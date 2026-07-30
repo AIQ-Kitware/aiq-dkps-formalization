@@ -51,7 +51,7 @@ Main results, all fully proved:
   the shift-and-invert argument: center at `c = (a+b)/2`, invert `A - c`
   through the continuous functional calculus with inverse norm at most
   `(r + d)⁻¹` where `r = (b-a)/2`, bound `‖B - c‖ ≤ r`, and absorb.
-* `sinTheta_genuineSpectrum`: the fully general bounded operator-norm
+* `sinTheta_spectrum`: the fully general bounded operator-norm
   Davis--Kahan `sin Θ` theorem with genuine spectra: if `U` reduces the
   self-adjoint `A` with the spectrum of the compression `A|_U` in `[a, b]`,
   and `V` reduces the self-adjoint `B` with the spectrum of `B|_{Vᗮ}` outside
@@ -262,7 +262,7 @@ genuine spectra.**  If `U` reduces the self-adjoint `A` with the spectrum of
 the compression `A|_U` contained in `[a, b]`, and `V` reduces the
 self-adjoint `B` with the spectrum of the compression `B|_{Vᗮ}` outside the
 open interval `(a - d, b + d)`, then `d * directedGap U V ≤ ‖B - A‖`. -/
-theorem sinTheta_genuineSpectrum
+theorem sinTheta_spectrum
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -303,7 +303,7 @@ with `B|_{Vᗮ}` outside `(a - d, b + d)`, and the spectrum of `B|_V` in
 `[a', b']` with `A|_{Uᗮ}` outside `(a' - d, b' + d)` — the full projection
 gap (the maximum of the two directed gaps) obeys the same bound:
 `d * subspaceGap U V ≤ ‖B - A‖`. -/
-theorem sinTheta_genuineSpectrum_symmetric
+theorem sinTheta_spectrum_symmetric
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -317,9 +317,9 @@ theorem sinTheta_genuineSpectrum_symmetric
       x ≤ a' - d ∨ b' + d ≤ x) :
     d * subspaceGap U V ≤ ‖B - A‖ := by
   have h1 : d * directedGap U V ≤ ‖B - A‖ :=
-    sinTheta_genuineSpectrum hA hB hU hV hd hab hUspec hVspec
+    sinTheta_spectrum hA hB hU hV hd hab hUspec hVspec
   have h2 : d * directedGap V U ≤ ‖A - B‖ :=
-    sinTheta_genuineSpectrum hB hA hV hU hd hab' hVspec' hUspec'
+    sinTheta_spectrum hB hA hV hU hd hab' hVspec' hUspec'
   rw [show A - B = -(B - A) by abel, norm_neg] at h2
   have hmax : subspaceGap U V = max (directedGap U V) (directedGap V U) := by
     show ‖U.starProjection - V.starProjection‖ =
@@ -436,11 +436,11 @@ open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 /-- **The bounded Davis--Kahan `sin Θ` theorem at unitary-invariant ideal
 scope, genuine spectra.**  Under the directed spectral configuration of
-`sinTheta_genuineSpectrum`, if the perturbation `B - A` lies in a
+`sinTheta_spectrum`, if the perturbation `B - A` lies in a
 rectangular symmetric ideal family, then so does the directed projection
 composition `P_{Vᗮ} P_U`, with `d · gauge (P_{Vᗮ} P_U) ≤ gauge (B - A)` —
 the ideal-gauge strengthening of `d * directedGap U V ≤ ‖B - A‖`. -/
-theorem sinTheta_genuineSpectrum_gauge
+theorem sinTheta_spectrum_gauge
     (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -517,7 +517,7 @@ ideal scope, genuine spectra.**  Both directed spectral configurations and
 `B - A` in the family give ideal membership of the projector difference with
 `d · gauge (P_U - P_V) ≤ 2 · gauge (B - A)`, by decomposing the projector
 difference into the two directed cross blocks. -/
-theorem sinTheta_genuineSpectrum_gauge_symmetric
+theorem sinTheta_spectrum_gauge_symmetric
     (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -535,12 +535,12 @@ theorem sinTheta_genuineSpectrum_gauge_symmetric
     N.Mem (U.starProjection - V.starProjection) ∧
       d * N.gaugeReal (U.starProjection - V.starProjection) ≤
         2 * N.gaugeReal (B - A) := by
-  have h1 := sinTheta_genuineSpectrum_gauge N hA hB hU hV hd hab
+  have h1 := sinTheta_spectrum_gauge N hA hB hU hV hd hab
     hUspec hVspec hMem
   have hMem' : N.Mem (A - B) := by
     rw [show A - B = -(B - A) from by abel]
     exact N.neg_mem hMem
-  have h2 := sinTheta_genuineSpectrum_gauge N hB hA hV hU hd hab'
+  have h2 := sinTheta_spectrum_gauge N hB hA hV hU hd hab'
     hVspec' hUspec' hMem'
   have hgAB : N.gaugeReal (A - B) = N.gaugeReal (B - A) := by
     rw [show A - B = -(B - A) from by abel]

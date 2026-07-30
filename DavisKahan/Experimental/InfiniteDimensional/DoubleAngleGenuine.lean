@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.Sylvester.GenuineSpectrum
+import DavisKahan.Sylvester.Spectrum
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
@@ -219,7 +219,7 @@ reducing subspace `U` and *any* closed `V`,
 `d * subspaceGap U (J_V U) ≤ ‖J_V A J_V - A‖`.  Both the reduced-comparison
 and the residual forms of the `sin 2Θ` theorem factor through this
 estimate. -/
-theorem sinTwoTheta_genuineSpectrum_defect
+theorem sinTwoTheta_spectrum_defect
     {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -250,7 +250,7 @@ theorem sinTwoTheta_genuineSpectrum_defect
       spectrum ℝ (compressOperator Uᗮ A) :=
     (spectrum_compressOperator_congr hperp.symm _).trans
       (spectrum_compressOperator_map Uᗮ A V.reflection)
-  have h := sinTheta_genuineSpectrum_symmetric hA hÃsa hU hŨred hd hab hab
+  have h := sinTheta_spectrum_symmetric hA hÃsa hU hŨred hd hab hab
     hUspec
     (by rw [htrans2]; exact hUspec')
     (by rw [htrans1]; exact hUspec)
@@ -270,7 +270,7 @@ reducing subspace `U` — compression to `U` in `[a, b]`, compression to
 `d * subspaceGap U (J_V U) ≤ 2 ‖B - A‖`, where `J_V U` is the image of `U`
 under the reflection through `V`.  The gap to the reflected image is the
 operator norm of `sin 2Θ(U, V)`. -/
-theorem sinTwoTheta_genuineSpectrum
+theorem sinTwoTheta_spectrum
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -285,14 +285,14 @@ theorem sinTwoTheta_genuineSpectrum
   calc d * subspaceGap U
         (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))
       ≤ ‖reflectionDefect V A‖ :=
-        sinTwoTheta_genuineSpectrum_defect hA hU hd hab hUspec hUspec'
+        sinTwoTheta_spectrum_defect hA hU hd hab hUspec hUspec'
     _ ≤ 2 * ‖A - B‖ := norm_reflectionDefect_le_two_mul A B V hV
     _ = 2 * ‖B - A‖ := by rw [norm_sub_rev]
 
 /-- The `sin 2Θ` theorem phrased through the complex sine-angle operator:
 `d * ‖sin Θ(U, J_V U)‖ ≤ 2 ‖B - A‖`, and `Θ(U, J_V U) = 2 Θ(U, V)` is the
 double-angle content of the reflected pair. -/
-theorem sinTwoTheta_genuineSpectrum_sinAngle
+theorem sinTwoTheta_spectrum_sinAngle
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -305,7 +305,7 @@ theorem sinTwoTheta_genuineSpectrum_sinAngle
         (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))‖ ≤
       2 * ‖B - A‖ := by
   rw [norm_sinAngleOperatorC]
-  exact sinTwoTheta_genuineSpectrum hA hU hV hd hab hUspec hUspec'
+  exact sinTwoTheta_spectrum hA hU hV hd hab hUspec hUspec'
 
 section IdealScope
 
@@ -316,7 +316,7 @@ scope** (directed form).  Under the genuine internal configuration of `A`
 at `U` and with `B - A` in the rectangular symmetric ideal family, the
 directed cross block to the reflected image `J_V U` lies in the family with
 `d · gauge (P_{(J_V U)ᗮ} P_U) ≤ 2 · gauge (B - A)`. -/
-theorem sinTwoTheta_genuineSpectrum_gauge
+theorem sinTwoTheta_spectrum_gauge
     (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A)
@@ -381,7 +381,7 @@ theorem sinTwoTheta_genuineSpectrum_gauge
         (norm_reflectionOperator_le_one V)
     rw [hgaugeAB] at h1 h2
     linarith
-  have hmain := sinTheta_genuineSpectrum_gauge N hA hÃsa hU hŨred hd hab
+  have hmain := sinTheta_spectrum_gauge N hA hÃsa hU hŨred hd hab
     hUspec (by rw [htrans2]; exact hUspec') hMemD
   exact ⟨hmain.1, hmain.2.trans hgaugeD⟩
 
@@ -400,7 +400,7 @@ reducing subspace `U` — compression to `U` in `[a, b]`, compression to
 space.  Then `d * subspaceGap U (J_V U) ≤ 2 ‖R‖`: the gap to the
 reflected image — the norm of `sin 2Θ(U, V)` — is controlled by the
 residual alone, with no reduction hypothesis on the comparison pair. -/
-theorem sinTwoTheta_genuineSpectrum_residual
+theorem sinTwoTheta_spectrum_residual
     {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -419,7 +419,7 @@ theorem sinTwoTheta_genuineSpectrum_residual
   calc d * subspaceGap U
         (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))
       ≤ ‖reflectionDefect V A‖ :=
-        sinTwoTheta_genuineSpectrum_defect hA hU hd hab hUspec hUspec'
+        sinTwoTheta_spectrum_defect hA hU hd hab hUspec hUspec'
     _ ≤ 2 * ‖Vᗮ.starProjection ∘L A ∘L V.starProjection‖ :=
         norm_reflectionDefect_le_two_mul_norm_cross V hA
     _ ≤ 2 * ‖A ∘L X - X ∘L M‖ := by linarith
@@ -522,7 +522,7 @@ For self-adjoint `A` with the genuine internal spectral configuration at
 the reducing subspace `U` and any `B` reduced by `V`,
 `d * ‖sin 2Θ(U, V)‖ ≤ 2 ‖B - A‖` — the double-angle sine operator is the
 functional-calculus `2 sin Θ cos Θ` of the pair `(U, V)`. -/
-theorem sinTwoTheta_genuineSpectrum_operator
+theorem sinTwoTheta_spectrum_operator
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -533,13 +533,13 @@ theorem sinTwoTheta_genuineSpectrum_operator
       x ≤ a - d ∨ b + d ≤ x) :
     d * ‖sinTwoAngleOperatorC U V‖ ≤ 2 * ‖B - A‖ := by
   rw [← subspaceGap_map_reflection_eq_norm_sinTwoAngle]
-  exact sinTwoTheta_genuineSpectrum hA hU hV hd hab hUspec hUspec'
+  exact sinTwoTheta_spectrum hA hU hV hd hab hUspec hUspec'
 
 /-- **The residual `sin 2Θ` theorem, exact operator form.**
 `d * ‖sin 2Θ(U, V)‖ ≤ 2 ‖A X - X M‖` for the trial subspace
 `V = range X` and an arbitrary comparison operator `M` on the trial
 space. -/
-theorem sinTwoTheta_genuineSpectrum_residual_operator
+theorem sinTwoTheta_spectrum_residual_operator
     {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
     {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
@@ -554,7 +554,7 @@ theorem sinTwoTheta_genuineSpectrum_residual_operator
     (M : F →L[ℂ] F) :
     d * ‖sinTwoAngleOperatorC U V‖ ≤ 2 * ‖A ∘L X - X ∘L M‖ := by
   rw [← subspaceGap_map_reflection_eq_norm_sinTwoAngle]
-  exact sinTwoTheta_genuineSpectrum_residual hA hU hd hab hUspec hUspec'
+  exact sinTwoTheta_spectrum_residual hA hU hd hab hUspec hUspec'
     hX hmem hsurj M
 
 end SinTwoThetaIdentification

@@ -117,7 +117,7 @@ alias Proposition6_1 :=
 
 /-! ## Theorem 6.2 and its printed finite-rank consequence -/
 
-alias PairwiseSpectrumGap := GenuinePairwiseSpectrumGap
+alias PairwiseSpectrumGap := PairwiseSpectrumGap
 alias Theorem6_2Data := PaperTheorem62Data
 alias Theorem6_2 := PaperTheorem62Data.result_across
 alias Theorem6_2_boundNorm_of_finiteRank :=

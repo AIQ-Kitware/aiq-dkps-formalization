@@ -124,11 +124,11 @@ form at operator norm.**  For an unbounded self-adjoint `A`, a genuine
 exterior Ritz spectrum, and transverse coordinates over the complement of the
 interval spectral subspace, `δ · ‖tan Θ‖ ≤ ‖R‖`. -/
 alias Theorem6_3_unbounded_graphAngle_opNorm :=
-  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_genuineTrialBlock
+  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_trialBlock
 
 /-- Per-vector unbounded form with a genuine Ritz-spectrum hypothesis. -/
 alias Theorem6_3_unbounded_vector :=
-  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_exactSpectralIcc_genuineTrialBlock
+  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_exactSpectralIcc_trialBlock
 
 /-- Per-vector unbounded form with an explicit coercivity hypothesis on the
 compressed shifted operator. -/
@@ -136,7 +136,7 @@ alias Theorem6_3_unbounded_vector_of_coercivity :=
   DavisKahan.Experimental.TanTheta.tanTheta_unbounded_exactSpectralIcc
 
 /-- Per-vector bounded form with genuine compression spectra. -/
-alias Theorem6_3_bounded_vector := DavisKahanExt.tanTheta_genuineSpectrum
+alias Theorem6_3_bounded_vector := DavisKahanExt.tanTheta_spectrum
 
 /-- Per-vector bounded form in the source's literal **one-sided**
 orientation: test compression spectrum below `α₀`, unwanted compression
@@ -144,7 +144,7 @@ spectrum in `[α₀ + δ, ∞)`.  The interval cap of the interval/exterior form
 is recovered from boundedness of the compression, so no upper bound is
 assumed. -/
 alias Theorem6_3_bounded_vector_oneSided :=
-  DavisKahanExt.tanTheta_genuineSpectrum_oneSided
+  DavisKahanExt.tanTheta_spectrum_oneSided
 
 /-- Per-vector bounded form from quadratic-form bounds alone; the
 low-dependency Hilbert-space companion. -/
