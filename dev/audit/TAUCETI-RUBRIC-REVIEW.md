@@ -11,16 +11,16 @@ Four rubrics can `block`: `correctness`, `reuse`, `scope`, `attribution`.
 
 | rubric | verdict | lane |
 |---|---|---|
-| **`correctness`** | **`block`** — 1 unexercised predicate | `FTC-UNEXERCISED` |
+| **`correctness`** | **`approve`** — the `block` is cleared, `FTC-UNEXERCISED` DONE | — |
 | **`reuse`** | `request_changes` — duplicate constructions | `T01-SQRT`, `MODULUS-DEDUP`, `DK-FRAME` |
-| **`scope`** | `request_changes` — 5 topics have no roadmap target | `ROADMAP-WRITE` |
+| **`scope`** | **`approve`** — 24 of 24 topics have a roadmap entry | — |
 | **`attribution`** | **`approve`** — provenance on 164/164 modules | — |
 | **`api-design`** | `request_changes` — 70 files expose bodies; 4 unused definitions | `FTC-EXPOSE-*` **(settled)**, `FTC-DEAD` |
 | **`generality`** | `approve` (with a caveat below) | — |
 | **`placement`** | `request_changes` — 54 flat files beside 12 directories | `FTC-ORG`, `PLACE-SYLV`, `PLACE-GRAM` |
 | **`naming`** | `request_changes` — `genuine`; 2 suffixes overstate | `DK-NAME`, `DK-NAME-SUFFIX`, `PLACE-GRAM` |
 | **`documentation`** | `request_changes` — 69 files document our workflow, not the math | `FTC-PROSE` |
-| **`proof-quality`** | `request_changes` — 10 linter suppressions, 6 long proofs | `FTC-SETOPT`, `FTC-LONGPROOF` |
+| **`proof-quality`** | `request_changes` — 6 long proofs (suppressions 10 → 5, each justified) | `FTC-LONGPROOF` |
 
 ## The three findings this run added that the earlier audit missed
 
@@ -118,6 +118,49 @@ because new files kept following the rule that creates it.
 
 Git already records who moved what and when, losslessly and without going stale.
 That is where this belongs.
+
+## `scope` — approve here, with a real fact about the real submission recorded
+
+**`approve`, and here is the distinction that took me two passes to get right.**
+`ROADMAP-WRITE` finished 24 of 24 topics. I marked `scope` approve, then
+reversed it on reading this sentence:
+
+> Tau Ceti implements the roadmaps in the **`TauCetiProject/TauCetiRoadmap`**
+> repo, checked out for you in the workspace. New material is in scope only if
+> it advances a specific roadmap target … A valid claim identifies a roadmap
+> file and node or heading; read it **in the roadmap checkout** to confirm.
+
+`ForTauCetiRoadmap/` is **ours**. The reviewer never sees it; it reads the
+upstream roadmap repo. Every one of our 24 topics is new mathematical content
+relative to TauCeti `main`, so each needs a target **accepted upstream** — and
+for material with no such target the rubric is explicit about the verdict:
+
+> Reject material on no path to any target … if it is off-roadmap but plausibly
+> worthwhile, **`block` and say a human must add it to the roadmap first.**
+
+That is a true fact about the **real** submission, and it is recorded here so
+nobody rediscovers it at PR time. **It is not a finding against this
+repository.** Per jon (2026-07-30), `ForTauCetiRoadmap` is a full-fidelity mock
+of the upstream roadmap repo and we rehearse against it: here, our roadmap *is*
+the roadmap, and a topic with a written entry satisfies `scope`. Hence
+**approve**.
+
+The reversal was the mistake — I treated a fact about a future third party as a
+defect in present work, which would have parked the whole submission behind
+someone else's decision. Two consequences that **do** carry over to the real
+run:
+
+- **One topic per PR.** *"`block` and ask for a split when the PR is more than
+  one topic."* The six clusters cannot go up as one submission.
+- **Refactors are exempt.** *"A refactor of already-merged code is in scope a
+  priori."* Nothing we hold is on their `main`, so the exemption does not apply
+  to us yet — but it will matter for follow-up PRs once a first cluster lands.
+
+So the 24 roadmaps do double duty: they satisfy `scope` in the rehearsal, and
+they are the argument for adding these targets upstream when the real
+submission happens. The readiness bar is that a Tau Ceti maintainer reads this
+repository and says *"submit those roadmaps as PRs, then push the code and
+merge it."*
 
 ## `generality` — approve, with a caveat I cannot discharge
 
