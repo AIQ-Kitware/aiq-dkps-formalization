@@ -64,6 +64,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  [A+x for x in ["GramOperator","AngleGeometry","FrameFactorization","HoffmanWielandt","EigenvalueChange"]]),
 ("T09","Approximation numbers",
  ["SetTheory.Cardinal.Lift","LinearAlgebra.Dimension.RankComp",
+  "Analysis.Normed.Operator.FiniteRankCompact",
   A+"SpectralCutoff"]+["Analysis.OperatorIdeal.ApproximationNumber."+x for x in
   ["Basic","Adjoint","Compact","Examples","FiniteDimensional","FiniteRestriction","KyFan","MinMax",
    "MinMaxUpper","SameSequence"]]),

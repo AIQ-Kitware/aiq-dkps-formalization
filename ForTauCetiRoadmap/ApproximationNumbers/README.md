@@ -143,7 +143,7 @@ of the first roadmap is claimable rather than described:
 | lane | what it proves | depends on |
 |---|---|---|
 | ~~`AN-A4-RANK`~~ | **DONE 2026-07-30** — `approximationNumber_eq_zero_of_rank_le` (any normed pair), `…_of_rank_le_of_le`, and `approximationNumber_eq_zero_iff_finrank_range_le` (the converse, finite-dimensional) | — |
-| `AN-A4-COMPACT` | **characterisation DONE 2026-07-30**; *approximable ⇒ compact* proved modulo a `finite rank ⇒ compact` lemma Mathlib lacks; *compact ⇒ approximable* on Hilbert spaces still open | `AN-A4-RANK` |
+| `AN-A4-COMPACT` | **characterisation and *approximable ⇒ compact* both DONE 2026-07-30**, the second now unconditional via the new `Analysis.Normed.Operator.FiniteRankCompact`; **only *compact ⇒ approximable* on Hilbert spaces is still open**, and it is free to take | `AN-A4-RANK` |
 | ~~`AN-B4-MINMAX`~~ | **DONE 2026-07-30** — the exact orthogonal-tail equality `approximationNumber_eq_sInf_norm_comp_starProjection_orthogonal`, from the `≤` half `approximationNumber_le_norm_comp_starProjection_orthogonal` and the `≥` half `exists_finrank_le_norm_comp_starProjection_orthogonal_le` / `le_approximationNumber_of_forall_norm_comp_starProjection_orthogonal`. The witness is the one this table predicted, `V := (ker R)ᗮ`. All four of §B4's stated conditions are met | — |
 | `AN-ACCEPT` | the six acceptance examples above, as theorems about the API. **(1), (2) and (4) DONE 2026-07-30** in `ApproximationNumber/Examples.lean` — the zero operator needed nothing (`approximationNumber_zero`), the identity is `1` below the dimension and `0` at or past it, and the rank cutoff has its `finrank` form | (3) the diagonal map's singular values; (5) `AN-B4-MINMAX`; (6) `AN-A4-COMPACT` |
 
@@ -230,14 +230,19 @@ Prove:
   `ContinuousLinearMap.tendsto_approximationNumber_atTop_iff_exists_finiteRank_approx`,
   stated as an explicit sequence with the `n`-th term of rank at most `n`, so no
   `ApproximableOperator` predicate was introduced — as this section asks;
-- every such approximable operator is compact — **half done**:
-  `ContinuousLinearMap.isCompactOperator_of_tendsto_approximationNumber` proves it
-  *given* that finite-rank operators are compact, which it takes as a hypothesis
-  because **Mathlib has no `finite rank ⇒ compact operator` lemma**. That lemma is
-  general (the witness is the closure of `R '' ball 0 1`, compact as a closed
-  bounded subset of the finite-dimensional, hence proper, `range R`) and belongs
-  upstream rather than inside an operator-ideal module; the theorem's docstring
-  gives its proof sketch and the lane records it as the remaining piece;
+- ~~every such approximable operator is compact~~ — **DONE 2026-07-30, lane
+  AN-A4-COMPACT.** `ContinuousLinearMap.isCompactOperator_of_tendsto_approximationNumber`
+  now proves it outright over a proper scalar field, with no hypothesis left in
+  the statement. It used to carry *finite rank ⇒ compact* as an explicit
+  hypothesis because **Mathlib has no such lemma**; that lemma is now
+  `ContinuousLinearMap.isCompactOperator_of_rank_lt_aleph0` in the new module
+  `ForTauCeti/Analysis/Normed/Operator/FiniteRankCompact.lean` — written there
+  rather than in the operator-ideal file, which is what the theorem's own
+  docstring had said should happen. **The proof turned out to be three lines, not
+  the instance-plumbing exercise this section predicted**: corestrict to the
+  range, which is finite-dimensional hence locally compact, apply Mathlib's
+  `isCompactOperator_of_locallyCompactSpace_dom`, and postcompose with the
+  inclusion. Only `[ProperSpace 𝕜]` is needed — not completeness of `𝕜`;
 - on Hilbert spaces, every compact operator is approximable, hence
   `aₙ(T) → 0`.
 
