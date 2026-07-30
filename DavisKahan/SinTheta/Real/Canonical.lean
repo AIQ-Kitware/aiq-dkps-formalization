@@ -88,12 +88,12 @@ theorem complementaryBlock_result
 
 end RealGeneralSinThetaProblem
 
-namespace IsometricSinThetaProblem
+namespace FormBoundedIsometricSinThetaProblem
 
 /-- Real specialization of the source-shaped isometric problem. -/
 theorem result_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (P : IsometricSinThetaProblem (𝕜 := ℝ) (E := E) (F := F)
+    (P : FormBoundedIsometricSinThetaProblem (𝕜 := ℝ) (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         ((ContinuousLinearMap.id ℝ E -
@@ -111,7 +111,7 @@ theorem result_real
 frame constant one. -/
 noncomputable def toGeneralReal
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (P : IsometricSinThetaProblem (𝕜 := ℝ) (E := E) (F := F)
+    (P : FormBoundedIsometricSinThetaProblem (𝕜 := ℝ) (E := E) (F := F)
       (G := G) (H := H) N) :
     RealGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N where
@@ -129,7 +129,7 @@ noncomputable def toGeneralReal
   spectral_gap := P.spectral_gap
   residual_mem := P.residual_mem
 
-end IsometricSinThetaProblem
+end FormBoundedIsometricSinThetaProblem
 
 end
 

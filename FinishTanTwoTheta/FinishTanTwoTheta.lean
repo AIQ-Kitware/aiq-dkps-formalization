@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import FinishTanTwoTheta.GroundedImports
-import FinishTanTwoTheta.Sequence.WeakSubmajorization
-import FinishTanTwoTheta.Sequence.MinimalCompletion
+import DavisKahan.OperatorIdeal.Majorization.WeakSubmajorization
+import DavisKahan.Sources.DavisKahan1970.Ideals.SequenceGauge
 import FinishTanTwoTheta.OperatorIdeal.StandardFanDominance
 import FinishTanTwoTheta.OperatorIdeal.StandardInstances
 import FinishTanTwoTheta.ApproximationNumber.SpectralSelection

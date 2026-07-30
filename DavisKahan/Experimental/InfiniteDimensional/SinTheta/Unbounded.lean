@@ -93,9 +93,14 @@ variable {E F G H : Type v}
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- Generalized finite-interval/exterior endpoint.  At least one diagonal block
-has bounded spectrum, so this is not the fully two-unbounded theorem. -/
-theorem generalizedSinTheta_unbounded_of_intervalExteriorGap
+/-- Generalized finite-interval/exterior endpoint over the `realSpectrum` gap.
+At least one diagonal block has bounded spectrum, so this is not the fully
+two-unbounded theorem.
+
+`generalizedSinTheta_unbounded_of_spectralIntervalExteriorGap` is the same statement over
+`SpectralIntervalExteriorGap`, the Spectra-spectrum spelling of the same
+configuration. -/
+theorem generalizedSinTheta_unbounded_of_realSpectrumIntervalExteriorGap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
@@ -145,7 +150,7 @@ theorem generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
     N.Mem (directedSinThetaOperator D.X F₀ hframe hε) ∧
       δ * ε * N.gaugeReal (directedSinThetaOperator D.X F₀ hframe hε)
         ≤ N.gaugeReal D.residual := by
-  have hBlock := generalizedSinTheta_unbounded_of_intervalExteriorGap
+  have hBlock := generalizedSinTheta_unbounded_of_realSpectrumIntervalExteriorGap
     N D hA hA₀ hΛ₁ hdecomp.isometry₁ hβα hδ hε hframe hgap hR
   have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
     N D.X F₀ D.F₁ hframe hε hdecomp hBlock.1

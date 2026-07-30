@@ -11,10 +11,10 @@ import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
-# Genuine-spectrum all-gap unbounded Sylvester theorem
+# Spectral all-gap unbounded Sylvester theorem
 
 This module states the source-facing all-gap predicate entirely through the
-genuine Spectra spectrum.  It covers the interval/exterior configuration and
+Spectra spectrum.  It covers the interval/exterior configuration and
 both ordered half-line configurations.  The capstone converts the ordered
 spectral containments to form bounds and then calls the direct interface-parametric finite-Ky-Fan
 engine instantiated by the vendored Spectra cutoffs.
@@ -56,7 +56,7 @@ Spectra spectrum -- the form Davis--Kahan 1970 uses.
 
 `FormBoundedSylvesterGap` states the two ordered configurations as operator-form
 bounds instead; it implies this predicate, and no converse is proved. -/
-inductive UnboundedSylvesterGap
+inductive SpectralSylvesterGap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
     (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
     (δ : ℝ) : Prop where
@@ -86,7 +86,7 @@ theorem davisKahan1970_sylvester_of_spectrumGap
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap A B δ)
+    (hgap : SpectralSylvesterGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧
