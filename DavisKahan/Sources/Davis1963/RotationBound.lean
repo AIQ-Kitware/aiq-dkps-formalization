@@ -143,7 +143,8 @@ theorem nonDegenerate_ofOrthonormalBasis {b b' : OrthonormalBasis (Fin n) 𝕜 E
     (OrthoProjFamily.ofOrthonormalBasis b).NonDegenerate
       (OrthoProjFamily.ofOrthonormalBasis b') := by
   intro j z hz hz0 hcontra
-  simp only [OrthoProjFamily.ofOrthonormalBasis_proj, spectralProjection_singleton_apply]
+  simp only [OrthoProjFamily.ofOrthonormalBasis_proj,
+      OrthonormalBasis.spanIndicesProjection_singleton_apply]
     at hz hcontra
   rcases smul_eq_zero.mp hcontra with hc | hb
   · have hzc : ⟪b j, z⟫_𝕜 ≠ 0 := fun h0 => hz0 (by rw [← hz, h0, zero_smul])
@@ -164,42 +165,47 @@ theorem intertwiningUnitary_apply_ofOrthonormalBasis {b b' : OrthonormalBasis (F
     OrthoProjFamily.intertwiningUnitary (nonDegenerate_ofOrthonormalBasis h) (b i)
       = (((‖⟪b' i, b i⟫_𝕜‖⁻¹ : ℝ) : 𝕜) * ⟪b' i, b i⟫_𝕜) • b' i := by
   have hcnorm : ‖⟪b' i, b i⟫_𝕜‖ ≠ 0 := norm_ne_zero_iff.mpr (h i)
-  have hPb : spectralProjection b {i} (b i) = b i := by
-    rw [spectralProjection_apply_basis]
+  have hPb : OrthonormalBasis.spanIndicesProjection b {i} (b i) = b i := by
+    rw [OrthonormalBasis.spanIndicesProjection_apply_basis]
     simp
-  have hP'b' : spectralProjection b' {i} (b' i) = b' i := by
-    rw [spectralProjection_apply_basis]
+  have hP'b' : OrthonormalBasis.spanIndicesProjection b' {i} (b' i) = b' i := by
+    rw [OrthonormalBasis.spanIndicesProjection_apply_basis]
     simp
-  have hMb : (spectralProjection b' {i} ∘ₗ spectralProjection b {i}) (b i)
+  have hMb : (OrthonormalBasis.spanIndicesProjection b' {i} ∘ₗ
+        OrthonormalBasis.spanIndicesProjection b {i}) (b i)
       = ⟪b' i, b i⟫_𝕜 • b' i := by
-    rw [LinearMap.comp_apply, hPb, spectralProjection_singleton_apply]
+    rw [LinearMap.comp_apply, hPb, OrthonormalBasis.spanIndicesProjection_singleton_apply]
   -- `|Mᵢ|` acts on `b i` as multiplication by the overlap size `‖c‖`
-  have habs : abs (spectralProjection b' {i} ∘ₗ spectralProjection b {i}) (b i)
+  have habs : abs (OrthonormalBasis.spanIndicesProjection b' {i} ∘ₗ
+        OrthonormalBasis.spanIndicesProjection b {i}) (b i)
       = ((‖⟪b' i, b i⟫_𝕜‖ : ℝ) : 𝕜) • b i := by
     refine (isPositive_abs _).apply_eq_smul_of_apply_apply_eq_smul (norm_nonneg _) ?_
     have h2 := congrArg (fun f : E →ₗ[𝕜] E => f (b i))
-      (abs_mul_self (spectralProjection b' {i} ∘ₗ spectralProjection b {i}))
+      (abs_mul_self (OrthonormalBasis.spanIndicesProjection b' {i} ∘ₗ
+            OrthonormalBasis.spanIndicesProjection b {i}))
     simp only [LinearMap.comp_apply] at h2
     rw [h2, LinearMap.adjoint_comp,
-      (isPositive_spectralProjection b {i}).adjoint_eq,
-      (isPositive_spectralProjection b' {i}).adjoint_eq]
+      (OrthonormalBasis.isPositive_spanIndicesProjection b {i}).adjoint_eq,
+      (OrthonormalBasis.isPositive_spanIndicesProjection b' {i}).adjoint_eq]
     -- Pᵢ (P'ᵢ (P'ᵢ (Pᵢ (b i)))) = (c * conj c) • b i = ‖c‖² • b i
-    rw [hPb, spectralProjection_singleton_apply, LinearMap.comp_apply, map_smul, hP'b',
-      map_smul, spectralProjection_singleton_apply, smul_smul,
+    rw [hPb, OrthonormalBasis.spanIndicesProjection_singleton_apply, LinearMap.comp_apply, map_smul,
+        hP'b',
+      map_smul, OrthonormalBasis.spanIndicesProjection_singleton_apply, smul_smul,
       ← inner_conj_symm (b i) (b' i), RCLike.mul_conj, pow_two]
   -- collapse the intertwining unitary's sum to the `i`-th block polar factor
   rw [OrthoProjFamily.intertwiningUnitary_apply]
   simp only [OrthoProjFamily.ofOrthonormalBasis_proj]
   rw [Finset.sum_eq_single i (fun j _ hji => ?_) (fun hi => absurd (Finset.mem_univ i) hi)]
   · -- the block polar factor sends `b i` to the polar phase of the overlap times `b' i`
-    have hinv : abs (spectralProjection b' {i} ∘ₗ spectralProjection b {i})
+    have hinv : abs (OrthonormalBasis.spanIndicesProjection b' {i} ∘ₗ
+          OrthonormalBasis.spanIndicesProjection b {i})
         (((‖⟪b' i, b i⟫_𝕜‖⁻¹ : ℝ) : 𝕜) • b i) = b i := by
       rw [map_smul, habs, smul_smul, ← RCLike.ofReal_mul, inv_mul_cancel₀ hcnorm]
       simp
     rw [hPb]
     conv_lhs => rw [← hinv]
     rw [polarFactor_apply_abs_apply, map_smul, hMb, smul_smul]
-  · rw [spectralProjection_apply_basis]
+  · rw [OrthonormalBasis.spanIndicesProjection_apply_basis]
     simp only [Finset.mem_singleton]
     rw [if_neg (Ne.symm hji), map_zero]
 
