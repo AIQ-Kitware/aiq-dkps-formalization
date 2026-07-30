@@ -120,9 +120,8 @@ theorem isBddMeasurable_truncSymbol {c r : ℝ} (hr : 0 ≤ r)
 /-- The indicator of the Cayley preimage of `B`: the symbol whose Borel calculus
 is the spectral projection `E_A(B)`.
 
-Introduced under lane `FTC-RESOLVENT-DEFS` because this function was being
-rebuilt inline in every proof that needed it, together with its two pointwise
-values — `specProjection_apply_sub_smul` and
+Named because it was being rebuilt inline in every proof that needed it,
+together with its two pointwise values — `specProjection_apply_sub_smul` and
 `mem_resolventSet_specRestrict_of_gap` between them proved those four times. -/
 private noncomputable def cayleyIndicator : _root_.spectrum ℂ (cayley hA) → ℂ :=
   (cayleyInv hA ⁻¹' B).indicator (fun _ => (1 : ℂ))
