@@ -53,13 +53,27 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
+/-- The scalar-action and continuous-functional-calculus assumptions under which
+`operatorAbsoluteValue` is defined in `SinTheta/General`.  Mathlib supplies the
+last one for `𝕜 = ℂ`; see the discussion there. -/
+variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
+
+attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
+
 /-! ## Canonical intertwiner and its polar data
 
-`operatorAbsoluteValue` is the leaf-defined absolute value from
-`SinTheta/General`.  The invertibility of the intertwiner and of its absolute
-value on acute pairs, the commutation of the absolute value with the
-projection, and the Halmos two-projection decomposition are the genuinely
-missing polar-campaign ingredients; they are isolated as leaf obligations.
+`operatorAbsoluteValue` is the absolute value from `SinTheta/General`, which is
+now a real definition (`CFC.abs`) rather than a leaf obligation.  **Two former
+leaf obligations of this file are therefore proved below rather than assumed**:
+the square identity `|S|² = S⋆S` and the self-adjointness of `|S|`.  Both were
+previously unprovable rather than merely unproved — an escaped `def` is an
+opaque term, so nothing about it can be established.
+
+The invertibility of the intertwiner and of its absolute value on acute pairs,
+the commutation of the absolute value with the projection, and the Halmos
+two-projection decomposition remain genuinely missing polar-campaign
+ingredients and stay isolated as leaf obligations.
 -/
 
 /-- The canonical intertwiner `S = P_V P_U + P_{Vᗮ} P_{Uᗮ}`. -/
@@ -68,15 +82,24 @@ noncomputable def canonicalIntertwiner (U V : Submodule 𝕜 E)
   projection V ∘L projection U +
     complementaryProjection V ∘L complementaryProjection U
 
-/-- **Leaf obligation.** The square of the absolute value is `S⋆S`. -/
-theorem operatorAbsoluteValue_sq (S : E →L[𝕜] E) :
-    operatorAbsoluteValue S ∘L operatorAbsoluteValue S = star S ∘L S :=
-  sorry
+/-- The square of the absolute value is `S⋆S`.
 
-/-- **Leaf obligation.** The absolute value is self-adjoint. -/
+Formerly a leaf obligation; it is now `CFC.abs_mul_abs` transported across
+`ContinuousLinearMap.mul_def`, which identifies composition with the ring
+multiplication of `E →L[𝕜] E`. -/
+theorem operatorAbsoluteValue_sq (S : E →L[𝕜] E) :
+    operatorAbsoluteValue S ∘L operatorAbsoluteValue S = star S ∘L S := by
+  rw [← ContinuousLinearMap.mul_def, ← ContinuousLinearMap.mul_def,
+    operatorAbsoluteValue_eq]
+  exact CFC.abs_mul_abs S
+
+/-- The absolute value is self-adjoint.
+
+Formerly a leaf obligation; it now follows from nonnegativity in the Loewner
+order, since a nonnegative element of a star-ordered ring is self-adjoint. -/
 theorem operatorAbsoluteValue_isSelfAdjoint (S : E →L[𝕜] E) :
     IsSelfAdjoint (operatorAbsoluteValue S) :=
-  sorry
+  (operatorAbsoluteValue_nonneg S).isSelfAdjoint
 
 /-- **Leaf obligation.** On an acute pair the canonical intertwiner is a unit:
 `S⋆S` is bounded below by a positive scalar. -/
