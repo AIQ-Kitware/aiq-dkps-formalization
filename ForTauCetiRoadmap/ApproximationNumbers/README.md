@@ -142,7 +142,7 @@ of the first roadmap is claimable rather than described:
 
 | lane | what it proves | depends on |
 |---|---|---|
-| `AN-A4-RANK` | `aₙ(T) = 0` when `rank T ≤ n`, with the converse on a Hilbert space | — |
+| ~~`AN-A4-RANK`~~ | **DONE 2026-07-30** — `approximationNumber_eq_zero_of_rank_le` (any normed pair), `…_of_rank_le_of_le`, and `approximationNumber_eq_zero_iff_finrank_range_le` (the converse, finite-dimensional) | — |
 | `AN-A4-COMPACT` | `aₙ(T) → 0` iff `T` is a norm limit of finite-rank operators; approximable ⇒ compact; on Hilbert spaces compact ⇒ approximable | `AN-A4-RANK` |
 | `AN-B4-MINMAX` | the exact orthogonal-tail equality `aₙ(T) = ⨅ {‖T ∘L (Vᗮ).starProjection‖ : finrank V ≤ n}`, with all four conditions B4 states | — |
 | `AN-ACCEPT` | the six acceptance examples above, as theorems about the API | (1)–(3) none; (4) `AN-A4-RANK`; (5) `AN-B4-MINMAX`; (6) `AN-A4-COMPACT` |
@@ -217,7 +217,14 @@ proved as a separate target rather than hidden behind the phrase
 
 Prove:
 
-- `aₙ(T) = 0` whenever `rank T ≤ n`;
+- ~~`aₙ(T) = 0` whenever `rank T ≤ n`~~ — **DONE 2026-07-30, lane AN-A4-RANK, and as
+  an iff.** `ContinuousLinearMap.approximationNumber_eq_zero_of_rank_le` holds over
+  any normed pair (`R := T` is admissible in the defining infimum), with
+  `…_of_rank_le_of_le` for a consumer holding a finite rank bound `r ≤ n`; and
+  `ContinuousLinearMap.approximationNumber_eq_zero_iff_finrank_range_le` is the
+  converse on finite-dimensional inner product spaces, through `aₙ(T) = σₙ(T)` and
+  Mathlib's `singularValues_pos_iff_lt_finrank_range`. The characterisation this
+  section asks for is therefore in place;
 - `aₙ(T) → 0` exactly when `T` is a norm limit of finite-rank operators;
 - every such approximable operator is compact;
 - on Hilbert spaces, every compact operator is approximable, hence

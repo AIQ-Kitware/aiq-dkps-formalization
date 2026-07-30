@@ -326,6 +326,25 @@ theorem abs_singularValues_sub_singularValues_le (T S : E →L[𝕜] F) (n : ℕ
     ← S.approximationNumber_eq_singularValues n]
   exact abs_approximationNumber_sub_approximationNumber_le T S n
 
+/-- **The rank cutoff is exact.**  On finite-dimensional inner product spaces,
+`aₙ(T) = 0` exactly when the rank of `T` is at most `n`.
+
+The forward direction is `ContinuousLinearMap.approximationNumber_eq_zero_of_rank_le`
+and holds over any normed pair; this is the converse, and it needs the singular
+values — `aₙ(T) = σₙ(T)` and `0 < σₙ(T)` exactly below the rank.  Together they are
+the characterisation roadmap topic T09 §A4 asks for. -/
+theorem approximationNumber_eq_zero_iff_finrank_range_le (T : E →L[𝕜] F) (n : ℕ) :
+    T.approximationNumber n = 0 ↔ finrank 𝕜 (LinearMap.range (T : E →ₗ[𝕜] F)) ≤ n := by
+  rw [approximationNumber_eq_singularValues]
+  constructor
+  · intro h
+    by_contra hlt
+    exact absurd h (ne_of_gt (T.singularValues_pos_iff_lt_finrank_range.mpr (not_le.mp hlt)))
+  · intro hle
+    refine le_antisymm ?_ (T.singularValues_nonneg n)
+    by_contra hpos
+    exact absurd (T.singularValues_pos_iff_lt_finrank_range.mp (not_le.mp hpos)) (not_lt.mpr hle)
+
 end
 
 end ContinuousLinearMap
