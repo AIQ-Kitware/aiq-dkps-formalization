@@ -28,7 +28,7 @@ the records are given once here.
 | `spectral_gap : UnboundedSylvesterGap data.A₀ data.Λ₁ gap` | interval/exterior **or** either ordered half-line orientation |
 
 `PaperTheorem62Data` is identical except that `spectral_gap` is replaced by
-`spectral_distance : GenuinePairwiseSpectrumGap data.A₀ data.Λ₁ gap` — the
+`spectral_distance : PairwiseSpectrumGap data.A₀ data.Λ₁ gap` — the
 weaker pairwise-distance hypothesis, which is what makes Theorem 6.2 a
 strictly stronger statement in the square norm.
 

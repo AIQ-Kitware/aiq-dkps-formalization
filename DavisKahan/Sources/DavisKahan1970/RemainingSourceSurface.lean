@@ -244,13 +244,13 @@ alias theorem6_3_equalRank_finite_tanTheta_ideal :=
 partial source coverage but does not discharge the paper's arbitrary
 unitarily-invariant-norm statement. -/
 alias theorem6_3_unbounded_graphAngle_opNorm_partial :=
-  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_genuineTrialBlock
+  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_trialBlock
 
 /-- Unique frontier marker for the still-open arbitrary-ideal unbounded scope.
 Its type deliberately records only the currently grounded operator-norm
 specialization; the manifest marks this declaration as an open obligation. -/
 alias unbounded_angle_theorems_source_scope_partial_marker :=
-  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_genuineTrialBlock
+  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_trialBlock
 
 /-- Completed finite-trial/arbitrary-ambient Ky Fan root of Theorem 6.3. -/
 alias theorem6_3_all_kyFan_core :=

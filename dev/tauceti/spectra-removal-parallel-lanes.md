@@ -715,7 +715,7 @@ circle**, no function can be `1` on one and `0` on the other and continuous at
 `1`, and Tietze has nothing to extend. Disjointness of `spec A` and `spec B` in
 `ℝ` does not survive the Cayley transform as disjointness of compacta.
 
-**A gap hypothesis does not rescue it.** `GenuinePairwiseSpectrumGap` bounds
+**A gap hypothesis does not rescue it.** `PairwiseSpectrumGap` bounds
 `dist (spec A) (spec B)` below, and that is a statement about the two sets in
 `ℝ`; it says nothing about their behaviour at infinity. The ordered
 Davis--Kahan configuration `spec A ⊆ [b, ∞)`, `spec B ⊆ (-∞, a]` with `a < b`

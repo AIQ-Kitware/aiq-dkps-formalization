@@ -140,8 +140,8 @@ Current homes:
 
 Main contributions:
 
-- canonical `LinearPMap.GenuinePairwiseSpectrumGap`, symmetry, monotonicity,
-  and disjointness; the bundle-shaped `GenuinePairwiseSpectrumGap` is now a
+- canonical `LinearPMap.PairwiseSpectrumGap`, symmetry, monotonicity,
+  and disjointness; the bundle-shaped `PairwiseSpectrumGap` is now a
   source-compatibility facade over it;
 - raw-partial-map homogeneous uniqueness under separated spectra; the three
   historical bundle signatures delegate to those proofs;
