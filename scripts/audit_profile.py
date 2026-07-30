@@ -58,7 +58,15 @@ def load(name):
 SCAN = load("audit_scan")
 CHECK = load("audit_checklist")
 
-ESCAPE = re.compile(r"\b(" + "sor" + "ry|ad" + "mit|nat" + "ive_decide)" + r"\b")
+READY = load("check_tauceti_readiness")
+# Escapes are counted by the GATE's helper, never re-implemented here. An
+# earlier version of this file stripped `--` line comments before `/- -/` block
+# comments; because this repository writes "Davis--Kahan" with a double hyphen
+# inside docstrings, that truncated docstring lines, destroyed their `-/`
+# closers, and the block pass then swallowed real code -- reporting 0 escapes in
+# a tree that has 50. Third instance in this audit of a re-implemented checker
+# disagreeing with the tested one.
+ESCAPE = READY.ESCAPE_RE
 DOCSTR = re.compile(r"/--.*?-/\s*$", re.S)
 
 
@@ -112,7 +120,8 @@ def profile(rel: str, dup_members, dead):
         "file": rel, "lines": text.count("\n") + 1, "kind": "Lean source",
         "decls": dict(kinds), "max_stmt": max_stmt, "max_proof": max_proof,
         "dup": dups, "dead": deads, "name": bad_names, "undoc": 0,
-        "prov": "## Provenance" in text, "esc": len(ESCAPE.findall(code)),
+        "prov": "## Provenance" in text,
+        "esc": len(ESCAPE.findall(READY.strip_comments(text))),
         "imports": len(re.findall(r"^\s*(?:public\s+)?import\s", text, re.M)),
     }
 
