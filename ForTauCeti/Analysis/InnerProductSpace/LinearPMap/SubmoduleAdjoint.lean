@@ -5,8 +5,6 @@ Authors: Jon Crall, Claude Opus 5
 
 Staged for Tau Ceti, and ultimately for Mathlib: additions to
 `Mathlib/Analysis/InnerProductSpace/LinearPMap.lean`, beside `Submodule.adjoint`.
-
-Added 2026-07-30 under lane `MATHLIB-ADJ-DENSE`.
 -/
 module
 
@@ -55,6 +53,21 @@ is the separating element of `g.adjoint`:
 
 So the only genuinely fiddly step is transporting `g` into `WithLp 2 (E × F)` to
 obtain the projection; the separation itself is the two lines above.
+
+## Sources
+
+*Follows nothing in particular*: the inclusion is the standard graph-adjoint
+computation, and the proof is `Submodule.mem_adjoint_iff` on both sides.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: authored directly in `ForTauCeti`.
+* Extraction class: **authored in place**, for Tau Ceti and ultimately for
+  Mathlib, beside `Submodule.adjoint`.
+* Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026
+  Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none** — imports only Mathlib.
 -/
 
 open scoped InnerProductSpace
