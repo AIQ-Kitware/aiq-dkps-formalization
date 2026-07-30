@@ -7,7 +7,6 @@ Authors: Jon Crall, GPT-5.6 Thinking
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt
 
 
 /-!
@@ -219,11 +218,27 @@ theorem selfAdjointFunctionalCalculus_comm
     simpa [LinearMap.comp_apply, hT.apply_eigenvectorBasis, map_smul] using h.symm
   rw [selfAdjointFunctionalCalculus_apply_of_apply_eq_smul hT f hBeig]
 
+/-- **Spectral positive square root** of a positive symmetric operator `T`, as the
+functional calculus of `Real.sqrt`:
+`sqrt T = ∑ᵢ √λᵢ • (rank-one projection onto the `i`-th eigenvector)`, where `λᵢ ≥ 0`
+are the eigenvalues of `T`.  Source: Horn--Johnson Thm 7.2.6.
+
+Until 2026-07-29 this was a second `noncomputable def` with that sum written out,
+and the library proved the two coincide by `rfl` — one object defined twice.  Lane
+T01-SQRT collapsed the definition; the uniqueness theory that only the square root
+has (`sqrt_unique`, `ker_sqrt`, `range_sqrt`, `sqrt_mul_self`) is unchanged and
+still lives in `ForTauCeti/Analysis/InnerProductSpace/PositiveSqrt.lean`, which now
+imports this module rather than the other way round. -/
+noncomputable def _root_.LinearMap.IsPositive.sqrt
+    {T : E →ₗ[𝕜] E} (hT : T.IsPositive) : E →ₗ[𝕜] E :=
+  selfAdjointFunctionalCalculus hT.isSymmetric Real.sqrt
+
 /-- The spectral square root is the finite self-adjoint functional calculus of
-`Real.sqrt`. -/
+`Real.sqrt`.  True by definition since lane T01-SQRT; kept because it is the name
+downstream proofs rewrite with. -/
 theorem selfAdjointFunctionalCalculus_sqrt
     {T : E →ₗ[𝕜] E} (hT : T.IsPositive) :
-    selfAdjointFunctionalCalculus hT.isSymmetric Real.sqrt = hT.sqrt := by
+    selfAdjointFunctionalCalculus hT.isSymmetric Real.sqrt = hT.sqrt :=
   rfl
 
 /-- Commutation passes from a positive operator to its positive square root. -/
