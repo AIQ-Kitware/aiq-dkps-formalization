@@ -208,18 +208,26 @@ RUNGS: list[tuple[str, str, list[str]]] = [
         "MeasureTheory.CompactExists",
         "MeasureTheory.HellySelection",
     ]),
-    ("L", "Unbounded self-adjoint operators on LinearPMap (T15)", [
-        "Analysis.CStarAlgebra.SelfAdjointGapInverse",
-        "Analysis.InnerProductSpace.BlockLowerBound",
+    ("L", "Closed operators on LinearPMap: graphs, constructions and form bounds (T15a)", [
         "Analysis.InnerProductSpace.LinearPMap.Closed",
         "Analysis.InnerProductSpace.LinearPMap.Constructions",
         "Analysis.InnerProductSpace.LinearPMap.GraphCore",
+        "Analysis.InnerProductSpace.LinearPMap.Sylvester",
+        "Analysis.InnerProductSpace.QuadraticFormBounds",
+        "Analysis.InnerProductSpace.SpectralOrder.Complex",
+    ]),
+    ("M", "Resolvents of self-adjoint LinearPMap operators, and semiboundedness (T15b)", [
+        "Analysis.CStarAlgebra.SelfAdjointGapInverse",
         "Analysis.InnerProductSpace.LinearPMap.RealLowerBound",
         "Analysis.InnerProductSpace.LinearPMap.Resolvent",
         "Analysis.InnerProductSpace.LinearPMap.ResolventBound",
         "Analysis.InnerProductSpace.LinearPMap.ResolventOpen",
-        "Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal",
         "Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent",
+        "Analysis.InnerProductSpace.SeparatedIntertwiner",
+    ]),
+    ("N", "The spectral measure of an unbounded self-adjoint operator, and Stone (T15c)", [
+        "Analysis.InnerProductSpace.BlockLowerBound",
+        "Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal",
         "Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator",
         "Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds",
         "Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse",
@@ -229,13 +237,9 @@ RUNGS: list[tuple[str, str, list[str]]] = [
         "Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup",
         "Analysis.InnerProductSpace.LinearPMap.SpectralSupport",
         "Analysis.InnerProductSpace.LinearPMap.StoneUniqueness",
-        "Analysis.InnerProductSpace.LinearPMap.Sylvester",
         "Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
-        "Analysis.InnerProductSpace.QuadraticFormBounds",
-        "Analysis.InnerProductSpace.SeparatedIntertwiner",
-        "Analysis.InnerProductSpace.SpectralOrder.Complex",
     ]),
-    ("M", "Sylvester equations and the Rosenblum theorem (T16)", [
+    ("O", "Sylvester equations and the Rosenblum theorem (T16)", [
         "Analysis.InnerProductSpace.CoerciveUnit",
         "Analysis.InnerProductSpace.HilbertSchmidtBlock",
         "Analysis.InnerProductSpace.Rosenblum",
@@ -255,7 +259,7 @@ RUNGS: list[tuple[str, str, list[str]]] = [
         "Analysis.InnerProductSpace.Sylvester.SpectralGap",
         "Analysis.InnerProductSpace.SylvesterGroup",
     ]),
-    ("N", "Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems (T17)", [
+    ("P", "Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems (T17)", [
         "Analysis.InnerProductSpace.BoundedOperator.Basic",
         "Analysis.InnerProductSpace.BoundedOperator.Projector",
         "Analysis.InnerProductSpace.BoundedOperator.SinTheta",
@@ -267,12 +271,12 @@ RUNGS: list[tuple[str, str, list[str]]] = [
         "Analysis.InnerProductSpace.SinTheta.Perturbation",
         "Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant",
     ]),
-    ("O", "The Yu-Wang-Samworth statistical variant (T18)", [
+    ("Q", "The Yu-Wang-Samworth statistical variant (T18)", [
         "Analysis.InnerProductSpace.YuWangSamworth.Residual",
         "Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace",
         "Analysis.InnerProductSpace.YuWangSamworth.Statistics",
     ]),
-    ("P", "Matrix spectra and spectral measurability (T19)", [
+    ("R", "Matrix spectra and spectral measurability (T19)", [
         "Analysis.Matrix.EntrywiseEigenvalue",
         "Analysis.Matrix.EntrywiseOpNorm",
         "Analysis.Matrix.SpectralFunctionMeasurable",
@@ -280,18 +284,18 @@ RUNGS: list[tuple[str, str, list[str]]] = [
         "MeasureTheory.Function.ConvergenceInMeasure",
         "MeasureTheory.Measure.Typeclasses.Probability",
     ]),
-    ("Q", "Sample moments and matrix concentration (T20)", [
+    ("S", "Sample moments and matrix concentration (T20)", [
         "Probability.Moments.CenteredScatter",
         "Probability.Moments.MatrixConcentration",
         "Probability.Moments.SampleCovariance",
         "Probability.Moments.SampleMean",
         "Probability.Moments.Variance",
     ]),
-    ("R", "Matrix rank factorization and positive semidefiniteness (T21)", [
+    ("T", "Matrix rank factorization and positive semidefiniteness (T21)", [
         "LinearAlgebra.Matrix.PosDef",
         "LinearAlgebra.Matrix.RankFactorization",
     ]),
-    ("S", "Berge's maximum theorem and approximate minimizers (T22)", [
+    ("U", "Berge's maximum theorem and approximate minimizers (T22)", [
         "Topology.ApproxMinimizer",
         "Topology.Berge",
     ]),
