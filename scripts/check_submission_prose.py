@@ -53,7 +53,7 @@ BASELINE = 58
 #: fourth lane id to a module that already has three leaves the module count unchanged,
 #: so a modules-only ratchet lets the prose keep growing inside the files that already
 #: have it.  Found by testing this gate against a deliberate regression -- it passed.
-HIT_BASELINE = 114
+HIT_BASELINE = 111
 
 #: An internal lane id: `lane FTC-EXPOSE-g2`, `Lane SPLIT-1K`, `lane Y3`, `lane T15a`.
 #: Anchored on the word `lane` so ordinary prose ("the bounded-operator lane ever
