@@ -359,11 +359,9 @@ T09 §B4's exact equality: `aₙ(T)` is the greatest lower bound of
 `‖T ∘L Vᗮ.starProjection‖` over subspaces `V` of the source with
 `finrank 𝕜 V ≤ n`.
 
-**What §B4 still asks for beyond this pair**: the `⨅`-form as a single
-`approximationNumber_eq_iInf` statement, the infimum's behaviour once `n` reaches
-the source dimension, and the equivalence with the unit-vector formulation
-`⨅_V sup_{x ∈ Vᗮ, ‖x‖ = 1} ‖T x‖`.  Those are recorded on lane `AN-B4-MINMAX`
-and are not proved here. -/
+The single-statement form is
+`approximationNumber_eq_sInf_norm_comp_starProjection_orthogonal` below, and
+§B4's other two conditions follow it. -/
 theorem le_approximationNumber_of_forall_norm_comp_starProjection_orthogonal
     (T : E₁ →L[𝕜] F₁) (n : ℕ) {c : ℝ}
     (h : ∀ V : Submodule 𝕜 E₁, ∀ _ : FiniteDimensional 𝕜 V,
@@ -391,9 +389,12 @@ existence statement; the two halves it is assembled from —
 `exists_finrank_le_norm_comp_starProjection_orthogonal_le` — are the usable
 forms.
 
-**Not proved here**, and recorded on lane `AN-B4-MINMAX`: the behaviour of the
-infimum once `n` reaches the dimension of the source, and the equivalence with
-the unit-vector formulation `⨅_V sup_{x ∈ Vᗮ, ‖x‖ = 1} ‖T x‖`. -/
+§B4's remaining two conditions are the two theorems just below:
+`approximationNumber_eq_zero_of_finrank_source_le` for the behaviour once `n`
+reaches the dimension of the source, and
+`norm_comp_starProjection_orthogonal_eq_sSup_unitClosedBall` for the equivalence
+with the sup formulation — on the closed unit ball of `Vᗮ` rather than its unit
+sphere, for the reason that theorem's docstring gives. -/
 theorem approximationNumber_eq_sInf_norm_comp_starProjection_orthogonal
     (T : E₁ →L[𝕜] F₁) (n : ℕ) :
     T.approximationNumber n =
@@ -422,6 +423,67 @@ theorem approximationNumber_eq_sInf_norm_comp_starProjection_orthogonal
       T.exists_finrank_le_norm_comp_starProjection_orthogonal_le R hR
     have hmem : ‖T ∘L Vᗮ.starProjection‖ ∈ S := ⟨V, ‹_›, ‹_›, hVdim, rfl⟩
     exact le_trans (csInf_le hbdd hmem) (le_trans hVle hRlt.le)
+
+omit [CompleteSpace E₁] in
+/-- **The infimum collapses once `n` reaches the dimension of the source (T09
+§B4).**  `V = ⊤` is then admissible, its orthogonal complement is `⊥`, and the
+tail of `T` over `⊥` is the zero operator — so the infimum, and therefore
+`aₙ(T)`, is `0`.
+
+This is proved from the orthogonal-tail bound rather than from the rank
+characterisation, which is the point: it is a statement *about the infimum* in
+§B4's sense, and reading it off the tail formula is what shows the formula
+behaves. -/
+theorem approximationNumber_eq_zero_of_finrank_source_le
+    [FiniteDimensional 𝕜 E₁] (T : E₁ →L[𝕜] F₁) {n : ℕ} (hn : finrank 𝕜 E₁ ≤ n) :
+    T.approximationNumber n = 0 := by
+  refine le_antisymm ?_ (T.approximationNumber_nonneg n)
+  have h := T.approximationNumber_le_norm_comp_starProjection_orthogonal n ⊤
+    (by simpa using hn)
+  simpa using h
+
+omit [CompleteSpace E₁] in
+/-- **Compressing by the projection is restricting to the subspace.**  The
+orthogonal projection maps the unit ball of `E₁` onto the unit ball of `Vᗮ` and
+fixes `Vᗮ`, so the two operator norms coincide. -/
+theorem norm_comp_starProjection_orthogonal_eq_norm_comp_subtypeL
+    (T : E₁ →L[𝕜] F₁) (V : Submodule 𝕜 E₁) [Vᗮ.HasOrthogonalProjection] :
+    ‖T ∘L Vᗮ.starProjection‖ = ‖T ∘L Vᗮ.subtypeL‖ := by
+  refine le_antisymm ?_ ?_
+  · refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
+    have hmem : Vᗮ.starProjection x ∈ Vᗮ := Vᗮ.starProjection_apply_mem x
+    have hval : (T ∘L Vᗮ.starProjection) x =
+        (T ∘L Vᗮ.subtypeL) (⟨Vᗮ.starProjection x, hmem⟩ : Vᗮ) := rfl
+    calc ‖(T ∘L Vᗮ.starProjection) x‖
+        = ‖(T ∘L Vᗮ.subtypeL) (⟨Vᗮ.starProjection x, hmem⟩ : Vᗮ)‖ := by rw [hval]
+      _ ≤ ‖T ∘L Vᗮ.subtypeL‖ * ‖(⟨Vᗮ.starProjection x, hmem⟩ : Vᗮ)‖ :=
+          ContinuousLinearMap.le_opNorm _ _
+      _ ≤ ‖T ∘L Vᗮ.subtypeL‖ * ‖x‖ := by
+          gcongr
+          exact Vᗮ.norm_starProjection_apply_le x
+  · refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun y => ?_
+    have hfix : Vᗮ.starProjection (y : E₁) = (y : E₁) :=
+      Vᗮ.starProjection_eq_self_iff.mpr y.2
+    have hval : (T ∘L Vᗮ.subtypeL) y = (T ∘L Vᗮ.starProjection) (y : E₁) := by
+      simp [ContinuousLinearMap.comp_apply, hfix]
+    rw [hval]
+    exact ContinuousLinearMap.le_opNorm _ _
+
+omit [CompleteSpace E₁] in
+/-- **The unit-ball formulation of the orthogonal tail (T09 §B4).**  The tail is
+the supremum of `‖T x‖` over the closed unit ball of `Vᗮ`, so
+`approximationNumber_eq_sInf_norm_comp_starProjection_orthogonal` is literally
+an `inf-sup` formula.
+
+Stated on the closed **ball** rather than the unit **sphere**, deliberately: on
+`Vᗮ = ⊥` the sphere is empty and its supremum is not the tail, whereas the ball
+form holds for every `V`. -/
+theorem norm_comp_starProjection_orthogonal_eq_sSup_unitClosedBall
+    (T : E₁ →L[𝕜] F₁) (V : Submodule 𝕜 E₁) [Vᗮ.HasOrthogonalProjection] :
+    ‖T ∘L Vᗮ.starProjection‖ =
+      sSup ((fun x : Vᗮ => ‖T (x : E₁)‖) '' Metric.closedBall 0 1) := by
+  rw [T.norm_comp_starProjection_orthogonal_eq_norm_comp_subtypeL V]
+  exact ((T ∘L Vᗮ.subtypeL).sSup_unitClosedBall_eq_norm).symm
 
 end OrthogonalTailLower
 
