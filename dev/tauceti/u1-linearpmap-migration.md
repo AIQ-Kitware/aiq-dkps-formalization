@@ -732,16 +732,16 @@ GenuineGeneralized 12, Real 37.
 
 **The honest takeable residual in `SinTheta/Natural` is 12 uses, not 88.**  Those
 are `GapConvenience.lean`, now served by six `linearPMap_` twins (three for
-`UnboundedSylvesterGap`, three for `UnboundedSylvesterGapPMap`).
+`FormBoundedSylvesterGap`, three for `UnboundedSylvesterGapPMap`).
 `Reducing.lean` is at 0 and no longer imports the bundled foundation at all.
 
 **Duplicate worth a convergence-matrix row, found on the way and not acted on.**
-`GenuineUnboundedSylvesterGap` (`Sylvester/Unbounded/AllGap.lean`) and
+`UnboundedSylvesterGap` (`Sylvester/Unbounded/AllGap.lean`) and
 `UnboundedSylvesterGapPMap` (`SinTheta/Unbounded/AllGap.lean`) are **two
 inductives for one predicate** — same three constructors, and the bundled
 version's hypotheses are *already* written as
 `TauCeti.LinearPMap.spectrum A.toLinearPMap`, so it is definitionally the raw one
-at `A.toLinearPMap`.  This is the identical situation `UnboundedSylvesterGap` was
+at `A.toLinearPMap`.  This is the identical situation `FormBoundedSylvesterGap` was
 in before it was collapsed, and it admits the identical fix: keep the raw
 inductive, demote the bundled spelling to a reducible `abbrev`, alias the three
 constructors.  I did **not** take it — both files sit in jon (namek)'s released
@@ -828,8 +828,8 @@ bundled counterpart at `D.toClosed`, with no tactic proof at all:
   straight through.
 - `UnboundedSinThetaDataPMap.toClosed` round-trips by `rfl`
   (`D.toClosed.Λ₁.toLinearPMap = D.Λ₁`), so `X`, `F₁` and `residual` are unchanged.
-- `UnboundedSylvesterGap D.toClosed.A₀ D.toClosed.Λ₁ δ` is *by `rfl`*
-  `linearPMap_UnboundedSylvesterGap D.A₀ D.Λ₁ δ` — **only true since the gap
+- `FormBoundedSylvesterGap D.toClosed.A₀ D.toClosed.Λ₁ δ` is *by `rfl`*
+  `linearPMap_FormBoundedSylvesterGap D.A₀ D.Λ₁ δ` — **only true since the gap
   predicates became canonical.**  Before that the twin could not have taken a raw
   gap hypothesis without a conversion, which is precisely what made this the
   blocking link rather than a cosmetic one.
@@ -839,15 +839,15 @@ Still bundled, for whoever continues the chain: `sinTheta_unbounded_complex` and
 module) have no raw twin, and the `Real` specializations are untouched.
 
 **The gap predicates are now canonical — and they were the keystone (edward,
-aiq-gpu, 2026-07-28).**  `UnboundedSylvesterGap` and
-`UnboundedIntervalExteriorGap` (`DavisKahan/Sylvester/Gap.lean`) are stated over
+aiq-gpu, 2026-07-28).**  `FormBoundedSylvesterGap` and
+`RealSpectrumIntervalExteriorGap` (`DavisKahan/Sylvester/Gap.lean`) are stated over
 `LinearPMap`; the bundled spellings survive as reducible `abbrev`s at
 `A.toLinearPMap`, so **none of the 27 consumer modules changed**.
 
 Why this one mattered more than its size (67 lines) suggests: it is what
 *blocked* the rest of the unbounded sin-Θ cluster.  `SinTheta/Natural/Reducing.lean`
 — U1's second-largest un-migrated record at 14 type-position uses — carries a
-`spectral_gap : UnboundedSylvesterGap A₀ Λ₁ gap` field, so retyping its two
+`spectral_gap : FormBoundedSylvesterGap A₀ Λ₁ gap` field, so retyping its two
 problem structures over `LinearPMap` without first retyping the gap would have
 forced `.toClosed` round-trips *at the gap field*, reintroducing the bundle in
 the middle of the record that was supposed to leave it.  The same field blocks
@@ -867,7 +867,7 @@ directly.
 1. **`cases` survives a reducible `abbrev`; `rw` does not.**  Demoting the
    bundled predicate to an `abbrev` left every `cases hgap with | intervalExterior
    ... =>` working untouched, and the three constructor `alias`es kept the
-   `UnboundedSylvesterGap.«ctor»` references resolving.  But four `rw`s in
+   `FormBoundedSylvesterGap.«ctor»` references resolving.  But four `rw`s in
    `SpectralTheory/ClosedOperator/Complexification.lean` broke: `rw` matches on
    the head symbol, and the goal's head became `LinearPMap.realSpectrum …
    toLinearPMap` where the rewrite lemma still says `ClosedOperator.realSpectrum`.

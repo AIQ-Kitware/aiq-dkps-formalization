@@ -50,7 +50,7 @@ structure GeneralSinThetaProblem
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : UnboundedSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
   residual_mem : N.Mem data.residual
 
 namespace GeneralSinThetaProblem
@@ -113,7 +113,7 @@ structure FiniteIntervalGeneralSinThetaProblem
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : GenuineUnboundedIntervalExteriorGap data.A₀ data.Λ₁
+  spectral_gap : UnboundedIntervalExteriorGap data.A₀ data.Λ₁
     intervalLower intervalUpper gap
   residual_mem : N.Mem data.residual
 
@@ -198,7 +198,7 @@ structure IsometricSinThetaProblem
   exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
   gap : ℝ
   gap_pos : 0 < gap
-  spectral_gap : UnboundedSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
   residual_mem : N.Mem data.residual
 
 end GenericIsometric
