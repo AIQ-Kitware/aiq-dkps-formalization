@@ -15,13 +15,32 @@ import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 /-!
 # The genuine-spectrum Sylvester estimate and the general `sin Θ` theorem
 
-The separation predicates in `Core/AbstractSpectrum.lean` are point-spectrum
-based and therefore vacuous for operators with empty point spectrum; the
-theorems stated over them are unprovable in infinite dimensions (see
-`docs/planning/davis-kahan-full-paper-goal.md`, statement-soundness finding of
-2026-07-15).  This module is the honest layer: hypotheses are phrased through
-the Banach-algebra spectrum, either of the ambient operator or of its
-compression to a reducing subspace.
+Hypotheses here are phrased through the Banach-algebra spectrum, either of the
+ambient operator or of its compression to a reducing subspace.
+
+**The `genuine` in these names is now historical, and this paragraph used to say
+so wrongly.**  It read: *"The separation predicates in `Core/AbstractSpectrum.lean`
+are point-spectrum based and therefore vacuous for operators with empty point
+spectrum; the theorems stated over them are unprovable in infinite dimensions …
+This module is the honest layer."*  Every clause of that was true on 2026-07-15
+and none of it is true now:
+
+* the statement-soundness finding of 2026-07-15 was **repaired in place, not
+  worked around** — `docs/planning/davis-kahan-full-paper-goal.md` records that
+  the repaired layer defines `realSpectrum` from the `RCLike` Banach-algebra
+  spectrum and carries invariance explicitly, *"which removes the counterexample
+  that made the Sylvester, `sin Θ`, ideal, off-diagonal and Riccati declarations
+  false as stated"*;
+* `DavisKahan/SpectralTheory/AbstractSpectrum.lean`, the live layer, is
+  therefore already the honest one;
+* `Core/AbstractSpectrum.lean` **does not exist**: it was deleted on 2026-07-24
+  in `e91ef142`, empty, as a retired facade.
+
+So there is no vacuous sibling that these theorems are distinguishing themselves
+from, and the prefix marks nothing.  Dropping it across the `genuine` family is
+lane `DK-NAME`, which was **blocked on sequestering a layer that had already
+been repaired** — a block this docstring caused.  Measured 2026-07-30 under lane
+`DK-FAILED`.
 
 Main results, all fully proved:
 
