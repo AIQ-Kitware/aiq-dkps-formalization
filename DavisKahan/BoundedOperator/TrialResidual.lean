@@ -143,7 +143,7 @@ theorem norm_isometricRangeCrossBlock_le_residual
 
 /-- Rectangular ideal membership of a residual implies membership of the exact
 range cross block. -/
-theorem RectangularSymmetricIdealFamily.isometricRangeCrossBlock_mem
+theorem isometricRangeCrossBlock_mem
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →L[ℂ] H) (X : F →L[ℂ] H) (M : F →L[ℂ] F)
@@ -163,7 +163,7 @@ theorem RectangularSymmetricIdealFamily.isometricRangeCrossBlock_mem
 set_option maxHeartbeats 1000000 in
 /-- Rectangular ideal gauge of the exact-range cross block is bounded by the
 trial residual gauge. -/
-theorem RectangularSymmetricIdealFamily.gauge_isometricRangeCrossBlock_le
+theorem gauge_isometricRangeCrossBlock_le
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →L[ℂ] H) (X : F →L[ℂ] H) (M : F →L[ℂ] F)
