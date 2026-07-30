@@ -25,11 +25,11 @@ namespace DavisKahan1970
 
 /-- Complex isometric unbounded theorem from a measurable exact spectral set. -/
 alias sinTheta_spectralSubspace :=
-  DavisKahan.Experimental.ExactSinTheta.sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
+  DavisKahan.Experimental.ExactSinTheta.sinTheta_unbounded_spectralSubspace_of_spectrumGap
 
 /-- Complex generalized unbounded theorem from a measurable exact spectral set. -/
 alias generalizedSinTheta_spectralSubspace :=
-  DavisKahan.Experimental.ExactSinTheta.generalizedSinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
+  DavisKahan.Experimental.ExactSinTheta.generalizedSinTheta_unbounded_spectralSubspace_of_spectrumGap
 
 /-- Scalar-generic natural isometric problem over a reducing exact subspace. -/
 alias NaturalReducingIsometricSinThetaProblem :=
@@ -57,11 +57,11 @@ alias generalizedSinTheta_reducingSubspace_real :=
 
 /-- Bounded complex isometric theorem from a measurable exact spectral set. -/
 alias sinTheta_bounded_spectralSubspace :=
-  DavisKahan.Experimental.ExactSinTheta.sinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
+  DavisKahan.Experimental.ExactSinTheta.sinTheta_bounded_spectralSubspace_of_spectrumGap
 
 /-- Bounded complex generalized theorem from a measurable exact spectral set. -/
 alias generalizedSinTheta_bounded_spectralSubspace :=
-  DavisKahan.Experimental.ExactSinTheta.generalizedSinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
+  DavisKahan.Experimental.ExactSinTheta.generalizedSinTheta_bounded_spectralSubspace_of_spectrumGap
 
 /-- Bounded real isometric theorem from a measurable exact spectral set. -/
 alias sinTheta_bounded_real_spectralSubspace :=

@@ -47,10 +47,10 @@ omit [HasKyFanApproximationGaugeTriangle 𝕜] in
 original operators.  This is the topological limit step in the two-unbounded
 ordered Sylvester argument; the remaining analytic input is the corresponding
 inequality for each bounded truncation. -/
-theorem kyFanApproximationGauge_le_of_genuineCutoff_le
+theorem kyFanApproximationGauge_le_of_cutoff_le
     {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hB : B.IsSelfAdjoint)
-    (PCB : GenuineSpectralCutoffInterface B hB)
+    (PCB : SpectralCutoffInterface B hB)
     {X C : F →L[𝕜] E} {δ : ℝ} (k : ℕ)
     (hcut : ∀ τ : ℝ, 0 ≤ τ →
       δ * kyFanApproximationGauge k
@@ -110,10 +110,10 @@ theorem kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
 
 omit [HasKyFanApproximationGaugeTriangle 𝕜] in
 /-- Left-cutoff finite Ky Fan inequalities pass to the original operators. -/
-theorem kyFanApproximationGauge_le_of_leftGenuineCutoff_le
+theorem kyFanApproximationGauge_le_of_leftCutoff_le
     {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     (hA : A.IsSelfAdjoint)
-    (PCA : GenuineSpectralCutoffInterface A hA)
+    (PCA : SpectralCutoffInterface A hA)
     {X C : F →L[𝕜] E} {δ : ℝ} (k : ℕ)
     (hcut : ∀ τ : ℝ, 0 ≤ τ →
       δ * kyFanApproximationGauge k
@@ -152,17 +152,17 @@ theorem doubleGenuineCutoff_filled_sylvester_equation
     {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
-    (PCA : GenuineSpectralCutoffInterface A hA)
-    (TCA : GenuineBoundedTruncationInterface A hA PCA)
-    (PCB : GenuineSpectralCutoffInterface B hB)
-    (TCB : GenuineBoundedTruncationInterface B hB PCB)
+    (PCA : SpectralCutoffInterface A hA)
+    (TCA : BoundedTruncationInterface A hA PCA)
+    (PCB : SpectralCutoffInterface B hB)
+    (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E}
     (hEq : HasClosedSylvesterEquation A B X C)
     (a b τA τB : ℝ) :
-    genuineFilledTruncation A hA PCA TCA a τA ∘L
+    filledTruncation A hA PCA TCA a τA ∘L
         (PCA.cutoff τA ∘L X ∘L PCB.cutoff τB) -
       (PCA.cutoff τA ∘L X ∘L PCB.cutoff τB) ∘L
-        genuineFilledTruncation B hB PCB TCB b τB =
+        filledTruncation B hB PCB TCB b τB =
       PCA.cutoff τA ∘L C ∘L PCB.cutoff τB := by
   let PA : E →L[𝕜] E := PCA.cutoff τA
   let PB : F →L[𝕜] F := PCB.cutoff τB
@@ -196,12 +196,12 @@ theorem doubleGenuineCutoff_filled_sylvester_equation
     have h := congrArg (fun S : F →L[𝕜] F => S x) hTBcomm.2
     simpa only [PB, TB, ContinuousLinearMap.comp_apply] using h
   have hPBFilled :
-      PB (genuineFilledTruncation B hB PCB TCB b τB x) = TB x := by
+      PB (filledTruncation B hB PCB TCB b τB x) = TB x := by
     change PB (TB x + ((b : ℝ) : 𝕜) • (x - PB x)) = TB x
     rw [map_add, map_smul, hPBTB, map_sub, hPBPBx, sub_self, smul_zero,
       add_zero]
   have hAFilled :
-      genuineFilledTruncation A hA PCA TCA a τA (PA (X (PB x))) =
+      filledTruncation A hA PCA TCA a τA (PA (X (PB x))) =
         PA (A.toLinearMap ⟨X (PB x), hXdom⟩) := by
     change TA (PA (X (PB x))) +
         ((a : ℝ) : 𝕜) • (PA (X (PB x)) - PA (PA (X (PB x)))) =
@@ -212,8 +212,8 @@ theorem doubleGenuineCutoff_filled_sylvester_equation
   have heq := ClosedSylvesterEquation.equation_toLinearMap hEq ⟨PB x, hPBdom⟩ hXdom
   have heqPA := congrArg PA heq
   change
-    genuineFilledTruncation A hA PCA TCA a τA (PA (X (PB x))) -
-      PA (X (PB (genuineFilledTruncation B hB PCB TCB b τB x))) =
+    filledTruncation A hA PCA TCA a τA (PA (X (PB x))) -
+      PA (X (PB (filledTruncation B hB PCB TCB b τB x))) =
         PA (C (PB x))
   rw [hAFilled, hPBFilled]
   rw [show TB x = B.toLinearMap ⟨PB x, hPBdom⟩ by
@@ -223,10 +223,10 @@ theorem doubleGenuineCutoff_filled_sylvester_equation
 omit [HasKyFanApproximationGaugeTriangle 𝕜] in
 /-- Pointwise cutoff estimates for every finite Ky Fan gauge imply the full
 family of Ky Fan inequalities used by Fan dominance. -/
-theorem all_kyFanApproximationGauge_le_of_genuineCutoff_le
+theorem all_kyFanApproximationGauge_le_of_cutoff_le
     {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hB : B.IsSelfAdjoint)
-    (PCB : GenuineSpectralCutoffInterface B hB)
+    (PCB : SpectralCutoffInterface B hB)
     {X C : F →L[𝕜] E} {δ : ℝ}
     (hcut : ∀ τ : ℝ, 0 ≤ τ → ∀ k : ℕ,
       δ * kyFanApproximationGauge k
@@ -236,7 +236,7 @@ theorem all_kyFanApproximationGauge_le_of_genuineCutoff_le
     ∀ k, δ * kyFanApproximationGauge k X ≤
       kyFanApproximationGauge k C := by
   intro k
-  exact kyFanApproximationGauge_le_of_genuineCutoff_le hB PCB k
+  exact kyFanApproximationGauge_le_of_cutoff_le hB PCB k
     (fun τ hτ => hcut τ hτ k)
 
 /-- Ky Fan estimate obtained from bounded spectral truncations. -/
@@ -244,10 +244,10 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
     {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
-    (PCA : GenuineSpectralCutoffInterface A hA)
-    (TCA : GenuineBoundedTruncationInterface A hA PCA)
-    (PCB : GenuineSpectralCutoffInterface B hB)
-    (TCB : GenuineBoundedTruncationInterface B hB PCB)
+    (PCA : SpectralCutoffInterface A hA)
+    (TCA : BoundedTruncationInterface A hA PCA)
+    (PCB : SpectralCutoffInterface B hB)
+    (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
     (hAc : SemiboundedBelow A (c + δ))
@@ -260,26 +260,26 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
   · subst k
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
-  apply kyFanApproximationGauge_le_of_leftGenuineCutoff_le hA PCA k
+  apply kyFanApproximationGauge_le_of_leftCutoff_le hA PCA k
   intro τA hτA
-  apply kyFanApproximationGauge_le_of_genuineCutoff_le hB PCB k
+  apply kyFanApproximationGauge_le_of_cutoff_le hB PCB k
   intro τB hτB
   let PA : E →L[𝕜] E := PCA.cutoff τA
   let PB : F →L[𝕜] F := PCB.cutoff τB
-  let AF : E →L[𝕜] E := genuineFilledTruncation A hA PCA TCA (c + δ) τA
-  let BF : F →L[𝕜] F := genuineFilledTruncation B hB PCB TCB c τB
+  let AF : E →L[𝕜] E := filledTruncation A hA PCA TCA (c + δ) τA
+  let BF : F →L[𝕜] F := filledTruncation B hB PCB TCB c τB
   let Xc : F →L[𝕜] E := PA ∘L X ∘L PB
   let Cc : F →L[𝕜] E := PA ∘L C ∘L PB
   have hAFsym : AF.IsSymmetric :=
-    genuineFilledTruncation_isSymmetric A hA PCA TCA (c + δ) τA
+    filledTruncation_isSymmetric A hA PCA TCA (c + δ) τA
   have hBFsym : BF.IsSymmetric :=
-    genuineFilledTruncation_isSymmetric B hB PCB TCB c τB
+    filledTruncation_isSymmetric B hB PCB TCB c τB
   have hAFlower : ∀ x, (c + δ) * ‖x‖ ^ 2 ≤
       RCLike.re ⟪AF x, x⟫_𝕜 :=
-    genuineFilledTruncation_lowerBound A hA PCA TCA hτA hAc
+    filledTruncation_lowerBound A hA PCA TCA hτA hAc
   have hBFupper : ∀ x, RCLike.re ⟪BF x, x⟫_𝕜 ≤
       c * ‖x‖ ^ 2 :=
-    genuineFilledTruncation_upperBound B hB PCB TCB hτB hBc
+    filledTruncation_upperBound B hB PCB TCB hτB hBc
   have hEqCut : AF ∘L Xc - Xc ∘L BF = Cc := by
     simpa only [AF, BF, Xc, Cc] using
       doubleGenuineCutoff_filled_sylvester_equation hA hB PCA TCA PCB TCB hEq
@@ -352,10 +352,10 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
     {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
-    (PCA : GenuineSpectralCutoffInterface A hA)
-    (TCA : GenuineBoundedTruncationInterface A hA PCA)
-    (PCB : GenuineSpectralCutoffInterface B hB)
-    (TCB : GenuineBoundedTruncationInterface B hB PCB)
+    (PCA : SpectralCutoffInterface A hA)
+    (TCA : BoundedTruncationInterface A hA PCA)
+    (PCB : SpectralCutoffInterface B hB)
+    (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
     (hAc : SemiboundedAbove A c)
@@ -368,26 +368,26 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
   · subst k
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
-  apply kyFanApproximationGauge_le_of_leftGenuineCutoff_le hA PCA k
+  apply kyFanApproximationGauge_le_of_leftCutoff_le hA PCA k
   intro τA hτA
-  apply kyFanApproximationGauge_le_of_genuineCutoff_le hB PCB k
+  apply kyFanApproximationGauge_le_of_cutoff_le hB PCB k
   intro τB hτB
   let PA : E →L[𝕜] E := PCA.cutoff τA
   let PB : F →L[𝕜] F := PCB.cutoff τB
-  let AF : E →L[𝕜] E := genuineFilledTruncation A hA PCA TCA c τA
-  let BF : F →L[𝕜] F := genuineFilledTruncation B hB PCB TCB (c + δ) τB
+  let AF : E →L[𝕜] E := filledTruncation A hA PCA TCA c τA
+  let BF : F →L[𝕜] F := filledTruncation B hB PCB TCB (c + δ) τB
   let Xc : F →L[𝕜] E := PA ∘L X ∘L PB
   let Cc : F →L[𝕜] E := PA ∘L C ∘L PB
   have hAFsym : AF.IsSymmetric :=
-    genuineFilledTruncation_isSymmetric A hA PCA TCA c τA
+    filledTruncation_isSymmetric A hA PCA TCA c τA
   have hBFsym : BF.IsSymmetric :=
-    genuineFilledTruncation_isSymmetric B hB PCB TCB (c + δ) τB
+    filledTruncation_isSymmetric B hB PCB TCB (c + δ) τB
   have hAFupper : ∀ x, RCLike.re ⟪AF x, x⟫_𝕜 ≤
       c * ‖x‖ ^ 2 :=
-    genuineFilledTruncation_upperBound A hA PCA TCA hτA hAc
+    filledTruncation_upperBound A hA PCA TCA hτA hAc
   have hBFlower : ∀ x, (c + δ) * ‖x‖ ^ 2 ≤
       RCLike.re ⟪BF x, x⟫_𝕜 :=
-    genuineFilledTruncation_lowerBound B hB PCB TCB hτB hBc
+    filledTruncation_lowerBound B hB PCB TCB hτB hBc
   have hEqCut : AF ∘L Xc - Xc ∘L BF = Cc := by
     simpa only [AF, BF, Xc, Cc] using
       doubleGenuineCutoff_filled_sylvester_equation hA hB PCA TCA PCB TCB hEq
@@ -460,10 +460,10 @@ theorem unbounded_sylvester_mem_of_semibounded_direct
     {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
-    (PCA : GenuineSpectralCutoffInterface A hA)
-    (TCA : GenuineBoundedTruncationInterface A hA PCA)
-    (PCB : GenuineSpectralCutoffInterface B hB)
-    (TCB : GenuineBoundedTruncationInterface B hB PCB)
+    (PCA : SpectralCutoffInterface A hA)
+    (TCA : BoundedTruncationInterface A hA PCA)
+    (PCB : SpectralCutoffInterface B hB)
+    (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
     (hAc : SemiboundedBelow A (c + δ))
@@ -482,10 +482,10 @@ theorem unbounded_sylvester_mem_and_gauge_le_direct
     {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
-    (PCA : GenuineSpectralCutoffInterface A hA)
-    (TCA : GenuineBoundedTruncationInterface A hA PCA)
-    (PCB : GenuineSpectralCutoffInterface B hB)
-    (TCB : GenuineBoundedTruncationInterface B hB PCB)
+    (PCA : SpectralCutoffInterface A hA)
+    (TCA : BoundedTruncationInterface A hA PCA)
+    (PCB : SpectralCutoffInterface B hB)
+    (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
     (hAc : SemiboundedBelow A (c + δ))
@@ -504,10 +504,10 @@ theorem unbounded_sylvester_mem_and_gauge_le_direct_swapped
     {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
-    (PCA : GenuineSpectralCutoffInterface A hA)
-    (TCA : GenuineBoundedTruncationInterface A hA PCA)
-    (PCB : GenuineSpectralCutoffInterface B hB)
-    (TCB : GenuineBoundedTruncationInterface B hB PCB)
+    (PCA : SpectralCutoffInterface A hA)
+    (TCA : BoundedTruncationInterface A hA PCA)
+    (PCB : SpectralCutoffInterface B hB)
+    (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
     (hAc : SemiboundedAbove A c)

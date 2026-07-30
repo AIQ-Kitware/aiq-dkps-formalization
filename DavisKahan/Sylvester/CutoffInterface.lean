@@ -31,7 +31,7 @@ variable {E : Type v}
 
 /-- The exact projection, domain, commutation, and strong-convergence laws
 needed from a spectral cutoff family. -/
-structure GenuineSpectralCutoffInterface
+structure SpectralCutoffInterface
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
     (hA : A.IsSelfAdjoint) where
   cutoff : ℝ → E →L[𝕜] E
@@ -45,10 +45,10 @@ structure GenuineSpectralCutoffInterface
     Tendsto (fun τ : ℝ => cutoff τ x) atTop (𝓝 x)
 
 /-- The bounded truncation laws needed after a cutoff family has been chosen. -/
-structure GenuineBoundedTruncationInterface
+structure BoundedTruncationInterface
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
     (hA : A.IsSelfAdjoint)
-    (P : GenuineSpectralCutoffInterface A hA) where
+    (P : SpectralCutoffInterface A hA) where
   truncation : ℝ → E →L[𝕜] E
   isSymmetric : ∀ τ, (truncation τ).IsSymmetric
   eq_on_cutoff : ∀ τ x,
