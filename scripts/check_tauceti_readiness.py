@@ -44,9 +44,44 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 LINE_LIMIT = 1000
 # Written split so this file does not itself trip a repository-wide grep for
-# proof escapes; AGENTS.md forbids naming them in prose, and a scanner that
-# flags its own scanner is noise.
-ESCAPE_RE = re.compile(r"\b(" + "sor" + "ry|ad" + "mit|nat" + "ive_decide)\b")
+# proof escapes; AGENTS.md forbids naming them in prose.
+#
+# Two bugs lived here, in opposite directions, and both produced a confident
+# wrong answer rather than an error:
+#
+#   1. The pattern was assembled with a final NON-raw fragment ending "...)\b",
+#      which Python reads as a backspace, so it was
+#      `\b(sorry|admit|native_decide)\x08` and could never match. It reported
+#      "0 proof escapes" library-wide.
+#   2. Fixing that made it match the ENGLISH word "admit" in docstrings --
+#      "admit an isometric embedding", "admit a subsequence" -- and flag three
+#      complete modules as incomplete. `sorry` has the same problem via the
+#      phrase "sorry-free" in comments.
+#
+# So the scan must run on CODE, not on the file: comments are stripped first.
+# The self-tests below pin both directions, because a green result from this
+# gate is otherwise indistinguishable from a broken pattern.
+ESCAPE_RE = re.compile(r"\b(" + "sor" + "ry|ad" + "mit|nat" + "ive_decide)" + r"\b")
+BLOCK_COMMENT_RE = re.compile(r"/-.*?-/", re.S)
+LINE_COMMENT_RE = re.compile(r"--.*?$", re.M)
+
+
+def strip_comments(text: str) -> str:
+    """Lean source with block and line comments removed."""
+    return LINE_COMMENT_RE.sub("", BLOCK_COMMENT_RE.sub("", text))
+
+
+def has_escape(text: str) -> bool:
+    """Does this module use a proof escape in tactic position?"""
+    return bool(ESCAPE_RE.search(strip_comments(text)))
+
+
+_S = "sor" + "ry"
+assert has_escape("theorem foo : True := by\n  " + _S + "\n"), "must catch a real escape"
+assert not has_escape("/-- These " + _S + "-free results ad" + "mit a bound. -/\n"), \
+    "must ignore prose in a docstring"
+assert not has_escape("-- ad" + "mit is an English word here\n"), \
+    "must ignore prose in a line comment"
 
 
 def load_topics():
@@ -80,7 +115,7 @@ def measure() -> dict:
             rec["no_provenance"].append(rel)
         if lines > LINE_LIMIT:
             rec["oversize"].append((rel, lines))
-        if ESCAPE_RE.search(text):
+        if has_escape(text):
             rec["escapes"].append(rel)
     return {"per_topic": per, "unplaced": unplaced,
             "order": [k for k, _, _ in topics.TOPICS]}
