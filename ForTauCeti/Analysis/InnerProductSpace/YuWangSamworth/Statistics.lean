@@ -93,6 +93,7 @@ theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
         if i ∈ s then ∑ k ∈ sᶜ, ‖⟪bS k, bT i⟫_𝕜‖ ^ 2 else 0 := by
     intro i
     rw [sinThetaMap, LinearMap.comp_apply]
+    -- names the application so the norm bound applies to it directly.
     change ‖Vᗮ.starProjection (U.starProjection (bT i))‖ ^ 2 = _
     rw [show U.starProjection (bT i) = if i ∈ s then bT i else 0 by
       simpa [U] using
@@ -269,10 +270,13 @@ theorem sinThetaSq_eq_sinThetaFrobenius_sq_of_spans
     rcases j with ⟨j, hj⟩
     rcases hi with ⟨i', rfl⟩
     rcases hj with ⟨j', rfl⟩
+    -- states the goal as the inner-product identity the structure lemma expects.
     change ⟪uExt (e i'), uExt (e j')⟫_𝕜 =
       if (⟨e i', ⟨i', rfl⟩⟩ : S) = ⟨e j', ⟨j', rfl⟩⟩ then 1 else 0
     rw [show uExt (e i') = u i' by
       exact e.injective.extend_apply u (fun _ => 0) i',
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       show uExt (e j') = u j' by
         exact e.injective.extend_apply u (fun _ => 0) j',
       orthonormal_iff_ite.mp hu i' j']
@@ -284,10 +288,13 @@ theorem sinThetaSq_eq_sinThetaFrobenius_sq_of_spans
     rcases j with ⟨j, hj⟩
     rcases hi with ⟨i', rfl⟩
     rcases hj with ⟨j', rfl⟩
+    -- states the goal as the inner-product identity the structure lemma expects.
     change ⟪vExt (e i'), vExt (e j')⟫_𝕜 =
       if (⟨e i', ⟨i', rfl⟩⟩ : S) = ⟨e j', ⟨j', rfl⟩⟩ then 1 else 0
     rw [show vExt (e i') = v i' by
       exact e.injective.extend_apply v (fun _ => 0) i',
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       show vExt (e j') = v j' by
         exact e.injective.extend_apply v (fun _ => 0) j',
       orthonormal_iff_ite.mp hv i' j']
@@ -381,6 +388,7 @@ theorem exists_aligned_orthonormalBasis
   have hu : Orthonormal 𝕜 u := by
     rw [orthonormal_iff_ite]
     intro i j
+    -- states the goal as the inner-product identity the structure lemma expects.
     change ⟪bU (Fin.cast hrankU.symm i), bU (Fin.cast hrankU.symm j)⟫_𝕜 =
       if i = j then 1 else 0
     rw [orthonormal_iff_ite.mp bU.orthonormal]
@@ -388,6 +396,7 @@ theorem exists_aligned_orthonormalBasis
   have hv0 : Orthonormal 𝕜 v0 := by
     rw [orthonormal_iff_ite]
     intro i j
+    -- states the goal as the inner-product identity the structure lemma expects.
     change ⟪bV (Fin.cast hrankV.symm i), bV (Fin.cast hrankV.symm j)⟫_𝕜 =
       if i = j then 1 else 0
     rw [orthonormal_iff_ite.mp bV.orthonormal]
@@ -410,6 +419,8 @@ theorem exists_aligned_orthonormalBasis
   have hv : Orthonormal 𝕜 v := by
     rw [orthonormal_iff_ite]
     intro i j
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change
       ⟪familyIsometry hv0 (O.symm (EuclideanSpace.single i (1 : 𝕜))),
         familyIsometry hv0 (O.symm (EuclideanSpace.single j (1 : 𝕜)))⟫_𝕜 =
