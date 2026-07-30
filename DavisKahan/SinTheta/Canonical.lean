@@ -15,20 +15,24 @@ theorem `FormBoundedIsometricSinThetaProblem.result` still runs through the
 form-bounded engine and therefore stays with the open obligations; the manuscript
 surface selects the complex proof here and the real proof in `Real.Canonical`.
 
-## Two copies of each problem, and what it would take to have one
+## Two copies of each problem, and which one is redundant
 
-`SinTheta/Unbounded/AllGap.lean` declares `GeneralSinThetaProblem` and
-`IsometricSinThetaProblem` with the same fields as the structures here and the
-same `result` statements, differing **only** in `spectral_gap`: those take
-`UnboundedSylvesterGap`, these take `FormBoundedSylvesterGap`.
+`SinTheta/Unbounded/AllGap.lean` declares `SpectralGeneralSinThetaProblem` and
+`SpectralIsometricSinThetaProblem` with the same fields as the structures here
+and the same `result` statements, differing **only** in `spectral_gap`: those
+take `SpectralSylvesterGap`, these take `FormBoundedSylvesterGap`.
 
-The duplication is not accidental and cannot be removed by deleting a structure.
-`DK-NAME-GAP1` established that the two gap predicates are bridged for the
-interval/exterior configuration only, so a caller holding form bounds on the
-ordered configurations cannot construct the spectral package.  **One lemma would
-collapse the pair** — `SemiboundedBelow A c ↔ ofReal ⁻¹' spectrum A ⊆ Set.Ici c`
-for unbounded self-adjoint `A`, the spectral theorem in half-line form, which
-this tree does not have.
+`formBoundedSylvesterGap_of_spectral` (`Sylvester/Unbounded/LegacyGap.lean`)
+turns a spectral gap into a form-bounded one in every configuration, so **the
+structures here are the more general pair**: every spectral package yields one of
+these, and `SpectralGeneralSinThetaProblem.result` is therefore a corollary of
+`FormBoundedGeneralSinThetaProblem.result` rather than an independent theorem.
+The converse fails on the ordered configurations — recovering a spectral
+containment from a form bound is the half of the spectral theorem this tree does
+not have — so the redundancy runs one way only.
+
+Collapsing the pair is real work rather than a deletion, because the two `result`
+proofs take different routes through the engines; it is posted as its own lane.
 
 `FormBoundedIsometricSinThetaProblem` is additionally `RCLike`-generic where the
 spectral one is `ℂ`-only, so it also carries the real-scalar surface in
@@ -58,7 +62,7 @@ block, and `data.Λ₁` is the complementary exact block.  The residual is bound
 on the ambient Hilbert spaces even when the diagonal operators are unbounded.
 The lower frame bound permits a non-isometric trial map.
 
-`GeneralSinThetaProblem` is the same package over the spectral gap; see the
+`SpectralGeneralSinThetaProblem` is the same package over the spectral gap; see the
 module docstring for why both exist. -/
 structure FormBoundedGeneralSinThetaProblem
     (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
@@ -136,7 +140,7 @@ structure FiniteIntervalGeneralSinThetaProblem
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : UnboundedIntervalExteriorGap data.A₀ data.Λ₁
+  spectral_gap : SpectralIntervalExteriorGap data.A₀ data.Λ₁
     intervalLower intervalUpper gap
   residual_mem : N.Mem data.residual
 
@@ -212,7 +216,7 @@ variable {E F G H : Type v}
 /-- Complete input package for the isometric specialization, with the spectral
 gap given as `FormBoundedSylvesterGap`.
 
-Unlike `IsometricSinThetaProblem`, which is `ℂ`-only, this package is
+Unlike `SpectralIsometricSinThetaProblem`, which is `ℂ`-only, this package is
 `RCLike`-generic and carries the real-scalar surface in `Real/Canonical.lean`. -/
 structure FormBoundedIsometricSinThetaProblem
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜)) where

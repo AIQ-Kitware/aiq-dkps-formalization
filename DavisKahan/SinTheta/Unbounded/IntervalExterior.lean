@@ -37,7 +37,7 @@ over the Spectra spectrum.  Either orientation is permitted.
 
 `RealSpectrumIntervalExteriorGap` is the `realSpectrum` spelling of the same
 configuration. -/
-def UnboundedIntervalExteriorGap
+def SpectralIntervalExteriorGap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
     (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G))
     (β α δ : ℝ) : Prop :=
@@ -65,7 +65,7 @@ def UnboundedIntervalExteriorGapPMap
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A)
 
-namespace UnboundedIntervalExteriorGap
+namespace SpectralIntervalExteriorGap
 
 omit [CompleteSpace F] [CompleteSpace G] in
 /-- View a source-facing interval/exterior gap through its canonical partial
@@ -73,15 +73,15 @@ maps. -/
 theorem toPMap
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G)}
-    {β α δ : ℝ} (h : UnboundedIntervalExteriorGap A B β α δ) :
+    {β α δ : ℝ} (h : SpectralIntervalExteriorGap A B β α δ) :
     UnboundedIntervalExteriorGapPMap A.toLinearPMap B.toLinearPMap β α δ := by
   exact h
 
-end UnboundedIntervalExteriorGap
+end SpectralIntervalExteriorGap
 
 /-- Generalized finite-interval unbounded sine-theta theorem at ideal-gauge
 scope, using Spectra spectrum hypotheses and no ordered half-line dependency. -/
-theorem generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
+theorem generalizedSinTheta_unbounded_of_spectralIntervalExteriorGap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
@@ -92,7 +92,7 @@ theorem generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
     {β α δ ε : ℝ}
     (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : UnboundedIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
+    (hgap : SpectralIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
       δ * ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)
@@ -137,7 +137,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_of_intervalExteriorGap
     N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
       δ * ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)
         ≤ N.gaugeReal D.residual := by
-  apply generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
+  apply generalizedSinTheta_unbounded_of_spectralIntervalExteriorGap
     N D.toClosed hA hA₀ hΛ₁ hF₁ hβα hδ hε hframe
   · exact hgap
   · exact hR
