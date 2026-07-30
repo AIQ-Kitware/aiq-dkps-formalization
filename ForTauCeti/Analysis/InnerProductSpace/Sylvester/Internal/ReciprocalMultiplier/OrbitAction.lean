@@ -68,6 +68,7 @@ noncomputable def basisMatrixUnit
 
 omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- Pointwise formula for a coordinate matrix unit. -/
+@[simp]
 theorem basisMatrixUnit_apply
     (eF : OrthonormalBasis (Fin (Module.finrank 𝕜 F)) 𝕜 F)
     (eE : OrthonormalBasis (Fin (Module.finrank 𝕜 E)) 𝕜 E)

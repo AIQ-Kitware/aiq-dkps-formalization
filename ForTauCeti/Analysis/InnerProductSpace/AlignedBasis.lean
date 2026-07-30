@@ -118,6 +118,7 @@ noncomputable def overlapOp {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : 
 
 /-- The overlap operator acts by taking inner products against the first family and re-expanding in
 the second. -/
+@[simp]
 theorem overlapOp_apply {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v)
     (x : EuclideanSpace 𝕜 (Fin d)) :
     overlapOp hu hv x = (familyIsometry hu).toLinearMap.adjoint (familyIsometry hv x) := rfl
