@@ -50,7 +50,7 @@ theorem sinTheta_unbounded_complex
       δ * N.gauge (D.X.adjoint ∘L D.F₁)
         ≤ N.gauge D.residual := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have hC := adjointResidualBlock_mem_and_gauge_le N.toRectangularSymmetricIdealFamily D hF₁ hR
+  have hC := adjointResidualBlock_mem_and_gauge_le N.toSymmetricOperatorIdealFamily D hF₁ hR
   have hRaw := davisKahan1970_sylvester_complex
     N hA₀ hΛ₁ hδ hgap hEq hC.1
   exact ⟨hRaw.1, hRaw.2.trans hC.2⟩
@@ -77,9 +77,9 @@ theorem sinTheta_unbounded_exact_complex
   have hBlock := sinTheta_unbounded_complex
     N D hA hA₀ hΛ₁ hX hdecomp.isometry₁ hδ hgap hR
   have hAngle := isometricComplementaryBlock_mem_and_gauge_eq_directed
-    N.toRectangularSymmetricIdealFamily D.X F₀ D.F₁ hX hdecomp hBlock.1
+    N.toSymmetricOperatorIdealFamily D.X F₀ D.F₁ hX hdecomp hBlock.1
   refine ⟨hAngle.1, ?_⟩
-  rw [KyFanDominantIdealFamily.toRectangular_gauge] at hAngle
+  rw [KyFanDominantIdealFamily.toSymmetric_gaugeReal] at hAngle
   rw [hAngle.2]
   exact hBlock.2
 
@@ -103,11 +103,11 @@ theorem generalizedSinTheta_unbounded_complex
           (sinThetaBlock D.X D.F₁ hframe hε)
         ≤ N.gauge D.residual := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have hC := adjointResidualBlock_mem_and_gauge_le N.toRectangularSymmetricIdealFamily D hF₁ hR
+  have hC := adjointResidualBlock_mem_and_gauge_le N.toSymmetricOperatorIdealFamily D hF₁ hR
   have hRaw := davisKahan1970_sylvester_complex
     N hA₀ hΛ₁ hδ hgap hEq hC.1
   have hFrame := lowerFrame_sinThetaBlock_mem_and_gauge_le
-    N.toRectangularSymmetricIdealFamily D.X D.F₁ hframe hε hRaw.1
+    N.toSymmetricOperatorIdealFamily D.X D.F₁ hframe hε hRaw.1
   refine ⟨hFrame.1, ?_⟩
   calc
     δ * ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε)
@@ -140,9 +140,9 @@ theorem generalizedSinTheta_unbounded_exact_complex
   have hBlock := generalizedSinTheta_unbounded_complex
     N D hA hA₀ hΛ₁ hdecomp.isometry₁ hδ hε hframe hgap hR
   have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
-    N.toRectangularSymmetricIdealFamily D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
+    N.toSymmetricOperatorIdealFamily D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
   refine ⟨hAngle.1, ?_⟩
-  rw [KyFanDominantIdealFamily.toRectangular_gauge] at hAngle
+  rw [KyFanDominantIdealFamily.toSymmetric_gaugeReal] at hAngle
   rw [hAngle.2]
   exact hBlock.2
 

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Bounded.Core
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.Sylvester.Gap
 import DavisKahan.Interop.TauCeti.ClosedOperator
 
@@ -412,23 +413,24 @@ theorem linearPMap_unbounded_adjoint_residual_block_identity
 /-- The projected residual block remains in the same rectangular ideal and its
  gauge is no larger than the original residual gauge. -/
 theorem adjointResidualBlock_mem_and_gauge_le
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
     (hF₁ : IsometricEmbedding D.F₁)
     (hR : N.Mem D.residual) :
     N.Mem (-(D.residual.adjoint ∘L D.F₁)) ∧
-      N.gauge (-(D.residual.adjoint ∘L D.F₁)) ≤
-        N.gauge D.residual := by
+      N.gaugeReal (-(D.residual.adjoint ∘L D.F₁)) ≤
+        N.gaugeReal D.residual := by
   have hAdj : N.Mem D.residual.adjoint := N.adjoint_mem hR
   have hComp : N.Mem (D.residual.adjoint ∘L D.F₁) :=
     N.comp_right_mem D.F₁ hAdj
   refine ⟨N.neg_mem hComp, ?_⟩
   calc
-    N.gauge (-(D.residual.adjoint ∘L D.F₁))
-        = N.gauge (D.residual.adjoint ∘L D.F₁) := N.gauge_neg hComp
-    _ ≤ N.gauge D.residual.adjoint :=
-      N.gauge_comp_right_le D.F₁ hAdj (opNorm_le_one_of_isometry hF₁)
-    _ = N.gauge D.residual := N.gauge_adjoint hR
+    N.gaugeReal (-(D.residual.adjoint ∘L D.F₁))
+        = N.gaugeReal (D.residual.adjoint ∘L D.F₁) := N.gaugeReal_neg hComp
+    _ ≤ N.gaugeReal D.residual.adjoint :=
+      N.gaugeReal_comp_right_le D.F₁ hAdj (opNorm_le_one_of_isometry hF₁)
+    _ = N.gaugeReal D.residual := N.gaugeReal_adjoint hR
 
 end GenericCore
 

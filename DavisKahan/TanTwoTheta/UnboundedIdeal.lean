@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.DoubleAngle.UnboundedIdeal
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.TanTwoTheta.Unbounded
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
@@ -49,14 +50,15 @@ noncomputable def tanTwoThetaIdealBlock
 rectangular ideal membership and introduces only the quarter-angle cosine
 denominator in the gauge. -/
 theorem tanTwoThetaIdealBlock_mem_and_gauge_le
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hquarter : IsQuarterAcute U V)
     (hsin : N.Mem (sinTwoThetaIdealBlock U V)) :
     N.Mem (tanTwoThetaIdealBlock U V hquarter) ∧
-      N.gauge (tanTwoThetaIdealBlock U V hquarter) ≤
-        N.gauge (sinTwoThetaIdealBlock U V) /
+      N.gaugeReal (tanTwoThetaIdealBlock U V hquarter) ≤
+        N.gaugeReal (sinTwoThetaIdealBlock U V) /
           (1 - 2 * directedGap U V ^ 2) := by
   let R : H →L[ℂ] H :=
     (cosTwoAngleExtendedCEquiv U V hquarter).symm.toContinuousLinearMap
@@ -66,26 +68,27 @@ theorem tanTwoThetaIdealBlock_mem_and_gauge_le
   have hmem : N.Mem (sinTwoThetaIdealBlock U V ∘L R) :=
     N.comp_right_mem R hsin
   have hgauge :
-      N.gauge (sinTwoThetaIdealBlock U V ∘L R) ≤
-        N.gauge (sinTwoThetaIdealBlock U V) * ‖R‖ :=
-    N.gauge_comp_right_le_mul R hsin
+      N.gaugeReal (sinTwoThetaIdealBlock U V ∘L R) ≤
+        N.gaugeReal (sinTwoThetaIdealBlock U V) * ‖R‖ :=
+    N.gaugeReal_comp_right_le_mul R hsin
   refine ⟨?_, ?_⟩
   · simpa only [tanTwoThetaIdealBlock, R] using hmem
-  · change N.gauge (sinTwoThetaIdealBlock U V ∘L R) ≤ _
+  · change N.gaugeReal (sinTwoThetaIdealBlock U V ∘L R) ≤ _
     calc
-      N.gauge (sinTwoThetaIdealBlock U V ∘L R) ≤
-          N.gauge (sinTwoThetaIdealBlock U V) * ‖R‖ := hgauge
-      _ ≤ N.gauge (sinTwoThetaIdealBlock U V) *
+      N.gaugeReal (sinTwoThetaIdealBlock U V ∘L R) ≤
+          N.gaugeReal (sinTwoThetaIdealBlock U V) * ‖R‖ := hgauge
+      _ ≤ N.gaugeReal (sinTwoThetaIdealBlock U V) *
           (1 - 2 * directedGap U V ^ 2)⁻¹ :=
-        mul_le_mul_of_nonneg_left hRnorm (N.gauge_nonneg hsin)
-      _ = N.gauge (sinTwoThetaIdealBlock U V) /
+        mul_le_mul_of_nonneg_left hRnorm (N.gaugeReal_nonneg hsin)
+      _ = N.gaugeReal (sinTwoThetaIdealBlock U V) /
           (1 - 2 * directedGap U V ^ 2) := by
         rw [div_eq_mul_inv]
 
 /-- Canonical bounded-perturbation unbounded tangent-two-theta theorem at
 rectangular ideal-gauge scope, under explicit quarter-acuteness. -/
 theorem tanTwoTheta_addBounded_gauge_of_spectrum_gap
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -107,12 +110,12 @@ theorem tanTwoTheta_addBounded_gauge_of_spectrum_gap
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)
         hquarter) ∧
-      δ * N.gauge (tanTwoThetaIdealBlock
+      δ * N.gaugeReal (tanTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)
         hquarter) ≤
-        (2 * N.gauge E) /
+        (2 * N.gaugeReal E) /
           (1 - 2 * directedGap
             (selfAdjointSpectralSubspace A hA B hB)
             (selfAdjointSpectralSubspace (A.addBounded E)
@@ -128,19 +131,20 @@ theorem tanTwoTheta_addBounded_gauge_of_spectrum_gap
     doubleCosineDenominator_pos U V hquarter
   refine ⟨htan.1, ?_⟩
   calc
-    δ * N.gauge (tanTwoThetaIdealBlock U V hquarter) ≤
-        δ * (N.gauge (sinTwoThetaIdealBlock U V) /
+    δ * N.gaugeReal (tanTwoThetaIdealBlock U V hquarter) ≤
+        δ * (N.gaugeReal (sinTwoThetaIdealBlock U V) /
           (1 - 2 * directedGap U V ^ 2)) :=
       mul_le_mul_of_nonneg_left htan.2 hδ.le
-    _ = (δ * N.gauge (sinTwoThetaIdealBlock U V)) /
+    _ = (δ * N.gaugeReal (sinTwoThetaIdealBlock U V)) /
           (1 - 2 * directedGap U V ^ 2) := by ring
-    _ ≤ (2 * N.gauge E) /
+    _ ≤ (2 * N.gaugeReal E) /
           (1 - 2 * directedGap U V ^ 2) :=
       div_le_div_of_nonneg_right hsin.2 hden.le
 
 /-- Set-localized rectangular ideal-gauge form of unbounded tangent two theta. -/
 theorem tanTwoTheta_addBounded_gauge_of_intervalExterior
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -157,12 +161,12 @@ theorem tanTwoTheta_addBounded_gauge_of_intervalExterior
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)
         hquarter) ∧
-      δ * N.gauge (tanTwoThetaIdealBlock
+      δ * N.gaugeReal (tanTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)
         hquarter) ≤
-        (2 * N.gauge E) /
+        (2 * N.gaugeReal E) /
           (1 - 2 * directedGap
             (selfAdjointSpectralSubspace A hA B hB)
             (selfAdjointSpectralSubspace (A.addBounded E)
@@ -213,7 +217,7 @@ theorem tanTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
             (selfAdjointSpectralSubspace (A.addBounded E)
               (addBounded_isSelfAdjoint A hA E hE) S hS) ^ 2) := by
   exact tanTwoTheta_addBounded_gauge_of_spectrum_gap
-    N.toRectangularSymmetricIdealFamily A hA E hE B S hB hS
+    N.toSymmetricOperatorIdealFamily A hA E hE B S hB hS
       hβα hδ hBlow hBhigh hBcomplSpec hEmem hquarter
 
 /-- Source-facing unitary-invariant-family wrapper for the set-localized ideal
@@ -247,7 +251,7 @@ theorem tanTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
             (selfAdjointSpectralSubspace (A.addBounded E)
               (addBounded_isSelfAdjoint A hA E hE) S hS) ^ 2) := by
   exact tanTwoTheta_addBounded_gauge_of_intervalExterior
-    N.toRectangularSymmetricIdealFamily A hA E hE B S hB hS
+    N.toSymmetricOperatorIdealFamily A hA E hE B S hB hS
       hβα hδ hBsub hBcomplDisj hEmem hquarter
 
 end SpectraBridge

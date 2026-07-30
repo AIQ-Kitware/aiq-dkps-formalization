@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.SpectralBridge
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.SinTheta.FrameFactorization
 
 /-!
@@ -152,14 +153,15 @@ theorem directedSinThetaOperator_eq_of_isometry
 /-- Under a complete orthogonal exact decomposition, the complementary overlap
 block and the directed sine operator have the same ideal membership and gauge. -/
 theorem sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (X : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E)
     {ε : ℝ} (hX : LowerFrameBound X ε) (hε : 0 < ε)
     (hdecomp : OrthogonalExactDecomposition F₀ F₁)
     (hblock : N.Mem (sinThetaBlock X F₁ hX hε)) :
     N.Mem (directedSinThetaOperator X F₀ hX hε) ∧
-      N.gauge (directedSinThetaOperator X F₀ hX hε) =
-        N.gauge (sinThetaBlock X F₁ hX hε) := by
+      N.gaugeReal (directedSinThetaOperator X F₀ hX hε) =
+        N.gaugeReal (sinThetaBlock X F₁ hX hε) := by
   have hComplement :
       ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint =
         F₁ ∘L F₁.adjoint := by
@@ -181,15 +183,15 @@ theorem sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
   have hF₁Norm : ‖F₁‖ ≤ 1 :=
     opNorm_le_one_of_isometry hdecomp.isometry₁
   have hForward :
-      N.gauge (directedSinThetaOperator X F₀ hX hε) ≤
-        N.gauge (sinThetaBlock X F₁ hX hε) := by
+      N.gaugeReal (directedSinThetaOperator X F₀ hX hε) ≤
+        N.gaugeReal (sinThetaBlock X F₁ hX hε) := by
     rw [hDirected]
     calc
-      N.gauge (F₁ ∘L (sinThetaBlock X F₁ hX hε).adjoint)
-          ≤ N.gauge (sinThetaBlock X F₁ hX hε).adjoint :=
-        N.gauge_comp_left_le F₁ hblockAdj hF₁Norm
-      _ = N.gauge (sinThetaBlock X F₁ hX hε) :=
-        N.gauge_adjoint hblock
+      N.gaugeReal (F₁ ∘L (sinThetaBlock X F₁ hX hε).adjoint)
+          ≤ N.gaugeReal (sinThetaBlock X F₁ hX hε).adjoint :=
+        N.gaugeReal_comp_left_le F₁ hblockAdj hF₁Norm
+      _ = N.gaugeReal (sinThetaBlock X F₁ hX hε) :=
+        N.gaugeReal_adjoint hblock
   have hF₁LeftInverse :
       F₁.adjoint ∘L F₁ = ContinuousLinearMap.id ℂ G :=
     adjoint_comp_self_eq_id_of_isometry hdecomp.isometry₁
@@ -211,10 +213,10 @@ theorem sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
   have hF₁AdjNorm : ‖F₁.adjoint‖ ≤ 1 := by
     simpa using hF₁Norm
   have hReverse :
-      N.gauge (sinThetaBlock X F₁ hX hε) ≤
-        N.gauge (directedSinThetaOperator X F₀ hX hε) := by
-    rw [← N.gauge_adjoint hblock, hRecover]
-    exact N.gauge_comp_left_le F₁.adjoint hDirectedMem hF₁AdjNorm
+      N.gaugeReal (sinThetaBlock X F₁ hX hε) ≤
+        N.gaugeReal (directedSinThetaOperator X F₀ hX hε) := by
+    rw [← N.gaugeReal_adjoint hblock, hRecover]
+    exact N.gaugeReal_comp_left_le F₁.adjoint hDirectedMem hF₁AdjNorm
   exact ⟨hDirectedMem, le_antisymm hForward hReverse⟩
 
 end Complex
@@ -233,14 +235,15 @@ variable {E F G H : Type v}
 /-- In the isometric case, the raw complementary overlap block and the
 orthogonal-complement projection of the trial map have the same ideal gauge. -/
 theorem isometricComplementaryBlock_mem_and_gauge_eq_directed
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     (X : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E)
     (_hX : IsometricEmbedding X)
     (hdecomp : OrthogonalExactDecomposition F₀ F₁)
     (hblock : N.Mem (X.adjoint ∘L F₁)) :
     N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L X) ∧
-      N.gauge ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L X) =
-        N.gauge (X.adjoint ∘L F₁) := by
+      N.gaugeReal ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L X) =
+        N.gaugeReal (X.adjoint ∘L F₁) := by
   have hComplement :
       ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint =
         F₁ ∘L F₁.adjoint := by
@@ -260,13 +263,13 @@ theorem isometricComplementaryBlock_mem_and_gauge_eq_directed
     exact N.comp_left_mem F₁ hblockAdj
   have hF₁Norm : ‖F₁‖ ≤ 1 :=
     opNorm_le_one_of_isometry hdecomp.isometry₁
-  have hForward : N.gauge D ≤ N.gauge (X.adjoint ∘L F₁) := by
+  have hForward : N.gaugeReal D ≤ N.gaugeReal (X.adjoint ∘L F₁) := by
     rw [hDirected]
     calc
-      N.gauge (F₁ ∘L (X.adjoint ∘L F₁).adjoint)
-          ≤ N.gauge (X.adjoint ∘L F₁).adjoint :=
-        N.gauge_comp_left_le F₁ hblockAdj hF₁Norm
-      _ = N.gauge (X.adjoint ∘L F₁) := N.gauge_adjoint hblock
+      N.gaugeReal (F₁ ∘L (X.adjoint ∘L F₁).adjoint)
+          ≤ N.gaugeReal (X.adjoint ∘L F₁).adjoint :=
+        N.gaugeReal_comp_left_le F₁ hblockAdj hF₁Norm
+      _ = N.gaugeReal (X.adjoint ∘L F₁) := N.gaugeReal_adjoint hblock
   have hF₁LeftInverse :
       F₁.adjoint ∘L F₁ = ContinuousLinearMap.id 𝕜 G :=
     adjoint_comp_self_eq_id_of_isometry hdecomp.isometry₁
@@ -281,9 +284,9 @@ theorem isometricComplementaryBlock_mem_and_gauge_eq_directed
           ContinuousLinearMap.comp_assoc _ _ _
       _ = F₁.adjoint ∘L D := by rw [hDirected]
   have hF₁AdjNorm : ‖F₁.adjoint‖ ≤ 1 := by simpa using hF₁Norm
-  have hReverse : N.gauge (X.adjoint ∘L F₁) ≤ N.gauge D := by
-    rw [← N.gauge_adjoint hblock, hRecover]
-    exact N.gauge_comp_left_le F₁.adjoint hDirectedMem hF₁AdjNorm
+  have hReverse : N.gaugeReal (X.adjoint ∘L F₁) ≤ N.gaugeReal D := by
+    rw [← N.gaugeReal_adjoint hblock, hRecover]
+    exact N.gaugeReal_comp_left_le F₁.adjoint hDirectedMem hF₁AdjNorm
   exact ⟨hDirectedMem, le_antisymm hForward hReverse⟩
 
 end GenericExact
