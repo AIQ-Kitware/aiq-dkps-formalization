@@ -18,8 +18,7 @@ An `X` intertwining two partial maps intertwines everything built from them:
 first their resolvents, and from there their spectral projections, so that
 disjoint spectra force `X = 0`.
 
-This is Spectra-removal lane **SR-E**
-(`dev/tauceti/spectra-removal-parallel-lanes.md`), replacing the donor constant
+This replaces the donor constant
 `generatorIntertwiner_eq_zero_of_disjoint_spectrum`.
 
 ## Status
@@ -35,8 +34,7 @@ What remains is the **Borel** step: upgrading `cfcHom_cayley_intertwines` to
 `BorelCalculus.borelCalculus`, and from there to `specProjection`.  That is a
 monotone-class argument on the sesquilinear `pair` form defining
 `borelCalculus`, i.e. it must be run through the diagonal measures rather than
-the operators.  It is the one genuinely open piece and is written up in the lane
-document.
+the operators.  It is the one genuinely open piece.
 
 Once `specProjection` intertwining exists the endgame is short: for disjoint
 closed spectra pick a Borel `B ⊇ σ(A)` missing `σ(B)`, and

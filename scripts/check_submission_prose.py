@@ -47,22 +47,48 @@ LIB = ROOT / "ForTauCeti"
 #: Do not read the change as progress; no docstring was touched.  The cleanup slices are lanes
 #: FTC-PROSE-a .. FTC-PROSE-d; FTC-PROSE-ENFORCE drops this to 0 and flips the
 #: convention so new files stop generating it.
-BASELINE = 0
+#:
+#: **RAISED from 0 to 34 on 2026-07-30, and this is not a regression in the tree.**  The
+#: tree did not change; the ruler did.  Both patterns below had holes wide enough to
+#: report a clean repository over 58 real hits, so the 0 recorded here was measuring the
+#: regexes rather than the docstrings.  Raising it is the honest move -- a baseline that
+#: is only ever lowered is worth having precisely because it is never quietly wrong, and
+#: leaving 0 in place would have made every future run agree with a number that was false
+#: the day it was written.  The cleanup that takes it back down is the commit after this.
+BASELINE = 34
 
 #: Highest number of individual hits.  The module count alone is not enough: adding a
 #: fourth lane id to a module that already has three leaves the module count unchanged,
 #: so a modules-only ratchet lets the prose keep growing inside the files that already
 #: have it.  Found by testing this gate against a deliberate regression -- it passed.
-HIT_BASELINE = 0
+#:
+#: Raised from 0 to 42 with `BASELINE`, for the reason recorded there.
+HIT_BASELINE = 42
 
 #: An internal lane id: `lane FTC-EXPOSE-g2`, `Lane SPLIT-1K`, `lane Y3`, `lane T15a`.
 #: Anchored on the word `lane` so ordinary prose ("the bounded-operator lane ever
 #: needs") does not match -- that phrasing produced a false positive in the first
 #: measurement of this defect.
-LANE_ID = re.compile(r"\b[Ll]anes?\s+(?:[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+|Y\d+|T\d+[a-c]?)\b")
+#:
+#: `[`*_]{0,2}` is not cosmetic, and leaving it out is how this gate reported a clean
+#: tree while 15 lane references sat in 12 modules.  A lane id is an identifier, so in a
+#: Lean docstring the natural way to write it is in backticks -- ``lane `AN-A4-COMPACT` ``
+#: -- and the undecorated pattern misses every one of those.  Bold (`lane **SR-E**`) fails
+#: the same way.  The decoration must be optional and must sit between the keyword and the
+#: id, which is exactly where a writer puts it.  `\s+` already spans a newline, which
+#: matters: three of the fifteen had wrapped between `lane` and the id.
+LANE_ID = re.compile(
+    r"\b[Ll]anes?\s+[`*_]{0,2}(?:[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+|Y\d+|T\d+[a-c]?)\b")
 
 #: Paths that do not exist in the destination repository, or at all.
-INTERNAL_PATH = re.compile(r"dev/LANES\.md|dev/journals|dev/audit/|\.claude/worktrees|ForMathlib/")
+#:
+#: `dev/` is matched as a whole rather than by naming its subdirectories one at a time.
+#: The enumerated version listed `dev/LANES.md`, `dev/journals` and `dev/audit/`, and
+#: missed 15 references to `dev/tauceti/` for no reason other than that nobody had added
+#: it -- a gate that has to be extended every time a directory is created is a gate that
+#: is quietly wrong most of the time.  The whole `dev/` tree is our workflow and none of
+#: it travels with a submission.
+INTERNAL_PATH = re.compile(r"\bdev/|\.claude/worktrees|ForMathlib/")
 
 #: Provenance lines are EXEMPT from the path check, and getting this wrong was the first
 #: version's bug.  `* Original module: ForMathlib/.../CourantFischer.lean at Davis--Kahan

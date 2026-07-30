@@ -21,7 +21,7 @@ converted to these form bounds in scalar-specific bridge modules.
 before the dependency-closed base of the sin-Θ core moved
 into the staging layer.
 
-**Renamespaced 2026-07-30 under lane `RUB-NS-PAPER`.**  The theorem below is
+**Renamespaced.**  The theorem below is
 generic operator geometry — two self-adjoint operators, two reducing subspaces,
 a form gap — and it was filed under `TauCeti.DavisKahan`, the namespace of the
 paper that happened to need it.  `ForTauCeti/README.md` §2 asks for `TauCeti` or
