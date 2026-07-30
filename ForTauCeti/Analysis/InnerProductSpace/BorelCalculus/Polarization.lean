@@ -37,6 +37,21 @@ This is what makes the construction short: no monotone-class induction, no
 Jordan–von Neumann argument recovering additivity from the parallelogram law,
 and no operator-monotone limits.
 
+## Sources
+
+The construction is the classical one for the bounded Borel functional calculus of
+a normal operator: represent the diagonal functionals by measures
+(Riesz--Markov--Kakutani), polarise, and extend from continuous to bounded Borel
+symbols by approximation in `L¹` of the diagonal measures.  It follows the standard
+textbook treatment of the spectral theorem for normal operators (Rudin,
+*Functional Analysis*; Conway, *A Course in Functional Analysis*) rather than any
+one source's proof.
+
+The route was chosen against the Spectra library's Herglotz/Poisson construction;
+`dev/tauceti/spectra-removal-plan.md` records that comparison, and
+`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean` carries
+the provenance of the route itself.
+
 ## Provenance
 
 *New*; see `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean`

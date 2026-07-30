@@ -13,6 +13,11 @@ Eigenvalue-to-quadratic-form conversions and centered spectral bounds shared by
 the interval and arbitrary-distance Sylvester arguments. These declarations are
 implementation support rather than part of the public theorem surface.
 
+## Sources
+
+*Follows nothing in particular*: internal bounds extracted from the Sylvester estimate's
+proof, kept separate so the main file states only the estimate.
+
 ## Provenance
 
 *Moved, not restated.*  This file was

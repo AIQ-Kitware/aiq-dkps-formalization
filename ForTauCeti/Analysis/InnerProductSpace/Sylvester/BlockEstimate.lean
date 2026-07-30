@@ -23,6 +23,14 @@ norm, not to the norm of the vector it was cut from.  That is what makes the
 blocks reassemble: `enorm_ge_of_blocks` needs a bound of exactly this shape, and
 a bound in terms of `‖z‖` would be useless.
 
+## Sources
+
+The per-block estimate is the Bhatia--Davis--McIntosh bound applied blockwise; see
+`prose/distilled_literature/BhatiaDavisMcIntosh1983_spectral_subspaces_sylvester.tex`.
+The reassembly is
+`ForTauCeti/Analysis/InnerProductSpace/BlockLowerBound.lean`, which follows nothing
+in particular.
+
 ## Provenance
 
 *New.*

@@ -23,6 +23,12 @@ and its norm bound is `norm_borelCalculus_apply_le`.
 uses: on the spectral range — where the projection acts as the identity — the
 operator *is* `A - c`.
 
+## Sources
+
+*Follows nothing in particular*: a pointwise spectral estimate promoted to an operator
+bound, because the ideal properties of the Hilbert--Schmidt energy are stated for
+operators.
+
 ## Provenance
 
 *New.*  Everything here is a repackaging of `specProjection_apply_sub_smul`.
