@@ -7,7 +7,7 @@ Staged for Tau Ceti: additions to `Mathlib/Analysis/InnerProductSpace/BasisSpan.
 (new file) or a home next to `OrthonormalBasis` in `PiL2`.
 
 Extracted and generalized from the Courant–Fischer staging module per the
-signature-polish backlog (`dev/tauceti-signature-polish-todo.md` §6): the former
+signature-polish backlog: the former
 `specSubspace` was a predicate-selected span of an arbitrary orthonormal basis —
 not intrinsically spectral — so it is renamed `OrthonormalBasis.spanIndices`,
 generalized from `Fin n` and a predicate to an arbitrary finite index type and a

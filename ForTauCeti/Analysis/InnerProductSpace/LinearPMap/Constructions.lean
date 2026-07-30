@@ -44,7 +44,7 @@ that used them do not need a spectral-theory dependency for bookkeeping.
   2. Spectra's `ofBounded` produces its bundled `SelfAdjointOperator` structure.
      Only the self-adjointness *fact* is ported, over the raw `LinearPMap`,
      because the DKPS `U1` migration is removing bundled closed-operator
-     wrappers rather than adding one (`dev/tauceti/u1-linearpmap-migration.md`).
+     wrappers rather than adding one.
 -/
 
 public section

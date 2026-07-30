@@ -45,8 +45,8 @@ measures, so the gap has to be closed somewhere.
   consume.  Spectra reaches them through Stone's theorem and a Herglotz/Poisson
   representation; this file's route (Riesz–Markov–Kakutani applied to the
   continuous functional calculus of the Cayley transform) is independent and
-  shorter, so nothing is being copied.  See
-  `dev/tauceti/spectra-removal-plan.md` for the comparison that chose it.
+  shorter, so nothing is being copied.  See the Spectra-removal plan for the
+  comparison that chose it.
 -/
 
 public section

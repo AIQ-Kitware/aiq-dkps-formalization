@@ -9,8 +9,7 @@ the closed Mathlib track —
 additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `UnitarilyInvariantNorm.lean`).
 
-Formalized by Claude Fable 5 (claude-fable-5[1m]), plan step F3 (v4 reroute) of
-`dev/davis-kahan-expert-completion-plan.md`.
+Formalized by Claude Fable 5 (claude-fable-5[1m]).
 
 Unitarily invariant (semi)norms on the square operators over a
 finite-dimensional inner product space, the operator SVD factorization

@@ -9,8 +9,7 @@ the closed Mathlib track —
 additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `AlignedBasis.lean`).
 
-Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]), plan step W3.4 of
-`dev/davis-kahan-gap-closure-plan.md`.
+Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 
 Groundwork for the Yu–Wang–Samworth aligned-basis (orthogonal-Procrustes) bound:
 the coordinate isometry `EuclideanSpace 𝕜 (Fin d) →ₗᵢ E` attached to an

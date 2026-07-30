@@ -47,7 +47,7 @@ Davis--Kahan spectral flow needs.
 * **Why ported rather than bypassed:** it is a dependency of Stone's theorem
   (`genToGroup`), which is in turn the route to `spectralPVM`; that endpoint
   manipulates the spectral measure itself and has no bounded-operator
-  reformulation.  See `dev/tauceti/spectra-removal-plan.md`.
+  reformulation.
 -/
 
 public section

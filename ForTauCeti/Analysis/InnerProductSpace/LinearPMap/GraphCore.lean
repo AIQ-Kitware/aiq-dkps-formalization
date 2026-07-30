@@ -27,7 +27,7 @@ chosen to avoid installing a second topology on the domain subtype.
 * Original module: `DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCore.lean`,
   where it was stated for the bundled DKPS `ClosedOperator`.
 * Extraction class: **representation migration** onto Mathlib's `LinearPMap`,
-  per the U1 lane (`dev/tauceti/u1-linearpmap-migration.md`).  Generalised on
+  per the U1 lane.  Generalised on
   the way: the original was stated for an endomorphism, this is stated for
   `E →ₗ.[𝕜] F`.
 * Spectra influence: none.

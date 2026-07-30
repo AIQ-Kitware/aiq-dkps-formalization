@@ -6,12 +6,12 @@ Authors: Jon Crall, Claude Opus 5
 Staged for Tau Ceti: additions to `Mathlib/Analysis/InnerProductSpace/`
 (a home next to `Submodule.starProjection`).
 
-Extracted 2026-07-30 under lane `FTC-REDEXT-UNIFY`.  The quadratic-form identity
+The quadratic-form identity
 below had been proved four times: twice inside
 `…/BoundedOperator/SinTheta.lean`'s `sinTheta_directed_coercive` and twice inside
 `…/SinTheta/OperatorNorm.lean`'s `exists_isSymmetric_comp_sub_comp_eq`, at about
-31 lines each.  Lanes `FTC-LONGPROOF-5` and `RUB-LONGPROOF-1` reduced that to one
-private copy per module; this module reduces it to one.
+31 lines each.  Earlier consolidation reduced that to one private copy per
+module; this module reduces it to one.
 -/
 module
 

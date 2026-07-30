@@ -48,7 +48,7 @@ textbook treatment of the spectral theorem for normal operators (Rudin,
 one source's proof.
 
 The route was chosen against the Spectra library's Herglotz/Poisson construction;
-`dev/tauceti/spectra-removal-plan.md` records that comparison, and
+the Spectra-removal plan records that comparison, and
 `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean` carries
 the provenance of the route itself.
 
