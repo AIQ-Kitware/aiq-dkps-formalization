@@ -621,6 +621,39 @@ private lemma cayleyInv_sub_ne_zero_of_gap {lam ε : ℝ} (hε : 0 < ε)
   rw [hzero, norm_zero] at h
   linarith
 
+/-- **The `(κ + i)`-companion of the gap symbol is boundedly measurable.**  On the
+gap set the symbol is `(κ - lam)⁻¹`, so the product has modulus at most
+`1 + (|lam| + 1) / ε` by `norm_add_I_mul_inv_norm_sub_le`; off the set the symbol
+vanishes and so does the product.
+
+This is the multiplier that turns the Borel calculus of `gapSymbol` into a right
+inverse for `A - lam`, and it was built inline in
+`mem_resolventSet_specRestrict_of_gap`.
+
+`hBm` is taken explicitly rather than through the section variable because it is
+used only in the proof, where section binders are not auto-included. -/
+private theorem isBddMeasurable_cayleyCoord_add_I_mul_gapSymbol
+    (hBm : MeasurableSet B) {lam ε : ℝ} (hε : 0 < ε)
+    (hgap : ∀ s ∈ B, ε ≤ |s - lam|) :
+    BorelCalculus.IsBddMeasurable
+      (fun w => ((cayleyInv hA w : ℂ) + Complex.I) * gapSymbol hA B lam w) := by
+  classical
+  have hmeasκ : Measurable fun w => ((cayleyInv hA w : ℝ) : ℂ) :=
+    Complex.continuous_ofReal.measurable.comp (measurable_cayleyInv hA)
+  have hfb : BorelCalculus.IsBddMeasurable (gapSymbol hA B lam) :=
+    isBddMeasurable_gapSymbol hA B hBm hε hgap
+  refine ⟨(hmeasκ.add measurable_const).mul hfb.measurable,
+    1 + (|lam| + 1) / ε, by positivity, fun w => ?_⟩
+  by_cases hw : w ∈ cayleyInv hA ⁻¹' B
+  · have hfw : ‖gapSymbol hA B lam w‖ =
+        (‖((cayleyInv hA w : ℂ) - (lam : ℂ))‖)⁻¹ := by
+      rw [gapSymbol_of_mem hA B hw, norm_inv]
+    rw [norm_mul, hfw]
+    exact norm_add_I_mul_inv_norm_sub_le hε _
+      (le_norm_cayleyInv_sub_of_gap hA B hgap hw)
+  · rw [gapSymbol_of_notMem hA B hw, mul_zero, norm_zero]
+    positivity
+
 /-- **A spectral gap gives a resolvent point of the restriction.**  If `B` keeps
 its distance `ε` from `lam`, then `lam` is in the resolvent set of the
 restriction of `A` to the spectral range of `B`; the inverse is the Borel
@@ -657,19 +690,8 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
   have hfb : BorelCalculus.IsBddMeasurable f := by
     rw [hf]
     exact isBddMeasurable_gapSymbol hA B hB hε hgap
-  have hhb : BorelCalculus.IsBddMeasurable hsym := by
-    refine ⟨(hmeasκ.add measurable_const).mul hfmeas, 1 + (|lam| + 1) / ε,
-      by positivity, fun w => ?_⟩
-    by_cases hw : w ∈ S
-    · have hfw : ‖f w‖ = (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹ := by
-        rw [hf, gapSymbol_of_mem hA B hw, norm_inv]
-      rw [hhsym, norm_mul, hfw]
-      exact norm_add_I_mul_inv_norm_sub_le hε _ (hgapS w hw)
-    · have hfz : f w = 0 := by rw [hf]; exact gapSymbol_of_notMem hA B hw
-      -- states the goal with the definition unfolded, in the shape the next step needs.
-      change ‖((κ w : ℂ) + Complex.I) * f w‖ ≤ 1 + (|lam| + 1) / ε
-      rw [hfz, mul_zero, norm_zero]
-      positivity
+  have hhb : BorelCalculus.IsBddMeasurable hsym :=
+    isBddMeasurable_cayleyCoord_add_I_mul_gapSymbol hA B hB hε hgap
   -- the resolvent as a Borel-calculus image, and `g = (κ + i)⁻¹` almost everywhere
   set gsym : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
     (2 * Complex.I)⁻¹ • (1 - cayleyCoord hA) with hgsym
