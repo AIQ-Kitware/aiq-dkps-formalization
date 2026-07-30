@@ -15,7 +15,7 @@ Four rubrics can `block`: `correctness`, `reuse`, `scope`, `attribution`.
 | **`reuse`** | `request_changes` — duplicate constructions | `T01-SQRT`, `MODULUS-DEDUP`, `DK-FRAME` |
 | **`scope`** | `request_changes` — 12 topics have no roadmap target | `ROADMAP-WRITE` |
 | **`attribution`** | **`approve`** — provenance on 164/164 modules | — |
-| **`api-design`** | `request_changes` — 68 files expose bodies; 4 unused definitions | `FTC-EXPOSE`, `FTC-DEAD` |
+| **`api-design`** | `request_changes` — 70 files expose bodies; 4 unused definitions | `FTC-EXPOSE-*` **(settled)**, `FTC-DEAD` |
 | **`generality`** | `approve` (with a caveat below) | — |
 | **`placement`** | `request_changes` — 54 flat files beside 12 directories | `FTC-ORG`, `PLACE-SYLV`, `PLACE-GRAM` |
 | **`naming`** | `request_changes` — `genuine`; 2 suffixes overstate | `DK-NAME`, `DK-NAME-SUFFIX`, `PLACE-GRAM` |
@@ -51,10 +51,23 @@ bodies to compensate for missing lemmas … ask for the missing lemma instead.
 Recall that we can avoid making lemmas rely on defeq downstream by using
 `:= (rfl)` instead of `:= rfl`."*
 
-**68 of 164 files follow the house rule.** Every one is an `api-design`
+**70 of 167 files follow the house rule.** Every one is an `api-design`
 objection waiting to happen, and the rubric supplies the fix we did not know to
-apply. This is the highest-volume reviewer objection the library carries, and it
-needs a convention decision before any file is touched.
+apply. This is the highest-volume reviewer objection the library carries.
+
+**SETTLED 2026-07-30 — jon adopted the Tau Ceti convention.** `ForTauCeti/README.md`
+§4 now mandates plain `public section` with bodies hidden by default, and
+`@[expose]` only on an individual declaration a consumer must genuinely unfold,
+with the reason in its docstring. The rubric's own alternative to defeq reliance
+— `:= (rfl)` rather than `:= rfl` — is recorded with it.
+
+The conversion is deliberately staged rather than swung at once, because **the
+blanket rule destroyed the evidence**: applying the annotation everywhere means
+we never recorded which modules actually need it, and that cost cannot be
+measured from this seat. So `FTC-EXPOSE-GATE` ratchets the count first (it went
+68 → 70 during this audit and must stop growing), `FTC-EXPOSE-MEASURE` samples
+~8 files with a compiler to turn the unknown into a number, and only then do the
+five conversion slices scope themselves from that number.
 
 ### 3. `documentation` — I graded presence; the rubric grades usefulness
 

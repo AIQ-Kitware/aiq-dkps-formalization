@@ -131,6 +131,13 @@ A public equality should not force users to read NNReal constructors such as ⟨
 
 ### 3.5 Do not expose implementation bodies globally
 
+**SETTLED 2026-07-30 by jon: adopt the Tau Ceti convention.** This item called it
+right. `ForTauCeti/README.md` §4 now mandates plain `public section`, with
+`@[expose]` only on an individual declaration a consumer must genuinely unfold,
+and the rubric's own alternative to defeq reliance (`:= (rfl)` over `:= rfl`)
+recorded alongside it. Conversion of the 70 existing files is lanes
+`FTC-EXPOSE-MEASURE` → `FTC-EXPOSE-*` in `dev/LANES.md`.
+
 The blanket @[expose] public section is a likely API-design finding. Keep bodies hidden and expose computation or characterization lemmas. A reviewer will prefer one precise _def theorem to downstream reliance on definitional equality.
 
 ### 3.6 Use structures and predicates already owned by Tau Ceti
@@ -309,9 +316,11 @@ norm-like quantity) and the docstring points readers at
 `approximationNumber_le_norm_sub` / `le_approximationNumber_iff` instead.  Three
 internal proofs that had been relying on it as a `simp` lemma now name it
 explicitly.  Note the `@[expose] public section` question raised alongside this
-item in roadmap item 8 is *not* settled here: dropping the blanket `@[expose]`
+item in roadmap item 8 was *not* settled here: dropping the blanket `@[expose]`
 is a module-system change and belongs to the deferred repo-wide module-system
-pass, not to a single file.
+pass, not to a single file. **That pass is now authorized — jon settled the
+question on 2026-07-30 in favour of the Tau Ceti convention (see §3.5 above and
+`ForTauCeti/README.md` §4). The deferral this paragraph describes has ended.**
 
 *Original disposition:*
 
