@@ -225,6 +225,46 @@ is the reason the green table at the top of
 the reason `FTC-PROSE` ships with a gate: once checked mechanically, no future
 reviewer should have to spend a finding on it.
 
+## Two merge mechanics that change how we should submit `{lane:SUBMIT-MECH}`
+
+Read out of `runner/verdict.py` and `runner/merge.py`, not inferred.
+
+**1. All ten rubrics must be green on one single commit.** `state_of` marks an
+`approve` **`green` only when `approved_sha == head_sha`**; on any other head it
+becomes **`stale`**, and `is_blocking` counts a never-run rubric (`absent`) as
+blocking too. `decide_merge` then requires `all_green` on HEAD, *"fresh, not
+stale"*.
+
+So approvals do **not** accumulate across a fix-and-push cycle. Pushing a fix
+for rubric 7 invalidates the approvals already earned from rubrics 1–6. There is
+no path where we submit early and grind the objections down one at a time —
+whatever commit we intend to merge has to satisfy all ten **simultaneously**.
+
+That is the strongest argument yet for the way this audit is being run: every
+objection found here is one that does not cost a full re-review round there. It
+also means **we should not open the PR while any lane is mid-flight**, because a
+half-finished cleanup on the head commit is reviewed exactly as it stands.
+
+**2. The diff must be confined to the library subtree.** `decide_merge` demands
+`code_only` — every changed path under `MERGE_PREFIX` (`TauCeti/`) or in the
+root allowlist, which is exactly:
+
+```
+TauCeti.lean, lake-manifest.json, lean-toolchain
+```
+
+Anything else returns *"PR touches paths outside TauCeti/ … needs human merge"*.
+Our repository interleaves the library with `dev/`, `scripts/`, `docs/`,
+`Challenge/`, `DavisKahan/` and the roadmap tree, and **none of that may ride
+along**. The mechanical port has to emit a `TauCeti/`-confined diff, which is a
+constraint on how the port is built, not a detail to discover at PR time. A Lake
+pin change additionally needs a green bump-guard, so the port should not move
+`lean-toolchain` or the manifest casually.
+
+Neither fact is written down in
+[`ForTauCeti/README.md`](../../ForTauCeti/README.md)'s lifecycle section, which
+is where whoever builds the port will look. That is what `SUBMIT-MECH` fixes.
+
 ## What this run does not replace
 
 The real Tau Ceti review runs each rubric through a fresh model in a clean room,
