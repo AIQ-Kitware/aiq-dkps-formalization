@@ -128,6 +128,14 @@ Every file in scope is on the list, labelled with its kind:
 | **data/config** | 56 | Do the names it pins still resolve? Generated or hand-edited? |
 | **manifest/notes** | 12 | Is it still checked by something, and does it still match? |
 
+## Mergeworthiness
+
+[`MERGEWORTHINESS.md`](MERGEWORTHINESS.md) is the operative file for
+`ForTauCeti`: every open defect that stands between it and Mathlib-quality
+merge, each mapped to the lane that fixes it, plus what is measured green, what
+is deliberately *not* a defect, and the three properties a static review cannot
+check. Read that before asking what is left.
+
 ## Result
 
 **Complete.** All 1,167 files and all 112 groups reviewed. Findings are in the
