@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.OperatorIdeal.ApproximationNumbers.All
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.All
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.OperatorIdeal.ComplexificationApproximation
 
 /-! # `DavisKahan/OperatorIdeal` -/
