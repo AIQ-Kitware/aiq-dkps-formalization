@@ -37,7 +37,7 @@ review is exactly a review of a future submission unit.
 - [ ] `DavisKahan/Experimental/FiniteDimensional` — 1 files, 19 lines — **blocked (0/1 files)**
 - [ ] `DavisKahan/Experimental/Frontier` — 7 files, 2,671 lines — **blocked (0/7 files)**
 - [ ] `DavisKahan/Experimental/InfiniteDimensional` — 94 files, 20,577 lines — **blocked (0/94 files)**
-- [ ] `DavisKahan/Experimental/MathAhead` — 24 files, 3,348 lines — **blocked (0/24 files)**
+- [ ] `DavisKahan/Experimental/MathAhead` — 15 files, 2,268 lines — **blocked (0/15 files)**
 - [ ] `DavisKahan/Experimental/Scratch` — 15 files, 1,765 lines — **blocked (0/15 files)**
 - [ ] `DavisKahan/Experimental/Sources` — 8 files, 523 lines — **blocked (0/8 files)**
 - [ ] `DavisKahan/FiniteDimensional` — 34 files, 9,606 lines — **blocked (0/34 files)**
@@ -48,7 +48,7 @@ review is exactly a review of a future submission unit.
 - [ ] `DavisKahan/SinTheta` — 31 files, 5,658 lines — **blocked (0/31 files)**
 - [ ] `DavisKahan/Sources` — 1 files, 11 lines — **blocked (0/1 files)**
 - [ ] `DavisKahan/Sources/Davis1963` — 4 files, 595 lines — **blocked (0/4 files)**
-- [ ] `DavisKahan/Sources/DavisKahan1970` — 71 files, 14,098 lines — **blocked (0/71 files)**
+- [ ] `DavisKahan/Sources/DavisKahan1970` — 77 files, 15,136 lines — **blocked (0/77 files)**
 - [ ] `DavisKahan/Specialized` — 1 files, 10 lines — **blocked (0/1 files)**
 - [ ] `DavisKahan/SpectralTheory` — 35 files, 7,999 lines — **blocked (0/35 files)**
 - [ ] `DavisKahan/Sylvester` — 24 files, 5,619 lines — **blocked (0/24 files)**
@@ -64,7 +64,7 @@ review is exactly a review of a future submission unit.
 - [ ] `DkpsQuench2026/Response` — 3 files, 1,377 lines — **blocked (0/3 files)**
 - [ ] `DkpsQuench2026/Spectral` — 2 files, 1,304 lines — **blocked (0/2 files)**
 - [ ] `FinishTanTwoTheta` — 1 files, 36 lines — **blocked (0/1 files)**
-- [ ] `FinishTanTwoTheta/FinishTanTwoTheta` — 21 files, 6,425 lines — **blocked (0/21 files)**
+- [ ] `FinishTanTwoTheta/FinishTanTwoTheta` — 21 files, 6,726 lines — **blocked (0/21 files)**
 - [ ] `FinishYuWangSamworth` — 1 files, 17 lines — **blocked (0/1 files)**
 - [ ] `FinishYuWangSamworth/FinishYuWangSamworth` — 11 files, 1,214 lines — **blocked (0/11 files)**
 - [ ] `ForTauCeti :: T01 Positive square root, operator modulus, functional calculus` — 9 files, 1,643 lines — **blocked (0/9 files)**
@@ -87,8 +87,8 @@ review is exactly a review of a future submission unit.
 - [ ] `ForTauCeti :: T18 The Yu-Wang-Samworth statistical variant` — 3 files, 1,079 lines — **blocked (0/3 files)**
 - [ ] `ForTauCeti :: T19 Matrix spectra and spectral measurability` — 6 files, 898 lines — **blocked (0/6 files)**
 - [ ] `ForTauCeti :: T20 Sample moments and matrix concentration` — 5 files, 886 lines — **blocked (0/5 files)**
-- [ ] `ForTauCeti :: T21 Matrix rank factorization and positive semidefiniteness` — 2 files, 386 lines — **blocked (0/2 files)**
-- [ ] `ForTauCeti :: T22 Berge's maximum theorem and approximate minimizers` — 2 files, 485 lines — **blocked (0/2 files)**
+- [ ] `ForTauCeti :: T21 Matrix rank factorization and positive semidefiniteness` — 2 files, 402 lines — **blocked (0/2 files)**
+- [ ] `ForTauCeti :: T22 Berge's maximum theorem and approximate minimizers` — 2 files, 488 lines — **blocked (0/2 files)**
 - [ ] `ForTauCetiRoadmap/ApproximationNumbers` — 1 files, 219 lines — **blocked (0/1 files)**
 - [ ] `Helm2025` — 4 files, 1,997 lines — **blocked (0/4 files)**
 - [ ] `dev/alternates` — 1 files, 412 lines — **blocked (0/1 files)**
