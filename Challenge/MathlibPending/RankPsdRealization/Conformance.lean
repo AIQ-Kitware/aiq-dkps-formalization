@@ -125,7 +125,7 @@ theorem exists_eq_mul_of_rank_le (M : Matrix m n 𝕜) {r : ℕ} (h : M.rank ≤
 
 end TauCeti.Matrix.RankFactorizationAux
 
-namespace ForMathlib.Matrix
+namespace TauCeti.Matrix
 
 open scoped BigOperators Matrix ComplexConjugate ComplexOrder
 open _root_.Matrix
@@ -211,4 +211,4 @@ theorem posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self
   rw [rank_conjTranspose_mul_self]
   exact A.rank_le_height
 
-end ForMathlib.Matrix
+end TauCeti.Matrix
