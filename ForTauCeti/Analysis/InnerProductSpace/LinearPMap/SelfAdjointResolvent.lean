@@ -436,7 +436,7 @@ theorem cayley_def {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
 /-- On a vector, `U ξ = (A + i) R(-i) ξ - 2i R(-i) ξ`, i.e. `(A - i)` applied to
 the preimage of `ξ` under `A + i`.
 
-Deliberately **not** `@[simp]` (lane RUB-DEFSIMP, 2026-07-30): it rewrites the Cayley
+Deliberately **not** `@[simp]`: it rewrites the Cayley
 transform into a resolvent expression, which is not a normal form — downstream proofs
 work with `cayley` folded and unfold it by name where they mean to. -/
 theorem cayley_apply {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ : E) :

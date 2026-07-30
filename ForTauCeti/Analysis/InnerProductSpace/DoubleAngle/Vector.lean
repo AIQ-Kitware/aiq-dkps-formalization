@@ -90,7 +90,7 @@ selection this avoids, `prose/distilled_literature/DoubleAngle_branch_selection_
 
 *Moved, not restated.*  This file was
 `DavisKahan/FiniteDimensional/DoubleAngle/Vector.lean`
-until 2026-07-29, when lane Y3(b4) moved the whole remaining sin-Θ closure into
+before the whole remaining sin-Θ closure moved into
 the staging layer.  Statements, proofs, signatures and namespaces are unchanged;
 the declarations already lived in `TauCeti.*`, so the move was a path change and
 an import repoint.
