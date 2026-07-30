@@ -105,8 +105,8 @@ calculus on Hilbert-space operators only over `ℂ`; see
 
 ## The three polar factors, and how they relate
 
-Documented 2026-07-30 (lane MODULUS-DEDUP) because none of the three named the
-others, so a reviewer could not tell a designed hierarchy from three independent
+Documented here because none of the three named the others, so a reviewer could
+not tell a designed hierarchy from three independent
 attempts. The separating hypotheses are the carrier, the field, and whether the
 modulus is invertible:
 
@@ -141,6 +141,11 @@ this is an isometry `E → F` with `M.polarIsometryOfIsUnitModulus ∘L |M| = M`
 factor of the polar decomposition of `M`.  Otherwise `Ring.inverse` returns `0`
 and so does this definition; every result below therefore carries the hypothesis
 `IsUnit M.modulus`. -/
+-- `@[expose]` because `@[simps!]` on this declaration generates `_apply` lemmas whose
+-- proofs are `rfl`, which cannot be validated unless the body is exposed. Recorded debt:
+-- the clean alternative is to drop `@[simps!]` and state the `_apply` lemmas by hand
+-- against a `_def` lemma. Recorded debt, not an endorsement.
+@[expose]
 noncomputable def polarIsometryOfIsUnitModulus (M : E →L[ℂ] F) : E →L[ℂ] F :=
   M ∘L Ring.inverse M.modulus
 

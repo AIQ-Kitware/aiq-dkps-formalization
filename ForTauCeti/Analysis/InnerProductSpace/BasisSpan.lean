@@ -64,7 +64,7 @@ variable {𝕜 E ι : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductS
 -- `@[expose]` because this is a definitional alias for `Submodule.span` and consumers run
 -- `induction … using Submodule.span_induction` on membership, which needs the alias to
 -- reduce. Recorded debt: a `spanIndices_def` lemma plus a rewrite before the induction is
--- the clean fix. Lane FTC-EXPOSE-SPECMEAS.
+-- the clean fix, and it is tracked as recorded debt rather than accepted.
 @[expose]
 noncomputable def spanIndices (b : OrthonormalBasis ι 𝕜 E) (s : Set ι) :
     Submodule 𝕜 E :=
