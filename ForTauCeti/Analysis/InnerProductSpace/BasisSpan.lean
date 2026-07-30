@@ -70,6 +70,18 @@ noncomputable def spanIndices (b : OrthonormalBasis ι 𝕜 E) (s : Set ι) :
     Submodule 𝕜 E :=
   Submodule.span 𝕜 (b '' s)
 
+/-- **`spanIndices` is the span of the selected basis vectors.**  The
+characteristic lemma: `spanIndices` is a name for a `Submodule.span`, and a
+consumer that needs to run `Submodule.span_induction` needs to be told so.
+
+Written because dropping this module's blanket `@[expose]` broke exactly one
+downstream proof — `LinearMap.IsSymmetric.map_mem_spanIndices` in
+`CourantFischer.lean` — which was reaching through the definition instead.  That
+is the `api-design` rubric's case for a missing lemma rather than an exposed
+body. -/
+theorem spanIndices_eq_span (b : OrthonormalBasis ι 𝕜 E) (s : Set ι) :
+    b.spanIndices s = Submodule.span 𝕜 (b '' s) := (rfl)
+
 /-- Selecting more indices spans more. -/
 theorem spanIndices_mono (b : OrthonormalBasis ι 𝕜 E) {s t : Set ι} (h : s ⊆ t) :
     b.spanIndices s ≤ b.spanIndices t :=

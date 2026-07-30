@@ -88,6 +88,7 @@ operator-norm statements. -/
 @[simp]
 theorem gauge_operatorNormIdealFamily (A : E →L[𝕜] F) :
     (operatorNormIdealFamily.{u, v, w} 𝕜).gauge A = ‖A‖ₑ := (rfl)
+
 /-- The operator-norm family is the *largest* ideal: every bounded operator
 belongs to it, because every bounded operator has finite operator norm.  It is
 the top element against which the other families (Ky Fan, Hilbert--Schmidt,
@@ -104,10 +105,10 @@ noncomputable def operatorNormIdealFamilyElemEquiv :
     (operatorNormIdealFamily.{u, v, w} 𝕜).Elem E F ≃ₗᵢ[𝕜] (E →L[𝕜] F) where
   toFun A := A.val
   invFun A := OperatorIdealFamily.Elem.mk (N := operatorNormIdealFamily 𝕜) (by simp)
-  left_inv _ := (rfl)
-  right_inv _ := (rfl)
-  map_add' _ _ := (rfl)
-  map_smul' _ _ := (rfl)
+  left_inv _ := OperatorIdealFamily.Elem.ext (OperatorIdealFamily.Elem.val_mk _)
+  right_inv _ := OperatorIdealFamily.Elem.val_mk _
+  map_add' A B := OperatorIdealFamily.Elem.val_add A B
+  map_smul' c A := OperatorIdealFamily.Elem.val_smul c A
   norm_map' A := by
     change ‖A.val‖ = ‖A‖
     rw [OperatorIdealFamily.Elem.norm_def, gauge_operatorNormIdealFamily, toReal_enorm]
