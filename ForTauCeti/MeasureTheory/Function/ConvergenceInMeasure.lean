@@ -55,7 +55,7 @@ filter, matching the generality of `MeasureTheory.TendstoInMeasure`.
 * Spectra influence: **none** (imports only Mathlib).
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 
