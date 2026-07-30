@@ -105,6 +105,10 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 ("T20","Sample moments and matrix concentration",
  ["Probability.Moments."+x for x in ["MatrixConcentration","SampleCovariance","SampleMean","Variance"]]
  +[A+"CenteredScatter"]),
+("T21","Matrix rank factorization and positive semidefiniteness",
+ ["LinearAlgebra.Matrix.RankFactorization","LinearAlgebra.Matrix.PosDef"]),
+("T22","Berge's maximum theorem and approximate minimizers",
+ ["Topology.ApproxMinimizer","Topology.Berge"]),
 ]
 
 
