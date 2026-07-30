@@ -104,8 +104,13 @@ independent parameters of the *fields*, which is the point of the layer.
   (`dev/tauceti-signature-polish-todo.md` §12.1) the free-data presentation
   (`Mem` plus a total real gauge constrained only on members, one universe,
   hand-rolled completeness, fourteen fields) is replaced here by the
-  single-gauge presentation above.  The legacy structure is derivable from this
-  one: see `DavisKahan/Interop/TauCeti/RectangularFamilyAdapter.lean`.
+  single-gauge presentation above.  The legacy structure was derivable from this
+  one through `DavisKahan/Interop/TauCeti/RectangularFamilyAdapter.lean`, which
+  **no longer exists**: lane P-EXP phase D deleted it on 2026-07-30 once the
+  production tree consumed `SymmetricOperatorIdealFamily` directly, which is the
+  condition the adapter's own docstring set for its removal.  The legacy
+  `RectangularSymmetricIdealFamily` is gone with it; this presentation is the only
+  one.
 -/
 
 @[expose] public section
