@@ -144,6 +144,7 @@ ROADMAP = {
     "T03": "SingularValues",
     "T04": "ProjectionsAndSpectralSubspaces",
     "T05": "MajorizationAndUINorms",
+    "T06": "PrincipalAngles",
     "T09": "ApproximationNumbers",
     "T10": "SymmetricOperatorIdeals",
     "T11": "HilbertSchmidtOperators",
@@ -160,16 +161,29 @@ ROADMAP = {
 }
 
 
-def roadmap_coverage() -> tuple[list, list, list]:
-    """(covered, missing, orphan directories)."""
+# Directories that deliberately cover no topic. Each entry must say why, so that a
+# permanent known-good finding never trains a reader to skim past real ones.
+INTENTIONAL_ORPHANS = {
+    "UnboundedOperators": (
+        "pre-split T15 roadmap, kept on purpose by jon (yardrat) 2026-07-30: it states the "
+        "U1 decision (an unbounded operator IS a Mathlib LinearPMap, with closedness and "
+        "self-adjointness as hypotheses, not structure fields) that T15a/b/c all inherit, "
+        "and it points at the three successor directories"),
+}
+
+
+def roadmap_coverage() -> tuple[list, list, list, list]:
+    """(covered, missing, unexpected orphans, intentional orphans)."""
     root = ROOT / "ForTauCetiRoadmap"
     dirs = {d.name for d in root.iterdir() if d.is_dir()} if root.exists() else set()
     covered, missing = [], []
     for key, title, _ in TOPICS:
         d = ROADMAP.get(key)
         (covered if d and d in dirs else missing).append((key, title, d))
-    orphans = sorted(dirs - set(ROADMAP.values()))
-    return covered, missing, orphans
+    loose = dirs - set(ROADMAP.values())
+    intentional = sorted(loose & set(INTENTIONAL_ORPHANS))
+    orphans = sorted(loose - set(INTENTIONAL_ORPHANS))
+    return covered, missing, orphans, intentional
 
 
 def import_graph() -> dict[str, set[str]]:
@@ -214,13 +228,16 @@ def main(argv: list[str] | None = None) -> int:
                     help="print each topic's exact prerequisite topics")
     args = ap.parse_args(argv)
     if args.roadmaps:
-        covered, missing, orphans = roadmap_coverage()
+        covered, missing, orphans, intentional = roadmap_coverage()
         print(f"roadmap coverage: {len(covered)}/{len(TOPICS)} topics\n")
         for key, title, d in missing:
             print(f"  MISSING  {key:<5} {title}")
         for d in orphans:
             print(f"  ORPHAN   ForTauCetiRoadmap/{d} covers no topic in the design")
-        return 0
+        for d in intentional:
+            print(f"  note: ForTauCetiRoadmap/{d} covers no topic, intentionally "
+                  f"({INTENTIONAL_ORPHANS[d]})")
+        return 0 if not orphans else 1
 
     d = analyse()
 
