@@ -105,9 +105,9 @@ calculus on Hilbert-space operators only over `ℂ`; see
 
 ## The three polar factors, and how they relate
 
-None of the three names the others, so a reader cannot otherwise tell a designed
-hierarchy from three independent attempts. The separating hypotheses are the
-carrier, the field, and whether the modulus is invertible:
+The library carries three polar factors, and they are a hierarchy rather than
+three independent attempts. The separating hypotheses are the carrier, the
+field, and whether the modulus is invertible:
 
 * `TauCeti.polarFactor`, in `PolarDecomposition.lean` — square `E →ₗ[𝕜] E`,
   `RCLike`, finite dimension; a genuine **unitary** factor.
