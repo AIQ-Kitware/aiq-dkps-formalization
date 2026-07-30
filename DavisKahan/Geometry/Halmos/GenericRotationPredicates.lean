@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Interop.Spectra.HalmosTwoProjections
-import DavisKahan.Interop.Spectra.SpectralRestriction
+import DavisKahan.Geometry.Halmos.TwoProjections
+import DavisKahan.SpectralTheory.SpectralRestriction
 -- supplies `compressOperator`
 import DavisKahan.Sylvester.GenuineSpectrum
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
@@ -33,7 +33,6 @@ namespace DavisKahan
 namespace Experimental
 namespace Frontier
 
-open SpectraBridge
 
 universe u v
 

@@ -110,11 +110,11 @@ theorem generalizedSinTheta_unbounded_of_genuineSpectrumGap
           (sinThetaBlock D.X D.F₁ hframe hε)
         ≤ N.gauge D.residual := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have hC := adjointResidualBlock_mem_and_gauge_le N.toRectangularSymmetricIdealFamily D hF₁ hR
+  have hC := adjointResidualBlock_mem_and_gauge_le N.toSymmetricOperatorIdealFamily D hF₁ hR
   have hRaw := davisKahan1970_sylvester_of_genuineSpectrumGap
     N hA₀ hΛ₁ hδ hgap hEq hC.1
   have hFrame := lowerFrame_sinThetaBlock_mem_and_gauge_le
-    N.toRectangularSymmetricIdealFamily D.X D.F₁ hframe hε hRaw.1
+    N.toSymmetricOperatorIdealFamily D.X D.F₁ hframe hε hRaw.1
   refine ⟨hFrame.1, ?_⟩
   calc
     δ * ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε)
@@ -166,9 +166,9 @@ theorem generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
   have hBlock := generalizedSinTheta_unbounded_of_genuineSpectrumGap
     N D hA hA₀ hΛ₁ hdecomp.isometry₁ hδ hε hframe hgap hR
   have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
-    N.toRectangularSymmetricIdealFamily D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
+    N.toSymmetricOperatorIdealFamily D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
   refine ⟨hAngle.1, ?_⟩
-  simp only [KyFanDominantIdealFamily.gauge]
+  rw [KyFanDominantIdealFamily.toSymmetric_gaugeReal] at hAngle
   rw [hAngle.2]
   exact hBlock.2
 
@@ -195,9 +195,9 @@ theorem linearPMap_generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
   have hBlock := linearPMap_generalizedSinTheta_unbounded_of_genuineSpectrumGap
     N D hA hA₀ hΛ₁ hdecomp.isometry₁ hδ hε hframe hgap hR
   have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
-    N.toRectangularSymmetricIdealFamily D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
+    N.toSymmetricOperatorIdealFamily D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
   refine ⟨hAngle.1, ?_⟩
-  simp only [KyFanDominantIdealFamily.gauge]
+  rw [KyFanDominantIdealFamily.toSymmetric_gaugeReal] at hAngle
   rw [hAngle.2]
   exact hBlock.2
 
@@ -245,13 +245,13 @@ theorem sinTheta_unbounded_exact_of_genuineSpectrumGap
           ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X)
         ≤ N.gauge D.residual := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have hC := adjointResidualBlock_mem_and_gauge_le N.toRectangularSymmetricIdealFamily D hdecomp.isometry₁ hR
+  have hC := adjointResidualBlock_mem_and_gauge_le N.toSymmetricOperatorIdealFamily D hdecomp.isometry₁ hR
   have hRaw := davisKahan1970_sylvester_of_genuineSpectrumGap
     N hA₀ hΛ₁ hδ hgap hEq hC.1
   have hAngle := isometricComplementaryBlock_mem_and_gauge_eq_directed
-    N.toRectangularSymmetricIdealFamily D.X F₀ D.F₁ hX hdecomp hRaw.1
+    N.toSymmetricOperatorIdealFamily D.X F₀ D.F₁ hX hdecomp hRaw.1
   refine ⟨hAngle.1, ?_⟩
-  simp only [KyFanDominantIdealFamily.gauge]
+  rw [KyFanDominantIdealFamily.toSymmetric_gaugeReal] at hAngle
   rw [hAngle.2]
   exact hRaw.2.trans hC.2
 

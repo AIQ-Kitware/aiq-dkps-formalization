@@ -134,9 +134,11 @@ theorem result
               P.lowerFrame P.frameLowerBound_pos)
         ≤ N.gauge P.data.residual :=
   by
-    simpa only [UnboundedSinThetaData.toPMap] using
+    simpa only [UnboundedSinThetaData.toPMap,
+      KyFanDominantIdealFamily.toSymmetric_mem,
+      KyFanDominantIdealFamily.toSymmetric_gaugeReal] using
       linearPMap_generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap
-        N.toRectangularSymmetricIdealFamily P.data.toPMap P.exactMap
+        N.toSymmetricOperatorIdealFamily P.data.toPMap P.exactMap
         (P.data.toPMap_A_isSelfAdjoint P.ambient_selfAdjoint)
         (P.data.toPMap_A₀_isSelfAdjoint P.trial_selfAdjoint)
         (P.data.toPMap_Λ₁_isSelfAdjoint P.complement_selfAdjoint)
@@ -158,9 +160,11 @@ theorem complementaryBlock_result
               P.lowerFrame P.frameLowerBound_pos)
         ≤ N.gauge P.data.residual :=
   by
-    simpa only [UnboundedSinThetaData.toPMap] using
+    simpa only [UnboundedSinThetaData.toPMap,
+      KyFanDominantIdealFamily.toSymmetric_mem,
+      KyFanDominantIdealFamily.toSymmetric_gaugeReal] using
       linearPMap_generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
-        N.toRectangularSymmetricIdealFamily P.data.toPMap
+        N.toSymmetricOperatorIdealFamily P.data.toPMap
         (P.data.toPMap_A_isSelfAdjoint P.ambient_selfAdjoint)
         (P.data.toPMap_A₀_isSelfAdjoint P.trial_selfAdjoint)
         (P.data.toPMap_Λ₁_isSelfAdjoint P.complement_selfAdjoint)

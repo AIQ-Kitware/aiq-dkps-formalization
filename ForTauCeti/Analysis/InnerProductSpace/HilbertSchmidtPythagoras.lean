@@ -33,6 +33,15 @@ the left one applied to the adjoint, since the energy is adjoint-invariant and
 `(Z ∘ Q)⋆ = Q⋆ ∘ Z⋆`.  Working in `ℝ≥0∞` keeps both free of summability side
 conditions.
 
+## Sources
+
+Additivity of the Hilbert--Schmidt energy over an orthogonal family is the
+Pythagoras identity for the Hilbert--Schmidt inner product, standard in the
+references given in
+`ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtLp.lean`.  The statement is
+shaped by the block argument that consumes it: it is an `ℝ≥0∞` identity, so it
+substitutes under a `tsum` with no summability side-condition.
+
 ## Provenance
 
 *New.*

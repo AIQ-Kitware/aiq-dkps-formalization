@@ -32,7 +32,7 @@ constructions coincide — both extend `|T| x ↦ T x` from the dense range of t
 but the ForTauCeti one is stated for `E →L[ℂ] F` with independent source and target, and it
 proves the uniqueness characterisation that makes `adjoint_polarIsometry` a three-line
 consequence instead of a 140-line argument.  That characterisation is also what lets
-`DavisKahan/Interop/Spectra/OperatorAbsoluteValue.lean` identify the Spectra-backed polar
+`DavisKahan/Geometry/Polar/OperatorAbsoluteValue.lean` identify the Spectra-backed polar
 isometry with ours, so nothing downstream had to choose between the two.
 -/
 

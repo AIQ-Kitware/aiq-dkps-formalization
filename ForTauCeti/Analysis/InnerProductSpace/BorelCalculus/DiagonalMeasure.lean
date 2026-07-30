@@ -41,7 +41,7 @@ measures, so the gap has to be closed somewhere.
 * **Endpoints it is aimed at:** the Spectra declarations
   `Spectra.QuantumMechanics.SpectralTheory.spectralPVM` and the surrounding
   `Spectra.SpectralTheory.Calculus.*` bounded Borel calculus, which
-  `DavisKahan/Interop/Spectra/RealSpectralRestriction.lean` and its siblings
+  `DavisKahan/SpectralTheory/Real/SpectralRestriction.lean` and its siblings
   consume.  Spectra reaches them through Stone's theorem and a Herglotz/Poisson
   representation; this file's route (Riesz–Markov–Kakutani applied to the
   continuous functional calculus of the Cayley transform) is independent and

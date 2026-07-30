@@ -49,7 +49,7 @@ namespace TauCeti
 namespace DavisKahan1970
 
 open DavisKahan.Experimental.ExactSinTheta
-open DavisKahan.Experimental.SpectraBridge
+open DavisKahan.Experimental
 
 /-! ## The mirror proof package, equations (7.1)--(7.3)
 
@@ -80,7 +80,7 @@ alias sinTwoTheta_mirrorDefect_le_two_mul :=
 /-- Ideal-gauge form of equation (7.3): the reflected perturbation stays in
 every rectangular symmetric ideal with gauge cost at most two. -/
 alias sinTwoTheta_mirrorPerturbation_mem_and_gauge_le :=
-  DavisKahan.Experimental.SpectraBridge.reflectionPerturbation_mem_and_gauge_le
+  DavisKahan.Experimental.reflectionPerturbation_mem_and_gauge_le
 
 /-! ## Identification of the double angle, equations (7.4)--(7.5)
 
@@ -92,16 +92,16 @@ double-angle conclusion. -/
 /-- Equations (7.4)--(7.5), ambient form: the reflected complementary overlap
 block has exactly the norm of `sin 2Θ`. -/
 alias sinTwoTheta_reflectedOverlap_norm :=
-  DavisKahan.Experimental.SpectraBridge.norm_starProjection_reflectedComplementary_eq_sinTwoAngle
+  DavisKahan.Experimental.norm_starProjection_reflectedComplementary_eq_sinTwoAngle
 
 /-- The canonical reflected overlap block whose complete singular-value data
 realizes the source's `sin 2Θ₀` in the unbounded ideal theorem. -/
 alias sinTwoThetaBlock :=
-  DavisKahan.Experimental.SpectraBridge.sinTwoThetaIdealBlock
+  DavisKahan.Experimental.sinTwoThetaIdealBlock
 
 /-- The canonical block has operator norm exactly `‖sin 2Θ‖`. -/
 alias norm_sinTwoThetaBlock :=
-  DavisKahan.Experimental.SpectraBridge.norm_sinTwoThetaIdealBlock
+  DavisKahan.Experimental.norm_sinTwoThetaIdealBlock
 
 /-! ## Unbounded forms
 
@@ -113,31 +113,31 @@ the source interval/exterior hypothesis. -/
 /-- **Davis--Kahan 1970, `sin 2Θ` theorem, unbounded perturbation form at
 operator norm.** -/
 alias unbounded_sinTwoTheta_opNorm :=
-  DavisKahan.Experimental.SpectraBridge.sinTwoTheta_addBounded_of_spectrum_gap
+  DavisKahan.Experimental.sinTwoTheta_addBounded_of_spectrum_gap
 
 /-- Set-localized interval/exterior form of the unbounded operator-norm
 theorem. -/
 alias unbounded_sinTwoTheta_intervalExterior_opNorm :=
-  DavisKahan.Experimental.SpectraBridge.sinTwoTheta_addBounded_of_intervalExterior
+  DavisKahan.Experimental.sinTwoTheta_addBounded_of_intervalExterior
 
 /-- **Reflection-residual form** of the unbounded operator-norm theorem: the
 bounded operator `R` implements the mirrored system on the full domain and
 controls `sin 2Θ` with constant one. -/
 alias unbounded_sinTwoTheta_reflectionResidual_opNorm :=
-  DavisKahan.Experimental.SpectraBridge.sinTwoTheta_reflectionResidual_of_spectrum_gap
+  DavisKahan.Experimental.sinTwoTheta_reflectionResidual_of_spectrum_gap
 
 /-- **Davis--Kahan 1970, `sin 2Θ` theorem, unbounded perturbation form for
 every source unitary-invariant ideal family.** -/
 alias unbounded_sinTwoTheta_uiNorm :=
-  DavisKahan.Experimental.SpectraBridge.sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
+  DavisKahan.Experimental.sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
 
 /-- Set-localized interval/exterior form at unitary-invariant ideal scope. -/
 alias unbounded_sinTwoTheta_intervalExterior_uiNorm :=
-  DavisKahan.Experimental.SpectraBridge.sinTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
+  DavisKahan.Experimental.sinTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
 
 /-- Reflection-residual form at rectangular symmetric ideal-gauge scope. -/
 alias unbounded_sinTwoTheta_reflectionResidual_gauge :=
-  DavisKahan.Experimental.SpectraBridge.sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
+  DavisKahan.Experimental.sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
 
 /-! ## Literal source forms with the paper's `sin 2Θ₀` freedom
 
@@ -151,7 +151,7 @@ universe v
 variable {H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-open DavisKahan.Experimental.SpectraBridge in
+open DavisKahan.Experimental in
 /-- **Davis--Kahan 1970, `sin 2Θ` theorem, literal unbounded perturbation
 form.**  The chosen `sin 2Θ₀` may be any operator with the complete
 singular-value sequence of the canonical reflected overlap block. -/
@@ -178,14 +178,14 @@ theorem unbounded_sinTwoTheta_uiNorm_representative
       δ * N.gauge sinTwoTheta₀.operator ≤
         2 * N.gauge E := by
   have hcanonical := sinTwoTheta_addBounded_gauge_of_spectrum_gap
-    N.toRectangularSymmetricIdealFamily A hA E hE B S hB hS
+    N.toSymmetricOperatorIdealFamily A hA E hE B S hB hS
       hβα hδ hBlow hBhigh hBcomplSpec hEmem
   obtain ⟨hmem, hgauge⟩ := sinTwoTheta₀.mem_and_gauge_eq N hcanonical.1
   refine ⟨hmem, ?_⟩
   rw [hgauge]
   exact hcanonical.2
 
-open DavisKahan.Experimental.SpectraBridge in
+open DavisKahan.Experimental in
 /-- **Davis--Kahan 1970, `sin 2Θ` theorem, literal reflection-residual
 form.**  The bounded operator `R` implements the mirrored system on the full
 domain; the chosen `sin 2Θ₀` may be any operator with the complete
@@ -218,7 +218,7 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative
       δ * N.gauge sinTwoTheta₀.operator ≤
         N.gauge R := by
   have hcanonical := sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
-    N.toRectangularSymmetricIdealFamily A hA R hR B hB V
+    N.toSymmetricOperatorIdealFamily A hA R hR B hB V
       hβα hδ hBlow hBhigh hBcomplSpec hJdom hJintertwines hRmem
   obtain ⟨hmem, hgauge⟩ := sinTwoTheta₀.mem_and_gauge_eq N hcanonical.1
   refine ⟨hmem, ?_⟩

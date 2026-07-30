@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import ForTauCeti.Analysis.InnerProductSpace.ProjectionBlocks
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
 /-!
@@ -63,7 +64,8 @@ theorem two_smul_paperDiagonalPair_eq_add_reflections
 
 /-- Ideal membership for the diagonal pair. -/
 theorem paperDiagonalPair_mem
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {K : E →L[𝕜] E} (hK : N.Mem K) :
@@ -74,30 +76,31 @@ theorem paperDiagonalPair_mem
 
 /-- **Davis--Kahan Lemma 6.2 for an arbitrary rectangular symmetric ideal.** -/
 theorem paperDiagonalPair_gauge_le
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {K : E →L[𝕜] E} (hK : N.Mem K) :
-    N.gauge (paperDiagonalPair U V K) ≤ N.gauge K := by
+    N.gaugeReal (paperDiagonalPair U V K) ≤ N.gaugeReal K := by
   have hB : N.Mem (paperDiagonalPair U V K) :=
     paperDiagonalPair_mem N U V hK
   have hJ : N.Mem
       (U.reflectionOperator ∘L K ∘L V.reflectionOperator) :=
     N.comp_mem U.reflectionOperator V.reflectionOperator hK
   have hJle :
-      N.gauge (U.reflectionOperator ∘L K ∘L V.reflectionOperator) ≤
-        N.gauge K :=
-    N.gauge_comp_le_of_contractions _ _ hK
+      N.gaugeReal (U.reflectionOperator ∘L K ∘L V.reflectionOperator) ≤
+        N.gaugeReal K :=
+    N.gaugeReal_comp_le_of_contractions _ _ hK
       (Submodule.norm_reflectionOperator_le_one U)
       (Submodule.norm_reflectionOperator_le_one V)
-  have hsum : N.gauge
+  have hsum : N.gaugeReal
       (K + U.reflectionOperator ∘L K ∘L V.reflectionOperator) ≤
-        N.gauge K + N.gauge
+        N.gaugeReal K + N.gaugeReal
           (U.reflectionOperator ∘L K ∘L V.reflectionOperator) :=
-    N.gauge_add_le hK hJ
-  have htwo : N.gauge ((2 : 𝕜) • paperDiagonalPair U V K) =
-      2 * N.gauge (paperDiagonalPair U V K) := by
-    rw [N.gauge_smul (2 : 𝕜) hB]
+    N.gaugeReal_add_le hK hJ
+  have htwo : N.gaugeReal ((2 : 𝕜) • paperDiagonalPair U V K) =
+      2 * N.gaugeReal (paperDiagonalPair U V K) := by
+    rw [N.gaugeReal_smul (2 : 𝕜) hB]
     norm_num
   rw [← two_smul_paperDiagonalPair_eq_add_reflections U V K, htwo] at hsum
   linarith
@@ -118,9 +121,10 @@ theorem paperDiagonalPair_all_kyFan_le
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk
     have h := paperDiagonalPair_gauge_le
-      N.toRectangularSymmetricIdealFamily U V
+      N.toSymmetricOperatorIdealFamily U V
       (KyFanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk K)
-    simpa only [N, KyFanDominantIdealFamily.kyFan_gauge] using h
+    simpa only [N,
+      KyFanDominantIdealFamily.kyFan_gauge] using h
 
 /-- Literal source-norm form of Davis--Kahan Lemma 6.2. -/
 theorem paperDiagonalPair_paperNorm_le

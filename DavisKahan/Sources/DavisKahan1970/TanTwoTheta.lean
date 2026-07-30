@@ -160,34 +160,34 @@ a derived branch conclusion. -/
 /-- Unbounded operator-norm `tan 2Θ` estimate with the extended-cosine
 denominator, under explicit quarter-acuteness. -/
 alias unbounded_tanTwoTheta_opNorm :=
-  DavisKahan.Experimental.SpectraBridge.tanTwoTheta_addBounded_of_spectrum_gap
+  DavisKahan.Experimental.tanTwoTheta_addBounded_of_spectrum_gap
 
 /-- Set-localized interval/exterior form of the unbounded operator-norm
 estimate. -/
 alias unbounded_tanTwoTheta_intervalExterior_opNorm :=
-  DavisKahan.Experimental.SpectraBridge.tanTwoTheta_addBounded_of_intervalExterior
+  DavisKahan.Experimental.tanTwoTheta_addBounded_of_intervalExterior
 
 /-- The ideal-theoretic tangent companion of the reflected overlap block. -/
 alias tanTwoThetaBlock :=
-  DavisKahan.Experimental.SpectraBridge.tanTwoThetaIdealBlock
+  DavisKahan.Experimental.tanTwoThetaIdealBlock
 
 /-- Rectangular ideal-gauge membership and estimate for the tangent
 companion block. -/
 alias tanTwoThetaBlock_mem_and_gauge_le :=
-  DavisKahan.Experimental.SpectraBridge.tanTwoThetaIdealBlock_mem_and_gauge_le
+  DavisKahan.Experimental.tanTwoThetaIdealBlock_mem_and_gauge_le
 
 /-- Unbounded `tan 2Θ` estimate at rectangular ideal-gauge scope. -/
 alias unbounded_tanTwoTheta_gauge :=
-  DavisKahan.Experimental.SpectraBridge.tanTwoTheta_addBounded_gauge_of_spectrum_gap
+  DavisKahan.Experimental.tanTwoTheta_addBounded_gauge_of_spectrum_gap
 
 /-- Unbounded `tan 2Θ` estimate for every source unitary-invariant ideal
 family. -/
 alias unbounded_tanTwoTheta_uiNorm :=
-  DavisKahan.Experimental.SpectraBridge.tanTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
+  DavisKahan.Experimental.tanTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
 
 /-- Set-localized interval/exterior form at unitary-invariant ideal scope. -/
 alias unbounded_tanTwoTheta_intervalExterior_uiNorm :=
-  DavisKahan.Experimental.SpectraBridge.tanTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
+  DavisKahan.Experimental.tanTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
 
 end DavisKahan1970
 end TauCeti

@@ -1,3 +1,149 @@
+# namek status — the Tau Ceti migration
+
+## 2026-07-29, end of day: where the campaign actually is
+
+**Spectra removal is closed.** In-scope `import Spectra` went 26 → 0; the
+snapshot is `retired/Spectra`, kept only because `FinishTanTwoTheta`'s
+`GroundedImports.lean` still reaches it and jon placed that out of scope. The
+`production_imports_spectra` ratchet is `[]`.
+
+**Y3 is complete.** Four lanes moved the whole Davis--Kahan sin-Θ and
+Yu--Wang--Samworth stack out of `ForMathlib` and `DavisKahan`:
+
+| lane | what moved | lines |
+| --- | --- | --- |
+| Y3(b2) | the 8-module `ForMathlib/Analysis/InnerProductSpace` component | 1,773 |
+| Y3(b3) | the sin-Θ closure's dependency-closed base, 6 modules | 1,217 |
+| Y3(b4) | the remaining 12 modules of the sin-Θ closure | 6,912 |
+| Y3(c)  | the last 3 Yu--Wang--Samworth modules | 1,028 |
+
+`ForMathlib` is **12 → 4 modules**. ~~The four that remain are genuinely
+Mathlib-shaped rather than migration debt.~~ **Superseded (jon, 2026-07-29):
+`ForMathlib` goes away entirely — the four move too, under lane FM-RETIRE.** The
+transitive non-Mathlib closure of `SinTheta/Perturbation.lean` and of every
+Yu--Wang--Samworth result is now **entirely `ForTauCeti`**.
+
+**The staging library is fully declared and fully exported.** The extraction
+manifest was covering 83 of 156 modules — and `export_for_tauceti.py` *refuses
+to export an undeclared module*, so **47% of the staging library could not
+leave the repository and nothing said so.** Now 156/156 across 18 clusters, and
+`--write` has put all 156 into `external/TauCeti` with `--check` OK.
+
+**EXECUTIVE DECISION — JON, 2026-07-29. Two rulings, both his.**
+
+1. **`ForTauCeti` is the product.** The goal is an *elegant package* there —
+   coherent API, one canonical spelling per concept, provenance on every module
+   — because **that package is what polished roadmaps are generated from, and
+   mechanical ports are then built to satisfy those roadmaps.**
+2. **It is never deleted, and it is not drained into `external/TauCeti`.**
+   There is no terminal state in which it is empty. `external/TauCeti` is a
+   read-only provenance reference.
+
+Recorded in `AGENTS.md`, `lakefile.toml` and `ForTauCeti/README.md`, each
+superseding the older *"temporary staging layer / successful terminal state is
+empty or deleted"* wording in place rather than erasing it.
+
+**Jon notes this mistake has now been made twice by agents, so it is written
+where agents look first rather than only in the library's own README.** I made
+the second instance: I read the superseded wording, planned toward draining the
+library, and ran `scripts/export_for_tauceti.py --write`, which put 156 files
+into the `external/TauCeti` working tree. Nothing was committed or pushed and
+the pin never moved; the copies are removed and the submodule is a clean
+upstream checkout again. **`--check` is free to run; `--write` belongs to an
+actual submission.** The first instance is visible in the tree too — an earlier
+agent's uncommitted `--write` left stale copies, which is what made
+`principal-angles` fail `--check`, a symptom `edward (fable)` flagged on
+2026-07-28 without the cause being found.
+
+**Where the package stands.** 156 modules; all declared in
+`dev/tauceti/extraction-manifest.json` across 18 dependency-closed clusters;
+all passing the import firewall; 0 warnings under `warningAsError`; 0
+undocumented declarations. `ForMathlib` is down to 4 modules, and **all four are going too** — jon has settled that `ForMathlib` goes away entirely (lane FM-RETIRE); my earlier "Mathlib-shaped remainder" reading of them is superseded.
+**The structural work is done, so the remaining work is coherence** — see the
+defects listed below.
+
+**Coherence defects, measured 2026-07-29, none yet fixed. Ordered by what a
+roadmap reader hits first.**
+
+**1. The package contains a live compatibility-alias layer, and it is the root
+cause of the duplicate spellings.**
+`ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/Basic.lean` says so
+itself, in its own docstrings: *"Compatibility-friendly name for symmetry of a
+bounded operator"*, *"Compatibility-friendly name for a reducing subspace"*.
+Of its 24 declarations, **17 are `abbrev`s onto a canonical spelling that
+already exists elsewhere in `ForTauCeti`**:
+
+| alias in `TauCeti.DavisKahan` | canonical spelling |
+| --- | --- |
+| `IsSelfAdjointOperator` | `A.IsSymmetric` |
+| `Reduces` | `ContinuousLinearMap.Reduces` |
+| `projection` / `complementaryProjection` | `U.starProjection` / `Uᗮ.starProjection` |
+| `reflectionOperator` | `Submodule.reflectionOperator` |
+| `diagonalPart` / `offDiagonalPart` | `Submodule.diagonalPart` / `.offDiagonalPart` |
+| `subspaceGap` / `directedGap` | `Submodule.projectionGap` / `.directedProjectionGap` |
+| `LowerFormBoundOn` / `UpperFormBoundOn` | `ContinuousLinearMap.LowerFormBoundOn` / `.UpperFormBoundOn` |
+| `sylvesterOperator` | `ContinuousLinearMap.sylvesterOperator` |
+
+**This is exactly the "compatibility aliases" that `ForTauCeti/README.md`'s own
+lifecycle step 4 says to remove — and it is why `Reduces` and
+`sylvesterOperator` each have *three* spellings in the package.**
+
+**It is not dead code, so it is a migration and not a deletion.** Measured
+consumers: `IsometricEmbedding` 31 files, `IsSelfAdjointOperator` 22,
+`Reduces` 17, `directedGap` 9 qualified, `IsAcute` 8. **The cheap end is real
+though**: `sylvesterOperator` and `LowerFormBoundOn`/`UpperFormBoundOn` have
+**zero** qualified consumers, and `offDiagonalPart` and `sinThetaEmbedding`
+have one each. Retire those first and the three-way `sylvesterOperator` split
+collapses immediately.
+
+**2. Two namespace families for one subject**, `TauCeti.DavisKahan` and
+`TauCeti.DavisKahanTheory`, with no stated rule for which gets what — the first
+is the bounded-operator vocabulary, the second the finite-dimensional theory,
+but nothing says so and the overlap (`Reduces`, `residual`, `projection`,
+`IsAcute`, `spectralProjection`) is where readers will guess wrong. **Write the
+rule down before moving any declaration between them.**
+
+**Not defects, and worth saying so** — a raw duplicate-base-name scan reports
+**46**, but most are idiomatic structure-namespace lemmas (`add`, `refl`,
+`trans`, `zero`, `smul`, `neg`, `sub`, `mono`, `nonneg`, `ext`, `add_le`,
+`sum_le`), exactly as Mathlib does. Counting those as duplication would send
+the next reader after 30 non-problems. **The real list is the 17-alias table
+above plus item 2.**
+- **Five `set_option linter.unusedDecidableInType false`** in
+  `Sylvester/Internal/ReciprocalMultiplier.lean`; the honest fix is dropping
+  `[DecidableEq ι]` from those five types and calling `classical`.
+  *Still open, new locations (`jon (yardrat)`, 2026-07-29, lane SPLIT-1K): the
+  five now sit in `ReciprocalMultiplier/OrbitAction.lean` (2, at 535 and 598) and
+  `ReciprocalMultiplier/DoubledPhase.lean` (3, at 111, 312 and 368).*
+- ~~**One file over the length limit** with its own
+  `set_option linter.style.longFile 2900` (`ReciprocalMultiplier`, 2,834 lines).~~
+  **Fixed 2026-07-29 by `jon (yardrat)`, lane SPLIT-1K.** `ReciprocalMultiplier`
+  was split at its four mathematical seams into
+  `ReciprocalMultiplier/{OrbitAction, Fourier, DoubledPhase}.lean` plus an 823-line
+  root; the `set_option` is gone and no part exceeds 820 lines. Struck rather than
+  deleted because the *diagnosis* was namek's and it was right.
+  `SpectralMeasure.lean` (1243) went the same way in the same lane. The only file
+  still over 1000 lines is `SinTheta/Perturbation.lean` (1111), left alone because
+  `jon (namek)`'s E-ALIAS second tranche holds it — see `dev/LANES.md`, which
+  carries the measured seam for whoever finishes it.
+
+**What is left beyond coherence.** Lane P-EXP — re-measured today and larger
+than the board says: a re-proof over an `ℝ≥0∞` gauge, not a retype, 117 sites
+across 30 modules. And convergence Waves 4–5.
+
+**Two findings worth carrying.**
+
+- **A previous `--write` was never committed**, so the exported copies sat
+  untracked and went stale against staging. That — not any defect in the new
+  clusters — is why `principal-angles` failed `--check`. If you export, commit
+  the submodule or the next reader inherits silent drift.
+- **`DavisKahan` and `ForTauCeti` build under different linter sets**, so
+  *every* module moving between them fails on arrival. Measured across three
+  lanes: 3 findings per 1,773 lines, 4 per 1,217, 20 per 6,912. Budget for it;
+  a red build straight after a `git mv` is the expected state.
+
+---
+
 # namek status — Spectra removal, serial phase
 
 **Updated 2026-07-29.  Read this before touching anything Spectra-facing.**

@@ -169,9 +169,9 @@ After steps 1-3 remove their coarse imports, then move:
 
 ```text
 Experimental/.../SpectraBridge/BoundedFromSpectrum.lean
-  -> DavisKahan/Interop/Spectra/BoundedFromSpectrum.lean
+  -> DavisKahan/SpectralTheory/BoundedFromSpectrum.lean
 Experimental/.../SpectraBridge/GapResolvent.lean
-  -> DavisKahan/Interop/Spectra/GapResolvent.lean
+  -> DavisKahan/SpectralTheory/GapResolvent.lean
 Experimental/.../SpectraBridge/UnboundedIntervalExterior.lean
   -> DavisKahan/Sylvester/Unbounded/IntervalExterior.lean
 Experimental/.../Sylvester/GenuineAllGap.lean

@@ -45,7 +45,7 @@ Primary source module:
 - `bounded_sinTwoTheta_genuineSpectrum_residual_operator`
 
 `bounded_sinTwoAngle_gap_identification` already has a production-quality
-counterpart in `DavisKahan/Interop/Spectra/ReflectionRestriction.lean`; prefer
+counterpart in `DavisKahan/SpectralTheory/ReflectionRestriction.lean`; prefer
 repointing the source alias if the statements are definitionally or
 propositionally identical rather than duplicating the proof.
 

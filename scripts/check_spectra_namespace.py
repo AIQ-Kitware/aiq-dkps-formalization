@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail if any file outside `vendor/` declares into Spectra's namespace.
+"""Fail if any production file declares into Spectra's namespace.
 
 A DKPS theorem parked in `namespace Spectra.*` is indistinguishable from donor
 material by name.  That is survivable while `import Spectra` is still in the
@@ -40,7 +40,24 @@ FORBIDDEN = re.compile(r"^\s*namespace\s+(Spectra)(\.[A-Za-z0-9_.'₀-₉]+)?\s*
 # reported violations, and the gate would fail on a commit that changed no Lean
 # source at all.  Adding it now rather than in the move commit keeps the two
 # concerns separable.
-EXEMPT_PREFIXES = ("vendor/", "external/", ".lake/", "retired/")
+EXEMPT_PREFIXES = ("vendor/", "external/", "retired/")
+
+
+def in_hidden_dir(rel: str) -> bool:
+    """Is any component of `rel` a dot-directory?
+
+    Structural, not a hand-list, because the hand-list was wrong the moment the
+    tree grew a directory nobody had thought of.  This gate carried `.lake/` in
+    `EXEMPT_PREFIXES`; when a subagent worktree appeared at `.claude/worktrees/`
+    it brought ~1259 `.lean` files -- a second full checkout of this repo -- and
+    the gate reported violations at paths like
+    `.claude/worktrees/aiq-gpu-docs/retired/Spectra/...`, i.e. inside *another
+    agent's* working copy, on a commit that changed no Lean source at all.
+
+    Every dot-directory at the repo root is tooling state (`.lake`, `.git`,
+    `.claude`), never submission surface, so the rule covers the next one too.
+    """
+    return any(part.startswith(".") for part in Path(rel).parts)
 
 
 def strip_block_comments(text: str) -> list[str]:
@@ -77,7 +94,7 @@ def main() -> int:
     violations: list[tuple[str, int, str]] = []
     for path in sorted(repo.rglob("*.lean")):
         rel = path.relative_to(repo).as_posix()
-        if rel.startswith(EXEMPT_PREFIXES):
+        if rel.startswith(EXEMPT_PREFIXES) or in_hidden_dir(rel):
             continue
         for lineno, line in enumerate(strip_block_comments(path.read_text(errors="ignore")), 1):
             m = FORBIDDEN.match(line)
@@ -85,18 +102,19 @@ def main() -> int:
                 violations.append((rel, lineno, line.strip()))
 
     if violations:
-        print("Declarations into Spectra's namespace from outside vendor/:", file=sys.stderr)
+        print("Declarations into Spectra's namespace from production code:", file=sys.stderr)
         for rel, lineno, text in violations:
             print(f"  {rel}:{lineno}: {text}", file=sys.stderr)
         print(
-            "\nMove them into a DKPS namespace -- `TauCeti.DavisKahan.Experimental.SpectraBridge`\n"
-            "is the convention used throughout DavisKahan/Interop/Spectra/.  See phase S0 of\n"
-            "dev/tauceti/spectra-removal-plan.md.",
+            "\nMove them into a DKPS namespace.  File the declaration by what it is --\n"
+            "spectral theory under `DavisKahan/SpectralTheory/`, geometry under\n"
+            "`DavisKahan/Geometry/` -- not under a donor's name: `DavisKahan/Interop/Spectra/`\n"
+            "was dissolved on 2026-07-30 for exactly that reason (lane DK-INTEROP).",
             file=sys.stderr,
         )
         return 1
 
-    print("no declarations into Spectra's namespace outside vendor/")
+    print("no declarations into Spectra's namespace in production code")
     return 0
 
 

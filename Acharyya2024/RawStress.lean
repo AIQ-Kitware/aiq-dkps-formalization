@@ -26,7 +26,7 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
 import Acharyya2024.Common
-import ForMathlib.Topology.ApproxMinimizer
+import ForTauCeti.Topology.ApproxMinimizer
 
 open scoped BigOperators Topology RealInnerProductSpace InnerProductSpace
 open Filter
@@ -608,7 +608,7 @@ theorem exists_subseq_tendsto_mds
     simpa using hlim.sub_const (rawStress n d Δ x')
   -- Apply the Mathlib-staged approximate-minimizer stability lemma.
   obtain ⟨φ, hφ_mono, ψ, hψK, hψmin, hψtendsto⟩ :=
-    ForMathlib.exists_subseq_tendsto_forall_le_of_approxMin hK_compact
+    TauCeti.exists_subseq_tendsto_forall_le_of_approxMin hK_compact
       (continuous_rawStress Δ) hyK hε happrox
   refine ⟨fun t => φ t + N, ?_, ψ, hψmin, ?_⟩
   · exact fun a b hab => by simpa using Nat.add_lt_add_right (hφ_mono hab) N
@@ -760,7 +760,7 @@ without measurable selection of minimizers (a gap the paper does not address
 explicitly). Distances are compared, matching the affine-invariant viewpoint of
 Remark 1.
 
-Relation to the abstract Berge modulus (`ForMathlib.Topology.Berge`,
+Relation to the abstract Berge modulus (`ForTauCeti.Topology.Berge`,
 `exists_modulus_isMinOn_family`): the abstract upper-hemicontinuity modulus over a
 *fixed compact* feasible set, with closeness measured by a finite family of
 continuous invariants, captures the metric side of this statement exactly — the

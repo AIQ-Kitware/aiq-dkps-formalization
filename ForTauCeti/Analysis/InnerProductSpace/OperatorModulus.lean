@@ -15,6 +15,14 @@ public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpo
 /-!
 # The modulus of a Hilbert-space operator
 
+**Its `RCLike` counterpart.** `TauCeti.abs` in
+`ForTauCeti/Analysis/InnerProductSpace/PolarDecomposition.lean` is the square,
+`RCLike`-generic, finite-dimensional modulus, built from the spectral square root
+rather than from the continuous functional calculus — which Mathlib registers only
+over `ℂ`. The two agree wherever both apply, by
+`TauCeti.abs_toContinuousLinearMap_eq_cfcAbs`. Neither subsumes the other: this
+one is rectangular, that one is field-generic (lane MODULUS-DEDUP, 2026-07-30).
+
 For a bounded operator `T : E →L[ℂ] F` between complex Hilbert spaces, its
 **modulus** `|T| = (T⋆ T)^(1/2)` is the positive square root, through the
 continuous functional calculus, of the Gram operator `T⋆ T` acting on the

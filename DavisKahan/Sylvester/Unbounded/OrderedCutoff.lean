@@ -338,9 +338,10 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
         AF (Xc x) - Xc (BF x) := by module
       _ = Cc x := hraw
   have hmain := sylvester_mem_and_gauge_le_of_bound_inverse
-    (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily
+    (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
     hA1inv B1 hρ hδ hA1invNorm hB1norm hEqShift
       (KyFanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk Cc)
+  simp only [KyFanDominantIdealFamily.toSymmetric_gaugeReal] at hmain
   rw [KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Xc,
     KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Cc] at hmain
   simpa only [Xc, Cc, PA, PB, ContinuousLinearMap.comp_assoc] using hmain.2
@@ -445,9 +446,10 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
         AF (Xc x) - Xc (BF x) := by module
       _ = Cc x := hraw
   have hmain := sylvester_mem_and_gauge_le_of_bound_inverse_swapped
-    (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily
+    (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
     hB1inv A1 hρ hδ hB1invNorm hA1norm hEqShift
       (KyFanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk Cc)
+  simp only [KyFanDominantIdealFamily.toSymmetric_gaugeReal] at hmain
   rw [KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Xc,
     KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Cc] at hmain
   simpa only [Xc, Cc, PA, PB, ContinuousLinearMap.comp_assoc] using hmain.2

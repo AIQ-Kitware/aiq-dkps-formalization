@@ -30,7 +30,6 @@ namespace Experimental
 namespace MathAhead
 namespace HiddenFoundations
 
-open SpectraBridge
 open Frontier
 
 noncomputable section
@@ -249,6 +248,7 @@ theorem star_crossedDefectQuarterTurn_mul_self
   rw [mul_apply_eq_comp, star_crossedDefectQuarterTurn,
     neg_apply, hQQx, neg_neg, hproj]
 
+omit [CompleteSpace H] in
 /-- The canonical intertwiner vanishes on the source defect. -/
 theorem canonicalIntertwiner_apply_sourceDefect_eq_zero
     (x : halmosSourceDefect U V) :
@@ -262,6 +262,7 @@ theorem canonicalIntertwiner_apply_sourceDefect_eq_zero
     simp [complementaryProjection, hP]
   simp [spectraCanonicalIntertwiner, hP, hQ, hPc]
 
+omit [CompleteSpace H] in
 /-- The canonical intertwiner vanishes on the target defect. -/
 theorem canonicalIntertwiner_apply_targetDefect_eq_zero
     (x : halmosTargetDefect U V) :
@@ -277,6 +278,7 @@ theorem canonicalIntertwiner_apply_targetDefect_eq_zero
     simp [complementaryProjection, hQ]
   simp [spectraCanonicalIntertwiner, hP, hPc, hQc]
 
+omit [CompleteSpace H] in
 /-- The kernel of the canonical intertwiner is exactly the crossed-defect sum. -/
 theorem ker_canonicalIntertwiner_eq_crossedDefectSum :
     LinearMap.ker (spectraCanonicalIntertwiner U V).toLinearMap =

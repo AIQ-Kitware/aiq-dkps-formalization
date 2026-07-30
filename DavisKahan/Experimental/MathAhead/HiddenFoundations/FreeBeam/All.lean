@@ -1,4 +1,0 @@
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SmoothGreenIdentity
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.ComplexGreenIdentity
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SmoothKernel
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.HardTheoryAll

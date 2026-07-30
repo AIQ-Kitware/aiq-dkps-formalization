@@ -18,6 +18,16 @@ A bounded-below real trial map is complexified.  The positive square root and
 inverse square root of its complex Gram operator are fixed by canonical
 conjugation and therefore descend to real bounded operators.  All package laws
 are then reflected through the injective complexification functor.
+
+## Where this sits among the three frame-factorization modules
+
+This file is the **`ℝ` existence proof** for `LowerFramePolarData`. Its two
+siblings, documented at length in `DavisKahan/SinTheta/FrameFactorization.lean`:
+that module declares the structure and proves it inhabited over `ℂ`, and
+`DavisKahan/SinTheta/FrameFactorizationGeneric.lean` is the `𝕜`-generic consumer
+layer, which proves no existence at all. The scalar field separates this file
+from the first and is irrelevant to the third.
+
 -/
 
 namespace TauCeti

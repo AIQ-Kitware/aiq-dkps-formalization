@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.BoundedOperator.Projector
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
 
 /-!
@@ -94,7 +94,7 @@ an ordinary real norm before assembling the final Rayleigh estimate. -/
 theorem upperFormBoundOn_top_of_spectrum_subset_Iic
     (A : E →L[ℝ] E) (hA : A.IsSymmetric) {c : ℝ}
     (hσ : spectrum ℝ A ⊆ Set.Iic c) :
-    UpperFormBoundOn A ⊤ c := by
+    A.UpperFormBoundOn ⊤ c := by
   rcases subsingleton_or_nontrivial E with hE | hE
   · intro x _
     have hx : x = 0 := Subsingleton.elim x 0
@@ -184,7 +184,7 @@ second spectral-theorem obligation. -/
 theorem lowerFormBoundOn_top_of_spectrum_subset_Ici
     (A : E →L[ℝ] E) (hA : A.IsSymmetric) {c : ℝ}
     (hσ : spectrum ℝ A ⊆ Set.Ici c) :
-    LowerFormBoundOn A ⊤ c := by
+    A.LowerFormBoundOn ⊤ c := by
   have hnegA : (-A).IsSymmetric := by
     intro x y
     change ⟪-A x, y⟫_ℝ = ⟪x, -A y⟫_ℝ
@@ -213,7 +213,7 @@ theorem upperFormBoundOn_of_restriction_spectrum_subset_Iic
     {U : Submodule ℝ E} [U.HasOrthogonalProjection]
     (hU : ∀ x ∈ U, A x ∈ U) {c : ℝ}
     (hσ : spectrum ℝ (A.restrict hU) ⊆ Set.Iic c) :
-    UpperFormBoundOn A U c := by
+    A.UpperFormBoundOn U c := by
   letI : CompleteSpace U :=
     completeSpace_coe_iff_isComplete.mpr U.isComplete_coe_of_hasOrthogonalProjection
   have hres : (A.restrict hU).IsSymmetric :=
@@ -233,7 +233,7 @@ theorem lowerFormBoundOn_of_restriction_spectrum_subset_Ici
     {U : Submodule ℝ E} [U.HasOrthogonalProjection]
     (hU : ∀ x ∈ U, A x ∈ U) {c : ℝ}
     (hσ : spectrum ℝ (A.restrict hU) ⊆ Set.Ici c) :
-    LowerFormBoundOn A U c := by
+    A.LowerFormBoundOn U c := by
   letI : CompleteSpace U :=
     completeSpace_coe_iff_isComplete.mpr U.isComplete_coe_of_hasOrthogonalProjection
   have hres : (A.restrict hU).IsSymmetric :=

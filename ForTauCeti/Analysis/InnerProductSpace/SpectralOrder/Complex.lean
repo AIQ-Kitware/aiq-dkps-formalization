@@ -21,9 +21,9 @@ bounds.
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
   `df036cd`; it has had no prior home.
-* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
-  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
-  areas.
+* Extraction class: **authored in place**, for Tau Ceti — `ForMathlib` was
+  retired on 2026-07-29 and `ForTauCeti` is the single staging library, whose
+  destination is Tau Ceti and not Mathlib (`ForTauCeti/README.md`).
 * Original authors / copyright: Jon Crall, Claude Opus 4.8, GPT 5.6 High; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none** — the `ForTauCeti` import firewall admits only

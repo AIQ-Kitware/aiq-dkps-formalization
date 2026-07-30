@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.SpectralTheory.ResolventOperator
-import DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection
+import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 

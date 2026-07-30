@@ -183,7 +183,7 @@ DK-6.3-lem (absent)
 - **Verification:** `proved_in_build`
 - **Mathematics:** A spectral gap between the two exact blocks yields residual and perturbation bounds for sin(2 Theta), with sharp factor two.
 - **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm`, `TauCeti.DavisKahan.Experimental.SpectraBridge.sinTwoTheta_addBounded_of_spectrum_gap`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm`, `TauCeti.DavisKahan.Experimental.sinTwoTheta_addBounded_of_spectrum_gap`
 - **Assessment:** Finite arbitrary-UI-norm forms are compiled; general Hilbert-space source forms are under repair.
 - **Next action:** Certify source-general residual and perturbation forms.
 
@@ -228,7 +228,7 @@ DK-6.3-lem (absent)
 - **Verification:** `proved_in_build`
 - **Mathematics:** A unitary intertwining the two projections whose diagonal cosine blocks are positive and whose off-diagonal sine blocks are adjoints.
 - **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation`, `TauCeti.DavisKahan.Experimental.SpectraBridge.spectraCanonicalIntertwiner`
+- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation`, `TauCeti.DavisKahan.Experimental.spectraCanonicalIntertwiner`
 - **Assessment:** Acute complex and finite constructions exist; exact nonacute source scope is not yet unified.
 - **Next action:** Add a source-facing definition covering the source existence regimes.
 
@@ -511,7 +511,7 @@ DK-6.3-lem (absent)
 - **Verification:** `proved_in_build`
 - **Mathematics:** Reflect the perturbation by 2P-1, identify U squared and sin(2 Theta), and reduce the result to the symmetric sine theorem.
 - **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `TauCeti.DavisKahan.reflectionDefect_eq_perturbationDefect`, `TauCeti.DavisKahan.Experimental.SpectraBridge.sinTwoTheta_reflectionResidual_of_spectrum_gap`
+- **Current Lean references:** `TauCeti.DavisKahan.reflectionDefect_eq_perturbationDefect`, `TauCeti.DavisKahan.Experimental.sinTwoTheta_reflectionResidual_of_spectrum_gap`
 - **Assessment:** The reflection identities and finite theorem exist; the exact full proof package is under repair.
 - **Next action:** Add a source wrapper preserving both residual and perturbation conclusions.
 

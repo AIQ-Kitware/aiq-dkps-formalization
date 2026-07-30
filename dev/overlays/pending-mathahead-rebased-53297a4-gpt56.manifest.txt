@@ -1,10 +1,10 @@
 DavisKahan/Experimental/MathAhead/All.lean
-DavisKahan/Experimental/MathAhead/GeometryAll.lean
+DavisKahan/Experimental/MathAhead/GeometryAll.lean -> DavisKahan/Geometry/Polar/All.lean
 DavisKahan/Experimental/MathAhead/SylvesterAll.lean
 DavisKahan/Experimental/MathAhead/ContinuationAll.lean
-DavisKahan/Experimental/MathAhead/Section9All.lean
+DavisKahan/Experimental/MathAhead/Section9All.lean -> DavisKahan/Sources/DavisKahan1970/Section9/All.lean
 DavisKahan/Experimental/MathAhead/Section3Elementary.lean
-DavisKahan/Experimental/MathAhead/Lemma63.lean
+DavisKahan/Experimental/MathAhead/Lemma63.lean -> DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean
 DavisKahan/Experimental/MathAhead/Sylvester/All.lean
 DavisKahan/Experimental/MathAhead/Sylvester/SelfAdjointBorelCalculus.lean
 DavisKahan/Experimental/MathAhead/Sylvester/FiniteStepCalculus.lean

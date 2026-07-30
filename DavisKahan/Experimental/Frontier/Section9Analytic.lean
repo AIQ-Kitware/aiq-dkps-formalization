@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.Experimental.Frontier.Section8
 import DavisKahan.Sources.DavisKahan1970.Section9.All
-import DavisKahan.Interop.Spectra.SpectralRestriction
+import DavisKahan.SpectralTheory.SpectralRestriction
 
 /-!
 # Section 9 frontier: analytic free-beam realization
@@ -28,7 +28,6 @@ namespace Experimental
 namespace Frontier
 namespace Section9
 
-open SpectraBridge
 open DavisKahan1970.Section9
 
 universe u

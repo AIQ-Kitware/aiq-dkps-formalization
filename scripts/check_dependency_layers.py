@@ -13,7 +13,9 @@ This script parses Lean `import` / `public import` lines and fails when a
 module violates the layering. The rules (see the campaign spec and
 `ForTauCeti/README.md`) are:
 
-1. `ForMathlib` must import only `Mathlib` and `ForMathlib` — never a paper
+1. (`ForMathlib` is retired as of 2026-07-29; the rule below is kept so the checker
+   still rejects the library if anyone recreates it.)  `ForMathlib` must import only
+   `Mathlib` and `ForMathlib` — never a paper
    library, `DavisKahan`, `TauCeti`, `ForTauCeti`, or `Spectra`.
 2. `ForTauCeti` must import only `Mathlib`, `TauCeti`, and `ForTauCeti`.
 3. a generic-foundation `DavisKahan` module must not import a source facade
@@ -22,7 +24,7 @@ module violates the layering. The rules (see the campaign spec and
 4. a production (non-`Experimental`) module must not import
    `DavisKahan.Experimental.*` unless it is in the reviewed allowlist.
 5. a source-facing wrapper (`DavisKahan.Sources.*`) must not be imported by a
-   lower-level generic module (`ForTauCeti`, `ForMathlib`, or a manifest-declared
+   lower-level generic module (`ForTauCeti`, or a manifest-declared
    generic `DavisKahan` foundation).
 6. a production module (`DavisKahan`, `DavisKahan.Sources`, or a paper library)
    must reach `Spectra` only through the designated bridge
@@ -194,7 +196,7 @@ def check(graph: dict[str, list[str]], allowlist: dict,
                     violations.append(Violation(
                         "FORMATHLIB_FIREWALL", module,
                         f"imports {imp} ({classify(imp)}); allowed: "
-                        f"Mathlib, ForMathlib", p))
+                        f"Mathlib, ForMathlib", p))  # ForMathlib retired 2026-07-29
 
         # Rule 3 & 5: generic DavisKahan foundation importing a source facade.
         if layer == "davis-kahan" and module.startswith(generic_dk_prefixes):
@@ -215,21 +217,27 @@ def check(graph: dict[str, list[str]], allowlist: dict,
                         f"production module imports Experimental {imp} "
                         f"without an allowlist entry"))
 
-    # Rule 7: Spectra reaches production only through the Interop bridge.
+    # Rule 7: production does not import Spectra.
+    #
+    # This began as "production reaches Spectra only through the designated bridge
+    # `DavisKahan.Interop.Spectra.*`".  Both halves of that are now historical: Spectra
+    # was retired on 2026-07-29, and the bridge directory was dissolved on 2026-07-30
+    # once none of its 26 modules imported Spectra any more (lane DK-INTEROP) -- they
+    # were spectral theory, geometry and sin-Theta endpoints filed under a donor's name.
+    # There is no longer any exempt location, which makes the rule stricter, not weaker:
+    # a production module importing Spectra is now a violation wherever it lives.  Kept
+    # so that reintroducing the dependency is caught rather than merely noticed.
     spectra_ok = set(allowlist.get("production_imports_spectra", []))
     for module, imports in graph.items():
         lyr = classify(module)
         if lyr not in {"davis-kahan", "dk-source", "paper"}:
             continue
-        if module.startswith("DavisKahan.Interop.Spectra"):
-            continue          # the designated bridge; this is where Spectra belongs
         for imp in imports:
             if classify(imp) == "spectra" and module not in spectra_ok:
                 violations.append(Violation(
                     "PRODUCTION_IMPORTS_SPECTRA", module,
-                    f"production module imports {imp} directly instead of going "
-                    f"through DavisKahan.Interop.Spectra, and is not in the "
-                    f"ratcheting allowlist"))
+                    f"production module imports {imp}; Spectra is retired and there is "
+                    f"no longer an exempt bridge location"))
 
     # Rule 6: cluster extraction closure (manifest-driven).
     for record in manifest.get("clusters", []):

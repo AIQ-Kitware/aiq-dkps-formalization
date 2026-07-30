@@ -68,7 +68,7 @@ for line-accurate citations in a final submission.
 - `Acharyya2024/RawStress.lean`: raw stress, minimizer existence, translation
   invariance, compactness/coercivity, minimizer-set stability, modulus of
   continuity, in-probability stability.
-- `ForMathlib/Topology/ApproxMinimizer.lean`: staged approximate-minimizer
+- `ForTauCeti/Topology/ApproxMinimizer.lean`: staged approximate-minimizer
   stability theorem used by the raw-stress layer.
 
 ## Probability and rate pipeline
@@ -105,10 +105,10 @@ for line-accurate citations in a final submission.
 - `ForMathlib/Analysis/InnerProductSpace/NearIsometry.lean`.
 - `ForMathlib/Analysis/Matrix/EntrywiseOpNorm.lean`.
 - `ForMathlib/Analysis/Matrix/Spectrum.lean`.
-- `ForMathlib/LinearAlgebra/Matrix/PosDef.lean`.
+- `ForTauCeti/LinearAlgebra/Matrix/PosDef.lean`.
 - `ForMathlib/MeasureTheory/CompactExists.lean`.
 - `ForMathlib/Probability/Moments/SampleMean.lean`.
-- `ForMathlib/Topology/ApproxMinimizer.lean`.
+- `ForTauCeti/Topology/ApproxMinimizer.lean`.
 
 ## Model-assisted provenance evidence
 
@@ -129,7 +129,7 @@ Use `model_provenance.md` for a longer record.  Summary:
   spectral bridge, raw-stress stability core, rate chain, and retirement of
   false-as-written seams.
 - Opus evidence: `ForMathlib/*` staged files such as
-  `ForMathlib/Topology/ApproxMinimizer.lean`,
+  `ForTauCeti/Topology/ApproxMinimizer.lean`,
   `ForMathlib/Analysis/Matrix/EntrywiseOpNorm.lean`,
   `DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean`,
   `ForMathlib/Probability/Moments/SampleMean.lean`, and

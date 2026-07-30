@@ -6,7 +6,7 @@ import DavisKahan.SpectralTheory.ClosedOperator.Complexification
 import DavisKahan.Sylvester.PairwiseHomogeneousUniqueness
 import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap
 
 /-!
 # Pairwise-gap square-norm Sylvester theorem
@@ -109,10 +109,10 @@ theorem paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
     -- The canonical spectrum lives in `ℂ`; `hgap` constrains only real points, so
     -- first use self-adjointness to see that there are no others.
     obtain ⟨lr, -, rfl⟩ :=
-      SpectraBridge.spectrum_subset_real_of_isSelfAdjoint
+      spectrum_subset_real_of_isSelfAdjoint
         (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) hlam
     obtain ⟨ar, -, rfl⟩ :=
-      SpectraBridge.spectrum_subset_real_of_isSelfAdjoint
+      spectrum_subset_real_of_isSelfAdjoint
         (ClosedOperatorComplexification.isSelfAdjoint_complexify hB) hα
     have h := hgap lr (by
         rwa [ClosedOperatorComplexification.realSpectrum_complexify A,

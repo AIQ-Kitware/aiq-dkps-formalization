@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.Gap
 import DavisKahan.Sylvester.Unbounded.IntervalExterior
-import DavisKahan.Interop.Spectra.OrderedHalfLine
+import DavisKahan.SpectralTheory.OrderedHalfLine
 import DavisKahan.Sylvester.CutoffInterface
 import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
@@ -89,23 +89,23 @@ theorem davisKahan1970_sylvester_of_genuineSpectrumGap
   cases hgap with
   | intervalExterior hβα hgap =>
       rcases hgap with hgap | hgap
-      · exact SpectraBridge.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
-          N.toRectangularSymmetricIdealFamily hA hB hβα hδ
+      · exact unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
+          N.toSymmetricOperatorIdealFamily hA hB hβα hδ
             hgap.1 hgap.2 hEq hC
-      · exact SpectraBridge.unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
-          N.toRectangularSymmetricIdealFamily hA hB hβα hδ
+      · exact unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
+          N.toSymmetricOperatorIdealFamily hA hB hβα hδ
             hgap.2 hgap.1 hEq hC
   | leftAboveRightBelow c hAspec hBspec =>
       exact GenuineOrderedSylvesterEngine.lowerUpper
         canonicalGenuineOrderedSylvesterEngine N hA hB hδ
-          (SpectraBridge.semiboundedBelow_of_spectrum_subset_Ici A hA hAspec)
-          (SpectraBridge.semiboundedAbove_of_spectrum_subset_Iic B hB hBspec)
+          (semiboundedBelow_of_spectrum_subset_Ici A hA hAspec)
+          (semiboundedAbove_of_spectrum_subset_Iic B hB hBspec)
           hEq hC
   | leftBelowRightAbove c hAspec hBspec =>
       exact GenuineOrderedSylvesterEngine.upperLower
         canonicalGenuineOrderedSylvesterEngine N hA hB hδ
-          (SpectraBridge.semiboundedAbove_of_spectrum_subset_Iic A hA hAspec)
-          (SpectraBridge.semiboundedBelow_of_spectrum_subset_Ici B hB hBspec)
+          (semiboundedAbove_of_spectrum_subset_Iic A hA hAspec)
+          (semiboundedBelow_of_spectrum_subset_Ici B hB hBspec)
           hEq hC
 
 end ExactSinTheta

@@ -25,6 +25,13 @@ bijection of `HilbertSchmidtLp.lean` did not need but any *linear* construction
 on the space does.  They are proved by the round trip rather than by
 manipulating the defining series.
 
+## Sources
+
+Unitary — and more generally isometric — invariance of the Hilbert--Schmidt norm is
+standard (Reed--Simon, *Methods of Modern Mathematical Physics I*; Simon,
+*Trace Ideals*).  The two-sided isometric form here is what the Sylvester block
+argument needs; no source is followed for its presentation.
+
 ## Provenance
 
 *New.*  The donor obtains the same invariance from the tensor factorisation
@@ -62,6 +69,14 @@ omit [CompleteSpace F] in
   · rw [columns_ofLp]; exact lp.memℓp _
   · rw [columns_add, columns_ofLp, columns_ofLp]; exact lp.memℓp (f + g)
   · rw [columns_ofLp, columns_add, columns_ofLp, columns_ofLp]; rfl
+
+omit [CompleteSpace F] in
+/-- The column-to-operator map is additive on differences.  Stated separately from
+`ofLp_add` because the subtraction form is what the convergence arguments use. -/
+theorem ofLp_sub (b : HilbertBasis ι 𝕜 F) (f g : lp (fun _ : ι => E) 2) :
+    ofLp b (f - g) = ofLp b f - ofLp b g := by
+  have h : ofLp b (f - g) + ofLp b g = ofLp b f := by rw [← ofLp_add]; congr 1; abel
+  rw [← h]; abel
 
 omit [CompleteSpace F] in
 /-- The column-to-operator map is homogeneous. -/

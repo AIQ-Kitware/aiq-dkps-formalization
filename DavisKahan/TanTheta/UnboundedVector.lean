@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.TanTheta.Vector
-import DavisKahan.Interop.Spectra.SpectralRestriction
-import DavisKahan.Interop.Spectra.BoundedFromSpectrum
+import DavisKahan.SpectralTheory.SpectralRestriction
+import DavisKahan.SpectralTheory.BoundedFromSpectrum
 
 /-!
 # The unbounded Davis--Kahan tangent theorem, per-vector form
@@ -38,7 +38,6 @@ namespace DavisKahan
 namespace Experimental
 namespace TanTheta
 
-open SpectraBridge
 
 /-- On a closed interval the absolute value is bounded by the larger endpoint
 modulus.  Local replacement for the donor lemma of the same name, which reached

@@ -94,7 +94,7 @@
       "spectra_module": "Spectra.CayleyTransform.BorelCalculus"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/SpectralRestrictionLocalization.lean",
+      "consumer": "DavisKahan/SpectralTheory/SpectralRestrictionLocalization.lean",
       "spectra_module": "Spectra.Mathlib.CharFunBridge"
     },
     {
@@ -110,19 +110,19 @@
       "spectra_module": "Spectra.Operator.Bounded"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/BoundedPerturbationSinTheta.lean",
+      "consumer": "DavisKahan/SinTheta/BoundedPerturbation.lean",
       "spectra_module": "Spectra.Operator.KatoRellich"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/ClosedOperator.lean",
+      "consumer": "DavisKahan/SpectralTheory/ClosedOperator/MathlibBridge.lean",
       "spectra_module": "Spectra.Operator.SelfAdjoint"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/UnitaryConjugation.lean",
+      "consumer": "DavisKahan/SpectralTheory/ClosedOperator/UnitaryConjugation.lean",
       "spectra_module": "Spectra.Operator.Unitary.Conjugation"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/PVMSubspace.lean",
+      "consumer": "DavisKahan/SpectralTheory/PVMSubspace.lean",
       "spectra_module": "Spectra.ProjValMeasure.Basic"
     },
     {
@@ -134,7 +134,7 @@
       "spectra_module": "Spectra.QuantumMechanics.BornRule.Observable"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/OrderedHalfLine.lean",
+      "consumer": "DavisKahan/SpectralTheory/OrderedHalfLine.lean",
       "spectra_module": "Spectra.QuantumMechanics.BornRule.Observable"
     },
     {
@@ -142,7 +142,7 @@
       "spectra_module": "Spectra.QuantumMechanics.BornRule.Observable"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/OperatorAbsoluteValue.lean",
+      "consumer": "DavisKahan/Geometry/Polar/OperatorAbsoluteValue.lean",
       "spectra_module": "Spectra.QuantumMechanics.Channels.PolarDecomp"
     },
     {
@@ -162,15 +162,15 @@
       "spectra_module": "Spectra.Resolvent.Defs"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/RealSpectralRestriction.lean",
+      "consumer": "DavisKahan/SpectralTheory/Real/SpectralRestriction.lean",
       "spectra_module": "Spectra.Resolvent.Identities"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/RealSpectrumBridge.lean",
+      "consumer": "DavisKahan/SpectralTheory/ClosedOperator/RealSpectrum.lean",
       "spectra_module": "Spectra.Resolvent.Spectrum"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/UnitaryConjugation.lean",
+      "consumer": "DavisKahan/SpectralTheory/ClosedOperator/UnitaryConjugation.lean",
       "spectra_module": "Spectra.Resolvent.Spectrum"
     },
     {
@@ -202,11 +202,11 @@
       "spectra_module": "Spectra.SpectralTheory.Algebra"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/BoundedTruncation.lean",
+      "consumer": "DavisKahan/SpectralTheory/BoundedTruncation.lean",
       "spectra_module": "Spectra.SpectralTheory.Algebra"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/GapResolvent.lean",
+      "consumer": "DavisKahan/SpectralTheory/GapResolvent.lean",
       "spectra_module": "Spectra.SpectralTheory.Algebra"
     },
     {
@@ -218,7 +218,7 @@
       "spectra_module": "Spectra.SpectralTheory.Calculus.PMapBounded"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/SpectralRestrictionLocalization.lean",
+      "consumer": "DavisKahan/SpectralTheory/SpectralRestrictionLocalization.lean",
       "spectra_module": "Spectra.SpectralTheory.Calculus.PMapSquareRoot"
     },
     {
@@ -230,11 +230,11 @@
       "spectra_module": "Spectra.SpectralTheory.Calculus.SquareBridge"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/BoundedFromSpectrum.lean",
+      "consumer": "DavisKahan/SpectralTheory/BoundedFromSpectrum.lean",
       "spectra_module": "Spectra.SpectralTheory.Essential.Discrete"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/RealSpectralRestriction.lean",
+      "consumer": "DavisKahan/SpectralTheory/Real/SpectralRestriction.lean",
       "spectra_module": "Spectra.SpectralTheory.Essential.Weyl"
     },
     {
@@ -242,15 +242,15 @@
       "spectra_module": "Spectra.SpectralTheory.Measure.GeneratorLink"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/BoundedFromSpectrum.lean",
+      "consumer": "DavisKahan/SpectralTheory/BoundedFromSpectrum.lean",
       "spectra_module": "Spectra.SpectralTheory.Measure.GeneratorLink"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/SpectralRestriction.lean",
+      "consumer": "DavisKahan/SpectralTheory/SpectralRestriction.lean",
       "spectra_module": "Spectra.SpectralTheory.Measure.GeneratorLink"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/SpectralRestriction.lean",
+      "consumer": "DavisKahan/SpectralTheory/SpectralRestriction.lean",
       "spectra_module": "Spectra.SpectralTheory.Measure.PVM"
     },
     {
@@ -270,7 +270,7 @@
       "spectra_module": "Spectra.SpectralTheory.ResolventForm"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/RealSpectralRestriction.lean",
+      "consumer": "DavisKahan/SpectralTheory/Real/SpectralRestriction.lean",
       "spectra_module": "Spectra.SpectralTheory.ResolventForm"
     },
     {
@@ -282,15 +282,15 @@
       "spectra_module": "Spectra.SpectralTheory.SeparatedIntertwiner"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/GapResolvent.lean",
+      "consumer": "DavisKahan/SpectralTheory/GapResolvent.lean",
       "spectra_module": "Spectra.SpectralTheory.Spectrum"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/SpectralRestrictionLocalization.lean",
+      "consumer": "DavisKahan/SpectralTheory/SpectralRestrictionLocalization.lean",
       "spectra_module": "Spectra.SpectralTheory.Spectrum"
     },
     {
-      "consumer": "DavisKahan/Interop/Spectra/SpectralCutoff.lean",
+      "consumer": "DavisKahan/SpectralTheory/SpectralCutoff.lean",
       "spectra_module": "Spectra.SpectralTheory.Weak"
     },
     {

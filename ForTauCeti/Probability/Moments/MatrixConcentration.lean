@@ -3,13 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 
-Staged for Mathlib: eigenvalue concentration for a random Hermitian matrix from
+Staged for Tau Ceti, roadmap topic T20.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+eigenvalue concentration for a random Hermitian matrix from
 per-entry second-moment control (the elementary, no-matrix-Bernstein route:
 entrywise Chebyshev + union bound, then entrywise → operator-norm → Weyl).
 
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); prose symbol `Ŝ` → `Shat`
 (matching the Lean variable, clearing the Mathlib unicode-allowlist linter).
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue

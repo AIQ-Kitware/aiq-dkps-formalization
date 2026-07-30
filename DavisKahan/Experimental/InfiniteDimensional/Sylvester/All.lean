@@ -8,8 +8,8 @@ import DavisKahan.Sylvester.GenuineSpectrum
 import DavisKahan.SpectralTheory.ResolventOperator
 import DavisKahan.Sylvester.Bounded
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Unbounded
-import DavisKahan.Interop.Spectra.SpectralCutoff
-import DavisKahan.Interop.Spectra.BoundedTruncation
+import DavisKahan.SpectralTheory.SpectralCutoff
+import DavisKahan.SpectralTheory.BoundedTruncation
 import DavisKahan.Sylvester.FilledTruncation
 import DavisKahan.Sylvester.Unbounded.OrderedCutoff
 import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect

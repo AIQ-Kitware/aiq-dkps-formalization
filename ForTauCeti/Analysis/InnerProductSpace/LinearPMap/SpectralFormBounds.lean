@@ -31,6 +31,11 @@ letting `τ → ∞` gives the half-line bound directly, because `E([c, τ])` ac
 `E([-τ, τ])` once `E([c, ∞)) = 1` — and that in turn is `E((-∞, c)) = 0`, which
 is the support statement in `SpectralSupport.lean`.
 
+## Sources
+
+*Follows nothing in particular*: form bounds read off a half-line spectrum, in the shape
+the consumer asked for — a form bound rather than a second moment.
+
 ## Provenance
 
 *New.*  The Spectra endpoints are

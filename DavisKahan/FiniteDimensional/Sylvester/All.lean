@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.FiniteDimensional.Sylvester.Internal.All
-import DavisKahan.FiniteDimensional.Sylvester.Basic
-import DavisKahan.FiniteDimensional.Sylvester.Interval
-import DavisKahan.FiniteDimensional.Sylvester.SpectralDistance
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
 
 /-! # `DavisKahan/FiniteDimensional/Sylvester` -/
