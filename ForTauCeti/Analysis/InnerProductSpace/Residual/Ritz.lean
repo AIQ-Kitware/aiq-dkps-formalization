@@ -81,6 +81,8 @@ theorem isSymmetric_compression {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
   refine ext_inner_right 𝕜 fun y => ?_
   simp only [LinearMap.comp_apply, LinearMap.id_apply]
   rw [LinearMap.adjoint_inner_left]
+  -- states the goal as the inner-product identity the isometry/adjoint lemma
+  -- expects, rather than through the bundled map.
   change ⟪X x, X y⟫_𝕜 = ⟪x, y⟫_𝕜
   exact X.inner_map_map x y
 
@@ -94,6 +96,8 @@ theorem adjoint_comp_ritzResidual_eq_zero (A : E →ₗ[𝕜] E)
   simp only [LinearMap.comp_apply, ritzResidual, residual, compression,
     LinearMap.sub_apply, LinearMap.zero_apply, inner_zero_left]
   rw [LinearMap.adjoint_inner_left, inner_sub_left]
+  -- states the goal as the inner-product identity the isometry/adjoint lemma
+  -- expects, rather than through the bundled map.
   change ⟪A (X x), X y⟫_𝕜 -
       ⟪X (X.toLinearMap.adjoint (A (X x))), X y⟫_𝕜 = 0
   apply sub_eq_zero.mpr
@@ -110,6 +114,8 @@ theorem ritzResidual_eq_zero_iff_reduces {A : E →ₗ[𝕜] E}
   · intro hR x hx
     rcases hx with ⟨y, rfl⟩
     have hpoint := LinearMap.congr_fun hR y
+    -- restates the hypothesis with the definition unfolded, which is the form the
+    -- following step matches against.
     change A (X y) - X (compression A X y) = 0 at hpoint
     exact ⟨compression A X y, (sub_eq_zero.mp hpoint).symm⟩
   · intro hred
@@ -119,11 +125,16 @@ theorem ritzResidual_eq_zero_iff_reduces {A : E →ₗ[𝕜] E}
     rcases hmem with ⟨z, hz⟩
     have hz' : A (X.toLinearMap y) = X.toLinearMap z := hz.symm
     have hcomp : compression A X y = z := by
+      -- states the goal with the definition unfolded, in the shape the next step needs.
       change X.toLinearMap.adjoint (A (X.toLinearMap y)) = z
       rw [hz']
       have hleft := LinearMap.congr_fun (adjoint_comp_linearIsometry_eq_id X) z
+      -- restates the hypothesis with the definition unfolded, which is the form the
+      -- following step matches against.
       change X.toLinearMap.adjoint (X.toLinearMap z) = z at hleft
       exact hleft
+    -- unfolds the named residual/compression so the following rewrite sees its
+    -- definition; there is no `_apply` lemma for it to route through.
     change A (X.toLinearMap y) - X.toLinearMap (compression A X y) = 0
     rw [hcomp, hz', sub_self]
 
@@ -147,6 +158,7 @@ theorem residual_eq_perturbation_comp {A B : E →ₗ[𝕜] E}
     (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F)
     (hBX : B ∘ₗ X.toLinearMap = X.toLinearMap ∘ₗ M) :
     residual A X M = (A - B) ∘ₗ X.toLinearMap := by
+  -- states the goal with the definition unfolded, in the shape the next step needs.
   change A ∘ₗ X.toLinearMap - X.toLinearMap ∘ₗ M = (A - B) ∘ₗ X.toLinearMap
   rw [LinearMap.sub_comp, hBX]
 
@@ -191,6 +203,7 @@ theorem residual_frobenius_pythagoras (A : E →ₗ[𝕜] E)
   have hdecomp : residual A X M =
       ritzResidual A X + X.toLinearMap ∘ₗ (compression A X - M) := by
     ext x
+    -- states the goal with the definition unfolded, in the shape the next step needs.
     change A (X x) - X (M x) =
       (A (X x) - X ((compression A X) x)) +
         X (((compression A X) x) - M x)
@@ -201,15 +214,20 @@ theorem residual_frobenius_pythagoras (A : E →ₗ[𝕜] E)
         ‖(compression A X - M) (b i)‖ ^ 2 := by
     intro i
     have hgal := LinearMap.congr_fun (adjoint_comp_ritzResidual_eq_zero A X) (b i)
+    -- restates the hypothesis with the definition unfolded, which is the form the
+    -- following step matches against.
     change X.toLinearMap.adjoint (ritzResidual A X (b i)) = 0 at hgal
     have horth :
         ⟪ritzResidual A X (b i),
             X.toLinearMap ((compression A X - M) (b i))⟫_𝕜 = 0 := by
       rw [← LinearMap.adjoint_inner_left, hgal, inner_zero_left]
     let d := (compression A X - M) (b i)
+    -- restates the hypothesis with the definition unfolded, which is the form the
+    -- following step matches against.
     change ⟪ritzResidual A X (b i), X d⟫_𝕜 = 0 at horth
     rw [LinearMap.congr_fun hdecomp (b i)]
     simp only [LinearMap.add_apply, LinearMap.comp_apply]
+    -- states the goal with the definition unfolded, in the shape the next step needs.
     change
       ‖ritzResidual A X (b i) + X d‖ ^ 2 =
         ‖ritzResidual A X (b i)‖ ^ 2 + ‖d‖ ^ 2
