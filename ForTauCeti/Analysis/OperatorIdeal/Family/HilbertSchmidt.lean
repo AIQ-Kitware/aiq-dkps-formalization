@@ -50,7 +50,7 @@ literature reaches for first.
 
 open scoped ENNReal NNReal InnerProductSpace
 
-@[expose] public section
+public section
 
 namespace ENNReal
 
@@ -272,13 +272,11 @@ theorem mem_hilbertSchmidtIdealFamily_carrier_iff {𝕜 : Type u} [RCLike 𝕜] 
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (A : E →L[𝕜] F) :
     A ∈ (hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.carrier ↔
-      A.IsHilbertSchmidt := Iff.rfl
-
+      A.IsHilbertSchmidt := (Iff.rfl)
 /-- The gauge of the Hilbert--Schmidt family is the Hilbert--Schmidt norm. -/
 @[simp] theorem hilbertSchmidtIdealFamily_gauge {𝕜 : Type u} [RCLike 𝕜] {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (A : E →L[𝕜] F) :
     (hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.gauge A =
-      A.hilbertSchmidtENorm := rfl
-
+      A.hilbertSchmidtENorm := (rfl)
 end TauCeti

@@ -60,7 +60,7 @@ complement as well — leaving `s * ‖y‖ ^ 2 ≤ re ⟪A y, y⟫`, and Cauchy
   that the continuous functional calculus already in Mathlib suffices.
 -/
 
-@[expose] public section
+public section
 
 namespace ContinuousLinearMap
 
