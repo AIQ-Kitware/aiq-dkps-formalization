@@ -21,7 +21,6 @@ arbitrary unitarily invariant ideal gauge.  Both are Spectra-free since
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 section SinTheta
 
@@ -155,7 +154,6 @@ theorem linearPMap_sinTheta_unbounded_gauge_of_spectrum_gap
 end SinTheta
 
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

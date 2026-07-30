@@ -31,7 +31,7 @@ namespace Experimental
 namespace MathAhead
 namespace HiddenFoundations
 
-open SpectraBridge Frontier
+open  Frontier
 
 universe u v
 

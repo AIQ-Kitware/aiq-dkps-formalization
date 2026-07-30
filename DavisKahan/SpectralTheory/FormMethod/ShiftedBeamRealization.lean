@@ -169,7 +169,7 @@ beam is self-adjoint. -/
 theorem beamOperator_isSelfAdjoint
     (D : ShiftedBeamFormData (H := H) (V := V)) :
     D.beamOperator.IsSelfAdjoint := by
-  exact SpectraBridge.addBounded_isSelfAdjoint
+  exact addBounded_isSelfAdjoint
     D.shiftedOperator D.shiftedOperator_isSelfAdjoint
     (-(1 : H →L[ℂ] H)) negIdentity_isSelfAdjointOperator
 

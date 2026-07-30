@@ -28,9 +28,8 @@ namespace Experimental
 namespace Frontier
 namespace Section4
 
--- `SpectraBridge` is `TauCeti.DavisKahan.Experimental.SpectraBridge`, so it
+-- `` is `TauCeti.DavisKahan.Experimental`, so it
 -- can only be opened once those namespaces are entered
-open SpectraBridge
 open ExactSinTheta
 
 universe u

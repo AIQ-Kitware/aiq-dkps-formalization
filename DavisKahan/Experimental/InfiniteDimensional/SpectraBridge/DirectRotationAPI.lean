@@ -30,7 +30,7 @@ noncomputable abbrev complexDirectRotation
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) : H →L[ℂ] H :=
-  _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation U V hacute
+  _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation U V hacute
 
 /-- The complex direct rotation is norm-preserving and onto. -/
 theorem complexDirectRotation_unitary
@@ -38,9 +38,9 @@ theorem complexDirectRotation_unitary
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
     IsUnitaryOperator (complexDirectRotation U V hacute) :=
-  ⟨_root_.TauCeti.DavisKahan.Experimental.SpectraBridge.norm_spectraDirectRotation_apply
+  ⟨_root_.TauCeti.DavisKahan.Experimental.norm_spectraDirectRotation_apply
       U V hacute,
-    _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_surjective
+    _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_surjective
       U V hacute⟩
 
 /-- The complex direct rotation is the unique unitary square root of the
@@ -56,7 +56,7 @@ theorem complexDirectRotation_unique
     (hsq : W * W = reflectionOperator V * reflectionOperator U)
     (hre : ∀ x, 0 ≤ Complex.re ⟪W x, x⟫_ℂ) :
     W = complexDirectRotation U V hacute :=
-  _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_unique_of_sq
+  _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_unique_of_sq
     U V hacute W hWunit hsq hre
 
 /-- The complex direct rotation intertwines the source and target
@@ -68,7 +68,7 @@ theorem complexDirectRotation_intertwines
     complexDirectRotation U V hacute ∘L projection U =
       projection V ∘L complexDirectRotation U V hacute := by
   simpa only [ContinuousLinearMap.mul_def] using
-    _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_intertwines
+    _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_intertwines
       U V hacute
 
 /-- The complex direct rotation maps the source subspace onto the target
@@ -78,7 +78,7 @@ theorem complexDirectRotation_maps_subspace
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
     U.map (complexDirectRotation U V hacute).toLinearMap = V :=
-  _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_maps_subspace
+  _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_maps_subspace
     U V hacute
 
 /-- The complex direct rotation maps orthogonal complements onto orthogonal
@@ -88,7 +88,7 @@ theorem complexDirectRotation_maps_orthogonalComplement
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
     Uᗮ.map (complexDirectRotation U V hacute).toLinearMap = Vᗮ :=
-  _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_maps_orthogonalComplement
+  _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_maps_orthogonalComplement
     U V hacute
 
 /-- The foundational direct-rotation properties are simultaneously realized
@@ -134,7 +134,7 @@ theorem complexDirectRotation_mem_unitary
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
     complexDirectRotation U V hacute ∈ unitary (H →L[ℂ] H) :=
-  _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_mem_unitary
+  _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_mem_unitary
     U V hacute
 
 /-- The adjoint of the complex direct rotation is its left inverse. -/
@@ -145,7 +145,7 @@ theorem star_complexDirectRotation_comp_self
     star (complexDirectRotation U V hacute) ∘L
         complexDirectRotation U V hacute = 1 := by
   simpa only [ContinuousLinearMap.mul_def] using
-    _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.star_spectraDirectRotation_mul_self
+    _root_.TauCeti.DavisKahan.Experimental.star_spectraDirectRotation_mul_self
       U V hacute
 
 /-- The adjoint of the complex direct rotation is its right inverse. -/
@@ -156,7 +156,7 @@ theorem complexDirectRotation_comp_star_self
     complexDirectRotation U V hacute ∘L
         star (complexDirectRotation U V hacute) = 1 := by
   simpa only [ContinuousLinearMap.mul_def] using
-    _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_mul_star_self
+    _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_mul_star_self
       U V hacute
 
 /-- The adjoint intertwines the target projection back to the source
@@ -168,7 +168,7 @@ theorem star_complexDirectRotation_intertwines
     star (complexDirectRotation U V hacute) ∘L projection V =
       projection U ∘L star (complexDirectRotation U V hacute) := by
   simpa only [ContinuousLinearMap.mul_def] using
-    _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.star_spectraDirectRotation_intertwines
+    _root_.TauCeti.DavisKahan.Experimental.star_spectraDirectRotation_intertwines
       U V hacute
 
 /-- The adjoint also intertwines complementary target and source projections. -/
@@ -179,7 +179,7 @@ theorem star_complexDirectRotation_intertwines_complementary
     star (complexDirectRotation U V hacute) ∘L complementaryProjection V =
       complementaryProjection U ∘L star (complexDirectRotation U V hacute) := by
   simpa only [ContinuousLinearMap.mul_def] using
-    _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.star_spectraDirectRotation_intertwines_complementary
+    _root_.TauCeti.DavisKahan.Experimental.star_spectraDirectRotation_intertwines_complementary
       U V hacute
 
 /-- Conjugation by the complex direct rotation carries the source projection
@@ -191,7 +191,7 @@ theorem complexDirectRotation_conjugates_projection
     (complexDirectRotation U V hacute ∘L projection U) ∘L
         star (complexDirectRotation U V hacute) = projection V := by
   simpa only [ContinuousLinearMap.mul_def] using
-    _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_conjugates_projection
+    _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_conjugates_projection
       U V hacute
 
 /-- Conjugation by the adjoint carries the target projection back to the source projection. -/
@@ -202,7 +202,7 @@ theorem star_complexDirectRotation_conjugates_projection
     (star (complexDirectRotation U V hacute) ∘L projection V) ∘L
         complexDirectRotation U V hacute = projection U := by
   simpa only [ContinuousLinearMap.mul_def] using
-    _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.star_spectraDirectRotation_conjugates_projection
+    _root_.TauCeti.DavisKahan.Experimental.star_spectraDirectRotation_conjugates_projection
       U V hacute
 
 /-- Conjugation by the complex direct rotation carries complementary source projection to the
@@ -214,7 +214,7 @@ theorem complexDirectRotation_conjugates_complementaryProjection
     (complexDirectRotation U V hacute ∘L complementaryProjection U) ∘L
         star (complexDirectRotation U V hacute) = complementaryProjection V := by
   simpa only [ContinuousLinearMap.mul_def] using
-    _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_conjugates_complementaryProjection
+    _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_conjugates_complementaryProjection
       U V hacute
 
 /-- The complex direct rotation intertwines the source and target
@@ -226,7 +226,7 @@ theorem complexDirectRotation_intertwines_reflection
     complexDirectRotation U V hacute ∘L reflectionOperator U =
       reflectionOperator V ∘L complexDirectRotation U V hacute := by
   simpa only [ContinuousLinearMap.mul_def] using
-    _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_intertwines_reflection
+    _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_intertwines_reflection
       U V hacute
 
 /-- The adjoint intertwines the target reflection back to the source reflection. -/
@@ -237,7 +237,7 @@ theorem star_complexDirectRotation_intertwines_reflection
     star (complexDirectRotation U V hacute) ∘L reflectionOperator V =
       reflectionOperator U ∘L star (complexDirectRotation U V hacute) := by
   simpa only [ContinuousLinearMap.mul_def] using
-    _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.star_spectraDirectRotation_intertwines_reflection
+    _root_.TauCeti.DavisKahan.Experimental.star_spectraDirectRotation_intertwines_reflection
       U V hacute
 
 /-- Conjugation by the complex direct rotation carries the source reflection
@@ -249,7 +249,7 @@ theorem complexDirectRotation_conjugates_reflection
     (complexDirectRotation U V hacute ∘L reflectionOperator U) ∘L
         star (complexDirectRotation U V hacute) = reflectionOperator V := by
   simpa only [ContinuousLinearMap.mul_def] using
-    _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_conjugates_reflection
+    _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_conjugates_reflection
       U V hacute
 
 /-- The adjoint of the complex direct rotation maps the target subspace back
@@ -260,7 +260,7 @@ theorem star_complexDirectRotation_maps_subspace
     (hacute : IsAcute U V) :
     V.map ((star (complexDirectRotation U V hacute) :
       H →L[ℂ] H).toLinearMap) = U :=
-  _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.star_spectraDirectRotation_maps_subspace
+  _root_.TauCeti.DavisKahan.Experimental.star_spectraDirectRotation_maps_subspace
     U V hacute
 
 /-- The adjoint of the complex direct rotation maps the target orthogonal
@@ -271,7 +271,7 @@ theorem star_complexDirectRotation_maps_orthogonalComplement
     (hacute : IsAcute U V) :
     Vᗮ.map ((star (complexDirectRotation U V hacute) :
       H →L[ℂ] H).toLinearMap) = Uᗮ :=
-  _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.star_spectraDirectRotation_maps_orthogonalComplement
+  _root_.TauCeti.DavisKahan.Experimental.star_spectraDirectRotation_maps_orthogonalComplement
     U V hacute
 
 
@@ -284,7 +284,7 @@ theorem complexDirectRotation_minimal
     (W : H →L[ℂ] H) (hWunit : W ∈ unitary (H →L[ℂ] H))
     (hintertwine : W ∘L projection U = projection V ∘L W) :
     ‖complexDirectRotation U V hacute - 1‖ ≤ ‖W - 1‖ := by
-  apply _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_minimal
+  apply _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_minimal
     U V hacute W hWunit
   simpa only [ContinuousLinearMap.mul_def] using hintertwine
 

@@ -47,7 +47,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
@@ -145,7 +144,6 @@ theorem adjoint_spectraPolarIsometry_comp (T : H →L[ℂ] H) :
       = T.polarInitial.starProjection :=
   T.adjoint_comp_polarPartial
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

@@ -58,7 +58,7 @@ ideals, and the orthogonal block-sum merge formulas.
   Apache 2.0.
 * Spectra influence: **none in the proof.**  The statement is the one
   `DavisKahan/Interop/Spectra/ApproximationNumberMinMax.lean` carried as
-  `SpectraBridge.exists_linearIndependent_lowerBound_of_lt_approximationNumber`, whose proof
+  `exists_linearIndependent_lowerBound_of_lt_approximationNumber`, whose proof
   used Spectra's projection-valued measures; nothing of that proof is reused here.
 -/
 

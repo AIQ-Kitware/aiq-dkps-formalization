@@ -100,9 +100,9 @@ theorem generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
       δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) ≤
         N.gaugeReal (-(D.residual.adjoint ∘L D.F₁)) := by
     rcases hgap with hgap | hgap
-    · exact SpectraBridge.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
+    · exact unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
         N hA₀ hΛ₁ hβα hδ hgap.1 hgap.2 hEq hC.1
-    · exact SpectraBridge.unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
+    · exact unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
         N hA₀ hΛ₁ hβα hδ hgap.2 hgap.1 hEq hC.1
   have hFrame := lowerFrame_sinThetaBlock_mem_and_gauge_le
     N D.X D.F₁ hframe hε hRaw.1

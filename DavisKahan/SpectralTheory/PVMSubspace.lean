@@ -25,7 +25,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
@@ -111,7 +110,6 @@ theorem pvmProjection_eq_starProjection_rangeSubspace
       pvmProjection_eq_self_of_mem_rangeSubspace P B hB
         (pvmProjection_mem_rangeSubspace P B hB x), sub_self, inner_zero_left]
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

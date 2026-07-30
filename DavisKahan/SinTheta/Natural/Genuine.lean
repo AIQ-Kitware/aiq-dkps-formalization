@@ -21,7 +21,6 @@ namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
 
-open SpectraBridge
 
 universe v
 
@@ -42,12 +41,12 @@ theorem spectralSubspace_orthogonalExactDecomposition
   have hUcProjection : Uc.starProjection =
       ContinuousLinearMap.id ℂ E - U.starProjection := by
     rw [← selfAdjointSpectralProjection_eq_starProjection A hA Sᶜ hS.compl,
-      show SpectraBridge.selfAdjointSpectralProjection A hA Sᶜ hS.compl
+      show selfAdjointSpectralProjection A hA Sᶜ hS.compl
           = ContinuousLinearMap.id ℂ E -
-            SpectraBridge.selfAdjointSpectralProjection A hA S hS from
+            selfAdjointSpectralProjection A hA S hS from
         (TauCeti.LinearPMap.spectralPVM hA).proj_compl S hS]
     change ContinuousLinearMap.id ℂ E -
-        SpectraBridge.selfAdjointSpectralProjection A hA S hS =
+        selfAdjointSpectralProjection A hA S hS =
       ContinuousLinearMap.id ℂ E - U.starProjection
     rw [selfAdjointSpectralProjection_eq_starProjection A hA S hS]
   refine

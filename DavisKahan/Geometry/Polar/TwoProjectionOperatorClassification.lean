@@ -25,7 +25,6 @@ namespace Experimental
 namespace MathAhead
 namespace HiddenFoundations
 
-open SpectraBridge
 
 noncomputable section
 
