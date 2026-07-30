@@ -49,6 +49,7 @@ ALLOWED: dict[str, str] = {
     "HilbertBasis": "Parseval-type identities for a Mathlib `HilbertBasis`",
     "IsPartialIsometry": "facts about Mathlib's `IsPartialIsometry` predicate",
     "LinearMap": "facts about a `LinearMap`, including its `IsPositive` / `IsSymmetric` predicates",
+    "LinearPMap": "facts about an unbounded `LinearPMap` — its domain, closure, and adjoint",
     "MeasureTheory": "additions to Mathlib's measure theory, stated for its own objects",
     "OrthonormalBasis": "facts about a Mathlib `OrthonormalBasis`",
     "Real": "facts about `Real`-valued functions, e.g. `Real.abs_sin_…`",
