@@ -96,8 +96,8 @@ calculus on Hilbert-space operators only over `ℂ`; see
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Extraction class: **new**.  Written for the Tau Ceti signature-polish backlog
-  (`dev/tauceti-signature-polish-todo.md` §8.2), which asked for the canonical
+* Extraction class: **new**.  Written for the Tau Ceti signature-polish
+  backlog, which asked for the canonical
   polar factor behind the existential near-isometry statement in
   `ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean`.
 * Spectra influence: **none** — this module imports only Mathlib and the

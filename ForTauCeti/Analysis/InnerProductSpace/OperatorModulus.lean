@@ -61,7 +61,7 @@ expected to follow by complexification transfer.
   (`operatorAbs` and its API, Jon Crall / Claude Fable 5), both at Davis--Kahan
   commit `fc38eb4`; Apache 2.0.
 * Extraction class: **unified and generalized**.  Per the signature-polish
-  backlog (`dev/tauceti-signature-polish-todo.md` §7) the two parallel APIs —
+  backlog, the two parallel APIs —
   one rectangular, one square — are replaced by this single rectangular
   definition with dot notation on `ContinuousLinearMap`.  The square-only
   composition laws `norm_operatorAbs_mul` / `norm_mul_operatorAbs` are

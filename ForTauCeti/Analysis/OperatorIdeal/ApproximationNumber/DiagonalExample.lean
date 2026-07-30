@@ -51,7 +51,7 @@ a concrete operator the roadmap names.
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: authored directly in `ForTauCeti` under lane `AN-ACCEPT`.
+* Original module: authored directly in `ForTauCeti`.
 * Extraction class: **authored in place**, for Tau Ceti.
 * Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.

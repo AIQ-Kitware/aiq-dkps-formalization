@@ -9,8 +9,7 @@ the closed Mathlib track —
 additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `HoffmanWielandt.lean`).
 
-Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]), plan step W2 of
-`dev/davis-kahan-gap-closure-plan.md`.  This file will build up to the
+Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).  This file will build up to the
 Hoffman–Wielandt eigenvalue-perturbation inequality; it currently supplies the
 sorted-rearrangement ingredient (W2.1).
 -/

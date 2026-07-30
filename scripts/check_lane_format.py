@@ -45,7 +45,7 @@ LANES = ROOT / "dev/LANES.md"
 #: is ratcheted, because 60 historical rows predate the convention and most are terminal
 #: rows for lanes already marked elsewhere.  New ones are what cause collisions, so the
 #: number may only fall.  Measured 2026-07-30.
-MARKERLESS_BASELINE = 56
+MARKERLESS_BASELINE = 55
 
 LANE_RE = re.compile(r"\{lane:([A-Za-z0-9()\-_]+)\}")
 NEEDS_RE = re.compile(r"\{needs:[^}]*\}")

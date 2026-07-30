@@ -43,11 +43,11 @@ independent source and target universes of a `ContinuousLinearMap`.
   `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean` (itself
   adapted from Mathlib PR #32126).
 * Extraction class: **moved and generalized.**  The signature-polish backlog
-  (`dev/tauceti-signature-polish-todo.md` §5.1) flagged the public one as rank
-  plumbing shipped inside an operator-ideal file, dispositioned "privatize or
-  reuse".  Privatizing is not available — it has independent consumers in three
-  `DavisKahan` modules and in a sibling `ApproximationNumber` module — so it
-  takes the other route already used for `Cardinal.lift_le_natCast`: state the
+  flagged the public one as rank plumbing shipped inside an operator-ideal
+  file, dispositioned "privatize or reuse".  Privatizing is not available —
+  it has independent consumers in three `DavisKahan` modules and in a
+  sibling `ApproximationNumber` module — so it takes the other route already
+  used for `Cardinal.lift_le_natCast`: state the
   mathematics where it belongs, in its own dependency-closed module, and leave
   the operator-ideal PR carrying no rank API.  The `LinearMap` statement is new;
   it is the content, and the continuous versions are one-line specializations.
