@@ -1,3 +1,23 @@
+# ForMathlib — RETIRED (prose source material only)
+
+**The Lean library is gone.** `ForMathlib` was retired on 2026-07-29 by lane
+FM-RETIRE: all modules were moved into `ForTauCeti`, the `ForMathlib.lean`
+aggregate and the `[[lean_lib]]` entry were deleted, and the namespace
+`ForMathlib` no longer exists anywhere in the tree.  Under jon's 2026-07-29
+decision `ForTauCeti` is the product, and nothing is retained as a
+Mathlib-bound remainder — see `ForTauCeti/README.md`
+§*Relationship to `ForMathlib`*.
+
+**This directory survives for one reason only:** `prose/` holds four `.tex`
+core-argument writeups that `prose/distilled_literature/source_manifest.json`
+names as sources, and that manifest is validated by
+`scripts/check_distilled_literature_index.py` (green, 55 works).  Deleting the
+directory would turn that gate red.  Relocating the prose is a separate
+decision and a separate lane; it is deliberately **not** bundled into
+FM-RETIRE.
+
+The historical description follows.
+
 # ForMathlib — staging library for Mathlib contributions
 
 Paper-agnostic results from `Acharyya2024`/`Acharyya2025`, restated in Mathlib

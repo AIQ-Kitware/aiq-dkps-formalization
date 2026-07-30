@@ -2,9 +2,9 @@
   "challenge_module": "Challenge.MathlibPending.Berge.Conformance",
   "solution_module": "Challenge.MathlibPending.Berge.Leaderboard",
   "theorem_names": [
-    "ForMathlib.upperHemicontinuousAt_isMinOn",
-    "ForMathlib.continuous_iInf_of_isCompact",
-    "ForMathlib.exists_modulus_isMinOn"
+    "TauCeti.upperHemicontinuousAt_isMinOn",
+    "TauCeti.continuous_iInf_of_isCompact",
+    "TauCeti.exists_modulus_isMinOn"
   ],
   "permitted_axioms": [
     "propext",

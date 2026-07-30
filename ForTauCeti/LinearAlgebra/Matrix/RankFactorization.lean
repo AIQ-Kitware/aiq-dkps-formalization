@@ -25,11 +25,11 @@ column of `M` in that basis.
 
 ## Main results
 
-* `ForMathlib.Matrix.exists_eq_mul_rank`: the exact rank factorization, inner
+* `TauCeti.Matrix.exists_eq_mul_rank`: the exact rank factorization, inner
   dimension `Fin M.rank`.
-* `ForMathlib.Matrix.exists_eq_mul_of_rank_le`: zero-padded to `Fin r` for any
+* `TauCeti.Matrix.exists_eq_mul_of_rank_le`: zero-padded to `Fin r` for any
   `M.rank ≤ r`.
-* `ForMathlib.Matrix.rank_le_iff_exists_eq_mul`: the characterization
+* `TauCeti.Matrix.rank_le_iff_exists_eq_mul`: the characterization
   `M.rank ≤ r ↔ ∃ L R, M = L * R`.
 
 ## Staging note
@@ -47,7 +47,7 @@ below: it is in their type and never used, and the linter's advice is to drop it
 same three signatures are pinned as **data**: `Challenge/MathlibPending/RankFactorization/`
 restates them in an immutable `Conformance.lean` — with the identical
 `variable {𝕜 m n : Type*} [Field 𝕜] [Fintype n] [DecidableEq n]` line — and
-`Leaderboard.lean` names `ForMathlib.Matrix.rank_le_iff_exists_eq_mul` in `#print axioms`.
+`Leaderboard.lean` names `TauCeti.Matrix.rank_le_iff_exists_eq_mul` in `#print axioms`.
 Dropping the instance here would change the signature and desynchronise the two, and
 `AGENTS.md` makes a `Conformance.lean` statement immutable, so it cannot move to meet us.
 
@@ -76,7 +76,16 @@ had accumulated unnoticed in the modules the target was not even building.
   Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
 -/
 
-namespace ForMathlib.Matrix
+/-!
+### Provenance
+
+Moved from `ForMathlib/LinearAlgebra/Matrix/` to `ForTauCeti/LinearAlgebra/Matrix/`
+on 2026-07-29 by lane FM-RETIRE, which finishes the `ForMathlib` retirement.  The
+namespace changed from `ForMathlib.Matrix` to `TauCeti.Matrix` to match the
+destination package; declaration names, statements and proofs are unchanged.
+-/
+
+namespace TauCeti.Matrix
 
 open Module (finrank)
 open _root_.Matrix
@@ -162,4 +171,4 @@ theorem rank_le_iff_exists_eq_mul (M : Matrix m n 𝕜) (r : ℕ) :
     _ ≤ Fintype.card (Fin r) := L.rank_le_card_width
     _ = r := Fintype.card_fin r
 
-end ForMathlib.Matrix
+end TauCeti.Matrix

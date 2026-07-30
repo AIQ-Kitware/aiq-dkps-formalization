@@ -294,7 +294,7 @@
       "target_note": "Schoenberg1935_euclidean_distance_matrices.tex",
       "repo_evidence": [
         "Acharyya2025/Deterministic.lean",
-        "ForMathlib/LinearAlgebra/Matrix/PosDef.lean"
+        "ForTauCeti/LinearAlgebra/Matrix/PosDef.lean"
       ],
       "existing_assets": [],
       "scope": "Conditional negative type and Hilbert-space realization underlying Euclidean distance matrices and double centering.",
@@ -318,7 +318,7 @@
       "primary_url": "",
       "target_note": "YoungHouseholder1938_mutual_distances.tex",
       "repo_evidence": [
-        "ForMathlib/LinearAlgebra/Matrix/PosDef.lean",
+        "ForTauCeti/LinearAlgebra/Matrix/PosDef.lean",
         "Acharyya2025/GramRealization.lean"
       ],
       "existing_assets": [],
@@ -1271,7 +1271,7 @@
       "repo_evidence": [
         "Acharyya2025/GramRigidity.lean",
         "Acharyya2025/GramRealization.lean",
-        "ForMathlib/LinearAlgebra/Matrix/PosDef.lean"
+        "ForTauCeti/LinearAlgebra/Matrix/PosDef.lean"
       ],
       "existing_assets": [],
       "scope": "Selected classical-scaling and Euclidean-distance realization sections.",

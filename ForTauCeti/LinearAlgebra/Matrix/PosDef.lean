@@ -8,7 +8,7 @@ import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.LinearAlgebra.Matrix.Rank
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.Matrix.PosDef
-import ForMathlib.LinearAlgebra.Matrix.RankFactorization
+import ForTauCeti.LinearAlgebra.Matrix.RankFactorization
 
 /-! # Rank-constrained positive-semidefinite factorization
 
@@ -21,7 +21,7 @@ The factorization is assembled from two reusable pieces:
 * the **square** factorization `B = Aᴴ * A` with `A` square, built spectrally
   (`A = √D · Uᴴ` for the spectral decomposition `B = U D Uᴴ`); and
 * the **rank factorization** `A = L * R` through `Fin d`
-  (`ForMathlib.Matrix.exists_eq_mul_of_rank_le`), which compresses the inner
+  (`TauCeti.Matrix.exists_eq_mul_of_rank_le`), which compresses the inner
   dimension.
 
 A second application of the square factorization to `Lᴴ * L` then yields the
@@ -31,11 +31,11 @@ rank-controlled Gram factor `(S * R)ᴴ * (S * R)`.  The reverse direction is
 
 ## Main results
 
-* `ForMathlib.Matrix.PosSemidef.exists_eq_conjTranspose_mul_self`: the square
+* `TauCeti.Matrix.PosSemidef.exists_eq_conjTranspose_mul_self`: the square
   factorization `B = Aᴴ * A` of a PSD matrix (spectral construction).
-* `ForMathlib.Matrix.PosSemidef.exists_conjTranspose_mul_self_of_rank_le`: the
+* `TauCeti.Matrix.PosSemidef.exists_conjTranspose_mul_self_of_rank_le`: the
   rank-controlled factorization, `A` of size `d × n` for any `rank B ≤ d`.
-* `ForMathlib.Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self`:
+* `TauCeti.Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self`:
   the iff characterization, over `RCLike 𝕜`.
 
 ## References
@@ -66,7 +66,16 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
   Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
 -/
 
-namespace ForMathlib.Matrix
+/-!
+### Provenance
+
+Moved from `ForMathlib/LinearAlgebra/Matrix/` to `ForTauCeti/LinearAlgebra/Matrix/`
+on 2026-07-29 by lane FM-RETIRE, which finishes the `ForMathlib` retirement.  The
+namespace changed from `ForMathlib.Matrix` to `TauCeti.Matrix` to match the
+destination package; declaration names, statements and proofs are unchanged.
+-/
+
+namespace TauCeti.Matrix
 
 open scoped BigOperators Matrix ComplexConjugate ComplexOrder
 open _root_.Matrix
@@ -182,4 +191,4 @@ theorem posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self
   rw [rank_conjTranspose_mul_self]
   exact A.rank_le_height
 
-end ForMathlib.Matrix
+end TauCeti.Matrix
