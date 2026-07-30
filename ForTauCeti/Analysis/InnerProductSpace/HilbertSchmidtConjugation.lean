@@ -25,6 +25,13 @@ bijection of `HilbertSchmidtLp.lean` did not need but any *linear* construction
 on the space does.  They are proved by the round trip rather than by
 manipulating the defining series.
 
+## Sources
+
+Unitary — and more generally isometric — invariance of the Hilbert--Schmidt norm is
+standard (Reed--Simon, *Methods of Modern Mathematical Physics I*; Simon,
+*Trace Ideals*).  The two-sided isometric form here is what the Sylvester block
+argument needs; no source is followed for its presentation.
+
 ## Provenance
 
 *New.*  The donor obtains the same invariance from the tensor factorisation

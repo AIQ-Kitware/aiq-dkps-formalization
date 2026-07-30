@@ -38,6 +38,14 @@ round trips below, at which point the whole file was redundant and was deleted
 scaffolding of the tensor-model column bijection, and in the `lp` model
 square-summability *is* the definition of the space.
 
+## Sources
+
+That the Hilbert--Schmidt operators are the `ℓ²` space of their columns in an
+orthonormal basis is standard (Reed--Simon, *Methods of Modern Mathematical
+Physics I*; Simon, *Trace Ideals and Their Applications*).  The `lp`-valued
+presentation here, and the choice to make it *the* definition rather than a
+characterisation, are this library's own and are explained in the module docstring.
+
 ## Provenance
 
 *New.*  The predicate and energy come from

@@ -23,6 +23,14 @@ the tolerance for the approximant `q` of `g` is then taken to be `ε / (1 + ‖p
 There is no uniform chooseBound on the approximants, so the second tolerance genuinely
 has to depend on the first approximant.
 
+## Sources
+
+Multiplicativity of the bounded Borel calculus, by the same transport argument as
+the rest of the chain; see
+`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Polarization.lean` for the
+sources of the construction as a whole (the classical spectral theorem for normal
+operators, and `dev/tauceti/spectra-removal-plan.md` for the route comparison).
+
 ## Provenance
 
 *New*; see `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean`.

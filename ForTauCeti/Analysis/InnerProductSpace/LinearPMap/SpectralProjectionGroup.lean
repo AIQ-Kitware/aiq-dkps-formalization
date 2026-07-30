@@ -25,6 +25,11 @@ analysis is required at any step:
 * and `expLimit` is the strong limit of those exponentials, so commutation
   survives — a projection is continuous, and limits are unique.
 
+## Sources
+
+*Follows nothing in particular*: the commutation a block-diagonal argument needs between
+spectral projections and the flow.
+
 ## Provenance
 
 *New.*  Every ingredient is already in `SpectralMeasure.lean`,

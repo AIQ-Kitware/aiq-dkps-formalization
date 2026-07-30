@@ -27,6 +27,14 @@ set `B` buys: on `specRange hA B hB` the operator `A` is *bounded*, and away fro
 Importing this module gives the whole spectral-measure development, as it did
 before the split.
 
+## Sources
+
+See `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure/Construction.lean`
+for the sources of the construction (the classical Cayley-transform route, and
+`dev/tauceti/spectra-removal-plan.md` for the comparison against the donor's).  The
+bounded-set truncation and the resolvent-gap estimate in this file are shaped by
+what the Davis--Kahan block argument consumes and follow no source's presentation.
+
 ## Provenance
 
 *Split, not restated.*  Until 2026-07-29 this file held the construction and this
