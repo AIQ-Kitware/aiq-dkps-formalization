@@ -111,7 +111,7 @@ end Square
 
 section Rectangular
 
-variable {𝕜 : Type*} [RCLike 𝕜]
+variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E F G H : Type u}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
