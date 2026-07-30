@@ -1,0 +1,3895 @@
+diff -ruN pristine-clean/Spectra/Bochner/Borel/Identity/CauchyVague.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Bochner/Borel/Identity/CauchyVague.lean
+--- pristine-clean/Spectra/Bochner/Borel/Identity/CauchyVague.lean	2026-07-30 11:52:33.864629201 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Bochner/Borel/Identity/CauchyVague.lean	2026-07-29 18:42:25.699318175 -0400
+@@ -157,7 +157,7 @@
+       rw [Real.volume_Ioo]
+       simp [show (c + 1 - c : ℝ) = 1 by ring]
+     have h_diff_ne : volume (Set.Ioo c (c + 1) \ (D₁ ∪ D₂)) ≠ 0 := by
+-      rw [measure_diff_null hD_null]; exact h_Ioo_pos
++      rw [measure_sdiff_null hD_null]; exact h_Ioo_pos
+     obtain ⟨R, hR_mem, hR_good⟩ := nonempty_of_measure_ne_zero h_diff_ne
+     have hRc : c < R := hR_mem.1
+     have hRcontR : ContinuousAt G R := by
+diff -ruN pristine-clean/Spectra/CayleyTransform/Inverse.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/CayleyTransform/Inverse.lean
+--- pristine-clean/Spectra/CayleyTransform/Inverse.lean	2026-07-30 11:52:33.866629194 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/CayleyTransform/Inverse.lean	2026-07-29 18:42:25.802317852 -0400
+@@ -132,17 +132,13 @@
+         rw [← hψ₁, ← hψ₂]
+         simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply]
+       have h_sub : (ContinuousLinearMap.id ℂ H - U) (ψ₁₂ - (ψ₁ + ψ₂)) = 0 := by
+-        simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply,
+-                   map_sub, map_add]
+-        rw [sub_eq_zero]
+-        convert h_eq using 1
+-        simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply]
+-        rw [map_add]
+-        abel
++        rw [map_sub, h_eq, sub_self]
+       have h_fixed : U (ψ₁₂ - (ψ₁ + ψ₂)) = ψ₁₂ - (ψ₁ + ψ₂) := by
+-        have : ψ₁₂ - (ψ₁ + ψ₂) - U (ψ₁₂ - (ψ₁ + ψ₂)) = 0 := by
+-          convert h_sub using 1
+-        exact (sub_eq_zero.mp this).symm
++        have hexpanded :
++            ψ₁₂ - (ψ₁ + ψ₂) - U (ψ₁₂ - (ψ₁ + ψ₂)) = 0 := by
++          simpa only [ContinuousLinearMap.sub_apply,
++            ContinuousLinearMap.id_apply] using h_sub
++        exact (sub_eq_zero.mp hexpanded).symm
+       exact eq_of_sub_eq_zero (h_one _ h_fixed)
+     rw [h_diff, map_add]
+     simp only [smul_add]
+@@ -165,9 +161,10 @@
+         simp only [map_sub, map_smul, eq1, eq2]
+         abel
+       have h_fixed : U (ψ' - c • ψ) = ψ' - c • ψ := by
+-        have : ψ' - c • ψ - U (ψ' - c • ψ) = 0 := by
+-          convert h_sub using 1
+-        exact (sub_eq_zero.mp this).symm
++        have hexpanded : ψ' - c • ψ - U (ψ' - c • ψ) = 0 := by
++          simpa only [ContinuousLinearMap.sub_apply,
++            ContinuousLinearMap.id_apply] using h_sub
++        exact (sub_eq_zero.mp hexpanded).symm
+       exact eq_of_sub_eq_zero (h_one _ h_fixed)
+     rw [h_diff, map_smul, smul_comm c I (U ψ), smul_comm c I ψ]
+ 
+diff -ruN pristine-clean/Spectra/Herglotz/CauchyInjective.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Herglotz/CauchyInjective.lean
+--- pristine-clean/Spectra/Herglotz/CauchyInjective.lean	2026-07-30 11:52:33.867629191 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Herglotz/CauchyInjective.lean	2026-07-29 18:42:25.878317614 -0400
+@@ -191,7 +191,9 @@
+   have hz_ne : z.im ≠ 0 := hz_pos.ne'
+   have hker_cont : Continuous fun x : ℝ => ((x : ℂ) - z)⁻¹ :=
+     (Complex.continuous_ofReal.sub continuous_const).inv₀ fun x =>
+-      sub_ne_zero.mpr fun hx => hz_ne (by rw [← hx]; exact Complex.ofReal_im x)
++      sub_ne_zero.mpr fun hx => hz_ne <| calc
++        z.im = ((x : ℂ)).im := congrArg Complex.im hx.symm
++        _ = 0 := Complex.ofReal_im x
+   have hint_μ : Integrable (fun x : ℝ => ((x : ℂ) - z)⁻¹) μ :=
+     integrable_of_bounded hker_cont.measurable (resolvent_integrand_bound z hz_ne)
+   have hint_ν : Integrable (fun x : ℝ => ((x : ℂ) - z)⁻¹) ν :=
+diff -ruN pristine-clean/Spectra/Kernel/Arctan.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Kernel/Arctan.lean
+--- pristine-clean/Spectra/Kernel/Arctan.lean	2026-07-30 11:52:33.870629180 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Kernel/Arctan.lean	2026-07-29 18:42:26.068317019 -0400
+@@ -45,11 +45,13 @@
+     have hg : HasDerivAt (fun t => (t - s) / ε) (1 / ε) t := by
+       simpa using ((hasDerivAt_id t).sub (hasDerivAt_const t s)).div_const ε
+     have hchain := (Real.hasDerivAt_arctan ((t - s) / ε)).comp t hg
+-    convert hchain using 1
+-    have : (s - t) ^ 2 + ε ^ 2 > 0 := by positivity
+-    have : 1 + ((t - s) / ε) ^ 2 > 0 := by positivity
+-    field_simp
+-    ring
++    have hderiv : (1 / (1 + ((t - s) / ε) ^ 2)) * (1 / ε) =
++        ε / ((s - t) ^ 2 + ε ^ 2) := by
++      have hden : (s - t) ^ 2 + ε ^ 2 ≠ 0 := by positivity
++      have hscaled : 1 + ((t - s) / ε) ^ 2 ≠ 0 := by positivity
++      field_simp [hε_ne, hden, hscaled]
++      ring
++    exact HasDerivAt.congr_deriv hchain hderiv
+   -- IntervalIntegrable
+   · apply Continuous.intervalIntegrable
+     apply continuous_const.div
+diff -ruN pristine-clean/Spectra/Kernel/Poisson/Lemmas.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Kernel/Poisson/Lemmas.lean
+--- pristine-clean/Spectra/Kernel/Poisson/Lemmas.lean	2026-07-30 11:52:33.870629180 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Kernel/Poisson/Lemmas.lean	2026-07-29 18:42:26.081316979 -0400
+@@ -70,9 +70,14 @@
+   have h_deriv : ∀ x : ℝ, HasDerivAt (fun x => (1 / Real.pi) * Real.arctan (x / ε))
+       (poissonKernel ε x) x := by
+     intro x
+-    convert ((Real.hasDerivAt_arctan (x / ε)).comp x
+-      ((hasDerivAt_id x).div_const ε)).const_mul (1 / Real.pi) using 1
+-    unfold poissonKernel; field_simp; ring
++    have h := ((Real.hasDerivAt_arctan (x / ε)).comp x
++      ((hasDerivAt_id x).div_const ε)).const_mul (1 / Real.pi)
++    rw [show poissonKernel ε x =
++        (1 / Real.pi) * ((1 / (1 + (x / ε) ^ 2)) * (1 / ε)) by
++      unfold poissonKernel
++      field_simp [hε_ne, (sq_add_sq_pos hε x).ne']
++      ring]
++    exact h
+   have h_FTC : ∀ a b : ℝ, ∫ x in a..b, poissonKernel ε x =
+       (1 / Real.pi) * Real.arctan (b / ε) -
+       (1 / Real.pi) * Real.arctan (a / ε) :=
+@@ -114,7 +119,7 @@
+       ((Real.tendsto_arctan_atBot.comp
+         ((tendsto_neg_atTop_atBot.comp h_nat_div).congr
+           (fun _ => (neg_div _ _).symm))).mono_right nhdsWithin_le_nhds)
+-    convert h_top.sub h_bot using 1
++    simpa only [Function.comp_apply] using h_top.sub h_bot
+ 
+ /-- **Poisson kernel integrates to 1**: `∫ P_ε(x) dx = 1`.
+ 
+@@ -207,10 +212,11 @@
+     HasDerivAt (fun t : ℝ => -a⁻¹ * cexp (-(a * ↑t)))
+                (cexp (-(a * ↑t))) t := by
+   have h1 : HasDerivAt (fun t : ℝ => (↑t : ℂ)) 1 t := ofRealCLM.hasDerivAt
+-  have h2 : HasDerivAt (fun t : ℝ => -(a * ↑t)) (-a) t := by
+-    convert (h1.const_mul a).neg using 1; ring
+-  convert (h2.cexp).const_mul (-a⁻¹) using 1
+-  field_simp
++  have h2 : HasDerivAt (-(fun t : ℝ => a * (t : ℂ))) (-a) t := by
++    simpa only [mul_one] using (h1.const_mul a).neg
++  have hcoef : (-a⁻¹) * (cexp (-(a * ↑t)) * (-a)) = cexp (-(a * ↑t)) := by
++    field_simp [ha_ne]
++  exact HasDerivAt.congr_deriv ((h2.cexp).const_mul (-a⁻¹)) hcoef
+ 
+ /-! ## Phase 2: Fourier transform of the two-sided exponential -/
+ 
+diff -ruN pristine-clean/Spectra/Mathlib/CharFunBridge.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Mathlib/CharFunBridge.lean
+--- pristine-clean/Spectra/Mathlib/CharFunBridge.lean	2026-07-30 11:52:33.871629176 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Mathlib/CharFunBridge.lean	2026-07-29 18:42:26.087316960 -0400
+@@ -220,10 +220,21 @@
+       rw [integral_withDensity_eq_integral_smul hs.real_toNNReal F]
+       refine integral_congr_ae (.of_forall fun ω => ?_)
+       simp only [NNReal.smul_def, Complex.real_smul]
++    have hneg_bdd : ∀ ω, |(-(r x)) ω| ≤ Cr := by
++      intro ω
++      change |-r x ω| ≤ Cr
++      simpa only [abs_neg] using hCr ω
++    have hwd_pos := hwd (r x) (hr_meas x)
++    have hwd_neg :
++        (∫ ω, F ω ∂((M x).withDensity fun ω => ((-r x ω).toNNReal : ℝ≥0∞))) =
++          ∫ ω, (((-r x ω).toNNReal : ℝ) : ℂ) * F ω ∂(M x) := by
++      simpa only [Pi.neg_apply] using hwd (-(r x)) (hr_meas x).neg
++    have hint_pos := hint (r x) (hr_meas x) hCr
++    have hint_neg :
++        Integrable (fun ω => (((-r x ω).toNNReal : ℝ) : ℂ) * F ω) (M x) := by
++      simpa only [Pi.neg_apply] using hint (-(r x)) (hr_meas x).neg hneg_bdd
+     simp only [hmp_def, hmm_def]
+-    rw [hwd _ (hr_meas x), hwd _ (hr_meas x).neg,
+-      ← integral_sub (hint _ (hr_meas x) hCr)
+-        (hint _ (hr_meas x).neg fun ω => by rw [abs_neg]; exact hCr ω)]
++    rw [hwd_pos, hwd_neg, ← integral_sub hint_pos hint_neg]
+     refine integral_congr_ae (.of_forall fun ω => ?_)
+     simp only [← sub_mul, toNNReal_split]
+     exact mul_comm _ _
+@@ -326,13 +337,14 @@
+   -- combine both sides into one family over `Fin n ⊕ Fin m`, with signed complex densities
+   set M : Fin n ⊕ Fin m → Measure ℝ := Sum.elim μ ν with hM_def
+   set h : Fin n ⊕ Fin m → ℝ → ℂ :=
+-    Sum.elim (fun i ω => c i * f i ω) (fun j ω => -(d j * k j ω)) with hh_def
++    Sum.elim (fun i ω => c i * f i ω) (fun j => -(fun ω => d j * k j ω)) with hh_def
+   haveI hM_fin : ∀ x, IsFiniteMeasure (M x) := by
+     rintro (i | j) <;> simp only [hM_def, Sum.elim_inl, Sum.elim_inr] <;> infer_instance
+   have hh_meas : ∀ x, Measurable (h x) := by
+     rintro (i | j)
+     · simpa only [hh_def, Sum.elim_inl] using (hf_meas i).const_mul (c i)
+-    · simpa only [hh_def, Sum.elim_inr] using ((hk_meas j).const_mul (d j)).neg
++    · simpa only [hh_def, Sum.elim_inr] using
++        ((hk_meas j).const_mul (d j)).neg
+   have hh_bdd : ∀ x, ∃ C, ∀ ω, ‖h x ω‖ ≤ C := by
+     rintro (i | j)
+     · obtain ⟨C, hC⟩ := hf_bdd i
+@@ -342,7 +354,7 @@
+       exact mul_le_mul_of_nonneg_left (hC ω) (norm_nonneg _)
+     · obtain ⟨C, hC⟩ := hk_bdd j
+       refine ⟨‖d j‖ * C, fun ω => ?_⟩
+-      simp only [hh_def, Sum.elim_inr]
++      simp only [hh_def, Sum.elim_inr, Pi.neg_apply]
+       rw [norm_neg, norm_mul]
+       exact mul_le_mul_of_nonneg_left (hC ω) (norm_nonneg _)
+   -- folding the combined family back into the two stated sums (no integrability needed)
+@@ -358,7 +370,7 @@
+       rw [← integral_const_mul']
+       exact integral_congr_ae (.of_forall fun ω => by ring)
+     · refine Finset.sum_congr rfl fun j _ => ?_
+-      simp only [hh_def, hM_def, Sum.elim_inr]
++      simp only [hh_def, hM_def, Sum.elim_inr, Pi.neg_apply]
+       rw [← integral_const_mul', ← integral_neg]
+       exact integral_congr_ae (.of_forall fun ω => by ring)
+   -- the hypothesis, in one-sided combined form
+diff -ruN pristine-clean/Spectra/Mathlib/MeasureTheory/Integral/Basic.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Mathlib/MeasureTheory/Integral/Basic.lean
+--- pristine-clean/Spectra/Mathlib/MeasureTheory/Integral/Basic.lean	2026-07-30 11:52:33.871629176 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Mathlib/MeasureTheory/Integral/Basic.lean	2026-07-29 18:42:26.093316941 -0400
+@@ -50,8 +50,7 @@
+       intro x _
+       have h1 : HasDerivAt (fun t => -t) (-1) x := hasDerivAt_neg x
+       have h2 : HasDerivAt Real.exp (Real.exp (-x)) (-x) := Real.hasDerivAt_exp (-x)
+-      convert (h2.comp x h1).neg using 1
+-      ring
++      exact HasDerivAt.congr_deriv (h2.comp x h1).neg (by simp)
+     convert intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le (le_of_lt hn)
+             ((Real.continuous_exp.comp continuous_neg).continuousOn.neg)
+             (fun x hx => hderiv x hx)
+@@ -90,7 +89,8 @@
+   have h_meas : AEStronglyMeasurable (fun t => Real.exp (-t) • f t)
+                                       (volume.restrict (Set.Ici 0)) := by
+     apply AEStronglyMeasurable.smul
+-    · exact (Real.continuous_exp.comp continuous_neg).aestronglyMeasurable.restrict
++    · exact (Complex.continuous_ofReal.comp
++        (Real.continuous_exp.comp continuous_neg)).aestronglyMeasurable.restrict
+     · exact hf_cont.aestronglyMeasurable.restrict
+   have h_bound : ∀ᵐ t ∂(volume.restrict (Set.Ici 0)),
+                   ‖Real.exp (-t) • f t‖ ≤ M * Real.exp (-t) := by
+@@ -159,7 +159,8 @@
+   case hF_meas =>
+     filter_upwards with τ
+     apply AEStronglyMeasurable.smul
+-    · exact (Real.continuous_exp.comp continuous_neg).aestronglyMeasurable.restrict
++    · exact (Complex.continuous_ofReal.comp
++        (Real.continuous_exp.comp continuous_neg)).aestronglyMeasurable.restrict
+     · exact (hf_cont.comp (continuous_const.prodMk continuous_id)).aestronglyMeasurable
+   case hF_int =>
+     have hf_t_cont : Continuous (fun s => f t s) :=
+@@ -168,7 +169,8 @@
+     exact integrable_exp_decay_continuous (fun s => f t s) hf_t_cont |C| hf_t_bound
+   case hF'_meas =>
+     apply AEStronglyMeasurable.smul
+-    · exact (Real.continuous_exp.comp continuous_neg).aestronglyMeasurable
++    · exact (Complex.continuous_ofReal.comp
++        (Real.continuous_exp.comp continuous_neg)).aestronglyMeasurable
+     · exact (hf'_cont t).aestronglyMeasurable
+   case hF'_bound =>
+     filter_upwards [ae_restrict_mem measurableSet_Ici] with s hs τ _
+diff -ruN pristine-clean/Spectra/Modular/KMS/Condition.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Modular/KMS/Condition.lean
+--- pristine-clean/Spectra/Modular/KMS/Condition.lean	2026-07-30 11:52:33.872629173 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Modular/KMS/Condition.lean	2026-07-29 18:42:26.174316688 -0400
+@@ -391,7 +391,11 @@
+   holomorphic := by
+     refine DifferentiableOn.add ?_ ?_
+     · convert F₁.holomorphic.const_smul (t : ℂ) using 1
++      ext z
++      simp [Pi.smul_apply, smul_eq_mul]
+     · convert F₂.holomorphic.const_smul ((1 - t) : ℂ) using 1
++      ext z
++      simp [Pi.smul_apply, smul_eq_mul]
+ 
+   -- Continuous: sum of continuous functions is continuous
+   continuousOn := by
+diff -ruN pristine-clean/Spectra/OneParameterUnitaryGroup/Product.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/OneParameterUnitaryGroup/Product.lean
+--- pristine-clean/Spectra/OneParameterUnitaryGroup/Product.lean	1969-12-31 19:00:00.000000000 -0500
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/OneParameterUnitaryGroup/Product.lean	2026-07-29 18:42:26.284316343 -0400
+@@ -0,0 +1,98 @@
++/-
++Copyright (c) 2026 Spectra Formalization Project. All rights reserved.
++Released under Apache 2.0 license as described in the file LICENSE.
++Authors: Jon Crall, OpenAI GPT-5.6 Thinking
++-/
++import Spectra.OneParameterUnitaryGroup.Basic
++
++/-!
++# Products of strongly commuting one-parameter unitary groups
++
++The pointwise product of two commuting strongly continuous unitary groups is
++again a strongly continuous unitary group.  The only analytic point is strong
++continuity with both the operator and vector varying; it follows by adding and
++subtracting `U(t) (V(t0) x)` and using norm preservation.
++-/
++
++open InnerProductSpace Complex Filter Topology
++open scoped InnerProductSpace
++
++namespace Spectra.OneParameterUnitaryGroup
++
++noncomputable section
++
++variable {H : Type*}
++variable [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
++
++/-- A unitary family may be applied to a convergent family of vectors while
++the parameter varies.  Strong convergence on each fixed vector and norm
++preservation are enough; no operator-norm continuity is required. -/
++theorem tendsto_apply_unitary_family
++    {α : Type*} {l : Filter α} {t : α → ℝ} {t₀ : ℝ}
++    (W : ℝ → H →L[ℂ] H)
++    (hW : ∀ s x, ‖W s x‖ = ‖x‖)
++    (hWstrong : ∀ x, Continuous fun s => W s x)
++    {x : α → H} {x₀ : H}
++    (ht : Tendsto t l (𝓝 t₀)) (hx : Tendsto x l (𝓝 x₀)) :
++    Tendsto (fun a => W (t a) (x a)) l (𝓝 (W t₀ x₀)) := by
++  have hvanish : Tendsto (fun a => W (t a) (x a - x₀)) l (𝓝 0) := by
++    rw [tendsto_zero_iff_norm_tendsto_zero]
++    simpa only [hW, sub_self, norm_zero] using (hx.sub_const x₀).norm
++  have hfixed : Tendsto (fun a => W (t a) x₀ - W t₀ x₀) l (𝓝 0) := by
++    have h := (((hWstrong x₀).tendsto t₀).comp ht).sub_const (W t₀ x₀)
++    rw [sub_self] at h
++    exact h
++  have hadd := hvanish.add hfixed
++  rw [zero_add] at hadd
++  have hfun : (fun a => W (t a) (x a - x₀) + (W (t a) x₀ - W t₀ x₀))
++      = fun a => W (t a) (x a) - W t₀ x₀ := by
++    funext a
++    rw [map_sub]
++    abel
++  rw [hfun] at hadd
++  exact tendsto_sub_nhds_zero_iff.mp hadd
++
++theorem continuous_apply_unitary_family
++    (W : ℝ → H →L[ℂ] H)
++    (hW : ∀ t x, ‖W t x‖ = ‖x‖)
++    (hWstrong : ∀ x, Continuous fun t => W t x)
++    {x : ℝ → H} (hx : Continuous x) :
++    Continuous fun t => W t (x t) := by
++  rw [continuous_iff_continuousAt]
++  intro t₀
++  exact tendsto_apply_unitary_family W hW hWstrong tendsto_id hx.continuousAt
++
++/-- The pointwise product of two strongly commuting unitary groups. -/
++noncomputable def mul (U V : OneParameterUnitaryGroup (H := H))
++    (hcomm : ∀ s t : ℝ, Commute (U.U s) (V.U t)) :
++    OneParameterUnitaryGroup (H := H) where
++  U t := U.U t * V.U t
++  unitary t x y := by
++    simp only [ContinuousLinearMap.mul_apply]
++    rw [U.unitary t, V.unitary t]
++  group_law s t := by
++    ext x
++    simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.mul_apply]
++    have hc := (hcomm t s).eq
++    have hcx := DFunLike.congr_fun hc (V.U t x)
++    rw [U.group_law, V.group_law]
++    simp only [ContinuousLinearMap.comp_apply]
++    simpa only [ContinuousLinearMap.mul_apply] using congrArg (U.U s) hcx
++  identity := by
++    rw [U.identity, V.identity]
++    ext x
++    simp
++  strong_continuous x := by
++    apply continuous_apply_unitary_family (fun t => U.U t)
++      (fun t y => U.norm_preserving t y) U.strong_continuous
++    exact V.strong_continuous x
++
++@[simp]
++theorem mul_apply (U V : OneParameterUnitaryGroup (H := H))
++    (hcomm : ∀ s t : ℝ, Commute (U.U s) (V.U t))
++    (t : ℝ) (x : H) :
++    (mul U V hcomm).U t x = U.U t (V.U t x) :=
++  rfl
++
++end
++end Spectra.OneParameterUnitaryGroup
+diff -ruN pristine-clean/Spectra/Operator/Unitary/Basic.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Operator/Unitary/Basic.lean
+--- pristine-clean/Spectra/Operator/Unitary/Basic.lean	2026-07-30 11:52:33.875629162 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Operator/Unitary/Basic.lean	2026-07-29 18:42:26.365316090 -0400
+@@ -70,7 +70,7 @@
+   intro y
+   use U.adjoint y
+   have := congr_arg (· y) hU.2
+-  simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.one_apply] at this
++  simp only [mul_apply_eq_comp, one_apply_eq_self] at this
+   exact this
+ 
+ /-- Unitary operators are invertible. -/
+@@ -90,21 +90,21 @@
+     ext x
+     apply ext_inner_right ℂ
+     intro y
+-    simp only [ContinuousLinearMap.adjoint_inner_left, ContinuousLinearMap.sub_apply,
+-               ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply,
++    simp only [ContinuousLinearMap.adjoint_inner_left, sub_apply,
++               smul_apply, one_apply_eq_self,
+                inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right]
+     simp_all only [RingHomCompTriple.comp_apply, RingHom.id_apply]
+   rw [h_adj]
+   ext x
+-  simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.sub_apply,
+-             ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply]
++  simp only [mul_apply_eq_comp, sub_apply,
++             smul_apply, one_apply_eq_self]
+   have h1 : U.adjoint (U x) = x := by
+     have := congr_arg (· x) hU.1
+-    simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.one_apply] at this
++    simp only [mul_apply_eq_comp, one_apply_eq_self] at this
+     exact this
+   have h2 : U (U.adjoint x) = x := by
+     have := congr_arg (· x) hU.2
+-    simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.one_apply] at this
++    simp only [mul_apply_eq_comp, one_apply_eq_self] at this
+     exact this
+   simp only [map_sub, map_smul, h1, h2]
+   module
+@@ -179,7 +179,7 @@
+   intro φ
+   have h_eq : T_inv (T φ) = φ := by
+     have := congr_arg (· φ) hT_right
+-    simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.one_apply] at this
++    simp only [mul_apply_eq_comp, one_apply_eq_self] at this
+     exact this
+   have h_bound : ‖φ‖ ≤ ‖T_inv‖ * ‖T φ‖ := by
+     calc ‖φ‖ = ‖T_inv (T φ)‖ := by rw [h_eq]
+@@ -291,10 +291,10 @@
+   let e := ContinuousLinearEquiv.ofBijective T h_ker h_range
+   exact ⟨⟨T, e.symm.toContinuousLinearMap,
+          by ext x;
+-            simp only [ContinuousLinearMap.one_apply]
++            simp only [one_apply_eq_self]
+             exact ContinuousLinearEquiv.ofBijective_apply_symm_apply T h_ker h_range x,
+          by ext x;
+-            simp only [ContinuousLinearMap.one_apply]
++            simp only [one_apply_eq_self]
+             exact ContinuousLinearEquiv.ofBijective_symm_apply_apply T h_ker h_range x⟩,
+             rfl⟩
+ 
+@@ -316,7 +316,7 @@
+         _ = ‖φ‖ * ‖‖φ‖⁻¹ • (U - w • ContinuousLinearMap.id ℂ H) φ‖ := by
+             congr 1; rw [norm_smul, norm_inv, norm_norm]
+         _ = ‖φ‖ * ‖(U - w • ContinuousLinearMap.id ℂ H) (‖φ‖⁻¹ • φ)‖ := by
+-            congr 1; simp only [ContinuousLinearMap.coe_sub', ContinuousLinearMap.coe_smul',
++            congr 1; simp only [FunLike.coe_sub, FunLike.coe_smul,
+               ContinuousLinearMap.coe_id', Pi.sub_apply, Pi.smul_apply, id_eq]
+             congr 1
+             have : (‖φ‖⁻¹ : ℝ) • φ = ((↑‖φ‖⁻¹ : ℂ) • φ) := by
+@@ -347,7 +347,7 @@
+         _ = ‖φ‖ * ‖‖φ‖⁻¹ • (U - w • ContinuousLinearMap.id ℂ H) φ‖ := by
+             congr 1; rw [norm_smul, norm_inv, norm_norm]
+         _ = ‖φ‖ * ‖(U - w • ContinuousLinearMap.id ℂ H) (‖φ‖⁻¹ • φ)‖ := by
+-            congr 1; simp only [ContinuousLinearMap.coe_sub', ContinuousLinearMap.coe_smul',
++            congr 1; simp only [FunLike.coe_sub, FunLike.coe_smul,
+               ContinuousLinearMap.coe_id', Pi.sub_apply, Pi.smul_apply, id_eq]
+             congr 1
+             have : (‖φ‖⁻¹ : ℝ) • φ = ((↑‖φ‖⁻¹ : ℂ) • φ) := by
+diff -ruN pristine-clean/Spectra/Operator/Unitary/Powers.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Operator/Unitary/Powers.lean
+--- pristine-clean/Spectra/Operator/Unitary/Powers.lean	2026-07-30 11:52:33.875629162 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Operator/Unitary/Powers.lean	2026-07-29 18:42:26.375316059 -0400
+@@ -108,7 +108,7 @@
+   induction a generalizing x y with
+   | zero => simp
+   | succ n ih =>
+-    rw [pow_succ, ContinuousLinearMap.mul_apply]
++    rw [pow_succ, mul_apply_eq_comp]
+     erw [ih (V x) (V y)]
+     exact hV.inner_map_map x y
+ 
+diff -ruN pristine-clean/Spectra/PositiveDefinite/Unitary.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/PositiveDefinite/Unitary.lean
+--- pristine-clean/Spectra/PositiveDefinite/Unitary.lean	2026-07-30 11:52:33.875629162 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/PositiveDefinite/Unitary.lean	2026-07-29 18:42:26.396315993 -0400
+@@ -83,7 +83,7 @@
+   rw [inner_conj_symm]
+   -- Goal: ⟪ψ, U^{-n} ψ⟫ = ⟪U^n ψ, ψ⟫
+   have h := unitaryZpow_inner_shift U hU n 0 ψ
+-  simp only [unitaryZpow_zero, ContinuousLinearMap.one_apply, zero_sub] at h
++  simp only [unitaryZpow_zero, one_apply_eq_self, zero_sub] at h
+   -- h : ⟪U^n ψ, ψ⟫ = ⟪ψ, U^{-n} ψ⟫
+   exact h.symm
+ 
+diff -ruN pristine-clean/Spectra/ProjValMeasure/Basic.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/ProjValMeasure/Basic.lean
+--- pristine-clean/Spectra/ProjValMeasure/Basic.lean	2026-07-30 11:52:33.875629162 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/ProjValMeasure/Basic.lean	2026-07-29 18:42:26.400315980 -0400
+@@ -114,7 +114,7 @@
+ @[simp]
+ lemma proj_empty (P : ProjValMeasure H) : P.proj ∅ MeasurableSet.empty = 0 :=
+   op_ext_of_inner_self fun ξ => by
+-    rw [P.inner_proj, ContinuousLinearMap.zero_apply, inner_zero_right, measure_empty]
++    rw [P.inner_proj, zero_apply, inner_zero_right, measure_empty]
+     simp
+ 
+ /-- Idempotence, from multiplicativity at `B ∩ B`. -/
+@@ -138,7 +138,7 @@
+     (hB₁ : MeasurableSet B₁) (hB₂ : MeasurableSet B₂) (hd : Disjoint B₁ B₂) :
+     P.proj (B₁ ∪ B₂) (hB₁.union hB₂) = P.proj B₁ hB₁ + P.proj B₂ hB₂ :=
+   op_ext_of_inner_self fun ξ => by
+-    rw [ContinuousLinearMap.add_apply, inner_add_right, P.inner_proj, P.inner_proj,
++    rw [add_apply, inner_add_right, P.inner_proj, P.inner_proj,
+       P.inner_proj, measure_union hd hB₂,
+       ENNReal.toReal_add (measure_ne_top _ _) (measure_ne_top _ _)]
+     push_cast
+@@ -151,7 +151,7 @@
+     ‖P.proj B hB ξ‖ ^ 2 = ((P.diag ξ) B).toReal := by
+   have h1 : ⟪P.proj B hB ξ, P.proj B hB ξ⟫_ℂ = ⟪ξ, P.proj B hB ξ⟫_ℂ := by
+     rw [← ContinuousLinearMap.adjoint_inner_right,
+-      (P.isSelfAdjoint_proj B hB).adjoint_eq, ← ContinuousLinearMap.mul_apply,
++      (P.isSelfAdjoint_proj B hB).adjoint_eq, ← mul_apply_eq_comp,
+       P.proj_idem]
+   rw [norm_sq_eq_re_inner (𝕜 := ℂ), h1, P.inner_proj, RCLike.re_eq_complex_re,
+     Complex.ofReal_re]
+diff -ruN pristine-clean/Spectra/ProjValMeasure/GeneralMap.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/ProjValMeasure/GeneralMap.lean
+--- pristine-clean/Spectra/ProjValMeasure/GeneralMap.lean	1969-12-31 19:00:00.000000000 -0500
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/ProjValMeasure/GeneralMap.lean	2026-07-29 18:42:26.406315962 -0400
+@@ -0,0 +1,70 @@
++/-
++Copyright (c) 2026 Spectra Formalization Project. All rights reserved.
++Released under Apache 2.0 license as described in the file LICENSE.
++Authors: Jon Crall, OpenAI GPT-5.6 Thinking
++-/
++import Spectra.ProjValMeasure.General
++
++/-!
++# Pushforward of a general projection-valued measure to the real line
++
++A projective measure on an arbitrary measurable outcome space can be pushed
++forward along a measurable real-valued observable.  This is the bridge from a
++joint PVM on `R x R` to the ordinary one-dimensional PVM of a joint symbol such
++as `(lambda, alpha) |-> lambda - alpha`.
++-/
++
++open MeasureTheory Complex
++open scoped InnerProductSpace
++
++namespace Spectra
++namespace ProjValMeasure'
++
++noncomputable section
++
++variable {K ι : Type*}
++variable [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
++variable [MeasurableSpace ι]
++
++/-- Push a general PVM forward along a measurable real-valued map. -/
++noncomputable def mapToReal (P : ProjValMeasure' K ι)
++    (φ : ι → ℝ) (hφ : Measurable φ) : ProjValMeasure K where
++  proj B hB := P.proj (φ ⁻¹' B) (hφ hB)
++  diag ξ := (P.diag ξ).map φ
++  diag_finite ξ := by
++    haveI := P.diag_finite ξ
++    exact (P.diag ξ).isFiniteMeasure_map φ
++  inner_proj B hB ξ := by
++    rw [P.inner_proj (φ ⁻¹' B) (hφ hB) ξ, Measure.map_apply hφ hB]
++  proj_univ := by
++    show P.proj (φ ⁻¹' Set.univ) (hφ MeasurableSet.univ) =
++      ContinuousLinearMap.id ℂ K
++    rw [P.proj_congr Set.preimage_univ
++      (hφ MeasurableSet.univ) MeasurableSet.univ]
++    exact P.proj_univ
++  proj_inter B₁ B₂ hB₁ hB₂ := by
++    show P.proj (φ ⁻¹' B₁) (hφ hB₁) *
++        P.proj (φ ⁻¹' B₂) (hφ hB₂) =
++      P.proj (φ ⁻¹' (B₁ ∩ B₂)) (hφ (hB₁.inter hB₂))
++    rw [P.proj_inter (φ ⁻¹' B₁) (φ ⁻¹' B₂)
++      (hφ hB₁) (hφ hB₂)]
++    exact P.proj_congr Set.preimage_inter.symm
++      ((hφ hB₁).inter (hφ hB₂)) (hφ (hB₁.inter hB₂))
++
++@[simp]
++theorem mapToReal_proj (P : ProjValMeasure' K ι)
++    (φ : ι → ℝ) (hφ : Measurable φ)
++    (B : Set ℝ) (hB : MeasurableSet B) :
++    (P.mapToReal φ hφ).proj B hB =
++      P.proj (φ ⁻¹' B) (hφ hB) :=
++  rfl
++
++@[simp]
++theorem mapToReal_diag (P : ProjValMeasure' K ι)
++    (φ : ι → ℝ) (hφ : Measurable φ) (ξ : K) :
++    (P.mapToReal φ hφ).diag ξ = (P.diag ξ).map φ :=
++  rfl
++
++end
++end ProjValMeasure'
++end Spectra
+diff -ruN pristine-clean/Spectra/QuantumMechanics/BornRule/Joint/Basic.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/Joint/Basic.lean
+--- pristine-clean/Spectra/QuantumMechanics/BornRule/Joint/Basic.lean	2026-07-30 11:52:33.877629155 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/Joint/Basic.lean	2026-07-29 18:42:26.482315724 -0400
+@@ -311,7 +311,7 @@
+   inter_mem := by
+     rintro _ ⟨S₁, T₁, hS₁, hT₁, rfl⟩ _ ⟨S₂, T₂, hS₂, hT₂, rfl⟩
+     exact ⟨S₁ ∩ S₂, T₁ ∩ T₂, hS₁.inter hS₂, hT₁.inter hT₂, Set.prod_inter_prod⟩
+-  diff_eq_sUnion' := by
++  sdiff_eq_sUnion' := by
+     classical
+     rintro _ ⟨S₁, T₁, hS₁, hT₁, rfl⟩ _ ⟨S₂, T₂, hS₂, hT₂, rfl⟩
+     refine ⟨{(S₁ \ S₂) ×ˢ T₁, (S₁ ∩ S₂) ×ˢ (T₁ \ T₂)}, ?_, ?_, ?_⟩
+diff -ruN pristine-clean/Spectra/QuantumMechanics/BornRule/Joint/Defs.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/Joint/Defs.lean
+--- pristine-clean/Spectra/QuantumMechanics/BornRule/Joint/Defs.lean	2026-07-30 11:52:33.877629155 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/Joint/Defs.lean	2026-07-29 18:42:26.487315708 -0400
+@@ -3,7 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Adam Bornemann
+ -/
+-import Spectra.QuantumMechanics.BornRule.POVM
++import Spectra.QuantumMechanics.BornRule.POVMCore
++import Spectra.QuantumMechanics.BornRule.PVM
++import Spectra.QuantumMechanics.BornRule.Observable
+ import Spectra.Operator.SelfAdjoint
+ import Spectra.SpectralTheory.Calculus.Bounded
+ import Spectra.SpectralTheory.Measure.Convergence
+@@ -12,7 +14,7 @@
+ /-!
+ # The relational layer: joint spectral measures and the Born rule for commuting observables
+ 
+-This file formalizes when two observables admit a *joint* outcome law, and connects that to
++This file formalizes when two observables have a *joint* outcome law, and connects that to
+ commutativity and (forward) to `BellsTheorem`.
+ 
+ ## Two corrections to the naive statement
+@@ -55,7 +57,7 @@
+ The full equivalence `stronglyCommute_iff_jointPVM` (whose forward direction is the genuine
+ multivariate spectral-theorem construction) and the correlation identity
+ `jointBornMeasure_correlation` (`∫ xy dμ_ξ = ⟪ξ, AB ξ⟫`) live in the cross-file
+-`BornRule.Joint.Forward`, where they are proved sorry-free and axiom-clean.
++`BornRule.Joint.Forward`, where they are proved completely with a clean trusted-dependency audit.
+ 
+ ## The Bell connection (forward, to `BellsTheorem`)
+ 
+@@ -331,11 +333,11 @@
+ 
+ A joint spectral measure is a PVM on `ℝ²`.  Rather than re-bundle, reuse the existing
+ `POVM H (ℝ × ℝ)` and add the projectivity predicate that distinguishes a PVM from a general POVM —
+-i.e. the `proj_inter` axiom that the POVM structure dropped. -/
++i.e. the `proj_inter` field that the POVM structure dropped. -/
+ 
+ /-- A POVM is **projective** — a genuine PVM — when its effects are multiplicative:
+ `M(B₁) · M(B₂) = M(B₁ ∩ B₂)`.  (Equivalently, every effect is a projection, by `proj_idem`.)
+-This is exactly the `ProjValMeasure.proj_inter` axiom, reintroduced as a predicate. -/
++This is exactly the `ProjValMeasure.proj_inter` law, reintroduced as a predicate. -/
+ def _root_.Spectra.POVM.IsProjective {ι : Type*} [MeasurableSpace ι] (M : POVM H ι) : Prop :=
+   ∀ (B₁ B₂ : Set ι) (h₁ : MeasurableSet B₁) (h₂ : MeasurableSet B₂),
+     M.effect B₁ h₁ * M.effect B₂ h₂ = M.effect (B₁ ∩ B₂) (h₁.inter h₂)
+@@ -377,7 +379,7 @@
+   exact M.effect_congr (Set.inter_comm _ _) _ _
+ 
+ /- The full equivalence `stronglyCommute_iff_jointPVM` (whose **forward** direction is the genuine
+-multivariate-spectral-theorem construction) lives in `BornRule.Joint.Forward`, sorry-free.  Its
++multivariate-spectral-theorem construction) lives in `BornRule.Joint.Forward`, with complete proofs.  Its
+ **backward** half is the proved `stronglyCommute_of_jointPVM` above. -/
+ 
+ /-! ## §4  The joint Born law (forward corollary)
+diff -ruN pristine-clean/Spectra/QuantumMechanics/BornRule/Joint/Forward.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/Joint/Forward.lean
+--- pristine-clean/Spectra/QuantumMechanics/BornRule/Joint/Forward.lean	2026-07-30 11:52:33.877629155 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/Joint/Forward.lean	2026-07-29 18:42:26.493315689 -0400
+@@ -8,10 +8,10 @@
+ # Joint spectral measures — the forward construction (headline results)
+ 
+ This file completes the forward direction of the relational Born-rule layer (`Joint.Defs`,
+-sorry-free, easy/backward half): the operator field `jointEffect` recovered by polarizing the
++proof-complete, easy/backward half): the operator field `jointEffect` recovered by polarizing the
+ quadratic form `ξ ↦ jointScalarMeasure ξ` (G2.3), the joint POVM `jointPOVM` and its cylinder
+ marginals (G2.5), and the multiplicativity that makes it a genuine PVM (G2.4, `IsProjective`).
+-All `sorry`-free and axiom-clean.
++All proofs are complete with a clean trusted-dependency audit.
+ 
+ * `stronglyCommute_iff_jointPVM` — the corrected equivalence.  Its **backward** half is the proved
+   `stronglyCommute_of_jointPVM` (`Joint.Defs`); the **forward** half — the genuine new construction
+@@ -1077,7 +1077,7 @@
+ left integral over the finite `μ_ξ`; the right `spectralForm`, a fixed combination of integrals over
+ the finite measures `μ^B_w`).  The operator product `Φ_A(f)Φ_B(g)` is what replaces the unavailable
+ Fubini. -/
+-private lemma joint_product_form (A B : Spectra.Operator.SelfAdjointOperator H)
++theorem joint_product_form (A B : Spectra.Operator.SelfAdjointOperator H)
+     (hSC : StronglyCommute A B) {f g : ℝ → ℂ} (hfm : Measurable f) (hfb : ∃ C, ∀ ω, ‖f ω‖ ≤ C)
+     (hgm : Measurable g) (hgb : ∃ C, ∀ ω, ‖g ω‖ ≤ C) (ξ : H) :
+     ∫ p, f p.1 * g p.2 ∂(jointScalarMeasure A B hSC ξ)
+diff -ruN pristine-clean/Spectra/QuantumMechanics/BornRule/Joint/Measure.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/Joint/Measure.lean
+--- pristine-clean/Spectra/QuantumMechanics/BornRule/Joint/Measure.lean	2026-07-30 11:52:33.877629155 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/Joint/Measure.lean	2026-07-29 18:42:26.499315670 -0400
+@@ -869,14 +869,14 @@
+               ≤ (jointContent A B hSC ξ).supClosure isSetSemiring_jointRectangles
+                   (((S ×ˢ T) \ KR) ∪ (⋃₀ ↑J \ KJ)) :=
+                 addContent_mono hRing.isSetSemiring
+-                  (hRing.diff_mem (hRing.union_mem hSTmem hB'mem) (hRing.union_mem hKRring hKJmem))
+-                  (hRing.union_mem (hRing.diff_mem hSTmem hKRring) (hRing.diff_mem hB'mem hKJmem))
++                  (hRing.sdiff_mem (hRing.union_mem hSTmem hB'mem) (hRing.union_mem hKRring hKJmem))
++                  (hRing.union_mem (hRing.sdiff_mem hSTmem hKRring) (hRing.sdiff_mem hB'mem hKJmem))
+                   hsub
+             _ ≤ (jointContent A B hSC ξ).supClosure isSetSemiring_jointRectangles ((S ×ˢ T) \ KR)
+                   + (jointContent A B hSC ξ).supClosure isSetSemiring_jointRectangles
+                     (⋃₀ ↑J \ KJ) :=
+-                addContent_union_le hRing (hRing.diff_mem hSTmem hKRring)
+-                  (hRing.diff_mem hB'mem hKJmem)
++                addContent_union_le hRing (hRing.sdiff_mem hSTmem hKRring)
++                  (hRing.sdiff_mem hB'mem hKJmem)
+             _ ≤ δ / 2 + δ / 2 := add_le_add hKRlt.le hKJle
+             _ = δ := ENNReal.add_halves δ
+   -- apply `aux` to a chosen rectangle partition of `s`
+@@ -930,7 +930,7 @@
+       a n - a m = ‖jointVectorContent A B ξ (s n \ s m)‖ ^ 2 := by
+     intro n m hnm
+     have hsm_sub : s m ⊆ s n := hanti hnm
+-    have hdmem : (s n \ s m) ∈ supClosure jointRectangles := hRing.diff_mem (hs n) (hs m)
++    have hdmem : (s n \ s m) ∈ supClosure jointRectangles := hRing.sdiff_mem (hs n) (hs m)
+     -- decompose `s n = s m ∪ (s n \ s m)` (disjoint)
+     have hunion : s n = s m ∪ (s n \ s m) := (Set.union_diff_cancel hsm_sub).symm
+     have hdisj : Disjoint (s m) (s n \ s m) := disjoint_sdiff_self_right
+@@ -1048,10 +1048,10 @@
+         exact Set.mem_biUnion (Finset.mem_range.mpr hj) ⟨hanti (Nat.lt_succ_iff.mp hj) hxsn, hxCj⟩
+       calc mR (s n \ K n)
+           ≤ mR (⋃ j ∈ Finset.range (n + 1), (s j \ C j)) :=
+-            addContent_mono hRing.isSetSemiring (hRing.diff_mem (hs n) (hKmem n))
+-              (hRing.biUnion_mem _ fun j _ => hRing.diff_mem (hs j) (hCmem j)) hsub
++            addContent_mono hRing.isSetSemiring (hRing.sdiff_mem (hs n) (hKmem n))
++              (hRing.biUnion_mem _ fun j _ => hRing.sdiff_mem (hs j) (hCmem j)) hsub
+         _ ≤ ∑ j ∈ Finset.range (n + 1), mR (s j \ C j) :=
+-            addContent_biUnion_le hRing fun j _ => hRing.diff_mem (hs j) (hCmem j)
++            addContent_biUnion_le hRing fun j _ => hRing.sdiff_mem (hs j) (hCmem j)
+         _ ≤ ∑ j ∈ Finset.range (n + 1), ENNReal.ofReal (L / 4 * (1 / 2) ^ j) :=
+             Finset.sum_le_sum fun j _ => hCle j
+         _ = ENNReal.ofReal (∑ j ∈ Finset.range (n + 1), L / 4 * (1 / 2) ^ j) :=
+@@ -1071,13 +1071,13 @@
+       rw [Set.nonempty_iff_ne_empty]
+       intro hKempty
+       have hdnetop : mR (s n \ K n) ≠ ⊤ :=
+-        jointContentRing_ne_top A B hSC ξ (hRing.diff_mem (hs n) (hKmem n))
++        jointContentRing_ne_top A B hSC ξ (hRing.sdiff_mem (hs n) (hKmem n))
+       have hKnetop : mR (K n) ≠ ⊤ :=
+         ne_top_of_le_ne_top (hmR_ne_top n)
+           (addContent_mono hRing.isSetSemiring (hKmem n) (hs n) (hKsubs n))
+       have hadd : mR (s n) = mR (K n) + mR (s n \ K n) := by
+         conv_lhs => rw [(Set.union_diff_cancel (hKsubs n)).symm]
+-        exact addContent_union hRing (hKmem n) (hRing.diff_mem (hs n) (hKmem n))
++        exact addContent_union hRing (hKmem n) (hRing.sdiff_mem (hs n) (hKmem n))
+           disjoint_sdiff_self_right
+       have hareal : a n = (mR (K n)).toReal + (mR (s n \ K n)).toReal := by
+         rw [hadef]; dsimp only; rw [hadd, ENNReal.toReal_add hKnetop hdnetop]
+diff -ruN pristine-clean/Spectra/QuantumMechanics/BornRule/Joint/ProjectivePVM.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/Joint/ProjectivePVM.lean
+--- pristine-clean/Spectra/QuantumMechanics/BornRule/Joint/ProjectivePVM.lean	1969-12-31 19:00:00.000000000 -0500
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/Joint/ProjectivePVM.lean	2026-07-29 18:42:26.504315655 -0400
+@@ -0,0 +1,118 @@
++/-
++Copyright (c) 2026 Spectra Formalization Project. All rights reserved.
++Released under Apache 2.0 license as described in the file LICENSE.
++Authors: Jon Crall, OpenAI GPT-5.6 Thinking
++-/
++import Spectra.QuantumMechanics.BornRule.Joint.Forward
++import Spectra.ProjValMeasure.GeneralMap
++
++/-!
++# The joint projective measure as a genuine PVM
++
++The joint-measure construction is packaged in `Joint.Forward` as a POVM plus
++an independently proved projectivity law.  This file combines those two pieces
++into `ProjValMeasure'`, then pushes it forward along real-valued joint symbols.
++The difference symbol is the spectral carrier needed by the Hilbert--Schmidt
++Sylvester multiplier.
++-/
++
++open MeasureTheory Complex
++open scoped InnerProductSpace
++
++namespace Spectra
++
++noncomputable section
++
++variable {H ι : Type*}
++variable [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
++variable [MeasurableSpace ι]
++
++namespace POVM
++
++/-- A projective POVM, bundled as a general projection-valued measure. -/
++noncomputable def toProjValMeasure' (M : POVM H ι)
++    (hM : M.IsProjective) : ProjValMeasure' H ι where
++  proj := M.effect
++  diag := M.diag
++  diag_finite := M.diag_finite
++  inner_proj := M.inner_effect
++  proj_univ := M.effect_univ
++  proj_inter := hM
++
++@[simp]
++theorem toProjValMeasure'_proj (M : POVM H ι)
++    (hM : M.IsProjective) (B : Set ι) (hB : MeasurableSet B) :
++    (M.toProjValMeasure' hM).proj B hB = M.effect B hB :=
++  rfl
++
++@[simp]
++theorem toProjValMeasure'_diag (M : POVM H ι)
++    (hM : M.IsProjective) (ξ : H) :
++    (M.toProjValMeasure' hM).diag ξ = M.diag ξ :=
++  rfl
++
++end POVM
++
++namespace QuantumMechanics.BornRule
++
++open Operator
++
++/-- The canonical joint PVM of two strongly commuting observables. -/
++noncomputable def jointPVM
++    (A B : SelfAdjointOperator H) (hSC : StronglyCommute A B) :
++    ProjValMeasure' H (ℝ × ℝ) :=
++  (jointPOVM A B hSC).toProjValMeasure'
++    (jointPOVM_isProjective A B hSC)
++
++@[simp]
++theorem jointPVM_diag
++    (A B : SelfAdjointOperator H) (hSC : StronglyCommute A B)
++    (ξ : H) :
++    (jointPVM A B hSC).diag ξ = jointScalarMeasure A B hSC ξ :=
++  rfl
++
++/-- The one-dimensional PVM obtained from the joint PVM by the difference
++symbol `(lambda, alpha) |-> lambda - alpha`. -/
++noncomputable def jointDifferencePVM
++    (A B : SelfAdjointOperator H) (hSC : StronglyCommute A B) :
++    ProjValMeasure H :=
++  (jointPVM A B hSC).mapToReal
++    (fun p : ℝ × ℝ => p.1 - p.2)
++    (measurable_fst.sub measurable_snd)
++
++@[simp]
++theorem jointDifferencePVM_diag
++    (A B : SelfAdjointOperator H) (hSC : StronglyCommute A B)
++    (ξ : H) :
++    (jointDifferencePVM A B hSC).diag ξ =
++      (jointScalarMeasure A B hSC ξ).map
++        (fun p : ℝ × ℝ => p.1 - p.2) :=
++  rfl
++
++
++/-- The characteristic function of the pushed-forward difference measure is
++implemented by the product of the two commuting unitary groups. -/
++theorem integral_exp_difference_jointScalarMeasure
++    (A B : SelfAdjointOperator H) (hSC : StronglyCommute A B)
++    (ξ : H) (t : ℝ) :
++    ∫ p : ℝ × ℝ, Complex.exp (Complex.I * ((p.1 - p.2 : ℝ) : ℂ) * (t : ℂ))
++        ∂(jointScalarMeasure A B hSC ξ) =
++      ⟪ξ,
++        (YosidaHille.genToGroup A.selfAdjoint).U t
++          ((YosidaHille.genToGroup B.selfAdjoint).U (-t) ξ)⟫_ℂ := by
++  have hprod := joint_product_form A B hSC
++    (SpectralTheory.char_measurable t) (SpectralTheory.char_bdd t)
++    (SpectralTheory.char_measurable (-t)) (SpectralTheory.char_bdd (-t)) ξ
++  rw [SpectralTheory.spectralCalculus_char,
++    SpectralTheory.spectralCalculus_char] at hprod
++  rw [← hprod]
++  apply integral_congr_ae
++  filter_upwards [] with p
++  rw [← Complex.exp_add]
++  congr 2
++  push_cast
++  ring
++
++end QuantumMechanics.BornRule
++end
++end Spectra
+diff -ruN pristine-clean/Spectra/QuantumMechanics/BornRule/POVM.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/POVM.lean
+--- pristine-clean/Spectra/QuantumMechanics/BornRule/POVM.lean	2026-07-30 11:52:33.877629155 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/POVM.lean	2026-07-29 18:42:26.520315605 -0400
+@@ -3,61 +3,16 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Adam Bornemann
+ -/
++import Spectra.QuantumMechanics.BornRule.POVMCore
+ import Spectra.QuantumMechanics.BornRule.Mixed
+-import Mathlib.Analysis.InnerProductSpace.Positive
+ /-!
+-# Generalized measurements: POVMs and the Born rule
++# Generalized measurements: Born rules and binary POVMs
+ 
+-A **positive operator-valued measure** (POVM) on an outcome space `(ι, 𝓜)` assigns to each
+-measurable `B ⊆ ι` an **effect** `M(B)` — a positive operator with `0 ≤ M(B) ≤ I` — additively
+-and with `M(ι) = I`.  It is the model of a generalized (unsharp) measurement; the projective
+-measurements of `ProjValMeasure` are the special case where every effect is a projection.
+-
+-## Design: a POVM is a `ProjValMeasure` minus multiplicativity
+-
+-`ProjValMeasure` carried the diagonal scalar measures `diag : H → Measure ℝ` as data, welded to
+-the operators by `inner_proj`, and had two structural axioms beyond the weld: `proj_univ`
+-(normalization) and `proj_inter` (multiplicativity, `E(B₁)E(B₂) = E(B₁∩B₂)`).  **A POVM keeps the
+-weld and `_univ`, and drops `_inter`** — generalizing the outcome space from `(ℝ, Borel)` to an
+-arbitrary `[MeasurableSpace ι]`.
+-
+-The data-carrying weld pays off exactly as before.  Because `inner_effect` welds `⟪ξ, M(B) ξ⟫` to
+-the value of a *measure*, which is nonnegative, each effect is **positive** with no extra axiom;
+-and `M(B) ≤ M(ι) = I` follows from additivity, giving the effect property `0 ≤ M(B) ≤ I` as a
+-theorem.  The only `ProjValMeasure` facts that *don't* survive are the ones that used `proj_inter`:
+-idempotence `E² = E` and the projective norm identity `‖E(B)ξ‖² = ⟪ξ, E(B)ξ⟫`.  Everything else —
+-self-adjointness, finite additivity, the mass `‖ξ‖²`, `ext_of_diag` — ports verbatim.
+-
+-## The Born rule is unchanged
+-
+-It never used multiplicativity.  For a POVM `M`:
+-* pure state `ψ`: the outcome law is `M.diag ψ` (mass `‖ψ‖²`); `(M.diag ψ) B = ⟪ψ, M(B) ψ⟫`;
+-* mixed state `ρ`: `bornMeasurePOVM M ρ = Measure.sum (fun i => ρ.weight i • M.diag (ρ.state i))`,
+-  exactly the mixture used for PVMs;
+-* trace form: `(ρ.toState M(B)) = Tr(ρ M(B))` via the same `toState` bridge of `Mixed.lean`.
+-
+-This is why the Born-rule layer factors through the `diag` field alone (see the abstraction note
+-in §6): PVM and POVM share it.
+-
+-## Mathlib used
+-
+-`MeasureTheory.Measure(.sum/.smul_apply)`, `ContinuousLinearMap.IsPositive`
+-(`Mathlib.Analysis.InnerProductSpace.Positive`), and — for the order `0 ≤ M(B) ≤ 1` — the
+-`StarOrderedRing` structure on the C*-algebra `H →L[ℂ] H`.  No operator-valued-measure topology
+-and no Naimark dilation are needed for any of the above.
+-
+-## References
+-
+-* [Busch, Lahti, Mittelstaedt, *The Quantum Theory of Measurement*], §§II–III (effects, POVMs).
+-* [Heinosaari, Ziman, *The Mathematical Language of Quantum Theory*], Ch. 3.
+-* M. Naimark, *On a representation of additive operator set functions* (1943) — the dilation
+-  theorem (flagged, §6).
+-
+-## Layout
+-
+-§1 the structure and its effect calculus; §2–§3 the two constructors (`ofEffects` from a discrete
+-family of effects, `toPOVM` from a sharp `ProjValMeasure`); §4 the Born rule; §5 a capstone — the
+-two-outcome measurement — tying the three strands together; §6 flags for later work.
++The core POVM structure, effect calculus, discrete constructor, and the
++forgetful map from projection-valued measures live in `POVMCore`.  This file
++adds the pure and mixed Born rules and the two-outcome capstone.  Keeping the
++core independent of mixed-state/KMS infrastructure allows joint spectral
++measure constructions to import only the operator-valued-measure layer.
+ -/
+ 
+ open MeasureTheory Complex
+@@ -66,316 +21,6 @@
+ 
+ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+ variable {ι : Type*} [MeasurableSpace ι]
+-
+-namespace Spectra
+-
+-/-! ## §1  The POVM structure -/
+-
+-/-- A **positive operator-valued measure** on the measurable space `(ι, 𝓜)`, acting on `H`.
+-
+-Exactly `ProjValMeasure` with the outcome space generalized and the multiplicativity axiom
+-`proj_inter` removed.  The diagonal scalar measures `diag ξ` are carried as data and welded to the
+-effects by `inner_effect`; countable additivity therefore lives inside `Measure ι` and is never
+-restated, and positivity/self-adjointness/the effect bound are theorems (proved below in this
+-section). -/
+-structure POVM (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+-    (ι : Type*) [MeasurableSpace ι] where
+-  /-- The effect assigned to each measurable set. -/
+-  effect : ∀ B : Set ι, MeasurableSet B → (H →L[ℂ] H)
+-  /-- The diagonal scalar measures, carried as data. -/
+-  diag : H → Measure ι
+-  /-- Each diagonal measure is finite (mass `‖ξ‖²`, by `diag_univ_toReal`). -/
+-  diag_finite : ∀ ξ : H, IsFiniteMeasure (diag ξ)
+-  /-- The weld: diagonal matrix elements of the effects are the diagonal measures. -/
+-  inner_effect : ∀ (B : Set ι) (hB : MeasurableSet B) (ξ : H),
+-    ⟪ξ, effect B hB ξ⟫_ℂ = (((diag ξ) B).toReal : ℂ)
+-  /-- Normalization: the whole space carries the identity, `M(ι) = I`. -/
+-  effect_univ : effect Set.univ MeasurableSet.univ = ContinuousLinearMap.id ℂ H
+-
+-namespace POVM
+-
+-instance instIsFiniteMeasureDiag (M : POVM H ι) (ξ : H) : IsFiniteMeasure (M.diag ξ) :=
+-  M.diag_finite ξ
+-
+-/-! ### Facts that port verbatim from `ProjValMeasure` (no `_inter` used) -/
+-
+-/-- `[done — ports verbatim]` Effects do not depend on the measurability witness. -/
+-lemma effect_congr (M : POVM H ι) {B₁ B₂ : Set ι} (h : B₁ = B₂)
+-    (h₁ : MeasurableSet B₁) (h₂ : MeasurableSet B₂) :
+-    M.effect B₁ h₁ = M.effect B₂ h₂ := by subst h; rfl
+-
+-/-- `[done — ports verbatim]` `M(∅) = 0`.  Proof: `op_ext_of_inner_self` + `measure_empty`. -/
+-@[simp] lemma effect_empty (M : POVM H ι) : M.effect ∅ MeasurableSet.empty = 0 :=
+-  op_ext_of_inner_self fun ξ => by
+-    rw [M.inner_effect, ContinuousLinearMap.zero_apply, inner_zero_right, measure_empty]
+-    simp
+-
+-/-- `[done — ports verbatim from `isSelfAdjoint_proj`]` Each effect is self-adjoint: its diagonal
+-is a real coercion, hence conjugation-fixed, hence (polarization) the operator is self-adjoint. -/
+-lemma isSelfAdjoint_effect (M : POVM H ι) (B : Set ι) (hB : MeasurableSet B) :
+-    IsSelfAdjoint (M.effect B hB) := by
+-  rw [ContinuousLinearMap.isSelfAdjoint_iff']
+-  refine op_ext_of_inner_self fun ξ => ?_
+-  rw [ContinuousLinearMap.adjoint_inner_right, ← inner_conj_symm (M.effect B hB ξ) ξ,
+-    M.inner_effect, Complex.conj_ofReal]
+-
+-/-- `[done — ports verbatim from `proj_union`]` Finite additivity on disjoint sets. -/
+-lemma effect_union (M : POVM H ι) {B₁ B₂ : Set ι}
+-    (hB₁ : MeasurableSet B₁) (hB₂ : MeasurableSet B₂) (hd : Disjoint B₁ B₂) :
+-    M.effect (B₁ ∪ B₂) (hB₁.union hB₂) = M.effect B₁ hB₁ + M.effect B₂ hB₂ :=
+-  op_ext_of_inner_self fun ξ => by
+-    rw [ContinuousLinearMap.add_apply, inner_add_right, M.inner_effect, M.inner_effect,
+-      M.inner_effect, measure_union hd hB₂,
+-      ENNReal.toReal_add (measure_ne_top _ _) (measure_ne_top _ _)]
+-    push_cast
+-    ring
+-
+-/-- `[done — ports verbatim from `diag_univ_toReal`]` Total mass `diag ξ ι = ‖ξ‖²`. -/
+-lemma diag_univ_toReal (M : POVM H ι) (ξ : H) : ((M.diag ξ) Set.univ).toReal = ‖ξ‖ ^ 2 := by
+-  have h := M.inner_effect Set.univ MeasurableSet.univ ξ
+-  rw [M.effect_univ, ContinuousLinearMap.id_apply, inner_self_eq_norm_sq_to_K,
+-    ← coe_algebraMap] at h
+-  exact_mod_cast h.symm
+-
+-/-! ### Facts new to POVMs (positivity and the effect bound)
+-
+-These replace the projective facts (`proj_idem`, `norm_sq_proj_apply`) that `_inter` would have
+-given.  They are *weaker* but exactly what an effect needs. -/
+-
+-/-- `[done — free from the weld]` Each effect is **positive**.  Because `inner_effect` welds the
+-diagonal to a measure value `(diag ξ B).toReal ≥ 0`, the quadratic form is nonnegative; with
+-`isSelfAdjoint_effect` this is `ContinuousLinearMap.IsPositive`.
+-SIGNATURE TO VERIFY: Mathlib's `IsPositive` uses `reApplyInnerSelf x = re ⟪T x, x⟫`; reconcile the
+-slot order with the `⟪ξ, T ξ⟫` of `inner_effect` (equal real parts by conjugation). -/
+-lemma isPositive_effect (M : POVM H ι) (B : Set ι) (hB : MeasurableSet B) :
+-    (M.effect B hB).IsPositive := by
+-  rw [ContinuousLinearMap.isPositive_iff']
+-  refine ⟨M.isSelfAdjoint_effect B hB, fun x => ?_⟩
+-  have h : ⟪M.effect B hB x, x⟫_ℂ = (((M.diag x) B).toReal : ℂ) := by
+-    rw [← inner_conj_symm (M.effect B hB x) x, M.inner_effect, Complex.conj_ofReal]
+-  rw [h]
+-  exact_mod_cast ENNReal.toReal_nonneg
+-
+-/-- `[done]` **Monotonicity.**  `B₁ ⊆ B₂ ⟹ M(B₁) ≤ M(B₂)` in the C*-order: the difference is
+-`M(B₂ \ B₁)`, a positive effect, by `effect_union` and `isPositive_effect`. -/
+-lemma effect_mono (M : POVM H ι) {B₁ B₂ : Set ι}
+-    (hB₁ : MeasurableSet B₁) (hB₂ : MeasurableSet B₂) (h : B₁ ⊆ B₂) :
+-    M.effect B₁ hB₁ ≤ M.effect B₂ hB₂ := by
+-  rw [ContinuousLinearMap.le_def]
+-  have hsplit : M.effect B₂ hB₂ =
+-      M.effect B₁ hB₁ + M.effect (B₂ \ B₁) (hB₂.diff hB₁) := by
+-    have hu : B₁ ∪ (B₂ \ B₁) = B₂ := Set.union_diff_cancel h
+-    rw [← M.effect_congr hu (hB₁.union (hB₂.diff hB₁)) hB₂,
+-      M.effect_union hB₁ (hB₂.diff hB₁) disjoint_sdiff_self_right]
+-  rw [hsplit, add_sub_cancel_left]
+-  exact M.isPositive_effect (B₂ \ B₁) (hB₂.diff hB₁)
+-
+-/-- `[done]` **The effect property** `0 ≤ M(B) ≤ I`.  Lower bound is `isPositive_effect`; upper
+-bound is `effect_mono` against `M(univ) = I` (`effect_univ`).
+-SIGNATURE TO VERIFY: the `StarOrderedRing (H →L[ℂ] H)` instance (from `CStarAlgebra`) supplying
+-`≤` and `1 = id`. -/
+-lemma effect_le_one (M : POVM H ι) (B : Set ι) (hB : MeasurableSet B) :
+-    M.effect B hB ≤ 1 := by
+-  have h1 : (1 : H →L[ℂ] H) = M.effect Set.univ MeasurableSet.univ := by
+-    rw [M.effect_univ]; rfl
+-  rw [h1]
+-  exact M.effect_mono hB MeasurableSet.univ (Set.subset_univ B)
+-
+-/-! ### Extensionality (the diagonal still determines the POVM) -/
+-
+-/-- `[done — ports verbatim from `ext_of_diag`]` A POVM is determined by its diagonal measures. -/
+-theorem ext_of_diag {M N : POVM H ι} (h : ∀ ξ : H, M.diag ξ = N.diag ξ) : M = N := by
+-  have heff : M.effect = N.effect := by
+-    funext B hB
+-    exact op_ext_of_inner_self fun ξ => by rw [M.inner_effect, N.inner_effect, h ξ]
+-  obtain ⟨e₁, d₁, _, _, _⟩ := M
+-  obtain ⟨e₂, d₂, _, _, _⟩ := N
+-  obtain rfl : e₁ = e₂ := heff
+-  obtain rfl : d₁ = d₂ := funext h
+-  rfl
+-
+-/-! ## §2  The discrete-POVM constructor `ofEffects`
+-
+-The first of the two constructors, and the form most applications take (state discrimination,
+-informationally-complete measurements): a countable family of effects `Eₖ ≥ 0` resolving the
+-identity, `∑' k, E k = 1`, *is* a POVM on `κ` with the discrete σ-algebra.  `ofEffects` assembles
+-it — `effect B = ∑' k, B.indicator E k` (an operator-valued tsum) and `diag ξ` the discrete measure
+-`k ↦ ⟪ξ, Eₖ ξ⟫.re`.  The only analytic input is convergence of `∑' k, Eₖ` in the strong operator
+-topology, isolated as `summable_ofEffects`; the weld `inner_effect` then follows by pushing `ξ` and
+-the inner product through the tsum (the same `mapL` idiom as `Mixed.toStateCLM`).  The helper lemmas
+-are `private`; the public surface is `ofEffects`, `summable_ofEffects`, `diagOfEffects`, and the
+-`@[simp]` projections `ofEffects_effect` / `ofEffects_diag`. -/
+-
+-/-- Each positive effect's diagonal matrix element is a nonnegative real coercion:
+-`⟪ξ, Eₖ ξ⟫ = (⟪ξ, Eₖ ξ⟫).re` (self-adjointness from positivity). -/
+-private lemma inner_eq_re_of_isPositive {E : H →L[ℂ] H} (hE : E.IsPositive) (ξ : H) :
+-    ⟪ξ, E ξ⟫_ℂ = ((⟪ξ, E ξ⟫_ℂ).re : ℂ) := by
+-  have hsa : IsSelfAdjoint E := hE.isSelfAdjoint
+-  have heq : starRingEnd ℂ ⟪ξ, E ξ⟫_ℂ = ⟪ξ, E ξ⟫_ℂ := by
+-    rw [inner_conj_symm, ← ContinuousLinearMap.adjoint_inner_right,
+-      ContinuousLinearMap.isSelfAdjoint_iff'.mp hsa]
+-  exact (Complex.conj_eq_iff_re.mp heq).symm
+-
+-open scoped ComplexOrder in
+-/-- The diagonal matrix element of a positive effect has nonnegative real part. -/
+-private lemma re_nonneg_of_isPositive {E : H →L[ℂ] H} (hE : E.IsPositive) (ξ : H) :
+-    0 ≤ (⟪ξ, E ξ⟫_ℂ).re := by
+-  rw [ContinuousLinearMap.isPositive_iff'] at hE
+-  have h := (Complex.le_def.mp (hE.2 ξ)).1
+-  simp only [Complex.zero_re] at h
+-  rw [← inner_conj_symm (E ξ) ξ, Complex.conj_re] at h
+-  exact h
+-
+-variable {κ : Type*}
+-
+-omit [CompleteSpace H] in
+-/-- From `∑' k, E k = 1`, the family `E` is summable.  (If it were not, the tsum would be `0`,
+-forcing the identity to vanish, hence `H` trivial — in which case every operator is `0`, so `E` is
+-summable after all.) -/
+-lemma summable_ofEffects {E : κ → (H →L[ℂ] H)} (hsum : ∑' k, E k = 1) : Summable E := by
+-  by_cases hns : Summable E
+-  · exact hns
+-  · rw [tsum_eq_zero_of_not_summable hns] at hsum
+-    have h0 : (1 : H →L[ℂ] H) = 0 := hsum.symm
+-    have hsub : ∀ x : H, x = 0 := fun x => by
+-      have := congrArg (fun T => T x) h0; simpa using this
+-    have hE0 : E = (fun _ => 0) := funext fun k => by
+-      ext x; rw [hsub (E k x)]; simp
+-    rw [hE0]
+-    exact summable_zero
+-
+-/-- Push `ξ` through the operator-valued tsum and the inner product through the scalar tsum:
+-`⟪ξ, (∑' k, B.indicator E k) ξ⟫ = ∑' k, B.indicator (k ↦ ⟪ξ, Eₖ ξ⟫) k`. -/
+-private lemma inner_effect_tsum {E : κ → (H →L[ℂ] H)} (hSE : Summable E) (B : Set κ) (ξ : H) :
+-    ⟪ξ, (∑' k, Set.indicator B E k) ξ⟫_ℂ
+-      = ∑' k, Set.indicator B (fun k => ⟪ξ, E k ξ⟫_ℂ) k := by
+-  have hBsum : Summable (Set.indicator B E) := hSE.indicator B
+-  have happ : (∑' k, Set.indicator B E k) ξ = ∑' k, (Set.indicator B E k) ξ :=
+-    (hBsum.hasSum.mapL (ContinuousLinearMap.apply ℂ H ξ)).tsum_eq.symm
+-  rw [happ]
+-  have hSummApp : Summable (fun k => (Set.indicator B E k) ξ) :=
+-    hBsum.mapL (ContinuousLinearMap.apply ℂ H ξ)
+-  have hinner : ⟪ξ, ∑' k, (Set.indicator B E k) ξ⟫_ℂ
+-      = ∑' k, ⟪ξ, (Set.indicator B E k) ξ⟫_ℂ :=
+-    (hSummApp.hasSum.mapL (innerSL ℂ ξ)).tsum_eq.symm
+-  rw [hinner]
+-  refine tsum_congr fun k => ?_
+-  by_cases hk : k ∈ B
+-  · rw [Set.indicator_of_mem hk, Set.indicator_of_mem hk]
+-  · rw [Set.indicator_of_notMem hk, Set.indicator_of_notMem hk,
+-      ContinuousLinearMap.zero_apply, inner_zero_right]
+-
+-variable [MeasurableSpace κ]
+-
+-/-- The discrete diagonal measure `diag ξ = ∑' k, ⟪ξ, Eₖ ξ⟫.re • δ_k`. -/
+-noncomputable def diagOfEffects (E : κ → (H →L[ℂ] H)) (ξ : H) : Measure κ :=
+-  Measure.sum (fun k => ENNReal.ofReal ((⟪ξ, E k ξ⟫_ℂ).re) • Measure.dirac k)
+-
+-omit [CompleteSpace H] in
+-private lemma diagOfEffects_apply {E : κ → (H →L[ℂ] H)} (ξ : H) {B : Set κ}
+-    (hB : MeasurableSet B) :
+-    (diagOfEffects E ξ) B
+-      = ∑' k, Set.indicator B (fun k => ENNReal.ofReal ((⟪ξ, E k ξ⟫_ℂ).re)) k := by
+-  rw [diagOfEffects, Measure.sum_apply _ hB]
+-  refine tsum_congr fun k => ?_
+-  rw [Measure.smul_apply, MeasureTheory.Measure.dirac_apply' k hB, smul_eq_mul]
+-  by_cases hk : k ∈ B
+-  · rw [Set.indicator_of_mem hk, Set.indicator_of_mem hk]; simp
+-  · rw [Set.indicator_of_notMem hk, Set.indicator_of_notMem hk]; simp
+-
+-/-- The weld for `ofEffects`: `⟪ξ, (∑' k, B.indicator E k) ξ⟫ = ((diag ξ B).toReal : ℂ)`. -/
+-private lemma inner_effect_eq_diag {E : κ → (H →L[ℂ] H)} (hSE : Summable E)
+-    (hpos : ∀ k, (E k).IsPositive) (B : Set κ) (hB : MeasurableSet B) (ξ : H) :
+-    ⟪ξ, (∑' k, Set.indicator B E k) ξ⟫_ℂ = (((diagOfEffects E ξ) B).toReal : ℂ) := by
+-  rw [inner_effect_tsum hSE B ξ, diagOfEffects_apply ξ hB]
+-  have hterm : ∀ k, Set.indicator B (fun k => ⟪ξ, E k ξ⟫_ℂ) k
+-      = ((Set.indicator B (fun k => ((⟪ξ, E k ξ⟫_ℂ).re : ℝ)) k : ℝ) : ℂ) := fun k => by
+-    by_cases hk : k ∈ B
+-    · rw [Set.indicator_of_mem hk, Set.indicator_of_mem hk]
+-      exact inner_eq_re_of_isPositive (hpos k) ξ
+-    · rw [Set.indicator_of_notMem hk, Set.indicator_of_notMem hk, Complex.ofReal_zero]
+-  rw [tsum_congr hterm, ← Complex.ofReal_tsum]
+-  congr 1
+-  have hfin : ∀ k, Set.indicator B (fun k => ENNReal.ofReal ((⟪ξ, E k ξ⟫_ℂ).re)) k ≠ ⊤ :=
+-    fun k => by
+-      by_cases hk : k ∈ B
+-      · rw [Set.indicator_of_mem hk]; exact ENNReal.ofReal_ne_top
+-      · rw [Set.indicator_of_notMem hk]; exact ENNReal.zero_ne_top
+-  rw [ENNReal.tsum_toReal_eq hfin]
+-  refine tsum_congr fun k => ?_
+-  by_cases hk : k ∈ B
+-  · rw [Set.indicator_of_mem hk, Set.indicator_of_mem hk,
+-      ENNReal.toReal_ofReal (re_nonneg_of_isPositive (hpos k) ξ)]
+-  · rw [Set.indicator_of_notMem hk, Set.indicator_of_notMem hk, ENNReal.toReal_zero]
+-
+-set_option linter.unusedSectionVars false in
+-/-- The real quadratic-form series `k ↦ ⟪ξ, Eₖ ξ⟫.re` is summable. -/
+-private lemma summable_re_quadForm {E : κ → (H →L[ℂ] H)} (hSE : Summable E) (ξ : H) :
+-    Summable (fun k => (⟪ξ, E k ξ⟫_ℂ).re) := by
+-  have h1 : Summable (fun k => (E k) ξ) := hSE.mapL (ContinuousLinearMap.apply ℂ H ξ)
+-  have h2 : Summable (fun k => ⟪ξ, (E k) ξ⟫_ℂ) := h1.mapL (innerSL ℂ ξ)
+-  exact h2.mapL Complex.reCLM
+-
+-private lemma diagOfEffects_finite {E : κ → (H →L[ℂ] H)} (hSE : Summable E)
+-    (hpos : ∀ k, (E k).IsPositive) (ξ : H) : IsFiniteMeasure (diagOfEffects E ξ) := by
+-  refine ⟨?_⟩
+-  rw [diagOfEffects_apply ξ MeasurableSet.univ]
+-  simp only [Set.indicator_univ]
+-  rw [← ENNReal.ofReal_tsum_of_nonneg (fun k => re_nonneg_of_isPositive (hpos k) ξ)
+-    (summable_re_quadForm hSE ξ)]
+-  exact ENNReal.ofReal_lt_top
+-
+-/-- **Discrete-POVM constructor.**  A countable family of positive effects `Eₖ` resolving the
+-identity (`∑' k, E k = 1`) is a POVM on `κ` (with the discrete σ-algebra): the effect of `B` is the
+-operator-valued tsum `∑' k, B.indicator E k`, and `diag ξ` is the discrete measure
+-`k ↦ ⟪ξ, Eₖ ξ⟫.re`. -/
+-noncomputable def ofEffects (E : κ → (H →L[ℂ] H)) (hpos : ∀ k, (E k).IsPositive)
+-    (hsum : ∑' k, E k = 1) : POVM H κ where
+-  effect B _ := ∑' k, Set.indicator B E k
+-  diag ξ := diagOfEffects E ξ
+-  diag_finite ξ := diagOfEffects_finite (summable_ofEffects hsum) hpos ξ
+-  inner_effect B hB ξ := inner_effect_eq_diag (summable_ofEffects hsum) hpos B hB ξ
+-  effect_univ := by
+-    simp only [Set.indicator_univ]
+-    rw [hsum, ContinuousLinearMap.one_def]
+-
+-@[simp] lemma ofEffects_effect (E : κ → (H →L[ℂ] H)) (hpos : ∀ k, (E k).IsPositive)
+-    (hsum : ∑' k, E k = 1) {B : Set κ} (hB : MeasurableSet B) :
+-    (ofEffects E hpos hsum).effect B hB = ∑' k, Set.indicator B E k := rfl
+-
+-@[simp] lemma ofEffects_diag (E : κ → (H →L[ℂ] H)) (hpos : ∀ k, (E k).IsPositive)
+-    (hsum : ∑' k, E k = 1) (ξ : H) :
+-    (ofEffects E hpos hsum).diag ξ = diagOfEffects E ξ := rfl
+-
+-
+-end POVM
+-
+-/-! ## §3  Every projection-valued measure is a POVM
+-
+-The second constructor, in the opposite direction: a sharp `ProjValMeasure` is a POVM on
+-`(ℝ, Borel)` — keep `proj`, `diag`, the weld, and `proj_univ`; forget only the multiplicativity
+-`proj_inter`.  So every projective measurement is an (extremal) generalized one, and the Born layer
+-of §4 applies to it unchanged (`bornMeasurePOVM_toPOVM`). -/
+-
+-/-- `[done]` The forgetful coercion: a `ProjValMeasure` is a POVM on `(ℝ, Borel)` — keep `proj`,
+-`diag`, the weld, and `proj_univ`; forget `proj_inter`.  (`effect_le_one` then holds with equality
+-of `M(B)` to a projection, the sharp case.) -/
+-noncomputable def _root_.Spectra.ProjValMeasure.toPOVM (P : ProjValMeasure H) : POVM H ℝ where
+-  effect := P.proj
+-  diag := P.diag
+-  diag_finite := P.diag_finite
+-  inner_effect := P.inner_proj
+-  effect_univ := P.proj_univ
+-
+-@[simp] lemma ProjValMeasure.toPOVM_diag (P : ProjValMeasure H) (ξ : H) :
+-    P.toPOVM.diag ξ = P.diag ξ := rfl
+-
+-@[simp] lemma ProjValMeasure.toPOVM_effect (P : ProjValMeasure H)
+-    (B : Set ℝ) (hB : MeasurableSet B) :
+-    P.toPOVM.effect B hB = P.proj B hB := rfl
+-
+-end Spectra
+-
+ /-! ## §4  The Born rule for POVMs
+ 
+ Identical in form to the PVM Born rule, because that layer only ever touched `diag`. -/
+@@ -557,7 +202,7 @@
+ `V : H → K`.  This is the structural theorem justifying "generalized measurement," and the bridge by
+ which POVM results reduce to projective ones.
+ 
+-The **discrete / countable** case is proved sorry-free in
++The **discrete / countable** case is proved completely in
+ `QuantumMechanics/BornRule/Naimark.lean` as `naimark_dilation`: for a resolution of the identity
+ `E : κ → (H →L[ℂ] H)`, `∑' k, E k = 1` (i.e. an `ofEffects` POVM), with carrier
+ `NaimarkSpace H κ = lp (fun _ : κ => H) 2`, isometry `naimarkV : ψ ↦ (√Eₖ ψ)ₖ` (operator square
+diff -ruN pristine-clean/Spectra/QuantumMechanics/BornRule/POVMCore.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/POVMCore.lean
+--- pristine-clean/Spectra/QuantumMechanics/BornRule/POVMCore.lean	1969-12-31 19:00:00.000000000 -0500
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/POVMCore.lean	2026-07-29 18:42:26.524315592 -0400
+@@ -0,0 +1,378 @@
++/-
++Copyright (c) 2026 Spectra Formalization Project. All rights reserved.
++Released under Apache 2.0 license as described in the file LICENSE.
++Authors: Adam Bornemann
++-/
++import Spectra.ProjValMeasure.Basic
++import Mathlib.Analysis.InnerProductSpace.Positive
++import Mathlib.MeasureTheory.Measure.Dirac
++/-!
++# Generalized measurements: POVMs and the Born rule
++
++A **positive operator-valued measure** (POVM) on an outcome space `(ι, 𝓜)` assigns to each
++measurable `B ⊆ ι` an **effect** `M(B)` — a positive operator with `0 ≤ M(B) ≤ I` — additively
++and with `M(ι) = I`.  It is the model of a generalized (unsharp) measurement; the projective
++measurements of `ProjValMeasure` are the special case where every effect is a projection.
++
++## Design: a POVM is a `ProjValMeasure` minus multiplicativity
++
++`ProjValMeasure` carried the diagonal scalar measures `diag : H → Measure ℝ` as data, welded to
++the operators by `inner_proj`, and had two structural laws beyond the weld: `proj_univ`
++(normalization) and `proj_inter` (multiplicativity, `E(B₁)E(B₂) = E(B₁∩B₂)`).  **A POVM keeps the
++weld and `_univ`, and drops `_inter`** — generalizing the outcome space from `(ℝ, Borel)` to an
++arbitrary `[MeasurableSpace ι]`.
++
++The data-carrying weld pays off exactly as before.  Because `inner_effect` welds `⟪ξ, M(B) ξ⟫` to
++the value of a *measure*, which is nonnegative, each effect is **positive** with no extra structure field;
++and `M(B) ≤ M(ι) = I` follows from additivity, giving the effect property `0 ≤ M(B) ≤ I` as a
++theorem.  The only `ProjValMeasure` facts that *don't* survive are the ones that used `proj_inter`:
++idempotence `E² = E` and the projective norm identity `‖E(B)ξ‖² = ⟪ξ, E(B)ξ⟫`.  Everything else —
++self-adjointness, finite additivity, the mass `‖ξ‖²`, `ext_of_diag` — ports verbatim.
++
++## The Born rule is unchanged
++
++It never used multiplicativity.  For a POVM `M`:
++* pure state `ψ`: the outcome law is `M.diag ψ` (mass `‖ψ‖²`); `(M.diag ψ) B = ⟪ψ, M(B) ψ⟫`;
++* mixed state `ρ`: `bornMeasurePOVM M ρ = Measure.sum (fun i => ρ.weight i • M.diag (ρ.state i))`,
++  exactly the mixture used for PVMs;
++* trace form: `(ρ.toState M(B)) = Tr(ρ M(B))` via the same `toState` bridge of `Mixed.lean`.
++
++This is why the Born-rule layer factors through the `diag` field alone (see the abstraction note
++in §6): PVM and POVM share it.
++
++## Mathlib used
++
++`MeasureTheory.Measure(.sum/.smul_apply)`, `ContinuousLinearMap.IsPositive`
++(`Mathlib.Analysis.InnerProductSpace.Positive`), and — for the order `0 ≤ M(B) ≤ 1` — the
++`StarOrderedRing` structure on the C*-algebra `H →L[ℂ] H`.  No operator-valued-measure topology
++and no Naimark dilation are needed for any of the above.
++
++## References
++
++* [Busch, Lahti, Mittelstaedt, *The Quantum Theory of Measurement*], §§II–III (effects, POVMs).
++* [Heinosaari, Ziman, *The Mathematical Language of Quantum Theory*], Ch. 3.
++* M. Naimark, *On a representation of additive operator set functions* (1943) — the dilation
++  theorem (flagged, §6).
++
++## Layout
++
++§1 the structure and its effect calculus; §2–§3 the two constructors (`ofEffects` from a discrete
++family of effects, `toPOVM` from a sharp `ProjValMeasure`); §4 the Born rule; §5 a capstone — the
++two-outcome measurement — tying the three strands together; §6 flags for later work.
++-/
++
++open MeasureTheory Complex
++open scoped InnerProductSpace ENNReal
++open Spectra Spectra.ProjValMeasure
++
++variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
++variable {ι : Type*} [MeasurableSpace ι]
++
++namespace Spectra
++
++/-! ## §1  The POVM structure -/
++
++/-- A **positive operator-valued measure** on the measurable space `(ι, 𝓜)`, acting on `H`.
++
++Exactly `ProjValMeasure` with the outcome space generalized and the multiplicativity field
++`proj_inter` removed.  The diagonal scalar measures `diag ξ` are carried as data and welded to the
++effects by `inner_effect`; countable additivity therefore lives inside `Measure ι` and is never
++restated, and positivity/self-adjointness/the effect bound are theorems (proved below in this
++section). -/
++structure POVM (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
++    (ι : Type*) [MeasurableSpace ι] where
++  /-- The effect assigned to each measurable set. -/
++  effect : ∀ B : Set ι, MeasurableSet B → (H →L[ℂ] H)
++  /-- The diagonal scalar measures, carried as data. -/
++  diag : H → Measure ι
++  /-- Each diagonal measure is finite (mass `‖ξ‖²`, by `diag_univ_toReal`). -/
++  diag_finite : ∀ ξ : H, IsFiniteMeasure (diag ξ)
++  /-- The weld: diagonal matrix elements of the effects are the diagonal measures. -/
++  inner_effect : ∀ (B : Set ι) (hB : MeasurableSet B) (ξ : H),
++    ⟪ξ, effect B hB ξ⟫_ℂ = (((diag ξ) B).toReal : ℂ)
++  /-- Normalization: the whole space carries the identity, `M(ι) = I`. -/
++  effect_univ : effect Set.univ MeasurableSet.univ = ContinuousLinearMap.id ℂ H
++
++namespace POVM
++
++instance instIsFiniteMeasureDiag (M : POVM H ι) (ξ : H) : IsFiniteMeasure (M.diag ξ) :=
++  M.diag_finite ξ
++
++/-! ### Facts that port verbatim from `ProjValMeasure` (no `_inter` used) -/
++
++/-- `[done — ports verbatim]` Effects do not depend on the measurability witness. -/
++lemma effect_congr (M : POVM H ι) {B₁ B₂ : Set ι} (h : B₁ = B₂)
++    (h₁ : MeasurableSet B₁) (h₂ : MeasurableSet B₂) :
++    M.effect B₁ h₁ = M.effect B₂ h₂ := by subst h; rfl
++
++/-- `[done — ports verbatim]` `M(∅) = 0`.  Proof: `op_ext_of_inner_self` + `measure_empty`. -/
++@[simp] lemma effect_empty (M : POVM H ι) : M.effect ∅ MeasurableSet.empty = 0 :=
++  op_ext_of_inner_self fun ξ => by
++    rw [M.inner_effect, ContinuousLinearMap.zero_apply, inner_zero_right, measure_empty]
++    simp
++
++/-- `[done — ports verbatim from `isSelfAdjoint_proj`]` Each effect is self-adjoint: its diagonal
++is a real coercion, hence conjugation-fixed, hence (polarization) the operator is self-adjoint. -/
++lemma isSelfAdjoint_effect (M : POVM H ι) (B : Set ι) (hB : MeasurableSet B) :
++    IsSelfAdjoint (M.effect B hB) := by
++  rw [ContinuousLinearMap.isSelfAdjoint_iff']
++  refine op_ext_of_inner_self fun ξ => ?_
++  rw [ContinuousLinearMap.adjoint_inner_right, ← inner_conj_symm (M.effect B hB ξ) ξ,
++    M.inner_effect, Complex.conj_ofReal]
++
++/-- `[done — ports verbatim from `proj_union`]` Finite additivity on disjoint sets. -/
++lemma effect_union (M : POVM H ι) {B₁ B₂ : Set ι}
++    (hB₁ : MeasurableSet B₁) (hB₂ : MeasurableSet B₂) (hd : Disjoint B₁ B₂) :
++    M.effect (B₁ ∪ B₂) (hB₁.union hB₂) = M.effect B₁ hB₁ + M.effect B₂ hB₂ :=
++  op_ext_of_inner_self fun ξ => by
++    rw [ContinuousLinearMap.add_apply, inner_add_right, M.inner_effect, M.inner_effect,
++      M.inner_effect, measure_union hd hB₂,
++      ENNReal.toReal_add (measure_ne_top _ _) (measure_ne_top _ _)]
++    push_cast
++    ring
++
++/-- `[done — ports verbatim from `diag_univ_toReal`]` Total mass `diag ξ ι = ‖ξ‖²`. -/
++lemma diag_univ_toReal (M : POVM H ι) (ξ : H) : ((M.diag ξ) Set.univ).toReal = ‖ξ‖ ^ 2 := by
++  have h := M.inner_effect Set.univ MeasurableSet.univ ξ
++  rw [M.effect_univ, ContinuousLinearMap.id_apply, inner_self_eq_norm_sq_to_K,
++    ← coe_algebraMap] at h
++  exact_mod_cast h.symm
++
++/-! ### Facts new to POVMs (positivity and the effect bound)
++
++These replace the projective facts (`proj_idem`, `norm_sq_proj_apply`) that `_inter` would have
++given.  They are *weaker* but exactly what an effect needs. -/
++
++/-- `[done — free from the weld]` Each effect is **positive**.  Because `inner_effect` welds the
++diagonal to a measure value `(diag ξ B).toReal ≥ 0`, the quadratic form is nonnegative; with
++`isSelfAdjoint_effect` this is `ContinuousLinearMap.IsPositive`.
++SIGNATURE TO VERIFY: Mathlib's `IsPositive` uses `reApplyInnerSelf x = re ⟪T x, x⟫`; reconcile the
++slot order with the `⟪ξ, T ξ⟫` of `inner_effect` (equal real parts by conjugation). -/
++lemma isPositive_effect (M : POVM H ι) (B : Set ι) (hB : MeasurableSet B) :
++    (M.effect B hB).IsPositive := by
++  rw [ContinuousLinearMap.isPositive_iff']
++  refine ⟨M.isSelfAdjoint_effect B hB, fun x => ?_⟩
++  have h : ⟪M.effect B hB x, x⟫_ℂ = (((M.diag x) B).toReal : ℂ) := by
++    rw [← inner_conj_symm (M.effect B hB x) x, M.inner_effect, Complex.conj_ofReal]
++  rw [h]
++  exact_mod_cast ENNReal.toReal_nonneg
++
++/-- `[done]` **Monotonicity.**  `B₁ ⊆ B₂ ⟹ M(B₁) ≤ M(B₂)` in the C*-order: the difference is
++`M(B₂ \ B₁)`, a positive effect, by `effect_union` and `isPositive_effect`. -/
++lemma effect_mono (M : POVM H ι) {B₁ B₂ : Set ι}
++    (hB₁ : MeasurableSet B₁) (hB₂ : MeasurableSet B₂) (h : B₁ ⊆ B₂) :
++    M.effect B₁ hB₁ ≤ M.effect B₂ hB₂ := by
++  rw [ContinuousLinearMap.le_def]
++  have hsplit : M.effect B₂ hB₂ =
++      M.effect B₁ hB₁ + M.effect (B₂ \ B₁) (hB₂.diff hB₁) := by
++    have hu : B₁ ∪ (B₂ \ B₁) = B₂ := Set.union_diff_cancel h
++    rw [← M.effect_congr hu (hB₁.union (hB₂.diff hB₁)) hB₂,
++      M.effect_union hB₁ (hB₂.diff hB₁) disjoint_sdiff_self_right]
++  rw [hsplit, add_sub_cancel_left]
++  exact M.isPositive_effect (B₂ \ B₁) (hB₂.diff hB₁)
++
++/-- `[done]` **The effect property** `0 ≤ M(B) ≤ I`.  Lower bound is `isPositive_effect`; upper
++bound is `effect_mono` against `M(univ) = I` (`effect_univ`).
++SIGNATURE TO VERIFY: the `StarOrderedRing (H →L[ℂ] H)` instance (from `CStarAlgebra`) supplying
++`≤` and `1 = id`. -/
++lemma effect_le_one (M : POVM H ι) (B : Set ι) (hB : MeasurableSet B) :
++    M.effect B hB ≤ 1 := by
++  have h1 : (1 : H →L[ℂ] H) = M.effect Set.univ MeasurableSet.univ := by
++    rw [M.effect_univ]; rfl
++  rw [h1]
++  exact M.effect_mono hB MeasurableSet.univ (Set.subset_univ B)
++
++/-! ### Extensionality (the diagonal still determines the POVM) -/
++
++/-- `[done — ports verbatim from `ext_of_diag`]` A POVM is determined by its diagonal measures. -/
++theorem ext_of_diag {M N : POVM H ι} (h : ∀ ξ : H, M.diag ξ = N.diag ξ) : M = N := by
++  have heff : M.effect = N.effect := by
++    funext B hB
++    exact op_ext_of_inner_self fun ξ => by rw [M.inner_effect, N.inner_effect, h ξ]
++  obtain ⟨e₁, d₁, _, _, _⟩ := M
++  obtain ⟨e₂, d₂, _, _, _⟩ := N
++  obtain rfl : e₁ = e₂ := heff
++  obtain rfl : d₁ = d₂ := funext h
++  rfl
++
++/-! ## §2  The discrete-POVM constructor `ofEffects`
++
++The first of the two constructors, and the form most applications take (state discrimination,
++informationally-complete measurements): a countable family of effects `Eₖ ≥ 0` resolving the
++identity, `∑' k, E k = 1`, *is* a POVM on `κ` with the discrete σ-algebra.  `ofEffects` assembles
++it — `effect B = ∑' k, B.indicator E k` (an operator-valued tsum) and `diag ξ` the discrete measure
++`k ↦ ⟪ξ, Eₖ ξ⟫.re`.  The only analytic input is convergence of `∑' k, Eₖ` in the strong operator
++topology, isolated as `summable_ofEffects`; the weld `inner_effect` then follows by pushing `ξ` and
++the inner product through the tsum (the same `mapL` idiom as `Mixed.toStateCLM`).  The helper lemmas
++are `private`; the public surface is `ofEffects`, `summable_ofEffects`, `diagOfEffects`, and the
++`@[simp]` projections `ofEffects_effect` / `ofEffects_diag`. -/
++
++/-- Each positive effect's diagonal matrix element is a nonnegative real coercion:
++`⟪ξ, Eₖ ξ⟫ = (⟪ξ, Eₖ ξ⟫).re` (self-adjointness from positivity). -/
++private lemma inner_eq_re_of_isPositive {E : H →L[ℂ] H} (hE : E.IsPositive) (ξ : H) :
++    ⟪ξ, E ξ⟫_ℂ = ((⟪ξ, E ξ⟫_ℂ).re : ℂ) := by
++  have hsa : IsSelfAdjoint E := hE.isSelfAdjoint
++  have heq : starRingEnd ℂ ⟪ξ, E ξ⟫_ℂ = ⟪ξ, E ξ⟫_ℂ := by
++    rw [inner_conj_symm, ← ContinuousLinearMap.adjoint_inner_right,
++      ContinuousLinearMap.isSelfAdjoint_iff'.mp hsa]
++  exact (Complex.conj_eq_iff_re.mp heq).symm
++
++open scoped ComplexOrder in
++/-- The diagonal matrix element of a positive effect has nonnegative real part. -/
++private lemma re_nonneg_of_isPositive {E : H →L[ℂ] H} (hE : E.IsPositive) (ξ : H) :
++    0 ≤ (⟪ξ, E ξ⟫_ℂ).re := by
++  rw [ContinuousLinearMap.isPositive_iff'] at hE
++  have h := (Complex.le_def.mp (hE.2 ξ)).1
++  simp only [Complex.zero_re] at h
++  rw [← inner_conj_symm (E ξ) ξ, Complex.conj_re] at h
++  exact h
++
++variable {κ : Type*}
++
++omit [CompleteSpace H] in
++/-- From `∑' k, E k = 1`, the family `E` is summable.  (If it were not, the tsum would be `0`,
++forcing the identity to vanish, hence `H` trivial — in which case every operator is `0`, so `E` is
++summable after all.) -/
++lemma summable_ofEffects {E : κ → (H →L[ℂ] H)} (hsum : ∑' k, E k = 1) : Summable E := by
++  by_cases hns : Summable E
++  · exact hns
++  · rw [tsum_eq_zero_of_not_summable hns] at hsum
++    have h0 : (1 : H →L[ℂ] H) = 0 := hsum.symm
++    have hsub : ∀ x : H, x = 0 := fun x => by
++      have := congrArg (fun T => T x) h0; simpa using this
++    have hE0 : E = (fun _ => 0) := funext fun k => by
++      ext x; rw [hsub (E k x)]; simp
++    rw [hE0]
++    exact summable_zero
++
++/-- Push `ξ` through the operator-valued tsum and the inner product through the scalar tsum:
++`⟪ξ, (∑' k, B.indicator E k) ξ⟫ = ∑' k, B.indicator (k ↦ ⟪ξ, Eₖ ξ⟫) k`. -/
++private lemma inner_effect_tsum {E : κ → (H →L[ℂ] H)} (hSE : Summable E) (B : Set κ) (ξ : H) :
++    ⟪ξ, (∑' k, Set.indicator B E k) ξ⟫_ℂ
++      = ∑' k, Set.indicator B (fun k => ⟪ξ, E k ξ⟫_ℂ) k := by
++  have hBsum : Summable (Set.indicator B E) := hSE.indicator B
++  have happ : (∑' k, Set.indicator B E k) ξ = ∑' k, (Set.indicator B E k) ξ :=
++    (hBsum.hasSum.mapL (ContinuousLinearMap.apply ℂ H ξ)).tsum_eq.symm
++  rw [happ]
++  have hSummApp : Summable (fun k => (Set.indicator B E k) ξ) :=
++    hBsum.mapL (ContinuousLinearMap.apply ℂ H ξ)
++  have hinner : ⟪ξ, ∑' k, (Set.indicator B E k) ξ⟫_ℂ
++      = ∑' k, ⟪ξ, (Set.indicator B E k) ξ⟫_ℂ :=
++    (hSummApp.hasSum.mapL (innerSL ℂ ξ)).tsum_eq.symm
++  rw [hinner]
++  refine tsum_congr fun k => ?_
++  by_cases hk : k ∈ B
++  · rw [Set.indicator_of_mem hk, Set.indicator_of_mem hk]
++  · rw [Set.indicator_of_notMem hk, Set.indicator_of_notMem hk,
++      ContinuousLinearMap.zero_apply, inner_zero_right]
++
++variable [MeasurableSpace κ]
++
++/-- The discrete diagonal measure `diag ξ = ∑' k, ⟪ξ, Eₖ ξ⟫.re • δ_k`. -/
++noncomputable def diagOfEffects (E : κ → (H →L[ℂ] H)) (ξ : H) : Measure κ :=
++  Measure.sum (fun k => ENNReal.ofReal ((⟪ξ, E k ξ⟫_ℂ).re) • Measure.dirac k)
++
++omit [CompleteSpace H] in
++private lemma diagOfEffects_apply {E : κ → (H →L[ℂ] H)} (ξ : H) {B : Set κ}
++    (hB : MeasurableSet B) :
++    (diagOfEffects E ξ) B
++      = ∑' k, Set.indicator B (fun k => ENNReal.ofReal ((⟪ξ, E k ξ⟫_ℂ).re)) k := by
++  rw [diagOfEffects, Measure.sum_apply _ hB]
++  refine tsum_congr fun k => ?_
++  rw [Measure.smul_apply, MeasureTheory.Measure.dirac_apply' k hB, smul_eq_mul]
++  by_cases hk : k ∈ B
++  · rw [Set.indicator_of_mem hk, Set.indicator_of_mem hk]; simp
++  · rw [Set.indicator_of_notMem hk, Set.indicator_of_notMem hk]; simp
++
++/-- The weld for `ofEffects`: `⟪ξ, (∑' k, B.indicator E k) ξ⟫ = ((diag ξ B).toReal : ℂ)`. -/
++private lemma inner_effect_eq_diag {E : κ → (H →L[ℂ] H)} (hSE : Summable E)
++    (hpos : ∀ k, (E k).IsPositive) (B : Set κ) (hB : MeasurableSet B) (ξ : H) :
++    ⟪ξ, (∑' k, Set.indicator B E k) ξ⟫_ℂ = (((diagOfEffects E ξ) B).toReal : ℂ) := by
++  rw [inner_effect_tsum hSE B ξ, diagOfEffects_apply ξ hB]
++  have hterm : ∀ k, Set.indicator B (fun k => ⟪ξ, E k ξ⟫_ℂ) k
++      = ((Set.indicator B (fun k => ((⟪ξ, E k ξ⟫_ℂ).re : ℝ)) k : ℝ) : ℂ) := fun k => by
++    by_cases hk : k ∈ B
++    · rw [Set.indicator_of_mem hk, Set.indicator_of_mem hk]
++      exact inner_eq_re_of_isPositive (hpos k) ξ
++    · rw [Set.indicator_of_notMem hk, Set.indicator_of_notMem hk, Complex.ofReal_zero]
++  rw [tsum_congr hterm, ← Complex.ofReal_tsum]
++  congr 1
++  have hfin : ∀ k, Set.indicator B (fun k => ENNReal.ofReal ((⟪ξ, E k ξ⟫_ℂ).re)) k ≠ ⊤ :=
++    fun k => by
++      by_cases hk : k ∈ B
++      · rw [Set.indicator_of_mem hk]; exact ENNReal.ofReal_ne_top
++      · rw [Set.indicator_of_notMem hk]; exact ENNReal.zero_ne_top
++  rw [ENNReal.tsum_toReal_eq hfin]
++  refine tsum_congr fun k => ?_
++  by_cases hk : k ∈ B
++  · rw [Set.indicator_of_mem hk, Set.indicator_of_mem hk,
++      ENNReal.toReal_ofReal (re_nonneg_of_isPositive (hpos k) ξ)]
++  · rw [Set.indicator_of_notMem hk, Set.indicator_of_notMem hk, ENNReal.toReal_zero]
++
++set_option linter.unusedSectionVars false in
++/-- The real quadratic-form series `k ↦ ⟪ξ, Eₖ ξ⟫.re` is summable. -/
++private lemma summable_re_quadForm {E : κ → (H →L[ℂ] H)} (hSE : Summable E) (ξ : H) :
++    Summable (fun k => (⟪ξ, E k ξ⟫_ℂ).re) := by
++  have h1 : Summable (fun k => (E k) ξ) := hSE.mapL (ContinuousLinearMap.apply ℂ H ξ)
++  have h2 : Summable (fun k => ⟪ξ, (E k) ξ⟫_ℂ) := h1.mapL (innerSL ℂ ξ)
++  exact h2.mapL Complex.reCLM
++
++private lemma diagOfEffects_finite {E : κ → (H →L[ℂ] H)} (hSE : Summable E)
++    (hpos : ∀ k, (E k).IsPositive) (ξ : H) : IsFiniteMeasure (diagOfEffects E ξ) := by
++  refine ⟨?_⟩
++  rw [diagOfEffects_apply ξ MeasurableSet.univ]
++  simp only [Set.indicator_univ]
++  rw [← ENNReal.ofReal_tsum_of_nonneg (fun k => re_nonneg_of_isPositive (hpos k) ξ)
++    (summable_re_quadForm hSE ξ)]
++  exact ENNReal.ofReal_lt_top
++
++/-- **Discrete-POVM constructor.**  A countable family of positive effects `Eₖ` resolving the
++identity (`∑' k, E k = 1`) is a POVM on `κ` (with the discrete σ-algebra): the effect of `B` is the
++operator-valued tsum `∑' k, B.indicator E k`, and `diag ξ` is the discrete measure
++`k ↦ ⟪ξ, Eₖ ξ⟫.re`. -/
++noncomputable def ofEffects (E : κ → (H →L[ℂ] H)) (hpos : ∀ k, (E k).IsPositive)
++    (hsum : ∑' k, E k = 1) : POVM H κ where
++  effect B _ := ∑' k, Set.indicator B E k
++  diag ξ := diagOfEffects E ξ
++  diag_finite ξ := diagOfEffects_finite (summable_ofEffects hsum) hpos ξ
++  inner_effect B hB ξ := inner_effect_eq_diag (summable_ofEffects hsum) hpos B hB ξ
++  effect_univ := by
++    simp only [Set.indicator_univ]
++    rw [hsum, ContinuousLinearMap.one_def]
++
++@[simp] lemma ofEffects_effect (E : κ → (H →L[ℂ] H)) (hpos : ∀ k, (E k).IsPositive)
++    (hsum : ∑' k, E k = 1) {B : Set κ} (hB : MeasurableSet B) :
++    (ofEffects E hpos hsum).effect B hB = ∑' k, Set.indicator B E k := rfl
++
++@[simp] lemma ofEffects_diag (E : κ → (H →L[ℂ] H)) (hpos : ∀ k, (E k).IsPositive)
++    (hsum : ∑' k, E k = 1) (ξ : H) :
++    (ofEffects E hpos hsum).diag ξ = diagOfEffects E ξ := rfl
++
++
++end POVM
++
++/-! ## §3  Every projection-valued measure is a POVM
++
++The second constructor, in the opposite direction: a sharp `ProjValMeasure` is a POVM on
++`(ℝ, Borel)` — keep `proj`, `diag`, the weld, and `proj_univ`; forget only the multiplicativity
++`proj_inter`.  So every projective measurement is an (extremal) generalized one, and the Born layer
++of §4 applies to it unchanged (`bornMeasurePOVM_toPOVM`). -/
++
++/-- `[done]` The forgetful coercion: a `ProjValMeasure` is a POVM on `(ℝ, Borel)` — keep `proj`,
++`diag`, the weld, and `proj_univ`; forget `proj_inter`.  (`effect_le_one` then holds with equality
++of `M(B)` to a projection, the sharp case.) -/
++noncomputable def _root_.Spectra.ProjValMeasure.toPOVM (P : ProjValMeasure H) : POVM H ℝ where
++  effect := P.proj
++  diag := P.diag
++  diag_finite := P.diag_finite
++  inner_effect := P.inner_proj
++  effect_univ := P.proj_univ
++
++@[simp] lemma ProjValMeasure.toPOVM_diag (P : ProjValMeasure H) (ξ : H) :
++    P.toPOVM.diag ξ = P.diag ξ := rfl
++
++@[simp] lemma ProjValMeasure.toPOVM_effect (P : ProjValMeasure H)
++    (B : Set ℝ) (hB : MeasurableSet B) :
++    P.toPOVM.effect B hB = P.proj B hB := rfl
++
++end Spectra
+diff -ruN pristine-clean/Spectra/QuantumMechanics/BornRule/PVM.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/PVM.lean
+--- pristine-clean/Spectra/QuantumMechanics/BornRule/PVM.lean	2026-07-30 11:52:33.877629155 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/BornRule/PVM.lean	2026-07-29 18:42:26.529315576 -0400
+@@ -8,7 +8,6 @@
+ import Spectra.SpectralTheory.Measure.Polarized
+ import Spectra.SpectralTheory.Measure.PVM
+ import Spectra.Resolvent.SpectralRepresentation
+-import Spectra.QuantumMechanics.Unitarity.Basic
+ /-!
+ # The Born rule
+ 
+@@ -38,8 +37,8 @@
+ * `born_rule_le` — Born probabilities are bounded by `‖ψ‖²` (by `1` for a unit vector).
+ 
+ All four results are one-line consequences of already-proved `ProjValMeasure` lemmas
+-(`norm_sq_proj_apply`, `diag_univ_toReal`, `norm_proj_apply_le`); there is no `sorry` and no
+-new analysis here.
++(`norm_sq_proj_apply`, `diag_univ_toReal`, `norm_proj_apply_le`); all declarations are complete and no
++new analysis is needed here.
+ 
+ ## Implementation notes
+ 
+@@ -100,7 +99,7 @@
+ These statements need only a `ProjValMeasure`; they are immediate from the existing
+ `ProjValMeasure` lemmas.  They are the Born rule for a *sharp measurement of a single
+ observable on a pure state*, with the observable presented through its PVM.  Every
+-declaration here is fully proved (no `sorry`). -/
++declaration here is fully proved. -/
+ 
+ /-- The **Born measure** of a state `ψ` against a resolution of the identity `P`: the
+ probability law of the measurement outcomes.  Definitionally the diagonal scalar measure
+diff -ruN pristine-clean/Spectra/QuantumMechanics/Channels/PolarDecomp.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/Channels/PolarDecomp.lean
+--- pristine-clean/Spectra/QuantumMechanics/Channels/PolarDecomp.lean	2026-07-30 11:52:33.878629151 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/QuantumMechanics/Channels/PolarDecomp.lean	2026-07-29 18:42:26.540315542 -0400
+@@ -126,12 +126,12 @@
+ /-- **The polar partial isometry** `U : H →L[ℂ] H`, isometric on `K = closure (range |T|)`, zero on
+ `Kᗮ`, with `U |T| = T`. -/
+ noncomputable def polarIsometry (T : H →L[ℂ] H) : H →L[ℂ] H :=
+-  polarPartial T ∘L (polarRange T).orthogonalProjection
++  polarPartial T ∘L (polarRange T).orthogonalProjectionOnto
+ 
+ @[simp] lemma polarIsometry_absOp (T : H →L[ℂ] H) (x : H) :
+     polarIsometry T (absOp T x) = T x := by
+   have hmem : absOp T x ∈ polarRange T := absOp_mem_polarRange T x
+-  have hproj : (polarRange T).orthogonalProjection (absOp T x) = absOpCorestrict T x := by
++  have hproj : (polarRange T).orthogonalProjectionOnto (absOp T x) = absOpCorestrict T x := by
+     apply Subtype.ext
+     rw [coe_absOpCorestrict, ← Submodule.starProjection_apply]
+     exact Submodule.starProjection_eq_self_iff.2 hmem
+diff -ruN pristine-clean/Spectra/Resolvent/Identities.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Resolvent/Identities.lean
+--- pristine-clean/Spectra/Resolvent/Identities.lean	2026-07-30 11:52:33.884629130 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Resolvent/Identities.lean	2026-07-29 18:42:26.931314318 -0400
+@@ -79,8 +79,7 @@
+   have h_Rz : resolvent z hz hsym hplus hminus φ = ψ_z := rfl
+   have h_Rw : resolvent w hw hsym hplus hminus φ = ψ_w := rfl
+   have h_Rz_ψw : resolvent z hz hsym hplus hminus ψ_w = η := rfl
+-  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+-             ContinuousLinearMap.comp_apply]
++  simp only [sub_apply, smul_apply, ContinuousLinearMap.comp_apply]
+   rw [h_Rz, h_Rw, h_Rz_ψw]
+   have h_Az_ψw : A ⟨ψ_w, h_w_domain⟩ - z • ψ_w = φ + (w - z) • ψ_w := by
+     have h_Aw : A ⟨ψ_w, h_w_domain⟩ = φ + w • ψ_w := by
+@@ -96,11 +95,29 @@
+   have h_sum_eq : A ⟨ψ_z + (w - z) • η, h_sum_domain⟩ -
+       z • (ψ_z + (w - z) • η) = φ + (w - z) • ψ_w := by
+     have h_smul_mem : (w - z) • η ∈ A.domain := A.domain.smul_mem (w - z) h_η_domain
++    have h_add_domain :
++        (⟨ψ_z + (w - z) • η, h_sum_domain⟩ : A.domain) =
++          ⟨ψ_z, h_z_domain⟩ + ⟨(w - z) • η, h_smul_mem⟩ := by
++      apply Subtype.ext
++      rfl
+     have op_eq : A ⟨ψ_z + (w - z) • η, h_sum_domain⟩ =
+                  A ⟨ψ_z, h_z_domain⟩ + A ⟨(w - z) • η, h_smul_mem⟩ := by
+-      convert A.map_add ⟨ψ_z, h_z_domain⟩ ⟨(w - z) • η, h_smul_mem⟩ using 1
++      calc
++        A ⟨ψ_z + (w - z) • η, h_sum_domain⟩ =
++            A (⟨ψ_z, h_z_domain⟩ + ⟨(w - z) • η, h_smul_mem⟩) := by
++              rw [h_add_domain]
++        _ = A ⟨ψ_z, h_z_domain⟩ + A ⟨(w - z) • η, h_smul_mem⟩ :=
++          A.map_add _ _
++    have h_smul_domain :
++        (⟨(w - z) • η, h_smul_mem⟩ : A.domain) =
++          (w - z) • (⟨η, h_η_domain⟩ : A.domain) := by
++      apply Subtype.ext
++      rfl
+     have op_smul_eq : A ⟨(w - z) • η, h_smul_mem⟩ = (w - z) • A ⟨η, h_η_domain⟩ := by
+-      convert A.map_smul (w - z) ⟨η, h_η_domain⟩ using 1
++      calc
++        A ⟨(w - z) • η, h_smul_mem⟩ = A ((w - z) • (⟨η, h_η_domain⟩ : A.domain)) := by
++          rw [h_smul_domain]
++        _ = (w - z) • A ⟨η, h_η_domain⟩ := A.map_smul _ _
+     calc A ⟨ψ_z + (w - z) • η, h_sum_domain⟩ - z • (ψ_z + (w - z) • η)
+         = (A ⟨ψ_z, h_z_domain⟩ + A ⟨(w - z) • η, h_smul_mem⟩) - z • (ψ_z + (w - z) • η) :=
+             by rw [op_eq]
+@@ -159,8 +176,7 @@
+           = (zn n - z) • resolvent (zn n) (h_im_ne n) hsym hplus hminus
+                             (resolvent z hz hsym hplus hminus ξ) := by
+       have hh := congrArg (fun T : H →L[ℂ] H => T ξ) hid
+-      simpa [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+-             ContinuousLinearMap.comp_apply] using hh
++      simpa [sub_apply, smul_apply, ContinuousLinearMap.comp_apply] using hh
+     have hop := resolvent_bound (zn n) (h_im_ne n) hsym hplus hminus
+     rw [happ, norm_smul]
+     calc ‖zn n - z‖ * ‖resolvent (zn n) (h_im_ne n) hsym hplus hminus
+diff -ruN pristine-clean/Spectra/Resolvent/Range/Surjectivity.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Resolvent/Range/Surjectivity.lean
+--- pristine-clean/Spectra/Resolvent/Range/Surjectivity.lean	2026-07-30 11:52:33.885629127 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Resolvent/Range/Surjectivity.lean	2026-07-29 18:42:26.970314196 -0400
+@@ -131,8 +131,11 @@
+     (hψ : A ψ - z • (ψ : H) = φ)
+     (hψ' : A ψ' - z • (ψ' : H) = φ) : ψ = ψ' := by
+   have hχ : A ⟨(ψ:H) - ψ', sub_mem ψ.2 ψ'.2⟩ - z • ((ψ:H) - ψ') = 0 := by
+-    have op_eq : A ⟨(ψ:H) - ψ', sub_mem ψ.2 ψ'.2⟩ = A ψ - A ψ' := by
+-      convert A.map_sub ψ ψ' using 1
++    have hsub_eq : (⟨(ψ : H) - ψ', sub_mem ψ.2 ψ'.2⟩ : A.domain) = ψ - ψ' := by
++      apply Subtype.ext
++      rfl
++    have op_eq : A ⟨(ψ : H) - ψ', sub_mem ψ.2 ψ'.2⟩ = A ψ - A ψ' := by
++      rw [hsub_eq, A.map_sub]
+     calc A ⟨(ψ:H) - ψ', sub_mem ψ.2 ψ'.2⟩ - z • ((ψ:H) - ψ')
+         = (A ψ - A ψ') - z • ((ψ:H) - ψ') := by rw [op_eq]
+       _ = (A ψ - z • (ψ:H)) - (A ψ' - z • (ψ':H)) := by rw [smul_sub]; abel
+diff -ruN pristine-clean/Spectra/Spaces/Tensor/Hilbert.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Spaces/Tensor/Hilbert.lean
+--- pristine-clean/Spectra/Spaces/Tensor/Hilbert.lean	2026-07-30 11:52:33.887629119 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Spaces/Tensor/Hilbert.lean	2026-07-29 18:42:27.100313789 -0400
+@@ -154,8 +154,14 @@
+ `x ⊗ₜ[𝕜] y` under the isometric dense coercion into the completion. -/
+ def tmul (x : E) (y : F) : E ⊗̂[𝕜] F := ((x ⊗ₜ[𝕜] y : E ⊗[𝕜] F) : E ⊗̂[𝕜] F)
+ 
+-@[inherit_doc]
+-scoped notation:100 x " ⊗̂ₜ[" 𝕜 "] " y:100 => HilbertTensor.tmul (𝕜 := 𝕜) x y
++/- The scalar field is pinned by a type ascription rather than by a named argument.
++A `notation` body substitutes the parsed parameter into *every* occurrence of `𝕜`,
++including the label of a named argument, so `HilbertTensor.tmul (𝕜 := 𝕜) x y` expands
++under `x ⊗̂ₜ[ℂ] y` to `tmul (ℂ := ℂ) x y` -- an invalid parameter name.  The named-argument
++form therefore only elaborates when the scalar is literally the identifier `𝕜`. -/
++@[inherit_doc HilbertTensor.tmul]
++scoped notation:100 x " ⊗̂ₜ[" 𝕜 "] " y:100 =>
++  (HilbertTensor.tmul x y : HilbertTensor 𝕜 _ _)
+ 
+ theorem tmul_def (x : E) (y : F) :
+     x ⊗̂ₜ[𝕜] y = ((x ⊗ₜ[𝕜] y : E ⊗[𝕜] F) : E ⊗̂[𝕜] F) := rfl
+diff -ruN pristine-clean/Spectra/Spaces/Tensor/HilbertSchmidt.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Spaces/Tensor/HilbertSchmidt.lean
+--- pristine-clean/Spectra/Spaces/Tensor/HilbertSchmidt.lean	1969-12-31 19:00:00.000000000 -0500
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Spaces/Tensor/HilbertSchmidt.lean	2026-07-29 18:42:27.104313777 -0400
+@@ -0,0 +1,625 @@
++/-
++Copyright (c) 2026 Spectra Formalization Project. All rights reserved.
++Released under Apache 2.0 license as described in the file LICENSE.
++Authors: Jon Crall, OpenAI GPT-5.6 Thinking
++-/
++import Spectra.Spaces.Tensor.Map
++import Spectra.SpectralTheory.Antilinear.ConjugateSpace
++import Spectra.Operator.AdjointClosure
++import Spectra.QuantumMechanics.BornRule.Joint.Basic
++
++/-!
++# Rectangular Hilbert--Schmidt operators as a Hilbert tensor product
++
++For complex Hilbert spaces `E` and `F`, the canonical Hilbert space of
++rectangular Hilbert--Schmidt maps `F -> E` is
++
++`E tensor Conj F`.
++
++The coordinate-free evaluation map sends `z` to the bounded operator whose
++value at `x` is the adjoint, applied to `z`, of the fixed-right-tensor map
++`u |-> u tensor toConj x`.  Consequently a pure tensor
++`u tensor toConj v` is exactly the rank-one operator `rankOne C u v`.
++
++This file supplies the tensor/operator dictionary needed by the square-norm
++Sylvester theorem.  It deliberately contains no spectral-measure machinery.
++Left and right multiplication are represented by bounded tensor maps, so a
++joint spectral model can be built in a higher module without choosing bases.
++-/
++
++open scoped InnerProductSpace ComplexConjugate BigOperators
++
++namespace Spectra
++
++/- The pure-tensor notation `x ⊗̂ₜ[𝕜] y` is scoped to `Spectra.HilbertTensor`, not to
++`Spectra`, so being inside `namespace Spectra` activates `⊗̂[𝕜]` but not `⊗̂ₜ[𝕜]`. -/
++open scoped HilbertTensor
++
++namespace HilbertSchmidtTensor
++
++noncomputable section
++
++universe u v w
++
++variable {E : Type u} {F : Type v} {G : Type w}
++variable [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
++variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
++variable [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
++
++/-- The canonical Hilbert space modelling Hilbert--Schmidt maps `F -> E`. -/
++abbrev Space (E F : Type*)
++    [NormedAddCommGroup E] [InnerProductSpace ℂ E]
++    [NormedAddCommGroup F] [InnerProductSpace ℂ F] :=
++  E ⊗̂[ℂ] Conj F
++
++/-- A bounded operator transported to conjugate Hilbert spaces. -/
++def Conj.map (A : E →L[ℂ] F) : Conj E →L[ℂ] Conj F :=
++  LinearMap.mkContinuous
++    { toFun := fun x => Conj.toConj (A (Conj.ofConj x))
++      map_add' := by
++        intro x y
++        apply Conj.ofConj_injective
++        simp
++      map_smul' := by
++        intro c x
++        apply Conj.ofConj_injective
++        simp [map_smul] }
++    ‖A‖
++    (by
++      intro x
++      change ‖A (Conj.ofConj x)‖ ≤ ‖A‖ * ‖x‖
++      simpa only [Conj.norm_ofConj] using A.le_opNorm (Conj.ofConj x))
++
++@[simp]
++theorem Conj.map_apply (A : E →L[ℂ] F) (x : Conj E) :
++    Conj.map A x = Conj.toConj (A (Conj.ofConj x)) :=
++  rfl
++
++@[simp]
++theorem Conj.map_id :
++    Conj.map (ContinuousLinearMap.id ℂ E) = ContinuousLinearMap.id ℂ (Conj E) := by
++  ext x
++  apply Conj.ofConj_injective
++  simp
++
++@[simp]
++theorem Conj.map_comp (A : E →L[ℂ] F) (B : F →L[ℂ] G) :
++    Conj.map (B ∘L A) = Conj.map B ∘L Conj.map A := by
++  ext x
++  apply Conj.ofConj_injective
++  simp
++
++@[simp]
++theorem Conj.map_adjoint (A : E →L[ℂ] F) :
++    Conj.map A.adjoint = (Conj.map A).adjoint := by
++  apply (ContinuousLinearMap.eq_adjoint_iff
++    (Conj.map A.adjoint) (Conj.map A)).2
++  intro x y
++  -- The inner product on `Conj E` is the *swapped* one, `⟪x, y⟫ = ⟪ofConj y, ofConj x⟫`,
++  -- so the obligation is the `adjoint_inner_right` orientation, not `adjoint_inner_left`.
++  simp only [Conj.inner_def, Conj.map_apply, Conj.ofConj_toConj]
++  exact ContinuousLinearMap.adjoint_inner_right A _ _
++
++/-- The norm on `Conj E` is the norm on `E`; `toConj` is the identity on vectors. -/
++@[simp]
++theorem Conj.norm_toConj (x : E) : ‖Conj.toConj x‖ = ‖x‖ := rfl
++
++private theorem Conj.norm_map_le (A : E →L[ℂ] F) : ‖Conj.map A‖ ≤ ‖A‖ := by
++  apply (Conj.map A).opNorm_le_bound (norm_nonneg A)
++  intro x
++  change ‖A (Conj.ofConj x)‖ ≤ ‖A‖ * ‖x‖
++  simpa only [Conj.norm_ofConj] using A.le_opNorm (Conj.ofConj x)
++
++@[simp]
++theorem Conj.norm_map (A : E →L[ℂ] F) : ‖Conj.map A‖ = ‖A‖ := by
++  refine le_antisymm (Conj.norm_map_le A) ?_
++  -- The reverse bound is proved directly.  Passing through `Conj.map (Conj.map A)` is
++  -- not available: that operator has type `Conj (Conj E) →L[ℂ] Conj (Conj F)`, which is
++  -- not the type of `A`, so no congruence relates their norms.
++  apply A.opNorm_le_bound (norm_nonneg _)
++  intro x
++  simpa only [Conj.map_apply, Conj.ofConj_toConj, Conj.norm_toConj]
++    using (Conj.map A).le_opNorm (Conj.toConj x)
++
++/-- Fixing the second factor of the pure tensor gives a bounded map in the
++first factor. -/
++def rightTensor (x : F) : E →L[ℂ] Space E F :=
++  (ContinuousLinearMap.apply ℂ (Space E F) (Conj.toConj x)) ∘L
++    HilbertTensor.tmulL ℂ E (Conj F)
++
++@[simp]
++theorem rightTensor_apply (x : F) (u : E) :
++    rightTensor x u = u ⊗̂ₜ[ℂ] Conj.toConj x :=
++  rfl
++
++@[simp]
++theorem rightTensor_add (x y : F) :
++    rightTensor (E := E) (x + y) =
++      rightTensor (E := E) x + rightTensor (E := E) y := by
++  ext u
++  simp only [rightTensor_apply, ContinuousLinearMap.add_apply]
++  -- `Conj.toConj` is the identity on vectors, so `toConj (x + y)` is already
++  -- `toConj x + toConj y`; `simp` cannot see this and leaves the sum unsplit.
++  exact HilbertTensor.tmul_add u (Conj.toConj x) (Conj.toConj y)
++
++private theorem toConj_smul (c : ℂ) (x : F) :
++    Conj.toConj (c • x) = starRingEnd ℂ c • Conj.toConj x := by
++  apply Conj.ofConj_injective
++  simp
++
++@[simp]
++theorem rightTensor_smul (c : ℂ) (x : F) :
++    rightTensor (E := E) (c • x) =
++      starRingEnd ℂ c • rightTensor (E := E) x := by
++  ext u
++  simp [rightTensor_apply, toConj_smul, HilbertTensor.tmul_smul]
++
++/-- The fixed-right-tensor map has norm at most the norm of the fixed vector. -/
++theorem norm_rightTensor_le (x : F) : ‖rightTensor (E := E) x‖ ≤ ‖x‖ := by
++  apply (rightTensor x).opNorm_le_bound (norm_nonneg x)
++  intro u
++  rw [rightTensor_apply, HilbertTensor.norm_tmul, Conj.norm_toConj]
++  exact le_of_eq (mul_comm _ _)
++
++/-- The operator represented by a Hilbert tensor. -/
++def toOperatorLinear (z : Space E F) : F →ₗ[ℂ] E where
++  toFun := fun x => (rightTensor x).adjoint z
++  map_add' := by
++    intro x y
++    rw [rightTensor_add (E := E)]
++    simp
++  map_smul' := by
++    intro c x
++    rw [rightTensor_smul (E := E)]
++    -- `adjoint` is conjugate-linear, so the conjugated scalar comes back unconjugated.
++    rw [map_smulₛₗ ContinuousLinearMap.adjoint]
++    simp
++
++/-- The defining estimate for the tensor/operator map, stated on the underlying
++linear map so that both the bundled operator and its norm bound can cite it. -/
++private theorem norm_toOperatorLinear_le (z : Space E F) (x : F) :
++    ‖toOperatorLinear z x‖ ≤ ‖z‖ * ‖x‖ :=
++  calc
++    ‖(rightTensor x).adjoint z‖
++        ≤ ‖(rightTensor x).adjoint‖ * ‖z‖ :=
++      (rightTensor x).adjoint.le_opNorm z
++    _ = ‖rightTensor x‖ * ‖z‖ := by
++      rw [ContinuousLinearMap.adjoint.norm_map]
++    _ ≤ ‖x‖ * ‖z‖ :=
++      mul_le_mul_of_nonneg_right (norm_rightTensor_le (E := E) x)
++        (norm_nonneg z)
++    _ = ‖z‖ * ‖x‖ := mul_comm _ _
++
++/-- The tensor/operator map is bounded from the Hilbert tensor norm to the
++ordinary operator norm. -/
++def toOperator (z : Space E F) : F →L[ℂ] E :=
++  LinearMap.mkContinuous (toOperatorLinear z) ‖z‖ (norm_toOperatorLinear_le z)
++
++@[simp]
++theorem toOperator_apply (z : Space E F) (x : F) :
++    toOperator z x = (rightTensor x).adjoint z :=
++  rfl
++
++/-- The represented operator has operator norm at most the tensor norm. -/
++theorem norm_toOperator_le (z : Space E F) : ‖toOperator z‖ ≤ ‖z‖ :=
++  LinearMap.mkContinuous_norm_le (toOperatorLinear z) (norm_nonneg z)
++    (norm_toOperatorLinear_le z)
++
++/-- The tensor/operator map, bundled as a contraction. -/
++def toOperatorL : Space E F →L[ℂ] (F →L[ℂ] E) :=
++  LinearMap.mkContinuous
++    { toFun := toOperator
++      map_add' := by
++        intro z w
++        ext x
++        simp [toOperator_apply]
++      map_smul' := by
++        intro c z
++        ext x
++        simp [toOperator_apply] }
++    1
++    (by
++      intro z
++      rw [one_mul]
++      -- Bounding by `‖toOperator z‖` here would assume the conclusion; the honest
++      -- bound is the `mkContinuous` constant `‖z‖`.
++      exact norm_toOperator_le z)
++
++@[simp]
++theorem toOperatorL_apply (z : Space E F) :
++    toOperatorL z = toOperator z :=
++  rfl
++
++/-! The tensor/operator map is linear.  These are stated separately because
++`toOperator` is the unbundled map, so `map_add` and friends do not apply to it
++directly; the span inductions below need them as `simp` lemmas. -/
++
++@[simp]
++theorem toOperator_zero : toOperator (0 : Space E F) = 0 := by
++  simpa only [toOperatorL_apply] using map_zero (toOperatorL (E := E) (F := F))
++
++@[simp]
++theorem toOperator_add (z w : Space E F) :
++    toOperator (z + w) = toOperator z + toOperator w := by
++  simpa only [toOperatorL_apply] using map_add toOperatorL z w
++
++@[simp]
++theorem toOperator_sub (z w : Space E F) :
++    toOperator (z - w) = toOperator z - toOperator w := by
++  simpa only [toOperatorL_apply] using map_sub toOperatorL z w
++
++@[simp]
++theorem toOperator_smul (c : ℂ) (z : Space E F) :
++    toOperator (c • z) = c • toOperator z := by
++  simpa only [toOperatorL_apply] using map_smul toOperatorL c z
++
++@[simp]
++theorem toOperator_sum {ι : Type*} (s : Finset ι) (f : ι → Space E F) :
++    toOperator (∑ i ∈ s, f i) = ∑ i ∈ s, toOperator (f i) := by
++  simpa only [toOperatorL_apply] using map_sum toOperatorL f s
++
++/-- Pure tensors represent the corresponding rank-one operators. -/
++theorem toOperator_tmul (u : E) (v : F) :
++    toOperator (u ⊗̂ₜ[ℂ] Conj.toConj v) =
++      InnerProductSpace.rankOne ℂ u v := by
++  ext x
++  refine ext_inner_right ℂ fun w => ?_
++  rw [toOperator_apply, ContinuousLinearMap.adjoint_inner_left]
++  simp [rightTensor_apply, HilbertTensor.inner_tmul_tmul,
++    Conj.inner_def, InnerProductSpace.rankOne_apply,
++    inner_smul_left, inner_conj_symm]
++  ring
++
++/-- The pure-tensor formula with the second factor left in the conjugate space.
++The span inductions below produce this shape, and substituting the conjugate
++variable is not stable: `Conj.toConj_ofConj` is a `simp` lemma, so any rewrite
++introducing `toConj (ofConj _)` is immediately undone. -/
++@[simp]
++theorem toOperator_tmul' (u : E) (cv : Conj F) :
++    toOperator (u ⊗̂ₜ[ℂ] cv) =
++      InnerProductSpace.rankOne ℂ u (Conj.ofConj cv) :=
++  toOperator_tmul u (Conj.ofConj cv)
++
++/-- The conjugate transport commutes with taking adjoints, in the form the
++span inductions need: `simp` normalises towards `(Conj.map B).adjoint`, so the
++`Conj.map B.adjoint` orientation is not available to it. -/
++@[simp]
++theorem Conj.ofConj_adjoint_map (B : E →L[ℂ] F) (cv : Conj F) :
++    Conj.ofConj ((Conj.map B).adjoint cv) = B.adjoint (Conj.ofConj cv) := by
++  rw [← Conj.map_adjoint]
++  rfl
++
++private theorem inner_tmul_eq_zero_of_toOperator_eq_zero
++    {z : Space E F} (hz : toOperator z = 0) (u : E) (v : F) :
++    ⟪u ⊗̂ₜ[ℂ] Conj.toConj v, z⟫_ℂ = 0 := by
++  have hx : toOperator z v = 0 := by rw [hz]; rfl
++  calc ⟪u ⊗̂ₜ[ℂ] Conj.toConj v, z⟫_ℂ
++      = ⟪rightTensor v u, z⟫_ℂ := rfl
++    _ = ⟪u, (rightTensor v).adjoint z⟫_ℂ :=
++        (ContinuousLinearMap.adjoint_inner_right _ _ _).symm
++    _ = ⟪u, toOperator z v⟫_ℂ := rfl
++    _ = 0 := by rw [hx, inner_zero_right]
++
++/-- The tensor/operator representation is faithful. -/
++theorem toOperator_injective :
++    Function.Injective (toOperator (E := E) (F := F)) := by
++  intro z w hzw
++  apply sub_eq_zero.mp
++  have hzero : toOperator (z - w) = 0 := by
++    have h : toOperatorL (z - w) = 0 := by
++      rw [map_sub, toOperatorL_apply, toOperatorL_apply, hzw, sub_self]
++    simpa only [toOperatorL_apply] using h
++  let K : Submodule ℂ (Space E F) :=
++    Submodule.span ℂ (Set.range fun p : E × Conj F => p.1 ⊗̂ₜ[ℂ] p.2)
++  have hzorth : z - w ∈ Kᗮ := by
++    rw [Submodule.mem_orthogonal]
++    intro t ht
++    induction ht using Submodule.span_induction with
++    | mem t ht =>
++        rcases ht with ⟨⟨u, cv⟩, rfl⟩
++        rw [← Conj.toConj_ofConj cv]
++        exact inner_tmul_eq_zero_of_toOperator_eq_zero hzero u (Conj.ofConj cv)
++    | zero => simp
++    -- `span_induction` binds the *membership* proofs before the induction
++    -- hypotheses; naming only two binders captures the memberships and leaves
++    -- the hypotheses inaccessible.
++    | add x y _ _ hx hy => simp [inner_add_left, hx, hy]
++    | smul c x _ hx => simp [inner_smul_left, hx]
++  have hzclosure : z - w ∈ K.topologicalClosureᗮ := by
++    rwa [Submodule.orthogonal_closure]
++  have hKtop : K.topologicalClosure = ⊤ :=
++    HilbertTensor.span_tmul_topologicalClosure
++  rw [hKtop, Submodule.top_orthogonal_eq_bot] at hzclosure
++  exact hzclosure
++
++/-- The tensor/operator map is an injective bounded linear map. -/
++def toOperatorEmbedding : Space E F →L[ℂ] (F →L[ℂ] E) :=
++  toOperatorL
++
++/-- Left tensor action is left composition of represented operators. -/
++theorem toOperator_mapL_left
++    (A : E →L[ℂ] G) (z : Space E F) :
++    toOperator (HilbertTensor.mapL A (ContinuousLinearMap.id ℂ (Conj F)) z) =
++      A ∘L toOperator z := by
++  -- `Dense.induction` is `elab_as_elim`, so the motive has to be supplied explicitly;
++  -- `apply` cannot abstract `z` out of the goal on its own.
++  refine HilbertTensor.dense_span_tmul.induction
++    (P := fun t => toOperator (HilbertTensor.mapL A
++      (ContinuousLinearMap.id ℂ (Conj F)) t) = A ∘L toOperator t) ?_ ?_ z
++  · intro t ht
++    induction ht using Submodule.span_induction with
++    | mem t ht =>
++        rcases ht with ⟨⟨u, cv⟩, rfl⟩
++        -- Substitute rather than rewrite: `Conj.toConj_ofConj` is itself a `simp`
++        -- lemma, so `rw [← Conj.toConj_ofConj cv]` is undone by the `simp` below.
++        simp [HilbertTensor.mapL_tmul, toOperator_tmul',
++          InnerProductSpace.comp_rankOne]
++    | zero => simp
++    | add x y _ _ hx hy =>
++        simp only [map_add, toOperator_add, hx, hy, ContinuousLinearMap.comp_add]
++    | smul c x _ hx =>
++        simp only [map_smul, toOperator_smul, hx, ContinuousLinearMap.comp_smul]
++  · exact isClosed_eq
++      (toOperatorL.comp
++        (HilbertTensor.mapL A (ContinuousLinearMap.id ℂ (Conj F)))).continuous
++      ((ContinuousLinearMap.compL ℂ F E G A).comp toOperatorL).continuous
++
++/-- Right tensor action by the conjugate adjoint is right composition of
++represented operators. -/
++theorem toOperator_mapL_right
++    (B : G →L[ℂ] F) (z : Space E F) :
++    toOperator (HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
++      (Conj.map B.adjoint) z) =
++      toOperator z ∘L B := by
++  refine HilbertTensor.dense_span_tmul.induction
++    (P := fun t => toOperator (HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
++      (Conj.map B.adjoint) t) = toOperator t ∘L B) ?_ ?_ z
++  · intro t ht
++    induction ht using Submodule.span_induction with
++    | mem t ht =>
++        rcases ht with ⟨⟨u, cv⟩, rfl⟩
++        simp [HilbertTensor.mapL_tmul, toOperator_tmul',
++          InnerProductSpace.rankOne_comp, Conj.inner_def]
++    | zero => simp
++    | add x y _ _ hx hy =>
++        simp only [map_add, toOperator_add, hx, hy, ContinuousLinearMap.add_comp]
++    | smul c x _ hx =>
++        simp only [map_smul, toOperator_smul, hx, ContinuousLinearMap.smul_comp]
++  · -- Right composition by `B` as a bounded operator: `compL` composes on the left,
++    -- so the flipped form is what sends `T` to `T ∘L B`.
++    exact isClosed_eq
++      (toOperatorL.comp (HilbertTensor.mapL
++        (ContinuousLinearMap.id ℂ E) (Conj.map B.adjoint))).continuous
++      (((ContinuousLinearMap.compL ℂ G F E).flip B).comp toOperatorL).continuous
++
++/-- A finite sum of pure tensors represents a finite-rank operator. -/
++theorem rank_toOperator_sum_tmul_le
++    {ι : Type*} (s : Finset ι) (u : ι → E) (v : ι → F) :
++    (toOperator (∑ i ∈ s, u i ⊗̂ₜ[ℂ] Conj.toConj (v i))).rank ≤ s.card := by
++  classical
++  have happly : ∀ x : F,
++      toOperator (∑ i ∈ s, u i ⊗̂ₜ[ℂ] Conj.toConj (v i)) x
++        = ∑ i ∈ s, ⟪v i, x⟫_ℂ • u i := by
++    intro x
++    rw [toOperator_sum]
++    simp
++  have hrange :
++      LinearMap.range
++          (toOperator (∑ i ∈ s, u i ⊗̂ₜ[ℂ] Conj.toConj (v i))).toLinearMap ≤
++        Submodule.span ℂ ((s.image u : Finset E) : Set E) := by
++    rintro _ ⟨x, rfl⟩
++    change toOperator (∑ i ∈ s, u i ⊗̂ₜ[ℂ] Conj.toConj (v i)) x ∈ _
++    rw [happly]
++    exact Submodule.sum_mem _ fun i hi =>
++      Submodule.smul_mem _ _
++        (Submodule.subset_span (Finset.mem_coe.2 (Finset.mem_image_of_mem u hi)))
++  calc (toOperator (∑ i ∈ s, u i ⊗̂ₜ[ℂ] Conj.toConj (v i))).rank
++      ≤ Module.rank ℂ (Submodule.span ℂ ((s.image u : Finset E) : Set E)) :=
++        Submodule.rank_mono hrange
++    _ ≤ ((s.image u).card : Cardinal) := rank_span_finset_le _
++    _ ≤ (s.card : Cardinal) := by exact_mod_cast Finset.card_image_le
++
++
++/-! ## Column expansion in an arbitrary Hilbert basis -/
++
++/-- Tensoring on the right with a fixed unit vector of the conjugate space is a
++linear isometry.  Packaging the columns this way makes them an
++`OrthogonalFamily`, which is the interface Mathlib offers for Pythagoras and for
++square-summability. -/
++private def tmulRightₗᵢ (w : Conj F) (hw : ‖w‖ = 1) : E →ₗᵢ[ℂ] Space E F where
++  toFun u := u ⊗̂ₜ[ℂ] w
++  map_add' u u' := HilbertTensor.add_tmul u u' w
++  map_smul' c u := HilbertTensor.smul_tmul c u w
++  norm_map' u := by
++    -- The structure-instance field is still the raw anonymous constructor here, so
++    -- the pure-tensor norm lemma has to be exposed by a definitional change first.
++    change ‖u ⊗̂ₜ[ℂ] w‖ = ‖u‖
++    rw [HilbertTensor.norm_tmul, hw, mul_one]
++
++@[simp]
++private theorem tmulRightₗᵢ_apply (w : Conj F) (hw : ‖w‖ = 1) (u : E) :
++    tmulRightₗᵢ (E := E) w hw u = u ⊗̂ₜ[ℂ] w :=
++  rfl
++
++/-- The `i`th column embedding of a Hilbert basis: tensoring on the right with
++the `i`th conjugate basis vector. -/
++private def columnEmbedding {ι : Type*} (b : HilbertBasis ι ℂ F) (i : ι) :
++    E →ₗᵢ[ℂ] Space E F :=
++  tmulRightₗᵢ (Conj.toConj (b i)) (by rw [Conj.norm_toConj]; exact b.orthonormal.1 i)
++
++private theorem orthogonalFamily_columnEmbedding {ι : Type*} (b : HilbertBasis ι ℂ F) :
++    OrthogonalFamily ℂ (fun _ : ι => E) (columnEmbedding (E := E) b) := by
++  intro i j hij x y
++  -- The inner product on `Conj F` is the swapped one, so the surviving factor is
++  -- `⟪b j, b i⟫`, not `⟪b i, b j⟫`.
++  simp [columnEmbedding, HilbertTensor.inner_tmul_tmul, Conj.inner_def,
++    b.orthonormal.inner_eq_zero hij.symm]
++
++/-- The `i`th orthogonal column tensor of `z`. -/
++def columnTensor {ι : Type*} (b : HilbertBasis ι ℂ F)
++    (z : Space E F) (i : ι) : Space E F :=
++  toOperator z (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i)
++
++private theorem columnTensor_eq {ι : Type*} (b : HilbertBasis ι ℂ F)
++    (z : Space E F) (i : ι) :
++    columnTensor b z i = columnEmbedding b i (toOperator z (b i)) :=
++  rfl
++
++/-- Distinct column tensors are orthogonal. -/
++theorem inner_columnTensor_eq_zero {ι : Type*} (b : HilbertBasis ι ℂ F)
++    (z : Space E F) {i j : ι} (hij : i ≠ j) :
++    ⟪columnTensor b z i, columnTensor b z j⟫_ℂ = 0 := by
++  simp [columnTensor, HilbertTensor.inner_tmul_tmul, Conj.inner_def,
++    b.orthonormal.inner_eq_zero hij.symm]
++
++/-- Pythagoras for the finite partial sums of the column expansion. -/
++theorem norm_sum_columnTensor_sq {ι : Type*} (b : HilbertBasis ι ℂ F)
++    (z : Space E F) (s : Finset ι) :
++    ‖∑ i ∈ s, columnTensor b z i‖ ^ 2 = ∑ i ∈ s, ‖toOperator z (b i)‖ ^ 2 := by
++  simpa only [← columnTensor_eq] using
++    (orthogonalFamily_columnEmbedding (E := E) b).norm_sum
++      (fun i => toOperator z (b i)) s
++
++/-- Pairing a pure tensor against `z` on the left evaluates the represented
++operator. -/
++private theorem inner_tmul_left_eq (u : E) (v : F) (z : Space E F) :
++    ⟪u ⊗̂ₜ[ℂ] Conj.toConj v, z⟫_ℂ = ⟪u, toOperator z v⟫_ℂ := by
++  rw [toOperator_apply]
++  exact (ContinuousLinearMap.adjoint_inner_right (rightTensor v) u z).symm
++
++/-- Bessel's inequality for the column expansion: every finite partial sum of
++column norms is bounded by the tensor norm. -/
++theorem sum_column_norm_sq_le {ι : Type*} (b : HilbertBasis ι ℂ F)
++    (z : Space E F) (s : Finset ι) :
++    ∑ i ∈ s, ‖toOperator z (b i)‖ ^ 2 ≤ ‖z‖ ^ 2 := by
++  have hpy := norm_sum_columnTensor_sq b z s
++  have hnonneg : (0 : ℝ) ≤ ∑ i ∈ s, ‖toOperator z (b i)‖ ^ 2 :=
++    Finset.sum_nonneg fun _ _ => sq_nonneg _
++  -- The partial sum pairs with `z` to exactly its own squared norm.
++  have hinner : ⟪∑ i ∈ s, columnTensor b z i, z⟫_ℂ
++      = ((∑ i ∈ s, ‖toOperator z (b i)‖ ^ 2 : ℝ) : ℂ) := by
++    rw [sum_inner]
++    push_cast
++    refine Finset.sum_congr rfl fun i _ => ?_
++    rw [columnTensor, inner_tmul_left_eq]
++    exact inner_self_eq_norm_sq_to_K (𝕜 := ℂ) (toOperator z (b i))
++  have hcs : ‖⟪∑ i ∈ s, columnTensor b z i, z⟫_ℂ‖
++      ≤ ‖∑ i ∈ s, columnTensor b z i‖ * ‖z‖ := norm_inner_le_norm (𝕜 := ℂ) _ _
++  rw [hinner, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hnonneg] at hcs
++  -- Cauchy--Schwarz plus Pythagoras bounds the partial sum by `‖z‖`.
++  have hle : ‖∑ i ∈ s, columnTensor b z i‖ ≤ ‖z‖ := by
++    rcases eq_or_lt_of_le (norm_nonneg (∑ i ∈ s, columnTensor b z i)) with h | h
++    · rw [← h]; exact norm_nonneg z
++    · nlinarith [hcs, hpy, h]
++  nlinarith [hpy, hle, norm_nonneg (∑ i ∈ s, columnTensor b z i), norm_nonneg z]
++
++/-- The columns of a Hilbert tensor are square-summable. -/
++theorem summable_column_norm_sq {ι : Type*} (b : HilbertBasis ι ℂ F)
++    (z : Space E F) : Summable fun i => ‖toOperator z (b i)‖ ^ 2 :=
++  summable_of_sum_le (fun _ => sq_nonneg _) (sum_column_norm_sq_le b z)
++
++/-- The column tensors resolve the identity on `E tensor Conj F`. -/
++theorem hasSum_columnTensor {ι : Type*} (b : HilbertBasis ι ℂ F)
++    (z : Space E F) :
++    HasSum (columnTensor b z) z := by
++  have hsummable : Summable (columnTensor b z) := by
++    simpa only [← columnTensor_eq] using
++      ((orthogonalFamily_columnEmbedding (E := E) b).summable_iff_norm_sq_summable
++        (fun i => toOperator z (b i))).2 (summable_column_norm_sq b z)
++  obtain ⟨w, hw⟩ := hsummable
++  -- The limit is forced to be `z` because the two represented operators agree on
++  -- the basis, hence everywhere.
++  have hkey : toOperator w = toOperator z := by
++    ext x
++    have hcol : ∀ i : ι,
++        (rightTensor x).adjoint (columnTensor b z i)
++          = ⟪b i, x⟫_ℂ • toOperator z (b i) := by
++      intro i
++      rw [columnTensor, ← toOperator_apply, toOperator_tmul,
++        InnerProductSpace.rankOne_apply]
++    -- The limit of the mapped net is `(rightTensor x).adjoint w`, which is the
++    -- unfolded form of `toOperator w x`; naming it keeps `simp` from rewriting
++    -- the summands and the limit with the same rule in different directions.
++    have hval : (rightTensor x).adjoint w = toOperator w x := rfl
++    have h1 : HasSum (fun i => ⟪b i, x⟫_ℂ • toOperator z (b i))
++        (toOperator w x) := by
++      simpa only [hcol, hval] using hw.mapL ((rightTensor x).adjoint)
++    have h2 : HasSum (fun i => ⟪b i, x⟫_ℂ • toOperator z (b i))
++        (toOperator z x) := by
++      simpa only [map_smul, b.repr_apply_apply] using
++        (b.hasSum_repr x).mapL (toOperator z)
++    exact h1.unique h2
++  rwa [toOperator_injective hkey] at hw
++
++/-- Parseval for the column decomposition of a tensor. -/
++theorem norm_sq_eq_tsum_column_norm_sq {ι : Type*}
++    (b : HilbertBasis ι ℂ F) (z : Space E F) :
++    ‖z‖ ^ 2 = ∑' i, ‖toOperator z (b i)‖ ^ 2 := by
++  have hlim := ((continuous_norm.pow 2).tendsto z).comp (hasSum_columnTensor b z)
++  have h : HasSum (fun i => ‖toOperator z (b i)‖ ^ 2) (‖z‖ ^ 2) :=
++    hlim.congr fun s => norm_sum_columnTensor_sq b z s
++  exact h.tsum_eq.symm
++
++/-- A basis-square-summable operator determines a tensor by its column series. -/
++noncomputable def ofOperator {ι : Type*} (b : HilbertBasis ι ℂ F)
++    (A : F →L[ℂ] E) (hA : Summable fun i => ‖A (b i)‖ ^ 2) : Space E F :=
++  ∑' i, A (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i)
++
++private theorem summable_columnSeries {ι : Type*} (b : HilbertBasis ι ℂ F)
++    (A : F →L[ℂ] E) (hA : Summable fun i => ‖A (b i)‖ ^ 2) :
++    Summable fun i => A (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i) :=
++  ((orthogonalFamily_columnEmbedding (E := E) b).summable_iff_norm_sq_summable
++    (fun i => A (b i))).2 hA
++
++/-- The column-series tensor represents the original operator. -/
++theorem toOperator_ofOperator {ι : Type*} (b : HilbertBasis ι ℂ F)
++    (A : F →L[ℂ] E) (hA : Summable fun i => ‖A (b i)‖ ^ 2) :
++    toOperator (ofOperator b A hA) = A := by
++  have hseries := summable_columnSeries b A hA
++  ext x
++  have hcol : ∀ i : ι,
++      (rightTensor x).adjoint (A (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i))
++        = ⟪b i, x⟫_ℂ • A (b i) := by
++    intro i
++    rw [← toOperator_apply, toOperator_tmul, InnerProductSpace.rankOne_apply]
++  have hval : (rightTensor x).adjoint (∑' i, A (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i))
++      = toOperator (ofOperator b A hA) x := rfl
++  have h1 : HasSum (fun i => ⟪b i, x⟫_ℂ • A (b i))
++      (toOperator (ofOperator b A hA) x) := by
++    simpa only [hcol, hval] using hseries.hasSum.mapL ((rightTensor x).adjoint)
++  have h2 : HasSum (fun i => ⟪b i, x⟫_ℂ • A (b i)) (A x) := by
++    simpa only [map_smul, b.repr_apply_apply] using A.hasSum (b.hasSum_repr x)
++  exact h1.unique h2
++
++/-- The tensor reconstructed from the columns of a represented operator is the
++original tensor. -/
++theorem ofOperator_toOperator {ι : Type*} (b : HilbertBasis ι ℂ F)
++    (z : Space E F) :
++    ofOperator b (toOperator z) (summable_column_norm_sq b z) = z := by
++  apply toOperator_injective
++  rw [toOperator_ofOperator]
++
++/-- The Hilbert tensor norm is exactly the basis Hilbert--Schmidt norm. -/
++theorem norm_ofOperator_sq {ι : Type*} (b : HilbertBasis ι ℂ F)
++    (A : F →L[ℂ] E) (hA : Summable fun i => ‖A (b i)‖ ^ 2) :
++    ‖ofOperator b A hA‖ ^ 2 = ∑' i, ‖A (b i)‖ ^ 2 := by
++  rw [norm_sq_eq_tsum_column_norm_sq b, toOperator_ofOperator]
++
++/-- Basis-square-summability is equivalent to representability by a unique
++Hilbert tensor. -/
++theorem existsUnique_tensor_iff_summable_columns {ι : Type*}
++    (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) :
++    (∃! z : Space E F, toOperator z = A) ↔
++      Summable (fun i => ‖A (b i)‖ ^ 2) := by
++  constructor
++  · rintro ⟨z, rfl, _⟩
++    exact summable_column_norm_sq b z
++  · intro hA
++    refine ⟨ofOperator b A hA, toOperator_ofOperator b A hA, ?_⟩
++    intro z hz
++    exact toOperator_injective (hz.trans (toOperator_ofOperator b A hA).symm)
++
++end
++
++end HilbertSchmidtTensor
++end Spectra
+diff -ruN pristine-clean/Spectra/Spaces/Tensor/HilbertSchmidtFlow.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Spaces/Tensor/HilbertSchmidtFlow.lean
+--- pristine-clean/Spectra/Spaces/Tensor/HilbertSchmidtFlow.lean	1969-12-31 19:00:00.000000000 -0500
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Spaces/Tensor/HilbertSchmidtFlow.lean	2026-07-29 18:42:27.109313761 -0400
+@@ -0,0 +1,279 @@
++/-
++Copyright (c) 2026 Spectra Formalization Project. All rights reserved.
++Released under Apache 2.0 license as described in the file LICENSE.
++Authors: Jon Crall, OpenAI GPT-5.6 Thinking
++-/
++import Spectra.Spaces.Tensor.HilbertSchmidt
++import Spectra.OneParameterUnitaryGroup.Product
++
++/-!
++# The left-minus-right unitary flow on rectangular Hilbert--Schmidt tensors
++
++For one-parameter unitary groups `U` on `E` and `V` on `F`, the natural flow on
++`E tensor Conj F` is
++
++`z |-> (U(t) tensor conjugate(V(t))) z`.
++
++Under the canonical tensor/operator dictionary this is exactly
++
++`X |-> U(t) X V(-t)`.
++
++Consequently its infinitesimal generator is the Hilbert--Schmidt realization of
++`A X - X B` when `U` and `V` are generated by self-adjoint operators `A` and
++`B`.  This file constructs the bounded group action and proves the exact
++intertwining identity.  The generator-domain identification belongs in the
++closed-operator bridge above this module.
++-/
++
++open InnerProductSpace Complex Filter Topology
++open scoped InnerProductSpace ComplexConjugate
++
++namespace Spectra
++namespace HilbertSchmidtTensor
++
++noncomputable section
++
++universe u v
++
++variable {E : Type u} {F : Type v}
++variable [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
++variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
++
++private theorem mapL_id_id :
++    HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
++      (ContinuousLinearMap.id ℂ (Conj F)) =
++      ContinuousLinearMap.id ℂ (Space E F) := by
++  refine ContinuousLinearMap.ext fun z₀ => ?_
++  -- `Dense.induction` eliminates, so the motive cannot be inferred by `apply`.
++  refine HilbertTensor.dense_span_tmul.induction
++    (P := fun t => HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
++      (ContinuousLinearMap.id ℂ (Conj F)) t =
++      ContinuousLinearMap.id ℂ (Space E F) t) ?_ ?_ z₀
++  · intro z hz
++    induction hz using Submodule.span_induction with
++    | mem z hz =>
++        rcases hz with ⟨⟨x, y⟩, rfl⟩
++        simp [HilbertTensor.mapL_tmul]
++    | zero => simp
++    | add x y _ _ hx hy => simp [hx, hy]
++    | smul c x _ hx => simp [hx]
++  · exact isClosed_eq
++      (HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
++        (ContinuousLinearMap.id ℂ (Conj F))).continuous
++      (ContinuousLinearMap.id ℂ (Space E F)).continuous
++
++private theorem mapL_comp
++    (A₁ A₂ : E →L[ℂ] E) (B₁ B₂ : Conj F →L[ℂ] Conj F) :
++    HilbertTensor.mapL (A₁ ∘L A₂) (B₁ ∘L B₂) =
++      (HilbertTensor.mapL A₁ B₁) ∘L (HilbertTensor.mapL A₂ B₂) := by
++  refine ContinuousLinearMap.ext fun z₀ => ?_
++  refine HilbertTensor.dense_span_tmul.induction
++    (P := fun t => HilbertTensor.mapL (A₁ ∘L A₂) (B₁ ∘L B₂) t =
++      ((HilbertTensor.mapL A₁ B₁) ∘L (HilbertTensor.mapL A₂ B₂)) t) ?_ ?_ z₀
++  · intro z hz
++    induction hz using Submodule.span_induction with
++    | mem z hz =>
++        rcases hz with ⟨⟨x, y⟩, rfl⟩
++        simp [HilbertTensor.mapL_tmul]
++    | zero => simp
++    | add x y _ _ hx hy => simp [hx, hy]
++    | smul c x _ hx => simp [hx]
++  · exact isClosed_eq
++      (HilbertTensor.mapL (A₁ ∘L A₂) (B₁ ∘L B₂)).continuous
++      ((HilbertTensor.mapL A₁ B₁) ∘L (HilbertTensor.mapL A₂ B₂)).continuous
++
++private theorem mapL_unitary
++    (A : E →L[ℂ] E) (B : Conj F →L[ℂ] Conj F)
++    (hA : ∀ x y, ⟪A x, A y⟫_ℂ = ⟪x, y⟫_ℂ)
++    (hB : ∀ x y, ⟪B x, B y⟫_ℂ = ⟪x, y⟫_ℂ) :
++    ∀ z w : Space E F,
++      ⟪HilbertTensor.mapL A B z, HilbertTensor.mapL A B w⟫_ℂ =
++        ⟪z, w⟫_ℂ := by
++  intro z
++  refine HilbertTensor.dense_span_tmul.induction
++    (P := fun z => ∀ w : Space E F,
++      ⟪HilbertTensor.mapL A B z, HilbertTensor.mapL A B w⟫_ℂ = ⟪z, w⟫_ℂ) ?_ ?_ z
++  · intro z hz
++    induction hz using Submodule.span_induction with
++    | mem z hz =>
++        rcases hz with ⟨⟨x, y⟩, rfl⟩
++        intro w
++        refine HilbertTensor.dense_span_tmul.induction
++          (P := fun w =>
++            ⟪HilbertTensor.mapL A B (HilbertTensor.tmul x y),
++              HilbertTensor.mapL A B w⟫_ℂ
++              = ⟪HilbertTensor.tmul x y, w⟫_ℂ) ?_ ?_ w
++        · intro w hw
++          induction hw using Submodule.span_induction with
++          | mem w hw =>
++              rcases hw with ⟨⟨x', y'⟩, rfl⟩
++              simp [HilbertTensor.mapL_tmul, HilbertTensor.inner_tmul_tmul,
++                hA, hB]
++          | zero => simp
++          -- Restrict the simp set: the default one rewrites the fixed pure
++          -- tensor through `mapL_tmul`, after which the induction hypotheses
++          -- no longer match the goal.
++          | add p q _ _ hp hq =>
++              simp only [map_add, inner_add_right, hp, hq]
++          | smul c p _ hp =>
++              simp only [map_smul, inner_smul_right, hp]
++        · exact isClosed_eq
++            (continuous_const.inner (HilbertTensor.mapL A B).continuous)
++            (continuous_const.inner continuous_id)
++    | zero => simp
++    | add p q _ _ hp hq =>
++        intro w
++        simp [inner_add_left, hp w, hq w]
++    | smul c p _ hp =>
++        intro w
++        simp [inner_smul_left, hp w]
++  · -- The property is a `forall` over `w`, hence an intersection of closed sets.
++    simp only [Set.setOf_forall]
++    exact isClosed_iInter fun w => isClosed_eq
++      ((HilbertTensor.mapL A B).continuous.inner continuous_const)
++      (continuous_id.inner continuous_const)
++
++private theorem continuous_mapL_orbit
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    (z : Space E F) :
++    Continuous fun t : ℝ =>
++      HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) z := by
++  -- The orbit map is a contraction uniformly in the parameter.
++  have hnorm : ∀ t : ℝ,
++      ‖HilbertTensor.mapL (U.U t) (Conj.map (V.U t))‖ ≤ 1 := by
++    intro t
++    rw [HilbertTensor.norm_mapL, Conj.norm_map]
++    have hU : ‖U.U t‖ ≤ 1 := by
++      refine (U.U t).opNorm_le_bound zero_le_one fun x => ?_
++      rw [one_mul, U.norm_preserving t x]
++    have hV : ‖V.U t‖ ≤ 1 := by
++      refine (V.U t).opNorm_le_bound zero_le_one fun x => ?_
++      rw [one_mul, V.norm_preserving t x]
++    calc ‖U.U t‖ * ‖V.U t‖ ≤ 1 * 1 :=
++          mul_le_mul hU hV (norm_nonneg _) zero_le_one
++      _ = 1 := one_mul 1
++  -- Continuity holds on the span of pure tensors.
++  have hspan : ∀ y ∈ Submodule.span ℂ
++      (Set.range fun p : E × Conj F => HilbertTensor.tmul p.1 p.2),
++      Continuous fun t : ℝ =>
++        HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) y := by
++    intro y hy
++    induction hy using Submodule.span_induction with
++    | mem y hymem =>
++        rcases hymem with ⟨⟨x, cy⟩, rfl⟩
++        have hx := U.strong_continuous x
++        have hvy := V.strong_continuous (Conj.ofConj cy)
++        have hcy : Continuous fun t => Conj.map (V.U t) cy := by
++          -- `Conj F` is a type synonym carrying the same topology and
++          -- `Conj.map` acts as the underlying operator, so this is that map.
++          exact hvy
++        -- `continuous₂` is continuity of the uncurried map, so the two
++        -- coordinates must be paired before composing.
++        simpa [HilbertTensor.mapL_tmul, Function.comp_def] using
++          (HilbertTensor.tmulL ℂ E (Conj F)).continuous₂.comp (hx.prodMk hcy)
++    | zero => simpa using continuous_const
++    -- State the target shape explicitly: otherwise the pointwise operation is
++    -- read at the function level and the two forms do not match syntactically.
++    | add p q _ _ hp hq =>
++        have hsum : Continuous fun t : ℝ =>
++            HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) p
++              + HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) q := hp.add hq
++        simpa [map_add] using hsum
++    | smul c p _ hp =>
++        have hsmul : Continuous fun t : ℝ =>
++            c • HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) p :=
++          hp.const_smul c
++        simpa [map_smul] using hsmul
++  -- A vector of the whole space is approximated by one of the span, and the
++  -- uniform contraction bound turns that into a uniform approximation of the
++  -- orbit maps.  Closedness of the continuity locus is not available as a
++  -- lemma, so it is obtained this way instead.
++  refine continuous_of_uniform_approx_of_continuous fun u hu => ?_
++  obtain ⟨ε, hε, hsub⟩ := Metric.mem_uniformity_dist.mp hu
++  obtain ⟨y, hy, hdist⟩ :=
++    Metric.mem_closure_iff.mp (HilbertTensor.dense_span_tmul z) ε hε
++  refine ⟨fun t => HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) y,
++    hspan y hy, fun t => hsub ?_⟩
++  have hle : ‖HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) z
++      - HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) y‖ ≤ ‖z - y‖ := by
++    rw [← map_sub]
++    calc ‖HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) (z - y)‖
++        ≤ ‖HilbertTensor.mapL (U.U t) (Conj.map (V.U t))‖ * ‖z - y‖ :=
++          ContinuousLinearMap.le_opNorm _ _
++      _ ≤ 1 * ‖z - y‖ :=
++          mul_le_mul_of_nonneg_right (hnorm t) (norm_nonneg _)
++      _ = ‖z - y‖ := one_mul _
++  calc dist (HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) z)
++        (HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) y)
++      = ‖HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) z
++        - HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) y‖ := dist_eq_norm _ _
++    _ ≤ ‖z - y‖ := hle
++    _ = dist z y := (dist_eq_norm _ _).symm
++    _ < ε := hdist
++
++/-- The canonical left-minus-right flow on rectangular Hilbert--Schmidt tensors. -/
++noncomputable def sylvesterGroup
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F)) :
++    OneParameterUnitaryGroup (H := Space E F) where
++  U t := HilbertTensor.mapL (U.U t) (Conj.map (V.U t))
++  unitary t := mapL_unitary (U.U t) (Conj.map (V.U t))
++    (U.unitary t) (by
++      intro x y
++      -- The conjugate inner product is the swapped one, so the obligation is
++      -- unitarity at the arguments in the opposite order.
++      simp only [Conj.inner_def, Conj.map_apply, Conj.ofConj_toConj]
++      exact V.unitary t (Conj.ofConj y) (Conj.ofConj x))
++  group_law s t := by
++    rw [U.group_law, V.group_law, Conj.map_comp, mapL_comp]
++  identity := by
++    rw [U.identity, V.identity, Conj.map_id, mapL_id_id]
++  strong_continuous := continuous_mapL_orbit U V
++
++@[simp]
++theorem sylvesterGroup_apply
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    (t : ℝ) (z : Space E F) :
++    (sylvesterGroup U V).U t z =
++      HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) z :=
++  rfl
++
++/-- Under the tensor/operator dictionary the tensor flow is precisely
++`X |-> U(t) X V(-t)`. -/
++theorem toOperator_sylvesterGroup
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    (t : ℝ) (z : Space E F) :
++    toOperator ((sylvesterGroup U V).U t z) =
++      U.U t ∘L toOperator z ∘L V.U (-t) := by
++  rw [sylvesterGroup_apply]
++  calc
++    toOperator (HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) z)
++        = U.U t ∘L
++            toOperator (HilbertTensor.mapL
++              (ContinuousLinearMap.id ℂ E) (Conj.map (V.U t)) z) := by
++          have hsplit : HilbertTensor.mapL (U.U t) (Conj.map (V.U t))
++              = HilbertTensor.mapL (U.U t) (ContinuousLinearMap.id ℂ (Conj F))
++                ∘L HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
++                  (Conj.map (V.U t)) := by
++            rw [← mapL_comp]
++            simp
++          rw [hsplit]
++          exact toOperator_mapL_left (U.U t) _
++    _ = U.U t ∘L (toOperator z ∘L V.U (-t)) := by
++          -- `toOperator_mapL_right` expects the conjugate factor as an adjoint,
++          -- so the reversed-time identity has to be applied before it, not after.
++          have hadj : (V.U (-t)).adjoint = V.U t := by
++            have h := V.inverse_eq_adjoint (-t)
++            rw [neg_neg] at h
++            exact h.symm
++          rw [← hadj, toOperator_mapL_right (B := V.U (-t))]
++    _ = U.U t ∘L toOperator z ∘L V.U (-t) := by
++          ext x
++          rfl
++
++end
++end HilbertSchmidtTensor
++end Spectra
+diff -ruN pristine-clean/Spectra/Spaces/Tensor/HilbertSchmidtGeneratorBridge.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Spaces/Tensor/HilbertSchmidtGeneratorBridge.lean
+--- pristine-clean/Spectra/Spaces/Tensor/HilbertSchmidtGeneratorBridge.lean	1969-12-31 19:00:00.000000000 -0500
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Spaces/Tensor/HilbertSchmidtGeneratorBridge.lean	2026-07-29 18:42:27.112313751 -0400
+@@ -0,0 +1,209 @@
++/-
++Copyright (c) 2026 Spectra Formalization Project. All rights reserved.
++Released under Apache 2.0 license as described in the file LICENSE.
++Authors: Jon Crall, OpenAI GPT-5.6 Thinking
++-/
++import Spectra.Spaces.Tensor.HilbertSchmidtFlow
++
++/-!
++# Generator graph of the Hilbert--Schmidt Sylvester flow
++
++The tensor flow
++
++`z |-> (U(t) tensor conjugate(V(t))) z`
++
++represents `X |-> U(t) X V(-t)`.  This file proves the nontrivial direction of
++the generator graph correspondence: if a tensor `z` lies in the generator
++domain with generator value `c`, then the represented bounded operator maps
++the domain of `generator V` into the domain of `generator U` and satisfies
++
++`generator U * X - X * generator V = C`.
++
++This direction is exactly what the defect-first square-norm construction needs
++after the inverse spectral multiplier has produced a tensor-domain vector.
++The converse graph inclusion is intentionally kept separate; it requires a
++closed-core argument rather than another formal difference-quotient rewrite.
++-/
++
++open InnerProductSpace Complex Filter Topology
++open scoped InnerProductSpace ComplexConjugate
++
++namespace Spectra
++namespace HilbertSchmidtTensor
++
++noncomputable section
++
++universe u v
++
++variable {E : Type u} {F : Type v}
++variable [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
++variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
++
++/-- Domain-aware Sylvester equation for the generators of two unitary groups. -/
++structure HasGeneratorSylvesterEquation
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    (X C : F →L[ℂ] E) : Prop where
++  mapsTo_domain : ∀ x : (OneParameterUnitaryGroup.generator V).domain,
++    X (x : F) ∈ (OneParameterUnitaryGroup.generator U).domain
++  equation : ∀ x : (OneParameterUnitaryGroup.generator V).domain,
++    OneParameterUnitaryGroup.generator U
++        ⟨X (x : F), mapsTo_domain x⟩ -
++      X (OneParameterUnitaryGroup.generator V x) = C (x : F)
++
++private theorem tendsto_neg_punctured :
++    Tendsto (fun t : ℝ => -t) (𝓝[≠] (0 : ℝ)) (𝓝[≠] (0 : ℝ)) := by
++  apply tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within
++  · simpa using (continuous_neg.tendsto (0 : ℝ)).mono_left nhdsWithin_le_nhds
++  · filter_upwards [self_mem_nhdsWithin] with t ht
++    simpa using ht
++
++/-- Difference quotient decomposition underlying the generator graph theorem. -/
++theorem genDiffQuot_toOperator_decomposition
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    (z : Space E F) (x : F) (t : ℝ) :
++    OneParameterUnitaryGroup.genDiffQuot U (toOperator z x) t =
++      toOperator
++          (OneParameterUnitaryGroup.genDiffQuot (sylvesterGroup U V) z t) x +
++        U.U t
++          (toOperator z
++            (OneParameterUnitaryGroup.genDiffQuot V x (-t))) := by
++  -- `toOperator` is the unbundled map, so `map_smul`/`map_sub` do not reach it;
++  -- without its own linearity lemmas the difference quotient never splits and
++  -- the flow rewrite has nothing to fire on.
++  simp only [OneParameterUnitaryGroup.genDiffQuot_apply,
++    map_smul, map_sub, toOperator_smul, toOperator_sub,
++    toOperator_sylvesterGroup, smul_apply, sub_apply,
++    ContinuousLinearMap.comp_apply]
++  by_cases ht : t = 0
++  · subst t
++    simp
++  · have hinv : (I * ((-t : ℝ) : ℂ))⁻¹ = -(I * (t : ℂ))⁻¹ := by
++      rw [ofReal_neg, mul_neg, inv_neg]
++    rw [hinv]
++    module
++
++/-- Generator-domain membership of a tensor implies domain transport for the
++represented operator. -/
++theorem toOperator_maps_generatorDomain
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    {z c : Space E F}
++    (hz : z ∈ (OneParameterUnitaryGroup.generator (sylvesterGroup U V)).domain)
++    (hzc : OneParameterUnitaryGroup.generator (sylvesterGroup U V) ⟨z, hz⟩ = c)
++    (x : (OneParameterUnitaryGroup.generator V).domain) :
++    toOperator z (x : F) ∈ (OneParameterUnitaryGroup.generator U).domain := by
++  let W := sylvesterGroup U V
++  have hfirstTensor :=
++    OneParameterUnitaryGroup.generator_tendsto W ⟨z, hz⟩
++  rw [hzc] at hfirstTensor
++  have hfirstOperator : Tendsto
++      (fun t => toOperator
++        (OneParameterUnitaryGroup.genDiffQuot W z t))
++      (𝓝[≠] (0 : ℝ)) (𝓝 (toOperator c)) :=
++    ((toOperatorL (E := E) (F := F)).continuous.tendsto c).comp
++      hfirstTensor
++  have hfirst : Tendsto
++      (fun t => toOperator
++        (OneParameterUnitaryGroup.genDiffQuot W z t) (x : F))
++      (𝓝[≠] (0 : ℝ)) (𝓝 (toOperator c (x : F))) :=
++    (((ContinuousLinearMap.apply ℂ E (x : F)).continuous.tendsto
++      (toOperator c)).comp hfirstOperator)
++
++  have hq : Tendsto
++      (fun t : ℝ => OneParameterUnitaryGroup.genDiffQuot V (x : F) (-t))
++      (𝓝[≠] (0 : ℝ))
++      (𝓝 (OneParameterUnitaryGroup.generator V x)) :=
++    (OneParameterUnitaryGroup.generator_tendsto V x).comp
++      tendsto_neg_punctured
++  have hZq : Tendsto
++      (fun t : ℝ => toOperator z
++        (OneParameterUnitaryGroup.genDiffQuot V (x : F) (-t)))
++      (𝓝[≠] (0 : ℝ))
++      (𝓝 (toOperator z (OneParameterUnitaryGroup.generator V x))) :=
++    ((toOperator z).continuous.tendsto _).comp hq
++  have ht0 : Tendsto (fun t : ℝ => t) (𝓝[≠] (0 : ℝ)) (𝓝 0) :=
++    tendsto_id.mono_left inf_le_left
++  have hsecondRaw := OneParameterUnitaryGroup.tendsto_apply_unitary_family
++    (fun t => U.U t)
++    (fun t y => U.norm_preserving t y)
++    U.strong_continuous ht0 hZq
++  have hsecond : Tendsto
++      (fun t : ℝ => U.U t
++        (toOperator z
++          (OneParameterUnitaryGroup.genDiffQuot V (x : F) (-t))))
++      (𝓝[≠] (0 : ℝ))
++      (𝓝 (toOperator z (OneParameterUnitaryGroup.generator V x))) := by
++    simpa [U.identity] using hsecondRaw
++
++  -- The goal names the partial operator's domain; the membership lemma is
++  -- stated for the generator domain, and the two are bridged definitionally.
++  rw [OneParameterUnitaryGroup.generator_domain,
++    OneParameterUnitaryGroup.mem_generatorDomain]
++  refine ⟨toOperator c (x : F) +
++    toOperator z (OneParameterUnitaryGroup.generator V x), ?_⟩
++  have hsum := hfirst.add hsecond
++  exact hsum.congr' (Eventually.of_forall fun t =>
++    (genDiffQuot_toOperator_decomposition U V z (x : F) t).symm)
++
++/-- The represented operator satisfies the generator-level closed Sylvester
++equation. -/
++theorem toOperator_hasGeneratorSylvesterEquation
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    {z c : Space E F}
++    (hz : z ∈ (OneParameterUnitaryGroup.generator (sylvesterGroup U V)).domain)
++    (hzc : OneParameterUnitaryGroup.generator (sylvesterGroup U V) ⟨z, hz⟩ = c) :
++    HasGeneratorSylvesterEquation U V (toOperator z) (toOperator c) := by
++  let hmaps : ∀ x : (OneParameterUnitaryGroup.generator V).domain,
++      toOperator z (x : F) ∈ (OneParameterUnitaryGroup.generator U).domain :=
++    toOperator_maps_generatorDomain U V hz hzc
++  refine ⟨hmaps, ?_⟩
++  intro x
++  have hlimit : Tendsto
++      (OneParameterUnitaryGroup.genDiffQuot U (toOperator z (x : F)))
++      (𝓝[≠] (0 : ℝ))
++      (𝓝 (toOperator c (x : F) +
++        toOperator z (OneParameterUnitaryGroup.generator V x))) := by
++    have hfirstTensor :=
++      OneParameterUnitaryGroup.generator_tendsto
++        (sylvesterGroup U V) ⟨z, hz⟩
++    rw [hzc] at hfirstTensor
++    have hfirstOperator : Tendsto
++        (fun t => toOperator
++          (OneParameterUnitaryGroup.genDiffQuot (sylvesterGroup U V) z t))
++        (𝓝[≠] (0 : ℝ)) (𝓝 (toOperator c)) :=
++      ((toOperatorL (E := E) (F := F)).continuous.tendsto c).comp
++        hfirstTensor
++    have hfirst :=
++      (((ContinuousLinearMap.apply ℂ E (x : F)).continuous.tendsto
++        (toOperator c)).comp hfirstOperator)
++    have hq := (OneParameterUnitaryGroup.generator_tendsto V x).comp
++      tendsto_neg_punctured
++    have hZq := ((toOperator z).continuous.tendsto _).comp hq
++    have ht0 : Tendsto (fun t : ℝ => t) (𝓝[≠] (0 : ℝ)) (𝓝 0) :=
++      tendsto_id.mono_left inf_le_left
++    have hsecondRaw := OneParameterUnitaryGroup.tendsto_apply_unitary_family
++      (fun t => U.U t)
++      (fun t y => U.norm_preserving t y)
++      U.strong_continuous ht0 hZq
++    have hsecond : Tendsto
++        (fun t : ℝ => U.U t
++          (toOperator z
++            (OneParameterUnitaryGroup.genDiffQuot V (x : F) (-t))))
++        (𝓝[≠] (0 : ℝ))
++        (𝓝 (toOperator z (OneParameterUnitaryGroup.generator V x))) := by
++      simpa [U.identity] using hsecondRaw
++    exact (hfirst.add hsecond).congr'
++      (Eventually.of_forall fun t =>
++        (genDiffQuot_toOperator_decomposition U V z (x : F) t).symm)
++  have hgen := OneParameterUnitaryGroup.generator_tendsto U
++    ⟨toOperator z (x : F), hmaps x⟩
++  have heq := tendsto_nhds_unique hgen hlimit
++  rw [heq]
++  abel
++
++end
++end HilbertSchmidtTensor
++end Spectra
+diff -ruN pristine-clean/Spectra/Spaces/Tensor/HilbertSchmidtSpectralGap.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Spaces/Tensor/HilbertSchmidtSpectralGap.lean
+--- pristine-clean/Spectra/Spaces/Tensor/HilbertSchmidtSpectralGap.lean	1969-12-31 19:00:00.000000000 -0500
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/Spaces/Tensor/HilbertSchmidtSpectralGap.lean	2026-07-29 18:42:27.115313742 -0400
+@@ -0,0 +1,225 @@
++/-
++Copyright (c) 2026 Spectra Formalization Project. All rights reserved.
++Released under Apache 2.0 license as described in the file LICENSE.
++Authors: Adam Bornemann, Jon Crall, OpenAI GPT-5.6 Thinking
++-/
++import Mathlib.MeasureTheory.Measure.Support
++import Spectra.Mathlib.CharFunBridge
++import Spectra.Spaces.Tensor.HilbertSchmidtFlow
++import Spectra.SpectralTheory.Algebra
++import Spectra.SpectralTheory.Calculus.SpectralGapInverse
++
++/-!
++# Spectral support of the rectangular Hilbert--Schmidt Sylvester flow
++
++For a pure Hilbert tensor `u tensor conjugate(v)`, the scalar spectral measure
++of the left-minus-right flow is the pushforward of the product of the two
++scalar spectral measures under `(lambda, alpha) |-> lambda - alpha`.
++
++Consequently, pairwise separation of the scalar supports gives a spectral gap
++for every pure tensor.  Pure tensors span densely and the gap spectral
++projection is bounded, so the projection vanishes on the whole Hilbert tensor
++space.  Thus every rectangular Hilbert--Schmidt tensor has the same vector
++spectral gap.
++-/
++
++open MeasureTheory Complex Spectra
++open scoped InnerProductSpace
++-- The pure-tensor notation is scoped to `Spectra.HilbertTensor`, and the
++-- spectral measure lives in `Spectra.Borel`; neither is reached by the above.
++open scoped Spectra.HilbertTensor
++open Spectra.Borel
++open Spectra.Borel.SpectralMeasure
++
++namespace Spectra.HilbertSchmidtTensor
++
++noncomputable section
++
++universe u v
++
++variable {E : Type u} {F : Type v}
++  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
++  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
++
++/-- The spectral-coordinate difference map for the Sylvester flow. -/
++def spectralDifference (p : ℝ × ℝ) : ℝ := p.1 - p.2
++
++@[fun_prop]
++theorem continuous_spectralDifference : Continuous spectralDifference := by
++  -- `fun_prop` does not unfold the definition on its own.
++  unfold spectralDifference
++  fun_prop
++
++@[fun_prop]
++theorem measurable_spectralDifference : Measurable spectralDifference :=
++  continuous_spectralDifference.measurable
++
++private theorem conj_orbit_inner
++    (V : OneParameterUnitaryGroup (H := F)) (t : ℝ) (v : F) :
++    ⟪Conj.toConj v, Conj.map (V.U t) (Conj.toConj v)⟫_ℂ =
++      ⟪v, V.U (-t) v⟫_ℂ := by
++  change ⟪V.U t v, v⟫_ℂ = ⟪v, V.U (-t) v⟫_ℂ
++  rw [V.inverse_eq_adjoint]
++  exact (ContinuousLinearMap.adjoint_inner_right (V.U t) v v).symm
++
++private theorem char_difference_factor (t lam α : ℝ) :
++    cexp (I * ((spectralDifference (lam, α) : ℝ) : ℂ) * (t : ℂ)) =
++      cexp (I * (lam : ℂ) * (t : ℂ)) *
++        cexp (I * (α : ℂ) * ((-t : ℝ) : ℂ)) := by
++  rw [← Complex.exp_add]
++  congr 1
++  simp only [spectralDifference]
++  push_cast
++  ring
++
++/-- The pure-tensor scalar spectral measure is the difference-pushforward of
++the product scalar measure. -/
++theorem borelMeasure_sylvesterGroup_tmul
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    (u : E) (v : F) :
++    borelMeasure (sylvesterGroup U V) (u ⊗̂ₜ[ℂ] Conj.toConj v) =
++      Measure.map spectralDifference
++        ((borelMeasure U u).prod (borelMeasure V v)) := by
++  let μ := borelMeasure U u
++  let ν := borelMeasure V v
++  haveI : IsFiniteMeasure μ := borelMeasure_isFiniteMeasure U u
++  haveI : IsFiniteMeasure ν := borelMeasure_isFiniteMeasure V v
++  haveI : IsFiniteMeasure (μ.prod ν) := inferInstance
++  haveI : IsFiniteMeasure (Measure.map spectralDifference (μ.prod ν)) := inferInstance
++  apply Spectra.Fourier.measure_ext_of_fourier
++  intro t
++  rw [← borelMeasure_fourier (sylvesterGroup U V)
++    (u ⊗̂ₜ[ℂ] Conj.toConj v) t]
++  -- State the integrand as a lambda in the target variable: built from `comp`
++  -- and pointwise products it does not match the shape `integral_map` expects,
++  -- and it was written in the source variable rather than the mapped one.
++  have hcont : Continuous fun ω : ℝ =>
++      Complex.exp (Complex.I * (ω : ℂ) * (t : ℂ)) := by fun_prop
++  rw [integral_map measurable_spectralDifference.aemeasurable
++    hcont.aestronglyMeasurable]
++  change
++    ⟪u ⊗̂ₜ[ℂ] Conj.toConj v,
++      (sylvesterGroup U V).U t (u ⊗̂ₜ[ℂ] Conj.toConj v)⟫_ℂ =
++      ∫ p, cexp (I * ((spectralDifference p : ℝ) : ℂ) * (t : ℂ)) ∂(μ.prod ν)
++  rw [sylvesterGroup_apply, HilbertTensor.mapL_tmul,
++    HilbertTensor.inner_tmul_tmul]
++  rw [show (fun p : ℝ × ℝ =>
++      cexp (I * ((spectralDifference p : ℝ) : ℂ) * (t : ℂ))) =
++      fun p => cexp (I * (p.1 : ℂ) * (t : ℂ)) *
++        cexp (I * (p.2 : ℂ) * ((-t : ℝ) : ℂ)) by
++      funext p
++      exact char_difference_factor t p.1 p.2]
++  -- The factorisation is higher order, so the two factors are given explicitly.
++  rw [integral_prod_mul (μ := μ) (ν := ν)
++    (f := fun x : ℝ => cexp (I * (x : ℂ) * (t : ℂ)))
++    (g := fun y : ℝ => cexp (I * (y : ℂ) * ((-t : ℝ) : ℂ)))]
++  rw [← borelMeasure_fourier U u t, ← borelMeasure_fourier V v (-t)]
++  exact congrArg₂ (· * ·) rfl (conj_orbit_inner V t v)
++
++/-- Pairwise separation of the scalar spectral supports of two groups. -/
++def PairwiseScalarSupportGap
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    (δ : ℝ) : Prop :=
++  ∀ u : E, ∀ v : F,
++    ∀ lam ∈ (borelMeasure U u).support,
++    ∀ α ∈ (borelMeasure V v).support,
++      δ ≤ |lam - α|
++
++/-- Pairwise support separation gives the vector gap for every pure tensor. -/
++theorem hasVectorSpectralGap_tmul
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    {δ : ℝ} (hgap : PairwiseScalarSupportGap U V δ)
++    (u : E) (v : F) :
++    Spectra.QuantumMechanics.SpectralTheory.HasVectorSpectralGap
++      (sylvesterGroup U V) (u ⊗̂ₜ[ℂ] Conj.toConj v) δ := by
++  let μ := borelMeasure U u
++  let ν := borelMeasure V v
++  haveI : IsFiniteMeasure μ := borelMeasure_isFiniteMeasure U u
++  haveI : IsFiniteMeasure ν := borelMeasure_isFiniteMeasure V v
++  unfold Spectra.QuantumMechanics.SpectralTheory.HasVectorSpectralGap
++  rw [borelMeasure_sylvesterGroup_tmul]
++  have hprod : ∀ᵐ p ∂μ.prod ν, δ ≤ |spectralDifference p| := by
++    have hmeas : MeasurableSet {p : ℝ × ℝ | δ ≤ |spectralDifference p|} :=
++      measurableSet_le measurable_const
++        (measurable_spectralDifference.abs)
++    rw [MeasureTheory.Measure.ae_prod_iff_ae_ae hmeas]
++    filter_upwards [μ.support_mem_ae] with lam hlam
++    filter_upwards [ν.support_mem_ae] with α hα
++    exact hgap u v lam hlam α hα
++  exact (ae_map_iff measurable_spectralDifference.aemeasurable
++    (measurableSet_le measurable_const measurable_abs)).2 hprod
++
++private theorem gap_projection_tmul_eq_zero
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    {δ : ℝ} (hδ : 0 ≤ δ)
++    (hgap : PairwiseScalarSupportGap U V δ)
++    (u : E) (v : F) :
++    Spectra.QuantumMechanics.SpectralTheory.spectralProjection
++      (sylvesterGroup U V) (Set.Ioo (-δ) δ) measurableSet_Ioo
++      (u ⊗̂ₜ[ℂ] Conj.toConj v) = 0 := by
++  rw [Spectra.QuantumMechanics.SpectralTheory.spectralProjection_eq_zero_iff_measure_zero]
++  have hae := hasVectorSpectralGap_tmul U V hgap u v
++  refine measure_mono_null ?_ (ae_iff.mp hae)
++  intro s hs
++  change s ∈ {s : ℝ | δ ≤ |s|}ᶜ
++  simp only [Set.mem_compl_iff, Set.mem_setOf_eq, not_le]
++  exact abs_lt.2 hs
++
++/-- Pairwise scalar support separation opens a global gap in the
++left-minus-right Hilbert--Schmidt tensor flow. -/
++theorem spectralProjection_gap_eq_zero
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    {δ : ℝ} (hδ : 0 ≤ δ)
++    (hgap : PairwiseScalarSupportGap U V δ) :
++    Spectra.QuantumMechanics.SpectralTheory.spectralProjection
++      (sylvesterGroup U V) (Set.Ioo (-δ) δ) measurableSet_Ioo = 0 := by
++  refine ContinuousLinearMap.ext fun z₀ => ?_
++  refine HilbertTensor.dense_span_tmul.induction
++    (P := fun t => Spectra.QuantumMechanics.SpectralTheory.spectralProjection
++      (sylvesterGroup U V) (Set.Ioo (-δ) δ) measurableSet_Ioo t = 0) ?_ ?_ z₀
++  · intro z hz
++    induction hz using Submodule.span_induction with
++    | mem z hz =>
++        rcases hz with ⟨⟨u, cv⟩, rfl⟩
++        simpa using gap_projection_tmul_eq_zero U V hδ hgap
++          u (Conj.ofConj cv)
++    | zero => simp
++    | add x y _ _ hx hy => simp [hx, hy]
++    | smul c x _ hx => simp [hx]
++  · exact isClosed_eq
++      ((Spectra.QuantumMechanics.SpectralTheory.spectralProjection
++        (sylvesterGroup U V) (Set.Ioo (-δ) δ) measurableSet_Ioo).continuous)
++      continuous_const
++
++/-- Pairwise scalar support separation gives a vector spectral gap for every
++Hilbert--Schmidt tensor. -/
++theorem hasVectorSpectralGap
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    {δ : ℝ} (hδ : 0 ≤ δ)
++    (hgap : PairwiseScalarSupportGap U V δ)
++    (z : Space E F) :
++    Spectra.QuantumMechanics.SpectralTheory.HasVectorSpectralGap
++      (sylvesterGroup U V) z δ := by
++  have hproj := congrArg
++    (fun P : Space E F →L[ℂ] Space E F => P z)
++    (spectralProjection_gap_eq_zero U V hδ hgap)
++  have hnull : borelMeasure (sylvesterGroup U V) z
++      (Set.Ioo (-δ) δ) = 0 := by
++    rw [← Spectra.QuantumMechanics.SpectralTheory.spectralProjection_eq_zero_iff_measure_zero]
++    simpa using hproj
++  refine ae_iff.mpr ?_
++  refine measure_mono_null ?_ hnull
++  intro s hs
++  change s ∈ Set.Ioo (-δ) δ
++  have hlt : |s| < δ := by simpa only [Set.mem_compl_iff,
++    Set.mem_setOf_eq, not_le] using hs
++  exact abs_lt.mp hlt
++
++end
++end Spectra.HilbertSchmidtTensor
+diff -ruN pristine-clean/Spectra/SpectralTheory/Algebra.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/SpectralTheory/Algebra.lean
+--- pristine-clean/Spectra/SpectralTheory/Algebra.lean	2026-07-30 11:52:33.887629119 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/SpectralTheory/Algebra.lean	2026-07-29 18:42:27.129313698 -0400
+@@ -313,7 +313,11 @@
+     measurableSet_Icc φ
+   have h_ae_mem : ∀ᵐ s ∂(borelMeasure U_grp
+       (spectralProjection U_grp (Set.Icc a b) measurableSet_Icc φ)), s ∈ Set.Icc a b :=
+-    ae_iff.mpr (by convert h_supp using 1)
++    ae_iff.mpr (by
++      change (borelMeasure U_grp
++        (spectralProjection U_grp (Set.Icc a b) measurableSet_Icc φ))
++          (Set.Icc a b)ᶜ = 0
++      exact h_supp)
+   -- absorption: Φ(λ·1_B) (E(B)φ) = Φ(λ·1_B) φ
+   have habsorb : spectralCalculus U_grp
+         (fun l => (l : ℂ) * Set.indicator (Set.Icc a b) (fun _ => (1 : ℂ)) l)
+diff -ruN pristine-clean/Spectra/SpectralTheory/Calculus/SpectralGapInverse.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/SpectralTheory/Calculus/SpectralGapInverse.lean
+--- pristine-clean/Spectra/SpectralTheory/Calculus/SpectralGapInverse.lean	1969-12-31 19:00:00.000000000 -0500
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/SpectralTheory/Calculus/SpectralGapInverse.lean	2026-07-29 18:42:27.162313595 -0400
+@@ -0,0 +1,224 @@
++/-
++Copyright (c) 2026 Spectra Formalization Project. All rights reserved.
++Released under Apache 2.0 license as described in the file LICENSE.
++Authors: Jon Crall, OpenAI GPT-5.6 Thinking
++-/
++import Spectra.SpectralTheory.Calculus.MixedProduct
++
++/-!
++# Inversion of the identity multiplier on a vector with a spectral gap
++
++Let `U` be a one-parameter unitary group and let `xi` have scalar spectral
++measure supported in `{s | delta <= |s|}`.  The bounded symbol
++
++`g_delta(s) = if delta <= |s| then 1/s else 0`
++
++produces a vector `eta = Phi(g_delta) xi` in the natural domain of the identity
++multiplier.  The unbounded identity calculus sends `eta` back to `xi`, and
++`‖eta‖ <= delta⁻¹ ‖xi‖`.
++
++This is the defect-first inverse used by the rectangular Hilbert--Schmidt
++Sylvester theorem.  It is deliberately vector-local: no global spectral-gap
++assumption on the generator is needed.
++-/
++
++open InnerProductSpace Complex MeasureTheory
++open Spectra.Borel
++open scoped InnerProductSpace
++
++namespace Spectra.QuantumMechanics.SpectralTheory
++
++noncomputable section
++
++variable {H : Type*}
++variable [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
++
++/-- The reciprocal symbol, cut off inside the forbidden gap. -/
++def spectralGapInverseSymbol (δ : ℝ) (s : ℝ) : ℂ :=
++  if δ ≤ |s| then ((s : ℂ)⁻¹) else 0
++
++/-- The scalar spectral measure of `xi` stays outside the open gap. -/
++def HasVectorSpectralGap (U : OneParameterUnitaryGroup (H := H))
++    (ξ : H) (δ : ℝ) : Prop :=
++  ∀ᵐ s ∂borelMeasure U ξ, δ ≤ |s|
++
++/-- The cut-off reciprocal symbol is measurable. -/
++theorem measurable_spectralGapInverseSymbol (δ : ℝ) :
++    Measurable (spectralGapInverseSymbol δ) := by
++  unfold spectralGapInverseSymbol
++  exact Measurable.ite
++    (measurableSet_le measurable_const measurable_abs)
++    Complex.measurable_ofReal.inv measurable_const
++
++/-- The cut-off reciprocal is bounded by `δ⁻¹` when `δ > 0`. -/
++theorem norm_spectralGapInverseSymbol_le {δ : ℝ} (hδ : 0 < δ) (s : ℝ) :
++    ‖spectralGapInverseSymbol δ s‖ ≤ δ⁻¹ := by
++  unfold spectralGapInverseSymbol
++  split_ifs with hs
++  · rw [norm_inv, Complex.norm_real, Real.norm_eq_abs]
++    exact inv_anti₀ hδ hs
++  · simp [inv_nonneg.mpr hδ.le]
++
++/-- The product of the identity and cut-off reciprocal is bounded by one. -/
++theorem norm_mul_spectralGapInverseSymbol_le_one {δ : ℝ}
++    (hδ : 0 < δ) (s : ℝ) :
++    ‖(s : ℂ) * spectralGapInverseSymbol δ s‖ ≤ 1 := by
++  unfold spectralGapInverseSymbol
++  split_ifs with hs
++  · have hs0 : (s : ℂ) ≠ 0 := by
++      exact_mod_cast abs_pos.mp (hδ.trans_le hs)
++    rw [mul_inv_cancel₀ hs0, norm_one]
++  · simp
++
++/-- The bounded inverse-calculus vector. -/
++noncomputable def spectralGapSolution
++    (U : OneParameterUnitaryGroup (H := H)) (δ : ℝ) (hδ : 0 < δ)
++    (ξ : H) : H :=
++  spectralCalculus U (spectralGapInverseSymbol δ)
++    (measurable_spectralGapInverseSymbol δ)
++    ⟨δ⁻¹, fun s => norm_spectralGapInverseSymbol_le hδ s⟩ ξ
++
++/-- Norm estimate for the defect-first inverse vector. -/
++theorem norm_spectralGapSolution_le
++    (U : OneParameterUnitaryGroup (H := H)) {δ : ℝ} (hδ : 0 < δ)
++    (ξ : H) :
++    ‖spectralGapSolution U δ hδ ξ‖ ≤ δ⁻¹ * ‖ξ‖ := by
++  unfold spectralGapSolution
++  exact (spectralCalculus U (spectralGapInverseSymbol δ)
++    (measurable_spectralGapInverseSymbol δ)
++    ⟨δ⁻¹, fun s => norm_spectralGapInverseSymbol_le hδ s⟩).le_of_opNorm_le
++      (norm_spectralCalculus_le U _ _ _
++        (fun s => norm_spectralGapInverseSymbol_le hδ s)) ξ
++
++/-- The inverse-calculus vector belongs directly to the generator domain.
++This avoids routing through a separate identification of the unbounded identity
++calculus with the generator. -/
++theorem spectralGapSolution_mem_generatorDomain
++    (U : OneParameterUnitaryGroup (H := H)) {δ : ℝ} (hδ : 0 < δ)
++    (ξ : H) :
++    spectralGapSolution U δ hδ ξ ∈
++      OneParameterUnitaryGroup.generatorDomain U := by
++  unfold spectralGapSolution
++  exact spectralCalculus_mem_generatorDomain U
++    (spectralGapInverseSymbol δ)
++    (measurable_spectralGapInverseSymbol δ)
++    ⟨δ⁻¹, fun s => norm_spectralGapInverseSymbol_le hδ s⟩
++    (Complex.measurable_ofReal.mul
++      (measurable_spectralGapInverseSymbol δ))
++    ⟨1, fun s => norm_mul_spectralGapInverseSymbol_le_one hδ s⟩ ξ
++
++/-- If two bounded symbols agree `μ_ξ`-a.e. then the bounded calculus agrees at
++`ξ`, because `‖Φ(g)ξ − Φ(g')ξ‖² = ∫ ‖g − g'‖² dμ_ξ = 0`.
++
++This duplicates `Spectra.Modular.Cocycle.ModularSqrtSquare.spectralCalculus_congr_ae`.
++Importing that module would not create a cycle -- it does not reach this file -- but
++it would pull the whole modular-theory subtree into a basic calculus file and invert
++the dependency direction. The statement is generic and every ingredient of its proof
++(`spectralCalculus_sub`, `bounded_sub`, `norm_sq_spectralCalculus_apply`) already lives
++in this subtree, so the standing fix is to move the general form down here and have the
++modular layer use it; that refactor is deliberately not done in this repair. -/
++private theorem spectralCalculus_eq_of_ae
++    (U : OneParameterUnitaryGroup (H := H)) (g g' : ℝ → ℂ)
++    (hg_meas : Measurable g) (hg_bdd : ∃ C, ∀ ω, ‖g ω‖ ≤ C)
++    (hg'_meas : Measurable g') (hg'_bdd : ∃ C, ∀ ω, ‖g' ω‖ ≤ C) (ξ : H)
++    (hae : g =ᵐ[borelMeasure U ξ] g') :
++    spectralCalculus U g hg_meas hg_bdd ξ
++      = spectralCalculus U g' hg'_meas hg'_bdd ξ := by
++  have hzero : ‖spectralCalculus U g hg_meas hg_bdd ξ
++      - spectralCalculus U g' hg'_meas hg'_bdd ξ‖ ^ 2 = 0 := by
++    rw [← ContinuousLinearMap.sub_apply,
++      ← spectralCalculus_sub U g g' hg_meas hg_bdd hg'_meas hg'_bdd
++        (hg_meas.sub hg'_meas) (bounded_sub hg_bdd hg'_bdd),
++      norm_sq_spectralCalculus_apply]
++    refine integral_eq_zero_of_ae ?_
++    filter_upwards [hae] with s hs
++    rw [hs, sub_self, norm_zero]
++    simp
++  have hsub : spectralCalculus U g hg_meas hg_bdd ξ
++      - spectralCalculus U g' hg'_meas hg'_bdd ξ = 0 :=
++    norm_eq_zero.mp (pow_eq_zero_iff (n := 2) (by norm_num) |>.mp hzero)
++  exact sub_eq_zero.mp hsub
++
++/-- On a vector spectrally supported outside the gap, the generator sends the
++inverse-calculus vector back to the original vector. -/
++theorem generator_spectralGapSolution
++    (U : OneParameterUnitaryGroup (H := H)) {δ : ℝ} (hδ : 0 < δ)
++    (ξ : H) (hgap : HasVectorSpectralGap U ξ δ) :
++    OneParameterUnitaryGroup.generator U
++        ⟨spectralGapSolution U δ hδ ξ,
++          spectralGapSolution_mem_generatorDomain U hδ ξ⟩ = ξ := by
++  unfold spectralGapSolution
++  rw [generator_spectralCalculus U
++    (spectralGapInverseSymbol δ)
++    (measurable_spectralGapInverseSymbol δ)
++    ⟨δ⁻¹, fun s => norm_spectralGapInverseSymbol_le hδ s⟩
++    (Complex.measurable_ofReal.mul
++      (measurable_spectralGapInverseSymbol δ))
++    ⟨1, fun s => norm_mul_spectralGapInverseSymbol_le_one hδ s⟩ ξ]
++  have hae : (fun s : ℝ => (s : ℂ) * spectralGapInverseSymbol δ s)
++      =ᵐ[borelMeasure U ξ] (fun _ => (1 : ℂ)) := by
++    filter_upwards [hgap] with s hs
++    unfold spectralGapInverseSymbol
++    rw [if_pos hs]
++    have hs0 : (s : ℂ) ≠ 0 := by
++      exact_mod_cast abs_pos.mp (hδ.trans_le hs)
++    exact mul_inv_cancel₀ hs0
++  rw [spectralCalculus_eq_of_ae U
++    (fun s : ℝ => (s : ℂ) * spectralGapInverseSymbol δ s)
++    (fun _ => (1 : ℂ))
++    (Complex.measurable_ofReal.mul
++      (measurable_spectralGapInverseSymbol δ))
++    ⟨1, fun s => norm_mul_spectralGapInverseSymbol_le_one hδ s⟩
++    measurable_const ⟨1, fun _ => norm_one.le⟩ ξ hae,
++    spectralCalculus_one]
++  rfl
++
++/-- The inverse vector lies in the natural domain of the identity multiplier. -/
++theorem spectralGapSolution_mem_pmapDomain
++    (U : OneParameterUnitaryGroup (H := H)) {δ : ℝ} (hδ : 0 < δ)
++    (ξ : H) :
++    spectralGapSolution U δ hδ ξ ∈
++      ProjValMeasure.pmapDomain U.toPVM (fun s : ℝ => (s : ℂ)) := by
++  unfold spectralGapSolution
++  exact mem_pmapDomain_spectralCalculus U
++    (fun s : ℝ => (s : ℂ)) (spectralGapInverseSymbol δ)
++    Complex.measurable_ofReal (measurable_spectralGapInverseSymbol δ)
++    ⟨δ⁻¹, fun s => norm_spectralGapInverseSymbol_le hδ s⟩
++    ⟨1, fun s => norm_mul_spectralGapInverseSymbol_le_one hδ s⟩ ξ
++
++/-- On a vector supported outside the gap, multiplying the inverse vector by
++the identity symbol recovers the original vector. -/
++theorem pmapOfPVM_id_spectralGapSolution
++    (U : OneParameterUnitaryGroup (H := H)) {δ : ℝ} (hδ : 0 < δ)
++    (ξ : H) (hgap : HasVectorSpectralGap U ξ δ) :
++    pmapOfPVM U (fun s : ℝ => (s : ℂ)) Complex.measurable_ofReal
++      ⟨spectralGapSolution U δ hδ ξ,
++        spectralGapSolution_mem_pmapDomain U hδ ξ⟩ = ξ := by
++  have hmix := pmapOfPVM_spectralCalculus_of_mul_bounded U
++    (fun s : ℝ => (s : ℂ)) (spectralGapInverseSymbol δ)
++    Complex.measurable_ofReal (measurable_spectralGapInverseSymbol δ)
++    ⟨δ⁻¹, fun s => norm_spectralGapInverseSymbol_le hδ s⟩
++    (Complex.measurable_ofReal.mul (measurable_spectralGapInverseSymbol δ))
++    ⟨1, fun s => norm_mul_spectralGapInverseSymbol_le_one hδ s⟩ ξ
++    (spectralGapSolution_mem_pmapDomain U hδ ξ)
++  refine hmix.trans ?_
++  have hae : (fun s : ℝ => (s : ℂ) * spectralGapInverseSymbol δ s)
++      =ᵐ[borelMeasure U ξ] (fun _ => (1 : ℂ)) := by
++    filter_upwards [hgap] with s hs
++    unfold spectralGapInverseSymbol
++    rw [if_pos hs]
++    have hs0 : (s : ℂ) ≠ 0 := by
++      exact_mod_cast abs_pos.mp (hδ.trans_le hs)
++    exact mul_inv_cancel₀ hs0
++  rw [spectralCalculus_eq_of_ae U
++    (fun s : ℝ => (s : ℂ) * spectralGapInverseSymbol δ s)
++    (fun _ => (1 : ℂ))
++    (Complex.measurable_ofReal.mul (measurable_spectralGapInverseSymbol δ))
++    ⟨1, fun s => norm_mul_spectralGapInverseSymbol_le_one hδ s⟩
++    measurable_const
++    ⟨1, fun _ => norm_one.le⟩ ξ hae,
++    spectralCalculus_one]
++  rfl
++
++end
++end Spectra.QuantumMechanics.SpectralTheory
+diff -ruN pristine-clean/Spectra/SpectralTheory/SeparatedIntertwiner.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/SpectralTheory/SeparatedIntertwiner.lean
+--- pristine-clean/Spectra/SpectralTheory/SeparatedIntertwiner.lean	1969-12-31 19:00:00.000000000 -0500
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/SpectralTheory/SeparatedIntertwiner.lean	2026-07-29 18:42:27.234313370 -0400
+@@ -0,0 +1,130 @@
++/-
++Copyright (c) 2026 Spectra Formalization Project. All rights reserved.
++Released under Apache 2.0 license as described in the file LICENSE.
++Authors: Adam Bornemann, Jon Crall, OpenAI GPT-5.6 Thinking
++-/
++import Mathlib.MeasureTheory.Measure.Support
++import Spectra.QuantumMechanics.BornRule.Observable
++import Spectra.Resolvent.Meromorphic
++import Spectra.SpectralTheory.Algebra
++import Spectra.YosidaHille.RectangularIntertwining
++
++/-!
++# Rectangular intertwiners of spectrally separated self-adjoint operators
++
++A bounded map intertwining two self-adjoint generators intertwines all of their
++spectral projections.  If the real spectra are disjoint, projection onto the
++first spectrum is the identity on the target and zero on the source, forcing
++the map to vanish.
++
++This is the arbitrary-spectrum homogeneous uniqueness theorem needed by the
++square-norm Davis--Kahan theorem.  It does not require interval/exterior or
++ordered half-line geometry.
++-/
++
++open MeasureTheory Complex Spectra
++open scoped InnerProductSpace
++open Spectra.Operator
++open Spectra.YosidaHille
++open Spectra.Resolvent
++-- The spectral (Borel) measure lives in `Spectra.Borel`, which is not opened by
++-- any of the namespaces above.
++open Spectra.Borel
++-- The Born measure and its support estimate sit one namespace deeper than they are
++-- cited below: under `BornRule.PVM` and `BornRule.Observable`, not under `BornRule`.
++open Spectra.QuantumMechanics.BornRule.PVM
++open Spectra.QuantumMechanics.BornRule.Observable
++
++namespace Spectra.QuantumMechanics.SpectralTheory
++
++noncomputable section
++
++universe u v
++
++variable {E : Type u} {F : Type v}
++  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
++  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
++
++/-- The real spectrum of an unbounded self-adjoint operator is closed. -/
++theorem isClosed_spectrum_of_isSelfAdjoint
++    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
++    (A : SelfAdjointOperator H) :
++    IsClosed (spectrum A.toLinearPMap) := by
++  have hopen : IsOpen {x : ℝ | (x : ℂ) ∈ resolventSet A.toLinearPMap} :=
++    (isOpen_resolventSet A.toLinearPMap).preimage Complex.continuous_ofReal
++  change IsClosed ({x : ℝ | (x : ℂ) ∈ resolventSet A.toLinearPMap}ᶜ)
++  exact hopen.isClosed_compl
++
++private theorem spectralProjection_eq_zero_of_disjoint_spectrum
++    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
++    (A : SelfAdjointOperator H)
++    (S : Set ℝ) (hS : MeasurableSet S)
++    (hdisj : Disjoint S (spectrum A.toLinearPMap)) :
++    spectralProjection (genToGroup A.selfAdjoint) S hS = 0 := by
++  apply ContinuousLinearMap.ext
++  intro ψ
++  rw [ContinuousLinearMap.zero_apply,
++    spectralProjection_eq_zero_iff_measure_zero]
++  let μ := borelMeasure (genToGroup A.selfAdjoint) ψ
++  have hsupp : μ.support ⊆ spectrum A.toLinearPMap := by
++    simpa [μ, bornMeasure, SelfAdjointOperator.spectralPVM] using
++      bornMeasure_support_subset_spectrum A ψ
++  have hsubset : S ⊆ μ.supportᶜ := by
++    intro lam hlam hlsupp
++    exact Set.disjoint_left.mp hdisj hlam (hsupp hlsupp)
++  exact measure_mono_null hsubset μ.measure_compl_support
++
++/-- The spectral projection of a self-adjoint operator onto its whole spectrum
++is the identity. -/
++theorem spectralProjection_spectrum_eq_id
++    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
++    (A : SelfAdjointOperator H) :
++    spectralProjection (genToGroup A.selfAdjoint)
++        (spectrum A.toLinearPMap)
++        (isClosed_spectrum_of_isSelfAdjoint A).measurableSet
++      = ContinuousLinearMap.id ℂ H := by
++  let S := spectrum A.toLinearPMap
++  let hS : MeasurableSet S := (isClosed_spectrum_of_isSelfAdjoint A).measurableSet
++  have hcomp : spectralProjection (genToGroup A.selfAdjoint) Sᶜ hS.compl = 0 := by
++    apply ContinuousLinearMap.ext
++    intro ψ
++    rw [ContinuousLinearMap.zero_apply,
++      spectralProjection_eq_zero_iff_measure_zero]
++    let μ := borelMeasure (genToGroup A.selfAdjoint) ψ
++    have hsupp : μ.support ⊆ S := by
++      simpa [μ, S, bornMeasure, SelfAdjointOperator.spectralPVM] using
++        bornMeasure_support_subset_spectrum A ψ
++    have hsubset : Sᶜ ⊆ μ.supportᶜ := by
++      intro lam hlam hlsupp
++      exact hlam (hsupp hlsupp)
++    exact measure_mono_null hsubset μ.measure_compl_support
++  have hcompl := spectralProjection_compl
++    (genToGroup A.selfAdjoint) S hS
++  rw [hcomp] at hcompl
++  exact (sub_eq_zero.mp hcompl.symm).symm
++
++/-- A bounded generator intertwiner between self-adjoint operators with
++disjoint spectra is zero. -/
++theorem generatorIntertwiner_eq_zero_of_disjoint_spectrum
++    (A : SelfAdjointOperator E)
++    (B : SelfAdjointOperator F)
++    (X : F →L[ℂ] E)
++    (hX : GeneratorIntertwines
++      (genToGroup A.selfAdjoint) (genToGroup B.selfAdjoint) X)
++    (hdisj : Disjoint
++      (spectrum A.toLinearPMap) (spectrum B.toLinearPMap)) :
++    X = 0 := by
++  let S := spectrum A.toLinearPMap
++  let hS : MeasurableSet S := (isClosed_spectrum_of_isSelfAdjoint A).measurableSet
++  have hintertwine := spectralProjection_intertwines_of_generator
++    (genToGroup A.selfAdjoint) (genToGroup B.selfAdjoint) X hX S hS
++  have hEA : spectralProjection (genToGroup A.selfAdjoint) S hS =
++      ContinuousLinearMap.id ℂ E := by
++    simpa [S, hS] using spectralProjection_spectrum_eq_id A
++  have hEB : spectralProjection (genToGroup B.selfAdjoint) S hS = 0 :=
++    spectralProjection_eq_zero_of_disjoint_spectrum B S hS hdisj
++  rw [hEA, hEB] at hintertwine
++  simpa using hintertwine
++
++end
++end Spectra.QuantumMechanics.SpectralTheory
+diff -ruN pristine-clean/Spectra/YosidaHille/Approximation/ExpBounded/Unitary.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/YosidaHille/Approximation/ExpBounded/Unitary.lean
+--- pristine-clean/Spectra/YosidaHille/Approximation/ExpBounded/Unitary.lean	2026-07-30 11:52:33.890629109 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/YosidaHille/Approximation/ExpBounded/Unitary.lean	2026-07-29 18:42:27.325313085 -0400
+@@ -27,6 +27,8 @@
+ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+ namespace Spectra.YosidaHille.Approximation
+ 
++noncomputable section
++
+ /-! ### Skew-adjoint implies unitary exponential -/
+ 
+ /-- If `B` is skew-adjoint (`B* = -B`), then `exp(tB)` is two-sided unitary: both composites with
+@@ -126,62 +128,74 @@
+ 
+ /-! ### Derivatives of exponential -/
+ 
+-/-- The base case that `expBounded_hasDerivAt` bootstraps by translation-invariance
+-(`expBounded B t = (expBounded B τ).comp (expBounded B (t - τ))`): at `τ = 0`, the derivative of
+-`t ↦ exp(tB)` is `B` itself, since `NormedSpace.exp` has derivative `1` at `0`. -/
+-lemma expBounded_hasDerivAt_zero (B : H →L[ℂ] H) :
+-    HasDerivAt (fun τ : ℝ => expBounded B τ) B 0 := by
++-- Mathlib currently exposes both generic bounded-convergence structures and
++-- operator-norm structures on continuous linear maps.  The direct generic parent
++-- instances otherwise win before the normed instances can provide their parents,
++-- so select the coherent operator-norm parents explicitly for these calculus facts.
++local instance operatorNormAddCommGroup : AddCommGroup (H →L[ℂ] H) :=
++  ContinuousLinearMap.toNormedAddCommGroup.toAddCommGroup
++
++local instance operatorNormRealModule : Module ℝ (H →L[ℂ] H) :=
++  ContinuousLinearMap.toNormedSpace.toModule
++
++local instance operatorNormTopologicalSpace : TopologicalSpace (H →L[ℂ] H) :=
++  PseudoMetricSpace.toUniformSpace.toTopologicalSpace
++
++/-- Differentiate the complex exponential curve and restrict it along `ℝ ↪ ℂ`.
++This avoids installing a second real normed-algebra structure on the operator space. -/
++private lemma expBounded_hasDerivAt_left (B : H →L[ℂ] H) (τ : ℝ) :
++    HasDerivAt (fun t : ℝ => expBounded B t) ((expBounded B τ).comp B) τ := by
+   haveI : IsScalarTower ℝ ℂ H := RestrictScalars.isScalarTower ℝ ℂ H
+-  letI : NormedAlgebra ℝ (H →L[ℂ] H) := NormedAlgebra.restrictScalars ℝ ℂ _
+   haveI : IsScalarTower ℝ ℂ (H →L[ℂ] H) :=
+     ⟨fun r c f => ContinuousLinearMap.ext fun x => smul_assoc r c (f x)⟩
+-  simp_rw [expBounded_eq_exp]
+-  have h_path : HasDerivAt (fun t : ℝ => (t : ℂ) • B) B 0 := by
+-    have h := (ofRealCLM.hasDerivAt (x := (0 : ℝ))).smul_const B
+-    convert h using 1
+-    exact (one_smul ℂ B).symm
+-  have h_fderiv : HasFDerivAt NormedSpace.exp
+-      (1 : (H →L[ℂ] H) →L[ℝ] (H →L[ℂ] H)) ((fun t : ℝ => (t : ℂ) • B) 0) := by
+-    simp only [ofReal_zero, zero_smul]
+-    show HasFDerivAt NormedSpace.exp (1 : (H →L[ℂ] H) →L[ℝ] (H →L[ℂ] H)) 0
+-    exact hasFDerivAt_exp_zero (𝕂 := ℝ) (𝔸 := H →L[ℂ] H)
+-  have h_comp := h_fderiv.comp_hasDerivAt (0 : ℝ) h_path
+-  convert h_comp using 1
++  have h_complex :
++      HasDerivAt (fun z : ℂ => NormedSpace.exp (z • B))
++        (NormedSpace.exp ((τ : ℂ) • B) * B) (τ : ℂ) :=
++    hasDerivAt_exp_smul_const B (τ : ℂ)
++  have h_real_comp :
++      HasDerivAt
++        ((fun z : ℂ => NormedSpace.exp (z • B)) ∘ Complex.ofReal)
++        (NormedSpace.exp ((τ : ℂ) • B) * B) τ := by
++    unfold operatorNormAddCommGroup operatorNormRealModule operatorNormTopologicalSpace
++    simpa only [Complex.ofRealCLM_apply, Complex.ofReal_one, one_smul] using
++      h_complex.scomp τ Complex.ofRealCLM.hasDerivAt
++  have h_real :
++      HasDerivAt (fun t : ℝ => NormedSpace.exp ((t : ℂ) • B))
++        (NormedSpace.exp ((τ : ℂ) • B) * B) τ :=
++    h_real_comp.congr_of_eventuallyEq (Eventually.of_forall fun _ => rfl)
++  have h_expBounded :
++      HasDerivAt (fun t : ℝ => expBounded B t)
++        (NormedSpace.exp ((τ : ℂ) • B) * B) τ :=
++    h_real.congr_of_eventuallyEq
++      (Eventually.of_forall fun t => expBounded_eq_exp B t)
++  have h_deriv :
++      NormedSpace.exp ((τ : ℂ) • B) * B = (expBounded B τ).comp B := by
++    rw [expBounded_eq_exp]
++    ext x
++    simp only [mul_apply_eq_comp, ContinuousLinearMap.comp_apply]
++  exact h_expBounded.congr_deriv h_deriv
++
++/-- The base case that `expBounded_hasDerivAt` bootstraps from: at `τ = 0`,
++the derivative of `t ↦ exp(tB)` is `B`. -/
++lemma expBounded_hasDerivAt_zero (B : H →L[ℂ] H) :
++    HasDerivAt (fun τ : ℝ => expBounded B τ) B 0 := by
++  apply (expBounded_hasDerivAt_left B 0).congr_deriv
++  rw [expBounded_at_zero']
++  ext x
++  simp only [ContinuousLinearMap.comp_apply, one_apply_eq_self]
+ 
+ /-- Derivative of the bounded exponential at any point. -/
+ lemma expBounded_hasDerivAt (B : H →L[ℂ] H) (τ : ℝ) :
+     HasDerivAt (fun t : ℝ => expBounded B t) (B.comp (expBounded B τ)) τ := by
+-  haveI : IsScalarTower ℝ ℂ H := RestrictScalars.isScalarTower ℝ ℂ H
+-  letI : NormedAlgebra ℝ (H →L[ℂ] H) := NormedAlgebra.restrictScalars ℝ ℂ _
+-  haveI : IsScalarTower ℝ ℂ (H →L[ℂ] H) :=
+-    ⟨fun r c f => ContinuousLinearMap.ext fun x => smul_assoc r c (f x)⟩
+-  have h_eq : ∀ t, expBounded B t = (expBounded B τ).comp (expBounded B (t - τ)) := by
+-    intro t
+-    rw [← expBounded_add_smul]
+-    congr 1; ring
+-  have h_shift : HasDerivAt (fun t => expBounded B (t - τ)) B τ := by
+-    have h0 : HasDerivAt (fun t => expBounded B t) B (τ - τ) := by
+-      simp only [sub_self]
+-      exact expBounded_hasDerivAt_zero B
+-    exact h0.comp_sub_const τ τ
+-  have _h_val : expBounded B (τ - τ) = 1 := by simp only [sub_self, expBounded_at_zero']
+-  have h_post : HasDerivAt (fun t => (expBounded B τ).comp (expBounded B (t - τ)))
+-                           ((expBounded B τ).comp B) τ := by
+-    set A := expBounded B τ
+-    have h_clm : HasFDerivAt (fun T : H →L[ℂ] H => A.comp T)
+-                             ((ContinuousLinearMap.compL ℂ H H H) A)
+-                             (expBounded B (τ - τ)) :=
+-      ((ContinuousLinearMap.compL ℂ H H H) A).hasFDerivAt
+-    have h_clm' := h_clm.restrictScalars ℝ
+-    have h_comp := h_clm'.comp_hasDerivAt τ h_shift
+-    convert h_comp using 1
++  have h_left := expBounded_hasDerivAt_left B τ
+   have h_comm : (expBounded B τ).comp B = B.comp (expBounded B τ) := by
+     ext ψ
+     simp only [ContinuousLinearMap.comp_apply]
+-    have := B_commute_expBounded B τ
+-    unfold Commute SemiconjBy at this
+-    exact congrFun (congrArg DFunLike.coe this.symm) ψ
+-  rw [h_comm] at h_post
+-  exact h_post.congr_of_eventuallyEq (Eventually.of_forall (fun t => (h_eq t)))
++    have h := B_commute_expBounded B τ
++    unfold Commute SemiconjBy at h
++    exact congrFun (congrArg DFunLike.coe h.symm) ψ
++  exact h_left.congr_deriv h_comm
++
++end
+ 
+ end Spectra.YosidaHille.Approximation
+diff -ruN pristine-clean/Spectra/YosidaHille/Helpers.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/YosidaHille/Helpers.lean
+--- pristine-clean/Spectra/YosidaHille/Helpers.lean	2026-07-30 11:52:33.890629109 -0400
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/YosidaHille/Helpers.lean	2026-07-29 18:42:27.343313029 -0400
+@@ -79,8 +79,11 @@
+     refine ⟨N, fun m hm k hk => ?_⟩
+     have hsub : (↑(xn m) - ↑(xn k) : H) ∈ A.domain := A.domain.sub_mem (xn m).2 (xn k).2
+     have hAsub : A ⟨↑(xn m) - ↑(xn k), hsub⟩ - z • (↑(xn m) - ↑(xn k)) = φn m - φn k := by
++      have hsub_eq : (⟨↑(xn m) - ↑(xn k), hsub⟩ : A.domain) = xn m - xn k := by
++        apply Subtype.ext
++        rfl
+       have hms : A ⟨↑(xn m) - ↑(xn k), hsub⟩ = A (xn m) - A (xn k) := by
+-        have := A.map_sub (xn m) (xn k); convert this using 2
++        rw [hsub_eq, A.map_sub]
+       rw [hms, smul_sub, ← hxn m, ← hxn k]; abel_nf
+       grind only
+     have hlb := op_lower_bound hsym z ⟨↑(xn m) - ↑(xn k), hsub⟩
+@@ -215,8 +218,12 @@
+     have hBv : B ⟨(v : H), hvB⟩ - I • (v : H) = B ⟨w, hw⟩ - I • w := by rw [← hagree]; exact hv
+     have hsub : (v : H) - w ∈ B.domain := B.domain.sub_mem hvB hw
+     have hzero : B ⟨(v : H) - w, hsub⟩ - I • ((v : H) - w) = 0 := by
++      have hsub_eq : (⟨(v : H) - w, hsub⟩ : B.domain) =
++          ⟨(v : H), hvB⟩ - ⟨w, hw⟩ := by
++        apply Subtype.ext
++        rfl
+       have op_eq : B ⟨(v : H) - w, hsub⟩ = B ⟨(v : H), hvB⟩ - B ⟨w, hw⟩ := by
+-        have hms := B.map_sub ⟨(v : H), hvB⟩ ⟨w, hw⟩; convert hms using 2
++        rw [hsub_eq, B.map_sub]
+       rw [op_eq, smul_sub, sub_sub_sub_comm, hBv, sub_self]
+     have hvw : (v : H) - w = 0 := by
+       have hlb := op_lower_bound hsymB I ⟨(v : H) - w, hsub⟩
+diff -ruN pristine-clean/Spectra/YosidaHille/RectangularIntertwining.lean /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/YosidaHille/RectangularIntertwining.lean
+--- pristine-clean/Spectra/YosidaHille/RectangularIntertwining.lean	1969-12-31 19:00:00.000000000 -0500
++++ /home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs/retired/Spectra/Spectra/YosidaHille/RectangularIntertwining.lean	2026-07-29 18:42:27.347313016 -0400
+@@ -0,0 +1,233 @@
++/-
++Copyright (c) 2026 Spectra Formalization Project. All rights reserved.
++Released under Apache 2.0 license as described in the file LICENSE.
++Authors: Adam Bornemann, Jon Crall, OpenAI GPT-5.6 Thinking
++-/
++import Spectra.QuantumMechanics.BornRule.Joint.Defs
++import Spectra.YosidaHille.Basic
++import Spectra.Resolvent.Integral.Domain
++
++/-!
++# Rectangular intertwining for Stone groups and spectral calculi
++
++A bounded map between two Hilbert spaces that intertwines the generators of
++strongly continuous unitary groups also intertwines the groups themselves.
++Fourier determinacy of the polarized spectral forms then promotes the group
++identity to every bounded Borel symbol and, in particular, to every spectral
++projection.
++
++The result is rectangular: the source and target Hilbert spaces need not agree.
++This is the natural tool for uniqueness of bounded solutions of homogeneous
++Sylvester equations under arbitrary disjoint self-adjoint spectra.
++-/
++
++open InnerProductSpace Complex Filter Topology
++open scoped InnerProductSpace
++open Spectra.OneParameterUnitaryGroup
++
++namespace Spectra.YosidaHille
++
++noncomputable section
++
++universe u v
++
++variable {E : Type u} {F : Type v}
++  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
++  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
++
++/-- Domain-aware intertwining of the generators of two unitary groups. -/
++structure GeneratorIntertwines
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    (X : F →L[ℂ] E) : Prop where
++  mapsTo_domain : ∀ x : (generator V).domain, X (x : F) ∈ (generator U).domain
++  equation : ∀ x : (generator V).domain,
++    generator U ⟨X (x : F), mapsTo_domain x⟩ = X (generator V x)
++
++namespace GeneratorIntertwines
++
++/-- Generator intertwining is preserved along the source unitary orbit. -/
++lemma equation_orbit
++    {U : OneParameterUnitaryGroup (H := E)}
++    {V : OneParameterUnitaryGroup (H := F)}
++    {X : F →L[ℂ] E}
++    (h : GeneratorIntertwines U V X)
++    (s : ℝ) (x : (generator V).domain) :
++    generator U
++        ⟨X (V.U s (x : F)),
++          h.mapsTo_domain
++            ⟨V.U s (x : F), generator_domain_invariant V s x⟩⟩
++      = X (V.U s (generator V x)) := by
++  let xs : (generator V).domain :=
++    ⟨V.U s (x : F), generator_domain_invariant V s x⟩
++  calc
++    generator U ⟨X (V.U s (x : F)), h.mapsTo_domain xs⟩
++        = X (generator V xs) := h.equation xs
++    _ = X (V.U s (generator V x)) := by rw [generator_comm]
++
++open Spectra.Resolvent in
++/-- **Rectangular Stone intertwining.**  A bounded generator intertwiner
++intertwines the full one-parameter unitary groups. -/
++theorem group
++    {U : OneParameterUnitaryGroup (H := E)}
++    {V : OneParameterUnitaryGroup (H := F)}
++    {X : F →L[ℂ] E}
++    (h : GeneratorIntertwines U V X) :
++    ∀ t : ℝ, U.U t ∘L X = X ∘L V.U t := by
++  intro t
++  have hdense : Dense ((generator V).domain : Set F) :=
++    generatorDomain_dense_via_average V
++  have hpt : ∀ x ∈ (generator V).domain,
++      U.U t (X x) = X (V.U t x) := by
++    intro x hx
++    let xd : (generator V).domain := ⟨x, hx⟩
++    let g : ℝ → E := fun s => U.U (t - s) (X (V.U s x))
++    have hg : ∀ s : ℝ, HasDerivAt g 0 s := by
++      intro s
++      let xs : (generator V).domain :=
++        ⟨V.U s x, generator_domain_invariant V s xd⟩
++      have hVderiv := unitary_orbit_hasDerivAt V xd s
++      have hXderiv : HasDerivAt (fun r => X (V.U r x))
++          (I • X (V.U s (generator V xd))) s := by
++        have hcomp := ((X.restrictScalars ℝ).hasFDerivAt.comp_hasDerivAt s hVderiv)
++        simpa only [ContinuousLinearMap.coe_restrictScalars', map_smul,
++          Function.comp_def, xd] using hcomp
++      have hcurve := group_apply_curve_hasDerivAt U
++        (v := fun r => X (V.U r x))
++        (v' := I • X (V.U s (generator V xd)))
++        (r := fun r => t - r) (r' := -1) (s := s)
++        hXderiv ((hasDerivAt_id s).const_sub t)
++        (h.mapsTo_domain xs)
++      have hkey : generator U
++          ⟨X (V.U s x), h.mapsTo_domain xs⟩
++          = X (V.U s (generator V xd)) := h.equation_orbit s xd
++      rw [show (-1 : ℝ) •
++            (I • U.U (t - s)
++              (generator U ⟨X (V.U s x), h.mapsTo_domain xs⟩))
++            + U.U (t - s) (I • X (V.U s (generator V xd))) = 0 by
++          rw [hkey, map_smul, neg_one_smul, neg_add_cancel]] at hcurve
++      exact hcurve
++    have hconst : g 0 = g t :=
++      is_const_of_deriv_eq_zero
++        (fun s => (hg s).differentiableAt)
++        (fun s => (hg s).deriv) 0 t
++    simpa [g, U.identity, V.identity, ContinuousLinearMap.id_apply,
++      sub_zero, sub_self] using hconst
++  apply ContinuousLinearMap.ext
++  intro x
++  change U.U t (X x) = X (V.U t x)
++  exact congrFun
++    (Continuous.ext_on hdense
++      ((U.U t) ∘L X).continuous
++      (X ∘L V.U t).continuous
++      (fun x hx => hpt x hx)) x
++
++end GeneratorIntertwines
++
++end
++end Spectra.YosidaHille
++
++namespace Spectra.QuantumMechanics.SpectralTheory
++
++open Complex MeasureTheory
++open scoped InnerProductSpace
++open Spectra.Borel
++open Spectra.YosidaHille
++
++noncomputable section
++
++universe u v
++
++variable {E : Type u} {F : Type v}
++  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
++  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
++
++/-- Character determinacy for polarized spectral forms belonging to two
++possibly different unitary groups and Hilbert spaces. -/
++theorem rectangularSpectralForm_ext_of_char
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    (ξ₁ η₁ : E) (ξ₂ η₂ : F)
++    (hchar : ∀ t : ℝ,
++      spectralForm U ξ₁ η₁ (fun l => cexp (I * l * t)) =
++        spectralForm V ξ₂ η₂ (fun l => cexp (I * l * t)))
++    {g : ℝ → ℂ} (hgm : Measurable g) (hgb : ∃ C, ∀ ω, ‖g ω‖ ≤ C) :
++    spectralForm U ξ₁ η₁ g = spectralForm V ξ₂ η₂ g := by
++  have key := Spectra.Fourier.integral_combination_ext'
++    (![1 / 4, -(1 / 4), I / 4, -(I / 4)] : Fin 4 → ℂ)
++    (fun i => borelMeasure U
++      (![ξ₁ + η₁, ξ₁ - η₁, ξ₁ - I • η₁, ξ₁ + I • η₁] i))
++    (![1 / 4, -(1 / 4), I / 4, -(I / 4)] : Fin 4 → ℂ)
++    (fun j => borelMeasure V
++      (![ξ₂ + η₂, ξ₂ - η₂, ξ₂ - I • η₂, ξ₂ + I • η₂] j))
++    (fun t => by
++      have ht := hchar t
++      simp only [spectralForm] at ht
++      simp only [Fin.sum_univ_succ, Fin.sum_univ_zero, Matrix.cons_val_zero,
++        Matrix.cons_val_succ, add_zero]
++      linear_combination ht)
++    hgm hgb
++  simp only [Fin.sum_univ_succ, Fin.sum_univ_zero, Matrix.cons_val_zero,
++    Matrix.cons_val_succ, add_zero] at key
++  simp only [spectralForm]
++  linear_combination key
++
++/-- A rectangular group intertwiner intertwines every bounded Borel spectral
++calculus. -/
++theorem spectralCalculus_intertwines_of_group
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    (X : F →L[ℂ] E)
++    (hX : ∀ t : ℝ, U.U t ∘L X = X ∘L V.U t)
++    {g : ℝ → ℂ} (hgm : Measurable g) (hgb : ∃ C, ∀ ω, ‖g ω‖ ≤ C) :
++    spectralCalculus U g hgm hgb ∘L X =
++      X ∘L spectralCalculus V g hgm hgb := by
++  have hkey : ∀ ξ : E, ∀ η : F,
++      spectralForm U ξ (X η) g =
++        spectralForm V (ContinuousLinearMap.adjoint X ξ) η g := by
++    intro ξ η
++    refine rectangularSpectralForm_ext_of_char U V
++      ξ (X η) (ContinuousLinearMap.adjoint X ξ) η
++      (fun t => ?_) hgm hgb
++    rw [spectralForm_char, spectralForm_char]
++    have hintertwine : U.U t (X η) = X (V.U t η) := by
++      have ht := congrArg (fun T : F →L[ℂ] E => T η) (hX t)
++      simpa only [ContinuousLinearMap.comp_apply] using ht
++    rw [hintertwine, ContinuousLinearMap.adjoint_inner_left]
++  apply ContinuousLinearMap.ext
++  intro η
++  apply ext_inner_left ℂ
++  intro ξ
++  rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply,
++    inner_spectralCalculus,
++    ← ContinuousLinearMap.adjoint_inner_left X
++      (spectralCalculus V g hgm hgb η) ξ,
++    inner_spectralCalculus]
++  exact hkey ξ η
++
++/-- A rectangular generator intertwiner intertwines every bounded Borel
++spectral calculus. -/
++theorem spectralCalculus_intertwines_of_generator
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    (X : F →L[ℂ] E)
++    (hX : GeneratorIntertwines U V X)
++    {g : ℝ → ℂ} (hgm : Measurable g) (hgb : ∃ C, ∀ ω, ‖g ω‖ ≤ C) :
++    spectralCalculus U g hgm hgb ∘L X =
++      X ∘L spectralCalculus V g hgm hgb :=
++  spectralCalculus_intertwines_of_group U V X hX.group hgm hgb
++
++/-- A rectangular generator intertwiner intertwines every spectral
++projection. -/
++theorem spectralProjection_intertwines_of_generator
++    (U : OneParameterUnitaryGroup (H := E))
++    (V : OneParameterUnitaryGroup (H := F))
++    (X : F →L[ℂ] E)
++    (hX : GeneratorIntertwines U V X)
++    (S : Set ℝ) (hS : MeasurableSet S) :
++    spectralProjection U S hS ∘L X = X ∘L spectralProjection V S hS := by
++  exact spectralCalculus_intertwines_of_generator U V X hX
++    (measurable_const.indicator hS) (indicator_one_bdd S)
++
++end
++end Spectra.QuantumMechanics.SpectralTheory
