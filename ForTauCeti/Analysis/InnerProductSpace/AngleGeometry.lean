@@ -113,6 +113,8 @@ the range of the projector. -/
 theorem sinThetaMap_self (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
     sinThetaMap U U = 0 := by
   ext x
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change Uᗮ.starProjection (U.starProjection x) = 0
   exact Submodule.starProjection_orthogonal_apply_eq_zero (U.starProjection_apply_mem x)
 
@@ -248,11 +250,13 @@ theorem principalSines_comm (U V : Submodule 𝕜 E)
   have hu : Orthonormal 𝕜 u := by
     rw [orthonormal_iff_ite]
     intro i j
+    -- states the goal as the inner-product identity the structure lemma expects.
     change ⟪bU i, bU j⟫_𝕜 = if i = j then 1 else 0
     exact orthonormal_iff_ite.mp bU.orthonormal i j
   have hv : Orthonormal 𝕜 v := by
     rw [orthonormal_iff_ite]
     intro i j
+    -- states the goal as the inner-product identity the structure lemma expects.
     change ⟪bV (Fin.cast hdV i), bV (Fin.cast hdV j)⟫_𝕜 =
       if i = j then 1 else 0
     rw [orthonormal_iff_ite.mp bV.orthonormal]
@@ -270,6 +274,8 @@ theorem principalSines_comm (U V : Submodule 𝕜 E)
       exact (bV (Fin.cast hdV i)).2
     · rw [finrank_span_eq_card hv.linearIndependent, Fintype.card_fin]
       exact hdV
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change
     (((Vᗮ.starProjection ∘L U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E).singularValues) =
       (((Uᗮ.starProjection ∘L V.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E).singularValues)
@@ -364,6 +370,7 @@ theorem opNorm_projection_sub_eq_opNorm_sinThetaMap (U V : Submodule 𝕜 E)
       ‖(sinThetaMap U V).toContinuousLinearMap‖ := by
   classical
   letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  -- names the application so the norm bound applies to it directly.
   change ‖U.starProjection - V.starProjection‖ =
     ‖Vᗮ.starProjection ∘L U.starProjection‖
   let d := finrank 𝕜 U
@@ -388,11 +395,13 @@ theorem opNorm_projection_sub_eq_opNorm_sinThetaMap (U V : Submodule 𝕜 E)
   have hu : Orthonormal 𝕜 u := by
     rw [orthonormal_iff_ite]
     intro i j
+    -- states the goal as the inner-product identity the structure lemma expects.
     change ⟪bU i, bU j⟫_𝕜 = if i = j then 1 else 0
     exact orthonormal_iff_ite.mp bU.orthonormal i j
   have hv : Orthonormal 𝕜 v := by
     rw [orthonormal_iff_ite]
     intro i j
+    -- states the goal as the inner-product identity the structure lemma expects.
     change ⟪bV (Fin.cast hdV i), bV (Fin.cast hdV j)⟫_𝕜 =
       if i = j then 1 else 0
     rw [orthonormal_iff_ite.mp bV.orthonormal]

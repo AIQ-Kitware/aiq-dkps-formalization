@@ -164,6 +164,8 @@ theorem singularValues_orthogonalBlockSum_self
     have hμ : Antitone μ := by
       intro j k hjk
       apply hS.eigenvalues_antitone
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       change j.val / 2 ≤ k.val / 2
       exact Nat.div_le_div_right (Fin.le_def.mp hjk)
     have hgram :
@@ -208,6 +210,8 @@ theorem singularValues_orthogonalBlockSum_self
     rw [(orthogonalBlockSum A A).singularValues_of_lt hn hi,
       congrFun heigen ⟨i, hi⟩]
     have hdiv : i / 2 < n := (Nat.div_lt_iff_lt_mul (by omega)).2 hi
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change √(A.isSymmetric_adjoint_comp_self.eigenvalues rfl
       ⟨i / 2, hdiv⟩) = A.singularValues (i / 2)
     rw [A.singularValues_of_lt rfl hdiv]
@@ -239,6 +243,8 @@ theorem rectangularKyFanSum_orthogonalBlockSum_self
       intro p _
       rw [singularValues_orthogonalBlockSum_self]
       congr 1
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       change (p.2.val + 2 * p.1.val) / 2 = p.1.val
       omega
     _ = ∑ i : Fin k, ∑ _r : Fin 2, A.singularValues (i : ℕ) := by
@@ -315,15 +321,21 @@ theorem orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
         _ = B := htsum
     have real_smul_first_eq (r : ℝ) (T : E₁ →ₗ[𝕜] F₁) :
         r • T = ((r : 𝕜)) • T := by
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       change (algebraMap ℝ 𝕜 r) • T = ((r : 𝕜)) • T
       rfl
     have real_smul_second_eq (r : ℝ) (T : E₂ →ₗ[𝕜] F₂) :
         r • T = ((r : 𝕜)) • T := by
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       change (algebraMap ℝ 𝕜 r) • T = ((r : 𝕜)) • T
       rfl
     have real_smul_block_eq (r : ℝ)
         (T : WithLp 2 (E₁ × E₂) →ₗ[𝕜] WithLp 2 (F₁ × F₂)) :
         r • T = ((r : 𝕜)) • T := by
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       change (algebraMap ℝ 𝕜 r) • T = ((r : 𝕜)) • T
       rfl
     have hfirst' :
