@@ -1134,7 +1134,7 @@ state both as `example`s or thin corollaries for the paper's dictionary.
 
 Research-grade formalization; **statement-first gate mandatory** (commit the
 `sorry` stub + a cross-check paragraph against the source before proving).
-Consult `ForMathlib/prose/Davis-1963-core-arguments.tex` and DK III §§6–8
+Consult `prose/core-arguments/Davis-1963-core-arguments.tex` and DK III §§6–8
 (Stewart–Sun V.3, Bhatia VII.1–2 as secondary) *before* writing each stub —
 the hypothesis structure is exactly where these theorems are subtle, and no
 route below should be trusted over the sources.  All three are
@@ -1179,7 +1179,7 @@ and the `|cos 2θ|` weight does not pass through a UI norm naively.
 - **G2.0 (statement gate — Fable, or Opus with a MANDATORY stop after the
   stub commit).**  Write the headline stub + cross-check paragraph from DK
   III §8 (tan 2Θ) with Stewart–Sun V.3 and Bhatia VII as secondaries, and
-  `ForMathlib/prose/Davis-1963-core-arguments.tex` for the per-vector
+  `prose/core-arguments/Davis-1963-core-arguments.tex` for the per-vector
   skeleton.  The one decision that must come from the sources: how the
   statement handles `2θᵢ ≥ π/2` (tan's pole).  Candidate shapes to weigh,
   in decreasing faithfulness-risk:

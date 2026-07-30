@@ -189,7 +189,7 @@ Ask Fable to produce a Mathlib-shaped refactor, not a new proof from scratch:
 
 Current file:
 
-- `ForMathlib/LinearAlgebra/Matrix/PosDef.lean`
+- `ForTauCeti/LinearAlgebra/Matrix/PosDef.lean`
 
 Current declarations:
 

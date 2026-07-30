@@ -16,11 +16,11 @@ import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 Literature map:
 
-* `ForMathlib/prose/Davis-Kahan-1970-part-III-core-arguments.tex`,
+* `prose/core-arguments/Davis-Kahan-1970-part-III-core-arguments.tex`,
   Section 13.
 * Davis--Kahan (1970), Section 2 immediately after the four headline
   theorems, and the two-dimensional models used throughout Sections 6--8.
-* `ForMathlib/prose/Davis-1963-core-arguments.tex`, final sharp two-subspace
+* `prose/core-arguments/Davis-1963-core-arguments.tex`, final sharp two-subspace
   section.
 
 The constants in all four classic theorems are optimal.  Planar models must

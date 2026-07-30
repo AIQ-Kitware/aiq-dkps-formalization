@@ -383,6 +383,21 @@
       "staging_modules": [
         "ForTauCeti.MeasureTheory.HellySelection"
       ]
+    },
+    {
+      "cluster": "mathlib-shaped-leaves",
+      "roadmap_target": "Matrix rank factorization and PSD realization, Berge's maximum theorem and the approximate-minimizer lemma.",
+      "roadmap_focus": "mathlib-shaped-leaves",
+      "status": "staged-unreviewed",
+      "upstream_pr": null,
+      "tauceti_population": "Declared 2026-07-29 by lane FM-RETIRE, which retired `ForMathlib` entirely and moved these four modules here.  **Their declarations keep the `ForMathlib` / `ForMathlib.Matrix` namespaces**, because `Challenge/**/Conformance.lean` are immutable challenge statements that name the leaf theorems there and the comparator matches by fully-qualified name.  These four therefore cannot be exported under `TauCeti.*` names until those statements are re-issued -- a decision, not a task.",
+      "tauceti_target_marker": null,
+      "staging_modules": [
+        "ForTauCeti.LinearAlgebra.Matrix.PosDef",
+        "ForTauCeti.LinearAlgebra.Matrix.RankFactorization",
+        "ForTauCeti.Topology.ApproxMinimizer",
+        "ForTauCeti.Topology.Berge"
+      ]
     }
   ],
   "records": [
@@ -4429,6 +4444,99 @@
       "roadmap_target": "Helly's selection theorem for uniformly bounded monotone functions.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib/LinearAlgebra/Matrix/RankFactorization.lean",
+      "source_declarations": [
+        "exists_eq_mul_of_rank_le",
+        "exists_eq_mul_rank",
+        "rank_le_iff_exists_eq_mul"
+      ],
+      "current_namespace": "ForMathlib.Matrix",
+      "staging_module": "ForTauCeti.LinearAlgebra.Matrix.RankFactorization",
+      "final_tauceti_module": "TauCeti.LinearAlgebra.Matrix.RankFactorization",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Matrix rank factorization and PSD realization, Berge's maximum theorem and the approximate-minimizer lemma.",
+      "provenance_class": "moved verbatim from the retired ForMathlib library; namespace deliberately unchanged (comparator pins)",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.LinearAlgebra.Matrix.PosDef"
+      ],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib/LinearAlgebra/Matrix/PosDef.lean",
+      "source_declarations": [
+        "PosSemidef.exists_conjTranspose_mul_self_of_rank_le",
+        "PosSemidef.exists_eq_conjTranspose_mul_self",
+        "isHermitian_entry_eq_sum_eigenvalues",
+        "posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self"
+      ],
+      "current_namespace": "ForMathlib.Matrix",
+      "staging_module": "ForTauCeti.LinearAlgebra.Matrix.PosDef",
+      "final_tauceti_module": "TauCeti.LinearAlgebra.Matrix.PosDef",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Matrix rank factorization and PSD realization, Berge's maximum theorem and the approximate-minimizer lemma.",
+      "provenance_class": "moved verbatim from the retired ForMathlib library; namespace deliberately unchanged (comparator pins)",
+      "direct_dependencies": [
+        "ForTauCeti.LinearAlgebra.Matrix.RankFactorization",
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib/Topology/ApproxMinimizer.lean",
+      "source_declarations": [
+        "exists_subseq_tendsto_forall_le_of_approxMin",
+        "exists_subseq_tendsto_isMinOn_of_approxMinOn"
+      ],
+      "current_namespace": "ForMathlib",
+      "staging_module": "ForTauCeti.Topology.ApproxMinimizer",
+      "final_tauceti_module": "TauCeti.Topology.ApproxMinimizer",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Matrix rank factorization and PSD realization, Berge's maximum theorem and the approximate-minimizer lemma.",
+      "provenance_class": "moved verbatim from the retired ForMathlib library; namespace deliberately unchanged (comparator pins)",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Topology.Berge"
+      ],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib/Topology/Berge.lean",
+      "source_declarations": [
+        "continuous_iInf_of_isCompact",
+        "exists_modulus_isMinOn",
+        "exists_modulus_isMinOn_family",
+        "tendsto_eval_sub_of_isCompact",
+        "tendsto_subseq_isMinOn_of_isMinOn",
+        "upperHemicontinuousAt_isMinOn"
+      ],
+      "current_namespace": "ForMathlib",
+      "staging_module": "ForTauCeti.Topology.Berge",
+      "final_tauceti_module": "TauCeti.Topology.Berge",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Matrix rank factorization and PSD realization, Berge's maximum theorem and the approximate-minimizer lemma.",
+      "provenance_class": "moved verbatim from the retired ForMathlib library; namespace deliberately unchanged (comparator pins)",
+      "direct_dependencies": [
+        "ForTauCeti.Topology.ApproxMinimizer",
         "Mathlib"
       ],
       "blocked_dependencies": [],

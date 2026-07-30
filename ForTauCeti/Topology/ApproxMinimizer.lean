@@ -42,9 +42,9 @@ to be re-authored per Mathlib's AI-contribution policy at PR time.
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
   `72b913b`; it has had no prior home.
-* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
-  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
-  areas.
+* Extraction class: **authored in place**. Upstream target is Mathlib; the module
+  is staged here because `ForMathlib` was retired on 2026-07-29 and `ForTauCeti`
+  is now the single staging library — see `ForTauCeti/README.md`.
 * Intended Mathlib home: additions to `Mathlib/Topology/Order/Compact.
 * Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
@@ -60,6 +60,10 @@ Moved from `ForMathlib/Topology/` to `ForTauCeti/Topology/` on 2026-07-29 by lan
 FM-RETIRE, which finishes the `ForMathlib` retirement.  The namespace changed from
 `ForMathlib` to `TauCeti` to match the destination package; declaration names,
 statements and proofs are unchanged.
+
+**FM-RETIRE was worked twice, and the two versions disagreed on the namespace.**
+The reconciliation — why `TauCeti` won over `main`'s `ForMathlib`, and which pins
+were updated to match — is recorded once, in `ForTauCeti/Topology/Berge.lean`.
 -/
 
 namespace TauCeti
