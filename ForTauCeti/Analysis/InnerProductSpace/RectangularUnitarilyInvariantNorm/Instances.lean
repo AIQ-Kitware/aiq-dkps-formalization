@@ -29,7 +29,6 @@ Ky Fan and nuclear norms, together with the bridges to and from the square
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -548,11 +547,9 @@ noncomputable def RectangularUnitarilyInvariantNorm.toSquare
   smul' := N.smul'
   invariant' := N.invariant'
 
-end DavisKahanTheory
 
 namespace UnitarilyInvariantNorm
 
-open DavisKahanTheory
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
