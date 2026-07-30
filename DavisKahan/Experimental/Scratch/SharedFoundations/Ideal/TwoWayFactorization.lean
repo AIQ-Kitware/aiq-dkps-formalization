@@ -111,7 +111,14 @@ end Square
 
 section Rectangular
 
-variable {𝕜 : Type*} [RCLike 𝕜]
+-- `𝕜` must live in the SAME universe `u` as the spaces below, not a fresh
+-- auto-bound one.  `SymmetricOperatorIdealFamily.{u, v}` takes `𝕜 : Type u`, and
+-- the call sites in this section instantiate it as `.{u, u}` — adjoints exchange
+-- source and target, so a family closed under adjoints cannot keep the two space
+-- universes independent (see the structure's own docstring).  With `Type*` here
+-- `𝕜` was auto-bound to a fresh `u_1`, and every such call failed with an
+-- application type mismatch.
+variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E F G H : Type u}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
