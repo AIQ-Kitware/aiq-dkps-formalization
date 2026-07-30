@@ -61,11 +61,6 @@ noncomputable abbrev diagonalPart (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (A : E →L[𝕜] E) : E →L[𝕜] E :=
   U.diagonalPart A
 
-/-- Off-diagonal block extraction. -/
-noncomputable abbrev offDiagonalPart (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (A : E →L[𝕜] E) : E →L[𝕜] E :=
-  U.offDiagonalPart A
-
 /-- Symmetric projection gap. -/
 noncomputable abbrev subspaceGap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
