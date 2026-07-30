@@ -425,6 +425,8 @@ theorem exists_aligned_orthonormalBasis
   have hv : Orthonormal 𝕜 v := by
     rw [orthonormal_iff_ite]
     intro i j
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change
       ⟪familyIsometry hv0 (O.symm (EuclideanSpace.single i (1 : 𝕜))),
         familyIsometry hv0 (O.symm (EuclideanSpace.single j (1 : 𝕜)))⟫_𝕜 =
