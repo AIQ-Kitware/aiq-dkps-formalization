@@ -45,6 +45,7 @@ namespace ProjValMeasure
 /-- The quadratic identity in `ℝ≥0∞`: the squared enorm of a projection *is* the
 diagonal measure of the set.  The real-valued form needs a `toReal`, which is
 what makes additivity awkward; this form does not. -/
+@[simp]
 theorem enorm_sq_proj_apply (P : ProjValMeasure H) (B : Set ℝ) (hB : MeasurableSet B)
     (ξ : H) : ‖P.proj B hB ξ‖ₑ ^ 2 = (P.diag ξ) B := by
   haveI := P.diag_finite ξ

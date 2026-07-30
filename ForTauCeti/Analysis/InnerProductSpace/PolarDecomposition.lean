@@ -101,6 +101,7 @@ theorem abs_mul_self (A : E →ₗ[𝕜] E) : abs A ∘ₗ abs A = A.adjoint ∘
 
 /-- **The polar norm identity** `‖|A| x‖ = ‖A x‖`. Not in HJ (SVD route); this is the seed of the
 isometry route (Conway VI.3.9). -/
+@[simp]
 theorem norm_abs_apply (A : E →ₗ[𝕜] E) (x : E) : ‖abs A x‖ = ‖A x‖ := by
   have hsq : ‖abs A x‖ ^ 2 = ‖A x‖ ^ 2 :=
     ((LinearMap.isPositive_adjoint_comp_self A).sq_norm_sqrt_apply x).trans <| by
@@ -146,6 +147,7 @@ noncomputable def polarFactor (A : E →ₗ[𝕜] E) : E →ₗ[𝕜] E :=
     ∘ₗ (((ker A)ᗮ).orthogonalProjectionOnto : E →L[𝕜] ↥((ker A)ᗮ)).toLinearMap
 
 /-- The defining property of the polar factor: `U (|A| x) = A x`. -/
+@[simp]
 theorem polarFactor_apply_abs_apply (A : E →ₗ[𝕜] E) (x : E) :
     polarFactor A (abs A x) = A x := by
   have habs : abs A x ∈ (ker A)ᗮ := abs_apply_mem_orthogonal_ker A x
@@ -280,6 +282,7 @@ noncomputable def choosePolarUnitary (A : E →ₗ[𝕜] E) : E ≃ₗᵢ[𝕜] 
 
 /-- The chosen polar unitary satisfies the defining identity `U (|A| x) = A x`.  It is *a* choice --
 see `choosePolarUnitary` -- but every choice satisfies this. -/
+@[simp]
 theorem choosePolarUnitary_apply_abs_apply (A : E →ₗ[𝕜] E) (x : E) :
     choosePolarUnitary A (abs A x) = A x := by
   have hmem : abs A x ∈ (ker A)ᗮ := abs_apply_mem_orthogonal_ker A x

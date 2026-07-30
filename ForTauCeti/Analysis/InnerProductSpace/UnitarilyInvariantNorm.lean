@@ -92,6 +92,7 @@ noncomputable def diagOp (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → �
 omit [FiniteDimensional 𝕜 E] in
 /-- The defining formula: `diagOp b x` expands `v` in the basis and scales the `i`-th coefficient
 by `x i`. -/
+@[simp]
 theorem diagOp_apply (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) (v : E) :
     diagOp b x v = ∑ i, ((x i : ℝ) : 𝕜) • ⟪b i, v⟫_𝕜 • b i := by
   unfold diagOp
@@ -203,6 +204,7 @@ theorem singularValues_diagOp (hn : finrank 𝕜 E = n)
 /-! ### The operator SVD factorization -/
 
 omit [FiniteDimensional 𝕜 E] in
+@[simp]
 private theorem coe_toLinearMap_apply (U : E ≃ₗᵢ[𝕜] E) (v : E) :
     U.toLinearMap v = U v := rfl
 
@@ -599,6 +601,7 @@ variable (𝕜 E) in
 /-- **Basis independence of the Frobenius norm.**  `‖A‖_F = √(∑ₖ ‖A bₖ‖²)` for
 *any* orthonormal basis `b`, not just the standard one — both sides equal
 `√(∑ σₖ²)` by `sum_sq_singularValues`. -/
+@[simp]
 theorem frobenius_apply (A : E →ₗ[𝕜] E) (hn : finrank 𝕜 E = n)
     (b : OrthonormalBasis (Fin n) 𝕜 E) :
     frobenius 𝕜 E A = Real.sqrt (∑ k, ‖A (b k)‖ ^ 2) := by

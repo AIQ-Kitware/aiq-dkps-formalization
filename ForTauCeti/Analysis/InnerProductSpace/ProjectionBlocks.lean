@@ -57,6 +57,7 @@ def IsOffDiagonal (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →L[𝕜] E) : Prop := U.diagonalPart A = 0
 
 /-- Pointwise formula for reflection. -/
+@[simp]
 theorem reflectionOperator_apply (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (x : E) :
     U.reflectionOperator x = (2 : 𝕜) • U.starProjection x - x := by
@@ -106,6 +107,7 @@ theorem reflectionOperator_comm_of_reduces
     map_sub, map_smul]
 
 /-- Complementary projection as `I-P`, pointwise. -/
+@[simp]
 theorem starProjection_orthogonal_apply (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (x : E) :
     Uᗮ.starProjection x = x - U.starProjection x := by
