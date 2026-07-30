@@ -351,7 +351,15 @@ theorem gauge_neg
     {A : E →L[𝕜] F} (hA : N.Mem A) : N.gauge (-A) = N.gauge A := by
   simpa using N.gauge_smul (-1 : 𝕜) hA
 
-/-- Operator-norm bound for a two-sided composition. -/
+/-- Operator-norm bound for a two-sided composition.
+
+**Deprecated location.**  The statement has nothing to do with ideal families —
+it needs neither an inner product nor completeness — and non-Experimental code
+was reaching into `Experimental.ExactSinTheta` to get it.  It now lives as
+`ContinuousLinearMap.opNorm_comp_comp_le` in
+`ForTauCeti/Analysis/OperatorIdeal/Family/OperatorNorm.lean`, where the same
+calc proof already existed inline.  This alias remains only so the legacy
+namespace keeps building; new uses should take the `ForTauCeti` name. -/
 theorem opNorm_comp_comp_le
     {E F G H : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -360,11 +368,7 @@ theorem opNorm_comp_comp_le
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (L : F →L[𝕜] G) (A : E →L[𝕜] F) (R : H →L[𝕜] E) :
     ‖L ∘L A ∘L R‖ ≤ ‖L‖ * ‖A‖ * ‖R‖ :=
-  calc ‖L ∘L A ∘L R‖ ≤ ‖L‖ * ‖A ∘L R‖ := ContinuousLinearMap.opNorm_comp_le _ _
-    _ ≤ ‖L‖ * (‖A‖ * ‖R‖) :=
-        mul_le_mul_of_nonneg_left
-          (ContinuousLinearMap.opNorm_comp_le A R) (norm_nonneg L)
-    _ = ‖L‖ * ‖A‖ * ‖R‖ := (mul_assoc _ _ _).symm
+  TauCeti.ContinuousLinearMap.opNorm_comp_comp_le L A R
 
 /-- An operator-norm Cauchy modulus converges to a limit in operator norm. -/
 theorem exists_opNorm_limit
