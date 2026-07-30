@@ -20,7 +20,7 @@ declarations are moved verbatim and remain in the `TauCeti.HaagerupZsido`
 namespace.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace HaagerupZsido
@@ -36,7 +36,7 @@ def weight (y : ℝ) : ℝ :=
 /-- Rewrite form of `weight`, for `simp only` chains that must unfold the weight without
 unfolding the surrounding kernel. -/
 theorem weight_def (y : ℝ) : weight y = Real.tanh (Real.pi * y / 2) :=
-  rfl
+  (rfl)
 
 /-- The hyperbolic weight is nonnegative on the half-line `0 ≤ y`, which is the only range the
 Laplace transform integrates over. -/
@@ -94,7 +94,7 @@ def weightLaplaceTransform (t : ℝ) : ℝ :=
 /-- Rewrite form of `weightLaplaceTransform` as an integral over `Ioi 0`. -/
 theorem weightLaplaceTransform_def (t : ℝ) :
     weightLaplaceTransform t = ∫ y in Set.Ioi (0 : ℝ), weight y * Real.exp (-|t| * y) :=
-  rfl
+  (rfl)
 
 /-- The real Haagerup--Zsidó kernel at the sharp parameter. -/
 def realKernel (t : ℝ) : ℝ :=
@@ -103,7 +103,7 @@ def realKernel (t : ℝ) : ℝ :=
 /-- Rewrite form of `realKernel` as the sine multiple of the weight's Laplace transform. -/
 theorem realKernel_def (t : ℝ) :
     realKernel t = (Real.sin t / 2) * weightLaplaceTransform t :=
-  rfl
+  (rfl)
 
 /-- The complex reciprocal kernel `-i f₀`. -/
 def reciprocalKernel (t : ℝ) : ℂ :=
@@ -112,7 +112,7 @@ def reciprocalKernel (t : ℝ) : ℂ :=
 /-- Rewrite form of `reciprocalKernel` as `-i` times the real kernel. -/
 theorem reciprocalKernel_def (t : ℝ) :
     reciprocalKernel t = -Complex.I * (realKernel t : ℂ) :=
-  rfl
+  (rfl)
 
 /-- The hyperbolic weight is continuous.  Proved through the exponential quotient form rather
 than from `Real.tanh` directly, since the quotient has a manifestly nonvanishing denominator. -/
