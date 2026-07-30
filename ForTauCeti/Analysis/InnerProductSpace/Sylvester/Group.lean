@@ -154,14 +154,6 @@ theorem tendsto_norm_of_tendsto_energy {α : Type*} {l : Filter α} (b : Hilbert
     simpa [Function.comp_def] using (ENNReal.tendsto_toReal (by simp)).comp h
   simpa [Function.comp_def] using (Real.continuous_sqrt.tendsto (0 : ℝ)).comp h1
 
-omit [CompleteSpace F] in
-/-- The column-to-operator map is additive on differences.  Stated separately from `ofLp_add`
-because the subtraction form is what the convergence arguments use. -/
-theorem ofLp_sub (b : HilbertBasis ι 𝕜 F) (f g : lp (fun _ : ι => E) 2) :
-    ofLp b (f - g) = ofLp b f - ofLp b g := by
-  have h : ofLp b (f - g) + ofLp b g = ofLp b f := by rw [← ofLp_add]; congr 1; abel
-  rw [← h]; abel
-
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The energy of `W ∘ S - S`, written out columnwise. -/
 theorem energy_sub_comp_eq (b : HilbertBasis ι 𝕜 F) (S : F →L[𝕜] E) (W : E →L[𝕜] E) :
