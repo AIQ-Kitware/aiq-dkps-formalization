@@ -31,7 +31,7 @@ review is exactly a review of a future submission unit.
 - [ ] `(root files) :: tooling` — 2 files, 789 lines — **blocked (0/2 files)**
 - [ ] `(root modules)` — 7 files, 65 lines — **blocked (0/7 files)**
 - [ ] `.claude :: data/config` — 1 files, 6 lines — **blocked (0/1 files)**
-- [ ] `.llm_resource_tally :: data/config` — 3 files, 936 lines — **blocked (0/3 files)**
+- [ ] `.llm_resource_tally :: data/config` — 3 files, 937 lines — **blocked (0/3 files)**
 - [ ] `.llm_resource_tally :: documentation` — 1 files, 99 lines — **blocked (0/1 files)**
 - [ ] `.llm_resource_tally :: other` — 3 files, 12 lines — **blocked (0/3 files)**
 - [ ] `.llm_resource_tally :: tooling` — 17 files, 1,743 lines — **blocked (0/17 files)**
@@ -43,7 +43,7 @@ review is exactly a review of a future submission unit.
 - [ ] `Acharyya2025 :: documentation` — 2 files, 1,430 lines — **blocked (0/2 files)**
 - [ ] `Challenge :: documentation` — 1 files, 147 lines — **blocked (0/1 files)**
 - [ ] `Challenge/MathlibCandidate` — 6 files, 501 lines — **blocked (0/6 files)**
-- [ ] `Challenge/MathlibPending` — 43 files, 2,020 lines — **blocked (0/43 files)**
+- [ ] `Challenge/MathlibPending` — 43 files, 2,020 lines — **blocked (5/43 files)**
 - [ ] `DavisKahan` — 2 files, 41 lines — **blocked (0/2 files)**
 - [ ] `DavisKahan :: documentation` — 8 files, 593 lines — **blocked (0/8 files)**
 - [ ] `DavisKahan/Alternative` — 8 files, 1,294 lines — **blocked (0/8 files)**
@@ -120,7 +120,7 @@ review is exactly a review of a future submission unit.
 - [ ] `Helm2025 :: other` — 1 files, 265 lines — **blocked (0/1 files)**
 - [ ] `comparator :: data/config` — 23 files, 335 lines — **blocked (0/23 files)**
 - [ ] `dev :: data/config` — 25 files, 11,483 lines — **blocked (0/25 files)**
-- [ ] `dev :: documentation` — 147 files, 35,189 lines — **blocked (0/147 files)**
+- [ ] `dev :: documentation` — 147 files, 35,183 lines — **blocked (0/147 files)**
 - [ ] `dev :: manifest/notes` — 8 files, 119 lines — **blocked (0/8 files)**
 - [ ] `dev/alternates` — 1 files, 412 lines — **blocked (0/1 files)**
 - [ ] `docs :: documentation` — 33 files, 6,197 lines — **blocked (0/33 files)**
