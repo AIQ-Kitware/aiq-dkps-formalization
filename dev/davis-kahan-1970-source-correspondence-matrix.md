@@ -25,7 +25,7 @@ the records are given once here.
 | `exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁` | `exactMap` and `F₁` split the ambient space orthogonally |
 | `gap_pos : 0 < gap` | the separation is strictly positive |
 | `lowerFrame : LowerFrameBound data.X frameLowerBound`, `frameLowerBound_pos` | the trial map is bounded below |
-| `spectral_gap : UnboundedSylvesterGap data.A₀ data.Λ₁ gap` | interval/exterior **or** either ordered half-line orientation |
+| `spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap` | interval/exterior **or** either ordered half-line orientation |
 
 `PaperTheorem62Data` is identical except that `spectral_gap` is replaced by
 `spectral_distance : PairwiseSpectrumGap data.A₀ data.Λ₁ gap` — the

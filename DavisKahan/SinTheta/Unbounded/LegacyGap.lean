@@ -7,13 +7,13 @@ import DavisKahan.SinTheta.Unbounded.Core
 import DavisKahan.Sylvester.Unbounded.LegacyGap
 
 /-!
-# Completion of the manuscript-shaped complex gap surface
+# Sine-theta endpoints over the form-bounded gap
 
-The historical problem records use `UnboundedSylvesterGap`.  This module keeps
-those statements intact while routing their complex proofs through the direct
-genuine-spectrum Sylvester engine.  It is deliberately above both the
-Sylvester and sine-theta implementation layers so that the compatibility route
-does not enter either foundational import cone.
+The source-correspondence problem records take `FormBoundedSylvesterGap`.  This
+module keeps those statements intact while routing their complex proofs through
+the direct spectral Sylvester engine.  It is deliberately above both the
+Sylvester and sine-theta implementation layers so that the transport route does
+not enter either foundational import cone.
 -/
 
 namespace TauCeti
@@ -44,7 +44,7 @@ theorem sinTheta_unbounded_complex
     (_hX : IsometricEmbedding D.X)
     (hF₁ : IsometricEmbedding D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
       δ * N.gauge (D.X.adjoint ∘L D.F₁)
@@ -67,7 +67,7 @@ theorem sinTheta_unbounded_exact_complex
     (hX : IsometricEmbedding D.X)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
       ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
@@ -95,7 +95,7 @@ theorem generalizedSinTheta_unbounded_complex
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
         (sinThetaBlock D.X D.F₁ hframe hε) ∧
@@ -130,7 +130,7 @@ theorem generalizedSinTheta_unbounded_exact_complex
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
         (directedSinThetaOperator D.X F₀ hframe hε) ∧
@@ -151,7 +151,7 @@ theorem generalizedSinTheta_unbounded_exact_complex
 Every hypothesis of the bundled statement is definitionally the raw one at
 `D.toClosed`: `ClosedOperator.IsSelfAdjoint` unfolds to `IsSelfAdjoint` of the
 canonical partial map, `UnboundedSinThetaDataPMap.toClosed` round-trips by `rfl`,
-and `UnboundedSylvesterGap` is a facade for `linearPMap_UnboundedSylvesterGap`.
+and `FormBoundedSylvesterGap` is a facade for `linearPMap_FormBoundedSylvesterGap`.
 So the transfer is a reindexing, not a proof. -/
 theorem linearPMap_sinTheta_unbounded_exact_complex
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
@@ -163,7 +163,7 @@ theorem linearPMap_sinTheta_unbounded_exact_complex
     (hX : IsometricEmbedding D.X)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : linearPMap_UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : linearPMap_FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
       ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
@@ -185,7 +185,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_exact_complex
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : linearPMap_UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : linearPMap_FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
         (directedSinThetaOperator D.X F₀ hframe hε) ∧
