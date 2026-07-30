@@ -148,16 +148,6 @@ namespace TauCeti
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E] {n : ℕ}
 
-end OrthonormalBasis
-
-namespace TauCeti
-
-open scoped InnerProductSpace
-open LinearMap InnerProductSpace
-
-variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-  [FiniteDimensional 𝕜 E] {n : ℕ}
-
 /-! ### Complete orthogonal projection families -/
 
 /-- A **complete orthogonal family** of `m` projections on `E`: pairwise-orthogonal projections
