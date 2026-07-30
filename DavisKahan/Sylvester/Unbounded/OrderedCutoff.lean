@@ -341,6 +341,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
     (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily
     hA1inv B1 hρ hδ hA1invNorm hB1norm hEqShift
       (KyFanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk Cc)
+  simp only [KyFanDominantIdealFamily.toRectangular_gauge] at hmain
   rw [KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Xc,
     KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Cc] at hmain
   simpa only [Xc, Cc, PA, PB, ContinuousLinearMap.comp_assoc] using hmain.2
@@ -448,6 +449,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
     (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily
     hB1inv A1 hρ hδ hB1invNorm hA1norm hEqShift
       (KyFanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk Cc)
+  simp only [KyFanDominantIdealFamily.toRectangular_gauge] at hmain
   rw [KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Xc,
     KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Cc] at hmain
   simpa only [Xc, Cc, PA, PB, ContinuousLinearMap.comp_assoc] using hmain.2

@@ -24,7 +24,7 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
 import Acharyya2024.Common
-import ForMathlib.LinearAlgebra.Matrix.PosDef
+import ForTauCeti.LinearAlgebra.Matrix.PosDef
 
 open scoped BigOperators
 open Matrix

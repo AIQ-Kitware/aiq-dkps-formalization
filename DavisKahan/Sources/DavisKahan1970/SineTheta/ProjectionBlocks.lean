@@ -120,7 +120,8 @@ theorem paperDiagonalPair_all_kyFan_le
     have h := paperDiagonalPair_gauge_le
       N.toRectangularSymmetricIdealFamily U V
       (KyFanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk K)
-    simpa only [N, KyFanDominantIdealFamily.kyFan_gauge] using h
+    simpa only [N, KyFanDominantIdealFamily.toRectangular_gauge,
+      KyFanDominantIdealFamily.kyFan_gauge] using h
 
 /-- Literal source-norm form of Davis--Kahan Lemma 6.2. -/
 theorem paperDiagonalPair_paperNorm_le

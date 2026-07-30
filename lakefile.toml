@@ -3,7 +3,7 @@ version = "0.1.0"
 keywords = ["math", "formalization", "DKPS", "MDS", "spectral-perturbation"]
 # The ordinary build is the complete claimed-mathematics build.  Admission-
 # dependent API experiments are available explicitly as DavisKahan.Experimental.
-defaultTargets = ["ForMathlib", "ForTauCeti", "DavisKahan.All", "Acharyya2024", "Acharyya2025", "DkpsQuench2026", "Helm2025"]
+defaultTargets = ["ForTauCeti", "DavisKahan.All", "Acharyya2024", "Acharyya2025", "DkpsQuench2026", "Helm2025"]
 
 # Standalone Lean workspace for Davis--Kahan and four DKPS paper developments.
 # The libraries share one Mathlib checkout/build and are intentionally kept as
@@ -18,8 +18,9 @@ autoImplicit = false
 
 
 
-# Mathlib-staging library: paper-agnostic results restated in Mathlib idiom,
-# one file per proposed Mathlib destination path.  See ForMathlib/README.md.
+# ForMathlib is RETIRED (lane FM-RETIRE, 2026-07-29).  Its four surviving modules moved
+# into ForTauCeti and the library, its root module and its directory are deleted.
+# See ForTauCeti/README.md.
 
 # BEGIN retired upstream Spectra snapshot
 #
@@ -56,25 +57,6 @@ path = "external/TauCeti"
 name = "mathlib"
 scope = "leanprover-community"
 # END authoritative root Mathlib dependency
-
-[[lean_lib]]
-name = "ForMathlib"
-# The glob builds every ForMathlib file, not just the ones the root aggregate happens to
-# import. Without it Lake builds `ForMathlib.lean` and its six transitive imports only, so
-# the other six modules were compiled solely as dependencies of `DavisKahan` -- outside the
-# `leanOptions` below, and therefore against this repository's default linter set rather than
-# Mathlib's. That is the very gap these options exist to close, and it was invisible because
-# `lake build ForMathlib` never touched those files. `ForTauCeti` carries the same glob.
-globs = ["ForMathlib.*"]
-# ForMathlib is destined for **Mathlib**, so it is measured against Mathlib's own linter
-# set rather than this repository's default. Unlike `ForTauCeti` the copyright-header
-# linter stays **on**: Tau Ceti disables it, Mathlib does not. The census under these
-# options was 22 when the default set reported 0, and it is now 0 across all twelve modules.
-# `warningAsError` is on so it cannot regress. The three `[DecidableEq n]` warnings that
-# used to keep it off are pinned by an immutable Challenge conformance statement and cannot
-# be fixed from here; they are suppressed at exactly those three declarations, with the
-# reasoning at the point of use -- see ForMathlib/LinearAlgebra/Matrix/RankFactorization.lean.
-leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, weak.linter.style.longFile = 1500, weak.linter.style.longFileDefValue = 1500 }
 
 # ForTauCeti: the reusable-mathematics package.  Declarations live in their final
 # `TauCeti.*` namespaces.  A ForTauCeti module may import only `Mathlib.*`,
@@ -146,7 +128,7 @@ leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, we
 
 
 # Comparator/challenge modules for community calibration of AI-authored
-# ForMathlib candidates. These are intentionally not default targets.
+# upstream candidates. These are intentionally not default targets.
 [[lean_lib]]
 name = "Challenge"
 globs = ["Challenge.*"]

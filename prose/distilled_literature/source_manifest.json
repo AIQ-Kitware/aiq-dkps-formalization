@@ -294,7 +294,7 @@
       "target_note": "Schoenberg1935_euclidean_distance_matrices.tex",
       "repo_evidence": [
         "Acharyya2025/Deterministic.lean",
-        "ForMathlib/LinearAlgebra/Matrix/PosDef.lean"
+        "ForTauCeti/LinearAlgebra/Matrix/PosDef.lean"
       ],
       "existing_assets": [],
       "scope": "Conditional negative type and Hilbert-space realization underlying Euclidean distance matrices and double centering.",
@@ -318,7 +318,7 @@
       "primary_url": "",
       "target_note": "YoungHouseholder1938_mutual_distances.tex",
       "repo_evidence": [
-        "ForMathlib/LinearAlgebra/Matrix/PosDef.lean",
+        "ForTauCeti/LinearAlgebra/Matrix/PosDef.lean",
         "Acharyya2025/GramRealization.lean"
       ],
       "existing_assets": [],
@@ -738,7 +738,7 @@
       "target_note": "Mirsky1960_symmetric_gauge_ui_norms.tex",
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean",
-        "ForMathlib/prose/Davis-Kahan-1970-part-III-core-arguments.tex"
+        "prose/core-arguments/Davis-Kahan-1970-part-III-core-arguments.tex"
       ],
       "existing_assets": [],
       "scope": "Symmetric gauge representations, unitarily invariant norms, and dominance principles used in the Part III extension.",
@@ -766,7 +766,7 @@
         "DavisKahan/Sources/Davis1963/DoubleAngle.lean"
       ],
       "existing_assets": [
-        "ForMathlib/prose/Davis-1963-core-arguments.tex",
+        "prose/core-arguments/Davis-1963-core-arguments.tex",
         "prose/distilled_literature/Davis1963_rotation_of_eigenvectors.tex"
       ],
       "scope": "Davis Sections 2--5, canonical rotations, total-rotation bound, sharp two-subspace estimates, sin 2 theta and tan 2 theta precursors.",
@@ -831,7 +831,7 @@
         "DavisKahan/TanTheta/Theorem63FiniteSource.lean"
       ],
       "existing_assets": [
-        "ForMathlib/prose/Davis-Kahan-1970-part-III-core-arguments.tex",
+        "prose/core-arguments/Davis-Kahan-1970-part-III-core-arguments.tex",
         "prose/distilled_literature/DavisKahan1970_part_III.tex",
         "prose/InfiniteDimensionalDavisKahan.tex",
         "prose/distilled_literature/DavisKahan1970_section9_numerical_example.tex",
@@ -1170,7 +1170,7 @@
         "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean"
       ],
       "existing_assets": [
-        "ForMathlib/prose/Yu-Wang-Samworth-2014-core-arguments.tex",
+        "prose/core-arguments/Yu-Wang-Samworth-2014-core-arguments.tex",
         "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex"
       ],
       "scope": "Population-gap Frobenius sin Theta bound, Hoffman--Wielandt step, singular-vector extension, and Procrustes-aligned basis conclusion.",
@@ -1271,7 +1271,7 @@
       "repo_evidence": [
         "Acharyya2025/GramRigidity.lean",
         "Acharyya2025/GramRealization.lean",
-        "ForMathlib/LinearAlgebra/Matrix/PosDef.lean"
+        "ForTauCeti/LinearAlgebra/Matrix/PosDef.lean"
       ],
       "existing_assets": [],
       "scope": "Selected classical-scaling and Euclidean-distance realization sections.",
@@ -1379,7 +1379,7 @@
       ],
       "existing_assets": [
         "prose/distilled_literature/HornJohnson2013_selected_matrix_analysis.tex",
-        "ForMathlib/prose/Horn-Johnson-2013-Gram-core-arguments.tex"
+        "prose/core-arguments/Horn-Johnson-2013-Gram-core-arguments.tex"
       ],
       "scope": "Selected theorem-level reconstruction: the complete Courant--Fischer prerequisite and literal-extrema chain; full Weyl, perturbation, interlacing, compression, Ky Fan, majorization, and trace descendants; Hermitian dilation, singular-value deletion and min--max, additive and product Weyl inequalities, mixed-product bounds, selected eigenvalue/singular-value majorization, and links into unitarily invariant norm theory, plus the separate Gram-rigidity reference material.",
       "missing_work": "The selected source chain is distilled in formalization-ready detail. Remaining Lean gaps include the Rayleigh/unit-sphere value-set API; literal sInf/sSup Courant--Fischer equalities and attainment; quantitative intersection families; full two-index Weyl and equality; Cauchy/Poincare interlacing and compression; Lidskii and trace-rearrangement majorization; Hermitian dilation; individual singular-value min--max, deletion, unsquared perturbation, and additive/product inequalities. Do not attempt to distill unrelated portions of the book.",

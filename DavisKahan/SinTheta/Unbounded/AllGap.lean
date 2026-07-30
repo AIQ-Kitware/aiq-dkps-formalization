@@ -168,7 +168,7 @@ theorem generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
   have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
     N.toRectangularSymmetricIdealFamily D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
   refine ⟨hAngle.1, ?_⟩
-  simp only [KyFanDominantIdealFamily.gauge]
+  rw [KyFanDominantIdealFamily.toRectangular_gauge] at hAngle
   rw [hAngle.2]
   exact hBlock.2
 
@@ -197,7 +197,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
   have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
     N.toRectangularSymmetricIdealFamily D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
   refine ⟨hAngle.1, ?_⟩
-  simp only [KyFanDominantIdealFamily.gauge]
+  rw [KyFanDominantIdealFamily.toRectangular_gauge] at hAngle
   rw [hAngle.2]
   exact hBlock.2
 
@@ -251,7 +251,7 @@ theorem sinTheta_unbounded_exact_of_genuineSpectrumGap
   have hAngle := isometricComplementaryBlock_mem_and_gauge_eq_directed
     N.toRectangularSymmetricIdealFamily D.X F₀ D.F₁ hX hdecomp hRaw.1
   refine ⟨hAngle.1, ?_⟩
-  simp only [KyFanDominantIdealFamily.gauge]
+  rw [KyFanDominantIdealFamily.toRectangular_gauge] at hAngle
   rw [hAngle.2]
   exact hRaw.2.trans hC.2
 
