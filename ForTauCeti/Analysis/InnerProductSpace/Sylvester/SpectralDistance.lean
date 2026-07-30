@@ -44,38 +44,14 @@ The Bhatia--Davis--McIntosh extension is factored through the simultaneous Ky
 Fan prefix estimate and rectangular Fan dominance.
 -/
 
-/-- Reciprocal spectral multiplier in the canonical eigenbases of `A` and `B`.
-The gap hypothesis is not built into the definition; it is supplied when the
-kernel is used, so the object remains a simple coordinate function. -/
-noncomputable def sylvesterReciprocalKernel
-    {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E}
-    (hA : A.IsSymmetric) (hB : B.IsSymmetric) :
-    Fin (Module.finrank 𝕜 F) → Fin (Module.finrank 𝕜 E) → 𝕜 :=
-  fun i j =>
-    ((hA.eigenvalues rfl i : 𝕜) - (hB.eigenvalues rfl j : 𝕜))⁻¹
+/-- Entrywise spectral-coordinate form of the Sylvester equation:
+`(αᵢ-βⱼ) Xᵢⱼ = Cᵢⱼ`.
 
-/-- Positive spectral separation makes every denominator of the reciprocal
-kernel nonzero.  This is the scalar fact used both by the coordinate solution
-formula and by the multiplier estimate. -/
-theorem sylvester_eigenvalue_sub_ne_zero
-    {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E}
-    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated A ⊤ B ⊤ δ)
-    (i : Fin (Module.finrank 𝕜 F)) (j : Fin (Module.finrank 𝕜 E)) :
-    (hA.eigenvalues rfl i : 𝕜) - (hB.eigenvalues rfl j : 𝕜) ≠ 0 := by
-  let α : ℝ := hA.eigenvalues rfl i
-  let β : ℝ := hB.eigenvalues rfl j
-  have hα : α ∈ restrictedSpectrum A ⊤ :=
-    eigenvalue_mem_restrictedSpectrum_top hA i
-  have hβ : β ∈ restrictedSpectrum B ⊤ :=
-    eigenvalue_mem_restrictedSpectrum_top hB j
-  have habs : 0 < |α - β| := lt_of_lt_of_le hδ (hgap α β hα hβ)
-  have hαβ : α ≠ β := sub_ne_zero.mp (abs_pos.mp habs)
-  exact sub_ne_zero.mpr fun h => hαβ (RCLike.ofReal_injective h)
-
-/-- Entrywise spectral-coordinate form of the Sylvester equation.  It exposes
-exactly the scalar equation to which the reciprocal kernel is applied:
-`(αᵢ-βⱼ) Xᵢⱼ = Cᵢⱼ`. -/
+This used to be described as exposing "the scalar equation to which the
+reciprocal kernel is applied".  There is no reciprocal kernel: the route through
+an explicit multiplier `(αᵢ-βⱼ)⁻¹` was abandoned in favour of the Ky Fan prefix
+estimate this file actually proves, and the two declarations left over from it
+have been removed. -/
 theorem sylvester_eigenbasis_coefficient_equation
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
