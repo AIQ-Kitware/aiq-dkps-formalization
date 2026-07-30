@@ -592,19 +592,127 @@ theorem doubleAngle_directedGap_identity
   rw [hassoc, complementary_comp_reflection_comp_projection,
     norm_reflection_comp]
 
-/-- **Leaf obligation.** In every symmetric norm ideal, the full sine of the
-angle to the mirror image carries the same membership and gauge as the
-one-sided double-angle operator: their singular values agree. -/
-theorem SymmetricNormIdeal.sinAngle_reflected_mem_gauge_eq
+/-- **The one-sided double-angle operator is a two-sided multiple of the
+projector difference to the mirror image**, with both multipliers of norm at
+most one: `2 P_Uᗮ P_V P_U = R_V (P_U - P_W) P_U` for `W = R_V U`.
+
+This is the ideal-theoretic form of `sinAngle_reflected_eq_sinTwoAngle`, and it
+is what an arbitrary symmetric norm ideal can actually use: `ideal_mem` and
+`ideal_bound` see a two-sided multiple, whereas the gap identity only speaks
+about operator norms. -/
+theorem reflection_comp_projectionDifference_comp_projection
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    reflectionOperator V ∘L
+        ((U.starProjection - (reflectedSubspace V U).starProjection : E →L[𝕜] E) ∘L
+          U.starProjection) =
+      sinTwoAngleOperator U V := by
+  have hidem (x : E) : U.starProjection (U.starProjection x) = U.starProjection x :=
+    Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
+  have h1 : (1 - (reflectedSubspace V U).starProjection : E →L[𝕜] E) ∘L
+      U.starProjection =
+      reflectionOperator V ∘L
+        (Uᗮ.starProjection ∘L reflectionOperator V ∘L U.starProjection) := by
+    rw [← Submodule.starProjection_orthogonal' (reflectedSubspace V U),
+      starProjection_orthogonal_reflectedSubspace]
+    ext x
+    rfl
+  calc reflectionOperator V ∘L
+        ((U.starProjection - (reflectedSubspace V U).starProjection : E →L[𝕜] E) ∘L
+          U.starProjection)
+      = reflectionOperator V ∘L
+          ((1 - (reflectedSubspace V U).starProjection : E →L[𝕜] E) ∘L
+            U.starProjection) := by
+        congr 1
+        ext x
+        simp [hidem x]
+    _ = reflectionOperator V ∘L (reflectionOperator V ∘L
+          (Uᗮ.starProjection ∘L reflectionOperator V ∘L U.starProjection)) := by
+        rw [h1]
+    _ = Uᗮ.starProjection ∘L reflectionOperator V ∘L U.starProjection := by
+        ext x
+        simp only [ContinuousLinearMap.coe_comp', Function.comp_apply,
+          reflectionOperator_apply_apply]
+    _ = sinTwoAngleOperator U V :=
+        complementary_comp_reflection_comp_projection U V
+
+/-- **The one-sided double-angle operator lies in every symmetric norm ideal
+that contains the projector difference to the mirror image, with no larger
+gauge.**
+
+Both halves are the ideal axioms applied to
+`reflection_comp_projectionDifference_comp_projection`: `ideal_mem` for
+membership, `ideal_bound` for the gauge, using `‖R_V‖ ≤ 1` and `‖P_U‖ ≤ 1`.
+
+**The reverse inequality is false**, which is why this is stated one-sidedly;
+see `norm_sinAngle_reflected_eq_norm_sinTwoAngle` below for the counterexample
+and for what survives at the level of the operator norm. -/
+theorem SymmetricNormIdeal.sinTwoAngle_mem_and_gauge_le
+    (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E)) (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hmem : I.mem
+      (U.starProjection - (reflectedSubspace V U).starProjection : E →L[𝕜] E)) :
+    I.mem (sinTwoAngleOperator U V) ∧
+      I.gauge (sinTwoAngleOperator U V) ≤
+        I.gauge
+          (U.starProjection - (reflectedSubspace V U).starProjection : E →L[𝕜] E) := by
+  have hid := reflection_comp_projectionDifference_comp_projection U V
+  refine ⟨hid ▸ I.ideal_mem (reflectionOperator V) U.starProjection hmem, ?_⟩
+  have hb := I.ideal_bound (reflectionOperator V) U.starProjection hmem
+  rw [hid] at hb
+  refine hb.trans ?_
+  have h0 : 0 ≤ I.gauge
+      (U.starProjection - (reflectedSubspace V U).starProjection : E →L[𝕜] E) :=
+    I.nonneg hmem
+  calc ‖reflectionOperator V‖ * I.gauge
+        (U.starProjection - (reflectedSubspace V U).starProjection : E →L[𝕜] E) *
+        ‖U.starProjection‖
+      ≤ 1 * I.gauge
+          (U.starProjection - (reflectedSubspace V U).starProjection : E →L[𝕜] E) * 1 := by
+        gcongr
+        · exact Submodule.norm_reflectionOperator_le_one V
+        · exact U.starProjection_norm_le
+    _ = _ := by ring
+
+/-- **The full sine of the angle to the mirror image has the same norm as the
+one-sided double-angle operator.**
+
+This is `sinAngle_reflected_eq_sinTwoAngle` stated for the sine operator itself
+rather than for the gap, which it becomes once `‖|T|‖ = ‖T‖`
+(`norm_operatorAbsoluteValue`).
+
+## What this replaced, and why it is a norm statement and not a gauge statement
+
+Until 2026-07-30 this position held a leaf obligation asserting the same thing
+for *every symmetric norm ideal* — equal membership and equal gauge — on the
+stated grounds that "their singular values agree".  **They do not.  They agree
+up to a factor of two in multiplicity, and no amount of proof effort was going
+to close that `sorry`.**
+
+In the generic two-subspace block at angle `θ`, `|P_U - P_W|` for `W = R_V U`
+carries the singular value `sin 2θ` **twice**, once on `U ∩ Wᗮ` and once on
+`Uᗮ ∩ W`, while `2 P_Uᗮ P_V P_U` carries it **once**.  Concretely in `ℂ²`, with
+`U = span e₁` and `V = span (e₁ + e₂)`: reflection in `V` carries `U` to `Uᗮ`,
+so `P_U - P_W = diag (1, -1)`, whose absolute value is `1` and whose Frobenius
+gauge is `√2`; while `2 P_Uᗮ P_V P_U = e₂ e₁⋆` has Frobenius gauge `1`.
+
+The operator norm is exactly the gauge that cannot see this, since `max` of a
+doubled multiset is unchanged — which is why the two norm identities directly
+above go through and the ideal statement could not.  A true ideal-level
+statement would be the two-sided bound
+`gauge (sin 2Θ) ≤ gauge |P_U - P_W| ≤ 2 * gauge (sin 2Θ)`; it is not stated here
+because it needs `operatorAbsoluteValue_mem_and_gauge_eq`, still a leaf. -/
+theorem norm_sinAngle_reflected_eq_norm_sinTwoAngle
     [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
     [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
-    (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E)) (U V : Submodule 𝕜 E)
+    (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    (I.mem (sinAngleOperator U (reflectedSubspace V U)) ↔
-      I.mem (sinTwoAngleOperator U V)) ∧
-    I.gauge (sinAngleOperator U (reflectedSubspace V U)) =
-      I.gauge (sinTwoAngleOperator U V) :=
-  sorry
+    ‖sinAngleOperator U (reflectedSubspace V U)‖ = ‖sinTwoAngleOperator U V‖ := by
+  rw [show sinAngleOperator U (reflectedSubspace V U) =
+      operatorAbsoluteValue
+        (U.starProjection - (reflectedSubspace V U).starProjection) from rfl,
+    norm_operatorAbsoluteValue]
+  exact sinAngle_reflected_eq_sinTwoAngle U V
 
 omit [CompleteSpace E] in
 /-- The reflection defect is `-2` times the sum of the two off-diagonal
@@ -1004,7 +1112,8 @@ theorem ideal_sinTwoTheta
     have h := I.add_mem
       (I.ideal_mem (reflectionOperator V) (reflectionOperator V) hAB) hnegAB
     simpa [sub_eq_add_neg] using h
-  have hsin := ideal_sinTheta I hA hA' hU hU' hlr hlr' hd hUU' hU'U hdefMem
+  have hsin := projectionDifference_ideal_intervalExterior
+    I hA hA' hU hU' hlr hlr' hd hUU' hU'U hdefMem
   have hdefGauge : I.gauge (A'-A) ≤ 2 * I.gauge (B-A) := by
     rw [show A'-A = reflectionDefect V A by rfl,
       reflectionDefect_eq_perturbationDefect A B V hV]
@@ -1027,9 +1136,16 @@ theorem ideal_sinTwoTheta
             I.gauge (-(A-B)) := htri
       _ = I.gauge (A-B) + I.gauge (A-B) := by rw [hconj, hgneg]
       _ = 2 * I.gauge (B-A) := by rw [hgBA]; ring
-  obtain ⟨hmemiff, hgaugeeq⟩ := I.sinAngle_reflected_mem_gauge_eq U V
-  exact ⟨hmemiff.mp hsin.1,
-    by rw [← hgaugeeq]; exact hsin.2.trans hdefGauge⟩
+  obtain ⟨hmemS, hgaugeS⟩ := I.sinTwoAngle_mem_and_gauge_le U V hsin.1
+  refine ⟨hmemS, ?_⟩
+  -- the gauge only goes one way, and this is the way it goes: passing from the
+  -- projector difference to the one-sided operator can only decrease it.
+  calc d * I.gauge (sinTwoAngleOperator U V)
+      ≤ d * I.gauge
+          (U.starProjection - (reflectedSubspace V U).starProjection : E →L[𝕜] E) := by
+        gcongr
+    _ ≤ I.gauge (A' - A) := hsin.2
+    _ ≤ 2 * I.gauge (B - A) := hdefGauge
 
 end DavisKahanExt
 end TauCeti
