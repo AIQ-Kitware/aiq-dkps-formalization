@@ -37,7 +37,7 @@ bounds the *representatives* `kε` and `lε` apart, up to the cell radius.
 projection-valued measures and a product-measure identity whose closure is
 ~20,000 lines of Born-rule machinery.  Nothing of that appears here.
 
-**Moved 2026-07-29** by lane PLACE-SYLV, from
+Moved from
 `ForTauCeti/Analysis/InnerProductSpace/SylvesterSpectralGap.lean` to
 `ForTauCeti/Analysis/InnerProductSpace/Sylvester/SpectralGap.lean`.  The `Sylvester/`
 directory already held `Basic`, `Interval`, `SpectralDistance` and `Internal/`, while
