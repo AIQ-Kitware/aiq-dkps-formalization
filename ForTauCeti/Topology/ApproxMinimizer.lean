@@ -58,8 +58,7 @@ Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 /-!
 ### Provenance
 
-Moved from `ForMathlib/Topology/` to `ForTauCeti/Topology/` on 2026-07-29 by lane
-FM-RETIRE, which finishes the `ForMathlib` retirement.  The namespace changed from
+Moved from the retired `ForMathlib` staging tree into `ForTauCeti/Topology/`.
 `ForMathlib` to `TauCeti` to match the destination package; declaration names,
 statements and proofs are unchanged.
 

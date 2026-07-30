@@ -47,7 +47,38 @@ TERMINAL_RE = re.compile(
 # A lane whose prerequisites are met but which someone already holds is not
 # available. Reporting it as READY sends two agents at the same work, which is
 # the collision this whole file exists to prevent.
-HELD_RE = re.compile(r"^(claimed|in progress|partially|blocked on)")
+# A claim is often not the first word of the cell: agents write "step (1)
+# claimed by ...", "slice 2 claimed", "partially claimed by ...".  Anchoring on
+# the first word missed all of those, and on 2026-07-30 printed FTC-CLM-TWINS
+# under READY TO TAKE while edward (aiq-gpu) held a pushed claim on it -- the
+# D-DOC collision with the tool at fault rather than the agents.
+#
+# Two properties this pattern must keep, both load-bearing:
+#
+#   * `unclaimed` must NOT match.  Nine open rows begin with it, and catching
+#     them would advertise nine available lanes as taken.  The `\b` before the
+#     keyword is what guarantees this: "unclaimed" has no word boundary between
+#     "un" and "claimed".
+#   * The prefix must stay inside the FIRST clause.  A row reading "slice 1
+#     done ...; slices 2 and 3 unclaimed" must not be dragged into `held` by a
+#     word appearing after the semicolon.  The colon is a clause boundary for
+#     the same reason: "unblocked ... by jon: no lane is ever blocked on
+#     upstream acceptance" is an UNblocking row, and without the `:` the
+#     "blocked on" inside the quoted policy flipped it to held.
+#
+# Deliberately, `TERMINAL_RE` is NOT widened the same way.  The two directions
+# are not symmetric: over-reporting *held* only makes an agent ask before
+# taking, while over-reporting *done* marks a lane terminal and hides the work
+# still in it -- which is exactly what RUB-NS-PAPER documented and E-ALIAS hit
+# again.  Statuses that look terminal but do not match are reported below
+# instead, so a human rewords them rather than the checker guessing.
+HELD_RE = re.compile(
+    r"^[^.;:—]{0,60}?\b(claimed|in progress|partially|blocked on)\b")
+
+#: A status the parser could not classify, but which contains a word suggesting
+#: it should have been.  These are reported, never acted on.
+SUSPECT_RE = re.compile(
+    r"^[^.;:—]{0,80}?\b(done|claimed|complete|completed|finished|in progress)\b")
 
 
 def rows(path: pathlib.Path):
@@ -67,8 +98,8 @@ def bare(status: str) -> str:
     return re.sub(r"^[^A-Za-z]*", "", status).lower()
 
 
-def collect() -> tuple[dict, list[str]]:
-    lanes, problems = {}, []
+def collect() -> tuple[dict, list[str], list[tuple[str, str]]]:
+    lanes, problems, suspect = {}, [], []
     for path in (LANES, ARCHIVE):
         for who, status in rows(path):
             m = LANE_RE.search(status)
@@ -93,6 +124,8 @@ def collect() -> tuple[dict, list[str]]:
             # as unclaimed on 2026-07-29.
             rec["rows"] += 1
             rec["needs"] = sorted(set(rec["needs"]) | set(needs))
+            if not done and not held and SUSPECT_RE.match(prose):
+                suspect.append((lane, prose[:88]))
             if done:
                 rec["done"] = True
                 rec["who"] = re.sub(r"[*~]", "", who).strip()[:58]
@@ -101,7 +134,7 @@ def collect() -> tuple[dict, list[str]]:
                 rec["who"] = re.sub(r"[*~]", "", who).strip()[:58]
             elif not rec["who"]:
                 rec["who"] = re.sub(r"[*~]", "", who).strip()[:58]
-    return lanes, problems
+    return lanes, problems, suspect
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -111,7 +144,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--rows", action="store_true",
                     help="show how many rows each lane has")
     args = ap.parse_args(argv)
-    lanes, problems = collect()
+    lanes, problems, suspect = collect()
 
     for lane, rec in lanes.items():
         for need in rec["needs"]:
@@ -163,6 +196,13 @@ def main(argv: list[str] | None = None) -> int:
         for lane, waiting in blocked:
             print(f"  {lane:<16} waiting on {', '.join(waiting)}")
         print(f"\nDONE ({len(done)}): {', '.join(done) if done else '—'}")
+        if suspect:
+            print(f"\nUNCLASSIFIED STATUS ({len(suspect)}) — these read as open, but "
+                  f"their wording suggests a claim or a completion the parser could "
+                  f"not see. Reword the cell so it leads with the state, or teach "
+                  f"the checker. Not acted on: guessing a lane DONE hides work.")
+            for lane, prose in suspect:
+                print(f"  {lane:<18} {prose}")
         if args.rows:
             multi = {k: v["rows"] for k, v in sorted(lanes.items()) if v["rows"] > 1}
             print(f"\nlanes with more than one row ({len(multi)}) — normal: an "

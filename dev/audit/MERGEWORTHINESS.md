@@ -45,7 +45,7 @@ submitting **to** — and in 69 files it does not.
 | ~~10~~ | ~~T19–T22 assert a Mathlib target~~ | **0 — headers fixed, and jon ratified Tau Ceti as the destination 2026-07-30** | — | — |
 | ~~11~~ | ~~unexercised `Prop` definition (`block`)~~ | **0 — `FTC-UNEXERCISED` DONE; characterization + witness both added** | — | — |
 | ~~12~~ | ~~70 files expose bodies~~ | **0 of 166 — the whole `FTC-EXPOSE-*` chain is DONE.** 23 per-declaration exposures remain, in three kinds; `FTC-EXPOSE-SPECMEAS` lowers the avoidable ones | — | — |
-| 13 | **69 files document our workflow, not the math** — incl. **31 pointers to the deleted `ForMathlib/` tree** | 69 of 167 | `FTC-PROSE-GATE` → `-a`/`-b`/`-c`/`-d` → `-ENFORCE` | no |
+| ~~13~~ | ~~files documenting our workflow, not the math~~ | **0 of 168 — the whole `FTC-PROSE-*` chain is DONE**, gate at a zero baseline | — | — |
 
 ## Ordering, and why
 
