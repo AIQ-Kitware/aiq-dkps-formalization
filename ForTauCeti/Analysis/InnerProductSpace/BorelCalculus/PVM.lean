@@ -36,7 +36,7 @@ The target structure `TauCeti.ProjValMeasure` is Spectra's, ported in
 construction filling it here is not.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace ENNReal CompactlySupported
 open MeasureTheory
@@ -62,10 +62,19 @@ variable (ha : IsStarNormal a) {κ : spectrum ℂ a → ℝ} (hκ : Measurable �
 
 /-- The spectral projection attached to a Borel subset of `ℝ`, pulled back along
 the relabelling `κ`. -/
+-- `@[expose]` here is a recorded compromise, not a clean carve-out. Consumers in this
+-- module rewrite by definition name (`rw [specProjection, spectralPVM, specProj]`) and
+-- index subtypes by `.domain`, so the bodies must reduce. The rubric-clean fix is a
+-- `_def` lemma per definition plus rewiring every call site, which is a larger refactor
+-- than this conversion lane: it is tracked as lane FTC-EXPOSE-SPECMEAS.
+@[expose]
 noncomputable def specProj (B : Set ℝ) (hB : MeasurableSet B) : H →L[ℂ] H :=
   borelCalculus ha (isBddMeasurable_indicator (a := a) (hκ hB))
 
 /-- The relabelled diagonal measure. -/
+-- `@[expose]` for the same reason as `toProjValMeasure`, whose exposed body references
+-- this one. Tracked with lane FTC-EXPOSE-SPECMEAS.
+@[expose]
 noncomputable def specDiag (κ' : spectrum ℂ a → ℝ) (ξ : H) : Measure ℝ :=
   Measure.map κ' (diagMeasure ha ξ)
 
@@ -118,6 +127,9 @@ theorem specProj_inter (B₁ B₂ : Set ℝ) (hB₁ : MeasurableSet B₁) (hB₂
 
 /-- **The projection-valued measure of a normal operator**, indexed along a
 measurable relabelling `κ` of its spectrum. -/
+-- `@[expose]` for the same reason as `spectralPVM`, which is built from this and whose
+-- exposed body cannot reference an unexposed one. Tracked with lane FTC-EXPOSE-SPECMEAS.
+@[expose]
 noncomputable def toProjValMeasure : TauCeti.ProjValMeasure H where
   proj := specProj ha hκ
   diag := specDiag ha κ
@@ -128,12 +140,10 @@ noncomputable def toProjValMeasure : TauCeti.ProjValMeasure H where
 
 /-- The projections of the derived PVM are the spectral projections. -/
 @[simp] theorem toProjValMeasure_proj (B : Set ℝ) (hB : MeasurableSet B) :
-    (toProjValMeasure (H := H) ha hκ).proj B hB = specProj ha hκ B hB := rfl
-
+    (toProjValMeasure (H := H) ha hκ).proj B hB = specProj ha hκ B hB := (rfl)
 /-- Its diagonal measures are the spectral diagonal measures. -/
 @[simp] theorem toProjValMeasure_diag (ξ : H) :
-    (toProjValMeasure (H := H) ha hκ).diag ξ = specDiag ha κ ξ := rfl
-
+    (toProjValMeasure (H := H) ha hκ).diag ξ = specDiag ha κ ξ := (rfl)
 end Projections
 
 section Coordinate

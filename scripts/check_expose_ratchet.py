@@ -37,7 +37,7 @@ LIB = ROOT / "ForTauCeti"
 
 #: The highest number of blanket-exposing modules the tree may contain.
 #: Measured on 2026-07-30, the day the convention was adopted.  Only ever lower it.
-BASELINE = 22
+BASELINE = 0
 
 BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 
@@ -47,9 +47,35 @@ BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 #: closes that.  It is NOT zero, and should not be: `api-design` explicitly permits
 #: exposure where "a consumer must unfold or compute".  Every one of these carries a
 #: comment naming the reason.  Raising it is allowed; doing so silently is not.
-PER_DECL_BASELINE = 5
+#:
+#: Raised 15 -> 23 on 2026-07-30 by lane FTC-EXPOSE-g1, which finished the conversion,
+#: then lowered 23 -> 21 the same day when the two `jon (yardrat)` / `jon (toothbrush)`
+#: runs of that lane were merged: `PolarIsometry.lean`'s two `@[simps! apply, expose]`
+#: attributes were recorded as debt on one side and already paid on the other, by
+#: dropping `@[simps!]` and stating `polarLinearIsometry_apply` and
+#: `polarLinearIsometryEquiv_apply` by hand.  That is the debt-repayment shape
+#: `FTC-EXPOSE-SPECMEAS` is for, done twice over in one file.
+#: The 23 fall into THREE kinds, and they are not interchangeable:
+#:   * clean carve-out -- a consumer genuinely must unfold. Legitimate; leave alone.
+#:   * recorded DEBT -- avoidable with a `_def` lemma plus rewiring the call sites.
+#:     Lane FTC-EXPOSE-SPECMEAS lowers this number; that is its whole job.
+#:   * COMPILER LIMITATION -- `Elem`, `Elem.val`, `Elem.mk` in `OperatorIdeal/Family`.
+#:     These failed *compilation*, not typechecking: "locally inferred compilation type
+#:     differs from type that would be inferred in other modules ... This is a current
+#:     compiler limitation for `module`s that may be lifted in the future."  No fix
+#:     exists at this toolchain.  Do NOT file these as debt; revisit on a toolchain bump.
+#:
+#: Earlier note, raised 4 -> 15 by lane FTC-EXPOSE-g2:
+#:   * 4 are clean carve-outs -- a `LinearPMap`'s `.domain` must reduce for its `_apply`
+#:     lemma to be *stated*, or a `Prop` abbreviation is applied as a function.
+#:   * 9 are the spectral-measure chain and are recorded DEBT, not endorsement.  An
+#:     exposed body cannot reference an unexposed one, so `spectralPVM` dragged in
+#:     `toProjValMeasure`, `specDiag`, and six more, one build at a time.  The clean fix
+#:     is a `_def` lemma per definition plus rewiring the call sites: lane
+#:     FTC-EXPOSE-SPECMEAS.  Lowering this number is that lane's job.
+PER_DECL_BASELINE = 21
 
-PER_DECL = re.compile(r"^@\[expose\]\s*$", re.M)
+PER_DECL = re.compile(r"^@\[expose\]\s*$|^@\[simps![^\]]*,\s*expose\]\s*$", re.M)
 
 
 def offenders() -> list[Path]:

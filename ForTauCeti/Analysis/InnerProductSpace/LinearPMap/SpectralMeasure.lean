@@ -53,7 +53,7 @@ provenance of the route, and `dev/tauceti/spectra-removal-plan.md` for the
 comparison against Spectra's Herglotz/Poisson route that chose it.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace
 open MeasureTheory
@@ -693,7 +693,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
       hRop, ← BorelCalculus.borelCalculus_add hU hfb ((hfb.mul hgb).const_smul _),
       ← BorelCalculus.borelCalculus_mul hU hindb hgb]
     exact hlefts
-  refine ⟨Rop.restrict (fun x _ => hKmap x), ?_, ?_⟩
+  refine mem_resolventSet_iff.mpr ⟨Rop.restrict (fun x _ => hKmap x), ?_, ?_⟩
   · intro ψ
     apply Subtype.ext
     have hyK : ((ψ : specRange hA B hB) : H) ∈ specRange hA B hB :=

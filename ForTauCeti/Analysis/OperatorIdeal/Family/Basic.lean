@@ -303,8 +303,7 @@ def carrier : Submodule 𝕜 (E →L[𝕜] F) where
 /-- Membership in the ideal is exactly finiteness of the gauge; the carrier is defined that way,
 so this is `Iff.rfl` and exists only to spare call sites the unfolding. -/
 @[simp]
-theorem mem_carrier_iff {A : E →L[𝕜] F} : A ∈ N.carrier ↔ N.gauge A ≠ ∞ := Iff.rfl
-
+theorem mem_carrier_iff {A : E →L[𝕜] F} : A ∈ N.carrier ↔ N.gauge A ≠ ∞ := (Iff.rfl)
 /-- Members of the ideal have finite gauge. -/
 theorem gauge_ne_top_of_mem {A : E →L[𝕜] F} (hA : A ∈ N.carrier) : N.gauge A ≠ ∞ := hA
 
@@ -348,6 +347,10 @@ namespace Elem
 variable {N}
 
 /-- The underlying operator of an ideal element. -/
+-- `@[expose]` forced by the same compiler limitation as `Elem` above: accessors on an
+-- unexposed type synonym re-infer a different compilation type downstream. Revisit when
+-- the limitation the compiler reports is lifted.
+@[expose]
 def val (A : N.Elem E F) : E →L[𝕜] F := Subtype.val (p := fun A => A ∈ N.carrier) A
 
 /-- The underlying operator of an ideal element lies in the ideal. -/
@@ -358,6 +361,9 @@ the reason the ideal norm can be real-valued while the gauge is `ℝ≥0∞`-val
 theorem gauge_val_ne_top (A : N.Elem E F) : N.gauge A.val ≠ ∞ := A.val_mem
 
 /-- An operator of finite gauge, as an element of the ideal. -/
+-- `@[expose]` forced by the same compiler limitation as `Elem`: constructors and accessors
+-- on an unexposed type synonym re-infer a different compilation type downstream.
+@[expose]
 def mk {A : E →L[𝕜] F} (hA : A ∈ N.carrier) : N.Elem E F := ⟨A, hA⟩
 
 /-- Building an ideal element and taking its value is the identity. -/

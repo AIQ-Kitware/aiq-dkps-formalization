@@ -51,7 +51,7 @@ self-adjoint operator (Stone's theorem):
   Spectra's `Resolvent/Range.lean` entirely.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap
@@ -521,7 +521,7 @@ theorem inner_expApprox (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) (x y : H) :
   calc ⟪expApprox hA n t x, expApprox hA n t y⟫_ℂ
       = ⟪(ContinuousLinearMap.adjoint (expApprox hA n t)) (expApprox hA n t x), y⟫_ℂ := by
         rw [ContinuousLinearMap.adjoint_inner_left]
-    _ = ⟪((ContinuousLinearMap.adjoint (expApprox hA n t)) * expApprox hA n t) x, y⟫_ℂ := rfl
+    _ = ⟪((ContinuousLinearMap.adjoint (expApprox hA n t)) * expApprox hA n t) x, y⟫_ℂ := (rfl)
     _ = ⟪x, y⟫_ℂ := by rw [hstar]; rfl
 
 /-! ### The approximants commute
@@ -664,8 +664,7 @@ noncomputable def expLimit (hA : IsSelfAdjoint A) (t : ℝ) : H →L[ℂ] H :=
 
 /-- The bundled limit flow acts as `expLimitFun`. -/
 @[simp] theorem expLimit_apply (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
-    expLimit hA t ψ = expLimitFun hA t ψ := rfl
-
+    expLimit hA t ψ = expLimitFun hA t ψ := (rfl)
 /-- Norm preservation, restated for the bundled operator `expLimit`. -/
 @[simp]
 theorem norm_expLimit_apply (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :

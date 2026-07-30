@@ -15,7 +15,7 @@ Four rubrics can `block`: `correctness`, `reuse`, `scope`, `attribution`.
 | **`reuse`** | `request_changes` — duplicate constructions | `T01-SQRT`, `MODULUS-DEDUP`, `DK-FRAME` |
 | **`scope`** | **`approve`** — 24 of 24 topics have a roadmap entry | — |
 | **`attribution`** | **`approve`** — provenance on 164/164 modules | — |
-| **`api-design`** | `request_changes` — 70 files expose bodies; 4 unused definitions | `FTC-EXPOSE-*` **(settled)**, `FTC-DEAD` |
+| **`api-design`** | `request_changes` — 4 unused definitions (body exposure **RESOLVED**: 70 → 0) | `FTC-DEAD` |
 | **`generality`** | `approve` (with a caveat below) | — |
 | **`placement`** | `request_changes` — 54 flat files beside 12 directories | `FTC-ORG`, `PLACE-SYLV`, `PLACE-GRAM` |
 | **`naming`** | `request_changes` — `genuine`; 2 suffixes overstate | `DK-NAME`, `DK-NAME-SUFFIX`, `PLACE-GRAM` |

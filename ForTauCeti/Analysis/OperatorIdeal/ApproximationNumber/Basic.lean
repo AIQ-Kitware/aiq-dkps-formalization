@@ -150,9 +150,7 @@ subtype is not a useful normal form for a norm-like quantity.  Prefer
 `ContinuousLinearMap.le_approximationNumber_iff`. -/
 theorem approximationNumber_eq_iInf (T : E →L[𝕜] F) (n : ℕ) :
     T.approximationNumber n =
-      ⨅ R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)}, ‖T - R.1‖ :=
-  (rfl)
-
+      ⨅ R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)}, ‖T - R.1‖ := (rfl)
 /-- Every admissible approximation of rank at most `n` bounds `aₙ(T)` above. -/
 theorem approximationNumber_le_norm_sub (T : E →L[𝕜] F) {n : ℕ}
     {R : E →L[𝕜] F} (hR : R.rank ≤ (n : Cardinal)) :

@@ -141,6 +141,11 @@ this is an isometry `E → F` with `M.polarIsometryOfIsUnitModulus ∘L |M| = M`
 factor of the polar decomposition of `M`.  Otherwise `Ring.inverse` returns `0`
 and so does this definition; every result below therefore carries the hypothesis
 `IsUnit M.modulus`. -/
+-- `@[expose]` because `@[simps!]` on this declaration generates `_apply` lemmas whose
+-- proofs are `rfl`, which cannot be validated unless the body is exposed. Recorded debt:
+-- the clean alternative is to drop `@[simps!]` and state the `_apply` lemmas by hand
+-- against a `_def` lemma. Tracked with lane FTC-EXPOSE-SPECMEAS.
+@[expose]
 noncomputable def polarIsometryOfIsUnitModulus (M : E →L[ℂ] F) : E →L[ℂ] F :=
   M ∘L Ring.inverse M.modulus
 

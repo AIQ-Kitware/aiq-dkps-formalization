@@ -90,8 +90,7 @@ variable {E F : Type v}
 
 /-- The gauge of the Ky Fan family is the Ky Fan gauge at index `k`. -/
 @[simp] theorem gauge_kyFanIdealFamily (k : ℕ) (hk : 0 < k) (A : E →L[ℂ] F) :
-    (kyFanIdealFamily.{v} k hk).gauge A = ENNReal.ofReal (A.kyFanGauge k) := rfl
-
+    (kyFanIdealFamily.{v} k hk).gauge A = ENNReal.ofReal (A.kyFanGauge k) := (rfl)
 /-- Every bounded operator has finite Ky Fan gauge -- a finite sum of approximation numbers, each
 bounded by the operator norm -- so the Ky Fan ideal is all of `E →L[𝕜] F`. -/
 theorem gauge_kyFanIdealFamily_ne_top (k : ℕ) (hk : 0 < k) (A : E →L[ℂ] F) :
