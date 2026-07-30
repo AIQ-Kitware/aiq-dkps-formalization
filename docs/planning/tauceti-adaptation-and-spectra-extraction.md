@@ -346,7 +346,7 @@ only makes the duplication harder to remove. Its PR slicing:
   codomain, `ContinuousLinearMap`-vs-`TauCeti` namespace, canonical modulus name
   and `operatorAbs` deletion, the actual Courant–Fischer equality, one
   Hilbert–Schmidt object, body-hiding). Captured in
-  [`ForTauCetiRoadmap/ApproximationNumbers`](../../ForTauCetiRoadmap/ApproximationNumbers/README.md).
+  [`ForTauCetiRoadmap/OperatorIdeals` Part A](../../ForTauCetiRoadmap/OperatorIdeals/README.md).
 - **A1 — `Basic` only**, after conventions settled.
 - **A2 — adjoint invariance + finite-dimensional singular-value identification**
   (`Adjoint`, `FiniteDimensional`).
