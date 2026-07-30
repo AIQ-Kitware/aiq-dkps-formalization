@@ -571,7 +571,7 @@ theorem paperHilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference
           ((complexifySubmodule U).starProjection -
             (complexifySubmodule V).starProjection) :=
       SameApproximationSingularSequence.paperHilbertSchmidtNorm_eq
-        (modulus_sameApproximationSingularValues _)
+        (modulus_hasSameApproximationNumbers _)
     _ = paperHilbertSchmidtNorm
         (complexify (U.starProjection - V.starProjection)) := by
       rw [starProjection_complexifySubmodule,

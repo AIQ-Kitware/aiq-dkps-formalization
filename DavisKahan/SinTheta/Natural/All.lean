@@ -6,8 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SinTheta.Natural.Bounded
 import DavisKahan.SinTheta.Natural.Examples
 import DavisKahan.SinTheta.Natural.GapConvenience
+import DavisKahan.SinTheta.Natural.Generalized
 import DavisKahan.SinTheta.Natural.Genuine
-import DavisKahan.SinTheta.Natural.GenuineGeneralized
 import DavisKahan.SinTheta.Natural.Real
 import DavisKahan.SinTheta.Natural.Reducing
 

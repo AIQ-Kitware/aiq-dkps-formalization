@@ -43,8 +43,8 @@ noncomputable def interfaceFilledTruncation
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
     {hA : A.IsSelfAdjoint}
-    (P : GenuineSpectralCutoffInterface A hA)
-    (T : GenuineBoundedTruncationInterface A hA P)
+    (P : SpectralCutoffInterface A hA)
+    (T : BoundedTruncationInterface A hA P)
     (a τ : ℝ) : H →L[ℂ] H :=
   T.truncation τ + (a : ℂ) •
     (ContinuousLinearMap.id ℂ H - P.cutoff τ)
@@ -55,8 +55,8 @@ theorem interfaceFilledTruncation_isSymmetric
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
     {hA : A.IsSelfAdjoint}
-    (P : GenuineSpectralCutoffInterface A hA)
-    (T : GenuineBoundedTruncationInterface A hA P)
+    (P : SpectralCutoffInterface A hA)
+    (T : BoundedTruncationInterface A hA P)
     (a τ : ℝ) :
     (interfaceFilledTruncation P T a τ).IsSymmetric := by
   have hT := T.isSymmetric τ
@@ -70,7 +70,7 @@ theorem interfaceCutoff_complement_identities
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
     {hA : A.IsSelfAdjoint}
-    (P : GenuineSpectralCutoffInterface A hA)
+    (P : SpectralCutoffInterface A hA)
     (τ : ℝ) (x : H) :
     ⟪P.cutoff τ x, x - P.cutoff τ x⟫_ℂ = 0 ∧
       ‖P.cutoff τ x‖ ^ 2 + ‖x - P.cutoff τ x‖ ^ 2 = ‖x‖ ^ 2 := by
@@ -100,8 +100,8 @@ theorem interfaceFilledTruncation_lowerBound
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
     {hA : A.IsSelfAdjoint}
-    (P : GenuineSpectralCutoffInterface A hA)
-    (T : GenuineBoundedTruncationInterface A hA P)
+    (P : SpectralCutoffInterface A hA)
+    (T : BoundedTruncationInterface A hA P)
     {a τ : ℝ} (hτ : 0 ≤ τ) (ha : SemiboundedBelow A a) :
     ∀ x, a * ‖x‖ ^ 2 ≤
       RCLike.re ⟪interfaceFilledTruncation P T a τ x, x⟫_ℂ := by
@@ -169,8 +169,8 @@ theorem interfaceFilledTruncation_upperBound
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
     {hA : A.IsSelfAdjoint}
-    (P : GenuineSpectralCutoffInterface A hA)
-    (T : GenuineBoundedTruncationInterface A hA P)
+    (P : SpectralCutoffInterface A hA)
+    (T : BoundedTruncationInterface A hA P)
     {a τ : ℝ} (hτ : 0 ≤ τ) (ha : SemiboundedAbove A a) :
     ∀ x, RCLike.re ⟪interfaceFilledTruncation P T a τ x, x⟫_ℂ ≤
       a * ‖x‖ ^ 2 := by
@@ -240,7 +240,7 @@ omit [HasKyFanApproximationGaugeTriangle ℂ] in
 theorem kyFan_le_of_interfaceRightCutoff_le
     {B : ComplexClosedOperatorOnF (F := F)}
     {hB : B.IsSelfAdjoint}
-    (P : GenuineSpectralCutoffInterface B hB)
+    (P : SpectralCutoffInterface B hB)
     {X C : F →L[ℂ] E} {δ : ℝ} (k : ℕ)
     (hcut : ∀ τ : ℝ, 0 ≤ τ →
       δ * kyFanApproximationGauge k (X ∘L P.cutoff τ) ≤
@@ -294,7 +294,7 @@ omit [HasKyFanApproximationGaugeTriangle ℂ] in
 theorem kyFan_le_of_interfaceLeftCutoff_le
     {A : ComplexClosedOperatorOnE (E := E)}
     {hA : A.IsSelfAdjoint}
-    (P : GenuineSpectralCutoffInterface A hA)
+    (P : SpectralCutoffInterface A hA)
     {X C : F →L[ℂ] E} {δ : ℝ} (k : ℕ)
     (hcut : ∀ τ : ℝ, 0 ≤ τ →
       δ * kyFanApproximationGauge k (P.cutoff τ ∘L X) ≤
@@ -323,10 +323,10 @@ theorem interfaceDoubleCutoff_sylvester_equation
     {A : ComplexClosedOperatorOnE (E := E)}
     {B : ComplexClosedOperatorOnF (F := F)}
     {hA : A.IsSelfAdjoint} {hB : B.IsSelfAdjoint}
-    (PAi : GenuineSpectralCutoffInterface A hA)
-    (TAi : GenuineBoundedTruncationInterface A hA PAi)
-    (PBi : GenuineSpectralCutoffInterface B hB)
-    (TBi : GenuineBoundedTruncationInterface B hB PBi)
+    (PAi : SpectralCutoffInterface A hA)
+    (TAi : BoundedTruncationInterface A hA PAi)
+    (PBi : SpectralCutoffInterface B hB)
+    (TBi : BoundedTruncationInterface B hB PBi)
     {X C : F →L[ℂ] E}
     (hEq : HasClosedSylvesterEquation A B X C)
     (a b τA τB : ℝ) :

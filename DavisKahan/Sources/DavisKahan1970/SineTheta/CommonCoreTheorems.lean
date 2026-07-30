@@ -152,7 +152,7 @@ structure PaperCommonCoreTheorem62Data where
   gap_pos : 0 < gap
   epsilon_pos : 0 < epsilon
   lower_frame : LowerFrameBound source.E₀ epsilon
-  spectral_distance : GenuinePairwiseSpectrumGap source.A₀ source.Λ₁ gap
+  spectral_distance : PairwiseSpectrumGap source.A₀ source.Λ₁ gap
 
 namespace PaperCommonCoreTheorem62Data
 

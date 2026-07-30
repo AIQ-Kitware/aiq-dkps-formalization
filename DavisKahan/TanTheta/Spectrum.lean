@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.TanTheta.Vector
-import DavisKahan.Sylvester.GenuineSpectrum
+import DavisKahan.Sylvester.Spectrum
 import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 
 /-!
@@ -195,7 +195,7 @@ the compression `T|_{Vᗮ}` in `[α, β]`, and a test subspace `Z` whose
 compression spectrum avoids `(α - δ, β + δ)`, a columnwise residual bound
 `ρ` over `Z` gives `δ ‖x - P_V x‖ ≤ ρ ‖P_V x‖` for every `x ∈ Z` — the
 per-vector `tan ∠(Z, V) ≤ ρ/δ`, forcing `Z ∩ Vᗮ = 0`. -/
-theorem tanTheta_genuineSpectrum
+theorem tanTheta_spectrum
     {T : E →L[ℂ] E} (hT : IsSelfAdjoint T)
     {Z V : Submodule ℂ E} [Z.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
@@ -245,8 +245,8 @@ test compression spectrum lies below `α₀` and the unwanted compression
 spectrum lies in `[α₀ + δ, ∞)`.  A bounded self-adjoint compression is
 norm-bounded, so its spectrum is automatically capped; this reduces the
 one-sided placement to the interval/exterior form
-`tanTheta_genuineSpectrum` with `[α, β] = [α₀ + δ, max ‖T|_{Vᗮ}‖ (α₀ + δ)]`. -/
-theorem tanTheta_genuineSpectrum_oneSided
+`tanTheta_spectrum` with `[α, β] = [α₀ + δ, max ‖T|_{Vᗮ}‖ (α₀ + δ)]`. -/
+theorem tanTheta_spectrum_oneSided
     {T : E →L[ℂ] E} (hT : IsSelfAdjoint T)
     {Z V : Submodule ℂ E} [Z.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
@@ -268,7 +268,7 @@ theorem tanTheta_genuineSpectrum_oneSided
         ≤ ‖compressOperator Vᗮ T‖ * 1 :=
           mul_le_mul_of_nonneg_left hone (norm_nonneg _)
       _ = ‖compressOperator Vᗮ T‖ := mul_one _
-  refine tanTheta_genuineSpectrum hT hVinv (α := α₀ + δ)
+  refine tanTheta_spectrum hT hVinv (α := α₀ + δ)
     (β := max ‖compressOperator Vᗮ T‖ (α₀ + δ))
     (le_max_right _ _) hδ hρ0
     (fun y hy => Set.mem_Icc.mpr ⟨hVspec y hy, hcap y hy⟩)

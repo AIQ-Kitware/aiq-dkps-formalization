@@ -137,7 +137,7 @@ theorem result
     simpa only [UnboundedSinThetaData.toPMap,
       KyFanDominantIdealFamily.toSymmetric_mem,
       KyFanDominantIdealFamily.toSymmetric_gaugeReal] using
-      linearPMap_generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap
+      linearPMap_generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
         N.toSymmetricOperatorIdealFamily P.data.toPMap P.exactMap
         (P.data.toPMap_A_isSelfAdjoint P.ambient_selfAdjoint)
         (P.data.toPMap_A₀_isSelfAdjoint P.trial_selfAdjoint)
@@ -163,7 +163,7 @@ theorem complementaryBlock_result
     simpa only [UnboundedSinThetaData.toPMap,
       KyFanDominantIdealFamily.toSymmetric_mem,
       KyFanDominantIdealFamily.toSymmetric_gaugeReal] using
-      linearPMap_generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
+      linearPMap_generalizedSinTheta_unbounded_of_intervalExteriorGap
         N.toSymmetricOperatorIdealFamily P.data.toPMap
         (P.data.toPMap_A_isSelfAdjoint P.ambient_selfAdjoint)
         (P.data.toPMap_A₀_isSelfAdjoint P.trial_selfAdjoint)
