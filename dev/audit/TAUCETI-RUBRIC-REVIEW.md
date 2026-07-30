@@ -13,7 +13,7 @@ Four rubrics can `block`: `correctness`, `reuse`, `scope`, `attribution`.
 |---|---|---|
 | **`correctness`** | **`block`** — 1 unexercised predicate | `FTC-UNEXERCISED` |
 | **`reuse`** | `request_changes` — duplicate constructions | `T01-SQRT`, `MODULUS-DEDUP`, `DK-FRAME` |
-| **`scope`** | `request_changes` — 12 topics have no roadmap target | `ROADMAP-WRITE` |
+| **`scope`** | `request_changes` — 5 topics have no roadmap target | `ROADMAP-WRITE` |
 | **`attribution`** | **`approve`** — provenance on 164/164 modules | — |
 | **`api-design`** | `request_changes` — 70 files expose bodies; 4 unused definitions | `FTC-EXPOSE-*` **(settled)**, `FTC-DEAD` |
 | **`generality`** | `approve` (with a caveat below) | — |
