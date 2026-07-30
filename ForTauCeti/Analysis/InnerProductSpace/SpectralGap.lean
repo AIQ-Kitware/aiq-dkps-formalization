@@ -21,8 +21,8 @@ the form the theorem consumes; see
 
 *Moved, not restated.*  This file was
 `DavisKahan/FiniteDimensional/Core/SpectralGap.lean`
-until 2026-07-29, when lane Y3(b3) moved the dependency-closed base of the sin-Θ core
-into the staging layer.  Statements, proofs, signatures and namespaces are
+before the dependency-closed base of the sin-Θ core moved into the staging
+layer.  Statements, proofs, signatures and namespaces are
 unchanged; the declarations already lived in `TauCeti.DavisKahan*`, so the move
 was a path change and an import repoint and nothing else.
 
