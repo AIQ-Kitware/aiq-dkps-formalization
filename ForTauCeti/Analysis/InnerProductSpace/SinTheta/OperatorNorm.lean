@@ -16,6 +16,7 @@ Built on the Sylvester operator bound (`opNorm_le_div_of_comp_sub_comp_eq`)
 without any dimension factor.
 -/
 
+import ForTauCeti.Analysis.InnerProductSpace.ReducedExtension
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
@@ -96,6 +97,46 @@ theorem starProjection_comp_toContinuousLinearMap_comm {T : E →ₗ[𝕜] E}
 
 variable {T S : E →ₗ[𝕜] E}
 
+omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
+/-- Pythagoras for an orthogonal projection: the squared norms of the
+projection and of the complementary part add to the squared norm. -/
+private theorem norm_sq_eq_starProjection_add_sub' {W : Submodule 𝕜 E}
+    [W.HasOrthogonalProjection] (x : E) :
+    ‖x‖ ^ 2 = ‖W.starProjection x‖ ^ 2 + ‖x - W.starProjection x‖ ^ 2 :=
+  TauCeti.norm_sq_eq_starProjection_add_sub x
+
+omit [CompleteSpace E] in
+/-- **The quadratic form of a reduced extension splits.**  For `R : E →ₗ[𝕜] E`
+leaving `W` invariant, the bounded extension `R ∘L P_W + κ (1 - P_W)` — equal to
+`R` on `W` and to the scalar `κ` on `Wᗮ` — has quadratic form
+
+`re ⟪R (P x), P x⟫ + κ ‖x - P x‖²`.
+
+Only invariance of `W` is used, not reduction.  Both coercivity bounds of
+`exists_isSymmetric_comp_sub_comp_eq` are this identity: the lower at
+`R = T`, `W = U`, `κ = c + g`, the upper at `R = S`, `W = V`, `κ = c`.
+
+**Duplicated across files, deliberately for now.**  The same statement over
+`E →L[𝕜] E` and `Reduces` lives in
+`ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/SinTheta.lean`.  The two
+modules share no `ForTauCeti` ancestor, so unifying them needs a new module —
+see lane `FTC-REDEXT-UNIFY`. -/
+private theorem re_inner_reducedExtension_self' {R : E →ₗ[𝕜] E}
+    {W : Submodule 𝕜 E} [W.HasOrthogonalProjection]
+    (hinv : ∀ x ∈ W, R x ∈ W) (κ : ℝ) (x : E) :
+    RCLike.re ⟪(LinearMap.toContinuousLinearMap R ∘L W.starProjection
+        + ((κ : ℝ) : 𝕜) • (1 - W.starProjection)) x, x⟫_𝕜
+      = RCLike.re ⟪R (W.starProjection x), W.starProjection x⟫_𝕜
+        + κ * ‖x - W.starProjection x‖ ^ 2 := by
+  have hval : (LinearMap.toContinuousLinearMap R ∘L W.starProjection
+      + ((κ : ℝ) : 𝕜) • (1 - W.starProjection)) x
+      = R (W.starProjection x) + ((κ : ℝ) : 𝕜) • (x - W.starProjection x) := by
+    simp only [add_apply, ContinuousLinearMap.comp_apply,
+      LinearMap.coe_toContinuousLinearMap', smul_apply, sub_apply,
+      one_apply_eq_self]
+  rw [hval]
+  exact TauCeti.re_inner_reducedExtension_self hinv κ x
+
 /-- **The norm-free Davis–Kahan setup.**  From the two invariant subspaces and
 their quadratic-form separation, builds the coercive `A` and the bounded `B`
 whose separated Sylvester equation the cross-projection
@@ -164,72 +205,24 @@ theorem exists_isSymmetric_comp_sub_comp_eq (hT : T.IsSymmetric) (hS : S.IsSymme
   have hAc : ∀ x, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜 := by
     intro x
     have hpx : P x ∈ U := U.starProjection_apply_mem x
-    have hrest : x - P x ∈ Uᗮ := U.sub_starProjection_mem_orthogonal x
-    have hAxeq : A x = T (P x) + ((c + g : ℝ) : 𝕜) • (x - P x) := by
-      simp only [hA, hTc, add_apply, ContinuousLinearMap.comp_apply,
-        LinearMap.coe_toContinuousLinearMap', smul_apply,
-        sub_apply, one_apply_eq_self]
     have hre : RCLike.re ⟪A x, x⟫_𝕜
-        = RCLike.re ⟪T (P x), x⟫_𝕜 + (c + g) * RCLike.re ⟪x - P x, x⟫_𝕜 := by
-      rw [hAxeq, inner_add_left, inner_smul_left, RCLike.conj_ofReal, map_add,
-        RCLike.re_ofReal_mul]
-    have h1 : RCLike.re ⟪T (P x), x⟫_𝕜 = RCLike.re ⟪T (P x), P x⟫_𝕜 := by
-      have hz : ⟪T (P x), x - P x⟫_𝕜 = 0 :=
-        Submodule.inner_right_of_mem_orthogonal (hUinv _ hpx) hrest
-      have : ⟪T (P x), x⟫_𝕜 = ⟪T (P x), P x⟫_𝕜 + ⟪T (P x), x - P x⟫_𝕜 := by
-        rw [← inner_add_right]; congr 1; abel
-      rw [this, hz, add_zero]
-    have h2 : RCLike.re ⟪x - P x, x⟫_𝕜 = ‖x - P x‖ ^ 2 := by
-      have hz : ⟪x - P x, P x⟫_𝕜 = 0 := Submodule.inner_left_of_mem_orthogonal hpx hrest
-      have : ⟪x - P x, x⟫_𝕜 = ⟪x - P x, x - P x⟫_𝕜 := by
-        have h' : ⟪x - P x, x⟫_𝕜 = ⟪x - P x, P x⟫_𝕜 + ⟪x - P x, x - P x⟫_𝕜 := by
-          rw [← inner_add_right]; congr 1; abel
-        rw [h', hz, zero_add]
-      rw [this, inner_self_eq_norm_sq]
+        = RCLike.re ⟪T (P x), P x⟫_𝕜 + (c + g) * ‖x - P x‖ ^ 2 := by
+      rw [hA, hTc, hP]; exact re_inner_reducedExtension_self' hUinv (c + g) x
     have hpyth : ‖x‖ ^ 2 = ‖P x‖ ^ 2 + ‖x - P x‖ ^ 2 := by
-      have h0 : RCLike.re ⟪P x, x - P x⟫_𝕜 = 0 := by
-        rw [Submodule.inner_right_of_mem_orthogonal hpx hrest]; simp
-      have hns := norm_add_sq (𝕜 := 𝕜) (P x) (x - P x)
-      rw [show P x + (x - P x) = x by abel, h0] at hns
-      linarith
-    rw [hre, h1, h2, hpyth]
-    have h1' := hU (P x) hpx
-    nlinarith [h1']
+      rw [hP]; exact norm_sq_eq_starProjection_add_sub' x
+    rw [hre, hpyth]
+    nlinarith [hU (P x) hpx]
   -- Upper bound for `B`: `re⟪B x, x⟫ ≤ c‖x‖²`.
   have hBc : ∀ x, RCLike.re ⟪B x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
     intro x
     have hqx : Q x ∈ V := V.starProjection_apply_mem x
-    have hrest : x - Q x ∈ Vᗮ := V.sub_starProjection_mem_orthogonal x
-    have hBxeq : B x = S (Q x) + ((c : ℝ) : 𝕜) • (x - Q x) := by
-      simp only [hB, hSc, add_apply, ContinuousLinearMap.comp_apply,
-        LinearMap.coe_toContinuousLinearMap', smul_apply,
-        sub_apply, one_apply_eq_self]
     have hre : RCLike.re ⟪B x, x⟫_𝕜
-        = RCLike.re ⟪S (Q x), x⟫_𝕜 + c * RCLike.re ⟪x - Q x, x⟫_𝕜 := by
-      rw [hBxeq, inner_add_left, inner_smul_left, RCLike.conj_ofReal, map_add,
-        RCLike.re_ofReal_mul]
-    have h1 : RCLike.re ⟪S (Q x), x⟫_𝕜 = RCLike.re ⟪S (Q x), Q x⟫_𝕜 := by
-      have hz : ⟪S (Q x), x - Q x⟫_𝕜 = 0 :=
-        Submodule.inner_right_of_mem_orthogonal (hVinv _ hqx) hrest
-      have : ⟪S (Q x), x⟫_𝕜 = ⟪S (Q x), Q x⟫_𝕜 + ⟪S (Q x), x - Q x⟫_𝕜 := by
-        rw [← inner_add_right]; congr 1; abel
-      rw [this, hz, add_zero]
-    have h2 : RCLike.re ⟪x - Q x, x⟫_𝕜 = ‖x - Q x‖ ^ 2 := by
-      have hz : ⟪x - Q x, Q x⟫_𝕜 = 0 := Submodule.inner_left_of_mem_orthogonal hqx hrest
-      have : ⟪x - Q x, x⟫_𝕜 = ⟪x - Q x, x - Q x⟫_𝕜 := by
-        have h' : ⟪x - Q x, x⟫_𝕜 = ⟪x - Q x, Q x⟫_𝕜 + ⟪x - Q x, x - Q x⟫_𝕜 := by
-          rw [← inner_add_right]; congr 1; abel
-        rw [h', hz, zero_add]
-      rw [this, inner_self_eq_norm_sq]
+        = RCLike.re ⟪S (Q x), Q x⟫_𝕜 + c * ‖x - Q x‖ ^ 2 := by
+      rw [hB, hSc, hQ]; exact re_inner_reducedExtension_self' hVinv c x
     have hpyth : ‖x‖ ^ 2 = ‖Q x‖ ^ 2 + ‖x - Q x‖ ^ 2 := by
-      have h0 : RCLike.re ⟪Q x, x - Q x⟫_𝕜 = 0 := by
-        rw [Submodule.inner_right_of_mem_orthogonal hqx hrest]; simp
-      have hns := norm_add_sq (𝕜 := 𝕜) (Q x) (x - Q x)
-      rw [show Q x + (x - Q x) = x by abel, h0] at hns
-      linarith
-    rw [hre, h1, h2, hpyth]
-    have h1' := hV (Q x) hqx
-    nlinarith [h1']
+      rw [hQ]; exact norm_sq_eq_starProjection_add_sub' x
+    rw [hre, hpyth]
+    nlinarith [hV (Q x) hqx]
   -- Sylvester relation `A ∘L X − X ∘L B = Y`.
   have hsylv : A ∘L X - X ∘L B = Y := by
     ext x

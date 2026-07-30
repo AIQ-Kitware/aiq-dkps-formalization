@@ -162,7 +162,7 @@ theorem isTraceClass_iff_summable (T : E →L[ℂ] F) :
     T.IsTraceClass ↔ Summable fun n => T.approximationNumber n := by
   rw [IsTraceClass, nuclearENorm]
   have hcoe : (fun n : ℕ => ENNReal.ofReal (T.approximationNumber n))
-      = fun n : ℕ => ((T.approximationNumber n).toNNReal : ℝ≥0∞) := rfl
+      = fun n : ℕ => ((T.approximationNumber n).toNNReal : ℝ≥0∞) := (rfl)
   rw [hcoe, ENNReal.tsum_coe_ne_top_iff_summable, ← NNReal.summable_coe]
   refine summable_congr fun n => ?_
   exact Real.coe_toNNReal _ (T.approximationNumber_nonneg n)
@@ -204,12 +204,9 @@ variable {E F : Type v}
 
 /-- The gauge of the trace-class family *is* the nuclear norm, definitionally. -/
 @[simp] theorem gauge_traceClassIdealFamily (A : E →L[ℂ] F) :
-    (traceClassIdealFamily.{v}).gauge A = A.nuclearENorm := rfl
-
+    (traceClassIdealFamily.{v}).gauge A = A.nuclearENorm := (rfl)
 /-- Membership in the trace-class ideal is exactly `IsTraceClass`, so the generic
 carrier and the named predicate never diverge. -/
 theorem mem_traceClassIdealFamily_carrier_iff (A : E →L[ℂ] F) :
-    A ∈ (traceClassIdealFamily.{v}).toOperatorIdealFamily.carrier ↔ A.IsTraceClass :=
-  Iff.rfl
-
+    A ∈ (traceClassIdealFamily.{v}).toOperatorIdealFamily.carrier ↔ A.IsTraceClass := (Iff.rfl)
 end TauCeti

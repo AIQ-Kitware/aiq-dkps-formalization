@@ -113,7 +113,6 @@ noncomputable def hilbertSchmidtEnergy (T : E →L[𝕜] F) (b : HilbertBasis ι
 /-- Rewrite form of the Hilbert--Schmidt energy as the sum of squared column norms. -/
 theorem hilbertSchmidtEnergy_def (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E) :
     T.hilbertSchmidtEnergy b = ∑' i, ‖T (b i)‖ₑ ^ 2 := (rfl)
-
 /-- The energy is the supremum of its finite partial sums. -/
 theorem hilbertSchmidtEnergy_eq_iSup_sum (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E) :
     T.hilbertSchmidtEnergy b = ⨆ s : Finset ι, ∑ i ∈ s, ‖T (b i)‖ₑ ^ 2 :=
@@ -209,7 +208,7 @@ at most the square of its norm. -/
 theorem hilbertSchmidtEnergy_comp_left_le (A : F →L[𝕜] G) (T : E →L[𝕜] F)
     (b : HilbertBasis ι 𝕜 E) :
     (A ∘L T).hilbertSchmidtEnergy b ≤ ‖A‖ₑ ^ 2 * T.hilbertSchmidtEnergy b := by
-  calc (A ∘L T).hilbertSchmidtEnergy b = ∑' i, ‖A (T (b i))‖ₑ ^ 2 := rfl
+  calc (A ∘L T).hilbertSchmidtEnergy b = ∑' i, ‖A (T (b i))‖ₑ ^ 2 := (rfl)
     _ ≤ ∑' i, ‖A‖ₑ ^ 2 * ‖T (b i)‖ₑ ^ 2 :=
         ENNReal.tsum_le_tsum fun i => by rw [← mul_pow]; gcongr; exact A.le_opENorm _
     _ = ‖A‖ₑ ^ 2 * T.hilbertSchmidtEnergy b := ENNReal.tsum_mul_left
