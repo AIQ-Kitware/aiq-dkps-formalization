@@ -71,7 +71,7 @@ comparison against Spectra's Herglotz/Poisson route that chose it.  The target i
 the Spectra endpoint `Spectra.QuantumMechanics.SpectralTheory.spectralPVM`.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace
 open MeasureTheory
@@ -92,7 +92,7 @@ transform. -/
 theorem one_sub_cayley_apply (ξ : H) :
     ((1 : H →L[ℂ] H) - cayley hA) ξ
       = (2 * Complex.I) • resolvent A (negI_mem_resolventSet hA) ξ := by
-  simp [cayley]
+  simp [cayley_def]
 
 /-- The resolvent at `-i` is injective — it inverts the bijection
 `A + i : dom A → H`. -/
@@ -123,6 +123,10 @@ theorem injective_one_sub_cayley :
 /-- The **inverse Cayley map** `w ↦ i(1+w)/(1-w)`, as a real-valued relabelling
 of the spectrum of the Cayley transform.  Its value at `w = 1` is junk; see
 `diagMeasure_cayley_preimage_one`. -/
+-- `@[expose]` as part of the spectral-measure chain: an exposed body cannot reference an
+-- unexposed one, and this is reached from `spectralPVM`. Recorded debt, tracked as lane
+-- FTC-EXPOSE-SPECMEAS.
+@[expose]
 noncomputable def cayleyInv (w : _root_.spectrum ℂ (cayley hA)) : ℝ :=
   (Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))).re
 
@@ -133,6 +137,12 @@ theorem measurable_cayleyInv : Measurable (cayleyInv hA) := by
   fun_prop
 
 /-- **The spectral measure of an unbounded self-adjoint operator.** -/
+-- `@[expose]` here is a recorded compromise, not a clean carve-out. Consumers in this
+-- module rewrite by definition name (`rw [specProjection, spectralPVM, specProj]`) and
+-- index subtypes by `.domain`, so the bodies must reduce. The rubric-clean fix is a
+-- `_def` lemma per definition plus rewiring every call site, which is a larger refactor
+-- than this conversion lane: it is tracked as lane FTC-EXPOSE-SPECMEAS.
+@[expose]
 noncomputable def spectralPVM : TauCeti.ProjValMeasure H :=
   BorelCalculus.toProjValMeasure (isStarNormal_cayley hA) (measurable_cayleyInv hA)
 
@@ -208,13 +218,16 @@ theorem cayley_denom_ne_zero {z : ℂ} (hz : z.im ≠ 0) {w : ℂ} (hw : ‖w‖
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {z : ℂ} (hz : z.im ≠ 0)
 
 /-- The coordinate function on the spectrum of the Cayley transform. -/
+-- `@[expose]` as part of the spectral-measure chain: an exposed body cannot reference an
+-- unexposed one, and this is reached from `spectralPVM`. Recorded debt, tracked as lane
+-- FTC-EXPOSE-SPECMEAS.
+@[expose]
 noncomputable def cayleyCoord : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
   (ContinuousMap.id ℂ).restrict (_root_.spectrum ℂ (cayley hA))
 
 /-- The Cayley coordinate is the spectral point itself, coerced. -/
 @[simp] theorem cayleyCoord_apply (w : _root_.spectrum ℂ (cayley hA)) :
-    cayleyCoord hA w = (w : ℂ) := rfl
-
+    cayleyCoord hA w = (w : ℂ) := (rfl)
 include hz in
 /-- The resolvent symbol's denominator never vanishes on the spectrum of the Cayley transform,
 because that spectrum lies on the unit circle and `z` is non-real.  This is what makes the symbol
@@ -230,8 +243,7 @@ noncomputable def cayleyDenomCM : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
 
 /-- The resolvent symbol's denominator, unfolded. -/
 @[simp] theorem cayleyDenomCM_apply (w : _root_.spectrum ℂ (cayley hA)) :
-    cayleyDenomCM hA (z := z) w = (Complex.I - z) + (Complex.I + z) * (w : ℂ) := rfl
-
+    cayleyDenomCM hA (z := z) w = (Complex.I - z) + (Complex.I + z) * (w : ℂ) := (rfl)
 /-- The **resolvent symbol** `g_z(w) = (1 - w) / ((i - z) + (i + z) w)`.  For
 non-real `z` it is continuous on the whole spectrum of the Cayley transform:
 its only pole is the Cayley image of `z`, which is off the unit circle. -/
@@ -242,8 +254,7 @@ noncomputable def resolventSymbol : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
 /-- The resolvent symbol, unfolded. -/
 @[simp] theorem resolventSymbol_apply (w : _root_.spectrum ℂ (cayley hA)) :
     resolventSymbol hA hz w
-      = (1 - (w : ℂ)) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) := rfl
-
+      = (1 - (w : ℂ)) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) := (rfl)
 /-- The reciprocal of the denominator symbol, scaled by `2i`. -/
 noncomputable def cayleyDenomInvCM : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
   ⟨fun w => (2 * Complex.I) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)),
@@ -252,8 +263,7 @@ noncomputable def cayleyDenomInvCM : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
 /-- The inverted denominator, unfolded. -/
 @[simp] theorem cayleyDenomInvCM_apply (w : _root_.spectrum ℂ (cayley hA)) :
     cayleyDenomInvCM hA hz w
-      = (2 * Complex.I) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) := rfl
-
+      = (2 * Complex.I) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) := (rfl)
 /-- `2i ≠ 0`, needed to divide by it when inverting the Cayley symbol. -/
 theorem two_I_ne_zero : (2 * Complex.I : ℂ) ≠ 0 := by simp
 
@@ -273,7 +283,7 @@ theorem one_sub_smul_resolvent_eq_cfcHom :
   have hsplit : cayleyDenomCM hA (z := z)
       = (Complex.I - z) • 1 + (Complex.I + z) • cayleyCoord hA := by
     ext w
-    simp [cayleyDenomCM, smul_eq_mul]
+    simp [cayleyDenomCM_apply, smul_eq_mul]
   rw [hsplit, map_smul, map_add, map_smul, map_smul, map_one, cayleyCoord, cfcHom_id]
   refine ContinuousLinearMap.ext fun ξ => ?_
   have h2 : (2 * Complex.I : ℂ) ≠ 0 := two_I_ne_zero
@@ -355,7 +365,7 @@ theorem spectralPVM_resolvent_formula (hzr : z ∈ resolventSet A) (ξ : H) :
       = ∫ w, resolventSymbol hA hz w ∂(BorelCalculus.diagMeasure hU ξ) := by
     rw [resolvent_eq_cfcHom hA hz hzr, BorelCalculus.integral_diagMeasure]
   have hdiag : (spectralPVM hA).diag ξ
-      = Measure.map (cayleyInv hA) (BorelCalculus.diagMeasure hU ξ) := rfl
+      = Measure.map (cayleyInv hA) (BorelCalculus.diagMeasure hU ξ) := (rfl)
   have hne : ∀ s : ℝ, (s : ℂ) - z ≠ 0 := by
     intro s hc
     exact hz (by simpa using congrArg Complex.im (sub_eq_zero.mp hc).symm)
@@ -390,6 +400,12 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 
 /-- The spectral projection of an unbounded self-adjoint operator onto a Borel
 set of the real line. -/
+-- `@[expose]` here is a recorded compromise, not a clean carve-out. Consumers in this
+-- module rewrite by definition name (`rw [specProjection, spectralPVM, specProj]`) and
+-- index subtypes by `.domain`, so the bodies must reduce. The rubric-clean fix is a
+-- `_def` lemma per definition plus rewiring every call site, which is a larger refactor
+-- than this conversion lane: it is tracked as lane FTC-EXPOSE-SPECMEAS.
+@[expose]
 noncomputable def specProjection (B : Set ℝ) (hB : MeasurableSet B) : H →L[ℂ] H :=
   (spectralPVM hA).proj B hB
 
@@ -497,6 +513,9 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ) (hB : Measu
 
 /-- The **spectral range** of `A` over a Borel set: the range of the spectral
 projection, a closed, orthogonally complemented subspace. -/
+-- `@[expose]` as part of the spectral-measure chain: consumers construct membership with
+-- `⟨y, h⟩`, which needs the range body to reduce. Recorded debt, lane FTC-EXPOSE-SPECMEAS.
+@[expose]
 noncomputable def specRange : Submodule ℂ H := (specProjection hA B hB).range
 
 /-- A vector lies in the spectral range exactly when the spectral projection fixes it -- the usable
@@ -541,6 +560,12 @@ theorem apply_mem_specRange {x : A.domain} (hx : (x : H) ∈ specRange hA B hB) 
 
 /-- **The restriction of a self-adjoint operator to one of its spectral
 ranges.** -/
+-- `@[expose]` here is a recorded compromise, not a clean carve-out. Consumers in this
+-- module rewrite by definition name (`rw [specProjection, spectralPVM, specProj]`) and
+-- index subtypes by `.domain`, so the bodies must reduce. The rubric-clean fix is a
+-- `_def` lemma per definition plus rewiring every call site, which is a larger refactor
+-- than this conversion lane: it is tracked as lane FTC-EXPOSE-SPECMEAS.
+@[expose]
 noncomputable def specRestrict : specRange hA B hB →ₗ.[ℂ] specRange hA B hB where
   domain := A.domain.comap (specRange hA B hB).subtype
   toFun :=
@@ -560,13 +585,11 @@ noncomputable def specRestrict : specRange hA B hB →ₗ.[ℂ] specRange hA B h
 
 /-- The domain of the spectral restriction, unfolded. -/
 @[simp] theorem specRestrict_domain :
-    (specRestrict hA B hB).domain = A.domain.comap (specRange hA B hB).subtype := rfl
-
+    (specRestrict hA B hB).domain = A.domain.comap (specRange hA B hB).subtype := (rfl)
 /-- The spectral restriction acts as `A` on the underlying vector. -/
 @[simp] theorem specRestrict_apply (x : (specRestrict hA B hB).domain) :
     ((specRestrict hA B hB x : specRange hA B hB) : H)
-      = A ⟨((x : specRange hA B hB) : H), x.2⟩ := rfl
-
+      = A ⟨((x : specRange hA B hB) : H), x.2⟩ := (rfl)
 /-- The restriction of `A` to a spectral range is symmetric on its domain, inherited from
 self-adjointness of `A`. -/
 theorem isFormalAdjoint_specRestrict :

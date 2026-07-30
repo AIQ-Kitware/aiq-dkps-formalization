@@ -28,7 +28,7 @@ diagonal measures occurring in it.
 *New*; see `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean`.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace ENNReal CompactlySupported
 open MeasureTheory
@@ -250,7 +250,7 @@ theorem norm_pair_le_crude (hfm : Measurable f) {M : ℝ} (hM : 0 ≤ M)
     simp only [pow_two] at this ⊢
     rw [hI] at this
     linarith
-  rw [pair, norm_mul]
+  rw [pair_def, norm_mul]
   have hq : ‖(1 / 4 : ℂ)‖ = 1 / 4 := by norm_num
   rw [hq]
   have hsum : ‖(∫ x, f x ∂(diagMeasure ha (ξ + ψ)))
@@ -343,8 +343,7 @@ noncomputable def pairFunctional (hf : IsBddMeasurable f) (ξ : H) : H →L[ℂ]
 
 /-- The polarised functional, unfolded. -/
 @[simp] theorem pairFunctional_apply (hf : IsBddMeasurable f) (ξ ψ : H) :
-    pairFunctional ha hf ξ ψ = (starRingEnd ℂ) (pair ha f ψ ξ) := rfl
-
+    pairFunctional ha hf ξ ψ = (starRingEnd ℂ) (pair ha f ψ ξ) := (rfl)
 /-- The polarised functional is bounded by `‖f‖ ‖x‖ ‖y‖`, which is what makes it the matrix-element
 form of a bounded operator. -/
 theorem norm_pairFunctional_le (hf : IsBddMeasurable f) (ξ : H) :
@@ -387,8 +386,7 @@ noncomputable def borelCalculus (hf : IsBddMeasurable f) : H →L[ℂ] H :=
 
 /-- The Borel calculus acts through the Riesz vector of the polarised functional. -/
 @[simp] theorem borelCalculus_apply (hf : IsBddMeasurable f) (ξ : H) :
-    borelCalculus ha hf ξ = borelVector ha hf ξ := rfl
-
+    borelCalculus ha hf ξ = borelVector ha hf ξ := (rfl)
 /-- **The defining property of the Borel calculus.** -/
 @[simp] theorem inner_borelCalculus (hf : IsBddMeasurable f) (ψ ξ : H) :
     ⟪ψ, borelCalculus ha hf ξ⟫_ℂ = pair ha f ψ ξ :=

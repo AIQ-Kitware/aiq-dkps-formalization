@@ -36,7 +36,7 @@ operators, and `dev/tauceti/spectra-removal-plan.md` for the route comparison).
 *New*; see `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean`.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace ENNReal CompactlySupported
 open MeasureTheory
@@ -337,7 +337,7 @@ theorem borelCalculus_add (hf : IsBddMeasurable f) (hg : IsBddMeasurable g) :
   refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
   rw [_root_.add_apply, inner_add_right, inner_borelCalculus, inner_borelCalculus,
     inner_borelCalculus]
-  simp only [pair]
+  simp only [pair_def]
   rw [integral_add (hf.integrable _) (hg.integrable _),
     integral_add (hf.integrable _) (hg.integrable _),
     integral_add (hf.integrable _) (hg.integrable _),
@@ -349,7 +349,7 @@ theorem borelCalculus_const_smul (c : ℂ) (hf : IsBddMeasurable f) :
     borelCalculus ha (hf.const_smul c) = c • borelCalculus ha hf := by
   refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
   rw [_root_.smul_apply, inner_smul_right, inner_borelCalculus, inner_borelCalculus]
-  simp only [pair]
+  simp only [pair_def]
   rw [integral_const_mul, integral_const_mul, integral_const_mul, integral_const_mul]
   ring
 
@@ -360,7 +360,7 @@ theorem borelCalculus_congr_ae (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
     borelCalculus ha hf = borelCalculus ha hg := by
   refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
   rw [inner_borelCalculus, inner_borelCalculus]
-  simp only [pair]
+  simp only [pair_def]
   rw [integral_congr_ae (h _), integral_congr_ae (h _), integral_congr_ae (h _),
     integral_congr_ae (h _)]
 

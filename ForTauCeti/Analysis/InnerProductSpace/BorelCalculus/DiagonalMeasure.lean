@@ -49,7 +49,7 @@ measures, so the gap has to be closed somewhere.
   `dev/tauceti/spectra-removal-plan.md` for the comparison that chose it.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace ENNReal CompactlySupported
 open MeasureTheory
@@ -71,8 +71,7 @@ noncomputable def ofRealLM : C(X, ℝ) →ₗ[ℝ] C(X, ℂ) where
 
 /-- The real-to-complex coercion of a continuous function, pointwise. -/
 @[simp] theorem ofRealLM_apply (g : C(X, ℝ)) (x : X) :
-    ofRealLM g x = (g x : ℂ) := rfl
-
+    ofRealLM g x = (g x : ℂ) := (rfl)
 /-- A real-valued symbol is star-invariant, which is why its calculus is self-adjoint. -/
 @[simp] theorem star_ofRealLM (g : C(X, ℝ)) : star (ofRealLM g) = ofRealLM g := by
   ext x; simp
@@ -140,10 +139,10 @@ noncomputable def diagFunctional (ξ : H) :
     C_c(spectrum ℂ a, ℝ) →ₚ[ℝ] ℝ where
   toFun g := (⟪ξ, cfcHom ha (ofRealLM g.toContinuousMap) ξ⟫_ℂ).re
   map_add' g g' := by
-    have h : (g + g').toContinuousMap = g.toContinuousMap + g'.toContinuousMap := rfl
+    have h : (g + g').toContinuousMap = g.toContinuousMap + g'.toContinuousMap := (rfl)
     rw [h, map_add, map_add, _root_.add_apply, inner_add_right, Complex.add_re]
   map_smul' r g := by
-    have h : (r • g).toContinuousMap = r • g.toContinuousMap := rfl
+    have h : (r • g).toContinuousMap = r • g.toContinuousMap := (rfl)
     have hc : ofRealLM (r • g.toContinuousMap) =
         (r : ℂ) • ofRealLM g.toContinuousMap := by
       ext x; simp [Complex.real_smul]
@@ -159,8 +158,7 @@ noncomputable def diagFunctional (ξ : H) :
 
 /-- The diagonal functional, unfolded to the integral it is. -/
 @[simp] theorem diagFunctional_apply (ξ : H) (g : C_c(spectrum ℂ a, ℝ)) :
-    diagFunctional ha ξ g = (⟪ξ, cfcHom ha (ofRealLM g.toContinuousMap) ξ⟫_ℂ).re := rfl
-
+    diagFunctional ha ξ g = (⟪ξ, cfcHom ha (ofRealLM g.toContinuousMap) ξ⟫_ℂ).re := (rfl)
 /-- The **diagonal spectral measure** of a normal operator at a vector. -/
 noncomputable def diagMeasure (ξ : H) : Measure (spectrum ℂ a) :=
   RealRMK.rieszMeasure (diagFunctional ha ξ)

@@ -50,7 +50,7 @@ policy has always allowed (`ForTauCeti` may import Mathlib / TauCeti /
 ForTauCeti) but which nothing had needed until convergence work began.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace NNReal
 open Filter Topology Complex
@@ -78,8 +78,7 @@ noncomputable def toSemigroup (U : OneParameterUnitaryGroup H) :
 
 /-- The derived semigroup acts as the group at nonnegative times. -/
 @[simp] theorem toSemigroup_apply (U : OneParameterUnitaryGroup H) (t : ℝ≥0) (x : H) :
-    (toSemigroup U) t x = U.U (t : ℝ) x := rfl
-
+    (toSemigroup U) t x = U.U (t : ℝ) x := (rfl)
 /-- Its underlying operator is the group's. -/
 @[simp] theorem toSemigroup_realOperator (U : OneParameterUnitaryGroup H)
     {t : ℝ} (ht : 0 ≤ t) (x : H) :
@@ -89,7 +88,7 @@ noncomputable def toSemigroup (U : OneParameterUnitaryGroup H) :
       = (toSemigroup U).realOperator ((t.toNNReal : ℝ≥0) : ℝ) x := by rw [ht']
     _ = (toSemigroup U) t.toNNReal x := by
         rw [Semigroups.StronglyContinuousSemigroup.realOperator_coe]
-    _ = U.U ((t.toNNReal : ℝ≥0) : ℝ) x := rfl
+    _ = U.U ((t.toNNReal : ℝ≥0) : ℝ) x := (rfl)
     _ = U.U t x := by rw [ht']
 
 /-- The semigroup difference quotient is `i` times the group difference
@@ -111,7 +110,7 @@ in the domain of the semigroup generator, and there the semigroup generator is
 `i` times the group generator. -/
 theorem mem_domain_toSemigroup (U : OneParameterUnitaryGroup H) {x : H}
     (hx : x ∈ generatorDomain U) : x ∈ (toSemigroup U).domain := by
-  obtain ⟨η, hη⟩ := hx
+  obtain ⟨η, hη⟩ := mem_generatorDomain.mp hx
   refine ((toSemigroup U).mem_domain_iff_tendsto x).mpr ⟨Complex.I • η, ?_⟩
   have hsub : 𝓝[>] (0 : ℝ) ≤ 𝓝[≠] (0 : ℝ) :=
     nhdsWithin_mono 0 fun t ht => ne_of_gt ht
