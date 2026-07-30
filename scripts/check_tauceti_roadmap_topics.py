@@ -51,8 +51,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  [A+"SingularValues",A+"RectangularSingularValues",A+"SingularSystem",A+"MoorePenroseInverse"]),
 ("T04","Gram matrices, orthogonal projections, and spectral subspaces",
  [A+x for x in ["GramMatrix","ProjectionGeometry","ProjectionBlocks","ProjectionGap",
-   "ReducingSubspace","ReducedExtension","SpectralSubspace","SpectralGap",
-   "OrthogonalSeries"]]),
+   "ReducingSubspace","SpectralSubspace","SpectralGap","OrthogonalSeries"]]),
 ("T05","Majorization, Schur-Horn, and unitarily invariant norms",
  ["Analysis.Convex.Majorization",A+"SchurHorn",A+"SingularSubspace",A+"KyFan",
   A+"UnitarilyInvariantNorm"]),
@@ -119,7 +118,8 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 ("T17","Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems",
  [A+"SinTheta."+x for x in ["OperatorNorm","Perturbation","DirectedBounds","UnitarilyInvariant"]]
  +[A+"Residual."+x for x in ["AngleEmbedding","Ritz","TrialMap"]]
- +[A+"DoubleAngle.Vector"]+[A+"BoundedOperator."+x for x in ["Projector","SinTheta"]]),
+ +[A+"DoubleAngle.Vector"]+[A+"BoundedOperator."+x for x in ["Projector","SinTheta"]]
+ +[A+"ReducedExtension"]),
 ("T18","The Yu-Wang-Samworth statistical variant",
  [A+"YuWangSamworth."+x for x in ["Residual","SingularSubspace","Statistics"]]),
 ("T19","Matrix spectra and spectral measurability",

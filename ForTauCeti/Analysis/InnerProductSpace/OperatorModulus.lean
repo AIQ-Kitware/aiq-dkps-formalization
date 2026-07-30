@@ -94,6 +94,15 @@ calculus, of the Gram operator `T⋆ T` on the source space. -/
 noncomputable def modulus (T : E →L[ℂ] F) : E →L[ℂ] E :=
   CFC.sqrt (T.adjoint ∘L T)
 
+/-- **The modulus unfolded.**  The characteristic lemma: `|T|` is the functional
+calculus square root of the Gram operator.  A consumer in another module that
+needs to rewrite through the definition should use this rather than `rw
+[modulus]`, which only works while the body is exposed.
+
+`modulus_eq_sqrt_star_mul_self` is the endomorphism specialization, in
+C⋆-algebra notation. -/
+theorem modulus_def (T : E →L[ℂ] F) : T.modulus = CFC.sqrt (T.adjoint ∘L T) := (rfl)
+
 /-- The Gram operator `T⋆ T` is nonnegative.  This is the `0 ≤ ·` form of
 `ContinuousLinearMap.isPositive_adjoint_comp_self`. -/
 theorem adjoint_comp_self_nonneg (T : E →L[ℂ] F) : 0 ≤ T.adjoint ∘L T :=
