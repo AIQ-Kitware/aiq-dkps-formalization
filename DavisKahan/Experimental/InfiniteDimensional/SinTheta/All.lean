@@ -8,8 +8,8 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.SpectralBridge
 import DavisKahan.SinTheta.FrameFactorization
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Bounded
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Unbounded
-import DavisKahan.SinTheta.Unbounded.GenuineOpNorm
-import DavisKahan.SinTheta.Unbounded.GenuineGauge
+import DavisKahan.SinTheta.Unbounded.OpNorm
+import DavisKahan.SinTheta.Unbounded.Gauge
 import DavisKahan.SinTheta.Unbounded.IntervalExterior
 import DavisKahan.SinTheta.Unbounded.AllGap
 import DavisKahan.SinTheta.Natural.Genuine

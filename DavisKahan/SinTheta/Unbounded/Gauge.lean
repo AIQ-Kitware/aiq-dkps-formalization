@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.ShiftedInverseGauge
 import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.SinTheta.Unbounded.GenuineOpNorm
+import DavisKahan.SinTheta.Unbounded.OpNorm
 
 /-!
 # Ideal-gauge `sin Θ` bound from a two-sided shifted inverse
