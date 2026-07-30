@@ -221,10 +221,49 @@ def cmd_names(files, args) -> int:
     return 0
 
 
-DEFN_RE = re.compile(
-    r"^\s*(?:@\[[^\]]*\]\s*)?(?:private |protected |noncomputable |partial )*"
-    r"(def|abbrev|instance|structure)\s+([A-Za-z_][\w.'\u2019]*)(.*?):=\s*"
-    + "sor" + r"ry\b", re.M | re.S)
+# Start of any declaration.  Used to cut the file into blocks so that a body is
+# only ever attributed to the declaration it actually belongs to.
+#
+# The previous detector was a single regex with `re.S`, whose lazy `(.*?)` ran
+# from a declaration's name to the next `:= sorry` ANYWHERE later in the file --
+# across blank lines, docstrings and intervening declarations.  So every `def`
+# that merely *preceded* an escape was reported as definitional even when it had
+# a perfectly good body.  That inverted the one distinction this subcommand
+# exists to draw: `spectralProjection` was listed despite its body being
+# `(spectralSubspace A s).starProjection`, and `operatorAbsoluteValue` stayed
+# listed after it was given the body `CFC.abs T`.  Since the point of `--defn`
+# is to separate opaque terms (whose downstream theorems are *unprovable*) from
+# merely unproved ones, an over-report here is not a rounding error -- it
+# misdirects lane planning, which is exactly what it did.
+DECL_START_RE = re.compile(
+    r"^\s*(?:@\[[^\]]*\]\s*)?(?:private |protected |noncomputable |partial |scoped |unsafe )*"
+    r"(def|abbrev|instance|structure|class|theorem|lemma|example|opaque|axiom)"
+    r"(?:\s+([A-Za-z_][\w.'\u2019]*))?", re.M)
+
+# Bodies that are themselves an escape.  `:= sorry` and `:= by ... sorry` both
+# produce an opaque term, so both count.
+BODY_ESCAPE_RE = re.compile(r":=[\s\S]*?\b" + "sor" + r"ry\b")
+
+# Declaration keywords that introduce a *term* rather than a proof.
+DEFINITIONAL_KINDS = {"def", "abbrev", "instance", "structure", "class", "opaque"}
+
+
+def definitional_escapes(text: str) -> list[tuple[str, str]]:
+    """The `(kind, name)` of every declaration whose own body is an escape.
+
+    Works blockwise: each declaration owns the text up to the next declaration,
+    so a body can never be attributed across a boundary.
+    """
+    starts = [(m.start(), m.group(1), m.group(2)) for m in DECL_START_RE.finditer(text)]
+    out = []
+    for i, (pos, kind, name) in enumerate(starts):
+        if kind not in DEFINITIONAL_KINDS:
+            continue
+        end = starts[i + 1][0] if i + 1 < len(starts) else len(text)
+        if BODY_ESCAPE_RE.search(text[pos:end]):
+            # An anonymous `instance : Foo := sorry` is still an opaque term.
+            out.append((kind, name or "<anonymous>"))
+    return out
 
 
 def cmd_defn(files, args) -> int:
@@ -240,7 +279,7 @@ def cmd_defn(files, args) -> int:
         n = len(ready.ESCAPE_RE.findall(text))
         if not n:
             continue
-        defs = [(m.group(1), m.group(2)) for m in DEFN_RE.finditer(text)]
+        defs = definitional_escapes(text)
         tot_d += len(defs)
         tot_p += n - len(defs)
         if defs:
