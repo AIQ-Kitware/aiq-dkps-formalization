@@ -98,9 +98,18 @@ leaderboard-only because the underlying approximation-number vocabulary is
 project-staged rather than available in Mathlib; a conformance surface should be
 added after the foundational definitions are split into an upstream-shaped file.
 
-The legacy `DavisKahanPartIII` aggregate remains as a compatibility audit, but the
-six focused comparator configurations above are the authoritative advertising
-surfaces.  The canonical spectral-projector wrapper is printed by the projector
+The legacy `DavisKahanPartIII` aggregate was **removed on 2026-07-30** (lane
+CH-DEDUP): it pinned exactly the four theorems the four dedicated Davis--Kahan
+challenges pin and nothing else, so five directories and five comparator
+configurations were maintained for four theorems, and the comparator ran each of
+those proofs twice.  The focused configurations above are now the only
+advertising surfaces.
+
+The four theorems themselves are unaffected -- they are `alias`es in
+`DavisKahan/Sources/DavisKahan1970/PartIII.lean`, the stable source-facing import
+surface for the finite Part III results, which each of the four dedicated
+challenges imports directly.  **That module, not the deleted challenge, is what
+to point at for the exact paper form of the Davis--Kahan proofs.**  The canonical spectral-projector wrapper is printed by the projector
 leaderboard but is not a second challenge leaf because it is a direct corollary
 of the reducing-subspace theorem.
 
