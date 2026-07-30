@@ -38,7 +38,6 @@ spaces, and the transport of equal singular-value data by the rectangular SVD.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -556,6 +555,5 @@ theorem apply_le_of_mem_convexHull_twoSidedUnitaryOrbit
 
 end RectangularUnitarilyInvariantNorm
 
-end DavisKahanTheory
 
 end TauCeti
