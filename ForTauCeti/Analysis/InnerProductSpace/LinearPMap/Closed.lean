@@ -28,7 +28,7 @@ them; they are not bundled into a parallel operator structure.
 * Spectra influence: none.  This module imports only Mathlib.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap
@@ -47,8 +47,7 @@ def SameDomain (A B : E →ₗ.[𝕜] E) : Prop :=
   A.domain = B.domain
 
 /-- Equality of partial-map domains is reflexive. -/
-@[refl] theorem SameDomain.refl (A : E →ₗ.[𝕜] E) : SameDomain A A := rfl
-
+@[refl] theorem SameDomain.refl (A : E →ₗ.[𝕜] E) : SameDomain A A := (rfl)
 /-- Equality of partial-map domains is symmetric. -/
 @[symm] theorem SameDomain.symm {A B : E →ₗ.[𝕜] E}
     (h : SameDomain A B) : SameDomain B A :=
@@ -59,7 +58,11 @@ def SameDomain (A B : E →ₗ.[𝕜] E) : Prop :=
     (hAB : SameDomain A B) (hBC : SameDomain B C) : SameDomain A C :=
   Eq.trans hAB hBC
 
+-- `@[expose]` is deliberate: this is a `Prop`-valued abbreviation for a ∀-statement and
+-- consumers *apply* it (`h x : X x ∈ A.domain`), which is unfolding by definition. The
+-- `api-design` carve-out for a consumer that must unfold, not blanket exposure.
 /-- A bounded map sends the domain of `B` into the domain of `A`. -/
+@[expose]
 def MapsDomainTo (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
     (X : F →L[𝕜] E) : Prop :=
   ∀ x : B.domain, X (x : F) ∈ A.domain
@@ -165,9 +168,7 @@ The two subtypes differ only in which membership proof they carry. -/
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E)
     (x : reducingRestrictionDomain A U) :
     ((reducingRestrictionDomainToAmbient A U x : A.domain) : E) =
-      ((x : reducingRestrictionDomain A U) : U) :=
-  rfl
-
+      ((x : reducingRestrictionDomain A U) : U) := (rfl)
 /-- Action of a partial map restricted to a reducing subspace. -/
 def reducingRestrictionLinearMap
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
@@ -198,9 +199,7 @@ makes `A x` land back in `U` so the corestriction typechecks. -/
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : ReducesSubspace A U) (x : reducingRestrictionDomain A U) :
     ((reducingRestrictionLinearMap A U hred x : U) : E) =
-      A (reducingRestrictionDomainToAmbient A U x) :=
-  rfl
-
+      A (reducingRestrictionDomainToAmbient A U x) := (rfl)
 /-- Projection of an ambient domain vector into the restricted domain. -/
 noncomputable def projectDomainToReducingRestriction
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
@@ -217,9 +216,7 @@ orthogonal projection onto `U`.  It stays in the domain because `A` reduces
     (hred : ReducesSubspace A U) (x : A.domain) :
     (((projectDomainToReducingRestriction A U hred x :
         reducingRestrictionDomain A U) : U) : E) =
-      U.starProjection (x : E) :=
-  rfl
-
+      U.starProjection (x : E) := (rfl)
 /-- The partial map induced on a reducing subspace.  Density and closedness
 are properties supplied separately by the theorem using this construction. -/
 noncomputable def reducingRestriction
@@ -232,9 +229,7 @@ noncomputable def reducingRestriction
 @[simp] theorem reducingRestriction_domain
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : ReducesSubspace A U) :
-    (reducingRestriction A U hred).domain = reducingRestrictionDomain A U :=
-  rfl
-
+    (reducingRestriction A U hred).domain = reducingRestrictionDomain A U := (rfl)
 /-- A dense partial-map domain remains dense after restriction to a reducing
 subspace. -/
 theorem reducingRestriction_dense
@@ -340,7 +335,7 @@ theorem mem_reducingRestriction_adjoint_domain_iff
       calc
         ⟪y, (reducingRestriction A U hred)
             (projectDomainToReducingRestriction A U hred x)⟫_𝕜 =
-            ⟪(y : E), A xu⟫_𝕜 := rfl
+            ⟪(y : E), A xu⟫_𝕜 := (rfl)
         _ = ⟪(y : E), A xu + A xo⟫_𝕜 := by
               rw [inner_add_right, horth, add_zero]
         _ = ⟪(y : E), A (xu + xo)⟫_𝕜 := by
@@ -433,9 +428,7 @@ restriction, this map genuinely moves the vector. -/
 @[simp] theorem pullbackDomainToOriginal_coe
     (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
     (x : pullbackDomain A e) :
-    ((pullbackDomainToOriginal A e x : A.domain) : E) = e (x : E) :=
-  rfl
-
+    ((pullbackDomainToOriginal A e x : A.domain) : E) = e (x : E) := (rfl)
 /-- Action of the partial map pulled back through a continuous linear
 equivalence. -/
 def pullbackLinearMap (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) :
@@ -448,9 +441,7 @@ pull back by `e⁻¹`.  Conjugation, written on the domain subtypes. -/
     (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
     (x : pullbackDomain A e) :
     pullbackLinearMap A e x =
-      e.symm (A (pullbackDomainToOriginal A e x)) :=
-  rfl
-
+      e.symm (A (pullbackDomainToOriginal A e x)) := (rfl)
 /-- Pull a partial map back through a continuous linear equivalence.  Density
 and graph closedness are separate properties of the resulting partial map. -/
 noncomputable def pullback (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) : E →ₗ.[𝕜] E where
@@ -460,9 +451,7 @@ noncomputable def pullback (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) : E →�
 /-- The pulled-back partial map has the pulled-back domain, definitionally. -/
 @[simp] theorem pullback_domain
     (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) :
-    (pullback A e).domain = pullbackDomain A e :=
-  rfl
-
+    (pullback A e).domain = pullbackDomain A e := (rfl)
 /-- Pullback through a continuous linear equivalence preserves a dense domain. -/
 theorem pullback_dense
     (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
@@ -647,8 +636,7 @@ noncomputable def directSum
 /-- The direct-sum partial map has the direct-sum domain, definitionally. -/
 @[simp] theorem directSum_domain
     (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
-    (directSum A B).domain = directSumDomain A B := rfl
-
+    (directSum A B).domain = directSumDomain A B := (rfl)
 /-- The direct sum of dense partial-map domains is dense. -/
 theorem directSum_dense
     (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
@@ -793,6 +781,11 @@ theorem norm_apply_le_graphNorm (A : E →ₗ.[𝕜] E) (x : A.domain) :
 
 /-- Add a bounded ambient perturbation to a partial map on its original
 domain.  Closedness remains a separate property of the resulting map. -/
+-- `@[expose]` here is deliberate and minimal: the `_apply` lemma below cannot be
+-- *stated* without `.domain` reducing, since it indexes its argument by this map's
+-- domain and applies the underlying map to it. That is the `api-design` rubric's own
+-- carve-out — a consumer that must unfold — not the blanket exposure it rejects.
+@[expose]
 noncomputable def addBounded (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E) :
     E →ₗ.[𝕜] E where
   domain := A.domain
@@ -803,13 +796,11 @@ defined, so `A + V` is defined exactly where `A` is.  This is what makes
 perturbation arguments comparable on the nose rather than up to a domain
 inclusion. -/
 @[simp] theorem addBounded_domain (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E) :
-    (TauCeti.LinearPMap.addBounded A V).domain = A.domain := rfl
-
+    (TauCeti.LinearPMap.addBounded A V).domain = A.domain := (rfl)
 /-- The perturbed map acts by `A x + V x`. -/
 @[simp] theorem addBounded_apply (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E)
     (x : (TauCeti.LinearPMap.addBounded A V).domain) :
-    TauCeti.LinearPMap.addBounded A V x = A x + V (x : E) := rfl
-
+    TauCeti.LinearPMap.addBounded A V x = A x + V (x : E) := (rfl)
 /-- A bounded left inverse for the real shift of a partial map. -/
 def LeftShiftedInverseBound (A : E →ₗ.[𝕜] E) (c s : ℝ) : Prop :=
   ∃ J : E →L[𝕜] E,
