@@ -49,7 +49,7 @@ vectors `{b i : i ∈ s}`.
 * Spectra influence: **none** — this module imports only Mathlib.
 -/
 
-@[expose] public section
+public section
 
 namespace OrthonormalBasis
 
@@ -61,6 +61,11 @@ variable {𝕜 E ι : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductS
 
 /-- The subspace spanned by the orthonormal basis vectors `b i` for indices
 `i ∈ s`. -/
+-- `@[expose]` because this is a definitional alias for `Submodule.span` and consumers run
+-- `induction … using Submodule.span_induction` on membership, which needs the alias to
+-- reduce. Recorded debt: a `spanIndices_def` lemma plus a rewrite before the induction is
+-- the clean fix. Lane FTC-EXPOSE-SPECMEAS.
+@[expose]
 noncomputable def spanIndices (b : OrthonormalBasis ι 𝕜 E) (s : Set ι) :
     Submodule 𝕜 E :=
   Submodule.span 𝕜 (b '' s)

@@ -89,7 +89,7 @@ two-operator Weyl inequalities are helper facts under `TauCeti`.
 * Spectra influence: **none** — this module imports only Mathlib.
 -/
 
-@[expose] public section
+public section
 
 open Module (finrank)
 open scoped InnerProductSpace
