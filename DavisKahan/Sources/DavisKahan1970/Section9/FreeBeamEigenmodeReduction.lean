@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Classical.CharacteristicConverse
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamAnalyticFoundation
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicConverse
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation
 import Mathlib.Tactic
 
 /-!
@@ -95,6 +95,7 @@ structure PositiveEigenmodeRegularity
 
 namespace PositiveEigenmodeRegularity
 
+omit [CompleteSpace H] in
 /-- Every positive eigenpair of a regular free-beam realization gives a
 positive characteristic root. -/
 theorem eigenpair_characteristic
@@ -120,6 +121,7 @@ def PositiveSpectrumIsPointSpectrum
     lambda ∈ A.realSpectrum → 0 < lambda →
       ∃ x : A.domain, ClosedOperatorEigenpair A lambda x
 
+omit [CompleteSpace H] in
 /-- Compact-resolvent discreteness plus ODE regularity gives the exact positive
 spectrum characterization required by the paper-facing foundation. -/
 theorem positive_spectrum_characterization_of_pointSpectrum_and_regularity
@@ -136,6 +138,7 @@ theorem positive_spectrum_characterization_of_pointSpectrum_and_regularity
   obtain ⟨x, hx⟩ := hpoint lambda hlambda hpositive
   exact hregular.eigenpair_characteristic hpositive hx
 
+omit [CompleteSpace H] in
 /-- Once root localization is known, every positive spectral point lies above
 `500`. -/
 theorem positive_spectrum_gt_five_hundred_of_pointSpectrum_and_regularity
