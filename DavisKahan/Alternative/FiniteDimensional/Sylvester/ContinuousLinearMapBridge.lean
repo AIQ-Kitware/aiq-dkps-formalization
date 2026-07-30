@@ -45,7 +45,7 @@ rectangular unitarily invariant seminorm satisfies
 
 All reciprocal-multiplier analysis, including the sharp `π / 2` constant,
 is supplied unconditionally by the Haagerup--Zsidó kernel through
-`DavisKahanTheory.kyFan_reciprocalMultiplier_le`.  Coordinate expansion,
+`kyFan_reciprocalMultiplier_le`.  Coordinate expansion,
 singular-value control, the orbit barycenter, and this
 continuous-linear-map bridge contain no further analytic argument.-/
 theorem ideal_sylvester_le
@@ -79,7 +79,7 @@ theorem ideal_sylvester_le
     change A (X x) - X (B x) = C x at hpoint
     simpa [A', B', X', C'] using hpoint
   simpa [X', C'] using
-    DavisKahanTheory.uiNorm_sylvester_le_of_spectralDistance
+    uiNorm_sylvester_le_of_spectralDistance
       N hA' hB' hd hsep' hEq'
 
 /-- **Unconditional complex sharp Sylvester estimate.**  Identical to
@@ -118,7 +118,7 @@ theorem ideal_sylvester_le_complex
     change A (X x) - X (B x) = C x at hpoint
     simpa [A', B', X', C'] using hpoint
   simpa [X', C'] using
-    DavisKahanTheory.uiNorm_sylvester_le_of_spectralDistance_complex
+    uiNorm_sylvester_le_of_spectralDistance_complex
       N hA' hB' hd hsep' hEq'
 
 /-- **Unconditional real sharp Sylvester estimate.**  Identical to
@@ -157,7 +157,7 @@ theorem ideal_sylvester_le_real
     change A (X x) - X (B x) = C x at hpoint
     simpa [A', B', X', C'] using hpoint
   simpa [X', C'] using
-    DavisKahanTheory.uiNorm_sylvester_le_of_spectralDistance_real
+    uiNorm_sylvester_le_of_spectralDistance_real
       N hA' hB' hd hsep' hEq'
 
 end DavisKahanExt

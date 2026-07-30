@@ -39,7 +39,7 @@ what the Davis--Kahan block argument consumes and follow no source's presentatio
 
 *Split, not restated.*  Until 2026-07-29 this file held the construction and this
 bounded-set theory together in 1243 lines, over Tau Ceti's stated 1000-line limit
-for a new file (`ForTauCeti/README.md` §4).  Lane SPLIT-1K divided it at its
+for a new file (`ForTauCeti/README.md` §4).  It was divided at its
 `end Reduce` / `section BoundedSet` seam; the construction moved to
 `…SpectralMeasure.Construction` and this root kept the `BoundedSet` and
 `ResolventGap` sections.  **No statement, signature, proof, attribute or

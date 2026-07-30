@@ -76,7 +76,7 @@ BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 #:     `toProjValMeasure`, `specDiag`, and six more, one build at a time.  The clean fix
 #:     is a `_def` lemma per definition plus rewiring the call sites: lane
 #:     FTC-EXPOSE-SPECMEAS.  Lowering this number is that lane's job.
-PER_DECL_BASELINE = 20
+PER_DECL_BASELINE = 18
 
 PER_DECL = re.compile(r"^@\[expose\]\s*$|^@\[simps![^\]]*,\s*expose\]\s*$", re.M)
 

@@ -120,7 +120,7 @@ reads the structure's type, where it is invisible.
   hand-rolled completeness, fourteen fields) is replaced here by the
   single-gauge presentation above.  The legacy structure was derivable from this
   one through `DavisKahan/Interop/TauCeti/RectangularFamilyAdapter.lean`, which
-  **no longer exists**: lane P-EXP phase D deleted it on 2026-07-30 once the
+  **no longer exists**: it was deleted once the
   production tree consumed `SymmetricOperatorIdealFamily` directly, which is the
   condition the adapter's own docstring set for its removal.  The legacy
   `RectangularSymmetricIdealFamily` is gone with it; this presentation is the only
@@ -149,9 +149,9 @@ universe u v w
 -- `instIsCompleteOperatorNormIdealFamily` is a second place the independence bites:
 -- it exists because instance search cannot find the three-universe instance once the
 -- symmetric family equates the last two.
--- Decided by lane FTC-UNIV, 2026-07-30, after measuring both alternatives; the earlier
+-- Decided after measuring both alternatives; the earlier
 -- version of this comment said the fix was to collapse them and deferred to that lane.
--- Written here rather than left silent because lane FTC-SETOPT found this the only one
+-- Written here rather than left silent because this is the only one
 -- of the library's ten linter suppressions with no reason at its site, and
 -- `ForTauCeti/README.md` §207 forbids silencing a linter without one.
 set_option linter.checkUnivs false in

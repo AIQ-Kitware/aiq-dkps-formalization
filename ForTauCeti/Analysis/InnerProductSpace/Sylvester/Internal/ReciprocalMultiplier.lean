@@ -51,7 +51,6 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open TauCeti
 open scoped InnerProductSpace BigOperators ComplexConjugate
@@ -819,5 +818,4 @@ theorem kyFan_reciprocalMultiplier_le
   kyFan_reciprocalMultiplier_le_of_integrableKernel eF eE α β hδ hgap
     hasIntegrableReciprocalFourierKernel_pi_div_two hcoeff k
 
-end DavisKahanTheory
 end TauCeti
