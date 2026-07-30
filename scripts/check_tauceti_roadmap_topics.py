@@ -133,6 +133,45 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 ]
 
 
+# Topic -> the ForTauCetiRoadmap directory that covers it. Nothing else connects
+# the two: the topic design lives here, the roadmaps live in ForTauCetiRoadmap/,
+# and before this table "how many topics have a roadmap?" was answered by
+# name-matching, which gave 13 and then 19 on successive passes and was wrong
+# both times. A topic with no entry has no roadmap; that is the readiness number.
+ROADMAP = {
+    "T01": "PositiveSqrtAndModulus",
+    "T02": "PolarDecomposition",
+    "T03": "SingularValues",
+    "T04": "ProjectionsAndSpectralSubspaces",
+    "T05": "MajorizationAndUINorms",
+    "T09": "ApproximationNumbers",
+    "T10": "SymmetricOperatorIdeals",
+    "T11": "HilbertSchmidtOperators",
+    "T12": "HaagerupZsidoKernel",
+    "T13": "StoneTheorem",
+    "T14": "BorelCalculus",
+    "T15a": "ClosedPartialMaps",
+    "T15b": "UnboundedResolvent",
+    "T15c": "UnboundedSpectralMeasure",
+    "T16": "SylvesterRosenblum",
+    "T17": "SpectralSubspacePerturbation",
+    "T21": "MatrixRankFactorization",
+    "T22": "BergeMaximum",
+}
+
+
+def roadmap_coverage() -> tuple[list, list, list]:
+    """(covered, missing, orphan directories)."""
+    root = ROOT / "ForTauCetiRoadmap"
+    dirs = {d.name for d in root.iterdir() if d.is_dir()} if root.exists() else set()
+    covered, missing = [], []
+    for key, title, _ in TOPICS:
+        d = ROADMAP.get(key)
+        (covered if d and d in dirs else missing).append((key, title, d))
+    orphans = sorted(dirs - set(ROADMAP.values()))
+    return covered, missing, orphans
+
+
 def import_graph() -> dict[str, set[str]]:
     graph = {}
     for path in sorted((ROOT / "ForTauCeti").rglob("*.lean")):
@@ -169,9 +208,20 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--check", action="store_true", help="exit 1 on any violation")
     ap.add_argument("--topic", help="list the modules of one topic")
+    ap.add_argument("--roadmaps", action="store_true",
+                    help="which topics have a roadmap, and which do not")
     ap.add_argument("--needs", action="store_true",
                     help="print each topic's exact prerequisite topics")
     args = ap.parse_args(argv)
+    if args.roadmaps:
+        covered, missing, orphans = roadmap_coverage()
+        print(f"roadmap coverage: {len(covered)}/{len(TOPICS)} topics\n")
+        for key, title, d in missing:
+            print(f"  MISSING  {key:<5} {title}")
+        for d in orphans:
+            print(f"  ORPHAN   ForTauCetiRoadmap/{d} covers no topic in the design")
+        return 0
+
     d = analyse()
 
     if args.topic:
