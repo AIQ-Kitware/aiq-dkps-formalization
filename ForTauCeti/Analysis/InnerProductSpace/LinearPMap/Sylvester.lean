@@ -25,7 +25,7 @@ separate hypotheses for the theorems that require them.
   dependency-clean `LinearPMap` domain API.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap
