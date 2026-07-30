@@ -3,20 +3,24 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.Sequence.WeakSubmajorization
+import DavisKahan.OperatorIdeal.Majorization.WeakSubmajorization
 import DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence
 import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
 import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 import Mathlib.Topology.Compactness.Compact
 
 /-!
-# The order-continuous part of a coherent symmetric gauge
+# The sequence gauge of a coherent symmetric norm, and its Riesz splitting
 
-This file supplies the sequence-space mathematics used by the minimal
-symmetrically normed operator ideal.  The key finite result is a Riesz
-splitting for weak majorization: if `x ≺w y + z`, then `x = u + v` with the
-symmetric gauge of `u` bounded by that of `y` and the symmetric gauge of `v`
-bounded by that of `z`.
+This file extends a coherent unitarily invariant norm from finite vectors to
+sequences, and proves the splitting theorem that extension exists to support.
+The key finite result is a Riesz splitting for weak majorization: if
+`x ≺w y + z`, then `x = u + v` with the symmetric gauge of `u` bounded by that
+of `y` and the symmetric gauge of `v` bounded by that of `z`.
+
+The order-continuous part of the gauge is what the minimal symmetrically normed
+operator ideal is built from; that construction lives downstream, and this file
+is the sequence-space half of it.
 
 The proof is not an assumption and does not use a separation theorem.  It
 applies the repository's constructive Hardy--Littlewood--Pólya descent to the
@@ -24,7 +28,7 @@ Minkowski sum of two symmetric-convex gauge balls.
 -/
 
 namespace TauCeti
-namespace FinishTanTwoTheta
+namespace Majorization
 
 open scoped BigOperators ENNReal
 open DavisKahan.Experimental.ExactSinTheta
@@ -56,6 +60,8 @@ noncomputable def paperFiniteSymmetricGauge
   (N.finiteNorm n).finiteSymmetricGauge
     (EuclideanSpace.basisFun (Fin n) ℂ)
 
+/-- `paperFiniteSymmetricGauge` computes the paper's own finite gauge: the repackaging
+into `FiniteSymmetricGauge` changes the interface, not the value. -/
 @[simp] theorem paperFiniteSymmetricGauge_apply
     (N : PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) :
     paperFiniteSymmetricGauge N n x = N.finiteGauge n x :=
@@ -95,7 +101,7 @@ theorem isSymmetricConvex_gaugeBall_add_gaugeBall
       Function.update v j (-(v j)), ?_, ?_, ?_⟩
     · funext i
       rcases eq_or_ne i j with rfl | hij
-      · simpa [add_comm]
+      · simp [add_comm]
       · simp [Function.update_of_ne hij]
     · exact hU.neg_single_mem u hu j
     · exact hV.neg_single_mem v hv j
@@ -141,5 +147,5 @@ theorem exists_l1_paperGauge_decomposition_of_weaklyMajorized
 
 end
 
-end FinishTanTwoTheta
+end Majorization
 end TauCeti
