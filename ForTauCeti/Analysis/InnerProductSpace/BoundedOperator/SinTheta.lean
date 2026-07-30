@@ -44,14 +44,6 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
 omit [CompleteSpace E] in
-/-- Pythagoras for an orthogonal projection, in the packaging this file uses.
-The content is `TauCeti.norm_sq_eq_starProjection_add_sub`. -/
-private theorem norm_sq_eq_starProjection_add_sub {W : Submodule 𝕜 E}
-    [W.HasOrthogonalProjection] (x : E) :
-    ‖x‖ ^ 2 = ‖W.starProjection x‖ ^ 2 + ‖x - W.starProjection x‖ ^ 2 :=
-  TauCeti.norm_sq_eq_starProjection_add_sub x
-
-omit [CompleteSpace E] in
 /-- **The quadratic form of a reduced extension splits**, for an extension
 packaged from a bounded `T` and a reducing subspace.
 
@@ -139,7 +131,7 @@ theorem sinTheta_directed_coercive
         = RCLike.re ⟪A (P x), P x⟫_𝕜 + (c + g) * ‖x - P x‖ ^ 2 := by
       rw [hA', hP]; exact re_inner_reducedExtension_self hU (c + g) x
     have hpyth : ‖x‖ ^ 2 = ‖P x‖ ^ 2 + ‖x - P x‖ ^ 2 := by
-      rw [hP]; exact norm_sq_eq_starProjection_add_sub x
+      rw [hP]; exact TauCeti.norm_sq_eq_starProjection_add_sub x
     rw [hre, hpyth]
     nlinarith [hUc (P x) hpx]
   -- upper bound for B'
@@ -150,7 +142,7 @@ theorem sinTheta_directed_coercive
         = RCLike.re ⟪B (Q x), Q x⟫_𝕜 + c * ‖x - Q x‖ ^ 2 := by
       rw [hB', hQ]; exact re_inner_reducedExtension_self hV c x
     have hpyth : ‖x‖ ^ 2 = ‖Q x‖ ^ 2 + ‖x - Q x‖ ^ 2 := by
-      rw [hQ]; exact norm_sq_eq_starProjection_add_sub x
+      rw [hQ]; exact TauCeti.norm_sq_eq_starProjection_add_sub x
     rw [hre, hpyth]
     nlinarith [hVc (Q x) hqx]
   -- Sylvester relation A' X - X B' = Y
