@@ -18,7 +18,7 @@ Four rubrics can `block`: `correctness`, `reuse`, `scope`, `attribution`.
 | **`api-design`** | `request_changes` — 68 files expose bodies; 4 unused definitions | `FTC-EXPOSE`, `FTC-DEAD` |
 | **`generality`** | `approve` (with a caveat below) | — |
 | **`placement`** | `request_changes` — 54 flat files beside 12 directories | `FTC-ORG`, `PLACE-SYLV`, `PLACE-GRAM` |
-| **`naming`** | `request_changes` — `genuine` marks the correct theorem | `DK-NAME`, `PLACE-GRAM` |
+| **`naming`** | `request_changes` — `genuine`; 2 suffixes overstate | `DK-NAME`, `DK-NAME-SUFFIX`, `PLACE-GRAM` |
 | **`documentation`** | `request_changes` — 69 files document our workflow, not the math | `FTC-PROSE` |
 | **`proof-quality`** | `request_changes` — 10 linter suppressions, 6 long proofs | `FTC-SETOPT`, `FTC-LONGPROOF` |
 
@@ -136,6 +136,58 @@ where they make sense:
   deliberately paper-shaped, exports broadly for its own downstream, and has no
   roadmap targets because it is not being submitted. Scoring it against them
   would generate findings that are wrong for the library's purpose.
+
+## `naming` — the conventions reference, applied mechanically
+
+The `naming` rubric ships a vendored Mathlib conventions document and requires
+that a claim of nonstandard terminology **cite its rule**. Its TauCeti addendum
+fixes four suffixes precisely enough to check without a compiler:
+
+> `_def`: restates a definition. `_apply`: evaluates at an argument.
+> **`_iff`: the statement is an `Iff`; a lemma proving only one direction must
+> not carry it. `_eq`: the statement is an equality; a lemma proving only an
+> inequality must not carry it.**
+
+Checked over every `theorem`/`lemma` in `ForTauCeti`, `DavisKahan`, and both
+`Finish*` libraries, comparing the suffix against the parsed conclusion.
+
+**`ForTauCeti` is clean on suffix semantics — 0 violations.** Recorded as a
+verified negative, not an assumption.
+
+**Two findings, both in `DavisKahan` `{lane:DK-NAME-SUFFIX}`:**
+
+1. `Experimental/…/RCLikeSpectralBridge.lean:227`
+   `mem_spectrum_sub_real_scalar_iff` takes membership as a **hypothesis**
+   (`hz : z ∈ spectrum …`) and concludes `∃ r : ℝ, r ∈ boundedRealSpectrum A ∧
+   z = ↑(r - c)`. One direction, named `_iff` — exactly what the addendum
+   forbids. This sits in `Experimental`, which the `EXP-PROMOTE-*` lanes intend
+   to promote, so it is cheapest to fix **before** promotion carries the name
+   into a protected tree.
+2. `OperatorIdeal/ApproximationNumbers/OperatorModulus.lean:54`
+   `sameApproximationSingularValues_of_norm_apply_eq` concludes
+   `A.HasSameApproximationNumbers B`. The rubric's first bullet is that a name
+   describes its conclusion; this one says *singular values* where the
+   conclusion says *approximation numbers*. It is also a two-line wrapper whose
+   body is `ContinuousLinearMap.hasSameApproximationNumbers_of_norm_apply_eq` —
+   the same fact under the **correct** name — so it is a `reuse` point as well.
+
+### What this check got wrong, recorded so it is not re-run naively
+
+The first sweep produced **13 candidates; 12 were my detector's fault.**
+
+- Eight were `_of_<hypothesis>_eq` names — `opNorm_le_div_of_comp_add_comp_eq`
+  and siblings. The `_eq` there describes the **hypothesis**, not the
+  conclusion, which is correct Mathlib style. A suffix check must stop at
+  `_of_`.
+- Twelve `_unique` hits concluded `X = Y` from two hypotheses. **That is the
+  standard Mathlib uniqueness idiom** — `IsLUB.unique` concludes `a = b` — and
+  the addendum does not list `_unique` at all. I had invented the rule.
+
+Both corrections point the same way: the rubric's *"verify before you assert:
+name the declaration and show the `grep` hit"* is what separates a finding from
+a regex artifact. A `FTC-PROSE-GATE`-style mechanical check for suffix semantics
+would be worth having, but only with the `_of_` rule built in — otherwise it
+reports 8 false positives on day one and gets switched off.
 
 ## The shared protocol, not just the ten rubrics — and one clean result
 
