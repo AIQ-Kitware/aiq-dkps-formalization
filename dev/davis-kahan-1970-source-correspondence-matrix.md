@@ -162,7 +162,7 @@ mathematical step in Theorems 6.1 or 6.2.
 
 The audit covers the 43 endpoints above.  It does not cover:
 
-- the scalar-generic isometric theorem `IsometricSinThetaProblem.result`, which
+- the scalar-generic isometric theorem `FormBoundedIsometricSinThetaProblem.result`, which
   still routes through the legacy unbounded engine; the paper surface uses the
   complex and real routes instead, both of which are proved.  See
   `DavisKahan/Experimental/InfiniteDimensional/SinTheta/Canonical.lean`;
