@@ -140,6 +140,50 @@ private theorem isBddMeasurable_cayleyIndicator :
   BorelCalculus.isBddMeasurable_indicator (a := cayley hA) (measurable_cayleyInv hA hB)
 
 
+/-- The inverting symbol `(κ - lam)⁻¹ · 1_B` of the resolvent-gap argument.
+
+`lam` is an explicit argument rather than a section variable, which is all it
+needed: nothing about the surrounding section has to change to give this
+function a name. -/
+private noncomputable def gapSymbol (lam : ℝ) : _root_.spectrum ℂ (cayley hA) → ℂ :=
+  fun w => ((cayleyInv hA w : ℂ) - (lam : ℂ))⁻¹ * cayleyIndicator hA B w
+
+/-- On the support the inverting symbol is the plain reciprocal. -/
+private theorem gapSymbol_of_mem {lam : ℝ} {w : _root_.spectrum ℂ (cayley hA)}
+    (hw : w ∈ cayleyInv hA ⁻¹' B) :
+    gapSymbol hA B lam w = ((cayleyInv hA w : ℂ) - (lam : ℂ))⁻¹ := by
+  rw [gapSymbol, cayleyIndicator_of_mem hA B hw, mul_one]
+
+/-- Off the support the indicator kills the inverting symbol. -/
+private theorem gapSymbol_of_notMem {lam : ℝ} {w : _root_.spectrum ℂ (cayley hA)}
+    (hw : w ∉ cayleyInv hA ⁻¹' B) : gapSymbol hA B lam w = 0 := by
+  rw [gapSymbol, cayleyIndicator_of_notMem hA B hw, mul_zero]
+
+include hB in
+/-- The inverting symbol is admissible for the bounded Borel calculus.  The
+bound is `ε⁻¹`, from the gap alone: on the support the factor is at least `ε` in
+modulus, and off it the indicator kills the symbol. -/
+private theorem isBddMeasurable_gapSymbol {lam ε : ℝ} (hε : 0 < ε)
+    (hgap : ∀ s ∈ B, ε ≤ |s - lam|) :
+    BorelCalculus.IsBddMeasurable (gapSymbol hA B lam) := by
+  classical
+  have hmeasκ : Measurable fun w => ((cayleyInv hA w : ℝ) : ℂ) :=
+    Complex.continuous_ofReal.measurable.comp (measurable_cayleyInv hA)
+  have hgapS : ∀ w ∈ cayleyInv hA ⁻¹' B,
+      ε ≤ ‖((cayleyInv hA w : ℂ) - (lam : ℂ))‖ := by
+    intro w hw
+    rw [show ((cayleyInv hA w : ℂ) - (lam : ℂ)) = ((cayleyInv hA w - lam : ℝ) : ℂ) by
+        push_cast; ring, Complex.norm_real, Real.norm_eq_abs]
+    exact hgap _ hw
+  refine ⟨((hmeasκ.sub measurable_const).inv).mul
+      (isBddMeasurable_cayleyIndicator hA B hB).measurable, ε⁻¹, by positivity, fun w => ?_⟩
+  by_cases hw : w ∈ cayleyInv hA ⁻¹' B
+  · rw [gapSymbol_of_mem hA B hw, norm_inv]
+    simpa only [one_div] using one_div_le_one_div_of_le hε (hgapS w hw)
+  · rw [gapSymbol_of_notMem hA B hw, norm_zero]
+    positivity
+
+
 /-- **Bounded spectral sets.**  If the spectral parameter stays within `r` of `c`
 on `B`, then the spectral projection lands in `dom A` and `A - c` is bounded by
 `r` there.  Both facts come from one identity: `(A + i) E_A(B)` is the Borel
@@ -582,31 +626,23 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
     rw [hzero, norm_zero] at this
     linarith
   -- the inverting symbol and its `(κ + i)`-companion
-  set f : _root_.spectrum ℂ (cayley hA) → ℂ :=
-    fun w => ((κ w : ℂ) - (lam : ℂ))⁻¹ * ind w with hf
+  set f : _root_.spectrum ℂ (cayley hA) → ℂ := gapSymbol hA B lam with hf
   set hsym : _root_.spectrum ℂ (cayley hA) → ℂ :=
     fun w => ((κ w : ℂ) + Complex.I) * f w with hhsym
   have hfmeas : Measurable f :=
     ((hmeasκ.sub measurable_const).inv).mul hindb.measurable
   have hfb : BorelCalculus.IsBddMeasurable f := by
-    refine ⟨hfmeas, ε⁻¹, by positivity, fun w => ?_⟩
-    by_cases hw : w ∈ S
-    · rw [hf]
-      simp only [hindone w hw, mul_one, norm_inv]
-      simpa only [one_div] using one_div_le_one_div_of_le hε (hgapS w hw)
-    · rw [hf]
-      simp only [hindnil w hw, mul_zero, norm_zero]
-      positivity
+    rw [hf]
+    exact isBddMeasurable_gapSymbol hA B hB hε hgap
   have hhb : BorelCalculus.IsBddMeasurable hsym := by
     refine ⟨(hmeasκ.add measurable_const).mul hfmeas, 1 + (|lam| + 1) / ε,
       by positivity, fun w => ?_⟩
     by_cases hw : w ∈ S
     · have hfw : ‖f w‖ = (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹ := by
-        rw [hf]
-        simp only [hindone w hw, mul_one, norm_inv]
+        rw [hf, gapSymbol_of_mem hA B hw, norm_inv]
       rw [hhsym, norm_mul, hfw]
       exact norm_add_I_mul_inv_norm_sub_le hε _ (hgapS w hw)
-    · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hw]
+    · have hfz : f w = 0 := by rw [hf]; exact gapSymbol_of_notMem hA B hw
       -- states the goal with the definition unfolded, in the shape the next step needs.
       change ‖((κ w : ℂ) + Complex.I) * f w‖ ≤ 1 + (|lam| + 1) / ε
       rw [hfz, mul_zero, norm_zero]
@@ -669,10 +705,10 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
       = ((κ w : ℂ) + Complex.I) * f w + -(Complex.I + (lam : ℂ)) * f w
     by_cases hw : w ∈ S
     · have hfw : f w = ((κ w : ℂ) - (lam : ℂ))⁻¹ := by
-        rw [hf]; simp [hindone w hw]
+        rw [hf]; exact gapSymbol_of_mem hA B hw
       rw [hindone w hw, hfw]
       exact (symbol_right_inverse_pointwise (hne w hw)).symm
-    · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hw]
+    · have hfz : f w = 0 := by rw [hf]; exact gapSymbol_of_notMem hA B hw
       rw [hindnil w hw, hfz]
       ring
   have hright : ∀ φ : H, A ⟨Rop φ, hmemdom φ⟩ - (lam : ℂ) • Rop φ
@@ -691,7 +727,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
     change ind w * f w = f w
     by_cases hw : w ∈ S
     · rw [hindone w hw, one_mul]
-    · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hw]
+    · have hfz : f w = 0 := by rw [hf]; exact gapSymbol_of_notMem hA B hw
       rw [hfz, mul_zero]
   have hKmap : ∀ φ : H, Rop φ ∈ specRange hA B hB := by
     intro φ
@@ -712,10 +748,10 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
       linear_combination hw
     by_cases hwS : w ∈ S
     · have hfw : f w = ((κ w : ℂ) - (lam : ℂ))⁻¹ := by
-        rw [hf]; simp [hindone w hwS]
+        rw [hf]; exact gapSymbol_of_mem hA B hwS
       rw [hindone w hwS, hfw, hgval, one_mul]
       exact symbol_left_inverse_pointwise (hne w hwS) (hkne w)
-    · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hwS]
+    · have hfz : f w = 0 := by rw [hf]; exact gapSymbol_of_notMem hA B hwS
       rw [hindnil w hwS, hfz]
       ring
   have hlefts' : Rop + (-(Complex.I + (lam : ℂ)))
