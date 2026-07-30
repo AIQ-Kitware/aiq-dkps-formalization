@@ -192,7 +192,7 @@ public import Mathlib...
 ...
 -/
 
-@[expose] public section
+public section
 
 namespace ...
 ...
@@ -202,8 +202,25 @@ end ...
 * Use `public import` for every import (implementation-only imports may stay
   private, but the approximation-number cluster's public interface needs its
   imports public).
-* `@[expose] public section` (not plain `public section`) — several proofs use
-  `rfl`/`change` that require definition bodies to be exposed.
+* **`public section`, not `@[expose] public section`. Keep definition bodies
+  hidden by default.** Reach for `@[expose]` only on the individual declaration
+  whose body a consumer must genuinely unfold or compute with, and say in the
+  docstring why. **If the reason is that a downstream proof wants `rfl` or
+  `change`, that is not a reason to expose — it is a missing lemma.** Write the
+  characteristic lemma instead (`foo_def`, `foo_apply`, `mem_foo_iff`), and note
+  that `:= (rfl)` rather than `:= rfl` avoids making downstream lemmas depend on
+  defeq in the first place.
+
+  **Decided by jon, 2026-07-30, adopting the Tau Ceti convention over ours.**
+  This reverses the previous rule, which mandated `@[expose] public section` on
+  every module and justified it as *"several proofs use `rfl`/`change` that
+  require definition bodies to be exposed."* `TauCetiReview/rubrics/api-design.md`
+  names that exact reasoning as the defect it rejects: *"Do not expose bodies to
+  compensate for missing lemmas … ask for the missing lemma instead."* Exposing
+  a body makes the implementation part of the public contract, so a later change
+  that preserves every stated lemma can still break a consumer. **70 of 167
+  existing files still carry the old pattern**; lane `FTC-EXPOSE-MEASURE` and
+  its follow-ons convert them. New files follow the rule above from today.
 * Do **not** use `set_option` to silence limits or linters.
 * Files must be **warning-clean** (Tau Ceti builds with `warningAsError`) and
   below the 1000-line new-file limit.
