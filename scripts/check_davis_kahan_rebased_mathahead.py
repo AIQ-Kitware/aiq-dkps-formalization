@@ -26,7 +26,26 @@ MANIFEST = ROOT / "dev/overlays/pending-mathahead-rebased-53297a4-gpt56.manifest
 LEAN_ROOT = ROOT / "DavisKahan/Experimental/MathAhead"
 BAD = re.compile(r"\b(sorry|admit|axiom|native_decide)\b")
 # trees that cannot count as a promotion home: staged-for-deletion and vendored
-NOT_A_HOME = ("dev/topurge/", "retired/", "external/", ".lake/")
+NOT_A_HOME = ("dev/topurge/", "retired/", "external/")
+
+
+def not_a_home(rel: str) -> bool:
+    """Is `rel` somewhere a promotion cannot legitimately land?
+
+    The named trees are staged-for-deletion or vendored.  Dot-directories are
+    excluded structurally rather than by name because the hand-list could not
+    keep up: it carried `.lake/`, and then a subagent worktree appeared at
+    `.claude/worktrees/` -- a full second checkout of this repo -- and this
+    gate happily reported eight modules as PROMOTED to paths like
+    `.claude/worktrees/aiq-gpu-docs/DavisKahan/Geometry/Polar/...`.
+
+    That is the failure this check exists to prevent, inverted: a module that
+    had genuinely been lost would still be found, in another agent's working
+    copy, and reported as a success.
+    """
+    return rel.startswith(NOT_A_HOME) or any(
+        part.startswith(".") for part in Path(rel).parts
+    )
 
 
 def parse_manifest() -> list[tuple[str, str | None]]:
@@ -58,7 +77,7 @@ def promoted_home(path: str, recorded: str | None) -> Path | None:
     name = Path(path).name
     for candidate in sorted(ROOT.rglob(name)):
         rel = candidate.relative_to(ROOT).as_posix()
-        if rel == path or rel.startswith(NOT_A_HOME):
+        if rel == path or not_a_home(rel):
             continue
         return candidate.relative_to(ROOT)
     return None

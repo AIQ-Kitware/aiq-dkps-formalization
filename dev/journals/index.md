@@ -4,6 +4,16 @@ Use this index when debugging a confusing symptom. Search `dev/journals/` when
 in doubt; this file is a routing aid, not a complete replacement for grep (see
 [`../SEARCH.md`](../SEARCH.md)).
 
+## Tooling that reports a wrong answer instead of failing
+
+| Symptom | Read |
+|---|---|
+| A commit says "documentation only" but `git show --stat` lists Lean files you did not edit | [`tool-rewrote-the-tree-during-its-own-regression-test-2026-07-29.md`](tool-rewrote-the-tree-during-its-own-regression-test-2026-07-29.md) |
+| Running a script with `--help` modified the working tree | same |
+| A generator deleted imports that were deliberately hand-added, and the build stayed green | same |
+| A tool reports this repository's own HEAD as an external submodule's pinned commit | same |
+| A regression test passes, but running it dirtied the repository | same |
+
 ## Comparator / export
 
 | Symptom | Read |
