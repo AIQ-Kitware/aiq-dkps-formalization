@@ -29,7 +29,7 @@ theorem sinAngleOperator_perturbation_le
     (N : UnitarilyInvariantNorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b c d δ : ℝ} (hδ : 0 < δ)
     (hgapUV : IntervalExteriorGap A B U V a b δ)
     (hgapVU : IntervalExteriorGap B A V U c d δ) :

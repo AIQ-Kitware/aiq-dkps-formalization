@@ -112,8 +112,8 @@ structure AboveBelowSpectralGapProseLike (T S : E →ₗ[𝕜] E)
     (U V : Submodule 𝕜 E) (c g : ℝ) : Prop where
   T_symm : T.IsSymmetric
   S_symm : S.IsSymmetric
-  U_reduces : Reduces T U
-  V_reduces : Reduces S V
+  U_reduces : IsInvariant T U
+  V_reduces : IsInvariant S V
   gap_pos : 0 < g
   U_spectrum : SpectrumIn T U (Set.Ici (c + g))
   V_spectrum : SpectrumIn S V (Set.Iic c)

@@ -317,7 +317,7 @@ theorem directedResidual_sylvesterEquation
     ContinuousLinearMap.comp_apply, restrictToOrthogonal_apply,
     coe_codRestrictTo_apply]
   have hUperp : Reduces A Uᗮ := reduces_orthogonalComplement hA hU.2
-  have hcomm := projection_apply_comm_of_reduces A Uᗮ hUperp (X x)
+  have hcomm := projection_apply_comm_of_isInvariant A Uᗮ hUperp (X x)
   change A (Uᗮ.starProjection (X x)) - Uᗮ.starProjection (X (M x)) =
     Uᗮ.starProjection (A (X x) - X (M x))
   rw [map_sub, hcomm]
@@ -344,7 +344,7 @@ theorem directedPerturbation_sylvesterEquation
     restrictToOrthogonal_apply, restrictToReducingSubspace_apply,
     coe_codRestrictTo_apply]
   have hVperp : Reduces B Vᗮ := reduces_orthogonalComplement hB hV.2
-  have hcomm := projection_apply_comm_of_reduces B Vᗮ hVperp (x : E)
+  have hcomm := projection_apply_comm_of_isInvariant B Vᗮ hVperp (x : E)
   change B (Vᗮ.starProjection (x : E)) - Vᗮ.starProjection (A (x : E)) =
     Vᗮ.starProjection (B (x : E) - A (x : E))
   rw [map_sub, hcomm]

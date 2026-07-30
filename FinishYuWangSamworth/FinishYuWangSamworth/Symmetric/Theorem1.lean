@@ -30,7 +30,7 @@ theorem yuWangSamworth_theorem1_uiNorm_le
     (N : UnitarilyInvariantNorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A B U V a b δ) :
     N (sinThetaMap U V) ≤ N (B - A) / δ := by
@@ -42,7 +42,7 @@ theorem yuWangSamworth_theorem1_uiNorm_le
 theorem yuWangSamworth_theorem1_frobenius_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A B U V a b δ) :
     sinThetaFrobenius U V ≤
@@ -56,7 +56,7 @@ theorem yuWangSamworth_theorem1_frobenius_le
 theorem yuWangSamworth_theorem1_opNorm_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A B U V a b δ) :
     ‖(sinThetaMap U V).toContinuousLinearMap‖ ≤

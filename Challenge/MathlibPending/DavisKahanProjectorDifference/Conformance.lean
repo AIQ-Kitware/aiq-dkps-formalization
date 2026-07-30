@@ -27,7 +27,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 theorem projector_difference_opNorm {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U W : Submodule 𝕜 E} [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
-    (hU : Reduces A U) (hW : Reduces B W)
+    (hU : IsInvariant A U) (hW : IsInvariant B W)
     {c g ε : ℝ} (hg : 0 < g)
     (hUhi : SpectrumIn A U (Set.Ici (c + g)))
     (hUlo : SpectrumIn A Uᗮ (Set.Iic c))
