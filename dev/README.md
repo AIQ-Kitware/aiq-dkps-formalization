@@ -330,6 +330,27 @@ python3 scripts/check_expose_ratchet.py --check   # gate; exit 1 above the basel
 python3 scripts/check_expose_ratchet.py --list    # name the modules
 ```
 
+**The conversion is COMPLETE as of 2026-07-30.** `BASELINE = 0`: not one module
+in `ForTauCeti` opens `@[expose] public section`, and the ratchet is now a flat
+prohibition rather than a declining count. Lanes `FTC-EXPOSE-g1`..`g5` did the
+work; `FTC-EXPOSE-ENFORCE` closed it.
+
+**The second count is the live one.** `PER_DECL_BASELINE = 23` bounds
+per-declaration `@[expose]`, and those 23 are three different things that must
+not be confused:
+
+| kind | what to do |
+|---|---|
+| **clean carve-out** — a consumer genuinely must unfold | leave it; the rubric permits this |
+| **recorded debt** — avoidable with a `_def` lemma plus rewiring | lane `FTC-EXPOSE-SPECMEAS` lowers it |
+| **compiler limitation** — `Elem`, `Elem.val`, `Elem.mk` | no fix at this toolchain; revisit on a bump |
+
+The third kind is not a defect and must not be filed as debt. Those three failed
+*compilation*, not typechecking, and the compiler says so itself: *"locally
+inferred compilation type differs from type that would be inferred in other
+modules … This is a current compiler limitation for `module`s that may be lifted
+in the future."*
+
 **Why a ratchet rather than a fix.** Jon adopted Tau Ceti's `api-design` rubric
 over this repository's own house rule on 2026-07-30: bodies stay hidden, and
 `@[expose]` goes on the individual declarations a consumer must unfold, with a

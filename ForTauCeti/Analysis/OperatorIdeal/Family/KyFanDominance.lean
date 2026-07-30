@@ -49,7 +49,7 @@ this module provides.
 
 open scoped ENNReal InnerProductSpace
 
-@[expose] public section
+public section
 
 namespace TauCeti
 
