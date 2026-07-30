@@ -71,6 +71,8 @@ def MapsDomainTo (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
 theorem MapsDomainTo.id (A : E →ₗ.[𝕜] E) :
     MapsDomainTo A A (ContinuousLinearMap.id 𝕜 E) := by
   intro x
+  -- states the goal with the local definition unfolded, in the shape the next step
+  -- needs.
   change (x : E) ∈ A.domain
   exact x.property
 
@@ -251,6 +253,7 @@ theorem reducingRestriction_dense
   · have hlim := (U.starProjection.continuous.tendsto (u : E)).comp hs_lim
     have hfix : U.starProjection (u : E) = (u : E) :=
       Submodule.starProjection_eq_self_iff.mpr u.property
+    -- names the sequence explicitly so the limit lemma matches its shape.
     change Tendsto (fun n => t n) atTop (𝓝 u)
     apply tendsto_subtype_rng.mpr
     simpa [t, hfix, Function.comp_def] using hlim
@@ -284,6 +287,8 @@ theorem reducingRestriction_closedGraph
       let u : (reducingRestriction A U hred).domain := ⟨p.1, hpdom⟩
       refine ⟨u, Prod.ext rfl ?_⟩
       apply Subtype.ext
+      -- states the goal with the local definition unfolded, in the shape the next step
+      -- needs.
       change A (reducingRestrictionDomainToAmbient A U u) = (p.2 : E)
       have hxu : reducingRestrictionDomainToAmbient A U u = x := by
         apply Subtype.ext
@@ -495,6 +500,8 @@ theorem pullback_closedGraph
       have hfst : (x : E) = e p.1 := congrArg Prod.fst hx
       have hsnd : A x = e p.2 := congrArg Prod.snd hx
       have hp1 : p.1 ∈ pullbackDomain A e := by
+        -- states the goal with the local definition unfolded, in the shape the next step
+        -- needs.
         change e p.1 ∈ A.domain
         rw [← hfst]
         exact x.property
@@ -504,6 +511,10 @@ theorem pullback_closedGraph
         exact hfst.symm
       refine ⟨z, Prod.ext rfl ?_⟩
       apply e.injective
+      -- `pullback` has a `_domain` lemma but no `_apply` one, and an `_apply` cannot be
+      -- stated without a cast: `x : (pullback A e).domain` does not reduce to
+      -- `pullbackDomain A e` unless the body is exposed. Tried; it fails to elaborate.
+      -- `change` names the unfolded form instead.
       change e (pullbackLinearMap A e z) = e p.2
       rw [pullbackLinearMap_apply, e.apply_symm_apply, hz]
       exact hsnd]
@@ -556,16 +567,34 @@ theorem pullback_unitaryEquivalent
   refine ⟨hWdom, ?_⟩
   let hWinvdom : ∀ y : A.domain,
       e.symm (y : E) ∈ (pullback A e).domain := fun y => by
+        -- states the goal with the local definition unfolded, in the shape the next step
+        -- needs.
         change e (e.symm (y : E)) ∈ A.domain
         simpa only [e.apply_symm_apply] using y.property
   refine ⟨hWinvdom, ?_, ?_⟩
   · intro x
+    -- `pullback` has a `_domain` lemma but no `_apply` one, and an `_apply` cannot be
+    -- stated without a cast: `x : (pullback A e).domain` does not reduce to
+    -- `pullbackDomain A e` unless the body is exposed. Tried; it fails to elaborate.
+    -- `change` names the unfolded form instead.
     change A ⟨e (x : E), hWdom x⟩ = e ((pullback A e) x)
+    -- `pullback` has a `_domain` lemma but no `_apply` one, and an `_apply` cannot be
+    -- stated without a cast: `x : (pullback A e).domain` does not reduce to
+    -- `pullbackDomain A e` unless the body is exposed. Tried; it fails to elaborate.
+    -- `change` names the unfolded form instead.
     change A ⟨e (x : E), hWdom x⟩ = e (pullbackLinearMap A e x)
     rw [pullbackLinearMap_apply, e.apply_symm_apply]
     rfl
   · intro y
+    -- `pullback` has a `_domain` lemma but no `_apply` one, and an `_apply` cannot be
+    -- stated without a cast: `x : (pullback A e).domain` does not reduce to
+    -- `pullbackDomain A e` unless the body is exposed. Tried; it fails to elaborate.
+    -- `change` names the unfolded form instead.
     change (pullback A e) ⟨e.symm (y : E), hWinvdom y⟩ = e.symm (A y)
+    -- `pullback` has a `_domain` lemma but no `_apply` one, and an `_apply` cannot be
+    -- stated without a cast: `x : (pullback A e).domain` does not reduce to
+    -- `pullbackDomain A e` unless the body is exposed. Tried; it fails to elaborate.
+    -- `change` names the unfolded form instead.
     change pullbackLinearMap A e ⟨e.symm (y : E), hWinvdom y⟩ = e.symm (A y)
     rw [pullbackLinearMap_apply]
     congr 2
@@ -716,10 +745,12 @@ theorem reducingRestriction_isSelfAdjoint
     (hA : _root_.IsSelfAdjoint A) :
     _root_.IsSelfAdjoint (reducingRestriction A U hred) := by
   let R := reducingRestriction A U hred
+  -- states the goal against the bundled predicate so the structure lemma applies.
   change _root_.IsSelfAdjoint R
   rw [LinearPMap.isSelfAdjoint_def] at hA ⊢
   refine LinearPMap.ext_iff.mpr ⟨?_, ?_⟩
   · ext y
+    -- states the goal against the bundled predicate so the structure lemma applies.
     change y ∈ R.adjoint.domain ↔ y ∈ R.domain
     rw [show R = reducingRestriction A U hred by rfl,
       mem_reducingRestriction_adjoint_domain_iff A U hred]

@@ -75,6 +75,38 @@ TERMINAL_RE = re.compile(
 HELD_RE = re.compile(
     r"^[^.;:—]{0,60}?\b(claimed|in progress|partially|blocked on)\b")
 
+#: A do-not-take instruction that arrives AFTER the first clause, where `HELD_RE`
+#: cannot see it.  `EXP-PROMOTE-HF` read "unclaimed -- parallel slice, take
+#: independently ... BLOCKED ... Do not take this slice yet; its premise is
+#: false" and was printed under READY TO TAKE.
+#:
+#: This is REPORTED, never acted on, and the reason is measured rather than
+#: assumed: a bare contains-`blocked` scan over `dev/LANES.md` returns five
+#: lanes of which one is real.  Two of the five are *negations* -- `DK-NAME`
+#: says "this lane was never actually blocked" and `EXP-UNBLOCK` says
+#: "'do not start there' rests on a wrong premise" -- so a detector that flipped
+#: them to held would hide two takeable lanes, which is the same collision
+#: pointing the other way.  The negative lookbehind below is what removes them;
+#: `test_check_lane_graph_state.py` pins both.
+def unquoted(prose: str) -> str:
+    """Blank out quoted and code-spanned text.
+
+    A do-not-take phrase inside quotes is being *discussed*, not asserted.
+    `EXP-UNBLOCK` reads: "do not start there" rests on a wrong premise -- the
+    row is rebutting the instruction, not issuing it.  Matching inside the
+    quotes turns a takeable lane into a warning nobody should act on.
+    """
+    prose = re.sub(r"`[^`]*`", lambda m: " " * len(m.group(0)), prose)
+    return re.sub(r"[\u201c\"'][^\u201d\"']{0,120}[\u201d\"']",
+                  lambda m: " " * len(m.group(0)), prose)
+
+
+DNT_RE = re.compile(
+    r"(?<!\w)(?<!never )(?<!not )"
+    r"(?:do not take|do not start|don't take)|"
+    r"(?<!never actually )(?<!not )(?<!un)\bblocked\b(?! on\b)",
+    re.I)
+
 #: A status the parser could not classify, but which contains a word suggesting
 #: it should have been.  These are reported, never acted on.
 SUSPECT_RE = re.compile(
@@ -98,8 +130,9 @@ def bare(status: str) -> str:
     return re.sub(r"^[^A-Za-z]*", "", status).lower()
 
 
-def collect() -> tuple[dict, list[str], list[tuple[str, str]]]:
-    lanes, problems, suspect = {}, [], []
+def collect() -> tuple[dict, list[str], list[tuple[str, str]],
+                      list[tuple[str, str, str]]]:
+    lanes, problems, suspect, donottake = {}, [], [], []
     for path in (LANES, ARCHIVE):
         for who, status in rows(path):
             m = LANE_RE.search(status)
@@ -126,6 +159,10 @@ def collect() -> tuple[dict, list[str], list[tuple[str, str]]]:
             rec["needs"] = sorted(set(rec["needs"]) | set(needs))
             if not done and not held and SUSPECT_RE.match(prose):
                 suspect.append((lane, prose[:88]))
+            if not done and not held:
+                d = DNT_RE.search(unquoted(prose))
+                if d:
+                    donottake.append((lane, d.group(0), prose[:84]))
             if done:
                 rec["done"] = True
                 rec["who"] = re.sub(r"[*~]", "", who).strip()[:58]
@@ -134,7 +171,7 @@ def collect() -> tuple[dict, list[str], list[tuple[str, str]]]:
                 rec["who"] = re.sub(r"[*~]", "", who).strip()[:58]
             elif not rec["who"]:
                 rec["who"] = re.sub(r"[*~]", "", who).strip()[:58]
-    return lanes, problems, suspect
+    return lanes, problems, suspect, donottake
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -144,7 +181,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--rows", action="store_true",
                     help="show how many rows each lane has")
     args = ap.parse_args(argv)
-    lanes, problems, suspect = collect()
+    lanes, problems, suspect, donottake = collect()
 
     for lane, rec in lanes.items():
         for need in rec["needs"]:
@@ -196,6 +233,14 @@ def main(argv: list[str] | None = None) -> int:
         for lane, waiting in blocked:
             print(f"  {lane:<16} waiting on {', '.join(waiting)}")
         print(f"\nDONE ({len(done)}): {', '.join(done) if done else '—'}")
+        if donottake:
+            print(f"\nREADS OPEN BUT SAYS DO-NOT-TAKE ({len(donottake)}) — the instruction "
+                  f"arrives after the first clause, where the held test cannot see it. "
+                  f"**Ask before taking one of these.** Advisory only: the state is NOT "
+                  f"changed, because two rows on this board say the opposite "
+                  f"(\"never actually blocked\") and acting would hide takeable lanes.")
+            for lane, phrase, prose in donottake:
+                print(f"  {lane:<18} [{phrase}] {prose}")
         if suspect:
             print(f"\nUNCLASSIFIED STATUS ({len(suspect)}) — these read as open, but "
                   f"their wording suggests a claim or a completion the parser could "
