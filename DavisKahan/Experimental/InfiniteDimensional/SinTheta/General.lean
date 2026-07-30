@@ -465,34 +465,38 @@ characterizing properties are isolated below as leaf obligations so that the
 
 /-- **Leaf obligation.** The measurable spectral subspace of a bounded
 operator: the range of the projection-valued measure of `s`. -/
-noncomputable def spectralSubspace (A : E →L[𝕜] E) (s : Set ℝ) :
+noncomputable def spectralSubspace (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+    (s : Set ℝ) (hs : MeasurableSet s) :
     Submodule 𝕜 E :=
   sorry
 
 /-- **Leaf obligation.** The spectral subspace is closed, hence admits an
 orthogonal projection in the complete ambient space. -/
 noncomputable instance spectralSubspace_hasOrthogonalProjection
-    (A : E →L[𝕜] E) (s : Set ℝ) :
-    (spectralSubspace A s).HasOrthogonalProjection :=
+    (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+    (s : Set ℝ) (hs : MeasurableSet s) :
+    (spectralSubspace A hA s hs).HasOrthogonalProjection :=
   sorry
 
 /-- The measurable spectral projection: the orthogonal projection onto the
 spectral subspace. -/
-noncomputable def spectralProjection (A : E →L[𝕜] E) (s : Set ℝ) :
+noncomputable def spectralProjection (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+    (s : Set ℝ) (hs : MeasurableSet s) :
     E →L[𝕜] E :=
-  (spectralSubspace A s).starProjection
+  (spectralSubspace A hA s hs).starProjection
 
 /-- **Leaf obligation.** Spectral subspaces of a self-adjoint operator reduce
 it. -/
 theorem isInvariant_spectralSubspace (A : E →L[𝕜] E)
-    (hA : IsSelfAdjointOperator A) (s : Set ℝ) (_hs : MeasurableSet s) :
-    Reduces A (spectralSubspace A s) :=
+    (hA : IsSelfAdjointOperator A) (s : Set ℝ) (hs : MeasurableSet s) :
+    Reduces A (spectralSubspace A hA s hs) :=
   sorry
 
 /-- The subspace projection of the spectral subspace is the spectral
 projection. -/
-theorem projection_spectralSubspace_eq (A : E →L[𝕜] E) (s : Set ℝ) :
-    projection (spectralSubspace A s) = spectralProjection A s :=
+theorem projection_spectralSubspace_eq (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+    (s : Set ℝ) (hs : MeasurableSet s) :
+    projection (spectralSubspace A hA s hs) = spectralProjection A hA s hs :=
   rfl
 
 /-- Canonical spectral-projection form.
@@ -517,16 +521,16 @@ theorem spectralProjection_sinTheta
     (s t : Set ℝ) (hs : MeasurableSet s) (ht : MeasurableSet t)
     {left right left' right' d : ℝ}
     (hlr : left ≤ right) (hlr' : left' ≤ right') (hd : 0 < d)
-    (hAs : SpectrumIn A (spectralSubspace A s) (Set.Icc left right))
-    (hBt : SpectrumIn B (spectralSubspace B t)ᗮ
+    (hAs : SpectrumIn A (spectralSubspace A hA s hs) (Set.Icc left right))
+    (hBt : SpectrumIn B (spectralSubspace B hB t ht)ᗮ
       {x | x ≤ left - d ∨ right + d ≤ x})
-    (hBs : SpectrumIn B (spectralSubspace B t) (Set.Icc left' right'))
-    (hAt : SpectrumIn A (spectralSubspace A s)ᗮ
+    (hBs : SpectrumIn B (spectralSubspace B hB t ht) (Set.Icc left' right'))
+    (hAt : SpectrumIn A (spectralSubspace A hA s hs)ᗮ
       {x | x ≤ left' - d ∨ right' + d ≤ x}) :
-    d * ‖spectralProjection A s - spectralProjection B t‖ ≤
+    d * ‖spectralProjection A hA s hs - spectralProjection B hB t ht‖ ≤
       ‖B - A‖ := by
-  let U := spectralSubspace A s
-  let V := spectralSubspace B t
+  let U := spectralSubspace A hA s hs
+  let V := spectralSubspace B hB t ht
   have hredA := isInvariant_spectralSubspace A hA s hs
   have hredB := isInvariant_spectralSubspace B hB t ht
   have hUV : IntervalExteriorSeparated A U B Vᗮ left right d :=
@@ -535,8 +539,8 @@ theorem spectralProjection_sinTheta
     ⟨hBs, hAt⟩
   have h := sinTheta_symmetric hA hB hredA hredB hlr hlr' hd hUV hVU
   have hgapeq : subspaceGap U V =
-      ‖spectralProjection A s - spectralProjection B t‖ := rfl
-  calc d * ‖spectralProjection A s - spectralProjection B t‖
+      ‖spectralProjection A hA s hs - spectralProjection B hB t ht‖ := rfl
+  calc d * ‖spectralProjection A hA s hs - spectralProjection B hB t ht‖
       = d * subspaceGap U V := by rw [hgapeq]
     _ ≤ ‖B - A‖ := h
 

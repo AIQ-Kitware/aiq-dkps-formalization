@@ -4,6 +4,21 @@
 `ForTauCeti` modules into **22 roadmap topics**, ordered as a submission ladder.
 This is a candidate design meant to be argued with; the numbers in it are not.
 
+> **Consolidation, 2026-07-30 (lane ROADMAP-HOLISTIC).** The topics below remain
+> the module-level partition and the PR-sized submission stages, but they are no
+> longer one directory each: they group into **six holistic roadmaps** sized
+> like real `TauCetiRoadmap` entries, each covering its topics as Parts —
+> `FiniteDimensionalOperators` (T01–T04), `MajorizationAndAngles` (T05–T08),
+> `OperatorIdeals` (T09–T11), `SpectralTheory` (T13–T15c),
+> `SpectralSubspacePerturbation` (T12, T16–T18), and `MatrixStatistics`
+> (T19–T22). The grouping is forced to stay honest by the same checker: each
+> roadmap README declares its topics, and
+> `check_tauceti_roadmap_topics.py --roadmaps` derives the roadmap-level DAG
+> and fails on a missing topic, a double claim, or a coarse cycle. The
+> T05–T08 grouping in particular is not taste: finding 3 below (geometry and
+> norms interleave) makes any split of those four cyclic at roadmap
+> granularity. See [`README.md`](README.md) for the meta-roadmap.
+
 Validate with:
 
 ```sh

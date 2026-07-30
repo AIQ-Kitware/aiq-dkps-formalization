@@ -31,7 +31,6 @@ namespace TauCeti
 namespace DavisKahan1970
 namespace Theorem63DistillationAudit
 
-open DavisKahanTheory
 
 /-- The isometric inclusion from the zero subspace into the full one-dimensional
 space.  This deliberately minimal witness keeps the regression theorem

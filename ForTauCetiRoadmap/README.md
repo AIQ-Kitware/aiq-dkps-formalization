@@ -13,57 +13,103 @@ is accepted, we already have what it needs. That includes paper references,
 adversarial review of every statement, and Mathlib-quality elegance. See
 `ForTauCeti/README.md` §*The readiness standard*.
 
-**Twelve of twenty-four topics are written** (2026-07-29/30; T15 became
-T15a/T15b/T15c on the second day). The design below partitions the library into
-twenty-four; the table under *Roadmaps* is the written ones, in topic order. Twelve remain, and `python3 scripts/check_tauceti_roadmap_topics.py --needs`
-reports **no independent topic left unwritten** — T01, T12, T14, T15b, T21
-and T22 all have roadmaps now, so every remaining topic waits on one of them.
+## The shape: six roadmaps, sized like real ones
+
+The real `TauCetiRoadmap` covers all of mathematics in fourteen roadmaps —
+*Partial differential equations*, *Representation theory*, each an area with
+milestones inside it. Our first cut partitioned one operator-theory library
+into twenty-four single-topic directories, which is a granularity no reviewer
+upstream would recognize as a roadmap. The library is now specified as **six
+roadmaps**, each a coherent body of mathematics whose Parts are the fine-grained
+topics of the [candidate topic design](CANDIDATE-TOPIC-DESIGN.md) (`T01`–`T22`,
+with the `T15a/b/c` split). The topics survive as the module-level partition and
+as PR-sized stages inside each roadmap; the roadmap is the unit a reviewer reads.
+
+| Roadmap | Parts | Modules | Needs |
+|---|---|---|---|
+| [`FiniteDimensionalOperators/`](FiniteDimensionalOperators/README.md) — the functional calculus of a symmetric operator, the positive square root and modulus, polar decomposition and partial isometries, singular values and the Moore–Penrose inverse, Gram matrices, projections and spectral subspaces. The foundation everything else names. | T01–T04 | 27 | — independent |
+| [`MajorizationAndAngles/`](MajorizationAndAngles/README.md) — majorization and Schur–Horn, unitarily invariant norms square and rectangular, principal angles as singular values of the overlap operator, the angle dictionary and eigenvalue perturbation. One roadmap because the import graph says so: geometry and norm theory interleave (T05 < T06 < T07 < T08). | T05–T08 | 19 | FiniteDimensionalOperators |
+| [`OperatorIdeals/`](OperatorIdeals/README.md) — approximation numbers as the infinite-dimensional continuation of singular values, symmetric operator ideals and Schatten norms, and Hilbert–Schmidt operators realised as `ℓ²` of columns. | T09–T11 | 28 | FiniteDimensionalOperators, MajorizationAndAngles |
+| [`SpectralTheory/`](SpectralTheory/README.md) — one-parameter unitary groups and Stone's theorem, the bounded Borel functional calculus and projection-valued measures, and the unbounded self-adjoint theory on Mathlib's `LinearPMap`: closed operators, resolvents, and the spectral measure. Opens with the representation decision the whole stack inherits. | T13, T14, T15a–c | 40 | FiniteDimensionalOperators |
+| [`SpectralSubspacePerturbation/`](SpectralSubspacePerturbation/README.md) — the endpoint: the Haagerup–Zsidó kernel behind the sharp `π/2` constant, Sylvester equations and the Rosenblum theorem, the Davis–Kahan sin Θ theorems, and the Yu–Wang–Samworth statistical variant. | T12, T16–T18 | 40 | all four above |
+| [`MatrixStatistics/`](MatrixStatistics/README.md) — matrix rank factorization and the MDS embedding step, Berge's maximum theorem for argmin stability, matrix spectra and spectral measurability, sample moments and matrix concentration. Its first two Parts are independent leaves. | T19–T22 | 15 | FiniteDimensionalOperators, SpectralTheory |
+
+## The meta-roadmap: how everything reaches Tau Ceti
+
+The six roadmaps form a DAG, and the DAG is the submission plan for
+contributing everything in `ForTauCeti`. It is validated against the import
+graph — run the tool rather than trusting the prose:
+
+```sh
+python3 scripts/check_tauceti_roadmap_topics.py --roadmaps   # this table, from ground truth
+python3 scripts/check_tauceti_roadmap_topics.py --check      # total, disjoint, acyclic, covered
+```
+
+```text
+              FiniteDimensionalOperators          (wave 1)
+                 │                 │
+       ┌─────────┴──────┐          │
+       ▼                ▼          │
+MajorizationAndAngles  SpectralTheory             (wave 2)
+       │      │            │   │
+       ▼      │            │   ▼
+ OperatorIdeals            │  MatrixStatistics    (wave 3)
+       │      │            │
+       └──────┴─────┬──────┘
+                    ▼
+     SpectralSubspacePerturbation                 (wave 4)
+```
+
+Reading the waves:
+
+1. **`FiniteDimensionalOperators` goes first** — it is the only roadmap with no
+   prerequisite, and five of the six name it. Within wave 1 the independent
+   Parts of later roadmaps are also submittable immediately: Stone's theorem,
+   the Borel calculus, and the unbounded resolvent theory (`SpectralTheory`
+   Parts A, B, D), the Haagerup–Zsidó kernel (`SpectralSubspacePerturbation`
+   Part A), and rank factorization and Berge (`MatrixStatistics` Parts A, B).
+   Those are the cheap first contacts with Tau Ceti review, where the thing
+   being tested is the *process* rather than the mathematics.
+2. **`MajorizationAndAngles` and `SpectralTheory` unlock in parallel** once the
+   foundation is accepted; neither needs the other.
+3. **`OperatorIdeals` and `MatrixStatistics`** follow their respective arms.
+4. **`SpectralSubspacePerturbation` is the endpoint** and needs everything.
+   That transitive depth is the honest cost of submitting Davis–Kahan as
+   reusable mathematics rather than as one paper's formalization. The lever for
+   getting sin Θ upstream sooner is not reordering — it is finding out which of
+   the earlier roadmaps Tau Ceti already has.
+
+What the DAG does **not** settle: which parts Tau Ceti or Mathlib already
+cover (the first real reviewer contact should measure that), and how accepted
+topics are packaged into PRs (`../dev/tauceti/submission-ladder.md`).
 
 ## The candidate topic design
 
-[`CANDIDATE-TOPIC-DESIGN.md`](CANDIDATE-TOPIC-DESIGN.md) proposes a partition of
-every `ForTauCeti` module into roadmap topics, ordered as a submission ladder and
-validated against the import graph (`scripts/check_tauceti_roadmap_topics.py`:
-total, disjoint, and acyclic in submission order). The design text says *156
-modules into 20 topics*; **the live partition is 164 modules into 22 topics** —
-run the tool rather than quoting the prose, which was written before T21 and T22
-were added and before lane SPLIT-1K added four modules (`jon (yardrat)`,
-2026-07-29). The directories below are the topics written so far; the rest have
-no directory yet, and writing them is the work that design makes possible.
+[`CANDIDATE-TOPIC-DESIGN.md`](CANDIDATE-TOPIC-DESIGN.md) records the partition
+of every `ForTauCeti` module into the fine-grained topics, ordered as a
+submission ladder and validated against the import graph
+(`scripts/check_tauceti_roadmap_topics.py`: total, disjoint, and acyclic in
+submission order). The topic keys (`T01`…`T22`) are stable identifiers: audit
+files, the checker, and the roadmap Parts all cite them, and they are never
+renumbered. Each roadmap README declares the topics it covers
+(`**Topic Txx of the candidate design**`), and the checker derives the
+directory-to-topic map from those declarations — there is no hand-maintained
+table to go stale.
 
-## Roadmaps
+## Roadmap format
 
-| Topic | Covers |
-|---|---|
-| [`PositiveSqrtAndModulus/`](PositiveSqrtAndModulus/README.md) | T01 — the finite-dimensional `RCLike` functional calculus of a symmetric operator, and what it builds: the positive square root with its uniqueness theory, the modulus and polar decomposition, Courant–Fischer min–max and Weyl. Independent, and named directly by seven other topics. |
-| [`PolarDecomposition/`](PolarDecomposition/README.md) | T02 — polar decomposition and partial isometries: the algebraic notion `u * star u * u = u` shared across settings, the finite-dimensional `RCLike` decomposition with a genuine unitary, the bounded-below isometry, the general rectangular `ℂ` partial isometry with `polarInitial = (ker M)ᗮ`, and the near-isometric factorisation. Answers the question a reviewer will ask — why *two* polar decompositions — by showing they differ on three axes and neither subsumes the other, because the two moduli of T01 have complementary limitations. |
-| [`SingularValues/`](SingularValues/README.md) | T03 — singular values and the singular system: a `ContinuousLinearMap` accessor over Mathlib's `LinearMap` notion (naming surface only, deliberately), the shared nonzero spectrum of `A†A` and `AA†` with multiplicity, the intrinsic singular **vectors** Mathlib lacks — including the extension of the left family to an orthonormal basis — and the Moore–Penrose inverse with all four Penrose identities **and** the uniqueness converse. Everything stated basis-free, because T06, T07 and T17 are. |
-| [`ProjectionsAndSpectralSubspaces/`](ProjectionsAndSpectralSubspaces/README.md) | T04 — Gram matrices, orthogonal projections and spectral subspaces: the sharp projector-difference identity `‖P − Q‖ = max(‖(1−Q)P‖, ‖(1−P)Q‖)` that upgrades two one-sided sin-Θ estimates to a factor-one bound **with no equal-rank hypothesis**, the shared spectral-gap predicates four theorem families state their hypotheses in, reducing subspaces kept independent of the perturbation theory, and an orthogonal-series constructor for non-unit vectors that Mathlib lacks. `GramMatrix` has already been through mathlib4 PR #40567 and was generalised past the review feedback afterwards. Seven dependents, one prerequisite. |
-| [`MajorizationAndUINorms/`](MajorizationAndUINorms/README.md) | T05 — majorization, Schur–Horn and unitarily invariant norms. The topic's architectural claim is checkable in one command: `Analysis/Convex/Majorization` — the Hardy–Littlewood–Pólya engine under every UI-norm inequality here — imports **no operator theory at all**, so it can go to `Mathlib.Analysis.Convex` independently. Mathlib has the spectral theorem and Birkhoff but neither a majorization predicate nor Schur–Horn, so neither half duplicates upstream. Schur–Horn via the doubly-stochastic `schurWeight`, Ky Fan sums and the trace inequality, `diagOp` turning tuples back into operators. |
-| [`PrincipalAngles/`](PrincipalAngles/README.md) | T06 — principal angles, aligned bases and finite frames: the angles defined as **singular values of the overlap operator** rather than by the variational recursion, so nonnegativity, `≤ 1`, ordering and symmetry are inherited (3–4 lines each) instead of four inductions; the analysis/synthesis and aligned-isometry construction that makes `overlapOp` a composite; and `‖sin Θ‖²_F = d − overlap`. Flags that `cosPrincipalAngles` is indexed by orthonormal *families*, and the theorem identifying it with the subspace invariant lives in T08. |
-| [`RectangularUINorms/`](RectangularUINorms/README.md) | T07 — rectangular unitarily invariant norms, the topic every *"for every unitarily invariant norm"* statement rests on: Ky Fan domination puts a map in the convex hull of the other's two-sided unitary orbit, so one estimate yields the operator, Frobenius, Ky Fan and nuclear norms at once. A three-law structure with positivity derived; the concrete instances; and the place T05's Hilbert-free majorization engine is *pulled back to* rather than re-derived — `Majorization.lean` contains zero inductions. Its four-way file split is a Tau Ceti length ceiling, not a subject boundary. |
-| [`AngleGeometryAndEigenvalues/`](AngleGeometryAndEigenvalues/README.md) | T08 — the angle dictionary (cosine, sine, tangent, double-angle for a subspace pair, on Gram operators) together with eigenvalue perturbation, because Davis–Kahan needs both in one breath. Carries `principalCosines_span_eq_cosPrincipalAngles`, **the theorem that makes T06's definition well-named**, which lives here rather than there. The displacement estimate goes through **Birkhoff**, deliberately not through T05's majorization engine (verified: zero majorization references); Hoffman–Wielandt through von Neumann, with the rearrangement core proved rather than cited. |
-| [`YuWangSamworth/`](YuWangSamworth/README.md) | T18 — the statistical Davis–Kahan variant. Separate from T17 for one reason: in a statistical problem the perturbed operator is a *sample* covariance with random spectrum, so the gap one can assume is in the **population** spectrum. Interval-block, aligned-basis (Procrustes) and single-vector surfaces, mapped to the YWS 2014 core arguments. A leaf. |
-| [`MatrixSpectra/`](MatrixSpectra/README.md) | T19 — matrix spectra and spectral measurability: two gaps in Mathlib stated precisely (no entrywise-to-operator-norm comparison; `eigenvalues₀` carries almost no theory), Weyl composed with the former to give an entrywise eigenvalue bound, and the measurability of the spectral `h`-transform **without which no probability statement about a sample eigenspace is well-posed**. |
-| [`MatrixConcentration/`](MatrixConcentration/README.md) | T20 — sample moments and matrix concentration: Chebyshev plus a union bound over `n²` entries, converted to an operator-norm bound by T19. Records that the elementary route is **dimension-suboptimal by design** — a matrix Bernstein inequality would give `log n` instead of `n`, at the cost of Laplace-transform machinery Mathlib does not have. Includes the exact add-one update for centered scatter. |
-| [`ApproximationNumbers/`](ApproximationNumbers/README.md) | Approximation numbers and Hilbert-space singular values: the field-generic theory, addition and composition laws, the approximable/compact boundary, adjoint invariance, the rectangular modulus, Eckart–Young, and the min–max principles. Carries [`Suggested.lean`](ApproximationNumbers/Suggested.lean). |
-| [`SymmetricOperatorIdeals/`](SymmetricOperatorIdeals/README.md) | Symmetric operator ideals. |
-| [`HilbertSchmidtOperators/`](HilbertSchmidtOperators/README.md) | T11 — Hilbert–Schmidt operators realised as `ℓ²` of columns in a fixed Hilbert basis: the `columns`/`ofLp` bijection and its two round trips, the `ℓ²` norm as the Hilbert–Schmidt norm, invariance of that norm under conjugation by isometries (which is what makes the Sylvester flow a unitary group), and the Pythagoras splitting of the energy along an orthogonal family. Records why the `ℓ²` model is used rather than the Hilbert tensor product, and the three `ofLp` lemmas this roadmap found stranded in T16 and moved back. |
-| [`SylvesterRosenblum/`](SylvesterRosenblum/README.md) | T16 — Sylvester equations and the Rosenblum theorem: the finite-dimensional core, the coercive bound `‖X‖ ≤ ‖Y‖/(2δ)` with its Lax–Milgram unit, the Hilbert–Schmidt block layer, and the flow `W t Z = U_A t ∘ Z ∘ (U_B t)⋆` whose generator Stone's theorem identifies as `Z ↦ A Z − Z B`. Records the two decisions a reviewer should check: Rosenblum is proved **without** a Borel functional calculus (using that `1` is null for every diagonal measure), and the sharp constant `π / 2` comes from T12 — where a real certificate provably cannot do better than `5 / 3`. The hinge of the DAG: seven prerequisites, and T17 consumes it. |
-| [`StoneTheorem/`](StoneTheorem/README.md) | T13 — one-parameter unitary groups and the forward direction of Stone's theorem: the generator as a `LinearPMap` on exactly the vectors where the difference quotient converges, self-adjointness via surjectivity of `generator + i` with density *derived* rather than assumed, the commutant lemma, and the Duhamel estimate behind the Yosida approximation. **Independent** — this roadmap found that its only edge to T02 came from a misfiled module (`IntertwiningUnitary`, reassigned), so Stone can now be submitted first. |
-| [`HaagerupZsidoKernel/`](HaagerupZsidoKernel/README.md) | T12 — a finite-mass Fourier kernel for the reciprocal on `1 ≤ \|x\|`: the hyperbolic weight and its Laplace transform, Poisson summation for the Cauchy lattice, the closed-form sine–Laplace and rational-quadratic integrals, the exterior identity `∫ k(t) e^{itx} dt = 1/x`, and the exact `L¹` mass `π / 2` that is the sharp Sylvester constant. Independent of every other topic. |
-| [`BorelCalculus/`](BorelCalculus/README.md) | T14 — the bounded Borel functional calculus of a normal operator and the projection-valued measures it produces: diagonal spectral measures from Riesz–Markov–Kakutani, the polarised transport principle that carries every continuous-calculus identity to bounded Borel symbols, multiplicativity, and `ProjValMeasure` on the Borel sets of `ℝ`. Independent, and the topic the whole unbounded stack (T15) rests on. |
-| [`ClosedPartialMaps/`](ClosedPartialMaps/README.md) | T15a — closed partial linear maps: the U1 decision in force (an unbounded operator *is* a `LinearPMap`; closedness and self-adjointness are hypotheses), domain transport, graph norms and graph cores, the domain-preserving perturbation, the domain-aware Sylvester equation, and quadratic-form bounds. |
-| [`UnboundedResolvent/`](UnboundedResolvent/README.md) | T15b — resolvents of unbounded self-adjoint operators: the resolvent set of a `LinearPMap` (Mathlib's `spectrum` does not apply to a partial map), the named resolvent and the first resolvent identity, openness, real spectrum with `‖R z‖ ≤ \|Im z\|⁻¹`, the real-point variant, and the intertwining chain up to the continuous functional calculus. Independent — one of the four topics that need nothing else. |
-| [`UnboundedSpectralMeasure/`](UnboundedSpectralMeasure/README.md) | T15c — the spectral measure of an unbounded self-adjoint operator via the Cayley transform, its resolvent formula, spectral projections and the reduction to a spectral subspace; Yosida approximants, Stone's uniqueness half, and the three shapes a Hilbert–Schmidt block argument needs. |
-| [`UnboundedOperators/`](UnboundedOperators/README.md) | **The pre-split T15 roadmap**, kept for its full statement of the U1 decision — unbounded operators on Mathlib `LinearPMap` as the canonical carrier (`AGENTS.md`). Its milestones are now distributed over T15a, T15b and T15c above. |
-| [`SpectralSubspacePerturbation/`](SpectralSubspacePerturbation/README.md) | Spectral subspace perturbation, operator angles, and Sylvester equations: projection geometry, graph subspaces and Riccati equations, closed and possibly unbounded self-adjoint operators. Davis–Kahan Part III is its principal worked source and acceptance suite. Carries [`Suggested.lean.md`](SpectralSubspacePerturbation/Suggested.lean.md). |
-| [`MatrixRankFactorization/`](MatrixRankFactorization/README.md) | T21 — rank factorization `M = L * R` through `Fin r`, and the positive-semidefinite case `B = Aᴴ * A` with at most `d` rows: the multidimensional-scaling embedding step, stated as an iff. Independent, and a leaf. |
-| [`BergeMaximum/`](BergeMaximum/README.md) | T22 — Berge's maximum theorem over a *fixed* compact feasible set: stability of minimizers under approximate minimization, upper hemicontinuity of the argmin correspondence through Mathlib's own predicate, continuity of the value function, and a uniform `ε`–`δ` modulus. Independent, and a leaf. |
+Each roadmap directory holds:
 
-`SpectralSubspacePerturbation` is the roadmap target the live `approximation-number`
-cluster in `dev/tauceti/extraction-manifest.json` names
-(`SpectralSubspacePerturbation Part B … / public-api-integration-review PR 1`).
+- **`README.md`** — the definitive specification, written the way the real
+  `TauCetiRoadmap` demands (see its *Writing a roadmap* section): motivation,
+  the bar for done, a generality bar with conventions pinned up front, what
+  Mathlib already has, Parts with objects / API / milestones / acceptance
+  examples, dependency ordering, references, and a clearly secondary
+  provenance section.
+- **`Suggested.lean`** — representative target signatures for the milestones,
+  with placeholder bodies, so contributors and reviewers converge on names and
+  forms. The markdown stays definitive; the prototypes are neither exhaustive
+  nor prescriptive about proof architecture.
 
 ## Related
 
@@ -79,16 +125,13 @@ cluster in `dev/tauceti/extraction-manifest.json` names
 
 ## Editing rules
 
-- One directory per topic: `<Topic>/README.md`, optionally with a `Suggested.lean`
-  sketching the intended public API. The markdown is definitive; the prototypes
-  are neither exhaustive nor prescriptive about proof architecture.
-- **This file is an index.** Until 2026-07-29 it held a *full copy* of the
-  `ApproximationNumbers` roadmap — an older revision, five passages diverged from
-  the real one, including a Related-Work section still weighing options that
-  `ApproximationNumbers/README.md` had already decided, and a truncated Ullrich
-  citation carrying a leaked assistant tool-call marker where the journal name
-  and year belonged. A topic's content belongs in its own directory, never here.
-- Specify mathematics **intrinsically**. DKPS file and identifier names belong in
-  the provenance and implementation notes, not in the specification prose — a
+- One directory per roadmap: `<Roadmap>/README.md` plus `Suggested.lean`. The
+  markdown is definitive.
+- **This file is an index and the meta-roadmap.** A roadmap's content belongs
+  in its own directory, never here. (Until 2026-07-29 this file held a stale
+  full copy of one roadmap, five passages diverged from the real one — the
+  lesson is recorded so it is not relearned.)
+- Specify mathematics **intrinsically**. DKPS file and identifier names belong
+  in each roadmap's provenance section, not in the specification prose — a
   roadmap Tau Ceti can accept must read as mathematics, not as a migration
   checklist.
