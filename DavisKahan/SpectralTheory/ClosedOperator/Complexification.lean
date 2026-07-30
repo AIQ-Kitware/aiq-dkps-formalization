@@ -61,13 +61,8 @@ theorem continuous_im : Continuous (im : Eℂ → E) :=
   continuous_snd.comp (WithLp.homeomorphProd 2 E E).continuous
 
 omit [InnerProductSpace ℝ E] [CompleteSpace E] in
-/-- Each coordinate norm is bounded by the L2 norm. -/
-theorem norm_re_le (z : Eℂ) : ‖re z‖ ≤ ‖z‖ := by
-  rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), RealComplexification.norm_sq]
-  nlinarith [sq_nonneg ‖im z‖]
-
-omit [InnerProductSpace ℝ E] [CompleteSpace E] in
-/-- Each coordinate norm is bounded by the L2 norm. -/
+/-- Each coordinate norm is bounded by the L2 norm.  The real-coordinate half is
+`Foundation.RealComplexification.norm_re_le`, opened above. -/
 theorem norm_im_le (z : Eℂ) : ‖im z‖ ≤ ‖z‖ := by
   rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), RealComplexification.norm_sq]
   nlinarith [sq_nonneg ‖re z‖]
