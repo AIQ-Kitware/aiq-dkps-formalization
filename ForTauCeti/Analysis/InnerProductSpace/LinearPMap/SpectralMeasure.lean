@@ -591,6 +591,36 @@ private lemma symbol_left_inverse_pointwise {z lam : ℂ} (hz : z - lam ≠ 0)
   field_simp
   ring
 
+omit hB in
+/-- **The gap hypothesis, transported to the Cayley spectrum.**
+
+`hgap` bounds `|s - lam|` for the real points `s ∈ B`; the symbols are indexed
+instead by the spectrum of the Cayley transform, where the corresponding point
+is `cayleyInv hA w`.  This is the bridge between the two, and it is what makes
+the denominator `κ - lam` bounded away from zero on the support of the
+indicator. -/
+private lemma le_norm_cayleyInv_sub_of_gap {lam ε : ℝ}
+    (hgap : ∀ s ∈ B, ε ≤ |s - lam|)
+    {w : _root_.spectrum ℂ (cayley hA)} (hw : w ∈ cayleyInv hA ⁻¹' B) :
+    ε ≤ ‖((cayleyInv hA w : ℂ) - (lam : ℂ))‖ := by
+  rw [show ((cayleyInv hA w : ℂ) - (lam : ℂ)) = ((cayleyInv hA w - lam : ℝ) : ℂ) by
+      push_cast; ring,
+    Complex.norm_real, Real.norm_eq_abs]
+  exact hgap _ hw
+
+omit hB in
+/-- The immediate consequence of the transported gap: the denominator never
+vanishes on the support of the indicator, so the inverting symbol is defined
+there. -/
+private lemma cayleyInv_sub_ne_zero_of_gap {lam ε : ℝ} (hε : 0 < ε)
+    (hgap : ∀ s ∈ B, ε ≤ |s - lam|)
+    {w : _root_.spectrum ℂ (cayley hA)} (hw : w ∈ cayleyInv hA ⁻¹' B) :
+    ((cayleyInv hA w : ℂ) - (lam : ℂ)) ≠ 0 := by
+  intro hzero
+  have h := le_norm_cayleyInv_sub_of_gap hA B hgap hw
+  rw [hzero, norm_zero] at h
+  linarith
+
 /-- **A spectral gap gives a resolvent point of the restriction.**  If `B` keeps
 its distance `ε` from `lam`, then `lam` is in the resolvent set of the
 restriction of `A` to the spectral range of `B`; the inverse is the Borel
@@ -614,17 +644,10 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
   have hindnil : ∀ w, w ∉ S → ind w = 0 := fun w hw => by
     rw [hind]; exact cayleyIndicator_of_notMem hA B hw
   -- the gap, transported to the spectrum
-  have hgapS : ∀ w ∈ S, ε ≤ ‖((κ w : ℂ) - (lam : ℂ))‖ := by
-    intro w hw
-    have hκB : κ w ∈ B := hw
-    rw [show ((κ w : ℂ) - (lam : ℂ)) = ((κ w - lam : ℝ) : ℂ) by push_cast; ring,
-      Complex.norm_real, Real.norm_eq_abs]
-    exact hgap _ hκB
-  have hne : ∀ w ∈ S, ((κ w : ℂ) - (lam : ℂ)) ≠ 0 := by
-    intro w hw hzero
-    have := hgapS w hw
-    rw [hzero, norm_zero] at this
-    linarith
+  have hgapS : ∀ w ∈ S, ε ≤ ‖((κ w : ℂ) - (lam : ℂ))‖ :=
+    fun _ hw => le_norm_cayleyInv_sub_of_gap hA B hgap hw
+  have hne : ∀ w ∈ S, ((κ w : ℂ) - (lam : ℂ)) ≠ 0 :=
+    fun _ hw => cayleyInv_sub_ne_zero_of_gap hA B hε hgap hw
   -- the inverting symbol and its `(κ + i)`-companion
   set f : _root_.spectrum ℂ (cayley hA) → ℂ := gapSymbol hA B lam with hf
   set hsym : _root_.spectrum ℂ (cayley hA) → ℂ :=
