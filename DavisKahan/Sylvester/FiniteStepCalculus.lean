@@ -12,6 +12,21 @@ This file provides the finite measurable functional-calculus identities used by
 the separated Sylvester reconstruction.  It is independent of the compact-cover
 construction: the compiler-side topology helpers only need to produce a finite
 measurable disjoint cover and representatives.
+
+**Promoted 2026-07-30 under lane `EXP-PROMOTE-SYL`** from
+`DavisKahan/Experimental/InfiniteDimensional/Sylvester/FiniteStepCalculus.lean`,
+into `defaultTargets` — which it was not compiled by before.  Nothing is
+restated: every declaration keeps its name and its namespace
+(`TauCeti.DavisKahanExt`).
+
+**Why this one and not its six siblings.**  Promotion is not "the module
+compiles"; `check_dependency_layers.py` rule 4 forbids production importing
+`DavisKahan.Experimental.*`, so the test is that the module's *transitive import
+closure contains no Experimental module*.  Measured across the seven modules the
+lane row listed as promotable, this is the only one that passes: it imports
+`DavisKahan.SpectralTheory.SelfAdjointBorelCalculus` and nothing else.  The other
+six carry 1, 2, 3, 4, 8 and 24 Experimental modules in closure and stay where
+they are until those clear.
 -/
 
 namespace TauCeti
@@ -249,7 +264,7 @@ theorem spectralProjection_select_left
     boundedSelfAdjointSpectralProjection A hA (cell i) (hcell i) ∘L
       (∑ j, rep j • boundedSelfAdjointSpectralProjection A hA (cell j) (hcell j)) =
       rep i • boundedSelfAdjointSpectralProjection A hA (cell i) (hcell i) := by
-  rw [ContinuousLinearMap.comp_finset_sum,
+  rw [ContinuousLinearMap.comp_finsetSum,
     Finset.sum_eq_single_of_mem i (Finset.mem_univ i)]
   · rw [ContinuousLinearMap.comp_smul]
     let P := boundedSelfAdjointSpectralPVM A hA
@@ -271,7 +286,7 @@ theorem spectralProjection_select_right
     (∑ j, rep j • boundedSelfAdjointSpectralProjection A hA (cell j) (hcell j)) ∘L
       boundedSelfAdjointSpectralProjection A hA (cell i) (hcell i) =
       rep i • boundedSelfAdjointSpectralProjection A hA (cell i) (hcell i) := by
-  rw [ContinuousLinearMap.finset_sum_comp,
+  rw [ContinuousLinearMap.finsetSum_comp,
     Finset.sum_eq_single_of_mem i (Finset.mem_univ i)]
   · rw [ContinuousLinearMap.smul_comp]
     let P := boundedSelfAdjointSpectralPVM A hA
