@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.Sylvester.ClosedSylvesterEquation
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.SpectralTheory.ClosedOperator.Complex
 import DavisKahan.SpectralTheory.ClosedOperator.BoundedRealization
 import DavisKahan.Sylvester.Gap
@@ -329,7 +330,8 @@ rectangular symmetric ideal family, then any solution of `A X - X B = C`
 lies in the family with `d · gauge X ≤ gauge C` — through the
 shift-and-invert data and the Neumann-iteration ideal engine. -/
 theorem mem_and_gauge_sylvester_le_of_spectrum_intervalExterior
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v'} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : F₁ →L[ℂ] F₁} {B : E₁ →L[ℂ] E₁} {X C : E₁ →L[ℂ] F₁}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
@@ -337,7 +339,7 @@ theorem mem_and_gauge_sylvester_le_of_spectrum_intervalExterior
     (hAspec : ∀ x ∈ spectrum ℝ A, x ≤ a - d ∨ b + d ≤ x)
     (hEq : A ∘L X - X ∘L B = C)
     (hC : N.Mem C) :
-    N.Mem X ∧ d * N.gauge X ≤ N.gauge C := by
+    N.Mem X ∧ d * N.gaugeReal X ≤ N.gaugeReal C := by
   set c : ℝ := (a + b) / 2 with hc
   set r : ℝ := (b - a) / 2 with hrdef
   have hr0 : 0 ≤ r := by rw [hrdef]; linarith
@@ -420,7 +422,8 @@ rectangular symmetric ideal family, then so does the directed projection
 composition `P_{Vᗮ} P_U`, with `d · gauge (P_{Vᗮ} P_U) ≤ gauge (B - A)` —
 the ideal-gauge strengthening of `d * directedGap U V ≤ ‖B - A‖`. -/
 theorem sinTheta_genuineSpectrum_gauge
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -431,8 +434,8 @@ theorem sinTheta_genuineSpectrum_gauge
       x ≤ a - d ∨ b + d ≤ x)
     (hMem : N.Mem (B - A)) :
     N.Mem (Vᗮ.starProjection ∘L U.starProjection) ∧
-      d * N.gauge (Vᗮ.starProjection ∘L U.starProjection) ≤
-        N.gauge (B - A) := by
+      d * N.gaugeReal (Vᗮ.starProjection ∘L U.starProjection) ≤
+        N.gaugeReal (B - A) := by
   haveI : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   haveI : CompleteSpace (Vᗮ : Submodule ℂ E) :=
@@ -452,21 +455,21 @@ theorem sinTheta_genuineSpectrum_gauge
   constructor
   · rw [hfact]
     exact N.comp_mem _ _ hmain.1
-  · have hgle : N.gauge (Vᗮ.starProjection ∘L U.starProjection) ≤
-        N.gauge (Vᗮ.orthogonalProjectionOnto ∘L U.subtypeL) := by
+  · have hgle : N.gaugeReal (Vᗮ.starProjection ∘L U.starProjection) ≤
+        N.gaugeReal (Vᗮ.orthogonalProjectionOnto ∘L U.subtypeL) := by
       rw [hfact]
-      exact N.gauge_comp_le_of_contractions _ _ hmain.1
+      exact N.gaugeReal_comp_le_of_contractions _ _ hmain.1
         Vᗮ.norm_subtypeL_le U.orthogonalProjectionOnto_norm_le
-    have hCle : N.gauge (Vᗮ.orthogonalProjectionOnto ∘L (B - A) ∘L U.subtypeL)
-        ≤ N.gauge (B - A) :=
-      N.gauge_comp_le_of_contractions _ _ hMem
+    have hCle : N.gaugeReal (Vᗮ.orthogonalProjectionOnto ∘L (B - A) ∘L U.subtypeL)
+        ≤ N.gaugeReal (B - A) :=
+      N.gaugeReal_comp_le_of_contractions _ _ hMem
         Vᗮ.orthogonalProjectionOnto_norm_le U.norm_subtypeL_le
-    calc d * N.gauge (Vᗮ.starProjection ∘L U.starProjection)
-        ≤ d * N.gauge (Vᗮ.orthogonalProjectionOnto ∘L U.subtypeL) :=
+    calc d * N.gaugeReal (Vᗮ.starProjection ∘L U.starProjection)
+        ≤ d * N.gaugeReal (Vᗮ.orthogonalProjectionOnto ∘L U.subtypeL) :=
           mul_le_mul_of_nonneg_left hgle hd.le
-      _ ≤ N.gauge (Vᗮ.orthogonalProjectionOnto ∘L (B - A) ∘L U.subtypeL) :=
+      _ ≤ N.gaugeReal (Vᗮ.orthogonalProjectionOnto ∘L (B - A) ∘L U.subtypeL) :=
           hmain.2
-      _ ≤ N.gauge (B - A) := hCle
+      _ ≤ N.gaugeReal (B - A) := hCle
 
 /-- The projector difference decomposes into the two directed cross blocks:
 `P_U - P_V = P_{Vᗮ} P_U - (P_{Uᗮ} P_V)⋆`. -/
@@ -496,7 +499,8 @@ ideal scope, genuine spectra.**  Both directed spectral configurations and
 `d · gauge (P_U - P_V) ≤ 2 · gauge (B - A)`, by decomposing the projector
 difference into the two directed cross blocks. -/
 theorem sinTheta_genuineSpectrum_gauge_symmetric
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -510,8 +514,8 @@ theorem sinTheta_genuineSpectrum_gauge_symmetric
       x ≤ a' - d ∨ b' + d ≤ x)
     (hMem : N.Mem (B - A)) :
     N.Mem (U.starProjection - V.starProjection) ∧
-      d * N.gauge (U.starProjection - V.starProjection) ≤
-        2 * N.gauge (B - A) := by
+      d * N.gaugeReal (U.starProjection - V.starProjection) ≤
+        2 * N.gaugeReal (B - A) := by
   have h1 := sinTheta_genuineSpectrum_gauge N hA hB hU hV hd hab
     hUspec hVspec hMem
   have hMem' : N.Mem (A - B) := by
@@ -519,30 +523,30 @@ theorem sinTheta_genuineSpectrum_gauge_symmetric
     exact N.neg_mem hMem
   have h2 := sinTheta_genuineSpectrum_gauge N hB hA hV hU hd hab'
     hVspec' hUspec' hMem'
-  have hgAB : N.gauge (A - B) = N.gauge (B - A) := by
+  have hgAB : N.gaugeReal (A - B) = N.gaugeReal (B - A) := by
     rw [show A - B = -(B - A) from by abel]
-    exact N.gauge_neg hMem
+    exact N.gaugeReal_neg hMem
   rw [hgAB] at h2
   have hdecomp := starProjection_sub_eq_cross_sub_cross_adjoint U V
   have hMemAdj : N.Mem ((Uᗮ.starProjection ∘L V.starProjection).adjoint) :=
     N.adjoint_mem h2.1
-  have hgAdj : N.gauge ((Uᗮ.starProjection ∘L V.starProjection).adjoint) =
-      N.gauge (Uᗮ.starProjection ∘L V.starProjection) :=
-    N.gauge_adjoint h2.1
+  have hgAdj : N.gaugeReal ((Uᗮ.starProjection ∘L V.starProjection).adjoint) =
+      N.gaugeReal (Uᗮ.starProjection ∘L V.starProjection) :=
+    N.gaugeReal_adjoint h2.1
   constructor
   · rw [hdecomp]
     exact N.sub_mem h1.1 hMemAdj
-  · calc d * N.gauge (U.starProjection - V.starProjection)
-        ≤ d * (N.gauge (Vᗮ.starProjection ∘L U.starProjection) +
-            N.gauge ((Uᗮ.starProjection ∘L V.starProjection).adjoint)) := by
+  · calc d * N.gaugeReal (U.starProjection - V.starProjection)
+        ≤ d * (N.gaugeReal (Vᗮ.starProjection ∘L U.starProjection) +
+            N.gaugeReal ((Uᗮ.starProjection ∘L V.starProjection).adjoint)) := by
           refine mul_le_mul_of_nonneg_left ?_ hd.le
           rw [hdecomp]
-          exact N.gauge_sub_le h1.1 hMemAdj
-      _ = d * N.gauge (Vᗮ.starProjection ∘L U.starProjection) +
-            d * N.gauge (Uᗮ.starProjection ∘L V.starProjection) := by
+          exact N.gaugeReal_sub_le h1.1 hMemAdj
+      _ = d * N.gaugeReal (Vᗮ.starProjection ∘L U.starProjection) +
+            d * N.gaugeReal (Uᗮ.starProjection ∘L V.starProjection) := by
           rw [hgAdj]; ring
-      _ ≤ N.gauge (B - A) + N.gauge (B - A) := add_le_add h1.2 h2.2
-      _ = 2 * N.gauge (B - A) := by ring
+      _ ≤ N.gaugeReal (B - A) + N.gaugeReal (B - A) := add_le_add h1.2 h2.2
+      _ = 2 * N.gaugeReal (B - A) := by ring
 
 end SinThetaIdealScope
 

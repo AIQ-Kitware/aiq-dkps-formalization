@@ -276,7 +276,7 @@ theorem mem_and_gauge_eq
     N.Mem A ∧
       N.gauge A =
         N.gauge B := by
-  let M := N.toRectangularSymmetricIdealFamily
+  let M := N.toSymmetricOperatorIdealFamily
   have hAB : ∀ k, kyFanApproximationGauge k A ≤
       kyFanApproximationGauge k B := fun k =>
     le_of_eq (h.kyFanApproximationGauge_eq k)

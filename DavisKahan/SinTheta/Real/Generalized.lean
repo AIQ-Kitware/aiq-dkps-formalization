@@ -59,11 +59,11 @@ theorem generalizedSinTheta_unbounded_real
         ≤ N.gauge D.residual := by
   let P := lowerFramePolarDataReal D.X hframe hε
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have hC := adjointResidualBlock_mem_and_gauge_le N.toRectangularSymmetricIdealFamily D hF₁ hR
+  have hC := adjointResidualBlock_mem_and_gauge_le N.toSymmetricOperatorIdealFamily D hF₁ hR
   have hRaw := davisKahan1970_sylvester_real
     N hA₀ hΛ₁ hδ hgap hEq hC.1
   have hFrame := lowerFrame_sinThetaBlockOfPolarData_mem_and_gauge_le
-    N.toRectangularSymmetricIdealFamily P D.F₁ hRaw.1
+    N.toSymmetricOperatorIdealFamily P D.F₁ hRaw.1
   have hBlockDef :
       sinThetaBlockReal D.X D.F₁ hframe hε =
         sinThetaBlockOfPolarData P D.F₁ := rfl
@@ -103,12 +103,12 @@ theorem generalizedSinTheta_unbounded_exact_real
       sinThetaBlockReal D.X D.F₁ hframe hε =
         sinThetaBlockOfPolarData P D.F₁ := rfl
   have hAngle := sinThetaBlockOfPolarData_mem_and_gauge_eq_directed
-    N.toRectangularSymmetricIdealFamily P F₀ D.F₁ hdecomp (hBlockDef ▸ hBlock.1)
+    N.toSymmetricOperatorIdealFamily P F₀ D.F₁ hdecomp (hBlockDef ▸ hBlock.1)
   have hDirectedDef :
       directedSinThetaOperatorReal D.X F₀ hframe hε =
         directedSinThetaOperatorOfPolarData P F₀ := rfl
   refine ⟨hDirectedDef ▸ hAngle.1, ?_⟩
-  simp only [KyFanDominantIdealFamily.toRectangular_gauge] at hAngle
+  simp only [KyFanDominantIdealFamily.toSymmetric_gaugeReal] at hAngle
   rw [hDirectedDef, hAngle.2, ← hBlockDef]
   exact hBlock.2
 

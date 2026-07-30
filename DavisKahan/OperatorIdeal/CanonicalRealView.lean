@@ -173,6 +173,81 @@ theorem gaugeReal_sub_le {A B : E →L[𝕜] F} (hA : N.Mem A) (hB : N.Mem B) :
     N.gaugeReal (A - B) ≤ N.gaugeReal A + N.gaugeReal B :=
   N.toRectangular.gauge_sub_le hA hB
 
+/-- Ideals are closed under negation. -/
+theorem neg_mem {A : E →L[𝕜] F} (hA : N.Mem A) : N.Mem (-A) :=
+  N.toRectangular.neg_mem hA
+
+/-- The real gauge is unchanged by negation. -/
+theorem gaugeReal_neg {A : E →L[𝕜] F} (hA : N.Mem A) :
+    N.gaugeReal (-A) = N.gaugeReal A :=
+  N.toRectangular.gauge_neg hA
+
+/-- Left composition by a contraction does not increase the gauge. -/
+theorem gaugeReal_comp_left_le (L : F →L[𝕜] G) {A : E →L[𝕜] F}
+    (hA : N.Mem A) (hL : ‖L‖ ≤ 1) :
+    N.gaugeReal (L ∘L A) ≤ N.gaugeReal A :=
+  N.toRectangular.gauge_comp_left_le L hA hL
+
+/-- Right composition by a contraction does not increase the gauge. -/
+theorem gaugeReal_comp_right_le {A : E →L[𝕜] F} (R : H →L[𝕜] E)
+    (hA : N.Mem A) (hR : ‖R‖ ≤ 1) :
+    N.gaugeReal (A ∘L R) ≤ N.gaugeReal A :=
+  N.toRectangular.gauge_comp_right_le R hA hR
+
+/-- Two-sided composition by contractions does not increase the gauge. -/
+theorem gaugeReal_comp_le_of_contractions (L : F →L[𝕜] G) {A : E →L[𝕜] F}
+    (R : H →L[𝕜] E) (hA : N.Mem A) (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) :
+    N.gaugeReal (L ∘L A ∘L R) ≤ N.gaugeReal A :=
+  N.toRectangular.gauge_comp_le_of_contractions L R hA hL hR
+
+/-- A member of gauge zero is the zero operator. -/
+theorem gaugeReal_eq_zero {A : E →L[𝕜] F} (hA : N.Mem A)
+    (h : N.gaugeReal A = 0) : A = 0 :=
+  N.toRectangular.gauge_eq_zero hA h
+
+/-- The gauge vanishes exactly on the zero operator. -/
+theorem gaugeReal_eq_zero_iff {A : E →L[𝕜] F} (hA : N.Mem A) :
+    N.gaugeReal A = 0 ↔ A = 0 :=
+  N.toRectangular.gauge_eq_zero_iff hA
+
+variable {ι : Type*}
+
+/-- Ideals are closed under finite sums. -/
+theorem finset_sum_mem (s : Finset ι) (A : ι → E →L[𝕜] F)
+    (hA : ∀ i ∈ s, N.Mem (A i)) : N.Mem (∑ i ∈ s, A i) :=
+  N.toRectangular.finset_sum_mem s A hA
+
+/-- The gauge of a finite sum is bounded by the sum of the gauges. -/
+theorem gaugeReal_finset_sum_le (s : Finset ι) (A : ι → E →L[𝕜] F)
+    (hA : ∀ i ∈ s, N.Mem (A i)) :
+    N.gaugeReal (∑ i ∈ s, A i) ≤ ∑ i ∈ s, N.gaugeReal (A i) :=
+  N.toRectangular.gauge_finset_sum_le s A hA
+
+/-- The ideal is complete in its own gauge.  `M` rather than `N` for the
+threshold index, since `N` is the family here. -/
+theorem gaugeReal_complete (A : ℕ → E →L[𝕜] F) (hA : ∀ n, N.Mem (A n))
+    (hcauchy : ∀ ε : ℝ, 0 < ε → ∃ M, ∀ m n, M ≤ m → M ≤ n →
+      N.gaugeReal (A m - A n) < ε) :
+    ∃ L, N.Mem L ∧ ∀ ε : ℝ, 0 < ε → ∃ M, ∀ n, M ≤ n →
+      N.gaugeReal (A n - L) < ε :=
+  N.toRectangular.gauge_complete A hA hcauchy
+
+/-- Every bounded operator lies in the operator-norm ideal.  In the historical
+record this was `True` by construction; canonically it is finiteness of `‖·‖ₑ`. -/
+@[simp] theorem mem_operatorNormFamily (A : E →L[𝕜] F) :
+    (operatorNormFamily.{u, v} 𝕜).Mem A := by
+  show (operatorNormFamily.{u, v} 𝕜).toOperatorIdealFamily.gauge A ≠ ∞
+  rw [gauge_operatorNormFamily]
+  exact enorm_ne_top
+
+/-- The real gauge of the operator-norm family is the operator norm.  The
+canonical `gauge_operatorNormFamily` states this in `ℝ≥0∞`; the `ℝ` view is what
+the Davis--Kahan estimates consume. -/
+@[simp] theorem gaugeReal_operatorNormFamily (A : E →L[𝕜] F) :
+    (operatorNormFamily.{u, v} 𝕜).gaugeReal A = ‖A‖ := by
+  rw [gaugeReal_eq_toReal, gauge_operatorNormFamily, enorm_eq_nnnorm]
+  simp
+
 end SymmetricOperatorIdealFamily
 
 end TauCeti

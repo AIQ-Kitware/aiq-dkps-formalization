@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.Unbounded.Equation
+import DavisKahan.OperatorIdeal.CanonicalRealView
 
 /-!
 # Neumann-series Sylvester estimates with one unbounded block
@@ -45,7 +46,8 @@ operator-norm contraction identifies that limit with `X`.  The gauge estimate
 then follows from the fixed-point identity by absorption, exactly as in the
 operator-norm shift-and-invert argument. -/
 theorem linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : E →ₗ.[𝕜] E}
     (hAinv : TauCeti.LinearPMap.HasBoundedEverywhereInverse A)
     (B : F →L[𝕜] F) {X C : F →L[𝕜] E}
@@ -55,7 +57,7 @@ theorem linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse
     (hEq : TauCeti.LinearPMap.SylvesterEquation
       A (B.toLinearMap.toPMap ⊤) X C)
     (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   set J : E →L[𝕜] E := hAinv.inv with hJdef
   have hρδ : (0 : ℝ) < ρ + δ := by linarith
   set q : ℝ := ρ * (ρ + δ)⁻¹ with hqdef
@@ -97,15 +99,15 @@ theorem linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse
   have hTmem : ∀ Y : F →L[𝕜] E, N.Mem Y → N.Mem (T Y) := fun Y hY =>
     N.comp_mem J B hY
   have hTgauge : ∀ Y : F →L[𝕜] E, N.Mem Y →
-      N.gauge (T Y) ≤ q * N.gauge Y := by
+      N.gaugeReal (T Y) ≤ q * N.gaugeReal Y := by
     intro Y hY
-    calc N.gauge (T Y) ≤ ‖J‖ * N.gauge Y * ‖B‖ := N.gauge_comp_le J B hY
-      _ ≤ (ρ + δ)⁻¹ * N.gauge Y * ρ :=
+    calc N.gaugeReal (T Y) ≤ ‖J‖ * N.gaugeReal Y * ‖B‖ := N.gaugeReal_comp_le J B hY
+      _ ≤ (ρ + δ)⁻¹ * N.gaugeReal Y * ρ :=
           mul_le_mul
-            (mul_le_mul_of_nonneg_right hInvNorm (N.gauge_nonneg hY))
+            (mul_le_mul_of_nonneg_right hInvNorm (N.gaugeReal_nonneg hY))
             hB (norm_nonneg B)
-            (mul_nonneg (inv_nonneg.mpr hρδ.le) (N.gauge_nonneg hY))
-      _ = q * N.gauge Y := by rw [hqdef]; ring
+            (mul_nonneg (inv_nonneg.mpr hρδ.le) (N.gaugeReal_nonneg hY))
+      _ = q * N.gaugeReal Y := by rw [hqdef]; ring
   -- the Neumann iterates and their partial sums
   set t : ℕ → F →L[𝕜] E := fun n => T^[n] (J ∘L C) with htdef
   have ht0 : t 0 = J ∘L C := rfl
@@ -117,14 +119,14 @@ theorem linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse
     induction n with
     | zero => exact N.comp_left_mem J hC
     | succ n ih => rw [htsucc]; exact hTmem _ ih
-  set g₀ : ℝ := N.gauge (J ∘L C) with hg₀def
-  have htgauge : ∀ n, N.gauge (t n) ≤ q ^ n * g₀ := by
+  set g₀ : ℝ := N.gaugeReal (J ∘L C) with hg₀def
+  have htgauge : ∀ n, N.gaugeReal (t n) ≤ q ^ n * g₀ := by
     intro n
     induction n with
     | zero => simp [htdef, hg₀def]
     | succ n ih =>
         rw [htsucc, pow_succ]
-        calc N.gauge (T (t n)) ≤ q * N.gauge (t n) := hTgauge _ (htmem n)
+        calc N.gaugeReal (T (t n)) ≤ q * N.gaugeReal (t n) := hTgauge _ (htmem n)
           _ ≤ q * (q ^ n * g₀) := mul_le_mul_of_nonneg_left ih hq0
           _ = q ^ n * q * g₀ := by ring
   set P : ℕ → F →L[𝕜] E := fun n => ∑ k ∈ Finset.range n, t k with hPdef
@@ -134,16 +136,16 @@ theorem linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse
     exact N.finset_sum_mem (Finset.range n) t fun k _ => htmem k
   -- the real comparison sequence of geometric partial sums
   set G : ℕ → ℝ := fun n => ∑ k ∈ Finset.range n, q ^ k * g₀ with hGdef
-  have hgap : ∀ {m n : ℕ}, n ≤ m → N.gauge (P m - P n) ≤ G m - G n := by
+  have hgap : ∀ {m n : ℕ}, n ≤ m → N.gaugeReal (P m - P n) ≤ G m - G n := by
     intro m n hnm
     have hsum : P m - P n = ∑ k ∈ Finset.Ico n m, t k :=
       (Finset.sum_Ico_eq_sub _ hnm).symm
     have hG : ∑ k ∈ Finset.Ico n m, q ^ k * g₀ = G m - G n :=
       Finset.sum_Ico_eq_sub _ hnm
     rw [hsum, ← hG]
-    calc N.gauge (∑ k ∈ Finset.Ico n m, t k)
-        ≤ ∑ k ∈ Finset.Ico n m, N.gauge (t k) :=
-          N.gauge_finset_sum_le (Finset.Ico n m) t fun k _ => htmem k
+    calc N.gaugeReal (∑ k ∈ Finset.Ico n m, t k)
+        ≤ ∑ k ∈ Finset.Ico n m, N.gaugeReal (t k) :=
+          N.gaugeReal_finset_sum_le (Finset.Ico n m) t fun k _ => htmem k
       _ ≤ ∑ k ∈ Finset.Ico n m, q ^ k * g₀ :=
           Finset.sum_le_sum fun k _ => htgauge k
   have hGcauchy : CauchySeq G := by
@@ -151,7 +153,7 @@ theorem linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse
       (summable_geometric_of_lt_one hq0 hq1).mul_right g₀
     exact hsummable.hasSum.tendsto_sum_nat.cauchySeq
   have hPcauchy : ∀ ε : ℝ, 0 < ε → ∃ N₀, ∀ m n, N₀ ≤ m → N₀ ≤ n →
-      N.gauge (P m - P n) < ε := by
+      N.gaugeReal (P m - P n) < ε := by
     intro ε hε
     obtain ⟨N₀, hN₀⟩ := Metric.cauchySeq_iff.mp hGcauchy ε hε
     refine ⟨N₀, fun m n hm hn => ?_⟩
@@ -160,26 +162,26 @@ theorem linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse
       calc G m - G n ≤ |G m - G n| := le_abs_self _
         _ = dist (G m) (G n) := (Real.dist_eq _ _).symm
         _ < ε := hN₀ m hm n hn
-    · have hswap : N.gauge (P m - P n) = N.gauge (P n - P m) := by
+    · have hswap : N.gaugeReal (P m - P n) = N.gaugeReal (P n - P m) := by
         rw [show P m - P n = -(P n - P m) from by abel,
-          N.gauge_neg (N.sub_mem (hPmem n) (hPmem m))]
+          N.gaugeReal_neg (N.sub_mem (hPmem n) (hPmem m))]
       rw [hswap]
       refine lt_of_le_of_lt (hgap h) ?_
       calc G n - G m ≤ |G n - G m| := le_abs_self _
         _ = dist (G n) (G m) := (Real.dist_eq _ _).symm
         _ < ε := hN₀ n hn m hm
-  obtain ⟨L, hLmem, hLlim⟩ := N.gauge_complete P hPmem hPcauchy
+  obtain ⟨L, hLmem, hLlim⟩ := N.gaugeReal_complete P hPmem hPcauchy
   -- the partial sums converge to `L` in operator norm
   have hPL : Filter.Tendsto P Filter.atTop (nhds L) := by
     rw [tendsto_iff_norm_sub_tendsto_zero]
     refine squeeze_zero (fun n => norm_nonneg _)
-      (fun n => N.opNorm_le_gauge (N.sub_mem (hPmem n) hLmem)) ?_
+      (fun n => N.opNorm_le_gaugeReal (N.sub_mem (hPmem n) hLmem)) ?_
     rw [Metric.tendsto_atTop]
     intro ε hε
     obtain ⟨N₀, hN₀⟩ := hLlim ε hε
     refine ⟨N₀, fun n hn => ?_⟩
     rw [Real.dist_eq, sub_zero,
-      abs_of_nonneg (N.gauge_nonneg (N.sub_mem (hPmem n) hLmem))]
+      abs_of_nonneg (N.gaugeReal_nonneg (N.sub_mem (hPmem n) hLmem))]
     exact hN₀ n hn
   -- the partial sums converge to `X` in operator norm
   have hfix' : X = t 0 + T X := by
@@ -227,19 +229,19 @@ theorem linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse
   have hXmem : N.Mem X := by rw [hXL]; exact hLmem
   -- the gauge estimate by absorption through the fixed point
   have hXBmem : N.Mem (X ∘L B) := N.comp_right_mem B hXmem
-  have hgauge : N.gauge X ≤ (ρ + δ)⁻¹ * (N.gauge C + N.gauge X * ρ) := by
+  have hgauge : N.gaugeReal X ≤ (ρ + δ)⁻¹ * (N.gaugeReal C + N.gaugeReal X * ρ) := by
     conv_lhs => rw [hfix]
-    calc N.gauge (J ∘L (C + X ∘L B))
-        ≤ ‖J‖ * N.gauge (C + X ∘L B) :=
-          N.gauge_comp_left_le_mul J (N.add_mem hC hXBmem)
-      _ ≤ (ρ + δ)⁻¹ * N.gauge (C + X ∘L B) :=
+    calc N.gaugeReal (J ∘L (C + X ∘L B))
+        ≤ ‖J‖ * N.gaugeReal (C + X ∘L B) :=
+          N.gaugeReal_comp_left_le_mul J (N.add_mem hC hXBmem)
+      _ ≤ (ρ + δ)⁻¹ * N.gaugeReal (C + X ∘L B) :=
           mul_le_mul_of_nonneg_right hInvNorm
-            (N.gauge_nonneg (N.add_mem hC hXBmem))
-      _ ≤ (ρ + δ)⁻¹ * (N.gauge C + N.gauge X * ρ) := by
+            (N.gaugeReal_nonneg (N.add_mem hC hXBmem))
+      _ ≤ (ρ + δ)⁻¹ * (N.gaugeReal C + N.gaugeReal X * ρ) := by
           refine mul_le_mul_of_nonneg_left ?_ (inv_nonneg.mpr hρδ.le)
-          refine (N.gauge_add_le hC hXBmem).trans (add_le_add le_rfl ?_)
-          exact (N.gauge_comp_right_le_mul B hXmem).trans
-            (mul_le_mul_of_nonneg_left hB (N.gauge_nonneg hXmem))
+          refine (N.gaugeReal_add_le hC hXBmem).trans (add_le_add le_rfl ?_)
+          exact (N.gaugeReal_comp_right_le_mul B hXmem).trans
+            (mul_le_mul_of_nonneg_left hB (N.gaugeReal_nonneg hXmem))
   refine ⟨hXmem, ?_⟩
   have hkey := mul_le_mul_of_nonneg_left hgauge hρδ.le
   rw [← mul_assoc, mul_inv_cancel₀ hρδ.ne', one_mul] at hkey
@@ -248,7 +250,8 @@ theorem linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse
 /-- Bundle-shaped compatibility entry point for the raw partial-map Neumann
 estimate. -/
 theorem sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
     (hAinv : HasBoundedEverywhereInverse A)
     (B : F →L[𝕜] F) {X C : F →L[𝕜] E}
@@ -257,7 +260,7 @@ theorem sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
     (hB : ‖B‖ ≤ ρ)
     (hEq : HasUnboundedBoundedSylvesterEquation A B X C)
     (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C :=
+    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C :=
   linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse N hAinv B
     hρ hδ hInvNorm hB hEq hC
 
@@ -341,7 +344,8 @@ theorem closedSylvesterEquation_boundedRealization
     block and a bounded shifted right inverse yield a Neumann contraction
     `Y ↦ S Y J`, preserving membership and the sharp constant-one gauge bound. -/
 theorem linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {G : Type v}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     {S : F →L[𝕜] F} {Λ : G →ₗ.[𝕜] G}
@@ -356,7 +360,7 @@ theorem linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
       S (Y (y : G)) -
         (Y (Λ y) - ((c : ℝ) : 𝕜) • Y (y : G)) = C (y : G))
     (hC : N.Mem C) :
-    N.Mem Y ∧ δ * N.gauge Y ≤ N.gauge C := by
+    N.Mem Y ∧ δ * N.gaugeReal Y ≤ N.gaugeReal C := by
   have hρδ : (0 : ℝ) < ρ + δ := by linarith
   set q : ℝ := ρ * (ρ + δ)⁻¹ with hqdef
   have hq0 : 0 ≤ q := mul_nonneg hρ (inv_nonneg.mpr hρδ.le)
@@ -398,15 +402,15 @@ theorem linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
   have hTmem : ∀ W : G →L[𝕜] F, N.Mem W → N.Mem (T W) := fun W hW =>
     N.comp_mem S J hW
   have hTgauge : ∀ W : G →L[𝕜] F, N.Mem W →
-      N.gauge (T W) ≤ q * N.gauge W := by
+      N.gaugeReal (T W) ≤ q * N.gaugeReal W := by
     intro W hW
-    calc N.gauge (T W) ≤ ‖S‖ * N.gauge W * ‖J‖ := N.gauge_comp_le S J hW
-      _ ≤ ρ * N.gauge W * (ρ + δ)⁻¹ :=
+    calc N.gaugeReal (T W) ≤ ‖S‖ * N.gaugeReal W * ‖J‖ := N.gaugeReal_comp_le S J hW
+      _ ≤ ρ * N.gaugeReal W * (ρ + δ)⁻¹ :=
           mul_le_mul
-            (mul_le_mul_of_nonneg_right hSnorm (N.gauge_nonneg hW))
+            (mul_le_mul_of_nonneg_right hSnorm (N.gaugeReal_nonneg hW))
             hJnorm (norm_nonneg J)
-            (mul_nonneg hρ (N.gauge_nonneg hW))
-      _ = q * N.gauge W := by rw [hqdef]; ring
+            (mul_nonneg hρ (N.gaugeReal_nonneg hW))
+      _ = q * N.gaugeReal W := by rw [hqdef]; ring
   -- the Neumann iterates and their partial sums
   have hbasemem : N.Mem (-(C ∘L J)) := N.neg_mem (N.comp_right_mem J hC)
   set t : ℕ → G →L[𝕜] F := fun n => T^[n] (-(C ∘L J)) with htdef
@@ -419,14 +423,14 @@ theorem linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
     induction n with
     | zero => exact hbasemem
     | succ n ih => rw [htsucc]; exact hTmem _ ih
-  set g₀ : ℝ := N.gauge (-(C ∘L J)) with hg₀def
-  have htgauge : ∀ n, N.gauge (t n) ≤ q ^ n * g₀ := by
+  set g₀ : ℝ := N.gaugeReal (-(C ∘L J)) with hg₀def
+  have htgauge : ∀ n, N.gaugeReal (t n) ≤ q ^ n * g₀ := by
     intro n
     induction n with
     | zero => simp [htdef, hg₀def]
     | succ n ih =>
         rw [htsucc, pow_succ]
-        calc N.gauge (T (t n)) ≤ q * N.gauge (t n) := hTgauge _ (htmem n)
+        calc N.gaugeReal (T (t n)) ≤ q * N.gaugeReal (t n) := hTgauge _ (htmem n)
           _ ≤ q * (q ^ n * g₀) := mul_le_mul_of_nonneg_left ih hq0
           _ = q ^ n * q * g₀ := by ring
   set P : ℕ → G →L[𝕜] F := fun n => ∑ k ∈ Finset.range n, t k with hPdef
@@ -435,16 +439,16 @@ theorem linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
     simp only [hPdef]
     exact N.finset_sum_mem (Finset.range n) t fun k _ => htmem k
   set Gs : ℕ → ℝ := fun n => ∑ k ∈ Finset.range n, q ^ k * g₀ with hGdef
-  have hgap : ∀ {m n : ℕ}, n ≤ m → N.gauge (P m - P n) ≤ Gs m - Gs n := by
+  have hgap : ∀ {m n : ℕ}, n ≤ m → N.gaugeReal (P m - P n) ≤ Gs m - Gs n := by
     intro m n hnm
     have hsum : P m - P n = ∑ k ∈ Finset.Ico n m, t k :=
       (Finset.sum_Ico_eq_sub _ hnm).symm
     have hG : ∑ k ∈ Finset.Ico n m, q ^ k * g₀ = Gs m - Gs n :=
       Finset.sum_Ico_eq_sub _ hnm
     rw [hsum, ← hG]
-    calc N.gauge (∑ k ∈ Finset.Ico n m, t k)
-        ≤ ∑ k ∈ Finset.Ico n m, N.gauge (t k) :=
-          N.gauge_finset_sum_le (Finset.Ico n m) t fun k _ => htmem k
+    calc N.gaugeReal (∑ k ∈ Finset.Ico n m, t k)
+        ≤ ∑ k ∈ Finset.Ico n m, N.gaugeReal (t k) :=
+          N.gaugeReal_finset_sum_le (Finset.Ico n m) t fun k _ => htmem k
       _ ≤ ∑ k ∈ Finset.Ico n m, q ^ k * g₀ :=
           Finset.sum_le_sum fun k _ => htgauge k
   have hGcauchy : CauchySeq Gs := by
@@ -452,7 +456,7 @@ theorem linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
       (summable_geometric_of_lt_one hq0 hq1).mul_right g₀
     exact hsummable.hasSum.tendsto_sum_nat.cauchySeq
   have hPcauchy : ∀ ε : ℝ, 0 < ε → ∃ N₀, ∀ m n, N₀ ≤ m → N₀ ≤ n →
-      N.gauge (P m - P n) < ε := by
+      N.gaugeReal (P m - P n) < ε := by
     intro ε hε
     obtain ⟨N₀, hN₀⟩ := Metric.cauchySeq_iff.mp hGcauchy ε hε
     refine ⟨N₀, fun m n hm hn => ?_⟩
@@ -461,26 +465,26 @@ theorem linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
       calc Gs m - Gs n ≤ |Gs m - Gs n| := le_abs_self _
         _ = dist (Gs m) (Gs n) := (Real.dist_eq _ _).symm
         _ < ε := hN₀ m hm n hn
-    · have hswap : N.gauge (P m - P n) = N.gauge (P n - P m) := by
+    · have hswap : N.gaugeReal (P m - P n) = N.gaugeReal (P n - P m) := by
         rw [show P m - P n = -(P n - P m) from by abel,
-          N.gauge_neg (N.sub_mem (hPmem n) (hPmem m))]
+          N.gaugeReal_neg (N.sub_mem (hPmem n) (hPmem m))]
       rw [hswap]
       refine lt_of_le_of_lt (hgap h) ?_
       calc Gs n - Gs m ≤ |Gs n - Gs m| := le_abs_self _
         _ = dist (Gs n) (Gs m) := (Real.dist_eq _ _).symm
         _ < ε := hN₀ n hn m hm
-  obtain ⟨L, hLmem, hLlim⟩ := N.gauge_complete P hPmem hPcauchy
+  obtain ⟨L, hLmem, hLlim⟩ := N.gaugeReal_complete P hPmem hPcauchy
   -- the partial sums converge to `L` in operator norm
   have hPL : Filter.Tendsto P Filter.atTop (nhds L) := by
     rw [tendsto_iff_norm_sub_tendsto_zero]
     refine squeeze_zero (fun n => norm_nonneg _)
-      (fun n => N.opNorm_le_gauge (N.sub_mem (hPmem n) hLmem)) ?_
+      (fun n => N.opNorm_le_gaugeReal (N.sub_mem (hPmem n) hLmem)) ?_
     rw [Metric.tendsto_atTop]
     intro ε hε
     obtain ⟨N₀, hN₀⟩ := hLlim ε hε
     refine ⟨N₀, fun n hn => ?_⟩
     rw [Real.dist_eq, sub_zero,
-      abs_of_nonneg (N.gauge_nonneg (N.sub_mem (hPmem n) hLmem))]
+      abs_of_nonneg (N.gaugeReal_nonneg (N.sub_mem (hPmem n) hLmem))]
     exact hN₀ n hn
   -- the partial sums converge to `Y` in operator norm
   have hfix' : Y = t 0 + T Y := by
@@ -528,23 +532,23 @@ theorem linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
   have hYL : Y = L := tendsto_nhds_unique hPY hPL
   have hYmem : N.Mem Y := by rw [hYL]; exact hLmem
   -- the gauge estimate by absorption through the fixed point
-  have hgauge : N.gauge Y ≤ (ρ + δ)⁻¹ * (ρ * N.gauge Y + N.gauge C) := by
+  have hgauge : N.gaugeReal Y ≤ (ρ + δ)⁻¹ * (ρ * N.gaugeReal Y + N.gaugeReal C) := by
     conv_lhs => rw [hfix]
-    calc N.gauge (S ∘L Y ∘L J + -(C ∘L J))
-        ≤ N.gauge (S ∘L Y ∘L J) + N.gauge (-(C ∘L J)) :=
-          N.gauge_add_le (N.comp_mem S J hYmem) hbasemem
-      _ ≤ ‖S‖ * N.gauge Y * ‖J‖ + N.gauge (C ∘L J) :=
-          add_le_add (N.gauge_comp_le S J hYmem)
-            (le_of_eq (N.gauge_neg (N.comp_right_mem J hC)))
-      _ ≤ ρ * N.gauge Y * (ρ + δ)⁻¹ + N.gauge C * (ρ + δ)⁻¹ := by
+    calc N.gaugeReal (S ∘L Y ∘L J + -(C ∘L J))
+        ≤ N.gaugeReal (S ∘L Y ∘L J) + N.gaugeReal (-(C ∘L J)) :=
+          N.gaugeReal_add_le (N.comp_mem S J hYmem) hbasemem
+      _ ≤ ‖S‖ * N.gaugeReal Y * ‖J‖ + N.gaugeReal (C ∘L J) :=
+          add_le_add (N.gaugeReal_comp_le S J hYmem)
+            (le_of_eq (N.gaugeReal_neg (N.comp_right_mem J hC)))
+      _ ≤ ρ * N.gaugeReal Y * (ρ + δ)⁻¹ + N.gaugeReal C * (ρ + δ)⁻¹ := by
           refine add_le_add
             (mul_le_mul
-              (mul_le_mul_of_nonneg_right hSnorm (N.gauge_nonneg hYmem))
+              (mul_le_mul_of_nonneg_right hSnorm (N.gaugeReal_nonneg hYmem))
               hJnorm (norm_nonneg J)
-              (mul_nonneg hρ (N.gauge_nonneg hYmem))) ?_
-          exact (N.gauge_comp_right_le_mul J hC).trans
-            (mul_le_mul_of_nonneg_left hJnorm (N.gauge_nonneg hC))
-      _ = (ρ + δ)⁻¹ * (ρ * N.gauge Y + N.gauge C) := by ring
+              (mul_nonneg hρ (N.gaugeReal_nonneg hYmem))) ?_
+          exact (N.gaugeReal_comp_right_le_mul J hC).trans
+            (mul_le_mul_of_nonneg_left hJnorm (N.gaugeReal_nonneg hC))
+      _ = (ρ + δ)⁻¹ * (ρ * N.gaugeReal Y + N.gaugeReal C) := by ring
   refine ⟨hYmem, ?_⟩
   have hkey := mul_le_mul_of_nonneg_left hgauge hρδ.le
   rw [← mul_assoc, mul_inv_cancel₀ hρδ.ne', one_mul] at hkey
@@ -553,7 +557,8 @@ theorem linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
 /-- Historical closed-operator presentation of the raw right-unbounded
 Neumann contraction. -/
 theorem mem_and_gauge_le_of_boundedLeft_exteriorRight
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {G : Type v}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     {S : F →L[𝕜] F}
@@ -569,7 +574,7 @@ theorem mem_and_gauge_le_of_boundedLeft_exteriorRight
       S (Y (y : G)) -
         (Y (Λ.toLinearMap y) - ((c : ℝ) : 𝕜) • Y (y : G)) = C (y : G))
     (hC : N.Mem C) :
-    N.Mem Y ∧ δ * N.gauge Y ≤ N.gauge C := by
+    N.Mem Y ∧ δ * N.gaugeReal Y ≤ N.gaugeReal C := by
   exact linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
     (Λ := Λ.toLinearPMap) N hρ hδ hSnorm hdom hres hJnorm hEq hC
 
