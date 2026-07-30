@@ -31,7 +31,7 @@ variable {E F G H : Type v}
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
-namespace IsometricSinThetaProblem
+namespace FormBoundedIsometricSinThetaProblem
 
 /-- Scalar-generic historical isometric theorem shape.  The manuscript
 surface selects the direct complex proof, while `RealCanonical` supplies the
@@ -40,7 +40,7 @@ theorem result
     [HasApproximationNumberStrongCutoff.{u, v, 0} 𝕜]
     [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
-    (P : IsometricSinThetaProblem (𝕜 := 𝕜) (E := E) (F := F)
+    (P : FormBoundedIsometricSinThetaProblem (𝕜 := 𝕜) (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         ((ContinuousLinearMap.id 𝕜 E -
@@ -54,7 +54,7 @@ theorem result
       P.complement_selfAdjoint P.trial_isometry P.exact_decomposition
       P.gap_pos P.spectral_gap P.residual_mem
 
-end IsometricSinThetaProblem
+end FormBoundedIsometricSinThetaProblem
 
 end GenericIsometric
 

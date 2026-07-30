@@ -41,7 +41,7 @@ variable {E F G H : Type v}
 /-- The literal complex input package for Davis--Kahan Theorem 6.1. -/
 structure PaperGeneralSinThetaProblem
     (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
-  problem : GeneralSinThetaProblem (E := E) (F := F) (G := G) (H := H) N
+  problem : FormBoundedGeneralSinThetaProblem (E := E) (F := F) (G := G) (H := H) N
   sinTheta₀ : PaperSinThetaRepresentative
     (directedSinThetaOperator problem.data.X problem.exactMap
       problem.lowerFrame problem.frameLowerBound_pos)
@@ -60,7 +60,7 @@ theorem result
       P.problem.gap * P.problem.frameLowerBound *
           N.gauge P.sinTheta₀.operator
         ≤ N.gauge P.problem.data.residual := by
-  have hcanonical := GeneralSinThetaProblem.result N P.problem
+  have hcanonical := FormBoundedGeneralSinThetaProblem.result N P.problem
   exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
     hcanonical.1 hcanonical.2
 
@@ -69,7 +69,7 @@ end PaperGeneralSinThetaProblem
 /-- Literal paper representative for the complex isometric theorem. -/
 structure PaperIsometricSinThetaProblem
     (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
-  problem : IsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
+  problem : FormBoundedIsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
     (G := G) (H := H) N
   sinTheta₀ : PaperSinThetaRepresentative
     ((ContinuousLinearMap.id ℂ E -
@@ -87,7 +87,7 @@ theorem result
       P.problem.gap *
           N.gauge P.sinTheta₀.operator
         ≤ N.gauge P.problem.data.residual := by
-  have hcanonical := IsometricSinThetaProblem.result_complex N P.problem
+  have hcanonical := FormBoundedIsometricSinThetaProblem.result_complex N P.problem
   exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
     hcanonical.1 hcanonical.2
 
@@ -132,7 +132,7 @@ end PaperRealGeneralSinThetaProblem
 /-- Literal paper representative for the real isometric theorem. -/
 structure PaperRealIsometricSinThetaProblem
     (N : KyFanDominantIdealFamily (𝕜 := ℝ)) where
-  problem : IsometricSinThetaProblem (𝕜 := ℝ) (E := E) (F := F)
+  problem : FormBoundedIsometricSinThetaProblem (𝕜 := ℝ) (E := E) (F := F)
     (G := G) (H := H) N
   sinTheta₀ : PaperSinThetaRepresentative
     ((ContinuousLinearMap.id ℝ E -
@@ -149,7 +149,7 @@ theorem result
       P.problem.gap *
           N.gauge P.sinTheta₀.operator
         ≤ N.gauge P.problem.data.residual := by
-  have hcanonical := IsometricSinThetaProblem.result_real N P.problem
+  have hcanonical := FormBoundedIsometricSinThetaProblem.result_real N P.problem
   exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
     hcanonical.1 hcanonical.2
 

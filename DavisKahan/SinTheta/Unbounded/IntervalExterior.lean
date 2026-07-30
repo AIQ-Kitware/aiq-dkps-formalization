@@ -11,7 +11,7 @@ import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 /-!
 # Source-shaped finite-interval unbounded sine-theta theorem
 
-This module assembles the domain-aware residual identity, the genuine-spectrum
+This module assembles the domain-aware residual identity, the spectral
 interval/exterior Sylvester estimate, lower-frame normalization, and exact-angle
 identification.  It deliberately bypasses the older abstract unbounded spectral
 facade, whose ordered half-line branch still depends on spectral-cutoff work.
@@ -80,7 +80,7 @@ theorem toPMap
 end UnboundedIntervalExteriorGap
 
 /-- Generalized finite-interval unbounded sine-theta theorem at ideal-gauge
-scope, using genuine Spectra hypotheses and no ordered half-line dependency. -/
+scope, using Spectra spectrum hypotheses and no ordered half-line dependency. -/
 theorem generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
