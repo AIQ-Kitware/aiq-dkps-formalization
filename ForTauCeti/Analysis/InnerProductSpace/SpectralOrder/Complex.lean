@@ -109,6 +109,8 @@ theorem re_inner_le_on_subspace_of_restriction_spectrum_subset_Iic
       (ContinuousLinearMap.IsSymmetric.restrict_of_invariant (A := A) hA hU)
   have h := re_inner_le_of_spectrum_subset_Iic
     (A.restrict hU) hres hσ (⟨x, hx⟩ : U)
+  -- restates the hypothesis with the definition unfolded, the form the following
+  -- step matches against.
   change RCLike.re ⟪A x, x⟫_ℂ ≤ c * ‖x‖ ^ 2 at h
   exact h
 
@@ -128,6 +130,8 @@ theorem le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
       (ContinuousLinearMap.IsSymmetric.restrict_of_invariant (A := A) hA hU)
   have h := le_re_inner_of_spectrum_subset_Ici
     (A.restrict hU) hres hσ (⟨x, hx⟩ : U)
+  -- restates the hypothesis with the definition unfolded, the form the following
+  -- step matches against.
   change c * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ at h
   exact h
 

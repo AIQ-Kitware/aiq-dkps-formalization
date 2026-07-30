@@ -97,6 +97,8 @@ theorem integral_cexp_neg_mul_abs_mul_cexp
     (integrableOn_exp_mul_complex_Iic haNeg 0).congr_fun hfNeg.symm measurableSet_Iic
   have hintPos : IntegrableOn f (Set.Ioi 0) :=
     (integrableOn_exp_mul_complex_Ioi haPos 0).congr_fun hfPos.symm measurableSet_Ioi
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change ∫ t, f t = _
   rw [← intervalIntegral.integral_Iic_add_Ioi hintNeg hintPos]
   calc

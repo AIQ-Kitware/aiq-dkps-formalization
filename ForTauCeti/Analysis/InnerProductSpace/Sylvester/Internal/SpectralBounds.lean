@@ -119,6 +119,7 @@ theorem opNorm_shift_le_of_spectrumIn_Icc
         RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
     rw [hval, abs_le]
     constructor <;> simp only [m, r] <;> nlinarith [ha x, hb x]
+  -- names the application so the norm bound applies to it directly.
   change ‖S.toContinuousLinearMap‖ ≤ r
   exact ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
     (fun x y => hS x y) hr hform
@@ -173,6 +174,7 @@ theorem norm_shift_lower_of_spectrumOutside
     rw [hinner, norm_mul, RCLike.norm_ofReal, mul_pow]
     gcongr
     exact hsep i
+  -- names the application so the norm bound applies to it directly.
   change (r + δ) * ‖x‖ ≤ ‖S x‖
   rw [← sq_le_sq₀ (mul_nonneg hk (norm_nonneg x)) (norm_nonneg (S x))]
   simpa [mul_pow] using hsq

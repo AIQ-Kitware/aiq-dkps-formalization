@@ -159,12 +159,16 @@ theorem norm_block_ge (U : TauCeti.OneParameterUnitaryGroup E)
     (fun t ht => TauCeti.LinearPMap.abs_sub_le_of_mem_gridCell hε l ht)
     ⟨W, hmemW⟩
     (by
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       change (TauCeti.LinearPMap.specProjection hA (TauCeti.LinearPMap.gridCell ε k)
         (TauCeti.LinearPMap.measurableSet_gridCell ε k)).comp (ofLp b W) = ofLp b W
       rw [hW, blockCLM_apply]
       exact comp_ofLp_blockFun_left b
         (TauCeti.LinearPMap.specProjection_comp_self hA _ _) _ _)
     (by
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       change (ofLp b W).comp (TauCeti.LinearPMap.specProjection hB
         (TauCeti.LinearPMap.gridCell ε l) (TauCeti.LinearPMap.measurableSet_gridCell ε l))
         = ofLp b W

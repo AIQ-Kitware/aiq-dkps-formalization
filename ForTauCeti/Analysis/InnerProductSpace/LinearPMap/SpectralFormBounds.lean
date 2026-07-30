@@ -72,6 +72,8 @@ theorem specProjection_eq_one_of_compl_eq_zero {S : Set ℝ} (hS : MeasurableSet
   rw [show (spectralPVM hA).proj Sᶜ hS.compl = specProjection hA Sᶜ hS.compl from rfl,
     hz] at h1
   rw [show specProjection hA S hS = (spectralPVM hA).proj S hS from rfl,
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     show (1 : H →L[ℂ] H) = ContinuousLinearMap.id ℂ H from ContinuousLinearMap.one_def]
   linear_combination (norm := module) h1
 
