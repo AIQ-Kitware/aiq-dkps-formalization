@@ -31,7 +31,7 @@ review is exactly a review of a future submission unit.
 - [x] `(root files) :: tooling` — 2 files, 789 lines — **READY**
 - [x] `(root modules)` — 7 files, 65 lines — **READY**
 - [x] `.claude :: data/config` — 1 files, 6 lines — **READY**
-- [x] `.llm_resource_tally :: data/config` — 3 files, 946 lines — **READY**
+- [x] `.llm_resource_tally :: data/config` — 3 files, 947 lines — **READY**
 - [x] `.llm_resource_tally :: documentation` — 1 files, 99 lines — **READY**
 - [x] `.llm_resource_tally :: other` — 3 files, 12 lines — **READY**
 - [x] `.llm_resource_tally :: tooling` — 17 files, 1,743 lines — **READY**
@@ -97,7 +97,7 @@ review is exactly a review of a future submission unit.
 - [x] `ForTauCeti :: T06 Principal angles, aligned bases, and finite frames` — 3 files, 1,287 lines — **READY**
 - [x] `ForTauCeti :: T07 Rectangular unitarily invariant norms` — 6 files, 2,359 lines — **READY**
 - [x] `ForTauCeti :: T08 Angle geometry and eigenvalue perturbation` — 5 files, 1,494 lines — **READY**
-- [x] `ForTauCeti :: T09 Approximation numbers` — 13 files, 2,899 lines — **blocked (11/13 files)**
+- [x] `ForTauCeti :: T09 Approximation numbers` — 13 files, 2,899 lines — **READY**
 - [x] `ForTauCeti :: T10 Symmetric operator ideals and Schatten norms` — 9 files, 2,280 lines — **READY**
 - [x] `ForTauCeti :: T11 Hilbert-Schmidt operators` — 4 files, 634 lines — **READY**
 - [x] `ForTauCeti :: T12 The Haagerup-Zsido kernel and its Fourier transform` — 8 files, 2,036 lines — **READY**
@@ -114,14 +114,14 @@ review is exactly a review of a future submission unit.
 - [x] `ForTauCeti :: T21 Matrix rank factorization and positive semidefiniteness` — 2 files, 406 lines — **READY**
 - [x] `ForTauCeti :: T22 Berge's maximum theorem and approximate minimizers` — 2 files, 492 lines — **READY**
 - [x] `ForTauCeti :: documentation` — 1 files, 339 lines — **READY**
-- [x] `ForTauCetiRoadmap :: documentation` — 22 files, 3,578 lines — **blocked (16/22 files)**
+- [x] `ForTauCetiRoadmap :: documentation` — 22 files, 3,578 lines — **READY**
 - [x] `ForTauCetiRoadmap/ApproximationNumbers` — 1 files, 219 lines — **READY**
 - [x] `Helm2025` — 4 files, 1,997 lines — **READY**
 - [x] `Helm2025 :: documentation` — 2 files, 683 lines — **READY**
 - [x] `Helm2025 :: other` — 1 files, 265 lines — **READY**
 - [x] `comparator :: data/config` — 23 files, 335 lines — **READY**
 - [x] `dev :: data/config` — 25 files, 11,483 lines — **READY**
-- [x] `dev :: documentation` — 156 files, 36,799 lines — **READY**
+- [x] `dev :: documentation` — 156 files, 36,800 lines — **READY**
 - [x] `dev :: manifest/notes` — 8 files, 119 lines — **READY**
 - [x] `dev/alternates` — 1 files, 412 lines — **READY**
 - [x] `docs :: documentation` — 33 files, 6,198 lines — **READY**
