@@ -149,6 +149,7 @@ check. Read that before asking what is left.
 | `review-DavisKahan-production.md` | all eighteen production groups |
 | `review-Experimental-and-papers.md` | `Experimental` and all six paper libraries |
 | `review-Challenge-MathlibPending.md` | the duplicated challenge admissions |
+| `TAUCETI-RUBRIC-REVIEW.md` | the ten Tau Ceti review rubrics applied to both libraries |
 | `review-docs-tooling-config.md` | documentation, tooling, config, `Challenge`; the whole-repo verdict |
 
 **Lanes opened by the audit:** `HDR-DEST`, `T01-SQRT`, `MODULUS-DEDUP`,
