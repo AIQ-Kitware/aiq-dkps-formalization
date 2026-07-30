@@ -106,14 +106,14 @@ TOPICS: list[tuple[str, str, list[str]]] = [
    "SpectralProjectionGroup","SelfAdjointMaximal","StoneUniqueness","YosidaApproximation"]]
  +[A+"BlockLowerBound"]),
 ("T16","Sylvester equations and the Rosenblum theorem",
- [A+x for x in ["Rosenblum","SylvesterGroup","HilbertSchmidtBlock","CoerciveUnit"]]
+ [A+x for x in ["Rosenblum","HilbertSchmidtBlock","CoerciveUnit"]]
  +[A+"Sylvester."+x for x in ["Basic","Interval","SpectralDistance",
-   "Bound","Operator","BlockIdentity","BlockEstimate","SpectralGap","Generator"]]
+   "Bound","Operator","BlockIdentity","BlockEstimate","SpectralGap","Generator","Group"]]
  +[A+"Sylvester.Internal.ReciprocalMultiplier"+x for x in
      ["",".OrbitAction",".Fourier",".DoubledPhase"]]
  +[A+"Sylvester.Internal.SpectralBounds"]),
 ("T17","Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems",
- [A+"SinTheta."+x for x in ["OperatorNorm","Perturbation","UnitarilyInvariant"]]
+ [A+"SinTheta."+x for x in ["OperatorNorm","Perturbation","DirectedBounds","UnitarilyInvariant"]]
  +[A+"Residual."+x for x in ["AngleEmbedding","Ritz","TrialMap"]]
  +[A+"DoubleAngle.Vector"]+[A+"BoundedOperator."+x for x in ["Basic","Projector","SinTheta"]]),
 ("T18","The Yu-Wang-Samworth statistical variant",
