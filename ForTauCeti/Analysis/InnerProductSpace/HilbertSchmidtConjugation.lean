@@ -71,6 +71,14 @@ omit [CompleteSpace F] in
   · rw [columns_ofLp, columns_add, columns_ofLp, columns_ofLp]; rfl
 
 omit [CompleteSpace F] in
+/-- The column-to-operator map is additive on differences.  Stated separately from
+`ofLp_add` because the subtraction form is what the convergence arguments use. -/
+theorem ofLp_sub (b : HilbertBasis ι 𝕜 F) (f g : lp (fun _ : ι => E) 2) :
+    ofLp b (f - g) = ofLp b f - ofLp b g := by
+  have h : ofLp b (f - g) + ofLp b g = ofLp b f := by rw [← ofLp_add]; congr 1; abel
+  rw [← h]; abel
+
+omit [CompleteSpace F] in
 /-- The column-to-operator map is homogeneous. -/
 @[simp] theorem ofLp_smul (b : HilbertBasis ι 𝕜 F) (c : 𝕜) (f : lp (fun _ : ι => E) 2) :
     ofLp b (c • f) = c • ofLp b f := by

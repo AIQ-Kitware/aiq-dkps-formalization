@@ -56,13 +56,6 @@ variable {ι : Type*} {E F : Type*}
 variable [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
-omit [CompleteSpace F] in
-/-- The zero column vector rebuilds to the zero operator. -/
-@[simp] theorem ofLp_zero (b : HilbertBasis ι ℂ F) :
-    ofLp b (0 : lp (fun _ : ι => E) 2) = 0 := by
-  ext x
-  simp [ofLp_apply]
-
 /-- A block with a zero factor is the zero block. -/
 theorem blockFun_eq_zero_left (b : HilbertBasis ι ℂ F) (Q : F →L[ℂ] F)
     (f : lp (fun _ : ι => E) 2) : blockFun b (0 : E →L[ℂ] E) Q f = 0 := by
