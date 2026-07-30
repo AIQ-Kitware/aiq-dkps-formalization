@@ -572,13 +572,13 @@ definition below unfolds and discharges automatically at `𝕜 = ℂ`.
 
 section OperatorAbsoluteValue
 
-/-- The scalar-action assumptions Mathlib itself makes when relating the Loewner
-order on `E →L[𝕜] E` to the continuous functional calculus. -/
+-- The scalar-action assumptions Mathlib itself makes when relating the Loewner
+-- order on `E →L[𝕜] E` to the continuous functional calculus.
 variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
 
-/-- The one genuinely `ℂ`-only ingredient.  Mathlib has this instance for
-`𝕜 = ℂ`; carrying it as a hypothesis keeps the development general without
-pretending the general case is already available. -/
+-- The one genuinely `ℂ`-only ingredient.  Mathlib has this instance for
+-- `𝕜 = ℂ`; carrying it as a hypothesis keeps the development general without
+-- pretending the general case is already available.
 variable [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
 
 attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
