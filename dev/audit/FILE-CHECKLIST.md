@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-1167/1167 files reviewed · 1167 files · 262,818 lines · 113 groups
+1171/1171 files reviewed · 1171 files · 263,826 lines · 113 groups
 
 ## How to review
 
@@ -315,9 +315,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/BoundedOperator
 
-*6 files, 481 lines — 6/6 reviewed*
+*6 files, 492 lines — 6/6 reviewed*
 
-- [x] `DavisKahan/BoundedOperator/TrialResidual.lean` — 173 lines · Lean source
+- [x] `DavisKahan/BoundedOperator/TrialResidual.lean` — 184 lines · Lean source
 - [x] `DavisKahan/BoundedOperator/IsometricRangeProjection.lean` — 130 lines · Lean source
 - [x] `DavisKahan/BoundedOperator/Reflection.lean` — 98 lines · Lean source
 - [x] `DavisKahan/BoundedOperator/Spectral/Complex.lean` — 56 lines · Lean source
@@ -326,9 +326,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/DoubleAngle
 
-*6 files, 1,750 lines — 6/6 reviewed*
+*6 files, 1,757 lines — 6/6 reviewed*
 
-- [x] `DavisKahan/DoubleAngle/UnboundedIdeal.lean` — 530 lines · Lean source
+- [x] `DavisKahan/DoubleAngle/UnboundedIdeal.lean` — 537 lines · Lean source
 - [x] `DavisKahan/DoubleAngle/TanTwoThetaKyFan.lean` — 520 lines · Lean source
 - [x] `DavisKahan/DoubleAngle/TanTwoThetaKyFanFiniteCarrier.lean` — 445 lines · Lean source
 - [x] `DavisKahan/DoubleAngle/KyFanOrthonormal.lean` — 140 lines · Lean source
@@ -553,7 +553,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/Interop
 
-*30 files, 7,795 lines — 30/30 reviewed*
+*29 files, 7,645 lines — 29/29 reviewed*
 
 - [x] `DavisKahan/Interop/Spectra/DirectRotationSquare.lean` — 1,410 lines · Lean source
 - [x] `DavisKahan/Interop/Spectra/DirectRotation.lean` — 1,182 lines · Lean source
@@ -568,11 +568,10 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/Interop/Spectra/BoundedSelfAdjointSpectralProjection.lean` — 155 lines · Lean source
 - [x] `DavisKahan/Interop/Spectra/BoundedTruncation.lean` — 152 lines · Lean source
 - [x] `DavisKahan/Interop/Spectra/OperatorAbsoluteValue.lean` — 152 lines · Lean source
-- [x] `DavisKahan/Interop/TauCeti/RectangularFamilyAdapter.lean` — 151 lines · Lean source
 - [x] `DavisKahan/Interop/Spectra/HilbertSchmidtTensor.lean` — 124 lines · Lean source
 - [x] `DavisKahan/Interop/Spectra/PVMSubspace.lean` — 117 lines · Lean source
 - [x] `DavisKahan/Interop/Spectra/SpectralRestrictionLocalization.lean` — 115 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/BoundedPerturbationSinThetaIdeal.lean` — 106 lines · Lean source
+- [x] `DavisKahan/Interop/Spectra/BoundedPerturbationSinThetaIdeal.lean` — 108 lines · Lean source
 - [x] `DavisKahan/Interop/Spectra/SpectralRestrictionOperator.lean` — 103 lines · Lean source
 - [x] `DavisKahan/Interop/Spectra/SinAngle.lean` — 100 lines · Lean source
 - [x] `DavisKahan/Interop/Spectra/SpectralCutoff.lean` — 99 lines · Lean source
@@ -584,22 +583,22 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/Interop/TauCeti/ClosedOperator.lean` — 64 lines · Lean source
 - [x] `DavisKahan/Interop/Spectra/All.lean` — 33 lines · Lean source
 - [x] `DavisKahan/Interop/All.lean` — 10 lines · Lean source
-- [x] `DavisKahan/Interop/TauCeti/All.lean` — 10 lines · Lean source
+- [x] `DavisKahan/Interop/TauCeti/All.lean` — 9 lines · Lean source
 
 ### DavisKahan/OperatorIdeal
 
-*17 files, 4,745 lines — 17/17 reviewed*
+*17 files, 4,910 lines — 17/17 reviewed*
 
 - [x] `DavisKahan/OperatorIdeal/ApproximationNumbers/Real/Threshold.lean` — 795 lines · Lean source
 - [x] `DavisKahan/OperatorIdeal/ApproximationNumbers/BlockSum.lean` — 732 lines · Lean source
 - [x] `DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean` — 657 lines · Lean source
-- [x] `DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean` — 558 lines · Lean source
+- [x] `DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean` — 550 lines · Lean source
 - [x] `DavisKahan/OperatorIdeal/UnitarilyInvariant/RectangularFamily.lean` — 437 lines · Lean source
-- [x] `DavisKahan/OperatorIdeal/UnitarilyInvariant/IdealBanach.lean` — 389 lines · Lean source
+- [x] `DavisKahan/OperatorIdeal/UnitarilyInvariant/IdealBanach.lean` — 393 lines · Lean source
+- [x] `DavisKahan/OperatorIdeal/CanonicalRealView.lean` — 348 lines · Lean source
 - [x] `DavisKahan/OperatorIdeal/ComplexificationApproximation.lean` — 346 lines · Lean source
 - [x] `DavisKahan/OperatorIdeal/ApproximationNumbers/FiniteSourceSingularSystem.lean` — 215 lines · Lean source
 - [x] `DavisKahan/OperatorIdeal/ApproximationNumbers/SchattenApproximationFoundation.lean` — 202 lines · Lean source
-- [x] `DavisKahan/OperatorIdeal/CanonicalRealView.lean` — 179 lines · Lean source
 - [x] `DavisKahan/OperatorIdeal/ApproximationNumbers/Real/KyFanGauge.lean` — 91 lines · Lean source
 - [x] `DavisKahan/OperatorIdeal/ApproximationNumbers/OperatorModulus.lean` — 79 lines · Lean source
 - [x] `DavisKahan/OperatorIdeal/ApproximationNumbers/Real.lean` — 17 lines · Lean source
@@ -630,27 +629,27 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/SinTheta
 
-*31 files, 5,658 lines — 31/31 reviewed*
+*31 files, 5,736 lines — 31/31 reviewed*
 
 - [x] `DavisKahan/SinTheta/Natural/Reducing.lean` — 560 lines · Lean source
-- [x] `DavisKahan/SinTheta/FrameFactorization.lean` — 462 lines · Lean source
-- [x] `DavisKahan/SinTheta/Unbounded/Core.lean` — 439 lines · Lean source
+- [x] `DavisKahan/SinTheta/FrameFactorization.lean` — 489 lines · Lean source
+- [x] `DavisKahan/SinTheta/Unbounded/Core.lean` — 441 lines · Lean source
+- [x] `DavisKahan/SinTheta/Real/FrameFactorization.lean` — 341 lines · Lean source
 - [x] `DavisKahan/SinTheta/Unbounded/AllGap.lean` — 339 lines · Lean source
-- [x] `DavisKahan/SinTheta/Real/FrameFactorization.lean` — 331 lines · Lean source
-- [x] `DavisKahan/SinTheta/Bounded/Core.lean` — 294 lines · Lean source
+- [x] `DavisKahan/SinTheta/Bounded/Core.lean` — 297 lines · Lean source
+- [x] `DavisKahan/SinTheta/FrameFactorizationGeneric.lean` — 274 lines · Lean source
 - [x] `DavisKahan/SinTheta/Canonical.lean` — 266 lines · Lean source
-- [x] `DavisKahan/SinTheta/FrameFactorizationGeneric.lean` — 249 lines · Lean source
 - [x] `DavisKahan/SinTheta/Natural/Bounded.lean` — 242 lines · Lean source
 - [x] `DavisKahan/SinTheta/Natural/Examples.lean` — 237 lines · Lean source
 - [x] `DavisKahan/SinTheta/Unbounded/LegacyGap.lean` — 203 lines · Lean source
 - [x] `DavisKahan/SinTheta/Natural/Real.lean` — 199 lines · Lean source
-- [x] `DavisKahan/SinTheta/Unbounded/IntervalExterior.lean` — 192 lines · Lean source
+- [x] `DavisKahan/SinTheta/Unbounded/IntervalExterior.lean` — 197 lines · Lean source
 - [x] `DavisKahan/SinTheta/Natural/GapConvenience.lean` — 174 lines · Lean source
+- [x] `DavisKahan/SinTheta/Unbounded/SpectrumGap.lean` — 162 lines · Lean source
 - [x] `DavisKahan/SinTheta/Specializations.lean` — 160 lines · Lean source
-- [x] `DavisKahan/SinTheta/Unbounded/SpectrumGap.lean` — 159 lines · Lean source
 - [x] `DavisKahan/SinTheta/Natural/Genuine.lean` — 154 lines · Lean source
+- [x] `DavisKahan/SinTheta/Unbounded/GenuineGauge.lean` — 141 lines · Lean source
 - [x] `DavisKahan/SinTheta/Real/Canonical.lean` — 139 lines · Lean source
-- [x] `DavisKahan/SinTheta/Unbounded/GenuineGauge.lean` — 138 lines · Lean source
 - [x] `DavisKahan/SinTheta/Real/Generalized.lean` — 133 lines · Lean source
 - [x] `DavisKahan/SinTheta/Real/Specializations.lean` — 132 lines · Lean source
 - [x] `DavisKahan/SinTheta/Real/Unbounded.lean` — 90 lines · Lean source
@@ -681,7 +680,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/Sources/DavisKahan1970
 
-*81 files, 15,947 lines — 81/81 reviewed*
+*81 files, 15,953 lines — 81/81 reviewed*
 
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean` — 642 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Section8RieszCircle.lean` — 554 lines · Lean source
@@ -695,8 +694,8 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61Universal.lean` — 378 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/SingularValueTransport.lean` — 372 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/FiniteMultiplicity.lean` — 364 lines · Lean source
+- [x] `DavisKahan/Sources/DavisKahan1970/RemainingSourceSurface.lean` — 350 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNormLaws.lean` — 349 lines · Lean source
-- [x] `DavisKahan/Sources/DavisKahan1970/RemainingSourceSurface.lean` — 347 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean` — 345 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean` — 338 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Section9/NumericalBounds.lean` — 329 lines · Lean source
@@ -704,7 +703,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCoreTheorems.lean` — 312 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean` — 295 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristic.lean` — 279 lines · Lean source
-- [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/ProjectionBlocks.lean` — 272 lines · Lean source
+- [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/ProjectionBlocks.lean` — 275 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Section9/ExactData.lean` — 265 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean` — 257 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCore.lean` — 232 lines · Lean source
@@ -814,18 +813,18 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/Sylvester
 
-*24 files, 5,619 lines — 24/24 reviewed*
+*24 files, 5,643 lines — 24/24 reviewed*
 
-- [x] `DavisKahan/Sylvester/Unbounded/Neumann.lean` — 580 lines · Lean source
-- [x] `DavisKahan/Sylvester/Bounded.lean` — 569 lines · Lean source
-- [x] `DavisKahan/Sylvester/GenuineSpectrum.lean` — 551 lines · Lean source
+- [x] `DavisKahan/Sylvester/Unbounded/Neumann.lean` — 585 lines · Lean source
+- [x] `DavisKahan/Sylvester/Bounded.lean` — 578 lines · Lean source
+- [x] `DavisKahan/Sylvester/GenuineSpectrum.lean` — 555 lines · Lean source
 - [x] `DavisKahan/Sylvester/Unbounded/OrderedCutoff.lean` — 530 lines · Lean source
 - [x] `DavisKahan/Sylvester/RosenblumExistence.lean` — 460 lines · Lean source
 - [x] `DavisKahan/Sylvester/ShiftedInverse.lean` — 428 lines · Lean source
 - [x] `DavisKahan/Sylvester/Unbounded/OrderedFromCutoffs.lean` — 399 lines · Lean source
 - [x] `DavisKahan/Sylvester/FilledTruncation.lean` — 378 lines · Lean source
-- [x] `DavisKahan/Sylvester/ShiftedInverseGauge.lean` — 200 lines · Lean source
-- [x] `DavisKahan/Sylvester/Unbounded/IntervalExterior.lean` — 194 lines · Lean source
+- [x] `DavisKahan/Sylvester/ShiftedInverseGauge.lean` — 203 lines · Lean source
+- [x] `DavisKahan/Sylvester/Unbounded/IntervalExterior.lean` — 197 lines · Lean source
 - [x] `DavisKahan/Sylvester/PairwiseHomogeneousUniqueness.lean` — 172 lines · Lean source
 - [x] `DavisKahan/Sylvester/HomogeneousUniqueness.lean` — 146 lines · Lean source
 - [x] `DavisKahan/Sylvester/PairwiseSpectrumGap.lean` — 146 lines · Lean source
@@ -855,9 +854,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/TanTwoTheta
 
-*5 files, 684 lines — 5/5 reviewed*
+*5 files, 688 lines — 5/5 reviewed*
 
-- [x] `DavisKahan/TanTwoTheta/UnboundedIdeal.lean` — 256 lines · Lean source
+- [x] `DavisKahan/TanTwoTheta/UnboundedIdeal.lean` — 260 lines · Lean source
 - [x] `DavisKahan/TanTwoTheta/BoundedOffDiagonal.lean` — 152 lines · Lean source
 - [x] `DavisKahan/TanTwoTheta/Unbounded.lean` — 142 lines · Lean source
 - [x] `DavisKahan/TanTwoTheta/UnboundedVector.lean` — 122 lines · Lean source
@@ -969,17 +968,17 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### FinishTanTwoTheta :: documentation
 
-*3 files, 117 lines — 3/3 reviewed*
+*3 files, 138 lines — 3/3 reviewed*
 
 - [x] `FinishTanTwoTheta/README.md` — 50 lines · documentation
+- [x] `FinishTanTwoTheta/GROUNDING.md` — 46 lines · documentation
 - [x] `FinishTanTwoTheta/PROOF_OBLIGATIONS.md` — 42 lines · documentation
-- [x] `FinishTanTwoTheta/GROUNDING.md` — 25 lines · documentation
 
 ### FinishTanTwoTheta :: tooling
 
-*1 files, 131 lines — 1/1 reviewed*
+*1 files, 142 lines — 1/1 reviewed*
 
-- [x] `FinishTanTwoTheta/scripts/verify_grounding.py` — 131 lines · tooling
+- [x] `FinishTanTwoTheta/scripts/verify_grounding.py` — 142 lines · tooling
 
 ### FinishTanTwoTheta/FinishTanTwoTheta
 
@@ -1015,10 +1014,10 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### FinishYuWangSamworth :: documentation
 
-*4 files, 158 lines — 4/4 reviewed*
+*4 files, 167 lines — 4/4 reviewed*
 
 - [x] `FinishYuWangSamworth/README.md` — 51 lines · documentation
-- [x] `FinishYuWangSamworth/GROUNDING.md` — 38 lines · documentation
+- [x] `FinishYuWangSamworth/GROUNDING.md` — 47 lines · documentation
 - [x] `FinishYuWangSamworth/PROOF_OBLIGATIONS.md` — 35 lines · documentation
 - [x] `FinishYuWangSamworth/ELEGANCE_AUDIT.md` — 34 lines · documentation
 
@@ -1046,12 +1045,12 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T01 Positive square root, operator modulus, functional calculus
 
-*9 files, 1,653 lines — 9/9 reviewed*
+*9 files, 1,671 lines — 9/9 reviewed*
 
 - [x] `ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean` — 556 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/SelfAdjointFunctionalCalculus.lean` — 238 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean` — 208 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/PositiveSqrt.lean` — 183 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SelfAdjointFunctionalCalculus.lean` — 253 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean` — 216 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/PositiveSqrt.lean` — 178 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean` — 157 lines · Lean source
 - [x] `ForTauCeti/Analysis/SpecialFunctions/Sqrt.lean` — 112 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Spectrum.lean` — 74 lines · Lean source
@@ -1060,12 +1059,12 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T02 Polar decomposition and partial isometries
 
-*5 files, 1,969 lines — 5/5 reviewed*
+*5 files, 2,045 lines — 5/5 reviewed*
 
-- [x] `ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean` — 688 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/PolarDecomposition.lean` — 419 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean` — 707 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/PolarDecomposition.lean` — 457 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean` — 411 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/PolarIsometry.lean` — 283 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/PolarIsometry.lean` — 302 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/PartialIsometry.lean` — 168 lines · Lean source
 
 ### ForTauCeti :: T03 Singular values and the singular system
@@ -1336,7 +1335,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCetiRoadmap :: documentation
 
-*9 files, 1,848 lines — 9/9 reviewed*
+*13 files, 2,337 lines — 13/13 reviewed*
 
 - [x] `ForTauCetiRoadmap/ApproximationNumbers/README.md` — 391 lines · documentation
 - [x] `ForTauCetiRoadmap/CANDIDATE-TOPIC-DESIGN.md` — 313 lines · documentation
@@ -1344,9 +1343,13 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `ForTauCetiRoadmap/SpectralSubspacePerturbation/README.md` — 250 lines · documentation
 - [x] `ForTauCetiRoadmap/HaagerupZsidoKernel/README.md` — 210 lines · documentation
 - [x] `ForTauCetiRoadmap/BorelCalculus/README.md` — 158 lines · documentation
+- [x] `ForTauCetiRoadmap/UnboundedResolvent/README.md` — 146 lines · documentation
+- [x] `ForTauCetiRoadmap/PositiveSqrtAndModulus/README.md` — 133 lines · documentation
+- [x] `ForTauCetiRoadmap/BergeMaximum/README.md` — 110 lines · documentation
 - [x] `ForTauCetiRoadmap/UnboundedOperators/README.md` — 102 lines · documentation
+- [x] `ForTauCetiRoadmap/MatrixRankFactorization/README.md` — 96 lines · documentation
 - [x] `ForTauCetiRoadmap/SpectralSubspacePerturbation/Suggested.lean.md` — 92 lines · documentation
-- [x] `ForTauCetiRoadmap/README.md` — 76 lines · documentation
+- [x] `ForTauCetiRoadmap/README.md` — 80 lines · documentation
 
 ### ForTauCetiRoadmap/ApproximationNumbers
 
@@ -1436,15 +1439,15 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*153 files, 36,267 lines — 153/153 reviewed*
+*153 files, 36,339 lines — 153/153 reviewed*
 
 - [x] `dev/tauceti-signature-polish-todo.md` — 2,201 lines · documentation
-- [x] `dev/audit/FILE-CHECKLIST.md` — 1,767 lines · documentation
+- [x] `dev/audit/FILE-CHECKLIST.md` — 1,771 lines · documentation
 - [x] `dev/davis-kahan-expert-completion-plan.md` — 1,589 lines · documentation
 - [x] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation
 - [x] `dev/tauceti/u1-linearpmap-migration.md` — 1,139 lines · documentation
 - [x] `dev/tauceti/spectra-removal-plan.md` — 1,036 lines · documentation
-- [x] `dev/LANES.md` — 1,012 lines · documentation
+- [x] `dev/LANES.md` — 1,016 lines · documentation
 - [x] `dev/lean-proof-engineering-lessons.md` — 907 lines · documentation
 - [x] `dev/tauceti/NAMEK-STATUS.md` — 862 lines · documentation
 - [x] `dev/tauceti/convergence-matrix.md` — 795 lines · documentation
@@ -1452,10 +1455,10 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `dev/tauceti/spectra-removal-parallel-lanes.md` — 736 lines · documentation
 - [x] `dev/davis-kahan-1970-full-source-census.md` — 684 lines · documentation
 - [x] `dev/finishtantwotheta-completion-lane.md` — 614 lines · documentation
+- [x] `dev/README.md` — 507 lines · documentation
 - [x] `dev/tauceti/spectra-to-tauceti-port-ledger.md` — 471 lines · documentation
 - [x] `dev/external-lean-references.md` — 459 lines · documentation
 - [x] `dev/flawless-sine-theta-reorganization-overnight-plan-2026-07-20.md` — 456 lines · documentation
-- [x] `dev/README.md` — 446 lines · documentation
 - [x] `dev/tauceti/submission-ladder.md` — 420 lines · documentation
 - [x] `dev/mathlib-proof-polishing.md` — 414 lines · documentation
 - [x] `dev/topurge/dev/overlays/sylvester-semigroup-mathpass-gpt56.md` — 404 lines · documentation
@@ -1487,8 +1490,8 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `dev/topurge/dev/overlays/shared-hard-foundations-dfd9d37-gpt56.md` — 230 lines · documentation
 - [x] `dev/tauceti/extraction-cluster-classification.md` — 227 lines · documentation
 - [x] `dev/davis-kahan-1970-full-sine-theta-proof-manuscript-2026-07-19.md` — 222 lines · documentation
+- [x] `dev/LANES-COMPLETED.md` — 218 lines · documentation
 - [x] `dev/topurge/dev/compile-repair-rebase-note-2026-07-20.md` — 217 lines · documentation
-- [x] `dev/LANES-COMPLETED.md` — 215 lines · documentation
 - [x] `dev/davis-kahan-1970-missing-statements-math-ahead-2026-07-20.md` — 213 lines · documentation
 - [x] `dev/tauceti/tauceti-pr1-approximation-numbers.md` — 213 lines · documentation
 - [x] `dev/davis-kahan-1970-frontier-status.md` — 207 lines · documentation
@@ -1684,7 +1687,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### scripts :: tooling
 
-*47 files, 11,038 lines — 47/47 reviewed*
+*48 files, 11,205 lines — 48/48 reviewed*
 
 - [x] `scripts/lake_build_report.py` — 1,156 lines · tooling
 - [x] `scripts/check_davis_kahan_frontier.py` — 633 lines · tooling
@@ -1695,10 +1698,10 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `scripts/upgrade_census_schema_v4.py` — 333 lines · tooling
 - [x] `scripts/audit_checklist.py` — 309 lines · tooling
 - [x] `scripts/render_distilled_literature_index.py` — 292 lines · tooling
+- [x] `scripts/audit_scan.py` — 291 lines · tooling
 - [x] `scripts/check_dependency_layers.py` — 286 lines · tooling
 - [x] `scripts/probe_census_declarations.py` — 263 lines · tooling
 - [x] `scripts/check_library_structure.py` — 248 lines · tooling
-- [x] `scripts/audit_scan.py` — 246 lines · tooling
 - [x] `scripts/check_comparator_signatures.py` — 232 lines · tooling
 - [x] `scripts/tests/test_lake_build_report.py` — 229 lines · tooling
 - [x] `scripts/run_challenge_comparator.sh` — 225 lines · tooling
@@ -1727,6 +1730,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `scripts/check_davis_kahan_rebased_mathahead.py` — 128 lines · tooling
 - [x] `scripts/audit_theorem62_hard_front.py` — 127 lines · tooling
 - [x] `scripts/tests/test_check_docstring_coverage.py` — 125 lines · tooling
+- [x] `scripts/check_namespace_policy.py` — 122 lines · tooling
 - [x] `scripts/check_spectra_namespace.py` — 122 lines · tooling
 - [x] `scripts/closed_operator_census.py` — 114 lines · tooling
 - [x] `scripts/audit_full_paper_sine_theta.py` — 109 lines · tooling
