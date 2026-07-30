@@ -32,7 +32,6 @@ open MeasureTheory
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
@@ -77,7 +76,6 @@ theorem semiboundedAbove_of_spectrum_subset_Iic
   simpa using
     TauCeti.LinearPMap.re_inner_le_of_specProjection_Ioi_eq_zero hA hzero x
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

@@ -40,7 +40,6 @@ namespace Experimental
 namespace Frontier
 namespace Section3
 
-open SpectraBridge
 open TauCeti.DavisKahanExt (reflectedSubspace starProjection_reflectedSubspace)
 
 universe u v

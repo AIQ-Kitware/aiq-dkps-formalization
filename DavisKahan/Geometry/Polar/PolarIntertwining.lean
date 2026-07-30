@@ -27,7 +27,6 @@ namespace Experimental
 namespace MathAhead
 namespace HiddenFoundations
 
-open SpectraBridge
 open DavisKahan.Experimental.Foundation
 
 noncomputable section

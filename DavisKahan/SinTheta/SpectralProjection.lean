@@ -27,7 +27,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
@@ -96,9 +95,9 @@ theorem norm_spectralComplementaryOverlap_eq_directedGap
   rw [norm_adjoint_subtypeL_comp_subtypeL_eq U Wc]
   have hWc : Wc.starProjection = Wᗮ.starProjection := by
     rw [← selfAdjointSpectralProjection_eq_starProjection C hC Sᶜ hS.compl,
-      show SpectraBridge.selfAdjointSpectralProjection C hC Sᶜ hS.compl
+      show selfAdjointSpectralProjection C hC Sᶜ hS.compl
           = ContinuousLinearMap.id ℂ H -
-            SpectraBridge.selfAdjointSpectralProjection C hC S hS from
+            selfAdjointSpectralProjection C hC S hS from
         (TauCeti.LinearPMap.spectralPVM hC).proj_compl S hS]
     change ContinuousLinearMap.id ℂ H -
         selfAdjointSpectralProjection C hC S hS =
@@ -322,7 +321,6 @@ theorem sinTheta_addBounded_spectralProjection_sub_opNorm_of_spectrum_gap
     A hA V hV B S hB hS hβα hβ'α' hδ
     hBlow hBhigh hScomplSpec hSlow hShigh hBcomplSpec
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

@@ -152,7 +152,7 @@
       ],
       "lean_declarations": [
         "TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm",
-        "TauCeti.DavisKahan.Experimental.SpectraBridge.sinTwoTheta_addBounded_of_spectrum_gap"
+        "TauCeti.DavisKahan.Experimental.sinTwoTheta_addBounded_of_spectrum_gap"
       ],
       "notes": "Finite arbitrary-UI-norm forms are compiled; general Hilbert-space source forms are under repair.",
       "next_action": "Certify source-general residual and perturbation forms."
@@ -227,7 +227,7 @@
       ],
       "lean_declarations": [
         "TauCeti.DavisKahan1970.complex_directRotation",
-        "TauCeti.DavisKahan.Experimental.SpectraBridge.spectraCanonicalIntertwiner"
+        "TauCeti.DavisKahan.Experimental.spectraCanonicalIntertwiner"
       ],
       "notes": "Acute complex and finite constructions exist; exact nonacute source scope is not yet unified.",
       "next_action": "Add a source-facing definition covering the source existence regimes."
@@ -676,7 +676,7 @@
       ],
       "lean_declarations": [
         "TauCeti.DavisKahan.reflectionDefect_eq_perturbationDefect",
-        "TauCeti.DavisKahan.Experimental.SpectraBridge.sinTwoTheta_reflectionResidual_of_spectrum_gap"
+        "TauCeti.DavisKahan.Experimental.sinTwoTheta_reflectionResidual_of_spectrum_gap"
       ],
       "notes": "The reflection identities and finite theorem exist; the exact full proof package is under repair.",
       "next_action": "Add a source wrapper preserving both residual and perturbation conclusions."

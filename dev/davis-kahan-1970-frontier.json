@@ -8,7 +8,7 @@
       "title": "Compiled Halmos two-projection decomposition",
       "kind": "foundation",
       "module": "DavisKahan.Geometry.Halmos.TwoProjections",
-      "declaration": "TauCeti.DavisKahan.Experimental.SpectraBridge.halmosTrivialPart_sup_genericPart",
+      "declaration": "TauCeti.DavisKahan.Experimental.halmosTrivialPart_sup_genericPart",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -20,7 +20,7 @@
       "title": "Compiled Halmos cosine/sine Pythagoras",
       "kind": "foundation",
       "module": "DavisKahan.Geometry.Halmos.TwoProjections",
-      "declaration": "TauCeti.DavisKahan.Experimental.SpectraBridge.halmosCosineSq_add_sineSq",
+      "declaration": "TauCeti.DavisKahan.Experimental.halmosCosineSq_add_sineSq",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -32,7 +32,7 @@
       "title": "Compiled acute complex direct rotation",
       "kind": "foundation",
       "module": "DavisKahan.Geometry.Polar.DirectRotation",
-      "declaration": "TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation",
+      "declaration": "TauCeti.DavisKahan.Experimental.spectraDirectRotation",
       "dependencies": [],
       "source_census_ids": [
         "DK-3.1-def"

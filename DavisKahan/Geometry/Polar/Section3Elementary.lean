@@ -27,7 +27,6 @@ namespace Experimental
 namespace MathAhead
 namespace Section3
 
-open SpectraBridge
 open Frontier
 
 universe u

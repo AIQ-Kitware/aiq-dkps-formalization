@@ -27,10 +27,10 @@ universe v
 
 section Complex
 
--- `open SpectraBridge` would resolve to the nested
--- `ExactSinTheta.SpectraBridge` namespace introduced by `RealSpectrumBridge`,
+-- `open ` would resolve to the nested
+-- `ExactSinTheta` namespace introduced by `RealSpectrumBridge`,
 -- which shadows the intended one, so the full path is spelled out here.
-open TauCeti.DavisKahan.Experimental.SpectraBridge
+open TauCeti.DavisKahan.Experimental
 
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -132,7 +132,7 @@ end Complex
 
 section Real
 
-open SpectraBridge.RealSpectralRestriction
+open RealSpectralRestriction
 
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]

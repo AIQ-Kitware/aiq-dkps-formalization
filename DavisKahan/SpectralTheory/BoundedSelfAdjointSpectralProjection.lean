@@ -28,7 +28,7 @@ namespace DavisKahanExt
 
 open Set
 open scoped InnerProductSpace
-open DavisKahan.Experimental.SpectraBridge
+open DavisKahan.Experimental
 
 universe v
 

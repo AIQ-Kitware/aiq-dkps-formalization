@@ -30,7 +30,6 @@ namespace Experimental
 namespace MathAhead
 namespace HiddenFoundations
 
-open SpectraBridge
 open Frontier
 
 noncomputable section

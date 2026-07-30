@@ -45,7 +45,6 @@ namespace TauCeti
 open TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
@@ -1404,7 +1403,6 @@ theorem spectraDirectRotation_minimal
       (mul_nonneg hr0 (norm_nonneg x))).mp hsq
   simpa only [r] using hle
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti
