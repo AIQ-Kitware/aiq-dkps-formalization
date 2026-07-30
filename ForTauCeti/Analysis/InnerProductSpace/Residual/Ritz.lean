@@ -12,6 +12,14 @@ import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 Finite-dimensional compressions, invariant-pair residuals, Galerkin
 orthogonality, covariance, and Frobenius minimality.
 
+## Sources
+
+Ritz compressions and their residuals are the numerical-analysis form of the
+Davis--Kahan `sin Θ` theorem; the source argument is distilled in
+`prose/core-arguments/Davis-Kahan-1970-part-III-core-arguments.tex` and
+`prose/distilled_literature/DavisKahan1970_part_III.tex`.  The generic-trial-map
+shape here is this library's, not the paper's.
+
 ## Provenance
 
 *Moved, not restated.*  This file was

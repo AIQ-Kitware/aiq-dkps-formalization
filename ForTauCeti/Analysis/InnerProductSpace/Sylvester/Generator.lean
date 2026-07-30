@@ -44,6 +44,14 @@ because `Z` is bounded and `U t → 1` strongly.  So the *second* term converges
 and that is precisely the assertion that `Z x` lies in the domain of `A`, with
 the value `C x + Z (B x)`.
 
+## Sources
+
+That the generator of the Sylvester flow is `Z ↦ A Z - Z B` is the semigroup form
+of Rosenblum's argument, and the `π / 2` mass that makes it sharp is distilled in
+`prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex`.
+The donor derived the same equation from a tensor factorisation of the flow; none
+of that is used here, as the provenance note records.
+
 ## Provenance
 
 *New.*  The donor derives the same equation from the tensor factorisation of the

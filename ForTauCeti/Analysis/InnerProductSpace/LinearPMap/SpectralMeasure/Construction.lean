@@ -41,6 +41,20 @@ What is *quantitative* about a bounded spectral set — the truncation operator 
 the resolvent-gap estimate — is in the root module
 `…LinearPMap.SpectralMeasure`, which imports this one.
 
+## Sources
+
+The Cayley transform route to the spectral measure of an unbounded self-adjoint
+operator is classical: `U = (A - i)(A + i)⁻¹` is unitary, so it carries the bounded
+Borel calculus, and relabelling its spectrum by the inverse Cayley map gives a
+projection-valued measure on `ℝ`.  It follows the standard textbook treatment
+(Rudin, *Functional Analysis*, and Reed--Simon, *Methods of Modern Mathematical
+Physics I*) rather than any one source's proof.  `dev/tauceti/spectra-removal-plan.md`
+records the comparison against the Spectra library's Herglotz/Poisson route, whose
+endpoint `Spectra.QuantumMechanics.SpectralTheory.spectralPVM` this replaces.
+
+The `{1}`-null argument (`diagMeasure_cayley_preimage_one`) is not taken from a
+source: it is short and lives entirely inside the Borel calculus.
+
 ## Provenance
 
 *Split, not restated.*  This module was the first four sections of

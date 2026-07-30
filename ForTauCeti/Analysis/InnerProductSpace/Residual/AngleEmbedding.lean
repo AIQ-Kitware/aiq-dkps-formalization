@@ -13,6 +13,14 @@ import ForTauCeti.Analysis.InnerProductSpace.FrameFactorization
 Coordinate-space sine and cosine embeddings, their projected residual identity,
 and the singular-value dictionary relating them to directed principal angles.
 
+## Sources
+
+Principal angles between subspaces and their use in a residual bound follow
+Davis--Kahan; see
+`prose/core-arguments/Davis-Kahan-1970-part-III-core-arguments.tex` and
+`prose/distilled_literature/DavisKahan1970_part_III.tex`.  The trial-subspace
+embedding shape is this library's.
+
 ## Provenance
 
 *Moved, not restated.*  This file was

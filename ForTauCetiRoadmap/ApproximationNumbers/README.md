@@ -137,6 +137,21 @@ mathematics is narrower:
 - the finite-dimensional orthogonal-tail infimum formula in B4;
 - theorem-level acceptance examples.
 
+**Each is now a lane** (`jon (yardrat)`, 2026-07-30), so the remaining mathematics
+of the first roadmap is claimable rather than described:
+
+| lane | what it proves | depends on |
+|---|---|---|
+| `AN-A4-RANK` | `aₙ(T) = 0` when `rank T ≤ n`, with the converse on a Hilbert space | — |
+| `AN-A4-COMPACT` | `aₙ(T) → 0` iff `T` is a norm limit of finite-rank operators; approximable ⇒ compact; on Hilbert spaces compact ⇒ approximable | `AN-A4-RANK` |
+| `AN-B4-MINMAX` | the exact orthogonal-tail equality `aₙ(T) = ⨅ {‖T ∘L (Vᗮ).starProjection‖ : finrank V ≤ n}`, with all four conditions B4 states | — |
+| `AN-ACCEPT` | the six acceptance examples above, as theorems about the API | (1)–(3) none; (4) `AN-A4-RANK`; (5) `AN-B4-MINMAX`; (6) `AN-A4-COMPACT` |
+
+Verified against the tree when the lanes were written: none of A4's four
+statements and none of B4's equality exists, while every inequality and support
+lemma they build on does — the lane rows name them individually. `dev/LANES.md`
+carries the rows.
+
 The complex-Hilbert min--max converse and finite-dimensional localization are
 already staged and are specified below as B6.
 

@@ -24,6 +24,13 @@ The proof is the obvious one and does not use unitarity at all — only that `T`
 is continuous and linear.  The difference quotient commutes with `T` term by
 term, and a continuous map carries the limit to the limit.
 
+## Sources
+
+That a bounded operator commutes with a one-parameter unitary group exactly when it
+commutes with its generator is standard in the Stone's-theorem literature
+(Reed--Simon, *Methods of Modern Mathematical Physics I*).  The form here is the one
+the spectral-projection argument consumes.
+
 ## Provenance
 
 *New.*

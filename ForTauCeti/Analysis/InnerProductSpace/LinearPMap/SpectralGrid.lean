@@ -28,6 +28,11 @@ The grid is indexed by `ℤ`, hence countable but not finite — the spectra nee
 be bounded.  This is why the reassembly lemmas were stated for an arbitrary index
 type rather than a `Finset`.
 
+## Sources
+
+*Follows nothing in particular*: the `ε`-grid a block argument cuts the line into, with
+exactly the three facts (measurable, disjoint, covering) the decomposition uses.
+
 ## Provenance
 
 *New.*  Mathlib has the unit grid (`iUnion_Ico_intCast`,
