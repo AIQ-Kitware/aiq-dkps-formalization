@@ -1,5 +1,18 @@
 /-
 # Approximation numbers and finite Ky Fan gauges -- dependency audit
+
+This directory carries a `Leaderboard.lean` and **no `Conformance.lean` and no
+`comparator/*.json`, deliberately**: it is a leaderboard-only dependency audit,
+not a posed challenge.  The five theorems below live in the
+`DavisKahan.Experimental.ExactSinTheta` namespace, which sits outside
+`defaultTargets`, so there is no stable public statement to pose a conformance
+against until that material is promoted.  Promotion is tracked by the
+`EXP-PROMOTE-*` lanes in `dev/LANES.md`; pose the challenge after it lands, not
+before.
+
+Note that this audits a tree the default build does not compile.  The names are
+checked by `scripts/check_declaration_name_drift.py`, which is what keeps this
+file from silently pointing at nothing.
 -/
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
