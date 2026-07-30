@@ -69,6 +69,7 @@ theorem norm_le_of_abs_re_inner_map_self_le {C : E →L[𝕜] E} (hC : C.IsSymme
     {κ : ℝ} (hκ : 0 ≤ κ) (h : ∀ x, |RCLike.re ⟪C x, x⟫_𝕜| ≤ κ * ‖x‖ ^ 2) : ‖C‖ ≤ κ := by
   rw [C.norm_eq_iSup_rayleighQuotient hC]
   refine ciSup_le fun x => ?_
+  -- names the application so the norm bound applies to it directly.
   change |C.reApplyInnerSelf x / ‖x‖ ^ 2| ≤ κ
   rcases eq_or_ne x 0 with rfl | hx
   · simpa [ContinuousLinearMap.reApplyInnerSelf_apply] using hκ

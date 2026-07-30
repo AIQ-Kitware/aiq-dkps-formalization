@@ -397,6 +397,8 @@ makes it the orthogonal projection onto the final space — the second half of
 theorem isIdempotentElem_polarPartial_comp_adjoint (M : E →L[ℂ] F) :
     IsIdempotentElem (M.polarPartial ∘L M.polarPartial.adjoint) := by
   have h := M.adjoint_comp_polarPartial_comp_adjoint
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change (M.polarPartial ∘L M.polarPartial.adjoint) ∘L
     (M.polarPartial ∘L M.polarPartial.adjoint) = _
   calc (M.polarPartial ∘L M.polarPartial.adjoint) ∘L
@@ -451,6 +453,8 @@ theorem range_polarPartial (M : E →L[ℂ] F) :
       intro x
       rw [polarPartialAux_modulusCorestrict]
       exact Submodule.le_topologicalClosure _ ⟨x, rfl⟩
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change M.polarPartial y ∈ _
     rw [polarPartial_apply]
     exact M.denseRange_modulusCorestrict.induction_on
@@ -525,6 +529,8 @@ theorem modulus_adjoint (M : E →L[ℂ] F) :
     have hM : ∀ z : E, M z = M.polarPartial (M.modulus z) := by
       intro z
       rw [M.polarPartial_apply_modulus]
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change (M.polarPartial ∘L M.modulus ∘L M.polarPartial.adjoint) ∘L
       (M.polarPartial ∘L M.modulus ∘L M.polarPartial.adjoint) = _
     rw [ContinuousLinearMap.adjoint_adjoint]

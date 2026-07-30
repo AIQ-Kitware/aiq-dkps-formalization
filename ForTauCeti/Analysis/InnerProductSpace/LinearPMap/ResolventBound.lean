@@ -168,11 +168,15 @@ theorem notMem_spectrum_resolvent {A : E →ₗ.[𝕜] E} {z : 𝕜}
     module
   have hleft : (algebraMap 𝕜 (E →L[𝕜] E) μ - R) * T = 1 := by
     refine ContinuousLinearMap.ext fun φ => ?_
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change μ • T φ - R (T φ) = φ
     rw [hRT φ, hTapp φ, smul_smul, hinv, one_smul]
     module
   have hright : T * (algebraMap 𝕜 (E →L[𝕜] E) μ - R) = 1 := by
     refine ContinuousLinearMap.ext fun φ => ?_
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change T (μ • φ - R φ) = φ
     rw [hTapp, map_sub, map_smul, hSR φ]
     rw [show μ • S φ - μ • (S φ - R φ) = μ • R φ by module]

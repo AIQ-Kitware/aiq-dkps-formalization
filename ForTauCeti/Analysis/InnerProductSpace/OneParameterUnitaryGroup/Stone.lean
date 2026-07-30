@@ -260,6 +260,8 @@ theorem exists_generator_add_I (U : OneParameterUnitaryGroup H) (φ : H) :
   -- Multiply `ψ - i A ψ = -i φ` through by `i`.
   have h2 : I • ((ψ : H) - I • (generator U ψ)) = I • ((-I) • φ) := by rw [hψ]
   rw [smul_sub, smul_smul, smul_smul, Complex.I_mul_I, neg_one_smul, sub_neg_eq_add,
+    -- restates the hypothesis with the definition unfolded, the form the following
+    -- step matches against.
     show I * -I = (1 : ℂ) by rw [mul_neg, Complex.I_mul_I, neg_neg], one_smul] at h2
   rw [← h2]
   abel

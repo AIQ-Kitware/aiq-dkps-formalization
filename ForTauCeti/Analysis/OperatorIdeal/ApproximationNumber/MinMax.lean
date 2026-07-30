@@ -106,6 +106,8 @@ theorem le_approximationNumber_of_lt_rank
   have hRVrank : RV.rank ≤ (n : Cardinal) := by
     calc
       RV.rank ≤ R.rank := by
+        -- states the goal with the definition unfolded, in the shape the next step needs;
+        -- there is no `_apply` lemma to rewrite with here.
         change LinearMap.rank
             (R.toLinearMap.comp V.subtypeL.toLinearMap) ≤ R.rank
         exact LinearMap.rank_comp_le_left V.subtypeL.toLinearMap R.toLinearMap
@@ -139,6 +141,8 @@ theorem le_approximationNumber_of_lt_rank
     simp only [x, Submodule.coe_smul, norm_smul, RCLike.norm_ofReal, abs_inv, abs_norm]
     exact inv_mul_cancel₀ hzNorm
   have hRx : R (x : E₁) = 0 := by
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change RV x = 0
     exact LinearMap.mem_ker.mp hxker
   calc
@@ -224,6 +228,8 @@ theorem approximationNumber_le_norm_comp_starProjection_orthogonal
   have hrangeeq :
       LinearMap.range ((T ∘L V.starProjection) : E₁ →ₗ[𝕜] F₁) =
         Submodule.map (T : E₁ →ₗ[𝕜] F₁) V := by
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change LinearMap.range ((T : E₁ →ₗ[𝕜] F₁).comp
         ((V.starProjection : E₁ →ₗ[𝕜] E₁))) = _
     rw [LinearMap.range_comp, Submodule.range_starProjection]

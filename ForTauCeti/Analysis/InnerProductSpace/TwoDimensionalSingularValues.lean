@@ -258,6 +258,8 @@ theorem gramDetFinTwo_eq_mul_sq_singularValues
       OrthonormalBasis.coe_toBasis_repr_apply, OrthonormalBasis.repr_apply_apply,
       G, LinearMap.comp_apply, LinearMap.adjoint_inner_right]
   have hdet : RCLike.re M.det = gramDetFinTwo A := by
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change RCLike.re M.det
       = ‖A (e 0)‖ ^ 2 * ‖A (e 1)‖ ^ 2 - ‖⟪A (e 0), A (e 1)⟫_𝕜‖ ^ 2
     have key : M.det = ((‖A (e 0)‖ ^ 2 * ‖A (e 1)‖ ^ 2

@@ -93,11 +93,13 @@ theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
         if i ∈ s then ∑ k ∈ sᶜ, ‖⟪bS k, bT i⟫_𝕜‖ ^ 2 else 0 := by
     intro i
     rw [sinThetaMap, LinearMap.comp_apply]
-    -- names the application so the norm bound applies to it directly.
+    -- `rw [sinThetaMap, LinearMap.comp_apply]` leaves the composition applied but
+    -- not in the two-projection form the `hproj` rewrite below matches.
     change ‖Vᗮ.starProjection (U.starProjection (bT i))‖ ^ 2 = _
-    rw [show U.starProjection (bT i) = if i ∈ s then bT i else 0 by
+    have hproj : U.starProjection (bT i) = if i ∈ s then bT i else 0 := by
       simpa [U] using
-        Orthonormal.starProjection_span_image_apply_self bT.orthonormal s i]
+        Orthonormal.starProjection_span_image_apply_self bT.orthonormal s i
+    rw [hproj]
     split_ifs with hi
     · rw [Submodule.starProjection_orthogonal_val]
       simpa [V] using
@@ -270,16 +272,16 @@ theorem sinThetaSq_eq_sinThetaFrobenius_sq_of_spans
     rcases j with ⟨j, hj⟩
     rcases hi with ⟨i', rfl⟩
     rcases hj with ⟨j', rfl⟩
-    -- states the goal as the inner-product identity the structure lemma expects.
+    -- After `orthonormal_iff_ite` the goal is phrased through the subtype (or
+    -- `Fin.cast`) coercion; `orthonormal_iff_ite.mp` is stated for the underlying
+    -- vectors, so the coercion has to be discharged before it can apply.
     change ⟪uExt (e i'), uExt (e j')⟫_𝕜 =
       if (⟨e i', ⟨i', rfl⟩⟩ : S) = ⟨e j', ⟨j', rfl⟩⟩ then 1 else 0
-    rw [show uExt (e i') = u i' by
-      exact e.injective.extend_apply u (fun _ => 0) i',
-      -- states the goal with the definition unfolded, in the shape the next step needs;
-      -- there is no `_apply` lemma to rewrite with here.
-      show uExt (e j') = u j' by
-        exact e.injective.extend_apply u (fun _ => 0) j',
-      orthonormal_iff_ite.mp hu i' j']
+    have hui : uExt (e i') = u i' :=
+      e.injective.extend_apply u (fun _ => 0) i'
+    have huj : uExt (e j') = u j' :=
+      e.injective.extend_apply u (fun _ => 0) j'
+    rw [hui, huj, orthonormal_iff_ite.mp hu i' j']
     simp only [Subtype.mk.injEq, EmbeddingLike.apply_eq_iff_eq]
   have hvS : Orthonormal 𝕜 (S.restrict vExt) := by
     rw [orthonormal_iff_ite]
@@ -288,16 +290,16 @@ theorem sinThetaSq_eq_sinThetaFrobenius_sq_of_spans
     rcases j with ⟨j, hj⟩
     rcases hi with ⟨i', rfl⟩
     rcases hj with ⟨j', rfl⟩
-    -- states the goal as the inner-product identity the structure lemma expects.
+    -- After `orthonormal_iff_ite` the goal is phrased through the subtype (or
+    -- `Fin.cast`) coercion; `orthonormal_iff_ite.mp` is stated for the underlying
+    -- vectors, so the coercion has to be discharged before it can apply.
     change ⟪vExt (e i'), vExt (e j')⟫_𝕜 =
       if (⟨e i', ⟨i', rfl⟩⟩ : S) = ⟨e j', ⟨j', rfl⟩⟩ then 1 else 0
-    rw [show vExt (e i') = v i' by
-      exact e.injective.extend_apply v (fun _ => 0) i',
-      -- states the goal with the definition unfolded, in the shape the next step needs;
-      -- there is no `_apply` lemma to rewrite with here.
-      show vExt (e j') = v j' by
-        exact e.injective.extend_apply v (fun _ => 0) j',
-      orthonormal_iff_ite.mp hv i' j']
+    have hvi : vExt (e i') = v i' :=
+      e.injective.extend_apply v (fun _ => 0) i'
+    have hvj : vExt (e j') = v j' :=
+      e.injective.extend_apply v (fun _ => 0) j'
+    rw [hvi, hvj, orthonormal_iff_ite.mp hv i' j']
     simp only [Subtype.mk.injEq, EmbeddingLike.apply_eq_iff_eq]
   have hncard : finrank 𝕜 E = Fintype.card (Fin n) := by simp [n]
   obtain ⟨bU, hbU⟩ :=
@@ -336,14 +338,14 @@ theorem sinThetaSq_eq_sinThetaFrobenius_sq_of_spans
   have hvBlock : Orthonormal 𝕜 vBlock := orthonormal_blockFamily bV s hscard
   have hspanUBlock : Submodule.span 𝕜 (Set.range uBlock) =
       Submodule.span 𝕜 (Set.range u) := by
-    rw [show Set.range uBlock = bU '' (↑s : Set (Fin n)) by
-      exact range_blockFamily bU s hscard,
-      himageU]
+    have hrangeU : Set.range uBlock = bU '' (↑s : Set (Fin n)) :=
+      range_blockFamily bU s hscard
+    rw [hrangeU, himageU]
   have hspanVBlock : Submodule.span 𝕜 (Set.range vBlock) =
       Submodule.span 𝕜 (Set.range v) := by
-    rw [show Set.range vBlock = bV '' (↑s : Set (Fin n)) by
-      exact range_blockFamily bV s hscard,
-      himageV]
+    have hrangeV : Set.range vBlock = bV '' (↑s : Set (Fin n)) :=
+      range_blockFamily bV s hscard
+    rw [hrangeV, himageV]
   have hcosUV := principalCosines_span_eq_cosPrincipalAngles hu hv
   have hcosBlock := principalCosines_span_eq_cosPrincipalAngles huBlock hvBlock
   have hcosBlock' :
@@ -388,7 +390,9 @@ theorem exists_aligned_orthonormalBasis
   have hu : Orthonormal 𝕜 u := by
     rw [orthonormal_iff_ite]
     intro i j
-    -- states the goal as the inner-product identity the structure lemma expects.
+    -- After `orthonormal_iff_ite` the goal is phrased through the subtype (or
+    -- `Fin.cast`) coercion; `orthonormal_iff_ite.mp` is stated for the underlying
+    -- vectors, so the coercion has to be discharged before it can apply.
     change ⟪bU (Fin.cast hrankU.symm i), bU (Fin.cast hrankU.symm j)⟫_𝕜 =
       if i = j then 1 else 0
     rw [orthonormal_iff_ite.mp bU.orthonormal]
@@ -396,7 +400,9 @@ theorem exists_aligned_orthonormalBasis
   have hv0 : Orthonormal 𝕜 v0 := by
     rw [orthonormal_iff_ite]
     intro i j
-    -- states the goal as the inner-product identity the structure lemma expects.
+    -- After `orthonormal_iff_ite` the goal is phrased through the subtype (or
+    -- `Fin.cast`) coercion; `orthonormal_iff_ite.mp` is stated for the underlying
+    -- vectors, so the coercion has to be discharged before it can apply.
     change ⟪bV (Fin.cast hrankV.symm i), bV (Fin.cast hrankV.symm j)⟫_𝕜 =
       if i = j then 1 else 0
     rw [orthonormal_iff_ite.mp bV.orthonormal]

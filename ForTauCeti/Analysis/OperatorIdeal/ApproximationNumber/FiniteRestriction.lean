@@ -140,6 +140,7 @@ theorem exists_finiteRestrictionApproximationNumber_gt_of_lt
     intro x _ hxNorm
     have hxV : ((x : V) : E) ∈ V := x.property
     have hxNormE : ‖((x : V) : E)‖ = 1 := by simpa using hxNorm
+    -- names the application so the norm bound applies to it directly.
     change s ≤ ‖T ((x : V) : E)‖
     calc
       s = s * ‖((x : V) : E)‖ := by rw [hxNormE, mul_one]
