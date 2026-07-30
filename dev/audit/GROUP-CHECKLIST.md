@@ -31,7 +31,7 @@ review is exactly a review of a future submission unit.
 - [x] `(root files) :: tooling` — 2 files, 789 lines — **READY**
 - [x] `(root modules)` — 7 files, 65 lines — **READY**
 - [x] `.claude :: data/config` — 1 files, 6 lines — **READY**
-- [x] `.llm_resource_tally :: data/config` — 3 files, 947 lines — **READY**
+- [x] `.llm_resource_tally :: data/config` — 3 files, 949 lines — **READY**
 - [x] `.llm_resource_tally :: documentation` — 1 files, 99 lines — **READY**
 - [x] `.llm_resource_tally :: other` — 3 files, 12 lines — **READY**
 - [x] `.llm_resource_tally :: tooling` — 17 files, 1,743 lines — **READY**
@@ -82,11 +82,11 @@ review is exactly a review of a future submission unit.
 - [x] `DkpsQuench2026/Response` — 3 files, 1,377 lines — **READY**
 - [x] `DkpsQuench2026/Spectral` — 2 files, 1,304 lines — **READY**
 - [x] `FinishTanTwoTheta` — 1 files, 36 lines — **READY**
-- [x] `FinishTanTwoTheta :: documentation` — 3 files, 138 lines — **READY**
+- [x] `FinishTanTwoTheta :: documentation` — 3 files, 153 lines — **READY**
 - [x] `FinishTanTwoTheta :: tooling` — 1 files, 142 lines — **READY**
 - [x] `FinishTanTwoTheta/FinishTanTwoTheta` — 21 files, 6,726 lines — **READY**
 - [x] `FinishYuWangSamworth` — 1 files, 17 lines — **READY**
-- [x] `FinishYuWangSamworth :: documentation` — 4 files, 167 lines — **READY**
+- [x] `FinishYuWangSamworth :: documentation` — 4 files, 179 lines — **READY**
 - [x] `FinishYuWangSamworth :: tooling` — 1 files, 79 lines — **READY**
 - [x] `FinishYuWangSamworth/FinishYuWangSamworth` — 11 files, 1,214 lines — **READY**
 - [x] `ForTauCeti :: T01 Positive square root, operator modulus, functional calculus` — 9 files, 1,671 lines — **READY**
@@ -121,7 +121,7 @@ review is exactly a review of a future submission unit.
 - [x] `Helm2025 :: other` — 1 files, 265 lines — **READY**
 - [x] `comparator :: data/config` — 23 files, 335 lines — **READY**
 - [x] `dev :: data/config` — 25 files, 11,483 lines — **READY**
-- [x] `dev :: documentation` — 156 files, 36,800 lines — **READY**
+- [x] `dev :: documentation` — 157 files, 36,889 lines — **blocked (156/157 files)**
 - [x] `dev :: manifest/notes` — 8 files, 119 lines — **READY**
 - [x] `dev/alternates` — 1 files, 412 lines — **READY**
 - [x] `docs :: documentation` — 33 files, 6,198 lines — **READY**

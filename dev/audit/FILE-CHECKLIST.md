@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-1185/1185 files reviewed · 1185 files · 266,302 lines · 113 groups
+1185/1186 files reviewed · 1186 files · 266,419 lines · 113 groups
 
 ## How to review
 
@@ -95,9 +95,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### .llm_resource_tally :: data/config
 
-*3 files, 947 lines — 3/3 reviewed*
+*3 files, 949 lines — 3/3 reviewed*
 
-- [x] `.llm_resource_tally/ledger/ledger.jsonl` — 894 lines · data/config
+- [x] `.llm_resource_tally/ledger/ledger.jsonl` — 896 lines · data/config
 - [x] `.llm_resource_tally/lifetime-totals.json` — 46 lines · data/config
 - [x] `.llm_resource_tally/settings.json` — 7 lines · data/config
 
@@ -967,11 +967,11 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### FinishTanTwoTheta :: documentation
 
-*3 files, 138 lines — 3/3 reviewed*
+*3 files, 153 lines — 3/3 reviewed*
 
+- [x] `FinishTanTwoTheta/PROOF_OBLIGATIONS.md` — 57 lines · documentation
 - [x] `FinishTanTwoTheta/README.md` — 50 lines · documentation
 - [x] `FinishTanTwoTheta/GROUNDING.md` — 46 lines · documentation
-- [x] `FinishTanTwoTheta/PROOF_OBLIGATIONS.md` — 42 lines · documentation
 
 ### FinishTanTwoTheta :: tooling
 
@@ -1013,11 +1013,11 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### FinishYuWangSamworth :: documentation
 
-*4 files, 167 lines — 4/4 reviewed*
+*4 files, 179 lines — 4/4 reviewed*
 
 - [x] `FinishYuWangSamworth/README.md` — 51 lines · documentation
 - [x] `FinishYuWangSamworth/GROUNDING.md` — 47 lines · documentation
-- [x] `FinishYuWangSamworth/PROOF_OBLIGATIONS.md` — 35 lines · documentation
+- [x] `FinishYuWangSamworth/PROOF_OBLIGATIONS.md` — 47 lines · documentation
 - [x] `FinishYuWangSamworth/ELEGANCE_AUDIT.md` — 34 lines · documentation
 
 ### FinishYuWangSamworth :: tooling
@@ -1450,15 +1450,15 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*156 files, 36,800 lines — 156/156 reviewed*
+*157 files, 36,888 lines — 156/157 reviewed*
 
 - [x] `dev/tauceti-signature-polish-todo.md` — 2,201 lines · documentation
 - [x] `dev/audit/FILE-CHECKLIST.md` — 1,785 lines · documentation
 - [x] `dev/davis-kahan-expert-completion-plan.md` — 1,589 lines · documentation
 - [x] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation
 - [x] `dev/tauceti/u1-linearpmap-migration.md` — 1,139 lines · documentation
-- [x] `dev/LANES.md` — 1,036 lines · documentation
 - [x] `dev/tauceti/spectra-removal-plan.md` — 1,036 lines · documentation
+- [x] `dev/LANES.md` — 1,035 lines · documentation
 - [x] `dev/lean-proof-engineering-lessons.md` — 907 lines · documentation
 - [x] `dev/tauceti/NAMEK-STATUS.md` — 862 lines · documentation
 - [x] `dev/tauceti/convergence-matrix.md` — 795 lines · documentation
@@ -1497,8 +1497,8 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `dev/topurge/dev/overlays/free-beam-hard-theory-scratch-dfd9d37-gpt56.md` — 247 lines · documentation
 - [x] `dev/topurge/dev/real-route-completion-prompt.md` — 246 lines · documentation
 - [x] `dev/tauceti/experimental-sorry-triage.md` — 235 lines · documentation
+- [x] `dev/LANES-COMPLETED.md` — 232 lines · documentation
 - [x] `dev/topurge/dev/tauceti/experimental-promotion-roadmap.md` — 232 lines · documentation
-- [x] `dev/LANES-COMPLETED.md` — 231 lines · documentation
 - [x] `dev/topurge/dev/overlays/shared-hard-foundations-dfd9d37-gpt56.md` — 230 lines · documentation
 - [x] `dev/tauceti/extraction-cluster-classification.md` — 227 lines · documentation
 - [x] `dev/davis-kahan-1970-full-sine-theta-proof-manuscript-2026-07-19.md` — 222 lines · documentation
@@ -1556,6 +1556,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `dev/topurge/dev/full-part-iii-experimental-closure-2026-07-21.md` — 96 lines · documentation
 - [x] `dev/topurge/dev/full-part-iii-admission-elimination-agent-prompt-2026-07-20.md` — 91 lines · documentation
 - [x] `dev/audit/MERGEWORTHINESS.md` — 88 lines · documentation
+- [x] `dev/audit/review-claim-documents.md` — 88 lines · documentation
 - [x] `dev/tauceti/experimental-promotion-classification.md` — 88 lines · documentation
 - [x] `dev/topurge/dev/overlays/section4-independent-scratch-7f9f562-gpt56.md` — 87 lines · documentation
 - [x] `dev/tauceti/README.md` — 86 lines · documentation
