@@ -45,7 +45,6 @@ namespace Experimental
 namespace MathAhead
 namespace Section4
 
-open SpectraBridge
 open ExactSinTheta
 open DavisKahanExt
 open Module (finrank)

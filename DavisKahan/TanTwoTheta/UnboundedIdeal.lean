@@ -27,7 +27,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
@@ -254,7 +253,6 @@ theorem tanTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
     N.toSymmetricOperatorIdealFamily A hA E hE B S hB hS
       hβα hδ hBsub hBcomplDisj hEmem hquarter
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

@@ -34,7 +34,6 @@ universe v
 
 section AbstractComplexUse
 
-open SpectraBridge
 
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -91,7 +90,7 @@ end AbstractComplexUse
 
 section AbstractRealUse
 
-open SpectraBridge.RealSpectralRestriction
+open RealSpectralRestriction
 
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
@@ -123,7 +122,6 @@ end AbstractRealUse
 
 section AbstractBoundedUse
 
-open SpectraBridge
 
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]

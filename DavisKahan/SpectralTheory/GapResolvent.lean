@@ -56,7 +56,6 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 /-- **A spectral gap gives a norm-bounded two-sided inverse.**  If the spectrum
 of a self-adjoint `A` avoids `(c - s, c + s)`, then `A - c` has a bounded
@@ -88,7 +87,6 @@ theorem twoSidedShiftedInverseBound_of_spectrum_gap
   exact ⟨R, fun z => (hright z).choose,
     fun x => hleft x, fun z => (hright z).choose_spec, hnorm⟩
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

@@ -34,7 +34,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
@@ -755,7 +754,6 @@ theorem halmosCosineSq_nonneg
   rw [← spectraCanonicalAbsoluteValue_sq_eq_halmosCosineSq U V]
   simpa only [hCstar] using star_mul_self_nonneg C
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

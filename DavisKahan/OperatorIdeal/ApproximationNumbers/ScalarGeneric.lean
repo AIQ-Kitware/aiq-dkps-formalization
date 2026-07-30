@@ -365,6 +365,15 @@ of the historical record is a theorem about the canonical gauge, proved in
 
 variable (N : KyFanDominantIdealFamily.{u, v} 𝕜)
 
+/-- The historical real-valued view of the ideal.
+
+Kept only for the five `Experimental/` modules that still construct legacy records;
+nothing in production uses it, and it goes when they migrate.  See the note on
+`TauCeti.SymmetricOperatorIdealFamily.toRectangular`. -/
+noncomputable def toRectangularSymmetricIdealFamily :
+    RectangularSymmetricIdealFamily.{u, v} 𝕜 :=
+  N.toSymmetricOperatorIdealFamily.toRectangular
+
 /-! Both accessors below read the **canonical** family directly.  They used to route
 through a `toRectangularSymmetricIdealFamily` view onto the historical record, which
 made every one of the ~28 modules that consume a

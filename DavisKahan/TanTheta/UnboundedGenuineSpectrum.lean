@@ -29,7 +29,6 @@ namespace DavisKahan
 namespace Experimental
 namespace TanTheta
 
-open SpectraBridge
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]

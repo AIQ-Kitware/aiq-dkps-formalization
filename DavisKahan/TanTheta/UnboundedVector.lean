@@ -38,7 +38,6 @@ namespace DavisKahan
 namespace Experimental
 namespace TanTheta
 
-open SpectraBridge
 
 /-- On a closed interval the absolute value is bounded by the larger endpoint
 modulus.  Local replacement for the donor lemma of the same name, which reached

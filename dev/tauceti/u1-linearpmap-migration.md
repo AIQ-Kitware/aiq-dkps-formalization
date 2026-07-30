@@ -915,7 +915,7 @@ relevant test: the raw endpoint
 proved by `apply`ing the bundled theorem at `D.toClosed`, so the module depends
 on it internally.  That delegation exists because the Spectra Sylvester lemmas
 underneath it —
-`SpectraBridge.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight`
+`unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight`
 and its `exteriorLeft_intervalRight` twin — still take bundled `ClosedOperator`
 arguments.  Contracting the endpoint therefore requires raw `SpectraBridge`
 lemmas, i.e. work inside `Interop/Spectra/**`, which this lane **explicitly

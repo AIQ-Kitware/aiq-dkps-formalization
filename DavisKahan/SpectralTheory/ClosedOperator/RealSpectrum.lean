@@ -19,7 +19,6 @@ cycle.
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 open scoped InnerProductSpace
 
@@ -67,7 +66,6 @@ theorem spectrum_subset_real_of_isSelfAdjoint {A : E →ₗ.[ℂ] E}
     TauCeti.LinearPMap.spectrum A ⊆ Complex.ofReal '' Set.univ :=
   TauCeti.LinearPMap.spectrum_subset_real hA
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

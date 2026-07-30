@@ -70,7 +70,7 @@ Per the Spectra provenance map, the approximation-number cluster has **no
 direct Spectra bridge** — it is a clean, self-contained Tier-1 / PR-1
 candidate. The only Spectra reach in the cluster is the *modulus-invariance*
 theorem, which routes through
-`SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound`
+`lt_approximationNumber_iff_exists_finiteDimensional_lowerBound`
 (in `DavisKahan/Interop/Spectra/ApproximationNumberMinMax.lean`). That theorem
 is deferred from PR 1 per the campaign's §9.2 option 2.
 

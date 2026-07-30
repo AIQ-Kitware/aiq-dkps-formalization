@@ -30,7 +30,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
@@ -280,7 +279,6 @@ theorem sinTheta_addBounded_spectralSubspaces_opNorm_of_intervalExterior
   exact sinTheta_addBounded_spectralSubspaces_opNorm_of_spectrum_gap
     A hA V hV B T hB hT hβα hδ hA₀low hA₀high hΛspec
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

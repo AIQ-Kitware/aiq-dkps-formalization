@@ -21,7 +21,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
@@ -102,7 +101,6 @@ theorem sinTheta_addBounded_gauge_of_spectrum_gap_isometric
       _ = N.gaugeReal V := N.gaugeReal_adjoint hVmem
   exact ⟨hRaw'.1, hRaw'.2.trans hProjectedGauge⟩
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

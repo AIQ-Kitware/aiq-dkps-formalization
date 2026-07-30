@@ -35,7 +35,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
@@ -190,7 +189,6 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRig
   exact mem_and_gauge_le_of_boundedLeft_exteriorRight N hr0 hδ hRnorm'
     hdom hright hJnorm hEq' hC
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

@@ -33,7 +33,6 @@ namespace Frontier
 namespace RemainingSourceSurface
 
 open ExactSinTheta
-open SpectraBridge
 open DavisKahanExt
 
 universe u v

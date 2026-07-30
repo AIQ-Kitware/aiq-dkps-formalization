@@ -20,7 +20,6 @@ namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
 
-open SpectraBridge
 
 universe v
 

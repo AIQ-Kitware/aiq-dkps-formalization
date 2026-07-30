@@ -25,7 +25,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
@@ -136,7 +135,6 @@ theorem tanTwoTheta_addBounded_of_intervalExterior
   exact tanTwoTheta_addBounded_of_spectrum_gap
     A hA E hE B S hB hS hβα hδ hBlow hBhigh hBcomplSpec hquarter
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti
