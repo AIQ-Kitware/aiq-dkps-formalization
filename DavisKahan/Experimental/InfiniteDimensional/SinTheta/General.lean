@@ -693,8 +693,67 @@ noncomputable def sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   operatorAbsoluteValue (projection U - projection V)
 
+/-- **Symmetric norm ideals contain absolute values with equal gauge, given a
+polar partial isometry.**
+
+This is the mathematical content of the leaf obligation below, with the one
+genuinely missing ingredient — the polar partial isometry — taken as an explicit
+hypothesis rather than assumed into existence.
+
+Two things are worth recording about the proof.  First, **unitary invariance is
+not needed**, although the leaf's own description reaches for it: `ideal_bound`
+alone closes both directions, because each of `|T|` and `T` is a two-sided
+multiple of the other.  Second, only the *norm bounds* on `W` are used, not that
+it is a partial isometry, so the hypotheses here are weaker than polar
+decomposition actually delivers. -/
+theorem SymmetricNormIdeal.operatorAbsoluteValue_mem_and_gauge_eq_of_polar
+    (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E)) {T W : E →L[𝕜] E}
+    (hT : I.mem T)
+    (hWT : W ∘L operatorAbsoluteValue T = T)
+    (hWadj : (ContinuousLinearMap.adjoint W) ∘L T = operatorAbsoluteValue T)
+    (hWnorm : ‖W‖ ≤ 1) (hWadjnorm : ‖ContinuousLinearMap.adjoint W‖ ≤ 1) :
+    I.mem (operatorAbsoluteValue T) ∧
+      I.gauge (operatorAbsoluteValue T) = I.gauge T := by
+  have hid : ‖ContinuousLinearMap.id 𝕜 E‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+  -- `|T| = W⋆ ∘ T ∘ 1`, so membership and one gauge bound come from the ideal axioms.
+  have habs : ContinuousLinearMap.adjoint W ∘L T ∘L ContinuousLinearMap.id 𝕜 E =
+      operatorAbsoluteValue T := by
+    rw [ContinuousLinearMap.comp_id]; exact hWadj
+  have hmem : I.mem (operatorAbsoluteValue T) := by
+    have := I.ideal_mem (ContinuousLinearMap.adjoint W) (ContinuousLinearMap.id 𝕜 E) hT
+    rwa [habs] at this
+  refine ⟨hmem, le_antisymm ?_ ?_⟩
+  · have hb := I.ideal_bound (ContinuousLinearMap.adjoint W) (ContinuousLinearMap.id 𝕜 E) hT
+    rw [habs] at hb
+    refine hb.trans ?_
+    have h0 : 0 ≤ I.gauge T := I.nonneg hT
+    calc ‖ContinuousLinearMap.adjoint W‖ * I.gauge T * ‖ContinuousLinearMap.id 𝕜 E‖
+        ≤ 1 * I.gauge T * 1 := by
+          gcongr
+      _ = I.gauge T := by ring
+  · -- and symmetrically `T = W ∘ |T| ∘ 1`.
+    have hT' : W ∘L operatorAbsoluteValue T ∘L ContinuousLinearMap.id 𝕜 E = T := by
+      rw [ContinuousLinearMap.comp_id]; exact hWT
+    have hb := I.ideal_bound W (ContinuousLinearMap.id 𝕜 E) hmem
+    rw [hT'] at hb
+    refine hb.trans ?_
+    have h0 : 0 ≤ I.gauge (operatorAbsoluteValue T) := I.nonneg hmem
+    calc ‖W‖ * I.gauge (operatorAbsoluteValue T) * ‖ContinuousLinearMap.id 𝕜 E‖
+        ≤ 1 * I.gauge (operatorAbsoluteValue T) * 1 := by
+          gcongr
+      _ = I.gauge (operatorAbsoluteValue T) := by ring
+
 /-- **Leaf obligation.** Symmetric norm ideals contain absolute values with
-equal gauge (via the polar partial isometry and unitary invariance). -/
+equal gauge.
+
+The mathematics is proved directly above, in
+`operatorAbsoluteValue_mem_and_gauge_eq_of_polar`; what is missing is only the
+polar partial isometry itself, over a general `RCLike` field in infinite
+dimensions.  That is the same empty quadrant the operator absolute value used to
+sit in: `ContinuousLinearMap.polarPartial` is `ℂ`-only, and the `RCLike`
+`polarFactor` is for plain linear maps.  Supplying `W` discharges this leaf by
+`exact I.operatorAbsoluteValue_mem_and_gauge_eq_of_polar hT hWT hWadj hWnorm
+hWadjnorm`. -/
 theorem SymmetricNormIdeal.operatorAbsoluteValue_mem_and_gauge_eq
     (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E)) {T : E →L[𝕜] E}
     (hT : I.mem T) :
