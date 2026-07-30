@@ -186,8 +186,19 @@ def cmd_dead(files, args) -> int:
         for name, kind, stmt, _p, line in declarations(p):
             if kind in ("def", "abbrev", "structure"):
                 defined.setdefault(name.split(".")[-1], []).append((rel, line, name))
-    corpus = "\n".join(p.read_text(errors="replace") for p in files)
-    counts = collections.Counter(re.findall(r"[A-Za-z_][A-Za-z0-9_.'’]*", corpus))
+    # The usage corpus is ALWAYS the whole tree, never the scoped subset.  `--scope`
+    # restricts which definitions are CANDIDATES, not where their consumers may live:
+    # scoping the corpus made every ForTauCeti definition used only by DavisKahan look
+    # dead, which is how this reported 25 false positives on 2026-07-30 (`IsOffDiagonal`
+    # has 47 repo-wide uses).
+    corpus_files = lean_files(None)
+    corpus = "\n".join(q.read_text(errors="replace") for q in corpus_files)
+    # The token class must NOT contain `.`: with it, `TauCeti.foo` is a single token and
+    # a qualified use never counts toward the short name `foo`.  That bug was fixed once
+    # on 2026-07-30 and came back in a merge, so the assertion below pins it.
+    counts = collections.Counter(re.findall(r"[A-Za-z_][A-Za-z0-9_'’]*", corpus))
+    assert counts.get("IsSelfAdjointOperator", 0) != 1 or not corpus_files, \
+        "short-name counting is broken again: a qualified use is not being counted"
     dead = [(v[0], k) for k, v in defined.items() if counts[k] <= len(v)]
     print(f"definitions whose short name appears no more often than it is "
           f"defined: {len(dead)}\n")

@@ -370,7 +370,14 @@ theorem intertwiningUnitary_mapsTo (hnd : P.NonDegenerate P') (j : Fin m) {x : E
 
 /-- **Block polar factor (PD-15):** the polar factor of `P'ⱼ Pⱼ` is a unitary
 `range Pⱼ ≃ₗᵢ range P'ⱼ` — the restriction of the intertwining unitary to the `j`-th block
-(surjectivity onto `range P'ⱼ` follows from the intertwining relation). Davis §2 line 221. -/
+(surjectivity onto `range P'ⱼ` follows from the intertwining relation). Davis §2 line 221.
+
+**No consumer inside this library, deliberately.**  This is a result the paper
+states, not scaffolding for one: Davis §2 line 221 asserts that the polar factor
+restricts to a unitary between the blocks, and this `def` *is* that assertion —
+its body carries the injectivity and surjectivity proofs that make the statement
+true.  Deleting it as unused would discard those, so it is exported for
+downstream users and this note is the answer to "who uses this?". -/
 noncomputable def blockPolar (hnd : P.NonDegenerate P') (j : Fin m) :
     ↥(range (P.proj j)) ≃ₗᵢ[𝕜] ↥(range (P'.proj j)) :=
   have hinj : Function.Injective
