@@ -36,6 +36,25 @@ Sources: Horn & Johnson, *Matrix Analysis* 2nd ed., **Thm 7.3.1** (statement; `A
 `Q = (A⋆A)^{1/2}`, `U` unitary, unique iff nonsingular). Conway, *A Course in Functional Analysis*
 2nd ed., **VI.3.9** (the partial-isometry construction `A = U|A|`, `ker U = ker A` — the route
 mathlib can follow, since HJ's SVD proof route is unavailable: mathlib has no SVD factorization).
+
+## The three polar factors, and how they relate
+
+Documented 2026-07-30 (lane MODULUS-DEDUP) because none of the three named the
+others, so a reviewer could not tell a designed hierarchy from three independent
+attempts. The separating hypotheses are the carrier, the field, and whether the
+modulus is invertible:
+
+* `TauCeti.polarFactor`, in `PolarDecomposition.lean` — square `E →ₗ[𝕜] E`,
+  `RCLike`, finite dimension; a genuine **unitary** factor.
+* `TauCeti.polarPartial`, in `PolarPartialIsometry.lean` — rectangular
+  `E →L[ℂ] F` over `ℂ`, no invertibility assumed; a **partial isometry**.
+* `TauCeti.polarIsometryOfIsUnitModulus`, in `PolarIsometry.lean` — rectangular
+  `E →L[ℂ] F` over `ℂ` **and** the modulus a unit; then the factor is an
+  **isometry**.
+
+Read down the list: dropping finite dimension costs the unitary and leaves a
+partial isometry; adding invertibility of the modulus buys it back as an
+isometry. That is the whole hierarchy.
 -/
 
 namespace TauCeti
@@ -46,7 +65,26 @@ open LinearMap InnerProductSpace
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 
-/-! ### The modulus `|A|` (RCLike, LinearMap) -/
+/-! ### The modulus `|A|` (RCLike, LinearMap)
+
+**There are two moduli in this library and they are not duplicates** (recorded
+2026-07-30, lane MODULUS-DEDUP, decided together with lane T01-SQRT):
+
+* `TauCeti.abs`, below, is **square, `RCLike`-generic and finite-dimensional** —
+  `(E →ₗ[𝕜] E) → (E →ₗ[𝕜] E)`, built from the spectral square root of `A⋆A`;
+* `ContinuousLinearMap.modulus` in
+  `ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean` is **rectangular
+  and complex** — `(E →L[ℂ] F) → (E →L[ℂ] E)`, built from Mathlib's continuous
+  functional calculus, which registers its C⋆-instances only over `ℂ`.
+
+They agree exactly where both are defined, and the library proves it:
+`abs_toContinuousLinearMap_eq_cfcAbs` below. Neither can be deleted in favour of
+the other — one is more general in the field, the other in the shape.
+
+A one-concept-one-name rename of `abs` was considered and declined: it would
+touch 71 call sites for consistency rather than correctness. If a Tau Ceti
+reviewer asks for it, that is the measured cost.
+-/
 
 /-- The **modulus** `|A| = (A⋆A)^{1/2}` of an operator, via the spectral square root of the
 positive operator `A⋆A`. HJ 7.3.1 (`Q = (A⋆A)^{1/2}`). -/
