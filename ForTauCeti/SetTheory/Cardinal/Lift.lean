@@ -43,7 +43,7 @@ here in the iff shape those use, so it can go upstream to
 * Spectra influence: **none** — this module imports only Mathlib.
 -/
 
-@[expose] public section
+public section
 
 namespace Cardinal
 

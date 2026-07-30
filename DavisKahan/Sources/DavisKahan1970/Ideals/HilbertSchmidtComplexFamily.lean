@@ -192,7 +192,8 @@ theorem paperHilbertSchmidt_complete
 
 /-- The coherent complex rectangular Hilbert--Schmidt ideal family. -/
 noncomputable def hilbertSchmidtComplex :
-    RectangularSymmetricIdealFamily (𝕜 := ℂ) := by
+    SymmetricOperatorIdealFamily (𝕜 := ℂ) :=
+  SymmetricOperatorIdealFamily.ofRectangular <| by
   classical
   refine
     { Mem := fun T => IsPaperHilbertSchmidt T

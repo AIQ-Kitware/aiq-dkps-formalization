@@ -168,6 +168,34 @@ theorem exists_finite_fourier_interpolation
   push_cast
   ring
 
+/-- Any finite set of reals can be rescaled into an arc shorter than a full
+turn, on which `Circle.exp` is injective.
+
+The scale `τ = (1 + ∑ |x|)⁻¹` sends `s` into `Icc (-1) 1`, whose length `2` is
+less than `2π`; injectivity of the rescaled exponential then follows from
+`Circle.exp_injOn_Icc`.  This is what lets a Lagrange interpolation be set up on
+the nodes `exp (τ x)`. -/
+private theorem exists_pos_injOn_circle_exp (s : Finset ℝ) :
+    ∃ τ : ℝ, 0 < τ ∧ Set.InjOn (fun x : ℝ => (Circle.exp (τ * x) : ℂ)) s := by
+  classical
+  let R : ℝ := ∑ x ∈ s, |x|
+  have hR : 0 ≤ R := Finset.sum_nonneg fun _ _ => abs_nonneg _
+  refine ⟨(1 + R)⁻¹, by positivity, ?_⟩
+  set τ : ℝ := (1 + R)⁻¹ with hτdef
+  have hτ : 0 < τ := by rw [hτdef]; positivity
+  have harg (x : ℝ) (hx : x ∈ s) : τ * x ∈ Set.Icc (-1 : ℝ) 1 := by
+    have hxR : |x| ≤ R := Finset.single_le_sum (fun z _ => abs_nonneg z) hx
+    have hden : 0 < 1 + R := by linarith
+    have habs : |τ * x| < 1 := by
+      rw [abs_mul, abs_of_pos hτ, hτdef, inv_mul_eq_div, div_lt_one hden]
+      linarith
+    exact ⟨le_of_lt (abs_lt.mp habs).1, le_of_lt (abs_lt.mp habs).2⟩
+  intro x hx x' hx' hzx
+  have harc : (1 : ℝ) - (-1) < 2 * Real.pi := by nlinarith [Real.pi_gt_three]
+  have hphase : τ * x = τ * x' :=
+    Circle.exp_injOn_Icc harc (harg x hx) (harg x' hx') (Subtype.ext hzx)
+  exact mul_left_cancel₀ (ne_of_gt hτ) hphase
+
 /-- The finite Fourier interpolation map can be chosen with coefficient mass
 bounded linearly by the `ℓ1` mass of the prescribed values.
 
@@ -182,31 +210,9 @@ theorem exists_finite_fourier_interpolation_with_mass_bound
           ((((t r * x) : ℝ) : ℂ) * Complex.I)) ∧
         ∑ r, ‖a r‖ ≤ K * ∑ x ∈ s, ‖y x‖ := by
   classical
-  let R : ℝ := ∑ x ∈ s, |x|
-  let τ : ℝ := (1 + R)⁻¹
-  have hR : 0 ≤ R := by
-    exact Finset.sum_nonneg fun _ _ => abs_nonneg _
-  have hτ : 0 < τ := by
-    simp only [τ]
-    positivity
-  have harg (x : ℝ) (hx : x ∈ s) : τ * x ∈ Set.Icc (-1 : ℝ) 1 := by
-    have hxR : |x| ≤ R := by
-      exact Finset.single_le_sum (fun z hz => abs_nonneg z) hx
-    have hden : 0 < 1 + R := by linarith
-    have habs : |τ * x| < 1 := by
-      rw [abs_mul, abs_of_pos hτ]
-      change (1 + R)⁻¹ * |x| < 1
-      rw [inv_mul_eq_div, div_lt_one hden]
-      linarith
-    exact ⟨le_of_lt (abs_lt.mp habs).1, le_of_lt (abs_lt.mp habs).2⟩
+  obtain ⟨τ, hτ, hinj⟩ := exists_pos_injOn_circle_exp s
   let z : ℝ → ℂ := fun x => (Circle.exp (τ * x) : ℂ)
-  have hzinj : Set.InjOn z s := by
-    intro x hx x' hx' hzx
-    have harc : (1 : ℝ) - (-1) < 2 * Real.pi := by
-      nlinarith [Real.pi_gt_three]
-    have hphase : τ * x = τ * x' :=
-      Circle.exp_injOn_Icc harc (harg x hx) (harg x' hx') (Subtype.ext hzx)
-    exact mul_left_cancel₀ (ne_of_gt hτ) hphase
+  have hzinj : Set.InjOn z s := hinj
   let q : ℕ := s.card + 1
   let K : ℝ := ∑ n : Fin q, ∑ x ∈ s,
     ‖(Lagrange.basis s z x).coeff (n : ℕ)‖
@@ -339,6 +345,31 @@ theorem hasIntegrableReciprocalFourierKernel_pi_div_two :
     fun x hx => HaagerupZsido.reciprocalKernel_fourier x hx,
     HaagerupZsido.integral_norm_reciprocalKernel.le⟩
 
+/-- The pointwise phase of a complex-valued function: `f t / ‖f t‖` off the zero
+set, and `0` on it.  Total by construction, so no integrability or non-vanishing
+hypothesis is needed to form it. -/
+private noncomputable def phaseOf (f : ℝ → ℂ) (t : ℝ) : ℂ :=
+  if f t = 0 then 0 else f t / (‖f t‖ : ℂ)
+
+private theorem measurable_phaseOf {f : ℝ → ℂ} (hf : Measurable f) :
+    Measurable (phaseOf f) :=
+  Measurable.ite
+    (measurableSet_eq_fun hf measurable_const)
+    measurable_const (by fun_prop)
+
+private theorem norm_phaseOf_le_one (f : ℝ → ℂ) (t : ℝ) : ‖phaseOf f t‖ ≤ 1 := by
+  by_cases ht : f t = 0
+  · simp [phaseOf, ht]
+  · simp [phaseOf, ht]
+
+/-- The phase recovers the function from its modulus. -/
+private theorem norm_mul_phaseOf (f : ℝ → ℂ) (t : ℝ) :
+    (‖f t‖ : ℂ) * phaseOf f t = f t := by
+  by_cases ht : f t = 0
+  · simp [phaseOf, ht]
+  · simp only [phaseOf, if_neg ht]
+    field_simp [norm_ne_zero_iff.mpr ht]
+
 /-- An integrable reciprocal Fourier kernel yields finite Fourier sums of no
 greater mass which uniformly approximate any prescribed finite frequency
 array. -/
@@ -384,9 +415,8 @@ theorem hasApproximateFiniteReciprocalFourierInterpolation_of_integrableKernel
         have hbound : ‖(1 : ℂ) / (d₀ : ℂ)‖ ≤ M := by
           rw [← hfourier d₀ (hgap i₀ j₀)]
           have hexpnorm (t : ℝ) :
-              ‖Complex.exp ((((t * d₀ : ℝ) : ℂ) * Complex.I))‖ = 1 := by
-            rw [Complex.norm_exp]
-            simp
+              ‖Complex.exp ((((t * d₀ : ℝ) : ℂ) * Complex.I))‖ = 1 :=
+            Complex.norm_exp_ofReal_mul_I _
           calc
             ‖∫ t, f t * Complex.exp ((((t * d₀ : ℝ) : ℂ) * Complex.I))‖ ≤
                 ∫ t, ‖f t * Complex.exp ((((t * d₀ : ℝ) : ℂ) * Complex.I))‖ :=
@@ -412,22 +442,11 @@ theorem hasApproximateFiniteReciprocalFourierInterpolation_of_integrableKernel
         rw [hμreal] at this
         linarith
       letI : NeZero μ := ⟨hμne⟩
-      let phase : ℝ → ℂ := fun t =>
-        if f t = 0 then 0 else f t / (‖f t‖ : ℂ)
-      have hphase_meas : Measurable phase := by
-        dsimp only [phase]
-        exact Measurable.ite
-          (measurableSet_eq_fun hfmeas measurable_const)
-          measurable_const (by fun_prop)
-      have hphase_norm (t : ℝ) : ‖phase t‖ ≤ 1 := by
-        by_cases ht : f t = 0
-        · simp [phase, ht]
-        · simp [phase, ht]
-      have hnorm_mul_phase (t : ℝ) : (‖f t‖ : ℂ) * phase t = f t := by
-        by_cases ht : f t = 0
-        · simp [phase, ht]
-        · simp only [phase, if_neg ht]
-          field_simp [norm_ne_zero_iff.mpr ht]
+      let phase : ℝ → ℂ := phaseOf f
+      have hphase_meas : Measurable phase := measurable_phaseOf hfmeas
+      have hphase_norm (t : ℝ) : ‖phase t‖ ≤ 1 := norm_phaseOf_le_one f t
+      have hnorm_mul_phase (t : ℝ) : (‖f t‖ : ℂ) * phase t = f t :=
+        norm_mul_phaseOf f t
       let atom : ℝ → (Fin m × Fin n → ℂ) := fun t ij =>
         phase t * Complex.exp
           ((((t * (α ij.1 - β ij.2) : ℝ) : ℂ) * Complex.I))
@@ -441,9 +460,8 @@ theorem hasApproximateFiniteReciprocalFourierInterpolation_of_integrableKernel
         intro ij
         have hexpnorm :
             ‖Complex.exp
-              ((((t * (α ij.1 - β ij.2) : ℝ) : ℂ) * Complex.I))‖ = 1 := by
-          rw [Complex.norm_exp]
-          simp
+              ((((t * (α ij.1 - β ij.2) : ℝ) : ℂ) * Complex.I))‖ = 1 :=
+          Complex.norm_exp_ofReal_mul_I _
         simp only [atom, norm_mul, hexpnorm, mul_one]
         exact hphase_norm t
       have hatom_int : MeasureTheory.Integrable atom μ :=

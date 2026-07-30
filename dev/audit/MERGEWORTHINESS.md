@@ -44,7 +44,7 @@ submitting **to** — and in 69 files it does not.
 | 9 | **Two square roots**, one definitionally the other | `rfl`-equal | `T01-SQRT` | yes |
 | ~~10~~ | ~~T19–T22 assert a Mathlib target~~ | **0 — headers fixed, and jon ratified Tau Ceti as the destination 2026-07-30** | — | — |
 | ~~11~~ | ~~unexercised `Prop` definition (`block`)~~ | **0 — `FTC-UNEXERCISED` DONE; characterization + witness both added** | — | — |
-| 12 | **70 files expose bodies** | 70 of 167; ratchet holding | **`FTC-EXPOSE-RFL`** → `-g1`..`-g5` → `-ENFORCE` | yes |
+| ~~12~~ | ~~70 files expose bodies~~ | **0 of 166 — the whole `FTC-EXPOSE-*` chain is DONE.** 23 per-declaration exposures remain, in three kinds; `FTC-EXPOSE-SPECMEAS` lowers the avoidable ones | — | — |
 | 13 | **69 files document our workflow, not the math** — incl. **31 pointers to the deleted `ForMathlib/` tree** | 69 of 167 | `FTC-PROSE-GATE` → `-a`/`-b`/`-c`/`-d` → `-ENFORCE` | no |
 
 ## Ordering, and why
@@ -58,14 +58,14 @@ submitting **to** — and in 69 files it does not.
 4. **`FTC-SETOPT`** and **`FTC-DEAD`** — both sliceable, both mechanical once
    the underlying warning or the keep/delete call is made.
 5. **`T01-SQRT`** and **`PLACE-GRAM`** — each needs one design decision first.
-6. **`FTC-EXPOSE-RFL`** — one file, minutes of work, and it re-scopes
-   everything after it. `FTC-EXPOSE-MEASURE` concluded that 31 modules need
-   `@[expose]` on named definitions, but it never tried the alternative the
-   rubric names in the same sentence (`:= (rfl)` over `:= rfl`). If that works,
-   56 restatements stop needing exposure and the library ends with nearly none
-   instead of 31. Settle it before converting anything.
-   **`FTC-EXPOSE-GATE` and `-MEASURE` are DONE**; the ratchet holds the count at
-   70 so it can only fall.
+6. ~~`FTC-EXPOSE-*`~~ — **the whole chain is DONE, 2026-07-30.** 70 → 0
+   blanket-exposed modules. The decisive step was `FTC-EXPOSE-RFL`: the earlier
+   measurement concluded 31 modules needed `@[expose]`, but never tried the
+   alternative the rubric names in the same sentence — `:= (rfl)` over
+   `:= rfl` — which works, and removed the need almost entirely. What the
+   conversion actually found is in `dev/audit/measure-expose-rfl.md`: most of
+   the work was **routing consumers back through characteristic lemmas the
+   library already had**, not writing new ones.
 7. **`FTC-PROSE`** — no build, four disjoint parallel slices, and it is the
    cheapest large win here: it removes 31 pointers to a tree that does not
    exist. Take `FTC-PROSE-GATE` first; the slices are worthless without it

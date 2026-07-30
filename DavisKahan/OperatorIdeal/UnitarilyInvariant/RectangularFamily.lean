@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Basic
+import DavisKahan.BoundedOperator.Compat
 import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 import Mathlib.Topology.Basic
 
@@ -519,5 +519,232 @@ noncomputable def toRectangular (N : SymmetricOperatorIdealFamily.{u, v} 𝕜)
     have := hM n hn
     rwa [dist_eq_norm, OperatorIdealFamily.Elem.norm_def, show (a n - l).val = A n - l.val from
       by simp [ha]] at this
+
+/-! ### The canonical family a historical record determines
+
+`toRectangular` above is one-directional, and its docstring says why: a historical
+record does not determine a canonical family, because its gauge is unconstrained
+off the ideal.
+
+That is an argument against a *unique* inverse, not against any inverse.  Choosing
+the canonical extension -- `∞` off the ideal, which is what `OperatorIdealFamily`
+means by a total gauge -- gives a canonical family whose gauge agrees with the
+record's on members, and that is all a consumer ever asked of it.
+
+This is what lets the three concrete constructions (Schatten, and the complex and
+real Hilbert--Schmidt families) produce canonical families without rebuilding each
+one field-by-field in `ℝ≥0∞`. -/
+
+/-- The `ℝ≥0∞` gauge determined by a historical record: its real gauge on members,
+`∞` off the ideal. -/
+noncomputable def ofRectangularGauge
+    (N : RectangularSymmetricIdealFamily.{u, v} 𝕜)
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (A : E →L[𝕜] F) : ℝ≥0∞ :=
+  open Classical in
+  if N.Mem A then ENNReal.ofReal (N.gauge A) else ∞
+
+variable {N : RectangularSymmetricIdealFamily.{u, v} 𝕜}
+variable {E F G H : Type v}
+variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+variable [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+variable [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+
+/-- On members the extended gauge is the record's gauge. -/
+theorem ofRectangularGauge_of_mem {A : E →L[𝕜] F} (hA : N.Mem A) :
+    ofRectangularGauge N A = ENNReal.ofReal (N.gauge A) := if_pos hA
+
+/-- Off the ideal the extended gauge is `∞`. -/
+theorem ofRectangularGauge_of_not_mem {A : E →L[𝕜] F} (hA : ¬ N.Mem A) :
+    ofRectangularGauge N A = ∞ := if_neg hA
+
+/-- Finiteness of the extended gauge is exactly membership. -/
+theorem ofRectangularGauge_ne_top_iff {A : E →L[𝕜] F} :
+    ofRectangularGauge N A ≠ ∞ ↔ N.Mem A := by
+  classical
+  by_cases h : N.Mem A
+  · simp [ofRectangularGauge_of_mem h, h]
+  · simp [ofRectangularGauge_of_not_mem h, h]
+
+/-- Scaling by a nonzero scalar does not change membership. -/
+theorem mem_smul_iff {c : 𝕜} (hc : c ≠ 0) {A : E →L[𝕜] F} :
+    N.Mem (c • A) ↔ N.Mem A := by
+  refine ⟨fun h => ?_, fun h => N.smul_mem c h⟩
+  have := N.smul_mem c⁻¹ h
+  rwa [← mul_smul, inv_mul_cancel₀ hc, one_smul] at this
+
+/-- Membership is adjoint-invariant. -/
+theorem mem_adjoint_iff {A : E →L[𝕜] F} : N.Mem A.adjoint ↔ N.Mem A := by
+  refine ⟨fun h => ?_, fun h => N.adjoint_mem h⟩
+  have := N.adjoint_mem h
+  rwa [ContinuousLinearMap.adjoint_adjoint] at this
+
+/-- Subadditivity, unconditionally: off the ideal the right-hand side is `∞`. -/
+theorem ofRectangularGauge_add_le (A B : E →L[𝕜] F) :
+    ofRectangularGauge N (A + B)
+      ≤ ofRectangularGauge N A + ofRectangularGauge N B := by
+  classical
+  by_cases hA : N.Mem A
+  · by_cases hB : N.Mem B
+    · rw [ofRectangularGauge_of_mem hA, ofRectangularGauge_of_mem hB,
+        ofRectangularGauge_of_mem (N.add_mem hA hB),
+        ← ENNReal.ofReal_add (N.gauge_nonneg hA) (N.gauge_nonneg hB)]
+      exact ENNReal.ofReal_le_ofReal (N.gauge_add_le hA hB)
+    · simp [ofRectangularGauge_of_not_mem hB]
+  · simp [ofRectangularGauge_of_not_mem hA]
+
+/-- Absolute homogeneity, unconditionally.  The `c = 0` case is where the
+extension is doing work: the left side is the gauge of `0`, and the right side is
+`0 * ∞ = 0` in `ℝ≥0∞` when `A` is off the ideal. -/
+theorem ofRectangularGauge_smul (c : 𝕜) (A : E →L[𝕜] F) :
+    ofRectangularGauge N (c • A) = ‖c‖ₑ * ofRectangularGauge N A := by
+  classical
+  rcases eq_or_ne c 0 with rfl | hc
+  · simp [ofRectangularGauge_of_mem (N.zero_mem (E := E) (F := F)), N.gauge_zero]
+  · by_cases hA : N.Mem A
+    · rw [ofRectangularGauge_of_mem hA,
+        ofRectangularGauge_of_mem (N.smul_mem c hA), N.gauge_smul c hA,
+        ENNReal.ofReal_mul (norm_nonneg c), ← ofReal_norm]
+    · rw [ofRectangularGauge_of_not_mem hA,
+        ofRectangularGauge_of_not_mem (fun h => hA ((mem_smul_iff hc).mp h))]
+      simp [ENNReal.mul_top, enorm_ne_zero.mpr hc]
+
+/-- The operator norm is dominated by the extended gauge. -/
+theorem enorm_le_ofRectangularGauge (A : E →L[𝕜] F) :
+    ‖A‖ₑ ≤ ofRectangularGauge N A := by
+  classical
+  by_cases hA : N.Mem A
+  · rw [ofRectangularGauge_of_mem hA, ← ofReal_norm]
+    exact ENNReal.ofReal_le_ofReal (N.opNorm_le_gauge hA)
+  · simp [ofRectangularGauge_of_not_mem hA]
+
+/-- The two-sided ideal law, unconditionally. -/
+theorem ofRectangularGauge_comp_le (L : F →L[𝕜] G) (A : E →L[𝕜] F) (R : H →L[𝕜] E) :
+    ofRectangularGauge N (L ∘L A ∘L R)
+      ≤ ‖L‖ₑ * ofRectangularGauge N A * ‖R‖ₑ := by
+  classical
+  by_cases hA : N.Mem A
+  · rw [ofRectangularGauge_of_mem hA,
+      ofRectangularGauge_of_mem (N.comp_mem L R hA),
+      ← ofReal_norm, ← ofReal_norm,
+      ← ENNReal.ofReal_mul (norm_nonneg L),
+      ← ENNReal.ofReal_mul (mul_nonneg (norm_nonneg L) (N.gauge_nonneg hA))]
+    exact ENNReal.ofReal_le_ofReal (N.gauge_comp_le L R hA)
+  · rcases eq_or_ne ‖L‖ₑ 0 with hL | hL
+    · have hL0 : L = 0 := by
+        rw [← ofReal_norm, ENNReal.ofReal_eq_zero] at hL
+        exact norm_eq_zero.mp (le_antisymm hL (norm_nonneg L))
+      subst hL0
+      simp [ContinuousLinearMap.zero_comp,
+        ofRectangularGauge_of_mem (N.zero_mem (E := H) (F := G)), N.gauge_zero]
+    · rcases eq_or_ne ‖R‖ₑ 0 with hR | hR
+      · have hR0 : R = 0 := by
+          rw [← ofReal_norm, ENNReal.ofReal_eq_zero] at hR
+          exact norm_eq_zero.mp (le_antisymm hR (norm_nonneg R))
+        subst hR0
+        simp [ContinuousLinearMap.comp_zero,
+          ofRectangularGauge_of_mem (N.zero_mem (E := H) (F := G)), N.gauge_zero]
+      · rw [ofRectangularGauge_of_not_mem hA]
+        simp [ENNReal.mul_top, hL, hR]
+
+/-- The extended gauge is adjoint-invariant. -/
+theorem ofRectangularGauge_adjoint (A : E →L[𝕜] F) :
+    ofRectangularGauge N A.adjoint = ofRectangularGauge N A := by
+  classical
+  by_cases hA : N.Mem A
+  · rw [ofRectangularGauge_of_mem hA, ofRectangularGauge_of_mem (N.adjoint_mem hA),
+      N.gauge_adjoint hA]
+  · rw [ofRectangularGauge_of_not_mem hA,
+      ofRectangularGauge_of_not_mem (fun h => hA (mem_adjoint_iff.mp h))]
+
+/-- The canonical symmetric family determined by a legacy rectangular record.
+
+This is the inverse direction to `toRectangular`, and it exists because the
+legacy record's gauge is only defined *on* the ideal.  There is no canonical
+`ℝ`-valued extension off it, but there is a canonical `ℝ≥0∞`-valued one — `∞` —
+and that is what the canonical structure asks for.  So the round trip
+`toRectangular ∘ ofRectangular` is the identity on members while
+`ofRectangular ∘ toRectangular` need not be: `toRectangular` forgets which
+non-members had which junk gauge value, and `ofRectangular` sends them all
+to `∞`.
+
+`toRectangular`'s docstring says the conversion has no inverse.  That remains
+true of a *two-sided* inverse in `ℝ`; what this definition supplies is the
+canonical extension, which is the thing the canonical structure was designed
+to have. -/
+noncomputable def ofRectangular (N : RectangularSymmetricIdealFamily.{u, v} 𝕜) :
+    SymmetricOperatorIdealFamily.{u, v} 𝕜 where
+  gauge := ofRectangularGauge N
+  gauge_add_le := ofRectangularGauge_add_le
+  gauge_smul := ofRectangularGauge_smul
+  enorm_le_gauge := enorm_le_ofRectangularGauge
+  gauge_comp_le := ofRectangularGauge_comp_le
+  gauge_adjoint := ofRectangularGauge_adjoint
+
+/-- The constructed family's gauge is the extended gauge, definitionally. -/
+@[simp]
+theorem gauge_ofRectangular (N : RectangularSymmetricIdealFamily.{u, v} 𝕜)
+    (A : E →L[𝕜] F) : (ofRectangular N).gauge A = ofRectangularGauge N A := rfl
+
+/-- Membership in the constructed family is the record's own membership. -/
+theorem gauge_ofRectangular_ne_top_iff {N : RectangularSymmetricIdealFamily.{u, v} 𝕜}
+    {A : E →L[𝕜] F} : (ofRectangular N).gauge A ≠ ∞ ↔ N.Mem A :=
+  ofRectangularGauge_ne_top_iff
+
+/-- `ofRectangular` is a section of `toRectangular` where that is meaningful:
+on members the real view of the constructed family is the record's own gauge.
+
+Stated on `toReal` of the gauge rather than through `toRectangular` itself,
+because `toRectangular` carries an `IsComplete` hypothesis that this direction
+does not need — and because `toReal ∘ gauge` is simultaneously `toRectangular`'s
+gauge field and the canonical real view's `gaugeReal`, so this one statement
+serves both vocabularies without either file importing the other. -/
+theorem toReal_gauge_ofRectangular {N : RectangularSymmetricIdealFamily.{u, v} 𝕜}
+    {A : E →L[𝕜] F} (hA : N.Mem A) :
+    ((ofRectangular N).gauge A).toReal = N.gauge A := by
+  rw [gauge_ofRectangular, ofRectangularGauge_of_mem hA,
+    ENNReal.toReal_ofReal (N.gauge_nonneg hA)]
+
+/-- The constructed family is complete.
+
+This is the field `ofRectangular` would otherwise drop.  The canonical structure
+has no completeness field — completeness is the separate class `IsComplete`,
+`CompleteSpace (N.Elem E F)` — whereas the legacy record carries
+`gauge_complete` as an `ℝ`-valued Cauchy statement.  Without this instance the
+retype would silently lose a proved fact, so the bridge is only lossless with it.
+
+Every legacy record has the field, so this holds for all of them
+unconditionally; the proof is the translation between the two idioms, using the
+fact that `Elem`'s norm is exactly the record's gauge on members. -/
+instance isComplete_ofRectangular (N : RectangularSymmetricIdealFamily.{u, v} 𝕜) :
+    (ofRectangular N).toOperatorIdealFamily.IsComplete where
+  completeSpace := by
+    intro E F _ _ _ _ _ _
+    have hnorm : ∀ x : (ofRectangular N).toOperatorIdealFamily.Elem E F,
+        ‖x‖ = N.gauge x.val := fun x =>
+      toReal_gauge_ofRectangular (gauge_ofRectangular_ne_top_iff.mp x.gauge_val_ne_top)
+    refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
+    have hmem : ∀ n, N.Mem (a n).val := fun n =>
+      gauge_ofRectangular_ne_top_iff.mp (a n).gauge_val_ne_top
+    have hcauchy : ∀ ε : ℝ, 0 < ε → ∃ M, ∀ m n, M ≤ m → M ≤ n →
+        N.gauge ((a m).val - (a n).val) < ε := by
+      intro ε hε
+      rw [Metric.cauchySeq_iff] at ha
+      obtain ⟨M, hM⟩ := ha ε hε
+      refine ⟨M, fun m n hm hn => ?_⟩
+      have h := hM m hm n hn
+      rw [dist_eq_norm, hnorm] at h
+      exact h
+    obtain ⟨L, hLmem, hL⟩ := N.gauge_complete (fun n => (a n).val) hmem hcauchy
+    refine ⟨OperatorIdealFamily.Elem.mk (gauge_ofRectangular_ne_top_iff.mpr hLmem), ?_⟩
+    rw [Metric.tendsto_atTop]
+    intro ε hε
+    obtain ⟨M, hM⟩ := hL ε hε
+    refine ⟨M, fun n hn => ?_⟩
+    rw [dist_eq_norm, hnorm]
+    exact hM n hn
 
 end TauCeti.SymmetricOperatorIdealFamily

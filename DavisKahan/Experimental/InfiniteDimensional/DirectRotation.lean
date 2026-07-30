@@ -53,7 +53,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
-/-- The scalar-action and continuous-functional-calculus assumptions under which
+/-! The scalar-action and continuous-functional-calculus assumptions under which
 `operatorAbsoluteValue` is defined in `SinTheta/General`.  Mathlib supplies the
 last one for `𝕜 = ℂ`; see the discussion there. -/
 variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
@@ -142,6 +142,8 @@ theorem canonicalAbsoluteValue_commutes_projection (U V : Submodule 𝕜 E)
       (projection U) :=
   sorry
 
+omit [CompleteSpace E] [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
 /-- The canonical intertwiner carries the source projection to the target
 projection: `S P_U = P_V S`. -/
 theorem canonicalIntertwiner_intertwines (U V : Submodule 𝕜 E)
@@ -183,6 +185,8 @@ noncomputable def directRotation (U V : Submodule 𝕜 E)
   canonicalIntertwiner U V ∘L
     (↑(canonicalAbsoluteValueUnit U V hacute)⁻¹ : E →L[𝕜] E)
 
+omit [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
 /-- A bounded operator with two-sided star inverse is unitary. -/
 private theorem isUnitaryOperator_of_star_identities
     {W : E →L[𝕜] E}

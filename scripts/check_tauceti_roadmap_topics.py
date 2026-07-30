@@ -64,6 +64,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  [A+x for x in ["GramOperator","AngleGeometry","FrameFactorization","HoffmanWielandt","EigenvalueChange"]]),
 ("T09","Approximation numbers",
  ["SetTheory.Cardinal.Lift","LinearAlgebra.Dimension.RankComp",
+  "Analysis.Normed.Operator.FiniteRankCompact",
   A+"SpectralCutoff"]+["Analysis.OperatorIdeal.ApproximationNumber."+x for x in
   ["Basic","Adjoint","Compact","Examples","FiniteDimensional","FiniteRestriction","KyFan","MinMax",
    "MinMaxUpper","SameSequence"]]),
@@ -117,7 +118,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 ("T17","Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems",
  [A+"SinTheta."+x for x in ["OperatorNorm","Perturbation","DirectedBounds","UnitarilyInvariant"]]
  +[A+"Residual."+x for x in ["AngleEmbedding","Ritz","TrialMap"]]
- +[A+"DoubleAngle.Vector"]+[A+"BoundedOperator."+x for x in ["Basic","Projector","SinTheta"]]),
+ +[A+"DoubleAngle.Vector"]+[A+"BoundedOperator."+x for x in ["Projector","SinTheta"]]),
 ("T18","The Yu-Wang-Samworth statistical variant",
  [A+"YuWangSamworth."+x for x in ["Residual","SingularSubspace","Statistics"]]),
 ("T19","Matrix spectra and spectral measurability",
