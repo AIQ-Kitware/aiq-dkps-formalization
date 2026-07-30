@@ -318,6 +318,38 @@ worth knowing before quoting this paper:
   Theorem 3 and Appendix Lemma 1. They agree only on Theorems 1 and 2.
   Resolving it needs one look at the published article.
 
+## Namespace policy
+
+`scripts/check_namespace_policy.py` gates `ForTauCeti/README.md` §2: a staging
+module may declare into `TauCeti.*`, or into the **canonical Mathlib namespace of
+the object it extends**, and nothing else.
+
+```sh
+python3 scripts/check_namespace_policy.py           # report
+python3 scripts/check_namespace_policy.py --check   # gate; exit 1 on a violation
+```
+
+**Why a gate.** §2 was written down and never checked, and by 2026-07-29 two
+modules had drifted into `FiniteDimensional` — a spectral functional calculus and
+a Moore–Penrose inverse, neither of them a fact about finite-dimensionality. The
+audit that found them (lane NS-SPREAD) also *cleared* two files the same audit
+had suspected, `ENNReal.tsum_sq_add_rpow_le` (Minkowski at `p = 2` for `tsum`,
+stated for arbitrary `ℝ≥0∞`-valued functions) and
+`HilbertBasis.{hasSum_norm_inner_sq, tsum_enorm_inner_sq}` (Parseval, proved from
+Mathlib's own `HilbertBasis.hasSum_inner_mul_inner`). Both really are facts about
+the object they name.
+
+**The allowlist is the review.** Every permitted Mathlib root in the script
+carries a one-line reason naming the object being extended; adding a root means
+writing that sentence. The test is the audit's: *would the declaration read
+naturally as a fact about that object?*
+
+**One parser subtlety worth not rediscovering.** The check is on the
+*fully-qualified* namespace, so `namespace TauCeti` / `namespace HilbertSchmidt`
+is `TauCeti.HilbertSchmidt` and fine. A naive scan of `namespace` lines reports
+106 of the 164 modules; the stack, and popping only on a matching `end`, is what
+makes the number 0.
+
 ## Docstring coverage
 
 `scripts/check_docstring_coverage.py` gates the one quality invariant that had no
