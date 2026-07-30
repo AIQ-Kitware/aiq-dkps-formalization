@@ -62,6 +62,8 @@ private theorem integral_sin_mul_cexp_neg_mul_abs_mul_cexp
         Complex.exp (-(t : ℂ) * Complex.I) =
       2 * Complex.sin t * Complex.I := by
     rw [Complex.exp_mul_I,
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       show -(t : ℂ) * Complex.I = (-(t : ℂ)) * Complex.I by ring,
       Complex.exp_mul_I, Complex.sin_neg, Complex.cos_neg]
     ring

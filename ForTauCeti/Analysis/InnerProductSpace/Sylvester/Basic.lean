@@ -119,6 +119,8 @@ theorem sylvesterOperator_injective {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E
   have hαβ𝕜 : (α : 𝕜) ≠ (β : 𝕜) := fun h =>
     hαβ (RCLike.ofReal_injective h)
   have hpoint := LinearMap.congr_fun hker (hB.eigenvectorBasis rfl j)
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change A ((X - Y) (hB.eigenvectorBasis rfl j)) -
       (X - Y) (B (hB.eigenvectorBasis rfl j)) = 0 at hpoint
   have heq : A ((X - Y) (hB.eigenvectorBasis rfl j)) =
@@ -189,6 +191,8 @@ theorem sylvesterOperator_solveSylvester {A : F →ₗ[𝕜] F}
     sylvesterOperator_injective hA hB hδ hgap
   have hbij : Function.Bijective (sylvesterOperator A B) :=
     ⟨hinj, LinearMap.injective_iff_surjective.mp hinj⟩
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change sylvesterOperator A B (solveSylvester A B C) = C
   rw [solveSylvester_eq_of_bijective A B C hbij]
   exact (LinearEquiv.ofBijective (sylvesterOperator A B) hbij).apply_symm_apply C

@@ -220,6 +220,8 @@ theorem norm_sub_polarIsometryOfIsUnitModulus_apply_eq (x : E) :
 theorem norm_sub_polarIsometryOfIsUnitModulus_apply_le_norm_modulus_sub_one (x : E) :
     ‖M x - M.polarIsometryOfIsUnitModulus x‖ ≤ ‖M.modulus - 1‖ * ‖x‖ := by
   rw [norm_sub_polarIsometryOfIsUnitModulus_apply_eq hM x,
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     show M.modulus x - x = (M.modulus - 1) x by simp]
   exact le_opNorm _ x
 

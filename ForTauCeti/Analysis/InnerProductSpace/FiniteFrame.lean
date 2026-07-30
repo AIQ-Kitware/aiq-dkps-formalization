@@ -153,6 +153,8 @@ theorem re_inner_finiteFrameOperator_eq_sum_sq (v : ι → E) (x : E) :
     RCLike.re (inner 𝕜 (finiteFrameOperator 𝕜 v x) x) =
       ∑ i, ‖inner 𝕜 (v i) x‖ ^ 2 := by
   rw [finiteFrameOperator_eq_adjointCompSelf,
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     show (finiteAnalysis 𝕜 v).adjoint.comp (finiteAnalysis 𝕜 v) =
       (finiteAnalysis 𝕜 v).adjoint ∘ₗ finiteAnalysis 𝕜 v from rfl,
     re_inner_adjointCompSelf_self, norm_sq_finiteAnalysis]

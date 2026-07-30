@@ -202,6 +202,7 @@ theorem norm_sq_cfcHom_apply (g : C(_root_.spectrum ℂ a, ℂ)) (v : H) :
       = fun w => ((star g * g : C(_root_.spectrum ℂ a, ℂ)) w) := rfl
   have key : ⟪v, cfcHom ha (star g * g) v⟫_ℂ = ⟪cfcHom ha g v, cfcHom ha g v⟫_ℂ := by
     rw [map_mul]
+    -- states the goal as the inner-product identity the structure lemma expects.
     change ⟪v, cfcHom ha (star g) (cfcHom ha g v)⟫_ℂ = _
     rw [← hstar, ContinuousLinearMap.adjoint_inner_right]
   rw [hfun, BorelCalculus.integral_diagMeasure, key, inner_self_eq_norm_sq_to_K]
@@ -267,6 +268,8 @@ theorem cfcHom_separator_eq_zero (hA : IsSelfAdjoint A) (f : C(ℝ, ℝ))
     have hf0 : f (cayleyInv hA w) = 0 := hfA hw
     have : g w = 0 := by
       rw [hgval w, cayleySymbolFun]
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       change ((f (cayleyInv hA w) * damp n (w : ℂ) : ℝ) : ℂ) = 0
       rw [hf0, zero_mul, Complex.ofReal_zero]
     rw [this, mul_zero]

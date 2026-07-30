@@ -210,6 +210,8 @@ private theorem integral_Ioi_abs_sin_mul_exp_neg {y : ℝ} (hy : 0 < y) :
     intro N
     exact (integral_abs_sin_mul_exp_neg_upto y N).symm
   rw [tendsto_nhds_unique hlim1 hlim2]
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change (1 - q)⁻¹ * ((1 + q) / (1 + y ^ 2)) = (1 + q) / ((1 - q) * (1 + y ^ 2))
   field_simp
 

@@ -203,6 +203,8 @@ theorem integral_diagMeasure (ξ : H) (f : C(spectrum ℂ a, ℂ)) :
     ⟨fun x => (f x).im, Complex.continuous_im.comp f.continuous⟩ with hv
   have hf : f = ofRealLM u + Complex.I • ofRealLM v := by
     ext x
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change f x = ((f x).re : ℂ) + Complex.I * ((f x).im : ℂ)
     rw [mul_comm]
     exact (Complex.re_add_im (f x)).symm
