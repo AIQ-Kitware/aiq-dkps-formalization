@@ -50,7 +50,7 @@ theorem RectangularSymmetricIdealFamily.reflectionDefect_isometricRange_mem
   let T : H →L[ℂ] H := Vᗮ.starProjection ∘L A ∘L V.starProjection
   have hT : N.Mem T := by
     simpa [T, isometricRangeCrossBlock] using
-      RectangularSymmetricIdealFamily.isometricRangeCrossBlock_mem
+      isometricRangeCrossBlock_mem
         N A X M hX hR
   have hTa : N.Mem T.adjoint := N.adjoint_mem hT
   have hblock : V.starProjection ∘L A ∘L Vᗮ.starProjection = T.adjoint := by
@@ -78,12 +78,12 @@ theorem RectangularSymmetricIdealFamily.gauge_reflectionDefect_isometricRange_le
   let T : H →L[ℂ] H := Vᗮ.starProjection ∘L A ∘L V.starProjection
   have hT : N.Mem T := by
     simpa [T, isometricRangeCrossBlock] using
-      RectangularSymmetricIdealFamily.isometricRangeCrossBlock_mem
+      isometricRangeCrossBlock_mem
         N A X M hX hR
   have hTa : N.Mem T.adjoint := N.adjoint_mem hT
   have hTg : N.gaugeReal T ≤ N.gaugeReal (residual A X M) := by
     simpa [T, isometricRangeCrossBlock] using
-      RectangularSymmetricIdealFamily.gauge_isometricRangeCrossBlock_le
+      gauge_isometricRangeCrossBlock_le
         N A X M hX hR
   have hblock : V.starProjection ∘L A ∘L Vᗮ.starProjection = T.adjoint := by
     change V.starProjection ∘L A ∘L Vᗮ.starProjection =
