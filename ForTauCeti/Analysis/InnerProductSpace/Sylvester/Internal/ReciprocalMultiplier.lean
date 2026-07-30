@@ -104,6 +104,26 @@ theorem obstruction_gap {n : ℕ} (i j : Fin n) :
     right
     norm_num
 
+/-- **A unitary's diagonal matrix entry has modulus at most one.**  For a linear
+isometry equivalence `W` and an orthonormal basis vector `e i`, Cauchy--Schwarz
+and `‖W (e i)‖ = ‖e i‖ = 1` give `|⟪e i, W (e i)⟫| ≤ 1`.
+
+Both diagonal families in `real_reciprocalOrbitInterpolation_mass_lower_bound`
+are bounded by this one statement; it was written out twice there, once for each
+side of the orbit action. -/
+private theorem abs_real_inner_isometryEquiv_diag_le_one
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+    {ι : Type*} [Fintype ι] (e : OrthonormalBasis ι ℝ G) (W : G ≃ₗᵢ[ℝ] G) (i : ι) :
+    |⟪e i, W.toLinearMap (e i)⟫_ℝ| ≤ 1 := by
+  have hnorm : ‖W.toLinearMap (e i)‖ = 1 := by
+    -- names the application so `W.norm_map` applies to it directly.
+    change ‖W (e i)‖ = 1
+    rw [W.norm_map, e.norm_eq_one]
+  calc
+    |⟪e i, W.toLinearMap (e i)⟫_ℝ| ≤ ‖e i‖ * ‖W.toLinearMap (e i)‖ :=
+      abs_real_inner_le_norm _ _
+    _ = 1 := by rw [hnorm, e.norm_eq_one, one_mul]
+
 /-- **Mass obstruction.**  Every undoubled real reciprocal orbit interpolation
 certificate for the two-by-two obstruction data has coefficient mass at least
 `5 / 3`. -/
@@ -122,24 +142,10 @@ theorem real_reciprocalOrbitInterpolation_mass_lower_bound
     ⟪e i, (U r).toLinearMap (e i)⟫_ℝ
   let v : Fin n → Fin (Module.finrank ℝ G) → ℝ := fun r j =>
     ⟪e j, (V r).toLinearMap (e j)⟫_ℝ
-  have hu_le (r : Fin n) (i : Fin (Module.finrank ℝ G)) : |u r i| ≤ 1 := by
-    have hnorm : ‖(U r).toLinearMap (e i)‖ = 1 := by
-      -- names the application so the norm bound applies to it directly.
-      change ‖(U r) (e i)‖ = 1
-      rw [(U r).norm_map, e.norm_eq_one]
-    calc
-      |u r i| ≤ ‖e i‖ * ‖(U r).toLinearMap (e i)‖ :=
-        abs_real_inner_le_norm _ _
-      _ = 1 := by rw [hnorm, e.norm_eq_one, one_mul]
-  have hv_le (r : Fin n) (j : Fin (Module.finrank ℝ G)) : |v r j| ≤ 1 := by
-    have hnorm : ‖(V r).toLinearMap (e j)‖ = 1 := by
-      -- names the application so the norm bound applies to it directly.
-      change ‖(V r) (e j)‖ = 1
-      rw [(V r).norm_map, e.norm_eq_one]
-    calc
-      |v r j| ≤ ‖e j‖ * ‖(V r).toLinearMap (e j)‖ :=
-        abs_real_inner_le_norm _ _
-      _ = 1 := by rw [hnorm, e.norm_eq_one, one_mul]
+  have hu_le (r : Fin n) (i : Fin (Module.finrank ℝ G)) : |u r i| ≤ 1 :=
+    abs_real_inner_isometryEquiv_diag_le_one e (U r) i
+  have hv_le (r : Fin n) (j : Fin (Module.finrank ℝ G)) : |v r j| ≤ 1 :=
+    abs_real_inner_isometryEquiv_diag_le_one e (V r) j
   have hterm (r : Fin n) (i j : Fin (Module.finrank ℝ G)) :
       ⟪e i, (unitaryOrbitAction (U r) (V r))
         (basisMatrixUnit e e i j) (e j)⟫_ℝ = u r i * v r j := by
