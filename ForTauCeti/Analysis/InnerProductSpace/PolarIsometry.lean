@@ -105,8 +105,8 @@ calculus on Hilbert-space operators only over `ℂ`; see
 
 ## The three polar factors, and how they relate
 
-Documented here because none of the three named the others, so a reviewer could
-not tell a designed hierarchy from three independent
+Documented 2026-07-30 (lane MODULUS-DEDUP) because none of the three named the
+others, so a reviewer could not tell a designed hierarchy from three independent
 attempts. The separating hypotheses are the carrier, the field, and whether the
 modulus is invertible:
 
