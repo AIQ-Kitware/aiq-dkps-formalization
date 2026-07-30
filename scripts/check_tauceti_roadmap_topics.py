@@ -173,16 +173,41 @@ INTENTIONAL_ORPHANS = {
 
 
 def roadmap_coverage() -> tuple[list, list, list, list]:
-    """(covered, missing, unexpected orphans, intentional orphans)."""
+    """(covered, missing, unexpected orphans, intentional orphans).
+
+    The directory-to-topic mapping is DERIVED, not maintained: each roadmap README
+    declares its own topic ("**Topic T19 of the candidate design.**"), so writing a new
+    roadmap needs no edit here. ROADMAP below is a fallback for directories that predate
+    the convention. Hand-maintaining this map went stale three times in one day -- once
+    per roadmap another agent wrote -- and each time it reported that agent's finished
+    work as an ORPHAN covering no topic.
+    """
     root = ROOT / "ForTauCetiRoadmap"
     dirs = {d.name for d in root.iterdir() if d.is_dir()} if root.exists() else set()
+
+    declared: dict[str, str] = {}      # topic key -> directory
+    undeclared: set[str] = set()
+    for name in dirs:
+        readme = root / name / "README.md"
+        m = re.search(r"\*\*Topic\s+(T\d+[a-c]?)\b", readme.read_text(errors="ignore")) \
+            if readme.exists() else None
+        if m:
+            declared[m.group(1)] = name
+        else:
+            undeclared.add(name)
+
+    known = {k for k, _, _ in TOPICS}
     covered, missing = [], []
     for key, title, _ in TOPICS:
-        d = ROADMAP.get(key)
-        (covered if d and d in dirs else missing).append((key, title, d))
-    loose = dirs - set(ROADMAP.values())
+        d = declared.get(key) or (ROADMAP.get(key) if ROADMAP.get(key) in dirs else None)
+        (covered if d else missing).append((key, title, d))
+
+    # a directory claiming a topic the design does not define is an error, not an orphan
+    bogus = sorted(f"{d} (declares unknown topic {k})" for k, d in declared.items()
+                   if k not in known)
+    loose = undeclared - set(ROADMAP.values())
     intentional = sorted(loose & set(INTENTIONAL_ORPHANS))
-    orphans = sorted(loose - set(INTENTIONAL_ORPHANS))
+    orphans = sorted((loose - set(INTENTIONAL_ORPHANS))) + bogus
     return covered, missing, orphans, intentional
 
 
