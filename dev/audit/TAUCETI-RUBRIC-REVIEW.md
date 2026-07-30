@@ -11,16 +11,16 @@ Four rubrics can `block`: `correctness`, `reuse`, `scope`, `attribution`.
 
 | rubric | verdict | lane |
 |---|---|---|
-| **`correctness`** | **`block`** — 1 unexercised predicate | `FTC-UNEXERCISED` |
+| **`correctness`** | **`approve`** — the `block` is cleared, `FTC-UNEXERCISED` DONE | — |
 | **`reuse`** | `request_changes` — duplicate constructions | `T01-SQRT`, `MODULUS-DEDUP`, `DK-FRAME` |
-| **`scope`** | `request_changes` — 5 topics have no roadmap target | `ROADMAP-WRITE` |
+| **`scope`** | **`approve`** — 24 of 24 topics have a roadmap, `ROADMAP-WRITE` DONE | — |
 | **`attribution`** | **`approve`** — provenance on 164/164 modules | — |
 | **`api-design`** | `request_changes` — 70 files expose bodies; 4 unused definitions | `FTC-EXPOSE-*` **(settled)**, `FTC-DEAD` |
 | **`generality`** | `approve` (with a caveat below) | — |
 | **`placement`** | `request_changes` — 54 flat files beside 12 directories | `FTC-ORG`, `PLACE-SYLV`, `PLACE-GRAM` |
 | **`naming`** | `request_changes` — `genuine`; 2 suffixes overstate | `DK-NAME`, `DK-NAME-SUFFIX`, `PLACE-GRAM` |
 | **`documentation`** | `request_changes` — 69 files document our workflow, not the math | `FTC-PROSE` |
-| **`proof-quality`** | `request_changes` — 10 linter suppressions, 6 long proofs | `FTC-SETOPT`, `FTC-LONGPROOF` |
+| **`proof-quality`** | `request_changes` — 6 long proofs (suppressions 10 → 5, each justified) | `FTC-LONGPROOF` |
 
 ## The three findings this run added that the earlier audit missed
 
