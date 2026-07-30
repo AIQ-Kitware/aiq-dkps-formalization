@@ -424,15 +424,21 @@ noncomputable instance : NormedAddCommGroup (N.Elem E F) :=
   AddGroupNorm.toNormedAddCommGroup
     { toFun := fun A => (N.gauge A.val).toReal
       map_zero' := by
+        -- states the goal with the definition unfolded, in the shape the next step needs;
+        -- there is no `_apply` lemma to rewrite with here.
         change (N.gauge (0 : N.Elem E F).val).toReal = 0
         rw [val_zero, N.gauge_zero, ENNReal.toReal_zero]
       add_le' := fun A B => by
+        -- states the goal with the definition unfolded, in the shape the next step needs;
+        -- there is no `_apply` lemma to rewrite with here.
         change (N.gauge (A + B).val).toReal ≤ (N.gauge A.val).toReal + (N.gauge B.val).toReal
         rw [val_add, ← ENNReal.toReal_add A.gauge_val_ne_top B.gauge_val_ne_top]
         exact ENNReal.toReal_mono
           (ENNReal.add_ne_top.mpr ⟨A.gauge_val_ne_top, B.gauge_val_ne_top⟩)
           (N.gauge_add_le A.val B.val)
       neg' := fun A => by
+        -- states the goal with the definition unfolded, in the shape the next step needs;
+        -- there is no `_apply` lemma to rewrite with here.
         change (N.gauge (-A).val).toReal = (N.gauge A.val).toReal
         rw [val_neg, N.gauge_neg]
       eq_zero_of_map_eq_zero' := fun A hA => by
