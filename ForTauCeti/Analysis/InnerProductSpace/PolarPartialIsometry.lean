@@ -114,7 +114,7 @@ partial isometry; adding invertibility of the modulus buys it back as an
 isometry. That is the whole hierarchy.
 -/
 
-@[expose] public section
+public section
 
 namespace ContinuousLinearMap
 
@@ -151,8 +151,7 @@ noncomputable def modulusCorestrict (M : E →L[ℂ] F) : E →ₗ[ℂ] M.polarI
 changes. -/
 @[simp]
 theorem coe_modulusCorestrict_apply (M : E →L[ℂ] F) (x : E) :
-    (M.modulusCorestrict x : E) = M.modulus x := rfl
-
+    (M.modulusCorestrict x : E) = M.modulus x := (rfl)
 /-- The corestricted modulus has **dense** range in the initial space — the
 initial space is defined as that closure.  This density is the hypothesis
 `extendOfNorm` needs, and is why `polarPartial` is determined on all of
@@ -200,8 +199,7 @@ noncomputable def polarPartial (M : E →L[ℂ] F) : E →L[ℂ] F :=
 continuous extension.  The projection is what makes `W` vanish off the initial
 space, i.e. on `ker M`. -/
 theorem polarPartial_apply (M : E →L[ℂ] F) (x : E) :
-    M.polarPartial x = M.polarPartialAux (M.polarInitial.orthogonalProjectionOnto x) := rfl
-
+    M.polarPartial x = M.polarPartialAux (M.polarInitial.orthogonalProjectionOnto x) := (rfl)
 /-- **The polar identity.**  `M = W |M|` with `W` the polar partial isometry, for every
 bounded `M` and with no invertibility hypothesis. -/
 @[simp]
@@ -432,7 +430,7 @@ initial space, and that space is complete. -/
 theorem isClosed_range_polarPartial (M : E →L[ℂ] F) :
     IsClosed (Set.range M.polarPartial) := by
   rw [M.range_polarPartial_eq_range_aux]
-  have hrange : Set.range M.polarPartialAux = Set.range M.polarLinearIsometryAux := rfl
+  have hrange : Set.range M.polarPartialAux = Set.range M.polarLinearIsometryAux := (rfl)
   rw [hrange, ← Set.image_univ]
   exact ((LinearIsometry.isComplete_image_iff M.polarLinearIsometryAux).mpr
     complete_univ).isClosed

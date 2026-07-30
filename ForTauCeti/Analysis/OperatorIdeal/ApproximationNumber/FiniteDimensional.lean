@@ -71,7 +71,7 @@ maintainer review.
   sibling `Basic` and `CourantFischer` staging modules.
 -/
 
-@[expose] public section
+public section
 
 namespace ContinuousLinearMap
 
@@ -274,7 +274,7 @@ private theorem approximationNumber_le_singularValues
       intro x
       have hy : Wᗮ.starProjection x ∈ Wᗮ := Wᗮ.starProjection_apply_mem x
       calc
-        ‖(T ∘L Wᗮ.starProjection) x‖ = ‖T (Wᗮ.starProjection x)‖ := rfl
+        ‖(T ∘L Wᗮ.starProjection) x‖ = ‖T (Wᗮ.starProjection x)‖ := (rfl)
         _ ≤ A.singularValues n * ‖Wᗮ.starProjection x‖ := htailNorm hy
         _ ≤ A.singularValues n * ‖x‖ :=
           mul_le_mul_of_nonneg_left (Wᗮ.norm_starProjection_apply_le x)

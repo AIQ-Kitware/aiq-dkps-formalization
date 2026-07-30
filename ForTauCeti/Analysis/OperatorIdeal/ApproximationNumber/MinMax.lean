@@ -50,7 +50,7 @@ Ceti maintainer review.
   sibling `Basic` and `CourantFischer` staging modules.
 -/
 
-@[expose] public section
+public section
 
 namespace ContinuousLinearMap
 
