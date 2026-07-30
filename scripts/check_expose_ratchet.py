@@ -37,7 +37,7 @@ LIB = ROOT / "ForTauCeti"
 
 #: The highest number of blanket-exposing modules the tree may contain.
 #: Measured on 2026-07-30, the day the convention was adopted.  Only ever lower it.
-BASELINE = 51
+BASELINE = 29
 
 BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 
@@ -47,7 +47,16 @@ BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 #: closes that.  It is NOT zero, and should not be: `api-design` explicitly permits
 #: exposure where "a consumer must unfold or compute".  Every one of these carries a
 #: comment naming the reason.  Raising it is allowed; doing so silently is not.
-PER_DECL_BASELINE = 4
+#:
+#: Raised 4 -> 15 on 2026-07-30 by lane FTC-EXPOSE-g2, and the split matters:
+#:   * 4 are clean carve-outs -- a `LinearPMap`'s `.domain` must reduce for its `_apply`
+#:     lemma to be *stated*, or a `Prop` abbreviation is applied as a function.
+#:   * 9 are the spectral-measure chain and are recorded DEBT, not endorsement.  An
+#:     exposed body cannot reference an unexposed one, so `spectralPVM` dragged in
+#:     `toProjValMeasure`, `specDiag`, and six more, one build at a time.  The clean fix
+#:     is a `_def` lemma per definition plus rewiring the call sites: lane
+#:     FTC-EXPOSE-SPECMEAS.  Lowering this number is that lane's job.
+PER_DECL_BASELINE = 15
 
 PER_DECL = re.compile(r"^@\[expose\]\s*$", re.M)
 

@@ -60,7 +60,7 @@ is followed for the presentation.
      *non-commutative* algebra.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 
@@ -84,6 +84,13 @@ theorem isSkewAdjointCLM_I_smul {S : H →L[ℂ] H} (hS : IsSelfAdjoint S) :
 /-- The exponential of a bounded operator scaled by a real time. -/
 noncomputable def expTime (B : H →L[ℂ] H) (t : ℝ) : H →L[ℂ] H :=
   exp (t • B)
+
+/-- Rewrite form of `expTime`, so call sites need not unfold the definition.
+
+Added 2026-07-30: `YosidaApproximation` was doing `rw [expTime]` and `simp [expTime]`,
+which requires the body to be exposed. Tau Ceti's `api-design` rubric asks for the
+lemma instead of the exposure. -/
+theorem expTime_def (B : H →L[ℂ] H) (t : ℝ) : expTime B t = exp (t • B) := (rfl)
 
 /-- The flow is the identity at time zero. -/
 @[simp] theorem expTime_zero (B : H →L[ℂ] H) : expTime B 0 = 1 := by

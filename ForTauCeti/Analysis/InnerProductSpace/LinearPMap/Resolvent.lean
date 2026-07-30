@@ -82,7 +82,7 @@ can be read side by side.
   `dev/tauceti/spectra-port-surface.json`.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap
@@ -97,6 +97,7 @@ def resolventSet (A : E →ₗ.[𝕜] E) : Set 𝕜 :=
   { z | ∃ R : E →L[𝕜] E,
       (∀ ψ : A.domain, R (A ψ - z • (ψ : E)) = (ψ : E)) ∧
       (∀ φ : E, ∃ h : R φ ∈ A.domain, A ⟨R φ, h⟩ - z • R φ = φ) }
+
 
 /-- The **spectrum** of `A`: the complement of the resolvent set.
 
@@ -113,24 +114,20 @@ theorem mem_resolventSet_iff {A : E →ₗ.[𝕜] E} {z : 𝕜} :
       ∃ R : E →L[𝕜] E,
         (∀ ψ : A.domain, R (A ψ - z • (ψ : E)) = (ψ : E)) ∧
         (∀ φ : E, ∃ h : R φ ∈ A.domain, A ⟨R φ, h⟩ - z • R φ = φ) :=
-  Iff.rfl
-
+  (Iff.rfl)
 /-- Unfolds membership in the spectrum: `z` is spectral exactly when `A - z` fails to have a
 bounded two-sided inverse. -/
 @[simp]
 theorem mem_spectrum_iff {A : E →ₗ.[𝕜] E} {z : 𝕜} :
     z ∈ spectrum A ↔ z ∉ resolventSet A :=
-  Iff.rfl
-
+  (Iff.rfl)
 /-- The negation of `mem_spectrum_iff`, stated so proofs need not push the negation by hand. -/
 theorem notMem_spectrum_iff {A : E →ₗ.[𝕜] E} {z : 𝕜} :
     z ∉ spectrum A ↔ z ∈ resolventSet A :=
   not_not
 
 /-- The spectrum is the complement of the resolvent set -- the definition, as a set equation. -/
-theorem spectrum_eq_compl (A : E →ₗ.[𝕜] E) : spectrum A = (resolventSet A)ᶜ :=
-  rfl
-
+theorem spectrum_eq_compl (A : E →ₗ.[𝕜] E) : spectrum A = (resolventSet A)ᶜ := (rfl)
 /-- The resolvent set is the complement of the spectrum, the converse reading of
 `spectrum_eq_compl`. -/
 theorem resolventSet_eq_compl (A : E →ₗ.[𝕜] E) : resolventSet A = (spectrum A)ᶜ :=
