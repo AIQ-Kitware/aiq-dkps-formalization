@@ -1,14 +1,14 @@
 # `dev/audit/` — the hostile review
 
-A line-by-line review of every Lean file in the repository, written in the voice
-of a reviewer **who does not want to inherit this code** and has to justify that
+A line-by-line review of **every tracked file** in the repository, written in the
+voice of a reviewer **who does not want to inherit this code** and has to justify that
 position. The output is not an opinion: it is a set of findings, each tagged
 with a lane, that another agent can pick up and execute.
 
 | File | What it is |
 |---|---|
-| [`FILE-CHECKLIST.md`](FILE-CHECKLIST.md) | Every file, once. **790 files, 179,541 lines, 70 groups.** |
-| [`GROUP-CHECKLIST.md`](GROUP-CHECKLIST.md) | Every group, reviewed *after* its files. Cross-file findings only. |
+| [`FILE-CHECKLIST.md`](FILE-CHECKLIST.md) | Every file, once. **1,271 files, 315,880 lines, 128 groups.** |
+| [`GROUP-CHECKLIST.md`](GROUP-CHECKLIST.md) | Every group, reviewed *after* its files. Cross-file findings only. **128 groups.** |
 | `review-<group>.md` | The findings. One document per group, written as the group is completed. |
 
 Both checklists are **generated**:
@@ -77,3 +77,42 @@ Not by size — by what the finding changes.
    measure what is promotable. Review it to decide what to *delete*.
 7. **`Challenge` (49 files).** Immutable conformance statements — review for
    whether the right theorems are pinned, never to change them.
+
+## Scope — and a correction
+
+**Scope is every tracked file except `retired/`, `external/`, `vendor/` and
+`.lake/`** — the trees that are not ours to review. Nothing else is dropped.
+
+The first version of this checklist covered **787 files: only `*.lean`.** That
+was wrong, and jon caught it. It silently omitted **484 files**, including
+exactly the ones a hostile reviewer attacks first:
+
+- `FinishYuWangSamworth/ELEGANCE_AUDIT.md`, and `GROUNDING.md` /
+  `PROOF_OBLIGATIONS.md` in both `Finish*` libraries — documents that make
+  **claims about completeness**. A false claim there is more damaging than a
+  weak proof, because it is what a reader trusts instead of checking.
+- `scripts/verify_grounding.py` ×2 — the tools that *assert* those claims hold.
+- `comparator/*.json` (23) — declaration names stored as data, already the
+  documented rename trap.
+- 232 `.md`, 63 `.py`, 55 `.json`, 45 files under `scripts/`.
+
+The lesson is the one this repository keeps relearning: **a checker whose scope
+is narrower than its name reports a green result that means nothing.** "Audit
+complete" over 787 of 1271 files would have been exactly that.
+
+### Review depth by kind
+
+Every file is on the list. What "reviewed" means varies, and the checklist
+labels each entry with its kind:
+
+| Kind | What review means |
+|---|---|
+| **Lean source** (787) | Line by line: duplication, splitting, simplification, naming, placement. |
+| **documentation** (232) | Does it state something false or stale? Does it match the tree it describes? |
+| **tooling** (63 `.py`, 6 `.sh`) | Does it check what it claims? Is it reachable? Does a green result mean anything? |
+| **data/config** (55 `.json`) | Do the names it pins still resolve? Is it generated or hand-edited? |
+| **paper source** (49 `.tex`, styles, `.bib`) | Shallow: does it match the formalized statements it cites? Not a LaTeX review. |
+| **artifact** (`.pyc`, `.gz`, `.ots`, `.patch`) | Should this be tracked at all? **12 `.pyc` files are committed — that is already a finding.** |
+
+Binary files have no lines to read but stay on the list, because "why is this
+tracked" is a legitimate review question.
