@@ -19,7 +19,6 @@ interface to downstream files.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 namespace RectangularUnitarilyInvariantNorm
 
 open scoped InnerProductSpace BigOperators
@@ -79,5 +78,4 @@ theorem mem_schatten (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
   exact schattenNorm_nonneg p hp A
 
 end RectangularUnitarilyInvariantNorm
-end DavisKahanTheory
 end TauCeti

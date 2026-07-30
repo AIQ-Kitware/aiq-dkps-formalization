@@ -48,7 +48,16 @@ BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 #: exposure where "a consumer must unfold or compute".  Every one of these carries a
 #: comment naming the reason.  Raising it is allowed; doing so silently is not.
 #:
-#: Raised 15 -> 23 on 2026-07-30 by lane FTC-EXPOSE-g1, which finished the conversion.
+#: Raised 15 -> 23 on 2026-07-30 by lane FTC-EXPOSE-g1, which finished the conversion,
+#: then lowered 23 -> 20 the same day when the two `jon (yardrat)` / `jon (toothbrush)`
+#: runs of that lane were merged.  `PolarIsometry.lean`'s debt was recorded on one side
+#: and already paid on the other: dropping `@[simps!]` and stating
+#: `polarLinearIsometry_apply` and `polarLinearIsometryEquiv_apply` by hand removes the
+#: two `@[simps! apply, expose]` attributes, and with no `@[simps!]` left in the file the
+#: third exposure — on `polarIsometryOfIsUnitModulus` itself, which existed only to feed
+#: them — is unnecessary too; the module builds without it.  **That is three of the
+#: recorded debt items paid, and the shape `FTC-EXPOSE-SPECMEAS` should copy: the
+#: `@[expose]` on a definition and the `@[simps!]` that forced it come out together.**
 #: The 23 fall into THREE kinds, and they are not interchangeable:
 #:   * clean carve-out -- a consumer genuinely must unfold. Legitimate; leave alone.
 #:   * recorded DEBT -- avoidable with a `_def` lemma plus rewiring the call sites.
@@ -67,7 +76,7 @@ BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 #:     `toProjValMeasure`, `specDiag`, and six more, one build at a time.  The clean fix
 #:     is a `_def` lemma per definition plus rewiring the call sites: lane
 #:     FTC-EXPOSE-SPECMEAS.  Lowering this number is that lane's job.
-PER_DECL_BASELINE = 23
+PER_DECL_BASELINE = 20
 
 PER_DECL = re.compile(r"^@\[expose\]\s*$|^@\[simps![^\]]*,\s*expose\]\s*$", re.M)
 

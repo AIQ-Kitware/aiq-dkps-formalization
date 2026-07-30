@@ -50,7 +50,7 @@ singular-value control, the orbit barycenter, and this
 continuous-linear-map bridge contain no further analytic argument.-/
 theorem ideal_sylvester_le
     [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
-    (N : DavisKahanTheory.RectangularUnitarilyInvariantNorm 𝕜 E F)
+    (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
     {A : F →L[𝕜] F} {B : E →L[𝕜] E} {X C : E →L[𝕜] F}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
@@ -89,7 +89,7 @@ theorem ideal_sylvester_le_complex
     {EC FC : Type*}
     [NormedAddCommGroup EC] [InnerProductSpace ℂ EC] [FiniteDimensional ℂ EC]
     [NormedAddCommGroup FC] [InnerProductSpace ℂ FC] [FiniteDimensional ℂ FC]
-    (N : DavisKahanTheory.RectangularUnitarilyInvariantNorm ℂ EC FC)
+    (N : RectangularUnitarilyInvariantNorm ℂ EC FC)
     {A : FC →L[ℂ] FC} {B : EC →L[ℂ] EC} {X C : EC →L[ℂ] FC}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
@@ -128,7 +128,7 @@ theorem ideal_sylvester_le_real
     {ER FR : Type*}
     [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [FiniteDimensional ℝ ER]
     [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [FiniteDimensional ℝ FR]
-    (N : DavisKahanTheory.RectangularUnitarilyInvariantNorm ℝ ER FR)
+    (N : RectangularUnitarilyInvariantNorm ℝ ER FR)
     {A : FR →L[ℝ] FR} {B : ER →L[ℝ] ER} {X C : ER →L[ℝ] FR}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
