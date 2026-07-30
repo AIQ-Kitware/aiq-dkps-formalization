@@ -17,8 +17,9 @@ Yu--Wang--Samworth stack out of `ForMathlib` and `DavisKahan`:
 | Y3(b4) | the remaining 12 modules of the sin-Θ closure | 6,912 |
 | Y3(c)  | the last 3 Yu--Wang--Samworth modules | 1,028 |
 
-`ForMathlib` is **12 → 4 modules**, and the four that remain are genuinely
-Mathlib-shaped (two matrix, two topology) rather than migration debt. The
+`ForMathlib` is **12 → 4 modules**. ~~The four that remain are genuinely
+Mathlib-shaped rather than migration debt.~~ **Superseded (jon, 2026-07-29):
+`ForMathlib` goes away entirely — the four move too, under lane FM-RETIRE.** The
 transitive non-Mathlib closure of `SinTheta/Perturbation.lean` and of every
 Yu--Wang--Samworth result is now **entirely `ForTauCeti`**.
 
@@ -57,7 +58,7 @@ agent's uncommitted `--write` left stale copies, which is what made
 **Where the package stands.** 156 modules; all declared in
 `dev/tauceti/extraction-manifest.json` across 18 dependency-closed clusters;
 all passing the import firewall; 0 warnings under `warningAsError`; 0
-undocumented declarations. `ForMathlib` is down to 4 Mathlib-shaped modules.
+undocumented declarations. `ForMathlib` is down to 4 modules, and **all four are going too** — jon has settled that `ForMathlib` goes away entirely (lane FM-RETIRE); my earlier "Mathlib-shaped remainder" reading of them is superseded.
 **The structural work is done, so the remaining work is coherence** — see the
 defects listed below.
 

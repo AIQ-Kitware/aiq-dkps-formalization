@@ -22,11 +22,11 @@ import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 
 Literature map:
 
-* `ForMathlib/prose/Davis-Kahan-1970-part-III-core-arguments.tex`,
+* `prose/core-arguments/Davis-Kahan-1970-part-III-core-arguments.tex`,
   Section 7, "The sin Theta theorem".
 * Davis--Kahan (1970), Section 2 (`sin Θ`) and Section 6 (proof and symmetric
   extension).
-* `ForMathlib/prose/Yu-Wang-Samworth-2014-core-arguments.tex`,
+* `prose/core-arguments/Yu-Wang-Samworth-2014-core-arguments.tex`,
   Sections "The symmetric-matrix variant" and "Lower bound on the residual".
 
 The residual theorem is the numerical analyst's form.  The perturbation

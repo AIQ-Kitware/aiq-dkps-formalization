@@ -34,7 +34,7 @@ converted at PR time.
 finite-dim real IPS), #5 (rank-constrained PSD factorization, ℝ), #6
 (quantitative polar factor, bundled isometry + CLM corollary), and #7
 (TendstoInMeasure constructors, general filter/EDist) are ALL staged in the
-`ForMathlib/` library (see `ForMathlib/README.md`), generalized to `RCLike 𝕜`
+`ForTauCeti` package (see `ForTauCeti/README.md`), generalized to `RCLike 𝕜`
 where applicable, with the paper libraries rewired to consume them
 (`Acharyya2025/GramRigidity.lean`, `Acharyya2025/RateChain.lean`,
 `Acharyya2024/Probability.lean`, `Acharyya2025/DavisKahan.lean`,
@@ -66,7 +66,7 @@ Both #5 follow-ups are now resolved (Opus, 2026-06-12):
 
 **Candidate #14 — rank factorization (`Matrix.exists_eq_mul_rank` /
 `exists_eq_mul_of_rank_le` / `rank_le_iff_exists_eq_mul`): STAGED (Fable,
-2026-06-12),** `ForMathlib/LinearAlgebra/Matrix/RankFactorization.lean`. Every
+2026-06-12),** `ForTauCeti/LinearAlgebra/Matrix/RankFactorization.lean`. Every
 matrix over a field factors `M = L·R` with inner dimension `M.rank` (basis of the
 column space + coordinates), zero-padded to any `r ≥ rank`, and conversely any
 factorization through `Fin r` bounds the rank — `M.rank ≤ r ↔ ∃ L R, M = L * R`.
@@ -172,7 +172,7 @@ of the elementary route); a matrix-Bernstein sharpening is possible future work.
 STAGED.**  Mathlib has the hemicontinuity *definitions*
 (`Topology/Semicontinuity/Hemicontinuity.lean`) and the extreme-value theorem
 (`IsCompact.exists_isMinOn`) but NO Berge maximum theorem.  Staged in
-`ForMathlib/Topology/Berge.lean` (the upper-hemicontinuity half), building on the
+`ForTauCeti/Topology/Berge.lean` (the upper-hemicontinuity half), building on the
 approximate-minimizer engine:
 - `tendsto_eval_sub_of_isCompact` — sequential uniform convergence on a compact
   `K` from joint continuity: `g (pₖ)(xₖ) − g p₀(xₖ) → 0` for `pₖ → p₀`, `xₖ ∈ K`
@@ -193,7 +193,7 @@ approximate-minimizer engine:
   ambient metric is the wrong notion); `exists_modulus_isMinOn` is its `ι = Unit`,
   `ρ = dist` corollary.
 
-Engine generalization (in `ForMathlib/Topology/ApproxMinimizer.lean`):
+Engine generalization (in `ForTauCeti/Topology/ApproxMinimizer.lean`):
 `exists_subseq_tendsto_isMinOn_of_approxMinOn`, the `K`-constrained sibling of
 `exists_subseq_tendsto_forall_le_of_approxMin` (concludes `IsMinOn F K` rather
 than a global minimizer).  Both halves of Berge (upper hemicontinuity + value
@@ -250,7 +250,7 @@ the `n` constant is loose (Frobenius gives `√card`), and the matrix bound is
 
 **Update 2026-06-12 (Opus session, cont.):** the genuinely-general core of the
 `Acharyya2024/RawStress.lean` deterministic MDS stability is now STAGED as a
-topology lemma: `ForMathlib/Topology/ApproxMinimizer.lean`
+topology lemma: `ForTauCeti/Topology/ApproxMinimizer.lean`
 `exists_subseq_tendsto_forall_le_of_approxMin` (compact-set + per-point
 approximate minimization of a continuous function ⇒ a subsequence converges to a
 global minimizer; the elementary "recovery" half of Γ-convergence).

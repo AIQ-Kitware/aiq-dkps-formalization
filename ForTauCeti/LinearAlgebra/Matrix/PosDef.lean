@@ -56,14 +56,30 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
   `e9379f2`; it has had no prior home.
-* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
-  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
-  areas.
+* Extraction class: **authored in place**. Upstream target is Mathlib; the module
+  is staged here because `ForMathlib` was retired on 2026-07-29 and `ForTauCeti`
+  is now the single staging library — see `ForTauCeti/README.md`.
 * Intended Mathlib home: additions to `Mathlib/LinearAlgebra/Matrix/PosDef.
 * Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — the `ForMathlib` import firewall admits only
-  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
+* Spectra influence: **none** — the `ForTauCeti` import firewall admits only
+  Mathlib, `TauCeti` and `ForTauCeti` (rule 2 of
+  `scripts/check_dependency_layers.py`); this module imports Mathlib only.
+
+## Provenance
+
+*Moved, not restated.*  This file was `ForMathlib/LinearAlgebra/Matrix/PosDef.lean`
+until 2026-07-29, when lane FM-RETIRE retired `ForMathlib` entirely: its four
+surviving modules moved here and the library, its root module and its directory
+were deleted.  Statements, proofs and signatures are unchanged.
+
+**FM-RETIRE was worked twice, and the two versions disagreed on the namespace.**
+The `main` version (`c85510d6`) kept `namespace ForMathlib.Matrix` here, reasoning
+that `Challenge/**/Conformance.lean` is immutable so its `ForMathlib.*` pins could
+not be re-issued.  Reconciled on merge in favour of `TauCeti.Matrix`; the rationale
+and the list of pins updated to match is recorded once, in
+`ForTauCeti/Topology/Berge.lean`.
+
 -/
 
 /-!

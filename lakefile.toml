@@ -18,8 +18,9 @@ autoImplicit = false
 
 
 
-# Mathlib-staging library: paper-agnostic results restated in Mathlib idiom,
-# one file per proposed Mathlib destination path.  See ForMathlib/README.md.
+# ForMathlib is RETIRED (lane FM-RETIRE, 2026-07-29).  Its four surviving modules moved
+# into ForTauCeti and the library, its root module and its directory are deleted.
+# See ForTauCeti/README.md.
 
 # BEGIN retired upstream Spectra snapshot
 #
@@ -57,6 +58,26 @@ name = "mathlib"
 scope = "leanprover-community"
 # END authoritative root Mathlib dependency
 
+# ForTauCeti: the reusable-mathematics package.  Declarations live in their final
+# `TauCeti.*` namespaces.  A ForTauCeti module may import only `Mathlib.*`,
+# `TauCeti.*`, and `ForTauCeti.*` (enforced by scripts/check_dependency_layers.py).
+# The glob builds every file even when no aggregate imports it, mirroring Tau
+# Ceti's own source-tree glob.
+#
+# EXECUTIVE DECISION -- JON, 2026-07-29.  Two rulings, both his, both binding:
+#   (a) ForTauCeti is THE PRODUCT: an elegant package that polished roadmaps are
+#       generated from, and that mechanical ports are then built to satisfy.
+#   (b) It is NOT a holding pen and it is NOT deleted at the end.  There is no
+#       terminal state in which it is empty.
+# This SUPERSEDES the previous comment here, which read "the successful terminal
+# state of the campaign is an empty/deleted ForTauCeti".  Kept struck rather than
+# erased so the reversal is legible: ~~empty/deleted ForTauCeti~~.
+#
+# THIS MISTAKE HAS NOW BEEN MADE TWICE BY AGENTS (jon, 2026-07-29).  If you are
+# about to write a lane, a task, or a doc that ends in deleting ForTauCeti or in
+# draining it into external/TauCeti -- stop.  Read ForTauCeti/README.md and
+# AGENTS.md first.
+# See ForTauCeti/README.md.
 [[lean_lib]]
 name = "ForTauCeti"
 globs = ["ForTauCeti.*"]
@@ -107,7 +128,7 @@ leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, we
 
 
 # Comparator/challenge modules for community calibration of AI-authored
-# ForMathlib candidates. These are intentionally not default targets.
+# upstream candidates. These are intentionally not default targets.
 [[lean_lib]]
 name = "Challenge"
 globs = ["Challenge.*"]

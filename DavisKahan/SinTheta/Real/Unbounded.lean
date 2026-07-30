@@ -78,7 +78,7 @@ theorem sinTheta_unbounded_exact_real
   have hAngle := isometricComplementaryBlock_mem_and_gauge_eq_directed
     N.toRectangularSymmetricIdealFamily D.X F₀ D.F₁ hX hdecomp hBlock.1
   refine ⟨hAngle.1, ?_⟩
-  simp only [KyFanDominantIdealFamily.gauge]
+  rw [KyFanDominantIdealFamily.toRectangular_gauge] at hAngle
   rw [hAngle.2]
   exact hBlock.2
 

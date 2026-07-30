@@ -108,12 +108,12 @@ claiming Fable alone completed the whole repository.
 Repository comments record `Claude Opus 4.8 (claude-opus-4-8[1m])` in several
 later staged/generalized files, including:
 
-- `ForMathlib/Topology/ApproxMinimizer.lean`
+- `ForTauCeti/Topology/ApproxMinimizer.lean`
 - `ForMathlib/Analysis/Matrix/EntrywiseOpNorm.lean`
 - `DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean`
 - `ForMathlib/Probability/Moments/SampleMean.lean`
 - `ForMathlib/Analysis/Matrix/Spectrum.lean`
-- `ForMathlib/LinearAlgebra/Matrix/PosDef.lean`
+- `ForTauCeti/LinearAlgebra/Matrix/PosDef.lean`
 - several later declarations in `DkpsQuench2026/Geometry/AlignedCMDS.lean`
 
 Relevant git-history milestones include:

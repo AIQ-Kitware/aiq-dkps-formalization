@@ -76,14 +76,6 @@ noncomputable abbrev directedGap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   U.directedProjectionGap V
 
-/-- Lower quadratic-form bound on a subspace. -/
-abbrev LowerFormBoundOn (A : E →L[𝕜] E) (U : Submodule 𝕜 E) (c : ℝ) : Prop :=
-  A.LowerFormBoundOn U c
-
-/-- Upper quadratic-form bound on a subspace. -/
-abbrev UpperFormBoundOn (A : E →L[𝕜] E) (U : Submodule 𝕜 E) (c : ℝ) : Prop :=
-  A.UpperFormBoundOn U c
-
 /-- The two subspaces are in the acute case. -/
 def IsAcute (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=

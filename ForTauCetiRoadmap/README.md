@@ -13,6 +13,16 @@ is accepted, we already have what it needs. That includes paper references,
 adversarial review of every statement, and Mathlib-quality elegance. See
 `ForTauCeti/README.md` §*The readiness standard*.
 
+## The candidate topic design
+
+[`CANDIDATE-TOPIC-DESIGN.md`](CANDIDATE-TOPIC-DESIGN.md) proposes a partition of
+**all 156 `ForTauCeti` modules into 20 roadmap topics**, ordered as a submission
+ladder and validated against the import graph
+(`scripts/check_tauceti_roadmap_topics.py`: total, disjoint, and acyclic in
+submission order). The four directories below are the first four of those topics
+to be written; **sixteen have no directory yet**, and writing them is the work
+that design makes possible.
+
 ## Roadmaps
 
 | Topic | Covers |
