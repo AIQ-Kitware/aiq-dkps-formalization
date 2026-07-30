@@ -202,6 +202,8 @@ theorem norm_starProjection_sub_eq_max (U V : Submodule 𝕜 E)
   have hnormA : ‖A‖ = ‖X‖ ^ 2 := by
     have h : star X * X = A := by
       rw [hstarX, hXdef, hAdef,
+        -- states the goal with the definition unfolded, in the shape the next step needs;
+        -- there is no `_apply` lemma to rewrite with here.
         show (P * (1 - Q)) * ((1 - Q) * P) = P * ((1 - Q) * (1 - Q)) * P by noncomm_ring, hQ1id]
     calc
       ‖A‖ = ‖star X * X‖ := congrArg (fun T : E →L[𝕜] E => ‖T‖) h.symm
@@ -211,6 +213,8 @@ theorem norm_starProjection_sub_eq_max (U V : Submodule 𝕜 E)
     have hQP : Q * Q = Q := hQid
     have h : Y * star Y = B := by
       rw [hstarY, hYdef, hBdef,
+        -- states the goal with the definition unfolded, in the shape the next step needs;
+        -- there is no `_apply` lemma to rewrite with here.
         show ((1 - P) * Q) * (Q * (1 - P)) = (1 - P) * (Q * Q) * (1 - P) by noncomm_ring, hQP]
     calc
       ‖B‖ = ‖Y * star Y‖ := congrArg (fun T : E →L[𝕜] E => ‖T‖) h.symm
@@ -222,6 +226,8 @@ theorem norm_starProjection_sub_eq_max (U V : Submodule 𝕜 E)
     rw [hBdef, mul_assoc, show (1 - P) * P = 0 by rw [sub_mul, one_mul, hPid, sub_self], mul_zero]
   have hPB : P * B = 0 := by
     rw [hBdef, ← mul_assoc, ← mul_assoc,
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       show P * (1 - P) = 0 by rw [mul_sub, mul_one, hPid, sub_self], zero_mul, zero_mul]
   have hA' : A = P - P * Q * P := by rw [hAdef, mul_sub, mul_one, sub_mul, hPid]
   have hB' : B = Q - Q * P - P * Q + P * Q * P := by

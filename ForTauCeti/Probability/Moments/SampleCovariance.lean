@@ -81,6 +81,8 @@ theorem isHermitian_sampleCovariance {n d : ℕ}
     (V : Fin n → Ω → EuclideanSpace ℝ (Fin d)) (ω : Ω) :
     (sampleCovariance V ω).IsHermitian := by
   ext k l
+  -- states the conjugate-symmetry goal against `sampleCovariance`'s own
+  -- entries, which is the form the `star` lemma below rewrites.
   change star (sampleCovariance V ω l k) = sampleCovariance V ω k l
   simp only [sampleCovariance, star_trivial]
   refine congrArg _ (Finset.sum_congr rfl fun i _ => ?_)

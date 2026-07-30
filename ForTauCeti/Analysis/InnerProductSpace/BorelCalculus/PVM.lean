@@ -115,6 +115,7 @@ theorem specProj_univ :
     rw [specDiag, Measure.map_apply hκ MeasurableSet.univ, Set.preimage_univ,
       diagMeasure_univ_toReal]
   rw [hm]
+  -- names the application so the norm bound applies to it directly.
   change (((‖ξ‖ ^ 2 : ℝ)) : ℂ) = ⟪ξ, ξ⟫_ℂ
   rw [inner_self_eq_norm_sq_to_K]
   norm_cast

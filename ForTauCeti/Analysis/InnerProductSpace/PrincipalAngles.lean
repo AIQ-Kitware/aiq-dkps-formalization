@@ -692,6 +692,8 @@ theorem singularValues_orthogonal_familyIsometry_comm
     refine ext_inner_right 𝕜 fun y => ?_
     simp only [LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.id_apply]
     rw [LinearMap.adjoint_inner_left, inner_sub_left, LinearMap.adjoint_inner_left]
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change
       ⟪(Submodule.span 𝕜 (Set.range v))ᗮ.starProjection (familyIsometry hu x),
           (Submodule.span 𝕜 (Set.range v))ᗮ.starProjection (familyIsometry hu y)⟫_𝕜 =
@@ -728,6 +730,8 @@ theorem singularValues_orthogonal_familyIsometry_comm
     refine ext_inner_right 𝕜 fun y => ?_
     simp only [LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.id_apply]
     rw [LinearMap.adjoint_inner_left, inner_sub_left, LinearMap.adjoint_inner_left]
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change
       ⟪(Submodule.span 𝕜 (Set.range u))ᗮ.starProjection (familyIsometry hv x),
           (Submodule.span 𝕜 (Set.range u))ᗮ.starProjection (familyIsometry hv y)⟫_𝕜 =
@@ -805,6 +809,8 @@ theorem singularValues_orthogonal_starProjection_comp_starProjection_comm
           (Submodule.span 𝕜 (Set.range u)).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E) =
         Suv ∘ₗ LinearMap.adjoint (familyIsometry hu).toLinearMap := by
     ext x
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change (Submodule.span 𝕜 (Set.range v))ᗮ.starProjection
         ((Submodule.span 𝕜 (Set.range u)).starProjection x) =
       (Submodule.span 𝕜 (Set.range v))ᗮ.starProjection
@@ -815,6 +821,8 @@ theorem singularValues_orthogonal_starProjection_comp_starProjection_comm
           (Submodule.span 𝕜 (Set.range v)).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E) =
         Svu ∘ₗ LinearMap.adjoint (familyIsometry hv).toLinearMap := by
     ext x
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change (Submodule.span 𝕜 (Set.range u))ᗮ.starProjection
         ((Submodule.span 𝕜 (Set.range v)).starProjection x) =
       (Submodule.span 𝕜 (Set.range u))ᗮ.starProjection
