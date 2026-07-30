@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-2/1271 files reviewed · 1271 files · 315,048 lines · 128 groups
+2/1160 files reviewed · 1160 files · 260,230 lines · 112 groups
 
 ## How to review
 
@@ -42,9 +42,8 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### (root files) :: data/config
 
-*2 files, 177 lines — 0/2 reviewed*
+*1 files, 41 lines — 0/1 reviewed*
 
-- [ ] `lake-manifest.json` — 136 lines · data/config
 - [ ] `aiq-dkps-column-expansion-finite-multiplicity-mathahead-b9c546c-20260720T115341-0400.manifest.json` — 41 lines · data/config
 
 ### (root files) :: documentation
@@ -58,26 +57,16 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### (root files) :: manifest/notes
 
-*9 files, 100 lines — 0/9 reviewed*
+*1 files, 9 lines — 0/1 reviewed*
 
-- [ ] `FREE_BEAM_HARD_THEORY_SCRATCH_DFD9D37_MANIFEST.txt` — 22 lines · manifest/notes
-- [ ] `SHARED_HARD_FOUNDATIONS_SCRATCH_DFD9D37_MANIFEST.txt` — 19 lines · manifest/notes
-- [ ] `OVERLAY_MANIFEST.txt` — 13 lines · manifest/notes
-- [ ] `SCRATCH_CONTINUATION_OVERLAY_MANIFEST.txt` — 13 lines · manifest/notes
 - [ ] `prompt.txt` — 9 lines · manifest/notes
-- [ ] `MILESTONE_FIRST_OPUS_PLAN_MANIFEST.txt` — 8 lines · manifest/notes
-- [ ] `LEMMA63_SCRATCH_OVERLAY_MANIFEST.txt` — 6 lines · manifest/notes
-- [ ] `REBASED_OVERLAY_MANIFEST.txt` — 6 lines · manifest/notes
-- [ ] `TAUCETI_ADAPTATION_PLAN_OVERLAY_MANIFEST.txt` — 4 lines · manifest/notes
 
 ### (root files) :: other
 
-*4 files, 237 lines — 0/4 reviewed*
+*2 files, 34 lines — 0/2 reviewed*
 
-- [ ] `LICENSE` — 202 lines · other
 - [ ] `.gitignore` — 30 lines · other
 - [ ] `.gitmodules` — 4 lines · other
-- [ ] `lean-toolchain` — 1 lines · other
 
 ### (root files) :: tooling
 
@@ -104,28 +93,11 @@ been read. An unrecorded review is indistinguishable from no review.
 
 - [ ] `.claude/settings.json` — 6 lines · data/config
 
-### .llm_resource_tally :: artifact
-
-*12 files, 0 lines — 0/12 reviewed*
-
-- [ ] `.llm_resource_tally/tool/__pycache__/__init__.cpython-313.pyc` — 0 lines · artifact
-- [ ] `.llm_resource_tally/tool/__pycache__/__main__.cpython-313.pyc` — 0 lines · artifact
-- [ ] `.llm_resource_tally/tool/__pycache__/_util.cpython-313.pyc` — 0 lines · artifact
-- [ ] `.llm_resource_tally/tool/__pycache__/cli.cpython-313.pyc` — 0 lines · artifact
-- [ ] `.llm_resource_tally/tool/__pycache__/config.cpython-313.pyc` — 0 lines · artifact
-- [ ] `.llm_resource_tally/tool/__pycache__/gitutil.cpython-313.pyc` — 0 lines · artifact
-- [ ] `.llm_resource_tally/tool/__pycache__/install.cpython-313.pyc` — 0 lines · artifact
-- [ ] `.llm_resource_tally/tool/__pycache__/ledger.cpython-313.pyc` — 0 lines · artifact
-- [ ] `.llm_resource_tally/tool/__pycache__/record.cpython-313.pyc` — 0 lines · artifact
-- [ ] `.llm_resource_tally/tool/__pycache__/rollup.cpython-313.pyc` — 0 lines · artifact
-- [ ] `.llm_resource_tally/tool/__pycache__/schema.cpython-313.pyc` — 0 lines · artifact
-- [ ] `.llm_resource_tally/tool/__pycache__/version.cpython-313.pyc` — 0 lines · artifact
-
 ### .llm_resource_tally :: data/config
 
-*3 files, 935 lines — 0/3 reviewed*
+*3 files, 936 lines — 0/3 reviewed*
 
-- [ ] `.llm_resource_tally/ledger/ledger.jsonl` — 882 lines · data/config
+- [ ] `.llm_resource_tally/ledger/ledger.jsonl` — 883 lines · data/config
 - [ ] `.llm_resource_tally/lifetime-totals.json` — 46 lines · data/config
 - [ ] `.llm_resource_tally/settings.json` — 7 lines · data/config
 
@@ -929,21 +901,6 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md` — 507 lines · documentation
 - [ ] `DkpsQuench2026/README.md` — 107 lines · documentation
 
-### DkpsQuench2026 :: paper source
-
-*10 files, 4,831 lines — 0/10 reviewed*
-
-- [ ] `DkpsQuench2026/prose/quench-tex-src/biblio.bib` — 1,650 lines · paper source
-- [ ] `DkpsQuench2026/prose/quench-tex-src/icml/icml2026.bst` — 1,444 lines · paper source
-- [ ] `DkpsQuench2026/prose/quench-tex-src/icml/icml2026.sty` — 768 lines · paper source
-- [ ] `DkpsQuench2026/prose/quench-tex-src/text/experiments.tex` — 253 lines · paper source
-- [ ] `DkpsQuench2026/prose/quench-tex-src/text/appendix.tex` — 171 lines · paper source
-- [ ] `DkpsQuench2026/prose/quench-tex-src/text/methods.tex` — 169 lines · paper source
-- [ ] `DkpsQuench2026/prose/quench-tex-src/main_icml.tex` — 165 lines · paper source
-- [ ] `DkpsQuench2026/prose/quench-tex-src/hayden_preamble.tex` — 108 lines · paper source
-- [ ] `DkpsQuench2026/prose/quench-tex-src/text/introduction.tex` — 79 lines · paper source
-- [ ] `DkpsQuench2026/prose/quench-tex-src/text/abstract.tex` — 24 lines · paper source
-
 ### DkpsQuench2026/Core
 
 *3 files, 1,310 lines — 0/3 reviewed*
@@ -1415,72 +1372,6 @@ been read. An unrecorded review is indistinguishable from no review.
 
 - [ ] `Helm2025/prose/statistical-black-box-dkps-tex-src/main_acl.bbl` — 265 lines · other
 
-### Helm2025 :: paper source
-
-*12 files, 5,807 lines — 0/12 reviewed*
-
-- [ ] `Helm2025/prose/statistical-black-box-dkps-tex-src/acl/acl_natbib.bst` — 1,929 lines · paper source
-- [ ] `Helm2025/prose/statistical-black-box-dkps-tex-src/biblio.bib` — 1,256 lines · paper source
-- [ ] `Helm2025/prose/statistical-black-box-dkps-tex-src/main_acl.tex` — 713 lines · paper source
-- [ ] `Helm2025/prose/statistical-black-box-dkps-tex-src/acl/_acl_latex.tex` — 377 lines · paper source
-- [ ] `Helm2025/prose/statistical-black-box-dkps-tex-src/acl/acl.sty` — 318 lines · paper source
-- [ ] `Helm2025/prose/statistical-black-box-dkps-tex-src/acl/_acl.sty` — 313 lines · paper source
-- [ ] `Helm2025/prose/statistical-black-box-dkps-tex-src/text/methods.tex` — 272 lines · paper source
-- [ ] `Helm2025/prose/statistical-black-box-dkps-tex-src/text/methods-old.tex` — 228 lines · paper source
-- [ ] `Helm2025/prose/statistical-black-box-dkps-tex-src/text/experiments.tex` — 202 lines · paper source
-- [ ] `Helm2025/prose/statistical-black-box-dkps-tex-src/hayden_preamble.tex` — 107 lines · paper source
-- [ ] `Helm2025/prose/statistical-black-box-dkps-tex-src/text/introduction.tex` — 76 lines · paper source
-- [ ] `Helm2025/prose/statistical-black-box-dkps-tex-src/text/abstract.tex` — 16 lines · paper source
-
-### OVERLAY-METADATA :: artifact
-
-*4 files, 3,397 lines — 0/4 reviewed*
-
-- [ ] `OVERLAY-METADATA/dkps_rectangular_schatten_rebased_48b436e.patch` — 1,578 lines · artifact
-- [ ] `OVERLAY-METADATA/UNIFIED.patch` — 884 lines · artifact
-- [ ] `OVERLAY-METADATA/dkps_angle_coordinate_redesign_rebased_90ef32f.patch` — 576 lines · artifact
-- [ ] `OVERLAY-METADATA/dkps_tan_two_theta_ordered_gap_rebased_17d0497.patch` — 359 lines · artifact
-
-### OVERLAY-METADATA :: documentation
-
-*1 files, 44 lines — 0/1 reviewed*
-
-- [ ] `OVERLAY-METADATA/MANIFEST.md` — 44 lines · documentation
-
-### OVERLAY-METADATA :: manifest/notes
-
-*5 files, 36 lines — 0/5 reviewed*
-
-- [ ] `OVERLAY-METADATA/namek-shared-ideal-compile-repair-b2ea942-gpt56.manifest` — 11 lines · manifest/notes
-- [ ] `OVERLAY-METADATA/COMMIT_MESSAGE.txt` — 9 lines · manifest/notes
-- [ ] `OVERLAY-METADATA/namek-operatorabs-namespace-repair-b2ea942-gpt56.manifest` — 9 lines · manifest/notes
-- [ ] `OVERLAY-METADATA/namek-operatorabs-final-fix-b2ea942-gpt56.manifest` — 5 lines · manifest/notes
-- [ ] `OVERLAY-METADATA/COMPILE_AGENT_MESSAGE.txt` — 2 lines · manifest/notes
-
-### OVERLAY-METADATA :: other
-
-*1 files, 14 lines — 0/1 reviewed*
-
-- [ ] `OVERLAY-METADATA/SHA256SUMS` — 14 lines · other
-
-### _overlay :: artifact
-
-*1 files, 26,022 lines — 0/1 reviewed*
-
-- [ ] `_overlay/UNIFIED.patch` — 26,022 lines · artifact
-
-### _overlay :: documentation
-
-*1 files, 39 lines — 0/1 reviewed*
-
-- [ ] `_overlay/MANIFEST.md` — 39 lines · documentation
-
-### _overlay :: other
-
-*1 files, 104 lines — 0/1 reviewed*
-
-- [ ] `_overlay/SHA256SUMS` — 104 lines · other
-
 ### comparator :: data/config
 
 *23 files, 335 lines — 0/23 reviewed*
@@ -1508,19 +1399,6 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `comparator/pending-restrict-cover-measurable.json` — 14 lines · data/config
 - [ ] `comparator/pending-tendsto-in-measure.json` — 14 lines · data/config
 - [ ] `comparator/pending-yu-wang-samworth.json` — 14 lines · data/config
-
-### dev :: artifact
-
-*8 files, 0 lines — 0/8 reviewed*
-
-- [ ] `dev/retired-full-part-iii-ambient-route-2026-07-21/DavisKahan__Experimental__FiniteDimensional__DirectRotation.lean.txt.gz` — 0 lines · artifact
-- [ ] `dev/retired-full-part-iii-ambient-route-2026-07-21/DavisKahan__Experimental__FiniteDimensional__DoubleAngle__TanTheta.lean.txt.gz` — 0 lines · artifact
-- [ ] `dev/retired-full-part-iii-ambient-route-2026-07-21/DavisKahan__Experimental__FiniteDimensional__TanTheta__GraphOperator.lean.txt.gz` — 0 lines · artifact
-- [ ] `dev/retired-full-part-iii-ambient-route-2026-07-21/DavisKahan__Experimental__InfiniteDimensional__All.lean.txt.gz` — 0 lines · artifact
-- [ ] `dev/retired-full-part-iii-ambient-route-2026-07-21/DavisKahan__Experimental__InfiniteDimensional__Core__AbstractSpectrum.lean.txt.gz` — 0 lines · artifact
-- [ ] `dev/retired-full-part-iii-ambient-route-2026-07-21/DavisKahan__Experimental__InfiniteDimensional__Core__OperatorAngle.lean.txt.gz` — 0 lines · artifact
-- [ ] `dev/retired-full-part-iii-ambient-route-2026-07-21/DavisKahan__Experimental__InfiniteDimensional__Core__SpectralProjection.lean.txt.gz` — 0 lines · artifact
-- [ ] `dev/retired-full-part-iii-ambient-route-2026-07-21/DavisKahan__Experimental__PartIII.lean.txt.gz` — 0 lines · artifact
 
 ### dev :: data/config
 
@@ -1554,11 +1432,11 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*147 files, 34,509 lines — 0/147 reviewed*
+*147 files, 35,380 lines — 0/147 reviewed*
 
 - [ ] `dev/tauceti-signature-polish-todo.md` — 2,201 lines · documentation
+- [ ] `dev/audit/FILE-CHECKLIST.md` — 1,946 lines · documentation
 - [ ] `dev/davis-kahan-expert-completion-plan.md` — 1,589 lines · documentation
-- [ ] `dev/audit/FILE-CHECKLIST.md` — 1,172 lines · documentation
 - [ ] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation
 - [ ] `dev/tauceti/u1-linearpmap-migration.md` — 1,139 lines · documentation
 - [ ] `dev/tauceti/spectra-removal-plan.md` — 1,036 lines · documentation
@@ -1622,6 +1500,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `dev/topurge/dev/davis-kahan-1970-flawless-sine-theta-handoff-2026-07-19.md` — 157 lines · documentation
 - [ ] `dev/davis-kahan-hidden-foundations-status.md` — 156 lines · documentation
 - [ ] `dev/topurge/dev/column-expansion-and-finite-multiplicity-math-ahead-2026-07-20.md` — 156 lines · documentation
+- [ ] `dev/audit/GROUP-CHECKLIST.md` — 154 lines · documentation
 - [ ] `dev/topurge/dev/general-sin-theta-extension-handoff-2026-07-19.md` — 154 lines · documentation
 - [ ] `dev/davis-kahan-open-debt-inventory-2026-07-19.md` — 152 lines · documentation
 - [ ] `dev/topurge/dev/overlays/independent-scratch-continuation-4080ec3-gpt56.md` — 150 lines · documentation
@@ -1635,6 +1514,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `dev/journals/comparator-statement-export-matching-2026-06-14.md` — 122 lines · documentation
 - [ ] `dev/overlays/pending-mathahead-rebased-53297a4-gpt56.md` — 122 lines · documentation
 - [ ] `dev/topurge/dev/handoff-2026-07-24-frontier.md` — 120 lines · documentation
+- [ ] `dev/audit/README.md` — 119 lines · documentation
 - [ ] `dev/tauceti/spectra-provenance-map.md` — 119 lines · documentation
 - [ ] `dev/overlays/lemma63-promotion-scratch-7f9f562-gpt56.md` — 116 lines · documentation
 - [ ] `dev/journals/davis-kahan-theorem63-distillation-error-2026-07-23.md` — 114 lines · documentation
@@ -1647,7 +1527,6 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `dev/topurge/dev/overlays/independent-scratch-lanes-4080ec3-gpt56.md` — 102 lines · documentation
 - [ ] `dev/benchmark-candidates/README.md` — 97 lines · documentation
 - [ ] `dev/journals/tool-rewrote-the-tree-during-its-own-regression-test-2026-07-29.md` — 97 lines · documentation
-- [ ] `dev/audit/GROUP-CHECKLIST.md` — 96 lines · documentation
 - [ ] `dev/topurge/dev/full-part-iii-experimental-closure-2026-07-21.md` — 96 lines · documentation
 - [ ] `dev/audit/review-ForTauCeti-T01.md` — 94 lines · documentation
 - [ ] `dev/topurge/dev/full-part-iii-admission-elimination-agent-prompt-2026-07-20.md` — 91 lines · documentation
@@ -1656,7 +1535,6 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `dev/tauceti/README.md` — 86 lines · documentation
 - [ ] `dev/topurge/dev/mathlib-reducing-restriction-extraction-2026-07-19.md` — 84 lines · documentation
 - [ ] `dev/topurge/dev/paper-hilbert-schmidt-history-recovery-2026-07-20.md` — 82 lines · documentation
-- [ ] `dev/audit/README.md` — 80 lines · documentation
 - [ ] `dev/topurge/dev/overlays/sintheta-general-current-api-ee5673e-gpt56.md` — 80 lines · documentation
 - [ ] `dev/topurge/dev/stage1-finite-dimensional-infrastructure-math-ahead-2026-07-20.md` — 80 lines · documentation
 - [ ] `dev/topurge/dev/overlays/full-frontier-scaffold-gpt56.md` — 78 lines · documentation
@@ -1723,13 +1601,6 @@ been read. An unrecorded review is indistinguishable from no review.
 
 - [ ] `dev/alternates/RectangularSingularValuesDkVariant.lean` — 412 lines · Lean source
 
-### docs :: artifact
-
-*2 files, 0 lines — 0/2 reviewed*
-
-- [ ] `docs/ots/opentimestamp-aiq-dkps-formalization-9eead8afc24b.sha256manifest.txt.ots` — 0 lines · artifact
-- [ ] `docs/ots/opentimestamp-aiq-dkps-formalization-fafe65b0deca.sha256manifest.txt.ots` — 0 lines · artifact
-
 ### docs :: documentation
 
 *33 files, 6,197 lines — 0/33 reviewed*
@@ -1781,35 +1652,6 @@ been read. An unrecorded review is indistinguishable from no review.
 
 - [ ] `docs/presentation/mathlib_contribution_dependencies.py` — 98 lines · tooling
 
-### papers :: documentation
-
-*4 files, 420 lines — 0/4 reviewed*
-
-- [ ] `papers/formalization_draft1/model_provenance.md` — 168 lines · documentation
-- [ ] `papers/formalization_draft1/claims_to_files.md` — 143 lines · documentation
-- [ ] `papers/formalization_draft1/venue_notes.md` — 55 lines · documentation
-- [ ] `papers/formalization_draft1/README.md` — 54 lines · documentation
-
-### papers :: other
-
-*3 files, 66 lines — 0/3 reviewed*
-
-- [ ] `papers/formalization_draft1/.gitignore` — 44 lines · other
-- [ ] `papers/formalization_draft1/Makefile` — 18 lines · other
-- [ ] `papers/formalization_draft1/.latexmkrc` — 4 lines · other
-
-### papers :: paper source
-
-*7 files, 4,327 lines — 0/7 reviewed*
-
-- [ ] `papers/DavisKahan-formalized-vs-literature.tex` — 1,414 lines · paper source
-- [ ] `papers/davis_kahan_prop_4_4_counterexample.tex` — 1,093 lines · paper source
-- [ ] `papers/DKPS-formalized-vs-literature.tex` — 564 lines · paper source
-- [ ] `papers/formalization_draft1/paper.tex` — 536 lines · paper source
-- [ ] `papers/historical-search-supplement.tex` — 338 lines · paper source
-- [ ] `papers/GramRigidity-formalized-vs-literature.tex` — 252 lines · paper source
-- [ ] `papers/formalization_draft1/references.bib` — 130 lines · paper source
-
 ### prose :: data/config
 
 *1 files, 1,488 lines — 0/1 reviewed*
@@ -1830,42 +1672,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 - [ ] `prose/core-arguments/.gitignore` — 2 lines · other
 
-### prose :: paper source
-
-*28 files, 10,195 lines — 0/28 reviewed*
-
-- [ ] `prose/distilled_literature/HaagerupZsido1994_resolvent_minimal_extrapolation.tex` — 1,161 lines · paper source
-- [ ] `prose/distilled_literature/HornJohnson2013_selected_matrix_analysis.tex` — 1,053 lines · paper source
-- [ ] `prose/distilled_literature/Davis1963_rotation_of_eigenvectors.tex` — 746 lines · paper source
-- [ ] `prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex` — 632 lines · paper source
-- [ ] `prose/distilled_literature/HaagerupZsido1994_alpha_zero_analytic_bridge.tex` — 616 lines · paper source
-- [ ] `prose/distilled_literature/DavisKahan1970_part_III.tex` — 557 lines · paper source
-- [ ] `prose/core-arguments/Davis-Kahan-1970-part-III-core-arguments.tex` — 476 lines · paper source
-- [ ] `prose/core-arguments/Yu-Wang-Samworth-2014-core-arguments.tex` — 416 lines · paper source
-- [ ] `prose/core-arguments/Davis-1963-core-arguments.tex` — 370 lines · paper source
-- [ ] `prose/InfiniteDimensionalDavisKahan.tex` — 326 lines · paper source
-- [ ] `prose/distilled_literature/Halmos1969_two_subspaces.tex` — 304 lines · paper source
-- [ ] `prose/distilled_literature/GrubisicKostrykinMakarovVeselic2013_tan_two_theta.tex` — 297 lines · paper source
-- [ ] `prose/distilled_literature/Seelmann2014_sin_two_theta.tex` — 295 lines · paper source
-- [ ] `prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex` — 283 lines · paper source
-- [ ] `prose/distilled_literature/Motovilov2012_tan_theta_comment.tex` — 274 lines · paper source
-- [ ] `prose/distilled_literature/Nakatsukasa2012_relaxed_tan_theta.tex` — 270 lines · paper source
-- [ ] `prose/distilled_literature/KostrykinMakarovMotovilov2005_riccati_tan_theta.tex` — 269 lines · paper source
-- [ ] `prose/distilled_literature/BhatiaDavisMcIntosh1983_spectral_subspaces_sylvester.tex` — 265 lines · paper source
-- [ ] `prose/distilled_literature/TanTheta_graph_riccati_corrections_dossier.tex` — 254 lines · paper source
-- [ ] `prose/distilled_literature/DoubleAngle_branch_selection_dossier.tex` — 253 lines · paper source
-- [ ] `prose/distilled_literature/Wedin1972_svd_perturbation.tex` — 244 lines · paper source
-- [ ] `prose/core-arguments/Horn-Johnson-2013-Gram-core-arguments.tex` — 240 lines · paper source
-- [ ] `prose/distilled_literature/DavisKahan1970_section9_numerical_example.tex` — 168 lines · paper source
-- [ ] `prose/distilled_literature/DavisKahan1970_section8_branch_selection.tex` — 142 lines · paper source
-- [ ] `prose/distilled_literature/distilled_papers_index.tex` — 127 lines · paper source
-- [ ] `prose/distilled_literature/preamble.tex` — 57 lines · paper source
-- [ ] `prose/distilled_literature/Ullrich2024_s_numbers.tex` — 53 lines · paper source
-- [ ] `prose/distilled_literature/Deepesh2024_approximation_truncations.tex` — 47 lines · paper source
-
 ### scripts :: tooling
 
-*45 files, 10,335 lines — 0/45 reviewed*
+*45 files, 10,377 lines — 0/45 reviewed*
 
 - [ ] `scripts/lake_build_report.py` — 1,156 lines · tooling
 - [ ] `scripts/check_davis_kahan_frontier.py` — 633 lines · tooling
@@ -1873,9 +1682,9 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `scripts/check_yu_wang_samworth_source_census.py` — 407 lines · tooling
 - [ ] `scripts/refresh_tauceti_pr1_consistency.py` — 390 lines · tooling
 - [ ] `scripts/upgrade_census_schema_v4.py` — 333 lines · tooling
+- [ ] `scripts/audit_checklist.py` — 309 lines · tooling
 - [ ] `scripts/render_distilled_literature_index.py` — 292 lines · tooling
 - [ ] `scripts/check_dependency_layers.py` — 286 lines · tooling
-- [ ] `scripts/audit_checklist.py` — 267 lines · tooling
 - [ ] `scripts/probe_census_declarations.py` — 263 lines · tooling
 - [ ] `scripts/check_library_structure.py` — 248 lines · tooling
 - [ ] `scripts/check_comparator_signatures.py` — 232 lines · tooling
