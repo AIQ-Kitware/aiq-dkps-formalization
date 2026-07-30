@@ -1,7 +1,7 @@
 # Candidate roadmap topic design for Tau Ceti
 
-**Proposal, 2026-07-29, `edward (aiq-gpu)` lane COORD.** A partition of all 156
-`ForTauCeti` modules into **20 roadmap topics**, ordered as a submission ladder.
+**Proposal, 2026-07-29, `edward (aiq-gpu)` lane COORD.** A partition of all 160
+`ForTauCeti` modules into **22 roadmap topics**, ordered as a submission ladder.
 This is a candidate design meant to be argued with; the numbers in it are not.
 
 Validate with:
@@ -15,7 +15,7 @@ python3 scripts/check_tauceti_roadmap_topics.py --topic T15
 ## Why a new design was needed
 
 The existing ladder (`dev/tauceti/submission-ladder.md`, rungs A–F) puts **41 of
-156** modules on a submission path. The other **115 have none** — including all
+160** modules on a submission path. The other **119 have none** — including all
 17 Davis–Kahan sin-Θ modules, which are the mathematics this project exists to
 contribute. And only four roadmap directories exist, covering perhaps a third of
 the library.
@@ -29,7 +29,7 @@ that does not cover the library. So the first job is a **total** partition.
 The checker enforces three properties. Each is here because the draft violated it:
 
 - **Total.** Every module is assigned. Adding a module without assigning it
-  fails `--check`. A design that quietly omits modules is exactly how 115 ended
+  fails `--check`. A design that quietly omits modules is exactly how 119 ended
   up unplaced.
 - **Disjoint.** No module in two topics.
 - **Acyclic in submission order.** No module imports anything in a *later*
@@ -68,14 +68,16 @@ printed by the checker.
 | **T18** | The Yu–Wang–Samworth statistical variant | 3 | T01, T05, T06, T08, T17 |
 | **T19** | Matrix spectra and spectral measurability | 6 | T01, T14 |
 | **T20** | Sample moments and matrix concentration | 5 | T19 |
+| **T21** | Matrix rank factorization and positive semidefiniteness | 2 | **— independent** |
+| **T22** | Berge's maximum theorem and approximate minimizers | 2 | **— independent** |
 
 **This is a DAG, not a chain — that is the most useful property of the design.**
 The numbering is *a* valid submission order, but it is not the only one, and
 several topics need far less than their position suggests:
 
-- **Three topics are fully independent** and can go first, in any order or at
+- **Five topics are fully independent** and can go first, in any order or at
   once: **T01**, **T12** (Haagerup–Zsidó, 8 modules), **T14** (Borel calculus
-  and PVMs, 10 modules).
+  and PVMs, 10 modules), and the two ex-`ForMathlib` pairs **T21** and **T22**.
 - **T09, approximation numbers — the advertised PR1 topic — needs only T01, T03
   and T07**, not the eight topics its position implies. That is the corrected
   version of the submission ladder's headline finding.
@@ -200,3 +202,31 @@ correction to the *reading* of where it belongs, not to the tree.
   `SymmetricOperatorIdeals` → T10; `UnboundedOperators` → T13–T15;
   `SpectralSubspacePerturbation` → T16–T18. **Sixteen of twenty topics have no
   roadmap directory yet**; writing them is the work this design makes possible.
+
+## Addendum, 2026-07-29 — T21 and T22 arrived when `ForMathlib` retired
+
+`jon (namek)` completed lane `FM-RETIRE` the same day: `ForMathlib` is **0
+modules** and its last four moved here, taking `ForTauCeti` from 156 to 160.
+`check_tauceti_roadmap_topics.py --check` went red on exactly the property it
+exists to hold — the partition stopped being total — which is the gate working.
+
+They are two independent pairs, mathematically unrelated to the operator theory
+and to each other, so they are two topics rather than an appendix to an existing
+one:
+
+- **T21** `LinearAlgebra.Matrix.{RankFactorization, PosDef}`. Algebra-side matrix
+  results. Deliberately *not* folded into T19 (`Analysis.Matrix.*`), which is the
+  analysis side with a different Mathlib destination.
+- **T22** `Topology.{ApproxMinimizer, Berge}`. Berge's maximum theorem — general
+  topology and optimization, with no operator theory in it at all.
+
+Both are leaves inside `ForTauCeti`: nothing in the library imports them. Their
+consumers are the paper libraries (`Acharyya2024`, `Acharyya2025`) and three
+`Challenge/MathlibPending/**/Leaderboard.lean` files.
+
+**These are the two topics most plausibly bound for Mathlib rather than Tau
+Ceti**, which is what the retired "genuinely Mathlib-shaped remainder" reading
+was gesturing at before jon closed that question. The decision is settled — they
+live in `ForTauCeti` — but if any topic here is ever *re*-aimed at Mathlib, it is
+these two, and their `Challenge/MathlibPending/` directory name would then be
+right rather than a misnomer.

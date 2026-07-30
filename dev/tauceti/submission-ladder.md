@@ -47,18 +47,18 @@ docstring or lint polish changes it.
 
 ## Why this is cheap to fix
 
-**`ForTauCeti` is not a tangle.** Derived over its 156 modules, counting only
+**`ForTauCeti` is not a tangle.** Derived over its 160 modules, counting only
 internal (`ForTauCeti.*`) imports:
 
 | statistic | value |
 | --- | --- |
 | median internal import closure | **3** |
 | mean | 8.3 |
-| modules that are internal leaves | **41 of 156** |
+| modules that are internal leaves | **43 of 160** |
 | modules pulling more than 30 | **13** |
 | maximum | 61 |
 
-The library already stratifies: by longest internal chain the 156 modules spread
+The library already stratifies: by longest internal chain the 160 modules spread
 41/23/14/17/13/9/6/10/3/2/1/1/6/4/2/2/1/1 across eighteen layers. **The ladder exists in the import graph. It needs naming,
 not building.** No Lean file has to move for the re-slice; only the submission
 plan changes.
@@ -140,8 +140,8 @@ base Tau Ceti has already accepted.
   - `Analysis.OperatorIdeal.Family.OperatorNorm`
   - `Analysis.OperatorIdeal.Family.TraceClass`
 
-**Cumulative: 41 of 156 `ForTauCeti` modules** — the rest is not yet on the
-submission path. See *What is not on the ladder* below; it is 73%.
+**Cumulative: 41 of 160 `ForTauCeti` modules** — the rest is not yet on the
+submission path. See *What is not on the ladder* below; it is 74%.
 
 ## The number that makes the case
 
@@ -156,7 +156,7 @@ submission path. See *What is not on the ladder* below; it is 73%.
 to land; it is wrong about the *unit*. Keep it as the rung-C narrative and hang
 rungs A, B, D, E, F off this file. Do not submit the 37-module version.
 
-## What is not on the ladder — 115 of 156 modules, 73%
+## What is not on the ladder — 119 of 160 modules, 74%
 
 Rungs A–F cover the approximation-number/ideal stack and stop. **Everything
 else in `ForTauCeti` has no submission path at all**, and that is now the larger
