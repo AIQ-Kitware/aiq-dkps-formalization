@@ -42,7 +42,7 @@ variable {E : Type v}
 theorem finite_proposition4_1_singularValues
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : DavisKahanTheory.IsAcute U V)
+    (hacute : TauCeti.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) (n : ℕ) :
     ((LinearMap.id - (DavisKahanTheory.directRotation U V hacute).toLinearMap) ∘ₗ
         TauCeti.projection U).singularValues n ≤
@@ -54,7 +54,7 @@ singular values used by the infinite-dimensional ideal framework. -/
 theorem finite_proposition4_1_approximationSingularValue
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : DavisKahanTheory.IsAcute U V)
+    (hacute : TauCeti.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) (n : ℕ) :
     approximationSingularValue n
         (((LinearMap.id - (DavisKahanTheory.directRotation U V hacute).toLinearMap) ∘ₗ
@@ -71,7 +71,7 @@ theorem finite_proposition4_1_approximationSingularValue
 theorem finite_restrictedDisplacementDominance
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : DavisKahanTheory.IsAcute U V)
+    (hacute : TauCeti.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     RestrictedDisplacementApproximationDominance
       (((LinearMap.id - (DavisKahanTheory.directRotation U V hacute).toLinearMap) ∘ₗ
@@ -87,7 +87,7 @@ theorem finite_corollary4_1_uiNorm
     (N : UnitarilyInvariantNorm 𝕜 E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : DavisKahanTheory.IsAcute U V)
+    (hacute : TauCeti.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     N ((LinearMap.id - (DavisKahanTheory.directRotation U V hacute).toLinearMap) ∘ₗ
         TauCeti.projection U) ≤
@@ -101,7 +101,7 @@ theorem finite_proposition4_3_uiNorm
     (N : UnitarilyInvariantNorm 𝕜 E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : DavisKahanTheory.IsAcute U V)
+    (hacute : TauCeti.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     N (DavisKahanTheory.displacementSquare
       (DavisKahanTheory.directRotation U V hacute).toLinearMap) ≤
@@ -116,7 +116,7 @@ theorem finite_proposition4_2_fullBasisEnergy
     {n : ℕ}
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : DavisKahanTheory.IsAcute U V)
+    (hacute : TauCeti.IsAcute U V)
     (b : OrthonormalBasis (Fin n) 𝕜 E)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     ∑ i, ‖DavisKahanTheory.directRotation U V hacute (b i) - b i‖ ^ 2 ≤
