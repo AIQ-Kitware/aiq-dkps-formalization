@@ -713,7 +713,7 @@
       "primary_url": "",
       "target_note": "Rosenblum1956_operator_equation.tex",
       "repo_evidence": [
-        "ForTauCeti/Analysis/InnerProductSpace/SylvesterBound.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/Sylvester/Bound.lean",
         "DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean"
       ],
       "existing_assets": [],
@@ -964,7 +964,7 @@
       "primary_url": "",
       "target_note": "BhatiaRosenthal1997_sylvester_equation.tex",
       "repo_evidence": [
-        "ForTauCeti/Analysis/InnerProductSpace/SylvesterBound.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/Sylvester/Bound.lean",
         "DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean"
       ],
       "existing_assets": [],
@@ -1243,7 +1243,7 @@
       "primary_url": "",
       "target_note": "Bhatia1997_selected_matrix_analysis.tex",
       "repo_evidence": [
-        "ForTauCeti/Analysis/InnerProductSpace/SylvesterBound.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/Sylvester/Bound.lean",
         "ForTauCeti/Analysis/InnerProductSpace/SinTheta/UnitarilyInvariant.lean",
         "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
       ],
