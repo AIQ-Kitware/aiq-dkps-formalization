@@ -11,6 +11,12 @@ import ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace
 Canonical separation hypotheses used by the sine, tangent, double-angle, and
 Sylvester theorem families.
 
+## Sources
+
+The spectral-gap predicates are the hypotheses of Davis--Kahan's `sin Θ` theorem in
+the form the theorem consumes; see
+`prose/core-arguments/Davis-Kahan-1970-part-III-core-arguments.tex`.
+
 ## Provenance
 
 *Moved, not restated.*  This file was

@@ -14,6 +14,14 @@ import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 Sharp constant-one operator and rectangular unitarily invariant norm bounds
 under ordered or interval/exterior spectral separation.
 
+## Sources
+
+The interval and exterior forms of the Sylvester estimate follow
+Bhatia--Davis--McIntosh
+(`prose/distilled_literature/BhatiaDavisMcIntosh1983_spectral_subspaces_sylvester.tex`);
+the sharp `π / 2` constant and its Fourier route are distilled in
+`prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex`.
+
 ## Provenance
 
 *Moved, not restated.*  This file was
