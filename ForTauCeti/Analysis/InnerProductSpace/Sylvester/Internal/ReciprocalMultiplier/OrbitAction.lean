@@ -30,7 +30,7 @@ content enters in the sibling module `…ReciprocalMultiplier.Fourier`.
 
 *Split, not restated.*  This module was part of
 `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Internal/ReciprocalMultiplier.lean`
-until 2026-07-29, when lane SPLIT-1K divided that 2887-line file — the largest in
+before that 2887-line file was divided — the largest in
 the library, and nearly 3x Tau Ceti's stated 1000-line limit for a new file
 (`ForTauCeti/README.md` §4) — along its four mathematical seams.  **No statement,
 signature, proof, attribute or declaration name changed**; the split is a file
@@ -41,7 +41,7 @@ option is gone from all four parts.
 
 That file in turn was
 `DavisKahan/FiniteDimensional/Sylvester/Internal/ReciprocalMultiplier.lean`
-until lane Y3(b4) moved the sin-Θ closure into the staging layer.
+before the sin-Θ closure moved into the staging layer.
 
 Literature bridge for the group as a whole:
 `prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex`.

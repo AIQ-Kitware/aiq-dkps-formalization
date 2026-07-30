@@ -57,7 +57,7 @@ of that is used here, as the provenance note records.
 *New.*  The donor derives the same equation from the tensor factorisation of the
 flow; nothing of that is used.
 
-**Moved 2026-07-29** by lane PLACE-SYLV, from
+Moved from
 `ForTauCeti/Analysis/InnerProductSpace/SylvesterGenerator.lean` to
 `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Generator.lean`.  The `Sylvester/`
 directory already held `Basic`, `Interval`, `SpectralDistance` and `Internal/`, while
