@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
+import ForTauCeti.Analysis.InnerProductSpace.ReducedExtension
 import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 import ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator
@@ -43,29 +44,20 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
 omit [CompleteSpace E] in
-/-- Pythagoras for an orthogonal projection: a vector splits into its
-projection and the complementary part, and the squared norms add. -/
+/-- Pythagoras for an orthogonal projection, in the packaging this file uses.
+The content is `TauCeti.norm_sq_eq_starProjection_add_sub`. -/
 private theorem norm_sq_eq_starProjection_add_sub {W : Submodule 𝕜 E}
     [W.HasOrthogonalProjection] (x : E) :
-    ‖x‖ ^ 2 = ‖W.starProjection x‖ ^ 2 + ‖x - W.starProjection x‖ ^ 2 := by
-  have hpx : W.starProjection x ∈ W := W.starProjection_apply_mem x
-  have hrest : x - W.starProjection x ∈ Wᗮ := W.sub_starProjection_mem_orthogonal x
-  have h0 : RCLike.re ⟪W.starProjection x, x - W.starProjection x⟫_𝕜 = 0 := by
-    rw [Submodule.inner_right_of_mem_orthogonal hpx hrest]; simp
-  have hns := norm_add_sq (𝕜 := 𝕜) (W.starProjection x) (x - W.starProjection x)
-  rw [show W.starProjection x + (x - W.starProjection x) = x by abel, h0] at hns
-  linarith
+    ‖x‖ ^ 2 = ‖W.starProjection x‖ ^ 2 + ‖x - W.starProjection x‖ ^ 2 :=
+  TauCeti.norm_sq_eq_starProjection_add_sub x
 
 omit [CompleteSpace E] in
-/-- **The quadratic form of a reduced extension splits.**  If `T` is symmetric
-and reduces `W`, the extension `T ∘L P_W + κ (1 - P_W)` — which agrees with `T`
-on `W` and is the scalar `κ` on `Wᗮ` — has quadratic form
+/-- **The quadratic form of a reduced extension splits**, for an extension
+packaged from a bounded `T` and a reducing subspace.
 
-`re ⟪T (P x), P x⟫ + κ ‖x - P x‖²`.
-
-Both coercivity bounds of `sinTheta_directed_coercive` are this one identity:
-the lower one at `T = A`, `W = U`, `κ = c + g`, the upper at `T = B`, `W = V`,
-`κ = c`. -/
+The mathematics is `TauCeti.re_inner_reducedExtension_self`, which is stated at
+the value `T (P x) + κ • (x - P x)` and assumes only invariance; this wrapper
+supplies the packaging and drops `Reduces` to its invariance half. -/
 private theorem re_inner_reducedExtension_self {T : E →L[𝕜] E}
     {W : Submodule 𝕜 E} [W.HasOrthogonalProjection] (hW : T.Reduces W)
     (κ : ℝ) (x : E) :
@@ -73,41 +65,13 @@ private theorem re_inner_reducedExtension_self {T : E →L[𝕜] E}
         + ((κ : ℝ) : 𝕜) • (1 - W.starProjection)) x, x⟫_𝕜
       = RCLike.re ⟪T (W.starProjection x), W.starProjection x⟫_𝕜
         + κ * ‖x - W.starProjection x‖ ^ 2 := by
-  have hpx : W.starProjection x ∈ W := W.starProjection_apply_mem x
-  have hrest : x - W.starProjection x ∈ Wᗮ := W.sub_starProjection_mem_orthogonal x
-  have hxeq : (T ∘L W.starProjection
+  have hval : (T ∘L W.starProjection
       + ((κ : ℝ) : 𝕜) • (1 - W.starProjection)) x
       = T (W.starProjection x) + ((κ : ℝ) : 𝕜) • (x - W.starProjection x) := by
     simp only [add_apply, ContinuousLinearMap.comp_apply, smul_apply, sub_apply,
       one_apply_eq_self]
-  have hre : RCLike.re ⟪(T ∘L W.starProjection
-        + ((κ : ℝ) : 𝕜) • (1 - W.starProjection)) x, x⟫_𝕜
-      = RCLike.re ⟪T (W.starProjection x), x⟫_𝕜
-        + κ * RCLike.re ⟪x - W.starProjection x, x⟫_𝕜 := by
-    rw [hxeq, inner_add_left, inner_smul_left, RCLike.conj_ofReal, map_add,
-      RCLike.re_ofReal_mul]
-  have h1 : RCLike.re ⟪T (W.starProjection x), x⟫_𝕜
-      = RCLike.re ⟪T (W.starProjection x), W.starProjection x⟫_𝕜 := by
-    have hz : ⟪T (W.starProjection x), x - W.starProjection x⟫_𝕜 = 0 :=
-      Submodule.inner_right_of_mem_orthogonal (hW.1 _ hpx) hrest
-    have hsplit : ⟪T (W.starProjection x), x⟫_𝕜
-        = ⟪T (W.starProjection x), W.starProjection x⟫_𝕜
-          + ⟪T (W.starProjection x), x - W.starProjection x⟫_𝕜 := by
-      rw [← inner_add_right]; congr 1; abel
-    rw [hsplit, hz, add_zero]
-  have h2 : RCLike.re ⟪x - W.starProjection x, x⟫_𝕜
-      = ‖x - W.starProjection x‖ ^ 2 := by
-    have hz : ⟪x - W.starProjection x, W.starProjection x⟫_𝕜 = 0 :=
-      Submodule.inner_left_of_mem_orthogonal hpx hrest
-    have hsplit : ⟪x - W.starProjection x, x⟫_𝕜
-        = ⟪x - W.starProjection x, x - W.starProjection x⟫_𝕜 := by
-      have h' : ⟪x - W.starProjection x, x⟫_𝕜
-          = ⟪x - W.starProjection x, W.starProjection x⟫_𝕜
-            + ⟪x - W.starProjection x, x - W.starProjection x⟫_𝕜 := by
-        rw [← inner_add_right]; congr 1; abel
-      rw [h', hz, zero_add]
-    rw [hsplit, inner_self_eq_norm_sq]
-  rw [hre, h1, h2]
+  rw [hval]
+  exact TauCeti.re_inner_reducedExtension_self (R := (T : E →ₗ[𝕜] E)) hW.1 κ x
 
 /-- **The dimension-free operator-norm Davis--Kahan `sin Θ` theorem, coercivity
 form.**  For self-adjoint `A, B` on an arbitrary Hilbert space, `U` reducing `A`
