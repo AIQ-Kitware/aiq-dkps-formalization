@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-1177/1185 files reviewed · 1185 files · 266,292 lines · 113 groups
+1185/1185 files reviewed · 1185 files · 266,302 lines · 113 groups
 
 ## How to review
 
@@ -95,9 +95,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### .llm_resource_tally :: data/config
 
-*3 files, 946 lines — 3/3 reviewed*
+*3 files, 947 lines — 3/3 reviewed*
 
-- [x] `.llm_resource_tally/ledger/ledger.jsonl` — 893 lines · data/config
+- [x] `.llm_resource_tally/ledger/ledger.jsonl` — 894 lines · data/config
 - [x] `.llm_resource_tally/lifetime-totals.json` — 46 lines · data/config
 - [x] `.llm_resource_tally/settings.json` — 7 lines · data/config
 
@@ -1130,7 +1130,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T09 Approximation numbers
 
-*13 files, 2,899 lines — 11/13 reviewed*
+*13 files, 2,899 lines — 13/13 reviewed*
 
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean` — 482 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFan.lean` — 451 lines · Lean source
@@ -1337,7 +1337,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCetiRoadmap :: documentation
 
-*22 files, 3,578 lines — 16/22 reviewed*
+*22 files, 3,578 lines — 22/22 reviewed*
 
 - [x] `ForTauCetiRoadmap/ApproximationNumbers/README.md` — 449 lines · documentation
 - [x] `ForTauCetiRoadmap/CANDIDATE-TOPIC-DESIGN.md` — 313 lines · documentation
@@ -1450,14 +1450,14 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*156 files, 36,791 lines — 156/156 reviewed*
+*156 files, 36,800 lines — 156/156 reviewed*
 
 - [x] `dev/tauceti-signature-polish-todo.md` — 2,201 lines · documentation
-- [x] `dev/audit/FILE-CHECKLIST.md` — 1,777 lines · documentation
+- [x] `dev/audit/FILE-CHECKLIST.md` — 1,785 lines · documentation
 - [x] `dev/davis-kahan-expert-completion-plan.md` — 1,589 lines · documentation
 - [x] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation
 - [x] `dev/tauceti/u1-linearpmap-migration.md` — 1,139 lines · documentation
-- [x] `dev/LANES.md` — 1,044 lines · documentation
+- [x] `dev/LANES.md` — 1,036 lines · documentation
 - [x] `dev/tauceti/spectra-removal-plan.md` — 1,036 lines · documentation
 - [x] `dev/lean-proof-engineering-lessons.md` — 907 lines · documentation
 - [x] `dev/tauceti/NAMEK-STATUS.md` — 862 lines · documentation
@@ -1498,9 +1498,9 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `dev/topurge/dev/real-route-completion-prompt.md` — 246 lines · documentation
 - [x] `dev/tauceti/experimental-sorry-triage.md` — 235 lines · documentation
 - [x] `dev/topurge/dev/tauceti/experimental-promotion-roadmap.md` — 232 lines · documentation
+- [x] `dev/LANES-COMPLETED.md` — 231 lines · documentation
 - [x] `dev/topurge/dev/overlays/shared-hard-foundations-dfd9d37-gpt56.md` — 230 lines · documentation
 - [x] `dev/tauceti/extraction-cluster-classification.md` — 227 lines · documentation
-- [x] `dev/LANES-COMPLETED.md` — 222 lines · documentation
 - [x] `dev/davis-kahan-1970-full-sine-theta-proof-manuscript-2026-07-19.md` — 222 lines · documentation
 - [x] `dev/topurge/dev/compile-repair-rebase-note-2026-07-20.md` — 217 lines · documentation
 - [x] `dev/davis-kahan-1970-missing-statements-math-ahead-2026-07-20.md` — 213 lines · documentation
