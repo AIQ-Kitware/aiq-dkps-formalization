@@ -82,6 +82,16 @@ the operator — the defining property of `adjointTransport`. -/
     (adjointTransport N).toFun A.adjoint = N.toFun A := by
   simp only [adjointTransport, LinearMap.adjoint_adjoint]
 
+/-- `adjointTransport_apply` in the **coerced** form, which is how call sites write it.
+
+Added 2026-07-30 (lane `RUB-SHOW`). The `.toFun` form above cannot be rewritten with at a
+call site that says `(adjointTransport N) A.adjoint`: the rewrite reports *"did not find an
+occurrence of the pattern"*, because the goal carries the `CoeFun` application rather than
+the projection. Consumers were working around that with `change`, which is the
+`proof-quality` rubric's code smell — the lemma existed but was unusable as stated. -/
+@[simp] theorem adjointTransport_coe_apply (A : E →ₗ[𝕜] F) :
+    (adjointTransport N) A.adjoint = N A := adjointTransport_apply N A
+
 
 /-- Left ideal property.  This is Fan dominance applied to the pointwise
 singular-value bound for composition by a bounded left factor. -/
