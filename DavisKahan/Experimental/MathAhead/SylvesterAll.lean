@@ -1,8 +1,7 @@
-import DavisKahan.Experimental.MathAhead.Sylvester.All
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.RealSylvesterDescent
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.HilbertSchmidtComplexFamily
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.SchattenApproximationFoundation
+import DavisKahan.OperatorIdeal.ApproximationNumbers.SchattenApproximationFoundation
 
 /-!
 # Sylvester and ideal mathematics-ahead aggregate

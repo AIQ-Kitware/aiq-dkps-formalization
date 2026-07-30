@@ -1,5 +1,5 @@
 DavisKahan/Experimental/MathAhead/All.lean
-DavisKahan/Experimental/MathAhead/GeometryAll.lean
+DavisKahan/Experimental/MathAhead/GeometryAll.lean -> DavisKahan/Geometry/Polar/All.lean
 DavisKahan/Experimental/MathAhead/SylvesterAll.lean
 DavisKahan/Experimental/MathAhead/ContinuationAll.lean
 DavisKahan/Experimental/MathAhead/Section9All.lean -> DavisKahan/Sources/DavisKahan1970/Section9/All.lean

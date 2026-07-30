@@ -16,5 +16,6 @@ import DavisKahan.SpectralTheory.GraphSubspace
 import DavisKahan.SpectralTheory.OperatorAngle
 import DavisKahan.SpectralTheory.ResolventOperator
 import DavisKahan.SpectralTheory.SelfAdjointBorelCalculus
+import DavisKahan.SpectralTheory.SpectralMultiplicityFoundation
 
 /-! # `DavisKahan/SpectralTheory` -/
