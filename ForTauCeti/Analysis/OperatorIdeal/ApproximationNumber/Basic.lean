@@ -105,7 +105,7 @@ choice, flagged for Tau Ceti maintainer review.
   did; it imports only Mathlib.
 -/
 
-@[expose] public section
+public section
 
 noncomputable section
 
@@ -151,7 +151,7 @@ subtype is not a useful normal form for a norm-like quantity.  Prefer
 theorem approximationNumber_eq_iInf (T : E →L[𝕜] F) (n : ℕ) :
     T.approximationNumber n =
       ⨅ R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)}, ‖T - R.1‖ :=
-  rfl
+  (rfl)
 
 /-- Every admissible approximation of rank at most `n` bounds `aₙ(T)` above. -/
 theorem approximationNumber_le_norm_sub (T : E →L[𝕜] F) {n : ℕ}

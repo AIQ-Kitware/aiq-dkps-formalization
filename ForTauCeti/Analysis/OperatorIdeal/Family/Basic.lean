@@ -113,7 +113,7 @@ independent parameters of the *fields*, which is the point of the layer.
   one.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 
@@ -328,7 +328,16 @@ theorem sum_mem_carrier {ι : Type*} (s : Finset ι) {A : ι → E →L[𝕜] F}
 
 This is deliberately a type synonym rather than the subtype itself: the subtype
 already inherits the *operator* norm from `E →L[𝕜] F`, and the two norms differ.
+
+**`@[expose]`, and this is the one place in the group that needs it.**  `Elem` is
+a *type*: the compiler has to see that it is a subtype in order to infer the same
+representation for `Elem.val` and `Elem.mk` here as in any consuming module, and
+it says so — *"locally inferred compilation type differs from type that would be
+inferred in other modules"*.  That is not the `api-design` rubric's
+expose-instead-of-a-lemma anti-pattern, which is about proofs relying on defeq;
+no lemma can substitute for a type's representation.
 -/
+@[expose]
 def Elem (N : OperatorIdealFamily.{u, v, w} 𝕜) (E : Type v) (F : Type w)
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] : Type max v w :=
@@ -352,11 +361,18 @@ theorem gauge_val_ne_top (A : N.Elem E F) : N.gauge A.val ≠ ∞ := A.val_mem
 def mk {A : E →L[𝕜] F} (hA : A ∈ N.carrier) : N.Elem E F := ⟨A, hA⟩
 
 /-- Building an ideal element and taking its value is the identity. -/
-@[simp] theorem val_mk {A : E →L[𝕜] F} (hA : A ∈ N.carrier) : (mk (N := N) hA).val = A := rfl
-
+@[simp] theorem val_mk {A : E →L[𝕜] F} (hA : A ∈ N.carrier) : (mk (N := N) hA).val = A := (rfl)
 /-- Ideal elements are equal when their underlying operators are.  Tagged `@[ext]`, so `ext`
 reduces any such goal to the operators. -/
 @[ext] theorem ext {A B : N.Elem E F} (h : A.val = B.val) : A = B := Subtype.ext h
+
+/-- Taking an ideal element's value and rebuilding is the identity — the
+companion of `val_mk`, in the direction a round-trip equivalence needs.
+
+Written when `Family/OperatorNorm.lean`'s `left_inv` field stopped being `rfl`:
+without `Elem`'s body exposed, `mk A.val_mem = A` is not definitional, and the
+right answer to that is the lemma rather than the exposure. -/
+@[simp] theorem mk_val (A : N.Elem E F) : mk (N := N) A.val_mem = A := ext (val_mk _)
 
 /-- The ideal is an additive subgroup of the bounded operators, inherited from its carrier. -/
 instance : AddCommGroup (N.Elem E F) :=
@@ -367,16 +383,15 @@ instance : Module 𝕜 (N.Elem E F) :=
   inferInstanceAs (Module 𝕜 (N.carrier : Submodule 𝕜 (E →L[𝕜] F)))
 
 /-- The zero ideal element is the zero operator. -/
-@[simp] theorem val_zero : (0 : N.Elem E F).val = 0 := rfl
+@[simp] theorem val_zero : (0 : N.Elem E F).val = 0 := (rfl)
 /-- Addition of ideal elements is addition of operators. -/
-@[simp] theorem val_add (A B : N.Elem E F) : (A + B).val = A.val + B.val := rfl
+@[simp] theorem val_add (A B : N.Elem E F) : (A + B).val = A.val + B.val := (rfl)
 /-- Negation of an ideal element is negation of the operator. -/
-@[simp] theorem val_neg (A : N.Elem E F) : (-A).val = -A.val := rfl
+@[simp] theorem val_neg (A : N.Elem E F) : (-A).val = -A.val := (rfl)
 /-- Subtraction of ideal elements is subtraction of operators. -/
-@[simp] theorem val_sub (A B : N.Elem E F) : (A - B).val = A.val - B.val := rfl
+@[simp] theorem val_sub (A B : N.Elem E F) : (A - B).val = A.val - B.val := (rfl)
 /-- Scaling an ideal element scales the operator. -/
-@[simp] theorem val_smul (c : 𝕜) (A : N.Elem E F) : (c • A).val = c • A.val := rfl
-
+@[simp] theorem val_smul (c : 𝕜) (A : N.Elem E F) : (c • A).val = c • A.val := (rfl)
 /-- The ideal norm, as a real-valued norm on the ideal. -/
 noncomputable instance : NormedAddCommGroup (N.Elem E F) :=
   AddGroupNorm.toNormedAddCommGroup
@@ -400,7 +415,7 @@ noncomputable instance : NormedAddCommGroup (N.Elem E F) :=
           (((ENNReal.toReal_eq_zero_iff _).mp hA).resolve_right A.gauge_val_ne_top) }
 
 /-- The ideal norm is the gauge, brought down to `ℝ`.  Lossless because `gauge_val_ne_top`. -/
-theorem norm_def (A : N.Elem E F) : ‖A‖ = (N.gauge A.val).toReal := rfl
+theorem norm_def (A : N.Elem E F) : ‖A‖ = (N.gauge A.val).toReal := (rfl)
 
 /-- Going back up: the extended norm of an ideal element is its gauge exactly, with no `toReal`
 round-trip loss. -/

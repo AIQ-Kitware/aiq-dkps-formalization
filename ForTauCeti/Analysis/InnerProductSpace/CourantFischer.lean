@@ -89,7 +89,7 @@ two-operator Weyl inequalities are helper facts under `TauCeti`.
 * Spectra influence: **none** — this module imports only Mathlib.
 -/
 
-@[expose] public section
+public section
 
 open Module (finrank)
 open scoped InnerProductSpace
@@ -422,6 +422,7 @@ theorem map_mem_spanIndices (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n)
     (s : Set (Fin n)) {x : E}
     (hx : x ∈ (hT.eigenvectorBasis hn).spanIndices s) :
     T x ∈ (hT.eigenvectorBasis hn).spanIndices s := by
+  rw [OrthonormalBasis.spanIndices_eq_span] at hx ⊢
   induction hx using Submodule.span_induction with
   | mem y hy =>
     obtain ⟨j, hj, rfl⟩ := hy

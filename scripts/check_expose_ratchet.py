@@ -37,7 +37,7 @@ LIB = ROOT / "ForTauCeti"
 
 #: The highest number of blanket-exposing modules the tree may contain.
 #: Measured on 2026-07-30, the day the convention was adopted.  Only ever lower it.
-BASELINE = 51
+BASELINE = 22
 
 BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 
@@ -47,7 +47,7 @@ BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 #: closes that.  It is NOT zero, and should not be: `api-design` explicitly permits
 #: exposure where "a consumer must unfold or compute".  Every one of these carries a
 #: comment naming the reason.  Raising it is allowed; doing so silently is not.
-PER_DECL_BASELINE = 4
+PER_DECL_BASELINE = 5
 
 PER_DECL = re.compile(r"^@\[expose\]\s*$", re.M)
 

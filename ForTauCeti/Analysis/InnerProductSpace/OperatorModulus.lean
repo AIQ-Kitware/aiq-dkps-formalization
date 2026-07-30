@@ -71,7 +71,7 @@ expected to follow by complexification transfer.
 * Spectra influence: **none** — this module imports only Mathlib.
 -/
 
-@[expose] public section
+public section
 
 namespace ContinuousLinearMap
 
@@ -89,6 +89,15 @@ Hilbert spaces: the positive square root, through the continuous functional
 calculus, of the Gram operator `T⋆ T` on the source space. -/
 noncomputable def modulus (T : E →L[ℂ] F) : E →L[ℂ] E :=
   CFC.sqrt (T.adjoint ∘L T)
+
+/-- **The modulus unfolded.**  The characteristic lemma: `|T|` is the functional
+calculus square root of the Gram operator.  A consumer in another module that
+needs to rewrite through the definition should use this rather than `rw
+[modulus]`, which only works while the body is exposed.
+
+`modulus_eq_sqrt_star_mul_self` is the endomorphism specialization, in
+C⋆-algebra notation. -/
+theorem modulus_def (T : E →L[ℂ] F) : T.modulus = CFC.sqrt (T.adjoint ∘L T) := (rfl)
 
 /-- The Gram operator `T⋆ T` is nonnegative.  This is the `0 ≤ ·` form of
 `ContinuousLinearMap.isPositive_adjoint_comp_self`. -/
@@ -129,7 +138,7 @@ theorem norm_modulus_apply (T : E →L[ℂ] F) (x : E) : ‖T.modulus x‖ = ‖
     calc (⟪T.modulus x, T.modulus x⟫_ℂ : ℂ)
         = ⟪T.modulus.adjoint x, T.modulus x⟫_ℂ := by rw [adjoint_modulus]
       _ = ⟪x, T.modulus (T.modulus x)⟫_ℂ := adjoint_inner_left _ _ _
-      _ = ⟪x, (T.modulus * T.modulus) x⟫_ℂ := rfl
+      _ = ⟪x, (T.modulus * T.modulus) x⟫_ℂ := (rfl)
       _ = ⟪x, (T.adjoint ∘L T) x⟫_ℂ := by rw [modulus_mul_self]
       _ = ⟪T x, T x⟫_ℂ := adjoint_inner_right T x (T x)
   have hsq : ‖T.modulus x‖ ^ 2 = ‖T x‖ ^ 2 := by
@@ -203,7 +212,7 @@ These are specializations of the definition above, not a second construction. -/
 /-- On an endomorphism the modulus is the C⋆-algebra absolute value. -/
 theorem modulus_eq_sqrt_star_mul_self (T : E →L[ℂ] E) :
     T.modulus = CFC.sqrt (star T * T) :=
-  rfl
+  (rfl)
 
 /-- The defining identity in C⋆-algebra form. -/
 theorem modulus_mul_self_eq_star_mul_self (T : E →L[ℂ] E) :

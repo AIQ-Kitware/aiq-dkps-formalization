@@ -63,7 +63,7 @@ for.
 
 open scoped ENNReal InnerProductSpace
 
-@[expose] public section
+public section
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E F G : Type*}
@@ -112,7 +112,7 @@ noncomputable def hilbertSchmidtEnergy (T : E →L[𝕜] F) (b : HilbertBasis ι
 
 /-- Rewrite form of the Hilbert--Schmidt energy as the sum of squared column norms. -/
 theorem hilbertSchmidtEnergy_def (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E) :
-    T.hilbertSchmidtEnergy b = ∑' i, ‖T (b i)‖ₑ ^ 2 := rfl
+    T.hilbertSchmidtEnergy b = ∑' i, ‖T (b i)‖ₑ ^ 2 := (rfl)
 
 /-- The energy is the supremum of its finite partial sums. -/
 theorem hilbertSchmidtEnergy_eq_iSup_sum (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E) :
