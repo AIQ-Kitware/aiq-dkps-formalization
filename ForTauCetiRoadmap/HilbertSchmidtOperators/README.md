@@ -126,32 +126,27 @@ is precisely the part that costs.
 3. **That `ofLp` is continuous with `‖ofLp b f‖ ≤ ‖f‖`**, which is what the
    `LinearMap.mkContinuous` in its definition establishes.
 
-## One thing to fix before this topic is submitted
+## A defect this document surfaced, and its fix
 
-**The elementary facts about `ofLp` are not all in this topic.** Measured
-2026-07-30, of the six identifiers the HS-PORT substitution needed, only three
-live in T11 modules:
+Writing this roadmap found that the elementary facts about `ofLp` were **not all
+in this topic**. Of the six identifiers the HS-PORT substitution needed, three
+were stated in T16 — in `Sylvester/{Group, SpectralGap, Generator}.lean` —
+because that is the topic that first needed them:
 
-| Lemma | Where it is | Where it belongs |
+| Lemma | Was | Now |
 |---|---|---|
-| `ofLp`, `columns`, round trips | `HilbertSchmidtLp` | ✓ |
-| `ofLp_injective` | `HilbertSchmidtSpace` | ✓ |
-| `ofLp_add` | `HilbertSchmidtConjugation` | ✓ |
-| `ofLp_sub` | `Sylvester/Group.lean` (T16) | T11 |
-| `ofLp_zero` | `Sylvester/SpectralGap.lean` (T16) | T11 |
-| `norm_ofLp_le` | `Sylvester/Generator.lean` (T16) | T11 |
+| `ofLp_sub` | `Sylvester/Group.lean` (T16) | `HilbertSchmidtConjugation`, beside `ofLp_add` |
+| `ofLp_zero` | `Sylvester/SpectralGap.lean` (T16) | `HilbertSchmidtLp`, beside `ofLp` |
+| `norm_ofLp_le` | `Sylvester/Generator.lean` (T16) | `HilbertSchmidtLp`, beside `ofLp` |
 
-Three lemmas about `ofLp` — that it respects subtraction, sends `0` to `0`, and
-is norm-contractive — are stated in the topic that first needed them rather than
-the topic that defines the object. That is how they came to be written, and it
-is invisible while both topics ship together, but T11 is supposed to be
-submittable *before* T16. As it stands a reviewer reading T11 alone would find
-the Hilbert–Schmidt space defined without the statement that its representation
-map is bounded.
+This was invisible while both topics shipped together, but **T11 is meant to be
+submittable before T16**, and as it stood a reviewer reading T11 alone would have
+found the Hilbert–Schmidt space defined without the statement that its
+representation map is bounded.
 
-Moving those three is mechanical and touches no proof. It is not folded into
-this document's own lane because it is a `.lean` change requiring a build,
-whereas writing the roadmap is not.
+All three have been moved (`ofLp_zero` was stated only over `ℂ` and is now
+generic in `𝕜`, since the module it moved into is). Nothing else changed: no
+proof was touched and the build is unaffected.
 
 ## Prerequisites
 
