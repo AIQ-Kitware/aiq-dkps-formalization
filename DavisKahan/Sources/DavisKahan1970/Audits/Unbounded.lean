@@ -49,8 +49,8 @@ namespace ExactSinTheta
 #check realSpectralSubspace_orthogonalExactDecomposition
 #check sinTheta_unbounded_real_spectralSubspace
 #check generalizedSinTheta_unbounded_real_spectralSubspace
-#check GeneralSinThetaProblem.result
-#check IsometricSinThetaProblem.result
+#check SpectralGeneralSinThetaProblem.result
+#check SpectralIsometricSinThetaProblem.result
 #check TauCeti.DavisKahanExt.ClosedOperator.realResolventSet
 #check realSpectrum_eq_spectraSpectrum
 #check ClosedOperatorComplexification.isSelfAdjoint_complexify
@@ -105,8 +105,8 @@ namespace ExactSinTheta
 #print axioms realSpectralSubspace_orthogonalExactDecomposition
 #print axioms sinTheta_unbounded_real_spectralSubspace
 #print axioms generalizedSinTheta_unbounded_real_spectralSubspace
-#print axioms GeneralSinThetaProblem.result
-#print axioms IsometricSinThetaProblem.result
+#print axioms SpectralGeneralSinThetaProblem.result
+#print axioms SpectralIsometricSinThetaProblem.result
 #print axioms TauCeti.DavisKahanExt.ClosedOperator.realSpectrum
 #print axioms realSpectrum_eq_spectraSpectrum
 #print axioms ClosedOperatorComplexification.isSelfAdjoint_complexify
