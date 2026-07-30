@@ -58,6 +58,8 @@ def IsOffDiagonal (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
 theorem reflectionOperator_apply (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (x : E) :
     U.reflectionOperator x = (2 : 𝕜) • U.starProjection x - x := by
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change U.reflection x = (2 : 𝕜) • U.starProjection x - x
   rw [Submodule.reflection_apply, ← Nat.cast_smul_eq_nsmul 𝕜]
   norm_num
@@ -68,6 +70,8 @@ theorem reflectionOperator_involutive (U : Submodule 𝕜 E)
     U.reflectionOperator ∘L U.reflectionOperator =
       ContinuousLinearMap.id 𝕜 E := by
   ext x
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change U.reflection (U.reflection x) = x
   exact U.reflection_reflection x
 
@@ -75,12 +79,15 @@ theorem reflectionOperator_involutive (U : Submodule 𝕜 E)
 theorem reflectionOperator_norm_map (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (x : E) :
     ‖U.reflectionOperator x‖ = ‖x‖ := by
+  -- names the application so the norm bound applies to it directly.
   change ‖U.reflection x‖ = ‖x‖
   exact U.reflection.norm_map x
 
 /-- Reflection is onto. -/
 theorem reflectionOperator_surjective (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] : Function.Surjective U.reflectionOperator := by
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change Function.Surjective U.reflection
   exact U.reflection.surjective
 
@@ -89,6 +96,7 @@ theorem norm_reflectionOperator_le_one (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] : ‖U.reflectionOperator‖ ≤ 1 := by
   refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one ?_
   intro x
+  -- names the application so the norm bound applies to it directly.
   change ‖U.reflection x‖ ≤ 1 * ‖x‖
   simpa only [one_mul] using le_of_eq (U.reflection.norm_map x)
 
@@ -98,6 +106,8 @@ theorem reflectionOperator_comm_of_reduces
     [U.HasOrthogonalProjection] (hU : A.Reduces U) :
     U.reflectionOperator ∘L A = A ∘L U.reflectionOperator := by
   ext x
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change U.reflectionOperator (A x) = A (U.reflectionOperator x)
   rw [reflectionOperator_apply, reflectionOperator_apply,
     ContinuousLinearMap.starProjection_apply_comm_of_reduces A U hU,
