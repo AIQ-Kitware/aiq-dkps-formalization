@@ -187,9 +187,11 @@ noncomputable def basisDoubledPhaseRotation
     have hparseval (z : G) : ∑ i, ‖e.repr z i‖ ^ 2 = ‖z‖ ^ 2 := by
       simp_rw [e.repr_apply_apply]
       exact e.sum_sq_norm_inner_right z
+    -- names the application so the norm bound applies to it directly.
     change ‖WithLp.toLp 2 (C x.fst - S x.snd, S x.fst + C x.snd)‖ = ‖x‖
     rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _),
       WithLp.prod_norm_sq_eq_of_L2, WithLp.prod_norm_sq_eq_of_L2]
+    -- names the application so the norm bound applies to it directly.
     change ‖C x.fst - S x.snd‖ ^ 2 + ‖S x.fst + C x.snd‖ ^ 2 =
       ‖x.fst‖ ^ 2 + ‖x.snd‖ ^ 2
     rw [← hparseval (C x.fst - S x.snd), ← hparseval (S x.fst + C x.snd),
@@ -478,6 +480,7 @@ theorem hasDoubledReciprocalOrbitInterpolation_of_finiteFourierInterpolation
                 apply Finset.sum_congr rfl
                 intro r _
                 rw [unitaryOrbitAction_apply]
+                -- names the application so the norm bound applies to it directly.
                 change ((‖a r‖ : ℝ) : 𝕜) •
                     ((basisDoubledPhaseRotation eF
                         (fun i => Complex.arg (a r) + t r * α i)).toLinearMap ∘ₗ
@@ -560,6 +563,8 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_doubledInterpolation
         ∑ i, ∑ j, ⟪eF i, A (eE j)⟫_𝕜 •
           RectangularUnitarilyInvariantNorm.orthogonalBlockSum
             (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j) := by
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change blockDiagonal A = _
     conv_lhs => rw [sum_basisMatrixUnit eF eE A]
     simp only [map_sum, map_smul, blockDiagonal]
