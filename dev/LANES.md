@@ -63,6 +63,36 @@ Two markers in a row's **status cell** make the board machine-readable, so that
 `{lane:FTT-DEDUP}` `{needs:FTT-PROMOTE}` **BLOCKED — posted now so it is not forgotten**
 ```
 
+#### `main` is now maintained, and what that means
+
+**jon, 2026-07-30: `edward (aiq-gpu)` owns merging every branch into `main` and
+pushing, including its own.** Before this, `main` sat 178 commits behind while all
+real work happened on agent branches; it advanced to `69df3d22` on 2026-07-30,
+carrying 192 commits.
+
+**The rule: `main` only ever advances through a green build.** Concretely, and this
+is the whole procedure:
+
+1. merge every branch that is ahead into the integration branch;
+2. run `lake build` **and** the gate suite — `check_lane_format`, `check_lane_graph`,
+   `check_expose_ratchet`, `check_submission_prose`, `check_declaration_name_drift`,
+   `check_tauceti_roadmap_topics`, and `scripts/tests/`;
+3. confirm `git merge-base --is-ancestor origin/main HEAD` — **a fast-forward means the
+   tree main receives IS the tree that was just built**, so a green build on the
+   integration branch is green on `main` by construction, and no second build is needed
+   (jon, 2026-07-30);
+4. push, then push the same tip to the integration branch so agents converge.
+
+**If step 3 fails**, `main` has a commit the integrator does not, the union is untested,
+and it goes back to step 1 — never force, never push around it.
+
+**`main` is the last known-green union, not the newest work.** Branches land while a
+build runs; those go in the next pass rather than being chased. `main` lagging the tips
+by a few commits is correct behaviour, not drift.
+
+**What this changes for you:** you may branch from `main` and expect it to build. You
+still push to your own branch and the integrator merges; do not push to `main` yourself.
+
 #### Claiming a lane: use the script, do not grep
 
 **`python3 scripts/lane.py check <LANE>` before every claim.** Not `git grep`.
