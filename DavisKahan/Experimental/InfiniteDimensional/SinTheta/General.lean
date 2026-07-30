@@ -202,7 +202,7 @@ This is the genuine infinite-dimensional `sin Θ` bound: the analytic core is th
 integral-free Sylvester estimate `norm_sylvester_le_of_coercive` (no spectral
 measure, no dimension or completeness hypothesis on the *bound* itself), and the
 block construction `A ∘L P + (c+g)(1−P)`, `B ∘L Q + c(1−Q)` uses only the
-dimension-free projection commutation `projection_apply_comm_of_reduces`.  The
+dimension-free projection commutation `projection_apply_comm_of_isInvariant`.  The
 spectrum-predicate forms (`sinTheta_perturbation`, `IntervalExteriorSeparated`)
 follow from this once a bounded spectral theorem converts spectral separation to
 these coercivity bounds. -/
@@ -230,10 +230,10 @@ theorem sinTheta_directed_coercive
   -- commutations
   have hcommA : A ∘L P = P ∘L A := by
     ext x; simp only [ContinuousLinearMap.comp_apply]
-    exact (projection_apply_comm_of_reduces A U hU x).symm
+    exact (projection_apply_comm_of_isInvariant A U hU x).symm
   have hcommB : B ∘L Q = Q ∘L B := by
     ext x; simp only [ContinuousLinearMap.comp_apply]
-    exact (projection_apply_comm_of_reduces B V hV x).symm
+    exact (projection_apply_comm_of_isInvariant B V hV x).symm
   -- self-adjointness of A', B'
   have hA'sa : IsSelfAdjoint A' := by
     have h1 : IsSelfAdjoint (A ∘L P) := (IsSelfAdjoint.commute_iff hAsa hPsa).mp hcommA
@@ -323,7 +323,7 @@ theorem sinTheta_directed_coercive
       rw [map_sub, hQQ, sub_self]
     have hQBQ : Q (B (Q x)) = B (Q x) := V.starProjection_eq_self_iff.mpr (hV.1 _ hQxV)
     have hAP : A (P (Q x)) = P (A (Q x)) :=
-      (projection_apply_comm_of_reduces A U hU (Q x)).symm
+      (projection_apply_comm_of_isInvariant A U hU (Q x)).symm
     have hAX : (A' ∘L X) x = A (P (Q x)) := by
       simp only [ContinuousLinearMap.comp_apply, hX, hA', add_apply,
         smul_apply, sub_apply,
@@ -484,7 +484,7 @@ noncomputable def spectralProjection (A : E →L[𝕜] E) (s : Set ℝ) :
 
 /-- **Leaf obligation.** Spectral subspaces of a self-adjoint operator reduce
 it. -/
-theorem reduces_spectralSubspace (A : E →L[𝕜] E)
+theorem isInvariant_spectralSubspace (A : E →L[𝕜] E)
     (hA : IsSelfAdjointOperator A) (s : Set ℝ) (_hs : MeasurableSet s) :
     Reduces A (spectralSubspace A s) :=
   sorry
@@ -500,7 +500,7 @@ theorem projection_spectralSubspace_eq (A : E →L[𝕜] E) (s : Set ℝ) :
 Lean proof route for a weaker agent:
 
 1. Convert the four spectral-containment hypotheses into the two `IntervalExteriorSeparated` predicates.
-2. Apply `sinTheta_symmetric` to the canonical spectral subspaces, using `reduces_spectralSubspace`.
+2. Apply `sinTheta_symmetric` to the canonical spectral subspaces, using `isInvariant_spectralSubspace`.
 3. Rewrite the subspace gap as the norm of the two spectral projections.
 
 
@@ -527,8 +527,8 @@ theorem spectralProjection_sinTheta
       ‖B - A‖ := by
   let U := spectralSubspace A s
   let V := spectralSubspace B t
-  have hredA := reduces_spectralSubspace A hA s hs
-  have hredB := reduces_spectralSubspace B hB t ht
+  have hredA := isInvariant_spectralSubspace A hA s hs
+  have hredB := isInvariant_spectralSubspace B hB t ht
   have hUV : IntervalExteriorSeparated A U B Vᗮ left right d :=
     ⟨hAs, hBt⟩
   have hVU : IntervalExteriorSeparated B V A Uᗮ left' right' d :=

@@ -99,11 +99,11 @@ theorem projection_comp_comm_of_reduces
     projection U ∘L A = A ∘L projection U :=
   DavisKahan.projection_comp_comm_of_reduces A U hU
 
-theorem projection_apply_comm_of_reduces
+theorem projection_apply_comm_of_isInvariant
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (hU : Reduces A U) (x : E) :
     projection U (A x) = A (projection U x) :=
-  DavisKahan.projection_apply_comm_of_reduces A U hU x
+  DavisKahan.projection_apply_comm_of_isInvariant A U hU x
 
 theorem reflectionOperator_apply (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (x : E) :
