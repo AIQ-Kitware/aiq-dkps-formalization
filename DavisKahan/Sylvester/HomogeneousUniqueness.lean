@@ -45,7 +45,7 @@ theorem closedSylvester_homogeneous_eq_zero_complex
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap A B δ)
+    (hgap : FormBoundedSylvesterGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X 0) :
     X = 0 := by
   let N := KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ)
@@ -72,7 +72,7 @@ theorem closedSylvester_solution_unique_complex
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X Y C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap A B δ)
+    (hgap : FormBoundedSylvesterGap A B δ)
     (hX : HasClosedSylvesterEquation A B X C)
     (hY : HasClosedSylvesterEquation A B Y C) :
     X = Y := by
@@ -98,7 +98,7 @@ theorem closedSylvester_homogeneous_eq_zero_real
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap A B δ)
+    (hgap : FormBoundedSylvesterGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X 0) :
     X = 0 := by
   let N := KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)
@@ -125,7 +125,7 @@ theorem closedSylvester_solution_unique_real
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X Y C : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap A B δ)
+    (hgap : FormBoundedSylvesterGap A B δ)
     (hX : HasClosedSylvesterEquation A B X C)
     (hY : HasClosedSylvesterEquation A B Y C) :
     X = Y := by

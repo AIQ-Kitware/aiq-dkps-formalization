@@ -50,7 +50,7 @@ theorem generalizedSinTheta_unbounded_real
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
       (sinThetaBlockReal D.X D.F₁ hframe hε) ∧
@@ -89,7 +89,7 @@ theorem generalizedSinTheta_unbounded_exact_real
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
       (directedSinThetaOperatorReal D.X F₀ hframe hε) ∧

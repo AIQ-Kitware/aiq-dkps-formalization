@@ -151,7 +151,7 @@ structure NaturalReducingIsometricSinThetaProblem
     A ⟨X (x : F), X_maps_domain x⟩ - X (A₀ x) = residual (x : F)
   gap : ℝ
   gap_pos : 0 < gap
-  spectral_gap : linearPMap_UnboundedSylvesterGap A₀
+  spectral_gap : linearPMap_FormBoundedSylvesterGap A₀
     (TauCeti.LinearPMap.reducingRestriction A Uᗮ reduces.orthogonal) gap
   residual_mem : N.Mem residual
 
@@ -194,7 +194,7 @@ structure NaturalReducingGeneralSinThetaProblem
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound X frameLowerBound
-  spectral_gap : linearPMap_UnboundedSylvesterGap A₀
+  spectral_gap : linearPMap_FormBoundedSylvesterGap A₀
     (TauCeti.LinearPMap.reducingRestriction A Uᗮ reduces.orthogonal) gap
   residual_mem : N.Mem residual
 
@@ -300,7 +300,7 @@ theorem sinTheta_unbounded_complex_reducingSubspace
     (hReq : ∀ x : A0.domain,
       A ⟨X (x : FC), hXdom x⟩ - X (A0 x) = Rop (x : FC))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : linearPMap_UnboundedSylvesterGap A0
+    (hgap : linearPMap_FormBoundedSylvesterGap A0
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ)
     (hR : N.Mem Rop) :
     N.Mem
@@ -347,7 +347,7 @@ theorem generalizedSinTheta_unbounded_complex_reducingSubspace
     (hXdom : ∀ x : A0.domain, X (x : FC) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
       A ⟨X (x : FC), hXdom x⟩ - X (A0 x) = Rop (x : FC))
-    (hgap : linearPMap_UnboundedSylvesterGap A0
+    (hgap : linearPMap_FormBoundedSylvesterGap A0
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ)
     (hR : N.Mem Rop) :
     N.Mem
@@ -471,7 +471,7 @@ theorem sinTheta_unbounded_real_reducingSubspace
     (hReq : ∀ x : A0.domain,
       A ⟨X (x : FR), hXdom x⟩ - X (A0 x) = Rop (x : FR))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : linearPMap_UnboundedSylvesterGap A0
+    (hgap : linearPMap_FormBoundedSylvesterGap A0
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ)
     (hR : N.Mem Rop) :
     N.Mem
@@ -518,7 +518,7 @@ theorem generalizedSinTheta_unbounded_real_reducingSubspace
     (hXdom : ∀ x : A0.domain, X (x : FR) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
       A ⟨X (x : FR), hXdom x⟩ - X (A0 x) = Rop (x : FR))
-    (hgap : linearPMap_UnboundedSylvesterGap A0
+    (hgap : linearPMap_FormBoundedSylvesterGap A0
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ)
     (hR : N.Mem Rop) :
     N.Mem
