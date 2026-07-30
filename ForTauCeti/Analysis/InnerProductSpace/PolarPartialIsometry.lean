@@ -93,6 +93,25 @@ statement that subsumes both directions of that gap.
   the general bounded polar decomposition from `Spectra.QuantumMechanics.Channels`, and
   AGENTS.md records that the final migration target removes Spectra from the normal build.
   No definition or proof here was read off Spectra's.
+
+## The three polar factors, and how they relate
+
+Documented 2026-07-30 (lane MODULUS-DEDUP) because none of the three named the
+others, so a reviewer could not tell a designed hierarchy from three independent
+attempts. The separating hypotheses are the carrier, the field, and whether the
+modulus is invertible:
+
+* `TauCeti.polarFactor`, in `PolarDecomposition.lean` — square `E →ₗ[𝕜] E`,
+  `RCLike`, finite dimension; a genuine **unitary** factor.
+* `TauCeti.polarPartial`, in `PolarPartialIsometry.lean` — rectangular
+  `E →L[ℂ] F` over `ℂ`, no invertibility assumed; a **partial isometry**.
+* `TauCeti.polarIsometryOfIsUnitModulus`, in `PolarIsometry.lean` — rectangular
+  `E →L[ℂ] F` over `ℂ` **and** the modulus a unit; then the factor is an
+  **isometry**.
+
+Read down the list: dropping finite dimension costs the unitary and leaves a
+partial isometry; adding invertibility of the modulus buys it back as an
+isometry. That is the whole hierarchy.
 -/
 
 @[expose] public section
