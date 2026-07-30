@@ -7,7 +7,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SpectralTheory.FormMethod.MaximalDomainTransport
 import DavisKahan.SpectralTheory.FormMethod.GraphClosedness
 import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamAnalyticFoundation
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation
 import Mathlib.Tactic
 
 /-!
