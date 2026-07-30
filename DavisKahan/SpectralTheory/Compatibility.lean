@@ -35,7 +35,7 @@ noncomputable abbrev complementaryProjection (U : Submodule 𝕜 E)
 noncomputable abbrev diagonalPart (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →L[𝕜] E) := DavisKahan.diagonalPart U A
 noncomputable abbrev offDiagonalPart (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (A : E →L[𝕜] E) := DavisKahan.offDiagonalPart U A
+    (A : E →L[𝕜] E) := U.offDiagonalPart A
 abbrev IsOffDiagonal (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →L[𝕜] E) := U.IsOffDiagonal A
 abbrev IsOrthogonalProjection (P : E →L[𝕜] E) :=
