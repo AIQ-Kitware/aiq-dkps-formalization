@@ -61,6 +61,8 @@ theorem sylvester_eigenbasis_coefficient_equation
         ⟪X (hB.eigenvectorBasis rfl j), hA.eigenvectorBasis rfl i⟫_𝕜 =
       ⟪C (hB.eigenvectorBasis rfl j), hA.eigenvectorBasis rfl i⟫_𝕜 := by
   have hpoint := LinearMap.congr_fun hEq (hB.eigenvectorBasis rfl j)
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change A (X (hB.eigenvectorBasis rfl j)) -
       X (B (hB.eigenvectorBasis rfl j)) =
         C (hB.eigenvectorBasis rfl j) at hpoint
@@ -137,6 +139,8 @@ separate real-field descent inside the barycentric theorem.
 
 We choose the maximal allowed mass `p = π / 2` and normalize
 `Y = p⁻¹ • (δ • X)`.  Positive homogeneity and the analytic Ky Fan estimate
+-- states the goal with the definition unfolded, in the shape the next step needs;
+-- there is no `_apply` lemma to rewrite with here.
 show every prefix of `Y` is bounded by the corresponding prefix of `C`;
 rectangular Fan orbit-convexity gives `Y ∈ conv(orbit(C))`, and the defining
 scalar identity recovers `δ • X = p • Y`. -/
@@ -164,6 +168,8 @@ theorem sylvester_barycentricOrbitRepresentation_of_spectralDistance
     have hcore :=
       kyFan_sylvester_le_of_spectralDistance_analytic
         hA hB hδ hgap hEq k
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change δ *
         RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
       p * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C at hcore
