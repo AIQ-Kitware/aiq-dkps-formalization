@@ -216,6 +216,20 @@ omit [CompleteSpace F] in
 coefficients. -/
 theorem ofLp_apply (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2) (x : F) :
     ofLp b f x = ∑' i, (b.repr x i) • f i := rfl
+omit [CompleteSpace F] in
+/-- The operator norm of a represented operator is at most the `ℓ²` norm of its
+column family: the Hilbert–Schmidt norm dominates the operator norm. -/
+theorem norm_ofLp_le (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2) :
+    ‖ofLp b f‖ ≤ ‖f‖ :=
+  LinearMap.mkContinuous_norm_le _ (norm_nonneg f) _
+
+omit [CompleteSpace F] in
+/-- The zero column vector rebuilds to the zero operator. -/
+@[simp] theorem ofLp_zero (b : HilbertBasis ι 𝕜 F) :
+    ofLp b (0 : lp (fun _ : ι => E) 2) = 0 := by
+  ext x
+  simp [ofLp_apply]
+
 
 omit [CompleteSpace F] in
 /-- **Round trip, operator side.**  `ofLp` recovers any bounded operator from

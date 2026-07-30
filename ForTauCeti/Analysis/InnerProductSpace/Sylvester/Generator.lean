@@ -80,13 +80,6 @@ variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 omit [CompleteSpace F] in
-/-- The operator norm of a represented operator is at most the `ℓ²` norm of its
-column family: the Hilbert–Schmidt norm dominates the operator norm. -/
-theorem norm_ofLp_le (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2) :
-    ‖ofLp b f‖ ≤ ‖f‖ :=
-  LinearMap.mkContinuous_norm_le _ (norm_nonneg f) _
-
-omit [CompleteSpace F] in
 /-- **`ℓ²` convergence dominates pointwise convergence.** -/
 theorem tendsto_ofLp_apply {α : Type*} {l : Filter α} (b : HilbertBasis ι 𝕜 F)
     (g : α → lp (fun _ : ι => E) 2) (g₀ : lp (fun _ : ι => E) 2)
