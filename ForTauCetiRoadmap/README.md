@@ -13,11 +13,11 @@ is accepted, we already have what it needs. That includes paper references,
 adversarial review of every statement, and Mathlib-quality elegance. See
 `ForTauCeti/README.md` §*The readiness standard*.
 
-**Seven of twenty-four topics are written** (2026-07-29; T15 became T15a/T15b/T15c on the same day). The design below
+**Eight of twenty-four topics are written** (2026-07-29; T15 became T15a/T15b/T15c on the same day). The design below
 partitions the library into twenty-four; the table under *Roadmaps* is the
-written ones. Seventeen remain, and `python3 scripts/check_tauceti_roadmap_topics.py --needs`
-names the ones that can go first: **T01**, **T21** and **T22** are still
-unwritten and have no prerequisites at all.
+written ones. Sixteen remain, and `python3 scripts/check_tauceti_roadmap_topics.py --needs`
+names the ones that can go first: **T21** and **T22** are the independent
+topics still unwritten.
 
 ## The candidate topic design
 
@@ -35,6 +35,7 @@ no directory yet, and writing them is the work that design makes possible.
 
 | Topic | Covers |
 |---|---|
+| [`PositiveSqrtAndModulus/`](PositiveSqrtAndModulus/README.md) | T01 — the finite-dimensional `RCLike` functional calculus of a symmetric operator, and what it builds: the positive square root with its uniqueness theory, the modulus and polar decomposition, Courant–Fischer min–max and Weyl. Independent, and named directly by seven other topics. |
 | [`ApproximationNumbers/`](ApproximationNumbers/README.md) | Approximation numbers and Hilbert-space singular values: the field-generic theory, addition and composition laws, the approximable/compact boundary, adjoint invariance, the rectangular modulus, Eckart–Young, and the min–max principles. Carries [`Suggested.lean`](ApproximationNumbers/Suggested.lean). |
 | [`SymmetricOperatorIdeals/`](SymmetricOperatorIdeals/README.md) | Symmetric operator ideals. |
 | [`HaagerupZsidoKernel/`](HaagerupZsidoKernel/README.md) | T12 — a finite-mass Fourier kernel for the reciprocal on `1 ≤ \|x\|`: the hyperbolic weight and its Laplace transform, Poisson summation for the Cauchy lattice, the closed-form sine–Laplace and rational-quadratic integrals, the exterior identity `∫ k(t) e^{itx} dt = 1/x`, and the exact `L¹` mass `π / 2` that is the sharp Sylvester constant. Independent of every other topic. |
