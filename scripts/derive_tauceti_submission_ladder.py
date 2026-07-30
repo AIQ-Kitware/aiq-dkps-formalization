@@ -156,6 +156,8 @@ RUNGS: list[tuple[str, str, list[str]]] = [
         "Analysis.Normed.Operator.LinearIsometry",
         "Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
         "Analysis.OperatorIdeal.ApproximationNumber.Basic",
+        "Analysis.OperatorIdeal.ApproximationNumber.Compact",
+        "Analysis.OperatorIdeal.ApproximationNumber.Examples",
         "Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
         "Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
         "Analysis.OperatorIdeal.ApproximationNumber.KyFan",
