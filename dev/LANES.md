@@ -365,6 +365,29 @@ rows moved verbatim to [`LANES-COMPLETED.md`](LANES-COMPLETED.md). Five of those
 had said `CLOSED — DO NOT TAKE` in the agent cell while their *status* cell read
 `open`; their status now says what the row always said.
 
+**Integration pass — 2026-07-30 evening, `edward (aiq-gpu)`.** Merged `yardrat-work`
+(`4bb6678a`), `toothbrush-work` (`60d248e4`) and `namek-work` (`b9059884`) into
+`aiq-gpu-work`, one merge per command. The only conflicts were `dev/LANES.md` (all three),
+plus `dev/tauceti/submission-ladder.md` and `scripts/check_tauceti_roadmap_topics.py`
+(yardrat only); every resolution kept both sides' rows — audited afterwards by diffing each
+merge's `dev/LANES.md` against both parents, and the single line that differs from each
+incoming branch is my own `ROADMAP-HOLISTIC` row at its newer status, which is correct.
+**No `.lean` conflict, and the union still did not build**: see the `norm_re_le` finding
+under *Cross-lane findings* — a duplicated lemma, invisible until two branches open its two
+homes in one file. After that one-lemma fix, what each target reads: `lake build` **green,
+9254 jobs**; `check_conflict_markers`, `check_lane_format`, `check_lane_graph`,
+`check_expose_ratchet`, `check_submission_prose`, `check_declaration_name_drift` and
+`check_tauceti_roadmap_topics` all OK; `scripts/tests/` **112 passed** (this box has no
+system `pytest` — `uv run --no-project --with pytest pytest scripts/tests -q` runs it).
+The four targets *outside* `defaultTargets` were built too — `FinishTanTwoTheta`,
+`FinishYuWangSamworth`, `Challenge` and `DavisKahan.Experimental`, green at **9297 jobs**,
+warnings only. That check is not optional for an integrator: a green `lake build` says
+nothing about them, and breakage landed through that gap four times on 2026-07-29 alone.
+Branches that landed *while* this was building — `yardrat-work` (2 commits),
+`toothbrush-work` (1), `namek-work` (1), `worktree-aiq-gpu-docs` (4) — are deliberately left
+for the next pass, per this file's own rule that `main` is the last known-green union rather
+than the newest work.
+
 ### What to take, in priority order
 
 **Refreshed 2026-07-30, pass 8. Roadmap coverage is 18 of 24 and now exact.** The board has grown because
@@ -732,6 +755,32 @@ and pruned. What is genuinely left:
 
 
 ## Cross-lane findings (post here to save another agent a re-derivation)
+
+- **A union of three green branches broke on a *name*, with no conflict anywhere**
+  (edward/aiq-gpu, 2026-07-30). Merging `yardrat-work`, `toothbrush-work` and `namek-work`
+  into `aiq-gpu-work` produced no `.lean` conflict at all — `check_conflict_markers` clean,
+  each branch green on its own — and the union still failed to compile
+  `DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtRealDescent.lean:63`:
+  `Ambiguous term norm_re_le`. `bd363ba4` (namek, `EXP-UNBLOCK-PI2-1`) added `norm_re_le` to
+  `Foundation.RealComplexification` while completing the complexification functor; `eb684f4a`
+  (`HS-PORT`, mine) had earlier added `open ClosedOperatorComplexification` to a file that
+  already opened `Foundation.RealComplexification`, and that namespace carried a **verbatim
+  copy** of the same lemma. Neither commit is wrong on its own branch; only the union is, and
+  the integrator is the first person who can see it.
+  **Fix the duplicate, do not qualify the use site.** `norm_re_le` is proved **four** times in
+  this repository — `SpectralTheory/Complexification/Basic.lean:450` (Foundation, the general
+  one and now canonical), `SpectralTheory/ClosedOperator/Complexification.lean`,
+  `SpectralTheory/Complexification/FunctionalCalculus.lean:342`, and a `private` copy at
+  `OperatorIdeal/ApproximationNumbers/Real/Threshold.lean:320` — so qualifying one call site
+  leaves the mine armed for the next file that opens two of the four homes, and
+  `SpectralTheory/Real/SpectralRestriction.lean` already opens **three** of them. The
+  `ClosedOperator` copy is deleted: its only consumer is `Complexification.lean:691`, in a file
+  that opens `Foundation.RealComplexification` at the top, so it re-resolves with no edit.
+  **Left measured, not done:** the `FunctionalCalculus` copy has an out-of-file consumer
+  (`Experimental/MathAhead/HiddenFoundations/RealSylvesterDescent.lean:100` opens that
+  namespace and calls `norm_re_le` unqualified), and the `Threshold` copy is `private`, so
+  neither can collide the way this one did; both are still duplicates and belong to whoever
+  takes a dedup lane.
 
 - **The RankFactorization challenge statement is not Mathlib-clean, and both halves cannot
   be right** (jon/namek, 2026-07-28). Building `ForMathlib` under Mathlib's own linter set
