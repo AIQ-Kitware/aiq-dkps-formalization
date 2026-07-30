@@ -26,7 +26,6 @@ leaderboard.
 
 namespace TauCeti
 
-open DavisKahanTheory
 open scoped InnerProductSpace BigOperators
 
 variable {𝕜 : Type*} [RCLike 𝕜]

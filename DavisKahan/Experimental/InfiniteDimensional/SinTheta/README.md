@@ -64,7 +64,7 @@ when their logical strength and scope are visible in the module structure.
 
 ## Gap configurations
 
-The canonical theorem accepts `UnboundedSylvesterGap`, whose constructors
+The canonical theorem accepts `FormBoundedSylvesterGap`, whose constructors
 cover:
 
 - interval/exterior separation;

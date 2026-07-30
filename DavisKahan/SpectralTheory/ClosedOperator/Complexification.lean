@@ -742,11 +742,11 @@ predicate. -/
 theorem unboundedSylvesterGap_complexify
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
-    {δ : ℝ} (hgap : UnboundedSylvesterGap A B δ) :
-    UnboundedSylvesterGap (complexify A) (complexify B) δ := by
+    {δ : ℝ} (hgap : FormBoundedSylvesterGap A B δ) :
+    FormBoundedSylvesterGap (complexify A) (complexify B) δ := by
   cases hgap with
   | intervalExterior hβα hgap =>
-      apply UnboundedSylvesterGap.intervalExterior hβα
+      apply FormBoundedSylvesterGap.intervalExterior hβα
       rcases hgap with hgap | hgap
       · left
         constructor
@@ -773,10 +773,10 @@ theorem unboundedSylvesterGap_complexify
             rwa [closed_realSpectrum_complexify A] at hlamA
           exact hgap.2 hlam'
   | leftAboveRightBelow c hA hB =>
-      exact UnboundedSylvesterGap.leftAboveRightBelow c
+      exact FormBoundedSylvesterGap.leftAboveRightBelow c
         (semiboundedBelow_complexify hA) (semiboundedAbove_complexify hB)
   | leftBelowRightAbove c hA hB =>
-      exact UnboundedSylvesterGap.leftBelowRightAbove c
+      exact FormBoundedSylvesterGap.leftBelowRightAbove c
         (semiboundedAbove_complexify hA) (semiboundedBelow_complexify hB)
 
 end ClosedOperatorComplexification
