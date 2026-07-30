@@ -56,6 +56,25 @@ unfold what" has never been asked. Some exposures are certainly required —
 `abbrev`s, `instance`s, and the `rfl`-bridges this library leans on. The lane is
 the triage, not a blanket removal. → `RUB-EXPOSE`
 
+**Converged with `edward (aiq-gpu)`, who ran the same rubrics the same hour and
+measured the same 68** — and found the root cause this pass missed:
+**`ForTauCeti/README.md:205` instructs every module to use
+`@[expose] public section`**, because *"several proofs use `rfl`/`change` that
+require definition bodies to be exposed"*. The rubric names that exact reasoning
+as the defect and supplies the fix: `:= (rfl)` rather than `:= rfl`, so lemmas do
+not make downstream proofs lean on defeq, and ask for the missing lemma instead of
+exposing the body. So this is one house rule, not 68 independent calls. **Lane
+`FTC-EXPOSE` supersedes `RUB-EXPOSE`**; the counts here stand, the work is there,
+and it needs jon's convention decision first.
+
+Two findings edward's pass has and this one does not, both worth reading: an
+unexercised `Prop`-valued definition rated a **correctness block**
+(`AvoidsQuarterTurnEmbedding`, whose name occurs once in the repository — its own
+definition), contrasted against `DavisKahanProposition4_4_Finite`, which *passes*
+because `ShortRotationCounterexample.lean` proves its negation; and a correction
+to his own earlier `FTC-DEAD` count, 31 → 4, caused by a name-tokenising regex
+that split on `.` and so missed every qualified use.
+
 ### F2 — no `@[grind]` anywhere (`api-design`)
 
 ```sh
