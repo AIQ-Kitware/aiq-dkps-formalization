@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.BoundedOperator.IsometricRangeProjection
 import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.Sylvester.GenuineSpectrum
+import DavisKahan.Sylvester.Spectrum
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 
 /-!

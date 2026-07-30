@@ -8,7 +8,7 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSelected
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
 import DavisKahan.Geometry.Polar.DirectRotationSquare
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
-import DavisKahan.Sylvester.GenuineSpectrum
+import DavisKahan.Sylvester.Spectrum
 
 /-!
 # Infinite-dimensional Proposition 4.1 by spectral cutoff

@@ -7,7 +7,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.TanTwoTheta.UnboundedIdeal
-import DavisKahan.TanTheta.GenuineSpectrum
+import DavisKahan.TanTheta.Spectrum
 import DavisKahan.TanTheta.UnboundedGraphAngle
 import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 import DavisKahan.TanTheta.Theorem63FiniteSource

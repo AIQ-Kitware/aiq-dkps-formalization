@@ -7,7 +7,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Geometry.Halmos.TwoProjections
 import DavisKahan.SpectralTheory.SpectralRestriction
 -- supplies `compressOperator`
-import DavisKahan.Sylvester.GenuineSpectrum
+import DavisKahan.Sylvester.Spectrum
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 
 /-!

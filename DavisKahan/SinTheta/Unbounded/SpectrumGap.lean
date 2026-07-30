@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.SpectralTheory.GapResolvent
 import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.SinTheta.Unbounded.GenuineGauge
+import DavisKahan.SinTheta.Unbounded.Gauge
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!

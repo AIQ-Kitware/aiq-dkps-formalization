@@ -9,7 +9,6 @@ import DavisKahan.Sylvester.ClosedSylvesterEquation
 import DavisKahan.Sylvester.CutoffInterface
 import DavisKahan.Sylvester.FilledTruncation
 import DavisKahan.Sylvester.Gap
-import DavisKahan.Sylvester.GenuineSpectrum
 import DavisKahan.Sylvester.HomogeneousUniqueness
 import DavisKahan.Sylvester.PairwiseHomogeneousUniqueness
 import DavisKahan.Sylvester.PairwiseSpectrumGap
@@ -17,5 +16,6 @@ import DavisKahan.Sylvester.RealUnbounded
 import DavisKahan.Sylvester.RosenblumExistence
 import DavisKahan.Sylvester.ShiftedInverse
 import DavisKahan.Sylvester.ShiftedInverseGauge
+import DavisKahan.Sylvester.Spectrum
 
 /-! # `DavisKahan/Sylvester` -/

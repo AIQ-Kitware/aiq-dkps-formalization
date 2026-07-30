@@ -61,7 +61,7 @@ Run:
 ```bash
 lake build \
   DavisKahan.SpectralTheory.OrderedHalfLine \
-  DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineCutoffInterface \
+  DavisKahan.Experimental.InfiniteDimensional.Sylvester.CutoffInterface \
   DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngine \
   DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineAllGap \
   DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineAllGap
