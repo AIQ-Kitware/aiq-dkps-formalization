@@ -8,8 +8,8 @@ Staged for Tau Ceti: additions to `Mathlib/Analysis/InnerProductSpace/CourantFis
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]); golfed/polished to Mathlib
 style by Claude Opus 4.8 (claude-opus-4-8[1m]) following the `mathlib-quality`
-rules.  API redesign by Claude Fable 5 per the signature-polish backlog
-(`dev/tauceti-signature-polish-todo.md` §6): the basis-span scaffolding moved to
+rules.  API redesign by Claude Fable 5 per the signature-polish backlog: the
+basis-span scaffolding moved to
 `BasisSpan.lean` as `OrthonormalBasis.spanIndices`; the eigenvalue results moved
 into the `LinearMap.IsSymmetric` namespace with `_apply_` naming; the lower
 Courant–Fischer direction was renamed to state its outer existential; the

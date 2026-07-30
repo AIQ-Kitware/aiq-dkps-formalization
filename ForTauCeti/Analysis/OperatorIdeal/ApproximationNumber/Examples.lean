@@ -51,8 +51,8 @@ map with **unequal source and target dimensions**, the min–max example selecti
 the span of the largest singular directions, and the compact diagonal operator with
 `aₙ → 0`.  The first needs the singular values of a rectangular diagonal map, which
 `singularValues_diagOp` does not give — it is square; the second needs the
-orthogonal-tail equality (lane `AN-B4-MINMAX`); the third needs lane
-`AN-A4-COMPACT`.
+orthogonal-tail equality; the third needs the finite-rank approximation
+characterisation of compactness.
 
 ## Sources
 
@@ -62,7 +62,7 @@ the concrete operators the roadmap names.
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: authored directly in `ForTauCeti` under lane `AN-ACCEPT`.
+* Original module: authored directly in `ForTauCeti`.
 * Extraction class: **authored in place**, for Tau Ceti.
 * Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.

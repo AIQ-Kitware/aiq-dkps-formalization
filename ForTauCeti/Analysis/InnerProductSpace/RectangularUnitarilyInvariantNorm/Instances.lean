@@ -87,7 +87,7 @@ the operator — the defining property of `adjointTransport`. -/
 
 /-- `adjointTransport_apply` in the **coerced** form, which is how call sites write it.
 
-Added 2026-07-30 (lane `RUB-SHOW`). The `.toFun` form above cannot be rewritten with at a
+The `.toFun` form above cannot be rewritten with at a
 call site that says `(adjointTransport N) A.adjoint`: the rewrite reports *"did not find an
 occurrence of the pattern"*, because the goal carries the `CoeFun` application rather than
 the projection. Consumers were working around that with `change`, which is the

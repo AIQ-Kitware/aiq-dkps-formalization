@@ -5,8 +5,7 @@ the closed Mathlib track —
 additions to `Mathlib/Analysis/InnerProductSpace/RotationSharp.lean`
 (new file).
 
-Formalized by Claude Fable 5 (claude-fable-5[1m]), plan step W6.1 of
-`dev/davis-kahan-gap-closure-plan.md` (v5 phase-free reroute).  Davis's classical
+Formalized by Claude Fable 5 (claude-fable-5[1m]).  Davis's classical
 proof chooses a unimodular phase making the off-diagonal entry of the 2×2
 compression real; the proof here avoids phases entirely — subtracting the two
 eigenvector equations and taking real parts collapses the mixed term via

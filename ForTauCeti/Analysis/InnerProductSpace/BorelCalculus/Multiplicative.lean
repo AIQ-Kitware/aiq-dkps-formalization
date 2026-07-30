@@ -29,7 +29,7 @@ Multiplicativity of the bounded Borel calculus, by the same transport argument a
 the rest of the chain; see
 `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Polarization.lean` for the
 sources of the construction as a whole (the classical spectral theorem for normal
-operators, and `dev/tauceti/spectra-removal-plan.md` for the route comparison).
+operators, and the Spectra-removal plan for the route comparison).
 
 ## Provenance
 
