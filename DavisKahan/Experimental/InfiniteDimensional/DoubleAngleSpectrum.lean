@@ -9,11 +9,11 @@ import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
 
 /-!
-# The genuine-spectrum `sin 2Θ` theorem
+# The `sin 2Θ` theorem through the compression spectrum
 
 The `sin 2Θ` scaffold in `DoubleAngle.lean` is stated over the blocked
-operator-angle ladder and the point-spectrum separation predicates.  This
-module proves the honest complex version by the reflection argument: with
+operator-angle ladder.  This module proves the complex version by the
+reflection argument instead: with
 `J` the reflection through `V`, the conjugate `J A J` is self-adjoint, is
 reduced by the reflected subspace `J U` with the *same* genuine compression
 spectra (unitary conjugation transport), so the symmetric two-sided

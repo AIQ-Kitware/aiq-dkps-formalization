@@ -13,7 +13,7 @@ import DavisKahan.SinTheta.Unbounded.OpNorm
 import DavisKahan.SinTheta.Unbounded.Gauge
 import DavisKahan.SinTheta.Unbounded.IntervalExterior
 import DavisKahan.SinTheta.Unbounded.AllGap
-import DavisKahan.SinTheta.Natural.Genuine
+import DavisKahan.SinTheta.Natural.SpectralSubspace
 import DavisKahan.SinTheta.Natural.Real
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Canonical
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationAll

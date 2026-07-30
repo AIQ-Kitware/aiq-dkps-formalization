@@ -27,7 +27,7 @@ operators and all spectral hypotheses phrased through the Spectra spectrum:
 The interval block is secretly bounded (`BoundedFromSpectrum`), the
 exterior block carries the Spectra-backed shifted resolvent
 (`twoSidedShiftedInverseBound_of_spectrum_gap`), and the ideal-scope
-Neumann engines of `GenuineUnboundedGauge` finish both orientations.
+Neumann engines of `SinTheta/Unbounded/Gauge.lean` finish both orientations.
 -/
 
 open scoped InnerProductSpace
