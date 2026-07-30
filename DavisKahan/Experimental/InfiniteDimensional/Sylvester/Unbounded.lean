@@ -768,7 +768,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_intervalExteriorGap
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[𝕜] E} {β α δ : ℝ}
     (hβα : β ≤ α) (hδ : 0 < δ)
-    (hgap : UnboundedIntervalExteriorGap A B β α δ)
+    (hgap : RealSpectrumIntervalExteriorGap A B β α δ)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
@@ -861,7 +861,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_gap
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[𝕜] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap A B δ)
+    (hgap : FormBoundedSylvesterGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧
@@ -888,7 +888,7 @@ theorem davisKahan1970_sylvester
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[𝕜] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap A B δ)
+    (hgap : FormBoundedSylvesterGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧

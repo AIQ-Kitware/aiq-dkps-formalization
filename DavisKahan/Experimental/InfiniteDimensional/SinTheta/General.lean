@@ -46,18 +46,101 @@ private theorem completeSpace_of_hasOrthogonalProjection
     exact isClosed_eq U.starProjection.continuous continuous_id
   exact hclosed.completeSpace_coe
 
-/-- **Leaf obligation.** The constant-one ordered Sylvester estimate over a
-general `RCLike` field.  The `ℂ` case is `norm_sylvester_le_of_orderedSeparation`
-(`Sylvester/Basic`, semigroup route); the general case is its complexification
-transport. -/
+/-- The real spectrum of a bounded operator is bounded by its norm.
+
+Used below in place of compactness of the spectrum: the cut construction needs
+only `BddAbove` / `BddBelow`, and those follow from `‖λ‖ ≤ ‖T‖` for `λ` in the
+spectrum without any of the topology. -/
+private theorem abs_le_norm_of_mem_realSpectrum {G : Type v} [NormedAddCommGroup G]
+    [InnerProductSpace 𝕜 G] [CompleteSpace G] {T : G →L[𝕜] G} {r : ℝ}
+    (hr : r ∈ TauCeti.DavisKahan.Experimental.Foundation.realSpectrum T) :
+    |r| ≤ ‖T‖ * ‖(1 : G →L[𝕜] G)‖ := by
+  -- `norm_le_norm_of_mem` would give the cleaner `‖T‖`, but it wants
+  -- `NormOneClass (G →L[𝕜] G)`, which fails when `G` is trivial.
+  have h : ‖((r : 𝕜))‖ ≤ ‖T‖ * ‖(1 : G →L[𝕜] G)‖ := spectrum.norm_le_norm_mul_of_mem hr
+  rwa [RCLike.norm_ofReal] at h
+
+/-- **A common cut between two ordered spectra**, over a general `RCLike` field.
+
+This is `exists_common_cut_of_orderedSeparation` (`Sylvester/OrderedSemigroup`)
+with `ℂ` relaxed to `𝕜`.  Nothing in the argument was complex: the cut is
+`sSup (realSpectrum B)` when that spectrum is nonempty and
+`sInf (realSpectrum A) - d` when it is not, and the boundedness it needs is the
+norm bound above rather than compactness of the spectrum. -/
+private theorem exists_common_cut_of_orderedSeparation_rclike
+    {A : F →L[𝕜] F} {B : E →L[𝕜] E} {d : ℝ}
+    (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d) :
+    ∃ c : ℝ,
+      TauCeti.DavisKahan.Experimental.Foundation.realSpectrum B ⊆ Set.Iic c ∧
+      TauCeti.DavisKahan.Experimental.Foundation.realSpectrum A ⊆ Set.Ici (c + d) := by
+  obtain ⟨hInvB, hInvA, hord⟩ := hsep
+  have hkey : ∀ b ∈ TauCeti.DavisKahan.Experimental.Foundation.realSpectrum B,
+      ∀ a ∈ TauCeti.DavisKahan.Experimental.Foundation.realSpectrum A, b + d ≤ a := by
+    intro b hb a ha
+    refine hord b ?_ a ?_
+    · rw [restrictedSpectrum_top_eq_realSpectrum_general]; exact hb
+    · rw [restrictedSpectrum_top_eq_realSpectrum_general]; exact ha
+  rcases (TauCeti.DavisKahan.Experimental.Foundation.realSpectrum B).eq_empty_or_nonempty
+    with hB0 | hBne
+  · rcases (TauCeti.DavisKahan.Experimental.Foundation.realSpectrum A).eq_empty_or_nonempty
+      with hA0 | hAne
+    · exact ⟨0, by simp [hB0], by simp [hA0]⟩
+    · refine ⟨sInf (TauCeti.DavisKahan.Experimental.Foundation.realSpectrum A) - d,
+        by simp [hB0], fun a ha => ?_⟩
+      have hbdd : BddBelow (TauCeti.DavisKahan.Experimental.Foundation.realSpectrum A) :=
+        ⟨-(‖A‖ * ‖(1 : F →L[𝕜] F)‖), fun r hr =>
+          neg_le_of_abs_le (abs_le_norm_of_mem_realSpectrum hr)⟩
+      have := csInf_le hbdd ha
+      simp only [Set.mem_Ici]
+      linarith
+  · refine ⟨sSup (TauCeti.DavisKahan.Experimental.Foundation.realSpectrum B),
+      fun b hb => ?_, fun a ha => ?_⟩
+    · exact le_csSup ⟨‖B‖ * ‖(1 : E →L[𝕜] E)‖, fun r hr =>
+        le_of_abs_le (abs_le_norm_of_mem_realSpectrum hr)⟩ hb
+    · have hsup : sSup (TauCeti.DavisKahan.Experimental.Foundation.realSpectrum B) ≤ a - d :=
+        csSup_le hBne fun b hb => by linarith [hkey b hb a ha]
+      simp only [Set.mem_Ici]
+      linarith
+
+/-- **The constant-one ordered Sylvester estimate over a general `RCLike`
+field.**
+
+This was a leaf obligation until 2026-07-30, on the stated grounds that the `ℂ`
+case is `norm_sylvester_le_of_orderedSeparation` and "the general case is its
+complexification transport".  **No transport is needed and none is done here.**
+`ExactSinTheta.sylvester_mem_and_gauge_le_of_intervalExteriorGap` is already
+proved over general `RCLike`, for every rectangular ideal family, with constant
+one; `sinTheta_perturbation` below instantiates it at `operatorNormFamily` in
+exactly the same way.
+
+The only real step is the shape change.  Ordered separation says one spectrum
+sits below the other, which gives a *cut*; the bridge wants an
+*interval/exterior* pair.  Putting `B` in `Icc β c` for the cut `c` and any
+`β` below both `-‖B‖` and `c` leaves `A` in the exterior `{x | c + d ≤ x}`, which
+is what ordered separation already gives. -/
 theorem norm_sylvester_le_of_orderedSeparation_rclike
     {A : F →L[𝕜] F} {B : E →L[𝕜] E} {X C : E →L[𝕜] F}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d)
     (hEq : sylvesterOperator A B X = C) :
-    d * ‖X‖ ≤ ‖C‖ :=
-  sorry
+    d * ‖X‖ ≤ ‖C‖ := by
+  obtain ⟨c, hBc, hAc⟩ := exists_common_cut_of_orderedSeparation_rclike hsep
+  set β : ℝ := min (-(‖B‖ * ‖(1 : E →L[𝕜] E)‖) - 1) (c - 1) with hβ
+  have hβc : β ≤ c := (min_le_right _ _).trans (by linarith)
+  have hgap : ExactSinTheta.IntervalExteriorGap A B β c d := by
+    refine Or.inr ⟨fun r hr => ?_, fun r hr => ?_⟩
+    · rw [boundedRealSpectrum_eq_realSpectrum] at hr
+      have hup : r ≤ c := hBc hr
+      have hlow : -(‖B‖ * ‖(1 : E →L[𝕜] E)‖) ≤ r :=
+        neg_le_of_abs_le (abs_le_norm_of_mem_realSpectrum hr)
+      exact ⟨le_trans (min_le_left _ _) (by linarith), hup⟩
+    · rw [boundedRealSpectrum_eq_realSpectrum] at hr
+      exact Or.inr (hAc hr)
+  have hsolve := ExactSinTheta.sylvester_mem_and_gauge_le_of_intervalExteriorGap
+    (TauCeti.operatorNormFamily.{u, v} 𝕜) hA hB hβc hd hgap hEq
+    (TauCeti.SymmetricOperatorIdealFamily.mem_operatorNormFamily _)
+  exact hsolve.2
 
 /-- **Leaf obligation.** The universal `π/2` Sylvester estimate over a general
 `RCLike` field.  The `ℂ` case is `norm_sylvester_le_of_generalSeparation`
@@ -686,6 +769,27 @@ theorem operatorAbsoluteValue_neg (T : E →L[𝕜] E) :
 theorem operatorAbsoluteValue_zero :
     operatorAbsoluteValue (0 : E →L[𝕜] E) = 0 :=
   CFC.abs_zero
+
+/-- **The absolute value is norm-preserving.**  `‖|T|‖ = ‖T‖`, by the C⋆
+identity applied twice: `|T|` is self-adjoint and `|T| * |T| = T⋆ T`, so
+`‖|T|‖² = ‖|T|⋆ |T|‖ = ‖T⋆ T‖ = ‖T‖²`.
+
+This is the gauge-free half of what a symmetric norm ideal wants from the
+absolute value, and unlike the gauge half it needs no polar decomposition — so
+it is available over a general `RCLike` field, where
+`operatorAbsoluteValue_mem_and_gauge_eq` is still a leaf. -/
+theorem norm_operatorAbsoluteValue (T : E →L[𝕜] E) :
+    ‖operatorAbsoluteValue T‖ = ‖T‖ := by
+  have hsa : star (operatorAbsoluteValue T) = operatorAbsoluteValue T :=
+    (CFC.abs_nonneg T).isSelfAdjoint
+  have hsq : ‖operatorAbsoluteValue T‖ * ‖operatorAbsoluteValue T‖ = ‖T‖ * ‖T‖ := by
+    calc ‖operatorAbsoluteValue T‖ * ‖operatorAbsoluteValue T‖
+        = ‖star (operatorAbsoluteValue T) * operatorAbsoluteValue T‖ :=
+          (CStarRing.norm_star_mul_self).symm
+      _ = ‖star T * T‖ := by
+          rw [hsa, operatorAbsoluteValue_eq, CFC.abs_mul_abs]
+      _ = ‖T‖ * ‖T‖ := CStarRing.norm_star_mul_self
+  exact (mul_self_inj (norm_nonneg _) (norm_nonneg _)).mp hsq
 
 /-- The full ambient sine-angle operator of two subspaces: the absolute value
 of the projector difference. -/

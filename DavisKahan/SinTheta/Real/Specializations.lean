@@ -48,7 +48,7 @@ structure RealBoundedGeneralSinThetaProblem
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound X frameLowerBound
-  spectral_gap : UnboundedSylvesterGap
+  spectral_gap : FormBoundedSylvesterGap
     (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A₀)
     (TauCeti.DavisKahanExt.ClosedOperator.ofBounded Λ₁) gap
   residual_mem : N.Mem

@@ -6,16 +6,35 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 
 /-!
-# Spectral gap configurations for the unbounded Sylvester equation
+# Form-bounded gap configurations for the unbounded Sylvester equation
 
 The interval/exterior configuration says one block has spectrum inside a compact
 interval while the other stays a fixed distance away from it.  The predicate is
 symmetric in the two blocks: either orientation is allowed.
 
-`UnboundedSylvesterGap` collects every gap configuration the `sin Θ` endpoint
+`FormBoundedSylvesterGap` collects every gap configuration the `sin Θ` endpoint
 needs.  Its two ordered constructors let both diagonal blocks be genuinely
 unbounded; only the interval/exterior constructor requires a bounded spectral
 block.
+
+## Why these names, and not the unqualified ones
+
+This module states the ordered configurations as **operator-form bounds** —
+`SemiboundedBelow`/`SemiboundedAbove` — and the interval/exterior configuration
+over `LinearPMap.realSpectrum`.  The unqualified names
+`UnboundedIntervalExteriorGap` and `UnboundedSylvesterGap`
+(`SinTheta/Unbounded/IntervalExterior.lean`,
+`Sylvester/Unbounded/AllGap.lean`) instead state all three configurations as
+**spectral containments** in `Set.Ici`/`Set.Iic`, which is the form Davis--Kahan
+1970 uses.
+
+The two surfaces are related in one direction only:
+`Sylvester/Unbounded/LegacyGap.lean` proves form-bounded ⇒ spectral, and no
+converse is proved here.  So the predicates in this module are the *stronger
+hypothesis*, and a theorem stated over them is the *weaker theorem*.  The
+unqualified name therefore belongs to the spectral surface, and these carry the
+qualifier that says what they additionally assume.  They remain the convenient
+entry point when the form bound is what a caller has in hand.
 -/
 
 namespace TauCeti
@@ -32,30 +51,43 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
-/-- Interval/exterior spectral configuration for two partial maps: one block has
-real spectrum inside a compact interval and the other stays a distance `δ` away
-from it.  The predicate is symmetric in the two blocks.
+/-- Interval/exterior configuration for two partial maps, over
+`LinearPMap.realSpectrum`: one block has real spectrum inside a compact interval
+and the other stays a distance `δ` away from it.  The predicate is symmetric in
+the two blocks.
 
-This is the canonical form.  It needs neither a dense domain nor a closed graph —
-only the two real spectra — so it is stated over `LinearPMap` and the closedness
-hypotheses live with the theorems that consume the gap. -/
-def linearPMap_UnboundedIntervalExteriorGap
+It needs neither a dense domain nor a closed graph — only the two real spectra —
+so it is stated over `LinearPMap` and the closedness hypotheses live with the
+theorems that consume the gap.
+
+`UnboundedIntervalExteriorGapPMap` is the same configuration spelled through
+`ofReal ⁻¹' LinearPMap.spectrum`; `realSpectrum_eq_spectraSpectrum` identifies
+the two spectra, and `sylvesterIntervalExteriorGap_of_realSpectrum` transports
+this predicate to that one. -/
+def linearPMap_RealSpectrumIntervalExteriorGap
     (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) (β α δ : ℝ) : Prop :=
   (TauCeti.LinearPMap.realSpectrum A ⊆ Set.Icc β α ∧
     TauCeti.LinearPMap.realSpectrum B ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x}) ∨
   (TauCeti.LinearPMap.realSpectrum B ⊆ Set.Icc β α ∧
     TauCeti.LinearPMap.realSpectrum A ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x})
 
-/-- All source-faithful unbounded gap configurations needed by the `sin Θ`
-endpoint, over the canonical partial-map representation.  The ordered
-constructors allow both diagonal blocks to be genuinely unbounded; only the
-interval/exterior constructor has a bounded spectral block. -/
-inductive linearPMap_UnboundedSylvesterGap
+/-- Every gap configuration the `sin Θ` endpoint needs, over the canonical
+partial-map representation, with the two ordered configurations given as
+operator-form bounds.  The ordered constructors allow both diagonal blocks to be
+genuinely unbounded; only the interval/exterior constructor has a bounded
+spectral block.
+
+For self-adjoint blocks `SemiboundedBelow A c` and
+`ofReal ⁻¹' spectrum A ⊆ Set.Ici c` describe the same configuration, but they are
+different propositions: only the form-bounded ⇒ spectral direction is proved, in
+`Sylvester/Unbounded/LegacyGap.lean`.  `UnboundedSylvesterGap` is the spectral
+spelling. -/
+inductive linearPMap_FormBoundedSylvesterGap
     (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) (δ : ℝ) : Prop where
   | intervalExterior
       {β α : ℝ}
       (hβα : β ≤ α)
-      (hgap : linearPMap_UnboundedIntervalExteriorGap A B β α δ)
+      (hgap : linearPMap_RealSpectrumIntervalExteriorGap A B β α δ)
   | leftAboveRightBelow
       (c : ℝ)
       (hA : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
@@ -65,42 +97,49 @@ inductive linearPMap_UnboundedSylvesterGap
       (hA : TauCeti.LinearPMap.SemiboundedAbove A c)
       (hB : TauCeti.LinearPMap.SemiboundedBelow B (c + δ))
 
-/-- Interval/exterior spectral configuration for two closed self-adjoint blocks.
+/-- Interval/exterior configuration for two closed self-adjoint blocks, over
+`realSpectrum`.
 
-Compatibility facade: `ClosedOperator.realSpectrum` is itself a facade for
+Representation shim: `ClosedOperator.realSpectrum` is itself a shim for
 `TauCeti.LinearPMap.realSpectrum` at `A.toLinearPMap`, so this is *definitionally*
-the canonical predicate and the two are interchangeable by `Iff.rfl`. -/
-abbrev UnboundedIntervalExteriorGap
+`linearPMap_RealSpectrumIntervalExteriorGap` and the two are interchangeable by
+`Iff.rfl`.  The mathematics lives in that definition; this spelling exists for
+callers holding a bundled `ClosedOperator`. -/
+abbrev RealSpectrumIntervalExteriorGap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
     (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F))
     (β α δ : ℝ) : Prop :=
-  linearPMap_UnboundedIntervalExteriorGap A.toLinearPMap B.toLinearPMap β α δ
+  linearPMap_RealSpectrumIntervalExteriorGap A.toLinearPMap B.toLinearPMap β α δ
 
-/-- All source-faithful unbounded gap configurations needed by the `sin Θ`
-endpoint.
+/-- Every gap configuration the `sin Θ` endpoint needs, for bundled closed
+operators, with the two ordered configurations given as operator-form bounds.
 
-Compatibility facade for the canonical partial-map predicate; every component
-(`realSpectrum`, `SemiboundedBelow`, `SemiboundedAbove`) is already a facade over
+Representation shim for the partial-map predicate; every component
+(`realSpectrum`, `SemiboundedBelow`, `SemiboundedAbove`) is already a shim over
 the `TauCeti.LinearPMap` layer, so the two spellings are definitionally equal at
-`A.toLinearPMap` and `cases`/`rcases` see the canonical constructors directly. -/
-abbrev UnboundedSylvesterGap
+`A.toLinearPMap` and `cases`/`rcases` see the underlying constructors directly.
+
+`UnboundedSylvesterGap` is the spectral spelling and is the weaker hypothesis;
+`UnboundedSylvesterGap.intervalExterior_of_formBounded` converts this one to
+it. -/
+abbrev FormBoundedSylvesterGap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
     (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F))
     (δ : ℝ) : Prop :=
-  linearPMap_UnboundedSylvesterGap A.toLinearPMap B.toLinearPMap δ
+  linearPMap_FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ
 
-namespace UnboundedSylvesterGap
+namespace FormBoundedSylvesterGap
 
-/-- Facade constructor: interval/exterior configuration. -/
-alias intervalExterior := linearPMap_UnboundedSylvesterGap.intervalExterior
+/-- Shim constructor: interval/exterior configuration. -/
+alias intervalExterior := linearPMap_FormBoundedSylvesterGap.intervalExterior
 
-/-- Facade constructor: left block above, right block below. -/
-alias leftAboveRightBelow := linearPMap_UnboundedSylvesterGap.leftAboveRightBelow
+/-- Shim constructor: left block above, right block below. -/
+alias leftAboveRightBelow := linearPMap_FormBoundedSylvesterGap.leftAboveRightBelow
 
-/-- Facade constructor: left block below, right block above. -/
-alias leftBelowRightAbove := linearPMap_UnboundedSylvesterGap.leftBelowRightAbove
+/-- Shim constructor: left block below, right block above. -/
+alias leftBelowRightAbove := linearPMap_FormBoundedSylvesterGap.leftBelowRightAbove
 
-end UnboundedSylvesterGap
+end FormBoundedSylvesterGap
 
 end ExactSinTheta
 end Experimental

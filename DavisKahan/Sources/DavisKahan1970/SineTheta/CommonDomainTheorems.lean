@@ -102,7 +102,7 @@ structure PaperCommonDomainTheorem61Data where
   gap_pos : 0 < gap
   epsilon_pos : 0 < epsilon
   lower_frame : LowerFrameBound source.E₀ epsilon
-  spectral_gap : UnboundedSylvesterGap source.A₀ source.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap source.A₀ source.Λ₁ gap
 
 namespace PaperCommonDomainTheorem61Data
 
@@ -248,7 +248,7 @@ structure PaperRealCommonDomainTheorem61Data where
   gap_pos : 0 < gap
   epsilon_pos : 0 < epsilon
   lower_frame : LowerFrameBound source.E₀ epsilon
-  spectral_gap : UnboundedSylvesterGap source.A₀ source.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap source.A₀ source.Λ₁ gap
 
 namespace PaperRealCommonDomainTheorem61Data
 
