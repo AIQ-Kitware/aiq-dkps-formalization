@@ -41,7 +41,6 @@ last edge to sever was this one.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -197,7 +196,6 @@ theorem nonempty_rightSingularSubspace_isometry
     (stdOrthonormalBasis 𝕜 (rightSingularSubspace A Ω)) (finCongr hrank.symm)⟩
 
 
-end DavisKahanTheory
 
 open scoped InnerProductSpace
 open Module (finrank)

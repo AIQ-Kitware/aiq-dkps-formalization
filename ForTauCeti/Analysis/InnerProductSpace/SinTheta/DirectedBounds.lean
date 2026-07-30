@@ -51,7 +51,6 @@ before the sin-Θ closure moved into the staging layer.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -516,5 +515,4 @@ theorem opNorm_spectralSubspace_sub_le_two {A B : E →ₗ[𝕜] E}
   opNorm_starProjection_sub_le_two hA hB (isInvariant_spectralSubspace A s)
     (isInvariant_spectralSubspace B t) hg hAhi hAlo hBhi hBlo hε0 hε
 
-end DavisKahanTheory
 end TauCeti

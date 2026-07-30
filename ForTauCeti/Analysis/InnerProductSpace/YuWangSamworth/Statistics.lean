@@ -35,7 +35,6 @@ last edge to sever was this one.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -574,5 +573,4 @@ theorem yuWangSamworth_eigenvector_le
     (min_le_left _ _).trans_eq (by rw [Nat.cast_one, Real.sqrt_one, one_mul])
   gcongr
 
-end DavisKahanTheory
 end TauCeti
