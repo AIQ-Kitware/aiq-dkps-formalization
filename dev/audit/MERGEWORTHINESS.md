@@ -11,7 +11,7 @@ defect. Last measured **2026-07-30, pass 7** over 165 files.
 |---|---|
 | proof escapes | **0** |
 | provenance on every module | **164/164** |
-| docstring coverage | **0 undocumented** |
+| docstring coverage | **0 undocumented** — presence only; see defect 13 for *usefulness* |
 | namespace policy | **OK** (164 modules, 10 allowlisted Mathlib namespaces) |
 | dependency firewall | **OK** |
 | header destination | **0** files name Mathlib (was 39) |
@@ -21,9 +21,13 @@ defect. Last measured **2026-07-30, pass 7** over 165 files.
 ## Reviewed against the actual Tau Ceti rubrics
 
 [`TAUCETI-RUBRIC-REVIEW.md`](TAUCETI-RUBRIC-REVIEW.md) runs the ten rubrics from
-`TauCetiReview/rubrics/` over both libraries. It found two objections this
-checklist had missed — one of them rated **`block`** — and both are in the table
-below (`FTC-UNEXERCISED`, `FTC-EXPOSE`).
+`TauCetiReview/rubrics/` over both libraries. It found three objections this
+checklist had missed — one rated **`block`** — and all are in the table below
+(`FTC-UNEXERCISED`, `FTC-EXPOSE`, `FTC-PROSE`). The third came from taking the
+rubric's own division of labour seriously: *"Linters may check presence; you
+judge usefulness and honesty."* Our green "0 undocumented" row is the linter
+half. It says nothing about whether the prose helps a reader of the repo we are
+submitting **to** — and in 69 files it does not.
 
 ## Open defects, each with its lane
 
@@ -41,6 +45,7 @@ below (`FTC-UNEXERCISED`, `FTC-EXPOSE`).
 | 10 | **T21/T22 assert a Mathlib target** | 4 files, 2 topics | `HDR-DEST` *(decision open)* | no |
 | 11 | **Unexercised `Prop` definition** — rubric rates this `block` | 1 | `FTC-UNEXERCISED` | yes |
 | 12 | **70 files expose bodies**; the README rule is the anti-pattern | **70 of 167 — grew from 68**, because new files follow the rule | `FTC-EXPOSE` *(decision open)* | yes |
+| 13 | **69 files document our workflow, not the math** — incl. **31 pointers to the deleted `ForMathlib/` tree** | 69 of 167 | `FTC-PROSE-GATE` → `-a`/`-b`/`-c`/`-d` → `-ENFORCE` | no |
 
 ## Ordering, and why
 
@@ -55,7 +60,11 @@ below (`FTC-UNEXERCISED`, `FTC-EXPOSE`).
 4. **`FTC-SETOPT`** and **`FTC-DEAD`** — both sliceable, both mechanical once
    the underlying warning or the keep/delete call is made.
 5. **`T01-SQRT`** and **`PLACE-GRAM`** — each needs one design decision first.
-6. **`HDR-DEST`'s remainder is jon's**, not an agent's: whether T19–T22 (15
+6. **`FTC-PROSE`** — no build, four disjoint parallel slices, and it is the
+   cheapest large win here: it removes 31 pointers to a tree that does not
+   exist. Take `FTC-PROSE-GATE` first; the slices are worthless without it
+   because the convention that generates the prose is still in force.
+7. **`HDR-DEST`'s remainder is jon's**, not an agent's: whether T19–T22 (15
    files) are Mathlib-bound or Tau Ceti-bound.
 
 ## Not defects — recorded so they are not re-raised
