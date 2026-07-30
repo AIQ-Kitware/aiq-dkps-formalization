@@ -31,7 +31,7 @@ review is exactly a review of a future submission unit.
 - [x] `(root files) :: tooling` — 2 files, 789 lines — **READY**
 - [x] `(root modules)` — 7 files, 65 lines — **READY**
 - [x] `.claude :: data/config` — 1 files, 6 lines — **READY**
-- [x] `.llm_resource_tally :: data/config` — 3 files, 945 lines — **READY**
+- [x] `.llm_resource_tally :: data/config` — 3 files, 946 lines — **READY**
 - [x] `.llm_resource_tally :: documentation` — 1 files, 99 lines — **READY**
 - [x] `.llm_resource_tally :: other` — 3 files, 12 lines — **READY**
 - [x] `.llm_resource_tally :: tooling` — 17 files, 1,743 lines — **READY**
@@ -49,27 +49,27 @@ review is exactly a review of a future submission unit.
 - [x] `DavisKahan/Alternative` — 8 files, 1,294 lines — **READY**
 - [x] `DavisKahan/Analysis` — 6 files, 855 lines — **READY**
 - [x] `DavisKahan/BoundedOperator` — 6 files, 492 lines — **READY**
-- [x] `DavisKahan/DoubleAngle` — 6 files, 1,757 lines — **READY**
+- [x] `DavisKahan/DoubleAngle` — 6 files, 1,753 lines — **READY**
 - [x] `DavisKahan/Experimental` — 1 files, 24 lines — **READY**
-- [x] `DavisKahan/Experimental/Frontier` — 7 files, 2,671 lines — **READY**
+- [x] `DavisKahan/Experimental/Frontier` — 7 files, 2,667 lines — **READY**
 - [x] `DavisKahan/Experimental/InfiniteDimensional` — 93 files, 20,554 lines — **READY**
-- [x] `DavisKahan/Experimental/MathAhead` — 9 files, 1,530 lines — **READY**
+- [x] `DavisKahan/Experimental/MathAhead` — 9 files, 1,529 lines — **READY**
 - [x] `DavisKahan/Experimental/Scratch` — 8 files, 772 lines — **READY**
 - [x] `DavisKahan/Experimental/Sources` — 8 files, 523 lines — **READY**
 - [x] `DavisKahan/FiniteDimensional` — 34 files, 9,606 lines — **READY**
-- [x] `DavisKahan/Geometry` — 16 files, 4,111 lines — **READY**
-- [x] `DavisKahan/Interop` — 29 files, 7,645 lines — **READY**
-- [x] `DavisKahan/OperatorIdeal` — 17 files, 4,910 lines — **READY**
+- [x] `DavisKahan/Geometry` — 21 files, 7,703 lines — **READY**
+- [x] `DavisKahan/Interop` — 3 files, 82 lines — **READY**
+- [x] `DavisKahan/OperatorIdeal` — 17 files, 5,006 lines — **READY**
 - [x] `DavisKahan/Riccati` — 15 files, 2,966 lines — **READY**
-- [x] `DavisKahan/SinTheta` — 31 files, 5,736 lines — **READY**
+- [x] `DavisKahan/SinTheta` — 34 files, 6,449 lines — **READY**
 - [x] `DavisKahan/Sources` — 1 files, 11 lines — **READY**
 - [x] `DavisKahan/Sources/Davis1963` — 4 files, 595 lines — **READY**
-- [x] `DavisKahan/Sources/DavisKahan1970` — 81 files, 15,953 lines — **READY**
+- [x] `DavisKahan/Sources/DavisKahan1970` — 82 files, 16,077 lines — **READY**
 - [x] `DavisKahan/Specialized` — 1 files, 10 lines — **READY**
-- [x] `DavisKahan/SpectralTheory` — 36 files, 8,151 lines — **READY**
-- [x] `DavisKahan/Sylvester` — 24 files, 5,643 lines — **READY**
-- [x] `DavisKahan/TanTheta` — 7 files, 2,480 lines — **READY**
-- [x] `DavisKahan/TanTwoTheta` — 5 files, 688 lines — **READY**
+- [x] `DavisKahan/SpectralTheory` — 52 files, 11,222 lines — **READY**
+- [x] `DavisKahan/Sylvester` — 24 files, 5,641 lines — **READY**
+- [x] `DavisKahan/TanTheta` — 7 files, 2,477 lines — **READY**
+- [x] `DavisKahan/TanTwoTheta` — 5 files, 682 lines — **READY**
 - [x] `DkpsQuench2026` — 8 files, 40 lines — **READY**
 - [x] `DkpsQuench2026 :: data/config` — 1 files, 14 lines — **READY**
 - [x] `DkpsQuench2026 :: documentation` — 2 files, 614 lines — **READY**
@@ -92,36 +92,36 @@ review is exactly a review of a future submission unit.
 - [x] `ForTauCeti :: T01 Positive square root, operator modulus, functional calculus` — 9 files, 1,671 lines — **READY**
 - [x] `ForTauCeti :: T02 Polar decomposition and partial isometries` — 5 files, 2,045 lines — **READY**
 - [x] `ForTauCeti :: T03 Singular values and the singular system` — 4 files, 1,104 lines — **READY**
-- [x] `ForTauCeti :: T04 Gram matrices, orthogonal projections, and spectral subspaces` — 8 files, 1,481 lines — **READY**
+- [x] `ForTauCeti :: T04 Gram matrices, orthogonal projections, and spectral subspaces` — 8 files, 1,487 lines — **READY**
 - [x] `ForTauCeti :: T05 Majorization, Schur-Horn, and unitarily invariant norms` — 5 files, 2,539 lines — **READY**
 - [x] `ForTauCeti :: T06 Principal angles, aligned bases, and finite frames` — 3 files, 1,287 lines — **READY**
 - [x] `ForTauCeti :: T07 Rectangular unitarily invariant norms` — 6 files, 2,359 lines — **READY**
-- [x] `ForTauCeti :: T08 Angle geometry and eigenvalue perturbation` — 5 files, 1,486 lines — **READY**
-- [x] `ForTauCeti :: T09 Approximation numbers` — 11 files, 2,551 lines — **READY**
-- [x] `ForTauCeti :: T10 Symmetric operator ideals and Schatten norms` — 9 files, 2,275 lines — **READY**
-- [x] `ForTauCeti :: T11 Hilbert-Schmidt operators` — 4 files, 581 lines — **READY**
+- [x] `ForTauCeti :: T08 Angle geometry and eigenvalue perturbation` — 5 files, 1,494 lines — **READY**
+- [x] `ForTauCeti :: T09 Approximation numbers` — 11 files, 2,593 lines — **READY**
+- [x] `ForTauCeti :: T10 Symmetric operator ideals and Schatten norms` — 9 files, 2,280 lines — **READY**
+- [x] `ForTauCeti :: T11 Hilbert-Schmidt operators` — 4 files, 634 lines — **READY**
 - [x] `ForTauCeti :: T12 The Haagerup-Zsido kernel and its Fourier transform` — 8 files, 2,036 lines — **READY**
-- [x] `ForTauCeti :: T13 One-parameter unitary groups and Stone's theorem` — 6 files, 1,500 lines — **READY**
-- [x] `ForTauCeti :: T14 Borel functional calculus and projection-valued measures` — 10 files, 2,513 lines — **READY**
-- [x] `ForTauCeti :: T15a Closed operators on LinearPMap: graphs, constructions and form bounds` — 6 files, 1,777 lines — **READY**
-- [x] `ForTauCeti :: T15b Resolvents of self-adjoint LinearPMap operators, and semiboundedness` — 7 files, 1,669 lines — **READY**
-- [x] `ForTauCeti :: T15c The spectral measure of an unbounded self-adjoint operator, and Stone` — 12 files, 3,490 lines — **READY**
-- [x] `ForTauCeti :: T16 Sylvester equations and the Rosenblum theorem` — 18 files, 7,325 lines — **READY**
-- [x] `ForTauCeti :: T17 Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems` — 10 files, 3,351 lines — **READY**
+- [x] `ForTauCeti :: T13 One-parameter unitary groups and Stone's theorem` — 6 files, 1,514 lines — **READY**
+- [x] `ForTauCeti :: T14 Borel functional calculus and projection-valued measures` — 10 files, 2,550 lines — **READY**
+- [x] `ForTauCeti :: T15a Closed operators on LinearPMap: graphs, constructions and form bounds` — 6 files, 1,782 lines — **READY**
+- [x] `ForTauCeti :: T15b Resolvents of self-adjoint LinearPMap operators, and semiboundedness` — 7 files, 1,674 lines — **READY**
+- [x] `ForTauCeti :: T15c The spectral measure of an unbounded self-adjoint operator, and Stone` — 12 files, 3,538 lines — **READY**
+- [x] `ForTauCeti :: T16 Sylvester equations and the Rosenblum theorem` — 18 files, 7,361 lines — **READY**
+- [x] `ForTauCeti :: T17 Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems` — 11 files, 3,474 lines — **blocked (10/11 files)**
 - [x] `ForTauCeti :: T18 The Yu-Wang-Samworth statistical variant` — 3 files, 1,081 lines — **READY**
 - [x] `ForTauCeti :: T19 Matrix spectra and spectral measurability` — 6 files, 910 lines — **READY**
 - [x] `ForTauCeti :: T20 Sample moments and matrix concentration` — 5 files, 903 lines — **READY**
 - [x] `ForTauCeti :: T21 Matrix rank factorization and positive semidefiniteness` — 2 files, 406 lines — **READY**
 - [x] `ForTauCeti :: T22 Berge's maximum theorem and approximate minimizers` — 2 files, 492 lines — **READY**
 - [x] `ForTauCeti :: documentation` — 1 files, 339 lines — **READY**
-- [x] `ForTauCetiRoadmap :: documentation` — 13 files, 2,337 lines — **READY**
+- [x] `ForTauCetiRoadmap :: documentation` — 16 files, 2,816 lines — **blocked (13/16 files)**
 - [x] `ForTauCetiRoadmap/ApproximationNumbers` — 1 files, 219 lines — **READY**
 - [x] `Helm2025` — 4 files, 1,997 lines — **READY**
 - [x] `Helm2025 :: documentation` — 2 files, 683 lines — **READY**
 - [x] `Helm2025 :: other` — 1 files, 265 lines — **READY**
 - [x] `comparator :: data/config` — 23 files, 335 lines — **READY**
 - [x] `dev :: data/config` — 25 files, 11,483 lines — **READY**
-- [x] `dev :: documentation` — 153 files, 36,369 lines — **READY**
+- [x] `dev :: documentation` — 156 files, 36,784 lines — **blocked (153/156 files)**
 - [x] `dev :: manifest/notes` — 8 files, 119 lines — **READY**
 - [x] `dev/alternates` — 1 files, 412 lines — **READY**
 - [x] `docs :: documentation` — 33 files, 6,198 lines — **READY**
@@ -130,7 +130,7 @@ review is exactly a review of a future submission unit.
 - [x] `prose :: data/config` — 1 files, 1,488 lines — **READY**
 - [x] `prose :: documentation` — 3 files, 271 lines — **READY**
 - [x] `prose :: other` — 1 files, 2 lines — **READY**
-- [x] `scripts :: tooling` — 48 files, 11,205 lines — **READY**
+- [x] `scripts :: tooling` — 48 files, 11,219 lines — **READY**
 - [x] `tools :: build config` — 1 files, 179 lines — **READY**
 - [x] `tools :: documentation` — 1 files, 110 lines — **READY**
 - [x] `tools :: manifest/notes` — 1 files, 2 lines — **READY**

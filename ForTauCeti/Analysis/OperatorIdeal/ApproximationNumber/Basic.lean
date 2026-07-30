@@ -239,6 +239,29 @@ theorem approximationNumber_zero (n : ℕ) :
         (by simp [LinearMap.rank_zero]))
   · exact approximationNumber_nonneg _ n
 
+/-- **The rank cutoff.**  An operator of rank at most `n` is its own best
+approximation of rank at most `n`, so `aₙ(T) = 0`.
+
+This is the first of the four statements roadmap topic T09 §A4 asks for.  It holds
+over any normed pair — no inner product, no completeness, no finite dimension —
+because `R := T` is admissible in the defining infimum.  The converse needs a
+Hilbert structure and is
+`ContinuousLinearMap.approximationNumber_eq_zero_iff_finrank_range_le`. -/
+theorem approximationNumber_eq_zero_of_rank_le (T : E →L[𝕜] F) {n : ℕ}
+    (hT : T.rank ≤ (n : Cardinal)) :
+    T.approximationNumber n = 0 := by
+  refine le_antisymm ?_ (T.approximationNumber_nonneg n)
+  simpa using T.approximationNumber_le_norm_sub hT
+
+/-- Every approximation number at or past the rank vanishes: the cutoff
+`ContinuousLinearMap.approximationNumber_eq_zero_of_rank_le` in the form a
+consumer with a *finite* rank bound uses. -/
+theorem approximationNumber_eq_zero_of_rank_le_of_le (T : E →L[𝕜] F) {r n : ℕ}
+    (hT : T.rank ≤ (r : Cardinal)) (hrn : r ≤ n) :
+    T.approximationNumber n = 0 :=
+  T.approximationNumber_eq_zero_of_rank_le
+    (hT.trans (Nat.cast_le.mpr hrn))
+
 /-- Near-minimizers exist: the defining infimum is approached to within any
 `ε > 0` by an admissible approximant.  This is the workhorse behind every
 inequality below, each of which builds an approximant for the left-hand side out
