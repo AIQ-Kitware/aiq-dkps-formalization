@@ -61,11 +61,6 @@ variable {𝕜 E ι : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductS
 
 /-- The subspace spanned by the orthonormal basis vectors `b i` for indices
 `i ∈ s`. -/
--- `@[expose]` because this is a definitional alias for `Submodule.span` and consumers run
--- `induction … using Submodule.span_induction` on membership, which needs the alias to
--- reduce. Recorded debt: a `spanIndices_def` lemma plus a rewrite before the induction is
--- the clean fix, and it is tracked as recorded debt rather than accepted.
-@[expose]
 noncomputable def spanIndices (b : OrthonormalBasis ι 𝕜 E) (s : Set ι) :
     Submodule 𝕜 E :=
   Submodule.span 𝕜 (b '' s)

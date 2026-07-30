@@ -48,7 +48,7 @@ The split modules are:
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 
-**Moved 2026-07-29** by lane PLACE-SYLV, from
+Moved from
 `ForTauCeti/Analysis/Fourier/HaagerupZsidoKernel.lean` to
 `ForTauCeti/Analysis/Fourier/HaagerupZsido/Kernel.lean`.
 `Analysis/Fourier/HaagerupZsido/` already held `Defs`, `Fourier` and `Integrability`,
