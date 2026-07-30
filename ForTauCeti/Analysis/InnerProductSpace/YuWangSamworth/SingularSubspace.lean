@@ -135,6 +135,7 @@ theorem rightSingularSubspace_sinTheta_le
     (isSymmetric_rightGram A) (isSymmetric_rightGram Â)
     (isInvariant_spectralSubspace (rightGram A) (Set.Icc a b))
     (isInvariant_spectralSubspace (rightGram Â) (Set.Icc a b)) hδ hgap
+  -- names the application so the norm bound applies to it directly.
   change δ * ‖(sinThetaMap (rightSingularSubspace A (Set.Icc a b))
       (rightSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
     ‖(rightGram Â - rightGram A).toContinuousLinearMap‖ at hdk
@@ -155,6 +156,7 @@ theorem leftSingularSubspace_sinTheta_le
     (isSymmetric_leftGram A) (isSymmetric_leftGram Â)
     (isInvariant_spectralSubspace (leftGram A) (Set.Icc a b))
     (isInvariant_spectralSubspace (leftGram Â) (Set.Icc a b)) hδ hgap
+  -- names the application so the norm bound applies to it directly.
   change δ * ‖(sinThetaMap (leftSingularSubspace A (Set.Icc a b))
       (leftSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
     ‖(leftGram Â - leftGram A).toContinuousLinearMap‖ at hdk

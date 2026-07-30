@@ -246,6 +246,7 @@ theorem exists_continuous_integral_norm_sub_le (ν : Measure (spectrum ℂ a))
       (ε := ENNReal.ofReal ε) (by simp only [ne_eq, ENNReal.ofReal_eq_zero, not_le]; exact hε)
   have hgint : Integrable (fun x => g x) ν := memLp_one_iff_integrable.mp hgmem
   refine ⟨g.toContinuousMap, hgint, ?_⟩
+  -- names the application so the norm bound applies to it directly.
   change (∫ x, ‖f x - g x‖ ∂ν) ≤ ε
   have hint : ∫ x, ‖f x - g x‖ ∂ν = (eLpNorm (f - ⇑g) 1 ν).toReal := by
     rw [eLpNorm_one_eq_lintegral_enorm,

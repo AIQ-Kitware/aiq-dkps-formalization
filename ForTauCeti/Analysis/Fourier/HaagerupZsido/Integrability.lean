@@ -162,6 +162,8 @@ private theorem integrable_abs_sin_mul_weightLaplaceTransform :
       rw [Real.norm_eq_abs, abs_of_nonneg
         (mul_nonneg (weight_nonneg hy0.le)
           (mul_nonneg (abs_nonneg _) (Real.exp_pos _).le)),
+        -- states the goal with the definition unfolded, in the shape the next step needs;
+        -- there is no `_apply` lemma to rewrite with here.
         show -|t| * y = -y * |t| by ring]
       ring
     _ = |Real.sin t| * weightLaplaceTransform t := by
