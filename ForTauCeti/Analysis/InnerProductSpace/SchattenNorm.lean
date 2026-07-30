@@ -44,7 +44,6 @@ dominance bridges, and operator-ideal inequalities.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -382,5 +381,4 @@ Schatten scale. -/
   rfl
 
 end RectangularUnitarilyInvariantNorm
-end DavisKahanTheory
 end TauCeti
