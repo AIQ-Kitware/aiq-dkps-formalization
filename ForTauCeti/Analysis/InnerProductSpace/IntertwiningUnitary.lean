@@ -39,43 +39,60 @@ Source: **Davis (1963)**, "The Rotation of Eigenvectors by a Perturbation", §2,
 Deferred (source Davis 1958 §7 unavailable, off critical path): the minimality theorems 2.1/2.3.
 -/
 
-namespace OrthonormalBasis
-
 open scoped InnerProductSpace
 open LinearMap InnerProductSpace
+
+namespace OrthonormalBasis
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E] {n : ℕ}
 
-/-! ### Spectral projections (prerequisite — API gap I.5, ticket PD-13) -/
+/-! ### The projection onto the span of a basis subset
+
+**This is not a spectral projection**, and the name says so since lane
+`NS-SPECPROJ` (2026-07-30).  It is the orthogonal projector onto
+`b.spanIndices ↑S`, the span of the basis vectors indexed by `S`; a spectral
+projection is `TauCeti.DavisKahanTheory.spectralProjection A Ω`, the projector
+onto the spectral subspace of an *operator* over a real set.  The two used to
+share the base name `spectralProjection` and differ only by namespace, so
+dropping `DavisKahanTheory` — which `RUB-NS-PAPER` slice 2c has to do — made
+Lean reject the import with *"environment already contains
+`TauCeti.spectralProjection`"*.
+
+It sits in `OrthonormalBasis` rather than `TauCeti` because that is the
+namespace of the object it extends (`ForTauCeti/README.md` §2), and because
+`OrthonormalBasis.spanIndices` in `BasisSpan.lean` is the submodule it projects
+onto.
+-/
 
 /-- Orthogonal projection onto the span of a subset `S` of an orthonormal basis; the building block
-for the spectral projections of a symmetric operator. -/
-noncomputable def spectralProjection (b : OrthonormalBasis (Fin n) 𝕜 E) (S : Finset (Fin n)) :
+for the spectral projections of a symmetric operator, which is what it was
+misleadingly named after. -/
+noncomputable def spanIndicesProjection (b : OrthonormalBasis (Fin n) 𝕜 E) (S : Finset (Fin n)) :
     E →ₗ[𝕜] E :=
   ∑ i ∈ S, (InnerProductSpace.rankOne 𝕜 (b i) (b i)).toLinearMap
 
 omit [FiniteDimensional 𝕜 E] in
-/-- The defining formula: `spectralProjection b S` expands `y` in the basis and keeps the
+/-- The defining formula: `spanIndicesProjection b S` expands `y` in the basis and keeps the
 coefficients indexed by `S`. -/
-theorem spectralProjection_apply (b : OrthonormalBasis (Fin n) 𝕜 E) (S : Finset (Fin n))
-    (y : E) : spectralProjection b S y = ∑ i ∈ S, ⟪b i, y⟫_𝕜 • b i := by
-  unfold spectralProjection
+theorem spanIndicesProjection_apply (b : OrthonormalBasis (Fin n) 𝕜 E) (S : Finset (Fin n))
+    (y : E) : spanIndicesProjection b S y = ∑ i ∈ S, ⟪b i, y⟫_𝕜 • b i := by
+  unfold spanIndicesProjection
   rw [LinearMap.sum_apply]
   exact Finset.sum_congr rfl fun i _ => by simp [InnerProductSpace.rankOne_apply]
 
 omit [FiniteDimensional 𝕜 E] in
-/-- On a singleton index set the spectral projection is the rank-one projection onto `b i`. -/
-theorem spectralProjection_singleton_apply (b : OrthonormalBasis (Fin n) 𝕜 E) (i : Fin n)
-    (y : E) : spectralProjection b {i} y = ⟪b i, y⟫_𝕜 • b i := by
-  rw [spectralProjection_apply, Finset.sum_singleton]
+/-- On a singleton index set this is the rank-one projection onto `b i`. -/
+theorem spanIndicesProjection_singleton_apply (b : OrthonormalBasis (Fin n) 𝕜 E) (i : Fin n)
+    (y : E) : spanIndicesProjection b {i} y = ⟪b i, y⟫_𝕜 • b i := by
+  rw [spanIndicesProjection_apply, Finset.sum_singleton]
 
 omit [FiniteDimensional 𝕜 E] in
 /-- A spectral projection fixes the basis vectors it selects and kills the others; this is the
 form used to compare two projections by testing them on a basis. -/
-theorem spectralProjection_apply_basis (b : OrthonormalBasis (Fin n) 𝕜 E) (S : Finset (Fin n))
-    (k : Fin n) : spectralProjection b S (b k) = if k ∈ S then b k else 0 := by
-  rw [spectralProjection_apply]
+theorem spanIndicesProjection_apply_basis (b : OrthonormalBasis (Fin n) 𝕜 E) (S : Finset (Fin n))
+    (k : Fin n) : spanIndicesProjection b S (b k) = if k ∈ S then b k else 0 := by
+  rw [spanIndicesProjection_apply]
   have hterm : ∀ i ∈ S, ⟪b i, b k⟫_𝕜 • b i = if i = k then b k else 0 := fun i _ => by
     rcases eq_or_ne i k with rfl | hik
     · simp
@@ -84,45 +101,52 @@ theorem spectralProjection_apply_basis (b : OrthonormalBasis (Fin n) 𝕜 E) (S 
 
 omit [FiniteDimensional 𝕜 E] in
 /-- Spectral projections multiply by intersecting their index sets. -/
-theorem spectralProjection_comp (b : OrthonormalBasis (Fin n) 𝕜 E) (S T : Finset (Fin n)) :
-    spectralProjection b S ∘ₗ spectralProjection b T = spectralProjection b (S ∩ T) := by
+theorem spanIndicesProjection_comp (b : OrthonormalBasis (Fin n) 𝕜 E) (S T : Finset (Fin n)) :
+    spanIndicesProjection b S ∘ₗ spanIndicesProjection b T = spanIndicesProjection b (S ∩ T) := by
   apply b.toBasis.ext
   intro k
-  simp only [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, spectralProjection_apply_basis]
+  simp only [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, spanIndicesProjection_apply_basis]
   by_cases hT : k ∈ T <;> by_cases hS : k ∈ S <;>
-    simp [hT, hS, spectralProjection_apply_basis, Finset.mem_inter]
+    simp [hT, hS, spanIndicesProjection_apply_basis, Finset.mem_inter]
 
 omit [FiniteDimensional 𝕜 E] in
 /-- A spectral projection is positive (in particular symmetric). -/
-theorem isPositive_spectralProjection (b : OrthonormalBasis (Fin n) 𝕜 E) (S : Finset (Fin n)) :
-    (spectralProjection b S).IsPositive := by
-  unfold spectralProjection
+theorem isPositive_spanIndicesProjection (b : OrthonormalBasis (Fin n) 𝕜 E) (S : Finset (Fin n)) :
+    (spanIndicesProjection b S).IsPositive := by
+  unfold spanIndicesProjection
   exact isPositive_sum _ fun i _ => (InnerProductSpace.isPositive_rankOne_self _).toLinearMap
 
-/-- A spectral projection is a projection (`IsStarProjection`). -/
-theorem isStarProjection_spectralProjection (b : OrthonormalBasis (Fin n) 𝕜 E)
-    (S : Finset (Fin n)) : IsStarProjection (spectralProjection b S) :=
+/-- It is an orthogonal projection (`IsStarProjection`). -/
+theorem isStarProjection_spanIndicesProjection (b : OrthonormalBasis (Fin n) 𝕜 E)
+    (S : Finset (Fin n)) : IsStarProjection (spanIndicesProjection b S) :=
   isStarProjection_iff'.mpr
     ⟨by
       rw [Module.End.mul_eq_comp]
-      simpa [Finset.inter_self] using spectralProjection_comp b S S,
-      by rw [LinearMap.star_eq_adjoint, (isPositive_spectralProjection b S).adjoint_eq]⟩
+      simpa [Finset.inter_self] using spanIndicesProjection_comp b S S,
+      by rw [LinearMap.star_eq_adjoint, (isPositive_spanIndicesProjection b S).adjoint_eq]⟩
 
 omit [FiniteDimensional 𝕜 E] in
-/-- Spectral projections onto disjoint index sets are orthogonal. -/
-theorem spectralProjection_comp_of_disjoint (b : OrthonormalBasis (Fin n) 𝕜 E)
+/-- Projections onto disjoint index sets are orthogonal. -/
+theorem spanIndicesProjection_comp_of_disjoint (b : OrthonormalBasis (Fin n) 𝕜 E)
     {S T : Finset (Fin n)} (h : Disjoint S T) :
-    spectralProjection b S ∘ₗ spectralProjection b T = 0 := by
-  rw [spectralProjection_comp, Finset.disjoint_iff_inter_eq_empty.mp h]
-  simp [spectralProjection]
+    spanIndicesProjection b S ∘ₗ spanIndicesProjection b T = 0 := by
+  rw [spanIndicesProjection_comp, Finset.disjoint_iff_inter_eq_empty.mp h]
+  simp [spanIndicesProjection]
 
 omit [FiniteDimensional 𝕜 E] in
-/-- The spectral projections over a partition of `Fin n` sum to `1`. -/
-theorem spectralProjection_univ (b : OrthonormalBasis (Fin n) 𝕜 E) :
-    spectralProjection b Finset.univ = 1 := by
+/-- Over the whole index set the projection is the identity. -/
+theorem spanIndicesProjection_univ (b : OrthonormalBasis (Fin n) 𝕜 E) :
+    spanIndicesProjection b Finset.univ = 1 := by
   apply b.toBasis.ext
   intro k
-  simp [spectralProjection_apply_basis]
+  simp [spanIndicesProjection_apply_basis]
+
+end OrthonormalBasis
+
+namespace TauCeti
+
+variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [FiniteDimensional 𝕜 E] {n : ℕ}
 
 end OrthonormalBasis
 
@@ -155,20 +179,20 @@ variable {m : ℕ}
 basis: `proj i` is the orthogonal projection onto `span (b i)`. -/
 noncomputable def OrthoProjFamily.ofOrthonormalBasis (b : OrthonormalBasis (Fin n) 𝕜 E) :
     OrthoProjFamily 𝕜 E n where
-  proj i := OrthonormalBasis.spectralProjection b {i}
-  isStarProjection' i := OrthonormalBasis.isStarProjection_spectralProjection b {i}
+  proj i := OrthonormalBasis.spanIndicesProjection b {i}
+  isStarProjection' i := OrthonormalBasis.isStarProjection_spanIndicesProjection b {i}
   orthogonal' _ _ hij :=
-    OrthonormalBasis.spectralProjection_comp_of_disjoint b (Finset.disjoint_singleton.mpr hij)
+    OrthonormalBasis.spanIndicesProjection_comp_of_disjoint b (Finset.disjoint_singleton.mpr hij)
   complete' := by
-    rw [← OrthonormalBasis.spectralProjection_univ b]
-    unfold OrthonormalBasis.spectralProjection
+    rw [← OrthonormalBasis.spanIndicesProjection_univ b]
+    unfold OrthonormalBasis.spanIndicesProjection
     exact Finset.sum_congr rfl fun i _ => Finset.sum_singleton _ _
 
 /-- The family built from an orthonormal basis has the singleton spectral
 projections as its components, definitionally. -/
 @[simp] theorem OrthoProjFamily.ofOrthonormalBasis_proj (b : OrthonormalBasis (Fin n) 𝕜 E)
     (i : Fin n) :
-    (OrthoProjFamily.ofOrthonormalBasis b).proj i = OrthonormalBasis.spectralProjection b {i} :=
+    (OrthoProjFamily.ofOrthonormalBasis b).proj i = OrthonormalBasis.spanIndicesProjection b {i} :=
   rfl
 
 namespace OrthoProjFamily
