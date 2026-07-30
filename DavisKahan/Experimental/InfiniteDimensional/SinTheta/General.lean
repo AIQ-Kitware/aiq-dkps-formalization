@@ -687,6 +687,27 @@ theorem operatorAbsoluteValue_zero :
     operatorAbsoluteValue (0 : E →L[𝕜] E) = 0 :=
   CFC.abs_zero
 
+/-- **The absolute value is norm-preserving.**  `‖|T|‖ = ‖T‖`, by the C⋆
+identity applied twice: `|T|` is self-adjoint and `|T| * |T| = T⋆ T`, so
+`‖|T|‖² = ‖|T|⋆ |T|‖ = ‖T⋆ T‖ = ‖T‖²`.
+
+This is the gauge-free half of what a symmetric norm ideal wants from the
+absolute value, and unlike the gauge half it needs no polar decomposition — so
+it is available over a general `RCLike` field, where
+`operatorAbsoluteValue_mem_and_gauge_eq` is still a leaf. -/
+theorem norm_operatorAbsoluteValue (T : E →L[𝕜] E) :
+    ‖operatorAbsoluteValue T‖ = ‖T‖ := by
+  have hsa : star (operatorAbsoluteValue T) = operatorAbsoluteValue T :=
+    (CFC.abs_nonneg T).isSelfAdjoint
+  have hsq : ‖operatorAbsoluteValue T‖ * ‖operatorAbsoluteValue T‖ = ‖T‖ * ‖T‖ := by
+    calc ‖operatorAbsoluteValue T‖ * ‖operatorAbsoluteValue T‖
+        = ‖star (operatorAbsoluteValue T) * operatorAbsoluteValue T‖ :=
+          (CStarRing.norm_star_mul_self).symm
+      _ = ‖star T * T‖ := by
+          rw [hsa, operatorAbsoluteValue_eq, CFC.abs_mul_abs]
+      _ = ‖T‖ * ‖T‖ := CStarRing.norm_star_mul_self
+  exact (mul_self_inj (norm_nonneg _) (norm_nonneg _)).mp hsq
+
 /-- The full ambient sine-angle operator of two subspaces: the absolute value
 of the projector difference. -/
 noncomputable def sinAngleOperator (U V : Submodule 𝕜 E)
