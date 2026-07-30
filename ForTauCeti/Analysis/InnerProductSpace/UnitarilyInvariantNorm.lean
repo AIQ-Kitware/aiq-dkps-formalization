@@ -543,8 +543,15 @@ instantiates the every-UI-norm Davis–Kahan theorems to the Frobenius vocabular
 
 /-- `√(∑ (fᵢ + gᵢ)²) ≤ √(∑ fᵢ²) + √(∑ gᵢ²)` for nonnegative real vectors: the
 Minkowski inequality, obtained from `EuclideanSpace`'s triangle inequality by
-transporting `f, g` across `WithLp.equiv`. -/
-private theorem sqrt_sum_add_sq_le {m : ℕ} (f g : Fin m → ℝ) :
+transporting `f, g` across `WithLp.equiv`.
+
+Public rather than `private` since 2026-07-30: the rectangular instances file
+had a character-for-character copy of this proof under the name
+`sqrt_sum_add_sq_le_rect`, which is what being `private` invites.  The
+namespace is not ideal — this is a fact about `Fin m → ℝ` and has nothing to do
+with unitarily invariant norms — but it is where the proof already lived, and
+moving it is a placement decision rather than a de-duplication. -/
+theorem sqrt_sum_add_sq_le {m : ℕ} (f g : Fin m → ℝ) :
     Real.sqrt (∑ i, (f i + g i) ^ 2)
       ≤ Real.sqrt (∑ i, f i ^ 2) + Real.sqrt (∑ i, g i ^ 2) := by
   let x : EuclideanSpace ℝ (Fin m) := (WithLp.equiv 2 (Fin m → ℝ)).symm f

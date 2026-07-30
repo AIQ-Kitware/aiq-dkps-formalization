@@ -96,14 +96,6 @@ theorem starProjection_comp_toContinuousLinearMap_comm {T : E →ₗ[𝕜] E}
 
 variable {T S : E →ₗ[𝕜] E}
 
-omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
-/-- Pythagoras for an orthogonal projection: the squared norms of the
-projection and of the complementary part add to the squared norm. -/
-private theorem norm_sq_eq_starProjection_add_sub' {W : Submodule 𝕜 E}
-    [W.HasOrthogonalProjection] (x : E) :
-    ‖x‖ ^ 2 = ‖W.starProjection x‖ ^ 2 + ‖x - W.starProjection x‖ ^ 2 :=
-  TauCeti.norm_sq_eq_starProjection_add_sub x
-
 omit [CompleteSpace E] in
 /-- **The quadratic form of a reduced extension splits.**  For `R : E →ₗ[𝕜] E`
 leaving `W` invariant, the bounded extension `R ∘L P_W + κ (1 - P_W)` — equal to
@@ -208,7 +200,7 @@ theorem exists_isSymmetric_comp_sub_comp_eq (hT : T.IsSymmetric) (hS : S.IsSymme
         = RCLike.re ⟪T (P x), P x⟫_𝕜 + (c + g) * ‖x - P x‖ ^ 2 := by
       rw [hA, hTc, hP]; exact re_inner_reducedExtension_self' hUinv (c + g) x
     have hpyth : ‖x‖ ^ 2 = ‖P x‖ ^ 2 + ‖x - P x‖ ^ 2 := by
-      rw [hP]; exact norm_sq_eq_starProjection_add_sub' x
+      rw [hP]; exact TauCeti.norm_sq_eq_starProjection_add_sub x
     rw [hre, hpyth]
     nlinarith [hU (P x) hpx]
   -- Upper bound for `B`: `re⟪B x, x⟫ ≤ c‖x‖²`.
@@ -219,7 +211,7 @@ theorem exists_isSymmetric_comp_sub_comp_eq (hT : T.IsSymmetric) (hS : S.IsSymme
         = RCLike.re ⟪S (Q x), Q x⟫_𝕜 + c * ‖x - Q x‖ ^ 2 := by
       rw [hB, hSc, hQ]; exact re_inner_reducedExtension_self' hVinv c x
     have hpyth : ‖x‖ ^ 2 = ‖Q x‖ ^ 2 + ‖x - Q x‖ ^ 2 := by
-      rw [hQ]; exact norm_sq_eq_starProjection_add_sub' x
+      rw [hQ]; exact TauCeti.norm_sq_eq_starProjection_add_sub x
     rw [hre, hpyth]
     nlinarith [hV (Q x) hqx]
   -- Sylvester relation `A ∘L X − X ∘L B = Y`.

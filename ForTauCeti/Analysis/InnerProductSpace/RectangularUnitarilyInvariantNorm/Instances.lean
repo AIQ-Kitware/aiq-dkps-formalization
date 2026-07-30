@@ -247,30 +247,6 @@ continuous-linear-map view, definitionally. -/
 @[simp] theorem opNorm_apply (A : E →ₗ[𝕜] F) :
     opNorm A = ‖A.toContinuousLinearMap‖ := rfl
 
-/-- Minkowski for finite Euclidean column-norm vectors. -/
-private theorem sqrt_sum_add_sq_le_rect {m : ℕ} (f g : Fin m → ℝ) :
-    Real.sqrt (∑ i, (f i + g i) ^ 2)
-      ≤ Real.sqrt (∑ i, f i ^ 2) + Real.sqrt (∑ i, g i ^ 2) := by
-  let x : EuclideanSpace ℝ (Fin m) := (WithLp.equiv 2 (Fin m → ℝ)).symm f
-  let y : EuclideanSpace ℝ (Fin m) := (WithLp.equiv 2 (Fin m → ℝ)).symm g
-  have hnx : ‖x‖ = Real.sqrt (∑ i, f i ^ 2) := by
-    rw [EuclideanSpace.norm_eq]
-    exact congrArg _ (Finset.sum_congr rfl fun i _ => by
-      rw [show x i = f i from rfl, Real.norm_eq_abs, sq_abs])
-  have hny : ‖y‖ = Real.sqrt (∑ i, g i ^ 2) := by
-    rw [EuclideanSpace.norm_eq]
-    exact congrArg _ (Finset.sum_congr rfl fun i _ => by
-      rw [show y i = g i from rfl, Real.norm_eq_abs, sq_abs])
-  have hnxy : ‖x + y‖ = Real.sqrt (∑ i, (f i + g i) ^ 2) := by
-    rw [EuclideanSpace.norm_eq]
-    exact congrArg _ (Finset.sum_congr rfl fun i _ => by
-      rw [PiLp.add_apply, show x i = f i from rfl,
-        -- states the goal with the definition unfolded, in the shape the next step needs;
-        -- there is no `_apply` lemma to rewrite with here.
-        show y i = g i from rfl, Real.norm_eq_abs, sq_abs])
-  rw [← hnx, ← hny, ← hnxy]
-  exact norm_add_le x y
-
 /-- Frobenius/Hilbert--Schmidt norm as a rectangular UI norm. -/
 noncomputable def frobenius : RectangularUnitarilyInvariantNorm 𝕜 E F where
   toFun A := Real.sqrt
@@ -284,7 +260,7 @@ noncomputable def frobenius : RectangularUnitarilyInvariantNorm 𝕜 E F where
       refine pow_le_pow_left₀ (norm_nonneg _) ?_ 2
       rw [LinearMap.add_apply]
       exact norm_add_le _ _
-    exact hmono.trans (sqrt_sum_add_sq_le_rect _ _)
+    exact hmono.trans (UnitarilyInvariantNorm.sqrt_sum_add_sq_le _ _)
   smul' a A := by
     have h : ∀ i, ‖(a • A) (stdOrthonormalBasis 𝕜 E i)‖ ^ 2 =
         ‖a‖ ^ 2 * ‖A (stdOrthonormalBasis 𝕜 E i)‖ ^ 2 := fun i => by
@@ -412,7 +388,14 @@ theorem sum_le_rectangularKyFanSum_of_orthonormal
     _ ≤ rectangularKyFanSum k A :=
       re_sum_inner_map_le_rectangularKyFanSum hk hu hv
 
-private theorem rectangularKyFanSum_add_le (k : ℕ)
+/-- **Rectangular Ky Fan subadditivity**: the `k`-th Ky Fan sum of a sum of
+operators is at most the sum of the two Ky Fan sums.
+
+Public rather than `private` since 2026-07-30.  `SchattenNorm.lean` carried a
+second declaration with *the same fully-qualified name*, legal only because
+this one was private and therefore mangled; that one is gone and this is the
+declaration every consumer now sees. -/
+theorem rectangularKyFanSum_add_le (k : ℕ)
     (A B : E →ₗ[𝕜] F) :
     rectangularKyFanSum k (A + B) ≤
       rectangularKyFanSum k A + rectangularKyFanSum k B := by
