@@ -73,15 +73,22 @@ carrying 192 commits.
 **The rule: `main` only ever advances through a green build.** Concretely, and this
 is the whole procedure:
 
-1. merge every branch that is ahead into the integration branch;
-2. run `lake build` **and** the gate suite — `check_lane_format`, `check_lane_graph`,
+1. merge every branch that is ahead into the integration branch, **one merge per command,
+   reading the result of each before starting the next**. Do not chain the merges and the
+   build into a single backgrounded command: on 2026-07-30 that was done here, the
+   `CONFLICT` lines scrolled past unread inside the task output, and the first thing to
+   notice the unfinished merge was the Lean compiler several minutes later;
+2. run `check_conflict_markers` **first** — it is the cheapest gate and it catches
+   exactly the failure above in about a second, where a build takes minutes and buries
+   the cause under a cascade of duplicated-namespace errors;
+3. run `lake build` **and** the gate suite — `check_lane_format`, `check_lane_graph`,
    `check_expose_ratchet`, `check_submission_prose`, `check_declaration_name_drift`,
    `check_tauceti_roadmap_topics`, and `scripts/tests/`;
-3. confirm `git merge-base --is-ancestor origin/main HEAD` — **a fast-forward means the
+4. confirm `git merge-base --is-ancestor origin/main HEAD` — **a fast-forward means the
    tree main receives IS the tree that was just built**, so a green build on the
    integration branch is green on `main` by construction, and no second build is needed
    (jon, 2026-07-30);
-4. push, then push the same tip to the integration branch so agents converge.
+5. push, then push the same tip to the integration branch so agents converge.
 
 **If step 3 fails**, `main` has a commit the integrator does not, the union is untested,
 and it goes back to step 1 — never force, never push around it.
