@@ -555,10 +555,6 @@ been read. An unrecorded review is indistinguishable from no review.
 
 *29 files, 7,645 lines — 29/29 reviewed*
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> origin/yardrat-work
 - [x] `DavisKahan/Geometry/Polar/DirectRotationSquare.lean` — 1,410 lines · Lean source
 - [x] `DavisKahan/Geometry/Polar/DirectRotation.lean` — 1,182 lines · Lean source
 - [x] `DavisKahan/Geometry/Halmos/TwoProjections.lean` — 761 lines · Lean source
@@ -584,36 +580,6 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/SpectralTheory/OrderedHalfLine.lean` — 84 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ClosedOperator/MathlibBridge.lean` — 75 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ClosedOperator/RealSpectrum.lean` — 73 lines · Lean source
-<<<<<<< HEAD
-=======
-- [x] `DavisKahan/Interop/Spectra/DirectRotationSquare.lean` — 1,410 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/DirectRotation.lean` — 1,182 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/HalmosTwoProjections.lean` — 761 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/RealSpectralRestriction.lean` — 711 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/ReflectionRestriction.lean` — 631 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/SpectralProjectionSinTheta.lean` — 328 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/BoundedPerturbationSinTheta.lean` — 286 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/UnitaryConjugation.lean` — 237 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/SpectralRestriction.lean` — 181 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/BoundedFromSpectrum.lean` — 166 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/BoundedSelfAdjointSpectralProjection.lean` — 155 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/BoundedTruncation.lean` — 152 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/OperatorAbsoluteValue.lean` — 152 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/HilbertSchmidtTensor.lean` — 124 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/PVMSubspace.lean` — 117 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/SpectralRestrictionLocalization.lean` — 115 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/BoundedPerturbationSinThetaIdeal.lean` — 108 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/SpectralRestrictionOperator.lean` — 103 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/SinAngle.lean` — 100 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/SpectralCutoff.lean` — 99 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/GapResolvent.lean` — 95 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/CircleRieszProjection.lean` — 84 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/OrderedHalfLine.lean` — 84 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/ClosedOperator.lean` — 75 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/RealSpectrumBridge.lean` — 73 lines · Lean source
->>>>>>> origin/main
-=======
->>>>>>> origin/yardrat-work
 - [x] `DavisKahan/Interop/TauCeti/ClosedOperator.lean` — 64 lines · Lean source
 - [x] `DavisKahan/Interop/All.lean` — 10 lines · Lean source
 - [x] `DavisKahan/Interop/TauCeti/All.lean` — 9 lines · Lean source
