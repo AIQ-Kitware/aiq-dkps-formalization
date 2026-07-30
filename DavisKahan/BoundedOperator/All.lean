@@ -9,5 +9,6 @@ import DavisKahan.BoundedOperator.IsometricRangeProjection
 import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 import DavisKahan.BoundedOperator.Reflection
 import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
+import DavisKahan.BoundedOperator.TrialResidual
 
 /-! # `DavisKahan/BoundedOperator` -/

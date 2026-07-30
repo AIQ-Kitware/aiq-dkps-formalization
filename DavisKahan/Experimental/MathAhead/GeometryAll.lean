@@ -4,7 +4,7 @@ import DavisKahan.Geometry.Polar.PolarIntertwining
 import DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates
 import DavisKahan.Geometry.Polar.Section3Nonacute
 import DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.SpectralMultiplicityFoundation
+import DavisKahan.SpectralTheory.SpectralMultiplicityFoundation
 
 /-!
 # Geometry and Section 3 mathematics-ahead aggregate

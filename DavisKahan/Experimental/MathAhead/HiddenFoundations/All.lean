@@ -12,9 +12,9 @@ import DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates
 import DavisKahan.Geometry.Polar.PolarIntertwining
 import DavisKahan.Geometry.Polar.PolarIsometryFinal
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.RealSylvesterDescent
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.SchattenApproximationFoundation
+import DavisKahan.OperatorIdeal.ApproximationNumbers.SchattenApproximationFoundation
 import DavisKahan.Geometry.Polar.Section3Nonacute
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.SpectralMultiplicityFoundation
+import DavisKahan.SpectralTheory.SpectralMultiplicityFoundation
 import DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification
 /-!
 # Aggregate hidden-foundation mathematics-ahead layer

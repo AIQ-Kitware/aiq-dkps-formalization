@@ -41,6 +41,7 @@ noncomputable def trialResidualCore
     [Z.HasOrthogonalProjection] : Z →L[ℂ] H :=
   Zᗮ.starProjection ∘L T ∘L Z.subtypeL
 
+omit [CompleteSpace H] in
 /-- The trial residual is the difference between the ambient action and the
 lifted Ritz compression. -/
 theorem trialResidualCore_eq_ritzDifference
@@ -55,6 +56,7 @@ theorem trialResidualCore_eq_ritzDifference
   rw [Submodule.starProjection_orthogonal_apply]
   rfl
 
+omit [CompleteSpace H] in
 /-- Every trial residual vector lies in the orthogonal complement of the trial
 space. -/
 theorem trialResidualCore_apply_mem_orthogonal
