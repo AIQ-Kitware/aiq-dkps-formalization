@@ -32,3 +32,15 @@ the printed equation (4).
 * migrate reusable results from this completion lane into canonical modules.
 
 These are no longer blockers for coverage of the paper's numbered theorems.
+
+## This library is not a default build target
+
+`lakefile.toml` does not list `FinishYuWangSamworth` in `defaultTargets`, so a
+green `lake build` does **not** compile anything here. The generated census
+(`dev/yu-wang-samworth-2015-full-source-census.json`) quantifies what that
+costs: of **19 formalized items only 10 are guarded by the default build**, so
+nine proved results can be broken by a refactor while every gate stays green.
+
+Coverage and protection against regression are different properties. This
+document asserts the first; the second is not yet true. Build explicitly with
+`lake build FinishYuWangSamworth`.
