@@ -144,6 +144,7 @@ theorem sqrt_unique {T S : E →ₗ[𝕜] E} (hT : T.IsPositive) (hS : S.IsPosit
 
 /-- **The isometry-defect identity** `‖sqrt T x‖² = re ⟪T x, x⟫`. This is the seed of the polar
 decomposition norm identity `‖A x‖ = ‖|A| x‖`. -/
+@[simp]
 theorem sq_norm_sqrt_apply {T : E →ₗ[𝕜] E} (hT : T.IsPositive) (x : E) :
     ‖hT.sqrt x‖ ^ 2 = RCLike.re ⟪T x, x⟫_𝕜 := by
   have hss : hT.sqrt (hT.sqrt x) = T x := by
