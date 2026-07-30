@@ -33,9 +33,24 @@ The current proof attempt writes both missing bridges in full:
    source compressions of sine/cosine, modulus identification, zero extension,
    and complete approximation-number preservation.
 
-The immediate remaining obligation is compiler validation and repair of these
-written arguments without narrowing the theorem.  After compilation, run the
-repository grounding checks and `#print axioms` on the unrestricted theorem.
+## Status: the bounded target is proved
 
-The unrestricted unbounded sharp ideal theorem remains separate from this
-bounded target.
+**`paperFaithful_tanTwoTheta_uiNorm` compiles as stated** (2026-07-30,
+`FinishTanTwoTheta/DavisKahan/PaperFaithful.lean:408`). The compiler-validation
+obligation this document previously described is discharged: both bridges above
+were written, repaired, and accepted without narrowing the theorem, and the
+library carries **no proof escapes** across its 21 modules.
+
+What remains:
+
+* run `#print axioms` on the unrestricted theorem and record the result here;
+* the unrestricted **unbounded** sharp ideal theorem, which is separate work and
+  not part of this bounded target.
+
+## This library is not a default build target
+
+`lakefile.toml` does not list `FinishTanTwoTheta` in `defaultTargets`, so a
+green `lake build` does **not** compile anything here. The results above are
+proved but unguarded: a refactor elsewhere can break them while every gate stays
+green. Build it explicitly with `lake build FinishTanTwoTheta`. Adding the
+target is tracked as lane `FTT-PROMOTE` in `dev/LANES.md`.

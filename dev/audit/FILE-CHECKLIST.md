@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-1170/1177 files reviewed · 1177 files · 265,156 lines · 113 groups
+1185/1186 files reviewed · 1186 files · 266,419 lines · 113 groups
 
 ## How to review
 
@@ -95,9 +95,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### .llm_resource_tally :: data/config
 
-*3 files, 946 lines — 3/3 reviewed*
+*3 files, 949 lines — 3/3 reviewed*
 
-- [x] `.llm_resource_tally/ledger/ledger.jsonl` — 893 lines · data/config
+- [x] `.llm_resource_tally/ledger/ledger.jsonl` — 896 lines · data/config
 - [x] `.llm_resource_tally/lifetime-totals.json` — 46 lines · data/config
 - [x] `.llm_resource_tally/settings.json` — 7 lines · data/config
 
@@ -967,11 +967,11 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### FinishTanTwoTheta :: documentation
 
-*3 files, 138 lines — 3/3 reviewed*
+*3 files, 153 lines — 3/3 reviewed*
 
+- [x] `FinishTanTwoTheta/PROOF_OBLIGATIONS.md` — 57 lines · documentation
 - [x] `FinishTanTwoTheta/README.md` — 50 lines · documentation
 - [x] `FinishTanTwoTheta/GROUNDING.md` — 46 lines · documentation
-- [x] `FinishTanTwoTheta/PROOF_OBLIGATIONS.md` — 42 lines · documentation
 
 ### FinishTanTwoTheta :: tooling
 
@@ -1013,11 +1013,11 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### FinishYuWangSamworth :: documentation
 
-*4 files, 167 lines — 4/4 reviewed*
+*4 files, 179 lines — 4/4 reviewed*
 
 - [x] `FinishYuWangSamworth/README.md` — 51 lines · documentation
 - [x] `FinishYuWangSamworth/GROUNDING.md` — 47 lines · documentation
-- [x] `FinishYuWangSamworth/PROOF_OBLIGATIONS.md` — 35 lines · documentation
+- [x] `FinishYuWangSamworth/PROOF_OBLIGATIONS.md` — 47 lines · documentation
 - [x] `FinishYuWangSamworth/ELEGANCE_AUDIT.md` — 34 lines · documentation
 
 ### FinishYuWangSamworth :: tooling
@@ -1058,10 +1058,11 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T02 Polar decomposition and partial isometries
 
-*5 files, 2,045 lines — 5/5 reviewed*
+*6 files, 2,486 lines — 6/6 reviewed*
 
 - [x] `ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean` — 707 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/PolarDecomposition.lean` — 457 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/IntertwiningUnitary.lean` — 441 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean` — 411 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/PolarIsometry.lean` — 302 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/PartialIsometry.lean` — 168 lines · Lean source
@@ -1129,17 +1130,19 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T09 Approximation numbers
 
-*11 files, 2,593 lines — 11/11 reviewed*
+*13 files, 2,899 lines — 13/13 reviewed*
 
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean` — 482 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFan.lean` — 451 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteDimensional.lean` — 353 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMax.lean` — 255 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteRestriction.lean` — 234 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/SpectralCutoff.lean` — 223 lines · Lean source
-- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMax.lean` — 211 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxUpper.lean` — 175 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/SameSequence.lean` — 146 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Adjoint.lean` — 135 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Examples.lean` — 135 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Compact.lean` — 127 lines · Lean source
 - [x] `ForTauCeti/LinearAlgebra/Dimension/RankComp.lean` — 117 lines · Lean source
 - [x] `ForTauCeti/SetTheory/Cardinal/Lift.lean` — 66 lines · Lean source
 
@@ -1181,9 +1184,8 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T13 One-parameter unitary groups and Stone's theorem
 
-*6 files, 1,514 lines — 6/6 reviewed*
+*5 files, 1,073 lines — 5/5 reviewed*
 
-- [x] `ForTauCeti/Analysis/InnerProductSpace/IntertwiningUnitary.lean` — 441 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/OneParameterUnitaryGroup/Basic.lean` — 321 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/OneParameterUnitaryGroup/Stone.lean` — 306 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/SkewAdjointExponential.lean` — 222 lines · Lean source
@@ -1270,7 +1272,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T17 Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems
 
-*11 files, 3,474 lines — 10/11 reviewed*
+*11 files, 3,474 lines — 11/11 reviewed*
 
 - [x] `ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean` — 709 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/SinTheta/DirectedBounds.lean` — 494 lines · Lean source
@@ -1335,9 +1337,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCetiRoadmap :: documentation
 
-*16 files, 2,816 lines — 13/16 reviewed*
+*22 files, 3,578 lines — 22/22 reviewed*
 
-- [x] `ForTauCetiRoadmap/ApproximationNumbers/README.md` — 413 lines · documentation
+- [x] `ForTauCetiRoadmap/ApproximationNumbers/README.md` — 449 lines · documentation
 - [x] `ForTauCetiRoadmap/CANDIDATE-TOPIC-DESIGN.md` — 313 lines · documentation
 - [x] `ForTauCetiRoadmap/SymmetricOperatorIdeals/README.md` — 256 lines · documentation
 - [x] `ForTauCetiRoadmap/SpectralSubspacePerturbation/README.md` — 250 lines · documentation
@@ -1346,13 +1348,19 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `ForTauCetiRoadmap/HilbertSchmidtOperators/README.md` — 155 lines · documentation
 - [x] `ForTauCetiRoadmap/UnboundedSpectralMeasure/README.md` — 152 lines · documentation
 - [x] `ForTauCetiRoadmap/UnboundedResolvent/README.md` — 146 lines · documentation
+- [x] `ForTauCetiRoadmap/SylvesterRosenblum/README.md` — 142 lines · documentation
+- [x] `ForTauCetiRoadmap/PolarDecomposition/README.md` — 133 lines · documentation
 - [x] `ForTauCetiRoadmap/PositiveSqrtAndModulus/README.md` — 133 lines · documentation
 - [x] `ForTauCetiRoadmap/ClosedPartialMaps/README.md` — 129 lines · documentation
 - [x] `ForTauCetiRoadmap/UnboundedOperators/README.md` — 120 lines · documentation
+- [x] `ForTauCetiRoadmap/StoneTheorem/README.md` — 118 lines · documentation
+- [x] `ForTauCetiRoadmap/SingularValues/README.md` — 116 lines · documentation
+- [x] `ForTauCetiRoadmap/MajorizationAndUINorms/README.md` — 111 lines · documentation
 - [x] `ForTauCetiRoadmap/BergeMaximum/README.md` — 110 lines · documentation
+- [x] `ForTauCetiRoadmap/ProjectionsAndSpectralSubspaces/README.md` — 100 lines · documentation
 - [x] `ForTauCetiRoadmap/MatrixRankFactorization/README.md` — 96 lines · documentation
 - [x] `ForTauCetiRoadmap/SpectralSubspacePerturbation/Suggested.lean.md` — 92 lines · documentation
-- [x] `ForTauCetiRoadmap/README.md` — 83 lines · documentation
+- [x] `ForTauCetiRoadmap/README.md` — 89 lines · documentation
 
 ### ForTauCetiRoadmap/ApproximationNumbers
 
@@ -1442,15 +1450,15 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*156 files, 36,777 lines — 153/156 reviewed*
+*157 files, 36,888 lines — 156/157 reviewed*
 
 - [x] `dev/tauceti-signature-polish-todo.md` — 2,201 lines · documentation
-- [x] `dev/audit/FILE-CHECKLIST.md` — 1,770 lines · documentation
+- [x] `dev/audit/FILE-CHECKLIST.md` — 1,785 lines · documentation
 - [x] `dev/davis-kahan-expert-completion-plan.md` — 1,589 lines · documentation
 - [x] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation
 - [x] `dev/tauceti/u1-linearpmap-migration.md` — 1,139 lines · documentation
-- [x] `dev/LANES.md` — 1,041 lines · documentation
 - [x] `dev/tauceti/spectra-removal-plan.md` — 1,036 lines · documentation
+- [x] `dev/LANES.md` — 1,035 lines · documentation
 - [x] `dev/lean-proof-engineering-lessons.md` — 907 lines · documentation
 - [x] `dev/tauceti/NAMEK-STATUS.md` — 862 lines · documentation
 - [x] `dev/tauceti/convergence-matrix.md` — 795 lines · documentation
@@ -1462,7 +1470,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `dev/tauceti/spectra-to-tauceti-port-ledger.md` — 471 lines · documentation
 - [x] `dev/external-lean-references.md` — 459 lines · documentation
 - [x] `dev/flawless-sine-theta-reorganization-overnight-plan-2026-07-20.md` — 456 lines · documentation
-- [x] `dev/tauceti/submission-ladder.md` — 421 lines · documentation
+- [x] `dev/tauceti/submission-ladder.md` — 423 lines · documentation
 - [x] `dev/mathlib-proof-polishing.md` — 414 lines · documentation
 - [x] `dev/topurge/dev/overlays/sylvester-semigroup-mathpass-gpt56.md` — 404 lines · documentation
 - [x] `dev/overlays/hidden-foundations-mathahead-gpt56.md` — 385 lines · documentation
@@ -1489,11 +1497,11 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `dev/topurge/dev/overlays/free-beam-hard-theory-scratch-dfd9d37-gpt56.md` — 247 lines · documentation
 - [x] `dev/topurge/dev/real-route-completion-prompt.md` — 246 lines · documentation
 - [x] `dev/tauceti/experimental-sorry-triage.md` — 235 lines · documentation
+- [x] `dev/LANES-COMPLETED.md` — 232 lines · documentation
 - [x] `dev/topurge/dev/tauceti/experimental-promotion-roadmap.md` — 232 lines · documentation
 - [x] `dev/topurge/dev/overlays/shared-hard-foundations-dfd9d37-gpt56.md` — 230 lines · documentation
 - [x] `dev/tauceti/extraction-cluster-classification.md` — 227 lines · documentation
 - [x] `dev/davis-kahan-1970-full-sine-theta-proof-manuscript-2026-07-19.md` — 222 lines · documentation
-- [x] `dev/LANES-COMPLETED.md` — 220 lines · documentation
 - [x] `dev/topurge/dev/compile-repair-rebase-note-2026-07-20.md` — 217 lines · documentation
 - [x] `dev/davis-kahan-1970-missing-statements-math-ahead-2026-07-20.md` — 213 lines · documentation
 - [x] `dev/tauceti/tauceti-pr1-approximation-numbers.md` — 213 lines · documentation
@@ -1548,6 +1556,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `dev/topurge/dev/full-part-iii-experimental-closure-2026-07-21.md` — 96 lines · documentation
 - [x] `dev/topurge/dev/full-part-iii-admission-elimination-agent-prompt-2026-07-20.md` — 91 lines · documentation
 - [x] `dev/audit/MERGEWORTHINESS.md` — 88 lines · documentation
+- [x] `dev/audit/review-claim-documents.md` — 88 lines · documentation
 - [x] `dev/tauceti/experimental-promotion-classification.md` — 88 lines · documentation
 - [x] `dev/topurge/dev/overlays/section4-independent-scratch-7f9f562-gpt56.md` — 87 lines · documentation
 - [x] `dev/tauceti/README.md` — 86 lines · documentation
@@ -1693,11 +1702,11 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### scripts :: tooling
 
-*48 files, 11,219 lines — 48/48 reviewed*
+*48 files, 11,273 lines — 48/48 reviewed*
 
 - [x] `scripts/lake_build_report.py` — 1,156 lines · tooling
 - [x] `scripts/check_davis_kahan_frontier.py` — 633 lines · tooling
-- [x] `scripts/derive_tauceti_submission_ladder.py` — 439 lines · tooling
+- [x] `scripts/derive_tauceti_submission_ladder.py` — 441 lines · tooling
 - [x] `scripts/check_declaration_name_drift.py` — 421 lines · tooling
 - [x] `scripts/check_yu_wang_samworth_source_census.py` — 407 lines · tooling
 - [x] `scripts/refresh_tauceti_pr1_consistency.py` — 390 lines · tooling
@@ -1706,12 +1715,12 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `scripts/check_dependency_layers.py` — 292 lines · tooling
 - [x] `scripts/render_distilled_literature_index.py` — 292 lines · tooling
 - [x] `scripts/audit_scan.py` — 291 lines · tooling
+- [x] `scripts/check_tauceti_roadmap_topics.py` — 274 lines · tooling
 - [x] `scripts/probe_census_declarations.py` — 263 lines · tooling
 - [x] `scripts/check_library_structure.py` — 248 lines · tooling
 - [x] `scripts/check_comparator_signatures.py` — 232 lines · tooling
 - [x] `scripts/tests/test_lake_build_report.py` — 229 lines · tooling
 - [x] `scripts/run_challenge_comparator.sh` — 225 lines · tooling
-- [x] `scripts/check_tauceti_roadmap_topics.py` — 222 lines · tooling
 - [x] `scripts/check_docstring_coverage.py` — 219 lines · tooling
 - [x] `scripts/check_distilled_literature_index.py` — 218 lines · tooling
 - [x] `scripts/render_davis_kahan_1970_source_census.py` — 210 lines · tooling
