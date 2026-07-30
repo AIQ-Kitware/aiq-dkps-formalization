@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.BoundedOperator.TrialResidual
 import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.Experimental.InfiniteDimensional.DoubleAngleGenuine
+import DavisKahan.Experimental.InfiniteDimensional.DoubleAngleSpectrum
 
 /-!
 # Ideal-gauge residual control for reflection defects
