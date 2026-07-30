@@ -147,6 +147,15 @@ Every file in scope is on the list, labelled with its kind:
 `NS-SPREAD` (superseding `T01-NS`), `T15-SPLIT`, `DK-INTEROP`, `DK-FRAME`,
 `CH-DEDUP`, `CLAIM-DOC` — plus scope widenings to `SPLIT-1K` and `PLACE-SYLV`.
 
+**Renames carry the review; splits do not.** When a reviewed file is renamed the
+checklist shows it unreviewed at its new path, because the path is new. If the
+content is unchanged (git reports 90%+ similarity) the review carries and the
+box is re-ticked. A file *created by splitting* a reviewed one is different: the
+split itself is new structure and gets looked at. Both cases occurred on
+2026-07-29 — nine `Experimental`→production promotions and the `PLACE-SYLV`
+moves were renames; the four files from splitting `ReciprocalMultiplier` and
+`SpectralMeasure` were checked, and both splits documented their own seams.
+
 **Re-running:** `python3 scripts/audit_checklist.py` regenerates both checklists
 against the current tree and preserves every mark, so new files arrive
 unchecked. A file added after 2026-07-29 is *not* covered by this audit and the
