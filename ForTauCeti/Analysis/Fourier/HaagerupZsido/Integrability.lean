@@ -178,8 +178,9 @@ private theorem integrable_realKernel : Integrable realKernel := by
   nlinarith
 
 /-- The reciprocal kernel is integrable. -/
-theorem integrable_reciprocalKernel : Integrable reciprocalKernel :=
-  integrable_realKernel.ofReal.const_mul (-Complex.I)
+theorem integrable_reciprocalKernel : Integrable reciprocalKernel := by
+  rw [funext reciprocalKernel_def]
+  exact integrable_realKernel.ofReal.const_mul (-Complex.I)
 
 /-- The exact `L¹` mass of the real kernel. -/
 private theorem integral_abs_realKernel : (∫ t : ℝ, |realKernel t|) = Real.pi / 2 := by
