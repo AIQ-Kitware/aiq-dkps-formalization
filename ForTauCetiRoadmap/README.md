@@ -13,9 +13,9 @@ is accepted, we already have what it needs. That includes paper references,
 adversarial review of every statement, and Mathlib-quality elegance. See
 `ForTauCeti/README.md` §*The readiness standard*.
 
-**Ten of twenty-four topics are written** (2026-07-29; T15 became T15a/T15b/T15c on the same day). The design below
-partitions the library into twenty-four; the table under *Roadmaps* is the
-written ones. Fourteen remain, and `python3 scripts/check_tauceti_roadmap_topics.py --needs`
+**Twelve of twenty-four topics are written** (2026-07-29/30; T15 became
+T15a/T15b/T15c on the second day). The design below partitions the library into
+twenty-four; the table under *Roadmaps* is the written ones, in topic order. Twelve remain, and `python3 scripts/check_tauceti_roadmap_topics.py --needs`
 reports **no independent topic left unwritten** — T01, T12, T14, T15b, T21
 and T22 all have roadmaps now, so every remaining topic waits on one of them.
 
@@ -39,9 +39,11 @@ no directory yet, and writing them is the work that design makes possible.
 | [`ApproximationNumbers/`](ApproximationNumbers/README.md) | Approximation numbers and Hilbert-space singular values: the field-generic theory, addition and composition laws, the approximable/compact boundary, adjoint invariance, the rectangular modulus, Eckart–Young, and the min–max principles. Carries [`Suggested.lean`](ApproximationNumbers/Suggested.lean). |
 | [`SymmetricOperatorIdeals/`](SymmetricOperatorIdeals/README.md) | Symmetric operator ideals. |
 | [`HaagerupZsidoKernel/`](HaagerupZsidoKernel/README.md) | T12 — a finite-mass Fourier kernel for the reciprocal on `1 ≤ \|x\|`: the hyperbolic weight and its Laplace transform, Poisson summation for the Cauchy lattice, the closed-form sine–Laplace and rational-quadratic integrals, the exterior identity `∫ k(t) e^{itx} dt = 1/x`, and the exact `L¹` mass `π / 2` that is the sharp Sylvester constant. Independent of every other topic. |
-| [`UnboundedOperators/`](UnboundedOperators/README.md) | Unbounded operators on Mathlib `LinearPMap`, the canonical carrier fixed by the U1 decision in `AGENTS.md`. |
 | [`BorelCalculus/`](BorelCalculus/README.md) | T14 — the bounded Borel functional calculus of a normal operator and the projection-valued measures it produces: diagonal spectral measures from Riesz–Markov–Kakutani, the polarised transport principle that carries every continuous-calculus identity to bounded Borel symbols, multiplicativity, and `ProjValMeasure` on the Borel sets of `ℝ`. Independent, and the topic the whole unbounded stack (T15) rests on. |
+| [`ClosedPartialMaps/`](ClosedPartialMaps/README.md) | T15a — closed partial linear maps: the U1 decision in force (an unbounded operator *is* a `LinearPMap`; closedness and self-adjointness are hypotheses), domain transport, graph norms and graph cores, the domain-preserving perturbation, the domain-aware Sylvester equation, and quadratic-form bounds. |
 | [`UnboundedResolvent/`](UnboundedResolvent/README.md) | T15b — resolvents of unbounded self-adjoint operators: the resolvent set of a `LinearPMap` (Mathlib's `spectrum` does not apply to a partial map), the named resolvent and the first resolvent identity, openness, real spectrum with `‖R z‖ ≤ \|Im z\|⁻¹`, the real-point variant, and the intertwining chain up to the continuous functional calculus. Independent — one of the four topics that need nothing else. |
+| [`UnboundedSpectralMeasure/`](UnboundedSpectralMeasure/README.md) | T15c — the spectral measure of an unbounded self-adjoint operator via the Cayley transform, its resolvent formula, spectral projections and the reduction to a spectral subspace; Yosida approximants, Stone's uniqueness half, and the three shapes a Hilbert–Schmidt block argument needs. |
+| [`UnboundedOperators/`](UnboundedOperators/README.md) | **The pre-split T15 roadmap**, kept for its full statement of the U1 decision — unbounded operators on Mathlib `LinearPMap` as the canonical carrier (`AGENTS.md`). Its milestones are now distributed over T15a, T15b and T15c above. |
 | [`SpectralSubspacePerturbation/`](SpectralSubspacePerturbation/README.md) | Spectral subspace perturbation, operator angles, and Sylvester equations: projection geometry, graph subspaces and Riccati equations, closed and possibly unbounded self-adjoint operators. Davis–Kahan Part III is its principal worked source and acceptance suite. Carries [`Suggested.lean.md`](SpectralSubspacePerturbation/Suggested.lean.md). |
 | [`MatrixRankFactorization/`](MatrixRankFactorization/README.md) | T21 — rank factorization `M = L * R` through `Fin r`, and the positive-semidefinite case `B = Aᴴ * A` with at most `d` rows: the multidimensional-scaling embedding step, stated as an iff. Independent, and a leaf. |
 | [`BergeMaximum/`](BergeMaximum/README.md) | T22 — Berge's maximum theorem over a *fixed* compact feasible set: stability of minimizers under approximate minimization, upper hemicontinuity of the argmin correspondence through Mathlib's own predicate, continuity of the value function, and a uniform `ε`–`δ` modulus. Independent, and a leaf. |

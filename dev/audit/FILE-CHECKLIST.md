@@ -556,6 +556,9 @@ been read. An unrecorded review is indistinguishable from no review.
 *29 files, 7,645 lines — 29/29 reviewed*
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/yardrat-work
 - [x] `DavisKahan/Geometry/Polar/DirectRotationSquare.lean` — 1,410 lines · Lean source
 - [x] `DavisKahan/Geometry/Polar/DirectRotation.lean` — 1,182 lines · Lean source
 - [x] `DavisKahan/Geometry/Halmos/TwoProjections.lean` — 761 lines · Lean source
@@ -569,7 +572,6 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/SpectralTheory/BoundedSelfAdjointSpectralProjection.lean` — 155 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/BoundedTruncation.lean` — 152 lines · Lean source
 - [x] `DavisKahan/Geometry/Polar/OperatorAbsoluteValue.lean` — 152 lines · Lean source
-- [x] `DavisKahan/Interop/TauCeti/RectangularFamilyAdapter.lean` — 151 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtTensor.lean` — 124 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/PVMSubspace.lean` — 117 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/SpectralRestrictionLocalization.lean` — 115 lines · Lean source
@@ -582,6 +584,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/SpectralTheory/OrderedHalfLine.lean` — 84 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ClosedOperator/MathlibBridge.lean` — 75 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ClosedOperator/RealSpectrum.lean` — 73 lines · Lean source
+<<<<<<< HEAD
 =======
 - [x] `DavisKahan/Interop/Spectra/DirectRotationSquare.lean` — 1,410 lines · Lean source
 - [x] `DavisKahan/Interop/Spectra/DirectRotation.lean` — 1,182 lines · Lean source
@@ -609,8 +612,9 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/Interop/Spectra/ClosedOperator.lean` — 75 lines · Lean source
 - [x] `DavisKahan/Interop/Spectra/RealSpectrumBridge.lean` — 73 lines · Lean source
 >>>>>>> origin/main
+=======
+>>>>>>> origin/yardrat-work
 - [x] `DavisKahan/Interop/TauCeti/ClosedOperator.lean` — 64 lines · Lean source
-- [x] `DavisKahan/Interop/Spectra/All.lean` — 33 lines · Lean source
 - [x] `DavisKahan/Interop/All.lean` — 10 lines · Lean source
 - [x] `DavisKahan/Interop/TauCeti/All.lean` — 9 lines · Lean source
 
@@ -1286,7 +1290,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Internal/ReciprocalMultiplier/OrbitAction.lean` — 694 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Interval.lean` — 515 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/SpectralDistance.lean` — 485 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/SylvesterGroup.lean` — 396 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Group.lean` — 396 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Rosenblum.lean` — 394 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean` — 347 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/SpectralGap.lean` — 305 lines · Lean source

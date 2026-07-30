@@ -305,7 +305,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockIdentity",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterGroup",
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap"
       ]
     },
@@ -2888,7 +2888,7 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterGroup"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -3034,7 +3034,7 @@
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtPythagoras",
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Commutant",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterGroup"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -3066,7 +3066,7 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtPythagoras",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterGroup"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -3314,7 +3314,7 @@
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterGroup"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -3353,7 +3353,7 @@
         "tendsto_norm_sylvesterFun_sub_zero"
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SylvesterGroup",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SylvesterGroup",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
