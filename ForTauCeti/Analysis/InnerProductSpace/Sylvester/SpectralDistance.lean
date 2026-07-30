@@ -28,7 +28,7 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+open DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 
@@ -480,5 +480,4 @@ theorem frobenius_sylvester_le_of_spectraSeparated
     ← Real.sqrt_sq hδ.le, ← Real.sqrt_mul (by positivity)]
   exact Real.sqrt_le_sqrt htot
 
-end DavisKahanTheory
 end TauCeti

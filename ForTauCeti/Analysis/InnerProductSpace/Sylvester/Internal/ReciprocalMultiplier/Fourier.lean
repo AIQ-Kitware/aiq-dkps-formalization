@@ -52,7 +52,6 @@ Literature bridge for the group as a whole:
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open TauCeti
 open scoped InnerProductSpace BigOperators ComplexConjugate
@@ -834,5 +833,4 @@ theorem hasDoubledRealReciprocalOrbitInterpolation_of_finiteFourierInterpolation
     exact hscalar i j
   · simpa only [w, abs_of_nonneg (norm_nonneg _)] using hmass
 
-end DavisKahanTheory
 end TauCeti
