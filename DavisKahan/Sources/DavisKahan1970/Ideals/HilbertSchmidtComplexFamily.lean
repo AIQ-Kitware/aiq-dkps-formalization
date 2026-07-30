@@ -6,6 +6,11 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
+import DavisKahan.Interop.Spectra.HilbertSchmidtTensor
+import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtConjugation
+import ForTauCeti.Analysis.InnerProductSpace.SylvesterGroup
+import ForTauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap
+import ForTauCeti.Analysis.InnerProductSpace.SylvesterGenerator
 
 /-!
 # The complex rectangular Hilbert--Schmidt ideal family
@@ -29,6 +34,7 @@ namespace HiddenFoundations
 
 open scoped InnerProductSpace
 open Filter
+open TauCeti.HilbertSchmidt
 
 noncomputable section
 
@@ -48,8 +54,8 @@ theorem isPaperHilbertSchmidt_add
     IsPaperHilbertSchmidt (A + B) := by
   let zA := paperHilbertSchmidtTensor A hA
   let zB := paperHilbertSchmidtTensor B hB
-  have hrepr : Spectra.HilbertSchmidtTensor.toOperator (zA + zB) = A + B := by
-    rw [Spectra.HilbertSchmidtTensor.toOperator_add]
+  have hrepr : ofLp (paperHSBasis _) (zA + zB) = A + B := by
+    rw [ofLp_add]
     rw [toOperator_paperHilbertSchmidtTensor,
       toOperator_paperHilbertSchmidtTensor]
   rw [← hrepr]
@@ -64,9 +70,9 @@ theorem paperHilbertSchmidtTensor_add
         (isPaperHilbertSchmidt_add hA hB) =
       paperHilbertSchmidtTensor A hA +
         paperHilbertSchmidtTensor B hB := by
-  apply Spectra.HilbertSchmidtTensor.toOperator_injective
+  apply ofLp_injective (paperHSBasis _)
   rw [toOperator_paperHilbertSchmidtTensor,
-    Spectra.HilbertSchmidtTensor.toOperator_add,
+    ofLp_add,
     toOperator_paperHilbertSchmidtTensor,
     toOperator_paperHilbertSchmidtTensor]
 
@@ -95,7 +101,7 @@ theorem paperHilbertSchmidtNorm_eq_zero
     exact hzero
   have hz : paperHilbertSchmidtTensor A hA = 0 := norm_eq_zero.mp hzNorm
   have hrepr := toOperator_paperHilbertSchmidtTensor A hA
-  rw [hz, Spectra.HilbertSchmidtTensor.toOperator_zero] at hrepr
+  rw [hz, ofLp_zero] at hrepr
   exact hrepr.symm
 
 /-- The operator norm is bounded by the paper Hilbert--Schmidt norm. -/
@@ -105,8 +111,8 @@ theorem opNorm_le_paperHilbertSchmidtNorm
   let z := paperHilbertSchmidtTensor A hA
   have hrepr := toOperator_paperHilbertSchmidtTensor A hA
   calc
-    ‖A‖ = ‖Spectra.HilbertSchmidtTensor.toOperator z‖ := by rw [hrepr]
-    _ ≤ ‖z‖ := Spectra.HilbertSchmidtTensor.norm_toOperator_le z
+    ‖A‖ = ‖ofLp (paperHSBasis _) z‖ := by rw [hrepr]
+    _ ≤ ‖z‖ := norm_ofLp_le (paperHSBasis _) z
     _ = paperHilbertSchmidtNorm A := norm_paperHilbertSchmidtTensor A hA
 
 /-- Subtraction preserves the paper Hilbert--Schmidt class. -/
@@ -126,9 +132,9 @@ theorem paperHilbertSchmidtTensor_sub
     paperHilbertSchmidtTensor (A - B) (isPaperHilbertSchmidt_sub hA hB) =
       paperHilbertSchmidtTensor A hA -
         paperHilbertSchmidtTensor B hB := by
-  apply Spectra.HilbertSchmidtTensor.toOperator_injective
+  apply ofLp_injective (paperHSBasis _)
   rw [toOperator_paperHilbertSchmidtTensor,
-    Spectra.HilbertSchmidtTensor.toOperator_sub,
+    ofLp_sub,
     toOperator_paperHilbertSchmidtTensor,
     toOperator_paperHilbertSchmidtTensor]
 
@@ -143,7 +149,7 @@ theorem paperHilbertSchmidt_complete
     ∃ L : E →L[ℂ] F, IsPaperHilbertSchmidt L ∧
       ∀ ε : ℝ, 0 < ε → ∃ N, ∀ n, N ≤ n →
         paperHilbertSchmidtNorm (A n - L) < ε := by
-  let z : ℕ → Spectra.HilbertSchmidtTensor.Space F E :=
+  let z : ℕ → lp (fun _ : PaperHSIndex E => F) 2 :=
     fun n => paperHilbertSchmidtTensor (A n) (hA n)
   have hzCauchy : CauchySeq z := by
     rw [Metric.cauchySeq_iff]
@@ -154,9 +160,9 @@ theorem paperHilbertSchmidt_complete
     have hsub : IsPaperHilbertSchmidt (A m - A n) :=
       isPaperHilbertSchmidt_sub (hA m) (hA n)
     have hcanon : paperHilbertSchmidtTensor (A m - A n) hsub = z m - z n := by
-      apply Spectra.HilbertSchmidtTensor.toOperator_injective
+      apply ofLp_injective (paperHSBasis _)
       rw [toOperator_paperHilbertSchmidtTensor,
-        Spectra.HilbertSchmidtTensor.toOperator_sub,
+        ofLp_sub,
         toOperator_paperHilbertSchmidtTensor,
         toOperator_paperHilbertSchmidtTensor]
     have hnorm : ‖z m - z n‖ =
@@ -164,7 +170,7 @@ theorem paperHilbertSchmidt_complete
       rw [← hcanon, norm_paperHilbertSchmidtTensor]
     simpa only [dist_eq_norm, hnorm] using hN m n hm hn
   obtain ⟨zlim, hzlim⟩ := cauchySeq_tendsto_of_complete hzCauchy
-  let L : E →L[ℂ] F := Spectra.HilbertSchmidtTensor.toOperator zlim
+  let L : E →L[ℂ] F := ofLp (paperHSBasis _) zlim
   have hL : IsPaperHilbertSchmidt L :=
     isPaperHilbertSchmidt_toOperator zlim
   refine ⟨L, hL, ?_⟩
@@ -175,9 +181,9 @@ theorem paperHilbertSchmidt_complete
   have hsub : IsPaperHilbertSchmidt (A n - L) :=
     isPaperHilbertSchmidt_sub (hA n) hL
   have hcanon : paperHilbertSchmidtTensor (A n - L) hsub = z n - zlim := by
-    apply Spectra.HilbertSchmidtTensor.toOperator_injective
+    apply ofLp_injective (paperHSBasis _)
     rw [toOperator_paperHilbertSchmidtTensor,
-      Spectra.HilbertSchmidtTensor.toOperator_sub,
+      ofLp_sub,
       toOperator_paperHilbertSchmidtTensor]
   have hnorm : paperHilbertSchmidtNorm (A n - L) = ‖z n - zlim‖ := by
     rw [← norm_paperHilbertSchmidtTensor (A n - L) hsub, hcanon]

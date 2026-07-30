@@ -1,6 +1,6 @@
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.RealSylvesterDescent
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.HilbertSchmidtComplexFamily
+import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily
 import DavisKahan.OperatorIdeal.ApproximationNumbers.SchattenApproximationFoundation
 
 /-!
