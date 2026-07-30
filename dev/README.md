@@ -383,6 +383,33 @@ submission path, which is the measurement behind lane `LADDER-EXT`.
 
 ---
 
+## Tau Ceti submission readiness
+
+`scripts/check_tauceti_readiness.py` measures, **per roadmap topic**, the four
+parts of the Tau Ceti standard that are checkable from the sources without a
+build: a `## Provenance` section on every module (`ForTauCeti/README.md` §5),
+no proof escapes, the 1000-line new-file limit (§4), and that every module is
+placed in a topic at all.
+
+```sh
+python3 scripts/check_tauceti_readiness.py           # per-topic table
+python3 scripts/check_tauceti_readiness.py --check    # exit 1 on a blocker
+python3 scripts/check_tauceti_readiness.py --json
+```
+
+Topic assignment is imported from `check_tauceti_roadmap_topics.py`, so the two
+cannot drift apart. **Per-topic is the point**: a library-wide average hides
+where the debt is. Measured 2026-07-29, **19 of 22 topics are clean on all four
+criteria**, and every gap falls in T15/T16/T17 — the unbounded stack, Sylvester,
+and the Davis–Kahan sin-Θ theorems, which are the deepest topics on the
+submission path.
+
+`--check` fails on a missing provenance section or a proof escape, both absolute
+blockers. Oversize files are **reported, not failed**: three exist, splitting
+them is a real refactor with a build, and it is tracked as lane `SPLIT-1K`.
+
+---
+
 ## Declaration-name drift
 
 Three places in this repository assert declaration names as **data**, where no
