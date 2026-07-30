@@ -108,7 +108,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  +["MeasureTheory.Function.ConvergenceInMeasure","MeasureTheory.Measure.Typeclasses.Probability"]),
 ("T20","Sample moments and matrix concentration",
  ["Probability.Moments."+x for x in ["MatrixConcentration","SampleCovariance","SampleMean","Variance"]]
- +[A+"CenteredScatter"]),
+ +["Probability.Moments.CenteredScatter"]),
 ("T21","Matrix rank factorization and positive semidefiniteness",
  ["LinearAlgebra.Matrix.RankFactorization","LinearAlgebra.Matrix.PosDef"]),
 ("T22","Berge's maximum theorem and approximate minimizers",

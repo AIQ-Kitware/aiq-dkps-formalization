@@ -33,9 +33,9 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
   `00ca5e1`; it has had no prior home.
-* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
-  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
-  areas.
+* Extraction class: **authored in place**. Upstream target is Mathlib; the module
+  is staged here because `ForMathlib` was retired on 2026-07-29 and `ForTauCeti`
+  is now the single staging library — see `ForTauCeti/README.md`.
 * Intended Mathlib home: additions to `Mathlib/Analysis/InnerProductSpace/CoerciveUnit.
 * Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
