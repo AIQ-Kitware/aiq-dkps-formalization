@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.Geometry.Halmos.GenericRotationPredicates
-import DavisKahan.Interop.Spectra.DirectRotationSquare
+import DavisKahan.Geometry.Polar.DirectRotationSquare
 
 /-!
 # Mathematics-ahead completion of the elementary Section 3 bridge

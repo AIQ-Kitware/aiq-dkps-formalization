@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.DoubleAngle.Unbounded
-import DavisKahan.Interop.Spectra.BoundedPerturbationSinThetaIdeal
+import DavisKahan.SinTheta.BoundedPerturbationIdeal
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!

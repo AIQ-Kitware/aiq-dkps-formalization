@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Interop.Spectra.HalmosTwoProjections
-import DavisKahan.Interop.Spectra.SpectralRestriction
+import DavisKahan.Geometry.Halmos.TwoProjections
+import DavisKahan.SpectralTheory.SpectralRestriction
 -- supplies `compressOperator`
 import DavisKahan.Sylvester.GenuineSpectrum
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
@@ -16,7 +16,7 @@ import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 -- grounded relational/projection declarations promoted out of this stub;
 -- re-exported here so Core's importers keep seeing their names
 import DavisKahan.Geometry.Halmos.UnitaryEquivalence
-import DavisKahan.Interop.Spectra.CircleRieszProjection
+import DavisKahan.SpectralTheory.CircleRieszProjection
 
 /-!
 # Experimental frontier interfaces for the remaining Davis--Kahan 1970 proof

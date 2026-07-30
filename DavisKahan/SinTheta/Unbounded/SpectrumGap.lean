@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.Interop.Spectra.GapResolvent
+import DavisKahan.SpectralTheory.GapResolvent
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.SinTheta.Unbounded.GenuineGauge
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
@@ -11,7 +11,7 @@ import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 /-!
 # `sin Θ` endpoints from a spectrum gap
 
-The resolvent construction lives in `DavisKahan.Interop.Spectra.GapResolvent`;
+The resolvent construction lives in `DavisKahan.SpectralTheory.GapResolvent`;
 these are the two `sin Θ` endpoints it feeds, in operator norm and in an
 arbitrary unitarily invariant ideal gauge.  Both are Spectra-free since
 2026-07-28 — the gap resolvent is now built from

@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.ClosedOperator.Complex
 import DavisKahan.Sylvester.CutoffInterface
-import DavisKahan.Interop.Spectra.SpectralRestriction
+import DavisKahan.SpectralTheory.SpectralRestriction
 
 /-!
 # Direct Spectra cutoffs for the unbounded Sylvester argument

@@ -46,7 +46,7 @@ graduate.
 ## Ordered plan
 
 1. **[READY] Pilot: graduate `SpectralProjection`** (leaf, grounded, Spectra-backed)
-   → `DavisKahan/Interop/Spectra/BoundedSelfAdjointSpectralProjection.lean`
+   → `DavisKahan/SpectralTheory/BoundedSelfAdjointSpectralProjection.lean`
    (it imports `Interop.Spectra.*` + `Spectra.*`, so it is a Spectra bridge; keep
    namespace `ForMathlib.DavisKahanExt`). Update its 6 Experimental importers +
    the `Core/All` aggregate + the frontier `base-spectral-projection` module field.

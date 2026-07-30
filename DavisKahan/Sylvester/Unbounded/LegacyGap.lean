@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.Unbounded.AllGap
-import DavisKahan.Interop.Spectra.RealSpectrumBridge
+import DavisKahan.SpectralTheory.ClosedOperator.RealSpectrum
 
 /-!
 # Completion of the manuscript-shaped complex gap API

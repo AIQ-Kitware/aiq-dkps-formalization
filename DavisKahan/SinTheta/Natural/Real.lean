@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Real.Generalized
-import DavisKahan.Interop.Spectra.RealSpectralRestriction
+import DavisKahan.SpectralTheory.Real.SpectralRestriction
 
 /-!
 # Natural real spectral inputs for the unbounded sine-theta theorem

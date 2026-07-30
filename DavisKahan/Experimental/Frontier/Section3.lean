@@ -5,9 +5,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.Experimental.Frontier.Core
-import DavisKahan.Interop.Spectra.DirectRotation
+import DavisKahan.Geometry.Polar.DirectRotation
 -- supplies `spectraReflectionProduct` and `IsAcute.symm`
-import DavisKahan.Interop.Spectra.DirectRotationSquare
+import DavisKahan.Geometry.Polar.DirectRotationSquare
 -- supplies `reflectedSubspace` and its projection/conjugation calculus used by
 -- Proposition 3.4.  This module imports only `SinTheta`/`SpectralTheory`
 -- material and never touches `Frontier`, so the dependency is acyclic.

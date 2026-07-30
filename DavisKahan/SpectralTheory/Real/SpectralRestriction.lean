@@ -7,7 +7,7 @@ import DavisKahan.SpectralTheory.ClosedOperator.Complexification
 import DavisKahan.SpectralTheory.Complexification.FunctionalCalculus
 import DavisKahan.SpectralTheory.Complexification.Subspace
 import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
-import DavisKahan.Interop.Spectra.SpectralRestrictionOperator
+import DavisKahan.SpectralTheory.SpectralRestrictionOperator
 
 /-!
 # Real spectral projections and restrictions by complexification

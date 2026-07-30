@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
-import DavisKahan.Interop.Spectra.RealSpectralRestriction
+import DavisKahan.SpectralTheory.Real.SpectralRestriction
 
 /-!
 # Canonical spectral projections
@@ -14,7 +14,7 @@ continuation development.  It is deliberately complex at the bounded Spectra
 layer: the PVM is the genuine spectral measure of the bridged bounded
 self-adjoint operator.  Real projections are supplied independently by the
 complexification-and-descent API in
-`DavisKahan.Interop.Spectra.RealSpectralRestriction`.
+`DavisKahan.SpectralTheory.Real.SpectralRestriction`.
 
 The former scalar-generic `spectralResolution` namespace and the nonexistent
 `Spectra.SpectralTheory.SpectralTheorem` import are not reconstructed.  A
@@ -69,7 +69,7 @@ This lane still runs on `vendor/Spectra`: it needs the spectral measure of a
 *bounded* operator to agree with that operator's own continuous functional
 calculus, which the native Cayley construction does not yet supply.  The range
 API is therefore kept local here rather than shared with
-`DavisKahan.Interop.Spectra.PVMSubspace`, which has moved to
+`DavisKahan.SpectralTheory.PVMSubspace`, which has moved to
 `TauCeti.ProjValMeasure`. -/
 noncomputable def boundedSelfAdjointSpectralSubspace
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)

@@ -19,7 +19,7 @@ coordinate bridge:
 * it equals the sum of squared approximation singular values;
 The tensor model itself — the identification with `E tensor Conj F` and the
 equality of the tensor norm with the paper square norm — lives in
-`DavisKahan/Interop/Spectra/HilbertSchmidtTensor.lean`, because it is the only
+`DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtTensor.lean`, because it is the only
 part that needs `vendor/Spectra`.
 
 The key comparison uses finite basis projections.  For every finite set of

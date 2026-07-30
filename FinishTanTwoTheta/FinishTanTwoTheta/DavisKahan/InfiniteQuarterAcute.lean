@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import FinishTanTwoTheta.GroundedImports
-import DavisKahan.Interop.Spectra.DirectRotation
+import DavisKahan.Geometry.Polar.DirectRotation
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedSpectralTransport
 import DavisKahan.SinTheta.FrameFactorization
 import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit

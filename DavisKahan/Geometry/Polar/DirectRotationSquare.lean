@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Interop.Spectra.DirectRotation
-import DavisKahan.Interop.Spectra.HalmosTwoProjections
+import DavisKahan.Geometry.Polar.DirectRotation
+import DavisKahan.Geometry.Halmos.TwoProjections
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
 import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit

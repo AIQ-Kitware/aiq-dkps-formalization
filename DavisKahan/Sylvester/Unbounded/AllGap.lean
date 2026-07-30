@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.Gap
 import DavisKahan.Sylvester.Unbounded.IntervalExterior
-import DavisKahan.Interop.Spectra.OrderedHalfLine
+import DavisKahan.SpectralTheory.OrderedHalfLine
 import DavisKahan.Sylvester.CutoffInterface
 import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent

@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Sources.DavisKahan1970.Section4Dominance
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSelectedReduction
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
-import DavisKahan.Interop.Spectra.DirectRotationSquare
+import DavisKahan.Geometry.Polar.DirectRotationSquare
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
 import DavisKahan.Sylvester.GenuineSpectrum
 

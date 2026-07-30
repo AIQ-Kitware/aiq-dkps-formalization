@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.Geometry.Polar.PolarIsometryFinal
-import DavisKahan.Interop.Spectra.DirectRotation
+import DavisKahan.Geometry.Polar.DirectRotation
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!

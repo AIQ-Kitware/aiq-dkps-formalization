@@ -449,7 +449,7 @@ as "genuinely free" on the strength of *ownership* — no open lane names those
 files — and then read the files. All five sit in `namespace SpectraBridge` and
 every one of them references `selfAdjointSpectralRestriction` /
 `selfAdjointSpectralSubspace`, which are defined in
-`DavisKahan/Interop/Spectra/SpectralRestrictionOperator.lean` (10, 2, 2, 19 and
+`DavisKahan/SpectralTheory/SpectralRestrictionOperator.lean` (10, 2, 2, 19 and
 19 references respectively). Their `DKClosedOperator` binders are **call-site
 adapters feeding Spectra endpoints** — structurally identical to the 91
 `SinTheta/Natural` positions edward measured as un-takeable, and blocked by the
