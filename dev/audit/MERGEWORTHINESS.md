@@ -18,13 +18,20 @@ defect. Last measured 2026-07-30 over 164 files.
 | files > 1,000 lines | **1** (was 3) |
 | roadmap topics written | **10 of 22** |
 
+## Reviewed against the actual Tau Ceti rubrics
+
+[`TAUCETI-RUBRIC-REVIEW.md`](TAUCETI-RUBRIC-REVIEW.md) runs the ten rubrics from
+`TauCetiReview/rubrics/` over both libraries. It found two objections this
+checklist had missed — one of them rated **`block`** — and both are in the table
+below (`FTC-UNEXERCISED`, `FTC-EXPOSE`).
+
 ## Open defects, each with its lane
 
 | # | defect | measure | lane | build? |
 |---|---|---|---|---|
 | 1 | **12 topics have no roadmap** | 10 of 22 written | `ROADMAP-WRITE` | no |
 | 2 | **54 flat files beside 12 directories** | 22 files, 7 missing directories | `FTC-ORG` | yes |
-| 3 | **31 public definitions with no consumer** | 31 | `FTC-DEAD` | yes |
+| 3 | **4 public definitions with no consumer** | 4 (was mis-measured as 31) | `FTC-DEAD` | yes |
 | 4 | **10 linter suppressions** the README forbids | 10 sites, incl. `checkUnivs` | `FTC-SETOPT` | yes |
 | 5 | **6 proofs over 145 lines**, one 231 | 6 | `FTC-LONGPROOF` | yes |
 | 6 | **1 file over the 1,000-line limit** | `SinTheta/Perturbation.lean`, 1,110 | `SPLIT-1K` | yes |
@@ -32,6 +39,8 @@ defect. Last measured 2026-07-30 over 164 files.
 | 8 | **`GramMatrix` is misnamed** and overlaps `GramOperator` | 1 decision | `PLACE-GRAM` | yes |
 | 9 | **Two square roots**, one definitionally the other | `rfl`-equal | `T01-SQRT` | yes |
 | 10 | **T21/T22 assert a Mathlib target** | 4 files, 2 topics | `HDR-DEST` *(decision open)* | no |
+| 11 | **Unexercised `Prop` definition** — rubric rates this `block` | 1 | `FTC-UNEXERCISED` | yes |
+| 12 | **68 files expose bodies**; the README rule is the anti-pattern | 68 of 164 | `FTC-EXPOSE` *(decision open)* | yes |
 
 ## Ordering, and why
 
