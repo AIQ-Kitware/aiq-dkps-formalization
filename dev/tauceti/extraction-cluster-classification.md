@@ -64,7 +64,7 @@ Ownership classes: `mathlib` · `tauceti` · `davis-kahan` · `spectra-bridge` �
   modules are in the `approximation-number` cluster's `staging_modules` and
   export cleanly.  What remains for PR 2 is the **symmetric-gauge/Calkin
   construction** (item S1 of
-  `ForTauCetiRoadmap/SymmetricOperatorIdeals/README.md`), which is still
+  `ForTauCetiRoadmap/OperatorIdeals/README.md` Part B), which is still
   unstarted.
 * **Consumers**: `…/ApproximationNumbers/ScalarGeneric` (which stores it inside
   `KyFanDominantIdealFamily`), sine-theta UI-norm layer.
