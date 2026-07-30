@@ -140,9 +140,13 @@ noncomputable def operator (D : SobolevTraceFoundation (H := H)) :
     dense_domain := D.dense_freeDomain
     closed_graph := D.closed_freeGraph }
 
+/-- The realized closed operator has exactly the free domain it was
+built from. -/
 @[simp] theorem operator_domain (D : SobolevTraceFoundation (H := H)) :
     D.operator.domain = D.freeDomain := rfl
 
+/-- The realized closed operator acts by the fourth-derivative map of the
+foundation. -/
 @[simp] theorem operator_apply
     (D : SobolevTraceFoundation (H := H)) (x : D.freeDomain) :
     D.operator.toLinearMap x = D.freeFourth x := rfl
