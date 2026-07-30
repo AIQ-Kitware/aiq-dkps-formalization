@@ -7,7 +7,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent
 import DavisKahan.SpectralTheory.FormMethod.FormCompactness
 import DavisKahan.SpectralTheory.FormMethod.BoundedGraphCompactness
-import DavisKahan.Interop.Spectra.BoundedPerturbationSinTheta
+import DavisKahan.SinTheta.BoundedPerturbation
 import Mathlib.Tactic
 
 /-!

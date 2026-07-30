@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5, Claude Opus 5
 -/
-import DavisKahan.Interop.Spectra.ClosedOperator
+import DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge
 import DavisKahan.Sylvester.ShiftedInverseGauge
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
 
@@ -43,9 +43,9 @@ them, and retaining them would have kept the whole projection-valued-measure
 layer on the critical path of `dev/tauceti/spectra-removal-plan.md`.  They
 remain in the history at `a58913e`.
 
-This module is now Spectra-free; it stays under `Interop/Spectra/` only because
-its consumers name it there, and it becomes a candidate for relocation once the
-directory empties.
+This module is Spectra-free, and as the note here used to predict, it has been
+relocated now that `Interop/Spectra/` is gone: it is spectral theory, and it sits
+with the rest of it.
 -/
 
 open scoped InnerProductSpace

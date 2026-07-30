@@ -205,7 +205,7 @@ predicate and norm*, with the basis-column, tensor and approximation-number
 descriptions as equivalence theorems for it.  Today `IsPaperHilbertSchmidt` and
 `paperHilbertSchmidtNorm` are the DKPS-side objects and
 `Spectra.HilbertSchmidtTensor.Space` is the donor's; the bridge between them is
-`DavisKahan/Interop/Spectra/HilbertSchmidtTensor.lean`.  Making `HS(F, E)` a
+`DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtTensor.lean`.  Making `HS(F, E)` a
 Hilbert space natively in `ForTauCeti` is what unblocks everything above it.
 
 **But the Hilbert tensor product does not have to be built.**  Measured
@@ -366,7 +366,7 @@ group at all.
 
 <details><summary>original lane description</summary>
 
-**File.** `DavisKahan/Interop/Spectra/BoundedFromSpectrum.lean` (195 lines).
+**File.** `DavisKahan/SpectralTheory/BoundedFromSpectrum.lean` (195 lines).
 
 **Blocker.** `spectralPVM_proj_eq_zero_of_subset_resolventSet`: the spectral
 measure gives no mass to a Borel set contained in the resolvent set. Consumed
@@ -402,7 +402,7 @@ consuming?" collapsed a measure-theoretic obligation into an operator-norm one.
 
 <details><summary>original (wrong) lane description</summary>
 
-**File.** `DavisKahan/Interop/Spectra/OrderedHalfLine.lean` (142 lines).
+**File.** `DavisKahan/SpectralTheory/OrderedHalfLine.lean` (142 lines).
 
 **Blocker.** `spectralPVM_integrable_id`: the identity function is integrable
 against the diagonal measure of a vector in `dom A`. Consumed twice, here only.
@@ -421,7 +421,7 @@ be restated over `TauCeti.ProjValMeasure.diag` rather than ported.
 
 ## SR-D — Hilbert–Schmidt tensor  *(open — the largest lane)*
 
-**Files.** `DavisKahan/Interop/Spectra/HilbertSchmidtTensor.lean` (115),
+**Files.** `DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtTensor.lean` (115),
 `DavisKahan/Interop/Spectra/HilbertSchmidtColumnExpansion.lean` (298),
 `DavisKahan/Sources/DavisKahan1970/Sylvester/HilbertSchmidtDefectFirst.lean` (162),
 `DavisKahan/Sources/DavisKahan1970/Sylvester/HilbertSchmidtPairwise.lean` (169),

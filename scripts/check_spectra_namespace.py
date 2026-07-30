@@ -106,9 +106,10 @@ def main() -> int:
         for rel, lineno, text in violations:
             print(f"  {rel}:{lineno}: {text}", file=sys.stderr)
         print(
-            "\nMove them into a DKPS namespace -- `TauCeti.DavisKahan.Experimental.SpectraBridge`\n"
-            "is the convention used throughout DavisKahan/Interop/Spectra/.  See phase S0 of\n"
-            "dev/tauceti/spectra-removal-plan.md.",
+            "\nMove them into a DKPS namespace.  File the declaration by what it is --\n"
+            "spectral theory under `DavisKahan/SpectralTheory/`, geometry under\n"
+            "`DavisKahan/Geometry/` -- not under a donor's name: `DavisKahan/Interop/Spectra/`\n"
+            "was dissolved on 2026-07-30 for exactly that reason (lane DK-INTEROP).",
             file=sys.stderr,
         )
         return 1

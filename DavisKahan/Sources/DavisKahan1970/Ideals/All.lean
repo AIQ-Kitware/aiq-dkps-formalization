@@ -9,6 +9,7 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtRealDescent
+import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor
 import DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence
 import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormDefinite

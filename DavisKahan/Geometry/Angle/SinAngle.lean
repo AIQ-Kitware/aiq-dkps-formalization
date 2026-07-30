@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Basic
-import DavisKahan.Interop.Spectra.OperatorAbsoluteValue
+import DavisKahan.Geometry.Polar.OperatorAbsoluteValue
 
 /-!
 # Spectra-backed sine of the operator angle

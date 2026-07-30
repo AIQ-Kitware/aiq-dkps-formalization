@@ -29,57 +29,57 @@
             "Spectra.Operator.SelfAdjointOperator": {
               "consumerModules": [
                 "DavisKahan.Interop.Spectra.Basic",
-                "DavisKahan.Interop.Spectra.ClosedOperator",
-                "DavisKahan.Interop.Spectra.OrderedHalfLine",
-                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator",
+                "DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge",
+                "DavisKahan.SpectralTheory.OrderedHalfLine",
+                "DavisKahan.SpectralTheory.SpectralRestrictionOperator",
                 "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
               ],
               "uses": 10
             },
             "Spectra.Operator.SelfAdjointOperator.bornMeasure": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.OrderedHalfLine"
+                "DavisKahan.SpectralTheory.OrderedHalfLine"
               ],
               "uses": 1
             },
             "Spectra.Operator.SelfAdjointOperator.dense": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.ClosedOperator"
+                "DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge"
               ],
               "uses": 1
             },
             "Spectra.Operator.SelfAdjointOperator.domain": {
               "consumerModules": [
                 "DavisKahan.Interop.Spectra.Basic",
-                "DavisKahan.Interop.Spectra.ClosedOperator"
+                "DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge"
               ],
               "uses": 5
             },
             "Spectra.Operator.SelfAdjointOperator.mk": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.ClosedOperator",
-                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator",
-                "DavisKahan.Interop.Spectra.UnitaryConjugation"
+                "DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge",
+                "DavisKahan.SpectralTheory.SpectralRestrictionOperator",
+                "DavisKahan.SpectralTheory.ClosedOperator.UnitaryConjugation"
               ],
               "uses": 3
             },
             "Spectra.Operator.SelfAdjointOperator.selfAdjoint": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
+                "DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection",
                 "DavisKahan.SpectralTheory.CayleySelectorBridge"
               ],
               "uses": 10
             },
             "Spectra.Operator.SelfAdjointOperator.spectralPVM": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.OrderedHalfLine"
+                "DavisKahan.SpectralTheory.OrderedHalfLine"
               ],
               "uses": 1
             },
             "Spectra.Operator.SelfAdjointOperator.toLinearPMap": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
-                "DavisKahan.Interop.Spectra.ClosedOperator",
+                "DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection",
+                "DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge",
                 "DavisKahan.SpectralTheory.CayleySelectorBridge",
                 "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
               ],
@@ -99,7 +99,7 @@
           "constants": {
             "Spectra.Operator.unitaryConj": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.UnitaryConjugation"
+                "DavisKahan.SpectralTheory.ClosedOperator.UnitaryConjugation"
               ],
               "uses": 4
             }
@@ -168,7 +168,7 @@
           "constants": {
             "Spectra.Borel.borelMeasure": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.SpectralRestrictionLocalization",
+                "DavisKahan.SpectralTheory.SpectralRestrictionLocalization",
                 "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
               ],
               "uses": 3
@@ -181,30 +181,30 @@
           "constants": {
             "Spectra.ProjValMeasure": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
-                "DavisKahan.Interop.Spectra.OrderedHalfLine",
-                "DavisKahan.Interop.Spectra.PVMSubspace",
-                "DavisKahan.Interop.Spectra.RealSpectralRestriction"
+                "DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection",
+                "DavisKahan.SpectralTheory.OrderedHalfLine",
+                "DavisKahan.SpectralTheory.PVMSubspace",
+                "DavisKahan.SpectralTheory.Real.SpectralRestriction"
               ],
               "uses": 14
             },
             "Spectra.ProjValMeasure.diag": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.RealSpectralRestriction"
+                "DavisKahan.SpectralTheory.Real.SpectralRestriction"
               ],
               "uses": 2
             },
             "Spectra.ProjValMeasure.mk": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.RealSpectralRestriction"
+                "DavisKahan.SpectralTheory.Real.SpectralRestriction"
               ],
               "uses": 1
             },
             "Spectra.ProjValMeasure.proj": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
-                "DavisKahan.Interop.Spectra.PVMSubspace",
-                "DavisKahan.Interop.Spectra.RealSpectralRestriction"
+                "DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection",
+                "DavisKahan.SpectralTheory.PVMSubspace",
+                "DavisKahan.SpectralTheory.Real.SpectralRestriction"
               ],
               "uses": 9
             }
@@ -216,7 +216,7 @@
           "constants": {
             "Spectra.QuantumMechanics.BornRule.Moments.bornExpectation": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.OrderedHalfLine"
+                "DavisKahan.SpectralTheory.OrderedHalfLine"
               ],
               "uses": 1
             }
@@ -228,7 +228,7 @@
           "constants": {
             "Spectra.QuantumMechanics.BornRule.PVM.bornMeasure": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.OrderedHalfLine"
+                "DavisKahan.SpectralTheory.OrderedHalfLine"
               ],
               "uses": 2
             }
@@ -240,7 +240,7 @@
           "constants": {
             "Spectra.QuantumMechanics.SpectralTheory.spectralCalculus": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.BoundedTruncation",
+                "DavisKahan.SpectralTheory.BoundedTruncation",
                 "DavisKahan.SpectralTheory.CayleySelectorBridge",
                 "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
               ],
@@ -273,10 +273,10 @@
             },
             "Spectra.QuantumMechanics.SpectralTheory.spectralProjection": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
-                "DavisKahan.Interop.Spectra.SpectralCutoff",
-                "DavisKahan.Interop.Spectra.SpectralRestriction",
-                "DavisKahan.Interop.Spectra.SpectralRestrictionLocalization"
+                "DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection",
+                "DavisKahan.SpectralTheory.SpectralCutoff",
+                "DavisKahan.SpectralTheory.SpectralRestriction",
+                "DavisKahan.SpectralTheory.SpectralRestrictionLocalization"
               ],
               "uses": 5
             }
@@ -288,7 +288,7 @@
           "constants": {
             "Spectra.QuantumMechanics.SpectralTheory.PVM.spectralPVM": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.SpectralRestriction"
+                "DavisKahan.SpectralTheory.SpectralRestriction"
               ],
               "uses": 1
             }
@@ -300,14 +300,14 @@
           "constants": {
             "Spectra.QuantumMechanics.SpectralTheory.selfAdjointResolvent": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.RealSpectralRestriction"
+                "DavisKahan.SpectralTheory.Real.SpectralRestriction"
               ],
               "uses": 1
             },
             "Spectra.QuantumMechanics.SpectralTheory.spectralPVM": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
-                "DavisKahan.Interop.Spectra.RealSpectralRestriction"
+                "DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection",
+                "DavisKahan.SpectralTheory.Real.SpectralRestriction"
               ],
               "uses": 2
             }
@@ -347,7 +347,7 @@
             "Spectra.HilbertSchmidtTensor.Space": {
               "consumerModules": [
                 "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion",
-                "DavisKahan.Interop.Spectra.HilbertSchmidtTensor",
+                "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor",
                 "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
                 "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise"
               ],
@@ -368,7 +368,7 @@
             "Spectra.HilbertSchmidtTensor.toOperator": {
               "consumerModules": [
                 "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion",
-                "DavisKahan.Interop.Spectra.HilbertSchmidtTensor"
+                "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor"
               ],
               "uses": 11
             }
@@ -394,7 +394,7 @@
             "Spectra.Conj": {
               "consumerModules": [
                 "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion",
-                "DavisKahan.Interop.Spectra.HilbertSchmidtTensor",
+                "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor",
                 "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
                 "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise"
               ],
@@ -403,7 +403,7 @@
             "Spectra.Conj.instInnerProductSpace": {
               "consumerModules": [
                 "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion",
-                "DavisKahan.Interop.Spectra.HilbertSchmidtTensor",
+                "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor",
                 "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
                 "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise"
               ],
@@ -412,7 +412,7 @@
             "Spectra.Conj.instNormedAddCommGroup": {
               "consumerModules": [
                 "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion",
-                "DavisKahan.Interop.Spectra.HilbertSchmidtTensor",
+                "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor",
                 "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
                 "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise"
               ],
@@ -477,32 +477,32 @@
           "constants": {
             "Spectra.OneParameterUnitaryGroup": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator",
+                "DavisKahan.SpectralTheory.SpectralRestrictionOperator",
                 "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
               ],
               "uses": 3
             },
             "Spectra.OneParameterUnitaryGroup.U": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator"
+                "DavisKahan.SpectralTheory.SpectralRestrictionOperator"
               ],
               "uses": 4
             },
             "Spectra.OneParameterUnitaryGroup.genDiffQuot": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator"
+                "DavisKahan.SpectralTheory.SpectralRestrictionOperator"
               ],
               "uses": 2
             },
             "Spectra.OneParameterUnitaryGroup.generator": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator"
+                "DavisKahan.SpectralTheory.SpectralRestrictionOperator"
               ],
               "uses": 4
             },
             "Spectra.OneParameterUnitaryGroup.mk": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator"
+                "DavisKahan.SpectralTheory.SpectralRestrictionOperator"
               ],
               "uses": 1
             }
@@ -514,12 +514,12 @@
           "constants": {
             "Spectra.YosidaHille.genToGroup": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
-                "DavisKahan.Interop.Spectra.BoundedTruncation",
-                "DavisKahan.Interop.Spectra.SpectralCutoff",
-                "DavisKahan.Interop.Spectra.SpectralRestriction",
-                "DavisKahan.Interop.Spectra.SpectralRestrictionLocalization",
-                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator",
+                "DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection",
+                "DavisKahan.SpectralTheory.BoundedTruncation",
+                "DavisKahan.SpectralTheory.SpectralCutoff",
+                "DavisKahan.SpectralTheory.SpectralRestriction",
+                "DavisKahan.SpectralTheory.SpectralRestrictionLocalization",
+                "DavisKahan.SpectralTheory.SpectralRestrictionOperator",
                 "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
                 "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise",
                 "DavisKahan.SpectralTheory.CayleySelectorBridge",

@@ -25,7 +25,7 @@ contains the canonical replacements:
 * complex bounded PVM and contour identification through the vendored Spectra
   continuation modules;
 * real spectral projections and restrictions in
-  `DavisKahan/Interop/Spectra/RealSpectralRestriction.lean`;
+  `DavisKahan/SpectralTheory/Real/SpectralRestriction.lean`;
 * the accepted unbounded sine-theta chain in the production Spectra route;
 * bounded complex tan-two-theta and Riccati theory under
   `DavisKahan/TanTwoTheta/` and `DavisKahan/Riccati/`.

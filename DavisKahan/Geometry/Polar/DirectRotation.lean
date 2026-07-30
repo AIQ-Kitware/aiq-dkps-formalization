@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.BoundedOperator.Reflection
-import DavisKahan.Interop.Spectra.OperatorAbsoluteValue
+import DavisKahan.Geometry.Polar.OperatorAbsoluteValue
 import Mathlib.Analysis.Normed.Ring.Units
 import Mathlib.Algebra.Group.Commute.Units
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute

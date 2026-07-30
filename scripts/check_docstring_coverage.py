@@ -33,6 +33,12 @@ mistake before it was written down:
     working, hiding 21 undocumented declarations.  When you add an exclusion,
     write the condition that would end it.
 
+    The tree is gone as of 2026-07-30, and *how* it went is the point: its 26
+    modules were distributed by subject into `SpectralTheory/`, `Geometry/` and
+    `SinTheta/`, because they had never been one thing -- only one donor's name.
+    The original exclusion would still have been wrong even having waited, since
+    "Spectra removal deletes this tree" was never the reason the tree existed.
+
 Usage:
     python3 scripts/check_docstring_coverage.py            # gate; exit 1 on findings
     python3 scripts/check_docstring_coverage.py --list     # show each finding

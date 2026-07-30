@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.Interop.Spectra.ClosedOperator
+import DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge
 import DavisKahan.SpectralTheory.ClosedOperator.BoundedRealization
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
 

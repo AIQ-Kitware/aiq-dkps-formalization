@@ -9,13 +9,25 @@ import DavisKahan.SpectralTheory.FormMethod.All
 import DavisKahan.SpectralTheory.Real.All
 import DavisKahan.SpectralTheory.ReducingSubspace.All
 import DavisKahan.SpectralTheory.AbstractSpectrum
+import DavisKahan.SpectralTheory.BoundedFromSpectrum
+import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
+import DavisKahan.SpectralTheory.BoundedTruncation
 import DavisKahan.SpectralTheory.CayleySelectorBridge
 import DavisKahan.SpectralTheory.CircleRieszEndpoints
+import DavisKahan.SpectralTheory.CircleRieszProjection
 import DavisKahan.SpectralTheory.Compatibility
+import DavisKahan.SpectralTheory.GapResolvent
 import DavisKahan.SpectralTheory.GraphSubspace
 import DavisKahan.SpectralTheory.OperatorAngle
+import DavisKahan.SpectralTheory.OrderedHalfLine
+import DavisKahan.SpectralTheory.PVMSubspace
+import DavisKahan.SpectralTheory.ReflectionRestriction
 import DavisKahan.SpectralTheory.ResolventOperator
 import DavisKahan.SpectralTheory.SelfAdjointBorelCalculus
+import DavisKahan.SpectralTheory.SpectralCutoff
 import DavisKahan.SpectralTheory.SpectralMultiplicityFoundation
+import DavisKahan.SpectralTheory.SpectralRestriction
+import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
+import DavisKahan.SpectralTheory.SpectralRestrictionOperator
 
 /-! # `DavisKahan/SpectralTheory` -/

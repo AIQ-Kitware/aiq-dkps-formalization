@@ -33,7 +33,7 @@ abbrev DKClosedOperator :=
 
 Until 2026-07-29 this file carried a pair of adapters to and from Spectra's
 `Operator.SelfAdjointOperator`; the only remaining consumer of the outbound
-adapter is `DavisKahan.Interop.Spectra.OrderedHalfLine`, which now carries its
+adapter is `DavisKahan.SpectralTheory.OrderedHalfLine`, which now carries its
 own copy, so this module — imported by most of the bridge — is Spectra-free. -/
 noncomputable def closedOperatorOfSelfAdjointPMap {K : Type*} [NormedAddCommGroup K]
     [InnerProductSpace ℂ K] [CompleteSpace K]

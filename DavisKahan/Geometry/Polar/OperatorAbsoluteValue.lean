@@ -29,7 +29,7 @@ collapse to `rfl` and the Spectra import is gone.  Cluster C of the port surface
 (`absOp`, `polarIsometry`, `polarRange`) is closed by this file.
 
 Nothing downstream changes: every `spectra*` name keeps its statement, so the
-~400 call sites across `Geometry/Polar/**`, `Interop/Spectra/**` and
+~400 call sites across `Geometry/Polar/**`, `SpectralTheory/**` and
 `Experimental/**` are untouched.  The names are now misnomers — there is no
 Spectra behind them — but renaming them is a naming-audit sweep over ten
 modules, deliberately *not* folded into the dependency removal.  It is recorded

@@ -97,7 +97,7 @@ Cheap now, impossible later. Nothing else starts until this lands.
 2. **Re-home the 14 DKPS-authored theorems out of `namespace Spectra.*`.**
    - `DavisKahan/Interop/Spectra/HilbertSchmidtColumnExpansion.lean:44` —
      11 `mathAhead_*` theorems under `namespace Spectra.HilbertSchmidtTensor`;
-   - `DavisKahan/Interop/Spectra/GapResolvent.lean:54–248` — 3 theorems under
+   - `DavisKahan/SpectralTheory/GapResolvent.lean:54–248` — 3 theorems under
      `namespace Spectra.QuantumMechanics.SpectralTheory`.
 
    These are **ours**. Once Spectra's imports are gone, nothing distinguishes

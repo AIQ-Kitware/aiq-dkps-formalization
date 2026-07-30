@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Unbounded.AllGap
-import DavisKahan.Interop.Spectra.SpectralRestrictionOperator
+import DavisKahan.SpectralTheory.SpectralRestrictionOperator
 
 /-!
 # Natural spectral-projection inputs for the unbounded sine-theta theorem

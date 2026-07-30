@@ -110,7 +110,7 @@ Ownership classes: `mathlib` · `tauceti` · `davis-kahan` · `spectra-bridge` �
   `HilbertSchmidtBasis.lean` used to import is a short consequence of Mathlib's
   `HilbertBasis.hasSum_inner_mul_inner` and is now staged for a general `RCLike`
   field.  Only the **tensor model** is still Spectra-bound, and it is confined to
-  `DavisKahan/Interop/Spectra/HilbertSchmidtTensor.lean`, where it belongs.
+  `DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtTensor.lean`, where it belongs.
   The reconciliation with the singular-value definition,
   `tsum_approximationSingularValue_sq_eq_hilbertSchmidtEnergy`, is proved in
   `DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean`; staging it
