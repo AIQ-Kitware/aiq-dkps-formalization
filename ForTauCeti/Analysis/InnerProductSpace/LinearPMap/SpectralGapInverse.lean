@@ -213,6 +213,7 @@ def HasVectorSpectralGap (δ : ℝ) (ξ : H) : Prop :=
   (spectralPVM hA).diag ξ (Set.Ioo (-δ) δ) = 0
 
 /-- Under a vector gap the spectral projection of the gap set fixes `ξ`. -/
+@[simp]
 theorem specProjection_gapSet_apply {δ : ℝ} {ξ : H}
     (hgap : HasVectorSpectralGap hA δ ξ) :
     specProjection hA (gapSet δ) (measurableSet_gapSet δ) ξ = ξ := by

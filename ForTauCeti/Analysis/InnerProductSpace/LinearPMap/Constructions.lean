@@ -186,6 +186,7 @@ theorem mem_unitaryConj_domain_iff {U : H ≃ₗᵢ[𝕜] H'} {A : H →ₗ.[�
 
 /-- `U A U⁻¹` acting on a vector of the conjugated domain: pull back by `U.symm`,
 apply `A`, push forward by `U`. -/
+@[simp]
 theorem unitaryConj_apply (U : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H)
     (x : (unitaryConj U A).domain) :
     unitaryConj U A x = U (A ⟨U.symm (x : H'), x.2⟩) := rfl
