@@ -536,7 +536,7 @@ theorem sinTheta_generalSeparation
 
 /-! ## Bounded measurable spectral subspaces
 
-Genuinely constructing the measurable spectral subspace of a bounded
+Actually constructing the measurable spectral subspace of a bounded
 self-adjoint operator over a general `RCLike` field requires the bounded Borel
 functional calculus.  Over `ℂ` that calculus exists in this development and is
 *not* experimental: it is `TauCeti.BorelCalculus.boundedPVM`, with the spectral
