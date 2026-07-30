@@ -319,6 +319,28 @@ worth knowing before quoting this paper:
   Theorem 3 and Appendix Lemma 1. They agree only on Theorems 1 and 2.
   Resolving it needs one look at the published article.
 
+## The `@[expose]` ratchet
+
+`scripts/check_expose_ratchet.py` holds the line while the `FTC-EXPOSE-*` lanes
+convert `ForTauCeti` off file-wide body exposure.
+
+```sh
+python3 scripts/check_expose_ratchet.py           # report
+python3 scripts/check_expose_ratchet.py --check   # gate; exit 1 above the baseline
+python3 scripts/check_expose_ratchet.py --list    # name the modules
+```
+
+**Why a ratchet rather than a fix.** Jon adopted Tau Ceti's `api-design` rubric
+over this repository's own house rule on 2026-07-30: bodies stay hidden, and
+`@[expose]` goes on the individual declarations a consumer must unfold, with a
+docstring saying why. Converting 70 modules is five lanes' work; the count rising
+while that happens is not hypothetical — it went from **68 to 70 between two audit
+passes**, because the old rule was telling every new file to add one.
+
+**Lowering the baseline is the point.** Each conversion slice edits `BASELINE`
+down to what it leaves behind, in the same commit as the conversion.
+`FTC-EXPOSE-ENFORCE` sets it to 0 and the gate becomes an invariant.
+
 ## Paper-library grounding audits
 
 Two completion libraries ship a `verify_grounding.py` that checks their grounding

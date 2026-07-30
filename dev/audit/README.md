@@ -12,6 +12,7 @@ with a lane, that another agent can pick up and execute.
 | [`FILE-CHECKLIST.md`](FILE-CHECKLIST.md) | Every file, once. **1,160 files, 112 groups.** |
 | [`GROUP-CHECKLIST.md`](GROUP-CHECKLIST.md) | Every group, reviewed *after* its files. Cross-file findings only. **112 groups.** |
 | `review-<group>.md` | The findings. One document per group, written as the group is completed. |
+| [`measure-expose-conversion.md`](measure-expose-conversion.md) | **A measurement, not a review**: what converting `ForTauCeti` off blanket `@[expose]` costs, from a 7-module sample built with the annotation removed. Lane `FTC-EXPOSE-MEASURE`. |
 | [`review-ForTauCeti-vs-tauceti-rubrics.md`](review-ForTauCeti-vs-tauceti-rubrics.md) | **A different axis**: `ForTauCeti/**` read against Tau Ceti's *own* ten review rubrics (`TauCetiReview/rubrics/`), rather than against a hostile reader. Seven `RUB-*` lanes, three recorded negative results. |
 
 Both checklists are **generated**:
