@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.SpectralBridge
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.SinTheta.Bounded.Core
 
 /-!
@@ -36,7 +37,8 @@ variable {E F G H : Type v}
 
 /-- The raw complementary block obeys the sharp interval/exterior estimate. -/
 theorem complementaryBlock_mem_and_gauge_le
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : E →L[𝕜] E} {A₀ : F →L[𝕜] F}
     {Λ₁ : G →L[𝕜] G} {X : F →L[𝕜] E}
     {F₁ : G →L[𝕜] E}
@@ -48,8 +50,8 @@ theorem complementaryBlock_mem_and_gauge_le
     (hgap : IntervalExteriorGap A₀ Λ₁ β α δ)
     (hR : N.Mem (generalResidual A X A₀)) :
     N.Mem (X.adjoint ∘L F₁) ∧
-      δ * N.gauge (X.adjoint ∘L F₁)
-        ≤ N.gauge (generalResidual A X A₀) := by
+      δ * N.gaugeReal (X.adjoint ∘L F₁)
+        ≤ N.gaugeReal (generalResidual A X A₀) := by
   have hEq := complementary_sylvester_equation
     (X := X) (F₁ := F₁) hA hA₀ hΛ₁ hIntertwine
   have hAdj : N.Mem (generalResidual A X A₀).adjoint := N.adjoint_mem hR
@@ -61,16 +63,17 @@ theorem complementaryBlock_mem_and_gauge_le
     N hA₀ hΛ₁ hβα hδ hgap hEq hC
   refine ⟨hRaw.1, hRaw.2.trans ?_⟩
   calc
-    N.gauge (-((generalResidual A X A₀).adjoint ∘L F₁))
-        = N.gauge ((generalResidual A X A₀).adjoint ∘L F₁) :=
-          N.gauge_neg hComp
-    _ ≤ N.gauge (generalResidual A X A₀).adjoint :=
-      N.gauge_comp_right_le F₁ hAdj (opNorm_le_one_of_isometry hF₁)
-    _ = N.gauge (generalResidual A X A₀) := N.gauge_adjoint hR
+    N.gaugeReal (-((generalResidual A X A₀).adjoint ∘L F₁))
+        = N.gaugeReal ((generalResidual A X A₀).adjoint ∘L F₁) :=
+          N.gaugeReal_neg hComp
+    _ ≤ N.gaugeReal (generalResidual A X A₀).adjoint :=
+      N.gaugeReal_comp_right_le F₁ hAdj (opNorm_le_one_of_isometry hF₁)
+    _ = N.gaugeReal (generalResidual A X A₀) := N.gaugeReal_adjoint hR
 
 /-- Isometric complementary-block specialization of the bounded theorem. -/
 theorem sinTheta_bounded
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : E →L[𝕜] E} {A₀ : F →L[𝕜] F}
     {Λ₁ : G →L[𝕜] G} {X : F →L[𝕜] E}
     {F₁ : G →L[𝕜] E}
@@ -82,8 +85,8 @@ theorem sinTheta_bounded
     (hgap : IntervalExteriorGap A₀ Λ₁ β α δ)
     (hR : N.Mem (generalResidual A X A₀)) :
     N.Mem (X.adjoint ∘L F₁) ∧
-      δ * N.gauge (X.adjoint ∘L F₁)
-        ≤ N.gauge (generalResidual A X A₀) := by
+      δ * N.gaugeReal (X.adjoint ∘L F₁)
+        ≤ N.gaugeReal (generalResidual A X A₀) := by
   exact complementaryBlock_mem_and_gauge_le
     N hA hA₀ hΛ₁ hF₁ hIntertwine hβα hδ hgap hR
 
@@ -103,7 +106,8 @@ variable {E F G H : Type v}
 core of Theorem 6.1, before identifying the block with the full directed sine
 of a complete exact-space decomposition. -/
 theorem generalizedSinTheta_bounded
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : E →L[ℂ] E} {A₀ : F →L[ℂ] F}
     {Λ₁ : G →L[ℂ] G} {X : F →L[ℂ] E}
     {F₁ : G →L[ℂ] E}
@@ -117,25 +121,26 @@ theorem generalizedSinTheta_bounded
     (hgap : IntervalExteriorGap A₀ Λ₁ β α δ)
     (hR : N.Mem (generalResidual A X A₀)) :
     N.Mem (sinThetaBlock X F₁ hframe hε) ∧
-      δ * ε * N.gauge (sinThetaBlock X F₁ hframe hε)
-        ≤ N.gauge (generalResidual A X A₀) := by
+      δ * ε * N.gaugeReal (sinThetaBlock X F₁ hframe hε)
+        ≤ N.gaugeReal (generalResidual A X A₀) := by
   have hRaw := complementaryBlock_mem_and_gauge_le
     N hA hA₀ hΛ₁ hF₁ hIntertwine hβα hδ hgap hR
   have hFrame := lowerFrame_sinThetaBlock_mem_and_gauge_le
     N X F₁ hframe hε hRaw.1
   refine ⟨hFrame.1, ?_⟩
   calc
-    δ * ε * N.gauge (sinThetaBlock X F₁ hframe hε)
-        = δ * (ε * N.gauge (sinThetaBlock X F₁ hframe hε)) := by ring
-    _ ≤ δ * N.gauge (X.adjoint ∘L F₁) :=
+    δ * ε * N.gaugeReal (sinThetaBlock X F₁ hframe hε)
+        = δ * (ε * N.gaugeReal (sinThetaBlock X F₁ hframe hε)) := by ring
+    _ ≤ δ * N.gaugeReal (X.adjoint ∘L F₁) :=
       mul_le_mul_of_nonneg_left hFrame.2 hδ.le
-    _ ≤ N.gauge (generalResidual A X A₀) := hRaw.2
+    _ ≤ N.gaugeReal (generalResidual A X A₀) := hRaw.2
 
 /-- Exact bounded infinite-dimensional Davis--Kahan Theorem 6.1, expressed in
 terms of the full directed sine operator rather than an arbitrary invariant
 complementary block. -/
 theorem generalizedSinTheta_bounded_exact
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : E →L[ℂ] E} {A₀ : F →L[ℂ] F}
     {Λ₁ : G →L[ℂ] G} {X : F →L[ℂ] E}
     {F₀ : H →L[ℂ] E} {F₁ : G →L[ℂ] E}
@@ -149,8 +154,8 @@ theorem generalizedSinTheta_bounded_exact
     (hgap : IntervalExteriorGap A₀ Λ₁ β α δ)
     (hR : N.Mem (generalResidual A X A₀)) :
     N.Mem (directedSinThetaOperator X F₀ hframe hε) ∧
-      δ * ε * N.gauge (directedSinThetaOperator X F₀ hframe hε)
-        ≤ N.gauge (generalResidual A X A₀) := by
+      δ * ε * N.gaugeReal (directedSinThetaOperator X F₀ hframe hε)
+        ≤ N.gaugeReal (generalResidual A X A₀) := by
   have hBlock := generalizedSinTheta_bounded
     N hA hA₀ hΛ₁ hdecomp.isometry₁ hIntertwine
       hβα hδ hε hframe hgap hR
@@ -175,7 +180,8 @@ variable {E F G H : Type v}
 
 /-- Exact isometric headline specialization of the bounded theorem. -/
 theorem sinTheta_bounded_exact
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : E →L[𝕜] E} {A₀ : F →L[𝕜] F}
     {Λ₁ : G →L[𝕜] G} {X : F →L[𝕜] E}
     {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}
@@ -188,9 +194,9 @@ theorem sinTheta_bounded_exact
     (hgap : IntervalExteriorGap A₀ Λ₁ β α δ)
     (hR : N.Mem (generalResidual A X A₀)) :
     N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L X) ∧
-      δ * N.gauge
+      δ * N.gaugeReal
         ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L X)
-        ≤ N.gauge (generalResidual A X A₀) := by
+        ≤ N.gaugeReal (generalResidual A X A₀) := by
   have hBlock := sinTheta_bounded
     N hA hA₀ hΛ₁ hX hdecomp.isometry₁ hIntertwine
       hβα hδ hgap hR
