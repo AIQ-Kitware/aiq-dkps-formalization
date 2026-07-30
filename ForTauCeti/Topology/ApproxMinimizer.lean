@@ -23,8 +23,8 @@ The typical source of the approximate-minimizer hypothesis is a second family
 
 ## Main results
 
-* `ForMathlib.exists_subseq_tendsto_forall_le_of_approxMin`
-* `ForMathlib.exists_subseq_tendsto_isMinOn_of_approxMinOn` — the variant where the
+* `TauCeti.exists_subseq_tendsto_forall_le_of_approxMin`
+* `TauCeti.exists_subseq_tendsto_isMinOn_of_approxMinOn` — the variant where the
   approximate-minimization comparison ranges only over the compact set `K`, so the
   limit is a minimizer *on `K`* (`IsMinOn F K`) rather than a global one. This is
   the form the Berge maximum theorem consumes (the feasible set is constrained).
@@ -48,11 +48,21 @@ to be re-authored per Mathlib's AI-contribution policy at PR time.
 * Intended Mathlib home: additions to `Mathlib/Topology/Order/Compact.
 * Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — the `ForMathlib` import firewall admits only
-  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
+* Spectra influence: **none** — the `ForTauCeti` import firewall admits only
+  Mathlib, `TauCeti` and `ForTauCeti` (rule 2 of
+  `scripts/check_dependency_layers.py`); this module imports Mathlib only.
 -/
 
-namespace ForMathlib
+/-!
+### Provenance
+
+Moved from `ForMathlib/Topology/` to `ForTauCeti/Topology/` on 2026-07-29 by lane
+FM-RETIRE, which finishes the `ForMathlib` retirement.  The namespace changed from
+`ForMathlib` to `TauCeti` to match the destination package; declaration names,
+statements and proofs are unchanged.
+-/
+
+namespace TauCeti
 
 open Filter Topology
 
@@ -125,4 +135,4 @@ theorem exists_subseq_tendsto_isMinOn_of_approxMinOn
   exact le_of_tendsto_of_tendsto hcont hrhs
     (Eventually.of_forall fun t => happrox x hx (φ t))
 
-end ForMathlib
+end TauCeti

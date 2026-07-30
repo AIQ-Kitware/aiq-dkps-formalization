@@ -5,7 +5,7 @@ These are the five checks required by
 `dev/flawless-sine-theta-reorganization-overnight-plan-2026-07-20.md`:
 
 1. every production module is reachable from `DavisKahan.All` or the
-   `ForMathlib` root;
+   curated `DavisKahan` root;
 2. no production module imports an Experimental module;
 3. every Experimental module has an admission in its dependency closure;
 4. every source facade is reachable from the curated `DavisKahan` root;
@@ -29,12 +29,16 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-LIB_DIRS = ("DavisKahan", "ForMathlib")
+# `ForMathlib` was retired on 2026-07-29 (lane FM-RETIRE): its modules moved into
+# `ForTauCeti` and the library no longer exists.  `ForTauCeti` is deliberately NOT
+# added here: like `ForMathlib` before it, it is glob-built by lake
+# (`globs = ["ForTauCeti.*"]`), so every module is compiled regardless of
+# reachability and rule 1 would add nothing.
+LIB_DIRS = ("DavisKahan",)
 EXPERIMENTAL = ".Experimental."
 EXPERIMENTAL_ROOT = "DavisKahan.Experimental"
 CURATED_ROOT = "DavisKahan"
 DEV_ROOT = "DavisKahan.All"
-FORMATHLIB_ROOT = "ForMathlib"
 AUDIT_SCRIPT = ROOT / "scripts/audit_full_paper_sine_theta.py"
 AUDIT_MODULE = ROOT / "DavisKahan/Sources/DavisKahan1970/Audits/FullPaperSineTheta.lean"
 # Audited endpoints: 38 at the first clean run (cc7a7fc), plus the five
@@ -160,9 +164,9 @@ def main() -> None:
     print(f"Library structure check over {len(files)} modules "
           f"({len(production)} production, {len(files) - len(production)} experimental)")
 
-    covered = reachable(imports, [DEV_ROOT, FORMATHLIB_ROOT])
+    covered = reachable(imports, [DEV_ROOT])
     check1 = report(
-        "1. production modules reachable from DavisKahan.All / ForMathlib",
+        "1. production modules reachable from DavisKahan.All",
         sorted(m for m in production
                if m not in covered and m not in DELIBERATELY_UNBUILT),
     )

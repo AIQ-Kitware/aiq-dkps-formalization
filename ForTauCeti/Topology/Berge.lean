@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 -/
 
-import ForMathlib.Topology.ApproxMinimizer
+import ForTauCeti.Topology.ApproxMinimizer
 import Mathlib.Order.Filter.AtTopBot.CountablyGenerated
 import Mathlib.Topology.Constructions.SumProd
 import Mathlib.Analysis.SpecificLimits.Basic
@@ -29,7 +29,7 @@ Mathlib has the hemicontinuity *definitions* (`Mathlib/Topology/Semicontinuity/
 Hemicontinuity.lean`) and the extreme-value theorem (`IsCompact.exists_isMinOn`),
 but no Berge theorem.  This file supplies the upper-hemicontinuity half in two
 usable forms, building on the approximate-minimizer stability engine
-`ForMathlib.exists_subseq_tendsto_isMinOn_of_approxMinOn`:
+`TauCeti.exists_subseq_tendsto_isMinOn_of_approxMinOn`:
 
 * `tendsto_eval_sub_of_isCompact` — along a convergent parameter sequence
   `p k → p₀`, the evaluation difference `g (p k) (x k) − g p₀ (x k)` vanishes
@@ -53,10 +53,10 @@ usable forms, building on the approximate-minimizer stability engine
 
 ## Main results
 
-* `ForMathlib.tendsto_subseq_isMinOn_of_isMinOn`
-* `ForMathlib.upperHemicontinuousAt_isMinOn`
-* `ForMathlib.continuous_iInf_of_isCompact` — value-function continuity.
-* `ForMathlib.exists_modulus_isMinOn_family` / `ForMathlib.exists_modulus_isMinOn`
+* `TauCeti.tendsto_subseq_isMinOn_of_isMinOn`
+* `TauCeti.upperHemicontinuousAt_isMinOn`
+* `TauCeti.continuous_iInf_of_isCompact` — value-function continuity.
+* `TauCeti.exists_modulus_isMinOn_family` / `TauCeti.exists_modulus_isMinOn`
 
 ## Staging note
 
@@ -77,11 +77,21 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 * Intended Mathlib home: the Berge maximum theorem (upper hemicontinuity of the.
 * Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — the `ForMathlib` import firewall admits only
-  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
+* Spectra influence: **none** — the `ForTauCeti` import firewall admits only
+  Mathlib, `TauCeti` and `ForTauCeti` (rule 2 of
+  `scripts/check_dependency_layers.py`); this module imports Mathlib only.
 -/
 
-namespace ForMathlib
+/-!
+### Provenance
+
+Moved from `ForMathlib/Topology/` to `ForTauCeti/Topology/` on 2026-07-29 by lane
+FM-RETIRE, which finishes the `ForMathlib` retirement.  The namespace changed from
+`ForMathlib` to `TauCeti` to match the destination package; declaration names,
+statements and proofs are unchanged.
+-/
+
+namespace TauCeti
 
 open Filter Topology Set
 
@@ -318,4 +328,4 @@ theorem exists_modulus_isMinOn {P X : Type*} [PseudoMetricSpace P] [PseudoMetric
   obtain ⟨x₀, hx₀K, hx₀min, hclose⟩ := h p x hxK hxmin hpd
   exact ⟨x₀, hx₀K, hx₀min, hclose ()⟩
 
-end ForMathlib
+end TauCeti
