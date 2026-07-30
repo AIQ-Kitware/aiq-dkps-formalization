@@ -18,7 +18,6 @@ verifies that implementation against this independently compiled statement.
 
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
@@ -36,5 +35,4 @@ theorem sinAngleOperator_perturbation_le
     δ * N (sinAngleOperator U V) ≤ N (B - A) := by
   sorry
 
-end DavisKahanTheory
 end TauCeti

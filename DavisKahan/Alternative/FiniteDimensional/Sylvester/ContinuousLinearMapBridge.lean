@@ -67,7 +67,7 @@ theorem ideal_sylvester_le
   have hB' : B'.IsSymmetric := by
     intro x y
     exact hB x y
-  have hsep' : DavisKahanTheory.SpectraSeparated A' ⊤ B' ⊤ d := by
+  have hsep' : TauCeti.SpectraSeparated A' ⊤ B' ⊤ d := by
     intro a b ha hb
     rcases ha with ⟨x, -, ⟨hx0, hxeig⟩⟩
     rcases hb with ⟨y, -, ⟨hy0, hyeig⟩⟩
@@ -106,7 +106,7 @@ theorem ideal_sylvester_le_complex
   have hB' : B'.IsSymmetric := by
     intro x y
     exact hB x y
-  have hsep' : DavisKahanTheory.SpectraSeparated A' ⊤ B' ⊤ d := by
+  have hsep' : TauCeti.SpectraSeparated A' ⊤ B' ⊤ d := by
     intro a b ha hb
     rcases ha with ⟨x, -, ⟨hx0, hxeig⟩⟩
     rcases hb with ⟨y, -, ⟨hy0, hyeig⟩⟩
@@ -145,7 +145,7 @@ theorem ideal_sylvester_le_real
   have hB' : B'.IsSymmetric := by
     intro x y
     exact hB x y
-  have hsep' : DavisKahanTheory.SpectraSeparated A' ⊤ B' ⊤ d := by
+  have hsep' : TauCeti.SpectraSeparated A' ⊤ B' ⊤ d := by
     intro a b ha hb
     rcases ha with ⟨x, -, ⟨hx0, hxeig⟩⟩
     rcases hb with ⟨y, -, ⟨hy0, hyeig⟩⟩

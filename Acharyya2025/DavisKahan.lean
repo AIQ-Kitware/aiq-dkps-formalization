@@ -128,7 +128,7 @@ it stays; but the sharp form is already available in this repository as
 `TauCeti.sum_cross_norm_inner_eigenvectorBasis_sq_le_hilbertSchmidt`
 (`DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean`), of which
 this is a corollary, and the arbitrary-unitarily-invariant-norm form as
-`TauCeti.DavisKahanTheory.sinTheta_perturbation_le`. -/
+`TauCeti.sinTheta_perturbation_le`. -/
 theorem sum_cross_inner_sq_le
     (hT : T.IsSymmetric) (hS : S.IsSymmetric)   -- both operators self-adjoint
     (hn : finrank ℝ E = n)                       -- finite-dimensionality (implicit in the paper)
