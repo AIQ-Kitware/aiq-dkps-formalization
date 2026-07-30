@@ -34,6 +34,13 @@ so no part of the bookkeeping is spent on convergence hypotheses.
 
 *New.*  The donor obtains strong continuity from the tensor-product functor
 applied to the two factor groups; nothing of that is used.
+
+**Moved 2026-07-30** by lane PLACE-SYLV, from
+`ForTauCeti/Analysis/InnerProductSpace/SylvesterGroup.lean` to
+`ForTauCeti/Analysis/InnerProductSpace/Sylvester/Group.lean` — the eighth and last
+of that lane's moves, held back on 2026-07-29 while a live `dev/LANES.md` row on
+this file read `in progress`.  Path change and repointing of imports only — no
+statement, signature, proof, attribute, declaration name or namespace changed.
 -/
 
 open scoped ENNReal NNReal

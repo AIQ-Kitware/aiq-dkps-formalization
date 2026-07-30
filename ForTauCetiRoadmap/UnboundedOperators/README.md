@@ -1,5 +1,23 @@
 # Unbounded operators on `LinearPMap`
 
+
+> **This is the pre-split roadmap, and it now spans three topics** (`jon (yardrat)`,
+> 2026-07-30). It was written against a single 25-module, 6,700-line T15. Lane
+> T15-SPLIT divided that topic along the three chains the audit found, so the
+> milestones below are distributed as:
+>
+> * **T15a** — closed partial maps, graphs, constructions, form bounds →
+>   [`../ClosedPartialMaps/`](../ClosedPartialMaps/README.md)
+> * **T15b** — resolvents, semiboundedness, the gap inverse →
+>   [`../UnboundedResolvent/`](../UnboundedResolvent/README.md)
+> * **T15c** — the spectral measure, Stone uniqueness, Yosida →
+>   [`../UnboundedSpectralMeasure/`](../UnboundedSpectralMeasure/README.md)
+>
+> Kept because the **U1 decision** — that an unbounded operator *is* a Mathlib
+> `LinearPMap`, with closedness and self-adjointness as hypotheses rather than
+> structure fields — is stated here at length and is the premise all three inherit.
+> Read this for the decision, and the three topic files for what each contains.
+
 ## Summary
 
 Develop a reusable unbounded-operator layer using Mathlib `LinearPMap` as the

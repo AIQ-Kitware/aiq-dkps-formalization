@@ -248,6 +248,7 @@ RUNGS: list[tuple[str, str, list[str]]] = [
         "Analysis.InnerProductSpace.Sylvester.BlockIdentity",
         "Analysis.InnerProductSpace.Sylvester.Bound",
         "Analysis.InnerProductSpace.Sylvester.Generator",
+        "Analysis.InnerProductSpace.Sylvester.Group",
         "Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier",
         "Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.DoubledPhase",
         "Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.Fourier",
@@ -257,7 +258,6 @@ RUNGS: list[tuple[str, str, list[str]]] = [
         "Analysis.InnerProductSpace.Sylvester.Operator",
         "Analysis.InnerProductSpace.Sylvester.SpectralDistance",
         "Analysis.InnerProductSpace.Sylvester.SpectralGap",
-        "Analysis.InnerProductSpace.SylvesterGroup",
     ]),
     ("P", "Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems (T17)", [
         "Analysis.InnerProductSpace.BoundedOperator.Basic",
@@ -267,6 +267,7 @@ RUNGS: list[tuple[str, str, list[str]]] = [
         "Analysis.InnerProductSpace.Residual.AngleEmbedding",
         "Analysis.InnerProductSpace.Residual.Ritz",
         "Analysis.InnerProductSpace.Residual.TrialMap",
+        "Analysis.InnerProductSpace.SinTheta.DirectedBounds",
         "Analysis.InnerProductSpace.SinTheta.OperatorNorm",
         "Analysis.InnerProductSpace.SinTheta.Perturbation",
         "Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant",
