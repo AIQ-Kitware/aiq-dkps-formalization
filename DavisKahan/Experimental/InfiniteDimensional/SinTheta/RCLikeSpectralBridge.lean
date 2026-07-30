@@ -220,11 +220,14 @@ theorem isUnit_sub_smul_one_of_im_ne_zero
       _ = x := e.symm_apply_apply x
       _ = (1 : E →L[𝕜] E) x := rfl
 
-/-- For self-adjoint `A`, `σ(A - c·1)` is real and equals `σ(A) - c`:
-non-real spectral parameters are excluded by
+/-- For self-adjoint `A`, every point of `σ(A - c·1)` is real and comes from
+`σ(A)`: non-real spectral parameters are excluded by
 `isUnit_sub_smul_one_of_im_ne_zero`, and the affine spectral mapping is
-`spectrum.sub_singleton_eq`. -/
-theorem mem_spectrum_sub_real_scalar_iff
+`spectrum.sub_singleton_eq`.
+
+This is the forward half; `mem_spectrum_sub_real_scalar_iff` below packages it
+with the converse, which needs no self-adjointness. -/
+theorem exists_mem_boundedRealSpectrum_of_mem_spectrum_sub_real_scalar
     {A : E →L[𝕜] E} (hA : A.IsSymmetric) {c : ℝ} {z : 𝕜}
     (hz : z ∈ spectrum 𝕜 (A - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E)) :
     ∃ r : ℝ, r ∈ boundedRealSpectrum A ∧ z = (((r - c : ℝ)) : 𝕜) := by
@@ -260,6 +263,40 @@ theorem mem_spectrum_sub_real_scalar_iff
   · rw [← hzw, hw_real]
     push_cast
     ring
+
+/-- The converse inclusion, which holds for **any** bounded operator: shifting a
+real spectral point by `c` lands in the spectrum of the shifted pencil.
+
+Self-adjointness is what makes the *forward* direction true — it is what forces
+the spectrum of the pencil to be real — and it is not needed here.  Keeping the
+two halves separate records that asymmetry instead of burying it in a hypothesis
+the `iff` carries for only one of its directions. -/
+theorem mem_spectrum_sub_real_scalar_of_mem_boundedRealSpectrum
+    {A : E →L[𝕜] E} {c r : ℝ} (hr : r ∈ boundedRealSpectrum A) :
+    (((r - c : ℝ)) : 𝕜) ∈
+      spectrum 𝕜 (A - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E) := by
+  have hpencil : A - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E =
+      A - algebraMap 𝕜 (E →L[𝕜] E) ((c : ℝ) : 𝕜) := by
+    congr 1
+  rw [hpencil, ← spectrum.sub_singleton_eq]
+  refine Set.mem_sub.mpr ⟨((r : ℝ) : 𝕜), ?_, ((c : ℝ) : 𝕜), rfl, ?_⟩
+  · rw [DavisKahanExt.boundedRealSpectrum_eq_realSpectrum] at hr
+    exact hr
+  · push_cast
+    ring
+
+/-- **The spectrum of the real pencil, as an actual `Iff`.**
+
+`σ(A - c·1) = σ(A) - c`, in membership form.  The name previously sat on the
+forward implication alone, which the naming rubric forbids: `_iff` asserts an
+`Iff`.  The fix was to supply the converse rather than to weaken the name, since
+the original docstring already claimed the equality. -/
+theorem mem_spectrum_sub_real_scalar_iff
+    {A : E →L[𝕜] E} (hA : A.IsSymmetric) {c : ℝ} {z : 𝕜} :
+    z ∈ spectrum 𝕜 (A - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E) ↔
+      ∃ r : ℝ, r ∈ boundedRealSpectrum A ∧ z = (((r - c : ℝ)) : 𝕜) :=
+  ⟨fun hz => exists_mem_boundedRealSpectrum_of_mem_spectrum_sub_real_scalar hA hz,
+   fun ⟨_r, hr, hz⟩ => hz ▸ mem_spectrum_sub_real_scalar_of_mem_boundedRealSpectrum hr⟩
 
 /-- A self-adjoint operator whose spectrum sits in the closed ball of radius `ρ`
 has operator norm at most `ρ`.  Proof: its norm equals its spectral radius
