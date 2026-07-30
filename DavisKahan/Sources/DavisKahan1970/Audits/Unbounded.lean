@@ -58,7 +58,7 @@ namespace ExactSinTheta
 #check ComplexificationApproximation.approximationNumber_complexify
 #check ComplexificationApproximation.kyFanApproximationGauge_complexify
 #check RealComplexificationFunctionalCalculus.conjugateOperator_cfc_eq
-#check sylvesterIntervalExteriorGap_of_legacy
+#check sylvesterIntervalExteriorGap_of_realSpectrum
 #check davisKahan1970_sylvester_complex
 #check sinTheta_unbounded_exact_complex
 #check generalizedSinTheta_unbounded_complex
@@ -114,7 +114,7 @@ namespace ExactSinTheta
 #print axioms ComplexificationApproximation.approximationNumber_complexify
 #print axioms ComplexificationApproximation.kyFanApproximationGauge_complexify
 #print axioms RealComplexificationFunctionalCalculus.conjugateOperator_cfc_eq
-#print axioms sylvesterIntervalExteriorGap_of_legacy
+#print axioms sylvesterIntervalExteriorGap_of_realSpectrum
 #print axioms davisKahan1970_sylvester_complex
 #print axioms sinTheta_unbounded_exact_complex
 #print axioms generalizedSinTheta_unbounded_complex

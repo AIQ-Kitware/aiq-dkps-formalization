@@ -32,9 +32,12 @@ variable {E F G H : Type v}
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- Genuine Spectra interval/exterior separation for two self-adjoint closed
-operators.  Either orientation is permitted. -/
-def GenuineUnboundedIntervalExteriorGap
+/-- Interval/exterior separation for two self-adjoint closed operators, stated
+over the Spectra spectrum.  Either orientation is permitted.
+
+`RealSpectrumIntervalExteriorGap` is the `realSpectrum` spelling of the same
+configuration. -/
+def UnboundedIntervalExteriorGap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
     (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G))
     (β α δ : ℝ) : Prop :=
@@ -62,7 +65,7 @@ def UnboundedIntervalExteriorGapPMap
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A)
 
-namespace GenuineUnboundedIntervalExteriorGap
+namespace UnboundedIntervalExteriorGap
 
 omit [CompleteSpace F] [CompleteSpace G] in
 /-- View a source-facing interval/exterior gap through its canonical partial
@@ -70,11 +73,11 @@ maps. -/
 theorem toPMap
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G)}
-    {β α δ : ℝ} (h : GenuineUnboundedIntervalExteriorGap A B β α δ) :
+    {β α δ : ℝ} (h : UnboundedIntervalExteriorGap A B β α δ) :
     UnboundedIntervalExteriorGapPMap A.toLinearPMap B.toLinearPMap β α δ := by
   exact h
 
-end GenuineUnboundedIntervalExteriorGap
+end UnboundedIntervalExteriorGap
 
 /-- Generalized finite-interval unbounded sine-theta theorem at ideal-gauge
 scope, using genuine Spectra hypotheses and no ordered half-line dependency. -/
@@ -89,7 +92,7 @@ theorem generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
     {β α δ ε : ℝ}
     (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : GenuineUnboundedIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
+    (hgap : UnboundedIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
       δ * ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)

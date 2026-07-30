@@ -68,13 +68,13 @@ structure PaperSymmetricSinThetaProblem where
   reduces_B_V : B.Reduces V
   gap : ℝ
   gap_pos : 0 < gap
-  gap_U_to_Vperp : UnboundedSylvesterGap
+  gap_U_to_Vperp : FormBoundedSylvesterGap
     (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded A) U
       (ClosedOperator.ofBounded_reducesSubspace A U reduces_A_U))
     (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded B) Vᗮ
       (ClosedOperator.ofBounded_reducesSubspace B V reduces_B_V).orthogonal)
     gap
-  gap_V_to_Uperp : UnboundedSylvesterGap
+  gap_V_to_Uperp : FormBoundedSylvesterGap
     (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded B) V
       (ClosedOperator.ofBounded_reducesSubspace B V reduces_B_V))
     (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded A) Uᗮ
