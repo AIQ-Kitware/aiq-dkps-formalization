@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.Experimental.InfiniteDimensional.Core.UnboundedSpectral
 import DavisKahan.Sylvester.Bounded
 import DavisKahan.Sylvester.Gap
@@ -732,7 +733,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_viaKyFan
     (hBc : SemiboundedAbove B c)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   exact mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hδ hC
       (kyFan_unbounded_sylvester_le_of_semibounded
@@ -750,7 +751,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_swapped_viaKyFan
     (hBc : SemiboundedBelow B (c + δ))
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   exact mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hδ hC
       (kyFan_unbounded_sylvester_le_of_semibounded_swapped
@@ -760,7 +761,8 @@ theorem unbounded_sylvester_mem_and_gauge_le_swapped_viaKyFan
 possibly unbounded exterior block.  This theorem only needs the ordinary
 rectangular ideal interface. -/
 theorem unbounded_sylvester_mem_and_gauge_le_of_intervalExteriorGap
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     {B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
@@ -769,7 +771,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_intervalExteriorGap
     (hgap : UnboundedIntervalExteriorGap A B β α δ)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   let c : ℝ := (β + α) / 2
   let ρ : ℝ := (α - β) / 2
   let c𝕜 : 𝕜 := (c : 𝕜)
@@ -863,8 +865,8 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_gap
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧
-      δ * N.gauge X ≤
-        N.gauge C := by
+      δ * N.gaugeReal X ≤
+        N.gaugeReal C := by
   cases hgap with
   | intervalExterior hβα hgap =>
       exact unbounded_sylvester_mem_and_gauge_le_of_intervalExteriorGap
@@ -890,8 +892,8 @@ theorem davisKahan1970_sylvester
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧
-      δ * N.gauge X ≤
-        N.gauge C :=
+      δ * N.gaugeReal X ≤
+        N.gaugeReal C :=
   unbounded_sylvester_mem_and_gauge_le_of_gap N hA hB hδ hgap hEq hC
 
 end ApproximationNumberEndpointAssumptions
