@@ -13,11 +13,11 @@ is accepted, we already have what it needs. That includes paper references,
 adversarial review of every statement, and Mathlib-quality elegance. See
 `ForTauCeti/README.md` §*The readiness standard*.
 
-**Eight of twenty-four topics are written** (2026-07-29; T15 became T15a/T15b/T15c on the same day). The design below
+**Ten of twenty-four topics are written** (2026-07-29; T15 became T15a/T15b/T15c on the same day). The design below
 partitions the library into twenty-four; the table under *Roadmaps* is the
-written ones. Sixteen remain, and `python3 scripts/check_tauceti_roadmap_topics.py --needs`
-names the ones that can go first: **T21** and **T22** are the independent
-topics still unwritten.
+written ones. Fourteen remain, and `python3 scripts/check_tauceti_roadmap_topics.py --needs`
+reports **no independent topic left unwritten** — T01, T12, T14, T15b, T21
+and T22 all have roadmaps now, so every remaining topic waits on one of them.
 
 ## The candidate topic design
 
@@ -43,6 +43,8 @@ no directory yet, and writing them is the work that design makes possible.
 | [`BorelCalculus/`](BorelCalculus/README.md) | T14 — the bounded Borel functional calculus of a normal operator and the projection-valued measures it produces: diagonal spectral measures from Riesz–Markov–Kakutani, the polarised transport principle that carries every continuous-calculus identity to bounded Borel symbols, multiplicativity, and `ProjValMeasure` on the Borel sets of `ℝ`. Independent, and the topic the whole unbounded stack (T15) rests on. |
 | [`UnboundedResolvent/`](UnboundedResolvent/README.md) | T15b — resolvents of unbounded self-adjoint operators: the resolvent set of a `LinearPMap` (Mathlib's `spectrum` does not apply to a partial map), the named resolvent and the first resolvent identity, openness, real spectrum with `‖R z‖ ≤ \|Im z\|⁻¹`, the real-point variant, and the intertwining chain up to the continuous functional calculus. Independent — one of the four topics that need nothing else. |
 | [`SpectralSubspacePerturbation/`](SpectralSubspacePerturbation/README.md) | Spectral subspace perturbation, operator angles, and Sylvester equations: projection geometry, graph subspaces and Riccati equations, closed and possibly unbounded self-adjoint operators. Davis–Kahan Part III is its principal worked source and acceptance suite. Carries [`Suggested.lean.md`](SpectralSubspacePerturbation/Suggested.lean.md). |
+| [`MatrixRankFactorization/`](MatrixRankFactorization/README.md) | T21 — rank factorization `M = L * R` through `Fin r`, and the positive-semidefinite case `B = Aᴴ * A` with at most `d` rows: the multidimensional-scaling embedding step, stated as an iff. Independent, and a leaf. |
+| [`BergeMaximum/`](BergeMaximum/README.md) | T22 — Berge's maximum theorem over a *fixed* compact feasible set: stability of minimizers under approximate minimization, upper hemicontinuity of the argmin correspondence through Mathlib's own predicate, continuity of the value function, and a uniform `ε`–`δ` modulus. Independent, and a leaf. |
 
 `SpectralSubspacePerturbation` is the roadmap target the live `approximation-number`
 cluster in `dev/tauceti/extraction-manifest.json` names
