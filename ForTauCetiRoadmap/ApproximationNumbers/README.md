@@ -145,7 +145,7 @@ of the first roadmap is claimable rather than described:
 | ~~`AN-A4-RANK`~~ | **DONE 2026-07-30** — `approximationNumber_eq_zero_of_rank_le` (any normed pair), `…_of_rank_le_of_le`, and `approximationNumber_eq_zero_iff_finrank_range_le` (the converse, finite-dimensional) | — |
 | `AN-A4-COMPACT` | `aₙ(T) → 0` iff `T` is a norm limit of finite-rank operators; approximable ⇒ compact; on Hilbert spaces compact ⇒ approximable | `AN-A4-RANK` |
 | `AN-B4-MINMAX` | the exact orthogonal-tail equality `aₙ(T) = ⨅ {‖T ∘L (Vᗮ).starProjection‖ : finrank V ≤ n}`, with all four conditions B4 states | — |
-| `AN-ACCEPT` | the six acceptance examples above, as theorems about the API | (1)–(3) none; (4) `AN-A4-RANK`; (5) `AN-B4-MINMAX`; (6) `AN-A4-COMPACT` |
+| `AN-ACCEPT` | the six acceptance examples above, as theorems about the API. **(1), (2) and (4) DONE 2026-07-30** in `ApproximationNumber/Examples.lean` — the zero operator needed nothing (`approximationNumber_zero`), the identity is `1` below the dimension and `0` at or past it, and the rank cutoff has its `finrank` form | (3) the diagonal map's singular values; (5) `AN-B4-MINMAX`; (6) `AN-A4-COMPACT` |
 
 Verified against the tree when the lanes were written: none of A4's four
 statements and none of B4's equality exists, while every inequality and support
@@ -358,6 +358,15 @@ concrete operators.
    tending to zero has approximation numbers tending to zero.
 
 These examples are theorem-level tests of the API, not merely `#eval` checks.
+
+**Three are in place** (`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Examples.lean`,
+lane `AN-ACCEPT`, 2026-07-30), and each is proved from the public API with the
+defining infimum never unfolded — which is the property that makes an acceptance
+example worth having: the lower bound for the identity comes from
+`le_approximationNumber_of_finrank_lt` on the whole space, the upper from
+`approximationNumber_le_norm` with Mathlib's `norm_id`, and the vanishing from the
+rank characterisation. The file names the three that remain and the lane each waits
+on.
 
 ## Ordering and PR slices
 
