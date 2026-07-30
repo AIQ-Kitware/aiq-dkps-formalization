@@ -47,6 +47,33 @@ def branches() -> list[str]:
     return [b for b in out.split() if not b.endswith("/HEAD")]
 
 
+#: A branch this far behind `main` is an abandoned snapshot, not a competing worker.
+#:
+#: Set deliberately high.  An ACTIVE agent's branch is routinely tens of commits behind
+#: `main` -- `main` moves every integration pass -- so a low threshold hides live claims
+#: and makes the free list LONGER, which is the opposite of safe.  A first attempt at 40
+#: excluded a branch that was 45 behind and mid-lane.  Only branches abandoned for
+#: hundreds of commits are skipped.
+STALE_COMMITS = 500
+
+
+def stale_branches() -> list[tuple[str, int]]:
+    """Branches so far behind `main` that their `dev/LANES.md` is misleading.
+
+    A stale branch makes CLOSED lanes reappear as free: `survey()` takes the most
+    advanced state across branches, so a branch still carrying the pre-closure row
+    contributes an `open` and nothing contradicts it if the closing row was never
+    merged there.  On 2026-07-30 an abandoned branch of this agent's own resurrected
+    two finished lanes that way.  Warn rather than guess.
+    """
+    out = []
+    for br in branches():
+        behind = git("rev-list", "--count", f"{br}..origin/main").strip()
+        if behind.isdigit() and int(behind) > STALE_COMMITS:
+            out.append((br, int(behind)))
+    return out
+
+
 def bare(cell: str) -> str:
     """Status prose with the markers and markdown emphasis stripped."""
     cell = LANE_RE.sub("", cell)
@@ -66,10 +93,21 @@ def rows_of(branch: str) -> list[list[str]]:
     return out
 
 
+def live_branches() -> list[str]:
+    """Branches recent enough for their lane rows to mean anything.
+
+    A branch thousands of commits behind `main` is not a competing claim, it is an
+    abandoned snapshot, and counting it makes closed lanes look free.  Excluded, and the
+    caller prints which ones and why -- silently ignoring a branch would be worse than
+    the bug this fixes."""
+    stale = {b for b, _ in stale_branches()}
+    return [b for b in branches() if b not in stale]
+
+
 def survey() -> dict[str, dict]:
-    """lane -> {'state': ..., 'branch': ..., 'owner': ...} across every remote branch."""
+    """lane -> {'state': ..., 'branch': ..., 'owner': ...} across every LIVE branch."""
     state: dict[str, dict] = {}
-    for br in branches():
+    for br in live_branches():
         for cells in rows_of(br):
             m = LANE_RE.search(cells[5])
             if not m:
@@ -106,11 +144,15 @@ def main(argv=None) -> int:
 
     print(f"fetching {len(branches())} remote branches ...", file=sys.stderr)
     git("fetch", "--all", "--quiet")
+    skipped = stale_branches()
+    for br, behind in skipped:
+        print(f"skipping {br}: {behind} commits behind main, its lane rows are an "
+              f"abandoned snapshot", file=sys.stderr)
     state = survey()
 
     if args.cmd == "free":
         free = sorted(k for k, v in state.items() if v["state"] == "open")
-        print(f"{len(free)} lane(s) nobody holds, checked across {len(branches())} branches:\n")
+        print(f"{len(free)} lane(s) nobody holds, checked across {len(live_branches())} live branches ({len(skipped)} stale skipped):\n")
         for lane in free:
             print(f"  {lane}")
         return 0
@@ -132,7 +174,7 @@ def main(argv=None) -> int:
         print("  lane rather than negotiating.")
         return 1
 
-    print(f"{lane} is FREE across all {len(branches())} remote branches.")
+    print(f"{lane} is FREE across all {len(live_branches())} live remote branches.")
     if args.cmd == "claim":
         print()
         print("Paste this row, push it BEFORE the first edit, then re-run:")
