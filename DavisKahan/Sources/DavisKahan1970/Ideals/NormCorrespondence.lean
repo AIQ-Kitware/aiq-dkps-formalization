@@ -140,7 +140,7 @@ end UnitarilyInvariantGauge
 theorem singularValues_smul_complex {n : ℕ} (a : ℂ)
     (A : EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n)) (i : ℕ) :
     (a • A).singularValues i = ‖a‖ * A.singularValues i :=
-  TauCeti.DavisKahanTheory.RectangularUnitarilyInvariantNorm.singularValues_smul_rect
+  TauCeti.RectangularUnitarilyInvariantNorm.singularValues_smul_rect
     a A i
 
 namespace PaperUnitaryInvariantNorm

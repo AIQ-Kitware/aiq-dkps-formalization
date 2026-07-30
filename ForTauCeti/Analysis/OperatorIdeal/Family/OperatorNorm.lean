@@ -58,6 +58,30 @@ variable {E : Type v} {F : Type w}
 variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
+/-- Submultiplicativity of the operator norm across a **two-sided** composition.
+
+Mathlib has the two-fold `ContinuousLinearMap.opNorm_comp_le`; the two-sided
+form is what every ideal law is stated against, so it is worth a name.  Nothing
+here needs an inner product or completeness — it is a fact about normed spaces
+— but it is stated where its first consumer is rather than in a file of its own.
+
+`opNorm_comp_comp_le` in the legacy rectangular namespace was this same calc
+proof, verbatim; it now delegates here. -/
+theorem ContinuousLinearMap.opNorm_comp_comp_le
+    {𝕜 : Type*} [RCLike 𝕜]
+    {E F G H : Type*}
+    [NormedAddCommGroup E] [NormedSpace 𝕜 E]
+    [NormedAddCommGroup F] [NormedSpace 𝕜 F]
+    [NormedAddCommGroup G] [NormedSpace 𝕜 G]
+    [NormedAddCommGroup H] [NormedSpace 𝕜 H]
+    (L : F →L[𝕜] G) (A : E →L[𝕜] F) (R : H →L[𝕜] E) :
+    ‖L ∘L A ∘L R‖ ≤ ‖L‖ * ‖A‖ * ‖R‖ :=
+  calc ‖L ∘L A ∘L R‖ ≤ ‖L‖ * ‖A ∘L R‖ := ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ ‖L‖ * (‖A‖ * ‖R‖) :=
+        mul_le_mul_of_nonneg_left
+          (ContinuousLinearMap.opNorm_comp_le A R) (norm_nonneg L)
+    _ = ‖L‖ * ‖A‖ * ‖R‖ := (mul_assoc _ _ _).symm
+
 /-- The operator norm, as an operator ideal family: every bounded operator is a
 member, and the gauge is the operator norm. -/
 noncomputable def operatorNormIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
@@ -70,10 +94,7 @@ noncomputable def operatorNormIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
   enorm_le_gauge _ := le_rfl
   gauge_comp_le L A R := by
     have h : ‖L ∘L A ∘L R‖ ≤ ‖L‖ * ‖A‖ * ‖R‖ :=
-      calc ‖L ∘L A ∘L R‖ ≤ ‖L‖ * ‖A ∘L R‖ := ContinuousLinearMap.opNorm_comp_le _ _
-        _ ≤ ‖L‖ * (‖A‖ * ‖R‖) :=
-            mul_le_mul_of_nonneg_left (ContinuousLinearMap.opNorm_comp_le A R) (norm_nonneg L)
-        _ = ‖L‖ * ‖A‖ * ‖R‖ := (mul_assoc _ _ _).symm
+      ContinuousLinearMap.opNorm_comp_comp_le L A R
     calc ‖L ∘L A ∘L R‖ₑ ≤ ‖(‖L‖ * ‖A‖ * ‖R‖ : ℝ)‖ₑ := by
           rw [← ofReal_norm, ← ofReal_norm]
           exact ENNReal.ofReal_le_ofReal (h.trans (le_abs_self _))
@@ -88,6 +109,7 @@ operator-norm statements. -/
 @[simp]
 theorem gauge_operatorNormIdealFamily (A : E →L[𝕜] F) :
     (operatorNormIdealFamily.{u, v, w} 𝕜).gauge A = ‖A‖ₑ := (rfl)
+
 /-- The operator-norm family is the *largest* ideal: every bounded operator
 belongs to it, because every bounded operator has finite operator norm.  It is
 the top element against which the other families (Ky Fan, Hilbert--Schmidt,
@@ -104,10 +126,10 @@ noncomputable def operatorNormIdealFamilyElemEquiv :
     (operatorNormIdealFamily.{u, v, w} 𝕜).Elem E F ≃ₗᵢ[𝕜] (E →L[𝕜] F) where
   toFun A := A.val
   invFun A := OperatorIdealFamily.Elem.mk (N := operatorNormIdealFamily 𝕜) (by simp)
-  left_inv _ := (rfl)
-  right_inv _ := (rfl)
-  map_add' _ _ := (rfl)
-  map_smul' _ _ := (rfl)
+  left_inv _ := OperatorIdealFamily.Elem.ext (OperatorIdealFamily.Elem.val_mk _)
+  right_inv _ := OperatorIdealFamily.Elem.val_mk _
+  map_add' A B := OperatorIdealFamily.Elem.val_add A B
+  map_smul' c A := OperatorIdealFamily.Elem.val_smul c A
   norm_map' A := by
     change ‖A.val‖ = ‖A‖
     rw [OperatorIdealFamily.Elem.norm_def, gauge_operatorNormIdealFamily, toReal_enorm]

@@ -38,8 +38,8 @@ singular-subspace argument that consumes them.
 
 * Original module: `DavisKahan/Specialized/SingularSubspace.lean`, where this
   API sat alongside the paper-specific singular-subspace definitions.
-* Extraction class: **relocation**, unchanged mathematics.  Migrated as lane Y3
-  slice (a) (`dev/LANES.md`): it is generic — nothing here mentions a paper, a
+* Extraction class: **relocation**, unchanged mathematics.  Migrated because it
+  is generic — nothing here mentions a paper, a
   gap condition, or a spectral subspace — and its one non-Mathlib dependency,
   `norm_gram_sub_gram_apply_le`, already lives in
   `ForTauCeti/Analysis/InnerProductSpace/SingularSubspace.lean`.

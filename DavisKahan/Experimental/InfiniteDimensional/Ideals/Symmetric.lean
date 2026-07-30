@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 import DavisKahan.SpectralTheory.OperatorAngle
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.Rectangular
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+import DavisKahan.OperatorIdeal.CanonicalRealView
 
 /-!
 # Symmetric norm ideals
@@ -190,9 +191,82 @@ noncomputable def ofRectangular
   opNorm_le_gauge := N.opNorm_le_gauge
   gauge_complete := N.gauge_complete
 
-/-- The operator norm ideal. -/
+/-- Specialize a **canonical** operator ideal family to the square case on a
+single Hilbert space.
+
+This is `ofRectangular` with the legacy record removed from the middle.  The
+canonical family's gauge is `ℝ≥0∞`-valued, but `CanonicalRealView` already
+supplies the `ℝ` view — `Mem`, `gaugeReal`, and the fourteen laws in exactly the
+shape this structure's fields ask for — so the transcription is direct rather
+than a re-proof.  `[IsComplete]` is what `gauge_complete` needs, and nothing
+else here does.
+
+Only `unitary_invariant` takes any work, for the same reason as in
+`ofRectangular`: the family supplies a two-sided *bound*, and the equality comes
+from applying it in both directions with `‖U‖, ‖Uinv‖ ≤ 1`. -/
+noncomputable def ofCanonical
+    (N : TauCeti.SymmetricOperatorIdealFamily (𝕜 := 𝕜))
+    [N.toOperatorIdealFamily.IsComplete] :
+    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) where
+  mem A := N.Mem A
+  gauge A := N.gaugeReal A
+  zero_mem := N.zero_mem
+  add_mem := N.add_mem
+  smul_mem := N.smul_mem
+  ideal_mem := fun L R => N.comp_mem L R
+  adjoint_mem := N.adjoint_mem
+  nonneg := N.gaugeReal_nonneg
+  gauge_zero := N.gaugeReal_zero
+  gauge_eq_zero := N.gaugeReal_eq_zero
+  triangle := N.gaugeReal_add_le
+  gauge_smul := N.gaugeReal_smul
+  gauge_adjoint := N.gaugeReal_adjoint
+  unitary_invariant := fun U Uinv A hU hUinv hUinvU _hUUinv hA => by
+    have hUnorm : ‖U‖ ≤ 1 :=
+      ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
+        rw [one_mul]; exact le_of_eq (hU.1 x)
+    have hUinvnorm : ‖Uinv‖ ≤ 1 :=
+      ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
+        rw [one_mul]; exact le_of_eq (hUinv.1 x)
+    have shrink : ∀ (a b g : ℝ), a ≤ 1 → b ≤ 1 → 0 ≤ a → 0 ≤ b → 0 ≤ g →
+        a * g * b ≤ g := by
+      intro a b g ha hb ha0 hb0 hg0
+      have h1 : a * g ≤ g := by nlinarith
+      have h2 : 0 ≤ a * g := mul_nonneg ha0 hg0
+      nlinarith
+    have hforward : N.gaugeReal (U ∘L A ∘L Uinv) ≤ N.gaugeReal A :=
+      (N.gaugeReal_comp_le U Uinv hA).trans
+        (shrink _ _ _ hUnorm hUinvnorm (norm_nonneg _) (norm_nonneg _)
+          (N.gaugeReal_nonneg hA))
+    have hAeq : Uinv ∘L (U ∘L A ∘L Uinv) ∘L U = A := by
+      ext x
+      simp only [ContinuousLinearMap.comp_apply]
+      have hx : Uinv (U x) = x := by
+        have := congrArg (fun T : E →L[𝕜] E => T x) hUinvU
+        simpa using this
+      have hy : Uinv (U (A x)) = A x := by
+        have := congrArg (fun T : E →L[𝕜] E => T (A x)) hUinvU
+        simpa using this
+      rw [hx, hy]
+    have hbackward : N.gaugeReal A ≤ N.gaugeReal (U ∘L A ∘L Uinv) := by
+      have h := N.gaugeReal_comp_le Uinv U (N.comp_mem U Uinv hA)
+      rw [hAeq] at h
+      exact h.trans
+        (shrink _ _ _ hUinvnorm hUnorm (norm_nonneg _) (norm_nonneg _)
+          (N.gaugeReal_nonneg (N.comp_mem U Uinv hA)))
+    exact le_antisymm hforward hbackward
+  ideal_bound := fun L R => N.gaugeReal_comp_le L R
+  opNorm_le_gauge := N.opNorm_le_gaugeReal
+  gauge_complete := N.gaugeReal_complete
+
+/-- The operator norm ideal.
+
+Built from the **canonical** family rather than the legacy rectangular record.
+This is the first catalogue entry to make that move; it can because
+`operatorNormFamily` is currently the only canonical symmetric family carrying
+an `IsComplete` instance.  See the note on the remaining five below. -/
 noncomputable def operatorNorm : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular RectangularSymmetricIdealFamily.operatorNorm
+  ofCanonical (TauCeti.operatorNormFamily 𝕜)
 
 /-! Concrete square ideals obtained from the rectangular families. -/
 

@@ -81,8 +81,22 @@ That is `SymmetricOperatorIdealFamily`, which extends the diagonal
 instantiation.
 
 The two universes occur only through `max v w` in the type of the structure
-itself, so `linter.checkUnivs` flags them; they are nevertheless genuinely
-independent parameters of the *fields*, which is the point of the layer.
+itself, so `linter.checkUnivs` flags them.  **They stay independent, and the
+argument is the layering itself rather than an appeal to generality** (lane
+`FTC-UNIV`, decided 2026-07-30):
+
+* `SymmetricOperatorIdealFamily` extends `OperatorIdealFamily.{u, v, v}` — it
+  *is* the diagonal instantiation.  Collapse `v` and `w` and `.{u, v, v}` becomes
+  `.{u, v}`: the two structures acquire the same generality, and the distinction
+  this section is about stops existing.  The rectangular layer earns its second
+  universe by being the thing the symmetric layer specializes.
+* `Family/OperatorNorm.lean` carries a hand-written specialization of
+  `instIsCompleteOperatorNormIdealFamily` precisely because the general instance
+  is stated at three independent universes and instance search cannot see it once
+  the symmetric family equates the last two.
+
+So the independence is exercised, not merely declared; the linter's heuristic
+reads the structure's type, where it is invisible.
 
 ## Main definitions
 
@@ -125,13 +139,20 @@ universe u v w
 --   `OperatorIdealFamily`: universes `v`, `w` only occur together.  This usually
 --   means there is a `max` expression in the type where none of these universes
 --   appear on their own.
--- It is right, and the fix is an API change rather than a local one: the source and
--- target universes are declared independent but the structure never uses them
--- apart, so `max v w` is all that is ever elaborated and one variable would do.
--- Collapsing them changes this structure's universe signature and every consumer's
--- (`SymmetricOperatorIdealFamily` first), which is lane FTC-UNIV, not this one.
--- Documented here rather than left silent: lane FTC-SETOPT found this the only one
--- of the library's ten linter suppressions with no reason written at its site, and
+-- The observation is correct and the conclusion does not follow here.  `v` and `w`
+-- are invisible apart *in this structure's type*, which is all the linter reads;
+-- they are apart in its fields, and one consumer depends on exactly that:
+-- `SymmetricOperatorIdealFamily` extends `OperatorIdealFamily.{u, v, v}`.  It is the
+-- diagonal instantiation of this structure, so collapsing `v` and `w` would make the
+-- two layers equally general and delete the distinction the module docstring calls
+-- the point of the design.  `Family/OperatorNorm.lean`'s specialization of
+-- `instIsCompleteOperatorNormIdealFamily` is a second place the independence bites:
+-- it exists because instance search cannot find the three-universe instance once the
+-- symmetric family equates the last two.
+-- Decided by lane FTC-UNIV, 2026-07-30, after measuring both alternatives; the earlier
+-- version of this comment said the fix was to collapse them and deferred to that lane.
+-- Written here rather than left silent because lane FTC-SETOPT found this the only one
+-- of the library's ten linter suppressions with no reason at its site, and
 -- `ForTauCeti/README.md` §207 forbids silencing a linter without one.
 set_option linter.checkUnivs false in
 /-- A **rectangular operator ideal family** over `𝕜`, presented by its gauge.
@@ -327,13 +348,15 @@ theorem sum_mem_carrier {ι : Type*} (s : Finset ι) {A : ι → E →L[𝕜] F}
 
 This is deliberately a type synonym rather than the subtype itself: the subtype
 already inherits the *operator* norm from `E →L[𝕜] F`, and the two norms differ.
+
+**`@[expose]`, and this is the one place in the group that needs it.**  `Elem` is
+a *type*: the compiler has to see that it is a subtype in order to infer the same
+representation for `Elem.val` and `Elem.mk` here as in any consuming module, and
+it says so — *"locally inferred compilation type differs from type that would be
+inferred in other modules"*.  That is not the `api-design` rubric's
+expose-instead-of-a-lemma anti-pattern, which is about proofs relying on defeq;
+no lemma can substitute for a type's representation.
 -/
--- `@[expose]` here is forced by the compiler, not by API design. `Elem` is a type synonym
--- for a subtype, and instances declared on it are compiled in this module and re-inferred
--- downstream; without the body the two inferred compilation types differ. The compiler
--- says so in as many words: *"Compilation failed, locally inferred compilation type
--- differs from type that would be inferred in other modules … This is a current compiler
--- limitation for `module`s that may be lifted in the future."* Revisit when it is.
 @[expose]
 def Elem (N : OperatorIdealFamily.{u, v, w} 𝕜) (E : Type v) (F : Type w)
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -369,6 +392,14 @@ def mk {A : E →L[𝕜] F} (hA : A ∈ N.carrier) : N.Elem E F := ⟨A, hA⟩
 /-- Ideal elements are equal when their underlying operators are.  Tagged `@[ext]`, so `ext`
 reduces any such goal to the operators. -/
 @[ext] theorem ext {A B : N.Elem E F} (h : A.val = B.val) : A = B := Subtype.ext h
+
+/-- Taking an ideal element's value and rebuilding is the identity — the
+companion of `val_mk`, in the direction a round-trip equivalence needs.
+
+Written when `Family/OperatorNorm.lean`'s `left_inv` field stopped being `rfl`:
+without `Elem`'s body exposed, `mk A.val_mem = A` is not definitional, and the
+right answer to that is the lemma rather than the exposure. -/
+@[simp] theorem mk_val (A : N.Elem E F) : mk (N := N) A.val_mem = A := ext (val_mk _)
 
 /-- The ideal is an additive subgroup of the bounded operators, inherited from its carrier. -/
 instance : AddCommGroup (N.Elem E F) :=
@@ -412,6 +443,7 @@ noncomputable instance : NormedAddCommGroup (N.Elem E F) :=
 
 /-- The ideal norm is the gauge, brought down to `ℝ`.  Lossless because `gauge_val_ne_top`. -/
 theorem norm_def (A : N.Elem E F) : ‖A‖ = (N.gauge A.val).toReal := (rfl)
+
 /-- Going back up: the extended norm of an ideal element is its gauge exactly, with no `toReal`
 round-trip loss. -/
 theorem enorm_eq_gauge (A : N.Elem E F) : ‖A‖ₑ = N.gauge A.val := by

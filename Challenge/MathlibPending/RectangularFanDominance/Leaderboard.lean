@@ -11,5 +11,5 @@ future PR-shaping work.
 
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
-#print axioms TauCeti.DavisKahanTheory.RectangularUnitarilyInvariantNorm.mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
-#print axioms TauCeti.DavisKahanTheory.RectangularUnitarilyInvariantNorm.apply_le_of_kyFanSum_le
+#print axioms TauCeti.RectangularUnitarilyInvariantNorm.mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
+#print axioms TauCeti.RectangularUnitarilyInvariantNorm.apply_le_of_kyFanSum_le
