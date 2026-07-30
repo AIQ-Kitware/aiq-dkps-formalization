@@ -6,7 +6,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
-import DavisKahan.Interop.TauCeti.RectangularFamilyAdapter
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
 
@@ -35,7 +34,7 @@ scalar-specific implementations, avoiding the former real-proof import cycle.
 The gauge is *stored* canonically in `ℝ≥0∞`, where the ideal laws are
 unconditional, and *read* in `ℝ` through `KyFanDominantIdealFamily.gauge`,
 because the Davis--Kahan estimates subtract gauges and finish with `linarith`.
-The bridge is `TauCeti.SymmetricOperatorIdealFamily.toRectangular`; see the
+The bridge is `TauCeti.SymmetricOperatorIdealFamily.gaugeReal`; see the
 "ideal interface" section below.
 -/
 
@@ -355,30 +354,20 @@ The gauge is stored canonically, in `ℝ≥0∞`, but the Davis--Kahan developme
 written in `ℝ`: its estimates multiply gauges by gap constants, subtract them,
 and finish with `linarith`, none of which survives truncated subtraction.  So
 the paper-facing view is a **real-valued** one, obtained by reading the
-canonical family through the historical record
-(`TauCeti.SymmetricOperatorIdealFamily.toRectangular`, which sets membership to
-finiteness of the gauge and the real gauge to `.toReal`).
+canonical family: `TauCeti.SymmetricOperatorIdealFamily.gaugeReal`, which reads
+the stored `ℝ≥0∞` gauge through `.toReal`, with `Mem` its finiteness.
 
-`toRectangularSymmetricIdealFamily` is therefore no longer a field — it is a
-derived view, and the canonical family is the source of truth.  Nothing is
-duplicated: every law of the record is a theorem about the canonical gauge.
+The canonical family is the source of truth and nothing is duplicated: every law
+of the historical record is a theorem about the canonical gauge, proved in
+`DavisKahan/OperatorIdeal/CanonicalRealView.lean`.
 
 `Mem` and `gauge` remain the whole public surface the sin-Θ development uses. -/
 
 variable (N : KyFanDominantIdealFamily.{u, v} 𝕜)
 
-/-- The historical real-valued view of the ideal.
-
-Transitional: it exists so that the `ℝ`-valued Davis--Kahan estimates keep
-working while they migrate.  It is a `def`, not data — see
-`dev/tauceti-signature-polish-todo.md` §13. -/
-noncomputable def toRectangularSymmetricIdealFamily :
-    RectangularSymmetricIdealFamily.{u, v} 𝕜 :=
-  N.toSymmetricOperatorIdealFamily.toRectangular
-
-/-! Both accessors below read the **canonical** family directly rather than going
-through `toRectangularSymmetricIdealFamily`.  They used to route through the
-historical record, which made every one of the ~28 modules that consume a
+/-! Both accessors below read the **canonical** family directly.  They used to route
+through a `toRectangularSymmetricIdealFamily` view onto the historical record, which
+made every one of the ~28 modules that consume a
 `KyFanDominantIdealFamily` depend on the legacy structure definitionally, even
 though none of them mentions it.  Since `toRectangular` defines exactly
 `Mem A := gauge A ≠ ∞` and `gauge A := (gauge A).toReal`, going direct is
@@ -432,16 +421,7 @@ once.  The two lemmas below rewrite the *hypothesis* into the accessor form
 instead, which is stable under any later change to what `gauge` unfolds to, and
 points the same way as the migration. -/
 
-/-- The historical record's gauge is `N.gauge` — the same term, different head
-symbol.  Use this to bring a legacy-stated hypothesis up to the accessor rather
-than unfolding the goal down to the record. -/
-theorem toRectangular_gauge (A : E →L[𝕜] F) :
-    N.toRectangularSymmetricIdealFamily.gauge A = N.gauge A := rfl
 
-/-- The historical record's membership is `N.Mem`; the companion of
-`toRectangular_gauge`. -/
-theorem toRectangular_mem (A : E →L[𝕜] F) :
-    N.toRectangularSymmetricIdealFamily.Mem A = N.Mem A := rfl
 
 /-- The canonical family's real view is `N.gauge` -- again the same term, again a
 different head symbol.  Needed once a provider has been migrated off the historical
@@ -497,7 +477,7 @@ since expired: downstream `simpa only [N, kyFan_gauge]` calls arrived with goals
 already unfolded by `simp only [KyFanDominantIdealFamily.gauge]`, so an
 accessor-shaped left-hand side would have stopped matching.  Those unfoldings are
 gone — the sites now normalise their hypotheses up to the accessor via
-`toRectangular_gauge` rather than unfolding the goal down to the record — so the
+`toSymmetric_gaugeReal` rather than unfolding the goal — so the
 accessor is the shape that matches, and it is also the shape that survives the
 historical record being deleted. -/
 
@@ -552,16 +532,15 @@ theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     exact h k
   obtain ⟨hdA, hgauge⟩ := N.majorization_mem_and_gauge_le hB hscaled
   have hA : N.Mem A := by
-    have hinv := N.toRectangularSymmetricIdealFamily.smul_mem d⁻¹ hdA
+    have hinv := N.toSymmetricOperatorIdealFamily.smul_mem d⁻¹ hdA
     rw [← mul_smul, inv_mul_cancel₀ hd, one_smul] at hinv
     exact hinv
   refine ⟨hA, ?_⟩
-  -- Ascribed to `N.gauge` rather than left at `N.toRectangularSymmetricIdealFamily.gauge`.
-  -- The two are the same term, but only the former shares an atom with the goal now that
-  -- `gauge` reads the canonical family: `linarith` identifies atoms up to *reducible*
-  -- defeq, and `toRectangularSymmetricIdealFamily` is a plain `def`.
+  -- Ascribed to `N.gauge` rather than left at the canonical accessor.  The two are the
+  -- same term, but only the former shares an atom with the goal: `linarith` identifies
+  -- atoms up to *reducible* defeq, and `toSymmetricOperatorIdealFamily` is a projection.
   have hhom : N.gauge (d • A) = ‖d‖ * N.gauge A :=
-    N.toRectangularSymmetricIdealFamily.gauge_smul d hA
+    N.toSymmetricOperatorIdealFamily.gaugeReal_smul d hA
   rw [hdnorm] at hhom
   linarith
 
