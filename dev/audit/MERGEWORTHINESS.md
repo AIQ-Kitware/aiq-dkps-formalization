@@ -3,7 +3,7 @@
 **Every defect below has a lane.** That is the point of this file: jon's rule is
 that an issue without a lane does not get worked on, so this is the checklist
 that maps *defect → lane*, and anything not here is either fixed or not a
-defect. Last measured 2026-07-30 over 164 files.
+defect. Last measured **2026-07-30, pass 7** over 165 files.
 
 ## Green — measured, not assumed
 
@@ -15,8 +15,8 @@ defect. Last measured 2026-07-30 over 164 files.
 | namespace policy | **OK** (164 modules, 10 allowlisted Mathlib namespaces) |
 | dependency firewall | **OK** |
 | header destination | **0** files name Mathlib (was 39) |
-| files > 1,000 lines | **1** (was 3) |
-| roadmap topics written | **10 of 22** |
+| files > 1,000 lines | **0** (was 3) |
+| roadmap topics written | **13 of 22** |
 
 ## Reviewed against the actual Tau Ceti rubrics
 
@@ -29,13 +29,13 @@ below (`FTC-UNEXERCISED`, `FTC-EXPOSE`).
 
 | # | defect | measure | lane | build? |
 |---|---|---|---|---|
-| 1 | **12 topics have no roadmap** | 10 of 22 written | `ROADMAP-WRITE` | no |
-| 2 | **54 flat files beside 12 directories** | 22 files, 7 missing directories | `FTC-ORG` | yes |
+| 1 | **9 topics have no roadmap** | 13 of 22 written | `ROADMAP-WRITE` | no |
+| 2 | **53 flat files beside 12 directories** | 22 files, 7 missing directories | `FTC-ORG` | yes |
 | 3 | **4 public definitions with no consumer** | 4 (was mis-measured as 31) | `FTC-DEAD` | yes |
 | 4 | **10 linter suppressions** the README forbids | 10 sites, incl. `checkUnivs` | `FTC-SETOPT` | yes |
 | 5 | **6 proofs over 145 lines**, one 231 | 6 | `FTC-LONGPROOF` | yes |
-| 6 | **1 file over the 1,000-line limit** | `SinTheta/Perturbation.lean`, 1,110 | `SPLIT-1K` | yes |
-| 7 | **1 flat `Sylvester*` file left** | `SylvesterGroup.lean` | `PLACE-SYLV` | yes |
+| ~~6~~ | ~~files over the 1,000-line limit~~ | **0 — `SPLIT-1K` DONE** | — | — |
+| ~~7~~ | ~~flat `Sylvester*` files~~ | **0 — `PLACE-SYLV` DONE** | — | — |
 | 8 | **`GramMatrix` is misnamed** and overlaps `GramOperator` | 1 decision | `PLACE-GRAM` | yes |
 | 9 | **Two square roots**, one definitionally the other | `rfl`-equal | `T01-SQRT` | yes |
 | 10 | **T21/T22 assert a Mathlib target** | 4 files, 2 topics | `HDR-DEST` *(decision open)* | no |
@@ -47,12 +47,11 @@ below (`FTC-UNEXERCISED`, `FTC-EXPOSE`).
 1. **`ROADMAP-WRITE`** — 12 topics, no build, parallel, and it is the only item
    that changes whether a topic can be *proposed* at all. Everything else
    polishes something already proposable.
-2. **`FTC-ORG`** then **`PLACE-SYLV`** — the defect a reviewer meets before
-   reading a theorem. `FTC-ORG` is blocked on `PLACE-SYLV` finishing so the two
-   do not collide in `Sylvester/`.
-3. **`FTC-LONGPROOF`** before the remaining **`SPLIT-1K`** — the 1,110-line file
-   is `SinTheta/Perturbation.lean`, which also holds a 205-line proof, so
-   extracting lemmas may close both.
+2. **`FTC-ORG`** — now unblocked: `PLACE-SYLV` finished, so nothing collides in
+   `Sylvester/`. This is the defect a reviewer meets before reading a theorem.
+3. **`FTC-LONGPROOF`** — `SPLIT-1K` closed without it (the oversize files were
+   split on other seams), so this stands on its own: 6 proofs over 145 lines,
+   one at 231, all with 5–11-line statements.
 4. **`FTC-SETOPT`** and **`FTC-DEAD`** — both sliceable, both mechanical once
    the underlying warning or the keep/delete call is made.
 5. **`T01-SQRT`** and **`PLACE-GRAM`** — each needs one design decision first.
