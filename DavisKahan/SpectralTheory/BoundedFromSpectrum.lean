@@ -50,7 +50,7 @@ self-adjoint operator with spectrum contained in `[β, α]` admits a bounded
 realization on the whole space, centered within distance `(α - β)/2` of the
 midpoint multiple of the identity. -/
 theorem exists_boundedRealization_of_spectrum_subset_Icc
-    {A : SpectraBridge.DKClosedOperator (H := H)}
+    {A : DKClosedOperator (H := H)}
     (hA : IsSelfAdjoint A.toLinearPMap)
     {β α : ℝ} (hβα : β ≤ α)
     (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆

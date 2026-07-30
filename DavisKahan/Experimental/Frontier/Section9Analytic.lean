@@ -28,7 +28,6 @@ namespace Experimental
 namespace Frontier
 namespace Section9
 
-open SpectraBridge
 open DavisKahan1970.Section9
 
 universe u

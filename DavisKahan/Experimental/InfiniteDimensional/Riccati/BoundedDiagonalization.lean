@@ -257,11 +257,11 @@ theorem complex_blockDiagonalization_of_riccati_of_acute
   let Winv := star W
   have hWinvEq : Winv = complexDirectRotation V U hacute.symm := by
     change star
-        (_root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation
+        (_root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation
           U V hacute) =
-      _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation
+      _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation
         V U hacute.symm
-    exact (_root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_reversal
+    exact (_root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_reversal
       U V hacute).symm
   have hWunit : IsUnitaryOperator W :=
     complexDirectRotation_unitary U V hacute

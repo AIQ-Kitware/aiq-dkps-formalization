@@ -27,7 +27,7 @@ namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
 
-open SpectraBridge.RealSpectralRestriction
+open RealSpectralRestriction
 
 noncomputable section
 

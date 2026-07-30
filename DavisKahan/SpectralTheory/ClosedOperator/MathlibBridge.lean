@@ -20,7 +20,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
@@ -69,7 +68,6 @@ noncomputable def closedOperatorOfSelfAdjointPMap {K : Type*} [NormedAddCommGrou
     (T : K →ₗ.[ℂ] K) (hT : IsSelfAdjoint T) :
     (closedOperatorOfSelfAdjointPMap T hT).domain = T.domain := rfl
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

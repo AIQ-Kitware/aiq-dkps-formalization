@@ -38,7 +38,7 @@ variable {H : Type v}
 noncomputable def spectraSpectralCutoff
     (A : ComplexClosedOperatorH (H := H))
     (hA : A.IsSelfAdjoint) (τ : ℝ) : H →L[ℂ] H :=
-  SpectraBridge.selfAdjointSpectralProjection A hA (Set.Icc (-τ) τ) measurableSet_Icc
+  selfAdjointSpectralProjection A hA (Set.Icc (-τ) τ) measurableSet_Icc
 
 /-- Spectral cutoffs are orthogonal projections. -/
 theorem spectraSpectralCutoff_isOrthogonalProjection
@@ -71,8 +71,8 @@ theorem spectraSpectralCutoff_commutes_on_domain
     ∃ hx : spectraSpectralCutoff A hA τ (x : H) ∈ A.domain,
       A.toLinearMap ⟨spectraSpectralCutoff A hA τ (x : H), hx⟩ =
         spectraSpectralCutoff A hA τ (A.toLinearMap x) :=
-  ⟨SpectraBridge.selfAdjointSpectralProjection_mem_domain A hA measurableSet_Icc x,
-    SpectraBridge.selfAdjoint_apply_spectralProjection A hA measurableSet_Icc x⟩
+  ⟨selfAdjointSpectralProjection_mem_domain A hA measurableSet_Icc x,
+    selfAdjoint_apply_spectralProjection A hA measurableSet_Icc x⟩
 
 /-- Spectral cutoffs converge strongly to the identity. -/
 theorem spectraSpectralCutoff_tendsto_identity

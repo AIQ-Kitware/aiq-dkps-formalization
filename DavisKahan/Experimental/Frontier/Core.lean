@@ -37,7 +37,6 @@ namespace DavisKahan
 namespace Experimental
 namespace Frontier
 
-open SpectraBridge
 
 universe u v
 

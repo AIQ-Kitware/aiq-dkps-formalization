@@ -28,7 +28,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
@@ -96,7 +95,6 @@ theorem norm_reflectedComplementaryOverlap_eq_sinTwoAngle
   exact norm_starProjection_reflectedComplementary_eq_sinTwoAngle U V
 
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

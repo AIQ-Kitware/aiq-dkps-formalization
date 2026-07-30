@@ -607,7 +607,7 @@
         "Mathlib"
       ],
       "blocked_dependencies": [
-        "approximationNumber invariance under the source modulus depends on SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound (Spectra infinite-dim min-max) -> deferred to a later dependency-closed PR per campaign 9.2 option 2"
+        "approximationNumber invariance under the source modulus depends on lt_approximationNumber_iff_exists_finiteDimensional_lowerBound (Spectra infinite-dim min-max) -> deferred to a later dependency-closed PR per campaign 9.2 option 2"
       ],
       "downstream_users": [
         "DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus (paper-norm wrappers)"
@@ -1893,12 +1893,12 @@
     {
       "source_module": "DavisKahan.Interop.Spectra.ApproximationNumberMinMax",
       "source_declarations": [
-        "TauCeti.DavisKahan.Experimental.SpectraBridge.approximationNumber_comp_subtypeL_le",
-        "TauCeti.DavisKahan.Experimental.SpectraBridge.finiteRestrictionApproximationNumbers",
-        "TauCeti.DavisKahan.Experimental.SpectraBridge.finiteRestrictionApproximationNumbers_upperBound",
-        "TauCeti.DavisKahan.Experimental.SpectraBridge.exists_finiteRestrictionApproximationNumber_gt_of_lt",
-        "TauCeti.DavisKahan.Experimental.SpectraBridge.approximationNumber_isLUB_finiteRestrictions",
-        "TauCeti.DavisKahan.Experimental.SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound"
+        "TauCeti.DavisKahan.Experimental.approximationNumber_comp_subtypeL_le",
+        "TauCeti.DavisKahan.Experimental.finiteRestrictionApproximationNumbers",
+        "TauCeti.DavisKahan.Experimental.finiteRestrictionApproximationNumbers_upperBound",
+        "TauCeti.DavisKahan.Experimental.exists_finiteRestrictionApproximationNumber_gt_of_lt",
+        "TauCeti.DavisKahan.Experimental.approximationNumber_isLUB_finiteRestrictions",
+        "TauCeti.DavisKahan.Experimental.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound"
       ],
       "current_namespace": "ContinuousLinearMap",
       "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",

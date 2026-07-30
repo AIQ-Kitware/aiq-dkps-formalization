@@ -30,7 +30,6 @@ open scoped InnerProductSpace ComplexConjugate
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 namespace RealSpectralRestriction
 
 open ExactSinTheta
@@ -705,7 +704,6 @@ theorem realSelfAdjointSpectralRestriction_inclusion_intertwines
 
 end
 end RealSpectralRestriction
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

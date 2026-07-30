@@ -38,7 +38,7 @@ linearly dependent ones are harmless, contributing restrictions to smaller subsp
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: `DavisKahan/Interop/Spectra/ApproximationNumberMinMax.lean`.
-* Original declarations: `TauCeti.DavisKahan.Experimental.SpectraBridge.{`
+* Original declarations: `TauCeti.DavisKahan.Experimental.{`
   `approximationNumber_comp_subtypeL_le, finiteRestrictionApproximationNumbers,`
   `finiteRestrictionApproximationNumbers_upperBound,`
   `exists_finiteRestrictionApproximationNumber_gt_of_lt,`
@@ -48,7 +48,7 @@ linearly dependent ones are harmless, contributing restrictions to smaller subsp
   Kitware, Inc.; Apache 2.0.
 * Extraction class: **copied and renamespaced**.  The statements are unchanged apart from
   the generalisation of `approximationNumber_comp_subtypeL_le` to an arbitrary `RCLike`
-  field; the declarations move from `TauCeti.DavisKahan.Experimental.SpectraBridge` to
+  field; the declarations move from `TauCeti.DavisKahan.Experimental` to
   `ContinuousLinearMap`, so that dot notation resolves.
 * Spectra influence: **none**.  The module was under `DavisKahan/Interop/Spectra/` because
   its threshold theorem was once proved from `vendor/Spectra`'s projection-valued measures.

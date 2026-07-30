@@ -36,7 +36,7 @@ Ownership classes: `mathlib` · `tauceti` · `davis-kahan` · `spectra-bridge` �
   `…/ScalarGeneric`, `…/Real`, `…/BlockSum`.
 * **Deferred (blocked-on-spectra-removal)**: approximation-number *invariance under
   the source modulus* (`sameApproximationSingularValues_rectangularOperatorModulus`)
-  routes through `SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound`.
+  routes through `lt_approximationNumber_iff_exists_finiteDimensional_lowerBound`.
   It ships in a later PR once a Mathlib-only infinite-dimensional min–max is proved
   (the `≥` half already exists Spectra-free in `MinMax.lean`; only the existence of the
   witnessing subspace — the `≤` half — needs Spectra today).

@@ -21,7 +21,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 
 universe u v
@@ -231,7 +230,6 @@ noncomputable def submoduleMapIsometry
     (((submoduleMapIsometry W U).symm x : U) : E) = W.symm (x : E) := rfl
 
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

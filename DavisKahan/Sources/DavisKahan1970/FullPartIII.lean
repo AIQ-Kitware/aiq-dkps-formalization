@@ -61,19 +61,19 @@ alias unbounded_sylvester_exteriorInterval_opNorm :=
 alias unbounded_sinTheta_uiNorm :=
   DavisKahan.Experimental.ExactSinTheta.sinTheta_unbounded_gauge
 alias unbounded_sinTheta_opNorm_genuineSpectrum :=
-  DavisKahan.Experimental.SpectraBridge.sinTheta_unbounded_opNorm_of_spectrum_gap
+  DavisKahan.Experimental.sinTheta_unbounded_opNorm_of_spectrum_gap
 alias unbounded_boundedPerturbation_sinTheta_spectralSubspaces :=
-  DavisKahan.Experimental.SpectraBridge.sinTheta_addBounded_spectralSubspaces_opNorm_of_intervalExterior
+  DavisKahan.Experimental.sinTheta_addBounded_spectralSubspaces_opNorm_of_intervalExterior
 alias unbounded_boundedPerturbation_sinTheta_directedGap :=
-  DavisKahan.Experimental.SpectraBridge.sinTheta_addBounded_directedGap_of_intervalExterior
+  DavisKahan.Experimental.sinTheta_addBounded_directedGap_of_intervalExterior
 alias unbounded_boundedPerturbation_sinTheta_spectralProjections :=
-  DavisKahan.Experimental.SpectraBridge.sinTheta_addBounded_spectralProjection_sub_opNorm_of_spectrum_gap
+  DavisKahan.Experimental.sinTheta_addBounded_spectralProjection_sub_opNorm_of_spectrum_gap
 alias unbounded_spectralRestriction_formBounds :=
-  DavisKahan.Experimental.SpectraBridge.selfAdjointSpectralRestriction_semibounded_of_subset_Icc
+  DavisKahan.Experimental.selfAdjointSpectralRestriction_semibounded_of_subset_Icc
 alias unbounded_spectralRestriction_spectrum_exterior :=
-  DavisKahan.Experimental.SpectraBridge.selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
+  DavisKahan.Experimental.selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
 alias unbounded_sinTheta_uiNorm_genuineSpectrum :=
-  DavisKahan.Experimental.SpectraBridge.sinTheta_unbounded_gauge_of_spectrum_gap
+  DavisKahan.Experimental.sinTheta_unbounded_gauge_of_spectrum_gap
 alias unbounded_sylvester_exteriorInterval_uiNorm :=
   DavisKahan.Experimental.ExactSinTheta.mem_and_gauge_le_of_exteriorLeft_intervalRight
 alias unbounded_sylvester_intervalExterior_uiNorm :=
@@ -81,11 +81,11 @@ alias unbounded_sylvester_intervalExterior_uiNorm :=
 alias unbounded_boundedRealization_of_spectrum_Icc :=
   DavisKahan.Experimental.ExactSinTheta.exists_boundedRealization_of_spectrum_subset_Icc
 alias unbounded_semibounded_of_spectrum_Icc :=
-  DavisKahan.Experimental.SpectraBridge.semibounded_of_spectrum_subset_Icc
+  DavisKahan.Experimental.semibounded_of_spectrum_subset_Icc
 alias unbounded_sylvester_exteriorInterval_uiNorm_genuineSpectrum :=
-  DavisKahan.Experimental.SpectraBridge.unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
+  DavisKahan.Experimental.unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
 alias unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum :=
-  DavisKahan.Experimental.SpectraBridge.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
+  DavisKahan.Experimental.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
 alias real_sinTheta_symmetric_genuineSpectrum :=
   DavisKahan.Experimental.Foundation.RealSpectralBridge.opNorm_starProjection_sub_le_of_restriction_spectra
 alias real_upperFormBound_of_spectrum :=
@@ -124,15 +124,15 @@ alias bounded_sinTwoAngle_norm_eq :=
 
 /-! ## Direct rotation -/
 alias complex_directRotation :=
-  DavisKahan.Experimental.SpectraBridge.spectraDirectRotation
+  DavisKahan.Experimental.spectraDirectRotation
 alias complex_directRotation_sq :=
-  DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_sq
+  DavisKahan.Experimental.spectraDirectRotation_sq
 alias complex_directRotation_reversal :=
-  DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_reversal
+  DavisKahan.Experimental.spectraDirectRotation_reversal
 alias complex_directRotation_unique :=
-  DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_unique
+  DavisKahan.Experimental.spectraDirectRotation_unique
 alias complex_directRotation_minimal :=
-  DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_minimal
+  DavisKahan.Experimental.spectraDirectRotation_minimal
 
 /-! ## Graph and Riccati theory -/
 alias bounded_coercive_isUnit :=
@@ -146,15 +146,15 @@ alias bounded_inverse_defect_norm :=
 
 /-! ## Unbounded and form theorems -/
 alias unbounded_boundedPerturbation_selfAdjoint_spectra :=
-  DavisKahan.Experimental.SpectraBridge.addBounded_isSelfAdjoint
+  DavisKahan.Experimental.addBounded_isSelfAdjoint
 alias unbounded_spectralRestriction :=
-  DavisKahan.Experimental.SpectraBridge.selfAdjointSpectralRestriction
+  DavisKahan.Experimental.selfAdjointSpectralRestriction
 alias unbounded_spectralRestriction_selfAdjoint :=
-  DavisKahan.Experimental.SpectraBridge.selfAdjointSpectralRestriction_isSelfAdjoint
+  DavisKahan.Experimental.selfAdjointSpectralRestriction_isSelfAdjoint
 alias unbounded_sinTheta_boundedPerturbation_blockEmbeddings :=
-  DavisKahan.Experimental.SpectraBridge.sinTheta_addBounded_opNorm_of_spectrum_gap_isometric
+  DavisKahan.Experimental.sinTheta_addBounded_opNorm_of_spectrum_gap_isometric
 alias unbounded_sinTheta_boundedPerturbation_spectralSubspaces :=
-  DavisKahan.Experimental.SpectraBridge.sinTheta_addBounded_spectralSubspaces_opNorm_of_spectrum_gap
+  DavisKahan.Experimental.sinTheta_addBounded_spectralSubspaces_opNorm_of_spectrum_gap
 
 /-! ## Continuation, ideal, and sharpness package -/
 
