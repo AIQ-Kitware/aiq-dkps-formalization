@@ -110,67 +110,6 @@ theorem exists_finite_average_approximation
     rw [hreindex, hsum, dist_comm]
     exact hdist
 
-/-- Arbitrary complex values on a finite set of real frequencies admit an
-exact finite Fourier interpolation.
-
-The proof places the finitely many frequencies in an arc shorter than a full
-circle, applies Lagrange interpolation to their distinct complex phases, and
-reads the polynomial coefficients as Fourier coefficients.  This is the
-algebraic correction mechanism needed when a reciprocal Fourier integral is
-first approximated by a finite sum. -/
-theorem exists_finite_fourier_interpolation
-    (s : Finset ℝ) (y : ℝ → ℂ) :
-    ∃ q : ℕ, ∃ a : Fin q → ℂ, ∃ t : Fin q → ℝ,
-      ∀ x ∈ s, y x = ∑ r, a r * Complex.exp
-        ((((t r * x) : ℝ) : ℂ) * Complex.I) := by
-  classical
-  let R : ℝ := ∑ x ∈ s, |x|
-  let τ : ℝ := (1 + R)⁻¹
-  have hR : 0 ≤ R := by
-    exact Finset.sum_nonneg fun _ _ => abs_nonneg _
-  have hτ : 0 < τ := by
-    simp only [τ]
-    positivity
-  have harg (x : ℝ) (hx : x ∈ s) : τ * x ∈ Set.Icc (-1 : ℝ) 1 := by
-    have hxR : |x| ≤ R := by
-      exact Finset.single_le_sum
-        (fun z hz => abs_nonneg z) hx
-    have hden : 0 < 1 + R := by linarith
-    have habs : |τ * x| < 1 := by
-      rw [abs_mul, abs_of_pos hτ]
-      -- states the goal with the definition unfolded, in the shape the next step needs;
-      -- there is no `_apply` lemma to rewrite with here.
-      change (1 + R)⁻¹ * |x| < 1
-      rw [inv_mul_eq_div, div_lt_one hden]
-      linarith
-    exact ⟨le_of_lt (abs_lt.mp habs).1, le_of_lt (abs_lt.mp habs).2⟩
-  let z : ℝ → ℂ := fun x => (Circle.exp (τ * x) : ℂ)
-  have hzinj : Set.InjOn z s := by
-    intro x hx x' hx' hzx
-    have harc : (1 : ℝ) - (-1) < 2 * Real.pi := by
-      nlinarith [Real.pi_gt_three]
-    have hphase : τ * x = τ * x' :=
-      Circle.exp_injOn_Icc harc (harg x hx) (harg x' hx') (Subtype.ext hzx)
-    exact (mul_left_cancel₀ (ne_of_gt hτ) hphase)
-  let p : Polynomial ℂ := Lagrange.interpolate s z y
-  refine ⟨p.natDegree + 1, fun r => p.coeff r, fun r => (r : ℕ) * τ, ?_⟩
-  intro x hx
-  rw [← Lagrange.eval_interpolate_at_node y hzinj hx]
-  rw [Polynomial.eval_eq_sum_range, ← Fin.sum_univ_eq_sum_range]
-  apply Finset.sum_congr rfl
-  intro r _
-  -- states the goal with the definition unfolded, in the shape the next step needs;
-  -- there is no `_apply` lemma to rewrite with here.
-  change p.coeff r * z x ^ (r : ℕ) =
-    p.coeff r * Complex.exp
-      ((((((r : ℕ) : ℝ) * τ * x) : ℝ) : ℂ) * Complex.I)
-  congr 1
-  simp only [z, Circle.coe_exp]
-  rw [← Complex.exp_nat_mul]
-  congr 1
-  push_cast
-  ring
-
 /-- Any finite set of reals can be rescaled into an arc shorter than a full
 turn, on which `Circle.exp` is injective.
 
@@ -198,6 +137,50 @@ private theorem exists_pos_injOn_circle_exp (s : Finset ℝ) :
   have hphase : τ * x = τ * x' :=
     Circle.exp_injOn_Icc harc (harg x hx) (harg x' hx') (Subtype.ext hzx)
   exact mul_left_cancel₀ (ne_of_gt hτ) hphase
+
+/-- **A polynomial evaluated at `Circle.exp (τ x)` is a finite Fourier sum in
+`x`**, with the polynomial's coefficients as Fourier coefficients and the
+frequencies `r τ` for `r` below any bound `q` on the degree.
+
+This is the step that turns Lagrange interpolation — an algebraic statement
+about a polynomial at distinct nodes — into the analytic statement wanted here,
+and it is pure bookkeeping: `zʳ = exp (r τ x i)` because `z = exp (τ x i)`.
+Stated separately because the two interpolation theorems below differ in how
+they bound the degree (`natDegree + 1` for one, `s.card + 1` for the other) and
+in nothing else, so this is exactly their common part. -/
+private theorem eval_circle_exp_eq_fourier_sum {q : ℕ} (τ : ℝ) (p : Polynomial ℂ)
+    (hp : p.natDegree < q) (x : ℝ) :
+    p.eval ((Circle.exp (τ * x) : ℂ)) =
+      ∑ r : Fin q, p.coeff r *
+        Complex.exp (((((r : ℕ) : ℝ) * τ * x : ℝ) : ℂ) * Complex.I) := by
+  rw [Polynomial.eval_eq_sum_range' hp, ← Fin.sum_univ_eq_sum_range]
+  refine Finset.sum_congr rfl fun r _ => ?_
+  congr 1
+  simp only [Circle.coe_exp]
+  rw [← Complex.exp_nat_mul]
+  congr 1
+  push_cast
+  ring
+
+/-- Arbitrary complex values on a finite set of real frequencies admit an
+exact finite Fourier interpolation.
+
+The proof places the finitely many frequencies in an arc shorter than a full
+circle, applies Lagrange interpolation to their distinct complex phases, and
+reads the polynomial coefficients as Fourier coefficients.  This is the
+algebraic correction mechanism needed when a reciprocal Fourier integral is
+first approximated by a finite sum. -/
+theorem exists_finite_fourier_interpolation
+    (s : Finset ℝ) (y : ℝ → ℂ) :
+    ∃ q : ℕ, ∃ a : Fin q → ℂ, ∃ t : Fin q → ℝ,
+      ∀ x ∈ s, y x = ∑ r, a r * Complex.exp
+        ((((t r * x) : ℝ) : ℂ) * Complex.I) := by
+  classical
+  obtain ⟨τ, -, hzinj⟩ := exists_pos_injOn_circle_exp s
+  let p : Polynomial ℂ := Lagrange.interpolate s (fun x => (Circle.exp (τ * x) : ℂ)) y
+  refine ⟨p.natDegree + 1, fun r => p.coeff r, fun r => (r : ℕ) * τ, fun x hx => ?_⟩
+  rw [← Lagrange.eval_interpolate_at_node y hzinj hx]
+  exact eval_circle_exp_eq_fourier_sum τ p (Nat.lt_succ_self _) x
 
 /-- The finite Fourier interpolation map can be chosen with coefficient mass
 bounded linearly by the `ℓ1` mass of the prescribed values.
@@ -231,20 +214,7 @@ theorem exists_finite_fourier_interpolation_with_mass_bound
   refine ⟨q, fun n => p.coeff n, fun n => (n : ℕ) * τ, ?_, ?_⟩
   · intro x hx
     rw [← Lagrange.eval_interpolate_at_node y hzinj hx]
-    rw [Polynomial.eval_eq_sum_range' hpdeg, ← Fin.sum_univ_eq_sum_range]
-    apply Finset.sum_congr rfl
-    intro n _
-    -- states the goal with the definition unfolded, in the shape the next step needs;
-    -- there is no `_apply` lemma to rewrite with here.
-    change p.coeff n * z x ^ (n : ℕ) =
-      p.coeff n * Complex.exp
-        ((((((n : ℕ) : ℝ) * τ * x) : ℝ) : ℂ) * Complex.I)
-    congr 1
-    simp only [z, Circle.coe_exp]
-    rw [← Complex.exp_nat_mul]
-    congr 1
-    push_cast
-    ring
+    exact eval_circle_exp_eq_fourier_sum τ p hpdeg x
   · have hcoeff (n : ℕ) :
         p.coeff n = ∑ x ∈ s, y x * (Lagrange.basis s z x).coeff n := by
       simp [p, Lagrange.interpolate_apply]
