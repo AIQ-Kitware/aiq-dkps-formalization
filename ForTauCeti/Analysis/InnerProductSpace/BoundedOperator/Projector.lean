@@ -19,7 +19,7 @@ theorem over arbitrary `RCLike` scalars.
 before the dependency-closed base of the sin-Θ core moved
 into the staging layer.
 
-**Renamespaced 2026-07-30 under lane `RUB-NS-PAPER`,** for the reason its sibling
+**Renamespaced,** for the reason its sibling
 `SinTheta.lean` records: the sharp projector bound is generic operator geometry
 and was filed under the paper's namespace.  It now lives in `Submodule`, the
 namespace of its conclusion's head symbol.

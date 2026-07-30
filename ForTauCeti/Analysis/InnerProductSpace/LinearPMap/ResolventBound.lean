@@ -35,7 +35,7 @@ truncated symbol `(l - c)⁻¹`.  None of that is needed.  The bound is a
 unbounded side is the spectral mapping, which is elementary algebra with domain
 bookkeeping.
 
-For `dev/tauceti/spectra-removal-plan.md` this removes the
+For the Spectra-removal plan this removes the
 projection-valued-measure layer from the critical path of the gap-resolvent
 endpoint, which was the largest single block of the port.
 

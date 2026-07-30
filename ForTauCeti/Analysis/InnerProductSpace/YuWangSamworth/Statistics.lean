@@ -71,8 +71,7 @@ used by Yu--Wang--Samworth: in the paper's matrix notation,
 
 Public, and deliberately so.  It was `private` until 2026-07-29, which made this
 the one Yu--Wang--Samworth result the repository proved and no reader could
-cite — recorded as item `YWS-S1-complement-identity` of
-`dev/yu-wang-samworth-2015-full-source-census.json`.  Every bound in that paper
+cite — recorded as item `YWS-S1-complement-identity`.  Every bound in that paper
 is proved as a statement about cross-block energy and read back as an angle, so
 this is the bridge the whole development turns on and it belongs in the API. -/
 theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}

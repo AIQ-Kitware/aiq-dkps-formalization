@@ -96,8 +96,8 @@ this file should be replaced by a specialization of the complex development.
 * Original authorship: formalized by Claude Fable 5 (`claude-fable-5[1m]`), golf
   pass by Claude Opus 4.8 (`claude-opus-4-8[1m]`); staged for Mathlib (no
   separate copyright line in the source header), released under Apache 2.0.
-* Extraction class: **copied, then redesigned** per
-  `dev/tauceti-signature-polish-todo.md` §8.2 — the existential now carries the polar
+* Extraction class: **copied, then redesigned** per the signature-polish
+  backlog — the existential now carries the polar
   factorization, the constant is sharp, and the scalar `Real.sqrt` lemmas were moved out.
 * Spectra influence: **none** (imports only Mathlib and the Tau Ceti `Real.sqrt` staging
   module).

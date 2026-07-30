@@ -49,8 +49,8 @@ variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpac
 
 /-! ### The projection onto the span of a basis subset
 
-**This is not a spectral projection**, and the name says so since lane
-`NS-SPECPROJ` (2026-07-30).  It is the orthogonal projector onto
+**This is not a spectral projection**, and the name says so.  It is the
+orthogonal projector onto
 `b.spanIndices ↑S`, the span of the basis vectors indexed by `S`; a spectral
 projection is `TauCeti.spectralProjection A Ω`, the projector
 onto the spectral subspace of an *operator* over a real set.  The two used to
@@ -144,9 +144,6 @@ theorem spanIndicesProjection_univ (b : OrthonormalBasis (Fin n) 𝕜 E) :
 end OrthonormalBasis
 
 namespace TauCeti
-
-open scoped InnerProductSpace
-open LinearMap InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E] {n : ℕ}

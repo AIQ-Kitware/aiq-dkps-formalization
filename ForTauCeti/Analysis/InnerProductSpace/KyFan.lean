@@ -9,8 +9,7 @@ the closed Mathlib track —
 additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `KyFan.lean`).
 
-Formalized by Claude Fable 5 (claude-fable-5[1m]), plan steps F0–F2 of
-`dev/davis-kahan-expert-completion-plan.md`.
+Formalized by Claude Fable 5 (claude-fable-5[1m]).
 
 Ky Fan partial sums of singular values: the trace inequality
 `∑ᵢ re⟪S wᵢ, wᵢ⟫ ≤ ∑_{top k} λᵢ(S)` for an orthonormal `k`-family (via a
