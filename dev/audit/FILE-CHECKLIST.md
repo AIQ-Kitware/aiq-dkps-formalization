@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-1171/1171 files reviewed · 1171 files · 263,826 lines · 113 groups
+1171/1171 files reviewed · 1171 files · 263,859 lines · 113 groups
 
 ## How to review
 
@@ -95,9 +95,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### .llm_resource_tally :: data/config
 
-*3 files, 943 lines — 3/3 reviewed*
+*3 files, 945 lines — 3/3 reviewed*
 
-- [x] `.llm_resource_tally/ledger/ledger.jsonl` — 890 lines · data/config
+- [x] `.llm_resource_tally/ledger/ledger.jsonl` — 892 lines · data/config
 - [x] `.llm_resource_tally/lifetime-totals.json` — 46 lines · data/config
 - [x] `.llm_resource_tally/settings.json` — 7 lines · data/config
 
@@ -1438,7 +1438,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*153 files, 36,339 lines — 153/153 reviewed*
+*153 files, 36,369 lines — 153/153 reviewed*
 
 - [x] `dev/tauceti-signature-polish-todo.md` — 2,201 lines · documentation
 - [x] `dev/audit/FILE-CHECKLIST.md` — 1,771 lines · documentation
@@ -1446,7 +1446,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation
 - [x] `dev/tauceti/u1-linearpmap-migration.md` — 1,139 lines · documentation
 - [x] `dev/tauceti/spectra-removal-plan.md` — 1,036 lines · documentation
-- [x] `dev/LANES.md` — 1,016 lines · documentation
+- [x] `dev/LANES.md` — 1,022 lines · documentation
 - [x] `dev/lean-proof-engineering-lessons.md` — 907 lines · documentation
 - [x] `dev/tauceti/NAMEK-STATUS.md` — 862 lines · documentation
 - [x] `dev/tauceti/convergence-matrix.md` — 795 lines · documentation
@@ -1454,7 +1454,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `dev/tauceti/spectra-removal-parallel-lanes.md` — 736 lines · documentation
 - [x] `dev/davis-kahan-1970-full-source-census.md` — 684 lines · documentation
 - [x] `dev/finishtantwotheta-completion-lane.md` — 614 lines · documentation
-- [x] `dev/README.md` — 507 lines · documentation
+- [x] `dev/README.md` — 508 lines · documentation
 - [x] `dev/tauceti/spectra-to-tauceti-port-ledger.md` — 471 lines · documentation
 - [x] `dev/external-lean-references.md` — 459 lines · documentation
 - [x] `dev/flawless-sine-theta-reorganization-overnight-plan-2026-07-20.md` — 456 lines · documentation
@@ -1474,13 +1474,13 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `dev/yu-wang-samworth-2015-full-source-census.md` — 293 lines · documentation
 - [x] `dev/graph-subspace-vendor-survey-2026-07-14.md` — 292 lines · documentation
 - [x] `dev/topurge/dev/paper-theorem62-math-ahead-handoff-2026-07-19.md` — 275 lines · documentation
+- [x] `dev/topurge/MANIFEST.md` — 265 lines · documentation
 - [x] `dev/topurge/dev/general-sine-theta-direct-spectra-production-plan-2026-07-20.md` — 264 lines · documentation
 - [x] `dev/topurge/dev/real-route-status-2026-07-19.md` — 263 lines · documentation
 - [x] `dev/tauceti/mathematical-declaration-inventory.md` — 261 lines · documentation
 - [x] `dev/topurge/dev/paper-theorem62-defect-first-architecture-2026-07-19.md` — 261 lines · documentation
 - [x] `dev/topurge/dev/rectangular-schatten-compiler-handoff-2026-07-20.md` — 260 lines · documentation
 - [x] `dev/topurge/dev/real-spectral-subspace-descent-audit-2026-07-19.md` — 256 lines · documentation
-- [x] `dev/topurge/MANIFEST.md` — 250 lines · documentation
 - [x] `dev/journals/lessons_learned.md` — 249 lines · documentation
 - [x] `dev/topurge/dev/overlays/free-beam-hard-theory-scratch-dfd9d37-gpt56.md` — 247 lines · documentation
 - [x] `dev/topurge/dev/real-route-completion-prompt.md` — 246 lines · documentation
@@ -1500,9 +1500,9 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `dev/topurge/dev/full-part-iii-admission-elimination-math-ahead-2026-07-20.md` — 190 lines · documentation
 - [x] `dev/tauceti/formathlib-to-fortauceti-migration.md` — 189 lines · documentation
 - [x] `dev/tauceti/experimental-promotable-inventory.md` — 182 lines · documentation
+- [x] `dev/audit/README.md` — 171 lines · documentation
 - [x] `dev/topurge/dev/davis-kahan-1970-full-sine-theta-specification-2026-07-19.md` — 170 lines · documentation
 - [x] `dev/topurge/dev/angle-coordinate-redesign-compiler-handoff-2026-07-20.md` — 164 lines · documentation
-- [x] `dev/audit/README.md` — 163 lines · documentation
 - [x] `dev/topurge/dev/circle-riesz-lane-status-2026-07-23.md` — 160 lines · documentation
 - [x] `dev/topurge/dev/davis-kahan-1970-flawless-sine-theta-handoff-2026-07-19.md` — 157 lines · documentation
 - [x] `dev/davis-kahan-hidden-foundations-status.md` — 156 lines · documentation
@@ -1615,7 +1615,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### docs :: documentation
 
-*33 files, 6,197 lines — 33/33 reviewed*
+*33 files, 6,198 lines — 33/33 reviewed*
 
 - [x] `docs/planning/davis-kahan-full-paper-goal.md` — 1,021 lines · documentation
 - [x] `docs/planning/upstream-readiness-audit.md` — 531 lines · documentation
@@ -1636,7 +1636,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `docs/planning/historical/opus-handoff.md` — 136 lines · documentation
 - [x] `docs/planning/spectral-pr-decomposition.md` — 129 lines · documentation
 - [x] `docs/challenge/comparator-tools.md` — 124 lines · documentation
-- [x] `docs/README.md` — 84 lines · documentation
+- [x] `docs/README.md` — 85 lines · documentation
 - [x] `docs/planning/historical/davis-kahan-pre-reorganization/compatibility-tree-readme.md` — 75 lines · documentation
 - [x] `docs/planning/davis-kahan-general-sin-theta-roadmap.md` — 71 lines · documentation
 - [x] `docs/planning/acharyya-graveyard.md` — 67 lines · documentation

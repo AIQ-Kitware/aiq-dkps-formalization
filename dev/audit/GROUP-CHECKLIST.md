@@ -31,7 +31,7 @@ review is exactly a review of a future submission unit.
 - [x] `(root files) :: tooling` — 2 files, 789 lines — **READY**
 - [x] `(root modules)` — 7 files, 65 lines — **READY**
 - [x] `.claude :: data/config` — 1 files, 6 lines — **READY**
-- [x] `.llm_resource_tally :: data/config` — 3 files, 943 lines — **READY**
+- [x] `.llm_resource_tally :: data/config` — 3 files, 945 lines — **READY**
 - [x] `.llm_resource_tally :: documentation` — 1 files, 99 lines — **READY**
 - [x] `.llm_resource_tally :: other` — 3 files, 12 lines — **READY**
 - [x] `.llm_resource_tally :: tooling` — 17 files, 1,743 lines — **READY**
@@ -121,10 +121,10 @@ review is exactly a review of a future submission unit.
 - [x] `Helm2025 :: other` — 1 files, 265 lines — **READY**
 - [x] `comparator :: data/config` — 23 files, 335 lines — **READY**
 - [x] `dev :: data/config` — 25 files, 11,483 lines — **READY**
-- [x] `dev :: documentation` — 153 files, 36,339 lines — **READY**
+- [x] `dev :: documentation` — 153 files, 36,369 lines — **READY**
 - [x] `dev :: manifest/notes` — 8 files, 119 lines — **READY**
 - [x] `dev/alternates` — 1 files, 412 lines — **READY**
-- [x] `docs :: documentation` — 33 files, 6,197 lines — **READY**
+- [x] `docs :: documentation` — 33 files, 6,198 lines — **READY**
 - [x] `docs :: manifest/notes` — 2 files, 194 lines — **READY**
 - [x] `docs :: tooling` — 1 files, 98 lines — **READY**
 - [x] `prose :: data/config` — 1 files, 1,488 lines — **READY**

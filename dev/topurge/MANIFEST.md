@@ -1,14 +1,29 @@
-# `dev/topurge/` — staged for deletion, not yet deleted
+# `dev/topurge/` — staged, and deliberately left in place
+
+> **DECISION — jon, 2026-07-30: leave this directory. Do not delete it, and do
+> not propose deleting it again.**
+>
+> The review pass it was staged for is finished: the three wrongly-swept files
+> were restored on 2026-07-29 and everything else here was re-checked against
+> the "does its *analysis* still bind" test. The outcome is that these 79 files
+> stay where they are.
+>
+> **Agents: this is not an open task.** It was raised four times across one
+> session before the decision was made; the cost of raising it again is another
+> round of that. Five live documents cite paths under `dev/topurge/` for
+> superseded detail, and those pointers now resolve permanently rather than
+> pending a deletion.
+
 
 Everything here was moved out of `dev/` or `docs/` by lane D1 on 2026-07-29
 (`jon (yardrat)`), because it read as current documentation while describing
 work that has since been finished, abandoned, or superseded.
 
-**Nothing here has been deleted.** Each file sits at its original path under
-`dev/topurge/`, moved with `git mv`, so the diff is rename-only and every file keeps
-its full history. The point of this directory is to make one review pass cheap:
-skim it, pull back anything that should not have gone, then delete the rest in a
-single commit.
+**Nothing here has been deleted, and nothing will be.** Each file sits at its
+original path under `dev/topurge/`, moved with `git mv`, so the diff is
+rename-only and every file keeps its full history. The directory existed to make
+one review pass cheap — skim it, pull back anything that should not have gone.
+That pass ran; three files came back; the rest stay here as a labelled archive.
 
 ## Why this happened
 
@@ -33,8 +48,8 @@ git mv dev/topurge/<path> <path>
 
 A handful of surviving documents carry an explicit `dev/topurge/…` pointer where
 a link used to resolve, so a reader who needs the superseded detail can still
-find it. Those pointers are the only thing to clean up when this directory is
-finally deleted; `git grep topurge` finds them all.
+find it. **Those pointers are permanent and correct** — they resolve today and
+will keep resolving. `git grep topurge` finds them all.
 
 ## What was NOT purged, and why
 
