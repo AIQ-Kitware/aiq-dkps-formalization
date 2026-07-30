@@ -527,22 +527,17 @@ theorem doubledComplexScalarAction_ofReal
     simp [doubledComplexScalarAction_apply,
       RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply]
 
--- `[DecidableEq ι]` is in this statement's type and unused there, but the proof needs it
--- (`Finset.induction_on` inserts).  The linter's advice -- drop it and call `classical` --
--- is a signature change, and this file arrived here by a move lane that changes no
--- signatures.  Suppressed at exactly the declarations it applies to; see the Y3(b4) row
--- in dev/LANES.md, which records dropping the hypothesis as follow-up work.
-set_option linter.unusedDecidableInType false in
 /-- A finite sum of complex-scalar block actions is the action of the scalar
 sum. -/
 theorem sum_doubledComplexScalarAction
     {ER FR ι : Type*}
     [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
     [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
-    [Fintype ι] [DecidableEq ι]
+    [Fintype ι]
     (z : ι → ℂ) (T : ER →ₗ[ℝ] FR) :
     ∑ i, doubledComplexScalarAction (z i) T =
       doubledComplexScalarAction (∑ i, z i) T := by
+  classical
   classical
   have h (s : Finset ι) :
       s.sum (fun i => doubledComplexScalarAction (z i) T) =
@@ -590,23 +585,18 @@ theorem norm_smul_doubledPhaseAction_arg_add
     _ = a * Complex.exp ((theta : ℂ) * Complex.I) := by
       rw [Complex.norm_mul_exp_arg_mul_I]
 
--- `[DecidableEq ι]` is in this statement's type and unused there, but the proof needs it
--- (`Finset.induction_on` inserts).  The linter's advice -- drop it and call `classical` --
--- is a signature change, and this file arrived here by a move lane that changes no
--- signatures.  Suppressed at exactly the declarations it applies to; see the Y3(b4) row
--- in dev/LANES.md, which records dropping the hypothesis as follow-up work.
-set_option linter.unusedDecidableInType false in
 /-- A finite complex Fourier sum acts on doubled real maps as a finite sum of
 nonnegatively weighted real phase rotations. -/
 theorem sum_norm_smul_doubledPhaseAction_arg_add
     {ER FR ι : Type*}
     [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
     [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
-    [Fintype ι] [DecidableEq ι]
+    [Fintype ι]
     (a : ι → ℂ) (theta : ι → ℝ) (T : ER →ₗ[ℝ] FR) :
     ∑ r, ‖a r‖ • doubledPhaseAction (Complex.arg (a r) + theta r) T =
       doubledComplexScalarAction
         (∑ r, a r * Complex.exp (((theta r : ℝ) : ℂ) * Complex.I)) T := by
+  classical
   classical
   simp_rw [norm_smul_doubledPhaseAction_arg_add]
   exact sum_doubledComplexScalarAction _ T
