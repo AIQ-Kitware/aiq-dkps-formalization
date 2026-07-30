@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.SchattenApproximationFoundation
+import DavisKahan.OperatorIdeal.ApproximationNumbers.SchattenApproximationFoundation
 
 /-!
 # Explicit spectral-multiplicity foundation for Section 3
@@ -46,6 +46,11 @@ def BoundedOperatorsUnitaryEquivalent
   ∃ U : H ≃ₗᵢ[ℂ] K,
     (U : H →L[ℂ] K) ∘L A = B ∘L (U : H →L[ℂ] K)
 
+-- The two Hilbert-space universes genuinely only occur together, inside the
+-- `max` of the unitary-equivalence relation; neither appears alone.  Same
+-- situation, and the same resolution, as `TauCeti.OperatorIdealFamily` in
+-- `ForTauCeti/Analysis/OperatorIdeal/Family/Basic.lean`.
+set_option linter.checkUnivs false in
 /-- Full direct-integral multiplicity theorem, isolated as a foundation.
 `Datum` is intentionally abstract: a later implementation may use measurable
 cardinal-valued multiplicity functions, cyclic decompositions, or a canonical

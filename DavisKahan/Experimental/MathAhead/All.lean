@@ -1,4 +1,3 @@
-import DavisKahan.Experimental.MathAhead.GeometryAll
 import DavisKahan.Experimental.MathAhead.SylvesterAll
 import DavisKahan.Experimental.MathAhead.ContinuationAll
 

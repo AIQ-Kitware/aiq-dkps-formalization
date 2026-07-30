@@ -52,7 +52,7 @@ noncomputable def idealSubmodule
   carrier := {A | N.Mem A}
   zero_mem' := N.zero_mem
   add_mem' := fun hA hB => N.add_mem hA hB
-  smul_mem' := fun c A hA => N.smul_mem c hA
+  smul_mem' := fun c _A hA => N.smul_mem c hA
 
 /-- A member of a rectangular symmetric ideal, bundled with the ideal gauge as
 its norm.  This is a fresh type synonym so it does not inherit the ambient
@@ -65,9 +65,11 @@ namespace IdealOperator
 
 variable (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
 
+/-- Additive group structure, inherited from the ideal submodule. -/
 instance instAddCommGroup : AddCommGroup (IdealOperator (E := E) (F := F) N) :=
   inferInstanceAs (AddCommGroup ↥(idealSubmodule (E := E) (F := F) N))
 
+/-- Scalar multiplication, inherited from the ideal submodule. -/
 instance instModule : Module 𝕜 (IdealOperator (E := E) (F := F) N) :=
   inferInstanceAs (Module 𝕜 ↥(idealSubmodule (E := E) (F := F) N))
 
@@ -83,28 +85,35 @@ theorem mem (A : IdealOperator (E := E) (F := F) N) : N.Mem A.toOp :=
 def ofMem (A : E →L[𝕜] F) (hA : N.Mem A) :
     IdealOperator (E := E) (F := F) N := ⟨A, hA⟩
 
+/-- Bundling a member and forgetting the witness is the identity. -/
 @[simp] theorem toOp_ofMem (A : E →L[𝕜] F) (hA : N.Mem A) :
     (ofMem N A hA).toOp = A := rfl
 
+/-- The zero ideal member is the zero operator. -/
 @[simp] theorem toOp_zero :
     (0 : IdealOperator (E := E) (F := F) N).toOp = 0 := rfl
 
+/-- Addition of ideal members is addition of the underlying operators. -/
 @[simp] theorem toOp_add
     (A B : IdealOperator (E := E) (F := F) N) :
     (A + B).toOp = A.toOp + B.toOp := rfl
 
+/-- Scaling an ideal member scales the underlying operator. -/
 @[simp] theorem toOp_smul
     (c : 𝕜) (A : IdealOperator (E := E) (F := F) N) :
     (c • A).toOp = c • A.toOp := rfl
 
+/-- Negation of an ideal member negates the underlying operator. -/
 @[simp] theorem toOp_neg
     (A : IdealOperator (E := E) (F := F) N) :
     (-A).toOp = -A.toOp := rfl
 
+/-- Subtraction of ideal members subtracts the underlying operators. -/
 @[simp] theorem toOp_sub
     (A B : IdealOperator (E := E) (F := F) N) :
     (A - B).toOp = A.toOp - B.toOp := rfl
 
+/-- The anonymous-constructor form also forgets to the underlying operator. -/
 @[simp] theorem toOp_mk
     (A : E →L[𝕜] F) (hA : N.Mem A) :
     (show IdealOperator (E := E) (F := F) N from ⟨A, hA⟩).toOp = A := rfl
@@ -121,6 +130,7 @@ noncomputable instance instNorm :
     Norm (IdealOperator (E := E) (F := F) N) :=
   ⟨fun A => N.gauge A.toOp⟩
 
+/-- The norm on the ideal is the ideal gauge of the underlying operator. -/
 @[simp] theorem norm_def
     (A : IdealOperator (E := E) (F := F) N) :
     ‖A‖ = N.gauge A.toOp := rfl
@@ -144,10 +154,12 @@ theorem core : NormedSpace.Core 𝕜 (IdealOperator (E := E) (F := F) N) where
       rw [hzero]
       exact N.gauge_zero
 
+/-- The ideal is a normed additive group for the gauge, via `core`. -/
 noncomputable instance instNormedAddCommGroup :
     NormedAddCommGroup (IdealOperator (E := E) (F := F) N) :=
   NormedAddCommGroup.ofCore (core (E := E) (F := F) N)
 
+/-- The ideal is a normed `𝕜`-space for the gauge, via `core`. -/
 noncomputable instance instNormedSpace :
     NormedSpace 𝕜 (IdealOperator (E := E) (F := F) N) :=
   NormedSpace.ofCore (core (E := E) (F := F) N)
@@ -170,6 +182,7 @@ noncomputable def toOpL :
       rw [one_mul]
       exact norm_toOp_le N A)
 
+/-- The contractive inclusion acts by forgetting the membership witness. -/
 @[simp] theorem toOpL_apply
     (A : IdealOperator (E := E) (F := F) N) :
     toOpL (E := E) (F := F) N A = A.toOp := rfl
@@ -192,11 +205,12 @@ noncomputable def compLeftL
       map_smul' := by
         intro c A
         apply IdealOperator.ext N
-        simp [ContinuousLinearMap.comp_smul] }
+        simp }
   exact M.mkContinuous ‖L‖ fun A => by
     change N.gauge (L ∘L A.toOp) ≤ ‖L‖ * N.gauge A.toOp
     exact N.gauge_comp_left_le_mul L A.mem
 
+/-- Left composition acts on the underlying operator by left composition. -/
 @[simp] theorem compLeftL_toOp
     {G : Type v}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
@@ -228,6 +242,7 @@ noncomputable def compRightL
     have h := N.gauge_comp_right_le_mul R A.mem
     simpa [mul_comm] using h
 
+/-- Right composition acts on the underlying operator by right composition. -/
 @[simp] theorem compRightL_toOp
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
@@ -254,7 +269,7 @@ noncomputable def compBothL
       map_smul' := by
         intro c A
         apply IdealOperator.ext N
-        simp [ContinuousLinearMap.comp_smul, ContinuousLinearMap.smul_comp] }
+        simp [ContinuousLinearMap.smul_comp] }
   exact M.mkContinuous (‖L‖ * ‖R‖) fun A => by
     change N.gauge (L ∘L A.toOp ∘L R) ≤
       (‖L‖ * ‖R‖) * N.gauge A.toOp
@@ -263,6 +278,7 @@ noncomputable def compBothL
           ≤ ‖L‖ * N.gauge A.toOp * ‖R‖ := N.gauge_comp_le L R A.mem
       _ = (‖L‖ * ‖R‖) * N.gauge A.toOp := by ring
 
+/-- Two-sided composition acts on the underlying operator on both sides. -/
 @[simp] theorem compBothL_toOp
     {G H : Type v}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]

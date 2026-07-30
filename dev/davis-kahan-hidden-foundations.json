@@ -263,8 +263,8 @@
     {
       "id": "spectral-multiplicity-foundation",
       "title": "Abstract spectral-multiplicity classifier interface",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.SpectralMultiplicityFoundation",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/SpectralMultiplicityFoundation.lean",
+      "module": "DavisKahan.SpectralTheory.SpectralMultiplicityFoundation",
+      "file": "DavisKahan/SpectralTheory/SpectralMultiplicityFoundation.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.SpectralMultiplicityFoundation",
       "kind": "interface",
       "dependencies": [],
@@ -279,8 +279,8 @@
     {
       "id": "spectral-multiplicity-completeness",
       "title": "Multiplicity equality iff unitary equivalence",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.SpectralMultiplicityFoundation",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/SpectralMultiplicityFoundation.lean",
+      "module": "DavisKahan.SpectralTheory.SpectralMultiplicityFoundation",
+      "file": "DavisKahan/SpectralTheory/SpectralMultiplicityFoundation.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.SpectralMultiplicityFoundation.multiplicity_eq_iff",
       "kind": "bridge",
       "dependencies": [
@@ -296,8 +296,8 @@
     {
       "id": "compact-positive-list-foundation",
       "title": "Compact positive operator eigenvalue-list classifier interface",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.SpectralMultiplicityFoundation",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/SpectralMultiplicityFoundation.lean",
+      "module": "DavisKahan.SpectralTheory.SpectralMultiplicityFoundation",
+      "file": "DavisKahan/SpectralTheory/SpectralMultiplicityFoundation.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.CompactPositiveListFoundation",
       "kind": "interface",
       "dependencies": [],
@@ -311,8 +311,8 @@
     {
       "id": "compact-list-classification",
       "title": "Eigenvalue list iff unitary equivalence",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.SpectralMultiplicityFoundation",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/SpectralMultiplicityFoundation.lean",
+      "module": "DavisKahan.SpectralTheory.SpectralMultiplicityFoundation",
+      "file": "DavisKahan/SpectralTheory/SpectralMultiplicityFoundation.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.CompactPositiveListFoundation.list_eq_iff_unitarilyEquivalent",
       "kind": "bridge",
       "dependencies": [
@@ -653,8 +653,8 @@
     {
       "id": "schatten-foundation",
       "title": "Approximation-number Schatten infrastructure contract",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.SchattenApproximationFoundation",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/SchattenApproximationFoundation.lean",
+      "module": "DavisKahan.OperatorIdeal.ApproximationNumbers.SchattenApproximationFoundation",
+      "file": "DavisKahan/OperatorIdeal/ApproximationNumbers/SchattenApproximationFoundation.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.ExactSinTheta.HiddenFoundations.SchattenApproximationFoundation",
       "kind": "interface",
       "dependencies": [],
@@ -665,8 +665,8 @@
     {
       "id": "schatten-family",
       "title": "Construct a rectangular symmetric ideal family from the Schatten contract",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.SchattenApproximationFoundation",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/SchattenApproximationFoundation.lean",
+      "module": "DavisKahan.OperatorIdeal.ApproximationNumbers.SchattenApproximationFoundation",
+      "file": "DavisKahan/OperatorIdeal/ApproximationNumbers/SchattenApproximationFoundation.lean",
       "declaration": "ForMathlib.DavisKahan.Experimental.ExactSinTheta.HiddenFoundations.SchattenApproximationFoundation.toFamily",
       "kind": "bridge",
       "dependencies": [
