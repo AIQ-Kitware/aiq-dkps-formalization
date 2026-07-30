@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-14/1162 files reviewed · 1162 files · 260,399 lines · 112 groups
+34/1163 files reviewed · 1163 files · 260,584 lines · 112 groups
 
 ## How to review
 
@@ -95,9 +95,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### .llm_resource_tally :: data/config
 
-*3 files, 938 lines — 0/3 reviewed*
+*3 files, 939 lines — 0/3 reviewed*
 
-- [ ] `.llm_resource_tally/ledger/ledger.jsonl` — 885 lines · data/config
+- [ ] `.llm_resource_tally/ledger/ledger.jsonl` — 886 lines · data/config
 - [ ] `.llm_resource_tally/lifetime-totals.json` — 46 lines · data/config
 - [ ] `.llm_resource_tally/settings.json` — 7 lines · data/config
 
@@ -1072,22 +1072,22 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T02 Polar decomposition and partial isometries
 
-*5 files, 1,961 lines — 0/5 reviewed*
+*5 files, 1,961 lines — 5/5 reviewed*
 
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean` — 688 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/PolarDecomposition.lean` — 416 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean` — 409 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/PolarIsometry.lean` — 283 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/PartialIsometry.lean` — 165 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean` — 688 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/PolarDecomposition.lean` — 416 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean` — 409 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/PolarIsometry.lean` — 283 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/PartialIsometry.lean` — 165 lines · Lean source
 
 ### ForTauCeti :: T03 Singular values and the singular system
 
-*4 files, 1,104 lines — 0/4 reviewed*
+*4 files, 1,104 lines — 4/4 reviewed*
 
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/RectangularSingularValues.lean` — 415 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/MoorePenroseInverse.lean` — 337 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SingularSystem.lean` — 227 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SingularValues.lean` — 125 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/RectangularSingularValues.lean` — 415 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/MoorePenroseInverse.lean` — 337 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SingularSystem.lean` — 227 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SingularValues.lean` — 125 lines · Lean source
 
 ### ForTauCeti :: T04 Gram matrices, orthogonal projections, and spectral subspaces
 
@@ -1114,11 +1114,11 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T06 Principal angles, aligned bases, and finite frames
 
-*3 files, 1,283 lines — 0/3 reviewed*
+*3 files, 1,283 lines — 3/3 reviewed*
 
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/PrincipalAngles.lean` — 836 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/AlignedBasis.lean` — 245 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/FiniteFrame.lean` — 202 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/PrincipalAngles.lean` — 836 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/AlignedBasis.lean` — 245 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/FiniteFrame.lean` — 202 lines · Lean source
 
 ### ForTauCeti :: T07 Rectangular unitarily invariant norms
 
@@ -1173,12 +1173,12 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T11 Hilbert-Schmidt operators
 
-*4 files, 581 lines — 0/4 reviewed*
+*4 files, 581 lines — 4/4 reviewed*
 
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtLp.lean` — 250 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtConjugation.lean` — 135 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtSpace.lean` — 103 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtPythagoras.lean` — 93 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtLp.lean` — 250 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtConjugation.lean` — 135 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtSpace.lean` — 103 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtPythagoras.lean` — 93 lines · Lean source
 
 ### ForTauCeti :: T12 The Haagerup-Zsido kernel and its Fourier transform
 
@@ -1314,17 +1314,17 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T21 Matrix rank factorization and positive semidefiniteness
 
-*2 files, 402 lines — 0/2 reviewed*
+*2 files, 402 lines — 2/2 reviewed*
 
-- [ ] `ForTauCeti/LinearAlgebra/Matrix/PosDef.lean` — 211 lines · Lean source
-- [ ] `ForTauCeti/LinearAlgebra/Matrix/RankFactorization.lean` — 191 lines · Lean source
+- [x] `ForTauCeti/LinearAlgebra/Matrix/PosDef.lean` — 211 lines · Lean source
+- [x] `ForTauCeti/LinearAlgebra/Matrix/RankFactorization.lean` — 191 lines · Lean source
 
 ### ForTauCeti :: T22 Berge's maximum theorem and approximate minimizers
 
-*2 files, 488 lines — 0/2 reviewed*
+*2 files, 488 lines — 2/2 reviewed*
 
-- [ ] `ForTauCeti/Topology/Berge.lean` — 345 lines · Lean source
-- [ ] `ForTauCeti/Topology/ApproxMinimizer.lean` — 143 lines · Lean source
+- [x] `ForTauCeti/Topology/Berge.lean` — 345 lines · Lean source
+- [x] `ForTauCeti/Topology/ApproxMinimizer.lean` — 143 lines · Lean source
 
 ### ForTauCeti :: documentation
 
@@ -1432,15 +1432,15 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*148 files, 35,301 lines — 0/148 reviewed*
+*148 files, 35,304 lines — 0/148 reviewed*
 
 - [ ] `dev/tauceti-signature-polish-todo.md` — 2,201 lines · documentation
-- [ ] `dev/audit/FILE-CHECKLIST.md` — 1,755 lines · documentation
+- [ ] `dev/audit/FILE-CHECKLIST.md` — 1,757 lines · documentation
 - [ ] `dev/davis-kahan-expert-completion-plan.md` — 1,589 lines · documentation
 - [ ] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation
 - [ ] `dev/tauceti/u1-linearpmap-migration.md` — 1,139 lines · documentation
 - [ ] `dev/tauceti/spectra-removal-plan.md` — 1,036 lines · documentation
-- [ ] `dev/LANES.md` — 976 lines · documentation
+- [ ] `dev/LANES.md` — 977 lines · documentation
 - [ ] `dev/lean-proof-engineering-lessons.md` — 907 lines · documentation
 - [ ] `dev/tauceti/NAMEK-STATUS.md` — 850 lines · documentation
 - [ ] `dev/tauceti/convergence-matrix.md` — 795 lines · documentation
@@ -1675,7 +1675,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### scripts :: tooling
 
-*46 files, 10,623 lines — 0/46 reviewed*
+*47 files, 10,804 lines — 0/47 reviewed*
 
 - [ ] `scripts/lake_build_report.py` — 1,156 lines · tooling
 - [ ] `scripts/check_davis_kahan_frontier.py` — 633 lines · tooling
@@ -1702,6 +1702,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `scripts/check_tauceti_roadmap_topics.py` — 203 lines · tooling
 - [ ] `scripts/check_lane_graph.py` — 187 lines · tooling
 - [ ] `scripts/tests/test_refresh_tauceti_pr1_consistency.py` — 186 lines · tooling
+- [ ] `scripts/audit_profile.py` — 181 lines · tooling
 - [ ] `scripts/tests/test_check_davis_kahan_frontier.py` — 181 lines · tooling
 - [ ] `scripts/tests/test_check_declaration_name_drift.py` — 179 lines · tooling
 - [ ] `scripts/tests/test_generate_all_aggregates.py` — 179 lines · tooling
