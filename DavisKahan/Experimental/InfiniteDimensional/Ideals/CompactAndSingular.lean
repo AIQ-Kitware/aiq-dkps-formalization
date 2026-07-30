@@ -36,13 +36,6 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [CompleteSpace F]
 
-/-! The assumptions under which `sinAngleOperator` is defined in
-`SinTheta/General` — it is built from `CFC.abs`, whose continuous functional
-calculus Mathlib supplies for `𝕜 = ℂ`.  Lean includes these only in the
-declarations that actually mention the sine operator. -/
-variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
-  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
-
 /-- Compact self-adjoint spectral block. -/
 noncomputable def compactSpectralSubspace (A : E →L[𝕜] E)
     (s : Set ℝ) : Submodule 𝕜 E :=
