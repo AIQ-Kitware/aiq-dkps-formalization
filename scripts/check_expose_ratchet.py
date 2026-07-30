@@ -37,7 +37,7 @@ LIB = ROOT / "ForTauCeti"
 
 #: The highest number of blanket-exposing modules the tree may contain.
 #: Measured on 2026-07-30, the day the convention was adopted.  Only ever lower it.
-BASELINE = 70
+BASELINE = 69
 
 BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 
