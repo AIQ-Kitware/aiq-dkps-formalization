@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-2/1160 files reviewed · 1160 files · 260,230 lines · 112 groups
+7/1160 files reviewed · 1160 files · 260,034 lines · 112 groups
 
 ## How to review
 
@@ -95,9 +95,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### .llm_resource_tally :: data/config
 
-*3 files, 936 lines — 0/3 reviewed*
+*3 files, 937 lines — 0/3 reviewed*
 
-- [ ] `.llm_resource_tally/ledger/ledger.jsonl` — 883 lines · data/config
+- [ ] `.llm_resource_tally/ledger/ledger.jsonl` — 884 lines · data/config
 - [ ] `.llm_resource_tally/lifetime-totals.json` — 46 lines · data/config
 - [ ] `.llm_resource_tally/settings.json` — 7 lines · data/config
 
@@ -223,24 +223,24 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### Challenge/MathlibPending
 
-*43 files, 2,020 lines — 0/43 reviewed*
+*43 files, 2,020 lines — 5/43 reviewed*
 
 - [ ] `Challenge/MathlibPending/NearIsometry/Conformance.lean` — 257 lines · Lean source
 - [ ] `Challenge/MathlibPending/RankPsdRealization/Conformance.lean` — 215 lines · Lean source
 - [ ] `Challenge/MathlibPending/Berge/Conformance.lean` — 205 lines · Lean source
 - [ ] `Challenge/MathlibPending/SampleMeanMSE/Conformance.lean` — 179 lines · Lean source
 - [ ] `Challenge/MathlibPending/CfcMeasurable/Conformance.lean` — 136 lines · Lean source
-- [ ] `Challenge/MathlibPending/DavisKahanPartIII/Conformance.lean` — 110 lines · Lean source
+- [x] `Challenge/MathlibPending/DavisKahanPartIII/Conformance.lean` — 110 lines · Lean source
 - [ ] `Challenge/MathlibPending/RankFactorization/Conformance.lean` — 91 lines · Lean source
 - [ ] `Challenge/MathlibPending/DavisKahanSylvesterPiOverTwo/Conformance.lean` — 61 lines · Lean source
 - [ ] `Challenge/MathlibPending/ProbabilityQoL/Conformance.lean` — 60 lines · Lean source
 - [ ] `Challenge/MathlibPending/TendstoInMeasure/Conformance.lean` — 60 lines · Lean source
 - [ ] `Challenge/MathlibPending/MatrixConcentration/Conformance.lean` — 58 lines · Lean source
 - [ ] `Challenge/MathlibPending/DavisKahanProjectorDifference/Conformance.lean` — 55 lines · Lean source
-- [ ] `Challenge/MathlibPending/DavisKahanTanTwoTheta/Conformance.lean` — 49 lines · Lean source
-- [ ] `Challenge/MathlibPending/DavisKahanSinTwoTheta/Conformance.lean` — 43 lines · Lean source
-- [ ] `Challenge/MathlibPending/DavisKahanSinTheta/Conformance.lean` — 42 lines · Lean source
-- [ ] `Challenge/MathlibPending/DavisKahanTanTheta/Conformance.lean` — 42 lines · Lean source
+- [x] `Challenge/MathlibPending/DavisKahanTanTwoTheta/Conformance.lean` — 49 lines · Lean source
+- [x] `Challenge/MathlibPending/DavisKahanSinTwoTheta/Conformance.lean` — 43 lines · Lean source
+- [x] `Challenge/MathlibPending/DavisKahanSinTheta/Conformance.lean` — 42 lines · Lean source
+- [x] `Challenge/MathlibPending/DavisKahanTanTheta/Conformance.lean` — 42 lines · Lean source
 - [ ] `Challenge/MathlibPending/RestrictCoverMeasurable/Conformance.lean` — 42 lines · Lean source
 - [ ] `Challenge/MathlibPending/DavisKahanSharp/Conformance.lean` — 40 lines · Lean source
 - [ ] `Challenge/MathlibPending/YuWangSamworth/Conformance.lean` — 39 lines · Lean source
@@ -1432,15 +1432,15 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*147 files, 35,380 lines — 0/147 reviewed*
+*147 files, 35,183 lines — 0/147 reviewed*
 
 - [ ] `dev/tauceti-signature-polish-todo.md` — 2,201 lines · documentation
-- [ ] `dev/audit/FILE-CHECKLIST.md` — 1,946 lines · documentation
+- [ ] `dev/audit/FILE-CHECKLIST.md` — 1,755 lines · documentation
 - [ ] `dev/davis-kahan-expert-completion-plan.md` — 1,589 lines · documentation
 - [ ] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation
 - [ ] `dev/tauceti/u1-linearpmap-migration.md` — 1,139 lines · documentation
 - [ ] `dev/tauceti/spectra-removal-plan.md` — 1,036 lines · documentation
-- [ ] `dev/LANES.md` — 973 lines · documentation
+- [ ] `dev/LANES.md` — 974 lines · documentation
 - [ ] `dev/lean-proof-engineering-lessons.md` — 907 lines · documentation
 - [ ] `dev/tauceti/NAMEK-STATUS.md` — 850 lines · documentation
 - [ ] `dev/tauceti/convergence-matrix.md` — 795 lines · documentation
@@ -1500,21 +1500,21 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `dev/topurge/dev/davis-kahan-1970-flawless-sine-theta-handoff-2026-07-19.md` — 157 lines · documentation
 - [ ] `dev/davis-kahan-hidden-foundations-status.md` — 156 lines · documentation
 - [ ] `dev/topurge/dev/column-expansion-and-finite-multiplicity-math-ahead-2026-07-20.md` — 156 lines · documentation
-- [ ] `dev/audit/GROUP-CHECKLIST.md` — 154 lines · documentation
 - [ ] `dev/topurge/dev/general-sin-theta-extension-handoff-2026-07-19.md` — 154 lines · documentation
 - [ ] `dev/davis-kahan-open-debt-inventory-2026-07-19.md` — 152 lines · documentation
 - [ ] `dev/topurge/dev/overlays/independent-scratch-continuation-4080ec3-gpt56.md` — 150 lines · documentation
 - [ ] `dev/tauceti/part-iii-production-extraction-queue.md` — 142 lines · documentation
 - [ ] `dev/topurge/dev/opus-next-agent-prompt.md` — 140 lines · documentation
+- [ ] `dev/audit/GROUP-CHECKLIST.md` — 138 lines · documentation
 - [ ] `dev/tauceti/pr1-consistency-restoration-2026-07-27.md` — 137 lines · documentation
 - [ ] `dev/overlays/section3-lemma63-mathahead-gpt56.md` — 135 lines · documentation
 - [ ] `dev/tauceti/public-api-integration-review.md` — 132 lines · documentation
 - [ ] `dev/topurge/dev/halmos-two-projection-survey-2026-07-18.md` — 130 lines · documentation
+- [ ] `dev/audit/README.md` — 128 lines · documentation
 - [ ] `dev/topurge/dev/sylvester-analytic-frontier-closure-2026-07-23.md` — 123 lines · documentation
 - [ ] `dev/journals/comparator-statement-export-matching-2026-06-14.md` — 122 lines · documentation
 - [ ] `dev/overlays/pending-mathahead-rebased-53297a4-gpt56.md` — 122 lines · documentation
 - [ ] `dev/topurge/dev/handoff-2026-07-24-frontier.md` — 120 lines · documentation
-- [ ] `dev/audit/README.md` — 119 lines · documentation
 - [ ] `dev/tauceti/spectra-provenance-map.md` — 119 lines · documentation
 - [ ] `dev/overlays/lemma63-promotion-scratch-7f9f562-gpt56.md` — 116 lines · documentation
 - [ ] `dev/journals/davis-kahan-theorem63-distillation-error-2026-07-23.md` — 114 lines · documentation
