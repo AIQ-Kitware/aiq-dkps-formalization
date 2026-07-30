@@ -1256,7 +1256,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Internal/ReciprocalMultiplier/OrbitAction.lean` — 694 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Interval.lean` — 515 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/SpectralDistance.lean` — 485 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/SylvesterGroup.lean` — 396 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Group.lean` — 396 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Rosenblum.lean` — 394 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean` — 347 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/SpectralGap.lean` — 305 lines · Lean source

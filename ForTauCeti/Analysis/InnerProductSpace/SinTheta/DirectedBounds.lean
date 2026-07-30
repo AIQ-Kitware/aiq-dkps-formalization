@@ -1,0 +1,493 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, GPT 5.6 High
+-/
+import ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace
+import ForTauCeti.Analysis.InnerProductSpace.SpectralGap
+import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
+import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
+import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
+import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
+import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+
+/-!
+# Davis--Kahan `sin Θ`: residual, directed and projector-difference bounds
+
+The three families of `sin Θ` bound that need no domain transport, in increasing
+strength of conclusion:
+
+* **Residual form** — `δ ‖sin Θ‖ ≤ ‖R‖` for `R = A X - X M`, in every unitarily
+  invariant norm, with the ordered-gap and spectral-distance variants;
+* **Directed form** — the one-sided operator-norm and UI-norm bounds on
+  `‖(spectralSubspace B t)ᗮ.starProjection ∘L (spectralSubspace A s).starProjection‖`;
+* **Two-sided form** — the projector-difference bounds
+  `‖P_A - P_B‖ ≤ ε / g` and its factor-two companion.
+
+The **perturbation** wrappers that state these against an operator difference
+`B - A`, together with the six private lemmas transporting them across the
+canonical isometric inclusion of a subspace, are in the sibling module
+`ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation`, which imports this
+one.  The seam is exactly that transport: nothing here mentions a domain
+isometry, and everything there does.
+
+## Provenance
+
+*Split, not restated.*  This module was the first three sections of
+`ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean` until
+2026-07-30, when lane SPLIT-1K divided that 1110-line file at its
+`## Perturbation form` seam — Tau Ceti's stated limit for a new file is 1000 lines
+(`ForTauCeti/README.md` §4), and this was the last module in the library over it.
+**No statement, signature, proof, attribute or declaration name changed.**
+
+That file in turn was `DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean`
+until lane Y3(b4) moved the sin-Θ closure into the staging layer.
+-/
+
+namespace TauCeti
+namespace DavisKahanTheory
+
+open scoped InnerProductSpace BigOperators
+open Module (finrank)
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [FiniteDimensional 𝕜 E]
+variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+  [FiniteDimensional 𝕜 F]
+
+/-! ## Residual form -/
+
+/-- **Davis--Kahan `sin Θ`, residual form, every UI norm.**
+
+The spectrum of the approximate coordinate operator `M` lies in `[a,b]`, the
+unwanted spectrum of `A` on `Uᗮ` lies outside `(a-δ,b+δ)`, and `R = AX-XM`.
+Then `δ ‖sin Θ‖ ≤ ‖R‖`.
+-/
+theorem sinTheta_residual_le
+    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
+    {a b δ : ℝ} (hδ : 0 < δ)
+    (hMspec : SpectrumIn M ⊤ (Set.Icc a b))
+    (hAspec : SpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
+    δ * N (sinThetaEmbedding U X) ≤ N (residual A X M) := by
+  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
+  let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
+  let Y : F →ₗ[𝕜] Uᗮ :=
+    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
+  let C : F →ₗ[𝕜] Uᗮ :=
+    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ residual A X M
+  let NU : RectangularUnitarilyInvariantNorm 𝕜 F Uᗮ :=
+    N.codomainIsometryTransport Uᗮ.subtypeₗᵢ
+  have hAU : AU.IsSymmetric := isSymmetric_restrict hA hUperp
+  have hgap : IntervalSylvesterGap AU M a b δ := by
+    refine ⟨hMspec, ?_⟩
+    exact (spectrumIn_restrict_iff A hUperp _).2 hAspec
+  have hEq : AU ∘ₗ Y - Y ∘ₗ M = C := by
+    ext x
+    have hx := LinearMap.congr_fun
+      (sylvester_sinThetaEmbedding_eq_projectedResidual hA hU X M) x
+    simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
+      LinearMap.comp_apply] using hx
+  have hY : NU Y = N (sinThetaEmbedding U X) := by
+    change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) = N (sinThetaEmbedding U X)
+    congr 1
+  have hC : NU C =
+      N (complementaryProjection U ∘ₗ residual A X M) := by
+    change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
+      N (complementaryProjection U ∘ₗ residual A X M)
+    congr 1
+  have hproj : ‖(complementaryProjection U).toContinuousLinearMap‖ ≤ 1 := by
+    refine (complementaryProjection U).toContinuousLinearMap.opNorm_le_bound
+      zero_le_one fun x => ?_
+    change ‖Uᗮ.starProjection x‖ ≤ 1 * ‖x‖
+    simpa using Uᗮ.norm_starProjection_apply_le x
+  have hC_le : NU C ≤ N (residual A X M) := by
+    rw [hC]
+    calc
+      N (complementaryProjection U ∘ₗ residual A X M)
+          ≤ ‖(complementaryProjection U).toContinuousLinearMap‖ *
+              N (residual A X M) :=
+        N.comp_le_opNorm_mul _ _
+      _ ≤ 1 * N (residual A X M) :=
+        mul_le_mul_of_nonneg_right hproj (N.nonneg _)
+      _ = N (residual A X M) := one_mul _
+  have hSylvester :=
+    uiNorm_sylvester_le_of_intervalGap NU hAU hM hδ hgap hEq
+  rw [hY] at hSylvester
+  exact hSylvester.trans hC_le
+
+/-- Ordered half-line residual form.
+-/
+theorem sinTheta_residual_le_of_orderedGap
+    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
+    δ * N (sinThetaEmbedding U X) ≤ N (residual A X M) := by
+  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
+  let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
+  let Y : F →ₗ[𝕜] Uᗮ :=
+    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
+  let C : F →ₗ[𝕜] Uᗮ :=
+    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ residual A X M
+  let NU : RectangularUnitarilyInvariantNorm 𝕜 F Uᗮ :=
+    N.codomainIsometryTransport Uᗮ.subtypeₗᵢ
+  have hAU : AU.IsSymmetric := isSymmetric_restrict hA hUperp
+  have hgap' : OrderedSylvesterGap AU M δ := by
+    left
+    intro lam μ hlam hμ
+    apply hgap lam μ hlam
+    change μ ∈ restrictedSpectrum (A.restrict hUperp) ⊤ at hμ
+    rw [restrictedSpectrum_restrict A hUperp] at hμ
+    exact hμ
+  have hEq : AU ∘ₗ Y - Y ∘ₗ M = C := by
+    ext x
+    have hx := LinearMap.congr_fun
+      (sylvester_sinThetaEmbedding_eq_projectedResidual hA hU X M) x
+    simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
+      LinearMap.comp_apply] using hx
+  have hY : NU Y = N (sinThetaEmbedding U X) := by
+    change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) = N (sinThetaEmbedding U X)
+    congr 1
+  have hC : NU C =
+      N (complementaryProjection U ∘ₗ residual A X M) := by
+    change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
+      N (complementaryProjection U ∘ₗ residual A X M)
+    congr 1
+  have hproj : ‖(complementaryProjection U).toContinuousLinearMap‖ ≤ 1 := by
+    refine (complementaryProjection U).toContinuousLinearMap.opNorm_le_bound
+      zero_le_one fun x => ?_
+    change ‖Uᗮ.starProjection x‖ ≤ 1 * ‖x‖
+    simpa using Uᗮ.norm_starProjection_apply_le x
+  have hC_le : NU C ≤ N (residual A X M) := by
+    rw [hC]
+    calc
+      N (complementaryProjection U ∘ₗ residual A X M)
+          ≤ ‖(complementaryProjection U).toContinuousLinearMap‖ *
+              N (residual A X M) :=
+        N.comp_le_opNorm_mul _ _
+      _ ≤ 1 * N (residual A X M) :=
+        mul_le_mul_of_nonneg_right hproj (N.nonneg _)
+      _ = N (residual A X M) := one_mul _
+  have hSylvester :=
+    uiNorm_sylvester_le_of_orderedGap NU hAU hM hδ hgap' hEq
+  rw [hY] at hSylvester
+  exact hSylvester.trans hC_le
+
+/-- General disjoint-spectrum residual form.  The `π/2` loss is the
+Bhatia--Davis--McIntosh extension, not the sharp interval/exterior theorem.
+The restriction and projection proof below is complete; the only open input is
+`kyFan_sylvester_le_of_spectralDistance` in the Sylvester layer.
+-/
+theorem sinTheta_residual_le_of_spectralDistance
+    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : SpectraSeparated M ⊤ A Uᗮ δ) :
+    δ * N (sinThetaEmbedding U X) ≤ (Real.pi / 2) * N (residual A X M) := by
+  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
+  let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
+  let Y : F →ₗ[𝕜] Uᗮ :=
+    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
+  let C : F →ₗ[𝕜] Uᗮ :=
+    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ residual A X M
+  let NU : RectangularUnitarilyInvariantNorm 𝕜 F Uᗮ :=
+    N.codomainIsometryTransport Uᗮ.subtypeₗᵢ
+  have hAU : AU.IsSymmetric := isSymmetric_restrict hA hUperp
+  have hgap' : SpectraSeparated AU ⊤ M ⊤ δ := by
+    intro lam μ hlam hμ
+    have hlam' : lam ∈ restrictedSpectrum A Uᗮ := by
+      rw [← restrictedSpectrum_restrict A hUperp]
+      exact hlam
+    have hsep := hgap μ lam hμ hlam'
+    simpa [abs_sub_comm] using hsep
+  have hEq : AU ∘ₗ Y - Y ∘ₗ M = C := by
+    ext x
+    have hx := LinearMap.congr_fun
+      (sylvester_sinThetaEmbedding_eq_projectedResidual hA hU X M) x
+    simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
+      LinearMap.comp_apply] using hx
+  have hY : NU Y = N (sinThetaEmbedding U X) := by
+    change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) = N (sinThetaEmbedding U X)
+    congr 1
+  have hC : NU C =
+      N (complementaryProjection U ∘ₗ residual A X M) := by
+    change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
+      N (complementaryProjection U ∘ₗ residual A X M)
+    congr 1
+  have hproj : ‖(complementaryProjection U).toContinuousLinearMap‖ ≤ 1 := by
+    refine (complementaryProjection U).toContinuousLinearMap.opNorm_le_bound
+      zero_le_one fun x => ?_
+    change ‖Uᗮ.starProjection x‖ ≤ 1 * ‖x‖
+    simpa using Uᗮ.norm_starProjection_apply_le x
+  have hC_le : NU C ≤ N (residual A X M) := by
+    rw [hC]
+    calc
+      N (complementaryProjection U ∘ₗ residual A X M)
+          ≤ ‖(complementaryProjection U).toContinuousLinearMap‖ *
+              N (residual A X M) :=
+        N.comp_le_opNorm_mul _ _
+      _ ≤ 1 * N (residual A X M) :=
+        mul_le_mul_of_nonneg_right hproj (N.nonneg _)
+      _ = N (residual A X M) := one_mul _
+  have hSylvester :=
+    uiNorm_sylvester_le_of_spectralDistance NU hAU hM hδ hgap' hEq
+  rw [hY] at hSylvester
+  calc
+    δ * N (sinThetaEmbedding U X)
+        ≤ (Real.pi / 2) * NU C := hSylvester
+    _ ≤ (Real.pi / 2) * N (residual A X M) :=
+      mul_le_mul_of_nonneg_left hC_le (by positivity)
+
+/-! ## Operator-norm one-sided (directed) form
+
+This is the robust first capstone: the one-sided operator-norm `sin Θ` estimate,
+proved by feeding the spectral-gap coercivity bridge into the dimension-free
+operator-norm Sylvester theorem `norm_starProjection_comp_starProjection_le`.
+No principal-angle or equal-rank geometry is needed. -/
+
+/-- **One-sided operator-norm Davis--Kahan `sin Θ` theorem (spectral-hypothesis
+form).**  If `A, B` are symmetric, `U` reduces `A` with `U`-carried spectrum
+`≥ c + g`, `V` reduces `B` with `V`-carried spectrum `≤ c`, and
+`‖(B − A) x‖ ≤ ε ‖x‖`, then
+
+`‖P_V ∘ P_U‖ ≤ ε / g`.
+
+`‖P_V P_U‖` is the sine of the directed angle between the high `A`-block `U` and
+the high `B`-block `Vᗮ`.  **The finite result is dispatched from the
+arbitrary-dimension lemma** `DavisKahan.sinTheta_directed_coercive`: the finite
+operators are converted to bounded operators, and the *only* finite-dimensional
+ingredient is the eigenbasis spectrum ⟹ coercivity bridge
+(`le_re_inner_of_spectrumIn` / `re_inner_le_of_spectrumIn`).  The whole sin-Θ
+construction and Sylvester estimate are the dimension-free infinite-dimensional
+core. -/
+theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U) (hV : Reduces B V)
+    {c g ε : ℝ} (hg : 0 < g)
+    (hUspec : SpectrumIn A U (Set.Ici (c + g)))
+    (hVspec : SpectrumIn B V (Set.Iic c))
+    (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
+    ‖(V.starProjection ∘L U.starProjection : E →L[𝕜] E)‖ ≤ ε / g := by
+  haveI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  set Ac : E →L[𝕜] E := A.toContinuousLinearMap with hAc
+  set Bc : E →L[𝕜] E := B.toContinuousLinearMap with hBc
+  have hApp : ∀ x, Ac x = A x := fun _ => rfl
+  have hBpp : ∀ x, Bc x = B x := fun _ => rfl
+  have hAself : DavisKahan.IsSelfAdjointOperator Ac := fun x y => hA x y
+  have hBself : DavisKahan.IsSelfAdjointOperator Bc := fun x y => hB x y
+  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
+  have hVperp : Reduces B Vᗮ := reduces_orthogonal_of_isSymmetric hB hV
+  have hUred : DavisKahan.Reduces Ac U := ⟨fun x hx => hU x hx, fun x hx => hUperp x hx⟩
+  have hVred : DavisKahan.Reduces Bc V := ⟨fun x hx => hV x hx, fun x hx => hVperp x hx⟩
+  have hUc : ∀ x ∈ U, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪Ac x, x⟫_𝕜 :=
+    fun x hx => le_re_inner_of_spectrumIn hA hU hUspec hx
+  have hVc : ∀ x ∈ V, RCLike.re ⟪Bc x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
+    fun x hx => re_inner_le_of_spectrumIn hB hV hVspec hx
+  have hExt := DavisKahan.sinTheta_directed_coercive hAself hBself hUred hVred hg hUc hVc
+  have hnorm : ‖(Bc - Ac : E →L[𝕜] E)‖ ≤ ε := by
+    refine ContinuousLinearMap.opNorm_le_bound _ hε0 fun x => ?_
+    have hsub : (Bc - Ac) x = (B - A) x := by
+      simp only [sub_apply, LinearMap.sub_apply, hApp, hBpp]
+    rw [hsub]; exact hε x
+  calc ‖(V.starProjection ∘L U.starProjection : E →L[𝕜] E)‖
+      ≤ ‖(Bc - Ac : E →L[𝕜] E)‖ / g := hExt
+    _ ≤ ε / g := by gcongr
+
+/-- **Spectral-projection directed operator-norm `sin Θ` theorem.**  The canonical
+spectral subspaces automatically reduce their operators, so the one-sided bound
+holds for `‖P_{spec B t} ∘ P_{spec A s}‖` under the corresponding spectral-gap
+hypotheses.  This is the directed operator-norm form of the canonical
+spectral-projector Davis--Kahan theorem.
+
+Related Lean work: `YuanheZ/lean-stat-learning-theory`,
+`SLT/MatrixInfra/Perturb.lean` at commit
+`216e578c9576bab6b0abc3ba6c65762536768e96`, proves a closely matching
+interval/set-separated cross-projection estimate named
+`davisKahan_spectralProjection_hdp`.  That proof is finite-dimensional and
+centered-shift based; this theorem instead exposes the local `SpectrumIn` API
+and dispatches through the dimension-free coercive Sylvester core. -/
+theorem opNorm_spectralSubspace_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
+    {c g ε : ℝ} (hg : 0 < g)
+    (hUspec : SpectrumIn A (spectralSubspace A s) (Set.Ici (c + g)))
+    (hVspec : SpectrumIn B (spectralSubspace B t) (Set.Iic c))
+    (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
+    ‖((spectralSubspace B t).starProjection ∘L
+        (spectralSubspace A s).starProjection : E →L[𝕜] E)‖ ≤ ε / g :=
+  opNorm_directed_sinTheta_le hA hB (reduces_spectralSubspace A s)
+    (reduces_spectralSubspace B t) hg hUspec hVspec hε0 hε
+
+/-- **Every-unitarily-invariant-norm directed `sin Θ` theorem, spectral
+hypothesis form.**  If `A, B` are symmetric, `U` reduces `A` with `U`-carried
+spectrum `≥ c + g`, and `V` reduces `B` with `V`-carried spectrum `≤ c`, then
+`N (P_V ∘ P_U) ≤ N (B − A) / g` for every unitarily invariant norm `N`.
+The quadratic-form hypotheses of the invariant-subspace theorem are supplied
+by the spectral coercivity bridges. -/
+theorem uiNorm_directed_sinTheta_le (N : UnitarilyInvariantNorm 𝕜 E)
+    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U) (hV : Reduces B V)
+    {c g : ℝ} (hg : 0 < g)
+    (hUspec : SpectrumIn A U (Set.Ici (c + g)))
+    (hVspec : SpectrumIn B V (Set.Iic c)) :
+    N ((V.starProjection ∘L U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
+      ≤ N (B - A) / g := by
+  haveI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  exact UnitarilyInvariantNorm.apply_starProjection_comp_starProjection_le N
+    hA hB hU hV hg
+    (fun x hx => le_re_inner_of_spectrumIn hA hU hUspec hx)
+    (fun x hx => re_inner_le_of_spectrumIn hB hV hVspec hx)
+
+/-- **Every-unitarily-invariant-norm directed `sin Θ` theorem for the
+canonical spectral subspaces.**  The canonical spectral subspaces reduce
+their operators automatically, so the full unitarily-invariant-norm `sin Θ`
+bound holds for `N (P_{spec B t} ∘ P_{spec A s})` under the spectral-gap
+hypotheses alone. -/
+theorem uiNorm_spectralSubspace_directed_sinTheta_le
+    (N : UnitarilyInvariantNorm 𝕜 E)
+    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
+    {c g : ℝ} (hg : 0 < g)
+    (hUspec : SpectrumIn A (spectralSubspace A s) (Set.Ici (c + g)))
+    (hVspec : SpectrumIn B (spectralSubspace B t) (Set.Iic c)) :
+    N (((spectralSubspace B t).starProjection ∘L
+        (spectralSubspace A s).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
+      ≤ N (B - A) / g :=
+  uiNorm_directed_sinTheta_le N hA hB (reduces_spectralSubspace A s)
+    (reduces_spectralSubspace B t) hg hUspec hVspec
+
+/-! ## Two-sided projector-difference operator-norm form
+
+The generic `RCLike` projector theorem now supplies the sharp factor-one bound
+without an equal-rank hypothesis.  Finite-dimensional spectral decomposition is
+used only to turn the four `SpectrumIn` assumptions into quadratic-form bounds;
+all projection geometry and Sylvester analysis are inherited from the supported
+dimension-free core. -/
+
+/-- **Sharp finite-dimensional operator-norm Davis--Kahan projector theorem.**
+With two-sided spectral gaps for the selected and complementary blocks of both
+operators,
+
+`‖P_U - P_W‖ ≤ ε / g`.
+
+This is a finite spectral specialization of
+`DavisKahan.opNorm_starProjection_sub_le_of_coercive`.  In particular, there is
+no rank hypothesis and no factor-two loss. -/
+theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {U W : Submodule 𝕜 E} [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
+    (hU : Reduces A U) (hW : Reduces B W)
+    {c g ε : ℝ} (hg : 0 < g)
+    (hUhi : SpectrumIn A U (Set.Ici (c + g)))
+    (hUlo : SpectrumIn A Uᗮ (Set.Iic c))
+    (hWhi : SpectrumIn B W (Set.Ici (c + g)))
+    (hWlo : SpectrumIn B Wᗮ (Set.Iic c))
+    (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
+    ‖(U.starProjection - W.starProjection : E →L[𝕜] E)‖ ≤ ε / g := by
+  haveI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  let Ac : E →L[𝕜] E := A.toContinuousLinearMap
+  let Bc : E →L[𝕜] E := B.toContinuousLinearMap
+  have hAself : DavisKahan.IsSelfAdjointOperator Ac := by
+    intro x y
+    change ⟪A x, y⟫_𝕜 = ⟪x, A y⟫_𝕜
+    exact hA x y
+  have hBself : DavisKahan.IsSelfAdjointOperator Bc := by
+    intro x y
+    change ⟪B x, y⟫_𝕜 = ⟪x, B y⟫_𝕜
+    exact hB x y
+  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
+  have hWperp : Reduces B Wᗮ := reduces_orthogonal_of_isSymmetric hB hW
+  have hUred : DavisKahan.Reduces Ac U :=
+    ⟨fun x hx => by simpa [Ac] using hU x hx,
+      fun x hx => by simpa [Ac] using hUperp x hx⟩
+  have hWred : DavisKahan.Reduces Bc W :=
+    ⟨fun x hx => by simpa [Bc] using hW x hx,
+      fun x hx => by simpa [Bc] using hWperp x hx⟩
+  have hUhiForm : ∀ x ∈ U,
+      (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪Ac x, x⟫_𝕜 :=
+    fun x hx => by simpa [Ac] using le_re_inner_of_spectrumIn hA hU hUhi hx
+  have hUloForm : ∀ x ∈ Uᗮ,
+      RCLike.re ⟪Ac x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
+    fun x hx => by simpa [Ac] using re_inner_le_of_spectrumIn hA hUperp hUlo hx
+  have hWhiForm : ∀ x ∈ W,
+      (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪Bc x, x⟫_𝕜 :=
+    fun x hx => by simpa [Bc] using le_re_inner_of_spectrumIn hB hW hWhi hx
+  have hWloForm : ∀ x ∈ Wᗮ,
+      RCLike.re ⟪Bc x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
+    fun x hx => by simpa [Bc] using re_inner_le_of_spectrumIn hB hWperp hWlo hx
+  have hcore := DavisKahan.opNorm_starProjection_sub_le_of_coercive
+    hAself hBself hUred hWred hg hUhiForm hUloForm hWhiForm hWloForm
+  have hnorm : ‖(Bc - Ac : E →L[𝕜] E)‖ ≤ ε := by
+    refine ContinuousLinearMap.opNorm_le_bound _ hε0 fun x => ?_
+    simpa [Ac, Bc] using hε x
+  exact hcore.trans (by gcongr)
+
+/-- Compatibility corollary with the older factor-two right-hand side.
+The sharp theorem `opNorm_starProjection_sub_le` is strictly stronger. -/
+theorem opNorm_starProjection_sub_le_two {A B : E →ₗ[𝕜] E}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {U W : Submodule 𝕜 E} [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
+    (hU : Reduces A U) (hW : Reduces B W)
+    {c g ε : ℝ} (hg : 0 < g)
+    (hUhi : SpectrumIn A U (Set.Ici (c + g))) (hUlo : SpectrumIn A Uᗮ (Set.Iic c))
+    (hWhi : SpectrumIn B W (Set.Ici (c + g))) (hWlo : SpectrumIn B Wᗮ (Set.Iic c))
+    (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
+    ‖(U.starProjection - W.starProjection : E →L[𝕜] E)‖ ≤ 2 * (ε / g) := by
+  have hsharp := opNorm_starProjection_sub_le hA hB hU hW hg
+    hUhi hUlo hWhi hWlo hε0 hε
+  have hnonneg : 0 ≤ ε / g := div_nonneg hε0 hg.le
+  nlinarith
+
+/-- **Sharp spectral-subspace projector theorem.**  Canonical finite
+spectral subspaces reduce their operators automatically, so the sharp
+factor-one theorem applies directly.
+
+The cross-projection endpoint in
+`YuanheZ/lean-stat-learning-theory/SLT/MatrixInfra/Perturb.lean` is related but
+does not replace this projector-difference theorem: the present result uses
+both selected and complementary gaps and inherits the factor-one identity from
+the generic projection geometry. -/
+theorem opNorm_spectralSubspace_sub_le {A B : E →ₗ[𝕜] E}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
+    {c g ε : ℝ} (hg : 0 < g)
+    (hAhi : SpectrumIn A (spectralSubspace A s) (Set.Ici (c + g)))
+    (hAlo : SpectrumIn A (spectralSubspace A s)ᗮ (Set.Iic c))
+    (hBhi : SpectrumIn B (spectralSubspace B t) (Set.Ici (c + g)))
+    (hBlo : SpectrumIn B (spectralSubspace B t)ᗮ (Set.Iic c))
+    (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
+    ‖((spectralSubspace A s).starProjection
+        - (spectralSubspace B t).starProjection : E →L[𝕜] E)‖ ≤ ε / g :=
+  opNorm_starProjection_sub_le hA hB (reduces_spectralSubspace A s)
+    (reduces_spectralSubspace B t) hg hAhi hAlo hBhi hBlo hε0 hε
+
+/-- **Two-sided operator-norm spectral-projector Davis--Kahan theorem.**  The
+projector-difference bound for the canonical spectral subspaces (they reduce
+their operators automatically). -/
+theorem opNorm_spectralSubspace_sub_le_two {A B : E →ₗ[𝕜] E}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
+    {c g ε : ℝ} (hg : 0 < g)
+    (hAhi : SpectrumIn A (spectralSubspace A s) (Set.Ici (c + g)))
+    (hAlo : SpectrumIn A (spectralSubspace A s)ᗮ (Set.Iic c))
+    (hBhi : SpectrumIn B (spectralSubspace B t) (Set.Ici (c + g)))
+    (hBlo : SpectrumIn B (spectralSubspace B t)ᗮ (Set.Iic c))
+    (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
+    ‖((spectralSubspace A s).starProjection
+        - (spectralSubspace B t).starProjection : E →L[𝕜] E)‖ ≤ 2 * (ε / g) :=
+  opNorm_starProjection_sub_le_two hA hB (reduces_spectralSubspace A s)
+    (reduces_spectralSubspace B t) hg hAhi hAlo hBhi hBlo hε0 hε
+
+end DavisKahanTheory
+end TauCeti
