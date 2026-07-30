@@ -5,8 +5,7 @@ the closed Mathlib track —
 additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `SinThetaUINorm.lean`).
 
-Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]), plan step F4 of
-`dev/davis-kahan-expert-completion-plan.md`.
+Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 
 The part-III Davis–Kahan sin-Θ theorem in **every unitarily invariant norm**:
 `N (Q̂ ∘ P) ≤ N (S − T) / g`, where `P, Q̂` project onto the separated invariant

@@ -9,8 +9,7 @@ the closed Mathlib track —
 additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `SingularSubspace.lean`).
 
-Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]), plan step W4 of
-`dev/davis-kahan-gap-closure-plan.md`.
+Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 
 Groundwork for the Yu–Wang–Samworth singular-vector extension: perturbing the
 Gram operator `A⋆A` by `Â⋆Â − A⋆A`, controlled by `Â − A`.  Includes the operator
@@ -236,8 +235,7 @@ theorem abs_sq_singularValues_sub_le {A Â : E →ₗ[𝕜] F} {a â ε : ℝ}
 /-! ### Extreme singular values: variational characterization
 
 The largest singular value is the operator norm and the smallest is the
-minimum gain, both attained (plan step E1 of
-`dev/davis-kahan-expert-completion-plan.md`).  These are the quantitative
+minimum gain, both attained.  These are the quantitative
 inputs for the operator-norm principal-angle identification. -/
 
 section Extreme

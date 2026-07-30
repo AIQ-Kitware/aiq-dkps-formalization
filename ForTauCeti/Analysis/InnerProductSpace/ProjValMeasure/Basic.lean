@@ -49,7 +49,7 @@ become theorems rather than axioms.
   preamble.
 * **Why it was ported rather than bypassed:** the rest of the Davis--Kahan
   Spectra removal has proceeded by restating endpoints at a lower altitude,
-  where Mathlib is strong (see `dev/tauceti/spectra-removal-plan.md`).  That does
+  where Mathlib is strong.  That does
   not apply here: `DavisKahan/SpectralTheory/Real/SpectralRestriction.lean` and
   its siblings manipulate the projection-valued measure *itself*, so there is no
   bounded-operator reformulation to fall back on.

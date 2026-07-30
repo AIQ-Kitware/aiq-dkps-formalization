@@ -5,8 +5,7 @@ the closed Mathlib track —
 additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `SinThetaOpNorm.lean`).
 
-Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]), plan step W5.2 of
-`dev/davis-kahan-gap-closure-plan.md`.
+Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 
 The dimension-free operator-norm Davis–Kahan sin-Θ theorem
 `‖Q̂ ∘L P‖ ≤ ε / g`, where `P` projects onto a `T`-invariant subspace `U` whose
@@ -120,7 +119,7 @@ Only invariance of `W` is used, not reduction.  Both coercivity bounds of
 `E →L[𝕜] E` and `Reduces` lives in
 `ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/SinTheta.lean`.  The two
 modules share no `ForTauCeti` ancestor, so unifying them needs a new module —
-see lane `FTC-REDEXT-UNIFY`. -/
+see `ForTauCeti.Analysis.InnerProductSpace.ReducedExtension`. -/
 private theorem re_inner_reducedExtension_self' {R : E →ₗ[𝕜] E}
     {W : Submodule 𝕜 E} [W.HasOrthogonalProjection]
     (hinv : ∀ x ∈ W, R x ∈ W) (κ : ℝ) (x : E) :
@@ -306,8 +305,7 @@ theorem norm_starProjection_comp_starProjection_le (hT : T.IsSymmetric) (hS : S.
 /-! ### Spectral corollaries (eigenvalue hypotheses)
 
 The literature-facing forms: the invariant subspaces are spans of eigenvector
-blocks and the quadratic-form hypotheses are sorted-eigenvalue hypotheses
-(plan step E3 of `dev/davis-kahan-expert-completion-plan.md`). -/
+blocks and the quadratic-form hypotheses are sorted-eigenvalue hypotheses. -/
 
 section Spectral
 

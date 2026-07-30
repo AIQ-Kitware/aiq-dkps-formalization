@@ -460,8 +460,7 @@ Staged for Tau Ceti, roadmap topic T16.  Mathlib is not the destination
 the closed Mathlib track —
 additions to `Mathlib/Analysis/InnerProductSpace/SylvesterBound.lean`
 (new file).
-Formalized by Claude Fable 5 (claude-fable-5[1m]), plan step W5.1 of
-`dev/davis-kahan-gap-closure-plan.md` (v3 reroute).  The classical proofs of
+Formalized by Claude Fable 5 (claude-fable-5[1m]).  The classical proofs of
 this bound run through an operator-valued integral `∫₀^∞ e^{−tA} Y e^{−tB} dt`
 (Bhatia VII.2) or a contour integral (Sylvester–Rosenblum); the proof here is
 a purely algebraic absorption argument discovered while planning: writing
