@@ -133,12 +133,12 @@ No injectivity or lower frame bound is needed at this stage. -/
 theorem complementaryTrialBlock_residual_le_of_intervalGap
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : Reduces A V)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
     (X : F →ₗ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : TrialComplementIntervalGap M A V a b δ) :
     δ * N (complementaryTrialBlock V X) ≤ N (generalResidual A X M) := by
-  have hVperp : Reduces A Vᗮ := reduces_orthogonal_of_isSymmetric hA hV
+  have hVperp : IsInvariant A Vᗮ := isInvariant_orthogonal_of_isSymmetric hA hV
   let AV : Vᗮ →ₗ[𝕜] Vᗮ := A.restrict hVperp
   let Y : F →ₗ[𝕜] Vᗮ :=
     Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X
@@ -197,7 +197,7 @@ dimension through the directed sine block. -/
 theorem generalizedSinTheta_residual_le_of_intervalGap
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : Reduces A V)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
     (X : F →ₗ[𝕜] E)
     {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
@@ -227,7 +227,7 @@ translate it into a pointwise norm bound. -/
 theorem generalizedSinTheta_residual_le_of_gramLowerBound
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : Reduces A V)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
     (X : F →ₗ[𝕜] E)
     {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
@@ -248,7 +248,7 @@ canonical Gram-bound theorem transfers without loss. -/
 theorem generalizedSinTheta0_residual_le_of_gramLowerBound
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : Reduces A V)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
     (X : F →ₗ[𝕜] E)
     {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
@@ -276,7 +276,7 @@ bound. -/
 theorem generalizedSinTheta_residual_le
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : Reduces A V)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
     {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)

@@ -118,7 +118,7 @@ theorem projection_comp_comm_of_reduces
   ContinuousLinearMap.starProjection_comp_comm_of_reduces A U hU
 
 /-- Pointwise projection commutation for a reducing subspace. -/
-theorem projection_apply_comm_of_reduces
+theorem projection_apply_comm_of_isInvariant
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (hU : A.Reduces U) (x : E) :
     projection U (A x) = A (projection U x) :=

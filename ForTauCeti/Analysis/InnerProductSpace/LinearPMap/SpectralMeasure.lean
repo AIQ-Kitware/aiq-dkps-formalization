@@ -189,6 +189,7 @@ theorem specProjection_apply_sub_smul {M c r : ℝ}
     have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := rfl
     have hκval : ((κ w : ℝ) : ℂ) + Complex.I = (2 * Complex.I) / (1 - (w : ℂ)) :=
       cayleyInv_add_I hA hw1
+    -- states the goal with the definition unfolded, in the shape the next step needs.
     change gsym w * q w = ind w
     have hqw : q w = ((κ w : ℂ) + Complex.I) * ind w := rfl
     rw [hgval, hqw, hκval]
@@ -210,6 +211,7 @@ theorem specProjection_apply_sub_smul {M c r : ℝ}
       = BorelCalculus.borelCalculus hU (hqb.add hsm) := by
     refine BorelCalculus.borelCalculus_congr_ae hU _ _ fun η =>
       Filter.Eventually.of_forall fun w => ?_
+    -- states the goal with the definition unfolded, in the shape the next step needs.
     change pf w = q w + -(Complex.I + (c : ℂ)) * ind w
     rw [hpf, hq]; ring
   -- hence `(A + i) E(B)` is the Borel calculus of `(κ + i) 1_B`
@@ -421,6 +423,7 @@ theorem isSelfAdjoint_truncation {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) :
       = BorelCalculus.borelCalculus (isStarNormal_cayley hA) hs := by
     refine BorelCalculus.borelCalculus_congr_ae _ _ _ fun η =>
       Filter.Eventually.of_forall fun w => ?_
+    -- states the goal with the definition unfolded, in the shape the next step needs.
     change (starRingEnd ℂ) (truncSymbol hA B 0 w) = truncSymbol hA B 0 w
     rw [truncSymbol]
     by_cases hw : w ∈ cayleyInv hA ⁻¹' B <;> simp [hw, Complex.conj_ofReal]
@@ -447,6 +450,7 @@ theorem truncation_mul_specProjection {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) 
     BorelCalculus.specProj, ← BorelCalculus.borelCalculus_mul]
   refine BorelCalculus.borelCalculus_congr_ae _ _ _ fun η =>
     Filter.Eventually.of_forall fun w => ?_
+  -- states the goal with the definition unfolded, in the shape the next step needs.
   change truncSymbol hA B 0 w
       * (cayleyInv hA ⁻¹' B).indicator (fun _ => (1 : ℂ)) w = truncSymbol hA B 0 w
   rw [truncSymbol]
@@ -578,6 +582,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
       rw [hhsym, norm_mul, hfw]
       exact norm_add_I_mul_inv_norm_sub_le hε _ (hgapS w hw)
     · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hw]
+      -- states the goal with the definition unfolded, in the shape the next step needs.
       change ‖((κ w : ℂ) + Complex.I) * f w‖ ≤ 1 + (|lam| + 1) / ε
       rw [hfz, mul_zero, norm_zero]
       positivity
@@ -603,6 +608,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
       = BorelCalculus.borelCalculus hU hfb := by
     refine BorelCalculus.borelCalculus_congr_ae hU _ _ fun η => ?_
     filter_upwards [hgae η] with w hw
+    -- states the goal with the definition unfolded, in the shape the next step needs.
     change gsym w * (((κ w : ℂ) + Complex.I) * f w) = f w
     rw [← mul_assoc, hw, one_mul]
   set Rop := BorelCalculus.borelCalculus hU hfb with hRop
@@ -633,6 +639,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
       = BorelCalculus.borelCalculus hU (hhb.add hsm2) := by
     refine BorelCalculus.borelCalculus_congr_ae hU _ _ fun η =>
       Filter.Eventually.of_forall fun w => ?_
+    -- states the goal with the definition unfolded, in the shape the next step needs.
     change ind w
       = ((κ w : ℂ) + Complex.I) * f w + -(Complex.I + (lam : ℂ)) * f w
     by_cases hw : w ∈ S
@@ -655,6 +662,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
       = BorelCalculus.borelCalculus hU hfb := by
     refine BorelCalculus.borelCalculus_congr_ae hU _ _ fun η =>
       Filter.Eventually.of_forall fun w => ?_
+    -- states the goal with the definition unfolded, in the shape the next step needs.
     change ind w * f w = f w
     by_cases hw : w ∈ S
     · rw [hindone w hw, one_mul]
@@ -699,6 +707,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
     have hyK : ((ψ : specRange hA B hB) : H) ∈ specRange hA B hB :=
       (ψ : specRange hA B hB).2
     have hydom : ((ψ : specRange hA B hB) : H) ∈ A.domain := ψ.2
+    -- states the goal with the definition unfolded, in the shape the next step needs.
     change Rop (A ⟨((ψ : specRange hA B hB) : H), hydom⟩
         - (lam : ℂ) • ((ψ : specRange hA B hB) : H)) = ((ψ : specRange hA B hB) : H)
     set y : H := ((ψ : specRange hA B hB) : H) with hy
@@ -716,6 +725,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
   · intro φ
     refine ⟨hmemdom ((φ : specRange hA B hB) : H), ?_⟩
     apply Subtype.ext
+    -- states the goal with the definition unfolded, in the shape the next step needs.
     change A ⟨Rop ((φ : specRange hA B hB) : H),
         hmemdom ((φ : specRange hA B hB) : H)⟩
         - (lam : ℂ) • Rop ((φ : specRange hA B hB) : H)
