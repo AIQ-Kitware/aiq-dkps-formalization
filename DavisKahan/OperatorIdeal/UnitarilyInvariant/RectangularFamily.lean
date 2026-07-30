@@ -607,7 +607,7 @@ theorem ofRectangularGauge_smul (c : 𝕜) (A : E →L[𝕜] F) :
   · by_cases hA : N.Mem A
     · rw [ofRectangularGauge_of_mem hA,
         ofRectangularGauge_of_mem (N.smul_mem c hA), N.gauge_smul c hA,
-        ENNReal.ofReal_mul (norm_nonneg c), ← ofReal_norm_eq_enorm]
+        ENNReal.ofReal_mul (norm_nonneg c), ← ofReal_norm]
     · rw [ofRectangularGauge_of_not_mem hA,
         ofRectangularGauge_of_not_mem (fun h => hA ((mem_smul_iff hc).mp h))]
       simp [ENNReal.mul_top, enorm_ne_zero.mpr hc]
@@ -617,7 +617,7 @@ theorem enorm_le_ofRectangularGauge (A : E →L[𝕜] F) :
     ‖A‖ₑ ≤ ofRectangularGauge N A := by
   classical
   by_cases hA : N.Mem A
-  · rw [ofRectangularGauge_of_mem hA, ← ofReal_norm_eq_enorm]
+  · rw [ofRectangularGauge_of_mem hA, ← ofReal_norm]
     exact ENNReal.ofReal_le_ofReal (N.opNorm_le_gauge hA)
   · simp [ofRectangularGauge_of_not_mem hA]
 
@@ -629,20 +629,20 @@ theorem ofRectangularGauge_comp_le (L : F →L[𝕜] G) (A : E →L[𝕜] F) (R 
   by_cases hA : N.Mem A
   · rw [ofRectangularGauge_of_mem hA,
       ofRectangularGauge_of_mem (N.comp_mem L R hA),
-      ← ofReal_norm_eq_enorm, ← ofReal_norm_eq_enorm,
+      ← ofReal_norm, ← ofReal_norm,
       ← ENNReal.ofReal_mul (norm_nonneg L),
       ← ENNReal.ofReal_mul (mul_nonneg (norm_nonneg L) (N.gauge_nonneg hA))]
     exact ENNReal.ofReal_le_ofReal (N.gauge_comp_le L R hA)
   · rcases eq_or_ne ‖L‖ₑ 0 with hL | hL
     · have hL0 : L = 0 := by
-        rw [← ofReal_norm_eq_enorm, ENNReal.ofReal_eq_zero] at hL
+        rw [← ofReal_norm, ENNReal.ofReal_eq_zero] at hL
         exact norm_eq_zero.mp (le_antisymm hL (norm_nonneg L))
       subst hL0
       simp [ContinuousLinearMap.zero_comp,
         ofRectangularGauge_of_mem (N.zero_mem (E := H) (F := G)), N.gauge_zero]
     · rcases eq_or_ne ‖R‖ₑ 0 with hR | hR
       · have hR0 : R = 0 := by
-          rw [← ofReal_norm_eq_enorm, ENNReal.ofReal_eq_zero] at hR
+          rw [← ofReal_norm, ENNReal.ofReal_eq_zero] at hR
           exact norm_eq_zero.mp (le_antisymm hR (norm_nonneg R))
         subst hR0
         simp [ContinuousLinearMap.comp_zero,
@@ -707,5 +707,44 @@ theorem toReal_gauge_ofRectangular {N : RectangularSymmetricIdealFamily.{u, v} �
     ((ofRectangular N).gauge A).toReal = N.gauge A := by
   rw [gauge_ofRectangular, ofRectangularGauge_of_mem hA,
     ENNReal.toReal_ofReal (N.gauge_nonneg hA)]
+
+/-- The constructed family is complete.
+
+This is the field `ofRectangular` would otherwise drop.  The canonical structure
+has no completeness field — completeness is the separate class `IsComplete`,
+`CompleteSpace (N.Elem E F)` — whereas the legacy record carries
+`gauge_complete` as an `ℝ`-valued Cauchy statement.  Without this instance the
+retype would silently lose a proved fact, so the bridge is only lossless with it.
+
+Every legacy record has the field, so this holds for all of them
+unconditionally; the proof is the translation between the two idioms, using the
+fact that `Elem`'s norm is exactly the record's gauge on members. -/
+instance isComplete_ofRectangular (N : RectangularSymmetricIdealFamily.{u, v} 𝕜) :
+    (ofRectangular N).toOperatorIdealFamily.IsComplete where
+  completeSpace := by
+    intro E F _ _ _ _ _ _
+    have hnorm : ∀ x : (ofRectangular N).toOperatorIdealFamily.Elem E F,
+        ‖x‖ = N.gauge x.val := fun x =>
+      toReal_gauge_ofRectangular (gauge_ofRectangular_ne_top_iff.mp x.gauge_val_ne_top)
+    refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
+    have hmem : ∀ n, N.Mem (a n).val := fun n =>
+      gauge_ofRectangular_ne_top_iff.mp (a n).gauge_val_ne_top
+    have hcauchy : ∀ ε : ℝ, 0 < ε → ∃ M, ∀ m n, M ≤ m → M ≤ n →
+        N.gauge ((a m).val - (a n).val) < ε := by
+      intro ε hε
+      rw [Metric.cauchySeq_iff] at ha
+      obtain ⟨M, hM⟩ := ha ε hε
+      refine ⟨M, fun m n hm hn => ?_⟩
+      have h := hM m hm n hn
+      rw [dist_eq_norm, hnorm] at h
+      exact h
+    obtain ⟨L, hLmem, hL⟩ := N.gauge_complete (fun n => (a n).val) hmem hcauchy
+    refine ⟨OperatorIdealFamily.Elem.mk (gauge_ofRectangular_ne_top_iff.mpr hLmem), ?_⟩
+    rw [Metric.tendsto_atTop]
+    intro ε hε
+    obtain ⟨M, hM⟩ := hL ε hε
+    refine ⟨M, fun n hn => ?_⟩
+    rw [dist_eq_norm, hnorm]
+    exact hM n hn
 
 end TauCeti.SymmetricOperatorIdealFamily
