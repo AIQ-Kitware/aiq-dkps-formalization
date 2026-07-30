@@ -12,6 +12,26 @@ The analytic existence proof for lower-frame polar data may depend on the
 scalar field.  Once a `LowerFramePolarData` package is available, however, all
 factorization, ideal transport, and exact-angle arguments are purely Hilbert
 space algebra.  This file records that scalar-generic layer explicitly.
+
+## `Generic` means field-independent, not stronger
+
+**This file proves no existence theorem.** It is the third of three
+frame-factorization modules and the only one that never asks what the scalar
+field is:
+
+* `DavisKahan/SinTheta/FrameFactorization.lean` declares
+  `structure LowerFramePolarData` and proves it inhabited over `ℂ`;
+* `DavisKahan/SinTheta/Real/FrameFactorization.lean` proves it inhabited over
+  `ℝ`, by complexification and descent;
+* this file takes a package as given and derives the factorization, the ideal
+  transport and the exact-angle arguments — all of which are pure Hilbert-space
+  algebra, hence `𝕜`-generic.
+
+So `Generic` names the *layer*, not a stronger theorem: a reader who wants "the
+general existence result" wants one of the other two, chosen by field. The name
+was recorded as misleading by lane DK-FRAME (2026-07-30) and kept, because a
+rename would repoint imports for a wording problem this paragraph fixes.
+
 -/
 
 namespace TauCeti
