@@ -42,7 +42,7 @@ single-angle residual theorem and `sin (2 t) <= 2 sin t`. -/
 theorem sinTwoTheta_residual_le
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hMspec : SpectrumIn M ⊤ (Set.Icc a b))
@@ -62,7 +62,7 @@ theorem sinTwoTheta_residual_le
 theorem sinTwoTheta_residual_le_of_orderedGap
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
     δ * N (sinTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) := by
@@ -82,7 +82,7 @@ Sylvester loss becomes the expected factor `pi` after the elementary
 theorem sinTwoTheta_residual_le_of_spectralDistance
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated M ⊤ A Uᗮ δ) :
     δ * N (sinTwoThetaEmbedding U X) ≤

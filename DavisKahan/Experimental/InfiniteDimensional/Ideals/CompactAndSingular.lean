@@ -228,8 +228,8 @@ theorem hermitianDilation_spectralProjection_sinTheta
   let Q := spectralProjection B t
   have hA := hermitianDilation_selfAdjoint S
   have hB := hermitianDilation_selfAdjoint T
-  have hredP := reduces_spectralSubspace A hA s hs
-  have hredQ := reduces_spectralSubspace B hB t ht
+  have hredP := isInvariant_spectralSubspace A hA s hs
+  have hredQ := isInvariant_spectralSubspace B hB t ht
   have hforward := sinTheta_generalSeparation hA hB hredP hredQ hd
     (HybridGap.general hsepST)
   have hbackward := sinTheta_generalSeparation hB hA hredQ hredP hd
