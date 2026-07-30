@@ -59,7 +59,8 @@ its checker.
 Resist adding a dated one-off note. The tree accumulated about ninety of them
 between 2026-07-18 and 07-24, they went stale within days, and reading them as
 current cost a later session two reversed lanes. They now sit in
-[`topurge/`](topurge/MANIFEST.md) awaiting deletion. If a note is worth
+[`topurge/`](topurge/MANIFEST.md), which **stays** — jon decided on 2026-07-30
+not to delete it. Treat those files as a labelled archive, not as pending work. If a note is worth
 writing, it is worth putting in the file that already owns the topic.
 
 ## `dev/benchmark-candidates/`
