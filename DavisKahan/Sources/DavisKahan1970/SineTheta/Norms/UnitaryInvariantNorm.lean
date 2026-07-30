@@ -403,7 +403,7 @@ theorem modulus_mem_and_gauge_eq
       N.gauge (ContinuousLinearMap.modulus T) =
         N.gauge T :=
   SameApproximationSingularValues.mem_and_gauge_eq N
-    (modulus_sameApproximationSingularValues T) hT
+    (modulus_hasSameApproximationNumbers T) hT
 
 /-- Every literal paper norm assigns exactly the same extended value to an
 operator and its positive modulus. -/
@@ -411,7 +411,7 @@ theorem paperNorm_modulus_eq
     (N : PaperUnitaryInvariantNorm) (T : E →L[ℂ] E) :
     N.extendedGauge (ContinuousLinearMap.modulus T) = N.extendedGauge T :=
   N.gauge_eq_of_sameApproximationSingularValues
-    (modulus_sameApproximationSingularValues T)
+    (modulus_hasSameApproximationNumbers T)
 
 
 end ModulusPaperNorms
