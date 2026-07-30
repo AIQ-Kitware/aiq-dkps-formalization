@@ -105,10 +105,9 @@ calculus on Hilbert-space operators only over `ℂ`; see
 
 ## The three polar factors, and how they relate
 
-Documented 2026-07-30 (lane MODULUS-DEDUP) because none of the three named the
-others, so a reviewer could not tell a designed hierarchy from three independent
-attempts. The separating hypotheses are the carrier, the field, and whether the
-modulus is invertible:
+None of the three names the others, so a reader cannot otherwise tell a designed
+hierarchy from three independent attempts. The separating hypotheses are the
+carrier, the field, and whether the modulus is invertible:
 
 * `TauCeti.polarFactor`, in `PolarDecomposition.lean` — square `E →ₗ[𝕜] E`,
   `RCLike`, finite dimension; a genuine **unitary** factor.
