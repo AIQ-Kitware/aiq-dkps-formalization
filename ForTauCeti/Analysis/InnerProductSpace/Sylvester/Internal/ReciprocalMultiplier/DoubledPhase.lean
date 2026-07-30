@@ -254,6 +254,7 @@ noncomputable def doubledPhaseMapAction (theta : ℝ) (T : E' →ₗ[𝕜] F') :
     (Complex.exp ((theta : ℂ) * Complex.I)) T
 
 /-- The doubled phase action, unfolded. -/
+@[simp]
 theorem doubledPhaseMapAction_apply (theta : ℝ) (T : E' →ₗ[𝕜] F')
     (x : WithLp 2 (E' × E')) :
     doubledPhaseMapAction theta T x = WithLp.toLp 2

@@ -114,6 +114,7 @@ theorem finiteGramOperator_eq_selfCompAdjoint (v : ι → E) :
 
 omit [FiniteDimensional 𝕜 E] in
 /-- Entrywise formula for the Gram operator: it acts by the Gram matrix `(⟪v i, v j⟫)ᵢⱼ`. -/
+@[simp]
 theorem finiteGramOperator_apply (v : ι → E) (c : EuclideanSpace 𝕜 ι) (i : ι) :
     finiteGramOperator 𝕜 v c i = ∑ j, inner 𝕜 (v i) (v j) * c j := by
   rw [finiteGramOperator, LinearMap.comp_apply, finiteAnalysis_apply, finiteSynthesis_apply,

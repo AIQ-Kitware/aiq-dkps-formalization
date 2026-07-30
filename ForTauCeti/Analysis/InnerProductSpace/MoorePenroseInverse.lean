@@ -185,6 +185,7 @@ theorem isSymmetric_moorePenroseInverse_comp (A : E →ₗ[𝕜] F) :
 
 /-- The pseudoinverse, evaluated.  Directions of zero singular value drop out
 because the field inverse of `0` is `0`. -/
+@[simp]
 theorem moorePenroseInverse_apply (A : E →ₗ[𝕜] F) (y : F) :
     moorePenroseInverse A y =
       ∑ i : Fin (finrank 𝕜 E), (((A.singularValues i ^ 2 : ℝ) : 𝕜))⁻¹ •

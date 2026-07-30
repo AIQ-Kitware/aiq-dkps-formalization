@@ -292,6 +292,7 @@ theorem _root_.LinearMap.singularValues_adjoint (A : E →ₗ[𝕜] F) :
     rw [h1, A.adjoint.singularValues_of_finrank_le hkn]
 
 /-- Pointwise adjoint invariance, convenient for rewriting a fixed index. -/
+@[simp]
 theorem _root_.LinearMap.singularValues_adjoint_apply (A : E →ₗ[𝕜] F) (k : ℕ) :
     A.adjoint.singularValues k = A.singularValues k := by
   rw [A.singularValues_adjoint]
