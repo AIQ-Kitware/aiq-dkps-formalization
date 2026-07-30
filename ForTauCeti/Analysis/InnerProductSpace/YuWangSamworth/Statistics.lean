@@ -481,6 +481,34 @@ theorem yuWangSamworth_alignedBasis_le
     _ = 2 * Real.sqrt 2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
           (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ := by ring
 
+omit [FiniteDimensional 𝕜 E] in
+/-- **The span of an eigenvector is invariant.**  If `A u = lam • u` then every
+scalar multiple of `u` is sent to a scalar multiple of `u`. -/
+private theorem isInvariant_span_singleton_of_apply_eq_smul
+    {A : E →ₗ[𝕜] E} {u : E} {lam : ℝ} (hAu : A u = (lam : 𝕜) • u) :
+    IsInvariant A (Submodule.span 𝕜 {u}) := by
+  intro x hx
+  rw [Submodule.mem_span_singleton] at hx
+  obtain ⟨a, rfl⟩ := hx
+  rw [map_smul, hAu]
+  exact Submodule.smul_mem _ _
+    (Submodule.smul_mem _ _ (Submodule.mem_span_singleton_self u))
+
+omit [FiniteDimensional 𝕜 E] in
+/-- **A unit vector spanning the same line as an orthonormal vector differs from
+it by a unit scalar.**  If `f` is orthonormal, `f 0` lies in `span {u}` and
+`‖u‖ = 1`, the scalar `α` with `α • u = f 0` satisfies `‖α‖ = 1`. -/
+private theorem exists_unit_smul_eq_of_mem_span_singleton
+    {u w : E} (hu : ‖u‖ = 1) (hw : ‖w‖ = 1)
+    (hmem : w ∈ Submodule.span 𝕜 {u}) :
+    ∃ α : 𝕜, ‖α‖ = 1 ∧ α • u = w := by
+  rw [Submodule.mem_span_singleton] at hmem
+  obtain ⟨α, hα⟩ := hmem
+  refine ⟨α, ?_, hα⟩
+  have h := hw
+  rw [← hα, norm_smul, hu, mul_one] at h
+  exact h
+
 /-- Rank-one/sign-aligned eigenvector corollary.
 
 Signature audit: The rank-one `hcorr` premise selects `v` from the corresponding ordered
@@ -507,18 +535,10 @@ theorem yuWangSamworth_eigenvector_le
   have hu0 : u ≠ 0 := by rw [← norm_ne_zero_iff, hu]; norm_num
   have hv0 : v ≠ 0 := by rw [← norm_ne_zero_iff, hv]; norm_num
   -- The eigenlines reduce the operators.
-  have hU : IsInvariant A (Submodule.span 𝕜 {u}) := by
-    intro x hx
-    rw [Submodule.mem_span_singleton] at hx
-    obtain ⟨a, rfl⟩ := hx
-    rw [map_smul, hAu]
-    exact Submodule.smul_mem _ _ (Submodule.smul_mem _ _ (Submodule.mem_span_singleton_self u))
-  have hV : IsInvariant B (Submodule.span 𝕜 {v}) := by
-    intro x hx
-    rw [Submodule.mem_span_singleton] at hx
-    obtain ⟨a, rfl⟩ := hx
-    rw [map_smul, hBv]
-    exact Submodule.smul_mem _ _ (Submodule.smul_mem _ _ (Submodule.mem_span_singleton_self v))
+  have hU : IsInvariant A (Submodule.span 𝕜 {u}) :=
+    isInvariant_span_singleton_of_apply_eq_smul hAu
+  have hV : IsInvariant B (Submodule.span 𝕜 {v}) :=
+    isInvariant_span_singleton_of_apply_eq_smul hBv
   have hrankU : finrank 𝕜 (Submodule.span 𝕜 {u}) = 1 := finrank_span_singleton hu0
   have hrankV : finrank 𝕜 (Submodule.span 𝕜 {v}) = 1 := finrank_span_singleton hv0
   -- The restricted spectrum of `A` on the eigenline is exactly `{lam}`, so the internal
@@ -540,18 +560,12 @@ theorem yuWangSamworth_eigenvector_le
   obtain ⟨u', v', hu'on, hv'on, hspanU, hspanV, hbound⟩ :=
     yuWangSamworth_alignedBasis_le hA hB hU hV hcorr hrankU hrankV hΔ hgap'
   -- Extract the unit scalars relating the aligned basis vectors to `u`, `v`.
-  have hu'0 : u' 0 ∈ Submodule.span 𝕜 {u} := hspanU ▸ Submodule.subset_span ⟨0, rfl⟩
-  rw [Submodule.mem_span_singleton] at hu'0
-  obtain ⟨α, hα⟩ := hu'0
-  have hv'0 : v' 0 ∈ Submodule.span 𝕜 {v} := hspanV ▸ Submodule.subset_span ⟨0, rfl⟩
-  rw [Submodule.mem_span_singleton] at hv'0
-  obtain ⟨β, hβ⟩ := hv'0
-  have hαnorm : ‖α‖ = 1 := by
-    have h := hu'on.norm_eq_one 0
-    rw [← hα, norm_smul, hu, mul_one] at h; exact h
-  have hβnorm : ‖β‖ = 1 := by
-    have h := hv'on.norm_eq_one 0
-    rw [← hβ, norm_smul, hv, mul_one] at h; exact h
+  have hu'mem : u' 0 ∈ Submodule.span 𝕜 {u} := hspanU ▸ Submodule.subset_span ⟨0, rfl⟩
+  have hv'mem : v' 0 ∈ Submodule.span 𝕜 {v} := hspanV ▸ Submodule.subset_span ⟨0, rfl⟩
+  obtain ⟨α, hαnorm, hα⟩ :=
+    exists_unit_smul_eq_of_mem_span_singleton hu (hu'on.norm_eq_one 0) hu'mem
+  obtain ⟨β, hβnorm, hβ⟩ :=
+    exists_unit_smul_eq_of_mem_span_singleton hv (hv'on.norm_eq_one 0) hv'mem
   have hα0 : α ≠ 0 := by rw [← norm_ne_zero_iff, hαnorm]; norm_num
   refine ⟨β * α⁻¹, by rw [norm_mul, norm_inv, hαnorm, hβnorm]; norm_num, ?_⟩
   -- `‖(βα⁻¹) v - u‖ = ‖v' 0 - u' 0‖`, then use the aligned-basis bound.
