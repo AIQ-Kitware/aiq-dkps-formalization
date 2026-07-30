@@ -104,7 +104,7 @@ structure PaperCommonCoreTheorem61Data where
   gap_pos : 0 < gap
   epsilon_pos : 0 < epsilon
   lower_frame : LowerFrameBound source.E₀ epsilon
-  spectral_gap : UnboundedSylvesterGap source.A₀ source.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap source.A₀ source.Λ₁ gap
 
 namespace PaperCommonCoreTheorem61Data
 
@@ -211,7 +211,7 @@ structure PaperRealCommonCoreTheorem61Data where
   gap_pos : 0 < gap
   epsilon_pos : 0 < epsilon
   lower_frame : LowerFrameBound source.E₀ epsilon
-  spectral_gap : UnboundedSylvesterGap source.A₀ source.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap source.A₀ source.Λ₁ gap
 
 namespace PaperRealCommonCoreTheorem61Data
 
