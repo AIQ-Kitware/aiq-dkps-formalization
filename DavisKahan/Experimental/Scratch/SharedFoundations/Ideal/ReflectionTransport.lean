@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.TwoWayFactorization
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
 
 /-!
@@ -55,7 +56,8 @@ theorem reflection_right_twoWay
 
 /-- Rectangular ideal membership is invariant under left reflection. -/
 theorem RectangularSymmetricIdealFamily.mem_reflection_comp_iff
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
     (T : E →L[𝕜] E) :
     N.Mem (reflectionOperator V ∘L T) ↔ N.Mem T := by
@@ -68,27 +70,29 @@ theorem RectangularSymmetricIdealFamily.mem_reflection_comp_iff
 
 /-- Rectangular ideal gauge is invariant under left reflection. -/
 theorem RectangularSymmetricIdealFamily.gauge_reflection_comp
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
     {T : E →L[𝕜] E} (hT : N.Mem T) :
-    N.gauge (reflectionOperator V ∘L T) = N.gauge T := by
+    N.gaugeReal (reflectionOperator V ∘L T) = N.gaugeReal T := by
   have hRT : N.Mem (reflectionOperator V ∘L T) :=
     N.comp_left_mem (reflectionOperator V) hT
   apply le_antisymm
-  · exact N.gauge_comp_left_le (reflectionOperator V) hT
+  · exact N.gaugeReal_comp_left_le (reflectionOperator V) hT
       (norm_reflectionOperator_le_one V)
   · calc
-      N.gauge T =
-          N.gauge (reflectionOperator V ∘L (reflectionOperator V ∘L T)) :=
-        congrArg (fun S : E →L[𝕜] E => N.gauge S)
+      N.gaugeReal T =
+          N.gaugeReal (reflectionOperator V ∘L (reflectionOperator V ∘L T)) :=
+        congrArg (fun S : E →L[𝕜] E => N.gaugeReal S)
           (reflection_left_twoWay V T).symm
-      _ ≤ N.gauge (reflectionOperator V ∘L T) :=
-        N.gauge_comp_left_le (reflectionOperator V) hRT
+      _ ≤ N.gaugeReal (reflectionOperator V ∘L T) :=
+        N.gaugeReal_comp_left_le (reflectionOperator V) hRT
           (norm_reflectionOperator_le_one V)
 
 /-- Rectangular ideal membership is invariant under right reflection. -/
 theorem RectangularSymmetricIdealFamily.mem_comp_reflection_iff
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
     (T : E →L[𝕜] E) :
     N.Mem (T ∘L reflectionOperator V) ↔ N.Mem T := by
@@ -101,22 +105,23 @@ theorem RectangularSymmetricIdealFamily.mem_comp_reflection_iff
 
 /-- Rectangular ideal gauge is invariant under right reflection. -/
 theorem RectangularSymmetricIdealFamily.gauge_comp_reflection
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
     {T : E →L[𝕜] E} (hT : N.Mem T) :
-    N.gauge (T ∘L reflectionOperator V) = N.gauge T := by
+    N.gaugeReal (T ∘L reflectionOperator V) = N.gaugeReal T := by
   have hTR : N.Mem (T ∘L reflectionOperator V) :=
     N.comp_right_mem (reflectionOperator V) hT
   apply le_antisymm
-  · exact N.gauge_comp_right_le (reflectionOperator V) hT
+  · exact N.gaugeReal_comp_right_le (reflectionOperator V) hT
       (norm_reflectionOperator_le_one V)
   · calc
-      N.gauge T =
-          N.gauge ((T ∘L reflectionOperator V) ∘L reflectionOperator V) :=
-        congrArg (fun S : E →L[𝕜] E => N.gauge S)
+      N.gaugeReal T =
+          N.gaugeReal ((T ∘L reflectionOperator V) ∘L reflectionOperator V) :=
+        congrArg (fun S : E →L[𝕜] E => N.gaugeReal S)
           (reflection_right_twoWay V T).symm
-      _ ≤ N.gauge (T ∘L reflectionOperator V) :=
-        N.gauge_comp_right_le (reflectionOperator V) hTR
+      _ ≤ N.gaugeReal (T ∘L reflectionOperator V) :=
+        N.gaugeReal_comp_right_le (reflectionOperator V) hTR
           (norm_reflectionOperator_le_one V)
 
 /-- Exact operator identity behind the directed ideal double-angle theorem. -/
@@ -139,14 +144,15 @@ theorem directedSinBlock_reflected_eq_reflection_comp_sinTwo
 /-- The directed mirror-angle block and the double-angle block have equivalent
 membership and equal rectangular ideal gauge. -/
 theorem RectangularSymmetricIdealFamily.directed_reflected_mem_iff_and_gauge_eq
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     (N.Mem (directedSinBlock U (reflectedSubspace V U)) ↔
       N.Mem (sinTwoAngleOperator U V)) ∧
     (N.Mem (sinTwoAngleOperator U V) →
-      N.gauge (directedSinBlock U (reflectedSubspace V U)) =
-        N.gauge (sinTwoAngleOperator U V)) := by
+      N.gaugeReal (directedSinBlock U (reflectedSubspace V U)) =
+        N.gaugeReal (sinTwoAngleOperator U V)) := by
   rw [directedSinBlock_reflected_eq_reflection_comp_sinTwo]
   constructor
   · exact RectangularSymmetricIdealFamily.mem_reflection_comp_iff N V

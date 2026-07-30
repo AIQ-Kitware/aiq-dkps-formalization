@@ -178,9 +178,10 @@ theorem sinTheta_perturbation
   haveI : CompleteSpace U := completeSpace_of_hasOrthogonalProjection U
   haveI : CompleteSpace Vᗮ := completeSpace_of_hasOrthogonalProjection Vᗮ
   have hsolve := ExactSinTheta.sylvester_mem_and_gauge_le_of_intervalExteriorGap
-    ExactSinTheta.RectangularSymmetricIdealFamily.operatorNorm
+    (TauCeti.operatorNormFamily.{u, v} 𝕜)
     (hB.restrictToOrthogonal V hV) (hA.restrictToReducingSubspace U hU)
-    hlr hd hgap' hEq trivial
+    hlr hd hgap' hEq
+    (TauCeti.SymmetricOperatorIdealFamily.mem_operatorNormFamily _)
   have hC : ‖C‖ ≤ ‖B - A‖ :=
     restricted_projection_sandwich_norm_le _ _ _
   have h2 : d * ‖codRestrictTo

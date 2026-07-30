@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.SpectralBridge
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.Sylvester.Bounded
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RCLikeSpectralBridge
 
@@ -133,7 +134,8 @@ noncomputable def centeredIntervalExteriorWitness_of_gap
 
 /-- Interval/exterior Sylvester estimate in every rectangular ideal family. -/
 theorem sylvester_mem_and_gauge_le_of_intervalExteriorGap
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : E →L[𝕜] E} {B : F →L[𝕜] F}
     {X C : F →L[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -141,7 +143,7 @@ theorem sylvester_mem_and_gauge_le_of_intervalExteriorGap
     (hgap : IntervalExteriorGap A B β α δ)
     (hEq : A ∘L X - X ∘L B = C)
     (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   let c : ℝ := (β + α) / 2
   let ρ : ℝ := (α - β) / 2
   have hρ : 0 ≤ ρ := by dsimp [ρ]; linarith

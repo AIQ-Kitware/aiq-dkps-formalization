@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.Symmetric
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 
 /-!
@@ -119,7 +120,8 @@ variable {E F G H : Type u}
 
 /-- Rectangular membership transport through a displayed factorization. -/
 theorem RectangularSymmetricIdealFamily.mem_of_eq_comp_comp
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : H →L[𝕜] G} {B : E →L[𝕜] F}
     (L : F →L[𝕜] G) (R : H →L[𝕜] E)
     (hB : N.Mem B) (hEq : A = L ∘L B ∘L R) : N.Mem A := by
@@ -128,28 +130,30 @@ theorem RectangularSymmetricIdealFamily.mem_of_eq_comp_comp
 
 /-- Rectangular gauge control through a displayed factorization. -/
 theorem RectangularSymmetricIdealFamily.gauge_le_of_eq_comp_comp
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : H →L[𝕜] G} {B : E →L[𝕜] F}
     (L : F →L[𝕜] G) (R : H →L[𝕜] E)
     (hB : N.Mem B) (hEq : A = L ∘L B ∘L R) :
-    N.gauge A ≤ ‖L‖ * N.gauge B * ‖R‖ := by
+    N.gaugeReal A ≤ ‖L‖ * N.gaugeReal B * ‖R‖ := by
   rw [hEq]
-  exact N.gauge_comp_le L R hB
+  exact N.gaugeReal_comp_le L R hB
 
 /-- A rectangular contraction factorization does not increase the gauge. -/
 theorem RectangularSymmetricIdealFamily.gauge_le_of_contraction_factorization
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : H →L[𝕜] G} {B : E →L[𝕜] F}
     (L : F →L[𝕜] G) (R : H →L[𝕜] E)
     (hB : N.Mem B) (hEq : A = L ∘L B ∘L R)
     (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) :
-    N.gauge A ≤ N.gauge B := by
+    N.gaugeReal A ≤ N.gaugeReal B := by
   have hraw := RectangularSymmetricIdealFamily.gauge_le_of_eq_comp_comp N L R hB hEq
-  have hnonneg := N.gauge_nonneg hB
+  have hnonneg := N.gaugeReal_nonneg hB
   calc
-    N.gauge A ≤ ‖L‖ * N.gauge B * ‖R‖ := hraw
-    _ ≤ 1 * N.gauge B * 1 := by gcongr
-    _ = N.gauge B := by ring
+    N.gaugeReal A ≤ ‖L‖ * N.gaugeReal B * ‖R‖ := hraw
+    _ ≤ 1 * N.gaugeReal B * 1 := by gcongr
+    _ = N.gaugeReal B := by ring
 
 end Rectangular
 
