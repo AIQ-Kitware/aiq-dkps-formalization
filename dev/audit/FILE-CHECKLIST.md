@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-0/787 files reviewed · 787 files · 179,819 lines · 70 groups
+2/787 files reviewed · 787 files · 179,819 lines · 70 groups
 
 ## How to review
 
@@ -875,7 +875,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T01 Positive square root, operator modulus, functional calculus
 
-*9 files, 1,643 lines — 0/9 reviewed*
+*9 files, 1,643 lines — 2/9 reviewed*
 
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean` — 556 lines
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/SelfAdjointFunctionalCalculus.lean` — 238 lines
@@ -884,8 +884,8 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean` — 157 lines
 - [ ] `ForTauCeti/Analysis/SpecialFunctions/Sqrt.lean` — 112 lines
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/Spectrum.lean` — 72 lines
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/Basic.lean` — 70 lines
-- [ ] `ForTauCeti/Analysis/Normed/Operator/LinearIsometry.lean` — 50 lines
+- [x] `ForTauCeti/Analysis/InnerProductSpace/Basic.lean` — 70 lines
+- [x] `ForTauCeti/Analysis/Normed/Operator/LinearIsometry.lean` — 50 lines
 
 ### ForTauCeti :: T02 Polar decomposition and partial isometries
 
