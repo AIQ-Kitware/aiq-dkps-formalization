@@ -324,7 +324,7 @@ trial map.**  This is the normalized specialization of
 `sylvester_complementaryTrialBlock_eq_projectedGeneralResidual`. -/
 theorem sylvester_sinThetaEmbedding_eq_projectedResidual
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F) :
     A ∘ₗ sinThetaEmbedding U X - sinThetaEmbedding U X ∘ₗ M =
       complementaryProjection U ∘ₗ residual A X M := by

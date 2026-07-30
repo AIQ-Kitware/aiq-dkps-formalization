@@ -73,13 +73,13 @@ Then `δ ‖sin Θ‖ ≤ ‖R‖`.
 theorem sinTheta_residual_le
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hMspec : SpectrumIn M ⊤ (Set.Icc a b))
     (hAspec : SpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * N (sinThetaEmbedding U X) ≤ N (residual A X M) := by
-  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
+  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
   let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
   let Y : F →ₗ[𝕜] Uᗮ :=
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
@@ -137,11 +137,11 @@ theorem sinTheta_residual_le
 theorem sinTheta_residual_le_of_orderedGap
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
     δ * N (sinThetaEmbedding U X) ≤ N (residual A X M) := by
-  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
+  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
   let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
   let Y : F →ₗ[𝕜] Uᗮ :=
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
@@ -208,12 +208,12 @@ The restriction and projection proof below is complete; the only open input is
 theorem sinTheta_residual_le_of_spectralDistance
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : SpectraSeparated M ⊤ A Uᗮ δ) :
     δ * N (sinThetaEmbedding U X) ≤ (Real.pi / 2) * N (residual A X M) := by
-  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
+  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
   let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
   let Y : F →ₗ[𝕜] Uᗮ :=
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
@@ -299,7 +299,7 @@ core. -/
 theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) (hV : Reduces B V)
+    (hU : IsInvariant A U) (hV : IsInvariant B V)
     {c g ε : ℝ} (hg : 0 < g)
     (hUspec : SpectrumIn A U (Set.Ici (c + g)))
     (hVspec : SpectrumIn B V (Set.Iic c))
@@ -312,8 +312,8 @@ theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
   have hBpp : ∀ x, Bc x = B x := fun _ => rfl
   have hAself : Ac.IsSymmetric := fun x y => hA x y
   have hBself : Bc.IsSymmetric := fun x y => hB x y
-  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
-  have hVperp : Reduces B Vᗮ := reduces_orthogonal_of_isSymmetric hB hV
+  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
+  have hVperp : IsInvariant B Vᗮ := isInvariant_orthogonal_of_isSymmetric hB hV
   have hUred : Ac.Reduces U := ⟨fun x hx => hU x hx, fun x hx => hUperp x hx⟩
   have hVred : Bc.Reduces V := ⟨fun x hx => hV x hx, fun x hx => hVperp x hx⟩
   have hUc : ∀ x ∈ U, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪Ac x, x⟫_𝕜 :=
@@ -351,8 +351,8 @@ theorem opNorm_spectralSubspace_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖((spectralSubspace B t).starProjection ∘L
         (spectralSubspace A s).starProjection : E →L[𝕜] E)‖ ≤ ε / g :=
-  opNorm_directed_sinTheta_le hA hB (reduces_spectralSubspace A s)
-    (reduces_spectralSubspace B t) hg hUspec hVspec hε0 hε
+  opNorm_directed_sinTheta_le hA hB (isInvariant_spectralSubspace A s)
+    (isInvariant_spectralSubspace B t) hg hUspec hVspec hε0 hε
 
 /-- **Every-unitarily-invariant-norm directed `sin Θ` theorem, spectral
 hypothesis form.**  If `A, B` are symmetric, `U` reduces `A` with `U`-carried
@@ -363,7 +363,7 @@ by the spectral coercivity bridges. -/
 theorem uiNorm_directed_sinTheta_le (N : UnitarilyInvariantNorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) (hV : Reduces B V)
+    (hU : IsInvariant A U) (hV : IsInvariant B V)
     {c g : ℝ} (hg : 0 < g)
     (hUspec : SpectrumIn A U (Set.Ici (c + g)))
     (hVspec : SpectrumIn B V (Set.Iic c)) :
@@ -389,8 +389,8 @@ theorem uiNorm_spectralSubspace_directed_sinTheta_le
     N (((spectralSubspace B t).starProjection ∘L
         (spectralSubspace A s).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (B - A) / g :=
-  uiNorm_directed_sinTheta_le N hA hB (reduces_spectralSubspace A s)
-    (reduces_spectralSubspace B t) hg hUspec hVspec
+  uiNorm_directed_sinTheta_le N hA hB (isInvariant_spectralSubspace A s)
+    (isInvariant_spectralSubspace B t) hg hUspec hVspec
 
 /-! ## Two-sided projector-difference operator-norm form
 
@@ -412,7 +412,7 @@ no rank hypothesis and no factor-two loss. -/
 theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U W : Submodule 𝕜 E} [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
-    (hU : Reduces A U) (hW : Reduces B W)
+    (hU : IsInvariant A U) (hW : IsInvariant B W)
     {c g ε : ℝ} (hg : 0 < g)
     (hUhi : SpectrumIn A U (Set.Ici (c + g)))
     (hUlo : SpectrumIn A Uᗮ (Set.Iic c))
@@ -435,8 +435,8 @@ theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
     -- expects.
     change ⟪B x, y⟫_𝕜 = ⟪x, B y⟫_𝕜
     exact hB x y
-  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
-  have hWperp : Reduces B Wᗮ := reduces_orthogonal_of_isSymmetric hB hW
+  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
+  have hWperp : IsInvariant B Wᗮ := isInvariant_orthogonal_of_isSymmetric hB hW
   have hUred : Ac.Reduces U :=
     ⟨fun x hx => by simpa [Ac] using hU x hx,
       fun x hx => by simpa [Ac] using hUperp x hx⟩
@@ -467,7 +467,7 @@ The sharp theorem `opNorm_starProjection_sub_le` is strictly stronger. -/
 theorem opNorm_starProjection_sub_le_two {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U W : Submodule 𝕜 E} [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
-    (hU : Reduces A U) (hW : Reduces B W)
+    (hU : IsInvariant A U) (hW : IsInvariant B W)
     {c g ε : ℝ} (hg : 0 < g)
     (hUhi : SpectrumIn A U (Set.Ici (c + g))) (hUlo : SpectrumIn A Uᗮ (Set.Iic c))
     (hWhi : SpectrumIn B W (Set.Ici (c + g))) (hWlo : SpectrumIn B Wᗮ (Set.Iic c))
@@ -497,8 +497,8 @@ theorem opNorm_spectralSubspace_sub_le {A B : E →ₗ[𝕜] E}
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖((spectralSubspace A s).starProjection
         - (spectralSubspace B t).starProjection : E →L[𝕜] E)‖ ≤ ε / g :=
-  opNorm_starProjection_sub_le hA hB (reduces_spectralSubspace A s)
-    (reduces_spectralSubspace B t) hg hAhi hAlo hBhi hBlo hε0 hε
+  opNorm_starProjection_sub_le hA hB (isInvariant_spectralSubspace A s)
+    (isInvariant_spectralSubspace B t) hg hAhi hAlo hBhi hBlo hε0 hε
 
 /-- **Two-sided operator-norm spectral-projector Davis--Kahan theorem.**  The
 projector-difference bound for the canonical spectral subspaces (they reduce
@@ -513,8 +513,8 @@ theorem opNorm_spectralSubspace_sub_le_two {A B : E →ₗ[𝕜] E}
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖((spectralSubspace A s).starProjection
         - (spectralSubspace B t).starProjection : E →L[𝕜] E)‖ ≤ 2 * (ε / g) :=
-  opNorm_starProjection_sub_le_two hA hB (reduces_spectralSubspace A s)
-    (reduces_spectralSubspace B t) hg hAhi hAlo hBhi hBlo hε0 hε
+  opNorm_starProjection_sub_le_two hA hB (isInvariant_spectralSubspace A s)
+    (isInvariant_spectralSubspace B t) hg hAhi hAlo hBhi hBlo hε0 hε
 
 end DavisKahanTheory
 end TauCeti
