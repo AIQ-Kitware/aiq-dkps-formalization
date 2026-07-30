@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-7/1160 files reviewed · 1160 files · 260,034 lines · 112 groups
+14/1162 files reviewed · 1162 files · 260,399 lines · 112 groups
 
 ## How to review
 
@@ -95,9 +95,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### .llm_resource_tally :: data/config
 
-*3 files, 937 lines — 0/3 reviewed*
+*3 files, 938 lines — 0/3 reviewed*
 
-- [ ] `.llm_resource_tally/ledger/ledger.jsonl` — 884 lines · data/config
+- [ ] `.llm_resource_tally/ledger/ledger.jsonl` — 885 lines · data/config
 - [ ] `.llm_resource_tally/lifetime-totals.json` — 46 lines · data/config
 - [ ] `.llm_resource_tally/settings.json` — 7 lines · data/config
 
@@ -1058,15 +1058,15 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T01 Positive square root, operator modulus, functional calculus
 
-*9 files, 1,643 lines — 2/9 reviewed*
+*9 files, 1,643 lines — 9/9 reviewed*
 
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean` — 556 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SelfAdjointFunctionalCalculus.lean` — 238 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean` — 208 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/PositiveSqrt.lean` — 180 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean` — 157 lines · Lean source
-- [ ] `ForTauCeti/Analysis/SpecialFunctions/Sqrt.lean` — 112 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/Spectrum.lean` — 72 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean` — 556 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SelfAdjointFunctionalCalculus.lean` — 238 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean` — 208 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/PositiveSqrt.lean` — 180 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean` — 157 lines · Lean source
+- [x] `ForTauCeti/Analysis/SpecialFunctions/Sqrt.lean` — 112 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/Spectrum.lean` — 72 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Basic.lean` — 70 lines · Lean source
 - [x] `ForTauCeti/Analysis/Normed/Operator/LinearIsometry.lean` — 50 lines · Lean source
 
@@ -1432,7 +1432,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*147 files, 35,183 lines — 0/147 reviewed*
+*148 files, 35,301 lines — 0/148 reviewed*
 
 - [ ] `dev/tauceti-signature-polish-todo.md` — 2,201 lines · documentation
 - [ ] `dev/audit/FILE-CHECKLIST.md` — 1,755 lines · documentation
@@ -1440,7 +1440,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation
 - [ ] `dev/tauceti/u1-linearpmap-migration.md` — 1,139 lines · documentation
 - [ ] `dev/tauceti/spectra-removal-plan.md` — 1,036 lines · documentation
-- [ ] `dev/LANES.md` — 974 lines · documentation
+- [ ] `dev/LANES.md` — 976 lines · documentation
 - [ ] `dev/lean-proof-engineering-lessons.md` — 907 lines · documentation
 - [ ] `dev/tauceti/NAMEK-STATUS.md` — 850 lines · documentation
 - [ ] `dev/tauceti/convergence-matrix.md` — 795 lines · documentation
@@ -1506,6 +1506,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `dev/tauceti/part-iii-production-extraction-queue.md` — 142 lines · documentation
 - [ ] `dev/topurge/dev/opus-next-agent-prompt.md` — 140 lines · documentation
 - [ ] `dev/audit/GROUP-CHECKLIST.md` — 138 lines · documentation
+- [ ] `dev/audit/review-ForTauCeti-T01.md` — 138 lines · documentation
 - [ ] `dev/tauceti/pr1-consistency-restoration-2026-07-27.md` — 137 lines · documentation
 - [ ] `dev/overlays/section3-lemma63-mathahead-gpt56.md` — 135 lines · documentation
 - [ ] `dev/tauceti/public-api-integration-review.md` — 132 lines · documentation
@@ -1528,7 +1529,6 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `dev/benchmark-candidates/README.md` — 97 lines · documentation
 - [ ] `dev/journals/tool-rewrote-the-tree-during-its-own-regression-test-2026-07-29.md` — 97 lines · documentation
 - [ ] `dev/topurge/dev/full-part-iii-experimental-closure-2026-07-21.md` — 96 lines · documentation
-- [ ] `dev/audit/review-ForTauCeti-T01.md` — 94 lines · documentation
 - [ ] `dev/topurge/dev/full-part-iii-admission-elimination-agent-prompt-2026-07-20.md` — 91 lines · documentation
 - [ ] `dev/tauceti/experimental-promotion-classification.md` — 88 lines · documentation
 - [ ] `dev/topurge/dev/overlays/section4-independent-scratch-7f9f562-gpt56.md` — 87 lines · documentation
@@ -1540,6 +1540,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `dev/topurge/dev/overlays/full-frontier-scaffold-gpt56.md` — 78 lines · documentation
 - [ ] `dev/topurge/dev/full-part-iii-math-ahead-restoration-manifest-2026-07-20.md` — 76 lines · documentation
 - [ ] `dev/SEARCH.md` — 72 lines · documentation
+- [ ] `dev/audit/review-Challenge-MathlibPending.md` — 72 lines · documentation
 - [ ] `dev/tan-two-theta-ordered-gap-correction-2026-07-20.md` — 71 lines · documentation
 - [ ] `dev/topurge/dev/tauceti/source-sine-theta-completion-audit.md` — 71 lines · documentation
 - [ ] `dev/targeted-mathematical-repair-2026-07-21.md` — 69 lines · documentation
@@ -1674,7 +1675,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### scripts :: tooling
 
-*45 files, 10,377 lines — 0/45 reviewed*
+*46 files, 10,623 lines — 0/46 reviewed*
 
 - [ ] `scripts/lake_build_report.py` — 1,156 lines · tooling
 - [ ] `scripts/check_davis_kahan_frontier.py` — 633 lines · tooling
@@ -1687,6 +1688,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `scripts/check_dependency_layers.py` — 286 lines · tooling
 - [ ] `scripts/probe_census_declarations.py` — 263 lines · tooling
 - [ ] `scripts/check_library_structure.py` — 248 lines · tooling
+- [ ] `scripts/audit_scan.py` — 246 lines · tooling
 - [ ] `scripts/check_comparator_signatures.py` — 232 lines · tooling
 - [ ] `scripts/derive_tauceti_submission_ladder.py` — 232 lines · tooling
 - [ ] `scripts/tests/test_lake_build_report.py` — 229 lines · tooling
