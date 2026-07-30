@@ -44,6 +44,25 @@ retried.  The mean-value inequality applied to `s ↦ exp(isAₙ)ψ - ψ - isA�
 has the right shape but needs `exp(isAₙ)φ → expLimit hA s φ` *uniformly* on
 compact `s`-intervals, which is a separate equicontinuity argument.  A
 second-order Duhamel estimate brings in `‖Aₙ² ψ‖`, which blows up with `n`.
+
+## Provenance
+
+* **Original repository:** none — **authored in place** in the AIQ DKPS
+  formalization (`https://github.com/AIQ-Kitware/aiq-dkps-formalization`),
+  commit `c9c8502c`, for staging into Tau Ceti.
+* **Original module:** none; written directly at this path.
+* **Original authors / copyright / licence:** Copyright (c) 2026 Kitware, Inc.;
+  `Authors: Jon Crall, Claude Opus 5`; Apache 2.0 (this repository's `LICENSE`).
+  No third-party code is incorporated, so no donor notice is carried.
+* **Extraction class:** *authored in place*, for upstreaming to Tau Ceti.
+* **Relation to existing libraries:** the uniqueness half of Stone's theorem for
+  a self-adjoint `LinearPMap`. Neither Mathlib nor the retired Spectra snapshot
+  carries it. Only one inclusion is proved: the generator of `genToGroup hA` is
+  self-adjoint by the forward direction, and a self-adjoint operator admits no
+  proper self-adjoint extension, so `A ≤ generator (genToGroup hA)` already
+  gives equality — the reverse inclusion, which would need a description of the
+  generator's domain, is never required.
+* **Semantic differences from a donor:** not applicable.
 -/
 
 open scoped InnerProductSpace
