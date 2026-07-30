@@ -121,6 +121,7 @@ theorem isSelfAdjoint_perturb_bounded {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoin
   -- `B` is symmetric
   have hsymB : B.IsFormalAdjoint B := by
     intro x y
+    -- states the goal as the inner-product identity the structure lemma expects.
     change ⟪A x + T (x : H), (y : H)⟫_𝕜 = ⟪(x : H), A y + T (y : H)⟫_𝕜
     rw [inner_add_left, inner_add_right, hsymA x y, hTsym (x : H) (y : H)]
   -- `T` contributes a continuous term, so `B` and `A` have the same adjoint domain
@@ -134,6 +135,7 @@ theorem isSelfAdjoint_perturb_bounded {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoin
           = fun x : A.domain =>
               ((innerₛₗ 𝕜 y).comp B.toFun) x - ⟪y, T (x : H)⟫_𝕜 := by
         funext x
+        -- states the goal as the inner-product identity the structure lemma expects.
         change ⟪y, A x⟫_𝕜 = ⟪y, A x + T (x : H)⟫_𝕜 - ⟪y, T (x : H)⟫_𝕜
         rw [inner_add_right]
         abel
@@ -178,6 +180,8 @@ noncomputable def unitaryConj (U : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H)
         have hsub : (⟨U.symm (c • (x : H')), (c • x).2⟩ : A.domain)
             = c • ⟨U.symm (x : H'), x.2⟩ :=
           Subtype.ext (by
+            -- states the goal with the definition unfolded, in the shape the next step needs;
+            -- there is no `_apply` lemma to rewrite with here.
             change U.symm (c • (x : H')) = c • U.symm (x : H')
             exact map_smul U.symm c (x : H'))
         simp only [Submodule.coe_smul]
