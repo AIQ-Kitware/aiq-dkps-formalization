@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.Released under Apache 2.0 l
 -/
 import DavisKahan.Interop.Spectra.HilbertSchmidtTensor
 import DavisKahan.Sylvester.HomogeneousUniqueness
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterGenerator
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse
 

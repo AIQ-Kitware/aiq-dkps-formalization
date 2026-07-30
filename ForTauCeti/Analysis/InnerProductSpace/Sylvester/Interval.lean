@@ -6,7 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 
 /-!
 # Ordered and interval/exterior Sylvester estimates
