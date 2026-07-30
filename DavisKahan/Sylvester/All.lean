@@ -8,6 +8,7 @@ import DavisKahan.Sylvester.Bounded
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 import DavisKahan.Sylvester.CutoffInterface
 import DavisKahan.Sylvester.FilledTruncation
+import DavisKahan.Sylvester.FiniteStepCalculus
 import DavisKahan.Sylvester.Gap
 import DavisKahan.Sylvester.HomogeneousUniqueness
 import DavisKahan.Sylvester.PairwiseHomogeneousUniqueness
