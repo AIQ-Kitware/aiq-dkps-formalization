@@ -33,7 +33,6 @@ namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
 
-open DavisKahanTheory
 
 noncomputable section
 
