@@ -51,7 +51,7 @@ structure BoundedGeneralSinThetaProblem
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound X frameLowerBound
-  spectral_gap : UnboundedSylvesterGap
+  spectral_gap : FormBoundedSylvesterGap
     (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A₀)
     (TauCeti.DavisKahanExt.ClosedOperator.ofBounded Λ₁) gap
   residual_mem : N.Mem
@@ -65,7 +65,7 @@ noncomputable def toGeneral
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (P : BoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
-    GeneralSinThetaProblem (E := E) (F := F)
+    FormBoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N := by
   let D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G) := {
     A := TauCeti.DavisKahanExt.ClosedOperator.ofBounded P.A
@@ -123,7 +123,7 @@ theorem result
               P.frameLowerBound_pos)
         ≤ N.gauge
             (generalResidual P.A P.X P.A₀) :=
-  GeneralSinThetaProblem.result N (P.toGeneral N)
+  FormBoundedGeneralSinThetaProblem.result N (P.toGeneral N)
 
 end BoundedGeneralSinThetaProblem
 
@@ -146,7 +146,7 @@ theorem intervalExteriorGap_to_unbounded
     {A : E →L[𝕜] E} {B : F →L[𝕜] F}
     {β α δ : ℝ}
     (hgap : IntervalExteriorGap A B β α δ) :
-    UnboundedIntervalExteriorGap
+    RealSpectrumIntervalExteriorGap
       (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
       (TauCeti.DavisKahanExt.ClosedOperator.ofBounded B)
       β α δ := by

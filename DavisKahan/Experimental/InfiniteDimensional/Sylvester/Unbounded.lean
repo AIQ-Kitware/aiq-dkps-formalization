@@ -412,8 +412,12 @@ theorem kyFanApproximationGauge_le_of_leftSpectralCutoff_le
     (tendsto_const_nhds.mul hX) hC hcutEventually
 
 /-- Double spectral cutoff turns a domain-aware equation into an ordinary
-bounded equation between the filled truncations. -/
-theorem doubleCutoff_filled_sylvester_equation
+bounded equation between the filled truncations, for the concrete
+`spectralCutoff` and `boundedSpectralTruncation`.
+
+`doubleCutoff_filled_sylvester_equation` is the interface-parametric form, stated
+over `SpectralCutoffInterface` and `BoundedTruncationInterface`. -/
+theorem doubleSpectralCutoff_filled_sylvester_equation
     {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     {B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
@@ -537,7 +541,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded
     filledSpectralTruncation_upperBound B hB hτB hBc
   have hEqCut : AF ∘L Xc - Xc ∘L BF = Cc := by
     simpa only [AF, BF, Xc, Cc] using
-      doubleCutoff_filled_sylvester_equation hA hB hEq
+      doubleSpectralCutoff_filled_sylvester_equation hA hB hEq
         (c + δ) c τA τB
   let B0 : F →L[𝕜] F :=
     BF - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 F
@@ -640,7 +644,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_swapped
     filledSpectralTruncation_lowerBound B hB hτB hBc
   have hEqCut : AF ∘L Xc - Xc ∘L BF = Cc := by
     simpa only [AF, BF, Xc, Cc] using
-      doubleCutoff_filled_sylvester_equation hA hB hEq
+      doubleSpectralCutoff_filled_sylvester_equation hA hB hEq
         c (c + δ) τA τB
   let A0 : E →L[𝕜] E :=
     AF - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E
@@ -768,7 +772,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_intervalExteriorGap
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[𝕜] E} {β α δ : ℝ}
     (hβα : β ≤ α) (hδ : 0 < δ)
-    (hgap : UnboundedIntervalExteriorGap A B β α δ)
+    (hgap : RealSpectrumIntervalExteriorGap A B β α δ)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
@@ -861,7 +865,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_gap
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[𝕜] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap A B δ)
+    (hgap : FormBoundedSylvesterGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧
@@ -888,7 +892,7 @@ theorem davisKahan1970_sylvester
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[𝕜] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap A B δ)
+    (hgap : FormBoundedSylvesterGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧

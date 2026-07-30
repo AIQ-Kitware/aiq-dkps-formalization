@@ -110,67 +110,6 @@ theorem exists_finite_average_approximation
     rw [hreindex, hsum, dist_comm]
     exact hdist
 
-/-- Arbitrary complex values on a finite set of real frequencies admit an
-exact finite Fourier interpolation.
-
-The proof places the finitely many frequencies in an arc shorter than a full
-circle, applies Lagrange interpolation to their distinct complex phases, and
-reads the polynomial coefficients as Fourier coefficients.  This is the
-algebraic correction mechanism needed when a reciprocal Fourier integral is
-first approximated by a finite sum. -/
-theorem exists_finite_fourier_interpolation
-    (s : Finset ℝ) (y : ℝ → ℂ) :
-    ∃ q : ℕ, ∃ a : Fin q → ℂ, ∃ t : Fin q → ℝ,
-      ∀ x ∈ s, y x = ∑ r, a r * Complex.exp
-        ((((t r * x) : ℝ) : ℂ) * Complex.I) := by
-  classical
-  let R : ℝ := ∑ x ∈ s, |x|
-  let τ : ℝ := (1 + R)⁻¹
-  have hR : 0 ≤ R := by
-    exact Finset.sum_nonneg fun _ _ => abs_nonneg _
-  have hτ : 0 < τ := by
-    simp only [τ]
-    positivity
-  have harg (x : ℝ) (hx : x ∈ s) : τ * x ∈ Set.Icc (-1 : ℝ) 1 := by
-    have hxR : |x| ≤ R := by
-      exact Finset.single_le_sum
-        (fun z hz => abs_nonneg z) hx
-    have hden : 0 < 1 + R := by linarith
-    have habs : |τ * x| < 1 := by
-      rw [abs_mul, abs_of_pos hτ]
-      -- states the goal with the definition unfolded, in the shape the next step needs;
-      -- there is no `_apply` lemma to rewrite with here.
-      change (1 + R)⁻¹ * |x| < 1
-      rw [inv_mul_eq_div, div_lt_one hden]
-      linarith
-    exact ⟨le_of_lt (abs_lt.mp habs).1, le_of_lt (abs_lt.mp habs).2⟩
-  let z : ℝ → ℂ := fun x => (Circle.exp (τ * x) : ℂ)
-  have hzinj : Set.InjOn z s := by
-    intro x hx x' hx' hzx
-    have harc : (1 : ℝ) - (-1) < 2 * Real.pi := by
-      nlinarith [Real.pi_gt_three]
-    have hphase : τ * x = τ * x' :=
-      Circle.exp_injOn_Icc harc (harg x hx) (harg x' hx') (Subtype.ext hzx)
-    exact (mul_left_cancel₀ (ne_of_gt hτ) hphase)
-  let p : Polynomial ℂ := Lagrange.interpolate s z y
-  refine ⟨p.natDegree + 1, fun r => p.coeff r, fun r => (r : ℕ) * τ, ?_⟩
-  intro x hx
-  rw [← Lagrange.eval_interpolate_at_node y hzinj hx]
-  rw [Polynomial.eval_eq_sum_range, ← Fin.sum_univ_eq_sum_range]
-  apply Finset.sum_congr rfl
-  intro r _
-  -- states the goal with the definition unfolded, in the shape the next step needs;
-  -- there is no `_apply` lemma to rewrite with here.
-  change p.coeff r * z x ^ (r : ℕ) =
-    p.coeff r * Complex.exp
-      ((((((r : ℕ) : ℝ) * τ * x) : ℝ) : ℂ) * Complex.I)
-  congr 1
-  simp only [z, Circle.coe_exp]
-  rw [← Complex.exp_nat_mul]
-  congr 1
-  push_cast
-  ring
-
 /-- Any finite set of reals can be rescaled into an arc shorter than a full
 turn, on which `Circle.exp` is injective.
 
@@ -198,6 +137,50 @@ private theorem exists_pos_injOn_circle_exp (s : Finset ℝ) :
   have hphase : τ * x = τ * x' :=
     Circle.exp_injOn_Icc harc (harg x hx) (harg x' hx') (Subtype.ext hzx)
   exact mul_left_cancel₀ (ne_of_gt hτ) hphase
+
+/-- **A polynomial evaluated at `Circle.exp (τ x)` is a finite Fourier sum in
+`x`**, with the polynomial's coefficients as Fourier coefficients and the
+frequencies `r τ` for `r` below any bound `q` on the degree.
+
+This is the step that turns Lagrange interpolation — an algebraic statement
+about a polynomial at distinct nodes — into the analytic statement wanted here,
+and it is pure bookkeeping: `zʳ = exp (r τ x i)` because `z = exp (τ x i)`.
+Stated separately because the two interpolation theorems below differ in how
+they bound the degree (`natDegree + 1` for one, `s.card + 1` for the other) and
+in nothing else, so this is exactly their common part. -/
+private theorem eval_circle_exp_eq_fourier_sum {q : ℕ} (τ : ℝ) (p : Polynomial ℂ)
+    (hp : p.natDegree < q) (x : ℝ) :
+    p.eval ((Circle.exp (τ * x) : ℂ)) =
+      ∑ r : Fin q, p.coeff r *
+        Complex.exp (((((r : ℕ) : ℝ) * τ * x : ℝ) : ℂ) * Complex.I) := by
+  rw [Polynomial.eval_eq_sum_range' hp, ← Fin.sum_univ_eq_sum_range]
+  refine Finset.sum_congr rfl fun r _ => ?_
+  congr 1
+  simp only [Circle.coe_exp]
+  rw [← Complex.exp_nat_mul]
+  congr 1
+  push_cast
+  ring
+
+/-- Arbitrary complex values on a finite set of real frequencies admit an
+exact finite Fourier interpolation.
+
+The proof places the finitely many frequencies in an arc shorter than a full
+circle, applies Lagrange interpolation to their distinct complex phases, and
+reads the polynomial coefficients as Fourier coefficients.  This is the
+algebraic correction mechanism needed when a reciprocal Fourier integral is
+first approximated by a finite sum. -/
+theorem exists_finite_fourier_interpolation
+    (s : Finset ℝ) (y : ℝ → ℂ) :
+    ∃ q : ℕ, ∃ a : Fin q → ℂ, ∃ t : Fin q → ℝ,
+      ∀ x ∈ s, y x = ∑ r, a r * Complex.exp
+        ((((t r * x) : ℝ) : ℂ) * Complex.I) := by
+  classical
+  obtain ⟨τ, -, hzinj⟩ := exists_pos_injOn_circle_exp s
+  let p : Polynomial ℂ := Lagrange.interpolate s (fun x => (Circle.exp (τ * x) : ℂ)) y
+  refine ⟨p.natDegree + 1, fun r => p.coeff r, fun r => (r : ℕ) * τ, fun x hx => ?_⟩
+  rw [← Lagrange.eval_interpolate_at_node y hzinj hx]
+  exact eval_circle_exp_eq_fourier_sum τ p (Nat.lt_succ_self _) x
 
 /-- The finite Fourier interpolation map can be chosen with coefficient mass
 bounded linearly by the `ℓ1` mass of the prescribed values.
@@ -231,20 +214,7 @@ theorem exists_finite_fourier_interpolation_with_mass_bound
   refine ⟨q, fun n => p.coeff n, fun n => (n : ℕ) * τ, ?_, ?_⟩
   · intro x hx
     rw [← Lagrange.eval_interpolate_at_node y hzinj hx]
-    rw [Polynomial.eval_eq_sum_range' hpdeg, ← Fin.sum_univ_eq_sum_range]
-    apply Finset.sum_congr rfl
-    intro n _
-    -- states the goal with the definition unfolded, in the shape the next step needs;
-    -- there is no `_apply` lemma to rewrite with here.
-    change p.coeff n * z x ^ (n : ℕ) =
-      p.coeff n * Complex.exp
-        ((((((n : ℕ) : ℝ) * τ * x) : ℝ) : ℂ) * Complex.I)
-    congr 1
-    simp only [z, Circle.coe_exp]
-    rw [← Complex.exp_nat_mul]
-    congr 1
-    push_cast
-    ring
+    exact eval_circle_exp_eq_fourier_sum τ p hpdeg x
   · have hcoeff (n : ℕ) :
         p.coeff n = ∑ x ∈ s, y x * (Lagrange.basis s z x).coeff n := by
       simp [p, Lagrange.interpolate_apply]
@@ -375,6 +345,104 @@ private theorem norm_mul_phaseOf (f : ℝ → ℂ) (t : ℝ) :
   · simp only [phaseOf, if_neg ht]
     field_simp [norm_ne_zero_iff.mpr ht]
 
+/-- **The `‖f‖`-weighted measure has real total mass `∫ ‖f‖`.**  A general fact
+about `volume.withDensity (fun t => ENNReal.ofReal ‖f t‖)` for integrable `f`,
+with no Fourier content; it was inlined in the interpolation proof below. -/
+private theorem measureReal_univ_withDensity_ofReal_norm
+    {f : ℝ → ℂ} (hfint : MeasureTheory.Integrable f) :
+    (MeasureTheory.volume.withDensity
+        (fun t => ENNReal.ofReal ‖f t‖)).real Set.univ = ∫ t, ‖f t‖ := by
+  rw [MeasureTheory.measureReal_def]
+  simp only [MeasureTheory.withDensity_apply _ MeasurableSet.univ,
+    MeasureTheory.setLIntegral_univ]
+  rw [← MeasureTheory.ofReal_integral_eq_lintegral_ofReal hfint.norm
+    (Filter.Eventually.of_forall fun _ => norm_nonneg _)]
+  exact ENNReal.toReal_ofReal
+    (MeasureTheory.integral_nonneg fun _ => norm_nonneg _)
+
+/-- **A reciprocal Fourier kernel has total variation at least `‖1/d‖`.**  If
+`∫ f t · exp (i t d) = 1/d` whenever `1 ≤ |d|`, then `‖1/d‖ ≤ ∫ ‖f t‖`: the
+triangle inequality for the integral, and `‖exp (i t d)‖ = 1` pointwise.
+
+Inlined in the interpolation proof below as the step that makes the weighted
+measure nonzero. -/
+private theorem norm_inv_le_integral_norm_of_reciprocalFourier
+    {f : ℝ → ℂ}
+    (hfourier : ∀ d : ℝ, 1 ≤ |d| →
+      ∫ t, f t * Complex.exp ((((t * d : ℝ) : ℂ) * Complex.I)) = 1 / (d : ℂ))
+    {d : ℝ} (hd : 1 ≤ |d|) :
+    ‖(1 : ℂ) / (d : ℂ)‖ ≤ ∫ t, ‖f t‖ := by
+  rw [← hfourier d hd]
+  have hexpnorm (t : ℝ) :
+      ‖Complex.exp ((((t * d : ℝ) : ℂ) * Complex.I))‖ = 1 :=
+    Complex.norm_exp_ofReal_mul_I _
+  calc
+    ‖∫ t, f t * Complex.exp ((((t * d : ℝ) : ℂ) * Complex.I))‖ ≤
+        ∫ t, ‖f t * Complex.exp ((((t * d : ℝ) : ℂ) * Complex.I))‖ :=
+      MeasureTheory.norm_integral_le_integral_norm _
+    _ = ∫ t, ‖f t‖ := by
+      apply MeasureTheory.integral_congr_ae
+      filter_upwards [] with t
+      rw [norm_mul, hexpnorm t, mul_one]
+
+/-- **The frequency-atom family is measurable and pointwise bounded by one.**
+`atom t ij = phaseOf f t · exp (i t (α i - β j))` has every coordinate of modulus
+at most one, since `phaseOf` does and the exponential has modulus exactly one.
+
+Stated on an arbitrary measurable phase of modulus at most one rather than on
+`phaseOf f`, because that is all the bound uses. -/
+private theorem measurable_and_norm_le_one_frequencyAtom
+    {m n : ℕ} (α : Fin m → ℝ) (β : Fin n → ℝ)
+    {phase : ℝ → ℂ} (hphase_meas : Measurable phase)
+    (hphase_norm : ∀ t, ‖phase t‖ ≤ 1) :
+    Measurable (fun t ij => phase t * Complex.exp
+        ((((t * (α (Prod.fst ij) - β (Prod.snd ij)) : ℝ) : ℂ) * Complex.I)) :
+      ℝ → (Fin m × Fin n → ℂ)) ∧
+    ∀ t, ‖(fun ij => phase t * Complex.exp
+        ((((t * (α (Prod.fst ij) - β (Prod.snd ij)) : ℝ) : ℂ) * Complex.I)) :
+      Fin m × Fin n → ℂ)‖ ≤ 1 := by
+  constructor
+  · apply measurable_pi_lambda
+    intro ij
+    fun_prop
+  · intro t
+    rw [pi_norm_le_iff_of_nonneg zero_le_one]
+    intro ij
+    have hexpnorm :
+        ‖Complex.exp
+          ((((t * (α ij.1 - β ij.2) : ℝ) : ℂ) * Complex.I))‖ = 1 :=
+      Complex.norm_exp_ofReal_mul_I _
+    simp only [norm_mul, hexpnorm, mul_one]
+    exact hphase_norm t
+
+/-- **The weighted integral of a frequency atom is the reciprocal it interpolates.**
+Against `volume.withDensity (ofReal ∘ norm ∘ f)`, the atom
+`phaseOf f t · exp (i t d)` integrates to `1/d` whenever `f` reciprocal-interpolates
+at `d`, because the density cancels the phase: `‖f t‖ · phaseOf f t = f t`. -/
+private theorem integral_withDensity_frequencyAtom
+    {f : ℝ → ℂ} (hfmeas : Measurable f)
+    (hfourier : ∀ d : ℝ, 1 ≤ |d| →
+      ∫ t, f t * Complex.exp ((((t * d : ℝ) : ℂ) * Complex.I)) = 1 / (d : ℂ))
+    {d : ℝ} (hd : 1 ≤ |d|) :
+    (∫ t, phaseOf f t * Complex.exp ((((t * d : ℝ) : ℂ) * Complex.I))
+        ∂(MeasureTheory.volume.withDensity fun t => ENNReal.ofReal ‖f t‖)) =
+      (1 : ℂ) / (d : ℂ) := by
+  rw [integral_withDensity_eq_integral_toReal_smul
+    (by fun_prop)
+    (Filter.Eventually.of_forall fun _ => ENNReal.ofReal_lt_top)]
+  rw [← hfourier d hd]
+  apply MeasureTheory.integral_congr_ae
+  filter_upwards [] with t
+  simp only [ENNReal.toReal_ofReal (norm_nonneg _)]
+  calc
+    ‖f t‖ • (phaseOf f t * Complex.exp ((((t * d : ℝ) : ℂ) * Complex.I))) =
+        ((‖f t‖ : ℂ) * phaseOf f t) *
+          Complex.exp ((((t * d : ℝ) : ℂ) * Complex.I)) := by
+      rw [RCLike.real_smul_eq_coe_mul, ← mul_assoc]
+      rfl
+    _ = _ := congrArg (fun u : ℂ => u *
+      Complex.exp ((((t * d : ℝ) : ℂ) * Complex.I))) (norm_mul_phaseOf f t)
+
 /-- An integrable reciprocal Fourier kernel yields finite Fourier sums of no
 greater mass which uniformly approximate any prescribed finite frequency
 array. -/
@@ -416,31 +484,13 @@ theorem hasApproximateFiniteReciprocalFourierInterpolation_of_integrableKernel
         have := hgap i₀ j₀
         simp only [d₀, hd, abs_zero] at this
         norm_num at this
-      have hMpos : 0 < M := by
-        have hbound : ‖(1 : ℂ) / (d₀ : ℂ)‖ ≤ M := by
-          rw [← hfourier d₀ (hgap i₀ j₀)]
-          have hexpnorm (t : ℝ) :
-              ‖Complex.exp ((((t * d₀ : ℝ) : ℂ) * Complex.I))‖ = 1 :=
-            Complex.norm_exp_ofReal_mul_I _
-          calc
-            ‖∫ t, f t * Complex.exp ((((t * d₀ : ℝ) : ℂ) * Complex.I))‖ ≤
-                ∫ t, ‖f t * Complex.exp ((((t * d₀ : ℝ) : ℂ) * Complex.I))‖ :=
-              MeasureTheory.norm_integral_le_integral_norm _
-            _ = M := by
-              dsimp only [M]
-              apply MeasureTheory.integral_congr_ae
-              filter_upwards [] with t
-              rw [norm_mul, hexpnorm t, mul_one]
-        exact lt_of_lt_of_le
-          (norm_pos_iff.mpr (div_ne_zero one_ne_zero (by exact_mod_cast hd₀))) hbound
+      have hMpos : 0 < M :=
+        lt_of_lt_of_le
+          (norm_pos_iff.mpr (div_ne_zero one_ne_zero (by exact_mod_cast hd₀)))
+          (norm_inv_le_integral_norm_of_reciprocalFourier hfourier (hgap i₀ j₀))
       have hMnonneg : 0 ≤ M := hMpos.le
-      have hμreal : μ.real Set.univ = M := by
-        rw [MeasureTheory.measureReal_def]
-        simp only [μ, density, MeasureTheory.withDensity_apply _ MeasurableSet.univ,
-          MeasureTheory.setLIntegral_univ]
-        rw [← MeasureTheory.ofReal_integral_eq_lintegral_ofReal hfint.norm
-          (Filter.Eventually.of_forall fun _ => norm_nonneg _)]
-        exact ENNReal.toReal_ofReal hMnonneg
+      have hμreal : μ.real Set.univ = M :=
+        measureReal_univ_withDensity_ofReal_norm hfint
       have hμne : μ ≠ 0 := by
         intro hzero
         have : μ.real Set.univ = 0 := by simp [hzero]
@@ -455,20 +505,8 @@ theorem hasApproximateFiniteReciprocalFourierInterpolation_of_integrableKernel
       let atom : ℝ → (Fin m × Fin n → ℂ) := fun t ij =>
         phase t * Complex.exp
           ((((t * (α ij.1 - β ij.2) : ℝ) : ℂ) * Complex.I))
-      have hatom_meas : Measurable atom := by
-        apply measurable_pi_lambda
-        intro ij
-        dsimp only [atom]
-        fun_prop
-      have hatom_norm (t : ℝ) : ‖atom t‖ ≤ 1 := by
-        rw [pi_norm_le_iff_of_nonneg zero_le_one]
-        intro ij
-        have hexpnorm :
-            ‖Complex.exp
-              ((((t * (α ij.1 - β ij.2) : ℝ) : ℂ) * Complex.I))‖ = 1 :=
-          Complex.norm_exp_ofReal_mul_I _
-        simp only [atom, norm_mul, hexpnorm, mul_one]
-        exact hphase_norm t
+      obtain ⟨hatom_meas, hatom_norm⟩ :=
+        measurable_and_norm_le_one_frequencyAtom α β hphase_meas hphase_norm
       have hatom_int : MeasureTheory.Integrable atom μ :=
         MeasureTheory.Integrable.of_bound hatom_meas.aestronglyMeasurable 1
           (Filter.Eventually.of_forall hatom_norm)
@@ -477,27 +515,8 @@ theorem hasApproximateFiniteReciprocalFourierInterpolation_of_integrableKernel
         ⟨q, w, z, hw_nonneg, hw_sum, hquad⟩
       have hmoment (ij : Fin m × Fin n) :
           (∫ t, atom t ij ∂μ) =
-            (1 : ℂ) / ((α ij.1 - β ij.2 : ℝ) : ℂ) := by
-        -- states the goal with the definition unfolded, in the shape the next step needs;
-        -- there is no `_apply` lemma to rewrite with here.
-        change (∫ t, atom t ij ∂MeasureTheory.volume.withDensity density) = _
-        rw [integral_withDensity_eq_integral_toReal_smul
-          (by fun_prop)
-          (Filter.Eventually.of_forall fun _ => ENNReal.ofReal_lt_top) ]
-        rw [← hfourier (α ij.1 - β ij.2) (hgap ij.1 ij.2)]
-        apply MeasureTheory.integral_congr_ae
-        filter_upwards [] with t
-        simp only [ENNReal.toReal_ofReal (norm_nonneg _), atom]
-        calc
-          ‖f t‖ • (phase t * Complex.exp
-              ((((t * (α ij.1 - β ij.2) : ℝ) : ℂ) * Complex.I))) =
-              ((‖f t‖ : ℂ) * phase t) * Complex.exp
-                ((((t * (α ij.1 - β ij.2) : ℝ) : ℂ) * Complex.I)) := by
-            rw [RCLike.real_smul_eq_coe_mul, ← mul_assoc]
-            rfl
-          _ = _ := congrArg (fun u : ℂ => u * Complex.exp
-            ((((t * (α ij.1 - β ij.2) : ℝ) : ℂ) * Complex.I)))
-              (hnorm_mul_phase t)
+            (1 : ℂ) / ((α ij.1 - β ij.2 : ℝ) : ℂ) :=
+        integral_withDensity_frequencyAtom hfmeas hfourier (hgap ij.1 ij.2)
       let A : Fin m × Fin n → ℂ := ⨍ t, atom t ∂μ
       let Q : Fin m × Fin n → ℂ := ∑ r, w r • atom (z r)
       have hMA : M • A = ∫ t, atom t ∂μ := by

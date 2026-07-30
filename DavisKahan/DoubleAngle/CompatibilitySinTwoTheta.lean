@@ -16,6 +16,9 @@ The one-sided Davis--Kahan `sin (2 Theta)` operator attached to a trial range
 This definition is valid in arbitrary Hilbert dimension and agrees literally
 with the finite-dimensional source normalization.  No singular-value or compactness
 hypothesis is needed to define it.
+
+**Promoted 2026-07-30 under lane `EXP-PROMOTE-MISC`**, from
+`DavisKahan/Experimental/InfiniteDimensional/Core/`.  Nothing is restated.
 -/
 
 namespace TauCeti

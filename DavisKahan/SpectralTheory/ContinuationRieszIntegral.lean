@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationContour
+import DavisKahan.SpectralTheory.ContinuationContour
 import Mathlib.Analysis.Normed.Operator.NormedSpace
 
 /-!
@@ -19,6 +19,10 @@ one-form.  A `SpectralSeparatingContour` supplies exactly the common positive
 spectral distance needed for continuity of the resolvent on the contour image.
 The normalized Bochner curve integral defines the Riesz operator selected by
 the contour.
+
+**Promoted 2026-07-30 under lane `EXP-PROMOTE-MISC`**, in the same cascade: it became
+promotable only after the modules it imported were promoted earlier in this lane.  Nothing is
+restated; names and namespace are unchanged.
 -/
 
 namespace TauCeti

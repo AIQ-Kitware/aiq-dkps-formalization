@@ -101,7 +101,8 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 # sits one chain later than its subject matter suggests.  Placed by dependency,
 # not by name -- `--check` reports a forward reference otherwise.
 ("T15a","Closed operators on LinearPMap: graphs, constructions and form bounds",
- [A+"LinearPMap."+x for x in ["Closed","Constructions","GraphCore","Sylvester"]]
+ [A+"LinearPMap."+x for x in ["Closed","Constructions","GraphCore","Sylvester",
+   "SubmoduleAdjoint"]]
  +[A+"QuadraticFormBounds",A+"SpectralOrder.Complex"]),
 ("T15b","Resolvents of self-adjoint LinearPMap operators, and semiboundedness",
  [A+"LinearPMap."+x for x in ["Resolvent","ResolventBound","ResolventOpen",

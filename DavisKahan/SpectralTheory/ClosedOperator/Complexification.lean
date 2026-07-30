@@ -61,13 +61,8 @@ theorem continuous_im : Continuous (im : Eℂ → E) :=
   continuous_snd.comp (WithLp.homeomorphProd 2 E E).continuous
 
 omit [InnerProductSpace ℝ E] [CompleteSpace E] in
-/-- Each coordinate norm is bounded by the L2 norm. -/
-theorem norm_re_le (z : Eℂ) : ‖re z‖ ≤ ‖z‖ := by
-  rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), RealComplexification.norm_sq]
-  nlinarith [sq_nonneg ‖im z‖]
-
-omit [InnerProductSpace ℝ E] [CompleteSpace E] in
-/-- Each coordinate norm is bounded by the L2 norm. -/
+/-- Each coordinate norm is bounded by the L2 norm.  The real-coordinate half is
+`Foundation.RealComplexification.norm_re_le`, opened above. -/
 theorem norm_im_le (z : Eℂ) : ‖im z‖ ≤ ‖z‖ := by
   rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), RealComplexification.norm_sq]
   nlinarith [sq_nonneg ‖re z‖]
@@ -742,11 +737,11 @@ predicate. -/
 theorem unboundedSylvesterGap_complexify
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
-    {δ : ℝ} (hgap : UnboundedSylvesterGap A B δ) :
-    UnboundedSylvesterGap (complexify A) (complexify B) δ := by
+    {δ : ℝ} (hgap : FormBoundedSylvesterGap A B δ) :
+    FormBoundedSylvesterGap (complexify A) (complexify B) δ := by
   cases hgap with
   | intervalExterior hβα hgap =>
-      apply UnboundedSylvesterGap.intervalExterior hβα
+      apply FormBoundedSylvesterGap.intervalExterior hβα
       rcases hgap with hgap | hgap
       · left
         constructor
@@ -773,10 +768,10 @@ theorem unboundedSylvesterGap_complexify
             rwa [closed_realSpectrum_complexify A] at hlamA
           exact hgap.2 hlam'
   | leftAboveRightBelow c hA hB =>
-      exact UnboundedSylvesterGap.leftAboveRightBelow c
+      exact FormBoundedSylvesterGap.leftAboveRightBelow c
         (semiboundedBelow_complexify hA) (semiboundedAbove_complexify hB)
   | leftBelowRightAbove c hA hB =>
-      exact UnboundedSylvesterGap.leftBelowRightAbove c
+      exact FormBoundedSylvesterGap.leftBelowRightAbove c
         (semiboundedAbove_complexify hA) (semiboundedBelow_complexify hB)
 
 end ClosedOperatorComplexification

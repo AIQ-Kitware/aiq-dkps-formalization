@@ -47,7 +47,7 @@ theorem sinTheta_unbounded_of_intervalExteriorGap
     (_hX : IsometricEmbedding D.X)
     (hF₁ : IsometricEmbedding D.F₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hgap : UnboundedIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
+    (hgap : RealSpectrumIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
       δ * N.gaugeReal (D.X.adjoint ∘L D.F₁)
@@ -70,7 +70,7 @@ theorem sinTheta_unbounded
     (_hX : IsometricEmbedding D.X)
     (hF₁ : IsometricEmbedding D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
       δ * N.gaugeReal (D.X.adjoint ∘L D.F₁)
@@ -93,9 +93,14 @@ variable {E F G H : Type v}
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- Generalized finite-interval/exterior endpoint.  At least one diagonal block
-has bounded spectrum, so this is not the fully two-unbounded theorem. -/
-theorem generalizedSinTheta_unbounded_of_intervalExteriorGap
+/-- Generalized finite-interval/exterior endpoint over the `realSpectrum` gap.
+At least one diagonal block has bounded spectrum, so this is not the fully
+two-unbounded theorem.
+
+`generalizedSinTheta_unbounded_of_spectralIntervalExteriorGap` is the same statement over
+`SpectralIntervalExteriorGap`, the Spectra-spectrum spelling of the same
+configuration. -/
+theorem generalizedSinTheta_unbounded_of_realSpectrumIntervalExteriorGap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
@@ -106,7 +111,7 @@ theorem generalizedSinTheta_unbounded_of_intervalExteriorGap
     {β α δ ε : ℝ}
     (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : UnboundedIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
+    (hgap : RealSpectrumIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
       δ * ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)
@@ -140,12 +145,12 @@ theorem generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
     {β α δ ε : ℝ}
     (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : UnboundedIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
+    (hgap : RealSpectrumIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem (directedSinThetaOperator D.X F₀ hframe hε) ∧
       δ * ε * N.gaugeReal (directedSinThetaOperator D.X F₀ hframe hε)
         ≤ N.gaugeReal D.residual := by
-  have hBlock := generalizedSinTheta_unbounded_of_intervalExteriorGap
+  have hBlock := generalizedSinTheta_unbounded_of_realSpectrumIntervalExteriorGap
     N D hA hA₀ hΛ₁ hdecomp.isometry₁ hβα hδ hε hframe hgap hR
   have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
     N D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
@@ -165,7 +170,7 @@ theorem generalizedSinTheta_unbounded
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
       δ * ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)
@@ -199,7 +204,7 @@ theorem generalizedSinTheta_unbounded_exact
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem (directedSinThetaOperator D.X F₀ hframe hε) ∧
       δ * ε * N.gaugeReal (directedSinThetaOperator D.X F₀ hframe hε)
@@ -240,7 +245,7 @@ theorem sinTheta_unbounded_exact_of_intervalExteriorGap
     (hX : IsometricEmbedding D.X)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hgap : UnboundedIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
+    (hgap : RealSpectrumIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem
       ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
@@ -268,7 +273,7 @@ theorem sinTheta_unbounded_exact
     (hX : IsometricEmbedding D.X)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
       ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧

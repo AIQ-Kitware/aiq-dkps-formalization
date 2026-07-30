@@ -45,7 +45,7 @@ theorem real_unbounded_sylvester_kyFan
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap A B δ)
+    (hgap : FormBoundedSylvesterGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X C)
     (k : ℕ) :
     δ * kyFanApproximationGauge k X ≤
@@ -81,7 +81,7 @@ theorem davisKahan1970_sylvester_real
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap A B δ)
+    (hgap : FormBoundedSylvesterGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧

@@ -437,6 +437,95 @@ theorem complexify_injective [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   have hx : complexify S (ofReal x) = complexify T (ofReal x) := by rw [h]
   simpa using congrArg re hx
 
+/-- A real scalar acts through its complex coercion. -/
+@[simp] theorem coe_real_smul [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (r : ℝ) (z : RealComplexification E) : (r : ℂ) • z = r • z := by
+  apply RealComplexification.ext
+  · simp only [re_complex_smul, Complex.ofReal_re, Complex.ofReal_im, zero_smul, sub_zero]
+    rfl
+  · simp only [im_complex_smul, Complex.ofReal_re, Complex.ofReal_im, zero_smul, zero_add]
+    rfl
+
+/-- A coordinate of a vector is no longer than the vector. -/
+theorem norm_re_le [NormedAddCommGroup E] (z : RealComplexification E) : ‖re z‖ ≤ ‖z‖ := by
+  have h := norm_sq z
+  nlinarith [norm_nonneg (re z), norm_nonneg (im z), norm_nonneg z]
+
+/-- Every vector is its real part plus `i` times its imaginary part. -/
+theorem eq_ofReal_add_I_smul_ofReal [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (z : RealComplexification E) : z = ofReal (re z) + Complex.I • ofReal (im z) := by
+  apply RealComplexification.ext <;> simp
+
+/-- An operator commuting with conjugation maps the real copy **into** the real copy: the
+imaginary part of `T (ofReal x)` vanishes.
+
+This is the whole content of the conjugation condition, and it is what makes `realify` below
+a two-sided inverse of `complexify`. -/
+theorem im_apply_ofReal_eq_zero [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    {T : RealComplexification E →L[ℂ] RealComplexification F}
+    (hT : ∀ z, T (conjugation z) = conjugation (T z)) (x : E) : im (T (ofReal x)) = 0 := by
+  have h := hT (ofReal x)
+  rw [conjugation_ofReal] at h
+  have hneg : im (T (ofReal x)) = -im (T (ofReal x)) := by
+    have := congrArg im h
+    simpa using this
+  have h2 : (2 : ℝ) • im (T (ofReal x)) = 0 := by
+    rw [two_smul]
+    exact add_eq_zero_iff_eq_neg.mpr hneg
+  simpa using h2
+
+/-- The real operator underlying a `ℂ`-linear operator: read off the action on the real copy.
+
+Paired with `complexify_realify` this says `complexify` is a bijection onto the operators
+commuting with `conjugation` — the surjectivity half that `complexify_injective` leaves open. -/
+noncomputable def realify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    (T : RealComplexification E →L[ℂ] RealComplexification F) : E →L[ℝ] F :=
+  LinearMap.mkContinuous
+    { toFun := fun x => re (T (ofReal x))
+      map_add' := fun x y => by simp
+      map_smul' := fun r x => by
+        have : ofReal (r • x) = (r : ℂ) • ofReal (x : E) := by
+          rw [coe_real_smul]; exact map_smul ofReal r x
+        rw [this, map_smul, coe_real_smul]
+        rfl }
+    ‖T‖ fun x => by
+      refine (norm_re_le _).trans ?_
+      simpa using T.le_opNorm (ofReal x)
+
+/-- `realify T` acts by reading the real part of `T` on the real copy. -/
+@[simp] theorem realify_apply [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    (T : RealComplexification E →L[ℂ] RealComplexification F) (x : E) :
+    realify T x = re (T (ofReal x)) := rfl
+
+/-- **`complexify` is onto the conjugation-commuting operators.**  Together with
+`complexify_injective`, complexification identifies `E →L[ℝ] F` with exactly those
+`ℂ`-linear operators that commute with `conjugation`. -/
+theorem complexify_realify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    {T : RealComplexification E →L[ℂ] RealComplexification F}
+    (hT : ∀ z, T (conjugation z) = conjugation (T z)) : complexify (realify T) = T := by
+  have him := im_apply_ofReal_eq_zero hT
+  apply ContinuousLinearMap.ext
+  intro z
+  have hz : T z = T (ofReal (re z)) + Complex.I • T (ofReal (im z)) := by
+    conv_lhs => rw [eq_ofReal_add_I_smul_ofReal z]
+    rw [map_add, map_smul]
+  apply RealComplexification.ext
+  · rw [re_complexify, realify_apply, hz]
+    simp [him]
+  · rw [im_complexify, realify_apply, hz]
+    simp [him]
+
+/-- The complexification of a real operator commutes with conjugation. -/
+theorem complexify_conjugation [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    (T : E →L[ℝ] F) (z : RealComplexification E) :
+    complexify T (conjugation z) = conjugation (complexify T z) := by
+  apply RealComplexification.ext <;> simp
+
 /-- Symmetry of a real operator is equivalent to symmetry of its complexification. -/
 theorem complexify_isSymmetric_iff [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     (T : E →L[ℝ] E) :

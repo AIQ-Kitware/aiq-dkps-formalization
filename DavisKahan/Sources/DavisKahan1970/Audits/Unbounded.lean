@@ -49,8 +49,8 @@ namespace ExactSinTheta
 #check realSpectralSubspace_orthogonalExactDecomposition
 #check sinTheta_unbounded_real_spectralSubspace
 #check generalizedSinTheta_unbounded_real_spectralSubspace
-#check GenuineGeneralSinThetaProblem.result
-#check GenuineIsometricSinThetaProblem.result
+#check SpectralGeneralSinThetaProblem.result
+#check SpectralIsometricSinThetaProblem.result
 #check TauCeti.DavisKahanExt.ClosedOperator.realResolventSet
 #check realSpectrum_eq_spectraSpectrum
 #check ClosedOperatorComplexification.isSelfAdjoint_complexify
@@ -58,7 +58,7 @@ namespace ExactSinTheta
 #check ComplexificationApproximation.approximationNumber_complexify
 #check ComplexificationApproximation.kyFanApproximationGauge_complexify
 #check RealComplexificationFunctionalCalculus.conjugateOperator_cfc_eq
-#check sylvesterIntervalExteriorGap_of_legacy
+#check sylvesterIntervalExteriorGap_of_realSpectrum
 #check davisKahan1970_sylvester_complex
 #check sinTheta_unbounded_exact_complex
 #check generalizedSinTheta_unbounded_complex
@@ -69,9 +69,9 @@ namespace ExactSinTheta
 #check lowerFramePolarData_real_nonempty
 #check generalizedSinTheta_unbounded_exact_real
 #check directedSinThetaOperatorReal_eq_of_isometry
-#check IsometricSinThetaProblem.result_complex
-#check IsometricSinThetaProblem.result_real
-#check GeneralSinThetaProblem.result
+#check FormBoundedIsometricSinThetaProblem.result_complex
+#check FormBoundedIsometricSinThetaProblem.result_real
+#check FormBoundedGeneralSinThetaProblem.result
 #check RealGeneralSinThetaProblem.result
 #check BoundedGeneralSinThetaProblem.result
 #check RealBoundedGeneralSinThetaProblem.result
@@ -105,8 +105,8 @@ namespace ExactSinTheta
 #print axioms realSpectralSubspace_orthogonalExactDecomposition
 #print axioms sinTheta_unbounded_real_spectralSubspace
 #print axioms generalizedSinTheta_unbounded_real_spectralSubspace
-#print axioms GenuineGeneralSinThetaProblem.result
-#print axioms GenuineIsometricSinThetaProblem.result
+#print axioms SpectralGeneralSinThetaProblem.result
+#print axioms SpectralIsometricSinThetaProblem.result
 #print axioms TauCeti.DavisKahanExt.ClosedOperator.realSpectrum
 #print axioms realSpectrum_eq_spectraSpectrum
 #print axioms ClosedOperatorComplexification.isSelfAdjoint_complexify
@@ -114,7 +114,7 @@ namespace ExactSinTheta
 #print axioms ComplexificationApproximation.approximationNumber_complexify
 #print axioms ComplexificationApproximation.kyFanApproximationGauge_complexify
 #print axioms RealComplexificationFunctionalCalculus.conjugateOperator_cfc_eq
-#print axioms sylvesterIntervalExteriorGap_of_legacy
+#print axioms sylvesterIntervalExteriorGap_of_realSpectrum
 #print axioms davisKahan1970_sylvester_complex
 #print axioms sinTheta_unbounded_exact_complex
 #print axioms generalizedSinTheta_unbounded_complex
@@ -125,9 +125,9 @@ namespace ExactSinTheta
 #print axioms lowerFramePolarData_real_nonempty
 #print axioms generalizedSinTheta_unbounded_exact_real
 #print axioms directedSinThetaOperatorReal_eq_of_isometry
-#print axioms IsometricSinThetaProblem.result_complex
-#print axioms IsometricSinThetaProblem.result_real
-#print axioms GeneralSinThetaProblem.result
+#print axioms FormBoundedIsometricSinThetaProblem.result_complex
+#print axioms FormBoundedIsometricSinThetaProblem.result_real
+#print axioms FormBoundedGeneralSinThetaProblem.result
 #print axioms RealGeneralSinThetaProblem.result
 #print axioms BoundedGeneralSinThetaProblem.result
 #print axioms RealBoundedGeneralSinThetaProblem.result

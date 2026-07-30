@@ -34,7 +34,6 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -88,5 +87,4 @@ theorem sylvester_complementaryTrialBlock_eq_projectedGeneralResidual
     LinearMap.sub_apply, map_sub]
   rw [complementaryProjection_apply_comm_of_isInvariant hA hU (X x)]
 
-end DavisKahanTheory
 end TauCeti

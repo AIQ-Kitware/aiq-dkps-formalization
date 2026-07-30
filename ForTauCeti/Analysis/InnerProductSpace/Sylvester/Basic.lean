@@ -37,7 +37,6 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 namespace TauCeti
 
 open TauCeti
-open DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 
