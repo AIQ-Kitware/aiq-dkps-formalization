@@ -69,6 +69,30 @@ noncomputable local instance completeSpaceOfHasOrthogonalProjection
     (W : Submodule ℂ E) [W.HasOrthogonalProjection] : CompleteSpace W :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
+/-- `J⋆ J = 1` for the inclusion `J = W.subtypeL` of an orthogonally complemented
+subspace.  This is the *only* coercion-level fact the block decompositions below
+need: with it, and with `J J⋆ = W.starProjection` (which is definitional, since
+`starProjection` *is* `subtypeL ∘L orthogonalProjectionOnto`), every block identity
+becomes operator algebra in `E` with no `⟨_, _⟩` bookkeeping. -/
+private theorem adjoint_subtypeL_comp_subtypeL
+    (W : Submodule ℂ E) [W.HasOrthogonalProjection] :
+    W.subtypeL.adjoint ∘L W.subtypeL = ContinuousLinearMap.id ℂ W := by
+  ext x
+  rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply,
+    Submodule.adjoint_subtypeL, Submodule.subtypeL_apply]
+  -- `ext` has already descended to the coercion level, so take the coercion of
+  -- the subspace-level identity.
+  exact congrArg (fun z : W => (z : E))
+    (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self x)
+
+/-- `J J⋆ = P`, the projection onto `W`.  True by definition of `starProjection`
+once `adjoint_subtypeL` rewrites `J⋆` to `orthogonalProjectionOnto`. -/
+private theorem subtypeL_comp_adjoint_subtypeL
+    (W : Submodule ℂ E) [W.HasOrthogonalProjection] :
+    W.subtypeL ∘L W.subtypeL.adjoint = W.starProjection := by
+  rw [Submodule.adjoint_subtypeL]
+  rfl
+
 private theorem ambientAngularOperator_eq_extendCoordinate
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
     (Y : E →L[ℂ] E) (hY : IsAngularOperator U Y) :
@@ -77,12 +101,21 @@ private theorem ambientAngularOperator_eq_extendCoordinate
   intro x
   have hYP : Y (U.starProjection x) = Y x := by
     have h := DFunLike.congr_fun hY.1 x
-    simpa only [ContinuousLinearMap.comp_apply] using h.symm
-  have hcoord := coe_subspaceAngularCoordinate_apply U Y hY
-    ⟨U.starProjection x, U.starProjection_apply_mem x⟩
-  change Y x = (((subspaceAngularCoordinate U Y)
-    ⟨U.starProjection x, U.starProjection_apply_mem x⟩ : Uᗮ) : E)
-  rw [← hcoord, hYP]
+    -- `h : (Y ∘ P) x = Y x` is already the right way round -- the `.symm` was
+    -- backwards -- and `IsAngularOperator` states its field with
+    -- `DavisKahanExt.projection`, so that abbreviation has to be unfolded for the
+    -- goal's `U.starProjection` to match.
+    simpa only [ContinuousLinearMap.comp_apply, DavisKahanExt.projection,
+      DavisKahan.projection] using h
+  -- Rewrite the ambient right-hand side instead of `change`-ing the goal.  The
+  -- adjoint of `subtypeL` is the orthogonal projection *into* the subspace
+  -- (`Submodule.adjoint_subtypeL`) and its coercion back to `E` is
+  -- `starProjection`; neither step is definitional, so `change` cannot bridge
+  -- them and the old `⟨U.starProjection x, _⟩` pattern never matched.
+  rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply,
+    Submodule.subtypeL_apply,
+    coe_subspaceAngularCoordinate_apply U Y hY (U.subtypeL.adjoint x),
+    Submodule.adjoint_subtypeL, ← Submodule.starProjection_apply, hYP]
 
 private theorem ambient_doubleAngleTangent_eq_extendCoordinate
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
@@ -120,88 +153,149 @@ private theorem ambient_doubleAngleTangent_eq_extendCoordinate
   have hPG : P ∘L G = G := by
     dsimp [G]
     rw [← ContinuousLinearMap.comp_assoc, hPYstar]
+  -- `Y⋆` in block form: `(J⊥ X J⋆)⋆ = J X⋆ J⊥⋆`.
+  have hYadj : Y.adjoint
+      = U.subtypeL ∘L X.adjoint ∘L Uᗮ.subtypeL.adjoint := by
+    rw [hYext, ContinuousLinearMap.adjoint_comp,
+      ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_adjoint,
+      ContinuousLinearMap.comp_assoc]
+  -- `J⊥⋆ J⊥ = 1`, stated pointwise so that it can be used as a `simp` rule
+  -- inside applications (where composition brackets are not an obstacle).
+  have hperp : ∀ y : Uᗮ, Uᗮ.subtypeL.adjoint (Uᗮ.subtypeL y) = y := by
+    intro y
+    have h := congrArg (fun T : Uᗮ →L[ℂ] Uᗮ => T y)
+      (adjoint_subtypeL_comp_subtypeL Uᗮ)
+    simpa using h
+  -- `G = Y⋆Y = J X⋆X J⋆`: the `J⊥` factors cancel.
+  have hG : G = U.subtypeL ∘L (X.adjoint ∘L X) ∘L U.subtypeL.adjoint := by
+    ext x
+    show Y.adjoint (Y x)
+      = U.subtypeL ((X.adjoint ∘L X) (U.subtypeL.adjoint x))
+    rw [hYadj, hYext]
+    simp only [ContinuousLinearMap.comp_apply, hperp]
+  -- `P + P⊥ = 1` as operators.
+  have hPsum : U.starProjection + Uᗮ.starProjection
+      = ContinuousLinearMap.id ℂ E := by
+    ext x
+    rw [ContinuousLinearMap.add_apply, ContinuousLinearMap.id_apply]
+    exact U.starProjection_add_starProjection_orthogonal x
+  -- Now the block identity is pure algebra: `J DX J⋆ = J J⋆ - J X⋆X J⋆ = P - G`,
+  -- so `D = 1 - G = (P - G) + P⊥` reduces to `P + P⊥ = 1`.  No coercions.
   have hDblock : D =
       U.subtypeL ∘L DX ∘L U.subtypeL.adjoint + Uᗮ.starProjection := by
-    apply ContinuousLinearMap.ext
-    intro x
-    change x - Y.adjoint (Y x) =
-      ((U.subtypeL ∘L DX ∘L U.subtypeL.adjoint) x) + Uᗮ.starProjection x
-    have hsplit : x = U.starProjection x + Uᗮ.starProjection x := by
-      rw [U.starProjection_add_starProjection_orthogonal]
-    have hYperp : Y (Uᗮ.starProjection x) = 0 := by
-      have h := DFunLike.congr_fun hYP (Uᗮ.starProjection x)
-      rw [ContinuousLinearMap.comp_apply,
-        Submodule.starProjection_apply_eq_zero_iff.mpr
-          (Uᗮ.starProjection_apply_mem x)] at h
-      simpa using h.symm
-    rw [hsplit, map_add, hYperp, map_zero, add_zero]
-    apply congrArg (fun z : U => (z : E))
-    ext
-    simp only [DX, D, doubleAngleDenominator,
-      ContinuousLinearMap.comp_apply, sub_apply, ContinuousLinearMap.id_apply,
-      Submodule.coe_sub, Submodule.coe_mk]
-    rw [coe_subspaceAngularCoordinate_apply U Y hY]
-    have hAdj :
-        (((X.adjoint (X
-          ⟨U.starProjection x, U.starProjection_apply_mem x⟩) : U) : E)) =
-          Y.adjoint (Y (U.starProjection x)) := by
-      apply Subtype.ext
-      intro
-      rw [ContinuousLinearMap.adjoint_inner_left,
-        ContinuousLinearMap.adjoint_inner_left]
-      simp only [X]
-      rw [coe_subspaceAngularCoordinate_apply U Y hY]
-      rfl
-    rw [hAdj]
+    have hJDXJ : U.subtypeL ∘L DX ∘L U.subtypeL.adjoint
+        = U.starProjection - G := by
+      show U.subtypeL ∘L (ContinuousLinearMap.id ℂ U - X.adjoint ∘L X) ∘L
+          U.subtypeL.adjoint = U.starProjection - G
+      rw [ContinuousLinearMap.sub_comp, ContinuousLinearMap.comp_sub,
+        ContinuousLinearMap.id_comp,
+        subtypeL_comp_adjoint_subtypeL U, hG]
+    show ContinuousLinearMap.id ℂ E - G
+        = U.subtypeL ∘L DX ∘L U.subtypeL.adjoint + Uᗮ.starProjection
+    rw [hJDXJ, ← hPsum]
+    abel
   have hDunit := isUnit_doubleAngleDenominator Y hcontractive
   have hDXcontractive : ‖X‖ < 1 :=
     (norm_subspaceAngularCoordinate_le U Y).trans_lt hcontractive
   have hDXunit := isUnit_doubleAngleDenominator X hDXcontractive
+  -- Every cancellation is stated POINTWISE: under application the brackets are
+  -- automatic, whereas no associativity convention brackets `J⋆ J` together
+  -- inside a composition chain.  Same technique as `hG` above.
+  have hJU : ∀ u : U, U.subtypeL.adjoint (U.subtypeL u) = u := by
+    intro u
+    have h := congrArg (fun T : U →L[ℂ] U => T u)
+      (adjoint_subtypeL_comp_subtypeL U)
+    simpa using h
+  have hJJadjApp : ∀ y : E,
+      U.subtypeL (U.subtypeL.adjoint y) = U.starProjection y := by
+    intro y
+    have h := congrArg (fun T : E →L[ℂ] E => T y)
+      (subtypeL_comp_adjoint_subtypeL U)
+    simpa using h
+  have hJadjPerpApp : ∀ y : E,
+      U.subtypeL.adjoint (Uᗮ.starProjection y) = 0 := by
+    intro y
+    apply Subtype.ext
+    rw [Submodule.adjoint_subtypeL, ← Submodule.starProjection_apply]
+    simpa using (Submodule.starProjection_apply_eq_zero_iff (K := U)).mpr
+      (Uᗮ.starProjection_apply_mem y)
+  have hPerpJApp : ∀ u : U, Uᗮ.starProjection (U.subtypeL u) = 0 := by
+    intro u
+    rw [Submodule.subtypeL_apply]
+    exact (Submodule.starProjection_apply_eq_zero_iff (K := Uᗮ)).mpr
+      (Submodule.le_orthogonal_orthogonal U u.2)
+  have hDXinv : ∀ u : U, DX (Ring.inverse DX u) = u := by
+    intro u
+    have h := congrArg (fun T : U →L[ℂ] U => T u)
+      (Ring.mul_inverse_cancel DX hDXunit)
+    simpa using h
+  have hPerpIdem : ∀ y : E,
+      Uᗮ.starProjection (Uᗮ.starProjection y) = Uᗮ.starProjection y := by
+    intro y
+    exact Submodule.starProjection_eq_self_iff.mpr
+      (Uᗮ.starProjection_apply_mem y)
   have hDinvblock : Ring.inverse D =
       U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
         Uᗮ.starProjection := by
-    apply (ContinuousLinearMap.isUnit_iff_bijective.mp hDunit).1
-    have hmul := Ring.mul_inverse_cancel D hDunit
     have hcandidate :
         D ∘L (U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
           Uᗮ.starProjection) = ContinuousLinearMap.id ℂ E := by
-      rw [hDblock, ContinuousLinearMap.add_comp,
-        ContinuousLinearMap.comp_add]
-      have hUU : U.subtypeL.adjoint ∘L U.subtypeL =
-          ContinuousLinearMap.id ℂ U := by
-        ext x
-        apply Subtype.ext
-        simp
-      have hXX := Ring.mul_inverse_cancel DX hDXunit
-      have hcross1 :
-          (U.subtypeL ∘L DX ∘L U.subtypeL.adjoint) ∘L
-            Uᗮ.starProjection = 0 := by
-        ext x
-        simp
-      have hcross2 : Uᗮ.starProjection ∘L
-          (U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint) = 0 := by
-        ext x
-        simp
-      rw [hcross1, hcross2, add_zero, zero_add,
-        ContinuousLinearMap.comp_assoc, ← ContinuousLinearMap.comp_assoc DX,
-        hUU, ContinuousLinearMap.id_comp, hXX,
-        ContinuousLinearMap.comp_assoc,
-        U.isIdempotentElem_starProjection_orthogonal.eq]
       ext x
-      simp
-    have hcand := congrArg (fun T : E →L[ℂ] E => T) hcandidate
-    rw [← hmul] at hcand
-    exact hcand
-  unfold doubleAngleTangentOperator
-  rw [hYext, hDinvblock]
+      rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply,
+        ContinuousLinearMap.add_apply, hDblock]
+      simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.comp_apply,
+        map_add, hJU, hJadjPerpApp, hPerpJApp, hDXinv, hPerpIdem, hJJadjApp,
+        map_zero, add_zero, zero_add]
+      exact U.starProjection_add_starProjection_orthogonal x
+    -- From `D B = 1` and `D⁻¹ D = 1`, cancel `D` on the left.  The old script
+    -- applied *injectivity* of `D` (`isUnit_iff_bijective.mp hDunit |>.1`) to an
+    -- *equation*, and that conclusion shape cannot match the goal.
+    calc Ring.inverse D
+        = Ring.inverse D * 1 := (mul_one _).symm
+      _ = Ring.inverse D *
+            (D * (U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
+              Uᗮ.starProjection)) := by
+          rw [show D * (U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
+            Uᗮ.starProjection) = 1 from hcandidate]
+      _ = (Ring.inverse D * D) *
+            (U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
+              Uᗮ.starProjection) := (mul_assoc _ _ _).symm
+      _ = 1 * (U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
+              Uᗮ.starProjection) := by
+          rw [Ring.inverse_mul_cancel D hDunit]
+      _ = _ := one_mul _
+  -- Finish POINTWISE.  At operator level neither rewrite order works: `hYext`
+  -- first also rewrites the `Y` hidden inside `X := subspaceAngularCoordinate U Y`
+  -- (making it self-referential), and `hDinvblock` first leaves `Ring.inverse D`
+  -- unmatched because `D = doubleAngleDenominator Y` still mentions `Y`.
+  -- Applying to a vector sidesteps both.
+  have hYPerpApp : ∀ y : E, Y (Uᗮ.starProjection y) = 0 := by
+    intro y
+    have h := DFunLike.congr_fun hYP (Uᗮ.starProjection y)
+    rw [ContinuousLinearMap.comp_apply,
+      (Submodule.starProjection_apply_eq_zero_iff (K := U)).mpr
+        (Uᗮ.starProjection_apply_mem y)] at h
+    simpa using h.symm
   apply ContinuousLinearMap.ext
   intro x
-  simp only [smul_apply, ContinuousLinearMap.comp_apply, add_apply]
-  have hcross : X (U.subtypeL.adjoint (Uᗮ.starProjection x)) = 0 := by
-    simp
-  rw [hcross, map_zero, add_zero]
-  rfl
+  have hDinvApp : Ring.inverse D x
+      = U.subtypeL (Ring.inverse DX (U.subtypeL.adjoint x))
+        + Uᗮ.starProjection x := by
+    have h := congrArg (fun T : E →L[ℂ] E => T x) hDinvblock
+    simpa using h
+  have hYJ : Y (U.subtypeL (Ring.inverse DX (U.subtypeL.adjoint x)))
+      = Uᗮ.subtypeL (X (Ring.inverse DX (U.subtypeL.adjoint x))) := by
+    rw [hYext]
+    simp only [ContinuousLinearMap.comp_apply, hJU]
+  show (2 : ℂ) • Y (Ring.inverse D x)
+      = Uᗮ.subtypeL ((2 : ℂ) • X (Ring.inverse DX (U.subtypeL.adjoint x)))
+  rw [hDinvApp, map_add, hYPerpApp, add_zero, hYJ, map_smul]
 
+-- This proof carries about forty `have`s over operators on `E`, several of them
+-- `Ring.inverse` and `CFC` terms whose defeq checks are expensive; it exhausts the
+-- default heartbeat budget during `whnf`.  The budget is raised rather than the
+-- proof weakened -- nothing here is `sorry`ed or `simp`-blasted.
+set_option maxHeartbeats 1600000 in
 /-- The canonical ambient double-angle tangent is the modulus of the ambient
 extension of the graph-coordinate double-angle tangent. -/
 private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
@@ -250,10 +344,24 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
   have hNunit : IsUnit N := by
     refine TauCeti.ContinuousLinearMap.isUnit_of_coercive one_pos ?_
     intro x
-    dsimp [N, G]
-    rw [add_apply, ContinuousLinearMap.id_apply, inner_add_left, map_add,
-      ContinuousLinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
-    nlinarith [sq_nonneg ‖Y x‖]
+    -- Compute the form value first, then conclude numerically.  Doing it with a
+    -- `rw` chain does not work: `isUnit_of_coercive` states its hypothesis with
+    -- `RCLike.re`, `dsimp` collapses that to `Complex.re`, and after the collapse
+    -- neither `map_add` (which wants a bundled additive map) nor
+    -- `inner_self_eq_norm_sq` (which is stated for `RCLike.re`) can match.
+    have hval : RCLike.re ⟪N x, x⟫_ℂ = ‖x‖ ^ 2 + ‖Y x‖ ^ 2 := by
+      have hN : N x = x + Y.adjoint (Y x) := by
+        show (ContinuousLinearMap.id ℂ E + Y.adjoint ∘L Y) x
+            = x + Y.adjoint (Y x)
+        rw [ContinuousLinearMap.add_apply, ContinuousLinearMap.id_apply,
+          ContinuousLinearMap.comp_apply]
+      rw [hN]
+      -- `← ofReal_pow` pulls `(↑‖x‖) ^ 2` back to `↑(‖x‖ ^ 2)` so that
+      -- `Complex.ofReal_re` can strip the coercion.
+      simp [inner_add_left, ContinuousLinearMap.adjoint_inner_left,
+        inner_self_eq_norm_sq, ← Complex.ofReal_pow]
+    rw [hval]
+    nlinarith [sq_nonneg ‖Y x‖, norm_nonneg x]
   have hNR : N ∘L R = ContinuousLinearMap.id ℂ E :=
     Ring.mul_inverse_cancel N hNunit
   have hRN : R ∘L N = ContinuousLinearMap.id ℂ E :=
@@ -281,30 +389,79 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
       _ = (R ∘L G) ∘L (N ∘L R) := by simp only [ContinuousLinearMap.comp_assoc]
       _ = R ∘L G := by rw [hNR, ContinuousLinearMap.comp_id]
   have hQformula : Q = (P + Y) ∘L R ∘L (P + Y.adjoint) := by
-    have hgraph := projection_graphSubspace_formula U Y hY
-    rw [graphSubspace_quarterAcuteAngularOperator U V hquarter] at hgraph
-    dsimp [Q, graphProjectionFormula, P, N, R, G] at hgraph ⊢
-    simpa only [hYP, ContinuousLinearMap.star_eq_adjoint,
-      (isSelfAdjoint_starProjection U).star_eq, star_add, star_mul] using hgraph
+    -- Transporting `projection (graphSubspace U Y)` to `projection V` needs care:
+    -- `rw` fails with "motive is not type correct" because `projection` carries a
+    -- `HasOrthogonalProjection` instance *for the submodule being rewritten*, and
+    -- `simp only [lemma]` fails to match because `Y` is a `let`-bound fvar while
+    -- the lemma's LHS mentions `quarterAcuteAngularOperator` explicitly.  Naming
+    -- the equation as a local hypothesis fixes both: simp rewrites with an fvar
+    -- equation directly, and `HasOrthogonalProjection` is a `Prop` class, so the
+    -- instance argument is proof-irrelevant and congruence goes through.
+    have hV : graphSubspace U Y = V :=
+      graphSubspace_quarterAcuteAngularOperator U V hquarter
+    have hgraph : DavisKahanExt.projection V = graphProjectionFormula U Y := by
+      simpa only [hV] using projection_graphSubspace_formula U Y hY
+    -- `graphProjectionFormula` produces every factor decorated with `P`:
+    --   (P + Y P) · (1 + P Y⋆ (Y P))⁻¹ · (P + P Y⋆)
+    -- and the decorations collapse by `Y P = Y` and `P Y⋆ = Y⋆`, which are
+    -- exactly the two angular-operator identities.  `1` and `id` are the same
+    -- element of the endomorphism algebra, so the tail is `rfl`.
+    have hcollapse :
+        graphProjectionFormula U Y = (P + Y) ∘L R ∘L (P + Y.adjoint) := by
+      -- A literal `show` cannot state the expansion: it mixes two spellings of
+      -- the same operator (`DavisKahanExt.projection U` in some factors,
+      -- `U.starProjection` in others), so no single hand-written pattern matches.
+      -- Let `simp only` do the unfolding and the two collapses together.
+      show (P + Y * P) *
+            (Ring.inverse (1 + star (Y * P) * (Y * P)) * star (P + Y * P))
+          = (P + Y) ∘L R ∘L (P + Y.adjoint)
+      rw [show Y * P = Y from hYP, star_add,
+        ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.star_eq_adjoint,
+        hPadj]
+      -- `R`, `N`, `G` are `let`-bound, and `1`/`id` and `*`/`∘SL` differ only up
+      -- to unfolding, so finish by definitional equality.
+      show (P + Y) * (Ring.inverse (1 + Y.adjoint * Y) * (P + Y.adjoint))
+          = (P + Y) * (Ring.inverse (1 + Y.adjoint * Y) * (P + Y.adjoint))
+      rfl
+    exact hgraph.trans hcollapse
+  -- Done as a ring computation rather than by `simp` normalisation.  No
+  -- associativity convention works here: right-association hides `P ∘ P` from
+  -- `hPP`, left-association hides `Y⋆ ∘ P` from `hYstarP`.  Collapsing the two
+  -- outer factors *first* avoids the choice entirely.
+  have hPP : P ∘L P = P := U.isIdempotentElem_starProjection
   have hPQP : P ∘L Q ∘L P = R ∘L P := by
+    have hleft : P ∘L (P + Y) = P := by
+      rw [ContinuousLinearMap.comp_add, hPP, hPY, add_zero]
+    have hright : (P + Y.adjoint) ∘L P = P := by
+      rw [ContinuousLinearMap.add_comp, hPP, hYstarP, add_zero]
+    show P * (Q * P) = R * P
     rw [hQformula]
-    have hPP : P ∘L P = P := U.isIdempotentElem_starProjection
-    simp only [ContinuousLinearMap.comp_add, ContinuousLinearMap.add_comp,
-      ContinuousLinearMap.comp_assoc, hPY, hYstarP, hPP,
-      zero_add, add_zero, ContinuousLinearMap.zero_comp,
-      ContinuousLinearMap.comp_zero]
-    rw [hPR]
+    calc P * (((P + Y) * (R * (P + Y.adjoint))) * P)
+        = (P * (P + Y)) * (R * ((P + Y.adjoint) * P)) := by noncomm_ring
+      _ = P * (R * P) := by
+            rw [show P * (P + Y) = P from hleft,
+              show (P + Y.adjoint) * P = P from hright]
+      _ = (P * R) * P := by rw [mul_assoc]
+      _ = (R * P) * P := by rw [show P * R = R * P from hPR]
+      _ = R * (P * P) := by rw [mul_assoc]
+      _ = R * P := by rw [show P * P = P from hPP]
   have hPQperpP : P ∘L Vᗮ.starProjection ∘L P = G ∘L R ∘L P := by
-    rw [Submodule.starProjection_orthogonal' V,
-      ContinuousLinearMap.comp_sub, ContinuousLinearMap.sub_comp,
-      ContinuousLinearMap.comp_id, ContinuousLinearMap.id_comp, hPQP]
+    -- `starProjection_orthogonal'` yields `1 - Q` (not `id - Q`), so stay in
+    -- ring notation and let `noncomm_ring` distribute; that sidesteps both the
+    -- `1` vs `id` mismatch and the bracketing of `P ∘ ((1 - Q) ∘ P)`.
+    rw [Submodule.starProjection_orthogonal' V]
+    have hexpand : P * ((1 - Q) * P) = P * P - P * (Q * P) := by noncomm_ring
+    show P * ((1 - Q) * P) = G * (R * P)
+    rw [hexpand, show P * P = P from hPP, show P * (Q * P) = R * P from hPQP]
     have hidentity : P - R ∘L P = G ∘L R ∘L P := by
       have hNRP := congrArg (fun T : E →L[ℂ] E => T ∘L P) hNR
       dsimp [N] at hNRP
       simp only [ContinuousLinearMap.add_comp,
         ContinuousLinearMap.id_comp, ContinuousLinearMap.comp_assoc] at hNRP
-      rw [hGR] at hNRP
-      module
+      -- `hNRP : R P + G R P = P`.  The `rw [hGR]` that used to sit here was
+      -- superfluous and could not fire; the goal is pure additive rearrangement.
+      calc P - R ∘L P = (R ∘L P + G ∘L R ∘L P) - R ∘L P := by rw [hNRP]
+        _ = G ∘L R ∘L P := by abel
     exact hidentity
   let Cang : E →L[ℂ] E := cosAngleOperatorC U V
   let Sang : E →L[ℂ] E := sinAngleOperatorDirectedC U V
@@ -341,13 +498,16 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     commute_sinAngleOperatorDirectedC_cosAngleOperatorC U V
   have hSinTwo : sinTwoAngleOperatorC U V = (2 : ℂ) • (Sang ∘L Cang) := rfl
   have hCosTwo : cosTwoAngleOperatorC U V = D ∘L R ∘L P := by
-    dsimp [cosTwoAngleOperatorC, Cang, Sang, D]
-    rw [hCangSq, hSangSq]
-    rw [← ContinuousLinearMap.sub_comp, ← ContinuousLinearMap.comp_sub]
-    dsimp [D]
-    rw [ContinuousLinearMap.sub_comp, ContinuousLinearMap.id_comp]
-    congr 1
-    rw [hGR]
+    -- `dsimp` unfolds the `let`s, after which `hCangSq`/`hSangSq` (stated in terms
+    -- of `Cang`/`Sang`) no longer match.  Keep the abbreviations and restate the
+    -- squares with `*` instead.
+    show Cang * Cang - Sang * Sang = D ∘L R ∘L P
+    rw [show Cang * Cang = R ∘L P from hCangSq,
+      show Sang * Sang = G ∘L R ∘L P from hSangSq]
+    -- state the identity with `1`, not `ContinuousLinearMap.id`: they are the same
+    -- element, but `noncomm_ring` only knows `one_mul` for the former.
+    show R * P - G * (R * P) = ((1 : E →L[ℂ] E) - G) * (R * P)
+    noncomm_ring
   have hDunit : IsUnit D :=
     isUnit_doubleAngleDenominator Y
       (norm_quarterAcuteAngularOperator_lt_one U V hquarter)
@@ -366,123 +526,256 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
       doubleAngleTangentOperator Y
           (norm_quarterAcuteAngularOperator_lt_one U V hquarter) =
         (2 : ℂ) • (Y ∘L Ring.inverse D) := rfl
+  -- Hoisted above `hMsq`.  `hMsq` needs the self-adjointness of `D⁻¹` and the
+  -- commutation `[|Y|, D⁻¹] = 0`; both were originally proved *below*, inside
+  -- `hCandidateNonneg`, i.e. after their first use.
+  have hmodYnonneg : (0 : E →L[ℂ] E) ≤ ContinuousLinearMap.modulus Y :=
+    ContinuousLinearMap.modulus_nonneg Y
+  have hDnonneg : (0 : E →L[ℂ] E) ≤ D := by
+    rw [ContinuousLinearMap.nonneg_iff_isPositive]
+    refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp ?_, ?_⟩
+    · -- Stay in the `ContinuousLinearMap` star instance throughout: the route via
+      -- `IsSelfAdjoint.algebraMap` states the fact at a *different* `Star`
+      -- instance on the same type, which is why it failed to typecheck.
+      show IsSelfAdjoint (ContinuousLinearMap.id ℂ E - G)
+      have hidsa : IsSelfAdjoint (ContinuousLinearMap.id ℂ E) := by
+        show star (ContinuousLinearMap.id ℂ E) = ContinuousLinearMap.id ℂ E
+        rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_id]
+      exact hidsa.sub
+        (ContinuousLinearMap.isPositive_adjoint_comp_self Y).isSelfAdjoint
+    · intro x
+      rw [ContinuousLinearMap.reApplyInnerSelf_apply]
+      -- Same trap as in `hNunit`: compute the form value as its own `have` with
+      -- `simp`, because once a `dsimp` collapses `RCLike.re` to `Complex.re`
+      -- neither `map_sub` nor `inner_self_eq_norm_sq` can match.
+      have hval : RCLike.re ⟪D x, x⟫_ℂ = ‖x‖ ^ 2 - ‖Y x‖ ^ 2 := by
+        have hD : D x = x - Y.adjoint (Y x) := by
+          show (ContinuousLinearMap.id ℂ E - G) x = x - Y.adjoint (Y x)
+          rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply,
+            ContinuousLinearMap.comp_apply]
+        rw [hD]
+        simp [inner_sub_left, ContinuousLinearMap.adjoint_inner_left,
+          inner_self_eq_norm_sq, ← Complex.ofReal_pow]
+      rw [hval]
+      have hle : ‖Y x‖ ≤ ‖x‖ :=
+        calc ‖Y x‖ ≤ ‖Y‖ * ‖x‖ := Y.le_opNorm x
+          _ ≤ 1 * ‖x‖ :=
+              mul_le_mul_of_nonneg_right
+                (norm_quarterAcuteAngularOperator_lt_one U V hquarter).le
+                (norm_nonneg x)
+          _ = ‖x‖ := one_mul _
+      nlinarith [hle, norm_nonneg (Y x), norm_nonneg x]
+  have hDsp : IsStrictlyPositive D := ⟨hDnonneg, hDunit⟩
+  have hDinvNonneg : (0 : E →L[ℂ] E) ≤ Ring.inverse D := by
+    rw [CFC.inverse_eq_rpow_neg_one hDsp]
+    exact CFC.rpow_nonneg
+  have hDinvSA : IsSelfAdjoint (Ring.inverse D) := hDinvNonneg.isSelfAdjoint
+  have hcomm : Commute (ContinuousLinearMap.modulus Y) (Ring.inverse D) := by
+    have hmodG : Commute (ContinuousLinearMap.modulus Y) G := by
+      show Commute (ContinuousLinearMap.modulus Y) (Y.adjoint ∘L Y)
+      rw [← ContinuousLinearMap.modulus_mul_self Y]
+      exact (Commute.refl _).mul_right (Commute.refl _)
+    have hmodD : Commute (ContinuousLinearMap.modulus Y) D := by
+      show Commute (ContinuousLinearMap.modulus Y)
+        (ContinuousLinearMap.id ℂ E - G)
+      exact (Commute.one_right _).sub_right hmodG
+    have hu : Commute (ContinuousLinearMap.modulus Y)
+        ((hDunit.unit : E →L[ℂ] E)) := by
+      rw [hDunit.unit_spec]; exact hmodD
+    rw [Ring.inverse_of_isUnit hDunit]
+    exact hu.units_inv_right
   have hMsq : M ∘L M =
       (4 : ℂ) • (ContinuousLinearMap.modulus Y ∘L
         Ring.inverse D ∘L ContinuousLinearMap.modulus Y ∘L Ring.inverse D) := by
+    -- `|T|² = T⋆ T` with `T = 2 • (Y D⁻¹)`, hence
+    --   T⋆ T = 4 • (D⁻¹ Y⋆ Y D⁻¹) = 4 • (D⁻¹ |Y| |Y| D⁻¹) = 4 • (|Y| D⁻¹ |Y| D⁻¹),
+    -- the last step by `[|Y|, D⁻¹] = 0`.  The old script called `star_smul` and
+    -- `star_mul` *after* `modulus_mul_self` had already put the goal in `adjoint`
+    -- form, so neither could ever fire.
+    have hDinvAdj :
+        ContinuousLinearMap.adjoint (Ring.inverse D) = Ring.inverse D := by
+      simpa only [ContinuousLinearMap.star_eq_adjoint] using hDinvSA.star_eq
+    have hYsq : ContinuousLinearMap.adjoint Y * Y
+        = ContinuousLinearMap.modulus Y * ContinuousLinearMap.modulus Y :=
+      (ContinuousLinearMap.modulus_mul_self Y).symm
     dsimp [M]
-    rw [ContinuousLinearMap.modulus_mul_self]
-    rw [hTformula, star_smul, star_mul,
-      ContinuousLinearMap.star_eq_adjoint,
-      (CFC.rpow_nonneg (a := D) (y := (-1 : ℝ))).isSelfAdjoint.star_eq]
-    simp only [map_ofNat, mul_smul_comm, smul_mul_assoc]
-    rw [← ContinuousLinearMap.modulus_mul_self Y]
-    noncomm_ring
+    rw [← ContinuousLinearMap.mul_def, ContinuousLinearMap.modulus_mul_self,
+      hTformula]
+    -- `adjoint` is a *conjugate*-linear isometry equiv (`≃ₗᵢ⋆`), so the scalar
+    -- comes out through `map_smulₛₗ` as `star 2`, not as `2`.
+    rw [map_smulₛₗ, ContinuousLinearMap.adjoint_comp, hDinvAdj]
+    show (starRingEnd ℂ) 2 • (Ring.inverse D * ContinuousLinearMap.adjoint Y) *
+          ((2 : ℂ) • (Y * Ring.inverse D))
+        = (4 : ℂ) • (ContinuousLinearMap.modulus Y *
+            (Ring.inverse D * (ContinuousLinearMap.modulus Y * Ring.inverse D)))
+    rw [map_ofNat, smul_mul_assoc, mul_smul_comm, smul_smul]
+    rw [show (2 : ℂ) * 2 = 4 by norm_num]
+    congr 1
+    calc Ring.inverse D * ContinuousLinearMap.adjoint Y * (Y * Ring.inverse D)
+        = Ring.inverse D * (ContinuousLinearMap.adjoint Y * Y) * Ring.inverse D := by
+          noncomm_ring
+      _ = Ring.inverse D * (ContinuousLinearMap.modulus Y *
+            ContinuousLinearMap.modulus Y) * Ring.inverse D := by rw [hYsq]
+      _ = (Ring.inverse D * ContinuousLinearMap.modulus Y) *
+            (ContinuousLinearMap.modulus Y * Ring.inverse D) := by noncomm_ring
+      _ = (ContinuousLinearMap.modulus Y * Ring.inverse D) *
+            (ContinuousLinearMap.modulus Y * Ring.inverse D) := by
+          rw [hcomm.symm.eq]
+      _ = ContinuousLinearMap.modulus Y *
+            (Ring.inverse D * (ContinuousLinearMap.modulus Y * Ring.inverse D)) := by
+          noncomm_ring
   have hCandidateNonneg :
       (0 : E →L[ℂ] E) ≤
         (2 : ℂ) • (ContinuousLinearMap.modulus Y ∘L Ring.inverse D) := by
-    have hmod : (0 : E →L[ℂ] E) ≤ ContinuousLinearMap.modulus Y :=
-      ContinuousLinearMap.modulus_nonneg Y
-    have hDinvNonneg : (0 : E →L[ℂ] E) ≤ Ring.inverse D := by
-      have hDnonneg : (0 : E →L[ℂ] E) ≤ D := by
-        rw [ContinuousLinearMap.nonneg_iff_isPositive]
-        refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp ?_, ?_⟩
-        · dsimp [D, G]
-          simpa only [map_one] using
-            (IsSelfAdjoint.algebraMap (E →L[ℂ] E)
-              (IsSelfAdjoint.all (1 : ℝ))).sub
-              (ContinuousLinearMap.isPositive_adjoint_comp_self Y).isSelfAdjoint
-        · intro x
-          rw [ContinuousLinearMap.reApplyInnerSelf_apply]
-          dsimp [D, G]
-          rw [sub_apply, ContinuousLinearMap.id_apply, inner_sub_left,
-            map_sub, ContinuousLinearMap.adjoint_inner_left,
-            inner_self_eq_norm_sq]
-          have hy := Y.le_opNorm x
-          nlinarith [norm_quarterAcuteAngularOperator_lt_one U V hquarter,
-            norm_nonneg x, norm_nonneg (Y x)]
-      -- `Ring.inverse` of a strictly positive element is its CFC `(-1)`-power,
-      -- which is nonnegative.  `IsStrictlyPositive` is by definition
-      -- `0 ≤ D ∧ IsUnit D`, both of which are already in hand.
-      have hDsp : IsStrictlyPositive D := ⟨hDnonneg, hDunit⟩
-      rw [CFC.inverse_eq_rpow_neg_one hDsp]
-      exact CFC.rpow_nonneg
-    have hcomm : Commute (ContinuousLinearMap.modulus Y) (Ring.inverse D) := by
-      have hmodG : Commute (ContinuousLinearMap.modulus Y) G := by
-        show Commute (ContinuousLinearMap.modulus Y) (Y.adjoint ∘L Y)
-        rw [← ContinuousLinearMap.modulus_mul_self Y]
-        exact (Commute.refl _).mul_right (Commute.refl _)
-      have hmodD : Commute (ContinuousLinearMap.modulus Y) D := by
-        show Commute (ContinuousLinearMap.modulus Y)
-          (ContinuousLinearMap.id ℂ E - G)
-        exact (Commute.one_right _).sub_right hmodG
-      -- as above: cross from `Ring.inverse` to the `Units` inverse.
-      have hu : Commute (ContinuousLinearMap.modulus Y)
-          ((hDunit.unit : E →L[ℂ] E)) := by
-        rw [hDunit.unit_spec]; exact hmodD
-      rw [Ring.inverse_of_isUnit hDunit]
-      exact hu.units_inv_right
     have hprod : (0 : E →L[ℂ] E) ≤
         ContinuousLinearMap.modulus Y ∘L Ring.inverse D :=
-      hcomm.mul_nonneg hmod hDinvNonneg
-    simpa only [Complex.ofReal_ofNat] using
-      smul_nonneg (show (0 : ℝ) ≤ 2 by norm_num) hprod
+      hcomm.mul_nonneg hmodYnonneg hDinvNonneg
+    -- The scalar is ℂ, so `smul_nonneg` -- which supplies the ℝ-action -- is the
+    -- wrong lemma.  The two statements print *identically* and differ only in the
+    -- `SMul` instance, which is why the mismatch looked like a no-op.
+    rw [ContinuousLinearMap.nonneg_iff_isPositive]
+    -- `0 ≤ (2 : ℂ)` is an order on ℂ (`re` compared, `im` equal), so it needs
+    -- `Complex.le_def`; `norm_num` alone does not unfold it.
+    exact ((ContinuousLinearMap.nonneg_iff_isPositive _).mp hprod).smul_of_nonneg
+      (by simp [Complex.le_def])
   have hMformula :
       M = (2 : ℂ) • (ContinuousLinearMap.modulus Y ∘L Ring.inverse D) := by
-    apply ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq hCandidateNonneg
-    rw [hMsq]
-    noncomm_ring
+    -- the lemma concludes `b = |T|`, the goal is `|T| = b`, hence `.symm`
+    refine (ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
+      hCandidateNonneg ?_).symm
+    rw [← ContinuousLinearMap.mul_def, ← ContinuousLinearMap.modulus_mul_self]
+    -- `hMsq` is stated with `∘SL`; restate it with `*` so it matches here.
+    rw [show M * M = (4 : ℂ) • (ContinuousLinearMap.modulus Y ∘L
+          Ring.inverse D ∘L ContinuousLinearMap.modulus Y ∘L Ring.inverse D)
+        from hMsq]
+    rw [smul_mul_assoc, mul_smul_comm, smul_smul,
+      show (2 : ℂ) * 2 = 4 by norm_num]
+    -- `congr 1` discharges the remaining associativity itself; no `noncomm_ring`
+    -- is needed (adding one reports "no goals to be solved").
+    congr 1
   have hSCformula : Sang ∘L Cang =
       ContinuousLinearMap.modulus Y ∘L R ∘L P := by
+    -- `Commute G (R P)` from `G R = R G` and `G P = G = P G`; then
+    -- `Commute |Y| (R P)` because `|Y| = CFC.sqrt G` and `Commute.cfcₙ_nnreal`
+    -- transports commutation through the functional calculus.
+    have hGRP : Commute G (R ∘L P) := by
+      show G * (R * P) = (R * P) * G
+      calc G * (R * P) = (G * R) * P := (mul_assoc _ _ _).symm
+        _ = (R * G) * P := by rw [show G * R = R * G from hGR]
+        _ = R * (G * P) := mul_assoc _ _ _
+        _ = R * G := by rw [show G * P = G from hGP]
+        _ = R * (P * G) := by rw [show P * G = G from hPG]
+        _ = (R * P) * G := (mul_assoc _ _ _).symm
+    have hmodRP : Commute (ContinuousLinearMap.modulus Y) (R ∘L P) :=
+      Commute.cfcₙ_nnreal hGRP _
+    have hRPnonneg : (0 : E →L[ℂ] E) ≤ R ∘L P := by
+      rw [show R ∘L P = Cang ∘L Cang from hCangSq.symm]
+      exact (Commute.refl Cang).mul_nonneg (cosAngleOperatorC_nonneg U V)
+        (cosAngleOperatorC_nonneg U V)
     have hleftNonneg : (0 : E →L[ℂ] E) ≤ Sang ∘L Cang :=
       hSCcomm.mul_nonneg (sinAngleOperatorDirectedC_nonneg U V)
         (cosAngleOperatorC_nonneg U V)
     have hrightNonneg : (0 : E →L[ℂ] E) ≤
-        ContinuousLinearMap.modulus Y ∘L R ∘L P := by
-      -- all three factors are nonnegative functions of `G` on `U`
-      rw [ContinuousLinearMap.nonneg_iff_isPositive]
-      refine ⟨?_, ?_⟩
-      · rw [ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric]
-        intro x y
-        simp [ContinuousLinearMap.adjoint_inner_left]
-      · intro x
-        rw [ContinuousLinearMap.reApplyInnerSelf_apply]
-        positivity
-    apply CFC.sqrt_unique
-    · rw [← hSCcomm.eq, ContinuousLinearMap.comp_assoc,
-        ← ContinuousLinearMap.comp_assoc Sang, hSangSq,
-        ContinuousLinearMap.comp_assoc, hCangSq]
-      rw [hGR, hGP, hPR]
+        ContinuousLinearMap.modulus Y ∘L R ∘L P :=
+      hmodRP.mul_nonneg hmodYnonneg hRPnonneg
+    -- Both sides are nonnegative with the same square, so they agree.
+    -- Stay in `*` notation throughout: the goal carries `∘L`, which is defeq but
+    -- not syntactically equal, so mixing the two makes every `rw` miss.
+    have hsq : (Sang * Cang) * (Sang * Cang)
+        = (ContinuousLinearMap.modulus Y * (R * P)) *
+          (ContinuousLinearMap.modulus Y * (R * P)) := by
+      have hL : (Sang * Cang) * (Sang * Cang)
+          = (Sang * Sang) * (Cang * Cang) := by
+        rw [mul_assoc, ← mul_assoc Cang Sang Cang,
+          show Cang * Sang = Sang * Cang from hSCcomm.eq.symm, mul_assoc,
+          ← mul_assoc]
+      have hR : (ContinuousLinearMap.modulus Y * (R * P)) *
+            (ContinuousLinearMap.modulus Y * (R * P))
+          = (ContinuousLinearMap.modulus Y * ContinuousLinearMap.modulus Y) *
+            ((R * P) * (R * P)) := by
+        rw [mul_assoc, ← mul_assoc (R * P) (ContinuousLinearMap.modulus Y),
+          show (R * P) * ContinuousLinearMap.modulus Y
+            = ContinuousLinearMap.modulus Y * (R * P) from hmodRP.eq.symm,
+          mul_assoc, ← mul_assoc]
+      rw [hL, hR, show Sang * Sang = G * (R * P) from hSangSq,
+        show Cang * Cang = R * P from hCangSq,
+        show ContinuousLinearMap.modulus Y * ContinuousLinearMap.modulus Y = G
+          from ContinuousLinearMap.modulus_mul_self Y]
       noncomm_ring
-    · exact hleftNonneg
-    · rw [ContinuousLinearMap.comp_assoc,
-        ← ContinuousLinearMap.comp_assoc (ContinuousLinearMap.modulus Y),
-        ContinuousLinearMap.modulus_mul_self Y]
-      rw [hGR, hGP, hPR]
-      noncomm_ring
-    · exact hrightNonneg
+    have h1 : CFC.sqrt ((Sang * Cang) * (Sang * Cang)) = Sang * Cang :=
+      CFC.sqrt_unique rfl hleftNonneg
+    have h2 : CFC.sqrt ((ContinuousLinearMap.modulus Y * (R * P)) *
+          (ContinuousLinearMap.modulus Y * (R * P)))
+        = ContinuousLinearMap.modulus Y * (R * P) :=
+      CFC.sqrt_unique rfl hrightNonneg
+    show Sang * Cang = ContinuousLinearMap.modulus Y * (R * P)
+    rw [← h1, ← h2, hsq]
   have hCandidateComp :
       M ∘L cosTwoAngleExtendedC U V = sinTwoAngleOperatorC U V := by
     rw [hMformula, cosTwoAngleExtendedC, hCosTwo, hSinTwo, hSCformula]
     have hMperp : ContinuousLinearMap.modulus Y ∘L Uᗮ.starProjection = 0 := by
       apply ContinuousLinearMap.ext
       intro x
-      rw [ContinuousLinearMap.comp_apply,
+      -- `zero_apply` is needed: after `comp_apply` the right-hand side is still
+      -- `(0 : E →L[ℂ] E) x`, so `modulus_apply_eq_zero_iff` has nothing to match.
+      rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.zero_apply,
         ContinuousLinearMap.modulus_apply_eq_zero_iff]
       have hzero : Y (Uᗮ.starProjection x) = 0 := by
         have h := DFunLike.congr_fun hYP (Uᗮ.starProjection x)
         rw [ContinuousLinearMap.comp_apply,
-          Submodule.starProjection_apply_eq_zero_iff.mpr
+          (Submodule.starProjection_apply_eq_zero_iff (K := U)).mpr
             (Uᗮ.starProjection_apply_mem x)] at h
         simpa using h.symm
       exact hzero
-    rw [ContinuousLinearMap.comp_add, hMperp, add_zero]
-    rw [ContinuousLinearMap.comp_assoc, ContinuousLinearMap.comp_assoc,
-      Ring.inverse_mul_cancel D hDunit, ContinuousLinearMap.id_comp]
-    noncomm_ring
+    -- `D` is the identity on `Uᗮ` (because `G` kills it), hence so is `D⁻¹`; that
+    -- is what makes the `Uᗮ` block of the product vanish.  `hMperp` alone cannot
+    -- fire: the second summand is `(2 • |Y| D⁻¹) ∘ P⊥`, in which `|Y| ∘ P⊥` is not
+    -- a subterm.
+    have hPsumOp : P + Uᗮ.starProjection = ContinuousLinearMap.id ℂ E := by
+      ext z
+      rw [ContinuousLinearMap.add_apply, ContinuousLinearMap.id_apply]
+      exact U.starProjection_add_starProjection_orthogonal z
+    have hGPerp : G ∘L Uᗮ.starProjection = 0 := by
+      have h : G ∘L P + G ∘L Uᗮ.starProjection = G := by
+        rw [← ContinuousLinearMap.comp_add, hPsumOp,
+          ContinuousLinearMap.comp_id]
+      rw [hGP] at h
+      -- `h : G P⊥ + G = G`, so `(G P⊥ + G) - G = 0`, i.e. `G P⊥ = 0`.
+      simpa using sub_eq_zero_of_eq h
+    have hDPerp : D ∘L Uᗮ.starProjection = Uᗮ.starProjection := by
+      show (ContinuousLinearMap.id ℂ E - G) ∘L Uᗮ.starProjection = _
+      rw [ContinuousLinearMap.sub_comp, ContinuousLinearMap.id_comp, hGPerp,
+        sub_zero]
+    have hDinvPerp : Ring.inverse D ∘L Uᗮ.starProjection
+        = Uᗮ.starProjection := by
+      -- keep `∘L` in the first step: `hDPerp` is stated with `∘L`, and `*` would
+      -- not match it syntactically.
+      calc Ring.inverse D ∘L Uᗮ.starProjection
+          = Ring.inverse D ∘L (D ∘L Uᗮ.starProjection) := by rw [hDPerp]
+        _ = (Ring.inverse D * D) * Uᗮ.starProjection := by noncomm_ring
+        _ = Uᗮ.starProjection := by
+            rw [Ring.inverse_mul_cancel D hDunit, one_mul]
+    rw [ContinuousLinearMap.comp_add]
+    rw [show ((2 : ℂ) • (ContinuousLinearMap.modulus Y ∘L Ring.inverse D)) ∘L
+          Uᗮ.starProjection = 0 by
+      rw [ContinuousLinearMap.smul_comp, ContinuousLinearMap.comp_assoc,
+        hDinvPerp, hMperp, smul_zero], add_zero]
+    show ((2 : ℂ) • (ContinuousLinearMap.modulus Y * Ring.inverse D)) *
+        (D * (R * P))
+      = (2 : ℂ) • (ContinuousLinearMap.modulus Y * (R * P))
+    rw [smul_mul_assoc]
+    congr 1
+    calc (ContinuousLinearMap.modulus Y * Ring.inverse D) * (D * (R * P))
+        = ContinuousLinearMap.modulus Y * ((Ring.inverse D * D) * (R * P)) := by
+          noncomm_ring
+      _ = ContinuousLinearMap.modulus Y * (R * P) := by
+          rw [Ring.inverse_mul_cancel D hDunit, one_mul]
   have hcanonical := tanTwoAngleOperatorC_comp_cosTwoAngleExtendedC U V hquarter
   have hcosSurj : Function.Surjective (cosTwoAngleExtendedC U V) := by
-    rw [← LinearMap.range_eq_top]
-    exact (cosTwoAngleExtendedC_ker_bot_range_top U V hquarter).2
+    -- `range_eq_top` is stated for `LinearMap`; the goal's coercion is the
+    -- `ContinuousLinearMap` one, so rewrite backwards through `.mp` instead.
+    exact LinearMap.range_eq_top.mp
+      (cosTwoAngleExtendedC_ker_bot_range_top U V hquarter).2
   apply ContinuousLinearMap.ext
   intro x
   obtain ⟨y, rfl⟩ := hcosSurj x

@@ -123,7 +123,7 @@ theorem exists_config_gram_eq_of_posSemidef_rank_le
   -- `B = Aᴴ * A` with `A : Matrix (Fin d) (Fin n) ℝ`: the columns of `A` are the
   -- configuration vectors.
   obtain ⟨A, hA⟩ :=
-    (ForMathlib.Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self B).mp
+    (TauCeti.Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self B).mp
       ⟨hB, hrank⟩
   refine ⟨fun i => WithLp.toLp 2 (fun k => A k i), ?_⟩
   intro i j
@@ -144,7 +144,7 @@ theorem posSemidef_and_rank_le_of_config_gram_eq
     (ψ : Acharyya2024.Config n d)
     (hψ : ∀ i j : Fin n, (∑ k : Fin d, ψ i k * ψ j k) = B i j) :
     B.PosSemidef ∧ B.rank ≤ d := by
-  apply (ForMathlib.Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self B).2
+  apply (TauCeti.Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self B).2
   let A : Matrix (Fin d) (Fin n) Real := fun k i => ψ i k
   refine ⟨A, ?_⟩
   ext i j

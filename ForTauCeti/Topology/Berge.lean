@@ -29,7 +29,7 @@ Mathlib has the hemicontinuity *definitions* (`Mathlib/Topology/Semicontinuity/
 Hemicontinuity.lean`) and the extreme-value theorem (`IsCompact.exists_isMinOn`),
 but no Berge theorem.  This file supplies the upper-hemicontinuity half in two
 usable forms, building on the approximate-minimizer stability engine
-`ForMathlib.exists_subseq_tendsto_isMinOn_of_approxMinOn`:
+`TauCeti.exists_subseq_tendsto_isMinOn_of_approxMinOn`:
 
 * `tendsto_eval_sub_of_isCompact` — along a convergent parameter sequence
   `p k → p₀`, the evaluation difference `g (p k) (x k) − g p₀ (x k)` vanishes
@@ -53,10 +53,10 @@ usable forms, building on the approximate-minimizer stability engine
 
 ## Main results
 
-* `ForMathlib.tendsto_subseq_isMinOn_of_isMinOn`
-* `ForMathlib.upperHemicontinuousAt_isMinOn`
-* `ForMathlib.continuous_iInf_of_isCompact` — value-function continuity.
-* `ForMathlib.exists_modulus_isMinOn_family` / `ForMathlib.exists_modulus_isMinOn`
+* `TauCeti.tendsto_subseq_isMinOn_of_isMinOn`
+* `TauCeti.upperHemicontinuousAt_isMinOn`
+* `TauCeti.continuous_iInf_of_isCompact` — value-function continuity.
+* `TauCeti.exists_modulus_isMinOn_family` / `TauCeti.exists_modulus_isMinOn`
 
 ## Staging note
 
@@ -71,34 +71,40 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
   `1ca2679`; it has had no prior home.
-* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
-  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
-  areas.
+* Extraction class: **authored in place**. Upstream target is Mathlib; the module
+  is staged here because `ForMathlib` was retired on 2026-07-29 and `ForTauCeti`
+  is now the single staging library — see `ForTauCeti/README.md`.
 * Intended Mathlib home: the Berge maximum theorem (upper hemicontinuity of the.
 * Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — the `ForMathlib` import firewall admits only
-  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
-
-## Provenance
-
-*Moved, not restated.*  This file was `ForMathlib/Topology/Berge.lean`
-until 2026-07-29, when lane FM-RETIRE retired `ForMathlib` entirely: its four
-surviving modules moved here and the library, its root module and its directory
-were deleted.  Statements, proofs and signatures are unchanged.
-
-**The declarations deliberately keep their `ForMathlib` namespace**, which is
-the one thing this move could not fix.  `Challenge/**/Conformance.lean` files
-are *immutable challenge statements* (`AGENTS.md`), and the ones paired with
-this module name their leaf theorems inside `ForMathlib` / `ForMathlib.Matrix`;
-the comparator matches implementation to statement by fully-qualified name.
-Renaming the namespace would orphan those pins.  Re-issuing the immutable
-statements under `TauCeti.*` names is a decision, not a task — until it is
-taken, these names stay and this note records why.
-
+* Spectra influence: **none** — the `ForTauCeti` import firewall admits only
+  Mathlib, `TauCeti` and `ForTauCeti` (rule 2 of
+  `scripts/check_dependency_layers.py`); this module imports Mathlib only.
 -/
 
-namespace ForMathlib
+/-!
+### Provenance
+
+Moved from `ForMathlib/Topology/` to `ForTauCeti/Topology/` on 2026-07-29 by lane
+FM-RETIRE, which finishes the `ForMathlib` retirement.  The namespace changed from
+`ForMathlib` to `TauCeti` to match the destination package; declaration names,
+statements and proofs are unchanged.
+
+**FM-RETIRE was worked twice, and the two versions disagreed on the namespace.**
+The `main` version (`c85510d6`) kept `namespace ForMathlib` here, reasoning that
+`Challenge/**/Conformance.lean` is immutable so its `ForMathlib.*` pins could not
+be re-issued.  Reconciled on merge in favour of `TauCeti`, because the pins are
+not what immutability protects: `AGENTS.md`'s comparator rule forbids *filling the
+proof placeholders*, and its rename protocol explicitly requires a rename lane to
+update `Challenge/` and `comparator/*.json`, which is what was done — the three
+Berge names in `comparator/pending-berge.json`, the `#print axioms` lines in
+`Challenge/MathlibPending/Berge/Leaderboard.lean`, and the restated statements in
+the paired `Conformance.lean` all read `TauCeti.*`.  Leaving `ForMathlib.*`
+declarations inside `ForTauCeti` would also contradict the package rule that its
+declarations live in their final `TauCeti.*` namespaces (`lakefile.toml`).
+-/
+
+namespace TauCeti
 
 open Filter Topology Set
 
@@ -335,4 +341,4 @@ theorem exists_modulus_isMinOn {P X : Type*} [PseudoMetricSpace P] [PseudoMetric
   obtain ⟨x₀, hx₀K, hx₀min, hclose⟩ := h p x hxK hxmin hpd
   exact ⟨x₀, hx₀K, hx₀min, hclose ()⟩
 
-end ForMathlib
+end TauCeti
