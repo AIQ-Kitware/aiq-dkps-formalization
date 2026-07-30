@@ -4493,6 +4493,28 @@
       "downstream_users": [],
       "status": "staged",
       "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.Normed.Operator.FiniteRankCompact",
+      "source_declarations": [
+        "isCompactOperator_of_finiteDimensional_range",
+        "isCompactOperator_of_rank_lt_aleph0"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.Normed.Operator.FiniteRankCompact",
+      "final_tauceti_module": "TauCeti.Analysis.Normed.Operator.FiniteRankCompact",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Approximation numbers (T09): the finite-rank-implies-compact input that roadmap section A4's compactness statement needs and Mathlib does not have.",
+      "provenance_class": "authored in place for Tau Ceti under lane AN-A4-COMPACT, 2026-07-30; authors Jon Crall, Claude Opus 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact"
+      ],
+      "status": "staged",
+      "upstream_pr": null
     }
   ]
 }
