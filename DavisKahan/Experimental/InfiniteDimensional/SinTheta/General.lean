@@ -455,28 +455,86 @@ theorem sinTheta_generalSeparation
 
 Genuinely constructing the measurable spectral subspace of a bounded
 self-adjoint operator over a general `RCLike` field requires the bounded Borel
-functional calculus: over `ℂ` this is the Spectra projection-valued measure
-(`DavisKahanExt.boundedSelfAdjointSpectralProjection` in
-`Experimental/InfiniteDimensional/Core/SpectralProjection.lean`), and the
-general case is its complexification transport.  The construction and its two
-characterizing properties are isolated below as leaf obligations so that the
-`sin Θ` consequences are fully proved relative to them.
+functional calculus.  Over `ℂ` that calculus exists in this development and is
+*not* experimental: it is `TauCeti.BorelCalculus.boundedPVM`, with the spectral
+subspace itself at
+`DavisKahan/SpectralTheory/BoundedSelfAdjointSpectralProjection.lean` as
+`boundedSelfAdjointSpectralSubspace`.  The general case is its complexification
+transport, which does not exist yet.
+
+That `ℂ` construction cannot simply be reused here, because
+`TauCeti.ProjValMeasure` fixes the scalar field **in its own binder** — it is
+declared over `[InnerProductSpace ℂ H]` — while this section is over a general
+`𝕜 : RCLike`.  Reusing it would mean either restricting this section to `ℂ` or
+generalising `ProjValMeasure`, and neither is necessary.
+
+So the `ℂ`-only ingredient is carried as a *hypothesis*, exactly as the operator
+absolute value is in the `OperatorAbsoluteValue` section below, and for the
+reason given there: an unproved `def` is an opaque term with no body, so no
+theorem about it can be proved at all, whereas the definitions below unfold.
+Relative to `BoundedBorelProjection` the three former leaf obligations are
+ordinary theorems, and the `sin Θ` consequences are fully proved.
 -/
 
-/-- **Leaf obligation.** The measurable spectral subspace of a bounded
-operator: the range of the projection-valued measure of `s`. -/
+section SpectralSubspace
+
+/-- **Hypothesis class: the bounded Borel functional calculus of a self-adjoint
+operator**, presented as the projection assignment it induces.
+
+Only the two laws actually needed downstream are demanded — idempotence, which
+makes the range a closed subspace with an orthogonal projection, and commutation
+with the operator, which makes that subspace reducing.  Nothing here asserts
+countable additivity or multiplicativity in `s`; a genuine projection-valued
+measure supplies this and much more, so the hypothesis is weaker than the object
+that discharges it.
+
+At `𝕜 = ℂ` it is discharged by `TauCeti.BorelCalculus.boundedPVM`: `proj_idem`
+is its `proj_idem` field, and `proj_comm` is the commutation of a spectral
+projection with its own operator.  The instance is deliberately *not* declared
+in this file, which would drag the whole Borel-calculus import chain into an
+experimental module; it belongs with the construction. -/
+class BoundedBorelProjection (𝕜 : Type u) (E : Type v) [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] where
+  /-- The spectral projection of `A` over a Borel set `s`. -/
+  proj : ∀ (A : E →L[𝕜] E), IsSelfAdjointOperator A →
+    ∀ s : Set ℝ, MeasurableSet s → E →L[𝕜] E
+  /-- Spectral projections are idempotent. -/
+  proj_idem : ∀ (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+    (s : Set ℝ) (hs : MeasurableSet s), IsIdempotentElem (proj A hA s hs)
+  /-- Spectral projections commute with their operator. -/
+  proj_comm : ∀ (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+    (s : Set ℝ) (hs : MeasurableSet s),
+    A ∘L proj A hA s hs = proj A hA s hs ∘L A
+
+variable [BoundedBorelProjection 𝕜 E]
+
+/-- The measurable spectral subspace of a bounded operator: the range of the
+spectral projection of `s`.
+
+Relative to the `BoundedBorelProjection` hypothesis this is a real definition
+rather than a leaf obligation, so the results below unfold it. -/
 noncomputable def spectralSubspace (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
     (s : Set ℝ) (hs : MeasurableSet s) :
     Submodule 𝕜 E :=
-  sorry
+  (BoundedBorelProjection.proj A hA s hs).range
 
-/-- **Leaf obligation.** The spectral subspace is closed, hence admits an
-orthogonal projection in the complete ambient space. -/
+/-- Unfolding lemma: the spectral subspace *is* the range of the spectral
+projection.  Stated so that downstream rewrites do not have to unfold a `def`. -/
+theorem spectralSubspace_eq_range (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+    (s : Set ℝ) (hs : MeasurableSet s) :
+    spectralSubspace A hA s hs = (BoundedBorelProjection.proj A hA s hs).range :=
+  rfl
+
+/-- The spectral subspace is closed, hence admits an orthogonal projection in
+the complete ambient space.
+
+This needs only idempotence: the range of a bounded idempotent is closed. -/
 noncomputable instance spectralSubspace_hasOrthogonalProjection
     (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
     (s : Set ℝ) (hs : MeasurableSet s) :
     (spectralSubspace A hA s hs).HasOrthogonalProjection :=
-  sorry
+  ContinuousLinearMap.IsIdempotentElem.hasOrthogonalProjection_range
+    (BoundedBorelProjection.proj_idem A hA s hs)
 
 /-- The measurable spectral projection: the orthogonal projection onto the
 spectral subspace. -/
@@ -485,12 +543,19 @@ noncomputable def spectralProjection (A : E →L[𝕜] E) (hA : IsSelfAdjointOpe
     E →L[𝕜] E :=
   (spectralSubspace A hA s hs).starProjection
 
-/-- **Leaf obligation.** Spectral subspaces of a self-adjoint operator reduce
-it. -/
+/-- Spectral subspaces of a self-adjoint operator reduce it.
+
+Only invariance has to be checked: `IsSymmetric.reduces_of_invariant` supplies
+invariance of the orthogonal complement from symmetry of `A`.  Invariance is
+immediate from commutation, since `A (P y) = P (A y)` is again in the range. -/
 theorem isInvariant_spectralSubspace (A : E →L[𝕜] E)
     (hA : IsSelfAdjointOperator A) (s : Set ℝ) (hs : MeasurableSet s) :
-    Reduces A (spectralSubspace A hA s hs) :=
-  sorry
+    Reduces A (spectralSubspace A hA s hs) := by
+  refine ContinuousLinearMap.IsSymmetric.reduces_of_invariant hA ?_
+  rintro x ⟨y, rfl⟩
+  refine ⟨A y, ?_⟩
+  exact congrFun (congrArg DFunLike.coe
+    (BoundedBorelProjection.proj_comm A hA s hs).symm) y
 
 /-- The subspace projection of the spectral subspace is the spectral
 projection. -/
@@ -544,6 +609,8 @@ theorem spectralProjection_sinTheta
       = d * subspaceGap U V := by rw [hgapeq]
     _ ≤ ‖B - A‖ := h
 
+end SpectralSubspace
+
 /-! ## Ideal-valued form
 
 The ideal-valued projector-difference estimate below is a genuinely missing
@@ -569,7 +636,7 @@ Mathlib states the remaining gap explicitly: that continuous functional
 calculus instance is known only for `𝕜 = ℂ`, which is exactly why
 `instStarOrderedRingRCLike` is a lemma there rather than an instance.  So the
 absolute value is carried here as a *hypothesis*, not as an escape.  This is
-the difference between unproved and unprovable: a `sorry`ed `def` is an opaque
+the difference between unproved and unprovable: an unproved `def` is an opaque
 term with no body, so no theorem about it can be proved at all, whereas the
 definition below unfolds and discharges automatically at `𝕜 = ℂ`.
 -/
@@ -626,8 +693,67 @@ noncomputable def sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   operatorAbsoluteValue (projection U - projection V)
 
+/-- **Symmetric norm ideals contain absolute values with equal gauge, given a
+polar partial isometry.**
+
+This is the mathematical content of the leaf obligation below, with the one
+genuinely missing ingredient — the polar partial isometry — taken as an explicit
+hypothesis rather than assumed into existence.
+
+Two things are worth recording about the proof.  First, **unitary invariance is
+not needed**, although the leaf's own description reaches for it: `ideal_bound`
+alone closes both directions, because each of `|T|` and `T` is a two-sided
+multiple of the other.  Second, only the *norm bounds* on `W` are used, not that
+it is a partial isometry, so the hypotheses here are weaker than polar
+decomposition actually delivers. -/
+theorem SymmetricNormIdeal.operatorAbsoluteValue_mem_and_gauge_eq_of_polar
+    (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E)) {T W : E →L[𝕜] E}
+    (hT : I.mem T)
+    (hWT : W ∘L operatorAbsoluteValue T = T)
+    (hWadj : (ContinuousLinearMap.adjoint W) ∘L T = operatorAbsoluteValue T)
+    (hWnorm : ‖W‖ ≤ 1) (hWadjnorm : ‖ContinuousLinearMap.adjoint W‖ ≤ 1) :
+    I.mem (operatorAbsoluteValue T) ∧
+      I.gauge (operatorAbsoluteValue T) = I.gauge T := by
+  have hid : ‖ContinuousLinearMap.id 𝕜 E‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+  -- `|T| = W⋆ ∘ T ∘ 1`, so membership and one gauge bound come from the ideal axioms.
+  have habs : ContinuousLinearMap.adjoint W ∘L T ∘L ContinuousLinearMap.id 𝕜 E =
+      operatorAbsoluteValue T := by
+    rw [ContinuousLinearMap.comp_id]; exact hWadj
+  have hmem : I.mem (operatorAbsoluteValue T) := by
+    have := I.ideal_mem (ContinuousLinearMap.adjoint W) (ContinuousLinearMap.id 𝕜 E) hT
+    rwa [habs] at this
+  refine ⟨hmem, le_antisymm ?_ ?_⟩
+  · have hb := I.ideal_bound (ContinuousLinearMap.adjoint W) (ContinuousLinearMap.id 𝕜 E) hT
+    rw [habs] at hb
+    refine hb.trans ?_
+    have h0 : 0 ≤ I.gauge T := I.nonneg hT
+    calc ‖ContinuousLinearMap.adjoint W‖ * I.gauge T * ‖ContinuousLinearMap.id 𝕜 E‖
+        ≤ 1 * I.gauge T * 1 := by
+          gcongr
+      _ = I.gauge T := by ring
+  · -- and symmetrically `T = W ∘ |T| ∘ 1`.
+    have hT' : W ∘L operatorAbsoluteValue T ∘L ContinuousLinearMap.id 𝕜 E = T := by
+      rw [ContinuousLinearMap.comp_id]; exact hWT
+    have hb := I.ideal_bound W (ContinuousLinearMap.id 𝕜 E) hmem
+    rw [hT'] at hb
+    refine hb.trans ?_
+    have h0 : 0 ≤ I.gauge (operatorAbsoluteValue T) := I.nonneg hmem
+    calc ‖W‖ * I.gauge (operatorAbsoluteValue T) * ‖ContinuousLinearMap.id 𝕜 E‖
+        ≤ 1 * I.gauge (operatorAbsoluteValue T) * 1 := by
+          gcongr
+      _ = I.gauge (operatorAbsoluteValue T) := by ring
+
 /-- **Leaf obligation.** Symmetric norm ideals contain absolute values with
-equal gauge (via the polar partial isometry and unitary invariance). -/
+equal gauge.
+
+The mathematics is proved directly above, in
+`operatorAbsoluteValue_mem_and_gauge_eq_of_polar`; what is missing is only the
+polar partial isometry itself, over a general `RCLike` field in infinite
+dimensions.  That is the same empty quadrant the operator absolute value used to
+sit in: `ContinuousLinearMap.polarPartial` is `ℂ`-only, and the `RCLike`
+`polarFactor` is for plain linear maps.  Supplying `W` discharges this leaf by
+`exact I.operatorAbsoluteValue_mem_and_gauge_eq_of_polar hT hWT hWadj hWnorm
+hWadjnorm`. -/
 theorem SymmetricNormIdeal.operatorAbsoluteValue_mem_and_gauge_eq
     (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E)) {T : E →L[𝕜] E}
     (hT : I.mem T) :
