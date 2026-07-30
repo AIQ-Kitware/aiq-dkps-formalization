@@ -35,7 +35,6 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -273,5 +272,4 @@ theorem ritzResidual_frobenius_minimal (A : E →ₗ[𝕜] E)
     (RectangularUnitarilyInvariantNorm.frobenius.nonneg _)
 
 
-end DavisKahanTheory
 end TauCeti

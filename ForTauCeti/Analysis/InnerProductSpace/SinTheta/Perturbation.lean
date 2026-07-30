@@ -74,7 +74,6 @@ resolves to the whole development.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -757,5 +756,4 @@ theorem sinTheta_perturbation_le_of_spectralDistance
     _ ≤ (Real.pi / 2) * N (B - A) :=
       mul_le_mul_of_nonneg_left hresBound (by positivity)
 
-end DavisKahanTheory
 end TauCeti

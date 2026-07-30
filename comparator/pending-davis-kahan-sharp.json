@@ -2,7 +2,7 @@
   "challenge_module": "Challenge.MathlibPending.DavisKahanSharp.Conformance",
   "solution_module": "Challenge.MathlibPending.DavisKahanSharp.Leaderboard",
   "theorem_names": [
-    "TauCeti.DavisKahanTheory.sinAngleOperator_perturbation_le"
+    "TauCeti.sinAngleOperator_perturbation_le"
   ],
   "permitted_axioms": [
     "propext",
