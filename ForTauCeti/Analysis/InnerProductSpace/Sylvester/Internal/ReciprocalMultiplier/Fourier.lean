@@ -138,6 +138,8 @@ theorem exists_finite_fourier_interpolation
     have hden : 0 < 1 + R := by linarith
     have habs : |τ * x| < 1 := by
       rw [abs_mul, abs_of_pos hτ]
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       change (1 + R)⁻¹ * |x| < 1
       rw [inv_mul_eq_div, div_lt_one hden]
       linarith
@@ -157,6 +159,8 @@ theorem exists_finite_fourier_interpolation
   rw [Polynomial.eval_eq_sum_range, ← Fin.sum_univ_eq_sum_range]
   apply Finset.sum_congr rfl
   intro r _
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change p.coeff r * z x ^ (r : ℕ) =
     p.coeff r * Complex.exp
       ((((((r : ℕ) : ℝ) * τ * x) : ℝ) : ℂ) * Complex.I)
@@ -230,6 +234,8 @@ theorem exists_finite_fourier_interpolation_with_mass_bound
     rw [Polynomial.eval_eq_sum_range' hpdeg, ← Fin.sum_univ_eq_sum_range]
     apply Finset.sum_congr rfl
     intro n _
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change p.coeff n * z x ^ (n : ℕ) =
       p.coeff n * Complex.exp
         ((((((n : ℕ) : ℝ) * τ * x) : ℝ) : ℂ) * Complex.I)
@@ -472,6 +478,8 @@ theorem hasApproximateFiniteReciprocalFourierInterpolation_of_integrableKernel
       have hmoment (ij : Fin m × Fin n) :
           (∫ t, atom t ij ∂μ) =
             (1 : ℂ) / ((α ij.1 - β ij.2 : ℝ) : ℂ) := by
+        -- states the goal with the definition unfolded, in the shape the next step needs;
+        -- there is no `_apply` lemma to rewrite with here.
         change (∫ t, atom t ij ∂MeasureTheory.volume.withDensity density) = _
         rw [integral_withDensity_eq_integral_toReal_smul
           (by fun_prop)
@@ -501,6 +509,8 @@ theorem hasApproximateFiniteReciprocalFourierInterpolation_of_integrableKernel
             (1 : ℂ) / ((α ij.1 - β ij.2 : ℝ) : ℂ) := by
         calc
           (M : ℂ) * A ij = (M • A) ij := by
+            -- states the goal with the definition unfolded, in the shape the next step needs;
+            -- there is no `_apply` lemma to rewrite with here.
             change (M : ℂ) * A ij = M • A ij
             exact (RCLike.real_smul_eq_coe_mul M (A ij)).symm
           _ = (∫ t, atom t ∂μ) ij := congrFun hMA ij
@@ -611,6 +621,8 @@ theorem hasFiniteReciprocalFourierInterpolation_of_approximate
     have hx₀ : x ≠ 0 := by
       intro hxz
       have := hgap i j
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       change 1 ≤ |x| at this
       rw [hxz, abs_zero] at this
       norm_num at this
@@ -629,6 +641,8 @@ theorem hasFiniteReciprocalFourierInterpolation_of_approximate
       rw [← hexact₁ x hx]
       simp only [y]
       ring
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change (1 : ℂ) = (x : ℂ) * ∑ r : Fin (q₀ + q₁),
       Fin.append a₀ a₁ r * Complex.exp
         (((Fin.append t₀ t₁ r * x : ℝ) : ℂ) * Complex.I)
@@ -812,6 +826,7 @@ theorem hasDoubledRealReciprocalOrbitInterpolation_of_finiteFourierInterpolation
                 apply Finset.sum_congr rfl
                 intro r _
                 rw [unitaryOrbitAction_apply]
+                -- names the application so the norm bound applies to it directly.
                 change ‖a r‖ •
                     ((basisDoubledRealRotation eF
                         (fun i => Complex.arg (a r) + t r * alpha i)).toLinearMap ∘ₗ
