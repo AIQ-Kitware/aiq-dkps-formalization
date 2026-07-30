@@ -183,6 +183,9 @@ theorem isSelfAdjoint_yosidaApproxSym (hA : IsSelfAdjoint A) (n : ℕ+) :
     rw [← adjoint_resolventAtIn hA n, ContinuousLinearMap.adjoint_inner_right]
   have hNIn : ⟪resolventAtNegIn hA n x, y⟫_ℂ = ⟪x, resolventAtIn hA n y⟫_ℂ := by
     rw [← adjoint_resolventAtNegIn hA n, ContinuousLinearMap.adjoint_inner_right]
+  -- `IsSymmetric` unfolds to this by definition, but the goal is phrased through the
+  -- `yosidaApproxSymSA` bundle; no simp lemma strips a `selfAdjoint` coercion, so the
+  -- inner-product form has to be stated before `hIn`/`hNIn` can be used.
   change ⟪yosidaApproxSym hA n x, y⟫_ℂ = ⟪x, yosidaApproxSym hA n y⟫_ℂ
   unfold yosidaApproxSym
   simp only [smul_apply, add_apply, inner_smul_left, inner_smul_right,
@@ -257,6 +260,9 @@ theorem yosidaJ_apply_of_mem_domain (hA : IsSelfAdjoint A) (n : ℕ+)
     rwa [map_sub, map_smul] at h1
   have h3 : resolvent A hz (A ⟨φ, hφ⟩) = φ + (I * (n : ℂ)) • resolvent A hz φ :=
     eq_add_of_sub_eq h2
+  -- `h3` is an equation about `resolvent A hz (A φ)`; the goal is the same identity
+  -- reassociated, and `rw [h3]` only fires once the scalar sits on the left. `abel`
+  -- finishes but cannot pick the orientation for `rw`.
   change (-I * (n : ℂ)) • resolvent A hz φ = φ - resolvent A hz (A ⟨φ, hφ⟩)
   rw [h3, neg_mul, neg_smul]
   abel
@@ -331,6 +337,8 @@ theorem yosidaJNeg_apply_of_mem_domain (hA : IsSelfAdjoint A) (n : ℕ+)
     rwa [map_sub, map_smul] at h1
   have h3 : resolvent A hz (A ⟨φ, hφ⟩) = φ + (-I * (n : ℂ)) • resolvent A hz φ :=
     eq_add_of_sub_eq h2
+  -- Mirror of the `+I` case above: `rw [h3]` needs the scalar on the left, and the
+  -- sign here is `+I` where the resolvent parameter carries `-I`.
   change (I * (n : ℂ)) • resolvent A hz φ = φ - resolvent A hz (A ⟨φ, hφ⟩)
   -- `-I * n` occurs in `hz`, so do not rewrite it; let `module` do the scalar arithmetic
   rw [h3]
@@ -418,6 +426,9 @@ theorem yosidaApprox_apply_of_mem_domain (hA : IsSelfAdjoint A) (n : ℕ+)
     rw [this]; abel
   have hRA : resolvent A hz (A ⟨φ, hφ⟩) = φ - (-I * (n : ℂ)) • resolvent A hz φ :=
     eq_sub_of_add_eq' h'
+  -- The goal is the squared-resolvent identity with the `n ^ 2` factor already
+  -- collected; `hRA` is stated in the un-collected form, so `rw [hRA]` matches only
+  -- after the two sides are put in this shape.
   change (n : ℂ) ^ 2 • resolvent A hz φ - (I * (n : ℂ)) • φ
     = (-I * (n : ℂ)) • resolvent A hz (A ⟨φ, hφ⟩)
   rw [hRA, smul_sub, smul_smul, negI_pnat_sq]
@@ -440,6 +451,8 @@ theorem yosidaApproxNeg_apply_of_mem_domain (hA : IsSelfAdjoint A) (n : ℕ+)
     rw [this]; abel
   have hRA : resolvent A hz (A ⟨φ, hφ⟩) = φ - (I * (n : ℂ)) • resolvent A hz φ :=
     eq_sub_of_add_eq' h'
+  -- Mirror of the previous lemma with the opposite sign; same reason `rw [hRA]`
+  -- cannot fire on the goal as elaborated.
   change (n : ℂ) ^ 2 • resolvent A hz φ + (I * (n : ℂ)) • φ
     = (I * (n : ℂ)) • resolvent A hz (A ⟨φ, hφ⟩)
   rw [hRA, smul_sub, smul_smul, I_pnat_sq]
@@ -501,6 +514,9 @@ theorem expApprox_add (hA : IsSelfAdjoint A) (n : ℕ+) (s t : ℝ) :
     expApprox hA n (s + t) = expApprox hA n s * expApprox hA n t := by
   have hcomm : Commute ((yosidaApproxSymSA hA n s : H →L[ℂ] H))
       ((yosidaApproxSymSA hA n t : H →L[ℂ] H)) := by
+    -- `Commute` unfolds to a product equation, but both factors are `yosidaApproxSymSA`
+    -- bundles; `smul_mul_smul_comm` is stated for plain `ContinuousLinearMap`, so the
+    -- coercion has to be pushed through before it applies.
     change ((s : ℂ) • yosidaApproxSym hA n) * ((t : ℂ) • yosidaApproxSym hA n)
        = ((t : ℂ) • yosidaApproxSym hA n) * ((s : ℂ) • yosidaApproxSym hA n)
     rw [smul_mul_smul_comm, smul_mul_smul_comm, mul_comm ((s : ℂ)) ((t : ℂ))]
@@ -508,6 +524,9 @@ theorem expApprox_add (hA : IsSelfAdjoint A) (n : ℕ+) (s t : ℝ) :
       = yosidaApproxSymSA hA n s + yosidaApproxSymSA hA n t := by
     ext
     simp [yosidaApproxSymSA, Complex.ofReal_add, add_smul]
+  -- `expUnitary` returns a unitary, and the goal compares its coercion to a plain
+  -- operator. No simp lemma unfolds `selfAdjoint.expUnitary` under the coercion, so
+  -- `hcomm.expUnitary_add` cannot be rewritten against the goal as stated.
   change ((selfAdjoint.expUnitary (yosidaApproxSymSA hA n (s + t))) : H →L[ℂ] H) = _
   rw [hsum, hcomm.expUnitary_add]
   rfl

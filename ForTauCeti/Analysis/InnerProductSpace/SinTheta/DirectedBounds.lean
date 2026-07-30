@@ -73,13 +73,13 @@ Then `δ ‖sin Θ‖ ≤ ‖R‖`.
 theorem sinTheta_residual_le
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hMspec : SpectrumIn M ⊤ (Set.Icc a b))
     (hAspec : SpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * N (sinThetaEmbedding U X) ≤ N (residual A X M) := by
-  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
+  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
   let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
   let Y : F →ₗ[𝕜] Uᗮ :=
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
@@ -98,16 +98,23 @@ theorem sinTheta_residual_le
     simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
       LinearMap.comp_apply] using hx
   have hY : NU Y = N (sinThetaEmbedding U X) := by
+    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
+    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
+    -- longer discharges -- tried, and it fails here.
     change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) = N (sinThetaEmbedding U X)
     congr 1
   have hC : NU C =
       N (complementaryProjection U ∘ₗ residual A X M) := by
+    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
+    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
+    -- longer discharges -- tried, and it fails here.
     change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
       N (complementaryProjection U ∘ₗ residual A X M)
     congr 1
   have hproj : ‖(complementaryProjection U).toContinuousLinearMap‖ ≤ 1 := by
     refine (complementaryProjection U).toContinuousLinearMap.opNorm_le_bound
       zero_le_one fun x => ?_
+    -- names the projection application so the operator-norm bound applies directly.
     change ‖Uᗮ.starProjection x‖ ≤ 1 * ‖x‖
     simpa using Uᗮ.norm_starProjection_apply_le x
   have hC_le : NU C ≤ N (residual A X M) := by
@@ -130,11 +137,11 @@ theorem sinTheta_residual_le
 theorem sinTheta_residual_le_of_orderedGap
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
     δ * N (sinThetaEmbedding U X) ≤ N (residual A X M) := by
-  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
+  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
   let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
   let Y : F →ₗ[𝕜] Uᗮ :=
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
@@ -147,6 +154,8 @@ theorem sinTheta_residual_le_of_orderedGap
     left
     intro lam μ hlam hμ
     apply hgap lam μ hlam
+    -- restates the spectrum membership through the restriction, the form the
+    -- following step matches.
     change μ ∈ restrictedSpectrum (A.restrict hUperp) ⊤ at hμ
     rw [restrictedSpectrum_restrict A hUperp] at hμ
     exact hμ
@@ -157,16 +166,23 @@ theorem sinTheta_residual_le_of_orderedGap
     simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
       LinearMap.comp_apply] using hx
   have hY : NU Y = N (sinThetaEmbedding U X) := by
+    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
+    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
+    -- longer discharges -- tried, and it fails here.
     change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) = N (sinThetaEmbedding U X)
     congr 1
   have hC : NU C =
       N (complementaryProjection U ∘ₗ residual A X M) := by
+    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
+    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
+    -- longer discharges -- tried, and it fails here.
     change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
       N (complementaryProjection U ∘ₗ residual A X M)
     congr 1
   have hproj : ‖(complementaryProjection U).toContinuousLinearMap‖ ≤ 1 := by
     refine (complementaryProjection U).toContinuousLinearMap.opNorm_le_bound
       zero_le_one fun x => ?_
+    -- names the projection application so the operator-norm bound applies directly.
     change ‖Uᗮ.starProjection x‖ ≤ 1 * ‖x‖
     simpa using Uᗮ.norm_starProjection_apply_le x
   have hC_le : NU C ≤ N (residual A X M) := by
@@ -192,12 +208,12 @@ The restriction and projection proof below is complete; the only open input is
 theorem sinTheta_residual_le_of_spectralDistance
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : SpectraSeparated M ⊤ A Uᗮ δ) :
     δ * N (sinThetaEmbedding U X) ≤ (Real.pi / 2) * N (residual A X M) := by
-  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
+  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
   let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
   let Y : F →ₗ[𝕜] Uᗮ :=
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
@@ -220,16 +236,23 @@ theorem sinTheta_residual_le_of_spectralDistance
     simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
       LinearMap.comp_apply] using hx
   have hY : NU Y = N (sinThetaEmbedding U X) := by
+    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
+    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
+    -- longer discharges -- tried, and it fails here.
     change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) = N (sinThetaEmbedding U X)
     congr 1
   have hC : NU C =
       N (complementaryProjection U ∘ₗ residual A X M) := by
+    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
+    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
+    -- longer discharges -- tried, and it fails here.
     change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
       N (complementaryProjection U ∘ₗ residual A X M)
     congr 1
   have hproj : ‖(complementaryProjection U).toContinuousLinearMap‖ ≤ 1 := by
     refine (complementaryProjection U).toContinuousLinearMap.opNorm_le_bound
       zero_le_one fun x => ?_
+    -- names the projection application so the operator-norm bound applies directly.
     change ‖Uᗮ.starProjection x‖ ≤ 1 * ‖x‖
     simpa using Uᗮ.norm_starProjection_apply_le x
   have hC_le : NU C ≤ N (residual A X M) := by
@@ -276,7 +299,7 @@ core. -/
 theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) (hV : Reduces B V)
+    (hU : IsInvariant A U) (hV : IsInvariant B V)
     {c g ε : ℝ} (hg : 0 < g)
     (hUspec : SpectrumIn A U (Set.Ici (c + g)))
     (hVspec : SpectrumIn B V (Set.Iic c))
@@ -289,8 +312,8 @@ theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
   have hBpp : ∀ x, Bc x = B x := fun _ => rfl
   have hAself : Ac.IsSymmetric := fun x y => hA x y
   have hBself : Bc.IsSymmetric := fun x y => hB x y
-  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
-  have hVperp : Reduces B Vᗮ := reduces_orthogonal_of_isSymmetric hB hV
+  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
+  have hVperp : IsInvariant B Vᗮ := isInvariant_orthogonal_of_isSymmetric hB hV
   have hUred : Ac.Reduces U := ⟨fun x hx => hU x hx, fun x hx => hUperp x hx⟩
   have hVred : Bc.Reduces V := ⟨fun x hx => hV x hx, fun x hx => hVperp x hx⟩
   have hUc : ∀ x ∈ U, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪Ac x, x⟫_𝕜 :=
@@ -328,8 +351,8 @@ theorem opNorm_spectralSubspace_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖((spectralSubspace B t).starProjection ∘L
         (spectralSubspace A s).starProjection : E →L[𝕜] E)‖ ≤ ε / g :=
-  opNorm_directed_sinTheta_le hA hB (reduces_spectralSubspace A s)
-    (reduces_spectralSubspace B t) hg hUspec hVspec hε0 hε
+  opNorm_directed_sinTheta_le hA hB (isInvariant_spectralSubspace A s)
+    (isInvariant_spectralSubspace B t) hg hUspec hVspec hε0 hε
 
 /-- **Every-unitarily-invariant-norm directed `sin Θ` theorem, spectral
 hypothesis form.**  If `A, B` are symmetric, `U` reduces `A` with `U`-carried
@@ -340,7 +363,7 @@ by the spectral coercivity bridges. -/
 theorem uiNorm_directed_sinTheta_le (N : UnitarilyInvariantNorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) (hV : Reduces B V)
+    (hU : IsInvariant A U) (hV : IsInvariant B V)
     {c g : ℝ} (hg : 0 < g)
     (hUspec : SpectrumIn A U (Set.Ici (c + g)))
     (hVspec : SpectrumIn B V (Set.Iic c)) :
@@ -366,8 +389,8 @@ theorem uiNorm_spectralSubspace_directed_sinTheta_le
     N (((spectralSubspace B t).starProjection ∘L
         (spectralSubspace A s).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (B - A) / g :=
-  uiNorm_directed_sinTheta_le N hA hB (reduces_spectralSubspace A s)
-    (reduces_spectralSubspace B t) hg hUspec hVspec
+  uiNorm_directed_sinTheta_le N hA hB (isInvariant_spectralSubspace A s)
+    (isInvariant_spectralSubspace B t) hg hUspec hVspec
 
 /-! ## Two-sided projector-difference operator-norm form
 
@@ -389,7 +412,7 @@ no rank hypothesis and no factor-two loss. -/
 theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U W : Submodule 𝕜 E} [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
-    (hU : Reduces A U) (hW : Reduces B W)
+    (hU : IsInvariant A U) (hW : IsInvariant B W)
     {c g ε : ℝ} (hg : 0 < g)
     (hUhi : SpectrumIn A U (Set.Ici (c + g)))
     (hUlo : SpectrumIn A Uᗮ (Set.Iic c))
@@ -402,14 +425,18 @@ theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
   let Bc : E →L[𝕜] E := B.toContinuousLinearMap
   have hAself : Ac.IsSymmetric := by
     intro x y
+    -- states the symmetry goal as the inner-product identity the structure field
+    -- expects.
     change ⟪A x, y⟫_𝕜 = ⟪x, A y⟫_𝕜
     exact hA x y
   have hBself : Bc.IsSymmetric := by
     intro x y
+    -- states the symmetry goal as the inner-product identity the structure field
+    -- expects.
     change ⟪B x, y⟫_𝕜 = ⟪x, B y⟫_𝕜
     exact hB x y
-  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
-  have hWperp : Reduces B Wᗮ := reduces_orthogonal_of_isSymmetric hB hW
+  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
+  have hWperp : IsInvariant B Wᗮ := isInvariant_orthogonal_of_isSymmetric hB hW
   have hUred : Ac.Reduces U :=
     ⟨fun x hx => by simpa [Ac] using hU x hx,
       fun x hx => by simpa [Ac] using hUperp x hx⟩
@@ -440,7 +467,7 @@ The sharp theorem `opNorm_starProjection_sub_le` is strictly stronger. -/
 theorem opNorm_starProjection_sub_le_two {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U W : Submodule 𝕜 E} [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
-    (hU : Reduces A U) (hW : Reduces B W)
+    (hU : IsInvariant A U) (hW : IsInvariant B W)
     {c g ε : ℝ} (hg : 0 < g)
     (hUhi : SpectrumIn A U (Set.Ici (c + g))) (hUlo : SpectrumIn A Uᗮ (Set.Iic c))
     (hWhi : SpectrumIn B W (Set.Ici (c + g))) (hWlo : SpectrumIn B Wᗮ (Set.Iic c))
@@ -470,8 +497,8 @@ theorem opNorm_spectralSubspace_sub_le {A B : E →ₗ[𝕜] E}
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖((spectralSubspace A s).starProjection
         - (spectralSubspace B t).starProjection : E →L[𝕜] E)‖ ≤ ε / g :=
-  opNorm_starProjection_sub_le hA hB (reduces_spectralSubspace A s)
-    (reduces_spectralSubspace B t) hg hAhi hAlo hBhi hBlo hε0 hε
+  opNorm_starProjection_sub_le hA hB (isInvariant_spectralSubspace A s)
+    (isInvariant_spectralSubspace B t) hg hAhi hAlo hBhi hBlo hε0 hε
 
 /-- **Two-sided operator-norm spectral-projector Davis--Kahan theorem.**  The
 projector-difference bound for the canonical spectral subspaces (they reduce
@@ -486,8 +513,8 @@ theorem opNorm_spectralSubspace_sub_le_two {A B : E →ₗ[𝕜] E}
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖((spectralSubspace A s).starProjection
         - (spectralSubspace B t).starProjection : E →L[𝕜] E)‖ ≤ 2 * (ε / g) :=
-  opNorm_starProjection_sub_le_two hA hB (reduces_spectralSubspace A s)
-    (reduces_spectralSubspace B t) hg hAhi hAlo hBhi hBlo hε0 hε
+  opNorm_starProjection_sub_le_two hA hB (isInvariant_spectralSubspace A s)
+    (isInvariant_spectralSubspace B t) hg hAhi hAlo hBhi hBlo hε0 hε
 
 end DavisKahanTheory
 end TauCeti

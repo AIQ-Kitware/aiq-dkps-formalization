@@ -71,6 +71,7 @@ omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 theorem cosThetaEmbedding_apply_norm_le (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) (x : F) :
     ‖cosThetaEmbedding U X x‖ ≤ ‖x‖ := by
+  -- names the projection application so the norm bound applies to it directly.
   change ‖U.starProjection (X x)‖ ≤ ‖x‖
   calc
     ‖U.starProjection (X x)‖ ≤ ‖X x‖ := U.norm_starProjection_apply_le _
@@ -81,6 +82,7 @@ omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 theorem sinThetaEmbedding_apply_norm_le (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) (x : F) :
     ‖sinThetaEmbedding U X x‖ ≤ ‖x‖ := by
+  -- names the projection application so the norm bound applies to it directly.
   change ‖Uᗮ.starProjection (X x)‖ ≤ ‖x‖
   calc
     ‖Uᗮ.starProjection (X x)‖ ≤ ‖X x‖ := Uᗮ.norm_starProjection_apply_le _
@@ -149,6 +151,7 @@ theorem cosThetaGram_add_sinThetaGram_eq_id (U : Submodule 𝕜 E)
   simp only [LinearMap.add_apply, cosThetaGram, sinThetaGram,
     LinearMap.comp_apply, LinearMap.id_apply, inner_add_left]
   rw [LinearMap.adjoint_inner_left, LinearMap.adjoint_inner_left]
+  -- states the goal with the definition unfolded, in the shape the next step needs.
   change
     ⟪U.starProjection (X x), U.starProjection (X y)⟫_𝕜 +
         ⟪Uᗮ.starProjection (X x), Uᗮ.starProjection (X y)⟫_𝕜 =
@@ -246,11 +249,19 @@ theorem ker_cosTwoThetaEmbedding (U : Submodule 𝕜 E)
       LinearMap.ker (cosTwoThetaSourceOperator U X) := by
   apply le_antisymm
   · intro y hy
+    -- restates the hypothesis with the definition unfolded, which is the form the
+    -- following step matches against.
     change X (cosTwoThetaSourceOperator U X y) = 0 at hy
+    -- unfolds the named residual/compression so the following rewrite sees its
+    -- definition; there is no `_apply` lemma for it to route through.
     change cosTwoThetaSourceOperator U X y = 0
     exact X.injective (hy.trans (map_zero X).symm)
   · intro y hy
+    -- restates the hypothesis with the definition unfolded, which is the form the
+    -- following step matches against.
     change cosTwoThetaSourceOperator U X y = 0 at hy
+    -- unfolds the named residual/compression so the following rewrite sees its
+    -- definition; there is no `_apply` lemma for it to route through.
     change X (cosTwoThetaSourceOperator U X y) = 0
     rw [hy, map_zero]
 
@@ -313,7 +324,7 @@ trial map.**  This is the normalized specialization of
 `sylvester_complementaryTrialBlock_eq_projectedGeneralResidual`. -/
 theorem sylvester_sinThetaEmbedding_eq_projectedResidual
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F) :
     A ∘ₗ sinThetaEmbedding U X - sinThetaEmbedding U X ∘ₗ M =
       complementaryProjection U ∘ₗ residual A X M := by
@@ -327,6 +338,7 @@ theorem projection_approximateSubspace_eq_comp_adjoint (X : F →ₗᵢ[𝕜] E)
     projection (approximateSubspace X) =
       X.toLinearMap ∘ₗ X.toLinearMap.adjoint := by
   ext y
+  -- states the goal with the definition unfolded, in the shape the next step needs.
   change (approximateSubspace X).starProjection y =
     X.toLinearMap (X.toLinearMap.adjoint y)
   apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero
@@ -334,10 +346,14 @@ theorem projection_approximateSubspace_eq_comp_adjoint (X : F →ₗᵢ[𝕜] E)
       LinearMap.range X.toLinearMap
     exact ⟨X.toLinearMap.adjoint y, rfl⟩
   · intro w hw
+    -- restates the hypothesis with the definition unfolded, which is the form the
+    -- following step matches against.
     change w ∈ LinearMap.range X.toLinearMap at hw
     rcases hw with ⟨z, rfl⟩
     rw [inner_sub_left]
     apply sub_eq_zero.mpr
+    -- states the goal as the inner-product identity the isometry/adjoint lemma
+    -- expects, rather than through the bundled map.
     change ⟪y, X z⟫_𝕜 =
       ⟪X (X.toLinearMap.adjoint y), X z⟫_𝕜
     exact (LinearMap.adjoint_inner_left X.toLinearMap z y).symm |>.trans
@@ -413,6 +429,8 @@ theorem tanThetaEmbedding_defined_iff (U : Submodule 𝕜 E)
     rw [LinearMap.ker_eq_bot]
     intro x y hxy
     have hproj : U.starProjection (X (x - y)) = 0 := by
+      -- unfolds the named residual/compression so the following rewrite sees its
+      -- definition; there is no `_apply` lemma for it to route through.
       change cosThetaEmbedding U X (x - y) = 0
       rw [map_sub, hxy, sub_self]
     have hXzero : X (x - y) = 0 :=

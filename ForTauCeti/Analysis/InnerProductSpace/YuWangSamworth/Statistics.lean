@@ -126,7 +126,7 @@ aligned-basis conclusion proved here.
 theorem yuWangSamworth_sinTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (_hU : Reduces A U) (_hV : Reduces B V)
+    [V.HasOrthogonalProjection] (_hU : IsInvariant A U) (_hV : IsInvariant B V)
     (hcorr : CorrespondingEigenblock hA hB U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d) {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : PopulationGap A U Δ) :
@@ -207,7 +207,7 @@ theorem yuWangSamworth_sinTheta_le
 eigenvectors, each of which maps to a scalar multiple of itself. -/
 theorem reduces_spanIndices {n : ℕ} {B : E →ₗ[𝕜] E} (hB : B.IsSymmetric)
     (hn : finrank 𝕜 E = n) (s : Set (Fin n)) :
-    Reduces B ((hB.eigenvectorBasis hn).spanIndices s) := by
+    IsInvariant B ((hB.eigenvectorBasis hn).spanIndices s) := by
   intro x hx
   refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
   · rintro y ⟨i, hip, rfl⟩
@@ -236,7 +236,7 @@ theorem yuWangSamworth_intervalBlock_le
         (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ := by
   obtain ⟨n, hn, s, -, hVp⟩ := id hcorr
   refine yuWangSamworth_sinTheta_le hA hB ?_ ?_ hcorr rfl hΔ hgap
-  · rw [hUeq]; exact reduces_spectralSubspace A (Set.Icc a b)
+  · rw [hUeq]; exact isInvariant_spectralSubspace A (Set.Icc a b)
   · rw [hVp]; exact reduces_spanIndices hB hn ↑s
 
 /-- The family-level squared sine agrees with the canonical Frobenius
@@ -439,7 +439,7 @@ the sine-distance theorem.
 theorem yuWangSamworth_alignedBasis_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     (hcorr : CorrespondingEigenblock hA hB U V)
     {d : ℕ} (hrankU : finrank 𝕜 U = d) (hrankV : finrank 𝕜 V = d)
     {Δ : ℝ} (hΔ : 0 < Δ) (hgap : PopulationGap A U Δ) :
@@ -492,13 +492,13 @@ theorem yuWangSamworth_eigenvector_le
   have hu0 : u ≠ 0 := by rw [← norm_ne_zero_iff, hu]; norm_num
   have hv0 : v ≠ 0 := by rw [← norm_ne_zero_iff, hv]; norm_num
   -- The eigenlines reduce the operators.
-  have hU : Reduces A (Submodule.span 𝕜 {u}) := by
+  have hU : IsInvariant A (Submodule.span 𝕜 {u}) := by
     intro x hx
     rw [Submodule.mem_span_singleton] at hx
     obtain ⟨a, rfl⟩ := hx
     rw [map_smul, hAu]
     exact Submodule.smul_mem _ _ (Submodule.smul_mem _ _ (Submodule.mem_span_singleton_self u))
-  have hV : Reduces B (Submodule.span 𝕜 {v}) := by
+  have hV : IsInvariant B (Submodule.span 𝕜 {v}) := by
     intro x hx
     rw [Submodule.mem_span_singleton] at hx
     obtain ⟨a, rfl⟩ := hx
