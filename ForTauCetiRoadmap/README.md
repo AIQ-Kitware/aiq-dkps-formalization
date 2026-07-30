@@ -13,9 +13,9 @@ is accepted, we already have what it needs. That includes paper references,
 adversarial review of every statement, and Mathlib-quality elegance. See
 `ForTauCeti/README.md` §*The readiness standard*.
 
-**Six of twenty-two topics are written** (2026-07-29). The design below
-partitions the library into twenty-two; the table under *Roadmaps* is the
-written ones. Sixteen remain, and `python3 scripts/check_tauceti_roadmap_topics.py --needs`
+**Seven of twenty-four topics are written** (2026-07-29; T15 became T15a/T15b/T15c on the same day). The design below
+partitions the library into twenty-four; the table under *Roadmaps* is the
+written ones. Seventeen remain, and `python3 scripts/check_tauceti_roadmap_topics.py --needs`
 names the ones that can go first: **T01**, **T21** and **T22** are still
 unwritten and have no prerequisites at all.
 
@@ -40,6 +40,7 @@ no directory yet, and writing them is the work that design makes possible.
 | [`HaagerupZsidoKernel/`](HaagerupZsidoKernel/README.md) | T12 — a finite-mass Fourier kernel for the reciprocal on `1 ≤ \|x\|`: the hyperbolic weight and its Laplace transform, Poisson summation for the Cauchy lattice, the closed-form sine–Laplace and rational-quadratic integrals, the exterior identity `∫ k(t) e^{itx} dt = 1/x`, and the exact `L¹` mass `π / 2` that is the sharp Sylvester constant. Independent of every other topic. |
 | [`UnboundedOperators/`](UnboundedOperators/README.md) | Unbounded operators on Mathlib `LinearPMap`, the canonical carrier fixed by the U1 decision in `AGENTS.md`. |
 | [`BorelCalculus/`](BorelCalculus/README.md) | T14 — the bounded Borel functional calculus of a normal operator and the projection-valued measures it produces: diagonal spectral measures from Riesz–Markov–Kakutani, the polarised transport principle that carries every continuous-calculus identity to bounded Borel symbols, multiplicativity, and `ProjValMeasure` on the Borel sets of `ℝ`. Independent, and the topic the whole unbounded stack (T15) rests on. |
+| [`UnboundedResolvent/`](UnboundedResolvent/README.md) | T15b — resolvents of unbounded self-adjoint operators: the resolvent set of a `LinearPMap` (Mathlib's `spectrum` does not apply to a partial map), the named resolvent and the first resolvent identity, openness, real spectrum with `‖R z‖ ≤ \|Im z\|⁻¹`, the real-point variant, and the intertwining chain up to the continuous functional calculus. Independent — one of the four topics that need nothing else. |
 | [`SpectralSubspacePerturbation/`](SpectralSubspacePerturbation/README.md) | Spectral subspace perturbation, operator angles, and Sylvester equations: projection geometry, graph subspaces and Riccati equations, closed and possibly unbounded self-adjoint operators. Davis–Kahan Part III is its principal worked source and acceptance suite. Carries [`Suggested.lean.md`](SpectralSubspacePerturbation/Suggested.lean.md). |
 
 `SpectralSubspacePerturbation` is the roadmap target the live `approximation-number`

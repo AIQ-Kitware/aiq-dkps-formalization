@@ -35,7 +35,7 @@ totalized tangent functions used by finite-dimensional operator-angle theory.
   `ForTauCeti` staging modules.
 -/
 
-namespace FiniteDimensional
+namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -234,4 +234,4 @@ theorem sqrt_comm
   rw [← selfAdjointFunctionalCalculus_sqrt hT]
   exact selfAdjointFunctionalCalculus_comm hT.isSymmetric Real.sqrt hBT
 
-end FiniteDimensional
+end TauCeti

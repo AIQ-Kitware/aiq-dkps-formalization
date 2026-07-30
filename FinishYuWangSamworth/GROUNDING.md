@@ -1,5 +1,14 @@
 # Grounding ledger
 
+**Audit status, 2026-07-30 (lane CLAIM-DOC):**
+`python3 FinishYuWangSamworth/scripts/verify_grounding.py` → `FinishYuWangSamworth
+grounding audit: OK`, exit 0, run against the current tree. The script is now in
+`dev/README.md`'s gate list; until this lane, nothing ran it, so the ledger below
+was a claim with no live evidence. Its sibling in `FinishTanTwoTheta` was failing
+on four stale references at the same moment — the two libraries were not in the
+same state, which is why the row asked for both to be run rather than assumed.
+
+
 The completion lane builds only on repository-local, machine-checked results.
 
 ## Symmetric results
