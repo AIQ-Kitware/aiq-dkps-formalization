@@ -223,9 +223,9 @@ functional calculus of `Real.sqrt`:
 `sqrt T = ∑ᵢ √λᵢ • (rank-one projection onto the `i`-th eigenvector)`, where `λᵢ ≥ 0`
 are the eigenvalues of `T`.  Source: Horn--Johnson Thm 7.2.6.
 
-Until 2026-07-29 this was a second `noncomputable def` with that sum written out,
-and the library proved the two coincide by `rfl` — one object defined twice.  Lane
-T01-SQRT collapsed the definition; the uniqueness theory that only the square root
+This was once a second `noncomputable def` with that sum written out, and the
+library proved the two coincide by `rfl` — one object defined twice.  The
+duplicate has been collapsed; the uniqueness theory that only the square root
 has (`sqrt_unique`, `ker_sqrt`, `range_sqrt`, `sqrt_mul_self`) is unchanged and
 still lives in `ForTauCeti/Analysis/InnerProductSpace/PositiveSqrt.lean`, which now
 imports this module rather than the other way round. -/
@@ -234,8 +234,8 @@ noncomputable def _root_.LinearMap.IsPositive.sqrt
   selfAdjointFunctionalCalculus hT.isSymmetric Real.sqrt
 
 /-- The spectral square root is the finite self-adjoint functional calculus of
-`Real.sqrt`.  True by definition since lane T01-SQRT; kept because it is the name
-downstream proofs rewrite with. -/
+`Real.sqrt`.  True by definition; kept because it is the name downstream proofs
+rewrite with. -/
 theorem selfAdjointFunctionalCalculus_sqrt
     {T : E →ₗ[𝕜] E} (hT : T.IsPositive) :
     selfAdjointFunctionalCalculus hT.isSymmetric Real.sqrt = hT.sqrt :=

@@ -39,8 +39,8 @@ mathlib can follow, since HJ's SVD proof route is unavailable: mathlib has no SV
 
 ## The three polar factors, and how they relate
 
-Documented 2026-07-30 (lane MODULUS-DEDUP) because none of the three named the
-others, so a reviewer could not tell a designed hierarchy from three independent
+Documented here because none of the three named the others, so a reviewer could
+not tell a designed hierarchy from three independent
 attempts. The separating hypotheses are the carrier, the field, and whether the
 modulus is invertible:
 
@@ -67,8 +67,7 @@ variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpac
 
 /-! ### The modulus `|A|` (RCLike, LinearMap)
 
-**There are two moduli in this library and they are not duplicates** (recorded
-2026-07-30, lane MODULUS-DEDUP, decided together with lane T01-SQRT):
+**There are two moduli in this library and they are not duplicates:**
 
 * `TauCeti.abs`, below, is **square, `RCLike`-generic and finite-dimensional** —
   `(E →ₗ[𝕜] E) → (E →ₗ[𝕜] E)`, built from the spectral square root of `A⋆A`;

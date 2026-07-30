@@ -86,9 +86,6 @@ hypothesis.  The proof uses the `RCLike` Hilbert-space star structure and is sca
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none** — the `ForTauCeti` import firewall admits only
   Mathlib, `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
-* Moved from `ForMathlib/Analysis/InnerProductSpace/` to `ForTauCeti/` on
-  2026-07-29 under lane Y3(b2), with the rest of its 8-module component.
-  Statements, proofs and signatures are unchanged.
 -/
 
 
