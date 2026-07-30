@@ -123,7 +123,7 @@ theorem sinTheta_unbounded_real_spectralSubspace
     (hReq : ∀ x : A0.domain,
       A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap A0
+    (hgap : FormBoundedSylvesterGap A0
       (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
     (hR : N.Mem Rop) :
     N.Mem
@@ -165,7 +165,7 @@ theorem generalizedSinTheta_unbounded_real_spectralSubspace
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
       A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
-    (hgap : UnboundedSylvesterGap A0
+    (hgap : FormBoundedSylvesterGap A0
       (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
     (hR : N.Mem Rop) :
     N.Mem

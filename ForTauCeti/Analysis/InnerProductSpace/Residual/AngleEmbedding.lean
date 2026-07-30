@@ -36,7 +36,6 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -448,5 +447,4 @@ theorem tanThetaEmbedding_defined_iff (U : Submodule 𝕜 E)
     rw [hy, map_zero]
 
 
-end DavisKahanTheory
 end TauCeti

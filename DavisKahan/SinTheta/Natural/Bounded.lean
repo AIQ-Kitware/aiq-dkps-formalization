@@ -44,7 +44,7 @@ theorem sinTheta_bounded_spectralSubspace_of_spectrumGap
     (A0 : F →L[ℂ] F) (hA0 : A0.IsSymmetric)
     (X : F →L[ℂ] E) (hX : IsometricEmbedding X)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : GenuineUnboundedSylvesterGap
+    (hgap : UnboundedSylvesterGap
       (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0)
       (selfAdjointSpectralRestriction
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
@@ -95,7 +95,7 @@ theorem generalizedSinTheta_bounded_spectralSubspace_of_spectrumGap
     (X : F →L[ℂ] E)
     {δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
-    (hgap : GenuineUnboundedSylvesterGap
+    (hgap : UnboundedSylvesterGap
       (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0)
       (selfAdjointSpectralRestriction
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
@@ -147,7 +147,7 @@ theorem sinTheta_bounded_real_spectralSubspace
     (A0 : F →L[ℝ] F) (hA0 : A0.IsSymmetric)
     (X : F →L[ℝ] E) (hX : IsometricEmbedding X)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap
+    (hgap : FormBoundedSylvesterGap
       (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0)
       (realSelfAdjointSpectralRestriction
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
@@ -199,7 +199,7 @@ theorem generalizedSinTheta_bounded_real_spectralSubspace
     (X : F →L[ℝ] E)
     {δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
-    (hgap : UnboundedSylvesterGap
+    (hgap : FormBoundedSylvesterGap
       (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0)
       (realSelfAdjointSpectralRestriction
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)

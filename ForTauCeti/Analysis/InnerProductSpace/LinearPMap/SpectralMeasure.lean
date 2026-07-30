@@ -117,6 +117,73 @@ theorem isBddMeasurable_truncSymbol {c r : ℝ} (hr : 0 ≤ r)
   exact ⟨(hmeasκ.sub measurable_const).mul (measurable_const.indicator hSm), r, hr,
     norm_truncSymbol_le hA B hr hcr⟩
 
+/-- The indicator of the Cayley preimage of `B`: the symbol whose Borel calculus
+is the spectral projection `E_A(B)`.
+
+Named because it was being rebuilt inline in every proof that needed it,
+together with its two pointwise values — `specProjection_apply_sub_smul` and
+`mem_resolventSet_specRestrict_of_gap` between them proved those four times. -/
+private noncomputable def cayleyIndicator : _root_.spectrum ℂ (cayley hA) → ℂ :=
+  (cayleyInv hA ⁻¹' B).indicator (fun _ => (1 : ℂ))
+
+private theorem cayleyIndicator_of_mem {w : _root_.spectrum ℂ (cayley hA)}
+    (hw : w ∈ cayleyInv hA ⁻¹' B) : cayleyIndicator hA B w = 1 := by
+  simp [cayleyIndicator, hw]
+
+private theorem cayleyIndicator_of_notMem {w : _root_.spectrum ℂ (cayley hA)}
+    (hw : w ∉ cayleyInv hA ⁻¹' B) : cayleyIndicator hA B w = 0 := by
+  simp [cayleyIndicator, hw]
+
+include hB in
+private theorem isBddMeasurable_cayleyIndicator :
+    BorelCalculus.IsBddMeasurable (cayleyIndicator hA B) :=
+  BorelCalculus.isBddMeasurable_indicator (a := cayley hA) (measurable_cayleyInv hA hB)
+
+
+/-- The inverting symbol `(κ - lam)⁻¹ · 1_B` of the resolvent-gap argument.
+
+`lam` is an explicit argument rather than a section variable, which is all it
+needed: nothing about the surrounding section has to change to give this
+function a name. -/
+private noncomputable def gapSymbol (lam : ℝ) : _root_.spectrum ℂ (cayley hA) → ℂ :=
+  fun w => ((cayleyInv hA w : ℂ) - (lam : ℂ))⁻¹ * cayleyIndicator hA B w
+
+/-- On the support the inverting symbol is the plain reciprocal. -/
+private theorem gapSymbol_of_mem {lam : ℝ} {w : _root_.spectrum ℂ (cayley hA)}
+    (hw : w ∈ cayleyInv hA ⁻¹' B) :
+    gapSymbol hA B lam w = ((cayleyInv hA w : ℂ) - (lam : ℂ))⁻¹ := by
+  rw [gapSymbol, cayleyIndicator_of_mem hA B hw, mul_one]
+
+/-- Off the support the indicator kills the inverting symbol. -/
+private theorem gapSymbol_of_notMem {lam : ℝ} {w : _root_.spectrum ℂ (cayley hA)}
+    (hw : w ∉ cayleyInv hA ⁻¹' B) : gapSymbol hA B lam w = 0 := by
+  rw [gapSymbol, cayleyIndicator_of_notMem hA B hw, mul_zero]
+
+include hB in
+/-- The inverting symbol is admissible for the bounded Borel calculus.  The
+bound is `ε⁻¹`, from the gap alone: on the support the factor is at least `ε` in
+modulus, and off it the indicator kills the symbol. -/
+private theorem isBddMeasurable_gapSymbol {lam ε : ℝ} (hε : 0 < ε)
+    (hgap : ∀ s ∈ B, ε ≤ |s - lam|) :
+    BorelCalculus.IsBddMeasurable (gapSymbol hA B lam) := by
+  classical
+  have hmeasκ : Measurable fun w => ((cayleyInv hA w : ℝ) : ℂ) :=
+    Complex.continuous_ofReal.measurable.comp (measurable_cayleyInv hA)
+  have hgapS : ∀ w ∈ cayleyInv hA ⁻¹' B,
+      ε ≤ ‖((cayleyInv hA w : ℂ) - (lam : ℂ))‖ := by
+    intro w hw
+    rw [show ((cayleyInv hA w : ℂ) - (lam : ℂ)) = ((cayleyInv hA w - lam : ℝ) : ℂ) by
+        push_cast; ring, Complex.norm_real, Real.norm_eq_abs]
+    exact hgap _ hw
+  refine ⟨((hmeasκ.sub measurable_const).inv).mul
+      (isBddMeasurable_cayleyIndicator hA B hB).measurable, ε⁻¹, by positivity, fun w => ?_⟩
+  by_cases hw : w ∈ cayleyInv hA ⁻¹' B
+  · rw [gapSymbol_of_mem hA B hw, norm_inv]
+    simpa only [one_div] using one_div_le_one_div_of_le hε (hgapS w hw)
+  · rw [gapSymbol_of_notMem hA B hw, norm_zero]
+    positivity
+
+
 /-- **Bounded spectral sets.**  If the spectral parameter stays within `r` of `c`
 on `B`, then the spectral projection lands in `dom A` and `A - c` is bounded by
 `r` there.  Both facts come from one identity: `(A + i) E_A(B)` is the Borel
@@ -134,11 +201,11 @@ theorem specProjection_apply_sub_smul {M c r : ℝ}
   set κ := cayleyInv hA with hκ
   set S : Set (_root_.spectrum ℂ (cayley hA)) := κ ⁻¹' B with hS
   have hSm : MeasurableSet S := measurable_cayleyInv hA hB
-  set ind : _root_.spectrum ℂ (cayley hA) → ℂ := S.indicator (fun _ => 1) with hind
-  have hindb : BorelCalculus.IsBddMeasurable ind :=
-    BorelCalculus.isBddMeasurable_indicator (a := cayley hA) hSm
+  set ind : _root_.spectrum ℂ (cayley hA) → ℂ := cayleyIndicator hA B with hind
   have hmeasκ : Measurable fun w => ((κ w : ℝ) : ℂ) :=
     Complex.continuous_ofReal.measurable.comp (measurable_cayleyInv hA)
+  have hindb : BorelCalculus.IsBddMeasurable ind :=
+    BorelCalculus.isBddMeasurable_indicator (a := cayley hA) hSm
   set q : _root_.spectrum ℂ (cayley hA) → ℂ :=
     fun w => ((κ w : ℂ) + Complex.I) * ind w with hq
   set pf : _root_.spectrum ℂ (cayley hA) → ℂ :=
@@ -154,20 +221,20 @@ theorem specProjection_apply_sub_smul {M c r : ℝ}
         have := hbnd _ hκB
         have := le_max_right 0 M
         linarith
-      have h2 : ind w = 1 := by simp [hind, hw]
+      have h2 : ind w = 1 := by rw [hind]; exact cayleyIndicator_of_mem hA B hw
       rw [hq]; simp only [h2, mul_one]; exact h1
-    · have h2 : ind w = 0 := by simp [hind, hw]
+    · have h2 : ind w = 0 := by rw [hind]; exact cayleyIndicator_of_notMem hA B hw
       rw [hq]; simp only [h2, mul_zero, norm_zero]; positivity
   have hpb : BorelCalculus.IsBddMeasurable pf := by
     refine ⟨(hmeasκ.sub measurable_const).mul hindb.measurable, r, hr, fun w => ?_⟩
     by_cases hw : w ∈ S
     · have hκB : κ w ∈ B := hw
-      have h2 : ind w = 1 := by simp [hind, hw]
+      have h2 : ind w = 1 := by rw [hind]; exact cayleyIndicator_of_mem hA B hw
       rw [hpf]; simp only [h2, mul_one]
       rw [show ((κ w : ℂ) - (c : ℂ)) = ((κ w - c : ℝ) : ℂ) by push_cast; ring,
         Complex.norm_real, Real.norm_eq_abs]
       exact hcr _ hκB
-    · have h2 : ind w = 0 := by simp [hind, hw]
+    · have h2 : ind w = 0 := by rw [hind]; exact cayleyIndicator_of_notMem hA B hw
       rw [hpf]; simp only [h2, mul_zero, norm_zero]; exact hr
   -- the resolvent as a Borel-calculus image
   set gsym : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
@@ -199,12 +266,12 @@ theorem specProjection_apply_sub_smul {M c r : ℝ}
     intro w
     by_cases hw : w ∈ S
     · have hκB : κ w ∈ B := hw
-      have h2 : ind w = 1 := by simp [hind, hw]
+      have h2 : ind w = 1 := by rw [hind]; exact cayleyIndicator_of_mem hA B hw
       rw [hpf]; simp only [h2, mul_one]
       rw [show ((κ w : ℂ) - (c : ℂ)) = ((κ w - c : ℝ) : ℂ) by push_cast; ring,
         Complex.norm_real, Real.norm_eq_abs]
       exact hcr _ hκB
-    · have h2 : ind w = 0 := by simp [hind, hw]
+    · have h2 : ind w = 0 := by rw [hind]; exact cayleyIndicator_of_notMem hA B hw
       rw [hpf]; simp only [h2, mul_zero, norm_zero]; exact hr
   set hsm := hindb.const_smul (-(Complex.I + (c : ℂ))) with hhsm
   have heq : BorelCalculus.borelCalculus hU hpb
@@ -524,6 +591,123 @@ private lemma symbol_left_inverse_pointwise {z lam : ℂ} (hz : z - lam ≠ 0)
   field_simp
   ring
 
+omit hB in
+/-- **The gap hypothesis, transported to the Cayley spectrum.**
+
+`hgap` bounds `|s - lam|` for the real points `s ∈ B`; the symbols are indexed
+instead by the spectrum of the Cayley transform, where the corresponding point
+is `cayleyInv hA w`.  This is the bridge between the two, and it is what makes
+the denominator `κ - lam` bounded away from zero on the support of the
+indicator. -/
+private lemma le_norm_cayleyInv_sub_of_gap {lam ε : ℝ}
+    (hgap : ∀ s ∈ B, ε ≤ |s - lam|)
+    {w : _root_.spectrum ℂ (cayley hA)} (hw : w ∈ cayleyInv hA ⁻¹' B) :
+    ε ≤ ‖((cayleyInv hA w : ℂ) - (lam : ℂ))‖ := by
+  rw [show ((cayleyInv hA w : ℂ) - (lam : ℂ)) = ((cayleyInv hA w - lam : ℝ) : ℂ) by
+      push_cast; ring,
+    Complex.norm_real, Real.norm_eq_abs]
+  exact hgap _ hw
+
+omit hB in
+/-- The immediate consequence of the transported gap: the denominator never
+vanishes on the support of the indicator, so the inverting symbol is defined
+there. -/
+private lemma cayleyInv_sub_ne_zero_of_gap {lam ε : ℝ} (hε : 0 < ε)
+    (hgap : ∀ s ∈ B, ε ≤ |s - lam|)
+    {w : _root_.spectrum ℂ (cayley hA)} (hw : w ∈ cayleyInv hA ⁻¹' B) :
+    ((cayleyInv hA w : ℂ) - (lam : ℂ)) ≠ 0 := by
+  intro hzero
+  have h := le_norm_cayleyInv_sub_of_gap hA B hgap hw
+  rw [hzero, norm_zero] at h
+  linarith
+
+/-- **The `(κ + i)`-companion of the gap symbol is boundedly measurable.**  On the
+gap set the symbol is `(κ - lam)⁻¹`, so the product has modulus at most
+`1 + (|lam| + 1) / ε` by `norm_add_I_mul_inv_norm_sub_le`; off the set the symbol
+vanishes and so does the product.
+
+This is the multiplier that turns the Borel calculus of `gapSymbol` into a right
+inverse for `A - lam`, and it was built inline in
+`mem_resolventSet_specRestrict_of_gap`.
+
+`hBm` is taken explicitly rather than through the section variable because it is
+used only in the proof, where section binders are not auto-included. -/
+private theorem isBddMeasurable_cayleyCoord_add_I_mul_gapSymbol
+    (hBm : MeasurableSet B) {lam ε : ℝ} (hε : 0 < ε)
+    (hgap : ∀ s ∈ B, ε ≤ |s - lam|) :
+    BorelCalculus.IsBddMeasurable
+      (fun w => ((cayleyInv hA w : ℂ) + Complex.I) * gapSymbol hA B lam w) := by
+  classical
+  have hmeasκ : Measurable fun w => ((cayleyInv hA w : ℝ) : ℂ) :=
+    Complex.continuous_ofReal.measurable.comp (measurable_cayleyInv hA)
+  have hfb : BorelCalculus.IsBddMeasurable (gapSymbol hA B lam) :=
+    isBddMeasurable_gapSymbol hA B hBm hε hgap
+  refine ⟨(hmeasκ.add measurable_const).mul hfb.measurable,
+    1 + (|lam| + 1) / ε, by positivity, fun w => ?_⟩
+  by_cases hw : w ∈ cayleyInv hA ⁻¹' B
+  · have hfw : ‖gapSymbol hA B lam w‖ =
+        (‖((cayleyInv hA w : ℂ) - (lam : ℂ))‖)⁻¹ := by
+      rw [gapSymbol_of_mem hA B hw, norm_inv]
+    rw [norm_mul, hfw]
+    exact norm_add_I_mul_inv_norm_sub_le hε _
+      (le_norm_cayleyInv_sub_of_gap hA B hgap hw)
+  · rw [gapSymbol_of_notMem hA B hw, mul_zero, norm_zero]
+    positivity
+
+/-- **The indicator splits as the companion symbol plus a multiple of the gap
+symbol**, pointwise: `1_B = (κ + i)·f + (-(i + lam))·f`, because on the gap set
+`f = (κ - lam)⁻¹` and `(κ + i) - (i + lam) = κ - lam`, while off it `f = 0` and
+both sides vanish.
+
+This is the pointwise identity behind the right-inverse law in
+`mem_resolventSet_specRestrict_of_gap`; stating it separately keeps the
+`borelCalculus_congr_ae` step to three lines. -/
+private theorem cayleyIndicator_eq_add_smul_gapSymbol
+    {lam ε : ℝ} (hε : 0 < ε) (hgap : ∀ s ∈ B, ε ≤ |s - lam|)
+    (w : _root_.spectrum ℂ (cayley hA)) :
+    cayleyIndicator hA B w
+      = ((cayleyInv hA w : ℂ) + Complex.I) * gapSymbol hA B lam w
+        + -(Complex.I + (lam : ℂ)) * gapSymbol hA B lam w := by
+  classical
+  by_cases hw : w ∈ cayleyInv hA ⁻¹' B
+  · have hfw : gapSymbol hA B lam w = ((cayleyInv hA w : ℂ) - (lam : ℂ))⁻¹ :=
+      gapSymbol_of_mem hA B hw
+    rw [cayleyIndicator_of_mem hA B hw, hfw]
+    exact (symbol_right_inverse_pointwise
+      (cayleyInv_sub_ne_zero_of_gap hA B hε hgap hw)).symm
+  · rw [cayleyIndicator_of_notMem hA B hw, gapSymbol_of_notMem hA B hw]
+    ring
+
+/-- **The indicator absorbs into the gap symbol.**  `1_B · f = f`, since `f` is
+supported on the gap set: on it the indicator is `1`, off it `f` is `0`. -/
+private theorem cayleyIndicator_mul_gapSymbol {lam : ℝ}
+    (w : _root_.spectrum ℂ (cayley hA)) :
+    cayleyIndicator hA B w * gapSymbol hA B lam w = gapSymbol hA B lam w := by
+  classical
+  by_cases hw : w ∈ cayleyInv hA ⁻¹' B
+  · rw [cayleyIndicator_of_mem hA B hw, one_mul]
+  · rw [gapSymbol_of_notMem hA B hw, mul_zero]
+
+/-- **The gap symbol is a left inverse pointwise, after multiplying by
+`(κ + i)⁻¹`.**  The companion of `cayleyIndicator_eq_add_smul_gapSymbol` for the
+other inverse law: on the gap set `f = (κ - lam)⁻¹` and the product telescopes;
+off it `f = 0` and both sides vanish. -/
+private theorem gapSymbol_left_inverse_pointwise
+    {lam ε : ℝ} (hε : 0 < ε) (hgap : ∀ s ∈ B, ε ≤ |s - lam|)
+    {w : _root_.spectrum ℂ (cayley hA)}
+    (hkne : ((cayleyInv hA w : ℂ) + Complex.I) ≠ 0) :
+    gapSymbol hA B lam w +
+        -(Complex.I + (lam : ℂ)) *
+          (gapSymbol hA B lam w * ((cayleyInv hA w : ℂ) + Complex.I)⁻¹) =
+      cayleyIndicator hA B w * ((cayleyInv hA w : ℂ) + Complex.I)⁻¹ := by
+  classical
+  by_cases hwS : w ∈ cayleyInv hA ⁻¹' B
+  · rw [cayleyIndicator_of_mem hA B hwS, gapSymbol_of_mem hA B hwS, one_mul]
+    exact symbol_left_inverse_pointwise
+      (cayleyInv_sub_ne_zero_of_gap hA B hε hgap hwS) hkne
+  · rw [cayleyIndicator_of_notMem hA B hwS, gapSymbol_of_notMem hA B hwS]
+    ring
+
 /-- **A spectral gap gives a resolvent point of the restriction.**  If `B` keeps
 its distance `ε` from `lam`, then `lam` is in the resolvent set of the
 restriction of `A` to the spectral range of `B`; the inverse is the Borel
@@ -537,55 +721,18 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
   set κ := cayleyInv hA with hκ
   set S : Set (_root_.spectrum ℂ (cayley hA)) := κ ⁻¹' B with hS
   have hSm : MeasurableSet S := measurable_cayleyInv hA hB
-  set ind : _root_.spectrum ℂ (cayley hA) → ℂ := S.indicator (fun _ => (1 : ℂ)) with hind
+  set ind : _root_.spectrum ℂ (cayley hA) → ℂ := cayleyIndicator hA B with hind
   have hindb : BorelCalculus.IsBddMeasurable ind :=
     BorelCalculus.isBddMeasurable_indicator (a := cayley hA) hSm
-  have hmeasκ : Measurable fun w => ((κ w : ℝ) : ℂ) :=
-    Complex.continuous_ofReal.measurable.comp (measurable_cayleyInv hA)
-  have hindone : ∀ w ∈ S, ind w = 1 := fun w hw => by simp [hind, hw]
-  have hindnil : ∀ w, w ∉ S → ind w = 0 := fun w hw => by simp [hind, hw]
-  -- the gap, transported to the spectrum
-  have hgapS : ∀ w ∈ S, ε ≤ ‖((κ w : ℂ) - (lam : ℂ))‖ := by
-    intro w hw
-    have hκB : κ w ∈ B := hw
-    rw [show ((κ w : ℂ) - (lam : ℂ)) = ((κ w - lam : ℝ) : ℂ) by push_cast; ring,
-      Complex.norm_real, Real.norm_eq_abs]
-    exact hgap _ hκB
-  have hne : ∀ w ∈ S, ((κ w : ℂ) - (lam : ℂ)) ≠ 0 := by
-    intro w hw hzero
-    have := hgapS w hw
-    rw [hzero, norm_zero] at this
-    linarith
   -- the inverting symbol and its `(κ + i)`-companion
-  set f : _root_.spectrum ℂ (cayley hA) → ℂ :=
-    fun w => ((κ w : ℂ) - (lam : ℂ))⁻¹ * ind w with hf
+  set f : _root_.spectrum ℂ (cayley hA) → ℂ := gapSymbol hA B lam with hf
   set hsym : _root_.spectrum ℂ (cayley hA) → ℂ :=
     fun w => ((κ w : ℂ) + Complex.I) * f w with hhsym
-  have hfmeas : Measurable f :=
-    ((hmeasκ.sub measurable_const).inv).mul hindb.measurable
   have hfb : BorelCalculus.IsBddMeasurable f := by
-    refine ⟨hfmeas, ε⁻¹, by positivity, fun w => ?_⟩
-    by_cases hw : w ∈ S
-    · rw [hf]
-      simp only [hindone w hw, mul_one, norm_inv]
-      simpa only [one_div] using one_div_le_one_div_of_le hε (hgapS w hw)
-    · rw [hf]
-      simp only [hindnil w hw, mul_zero, norm_zero]
-      positivity
-  have hhb : BorelCalculus.IsBddMeasurable hsym := by
-    refine ⟨(hmeasκ.add measurable_const).mul hfmeas, 1 + (|lam| + 1) / ε,
-      by positivity, fun w => ?_⟩
-    by_cases hw : w ∈ S
-    · have hfw : ‖f w‖ = (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹ := by
-        rw [hf]
-        simp only [hindone w hw, mul_one, norm_inv]
-      rw [hhsym, norm_mul, hfw]
-      exact norm_add_I_mul_inv_norm_sub_le hε _ (hgapS w hw)
-    · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hw]
-      -- states the goal with the definition unfolded, in the shape the next step needs.
-      change ‖((κ w : ℂ) + Complex.I) * f w‖ ≤ 1 + (|lam| + 1) / ε
-      rw [hfz, mul_zero, norm_zero]
-      positivity
+    rw [hf]
+    exact isBddMeasurable_gapSymbol hA B hB hε hgap
+  have hhb : BorelCalculus.IsBddMeasurable hsym :=
+    isBddMeasurable_cayleyCoord_add_I_mul_gapSymbol hA B hB hε hgap
   -- the resolvent as a Borel-calculus image, and `g = (κ + i)⁻¹` almost everywhere
   set gsym : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
     (2 * Complex.I)⁻¹ • (1 - cayleyCoord hA) with hgsym
@@ -638,18 +785,8 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
   have hidsym : BorelCalculus.borelCalculus hU hindb
       = BorelCalculus.borelCalculus hU (hhb.add hsm2) := by
     refine BorelCalculus.borelCalculus_congr_ae hU _ _ fun η =>
-      Filter.Eventually.of_forall fun w => ?_
-    -- states the goal with the definition unfolded, in the shape the next step needs.
-    change ind w
-      = ((κ w : ℂ) + Complex.I) * f w + -(Complex.I + (lam : ℂ)) * f w
-    by_cases hw : w ∈ S
-    · have hfw : f w = ((κ w : ℂ) - (lam : ℂ))⁻¹ := by
-        rw [hf]; simp [hindone w hw]
-      rw [hindone w hw, hfw]
-      exact (symbol_right_inverse_pointwise (hne w hw)).symm
-    · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hw]
-      rw [hindnil w hw, hfz]
-      ring
+      Filter.Eventually.of_forall fun w =>
+        cayleyIndicator_eq_add_smul_gapSymbol hA B hε hgap w
   have hright : ∀ φ : H, A ⟨Rop φ, hmemdom φ⟩ - (lam : ℂ) • Rop φ
       = BorelCalculus.borelCalculus hU hindb φ := by
     intro φ
@@ -657,19 +794,12 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
       BorelCalculus.borelCalculus_const_smul hU (-(Complex.I + (lam : ℂ))) hfb]
     simp only [_root_.add_apply, _root_.smul_apply, ← hRop]
     module
-  -- `T_f` lands in the spectral range
-  have hindf : BorelCalculus.borelCalculus hU (hindb.mul hfb)
-      = BorelCalculus.borelCalculus hU hfb := by
-    refine BorelCalculus.borelCalculus_congr_ae hU _ _ fun η =>
-      Filter.Eventually.of_forall fun w => ?_
-    -- states the goal with the definition unfolded, in the shape the next step needs.
-    change ind w * f w = f w
-    by_cases hw : w ∈ S
-    · rw [hindone w hw, one_mul]
-    · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hw]
-      rw [hfz, mul_zero]
-  have hKmap : ∀ φ : H, Rop φ ∈ specRange hA B hB := by
-    intro φ
+  -- `T_f` lands in the spectral range: `1_B · f = f`, so `E(B) T_f = T_f`.
+  have hKmap : ∀ φ : H, Rop φ ∈ specRange hA B hB := fun φ => by
+    have hindf : BorelCalculus.borelCalculus hU (hindb.mul hfb)
+        = BorelCalculus.borelCalculus hU hfb :=
+      BorelCalculus.borelCalculus_congr_ae hU _ _ fun η =>
+        Filter.Eventually.of_forall fun w => cayleyIndicator_mul_gapSymbol hA B w
     have hx := congrArg (fun L : H →L[ℂ] H => L φ)
       ((BorelCalculus.borelCalculus_mul hU hindb hfb).symm.trans hindf)
     simp only [_root_.mul_apply_eq_comp] at hx
@@ -685,14 +815,8 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
     have hgval : gsym w = ((κ w : ℂ) + Complex.I)⁻¹ := by
       field_simp [hkne w]
       linear_combination hw
-    by_cases hwS : w ∈ S
-    · have hfw : f w = ((κ w : ℂ) - (lam : ℂ))⁻¹ := by
-        rw [hf]; simp [hindone w hwS]
-      rw [hindone w hwS, hfw, hgval, one_mul]
-      exact symbol_left_inverse_pointwise (hne w hwS) (hkne w)
-    · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hwS]
-      rw [hindnil w hwS, hfz]
-      ring
+    rw [hgval]
+    exact gapSymbol_left_inverse_pointwise hA B hε hgap (hkne w)
   have hlefts' : Rop + (-(Complex.I + (lam : ℂ)))
         • (Rop * BorelCalculus.borelCalculus hU hgb)
       = BorelCalculus.borelCalculus hU hindb * BorelCalculus.borelCalculus hU hgb := by
