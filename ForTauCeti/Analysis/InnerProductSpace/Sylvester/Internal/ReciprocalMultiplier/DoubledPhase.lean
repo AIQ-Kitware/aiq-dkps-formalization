@@ -103,16 +103,12 @@ omit [DecidableEq ι] in
     basisDiagonalRealCoeffMap e c (e i) = ((c i : ℝ) : 𝕜) • e i := by
   exact e.toBasis.constr_basis 𝕜 _ i
 
--- `[DecidableEq ι]` is in this statement's type and unused there, but the proof needs it
--- (`Finset.induction_on` inserts).  The linter's advice -- drop it and call `classical` --
--- is a signature change, and this file arrived here by a move lane that changes no
--- signatures.  Suppressed at exactly the declarations it applies to; see the Y3(b4) row
--- in dev/LANES.md, which records dropping the hypothesis as follow-up work.
-set_option linter.unusedDecidableInType false in
+omit [DecidableEq ι] in
 @[simp] private theorem basisDiagonalRealCoeffMap_repr
     (e : OrthonormalBasis ι 𝕜 G) (c : ι → ℝ) (x : G) (i : ι) :
     e.repr (basisDiagonalRealCoeffMap e c x) i =
       ((c i : ℝ) : 𝕜) * e.repr x i := by
+  classical
   rw [← e.sum_repr x]
   simp only [map_sum, map_smul, basisDiagonalRealCoeffMap_apply_basis, smul_smul]
   simp [Pi.single_apply]
@@ -208,6 +204,7 @@ noncomputable def basisDoubledPhaseRotation
       (by nlinarith [Real.sin_sq_add_cos_sq (theta i)])
       (e.repr x.fst i) (e.repr x.snd i)
 
+omit [DecidableEq ι] in
 /-- The doubled phase rotation on a basis vector. -/
 @[simp] theorem basisDoubledPhaseRotation_apply
     (e : OrthonormalBasis ι 𝕜 G) (theta : ι → ℝ) (x : WithLp 2 (G × G)) :
@@ -304,19 +301,14 @@ theorem doubledComplexScalarMapAction_ofReal
     simp [doubledComplexScalarMapAction_apply,
       RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply]
 
--- `[DecidableEq ι]` is in this statement's type and unused there, but the proof needs it
--- (`Finset.induction_on` inserts).  The linter's advice -- drop it and call `classical` --
--- is a signature change, and this file arrived here by a move lane that changes no
--- signatures.  Suppressed at exactly the declarations it applies to; see the Y3(b4) row
--- in dev/LANES.md, which records dropping the hypothesis as follow-up work.
-set_option linter.unusedDecidableInType false in
 /-- A finite sum of complex-scalar block actions is the action of the scalar
 sum. -/
 theorem sum_doubledComplexScalarMapAction
-    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {ι : Type*} [Fintype ι]
     (z : ι → ℂ) (T : E' →ₗ[𝕜] F') :
     ∑ i, doubledComplexScalarMapAction (z i) T =
       doubledComplexScalarMapAction (∑ i, z i) T := by
+  classical
   classical
   have h (s : Finset ι) :
       s.sum (fun i => doubledComplexScalarMapAction (z i) T) =
@@ -360,21 +352,16 @@ theorem norm_smul_doubledPhaseMapAction_arg_add
     _ = a * Complex.exp ((theta : ℂ) * Complex.I) := by
       rw [Complex.norm_mul_exp_arg_mul_I]
 
--- `[DecidableEq ι]` is in this statement's type and unused there, but the proof needs it
--- (`Finset.induction_on` inserts).  The linter's advice -- drop it and call `classical` --
--- is a signature change, and this file arrived here by a move lane that changes no
--- signatures.  Suppressed at exactly the declarations it applies to; see the Y3(b4) row
--- in dev/LANES.md, which records dropping the hypothesis as follow-up work.
-set_option linter.unusedDecidableInType false in
 /-- A finite complex Fourier sum acts on doubled `𝕜`-linear maps as a finite
 sum of nonnegatively weighted phase rotations. -/
 theorem sum_norm_smul_doubledPhaseMapAction_arg_add
-    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {ι : Type*} [Fintype ι]
     (a : ι → ℂ) (theta : ι → ℝ) (T : E' →ₗ[𝕜] F') :
     ∑ r, ((‖a r‖ : ℝ) : 𝕜) •
         doubledPhaseMapAction (Complex.arg (a r) + theta r) T =
       doubledComplexScalarMapAction
         (∑ r, a r * Complex.exp (((theta r : ℝ) : ℂ) * Complex.I)) T := by
+  classical
   classical
   simp_rw [norm_smul_doubledPhaseMapAction_arg_add]
   exact sum_doubledComplexScalarMapAction _ T

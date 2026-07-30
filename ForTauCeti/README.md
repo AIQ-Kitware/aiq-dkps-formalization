@@ -114,6 +114,36 @@ migratable only once no remaining `ForMathlib` file imports it — so components
 move whole, in dependency order, and the last `ForMathlib → ForTauCeti` edge
 must never exist even transiently.
 
+### Why there is no `@[grind]` in this library (2026-07-30)
+
+Tau Ceti's `api-design` rubric asks for `@[grind]` on the lemmas that should drive
+`grind`, and flags a characteristic lemma that should carry one and does not. This
+library has **178 `@[simp]` and zero `@[grind]`**, so lane `RUB-GRIND` ran the
+experiment rather than leaving the reviewer's question unanswered.
+
+**`grind` does not drive this library's characteristic lemmas, for two structural
+reasons.** Probed on approximation-number goals with the relevant lemmas passed
+explicitly:
+
+- **Bundled order predicates are opaque to it.** `approximationNumber_antitone` is
+  stated as `Antitone T.approximationNumber`. `grind` asserts that as a fact and
+  then cannot instantiate it: given `m ≤ n` it lists `Antitone …` among its true
+  propositions and still fails to derive `aₙ ≤ aₘ`. The same shape recurs in the
+  `IsLUB` family.
+- **`Cardinal`-valued side conditions defeat matching.**
+  `approximationNumber_le_norm_sub` is a plain implication, which is the shape
+  `grind` likes, but its hypothesis is `R.rank ≤ (n : Cardinal)`; `grind`
+  normalises that to `Module.rank 𝕜 (Subtype (Membership.mem (↑R).range)) ≤ ↑n`
+  and no longer matches the lemma.
+
+Goals needing a *single* lemma and no side condition do close (`0 ≤ aₙ(T)`,
+`aₙ(0) = 0`). That is not worth an attribute.
+
+**What would change the answer**, and either is a reasonable future lane: giving
+the order-predicate lemmas plain-implication companions, or moving the rank side
+conditions to the `ℕ`-valued `finrank` form the finite-dimensional API already
+uses. Until then, annotating would advertise automation that does not fire.
+
 ## Hard rules
 
 ### 1. Import firewall
@@ -255,6 +285,22 @@ why `AGENTS.md` says not to commit the `external/TauCeti` submodule pointer yet.
 So: improvements go **into** `ForTauCeti`. A task that sounds like "move
 `ForTauCeti` into `TauCeti`" is asking for an *export*. Never empty or delete
 `ForTauCeti/` as a way of declaring the migration done.
+
+### This package and `ForTauCetiRoadmap` are rehearsals — treat them as real
+
+**jon, 2026-07-30.** `ForTauCeti` is a mock of the Tau Ceti PR contents;
+`ForTauCetiRoadmap` is a mock of `TauCetiProject/TauCetiRoadmap`. They exist so
+that **when we make the effort to do the real submission, it goes smoothly.**
+
+So work on them as though they were the real repositories — no hedging, no
+provisional marking, no waiting on upstream. **The acceptance test is a
+demonstration:** we show this repository to Tau Ceti and they say *"yes, that's
+ready — submit these roadmaps as PRs, then push up the code and merge it."*
+Anything that would make a reviewer hesitate at that moment is a defect and
+needs a lane.
+
+**No lane is ever blocked on upstream acceptance.** How the clusters go upstream
+is a genuine open question, but it is never a prerequisite for work here.
 
 ### The readiness standard — the platonic ideal roadmap
 
