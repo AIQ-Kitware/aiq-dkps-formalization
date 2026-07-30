@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.Spectra.BoundedPerturbationSinTheta
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
@@ -37,7 +38,8 @@ perturbation belongs to the rectangular symmetric ideal family, then the
 isometric overlap block belongs to the same family with the sharp
 constant-one gap estimate. -/
 theorem sinTheta_addBounded_gauge_of_spectrum_gap_isometric
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     (V : H →L[ℂ] H) (hV : IsSelfAdjointOperator V)
     (A₀ : DKClosedOperator (H := F)) (hA₀ : A₀.IsSelfAdjoint)
@@ -57,7 +59,7 @@ theorem sinTheta_addBounded_gauge_of_spectrum_gap_isometric
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁.toLinearPMap)
     (hVmem : N.Mem V) :
     N.Mem (X.adjoint ∘L F₁) ∧
-      δ * N.gauge (X.adjoint ∘L F₁) ≤ N.gauge V := by
+      δ * N.gaugeReal (X.adjoint ∘L F₁) ≤ N.gaugeReal V := by
   let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
   have hD : D.A.IsSelfAdjoint := by
@@ -73,31 +75,31 @@ theorem sinTheta_addBounded_gauge_of_spectrum_gap_isometric
     N D hD hA₀ hΛ₁ hβα hδ hA₀low hA₀high hΛspec hProjectedMem
   have hRaw' :
       N.Mem (X.adjoint ∘L F₁) ∧
-        δ * N.gauge (X.adjoint ∘L F₁) ≤
-          N.gauge ((V ∘L X).adjoint ∘L F₁) := by
+        δ * N.gaugeReal (X.adjoint ∘L F₁) ≤
+          N.gaugeReal ((V ∘L X).adjoint ∘L F₁) := by
     change
       N.Mem (X.adjoint ∘L F₁) ∧
-        δ * N.gauge (X.adjoint ∘L F₁) ≤
-          N.gauge ((V ∘L X).adjoint ∘L F₁) at hRaw
+        δ * N.gaugeReal (X.adjoint ∘L F₁) ≤
+          N.gaugeReal ((V ∘L X).adjoint ∘L F₁) at hRaw
     exact hRaw
   have hXadjNorm : ‖X.adjoint‖ ≤ 1 := by
     rw [ContinuousLinearMap.adjoint.norm_map]
     exact opNorm_le_one_of_isometry hXiso
   have hF₁norm : ‖F₁‖ ≤ 1 := opNorm_le_one_of_isometry hF₁iso
   have hLeftGauge :
-      N.gauge (X.adjoint ∘L V.adjoint) ≤ N.gauge V.adjoint :=
-    N.gauge_comp_left_le (E := H) (F := H) (G := F)
+      N.gaugeReal (X.adjoint ∘L V.adjoint) ≤ N.gaugeReal V.adjoint :=
+    N.gaugeReal_comp_left_le (E := H) (F := H) (G := F)
       X.adjoint hVadj hXadjNorm
   have hProjectedGauge :
-      N.gauge ((V ∘L X).adjoint ∘L F₁) ≤ N.gauge V := by
+      N.gaugeReal ((V ∘L X).adjoint ∘L F₁) ≤ N.gaugeReal V := by
     rw [ContinuousLinearMap.adjoint_comp]
     calc
-      N.gauge ((X.adjoint ∘L V.adjoint) ∘L F₁) ≤
-          N.gauge (X.adjoint ∘L V.adjoint) :=
-        N.gauge_comp_right_le (E := H) (F := F) (H := G)
+      N.gaugeReal ((X.adjoint ∘L V.adjoint) ∘L F₁) ≤
+          N.gaugeReal (X.adjoint ∘L V.adjoint) :=
+        N.gaugeReal_comp_right_le (E := H) (F := F) (H := G)
           F₁ hLeftMem hF₁norm
-      _ ≤ N.gauge V.adjoint := hLeftGauge
-      _ = N.gauge V := N.gauge_adjoint hVmem
+      _ ≤ N.gaugeReal V.adjoint := hLeftGauge
+      _ = N.gaugeReal V := N.gaugeReal_adjoint hVmem
   exact ⟨hRaw'.1, hRaw'.2.trans hProjectedGauge⟩
 
 end SpectraBridge

@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
 /-!
@@ -47,7 +48,8 @@ variable {E F : Type v}
 
 /-- The linear subspace of members of a rectangular symmetric ideal. -/
 noncomputable def idealSubmodule
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜)) :
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete] :
     Submodule 𝕜 (E →L[𝕜] F) where
   carrier := {A | N.Mem A}
   zero_mem' := N.zero_mem
@@ -58,12 +60,14 @@ noncomputable def idealSubmodule
 its norm.  This is a fresh type synonym so it does not inherit the ambient
 operator norm from the submodule subtype. -/
 def IdealOperator
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜)) : Type _ :=
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete] : Type _ :=
   ↥(idealSubmodule (E := E) (F := F) N)
 
 namespace IdealOperator
 
-variable (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+variable (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
 
 /-- Additive group structure, inherited from the ideal submodule. -/
 instance instAddCommGroup : AddCommGroup (IdealOperator (E := E) (F := F) N) :=
@@ -128,31 +132,31 @@ def ofMem (A : E →L[𝕜] F) (hA : N.Mem A) :
 /-- The ideal gauge is the norm on bundled ideal operators. -/
 noncomputable instance instNorm :
     Norm (IdealOperator (E := E) (F := F) N) :=
-  ⟨fun A => N.gauge A.toOp⟩
+  ⟨fun A => N.gaugeReal A.toOp⟩
 
 /-- The norm on the ideal is the ideal gauge of the underlying operator. -/
 @[simp] theorem norm_def
     (A : IdealOperator (E := E) (F := F) N) :
-    ‖A‖ = N.gauge A.toOp := rfl
+    ‖A‖ = N.gaugeReal A.toOp := rfl
 
 /-- Norm laws supplied directly by the rectangular ideal fields. -/
 theorem core : NormedSpace.Core 𝕜 (IdealOperator (E := E) (F := F) N) where
-  norm_nonneg A := N.gauge_nonneg A.mem
+  norm_nonneg A := N.gaugeReal_nonneg A.mem
   norm_smul c A := by
-    change N.gauge (c • A.toOp) = ‖c‖ * N.gauge A.toOp
-    exact N.gauge_smul c A.mem
+    change N.gaugeReal (c • A.toOp) = ‖c‖ * N.gaugeReal A.toOp
+    exact N.gaugeReal_smul c A.mem
   norm_triangle A B := by
-    change N.gauge (A.toOp + B.toOp) ≤ N.gauge A.toOp + N.gauge B.toOp
-    exact N.gauge_add_le A.mem B.mem
+    change N.gaugeReal (A.toOp + B.toOp) ≤ N.gaugeReal A.toOp + N.gaugeReal B.toOp
+    exact N.gaugeReal_add_le A.mem B.mem
   norm_eq_zero_iff A := by
-    change N.gauge A.toOp = 0 ↔ A = 0
+    change N.gaugeReal A.toOp = 0 ↔ A = 0
     constructor
     · intro hzero
       apply IdealOperator.ext N
-      exact N.gauge_eq_zero A.mem hzero
+      exact N.gaugeReal_eq_zero A.mem hzero
     · intro hzero
       rw [hzero]
-      exact N.gauge_zero
+      exact N.gaugeReal_zero
 
 /-- The ideal is a normed additive group for the gauge, via `core`. -/
 noncomputable instance instNormedAddCommGroup :
@@ -168,8 +172,8 @@ noncomputable instance instNormedSpace :
 theorem norm_toOp_le
     (A : IdealOperator (E := E) (F := F) N) :
     ‖A.toOp‖ ≤ ‖A‖ := by
-  change ‖A.toOp‖ ≤ N.gauge A.toOp
-  exact N.opNorm_le_gauge A.mem
+  change ‖A.toOp‖ ≤ N.gaugeReal A.toOp
+  exact N.opNorm_le_gaugeReal A.mem
 
 /-- The forgetful linear map from the ideal Banach space to bounded operators. -/
 noncomputable def toOpL :
@@ -207,8 +211,8 @@ noncomputable def compLeftL
         apply IdealOperator.ext N
         simp }
   exact M.mkContinuous ‖L‖ fun A => by
-    change N.gauge (L ∘L A.toOp) ≤ ‖L‖ * N.gauge A.toOp
-    exact N.gauge_comp_left_le_mul L A.mem
+    change N.gaugeReal (L ∘L A.toOp) ≤ ‖L‖ * N.gaugeReal A.toOp
+    exact N.gaugeReal_comp_left_le_mul L A.mem
 
 /-- Left composition acts on the underlying operator by left composition. -/
 @[simp] theorem compLeftL_toOp
@@ -238,8 +242,8 @@ noncomputable def compRightL
         apply IdealOperator.ext N
         simp [ContinuousLinearMap.smul_comp] }
   exact M.mkContinuous ‖R‖ fun A => by
-    change N.gauge (A.toOp ∘L R) ≤ ‖R‖ * N.gauge A.toOp
-    have h := N.gauge_comp_right_le_mul R A.mem
+    change N.gaugeReal (A.toOp ∘L R) ≤ ‖R‖ * N.gaugeReal A.toOp
+    have h := N.gaugeReal_comp_right_le_mul R A.mem
     simpa [mul_comm] using h
 
 /-- Right composition acts on the underlying operator by right composition. -/
@@ -271,12 +275,12 @@ noncomputable def compBothL
         apply IdealOperator.ext N
         simp [ContinuousLinearMap.smul_comp] }
   exact M.mkContinuous (‖L‖ * ‖R‖) fun A => by
-    change N.gauge (L ∘L A.toOp ∘L R) ≤
-      (‖L‖ * ‖R‖) * N.gauge A.toOp
+    change N.gaugeReal (L ∘L A.toOp ∘L R) ≤
+      (‖L‖ * ‖R‖) * N.gaugeReal A.toOp
     calc
-      N.gauge (L ∘L A.toOp ∘L R)
-          ≤ ‖L‖ * N.gauge A.toOp * ‖R‖ := N.gauge_comp_le L R A.mem
-      _ = (‖L‖ * ‖R‖) * N.gauge A.toOp := by ring
+      N.gaugeReal (L ∘L A.toOp ∘L R)
+          ≤ ‖L‖ * N.gaugeReal A.toOp * ‖R‖ := N.gaugeReal_comp_le L R A.mem
+      _ = (‖L‖ * ‖R‖) * N.gaugeReal A.toOp := by ring
 
 /-- Two-sided composition acts on the underlying operator on both sides. -/
 @[simp] theorem compBothL_toOp
@@ -293,14 +297,14 @@ noncomputable instance instCompleteSpace :
     CompleteSpace (IdealOperator (E := E) (F := F) N) := by
   refine Metric.complete_of_cauchySeq_tendsto fun A hA => ?_
   have hcauchy : ∀ ε : ℝ, 0 < ε → ∃ M, ∀ m n,
-      M ≤ m → M ≤ n → N.gauge ((A m).toOp - (A n).toOp) < ε := by
+      M ≤ m → M ≤ n → N.gaugeReal ((A m).toOp - (A n).toOp) < ε := by
     intro ε hε
     obtain ⟨M, hM⟩ := Metric.cauchySeq_iff.1 hA ε hε
     refine ⟨M, ?_⟩
     intro m n hm hn
     have hdist := hM m hm n hn
     simpa only [dist_eq_norm, norm_def, toOp_sub] using hdist
-  obtain ⟨L, hL, hconv⟩ := N.gauge_complete
+  obtain ⟨L, hL, hconv⟩ := N.gaugeReal_complete
     (fun n => (A n).toOp) (fun n => (A n).mem) hcauchy
   refine ⟨ofMem N L hL, ?_⟩
   rw [Metric.tendsto_atTop]
@@ -349,7 +353,7 @@ theorem gauge_integral_toOp_le
     [NormedSpace ℝ (E →L[𝕜] F)]
     (f : α → IdealOperator (E := E) (F := F) N)
     (hf : Integrable f μ) :
-    N.gauge (∫ a, (f a).toOp ∂μ) ≤ ∫ a, ‖f a‖ ∂μ := by
+    N.gaugeReal (∫ a, (f a).toOp ∂μ) ≤ ∫ a, ‖f a‖ ∂μ := by
   rw [← toOp_integral N f hf]
   change ‖∫ a, f a ∂μ‖ ≤ ∫ a, ‖f a‖ ∂μ
   exact norm_integral_le_integral_norm f
@@ -373,7 +377,7 @@ theorem gauge_integral_of_integrable_lift_le
     (f : α → E →L[𝕜] F)
     (hmem : ∀ a, N.Mem (f a))
     (hlift : Integrable (fun a => ofMem N (f a) (hmem a)) μ) :
-    N.gauge (∫ a, f a ∂μ) ≤ ∫ a, N.gauge (f a) ∂μ := by
+    N.gaugeReal (∫ a, f a ∂μ) ≤ ∫ a, N.gaugeReal (f a) ∂μ := by
   simpa only [norm_def, toOp_ofMem] using
     gauge_integral_toOp_le N (fun a => ofMem N (f a) (hmem a)) hlift
 

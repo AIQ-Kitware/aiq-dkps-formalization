@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.ShiftedInverseGauge
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.SinTheta.Unbounded.GenuineOpNorm
 
 /-!
@@ -33,7 +34,8 @@ resolvent bounded by `((α-β)/2 + δ)⁻¹`, if the projected residual
 `R⋆ ∘ F₁` lies in the rectangular symmetric ideal family `N`, then so does
 `X⋆ ∘ F₁`, with `δ · gauge (X⋆ ∘ F₁) ≤ gauge (R⋆ ∘ F₁)`. -/
 theorem sinTheta_unbounded_gauge
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
     (hA : D.A.IsSelfAdjoint) (hA₀ : D.A₀.IsSelfAdjoint)
     (hΛ₁ : D.Λ₁.IsSelfAdjoint)
@@ -43,8 +45,8 @@ theorem sinTheta_unbounded_gauge
       ((α - β) / 2 + δ))
     (hC : N.Mem (D.residual.adjoint ∘L D.F₁)) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
-      δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
-        N.gauge (D.residual.adjoint ∘L D.F₁) := by
+      δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) ≤
+        N.gaugeReal (D.residual.adjoint ∘L D.F₁) := by
   obtain ⟨S, hSnorm, hSeq⟩ :=
     linearPMap_exists_bounded_shift_extension hA₀.isSymmetric
       D.A₀.toLinearPMap_dense hβα hA₀low hA₀high
@@ -72,17 +74,18 @@ theorem sinTheta_unbounded_gauge
   have hmain := mem_and_gauge_le_of_boundedLeft_exteriorRight N hρ hδ
     hSnorm hdom hright hJnorm hEq' (N.neg_mem hC)
   refine ⟨hmain.1, ?_⟩
-  have hgC : N.gauge (-(D.residual.adjoint ∘L D.F₁)) =
-      N.gauge (D.residual.adjoint ∘L D.F₁) := N.gauge_neg hC
-  calc δ * N.gauge (D.X.adjoint ∘L D.F₁)
-      ≤ N.gauge (-(D.residual.adjoint ∘L D.F₁)) := hmain.2
-    _ = N.gauge (D.residual.adjoint ∘L D.F₁) := hgC
+  have hgC : N.gaugeReal (-(D.residual.adjoint ∘L D.F₁)) =
+      N.gaugeReal (D.residual.adjoint ∘L D.F₁) := N.gaugeReal_neg hC
+  calc δ * N.gaugeReal (D.X.adjoint ∘L D.F₁)
+      ≤ N.gaugeReal (-(D.residual.adjoint ∘L D.F₁)) := hmain.2
+    _ = N.gaugeReal (D.residual.adjoint ∘L D.F₁) := hgC
 
 /-- Canonical partial-map form of the unbounded ideal-gauge `sin Θ` bound.
 The Sylvester data, form bounds, and shifted-inverse hypothesis are all stated
 over raw `LinearPMap`s. -/
 theorem linearPMap_sinTheta_unbounded_gauge
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaDataPMap (𝕜 := 𝕜) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A) (hA₀ : _root_.IsSelfAdjoint D.A₀)
     (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
@@ -93,8 +96,8 @@ theorem linearPMap_sinTheta_unbounded_gauge
       ((α - β) / 2 + δ))
     (hC : N.Mem (D.residual.adjoint ∘L D.F₁)) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
-      δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
-        N.gauge (D.residual.adjoint ∘L D.F₁) := by
+      δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) ≤
+        N.gaugeReal (D.residual.adjoint ∘L D.F₁) := by
   have hA₀sym : TauCeti.LinearPMap.IsSymmetric D.A₀ := by
     have hformal := LinearPMap.adjoint_isFormalAdjoint D.A₀_dense
     rw [LinearPMap.isSelfAdjoint_def.mp hA₀] at hformal
@@ -125,11 +128,11 @@ theorem linearPMap_sinTheta_unbounded_gauge
   have hmain := linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
     N hρ hδ hSnorm hdom hright hJnorm hEq' (N.neg_mem hC)
   refine ⟨hmain.1, ?_⟩
-  have hgC : N.gauge (-(D.residual.adjoint ∘L D.F₁)) =
-      N.gauge (D.residual.adjoint ∘L D.F₁) := N.gauge_neg hC
-  calc δ * N.gauge (D.X.adjoint ∘L D.F₁)
-      ≤ N.gauge (-(D.residual.adjoint ∘L D.F₁)) := hmain.2
-    _ = N.gauge (D.residual.adjoint ∘L D.F₁) := hgC
+  have hgC : N.gaugeReal (-(D.residual.adjoint ∘L D.F₁)) =
+      N.gaugeReal (D.residual.adjoint ∘L D.F₁) := N.gaugeReal_neg hC
+  calc δ * N.gaugeReal (D.X.adjoint ∘L D.F₁)
+      ≤ N.gaugeReal (-(D.residual.adjoint ∘L D.F₁)) := hmain.2
+    _ = N.gaugeReal (D.residual.adjoint ∘L D.F₁) := hgC
 
 end ExactSinTheta
 end Experimental

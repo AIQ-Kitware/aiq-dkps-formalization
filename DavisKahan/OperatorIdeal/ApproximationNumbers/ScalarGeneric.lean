@@ -7,6 +7,7 @@ import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
 import DavisKahan.Interop.TauCeti.RectangularFamilyAdapter
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
 
 /-!
@@ -441,6 +442,18 @@ theorem toRectangular_gauge (A : E →L[𝕜] F) :
 `toRectangular_gauge`. -/
 theorem toRectangular_mem (A : E →L[𝕜] F) :
     N.toRectangularSymmetricIdealFamily.Mem A = N.Mem A := rfl
+
+/-- The canonical family's real view is `N.gauge` -- again the same term, again a
+different head symbol.  Needed once a provider has been migrated off the historical
+record: the result then arrives as `N.toSymmetricOperatorIdealFamily.gaugeReal`, and
+`kyFan_gauge` is stated over the accessor. -/
+theorem toSymmetric_gaugeReal (A : E →L[𝕜] F) :
+    N.toSymmetricOperatorIdealFamily.gaugeReal A = N.gauge A := rfl
+
+/-- The canonical family's membership is `N.Mem`; the companion of
+`toSymmetric_gaugeReal`. -/
+theorem toSymmetric_mem (A : E →L[𝕜] F) :
+    N.toSymmetricOperatorIdealFamily.Mem A = N.Mem A := rfl
 
 /-- Fan dominance in the historical two-part form: majorization of every finite
 Ky Fan gauge carries membership *and* the gauge bound.

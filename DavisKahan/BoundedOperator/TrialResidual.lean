@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.BoundedOperator.IsometricRangeProjection
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.Sylvester.GenuineSpectrum
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 
@@ -143,7 +144,8 @@ theorem norm_isometricRangeCrossBlock_le_residual
 /-- Rectangular ideal membership of a residual implies membership of the exact
 range cross block. -/
 theorem RectangularSymmetricIdealFamily.isometricRangeCrossBlock_mem
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (A : H →L[ℂ] H) (X : F →L[ℂ] H) (M : F →L[ℂ] F)
     (hX : IsometricEmbedding X) (hR : N.Mem (residual A X M)) :
     N.Mem (isometricRangeCrossBlock A X hX) := by
@@ -152,18 +154,27 @@ theorem RectangularSymmetricIdealFamily.isometricRangeCrossBlock_mem
   rw [isometricRangeCrossBlock_eq_projectedResidual_comp_adjoint A X M hX]
   exact N.comp_mem Vᗮ.starProjection X.adjoint hR
 
+-- The two-sided contraction estimate has to unify a triple composition against the
+-- goal *through* `gaugeReal`, which is a reducible `abbrev` over
+-- `(OperatorIdealFamily.gauge _).toReal`, so `isDefEq` unfolds the whole gauge chain on
+-- both sides.  The neighbouring `comp_mem` call is cheap because it compares `Prop`s;
+-- this one compares two real-valued gauge applications.  Explicit space arguments cut
+-- the search but not enough.
+set_option maxHeartbeats 1000000 in
 /-- Rectangular ideal gauge of the exact-range cross block is bounded by the
 trial residual gauge. -/
 theorem RectangularSymmetricIdealFamily.gauge_isometricRangeCrossBlock_le
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (A : H →L[ℂ] H) (X : F →L[ℂ] H) (M : F →L[ℂ] F)
     (hX : IsometricEmbedding X) (hR : N.Mem (residual A X M)) :
-    N.gauge (isometricRangeCrossBlock A X hX) ≤
-      N.gauge (residual A X M) := by
+    N.gaugeReal (isometricRangeCrossBlock A X hX) ≤
+      N.gaugeReal (residual A X M) := by
   letI := rangeHasOrthogonalProjection X hX
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   rw [isometricRangeCrossBlock_eq_projectedResidual_comp_adjoint A X M hX]
-  exact N.gauge_comp_le_of_contractions Vᗮ.starProjection X.adjoint hR
+  refine N.gaugeReal_comp_le_of_contractions (E := F) (F := H) (G := H) (H := H)
+    Vᗮ.starProjection X.adjoint hR
     Vᗮ.starProjection_norm_le (isometry_and_adjoint_norm_le_one X hX).2
 
 end SharedFoundations
