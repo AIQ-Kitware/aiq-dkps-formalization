@@ -105,8 +105,6 @@ noncomputable def firstPositiveRootCertificate_of_split_exclusion
     {root lower : ℝ}
     (hroot_pos : 0 < root)
     (hroot : MathAhead.HiddenFoundations.FreeBeam.characteristic root = 0)
-    (hlower_pos : 0 < lower)
-    (hlower_root : lower < root)
     (hsmall : ∀ beta : ℝ, 0 < beta → beta ≤ lower →
       MathAhead.HiddenFoundations.FreeBeam.characteristic beta ≠ 0)
     (hmiddle : ∀ beta : ℝ, lower < beta → beta < root →
