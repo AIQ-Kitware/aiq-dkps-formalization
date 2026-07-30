@@ -28,7 +28,6 @@ majorization statements that transfer to it.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -407,6 +406,5 @@ theorem apply_le_of_singularValues_le {A B : E →ₗ[𝕜] F}
 
 end RectangularUnitarilyInvariantNorm
 
-end DavisKahanTheory
 
 end TauCeti

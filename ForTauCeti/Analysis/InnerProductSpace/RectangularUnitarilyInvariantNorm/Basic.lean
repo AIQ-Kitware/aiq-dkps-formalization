@@ -35,7 +35,6 @@ the domain or the codomain.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -457,6 +456,5 @@ noncomputable def domainIsometryTransport
 
 end RectangularUnitarilyInvariantNorm
 
-end DavisKahanTheory
 
 end TauCeti

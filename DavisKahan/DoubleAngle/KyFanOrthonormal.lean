@@ -84,15 +84,15 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge
       Submodule.starProjection_eq_self_iff.mpr (humem i)]
   -- finite Ky Fan principle on the compression
   have hfin : RCLike.re (∑ i, ⟪u' i, K' (v' i)⟫_𝕜) ≤
-      DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum
+      RectangularUnitarilyInvariantNorm.rectangularKyFanSum
         k K'.toLinearMap :=
-    DavisKahanTheory.RectangularUnitarilyInvariantNorm.re_sum_inner_map_le_rectangularKyFanSum
+    RectangularUnitarilyInvariantNorm.re_sum_inner_map_le_rectangularKyFanSum
       hkle hu' hv'
   -- finite bridge to the approximation-number prefix
   have hK'id : K'.toLinearMap.toContinuousLinearMap = K' := by
     ext x; rfl
   have hbridge :
-      DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum
+      RectangularUnitarilyInvariantNorm.rectangularKyFanSum
         k K'.toLinearMap = kyFanApproximationGauge k K' := by
     rw [rectangularKyFanSum_eq_kyFanApproximationGauge, hK'id]
   -- the compression does not increase approximation numbers
@@ -117,7 +117,7 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge
       = RCLike.re (∑ i, ⟪u' i, K' (v' i)⟫_𝕜) := by
         congr 1
         exact Finset.sum_congr rfl fun i _ => (hpair i).symm
-    _ ≤ DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum
+    _ ≤ RectangularUnitarilyInvariantNorm.rectangularKyFanSum
           k K'.toLinearMap := hfin
     _ = kyFanApproximationGauge k K' := hbridge
     _ ≤ kyFanApproximationGauge k K := hmono
