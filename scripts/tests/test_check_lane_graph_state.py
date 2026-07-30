@@ -108,6 +108,45 @@ class SuspectReportTest(unittest.TestCase):
         self.assertFalse(suspect("ready, no prerequisite"))
 
 
+def dnt(prose: str) -> bool:
+    return bool(M.DNT_RE.search(M.unquoted(prose)))
+
+
+class DoNotTakeAdvisoryTest(unittest.TestCase):
+    """A do-not-take that arrives after the first clause must be surfaced.
+
+    `EXP-PROMOTE-HF` sat in READY TO TAKE while its own status said "BLOCKED ...
+    Do not take this slice yet; its premise is false".  The instruction is real
+    but lands after a clause boundary, exactly where the first-clause rule that
+    keeps `HELD_RE` safe cannot see it.
+
+    The two negative tests are the reason this is advisory and not a state
+    change: a bare contains-`blocked` scan flags five lanes on the live board
+    and only one is real.
+    """
+
+    def test_the_row_that_was_actually_missed(self) -> None:
+        self.assertTrue(dnt("unclaimed — parallel slice, take independently** "
+                            "**blocked — do not take this slice yet; its premise is false"))
+
+    def test_do_not_start_is_caught(self) -> None:
+        self.assertTrue(dnt("measured, but do not start here"))
+
+    def test_a_negated_block_is_not_flagged(self) -> None:
+        # DK-NAME: flagging this would hide a lane that is explicitly takeable.
+        self.assertFalse(dnt("ready now — dk-failed is done, so this lane was "
+                             "never actually blocked."))
+
+    def test_a_quoted_instruction_is_not_flagged(self) -> None:
+        # EXP-UNBLOCK rebuts the instruction rather than issuing it.
+        self.assertFalse(dnt('so "do not start there" rests on a wrong premise'))
+
+    def test_blocked_on_is_left_to_held_detection(self) -> None:
+        # `blocked on X` is a real held state and HELD_RE already owns it;
+        # double-reporting it here would be noise.
+        self.assertFalse(dnt("blocked on FTT-PROMOTE"))
+
+
 class BoardStaysConsistentTest(unittest.TestCase):
     """The real file must classify without cycles or dangling prerequisites."""
 
