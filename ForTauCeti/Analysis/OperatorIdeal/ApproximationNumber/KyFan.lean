@@ -187,9 +187,9 @@ variable {E : Type v} {F : Type w}
 
 /-- In finite dimensions the Ky Fan gauge is the rectangular Ky Fan singular-value sum. -/
 theorem rectangularKyFanSum_eq_kyFanGauge (k : ℕ) (A : E →ₗ[𝕜] F) :
-    TauCeti.DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum k A =
+    TauCeti.RectangularUnitarilyInvariantNorm.rectangularKyFanSum k A =
       A.toContinuousLinearMap.kyFanGauge k := by
-  unfold TauCeti.DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum
+  unfold TauCeti.RectangularUnitarilyInvariantNorm.rectangularKyFanSum
     kyFanGauge
   rw [Fin.sum_univ_eq_sum_range]
   exact Finset.sum_congr rfl fun n _ =>
@@ -202,7 +202,7 @@ theorem kyFanGauge_add_le_of_finiteDimensional (k : ℕ) (A B : E →ₗ[𝕜] F
       A.toContinuousLinearMap.kyFanGauge k + B.toContinuousLinearMap.kyFanGauge k := by
   rw [← rectangularKyFanSum_eq_kyFanGauge k (A + B),
     ← rectangularKyFanSum_eq_kyFanGauge k A, ← rectangularKyFanSum_eq_kyFanGauge k B]
-  exact (TauCeti.DavisKahanTheory.RectangularUnitarilyInvariantNorm.kyFan
+  exact (TauCeti.RectangularUnitarilyInvariantNorm.kyFan
     (𝕜 := 𝕜) (E := E) (F := F) k).add_le A B
 
 end FiniteDimensional
