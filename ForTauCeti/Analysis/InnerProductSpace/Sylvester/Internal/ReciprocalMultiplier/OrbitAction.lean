@@ -48,7 +48,6 @@ Literature bridge for the group as a whole:
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open TauCeti
 open scoped InnerProductSpace BigOperators ComplexConjugate
@@ -680,5 +679,4 @@ theorem complexUnitaryOrbitAction_basisMatrixUnit_exp_sub
   congr 1
   ring_nf
 
-end DavisKahanTheory
 end TauCeti
