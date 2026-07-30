@@ -1,4 +1,3 @@
-import DavisKahan.Experimental.MathAhead.Sylvester.All
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.RealSylvesterDescent
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.HilbertSchmidtComplexFamily
