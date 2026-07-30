@@ -54,7 +54,7 @@ structure PaperTheorem61Data where
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : UnboundedSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
 
 namespace PaperTheorem61Data
 
@@ -68,7 +68,7 @@ def canonicalSinTheta (P : PaperTheorem61Data
 noncomputable def toKyFanProblem
     (P : PaperTheorem61Data (E := E) (F := F) (G := G) (H := H))
     (k : ℕ) (hk : 0 < k) :
-    GeneralSinThetaProblem (E := E) (F := F) (G := G) (H := H)
+    FormBoundedGeneralSinThetaProblem (E := E) (F := F) (G := G) (H := H)
       (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk) where
   data := P.data
   exactMap := P.exactMap
@@ -100,7 +100,7 @@ theorem all_kyFan_bound
       mul_zero, le_refl]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
-    have hmain := GeneralSinThetaProblem.result N (P.toKyFanProblem k hk)
+    have hmain := FormBoundedGeneralSinThetaProblem.result N (P.toKyFanProblem k hk)
     have hsame := S.same_singular_values.kyFanApproximationGauge_eq k
     simpa only [N, KyFanDominantIdealFamily.kyFan_gauge,
       PaperTheorem61Data.toKyFanProblem,
@@ -157,7 +157,7 @@ structure PaperIsometricTheoremData where
   gap : ℝ
   gap_pos : 0 < gap
   trial_isometry : IsometricEmbedding data.X
-  spectral_gap : UnboundedSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
 
 namespace PaperIsometricTheoremData
 
@@ -224,7 +224,7 @@ structure PaperRealTheorem61Data where
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : UnboundedSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
 
 namespace PaperRealTheorem61Data
 
@@ -322,7 +322,7 @@ structure PaperRealIsometricTheoremData where
   gap : ℝ
   gap_pos : 0 < gap
   trial_isometry : IsometricEmbedding data.X
-  spectral_gap : UnboundedSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
 
 namespace PaperRealIsometricTheoremData
 

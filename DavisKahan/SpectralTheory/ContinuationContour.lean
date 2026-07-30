@@ -23,6 +23,11 @@ The normalized winding value is written directly as Mathlib's Bochner interval
 integral of the scalar resolvent one-form.  The later operator-valued contour
 module can use the same parameterization and derivative without introducing a
 second contour representation.
+
+**Promoted 2026-07-30 under lane `EXP-PROMOTE-MISC`**, from
+`DavisKahan/Experimental/InfiniteDimensional/SinTheta/`.  Its import closure was already
+Experimental-free — it needs only `DavisKahan.SpectralTheory.ResolventOperator` and Mathlib —
+so it was compiled by nothing but its own aggregate until now.  Nothing is restated.
 -/
 
 namespace TauCeti

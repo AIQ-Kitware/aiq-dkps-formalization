@@ -27,7 +27,7 @@ namespace ExactSinTheta
 
 universe u v
 
-namespace GenuineUnboundedSylvesterGap
+namespace SpectralSylvesterGap
 
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -41,7 +41,7 @@ theorem trialInterval_complementExterior
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {β α δ : ℝ} (hβα : β ≤ α)
     (hgap : SylvesterIntervalExteriorGap A B β α δ) :
-    GenuineUnboundedSylvesterGap A B δ :=
+    SpectralSylvesterGap A B δ :=
   .intervalExterior hβα hgap
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -54,7 +54,7 @@ theorem trialAbove_complementBelow
         Set.Ici (c + δ))
     (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
         Set.Iic c) :
-    GenuineUnboundedSylvesterGap A B δ :=
+    SpectralSylvesterGap A B δ :=
   .leftAboveRightBelow c hA hB
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -67,7 +67,7 @@ theorem trialBelow_complementAbove
         Set.Iic c)
     (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
         Set.Ici (c + δ)) :
-    GenuineUnboundedSylvesterGap A B δ :=
+    SpectralSylvesterGap A B δ :=
   .leftBelowRightAbove c hA hB
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -97,9 +97,9 @@ theorem linearPMap_trialBelow_complementAbove
     UnboundedSylvesterGapPMap A B δ :=
   .leftBelowRightAbove c hA hB
 
-end GenuineUnboundedSylvesterGap
+end SpectralSylvesterGap
 
-namespace UnboundedSylvesterGap
+namespace FormBoundedSylvesterGap
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E F : Type v}
@@ -113,8 +113,8 @@ theorem trialInterval_complementExterior
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     {β α δ : ℝ} (hβα : β ≤ α)
-    (hgap : UnboundedIntervalExteriorGap A B β α δ) :
-    UnboundedSylvesterGap A B δ :=
+    (hgap : RealSpectrumIntervalExteriorGap A B β α δ) :
+    FormBoundedSylvesterGap A B δ :=
   .intervalExterior hβα hgap
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -125,7 +125,7 @@ theorem trialAbove_complementBelow
     {δ c : ℝ}
     (hA : SemiboundedBelow A (c + δ))
     (hB : SemiboundedAbove B c) :
-    UnboundedSylvesterGap A B δ :=
+    FormBoundedSylvesterGap A B δ :=
   .leftAboveRightBelow c hA hB
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -136,7 +136,7 @@ theorem trialBelow_complementAbove
     {δ c : ℝ}
     (hA : SemiboundedAbove A c)
     (hB : SemiboundedBelow B (c + δ)) :
-    UnboundedSylvesterGap A B δ :=
+    FormBoundedSylvesterGap A B δ :=
   .leftBelowRightAbove c hA hB
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -144,8 +144,8 @@ omit [CompleteSpace E] [CompleteSpace F] in
 theorem linearPMap_trialInterval_complementExterior
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
     {β α δ : ℝ} (hβα : β ≤ α)
-    (hgap : linearPMap_UnboundedIntervalExteriorGap A B β α δ) :
-    linearPMap_UnboundedSylvesterGap A B δ :=
+    (hgap : linearPMap_RealSpectrumIntervalExteriorGap A B β α δ) :
+    linearPMap_FormBoundedSylvesterGap A B δ :=
   .intervalExterior hβα hgap
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -154,7 +154,7 @@ theorem linearPMap_trialAbove_complementBelow
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {δ c : ℝ}
     (hA : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
     (hB : TauCeti.LinearPMap.SemiboundedAbove B c) :
-    linearPMap_UnboundedSylvesterGap A B δ :=
+    linearPMap_FormBoundedSylvesterGap A B δ :=
   .leftAboveRightBelow c hA hB
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -163,10 +163,10 @@ theorem linearPMap_trialBelow_complementAbove
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {δ c : ℝ}
     (hA : TauCeti.LinearPMap.SemiboundedAbove A c)
     (hB : TauCeti.LinearPMap.SemiboundedBelow B (c + δ)) :
-    linearPMap_UnboundedSylvesterGap A B δ :=
+    linearPMap_FormBoundedSylvesterGap A B δ :=
   .leftBelowRightAbove c hA hB
 
-end UnboundedSylvesterGap
+end FormBoundedSylvesterGap
 
 end ExactSinTheta
 end Experimental
