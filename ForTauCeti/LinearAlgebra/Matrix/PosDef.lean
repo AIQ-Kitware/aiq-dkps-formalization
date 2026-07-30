@@ -70,8 +70,8 @@ reproved through the rank-factorization API by Claude Fable 5 (claude-fable-5[1m
 
 ## Provenance
 
-*Moved, not restated.*  This file was `ForMathlib/LinearAlgebra/Matrix/PosDef.lean`
-until 2026-07-29, when lane FM-RETIRE retired `ForMathlib` entirely: its four
+*Moved, not restated.*  This file lived in the retired `ForMathlib` staging tree
+before `ForMathlib` was retired entirely: its four
 surviving modules moved here and the library, its root module and its directory
 were deleted.  Statements, proofs and signatures are unchanged.
 
@@ -87,8 +87,8 @@ and the list of pins updated to match is recorded once, in
 /-!
 ### Provenance
 
-Moved from `ForMathlib/LinearAlgebra/Matrix/` to `ForTauCeti/LinearAlgebra/Matrix/`
-on 2026-07-29 by lane FM-RETIRE, which finishes the `ForMathlib` retirement.  The
+Moved into `ForTauCeti/LinearAlgebra/Matrix/`
+as part of the `ForMathlib` retirement.  The
 namespace changed from `ForMathlib.Matrix` to `TauCeti.Matrix` to match the
 destination package; declaration names, statements and proofs are unchanged.
 -/

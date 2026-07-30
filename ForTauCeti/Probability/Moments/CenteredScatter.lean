@@ -61,7 +61,7 @@ See backlog §8.1.
   `Fin.snoc`, and `centeredScatter` moved from `E →ₗ[𝕜] E` to `E →L[𝕜] E`.
 * Spectra influence: **none** (imports only Mathlib).
 
-**Moved 2026-07-29** by lane PLACE-GRAM, from
+Moved from
 `ForTauCeti/Analysis/InnerProductSpace/CenteredScatter.lean` to
 `ForTauCeti/Probability/Moments/CenteredScatter.lean`, beside `SampleMean`,
 `SampleCovariance`, `Variance` and `MatrixConcentration`.  Finite means and

@@ -19,7 +19,7 @@ Four rubrics can `block`: `correctness`, `reuse`, `scope`, `attribution`.
 | **`generality`** | `approve` (with a caveat below) | — |
 | **`placement`** | `request_changes` — 54 flat files beside 12 directories | `FTC-ORG`, `PLACE-SYLV`, `PLACE-GRAM` |
 | **`naming`** | `request_changes` — `genuine`; 2 suffixes overstate | `DK-NAME`, `DK-NAME-SUFFIX`, `PLACE-GRAM` |
-| **`documentation`** | `request_changes` — 69 files document our workflow, not the math | `FTC-PROSE` |
+| **`documentation`** | **`approve`** — 0 files narrate our workflow; provenance intact | — |
 | **`proof-quality`** | `request_changes` — 6 long proofs (suppressions 10 → 5, each justified) | `FTC-LONGPROOF` |
 
 ## The three findings this run added that the earlier audit missed
