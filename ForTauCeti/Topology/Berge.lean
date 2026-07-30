@@ -87,8 +87,7 @@ Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); golfed a terminal
 /-!
 ### Provenance
 
-Moved from `ForMathlib/Topology/` to `ForTauCeti/Topology/` on 2026-07-29 by lane
-FM-RETIRE, which finishes the `ForMathlib` retirement.  The namespace changed from
+Moved from the retired `ForMathlib` staging tree into `ForTauCeti/Topology/`.
 `ForMathlib` to `TauCeti` to match the destination package; declaration names,
 statements and proofs are unchanged.
 
@@ -97,7 +96,7 @@ The `main` version (`c85510d6`) kept `namespace ForMathlib` here, reasoning that
 `Challenge/**/Conformance.lean` is immutable so its `ForMathlib.*` pins could not
 be re-issued.  Reconciled on merge in favour of `TauCeti`, because the pins are
 not what immutability protects: `AGENTS.md`'s comparator rule forbids *filling the
-proof placeholders*, and its rename protocol explicitly requires a rename lane to
+proof placeholders*, and its rename protocol explicitly requires a dedicated rename pass to
 update `Challenge/` and `comparator/*.json`, which is what was done — the three
 Berge names in `comparator/pending-berge.json`, the `#print axioms` lines in
 `Challenge/MathlibPending/Berge/Leaderboard.lean`, and the restated statements in

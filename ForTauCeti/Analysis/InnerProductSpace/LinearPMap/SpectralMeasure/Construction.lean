@@ -59,7 +59,7 @@ source: it is short and lives entirely inside the Borel calculus.
 
 *Split, not restated.*  This module was the first four sections of
 `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure.lean` until
-2026-07-29, when lane SPLIT-1K divided that 1243-line file at its
+the point that 1243-line file was divided at its
 `end Reduce` / `section BoundedSet` seam, Tau Ceti's stated limit for a new file
 being 1000 lines (`ForTauCeti/README.md` §4).  **No statement, signature, proof,
 attribute or declaration name changed.**
@@ -141,7 +141,7 @@ theorem measurable_cayleyInv : Measurable (cayleyInv hA) := by
 -- module rewrite by definition name (`rw [specProjection, spectralPVM, specProj]`) and
 -- index subtypes by `.domain`, so the bodies must reduce. The rubric-clean fix is a
 -- `_def` lemma per definition plus rewiring every call site, which is a larger refactor
--- than this conversion lane: it is tracked as lane FTC-EXPOSE-SPECMEAS.
+-- than a conversion pass; it is recorded debt rather than an endorsement.
 @[expose]
 noncomputable def spectralPVM : TauCeti.ProjValMeasure H :=
   BorelCalculus.toProjValMeasure (isStarNormal_cayley hA) (measurable_cayleyInv hA)
@@ -404,7 +404,7 @@ set of the real line. -/
 -- module rewrite by definition name (`rw [specProjection, spectralPVM, specProj]`) and
 -- index subtypes by `.domain`, so the bodies must reduce. The rubric-clean fix is a
 -- `_def` lemma per definition plus rewiring every call site, which is a larger refactor
--- than this conversion lane: it is tracked as lane FTC-EXPOSE-SPECMEAS.
+-- than a conversion pass; it is recorded debt rather than an endorsement.
 @[expose]
 noncomputable def specProjection (B : Set ℝ) (hB : MeasurableSet B) : H →L[ℂ] H :=
   (spectralPVM hA).proj B hB
@@ -514,7 +514,7 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ) (hB : Measu
 /-- The **spectral range** of `A` over a Borel set: the range of the spectral
 projection, a closed, orthogonally complemented subspace. -/
 -- `@[expose]` as part of the spectral-measure chain: consumers construct membership with
--- `⟨y, h⟩`, which needs the range body to reduce. Recorded debt, lane FTC-EXPOSE-SPECMEAS.
+-- `⟨y, h⟩`, which needs the range body to reduce. Recorded debt.
 @[expose]
 noncomputable def specRange : Submodule ℂ H := (specProjection hA B hB).range
 
@@ -564,7 +564,7 @@ ranges.** -/
 -- module rewrite by definition name (`rw [specProjection, spectralPVM, specProj]`) and
 -- index subtypes by `.domain`, so the bodies must reduce. The rubric-clean fix is a
 -- `_def` lemma per definition plus rewiring every call site, which is a larger refactor
--- than this conversion lane: it is tracked as lane FTC-EXPOSE-SPECMEAS.
+-- than a conversion pass; it is recorded debt rather than an endorsement.
 @[expose]
 noncomputable def specRestrict : specRange hA B hB →ₗ.[ℂ] specRange hA B hB where
   domain := A.domain.comap (specRange hA B hB).subtype

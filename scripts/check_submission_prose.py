@@ -47,13 +47,13 @@ LIB = ROOT / "ForTauCeti"
 #: Do not read the change as progress; no docstring was touched.  The cleanup slices are lanes
 #: FTC-PROSE-a .. FTC-PROSE-d; FTC-PROSE-ENFORCE drops this to 0 and flips the
 #: convention so new files stop generating it.
-BASELINE = 26
+BASELINE = 0
 
 #: Highest number of individual hits.  The module count alone is not enough: adding a
 #: fourth lane id to a module that already has three leaves the module count unchanged,
 #: so a modules-only ratchet lets the prose keep growing inside the files that already
 #: have it.  Found by testing this gate against a deliberate regression -- it passed.
-HIT_BASELINE = 50
+HIT_BASELINE = 0
 
 #: An internal lane id: `lane FTC-EXPOSE-g2`, `Lane SPLIT-1K`, `lane Y3`, `lane T15a`.
 #: Anchored on the word `lane` so ordinary prose ("the bounded-operator lane ever
@@ -72,7 +72,9 @@ INTERNAL_PATH = re.compile(r"dev/LANES\.md|dev/journals|dev/audit/|\.claude/work
 #: happens to mention the same path -- "Moved from ForMathlib/... on 2026-07-29 under lane
 #: Y3(b2)" -- which git already records losslessly.  Match the provenance BULLET, not the
 #: word: a line beginning `* Original ...`.
-PROVENANCE_LINE = re.compile(r"^\s*\*\s*Original\s+(?:repository|module|declarations|authors)", re.M)
+PROVENANCE_LINE = re.compile(
+    r"^\s*\*\s*(?:Original\s+(?:repository|module|declarations|authors)"
+    r"|`?[\w.']+`? was originally)", re.M)
 
 #: "Moved 2026-07-29", "Documented 2026-07-30" -- migration archaeology.
 DATED_MOVE = re.compile(
