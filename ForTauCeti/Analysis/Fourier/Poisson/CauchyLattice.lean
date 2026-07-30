@@ -85,6 +85,8 @@ private theorem tsum_int_exp_neg_mul_abs {a : ℝ} (ha : 0 < a) :
   have hsum : Summable f := by
     apply Summable.of_nat_of_neg
     · refine hgeo.congr fun n => ?_
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       change q ^ n = Real.exp (-a * |(((n : ℕ) : ℤ) : ℝ)|)
       rw [show |(((n : ℕ) : ℤ) : ℝ)| = (n : ℝ) by simp]
       simp only [q]
@@ -92,6 +94,8 @@ private theorem tsum_int_exp_neg_mul_abs {a : ℝ} (ha : 0 < a) :
       congr 1
       ring
     · refine hgeo.congr fun n => ?_
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       change q ^ n = Real.exp (-a * |((-(n : ℤ) : ℤ) : ℝ)|)
       rw [show |((-(n : ℤ) : ℤ) : ℝ)| = (n : ℝ) by simp]
       simp only [q]
@@ -114,6 +118,8 @@ private theorem tsum_int_exp_neg_mul_abs {a : ℝ} (ha : 0 < a) :
         rw [abs_of_nonneg]
         · congr 1
         · positivity
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change ∑' n : ℤ, f n = _
   calc
     (∑' n : ℤ, f n) = f 0 + 2 • ∑' n : ℕ+, f (n : ℤ) :=
@@ -262,6 +268,8 @@ private theorem tsum_nat_inv_sq_add_sq
   have hIntSplit := tsum_of_add_one_of_neg_add_one hpos hneg
   have hNatSplit := hNat.tsum_eq_zero_add
   have hLattice := tsum_int_inv_sq_add_sq hy
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change ∑' n : ℕ, fNat n = _
   simp only [fInt, Int.cast_neg, Int.cast_add, Int.cast_natCast, Int.cast_one,
     Int.cast_zero, neg_sq] at hIntSplit
@@ -321,6 +329,8 @@ private theorem tsum_odd_inv_sq_add_sq
   have hInvHalf : (y / 2)⁻¹ ^ 2 = 4 * y⁻¹ ^ 2 := by
     field_simp [hy.ne']
     ring
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change (∑' n : ℕ, f (2 * n + 1)) = _
   calc
     (∑' n : ℕ, f (2 * n + 1)) =

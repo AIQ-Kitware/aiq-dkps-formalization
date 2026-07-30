@@ -175,6 +175,7 @@ original trial map. -/
 theorem norm_trialGramSqrtEquiv_apply (X : F →ₗ[𝕜] E)
     (hX : Function.Injective X) (x : F) :
     ‖trialGramSqrtEquiv X hX x‖ = ‖X x‖ := by
+  -- names the application so the norm bound applies to it directly.
   change ‖trialGramSqrt X x‖ = ‖X x‖
   exact norm_trialGramSqrt_apply X x
 
@@ -183,8 +184,10 @@ noncomputable def orthonormalizedEmbedding (X : F →ₗ[𝕜] E)
     (hX : Function.Injective X) : F →ₗᵢ[𝕜] E where
   toLinearMap := X ∘ₗ (trialGramSqrtEquiv X hX).symm.toLinearMap
   norm_map' y := by
+    -- names the application so the norm bound applies to it directly.
     change ‖X ((trialGramSqrtEquiv X hX).symm y)‖ = ‖y‖
     rw [← norm_trialGramSqrt_apply X]
+    -- names the application so the norm bound applies to it directly.
     change ‖(trialGramSqrtEquiv X hX)
       ((trialGramSqrtEquiv X hX).symm y)‖ = ‖y‖
     rw [(trialGramSqrtEquiv X hX).apply_symm_apply]
@@ -195,6 +198,8 @@ theorem orthonormalizedEmbedding_comp_trialGramSqrtEquiv
     (orthonormalizedEmbedding X hX).toLinearMap ∘ₗ
         (trialGramSqrtEquiv X hX).toLinearMap = X := by
   ext x
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change X ((trialGramSqrtEquiv X hX).symm
     (trialGramSqrtEquiv X hX x)) = X x
   rw [(trialGramSqrtEquiv X hX).symm_apply_apply]
