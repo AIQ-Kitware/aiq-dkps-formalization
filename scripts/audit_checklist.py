@@ -49,8 +49,16 @@ SKIP_PREFIX = ("retired/", "external/", ".lake/", "vendor/")
 DONE_RE = re.compile(r"^\s*-\s*\[[xX]\]\s+`([^`]+)`")
 
 
-def tracked_lean() -> list[str]:
-    out = subprocess.run(["git", "ls-files", "*.lean"], cwd=ROOT,
+def tracked_files() -> list[str]:
+    """Every tracked file in scope.
+
+    Scope is EVERYTHING except the trees that are not ours to review:
+    `retired/`, `external/`, `vendor/`, `.lake/`. Nothing else is dropped --
+    not documentation, not scripts, not comparator configs, not paper sources.
+    An audit that silently covers only `.lean` reports 787 of 1271 files and
+    calls it complete, which is the failure this generator exists to prevent.
+    """
+    out = subprocess.run(["git", "ls-files"], cwd=ROOT,
                          capture_output=True, text=True, check=True).stdout
     return sorted(p for p in out.splitlines()
                   if p and not p.startswith(SKIP_PREFIX))
@@ -69,7 +77,27 @@ def topic_of() -> dict[str, str]:
     return out
 
 
+KIND = {
+    ".lean": "Lean source", ".md": "documentation", ".py": "tooling",
+    ".sh": "tooling", ".json": "data/config", ".jsonl": "data/config",
+    ".tex": "paper source", ".sty": "paper source", ".bst": "paper source",
+    ".bib": "paper source", ".txt": "manifest/notes", ".manifest": "manifest/notes",
+    ".toml": "build config", ".yaml": "build config", ".patch": "artifact",
+    ".gz": "artifact", ".ots": "artifact", ".pyc": "artifact",
+}
+
+
+def kind_of(path: str) -> str:
+    return KIND.get(pathlib.PurePath(path).suffix, "other")
+
+
 def group_of(path: str, topics: dict[str, str]) -> str:
+    if not path.endswith(".lean"):
+        # non-Lean files group by their top directory, kept separate from the
+        # code so a group review is not half prose and half proofs
+        parts = path.split("/")
+        top = parts[0] if len(parts) > 1 else "(root files)"
+        return f"{top} :: {kind_of(path)}"
     if path in topics:
         return "ForTauCeti :: " + topics[path]
     if path.startswith("ForTauCeti/"):
@@ -95,15 +123,20 @@ def existing_marks(path: pathlib.Path) -> set[str]:
 
 
 def lines_of(rel: str) -> int:
+    """Line count, or 0 for a binary file.
+
+    Binary files are still ON the checklist -- a tracked `.pyc` or `.gz` is
+    itself worth a reviewer's attention -- they simply have no lines to read.
+    """
     p = ROOT / rel
     try:
         return p.read_text().count("\n") + 1
-    except OSError:
+    except (OSError, UnicodeDecodeError):
         return 0
 
 
 def build():
-    files = tracked_lean()
+    files = tracked_files()
     topics = topic_of()
     groups: dict[str, list[str]] = {}
     for f in files:
@@ -147,7 +180,7 @@ def main(argv: list[str] | None = None) -> int:
                    f"*{len(members)} files, {gl:,} lines — {nd}/{len(members)} reviewed*\n")
         for f in sorted(members, key=lambda x: (-lines_of(x), x)):
             mark = "x" if f in done_files else " "
-            out.append(f"- [{mark}] `{f}` — {lines_of(f):,} lines")
+            out.append(f"- [{mark}] `{f}` — {lines_of(f):,} lines · {kind_of(f)}")
     FILE_LIST.write_text("\n".join(out) + "\n")
 
     # ---- group checklist
