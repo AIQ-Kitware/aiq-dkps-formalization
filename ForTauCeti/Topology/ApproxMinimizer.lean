@@ -31,20 +31,22 @@ The typical source of the approximate-minimizer hypothesis is a second family
 
 ## Staging note
 
-Staged for Mathlib: additions to `Mathlib/Topology/Order/Compact.lean` (companion
+Staged for Tau Ceti, roadmap topic T22.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+additions to `Mathlib/Topology/Order/Compact.lean` (companion
 to `IsCompact.exists_isMinOn`), or a dedicated file alongside
 `Mathlib/Topology/Sequences.lean`.
-Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]);
-to be re-authored per Mathlib's AI-contribution policy at PR time.
+Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
   `72b913b`; it has had no prior home.
-* Extraction class: **authored in place**. Upstream target is Mathlib; the module
-  is staged here because `ForMathlib` was retired on 2026-07-29 and `ForTauCeti`
-  is now the single staging library — see `ForTauCeti/README.md`.
+* Extraction class: **authored in place**, for Tau Ceti — `ForMathlib` was
+  retired on 2026-07-29 and `ForTauCeti` is the single staging library, whose
+  destination is Tau Ceti and not Mathlib (`ForTauCeti/README.md`).
 * Intended Mathlib home: additions to `Mathlib/Topology/Order/Compact.
 * Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.

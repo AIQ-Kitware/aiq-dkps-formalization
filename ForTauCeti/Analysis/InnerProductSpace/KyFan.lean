@@ -3,7 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 
-Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/` (new file
+Staged for Tau Ceti, roadmap topic T05.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `KyFan.lean`).
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]), plan steps F0–F2 of
@@ -16,7 +19,6 @@ fractional-knapsack lemma), the Ky Fan variational principle
 positive square root), and its consequence, the simultaneous triangle
 inequality for all Ky Fan norms — weak majorization
 `σ(A + B) ≺_w σ(A) + σ(B)`.
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import Mathlib.Analysis.InnerProductSpace.SingularValues

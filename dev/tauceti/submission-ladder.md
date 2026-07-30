@@ -219,21 +219,35 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `MeasureTheory.CompactExists`
   - `MeasureTheory.HellySelection`
 
-### Rung L — Unbounded self-adjoint operators on LinearPMap (T15)
+### Rung L — Closed operators on LinearPMap: graphs, constructions and form bounds (T15a)
 
-**25 new, cumulative closed slice 118.**
+**6 new, cumulative closed slice 99.**
 
-  - `Analysis.CStarAlgebra.SelfAdjointGapInverse`
-  - `Analysis.InnerProductSpace.BlockLowerBound`
   - `Analysis.InnerProductSpace.LinearPMap.Closed`
   - `Analysis.InnerProductSpace.LinearPMap.Constructions`
   - `Analysis.InnerProductSpace.LinearPMap.GraphCore`
+  - `Analysis.InnerProductSpace.LinearPMap.Sylvester`
+  - `Analysis.InnerProductSpace.QuadraticFormBounds`
+  - `Analysis.InnerProductSpace.SpectralOrder.Complex`
+
+### Rung M — Resolvents of self-adjoint LinearPMap operators, and semiboundedness (T15b)
+
+**7 new, cumulative closed slice 106.**
+
+  - `Analysis.CStarAlgebra.SelfAdjointGapInverse`
   - `Analysis.InnerProductSpace.LinearPMap.RealLowerBound`
   - `Analysis.InnerProductSpace.LinearPMap.Resolvent`
   - `Analysis.InnerProductSpace.LinearPMap.ResolventBound`
   - `Analysis.InnerProductSpace.LinearPMap.ResolventOpen`
-  - `Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal`
   - `Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent`
+  - `Analysis.InnerProductSpace.SeparatedIntertwiner`
+
+### Rung N — The spectral measure of an unbounded self-adjoint operator, and Stone (T15c)
+
+**12 new, cumulative closed slice 118.**
+
+  - `Analysis.InnerProductSpace.BlockLowerBound`
+  - `Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal`
   - `Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator`
   - `Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds`
   - `Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse`
@@ -243,13 +257,9 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup`
   - `Analysis.InnerProductSpace.LinearPMap.SpectralSupport`
   - `Analysis.InnerProductSpace.LinearPMap.StoneUniqueness`
-  - `Analysis.InnerProductSpace.LinearPMap.Sylvester`
   - `Analysis.InnerProductSpace.LinearPMap.YosidaApproximation`
-  - `Analysis.InnerProductSpace.QuadraticFormBounds`
-  - `Analysis.InnerProductSpace.SeparatedIntertwiner`
-  - `Analysis.InnerProductSpace.SpectralOrder.Complex`
 
-### Rung M — Sylvester equations and the Rosenblum theorem (T16)
+### Rung O — Sylvester equations and the Rosenblum theorem (T16)
 
 **18 new, cumulative closed slice 136.**
 
@@ -272,7 +282,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `Analysis.InnerProductSpace.Sylvester.SpectralGap`
   - `Analysis.InnerProductSpace.SylvesterGroup`
 
-### Rung N — Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems (T17)
+### Rung P — Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems (T17)
 
 **10 new, cumulative closed slice 146.**
 
@@ -287,7 +297,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `Analysis.InnerProductSpace.SinTheta.Perturbation`
   - `Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant`
 
-### Rung O — The Yu-Wang-Samworth statistical variant (T18)
+### Rung Q — The Yu-Wang-Samworth statistical variant (T18)
 
 **3 new, cumulative closed slice 149.**
 
@@ -295,7 +305,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace`
   - `Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 
-### Rung P — Matrix spectra and spectral measurability (T19)
+### Rung R — Matrix spectra and spectral measurability (T19)
 
 **6 new, cumulative closed slice 155.**
 
@@ -306,7 +316,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `MeasureTheory.Function.ConvergenceInMeasure`
   - `MeasureTheory.Measure.Typeclasses.Probability`
 
-### Rung Q — Sample moments and matrix concentration (T20)
+### Rung S — Sample moments and matrix concentration (T20)
 
 **5 new, cumulative closed slice 160.**
 
@@ -316,20 +326,19 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `Probability.Moments.SampleMean`
   - `Probability.Moments.Variance`
 
-### Rung R — Matrix rank factorization and positive semidefiniteness (T21)
+### Rung T — Matrix rank factorization and positive semidefiniteness (T21)
 
 **2 new, cumulative closed slice 162.**
 
   - `LinearAlgebra.Matrix.PosDef`
   - `LinearAlgebra.Matrix.RankFactorization`
 
-### Rung S — Berge's maximum theorem and approximate minimizers (T22)
+### Rung U — Berge's maximum theorem and approximate minimizers (T22)
 
 **2 new, cumulative closed slice 164.**
 
   - `Topology.ApproxMinimizer`
   - `Topology.Berge`
-
 **Cumulative: 164 of 164 `ForTauCeti` modules — the ladder is total.**
 
 ## The number that makes the case
@@ -369,6 +378,17 @@ each topic's own module list, so a rung is exactly a roadmap target — Tau Ceti
 own unit of review. Rung G is the one exception it has to be: A–F predate the
 partition and cut across topics T01–T10, so G completes those ten.
 
+**T15 was three rungs, not one** (lane T15-SPLIT, 2026-07-29). The
+`review-ForTauCeti-T04-T20` audit found the 25-module topic to be three chains
+that barely touch, and the import graph then moved three modules across the cut
+the audit proposed: `RealLowerBound` imports `SelfAdjointResolvent`,
+`SelfAdjointMaximal` imports `SpectralMeasure`, and `SpectralGapInverse` imports
+`SpectralSupport`, so each sits one chain later than its name suggests. Placed by
+dependency, the split is rungs **L** (T15a, closedness and graphs, 6), **M**
+(T15b, resolvents and semiboundedness, 7) and **N** (T15c, the spectral measure
+and Stone, 12) — and **T15b turns out to be independent of every other topic**,
+which the undivided T15 could not be. Rungs O–U are the old M–S, shifted.
+
 Two of the three blocks needed nothing but naming. The third dissolved on
 inspection:
 
@@ -376,8 +396,8 @@ inspection:
   (`ForTauCetiRoadmap/HaagerupZsidoKernel/`) was written the same day. They are
   rung I.
 - **The eighth, `Analysis.CStarAlgebra.SelfAdjointGapInverse`, was never an
-  orphan** — the topic table already assigns it to T15, where it lands as part of
-  rung L. The "needs a decision from jon" caveat on it was measured against the
+  orphan** — the topic table already assigns it to T15 (now T15b), where it lands
+  as part of rung M. The "needs a decision from jon" caveat on it was measured against the
   subtree listing, not against the topic partition.
 
 Against the readiness standard in `ForTauCeti/README.md` — that `ForTauCeti`

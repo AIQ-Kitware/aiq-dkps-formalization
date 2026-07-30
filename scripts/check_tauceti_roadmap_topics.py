@@ -82,14 +82,29 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  [A+"BorelCalculus."+x for x in ["DiagonalMeasure","Multiplicative","Operator","PVM","Polarization"]]
  +[A+"ProjValMeasure.Basic",A+"ProjValMeasure.Additivity",
    "MeasureTheory.CfcMeasurable","MeasureTheory.CompactExists","MeasureTheory.HellySelection"]),
-("T15","Unbounded self-adjoint operators on LinearPMap",
- [A+"LinearPMap."+x for x in ["Closed","Constructions","GraphCore","RealLowerBound","Resolvent",
-   "ResolventBound","ResolventOpen","SelfAdjointMaximal","SelfAdjointResolvent","Sylvester",
-   "YosidaApproximation","SpectralCutOperator","SpectralFormBounds","SpectralGapInverse","SpectralGrid",
-   "SpectralMeasure","SpectralMeasure.Construction","SpectralProjectionGroup","SpectralSupport",
-   "StoneUniqueness"]]
- +[A+"SpectralOrder.Complex","Analysis.CStarAlgebra.SelfAdjointGapInverse",
-   A+"QuadraticFormBounds",A+"BlockLowerBound",A+"SeparatedIntertwiner"]),
+# T15 was one 25-module, 6,700-line topic -- the biggest by both measures and
+# nearly three times the median.  Lane T15-SPLIT cut it into the three chains the
+# T04-T20 audit found, which barely touch: closedness/graphs, resolvents, and the
+# spectral measure.  Keys are suffixed rather than renumbered on purpose: pushing
+# T16-T22 up would invalidate every `Txx` reference in the audit files, in
+# CANDIDATE-TOPIC-DESIGN.md and in the written roadmaps, for no gain.
+# The audit proposed the cut; the import graph moved three modules across it.
+# `RealLowerBound` imports `SelfAdjointResolvent`, `SelfAdjointMaximal` imports
+# `SpectralMeasure`, and `SpectralGapInverse` imports `SpectralSupport`, so each
+# sits one chain later than its subject matter suggests.  Placed by dependency,
+# not by name -- `--check` reports a forward reference otherwise.
+("T15a","Closed operators on LinearPMap: graphs, constructions and form bounds",
+ [A+"LinearPMap."+x for x in ["Closed","Constructions","GraphCore","Sylvester"]]
+ +[A+"QuadraticFormBounds",A+"SpectralOrder.Complex"]),
+("T15b","Resolvents of self-adjoint LinearPMap operators, and semiboundedness",
+ [A+"LinearPMap."+x for x in ["Resolvent","ResolventBound","ResolventOpen",
+   "SelfAdjointResolvent","RealLowerBound"]]
+ +["Analysis.CStarAlgebra.SelfAdjointGapInverse",A+"SeparatedIntertwiner"]),
+("T15c","The spectral measure of an unbounded self-adjoint operator, and Stone",
+ [A+"LinearPMap."+x for x in ["SpectralMeasure","SpectralMeasure.Construction","SpectralGrid",
+   "SpectralSupport","SpectralFormBounds","SpectralGapInverse","SpectralCutOperator",
+   "SpectralProjectionGroup","SelfAdjointMaximal","StoneUniqueness","YosidaApproximation"]]
+ +[A+"BlockLowerBound"]),
 ("T16","Sylvester equations and the Rosenblum theorem",
  [A+x for x in ["Rosenblum","SylvesterGroup","HilbertSchmidtBlock","CoerciveUnit"]]
  +[A+"Sylvester."+x for x in ["Basic","Interval","SpectralDistance",

@@ -3,7 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 
-Staged for Mathlib: addition to `Mathlib/Analysis/InnerProductSpace/Basic.lean`.
+Staged for Tau Ceti, roadmap topic T01.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+addition to `Mathlib/Analysis/InnerProductSpace/Basic.lean`.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).  Placement history: originally
 in the Gram-matrix staging file, then moved to `Orthonormal.lean` to sit by the
@@ -11,7 +14,6 @@ in the Gram-matrix staging file, then moved to `Orthonormal.lean` to sit by the
 moved here to `Basic.lean` — the lemma involves no `Orthonormal`, and `Basic`
 already hosts `Finsupp.sum_inner` / `Finsupp.inner_sum` (its dependencies) and
 `open`s `Finsupp` + `ComplexConjugate`, so no new import is needed.
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import Mathlib.Analysis.InnerProductSpace.Basic

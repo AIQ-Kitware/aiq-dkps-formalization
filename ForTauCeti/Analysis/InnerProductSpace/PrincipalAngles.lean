@@ -3,7 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 
-Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/` (new file
+Staged for Tau Ceti, roadmap topic T06.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `PrincipalAngles.lean`).
 
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]), plan step W0.2 of
@@ -15,7 +18,6 @@ flat overlap operator `overlapOp` (from `AlignedBasis.lean`).  This packages the
 `cos Θ`/`sin Θ` vectors, their basic order/range properties, the symmetry in the
 two families (which needs `singularValues_adjoint`, W0.1(d)), and the bridge
 `‖sin Θ‖²_F = d − overlap` to the flat overlap sum.
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis

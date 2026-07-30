@@ -60,20 +60,22 @@ usable forms, building on the approximate-minimizer stability engine
 
 ## Staging note
 
-Staged for Mathlib: the Berge maximum theorem (upper hemicontinuity of the
+Staged for Tau Ceti, roadmap topic T22.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+the Berge maximum theorem (upper hemicontinuity of the
 parametric argmin correspondence over a fixed compact feasible set).
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); golfed a terminal
 `simp only [Function.comp_apply]; exact …` to `simpa using …` (rule 1.15).
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
   `1ca2679`; it has had no prior home.
-* Extraction class: **authored in place**. Upstream target is Mathlib; the module
-  is staged here because `ForMathlib` was retired on 2026-07-29 and `ForTauCeti`
-  is now the single staging library — see `ForTauCeti/README.md`.
+* Extraction class: **authored in place**, for Tau Ceti — `ForMathlib` was
+  retired on 2026-07-29 and `ForTauCeti` is the single staging library, whose
+  destination is Tau Ceti and not Mathlib (`ForTauCeti/README.md`).
 * Intended Mathlib home: the Berge maximum theorem (upper hemicontinuity of the.
 * Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.

@@ -46,19 +46,21 @@ rank-controlled Gram factor `(S * R)ᴴ * (S * R)`.  The reverse direction is
 
 ## Staging note
 
-Staged for Mathlib: additions to `Mathlib/LinearAlgebra/Matrix/PosDef.lean`.
+Staged for Tau Ceti, roadmap topic T21.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+additions to `Mathlib/LinearAlgebra/Matrix/PosDef.lean`.
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); rank-controlled direction
 reproved through the rank-factorization API by Claude Fable 5 (claude-fable-5[1m]).
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
   `e9379f2`; it has had no prior home.
-* Extraction class: **authored in place**. Upstream target is Mathlib; the module
-  is staged here because `ForMathlib` was retired on 2026-07-29 and `ForTauCeti`
-  is now the single staging library — see `ForTauCeti/README.md`.
+* Extraction class: **authored in place**, for Tau Ceti — `ForMathlib` was
+  retired on 2026-07-29 and `ForTauCeti` is the single staging library, whose
+  destination is Tau Ceti and not Mathlib (`ForTauCeti/README.md`).
 * Intended Mathlib home: additions to `Mathlib/LinearAlgebra/Matrix/PosDef.
 * Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.

@@ -1,6 +1,8 @@
 # `dev/audit/` — the hostile review
 
-A line-by-line review of **every tracked file** in the repository, written in the
+**COMPLETE 2026-07-29 — 1,167 files, 112 groups, ~261,000 lines.**
+
+A review of **every load-bearing tracked file** in the repository, written in the
 voice of a reviewer **who does not want to inherit this code** and has to justify that
 position. The output is not an opinion: it is a set of findings, each tagged
 with a lane, that another agent can pick up and execute.
@@ -125,3 +127,36 @@ Every file in scope is on the list, labelled with its kind:
 | **tooling** | 69 | Does it check what it claims? Does a green result mean anything? |
 | **data/config** | 56 | Do the names it pins still resolve? Generated or hand-edited? |
 | **manifest/notes** | 12 | Is it still checked by something, and does it still match? |
+
+## Result
+
+**Complete.** All 1,167 files and all 112 groups reviewed. Findings are in the
+`review-*.md` documents in this directory, and every one carries a lane tag.
+
+| review | covers |
+|---|---|
+| `review-ForTauCeti-T01.md` | T01, in depth — the first group, read file by file |
+| `review-ForTauCeti-T02-T03-T06-T11-T21-T22.md` | six topics; the modulus duplication |
+| `review-ForTauCeti-T04-T20.md` | the remaining fifteen topics; the `ForTauCeti` verdict |
+| `review-DavisKahan-production.md` | all eighteen production groups |
+| `review-Experimental-and-papers.md` | `Experimental` and all six paper libraries |
+| `review-Challenge-MathlibPending.md` | the duplicated challenge admissions |
+| `review-docs-tooling-config.md` | documentation, tooling, config, `Challenge`; the whole-repo verdict |
+
+**Lanes opened by the audit:** `HDR-DEST`, `T01-SQRT`, `MODULUS-DEDUP`,
+`NS-SPREAD` (superseding `T01-NS`), `T15-SPLIT`, `DK-INTEROP`, `DK-FRAME`,
+`CH-DEDUP`, `CLAIM-DOC` — plus scope widenings to `SPLIT-1K` and `PLACE-SYLV`.
+
+**Renames carry the review; splits do not.** When a reviewed file is renamed the
+checklist shows it unreviewed at its new path, because the path is new. If the
+content is unchanged (git reports 90%+ similarity) the review carries and the
+box is re-ticked. A file *created by splitting* a reviewed one is different: the
+split itself is new structure and gets looked at. Both cases occurred on
+2026-07-29 — nine `Experimental`→production promotions and the `PLACE-SYLV`
+moves were renames; the four files from splitting `ReciprocalMultiplier` and
+`SpectralMeasure` were checked, and both splits documented their own seams.
+
+**Re-running:** `python3 scripts/audit_checklist.py` regenerates both checklists
+against the current tree and preserves every mark, so new files arrive
+unchecked. A file added after 2026-07-29 is *not* covered by this audit and the
+checklist will say so.
