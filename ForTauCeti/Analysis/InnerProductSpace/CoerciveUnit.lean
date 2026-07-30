@@ -251,6 +251,8 @@ theorem norm_one_sub_inverse_one_add {B : E →L[𝕜] E} (hB : IsSelfAdjoint B)
       _ = R * (N * star R) := by rw [mul_assoc]
       _ = R := by rw [h1, mul_one]
   have hCsa : IsSelfAdjoint (1 - R) := by
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change star (1 - R) = 1 - R
     rw [star_sub, star_one, hRsa]
   have hbs : ∀ y, RCLike.re ⟪B y, y⟫_𝕜 ≤ ‖B‖ * ‖y‖ ^ 2 := by

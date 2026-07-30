@@ -131,6 +131,7 @@ noncomputable def operatorNormIdealFamilyElemEquiv :
   map_add' A B := OperatorIdealFamily.Elem.val_add A B
   map_smul' c A := OperatorIdealFamily.Elem.val_smul c A
   norm_map' A := by
+    -- names the application so the norm bound applies to it directly.
     change ‖A.val‖ = ‖A‖
     rw [OperatorIdealFamily.Elem.norm_def, gauge_operatorNormIdealFamily, toReal_enorm]
 

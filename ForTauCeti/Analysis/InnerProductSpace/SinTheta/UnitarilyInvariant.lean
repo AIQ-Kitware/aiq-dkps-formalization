@@ -129,6 +129,8 @@ theorem apply_starProjection_comp_starProjection_le (N : UnitarilyInvariantNorm 
     ext x
     simp [hY, map_sub]
   have hYbound : N' Y ≤ N (S - T) := by
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change N (Y : E →ₗ[𝕜] E) ≤ N (S - T)
     rw [hYcoe]
     calc N ((P : E →ₗ[𝕜] E) ∘ₗ ((T - S) ∘ₗ (Q : E →ₗ[𝕜] E)))
