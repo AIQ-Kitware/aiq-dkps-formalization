@@ -43,7 +43,7 @@ review.
   did; it imports only Mathlib and the sibling `Basic` staging module.
 -/
 
-@[expose] public section
+public section
 
 noncomputable section
 

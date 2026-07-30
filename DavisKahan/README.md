@@ -2,6 +2,72 @@
 
 This is the canonical Davis--Kahan library root.
 
+## Headline finding: Proposition 4.4 of the published paper is false
+
+**Davis--Kahan (1970), Proposition 4.4 is not a theorem, and this library
+machine-checks the refutation.** The claim, as transcribed, is:
+
+> over a real space, if every principal angle is at most `π/3`, then the direct
+> rotation minimizes every unitarily invariant norm of the full displacement
+> `I - W` over unitaries `W` carrying `U` onto `V`.
+
+It fails already for the trace norm in `ℝ⁴`.
+
+**The witness is explicit and small.** Take `U = span{e₀, e₁}` and the
+orthogonal competitor `W = ½·H` with
+
+```
+H = !![ 1,-1,-1,-1;  1, 1, 1,-1; -1,-1, 1,-1;  1,-1, 1, 1]
+```
+
+and `V = W(U)`. Both principal angles are `π/4 ≤ π/3` and the pair is acute, so
+the hypothesis holds. `W` restricted to `M = span{(e₀+e₂)/√2, (e₁+e₃)/√2}` is a
+rotation by `π/2` fixing `Mᗮ` pointwise, so `σ(I-W) = (√2, √2, 0, 0)` and the
+trace norm is `2√2` — strictly smaller than the direct rotation's. The
+conclusion therefore fails under the stated hypothesis.
+
+| what | where |
+|---|---|
+| the configuration and the refutation | [`FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean`](FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean) |
+| the source claim, stated as written | `DavisKahanProposition4_4_Finite` |
+| the refutation | `not_davisKahanProposition4_4_Finite` |
+| the norm-agnostic form | `shortRotation_fullDisplacement_refuted` |
+
+**On universes, because the statement is polymorphic.** Lean cannot quantify
+over universes, so `¬ P.{0}` is the strongest available refutation of a
+universe-polymorphic `P` — and it suffices: a polymorphic `P` holds only if it
+holds at every universe, so refuting it at universe `0` refutes it outright. The
+witness `EuclideanSpace ℝ (Fin 4)` lives there.
+
+**What replaces it.** Two nearby statements *are* true and are the endpoints to
+reach for instead:
+
+- `uiNorm_restrictedDisplacement_le` — the **restricted** displacement, with no
+  angle hypothesis at all;
+- `directRotation_displacementSquare_uiNorm` — the displacement **square**.
+
+The failure is specific: it is the *full* displacement under a *largest-angle*
+hypothesis that does not hold, not the direct rotation's optimality in general.
+
+### Why this is first class, and why abandoned internal work is not
+
+**jon, 2026-07-30.** A refuted claim in a *published paper* is a contribution:
+it is a correction to the literature, it is what a reader most needs to know
+before trusting the source, and it is why the counterexample, the explanation of
+the failure, and the corrected endpoints all live in the production library
+rather than in a footnote.
+
+That is the opposite of an approach *we* tried and abandoned. Those are
+sequestered into `FailedAttempts` (lane `DK-FAILED`) precisely because they
+teach a reader nothing about the mathematics — only about our route to it.
+
+**This material is deliberately not `ForTauCeti`-bound.** It is paper-specific
+refutation, not reusable general mathematics, so it stays here. `AGENTS.md`
+carries the general rule — *a source claim shown false is completed by a
+machine-checked counterexample, an explanation of the failure, and a corrected
+theorem when one is justified* — and this is its flagship instance. **Do not
+restore Proposition 4.4 as a theorem.**
+
 ## Project mission
 
 The default target is the full Hilbert-space theory of Davis--Kahan (1970), not
