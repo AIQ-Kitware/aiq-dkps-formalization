@@ -428,7 +428,11 @@ noncomputable def cayley {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) : E →L[
   1 - (2 * Complex.I) • resolvent A (negI_mem_resolventSet hA)
 
 /-- On a vector, `U ξ = (A + i) R(-i) ξ - 2i R(-i) ξ`, i.e. `(A - i)` applied to
-the preimage of `ξ` under `A + i`. -/
+the preimage of `ξ` under `A + i`.
+
+Deliberately **not** `@[simp]` (lane RUB-DEFSIMP, 2026-07-30): it rewrites the Cayley
+transform into a resolvent expression, which is not a normal form — downstream proofs
+work with `cayley` folded and unfold it by name where they mean to. -/
 theorem cayley_apply {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ : E) :
     cayley hA ξ
       = A ⟨resolvent A (negI_mem_resolventSet hA) ξ,
@@ -446,6 +450,7 @@ theorem cayley_apply {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ : E) :
 
 /-- **The Cayley transform is isometric.**  Both `‖(A - i)x‖²` and `‖(A + i)x‖²`
 equal `‖Ax‖² + ‖x‖²`, by the exact norm identity. -/
+@[simp]
 theorem norm_cayley_apply {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ : E) :
     ‖cayley hA ξ‖ = ‖ξ‖ := by
   have hsym : A.IsFormalAdjoint A := by

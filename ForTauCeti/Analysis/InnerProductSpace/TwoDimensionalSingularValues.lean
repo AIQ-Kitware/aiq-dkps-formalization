@@ -111,7 +111,7 @@ theorem singularValues_eq_abs_pair_of_isSymmetric_sq
   rw [OrthonormalBasis.coe_toBasis]
   -- the diagonal entry only reduces once the index is split
   fin_cases i <;>
-    simp [LinearMap.smul_apply, LinearMap.id_apply, diagOp_apply_basis, sq_abs]
+    simp [LinearMap.smul_apply, LinearMap.id_apply, sq_abs]
 
 
 /-- In positive finite dimension, the operator norm is the largest singular
