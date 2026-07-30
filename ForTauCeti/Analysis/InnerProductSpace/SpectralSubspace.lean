@@ -27,7 +27,6 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -291,5 +290,4 @@ theorem spectralSubspace_eq_span_eigenvectors (A : E →ₗ[𝕜] E)
   rfl
 
 
-end DavisKahanTheory
 end TauCeti
