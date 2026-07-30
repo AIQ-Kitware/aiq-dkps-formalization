@@ -50,7 +50,7 @@ Davis--Kahan spectral flow needs.
   reformulation.  See `dev/tauceti/spectra-removal-plan.md`.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 
@@ -116,8 +116,7 @@ noncomputable def genDiffQuot (U : OneParameterUnitaryGroup (H := H)) (ψ : H) :
 
 /-- The difference quotient, unfolded. -/
 @[simp] lemma genDiffQuot_apply (U : OneParameterUnitaryGroup (H := H)) (ψ : H) (t : ℝ) :
-    genDiffQuot U ψ t = ((I * (t : ℂ))⁻¹) • (U.U t ψ - ψ) := rfl
-
+    genDiffQuot U ψ t = ((I * (t : ℂ))⁻¹) • (U.U t ψ - ψ) := (rfl)
 /-- The difference quotient of the zero vector is identically zero. -/
 @[simp] lemma genDiffQuot_zero (U : OneParameterUnitaryGroup (H := H)) :
     genDiffQuot U (0 : H) = fun _ => 0 := by
@@ -141,6 +140,12 @@ lemma genDiffQuot_smul (U : OneParameterUnitaryGroup (H := H)) (c : ℂ) (a : H)
 /-! ### The domain and the generator -/
 
 /-- The set of vectors at which the generator limit exists, as a `ℂ`-submodule. -/
+-- `@[expose]` on this pair is deliberate and minimal. Consumers write `⟨x, hx⟩` for
+-- elements of `(generator U).domain`, which typechecks only if the `domain` field
+-- reduces to `generatorDomain U`; and `generator`'s own body projects `.choose` out of
+-- that membership, so exposing one without the other does not elaborate. This is the
+-- `api-design` carve-out for a consumer that must unfold, not blanket exposure.
+@[expose]
 def generatorDomain (U : OneParameterUnitaryGroup (H := H)) : Submodule ℂ H where
   carrier := {ψ | ∃ η, Tendsto (genDiffQuot U ψ) (𝓝[≠] 0) (𝓝 η)}
   add_mem' := by
@@ -154,11 +159,16 @@ def generatorDomain (U : OneParameterUnitaryGroup (H := H)) : Submodule ℂ H wh
 /-- Membership in the generator's domain is exactly convergence of the difference quotient -- the
 definition, stated so call sites need not unfold it. -/
 @[simp] lemma mem_generatorDomain {U : OneParameterUnitaryGroup (H := H)} {ψ : H} :
-    ψ ∈ generatorDomain U ↔ ∃ η, Tendsto (genDiffQuot U ψ) (𝓝[≠] 0) (𝓝 η) := Iff.rfl
-
+    ψ ∈ generatorDomain U ↔ ∃ η, Tendsto (genDiffQuot U ψ) (𝓝[≠] 0) (𝓝 η) := (Iff.rfl)
 /-- The infinitesimal generator as a (generally unbounded) partial linear operator.
 The value at `ψ` is the limit of the difference quotient; linearity is forced by
 uniqueness of limits in the Hausdorff space `H`. -/
+-- `@[expose]` on this pair is deliberate and minimal. Consumers write `⟨x, hx⟩` for
+-- elements of `(generator U).domain`, which typechecks only if the `domain` field
+-- reduces to `generatorDomain U`; and `generator`'s own body projects `.choose` out of
+-- that membership, so exposing one without the other does not elaborate. This is the
+-- `api-design` carve-out for a consumer that must unfold, not blanket exposure.
+@[expose]
 noncomputable def generator (U : OneParameterUnitaryGroup (H := H)) : H →ₗ.[ℂ] H where
   domain := generatorDomain U
   toFun :=
@@ -180,8 +190,7 @@ noncomputable def generator (U : OneParameterUnitaryGroup (H := H)) : H →ₗ.[
 
 /-- The generator's domain, unfolded. -/
 @[simp] lemma generator_domain (U : OneParameterUnitaryGroup (H := H)) :
-    (generator U).domain = generatorDomain U := rfl
-
+    (generator U).domain = generatorDomain U := (rfl)
 /-- The defining property: the generator is the limit of the difference quotient. -/
 lemma generator_tendsto (U : OneParameterUnitaryGroup (H := H)) (x : (generator U).domain) :
     Tendsto (genDiffQuot U (x : H)) (𝓝[≠] 0) (𝓝 (generator U x)) :=
@@ -278,7 +287,7 @@ lemma isSelfAdjoint_of_surjective_addSub
   have hxeq : A.adjoint (⟨(x : H), hxin⟩ : (A.adjoint).domain) = A x :=
     ((hsym.le_adjoint hdense).2 (x := x) (y := ⟨(x : H), hxin⟩) rfl).symm
   set W' : (A.adjoint).domain := W - ⟨(x : H), hxin⟩ with hW'def
-  have hW'val : (W' : H) = (W : H) - (x : H) := rfl
+  have hW'val : (W' : H) = (W : H) - (x : H) := (rfl)
   have hrearr : A.adjoint W - A x = I • (W : H) - I • (x : H) := by
     have h2 : A.adjoint W = A x - I • (x : H) + I • (W : H) := by rw [hx]; abel
     rw [h2]; abel
@@ -306,8 +315,7 @@ def reversedGroup (U : OneParameterUnitaryGroup (H := H)) : OneParameterUnitaryG
 
 /-- The reversed group runs the flow backwards: `U(-t)`. -/
 @[simp] lemma reversedGroup_apply (U : OneParameterUnitaryGroup (H := H)) (t : ℝ) :
-    (reversedGroup U).U t = U.U (-t) := rfl
-
+    (reversedGroup U).U t = U.U (-t) := (rfl)
 /-- The reversed group's difference quotient is the negated, time-reversed original:
 `genDiffQuot (reversedGroup U) ψ t = - genDiffQuot U ψ (-t)`. -/
 lemma genDiffQuot_reversedGroup (U : OneParameterUnitaryGroup (H := H)) (ψ : H) (t : ℝ) :
