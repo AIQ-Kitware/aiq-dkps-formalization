@@ -67,7 +67,7 @@ review is exactly a review of a future submission unit.
 - [ ] `FinishTanTwoTheta/FinishTanTwoTheta` — 21 files, 6,726 lines — **blocked (0/21 files)**
 - [ ] `FinishYuWangSamworth` — 1 files, 17 lines — **blocked (0/1 files)**
 - [ ] `FinishYuWangSamworth/FinishYuWangSamworth` — 11 files, 1,214 lines — **blocked (0/11 files)**
-- [ ] `ForTauCeti :: T01 Positive square root, operator modulus, functional calculus` — 9 files, 1,643 lines — **blocked (0/9 files)**
+- [ ] `ForTauCeti :: T01 Positive square root, operator modulus, functional calculus` — 9 files, 1,643 lines — **blocked (2/9 files)**
 - [ ] `ForTauCeti :: T02 Polar decomposition and partial isometries` — 5 files, 1,961 lines — **blocked (0/5 files)**
 - [ ] `ForTauCeti :: T03 Singular values and the singular system` — 4 files, 1,104 lines — **blocked (0/4 files)**
 - [ ] `ForTauCeti :: T04 Gram matrices, orthogonal projections, and spectral subspaces` — 8 files, 1,479 lines — **blocked (0/8 files)**
