@@ -4,6 +4,5 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.TauCeti.ClosedOperator
-import DavisKahan.Interop.TauCeti.RectangularFamilyAdapter
 
 /-! # `DavisKahan/Interop/TauCeti` -/
