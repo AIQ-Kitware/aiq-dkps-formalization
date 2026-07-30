@@ -35,7 +35,7 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 namespace TauCeti
 
 open TauCeti
-namespace DavisKahanTheory
+open DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 
@@ -178,5 +178,4 @@ theorem norm_shift_lower_of_spectrumOutside
   rw [← sq_le_sq₀ (mul_nonneg hk (norm_nonneg x)) (norm_nonneg (S x))]
   simpa [mul_pow] using hsq
 
-end DavisKahanTheory
 end TauCeti

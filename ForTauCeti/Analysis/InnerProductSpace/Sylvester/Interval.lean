@@ -39,7 +39,6 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 namespace TauCeti
 
 open TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 
@@ -518,5 +517,4 @@ theorem uiNorm_sylvester_le_of_form_bounds
     δ * N X ≤ N C := by
   exact uiNorm_sylvester_le_of_form_bounds_aux N hA hB hδ hAform hBform hEq
 
-end DavisKahanTheory
 end TauCeti
