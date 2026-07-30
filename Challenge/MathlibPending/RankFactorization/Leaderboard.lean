@@ -3,4 +3,4 @@
 -/
 import ForTauCeti.LinearAlgebra.Matrix.RankFactorization
 
-#print axioms ForMathlib.Matrix.rank_le_iff_exists_eq_mul
+#print axioms TauCeti.Matrix.rank_le_iff_exists_eq_mul

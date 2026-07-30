@@ -3,7 +3,7 @@
   "solution_module": "Challenge.MathlibPending.RankPsdRealization.Leaderboard",
   "theorem_names": [
     "TauCeti.Matrix.PosSemidef.eigenvalues\u2080_eq_zero_of_rank_le",
-    "ForMathlib.Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self"
+    "TauCeti.Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self"
   ],
   "permitted_axioms": [
     "propext",

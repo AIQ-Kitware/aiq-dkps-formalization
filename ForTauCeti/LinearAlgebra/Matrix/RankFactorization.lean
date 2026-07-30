@@ -25,11 +25,11 @@ column of `M` in that basis.
 
 ## Main results
 
-* `ForMathlib.Matrix.exists_eq_mul_rank`: the exact rank factorization, inner
+* `TauCeti.Matrix.exists_eq_mul_rank`: the exact rank factorization, inner
   dimension `Fin M.rank`.
-* `ForMathlib.Matrix.exists_eq_mul_of_rank_le`: zero-padded to `Fin r` for any
+* `TauCeti.Matrix.exists_eq_mul_of_rank_le`: zero-padded to `Fin r` for any
   `M.rank ≤ r`.
-* `ForMathlib.Matrix.rank_le_iff_exists_eq_mul`: the characterization
+* `TauCeti.Matrix.rank_le_iff_exists_eq_mul`: the characterization
   `M.rank ≤ r ↔ ∃ L R, M = L * R`.
 
 ## Staging note
@@ -47,7 +47,7 @@ below: it is in their type and never used, and the linter's advice is to drop it
 same three signatures are pinned as **data**: `Challenge/MathlibPending/RankFactorization/`
 restates them in an immutable `Conformance.lean` — with the identical
 `variable {𝕜 m n : Type*} [Field 𝕜] [Fintype n] [DecidableEq n]` line — and
-`Leaderboard.lean` names `ForMathlib.Matrix.rank_le_iff_exists_eq_mul` in `#print axioms`.
+`Leaderboard.lean` names `TauCeti.Matrix.rank_le_iff_exists_eq_mul` in `#print axioms`.
 Dropping the instance here would change the signature and desynchronise the two, and
 `AGENTS.md` makes a `Conformance.lean` statement immutable, so it cannot move to meet us.
 
@@ -66,14 +66,15 @@ had accumulated unnoticed in the modules the target was not even building.
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
   `7bc63b8`; it has had no prior home.
-* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
-  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
-  areas.
+* Extraction class: **authored in place**. Upstream target is Mathlib; the module
+  is staged here because `ForMathlib` was retired on 2026-07-29 and `ForTauCeti`
+  is now the single staging library — see `ForTauCeti/README.md`.
 * Intended Mathlib home: additions to `Mathlib/LinearAlgebra/Matrix/Rank.
 * Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — the `ForMathlib` import firewall admits only
-  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
+* Spectra influence: **none** — the `ForTauCeti` import firewall admits only
+  Mathlib, `TauCeti` and `ForTauCeti` (rule 2 of
+  `scripts/check_dependency_layers.py`); this module imports Mathlib only.
 
 ## Provenance
 
@@ -82,18 +83,25 @@ until 2026-07-29, when lane FM-RETIRE retired `ForMathlib` entirely: its four
 surviving modules moved here and the library, its root module and its directory
 were deleted.  Statements, proofs and signatures are unchanged.
 
-**The declarations deliberately keep their `ForMathlib` namespace**, which is
-the one thing this move could not fix.  `Challenge/**/Conformance.lean` files
-are *immutable challenge statements* (`AGENTS.md`), and the ones paired with
-this module name their leaf theorems inside `ForMathlib` / `ForMathlib.Matrix`;
-the comparator matches implementation to statement by fully-qualified name.
-Renaming the namespace would orphan those pins.  Re-issuing the immutable
-statements under `TauCeti.*` names is a decision, not a task — until it is
-taken, these names stay and this note records why.
+**FM-RETIRE was worked twice, and the two versions disagreed on the namespace.**
+The `main` version (`c85510d6`) kept `namespace ForMathlib.Matrix` here, reasoning
+that `Challenge/**/Conformance.lean` is immutable so its `ForMathlib.*` pins could
+not be re-issued.  Reconciled on merge in favour of `TauCeti.Matrix`; the rationale
+and the list of pins updated to match is recorded once, in
+`ForTauCeti/Topology/Berge.lean`.
 
 -/
 
-namespace ForMathlib.Matrix
+/-!
+### Provenance
+
+Moved from `ForMathlib/LinearAlgebra/Matrix/` to `ForTauCeti/LinearAlgebra/Matrix/`
+on 2026-07-29 by lane FM-RETIRE, which finishes the `ForMathlib` retirement.  The
+namespace changed from `ForMathlib.Matrix` to `TauCeti.Matrix` to match the
+destination package; declaration names, statements and proofs are unchanged.
+-/
+
+namespace TauCeti.Matrix
 
 open Module (finrank)
 open _root_.Matrix
@@ -179,4 +187,4 @@ theorem rank_le_iff_exists_eq_mul (M : Matrix m n 𝕜) (r : ℕ) :
     _ ≤ Fintype.card (Fin r) := L.rank_le_card_width
     _ = r := Fintype.card_fin r
 
-end ForMathlib.Matrix
+end TauCeti.Matrix

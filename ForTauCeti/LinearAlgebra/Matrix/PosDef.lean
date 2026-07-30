@@ -21,7 +21,7 @@ The factorization is assembled from two reusable pieces:
 * the **square** factorization `B = Aᴴ * A` with `A` square, built spectrally
   (`A = √D · Uᴴ` for the spectral decomposition `B = U D Uᴴ`); and
 * the **rank factorization** `A = L * R` through `Fin d`
-  (`ForMathlib.Matrix.exists_eq_mul_of_rank_le`), which compresses the inner
+  (`TauCeti.Matrix.exists_eq_mul_of_rank_le`), which compresses the inner
   dimension.
 
 A second application of the square factorization to `Lᴴ * L` then yields the
@@ -31,11 +31,11 @@ rank-controlled Gram factor `(S * R)ᴴ * (S * R)`.  The reverse direction is
 
 ## Main results
 
-* `ForMathlib.Matrix.PosSemidef.exists_eq_conjTranspose_mul_self`: the square
+* `TauCeti.Matrix.PosSemidef.exists_eq_conjTranspose_mul_self`: the square
   factorization `B = Aᴴ * A` of a PSD matrix (spectral construction).
-* `ForMathlib.Matrix.PosSemidef.exists_conjTranspose_mul_self_of_rank_le`: the
+* `TauCeti.Matrix.PosSemidef.exists_conjTranspose_mul_self_of_rank_le`: the
   rank-controlled factorization, `A` of size `d × n` for any `rank B ≤ d`.
-* `ForMathlib.Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self`:
+* `TauCeti.Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self`:
   the iff characterization, over `RCLike 𝕜`.
 
 ## References
@@ -56,14 +56,15 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
   `e9379f2`; it has had no prior home.
-* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
-  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
-  areas.
+* Extraction class: **authored in place**. Upstream target is Mathlib; the module
+  is staged here because `ForMathlib` was retired on 2026-07-29 and `ForTauCeti`
+  is now the single staging library — see `ForTauCeti/README.md`.
 * Intended Mathlib home: additions to `Mathlib/LinearAlgebra/Matrix/PosDef.
 * Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — the `ForMathlib` import firewall admits only
-  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
+* Spectra influence: **none** — the `ForTauCeti` import firewall admits only
+  Mathlib, `TauCeti` and `ForTauCeti` (rule 2 of
+  `scripts/check_dependency_layers.py`); this module imports Mathlib only.
 
 ## Provenance
 
@@ -72,18 +73,25 @@ until 2026-07-29, when lane FM-RETIRE retired `ForMathlib` entirely: its four
 surviving modules moved here and the library, its root module and its directory
 were deleted.  Statements, proofs and signatures are unchanged.
 
-**The declarations deliberately keep their `ForMathlib` namespace**, which is
-the one thing this move could not fix.  `Challenge/**/Conformance.lean` files
-are *immutable challenge statements* (`AGENTS.md`), and the ones paired with
-this module name their leaf theorems inside `ForMathlib` / `ForMathlib.Matrix`;
-the comparator matches implementation to statement by fully-qualified name.
-Renaming the namespace would orphan those pins.  Re-issuing the immutable
-statements under `TauCeti.*` names is a decision, not a task — until it is
-taken, these names stay and this note records why.
+**FM-RETIRE was worked twice, and the two versions disagreed on the namespace.**
+The `main` version (`c85510d6`) kept `namespace ForMathlib.Matrix` here, reasoning
+that `Challenge/**/Conformance.lean` is immutable so its `ForMathlib.*` pins could
+not be re-issued.  Reconciled on merge in favour of `TauCeti.Matrix`; the rationale
+and the list of pins updated to match is recorded once, in
+`ForTauCeti/Topology/Berge.lean`.
 
 -/
 
-namespace ForMathlib.Matrix
+/-!
+### Provenance
+
+Moved from `ForMathlib/LinearAlgebra/Matrix/` to `ForTauCeti/LinearAlgebra/Matrix/`
+on 2026-07-29 by lane FM-RETIRE, which finishes the `ForMathlib` retirement.  The
+namespace changed from `ForMathlib.Matrix` to `TauCeti.Matrix` to match the
+destination package; declaration names, statements and proofs are unchanged.
+-/
+
+namespace TauCeti.Matrix
 
 open scoped BigOperators Matrix ComplexConjugate ComplexOrder
 open _root_.Matrix
@@ -199,4 +207,4 @@ theorem posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self
   rw [rank_conjTranspose_mul_self]
   exact A.rank_le_height
 
-end ForMathlib.Matrix
+end TauCeti.Matrix
