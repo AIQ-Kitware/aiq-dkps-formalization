@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-34/1163 files reviewed · 1163 files · 260,584 lines · 112 groups
+165/1164 files reviewed · 1164 files · 260,708 lines · 112 groups
 
 ## How to review
 
@@ -95,9 +95,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### .llm_resource_tally :: data/config
 
-*3 files, 939 lines — 0/3 reviewed*
+*3 files, 940 lines — 0/3 reviewed*
 
-- [ ] `.llm_resource_tally/ledger/ledger.jsonl` — 886 lines · data/config
+- [ ] `.llm_resource_tally/ledger/ledger.jsonl` — 887 lines · data/config
 - [ ] `.llm_resource_tally/lifetime-totals.json` — 46 lines · data/config
 - [ ] `.llm_resource_tally/settings.json` — 7 lines · data/config
 
@@ -1091,26 +1091,26 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T04 Gram matrices, orthogonal projections, and spectral subspaces
 
-*8 files, 1,479 lines — 0/8 reviewed*
+*8 files, 1,479 lines — 8/8 reviewed*
 
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SpectralSubspace.lean` — 287 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/ProjectionGap.lean` — 255 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/GramMatrix.lean` — 223 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/ProjectionGeometry.lean` — 200 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/OrthogonalSeries.lean` — 142 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/ProjectionBlocks.lean` — 137 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SpectralGap.lean` — 124 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/ReducingSubspace.lean` — 111 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SpectralSubspace.lean` — 287 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/ProjectionGap.lean` — 255 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/GramMatrix.lean` — 223 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/ProjectionGeometry.lean` — 200 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/OrthogonalSeries.lean` — 142 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/ProjectionBlocks.lean` — 137 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SpectralGap.lean` — 124 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/ReducingSubspace.lean` — 111 lines · Lean source
 
 ### ForTauCeti :: T05 Majorization, Schur-Horn, and unitarily invariant norms
 
-*5 files, 2,531 lines — 0/5 reviewed*
+*5 files, 2,531 lines — 5/5 reviewed*
 
-- [ ] `ForTauCeti/Analysis/Convex/Majorization.lean` — 710 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean` — 620 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/KyFan.lean` — 539 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SingularSubspace.lean` — 464 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SchurHorn.lean` — 198 lines · Lean source
+- [x] `ForTauCeti/Analysis/Convex/Majorization.lean` — 710 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean` — 620 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/KyFan.lean` — 539 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SingularSubspace.lean` — 464 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SchurHorn.lean` — 198 lines · Lean source
 
 ### ForTauCeti :: T06 Principal angles, aligned bases, and finite frames
 
@@ -1122,54 +1122,54 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T07 Rectangular unitarily invariant norms
 
-*6 files, 2,359 lines — 0/6 reviewed*
+*6 files, 2,359 lines — 6/6 reviewed*
 
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm/Instances.lean` — 576 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm/Majorization.lean` — 540 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm/Basic.lean` — 463 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm/BlockSum.lean` — 413 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/TwoDimensionalSingularValues.lean` — 334 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm.lean` — 33 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm/Instances.lean` — 576 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm/Majorization.lean` — 540 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm/Basic.lean` — 463 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm/BlockSum.lean` — 413 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/TwoDimensionalSingularValues.lean` — 334 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm.lean` — 33 lines · Lean source
 
 ### ForTauCeti :: T08 Angle geometry and eigenvalue perturbation
 
-*5 files, 1,482 lines — 0/5 reviewed*
+*5 files, 1,482 lines — 5/5 reviewed*
 
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/AngleGeometry.lean` — 403 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/EigenvalueChange.lean` — 377 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/FrameFactorization.lean` — 334 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/HoffmanWielandt.lean` — 229 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/GramOperator.lean` — 139 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/AngleGeometry.lean` — 403 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/EigenvalueChange.lean` — 377 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/FrameFactorization.lean` — 334 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/HoffmanWielandt.lean` — 229 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/GramOperator.lean` — 139 lines · Lean source
 
 ### ForTauCeti :: T09 Approximation numbers
 
-*11 files, 2,551 lines — 0/11 reviewed*
+*11 files, 2,551 lines — 11/11 reviewed*
 
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean` — 459 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFan.lean` — 451 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteDimensional.lean` — 334 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteRestriction.lean` — 234 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SpectralCutoff.lean` — 223 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMax.lean` — 211 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxUpper.lean` — 175 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/SameSequence.lean` — 146 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Adjoint.lean` — 135 lines · Lean source
-- [ ] `ForTauCeti/LinearAlgebra/Dimension/RankComp.lean` — 117 lines · Lean source
-- [ ] `ForTauCeti/SetTheory/Cardinal/Lift.lean` — 66 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean` — 459 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFan.lean` — 451 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteDimensional.lean` — 334 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteRestriction.lean` — 234 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SpectralCutoff.lean` — 223 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMax.lean` — 211 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxUpper.lean` — 175 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/SameSequence.lean` — 146 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Adjoint.lean` — 135 lines · Lean source
+- [x] `ForTauCeti/LinearAlgebra/Dimension/RankComp.lean` — 117 lines · Lean source
+- [x] `ForTauCeti/SetTheory/Cardinal/Lift.lean` — 66 lines · Lean source
 
 ### ForTauCeti :: T10 Symmetric operator ideals and Schatten norms
 
-*9 files, 2,275 lines — 0/9 reviewed*
+*9 files, 2,275 lines — 9/9 reviewed*
 
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/Family/Basic.lean` — 456 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SchattenNorm.lean` — 385 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/Family/HilbertSchmidt.lean` — 285 lines · Lean source
-- [ ] `ForTauCeti/Analysis/Normed/FiniteLpGauge.lean` — 274 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtEnergy.lean` — 230 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/Family/TraceClass.lean` — 216 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/Family/OperatorNorm.lean` — 160 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/Family/KyFan.lean` — 146 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/Family/KyFanDominance.lean` — 123 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/Family/Basic.lean` — 456 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SchattenNorm.lean` — 385 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/Family/HilbertSchmidt.lean` — 285 lines · Lean source
+- [x] `ForTauCeti/Analysis/Normed/FiniteLpGauge.lean` — 274 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtEnergy.lean` — 230 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/Family/TraceClass.lean` — 216 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/Family/OperatorNorm.lean` — 160 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/Family/KyFan.lean` — 146 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/Family/KyFanDominance.lean` — 123 lines · Lean source
 
 ### ForTauCeti :: T11 Hilbert-Schmidt operators
 
@@ -1182,135 +1182,135 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T12 The Haagerup-Zsido kernel and its Fourier transform
 
-*8 files, 2,028 lines — 0/8 reviewed*
+*8 files, 2,028 lines — 8/8 reviewed*
 
-- [ ] `ForTauCeti/Analysis/SpecialFunctions/Integral/RationalQuadratic.lean` — 430 lines · Lean source
-- [ ] `ForTauCeti/Analysis/Fourier/Poisson/CauchyLattice.lean` — 355 lines · Lean source
-- [ ] `ForTauCeti/Analysis/Fourier/HaagerupZsido/Fourier.lean` — 304 lines · Lean source
-- [ ] `ForTauCeti/Analysis/SpecialFunctions/Integral/SineLaplace.lean` — 248 lines · Lean source
-- [ ] `ForTauCeti/Analysis/Fourier/ExponentialAbs.lean` — 247 lines · Lean source
-- [ ] `ForTauCeti/Analysis/Fourier/HaagerupZsido/Integrability.lean` — 213 lines · Lean source
-- [ ] `ForTauCeti/Analysis/Fourier/HaagerupZsido/Defs.lean` — 180 lines · Lean source
-- [ ] `ForTauCeti/Analysis/Fourier/HaagerupZsidoKernel.lean` — 51 lines · Lean source
+- [x] `ForTauCeti/Analysis/SpecialFunctions/Integral/RationalQuadratic.lean` — 430 lines · Lean source
+- [x] `ForTauCeti/Analysis/Fourier/Poisson/CauchyLattice.lean` — 355 lines · Lean source
+- [x] `ForTauCeti/Analysis/Fourier/HaagerupZsido/Fourier.lean` — 304 lines · Lean source
+- [x] `ForTauCeti/Analysis/SpecialFunctions/Integral/SineLaplace.lean` — 248 lines · Lean source
+- [x] `ForTauCeti/Analysis/Fourier/ExponentialAbs.lean` — 247 lines · Lean source
+- [x] `ForTauCeti/Analysis/Fourier/HaagerupZsido/Integrability.lean` — 213 lines · Lean source
+- [x] `ForTauCeti/Analysis/Fourier/HaagerupZsido/Defs.lean` — 180 lines · Lean source
+- [x] `ForTauCeti/Analysis/Fourier/HaagerupZsidoKernel.lean` — 51 lines · Lean source
 
 ### ForTauCeti :: T13 One-parameter unitary groups and Stone's theorem
 
-*6 files, 1,497 lines — 0/6 reviewed*
+*6 files, 1,497 lines — 6/6 reviewed*
 
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/IntertwiningUnitary.lean` — 438 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/OneParameterUnitaryGroup/Basic.lean` — 321 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/OneParameterUnitaryGroup/Stone.lean` — 306 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SkewAdjointExponential.lean` — 215 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/OneParameterUnitaryGroup/SemigroupBridge.lean` — 147 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/OneParameterUnitaryGroup/Commutant.lean` — 70 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/IntertwiningUnitary.lean` — 438 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/OneParameterUnitaryGroup/Basic.lean` — 321 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/OneParameterUnitaryGroup/Stone.lean` — 306 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SkewAdjointExponential.lean` — 215 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/OneParameterUnitaryGroup/SemigroupBridge.lean` — 147 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/OneParameterUnitaryGroup/Commutant.lean` — 70 lines · Lean source
 
 ### ForTauCeti :: T14 Borel functional calculus and projection-valued measures
 
-*10 files, 2,509 lines — 0/10 reviewed*
+*10 files, 2,509 lines — 10/10 reviewed*
 
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Multiplicative.lean` — 469 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Operator.lean` — 406 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/PVM.lean` — 295 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Polarization.lean` — 258 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/ProjValMeasure/Basic.lean` — 257 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean` — 244 lines · Lean source
-- [ ] `ForTauCeti/MeasureTheory/CompactExists.lean` — 200 lines · Lean source
-- [ ] `ForTauCeti/MeasureTheory/HellySelection.lean` — 169 lines · Lean source
-- [ ] `ForTauCeti/MeasureTheory/CfcMeasurable.lean` — 140 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/ProjValMeasure/Additivity.lean` — 71 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Multiplicative.lean` — 469 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Operator.lean` — 406 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/PVM.lean` — 295 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Polarization.lean` — 258 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/ProjValMeasure/Basic.lean` — 257 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean` — 244 lines · Lean source
+- [x] `ForTauCeti/MeasureTheory/CompactExists.lean` — 200 lines · Lean source
+- [x] `ForTauCeti/MeasureTheory/HellySelection.lean` — 169 lines · Lean source
+- [x] `ForTauCeti/MeasureTheory/CfcMeasurable.lean` — 140 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/ProjValMeasure/Additivity.lean` — 71 lines · Lean source
 
 ### ForTauCeti :: T15 Unbounded self-adjoint operators on LinearPMap
 
-*24 files, 6,852 lines — 0/24 reviewed*
+*24 files, 6,852 lines — 24/24 reviewed*
 
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure.lean` — 1,243 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean` — 964 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/YosidaApproximation.lean` — 822 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SelfAdjointResolvent.lean` — 535 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralGapInverse.lean` — 307 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Constructions.lean` — 281 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SeparatedIntertwiner.lean` — 259 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/StoneUniqueness.lean` — 236 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/ResolventBound.lean` — 228 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Sylvester.lean` — 223 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralFormBounds.lean` — 222 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Resolvent.lean` — 201 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/RealLowerBound.lean` — 176 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/ResolventOpen.lean` — 174 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SpectralOrder/Complex.lean` — 163 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralSupport.lean` — 155 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralGrid.lean` — 138 lines · Lean source
-- [ ] `ForTauCeti/Analysis/CStarAlgebra/SelfAdjointGapInverse.lean` — 96 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/GraphCore.lean` — 96 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralProjectionGroup.lean` — 83 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SelfAdjointMaximal.lean` — 70 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralCutOperator.lean` — 70 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/BlockLowerBound.lean` — 60 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/QuadraticFormBounds.lean` — 50 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure.lean` — 1,243 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean` — 964 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/YosidaApproximation.lean` — 822 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SelfAdjointResolvent.lean` — 535 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralGapInverse.lean` — 307 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Constructions.lean` — 281 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SeparatedIntertwiner.lean` — 259 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/StoneUniqueness.lean` — 236 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/ResolventBound.lean` — 228 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Sylvester.lean` — 223 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralFormBounds.lean` — 222 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Resolvent.lean` — 201 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/RealLowerBound.lean` — 176 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/ResolventOpen.lean` — 174 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SpectralOrder/Complex.lean` — 163 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralSupport.lean` — 155 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralGrid.lean` — 138 lines · Lean source
+- [x] `ForTauCeti/Analysis/CStarAlgebra/SelfAdjointGapInverse.lean` — 96 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/GraphCore.lean` — 96 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralProjectionGroup.lean` — 83 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SelfAdjointMaximal.lean` — 70 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralCutOperator.lean` — 70 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/BlockLowerBound.lean` — 60 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/QuadraticFormBounds.lean` — 50 lines · Lean source
 
 ### ForTauCeti :: T16 Sylvester equations and the Rosenblum theorem
 
-*15 files, 7,092 lines — 0/15 reviewed*
+*15 files, 7,092 lines — 15/15 reviewed*
 
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Internal/ReciprocalMultiplier.lean` — 2,887 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SylvesterBound.lean` — 703 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Interval.lean` — 515 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/SpectralDistance.lean` — 485 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SylvesterGroup.lean` — 396 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/Rosenblum.lean` — 394 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean` — 345 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SylvesterSpectralGap.lean` — 297 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SylvesterGenerator.lean` — 195 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Basic.lean` — 191 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtBlock.lean` — 190 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Internal/SpectralBounds.lean` — 178 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SylvesterBlockIdentity.lean` — 137 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SylvesterBlockEstimate.lean` — 109 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SylvesterOperator.lean` — 70 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Internal/ReciprocalMultiplier.lean` — 2,887 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SylvesterBound.lean` — 703 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Interval.lean` — 515 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/SpectralDistance.lean` — 485 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SylvesterGroup.lean` — 396 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/Rosenblum.lean` — 394 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean` — 345 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SylvesterSpectralGap.lean` — 297 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SylvesterGenerator.lean` — 195 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Basic.lean` — 191 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtBlock.lean` — 190 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Internal/SpectralBounds.lean` — 178 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SylvesterBlockIdentity.lean` — 137 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SylvesterBlockEstimate.lean` — 109 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SylvesterOperator.lean` — 70 lines · Lean source
 
 ### ForTauCeti :: T17 Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems
 
-*10 files, 3,345 lines — 0/10 reviewed*
+*10 files, 3,345 lines — 10/10 reviewed*
 
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean` — 1,111 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/Vector.lean` — 431 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SinTheta/OperatorNorm.lean` — 419 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/Residual/AngleEmbedding.lean` — 397 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/Residual/Ritz.lean` — 252 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/SinTheta.lean` — 219 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/SinTheta/UnitarilyInvariant.lean` — 175 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/Basic.lean` — 152 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/Projector.lean` — 104 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/Residual/TrialMap.lean` — 85 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean` — 1,111 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/Vector.lean` — 431 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SinTheta/OperatorNorm.lean` — 419 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/Residual/AngleEmbedding.lean` — 397 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/Residual/Ritz.lean` — 252 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/SinTheta.lean` — 219 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SinTheta/UnitarilyInvariant.lean` — 175 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/Basic.lean` — 152 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/Projector.lean` — 104 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/Residual/TrialMap.lean` — 85 lines · Lean source
 
 ### ForTauCeti :: T18 The Yu-Wang-Samworth statistical variant
 
-*3 files, 1,079 lines — 0/3 reviewed*
+*3 files, 1,079 lines — 3/3 reviewed*
 
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean` — 563 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Residual.lean` — 283 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/SingularSubspace.lean` — 233 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean` — 563 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Residual.lean` — 283 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/SingularSubspace.lean` — 233 lines · Lean source
 
 ### ForTauCeti :: T19 Matrix spectra and spectral measurability
 
-*6 files, 898 lines — 0/6 reviewed*
+*6 files, 898 lines — 6/6 reviewed*
 
-- [ ] `ForTauCeti/Analysis/Matrix/SpectralFunctionMeasurable.lean` — 365 lines · Lean source
-- [ ] `ForTauCeti/Analysis/Matrix/EntrywiseOpNorm.lean` — 146 lines · Lean source
-- [ ] `ForTauCeti/MeasureTheory/Function/ConvergenceInMeasure.lean` — 128 lines · Lean source
-- [ ] `ForTauCeti/Analysis/Matrix/Spectrum.lean` — 124 lines · Lean source
-- [ ] `ForTauCeti/Analysis/Matrix/EntrywiseEigenvalue.lean` — 72 lines · Lean source
-- [ ] `ForTauCeti/MeasureTheory/Measure/Typeclasses/Probability.lean` — 63 lines · Lean source
+- [x] `ForTauCeti/Analysis/Matrix/SpectralFunctionMeasurable.lean` — 365 lines · Lean source
+- [x] `ForTauCeti/Analysis/Matrix/EntrywiseOpNorm.lean` — 146 lines · Lean source
+- [x] `ForTauCeti/MeasureTheory/Function/ConvergenceInMeasure.lean` — 128 lines · Lean source
+- [x] `ForTauCeti/Analysis/Matrix/Spectrum.lean` — 124 lines · Lean source
+- [x] `ForTauCeti/Analysis/Matrix/EntrywiseEigenvalue.lean` — 72 lines · Lean source
+- [x] `ForTauCeti/MeasureTheory/Measure/Typeclasses/Probability.lean` — 63 lines · Lean source
 
 ### ForTauCeti :: T20 Sample moments and matrix concentration
 
-*5 files, 886 lines — 0/5 reviewed*
+*5 files, 886 lines — 5/5 reviewed*
 
-- [ ] `ForTauCeti/Probability/Moments/SampleMean.lean` — 271 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/CenteredScatter.lean` — 260 lines · Lean source
-- [ ] `ForTauCeti/Probability/Moments/MatrixConcentration.lean` — 162 lines · Lean source
-- [ ] `ForTauCeti/Probability/Moments/SampleCovariance.lean` — 114 lines · Lean source
-- [ ] `ForTauCeti/Probability/Moments/Variance.lean` — 79 lines · Lean source
+- [x] `ForTauCeti/Probability/Moments/SampleMean.lean` — 271 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/CenteredScatter.lean` — 260 lines · Lean source
+- [x] `ForTauCeti/Probability/Moments/MatrixConcentration.lean` — 162 lines · Lean source
+- [x] `ForTauCeti/Probability/Moments/SampleCovariance.lean` — 114 lines · Lean source
+- [x] `ForTauCeti/Probability/Moments/Variance.lean` — 79 lines · Lean source
 
 ### ForTauCeti :: T21 Matrix rank factorization and positive semidefiniteness
 
@@ -1432,15 +1432,15 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*148 files, 35,304 lines — 0/148 reviewed*
+*149 files, 35,427 lines — 0/149 reviewed*
 
 - [ ] `dev/tauceti-signature-polish-todo.md` — 2,201 lines · documentation
-- [ ] `dev/audit/FILE-CHECKLIST.md` — 1,757 lines · documentation
+- [ ] `dev/audit/FILE-CHECKLIST.md` — 1,758 lines · documentation
 - [ ] `dev/davis-kahan-expert-completion-plan.md` — 1,589 lines · documentation
 - [ ] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation
 - [ ] `dev/tauceti/u1-linearpmap-migration.md` — 1,139 lines · documentation
 - [ ] `dev/tauceti/spectra-removal-plan.md` — 1,036 lines · documentation
-- [ ] `dev/LANES.md` — 977 lines · documentation
+- [ ] `dev/LANES.md` — 979 lines · documentation
 - [ ] `dev/lean-proof-engineering-lessons.md` — 907 lines · documentation
 - [ ] `dev/tauceti/NAMEK-STATUS.md` — 850 lines · documentation
 - [ ] `dev/tauceti/convergence-matrix.md` — 795 lines · documentation
@@ -1515,6 +1515,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `dev/topurge/dev/sylvester-analytic-frontier-closure-2026-07-23.md` — 123 lines · documentation
 - [ ] `dev/journals/comparator-statement-export-matching-2026-06-14.md` — 122 lines · documentation
 - [ ] `dev/overlays/pending-mathahead-rebased-53297a4-gpt56.md` — 122 lines · documentation
+- [ ] `dev/audit/review-ForTauCeti-T02-T03-T06-T11-T21-T22.md` — 120 lines · documentation
 - [ ] `dev/topurge/dev/handoff-2026-07-24-frontier.md` — 120 lines · documentation
 - [ ] `dev/tauceti/spectra-provenance-map.md` — 119 lines · documentation
 - [ ] `dev/overlays/lemma63-promotion-scratch-7f9f562-gpt56.md` — 116 lines · documentation
