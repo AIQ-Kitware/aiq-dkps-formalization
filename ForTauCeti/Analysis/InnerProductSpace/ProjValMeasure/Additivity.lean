@@ -23,6 +23,11 @@ companion take: a family that splits vector norms splits the Hilbert–Schmidt
 energy.  Spectral projections over a partition of the line are the instance the
 block argument for the Sylvester spectral gap uses.
 
+## Sources
+
+*Follows nothing in particular*: one identity of `ProjValMeasure/Basic.lean` restated in
+`ℝ≥0∞` so that countable additivity transfers with no summability bookkeeping.
+
 ## Provenance
 
 *New.*

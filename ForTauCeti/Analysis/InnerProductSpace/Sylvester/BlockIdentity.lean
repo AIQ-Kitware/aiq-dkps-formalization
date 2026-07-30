@@ -31,6 +31,12 @@ The one step that is not formal: `Z (B x) = Z (B (Q x))`, which holds because
 `Z = Z ∘ Q` and `Q` intertwines `B` (`specProjection_apply_domain`).  Without
 the intertwining the two sides differ by `Z ((1 - Q) B x)`, which is not small.
 
+## Sources
+
+The block form of the Sylvester operator, and its use to reduce a spectral-gap
+estimate to one block at a time, follow Bhatia--Davis--McIntosh; see
+`prose/distilled_literature/BhatiaDavisMcIntosh1983_spectral_subspaces_sylvester.tex`.
+
 ## Provenance
 
 *New.*

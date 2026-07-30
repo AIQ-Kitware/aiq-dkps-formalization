@@ -19,6 +19,15 @@ spectrum of a normal operator lives in `ℂ`; for a self-adjoint operator `κ` w
 be the real part, and for the Cayley transform of an unbounded self-adjoint
 operator it will be the inverse Cayley map.
 
+## Sources
+
+Applying a functional calculus to indicator functions to obtain a
+projection-valued measure is the standard route to the spectral theorem for a
+normal operator; see
+`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Polarization.lean` for the
+sources of the chain.  The relabelling parameter `κ` is this library's own, and is
+there so that the unbounded Cayley case is an instance rather than a special case.
+
 ## Provenance
 
 *New*; see `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean`.
