@@ -71,9 +71,13 @@ previously unprovable rather than merely unproved — an escaped `def` is an
 opaque term, so nothing about it can be established.
 
 The invertibility of the intertwiner and of its absolute value on acute pairs,
-the commutation of the absolute value with the projection, and the Halmos
-two-projection decomposition remain genuinely missing polar-campaign
-ingredients and stay isolated as leaf obligations.
+and the Halmos two-projection decomposition, remain genuinely missing
+polar-campaign ingredients and stay isolated as leaf obligations.
+
+The commutation of the absolute value with the projection was on that list
+until 2026-07-30 and did not belong there: it needs no polar decomposition and
+no invertibility, only that `S⋆S` commutes with `P_U` and that `|S|` is a
+functional calculus applied to `S⋆S`.  It is proved below.
 -/
 
 /-- The canonical intertwiner `S = P_V P_U + P_{Vᗮ} P_{Uᗮ}`. -/
@@ -133,15 +137,6 @@ theorem coe_canonicalAbsoluteValueUnit (U V : Submodule 𝕜 E)
       operatorAbsoluteValue (canonicalIntertwiner U V) :=
   sorry
 
-/-- **Leaf obligation.** The absolute value of the canonical intertwiner
-commutes with the source projection (via `S⋆S P = P S⋆S` and the functional
-calculus). -/
-theorem canonicalAbsoluteValue_commutes_projection (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    Commute (operatorAbsoluteValue (canonicalIntertwiner U V))
-      (projection U) :=
-  sorry
-
 omit [CompleteSpace E] [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
   [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
 /-- The canonical intertwiner carries the source projection to the target
@@ -168,6 +163,45 @@ theorem canonicalIntertwiner_intertwines (U V : Submodule 𝕜 E)
   simp only [projection, complementaryProjection] at *
   rw [hPP, hP'P, map_zero, add_zero, hQQ, hQQ']
   rw [add_zero]
+
+/-- **The absolute value of the canonical intertwiner commutes with the source
+projection.**
+
+The route is the one the leaf obligation this replaced already named: `S⋆S`
+commutes with `P_U`, and `|S|` is a functional calculus applied to `S⋆S`, so it
+inherits the commutation.
+
+The first half is four rewrites of the intertwining relation `S P_U = P_V S`
+(`canonicalIntertwiner_intertwines`) and its adjoint `P_U S⋆ = S⋆ P_V`:
+`S⋆S P_U = S⋆ P_V S = P_U S⋆S`.  The second is `Commute.cfcₙ_nnreal`, since
+`CFC.abs a` is by definition `CFC.sqrt (star a * a)`, itself `cfcₙ NNReal.sqrt`
+of `star a * a` — so anything commuting with `S⋆S` commutes with `|S|`.
+
+Note what is *not* needed: no polar decomposition, and no invertibility.  This
+was grouped with the parked polar-decomposition campaign in the module header,
+but only the neighbouring leaves belong there. -/
+theorem canonicalAbsoluteValue_commutes_projection (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Commute (operatorAbsoluteValue (canonicalIntertwiner U V))
+      (projection U) := by
+  set S : E →L[𝕜] E := canonicalIntertwiner U V with hS
+  have hint : S * projection U = projection V * S := by
+    simpa only [ContinuousLinearMap.mul_def] using canonicalIntertwiner_intertwines U V
+  have hstarU : star (projection U : E →L[𝕜] E) = projection U :=
+    isSelfAdjoint_starProjection U
+  have hstarV : star (projection V : E →L[𝕜] E) = projection V :=
+    isSelfAdjoint_starProjection V
+  have hadj : projection U * star S = star S * projection V := by
+    have h := congrArg star hint
+    rwa [star_mul, star_mul, hstarU, hstarV] at h
+  have hcomm : Commute (star S * S) (projection U) := by
+    show star S * S * projection U = projection U * (star S * S)
+    calc star S * S * projection U = star S * (S * projection U) := by rw [mul_assoc]
+      _ = star S * (projection V * S) := by rw [hint]
+      _ = star S * projection V * S := by rw [mul_assoc]
+      _ = projection U * star S * S := by rw [hadj]
+      _ = projection U * (star S * S) := by rw [mul_assoc]
+  exact hcomm.cfcₙ_nnreal _
 
 /-- Canonical direct rotation.
 
