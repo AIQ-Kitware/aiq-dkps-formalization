@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Bounded.Core
+import DavisKahan.OperatorIdeal.CanonicalRealView
 
 /-!
 # Scalar-generic lower-frame transport from explicit polar data
@@ -95,15 +96,16 @@ theorem frameIsometryOfPolarData_eq_of_isometry
 /-- Lower-frame ideal transport requires only the explicit inverse square root
 and its sharp norm estimate. -/
 theorem lowerFrame_sinThetaBlockOfPolarData_mem_and_gauge_le
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {X : F →L[𝕜] E} {ε : ℝ}
     {hX : LowerFrameBound X ε} {hε : 0 < ε}
     (P : LowerFramePolarData X ε hX hε)
     (F₁ : G →L[𝕜] E)
     (hRaw : N.Mem (X.adjoint ∘L F₁)) :
     N.Mem (sinThetaBlockOfPolarData P F₁) ∧
-      ε * N.gauge (sinThetaBlockOfPolarData P F₁)
-        ≤ N.gauge (X.adjoint ∘L F₁) := by
+      ε * N.gaugeReal (sinThetaBlockOfPolarData P F₁)
+        ≤ N.gaugeReal (X.adjoint ∘L F₁) := by
   have hBlock :
       sinThetaBlockOfPolarData P F₁ =
         P.invSqrt.adjoint ∘L (X.adjoint ∘L F₁) := by
@@ -116,23 +118,24 @@ theorem lowerFrame_sinThetaBlockOfPolarData_mem_and_gauge_le
   have hnorm : ‖P.invSqrt.adjoint‖ ≤ ε⁻¹ := by
     simpa using P.invSqrt_norm_le
   have hgauge :
-      N.gauge (sinThetaBlockOfPolarData P F₁) ≤
-        ε⁻¹ * N.gauge (X.adjoint ∘L F₁) := by
+      N.gaugeReal (sinThetaBlockOfPolarData P F₁) ≤
+        ε⁻¹ * N.gaugeReal (X.adjoint ∘L F₁) := by
     rw [hBlock]
-    exact (N.gauge_comp_left_le_mul P.invSqrt.adjoint hRaw).trans
-      (mul_le_mul_of_nonneg_right hnorm (N.gauge_nonneg hRaw))
+    exact (N.gaugeReal_comp_left_le_mul P.invSqrt.adjoint hRaw).trans
+      (mul_le_mul_of_nonneg_right hnorm (N.gaugeReal_nonneg hRaw))
   refine ⟨hBlock ▸ hMem, ?_⟩
   calc
-    ε * N.gauge (sinThetaBlockOfPolarData P F₁)
-        ≤ ε * (ε⁻¹ * N.gauge (X.adjoint ∘L F₁)) :=
+    ε * N.gaugeReal (sinThetaBlockOfPolarData P F₁)
+        ≤ ε * (ε⁻¹ * N.gaugeReal (X.adjoint ∘L F₁)) :=
       mul_le_mul_of_nonneg_left hgauge hε.le
-    _ = N.gauge (X.adjoint ∘L F₁) := by
+    _ = N.gaugeReal (X.adjoint ∘L F₁) := by
       rw [← mul_assoc, mul_inv_cancel₀ hε.ne', one_mul]
 
 /-- Under a complete exact-space decomposition, the explicit complementary
 block and explicit directed sine operator have identical ideal gauge. -/
 theorem sinThetaBlockOfPolarData_mem_and_gauge_eq_directed
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {X : F →L[𝕜] E} {ε : ℝ}
     {hX : LowerFrameBound X ε} {hε : 0 < ε}
     (P : LowerFramePolarData X ε hX hε)
@@ -140,8 +143,8 @@ theorem sinThetaBlockOfPolarData_mem_and_gauge_eq_directed
     (hdecomp : OrthogonalExactDecomposition F₀ F₁)
     (hblock : N.Mem (sinThetaBlockOfPolarData P F₁)) :
     N.Mem (directedSinThetaOperatorOfPolarData P F₀) ∧
-      N.gauge (directedSinThetaOperatorOfPolarData P F₀) =
-        N.gauge (sinThetaBlockOfPolarData P F₁) := by
+      N.gaugeReal (directedSinThetaOperatorOfPolarData P F₀) =
+        N.gaugeReal (sinThetaBlockOfPolarData P F₁) := by
   have hComplement :
       ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint =
         F₁ ∘L F₁.adjoint := by
@@ -163,15 +166,15 @@ theorem sinThetaBlockOfPolarData_mem_and_gauge_eq_directed
   have hF₁Norm : ‖F₁‖ ≤ 1 :=
     opNorm_le_one_of_isometry hdecomp.isometry₁
   have hForward :
-      N.gauge (directedSinThetaOperatorOfPolarData P F₀) ≤
-        N.gauge (sinThetaBlockOfPolarData P F₁) := by
+      N.gaugeReal (directedSinThetaOperatorOfPolarData P F₀) ≤
+        N.gaugeReal (sinThetaBlockOfPolarData P F₁) := by
     rw [hDirected]
     calc
-      N.gauge (F₁ ∘L (sinThetaBlockOfPolarData P F₁).adjoint)
-          ≤ N.gauge (sinThetaBlockOfPolarData P F₁).adjoint :=
-        N.gauge_comp_left_le F₁ hblockAdj hF₁Norm
-      _ = N.gauge (sinThetaBlockOfPolarData P F₁) :=
-        N.gauge_adjoint hblock
+      N.gaugeReal (F₁ ∘L (sinThetaBlockOfPolarData P F₁).adjoint)
+          ≤ N.gaugeReal (sinThetaBlockOfPolarData P F₁).adjoint :=
+        N.gaugeReal_comp_left_le F₁ hblockAdj hF₁Norm
+      _ = N.gaugeReal (sinThetaBlockOfPolarData P F₁) :=
+        N.gaugeReal_adjoint hblock
   have hF₁LeftInverse :
       F₁.adjoint ∘L F₁ = ContinuousLinearMap.id 𝕜 G :=
     adjoint_comp_self_eq_id_of_isometry hdecomp.isometry₁
@@ -193,47 +196,49 @@ theorem sinThetaBlockOfPolarData_mem_and_gauge_eq_directed
   have hF₁AdjNorm : ‖F₁.adjoint‖ ≤ 1 := by
     simpa using hF₁Norm
   have hReverse :
-      N.gauge (sinThetaBlockOfPolarData P F₁) ≤
-        N.gauge (directedSinThetaOperatorOfPolarData P F₀) := by
-    rw [← N.gauge_adjoint hblock, hRecover]
-    exact N.gauge_comp_left_le F₁.adjoint hDirectedMem hF₁AdjNorm
+      N.gaugeReal (sinThetaBlockOfPolarData P F₁) ≤
+        N.gaugeReal (directedSinThetaOperatorOfPolarData P F₀) := by
+    rw [← N.gaugeReal_adjoint hblock, hRecover]
+    exact N.gaugeReal_comp_left_le F₁.adjoint hDirectedMem hF₁AdjNorm
   exact ⟨hDirectedMem, le_antisymm hForward hReverse⟩
 
 /-- Scalar-generic generalized complementary-block theorem once explicit polar
 data and a raw Sylvester estimate are supplied. -/
 theorem generalizedSinTheta_of_polarData_of_raw
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {X : F →L[𝕜] E} {F₁ : G →L[𝕜] E} {C : G →L[𝕜] F}
     {ε δ : ℝ} {hX : LowerFrameBound X ε} {hε : 0 < ε}
     (P : LowerFramePolarData X ε hX hε)
     (hδ : 0 < δ)
     (hRaw : N.Mem (X.adjoint ∘L F₁) ∧
-      δ * N.gauge (X.adjoint ∘L F₁) ≤ N.gauge C) :
+      δ * N.gaugeReal (X.adjoint ∘L F₁) ≤ N.gaugeReal C) :
     N.Mem (sinThetaBlockOfPolarData P F₁) ∧
-      δ * ε * N.gauge (sinThetaBlockOfPolarData P F₁) ≤ N.gauge C := by
+      δ * ε * N.gaugeReal (sinThetaBlockOfPolarData P F₁) ≤ N.gaugeReal C := by
   have hFrame := lowerFrame_sinThetaBlockOfPolarData_mem_and_gauge_le
     N P F₁ hRaw.1
   refine ⟨hFrame.1, ?_⟩
   calc
-    δ * ε * N.gauge (sinThetaBlockOfPolarData P F₁) =
-        δ * (ε * N.gauge (sinThetaBlockOfPolarData P F₁)) := by ring
-    _ ≤ δ * N.gauge (X.adjoint ∘L F₁) :=
+    δ * ε * N.gaugeReal (sinThetaBlockOfPolarData P F₁) =
+        δ * (ε * N.gaugeReal (sinThetaBlockOfPolarData P F₁)) := by ring
+    _ ≤ δ * N.gaugeReal (X.adjoint ∘L F₁) :=
       mul_le_mul_of_nonneg_left hFrame.2 hδ.le
-    _ ≤ N.gauge C := hRaw.2
+    _ ≤ N.gaugeReal C := hRaw.2
 
 /-- Exact directed-angle version of the scalar-generic lower-frame transport. -/
 theorem generalizedSinTheta_exact_of_polarData_of_raw
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {X : F →L[𝕜] E} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}
     {C : G →L[𝕜] F} {ε δ : ℝ} {hX : LowerFrameBound X ε} {hε : 0 < ε}
     (P : LowerFramePolarData X ε hX hε)
     (hdecomp : OrthogonalExactDecomposition F₀ F₁)
     (hδ : 0 < δ)
     (hRaw : N.Mem (X.adjoint ∘L F₁) ∧
-      δ * N.gauge (X.adjoint ∘L F₁) ≤ N.gauge C) :
+      δ * N.gaugeReal (X.adjoint ∘L F₁) ≤ N.gaugeReal C) :
     N.Mem (directedSinThetaOperatorOfPolarData P F₀) ∧
-      δ * ε * N.gauge (directedSinThetaOperatorOfPolarData P F₀) ≤
-        N.gauge C := by
+      δ * ε * N.gaugeReal (directedSinThetaOperatorOfPolarData P F₀) ≤
+        N.gaugeReal C := by
   have hBlock := generalizedSinTheta_of_polarData_of_raw N P hδ hRaw
   have hAngle := sinThetaBlockOfPolarData_mem_and_gauge_eq_directed
     N P F₀ F₁ hdecomp hBlock.1

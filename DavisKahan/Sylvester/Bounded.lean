@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
 
 /-!
@@ -165,7 +166,8 @@ theorem norm_sylvesterNeumannTerm_le
 
 /-- Each Neumann term belongs to the same rectangular ideal as `C`. -/
 theorem sylvesterNeumannTerm_mem
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : E →L[𝕜] E}
     (hA : BoundedInverseData A) (B : F →L[𝕜] F)
     {C : F →L[𝕜] E} (hC : N.Mem C) (n : ℕ) :
@@ -175,24 +177,25 @@ theorem sylvesterNeumannTerm_mem
 
 /-- Geometric bound for one Neumann term. -/
 theorem gauge_sylvesterNeumannTerm_le
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : E →L[𝕜] E}
     (hA : BoundedInverseData A) (B : F →L[𝕜] F)
     {C : F →L[𝕜] E} (hC : N.Mem C) (n : ℕ) :
-    N.gauge (sylvesterNeumannTerm hA B C n)
-      ≤ ‖hA.inv‖ ^ (n + 1) * N.gauge C * ‖B‖ ^ n := by
+    N.gaugeReal (sylvesterNeumannTerm hA B C n)
+      ≤ ‖hA.inv‖ ^ (n + 1) * N.gaugeReal C * ‖B‖ ^ n := by
   unfold sylvesterNeumannTerm
-  have hcomp := N.gauge_comp_le (hA.inv ^ (n + 1)) (B ^ n) hC
+  have hcomp := N.gaugeReal_comp_le (hA.inv ^ (n + 1)) (B ^ n) hC
   have hinv := opNorm_pow_le hA.inv (n + 1)
   have hBpow := opNorm_pow_le B n
-  have hgauge := N.gauge_nonneg hC
+  have hgauge := N.gaugeReal_nonneg hC
   calc
-    N.gauge ((hA.inv ^ (n + 1)) ∘L C ∘L (B ^ n))
-        ≤ ‖hA.inv ^ (n + 1)‖ * N.gauge C * ‖B ^ n‖ := hcomp
-    _ ≤ (‖hA.inv‖ ^ (n + 1) * N.gauge C) * ‖B ^ n‖ := by
+    N.gaugeReal ((hA.inv ^ (n + 1)) ∘L C ∘L (B ^ n))
+        ≤ ‖hA.inv ^ (n + 1)‖ * N.gaugeReal C * ‖B ^ n‖ := hcomp
+    _ ≤ (‖hA.inv‖ ^ (n + 1) * N.gaugeReal C) * ‖B ^ n‖ := by
       exact mul_le_mul_of_nonneg_right
         (mul_le_mul_of_nonneg_right hinv hgauge) (norm_nonneg (B ^ n))
-    _ ≤ (‖hA.inv‖ ^ (n + 1) * N.gauge C) * ‖B‖ ^ n := by
+    _ ≤ (‖hA.inv‖ ^ (n + 1) * N.gaugeReal C) * ‖B‖ ^ n := by
       exact mul_le_mul_of_nonneg_left hBpow
         (mul_nonneg (pow_nonneg (norm_nonneg hA.inv) _) hgauge)
 
@@ -220,17 +223,18 @@ theorem sylvesterNeumannTerm_summable
 
 /-- Ideal-norm Cauchy control for partial Neumann sums under the strict ratio. -/
 theorem sylvesterNeumannPartialSum_cauchy
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : E →L[𝕜] E}
     (hA : BoundedInverseData A) (B : F →L[𝕜] F)
     {C : F →L[𝕜] E} (hC : N.Mem C)
     (hratio : ‖hA.inv‖ * ‖B‖ < 1) :
     ∀ ε : ℝ, 0 < ε → ∃ M, ∀ m n, M ≤ m → M ≤ n →
-      N.gauge
+      N.gaugeReal
         ((∑ j ∈ Finset.range m, sylvesterNeumannTerm hA B C j) -
          (∑ j ∈ Finset.range n, sylvesterNeumannTerm hA B C j)) < ε := by
   let q : ℝ := ‖hA.inv‖ * ‖B‖
-  let g₀ : ℝ := ‖hA.inv‖ * N.gauge C
+  let g₀ : ℝ := ‖hA.inv‖ * N.gaugeReal C
   let t : ℕ → F →L[𝕜] E := fun n => sylvesterNeumannTerm hA B C n
   let P : ℕ → F →L[𝕜] E := fun n => ∑ j ∈ Finset.range n, t j
   let G : ℕ → ℝ := fun n => ∑ j ∈ Finset.range n, q ^ j * g₀
@@ -240,18 +244,18 @@ theorem sylvesterNeumannPartialSum_cauchy
   have hPmem : ∀ n, N.Mem (P n) := by
     intro n
     exact N.finset_sum_mem (Finset.range n) t fun j _ => htmem j
-  have htGauge : ∀ n, N.gauge (t n) ≤ q ^ n * g₀ := by
+  have htGauge : ∀ n, N.gaugeReal (t n) ≤ q ^ n * g₀ := by
     intro n
     calc
-      N.gauge (t n)
-          ≤ ‖hA.inv‖ ^ (n + 1) * N.gauge C * ‖B‖ ^ n :=
+      N.gaugeReal (t n)
+          ≤ ‖hA.inv‖ ^ (n + 1) * N.gaugeReal C * ‖B‖ ^ n :=
         gauge_sylvesterNeumannTerm_le N hA B hC n
       _ = q ^ n * g₀ := by
         simp only [q, g₀]
         rw [pow_succ', mul_pow]
         ring
   have hgap : ∀ {m n : ℕ}, n ≤ m →
-      N.gauge (P m - P n) ≤ G m - G n := by
+      N.gaugeReal (P m - P n) ≤ G m - G n := by
     intro m n hnm
     have hsum : P m - P n = ∑ j ∈ Finset.Ico n m, t j :=
       (Finset.sum_Ico_eq_sub _ hnm).symm
@@ -259,9 +263,9 @@ theorem sylvesterNeumannPartialSum_cauchy
       Finset.sum_Ico_eq_sub _ hnm
     rw [hsum, ← hG]
     calc
-      N.gauge (∑ j ∈ Finset.Ico n m, t j)
-          ≤ ∑ j ∈ Finset.Ico n m, N.gauge (t j) :=
-        N.gauge_finset_sum_le (Finset.Ico n m) t fun j _ => htmem j
+      N.gaugeReal (∑ j ∈ Finset.Ico n m, t j)
+          ≤ ∑ j ∈ Finset.Ico n m, N.gaugeReal (t j) :=
+        N.gaugeReal_finset_sum_le (Finset.Ico n m) t fun j _ => htmem j
       _ ≤ ∑ j ∈ Finset.Ico n m, q ^ j * g₀ :=
         Finset.sum_le_sum fun j _ => htGauge j
   have hGcauchy : CauchySeq G := by
@@ -269,7 +273,7 @@ theorem sylvesterNeumannPartialSum_cauchy
       (summable_geometric_of_lt_one hq0 hratio).mul_right g₀
     exact hsummable.hasSum.tendsto_sum_nat.cauchySeq
   have hPcauchy : ∀ ε : ℝ, 0 < ε → ∃ M, ∀ m n, M ≤ m → M ≤ n →
-      N.gauge (P m - P n) < ε := by
+      N.gaugeReal (P m - P n) < ε := by
     intro ε hε
     obtain ⟨M, hM⟩ := Metric.cauchySeq_iff.mp hGcauchy ε hε
     refine ⟨M, fun m n hm hn => ?_⟩
@@ -279,9 +283,9 @@ theorem sylvesterNeumannPartialSum_cauchy
         G m - G n ≤ |G m - G n| := le_abs_self _
         _ = dist (G m) (G n) := (Real.dist_eq _ _).symm
         _ < ε := hM m hm n hn
-    · have hswap : N.gauge (P m - P n) = N.gauge (P n - P m) := by
+    · have hswap : N.gaugeReal (P m - P n) = N.gaugeReal (P n - P m) := by
         rw [show P m - P n = -(P n - P m) from by abel,
-          N.gauge_neg (N.sub_mem (hPmem n) (hPmem m))]
+          N.gaugeReal_neg (N.sub_mem (hPmem n) (hPmem m))]
       rw [hswap]
       refine lt_of_le_of_lt (hgap hmn) ?_
       calc
@@ -292,7 +296,8 @@ theorem sylvesterNeumannPartialSum_cauchy
 
 /-- The ideal-norm limit of the Neumann series. -/
 noncomputable def sylvesterNeumannSolution
-    (_N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (_N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [_N.toOperatorIdealFamily.IsComplete]
     {A : E →L[𝕜] E}
     (hA : BoundedInverseData A) (B : F →L[𝕜] F)
     (C : F →L[𝕜] E) : F →L[𝕜] E :=
@@ -300,7 +305,8 @@ noncomputable def sylvesterNeumannSolution
 
 /-- The selected Neumann solution belongs to the ideal. -/
 theorem sylvesterNeumannSolution_mem
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : E →L[𝕜] E}
     (hA : BoundedInverseData A) (B : F →L[𝕜] F)
     {C : F →L[𝕜] E} (hC : N.Mem C)
@@ -314,20 +320,20 @@ theorem sylvesterNeumannSolution_mem
     intro n
     exact N.finset_sum_mem (Finset.range n) t fun j _ => htmem j
   have hPcauchy : ∀ ε : ℝ, 0 < ε → ∃ M, ∀ m n, M ≤ m → M ≤ n →
-      N.gauge (P m - P n) < ε := by
+      N.gaugeReal (P m - P n) < ε := by
     simpa only [P, t] using
       sylvesterNeumannPartialSum_cauchy N hA B hC hratio
-  obtain ⟨L, hLmem, hLlim⟩ := N.gauge_complete P hPmem hPcauchy
+  obtain ⟨L, hLmem, hLlim⟩ := N.gaugeReal_complete P hPmem hPcauchy
   have hPL : Filter.Tendsto P Filter.atTop (nhds L) := by
     rw [tendsto_iff_norm_sub_tendsto_zero]
     refine squeeze_zero (fun n => norm_nonneg _)
-      (fun n => N.opNorm_le_gauge (N.sub_mem (hPmem n) hLmem)) ?_
+      (fun n => N.opNorm_le_gaugeReal (N.sub_mem (hPmem n) hLmem)) ?_
     rw [Metric.tendsto_atTop]
     intro ε hε
     obtain ⟨M, hM⟩ := hLlim ε hε
     refine ⟨M, fun n hn => ?_⟩
     rw [Real.dist_eq, sub_zero,
-      abs_of_nonneg (N.gauge_nonneg (N.sub_mem (hPmem n) hLmem))]
+      abs_of_nonneg (N.gaugeReal_nonneg (N.sub_mem (hPmem n) hLmem))]
     exact hM n hn
   have hsum : Summable t := by
     simpa only [t] using sylvesterNeumannTerm_summable hA B C hratio
@@ -343,7 +349,8 @@ theorem sylvesterNeumannSolution_mem
 omit [CompleteSpace F] in
 /-- The Neumann solution satisfies the Sylvester equation. -/
 theorem sylvesterNeumannSolution_eq
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : E →L[𝕜] E}
     (hA : BoundedInverseData A) (B : F →L[𝕜] F)
     (C : F →L[𝕜] E)
@@ -457,7 +464,8 @@ theorem sylvester_unique_of_bound_inverse
 
 /-- Davis--Kahan Theorem 5.1 in a rectangular ideal family. -/
 theorem sylvester_mem_and_gauge_le_of_bound_inverse
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : E →L[𝕜] E}
     (hA : BoundedInverseData A) (B : F →L[𝕜] F)
     {X C : F →L[𝕜] E} {ρ δ : ℝ}
@@ -466,7 +474,7 @@ theorem sylvester_mem_and_gauge_le_of_bound_inverse
     (hB : ‖B‖ ≤ ρ)
     (hEq : A ∘L X - X ∘L B = C)
     (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   have hρδ : 0 < ρ + δ := by linarith
   have hratio : ‖hA.inv‖ * ‖B‖ < 1 := by
     calc
@@ -494,21 +502,21 @@ theorem sylvester_mem_and_gauge_le_of_bound_inverse
       _ = hA.inv ∘L (A ∘L X) := ContinuousLinearMap.comp_assoc _ _ _
       _ = hA.inv ∘L (C + X ∘L B) := by rw [hAX]
   have hXBmem : N.Mem (X ∘L B) := N.comp_right_mem B hXmem
-  have hgauge : N.gauge X ≤
-      (ρ + δ)⁻¹ * (N.gauge C + N.gauge X * ρ) := by
+  have hgauge : N.gaugeReal X ≤
+      (ρ + δ)⁻¹ * (N.gaugeReal C + N.gaugeReal X * ρ) := by
     conv_lhs => rw [hfix]
     calc
-      N.gauge (hA.inv ∘L (C + X ∘L B))
-          ≤ ‖hA.inv‖ * N.gauge (C + X ∘L B) :=
-        N.gauge_comp_left_le_mul hA.inv (N.add_mem hC hXBmem)
-      _ ≤ (ρ + δ)⁻¹ * N.gauge (C + X ∘L B) :=
+      N.gaugeReal (hA.inv ∘L (C + X ∘L B))
+          ≤ ‖hA.inv‖ * N.gaugeReal (C + X ∘L B) :=
+        N.gaugeReal_comp_left_le_mul hA.inv (N.add_mem hC hXBmem)
+      _ ≤ (ρ + δ)⁻¹ * N.gaugeReal (C + X ∘L B) :=
         mul_le_mul_of_nonneg_right hAinv
-          (N.gauge_nonneg (N.add_mem hC hXBmem))
-      _ ≤ (ρ + δ)⁻¹ * (N.gauge C + N.gauge X * ρ) := by
+          (N.gaugeReal_nonneg (N.add_mem hC hXBmem))
+      _ ≤ (ρ + δ)⁻¹ * (N.gaugeReal C + N.gaugeReal X * ρ) := by
         refine mul_le_mul_of_nonneg_left ?_ (inv_nonneg.mpr hρδ.le)
-        refine (N.gauge_add_le hC hXBmem).trans (add_le_add le_rfl ?_)
-        exact (N.gauge_comp_right_le_mul B hXmem).trans
-          (mul_le_mul_of_nonneg_left hB (N.gauge_nonneg hXmem))
+        refine (N.gaugeReal_add_le hC hXBmem).trans (add_le_add le_rfl ?_)
+        exact (N.gaugeReal_comp_right_le_mul B hXmem).trans
+          (mul_le_mul_of_nonneg_left hB (N.gaugeReal_nonneg hXmem))
   refine ⟨hXmem, ?_⟩
   have hkey := mul_le_mul_of_nonneg_left hgauge hρδ.le
   rw [← mul_assoc, mul_inv_cancel₀ hρδ.ne', one_mul] at hkey
@@ -516,7 +524,8 @@ theorem sylvester_mem_and_gauge_le_of_bound_inverse
 
 /-- Reversed orientation of the bound/inverse Sylvester estimate. -/
 theorem sylvester_mem_and_gauge_le_of_bound_inverse_swapped
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {B : F →L[𝕜] F}
     (hB : BoundedInverseData B) (A : E →L[𝕜] E)
     {X C : F →L[𝕜] E} {ρ δ : ℝ}
@@ -525,7 +534,7 @@ theorem sylvester_mem_and_gauge_le_of_bound_inverse_swapped
     (hA : ‖A‖ ≤ ρ)
     (hEq : A ∘L X - X ∘L B = C)
     (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   let hBadj : BoundedInverseData B.adjoint :=
     { inv := hB.inv.adjoint
       left_inv := by
@@ -559,8 +568,8 @@ theorem sylvester_mem_and_gauge_le_of_bound_inverse_swapped
     simpa using hdouble
   refine ⟨hXmem, ?_⟩
   have hbound := hmain.2
-  rw [N.gauge_adjoint hXmem, N.gauge_neg hCadj,
-    N.gauge_adjoint hC] at hbound
+  rw [N.gaugeReal_adjoint hXmem, N.gaugeReal_neg hCadj,
+    N.gaugeReal_adjoint hC] at hbound
   exact hbound
 
 end ExactSinTheta

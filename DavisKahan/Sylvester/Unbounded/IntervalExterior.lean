@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.Interop.Spectra.BoundedFromSpectrum
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.Interop.Spectra.GapResolvent
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
@@ -117,7 +118,8 @@ the spectrum of `A` avoiding `(β - δ, α + δ)`, membership of `C` in a
 rectangular symmetric ideal family passes to `X` with
 `δ · gauge X ≤ gauge C`. -/
 theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : DKClosedOperator (H := E)} {B : DKClosedOperator (H := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℂ] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
@@ -127,7 +129,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRig
         Set.Icc β α)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   obtain ⟨hBlow, hBhigh⟩ := semibounded_of_spectrum_subset_Icc hB hβα hσB
   have hAres : TwoSidedShiftedInverseBound A ((α + β) / 2)
       ((α - β) / 2 + δ) := by
@@ -146,7 +148,8 @@ in `[β, α]` and the spectrum of `B` avoiding `(β - δ, α + δ)`.  The
 interval block is replaced by its bounded realization and the ideal-scope
 Neumann engine finishes. -/
 theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : DKClosedOperator (H := E)} {B : DKClosedOperator (H := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℂ] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
@@ -156,7 +159,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRig
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B.toLinearPMap)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   have hr0 : (0 : ℝ) ≤ (α - β) / 2 := by linarith
   obtain ⟨R, hRnorm⟩ :=
     exists_boundedRealization_of_spectrum_subset_Icc hA hβα hσA

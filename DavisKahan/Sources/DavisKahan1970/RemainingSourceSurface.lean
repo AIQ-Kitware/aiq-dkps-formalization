@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.DoubleAngle.UnboundedIdeal
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.TanTwoTheta.UnboundedIdeal
 import DavisKahan.TanTheta.GenuineSpectrum
 import DavisKahan.TanTheta.UnboundedGraphAngle
@@ -270,7 +271,8 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 /-- Source-numbered residual and perturbation form of the sine-double-angle
 theorem at arbitrary rectangular ideal-gauge scope. -/
 theorem section7_sinTwoTheta_source_ideal
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -287,11 +289,11 @@ theorem section7_sinTwoTheta_source_ideal
       (selfAdjointSpectralSubspace A hA B hB)
       (selfAdjointSpectralSubspace (A.addBounded E)
         (addBounded_isSelfAdjoint A hA E hE) S hS)) ∧
-    delta * N.gauge (sinTwoThetaIdealBlock
+    delta * N.gaugeReal (sinTwoThetaIdealBlock
       (selfAdjointSpectralSubspace A hA B hB)
       (selfAdjointSpectralSubspace (A.addBounded E)
         (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
-      2 * N.gauge E := by
+      2 * N.gaugeReal E := by
   exact sinTwoTheta_addBounded_gauge_of_spectrum_gap
     N A hA E hE B S hB hS hba hdelta hBlow hBhigh hBcomplSpec hEmem
 
@@ -301,11 +303,12 @@ strict quarter-acute branch.
 The bound carries the positive double-cosine denominator
 `1 - 2 * directedGap ^ 2` (positive under the quarter-acute hypothesis).  This
 factor is intrinsic to `tanTwoThetaIdealBlock = sinTwoThetaIdealBlock ∘L cos⁻¹`;
-a bare `2 * N.gauge E` on the right is strictly stronger than the tangent
+a bare `2 * N.gaugeReal E` on the right is strictly stronger than the tangent
 construction supports, so the denominator is a required part of the statement,
 not an artifact. -/
 theorem section7_tanTwoTheta_source_ideal
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -326,11 +329,11 @@ theorem section7_tanTwoTheta_source_ideal
       (selfAdjointSpectralSubspace A hA B hB)
       (selfAdjointSpectralSubspace (A.addBounded E)
         (addBounded_isSelfAdjoint A hA E hE) S hS) hquarter) ∧
-    delta * N.gauge (tanTwoThetaIdealBlock
+    delta * N.gaugeReal (tanTwoThetaIdealBlock
       (selfAdjointSpectralSubspace A hA B hB)
       (selfAdjointSpectralSubspace (A.addBounded E)
         (addBounded_isSelfAdjoint A hA E hE) S hS) hquarter) ≤
-      (2 * N.gauge E) /
+      (2 * N.gaugeReal E) /
         (1 - 2 * directedGap
           (selfAdjointSpectralSubspace A hA B hB)
           (selfAdjointSpectralSubspace (A.addBounded E)

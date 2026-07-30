@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.Interop.Spectra.GapResolvent
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.SinTheta.Unbounded.GenuineGauge
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
@@ -94,7 +95,8 @@ resolvent hypothesis: the only spectral inputs are the trial block's form
 bounds and Spectra resolvent-set spectrum avoidance for the complementary
 block. -/
 theorem sinTheta_unbounded_gauge_of_spectrum_gap
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : D.A.IsSelfAdjoint) (hA₀ : D.A₀.IsSelfAdjoint)
     (hΛ₁ : D.Λ₁.IsSelfAdjoint)
@@ -104,8 +106,8 @@ theorem sinTheta_unbounded_gauge_of_spectrum_gap
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum D.Λ₁.toLinearPMap)
     (hC : N.Mem (D.residual.adjoint ∘L D.F₁)) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
-      δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
-        N.gauge (D.residual.adjoint ∘L D.F₁) := by
+      δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) ≤
+        N.gaugeReal (D.residual.adjoint ∘L D.F₁) := by
   have hΛsa : IsSelfAdjoint D.Λ₁.toLinearPMap :=
     LinearPMap.isSelfAdjoint_def.mpr
       ((D.Λ₁.isSelfAdjoint_iff_toLinearPMap_adjoint_eq).mp hΛ₁)
@@ -120,7 +122,8 @@ theorem sinTheta_unbounded_gauge_of_spectrum_gap
 /-- Raw partial-map ideal-gauge sine-theta endpoint with the Spectra
 resolvent-set gap discharge. -/
 theorem linearPMap_sinTheta_unbounded_gauge_of_spectrum_gap
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A) (hA₀ : _root_.IsSelfAdjoint D.A₀)
     (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
@@ -131,8 +134,8 @@ theorem linearPMap_sinTheta_unbounded_gauge_of_spectrum_gap
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum D.Λ₁)
     (hC : N.Mem (D.residual.adjoint ∘L D.F₁)) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
-      δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
-        N.gauge (D.residual.adjoint ∘L D.F₁) := by
+      δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) ≤
+        N.gaugeReal (D.residual.adjoint ∘L D.F₁) := by
   have hΛsa : _root_.IsSelfAdjoint D.toClosed.Λ₁.toLinearPMap := by
     simpa only [UnboundedSinThetaDataPMap.toClosed,
       DavisKahanExt.ClosedOperator.ofLinearPMap_toLinearPMap] using hΛ₁

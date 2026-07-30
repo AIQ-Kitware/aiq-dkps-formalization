@@ -90,10 +90,10 @@ theorem davisKahan1970_sylvester_of_genuineSpectrumGap
   | intervalExterior hβα hgap =>
       rcases hgap with hgap | hgap
       · exact SpectraBridge.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
-          N.toRectangularSymmetricIdealFamily hA hB hβα hδ
+          N.toSymmetricOperatorIdealFamily hA hB hβα hδ
             hgap.1 hgap.2 hEq hC
       · exact SpectraBridge.unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
-          N.toRectangularSymmetricIdealFamily hA hB hβα hδ
+          N.toSymmetricOperatorIdealFamily hA hB hβα hδ
             hgap.2 hgap.1 hEq hC
   | leftAboveRightBelow c hAspec hBspec =>
       exact GenuineOrderedSylvesterEngine.lowerUpper

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.Bounded
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 import Mathlib.Analysis.InnerProductSpace.StarOrder
 import Mathlib.Analysis.Normed.Group.Uniform
@@ -421,13 +422,14 @@ noncomputable def sinThetaBlock
 
 /-- Lower-frame transport from the raw complementary block to the sine block. -/
 theorem lowerFrame_sinThetaBlock_mem_and_gauge_le
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (X : F →L[ℂ] E) (F₁ : G →L[ℂ] E) {ε : ℝ}
     (hX : LowerFrameBound X ε) (hε : 0 < ε)
     (hRaw : N.Mem (X.adjoint ∘L F₁)) :
     N.Mem (sinThetaBlock X F₁ hX hε) ∧
-      ε * N.gauge (sinThetaBlock X F₁ hX hε)
-        ≤ N.gauge (X.adjoint ∘L F₁) := by
+      ε * N.gaugeReal (sinThetaBlock X F₁ hX hε)
+        ≤ N.gaugeReal (X.adjoint ∘L F₁) := by
   have hBlock :
       sinThetaBlock X F₁ hX hε =
         (gramInvSqrt X hX hε).adjoint ∘L (X.adjoint ∘L F₁) := by
@@ -440,18 +442,18 @@ theorem lowerFrame_sinThetaBlock_mem_and_gauge_le
   have hnorm : ‖(gramInvSqrt X hX hε).adjoint‖ ≤ ε⁻¹ := by
     simpa using norm_gramInvSqrt_le X hX hε
   have hgauge :
-      N.gauge (sinThetaBlock X F₁ hX hε) ≤
-        ε⁻¹ * N.gauge (X.adjoint ∘L F₁) := by
+      N.gaugeReal (sinThetaBlock X F₁ hX hε) ≤
+        ε⁻¹ * N.gaugeReal (X.adjoint ∘L F₁) := by
     rw [hBlock]
-    exact (N.gauge_comp_left_le_mul
+    exact (N.gaugeReal_comp_left_le_mul
       (gramInvSqrt X hX hε).adjoint hRaw).trans
-        (mul_le_mul_of_nonneg_right hnorm (N.gauge_nonneg hRaw))
+        (mul_le_mul_of_nonneg_right hnorm (N.gaugeReal_nonneg hRaw))
   refine ⟨hBlock ▸ hMem, ?_⟩
   calc
-    ε * N.gauge (sinThetaBlock X F₁ hX hε)
-        ≤ ε * (ε⁻¹ * N.gauge (X.adjoint ∘L F₁)) :=
+    ε * N.gaugeReal (sinThetaBlock X F₁ hX hε)
+        ≤ ε * (ε⁻¹ * N.gaugeReal (X.adjoint ∘L F₁)) :=
       mul_le_mul_of_nonneg_left hgauge hε.le
-    _ = N.gauge (X.adjoint ∘L F₁) := by
+    _ = N.gaugeReal (X.adjoint ∘L F₁) := by
       rw [← mul_assoc, mul_inv_cancel₀ hε.ne', one_mul]
 
 end Complex

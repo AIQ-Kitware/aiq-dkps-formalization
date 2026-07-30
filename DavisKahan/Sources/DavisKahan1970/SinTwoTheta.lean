@@ -178,7 +178,7 @@ theorem unbounded_sinTwoTheta_uiNorm_representative
       δ * N.gauge sinTwoTheta₀.operator ≤
         2 * N.gauge E := by
   have hcanonical := sinTwoTheta_addBounded_gauge_of_spectrum_gap
-    N.toRectangularSymmetricIdealFamily A hA E hE B S hB hS
+    N.toSymmetricOperatorIdealFamily A hA E hE B S hB hS
       hβα hδ hBlow hBhigh hBcomplSpec hEmem
   obtain ⟨hmem, hgauge⟩ := sinTwoTheta₀.mem_and_gauge_eq N hcanonical.1
   refine ⟨hmem, ?_⟩
@@ -218,7 +218,7 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative
       δ * N.gauge sinTwoTheta₀.operator ≤
         N.gauge R := by
   have hcanonical := sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
-    N.toRectangularSymmetricIdealFamily A hA R hR B hB V
+    N.toSymmetricOperatorIdealFamily A hA R hR B hB V
       hβα hδ hBlow hBhigh hBcomplSpec hJdom hJintertwines hRmem
   obtain ⟨hmem, hgauge⟩ := sinTwoTheta₀.mem_and_gauge_eq N hcanonical.1
   refine ⟨hmem, ?_⟩

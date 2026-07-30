@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.DoubleAngle.Unbounded
 import DavisKahan.Interop.Spectra.BoundedPerturbationSinThetaIdeal
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
@@ -51,14 +52,15 @@ theorem norm_sinTwoThetaIdealBlock
 /-- A rectangular overlap block controls the corresponding ambient projection
 product in every rectangular symmetric ideal family. -/
 theorem projectionProduct_mem_and_gauge_le_overlap
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (U W : Submodule ℂ H)
     [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
     [CompleteSpace U] [CompleteSpace W]
     (hT : N.Mem (U.subtypeL.adjoint ∘L W.subtypeL)) :
     N.Mem (U.starProjection ∘L W.starProjection) ∧
-      N.gauge (U.starProjection ∘L W.starProjection) ≤
-        N.gauge (U.subtypeL.adjoint ∘L W.subtypeL) := by
+      N.gaugeReal (U.starProjection ∘L W.starProjection) ≤
+        N.gaugeReal (U.subtypeL.adjoint ∘L W.subtypeL) := by
   let T : W →L[ℂ] U := U.subtypeL.adjoint ∘L W.subtypeL
   have hfactor :
       U.starProjection ∘L W.starProjection =
@@ -85,30 +87,31 @@ theorem projectionProduct_mem_and_gauge_le_overlap
   · rw [hfactor]
     exact hmemFactor
   · rw [hfactor]
-    have hgauge := N.gauge_comp_le U.subtypeL W.subtypeL.adjoint hT
-    have hnonneg := N.gauge_nonneg hT
+    have hgauge := N.gaugeReal_comp_le U.subtypeL W.subtypeL.adjoint hT
+    have hnonneg := N.gaugeReal_nonneg hT
     calc
-      N.gauge (U.subtypeL ∘L T ∘L W.subtypeL.adjoint) ≤
-          ‖U.subtypeL‖ * N.gauge T * ‖W.subtypeL.adjoint‖ := hgauge
-      _ ≤ 1 * N.gauge T * ‖W.subtypeL.adjoint‖ := by
+      N.gaugeReal (U.subtypeL ∘L T ∘L W.subtypeL.adjoint) ≤
+          ‖U.subtypeL‖ * N.gaugeReal T * ‖W.subtypeL.adjoint‖ := hgauge
+      _ ≤ 1 * N.gaugeReal T * ‖W.subtypeL.adjoint‖ := by
         exact mul_le_mul_of_nonneg_right
           (mul_le_mul_of_nonneg_right hUnorm hnonneg)
           (norm_nonneg W.subtypeL.adjoint)
-      _ ≤ 1 * N.gauge T * 1 := by
+      _ ≤ 1 * N.gaugeReal T * 1 := by
         exact mul_le_mul_of_nonneg_left hWadjNorm
           (mul_nonneg zero_le_one hnonneg)
-      _ = N.gauge (U.subtypeL.adjoint ∘L W.subtypeL) := by
+      _ = N.gaugeReal (U.subtypeL.adjoint ∘L W.subtypeL) := by
         dsimp [T]
         ring
 
 /-- The bounded reflection residual remains in every rectangular symmetric
 ideal containing the perturbation, with gauge cost at most two. -/
 theorem reflectionPerturbation_mem_and_gauge_le
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     (E : H →L[ℂ] H) (hEmem : N.Mem E) :
     N.Mem (reflectionPerturbation V E) ∧
-      N.gauge (reflectionPerturbation V E) ≤ 2 * N.gauge E := by
+      N.gaugeReal (reflectionPerturbation V E) ≤ 2 * N.gaugeReal E := by
   let W : H →L[ℂ] H :=
     V.reflection.toLinearIsometry.toContinuousLinearMap
   let W' : H →L[ℂ] H :=
@@ -123,27 +126,28 @@ theorem reflectionPerturbation_mem_and_gauge_le
     change N.Mem (W ∘L E ∘L W')
     exact N.comp_mem W W' hEmem
   have hconjGauge :
-      N.gauge (boundedUnitaryConjugate V.reflection E) ≤ N.gauge E := by
-    change N.gauge (W ∘L E ∘L W') ≤ N.gauge E
-    exact N.gauge_comp_le_of_contractions W W' hEmem
+      N.gaugeReal (boundedUnitaryConjugate V.reflection E) ≤ N.gaugeReal E := by
+    change N.gaugeReal (W ∘L E ∘L W') ≤ N.gaugeReal E
+    exact N.gaugeReal_comp_le_of_contractions W W' hEmem
       (opNorm_le_one_of_isometry hWiso)
       (opNorm_le_one_of_isometry hW'iso)
   refine ⟨?_, ?_⟩
   · unfold reflectionPerturbation
     exact N.sub_mem hEmem hconjMem
   · unfold reflectionPerturbation
-    have hsub := N.gauge_sub_le hEmem hconjMem
+    have hsub := N.gaugeReal_sub_le hEmem hconjMem
     calc
-      N.gauge (E - boundedUnitaryConjugate V.reflection E) ≤
-          N.gauge E + N.gauge (boundedUnitaryConjugate V.reflection E) := hsub
-      _ ≤ N.gauge E + N.gauge E :=
+      N.gaugeReal (E - boundedUnitaryConjugate V.reflection E) ≤
+          N.gaugeReal E + N.gaugeReal (boundedUnitaryConjugate V.reflection E) := hsub
+      _ ≤ N.gaugeReal E + N.gaugeReal E :=
         add_le_add le_rfl hconjGauge
-      _ = 2 * N.gauge E := by ring
+      _ = 2 * N.gaugeReal E := by ring
 
 /-- Residual reflection form of unbounded sine two theta at rectangular
 ideal-gauge scope. -/
 theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     (R : H →L[ℂ] H) (hR : IsSelfAdjointOperator R)
     (B : Set ℝ) (hB : MeasurableSet B)
@@ -164,8 +168,8 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB) V) ∧
-      δ * N.gauge (sinTwoThetaIdealBlock
-        (selfAdjointSpectralSubspace A hA B hB) V) ≤ N.gauge R := by
+      δ * N.gaugeReal (sinTwoThetaIdealBlock
+        (selfAdjointSpectralSubspace A hA B hB) V) ≤ N.gaugeReal R := by
   let U := selfAdjointSpectralSubspace A hA B hB
   let Uc := selfAdjointSpectralSubspace A hA Bᶜ hB.compl
   let Wc := Uc.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)
@@ -277,7 +281,7 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
       hXiso hFiso hβα hδ hBlow hBhigh hΛJspec hRmem
   change
     N.Mem (U.subtypeL.adjoint ∘L Wc.subtypeL) ∧
-      δ * N.gauge (U.subtypeL.adjoint ∘L Wc.subtypeL) ≤ N.gauge R at hraw
+      δ * N.gaugeReal (U.subtypeL.adjoint ∘L Wc.subtypeL) ≤ N.gaugeReal R at hraw
   have hambient := projectionProduct_mem_and_gauge_le_overlap
     N U Wc hraw.1
   have hUcProjection : Uc.starProjection = Uᗮ.starProjection := by
@@ -307,15 +311,16 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
   rw [hblock]
   refine ⟨hambient.1, ?_⟩
   calc
-    δ * N.gauge (U.starProjection ∘L Wc.starProjection) ≤
-        δ * N.gauge (U.subtypeL.adjoint ∘L Wc.subtypeL) :=
+    δ * N.gaugeReal (U.starProjection ∘L Wc.starProjection) ≤
+        δ * N.gaugeReal (U.subtypeL.adjoint ∘L Wc.subtypeL) :=
       mul_le_mul_of_nonneg_left hambient.2 hδ.le
-    _ ≤ N.gauge R := hraw.2
+    _ ≤ N.gaugeReal R := hraw.2
 
 /-- Canonical bounded-perturbation unbounded sine-two-theta theorem at
 rectangular ideal-gauge scope. -/
 theorem sinTwoTheta_addBounded_gauge_of_spectrum_gap
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -332,11 +337,11 @@ theorem sinTwoTheta_addBounded_gauge_of_spectrum_gap
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ∧
-      δ * N.gauge (sinTwoThetaIdealBlock
+      δ * N.gaugeReal (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
-        2 * N.gauge E := by
+        2 * N.gaugeReal E := by
   let C := A.addBounded E
   let hC : C.IsSelfAdjoint := addBounded_isSelfAdjoint A hA E hE
   let V := selfAdjointSpectralSubspace C hC S hS
@@ -354,7 +359,8 @@ theorem sinTwoTheta_addBounded_gauge_of_spectrum_gap
 
 /-- Set-localized canonical ideal-gauge form of unbounded sine two theta. -/
 theorem sinTwoTheta_addBounded_gauge_of_intervalExterior
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -366,11 +372,11 @@ theorem sinTwoTheta_addBounded_gauge_of_intervalExterior
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ∧
-      δ * N.gauge (sinTwoThetaIdealBlock
+      δ * N.gaugeReal (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
-        2 * N.gauge E := by
+        2 * N.gaugeReal E := by
   obtain ⟨hBlow, hBhigh⟩ :=
     selfAdjointSpectralRestriction_semibounded_of_subset_Icc
       A hA B hB hBsub
@@ -407,7 +413,7 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
         2 * N.gauge E := by
   exact sinTwoTheta_addBounded_gauge_of_spectrum_gap
-    N.toRectangularSymmetricIdealFamily A hA E hE B S hB hS
+    N.toSymmetricOperatorIdealFamily A hA E hE B S hB hS
       hβα hδ hBlow hBhigh hBcomplSpec hEmem
 
 /-- Source-facing unitary-invariant-family wrapper for the set-localized ideal
@@ -431,7 +437,7 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
         2 * N.gauge E := by
   exact sinTwoTheta_addBounded_gauge_of_intervalExterior
-    N.toRectangularSymmetricIdealFamily A hA E hE B S hB hS
+    N.toSymmetricOperatorIdealFamily A hA E hE B S hB hS
       hβα hδ hBsub hBcomplDisj hEmem
 
 /-- Residual reflection form of the unbounded sine-two-theta theorem, operator norm.  The
@@ -461,10 +467,11 @@ theorem sinTwoTheta_reflectionResidual_of_spectrum_gap
     δ * ‖sinTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB) V‖ ≤ ‖R‖ := by
   have h := (sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
-    RectangularSymmetricIdealFamily.operatorNorm A hA R hR B hB V hβα hδ
-    hBlow hBhigh hBcomplSpec hJdom hJintertwines trivial).2
-  rwa [RectangularSymmetricIdealFamily.operatorNorm_gauge,
-    RectangularSymmetricIdealFamily.operatorNorm_gauge,
+    (TauCeti.operatorNormFamily ℂ) A hA R hR B hB V hβα hδ
+    hBlow hBhigh hBcomplSpec hJdom hJintertwines
+    (TauCeti.SymmetricOperatorIdealFamily.mem_operatorNormFamily R)).2
+  rwa [TauCeti.SymmetricOperatorIdealFamily.gaugeReal_operatorNormFamily,
+    TauCeti.SymmetricOperatorIdealFamily.gaugeReal_operatorNormFamily,
     norm_sinTwoThetaIdealBlock] at h
 
 /-- Canonical complex operator-norm unbounded sine-two-theta theorem for a
