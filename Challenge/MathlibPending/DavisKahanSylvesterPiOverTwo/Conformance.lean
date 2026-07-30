@@ -25,8 +25,8 @@ leaderboard.
 
 
 namespace TauCeti
-namespace DavisKahanTheory
 
+open DavisKahanTheory
 open scoped InnerProductSpace BigOperators
 
 variable {𝕜 : Type*} [RCLike 𝕜]
@@ -57,5 +57,4 @@ theorem sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance
       (Real.pi / 2) (((δ : 𝕜)) • X) C := by
   sorry
 
-end DavisKahanTheory
 end TauCeti

@@ -32,12 +32,12 @@ variable {E F : Type v}
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- A legacy interval/exterior hypothesis becomes the genuine Spectra
 interval/exterior hypothesis after identifying the two real spectra. -/
-theorem genuineSylvesterIntervalExteriorGap_of_legacy
+theorem sylvesterIntervalExteriorGap_of_legacy
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {β α δ : ℝ}
     (hgap : UnboundedIntervalExteriorGap A B β α δ) :
-    GenuineSylvesterIntervalExteriorGap A B β α δ := by
+    SylvesterIntervalExteriorGap A B β α δ := by
   rcases hgap with hgap | hgap
   · left
     constructor
@@ -72,7 +72,7 @@ theorem GenuineUnboundedSylvesterGap.intervalExterior_of_legacy
     (hgap : UnboundedIntervalExteriorGap A B β α δ) :
     GenuineUnboundedSylvesterGap A B δ :=
   GenuineUnboundedSylvesterGap.intervalExterior hβα
-    (genuineSylvesterIntervalExteriorGap_of_legacy hgap)
+    (sylvesterIntervalExteriorGap_of_legacy hgap)
 
 /-- Admission-free complex specialization of the manuscript Section 5
 Sylvester theorem.  The spectral constructor is routed through the genuine
@@ -93,15 +93,15 @@ theorem davisKahan1970_sylvester_complex
         N.gauge C := by
   cases hgap with
   | intervalExterior hβα hgap =>
-      exact davisKahan1970_sylvester_of_genuineSpectrumGap
+      exact davisKahan1970_sylvester_of_spectrumGap
         N hA hB hδ
           (GenuineUnboundedSylvesterGap.intervalExterior_of_legacy hβα hgap)
           hEq hC
   | leftAboveRightBelow c hAc hBc =>
-      exact directGenuineOrderedSylvesterEngine_lowerUpper
+      exact directOrderedSylvesterEngine_lowerUpper
         N hA hB hδ hAc hBc hEq hC
   | leftBelowRightAbove c hAc hBc =>
-      exact directGenuineOrderedSylvesterEngine_upperLower
+      exact directOrderedSylvesterEngine_upperLower
         N hA hB hδ hAc hBc hEq hC
 
 end ExactSinTheta

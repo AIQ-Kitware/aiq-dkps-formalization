@@ -45,7 +45,6 @@ Literature bridge for the group as a whole:
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open TauCeti
 open scoped InnerProductSpace BigOperators ComplexConjugate
@@ -712,5 +711,4 @@ theorem kyFan_reciprocalMultiplier_le_of_integrableKernel
   rw [abs_div, abs_of_pos hδ]
   exact (le_div_iff₀ hδ).2 (by simpa using hgap i j)
 
-end DavisKahanTheory
 end TauCeti

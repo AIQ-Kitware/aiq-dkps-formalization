@@ -37,7 +37,7 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 namespace TauCeti
 
 open TauCeti
-namespace DavisKahanTheory
+open DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 
@@ -193,5 +193,4 @@ theorem sylvesterOperator_solveSylvester {A : F →ₗ[𝕜] F}
   rw [solveSylvester_eq_of_bijective A B C hbij]
   exact (LinearEquiv.ofBijective (sylvesterOperator A B) hbij).apply_symm_apply C
 
-end DavisKahanTheory
 end TauCeti

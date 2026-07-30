@@ -32,12 +32,12 @@ Already complete and intended to remain unchanged:
 
 The only analytic replacement point is:
 
-- `canonicalGenuineOrderedSylvesterEngine`
+- `canonicalOrderedSylvesterEngine`
 
 It has exactly two fields:
 
-- `GenuineOrderedSylvesterEngine.lowerUpper`
-- `GenuineOrderedSylvesterEngine.upperLower`
+- `OrderedSylvesterEngine.lowerUpper`
+- `OrderedSylvesterEngine.upperLower`
 
 The current value is a compatibility implementation through the legacy
 cutoff development. The entire completion can be made trusted-dependency clean
@@ -85,7 +85,7 @@ Construct:
 ```lean
 noncomputable def spectraSpectralCutoffInterface
     (A : ClosedOperator ...) (hA : A.IsSelfAdjoint) :
-    GenuineSpectralCutoffInterface A hA
+    SpectralCutoffInterface A hA
 ```
 
 Use the vendored Spectra group for the self-adjoint partial operator:
@@ -137,7 +137,7 @@ In the same leaf or a second leaf, construct:
 ```lean
 noncomputable def spectraBoundedTruncationInterface
     (A : ClosedOperator ...) (hA : A.IsSelfAdjoint) :
-    GenuineBoundedTruncationInterface A hA
+    BoundedTruncationInterface A hA
       (spectraSpectralCutoffInterface A hA)
 ```
 
@@ -218,10 +218,10 @@ Prove a constructor with this conceptual shape:
 
 ```lean
 noncomputable def genuineOrderedSylvesterEngine_of_interfaces
-    (cutoff : ∀ A hA, GenuineSpectralCutoffInterface A hA)
+    (cutoff : ∀ A hA, SpectralCutoffInterface A hA)
     (truncation : ∀ A hA,
-      GenuineBoundedTruncationInterface A hA (cutoff A hA)) :
-    GenuineOrderedSylvesterEngine
+      BoundedTruncationInterface A hA (cutoff A hA)) :
+    OrderedSylvesterEngine
 ```
 
 Do not invent a new analytic argument. Port the already accepted proof in
@@ -264,7 +264,7 @@ Define:
 
 ```lean
 noncomputable def spectraGenuineOrderedSylvesterEngine :
-    GenuineOrderedSylvesterEngine :=
+    OrderedSylvesterEngine :=
   genuineOrderedSylvesterEngine_of_interfaces
     spectraSpectralCutoffInterface
     spectraBoundedTruncationInterface
@@ -273,7 +273,7 @@ noncomputable def spectraGenuineOrderedSylvesterEngine :
 Then change only:
 
 ```lean
-canonicalGenuineOrderedSylvesterEngine
+canonicalOrderedSylvesterEngine
 ```
 
 to point at `spectraGenuineOrderedSylvesterEngine`.

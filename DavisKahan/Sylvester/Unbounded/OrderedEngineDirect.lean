@@ -23,7 +23,7 @@ namespace ExactSinTheta
 universe v
 
 /-- Direct lower-left/upper-right ordered branch over vendored Spectra. -/
-theorem directGenuineOrderedSylvesterEngine_lowerUpper
+theorem directOrderedSylvesterEngine_lowerUpper
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -50,7 +50,7 @@ theorem directGenuineOrderedSylvesterEngine_lowerUpper
     hδ hAc hBc hEq hR
 
 /-- Direct upper-left/lower-right ordered branch over vendored Spectra. -/
-theorem directGenuineOrderedSylvesterEngine_upperLower
+theorem directOrderedSylvesterEngine_upperLower
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -77,15 +77,15 @@ theorem directGenuineOrderedSylvesterEngine_upperLower
     hδ hAc hBc hEq hR
 
 /-- Direct implementation of both ordered orientations. -/
-theorem directGenuineOrderedSylvesterEngine :
-    GenuineOrderedSylvesterEngine where
-  lowerUpper := directGenuineOrderedSylvesterEngine_lowerUpper
-  upperLower := directGenuineOrderedSylvesterEngine_upperLower
+theorem directOrderedSylvesterEngine :
+    OrderedSylvesterEngine where
+  lowerUpper := directOrderedSylvesterEngine_lowerUpper
+  upperLower := directOrderedSylvesterEngine_upperLower
 
 /-- Canonical ordered engine used by the genuine all-gap capstone. -/
-theorem canonicalGenuineOrderedSylvesterEngine :
-    GenuineOrderedSylvesterEngine :=
-  directGenuineOrderedSylvesterEngine
+theorem canonicalOrderedSylvesterEngine :
+    OrderedSylvesterEngine :=
+  directOrderedSylvesterEngine
 
 end ExactSinTheta
 end Experimental

@@ -71,12 +71,25 @@ the relabelling `κ`. -/
 noncomputable def specProj (B : Set ℝ) (hB : MeasurableSet B) : H →L[ℂ] H :=
   borelCalculus ha (isBddMeasurable_indicator (a := a) (hκ hB))
 
+/-- Rewrite form of `specProj`, so a call site need not unfold the definition.
+
+Added 2026-07-30 by `FTC-EXPOSE-SPECMEAS` slice 2. Consumers were doing
+`rw [BorelCalculus.specProj]`, which needs the body exposed; this is the lemma the
+`api-design` rubric asks for instead. -/
+theorem specProj_def (B : Set ℝ) (hB : MeasurableSet B) :
+    specProj (H := H) ha hκ B hB
+      = borelCalculus ha (isBddMeasurable_indicator (a := a) (hκ hB)) := (rfl)
+
 /-- The relabelled diagonal measure. -/
 -- `@[expose]` for the same reason as `toProjValMeasure`, whose exposed body references
 -- this one. Recorded debt, not an endorsement.
 @[expose]
 noncomputable def specDiag (κ' : spectrum ℂ a → ℝ) (ξ : H) : Measure ℝ :=
   Measure.map κ' (diagMeasure ha ξ)
+
+/-- Rewrite form of `specDiag`, so a call site need not unfold the definition. -/
+theorem specDiag_def (κ' : spectrum ℂ a → ℝ) (ξ : H) :
+    specDiag ha κ' ξ = Measure.map κ' (diagMeasure ha ξ) := (rfl)
 
 include hκ in
 /-- The spectral diagonal measures are finite. -/

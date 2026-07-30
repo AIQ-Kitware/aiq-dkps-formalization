@@ -37,7 +37,7 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
 /-- Genuine Spectra interval/exterior separation for a Sylvester pair. -/
-def GenuineSylvesterIntervalExteriorGap
+def SylvesterIntervalExteriorGap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
     (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
     (β α δ : ℝ) : Prop :=
@@ -58,7 +58,7 @@ inductive GenuineUnboundedSylvesterGap
   | intervalExterior
       {β α : ℝ}
       (hβα : β ≤ α)
-      (hgap : GenuineSylvesterIntervalExteriorGap A B β α δ)
+      (hgap : SylvesterIntervalExteriorGap A B β α δ)
   | leftAboveRightBelow
       (c : ℝ)
       (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
@@ -73,7 +73,7 @@ inductive GenuineUnboundedSylvesterGap
         Set.Ici (c + δ))
 
 /-- Source-facing Theorem 5.2 wrapper with genuine spectra in every branch. -/
-theorem davisKahan1970_sylvester_of_genuineSpectrumGap
+theorem davisKahan1970_sylvester_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
@@ -96,14 +96,14 @@ theorem davisKahan1970_sylvester_of_genuineSpectrumGap
           N.toSymmetricOperatorIdealFamily hA hB hβα hδ
             hgap.2 hgap.1 hEq hC
   | leftAboveRightBelow c hAspec hBspec =>
-      exact GenuineOrderedSylvesterEngine.lowerUpper
-        canonicalGenuineOrderedSylvesterEngine N hA hB hδ
+      exact OrderedSylvesterEngine.lowerUpper
+        canonicalOrderedSylvesterEngine N hA hB hδ
           (semiboundedBelow_of_spectrum_subset_Ici A hA hAspec)
           (semiboundedAbove_of_spectrum_subset_Iic B hB hBspec)
           hEq hC
   | leftBelowRightAbove c hAspec hBspec =>
-      exact GenuineOrderedSylvesterEngine.upperLower
-        canonicalGenuineOrderedSylvesterEngine N hA hB hδ
+      exact OrderedSylvesterEngine.upperLower
+        canonicalOrderedSylvesterEngine N hA hB hδ
           (semiboundedAbove_of_spectrum_subset_Iic A hA hAspec)
           (semiboundedBelow_of_spectrum_subset_Ici B hB hBspec)
           hEq hC
