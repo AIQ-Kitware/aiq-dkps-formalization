@@ -51,7 +51,7 @@ singular-subspace argument that consumes them.
 * Spectra influence: none.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 
