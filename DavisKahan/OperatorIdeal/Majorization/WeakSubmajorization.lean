@@ -3,7 +3,6 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.GroundedImports
 import ForTauCeti.Analysis.Normed.FiniteLpGauge
 
 /-!
@@ -15,7 +14,7 @@ approximation numbers already arrive in decreasing nonnegative order.
 -/
 
 namespace TauCeti
-namespace FinishTanTwoTheta
+namespace Majorization
 
 open scoped BigOperators
 
@@ -23,15 +22,18 @@ open scoped BigOperators
 def sequencePrefixSum (k : ℕ) (x : ℕ → ℝ) : ℝ :=
   ∑ i ∈ Finset.range k, x i
 
+/-- Every prefix sum of the zero sequence vanishes. -/
 @[simp] theorem sequencePrefixSum_zero (k : ℕ) :
     sequencePrefixSum k (0 : ℕ → ℝ) = 0 := by
   simp [sequencePrefixSum]
 
+/-- Prefix sums are additive in the sequence. -/
 @[simp] theorem sequencePrefixSum_add (k : ℕ) (x y : ℕ → ℝ) :
     sequencePrefixSum k (x + y) =
       sequencePrefixSum k x + sequencePrefixSum k y := by
   simp [sequencePrefixSum, Finset.sum_add_distrib]
 
+/-- Prefix sums are homogeneous in the sequence. -/
 @[simp] theorem sequencePrefixSum_smul (k : ℕ) (c : ℝ) (x : ℕ → ℝ) :
     sequencePrefixSum k (c • x) = c * sequencePrefixSum k x := by
   simp [sequencePrefixSum, Finset.mul_sum]
@@ -132,5 +134,5 @@ theorem finite_weaklyMajorized_of_weaklySubmajorized
       simpa [sequencePrefixVector, sequencePrefixSum,
         Fin.sum_univ_eq_sum_range] using hxy.prefix_le n
 
-end FinishTanTwoTheta
+end Majorization
 end TauCeti
