@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.SpectralTheory.Compatibility
-import DavisKahan.Experimental.InfiniteDimensional.Core.CompatibilitySinTwoTheta
+import DavisKahan.DoubleAngle.CompatibilitySinTwoTheta
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.General
 
 /-!
