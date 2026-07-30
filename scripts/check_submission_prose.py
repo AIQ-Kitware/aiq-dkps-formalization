@@ -40,16 +40,20 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 LIB = ROOT / "ForTauCeti"
 
 #: Highest number of modules that may carry internal-workflow prose.  Only ever lower it.
-#: Measured 2026-07-30, the day the gate landed.  The cleanup slices are lanes
+#: Measured 2026-07-30, the day the gate landed.  **Corrected the same day from 70 to 58,
+#: and that drop is NOT cleanup** -- it is the provenance exemption below fixing a
+#: false-positive class in this gate's first version.  Twelve modules were being flagged
+#: for `ForMathlib/` inside `* Original module:` bullets, which are genuine source records.
+#: Do not read the change as progress; no docstring was touched.  The cleanup slices are lanes
 #: FTC-PROSE-a .. FTC-PROSE-d; FTC-PROSE-ENFORCE drops this to 0 and flips the
 #: convention so new files stop generating it.
-BASELINE = 70
+BASELINE = 26
 
 #: Highest number of individual hits.  The module count alone is not enough: adding a
 #: fourth lane id to a module that already has three leaves the module count unchanged,
 #: so a modules-only ratchet lets the prose keep growing inside the files that already
 #: have it.  Found by testing this gate against a deliberate regression -- it passed.
-HIT_BASELINE = 129
+HIT_BASELINE = 50
 
 #: An internal lane id: `lane FTC-EXPOSE-g2`, `Lane SPLIT-1K`, `lane Y3`, `lane T15a`.
 #: Anchored on the word `lane` so ordinary prose ("the bounded-operator lane ever
@@ -59,6 +63,16 @@ LANE_ID = re.compile(r"\b[Ll]anes?\s+(?:[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+|Y\d+|T\d+[
 
 #: Paths that do not exist in the destination repository, or at all.
 INTERNAL_PATH = re.compile(r"dev/LANES\.md|dev/journals|dev/audit/|\.claude/worktrees|ForMathlib/")
+
+#: Provenance lines are EXEMPT from the path check, and getting this wrong was the first
+#: version's bug.  `* Original module: ForMathlib/.../CourantFischer.lean at Davis--Kahan
+#: commit fc38eb48...` is a genuine source record: it names where the material came from
+#: and pins a resolvable commit.  The `attribution` rubric requires exactly that and warns
+#: against inventing requirements for routine work.  What is NOT exempt is narration that
+#: happens to mention the same path -- "Moved from ForMathlib/... on 2026-07-29 under lane
+#: Y3(b2)" -- which git already records losslessly.  Match the provenance BULLET, not the
+#: word: a line beginning `* Original ...`.
+PROVENANCE_LINE = re.compile(r"^\s*\*\s*Original\s+(?:repository|module|declarations|authors)", re.M)
 
 #: "Moved 2026-07-29", "Documented 2026-07-30" -- migration archaeology.
 DATED_MOVE = re.compile(
@@ -87,13 +101,37 @@ def comment_text(source: str) -> str:
     return "\n".join(blocks + lines)
 
 
+def _drop_provenance_lines(text: str) -> str:
+    """Blank out `* Original ...` bullets, including their continuation lines.
+
+    A provenance bullet wraps, so dropping only the matched line would leave the path on
+    the next one and the exemption would not fire."""
+    out, skipping = [], False
+    for line in text.splitlines():
+        if PROVENANCE_LINE.match(line):
+            skipping = True
+            out.append("")
+            continue
+        if skipping:
+            # continuation = indented and not the start of a new bullet
+            if line.strip() and not line.lstrip().startswith("*"):
+                out.append("")
+                continue
+            skipping = False
+        out.append(line)
+    return "\n".join(out)
+
+
 def offenders() -> list[tuple[pathlib.Path, dict[str, list[str]]]]:
     out = []
     for path in sorted(LIB.rglob("*.lean")):
         text = comment_text(path.read_text(errors="ignore"))
+        without_provenance = _drop_provenance_lines(text)
         found = {}
         for name, pattern in KINDS:
-            hits = [m.group(0).strip() for m in pattern.finditer(text)]
+            # the path check exempts provenance bullets; the others apply everywhere
+            scope = without_provenance if name == "internal path" else text
+            hits = [m.group(0).strip() for m in pattern.finditer(scope)]
             if hits:
                 found[name] = hits
         if found:

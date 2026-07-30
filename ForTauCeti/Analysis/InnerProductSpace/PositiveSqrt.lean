@@ -57,8 +57,9 @@ variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpac
 
 /-! `LinearMap.IsPositive.sqrt` itself is defined in
 `ForTauCeti/Analysis/InnerProductSpace/SelfAdjointFunctionalCalculus.lean`, as the
-functional calculus of `Real.sqrt`.  It was defined twice until lane T01-SQRT
-(2026-07-29): once there and once here, with the two shown equal by `rfl`.  This
+functional calculus of `Real.sqrt`.  It was once defined twice -- there and
+here, with the two shown equal by `rfl` -- and
+the duplicate has since been collapsed into the calculus.  This
 module keeps what is special to the square root — that it is positive, that it
 squares to `T`, and the uniqueness theory the general calculus has no analogue
 for. -/
@@ -83,8 +84,8 @@ theorem sqrt_apply_eigenvectorBasis {T : E →ₗ[𝕜] E} (hT : T.IsPositive)
     hT.sqrt (hT.isSymmetric.eigenvectorBasis rfl k)
       = (Real.sqrt (hT.isSymmetric.eigenvalues rfl k) : 𝕜)
           • hT.isSymmetric.eigenvectorBasis rfl k := by
-  -- the general calculus already proves this; before lane T01-SQRT the same
-  -- `Finset.sum_eq_single` argument was written out a second time here
+  -- the general calculus already proves this; the same `Finset.sum_eq_single`
+  -- argument used to be written out a second time here
   exact TauCeti.selfAdjointFunctionalCalculus_apply_eigenvectorBasis
     hT.isSymmetric Real.sqrt k
 

@@ -40,7 +40,7 @@ document.
 
 Once `specProjection` intertwining exists the endgame is short: for disjoint
 closed spectra pick a Borel `B ⊇ σ(A)` missing `σ(B)`, and
-`X = E_A(B) X = X E_B(B) = 0` by lane SR-B's
+`X = E_A(B) X = X E_B(B) = 0` by
 `specProjection_eq_zero_of_subset_resolventSet`.
 
 ## Provenance

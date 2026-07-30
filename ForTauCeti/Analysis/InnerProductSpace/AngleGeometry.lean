@@ -19,8 +19,8 @@ objects, together with their singular-value and projector dictionaries.
 
 *Moved, not restated.*  This file was
 `DavisKahan/FiniteDimensional/Core/AngleGeometry.lean`
-until 2026-07-29, when lane Y3(b3) moved the dependency-closed base of the sin-Θ core
-into the staging layer.  Statements, proofs, signatures and namespaces are
+before the dependency-closed base of the sin-Θ core moved into the staging
+layer.  Statements, proofs, signatures and namespaces are
 unchanged; the declarations already lived in `TauCeti.DavisKahan*`, so the move
 was a path change and an import repoint and nothing else.
 
@@ -133,6 +133,73 @@ def IsAcute (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
   (∀ x ∈ U, V.starProjection x = 0 → x = 0) ∧
     (∀ y ∈ V, U.starProjection y = 0 → y = 0)
+
+omit [FiniteDimensional 𝕜 E] in
+/-- A subspace meeting another's orthogonal complement forces the gap to be at
+least one.  This is the engine of `isAcute_of_projectionGap_lt_one`: if a
+nonzero `x ∈ U` is killed by `P_V`, then `(P_U − P_V) x = x` exactly, so the
+operator has a unit vector on which it acts as the identity.
+
+Stated without `FiniteDimensional` because it does not need it — this direction
+is true in any inner product space, and that asymmetry is the point of the pair
+of theorems below. -/
+theorem eq_zero_of_projectionGap_lt_one {U V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : U.projectionGap V < 1)
+    {x : E} (hxU : x ∈ U) (hxV : V.starProjection x = 0) : x = 0 := by
+  by_contra hx
+  have hxpos : 0 < ‖x‖ := norm_pos_iff.mpr hx
+  have hval : (U.starProjection - V.starProjection : E →L[𝕜] E) x = x := by
+    simp [Submodule.starProjection_eq_self_iff.mpr hxU, hxV]
+  have hle : ‖x‖ ≤ U.projectionGap V * ‖x‖ := by
+    calc ‖x‖ = ‖(U.starProjection - V.starProjection : E →L[𝕜] E) x‖ := by rw [hval]
+      _ ≤ ‖(U.starProjection - V.starProjection : E →L[𝕜] E)‖ * ‖x‖ :=
+          ContinuousLinearMap.le_opNorm _ _
+      _ = U.projectionGap V * ‖x‖ := rfl
+  nlinarith [hle, hxpos, h]
+
+omit [FiniteDimensional 𝕜 E] in
+/-- The **directed** sharpening: transversality of `U` into `V` needs only the
+directed gap `‖P_{Vᗮ} P_U‖` to be below one, not the symmetric gap.
+
+This is strictly stronger than `eq_zero_of_projectionGap_lt_one` because
+`directedProjectionGap_le_projectionGap`, and it is the right granularity: each
+half of `IsAcute` is a one-sided condition, so each should be implied by the
+corresponding one-sided gap. -/
+theorem eq_zero_of_directedProjectionGap_lt_one {U V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    [Vᗮ.HasOrthogonalProjection]
+    (h : U.directedProjectionGap V < 1)
+    {x : E} (hxU : x ∈ U) (hxV : V.starProjection x = 0) : x = 0 := by
+  by_contra hx
+  have hxpos : 0 < ‖x‖ := norm_pos_iff.mpr hx
+  have hval : (Vᗮ.starProjection ∘L U.starProjection : E →L[𝕜] E) x = x := by
+    simp [Submodule.starProjection_eq_self_iff.mpr hxU,
+      Submodule.starProjection_orthogonal_val, hxV]
+  have hle : ‖x‖ ≤ U.directedProjectionGap V * ‖x‖ := by
+    calc ‖x‖ = ‖(Vᗮ.starProjection ∘L U.starProjection : E →L[𝕜] E) x‖ := by rw [hval]
+      _ ≤ ‖(Vᗮ.starProjection ∘L U.starProjection : E →L[𝕜] E)‖ * ‖x‖ :=
+          ContinuousLinearMap.le_opNorm _ _
+      _ = U.directedProjectionGap V * ‖x‖ := rfl
+  nlinarith [hle, hxpos, h]
+
+omit [FiniteDimensional 𝕜 E] in
+/-- **A small projection gap implies the acute (transversality) condition, in
+any dimension.**
+
+`DavisKahan.IsAcute U V` unfolds to `U.projectionGap V < 1`, so this is one
+half of the relation between the two same-named predicates in this development.
+The converse is `projectionGap_lt_one_of_isAcute` below and is **not** true in
+this generality — it needs `FiniteDimensional`. Two predicates called `IsAcute`
+that are related in only one direction without it is a correctness hazard, so
+both directions are stated here with their hypotheses made explicit. -/
+theorem isAcute_of_projectionGap_lt_one {U V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : U.projectionGap V < 1) : IsAcute U V :=
+  ⟨fun _x hxU hxV => eq_zero_of_projectionGap_lt_one h hxU hxV,
+   fun _y hyV hyU =>
+     eq_zero_of_projectionGap_lt_one
+       ((Submodule.projectionGap_comm U V) ▸ h) hyV hyU⟩
 
 /-- No principal angle is a quarter turn.  This is the natural domain condition
 for `tan (2 Θ)` before the canonical branch is selected.  The arbitrary

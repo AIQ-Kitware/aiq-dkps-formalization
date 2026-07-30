@@ -85,11 +85,13 @@ theorem isSkewAdjointCLM_I_smul {S : H →L[ℂ] H} (hS : IsSelfAdjoint S) :
 noncomputable def expTime (B : H →L[ℂ] H) (t : ℝ) : H →L[ℂ] H :=
   exp (t • B)
 
-/-- Rewrite form of `expTime`, so call sites need not unfold the definition.
+/-- **The flow unfolded.**  The characteristic lemma for `expTime`: a consumer in
+another module that needs `exp (t • B)` should rewrite with this rather than
+reach through the definition.
 
-Added 2026-07-30: `YosidaApproximation` was doing `rw [expTime]` and `simp [expTime]`,
-which requires the body to be exposed. Tau Ceti's `api-design` rubric asks for the
-lemma instead of the exposure. -/
+Written when this module stopped exposing its bodies:
+`LinearPMap/YosidaApproximation.lean` was doing `rw [expTime]` and
+`simp [expTime]`, which only works while the body is exposed. -/
 theorem expTime_def (B : H →L[ℂ] H) (t : ℝ) : expTime B t = exp (t • B) := (rfl)
 
 /-- The flow is the identity at time zero. -/
