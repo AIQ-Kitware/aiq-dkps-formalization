@@ -217,6 +217,66 @@ theorem sinTheta_perturbation_le
     _ ≤ NU (residual B U.subtypeₗᵢ (A.restrict hU)) := hres
     _ ≤ N (B - A) := hresBound
 
+/-- **The scaled compression of a reducing block is Ky Fan dominated by its
+residual.**  For symmetric `A`, `B` with `U` invariant under `A` and `Wᗮ`
+invariant under `B`, an interval/exterior gap of width `δ` gives
+
+`Σₖ σ (δ • P_{Wᗮ}|_U) ≤ Σₖ σ (P_{Wᗮ} (B - A)|_U)`
+
+at every `k`.  The proof restricts both operators to their blocks, transports the
+gap through `spectrumIn_restrict_iff`, checks the Sylvester equation
+`B|_{Wᗮ} X - X A|_U = C`, and applies `kyFan_sylvester_le_of_intervalGap`.
+
+`sinAngleOperator_perturbation_le` needs this on both diagonals — once as
+`(A, B, U, V)` and once as `(B, A, V, U)` — and built it twice inline. -/
+private theorem kyFanSum_smul_compression_le_of_intervalExteriorGap
+    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {U W : Submodule 𝕜 E} [W.HasOrthogonalProjection]
+    (hU : IsInvariant A U) (hWperp : IsInvariant B Wᗮ)
+    {a b δ : ℝ} (hδ : 0 < δ)
+    (hgap : IntervalExteriorGap A B U W a b δ) (k : ℕ) :
+    RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+        (((δ : ℝ) : 𝕜) •
+          (Wᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype)) ≤
+      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+        (Wᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ ((B - A) ∘ₗ U.subtype)) := by
+  set AU : U →ₗ[𝕜] U := A.restrict hU with hAUdef
+  set BWperp : Wᗮ →ₗ[𝕜] Wᗮ := B.restrict hWperp with hBWdef
+  set X : U →ₗ[𝕜] Wᗮ :=
+    Wᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype with hXdef
+  set C : U →ₗ[𝕜] Wᗮ :=
+    Wᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ ((B - A) ∘ₗ U.subtype) with hCdef
+  have hAU : AU.IsSymmetric := isSymmetric_restrict hA hU
+  have hBWperp : BWperp.IsSymmetric := isSymmetric_restrict hB hWperp
+  have hgap' : IntervalSylvesterGap BWperp AU a b δ := by
+    constructor
+    · exact (spectrumIn_restrict_iff A hU (Set.Icc a b)).2 hgap.1
+    · exact (spectrumIn_restrict_iff B hWperp
+        {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}).2 hgap.2
+  have hEq : BWperp ∘ₗ X - X ∘ₗ AU = C := by
+    ext x
+    have hcomm := projection_apply_comm_of_isInvariant hB hWperp (x : E)
+    -- states the goal with the local definitions unfolded, in the exact shape the
+    -- following rewrite needs. `simp only` on those definitions normalises further
+    -- and the rewrite then has nothing to match -- tried, and it fails here.
+    change Wᗮ.starProjection (B (x : E)) =
+      B (Wᗮ.starProjection (x : E)) at hcomm
+    -- and the goal, in the matching shape: `simp only` on the local definitions
+    -- normalises further and leaves the rewrite below nothing to match.
+    change B (Wᗮ.starProjection (x : E)) -
+        Wᗮ.starProjection (A (x : E)) =
+      Wᗮ.starProjection ((B - A) (x : E))
+    rw [← hcomm]
+    simp only [LinearMap.sub_apply, map_sub]
+  -- states the goal with the local definitions unfolded, in the exact shape the
+  -- following rewrite needs. `simp only` on those definitions normalises further
+  -- and the rewrite then has nothing to match -- tried, and it fails here.
+  change (RectangularUnitarilyInvariantNorm.kyFan k) (((δ : ℝ) : 𝕜) • X) ≤
+    (RectangularUnitarilyInvariantNorm.kyFan k) C
+  rw [(RectangularUnitarilyInvariantNorm.kyFan k).smul_eq,
+    RCLike.norm_ofReal, abs_of_nonneg hδ.le]
+  exact kyFan_sylvester_le_of_intervalGap hBWperp hAU hδ hgap' hEq k
+
 /-- **Symmetric sharp `sin Θ` theorem.**  The full-space angle operator
 contains both one-sided sine blocks.  For a general UI norm the constant-one
 conclusion therefore requires a forward and reverse interval/exterior gap;
@@ -237,90 +297,44 @@ theorem sinAngleOperator_perturbation_le
   classical
   have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
   have hVperp : IsInvariant B Vᗮ := isInvariant_orthogonal_of_isSymmetric hB hV
-  -- Restrictions of `A` and `B` to the two reducing blocks.
-  let AU : U →ₗ[𝕜] U := A.restrict hU
-  let BVperp : Vᗮ →ₗ[𝕜] Vᗮ := B.restrict hVperp
+  -- The two compressions the block-sum below is built from.
   let XUV : U →ₗ[𝕜] Vᗮ :=
     Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype
   let CUV : U →ₗ[𝕜] Vᗮ :=
     Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ
       ((B - A) ∘ₗ U.subtype)
-  have hAU : AU.IsSymmetric := isSymmetric_restrict hA hU
-  have hBVperp : BVperp.IsSymmetric := isSymmetric_restrict hB hVperp
-  have hgapUV' : IntervalSylvesterGap BVperp AU a b δ := by
-    constructor
-    · exact (spectrumIn_restrict_iff A hU (Set.Icc a b)).2 hgapUV.1
-    · exact (spectrumIn_restrict_iff B hVperp
-        {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}).2 hgapUV.2
-  have hEqUV : BVperp ∘ₗ XUV - XUV ∘ₗ AU = CUV := by
-    ext x
-    have hcomm := projection_apply_comm_of_isInvariant hB hVperp (x : E)
-    -- states the goal with the local definitions unfolded, in the exact shape the
-    -- following rewrite needs. `simp only` on those definitions normalises further
-    -- and the rewrite then has nothing to match -- tried, and it fails here.
-    change Vᗮ.starProjection (B (x : E)) =
-      B (Vᗮ.starProjection (x : E)) at hcomm
-    -- states the goal with the local definitions unfolded, in the exact shape the
-    -- following rewrite needs. `simp only` on those definitions normalises further
-    -- and the rewrite then has nothing to match -- tried, and it fails here.
-    change B (Vᗮ.starProjection (x : E)) -
-        Vᗮ.starProjection (A (x : E)) =
-      Vᗮ.starProjection ((B - A) (x : E))
-    rw [← hcomm]
-    simp only [LinearMap.sub_apply, map_sub]
   have hkyUV : ∀ k,
       RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
           (((δ : ℝ) : 𝕜) • XUV) ≤
-        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CUV := by
-    intro k
-    -- states the goal with the local definitions unfolded, in the exact shape the
-    -- following rewrite needs. `simp only` on those definitions normalises further
-    -- and the rewrite then has nothing to match -- tried, and it fails here.
-    change (RectangularUnitarilyInvariantNorm.kyFan k)
-        (((δ : ℝ) : 𝕜) • XUV) ≤
-      (RectangularUnitarilyInvariantNorm.kyFan k) CUV
-    rw [(RectangularUnitarilyInvariantNorm.kyFan k).smul_eq,
-      RCLike.norm_ofReal, abs_of_nonneg hδ.le]
-    exact kyFan_sylvester_le_of_intervalGap
-      hBVperp hAU hδ hgapUV' hEqUV k
-  -- The mirrored pair of restrictions, for the other diagonal.
-  let BV : V →ₗ[𝕜] V := B.restrict hV
-  let AUperp : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CUV :=
+    kyFanSum_smul_compression_le_of_intervalExteriorGap hA hB hU hVperp hδ hgapUV
+  -- The mirrored compression, for the other diagonal.
   let XVU : V →ₗ[𝕜] Uᗮ :=
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ V.subtype
   let CVU : V →ₗ[𝕜] Uᗮ :=
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ
       ((A - B) ∘ₗ V.subtype)
-  have hBV : BV.IsSymmetric := isSymmetric_restrict hB hV
-  have hAUperp : AUperp.IsSymmetric := isSymmetric_restrict hA hUperp
-  have hgapVU' : IntervalSylvesterGap AUperp BV c d δ := by
-    constructor
-    · exact (spectrumIn_restrict_iff B hV (Set.Icc c d)).2 hgapVU.1
-    · exact (spectrumIn_restrict_iff A hUperp
-        {lam | lam ∉ Set.Ioo (c - δ) (d + δ)}).2 hgapVU.2
-  have hEqVU : AUperp ∘ₗ XVU - XVU ∘ₗ BV = CVU := by
-    ext x
-    have hcomm := projection_apply_comm_of_isInvariant hA hUperp (x : E)
-    -- states the goal with the local definitions unfolded, in the exact shape the
-    -- following rewrite needs. `simp only` on those definitions normalises further
-    -- and the rewrite then has nothing to match -- tried, and it fails here.
-    change Uᗮ.starProjection (A (x : E)) =
-      A (Uᗮ.starProjection (x : E)) at hcomm
-    -- states the goal with the local definitions unfolded, in the exact shape the
-    -- following rewrite needs. `simp only` on those definitions normalises further
-    -- and the rewrite then has nothing to match -- tried, and it fails here.
-    change A (Uᗮ.starProjection (x : E)) -
-        Uᗮ.starProjection (B (x : E)) =
-      Uᗮ.starProjection ((A - B) (x : E))
-    rw [← hcomm]
-    simp only [LinearMap.sub_apply, map_sub]
   have hkyVU : ∀ k,
       RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
           (((δ : ℝ) : 𝕜) • (-XVU.adjoint)) ≤
         RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU.adjoint := by
     intro k
-    have hbase := kyFan_sylvester_le_of_intervalGap
-      hAUperp hBV hδ hgapVU' hEqVU k
+    have hbase0 :=
+      kyFanSum_smul_compression_le_of_intervalExteriorGap hB hA hV hUperp hδ hgapVU k
+    have hbase : δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k XVU ≤
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU := by
+      -- the extracted lemma states the bound with `δ` inside the norm; this pulls it
+      -- out, which is the form the adjoint manipulations below expect.
+      rw [show RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+              (((δ : ℝ) : 𝕜) • XVU) =
+            δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k XVU from by
+          -- `rectangularKyFanSum` is `kyFan` under a different name; naming the `kyFan`
+          -- form is what lets `smul_eq` fire on the scalar.
+          change (RectangularUnitarilyInvariantNorm.kyFan k) (((δ : ℝ) : 𝕜) • XVU) = _
+          rw [(RectangularUnitarilyInvariantNorm.kyFan k).smul_eq,
+            RCLike.norm_ofReal, abs_of_nonneg hδ.le]
+          rfl] at hbase0
+      exact hbase0
     have hleft :
         RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
             (-XVU.adjoint) =
