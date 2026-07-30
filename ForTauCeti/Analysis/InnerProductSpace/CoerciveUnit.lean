@@ -175,6 +175,47 @@ theorem norm_apply_sq_le_of_positive {B : E →L[𝕜] E}
       _ ≤ ‖B‖ * RCLike.re ⟪B y, y⟫_𝕜 :=
           mul_le_mul_of_nonneg_left h7 (norm_nonneg B)
 
+/-- The arithmetic core of the lower bound: if the "energy" `c` and the
+"square" `d` of a positive operator at a unit vector satisfy `c² ≤ d` and the
+Cauchy–Schwarz consequence `c + d ≤ K (1 + 2c + d)`, then `K` already dominates
+`c / (1 + c)`.
+
+Stated over plain reals because that is all it is; in the application
+`c = re ⟪B u, u⟫`, `d = ‖B u‖²` and `K = ‖1 - (1 + B)⁻¹‖`. -/
+private lemma div_one_add_le_of_sq_le {c d K : ℝ} (hc : 0 ≤ c)
+    (hcd : c ^ 2 ≤ d) (h : c + d ≤ K * (1 + 2 * c + d)) :
+    c / (1 + c) ≤ K := by
+  have hd : 0 ≤ d := le_trans (sq_nonneg c) hcd
+  have hD : (0 : ℝ) < 1 + 2 * c + d := by linarith
+  rw [div_le_iff₀ (by linarith : (0 : ℝ) < 1 + c)]
+  have h9 : c * (1 + 2 * c + d) ≤ (c + d) * (1 + c) := by nlinarith [hcd]
+  have h10 : c * (1 + 2 * c + d) ≤ (K * (1 + c)) * (1 + 2 * c + d) := by
+    calc c * (1 + 2 * c + d) ≤ (c + d) * (1 + c) := h9
+      _ ≤ (K * (1 + 2 * c + d)) * (1 + c) :=
+          mul_le_mul_of_nonneg_right h (by linarith)
+      _ = (K * (1 + c)) * (1 + 2 * c + d) := by ring
+  exact le_of_mul_le_mul_right h10 hD
+
+/-- The limit that turns the family of near-maximizer bounds into the sharp
+constant: `(b - ε)² / (b + (b - ε)²) → b / (1 + b)` as `ε ↓ 0` inside `Ioo 0 b`.
+
+Pure real analysis; `b = ‖B‖` at the use site. -/
+private lemma tendsto_sub_sq_div_add_sub_sq {b : ℝ} (hb : 0 < b) :
+    Filter.Tendsto (fun ε : ℝ => (b - ε) ^ 2 / (b + (b - ε) ^ 2))
+      (nhdsWithin 0 (Set.Ioo 0 b)) (nhds (b / (1 + b))) := by
+  have hden : b + (b - 0) ^ 2 ≠ 0 := by nlinarith
+  have h1 : Filter.Tendsto (fun ε : ℝ => (b - ε) ^ 2 / (b + (b - ε) ^ 2))
+      (nhds 0) (nhds ((b - 0) ^ 2 / (b + (b - 0) ^ 2))) := by
+    refine Filter.Tendsto.div ?_ ?_ hden
+    · exact (((continuous_const.sub continuous_id).pow 2).tendsto 0)
+    · exact ((continuous_const.add
+        ((continuous_const.sub continuous_id).pow 2)).tendsto 0)
+  have h2 : (b - 0) ^ 2 / (b + (b - 0) ^ 2) = b / (1 + b) := by
+    rw [sub_zero, div_eq_div_iff (by nlinarith) (by linarith)]
+    ring
+  rw [← h2]
+  exact h1.mono_left nhdsWithin_le_nhds
+
 /-- Exact operator norm of `1 - (1 + B)⁻¹` for a positive operator `B`:
 the value is `‖B‖ / (1 + ‖B‖)`.  The inverse is interpreted through
 `Ring.inverse`; the operator `1 + B` is coercive, so this is a genuine
@@ -273,30 +314,10 @@ theorem norm_one_sub_inverse_one_add {B : E →L[𝕜] E} (hB : IsSelfAdjoint B)
       rw [hval u, hNsq u] at hCS
       have husq : ‖u‖ ^ 2 ≤ 1 := by nlinarith [norm_nonneg u]
       have hK0 : (0 : ℝ) ≤ ‖1 - R‖ := norm_nonneg _
-      rw [div_le_iff₀ (by linarith : (0 : ℝ) < 1 + RCLike.re ⟪B u, u⟫_𝕜)]
-      have hD : (0 : ℝ)
-          < 1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2 := by nlinarith
       have h8 : RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2
           ≤ ‖1 - R‖ * (1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2) := by
         nlinarith [hCS]
-      have h9 : RCLike.re ⟪B u, u⟫_𝕜
-            * (1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2)
-          ≤ (RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2)
-            * (1 + RCLike.re ⟪B u, u⟫_𝕜) := by nlinarith [hc2]
-      have h10 : RCLike.re ⟪B u, u⟫_𝕜
-            * (1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2)
-          ≤ (‖1 - R‖ * (1 + RCLike.re ⟪B u, u⟫_𝕜))
-            * (1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2) := by
-        calc RCLike.re ⟪B u, u⟫_𝕜
-              * (1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2)
-            ≤ (RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2)
-              * (1 + RCLike.re ⟪B u, u⟫_𝕜) := h9
-          _ ≤ (‖1 - R‖ * (1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2))
-              * (1 + RCLike.re ⟪B u, u⟫_𝕜) :=
-              mul_le_mul_of_nonneg_right h8 (by linarith)
-          _ = (‖1 - R‖ * (1 + RCLike.re ⟪B u, u⟫_𝕜))
-              * (1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2) := by ring
-      exact le_of_mul_le_mul_right h10 hD
+      exact div_one_add_le_of_sq_le hb0 hc2 h8
     have hstep2 : ∀ ε ∈ Set.Ioo (0 : ℝ) ‖B‖,
         (‖B‖ - ε) ^ 2 / (‖B‖ + (‖B‖ - ε) ^ 2) ≤ ‖1 - R‖ := by
       intro ε hε
@@ -318,22 +339,7 @@ theorem norm_one_sub_inverse_one_add {B : E →L[𝕜] E} (hB : IsSelfAdjoint B)
         rw [div_le_div_iff₀ (by nlinarith [sq_nonneg (‖B‖ - ε)]) (by linarith)]
         nlinarith [hr2, sq_nonneg (‖B‖ - ε)]
       linarith
-    have hcont : Filter.Tendsto
-        (fun ε : ℝ => (‖B‖ - ε) ^ 2 / (‖B‖ + (‖B‖ - ε) ^ 2))
-        (nhdsWithin 0 (Set.Ioo 0 ‖B‖)) (nhds (‖B‖ / (1 + ‖B‖))) := by
-      have hden : ‖B‖ + (‖B‖ - 0) ^ 2 ≠ 0 := by nlinarith
-      have h1 : Filter.Tendsto
-          (fun ε : ℝ => (‖B‖ - ε) ^ 2 / (‖B‖ + (‖B‖ - ε) ^ 2))
-          (nhds 0) (nhds ((‖B‖ - 0) ^ 2 / (‖B‖ + (‖B‖ - 0) ^ 2))) := by
-        refine Filter.Tendsto.div ?_ ?_ hden
-        · exact (((continuous_const.sub continuous_id).pow 2).tendsto 0)
-        · exact ((continuous_const.add
-            ((continuous_const.sub continuous_id).pow 2)).tendsto 0)
-      have h2 : (‖B‖ - 0) ^ 2 / (‖B‖ + (‖B‖ - 0) ^ 2) = ‖B‖ / (1 + ‖B‖) := by
-        rw [sub_zero, div_eq_div_iff (by nlinarith) (by linarith)]
-        ring
-      rw [← h2]
-      exact h1.mono_left nhdsWithin_le_nhds
+    have hcont := tendsto_sub_sq_div_add_sub_sq (b := ‖B‖) hs
     haveI hNB : (nhdsWithin (0 : ℝ) (Set.Ioo 0 ‖B‖)).NeBot := by
       apply mem_closure_iff_nhdsWithin_neBot.mp
       rw [closure_Ioo hs.ne]
