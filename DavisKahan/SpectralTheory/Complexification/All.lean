@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.Complexification.Basic
 import DavisKahan.SpectralTheory.Complexification.FunctionalCalculus
+import DavisKahan.SpectralTheory.Complexification.Spectrum
 import DavisKahan.SpectralTheory.Complexification.Subspace
 
 /-! # `DavisKahan/SpectralTheory/Complexification` -/
