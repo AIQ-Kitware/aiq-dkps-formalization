@@ -81,8 +81,22 @@ That is `SymmetricOperatorIdealFamily`, which extends the diagonal
 instantiation.
 
 The two universes occur only through `max v w` in the type of the structure
-itself, so `linter.checkUnivs` flags them; they are nevertheless genuinely
-independent parameters of the *fields*, which is the point of the layer.
+itself, so `linter.checkUnivs` flags them.  **They stay independent, and the
+argument is the layering itself rather than an appeal to generality** (lane
+`FTC-UNIV`, decided 2026-07-30):
+
+* `SymmetricOperatorIdealFamily` extends `OperatorIdealFamily.{u, v, v}` — it
+  *is* the diagonal instantiation.  Collapse `v` and `w` and `.{u, v, v}` becomes
+  `.{u, v}`: the two structures acquire the same generality, and the distinction
+  this section is about stops existing.  The rectangular layer earns its second
+  universe by being the thing the symmetric layer specializes.
+* `Family/OperatorNorm.lean` carries a hand-written specialization of
+  `instIsCompleteOperatorNormIdealFamily` precisely because the general instance
+  is stated at three independent universes and instance search cannot see it once
+  the symmetric family equates the last two.
+
+So the independence is exercised, not merely declared; the linter's heuristic
+reads the structure's type, where it is invisible.
 
 ## Main definitions
 
@@ -125,13 +139,20 @@ universe u v w
 --   `OperatorIdealFamily`: universes `v`, `w` only occur together.  This usually
 --   means there is a `max` expression in the type where none of these universes
 --   appear on their own.
--- It is right, and the fix is an API change rather than a local one: the source and
--- target universes are declared independent but the structure never uses them
--- apart, so `max v w` is all that is ever elaborated and one variable would do.
--- Collapsing them changes this structure's universe signature and every consumer's
--- (`SymmetricOperatorIdealFamily` first), which is lane FTC-UNIV, not this one.
--- Documented here rather than left silent: lane FTC-SETOPT found this the only one
--- of the library's ten linter suppressions with no reason written at its site, and
+-- The observation is correct and the conclusion does not follow here.  `v` and `w`
+-- are invisible apart *in this structure's type*, which is all the linter reads;
+-- they are apart in its fields, and one consumer depends on exactly that:
+-- `SymmetricOperatorIdealFamily` extends `OperatorIdealFamily.{u, v, v}`.  It is the
+-- diagonal instantiation of this structure, so collapsing `v` and `w` would make the
+-- two layers equally general and delete the distinction the module docstring calls
+-- the point of the design.  `Family/OperatorNorm.lean`'s specialization of
+-- `instIsCompleteOperatorNormIdealFamily` is a second place the independence bites:
+-- it exists because instance search cannot find the three-universe instance once the
+-- symmetric family equates the last two.
+-- Decided by lane FTC-UNIV, 2026-07-30, after measuring both alternatives; the earlier
+-- version of this comment said the fix was to collapse them and deferred to that lane.
+-- Written here rather than left silent because lane FTC-SETOPT found this the only one
+-- of the library's ten linter suppressions with no reason at its site, and
 -- `ForTauCeti/README.md` §207 forbids silencing a linter without one.
 set_option linter.checkUnivs false in
 /-- A **rectangular operator ideal family** over `𝕜`, presented by its gauge.
