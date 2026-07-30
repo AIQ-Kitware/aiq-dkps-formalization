@@ -7,13 +7,36 @@ import DavisKahan.SinTheta.Unbounded.IntervalExterior
 import DavisKahan.SinTheta.Unbounded.LegacyGap
 
 /-!
-# Canonical source-shaped generalized and isometric problems
+# Source-shaped generalized and isometric problems over the form-bounded gap
 
 The generalized problems and the complex isometric problem are proved through
-the direct manuscript gap engine, so they are complete.  The scalar-generic
-isometric theorem `IsometricSinThetaProblem.result` still runs through the
-legacy engine and therefore stays with the open obligations; the manuscript
+the direct gap engine, so they are complete.  The scalar-generic isometric
+theorem `FormBoundedIsometricSinThetaProblem.result` still runs through the
+form-bounded engine and therefore stays with the open obligations; the manuscript
 surface selects the complex proof here and the real proof in `Real.Canonical`.
+
+## Two copies of each problem, and which one is redundant
+
+`SinTheta/Unbounded/AllGap.lean` declares `SpectralGeneralSinThetaProblem` and
+`SpectralIsometricSinThetaProblem` with the same fields as the structures here
+and the same `result` statements, differing **only** in `spectral_gap`: those
+take `SpectralSylvesterGap`, these take `FormBoundedSylvesterGap`.
+
+`formBoundedSylvesterGap_of_spectral` (`Sylvester/Unbounded/LegacyGap.lean`)
+turns a spectral gap into a form-bounded one in every configuration, so **the
+structures here are the more general pair**: every spectral package yields one of
+these, and `SpectralGeneralSinThetaProblem.result` is therefore a corollary of
+`FormBoundedGeneralSinThetaProblem.result` rather than an independent theorem.
+The converse fails on the ordered configurations — recovering a spectral
+containment from a form bound is the half of the spectral theorem this tree does
+not have — so the redundancy runs one way only.
+
+Collapsing the pair is real work rather than a deletion, because the two `result`
+proofs take different routes through the engines; it is posted as its own lane.
+
+`FormBoundedIsometricSinThetaProblem` is additionally `RCLike`-generic where the
+spectral one is `ℂ`-only, so it also carries the real-scalar surface in
+`Real/Canonical.lean`.
 -/
 
 namespace TauCeti
@@ -31,13 +54,17 @@ variable {E F G H : Type v}
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- Complete input package for the generalized Davis--Kahan 1970 sine theorem.
+/-- Complete input package for the generalized Davis--Kahan 1970 sine theorem,
+with the spectral gap given as `FormBoundedSylvesterGap`.
 
 `data.A` is the ambient self-adjoint closed operator, `data.A₀` is the trial
 block, and `data.Λ₁` is the complementary exact block.  The residual is bounded
 on the ambient Hilbert spaces even when the diagonal operators are unbounded.
-The lower frame bound permits a non-isometric trial map. -/
-structure GeneralSinThetaProblem
+The lower frame bound permits a non-isometric trial map.
+
+`SpectralGeneralSinThetaProblem` is the same package over the spectral gap; see the
+module docstring for why both exist. -/
+structure FormBoundedGeneralSinThetaProblem
     (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
@@ -53,12 +80,12 @@ structure GeneralSinThetaProblem
   spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
   residual_mem : N.Mem data.residual
 
-namespace GeneralSinThetaProblem
+namespace FormBoundedGeneralSinThetaProblem
 
 /-- The complete generalized source target. -/
 theorem result
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (P : GeneralSinThetaProblem (E := E) (F := F)
+    (P : FormBoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         (directedSinThetaOperator P.data.X P.exactMap
@@ -77,7 +104,7 @@ theorem result
 identification. -/
 theorem complementaryBlock_result
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (P : GeneralSinThetaProblem (E := E) (F := F)
+    (P : FormBoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         (sinThetaBlock P.data.X P.data.F₁
@@ -92,10 +119,10 @@ theorem complementaryBlock_result
       P.complement_selfAdjoint P.exact_decomposition.isometry₁ P.gap_pos
       P.frameLowerBound_pos P.lowerFrame P.spectral_gap P.residual_mem
 
-end GeneralSinThetaProblem
+end FormBoundedGeneralSinThetaProblem
 
 /-- Complete source-shaped package for the proved finite interval/exterior
-branch.  Unlike `GeneralSinThetaProblem.spectral_gap`, this uses the genuine
+branch.  Unlike `FormBoundedGeneralSinThetaProblem.spectral_gap`, this uses the genuine
 `Spectra` spectrum and does not pass through the ordered half-line engine. -/
 structure FiniteIntervalGeneralSinThetaProblem
     (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
@@ -113,7 +140,7 @@ structure FiniteIntervalGeneralSinThetaProblem
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : UnboundedIntervalExteriorGap data.A₀ data.Λ₁
+  spectral_gap : SpectralIntervalExteriorGap data.A₀ data.Λ₁
     intervalLower intervalUpper gap
   residual_mem : N.Mem data.residual
 
@@ -186,8 +213,12 @@ variable {E F G H : Type v}
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
-/-- Complete input package for the isometric specialization. -/
-structure IsometricSinThetaProblem
+/-- Complete input package for the isometric specialization, with the spectral
+gap given as `FormBoundedSylvesterGap`.
+
+Unlike `SpectralIsometricSinThetaProblem`, which is `ℂ`-only, this package is
+`RCLike`-generic and carries the real-scalar surface in `Real/Canonical.lean`. -/
+structure FormBoundedIsometricSinThetaProblem
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜)) where
   data : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G)
   exactMap : H →L[𝕜] E
@@ -213,13 +244,13 @@ variable {E F G H : Type v}
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-namespace IsometricSinThetaProblem
+namespace FormBoundedIsometricSinThetaProblem
 
 /-- Complex specialization of the source-shaped isometric problem, routed
 through the direct manuscript gap engine. -/
 theorem result_complex
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (P : IsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
+    (P : FormBoundedIsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         ((ContinuousLinearMap.id ℂ E -
@@ -237,9 +268,9 @@ theorem result_complex
 frame bound one. -/
 noncomputable def toGeneral
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (P : IsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
+    (P : FormBoundedIsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
       (G := G) (H := H) N) :
-    GeneralSinThetaProblem (E := E) (F := F)
+    FormBoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N where
   data := P.data
   exactMap := P.exactMap
@@ -255,7 +286,7 @@ noncomputable def toGeneral
   spectral_gap := P.spectral_gap
   residual_mem := P.residual_mem
 
-end IsometricSinThetaProblem
+end FormBoundedIsometricSinThetaProblem
 
 end ComplexIsometricBridge
 
