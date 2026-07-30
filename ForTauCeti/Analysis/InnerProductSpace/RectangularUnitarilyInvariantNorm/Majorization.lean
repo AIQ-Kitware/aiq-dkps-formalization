@@ -203,6 +203,9 @@ private theorem apply_eq_coordinateSquareNorm
     (singularValues_coordinateLift ιE ιF X).trans hσ
   obtain ⟨U, V, hfac⟩ :=
     exists_unitary_factorization_of_singularValues_eq hliftσ.symm
+  -- unfolds the private helper `coordinateLift`. It has no `_apply` lemma because
+  -- it is file-local plumbing rather than public API, so there is nothing to
+  -- rewrite with; `change` names the unfolded form the next step needs.
   change N A = N (coordinateLift ιE ιF X)
   rw [hfac]
   exact N.invariant U V _
@@ -218,6 +221,8 @@ private noncomputable def twoSidedActionLinear
     simp [LinearMap.comp_apply]
   map_smul' r A := by
     ext x
+    -- states the goal through the private file-local helper, which has no
+    -- characteristic lemma to rewrite with.
     change U (((r : 𝕜) • A) (V x)) = ((r : 𝕜) •
       (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap)) x
     simp [LinearMap.comp_apply]
@@ -290,6 +295,9 @@ private noncomputable def coordinateDiagonalLift
     simp [coordinateLift, diagOp_add, LinearMap.comp_apply]
   map_smul' r x := by
     ext z
+    -- unfolds the private helper `coordinateLift`. It has no `_apply` lemma because
+    -- it is file-local plumbing rather than public API, so there is nothing to
+    -- rewrite with; `change` names the unfolded form the next step needs.
     change coordinateLift ιE ιF
       (diagOp (EuclideanSpace.basisFun (Fin d) 𝕜) (r • x)) z =
       ((r : 𝕜) • coordinateLift ιE ιF
@@ -317,6 +325,8 @@ private theorem diagOp_comp_swap {d : ℕ} (q : Fin d → ℝ) (j l : Fin d) :
   simp only [LinearMap.comp_apply, OrthonormalBasis.coe_toBasis]
   rw [diagOp_apply_basis]
   have hPi : P (b i) = b (Equiv.swap j l i) := by simp [hP, hb]
+  -- states the goal in the permuted-coordinate form the following step matches
+  -- against; the permutation has to appear explicitly for it to fire.
   change ((q (Equiv.swap j l i) : ℝ) : 𝕜) • b i = P.symm (diagOp b q (P (b i)))
   rw [hPi, diagOp_apply_basis, map_smul]
   have hPsymm : P.symm (b (Equiv.swap j l i)) = b i := by
@@ -390,9 +400,16 @@ theorem mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
     obtain ⟨UF, VE, hfac⟩ := coordinateLift_unitary_factorization
       ιE ιF P.symm P
       (diagOp (EuclideanSpace.basisFun (Fin d) 𝕜) q)
+    -- states the goal in the permuted-coordinate form the following step matches
+    -- against; the permutation has to appear explicitly for it to fire.
     change L (q ∘ Equiv.swap j l) ∈
       convexHull ℝ (twoSidedUnitaryOrbit B)
+    -- restates the hypothesis through the private helper `L`, which has no
+    -- characteristic lemma to rewrite with: it is file-local plumbing, not API.
     change L q ∈ convexHull ℝ (twoSidedUnitaryOrbit B) at hq
+    -- unfolds the private helper `coordinateLift`. It has no `_apply` lemma because
+    -- it is file-local plumbing rather than public API, so there is nothing to
+    -- rewrite with; `change` names the unfolded form the next step needs.
     change coordinateLift ιE ιF
       (diagOp (EuclideanSpace.basisFun (Fin d) 𝕜)
         (q ∘ Equiv.swap j l)) ∈ _
@@ -421,9 +438,16 @@ theorem mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
         UF.toLinearMap ∘ₗ coordinateLift ιE ιF
           (diagOp (EuclideanSpace.basisFun (Fin d) 𝕜) q) ∘ₗ VE.toLinearMap :=
       hfac0
+    -- states the goal through the private file-local helper, which has no
+    -- characteristic lemma to rewrite with.
     change L (Function.update q j (-(q j))) ∈
       convexHull ℝ (twoSidedUnitaryOrbit B)
+    -- restates the hypothesis through the private helper `L`, which has no
+    -- characteristic lemma to rewrite with: it is file-local plumbing, not API.
     change L q ∈ convexHull ℝ (twoSidedUnitaryOrbit B) at hq
+    -- unfolds the private helper `coordinateLift`. It has no `_apply` lemma because
+    -- it is file-local plumbing rather than public API, so there is nothing to
+    -- rewrite with; `change` names the unfolded form the next step needs.
     change coordinateLift ιE ιF
       (diagOp (EuclideanSpace.basisFun (Fin d) 𝕜)
         (Function.update q j (-(q j)))) ∈ _
@@ -441,6 +465,9 @@ theorem mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
     · exact Submodule.finrank_le _
   have hLy : L y ∈ twoSidedUnitaryOrbit B := by
     have hsigma : (L y).singularValues = B.singularValues := by
+      -- unfolds the private helper `coordinateLift`. It has no `_apply` lemma because
+      -- it is file-local plumbing rather than public API, so there is nothing to
+      -- rewrite with; `change` names the unfolded form the next step needs.
       change (coordinateLift ιE ιF (singularValueDiagonal d B)).singularValues =
         B.singularValues
       rw [singularValues_coordinateLift,
@@ -471,12 +498,17 @@ theorem mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
       hzanti hz0 hy0 hpre hyK
   have hsigmaA : A.singularValues = (L z).singularValues := by
     symm
+    -- unfolds the private helper `coordinateLift`. It has no `_apply` lemma because
+    -- it is file-local plumbing rather than public API, so there is nothing to
+    -- rewrite with; `change` names the unfolded form the next step needs.
     change (coordinateLift ιE ιF (singularValueDiagonal d A)).singularValues =
       A.singularValues
     rw [singularValues_coordinateLift,
       singularValues_singularValueDiagonal A hrankA]
   obtain ⟨U, V, hfac⟩ :=
     exists_unitary_factorization_of_singularValues_eq hsigmaA
+  -- restates the hypothesis through the private helper `L`, which has no
+  -- characteristic lemma to rewrite with: it is file-local plumbing, not API.
   change L z ∈ convexHull ℝ (twoSidedUnitaryOrbit B) at hzK
   rw [hfac]
   exact twoSidedAction_mem_convexHull hzK U V

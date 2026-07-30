@@ -355,7 +355,7 @@ private theorem exists_intervalGap_of_orderedGap
 /-- An ordered Ritz-to-unwanted-spectrum gap forces transversality. -/
 theorem isTransverse_of_orderedRitzGap
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
@@ -376,7 +376,7 @@ in every rectangular unitarily invariant norm. -/
 theorem tanThetaEmbedding_residual_le_of_orderedGap
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
@@ -425,7 +425,7 @@ theorem singularValues_graphOperator (U : Submodule 𝕜 E)
 theorem tanTheta_residual_le
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
@@ -437,7 +437,7 @@ theorem tanTheta_residual_le
 tangent has no pole. -/
 theorem isTransverse_of_tanTheta_residual_gap
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
@@ -451,7 +451,7 @@ factorization `S = (S |C|⁺) |C|`; no normalization of the input vector is
 silently assumed. -/
 theorem tanTheta_vector_le
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
     {δ ρ : ℝ} (hδ : 0 < δ)
