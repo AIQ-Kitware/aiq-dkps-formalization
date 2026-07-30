@@ -84,6 +84,8 @@ theorem inner_apply_rightSingularBasis
         inner 𝕜 (TauCeti.rightSingularBasis A i)
           (TauCeti.rightSingularBasis A j) := by
   rw [← LinearMap.adjoint_inner_right,
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     show A.adjoint (A (TauCeti.rightSingularBasis A j)) =
       (A.adjoint.comp A) (TauCeti.rightSingularBasis A j) from rfl,
     TauCeti.adjointCompSelf_apply_rightSingularBasis,
@@ -133,6 +135,8 @@ theorem comp_moorePenroseInverse_comp (A : E →ₗ[𝕜] F) :
     rw [OrthonormalBasis.coe_toBasis]
     simp [TauCeti.apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero A hi]
   · rw [OrthonormalBasis.coe_toBasis]
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change A (moorePenroseInverse A (A (TauCeti.rightSingularBasis A i))) =
       A (TauCeti.rightSingularBasis A i)
     rw [moorePenroseInverse_apply_apply_rightSingularBasis A hi]
@@ -203,6 +207,8 @@ theorem moorePenroseInverse_comp_comp (A : E →ₗ[𝕜] F) :
       moorePenroseInverse A := by
   classical
   ext y
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change (moorePenroseInverse A ∘ₗ A) (moorePenroseInverse A y) =
     moorePenroseInverse A y
   rw [moorePenroseInverse_apply, map_sum]

@@ -27,7 +27,6 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -186,6 +185,8 @@ theorem projection_apply_comm_of_isInvariant {A : E →ₗ[𝕜] E} (hA : A.IsSy
   have hArest : A (x - U.starProjection x) ∈ Uᗮ := hUperp _ hrest
   have hsplit : A x = A (U.starProjection x) + A (x - U.starProjection x) := by
     rw [← map_add]; congr 1; abel
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change U.starProjection (A x) = A (U.starProjection x)
   rw [hsplit, map_add, U.starProjection_eq_self_iff.mpr hApx,
     (Submodule.starProjection_apply_eq_zero_iff U).mpr hArest, add_zero]
@@ -289,5 +290,4 @@ theorem spectralSubspace_eq_span_eigenvectors (A : E →ₗ[𝕜] E)
   rfl
 
 
-end DavisKahanTheory
 end TauCeti

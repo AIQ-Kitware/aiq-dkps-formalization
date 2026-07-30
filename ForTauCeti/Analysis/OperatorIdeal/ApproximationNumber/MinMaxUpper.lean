@@ -145,6 +145,8 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber
     have hrangeeq :
         LinearMap.range ((T ∘L (Kᗮ : Submodule ℂ E).starProjection) : E →ₗ[ℂ] F) =
           Submodule.map (T : E →ₗ[ℂ] F) (Kᗮ) := by
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       change LinearMap.range ((T : E →ₗ[ℂ] F).comp
           (((Kᗮ : Submodule ℂ E).starProjection : E →ₗ[ℂ] E))) = _
       rw [LinearMap.range_comp, Submodule.range_starProjection]

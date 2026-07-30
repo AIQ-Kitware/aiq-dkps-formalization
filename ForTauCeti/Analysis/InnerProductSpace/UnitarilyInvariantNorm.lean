@@ -606,6 +606,7 @@ theorem frobenius_apply (A : E →ₗ[𝕜] E) (hn : finrank 𝕜 E = n)
     (b : OrthonormalBasis (Fin n) 𝕜 E) :
     frobenius 𝕜 E A = Real.sqrt (∑ k, ‖A (b k)‖ ^ 2) := by
   subst hn
+  -- names the application so the norm bound applies to it directly.
   change Real.sqrt (∑ i, ‖A (stdOrthonormalBasis 𝕜 E i)‖ ^ 2) = _
   rw [← sum_sq_singularValues A rfl (stdOrthonormalBasis 𝕜 E),
     ← sum_sq_singularValues A rfl b]

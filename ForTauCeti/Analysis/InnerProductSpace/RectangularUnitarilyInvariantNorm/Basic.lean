@@ -317,9 +317,13 @@ theorem exists_unitary_factorization_of_singularValues_eq
   have hgram_conj : A.adjoint ∘ₗ A =
       K.toLinearMap ∘ₗ (B.adjoint ∘ₗ B) ∘ₗ K.symm.toLinearMap := by
     refine bA.toBasis.ext fun i => ?_
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change (A.adjoint ∘ₗ A) (bA i) =
       K ((B.adjoint ∘ₗ B) (K.symm (bA i)))
     rw [hKsymm i]
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change (A.adjoint ∘ₗ A) (hA.eigenvectorBasis rfl i) =
       K ((B.adjoint ∘ₗ B) (hB.eigenvectorBasis rfl i))
     rw [hA.apply_eigenvectorBasis rfl i,

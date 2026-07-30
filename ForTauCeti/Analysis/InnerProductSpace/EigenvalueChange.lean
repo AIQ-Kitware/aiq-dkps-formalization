@@ -292,6 +292,7 @@ theorem diag_mem_convexHull_perm_spectrum (hT : T.IsSymmetric) (hS : S.IsSymmetr
   have hcMW : c₀ = M *ᵥ W₀ := by
     funext k
     have hsym : ⟪v k, S (v k)⟫_𝕜 = ⟪S (v k), v k⟫_𝕜 := (hS (v k) (v k)).symm
+    -- states the goal as the inner-product identity the structure lemma expects.
     change RCLike.re ⟪v k, S (v k)⟫_𝕜 = (M *ᵥ W₀) k
     rw [hsym, re_inner_orthonormalBasis_self_eq_sum_eigenvalues_mul hS hn v k]
     simp only [hM, hW0, Matrix.mulVec, dotProduct]
@@ -354,6 +355,7 @@ theorem sum_sq_eigenvalues_sub_ge (hT : T.IsSymmetric) (hS : S.IsSymmetric)
       rw [hT.apply_eigenvectorBasis hn i, inner_smul_right,
         orthonormal_iff_ite.mp v.orthonormal i i]
       simp
+    -- states the goal as the inner-product identity the structure lemma expects.
     change RCLike.re ⟪v i, S (v i)⟫_𝕜 - RCLike.re ⟪v i, (S - T) (v i)⟫_𝕜 = hT.eigenvalues hn i
     rw [← hTeig, ← map_sub, ← inner_sub_right]
     congr 2

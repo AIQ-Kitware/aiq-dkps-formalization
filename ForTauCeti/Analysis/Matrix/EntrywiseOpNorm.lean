@@ -95,6 +95,8 @@ theorem norm_toEuclideanLin_le_of_entry_le {n : ℕ} {A : Matrix (Fin n) (Fin n)
         |(Matrix.toEuclideanLin A x) i| ≤ ε * (Real.sqrt n * ‖x‖) := by
       intro i
       have happ : (Matrix.toEuclideanLin A x) i = ∑ j : Fin n, A i j * x j := by
+        -- states the goal with the definition unfolded, in the shape the next step needs;
+        -- there is no `_apply` lemma to rewrite with here.
         change (A.mulVec (WithLp.ofLp x)) i = _
         simp [Matrix.mulVec, dotProduct]
       calc
