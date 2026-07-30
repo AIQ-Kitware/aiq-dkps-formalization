@@ -169,7 +169,7 @@ theorem totalRotation_le_two_mul_offDiagonal
 theorem sinTwoTheta_eigenvector_product_le
     {A H : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hU : Reduces A U) {a b ε lam : ℝ} (_hab : a < b)
+    (hU : IsInvariant A U) {a b ε lam : ℝ} (_hab : a < b)
     (hupper : ∀ z ∈ Uᗮ, RCLike.re ⟪A z, z⟫_𝕜 ≤ a * ‖z‖ ^ 2)
     (hlower : ∀ y ∈ U, b * ‖y‖ ^ 2 ≤ RCLike.re ⟪A y, y⟫_𝕜)
     {x : E} (hx : ‖x‖ = 1) (heig : (A + H) x = (lam : 𝕜) • x)
@@ -191,7 +191,7 @@ theorem sinTwoTheta_eigenvector_product_le
 theorem tanTwoTheta_eigenvector_product_le
     {A H : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hU : Reduces A U) (hoff : IsOffDiagonal U H)
+    (hU : IsInvariant A U) (hoff : IsOffDiagonal U H)
     {a b ε lam : ℝ} (_hab : a < b)
     (hupper : ∀ z ∈ Uᗮ, RCLike.re ⟪A z, z⟫_𝕜 ≤ a * ‖z‖ ^ 2)
     (hlower : ∀ y ∈ U, b * ‖y‖ ^ 2 ≤ RCLike.re ⟪A y, y⟫_𝕜)
