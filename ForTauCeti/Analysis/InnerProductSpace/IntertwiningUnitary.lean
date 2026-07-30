@@ -39,7 +39,7 @@ Source: **Davis (1963)**, "The Rotation of Eigenvectors by a Perturbation", §2,
 Deferred (source Davis 1958 §7 unavailable, off critical path): the minimality theorems 2.1/2.3.
 -/
 
-namespace TauCeti
+namespace OrthonormalBasis
 
 open scoped InnerProductSpace
 open LinearMap InnerProductSpace
@@ -124,6 +124,16 @@ theorem spectralProjection_univ (b : OrthonormalBasis (Fin n) 𝕜 E) :
   intro k
   simp [spectralProjection_apply_basis]
 
+end OrthonormalBasis
+
+namespace TauCeti
+
+open scoped InnerProductSpace
+open LinearMap InnerProductSpace
+
+variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [FiniteDimensional 𝕜 E] {n : ℕ}
+
 /-! ### Complete orthogonal projection families -/
 
 /-- A **complete orthogonal family** of `m` projections on `E`: pairwise-orthogonal projections
@@ -145,20 +155,20 @@ variable {m : ℕ}
 basis: `proj i` is the orthogonal projection onto `span (b i)`. -/
 noncomputable def OrthoProjFamily.ofOrthonormalBasis (b : OrthonormalBasis (Fin n) 𝕜 E) :
     OrthoProjFamily 𝕜 E n where
-  proj i := spectralProjection b {i}
-  isStarProjection' i := isStarProjection_spectralProjection b {i}
+  proj i := OrthonormalBasis.spectralProjection b {i}
+  isStarProjection' i := OrthonormalBasis.isStarProjection_spectralProjection b {i}
   orthogonal' _ _ hij :=
-    spectralProjection_comp_of_disjoint b (Finset.disjoint_singleton.mpr hij)
+    OrthonormalBasis.spectralProjection_comp_of_disjoint b (Finset.disjoint_singleton.mpr hij)
   complete' := by
-    rw [← spectralProjection_univ b]
-    unfold spectralProjection
+    rw [← OrthonormalBasis.spectralProjection_univ b]
+    unfold OrthonormalBasis.spectralProjection
     exact Finset.sum_congr rfl fun i _ => Finset.sum_singleton _ _
 
 /-- The family built from an orthonormal basis has the singleton spectral
 projections as its components, definitionally. -/
 @[simp] theorem OrthoProjFamily.ofOrthonormalBasis_proj (b : OrthonormalBasis (Fin n) 𝕜 E)
     (i : Fin n) :
-    (OrthoProjFamily.ofOrthonormalBasis b).proj i = spectralProjection b {i} :=
+    (OrthoProjFamily.ofOrthonormalBasis b).proj i = OrthonormalBasis.spectralProjection b {i} :=
   rfl
 
 namespace OrthoProjFamily
