@@ -173,7 +173,43 @@ private theorem norm_diagonal_apply_le (b : OrthonormalBasis (Fin d) ℝ E) (c :
   nlinarith [hbnd, norm_nonneg (diagonal b c x), mul_nonneg hδ0 (norm_nonneg x),
     sq_nonneg (‖diagonal b c x‖ - δ * ‖x‖)]
 
+/-- A diagonal operator whose scaling factors are all within `δ` of `1` moves no vector by
+more than `δ`.
+
+This is the operator form of the scalar estimate that makes the near-isometry constant sharp:
+`diagonal b c - 1` is again diagonal, with factors `c k - 1`. -/
+private theorem norm_diagonal_apply_sub_self_le (b : OrthonormalBasis (Fin d) ℝ E)
+    (c : Fin d → ℝ) {δ : ℝ} (hδ0 : 0 ≤ δ) (hc : ∀ k, |c k - 1| ≤ δ) (x : E) :
+    ‖diagonal b c x - x‖ ≤ δ * ‖x‖ := by
+  have hsub : diagonal b c - LinearMap.id = diagonal b fun k => c k - 1 := by
+    refine b.toBasis.ext fun k => ?_
+    rw [OrthonormalBasis.coe_toBasis, LinearMap.sub_apply, LinearMap.id_apply, diagonal_basis,
+      diagonal_basis, sub_smul, one_smul]
+  have hx : diagonal b c x - x = diagonal b (fun k => c k - 1) x := by
+    have := congrArg (fun T : E →ₗ[ℝ] E => T x) hsub
+    simpa using this
+  rw [hx]
+  exact norm_diagonal_apply_le b _ hδ0 hc x
+
 end Diagonal
+
+section OrthonormalBasis
+
+variable {d : ℕ}
+
+/-- A linear map that preserves the inner products *between the vectors of an orthonormal
+basis* preserves all inner products.  Bilinearity does the rest. -/
+private theorem inner_map_eq_of_inner_basis (b : OrthonormalBasis (Fin d) ℝ E)
+    {W : E →ₗ[ℝ] E} (hW : ∀ j k : Fin d, ⟪W (b j), W (b k)⟫_ℝ = ⟪b j, b k⟫_ℝ) (x y : E) :
+    ⟪W x, W y⟫_ℝ = ⟪x, y⟫_ℝ := by
+  conv_lhs => rw [← b.sum_repr x, ← b.sum_repr y]
+  conv_rhs => rw [← b.sum_repr x, ← b.sum_repr y]
+  simp only [map_sum, map_smul, sum_inner, inner_sum, real_inner_smul_left,
+    real_inner_smul_right]
+  refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun k _ => ?_
+  rw [hW k j]
+
+end OrthonormalBasis
 
 variable [FiniteDimensional ℝ E]
 
@@ -209,6 +245,30 @@ private theorem inner_map_eigenvectorBasis {M : E →ₗ[ℝ] E} {d : ℕ}
   · subst hjk; rw [hunit j, if_pos rfl, mul_one]
   · rw [b.inner_eq_zero hjk, if_neg hjk, mul_zero]
 
+/-- Rescaling the eigenbasis images by `(√ μ k)⁻¹` turns the Gram matrix of `M` into the
+identity: a map sending `b k` to `(√ μ k)⁻¹ • M (b k)` preserves the inner products *between
+basis vectors*.
+
+With `inner_map_eq_of_inner_basis` this is the whole reason `W = M ∘ S⁻¹` is an isometry in
+`exists_linearIsometryEquiv_comp_polarFactor`. -/
+private theorem inner_basis_of_smul_inv_sqrt {M W : E →ₗ[ℝ] E} {d : ℕ}
+    (b : OrthonormalBasis (Fin d) ℝ E) {μ : Fin d → ℝ} (hμpos : ∀ k, 0 < μ k)
+    (hunit : ∀ k, ⟪b k, b k⟫_ℝ = 1)
+    (hGbasis : ∀ k, (M.adjoint * M) (b k) = μ k • b k)
+    (hWbasis : ∀ k, W (b k) = (Real.sqrt (μ k))⁻¹ • M (b k)) (j k : Fin d) :
+    ⟪W (b j), W (b k)⟫_ℝ = ⟪b j, b k⟫_ℝ := by
+  rw [hWbasis, hWbasis, real_inner_smul_left, real_inner_smul_right,
+    inner_map_eigenvectorBasis b μ hunit hGbasis]
+  by_cases hjk : j = k
+  · subst hjk
+    rw [if_pos rfl, hunit j]
+    have hsj : 0 < Real.sqrt (μ j) := Real.sqrt_pos.mpr (hμpos j)
+    have hsqj : Real.sqrt (μ j) * Real.sqrt (μ j) = μ j :=
+      Real.mul_self_sqrt (le_of_lt (hμpos j))
+    field_simp
+    exact (Real.sq_sqrt (le_of_lt (hμpos j))).symm
+  · rw [if_neg hjk, b.inner_eq_zero hjk, mul_zero, mul_zero]
+
 /-- An eigenvalue of the Gram operator `Mᵀ ∘ M` at a **unit** eigenvector lies within `δ` of `1`.
 
 This is the quantitative heart of `exists_linearIsometryEquiv_comp_polarFactor`: the hypothesis
@@ -225,6 +285,47 @@ private theorem abs_eigenvalue_sub_one_le {M : E →ₗ[ℝ] E} {δ : ℝ}
     rw [hGv, real_inner_smul_left, hv, mul_one]
   have hb := hM v
   rwa [← hquad, hlam, hv, mul_one] at hb
+
+/-- The Gram operator `Mᵀ M` of a near-isometry has an orthonormal eigenbasis whose eigenvalues
+all lie within `δ` of `1` — hence are positive, since `δ < 1`.
+
+This is the entire spectral input to `exists_linearIsometryEquiv_comp_polarFactor`: everything
+after it is the construction of `S = (Mᵀ M)^(1/2)` and `W = M ∘ S⁻¹` from this data. -/
+private theorem exists_orthonormalBasis_gram (M : E →ₗ[ℝ] E) {δ : ℝ} (hδ : δ < 1)
+    (hM : ∀ x : E, |⟪M x, M x⟫_ℝ - ⟪x, x⟫_ℝ| ≤ δ * ⟪x, x⟫_ℝ) {d : ℕ} (hd : finrank ℝ E = d) :
+    ∃ (b : OrthonormalBasis (Fin d) ℝ E) (μ : Fin d → ℝ),
+      (∀ k, ⟪b k, b k⟫_ℝ = 1) ∧ (∀ k, (M.adjoint * M) (b k) = μ k • b k) ∧
+        (∀ k, |μ k - 1| ≤ δ) ∧ ∀ k, 0 < μ k := by
+  have hGsymm : (M.adjoint * M).IsSymmetric := LinearMap.isSymmetric_adjoint_mul_self M
+  set b := hGsymm.eigenvectorBasis hd with hb
+  set μ := hGsymm.eigenvalues hd with hμ
+  have hunit : ∀ k : Fin d, ⟪b k, b k⟫_ℝ = 1 := fun k => by
+    rw [real_inner_self_eq_norm_sq, b.orthonormal.norm_eq_one k]; ring
+  have hGbasis : ∀ k : Fin d, (M.adjoint * M) (b k) = μ k • b k := by
+    intro k
+    rw [hb, hGsymm.apply_eigenvectorBasis, ← hb, ← hμ]
+    simp
+  have hμbound : ∀ k : Fin d, |μ k - 1| ≤ δ := fun k =>
+    abs_eigenvalue_sub_one_le hM (hunit k) (hGbasis k)
+  refine ⟨b, μ, hunit, hGbasis, hμbound, fun k => ?_⟩
+  have hk := hμbound k
+  rw [abs_le] at hk
+  linarith
+
+/-- A linear map of a *finite-dimensional* space that preserves inner products is a linear
+isometry **equivalence**.
+
+Preserving inner products gives an isometry, hence injectivity; finite dimension upgrades that
+to surjectivity, which is the only place `exists_linearIsometryEquiv_comp_polarFactor` needs
+`E` to be finite-dimensional beyond the eigenbasis. -/
+private theorem exists_linearIsometryEquiv_coe_eq {W : E →ₗ[ℝ] E}
+    (hW : ∀ x y : E, ⟪W x, W y⟫_ℝ = ⟪x, y⟫_ℝ) : ∃ U : E ≃ₗᵢ[ℝ] E, ∀ x, U x = W x := by
+  have hcoe : ⇑(W.isometryOfInner hW) = ⇑W := W.coe_isometryOfInner hW
+  have hsurj : Function.Surjective (W.isometryOfInner hW) := by
+    rw [hcoe]
+    exact LinearMap.injective_iff_surjective.mp (hcoe ▸ (W.isometryOfInner hW).injective)
+  refine ⟨LinearIsometryEquiv.ofSurjective _ hsurj, fun x => ?_⟩
+  rw [LinearIsometryEquiv.coe_ofSurjective, hcoe]
 
 /-- **Polar factorization of a near-isometry.**  If the quadratic form of a linear map `M` on a
 finite-dimensional real inner product space is uniformly `δ`-close to the identity quadratic
@@ -257,29 +358,8 @@ theorem exists_linearIsometryEquiv_comp_polarFactor (M : E →ₗ[ℝ] E) {δ : 
   -- Main case: `E` is nontrivial.  Derive `δ ≥ 0` from a nonzero vector.
   have hδ0 : 0 ≤ δ := nonneg_of_quadraticFormBound hM
   obtain ⟨d, hd⟩ : ∃ d, finrank ℝ E = d := ⟨_, rfl⟩
-  -- The Gram operator and its symmetry.
-  set G : E →ₗ[ℝ] E := M.adjoint * M with hG
-  have hGsymm : G.IsSymmetric := LinearMap.isSymmetric_adjoint_mul_self M
-  have hGquad : ∀ x : E, ⟪G x, x⟫_ℝ = ⟪M x, M x⟫_ℝ := by
-    intro x
-    rw [hG, Module.End.mul_apply, LinearMap.adjoint_inner_left]
-  -- Sorted eigen-data of `G`.
-  set b := hGsymm.eigenvectorBasis hd with hb
-  set μ := hGsymm.eigenvalues hd with hμ
-  have hunit : ∀ k : Fin d, ⟪b k, b k⟫_ℝ = 1 := fun k => by
-    rw [real_inner_self_eq_norm_sq, b.orthonormal.norm_eq_one k]; ring
-  have hGbasis : ∀ k : Fin d, G (b k) = μ k • b k := by
-    intro k
-    rw [hb, hGsymm.apply_eigenvectorBasis, ← hb, ← hμ]
-    simp
-  -- Each eigenvalue lies in `[1 - δ, 1 + δ]`, in particular it is positive.
-  have hμbound : ∀ k : Fin d, |μ k - 1| ≤ δ := fun k =>
-    abs_eigenvalue_sub_one_le hM (hunit k) (hGbasis k)
-  have hμpos : ∀ k : Fin d, 0 < μ k := by
-    intro k
-    have := hμbound k
-    rw [abs_le] at this
-    linarith
+  -- Sorted eigen-data of the Gram operator `Mᵀ M`, with every eigenvalue within `δ` of `1`.
+  obtain ⟨b, μ, hunit, hGbasis, hμbound, hμpos⟩ := exists_orthonormalBasis_gram M hδ hM hd
   have hsqrtpos : ∀ k : Fin d, 0 < Real.sqrt (μ k) := fun k => Real.sqrt_pos.mpr (hμpos k)
   -- The modulus `S = G^(1/2)` and its inverse `R = G^(-1/2)`, diagonal in the eigenbasis.
   set S : E →ₗ[ℝ] E := diagonal b (fun k => Real.sqrt (μ k)) with hS
@@ -298,59 +378,21 @@ theorem exists_linearIsometryEquiv_comp_polarFactor (M : E →ₗ[ℝ] E) {δ : 
     rw [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, hS, diagonal_basis, map_smul,
       diagonal_basis, smul_smul, Real.mul_self_sqrt (le_of_lt (hμpos k))]
     exact (hGbasis k).symm
-  -- `M` applied to the eigenbasis gives inner products `μ j * δ_{jk}`.
-  have hMM : ∀ j k : Fin d, ⟪M (b j), M (b k)⟫_ℝ = if j = k then μ j else 0 :=
-    inner_map_eigenvectorBasis b μ hunit hGbasis
-  -- The candidate isometry `W₀ = M ∘ R`.
+  -- The candidate isometry `W₀ = M ∘ R`, which is orthonormal on the eigenbasis.
   set W₀ : E →ₗ[ℝ] E := M ∘ₗ R with hW
-  have hWbasis : ∀ k : Fin d, W₀ (b k) = (Real.sqrt (μ k))⁻¹ • M (b k) := by
-    intro k
+  have hWbasis : ∀ k : Fin d, W₀ (b k) = (Real.sqrt (μ k))⁻¹ • M (b k) := fun k => by
     rw [hW, LinearMap.comp_apply, hR, diagonal_basis, map_smul]
-  have hWortho : ∀ j k : Fin d, ⟪W₀ (b j), W₀ (b k)⟫_ℝ = ⟪b j, b k⟫_ℝ := by
-    intro j k
-    rw [hWbasis, hWbasis, real_inner_smul_left, real_inner_smul_right, hMM]
-    by_cases hjk : j = k
-    · subst hjk
-      rw [if_pos rfl, hunit j]
-      have hsj := hsqrtpos j
-      have hsqj : Real.sqrt (μ j) * Real.sqrt (μ j) = μ j :=
-        Real.mul_self_sqrt (le_of_lt (hμpos j))
-      field_simp
-      exact (Real.sq_sqrt (le_of_lt (hμpos j))).symm
-    · rw [if_neg hjk, b.inner_eq_zero hjk, mul_zero, mul_zero]
-  have hWinner : ∀ x y : E, ⟪W₀ x, W₀ y⟫_ℝ = ⟪x, y⟫_ℝ := by
-    intro x y
-    conv_lhs => rw [← b.sum_repr x, ← b.sum_repr y]
-    conv_rhs => rw [← b.sum_repr x, ← b.sum_repr y]
-    simp only [map_sum, map_smul, sum_inner, inner_sum, real_inner_smul_left,
-      real_inner_smul_right]
-    refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun k _ => ?_
-    rw [hWortho k j]
+  have hWortho := inner_basis_of_smul_inv_sqrt b hμpos hunit hGbasis hWbasis
   -- `S` moves no vector by more than `δ`, since `|√(μ k) - 1| ≤ |μ k - 1| ≤ δ`.
-  have hSid : ∀ x : E, S x - x = diagonal b (fun k => Real.sqrt (μ k) - 1) x := by
-    have : S - LinearMap.id = diagonal b fun k => Real.sqrt (μ k) - 1 := by
-      refine b.toBasis.ext fun k => ?_
-      rw [OrthonormalBasis.coe_toBasis, LinearMap.sub_apply, LinearMap.id_apply, hS,
-        diagonal_basis, diagonal_basis, sub_smul, one_smul]
-    intro x
-    have := congrArg (fun T : E →ₗ[ℝ] E => T x) this
-    simpa using this
   have hSest : ∀ x : E, ‖S x - x‖ ≤ δ * ‖x‖ := by
     intro x
-    rw [hSid x]
-    refine norm_diagonal_apply_le b _ hδ0 (fun k => ?_) x
-    exact (Real.abs_sqrt_sub_one_le_abs_sub_one (le_of_lt (hμpos k))).trans (hμbound k)
-  -- Bundle `W₀` as a linear isometry equivalence.
-  have hWcoe : ⇑(W₀.isometryOfInner hWinner) = ⇑W₀ := W₀.coe_isometryOfInner hWinner
-  have hWsurj : Function.Surjective (W₀.isometryOfInner hWinner) := by
-    rw [hWcoe]
-    exact LinearMap.injective_iff_surjective.mp
-      (hWcoe ▸ (W₀.isometryOfInner hWinner).injective)
-  refine ⟨LinearIsometryEquiv.ofSurjective _ hWsurj, S, fun x => ?_,
-    hS ▸ isSymmetric_diagonal b _, hSS, hSest⟩
-  have hx : LinearIsometryEquiv.ofSurjective _ hWsurj (S x) = W₀ (S x) := by
-    rw [LinearIsometryEquiv.coe_ofSurjective, hWcoe]
-  rw [hx, hW, LinearMap.comp_apply, hRS]
+    rw [hS]
+    exact norm_diagonal_apply_sub_self_le b _ hδ0
+      (fun k => (Real.abs_sqrt_sub_one_le_abs_sub_one (le_of_lt (hμpos k))).trans (hμbound k)) x
+  -- Bundle `W₀` as a linear isometry equivalence and read off the factorization.
+  obtain ⟨U, hU⟩ := exists_linearIsometryEquiv_coe_eq (inner_map_eq_of_inner_basis b hWortho)
+  refine ⟨U, S, fun x => ?_, hS ▸ isSymmetric_diagonal b _, hSS, hSest⟩
+  rw [hU, hW, LinearMap.comp_apply, hRS]
 
 /-- **The sharp near-isometry estimate.**  If the quadratic form of a linear map `M` on a
 finite-dimensional real inner product space is uniformly `δ`-close to the identity quadratic
