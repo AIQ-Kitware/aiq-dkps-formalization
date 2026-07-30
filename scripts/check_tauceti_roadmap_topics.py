@@ -85,14 +85,17 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  [A+"LinearPMap."+x for x in ["Closed","Constructions","GraphCore","RealLowerBound","Resolvent",
    "ResolventBound","ResolventOpen","SelfAdjointMaximal","SelfAdjointResolvent","Sylvester",
    "YosidaApproximation","SpectralCutOperator","SpectralFormBounds","SpectralGapInverse","SpectralGrid",
-   "SpectralMeasure","SpectralProjectionGroup","SpectralSupport","StoneUniqueness"]]
+   "SpectralMeasure","SpectralMeasure.Construction","SpectralProjectionGroup","SpectralSupport",
+   "StoneUniqueness"]]
  +[A+"SpectralOrder.Complex","Analysis.CStarAlgebra.SelfAdjointGapInverse",
    A+"QuadraticFormBounds",A+"BlockLowerBound",A+"SeparatedIntertwiner"]),
 ("T16","Sylvester equations and the Rosenblum theorem",
  [A+x for x in ["SylvesterBound","SylvesterOperator","Rosenblum","SylvesterBlockIdentity",
    "SylvesterBlockEstimate","SylvesterSpectralGap","SylvesterGroup","SylvesterGenerator","HilbertSchmidtBlock","CoerciveUnit"]]
  +[A+"Sylvester."+x for x in ["Basic","Interval","SpectralDistance"]]
- +[A+"Sylvester.Internal.ReciprocalMultiplier",A+"Sylvester.Internal.SpectralBounds"]),
+ +[A+"Sylvester.Internal.ReciprocalMultiplier"+x for x in
+     ["",".OrbitAction",".Fourier",".DoubledPhase"]]
+ +[A+"Sylvester.Internal.SpectralBounds"]),
 ("T17","Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems",
  [A+"SinTheta."+x for x in ["OperatorNorm","Perturbation","UnitarilyInvariant"]]
  +[A+"Residual."+x for x in ["AngleEmbedding","Ritz","TrialMap"]]
