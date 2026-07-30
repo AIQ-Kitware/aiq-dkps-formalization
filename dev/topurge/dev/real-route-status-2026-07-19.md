@@ -17,7 +17,7 @@ and prints exactly `[propext, Classical.choice, Quot.sound]`:
 |---|
 | `ForMathlib.DavisKahanExt.ClosedOperator.realSpectrum` |
 | `SpectraBridge.realSpectrum_eq_spectraSpectrum` |
-| `genuineSylvesterIntervalExteriorGap_of_legacy` |
+| `sylvesterIntervalExteriorGap_of_legacy` |
 | `davisKahan1970_sylvester_complex` |
 | `sinTheta_unbounded_complex`, `sinTheta_unbounded_exact_complex` |
 | `generalizedSinTheta_unbounded_complex`, `..._exact_complex` |

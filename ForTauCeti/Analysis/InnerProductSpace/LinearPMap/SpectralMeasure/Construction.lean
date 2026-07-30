@@ -146,6 +146,12 @@ theorem measurable_cayleyInv : Measurable (cayleyInv hA) := by
 noncomputable def spectralPVM : TauCeti.ProjValMeasure H :=
   BorelCalculus.toProjValMeasure (isStarNormal_cayley hA) (measurable_cayleyInv hA)
 
+/-- Rewrite form of `spectralPVM`, so a call site need not unfold the definition. -/
+theorem spectralPVM_def :
+    spectralPVM hA
+      = BorelCalculus.toProjValMeasure (isStarNormal_cayley hA)
+          (measurable_cayleyInv hA) := (rfl)
+
 /-- The Cayley singularity `{1}` is a null set for every diagonal measure. -/
 theorem diagMeasure_cayley_preimage_one (ξ : H) :
     BorelCalculus.diagMeasure (isStarNormal_cayley hA) ξ

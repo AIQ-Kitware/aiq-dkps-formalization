@@ -86,7 +86,7 @@ theorem spectraSpectralCutoff_tendsto_identity
 noncomputable def spectraSpectralCutoffInterface
     (A : ComplexClosedOperatorH (H := H))
     (hA : A.IsSelfAdjoint) :
-    GenuineSpectralCutoffInterface A hA where
+    SpectralCutoffInterface A hA where
   cutoff := spectraSpectralCutoff A hA
   isOrthogonalProjection := spectraSpectralCutoff_isOrthogonalProjection A hA
   range_le_domain := spectraSpectralCutoff_range_le_domain A hA

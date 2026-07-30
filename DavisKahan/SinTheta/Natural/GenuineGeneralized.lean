@@ -30,7 +30,7 @@ variable {E F : Type v}
 /-- Public generalized complex unbounded sine-theta theorem from natural
 spectral inputs. The lower-frame polar factorization and every complementary
 spectral restriction are constructed internally. -/
-theorem generalizedSinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
+theorem generalizedSinTheta_unbounded_spectralSubspace_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
     (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
@@ -66,7 +66,7 @@ theorem generalizedSinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
     simpa only [D, unboundedSinThetaDataOfSpectralSubspace] using hA
   have hDA₀ : D.A₀.IsSelfAdjoint := by
     simpa only [D, unboundedSinThetaDataOfSpectralSubspace] using hA0
-  have hmain := linearPMap_generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
+  have hmain := linearPMap_generalizedSinTheta_unbounded_exact_of_spectrumGap
     N D.toPMap (selfAdjointSpectralSubspaceInclusion A hA S hS)
       (D.toPMap_A_isSelfAdjoint hDA)
       (D.toPMap_A₀_isSelfAdjoint hDA₀)

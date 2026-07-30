@@ -166,7 +166,7 @@ The exact complementary block is the canonical interval spectral range of
 `A`.  The test subspace is represented by `D`; the spectrum of its bounded
 self-adjoint Ritz block lies outside the enlarged interval.  The conclusion is
 controlled directly by the operator norm of the bundled residual. -/
-theorem tanTheta_unbounded_exactSpectralIcc_genuineTrialBlock
+theorem tanTheta_unbounded_exactSpectralIcc_trialBlock
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : UnboundedTrialBlock A Z)
