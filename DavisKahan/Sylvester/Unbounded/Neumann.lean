@@ -90,7 +90,7 @@ theorem linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse
   have hTnorm : ∀ Y : F →L[𝕜] E, ‖T Y‖ ≤ q * ‖Y‖ := by
     intro Y
     calc ‖T Y‖ ≤ ‖J‖ * ‖Y‖ * ‖B‖ :=
-          RectangularSymmetricIdealFamily.opNorm_comp_comp_le J Y B
+          TauCeti.ContinuousLinearMap.opNorm_comp_comp_le J Y B
       _ ≤ (ρ + δ)⁻¹ * ‖Y‖ * ρ :=
           mul_le_mul (mul_le_mul_of_nonneg_right hInvNorm (norm_nonneg Y))
             hB (norm_nonneg B)
@@ -394,7 +394,7 @@ theorem linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
   have hTnorm : ∀ W : G →L[𝕜] F, ‖T W‖ ≤ q * ‖W‖ := by
     intro W
     calc ‖T W‖ ≤ ‖S‖ * ‖W‖ * ‖J‖ :=
-          RectangularSymmetricIdealFamily.opNorm_comp_comp_le S W J
+          TauCeti.ContinuousLinearMap.opNorm_comp_comp_le S W J
       _ ≤ ρ * ‖W‖ * (ρ + δ)⁻¹ :=
           mul_le_mul (mul_le_mul_of_nonneg_right hSnorm (norm_nonneg W))
             hJnorm (norm_nonneg J) (mul_nonneg hρ (norm_nonneg W))
