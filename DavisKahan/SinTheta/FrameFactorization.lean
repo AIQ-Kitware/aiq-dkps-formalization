@@ -16,6 +16,31 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 The generalized theorem permits a non-isometric trial map with a positive lower
 frame bound.  This module exposes the closed-range, Gram inverse, polar factor,
 and ideal-norm transport seams separately.
+
+## The three frame-factorization modules, and how they relate
+
+Documented 2026-07-30 (lane DK-FRAME) because none of the three said anything
+about the other two, and the third is named `Generic`, which reads as *the
+general existence theorem* when it is in fact *the layer that needs no field*.
+
+* **`DavisKahan/SinTheta/FrameFactorization.lean`** (this file) declares
+  `structure LowerFramePolarData` and proves it **inhabited over `ℂ`**
+  (`lowerFramePolarData_nonempty`): the Gram operator `X⋆X` is strictly positive
+  by the lower-frame estimate, and its real powers under the continuous
+  functional calculus supply the square root and inverse square root.
+* **`DavisKahan/SinTheta/Real/FrameFactorization.lean`** proves the same package
+  **inhabited over `ℝ`** (`lowerFramePolarData_real_nonempty`), by complexifying
+  the trial map and descending: the square root and inverse square root of the
+  complex Gram operator are fixed by the canonical conjugation, so they are real.
+* **`DavisKahan/SinTheta/FrameFactorizationGeneric.lean`** consumes a package and
+  proves **nothing about existence**. Factorization, ideal transport and the
+  exact-angle arguments are pure Hilbert-space algebra once the data is in hand,
+  so they are stated `𝕜`-generically there.
+
+**The separating hypothesis is the scalar field, and it separates only the two
+existence proofs.** `Generic` is downstream of both and independent of the field;
+it is not a strengthening of either.
+
 -/
 
 namespace TauCeti
