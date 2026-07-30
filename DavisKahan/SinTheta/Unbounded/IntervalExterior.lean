@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Unbounded.Core
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.Sylvester.Unbounded.IntervalExterior
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
@@ -78,7 +79,8 @@ end GenuineUnboundedIntervalExteriorGap
 /-- Generalized finite-interval unbounded sine-theta theorem at ideal-gauge
 scope, using genuine Spectra hypotheses and no ordered half-line dependency. -/
 theorem generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : D.A.IsSelfAdjoint)
     (hA₀ : D.A₀.IsSelfAdjoint)
@@ -90,34 +92,35 @@ theorem generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
     (hgap : GenuineUnboundedIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
-      δ * ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε)
-        ≤ N.gauge D.residual := by
+      δ * ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)
+        ≤ N.gaugeReal D.residual := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
   have hC := adjointResidualBlock_mem_and_gauge_le N D hF₁ hR
   have hRaw : N.Mem (D.X.adjoint ∘L D.F₁) ∧
-      δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
-        N.gauge (-(D.residual.adjoint ∘L D.F₁)) := by
+      δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) ≤
+        N.gaugeReal (-(D.residual.adjoint ∘L D.F₁)) := by
     rcases hgap with hgap | hgap
-    · exact SpectraBridge.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
+    · exact unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
         N hA₀ hΛ₁ hβα hδ hgap.1 hgap.2 hEq hC.1
-    · exact SpectraBridge.unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
+    · exact unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
         N hA₀ hΛ₁ hβα hδ hgap.2 hgap.1 hEq hC.1
   have hFrame := lowerFrame_sinThetaBlock_mem_and_gauge_le
     N D.X D.F₁ hframe hε hRaw.1
   refine ⟨hFrame.1, ?_⟩
   calc
-    δ * ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε)
-        = δ * (ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε)) := by ring
-    _ ≤ δ * N.gauge (D.X.adjoint ∘L D.F₁) :=
+    δ * ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)
+        = δ * (ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)) := by ring
+    _ ≤ δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) :=
       mul_le_mul_of_nonneg_left hFrame.2 hδ.le
-    _ ≤ N.gauge (-(D.residual.adjoint ∘L D.F₁)) := hRaw.2
-    _ ≤ N.gauge D.residual := hC.2
+    _ ≤ N.gaugeReal (-(D.residual.adjoint ∘L D.F₁)) := hRaw.2
+    _ ≤ N.gaugeReal D.residual := hC.2
 
 /-- Raw partial-map form of the interval/exterior unbounded sine-theta bound.
 The conversion to the historical bundle is confined to the current Spectra
 Sylvester boundary. -/
 theorem linearPMap_generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
@@ -129,8 +132,8 @@ theorem linearPMap_generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
     (hgap : GenuineUnboundedIntervalExteriorGapPMap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
-      δ * ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε)
-        ≤ N.gauge D.residual := by
+      δ * ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)
+        ≤ N.gaugeReal D.residual := by
   apply generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
     N D.toClosed hA hA₀ hΛ₁ hF₁ hβα hδ hε hframe
   · exact hgap
@@ -138,7 +141,8 @@ theorem linearPMap_generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
 
 /-- Raw exact directed-angle form of the interval/exterior sine-theta bound. -/
 theorem linearPMap_generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : _root_.IsSelfAdjoint D.A)
@@ -151,8 +155,8 @@ theorem linearPMap_generalizedSinTheta_unbounded_exact_of_genuineIntervalExterio
     (hgap : GenuineUnboundedIntervalExteriorGapPMap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem (directedSinThetaOperator D.X F₀ hframe hε) ∧
-      δ * ε * N.gauge (directedSinThetaOperator D.X F₀ hframe hε)
-        ≤ N.gauge D.residual := by
+      δ * ε * N.gaugeReal (directedSinThetaOperator D.X F₀ hframe hε)
+        ≤ N.gaugeReal D.residual := by
   have hBlock := linearPMap_generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
     N D hA hA₀ hΛ₁ hdecomp.isometry₁ hβα hδ hε hframe hgap hR
   have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
@@ -164,7 +168,8 @@ theorem linearPMap_generalizedSinTheta_unbounded_exact_of_genuineIntervalExterio
 /-- Raw partial-map isometric specialization of the interval/exterior
 endpoint, derived from the raw lower-frame theorem at frame bound one. -/
 theorem linearPMap_sinTheta_unbounded_exact_of_genuineIntervalExteriorGap
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : _root_.IsSelfAdjoint D.A)
@@ -176,9 +181,9 @@ theorem linearPMap_sinTheta_unbounded_exact_of_genuineIntervalExteriorGap
     (hgap : GenuineUnboundedIntervalExteriorGapPMap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
-      δ * N.gauge
+      δ * N.gaugeReal
         ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X)
-        ≤ N.gauge D.residual := by
+        ≤ N.gaugeReal D.residual := by
   have hGeneral := linearPMap_generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap
     N D F₀ hA hA₀ hΛ₁ hdecomp hβα hδ zero_lt_one
       (lowerFrameBound_one_of_isometry hX) hgap hR

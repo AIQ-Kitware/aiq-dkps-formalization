@@ -7,5 +7,8 @@ import DavisKahan.SpectralTheory.ClosedOperator.Basic
 import DavisKahan.SpectralTheory.ClosedOperator.BoundedRealization
 import DavisKahan.SpectralTheory.ClosedOperator.Complex
 import DavisKahan.SpectralTheory.ClosedOperator.Complexification
+import DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge
+import DavisKahan.SpectralTheory.ClosedOperator.RealSpectrum
+import DavisKahan.SpectralTheory.ClosedOperator.UnitaryConjugation
 
 /-! # `DavisKahan/SpectralTheory/ClosedOperator` -/

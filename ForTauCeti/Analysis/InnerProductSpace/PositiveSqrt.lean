@@ -3,7 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 
-Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/Positive.lean`
+Staged for Tau Ceti, roadmap topic T01.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+additions to `Mathlib/Analysis/InnerProductSpace/Positive.lean`
 (and a new `Mathlib/Analysis/InnerProductSpace/PositiveSqrt.lean`).
 
 Sub-dev I of the operator polar decomposition project — COMPLETE
@@ -14,6 +17,7 @@ Sub-dev I of the operator polar decomposition project — COMPLETE
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 import Mathlib.Analysis.InnerProductSpace.Adjoint
+import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 
 
 /-! # The positive square root of a positive symmetric operator (Sub-dev I)
@@ -51,19 +55,18 @@ namespace LinearMap.IsPositive
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 
-/-- **Spectral positive square root** of a positive symmetric operator `T`:
-`sqrt T = ∑ᵢ √λᵢ • (rank-one projection onto the `i`-th eigenvector)`, where `λᵢ ≥ 0` are the
-eigenvalues of `T`. Source: Horn–Johnson Thm 7.2.6. -/
-noncomputable def sqrt {T : E →ₗ[𝕜] E} (hT : T.IsPositive) : E →ₗ[𝕜] E :=
-  ∑ i : Fin (Module.finrank 𝕜 E),
-    (Real.sqrt (hT.isSymmetric.eigenvalues rfl i) : 𝕜) •
-      (InnerProductSpace.rankOne 𝕜 (hT.isSymmetric.eigenvectorBasis rfl i)
-        (hT.isSymmetric.eigenvectorBasis rfl i)).toLinearMap
+/-! `LinearMap.IsPositive.sqrt` itself is defined in
+`ForTauCeti/Analysis/InnerProductSpace/SelfAdjointFunctionalCalculus.lean`, as the
+functional calculus of `Real.sqrt`.  It was defined twice until lane T01-SQRT
+(2026-07-29): once there and once here, with the two shown equal by `rfl`.  This
+module keeps what is special to the square root — that it is positive, that it
+squares to `T`, and the uniqueness theory the general calculus has no analogue
+for. -/
 
 /-- The square root is positive. HJ 7.2.6 (it is the PSD square root). -/
 theorem sqrt_isPositive {T : E →ₗ[𝕜] E} (hT : T.IsPositive) :
     hT.sqrt.IsPositive := by
-  unfold IsPositive.sqrt
+  unfold IsPositive.sqrt TauCeti.selfAdjointFunctionalCalculus
   refine isPositive_sum _ fun i _ => ?_
   refine IsPositive.smul_of_nonneg ?_ (RCLike.ofReal_nonneg.mpr (Real.sqrt_nonneg _))
   exact (InnerProductSpace.isPositive_rankOne_self _).toLinearMap
@@ -80,15 +83,10 @@ theorem sqrt_apply_eigenvectorBasis {T : E →ₗ[𝕜] E} (hT : T.IsPositive)
     hT.sqrt (hT.isSymmetric.eigenvectorBasis rfl k)
       = (Real.sqrt (hT.isSymmetric.eigenvalues rfl k) : 𝕜)
           • hT.isSymmetric.eigenvectorBasis rfl k := by
-  classical
-  unfold IsPositive.sqrt
-  rw [LinearMap.sum_apply]
-  refine (Finset.sum_eq_single k ?_ ?_).trans ?_
-  · intro i _ hik
-    simp [rankOne_apply,
-      orthonormal_iff_ite.mp (hT.isSymmetric.eigenvectorBasis rfl).orthonormal i k, if_neg hik]
-  · intro hk; exact absurd (Finset.mem_univ k) hk
-  · simp [rankOne_apply]
+  -- the general calculus already proves this; before lane T01-SQRT the same
+  -- `Finset.sum_eq_single` argument was written out a second time here
+  exact TauCeti.selfAdjointFunctionalCalculus_apply_eigenvectorBasis
+    hT.isSymmetric Real.sqrt k
 
 /-- **Defining property:** `sqrt T` squares to `T`. HJ 7.2.6 (`B² = A`). -/
 theorem sqrt_mul_self {T : E →ₗ[𝕜] E} (hT : T.IsPositive) :

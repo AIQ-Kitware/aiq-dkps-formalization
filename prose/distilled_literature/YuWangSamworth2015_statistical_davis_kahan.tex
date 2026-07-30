@@ -272,13 +272,29 @@ Since
 \[
   \norm{\widehat v-v}^2=2-2c,
 \]
-the source rewrites this as
+the source rewrites this as its equation (4). \textbf{The printed equation~(4) is
+false: it omits a square on the factor $2-\norm{\widehat v-v}^2$.} Writing
+$t:=\norm{\widehat v-v}^2=2-2c$, so that $c=1-t/2$, $1-c=t/2$ and
+$1+c=(4-t)/2$, gives
+\[
+  (2c)^2(1-c^2)=4c^2(1-c)(1+c)=c^2t(4-t)=\tfrac14 t(2-t)^2(4-t),
+\]
+so the correct identity is
 \begin{equation}
   \sin^2(2\Theta(\widehat v,v))
   =\frac14\norm{\widehat v-v}^2
-    \bigl(2-\norm{\widehat v-v}^2\bigr)
+    \bigl(2-\norm{\widehat v-v}^2\bigr)^2
     \bigl(4-\norm{\widehat v-v}^2\bigr). \tag{YWS-3}
 \end{equation}
+\sourcecomment{Corrected 2026-07-29. This note previously reproduced the
+printed form, with $2-\norm{\widehat v-v}^2$ to the first power, so the
+repository asserted a false identity here while refuting it in Lean. Both
+directions are machine checked:
+\code{TauCeti.DavisKahanTheory.yuWangSamworth\_equation4} proves the corrected
+identity and
+\code{TauCeti.DavisKahanTheory.yuWangSamworth\_equation4\_printed\_counterexample}
+refutes the printed polynomial at $c=3/5$. The defect is recorded as item
+\code{YWS-EQ4-double-angle} of \code{dev/yu-wang-samworth-2015-full-source-census.json}.}
 A bound on $\sin2\theta$ alone does not control $\sin\theta$ globally because $\sin2\theta$ is small both near $0$ and near $\pi/2$. An additional acute-overlap hypothesis, such as $c\ge1/\sqrt2$, would be needed.
 
 \begin{corollary}[Rank-one form]
@@ -597,6 +613,7 @@ Frobenius compression & Orthogonal compression cannot increase Frobenius norm. &
 
 \begin{enumerate}[leftmargin=2em]
 \item The paper appeared in 2015, while the supplied source is the 2014 preprint transcription. The theorem numbering used here follows the transcription's labeled structure.
+\item \textbf{This note's result numbering conflicts with the rest of the repository and is not authoritative.} The \code{\textbackslash sourceanchor} lines here restart the counter per environment type, so they name the rank-one corollary \emph{Corollary 1}, the rectangular theorem \emph{Theorem 3}, and the appendix lemma \emph{Appendix Lemma 1}. \code{FinishYuWangSamworth} and every Lean declaration name use a single flat sequence --- Theorem 1, Theorem 2, Corollary 3, Theorem 4, Lemma 5 --- citing arXiv:1405.0680. The two agree only on Theorems 1 and 2. Neither can settle it from inside the repository, since the transcription is not distributed and the published article is not present. Recorded as gap \code{numbering-conflict} in \code{dev/yu-wang-samworth-2015-full-source-census.json}, which keys on the flat sequence because the Lean names do.
 \item The transcription contains a duplicate, deprecated Davis--Kahan theorem and unfinished scratch calculations after its end-of-document marker. They are not part of the paper and are excluded from the reconstruction.
 \item The baseline mixed-gap theorem's printed endpoint conventions should be checked against the official article before being used as a canonical index formula. The population-gap theorem and its proof are internally consistent.
 \item The source uses finite real matrices. The Lean development generalizes the central symmetric-operator statements to finite-dimensional real or complex inner-product spaces and expresses subspaces intrinsically.

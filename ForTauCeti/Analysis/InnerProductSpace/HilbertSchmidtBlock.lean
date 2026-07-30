@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterGroup
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group
 import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Commutant
 import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtPythagoras
 
@@ -23,6 +23,15 @@ estimate be applied and the blocks reassembled.
 
 Boundedness is the two ideal properties of the Hilbert–Schmidt energy applied in
 turn: `‖P ∘ Z ∘ Q‖ ≤ ‖P‖ ‖Q‖ ‖Z‖`.
+
+## Sources
+
+The two-sided block decomposition of a Hilbert--Schmidt operator is the
+operator-matrix view of the `ℓ²`-of-columns presentation
+(`ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtLp.lean`, with the standard
+references there).  Its use as the carrier of a Sylvester estimate follows
+Bhatia--Davis--McIntosh; see
+`prose/distilled_literature/BhatiaDavisMcIntosh1983_spectral_subspaces_sylvester.tex`.
 
 ## Provenance
 

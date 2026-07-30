@@ -201,6 +201,50 @@ theorem le_approximationNumber_of_linearIndependent
   intro x hx
   exact hV (x : E₁) x.2 hx
 
+/-! ### The orthogonal-tail upper bound
+
+Roadmap topic T09 §B4 asks for the intrinsic equality
+`aₙ(T) = ⨅ {‖T ∘L (Vᗮ).starProjection‖ : finrank V ≤ n}`.  This is the `≤` half:
+every subspace of dimension at most `n` supplies an admissible approximation, so
+the approximation number is below every orthogonal tail. -/
+
+/-- **Every orthogonal tail bounds the approximation number.**  Compressing away a
+subspace `V` of dimension at most `n` leaves an admissible rank-`≤ n`
+approximation, so `aₙ(T) ≤ ‖T ∘L (Vᗮ).starProjection‖`.
+
+This is the easy half of the orthogonal-tail formula (T09 §B4); the reverse
+inequality — that the infimum over such `V` is *attained down to* `aₙ(T)` — is not
+proved here.  The subspace lies in the **source**, and the dimension bound is
+`finrank V ≤ n` under the zero-based indexing this development uses. -/
+theorem approximationNumber_le_norm_comp_starProjection_orthogonal
+    (T : E₁ →L[𝕜] F₁) (n : ℕ) (V : Submodule 𝕜 E₁)
+    [V.HasOrthogonalProjection] [Vᗮ.HasOrthogonalProjection]
+    [FiniteDimensional 𝕜 V] (hV : finrank 𝕜 V ≤ n) :
+    T.approximationNumber n ≤ ‖T ∘L Vᗮ.starProjection‖ := by
+  have hrangeeq :
+      LinearMap.range ((T ∘L V.starProjection) : E₁ →ₗ[𝕜] F₁) =
+        Submodule.map (T : E₁ →ₗ[𝕜] F₁) V := by
+    change LinearMap.range ((T : E₁ →ₗ[𝕜] F₁).comp
+        ((V.starProjection : E₁ →ₗ[𝕜] E₁))) = _
+    rw [LinearMap.range_comp, Submodule.range_starProjection]
+  haveI : FiniteDimensional 𝕜 (Submodule.map (T : E₁ →ₗ[𝕜] F₁) V) := inferInstance
+  have hrank : (T ∘L V.starProjection).rank ≤ (n : Cardinal) := by
+    rw [LinearMap.rank, hrangeeq,
+      ← Module.finrank_eq_rank' 𝕜 (Submodule.map (T : E₁ →ₗ[𝕜] F₁) V)]
+    exact_mod_cast le_trans (Submodule.finrank_map_le _ _) hV
+  have hsub : T - T ∘L V.starProjection = T ∘L Vᗮ.starProjection := by
+    ext x
+    have hsplit : x - V.starProjection x = Vᗮ.starProjection x := by
+      rw [V.starProjection_orthogonal']
+      simp
+    have hval : (T - T ∘L V.starProjection) x = T (x - V.starProjection x) := by
+      simp [map_sub]
+    rw [hval, hsplit]
+    rfl
+  calc T.approximationNumber n ≤ ‖T - T ∘L V.starProjection‖ :=
+        T.approximationNumber_le_norm_sub hrank
+    _ = ‖T ∘L Vᗮ.starProjection‖ := by rw [hsub]
+
 end InfiniteDimensionalMinMaxLower
 
 end

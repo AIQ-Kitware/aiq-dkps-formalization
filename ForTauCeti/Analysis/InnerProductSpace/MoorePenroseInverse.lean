@@ -55,7 +55,7 @@ be constructed from the singular system.
   `ForTauCeti` staging modules.
 -/
 
-namespace FiniteDimensional
+namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -333,4 +333,4 @@ theorem comp_moorePenroseInverse_comp_eq_of_ker_le
       B (TauCeti.rightSingularBasis A i)
     rw [moorePenroseInverse_apply_apply_rightSingularBasis A hi]
 
-end FiniteDimensional
+end TauCeti

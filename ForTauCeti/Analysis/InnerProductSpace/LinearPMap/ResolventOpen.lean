@@ -36,6 +36,23 @@ so `R₀ ∘ V⁻¹` is a two-sided inverse of `A - z`.  Both identities are one
 from `sub_smul_resolvent` / `resolvent_apply_sub_smul` after splitting
 `A - z = (A - z₀) - (z - z₀)`, and `V` commutes with `R₀` because it is a
 polynomial in it, which is what lets the same operator serve on both sides.
+
+## Provenance
+
+* **Original repository:** none — **authored in place** in the AIQ DKPS
+  formalization (`https://github.com/AIQ-Kitware/aiq-dkps-formalization`),
+  commit `9be75beb`, for staging into Tau Ceti.
+* **Original module:** none; written directly at this path.
+* **Original authors / copyright / licence:** Copyright (c) 2026 Kitware, Inc.;
+  `Authors: Jon Crall, Claude Opus 5`; Apache 2.0 (this repository's `LICENSE`).
+  No third-party code is incorporated, so no donor notice is carried.
+* **Extraction class:** *authored in place*, for upstreaming to Tau Ceti.
+* **Relation to existing libraries:** Mathlib proves the bounded analogue,
+  `spectrum.isOpen_resolventSet`. This module is the `LinearPMap` statement,
+  which Mathlib does not have; the argument is the usual Neumann-series
+  perturbation, routed through `resolvent_unique` so that no second inverse has
+  to be identified by hand. Spectra did not influence the selection or the proof.
+* **Semantic differences from a donor:** not applicable.
 -/
 
 @[expose] public section

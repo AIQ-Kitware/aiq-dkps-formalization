@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.ShiftedInverse
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.Sylvester.Unbounded.Neumann
 import Mathlib.Analysis.Normed.Operator.Extend
 
@@ -105,7 +106,8 @@ bounded through its shift extension and the equation transfers by density;
 the exterior block `A` carries a proof-carrying two-sided shifted inverse.
 Both closed blocks may be genuinely unbounded a priori. -/
 theorem linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
     (hAclosed : A.IsClosed) (hBdense : Dense (B.domain : Set F))
     {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
@@ -116,7 +118,7 @@ theorem linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight
       ((α - β) / 2 + δ))
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   have hr0 : (0 : ℝ) ≤ (α - β) / 2 := by linarith
   obtain ⟨S, hSnorm, hSeq⟩ :=
     linearPMap_exists_bounded_shift_extension hBsym hBdense hβα hBlow hBhigh
@@ -179,7 +181,8 @@ theorem linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight
 /-- Compatibility entry point for the raw ideal-gauge shifted-inverse
 assembly theorem. -/
 theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
@@ -189,7 +192,7 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
       ((α - β) / 2 + δ))
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C :=
+    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C :=
   linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight N
     A.toLinearPMap_isClosed B.toLinearPMap_dense hβα hδ hBsym hBlow hBhigh hAres hEq hC
 

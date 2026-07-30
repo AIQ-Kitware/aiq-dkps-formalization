@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 
-import DavisKahan.FiniteDimensional.Sylvester.Interval
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
 import DavisKahan.FiniteDimensional.DirectRotation.Basic
-import DavisKahan.FiniteDimensional.SinTheta.Perturbation
+import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 import DavisKahan.FiniteDimensional.SinTheta.TrialMap
 import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 import DavisKahan.FiniteDimensional.TanTheta.Vector

@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.FiniteDimensional.Sylvester.SpectralDistance
-import DavisKahan.BoundedOperator.Basic
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Basic
 
 /-!
 # Compatibility bridges for the historical continuous-linear-map API
@@ -55,7 +55,7 @@ theorem ideal_sylvester_le
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
     (hsep : ContinuousLinearMapBridge.SpectraSeparated A ⊤ B ⊤ d)
-    (hEq : sylvesterOperator A B X = C) :
+    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
     d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
   let A' : F →ₗ[𝕜] F := A.toLinearMap
   let B' : E →ₗ[𝕜] E := B.toLinearMap
@@ -94,7 +94,7 @@ theorem ideal_sylvester_le_complex
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
     (hsep : ContinuousLinearMapBridge.SpectraSeparated A ⊤ B ⊤ d)
-    (hEq : sylvesterOperator A B X = C) :
+    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
     d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
   let A' : FC →ₗ[ℂ] FC := A.toLinearMap
   let B' : EC →ₗ[ℂ] EC := B.toLinearMap
@@ -133,7 +133,7 @@ theorem ideal_sylvester_le_real
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
     (hsep : ContinuousLinearMapBridge.SpectraSeparated A ⊤ B ⊤ d)
-    (hEq : sylvesterOperator A B X = C) :
+    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
     d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
   let A' : FR →ₗ[ℝ] FR := A.toLinearMap
   let B' : ER →ₗ[ℝ] ER := B.toLinearMap

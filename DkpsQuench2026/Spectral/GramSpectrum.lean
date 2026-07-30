@@ -18,7 +18,7 @@ the target-augmentation floor in `SpectralRegularity.lean`.
 
 import DkpsQuench2026.Core.Certificates
 import ForTauCeti.Analysis.InnerProductSpace.FiniteFrame
-import ForTauCeti.Analysis.InnerProductSpace.CenteredScatter
+import ForTauCeti.Probability.Moments.CenteredScatter
 
 set_option linter.mathlibStandardSet false
 

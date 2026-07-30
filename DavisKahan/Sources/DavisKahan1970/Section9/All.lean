@@ -5,6 +5,13 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.Section9.DomainLimitation
 import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicConverse
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamEigenmodeReduction
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamFoundationAssembler
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamModeData
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootLocalization
 import DavisKahan.Sources.DavisKahan1970.Section9.FullExample
 import DavisKahan.Sources.DavisKahan1970.Section9.IndividualAngles
 import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds

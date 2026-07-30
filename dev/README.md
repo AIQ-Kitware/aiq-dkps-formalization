@@ -11,8 +11,8 @@ pattern of past mistakes, and take fewer of them.
 
 | File | What it answers |
 |---|---|
-| [`LANES.md`](LANES.md) | Who holds what. **Claim your row and commit it before your first edit.** Unlisted means unclaimed. |
-| [`tauceti/README.md`](tauceti/README.md) | The active migration: polishing foundations into `ForTauCeti`, retiring `vendor/Spectra`, converging three operator-theory stacks. |
+| [`LANES.md`](LANES.md) | Who holds what. **Claim your row, commit it, and push it before your first edit** — unpushed is invisible to the other agents. Unlisted means unclaimed. Its `Branch and sync protocol` covers fetching, merging and conflict resolution across agent branches. |
+| [`tauceti/README.md`](tauceti/README.md) | The active migration: polishing foundations into `ForTauCeti` and converging the operator-theory stacks. The Spectra dependency is **retired** as of 2026-07-29 — see *Retired tooling* below. |
 | [`SEARCH.md`](SEARCH.md) | How to *search* this memory instead of reading it all. Grep patterns and routing rules by symptom. |
 
 The governing policy is in [`../AGENTS.md`](../AGENTS.md), not here. It defines
@@ -59,7 +59,8 @@ its checker.
 Resist adding a dated one-off note. The tree accumulated about ninety of them
 between 2026-07-18 and 07-24, they went stale within days, and reading them as
 current cost a later session two reversed lanes. They now sit in
-[`topurge/`](topurge/MANIFEST.md) awaiting deletion. If a note is worth
+[`topurge/`](topurge/MANIFEST.md), which **stays** — jon decided on 2026-07-30
+not to delete it. Treat those files as a labelled archive, not as pending work. If a note is worth
 writing, it is worth putting in the file that already owns the topic.
 
 ## `dev/benchmark-candidates/`
@@ -115,7 +116,9 @@ proves, where it should land, and the likely elaboration seams.
 Only the manifests whose sketches are still unpromoted remain here; the delivery
 receipts for overlays already applied were purged. Two of these are load-bearing
 beyond documentation: `pending-mathahead-rebased-53297a4-gpt56.manifest.txt` is
-existence-checked by `scripts/check_davis_kahan_rebased_mathahead.py`, and
+checked by `scripts/check_davis_kahan_rebased_mathahead.py` — which treats a
+sketch **promoted** out of `Experimental/` as success and fails only when a
+module is nowhere, so an entry may record a rename with `<scratch> -> <target>` — and
 `lemma63-promotion-scratch-7f9f562-gpt56.md` is cited from two Lean sources.
 
 ## Quality bar
@@ -127,6 +130,44 @@ entries hidden between filler. The strongest entries are the ones where the code
 `#print axioms`, kernel — still rejected it. Those are the non-obvious,
 transferable traps. If unsure whether something belongs, write it in scratch
 first; if a week later you still think the lesson is durable, move it in.
+
+---
+
+## Retired tooling — the Spectra lifecycle scripts
+
+**Sixteen scripts were deleted on 2026-07-29** when the Spectra dependency was
+retired. They are listed here because a reader who finds them cited in an older
+document should know they are gone on purpose, not missing by accident:
+
+`apply_spectra_submodule_overlay.py`, `bootstrap_spectra_submodule.sh`,
+`restore_spectra_reference_submodule.sh`, `finalize_vendored_spectra_snapshot.sh`,
+`spectra_compatibility_patch.py`, `spectra_import_smoke.sh`,
+`verify_spectra_reference.py`, `verify_vendored_spectra.py`,
+`check_spectra_vendor_authorship.py`, `enable_spectra_lake_dependency.py`,
+`disable_spectra_lake_dependency.py`, `spectra_port_surface.py`,
+`check_spectra_parent_only_bridge.sh`, `ExportSpectraDeclClosure.lean`,
+`ExportSpectraUsage.lean`, `remove_redundant_mathlib_vendor_snapshots.py`.
+
+Three had stopped telling the truth rather than failing, which is the worse
+mode: `verify_spectra_reference.py` printed the *superproject* commit as the
+submodule's pin (it reported this repository's own HEAD as Spectra's SHA),
+`verify_vendored_spectra.py` diffed `vendor/Spectra`, a tree that no longer
+exists, and `check_spectra_vendor_authorship.py` refused to classify anything
+because its `external/Spectra` reference checkout was gone. One was actively
+dangerous: `apply_spectra_submodule_overlay.py` regenerates the managed
+`Spectra collaboration policy` block in `AGENTS.md`, so running it would have
+reinstated the retired policy over the notice that replaced it.
+
+**One is kept and still has a job:** `scripts/check_spectra_namespace.py`. The
+rule it enforces — never declare into `namespace Spectra` — *outlives* the
+dependency. With the imports gone, a DKPS theorem parked in the donor namespace
+is no longer distinguishable from donor material by anything, so the attribution
+ledger would silently credit Spectra for our work. `namespace SpectraBridge` is
+the correct pattern and is not a violation.
+
+Attribution survives all of this: `retired/Spectra.UPSTREAM.md`,
+`tauceti/spectra-provenance-map.md`, `tauceti/spectra-vendor-authorship-baseline.json`,
+and the provenance headers in nine Lean modules.
 
 ---
 
@@ -220,6 +261,125 @@ hand-maintaining, because a recorded status drifts the moment someone moves a
 module and nobody notices. Run it after any namespace move, then re-render the
 markdown view.
 
+## Yu--Wang--Samworth 2015 full source census
+
+The same instrument for the second paper the campaign carries end to end: Yu,
+Wang & Samworth, *A useful variant of the Davis--Kahan theorem for
+statisticians*, Biometrika 102(2), 2015.
+
+- `yu-wang-samworth-2015-full-source-census.json` — authoritative structured data;
+- `yu-wang-samworth-2015-full-source-census.md` — generated human-readable view.
+
+```bash
+python3 scripts/check_yu_wang_samworth_source_census.py            # fast gate
+python3 scripts/check_yu_wang_samworth_source_census.py --probe    # + build resolution
+python3 scripts/check_yu_wang_samworth_source_census.py --probe --sync
+```
+
+**It is keyed on the paper, not on the Lean tree**, so every result the paper
+proves has a row whether or not anything formalizes it. A census assembled from
+the Lean side enumerates what someone happened to write and cannot report an
+absence; this one can, and does.
+
+It currently reports **22 items; 18 formalized, of which 9 are guarded by the
+default build; 3 unformalized and still proof debt.** The gap between 18 and 9
+is the finding: `FinishYuWangSamworth` is a `lean_lib` but **not a default
+target**, so Theorem 1's three norm forms, most of Theorem 4, Lemma 5 and the
+corrected equation (4) are proved and unprotected — a refactor can break them
+while CI stays green. Adding one target closes most of that gap with no new
+mathematics.
+
+Three things this gate does that a name-grep cannot, each of which changed a
+row when it was first run:
+
+1. **It distinguishes `private` from missing.** Both fail a `#check`
+   identically and mean opposite things. Three declarations the census
+   initially cited are `private`; two have public siblings, and one does not —
+   the Section 1 complement identity `‖V_1ᵀV̂‖_F = ‖sin Θ‖_F` is proved and
+   uncitable, so its row reads `absent`, which is the only honest reading.
+2. **It carries a canary.** A name that must never resolve is appended to every
+   probe; if it does resolve, the diagnostic parser is broken and the run
+   refuses to report rather than reporting universal success. It fired on the
+   first run — the path anchor was wrong — which is precisely the failure a
+   canary exists to catch.
+3. **It separates `status` from `verification`.** The first is a judgement about
+   the printed source, the second is measured from the build and is rewritten by
+   `--sync`. Hand-maintaining the second is how a census drifts.
+
+Two source-level findings are recorded in the census's `gaps` table and are
+worth knowing before quoting this paper:
+
+- **The printed equation (4) is false.** It omits a square on `2 - ‖v̂ - v‖²`.
+  The corrected identity and a `norm_num` refutation of the printed polynomial
+  are both formalized.
+- **The repository carries two incompatible numberings for this paper.** The
+  Lean names and `FinishYuWangSamworth` use a flat sequence (Theorem 1,
+  Theorem 2, Corollary 3, Theorem 4, Lemma 5); the distilled tex restarts the
+  counter per environment type and calls the same results Corollary 1,
+  Theorem 3 and Appendix Lemma 1. They agree only on Theorems 1 and 2.
+  Resolving it needs one look at the published article.
+
+## Paper-library grounding audits
+
+Two completion libraries ship a `verify_grounding.py` that checks their grounding
+claim against the tree — that every repository result their write-up leans on is
+still where it says, under the name it says.
+
+```sh
+python3 FinishTanTwoTheta/scripts/verify_grounding.py      # gate; exit 1 on a stale pin
+python3 FinishYuWangSamworth/scripts/verify_grounding.py   # gate; exit 1 on a stale pin
+```
+
+**They are listed here because until 2026-07-30 nothing ran them** (lane
+CLAIM-DOC). They live inside their libraries rather than in top-level `scripts/`,
+were wired into no gate list, and so a reader met a completeness claim with no
+live evidence behind it. That is worse than a weak proof: it is what a reader
+trusts *instead of* checking.
+
+When they were finally run, the two libraries were **not** in the same state.
+`FinishYuWangSamworth` passed. `FinishTanTwoTheta` failed with four stale pins,
+all of them left by *other* lanes' migrations and none of them missing
+mathematics — a promoted Riccati module, two deliberately-deleted dead wrappers
+whose canonical twins live in `ForTauCeti`, and the `vendor/` → `retired/` move of
+the Spectra snapshot. All four were repointed, and the outcome is recorded in
+`FinishTanTwoTheta/GROUNDING.md`. Both now exit 0.
+
+**A grounding audit is a gate, not a document.** If one of these starts failing,
+the fix is to repoint it or to say in the library's `GROUNDING.md` that it fails —
+not to delete the pin, which removes the evidence rather than the problem.
+
+## Namespace policy
+
+`scripts/check_namespace_policy.py` gates `ForTauCeti/README.md` §2: a staging
+module may declare into `TauCeti.*`, or into the **canonical Mathlib namespace of
+the object it extends**, and nothing else.
+
+```sh
+python3 scripts/check_namespace_policy.py           # report
+python3 scripts/check_namespace_policy.py --check   # gate; exit 1 on a violation
+```
+
+**Why a gate.** §2 was written down and never checked, and by 2026-07-29 two
+modules had drifted into `FiniteDimensional` — a spectral functional calculus and
+a Moore–Penrose inverse, neither of them a fact about finite-dimensionality. The
+audit that found them (lane NS-SPREAD) also *cleared* two files the same audit
+had suspected, `ENNReal.tsum_sq_add_rpow_le` (Minkowski at `p = 2` for `tsum`,
+stated for arbitrary `ℝ≥0∞`-valued functions) and
+`HilbertBasis.{hasSum_norm_inner_sq, tsum_enorm_inner_sq}` (Parseval, proved from
+Mathlib's own `HilbertBasis.hasSum_inner_mul_inner`). Both really are facts about
+the object they name.
+
+**The allowlist is the review.** Every permitted Mathlib root in the script
+carries a one-line reason naming the object being extended; adding a root means
+writing that sentence. The test is the audit's: *would the declaration read
+naturally as a fact about that object?*
+
+**One parser subtlety worth not rediscovering.** The check is on the
+*fully-qualified* namespace, so `namespace TauCeti` / `namespace HilbertSchmidt`
+is `TauCeti.HilbertSchmidt` and fine. A naive scan of `namespace` lines reports
+106 of the 164 modules; the stack, and popping only on a matching `end`, is what
+makes the number 0.
+
 ## Docstring coverage
 
 `scripts/check_docstring_coverage.py` gates the one quality invariant that had no
@@ -261,6 +421,54 @@ holds 7, all in a file with a live lane row. Shrink it; do not grow it.
 **Verified to fail, not merely to pass:** injecting an undocumented theorem *and* an
 anonymous instance makes it exit 1 and name both, while prose beginning with a keyword
 inside a block comment is correctly ignored.
+
+---
+
+## Tau Ceti submission ladder
+
+`scripts/derive_tauceti_submission_ladder.py` derives the rungs in
+`tauceti/submission-ladder.md` from the `ForTauCeti` import graph, so the
+document cannot silently go stale the way it did within hours of being written.
+
+```sh
+python3 scripts/derive_tauceti_submission_ladder.py          # report
+python3 scripts/derive_tauceti_submission_ladder.py --check  # exit 1 if the document disagrees
+python3 scripts/derive_tauceti_submission_ladder.py --json   # machine-readable
+```
+
+Rungs are defined by **seed** modules in the script's `RUNGS` table; everything
+else — the `new` count, the cumulative closed slice, what is off the ladder — is
+computed. Add a rung by adding seeds, not by writing a number.
+
+It currently reports **41 of 156 modules on the ladder**; the other 115 have no
+submission path, which is the measurement behind lane `LADDER-EXT`.
+
+---
+
+## Tau Ceti submission readiness
+
+`scripts/check_tauceti_readiness.py` measures, **per roadmap topic**, the four
+parts of the Tau Ceti standard that are checkable from the sources without a
+build: a `## Provenance` section on every module (`ForTauCeti/README.md` §5),
+no proof escapes, the 1000-line new-file limit (§4), and that every module is
+placed in a topic at all.
+
+```sh
+python3 scripts/check_tauceti_readiness.py           # per-topic table
+python3 scripts/check_tauceti_readiness.py --check    # exit 1 on a blocker
+python3 scripts/check_tauceti_readiness.py --json
+```
+
+Topic assignment is imported from `check_tauceti_roadmap_topics.py`, so the two
+cannot drift apart. **Per-topic is the point**: a library-wide average hides
+where the debt is. Measured 2026-07-29, **19 of 22 topics are clean on all four
+criteria**, and every gap falls in T15/T16/T17 — the unbounded stack, Sylvester,
+and the Davis–Kahan sin-Θ theorems, which are the deepest topics on the
+submission path.
+
+`--check` fails on a missing provenance section or a proof escape, both absolute
+blockers. Oversize files are **reported, not failed**: three exist, splitting
+them is a real refactor with a build, and it is tracked as lane `SPLIT-1K`.
 
 ---
 

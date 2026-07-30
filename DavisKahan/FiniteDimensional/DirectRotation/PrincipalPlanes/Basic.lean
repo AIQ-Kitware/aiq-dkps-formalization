@@ -271,9 +271,9 @@ theorem abs_canonicalIntertwiner_apply_principalSourceVector
     rw [hcossq, RCLike.ofReal_sub, RCLike.ofReal_one, sub_smul, one_smul, ← heig]
     abel
   have hpos := LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V)
-  have hfc := FiniteDimensional.selfAdjointFunctionalCalculus_apply_of_apply_eq_smul
+  have hfc := TauCeti.selfAdjointFunctionalCalculus_apply_of_apply_eq_smul
     hpos.isSymmetric Real.sqrt hsq
-  rw [FiniteDimensional.selfAdjointFunctionalCalculus_sqrt hpos,
+  rw [TauCeti.selfAdjointFunctionalCalculus_sqrt hpos,
     Real.sqrt_sq hc0] at hfc
   exact hfc
 

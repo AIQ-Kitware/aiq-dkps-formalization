@@ -50,7 +50,9 @@ REPO_LEDGER = {
     "DavisKahan/DoubleAngle/KyFanOrthonormal.lean": [
         "theorem sum_le_kyFanApproximationGauge_of_orthonormal",
     ],
-    "DavisKahan/Experimental/InfiniteDimensional/Riccati/BoundedCore.lean": [
+    # Repointed 2026-07-30 (lane CLAIM-DOC): `edward (aiq-gpu)`'s 023b2ceb promoted
+    # the bounded Riccati block out of Experimental into production, by path only.
+    "DavisKahan/Riccati/BoundedCore.lean": [
         "theorem solvesRiccati_iff_pointwise",
     ],
     "DavisKahan/Riccati/UnboundedReduction.lean": [
@@ -64,11 +66,20 @@ REPO_LEDGER = {
         "theorem IsSymmetric.toLinearMap_inner_eq",
         "theorem IsSelfAdjoint.isSymmetric",
     ],
-    "DavisKahan/Sylvester/ClosedSylvesterEquation.lean": [
-        "theorem SemiboundedBelow.toLinearMap_bound",
-        "theorem SemiboundedAbove.toLinearMap_bound",
+    # Repointed 2026-07-30 (lane CLAIM-DOC).  The two bundled wrappers
+    # `SemiboundedBelow.toLinearMap_bound` / `SemiboundedAbove.toLinearMap_bound`
+    # were deleted as dead by 9e10b784 -- zero callers, and the bundled predicate is
+    # a reducible abbrev, so a caller uses the ForTauCeti twins by defeq.  The
+    # grounding is therefore on the canonical definitions, which is where the
+    # mathematics now lives.
+    "ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Sylvester.lean": [
+        "def SemiboundedBelow",
+        "def SemiboundedAbove",
     ],
-    "vendor/Spectra/Spectra/SpectralTheory/Algebra.lean": [
+    # Repointed 2026-07-30 (lane CLAIM-DOC): the Spectra snapshot moved from
+    # `vendor/` to `retired/` when the dependency was retired.  This is a grounding
+    # reference to the donor, not an import -- rule 6 still forbids importing it.
+    "retired/Spectra/Spectra/SpectralTheory/Algebra.lean": [
         "theorem spectralProjection_congr",
         "theorem energy_lower_bound_of_spectralProjection_Iic_eq_zero",
         "theorem energy_upper_bound_of_spectralProjection_Ici_eq_zero",

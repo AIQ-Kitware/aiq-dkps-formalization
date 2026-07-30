@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Interop.Spectra.ReflectionRestriction
+import DavisKahan.SpectralTheory.ReflectionRestriction
 
 /-!
 # Reflection geometry for the unbounded sine-two-theta theorem
@@ -28,7 +28,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
-namespace SpectraBridge
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
@@ -96,7 +95,6 @@ theorem norm_reflectedComplementaryOverlap_eq_sinTwoAngle
   exact norm_starProjection_reflectedComplementary_eq_sinTwoAngle U V
 
 
-end SpectraBridge
 end Experimental
 end DavisKahan
 end TauCeti

@@ -3,12 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.FiniteDimensional.Core.SpectralSubspace
+import ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace
 import ForTauCeti.Analysis.InnerProductSpace.FrameFactorization
-import DavisKahan.FiniteDimensional.Residual.Ritz
-import DavisKahan.FiniteDimensional.Residual.TrialMap
-import DavisKahan.FiniteDimensional.Residual.AngleEmbedding
-import DavisKahan.FiniteDimensional.Sylvester.Interval
+import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
+import ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap
+import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
 
 /-!
 # Generalized finite-dimensional Davis--Kahan theorems
@@ -18,7 +18,7 @@ after the four headline theorems in Davis--Kahan (1970).
 
 Literature map:
 
-* `ForMathlib/prose/Davis-Kahan-1970-part-III-core-arguments.tex`,
+* `prose/core-arguments/Davis-Kahan-1970-part-III-core-arguments.tex`,
   Sections 5--11.
 * Davis--Kahan (1970), Theorems 6.1--6.3 and 8.2.
 

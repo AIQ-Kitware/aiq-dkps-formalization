@@ -449,7 +449,7 @@ as "genuinely free" on the strength of *ownership* — no open lane names those
 files — and then read the files. All five sit in `namespace SpectraBridge` and
 every one of them references `selfAdjointSpectralRestriction` /
 `selfAdjointSpectralSubspace`, which are defined in
-`DavisKahan/Interop/Spectra/SpectralRestrictionOperator.lean` (10, 2, 2, 19 and
+`DavisKahan/SpectralTheory/SpectralRestrictionOperator.lean` (10, 2, 2, 19 and
 19 references respectively). Their `DKClosedOperator` binders are **call-site
 adapters feeding Spectra endpoints** — structurally identical to the 91
 `SinTheta/Natural` positions edward measured as un-takeable, and blocked by the
@@ -915,7 +915,7 @@ relevant test: the raw endpoint
 proved by `apply`ing the bundled theorem at `D.toClosed`, so the module depends
 on it internally.  That delegation exists because the Spectra Sylvester lemmas
 underneath it —
-`SpectraBridge.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight`
+`unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight`
 and its `exteriorLeft_intervalRight` twin — still take bundled `ClosedOperator`
 arguments.  Contracting the endpoint therefore requires raw `SpectraBridge`
 lemmas, i.e. work inside `Interop/Spectra/**`, which this lane **explicitly

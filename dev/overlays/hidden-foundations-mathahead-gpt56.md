@@ -264,7 +264,7 @@ These are interfaces, not completed proofs:
 - `spectraCanonicalPolarFactor`
 - `IsPaperDirectRotation`
 - the existing direct-rotation projection-intertwining declarations imported by
-  `DavisKahan.Interop.Spectra.DirectRotation`.
+  `DavisKahan.Geometry.Polar.DirectRotation`.
 
 #### Orthogonal projection API
 

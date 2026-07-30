@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Unbounded.AllGap
-import DavisKahan.Interop.Spectra.SpectralRestrictionOperator
+import DavisKahan.SpectralTheory.SpectralRestrictionOperator
 
 /-!
 # Natural spectral-projection inputs for the unbounded sine-theta theorem
@@ -21,7 +21,6 @@ namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
 
-open SpectraBridge
 
 universe v
 
@@ -42,12 +41,12 @@ theorem spectralSubspace_orthogonalExactDecomposition
   have hUcProjection : Uc.starProjection =
       ContinuousLinearMap.id ℂ E - U.starProjection := by
     rw [← selfAdjointSpectralProjection_eq_starProjection A hA Sᶜ hS.compl,
-      show SpectraBridge.selfAdjointSpectralProjection A hA Sᶜ hS.compl
+      show selfAdjointSpectralProjection A hA Sᶜ hS.compl
           = ContinuousLinearMap.id ℂ E -
-            SpectraBridge.selfAdjointSpectralProjection A hA S hS from
+            selfAdjointSpectralProjection A hA S hS from
         (TauCeti.LinearPMap.spectralPVM hA).proj_compl S hS]
     change ContinuousLinearMap.id ℂ E -
-        SpectraBridge.selfAdjointSpectralProjection A hA S hS =
+        selfAdjointSpectralProjection A hA S hS =
       ContinuousLinearMap.id ℂ E - U.starProjection
     rw [selfAdjointSpectralProjection_eq_starProjection A hA S hS]
   refine

@@ -3,10 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.MathAhead.Section4.InfiniteIdealDominance
+import DavisKahan.Sources.DavisKahan1970.Section4Dominance
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSelectedReduction
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
-import DavisKahan.Interop.Spectra.DirectRotationSquare
+import DavisKahan.Geometry.Polar.DirectRotationSquare
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
 import DavisKahan.Sylvester.GenuineSpectrum
 
@@ -45,7 +45,6 @@ namespace Experimental
 namespace MathAhead
 namespace Section4
 
-open SpectraBridge
 open ExactSinTheta
 open DavisKahanExt
 open Module (finrank)

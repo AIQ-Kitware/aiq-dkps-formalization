@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import FinishTanTwoTheta.GroundedImports
-import DavisKahan.Interop.Spectra.DirectRotation
+import DavisKahan.Geometry.Polar.DirectRotation
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedSpectralTransport
 import DavisKahan.SinTheta.FrameFactorization
 import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
@@ -319,10 +319,10 @@ theorem isQuarterAcute_of_paper_form_gap_infinite
     simpa only [K] using reflectionOperator_comm_of_reduces (A + H) V hVred
   have hJstar : star J = J := by
     simpa only [J] using
-      TauCeti.DavisKahan.Experimental.SpectraBridge.star_reflectionOperator_complex U
+      TauCeti.DavisKahan.Experimental.star_reflectionOperator_complex U
   have hKstar : star K = K := by
     simpa only [K] using
-      TauCeti.DavisKahan.Experimental.SpectraBridge.star_reflectionOperator_complex V
+      TauCeti.DavisKahan.Experimental.star_reflectionOperator_complex V
   have hJ2 : J ∘L J = ContinuousLinearMap.id ℂ E := by
     simpa only [J] using reflectionOperator_involutive U
   have hK2 : K ∘L K = ContinuousLinearMap.id ℂ E := by
@@ -551,7 +551,7 @@ theorem isQuarterAcute_of_paper_form_gap_infinite
     exact hspecZ z hz
   have hWunit : W ∈ unitary (E →L[ℂ] E) := by
     simpa only [W, K, J, ContinuousLinearMap.mul_def] using
-      TauCeti.DavisKahan.Experimental.SpectraBridge.spectraReflectionProduct_mem_unitary U V
+      TauCeti.DavisKahan.Experimental.spectraReflectionProduct_mem_unitary U V
   let hWnormal : IsStarNormal W := isStarNormal_of_mem_unitary hWunit
   letI : IsStarNormal W := hWnormal
   have hshiftForm : ∀ x : E,

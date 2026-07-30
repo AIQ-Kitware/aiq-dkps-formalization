@@ -3,7 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 
-Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/` (new file
+Staged for Tau Ceti, roadmap topic T05.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `UnitarilyInvariantNorm.lean`).
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]), plan step F3 (v4 reroute) of
@@ -19,7 +22,6 @@ invariant norm `N`.  The engine is the Hardy–Littlewood–Pólya transfer desc
 `UnitarilyInvariantNorm.finiteSymmetricGauge`: no weak-majorization completion and no
 Birkhoff decomposition, each transform step costing one triangle inequality, one
 homogeneity, and one swap-permutation invariance of the gauge.
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.KyFan

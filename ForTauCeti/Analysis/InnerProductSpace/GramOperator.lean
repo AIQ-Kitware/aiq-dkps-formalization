@@ -26,6 +26,14 @@ The bound is stated with `toContinuousLinearMap` on both sides because the
 operator norm is only available on the bundled continuous map; in finite
 dimensions the two carry the same data.
 
+## Sources
+
+That `A⋆A` and `A A⋆` are positive with eigenvalues the squared singular values is
+standard singular-value theory (Horn--Johnson, *Matrix Analysis*; distilled in
+`prose/distilled_literature/HornJohnson2013_selected_matrix_analysis.tex`).  The
+exact difference identity and the perturbation bound are shaped by the
+singular-subspace argument that consumes them.
+
 ## Provenance
 
 * Original module: `DavisKahan/Specialized/SingularSubspace.lean`, where this

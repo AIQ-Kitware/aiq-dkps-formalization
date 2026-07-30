@@ -68,37 +68,21 @@ In a fresh environment you will need to setup Lean4, see:
 ```
 
 <!-- BEGIN Spectra collaboration checkout -->
-## Spectra collaboration checkout
+## Spectra collaboration — CLOSED 2026-07-29
 
-The full Hilbert-space Davis--Kahan roadmap needs spectral-measure and
-unbounded-operator infrastructure that is being developed in the external
-[`Spectra`](https://github.com/adambornemann-glitch/Spectra) project. During the
-collaboration phase, this repository tracks Spectra as the Git submodule
-`external/Spectra` rather than copying selected source files.
+The Spectra collaboration is over and **nothing here needs setting up**. This
+section previously told readers to create an `external/Spectra` submodule and
+enable a Lake dependency on it; both are gone.
 
-Initialize it with:
+Final state: in-scope `import Spectra` is **0**, the vendored tree is
+`retired/Spectra`, and the `external/Spectra` submodule and its sixteen
+lifecycle scripts were removed. Attribution is preserved in
+`retired/Spectra.UPSTREAM.md` and `dev/tauceti/spectra-provenance-map.md`.
 
-```bash
-git submodule update --init --recursive
-```
-
-For a first checkout, or to configure the upstream and contribution remotes:
-
-```bash
-scripts/bootstrap_spectra_submodule.sh --create-fork
-```
-
-The submodule is intentionally staged separately from the Lake dependency.
-After porting the Spectra compatibility branch to this repository's Lean and
-Mathlib pins, enable and test the narrow dependency cone with:
-
-```bash
-python3 scripts/enable_spectra_lake_dependency.py
-scripts/spectra_import_smoke.sh
-```
-
-See `dev/spectra-integration-survey-2026-07-14.md` for the division of labor,
-reviewed modules, version-skew risks, and planned upstream contributions.
+For the record of the completed campaign see
+[`dev/spectra-integration-survey-2026-07-14.md`](dev/spectra-integration-survey-2026-07-14.md)
+and [`dev/tauceti/spectra-removal-plan.md`](dev/tauceti/spectra-removal-plan.md);
+both describe finished work.
 <!-- END Spectra collaboration checkout -->
 
 ## Build
@@ -123,7 +107,7 @@ libraries: results are restated in Mathlib idiom (e.g. generalized from `ℝ` to
 `RCLike 𝕜`), placed in files mirroring their proposed Mathlib destination
 paths, and import only Mathlib.  The paper libraries import these general
 versions and keep only thin paper-facing specializations.  See
-`ForMathlib/README.md` for the contribution workflow and
+`ForTauCeti/README.md` for the package policy and
 `planning/mathlib-candidates.md` for the ranked candidate list.
 
 ### `DavisKahan`

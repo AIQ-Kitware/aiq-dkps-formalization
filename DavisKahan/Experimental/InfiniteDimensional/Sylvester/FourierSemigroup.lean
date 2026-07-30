@@ -3,9 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection
+import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.FiniteBlockReconstruction
-import ForTauCeti.Analysis.Fourier.HaagerupZsidoKernel
+import ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel
 import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 import Mathlib.Analysis.SpecialFunctions.Exponential
 import Mathlib.MeasureTheory.Integral.Bochner.Basic

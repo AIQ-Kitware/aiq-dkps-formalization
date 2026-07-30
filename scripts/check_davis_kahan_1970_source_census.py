@@ -56,10 +56,16 @@ def main() -> int:
     if missing_anchors:
         fail("missing numbered source anchors: " + ", ".join(missing_anchors))
 
+    # Skip every dot-directory, not just `.lake`.  This census only *adds* to
+    # `declared`, so a stray checkout inside the repo cannot make it fail -- it
+    # can only satisfy a pin that the real tree no longer satisfies, turning a
+    # missing declaration into a silent pass.  A subagent worktree at
+    # `.claude/worktrees/` put ~1259 extra `.lean` files in range, which is
+    # exactly enough to hide a rename from this check.
     lean_text = "\n".join(
         path.read_text(errors="ignore")
         for path in ROOT.rglob("*.lean")
-        if ".lake" not in path.parts
+        if not any(part.startswith(".") for part in path.relative_to(ROOT).parts)
     )
     declared = set(DECL_RE.findall(lean_text))
     for item in items:

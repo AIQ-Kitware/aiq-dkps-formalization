@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 
-Staged for Mathlib: addition to `Mathlib/Analysis/Matrix/Spectrum.lean`.
+Staged for Tau Ceti, roadmap topic T19.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+addition to `Mathlib/Analysis/Matrix/Spectrum.lean`.
 
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); golfed (drop unused
 `set … with`, `intro;exact` → term mode) per the `mathlib-quality` rules.
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 module
 

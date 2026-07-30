@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.Geometry.Halmos.GenericRotationPredicates
-import DavisKahan.Interop.Spectra.DirectRotationSquare
+import DavisKahan.Geometry.Polar.DirectRotationSquare
 
 /-!
 # Mathematics-ahead completion of the elementary Section 3 bridge
@@ -27,7 +27,6 @@ namespace Experimental
 namespace MathAhead
 namespace Section3
 
-open SpectraBridge
 open Frontier
 
 universe u
@@ -53,6 +52,7 @@ theorem coe_restrictToInvariantSubspace_apply
     ((restrictToInvariantSubspace A M hA x : M) : H) = A (x : H) :=
   rfl
 
+omit [CompleteSpace H] in
 /-- The complementary source projection preserves the generic Halmos part. -/
 theorem complementaryProjection_mem_halmosGenericPart_left
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -64,6 +64,7 @@ theorem complementaryProjection_mem_halmosGenericPart_left
   exact (halmosGenericPart U V).sub_mem hx
     (projection_mem_halmosGenericPart_left U V hx)
 
+omit [CompleteSpace H] in
 /-- The complementary target projection preserves the generic Halmos part. -/
 theorem complementaryProjection_mem_halmosGenericPart_right
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -75,6 +76,7 @@ theorem complementaryProjection_mem_halmosGenericPart_right
   exact (halmosGenericPart U V).sub_mem hx
     (projection_mem_halmosGenericPart_right U V hx)
 
+omit [CompleteSpace H] in
 /-- The Halmos cosine square preserves the generic summand. -/
 theorem halmosCosineSq_mem_generic
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -91,6 +93,7 @@ theorem halmosCosineSq_mem_generic
       (complementaryProjection_mem_halmosGenericPart_right U V
         (complementaryProjection_mem_halmosGenericPart_left U V hx))
 
+omit [CompleteSpace H] in
 /-- The Halmos sine square preserves the generic summand. -/
 theorem halmosSineSq_mem_generic
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -125,6 +128,7 @@ noncomputable def genericHalmosSineSqCompleted
     (halmosGenericPart U V) fun _ hx =>
       halmosSineSq_mem_generic U V hx
 
+omit [CompleteSpace H] in
 /-- The restricted generic cosine and sine squares resolve the identity. -/
 theorem genericHalmosCosineSqCompleted_add_sineSq
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]

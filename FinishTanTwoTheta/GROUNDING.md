@@ -1,5 +1,26 @@
 # Grounding
 
+## Audit status, 2026-07-30 (lane CLAIM-DOC)
+
+`python3 FinishTanTwoTheta/scripts/verify_grounding.py` → **passes**, 13 repository
+source files checked, exit 0.
+
+It did **not** pass when this lane started: four of its pinned references had gone
+stale under other lanes' migrations, and nothing was running the script to notice.
+None of the four was missing mathematics, and all four are repointed rather than
+deleted:
+
+| was | now | why |
+|---|---|---|
+| `DavisKahan/Experimental/InfiniteDimensional/Riccati/BoundedCore.lean` | `DavisKahan/Riccati/BoundedCore.lean` | `023b2ceb` promoted the bounded Riccati block out of `Experimental`, by path only |
+| `DavisKahan/Sylvester/ClosedSylvesterEquation.lean` — `SemiboundedBelow.toLinearMap_bound`, `SemiboundedAbove.toLinearMap_bound` | `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Sylvester.lean` — `def SemiboundedBelow`, `def SemiboundedAbove` | `9e10b784` deleted the two bundled wrappers as dead (zero callers; the bundled predicate is a reducible `abbrev`, so callers use the `ForTauCeti` twins by defeq) |
+| `vendor/Spectra/Spectra/SpectralTheory/Algebra.lean` | `retired/Spectra/Spectra/SpectralTheory/Algebra.lean` | the Spectra snapshot moved from `vendor/` to `retired/` when the dependency was retired; this is a grounding reference to the donor, not an import |
+
+**The script is now in `dev/README.md`'s gate list**, so the next such drift shows
+up as a failing gate rather than as an unverified claim in this document. That was
+the finding: a completeness claim is only worth what re-runs it.
+
+
 The package distinguishes three theorem layers.
 
 1. The main Davis--Kahan tree already supplies the finite-dimensional Section 7

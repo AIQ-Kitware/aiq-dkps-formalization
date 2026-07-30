@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.FiniteDimensional.Core.AngleGeometry
+import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
 
@@ -57,7 +57,7 @@ current total signature is provisional; bounded inversion must ultimately
 require `IsTransverse U V`. -/
 noncomputable def tanThetaMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  sinThetaMap U V ∘ₗ FiniteDimensional.moorePenroseInverse (cosThetaMap U V)
+  sinThetaMap U V ∘ₗ TauCeti.moorePenroseInverse (cosThetaMap U V)
 
 /-- The full-space canonical angle operator `Θ(U,V)` of Davis--Kahan.
 Its nonzero eigenvalues are the principal angles, with the multiplicities
@@ -70,7 +70,7 @@ independence through finite functional calculus (equivalently, apply
 `Real.arcsin` to `sinAngleOperator U V` through that calculus). -/
 noncomputable def angleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  FiniteDimensional.selfAdjointFunctionalCalculus
+  TauCeti.selfAdjointFunctionalCalculus
     (TauCeti.isPositive_abs (projection U - projection V)).isSymmetric
     Real.arcsin
 
@@ -84,8 +84,8 @@ only as a documented Moore--Penrose convention.  Theorems interpreting its
 norm as a principal tangent must assume transversality or acuteness. -/
 noncomputable def tanAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  FiniteDimensional.selfAdjointFunctionalCalculus
-    (FiniteDimensional.selfAdjointFunctionalCalculus_isSymmetric
+  TauCeti.selfAdjointFunctionalCalculus
+    (TauCeti.selfAdjointFunctionalCalculus_isSymmetric
       (TauCeti.isPositive_abs (projection U - projection V)).isSymmetric Real.arcsin)
     safeTan
 
@@ -97,8 +97,8 @@ the resulting operator is used analytically.  A future API may instead bundle
 that pole-avoidance proof into the constructor. -/
 noncomputable def tanTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  FiniteDimensional.selfAdjointFunctionalCalculus
-    (FiniteDimensional.selfAdjointFunctionalCalculus_isSymmetric
+  TauCeti.selfAdjointFunctionalCalculus
+    (TauCeti.selfAdjointFunctionalCalculus_isSymmetric
       (TauCeti.isPositive_abs (projection U - projection V)).isSymmetric Real.arcsin)
     safeTanTwo
 

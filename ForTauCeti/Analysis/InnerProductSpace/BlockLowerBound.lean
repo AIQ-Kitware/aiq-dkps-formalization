@@ -20,6 +20,11 @@ along a partition (`ProjValMeasure.tsum_enorm_sq_proj`).
 Working in `ℝ≥0∞` keeps it free of summability side conditions: the sums are
 unconditional and no term has to be shown finite.
 
+## Sources
+
+*Follows nothing in particular*: the reassembly step of a block-diagonal argument,
+stated with no projections, no spectral theory and no convergence hypothesis.
+
 ## Provenance
 
 *New.*

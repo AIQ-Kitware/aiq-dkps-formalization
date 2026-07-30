@@ -36,7 +36,7 @@ Ownership classes: `mathlib` · `tauceti` · `davis-kahan` · `spectra-bridge` �
   `…/ScalarGeneric`, `…/Real`, `…/BlockSum`.
 * **Deferred (blocked-on-spectra-removal)**: approximation-number *invariance under
   the source modulus* (`sameApproximationSingularValues_rectangularOperatorModulus`)
-  routes through `SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound`.
+  routes through `lt_approximationNumber_iff_exists_finiteDimensional_lowerBound`.
   It ships in a later PR once a Mathlib-only infinite-dimensional min–max is proved
   (the `≥` half already exists Spectra-free in `MinMax.lean`; only the existence of the
   witnessing subspace — the `≤` half — needs Spectra today).
@@ -110,7 +110,7 @@ Ownership classes: `mathlib` · `tauceti` · `davis-kahan` · `spectra-bridge` �
   `HilbertSchmidtBasis.lean` used to import is a short consequence of Mathlib's
   `HilbertBasis.hasSum_inner_mul_inner` and is now staged for a general `RCLike`
   field.  Only the **tensor model** is still Spectra-bound, and it is confined to
-  `DavisKahan/Interop/Spectra/HilbertSchmidtTensor.lean`, where it belongs.
+  `DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtTensor.lean`, where it belongs.
   The reconciliation with the singular-value definition,
   `tsum_approximationSingularValue_sq_eq_hilbertSchmidtEnergy`, is proved in
   `DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean`; staging it

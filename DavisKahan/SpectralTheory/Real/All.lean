@@ -5,5 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.Real.ContinuousFunctionalCalculus
 import DavisKahan.SpectralTheory.Real.SpectralBridge
+import DavisKahan.SpectralTheory.Real.SpectralRestriction
 
 /-! # `DavisKahan/SpectralTheory/Real` -/
