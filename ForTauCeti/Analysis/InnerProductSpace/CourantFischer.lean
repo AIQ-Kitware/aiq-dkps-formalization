@@ -140,6 +140,7 @@ theorem re_inner_apply_self_le_of_mem_spanIndices
     RCLike.re ⟪T x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
   set b := hT.eigenvectorBasis hn
   rw [hT.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hn x,
+    -- names the application so the norm bound applies to it directly.
     show c * ‖x‖ ^ 2 = ∑ i : Fin n, c * ‖b.repr x i‖ ^ 2 by
       rw [← Finset.mul_sum, sum_sq_norm_repr_eq_sq_norm]]
   refine Finset.sum_le_sum fun i _ => ?_
@@ -157,6 +158,7 @@ theorem le_re_inner_apply_self_of_mem_spanIndices
     c * ‖x‖ ^ 2 ≤ RCLike.re ⟪T x, x⟫_𝕜 := by
   set b := hT.eigenvectorBasis hn
   rw [hT.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hn x,
+    -- names the application so the norm bound applies to it directly.
     show c * ‖x‖ ^ 2 = ∑ i : Fin n, c * ‖b.repr x i‖ ^ 2 by
       rw [← Finset.mul_sum, sum_sq_norm_repr_eq_sq_norm]]
   refine Finset.sum_le_sum fun i _ => ?_
@@ -252,6 +254,8 @@ theorem eigenvalues_eq_iSup_iInf_re_inner
       hT.eigenvalues hn m ≤ RCLike.re ⟪T x, x⟫_𝕜 := by
     intro x hx
     rw [hT.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hn x,
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       show hT.eigenvalues hn m = ∑ i : Fin n,
           hT.eigenvalues hn m * ‖(hT.eigenvectorBasis hn).repr x i‖ ^ 2 by
         rw [← Finset.mul_sum, sum_sq_norm_repr_eq_sq_norm, hx]; ring]
@@ -259,6 +263,8 @@ theorem eigenvalues_eq_iSup_iInf_re_inner
     refine mul_le_mul_of_nonneg_right
       (hT.eigenvalues_antitone hn ?_) (sq_nonneg _)
     rw [Fin.le_def]
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change (i : ℕ) ≤ n - 1
     have := i.2
     omega
@@ -334,6 +340,7 @@ private theorem le_re_inner_of_eigenbasis
     (hc : ∀ i ∈ s, c ≤ μ i) {x : E} (hx : x ∈ w.spanIndices s) :
     c * ‖x‖ ^ 2 ≤ RCLike.re ⟪S x, x⟫_𝕜 := by
   rw [hS.re_inner_apply_self_eq_sum_of_eigenbasis w hw x,
+    -- names the application so the norm bound applies to it directly.
     show c * ‖x‖ ^ 2 = ∑ i : Fin n, c * ‖w.repr x i‖ ^ 2 by
       rw [← Finset.mul_sum, sum_sq_norm_repr_eq_sq_norm]]
   refine Finset.sum_le_sum fun i _ => ?_
@@ -349,6 +356,7 @@ private theorem re_inner_le_of_eigenbasis
     (hc : ∀ i ∈ s, μ i ≤ c) {x : E} (hx : x ∈ w.spanIndices s) :
     RCLike.re ⟪S x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
   rw [hS.re_inner_apply_self_eq_sum_of_eigenbasis w hw x,
+    -- names the application so the norm bound applies to it directly.
     show c * ‖x‖ ^ 2 = ∑ i : Fin n, c * ‖w.repr x i‖ ^ 2 by
       rw [← Finset.mul_sum, sum_sq_norm_repr_eq_sq_norm]]
   refine Finset.sum_le_sum fun i _ => ?_
