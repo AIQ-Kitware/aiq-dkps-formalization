@@ -20,8 +20,7 @@ Proof strategy read from and credited to rjwalters/lean-genius,
 `proofs/Proofs/SchurHornMajorization.lean` (commit
 3e09c97392dc68d068becb89e2068b1830234661, retrieved 2026-07-04; no license
 declared upstream).  Independently re-derived here on this project's existing
-`LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq`.  See
-`dev/external-lean-references.md`.
+`LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq`.
 -/
 
 import Mathlib.Analysis.Convex.Jensen
