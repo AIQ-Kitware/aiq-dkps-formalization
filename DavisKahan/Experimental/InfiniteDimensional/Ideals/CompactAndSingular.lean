@@ -36,7 +36,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [CompleteSpace F]
 
-/-- The assumptions under which `sinAngleOperator` is defined in
+/-! The assumptions under which `sinAngleOperator` is defined in
 `SinTheta/General` — it is built from `CFC.abs`, whose continuous functional
 calculus Mathlib supplies for `𝕜 = ℂ`.  Lean includes these only in the
 declarations that actually mention the sine operator. -/
