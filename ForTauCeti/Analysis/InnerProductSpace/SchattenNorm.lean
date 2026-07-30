@@ -135,12 +135,6 @@ theorem singularValueVector_weaklyMajorized_iff (A B : E →ₗ[𝕜] F) :
       singularValueVector_nonneg A, singularValueVector_nonneg B, fun k => by
         simpa only [prefixSum_singularValueVector] using h k⟩
 
-/-- Public rectangular Ky Fan subadditivity. -/
-theorem rectangularKyFanSum_add_le (k : ℕ) (A B : E →ₗ[𝕜] F) :
-    rectangularKyFanSum k (A + B) ≤
-      rectangularKyFanSum k A + rectangularKyFanSum k B :=
-  (kyFan k).add_le A B
-
 /-- The singular-value vector of a sum is weakly majorized by the sum of the
 singular-value vectors.  This is the correct simultaneous singular-value
 subadditivity statement; no coordinatewise inequality is asserted. -/
