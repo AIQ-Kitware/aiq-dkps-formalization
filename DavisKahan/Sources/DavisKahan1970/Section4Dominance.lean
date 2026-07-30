@@ -36,6 +36,7 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Pointwise domination of approximation singular values implies domination
 of every finite Ky Fan approximation gauge. -/
 theorem kyFanApproximationGauge_le_of_approximationSingularValue_le
@@ -80,6 +81,7 @@ theorem restrictedDisplacement_idealGauge_le
         N.gauge B :=
   mem_and_gauge_le_of_approximationSingularValue_le N hB D.approximation_le
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The operator-norm specialization of the dominance bridge. -/
 theorem restrictedDisplacement_opNorm_le
     {A B : E →L[𝕜] F}
@@ -87,6 +89,7 @@ theorem restrictedDisplacement_opNorm_le
     ‖A‖ ≤ ‖B‖ := by
   simpa only [approximationSingularValue_zero] using D.approximation_le 0
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Every fixed positive Ky Fan gauge is a direct specialization. -/
 theorem restrictedDisplacement_kyFan_le
     [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
