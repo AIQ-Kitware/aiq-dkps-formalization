@@ -128,6 +128,7 @@ noncomputable def trialGramSqrt (X : F →ₗ[𝕜] E) : F →ₗ[𝕜] F :=
 
 /-- The Gram square root has the same pointwise norm as the original
 rectangular map. -/
+@[simp]
 theorem norm_trialGramSqrt_apply (X : F →ₗ[𝕜] E) (x : F) :
     ‖trialGramSqrt X x‖ = ‖X x‖ := by
   have hsq : ‖trialGramSqrt X x‖ ^ 2 = ‖X x‖ ^ 2 :=
@@ -171,6 +172,7 @@ in finite dimensions; it does not change the map. -/
 
 /-- The invertible coordinate factor has the same pointwise norm as the
 original trial map. -/
+@[simp]
 theorem norm_trialGramSqrtEquiv_apply (X : F →ₗ[𝕜] E)
     (hX : Function.Injective X) (x : F) :
     ‖trialGramSqrtEquiv X hX x‖ = ‖X x‖ := by

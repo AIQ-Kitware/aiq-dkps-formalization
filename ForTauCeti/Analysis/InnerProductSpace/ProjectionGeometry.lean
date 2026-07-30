@@ -49,6 +49,7 @@ below, and is requested explicitly otherwise).
 family `w` and a finite index set `s`, the orthogonal projection onto
 `span 𝕜 (w '' s)` acts as `x ↦ ∑ i ∈ s, ⟪w i, x⟫ • w i`.
 -/
+@[simp]
 theorem Orthonormal.starProjection_span_image_apply {ι : Type*} {w : ι → F}
     (hw : Orthonormal 𝕜 w) (s : Finset ι)
     [(Submodule.span 𝕜 (w '' ↑s)).HasOrthogonalProjection] (x : F) :

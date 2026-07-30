@@ -227,6 +227,35 @@ review of the statements, and everything that makes a library elegant at Mathlib
 quality. Meeting a roadmap we wrote ourselves does not clear this bar. See
 [`ForTauCeti/README.md`](ForTauCeti/README.md).
 
+### Both `ForTauCeti` and `ForTauCetiRoadmap` are full-fidelity rehearsals
+
+**jon, 2026-07-30.** `ForTauCeti` stands in for the Tau Ceti PR contents and
+`ForTauCetiRoadmap` stands in for `TauCetiProject/TauCetiRoadmap`. They are
+mocks of the real thing, built so that **when we do make the effort to do the
+real thing, it goes smoothly.**
+
+Work on them **as if they were the real repositories.** Do not hedge, do not
+mark work provisional, and do not wait on upstream.
+
+**The acceptance test is a demonstration.** We show this repository to Tau Ceti
+and they say: *"yes, that's ready — please submit these roadmaps as PRs, then
+push up the code and merge it."* Anything in the repository that would make a
+reviewer hesitate at that moment is a defect, and by the rule below it needs a
+lane.
+
+Two consequences that settle recurring questions:
+
+- **No lane is ever blocked on upstream acceptance.** How the clusters actually
+  go upstream is a real question, but it is *not* a prerequisite for any work
+  here and must never be recorded as one. A lane blocked on a third party is a
+  lane nobody can take.
+- **The `scope` rubric is rehearsed against `ForTauCetiRoadmap`.** The real
+  `TauCetiReview` reviewer reads the upstream roadmap repo, so in a real
+  submission our roadmap has no standing — that is a true fact about the future
+  and is recorded in `dev/audit/TAUCETI-RUBRIC-REVIEW.md`. It is **not** a
+  finding against this repository. Here, our roadmap *is* the roadmap, and a
+  topic with a written `ForTauCetiRoadmap` entry satisfies `scope`.
+
 ### Governance gate before upstreaming (Tau Ceti)
 
 Tau Ceti admits new mathematical declarations only against an **accepted

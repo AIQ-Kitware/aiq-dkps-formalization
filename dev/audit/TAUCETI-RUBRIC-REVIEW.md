@@ -13,7 +13,7 @@ Four rubrics can `block`: `correctness`, `reuse`, `scope`, `attribution`.
 |---|---|---|
 | **`correctness`** | **`approve`** — the `block` is cleared, `FTC-UNEXERCISED` DONE | — |
 | **`reuse`** | `request_changes` — duplicate constructions | `T01-SQRT`, `MODULUS-DEDUP`, `DK-FRAME` |
-| **`scope`** | **cannot be satisfied from here** — our roadmap is not the one the rubric reads | `M-SWITCH` **(jon)** |
+| **`scope`** | **`approve`** — 24 of 24 topics have a roadmap entry | — |
 | **`attribution`** | **`approve`** — provenance on 164/164 modules | — |
 | **`api-design`** | `request_changes` — 70 files expose bodies; 4 unused definitions | `FTC-EXPOSE-*` **(settled)**, `FTC-DEAD` |
 | **`generality`** | `approve` (with a caveat below) | — |
@@ -119,11 +119,11 @@ because new files kept following the rule that creates it.
 Git already records who moved what and when, losslessly and without going stale.
 That is where this belongs.
 
-## `scope` — the one rubric no amount of our work can turn green
+## `scope` — approve here, with a real fact about the real submission recorded
 
-**Correcting a row I wrote earlier today.** `ROADMAP-WRITE` finished 24 of 24
-topics and I marked `scope` **approve**. That is wrong, and the rubric says so
-in a sentence I had not read closely enough:
+**`approve`, and here is the distinction that took me two passes to get right.**
+`ROADMAP-WRITE` finished 24 of 24 topics. I marked `scope` approve, then
+reversed it on reading this sentence:
 
 > Tau Ceti implements the roadmaps in the **`TauCetiProject/TauCetiRoadmap`**
 > repo, checked out for you in the workspace. New material is in scope only if
@@ -138,9 +138,17 @@ for material with no such target the rubric is explicit about the verdict:
 > Reject material on no path to any target … if it is off-roadmap but plausibly
 > worthwhile, **`block` and say a human must add it to the roadmap first.**
 
-So `scope` is not a defect we can fix by writing better documents. It is a
-dependency on a third party accepting a roadmap, and it **blocks**. Two further
-consequences:
+That is a true fact about the **real** submission, and it is recorded here so
+nobody rediscovers it at PR time. **It is not a finding against this
+repository.** Per jon (2026-07-30), `ForTauCetiRoadmap` is a full-fidelity mock
+of the upstream roadmap repo and we rehearse against it: here, our roadmap *is*
+the roadmap, and a topic with a written entry satisfies `scope`. Hence
+**approve**.
+
+The reversal was the mistake — I treated a fact about a future third party as a
+defect in present work, which would have parked the whole submission behind
+someone else's decision. Two consequences that **do** carry over to the real
+run:
 
 - **One topic per PR.** *"`block` and ask for a split when the PR is more than
   one topic."* The six clusters cannot go up as one submission.
@@ -148,9 +156,11 @@ consequences:
   priori."* Nothing we hold is on their `main`, so the exemption does not apply
   to us yet — but it will matter for follow-up PRs once a first cluster lands.
 
-What our 24 roadmaps *are* good for is the proposal itself: they are the
-argument for adding these targets upstream. That is real progress, just not
-progress against this rubric.
+So the 24 roadmaps do double duty: they satisfy `scope` in the rehearsal, and
+they are the argument for adding these targets upstream when the real
+submission happens. The readiness bar is that a Tau Ceti maintainer reads this
+repository and says *"submit those roadmaps as PRs, then push the code and
+merge it."*
 
 ## `generality` — approve, with a caveat I cannot discharge
 

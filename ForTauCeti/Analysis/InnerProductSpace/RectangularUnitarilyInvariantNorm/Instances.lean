@@ -179,6 +179,7 @@ omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
     zeroExtensionInr (𝕜 := 𝕜) (E := E) y = WithLp.toLp 2 (0, y) := by
   rfl
 
+@[simp]
 private theorem zeroExtensionInl_adjoint_apply
     (z : WithLp 2 (E × F)) :
     LinearMap.adjoint (zeroExtensionInl (𝕜 := 𝕜) (F := F)).toLinearMap z = z.fst := by
@@ -433,6 +434,7 @@ noncomputable def nuclear : RectangularUnitarilyInvariantNorm 𝕜 E F :=
 /-- The rectangular Frobenius norm is the square root of the sum of squared
 column norms in any orthonormal basis of the domain.
 -/
+@[simp]
 theorem frobenius_apply (A : E →ₗ[𝕜] F)
     (b : OrthonormalBasis (Fin (finrank 𝕜 E)) 𝕜 E) :
     frobenius A = Real.sqrt (∑ i, ‖A (b i)‖ ^ 2) := by
@@ -469,6 +471,7 @@ theorem frobenius_subtype_comp
 
 /-- The Ky Fan norm evaluates to the prefix sum of singular values.
 -/
+@[simp]
 theorem kyFan_apply (k : ℕ) (A : E →ₗ[𝕜] F) :
     kyFan k A = rectangularKyFanSum k A :=
   rfl
@@ -486,6 +489,7 @@ theorem rectangularKyFanSum_le_of_finiteUnitaryOrbitCertificate
 
 /-- The nuclear norm is the full domain-length singular-value sum; singular
 values past the rank are zero automatically. -/
+@[simp]
 theorem nuclear_apply (A : E →ₗ[𝕜] F) :
     nuclear A = ∑ i : Fin (finrank 𝕜 E), A.singularValues (i : ℕ) :=
   rfl
