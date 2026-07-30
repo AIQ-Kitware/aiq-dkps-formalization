@@ -736,7 +736,7 @@ are `GapConvenience.lean`, now served by six `linearPMap_` twins (three for
 `Reducing.lean` is at 0 and no longer imports the bundled foundation at all.
 
 **Duplicate worth a convergence-matrix row, found on the way and not acted on.**
-`UnboundedSylvesterGap` (`Sylvester/Unbounded/AllGap.lean`) and
+`SpectralSylvesterGap` (`Sylvester/Unbounded/AllGap.lean`) and
 `UnboundedSylvesterGapPMap` (`SinTheta/Unbounded/AllGap.lean`) are **two
 inductives for one predicate** — same three constructors, and the bundled
 version's hypotheses are *already* written as
@@ -907,7 +907,7 @@ also hides every *qualified* reference, and qualified references are exactly how
 would have broken a paper-facing module.  Always grep the bare name including
 dotted occurrences before believing a zero.
 
-**Correction — `generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap` is
+**Correction — `generalizedSinTheta_unbounded_of_spectralIntervalExteriorGap` is
 NOT contractible, and was previously listed here as if it were.**  "No
 production caller outside its own module" is true of it and is also not the
 relevant test: the raw endpoint
