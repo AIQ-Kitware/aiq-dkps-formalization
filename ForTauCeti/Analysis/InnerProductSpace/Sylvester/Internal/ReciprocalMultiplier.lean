@@ -124,6 +124,7 @@ theorem real_reciprocalOrbitInterpolation_mass_lower_bound
     ⟪e j, (V r).toLinearMap (e j)⟫_ℝ
   have hu_le (r : Fin n) (i : Fin (Module.finrank ℝ G)) : |u r i| ≤ 1 := by
     have hnorm : ‖(U r).toLinearMap (e i)‖ = 1 := by
+      -- names the application so the norm bound applies to it directly.
       change ‖(U r) (e i)‖ = 1
       rw [(U r).norm_map, e.norm_eq_one]
     calc
@@ -132,6 +133,7 @@ theorem real_reciprocalOrbitInterpolation_mass_lower_bound
       _ = 1 := by rw [hnorm, e.norm_eq_one, one_mul]
   have hv_le (r : Fin n) (j : Fin (Module.finrank ℝ G)) : |v r j| ≤ 1 := by
     have hnorm : ‖(V r).toLinearMap (e j)‖ = 1 := by
+      -- names the application so the norm bound applies to it directly.
       change ‖(V r) (e j)‖ = 1
       rw [(V r).norm_map, e.norm_eq_one]
     calc
@@ -141,6 +143,7 @@ theorem real_reciprocalOrbitInterpolation_mass_lower_bound
   have hterm (r : Fin n) (i j : Fin (Module.finrank ℝ G)) :
       ⟪e i, (unitaryOrbitAction (U r) (V r))
         (basisMatrixUnit e e i j) (e j)⟫_ℝ = u r i * v r j := by
+    -- states the goal as the inner-product identity the structure lemma expects.
     change ⟪e i, (U r).toLinearMap
       ((basisMatrixUnit e e i j) ((V r).toLinearMap (e j)))⟫_ℝ = _
     rw [basisMatrixUnit_apply, map_smul, real_inner_smul_right]
@@ -489,6 +492,8 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_reciprocalInterpolat
         ∑ i, ∑ j, ⟪eF i, A (eE j)⟫_ℝ •
           RectangularUnitarilyInvariantNorm.orthogonalBlockSum
             (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j) := by
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change blockDiagonal A = _
     conv_lhs => rw [sum_basisMatrixUnit eF eE A]
     simp only [map_sum, map_smul, blockDiagonal]
