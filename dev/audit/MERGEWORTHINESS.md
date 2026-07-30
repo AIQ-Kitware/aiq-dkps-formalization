@@ -16,7 +16,7 @@ defect. Last measured **2026-07-30, pass 7** over 165 files.
 | dependency firewall | **OK** |
 | header destination | **0** files name Mathlib (was 39) |
 | files > 1,000 lines | **0** (was 3) |
-| roadmap topics written | **19 of 24** — exact, via `--roadmaps` |
+| roadmap topics written | **24 of 24** — complete, derived from each README's own topic declaration |
 
 ## Reviewed against the actual Tau Ceti rubrics
 
@@ -33,25 +33,23 @@ submitting **to** — and in 69 files it does not.
 
 | # | defect | measure | lane | build? |
 |---|---|---|---|---|
-| 1 | **5 topics have no roadmap** — T07, T08, T18, T19, T20 | 19 of 24, derived not guessed | `ROADMAP-WRITE` | no |
+| ~~1~~ | ~~topics with no roadmap~~ | **0 — `ROADMAP-WRITE` DONE, 24 of 24** | — | — |
 | 2 | **53 flat files beside 12 directories** | 22 files, 7 missing directories | `FTC-ORG` | yes |
 | 3 | **4 public definitions with no consumer** | 4 (was mis-measured as 31) | `FTC-DEAD` | yes |
-| 4 | **10 linter suppressions** the README forbids | 10 sites, incl. `checkUnivs` | `FTC-SETOPT` | yes |
+| ~~4~~ | ~~10 linter suppressions~~ | **5 left, each stating why — `FTC-SETOPT` DONE** | — | — |
 | 5 | **6 proofs over 145 lines**, one 231 | 6 | `FTC-LONGPROOF` | yes |
 | ~~6~~ | ~~files over the 1,000-line limit~~ | **0 — `SPLIT-1K` DONE** | — | — |
 | ~~7~~ | ~~flat `Sylvester*` files~~ | **0 — `PLACE-SYLV` DONE** | — | — |
 | 8 | **`GramMatrix` is misnamed** and overlaps `GramOperator` | 1 decision | `PLACE-GRAM` | yes |
 | 9 | **Two square roots**, one definitionally the other | `rfl`-equal | `T01-SQRT` | yes |
-| 10 | **T21/T22 assert a Mathlib target** | 4 files, 2 topics | `HDR-DEST` *(decision open)* | no |
-| 11 | **Unexercised `Prop` definition** — rubric rates this `block` | 1 | `FTC-UNEXERCISED` | yes |
-| 12 | **70 files expose bodies** | 70 of 167 | **`FTC-EXPOSE-GATE`** + `-MEASURE` → `-a`..`-e` → `-ENFORCE` | yes |
+| ~~10~~ | ~~T19–T22 assert a Mathlib target~~ | **0 — headers fixed, and jon ratified Tau Ceti as the destination 2026-07-30** | — | — |
+| ~~11~~ | ~~unexercised `Prop` definition (`block`)~~ | **0 — `FTC-UNEXERCISED` DONE; characterization + witness both added** | — | — |
+| 12 | **70 files expose bodies** | 70 of 167; ratchet holding | **`FTC-EXPOSE-RFL`** → `-g1`..`-g5` → `-ENFORCE` | yes |
 | 13 | **69 files document our workflow, not the math** — incl. **31 pointers to the deleted `ForMathlib/` tree** | 69 of 167 | `FTC-PROSE-GATE` → `-a`/`-b`/`-c`/`-d` → `-ENFORCE` | no |
 
 ## Ordering, and why
 
-1. **`ROADMAP-WRITE`** — 5 topics left, no build, parallel, and it is the only item
-   that changes whether a topic can be *proposed* at all. Everything else
-   polishes something already proposable.
+1. ~~`ROADMAP-WRITE`~~ — **done, 24 of 24.** Every topic is now proposable.
 2. **`FTC-ORG`** — now unblocked: `PLACE-SYLV` finished, so nothing collides in
    `Sylvester/`. This is the defect a reviewer meets before reading a theorem.
 3. **`FTC-LONGPROOF`** — `SPLIT-1K` closed without it (the oversize files were
@@ -60,19 +58,20 @@ submitting **to** — and in 69 files it does not.
 4. **`FTC-SETOPT`** and **`FTC-DEAD`** — both sliceable, both mechanical once
    the underlying warning or the keep/delete call is made.
 5. **`T01-SQRT`** and **`PLACE-GRAM`** — each needs one design decision first.
-6. **`FTC-EXPOSE-GATE`** — **take this first of everything here.** jon settled
-   the convention on 2026-07-30 in favour of the Tau Ceti rubric, so the
-   direction is no longer open; the ratchet costs nothing, passes on today's
-   tree, and stops a count that grew 68 → 70 *during this audit*.
-   `FTC-EXPOSE-MEASURE` runs beside it and is the only lane in that chain
-   needing a compiler — it converts an unknown conversion cost into a number
-   before anyone commits to 70 files.
+6. **`FTC-EXPOSE-RFL`** — one file, minutes of work, and it re-scopes
+   everything after it. `FTC-EXPOSE-MEASURE` concluded that 31 modules need
+   `@[expose]` on named definitions, but it never tried the alternative the
+   rubric names in the same sentence (`:= (rfl)` over `:= rfl`). If that works,
+   56 restatements stop needing exposure and the library ends with nearly none
+   instead of 31. Settle it before converting anything.
+   **`FTC-EXPOSE-GATE` and `-MEASURE` are DONE**; the ratchet holds the count at
+   70 so it can only fall.
 7. **`FTC-PROSE`** — no build, four disjoint parallel slices, and it is the
    cheapest large win here: it removes 31 pointers to a tree that does not
    exist. Take `FTC-PROSE-GATE` first; the slices are worthless without it
    because the convention that generates the prose is still in force.
-8. **`HDR-DEST`'s remainder is jon's**, not an agent's: whether T19–T22 (15
-   files) are Mathlib-bound or Tau Ceti-bound.
+8. ~~`HDR-DEST`'s remainder~~ — **ratified by jon 2026-07-30: T19–T22 are Tau
+   Ceti-bound.** All 24 topics now have roadmaps, so nothing is left open here.
 
 ## Not defects — recorded so they are not re-raised
 
