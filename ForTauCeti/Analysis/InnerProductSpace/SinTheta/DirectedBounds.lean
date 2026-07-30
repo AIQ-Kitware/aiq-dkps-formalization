@@ -267,7 +267,7 @@ form).**  If `A, B` are symmetric, `U` reduces `A` with `U`-carried spectrum
 
 `‖P_V P_U‖` is the sine of the directed angle between the high `A`-block `U` and
 the high `B`-block `Vᗮ`.  **The finite result is dispatched from the
-arbitrary-dimension lemma** `DavisKahan.sinTheta_directed_coercive`: the finite
+arbitrary-dimension lemma** `Submodule.sinTheta_directed_coercive`: the finite
 operators are converted to bounded operators, and the *only* finite-dimensional
 ingredient is the eigenbasis spectrum ⟹ coercivity bridge
 (`le_re_inner_of_spectrumIn` / `re_inner_le_of_spectrumIn`).  The whole sin-Θ
@@ -287,17 +287,17 @@ theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
   set Bc : E →L[𝕜] E := B.toContinuousLinearMap with hBc
   have hApp : ∀ x, Ac x = A x := fun _ => rfl
   have hBpp : ∀ x, Bc x = B x := fun _ => rfl
-  have hAself : DavisKahan.IsSelfAdjointOperator Ac := fun x y => hA x y
-  have hBself : DavisKahan.IsSelfAdjointOperator Bc := fun x y => hB x y
+  have hAself : Ac.IsSymmetric := fun x y => hA x y
+  have hBself : Bc.IsSymmetric := fun x y => hB x y
   have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
   have hVperp : Reduces B Vᗮ := reduces_orthogonal_of_isSymmetric hB hV
-  have hUred : DavisKahan.Reduces Ac U := ⟨fun x hx => hU x hx, fun x hx => hUperp x hx⟩
-  have hVred : DavisKahan.Reduces Bc V := ⟨fun x hx => hV x hx, fun x hx => hVperp x hx⟩
+  have hUred : Ac.Reduces U := ⟨fun x hx => hU x hx, fun x hx => hUperp x hx⟩
+  have hVred : Bc.Reduces V := ⟨fun x hx => hV x hx, fun x hx => hVperp x hx⟩
   have hUc : ∀ x ∈ U, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪Ac x, x⟫_𝕜 :=
     fun x hx => le_re_inner_of_spectrumIn hA hU hUspec hx
   have hVc : ∀ x ∈ V, RCLike.re ⟪Bc x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
     fun x hx => re_inner_le_of_spectrumIn hB hV hVspec hx
-  have hExt := DavisKahan.sinTheta_directed_coercive hAself hBself hUred hVred hg hUc hVc
+  have hExt := Submodule.sinTheta_directed_coercive hAself hBself hUred hVred hg hUc hVc
   have hnorm : ‖(Bc - Ac : E →L[𝕜] E)‖ ≤ ε := by
     refine ContinuousLinearMap.opNorm_le_bound _ hε0 fun x => ?_
     have hsub : (Bc - Ac) x = (B - A) x := by
@@ -384,7 +384,7 @@ operators,
 `‖P_U - P_W‖ ≤ ε / g`.
 
 This is a finite spectral specialization of
-`DavisKahan.opNorm_starProjection_sub_le_of_coercive`.  In particular, there is
+`Submodule.opNorm_starProjection_sub_le_of_coercive`.  In particular, there is
 no rank hypothesis and no factor-two loss. -/
 theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -400,20 +400,20 @@ theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
   haveI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
   let Ac : E →L[𝕜] E := A.toContinuousLinearMap
   let Bc : E →L[𝕜] E := B.toContinuousLinearMap
-  have hAself : DavisKahan.IsSelfAdjointOperator Ac := by
+  have hAself : Ac.IsSymmetric := by
     intro x y
     change ⟪A x, y⟫_𝕜 = ⟪x, A y⟫_𝕜
     exact hA x y
-  have hBself : DavisKahan.IsSelfAdjointOperator Bc := by
+  have hBself : Bc.IsSymmetric := by
     intro x y
     change ⟪B x, y⟫_𝕜 = ⟪x, B y⟫_𝕜
     exact hB x y
   have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
   have hWperp : Reduces B Wᗮ := reduces_orthogonal_of_isSymmetric hB hW
-  have hUred : DavisKahan.Reduces Ac U :=
+  have hUred : Ac.Reduces U :=
     ⟨fun x hx => by simpa [Ac] using hU x hx,
       fun x hx => by simpa [Ac] using hUperp x hx⟩
-  have hWred : DavisKahan.Reduces Bc W :=
+  have hWred : Bc.Reduces W :=
     ⟨fun x hx => by simpa [Bc] using hW x hx,
       fun x hx => by simpa [Bc] using hWperp x hx⟩
   have hUhiForm : ∀ x ∈ U,
@@ -428,7 +428,7 @@ theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
   have hWloForm : ∀ x ∈ Wᗮ,
       RCLike.re ⟪Bc x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
     fun x hx => by simpa [Bc] using re_inner_le_of_spectrumIn hB hWperp hWlo hx
-  have hcore := DavisKahan.opNorm_starProjection_sub_le_of_coercive
+  have hcore := Submodule.opNorm_starProjection_sub_le_of_coercive
     hAself hBself hUred hWred hg hUhiForm hUloForm hWhiForm hWloForm
   have hnorm : ‖(Bc - Ac : E →L[𝕜] E)‖ ≤ ε := by
     refine ContinuousLinearMap.opNorm_le_bound _ hε0 fun x => ?_

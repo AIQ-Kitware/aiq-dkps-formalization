@@ -53,7 +53,7 @@ provenance of the route, and `dev/tauceti/spectra-removal-plan.md` for the
 comparison against Spectra's Herglotz/Poisson route that chose it.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace
 open MeasureTheory
@@ -465,6 +465,61 @@ section ResolventGap
 
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ) (hB : MeasurableSet B)
 
+/-- The scalar estimate behind the boundedness of the companion symbol
+`(κ + i) · (κ - lam)⁻¹ 1_B`: a point kept at distance `ε` from `lam` admits a
+bound on `‖z + i‖ / ‖z - lam‖` depending only on `lam` and `ε`.
+
+Stated for an arbitrary `z : ℂ` because the argument is the triangle inequality
+applied to `z + i = (z - lam) + (lam + i)`; the use site instantiates it at the
+real points of the Cayley spectrum. -/
+private lemma norm_add_I_mul_inv_norm_sub_le {lam ε : ℝ} (hε : 0 < ε) (z : ℂ)
+    (hgap : ε ≤ ‖z - (lam : ℂ)‖) :
+    ‖z + Complex.I‖ * ‖z - (lam : ℂ)‖⁻¹ ≤ 1 + (|lam| + 1) / ε := by
+  have hpos : 0 < ‖z - (lam : ℂ)‖ := lt_of_lt_of_le hε hgap
+  have hb1 : ‖z + Complex.I‖ ≤ ‖z - (lam : ℂ)‖ + (|lam| + 1) := by
+    have hsplit : z + Complex.I = (z - (lam : ℂ)) + ((lam : ℂ) + Complex.I) := by ring
+    rw [hsplit]
+    refine le_trans (norm_add_le _ _) ?_
+    gcongr
+    refine le_trans (norm_add_le _ _) ?_
+    rw [Complex.norm_real, Real.norm_eq_abs, Complex.norm_I]
+  have hinv : ‖z - (lam : ℂ)‖⁻¹ ≤ ε⁻¹ := by
+    simpa only [one_div] using one_div_le_one_div_of_le hε hgap
+  have hstep : ‖z + Complex.I‖ * ‖z - (lam : ℂ)‖⁻¹
+      ≤ (‖z - (lam : ℂ)‖ + (|lam| + 1)) * ‖z - (lam : ℂ)‖⁻¹ := by
+    gcongr
+  have hexp : (‖z - (lam : ℂ)‖ + (|lam| + 1)) * ‖z - (lam : ℂ)‖⁻¹
+      = 1 + (|lam| + 1) * ‖z - (lam : ℂ)‖⁻¹ := by
+    rw [add_mul, mul_inv_cancel₀ (ne_of_gt hpos)]
+  have hlast : (|lam| + 1) * ‖z - (lam : ℂ)‖⁻¹ ≤ (|lam| + 1) / ε := by
+    rw [div_eq_mul_inv]
+    exact mul_le_mul_of_nonneg_left hinv (by positivity)
+  linarith
+
+/-- A real point of the Cayley spectrum never cancels `i`; the imaginary parts
+cannot agree. -/
+private lemma real_add_I_ne_zero (t : ℝ) : ((t : ℂ) + Complex.I) ≠ 0 := by
+  intro h0
+  have him := congrArg Complex.im h0
+  simp at him
+
+/-- The pointwise identity behind the **right** inverse law
+`(A - lam) T_f = E(B)`: on the support of the indicator, the symbol
+`f = (κ - lam)⁻¹` inverts `κ - lam` after the `(κ + i)` companion is split off. -/
+private lemma symbol_right_inverse_pointwise {z lam : ℂ} (hz : z - lam ≠ 0) :
+    (z + Complex.I) * (z - lam)⁻¹ + -(Complex.I + lam) * (z - lam)⁻¹ = 1 := by
+  field_simp
+  ring
+
+/-- The pointwise identity behind the **left** inverse law: the same symbol,
+composed with `g = (κ + i)⁻¹`, recovers `g` on the support of the indicator. -/
+private lemma symbol_left_inverse_pointwise {z lam : ℂ} (hz : z - lam ≠ 0)
+    (hi : z + Complex.I ≠ 0) :
+    (z - lam)⁻¹ + -(Complex.I + lam) * ((z - lam)⁻¹ * (z + Complex.I)⁻¹)
+      = (z + Complex.I)⁻¹ := by
+  field_simp
+  ring
+
 /-- **A spectral gap gives a resolvent point of the restriction.**  If `B` keeps
 its distance `ε` from `lam`, then `lam` is in the resolvent set of the
 restriction of `A` to the spectral range of `B`; the inverse is the Borel
@@ -517,36 +572,11 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
     refine ⟨(hmeasκ.add measurable_const).mul hfmeas, 1 + (|lam| + 1) / ε,
       by positivity, fun w => ?_⟩
     by_cases hw : w ∈ S
-    · have hgw := hgapS w hw
-      have hpos : 0 < ‖((κ w : ℂ) - (lam : ℂ))‖ := lt_of_lt_of_le hε hgw
-      have hb1 : ‖((κ w : ℂ) + Complex.I)‖
-          ≤ ‖((κ w : ℂ) - (lam : ℂ))‖ + (|lam| + 1) := by
-        have hsplit : ((κ w : ℂ) + Complex.I)
-            = ((κ w : ℂ) - (lam : ℂ)) + ((lam : ℂ) + Complex.I) := by ring
-        rw [hsplit]
-        refine le_trans (norm_add_le _ _) ?_
-        gcongr
-        refine le_trans (norm_add_le _ _) ?_
-        rw [Complex.norm_real, Real.norm_eq_abs, Complex.norm_I]
-      have hfw : ‖f w‖ = (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹ := by
+    · have hfw : ‖f w‖ = (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹ := by
         rw [hf]
         simp only [hindone w hw, mul_one, norm_inv]
-      have hinv : (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹ ≤ ε⁻¹ := by
-        simpa only [one_div] using one_div_le_one_div_of_le hε hgw
       rw [hhsym, norm_mul, hfw]
-      have hstep : ‖((κ w : ℂ) + Complex.I)‖ * (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹
-          ≤ (‖((κ w : ℂ) - (lam : ℂ))‖ + (|lam| + 1))
-              * (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹ := by
-        gcongr
-      have hexp : (‖((κ w : ℂ) - (lam : ℂ))‖ + (|lam| + 1))
-          * (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹
-          = 1 + (|lam| + 1) * (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹ := by
-        rw [add_mul, mul_inv_cancel₀ (ne_of_gt hpos)]
-      have hlast : (|lam| + 1) * (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹
-          ≤ (|lam| + 1) / ε := by
-        rw [div_eq_mul_inv]
-        exact mul_le_mul_of_nonneg_left hinv (by positivity)
-      linarith
+      exact norm_add_I_mul_inv_norm_sub_le hε _ (hgapS w hw)
     · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hw]
       change ‖((κ w : ℂ) + Complex.I) * f w‖ ≤ 1 + (|lam| + 1) / ε
       rw [hfz, mul_zero, norm_zero]
@@ -609,8 +639,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
     · have hfw : f w = ((κ w : ℂ) - (lam : ℂ))⁻¹ := by
         rw [hf]; simp [hindone w hw]
       rw [hindone w hw, hfw]
-      field_simp [hne w hw]
-      ring
+      exact (symbol_right_inverse_pointwise (hne w hw)).symm
     · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hw]
       rw [hindnil w hw, hfz]
       ring
@@ -638,10 +667,8 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
     simp only [_root_.mul_apply_eq_comp] at hx
     exact ⟨Rop φ, hx⟩
   -- the left inverse
-  have hkne : ∀ w : _root_.spectrum ℂ (cayley hA), ((κ w : ℂ) + Complex.I) ≠ 0 := by
-    intro w h0
-    have him := congrArg Complex.im h0
-    simp at him
+  have hkne : ∀ w : _root_.spectrum ℂ (cayley hA), ((κ w : ℂ) + Complex.I) ≠ 0 :=
+    fun w => real_add_I_ne_zero (κ w)
   have hlefts : BorelCalculus.borelCalculus hU
         (hfb.add ((hfb.mul hgb).const_smul (-(Complex.I + (lam : ℂ)))))
       = BorelCalculus.borelCalculus hU (hindb.mul hgb) := by
@@ -654,8 +681,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
     · have hfw : f w = ((κ w : ℂ) - (lam : ℂ))⁻¹ := by
         rw [hf]; simp [hindone w hwS]
       rw [hindone w hwS, hfw, hgval, one_mul]
-      field_simp [hne w hwS, hkne w]
-      ring
+      exact symbol_left_inverse_pointwise (hne w hwS) (hkne w)
     · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hwS]
       rw [hindnil w hwS, hfz]
       ring
@@ -667,7 +693,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
       hRop, ← BorelCalculus.borelCalculus_add hU hfb ((hfb.mul hgb).const_smul _),
       ← BorelCalculus.borelCalculus_mul hU hindb hgb]
     exact hlefts
-  refine ⟨Rop.restrict (fun x _ => hKmap x), ?_, ?_⟩
+  refine mem_resolventSet_iff.mpr ⟨Rop.restrict (fun x _ => hKmap x), ?_, ?_⟩
   · intro ψ
     apply Subtype.ext
     have hyK : ((ψ : specRange hA B hB) : H) ∈ specRange hA B hB :=

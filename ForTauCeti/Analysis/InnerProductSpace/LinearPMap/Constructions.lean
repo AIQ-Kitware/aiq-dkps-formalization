@@ -47,7 +47,7 @@ that used them do not need a spectral-theory dependency for bookkeeping.
      wrappers rather than adding one (`dev/tauceti/u1-linearpmap-migration.md`).
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap
@@ -58,6 +58,11 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
 
 /-- Add a map defined on `dom A` to `A`, keeping the domain unchanged. -/
+-- `@[expose]` here is deliberate and minimal: the `_apply` lemma below cannot be
+-- *stated* without `.domain` reducing, since it indexes its argument by this map's
+-- domain and applies the underlying map to it. That is the `api-design` rubric's own
+-- carve-out — a consumer that must unfold — not the blanket exposure it rejects.
+@[expose]
 def perturb (A : H →ₗ.[𝕜] H) (V : A.domain →ₗ[𝕜] H) : H →ₗ.[𝕜] H where
   domain := A.domain
   toFun := A.toFun + V
@@ -65,12 +70,10 @@ def perturb (A : H →ₗ.[𝕜] H) (V : A.domain →ₗ[𝕜] H) : H →ₗ.[�
 /-- Perturbing leaves the domain alone — that is the point of `perturb`, and
 what lets a perturbed operator be compared with the original on the nose. -/
 @[simp] theorem perturb_domain (A : H →ₗ.[𝕜] H) (V : A.domain →ₗ[𝕜] H) :
-    (perturb A V).domain = A.domain := rfl
-
+    (perturb A V).domain = A.domain := (rfl)
 /-- The perturbed map acts by `A + V` pointwise on the shared domain. -/
 @[simp] theorem perturb_apply (A : H →ₗ.[𝕜] H) (V : A.domain →ₗ[𝕜] H)
-    (ψ : A.domain) : perturb A V ψ = A ψ + V ψ := rfl
-
+    (ψ : A.domain) : perturb A V ψ = A ψ + V ψ := (rfl)
 section Bounded
 
 variable [CompleteSpace H]
@@ -93,8 +96,7 @@ omit [CompleteSpace H] in
 /-- A bounded perturbation acts by `T` itself; restricting `T` to `A.domain`
 changes nothing about its values. -/
 @[simp] theorem boundedPerturbation_apply (A : H →ₗ.[𝕜] H) (T : H →L[𝕜] H)
-    (x : A.domain) : boundedPerturbation A T x = T (x : H) := rfl
-
+    (x : A.domain) : boundedPerturbation A T x = T (x : H) := (rfl)
 /-- **Bounded Kato--Rellich.**  A bounded self-adjoint perturbation of a
 self-adjoint partial map is self-adjoint, on the same domain.
 
@@ -157,6 +159,11 @@ variable {H' : Type*} [NormedAddCommGroup H'] [InnerProductSpace 𝕜 H']
 
 /-- **Conjugation of a partial map by a unitary**, `A ↦ U A U⁻¹`, with domain
 `U '' dom A` and action `y ↦ U (A (U⁻¹ y))`. -/
+-- `@[expose]` here is deliberate and minimal: the `_apply` lemma below cannot be
+-- *stated* without `.domain` reducing, since it indexes its argument by this map's
+-- domain and applies the underlying map to it. That is the `api-design` rubric's own
+-- carve-out — a consumer that must unfold — not the blanket exposure it rejects.
+@[expose]
 noncomputable def unitaryConj (U : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H) : H' →ₗ.[𝕜] H' where
   domain := A.domain.comap (U.symm.toLinearEquiv : H' →ₗ[𝕜] H)
   toFun :=
@@ -189,8 +196,7 @@ apply `A`, push forward by `U`. -/
 @[simp]
 theorem unitaryConj_apply (U : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H)
     (x : (unitaryConj U A).domain) :
-    unitaryConj U A x = U (A ⟨U.symm (x : H'), x.2⟩) := rfl
-
+    unitaryConj U A x = U (A ⟨U.symm (x : H'), x.2⟩) := (rfl)
 /-- `U` carries `A.domain` into the conjugated domain.  This is the membership
 witness needed to state `unitaryConj_apply_map`, which is the form of the
 conjugation law that is usable from the *original* domain. -/
