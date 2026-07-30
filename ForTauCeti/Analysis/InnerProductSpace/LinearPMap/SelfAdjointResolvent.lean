@@ -41,7 +41,7 @@ The argument is the classical one, in three steps:
   Spectra's, which routes through the Cayley transform and Yosida--Hille.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap
@@ -152,8 +152,7 @@ def shiftMap (A : E →ₗ.[ℂ] E) (z : ℂ) : A.domain →ₗ[ℂ] E :=
 omit [CompleteSpace E] in
 /-- The shifted map `A - z`, unfolded. -/
 @[simp] theorem shiftMap_apply (A : E →ₗ.[ℂ] E) (z : ℂ) (x : A.domain) :
-    shiftMap A z x = A x - z • (x : E) := rfl
-
+    shiftMap A z x = A x - z • (x : E) := (rfl)
 /-- **Closed range.**  The estimate turns a convergent sequence in the range into
 a Cauchy sequence of preimages; closedness of `A` (which self-adjointness
 supplies) identifies the limit. -/
@@ -175,7 +174,7 @@ theorem isClosed_range_shiftMap {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
     obtain ⟨N, hN⟩ := hwCauchy (|z.im| * ε) (by positivity)
     refine ⟨N, fun m hm n hn => ?_⟩
     have hest := norm_sub_smul_ge_abs_im hsym z (x m - x n)
-    have hcoe : ((x m - x n : A.domain) : E) = (x m : E) - (x n : E) := rfl
+    have hcoe : ((x m - x n : A.domain) : E) = (x m : E) - (x n : E) := (rfl)
     have hAsub : A (x m - x n) = A (x m) - A (x n) := map_sub _ _ _
     have hval : A (x m - x n) - z • ((x m - x n : A.domain) : E) = w m - w n := by
       rw [hAsub, hcoe, smul_sub, ← hx m, ← hx n]
@@ -256,11 +255,11 @@ theorem mem_resolventSet_of_im_ne_zero {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoin
     have h := norm_sub_smul_ge_abs_im hsym z (e.symm y)
     rw [show A (e.symm y) - z • ((e.symm y : A.domain) : E) = shiftMap A z (e.symm y) from rfl,
       hesymm] at h
-    have : ‖Rlin y‖ = ‖((e.symm y : A.domain) : E)‖ := rfl
+    have : ‖Rlin y‖ = ‖((e.symm y : A.domain) : E)‖ := (rfl)
     rw [this]
     rw [inv_mul_eq_div, le_div_iff₀ habs, mul_comm]
     exact h
-  refine ⟨Rlin.mkContinuous (|z.im|⁻¹) hbound, ?_, ?_⟩
+  refine mem_resolventSet_iff.mpr ⟨Rlin.mkContinuous (|z.im|⁻¹) hbound, ?_, ?_⟩
   · intro ψ
     have hinv : e.symm ((shiftMap A z) ψ) = ψ := e.symm_apply_apply ψ
     change ((e.symm (A ψ - z • (ψ : E)) : A.domain) : E) = (ψ : E)
@@ -276,7 +275,7 @@ theorem spectrum_subset_real {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
   intro z hz
   have him : z.im = 0 := by
     by_contra him
-    exact hz (mem_resolventSet_of_im_ne_zero hA him)
+    exact (mem_spectrum_iff.mp hz) (mem_resolventSet_of_im_ne_zero hA him)
   exact ⟨z.re, Set.mem_univ _, by simp [Complex.ext_iff, him]⟩
 
 /-- The resolvent of a self-adjoint operator at a non-real point is bounded by
@@ -366,7 +365,7 @@ theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
       ∀ φ : E, ∃ hmem : R φ ∈ A.domain,
         A ⟨R φ, hmem⟩ - (c : ℂ) • R φ = φ := by
   have hcmem : c ∈ Set.Ioo (c - s) (c + s) := ⟨by linarith, by linarith⟩
-  have hc : (c : ℂ) ∈ resolventSet A := not_not.mp (hgap c hcmem)
+  have hc : (c : ℂ) ∈ resolventSet A := notMem_spectrum_iff.mp (hgap c hcmem)
   refine ⟨resolvent A hc, ?_, fun ψ => resolvent_apply_sub_smul hc ψ, fun φ =>
     ⟨resolvent_mem_domain hc φ, sub_smul_resolvent hc φ⟩⟩
   -- every spectral point of the bounded resolvent has modulus at most `s⁻¹`
@@ -377,8 +376,8 @@ theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
     · -- `c + μ⁻¹` is a spectral point of `A`, hence real and outside the gap
       have hnot : (c : ℂ) + μ⁻¹ ∉ resolventSet A := fun hmem =>
         notMem_spectrum_resolvent hc hμ0 hmem hμ
-      obtain ⟨r, -, hr⟩ := spectrum_subset_real hA hnot
-      have hrspec : (r : ℂ) ∈ spectrum A := by rw [hr]; exact hnot
+      obtain ⟨r, -, hr⟩ := spectrum_subset_real hA (mem_spectrum_iff.mpr hnot)
+      have hrspec : (r : ℂ) ∈ spectrum A := by rw [hr]; exact mem_spectrum_iff.mpr hnot
       have hrgap : r ∉ Set.Ioo (c - s) (c + s) := fun hmem => hgap r hmem hrspec
       have hge : s ≤ |r - c| := by
         rw [Set.mem_Ioo, not_and_or, not_lt, not_lt] at hrgap
@@ -426,6 +425,13 @@ theorem I_mem_resolventSet {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
 `1 - 2i·R(-i)`. -/
 noncomputable def cayley {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) : E →L[ℂ] E :=
   1 - (2 * Complex.I) • resolvent A (negI_mem_resolventSet hA)
+
+/-- Rewrite form of `cayley`, so call sites need not unfold the definition.
+
+Added 2026-07-30: `SpectralMeasure/Construction` was doing `simp [cayley]`, which needs
+the body exposed. Tau Ceti's `api-design` rubric asks for the lemma instead. -/
+theorem cayley_def {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
+    cayley hA = 1 - (2 * Complex.I) • resolvent A (negI_mem_resolventSet hA) := (rfl)
 
 /-- On a vector, `U ξ = (A + i) R(-i) ξ - 2i R(-i) ξ`, i.e. `(A - i)` applied to
 the preimage of `ξ` under `A + i`.
@@ -514,7 +520,7 @@ theorem cayley_mem_unitary {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
               = ContinuousLinearMap.adjoint (cayley hA) (cayley hA ξ) from rfl,
             ContinuousLinearMap.adjoint_inner_left]
       _ = ⟪ξ, η⟫_ℂ := inner_cayley hA ξ η
-      _ = ⟪(1 : E →L[ℂ] E) ξ, η⟫_ℂ := rfl
+      _ = ⟪(1 : E →L[ℂ] E) ξ, η⟫_ℂ := (rfl)
   have hmul : cayley hA * ContinuousLinearMap.adjoint (cayley hA) = 1 := by
     refine ContinuousLinearMap.ext fun ξ => ?_
     obtain ⟨ζ, rfl⟩ := surjective_cayley hA ξ

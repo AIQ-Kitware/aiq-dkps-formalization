@@ -36,7 +36,7 @@ the spectral-projection argument consumes.
 *New.*
 -/
 
-@[expose] public section
+public section
 
 noncomputable section
 
@@ -67,8 +67,8 @@ theorem generator_commute (U : OneParameterUnitaryGroup (H := H)) (T : H →L[�
     have h := (T.continuous.tendsto (generator U x)).comp (generator_tendsto U x)
     refine h.congr fun t => ?_
     rw [Function.comp_apply, ← genDiffQuot_commute U T hT (x : H) t]
-  exact ⟨⟨T (generator U x), hlim⟩, tendsto_nhds_unique
-    (generator_tendsto U ⟨T (x : H), ⟨T (generator U x), hlim⟩⟩) hlim⟩
+  exact ⟨mem_generatorDomain.mpr ⟨T (generator U x), hlim⟩, tendsto_nhds_unique
+    (generator_tendsto U ⟨T (x : H), mem_generatorDomain.mpr ⟨T (generator U x), hlim⟩⟩) hlim⟩
 
 end OneParameterUnitaryGroup
 end TauCeti
