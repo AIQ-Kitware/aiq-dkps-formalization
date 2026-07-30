@@ -100,6 +100,8 @@ theorem opNorm_sylvester_le_of_intervalGap
     intro i
     have hi : (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
         ‖H (hHsym.eigenvectorBasis rfl i)‖ := by
+      -- `H` is the local name for `TauCeti.abs S`; this states the goal against that
+      -- definition so that `norm_abs_apply` can fire on the right-hand side.
       change (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
         ‖TauCeti.abs S (hHsym.eigenvectorBasis rfl i)‖
       rw [TauCeti.norm_abs_apply]
@@ -129,27 +131,39 @@ theorem opNorm_sylvester_le_of_intervalGap
         _ = U.symm (C x) := congrArg U.symm hx
     have hSX : U.symm (S (X x)) = H (X x) := by
       have hp := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary S) (X x)
+      -- restates the polar-decomposition identity against the local names `U` and `H`,
+      -- so the following rewrite can cancel `U.symm (U _)`.
       change S (X x) = U (H (X x)) at hp
       rw [hp, U.symm_apply_apply]
+    -- the goal is stated for `Z`/`Y`; this names it through `H` and `U.symm` so that
+    -- `hSX` matches syntactically.
     change H (X x) - U.symm (X (T x)) = U.symm (C x)
     rwa [← hSX]
   have hZnorm : ‖Z.toContinuousLinearMap‖ = ‖X.toContinuousLinearMap‖ := by
     apply le_antisymm
     · refine Z.toContinuousLinearMap.opNorm_le_bound (norm_nonneg _) fun x => ?_
+      -- `simp only [Z]` cannot be used here: it normalises the composition further and
+      -- the following `norm_map` rewrite then has nothing to match. `change` states the
+      -- goal in the shape `opNorm_le_bound` left it, with the composite still applied.
       change ‖U.symm (X x)‖ ≤ ‖X.toContinuousLinearMap‖ * ‖x‖
       rw [U.symm.norm_map]
       exact X.toContinuousLinearMap.le_opNorm x
     · refine X.toContinuousLinearMap.opNorm_le_bound (norm_nonneg _) fun x => ?_
+      -- `simp only [Z]` cannot be used here: it normalises the composition further and
+      -- the following `norm_map` rewrite then has nothing to match. `change` states the
+      -- goal in the shape `opNorm_le_bound` left it, with the composite still applied.
       change ‖X x‖ ≤ ‖Z.toContinuousLinearMap‖ * ‖x‖
       rw [← U.symm.norm_map (X x)]
       exact Z.toContinuousLinearMap.le_opNorm x
   have hYnorm : ‖Y.toContinuousLinearMap‖ = ‖C.toContinuousLinearMap‖ := by
     apply le_antisymm
     · refine Y.toContinuousLinearMap.opNorm_le_bound (norm_nonneg _) fun x => ?_
+      -- As above: `simp only [Y]` over-normalises for the `norm_map` step that follows.
       change ‖U.symm (C x)‖ ≤ ‖C.toContinuousLinearMap‖ * ‖x‖
       rw [U.symm.norm_map]
       exact C.toContinuousLinearMap.le_opNorm x
     · refine C.toContinuousLinearMap.opNorm_le_bound (norm_nonneg _) fun x => ?_
+      -- As above: `simp only [Y]` over-normalises for the `norm_map` step that follows.
       change ‖C x‖ ≤ ‖Y.toContinuousLinearMap‖ * ‖x‖
       rw [← U.symm.norm_map (C x)]
       exact Y.toContinuousLinearMap.le_opNorm x
@@ -188,7 +202,7 @@ private theorem uiNorm_sylvester_le_of_form_bounds_aux
   have hidealL : ∀ D : F →L[𝕜] F, ∀ T : E →L[𝕜] F,
       N' (D ∘L T) ≤ ‖D‖ * N' T := by
     intro D T
-    change N (D.toLinearMap ∘ₗ T.toLinearMap) ≤ ‖D‖ * N T.toLinearMap
+    simp only [N']
     have h := N.comp_le_opNorm_mul D.toLinearMap T.toLinearMap
     have hD : D.toLinearMap.toContinuousLinearMap = D := by
       ext x
@@ -197,7 +211,7 @@ private theorem uiNorm_sylvester_le_of_form_bounds_aux
   have hidealR : ∀ T : E →L[𝕜] F, ∀ D : E →L[𝕜] E,
       N' (T ∘L D) ≤ N' T * ‖D‖ := by
     intro T D
-    change N (T.toLinearMap ∘ₗ D.toLinearMap) ≤ N T.toLinearMap * ‖D‖
+    simp only [N']
     have h := N.comp_le_mul_opNorm T.toLinearMap D.toLinearMap
     have hD : D.toLinearMap.toContinuousLinearMap = D := by
       ext x
@@ -361,6 +375,8 @@ theorem uiNorm_sylvester_le_of_intervalGap
     intro i
     have hi : (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
         ‖H (hHsym.eigenvectorBasis rfl i)‖ := by
+      -- `H` is the local name for `TauCeti.abs S`; this states the goal against that
+      -- definition so that `norm_abs_apply` can fire on the right-hand side.
       change (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
         ‖TauCeti.abs S (hHsym.eigenvectorBasis rfl i)‖
       rw [TauCeti.norm_abs_apply]
@@ -390,12 +406,16 @@ theorem uiNorm_sylvester_le_of_intervalGap
         _ = U.symm (C x) := congrArg U.symm hx
     have hSX : U.symm (S (X x)) = H (X x) := by
       have hp := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary S) (X x)
+      -- restates the polar-decomposition identity against the local names `U` and `H`,
+      -- so the following rewrite can cancel `U.symm (U _)`.
       change S (X x) = U (H (X x)) at hp
       rw [hp, U.symm_apply_apply]
+    -- the goal is stated for `Z`/`Y`; this names it through `H` and `U.symm` so that
+    -- `hSX` matches syntactically.
     change H (X x) - U.symm (X (T x)) = U.symm (C x)
     rwa [← hSX]
   have hZnorm : N Z = N X := by
-    change N (U.symm.toLinearMap ∘ₗ X) = N X
+    simp only [Z]
     have h := N.invariant U.symm (LinearIsometryEquiv.refl 𝕜 E) X
     have hcomp : U.symm.toLinearMap ∘ₗ X ∘ₗ
         (LinearIsometryEquiv.refl 𝕜 E).toLinearMap =
@@ -404,7 +424,7 @@ theorem uiNorm_sylvester_le_of_intervalGap
       rfl
     rwa [hcomp] at h
   have hYnorm : N Y = N C := by
-    change N (U.symm.toLinearMap ∘ₗ C) = N C
+    simp only [Y]
     have h := N.invariant U.symm (LinearIsometryEquiv.refl 𝕜 E) C
     have hcomp : U.symm.toLinearMap ∘ₗ C ∘ₗ
         (LinearIsometryEquiv.refl 𝕜 E).toLinearMap =
@@ -429,14 +449,14 @@ theorem uiNorm_sylvester_le_of_intervalGap
   have hidealL : ∀ D : F →L[𝕜] F, ∀ Q : E →L[𝕜] F,
       N' (D ∘L Q) ≤ ‖D‖ * N' Q := by
     intro D Q
-    change N (D.toLinearMap ∘ₗ Q.toLinearMap) ≤ ‖D‖ * N Q.toLinearMap
+    simp only [N']
     have h := N.comp_le_opNorm_mul D.toLinearMap Q.toLinearMap
     have hD : D.toLinearMap.toContinuousLinearMap = D := by ext x; rfl
     rwa [hD] at h
   have hidealR : ∀ Q : E →L[𝕜] F, ∀ D : E →L[𝕜] E,
       N' (Q ∘L D) ≤ N' Q * ‖D‖ := by
     intro Q D
-    change N (Q.toLinearMap ∘ₗ D.toLinearMap) ≤ N Q.toLinearMap * ‖D‖
+    simp only [N']
     have h := N.comp_le_mul_opNorm Q.toLinearMap D.toLinearMap
     have hD : D.toLinearMap.toContinuousLinearMap = D := by ext x; rfl
     rwa [hD] at h
