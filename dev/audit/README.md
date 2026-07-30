@@ -7,8 +7,8 @@ with a lane, that another agent can pick up and execute.
 
 | File | What it is |
 |---|---|
-| [`FILE-CHECKLIST.md`](FILE-CHECKLIST.md) | Every file, once. **1,271 files, 315,880 lines, 128 groups.** |
-| [`GROUP-CHECKLIST.md`](GROUP-CHECKLIST.md) | Every group, reviewed *after* its files. Cross-file findings only. **128 groups.** |
+| [`FILE-CHECKLIST.md`](FILE-CHECKLIST.md) | Every file, once. **1,160 files, 112 groups.** |
+| [`GROUP-CHECKLIST.md`](GROUP-CHECKLIST.md) | Every group, reviewed *after* its files. Cross-file findings only. **112 groups.** |
 | `review-<group>.md` | The findings. One document per group, written as the group is completed. |
 
 Both checklists are **generated**:
@@ -78,41 +78,50 @@ Not by size — by what the finding changes.
 7. **`Challenge` (49 files).** Immutable conformance statements — review for
    whether the right theorems are pinned, never to change them.
 
-## Scope — and a correction
+## Scope — load-bearing files only
 
-**Scope is every tracked file except `retired/`, `external/`, `vendor/` and
-`.lake/`** — the trees that are not ours to review. Nothing else is dropped.
+**In scope: every tracked file whose *content*, if wrong, would mislead a reader
+or break a gate.** That is all 787 Lean sources plus 373 load-bearing non-Lean
+files — **1,160 total, 112 groups.**
 
-The first version of this checklist covered **787 files: only `*.lean`.** That
-was wrong, and jon caught it. It silently omitted **484 files**, including
-exactly the ones a hostile reviewer attacks first:
+Excluded, with the reason recorded in `scripts/audit_checklist.py` so the
+decision is auditable rather than a silent filter (111 files):
 
-- `FinishYuWangSamworth/ELEGANCE_AUDIT.md`, and `GROUNDING.md` /
-  `PROOF_OBLIGATIONS.md` in both `Finish*` libraries — documents that make
-  **claims about completeness**. A false claim there is more damaging than a
-  weak proof, because it is what a reader trusts instead of checking.
-- `scripts/verify_grounding.py` ×2 — the tools that *assert* those claims hold.
-- `comparator/*.json` (23) — declaration names stored as data, already the
-  documented rename trap.
-- 232 `.md`, 63 `.py`, 55 `.json`, 45 files under `scripts/`.
+| n | dropped | why |
+|---|---|---|
+| 57 | `.tex` / `.sty` / `.bst` / `.bib`, `papers/` | paper sources, reviewed as prose not as code |
+| 17 | root `*_MANIFEST.txt`, `OVERLAY-METADATA/`, `_overlay/` | overlay delivery receipts, superseded by `dev/overlays/` |
+| 27 | `.pyc`, `.gz`, `.ots`, `.patch`, `SHA256SUMS` | build and archive artifacts |
+| 3 | `lake-manifest.json`, `lean-toolchain`, `LICENSE` | generated, or a single pinned value |
 
-The lesson is the one this repository keeps relearning: **a checker whose scope
-is narrower than its name reports a green result that means nothing.** "Audit
-complete" over 787 of 1271 files would have been exactly that.
+**`dev/overlays/*.manifest.txt` is deliberately NOT dropped**, even though it
+matches the word "manifest": `scripts/check_davis_kahan_rebased_mathahead.py`
+checks it, so its content is load-bearing. That distinction is why the exclusion
+is a function with reasons rather than a glob.
+
+### Two corrections, recorded because the second is the instructive one
+
+The first version of this checklist covered **787 files: only `*.lean`**, while
+presenting itself as an audit of every file. jon caught it. It silently omitted
+the files a hostile reviewer attacks first — `ELEGANCE_AUDIT.md`,
+`GROUNDING.md` and `PROOF_OBLIGATIONS.md` in the `Finish*` libraries, which make
+**claims about completeness**; `verify_grounding.py`, the tools that assert those
+claims hold; and `comparator/*.json`, which stores declaration names as data.
+
+The over-correction then swept in 1,271 files including LaTeX styles and
+compiled `.pyc`. Both errors are the same one in opposite directions: **a
+checker whose scope does not match its name.** "Audit complete" over 787 of 1271
+would have meant nothing; an audit padded with `.bst` files would have meant
+little more.
 
 ### Review depth by kind
 
-Every file is on the list. What "reviewed" means varies, and the checklist
-labels each entry with its kind:
+Every file in scope is on the list, labelled with its kind:
 
-| Kind | What review means |
-|---|---|
-| **Lean source** (787) | Line by line: duplication, splitting, simplification, naming, placement. |
-| **documentation** (232) | Does it state something false or stale? Does it match the tree it describes? |
-| **tooling** (63 `.py`, 6 `.sh`) | Does it check what it claims? Is it reachable? Does a green result mean anything? |
-| **data/config** (55 `.json`) | Do the names it pins still resolve? Is it generated or hand-edited? |
-| **paper source** (49 `.tex`, styles, `.bib`) | Shallow: does it match the formalized statements it cites? Not a LaTeX review. |
-| **artifact** (`.pyc`, `.gz`, `.ots`, `.patch`) | Should this be tracked at all? **12 `.pyc` files are committed — that is already a finding.** |
-
-Binary files have no lines to read but stay on the list, because "why is this
-tracked" is a legitimate review question.
+| Kind | n | What review means |
+|---|---|---|
+| **Lean source** | 787 | Line by line: duplication, splitting, simplification, naming, placement. |
+| **documentation** | 226 | Does it state something false or stale? Does it match the tree it describes? |
+| **tooling** | 69 | Does it check what it claims? Does a green result mean anything? |
+| **data/config** | 56 | Do the names it pins still resolve? Generated or hand-edited? |
+| **manifest/notes** | 12 | Is it still checked by something, and does it still match? |
