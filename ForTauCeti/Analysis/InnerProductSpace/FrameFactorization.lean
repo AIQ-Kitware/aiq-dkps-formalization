@@ -28,7 +28,6 @@ This module is independent of Davis--Kahan spectral-gap assumptions.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
 
 open scoped InnerProductSpace
 
@@ -324,5 +323,4 @@ theorem trialMap_comp_trialGramSqrtEquiv_symm
       rw [(trialGramSqrtEquiv X hX).apply_symm_apply]
 
 
-end DavisKahanTheory
 end TauCeti

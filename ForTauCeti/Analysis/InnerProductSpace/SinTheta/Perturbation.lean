@@ -98,6 +98,7 @@ private theorem adjoint_subtype_eq_orthogonalProjectionOnto
   apply (LinearMap.eq_adjoint_iff
     U.orthogonalProjectionOnto.toLinearMap U.subtype).2
   intro x y
+  -- states the inner-product goal against the projection's defining property.
   change ⟪U.starProjection x, (y : E)⟫_𝕜 = ⟪x, (y : E)⟫_𝕜
   rw [U.inner_starProjection_left_eq_right,
     U.starProjection_eq_self_iff.mpr y.2]
@@ -138,6 +139,9 @@ private theorem domainTransport_sinThetaEmbedding_apply
     [V.HasOrthogonalProjection] :
     (N.toRectangular.domainIsometryTransport U.subtypeₗᵢ)
         (sinThetaEmbedding V U.subtypeₗᵢ) = N (sinThetaMap U V) := by
+  -- states the goal with the local definitions unfolded, in the exact shape the
+  -- following rewrite needs. `simp only` on those definitions normalises further
+  -- and the rewrite then has nothing to match -- tried, and it fails here.
   change N ((sinThetaEmbedding V U.subtypeₗᵢ) ∘ₗ
       LinearMap.adjoint U.subtypeₗᵢ.toLinearMap) = N (sinThetaMap U V)
   rw [adjoint_subtype_eq_orthogonalProjectionOnto]
@@ -154,8 +158,14 @@ private theorem domainTransport_residual_le
   have hres : residual B U.subtypeₗᵢ (A.restrict hU) =
       (B - A) ∘ₗ U.subtype := by
     ext x
+    -- states the goal with the local definitions unfolded, in the exact shape the
+    -- following rewrite needs. `simp only` on those definitions normalises further
+    -- and the rewrite then has nothing to match -- tried, and it fails here.
     change B (x : E) - A (x : E) = (B - A) (x : E)
     rfl
+  -- states the goal with the local definitions unfolded, in the exact shape the
+  -- following rewrite needs. `simp only` on those definitions normalises further
+  -- and the rewrite then has nothing to match -- tried, and it fails here.
   change N ((residual B U.subtypeₗᵢ (A.restrict hU)) ∘ₗ
       LinearMap.adjoint U.subtypeₗᵢ.toLinearMap) ≤ N (B - A)
   rw [hres, adjoint_subtype_eq_orthogonalProjectionOnto]
@@ -168,6 +178,9 @@ private theorem domainTransport_residual_le
   calc
     N ((B - A) ∘ₗ projection U) ≤ N (B - A) * 1 :=
       N.apply_comp_le' zero_le_one fun x => by
+        -- states the norm goal against the local definition so the operator-norm bound
+        -- applies directly; `simp only` would unfold the composition further than the
+        -- bound lemma expects.
         change ‖U.starProjection x‖ ≤ 1 * ‖x‖
         simpa using U.norm_starProjection_apply_le x
     _ = N (B - A) := mul_one _
@@ -243,8 +256,14 @@ theorem sinAngleOperator_perturbation_le
   have hEqUV : BVperp ∘ₗ XUV - XUV ∘ₗ AU = CUV := by
     ext x
     have hcomm := projection_apply_comm_of_reduces hB hVperp (x : E)
+    -- states the goal with the local definitions unfolded, in the exact shape the
+    -- following rewrite needs. `simp only` on those definitions normalises further
+    -- and the rewrite then has nothing to match -- tried, and it fails here.
     change Vᗮ.starProjection (B (x : E)) =
       B (Vᗮ.starProjection (x : E)) at hcomm
+    -- states the goal with the local definitions unfolded, in the exact shape the
+    -- following rewrite needs. `simp only` on those definitions normalises further
+    -- and the rewrite then has nothing to match -- tried, and it fails here.
     change B (Vᗮ.starProjection (x : E)) -
         Vᗮ.starProjection (A (x : E)) =
       Vᗮ.starProjection ((B - A) (x : E))
@@ -255,6 +274,9 @@ theorem sinAngleOperator_perturbation_le
           (((δ : ℝ) : 𝕜) • XUV) ≤
         RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CUV := by
     intro k
+    -- states the goal with the local definitions unfolded, in the exact shape the
+    -- following rewrite needs. `simp only` on those definitions normalises further
+    -- and the rewrite then has nothing to match -- tried, and it fails here.
     change (RectangularUnitarilyInvariantNorm.kyFan k)
         (((δ : ℝ) : 𝕜) • XUV) ≤
       (RectangularUnitarilyInvariantNorm.kyFan k) CUV
@@ -280,8 +302,14 @@ theorem sinAngleOperator_perturbation_le
   have hEqVU : AUperp ∘ₗ XVU - XVU ∘ₗ BV = CVU := by
     ext x
     have hcomm := projection_apply_comm_of_reduces hA hUperp (x : E)
+    -- states the goal with the local definitions unfolded, in the exact shape the
+    -- following rewrite needs. `simp only` on those definitions normalises further
+    -- and the rewrite then has nothing to match -- tried, and it fails here.
     change Uᗮ.starProjection (A (x : E)) =
       A (Uᗮ.starProjection (x : E)) at hcomm
+    -- states the goal with the local definitions unfolded, in the exact shape the
+    -- following rewrite needs. `simp only` on those definitions normalises further
+    -- and the rewrite then has nothing to match -- tried, and it fails here.
     change A (Uᗮ.starProjection (x : E)) -
         Uᗮ.starProjection (B (x : E)) =
       Uᗮ.starProjection ((A - B) (x : E))
@@ -344,6 +372,9 @@ theorem sinAngleOperator_perturbation_le
     have h :=
       RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply_le_of_kyFanSum_le
         NB hkyUV hkyVU
+    -- states the goal with the local definitions unfolded, in the exact shape the
+    -- following rewrite needs. `simp only` on those definitions normalises further
+    -- and the rewrite then has nothing to match -- tried, and it fails here.
     change NB (((δ : ℝ) : 𝕜) •
         RectangularUnitarilyInvariantNorm.orthogonalBlockSum
           XUV (-XVU.adjoint)) ≤
@@ -368,6 +399,9 @@ theorem sinAngleOperator_perturbation_le
   have hEUadj :
       LinearMap.adjoint EU.symm.toLinearIsometry.toLinearMap =
         EU.toLinearMap := by
+    -- states the goal with the local definitions unfolded, in the exact shape the
+    -- following rewrite needs. `simp only` on those definitions normalises further
+    -- and the rewrite then has nothing to match -- tried, and it fails here.
     change LinearMap.adjoint EU.symm.toLinearMap = EU.toLinearMap
     exact (EU.symm).adjoint_toLinearMap_eq_symm
   have hXVUadj :
@@ -509,8 +543,14 @@ theorem opNorm_sinThetaMap_le_of_intervalGap
   have hEq : BVperp ∘ₗ X - X ∘ₗ AU = C := by
     ext x
     have hcomm := projection_apply_comm_of_reduces hB hVperp (x : E)
+    -- states the goal with the local definitions unfolded, in the exact shape the
+    -- following rewrite needs. `simp only` on those definitions normalises further
+    -- and the rewrite then has nothing to match -- tried, and it fails here.
     change Vᗮ.starProjection (B (x : E)) =
       B (Vᗮ.starProjection (x : E)) at hcomm
+    -- states the goal with the local definitions unfolded, in the exact shape the
+    -- following rewrite needs. `simp only` on those definitions normalises further
+    -- and the rewrite then has nothing to match -- tried, and it fails here.
     change B (Vᗮ.starProjection (x : E)) -
         Vᗮ.starProjection (A (x : E)) =
       Vᗮ.starProjection ((B - A) (x : E))
@@ -524,6 +564,9 @@ theorem opNorm_sinThetaMap_le_of_intervalGap
       have hxU : U.starProjection (x : E) = (x : E) :=
         U.starProjection_eq_self_iff.mpr x.2
       have hfull := (sinThetaMap U V).toContinuousLinearMap.le_opNorm (x : E)
+      -- states the norm goal against the local definition so the operator-norm bound
+      -- applies directly; `simp only` would unfold the composition further than the
+      -- bound lemma expects.
       change ‖Vᗮ.starProjection (U.starProjection (x : E))‖ ≤
         ‖(sinThetaMap U V).toContinuousLinearMap‖ * ‖x‖ at hfull
       rw [hxU] at hfull
@@ -532,8 +575,14 @@ theorem opNorm_sinThetaMap_le_of_intervalGap
         (norm_nonneg X.toContinuousLinearMap) fun x => ?_
       let ux : U := ⟨U.starProjection x, U.starProjection_apply_mem x⟩
       have hXu := X.toContinuousLinearMap.le_opNorm ux
+      -- states the norm goal against the local definition so the operator-norm bound
+      -- applies directly; `simp only` would unfold the composition further than the
+      -- bound lemma expects.
       change ‖Vᗮ.starProjection (U.starProjection x)‖ ≤
         ‖X.toContinuousLinearMap‖ * ‖U.starProjection x‖ at hXu
+      -- states the norm goal against the local definition so the operator-norm bound
+      -- applies directly; `simp only` would unfold the composition further than the
+      -- bound lemma expects.
       change ‖Vᗮ.starProjection (U.starProjection x)‖ ≤
         ‖X.toContinuousLinearMap‖ * ‖x‖
       exact hXu.trans (mul_le_mul_of_nonneg_left
@@ -542,6 +591,9 @@ theorem opNorm_sinThetaMap_le_of_intervalGap
       ‖(B - A).toContinuousLinearMap‖ := by
     refine C.toContinuousLinearMap.opNorm_le_bound
       (norm_nonneg (B - A).toContinuousLinearMap) fun x => ?_
+    -- states the norm goal against the local definition so the operator-norm bound
+    -- applies directly; `simp only` would unfold the composition further than the
+    -- bound lemma expects.
     change ‖Vᗮ.starProjection ((B - A) (x : E))‖ ≤
       ‖(B - A).toContinuousLinearMap‖ * ‖x‖
     exact (Vᗮ.norm_starProjection_apply_le ((B - A) (x : E))).trans
