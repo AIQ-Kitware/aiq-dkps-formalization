@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace
 import ForTauCeti.Analysis.InnerProductSpace.SpectralGap
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 
 /-!
 # Finite-dimensional Sylvester equations

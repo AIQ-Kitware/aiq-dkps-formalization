@@ -9,8 +9,8 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
 import DavisKahan.Interop.Spectra.HilbertSchmidtTensor
 import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtConjugation
 import ForTauCeti.Analysis.InnerProductSpace.SylvesterGroup
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterGenerator
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
 
 /-!
 # The complex rectangular Hilbert--Schmidt ideal family

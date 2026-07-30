@@ -14,7 +14,7 @@ without any dimension factor.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles

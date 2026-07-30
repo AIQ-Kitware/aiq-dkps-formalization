@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 
 /-! # The bounded Sylvester operator
 
@@ -12,9 +12,9 @@ import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
   `df036cd`; it has had no prior home.
-* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
-  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
-  areas.
+* Extraction class: **authored in place**. Upstream target is Mathlib; the module
+  is staged here because `ForMathlib` was retired on 2026-07-29 and `ForTauCeti`
+  is now the single staging library — see `ForTauCeti/README.md`.
 * Original authors / copyright: Jon Crall, GPT 5.6 High; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none** — the `ForTauCeti` import firewall admits only
@@ -22,6 +22,14 @@ import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
 * Moved from `ForMathlib/Analysis/InnerProductSpace/` to `ForTauCeti/` on
   2026-07-29 under lane Y3(b2), with the rest of its 8-module component.
   Statements, proofs and signatures are unchanged.
+
+**Moved 2026-07-29** by lane PLACE-SYLV, from
+`ForTauCeti/Analysis/InnerProductSpace/SylvesterOperator.lean` to
+`ForTauCeti/Analysis/InnerProductSpace/Sylvester/Operator.lean`.  The `Sylvester/`
+directory already held `Basic`, `Interval`, `SpectralDistance` and `Internal/`, while
+six siblings of the same family used a flat `Sylvester*` prefix in the directory above;
+one family now has one convention.  Path change and import repoint only — no statement,
+signature, proof, attribute, declaration name or namespace changed.
 -/
 
 

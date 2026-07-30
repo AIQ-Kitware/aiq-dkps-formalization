@@ -132,7 +132,11 @@ intuition. These are the load-bearing findings.
 ## Inconsistently placed modules, and where they should go
 
 Found by comparing each module's path against its content and its family. **None
-of these is fixed here** — they are `.lean` moves needing a build.
+of these was fixed here** — they are `.lean` moves needing a build.
+
+**A and B have since been done** (lane PLACE-SYLV, `jon (yardrat)`, 2026-07-29),
+minus one file; C and D are still open. The two sections are kept as written,
+each with its outcome recorded at the end.
 
 ### A. Seven `Sylvester*` modules sit beside a `Sylvester/` directory
 
@@ -153,11 +157,27 @@ the flat prefix convention instead:
 One family, two conventions, in one directory. This is the clearest elegance
 defect in the library and it is mechanical to fix.
 
+**DONE 2026-07-29, six of the seven** (lane PLACE-SYLV). `Bound`, `Operator`,
+`Generator`, `BlockIdentity`, `BlockEstimate` and `SpectralGap` are now inside
+`Sylvester/`, with every import repointed and the T16 table in
+`scripts/check_tauceti_roadmap_topics.py` updated in the same commit.
+**`SylvesterGroup.lean` was deliberately left flat**: `jon (namek)` holds a live
+`dev/LANES.md` row on it that still reads `in progress`, and renaming a file
+under an agent who is adding declarations to it is a merge collision, not a
+tidy-up. It is the one move left in this section; whoever closes that row should
+do it.
+
 ### B. `HaagerupZsidoKernel.lean` sits beside `HaagerupZsido/`
 
 Same shape: `Analysis/Fourier/HaagerupZsido/` exists (`Defs`, `Fourier`,
 `Integrability`) and `Analysis/Fourier/HaagerupZsidoKernel.lean` sits next to it.
 Proposed: `HaagerupZsido/Kernel.lean`.
+
+**DONE 2026-07-29** (lane PLACE-SYLV). The module is now
+`Analysis/Fourier/HaagerupZsido/Kernel.lean`. Worth recording why the move was
+free: that file is a *re-export aggregate* whose own docstring already told
+consumers to import `ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel` — the
+path it did not yet have. The move made the docstring true.
 
 ### C. `GramMatrix.lean` is misnamed, and overlaps `GramOperator.lean`
 
@@ -168,11 +188,49 @@ what the name promises, and a reviewer reading `GramOperator.lean` will find an
 adjacent module covering related ground. **Needs a decision: rename, or merge
 the two.** Recommend deciding it inside T04 rather than as a standalone rename.
 
+**DECIDED 2026-07-29 (lane PLACE-GRAM, `jon (yardrat)`): neither. Both names
+stay and the two modules stay apart** — the premise above does not survive
+reading the file, and the correction is worth more than the rename would have
+been.
+
+- `GramMatrix.lean` **does** declare into `Matrix`: it opens `namespace Matrix`
+  at line 201, and its headline corollary is
+  `TauCeti.Matrix.gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq`, stated as
+  `Matrix.gram 𝕜 φ = Matrix.gram 𝕜 ψ ↔ ∃ W : E ≃ₗᵢ[𝕜] E, ∀ i, W (φ i) = ψ i`.
+  What is true is that its *engine* — `LinearMap.ker_eq_ker_of_inner_eq` and
+  `LinearMap.rangeEquivOfInnerEq`, an isometric first isomorphism theorem — lives
+  in `LinearMap`, which is where a general fact about a pair of linear maps
+  belongs. A module whose engine is general and whose headline is a matrix
+  statement is well factored, not misnamed.
+- The name is also the **destination**: the file imports
+  `Mathlib.Analysis.InnerProductSpace.GramMatrix` and names that module as its
+  intended upstream home. Renaming it here would only have to be undone at PR
+  time.
+- The overlap is verbal. `GramOperator.lean` is about `A⋆A` and `AA⋆` — their
+  symmetry and the perturbation bound `‖Â⋆Â - A⋆A‖ ≤ (‖Â‖ + ‖A‖)‖Â - A‖` — as
+  the carriers of singular-subspace theory. The two modules share no declaration
+  and no notion beyond the word *Gram*. Merging a rigidity theorem about vectors
+  with equal inner products into a file about singular-value carriers would
+  create the defect this section is trying to remove.
+
+The one thing a reviewer might still ask for is a sentence in `GramMatrix.lean`'s
+docstring distinguishing the two senses of *Gram*. That is a docstring line, not
+a placement decision, and it belongs to whoever holds the docstring lane.
+
 ### D. `CenteredScatter.lean` is statistics living under `InnerProductSpace`
 
 It proves facts about finite means and centered scatter operators — the content
 of T20, and it is assigned there. It is also **imported by nothing**, so moving
 it is free. Proposed: `Probability/Moments/CenteredScatter.lean`.
+
+**DONE 2026-07-29** (lane PLACE-GRAM). The module is now
+`ForTauCeti/Probability/Moments/CenteredScatter.lean`, beside `SampleMean`,
+`SampleCovariance`, `Variance` and `MatrixConcentration`, and the T20 entry in
+`scripts/check_tauceti_roadmap_topics.py` follows it.
+**Correction to "imported by nothing":** nothing in `ForTauCeti` imports it, but
+`DkpsQuench2026/Spectral/GramSpectrum.lean` does. One import line, repointed in
+the same commit — cheap, but not free, and a lane that skipped the build on the
+strength of that sentence would have broken a paper library.
 
 ### E. `Analysis.Normed.Operator.LinearIsometry` is a foundation, filed late
 

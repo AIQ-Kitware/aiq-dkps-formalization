@@ -48,6 +48,14 @@ the value `C x + Z (B x)`.
 
 *New.*  The donor derives the same equation from the tensor factorisation of the
 flow; nothing of that is used.
+
+**Moved 2026-07-29** by lane PLACE-SYLV, from
+`ForTauCeti/Analysis/InnerProductSpace/SylvesterGenerator.lean` to
+`ForTauCeti/Analysis/InnerProductSpace/Sylvester/Generator.lean`.  The `Sylvester/`
+directory already held `Basic`, `Interval`, `SpectralDistance` and `Internal/`, while
+six siblings of the same family used a flat `Sylvester*` prefix in the directory above;
+one family now has one convention.  Path change and import repoint only — no statement,
+signature, proof, attribute, declaration name or namespace changed.
 -/
 
 open scoped ENNReal NNReal

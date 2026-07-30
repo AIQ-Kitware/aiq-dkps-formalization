@@ -72,7 +72,8 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  [A+"HilbertSchmidt"+x for x in ["Lp","Space","Conjugation","Pythagoras"]]),
 ("T12","The Haagerup-Zsido kernel and its Fourier transform",
  ["Analysis.Fourier.HaagerupZsido."+x for x in ["Defs","Fourier","Integrability"]]
- +["Analysis.Fourier.ExponentialAbs","Analysis.Fourier.HaagerupZsidoKernel","Analysis.Fourier.Poisson.CauchyLattice"]
+ +["Analysis.Fourier.ExponentialAbs","Analysis.Fourier.HaagerupZsido.Kernel",
+   "Analysis.Fourier.Poisson.CauchyLattice"]
  +["Analysis.SpecialFunctions.Integral."+x for x in ["RationalQuadratic","SineLaplace"]]),
 ("T13","One-parameter unitary groups and Stone's theorem",
  [A+"OneParameterUnitaryGroup."+x for x in ["Basic","Commutant","SemigroupBridge","Stone"]]
@@ -85,14 +86,17 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  [A+"LinearPMap."+x for x in ["Closed","Constructions","GraphCore","RealLowerBound","Resolvent",
    "ResolventBound","ResolventOpen","SelfAdjointMaximal","SelfAdjointResolvent","Sylvester",
    "YosidaApproximation","SpectralCutOperator","SpectralFormBounds","SpectralGapInverse","SpectralGrid",
-   "SpectralMeasure","SpectralProjectionGroup","SpectralSupport","StoneUniqueness"]]
+   "SpectralMeasure","SpectralMeasure.Construction","SpectralProjectionGroup","SpectralSupport",
+   "StoneUniqueness"]]
  +[A+"SpectralOrder.Complex","Analysis.CStarAlgebra.SelfAdjointGapInverse",
    A+"QuadraticFormBounds",A+"BlockLowerBound",A+"SeparatedIntertwiner"]),
 ("T16","Sylvester equations and the Rosenblum theorem",
- [A+x for x in ["SylvesterBound","SylvesterOperator","Rosenblum","SylvesterBlockIdentity",
-   "SylvesterBlockEstimate","SylvesterSpectralGap","SylvesterGroup","SylvesterGenerator","HilbertSchmidtBlock","CoerciveUnit"]]
- +[A+"Sylvester."+x for x in ["Basic","Interval","SpectralDistance"]]
- +[A+"Sylvester.Internal.ReciprocalMultiplier",A+"Sylvester.Internal.SpectralBounds"]),
+ [A+x for x in ["Rosenblum","SylvesterGroup","HilbertSchmidtBlock","CoerciveUnit"]]
+ +[A+"Sylvester."+x for x in ["Basic","Interval","SpectralDistance",
+   "Bound","Operator","BlockIdentity","BlockEstimate","SpectralGap","Generator"]]
+ +[A+"Sylvester.Internal.ReciprocalMultiplier"+x for x in
+     ["",".OrbitAction",".Fourier",".DoubledPhase"]]
+ +[A+"Sylvester.Internal.SpectralBounds"]),
 ("T17","Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems",
  [A+"SinTheta."+x for x in ["OperatorNorm","Perturbation","UnitarilyInvariant"]]
  +[A+"Residual."+x for x in ["AngleEmbedding","Ritz","TrialMap"]]
@@ -104,7 +108,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  +["MeasureTheory.Function.ConvergenceInMeasure","MeasureTheory.Measure.Typeclasses.Probability"]),
 ("T20","Sample moments and matrix concentration",
  ["Probability.Moments."+x for x in ["MatrixConcentration","SampleCovariance","SampleMean","Variance"]]
- +[A+"CenteredScatter"]),
+ +["Probability.Moments.CenteredScatter"]),
 ("T21","Matrix rank factorization and positive semidefiniteness",
  ["LinearAlgebra.Matrix.RankFactorization","LinearAlgebra.Matrix.PosDef"]),
 ("T22","Berge's maximum theorem and approximate minimizers",
