@@ -133,8 +133,8 @@ theorem rightSingularSubspace_sinTheta_le
         ‖(Â - A).toContinuousLinearMap‖ := by
   have hdk := sinTheta_perturbation_le (UnitarilyInvariantNorm.opNorm 𝕜 E)
     (isSymmetric_rightGram A) (isSymmetric_rightGram Â)
-    (reduces_spectralSubspace (rightGram A) (Set.Icc a b))
-    (reduces_spectralSubspace (rightGram Â) (Set.Icc a b)) hδ hgap
+    (isInvariant_spectralSubspace (rightGram A) (Set.Icc a b))
+    (isInvariant_spectralSubspace (rightGram Â) (Set.Icc a b)) hδ hgap
   change δ * ‖(sinThetaMap (rightSingularSubspace A (Set.Icc a b))
       (rightSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
     ‖(rightGram Â - rightGram A).toContinuousLinearMap‖ at hdk
@@ -153,8 +153,8 @@ theorem leftSingularSubspace_sinTheta_le
         ‖(Â - A).toContinuousLinearMap‖ := by
   have hdk := sinTheta_perturbation_le (UnitarilyInvariantNorm.opNorm 𝕜 F)
     (isSymmetric_leftGram A) (isSymmetric_leftGram Â)
-    (reduces_spectralSubspace (leftGram A) (Set.Icc a b))
-    (reduces_spectralSubspace (leftGram Â) (Set.Icc a b)) hδ hgap
+    (isInvariant_spectralSubspace (leftGram A) (Set.Icc a b))
+    (isInvariant_spectralSubspace (leftGram Â) (Set.Icc a b)) hδ hgap
   change δ * ‖(sinThetaMap (leftSingularSubspace A (Set.Icc a b))
       (leftSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
     ‖(leftGram Â - leftGram A).toContinuousLinearMap‖ at hdk
@@ -178,8 +178,8 @@ theorem singularSubspace_dilation_sinTheta_le
   exact sinTheta_perturbation_le_of_spectralDistance
     (UnitarilyInvariantNorm.opNorm 𝕜 (WithLp 2 (E × F)))
     (isSymmetric_hermitianDilation A) (isSymmetric_hermitianDilation Â)
-    (reduces_spectralSubspace (hermitianDilation A) Ω)
-    (reduces_spectralSubspace (hermitianDilation Â) Ω) hδ hgap
+    (isInvariant_spectralSubspace (hermitianDilation A) Ω)
+    (isInvariant_spectralSubspace (hermitianDilation Â) Ω) hδ hgap
 
 /-- Equal-dimensional right singular subspaces admit an isometric
 identification; the aligned-frame theorem in `Statistics.lean` chooses the

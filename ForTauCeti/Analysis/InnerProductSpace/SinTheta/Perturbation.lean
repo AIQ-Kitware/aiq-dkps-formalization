@@ -148,7 +148,7 @@ ambient perturbation norm. -/
 private theorem domainTransport_residual_le
     (N : UnitarilyInvariantNorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U) :
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U) :
     (N.toRectangular.domainIsometryTransport U.subtypeₗᵢ)
         (residual B U.subtypeₗᵢ (A.restrict hU)) ≤ N (B - A) := by
   have hres : residual B U.subtypeₗᵢ (A.restrict hU) =
@@ -179,7 +179,7 @@ theorem sinTheta_perturbation_le
     (N : UnitarilyInvariantNorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A B U V a b δ) :
     δ * N (sinThetaMap U V) ≤ N (B - A) := by
@@ -217,14 +217,14 @@ theorem sinAngleOperator_perturbation_le
     (N : UnitarilyInvariantNorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b c d δ : ℝ} (hδ : 0 < δ)
     (hgapUV : IntervalExteriorGap A B U V a b δ)
     (hgapVU : IntervalExteriorGap B A V U c d δ) :
     δ * N (sinAngleOperator U V) ≤ N (B - A) := by
   classical
-  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
-  have hVperp : Reduces B Vᗮ := reduces_orthogonal_of_isSymmetric hB hV
+  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
+  have hVperp : IsInvariant B Vᗮ := isInvariant_orthogonal_of_isSymmetric hB hV
   -- Restrictions of `A` and `B` to the two reducing blocks.
   let AU : U →ₗ[𝕜] U := A.restrict hU
   let BVperp : Vᗮ →ₗ[𝕜] Vᗮ := B.restrict hVperp
@@ -242,7 +242,7 @@ theorem sinAngleOperator_perturbation_le
         {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}).2 hgapUV.2
   have hEqUV : BVperp ∘ₗ XUV - XUV ∘ₗ AU = CUV := by
     ext x
-    have hcomm := projection_apply_comm_of_reduces hB hVperp (x : E)
+    have hcomm := projection_apply_comm_of_isInvariant hB hVperp (x : E)
     change Vᗮ.starProjection (B (x : E)) =
       B (Vᗮ.starProjection (x : E)) at hcomm
     change B (Vᗮ.starProjection (x : E)) -
@@ -279,7 +279,7 @@ theorem sinAngleOperator_perturbation_le
         {lam | lam ∉ Set.Ioo (c - δ) (d + δ)}).2 hgapVU.2
   have hEqVU : AUperp ∘ₗ XVU - XVU ∘ₗ BV = CVU := by
     ext x
-    have hcomm := projection_apply_comm_of_reduces hA hUperp (x : E)
+    have hcomm := projection_apply_comm_of_isInvariant hA hUperp (x : E)
     change Uᗮ.starProjection (A (x : E)) =
       A (Uᗮ.starProjection (x : E)) at hcomm
     change A (Uᗮ.starProjection (x : E)) -
@@ -432,7 +432,7 @@ theorem sinTheta_perturbation_le_of_orderedGap
     (N : UnitarilyInvariantNorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : OrderedGap A U B Vᗮ δ) :
     δ * N (sinThetaMap U V) ≤ N (B - A) := by
@@ -475,8 +475,8 @@ theorem sinTheta_spectralSubspace_le
     δ * N (sinThetaMap (spectralSubspace A (Set.Icc a b))
         (spectralSubspace B (Set.Icc a b))) ≤ N (B - A) := by
   exact sinTheta_perturbation_le N hA hB
-    (reduces_spectralSubspace A (Set.Icc a b))
-    (reduces_spectralSubspace B (Set.Icc a b)) hδ
+    (isInvariant_spectralSubspace A (Set.Icc a b))
+    (isInvariant_spectralSubspace B (Set.Icc a b)) hδ
     ⟨hAselected, hBoutside⟩
 
 /-- **Sharp one-sided interval/exterior `sin Θ` bound in operator norm.**
@@ -487,12 +487,12 @@ blocks and the finite spectral bridge used by that theorem. -/
 theorem opNorm_sinThetaMap_le_of_intervalGap
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A B U V a b δ) :
     δ * ‖(sinThetaMap U V).toContinuousLinearMap‖ ≤
       ‖(B - A).toContinuousLinearMap‖ := by
-  have hVperp : Reduces B Vᗮ := reduces_orthogonal_of_isSymmetric hB hV
+  have hVperp : IsInvariant B Vᗮ := isInvariant_orthogonal_of_isSymmetric hB hV
   let AU : U →ₗ[𝕜] U := A.restrict hU
   let BVperp : Vᗮ →ₗ[𝕜] Vᗮ := B.restrict hVperp
   let X : U →ₗ[𝕜] Vᗮ :=
@@ -508,7 +508,7 @@ theorem opNorm_sinThetaMap_le_of_intervalGap
         {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}).2 hgap.2
   have hEq : BVperp ∘ₗ X - X ∘ₗ AU = C := by
     ext x
-    have hcomm := projection_apply_comm_of_reduces hB hVperp (x : E)
+    have hcomm := projection_apply_comm_of_isInvariant hB hVperp (x : E)
     change Vᗮ.starProjection (B (x : E)) =
       B (Vᗮ.starProjection (x : E)) at hcomm
     change B (Vᗮ.starProjection (x : E)) -
@@ -556,14 +556,14 @@ the sharp constant one.  Unlike a general symmetric gauge, the square norm
 can be estimated entrywise in eigenbases of the two compressed operators. -/
 theorem frobenius_sinTheta_residual_le_of_spectralDistance
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : SpectraSeparated M ⊤ A Uᗮ δ) :
     δ * RectangularUnitarilyInvariantNorm.frobenius
         (sinThetaEmbedding U X) ≤
       RectangularUnitarilyInvariantNorm.frobenius (residual A X M) := by
-  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
+  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
   let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
   let Y : F →ₗ[𝕜] Uᗮ :=
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
@@ -601,7 +601,7 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
 theorem opNorm_projection_sub_projection_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     (hrank : finrank 𝕜 U = finrank 𝕜 V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A B U V a b δ) :
@@ -629,8 +629,8 @@ theorem opNorm_spectralProjection_sub_spectralProjection_le
       ‖(B - A).toContinuousLinearMap‖ := by
   simpa [spectralProjection, projection] using
     opNorm_projection_sub_projection_le hA hB
-      (reduces_spectralSubspace A (Set.Icc a b))
-      (reduces_spectralSubspace B (Set.Icc a b))
+      (isInvariant_spectralSubspace A (Set.Icc a b))
+      (isInvariant_spectralSubspace B (Set.Icc a b))
       hrank hδ ⟨hAselected, hBoutside⟩
 
 /-- Frobenius form.
@@ -638,7 +638,7 @@ theorem opNorm_spectralProjection_sub_spectralProjection_le
 theorem frobenius_sinTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A B U V a b δ) :
     δ * UnitarilyInvariantNorm.frobenius 𝕜 E (sinThetaMap U V) ≤
@@ -651,7 +651,7 @@ theorem frobenius_sinTheta_le
 theorem kyFan_sinTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A B U V a b δ) (k : ℕ) :
     δ * kyFanSum k (sinThetaMap U V) ≤ kyFanSum k (B - A) := by
@@ -672,7 +672,7 @@ theorem sinTheta_perturbation_le_of_spectralDistance
     (N : UnitarilyInvariantNorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : SpectraSeparated A U B Vᗮ δ) :
     δ * N (sinThetaMap U V) ≤ (Real.pi / 2) * N (B - A) := by

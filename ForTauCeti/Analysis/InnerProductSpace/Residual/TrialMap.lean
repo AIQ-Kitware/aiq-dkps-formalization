@@ -79,14 +79,14 @@ coordinates.  It is the shared algebraic root of the ordinary and generalized
 residual sine bounds and of the graph-operator tangent development. -/
 theorem sylvester_complementaryTrialBlock_eq_projectedGeneralResidual
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗ[𝕜] E) (M : F →ₗ[𝕜] F) :
     A ∘ₗ complementaryTrialBlock U X - complementaryTrialBlock U X ∘ₗ M =
       complementaryProjection U ∘ₗ generalResidual A X M := by
   ext x
   simp only [complementaryTrialBlock, generalResidual, LinearMap.comp_apply,
     LinearMap.sub_apply, map_sub]
-  rw [complementaryProjection_apply_comm_of_reduces hA hU (X x)]
+  rw [complementaryProjection_apply_comm_of_isInvariant hA hU (X x)]
 
 end DavisKahanTheory
 end TauCeti

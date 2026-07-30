@@ -35,10 +35,17 @@ open Module (finrank)
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
-/-- A subspace reduces an operator when it is invariant.  For a symmetric
-operator, invariance of `U` implies invariance of `Uᗮ`, so this is the right
-finite-dimensional public predicate. -/
-def Reduces (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
+/-- A subspace is **invariant** under an operator when the operator maps it into
+itself.
+
+Named for what it says.  It was called `Reduces`, which collided with
+`ContinuousLinearMap.Reduces` — a genuinely *stronger* predicate requiring
+`Uᗮ` to be invariant too — so one name meant two things in one library and a
+reader meeting `IsInvariant A U` in a docstring could not tell which.  For a
+symmetric operator the two coincide, and `isInvariant_orthogonal_of_isSymmetric`
+is what supplies that; but the implication is one-directional in general, which
+is exactly why the names had to be separated. -/
+def IsInvariant (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
   ∀ x ∈ U, A x ∈ U
 
 /-- A nonzero eigenvector of a symmetric operator at a real eigenvalue. -/
@@ -94,9 +101,9 @@ omit [FiniteDimensional 𝕜 E] in
 /-- A symmetric operator leaves the orthogonal complement of an invariant
 subspace invariant.
 -/
-theorem reduces_orthogonal_of_isSymmetric {A : E →ₗ[𝕜] E}
-    (hA : A.IsSymmetric) {U : Submodule 𝕜 E} (hU : Reduces A U) :
-    Reduces A Uᗮ := by
+theorem isInvariant_orthogonal_of_isSymmetric {A : E →ₗ[𝕜] E}
+    (hA : A.IsSymmetric) {U : Submodule 𝕜 E} (hU : IsInvariant A U) :
+    IsInvariant A Uᗮ := by
   intro x hx
   rw [Submodule.mem_orthogonal]
   intro u hu
@@ -108,8 +115,8 @@ omit [FiniteDimensional 𝕜 E] in
 needed for this algebraic fact; it is needed later for orthogonal reduction and
 for completeness of the real eigenvector decomposition.
 -/
-theorem reduces_spectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
-    Reduces A (spectralSubspace A Ω) := by
+theorem isInvariant_spectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
+    IsInvariant A (spectralSubspace A Ω) := by
   intro x hx
   refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
   · rintro y ⟨lam, hlam, hy⟩
@@ -131,9 +138,9 @@ hypotheses of the residual/perturbation `sin Θ` theorems on the subtype. -/
 omit [FiniteDimensional 𝕜 E] in
 /-- The restriction of a symmetric operator to an invariant subspace is
 symmetric (mathlib's `LinearMap.IsSymmetric.restrict_invariant`, restated for the
-`Reduces` predicate). -/
+`IsInvariant` predicate). -/
 theorem isSymmetric_restrict {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} (hU : Reduces A U) :
+    {U : Submodule 𝕜 E} (hU : IsInvariant A U) :
     (A.restrict hU).IsSymmetric :=
   hA.restrict_invariant hU
 
@@ -142,7 +149,7 @@ omit [FiniteDimensional 𝕜 E] in
 `A.restrict hU : U →ₗ[𝕜] U` (over the whole `⊤`) equals the `U`-carried point
 spectrum of `A`.  Eigenvectors transport across the subtype coercion. -/
 theorem restrictedSpectrum_restrict (A : E →ₗ[𝕜] E)
-    {U : Submodule 𝕜 E} (hU : Reduces A U) :
+    {U : Submodule 𝕜 E} (hU : IsInvariant A U) :
     restrictedSpectrum (A.restrict hU) ⊤ = restrictedSpectrum A U := by
   ext lam
   constructor
@@ -160,7 +167,7 @@ omit [FiniteDimensional 𝕜 E] in
 /-- The containment form of the restricted-spectrum bridge: `A.restrict hU` has
 spectrum in `s` iff `A` carries spectrum in `s` on `U`. -/
 theorem spectrumIn_restrict_iff (A : E →ₗ[𝕜] E)
-    {U : Submodule 𝕜 E} (hU : Reduces A U) (s : Set ℝ) :
+    {U : Submodule 𝕜 E} (hU : IsInvariant A U) (s : Set ℝ) :
     SpectrumIn (A.restrict hU) ⊤ s ↔ SpectrumIn A U s := by
   unfold SpectrumIn
   rw [restrictedSpectrum_restrict]
@@ -169,10 +176,10 @@ omit [FiniteDimensional 𝕜 E] in
 /-- **A symmetric operator commutes with the projection onto a reducing
 subspace.**  For `A` symmetric and `U` an `A`-invariant subspace (so `Uᗮ` is
 invariant too), `P_U (A x) = A (P_U x)`. -/
-theorem projection_apply_comm_of_reduces {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U) (x : E) :
+theorem projection_apply_comm_of_isInvariant {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U) (x : E) :
     projection U (A x) = A (projection U x) := by
-  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
+  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
   have hpx : U.starProjection x ∈ U := U.starProjection_apply_mem x
   have hrest : x - U.starProjection x ∈ Uᗮ := U.sub_starProjection_mem_orthogonal x
   have hApx : A (U.starProjection x) ∈ U := hU _ hpx
@@ -186,11 +193,11 @@ theorem projection_apply_comm_of_reduces {A : E →ₗ[𝕜] E} (hA : A.IsSymmet
 omit [FiniteDimensional 𝕜 E] in
 /-- The complementary projection onto `Uᗮ` also commutes with `A` when `A` is
 symmetric and `U` reduces `A`. -/
-theorem complementaryProjection_apply_comm_of_reduces {A : E →ₗ[𝕜] E}
+theorem complementaryProjection_apply_comm_of_isInvariant {A : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hU : Reduces A U) (x : E) :
+    (hU : IsInvariant A U) (x : E) :
     complementaryProjection U (A x) = A (complementaryProjection U x) :=
-  projection_apply_comm_of_reduces hA (reduces_orthogonal_of_isSymmetric hA hU) x
+  projection_apply_comm_of_isInvariant hA (isInvariant_orthogonal_of_isSymmetric hA hU) x
 
 /-! ### Spectral gap ⟹ quadratic-form coercivity bridge
 
@@ -232,7 +239,7 @@ theorem le_re_inner_of_forall_le_eigenvalue {n : ℕ} {T : E →ₗ[𝕜] E}
 reduces `A`, and the `U`-carried spectrum lies in `Set.Iic c`, then the quadratic
 form of `A` is bounded above by `c ‖·‖²` on `U`. -/
 theorem re_inner_le_of_spectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} (hU : Reduces A U) {c : ℝ}
+    {U : Submodule 𝕜 E} (hU : IsInvariant A U) {c : ℝ}
     (hspec : SpectrumIn A U (Set.Iic c)) {x : E} (hx : x ∈ U) :
     RCLike.re ⟪A x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
   have hA'sym : (A.restrict hU).IsSymmetric := isSymmetric_restrict hA hU
@@ -251,7 +258,7 @@ theorem re_inner_le_of_spectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
 reduces `A`, and the `U`-carried spectrum lies in `Set.Ici c`, then the quadratic
 form of `A` is bounded below by `c ‖·‖²` on `U`. -/
 theorem le_re_inner_of_spectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} (hU : Reduces A U) {c : ℝ}
+    {U : Submodule 𝕜 E} (hU : IsInvariant A U) {c : ℝ}
     (hspec : SpectrumIn A U (Set.Ici c)) {x : E} (hx : x ∈ U) :
     c * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜 := by
   have hA'sym : (A.restrict hU).IsSymmetric := isSymmetric_restrict hA hU

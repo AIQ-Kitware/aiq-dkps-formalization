@@ -62,7 +62,7 @@ private theorem correspondingEigenblock_reduces_population
     [FiniteDimensional 𝕜 H]
     {G Ĝ : H →ₗ[𝕜] H} (hG : G.IsSymmetric) (hĜ : Ĝ.IsSymmetric)
     {U V : Submodule 𝕜 H}
-    (hcorr : CorrespondingEigenblock hG hĜ U V) : Reduces G U := by
+    (hcorr : CorrespondingEigenblock hG hĜ U V) : IsInvariant G U := by
   obtain ⟨n, hn, s, hU, -⟩ := hcorr
   rw [hU]
   exact reduces_spanIndices hG hn ↑s
@@ -72,7 +72,7 @@ private theorem correspondingEigenblock_reduces_perturbed
     [FiniteDimensional 𝕜 H]
     {G Ĝ : H →ₗ[𝕜] H} (hG : G.IsSymmetric) (hĜ : Ĝ.IsSymmetric)
     {U V : Submodule 𝕜 H}
-    (hcorr : CorrespondingEigenblock hG hĜ U V) : Reduces Ĝ V := by
+    (hcorr : CorrespondingEigenblock hG hĜ U V) : IsInvariant Ĝ V := by
   obtain ⟨n, hn, s, -, hV⟩ := hcorr
   rw [hV]
   exact reduces_spanIndices hĜ hn ↑s
