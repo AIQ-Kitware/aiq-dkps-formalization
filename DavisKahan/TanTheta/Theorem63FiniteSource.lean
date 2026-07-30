@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.BoundedOperator.Compat
-import DavisKahan.Sylvester.GenuineSpectrum
+import DavisKahan.Sylvester.Spectrum
 import DavisKahan.DoubleAngle.KyFanOrthonormal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
