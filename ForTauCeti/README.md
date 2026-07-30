@@ -256,6 +256,22 @@ So: improvements go **into** `ForTauCeti`. A task that sounds like "move
 `ForTauCeti` into `TauCeti`" is asking for an *export*. Never empty or delete
 `ForTauCeti/` as a way of declaring the migration done.
 
+### This package and `ForTauCetiRoadmap` are rehearsals — treat them as real
+
+**jon, 2026-07-30.** `ForTauCeti` is a mock of the Tau Ceti PR contents;
+`ForTauCetiRoadmap` is a mock of `TauCetiProject/TauCetiRoadmap`. They exist so
+that **when we make the effort to do the real submission, it goes smoothly.**
+
+So work on them as though they were the real repositories — no hedging, no
+provisional marking, no waiting on upstream. **The acceptance test is a
+demonstration:** we show this repository to Tau Ceti and they say *"yes, that's
+ready — submit these roadmaps as PRs, then push up the code and merge it."*
+Anything that would make a reviewer hesitate at that moment is a defect and
+needs a lane.
+
+**No lane is ever blocked on upstream acceptance.** How the clusters go upstream
+is a genuine open question, but it is never a prerequisite for work here.
+
 ### The readiness standard — the platonic ideal roadmap
 
 When a Tau Ceti roadmap is **accepted**, we use `ForTauCeti` to open a PR
