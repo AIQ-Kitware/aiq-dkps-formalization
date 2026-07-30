@@ -142,6 +142,9 @@ theorem basisDiagonalUnitary_apply_basis {G : Type*}
     LinearIsometryEquiv.apply_symm_apply]
   rw [LinearIsometryEquiv.piLpCongrRight_single]
   simp only [LinearIsometryEquiv.smul_apply]
+  -- `simp only [LinearIsometryEquiv.smul_apply]` leaves the scalar as `ζ i • 1` inside
+  -- `PiLp.single`, where `mul_one` cannot fire: the multiplication is under the
+  -- `LinearIsometryEquiv` application, not at the head. Restating exposes it.
   change e.repr.symm (PiLp.single 2 i ((ζ i : 𝕜) * 1)) = _
   rw [mul_one]
   rw [← map_smul]
@@ -166,6 +169,9 @@ theorem unitaryOrbitAction_basisMatrixUnit
       ((ζF i : 𝕜) * (ζE j : 𝕜)) • basisMatrixUnit eF eE i j := by
   refine eE.toBasis.ext fun q => ?_
   rw [OrthonormalBasis.coe_toBasis]
+  -- `OrthonormalBasis.coe_toBasis` rewrites the basis but leaves both sides as maps;
+  -- the rewrites below act on the *applied* form, and no lemma applies a bundled
+  -- `basisDiagonalUnitary` to a point without unfolding the composition first.
   change basisDiagonalUnitary eF ζF
       (basisMatrixUnit eF eE i j (basisDiagonalUnitary eE ζE (eE q))) =
     (((ζF i : 𝕜) * (ζE j : 𝕜)) • basisMatrixUnit eF eE i j) (eE q)
@@ -185,11 +191,9 @@ noncomputable def complexFourierPhase (x : ℝ) : unitary ℂ := by
   refine ⟨z, ?_⟩
   rw [Unitary.mem_iff]
   constructor
-  · change conj z * z = 1
-    rw [RCLike.conj_mul, hz]
+  · rw [RCLike.star_def, RCLike.conj_mul, hz]
     norm_num
-  · change z * conj z = 1
-    rw [RCLike.mul_conj, hz]
+  · rw [RCLike.star_def, RCLike.mul_conj, hz]
     norm_num
 
 /-- The Fourier phase as a complex number is `exp(ix)`. -/
@@ -250,12 +254,18 @@ noncomputable def doubledRealRotation
     have htrig : Real.cos theta * Real.cos theta +
         Real.sin theta * Real.sin theta = 1 := by
       nlinarith [Real.sin_sq_add_cos_sq theta]
+    -- `doubledRealRotation` is a bundled `LinearIsometryEquiv`, so its application to a
+    -- `WithLp` pair is not in normal form for the `norm_sq_eq_re_inner` rewrites below;
+    -- no simp lemma unfolds a bundled equiv at a point.
     change ‖WithLp.toLp 2
       (Real.cos theta • x.fst - Real.sin theta • x.snd,
         Real.sin theta • x.fst + Real.cos theta • x.snd)‖ = ‖x‖
     rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _),
       norm_sq_eq_re_inner ( 𝕜 := ℝ), norm_sq_eq_re_inner ( 𝕜 := ℝ)]
     simp only [WithLp.prod_inner_apply]
+    -- `WithLp.prod_inner_apply` normalises the left side only. The right side is still
+    -- `⟪x, x⟫` on the L2 product, and stating the componentwise sum is what lets the
+    -- `inner_*` lemmas below match; there is no lemma splitting `⟪x, x⟫_ℝ` on `WithLp`.
     change _ = ⟪x.fst, x.fst⟫_ℝ + ⟪x.snd, x.snd⟫_ℝ
     simp only [inner_sub_left, inner_sub_right, inner_add_left, inner_add_right,
       inner_smul_left, inner_smul_right, RCLike.conj_to_real,
@@ -361,9 +371,13 @@ noncomputable def basisDoubledRealRotation
     have hparseval (z : G) : ∑ i, ‖e.repr z i‖ ^ 2 = ‖z‖ ^ 2 := by
       simp_rw [e.repr_apply_apply]
       exact e.sum_sq_norm_inner_right z
+    -- Same reason as the rotation case above: `doubledRealPhase` is a bundled equiv, so
+    -- its value at a pair is not syntactically a `WithLp.toLp` until it is said to be.
     change ‖WithLp.toLp 2 (C x.fst - S x.snd, S x.fst + C x.snd)‖ = ‖x‖
     rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _),
       WithLp.prod_norm_sq_eq_of_L2, WithLp.prod_norm_sq_eq_of_L2]
+    -- `WithLp.prod_norm_sq_eq_of_L2` fires on both sides but leaves them as squared norms
+    -- of the *pair*; the Parseval rewrites below need the two components separately.
     change ‖C x.fst - S x.snd‖ ^ 2 + ‖S x.fst + C x.snd‖ ^ 2 =
       ‖x.fst‖ ^ 2 + ‖x.snd‖ ^ 2
     rw [
@@ -401,6 +415,9 @@ noncomputable def basisDoubledRealRotation
     basisDoubledRealRotation e theta (WithLp.toLp 2 (e i, 0)) =
       WithLp.toLp 2
         (Real.cos (theta i) • e i, Real.sin (theta i) • e i) := by
+  -- `basisDoubledRealRotation` is defined by composing two `basisDiagonalRealMap`s; no
+  -- simp lemma unfolds that composition at a basis vector, and the rewrites below are
+  -- stated for the component maps.
   change WithLp.toLp 2
     (basisDiagonalRealMap e (fun q => Real.cos (theta q)) (e i) -
         basisDiagonalRealMap e (fun q => Real.sin (theta q)) 0,
@@ -416,6 +433,8 @@ noncomputable def basisDoubledRealRotation
     basisDoubledRealRotation e theta (WithLp.toLp 2 (0, e i)) =
       WithLp.toLp 2
         (-Real.sin (theta i) • e i, Real.cos (theta i) • e i) := by
+  -- As at the previous lemma: the composition defining `basisDoubledRealRotation` has to
+  -- be exposed before the component-map rewrites can apply.
   change WithLp.toLp 2
     (basisDiagonalRealMap e (fun q => Real.cos (theta q)) 0 -
         basisDiagonalRealMap e (fun q => Real.sin (theta q)) (e i),
