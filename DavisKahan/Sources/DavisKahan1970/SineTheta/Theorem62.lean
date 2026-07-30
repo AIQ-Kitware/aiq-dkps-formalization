@@ -52,7 +52,7 @@ structure PaperTheorem62Data where
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_distance : GenuinePairwiseSpectrumGap data.A₀ data.Λ₁ gap
+  spectral_distance : PairwiseSpectrumGap data.A₀ data.Λ₁ gap
 
 namespace PaperTheorem62Data
 

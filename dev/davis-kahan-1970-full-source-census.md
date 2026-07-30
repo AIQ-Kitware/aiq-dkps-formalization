@@ -172,7 +172,7 @@ DK-6.3-lem (absent)
 - **Verification:** `proved_in_build`
 - **Mathematics:** One-sided spectral separation plus the Rayleigh–Ritz/off-diagonal condition gives residual and perturbation tangent bounds in every unitary-invariant norm.
 - **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`, `TauCeti.DavisKahanExt.tanTheta_genuineSpectrum`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`, `TauCeti.DavisKahanExt.tanTheta_spectrum`
 - **Assessment:** Finite arbitrary-UI-norm and Hilbert-space operator-norm forms are compiled. The source Hilbert-space arbitrary-UI-norm residual and perturbation statements remain open.
 - **Next action:** Reuse the corrected directed Theorem 6.3 Ky-Fan core for the equal-rank source theorem and add the full perturbation companion.
 
@@ -403,7 +403,7 @@ DK-6.3-lem (absent)
 - **Verification:** `proved_in_build`
 - **Mathematics:** For A >= gamma+delta > gamma >= B, a bounded solution of AX=XB+C satisfies the sharp UI-norm inequality.
 - **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `TauCeti.DavisKahan.Experimental.ExactSinTheta.directGenuineOrderedSylvesterEngine_lowerUpper`, `TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum`
+- **Current Lean references:** `TauCeti.DavisKahan.Experimental.ExactSinTheta.directOrderedSylvesterEngine_lowerUpper`, `TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum`
 - **Assessment:** The completed Section 6 route contains the needed constant-one engines, while the exact source theorem alias is still in the full Part III repair campaign.
 - **Next action:** Expose an exact Theorem 5.2 wrapper and include it in the full-paper audit.
 

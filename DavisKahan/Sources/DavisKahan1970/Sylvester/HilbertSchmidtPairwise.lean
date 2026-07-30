@@ -49,7 +49,7 @@ theorem paperHilbertSchmidtTensor_hasVectorSpectralGap
     {B : ClosedOperator (𝕜 := ℂ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {C : F →L[ℂ] E} {δ : ℝ}
-    (hgap : GenuinePairwiseSpectrumGap A B δ)
+    (hgap : PairwiseSpectrumGap A B δ)
     (hC : IsPaperHilbertSchmidt C) :
     TauCeti.LinearPMap.HasVectorSpectralGap
       (TauCeti.HilbertSchmidt.isSelfAdjoint_generator_sylvesterGroup
@@ -70,7 +70,7 @@ theorem paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
     {X C : F →L[ℂ] E}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : GenuinePairwiseSpectrumGap A B δ)
+    (hgap : PairwiseSpectrumGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : IsPaperHilbertSchmidt C) :
     IsPaperHilbertSchmidt X ∧
@@ -102,7 +102,7 @@ theorem paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
     (hC : IsPaperHilbertSchmidt C) :
     IsPaperHilbertSchmidt X ∧
       δ * paperHilbertSchmidtNorm X ≤ paperHilbertSchmidtNorm C := by
-  have hgapC : GenuinePairwiseSpectrumGap
+  have hgapC : PairwiseSpectrumGap
       (ClosedOperatorComplexification.complexify A)
       (ClosedOperatorComplexification.complexify B) δ := by
     intro lam hlam α hα

@@ -161,7 +161,7 @@ end TrialExactCoordinates
 The exact target is the orthogonal complement of the interval spectral range.
 The trial block supplies the exterior Ritz spectrum and bounded residual.  The
 coordinate datum selects the transverse graph branch. -/
-theorem tanTheta_unbounded_graphAngle_genuineTrialBlock
+theorem tanTheta_unbounded_graphAngle_trialBlock
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : UnboundedTrialBlock A Z)
@@ -177,7 +177,7 @@ theorem tanTheta_unbounded_graphAngle_genuineTrialBlock
   have hvec : ∀ x : H, ∀ hx : x ∈ Z,
       δ * ‖x - Wᗮ.starProjection x‖ ≤
         ‖D.residual‖ * ‖Wᗮ.starProjection x‖ := by
-    exact tanTheta_unbounded_exactSpectralIcc_genuineTrialBlock
+    exact tanTheta_unbounded_exactSpectralIcc_trialBlock
       A hA D hαβ hδ hZspec
   exact C.mul_norm_angularMap_le hδ (norm_nonneg D.residual) hvec
 

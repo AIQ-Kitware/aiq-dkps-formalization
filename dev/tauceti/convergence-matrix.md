@@ -442,7 +442,7 @@ transitive closure. These form distinct donor clusters, handled separately.
 - **Cluster E — separated spectra and intertwiners.** Keep Spectra's general
   spectral facts; keep our genuinely new norm estimates; reformulate both over
   the same operator/spectrum APIs; remove bridge structures such as
-  `GenuinePairwiseSpectrumGap` when a simpler predicate over canonical spectra
+  `PairwiseSpectrumGap` when a simpler predicate over canonical spectra
   suffices.
 
 ## Seed matrix (to be filled to the declaration level)
@@ -479,7 +479,7 @@ Concrete rows we already know; expand each into the full schema during phase 0.
 | PVM / spectral projection / Borel calculus bridges | none | PVM + Borel calculus layer | Missing reusable result | new **spectral-calculus roadmap** area, canonical Tau Ceti location | (spectral calculus, its own) |
 | polar decomposition / partial isometry (local + Spectra) | partial | polar/partial-isometry layer | Parallel | one canonical Tau Ceti polar/partial-isometry API | (spectral-perturbation, later) |
 | Hilbert–Schmidt / trace class (column-expansion + approx-number + Spectra tensor) | partial | HS/trace tensor layer | Parallel | one HS predicate+norm; others are equivalence theorems | ApproximationNumbers (C) + Cluster D |
-| Sylvester uniqueness/estimates + `GenuinePairwiseSpectrumGap` | `LinearPMap` equation/domain API; no canonical spectrum API yet | separated-intertwiner results | Spectra-dependent parallel formulation | **2026-07-28:** raw `LinearPMap.GenuinePairwiseSpectrumGap` and `linearPMapSylvester_*` now own the implementation in `DavisKahan/Sylvester`; keep the bundled predicate and three old theorem signatures only for the seven source/audit consumers until those data records migrate | (spectral-perturbation, later) |
+| Sylvester uniqueness/estimates + `PairwiseSpectrumGap` | `LinearPMap` equation/domain API; no canonical spectrum API yet | separated-intertwiner results | Spectra-dependent parallel formulation | **2026-07-28:** raw `LinearPMap.PairwiseSpectrumGap` and `linearPMapSylvester_*` now own the implementation in `DavisKahan/Sylvester`; keep the bundled predicate and three old theorem signatures only for the seven source/audit consumers until those data records migrate | (spectral-perturbation, later) |
 
 ## Completion-lane seed rows: `FinishTanTwoTheta` and `FinishYuWangSamworth`
 
@@ -698,7 +698,7 @@ The adversarial-review audit `dev/tauceti-signature-polish-todo.md` (baseline
 | `specSubspace` (+ its lemmas) | Wrapper (misnamed coordinate span) | rename/relocate → `OrthonormalBasis.spanIndices` | deprecated local alias only if needed |
 | `ClosedOperator` (+ SameDomain, …) | Parallel | demote to adapter over `LinearPMap` | `DavisKahan/Interop/TauCeti`; delete from generic production (Wave 2) |
 | `RectangularSymmetricIdealFamily` | Parallel (free-data gauge off carrier) | **DONE 2026-07-27** — canonical `TauCeti.OperatorIdealFamily` / `SymmetricOperatorIdealFamily` (single `ℝ≥0∞` gauge; carrier = its finiteness domain) in `ForTauCeti/Analysis/OperatorIdeal/Family/` | **2026-07-28** — `KyFanDominantIdealFamily`, the structure the whole ideal-valued sin-Θ development is parameterized over, now *stores* the canonical family; `SymmetricOperatorIdealFamily.toRectangular` survives only as its derived real-valued view. Two canonical instances exist: `operatorNormFamily` and `kyFanSymmetricIdealFamily`. Remaining: 106 direct type-position uses in 30 production modules (23 inside the concurrently-claimed U1 lane), then delete the adapter and the legacy structure |
-| `GenuinePairwiseSpectrumGap` | Spectra-dependent bridge wrapper | raw `LinearPMap.GenuinePairwiseSpectrumGap` owns the proof; replace it with a canonical spectrum/set-distance predicate only after the required Spectra API is ported | bundled wrapper has seven source/audit consumers; delete after their raw-partial-map migration |
+| `PairwiseSpectrumGap` | Spectra-dependent bridge wrapper | raw `LinearPMap.PairwiseSpectrumGap` owns the proof; replace it with a canonical spectrum/set-distance predicate only after the required Spectra API is ported | bundled wrapper has seven source/audit consumers; delete after their raw-partial-map migration |
 | `finiteMean` / `appendFin` | **Reclassified 2026-07-27 (§8.1): only `appendFin` was a duplicate** | `appendFin` **DELETED** — it was exactly `Fin.snoc`. `finiteMean` **KEPT**: `Finset.expect` needs `Module ℚ≥0 E`, which does not synthesize for a `𝕜`-inner-product space, and `Finset.centroid` is affine with `Classical.arbitrary` junk on the empty family, whereas `finiteMean_append` is deliberately stated to hold *at* `n = 0`. `centeredScatter` retyped to `E →L[𝕜] E` | no upstream adapter |
 | `exists_two_sided_inverse_of_spectrum_gap` | **DONE 2026-07-27 (§9.1)** | split into `TauCeti.isUnit_of_forall_le_abs` + `TauCeti.IsSelfAdjoint.norm_ringInverse_le` over the canonical `Ring.inverse` (the sketched names were `isUnit_of_abs_spectrum_ge` / `norm_inv_le…`). Invertibility needs **neither** self-adjointness **nor** a C\*-algebra, so it is stated at `[Ring A] [Algebra ℝ A]` outside the `IsSelfAdjoint` namespace. Its sibling `norm_le_of_spectrum_subset_Icc` became the iff `norm_le_iff_spectrum_subset_Icc` | — |
 

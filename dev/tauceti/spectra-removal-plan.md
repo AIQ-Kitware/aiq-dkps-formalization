@@ -284,7 +284,7 @@ Under the S0 decision. Order inside the cluster:
      needs `±i` deficiency-surjectivity from Spectra's Yosida–Hille layer (phase
      S5). Isolating it there keeps the remaining dependency to *one lemma in one
      file* instead of 26 modules.
-   - `GenuinePairwiseSpectrumGap` improved rather than merely moved: separation is
+   - `PairwiseSpectrumGap` improved rather than merely moved: separation is
      now `‖lam - α‖` in `ℂ`. The old real version was not the honest condition —
      two operators with separated real slices but colliding complex spectra
      satisfied it.

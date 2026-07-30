@@ -24,7 +24,7 @@ namespace ExactSinTheta
 universe v
 
 /-- Compatibility proof for the lower-left/upper-right ordered branch. -/
-theorem legacyGenuineOrderedSylvesterEngine_lowerUpper
+theorem legacyOrderedSylvesterEngine_lowerUpper
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -46,7 +46,7 @@ theorem legacyGenuineOrderedSylvesterEngine_lowerUpper
     hA hB hδ hAc hBc hEq hC
 
 /-- Compatibility proof for the upper-left/lower-right ordered branch. -/
-theorem legacyGenuineOrderedSylvesterEngine_upperLower
+theorem legacyOrderedSylvesterEngine_upperLower
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -69,10 +69,10 @@ theorem legacyGenuineOrderedSylvesterEngine_upperLower
 
 /-- Compatibility implementation using the existing finite-cutoff Ky Fan
 proof. -/
-noncomputable def legacyGenuineOrderedSylvesterEngine :
-    GenuineOrderedSylvesterEngine where
-  lowerUpper := legacyGenuineOrderedSylvesterEngine_lowerUpper
-  upperLower := legacyGenuineOrderedSylvesterEngine_upperLower
+noncomputable def legacyOrderedSylvesterEngine :
+    OrderedSylvesterEngine where
+  lowerUpper := legacyOrderedSylvesterEngine_lowerUpper
+  upperLower := legacyOrderedSylvesterEngine_upperLower
 
 
 end ExactSinTheta
