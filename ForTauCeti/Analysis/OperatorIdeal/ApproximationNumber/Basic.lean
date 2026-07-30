@@ -99,7 +99,7 @@ choice, flagged for Tau Ceti maintainer review.
   Arnav Mehta, Rawad Kansoh; Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
 * The Davis--Kahan file was itself adapted from Mathlib PR #32126.
 * Extraction class: **copied**, converted to the Tau Ceti module system, then
-  renamed conclusion-outward under `dev/tauceti-signature-polish-todo.md` §5.1.
+  renamed conclusion-outward per the signature-polish backlog
   No mathematical change; see Appendix A of that document for the name index.
 * Spectra influence: **none** — this module has no Spectra dependency and never
   did; it imports only Mathlib.

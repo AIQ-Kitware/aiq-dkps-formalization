@@ -5,8 +5,7 @@ the closed Mathlib track —
 additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `SinThetaOpNorm.lean`).
 
-Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]), plan step W5.2 of
-`dev/davis-kahan-gap-closure-plan.md`.
+Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 
 The dimension-free operator-norm Davis–Kahan sin-Θ theorem
 `‖Q̂ ∘L P‖ ≤ ε / g`, where `P` projects onto a `T`-invariant subspace `U` whose
@@ -306,8 +305,7 @@ theorem norm_starProjection_comp_starProjection_le (hT : T.IsSymmetric) (hS : S.
 /-! ### Spectral corollaries (eigenvalue hypotheses)
 
 The literature-facing forms: the invariant subspaces are spans of eigenvector
-blocks and the quadratic-form hypotheses are sorted-eigenvalue hypotheses
-(plan step E3 of `dev/davis-kahan-expert-completion-plan.md`). -/
+blocks and the quadratic-form hypotheses are sorted-eigenvalue hypotheses. -/
 
 section Spectral
 

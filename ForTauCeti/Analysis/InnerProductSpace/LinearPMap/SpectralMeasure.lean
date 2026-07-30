@@ -31,7 +31,7 @@ before the split.
 
 See `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure/Construction.lean`
 for the sources of the construction (the classical Cayley-transform route, and
-`dev/tauceti/spectra-removal-plan.md` for the comparison against the donor's).  The
+the Spectra-removal plan for the comparison against the donor's).  The
 bounded-set truncation and the resolvent-gap estimate in this file are shaped by
 what the Davis--Kahan block argument consumes and follow no source's presentation.
 
@@ -49,7 +49,7 @@ to the whole development.
 
 The material itself is *new*; see
 `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean` for the
-provenance of the route, and `dev/tauceti/spectra-removal-plan.md` for the
+provenance of the route, and the Spectra-removal plan for the
 comparison against Spectra's Herglotz/Poisson route that chose it.
 -/
 

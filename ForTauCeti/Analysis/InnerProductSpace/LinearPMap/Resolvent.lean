@@ -68,7 +68,7 @@ can be read side by side.
      `spectrum 𝕜 a : Set 𝕜`, and this repository already uses `spectrum ℂ T` for
      bounded operators in `DavisKahan/Sources/DavisKahan1970/Section8RieszCircle.lean`,
      so the two were not comparable.  Recorded as a decision in
-     `dev/tauceti/spectra-removal-plan.md`.
+     the Spectra-removal plan.
   2. **Scalars are a general `NontriviallyNormedField`, not `ℂ`**, and the space
      is a normed space rather than an inner-product space.  Nothing in these
      definitions uses the inner product; requiring one was incidental to
@@ -79,7 +79,7 @@ can be read side by side.
      of the removal, and no Davis--Kahan production declaration uses them.
 * **Downstream users at extraction time:** 26 `DavisKahan` modules reference
   `spectrum`, 4 reference `resolventSet`.  See
-  `dev/tauceti/spectra-port-surface.json`.
+  the Spectra port surface.
 -/
 
 public section

@@ -34,7 +34,7 @@ here in the iff shape those use, so it can go upstream to
   `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean`
   (itself adapted from Mathlib PR #32126).
 * Extraction class: **moved and generalized to an iff.**  The signature-polish
-  backlog (`dev/tauceti-signature-polish-todo.md` §5.1) flagged the original as
+  backlog flagged the original as
   a public extension of Mathlib's `Cardinal` namespace living inside an
   operator-ideal file — a placement a reviewer would challenge.  It has four
   call sites in three modules plus one downstream consumer, so privatizing it

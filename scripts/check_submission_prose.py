@@ -54,16 +54,16 @@ LIB = ROOT / "ForTauCeti"
 #: regexes rather than the docstrings.  Raising it is the honest move -- a baseline that
 #: is only ever lowered is worth having precisely because it is never quietly wrong, and
 #: leaving 0 in place would have made every future run agree with a number that was false
-#: the day it was written.  The cleanup that takes it back down is the commit after this.
-BASELINE = 34
+#: the day it was written.  **Back to 0 in the very next commit**, which removed all 58.
+BASELINE = 0
 
 #: Highest number of individual hits.  The module count alone is not enough: adding a
 #: fourth lane id to a module that already has three leaves the module count unchanged,
 #: so a modules-only ratchet lets the prose keep growing inside the files that already
 #: have it.  Found by testing this gate against a deliberate regression -- it passed.
 #:
-#: Raised from 0 to 42 with `BASELINE`, for the reason recorded there.
-HIT_BASELINE = 42
+#: Raised to 42 with `BASELINE` and returned to 0 with it, for the reason recorded there.
+HIT_BASELINE = 0
 
 #: An internal lane id: `lane FTC-EXPOSE-g2`, `Lane SPLIT-1K`, `lane Y3`, `lane T15a`.
 #: Anchored on the word `lane` so ordinary prose ("the bounded-operator lane ever
