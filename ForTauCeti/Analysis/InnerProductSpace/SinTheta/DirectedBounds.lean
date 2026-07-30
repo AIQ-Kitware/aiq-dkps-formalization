@@ -98,16 +98,23 @@ theorem sinTheta_residual_le
     simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
       LinearMap.comp_apply] using hx
   have hY : NU Y = N (sinThetaEmbedding U X) := by
+    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
+    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
+    -- longer discharges -- tried, and it fails here.
     change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) = N (sinThetaEmbedding U X)
     congr 1
   have hC : NU C =
       N (complementaryProjection U ∘ₗ residual A X M) := by
+    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
+    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
+    -- longer discharges -- tried, and it fails here.
     change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
       N (complementaryProjection U ∘ₗ residual A X M)
     congr 1
   have hproj : ‖(complementaryProjection U).toContinuousLinearMap‖ ≤ 1 := by
     refine (complementaryProjection U).toContinuousLinearMap.opNorm_le_bound
       zero_le_one fun x => ?_
+    -- names the projection application so the operator-norm bound applies directly.
     change ‖Uᗮ.starProjection x‖ ≤ 1 * ‖x‖
     simpa using Uᗮ.norm_starProjection_apply_le x
   have hC_le : NU C ≤ N (residual A X M) := by
@@ -147,6 +154,8 @@ theorem sinTheta_residual_le_of_orderedGap
     left
     intro lam μ hlam hμ
     apply hgap lam μ hlam
+    -- restates the spectrum membership through the restriction, the form the
+    -- following step matches.
     change μ ∈ restrictedSpectrum (A.restrict hUperp) ⊤ at hμ
     rw [restrictedSpectrum_restrict A hUperp] at hμ
     exact hμ
@@ -157,16 +166,23 @@ theorem sinTheta_residual_le_of_orderedGap
     simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
       LinearMap.comp_apply] using hx
   have hY : NU Y = N (sinThetaEmbedding U X) := by
+    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
+    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
+    -- longer discharges -- tried, and it fails here.
     change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) = N (sinThetaEmbedding U X)
     congr 1
   have hC : NU C =
       N (complementaryProjection U ∘ₗ residual A X M) := by
+    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
+    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
+    -- longer discharges -- tried, and it fails here.
     change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
       N (complementaryProjection U ∘ₗ residual A X M)
     congr 1
   have hproj : ‖(complementaryProjection U).toContinuousLinearMap‖ ≤ 1 := by
     refine (complementaryProjection U).toContinuousLinearMap.opNorm_le_bound
       zero_le_one fun x => ?_
+    -- names the projection application so the operator-norm bound applies directly.
     change ‖Uᗮ.starProjection x‖ ≤ 1 * ‖x‖
     simpa using Uᗮ.norm_starProjection_apply_le x
   have hC_le : NU C ≤ N (residual A X M) := by
@@ -220,16 +236,23 @@ theorem sinTheta_residual_le_of_spectralDistance
     simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
       LinearMap.comp_apply] using hx
   have hY : NU Y = N (sinThetaEmbedding U X) := by
+    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
+    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
+    -- longer discharges -- tried, and it fails here.
     change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) = N (sinThetaEmbedding U X)
     congr 1
   have hC : NU C =
       N (complementaryProjection U ∘ₗ residual A X M) := by
+    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
+    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
+    -- longer discharges -- tried, and it fails here.
     change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
       N (complementaryProjection U ∘ₗ residual A X M)
     congr 1
   have hproj : ‖(complementaryProjection U).toContinuousLinearMap‖ ≤ 1 := by
     refine (complementaryProjection U).toContinuousLinearMap.opNorm_le_bound
       zero_le_one fun x => ?_
+    -- names the projection application so the operator-norm bound applies directly.
     change ‖Uᗮ.starProjection x‖ ≤ 1 * ‖x‖
     simpa using Uᗮ.norm_starProjection_apply_le x
   have hC_le : NU C ≤ N (residual A X M) := by
@@ -402,10 +425,14 @@ theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
   let Bc : E →L[𝕜] E := B.toContinuousLinearMap
   have hAself : Ac.IsSymmetric := by
     intro x y
+    -- states the symmetry goal as the inner-product identity the structure field
+    -- expects.
     change ⟪A x, y⟫_𝕜 = ⟪x, A y⟫_𝕜
     exact hA x y
   have hBself : Bc.IsSymmetric := by
     intro x y
+    -- states the symmetry goal as the inner-product identity the structure field
+    -- expects.
     change ⟪B x, y⟫_𝕜 = ⟪x, B y⟫_𝕜
     exact hB x y
   have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
