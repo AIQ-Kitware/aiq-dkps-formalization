@@ -240,6 +240,63 @@ theorem yuWangSamworth_intervalBlock_le
   · rw [hUeq]; exact isInvariant_spectralSubspace A (Set.Icc a b)
   · rw [hVp]; exact reduces_spanIndices hB hn ↑s
 
+/-- **An orthonormal family is the image of a `Finset` under some orthonormal
+basis.**  Precisely: given an embedding `e : Fin d ↪ Fin n` of index types, with
+`n` the dimension of `E`, an orthonormal `w : Fin d → E` extends to an
+orthonormal basis of `E` carrying `s = Finset.univ.map e` onto `Set.range w`.
+
+This is the bridge between the *family*-indexed statements of this file and the
+*basis*-indexed ones: `sinThetaFrobenius_eq_sqrt_sum_cross` and `blockFamily`
+are phrased for an orthonormal basis together with a distinguished `Finset` of
+indices, and a caller holding only a `d`-element orthonormal family has to
+manufacture both.  Doing so is the only genuinely fiddly step — the extension
+`Function.extend e w 0` is orthonormal *on the image of `e`*, and getting Lean to
+see that means pushing the `Set.range e` subtype coercion out of the way before
+`orthonormal_iff_ite` applies.
+
+Stated because the manufacture is index bookkeeping and no part of it depends on
+`w` beyond orthonormality, so a proof that needs it for two families needs it
+twice, verbatim. -/
+private theorem exists_orthonormalBasis_image_eq_range {d n : ℕ}
+    (hncard : finrank 𝕜 E = Fintype.card (Fin n)) (e : Fin d ↪ Fin n)
+    {s : Finset (Fin n)} (hs : s = Finset.univ.map e)
+    {w : Fin d → E} (hw : Orthonormal 𝕜 w) :
+    ∃ b : OrthonormalBasis (Fin n) 𝕜 E, ⇑b '' (↑s : Set (Fin n)) = Set.range w := by
+  classical
+  let wExt : Fin n → E := Function.extend e w (fun _ => 0)
+  let S : Set (Fin n) := Set.range e
+  have hwS : Orthonormal 𝕜 (S.restrict wExt) := by
+    rw [orthonormal_iff_ite]
+    intro i j
+    rcases i with ⟨i, hi⟩
+    rcases j with ⟨j, hj⟩
+    rcases hi with ⟨i', rfl⟩
+    rcases hj with ⟨j', rfl⟩
+    -- After `orthonormal_iff_ite` the goal is phrased through the subtype (or
+    -- `Fin.cast`) coercion; `orthonormal_iff_ite.mp` is stated for the underlying
+    -- vectors, so the coercion has to be discharged before it can apply.
+    change ⟪wExt (e i'), wExt (e j')⟫_𝕜 =
+      if (⟨e i', ⟨i', rfl⟩⟩ : S) = ⟨e j', ⟨j', rfl⟩⟩ then 1 else 0
+    have hwi : wExt (e i') = w i' := e.injective.extend_apply w (fun _ => 0) i'
+    have hwj : wExt (e j') = w j' := e.injective.extend_apply w (fun _ => 0) j'
+    rw [hwi, hwj, orthonormal_iff_ite.mp hw i' j']
+    simp only [Subtype.mk.injEq, EmbeddingLike.apply_eq_iff_eq]
+  obtain ⟨b, hb⟩ :=
+    Orthonormal.exists_orthonormalBasis_extension_of_card_eq hncard hwS
+  have hbe (i : Fin d) : b (e i) = w i := by
+    rw [hb (e i) ⟨i, rfl⟩]
+    exact e.injective.extend_apply w (fun _ => 0) i
+  refine ⟨b, ?_⟩
+  subst hs
+  ext x
+  constructor
+  · rintro ⟨j, hj, rfl⟩
+    rw [Finset.mem_coe, Finset.mem_map] at hj
+    obtain ⟨i, -, rfl⟩ := hj
+    exact ⟨i, (hbe i).symm⟩
+  · rintro ⟨i, rfl⟩
+    exact ⟨e i, by simp, hbe i⟩
+
 /-- The family-level squared sine agrees with the canonical Frobenius
 sine whenever the two orthonormal families span the supplied subspaces. -/
 theorem sinThetaSq_eq_sinThetaFrobenius_sq_of_spans
@@ -260,76 +317,11 @@ theorem sinThetaSq_eq_sinThetaFrobenius_sq_of_spans
     rw [hspanrank] at hle
     simpa only [n] using hle
   let e : Fin d ↪ Fin n := Fin.castLEEmb hdn
-  let S : Set (Fin n) := Set.range e
-  let uExt : Fin n → E := Function.extend e u (fun _ => 0)
-  let vExt : Fin n → E := Function.extend e v (fun _ => 0)
-  have huS : Orthonormal 𝕜 (S.restrict uExt) := by
-    rw [orthonormal_iff_ite]
-    intro i j
-    rcases i with ⟨i, hi⟩
-    rcases j with ⟨j, hj⟩
-    rcases hi with ⟨i', rfl⟩
-    rcases hj with ⟨j', rfl⟩
-    -- After `orthonormal_iff_ite` the goal is phrased through the subtype (or
-    -- `Fin.cast`) coercion; `orthonormal_iff_ite.mp` is stated for the underlying
-    -- vectors, so the coercion has to be discharged before it can apply.
-    change ⟪uExt (e i'), uExt (e j')⟫_𝕜 =
-      if (⟨e i', ⟨i', rfl⟩⟩ : S) = ⟨e j', ⟨j', rfl⟩⟩ then 1 else 0
-    have hui : uExt (e i') = u i' :=
-      e.injective.extend_apply u (fun _ => 0) i'
-    have huj : uExt (e j') = u j' :=
-      e.injective.extend_apply u (fun _ => 0) j'
-    rw [hui, huj, orthonormal_iff_ite.mp hu i' j']
-    simp only [Subtype.mk.injEq, EmbeddingLike.apply_eq_iff_eq]
-  have hvS : Orthonormal 𝕜 (S.restrict vExt) := by
-    rw [orthonormal_iff_ite]
-    intro i j
-    rcases i with ⟨i, hi⟩
-    rcases j with ⟨j, hj⟩
-    rcases hi with ⟨i', rfl⟩
-    rcases hj with ⟨j', rfl⟩
-    -- After `orthonormal_iff_ite` the goal is phrased through the subtype (or
-    -- `Fin.cast`) coercion; `orthonormal_iff_ite.mp` is stated for the underlying
-    -- vectors, so the coercion has to be discharged before it can apply.
-    change ⟪vExt (e i'), vExt (e j')⟫_𝕜 =
-      if (⟨e i', ⟨i', rfl⟩⟩ : S) = ⟨e j', ⟨j', rfl⟩⟩ then 1 else 0
-    have hvi : vExt (e i') = v i' :=
-      e.injective.extend_apply v (fun _ => 0) i'
-    have hvj : vExt (e j') = v j' :=
-      e.injective.extend_apply v (fun _ => 0) j'
-    rw [hvi, hvj, orthonormal_iff_ite.mp hv i' j']
-    simp only [Subtype.mk.injEq, EmbeddingLike.apply_eq_iff_eq]
-  have hncard : finrank 𝕜 E = Fintype.card (Fin n) := by simp [n]
-  obtain ⟨bU, hbU⟩ :=
-    Orthonormal.exists_orthonormalBasis_extension_of_card_eq hncard huS
-  obtain ⟨bV, hbV⟩ :=
-    Orthonormal.exists_orthonormalBasis_extension_of_card_eq hncard hvS
   let s : Finset (Fin n) := Finset.univ.map e
   have hscard : s.card = d := by simp [s]
-  have hbUe (i : Fin d) : bU (e i) = u i := by
-    rw [hbU (e i) ⟨i, rfl⟩]
-    exact e.injective.extend_apply u (fun _ => 0) i
-  have hbVe (i : Fin d) : bV (e i) = v i := by
-    rw [hbV (e i) ⟨i, rfl⟩]
-    exact e.injective.extend_apply v (fun _ => 0) i
-  have himageU : bU '' (↑s : Set (Fin n)) = Set.range u := by
-    ext x
-    constructor
-    · rintro ⟨j, hj, rfl⟩
-      rw [Finset.mem_coe, Finset.mem_map] at hj
-      obtain ⟨i, -, rfl⟩ := hj
-      exact ⟨i, (hbUe i).symm⟩
-    · rintro ⟨i, rfl⟩
-      exact ⟨e i, by simp [s], hbUe i⟩
-  have himageV : bV '' (↑s : Set (Fin n)) = Set.range v := by
-    ext x
-    constructor
-    · rintro ⟨j, hj, rfl⟩
-      rw [Finset.mem_coe, Finset.mem_map] at hj
-      obtain ⟨i, -, rfl⟩ := hj
-      exact ⟨i, (hbVe i).symm⟩
-    · rintro ⟨i, rfl⟩
-      exact ⟨e i, by simp [s], hbVe i⟩
+  have hncard : finrank 𝕜 E = Fintype.card (Fin n) := by simp [n]
+  obtain ⟨bU, himageU⟩ := exists_orthonormalBasis_image_eq_range hncard e (s := s) rfl hu
+  obtain ⟨bV, himageV⟩ := exists_orthonormalBasis_image_eq_range hncard e (s := s) rfl hv
   let uBlock : Fin d → E := blockFamily bU s hscard
   let vBlock : Fin d → E := blockFamily bV s hscard
   have huBlock : Orthonormal 𝕜 uBlock := orthonormal_blockFamily bU s hscard
