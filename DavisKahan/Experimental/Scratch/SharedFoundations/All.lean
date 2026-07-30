@@ -7,7 +7,7 @@ import DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.TwoWayFactorizati
 import DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.OperatorAbsoluteValueComplex
 import DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.ReflectionTransport
 import DavisKahan.BoundedOperator.IsometricRangeProjection
-import DavisKahan.Experimental.Scratch.SharedFoundations.Residual.TrialResidual
+import DavisKahan.BoundedOperator.TrialResidual
 import DavisKahan.Experimental.Scratch.SharedFoundations.Residual.ReflectionDefect
 import DavisKahan.Experimental.Scratch.SharedFoundations.Residual.ReflectionDefectIdeal
 import DavisKahan.Experimental.Scratch.SharedFoundations.Spectral.BoundedSelection
