@@ -127,7 +127,7 @@ theorem exists_reduced_coefficients_of_characteristic
 /-- Every nonzero characteristic root produces a nontrivial classical
 free--free mode. -/
 theorem exists_nontrivial_freeBoundary_of_characteristic
-    {beta : ℝ} (hbeta : beta ≠ 0)
+    {beta : ℝ} (_hbeta : beta ≠ 0)
     (hroot : MathAhead.HiddenFoundations.FreeBeam.characteristic beta = 0) :
     ∃ a b : ℝ,
       (a ≠ 0 ∨ b ≠ 0) ∧

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Classical.CharacteristicConverse
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicConverse
 import DavisKahan.Analysis.FourthOrderODE.SmoothGreenIdentity
 import Mathlib.Tactic
 
@@ -55,22 +55,27 @@ noncomputable def modeData (beta a b c d : ℝ) : FourthOrderData where
   deriv2 := MathAhead.HiddenFoundations.FreeBeam.hasDerivAt_modeD2 beta a b c d
   deriv3 := MathAhead.HiddenFoundations.FreeBeam.hasDerivAt_modeD3 beta a b c d
 
+/-- The bundled mode data reproduces the mode itself in slot `f0`. -/
 @[simp] theorem modeData_f0 (beta a b c d x : ℝ) :
     (modeData beta a b c d).f0 x =
       MathAhead.HiddenFoundations.FreeBeam.mode beta a b c d x := rfl
 
+/-- Slot `f1` of the bundled mode data is the first derivative of the mode. -/
 @[simp] theorem modeData_f1 (beta a b c d x : ℝ) :
     (modeData beta a b c d).f1 x =
       MathAhead.HiddenFoundations.FreeBeam.modeD1 beta a b c d x := rfl
 
+/-- Slot `f2` of the bundled mode data is the second derivative of the mode. -/
 @[simp] theorem modeData_f2 (beta a b c d x : ℝ) :
     (modeData beta a b c d).f2 x =
       MathAhead.HiddenFoundations.FreeBeam.modeD2 beta a b c d x := rfl
 
+/-- Slot `f3` of the bundled mode data is the third derivative of the mode. -/
 @[simp] theorem modeData_f3 (beta a b c d x : ℝ) :
     (modeData beta a b c d).f3 x =
       MathAhead.HiddenFoundations.FreeBeam.modeD3 beta a b c d x := rfl
 
+/-- Slot `f4` of the bundled mode data is the fourth derivative of the mode. -/
 @[simp] theorem modeData_f4 (beta a b c d x : ℝ) :
     (modeData beta a b c d).f4 x =
       MathAhead.HiddenFoundations.FreeBeam.modeD4 beta a b c d x := rfl

@@ -758,8 +758,8 @@
     {
       "id": "free-beam-sobolev-foundation",
       "title": "Interval Sobolev trace, Green identity, self-adjointness, and compactness contract",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamAnalyticFoundation",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeamAnalyticFoundation.lean",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SobolevTraceFoundation",
       "kind": "interface",
       "dependencies": [],
@@ -774,8 +774,8 @@
     {
       "id": "free-beam-closed-operator",
       "title": "Closed fourth-derivative operator derived from the analytic contract",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamAnalyticFoundation",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeamAnalyticFoundation.lean",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SobolevTraceFoundation.operator",
       "kind": "proof_candidate",
       "dependencies": [
@@ -790,8 +790,8 @@
     {
       "id": "free-beam-selfadjoint",
       "title": "Self-adjointness of the free-beam realization",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamAnalyticFoundation",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeamAnalyticFoundation.lean",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SobolevTraceFoundation.operator_isSelfAdjoint",
       "kind": "proof_candidate",
       "dependencies": [
@@ -806,8 +806,8 @@
     {
       "id": "free-beam-third-eigenvalue",
       "title": "First positive spectral value is greater than 500",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamAnalyticFoundation",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeamAnalyticFoundation.lean",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SobolevTraceFoundation.firstPositiveSpectralValue_gt_five_hundred",
       "kind": "proof_candidate",
       "dependencies": [
@@ -823,8 +823,8 @@
     {
       "id": "free-beam-spectrum-gap",
       "title": "Spectrum is contained in {0} union (500,infinity)",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamAnalyticFoundation",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeamAnalyticFoundation.lean",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SobolevTraceFoundation.spectrum_subset_zero_union_Ioi_five_hundred",
       "kind": "proof_candidate",
       "dependencies": [
