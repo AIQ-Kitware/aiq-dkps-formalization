@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterBlockIdentity
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockIdentity
 import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtBlock
 
 /-!
@@ -26,6 +26,14 @@ a bound in terms of `‖z‖` would be useless.
 ## Provenance
 
 *New.*
+
+**Moved 2026-07-29** by lane PLACE-SYLV, from
+`ForTauCeti/Analysis/InnerProductSpace/SylvesterBlockEstimate.lean` to
+`ForTauCeti/Analysis/InnerProductSpace/Sylvester/BlockEstimate.lean`.  The `Sylvester/`
+directory already held `Basic`, `Interval`, `SpectralDistance` and `Internal/`, while
+six siblings of the same family used a flat `Sylvester*` prefix in the directory above;
+one family now has one convention.  Path change and import repoint only — no statement,
+signature, proof, attribute, declaration name or namespace changed.
 -/
 
 open scoped InnerProductSpace

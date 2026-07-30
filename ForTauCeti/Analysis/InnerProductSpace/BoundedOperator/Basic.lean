@@ -6,7 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 import ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds
 import ForTauCeti.Analysis.InnerProductSpace.ProjectionGap
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterOperator
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator
 
 /-!
 # Supported bounded Davis--Kahan vocabulary

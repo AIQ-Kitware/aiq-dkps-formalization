@@ -7,7 +7,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Ideals.Symmetric
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.CompactIntegral
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.FourierSemigroup
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.OrderedSemigroup
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 /-!

@@ -202,7 +202,7 @@
         "ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs",
         "ForTauCeti.Analysis.Fourier.HaagerupZsido.Fourier",
         "ForTauCeti.Analysis.Fourier.HaagerupZsido.Integrability",
-        "ForTauCeti.Analysis.Fourier.HaagerupZsidoKernel",
+        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel",
         "ForTauCeti.Analysis.Fourier.Poisson.CauchyLattice",
         "ForTauCeti.Analysis.SpecialFunctions.Integral.RationalQuadratic",
         "ForTauCeti.Analysis.SpecialFunctions.Integral.SineLaplace"
@@ -302,11 +302,11 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventOpen",
         "ForTauCeti.Analysis.InnerProductSpace.Rosenblum",
         "ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterBlockEstimate",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterBlockIdentity",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterGenerator",
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate",
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockIdentity",
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator",
         "ForTauCeti.Analysis.InnerProductSpace.SylvesterGroup",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap"
       ]
     },
     {
@@ -342,8 +342,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterBound",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterOperator"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound",
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator"
       ]
     },
     {
@@ -748,10 +748,10 @@
       "upstream_pr": null
     },
     {
-      "source_module": "ForTauCeti.Analysis.Fourier.HaagerupZsidoKernel",
+      "source_module": "ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel",
       "source_declarations": [],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.Fourier.HaagerupZsidoKernel",
+      "staging_module": "ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel",
       "final_tauceti_module": "TauCeti.Analysis.Fourier.HaagerupZsidoKernel",
       "ownership_class": "tauceti",
       "roadmap_target": "fourier-haagerup-zsido",
@@ -2300,7 +2300,7 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -2459,7 +2459,7 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterBlockIdentity"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockIdentity"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -2519,7 +2519,7 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -2550,7 +2550,7 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -2640,7 +2640,7 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -2696,7 +2696,7 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -3003,7 +3003,7 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -3038,7 +3038,7 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterBlockEstimate"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -3260,18 +3260,18 @@
         "norm_sylvester_block_sub_smul_le"
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SylvesterBlockEstimate",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SylvesterBlockEstimate",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtBlock",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterBlockIdentity"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockIdentity"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -3282,18 +3282,18 @@
         "sylvester_block_identity"
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SylvesterBlockIdentity",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockIdentity",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SylvesterBlockIdentity",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterGenerator"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterBlockEstimate"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -3308,7 +3308,7 @@
         "tendsto_ofLp_apply"
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SylvesterGenerator",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SylvesterGenerator",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
@@ -3318,7 +3318,7 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterBlockIdentity"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockIdentity"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -3365,7 +3365,7 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtBlock",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterGenerator"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -3384,7 +3384,7 @@
         "ofLp_zero"
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
@@ -3396,7 +3396,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterBlockEstimate"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -3492,7 +3492,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.ProjectionGap",
         "ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds",
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterOperator"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -3852,7 +3852,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterBound",
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound",
         "Mathlib"
       ],
       "blocked_dependencies": [],
@@ -4075,7 +4075,7 @@
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.SpectralGap",
         "ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterBound"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -4135,7 +4135,7 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.Fourier.HaagerupZsidoKernel",
+        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
         "Mathlib"
       ],
@@ -4163,7 +4163,7 @@
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterBound"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -4194,7 +4194,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterBound"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -4260,7 +4260,7 @@
         "rectangular_nonneg_of_add_le_of_smul"
       ],
       "current_namespace": "TauCeti.ContinuousLinearMap",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SylvesterBound",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SylvesterBound",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
@@ -4275,7 +4275,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval",
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterOperator"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -4289,13 +4289,13 @@
         "sylvesterOperatorL_apply"
       ],
       "current_namespace": "ContinuousLinearMap",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SylvesterOperator",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SylvesterOperator",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterBound"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -4421,7 +4421,7 @@
       "roadmap_target": "Coercive bounded operators and the unit-ball criterion used by the form method.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.SylvesterBound",
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound",
         "Mathlib"
       ],
       "blocked_dependencies": [],

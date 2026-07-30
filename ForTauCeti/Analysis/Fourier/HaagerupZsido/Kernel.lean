@@ -19,7 +19,7 @@ public import ForTauCeti.Analysis.Fourier.HaagerupZsido.Fourier
 This module is a transitional re-export aggregate.  The former single-file
 development of the scalar Haagerup--Zsidó reciprocal Fourier kernel was split
 into seven topic modules; this file re-exports all of them so that existing
-consumers importing `ForTauCeti.Analysis.Fourier.HaagerupZsidoKernel` continue
+consumers importing `ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel` continue
 to see the entire `TauCeti.HaagerupZsido` API unchanged.
 
 The split modules are:
@@ -47,4 +47,12 @@ The split modules are:
   Apache 2.0.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
+
+**Moved 2026-07-29** by lane PLACE-SYLV, from
+`ForTauCeti/Analysis/Fourier/HaagerupZsidoKernel.lean` to
+`ForTauCeti/Analysis/Fourier/HaagerupZsido/Kernel.lean`.
+`Analysis/Fourier/HaagerupZsido/` already held `Defs`, `Fourier` and `Integrability`,
+while this module sat beside the directory rather than inside it.  Path change and
+repointing of imports only — no statement, signature, proof, attribute, declaration name or
+namespace changed.
 -/

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.Normed.Operator.Banach
 

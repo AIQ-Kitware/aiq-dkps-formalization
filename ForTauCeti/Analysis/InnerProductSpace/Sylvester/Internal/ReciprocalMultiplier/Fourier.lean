@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.OrbitAction
-import ForTauCeti.Analysis.Fourier.HaagerupZsidoKernel
+import ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel
 import Mathlib.Analysis.Convex.Integral
 import Mathlib.Analysis.Real.Pi.Bounds
 import Mathlib.MeasureTheory.SpecificCodomains.Pi
