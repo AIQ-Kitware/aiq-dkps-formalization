@@ -45,7 +45,8 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  ["Analysis.SpecialFunctions.Sqrt","Analysis.Normed.Operator.LinearIsometry",A+"Basic",A+"BasisSpan",A+"CourantFischer",
   A+"PositiveSqrt",A+"SelfAdjointFunctionalCalculus",A+"OperatorModulus",A+"Spectrum"]),
 ("T02","Polar decomposition and partial isometries",
- [A+"PartialIsometry",A+"PolarDecomposition",A+"PolarIsometry",A+"PolarPartialIsometry",A+"NearIsometry"]),
+ [A+"PartialIsometry",A+"PolarDecomposition",A+"PolarIsometry",A+"PolarPartialIsometry",
+  A+"NearIsometry",A+"IntertwiningUnitary"]),
 ("T03","Singular values and the singular system",
  [A+"SingularValues",A+"RectangularSingularValues",A+"SingularSystem",A+"MoorePenroseInverse"]),
 ("T04","Gram matrices, orthogonal projections, and spectral subspaces",
@@ -78,7 +79,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  +["Analysis.SpecialFunctions.Integral."+x for x in ["RationalQuadratic","SineLaplace"]]),
 ("T13","One-parameter unitary groups and Stone's theorem",
  [A+"OneParameterUnitaryGroup."+x for x in ["Basic","Commutant","SemigroupBridge","Stone"]]
- +[A+"IntertwiningUnitary",A+"SkewAdjointExponential"]),
+ +[A+"SkewAdjointExponential"]),
 ("T14","Borel functional calculus and projection-valued measures",
  [A+"BorelCalculus."+x for x in ["DiagonalMeasure","Multiplicative","Operator","PVM","Polarization"]]
  +[A+"ProjValMeasure.Basic",A+"ProjValMeasure.Additivity",
