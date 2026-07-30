@@ -52,7 +52,7 @@ variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpac
 **This is not a spectral projection**, and the name says so since lane
 `NS-SPECPROJ` (2026-07-30).  It is the orthogonal projector onto
 `b.spanIndices ↑S`, the span of the basis vectors indexed by `S`; a spectral
-projection is `TauCeti.DavisKahanTheory.spectralProjection A Ω`, the projector
+projection is `TauCeti.spectralProjection A Ω`, the projector
 onto the spectral subspace of an *operator* over a real set.  The two used to
 share the base name `spectralProjection` and differ only by namespace, so
 dropping `DavisKahanTheory` — which `RUB-NS-PAPER` slice 2c has to do — made
