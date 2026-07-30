@@ -618,28 +618,28 @@ private theorem singularValues_tanAngle_model
   have hsinEq' : TauCeti.abs (projection (modelSubspace (𝕜 := 𝕜)) -
       projection (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       (((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) := hsinEq
-  have hinner : FiniteDimensional.selfAdjointFunctionalCalculus
+  have hinner : TauCeti.selfAdjointFunctionalCalculus
       (TauCeti.isPositive_abs (projection (modelSubspace (𝕜 := 𝕜)) -
         projection (rotatedModelSubspace (𝕜 := 𝕜) θ))).isSymmetric
       Real.arcsin = (((θ : ℝ) : 𝕜) • LinearMap.id) := by
-    rw [FiniteDimensional.selfAdjointFunctionalCalculus_congr_op _
+    rw [TauCeti.selfAdjointFunctionalCalculus_congr_op _
       (show ((((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) :
           Plane 𝕜 →ₗ[𝕜] Plane 𝕜).IsSymmetric by
         intro x y
         simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
           inner_smul_right, RCLike.conj_ofReal])
       hsinEq' Real.arcsin]
-    rw [FiniteDimensional.selfAdjointFunctionalCalculus_real_smul_id,
+    rw [TauCeti.selfAdjointFunctionalCalculus_real_smul_id,
       harcsin]
   rw [tanAngleOperator,
-    FiniteDimensional.selfAdjointFunctionalCalculus_congr_op _
+    TauCeti.selfAdjointFunctionalCalculus_congr_op _
       (show ((((θ : ℝ) : 𝕜) • LinearMap.id) :
           Plane 𝕜 →ₗ[𝕜] Plane 𝕜).IsSymmetric by
         intro x y
         simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
           inner_smul_right, RCLike.conj_ofReal])
       hinner safeTan,
-    FiniteDimensional.selfAdjointFunctionalCalculus_real_smul_id]
+    TauCeti.selfAdjointFunctionalCalculus_real_smul_id]
   simp only [safeTan, if_neg hcos]
   rw [show Real.sin θ / Real.cos θ = Real.tan θ from (Real.tan_eq_sin_div_cos θ).symm]
   -- restate the scalar operator as a constant diagonal so the planar
@@ -686,17 +686,17 @@ private theorem singularValues_tanTwoAngle_model
     intro x y
     simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
       inner_smul_right, RCLike.conj_ofReal]
-  have hinner : FiniteDimensional.selfAdjointFunctionalCalculus
+  have hinner : TauCeti.selfAdjointFunctionalCalculus
       (TauCeti.isPositive_abs (projection (modelSubspace (𝕜 := 𝕜)) -
         projection (rotatedModelSubspace (𝕜 := 𝕜) θ))).isSymmetric
       Real.arcsin = (((θ : ℝ) : 𝕜) • LinearMap.id) := by
-    rw [FiniteDimensional.selfAdjointFunctionalCalculus_congr_op _ hsymSin
+    rw [TauCeti.selfAdjointFunctionalCalculus_congr_op _ hsymSin
       hsinEq' Real.arcsin,
-      FiniteDimensional.selfAdjointFunctionalCalculus_real_smul_id, harcsin]
+      TauCeti.selfAdjointFunctionalCalculus_real_smul_id, harcsin]
   rw [tanTwoAngleOperator,
-    FiniteDimensional.selfAdjointFunctionalCalculus_congr_op _ hsymTheta
+    TauCeti.selfAdjointFunctionalCalculus_congr_op _ hsymTheta
       hinner safeTanTwo,
-    FiniteDimensional.selfAdjointFunctionalCalculus_real_smul_id]
+    TauCeti.selfAdjointFunctionalCalculus_real_smul_id]
   simp only [safeTanTwo, if_neg hcos]
   rw [show Real.sin (2 * θ) / Real.cos (2 * θ) = Real.tan (2 * θ) from
     (Real.tan_eq_sin_div_cos (2 * θ)).symm,
