@@ -100,8 +100,8 @@ theorem opNorm_sylvester_le_of_intervalGap
     intro i
     have hi : (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
         ‖H (hHsym.eigenvectorBasis rfl i)‖ := by
-      -- `H` is the local name for `TauCeti.abs S`; this states the goal against that
-      -- definition so that `norm_abs_apply` can fire on the right-hand side.
+      -- `H` is `TauCeti.abs S` by definition, and the eigenvector lower bound below is
+      -- stated for `abs S`; the goal has to carry that spelling before it can be cited.
       change (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
         ‖TauCeti.abs S (hHsym.eigenvectorBasis rfl i)‖
       rw [TauCeti.norm_abs_apply]
@@ -131,39 +131,37 @@ theorem opNorm_sylvester_le_of_intervalGap
         _ = U.symm (C x) := congrArg U.symm hx
     have hSX : U.symm (S (X x)) = H (X x) := by
       have hp := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary S) (X x)
-      -- restates the polar-decomposition identity against the local names `U` and `H`,
-      -- so the following rewrite can cancel `U.symm (U _)`.
+      -- `congr_fun` leaves the polar identity as a raw function application; naming it as
+      -- the operator equation `S (X x) = U (H (X x))` is what lets `U.symm_apply_apply` fire.
       change S (X x) = U (H (X x)) at hp
       rw [hp, U.symm_apply_apply]
-    -- the goal is stated for `Z`/`Y`; this names it through `H` and `U.symm` so that
-    -- `hSX` matches syntactically.
+    -- Both sides are the same term once `Z`, `Y` and `H` are unfolded; written out because
+    -- the `← hSX` rewrite below has to match this spelling and not the folded one.
     change H (X x) - U.symm (X (T x)) = U.symm (C x)
     rwa [← hSX]
   have hZnorm : ‖Z.toContinuousLinearMap‖ = ‖X.toContinuousLinearMap‖ := by
     apply le_antisymm
     · refine Z.toContinuousLinearMap.opNorm_le_bound (norm_nonneg _) fun x => ?_
-      -- `simp only [Z]` cannot be used here: it normalises the composition further and
-      -- the following `norm_map` rewrite then has nothing to match. `change` states the
-      -- goal in the shape `opNorm_le_bound` left it, with the composite still applied.
+      -- `Z x` is `U.symm (X x)` by definition; `U.symm.norm_map` is an isometry lemma about
+      -- that composite, so it applies only once the goal names it.
       change ‖U.symm (X x)‖ ≤ ‖X.toContinuousLinearMap‖ * ‖x‖
       rw [U.symm.norm_map]
       exact X.toContinuousLinearMap.le_opNorm x
     · refine X.toContinuousLinearMap.opNorm_le_bound (norm_nonneg _) fun x => ?_
-      -- `simp only [Z]` cannot be used here: it normalises the composition further and
-      -- the following `norm_map` rewrite then has nothing to match. `change` states the
-      -- goal in the shape `opNorm_le_bound` left it, with the composite still applied.
+      -- The reverse bound, for the same reason: `U.symm` is an isometry, so `‖X x‖` and
+      -- `‖Z x‖` are equal, but the rewrite needs the composite spelled out.
       change ‖X x‖ ≤ ‖Z.toContinuousLinearMap‖ * ‖x‖
       rw [← U.symm.norm_map (X x)]
       exact Z.toContinuousLinearMap.le_opNorm x
   have hYnorm : ‖Y.toContinuousLinearMap‖ = ‖C.toContinuousLinearMap‖ := by
     apply le_antisymm
     · refine Y.toContinuousLinearMap.opNorm_le_bound (norm_nonneg _) fun x => ?_
-      -- As above: `simp only [Y]` over-normalises for the `norm_map` step that follows.
+      -- `Y x` is `U.symm (C x)` by definition; same isometry step as for `Z` above.
       change ‖U.symm (C x)‖ ≤ ‖C.toContinuousLinearMap‖ * ‖x‖
       rw [U.symm.norm_map]
       exact C.toContinuousLinearMap.le_opNorm x
     · refine C.toContinuousLinearMap.opNorm_le_bound (norm_nonneg _) fun x => ?_
-      -- As above: `simp only [Y]` over-normalises for the `norm_map` step that follows.
+      -- The reverse bound for `Y`, matching the `Z` pair above.
       change ‖C x‖ ≤ ‖Y.toContinuousLinearMap‖ * ‖x‖
       rw [← U.symm.norm_map (C x)]
       exact Y.toContinuousLinearMap.le_opNorm x
@@ -202,7 +200,10 @@ private theorem uiNorm_sylvester_le_of_form_bounds_aux
   have hidealL : ∀ D : F →L[𝕜] F, ∀ T : E →L[𝕜] F,
       N' (D ∘L T) ≤ ‖D‖ * N' T := by
     intro D T
-    simp only [N']
+    -- `N'` is `N` precomposed with `toLinearMap`. The goal is stated over `∘L` on bundled
+    -- maps and `N`'s ideal API over `∘ₗ` on the underlying ones; the two are the same term,
+    -- so this `change` is the entire translation between the two spellings.
+    change N (D.toLinearMap ∘ₗ T.toLinearMap) ≤ ‖D‖ * N T.toLinearMap
     have h := N.comp_le_opNorm_mul D.toLinearMap T.toLinearMap
     have hD : D.toLinearMap.toContinuousLinearMap = D := by
       ext x
@@ -211,7 +212,8 @@ private theorem uiNorm_sylvester_le_of_form_bounds_aux
   have hidealR : ∀ T : E →L[𝕜] F, ∀ D : E →L[𝕜] E,
       N' (T ∘L D) ≤ N' T * ‖D‖ := by
     intro T D
-    simp only [N']
+    -- As `hidealL`: the same `∘L` / `∘ₗ` translation, on the other side.
+    change N (T.toLinearMap ∘ₗ D.toLinearMap) ≤ N T.toLinearMap * ‖D‖
     have h := N.comp_le_mul_opNorm T.toLinearMap D.toLinearMap
     have hD : D.toLinearMap.toContinuousLinearMap = D := by
       ext x
@@ -375,8 +377,8 @@ theorem uiNorm_sylvester_le_of_intervalGap
     intro i
     have hi : (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
         ‖H (hHsym.eigenvectorBasis rfl i)‖ := by
-      -- `H` is the local name for `TauCeti.abs S`; this states the goal against that
-      -- definition so that `norm_abs_apply` can fire on the right-hand side.
+      -- `H` is `TauCeti.abs S` by definition, and the eigenvector lower bound below is
+      -- stated for `abs S`; the goal has to carry that spelling before it can be cited.
       change (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
         ‖TauCeti.abs S (hHsym.eigenvectorBasis rfl i)‖
       rw [TauCeti.norm_abs_apply]
@@ -406,16 +408,18 @@ theorem uiNorm_sylvester_le_of_intervalGap
         _ = U.symm (C x) := congrArg U.symm hx
     have hSX : U.symm (S (X x)) = H (X x) := by
       have hp := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary S) (X x)
-      -- restates the polar-decomposition identity against the local names `U` and `H`,
-      -- so the following rewrite can cancel `U.symm (U _)`.
+      -- `congr_fun` leaves the polar identity as a raw function application; naming it as
+      -- the operator equation `S (X x) = U (H (X x))` is what lets `U.symm_apply_apply` fire.
       change S (X x) = U (H (X x)) at hp
       rw [hp, U.symm_apply_apply]
-    -- the goal is stated for `Z`/`Y`; this names it through `H` and `U.symm` so that
-    -- `hSX` matches syntactically.
+    -- Both sides are the same term once `Z`, `Y` and `H` are unfolded; written out because
+    -- the `← hSX` rewrite below has to match this spelling and not the folded one.
     change H (X x) - U.symm (X (T x)) = U.symm (C x)
     rwa [← hSX]
   have hZnorm : N Z = N X := by
-    simp only [Z]
+    -- `Z` is definitionally `U.symm.toLinearMap ∘ₗ X`, and `N.invariant` is stated over that
+    -- composite; the goal has to be in that form before the lemma can be cited.
+    change N (U.symm.toLinearMap ∘ₗ X) = N X
     have h := N.invariant U.symm (LinearIsometryEquiv.refl 𝕜 E) X
     have hcomp : U.symm.toLinearMap ∘ₗ X ∘ₗ
         (LinearIsometryEquiv.refl 𝕜 E).toLinearMap =
@@ -424,7 +428,8 @@ theorem uiNorm_sylvester_le_of_intervalGap
       rfl
     rwa [hcomp] at h
   have hYnorm : N Y = N C := by
-    simp only [Y]
+    -- `Y` is definitionally `U.symm.toLinearMap ∘ₗ C`; same step as `hZnorm`.
+    change N (U.symm.toLinearMap ∘ₗ C) = N C
     have h := N.invariant U.symm (LinearIsometryEquiv.refl 𝕜 E) C
     have hcomp : U.symm.toLinearMap ∘ₗ C ∘ₗ
         (LinearIsometryEquiv.refl 𝕜 E).toLinearMap =
@@ -449,14 +454,18 @@ theorem uiNorm_sylvester_le_of_intervalGap
   have hidealL : ∀ D : F →L[𝕜] F, ∀ Q : E →L[𝕜] F,
       N' (D ∘L Q) ≤ ‖D‖ * N' Q := by
     intro D Q
-    simp only [N']
+    -- `N'` is `N` precomposed with `toLinearMap`. The goal is stated over `∘L` on bundled
+    -- maps and `N`'s ideal API over `∘ₗ` on the underlying ones; the two are the same term,
+    -- so this `change` is the entire translation between the two spellings.
+    change N (D.toLinearMap ∘ₗ Q.toLinearMap) ≤ ‖D‖ * N Q.toLinearMap
     have h := N.comp_le_opNorm_mul D.toLinearMap Q.toLinearMap
     have hD : D.toLinearMap.toContinuousLinearMap = D := by ext x; rfl
     rwa [hD] at h
   have hidealR : ∀ Q : E →L[𝕜] F, ∀ D : E →L[𝕜] E,
       N' (Q ∘L D) ≤ N' Q * ‖D‖ := by
     intro Q D
-    simp only [N']
+    -- As `hidealL`: the same `∘L` / `∘ₗ` translation, on the other side.
+    change N (Q.toLinearMap ∘ₗ D.toLinearMap) ≤ N Q.toLinearMap * ‖D‖
     have h := N.comp_le_mul_opNorm Q.toLinearMap D.toLinearMap
     have hD : D.toLinearMap.toContinuousLinearMap = D := by ext x; rfl
     rwa [hD] at h
