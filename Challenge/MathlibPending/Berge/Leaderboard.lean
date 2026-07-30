@@ -3,6 +3,6 @@
 -/
 import ForTauCeti.Topology.Berge
 
-#print axioms ForMathlib.upperHemicontinuousAt_isMinOn
-#print axioms ForMathlib.continuous_iInf_of_isCompact
-#print axioms ForMathlib.exists_modulus_isMinOn
+#print axioms TauCeti.upperHemicontinuousAt_isMinOn
+#print axioms TauCeti.continuous_iInf_of_isCompact
+#print axioms TauCeti.exists_modulus_isMinOn

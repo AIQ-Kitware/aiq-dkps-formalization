@@ -23,8 +23,8 @@ The typical source of the approximate-minimizer hypothesis is a second family
 
 ## Main results
 
-* `ForMathlib.exists_subseq_tendsto_forall_le_of_approxMin`
-* `ForMathlib.exists_subseq_tendsto_isMinOn_of_approxMinOn` — the variant where the
+* `TauCeti.exists_subseq_tendsto_forall_le_of_approxMin`
+* `TauCeti.exists_subseq_tendsto_isMinOn_of_approxMinOn` — the variant where the
   approximate-minimization comparison ranges only over the compact set `K`, so the
   limit is a minimizer *on `K`* (`IsMinOn F K`) rather than a global one. This is
   the form the Berge maximum theorem consumes (the feasible set is constrained).
@@ -42,34 +42,31 @@ to be re-authored per Mathlib's AI-contribution policy at PR time.
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
   `72b913b`; it has had no prior home.
-* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
-  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
-  areas.
+* Extraction class: **authored in place**. Upstream target is Mathlib; the module
+  is staged here because `ForMathlib` was retired on 2026-07-29 and `ForTauCeti`
+  is now the single staging library — see `ForTauCeti/README.md`.
 * Intended Mathlib home: additions to `Mathlib/Topology/Order/Compact.
 * Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — the `ForMathlib` import firewall admits only
-  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
-
-## Provenance
-
-*Moved, not restated.*  This file was `ForMathlib/Topology/ApproxMinimizer.lean`
-until 2026-07-29, when lane FM-RETIRE retired `ForMathlib` entirely: its four
-surviving modules moved here and the library, its root module and its directory
-were deleted.  Statements, proofs and signatures are unchanged.
-
-**The declarations deliberately keep their `ForMathlib` namespace**, which is
-the one thing this move could not fix.  `Challenge/**/Conformance.lean` files
-are *immutable challenge statements* (`AGENTS.md`), and the ones paired with
-this module name their leaf theorems inside `ForMathlib` / `ForMathlib.Matrix`;
-the comparator matches implementation to statement by fully-qualified name.
-Renaming the namespace would orphan those pins.  Re-issuing the immutable
-statements under `TauCeti.*` names is a decision, not a task — until it is
-taken, these names stay and this note records why.
-
+* Spectra influence: **none** — the `ForTauCeti` import firewall admits only
+  Mathlib, `TauCeti` and `ForTauCeti` (rule 2 of
+  `scripts/check_dependency_layers.py`); this module imports Mathlib only.
 -/
 
-namespace ForMathlib
+/-!
+### Provenance
+
+Moved from `ForMathlib/Topology/` to `ForTauCeti/Topology/` on 2026-07-29 by lane
+FM-RETIRE, which finishes the `ForMathlib` retirement.  The namespace changed from
+`ForMathlib` to `TauCeti` to match the destination package; declaration names,
+statements and proofs are unchanged.
+
+**FM-RETIRE was worked twice, and the two versions disagreed on the namespace.**
+The reconciliation — why `TauCeti` won over `main`'s `ForMathlib`, and which pins
+were updated to match — is recorded once, in `ForTauCeti/Topology/Berge.lean`.
+-/
+
+namespace TauCeti
 
 open Filter Topology
 
@@ -142,4 +139,4 @@ theorem exists_subseq_tendsto_isMinOn_of_approxMinOn
   exact le_of_tendsto_of_tendsto hcont hrhs
     (Eventually.of_forall fun t => happrox x hx (φ t))
 
-end ForMathlib
+end TauCeti
