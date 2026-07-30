@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterBlockEstimate
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate
 import ForTauCeti.Analysis.InnerProductSpace.BlockLowerBound
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
@@ -36,6 +36,14 @@ bounds the *representatives* `kε` and `lε` apart, up to the cell radius.
 *New.*  The donor proves the same statement in the tensor model, through joint
 projection-valued measures and a product-measure identity whose closure is
 ~20,000 lines of Born-rule machinery.  Nothing of that appears here.
+
+**Moved 2026-07-29** by lane PLACE-SYLV, from
+`ForTauCeti/Analysis/InnerProductSpace/SylvesterSpectralGap.lean` to
+`ForTauCeti/Analysis/InnerProductSpace/Sylvester/SpectralGap.lean`.  The `Sylvester/`
+directory already held `Basic`, `Interval`, `SpectralDistance` and `Internal/`, while
+six siblings of the same family used a flat `Sylvester*` prefix in the directory above;
+one family now has one convention.  Path change and import repoint only — no statement,
+signature, proof, attribute, declaration name or namespace changed.
 -/
 
 open scoped InnerProductSpace ENNReal

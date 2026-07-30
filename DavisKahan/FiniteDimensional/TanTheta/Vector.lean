@@ -27,7 +27,7 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 
 /-! # The Davis–Kahan tan Θ theorem (gated statement)
 

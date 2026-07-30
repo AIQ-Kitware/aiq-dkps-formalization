@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterGenerator
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator
 
 /-!
@@ -34,6 +34,14 @@ the intertwining the two sides differ by `Z ((1 - Q) B x)`, which is not small.
 ## Provenance
 
 *New.*
+
+**Moved 2026-07-29** by lane PLACE-SYLV, from
+`ForTauCeti/Analysis/InnerProductSpace/SylvesterBlockIdentity.lean` to
+`ForTauCeti/Analysis/InnerProductSpace/Sylvester/BlockIdentity.lean`.  The `Sylvester/`
+directory already held `Basic`, `Interval`, `SpectralDistance` and `Internal/`, while
+six siblings of the same family used a flat `Sylvester*` prefix in the directory above;
+one family now has one convention.  Path change and import repoint only — no statement,
+signature, proof, attribute, declaration name or namespace changed.
 -/
 
 open scoped InnerProductSpace

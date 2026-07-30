@@ -13,24 +13,34 @@ is accepted, we already have what it needs. That includes paper references,
 adversarial review of every statement, and Mathlib-quality elegance. See
 `ForTauCeti/README.md` §*The readiness standard*.
 
+**Six of twenty-two topics are written** (2026-07-29). The design below
+partitions the library into twenty-two; the table under *Roadmaps* is the
+written ones. Sixteen remain, and `python3 scripts/check_tauceti_roadmap_topics.py --needs`
+names the ones that can go first: **T01**, **T21** and **T22** are still
+unwritten and have no prerequisites at all.
+
 ## The candidate topic design
 
 [`CANDIDATE-TOPIC-DESIGN.md`](CANDIDATE-TOPIC-DESIGN.md) proposes a partition of
-**all 156 `ForTauCeti` modules into 20 roadmap topics**, ordered as a submission
-ladder and validated against the import graph
-(`scripts/check_tauceti_roadmap_topics.py`: total, disjoint, and acyclic in
-submission order). The four directories below are the first four of those topics
-to be written; **sixteen have no directory yet**, and writing them is the work
-that design makes possible.
+every `ForTauCeti` module into roadmap topics, ordered as a submission ladder and
+validated against the import graph (`scripts/check_tauceti_roadmap_topics.py`:
+total, disjoint, and acyclic in submission order). The design text says *156
+modules into 20 topics*; **the live partition is 164 modules into 22 topics** —
+run the tool rather than quoting the prose, which was written before T21 and T22
+were added and before lane SPLIT-1K added four modules (`jon (yardrat)`,
+2026-07-29). The directories below are the topics written so far; the rest have
+no directory yet, and writing them is the work that design makes possible.
 
 ## Roadmaps
 
 | Topic | Covers |
 |---|---|
 | [`ApproximationNumbers/`](ApproximationNumbers/README.md) | Approximation numbers and Hilbert-space singular values: the field-generic theory, addition and composition laws, the approximable/compact boundary, adjoint invariance, the rectangular modulus, Eckart–Young, and the min–max principles. Carries [`Suggested.lean`](ApproximationNumbers/Suggested.lean). |
-| [`SpectralSubspacePerturbation/`](SpectralSubspacePerturbation/README.md) | Spectral subspace perturbation, operator angles, and Sylvester equations: projection geometry, graph subspaces and Riccati equations, closed and possibly unbounded self-adjoint operators. Davis–Kahan Part III is its principal worked source and acceptance suite. Carries [`Suggested.lean.md`](SpectralSubspacePerturbation/Suggested.lean.md). |
 | [`SymmetricOperatorIdeals/`](SymmetricOperatorIdeals/README.md) | Symmetric operator ideals. |
+| [`HaagerupZsidoKernel/`](HaagerupZsidoKernel/README.md) | T12 — a finite-mass Fourier kernel for the reciprocal on `1 ≤ \|x\|`: the hyperbolic weight and its Laplace transform, Poisson summation for the Cauchy lattice, the closed-form sine–Laplace and rational-quadratic integrals, the exterior identity `∫ k(t) e^{itx} dt = 1/x`, and the exact `L¹` mass `π / 2` that is the sharp Sylvester constant. Independent of every other topic. |
 | [`UnboundedOperators/`](UnboundedOperators/README.md) | Unbounded operators on Mathlib `LinearPMap`, the canonical carrier fixed by the U1 decision in `AGENTS.md`. |
+| [`BorelCalculus/`](BorelCalculus/README.md) | T14 — the bounded Borel functional calculus of a normal operator and the projection-valued measures it produces: diagonal spectral measures from Riesz–Markov–Kakutani, the polarised transport principle that carries every continuous-calculus identity to bounded Borel symbols, multiplicativity, and `ProjValMeasure` on the Borel sets of `ℝ`. Independent, and the topic the whole unbounded stack (T15) rests on. |
+| [`SpectralSubspacePerturbation/`](SpectralSubspacePerturbation/README.md) | Spectral subspace perturbation, operator angles, and Sylvester equations: projection geometry, graph subspaces and Riccati equations, closed and possibly unbounded self-adjoint operators. Davis–Kahan Part III is its principal worked source and acceptance suite. Carries [`Suggested.lean.md`](SpectralSubspacePerturbation/Suggested.lean.md). |
 
 `SpectralSubspacePerturbation` is the roadmap target the live `approximation-number`
 cluster in `dev/tauceti/extraction-manifest.json` names

@@ -6,7 +6,7 @@ import DavisKahan.SpectralTheory.ClosedOperator.Complexification
 import DavisKahan.Sylvester.PairwiseHomogeneousUniqueness
 import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import ForTauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap
 
 /-!
 # Pairwise-gap square-norm Sylvester theorem

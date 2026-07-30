@@ -112,8 +112,20 @@ above plus item 2.**
 - **Five `set_option linter.unusedDecidableInType false`** in
   `Sylvester/Internal/ReciprocalMultiplier.lean`; the honest fix is dropping
   `[DecidableEq ι]` from those five types and calling `classical`.
-- **One file over the length limit** with its own
-  `set_option linter.style.longFile 2900` (`ReciprocalMultiplier`, 2,834 lines).
+  *Still open, new locations (`jon (yardrat)`, 2026-07-29, lane SPLIT-1K): the
+  five now sit in `ReciprocalMultiplier/OrbitAction.lean` (2, at 535 and 598) and
+  `ReciprocalMultiplier/DoubledPhase.lean` (3, at 111, 312 and 368).*
+- ~~**One file over the length limit** with its own
+  `set_option linter.style.longFile 2900` (`ReciprocalMultiplier`, 2,834 lines).~~
+  **Fixed 2026-07-29 by `jon (yardrat)`, lane SPLIT-1K.** `ReciprocalMultiplier`
+  was split at its four mathematical seams into
+  `ReciprocalMultiplier/{OrbitAction, Fourier, DoubledPhase}.lean` plus an 823-line
+  root; the `set_option` is gone and no part exceeds 820 lines. Struck rather than
+  deleted because the *diagnosis* was namek's and it was right.
+  `SpectralMeasure.lean` (1243) went the same way in the same lane. The only file
+  still over 1000 lines is `SinTheta/Perturbation.lean` (1111), left alone because
+  `jon (namek)`'s E-ALIAS second tranche holds it — see `dev/LANES.md`, which
+  carries the measured seam for whoever finishes it.
 
 **What is left beyond coherence.** Lane P-EXP — re-measured today and larger
 than the board says: a re-proof over an `ℝ≥0∞` gauge, not a retype, 117 sites

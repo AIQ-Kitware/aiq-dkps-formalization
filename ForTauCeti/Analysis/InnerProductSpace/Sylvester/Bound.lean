@@ -472,9 +472,9 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
   `5c65c95`; it has had no prior home.
-* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
-  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
-  areas.
+* Extraction class: **authored in place**. Upstream target is Mathlib; the module
+  is staged here because `ForMathlib` was retired on 2026-07-29 and `ForTauCeti`
+  is now the single staging library — see `ForTauCeti/README.md`.
 * Intended Mathlib home: additions to `Mathlib/Analysis/InnerProductSpace/SylvesterBound.
 * Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
@@ -483,6 +483,14 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 * Moved from `ForMathlib/Analysis/InnerProductSpace/` to `ForTauCeti/` on
   2026-07-29 under lane Y3(b2), with the rest of its 8-module component.
   Statements, proofs and signatures are unchanged.
+
+**Moved 2026-07-29** by lane PLACE-SYLV, from
+`ForTauCeti/Analysis/InnerProductSpace/SylvesterBound.lean` to
+`ForTauCeti/Analysis/InnerProductSpace/Sylvester/Bound.lean`.  The `Sylvester/`
+directory already held `Basic`, `Interval`, `SpectralDistance` and `Internal/`, while
+six siblings of the same family used a flat `Sylvester*` prefix in the directory above;
+one family now has one convention.  Path change and import repoint only — no statement,
+signature, proof, attribute, declaration name or namespace changed.
 -/
 
 section RectangularAbstractSylvesterBound

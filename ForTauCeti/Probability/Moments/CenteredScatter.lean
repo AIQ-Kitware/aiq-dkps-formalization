@@ -60,6 +60,15 @@ See backlog §8.1.
   against the reuse rubric (backlog §8.1): `appendFin` was deleted in favour of
   `Fin.snoc`, and `centeredScatter` moved from `E →ₗ[𝕜] E` to `E →L[𝕜] E`.
 * Spectra influence: **none** (imports only Mathlib).
+
+**Moved 2026-07-29** by lane PLACE-GRAM, from
+`ForTauCeti/Analysis/InnerProductSpace/CenteredScatter.lean` to
+`ForTauCeti/Probability/Moments/CenteredScatter.lean`, beside `SampleMean`,
+`SampleCovariance`, `Variance` and `MatrixConcentration`.  Finite means and
+centered scatter operators are the content of roadmap topic T20, where this
+module was already assigned; only its path disagreed.  Path change and
+repointing of one import in `DkpsQuench2026/Spectral/GramSpectrum.lean` — no
+statement, signature, proof, attribute, declaration name or namespace changed.
 -/
 
 @[expose] public section
