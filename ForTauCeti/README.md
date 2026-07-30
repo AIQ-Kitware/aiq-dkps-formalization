@@ -328,6 +328,49 @@ Readiness therefore includes, and is not complete without:
 Concretely: a cluster is ready when nothing in it would be sent back. Until
 then, polishing `ForTauCeti` *is* the submission work — not a prelude to it.
 
+## What the Tau Ceti merge machinery actually requires
+
+**Read out of `TauCetiReview/runner/verdict.py` and `runner/merge.py`, not
+inferred.** Both facts constrain how the port is *built*, so they belong here
+rather than being discovered at PR time.
+
+**1. All ten rubrics must be green on one single commit.** `state_of` marks an
+`approve` **green only when `approved_sha == head_sha`**; on any other head it
+becomes **`stale`**, and a never-run rubric counts as blocking too. `decide_merge`
+then requires every blocking rubric green on `HEAD`, *"fresh, not stale"*.
+
+Approvals therefore **do not accumulate** across a fix-and-push cycle: pushing a
+fix for rubric 7 invalidates the approvals already earned from rubrics 1–6.
+There is no submit-early-and-grind-it-down path. Whatever commit we intend to
+merge has to satisfy all ten *simultaneously* — which is the argument for
+finishing every lane before the PR opens, and for not opening it while a lane is
+mid-flight.
+
+**2. The diff must be confined to the library subtree.** `decide_merge` demands
+`code_only`: every changed path under `MERGE_PREFIX` (`TauCeti/`) or in the root
+allowlist, which is exactly
+
+```
+TauCeti.lean, lake-manifest.json, lean-toolchain
+```
+
+Anything else returns *"PR touches paths outside TauCeti/ … needs human merge"*.
+This repository interleaves the library with `dev/`, `scripts/`, `docs/`,
+`Challenge/`, `DavisKahan/` and the roadmap tree, and **none of it may ride
+along** — so the mechanical port must emit a `TauCeti/`-confined diff. A Lake
+pin change additionally needs a green bump-guard, so the port should not move
+`lean-toolchain` or the manifest casually.
+
+**One topic per PR.** `rubrics/scope.md` blocks a PR that is more than one
+topic, so the clusters go up individually, not as a single submission.
+
+**A note on `scope`, which cannot be satisfied from inside this repo.** The real
+reviewer reads `TauCetiProject/TauCetiRoadmap`, not our `ForTauCetiRoadmap/`.
+That is a fact about the real run and is recorded in
+[`dev/audit/TAUCETI-RUBRIC-REVIEW.md`](../dev/audit/TAUCETI-RUBRIC-REVIEW.md).
+It is **not** a defect in present work: per jon (2026-07-30) we rehearse against
+our own roadmap, and no lane is ever blocked on upstream acceptance.
+
 ## Lifecycle (per cluster)
 
 **Precondition — this sequence applies only *after* a cluster has actually been
