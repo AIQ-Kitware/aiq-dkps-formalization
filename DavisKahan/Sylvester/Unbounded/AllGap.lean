@@ -11,10 +11,10 @@ import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
-# Genuine-spectrum all-gap unbounded Sylvester theorem
+# Spectral all-gap unbounded Sylvester theorem
 
 This module states the source-facing all-gap predicate entirely through the
-genuine Spectra spectrum.  It covers the interval/exterior configuration and
+Spectra spectrum.  It covers the interval/exterior configuration and
 both ordered half-line configurations.  The capstone converts the ordered
 spectral containments to form bounds and then calls the direct interface-parametric finite-Ky-Fan
 engine instantiated by the vendored Spectra cutoffs.

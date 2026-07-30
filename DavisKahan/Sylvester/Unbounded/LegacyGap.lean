@@ -16,11 +16,19 @@ spectrally, using Spectra for the spectral branch and the direct cutoff engine
 for the ordered branches.  This file connects the two surfaces without importing
 any theorem from the obsolete cutoff facade.
 
-**The connection runs one way.**  Both theorems here take a form-bounded
-hypothesis and produce a spectral one; neither converse is proved.  That is why
-`Sylvester/Gap.lean` carries the qualified names: it is the stronger hypothesis,
-so a theorem stated over it is the weaker theorem, and the unqualified name
-belongs to the spectral surface.
+**The connection is one-way and partial.**  Both theorems here take a
+form-bounded hypothesis and produce a spectral one, no converse is proved, and
+**only the interval/exterior constructor is covered**: the two ordered
+configurations are never translated, because `SemiboundedBelow A c ↔
+ofReal ⁻¹' spectrum A ⊆ Set.Ici c` is the spectral theorem for unbounded
+self-adjoint operators and is not available in this tree.
+`davisKahan1970_sylvester_complex` therefore cases on the form-bounded gap and
+hands the ordered branches to the direct engine with their form bounds intact.
+
+That is why `Sylvester/Gap.lean` carries the qualified names: not because it is
+the stronger hypothesis, but because the spectral predicate is the **uniform**
+one — three spectral containments, the form Davis--Kahan 1970 states — where the
+form-bounded predicate mixes a spectral condition with two form bounds.
 -/
 
 namespace TauCeti
