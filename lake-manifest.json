@@ -24,15 +24,6 @@
       "configFile": "lakefile.toml"
     },
     {
-      "type": "path",
-      "scope": "",
-      "name": "Spectra",
-      "manifestFile": "lake-manifest.json",
-      "inherited": false,
-      "dir": "retired/Spectra",
-      "configFile": "lakefile.lean"
-    },
-    {
       "url": "https://github.com/leanprover-community/plausible",
       "type": "git",
       "subDir": null,
