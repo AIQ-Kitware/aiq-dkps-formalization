@@ -3,7 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 
-Staged for Mathlib: addition to `Mathlib/Analysis/Matrix/Spectrum.lean`
+Staged for Tau Ceti, roadmap topic T19.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+addition to `Mathlib/Analysis/Matrix/Spectrum.lean`
 (measurability of a continuous spectral function of a measurable Hermitian-matrix
 family).
 
@@ -12,7 +15,6 @@ self-contained-ized by Claude Opus 4.8 (claude-opus-4-8[1m]); linter pass by
 Claude Opus 4.8 (name the two `MeasurableSpace`/`BorelSpace` instances so the
 auto-name carries no underscore; `opSym` `def` → `theorem` since it is
 Prop-valued; `rwa` consolidation).
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import Mathlib.Analysis.Matrix.Spectrum

@@ -95,9 +95,31 @@ Three observations worth arguing about:
 - **T12 and T14 are the cheapest real submissions** and both are independent.
   Either is a good first contact with Tau Ceti review, where the thing being
   tested is the *process* rather than the mathematics.
-- **T15 is 24 modules and should probably split** before submission. It is left
+- ~~**T15 is 24 modules and should probably split** before submission. It is left
   whole here because its internal cut is a mathematical judgement (resolvents /
-  spectral measure / Stone) belonging to whoever owns `UnboundedOperators`.
+  spectral measure / Stone) belonging to whoever owns `UnboundedOperators`.~~
+  **SPLIT 2026-07-29 (lane T15-SPLIT, `jon (yardrat)`), and the judgement was
+  made rather than deferred:**
+
+  | key | modules | contents |
+  |---|---|---|
+  | `T15a` | 6 | closed operators on `LinearPMap`: graphs, constructions, the domain-aware Sylvester equation, and quadratic-form bounds |
+  | `T15b` | 7 | resolvents of self-adjoint `LinearPMap` operators, semiboundedness, and the gap inverse |
+  | `T15c` | 12 | the spectral measure, spectral projections, maximality, Stone uniqueness, and Yosida |
+
+  **Keys are suffixed, not renumbered.** Pushing T16–T22 up would invalidate every
+  `Txx` reference in the audit files, in this document and in the written
+  roadmaps, for no gain.
+
+  **The import graph moved three modules across the cut the audit proposed**, and
+  that is the part worth keeping: `RealLowerBound` imports `SelfAdjointResolvent`,
+  `SelfAdjointMaximal` imports `SpectralMeasure`, and `SpectralGapInverse` imports
+  `SpectralSupport`. Each therefore sits one chain *later* than its subject matter
+  suggests, and `--check` reports a forward reference if they are placed by name.
+
+  **One result the undivided topic could not have**: `--needs` now reports
+  **T15b as independent of every other topic**. The unbounded resolvent theory is
+  submittable on its own.
 
 ## What the violations taught us
 

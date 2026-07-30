@@ -2,7 +2,7 @@
 
 **Topic T14 of the candidate design.** Ten modules, no prerequisites — one of the
 independent topics `scripts/check_tauceti_roadmap_topics.py --needs` reports, and
-the one the whole unbounded stack (T15) rests on.
+the one the unbounded spectral-measure topic (T15c) rests on.
 
 ## What is missing from Mathlib, exactly
 
@@ -78,7 +78,7 @@ spectrum of a normal operator lives in `ℂ`. `BorelCalculus/PVM.lean` therefore
 takes an arbitrary measurable **relabelling** `κ : spectrum ℂ a → ℝ` rather than
 assuming self-adjointness. For a self-adjoint operator `κ` is the real part; for
 the Cayley transform of an *unbounded* self-adjoint operator it is the inverse
-Cayley map, which is exactly what T15 needs and exactly why `κ` is a parameter
+Cayley map, which is exactly what T15c needs and exactly why `κ` is a parameter
 and not a special case.
 
 ### Three measure-theoretic modules are generic and stay generic
@@ -148,8 +148,9 @@ Herglotz/Poisson construction; the comparison is recorded in
 the provenance of the route itself.
 
 T14 is rung **K** of `dev/tauceti/submission-ladder.md`. Its only downstream
-consumer here is T15 (unbounded self-adjoint operators on `LinearPMap`), which
-takes the PVM through the Cayley transform — see
+consumer here is T15c (the spectral measure of an unbounded self-adjoint
+operator — lane T15-SPLIT cut the old 25-module T15 into T15a/T15b/T15c on
+2026-07-29), which takes the PVM through the Cayley transform — see
 `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure/Construction.lean`.
 
 Written 2026-07-29 by `jon (yardrat)` under lane ROADMAP-WRITE, one topic per

@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 
-Staged for Mathlib: additions to
+Staged for Tau Ceti, roadmap topic T19.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+additions to
 `Mathlib/MeasureTheory/Measure/Typeclasses/Probability.lean`.
 
-Formalized by Claude Fable 5 (claude-fable-5[1m]);
-to be re-authored per Mathlib's AI-contribution policy at PR time.
+Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 module
 

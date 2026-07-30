@@ -59,6 +59,16 @@ no "genuinely Mathlib-shaped" exemption. Earlier text describing the four
 survivors as a deliberate Mathlib-bound remainder is superseded by this
 paragraph.
 
+**Done, 2026-07-29 (`jon (yardrat)`, lane FM-RETIRE):** the four moved, the
+library, its root module and its directory were deleted, and `ForMathlib` no
+longer exists in the tree. The paragraph below is kept as the specification the
+lane was executed against; the downstream pins it warns about were all repointed
+(`comparator/pending-{berge,rank-factorization,rank-psd-realization}.json` and
+the three `Challenge/**/Leaderboard.lean` files now read `TauCeti.*`), and the
+declarations were renamed out of `ForMathlib` into `TauCeti` — see
+`ForTauCeti/Topology/Berge.lean` for why that was the right call when a parallel
+version of the same lane had decided otherwise.
+
 Four modules remain (799 lines), and they are **not** blocked by the import
 firewall — the internal edges are only `PosDef → RankFactorization` and
 `Berge → ApproxMinimizer`, so they move as two independent pairs. What makes the
@@ -75,6 +85,28 @@ migrating that module.** Those lines predate the dual-track policy in
 `AGENTS.md` and have not been treated as blocking for comparable modules all
 week. Reading this section's *previous* wording as live policy cost one session
 two reversed lanes; that is why the wording is now explicit.
+
+### File headers name Tau Ceti, and there is no re-authoring step (2026-07-29)
+
+Two header conventions, both settled by lane HDR-DEST after an audit found 39
+files stating the wrong destination:
+
+- **A header says `Staged for Tau Ceti, roadmap topic Tnn`**, not *staged for
+  Mathlib*. Where a header previously named a `Mathlib/...` file, that path is
+  kept but explicitly marked as where the material *would have gone on the
+  closed Mathlib track* — it is history and orientation, not a destination. Real
+  Mathlib history is untouched: `Analysis/InnerProductSpace/Basic.lean` was
+  genuinely submitted as PR #40567 and reshaped on @wwylele's review, and its
+  header still says so.
+- **The instruction `To be re-authored per Mathlib's AI-contribution policy at
+  PR time` is deleted, not redirected**, in all 35 files that carried it. Tau
+  Ceti has no such requirement to redirect it to: it describes itself as a
+  library *"implemented and maintained by AI contributors, subject to
+  adversarial review"* (`external/TauCeti/README.md`), and attribution is one of
+  its review rubrics rather than a bar to entry. The `Formalized by …` line stays
+  for exactly that reason.
+
+If you are adding a module, write the first form and omit the second.
 
 The real constraint is the import firewall below, not a docstring. Because
 `ForTauCeti` may not import `ForMathlib`, a `ForMathlib` module becomes

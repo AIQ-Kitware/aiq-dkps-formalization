@@ -1,5 +1,8 @@
 /-
-Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/` (new file
+Staged for Tau Ceti, roadmap topic T17.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `SinThetaOpNorm.lean`).
 
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]), plan step W5.2 of
@@ -11,7 +14,6 @@ quadratic form is `≥ (c+g)‖·‖²` and `Q̂` onto an `S`-invariant subspace
 quadratic form is `≤ c‖·‖²`.  The operator norm `‖Q̂ ∘L P‖` *is* `‖sinΘ‖_op`.
 Built on the Sylvester operator bound (`opNorm_le_div_of_comp_sub_comp_eq`)
 without any dimension factor.
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound

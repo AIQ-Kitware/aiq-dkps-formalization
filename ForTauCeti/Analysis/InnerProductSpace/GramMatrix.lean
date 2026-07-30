@@ -3,7 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 
-Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/GramMatrix.lean`.
+Staged for Tau Ceti, roadmap topic T04.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+additions to `Mathlib/Analysis/InnerProductSpace/GramMatrix.lean`.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]); refactored into a
 span-to-span core plus corollaries by Claude Opus 4.8 (claude-opus-4-8[1m]);
@@ -14,7 +17,6 @@ standalone *isometric first isomorphism theorem* (`LinearMap.rangeEquivOfInnerEq
 about an arbitrary pair of linear maps, whose `@[simp]` apply lemma carries an
 arbitrary membership proof so that every downstream proof is a short `simp`;
 the span, ambient, and `gram` statements are thin corollaries.
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import Mathlib.Analysis.InnerProductSpace.GramMatrix

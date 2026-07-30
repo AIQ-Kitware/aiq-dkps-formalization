@@ -3,15 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 
-Staged for Mathlib: sample-covariance eigenvalue concentration.
+Staged for Tau Ceti, roadmap topic T20.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+sample-covariance eigenvalue concentration.
 
 Specializes the generic random-Hermitian eigenvalue-concentration engine
 (`MatrixConcentration.lean`) to the empirical covariance
 `Cov̂_{kl}(ω) = n⁻¹ Σᵢ Vᵢ(ω)ₖ Vᵢ(ω)ₗ` of iid random vectors, via the scalar
 sample-mean second-moment identity applied to the coordinate products.
 
-Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]);
-to be re-authored per Mathlib's AI-contribution policy at PR time.
+Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 -/
 
 import ForTauCeti.Probability.Moments.MatrixConcentration
