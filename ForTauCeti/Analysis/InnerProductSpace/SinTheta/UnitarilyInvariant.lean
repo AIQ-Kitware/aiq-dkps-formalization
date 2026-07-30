@@ -1,5 +1,8 @@
 /-
-Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/` (new file
+Staged for Tau Ceti, roadmap topic T17.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `SinThetaUINorm.lean`).
 
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]), plan step F4 of
@@ -18,7 +21,6 @@ estimate differs — here it is the abstract Sylvester bound
 `TauCeti.ContinuousLinearMap.le_div_of_comp_sub_comp_eq`, fed the operator seminorm
 induced by `N`, whose operator-ideal property is `UnitarilyInvariantNorm`'s
 `apply_comp_le`.
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm

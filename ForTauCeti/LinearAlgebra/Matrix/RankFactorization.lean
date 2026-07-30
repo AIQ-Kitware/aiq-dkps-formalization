@@ -34,10 +34,12 @@ column of `M` in that basis.
 
 ## Staging note
 
-Staged for Mathlib: additions to `Mathlib/LinearAlgebra/Matrix/Rank.lean`
+Staged for Tau Ceti, roadmap topic T21.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+additions to `Mathlib/LinearAlgebra/Matrix/Rank.lean`
 (rank factorization).
-Formalized by Claude Fable 5 (claude-fable-5[1m]);
-to be re-authored per Mathlib's AI-contribution policy at PR time.
+Formalized by Claude Fable 5 (claude-fable-5[1m]).
 
 ## Known linter warnings, and why they stay
 
@@ -66,9 +68,9 @@ had accumulated unnoticed in the modules the target was not even building.
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
   `7bc63b8`; it has had no prior home.
-* Extraction class: **authored in place**. Upstream target is Mathlib; the module
-  is staged here because `ForMathlib` was retired on 2026-07-29 and `ForTauCeti`
-  is now the single staging library — see `ForTauCeti/README.md`.
+* Extraction class: **authored in place**, for Tau Ceti — `ForMathlib` was
+  retired on 2026-07-29 and `ForTauCeti` is the single staging library, whose
+  destination is Tau Ceti and not Mathlib (`ForTauCeti/README.md`).
 * Intended Mathlib home: additions to `Mathlib/LinearAlgebra/Matrix/Rank.
 * Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
