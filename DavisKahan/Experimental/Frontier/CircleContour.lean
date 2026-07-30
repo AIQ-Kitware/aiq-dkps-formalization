@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 
 import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationContour
+import DavisKahan.SpectralTheory.ContinuationContour
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationTransport
 
 /-!

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.FiniteBlockReconstruction
+import DavisKahan.Sylvester.FiniteBlockReconstruction
 import ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel
 import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 import Mathlib.Analysis.SpecialFunctions.Exponential
