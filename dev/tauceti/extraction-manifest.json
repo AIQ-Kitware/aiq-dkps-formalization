@@ -319,7 +319,6 @@
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
         "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta",
         "ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector",
@@ -3455,53 +3454,6 @@
       "upstream_pr": null
     },
     {
-      "source_module": "DavisKahan/BoundedOperator/Basic.lean",
-      "source_declarations": [
-        "IsAcute",
-        "IsQuarterAcute",
-        "IsSelfAdjointOperator",
-        "IsometricEmbedding",
-        "LowerFormBoundOn",
-        "Reduces",
-        "UpperFormBoundOn",
-        "complementaryProjection",
-        "diagonalPart",
-        "directedGap",
-        "norm_reflectionOperator_le_one",
-        "norm_sylvester_le_of_coercive",
-        "offDiagonalPart",
-        "projection",
-        "projection_apply_comm_of_reduces",
-        "projection_comp_comm_of_reduces",
-        "reduces_orthogonalComplement",
-        "reflectionOperator",
-        "reflectionOperator_comm_of_reduces",
-        "reflectionOperator_involutive",
-        "residual",
-        "sinThetaEmbedding",
-        "subspaceGap",
-        "sylvesterOperator"
-      ],
-      "current_namespace": "TauCeti.DavisKahan",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Basic",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BoundedOperator.Basic",
-      "ownership_class": "tauceti",
-      "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.ProjectionGap",
-        "ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds",
-        "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator"
-      ],
-      "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta"
-      ],
-      "status": "staged",
-      "upstream_pr": null
-    },
-    {
       "source_module": "DavisKahan/BoundedOperator/Projector.lean",
       "source_declarations": [
         "norm_add_eq_max_of_block",
@@ -3539,7 +3491,10 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Basic"
+        "ForTauCeti.Analysis.InnerProductSpace.ProjectionGap",
+        "ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds",
+        "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -3662,7 +3617,6 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace"
       ],
       "status": "staged",
@@ -3685,7 +3639,6 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex"
       ],
       "status": "staged",
@@ -3712,7 +3665,6 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.ProjectionBlocks",
         "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex"
       ],
@@ -4298,9 +4250,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Basic"
-      ],
+      "downstream_users": [],
       "status": "staged",
       "upstream_pr": null
     },
@@ -4541,6 +4491,28 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.Normed.Operator.FiniteRankCompact",
+      "source_declarations": [
+        "isCompactOperator_of_finiteDimensional_range",
+        "isCompactOperator_of_rank_lt_aleph0"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.Normed.Operator.FiniteRankCompact",
+      "final_tauceti_module": "TauCeti.Analysis.Normed.Operator.FiniteRankCompact",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Approximation numbers (T09): the finite-rank-implies-compact input that roadmap section A4's compactness statement needs and Mathlib does not have.",
+      "provenance_class": "authored in place for Tau Ceti under lane AN-A4-COMPACT, 2026-07-30; authors Jon Crall, Claude Opus 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact"
+      ],
       "status": "staged",
       "upstream_pr": null
     }

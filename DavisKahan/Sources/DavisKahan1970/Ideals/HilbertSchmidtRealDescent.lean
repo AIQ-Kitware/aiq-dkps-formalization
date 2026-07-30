@@ -243,7 +243,8 @@ theorem paperHilbertSchmidtNorm_add_le_real
 
 /-- The complete rectangular Hilbert--Schmidt family over real Hilbert spaces. -/
 noncomputable def hilbertSchmidtReal :
-    RectangularSymmetricIdealFamily (𝕜 := ℝ) := by
+    SymmetricOperatorIdealFamily (𝕜 := ℝ) :=
+  SymmetricOperatorIdealFamily.ofRectangular <| by
   classical
   refine
     { Mem := fun T => IsPaperHilbertSchmidt T

@@ -113,7 +113,7 @@ independent parameters of the *fields*, which is the point of the layer.
   one.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 
@@ -303,8 +303,7 @@ def carrier : Submodule 𝕜 (E →L[𝕜] F) where
 /-- Membership in the ideal is exactly finiteness of the gauge; the carrier is defined that way,
 so this is `Iff.rfl` and exists only to spare call sites the unfolding. -/
 @[simp]
-theorem mem_carrier_iff {A : E →L[𝕜] F} : A ∈ N.carrier ↔ N.gauge A ≠ ∞ := Iff.rfl
-
+theorem mem_carrier_iff {A : E →L[𝕜] F} : A ∈ N.carrier ↔ N.gauge A ≠ ∞ := (Iff.rfl)
 /-- Members of the ideal have finite gauge. -/
 theorem gauge_ne_top_of_mem {A : E →L[𝕜] F} (hA : A ∈ N.carrier) : N.gauge A ≠ ∞ := hA
 
@@ -329,6 +328,13 @@ theorem sum_mem_carrier {ι : Type*} (s : Finset ι) {A : ι → E →L[𝕜] F}
 This is deliberately a type synonym rather than the subtype itself: the subtype
 already inherits the *operator* norm from `E →L[𝕜] F`, and the two norms differ.
 -/
+-- `@[expose]` here is forced by the compiler, not by API design. `Elem` is a type synonym
+-- for a subtype, and instances declared on it are compiled in this module and re-inferred
+-- downstream; without the body the two inferred compilation types differ. The compiler
+-- says so in as many words: *"Compilation failed, locally inferred compilation type
+-- differs from type that would be inferred in other modules … This is a current compiler
+-- limitation for `module`s that may be lifted in the future."* Revisit when it is.
+@[expose]
 def Elem (N : OperatorIdealFamily.{u, v, w} 𝕜) (E : Type v) (F : Type w)
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] : Type max v w :=
@@ -339,6 +345,10 @@ namespace Elem
 variable {N}
 
 /-- The underlying operator of an ideal element. -/
+-- `@[expose]` forced by the same compiler limitation as `Elem` above: accessors on an
+-- unexposed type synonym re-infer a different compilation type downstream. Revisit when
+-- the limitation the compiler reports is lifted.
+@[expose]
 def val (A : N.Elem E F) : E →L[𝕜] F := Subtype.val (p := fun A => A ∈ N.carrier) A
 
 /-- The underlying operator of an ideal element lies in the ideal. -/
@@ -349,11 +359,13 @@ the reason the ideal norm can be real-valued while the gauge is `ℝ≥0∞`-val
 theorem gauge_val_ne_top (A : N.Elem E F) : N.gauge A.val ≠ ∞ := A.val_mem
 
 /-- An operator of finite gauge, as an element of the ideal. -/
+-- `@[expose]` forced by the same compiler limitation as `Elem`: constructors and accessors
+-- on an unexposed type synonym re-infer a different compilation type downstream.
+@[expose]
 def mk {A : E →L[𝕜] F} (hA : A ∈ N.carrier) : N.Elem E F := ⟨A, hA⟩
 
 /-- Building an ideal element and taking its value is the identity. -/
-@[simp] theorem val_mk {A : E →L[𝕜] F} (hA : A ∈ N.carrier) : (mk (N := N) hA).val = A := rfl
-
+@[simp] theorem val_mk {A : E →L[𝕜] F} (hA : A ∈ N.carrier) : (mk (N := N) hA).val = A := (rfl)
 /-- Ideal elements are equal when their underlying operators are.  Tagged `@[ext]`, so `ext`
 reduces any such goal to the operators. -/
 @[ext] theorem ext {A B : N.Elem E F} (h : A.val = B.val) : A = B := Subtype.ext h
@@ -367,16 +379,15 @@ instance : Module 𝕜 (N.Elem E F) :=
   inferInstanceAs (Module 𝕜 (N.carrier : Submodule 𝕜 (E →L[𝕜] F)))
 
 /-- The zero ideal element is the zero operator. -/
-@[simp] theorem val_zero : (0 : N.Elem E F).val = 0 := rfl
+@[simp] theorem val_zero : (0 : N.Elem E F).val = 0 := (rfl)
 /-- Addition of ideal elements is addition of operators. -/
-@[simp] theorem val_add (A B : N.Elem E F) : (A + B).val = A.val + B.val := rfl
+@[simp] theorem val_add (A B : N.Elem E F) : (A + B).val = A.val + B.val := (rfl)
 /-- Negation of an ideal element is negation of the operator. -/
-@[simp] theorem val_neg (A : N.Elem E F) : (-A).val = -A.val := rfl
+@[simp] theorem val_neg (A : N.Elem E F) : (-A).val = -A.val := (rfl)
 /-- Subtraction of ideal elements is subtraction of operators. -/
-@[simp] theorem val_sub (A B : N.Elem E F) : (A - B).val = A.val - B.val := rfl
+@[simp] theorem val_sub (A B : N.Elem E F) : (A - B).val = A.val - B.val := (rfl)
 /-- Scaling an ideal element scales the operator. -/
-@[simp] theorem val_smul (c : 𝕜) (A : N.Elem E F) : (c • A).val = c • A.val := rfl
-
+@[simp] theorem val_smul (c : 𝕜) (A : N.Elem E F) : (c • A).val = c • A.val := (rfl)
 /-- The ideal norm, as a real-valued norm on the ideal. -/
 noncomputable instance : NormedAddCommGroup (N.Elem E F) :=
   AddGroupNorm.toNormedAddCommGroup
@@ -400,8 +411,7 @@ noncomputable instance : NormedAddCommGroup (N.Elem E F) :=
           (((ENNReal.toReal_eq_zero_iff _).mp hA).resolve_right A.gauge_val_ne_top) }
 
 /-- The ideal norm is the gauge, brought down to `ℝ`.  Lossless because `gauge_val_ne_top`. -/
-theorem norm_def (A : N.Elem E F) : ‖A‖ = (N.gauge A.val).toReal := rfl
-
+theorem norm_def (A : N.Elem E F) : ‖A‖ = (N.gauge A.val).toReal := (rfl)
 /-- Going back up: the extended norm of an ideal element is its gauge exactly, with no `toReal`
 round-trip loss. -/
 theorem enorm_eq_gauge (A : N.Elem E F) : ‖A‖ₑ = N.gauge A.val := by

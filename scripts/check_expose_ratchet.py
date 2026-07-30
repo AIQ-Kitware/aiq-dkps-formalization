@@ -37,14 +37,54 @@ LIB = ROOT / "ForTauCeti"
 
 #: The highest number of blanket-exposing modules the tree may contain.
 #: Measured on 2026-07-30, the day the convention was adopted.  Only ever lower it.
-BASELINE = 63
+BASELINE = 0
 
 BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
+
+#: Per-declaration `@[expose]`.  The blanket ratchet alone has an obvious failure mode:
+#: convert a module off `@[expose] public section` and then sprinkle `@[expose]` over its
+#: definitions, which satisfies the count while defeating the point.  This second ratchet
+#: closes that.  It is NOT zero, and should not be: `api-design` explicitly permits
+#: exposure where "a consumer must unfold or compute".  Every one of these carries a
+#: comment naming the reason.  Raising it is allowed; doing so silently is not.
+#:
+#: Raised 15 -> 23 on 2026-07-30 by lane FTC-EXPOSE-g1, which finished the conversion.
+#: The 23 fall into THREE kinds, and they are not interchangeable:
+#:   * clean carve-out -- a consumer genuinely must unfold. Legitimate; leave alone.
+#:   * recorded DEBT -- avoidable with a `_def` lemma plus rewiring the call sites.
+#:     Lane FTC-EXPOSE-SPECMEAS lowers this number; that is its whole job.
+#:   * COMPILER LIMITATION -- `Elem`, `Elem.val`, `Elem.mk` in `OperatorIdeal/Family`.
+#:     These failed *compilation*, not typechecking: "locally inferred compilation type
+#:     differs from type that would be inferred in other modules ... This is a current
+#:     compiler limitation for `module`s that may be lifted in the future."  No fix
+#:     exists at this toolchain.  Do NOT file these as debt; revisit on a toolchain bump.
+#:
+#: Earlier note, raised 4 -> 15 by lane FTC-EXPOSE-g2:
+#:   * 4 are clean carve-outs -- a `LinearPMap`'s `.domain` must reduce for its `_apply`
+#:     lemma to be *stated*, or a `Prop` abbreviation is applied as a function.
+#:   * 9 are the spectral-measure chain and are recorded DEBT, not endorsement.  An
+#:     exposed body cannot reference an unexposed one, so `spectralPVM` dragged in
+#:     `toProjValMeasure`, `specDiag`, and six more, one build at a time.  The clean fix
+#:     is a `_def` lemma per definition plus rewiring the call sites: lane
+#:     FTC-EXPOSE-SPECMEAS.  Lowering this number is that lane's job.
+PER_DECL_BASELINE = 23
+
+PER_DECL = re.compile(r"^@\[expose\]\s*$|^@\[simps![^\]]*,\s*expose\]\s*$", re.M)
 
 
 def offenders() -> list[Path]:
     """Modules opening a file-wide `@[expose] public section`."""
     return [p for p in sorted(LIB.rglob("*.lean")) if BLANKET.search(p.read_text())]
+
+
+def per_declaration() -> list[tuple[Path, int]]:
+    """(module, count) for each module carrying standalone `@[expose]` attributes."""
+    out = []
+    for p in sorted(LIB.rglob("*.lean")):
+        k = len(PER_DECL.findall(p.read_text()))
+        if k:
+            out.append((p, k))
+    return out
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -78,6 +118,22 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     print(f"expose-ratchet check: OK ({n} of {total} modules at the baseline of {BASELINE})")
+
+    per = per_declaration()
+    m = sum(k for _, k in per)
+    if args.list:
+        for path, k in per:
+            print(f"  per-declaration x{k}: {path.relative_to(ROOT)}")
+    if m > PER_DECL_BASELINE:
+        print(f"  per-declaration @[expose]: {m} across {len(per)} modules, ABOVE the "
+              f"baseline of {PER_DECL_BASELINE}")
+        print("  Converting a module off the blanket and then exposing its definitions one")
+        print("  by one satisfies the blanket count while defeating the point. If the new")
+        print("  exposure is genuinely the api-design carve-out, raise PER_DECL_BASELINE in")
+        print("  the same commit and say why at the declaration.")
+        return 1 if args.check else 0
+    print(f"  per-declaration @[expose]: {m} across {len(per)} modules, at or below the "
+          f"baseline of {PER_DECL_BASELINE}")
     return 0
 
 

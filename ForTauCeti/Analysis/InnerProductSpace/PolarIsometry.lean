@@ -123,7 +123,7 @@ partial isometry; adding invertibility of the modulus buys it back as an
 isometry. That is the whole hierarchy.
 -/
 
-@[expose] public section
+public section
 
 namespace ContinuousLinearMap
 
@@ -141,14 +141,18 @@ this is an isometry `E → F` with `M.polarIsometryOfIsUnitModulus ∘L |M| = M`
 factor of the polar decomposition of `M`.  Otherwise `Ring.inverse` returns `0`
 and so does this definition; every result below therefore carries the hypothesis
 `IsUnit M.modulus`. -/
+-- `@[expose]` because `@[simps!]` on this declaration generates `_apply` lemmas whose
+-- proofs are `rfl`, which cannot be validated unless the body is exposed. Recorded debt:
+-- the clean alternative is to drop `@[simps!]` and state the `_apply` lemmas by hand
+-- against a `_def` lemma. Tracked with lane FTC-EXPOSE-SPECMEAS.
+@[expose]
 noncomputable def polarIsometryOfIsUnitModulus (M : E →L[ℂ] F) : E →L[ℂ] F :=
   M ∘L Ring.inverse M.modulus
 
 /-- The defining formula: the polar isometry sends `x` to `M (|M|⁻¹ x)`. -/
 @[simp]
 theorem polarIsometryOfIsUnitModulus_apply (M : E →L[ℂ] F) (x : E) :
-    M.polarIsometryOfIsUnitModulus x = M (Ring.inverse M.modulus x) := rfl
-
+    M.polarIsometryOfIsUnitModulus x = M (Ring.inverse M.modulus x) := (rfl)
 /-- The modulus of `M` is invertible exactly when the Gram operator `M⋆ M` is.
 
 Both directions are the elementary fact that a self-commuting square is a unit
@@ -272,7 +276,11 @@ theorem norm_sub_polarIsometryOfIsUnitModulus_le {M : E →L[ℂ] F} (hM : IsUni
 
 /-- The polar isometry of a bounded-below operator, bundled as a
 `LinearIsometry`. -/
-@[simps! apply]
+-- `@[expose]` because `@[simps!]` on this declaration generates `_apply` lemmas whose
+-- proofs are `rfl`, which cannot be validated unless the body is exposed. Recorded debt:
+-- the clean alternative is to drop `@[simps!]` and state the `_apply` lemmas by hand
+-- against a `_def` lemma. Tracked with lane FTC-EXPOSE-SPECMEAS.
+@[simps! apply, expose]
 noncomputable def polarLinearIsometry {M : E →L[ℂ] F} (hM : IsUnit M.modulus) : E →ₗᵢ[ℂ] F where
   toLinearMap := M.polarIsometryOfIsUnitModulus
   norm_map' := norm_polarIsometryOfIsUnitModulus_apply hM
@@ -284,7 +292,11 @@ Surjectivity is where a genuine hypothesis is needed and it is stated
 explicitly: `M.polarIsometryOfIsUnitModulus` is surjective as soon as `M` is (its range is that
 of `M`, since `|M|` is invertible), and in the finite-dimensional case with
 `finrank ℂ E = finrank ℂ F` it follows from injectivity. -/
-@[simps! apply]
+-- `@[expose]` because `@[simps!]` on this declaration generates `_apply` lemmas whose
+-- proofs are `rfl`, which cannot be validated unless the body is exposed. Recorded debt:
+-- the clean alternative is to drop `@[simps!]` and state the `_apply` lemmas by hand
+-- against a `_def` lemma. Tracked with lane FTC-EXPOSE-SPECMEAS.
+@[simps! apply, expose]
 noncomputable def polarLinearIsometryEquiv {M : E →L[ℂ] F} (hM : IsUnit M.modulus)
     (hsurj : Function.Surjective M.polarIsometryOfIsUnitModulus) : E ≃ₗᵢ[ℂ] F :=
   .ofSurjective (polarLinearIsometry hM) hsurj

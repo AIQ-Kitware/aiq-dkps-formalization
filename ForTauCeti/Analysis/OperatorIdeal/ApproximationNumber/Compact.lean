@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import Mathlib.Analysis.Normed.Operator.Compact.Basic
+public import ForTauCeti.Analysis.Normed.Operator.FiniteRankCompact
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 
 /-!
@@ -20,13 +21,15 @@ limit of finite-rank operators, and such an operator is compact.
   The roadmap rules out a named `ApproximableOperator` predicate until multiple
   consumers justify one, so there is no new definition here.
 * `isCompactOperator_of_tendsto_approximationNumber` — approximation numbers
-  tending to zero force compactness, **given that finite-rank operators are
-  compact**.  The closure argument is Mathlib's (`isCompactOperator_of_tendsto`) and
-  the approximating sequence is the one above; the finite-rank input is an explicit
-  hypothesis because Mathlib has no *finite rank ⇒ compact* lemma.  That lemma is
-  general and belongs upstream, not inside an operator-ideal module; the theorem's
-  own docstring says what its proof is and lane `AN-A4-COMPACT` records it as the
-  remaining piece.
+  tending to zero force compactness, unconditionally over a proper scalar field.
+  The closure argument is Mathlib's (`isCompactOperator_of_tendsto`) and the
+  approximating sequence is the one above.  **The finite-rank input used to be an
+  explicit hypothesis**, because Mathlib has no *finite rank ⇒ compact* lemma;
+  it is now `ContinuousLinearMap.isCompactOperator_of_rank_lt_aleph0` in
+  `ForTauCeti/Analysis/Normed/Operator/FiniteRankCompact.lean`, written there
+  rather than here because it is a general fact about compact operators and has
+  nothing to do with operator ideals — which is what this docstring previously
+  said should happen.
 
 **The converse over a general Banach space is deliberately absent.**  A compact
 operator between Banach spaces need not be a norm limit of finite-rank operators
@@ -52,7 +55,7 @@ approximation-number API and Mathlib's compact-operator closure lemma.
   staging module.
 -/
 
-@[expose] public section
+public section
 
 namespace ContinuousLinearMap
 
@@ -91,29 +94,27 @@ theorem tendsto_approximationNumber_atTop_iff_exists_finiteRank_approx
     refine squeeze_zero (fun n => T.approximationNumber_nonneg n)
       (fun n => T.approximationNumber_le_norm_sub (hR n)) hconv
 
-/-- **Approximable operators are compact, given that finite-rank operators are.**
+/-- **Approximable operators are compact.**  This is the implication roadmap
+topic T09 §A4 asks for: `aₙ(T) → 0` forces `T` compact.
 
-The closure half of the argument is Mathlib's `isCompactOperator_of_tendsto`; what
-this states is that half, with the finite-rank input left as a hypothesis.
+The argument is two Mathlib-shaped halves.  The approximating sequence is
+`tendsto_approximationNumber_atTop_iff_exists_finiteRank_approx`, and the closure
+step is Mathlib's `isCompactOperator_of_tendsto`; what sits between them is that
+each `R n` is compact, which is
+`ContinuousLinearMap.isCompactOperator_of_rank_lt_aleph0`.
 
-**Why the hypothesis is here rather than discharged**: Mathlib has no
-*finite rank ⇒ compact operator* lemma.  `IsCompactOperator f` unfolds to
-`∃ K, IsCompact K ∧ f ⁻¹' K ∈ 𝓝 0`, and for a finite-rank `R` the witness is the
-closure of `R '' ball 0 1`, which is compact because it is a closed bounded subset
-of the finite-dimensional — hence closed and proper — `range R`.  That is a real
-proof with instance plumbing (`Submodule.closed_of_finiteDimensional`,
-`FiniteDimensional.proper`), it belongs in Mathlib rather than here, and inventing
-it inside this file would hide a general lemma inside an operator-ideal module.
-Lane `AN-A4-COMPACT` records it as the remaining piece.
+**That last lemma is not Mathlib's** — Mathlib has no *finite rank ⇒ compact*
+statement — so it is proved in
+`ForTauCeti/Analysis/Normed/Operator/FiniteRankCompact.lean`, a module about
+compact operators, rather than here.  An earlier version of this theorem carried
+it as an explicit hypothesis with a docstring saying exactly that it should move;
+it has moved.
 
-Once that lemma exists — in Mathlib or in a `ForTauCeti` module about compact
-operators — this becomes the unconditional *`aₙ(T) → 0` implies `T` compact* that
-roadmap topic T09 §A4 asks for, by feeding it
-`tendsto_approximationNumber_atTop_iff_exists_finiteRank_approx`. -/
-theorem isCompactOperator_of_tendsto_approximationNumber [CompleteSpace F]
-    (T : E →L[𝕜] F)
-    (h : Tendsto (T.approximationNumber) atTop (𝓝 0))
-    (hfin : ∀ R : E →L[𝕜] F, R.rank < Cardinal.aleph0 → IsCompactOperator R) :
+`[ProperSpace 𝕜]` is what the finite-rank lemma needs, and it is the only new
+scalar hypothesis.  Completeness of `F` is Mathlib's, for the closure step. -/
+theorem isCompactOperator_of_tendsto_approximationNumber [ProperSpace 𝕜]
+    [CompleteSpace F] (T : E →L[𝕜] F)
+    (h : Tendsto (T.approximationNumber) atTop (𝓝 0)) :
     IsCompactOperator T := by
   obtain ⟨R, hR, hconv⟩ :=
     (T.tendsto_approximationNumber_atTop_iff_exists_finiteRank_approx).mp h
@@ -121,6 +122,7 @@ theorem isCompactOperator_of_tendsto_approximationNumber [CompleteSpace F]
     rw [tendsto_iff_norm_sub_tendsto_zero]
     simpa only [norm_sub_rev] using hconv
   refine isCompactOperator_of_tendsto htend (Eventually.of_forall fun n => ?_)
-  exact hfin (R n) (lt_of_le_of_lt (hR n) (Cardinal.natCast_lt_aleph0))
+  exact (R n).isCompactOperator_of_rank_lt_aleph0
+    (lt_of_le_of_lt (hR n) (Cardinal.natCast_lt_aleph0))
 
 end ContinuousLinearMap

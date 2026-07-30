@@ -143,8 +143,8 @@ of the first roadmap is claimable rather than described:
 | lane | what it proves | depends on |
 |---|---|---|
 | ~~`AN-A4-RANK`~~ | **DONE 2026-07-30** — `approximationNumber_eq_zero_of_rank_le` (any normed pair), `…_of_rank_le_of_le`, and `approximationNumber_eq_zero_iff_finrank_range_le` (the converse, finite-dimensional) | — |
-| `AN-A4-COMPACT` | **characterisation DONE 2026-07-30**; *approximable ⇒ compact* proved modulo a `finite rank ⇒ compact` lemma Mathlib lacks; *compact ⇒ approximable* on Hilbert spaces still open | `AN-A4-RANK` |
-| `AN-B4-MINMAX` | the exact orthogonal-tail equality. **`≤` DONE 2026-07-30** — `approximationNumber_le_norm_comp_starProjection_orthogonal`: every subspace of dimension at most `n` supplies an admissible approximation. **`≥` open**: for an admissible `R`, take `V := (ker R)ᗮ`, which needs `finrank (ker R)ᗮ = rank R` and `R = 0` on `ker R` in `starProjection` form | — |
+| `AN-A4-COMPACT` | **characterisation and *approximable ⇒ compact* both DONE 2026-07-30**, the second now unconditional via the new `Analysis.Normed.Operator.FiniteRankCompact`; **only *compact ⇒ approximable* on Hilbert spaces is still open**, and it is free to take | `AN-A4-RANK` |
+| ~~`AN-B4-MINMAX`~~ | **DONE 2026-07-30** — the exact orthogonal-tail equality `approximationNumber_eq_sInf_norm_comp_starProjection_orthogonal`, from the `≤` half `approximationNumber_le_norm_comp_starProjection_orthogonal` and the `≥` half `exists_finrank_le_norm_comp_starProjection_orthogonal_le` / `le_approximationNumber_of_forall_norm_comp_starProjection_orthogonal`. The witness is the one this table predicted, `V := (ker R)ᗮ`. All four of §B4's stated conditions are met | — |
 | `AN-ACCEPT` | the six acceptance examples above, as theorems about the API. **(1), (2) and (4) DONE 2026-07-30** in `ApproximationNumber/Examples.lean` — the zero operator needed nothing (`approximationNumber_zero`), the identity is `1` below the dimension and `0` at or past it, and the rank cutoff has its `finrank` form | (3) the diagonal map's singular values; (5) `AN-B4-MINMAX`; (6) `AN-A4-COMPACT` |
 
 Verified against the tree when the lanes were written: none of A4's four
@@ -230,14 +230,19 @@ Prove:
   `ContinuousLinearMap.tendsto_approximationNumber_atTop_iff_exists_finiteRank_approx`,
   stated as an explicit sequence with the `n`-th term of rank at most `n`, so no
   `ApproximableOperator` predicate was introduced — as this section asks;
-- every such approximable operator is compact — **half done**:
-  `ContinuousLinearMap.isCompactOperator_of_tendsto_approximationNumber` proves it
-  *given* that finite-rank operators are compact, which it takes as a hypothesis
-  because **Mathlib has no `finite rank ⇒ compact operator` lemma**. That lemma is
-  general (the witness is the closure of `R '' ball 0 1`, compact as a closed
-  bounded subset of the finite-dimensional, hence proper, `range R`) and belongs
-  upstream rather than inside an operator-ideal module; the theorem's docstring
-  gives its proof sketch and the lane records it as the remaining piece;
+- ~~every such approximable operator is compact~~ — **DONE 2026-07-30, lane
+  AN-A4-COMPACT.** `ContinuousLinearMap.isCompactOperator_of_tendsto_approximationNumber`
+  now proves it outright over a proper scalar field, with no hypothesis left in
+  the statement. It used to carry *finite rank ⇒ compact* as an explicit
+  hypothesis because **Mathlib has no such lemma**; that lemma is now
+  `ContinuousLinearMap.isCompactOperator_of_rank_lt_aleph0` in the new module
+  `ForTauCeti/Analysis/Normed/Operator/FiniteRankCompact.lean` — written there
+  rather than in the operator-ideal file, which is what the theorem's own
+  docstring had said should happen. **The proof turned out to be three lines, not
+  the instance-plumbing exercise this section predicted**: corestrict to the
+  range, which is finite-dimensional hence locally compact, apply Mathlib's
+  `isCompactOperator_of_locallyCompactSpace_dom`, and postcompose with the
+  inclusion. Only `[ProperSpace 𝕜]` is needed — not completeness of `𝕜`;
 - on Hilbert spaces, every compact operator is approximable, hence
   `aₙ(T) → 0`.
 
@@ -326,16 +331,41 @@ The final theorem must specify:
 Coordinate-span lemmas and eigenbasis calculations are support lemmas, not a
 substitute for this equality.
 
-**Half of it is in place** (lane `AN-B4-MINMAX`, 2026-07-30):
-`ContinuousLinearMap.approximationNumber_le_norm_comp_starProjection_orthogonal`
-proves `aₙ(T) ≤ ‖T ∘L (Vᗮ).starProjection‖` for every `V` in the source with
-`finrank V ≤ n` — the subspace and the zero-based dimension condition are in the
-statement, as this section requires. What remains is the reverse inequality, and
-its plan is short: for an admissible `R` of rank at most `n`, take `V := (ker R)ᗮ`,
-whose dimension is the rank of `R`; on `Vᗮ = ker R` the map `R` vanishes, so
-`‖T ∘L (Vᗮ).starProjection‖ = ‖(T − R) ∘L (Vᗮ).starProjection‖ ≤ ‖T − R‖`. The two
-Mathlib facts it needs are `finrank (ker R)ᗮ = rank R` and the `starProjection`
-form of *`R` vanishes on its kernel*.
+**The equality is proved** (lane `AN-B4-MINMAX`, 2026-07-30), in
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMax.lean`:
+
+```text
+aₙ(T) = sInf { ‖T ∘L (Vᗮ).starProjection‖ : FiniteDimensional 𝕜 V, finrank 𝕜 V ≤ n }
+```
+
+as `ContinuousLinearMap.approximationNumber_eq_sInf_norm_comp_starProjection_orthogonal`,
+over a complete source.  The `≤` half is
+`approximationNumber_le_norm_comp_starProjection_orthogonal`; the `≥` half went
+through the witness this section predicted, `V := (ker R)ᗮ` for an admissible `R`
+of rank at most `n`, and is available separately as
+`exists_finrank_le_norm_comp_starProjection_orthogonal_le` (the witness) and
+`le_approximationNumber_of_forall_norm_comp_starProjection_orthogonal` (the
+usable lower-bound form).  Two supporting lemmas came out of it and are worth
+naming: `rank_orthogonal_ker_le_of_rank_le`, which is the rank bound argued
+through `Cardinal.lift` because source and target live in independent universes,
+and `norm_comp_starProjection_ker_le_norm_sub`.
+
+**All four stated conditions are met.**  The subspace lies in the source and the
+dimension condition is `finrank 𝕜 V ≤ n` under zero-based indexing, both visible
+in the statement.  The infimum's behaviour once `n` reaches the source dimension
+is `approximationNumber_eq_zero_of_finrank_source_le`: `V = ⊤` becomes
+admissible, `⊤ᗮ = ⊥`, the tail is the zero operator, and the infimum collapses to
+`0` — read off the tail formula rather than off the rank characterisation, which
+is what makes it a statement about the formula.  The equivalence with the sup
+formulation is
+`norm_comp_starProjection_orthogonal_eq_sSup_unitClosedBall`, via the bridge
+`norm_comp_starProjection_orthogonal_eq_norm_comp_subtypeL`; it is stated on the
+closed unit **ball** of `Vᗮ` rather than its unit **sphere**, deliberately,
+because on `V = ⊤` the sphere of `Vᗮ = ⊥` is empty and its supremum is not the
+tail, while the ball form holds for every `V`.
+
+Completeness of the source is used exactly once, to give `ker R` an orthogonal
+projection; the two sup-formulation lemmas and the dimension collapse need none.
 
 ### B5 -- unconditional infinite-dimensional lower bound
 

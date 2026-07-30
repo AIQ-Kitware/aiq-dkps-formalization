@@ -52,7 +52,7 @@ closed spectra pick a Borel `B ⊇ σ(A)` missing `σ(B)`, and
 * Spectra influence: none.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap

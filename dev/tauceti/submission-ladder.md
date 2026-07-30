@@ -144,7 +144,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung G — Foundations completion — the rest of topics T01-T10
 
-**26 new, cumulative closed slice 67.**
+**27 new, cumulative closed slice 68.**
 
   - `Analysis.InnerProductSpace.AngleGeometry`
   - `Analysis.InnerProductSpace.EigenvalueChange`
@@ -167,6 +167,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `Analysis.InnerProductSpace.SpectralSubspace`
   - `Analysis.InnerProductSpace.TwoDimensionalSingularValues`
   - `Analysis.Normed.FiniteLpGauge`
+  - `Analysis.Normed.Operator.FiniteRankCompact`
   - `Analysis.OperatorIdeal.ApproximationNumber.Compact`
   - `Analysis.OperatorIdeal.ApproximationNumber.Examples`
   - `Analysis.OperatorIdeal.ApproximationNumber.SameSequence`
@@ -175,7 +176,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung H — Hilbert-Schmidt operators (T11)
 
-**4 new, cumulative closed slice 71.**
+**4 new, cumulative closed slice 72.**
 
   - `Analysis.InnerProductSpace.HilbertSchmidtConjugation`
   - `Analysis.InnerProductSpace.HilbertSchmidtLp`
@@ -184,7 +185,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung I — The Haagerup-Zsido kernel and its Fourier transform (T12)
 
-**8 new, cumulative closed slice 79.**
+**8 new, cumulative closed slice 80.**
 
   - `Analysis.Fourier.ExponentialAbs`
   - `Analysis.Fourier.HaagerupZsido.Defs`
@@ -197,7 +198,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung J — One-parameter unitary groups and Stone's theorem (T13)
 
-**6 new, cumulative closed slice 85.**
+**6 new, cumulative closed slice 86.**
 
   - `Analysis.InnerProductSpace.IntertwiningUnitary`
   - `Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic`
@@ -208,7 +209,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung K — Borel functional calculus and projection-valued measures (T14)
 
-**10 new, cumulative closed slice 95.**
+**10 new, cumulative closed slice 96.**
 
   - `Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure`
   - `Analysis.InnerProductSpace.BorelCalculus.Multiplicative`
@@ -223,7 +224,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung L — Closed operators on LinearPMap: graphs, constructions and form bounds (T15a)
 
-**6 new, cumulative closed slice 101.**
+**6 new, cumulative closed slice 102.**
 
   - `Analysis.InnerProductSpace.LinearPMap.Closed`
   - `Analysis.InnerProductSpace.LinearPMap.Constructions`
@@ -234,7 +235,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung M — Resolvents of self-adjoint LinearPMap operators, and semiboundedness (T15b)
 
-**7 new, cumulative closed slice 108.**
+**7 new, cumulative closed slice 109.**
 
   - `Analysis.CStarAlgebra.SelfAdjointGapInverse`
   - `Analysis.InnerProductSpace.LinearPMap.RealLowerBound`
@@ -246,7 +247,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung N — The spectral measure of an unbounded self-adjoint operator, and Stone (T15c)
 
-**12 new, cumulative closed slice 120.**
+**12 new, cumulative closed slice 121.**
 
   - `Analysis.InnerProductSpace.BlockLowerBound`
   - `Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal`
@@ -263,7 +264,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung O — Sylvester equations and the Rosenblum theorem (T16)
 
-**18 new, cumulative closed slice 138.**
+**18 new, cumulative closed slice 139.**
 
   - `Analysis.InnerProductSpace.CoerciveUnit`
   - `Analysis.InnerProductSpace.HilbertSchmidtBlock`
@@ -286,9 +287,8 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung P — Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems (T17)
 
-**11 new, cumulative closed slice 149.**
+**10 new, cumulative closed slice 149.**
 
-  - `Analysis.InnerProductSpace.BoundedOperator.Basic`
   - `Analysis.InnerProductSpace.BoundedOperator.Projector`
   - `Analysis.InnerProductSpace.BoundedOperator.SinTheta`
   - `Analysis.InnerProductSpace.DoubleAngle.Vector`

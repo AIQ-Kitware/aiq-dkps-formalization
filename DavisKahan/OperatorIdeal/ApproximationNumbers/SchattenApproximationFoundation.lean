@@ -162,11 +162,17 @@ structure SchattenApproximationFoundation (p : ℝ) (hp : 1 ≤ p) where
           N ≤ n → schattenGauge p (A n - L) < epsilon
 
 /-- A completed approximation-number campaign produces the family consumed by
-the exact rectangular Davis--Kahan theory. -/
+the exact rectangular Davis--Kahan theory.
+
+The campaign's data is `ℝ`-valued and conditional on `IsSchatten p`, which is
+the shape `RectangularSymmetricIdealFamily` packages; `ofRectangular` extends it
+to the canonical `ℝ≥0∞` gauge, and `isComplete_ofRectangular` carries `D.complete`
+across as the `IsComplete` instance, so nothing the campaign proved is lost. -/
 noncomputable def SchattenApproximationFoundation.toFamily
     {p : ℝ} {hp : 1 ≤ p}
     (D : SchattenApproximationFoundation (k := k) p hp) :
-    RectangularSymmetricIdealFamily (𝕜 := k) :=
+    SymmetricOperatorIdealFamily (𝕜 := k) :=
+  SymmetricOperatorIdealFamily.ofRectangular
   { Mem := fun T => IsSchatten p T
     gauge := fun T => schattenGauge p T
     zero_mem := D.zero_mem

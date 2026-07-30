@@ -103,7 +103,7 @@ this file should be replaced by a specialization of the complex development.
   module).
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 
