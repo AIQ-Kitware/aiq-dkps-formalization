@@ -106,6 +106,8 @@ theorem prefixSum_singularValueVector
     FiniteVector.prefixSum k (singularValueVector A) =
       rectangularKyFanSum k A := by
   let d := min (finrank 𝕜 E) (finrank 𝕜 F)
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change FiniteVector.prefixSum k
       (fun i : Fin d => A.singularValues (i : ℕ)) =
     rectangularKyFanSum k A
@@ -114,6 +116,8 @@ theorem prefixSum_singularValueVector
     rw [sum_filter_lt_eq_sum_fin hk (fun j => A.singularValues j)]
   · have hdk : d ≤ k := Nat.le_of_lt hk
     rw [FiniteVector.prefixSum_eq_full_sum_of_le _ hdk]
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change rectangularKyFanSum d A = rectangularKyFanSum k A
     exact (rectangularKyFanSum_eq_minFinrank_of_minFinrank_le A hdk).symm
 
@@ -354,6 +358,8 @@ theorem schattenNorm_one_apply (A : E →ₗ[𝕜] F) :
   rw [schattenNorm_apply]
   simp only [FiniteVector.lpGauge, one_div, inv_one, Real.rpow_one]
   simp_rw [abs_of_nonneg (singularValueVector_nonneg A _)]
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change rectangularKyFanSum (min (finrank 𝕜 E) (finrank 𝕜 F)) A =
     rectangularKyFanSum (finrank 𝕜 E) A
   exact (rectangularKyFanSum_eq_minFinrank_of_minFinrank_le A

@@ -222,6 +222,8 @@ private theorem approximationNumber_le_singularValues
       dsimp only [W]
       rw [b.finrank_spanIndices_set, Set.toFinset_setOf, card_filter_lt hnlt.le]
     have hPrank : W.starProjection.rank = (n : Cardinal) := by
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       change Module.rank 𝕜 W.starProjection.range = (n : Cardinal)
       rw [Submodule.range_starProjection, ← Module.finrank_eq_rank' 𝕜 W, hWdim]
     let R : E →L[𝕜] F := T ∘L W.starProjection
@@ -245,6 +247,8 @@ private theorem approximationNumber_le_singularValues
         (c := hGram.eigenvalues rfl k)
         (fun i hi => hGram.eigenvalues_antitone rfl (by
           rw [Set.mem_compl_iff, Set.mem_setOf_eq] at hi
+          -- states the goal with the definition unfolded, in the shape the next step needs;
+          -- there is no `_apply` lemma to rewrite with here.
           change n ≤ (i : ℕ)
           exact Nat.le_of_not_gt hi))
         hy'
@@ -281,6 +285,8 @@ private theorem approximationNumber_le_singularValues
             (A.singularValues_nonneg n)
     have herr : T - R = T ∘L Wᗮ.starProjection := by
       ext x
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       change T x - T (W.starProjection x) = T (Wᗮ.starProjection x)
       rw [Submodule.starProjection_orthogonal_val, map_sub]
     have htailOpNorm' :

@@ -47,6 +47,7 @@ theorem IsSymmetric.reduces_of_invariant {A : E →L[𝕜] E}
   intro x hx
   rw [Submodule.mem_orthogonal]
   intro u hu
+  -- states the goal as the inner-product identity the structure lemma expects.
   change ⟪u, (A : E →ₗ[𝕜] E) x⟫_𝕜 = 0
   rw [← hA u x]
   exact Submodule.inner_right_of_mem_orthogonal (hU u hu) hx
@@ -58,6 +59,8 @@ theorem starProjection_comp_comm_of_reduces
     [U.HasOrthogonalProjection] (hU : A.Reduces U) :
     U.starProjection ∘L A = A ∘L U.starProjection := by
   ext x
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change U.starProjection (A x) = A (U.starProjection x)
   have hpx : U.starProjection x ∈ U := U.starProjection_apply_mem x
   have hrest : x - U.starProjection x ∈ Uᗮ :=
@@ -88,6 +91,7 @@ theorem IsSymmetric.restrict_of_invariant {A : E →L[𝕜] E} (hA : A.IsSymmetr
     {U : Submodule 𝕜 E} (hU : ∀ x ∈ U, A x ∈ U) :
     (A.restrict hU).IsSymmetric := by
   intro x y
+  -- states the goal as the inner-product identity the structure lemma expects.
   change ⟪A (x : E), (y : E)⟫_𝕜 = ⟪(x : E), A (y : E)⟫_𝕜
   exact hA x y
 

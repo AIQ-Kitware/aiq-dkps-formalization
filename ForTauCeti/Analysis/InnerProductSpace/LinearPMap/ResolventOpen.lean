@@ -96,6 +96,8 @@ theorem resolvent_sub_smul_shift (z : 𝕜) (x : A.domain) :
     resolvent A hz₀ (A x - z • (x : E)) = neumannFactor hz₀ z (x : E) := by
   have h := resolvent_apply_sub_smul hz₀ x
   rw [neumannFactor_apply,
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     show A x - z • (x : E) = (A x - z₀ • (x : E)) - (z - z₀) • (x : E) by module,
     map_sub, h, map_smul]
 
@@ -133,6 +135,8 @@ theorem isOpen_resolventSet (A : E →ₗ.[𝕜] E) : IsOpen (resolventSet A) :=
   refine mem_resolventSet_iff.mpr ⟨R₀ ∘L (↑V⁻¹ : E →L[𝕜] E), fun ψ => ?_, fun φ => ?_⟩
   · -- left inverse on the domain
     have hshift := resolvent_sub_smul_shift hz₀ z ψ
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change R₀ ((↑V⁻¹ : E →L[𝕜] E) (A ψ - z • (ψ : E))) = (ψ : E)
     have hswap : R₀ ((↑V⁻¹ : E →L[𝕜] E) (A ψ - z • (ψ : E)))
         = (↑V⁻¹ : E →L[𝕜] E) (R₀ (A ψ - z • (ψ : E))) := by
@@ -143,6 +147,8 @@ theorem isOpen_resolventSet (A : E →ₗ.[𝕜] E) : IsOpen (resolventSet A) :=
     exact congrArg (fun T : E →L[𝕜] E => T (ψ : E)) V.inv_mul
   · -- right inverse everywhere, landing in the domain
     refine ⟨resolvent_mem_domain hz₀ _, ?_⟩
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change A ⟨R₀ ((↑V⁻¹ : E →L[𝕜] E) φ), _⟩ - z • R₀ ((↑V⁻¹ : E →L[𝕜] E) φ) = φ
     rw [sub_smul_resolvent_shift hz₀ z, ← hVval]
     exact congrArg (fun T : E →L[𝕜] E => T φ) V.mul_inv
