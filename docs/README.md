@@ -79,5 +79,6 @@ When a phase ends, **update the document in place with a banner** saying what
 superseded it, or move it to `historical/` with an entry in that README. Do not
 leave a finished plan looking active — that is precisely the failure the
 2026-07-29 purge was cleaning up, and it had already caused two reversed lanes.
-Files removed in that purge are staged in [`../dev/topurge/`](../dev/topurge/MANIFEST.md)
-pending review and deletion.
+Files removed in that purge live in [`../dev/topurge/`](../dev/topurge/MANIFEST.md).
+The review pass ran and **jon decided on 2026-07-30 that the directory stays** —
+treat it as a labelled archive, not as pending work.
