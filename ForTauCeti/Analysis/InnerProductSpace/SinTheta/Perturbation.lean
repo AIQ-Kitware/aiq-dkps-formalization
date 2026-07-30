@@ -277,6 +277,120 @@ private theorem kyFanSum_smul_compression_le_of_intervalExteriorGap
     RCLike.norm_ofReal, abs_of_nonneg hδ.le]
   exact kyFan_sylvester_le_of_intervalGap hBWperp hAU hδ hgap' hEq k
 
+/-- **The orthogonal block sum turns the two diagonal Ky Fan bounds into a bound
+on the projector difference.**  Transport the two compressions into
+`WithLp 2 (U × Uᗮ) → WithLp 2 (Vᗮ × V)` coordinates, take the orthogonal block
+sum, and read the result back through the ambient norm.
+
+This is the middle third of `sinAngleOperator_perturbation_le`, stated
+separately because it is one step: everything between "the diagonals are Ky Fan
+dominated" and "the projector difference is norm dominated" belongs to it, and
+none of it mentions the spectral gap that produced the diagonal bounds. -/
+private theorem uiNorm_projection_sub_le_of_kyFanSum_le
+    (N : UnitarilyInvariantNorm 𝕜 E)
+    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {δ : ℝ} (hδ : 0 < δ)
+    (hkyUV : ∀ k, RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+        (((δ : ℝ) : 𝕜) •
+          (Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype)) ≤
+      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+        (Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ ((B - A) ∘ₗ U.subtype)))
+    (hkyVU : ∀ k, RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+        (((δ : ℝ) : 𝕜) •
+          (-(Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ V.subtype).adjoint)) ≤
+      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+        (Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ
+          ((A - B) ∘ₗ V.subtype)).adjoint) :
+    δ * N (projection U - projection V) ≤
+      N ((B - A) ∘ₗ projection U - projection V ∘ₗ (B - A)) := by
+  let XUV : U →ₗ[𝕜] Vᗮ :=
+    Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype
+  let CUV : U →ₗ[𝕜] Vᗮ :=
+    Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ ((B - A) ∘ₗ U.subtype)
+  let XVU : V →ₗ[𝕜] Uᗮ :=
+    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ V.subtype
+  let CVU : V →ₗ[𝕜] Uᗮ :=
+    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ ((A - B) ∘ₗ V.subtype)
+  let EU : E ≃ₗᵢ[𝕜] WithLp 2 (U × Uᗮ) := U.orthogonalDecomposition
+  let EV : E ≃ₗᵢ[𝕜] WithLp 2 (Vᗮ × V) :=
+    V.orthogonalDecomposition.trans
+      (LinearIsometryEquiv.withLpProdComm 2 𝕜 V Vᗮ)
+  let NB : RectangularUnitarilyInvariantNorm 𝕜
+      (WithLp 2 (U × Uᗮ)) (WithLp 2 (Vᗮ × V)) :=
+    RectangularUnitarilyInvariantNorm.domainIsometryTransport
+      (N.toRectangular.codomainIsometryTransport EV.symm.toLinearIsometry)
+      EU.symm.toLinearIsometry
+  let Xblock := RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+    XUV (-XVU.adjoint)
+  let Cblock := RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+    CUV CVU.adjoint
+  have hNBscaled : NB (((δ : ℝ) : 𝕜) • Xblock) ≤ NB Cblock := by
+    have h :=
+      RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply_le_of_kyFanSum_le
+        NB hkyUV hkyVU
+    -- states the goal with the local definitions unfolded, in the exact shape the
+    -- following rewrite needs. `simp only` on those definitions normalises further
+    -- and the rewrite then has nothing to match -- tried, and it fails here.
+    change NB (((δ : ℝ) : 𝕜) •
+        RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+          XUV (-XVU.adjoint)) ≤
+      NB (RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+        CUV CVU.adjoint)
+    rw [← RectangularUnitarilyInvariantNorm.orthogonalBlockSum_smul]
+    exact h
+  have hNB : δ * NB Xblock ≤ NB Cblock := by
+    rw [NB.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hδ.le] at hNBscaled
+    exact hNBscaled
+  -- The ambient operator represented by a block map in the `U ⊕ Uᗮ` domain
+  -- and `Vᗮ ⊕ V` codomain coordinates.  This uses the exact adjoint appearing
+  -- in `domainIsometryTransport`, so the norm identity below is definitional.
+  let liftBlock :
+      ((WithLp 2 (U × Uᗮ)) →ₗ[𝕜] (WithLp 2 (Vᗮ × V))) →
+        (E →ₗ[𝕜] E) := fun T =>
+    EV.symm.toLinearIsometry.toLinearMap ∘ₗ T ∘ₗ
+      LinearMap.adjoint EU.symm.toLinearIsometry.toLinearMap
+  have hNB_apply (T : WithLp 2 (U × Uᗮ) →ₗ[𝕜]
+      WithLp 2 (Vᗮ × V)) : NB T = N (liftBlock T) := by
+    rfl
+  have hEUadj :
+      LinearMap.adjoint EU.symm.toLinearIsometry.toLinearMap =
+        EU.toLinearMap := by
+    -- states the goal with the local definitions unfolded, in the exact shape the
+    -- following rewrite needs. `simp only` on those definitions normalises further
+    -- and the rewrite then has nothing to match -- tried, and it fails here.
+    change LinearMap.adjoint EU.symm.toLinearMap = EU.toLinearMap
+    exact (EU.symm).adjoint_toLinearMap_eq_symm
+  have hXVUadj :
+      XVU.adjoint =
+        V.orthogonalProjectionOnto.toLinearMap ∘ₗ Uᗮ.subtype := by
+    simp only [XVU, LinearMap.adjoint_comp,
+      adjoint_subtypeLinearMap_eq_orthogonalProjectionOnto,
+      adjoint_orthogonalProjectionOnto_eq_subtype]
+  have hCVUadj :
+      CVU.adjoint =
+        (V.orthogonalProjectionOnto.toLinearMap ∘ₗ (A - B)) ∘ₗ
+          Uᗮ.subtype := by
+    simp only [CVU, LinearMap.adjoint_comp, map_sub,
+      hA.adjoint_eq, hB.adjoint_eq,
+      adjoint_subtypeLinearMap_eq_orthogonalProjectionOnto,
+      adjoint_orthogonalProjectionOnto_eq_subtype]
+  have hXlift : liftBlock Xblock = projection U - projection V := by
+    ext x
+    simp [liftBlock, Xblock, EU, EV, hEUadj, hXVUadj, XUV,
+      RectangularUnitarilyInvariantNorm.orthogonalBlockSum,
+      projection, Submodule.orthogonalDecomposition_apply,
+      LinearMap.comp_apply]
+  have hClift : liftBlock Cblock =
+      (B - A) ∘ₗ projection U - projection V ∘ₗ (B - A) := by
+    ext x
+    (simp [liftBlock, Cblock, EU, EV, hEUadj, CUV, hCVUadj,
+      RectangularUnitarilyInvariantNorm.orthogonalBlockSum,
+      projection, Submodule.orthogonalDecomposition_apply,
+      LinearMap.comp_apply]; module)
+  rw [hNB_apply, hNB_apply, hXlift, hClift] at hNB
+  exact hNB
+
 /-- **Symmetric sharp `sin Θ` theorem.**  The full-space angle operator
 contains both one-sided sine blocks.  For a general UI norm the constant-one
 conclusion therefore requires a forward and reverse interval/exterior gap;
@@ -368,83 +482,9 @@ theorem sinAngleOperator_perturbation_le
       _ = RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU.adjoint :=
         hright.symm
   -- Orthogonal decompositions of the ambient space along each subspace.
-  let EU : E ≃ₗᵢ[𝕜] WithLp 2 (U × Uᗮ) := U.orthogonalDecomposition
-  let EV : E ≃ₗᵢ[𝕜] WithLp 2 (Vᗮ × V) :=
-    V.orthogonalDecomposition.trans
-      (LinearIsometryEquiv.withLpProdComm 2 𝕜 V Vᗮ)
-  let NB : RectangularUnitarilyInvariantNorm 𝕜
-      (WithLp 2 (U × Uᗮ)) (WithLp 2 (Vᗮ × V)) :=
-    RectangularUnitarilyInvariantNorm.domainIsometryTransport
-      (N.toRectangular.codomainIsometryTransport EV.symm.toLinearIsometry)
-      EU.symm.toLinearIsometry
-  let Xblock := RectangularUnitarilyInvariantNorm.orthogonalBlockSum
-    XUV (-XVU.adjoint)
-  let Cblock := RectangularUnitarilyInvariantNorm.orthogonalBlockSum
-    CUV CVU.adjoint
-  have hNBscaled : NB (((δ : ℝ) : 𝕜) • Xblock) ≤ NB Cblock := by
-    have h :=
-      RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply_le_of_kyFanSum_le
-        NB hkyUV hkyVU
-    -- states the goal with the local definitions unfolded, in the exact shape the
-    -- following rewrite needs. `simp only` on those definitions normalises further
-    -- and the rewrite then has nothing to match -- tried, and it fails here.
-    change NB (((δ : ℝ) : 𝕜) •
-        RectangularUnitarilyInvariantNorm.orthogonalBlockSum
-          XUV (-XVU.adjoint)) ≤
-      NB (RectangularUnitarilyInvariantNorm.orthogonalBlockSum
-        CUV CVU.adjoint)
-    rw [← RectangularUnitarilyInvariantNorm.orthogonalBlockSum_smul]
-    exact h
-  have hNB : δ * NB Xblock ≤ NB Cblock := by
-    rw [NB.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hδ.le] at hNBscaled
-    exact hNBscaled
-  -- The ambient operator represented by a block map in the `U ⊕ Uᗮ` domain
-  -- and `Vᗮ ⊕ V` codomain coordinates.  This uses the exact adjoint appearing
-  -- in `domainIsometryTransport`, so the norm identity below is definitional.
-  let liftBlock :
-      ((WithLp 2 (U × Uᗮ)) →ₗ[𝕜] (WithLp 2 (Vᗮ × V))) →
-        (E →ₗ[𝕜] E) := fun T =>
-    EV.symm.toLinearIsometry.toLinearMap ∘ₗ T ∘ₗ
-      LinearMap.adjoint EU.symm.toLinearIsometry.toLinearMap
-  have hNB_apply (T : WithLp 2 (U × Uᗮ) →ₗ[𝕜]
-      WithLp 2 (Vᗮ × V)) : NB T = N (liftBlock T) := by
-    rfl
-  have hEUadj :
-      LinearMap.adjoint EU.symm.toLinearIsometry.toLinearMap =
-        EU.toLinearMap := by
-    -- states the goal with the local definitions unfolded, in the exact shape the
-    -- following rewrite needs. `simp only` on those definitions normalises further
-    -- and the rewrite then has nothing to match -- tried, and it fails here.
-    change LinearMap.adjoint EU.symm.toLinearMap = EU.toLinearMap
-    exact (EU.symm).adjoint_toLinearMap_eq_symm
-  have hXVUadj :
-      XVU.adjoint =
-        V.orthogonalProjectionOnto.toLinearMap ∘ₗ Uᗮ.subtype := by
-    simp only [XVU, LinearMap.adjoint_comp,
-      adjoint_subtypeLinearMap_eq_orthogonalProjectionOnto,
-      adjoint_orthogonalProjectionOnto_eq_subtype]
-  have hCVUadj :
-      CVU.adjoint =
-        (V.orthogonalProjectionOnto.toLinearMap ∘ₗ (A - B)) ∘ₗ
-          Uᗮ.subtype := by
-    simp only [CVU, LinearMap.adjoint_comp, map_sub,
-      hA.adjoint_eq, hB.adjoint_eq,
-      adjoint_subtypeLinearMap_eq_orthogonalProjectionOnto,
-      adjoint_orthogonalProjectionOnto_eq_subtype]
-  have hXlift : liftBlock Xblock = projection U - projection V := by
-    ext x
-    simp [liftBlock, Xblock, EU, EV, hEUadj, hXVUadj, XUV,
-      RectangularUnitarilyInvariantNorm.orthogonalBlockSum,
-      projection, Submodule.orthogonalDecomposition_apply,
-      LinearMap.comp_apply]
-  have hClift : liftBlock Cblock =
-      (B - A) ∘ₗ projection U - projection V ∘ₗ (B - A) := by
-    ext x
-    (simp [liftBlock, Cblock, EU, EV, hEUadj, CUV, hCVUadj,
-      RectangularUnitarilyInvariantNorm.orthogonalBlockSum,
-      projection, Submodule.orthogonalDecomposition_apply,
-      LinearMap.comp_apply]; module)
-  rw [hNB_apply, hNB_apply, hXlift, hClift] at hNB
+  have hNB : δ * N (projection U - projection V) ≤
+      N ((B - A) ∘ₗ projection U - projection V ∘ₗ (B - A)) :=
+    uiNorm_projection_sub_le_of_kyFanSum_le N hA hB hδ hkyUV hkyVU
   rw [uiNorm_projection_sub_eq_sinAngleOperator N U V] at hNB
   -- The perturbation and the two block reflections.
   let H : E →ₗ[𝕜] E := B - A
