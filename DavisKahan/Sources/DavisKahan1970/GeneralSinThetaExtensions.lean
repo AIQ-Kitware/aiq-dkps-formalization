@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.SinTheta.Natural.Reducing
-import DavisKahan.SinTheta.Natural.GenuineGeneralized
+import DavisKahan.SinTheta.Natural.Generalized
 import DavisKahan.SinTheta.Natural.Bounded
 import DavisKahan.SinTheta.Natural.GapConvenience
 import DavisKahan.SinTheta.NaturalTwoSubspace

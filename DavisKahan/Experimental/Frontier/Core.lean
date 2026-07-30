@@ -7,7 +7,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Geometry.Halmos.TwoProjections
 import DavisKahan.SpectralTheory.SpectralRestriction
 -- supplies `compressOperator`
-import DavisKahan.Sylvester.GenuineSpectrum
+import DavisKahan.Sylvester.Spectrum
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 import Mathlib.MeasureTheory.Integral.CircleIntegral
 -- grounded Section-3 predicates promoted out of the experimental frontier;
