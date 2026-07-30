@@ -318,6 +318,35 @@ worth knowing before quoting this paper:
   Theorem 3 and Appendix Lemma 1. They agree only on Theorems 1 and 2.
   Resolving it needs one look at the published article.
 
+## Paper-library grounding audits
+
+Two completion libraries ship a `verify_grounding.py` that checks their grounding
+claim against the tree — that every repository result their write-up leans on is
+still where it says, under the name it says.
+
+```sh
+python3 FinishTanTwoTheta/scripts/verify_grounding.py      # gate; exit 1 on a stale pin
+python3 FinishYuWangSamworth/scripts/verify_grounding.py   # gate; exit 1 on a stale pin
+```
+
+**They are listed here because until 2026-07-30 nothing ran them** (lane
+CLAIM-DOC). They live inside their libraries rather than in top-level `scripts/`,
+were wired into no gate list, and so a reader met a completeness claim with no
+live evidence behind it. That is worse than a weak proof: it is what a reader
+trusts *instead of* checking.
+
+When they were finally run, the two libraries were **not** in the same state.
+`FinishYuWangSamworth` passed. `FinishTanTwoTheta` failed with four stale pins,
+all of them left by *other* lanes' migrations and none of them missing
+mathematics — a promoted Riccati module, two deliberately-deleted dead wrappers
+whose canonical twins live in `ForTauCeti`, and the `vendor/` → `retired/` move of
+the Spectra snapshot. All four were repointed, and the outcome is recorded in
+`FinishTanTwoTheta/GROUNDING.md`. Both now exit 0.
+
+**A grounding audit is a gate, not a document.** If one of these starts failing,
+the fix is to repoint it or to say in the library's `GROUNDING.md` that it fails —
+not to delete the pin, which removes the evidence rather than the problem.
+
 ## Namespace policy
 
 `scripts/check_namespace_policy.py` gates `ForTauCeti/README.md` §2: a staging
