@@ -77,6 +77,7 @@ variable {A : H →ₗ.[ℂ] H}
 /-! ### The bounded case: an exact integral identity -/
 
 /-- `s ↦ exp(s • B) ψ` differentiates to `exp(s • B) (B ψ)`. -/
+@[simp]
 theorem hasDerivAt_expTime_apply' (B : H →L[ℂ] H) (ψ : H) (s : ℝ) :
     HasDerivAt (fun s : ℝ => expTime B s ψ) (expTime B s (B ψ)) s := by
   have h := ((ContinuousLinearMap.apply ℂ H ψ).restrictScalars ℝ).hasFDerivAt.comp_hasDerivAt s
@@ -84,6 +85,7 @@ theorem hasDerivAt_expTime_apply' (B : H →L[ℂ] H) (ψ : H) (s : ℝ) :
   exact HasDerivAt.congr_deriv h rfl
 
 /-- `s ↦ exp(s • B) ψ` is continuous. -/
+@[simp]
 theorem continuous_expTime_apply (B : H →L[ℂ] H) (ψ : H) :
     Continuous fun s : ℝ => expTime B s ψ := by
   have hdiff : Differentiable ℝ fun s : ℝ => expTime B s ψ := fun s =>
@@ -91,6 +93,7 @@ theorem continuous_expTime_apply (B : H →L[ℂ] H) (ψ : H) :
   exact hdiff.continuous
 
 /-- **The exact integral identity for a bounded generator.** -/
+@[simp]
 theorem integral_expTime_apply (B : H →L[ℂ] H) (ψ : H) (t : ℝ) :
     (∫ s in (0 : ℝ)..t, expTime B s (B ψ)) = expTime B t ψ - ψ := by
   have hderiv : ∀ s ∈ Set.uIcc (0 : ℝ) t,
@@ -112,6 +115,7 @@ theorem integral_expApprox (hA : IsSelfAdjoint A) (n : ℕ+) (ψ : H) (t : ℝ) 
   exact h
 
 /-- `s ↦ expApprox hA n s w` is continuous. -/
+@[simp]
 theorem continuous_expApprox_apply (hA : IsSelfAdjoint A) (n : ℕ+) (w : H) :
     Continuous fun s : ℝ => expApprox hA n s w := by
   simp only [expApprox_eq_expTime]

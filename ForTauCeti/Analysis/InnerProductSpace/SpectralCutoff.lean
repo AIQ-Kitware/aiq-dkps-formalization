@@ -125,6 +125,7 @@ theorem isSelfAdjoint_spectralCocutoff (A : E →L[ℂ] E) (hA : 0 ≤ A) (s : �
   exact cfc_predicate _ A
 
 /-- The range of the cocutoff lies in the kernel of the cutoff. -/
+@[simp]
 theorem spectralCutoff_spectralCocutoff_apply (A : E →L[ℂ] E) (hA : 0 ≤ A) (s : ℝ) (x : E) :
     A.spectralCutoff s (A.spectralCocutoff s x) = 0 := by
   have h := congrArg (fun B : E →L[ℂ] E => B x) (spectralCutoff_mul_spectralCocutoff A hA s)
