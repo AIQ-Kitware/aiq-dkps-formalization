@@ -1,93 +1,137 @@
 # Review — `ForTauCeti :: T01` Positive square root, operator modulus, functional calculus
 
-**Status: IN PROGRESS — 2 of 9 files reviewed.** Started 2026-07-29 by
-`edward (aiq-gpu)`, lane `AUDIT`. Reviewed in the voice of a reviewer who does
-not want to inherit this code.
+**FILE PASS COMPLETE — 9 of 9 files read.** 2026-07-29, `edward (aiq-gpu)`,
+lane `AUDIT`. Group review below. 70 declarations, 1,643 lines, 0 proof escapes,
+provenance present in all 9.
 
-Reviewed so far, smallest first:
+| file | lines | decls | verdict |
+|---|---|---|---|
+| `CourantFischer.lean` | 556 | 17 | good; 6 statements shared with its Challenge conformance (by design) |
+| `SelfAdjointFunctionalCalculus.lean` | 238 | 13 | **namespace defect, T01-3** |
+| `OperatorModulus.lean` | 208 | 16 | **best file in the group** |
+| `PositiveSqrt.lean` | 180 | 11 | **duplicate construction, T01-2**; ticket metadata, T01-4 |
+| `BasisSpan.lean` | 157 | 8 | good; a model extraction |
+| `SpecialFunctions/Sqrt.lean` | 112 | 2 | good |
+| `Spectrum.lean` | 72 | 1 | good |
+| `Basic.lean` | 70 | 1 | good |
+| `Normed/Operator/LinearIsometry.lean` | 50 | 1 | good |
 
-- [x] `Analysis/Normed/Operator/LinearIsometry.lean` — 50 lines
-- [x] `Analysis/InnerProductSpace/Basic.lean` — 70 lines
+## What is good — and it is most of the group
 
-## What is good, and should not be disturbed
+- **`OperatorModulus.lean` is the standard the rest should meet.** It defines
+  `|T| = (T⋆T)^(1/2)` *rectangularly*, notes that the endomorphism case is a
+  specialization rather than a second definition, justifies the ℂ-only scalars
+  by Mathlib's CFC registration, and its provenance records that it **replaced
+  two parallel APIs** (`rectangularOperatorModulus` and `operatorAbs`) with one.
+  It also names the computational heart (`norm_modulus_apply`) and derives the
+  four norm laws from it rather than reproving each. Nothing here needs work.
+- **`BasisSpan.lean` is a model extraction.** Its header explains that the old
+  `specSubspace` was "a predicate-selected span of an arbitrary orthonormal
+  basis — not intrinsically spectral", so it was renamed, generalized from
+  `Fin n` to an arbitrary index type, moved into `OrthonormalBasis`, and given
+  the *complete* API rather than only the fragments its one caller needed. That
+  is exactly the reasoning a Tau Ceti reviewer wants to see.
+- **`Sqrt.lean` states why its two lemmas differ.** One needs no smallness
+  hypothesis and is sharp; the other genuinely does, "as `μ ↓ 0` the left-hand
+  side blows up". Explaining the *asymmetry* pre-empts the obvious review
+  question.
+- `CourantFischer.lean`'s 6 statement collisions are all against
+  `Challenge/MathlibCandidate/CourantFischerWeyl/Conformance.lean`, which is a
+  conformance restating the library theorem **by design**. Not a defect.
 
-Both files are **the right shape for submission**, and that is worth recording
-because most of this audit will be complaints.
+## Finding T01-2 — two square roots, one of them definitionally the other `{lane:T01-SQRT}`
 
-- `LinearIsometry.lean` is one `rfl` `@[simp]` lemma with a docstring that says
-  *why the existing `coe_ofEq_apply` is insufficient* — the result stays in
-  subtype form so `simp` can push through explicit `Subtype.mk`s. That is the
-  justification a reviewer actually asks for, written before being asked.
-- `Basic.lean` proves `inner_linearCombination_linearCombination` in five tactic
-  lines with no `simp` sledgehammer, and its name is Mathlib-idiomatic. Its
-  header records a real review history — *"following @wwylele's review (PR
-  #40567) it moved here to `Basic.lean` — the lemma involves no `Orthonormal`,
-  and `Basic` already hosts `Finsupp.sum_inner` / `Finsupp.inner_sum` (its
-  dependencies)"*. That is genuine upstream provenance and it should survive any
-  reorganization.
+`PositiveSqrt.lean` defines `LinearMap.IsPositive.sqrt` as a spectral sum.
+`SelfAdjointFunctionalCalculus.lean` defines `selfAdjointFunctionalCalculus` as
+the *same* spectral sum with a general `f : ℝ → ℝ`. Then, at line 224:
 
-No duplication, no over-broad statement, no theorem needing a split in either.
+```lean
+theorem selfAdjointFunctionalCalculus_sqrt {T : E →ₗ[𝕜] E} (hT : T.IsPositive) :
+    selfAdjointFunctionalCalculus hT.isSymmetric Real.sqrt = hT.sqrt := rfl
+```
 
-## Finding T01-1 — every file header names the wrong destination `{lane:HDR-DEST}`
+**`rfl`.** The two constructions are not merely equal, they are *definitionally
+identical* — `sqrt` is `selfAdjointFunctionalCalculus … Real.sqrt` with the
+function inlined. So the library defines one object twice and then observes that
+the definitions coincide.
 
-**Both files reviewed say `Staged for Mathlib: addition to Mathlib/...` in their
-copyright header.** `ForTauCeti` targets **Tau Ceti**; `ForMathlib` is retired
-and the Mathlib track is closed (`AGENTS.md`, `ForTauCeti/README.md`).
+A reviewer asks the obvious question: why is `sqrt` a separate `noncomputable
+def` rather than an `abbrev` for the calculus at `Real.sqrt`? The current shape
+means every fact about `sqrt` must be proved again or transported, and
+`sqrt_comm` (line 230) is exactly that transport — it rewrites through
+`selfAdjointFunctionalCalculus_sqrt` to reuse `selfAdjointFunctionalCalculus_comm`.
 
-This is not a stale docstring in the class already documented — those were the
-`Extraction class:` lines in the module docstring, and they have been corrected.
-This is the **file header**, and it is a different 39 files.
+**Not a trivial fix, which is why it is a lane.** `PositiveSqrt.lean` carries
+the *uniqueness* theory (`sqrt_unique`, `apply_eq_smul_of_apply_apply_eq_smul`)
+that the general calculus does not, and its `ker_sqrt` / `range_sqrt` are stated
+against `IsPositive`. Collapsing the definition without losing that API is a
+design decision.
 
-Measured across `ForTauCeti/**`:
+**There is a third square root in this group**: `OperatorModulus.lean` uses
+Mathlib's `CFC.sqrt`. That one is *justified* — `PositiveSqrt`'s own docstring
+explains it is the `𝕜`-generic `LinearMap` counterpart of the ℂ-only `CFC.sqrt`,
+needed because the C⋆ instances exist only over ℂ. Keep both; the reviewable
+question is only the first pair.
 
-| pattern | files |
+## Finding T01-3 — a module declares into Mathlib's `FiniteDimensional` namespace `{lane:T01-NS}`
+
+`SelfAdjointFunctionalCalculus.lean:38` opens `namespace FiniteDimensional` and
+puts `selfAdjointFunctionalCalculus` and its twelve lemmas inside it. So the
+public name is `FiniteDimensional.selfAdjointFunctionalCalculus`.
+
+`FiniteDimensional` is a **core Mathlib namespace**. Declaring an
+operator-theoretic construction into it is namespace pollution of the kind Tau
+Ceti and Mathlib both reject, and it is inconsistent with every other file in
+this group, which use `TauCeti`, `TauCeti.Real`, `OrthonormalBasis`,
+`LinearMap.IsPositive` or `ContinuousLinearMap` — all either the project
+namespace or the canonical namespace of the object being extended, exactly as
+`ForTauCeti/README.md` §2 requires.
+
+Neither justification in that README applies: this is not an extension of
+`FiniteDimensional` (the class), and it is not `TauCeti`. It should be
+`LinearMap.IsSymmetric.functionalCalculus` or live under `TauCeti`.
+
+## Finding T01-4 — project-management metadata in a source header `{lane:HDR-DEST}`
+
+`PositiveSqrt.lean:9-11`:
+
+> Sub-dev I of the operator polar decomposition project — COMPLETE
+> (proof-complete; reduction uses only: `propext, Classical.choice, Quot.sound`).
+> Tickets PD-01..PD-04.
+
+"Sub-dev I", "COMPLETE", and ticket IDs `PD-01..PD-04` are internal
+project-tracking state. They mean nothing to a Tau Ceti reviewer and will be
+wrong the moment the tickets are closed. The axiom list is worth keeping — as a
+fact about the file, not as a status claim. Folded into lane `HDR-DEST`.
+
+## Finding T01-5 — three header conventions in nine files `{lane:HDR-DEST}`
+
+Refines the earlier finding with what the group actually shows:
+
+| header form | files |
 |---|---|
-| `Staged for Mathlib: addition to Mathlib/...` | **39** |
-| `To be re-authored per Mathlib's AI-contribution policy at PR time` | **35** |
+| `Staged for Mathlib: … Mathlib/…` | `LinearIsometry`, `Basic`, `Spectrum`, `PositiveSqrt` |
+| `Staged for **Tau Ceti**: … **`Mathlib/`**…` | `BasisSpan`, `CourantFischer` |
+| no staging line at all | `OperatorModulus`, `SelfAdjointFunctionalCalculus`, `Sqrt` |
 
-The second is worse than a stale pointer: it is an **instruction to a future
-submitter** naming the wrong project's policy. A Tau Ceti reviewer reading it
-learns that this file was aimed somewhere else and never re-aimed.
+The middle row is the interesting one: those two files say **Tau Ceti** in the
+prose and then name a `Mathlib/` destination path in the same sentence. So the
+correction has already been started and left half-done — which is worse than
+either consistent state, because a reader cannot tell whether the path or the
+project name is the stale half.
 
-**Not every one is wrong.** `Basic.lean` genuinely was submitted to Mathlib as
-PR #40567, so its history belongs in the header — but as *history*, not as a
-statement of where the file is going. The fix must distinguish "this was offered
-to Mathlib once" from "this is staged for Mathlib", and only the second is false.
+## Group verdict
 
-## Finding T01-2 — 33 doc references point at paths that do not exist `{lane:HDR-DEST}`
+**This group is close to submittable and its problems are structural, not
+mathematical.** Nothing here is wrong; two things are shaped wrong (T01-2's
+duplicate definition, T01-3's namespace) and the headers disagree with each other
+(T01-4, T01-5). The mathematics — Courant–Fischer with the sup-inf equality as
+the headline, Weyl at `ContinuousLinearMap` level, the rectangular modulus with
+its norm laws derived from one pointwise identity — is the quality the rest of
+the library should be measured against.
 
-Both files cite destination paths as if they were current:
-`Mathlib/Analysis/InnerProductSpace/GramMatrix.lean`,
-`TauCeti/Analysis/InnerProductSpace/GramMatrix.lean`. Neither resolves — the
-file is `ForTauCeti/Analysis/InnerProductSpace/GramMatrix.lean` today.
-
-Repo-wide: **33 distinct unresolvable paths, cited by 30 files**, checked against
-both the working tree and the pinned Mathlib checkout. Most-cited:
-`Mathlib/Analysis/Matrix/Spectrum.lean` (3),
-`Mathlib/Analysis/InnerProductSpace/{GramMatrix,Spectrum}.lean` (2 each).
-
-A reader who follows one of these gets nothing. Writing the *post-submission*
-path in prose is defensible if it is marked as the intended destination; writing
-it as a plain cross-reference, as here, is a dangling link.
-
-## Finding T01-3 — `GramMatrix.lean` is cited from T01 but assigned to T04
-
-`LinearIsometry.lean`'s docstring exists to serve the *"Gram-rigidity composites
-in GramMatrix.lean"*. `GramMatrix` sits in topic **T04**, which needs T01 — so
-the dependency direction is right and this is **not** a layering violation.
-
-Recording it because it confirms, from the prose side, the finding already in
-`CANDIDATE-TOPIC-DESIGN.md` §C: `GramMatrix.lean` does not contain matrix
-results, and a reviewer arriving from this docstring will expect matrices and
-find `TauCeti.LinearMap`. It strengthens lane `PLACE-GRAM` rather than opening
-anything new.
-
-## Still to review in T01
-
-`CourantFischer.lean` (556), `SelfAdjointFunctionalCalculus.lean` (238),
-`OperatorModulus.lean` (208), `PositiveSqrt.lean` (180), `BasisSpan.lean` (157),
-`SpecialFunctions/Sqrt.lean` (112), `Spectrum.lean` (72).
-
-The group-level review of T01 is **blocked** until those land — in particular,
-whether `PositiveSqrt`, `OperatorModulus` and `SelfAdjointFunctionalCalculus`
-are three topics or one is a cross-file question that cannot be answered yet.
+**One boundary question for the group, which the file pass answers: T01 is
+correctly one topic.** The square root, the modulus and the functional calculus
+are the same construction at three generalities, and `BasisSpan` /
+`CourantFischer` / `Spectrum` are the spectral machinery they all use. Do not
+split it.
