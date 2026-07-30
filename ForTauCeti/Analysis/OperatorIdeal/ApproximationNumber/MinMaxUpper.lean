@@ -62,7 +62,7 @@ ideals, and the orthogonal block-sum merge formulas.
   used Spectra's projection-valued measures; nothing of that proof is reused here.
 -/
 
-@[expose] public section
+public section
 
 namespace ContinuousLinearMap
 

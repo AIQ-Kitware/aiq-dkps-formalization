@@ -55,7 +55,7 @@ operator-norm limit back into an ideal-norm limit.
 
 open scoped ENNReal InnerProductSpace
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

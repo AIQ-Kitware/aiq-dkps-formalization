@@ -54,7 +54,7 @@ is exactly the duplication this module exists to avoid.
 * Spectra influence: **none** — this module imports only Mathlib.
 -/
 
-@[expose] public section
+public section
 
 namespace ContinuousLinearMap
 
@@ -87,7 +87,7 @@ coercion from statements rather than introducing it. -/
 @[simp]
 theorem toLinearMap_singularValues (T : E →L[𝕜] F) :
     (T : E →ₗ[𝕜] F).singularValues = T.singularValues :=
-  rfl
+  (rfl)
 
 /-- Singular values are nonnegative. -/
 theorem singularValues_nonneg (T : E →L[𝕜] F) (i : ℕ) : 0 ≤ T.singularValues i :=

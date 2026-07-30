@@ -545,7 +545,7 @@ theorem commute_yosidaApproxSym (hA : IsSelfAdjoint A) (m n : ℕ+) :
 /-- `expApprox` is the skew-adjoint exponential of `i Aₙˢʸᵐ`. -/
 theorem expApprox_eq_expTime (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) :
     expApprox hA n t = expTime (I • yosidaApproxSym hA n) t := by
-  rw [expTime, TauCeti.real_smul_I_smul]
+  rw [expTime_def, TauCeti.real_smul_I_smul]
   rfl
 
 /-- The Duhamel estimate, specialised to two approximants. -/
@@ -727,7 +727,7 @@ theorem expLimit_add (hA : IsSelfAdjoint A) (s t : ℝ) :
 theorem norm_expApprox_sub_self_le (hA : IsSelfAdjoint A) (n : ℕ+) (τ : ℝ) (ψ : H) :
     ‖expApprox hA n τ ψ - ψ‖ ≤ |τ| * ‖yosidaApproxSym hA n ψ‖ := by
   have hzero : expTime ((I : ℂ) • (0 : H →L[ℂ] H)) τ = 1 := by
-    simp [expTime]
+    simp [expTime_def]
   have h := norm_expTime_sub_expTime_le (isSelfAdjoint_yosidaApproxSym hA n)
     (IsSelfAdjoint.zero (H →L[ℂ] H)) (Commute.zero_right _) τ ψ
   rw [hzero] at h

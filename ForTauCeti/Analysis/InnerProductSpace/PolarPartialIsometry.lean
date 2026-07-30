@@ -114,7 +114,7 @@ partial isometry; adding invertibility of the modulus buys it back as an
 isometry. That is the whole hierarchy.
 -/
 
-@[expose] public section
+public section
 
 namespace ContinuousLinearMap
 
@@ -151,7 +151,7 @@ noncomputable def modulusCorestrict (M : E →L[ℂ] F) : E →ₗ[ℂ] M.polarI
 changes. -/
 @[simp]
 theorem coe_modulusCorestrict_apply (M : E →L[ℂ] F) (x : E) :
-    (M.modulusCorestrict x : E) = M.modulus x := rfl
+    (M.modulusCorestrict x : E) = M.modulus x := (rfl)
 
 /-- The corestricted modulus has **dense** range in the initial space — the
 initial space is defined as that closure.  This density is the hypothesis
@@ -200,7 +200,7 @@ noncomputable def polarPartial (M : E →L[ℂ] F) : E →L[ℂ] F :=
 continuous extension.  The projection is what makes `W` vanish off the initial
 space, i.e. on `ker M`. -/
 theorem polarPartial_apply (M : E →L[ℂ] F) (x : E) :
-    M.polarPartial x = M.polarPartialAux (M.polarInitial.orthogonalProjectionOnto x) := rfl
+    M.polarPartial x = M.polarPartialAux (M.polarInitial.orthogonalProjectionOnto x) := (rfl)
 
 /-- **The polar identity.**  `M = W |M|` with `W` the polar partial isometry, for every
 bounded `M` and with no invertibility hypothesis. -/
