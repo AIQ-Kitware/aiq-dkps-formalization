@@ -45,7 +45,8 @@ theorem norm_sub_midpoint_le_of_spectrumIn_Icc
         Metric.closedBall 0 ρ := by
     intro z hz
     obtain ⟨r, hrA, rfl⟩ :=
-      RCLikeSpectralBridge.mem_spectrum_sub_real_scalar_iff hA hz
+      RCLikeSpectralBridge.exists_mem_boundedRealSpectrum_of_mem_spectrum_sub_real_scalar
+        hA hz
     obtain ⟨hrβ, hrα⟩ := Set.mem_Icc.mp (hσ hrA)
     rw [Metric.mem_closedBall, dist_zero_right, RCLike.norm_ofReal]
     exact abs_le.mpr ⟨by dsimp [c, ρ] at *; linarith,
@@ -74,7 +75,8 @@ theorem centered_isUnit_of_spectrumOutside
   have hdist : ∀ z ∈ spectrum 𝕜 T, γ ≤ ‖z‖ := by
     intro z hz
     obtain ⟨r, hrA, rfl⟩ :=
-      RCLikeSpectralBridge.mem_spectrum_sub_real_scalar_iff hA hz
+      RCLikeSpectralBridge.exists_mem_boundedRealSpectrum_of_mem_spectrum_sub_real_scalar
+        hA hz
     have hr := hσ hrA
     rw [RCLike.norm_ofReal]
     rcases hr with hr | hr

@@ -91,7 +91,7 @@ The remaining non-experimental references divide as follows:
 | Family | Classification | Canonical implementation | Remaining bundle boundary / deletion condition |
 | --- | --- | --- | --- |
 | domain, extension, graph-norm, semibound, bounded perturbation, and closed-Sylvester algebra | missing reusable result, now migrated | `TauCeti.LinearPMap` in `ForTauCeti`, including raw `addBounded` on the original domain | `ClosedOperator` declarations are compatibility facades; the new `DavisKahan/Interop/TauCeti/ClosedOperator.lean` is the explicit downstream boundary, and the pairwise family has already moved its import there |
-| pairwise spectral separation and homogeneous uniqueness | Spectra-dependent downstream result | `LinearPMap.GenuinePairwiseSpectrumGap` and `linearPMapSylvester_*` in `DavisKahan/Sylvester` | `GenuinePairwiseSpectrumGap` remains only for seven source/audit consumers until their paper data records accept raw partial maps; it is reducible to the canonical predicate and its three old uniqueness theorems delegate to the raw proofs |
+| pairwise spectral separation and homogeneous uniqueness | Spectra-dependent downstream result | `LinearPMap.PairwiseSpectrumGap` and `linearPMapSylvester_*` in `DavisKahan/Sylvester` | `PairwiseSpectrumGap` remains only for seven source/audit consumers until their paper data records accept raw partial maps; it is reducible to the canonical predicate and its three old uniqueness theorems delegate to the raw proofs |
 | one-unbounded/one-bounded equation and Neumann estimate | generic downstream result | `LinearPMap.UnboundedBoundedSylvesterEquation` embeds the bounded right block without a `ClosedOperator`; `linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse` takes raw partial maps and equations, and the bounded `GenuineSpectrum` consumer now calls it directly | the historical theorem remains for source-facing callers; migrate those before deleting the bundle-shaped entry point |
 | shifted-inverse predicates and interval/exterior gauge estimate | production consumer migrated | `LinearPMap.{Left,TwoSided}ShiftedInverseBound`, raw `addBounded`, raw Sylvester equations, the raw Neumann theorem, `linearPMap_norm_shift_apply_le_of_form_bounds`, both raw `linearPMap_norm_sylvester_le_of_{intervalExterior,exteriorInterval}` estimates, `linearPMap_exists_bounded_shift_extension`, and `linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight` now own the implementation | `ShiftedInverse` and `ShiftedInverseGauge` preserve historical names only as compatibility facades; migrate their source-facing callers before contracting those bundle-shaped entry points |
 | PVM, spectral restriction, cutoff, real-spectrum, and complexification bridges | Spectra/PVM boundary | none yet; depends on Spectra spectral-calculus APIs | retain downstream and list the exact Spectra import at each bridge; not a reason to retain the bundle in unrelated Sylvester or Riccati mathematics |
@@ -424,7 +424,7 @@ does not appear in `--verbose`'s type-position list. Nothing to do here.
   **done 2026-07-28 (edward, aiq-gpu): deleted.**  It was not merely
   caller-free outside its module, it was **dead in the whole repository**,
   including inside its own module: the raw
-  `linearPMap_generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap`
+  `linearPMap_generalizedSinTheta_unbounded_exact_of_intervalExteriorGap`
   is proved from the *raw* non-exact theorem, never from the bundled one.
 - ~~The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.~~ **Done 2026-07-29** — the caller-free members of
@@ -524,7 +524,7 @@ in-scope, `unusedSimpArgs` at 8 documented exclusions.
    `DavisKahan/**`.**
 2. **`linter.unusedVariables` (36 in-scope) should be left as-is.**  They are
    named hypothesis binders in structure fields — `(hA : A.IsSelfAdjoint)
-   (hB : B.IsSelfAdjoint)` in `GenuineOrderedSylvesterEngine.lowerUpper` and 13
+   (hB : B.IsSelfAdjoint)` in `OrderedSylvesterEngine.lowerUpper` and 13
    more of that shape.  The linter fires because the *name* is unreferenced
    inside the declaration, but the name is **API documentation** for the caller
    who has to supply the argument.  Silencing it means rewriting them as `_`,
@@ -732,12 +732,12 @@ GenuineGeneralized 12, Real 37.
 
 **The honest takeable residual in `SinTheta/Natural` is 12 uses, not 88.**  Those
 are `GapConvenience.lean`, now served by six `linearPMap_` twins (three for
-`UnboundedSylvesterGap`, three for `GenuineUnboundedSylvesterGapPMap`).
+`UnboundedSylvesterGap`, three for `UnboundedSylvesterGapPMap`).
 `Reducing.lean` is at 0 and no longer imports the bundled foundation at all.
 
 **Duplicate worth a convergence-matrix row, found on the way and not acted on.**
 `GenuineUnboundedSylvesterGap` (`Sylvester/Unbounded/AllGap.lean`) and
-`GenuineUnboundedSylvesterGapPMap` (`SinTheta/Unbounded/AllGap.lean`) are **two
+`UnboundedSylvesterGapPMap` (`SinTheta/Unbounded/AllGap.lean`) are **two
 inductives for one predicate** — same three constructors, and the bundled
 version's hypotheses are *already* written as
 `TauCeti.LinearPMap.spectrum A.toLinearPMap`, so it is definitionally the raw one
@@ -911,7 +911,7 @@ dotted occurrences before believing a zero.
 NOT contractible, and was previously listed here as if it were.**  "No
 production caller outside its own module" is true of it and is also not the
 relevant test: the raw endpoint
-`linearPMap_generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap` is
+`linearPMap_generalizedSinTheta_unbounded_of_intervalExteriorGap` is
 proved by `apply`ing the bundled theorem at `D.toClosed`, so the module depends
 on it internally.  That delegation exists because the Spectra Sylvester lemmas
 underneath it —

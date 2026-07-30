@@ -2,8 +2,8 @@
   "challenge_module": "Challenge.MathlibPending.DavisKahanSylvesterPiOverTwo.Conformance",
   "solution_module": "Challenge.MathlibPending.DavisKahanSylvesterPiOverTwo.Leaderboard",
   "theorem_names": [
-    "TauCeti.DavisKahanTheory.uiNorm_sylvester_le_of_spectralDistance",
-    "TauCeti.DavisKahanTheory.sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance"
+    "TauCeti.uiNorm_sylvester_le_of_spectralDistance",
+    "TauCeti.sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance"
   ],
   "permitted_axioms": [
     "propext",

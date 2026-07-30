@@ -11,8 +11,8 @@ import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 # Interface-parametric filled spectral truncations
 
 This module rebuilds the filled bounded truncation used by the ordered
-two-unbounded Sylvester argument over `GenuineSpectralCutoffInterface` and
-`GenuineBoundedTruncationInterface`.
+two-unbounded Sylvester argument over `SpectralCutoffInterface` and
+`BoundedTruncationInterface`.
 -/
 
 namespace TauCeti
@@ -34,28 +34,28 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- Fill the complement of an orthogonal spectral cutoff by a real scalar. -/
-noncomputable def genuineFilledTruncation
+noncomputable def filledTruncation
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
-    (Pcut : GenuineSpectralCutoffInterface A hA)
-    (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
+    (Pcut : SpectralCutoffInterface A hA)
+    (Tcut : BoundedTruncationInterface A hA Pcut)
     (a τ : ℝ) : H →L[𝕜] H :=
   Tcut.truncation τ +
     ((a : ℝ) : 𝕜) •
       (ContinuousLinearMap.id 𝕜 H - Pcut.cutoff τ)
 
 /-- A filled truncation is symmetric. -/
-theorem genuineFilledTruncation_isSymmetric
+theorem filledTruncation_isSymmetric
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
-    (Pcut : GenuineSpectralCutoffInterface A hA)
-    (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
+    (Pcut : SpectralCutoffInterface A hA)
+    (Tcut : BoundedTruncationInterface A hA Pcut)
     (a τ : ℝ) :
-    (genuineFilledTruncation A hA Pcut Tcut a τ).IsSymmetric := by
+    (filledTruncation A hA Pcut Tcut a τ).IsSymmetric := by
   have hT := Tcut.isSymmetric τ
   have hP := (Pcut.isOrthogonalProjection τ).2
   exact hT.add (LinearMap.IsSymmetric.smul (RCLike.conj_ofReal a)
@@ -63,13 +63,13 @@ theorem genuineFilledTruncation_isSymmetric
 
 /-- The complement of an orthogonal cutoff is orthogonal to its range, and
 its squared norm completes the Pythagorean decomposition. -/
-theorem genuineCutoff_complement_identities
+theorem cutoff_complement_identities
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
-    (Pcut : GenuineSpectralCutoffInterface A hA)
-    (_Tcut : GenuineBoundedTruncationInterface A hA Pcut)
+    (Pcut : SpectralCutoffInterface A hA)
+    (_Tcut : BoundedTruncationInterface A hA Pcut)
     (τ : ℝ) (x : H) :
     let P := Pcut.cutoff τ
     ⟪P x, x - P x⟫_𝕜 = 0 ∧
@@ -94,17 +94,17 @@ theorem genuineCutoff_complement_identities
 
 /-- A filled truncation commutes with its cutoff, and either compression
 recovers the bounded truncation. -/
-theorem genuineFilledTruncation_commutes_cutoff
+theorem filledTruncation_commutes_cutoff
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
-    (Pcut : GenuineSpectralCutoffInterface A hA)
-    (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
+    (Pcut : SpectralCutoffInterface A hA)
+    (Tcut : BoundedTruncationInterface A hA Pcut)
     (a τ : ℝ) :
-    genuineFilledTruncation A hA Pcut Tcut a τ ∘L Pcut.cutoff τ =
+    filledTruncation A hA Pcut Tcut a τ ∘L Pcut.cutoff τ =
         Tcut.truncation τ ∧
-      Pcut.cutoff τ ∘L genuineFilledTruncation A hA Pcut Tcut a τ =
+      Pcut.cutoff τ ∘L filledTruncation A hA Pcut Tcut a τ =
         Tcut.truncation τ := by
   let P := Pcut.cutoff τ
   let T := Tcut.truncation τ
@@ -133,40 +133,40 @@ theorem genuineFilledTruncation_commutes_cutoff
 
 /-- On a cutoff vector, a filled truncation agrees with the original closed
 operator. -/
-theorem genuineFilledTruncation_eq_on_cutoff
+theorem filledTruncation_eq_on_cutoff
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
-    (Pcut : GenuineSpectralCutoffInterface A hA)
-    (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
+    (Pcut : SpectralCutoffInterface A hA)
+    (Tcut : BoundedTruncationInterface A hA Pcut)
     (a τ : ℝ) (x : H) :
     ∃ hx : Pcut.cutoff τ x ∈ A.domain,
-      genuineFilledTruncation A hA Pcut Tcut a τ (Pcut.cutoff τ x) =
+      filledTruncation A hA Pcut Tcut a τ (Pcut.cutoff τ x) =
         A.toLinearMap ⟨Pcut.cutoff τ x, hx⟩ := by
   obtain ⟨hx, hTx⟩ := Tcut.eq_on_cutoff τ x
   refine ⟨hx, ?_⟩
-  have hcomp := (genuineFilledTruncation_commutes_cutoff
+  have hcomp := (filledTruncation_commutes_cutoff
     A hA Pcut Tcut a τ).1
   have happly := congrArg (fun S : H →L[𝕜] H => S x) hcomp
   calc
-    genuineFilledTruncation A hA Pcut Tcut a τ (Pcut.cutoff τ x) =
+    filledTruncation A hA Pcut Tcut a τ (Pcut.cutoff τ x) =
         Tcut.truncation τ x := by
       simpa only [ContinuousLinearMap.comp_apply] using happly
     _ = A.toLinearMap ⟨Pcut.cutoff τ x, hx⟩ := hTx
 
 /-- For a fixed fill value, filled truncations converge strongly to the closed
 operator on its domain. -/
-theorem genuineFilledTruncation_tendsto_on_domain
+theorem filledTruncation_tendsto_on_domain
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
-    (Pcut : GenuineSpectralCutoffInterface A hA)
-    (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
+    (Pcut : SpectralCutoffInterface A hA)
+    (Tcut : BoundedTruncationInterface A hA Pcut)
     (a : ℝ) (x : A.domain) :
     Tendsto
-      (fun τ : ℝ => genuineFilledTruncation A hA Pcut Tcut a τ (x : H))
+      (fun τ : ℝ => filledTruncation A hA Pcut Tcut a τ (x : H))
       atTop (𝓝 (A.toLinearMap x)) := by
   have hT := Tcut.tendsto_on_domain x
   have hP := Pcut.tendsto_identity (x : H)
@@ -183,11 +183,11 @@ theorem genuineFilledTruncation_tendsto_on_domain
     have h := hT.add (ha.smul hQ)
     simpa only [smul_zero, add_zero] using h
   have hfun :
-      (fun τ : ℝ => genuineFilledTruncation A hA Pcut Tcut a τ (x : H)) =
+      (fun τ : ℝ => filledTruncation A hA Pcut Tcut a τ (x : H)) =
         fun τ : ℝ => Tcut.truncation τ (x : H) +
           ((a : ℝ) : 𝕜) • ((x : H) - Pcut.cutoff τ (x : H)) := by
     funext τ
-    simp only [genuineFilledTruncation, add_apply,
+    simp only [filledTruncation, add_apply,
       FunLike.coe_smul, Pi.smul_apply,
       sub_apply, ContinuousLinearMap.id_apply]
   rw [hfun]
@@ -195,21 +195,21 @@ theorem genuineFilledTruncation_tendsto_on_domain
 
 /-- A lower form bound on a cutoff range becomes a global lower bound after
 filling the orthogonal complement by the same scalar. -/
-theorem genuineFilledTruncation_lowerBound
+theorem filledTruncation_lowerBound
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
-    (Pcut : GenuineSpectralCutoffInterface A hA)
-    (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
+    (Pcut : SpectralCutoffInterface A hA)
+    (Tcut : BoundedTruncationInterface A hA Pcut)
     {a τ : ℝ} (hτ : 0 ≤ τ)
     (ha : SemiboundedBelow A a) :
     ∀ x, a * ‖x‖ ^ 2 ≤
-      RCLike.re ⟪genuineFilledTruncation A hA Pcut Tcut a τ x, x⟫_𝕜 := by
+      RCLike.re ⟪filledTruncation A hA Pcut Tcut a τ x, x⟫_𝕜 := by
   intro x
   let P := Pcut.cutoff τ
   let T := Tcut.truncation τ
-  have hproj := genuineCutoff_complement_identities A hA Pcut Tcut τ x
+  have hproj := cutoff_complement_identities A hA Pcut Tcut τ x
   have hcomm := Tcut.commutes_cutoff τ
   have hPT : P (T x) = T x := by
     have h := congrArg (fun S : H →L[𝕜] H => S x) hcomm.2
@@ -254,21 +254,21 @@ theorem genuineFilledTruncation_lowerBound
 
 /-- An upper form bound on a cutoff range becomes a global upper bound after
 filling the orthogonal complement by the same scalar. -/
-theorem genuineFilledTruncation_upperBound
+theorem filledTruncation_upperBound
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
-    (Pcut : GenuineSpectralCutoffInterface A hA)
-    (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
+    (Pcut : SpectralCutoffInterface A hA)
+    (Tcut : BoundedTruncationInterface A hA Pcut)
     {a τ : ℝ} (hτ : 0 ≤ τ)
     (ha : SemiboundedAbove A a) :
-    ∀ x, RCLike.re ⟪genuineFilledTruncation A hA Pcut Tcut a τ x, x⟫_𝕜 ≤
+    ∀ x, RCLike.re ⟪filledTruncation A hA Pcut Tcut a τ x, x⟫_𝕜 ≤
       a * ‖x‖ ^ 2 := by
   intro x
   let P := Pcut.cutoff τ
   let T := Tcut.truncation τ
-  have hproj := genuineCutoff_complement_identities A hA Pcut Tcut τ x
+  have hproj := cutoff_complement_identities A hA Pcut Tcut τ x
   have hcomm := Tcut.commutes_cutoff τ
   have hPT : P (T x) = T x := by
     have h := congrArg (fun S : H →L[𝕜] H => S x) hcomm.2

@@ -650,7 +650,7 @@ theorem approximationSingularValue_eq_kyFan_succ_sub
 
 /-- Orthogonal block sums preserve complete singular-value equality component
 by component. -/
-theorem sameApproximationSingularValues_continuousOrthogonalBlockSum
+theorem hasSameApproximationNumbers_continuousOrthogonalBlockSum
     {E₀ E₁ F₀ F₁ : Type v}
     [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
     [NormedAddCommGroup E₁] [InnerProductSpace ℂ E₁] [CompleteSpace E₁]

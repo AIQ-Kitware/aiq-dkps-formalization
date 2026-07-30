@@ -34,7 +34,7 @@ variable {E : Type v}
 noncomputable def legacySpectralCutoffInterface
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
     (hA : A.IsSelfAdjoint) :
-    GenuineSpectralCutoffInterface A hA where
+    SpectralCutoffInterface A hA where
   cutoff := spectralCutoff A hA
   isOrthogonalProjection := spectralCutoff_isOrthogonalProjection A hA
   range_le_domain := spectralCutoff_range_le_domain A hA
@@ -46,7 +46,7 @@ interface. -/
 noncomputable def legacyBoundedTruncationInterface
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
     (hA : A.IsSelfAdjoint) :
-    GenuineBoundedTruncationInterface A hA
+    BoundedTruncationInterface A hA
       (legacySpectralCutoffInterface A hA) where
   truncation := boundedSpectralTruncation A hA
   isSymmetric := boundedSpectralTruncation_isSymmetric A hA

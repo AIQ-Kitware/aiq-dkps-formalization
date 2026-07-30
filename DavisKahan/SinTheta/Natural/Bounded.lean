@@ -37,7 +37,7 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
 /-- Bounded complex isometric theorem with a canonical spectral subspace. -/
-theorem sinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
+theorem sinTheta_bounded_spectralSubspace_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : E →L[ℂ] E) (hA : A.IsSymmetric)
     (S : Set ℝ) (hS : MeasurableSet S)
@@ -74,7 +74,7 @@ theorem sinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
             S hS).adjoint) ∘L X)
         ≤ N.gauge
           (generalResidual A X A0) := by
-  apply sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
+  apply sinTheta_unbounded_spectralSubspace_of_spectrumGap
     N (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
       (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
       S hS (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0)
@@ -87,7 +87,7 @@ theorem sinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
   case hR => exact hR
 
 /-- Bounded complex lower-frame theorem with a canonical spectral subspace. -/
-theorem generalizedSinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
+theorem generalizedSinTheta_bounded_spectralSubspace_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : E →L[ℂ] E) (hA : A.IsSymmetric)
     (S : Set ℝ) (hS : MeasurableSet S)
@@ -117,7 +117,7 @@ theorem generalizedSinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
             S hS) hframe hε)
         ≤ N.gauge
           (generalResidual A X A0) := by
-  apply generalizedSinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
+  apply generalizedSinTheta_unbounded_spectralSubspace_of_spectrumGap
     N (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
       (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
       S hS (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0)
