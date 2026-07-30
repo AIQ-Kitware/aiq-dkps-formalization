@@ -13,7 +13,7 @@ Four rubrics can `block`: `correctness`, `reuse`, `scope`, `attribution`.
 |---|---|---|
 | **`correctness`** | **`approve`** — the `block` is cleared, `FTC-UNEXERCISED` DONE | — |
 | **`reuse`** | `request_changes` — duplicate constructions | `T01-SQRT`, `MODULUS-DEDUP`, `DK-FRAME` |
-| **`scope`** | **`approve`** — 24 of 24 topics have a roadmap, `ROADMAP-WRITE` DONE | — |
+| **`scope`** | **cannot be satisfied from here** — our roadmap is not the one the rubric reads | `M-SWITCH` **(jon)** |
 | **`attribution`** | **`approve`** — provenance on 164/164 modules | — |
 | **`api-design`** | `request_changes` — 70 files expose bodies; 4 unused definitions | `FTC-EXPOSE-*` **(settled)**, `FTC-DEAD` |
 | **`generality`** | `approve` (with a caveat below) | — |
@@ -118,6 +118,39 @@ because new files kept following the rule that creates it.
 
 Git already records who moved what and when, losslessly and without going stale.
 That is where this belongs.
+
+## `scope` — the one rubric no amount of our work can turn green
+
+**Correcting a row I wrote earlier today.** `ROADMAP-WRITE` finished 24 of 24
+topics and I marked `scope` **approve**. That is wrong, and the rubric says so
+in a sentence I had not read closely enough:
+
+> Tau Ceti implements the roadmaps in the **`TauCetiProject/TauCetiRoadmap`**
+> repo, checked out for you in the workspace. New material is in scope only if
+> it advances a specific roadmap target … A valid claim identifies a roadmap
+> file and node or heading; read it **in the roadmap checkout** to confirm.
+
+`ForTauCetiRoadmap/` is **ours**. The reviewer never sees it; it reads the
+upstream roadmap repo. Every one of our 24 topics is new mathematical content
+relative to TauCeti `main`, so each needs a target **accepted upstream** — and
+for material with no such target the rubric is explicit about the verdict:
+
+> Reject material on no path to any target … if it is off-roadmap but plausibly
+> worthwhile, **`block` and say a human must add it to the roadmap first.**
+
+So `scope` is not a defect we can fix by writing better documents. It is a
+dependency on a third party accepting a roadmap, and it **blocks**. Two further
+consequences:
+
+- **One topic per PR.** *"`block` and ask for a split when the PR is more than
+  one topic."* The six clusters cannot go up as one submission.
+- **Refactors are exempt.** *"A refactor of already-merged code is in scope a
+  priori."* Nothing we hold is on their `main`, so the exemption does not apply
+  to us yet — but it will matter for follow-up PRs once a first cluster lands.
+
+What our 24 roadmaps *are* good for is the proposal itself: they are the
+argument for adding these targets upstream. That is real progress, just not
+progress against this rubric.
 
 ## `generality` — approve, with a caveat I cannot discharge
 

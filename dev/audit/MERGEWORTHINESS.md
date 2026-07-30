@@ -33,7 +33,7 @@ submitting **to** — and in 69 files it does not.
 
 | # | defect | measure | lane | build? |
 |---|---|---|---|---|
-| ~~1~~ | ~~topics with no roadmap~~ | **0 — `ROADMAP-WRITE` DONE, 24 of 24** | — | — |
+| 1 | **No topic has an *upstream* roadmap target** — ours is a proposal, the rubric reads `TauCetiProject/TauCetiRoadmap` | 0 of 24 accepted upstream | `M-SWITCH` **(jon)** | no |
 | 2 | **53 flat files beside 12 directories** | 22 files, 7 missing directories | `FTC-ORG` | yes |
 | 3 | **4 public definitions with no consumer** | 4 (was mis-measured as 31) | `FTC-DEAD` | yes |
 | ~~4~~ | ~~10 linter suppressions~~ | **5 left, each stating why — `FTC-SETOPT` DONE** | — | — |
