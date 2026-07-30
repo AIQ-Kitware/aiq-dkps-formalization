@@ -179,6 +179,53 @@ variable [FiniteDimensional ℝ E]
 
 namespace LinearMap
 
+omit [FiniteDimensional ℝ E] in
+/-- A quadratic-form perturbation bound forces `0 ≤ δ`, as soon as some vector is nonzero.
+
+Extracted from `exists_linearIsometryEquiv_comp_polarFactor`, where the sign of `δ` is needed
+before any eigenvalue reasoning can start. -/
+private theorem nonneg_of_quadraticFormBound [Nontrivial E] {M : E →ₗ[ℝ] E} {δ : ℝ}
+    (hM : ∀ x : E, |⟪M x, M x⟫_ℝ - ⟪x, x⟫_ℝ| ≤ δ * ⟪x, x⟫_ℝ) : 0 ≤ δ := by
+  obtain ⟨v, hv⟩ := exists_ne (0 : E)
+  have hvpos : 0 < ⟪v, v⟫_ℝ := real_inner_self_pos.mpr hv
+  have hmul : 0 ≤ δ * ⟪v, v⟫_ℝ :=
+    le_trans (abs_nonneg (⟪M v, M v⟫_ℝ - ⟪v, v⟫_ℝ)) (hM v)
+  exact nonneg_of_mul_nonneg_left hmul hvpos
+
+/-- On an orthonormal eigenbasis of the Gram operator `Mᵀ ∘ M`, the images under `M` are
+orthogonal and their squared norms are the eigenvalues.
+
+This is why `W = M ∘ S⁻¹` is an isometry in `exists_linearIsometryEquiv_comp_polarFactor`:
+rescaling `M (b k)` by `(√ μ k)⁻¹` turns this Gram matrix into the identity. -/
+private theorem inner_map_eigenvectorBasis {M : E →ₗ[ℝ] E} {d : ℕ}
+    (b : OrthonormalBasis (Fin d) ℝ E) (μ : Fin d → ℝ)
+    (hunit : ∀ k, ⟪b k, b k⟫_ℝ = 1)
+    (hGbasis : ∀ k, (M.adjoint * M) (b k) = μ k • b k) (j k : Fin d) :
+    ⟪M (b j), M (b k)⟫_ℝ = if j = k then μ j else 0 := by
+  have hadj : ⟪M (b j), M (b k)⟫_ℝ = ⟪(M.adjoint * M) (b j), b k⟫_ℝ := by
+    rw [Module.End.mul_apply, LinearMap.adjoint_inner_left]
+  rw [hadj, hGbasis j, real_inner_smul_left]
+  by_cases hjk : j = k
+  · subst hjk; rw [hunit j, if_pos rfl, mul_one]
+  · rw [b.inner_eq_zero hjk, if_neg hjk, mul_zero]
+
+/-- An eigenvalue of the Gram operator `Mᵀ ∘ M` at a **unit** eigenvector lies within `δ` of `1`.
+
+This is the quantitative heart of `exists_linearIsometryEquiv_comp_polarFactor`: the hypothesis
+says `M` distorts every quadratic form by at most `δ`, and on an eigenvector that distortion *is*
+`μ - 1`.  Positivity of the eigenvalues, and hence invertibility of the square root, follows from
+this bound together with `δ < 1`. -/
+private theorem abs_eigenvalue_sub_one_le {M : E →ₗ[ℝ] E} {δ : ℝ}
+    (hM : ∀ x : E, |⟪M x, M x⟫_ℝ - ⟪x, x⟫_ℝ| ≤ δ * ⟪x, x⟫_ℝ)
+    {v : E} (hv : ⟪v, v⟫_ℝ = 1) {lam : ℝ}
+    (hGv : (M.adjoint * M) v = lam • v) : |lam - 1| ≤ δ := by
+  have hquad : ⟪(M.adjoint * M) v, v⟫_ℝ = ⟪M v, M v⟫_ℝ := by
+    rw [Module.End.mul_apply, LinearMap.adjoint_inner_left]
+  have hlam : ⟪(M.adjoint * M) v, v⟫_ℝ = lam := by
+    rw [hGv, real_inner_smul_left, hv, mul_one]
+  have hb := hM v
+  rwa [← hquad, hlam, hv, mul_one] at hb
+
 /-- **Polar factorization of a near-isometry.**  If the quadratic form of a linear map `M` on a
 finite-dimensional real inner product space is uniformly `δ`-close to the identity quadratic
 form (`|⟪M x, M x⟫ - ⟪x, x⟫| ≤ δ * ⟪x, x⟫`, with `δ < 1`), then `M` factors as `M = W ∘ S`
@@ -208,12 +255,7 @@ theorem exists_linearIsometryEquiv_comp_polarFactor (M : E →ₗ[ℝ] E) {δ : 
       LinearMap.ext fun x => ?_, fun x => ?_⟩ <;>
       simp [Subsingleton.elim x (0 : E)]
   -- Main case: `E` is nontrivial.  Derive `δ ≥ 0` from a nonzero vector.
-  have hδ0 : 0 ≤ δ := by
-    obtain ⟨v, hv⟩ := exists_ne (0 : E)
-    have hvpos : 0 < ⟪v, v⟫_ℝ := real_inner_self_pos.mpr hv
-    have hmul : 0 ≤ δ * ⟪v, v⟫_ℝ :=
-      le_trans (abs_nonneg (⟪M v, M v⟫_ℝ - ⟪v, v⟫_ℝ)) (hM v)
-    exact nonneg_of_mul_nonneg_left hmul hvpos
+  have hδ0 : 0 ≤ δ := nonneg_of_quadraticFormBound hM
   obtain ⟨d, hd⟩ : ∃ d, finrank ℝ E = d := ⟨_, rfl⟩
   -- The Gram operator and its symmetry.
   set G : E →ₗ[ℝ] E := M.adjoint * M with hG
@@ -231,12 +273,8 @@ theorem exists_linearIsometryEquiv_comp_polarFactor (M : E →ₗ[ℝ] E) {δ : 
     rw [hb, hGsymm.apply_eigenvectorBasis, ← hb, ← hμ]
     simp
   -- Each eigenvalue lies in `[1 - δ, 1 + δ]`, in particular it is positive.
-  have hμbound : ∀ k : Fin d, |μ k - 1| ≤ δ := by
-    intro k
-    have hGbk : ⟪G (b k), b k⟫_ℝ = μ k := by
-      rw [hGbasis k, real_inner_smul_left, hunit k, mul_one]
-    have := hM (b k)
-    rwa [← hGquad, hGbk, hunit k, mul_one] at this
+  have hμbound : ∀ k : Fin d, |μ k - 1| ≤ δ := fun k =>
+    abs_eigenvalue_sub_one_le hM (hunit k) (hGbasis k)
   have hμpos : ∀ k : Fin d, 0 < μ k := by
     intro k
     have := hμbound k
@@ -261,14 +299,8 @@ theorem exists_linearIsometryEquiv_comp_polarFactor (M : E →ₗ[ℝ] E) {δ : 
       diagonal_basis, smul_smul, Real.mul_self_sqrt (le_of_lt (hμpos k))]
     exact (hGbasis k).symm
   -- `M` applied to the eigenbasis gives inner products `μ j * δ_{jk}`.
-  have hMM : ∀ j k : Fin d, ⟪M (b j), M (b k)⟫_ℝ = if j = k then μ j else 0 := by
-    intro j k
-    have hadj : ⟪M (b j), M (b k)⟫_ℝ = ⟪G (b j), b k⟫_ℝ := by
-      rw [hG, Module.End.mul_apply, LinearMap.adjoint_inner_left]
-    rw [hadj, hGbasis j, real_inner_smul_left]
-    by_cases hjk : j = k
-    · subst hjk; rw [hunit j, if_pos rfl, mul_one]
-    · rw [b.inner_eq_zero hjk, if_neg hjk, mul_zero]
+  have hMM : ∀ j k : Fin d, ⟪M (b j), M (b k)⟫_ℝ = if j = k then μ j else 0 :=
+    inner_map_eigenvectorBasis b μ hunit hGbasis
   -- The candidate isometry `W₀ = M ∘ R`.
   set W₀ : E →ₗ[ℝ] E := M ∘ₗ R with hW
   have hWbasis : ∀ k : Fin d, W₀ (b k) = (Real.sqrt (μ k))⁻¹ • M (b k) := by
