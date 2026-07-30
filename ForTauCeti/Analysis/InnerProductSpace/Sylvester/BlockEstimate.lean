@@ -35,7 +35,7 @@ in particular.
 
 *New.*
 
-**Moved 2026-07-29** by lane PLACE-SYLV, from
+Moved from
 `ForTauCeti/Analysis/InnerProductSpace/SylvesterBlockEstimate.lean` to
 `ForTauCeti/Analysis/InnerProductSpace/Sylvester/BlockEstimate.lean`.  The `Sylvester/`
 directory already held `Basic`, `Interval`, `SpectralDistance` and `Internal/`, while

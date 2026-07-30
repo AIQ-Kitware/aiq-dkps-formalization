@@ -41,7 +41,7 @@ estimate to one block at a time, follow Bhatia--Davis--McIntosh; see
 
 *New.*
 
-**Moved 2026-07-29** by lane PLACE-SYLV, from
+Moved from
 `ForTauCeti/Analysis/InnerProductSpace/SylvesterBlockIdentity.lean` to
 `ForTauCeti/Analysis/InnerProductSpace/Sylvester/BlockIdentity.lean`.  The `Sylvester/`
 directory already held `Basic`, `Interval`, `SpectralDistance` and `Internal/`, while

@@ -36,7 +36,7 @@ Literature bridge:
 
 *Split, not restated.*  Until 2026-07-29 this file held the whole development in
 2887 lines — the largest module in the library, nearly 3x Tau Ceti's stated
-1000-line limit for a new file (`ForTauCeti/README.md` §4).  Lane SPLIT-1K divided
+1000-line limit for a new file (`ForTauCeti/README.md` §4).  The file was divided
 it along its four mathematical seams into
 `…ReciprocalMultiplier.{OrbitAction, Fourier, DoubledPhase}` and this
 root.  **No statement, signature, proof, attribute or declaration name changed**;
@@ -45,7 +45,7 @@ the split is a file boundary plus the imports it forces, and the
 
 That file in turn was
 `DavisKahan/FiniteDimensional/Sylvester/Internal/ReciprocalMultiplier.lean`
-until lane Y3(b4) moved the whole remaining sin-Θ closure into the staging layer;
+before the whole remaining sin-Θ closure moved into the staging layer;
 Y3(b2) and Y3(b3) are what made that possible, since before them this import
 closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
