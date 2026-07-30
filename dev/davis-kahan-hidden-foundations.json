@@ -627,8 +627,8 @@
     {
       "id": "hs-completeness",
       "title": "Completeness of the paper Hilbert--Schmidt gauge",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.HilbertSchmidtComplexFamily",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/HilbertSchmidtComplexFamily.lean",
+      "module": "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily",
+      "file": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.ExactSinTheta.HiddenFoundations.paperHilbertSchmidt_complete",
       "kind": "proof_candidate",
       "dependencies": [],
@@ -639,8 +639,8 @@
     {
       "id": "hs-complex-family",
       "title": "Complex rectangular Hilbert--Schmidt family",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.HilbertSchmidtComplexFamily",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/HilbertSchmidtComplexFamily.lean",
+      "module": "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily",
+      "file": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.ExactSinTheta.HiddenFoundations.hilbertSchmidtComplex",
       "kind": "construction",
       "dependencies": [
