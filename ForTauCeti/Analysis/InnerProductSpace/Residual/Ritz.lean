@@ -105,7 +105,7 @@ subspace.
 -/
 theorem ritzResidual_eq_zero_iff_reduces {A : E →ₗ[𝕜] E}
     (X : F →ₗᵢ[𝕜] E) :
-    ritzResidual A X = 0 ↔ Reduces A (approximateSubspace X) := by
+    ritzResidual A X = 0 ↔ IsInvariant A (approximateSubspace X) := by
   constructor
   · intro hR x hx
     rcases hx with ⟨y, rfl⟩
