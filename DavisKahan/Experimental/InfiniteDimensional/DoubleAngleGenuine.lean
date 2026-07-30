@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.Sylvester.GenuineSpectrum
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
 
@@ -316,7 +317,8 @@ at `U` and with `B - A` in the rectangular symmetric ideal family, the
 directed cross block to the reflected image `J_V U` lies in the family with
 `d · gauge (P_{(J_V U)ᗮ} P_U) ≤ 2 · gauge (B - A)`. -/
 theorem sinTwoTheta_genuineSpectrum_gauge
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -328,10 +330,10 @@ theorem sinTwoTheta_genuineSpectrum_gauge
     (hMem : N.Mem (B - A)) :
     N.Mem ((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))ᗮ.starProjection
         ∘L U.starProjection) ∧
-      d * N.gauge
+      d * N.gaugeReal
         ((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))ᗮ.starProjection
           ∘L U.starProjection) ≤
-      2 * N.gauge (B - A) := by
+      2 * N.gaugeReal (B - A) := by
   have hÃsa : IsSelfAdjoint (conjByIsometryEquiv V.reflection A) :=
     isSelfAdjoint_conjByIsometryEquiv V.reflection hA
   have hŨred : Reduces (conjByIsometryEquiv V.reflection A)
@@ -360,21 +362,21 @@ theorem sinTwoTheta_genuineSpectrum_gauge
   have hMemD : N.Mem (conjByIsometryEquiv V.reflection A - A) := by
     rw [hdefect2]
     exact N.sub_mem hMemConj hMemAB
-  have hgaugeAB : N.gauge (A - B) = N.gauge (B - A) := by
+  have hgaugeAB : N.gaugeReal (A - B) = N.gaugeReal (B - A) := by
     rw [show A - B = -(B - A) from by abel]
-    exact N.gauge_neg hMem
-  have hgaugeD : N.gauge (conjByIsometryEquiv V.reflection A - A) ≤
-      2 * N.gauge (B - A) := by
+    exact N.gaugeReal_neg hMem
+  have hgaugeD : N.gaugeReal (conjByIsometryEquiv V.reflection A - A) ≤
+      2 * N.gaugeReal (B - A) := by
     rw [hdefect2]
-    have h1 : N.gauge
+    have h1 : N.gaugeReal
         (reflectionOperator V ∘L (A - B) ∘L reflectionOperator V - (A - B))
-        ≤ N.gauge
+        ≤ N.gaugeReal
             (reflectionOperator V ∘L (A - B) ∘L reflectionOperator V) +
-          N.gauge (A - B) := N.gauge_sub_le hMemConj hMemAB
-    have h2 : N.gauge
+          N.gaugeReal (A - B) := N.gaugeReal_sub_le hMemConj hMemAB
+    have h2 : N.gaugeReal
         (reflectionOperator V ∘L (A - B) ∘L reflectionOperator V) ≤
-        N.gauge (A - B) :=
-      N.gauge_comp_le_of_contractions _ _ hMemAB
+        N.gaugeReal (A - B) :=
+      N.gaugeReal_comp_le_of_contractions _ _ hMemAB
         (norm_reflectionOperator_le_one V)
         (norm_reflectionOperator_le_one V)
     rw [hgaugeAB] at h1 h2
