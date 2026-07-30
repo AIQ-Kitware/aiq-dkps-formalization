@@ -28,6 +28,14 @@ Detectors:
 * `--dead` — **definitions with no consumer.** A `def`/`abbrev`/`structure`
   whose name appears nowhere else in the repository. Public API with no user is
   either unfinished or unnecessary, and a reviewer asks which.
+* `--defn` — **definitional escapes**, separated from proof escapes. A `def`
+  whose *body* is an escape produces an **opaque term**: every theorem stated
+  about it is unprovable, not merely unproved, because there is nothing to
+  unfold. Counting escapes per file conflates the two and inverts leverage --
+  it made `DoubleAngle.lean` (1 escape, gating 75 modules) look like the highest-
+  value target when its escape is a theorem *about* a `sorry`-defined operator
+  three modules upstream, so it cannot be discharged at all until that operator
+  is defined. Found by `jon (yardrat)` 2026-07-30, correcting lane `EXP-UNBLOCK`.
 * `--names` — **names that mislead.** Qualifiers asserting the author's opinion
   of the result (`genuine`, `faithful`, `complete`, `sharp`, `real`, `proper`),
   version suffixes, and `Legacy`/`Compat`/`Aux`/`Tmp`.
@@ -213,6 +221,39 @@ def cmd_names(files, args) -> int:
     return 0
 
 
+DEFN_RE = re.compile(
+    r"^\s*(?:@\[[^\]]*\]\s*)?(?:private |protected |noncomputable |partial )*"
+    r"(def|abbrev|instance|structure)\s+([A-Za-z_][\w.'\u2019]*)(.*?):=\s*"
+    + "sor" + r"ry\b", re.M | re.S)
+
+
+def cmd_defn(files, args) -> int:
+    """Definitional escapes poison every downstream statement; proof escapes do not."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "ready", ROOT / "scripts" / "check_tauceti_readiness.py")
+    ready = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(ready)
+    tot_d = tot_p = 0
+    for p in files:
+        text = ready.strip_comments(p.read_text(errors="replace"))
+        n = len(ready.ESCAPE_RE.findall(text))
+        if not n:
+            continue
+        defs = [(m.group(1), m.group(2)) for m in DEFN_RE.finditer(text)]
+        tot_d += len(defs)
+        tot_p += n - len(defs)
+        if defs:
+            print(f"{p.relative_to(ROOT)}  ({len(defs)} definitional of {n})")
+            for kind, name in defs:
+                print(f"      {kind} {name}")
+    print(f"\n{tot_d} definitional (opaque terms), {tot_p} proof-only, "
+          f"{tot_d + tot_p} total")
+    print("Definitional first: a theorem about an opaque term cannot be proved, "
+          "only restated.")
+    return 0
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--dup", action="store_true")
@@ -221,6 +262,8 @@ def main(argv=None) -> int:
     ap.add_argument("--big", action="store_true")
     ap.add_argument("--dead", action="store_true")
     ap.add_argument("--names", action="store_true")
+    ap.add_argument("--defn", action="store_true",
+                    help="definitional escapes (a sorry-DEFINED term) vs proof escapes")
     ap.add_argument("--scope", help="restrict to a path prefix")
     ap.add_argument("--top", type=int, default=25)
     ap.add_argument("--min-chars", type=int, default=60,
@@ -237,6 +280,8 @@ def main(argv=None) -> int:
         return cmd_dead(files, args)
     if args.names:
         return cmd_names(files, args)
+    if args.defn:
+        return cmd_defn(files, args)
     ap.print_help()
     return 2
 
