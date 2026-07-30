@@ -270,6 +270,29 @@ theorem singularValues_linearIsometry_comp
   simp only [LinearMap.comp_apply, LinearMap.adjoint_inner_left]
   exact ι.inner_map_map (X x) (X y)
 
+/-- **The adjoint of a linear isometry is a left inverse.**  `ι⋆ (ι x) = x`,
+because `⟪ι⋆ (ι x), y⟫ = ⟪ι x, ι y⟫ = ⟪x, y⟫` for every `y`. -/
+theorem LinearIsometry.adjoint_apply_apply {D : Type*}
+    [NormedAddCommGroup D] [InnerProductSpace 𝕜 D] [FiniteDimensional 𝕜 D]
+    (ι : D →ₗᵢ[𝕜] E) (x : D) :
+    LinearMap.adjoint ι.toLinearMap (ι x) = x :=
+  ext_inner_right 𝕜 fun y => by
+    rw [LinearMap.adjoint_inner_left]
+    exact ι.inner_map_map x y
+
+/-- **The adjoint of a linear isometry annihilates the orthogonal complement of
+its range.**  Together with `LinearIsometry.adjoint_apply_apply` this says `ι⋆`
+is the orthogonal projection onto the source. -/
+theorem LinearIsometry.adjoint_eq_zero_of_mem_orthogonal {D : Type*}
+    [NormedAddCommGroup D] [InnerProductSpace 𝕜 D] [FiniteDimensional 𝕜 D]
+    (ι : D →ₗᵢ[𝕜] E) {y : E}
+    (hy : y ∈ (LinearMap.range ι.toLinearMap)ᗮ) :
+    LinearMap.adjoint ι.toLinearMap y = 0 :=
+  ext_inner_right 𝕜 fun z => by
+    rw [LinearMap.adjoint_inner_left, inner_zero_left]
+    exact Submodule.inner_left_of_mem_orthogonal
+      (LinearMap.mem_range.mpr ⟨z, rfl⟩) hy
+
 /-- Precomposing with the adjoint of a linear isometric embedding preserves
 singular values, with the additional ambient-domain slots padded by zero.
 
@@ -286,16 +309,9 @@ theorem singularValues_comp_adjoint_linearIsometry
   classical
   set Y : E →ₗ[𝕜] F := X ∘ₗ LinearMap.adjoint ι.toLinearMap with hYdef
   set U : Submodule 𝕜 E := LinearMap.range ι.toLinearMap with hUdef
-  have hadj : ∀ x, LinearMap.adjoint ι.toLinearMap (ι x) = x := fun x =>
-    ext_inner_right 𝕜 fun y => by
-      rw [LinearMap.adjoint_inner_left]
-      exact ι.inner_map_map x y
-  have hker : ∀ y ∈ Uᗮ, LinearMap.adjoint ι.toLinearMap y = 0 := fun y hy =>
-    ext_inner_right 𝕜 fun z => by
-      rw [LinearMap.adjoint_inner_left, inner_zero_left]
-      apply Submodule.inner_left_of_mem_orthogonal _ hy
-      rw [hUdef]
-      exact ⟨z, rfl⟩
+  have hadj := LinearIsometry.adjoint_apply_apply ι
+  have hker : ∀ y ∈ Uᗮ, LinearMap.adjoint ι.toLinearMap y = 0 := fun _ hy =>
+    LinearIsometry.adjoint_eq_zero_of_mem_orthogonal ι (hUdef ▸ hy)
   have hgram : LinearMap.adjoint Y ∘ₗ Y =
       ι.toLinearMap ∘ₗ
         ((LinearMap.adjoint X ∘ₗ X) ∘ₗ LinearMap.adjoint ι.toLinearMap) := by
