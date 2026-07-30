@@ -39,7 +39,7 @@ concrete-norm corollaries expected from the final API.
 
 *Moved, not restated.*  This file was
 `DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean`
-until 2026-07-29, when lane Y3(b4) moved the whole remaining sin-Θ closure into
+before the whole remaining sin-Θ closure moved into
 the staging layer.  Statements, proofs, signatures and namespaces are unchanged;
 the declarations already lived in `TauCeti.*`, so the move was a path change and
 an import repoint.
@@ -47,7 +47,7 @@ an import repoint.
 Y3(b2) and Y3(b3) are what made it possible: before them this file's import
 closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 
-## Split, 2026-07-30 (lane SPLIT-1K)
+## The split
 
 This file held all four sections in 1110 lines, over Tau Ceti's stated 1000-line
 limit for a new file (`ForTauCeti/README.md` §4) — the last module in the library

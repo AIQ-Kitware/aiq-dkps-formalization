@@ -41,13 +41,13 @@ isometry, and everything there does.
 
 *Split, not restated.*  This module was the first three sections of
 `ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean` until
-2026-07-30, when lane SPLIT-1K divided that 1110-line file at its
+the point that 1110-line file was divided at its
 `## Perturbation form` seam — Tau Ceti's stated limit for a new file is 1000 lines
 (`ForTauCeti/README.md` §4), and this was the last module in the library over it.
 **No statement, signature, proof, attribute or declaration name changed.**
 
 That file in turn was `DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean`
-until lane Y3(b4) moved the sin-Θ closure into the staging layer.
+before the sin-Θ closure moved into the staging layer.
 -/
 
 namespace TauCeti

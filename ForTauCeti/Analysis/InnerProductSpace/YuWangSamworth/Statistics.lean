@@ -23,7 +23,7 @@ records the full interval-block, aligned-basis, and single-vector surfaces.
 ## Provenance
 
 *Moved, not restated.*  This file was `DavisKahan/Specialized/Statistics.lean`
-until 2026-07-29, when lane Y3(c) moved the last three `DavisKahan` modules of
+before the last three `DavisKahan` modules of
 the Yu--Wang--Samworth payload into the staging layer, finishing Y3.  Statements,
 proofs, signatures and namespaces are unchanged; the declarations already lived
 in `TauCeti.*`.
