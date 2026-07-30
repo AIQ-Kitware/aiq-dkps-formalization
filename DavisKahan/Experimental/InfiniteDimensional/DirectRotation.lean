@@ -53,7 +53,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
-/-- The scalar-action and continuous-functional-calculus assumptions under which
+/-! The scalar-action and continuous-functional-calculus assumptions under which
 `operatorAbsoluteValue` is defined in `SinTheta/General`.  Mathlib supplies the
 last one for `𝕜 = ℂ`; see the discussion there. -/
 variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
