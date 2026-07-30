@@ -63,7 +63,7 @@ theorem real_unbounded_sylvester_kyFan
       (KyFanDominantIdealFamily.kyFan_mem k hkpos
         (RealComplexification.complexify C))
     have hbound := hcomplex.2
-    simp only [K, KyFanDominantIdealFamily.gauge] at hbound
+    simp only [K] at hbound
     rw [KyFanDominantIdealFamily.kyFan_gauge (𝕜 := ℂ) k hkpos
       (RealComplexification.complexify X),
       KyFanDominantIdealFamily.kyFan_gauge (𝕜 := ℂ) k hkpos

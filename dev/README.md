@@ -12,7 +12,7 @@ pattern of past mistakes, and take fewer of them.
 | File | What it answers |
 |---|---|
 | [`LANES.md`](LANES.md) | Who holds what. **Claim your row, commit it, and push it before your first edit** — unpushed is invisible to the other agents. Unlisted means unclaimed. Its `Branch and sync protocol` covers fetching, merging and conflict resolution across agent branches. |
-| [`tauceti/README.md`](tauceti/README.md) | The active migration: polishing foundations into `ForTauCeti`, retiring `vendor/Spectra`, converging three operator-theory stacks. |
+| [`tauceti/README.md`](tauceti/README.md) | The active migration: polishing foundations into `ForTauCeti` and converging the operator-theory stacks. The Spectra dependency is **retired** as of 2026-07-29 — see *Retired tooling* below. |
 | [`SEARCH.md`](SEARCH.md) | How to *search* this memory instead of reading it all. Grep patterns and routing rules by symptom. |
 
 The governing policy is in [`../AGENTS.md`](../AGENTS.md), not here. It defines
@@ -115,7 +115,9 @@ proves, where it should land, and the likely elaboration seams.
 Only the manifests whose sketches are still unpromoted remain here; the delivery
 receipts for overlays already applied were purged. Two of these are load-bearing
 beyond documentation: `pending-mathahead-rebased-53297a4-gpt56.manifest.txt` is
-existence-checked by `scripts/check_davis_kahan_rebased_mathahead.py`, and
+checked by `scripts/check_davis_kahan_rebased_mathahead.py` — which treats a
+sketch **promoted** out of `Experimental/` as success and fails only when a
+module is nowhere, so an entry may record a rename with `<scratch> -> <target>` — and
 `lemma63-promotion-scratch-7f9f562-gpt56.md` is cited from two Lean sources.
 
 ## Quality bar
@@ -357,6 +359,27 @@ holds 7, all in a file with a live lane row. Shrink it; do not grow it.
 **Verified to fail, not merely to pass:** injecting an undocumented theorem *and* an
 anonymous instance makes it exit 1 and name both, while prose beginning with a keyword
 inside a block comment is correctly ignored.
+
+---
+
+## Tau Ceti submission ladder
+
+`scripts/derive_tauceti_submission_ladder.py` derives the rungs in
+`tauceti/submission-ladder.md` from the `ForTauCeti` import graph, so the
+document cannot silently go stale the way it did within hours of being written.
+
+```sh
+python3 scripts/derive_tauceti_submission_ladder.py          # report
+python3 scripts/derive_tauceti_submission_ladder.py --check  # exit 1 if the document disagrees
+python3 scripts/derive_tauceti_submission_ladder.py --json   # machine-readable
+```
+
+Rungs are defined by **seed** modules in the script's `RUNGS` table; everything
+else — the `new` count, the cumulative closed slice, what is off the ladder — is
+computed. Add a rung by adding seeds, not by writing a number.
+
+It currently reports **41 of 156 modules on the ladder**; the other 115 have no
+submission path, which is the measurement behind lane `LADDER-EXT`.
 
 ---
 
