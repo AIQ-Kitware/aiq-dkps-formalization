@@ -281,7 +281,7 @@ theorem abs_comm_of_normal {A : E →ₗ[𝕜] E}
   have hcomm : A ∘ₗ (A.adjoint ∘ₗ A) =
       (A.adjoint ∘ₗ A) ∘ₗ A := by
     rw [← LinearMap.comp_assoc, ← hnormal]
-  exact FiniteDimensional.sqrt_comm
+  exact TauCeti.sqrt_comm
     (LinearMap.isPositive_adjoint_comp_self A) hcomm
 
 /-- Uniqueness of the unitary factor in an invertible polar decomposition.

@@ -50,7 +50,7 @@ definition only fixes the canonical coordinate semantics. -/
 noncomputable def tanThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   sinThetaEmbedding U X ∘ₗ
-    FiniteDimensional.moorePenroseInverse (cosThetaMagnitude U X)
+    TauCeti.moorePenroseInverse (cosThetaMagnitude U X)
 
 /-- Transversality supplies the injectivity that makes the coordinate tangent
 well defined.
@@ -103,7 +103,7 @@ theorem sinTwoThetaEmbedding_uiNorm_le_two_mul
 noncomputable def tanTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   sinTwoThetaEmbedding U X ∘ₗ
-    FiniteDimensional.moorePenroseInverse
+    TauCeti.moorePenroseInverse
       (cosTwoThetaSourceOperator U X)
 
 
@@ -179,7 +179,7 @@ private theorem moorePenroseInverse_cosThetaMagnitude_apply_rightSingularBasis
     (X : F →ₗᵢ[𝕜] E)
     (htrans : IsTransverse (approximateSubspace X) U)
     (i : Fin (finrank 𝕜 F)) :
-    FiniteDimensional.moorePenroseInverse (cosThetaMagnitude U X)
+    TauCeti.moorePenroseInverse (cosThetaMagnitude U X)
         (rightSingularBasis (sinThetaEmbedding U X) i) =
       ((((Real.sqrt
         (1 - (sinThetaEmbedding U X).singularValues i ^ 2) : ℝ) : 𝕜)⁻¹) •
@@ -200,16 +200,16 @@ private theorem moorePenroseInverse_cosThetaMagnitude_apply_rightSingularBasis
     cosThetaMagnitude_injective U X
       (LinearMap.ker_eq_bot.mp ((tanThetaEmbedding_defined_iff U X).mp htrans))
   have hleft := LinearMap.congr_fun
-    (FiniteDimensional.moorePenroseInverse_comp_eq_id_of_injective C hCinj) v
-  change FiniteDimensional.moorePenroseInverse C (C v) = v at hleft
+    (TauCeti.moorePenroseInverse_comp_eq_id_of_injective C hCinj) v
+  change TauCeti.moorePenroseInverse C (C v) = v at hleft
   have hcK : (((c : ℝ) : 𝕜)) ≠ 0 := RCLike.ofReal_ne_zero.mpr hc.ne'
   calc
-    FiniteDimensional.moorePenroseInverse C v =
-        FiniteDimensional.moorePenroseInverse C
+    TauCeti.moorePenroseInverse C v =
+        TauCeti.moorePenroseInverse C
           (((((c : ℝ) : 𝕜))⁻¹) • C v) := by
             rw [hCv, inv_smul_smul₀ hcK]
     _ = (((((c : ℝ) : 𝕜))⁻¹) •
-        FiniteDimensional.moorePenroseInverse C (C v)) := by rw [map_smul]
+        TauCeti.moorePenroseInverse C (C v)) := by rw [map_smul]
     _ = (((((c : ℝ) : 𝕜))⁻¹) • v) := by rw [hleft]
     _ = _ := by rfl
 
@@ -263,7 +263,7 @@ theorem singularValues_tanThetaEmbedding
     rw [tanThetaEmbedding_apply_rightSingularBasis U X htrans j,
       tanThetaEmbedding_apply_rightSingularBasis U X htrans i,
       inner_smul_left, inner_smul_right, map_inv₀, RCLike.conj_ofReal,
-      FiniteDimensional.inner_apply_rightSingularBasis]
+      TauCeti.inner_apply_rightSingularBasis]
     -- the goal is an application, not a composition, so `diagOp_comp` cannot
     -- fire; apply the diagonal action twice instead
     rw [adjoint_diagOp]
@@ -474,7 +474,7 @@ theorem tanTheta_vector_le
       cosThetaMagnitude_injective U X
         (LinearMap.ker_eq_bot.mp ((tanThetaEmbedding_defined_iff U X).mp htrans))
     have hleft :=
-      FiniteDimensional.moorePenroseInverse_comp_eq_id_of_injective
+      TauCeti.moorePenroseInverse_comp_eq_id_of_injective
         (cosThetaMagnitude U X) hCinj
     have hfactor :
         tanThetaEmbedding U X ∘ₗ cosThetaMagnitude U X =

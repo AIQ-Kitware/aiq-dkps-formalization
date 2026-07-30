@@ -46,7 +46,7 @@ noncomputable def angleComplexStructure (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) : E →ₗ[𝕜] E :=
   ((directRotation U V hacute).toLinearMap - directRotationCosine U V) ∘ₗ
-    FiniteDimensional.moorePenroseInverse (sinAngleOperator U V)
+    TauCeti.moorePenroseInverse (sinAngleOperator U V)
 
 /-- The zero-angle space of the full sine is contained in the zero space of
 `R-C`. -/
@@ -124,8 +124,8 @@ theorem directRotation_eq_cos_add_J_sin (U V : Submodule 𝕜 E)
         angleComplexStructure U V hacute ∘ₗ sinAngleOperator U V := by
   let A := sinAngleOperator U V
   let B := (directRotation U V hacute).toLinearMap - directRotationCosine U V
-  have hfactor : B ∘ₗ FiniteDimensional.moorePenroseInverse A ∘ₗ A = B :=
-    FiniteDimensional.comp_moorePenroseInverse_comp_eq_of_ker_le A B
+  have hfactor : B ∘ₗ TauCeti.moorePenroseInverse A ∘ₗ A = B :=
+    TauCeti.comp_moorePenroseInverse_comp_eq_of_ker_le A B
       (ker_sinAngleOperator_le_ker_directRotation_sub_cosine U V hacute)
   ext x
   have hx := LinearMap.congr_fun hfactor x

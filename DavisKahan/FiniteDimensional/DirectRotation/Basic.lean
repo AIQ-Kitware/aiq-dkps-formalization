@@ -284,7 +284,7 @@ theorem projection_comm_abs_canonicalIntertwiner
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     projection U ∘ₗ TauCeti.abs (canonicalIntertwiner U V) =
       TauCeti.abs (canonicalIntertwiner U V) ∘ₗ projection U := by
-  exact FiniteDimensional.sqrt_comm
+  exact TauCeti.sqrt_comm
     (LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V))
     (projection_comm_canonicalIntertwiner_gram U V)
 
@@ -331,9 +331,9 @@ theorem abs_canonicalIntertwiner_apply_eq_self_of_projection_eq
   have hsq : (S.adjoint ∘ₗ S) x = ((1 : ℝ) : 𝕜) • x := by
     simp [LinearMap.comp_apply, hS, hSstar]
   have hpos := LinearMap.isPositive_adjoint_comp_self S
-  have hfc := FiniteDimensional.selfAdjointFunctionalCalculus_apply_of_apply_eq_smul
+  have hfc := TauCeti.selfAdjointFunctionalCalculus_apply_of_apply_eq_smul
     hpos.isSymmetric Real.sqrt hsq
-  rw [FiniteDimensional.selfAdjointFunctionalCalculus_sqrt hpos, Real.sqrt_one] at hfc
+  rw [TauCeti.selfAdjointFunctionalCalculus_sqrt hpos, Real.sqrt_one] at hfc
   show hpos.sqrt x = x
   rw [hfc]
   simp
@@ -536,7 +536,7 @@ theorem reflectionProduct_comm_abs_canonicalIntertwiner
         TauCeti.abs (canonicalIntertwiner U V) =
       TauCeti.abs (canonicalIntertwiner U V) ∘ₗ
         (reflectionProduct U V).toLinearMap := by
-  exact FiniteDimensional.sqrt_comm
+  exact TauCeti.sqrt_comm
     (LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V))
     (reflectionProduct_comm_canonicalIntertwiner_gram U V)
 
