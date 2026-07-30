@@ -18,7 +18,10 @@ through `IsUnit.unit`.
 
 ## Staging note
 
-Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/CoerciveUnit.lean`
+Staged for Tau Ceti, roadmap topic T16.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+additions to `Mathlib/Analysis/InnerProductSpace/CoerciveUnit.lean`
 (new file).
 Formalized by Claude Fable 5 (claude-fable-5[1m]) while closing the graph
 projection formula of the Davis–Kahan graph-subspace correspondence.  This is
@@ -26,16 +29,15 @@ the operator form of the Lax–Milgram lemma on a Hilbert space: a uniformly
 coercive bounded operator is invertible in the algebra of bounded operators.
 No self-adjointness is required — coercivity alone forces injectivity, a
 closed range, and a trivial orthogonal complement of the range.
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
   `00ca5e1`; it has had no prior home.
-* Extraction class: **authored in place**. Upstream target is Mathlib; the module
-  is staged here because `ForMathlib` was retired on 2026-07-29 and `ForTauCeti`
-  is now the single staging library — see `ForTauCeti/README.md`.
+* Extraction class: **authored in place**, for Tau Ceti — `ForMathlib` was
+  retired on 2026-07-29 and `ForTauCeti` is the single staging library, whose
+  destination is Tau Ceti and not Mathlib (`ForTauCeti/README.md`).
 * Intended Mathlib home: additions to `Mathlib/Analysis/InnerProductSpace/CoerciveUnit.
 * Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.

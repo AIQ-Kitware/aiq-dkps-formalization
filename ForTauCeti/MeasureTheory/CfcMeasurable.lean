@@ -3,13 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 
-Staged for Mathlib: addition to
+Staged for Tau Ceti, roadmap topic T14.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+addition to
 `Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/` (measurability of
 `ω ↦ cfc f (a ω)`) and `Mathlib/MeasureTheory/MeasurableSpace/` (a countable
 restrict-cover measurability criterion).
 
-Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]);
-to be re-authored per Mathlib's AI-contribution policy at PR time.
+Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 -/
 
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continuity

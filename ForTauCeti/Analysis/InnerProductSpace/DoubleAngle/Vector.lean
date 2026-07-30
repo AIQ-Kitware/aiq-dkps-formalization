@@ -1,5 +1,8 @@
 /-
-Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/RotationSharp.lean`
+Staged for Tau Ceti, roadmap topic T17.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+additions to `Mathlib/Analysis/InnerProductSpace/RotationSharp.lean`
 (new file).
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]), plan step W6.1 of
@@ -20,7 +23,6 @@ diagonal blocks with respect to `U ⊕ Uᗮ`) the same `key_identity` collapses 
 mixed term directly (no rotation, no half-angle) gives
 `(b − a)·(‖Px‖·‖x − Px‖) ≤ |‖Px‖² − ‖x − Px‖²|·ε`, i.e. `tan 2θ ≤ 2ε/(b − a)`,
 with no smallness assumption on the perturbation.
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic

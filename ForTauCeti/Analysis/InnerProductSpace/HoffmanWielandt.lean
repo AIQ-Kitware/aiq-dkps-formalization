@@ -3,14 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 
-Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/` (new file
+Staged for Tau Ceti, roadmap topic T08.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `HoffmanWielandt.lean`).
 
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]), plan step W2 of
 `dev/davis-kahan-gap-closure-plan.md`.  This file will build up to the
 Hoffman–Wielandt eigenvalue-perturbation inequality; it currently supplies the
 sorted-rearrangement ingredient (W2.1).
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import Mathlib.Algebra.Order.Rearrangement

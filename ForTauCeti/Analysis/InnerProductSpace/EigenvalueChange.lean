@@ -3,7 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 
-Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/` (new file
+Staged for Tau Ceti, roadmap topic T08.  Mathlib is not the destination
+(`ForTauCeti/README.md`); what follows is where this material would have gone on
+the closed Mathlib track —
+additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `EigenvalueChange.lean`).
 
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
@@ -18,7 +21,6 @@ Source: Davis, *The rotation of eigenvectors by a perturbation*, J. Math. Anal.
 Appl. 6 (1963), Theorem 4.1 (pp. 168–170).  See
 `TauCeti/prose/non-distributable/Davis-1963-...tex` lines 641–754 and the
 decomposition in `.mathlib-quality/decomposition.md`.
-To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import Mathlib.Analysis.Convex.Birkhoff
