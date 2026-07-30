@@ -36,12 +36,23 @@ Each is proved from the public API alone — the defining infimum is never unfol
 The zero operator needs nothing: `approximationNumber_zero` already says every
 `aₙ(0) = 0`.
 
-**What is not here yet**, from the same acceptance list: the rectangular diagonal
-map whose approximation numbers are its entries sorted decreasingly, the min–max
-example selecting the span of the largest singular directions, and the compact
-diagonal operator with `aₙ → 0`.  The first needs the singular values of a diagonal
-map; the second needs the orthogonal-tail equality (lane `AN-B4-MINMAX`); the third
-needs lane `AN-A4-COMPACT`.
+**The diagonal example is proved, but in a sibling file.**
+`ContinuousLinearMap.approximationNumber_diagOp` in `ApproximationNumber/DiagonalExample.lean`
+gives `aᵢ (diagOp b x) = x i` for antitone nonnegative `x`.  It is not here because
+this file is a `module` and `TauCeti.diagOp` is not: a `module` may only import
+other `module`s, and nothing in `diagOp`'s neighbourhood has been converted.  That
+file says to fold itself back in once `UnitarilyInvariantNorm.lean` becomes a
+`module`.  Note the reason above is *not* the one this note used to give — the
+singular values of a diagonal map (`TauCeti.singularValues_diagOp`) do exist; the
+module boundary is the whole of what is left.
+
+**What is not here yet**, from the same acceptance list: the *rectangular* diagonal
+map with **unequal source and target dimensions**, the min–max example selecting
+the span of the largest singular directions, and the compact diagonal operator with
+`aₙ → 0`.  The first needs the singular values of a rectangular diagonal map, which
+`singularValues_diagOp` does not give — it is square; the second needs the
+orthogonal-tail equality (lane `AN-B4-MINMAX`); the third needs lane
+`AN-A4-COMPACT`.
 
 ## Sources
 
