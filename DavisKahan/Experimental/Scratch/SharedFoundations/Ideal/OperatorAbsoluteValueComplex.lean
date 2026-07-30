@@ -8,6 +8,7 @@ originally authored by Adam Bornemann.  The declaration-level mapping is
 recorded in the accompanying provenance ledger.
 -/
 import DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.TwoWayFactorization
+import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
 import ForTauCeti.Analysis.InnerProductSpace.PolarPartialIsometry
 
@@ -93,10 +94,11 @@ theorem SymmetricNormIdeal.modulus_mem_and_gauge_eq
 
 /-- Rectangular-family square specialization. -/
 theorem RectangularSymmetricIdealFamily.modulus_mem_and_gauge_eq
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
     {T : E →L[ℂ] E} (hT : N.Mem T) :
     N.Mem (ContinuousLinearMap.modulus T) ∧
-      N.gauge (ContinuousLinearMap.modulus T) = N.gauge T := by
+      N.gaugeReal (ContinuousLinearMap.modulus T) = N.gaugeReal T := by
   let I : DavisKahanExt.SymmetricNormIdeal (𝕜 := ℂ) (E := E) :=
     DavisKahanExt.SymmetricNormIdeal.ofRectangular N
   have h := SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq I T
@@ -109,8 +111,8 @@ theorem operatorAbs_family_transport_two_routes
     {T : E →L[ℂ] E}
     (hT : N.Mem T) :
     N.Mem (ContinuousLinearMap.modulus T) ∧
-      N.gauge (ContinuousLinearMap.modulus T) =
-        N.gauge T := by
+      N.gaugeReal (ContinuousLinearMap.modulus T) =
+        N.gaugeReal T := by
   exact RectangularSymmetricIdealFamily.modulus_mem_and_gauge_eq
     N.toRectangularSymmetricIdealFamily hT
 

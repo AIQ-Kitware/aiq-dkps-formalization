@@ -33,7 +33,7 @@ namespace.
   `ForTauCeti` staging modules.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace HaagerupZsido
