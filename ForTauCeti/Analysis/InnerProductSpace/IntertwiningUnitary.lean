@@ -145,6 +145,9 @@ end OrthonormalBasis
 
 namespace TauCeti
 
+open scoped InnerProductSpace
+open LinearMap InnerProductSpace
+
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E] {n : ℕ}
 
