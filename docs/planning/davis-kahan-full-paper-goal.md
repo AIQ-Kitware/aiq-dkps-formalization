@@ -205,7 +205,7 @@ declaration):
   `norm_sylvester_le_of_spectrum_intervalExterior`, the **constant-one
   interval/exterior Sylvester estimate** with genuine Banach-algebra spectra
   (shift-and-invert argument, no splitting, no `π/2` loss), and
-  `sinTheta_genuineSpectrum`, the **fully general bounded operator-norm
+  `sinTheta_spectrum`, the **fully general bounded operator-norm
   Davis--Kahan `sin Θ` theorem**: `U` reducing self-adjoint `A` with
   `spectrum ℝ (A|_U) ⊆ [a, b]`, `V` reducing self-adjoint `B` with
   `spectrum ℝ (B|_{Vᗮ})` outside `(a-d, b+d)` give
@@ -262,7 +262,7 @@ use `ContinuousLinearMap.opNorm_nonneg` and `add_le_add le_rfl` instead.
 Three gaps toward "paper theorem complete" closed (axiom audit clean on every
 new declaration):
 
-- `sinTheta_genuineSpectrum_symmetric` (`Sylvester/GenuineSpectrum.lean`): the
+- `sinTheta_spectrum_symmetric` (`Sylvester/GenuineSpectrum.lean`): the
   **symmetric two-sided genuine-spectrum `sin Θ` theorem** — both directed
   spectral configurations give `d * subspaceGap U V ≤ ‖B - A‖` through the
   max-of-directed-gaps projector identity.
@@ -337,7 +337,7 @@ The bounded branch received the same upgrade
 `mem_and_gauge_sylvester_le_of_spectrum_intervalExterior` (the ideal-gauge
 interval/exterior Sylvester estimate with genuine Banach-algebra spectra,
 by feeding the CFC shift-and-invert data into the Neumann ideal engine
-through `ClosedOperator.ofBounded`), and `sinTheta_genuineSpectrum_gauge`:
+through `ClosedOperator.ofBounded`), and `sinTheta_spectrum_gauge`:
 **the bounded `sin Θ` theorem at unitary-invariant ideal scope with
 genuine spectra** — `B - A` in the family gives
 `d · gauge (P_{Vᗮ} P_U) ≤ gauge (B - A)` with membership of the directed
@@ -349,7 +349,7 @@ projection composition.  `FullPartIII` aliases:
 norm + UI norm, at bounded and unbounded scope, directed and (bounded)
 symmetric two-sided forms — every combination proved and axiom-clean.
 The symmetric two-sided form also holds at UI scope
-(`sinTheta_genuineSpectrum_gauge_symmetric`, constant `2`, via the
+(`sinTheta_spectrum_gauge_symmetric`, constant `2`, via the
 projector-difference decomposition
 `P_U - P_V = P_{Vᗮ}P_U - (P_{Uᗮ}P_V)⋆` proved in
 `starProjection_sub_eq_cross_sub_cross_adjoint`; the constant-one version
@@ -418,23 +418,23 @@ bounded by the larger block.  Aliases:
 The residual `sin 2Θ` theorem now needs only: `V := closed range of the
 isometric trial embedding`, the bound `‖P_{Vᗮ} A P_V‖ ≤ ‖residual‖`
 (pointwise on the range, by the residual identity), and the reflected-pair
-`sin Θ` argument of `sinTwoTheta_genuineSpectrum`.
+`sin Θ` argument of `sinTwoTheta_spectrum`.
 
 ### Progress note (2026-07-17, the residual `sin 2Θ` theorem)
 
 The residual form is proved (all axiom-clean), closing the
 "residual (approximate-invariant-pair) form" gap in the `sin 2Θ` family:
 
-- `sinTwoTheta_genuineSpectrum_defect`: the reflected-pair core
+- `sinTwoTheta_spectrum_defect`: the reflected-pair core
   `d * subspaceGap U (J_V U) ≤ ‖reflectionDefect V A‖`, factored out of
-  `sinTwoTheta_genuineSpectrum` so both the reduced-comparison and the
+  `sinTwoTheta_spectrum` so both the reduced-comparison and the
   residual forms consume it (the comparison form is now a three-line
   corollary);
 - `norm_cross_le_norm_residual`: if `V` is the range of an isometric
   embedding `X` and `R = A X - X M`, then `‖P_{Vᗮ} A P_V‖ ≤ ‖R‖` — on
   `v = X u`, `(1 - P_V) A v = (1 - P_V) (R u)` since `X (M u) ∈ V`, and
   the isometry converts `‖u‖` back to `‖P_V z‖`;
-- **`sinTwoTheta_genuineSpectrum_residual`**: for self-adjoint `A` with
+- **`sinTwoTheta_spectrum_residual`**: for self-adjoint `A` with
   the genuine internal configuration at the reducing `U`, trial subspace
   `V = range X`, and *arbitrary* comparison operator `M` on the trial
   space, `d * subspaceGap U (J_V U) ≤ 2 ‖A X - X M‖` — the paper's
@@ -468,8 +468,8 @@ substitutes for it:
 - **`subspaceGap_map_reflection_eq_norm_sinTwoAngle`**: the double-angle
   identification `subspaceGap U (J_V U) = ‖sinTwoAngleOperatorC U V‖` —
   both sides equal `2 ‖P_{Vᗮ} P_U P_V‖`;
-- **`sinTwoTheta_genuineSpectrum_operator`** and
-  **`sinTwoTheta_genuineSpectrum_residual_operator`**: the exact operator
+- **`sinTwoTheta_spectrum_operator`** and
+  **`sinTwoTheta_spectrum_residual_operator`**: the exact operator
   forms `d * ‖sin 2Θ(U, V)‖ ≤ 2 ‖B - A‖` and
   `d * ‖sin 2Θ(U, V)‖ ≤ 2 ‖A X - X M‖` — the paper's `sin 2Θ` theorems
   stated on the functional-calculus double-angle sine operator.
@@ -740,13 +740,13 @@ waiting on the Halmos decomposition, by the reflection argument:
   isometric restriction `submoduleMapIsometry`), and **real spectra**
   (`spectrum_compressOperator_map`, via `AlgEquiv.spectrum_eq` after scalar
   restriction);
-- `sinTwoTheta_genuineSpectrum`: for self-adjoint `A` with genuine internal
+- `sinTwoTheta_spectrum`: for self-adjoint `A` with genuine internal
   configuration at the reducing `U` (compression to `U` in `[a, b]`,
   compression to `Uᗮ` outside `(a-d, b+d)`) and any `B` reduced by `V`,
   `d * subspaceGap U (J_V U) ≤ 2 ‖B - A‖` where `J_V U` is the reflected
   image — the gap to the reflected image is `‖sin 2Θ(U, V)‖`; also phrased
-  through `sinAngleOperatorC` (`sinTwoTheta_genuineSpectrum_sinAngle`).
-  Route: apply `sinTheta_genuineSpectrum_symmetric` to the pair
+  through `sinAngleOperatorC` (`sinTwoTheta_spectrum_sinAngle`).
+  Route: apply `sinTheta_spectrum_symmetric` to the pair
   `(A, J A J)` — the conjugate has the *same* genuine compression spectra —
   and bound `‖J A J - A‖ = ‖reflectionDefect V A‖ ≤ 2‖B - A‖` by the
   proved defect estimate.  `FullPartIII` aliases:
@@ -755,14 +755,14 @@ waiting on the Halmos decomposition, by the reflection argument:
 
 This replaces the `FiniteGapConfiguration`-gated `sinTwoTheta_perturbation`
 obligation with an honest statement.  The UI-norm scope is also proved:
-`sinTwoTheta_genuineSpectrum_gauge` gives ideal membership of the directed
+`sinTwoTheta_spectrum_gauge` gives ideal membership of the directed
 cross block to the reflected image with
 `d · gauge ≤ 2 · gauge (B - A)`, using
 `reflectionDefect_eq_perturbationDefect` and reflection-conjugation
 contractivity of the gauge (alias
 `bounded_sinTwoTheta_uiNorm_genuineSpectrum`).  The residual
 (approximate-invariant-pair) form is now proved
-(`sinTwoTheta_genuineSpectrum_residual`; see the residual progress note),
+(`sinTwoTheta_spectrum_residual`; see the residual progress note),
 and the identification with the functional-calculus
 `sinTwoAngleOperatorC` is also proved
 (`subspaceGap_map_reflection_eq_norm_sinTwoAngle`; see the double-angle
@@ -803,7 +803,7 @@ and the `tan θ_max = ‖angular operator‖` identification.
 
 The bounded genuine-spectrum `tan Θ` theorem is proved
 (`Experimental/InfiniteDimensional/TanTheta/GenuineSpectrum.lean`, all
-axiom-clean): **`tanTheta_genuineSpectrum`** — for self-adjoint `T`, a
+axiom-clean): **`tanTheta_spectrum`** — for self-adjoint `T`, a
 `T`-invariant subspace `V` with `σ(T|_{Vᗮ}) ⊆ [α, β]` (Banach-algebra
 spectrum of the compression), and a test subspace `Z` whose compression
 spectrum avoids `(α - δ, β + δ)`, a columnwise residual bound `ρ` over

@@ -61,14 +61,14 @@ Machine-checked status of the chain (reproduce with `Lean.collectAxioms`):
 
 ```
 DIRTY  UnboundedSylvesterGap                                   clean  GenuineUnboundedSylvesterGap
-DIRTY  UnboundedIntervalExteriorGap                            clean  GenuineSylvesterIntervalExteriorGap
+DIRTY  UnboundedIntervalExteriorGap                            clean  SylvesterIntervalExteriorGap
 DIRTY  unbounded_sylvester_mem_and_gauge_le_of_gap             clean  unbounded_sylvester_mem_and_gauge_le_direct
 DIRTY  unbounded_sylvester_mem_and_gauge_le_viaKyFan           clean  unbounded_sylvester_mem_and_gauge_le_direct_swapped
-DIRTY  unbounded_sylvester_mem_and_gauge_le_swapped_viaKyFan   clean  davisKahan1970_sylvester_of_genuineSpectrumGap
+DIRTY  unbounded_sylvester_mem_and_gauge_le_swapped_viaKyFan   clean  davisKahan1970_sylvester_of_spectrumGap
 DIRTY  unbounded_sylvester_mem_and_gauge_le_of_intervalExteriorGap
 DIRTY  davisKahan1970_sylvester
-DIRTY  generalizedSinTheta_unbounded                           clean  generalizedSinTheta_unbounded_of_genuineSpectrumGap
-DIRTY  generalizedSinTheta_unbounded_exact                     clean  generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
+DIRTY  generalizedSinTheta_unbounded                           clean  generalizedSinTheta_unbounded_of_spectrumGap
+DIRTY  generalizedSinTheta_unbounded_exact                     clean  generalizedSinTheta_unbounded_exact_of_spectrumGap
 DIRTY  GeneralSinThetaProblem.result                           clean  GenuineGeneralSinThetaProblem.result
 DIRTY  IsometricSinThetaProblem.result                         clean  GenuineIsometricSinThetaProblem.result
 DIRTY  BoundedGeneralSinThetaProblem.result                    clean  FiniteIntervalGeneralSinThetaProblem.result
@@ -105,7 +105,7 @@ Two decisive structural facts:
    | leftAboveRightBelow (c : ℝ) (hA : SemiboundedBelow A (c + δ)) (hB : SemiboundedAbove B c)
    | leftBelowRightAbove (c : ℝ) (hA : SemiboundedAbove A c)       (hB : SemiboundedBelow B (c + δ))
    ```
-   and the already-clean `directGenuineOrderedSylvesterEngine_lowerUpper` /
+   and the already-clean `directOrderedSylvesterEngine_lowerUpper` /
    `_upperLower` (`Sylvester/GenuineOrderedEngineDirect.lean`) take **exactly
    these hypotheses, verbatim**. These two branches are a direct substitution.
 
@@ -217,11 +217,11 @@ theorem davisKahan1970_sylvester_complex
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ)) … (hgap : UnboundedSylvesterGap A B δ) … := by
   cases hgap with
   | intervalExterior hβα hgap =>
-      -- Item 2 + Item 3, then davisKahan1970_sylvester_of_genuineSpectrumGap
+      -- Item 2 + Item 3, then davisKahan1970_sylvester_of_spectrumGap
   | leftAboveRightBelow c hAc hBc =>
-      exact directGenuineOrderedSylvesterEngine_lowerUpper N hA hB hδ hAc hBc hEq hR
+      exact directOrderedSylvesterEngine_lowerUpper N hA hB hδ hAc hBc hEq hR
   | leftBelowRightAbove c hAc hBc =>
-      exact directGenuineOrderedSylvesterEngine_upperLower N hA hB hδ hAc hBc hEq hR
+      exact directOrderedSylvesterEngine_upperLower N hA hB hδ hAc hBc hEq hR
 ```
 
 The two ordered cases should be a one-line `exact` each — the hypotheses match
@@ -326,7 +326,7 @@ Also confirm you have not regressed the already-clean genuine chain:
 
 ```lean
 #print axioms ForMathlib.DavisKahan.Experimental.ExactSinTheta.GenuineIsometricSinThetaProblem.result
-#print axioms ForMathlib.DavisKahan.Experimental.ExactSinTheta.directGenuineOrderedSylvesterEngine
+#print axioms ForMathlib.DavisKahan.Experimental.ExactSinTheta.directOrderedSylvesterEngine
 ```
 
 And confirm no admissions were added:

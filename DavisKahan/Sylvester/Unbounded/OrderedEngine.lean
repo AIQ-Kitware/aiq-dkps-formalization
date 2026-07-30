@@ -30,7 +30,7 @@ estimate.
 The hypothesis binders are `_`-prefixed because they are proof-valued and the
 conclusion `N.Mem X ∧ δ * N.gauge X ≤ N.gauge C` cannot mention them; the names
 are kept for documentation rather than dropped to `_`. -/
-structure GenuineOrderedSylvesterEngine : Prop where
+structure OrderedSylvesterEngine : Prop where
   lowerUpper :
     ∀ {E F : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]

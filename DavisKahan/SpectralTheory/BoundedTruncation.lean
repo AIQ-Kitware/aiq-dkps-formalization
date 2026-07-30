@@ -131,7 +131,7 @@ theorem spectraBoundedTruncation_commutes_cutoff
 noncomputable def spectraBoundedTruncationInterface
     (A : ComplexClosedOperatorH (H := H))
     (hA : A.IsSelfAdjoint) :
-    GenuineBoundedTruncationInterface A hA
+    BoundedTruncationInterface A hA
       (spectraSpectralCutoffInterface A hA) where
   truncation := spectraBoundedTruncation A hA
   isSymmetric := spectraBoundedTruncation_isSymmetric A hA
