@@ -55,7 +55,7 @@ polynomial in it, which is what lets the same operator serve on both sides.
 * **Semantic differences from a donor:** not applicable.
 -/
 
-@[expose] public section
+public section
 
 open scoped Topology
 
@@ -130,7 +130,7 @@ theorem isOpen_resolventSet (A : E →ₗ.[𝕜] E) : IsOpen (resolventSet A) :=
   have hcomm : Commute R₀ (V : E →L[𝕜] E) := by
     rw [hVval]; exact commute_resolvent_neumannFactor hz₀ z
   have hcomm' : Commute R₀ (↑V⁻¹ : E →L[𝕜] E) := hcomm.units_inv_right
-  refine ⟨R₀ ∘L (↑V⁻¹ : E →L[𝕜] E), fun ψ => ?_, fun φ => ?_⟩
+  refine mem_resolventSet_iff.mpr ⟨R₀ ∘L (↑V⁻¹ : E →L[𝕜] E), fun ψ => ?_, fun φ => ?_⟩
   · -- left inverse on the domain
     have hshift := resolvent_sub_smul_shift hz₀ z ψ
     change R₀ ((↑V⁻¹ : E →L[𝕜] E) (A ψ - z • (ψ : E))) = (ψ : E)
@@ -149,7 +149,7 @@ theorem isOpen_resolventSet (A : E →ₗ.[𝕜] E) : IsOpen (resolventSet A) :=
 
 /-- **The spectrum is closed.** -/
 theorem isClosed_spectrum (A : E →ₗ.[𝕜] E) : IsClosed (spectrum A) := by
-  rw [spectrum, isClosed_compl_iff]
+  rw [spectrum_eq_compl, isClosed_compl_iff]
   exact isOpen_resolventSet A
 
 section RealPoints

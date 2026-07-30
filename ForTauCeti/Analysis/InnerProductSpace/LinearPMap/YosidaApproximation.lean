@@ -51,7 +51,7 @@ self-adjoint operator (Stone's theorem):
   Spectra's `Resolvent/Range.lean` entirely.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap
@@ -521,7 +521,7 @@ theorem inner_expApprox (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) (x y : H) :
   calc ⟪expApprox hA n t x, expApprox hA n t y⟫_ℂ
       = ⟪(ContinuousLinearMap.adjoint (expApprox hA n t)) (expApprox hA n t x), y⟫_ℂ := by
         rw [ContinuousLinearMap.adjoint_inner_left]
-    _ = ⟪((ContinuousLinearMap.adjoint (expApprox hA n t)) * expApprox hA n t) x, y⟫_ℂ := rfl
+    _ = ⟪((ContinuousLinearMap.adjoint (expApprox hA n t)) * expApprox hA n t) x, y⟫_ℂ := (rfl)
     _ = ⟪x, y⟫_ℂ := by rw [hstar]; rfl
 
 /-! ### The approximants commute
@@ -545,7 +545,7 @@ theorem commute_yosidaApproxSym (hA : IsSelfAdjoint A) (m n : ℕ+) :
 /-- `expApprox` is the skew-adjoint exponential of `i Aₙˢʸᵐ`. -/
 theorem expApprox_eq_expTime (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) :
     expApprox hA n t = expTime (I • yosidaApproxSym hA n) t := by
-  rw [expTime, TauCeti.real_smul_I_smul]
+  rw [expTime_def, TauCeti.real_smul_I_smul]
   rfl
 
 /-- The Duhamel estimate, specialised to two approximants. -/
@@ -664,8 +664,7 @@ noncomputable def expLimit (hA : IsSelfAdjoint A) (t : ℝ) : H →L[ℂ] H :=
 
 /-- The bundled limit flow acts as `expLimitFun`. -/
 @[simp] theorem expLimit_apply (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
-    expLimit hA t ψ = expLimitFun hA t ψ := rfl
-
+    expLimit hA t ψ = expLimitFun hA t ψ := (rfl)
 /-- Norm preservation, restated for the bundled operator `expLimit`. -/
 @[simp]
 theorem norm_expLimit_apply (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
@@ -727,7 +726,7 @@ theorem expLimit_add (hA : IsSelfAdjoint A) (s t : ℝ) :
 theorem norm_expApprox_sub_self_le (hA : IsSelfAdjoint A) (n : ℕ+) (τ : ℝ) (ψ : H) :
     ‖expApprox hA n τ ψ - ψ‖ ≤ |τ| * ‖yosidaApproxSym hA n ψ‖ := by
   have hzero : expTime ((I : ℂ) • (0 : H →L[ℂ] H)) τ = 1 := by
-    simp [expTime]
+    simp [expTime_def]
   have h := norm_expTime_sub_expTime_le (isSelfAdjoint_yosidaApproxSym hA n)
     (IsSelfAdjoint.zero (H →L[ℂ] H)) (Commute.zero_right _) τ ψ
   rw [hzero] at h

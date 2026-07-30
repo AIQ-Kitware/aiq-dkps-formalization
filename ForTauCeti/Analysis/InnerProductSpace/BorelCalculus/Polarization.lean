@@ -58,7 +58,7 @@ the provenance of the route itself.
 for the provenance of the route as a whole.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace ENNReal CompactlySupported
 open MeasureTheory
@@ -104,6 +104,17 @@ noncomputable def pair (f : spectrum ℂ a → ℂ) (ψ ξ : H) : ℂ :=
       + Complex.I * (∫ x, f x ∂(diagMeasure ha (ξ + Complex.I • ψ)))
       - (∫ x, f x ∂(diagMeasure ha (ξ - ψ)))
       - Complex.I * (∫ x, f x ∂(diagMeasure ha (ξ - Complex.I • ψ))))
+
+/-- Rewrite form of `pair`, so call sites need not unfold the definition.
+
+Added 2026-07-30: `BorelCalculus/Operator` was doing `rw [pair]`, which requires the
+body to be exposed. Tau Ceti's `api-design` rubric asks for the lemma instead. -/
+theorem pair_def (f : spectrum ℂ a → ℂ) (ψ ξ : H) :
+    pair ha f ψ ξ = (1 / 4 : ℂ) *
+      ((∫ x, f x ∂(diagMeasure ha (ξ + ψ)))
+        + Complex.I * (∫ x, f x ∂(diagMeasure ha (ξ + Complex.I • ψ)))
+        - (∫ x, f x ∂(diagMeasure ha (ξ - ψ)))
+        - Complex.I * (∫ x, f x ∂(diagMeasure ha (ξ - Complex.I • ψ)))) := (rfl)
 
 /-- On continuous symbols the polarised diagonal integral is the matrix element
 of the continuous functional calculus. -/
