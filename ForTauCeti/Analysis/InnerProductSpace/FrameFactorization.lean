@@ -232,13 +232,6 @@ noncomputable def trialMapFrameFactorization (X : F →ₗ[𝕜] E)
   factor := orthonormalizedEmbedding_comp_trialGramSqrtEquiv X hX
   range_eq := range_orthonormalizedEmbedding X hX
 
-/-- Canonical frame factorization obtained directly from a positive lower
-frame bound. -/
-noncomputable def trialMapFrameFactorizationOfLowerFrameBound
-    (X : F →ₗ[𝕜] E) {ε : ℝ} (hframe : LowerFrameBound X ε)
-    (hε : 0 < ε) : TrialMapFrameFactorization X :=
-  trialMapFrameFactorization X (hframe.injective hε)
-
 /-- The isometry factor of the frame factorization is the orthonormalized
 embedding, definitionally. -/
 @[simp] theorem trialMapFrameFactorization_isometry
