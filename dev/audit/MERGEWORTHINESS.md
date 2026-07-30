@@ -16,7 +16,7 @@ defect. Last measured **2026-07-30, pass 7** over 165 files.
 | dependency firewall | **OK** |
 | header destination | **0** files name Mathlib (was 39) |
 | files > 1,000 lines | **0** (was 3) |
-| roadmap topics written | **18 of 24** — exact, via `--roadmaps` |
+| roadmap topics written | **19 of 24** — exact, via `--roadmaps` |
 
 ## Reviewed against the actual Tau Ceti rubrics
 
@@ -33,7 +33,7 @@ submitting **to** — and in 69 files it does not.
 
 | # | defect | measure | lane | build? |
 |---|---|---|---|---|
-| 1 | **6 topics have no roadmap** | 18 of 24, derived not guessed | `ROADMAP-WRITE` | no |
+| 1 | **5 topics have no roadmap** — T07, T08, T18, T19, T20 | 19 of 24, derived not guessed | `ROADMAP-WRITE` | no |
 | 2 | **53 flat files beside 12 directories** | 22 files, 7 missing directories | `FTC-ORG` | yes |
 | 3 | **4 public definitions with no consumer** | 4 (was mis-measured as 31) | `FTC-DEAD` | yes |
 | 4 | **10 linter suppressions** the README forbids | 10 sites, incl. `checkUnivs` | `FTC-SETOPT` | yes |
@@ -49,7 +49,7 @@ submitting **to** — and in 69 files it does not.
 
 ## Ordering, and why
 
-1. **`ROADMAP-WRITE`** — 12 topics, no build, parallel, and it is the only item
+1. **`ROADMAP-WRITE`** — 5 topics left, no build, parallel, and it is the only item
    that changes whether a topic can be *proposed* at all. Everything else
    polishes something already proposable.
 2. **`FTC-ORG`** — now unblocked: `PLACE-SYLV` finished, so nothing collides in
