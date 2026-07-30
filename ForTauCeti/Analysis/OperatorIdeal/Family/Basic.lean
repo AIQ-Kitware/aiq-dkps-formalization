@@ -82,8 +82,7 @@ instantiation.
 
 The two universes occur only through `max v w` in the type of the structure
 itself, so `linter.checkUnivs` flags them.  **They stay independent, and the
-argument is the layering itself rather than an appeal to generality** (lane
-`FTC-UNIV`, decided 2026-07-30):
+argument is the layering itself rather than an appeal to generality**:
 
 * `SymmetricOperatorIdealFamily` extends `OperatorIdealFamily.{u, v, v}` — it
   *is* the diagonal instantiation.  Collapse `v` and `w` and `.{u, v, v}` becomes

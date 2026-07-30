@@ -120,7 +120,7 @@ Only invariance of `W` is used, not reduction.  Both coercivity bounds of
 `E →L[𝕜] E` and `Reduces` lives in
 `ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/SinTheta.lean`.  The two
 modules share no `ForTauCeti` ancestor, so unifying them needs a new module —
-see lane `FTC-REDEXT-UNIFY`. -/
+see `ForTauCeti.Analysis.InnerProductSpace.ReducedExtension`. -/
 private theorem re_inner_reducedExtension_self' {R : E →ₗ[𝕜] E}
     {W : Submodule 𝕜 E} [W.HasOrthogonalProjection]
     (hinv : ∀ x ∈ W, R x ∈ W) (κ : ℝ) (x : E) :
