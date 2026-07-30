@@ -60,8 +60,10 @@ are representative, neither exhaustive nor prescriptive about proof architecture
   Milestone B4.
 - **The approximable/compact boundary.**  `aₙ(T) → 0` characterizes finite-rank
   approximability on any normed pair, and approximable implies compact over a `ProperSpace`
-  scalar; the converse is asserted **only on Hilbert spaces** — it is false for general
-  Banach spaces without an approximation-property hypothesis, and none is smuggled in.
+  scalar; the converse is asserted **only when the target is a Hilbert space** — it is
+  false for general Banach spaces without an approximation-property hypothesis, and none is
+  smuggled in.  The hypothesis sits on the target rather than on the pair because that is
+  where the approximation property lives; the domain stays an arbitrary normed space.
 - **One `ℝ≥0∞` gauge as the sole datum of an ideal family.**  A family is presented by a
   single total gauge, the ideal recovered as its finiteness domain — never by a membership
   predicate plus an independent real gauge.  Only this presentation has an extensionality
@@ -129,8 +131,8 @@ are representative, neither exhaustive nor prescriptive about proof architecture
 ## Part A — approximation numbers and Hilbert-space singular values
 
 **Topic T09 of the candidate design.**  A complete staged implementation of this part
-exists and needs Tau Ceti review and migration; Milestone A3 and acceptance examples
-(5)–(6) are the genuinely open remainder.
+exists and needs Tau Ceti review and migration; acceptance examples (5)–(6) are the
+genuinely open remainder, Milestone A3 having landed.
 
 **Objects.**  `ContinuousLinearMap.approximationNumber T n : ℝ`, the infimum of `‖T - R‖`
 over bounded `R` with `R.rank ≤ n`, on seminormed spaces over a `NontriviallyNormedField`;
@@ -157,7 +159,10 @@ the Ky Fan gauge `kyFanGauge T k = ∑_{n<k} aₙ(T)`.
   a named `ApproximableOperator` predicate is justified only by multiple consumers); finite
   rank implies compact over a proper field (`isCompactOperator_of_rank_lt_aleph0`, the
   lemma Mathlib lacks), hence approximable implies compact
-  (`isCompactOperator_of_tendsto_approximationNumber`).
+  (`isCompactOperator_of_tendsto_approximationNumber`); and, once the *target* is an inner
+  product space, the converse
+  (`tendsto_approximationNumber_atTop_nhds_zero_of_isCompactOperator`), which closes the
+  boundary as the equivalence `isCompactOperator_iff_tendsto_approximationNumber`.
 - **Hilbert layer:** adjoint invariance `aₙ(T⋆) = aₙ(T)` (`approximationNumber_adjoint`,
   via rank invariance under the adjoint and the adjoint isometry); over `ℂ` the sequence
   identity `aₙ(|T|) = aₙ(T)` (`modulus_hasSameApproximationNumbers`, from the pointwise
@@ -188,9 +193,22 @@ finite-dimensional source with arbitrary codomain follows by range compression; 
 case localizes along the min–max converse.  This is the single inequality every symmetric
 ideal in Part B stands on.
 
-**Milestone A3 — compact implies approximable on Hilbert spaces** (open): a compact
-operator between Hilbert spaces has `aₙ(T) → 0`, completing the boundary whose other three
-edges are in the API above.
+**Milestone A3 — compact implies approximable on Hilbert spaces** (done): a compact
+operator into a Hilbert space has `aₙ(T) → 0`
+(`tendsto_approximationNumber_atTop_nhds_zero_of_isCompactOperator`), completing the
+boundary whose other three edges are in the API above; the four close as one equivalence,
+`isCompactOperator_iff_tendsto_approximationNumber`, on a complete Hilbert target.
+
+**Two hypotheses the milestone predicted are not needed, and the statements record it.**
+The domain need not be a Hilbert space — only the *target* carries an inner product, since
+what the proof uses is an orthogonal projection onto a finite-dimensional subspace of the
+codomain, which is where the approximation property lives and therefore where the
+counterexamples to the general-Banach statement bite.  Completeness of the target is not
+needed either for the forward implication: a finite-dimensional subspace is complete on
+its own.  Nor is the spectral theorem for compact self-adjoint operators applied to `T⋆T`,
+which this milestone named as the route; the finite-`ε`-net argument (cover the image of
+the unit ball, project onto the span of the net, and use that the orthogonal projection is
+the nearest point) proves the stronger statement through a far smaller prerequisite.
 
 ```lean
 noncomputable def approximationNumber (T : E →L[𝕜] F) (n : ℕ) : ℝ :=
@@ -212,8 +230,9 @@ equal to `1`; (3) a rectangular diagonal map has approximation numbers its entri
 decreasingly, unequal dimensions included; (4) an explicit rank-`r` map has `aₙ = 0` for
 `n ≥ r`; (5) on a small diagonal matrix the orthogonal-tail infimum selects the span of the
 largest singular directions and returns the next singular value; (6) a diagonal compact
-operator with coefficients tending to zero has `aₙ → 0`.  (5) and (6) are open; (6) waits
-on Milestone A3.
+operator with coefficients tending to zero has `aₙ → 0`.  (5) and (6) are open; (6) no
+longer waits on Milestone A3, which has landed — what it now needs is that the diagonal
+operator is compact, after which A3 supplies `aₙ → 0` directly.
 
 ## Part B — symmetric operator ideals and Schatten norms
 
@@ -377,8 +396,8 @@ inequality that seeds Milestone A2).  Part B consumes Part A — every ideal gau
 functional of the `a`-sequence — plus the MajorizationAndAngles majorization engine (weak
 majorization, symmetric gauges, the Hardy–Littlewood–Pólya transfer) for Milestones B2–B3
 and the Schatten layer.  Part C consumes Part B for the energy and the ideal framing, and
-otherwise only Mathlib's `lp` and `HilbertBasis`.  Within Part A, Milestone A3 and
-acceptance examples (5)–(6) can land after the min–max layer; within Part B, the interface
+otherwise only Mathlib's `lp` and `HilbertBasis`.  Within Part A, acceptance examples
+(5)–(6) can land after the min–max layer; within Part B, the interface
 and its four instances are dependency-closed on Part A and can ship first, with B1–B4
 following in order.
 
@@ -418,7 +437,9 @@ Part A lane record (2026-07-30): `AN-A4-RANK` done, including the finite-dimensi
 converse iff; `AN-A4-COMPACT` — the characterization and *approximable ⇒ compact* landed
 unconditionally (the finite-rank-compact lemma turned out to be a three-line corestriction
 argument needing only `[ProperSpace 𝕜]`, not the predicted instance-plumbing), while
-*compact ⇒ approximable* on Hilbert spaces remains open (Milestone A3); `AN-B4-MINMAX`
+*compact ⇒ approximable* landed on 2026-07-30 as well (Milestone A3), by the finite-`ε`-net
+argument rather than the predicted spectral theorem for `T⋆T`, and for an arbitrary normed
+domain rather than a Hilbert pair; `AN-B4-MINMAX`
 done, with the predicted witness `V := (ker R)ᗮ` and the ball-not-sphere sup formulation;
 `AN-ACCEPT` — examples (1), (2), (4) and the diagonal example (3) are proved with the
 defining infimum never unfolded; (5) and (6) remain.  The Ky Fan gauge and its triangle
