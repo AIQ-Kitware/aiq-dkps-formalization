@@ -9,8 +9,7 @@ the closed Mathlib track —
 additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `PrincipalAngles.lean`).
 
-Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]), plan step W0.2 of
-`dev/davis-kahan-gap-closure-plan.md`.
+Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 
 The canonical principal-angle API: the cosines of the principal angles between
 two subspaces (given by orthonormal families) are the singular values of the
@@ -149,8 +148,7 @@ theorem sum_sq_norm_aligned_le_sinThetaSq {u v : Fin d → E} (hu : Orthonormal 
 
 The `sinThetaSq` of two eigenblock families equals the cross-block overlap sum
 used throughout `DavisKahan.lean`, and (for equal blocks) half the squared
-Frobenius distance of the two spectral projections (plan step E4 of
-`dev/davis-kahan-expert-completion-plan.md`).  All the `sin Θ` encodings in
+Frobenius distance of the two spectral projections.  All the `sin Θ` encodings in
 this development are therefore provably the same quantity. -/
 
 section Block
@@ -235,8 +233,7 @@ end Block
 /-! ### The operator-norm identification `‖Q̂ ∘L P‖ = sin θ_max`
 
 The operator norm of "project onto `U`, then onto `Wᗮ`" is exactly the sine of
-the largest principal angle between `U` and `W` (plan step E2 of
-`dev/davis-kahan-expert-completion-plan.md`).  This certifies that the
+the largest principal angle between `U` and `W`.  This certifies that the
 operator-norm Davis–Kahan theorem (`SinThetaOpNorm.lean`) bounds a principal
 angle. -/
 

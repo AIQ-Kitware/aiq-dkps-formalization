@@ -31,7 +31,7 @@ accessor.
 ## Naming
 
 The name stays **plural**, matching `LinearMap.singularValues`.  The
-signature-polish backlog (`dev/tauceti-signature-polish-todo.md` §5.3) suggested
+signature-polish backlog suggested
 a singular `singularValue` "unless the existing Mathlib function is irrevocably
 plural" — it is: the Mathlib object is the whole `ℕ →₀ ℝ` sequence, not an
 individual value, and `T.singularValues n` is function application to it.  A
@@ -48,9 +48,9 @@ is exactly the duplication this module exists to avoid.
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Extraction class: **new**, written for `dev/tauceti-signature-polish-todo.md`
-  §5.3, which asked for "a singular-value accessor on `ContinuousLinearMap`
-  rather than `T.toLinearMap.singularValues` in public statements".
+* Extraction class: **new**, written per the signature-polish backlog, which
+  asked for "a singular-value accessor on `ContinuousLinearMap` rather than
+  `T.toLinearMap.singularValues` in public statements".
 * Spectra influence: **none** — this module imports only Mathlib.
 -/
 

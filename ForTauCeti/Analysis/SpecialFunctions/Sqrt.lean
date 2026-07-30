@@ -41,7 +41,7 @@ them without either importing the other.
   `ForMathlib.Real.abs_one_sub_inv_sqrt_le` in
   `ForMathlib/Analysis/InnerProductSpace/NearIsometry.lean` at Davis--Kahan
   commit `fc38eb4` (formalized by Claude Fable 5, golf pass by Claude Opus 4.8),
-  moved here per `dev/tauceti-signature-polish-todo.md` §8.2, which asked for it
+  moved here per the signature-polish backlog, which asked for it
   to be placed with the `Real.sqrt` API rather than inside near-isometry
   operator theory.
 * `abs_sqrt_sub_one_le_abs_sub_one` is **new**.

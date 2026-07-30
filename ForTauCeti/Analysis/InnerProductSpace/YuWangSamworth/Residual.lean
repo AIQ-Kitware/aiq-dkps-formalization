@@ -5,8 +5,7 @@ the closed Mathlib track —
 additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `YuWangSamworth.lean`).
 
-Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]), plan step W2.4 of
-`dev/davis-kahan-gap-closure-plan.md`.
+Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 
 The Yu–Wang–Samworth variant of the Davis–Kahan theorem: a sin-Θ bound whose
 denominator is a *population-only* eigengap `Δ` (formed from `T` alone), with the
