@@ -807,7 +807,7 @@ theorem canonicalTanTwoAngle_hasSameApproximationNumbers_graphCoordinate
         (quarterAcuteAngularOperator_isAngularOperator U V hquarter) hYc
   rw [hcanonical]
   exact
-    (sameApproximationSingularValues_rectangularOperatorModulus
+    (modulus_hasSameApproximationNumbers
       (doubleAngleTangentOperator Y hYc)).trans
       (by
         rw [hambient]

@@ -284,7 +284,7 @@ theorem paperSourceDirectedSin_same_paperSineBlock
     SameApproximationSingularSequence
       (paperSourceDirectedSinC U V) (paperSineBlockC U V) := by
   rw [paperSourceDirectedSinC_eq_paperSineModulusC]
-  exact sameApproximationSingularValues_rectangularOperatorModulus _
+  exact modulus_hasSameApproximationNumbers _
 
 
 end
