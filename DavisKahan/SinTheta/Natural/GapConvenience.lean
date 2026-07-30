@@ -40,7 +40,7 @@ theorem trialInterval_complementExterior
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {β α δ : ℝ} (hβα : β ≤ α)
-    (hgap : SylvesterIntervalExteriorGap A B β α δ) :
+    (hgap : SpectralIntervalExteriorGap A B β α δ) :
     SpectralSylvesterGap A B δ :=
   .intervalExterior hβα hgap
 
