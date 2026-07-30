@@ -73,12 +73,26 @@ noncomputable def hilbertSchmidt :
 
 /-- Trace-class operators as a coherent rectangular family.
 
-Construction route: define the trace gauge through the singular-value
+**Status corrected 2026-07-30.**  The sentence this docstring used to end
+with — "the required rectangular trace-class theory over `RCLike` scalars is
+not yet available in this development" — is no longer true as written.
+`TauCeti.traceClassIdealFamily` exists, in
+`ForTauCeti/Analysis/OperatorIdeal/Family/TraceClass.lean`, with the gauge
+`nuclearENorm`, adjoint invariance, and the ideal bounds all supplied.
+
+Two things are still missing, and they are much more specific than "the theory":
+
+* it is stated **over `ℂ` only** (`SymmetricOperatorIdealFamily.{0, v} ℂ`),
+  because `nuclearENorm` is; the `RCLike` generalisation is the real work;
+* `toRectangular` wants `[N.toOperatorIdealFamily.IsComplete]`, and as with
+  `hilbertSchmidt` above that instance does not exist — and for the same
+  reason, since the trace norm is not equivalent to the operator norm, so the
+  `kyFan` route to completeness does not transfer.
+
+Construction route, retained: define the trace gauge through the singular-value
 sequence (equivalently `tr |A|`), with adjoint invariance from the shared
 singular values of `A` and `A⋆`, ideal control from singular-value
-domination, and completeness against the operator-norm limit.  The required
-rectangular trace-class theory over `RCLike` scalars is not yet available in
-this development, the pinned Mathlib, or the pinned Spectra checkout. -/
+domination, and completeness against the operator-norm limit. -/
 noncomputable def traceClass :
     RectangularSymmetricIdealFamily (𝕜 := 𝕜) :=
   -- Open obligation (separate analytic campaign): the rectangular trace-class
@@ -87,11 +101,22 @@ noncomputable def traceClass :
 
 /-- Schatten `p` operators as a coherent rectangular family.
 
-Construction route: apply the `ℓᵖ` gauge to the approximation-number
+**Status corrected 2026-07-30**, though less than for `traceClass` above.
+`ForTauCeti/Analysis/InnerProductSpace/SchattenNorm.lean` supplies the Schatten
+`p` gauge over general `RCLike` scalars, as a
+`RectangularUnitarilyInvariantNorm`, with the triangle inequality already
+factored exactly the way the route below describes — Ky Fan subadditivity plus
+`ℓᵖ` monotonicity under weak majorization.  What it does **not** supply is the
+infinite-dimensional case: it is stated for finite-dimensional `E` and `F` and
+indexes by `min (finrank E) (finrank F)`.
+
+So the remaining work is the extension from a finite-dimensional
+unitarily-invariant norm to an operator ideal, not the Schatten theory itself.
+
+Construction route, retained: apply the `ℓᵖ` gauge to the approximation-number
 sequence; the triangle inequality is the Tomić--Weyl weak-majorization
 argument, and completeness follows from Fatou against the operator-norm
-limit.  The required Schatten theory is not yet available in this
-development, the pinned Mathlib, or the pinned Spectra checkout. -/
+limit. -/
 noncomputable def schatten (p : ℝ) (hp : 1 ≤ p) :
     RectangularSymmetricIdealFamily (𝕜 := 𝕜) :=
   -- Open obligation (separate analytic campaign): the rectangular Schatten-p
