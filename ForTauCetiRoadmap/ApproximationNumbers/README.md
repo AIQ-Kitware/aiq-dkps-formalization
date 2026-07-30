@@ -144,7 +144,7 @@ of the first roadmap is claimable rather than described:
 |---|---|---|
 | ~~`AN-A4-RANK`~~ | **DONE 2026-07-30** — `approximationNumber_eq_zero_of_rank_le` (any normed pair), `…_of_rank_le_of_le`, and `approximationNumber_eq_zero_iff_finrank_range_le` (the converse, finite-dimensional) | — |
 | `AN-A4-COMPACT` | **characterisation DONE 2026-07-30**; *approximable ⇒ compact* proved modulo a `finite rank ⇒ compact` lemma Mathlib lacks; *compact ⇒ approximable* on Hilbert spaces still open | `AN-A4-RANK` |
-| `AN-B4-MINMAX` | the exact orthogonal-tail equality. **`≤` DONE 2026-07-30** — `approximationNumber_le_norm_comp_starProjection_orthogonal`: every subspace of dimension at most `n` supplies an admissible approximation. **`≥` open**: for an admissible `R`, take `V := (ker R)ᗮ`, which needs `finrank (ker R)ᗮ = rank R` and `R = 0` on `ker R` in `starProjection` form | — |
+| ~~`AN-B4-MINMAX`~~ | **DONE 2026-07-30** — the exact orthogonal-tail equality `approximationNumber_eq_sInf_norm_comp_starProjection_orthogonal`, from the `≤` half `approximationNumber_le_norm_comp_starProjection_orthogonal` and the `≥` half `exists_finrank_le_norm_comp_starProjection_orthogonal_le` / `le_approximationNumber_of_forall_norm_comp_starProjection_orthogonal`. The witness is the one this table predicted, `V := (ker R)ᗮ`. **Two of §B4's stated conditions are still open** and are listed there | — |
 | `AN-ACCEPT` | the six acceptance examples above, as theorems about the API. **(1), (2) and (4) DONE 2026-07-30** in `ApproximationNumber/Examples.lean` — the zero operator needed nothing (`approximationNumber_zero`), the identity is `1` below the dimension and `0` at or past it, and the rank cutoff has its `finrank` form | (3) the diagonal map's singular values; (5) `AN-B4-MINMAX`; (6) `AN-A4-COMPACT` |
 
 Verified against the tree when the lanes were written: none of A4's four
@@ -326,16 +326,32 @@ The final theorem must specify:
 Coordinate-span lemmas and eigenbasis calculations are support lemmas, not a
 substitute for this equality.
 
-**Half of it is in place** (lane `AN-B4-MINMAX`, 2026-07-30):
-`ContinuousLinearMap.approximationNumber_le_norm_comp_starProjection_orthogonal`
-proves `aₙ(T) ≤ ‖T ∘L (Vᗮ).starProjection‖` for every `V` in the source with
-`finrank V ≤ n` — the subspace and the zero-based dimension condition are in the
-statement, as this section requires. What remains is the reverse inequality, and
-its plan is short: for an admissible `R` of rank at most `n`, take `V := (ker R)ᗮ`,
-whose dimension is the rank of `R`; on `Vᗮ = ker R` the map `R` vanishes, so
-`‖T ∘L (Vᗮ).starProjection‖ = ‖(T − R) ∘L (Vᗮ).starProjection‖ ≤ ‖T − R‖`. The two
-Mathlib facts it needs are `finrank (ker R)ᗮ = rank R` and the `starProjection`
-form of *`R` vanishes on its kernel*.
+**The equality is proved** (lane `AN-B4-MINMAX`, 2026-07-30), in
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMax.lean`:
+
+```text
+aₙ(T) = sInf { ‖T ∘L (Vᗮ).starProjection‖ : FiniteDimensional 𝕜 V, finrank 𝕜 V ≤ n }
+```
+
+as `ContinuousLinearMap.approximationNumber_eq_sInf_norm_comp_starProjection_orthogonal`,
+over a complete source.  The `≤` half is
+`approximationNumber_le_norm_comp_starProjection_orthogonal`; the `≥` half went
+through the witness this section predicted, `V := (ker R)ᗮ` for an admissible `R`
+of rank at most `n`, and is available separately as
+`exists_finrank_le_norm_comp_starProjection_orthogonal_le` (the witness) and
+`le_approximationNumber_of_forall_norm_comp_starProjection_orthogonal` (the
+usable lower-bound form).  Two supporting lemmas came out of it and are worth
+naming: `rank_orthogonal_ker_le_of_rank_le`, which is the rank bound argued
+through `Cardinal.lift` because source and target live in independent universes,
+and `norm_comp_starProjection_ker_le_norm_sub`.
+
+**Three of the four stated conditions are met** — the subspace lies in the
+source, the dimension condition is `finrank V ≤ n` under zero-based indexing, and
+the infimum is over a nonempty bounded-below set of reals so `sInf` means what it
+says.  **Two things this section asks for are still open**: the behaviour of the
+infimum once `n` reaches the source dimension, and the equivalence with the
+unit-vector formulation `⨅_V sup_{x ∈ Vᗮ, ‖x‖ = 1} ‖T x‖`.  Completeness of the
+source is used exactly once, to give `ker R` an orthogonal projection.
 
 ### B5 -- unconditional infinite-dimensional lower bound
 
