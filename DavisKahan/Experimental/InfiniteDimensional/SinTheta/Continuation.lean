@@ -101,5 +101,7 @@ theorem continuedProjection_isOrthogonalProjection
   exact fixedContourRieszOperator_operatorPath_isOrthogonalProjection
     Γ A V s D.separating D.geometric t ht
 
+end
+
 end DavisKahanExt
 end TauCeti

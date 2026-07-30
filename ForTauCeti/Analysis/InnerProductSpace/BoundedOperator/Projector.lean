@@ -16,7 +16,7 @@ theorem over arbitrary `RCLike` scalars.
 
 *Moved, not restated.*  This file was
 `DavisKahan/BoundedOperator/Projector.lean`
-until 2026-07-29, when lane Y3(b3) moved the dependency-closed base of the sin-Θ core
+before the dependency-closed base of the sin-Θ core moved
 into the staging layer.
 
 **Renamespaced 2026-07-30 under lane `RUB-NS-PAPER`,** for the reason its sibling
