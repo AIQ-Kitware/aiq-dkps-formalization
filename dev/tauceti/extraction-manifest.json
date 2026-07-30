@@ -162,7 +162,7 @@
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
-        "ForTauCeti.Analysis.InnerProductSpace.CenteredScatter",
+        "ForTauCeti.Probability.Moments.CenteredScatter",
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
         "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
@@ -843,11 +843,11 @@
       "upstream_pr": null
     },
     {
-      "source_module": "ForTauCeti.Analysis.InnerProductSpace.CenteredScatter",
+      "source_module": "ForTauCeti.Probability.Moments.CenteredScatter",
       "source_declarations": [],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.CenteredScatter",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.CenteredScatter",
+      "staging_module": "ForTauCeti.Probability.Moments.CenteredScatter",
+      "final_tauceti_module": "TauCeti.Probability.Moments.CenteredScatter",
       "ownership_class": "tauceti",
       "roadmap_target": "probability-concentration",
       "provenance_class": "copied; introduced at Davis--Kahan commit fc38eb4; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
