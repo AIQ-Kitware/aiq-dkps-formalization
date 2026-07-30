@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RestrictionCompat
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.SpectralBridge
+import Mathlib.Analysis.InnerProductSpace.StarOrder
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
 
 /-!
 # Infinite-dimensional `sin Θ` theorems
@@ -176,9 +178,10 @@ theorem sinTheta_perturbation
   haveI : CompleteSpace U := completeSpace_of_hasOrthogonalProjection U
   haveI : CompleteSpace Vᗮ := completeSpace_of_hasOrthogonalProjection Vᗮ
   have hsolve := ExactSinTheta.sylvester_mem_and_gauge_le_of_intervalExteriorGap
-    ExactSinTheta.RectangularSymmetricIdealFamily.operatorNorm
+    (TauCeti.operatorNormFamily.{u, v} 𝕜)
     (hB.restrictToOrthogonal V hV) (hA.restrictToReducingSubspace U hU)
-    hlr hd hgap' hEq trivial
+    hlr hd hgap' hEq
+    (TauCeti.SymmetricOperatorIdealFamily.mem_operatorNormFamily _)
   have hC : ‖C‖ ≤ ‖B - A‖ :=
     restricted_projection_sandwich_norm_le _ _ _
   have h2 : d * ‖codRestrictTo
@@ -539,16 +542,80 @@ theorem spectralProjection_sinTheta
 
 /-! ## Ideal-valued form
 
-The operator absolute value over a general `RCLike` field and the ideal-valued
-projector-difference estimate are the two genuinely missing analytic
-ingredients (over `ℂ` the absolute value is `CFC.sqrt (star T * T)`; the
-gauge identity `‖|T|‖_I = ‖T‖_I` needs the polar partial isometry).  They are
-isolated as leaf obligations.
+The ideal-valued projector-difference estimate below is a genuinely missing
+analytic ingredient (the gauge identity `‖|T|‖_I = ‖T‖_I` needs the polar
+partial isometry) and stays a leaf obligation.
+
+The operator absolute value is **not** missing, and the reason is worth
+recording, because it was previously an escape and was sized as research.
+Over `ℂ` it is `CFC.sqrt (star T * T)`; over a general `RCLike` field every
+ingredient is already available except one typeclass:
+
+* `CStarRing (E →L[𝕜] E)` is an unconditional instance
+  (`Mathlib/Analysis/InnerProductSpace/Adjoint.lean`);
+* `NonnegSpectrumClass ℝ (E →L[𝕜] E)` is an unconditional instance
+  (`Mathlib/Analysis/InnerProductSpace/StarOrder.lean`);
+* `StarOrderedRing (E →L[𝕜] E)` is *proved* for general `𝕜` there as
+  `instStarOrderedRingRCLike`, taking `ContinuousFunctionalCalculus ℝ _
+  IsSelfAdjoint` as its single argument;
+* the operator itself is `CFC.abs`, already upstream in
+  `Mathlib/Analysis/SpecialFunctions/ContinuousFunctionalCalculus/Abs.lean`.
+
+Mathlib states the remaining gap explicitly: that continuous functional
+calculus instance is known only for `𝕜 = ℂ`, which is exactly why
+`instStarOrderedRingRCLike` is a lemma there rather than an instance.  So the
+absolute value is carried here as a *hypothesis*, not as an escape.  This is
+the difference between unproved and unprovable: a `sorry`ed `def` is an opaque
+term with no body, so no theorem about it can be proved at all, whereas the
+definition below unfolds and discharges automatically at `𝕜 = ℂ`.
 -/
 
-/-- **Leaf obligation.** The operator absolute value `|T| = (T⋆T)^{1/2}`. -/
+section OperatorAbsoluteValue
+
+/-- The scalar-action assumptions Mathlib itself makes when relating the Loewner
+order on `E →L[𝕜] E` to the continuous functional calculus. -/
+variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+
+/-- The one genuinely `ℂ`-only ingredient.  Mathlib has this instance for
+`𝕜 = ℂ`; carrying it as a hypothesis keeps the development general without
+pretending the general case is already available. -/
+variable [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
+
+attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
+
+/-- The operator absolute value `|T| = (T⋆T)^{1/2}`, as the continuous
+functional calculus `CFC.abs`.
+
+Relative to the `ContinuousFunctionalCalculus` hypothesis above this is a real
+definition rather than a leaf obligation, so the results below unfold it. -/
 noncomputable def operatorAbsoluteValue (T : E →L[𝕜] E) : E →L[𝕜] E :=
-  sorry
+  CFC.abs T
+
+/-- Unfolding lemma: the absolute value *is* `CFC.abs`.  Stated so that
+downstream rewrites do not have to unfold a `def`. -/
+theorem operatorAbsoluteValue_eq (T : E →L[𝕜] E) :
+    operatorAbsoluteValue T = CFC.abs T := rfl
+
+/-- The absolute value is nonnegative in the Loewner order.
+
+This is the first consequence that was previously out of reach: with an opaque
+term there is nothing to unfold, so even this could not be stated usefully. -/
+@[simp]
+theorem operatorAbsoluteValue_nonneg (T : E →L[𝕜] E) :
+    0 ≤ operatorAbsoluteValue T :=
+  CFC.abs_nonneg T
+
+/-- The absolute value is insensitive to sign. -/
+@[simp]
+theorem operatorAbsoluteValue_neg (T : E →L[𝕜] E) :
+    operatorAbsoluteValue (-T) = operatorAbsoluteValue T :=
+  CFC.abs_neg T
+
+/-- The absolute value of `0` is `0`. -/
+@[simp]
+theorem operatorAbsoluteValue_zero :
+    operatorAbsoluteValue (0 : E →L[𝕜] E) = 0 :=
+  CFC.abs_zero
 
 /-- The full ambient sine-angle operator of two subspaces: the absolute value
 of the projector difference. -/
@@ -625,6 +692,8 @@ theorem ideal_sinTheta
   have habs := I.operatorAbsoluteValue_mem_and_gauge_eq hdiff.1
   simpa [sinAngleOperator, habs.2] using
     And.intro habs.1 hdiff.2
+
+end OperatorAbsoluteValue
 
 end DavisKahanExt
 end TauCeti
