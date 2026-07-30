@@ -24,9 +24,11 @@ Each is proved from the public API alone — the defining infimum is never unfol
   characteristic lemmas: the lower bound from `le_approximationNumber_of_finrank_lt`
   on the whole space, the upper from `approximationNumber_le_norm` and `norm_id`,
   and the vanishing from `approximationNumber_eq_zero_of_rank_le`.
-* `approximationNumber_starProjection` — an orthogonal projection onto a subspace
-  of dimension `r` has the same profile, for the same two reasons, with the
-  subspace itself as the witness of the lower bound.
+
+* `approximationNumber_starProjection` and
+  `approximationNumber_starProjection_of_finrank_le` — an orthogonal projection onto
+  a subspace of dimension `r` has the same profile, for the same two reasons, with
+  the subspace itself as the witness of the lower bound.
 * `approximationNumber_eq_zero_of_finrank_range_le` — the rank cutoff on a
   concrete map, stated in `finrank` rather than `Cardinal` form because that is
   what a consumer with an explicit map has.
@@ -98,5 +100,35 @@ theorem approximationNumber_id_of_finrank_le {n : ℕ} (hn : finrank 𝕜 E ≤ 
     simp
   rw [hrange]
   simpa using hn
+
+/-- **Acceptance example: an orthogonal projection.**  A projection onto a
+subspace of dimension `r` has `aₙ = 1` for every `n < r`.
+
+Same two arguments as the identity, with the subspace itself as the witness of the
+lower bound: on `V` the projection is the identity, so it does not shrink any unit
+vector there. -/
+theorem approximationNumber_starProjection (V : Submodule 𝕜 E)
+    [V.HasOrthogonalProjection] (n : ℕ) (hn : n < finrank 𝕜 V) :
+    V.starProjection.approximationNumber n = 1 := by
+  refine le_antisymm ?_ ?_
+  · refine le_trans (V.starProjection.approximationNumber_le_norm n) ?_
+    exact V.starProjection_norm_le
+  · refine le_approximationNumber_of_finrank_lt _ n V hn ?_
+    intro x hx
+    have hxV : V.starProjection (x : E) = (x : E) :=
+      V.starProjection_eq_self_iff.mpr x.2
+    rw [hxV, hx]
+
+/-- **Acceptance example: an orthogonal projection, past its rank.**  Beyond the
+dimension of the subspace there is nothing left to approximate. -/
+theorem approximationNumber_starProjection_of_finrank_le (V : Submodule 𝕜 E)
+    [V.HasOrthogonalProjection] [FiniteDimensional 𝕜 V] {n : ℕ}
+    (hn : finrank 𝕜 V ≤ n) :
+    V.starProjection.approximationNumber n = 0 := by
+  refine approximationNumber_eq_zero_of_finrank_range_le _ ?_
+  have hrange : LinearMap.range (V.starProjection : E →ₗ[𝕜] E) = V :=
+    V.range_starProjection
+  rw [hrange]
+  exact hn
 
 end ContinuousLinearMap
