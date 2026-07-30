@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-0/790 files reviewed · 790 files · 179,541 lines · 70 groups
+0/787 files reviewed · 787 files · 179,819 lines · 70 groups
 
 ## How to review
 
@@ -319,32 +319,23 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/Experimental/MathAhead
 
-*24 files, 3,348 lines — 0/24 reviewed*
+*15 files, 2,268 lines — 0/15 reviewed*
 
 - [ ] `DavisKahan/Experimental/MathAhead/Section4/InfiniteProposition41.lean` — 638 lines
 - [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/HilbertSchmidtComplexFamily.lean` — 251 lines
 - [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/CircleContourGeometry.lean` — 246 lines
 - [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/RealSylvesterDescent.lean` — 237 lines
-- [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeamAnalyticFoundation.lean` — 207 lines
 - [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/SchattenApproximationFoundation.lean` — 202 lines
 - [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/ContourReuseBridge.lean` — 181 lines
-- [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeam/Classical/CharacteristicConverse.lean` — 167 lines
-- [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeam/Analytic/FoundationAssembler.lean` — 166 lines
 - [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/KyFanBochner.lean` — 165 lines
-- [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeam/Analytic/EigenmodeReduction.lean` — 164 lines
-- [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeam/Classical/ModeData.lean` — 159 lines
-- [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeam/Classical/RootLocalizationReduction.lean` — 159 lines
 - [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/SpectralMultiplicityFoundation.lean` — 146 lines
 - [ ] `DavisKahan/Experimental/MathAhead/Section4/InfiniteIdealDominance.lean` — 104 lines
-- [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeam/HardTheoryAll.lean` — 34 lines
-- [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/All.lean` — 28 lines
+- [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/All.lean` — 26 lines
 - [ ] `DavisKahan/Experimental/MathAhead/Sylvester/All.lean` — 17 lines
 - [ ] `DavisKahan/Experimental/MathAhead/GeometryAll.lean` — 16 lines
-- [ ] `DavisKahan/Experimental/MathAhead/Section9All.lean` — 16 lines
-- [ ] `DavisKahan/Experimental/MathAhead/All.lean` — 14 lines
 - [ ] `DavisKahan/Experimental/MathAhead/SylvesterAll.lean` — 14 lines
+- [ ] `DavisKahan/Experimental/MathAhead/All.lean` — 13 lines
 - [ ] `DavisKahan/Experimental/MathAhead/ContinuationAll.lean` — 12 lines
-- [ ] `DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeam/All.lean` — 5 lines
 
 ### DavisKahan/Experimental/Scratch
 
@@ -566,7 +557,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/Sources/DavisKahan1970
 
-*71 files, 14,098 lines — 0/71 reviewed*
+*77 files, 15,136 lines — 0/77 reviewed*
 
 - [ ] `DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean` — 642 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section8RieszCircle.lean` — 554 lines
@@ -594,6 +585,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section9/TrialSubspace.lean` — 231 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/SineTheta/OperatorAngleBridge.lean` — 230 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean` — 229 lines
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean` — 211 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoTheta.lean` — 193 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean` — 183 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/PartIII.lean` — 181 lines
@@ -601,9 +593,14 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `DavisKahan/Sources/DavisKahan1970/Ideals/UnitaryInvariantNormInstances.lean` — 177 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/SineTheta/CommonDomain.lean` — 173 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFiniteRank.lean` — 168 lines
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristicConverse.lean` — 167 lines
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamEigenmodeReduction.lean` — 167 lines
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamFoundationAssembler.lean` — 166 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61.lean` — 165 lines
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamModeData.lean` — 164 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean` — 162 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/SineTheta/FullAngle.lean` — 159 lines
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamRootLocalization.lean` — 157 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section9/WeinbergerComparison.lean` — 157 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/Ideals/RankOneNormalization.lean` — 155 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanTheta.lean` — 154 lines
@@ -633,7 +630,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `DavisKahan/Sources/DavisKahan1970/Audits/Correspondence.lean` — 42 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/SineTheta/All.lean` — 27 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/All.lean` — 25 lines
-- [ ] `DavisKahan/Sources/DavisKahan1970/Section9/All.lean` — 18 lines
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section9/All.lean` — 24 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/FullPartIIIExtensions.lean` — 17 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/Audits/All.lean` — 16 lines
 - [ ] `DavisKahan/Sources/DavisKahan1970/Ideals/All.lean` — 16 lines
@@ -830,15 +827,15 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### FinishTanTwoTheta/FinishTanTwoTheta
 
-*21 files, 6,425 lines — 0/21 reviewed*
+*21 files, 6,726 lines — 0/21 reviewed*
 
 - [ ] `FinishTanTwoTheta/FinishTanTwoTheta/FunctionalCalculus/DoubleAngleTangent.lean` — 870 lines
+- [ ] `FinishTanTwoTheta/FinishTanTwoTheta/DavisKahan/CanonicalTangentBridge.lean` — 822 lines
 - [ ] `FinishTanTwoTheta/FinishTanTwoTheta/DavisKahan/InfiniteQuarterAcute.lean` — 701 lines
 - [ ] `FinishTanTwoTheta/FinishTanTwoTheta/DavisKahan/Unbounded.lean` — 592 lines
-- [ ] `FinishTanTwoTheta/FinishTanTwoTheta/DavisKahan/CanonicalTangentBridge.lean` — 529 lines
 - [ ] `FinishTanTwoTheta/FinishTanTwoTheta/ApproximationNumber/SpectralSelection.lean` — 490 lines
 - [ ] `FinishTanTwoTheta/FinishTanTwoTheta/ApproximationNumber/GramSpectralRank.lean` — 489 lines
-- [ ] `FinishTanTwoTheta/FinishTanTwoTheta/DavisKahan/PaperFaithful.lean` — 447 lines
+- [ ] `FinishTanTwoTheta/FinishTanTwoTheta/DavisKahan/PaperFaithful.lean` — 455 lines
 - [ ] `FinishTanTwoTheta/FinishTanTwoTheta/DavisKahan/SharpKyFan.lean` — 355 lines
 - [ ] `FinishTanTwoTheta/FinishTanTwoTheta/DavisKahan/StableRiccatiPair.lean` — 267 lines
 - [ ] `FinishTanTwoTheta/FinishTanTwoTheta/ApproximationNumber/GramBandPolar.lean` — 233 lines
@@ -1134,17 +1131,17 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T21 Matrix rank factorization and positive semidefiniteness
 
-*2 files, 386 lines — 0/2 reviewed*
+*2 files, 402 lines — 0/2 reviewed*
 
-- [ ] `ForTauCeti/LinearAlgebra/Matrix/PosDef.lean` — 203 lines
-- [ ] `ForTauCeti/LinearAlgebra/Matrix/RankFactorization.lean` — 183 lines
+- [ ] `ForTauCeti/LinearAlgebra/Matrix/PosDef.lean` — 211 lines
+- [ ] `ForTauCeti/LinearAlgebra/Matrix/RankFactorization.lean` — 191 lines
 
 ### ForTauCeti :: T22 Berge's maximum theorem and approximate minimizers
 
-*2 files, 485 lines — 0/2 reviewed*
+*2 files, 488 lines — 0/2 reviewed*
 
-- [ ] `ForTauCeti/Topology/Berge.lean` — 339 lines
-- [ ] `ForTauCeti/Topology/ApproxMinimizer.lean` — 146 lines
+- [ ] `ForTauCeti/Topology/Berge.lean` — 345 lines
+- [ ] `ForTauCeti/Topology/ApproxMinimizer.lean` — 143 lines
 
 ### ForTauCetiRoadmap/ApproximationNumbers
 
