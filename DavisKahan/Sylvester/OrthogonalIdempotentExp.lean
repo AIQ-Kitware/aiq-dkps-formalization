@@ -11,6 +11,12 @@ import DavisKahan.Sylvester.FiniteStepCalculus
 The proof is algebraic.  Powers of an orthogonal idempotent decomposition act
 coefficientwise, and the exponential power series may then be interchanged with
 the finite sum.
+
+**Promoted 2026-07-30 under lane `EXP-PROMOTE-MISC`**, from
+`DavisKahan/Experimental/InfiniteDimensional/Sylvester/`.  It became promotable *because*
+`Sylvester/FiniteStepCalculus.lean` was promoted an hour earlier under `EXP-PROMOTE-SYL`:
+that was its only Experimental import, so clearing one module cleared this one.  Nothing is
+restated; names and namespace (`TauCeti.DavisKahanExt`) are unchanged.
 -/
 
 namespace TauCeti
@@ -25,6 +31,7 @@ universe u
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /-- Powers of a scalar multiple of an idempotent. -/
 theorem smul_idempotent_pow
     (P : H →L[ℂ] H) (hP : P * P = P) (c : ℂ) :
@@ -74,8 +81,9 @@ theorem exp_smul_idempotent
           have hcexp : Summable fun n : ℕ => c ^ n / n.factorial :=
             NormedSpace.expSeries_div_summable c
           rw [hcexp.tsum_eq_zero_add]
-          simp [div_eq_mul_inv, mul_comm, mul_left_comm]
+          simp [div_eq_mul_inv, mul_comm]
 
+omit [CompleteSpace H] in
 /-- Powers of a finite sum of pairwise orthogonal idempotents are taken
 coefficientwise. -/
 theorem finset_orthogonal_idempotents_pow
@@ -186,7 +194,7 @@ theorem exp_finset_orthogonal_idempotents
                 (((t : ℂ) * c i) ^ m) / m.factorial :=
               NormedSpace.expSeries_div_summable ((t : ℂ) * c i)
             rw [hcexp.tsum_eq_zero_add]
-            simp [div_eq_mul_inv, mul_comm, mul_left_comm]
+            simp [div_eq_mul_inv, mul_comm]
           rw [hf.tsum_smul_const, ← hscalar, add_smul, one_smul]
 
 end
