@@ -88,7 +88,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  +[A+"SkewAdjointExponential"]),
 ("T14","Borel functional calculus and projection-valued measures",
  [A+"BorelCalculus."+x for x in ["DiagonalMeasure","Multiplicative","Operator","PVM","Polarization"]]
- +[A+"ProjValMeasure.Basic",A+"ProjValMeasure.Additivity",
+ +[A+"ProjValMeasure.Basic",A+"ProjValMeasure.Additivity",A+"ProjValMeasure.Subspace",
    "MeasureTheory.CfcMeasurable","MeasureTheory.CompactExists","MeasureTheory.HellySelection"]),
 # T15 was one 25-module, 6,700-line topic -- the biggest by both measures and
 # nearly three times the median.  Lane T15-SPLIT cut it into the three chains the

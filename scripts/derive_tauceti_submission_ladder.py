@@ -212,6 +212,7 @@ RUNGS: list[tuple[str, str, list[str]]] = [
         "Analysis.InnerProductSpace.BorelCalculus.Polarization",
         "Analysis.InnerProductSpace.ProjValMeasure.Additivity",
         "Analysis.InnerProductSpace.ProjValMeasure.Basic",
+        "Analysis.InnerProductSpace.ProjValMeasure.Subspace",
         "MeasureTheory.CfcMeasurable",
         "MeasureTheory.CompactExists",
         "MeasureTheory.HellySelection",
