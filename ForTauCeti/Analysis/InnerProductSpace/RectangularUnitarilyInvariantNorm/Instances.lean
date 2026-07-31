@@ -95,6 +95,19 @@ the projection. Consumers were working around that with `change`, which is the
 @[simp] theorem adjointTransport_coe_apply (A : E →ₗ[𝕜] F) :
     (adjointTransport N) A.adjoint = N A := adjointTransport_apply N A
 
+/-- The transported norm of a *negated* adjoint.
+
+`adjointTransport_coe_apply` cannot fire on this: it matches an argument of the
+form `A.adjoint`, and `-C.adjoint` has `Neg.neg` at the head, so simp sees no
+adjoint to cancel.  Callers that reverse a Sylvester equation land on exactly
+this shape — the reversal introduces the sign — and before 2026-07-30 two proofs
+in `Sylvester/Interval.lean` each carried an eight-line comment explaining the
+failure followed by the same `change`/`map_neg`/`adjoint_adjoint` fix by hand. -/
+@[simp] theorem adjointTransport_neg_adjoint_apply (C : E →ₗ[𝕜] F) :
+    (adjointTransport N) (-C.adjoint) = N C := by
+  change N ((-C.adjoint).adjoint) = N C
+  rw [map_neg, LinearMap.adjoint_adjoint, N.apply_neg]
+
 
 /-- Left ideal property.  This is Fan dominance applied to the pointwise
 singular-value bound for composition by a bounded left factor. -/
@@ -245,7 +258,7 @@ noncomputable def opNorm : RectangularUnitarilyInvariantNorm 𝕜 E F where
 /-- The rectangular operator norm is the ordinary operator norm of the
 continuous-linear-map view, definitionally. -/
 @[simp] theorem opNorm_apply (A : E →ₗ[𝕜] F) :
-    opNorm A = ‖A.toContinuousLinearMap‖ := rfl
+    opNorm A = ‖A.toContinuousLinearMap‖ := (rfl)
 
 /-- Frobenius/Hilbert--Schmidt norm as a rectangular UI norm. -/
 noncomputable def frobenius : RectangularUnitarilyInvariantNorm 𝕜 E F where
@@ -472,7 +485,7 @@ theorem frobenius_subtype_comp
 @[simp]
 theorem kyFan_apply (k : ℕ) (A : E →ₗ[𝕜] F) :
     kyFan k A = rectangularKyFanSum k A :=
-  rfl
+  (rfl)
 
 /-- A finite two-sided unitary-orbit certificate bounds every rectangular
 Ky Fan prefix by the same certificate mass.
@@ -492,7 +505,7 @@ values past the rank are zero automatically. -/
 @[simp]
 theorem nuclear_apply (A : E →ₗ[𝕜] F) :
     nuclear A = ∑ i : Fin (finrank 𝕜 E), A.singularValues (i : ℕ) :=
-  rfl
+  (rfl)
 
 /-- The rectangular Frobenius norm is the Euclidean norm of the complete
 finite singular-value list. -/
@@ -571,7 +584,7 @@ itself on square operators. -/
 @[simp] theorem toRectangular_apply
     (N : UnitarilyInvariantNorm 𝕜 E) (A : E →ₗ[𝕜] E) :
     N.toRectangular A = N A :=
-  rfl
+  (rfl)
 
 end UnitarilyInvariantNorm
 end TauCeti

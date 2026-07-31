@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.ApproximationNumber.GramSpectralRank
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 
 /-!
@@ -17,6 +17,7 @@ number argument.  This file supplies that wrapper without tactic search.
 namespace TauCeti
 namespace FinishTanTwoTheta
 
+open ApproximationNumber
 open scoped InnerProductSpace
 open Set
 

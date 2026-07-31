@@ -132,15 +132,7 @@ private noncomputable def basisDoubledPhaseRotationLinearEquiv
   · intro r x
     apply Prod.ext <;> simp [C, S, smul_sub, smul_add]
   · intro x
-    have htrig (i : ι) : ((Real.cos (theta i) : ℝ) : 𝕜) *
-        ((Real.cos (theta i) : ℝ) : 𝕜) +
-        ((Real.sin (theta i) : ℝ) : 𝕜) * ((Real.sin (theta i) : ℝ) : 𝕜) = 1 := by
-      have h := congrArg (fun x : ℝ => (x : 𝕜))
-        (by nlinarith [Real.sin_sq_add_cos_sq (theta i)] :
-          Real.cos (theta i) * Real.cos (theta i) +
-            Real.sin (theta i) * Real.sin (theta i) = 1)
-      push_cast at h
-      simpa using h
+    have htrig (i : ι) := cos_mul_cos_add_sin_mul_sin_cast (𝕜 := 𝕜) (theta i)
     apply Prod.ext
     · apply e.repr.injective
       ext i
@@ -153,15 +145,7 @@ private noncomputable def basisDoubledPhaseRotationLinearEquiv
         PiLp.add_apply, PiLp.sub_apply, PiLp.neg_apply]
       linear_combination (e.repr x.2 i) * htrig i
   · intro x
-    have htrig (i : ι) : ((Real.cos (theta i) : ℝ) : 𝕜) *
-        ((Real.cos (theta i) : ℝ) : 𝕜) +
-        ((Real.sin (theta i) : ℝ) : 𝕜) * ((Real.sin (theta i) : ℝ) : 𝕜) = 1 := by
-      have h := congrArg (fun x : ℝ => (x : 𝕜))
-        (by nlinarith [Real.sin_sq_add_cos_sq (theta i)] :
-          Real.cos (theta i) * Real.cos (theta i) +
-            Real.sin (theta i) * Real.sin (theta i) = 1)
-      push_cast at h
-      simpa using h
+    have htrig (i : ι) := cos_mul_cos_add_sin_mul_sin_cast (𝕜 := 𝕜) (theta i)
     apply Prod.ext
     · apply e.repr.injective
       ext i
@@ -245,7 +229,7 @@ def doubledComplexScalarMapAction (z : ℂ) (T : E' →ₗ[𝕜] F') :
     doubledComplexScalarMapAction z T x = WithLp.toLp 2
       (((z.re : ℝ) : 𝕜) • T x.fst - ((z.im : ℝ) : 𝕜) • T x.snd,
         ((z.im : ℝ) : 𝕜) • T x.fst + ((z.re : ℝ) : 𝕜) • T x.snd) :=
-  rfl
+  (rfl)
 
 /-- The doubled realization of multiplication by the phase `exp (θ i)` after
 applying a `𝕜`-linear map. -/
@@ -338,21 +322,7 @@ theorem norm_smul_doubledPhaseMapAction_arg_add
         (a * Complex.exp ((theta : ℂ) * Complex.I)) T := by
   rw [doubledPhaseMapAction, doubledComplexScalarMapAction_real_smul]
   congr 1
-  calc
-    ((‖a‖ : ℝ) : ℂ) *
-        Complex.exp (((Complex.arg a + theta : ℝ) : ℂ) * Complex.I) =
-      ((‖a‖ : ℝ) : ℂ) *
-        (Complex.exp (((Complex.arg a : ℝ) : ℂ) * Complex.I) *
-          Complex.exp ((theta : ℂ) * Complex.I)) := by
-            rw [← Complex.exp_add]
-            congr 2
-            push_cast
-            ring
-    _ = (((‖a‖ : ℝ) : ℂ) *
-          Complex.exp (((Complex.arg a : ℝ) : ℂ) * Complex.I)) *
-        Complex.exp ((theta : ℂ) * Complex.I) := by ring
-    _ = a * Complex.exp ((theta : ℂ) * Complex.I) := by
-      rw [Complex.norm_mul_exp_arg_mul_I]
+  exact norm_mul_exp_arg_add_mul_I a theta
 
 /-- A finite complex Fourier sum acts on doubled `𝕜`-linear maps as a finite
 sum of nonnegatively weighted phase rotations. -/
@@ -543,21 +513,8 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_doubledInterpolation
     simpa only [map_mul, map_sub, RCLike.conj_ofReal, inner_conj_symm,
       RCLike.ofReal_sub] using
       congrArg (starRingEnd 𝕜) (hcoeff i j)
-  let blockDiagonal :
-      (E →ₗ[𝕜] F) →ₗ[𝕜]
-        (WithLp 2 (E × E) →ₗ[𝕜] WithLp 2 (F × F)) := by
-    refine
-      { toFun := fun A =>
-          RectangularUnitarilyInvariantNorm.orthogonalBlockSum A A
-        map_add' := ?_
-        map_smul' := ?_ }
-    · intro A B
-      ext x
-      apply WithLp.ofLp_injective 2
-      apply Prod.ext <;>
-        simp [RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply]
-    · intro r A
-      exact RectangularUnitarilyInvariantNorm.orthogonalBlockSum_smul r A A
+  let blockDiagonal := RectangularUnitarilyInvariantNorm.orthogonalBlockSumDiagonal
+    (𝕜 := 𝕜) (E₁ := E) (F₁ := F)
   have hblock (A : E →ₗ[𝕜] F) :
       RectangularUnitarilyInvariantNorm.orthogonalBlockSum A A =
         ∑ i, ∑ j, ⟪eF i, A (eE j)⟫_𝕜 •

@@ -117,7 +117,7 @@ omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 theorem unitaryOrbitAction_apply
     (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) (T : E →ₗ[𝕜] F) :
     unitaryOrbitAction U V T = U.toLinearMap ∘ₗ T ∘ₗ V.toLinearMap :=
-  rfl
+  (rfl)
 
 /-- The unitary diagonal in an orthonormal basis with prescribed unit-modulus
 coordinate factors.  This is the finite-dimensional operator attached to one
@@ -196,6 +196,54 @@ noncomputable def complexFourierPhase (x : ℝ) : unitary ℂ := by
   · rw [RCLike.star_def, RCLike.mul_conj, hz]
     norm_num
 
+/-- **Rotating a complex number by `θ` shifts its argument by `θ`.**
+`‖a‖ * exp((arg a + θ) i) = a * exp(θ i)`.
+
+Pure scalar arithmetic — split the exponential, re-associate, and close with
+`Complex.norm_mul_exp_arg_mul_I` — but it appeared twice as a fifteen-line
+`calc` buried inside two *operator* proofs, once here and once in
+`DoubledPhase.lean`.  Nothing in either copy mentioned the operators or bases
+around it, which is exactly why it read as incidental in both places. -/
+theorem norm_mul_exp_arg_add_mul_I (a : ℂ) (theta : ℝ) :
+    ((‖a‖ : ℝ) : ℂ) *
+        Complex.exp (((Complex.arg a + theta : ℝ) : ℂ) * Complex.I) =
+      a * Complex.exp ((theta : ℂ) * Complex.I) := by
+  calc
+    ((‖a‖ : ℝ) : ℂ) *
+        Complex.exp (((Complex.arg a + theta : ℝ) : ℂ) * Complex.I) =
+      ((‖a‖ : ℝ) : ℂ) *
+        (Complex.exp (((Complex.arg a : ℝ) : ℂ) * Complex.I) *
+          Complex.exp ((theta : ℂ) * Complex.I)) := by
+            rw [← Complex.exp_add]
+            congr 2
+            push_cast
+            ring
+    _ = (((‖a‖ : ℝ) : ℂ) *
+          Complex.exp (((Complex.arg a : ℝ) : ℂ) * Complex.I)) *
+        Complex.exp ((theta : ℂ) * Complex.I) := by ring
+    _ = a * Complex.exp ((theta : ℂ) * Complex.I) := by
+      rw [Complex.norm_mul_exp_arg_mul_I]
+
+/-- **`cos t * cos t + sin t * sin t = 1`.**
+
+Mathlib states the Pythagorean identity with squares
+(`Real.sin_sq_add_cos_sq`), and every rotation-matrix computation in this
+cluster needs it with products, so it was being re-derived by `nlinarith` at each
+use — six times in this file and, in its cast form below, twice more in
+`DoubledPhase.lean`. -/
+theorem cos_mul_cos_add_sin_mul_sin (t : ℝ) :
+    Real.cos t * Real.cos t + Real.sin t * Real.sin t = 1 := by
+  nlinarith [Real.sin_sq_add_cos_sq t]
+
+/-- The same identity pushed into `𝕜`, which is the form the doubled-phase
+rotation needs when it works through `RCLike` coefficients. -/
+theorem cos_mul_cos_add_sin_mul_sin_cast (t : ℝ) :
+    ((Real.cos t : ℝ) : 𝕜) * ((Real.cos t : ℝ) : 𝕜) +
+      ((Real.sin t : ℝ) : 𝕜) * ((Real.sin t : ℝ) : 𝕜) = 1 := by
+  have h := congrArg (fun x : ℝ => (x : 𝕜)) (cos_mul_cos_add_sin_mul_sin t)
+  push_cast at h
+  simpa using h
+
 /-- The Fourier phase as a complex number is `exp(ix)`. -/
 @[simp]
 theorem complexFourierPhase_coe (x : ℝ) :
@@ -222,18 +270,14 @@ private noncomputable def realRotationLinearEquiv
     (Real.cos theta • x.1 + Real.sin theta • x.2,
       -Real.sin theta • x.1 + Real.cos theta • x.2)
   left_inv x := by
-    have htrig : Real.cos theta * Real.cos theta +
-        Real.sin theta * Real.sin theta = 1 := by
-      nlinarith [Real.sin_sq_add_cos_sq theta]
+    have htrig := cos_mul_cos_add_sin_mul_sin theta
     apply Prod.ext <;> dsimp
     · conv_rhs => rw [← one_smul ℝ x.1, ← htrig]
       module
     · conv_rhs => rw [← one_smul ℝ x.2, ← htrig]
       module
   right_inv x := by
-    have htrig : Real.cos theta * Real.cos theta +
-        Real.sin theta * Real.sin theta = 1 := by
-      nlinarith [Real.sin_sq_add_cos_sq theta]
+    have htrig := cos_mul_cos_add_sin_mul_sin theta
     apply Prod.ext <;> dsimp
     · conv_rhs => rw [← one_smul ℝ x.1, ← htrig]
       module
@@ -251,9 +295,7 @@ noncomputable def doubledRealRotation
     (theta : ℝ) : WithLp 2 (G × G) ≃ₗᵢ[ℝ] WithLp 2 (G × G) where
   __ := (realRotationLinearEquiv theta).withLpCongr 2
   norm_map' x := by
-    have htrig : Real.cos theta * Real.cos theta +
-        Real.sin theta * Real.sin theta = 1 := by
-      nlinarith [Real.sin_sq_add_cos_sq theta]
+    have htrig := cos_mul_cos_add_sin_mul_sin theta
     -- `doubledRealRotation` is a bundled `LinearIsometryEquiv`, so its application to a
     -- `WithLp` pair is not in normal form for the `norm_sq_eq_re_inner` rewrites below;
     -- no simp lemma unfolds a bundled equiv at a point.
@@ -281,7 +323,7 @@ noncomputable def doubledRealRotation
     doubledRealRotation theta x = WithLp.toLp 2
       (Real.cos theta • x.fst - Real.sin theta • x.snd,
         Real.sin theta • x.fst + Real.cos theta • x.snd) :=
-  rfl
+  (rfl)
 
 /-- A real diagonal map in an orthonormal basis. -/
 private noncomputable def basisDiagonalRealMap
@@ -328,9 +370,7 @@ private noncomputable def basisDoubledRealRotationLinearEquiv
   · intro r x
     apply Prod.ext <;> simp [C, S, smul_sub, smul_add]
   · intro x
-    have htrig (i : ι) : Real.cos (theta i) * Real.cos (theta i) +
-        Real.sin (theta i) * Real.sin (theta i) = 1 := by
-      nlinarith [Real.sin_sq_add_cos_sq (theta i)]
+    have htrig (i : ι) := cos_mul_cos_add_sin_mul_sin (theta i)
     apply Prod.ext
     · apply e.repr.injective
       ext i
@@ -343,9 +383,7 @@ private noncomputable def basisDoubledRealRotationLinearEquiv
         PiLp.add_apply, PiLp.sub_apply, PiLp.neg_apply]
       linear_combination (e.repr x.2 i) * htrig i
   · intro x
-    have htrig (i : ι) : Real.cos (theta i) * Real.cos (theta i) +
-        Real.sin (theta i) * Real.sin (theta i) = 1 := by
-      nlinarith [Real.sin_sq_add_cos_sq (theta i)]
+    have htrig (i : ι) := cos_mul_cos_add_sin_mul_sin (theta i)
     apply Prod.ext
     · apply e.repr.injective
       ext i
@@ -388,9 +426,7 @@ noncomputable def basisDoubledRealRotation
     intro i _
     simp only [map_sub, map_add, C, S, basisDiagonalRealMap_repr,
       PiLp.sub_apply, PiLp.add_apply, Real.norm_eq_abs, sq_abs]
-    have htrig : Real.cos (theta i) * Real.cos (theta i) +
-        Real.sin (theta i) * Real.sin (theta i) = 1 := by
-      nlinarith [Real.sin_sq_add_cos_sq (theta i)]
+    have htrig := cos_mul_cos_add_sin_mul_sin (theta i)
     linear_combination
       ((e.repr x.fst i) ^ 2 + (e.repr x.snd i) ^ 2) * htrig
 
@@ -490,7 +526,7 @@ def doubledComplexScalarAction
     doubledComplexScalarAction z T x = WithLp.toLp 2
       (z.re • T x.fst - z.im • T x.snd,
         z.im • T x.fst + z.re • T x.snd) :=
-  rfl
+  (rfl)
 
 /-- A doubled phase action is complex scalar action by its unit phase. -/
 theorem doubledPhaseAction_eq_complexScalarAction
@@ -588,21 +624,7 @@ theorem norm_smul_doubledPhaseAction_arg_add
   rw [doubledPhaseAction_eq_complexScalarAction,
     doubledComplexScalarAction_real_smul]
   congr 1
-  calc
-    ((‖a‖ : ℝ) : ℂ) *
-        Complex.exp (((Complex.arg a + theta : ℝ) : ℂ) * Complex.I) =
-      ((‖a‖ : ℝ) : ℂ) *
-        (Complex.exp (((Complex.arg a : ℝ) : ℂ) * Complex.I) *
-          Complex.exp ((theta : ℂ) * Complex.I)) := by
-            rw [← Complex.exp_add]
-            congr 2
-            push_cast
-            ring
-    _ = (((‖a‖ : ℝ) : ℂ) *
-          Complex.exp (((Complex.arg a : ℝ) : ℂ) * Complex.I)) *
-        Complex.exp ((theta : ℂ) * Complex.I) := by ring
-    _ = a * Complex.exp ((theta : ℂ) * Complex.I) := by
-      rw [Complex.norm_mul_exp_arg_mul_I]
+  exact norm_mul_exp_arg_add_mul_I a theta
 
 /-- A finite complex Fourier sum acts on doubled real maps as a finite sum of
 nonnegatively weighted real phase rotations. -/

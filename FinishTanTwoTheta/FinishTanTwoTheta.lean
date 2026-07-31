@@ -6,8 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import FinishTanTwoTheta.GroundedImports
 import DavisKahan.OperatorIdeal.Majorization.WeakSubmajorization
 import DavisKahan.Sources.DavisKahan1970.Ideals.SequenceGauge
-import FinishTanTwoTheta.OperatorIdeal.StandardFanDominance
-import FinishTanTwoTheta.OperatorIdeal.StandardInstances
+import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
+import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 import FinishTanTwoTheta.ApproximationNumber.SpectralSelection
 import FinishTanTwoTheta.FunctionalCalculus.DoubleAngleTangent
 import FinishTanTwoTheta.DavisKahan.StableRiccatiPair

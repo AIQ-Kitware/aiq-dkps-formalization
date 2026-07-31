@@ -120,7 +120,7 @@ the second. -/
 @[simp]
 theorem overlapOp_apply {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v)
     (x : EuclideanSpace 𝕜 (Fin d)) :
-    overlapOp hu hv x = (familyIsometry hu).toLinearMap.adjoint (familyIsometry hv x) := rfl
+    overlapOp hu hv x = (familyIsometry hu).toLinearMap.adjoint (familyIsometry hv x) := (rfl)
 
 /-- **The overlap operator is a contraction.** `‖overlapOp hu hv x‖ ≤ ‖x‖`, since
 `familyIsometry hv` is an isometry and the adjoint of an isometry is a

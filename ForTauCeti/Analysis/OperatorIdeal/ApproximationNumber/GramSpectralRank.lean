@@ -3,7 +3,6 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.GroundedImports
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
@@ -22,10 +21,29 @@ The proofs are explicit min--max arguments.  No tactic search, compactness, or
 singular-vector attainment is used.  The spectral measure is Tau Ceti's native
 `LinearPMap.spectralPVM`; no Spectra self-adjoint wrapper or Stone group is
 introduced for this bounded operator.
+
+## Provenance
+
+*Moved, not restated.*  This module was written in the `FinishTanTwoTheta`
+completion workspace and reached its present home in two steps, the second of
+which is the one a reader should know about: **its imports are three `ForTauCeti`
+leaves and nothing else**, so it had been sitting in a library it did not depend
+on.  Statements, proofs and the `TauCeti.ApproximationNumber` namespace are
+unchanged throughout; only the enclosing library and the consumers' import lines
+moved.  `FinishTanTwoTheta.GroundedImports` was dropped along the way because it
+imports the whole Davis--Kahan aggregate and so could not travel.
+
+**Two hypotheses the move falsified, recorded because they are the argument for
+making such moves early.**  Under the stricter options this library is built with,
+the file needed `sub_apply` in place of a deprecated
+`ContinuousLinearMap.sub_apply` twice; and by *dependency* it is not
+approximation-number material at all — it imports `LinearPMap.Constructions` and
+`LinearPMap.SpectralFormBounds`, so it is submittable only after the unbounded
+spectral measure, not with the `a`-numbers its name suggests.
 -/
 
 namespace TauCeti
-namespace FinishTanTwoTheta
+namespace ApproximationNumber
 
 open scoped InnerProductSpace
 open Set
@@ -95,7 +113,7 @@ theorem specProjection_Ici_apply_eq_self_of_Iic_apply_eq_zero {c : ℝ} (x : H)
     _ = (ContinuousLinearMap.id ℂ H - P.proj (Set.Iio c) measurableSet_Iio) x := by
       rw [P.proj_compl]
     _ = x := by
-      rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply, hIio, sub_zero]
+      rw [sub_apply, ContinuousLinearMap.id_apply, hIio, sub_zero]
 
 /-- If the high closed half-line annihilates `x`, then the complementary low
 closed half-line fixes `x`. -/
@@ -134,7 +152,7 @@ theorem specProjection_Iic_apply_eq_self_of_Ici_apply_eq_zero {c : ℝ} (x : H)
     _ = (ContinuousLinearMap.id ℂ H - P.proj (Set.Ioi c) measurableSet_Ioi) x := by
       rw [P.proj_compl]
     _ = x := by
-      rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply, hIoi, sub_zero]
+      rw [sub_apply, ContinuousLinearMap.id_apply, hIoi, sub_zero]
 
 /-- **Vector-local lower energy bound.** If a domain vector has no spectral
 component in `(-∞, c]`, its quadratic form is at least `c ‖x‖²`. -/
@@ -310,9 +328,11 @@ theorem re_inner_gramOperator (X : E0 →L[ℂ] E1) (x : E0) :
 def gramLinearPMap (X : E0 →L[ℂ] E1) : E0 →ₗ.[ℂ] E0 :=
   ((gramOperator X : E0 →ₗ[ℂ] E0).toPMap ⊤)
 
+/-- The Gram partial map is everywhere defined: it comes from a bounded operator. -/
 @[simp] theorem gramLinearPMap_domain (X : E0 →L[ℂ] E1) :
     (gramLinearPMap X).domain = ⊤ := rfl
 
+/-- On its domain the Gram partial map is the bounded Gram operator. -/
 @[simp] theorem gramLinearPMap_apply (X : E0 →L[ℂ] E1)
     (x : (gramLinearPMap X).domain) :
     gramLinearPMap X x = gramOperator X (x : E0) := rfl
@@ -484,5 +504,5 @@ theorem rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt
 
 end
 
-end FinishTanTwoTheta
+end ApproximationNumber
 end TauCeti

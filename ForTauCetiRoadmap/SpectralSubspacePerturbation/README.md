@@ -302,9 +302,94 @@ theorem sinTheta_perturbation_le
 ```
 
 **Milestone C2 — the two-sided `π/2` form**: under `SpectraSeparated A U B Vᗮ δ`
-alone, `δ * N (sinThetaMap U V) ≤ (π/2) * N (B − A)`.  **Milestone C3 — the
-domain-aware `sin Θ` theorem**, in the canonical unbounded form of the generality
-bar, with the finite statements as its specializations.
+alone, `δ * N (sinThetaMap U V) ≤ (π/2) * N (B − A)`.
+
+### Milestone C3 — the domain-aware `sin Θ` theorem
+
+**This is the roadmap's headline, and it is the one milestone whose statement a reader
+cannot reconstruct from the milestones around it.**  Everything above is a bounded or
+finite statement; the generality bar says the unbounded form is *canonical* and those are
+its specializations, so the canonical statement has to be written out rather than referred
+to.
+
+**Objects.**  All from sibling roadmaps except the last two:
+
+- a self-adjoint `A : E →ₗ.[ℂ] E` on a `LinearPMap` (SpectralTheory roadmap), possibly
+  unbounded, with its spectrum via `resolventSet`;
+- a **trial map** `X : H →L[ℂ] E` with a **lower frame bound** `c > 0`
+  (`∀ h, c * ‖h‖ ≤ ‖X h‖`) — not required to be isometric, which is what makes the
+  statement *generalized* in the source's sense and what the Ritz layer of Part C needs;
+- a self-adjoint **trial block** `A₀` and a self-adjoint **complementary block** `Λ₁`,
+  together with an **orthogonal exact decomposition** identifying the complement as the
+  range of an exact map — the data that replaces "`V` is an invariant subspace" once no
+  spectral projection is available;
+- the **residual** `R`, a *bounded* operator even though `A` is not: the domain-aware
+  content is that `A X − X A₀` extends from a graph core to a bounded operator on all of
+  `H`, and the hypothesis is bounded-residual, never bounded-`A`;
+- the **norm**: a Ky Fan dominant symmetric ideal family `N` from the **OperatorIdeals**
+  roadmap (Part B), *not* a unitarily invariant norm on a finite-dimensional space.  This
+  is the load-bearing import: at this generality the norm must be a total `ℝ≥0∞` gauge
+  whose finiteness is a hypothesis on the residual and a *conclusion* about `sin Θ`;
+- the **gap**: a form-bounded Sylvester separation `g > 0` between `A₀` and `Λ₁`, in the
+  interval/exterior, ordered, or pairwise form of the generality bar, carrying constants
+  `1`, `1` and `π/2` respectively.
+
+**Statement.**  Under those hypotheses, with `Θ` the directed sine operator built from `X`
+and the exact map:
+
+```text
+sin Θ ∈ N     and     g · c · N(sin Θ)  ≤  N(R).
+```
+
+**Two features of the conclusion are easy to miss and are the reason it is stated as a
+conjunction.**  First, *membership is part of the theorem*: the residual is assumed to lie
+in the ideal and the sine operator is *proved* to, which is exactly the content a bounded
+statement cannot express because there every operator is in every ideal's carrier or the
+carrier is `⊤`.  Second, the lower frame constant `c` multiplies the gap, so the bound
+degrades as the trial map degenerates — with `c = 1` for an isometric trial map, recovering
+the classical form.
+
+**Hypotheses are bundled as a record, deliberately.**  A flat theorem here takes upwards of
+a dozen arguments with non-obvious mutual constraints, and every specialization repeats all
+of them.  Bundling them (`UnboundedSinThetaProblem`) makes each specialization a
+*constructor* — bounded operators build the record with `A.toLinearMap.toPMap ⊤` and a
+trivial domain transport, finite dimension adds `FiniteDimensional` and reads the blocks
+off an eigenbasis — so the specializations are proved by supplying data, not by re-proving
+the estimate.  **This is the decision that makes "bounded and finite are specializations"
+true in the code rather than only in the prose**, and it is why the roadmap can carry one
+theorem where the literature carries a family.
+
+**Status, stated precisely.**  The mathematics is **settled and machine-checked**, for both
+complex and real scalars, in the source-facing Davis–Kahan development this roadmap draws
+on: the complete Section 6 surface — the isometric theorem, the generalized lower-frame
+theorem, both directional gaps, the pairwise-gap square-norm theorem, common-domain and
+graph-core forms, real descent by complexification, and the sharpness and
+arbitrary-multiplicity equality models.  What is **open in this roadmap** is therefore not
+the proof:
+
+1. **Intrinsic restatement.**  The staged statements carry paper numbering and
+   paper-flavored names.  A Tau Ceti submission states the theorem in terms of the objects
+   above, with the source correspondence confined to a downstream wrapper — the editing
+   rule this repository's roadmaps are held to.
+2. **Norm-side reconciliation.**  The staged form quantifies over a Ky Fan dominant ideal
+   family; the OperatorIdeals roadmap now specifies that class as arising from a symmetric
+   gauge (its Milestones B1–B2).  The two must be the same object, or this theorem
+   quantifies over a class no other roadmap constructs.  **That reconciliation is the real
+   dependency between the two roadmaps, and it is why C3 cannot ship before OperatorIdeals
+   Part B.**
+3. **The specialization theorems as such.**  Bounded and finite forms exist and are proved;
+   what is missing is that they be *derived* from this record rather than proved beside it,
+   which is the claim the generality bar makes.
+4. **Real scalars without complexification bookkeeping.**  Real descent is proved by
+   complexification; the statement a reviewer would want is over `[RCLike 𝕜]` with the
+   descent internal.
+
+**Acceptance.**  A reviewer should be able to check, without reading the proof: that no
+hypothesis says `A` is bounded; that the residual's boundedness is a hypothesis and the
+sine operator's ideal membership is a conclusion; that instantiating the record with a
+bounded self-adjoint `A` and an isometric trial map yields Milestone C1 *by construction*;
+and that the `π/2` constant appears only under pairwise separation, the other two gap forms
+carrying constant one.
 
 **Acceptance suite — Davis–Kahan Part III.**  A source-facing layer recording the
 correspondence between the paper's statements and the reusable declarations, in real
@@ -463,4 +548,11 @@ draft here, whose `Suggested.lean.md` sketch is superseded by `Suggested.lean`):
   that the repository "completes the source-general sine-theta surface" refers to
   the wider DKPS tree: the *staged* T17 surface is the dimension-free bounded layer
   plus the complete finite-dimensional family, and Part C's domain-aware milestone
-  C3 remains genuinely open in staging.
+  C3 remains genuinely open in staging.  **What "open" means for C3 was sharpened on
+  2026-07-31** and the milestone now says so in full: the mathematics is settled and
+  machine-checked in the wider DKPS tree for both scalar fields, so the open work is
+  intrinsic restatement, reconciliation with the OperatorIdeals ideal-family class,
+  deriving the bounded and finite forms *from* the record rather than beside it, and real
+  scalars without complexification bookkeeping.  Recording that distinction matters: a
+  reader of the earlier one-clause milestone could not tell whether the theorem was
+  unproved or merely unstaged, and those call for different reviewers.

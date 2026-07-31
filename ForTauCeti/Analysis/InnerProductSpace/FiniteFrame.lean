@@ -60,7 +60,7 @@ omit [FiniteDimensional 𝕜 E] [Fintype ι] in
 /-- Analysis reads off the frame coefficients `⟪vᵢ, x⟫`. -/
 @[simp] theorem finiteAnalysis_apply (v : ι → E) (x : E) (i : ι) :
     finiteAnalysis 𝕜 v x i = inner 𝕜 (v i) x :=
-  rfl
+  (rfl)
 
 /-- Synthesis map `c ↦ ∑ i, c i • v i` of a finite family. -/
 noncomputable def finiteSynthesis (v : ι → E) : EuclideanSpace 𝕜 ι →ₗ[𝕜] E where
@@ -75,7 +75,7 @@ omit [FiniteDimensional 𝕜 E] in
 /-- Synthesis reassembles a coefficient vector as `∑ᵢ cᵢ • vᵢ`. -/
 @[simp] theorem finiteSynthesis_apply (v : ι → E) (c : EuclideanSpace 𝕜 ι) :
     finiteSynthesis 𝕜 v c = ∑ i, c i • v i :=
-  rfl
+  (rfl)
 
 /-- Analysis and synthesis are adjoint to each other. -/
 theorem adjoint_finiteAnalysis (v : ι → E) :

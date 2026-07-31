@@ -149,9 +149,12 @@ the Ky Fan gauge `kyFanGauge T k = ∑_{n<k} aₙ(T)`.
 - The exact zero-based additive law `a_{m+n}(S + T) ≤ aₘ(S) + aₙ(T)`
   (`approximationNumber_add_le`; no truncated subtraction anywhere), with the Lipschitz
   bound `|aₙ(S) − aₙ(T)| ≤ ‖S − T‖` and norm-continuity of `T ↦ aₙ(T)`.
-- The two-sided ideal laws `aₙ(A ∘ T ∘ B) ≤ ‖A‖ aₙ(T) ‖B‖` and `aₙ(c • T) = ‖c‖ aₙ(T)`;
-  any stronger rank-splitting product inequality is a separate target, never implied by the
-  word "multiplicativity".
+- The two-sided ideal laws `aₙ(A ∘ T ∘ B) ≤ ‖A‖ aₙ(T) ‖B‖` (`approximationNumber_comp_comp_le`)
+  and `aₙ(c • T) = ‖c‖ aₙ(T)`; any stronger rank-splitting product inequality is a separate
+  target, never implied by the word "multiplicativity".  That separate target is
+  `a_{m+n}(S ∘ T) ≤ aₘ(S) · aₙ(T)`, and it is named `approximationNumber_comp_add_le_mul`:
+  the fixed-index ideal bound above already owns `approximationNumber_comp_comp_le`, and the
+  `add` records that this one splits the index, the way `approximationNumber_add_le` does.
 - **Rank and compactness:** `aₙ(T) = 0` when `rank T ≤ n`, with the finite-dimensional
   converse as an iff; `aₙ(T) → 0` iff `T` is a norm limit of finite-rank operators with
   `n`-th term of rank at most `n`
@@ -249,7 +252,10 @@ example does not assume.
 
 **Topic T10 of the candidate design.**  The interface and four instances are staged and
 building; the symmetric-gauge construction, the dominance principle, general Schatten `p`,
-and the transport milestones are open.
+and the transport milestones are open — **specified below, not staged.**  The asymmetry is
+deliberate and worth naming: Part B's *interface* is settled and its *construction layer*
+is not, so this Part reads as four gauges that happen to satisfy four laws until B1 makes
+it a map from symbols to families.
 
 **Objects.**  `TauCeti.OperatorIdealFamily 𝕜`: a single field
 `gauge : (E →L[𝕜] F) → ℝ≥0∞` quantified over all Hilbert pairs in two independent
@@ -295,29 +301,179 @@ inherits the operator norm, which is the wrong instance); `IsComplete`, complete
   unitarily invariant norms: triangle inequality from Ky Fan subadditivity plus `ℓᵖ`-gauge
   monotonicity under weak majorization (both consumed from the MajorizationAndAngles
   roadmap), definiteness, adjoint invariance, ideal inequalities, and the endpoint
-  identifications `S₁ =` nuclear, `S₂ =` Frobenius, `S∞ =` operator norm.
+  identifications `S₁ =` nuclear, `S₂ =` Frobenius, `S∞ =` operator norm.  **The
+  finite-dimensional layer is not a special case of Milestone B3 and does not wait on it**:
+  it is a rectangular unitarily invariant norm on a vector, consumed by the
+  MajorizationAndAngles arm, whereas B3 is a family on operators between infinite-dimensional
+  spaces.  The two are related by the finite-dimensional identification of Milestone A1, and
+  that agreement is itself a target (`schattenNorm_eq_gauge_schattenFamily` on
+  finite-dimensional pairs) — without it a reader cannot tell whether `S₂` means the same
+  thing in the two halves of this Part.
 
-**Milestone B1 — symmetric norming functions and the Calkin correspondence.**  A symmetric
-gauge `Φ` on finitely supported `ℝ≥0` sequences (monotone, symmetric, normalized), its
-extension to infinite sequences, and the induced family `S_Φ` with gauge `Φ ∘ a` read in
-`ℝ≥0∞` — a `SymmetricOperatorIdealFamily` by construction.
+### Milestone B1 — symmetric norming functions and the Calkin correspondence
 
-**Milestone B2 — the Ky Fan dominance principle.**  Every family arising from a symmetric
-gauge is `IsKyFanDominant`: termwise Ky Fan domination implies `Φ`-domination for every
-symmetric gauge `Φ`.  This is the weak-majorization transfer of the MajorizationAndAngles
-roadmap applied to singular-value sequences, and it delivers the triangle inequality for
-every `‖·‖_Φ` at once.
+This is the construction the whole interface exists to receive: it is what turns "here are
+four gauges we happened to build" into "here is every symmetric ideal, from its symbol."
+Four instances are examples; a functor from symbols to families is a theory.
 
-**Milestone B3 — Schatten `p` in infinite dimensions, and reconciliation.**
-`Φ_p(a) = (∑ aₙ^p)^{1/p}` through Milestone B1 gives the Schatten-`p` families for all
-`p ≥ 1`; and the identity `∑' n, ENNReal.ofReal (aₙ(T)) ^ 2 = hilbertSchmidtEnergy T b`
-reconciles the singular-value and orthonormal-expansion definitions at `p = 2`, which were
-deliberately built by different routes.
+**Objects.**  `TauCeti.SymmetricGauge`, a **symmetric norming function** in the sense of
+Gohberg–Kreĭn: a map `Φ : (ℕ →₀ ℝ≥0) → ℝ≥0` on finitely supported sequences with
 
-**Milestone B4 — block sums and scalar transport.**  The gauge of an orthogonal
-block-diagonal sum in terms of the summands; invariance under real ⇆ complex
-complexification, so the real-scalar ideal theory (including the Ky Fan triangle inequality
-over `ℝ`) is a transported instance rather than a re-proof.
+- `Φ_add_le`, `Φ_smul` — subadditivity and positive homogeneity, so `Φ` is a gauge;
+- `Φ_symm` — invariance under every permutation of `ℕ` (as a bijection acting on the
+  support), which is what "symmetric" names;
+- `Φ_mono` — monotonicity in the termwise order;
+- `Φ_normalized` — `Φ` of the first basis vector is `1`.
+
+The last is a normalization, not a restriction: it fixes the scale so `Φ` dominates the
+supremum norm and is dominated by the sum, and those two bounds — `‖a‖_∞ ≤ Φ a ≤ ∑ aₙ` —
+are the first theorems, since they are what make the extension below well-behaved at both
+ends of the scale.
+
+**The extension to infinite sequences** is a monotone limit, not a new definition:
+`Φ∞ : (ℕ → ℝ≥0∞) → ℝ≥0∞`, `Φ∞ a = ⨆ N, Φ (truncate a N)` over the finitely supported
+truncations of the **decreasing rearrangement**.  Three decisions are pinned here because
+each has a wrong answer that looks right:
+
+- **`ℝ≥0∞`-valued, and the supremum is over truncations, not a `tsum`.**  The gauge must be
+  total and genuinely `∞` off its ideal (the generality bar above); a supremum of an
+  increasing net is total by construction, whereas any route through summability
+  reintroduces the side conditions the interface was designed to avoid.
+- **The truncations are of the decreasing rearrangement**, so `Φ∞` sees the sequence
+  the way `Φ` sees a finite one.  For the sequences this roadmap actually feeds it —
+  approximation-number sequences — this costs nothing: `n ↦ aₙ(T)` is already antitone by
+  Part A, so the rearrangement is the identity and every consumer-facing statement about
+  `S_Φ` avoids it. The rearrangement is in the definition so that `Φ∞` is defined on
+  arbitrary sequences, not so that anyone rearranges anything.
+- **Monotone convergence is the only limit theorem needed**, so nothing here waits on a
+  theory of symmetric sequence spaces.
+
+**The induced family.**  `symmetricGaugeFamily Φ : SymmetricOperatorIdealFamily ℂ` with
+`gauge T = Φ∞ (fun n => ENNReal.ofReal (aₙ T))`.  The content of the milestone is that the
+five structure fields are theorems rather than hypotheses, and each traces to exactly one
+input:
+
+| field | proved from |
+|---|---|
+| `gauge_add_le` | Milestone B2 applied to `a(S + T)` against `a S + a T` |
+| `gauge_smul` | `aₙ(c • T) = ‖c‖ aₙ(T)` (Part A) and homogeneity of `Φ` |
+| `enorm_le_gauge` | `a₀(T) = ‖T‖` (Part A) with `‖a‖_∞ ≤ Φ a` |
+| `gauge_comp_le` | the two-sided ideal law `aₙ(L ∘ T ∘ R) ≤ ‖L‖ aₙ(T) ‖R‖` and monotonicity of `Φ` |
+| `gauge_adjoint` | `aₙ(T⋆) = aₙ(T)` (Part A) |
+
+**`gauge_add_le` is the only hard one, and it is exactly Milestone B2** — which is why B2
+is stated as a property of the construction rather than as a lemma inside it.
+
+**The Calkin correspondence** is the classification that makes this a correspondence and
+not merely a construction: symmetric ideals of `B(H)` on a separable infinite-dimensional
+Hilbert space are in bijection with the symmetric sequence ideals, via `T ↦ a(T)`.  We
+specify the direction we need and are explicit that we do not claim the other:
+
+- **Stated and targeted:** the map `Φ ↦ symmetricGaugeFamily Φ` is injective up to
+  equality of gauges on antitone sequences (`symmetricGaugeFamily_injective`), and
+  membership transports along `HasSameApproximationNumbers` (Part A) — so the ideal really
+  is a function of the singular-value sequence alone.
+- **Not claimed:** surjectivity — that *every* symmetric ideal arises from a symmetric
+  norming function.  That is the substantial half of Calkin's theorem, it needs the
+  separable infinite-dimensional hypothesis that nothing else in this roadmap needs, and no
+  downstream result here consumes it.  A roadmap that claimed the full correspondence and
+  then proved one direction would be the kind of overstatement this repository has been
+  bitten by; if a reviewer wants it, it is a milestone of its own and should be posted as
+  one.
+
+### Milestone B2 — the Ky Fan dominance principle
+
+**Statement.**  For every symmetric gauge `Φ`, the family `symmetricGaugeFamily Φ` is
+`IsKyFanDominant`: if `kyFanGauge A k ≤ kyFanGauge B k` for all `k`, then
+`gauge A ≤ gauge B`.  Equivalently and more usefully as a lemma about sequences, if the
+antitone sequences `a` and `b` satisfy `∑_{n<k} aₙ ≤ ∑_{n<k} bₙ` for every `k` — `a` is
+**weakly majorized** by `b` — then `Φ∞ a ≤ Φ∞ b`.
+
+**Route.**  The sequence form is the Hardy–Littlewood–Pólya transfer of the
+MajorizationAndAngles roadmap: weak majorization of finite antitone vectors implies
+domination under every symmetric gauge, because a weakly majorized vector is dominated
+termwise by a convex combination of permutations of the majorizing one, and `Φ` is
+monotone, symmetric and convex.  Lift to sequences by monotone convergence along the
+truncations; that is the whole infinite-dimensional content, and it is why the extension in
+B1 is a supremum of truncations rather than anything cleverer.
+
+**Why this is the load-bearing milestone.**  It delivers the triangle inequality for every
+symmetric ideal norm at once.  Milestone A2 says exactly that `a(S + T)` is weakly
+majorized by the termwise sum `a(S) + a(T)`; feeding that into the statement above gives
+`gauge (S + T) ≤ Φ∞ (a S + a T) ≤ gauge S + gauge T`, for every `Φ`, from the single
+inequality A2 proves.  **Every symmetric ideal in this roadmap stands on A2 through this
+milestone**, and nothing else in Part B needs A2 directly.
+
+**Scope note.**  `IsKyFanDominant` is a class over families and is *false* for an arbitrary
+`OperatorIdealFamily` — a gauge satisfying the four laws need not respect Ky Fan
+domination.  This milestone is the theorem that the symmetric-gauge construction always
+lands in the dominant subclass; it is not a theorem about the interface.  The staged
+library already has the consumer-facing direction as a class field, so what is genuinely
+open is the instance `isKyFanDominant_symmetricGaugeFamily`.
+
+### Milestone B3 — Schatten `p` in infinite dimensions, duality, and reconciliation
+
+**Objects.**  `schattenGauge p : SymmetricGauge` for `1 ≤ p ≤ ∞`, `Φ_p a = (∑ aₙ^p)^{1/p}`
+with `Φ_∞ = ‖·‖_∞` as the honest endpoint rather than a separate definition; and
+`schattenFamily p = symmetricGaugeFamily (schattenGauge p)`, so **the Schatten classes are
+obtained rather than constructed**, and their four laws are B1's, not new work.
+
+**API to develop.**
+
+- `Φ_p` is a symmetric gauge: subadditivity is Minkowski in `ℓᵖ` (finite form from Mathlib,
+  the `tsum` form at general `p` following the `p = 2` pattern of the energy layer),
+  monotonicity and symmetry are termwise, normalization is by inspection.
+- The endpoint identifications, each an equality of *families*, not merely of gauges on the
+  ideal: `schattenFamily 1 = traceClassIdealFamily`, `schattenFamily 2` has gauge the
+  Hilbert–Schmidt norm, `schattenFamily ∞ = operatorNormFamily`.
+- The scale is monotone: `p ≤ q → gauge_q T ≤ gauge_p T`, hence `S_p ⊆ S_q`, with the
+  inclusions strict — witnessed by a diagonal operator with coefficients `n ↦ n^{-1/r}` for
+  `p < r < q`, which is the same diagonal machinery Part A's acceptance example (6) builds.
+- **Hölder duality**, `‖T‖_p` recovered as a supremum of trace pairings against `S_q` with
+  `1/p + 1/q = 1`, is **listed and deliberately deferred**: it needs a trace functional,
+  which this roadmap does not define, and it is not consumed by any milestone here.  It is
+  the natural first milestone of a successor roadmap, and saying so is more useful than
+  half-specifying it.
+
+**The reconciliation obligation.**  `p = 2` is now defined twice: through `schattenGauge 2`
+on the singular-value sequence, and through `hilbertSchmidtEnergy` on an orthonormal
+expansion.  The two were built by different routes on purpose — the energy route needs no
+spectral theory at all, which is why Part C can stand on it — so they must be proved equal:
+
+```text
+∑' n, ENNReal.ofReal (aₙ T) ^ 2  =  hilbertSchmidtEnergy T b        (any Hilbert basis b)
+```
+
+Both sides are basis-independent, the right by `hilbertSchmidtEnergy_indep`, so the
+statement is well-posed; the proof is the singular-value expansion of a Hilbert–Schmidt
+operator, and it is the one place in Part B where the compactness theory of Part A
+(Milestone A3) is genuinely needed rather than convenient.  **This debt was incurred
+knowingly and is recorded in the decision record below; it is the price of Part C being
+independent of the ideal machinery.**
+
+### Milestone B4 — block sums and scalar transport
+
+**Block sums.**  For an orthogonal decomposition of source and target and a block-diagonal
+operator `⊕ᵢ Tᵢ`, the approximation-number sequence of the sum is the decreasing
+rearrangement of the union of the summands' sequences, hence
+`gauge (⊕ᵢ Tᵢ) = Φ∞ (rearrangement of ⋃ᵢ a(Tᵢ))` for every symmetric gauge — and, for the
+two-block case that consumers actually use, the sharp comparison
+`max (gauge T₁) (gauge T₂) ≤ gauge (T₁ ⊕ T₂) ≤ gauge T₁ + gauge T₂`.  The lower bound is
+restriction–corestriction; the upper is subadditivity applied to the two extensions by zero.
+
+**Scalar transport.**  A real Hilbert space complexifies, `aₙ(T_ℂ) = aₙ(T)`, and every
+gauge in this roadmap is a function of that sequence — so **the real-scalar ideal theory is
+a transported instance rather than a re-proof.**  Concretely this is what discharges the
+`ℂ`-only hypotheses left standing in Part A and in the Ky Fan instance: A2's triangle
+inequality over `ℝ`, the Ky Fan family over `ℝ`, and the min–max converse over `ℝ` all
+follow by transport once the sequence identity is proved.
+
+**Why this is a milestone and not a remark.**  The `ℂ`-only hypotheses are currently the
+single largest gap between what this roadmap states and what a reader assumes it states: a
+generality bar that says "over `ℂ`, where the continuous functional calculus is registered"
+is honest, but a reviewer will ask what it costs to remove, and the answer should be a
+named milestone with a route, not a promise.  The route is one sequence identity and no new
+analysis.
 
 ```lean
 structure OperatorIdealFamily (𝕜 : Type u) [RCLike 𝕜] where

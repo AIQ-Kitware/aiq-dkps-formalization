@@ -3,7 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.GroundedImports
+module
+
+public import Mathlib.Data.Finset.Max
+public import Mathlib.Data.Fintype.Prod
+public import Mathlib.Data.Real.Basic
+public import Mathlib.Tactic.Common
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Positivity
 
 /-!
 # Uniform separation for a finite positive family
@@ -12,17 +19,33 @@ A finite family of positive real numbers admits one positive radius that is
 smaller than every value, smaller than a prescribed tolerance, and separates
 all distinct values.  This is the elementary finite ingredient used to make
 Gram spectral bands pairwise disjoint.
+
+The tolerance is written `ε / 16` because the consumer needs room for four
+halvings; no significance attaches to the constant beyond that.
+
+## Provenance
+
+* Original module: authored for the Davis--Kahan tan-2-theta development, then
+  moved here once its dependencies were measured: the two statements are about
+  finite families of reals and use nothing but Mathlib.
+* Extraction class: **moved and renamespaced.**  Statements and proofs are
+  unchanged; only the enclosing namespace and the import list moved.
+* Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking;
+  Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none.**
 -/
 
+public section
+
 namespace TauCeti
-namespace FinishTanTwoTheta
+namespace ApproximationNumber
 
 noncomputable section
 
 /-- A finite family of strictly positive reals has a common positive strict
 lower bound. -/
 theorem exists_pos_lt_all_finset
-    {α : Type*} [DecidableEq α] (s : Finset α) (f : α → ℝ)
+    {α : Type*} (s : Finset α) (f : α → ℝ)
     (hf : ∀ i ∈ s, 0 < f i) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ i ∈ s, δ < f i := by
   classical
@@ -98,5 +121,5 @@ theorem exists_uniform_positive_separation
 
 end
 
-end FinishTanTwoTheta
+end ApproximationNumber
 end TauCeti
