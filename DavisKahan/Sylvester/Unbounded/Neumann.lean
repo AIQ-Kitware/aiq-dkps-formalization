@@ -35,6 +35,106 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
+/-- **A geometrically contracting iteration in an ideal has a gauge limit.**
+
+If `T` preserves the ideal and shrinks its gauge by a factor `q < 1`, the partial
+sums of the Neumann iterates `T^[k] t₀` are gauge-Cauchy, and completeness of the
+gauge produces a limit that is still in the ideal and is also the operator-norm
+limit.
+
+**This was written twice**, once for each orientation of the Sylvester estimate
+below — seventy-four lines each, differing only in the seed and the pair of
+spaces.  `{lane:DK-LONGPROOF-5}`.  Nothing in it is about Sylvester equations;
+the callers supply `hTmem` and `hTgauge` and that is the entire interface. -/
+theorem exists_mem_and_tendsto_partialSum_of_gauge_geometric
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
+    {A B : Type v}
+    [NormedAddCommGroup A] [InnerProductSpace 𝕜 A] [CompleteSpace A]
+    [NormedAddCommGroup B] [InnerProductSpace 𝕜 B] [CompleteSpace B]
+    (T : (A →L[𝕜] B) → (A →L[𝕜] B)) {t₀ : A →L[𝕜] B} (ht₀ : N.Mem t₀)
+    {q : ℝ} (hq0 : 0 ≤ q) (hq1 : q < 1)
+    (hTmem : ∀ Y : A →L[𝕜] B, N.Mem Y → N.Mem (T Y))
+    (hTgauge : ∀ Y : A →L[𝕜] B, N.Mem Y → N.gaugeReal (T Y) ≤ q * N.gaugeReal Y) :
+    ∃ L : A →L[𝕜] B, N.Mem L ∧
+      Filter.Tendsto (fun n => ∑ k ∈ Finset.range n, T^[k] t₀)
+        Filter.atTop (nhds L) := by
+  set t : ℕ → A →L[𝕜] B := fun n => T^[n] t₀ with htdef
+  have ht0 : t 0 = t₀ := rfl
+  have htsucc : ∀ n, t (n + 1) = T (t n) := by
+    intro n
+    simp only [htdef, Function.iterate_succ_apply']
+  have htmem : ∀ n, N.Mem (t n) := by
+    intro n
+    induction n with
+    | zero => rw [ht0]; exact ht₀
+    | succ n ih => rw [htsucc]; exact hTmem _ ih
+  set g₀ : ℝ := N.gaugeReal t₀ with hg₀def
+  have htgauge : ∀ n, N.gaugeReal (t n) ≤ q ^ n * g₀ := by
+    intro n
+    induction n with
+    | zero => simp [htdef, hg₀def]
+    | succ n ih =>
+        rw [htsucc, pow_succ]
+        calc N.gaugeReal (T (t n)) ≤ q * N.gaugeReal (t n) := hTgauge _ (htmem n)
+          _ ≤ q * (q ^ n * g₀) := mul_le_mul_of_nonneg_left ih hq0
+          _ = q ^ n * q * g₀ := by ring
+  set P : ℕ → A →L[𝕜] B := fun n => ∑ k ∈ Finset.range n, t k with hPdef
+  have hPmem : ∀ n, N.Mem (P n) := by
+    intro n
+    simp only [hPdef]
+    exact N.finset_sum_mem (Finset.range n) t fun k _ => htmem k
+  -- the real comparison sequence of geometric partial sums
+  set G : ℕ → ℝ := fun n => ∑ k ∈ Finset.range n, q ^ k * g₀ with hGdef
+  have hgap : ∀ {m n : ℕ}, n ≤ m → N.gaugeReal (P m - P n) ≤ G m - G n := by
+    intro m n hnm
+    have hsum : P m - P n = ∑ k ∈ Finset.Ico n m, t k :=
+      (Finset.sum_Ico_eq_sub _ hnm).symm
+    have hG : ∑ k ∈ Finset.Ico n m, q ^ k * g₀ = G m - G n :=
+      Finset.sum_Ico_eq_sub _ hnm
+    rw [hsum, ← hG]
+    calc N.gaugeReal (∑ k ∈ Finset.Ico n m, t k)
+        ≤ ∑ k ∈ Finset.Ico n m, N.gaugeReal (t k) :=
+          N.gaugeReal_finset_sum_le (Finset.Ico n m) t fun k _ => htmem k
+      _ ≤ ∑ k ∈ Finset.Ico n m, q ^ k * g₀ :=
+          Finset.sum_le_sum fun k _ => htgauge k
+  have hGcauchy : CauchySeq G := by
+    have hsummable : Summable fun k : ℕ => q ^ k * g₀ :=
+      (summable_geometric_of_lt_one hq0 hq1).mul_right g₀
+    exact hsummable.hasSum.tendsto_sum_nat.cauchySeq
+  have hPcauchy : ∀ ε : ℝ, 0 < ε → ∃ N₀, ∀ m n, N₀ ≤ m → N₀ ≤ n →
+      N.gaugeReal (P m - P n) < ε := by
+    intro ε hε
+    obtain ⟨N₀, hN₀⟩ := Metric.cauchySeq_iff.mp hGcauchy ε hε
+    refine ⟨N₀, fun m n hm hn => ?_⟩
+    rcases le_total n m with h | h
+    · refine lt_of_le_of_lt (hgap h) ?_
+      calc G m - G n ≤ |G m - G n| := le_abs_self _
+        _ = dist (G m) (G n) := (Real.dist_eq _ _).symm
+        _ < ε := hN₀ m hm n hn
+    · have hswap : N.gaugeReal (P m - P n) = N.gaugeReal (P n - P m) := by
+        rw [show P m - P n = -(P n - P m) from by abel,
+          N.gaugeReal_neg (N.sub_mem (hPmem n) (hPmem m))]
+      rw [hswap]
+      refine lt_of_le_of_lt (hgap h) ?_
+      calc G n - G m ≤ |G n - G m| := le_abs_self _
+        _ = dist (G n) (G m) := (Real.dist_eq _ _).symm
+        _ < ε := hN₀ n hn m hm
+  obtain ⟨L, hLmem, hLlim⟩ := N.gaugeReal_complete P hPmem hPcauchy
+  -- the partial sums converge to `L` in operator norm
+  have hPL : Filter.Tendsto P Filter.atTop (nhds L) := by
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    refine squeeze_zero (fun n => norm_nonneg _)
+      (fun n => N.opNorm_le_gaugeReal (N.sub_mem (hPmem n) hLmem)) ?_
+    rw [Metric.tendsto_atTop]
+    intro ε hε
+    obtain ⟨N₀, hN₀⟩ := hLlim ε hε
+    refine ⟨N₀, fun n hn => ?_⟩
+    rw [Real.dist_eq, sub_zero,
+      abs_of_nonneg (N.gaugeReal_nonneg (N.sub_mem (hPmem n) hLmem))]
+    exact hN₀ n hn
+  exact ⟨L, hLmem, by simpa only [hPdef, htdef] using hPL⟩
+
 /-- One-unbounded version of the bound/inverse Sylvester estimate.
 
 The solution is exhibited as the ideal-gauge limit of the Neumann iteration
@@ -111,78 +211,14 @@ theorem linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse
   -- the Neumann iterates and their partial sums
   set t : ℕ → F →L[𝕜] E := fun n => T^[n] (J ∘L C) with htdef
   have ht0 : t 0 = J ∘L C := rfl
-  have htsucc : ∀ n, t (n + 1) = T (t n) := by
-    intro n
+  have htsucc : ∀ n, t (n + 1) = T (t n) := fun n => by
     simp only [htdef, Function.iterate_succ_apply']
-  have htmem : ∀ n, N.Mem (t n) := by
-    intro n
-    induction n with
-    | zero => exact N.comp_left_mem J hC
-    | succ n ih => rw [htsucc]; exact hTmem _ ih
-  set g₀ : ℝ := N.gaugeReal (J ∘L C) with hg₀def
-  have htgauge : ∀ n, N.gaugeReal (t n) ≤ q ^ n * g₀ := by
-    intro n
-    induction n with
-    | zero => simp [htdef, hg₀def]
-    | succ n ih =>
-        rw [htsucc, pow_succ]
-        calc N.gaugeReal (T (t n)) ≤ q * N.gaugeReal (t n) := hTgauge _ (htmem n)
-          _ ≤ q * (q ^ n * g₀) := mul_le_mul_of_nonneg_left ih hq0
-          _ = q ^ n * q * g₀ := by ring
   set P : ℕ → F →L[𝕜] E := fun n => ∑ k ∈ Finset.range n, t k with hPdef
-  have hPmem : ∀ n, N.Mem (P n) := by
-    intro n
-    simp only [hPdef]
-    exact N.finset_sum_mem (Finset.range n) t fun k _ => htmem k
-  -- the real comparison sequence of geometric partial sums
-  set G : ℕ → ℝ := fun n => ∑ k ∈ Finset.range n, q ^ k * g₀ with hGdef
-  have hgap : ∀ {m n : ℕ}, n ≤ m → N.gaugeReal (P m - P n) ≤ G m - G n := by
-    intro m n hnm
-    have hsum : P m - P n = ∑ k ∈ Finset.Ico n m, t k :=
-      (Finset.sum_Ico_eq_sub _ hnm).symm
-    have hG : ∑ k ∈ Finset.Ico n m, q ^ k * g₀ = G m - G n :=
-      Finset.sum_Ico_eq_sub _ hnm
-    rw [hsum, ← hG]
-    calc N.gaugeReal (∑ k ∈ Finset.Ico n m, t k)
-        ≤ ∑ k ∈ Finset.Ico n m, N.gaugeReal (t k) :=
-          N.gaugeReal_finset_sum_le (Finset.Ico n m) t fun k _ => htmem k
-      _ ≤ ∑ k ∈ Finset.Ico n m, q ^ k * g₀ :=
-          Finset.sum_le_sum fun k _ => htgauge k
-  have hGcauchy : CauchySeq G := by
-    have hsummable : Summable fun k : ℕ => q ^ k * g₀ :=
-      (summable_geometric_of_lt_one hq0 hq1).mul_right g₀
-    exact hsummable.hasSum.tendsto_sum_nat.cauchySeq
-  have hPcauchy : ∀ ε : ℝ, 0 < ε → ∃ N₀, ∀ m n, N₀ ≤ m → N₀ ≤ n →
-      N.gaugeReal (P m - P n) < ε := by
-    intro ε hε
-    obtain ⟨N₀, hN₀⟩ := Metric.cauchySeq_iff.mp hGcauchy ε hε
-    refine ⟨N₀, fun m n hm hn => ?_⟩
-    rcases le_total n m with h | h
-    · refine lt_of_le_of_lt (hgap h) ?_
-      calc G m - G n ≤ |G m - G n| := le_abs_self _
-        _ = dist (G m) (G n) := (Real.dist_eq _ _).symm
-        _ < ε := hN₀ m hm n hn
-    · have hswap : N.gaugeReal (P m - P n) = N.gaugeReal (P n - P m) := by
-        rw [show P m - P n = -(P n - P m) from by abel,
-          N.gaugeReal_neg (N.sub_mem (hPmem n) (hPmem m))]
-      rw [hswap]
-      refine lt_of_le_of_lt (hgap h) ?_
-      calc G n - G m ≤ |G n - G m| := le_abs_self _
-        _ = dist (G n) (G m) := (Real.dist_eq _ _).symm
-        _ < ε := hN₀ n hn m hm
-  obtain ⟨L, hLmem, hLlim⟩ := N.gaugeReal_complete P hPmem hPcauchy
-  -- the partial sums converge to `L` in operator norm
-  have hPL : Filter.Tendsto P Filter.atTop (nhds L) := by
-    rw [tendsto_iff_norm_sub_tendsto_zero]
-    refine squeeze_zero (fun n => norm_nonneg _)
-      (fun n => N.opNorm_le_gaugeReal (N.sub_mem (hPmem n) hLmem)) ?_
-    rw [Metric.tendsto_atTop]
-    intro ε hε
-    obtain ⟨N₀, hN₀⟩ := hLlim ε hε
-    refine ⟨N₀, fun n hn => ?_⟩
-    rw [Real.dist_eq, sub_zero,
-      abs_of_nonneg (N.gaugeReal_nonneg (N.sub_mem (hPmem n) hLmem))]
-    exact hN₀ n hn
+  -- The gauge-Cauchy argument is shared with the other orientation and lives in
+  -- `exists_mem_and_tendsto_partialSum_of_gauge_geometric`.
+  obtain ⟨L, hLmem, hPL⟩ :=
+    exists_mem_and_tendsto_partialSum_of_gauge_geometric N T
+      (N.comp_left_mem J hC) hq0 hq1 hTmem hTgauge
   -- the partial sums converge to `X` in operator norm
   have hfix' : X = t 0 + T X := by
     conv_lhs => rw [hfix]
@@ -415,77 +451,14 @@ theorem linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
   have hbasemem : N.Mem (-(C ∘L J)) := N.neg_mem (N.comp_right_mem J hC)
   set t : ℕ → G →L[𝕜] F := fun n => T^[n] (-(C ∘L J)) with htdef
   have ht0 : t 0 = -(C ∘L J) := rfl
-  have htsucc : ∀ n, t (n + 1) = T (t n) := by
-    intro n
+  have htsucc : ∀ n, t (n + 1) = T (t n) := fun n => by
     simp only [htdef, Function.iterate_succ_apply']
-  have htmem : ∀ n, N.Mem (t n) := by
-    intro n
-    induction n with
-    | zero => exact hbasemem
-    | succ n ih => rw [htsucc]; exact hTmem _ ih
-  set g₀ : ℝ := N.gaugeReal (-(C ∘L J)) with hg₀def
-  have htgauge : ∀ n, N.gaugeReal (t n) ≤ q ^ n * g₀ := by
-    intro n
-    induction n with
-    | zero => simp [htdef, hg₀def]
-    | succ n ih =>
-        rw [htsucc, pow_succ]
-        calc N.gaugeReal (T (t n)) ≤ q * N.gaugeReal (t n) := hTgauge _ (htmem n)
-          _ ≤ q * (q ^ n * g₀) := mul_le_mul_of_nonneg_left ih hq0
-          _ = q ^ n * q * g₀ := by ring
   set P : ℕ → G →L[𝕜] F := fun n => ∑ k ∈ Finset.range n, t k with hPdef
-  have hPmem : ∀ n, N.Mem (P n) := by
-    intro n
-    simp only [hPdef]
-    exact N.finset_sum_mem (Finset.range n) t fun k _ => htmem k
-  set Gs : ℕ → ℝ := fun n => ∑ k ∈ Finset.range n, q ^ k * g₀ with hGdef
-  have hgap : ∀ {m n : ℕ}, n ≤ m → N.gaugeReal (P m - P n) ≤ Gs m - Gs n := by
-    intro m n hnm
-    have hsum : P m - P n = ∑ k ∈ Finset.Ico n m, t k :=
-      (Finset.sum_Ico_eq_sub _ hnm).symm
-    have hG : ∑ k ∈ Finset.Ico n m, q ^ k * g₀ = Gs m - Gs n :=
-      Finset.sum_Ico_eq_sub _ hnm
-    rw [hsum, ← hG]
-    calc N.gaugeReal (∑ k ∈ Finset.Ico n m, t k)
-        ≤ ∑ k ∈ Finset.Ico n m, N.gaugeReal (t k) :=
-          N.gaugeReal_finset_sum_le (Finset.Ico n m) t fun k _ => htmem k
-      _ ≤ ∑ k ∈ Finset.Ico n m, q ^ k * g₀ :=
-          Finset.sum_le_sum fun k _ => htgauge k
-  have hGcauchy : CauchySeq Gs := by
-    have hsummable : Summable fun k : ℕ => q ^ k * g₀ :=
-      (summable_geometric_of_lt_one hq0 hq1).mul_right g₀
-    exact hsummable.hasSum.tendsto_sum_nat.cauchySeq
-  have hPcauchy : ∀ ε : ℝ, 0 < ε → ∃ N₀, ∀ m n, N₀ ≤ m → N₀ ≤ n →
-      N.gaugeReal (P m - P n) < ε := by
-    intro ε hε
-    obtain ⟨N₀, hN₀⟩ := Metric.cauchySeq_iff.mp hGcauchy ε hε
-    refine ⟨N₀, fun m n hm hn => ?_⟩
-    rcases le_total n m with h | h
-    · refine lt_of_le_of_lt (hgap h) ?_
-      calc Gs m - Gs n ≤ |Gs m - Gs n| := le_abs_self _
-        _ = dist (Gs m) (Gs n) := (Real.dist_eq _ _).symm
-        _ < ε := hN₀ m hm n hn
-    · have hswap : N.gaugeReal (P m - P n) = N.gaugeReal (P n - P m) := by
-        rw [show P m - P n = -(P n - P m) from by abel,
-          N.gaugeReal_neg (N.sub_mem (hPmem n) (hPmem m))]
-      rw [hswap]
-      refine lt_of_le_of_lt (hgap h) ?_
-      calc Gs n - Gs m ≤ |Gs n - Gs m| := le_abs_self _
-        _ = dist (Gs n) (Gs m) := (Real.dist_eq _ _).symm
-        _ < ε := hN₀ n hn m hm
-  obtain ⟨L, hLmem, hLlim⟩ := N.gaugeReal_complete P hPmem hPcauchy
-  -- the partial sums converge to `L` in operator norm
-  have hPL : Filter.Tendsto P Filter.atTop (nhds L) := by
-    rw [tendsto_iff_norm_sub_tendsto_zero]
-    refine squeeze_zero (fun n => norm_nonneg _)
-      (fun n => N.opNorm_le_gaugeReal (N.sub_mem (hPmem n) hLmem)) ?_
-    rw [Metric.tendsto_atTop]
-    intro ε hε
-    obtain ⟨N₀, hN₀⟩ := hLlim ε hε
-    refine ⟨N₀, fun n hn => ?_⟩
-    rw [Real.dist_eq, sub_zero,
-      abs_of_nonneg (N.gaugeReal_nonneg (N.sub_mem (hPmem n) hLmem))]
-    exact hN₀ n hn
+  -- The gauge-Cauchy argument is shared with the other orientation and lives in
+  -- `exists_mem_and_tendsto_partialSum_of_gauge_geometric`.
+  obtain ⟨L, hLmem, hPL⟩ :=
+    exists_mem_and_tendsto_partialSum_of_gauge_geometric N T
+      (N.neg_mem (N.comp_right_mem J hC)) hq0 hq1 hTmem hTgauge
   -- the partial sums converge to `Y` in operator norm
   have hfix' : Y = t 0 + T Y := by
     conv_lhs => rw [hfix]
