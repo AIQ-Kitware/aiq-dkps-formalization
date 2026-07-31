@@ -780,6 +780,20 @@ theorem extend_add_le (x y : ℕ → ℝ≥0∞) :
         · exact le_extend_of_dominated Φ x c₁ (capAt_le_ennreal c.1 hxf)
         · exact le_extend_of_dominated Φ y c₂ hc₂y
 
+/-- **The extension is monotone in the gauge.**
+
+If one gauge dominates another on every finitely supported sequence, the same
+holds for their extensions.  Immediate, because both suprema range over the
+*same* index set `Dominated a` and only the summand changes — which is what lets
+scale comparisons (the `ℓᵖ` nesting, say) be proved once at the level of
+finitely supported sequences and then transported. -/
+theorem extend_le_extend_of_le {Φ₁ Φ₂ : SymmetricGauge}
+    (h : ∀ c : ℕ →₀ ℝ≥0, Φ₁ c ≤ Φ₂ c) (a : ℕ → ℝ≥0∞) :
+    Φ₁.extend a ≤ Φ₂.extend a := by
+  refine iSup_le fun c => ?_
+  calc (Φ₁ c.1 : ℝ≥0∞) ≤ (Φ₂ c.1 : ℝ≥0∞) := by exact_mod_cast h c.1
+    _ ≤ Φ₂.extend a := le_extend_of_dominated Φ₂ a c.1 c.2
+
 end SymmetricGauge
 
 end TauCeti
