@@ -350,7 +350,10 @@ theorem tendsto_specProjection_Icc (x : H) :
     intro τ
     have hSm : MeasurableSet (κ ⁻¹' Set.Icc (-τ) τ) :=
       measurable_cayleyInv hA measurableSet_Icc
-    rw [show ((spectralPVM hA).diag x) = Measure.map κ μ from rfl,
+    have hdiag : ((spectralPVM hA).diag x) = Measure.map κ μ := by
+      rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag,
+        BorelCalculus.specDiag_def, hμ, hκ]
+    rw [hdiag,
       Measure.map_apply (measurable_cayleyInv hA) measurableSet_Icc, hF,
       integral_indicator_const _ hSm, smul_eq_mul, mul_one,
       MeasureTheory.measureReal_def]

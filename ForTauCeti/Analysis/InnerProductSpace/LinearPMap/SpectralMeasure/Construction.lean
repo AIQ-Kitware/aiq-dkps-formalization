@@ -374,7 +374,9 @@ theorem spectralPVM_resolvent_formula (hzr : z ∈ resolventSet A) (ξ : H) :
       = ∫ w, resolventSymbol hA hz w ∂(BorelCalculus.diagMeasure hU ξ) := by
     rw [resolvent_eq_cfcHom hA hz hzr, BorelCalculus.integral_diagMeasure]
   have hdiag : (spectralPVM hA).diag ξ
-      = Measure.map (cayleyInv hA) (BorelCalculus.diagMeasure hU ξ) := (rfl)
+      = Measure.map (cayleyInv hA) (BorelCalculus.diagMeasure hU ξ) := by
+    rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag,
+      BorelCalculus.specDiag_def]
   have hne : ∀ s : ℝ, (s : ℂ) - z ≠ 0 := by
     intro s hc
     exact hz (by simpa using congrArg Complex.im (sub_eq_zero.mp hc).symm)
@@ -436,7 +438,7 @@ theorem specProjection_comm_resolvent (B : Set ℝ) (hB : MeasurableSet B) :
       (fun w => ((2 * Complex.I)⁻¹ • (1 - cayleyCoord hA)) w) :=
     BorelCalculus.IsBddMeasurable.of_continuous _
   rw [resolvent_negI_eq_borelCalculus hA hs, specProjection, spectralPVM,
-    BorelCalculus.toProjValMeasure_proj, BorelCalculus.specProj]
+    BorelCalculus.toProjValMeasure_proj, BorelCalculus.specProj_def]
   exact BorelCalculus.borelCalculus_comm _ _ _
 
 /-- Pointwise form: `P (R φ) = R (P φ)`. -/
@@ -490,7 +492,7 @@ theorem specProjection_comm_resolvent' {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ 
   have hR : resolvent A hzr = BorelCalculus.borelCalculus (isStarNormal_cayley hA) hs := by
     rw [BorelCalculus.borelCalculus_of_continuous, resolvent_eq_cfcHom hA hz hzr]
   rw [hR, specProjection, spectralPVM, BorelCalculus.toProjValMeasure_proj,
-    BorelCalculus.specProj]
+    BorelCalculus.specProj_def]
   exact BorelCalculus.borelCalculus_comm _ _ _
 
 /-- Spectral projections commute with the resolvent, pointwise.  The operator-level statement is
