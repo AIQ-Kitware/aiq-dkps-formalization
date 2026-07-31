@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge
-import DavisKahan.SpectralTheory.PVMSubspace
+import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Subspace
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
 
 /-!

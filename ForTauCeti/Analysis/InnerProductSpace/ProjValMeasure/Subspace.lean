@@ -7,24 +7,23 @@ import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 
 /-!
-# DKPS adapters for ranges of projection-valued measures
+# The range of a projection-valued measure, as a subspace
 
-These declarations intentionally live in the DKPS bridge namespace. If this API
-proves broadly useful it can be proposed upstream later.
+For a `TauCeti.ProjValMeasure` and a measurable set, the range of the attached
+projection, packaged as a submodule, together with the membership and
+idempotence facts that make it usable.
 
-The projection-valued measure structure itself is
-`TauCeti.ProjValMeasure`, in
-`ForTauCeti/Analysis/InnerProductSpace/ProjValMeasure/Basic.lean` — ported from
-Spectra with provenance recorded there.  This module was repointed from
-`Spectra.ProjValMeasure` to it on 2026-07-28; the two structures are the same,
-so nothing in the mathematics below changed.
+**Moved here from `DavisKahan/SpectralTheory/PVMSubspace.lean` on 2026-07-31.**
+Its docstring said the declarations *intentionally live in the DKPS bridge
+namespace*, and that was true when they were adapters over `Spectra.ProjValMeasure`
+from outside.  The structure was repointed to `TauCeti.ProjValMeasure` on
+2026-07-28 and now lives in this directory, so the adapters sit beside the thing
+they adapt rather than in a bridge that no longer bridges anything.
 -/
 
 open scoped InnerProductSpace
 
 namespace TauCeti
-namespace DavisKahan
-namespace Experimental
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
@@ -110,6 +109,4 @@ theorem pvmProjection_eq_starProjection_rangeSubspace
       pvmProjection_eq_self_of_mem_rangeSubspace P B hB
         (pvmProjection_mem_rangeSubspace P B hB x), sub_self, inner_zero_left]
 
-end Experimental
-end DavisKahan
 end TauCeti
