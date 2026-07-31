@@ -3,13 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.GroundedImports
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteValueSeparation
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteValueFibers
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar
+import DavisKahan.DoubleAngle.TanTwoThetaKyFan
 import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 
 /-!
