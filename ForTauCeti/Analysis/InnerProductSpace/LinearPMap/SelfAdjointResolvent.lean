@@ -153,43 +153,42 @@ omit [CompleteSpace E] in
 /-- The shifted map `A - z`, unfolded. -/
 @[simp] theorem shiftMap_apply (A : E →ₗ.[ℂ] E) (z : ℂ) (x : A.domain) :
     shiftMap A z x = A x - z • (x : E) := (rfl)
-/-- **Closed range.**  The estimate turns a convergent sequence in the range into
-a Cauchy sequence of preimages; closedness of `A` (which self-adjointness
-supplies) identifies the limit. -/
-theorem isClosed_range_shiftMap {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
-    {z : ℂ} (hz : z.im ≠ 0) :
+/-- **A lower bound makes the range of `A - z` closed.**
+
+Stated with the bound as a hypothesis so both users can reach it: the
+`z.im ≠ 0` case below supplies `c = |z.im|`, and `RealLowerBound.lean` supplies
+it from a real spectral lower bound.  It lived in that module until 2026-07-30,
+which put it *downstream* of the specialisation directly below — so the two
+carried the same thirteen-line closedness argument twice. -/
+theorem isClosed_range_shiftMap_of_lower_bound {A : E →ₗ.[ℂ] E} {z : ℂ} {c : ℝ}
+    (hA : IsSelfAdjoint A) (hc : 0 < c)
+    (hbd : ∀ x : A.domain, c * ‖(x : E)‖ ≤ ‖A x - z • (x : E)‖) :
     IsClosed (Set.range (shiftMap A z)) := by
-  have hsym : A.IsFormalAdjoint A := by
-    have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
-    rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
-  have habs : 0 < |z.im| := abs_pos.mpr hz
   apply IsSeqClosed.isClosed
   intro w a hw hlim
   choose x hx using hw
-  -- the preimages are Cauchy, by the estimate applied to differences
   have hwCauchy : CauchySeq w := hlim.cauchySeq
   have hCauchy : CauchySeq fun n => ((x n : E)) := by
     rw [Metric.cauchySeq_iff] at hwCauchy ⊢
     intro ε hε
-    obtain ⟨N, hN⟩ := hwCauchy (|z.im| * ε) (by positivity)
+    obtain ⟨N, hN⟩ := hwCauchy (c * ε) (by positivity)
     refine ⟨N, fun m hm n hn => ?_⟩
-    have hest := norm_sub_smul_ge_abs_im hsym z (x m - x n)
-    have hcoe : ((x m - x n : A.domain) : E) = (x m : E) - (x n : E) := (rfl)
+    have hest := hbd (x m - x n)
+    have hcoe : ((x m - x n : A.domain) : E) = (x m : E) - (x n : E) := rfl
     have hAsub : A (x m - x n) = A (x m) - A (x n) := map_sub _ _ _
     have hval : A (x m - x n) - z • ((x m - x n : A.domain) : E) = w m - w n := by
       rw [hAsub, hcoe, smul_sub, ← hx m, ← hx n]
       simp only [shiftMap_apply]
       abel
     rw [hval, hcoe] at hest
-    have hd : dist (w m) (w n) < |z.im| * ε := hN m hm n hn
+    have hd : dist (w m) (w n) < c * ε := hN m hm n hn
     rw [dist_eq_norm] at hd ⊢
     nlinarith [norm_nonneg ((x m : E) - (x n : E))]
   obtain ⟨p, hp⟩ := cauchySeq_tendsto_of_complete hCauchy
-  -- `A xₙ = wₙ + z • xₙ → a + z • p`, and the graph of `A` is closed
   have hAx : Filter.Tendsto (fun n => A (x n)) Filter.atTop (nhds (a + z • p)) := by
-    have : ∀ n, A (x n) = w n + z • ((x n : E)) := by
+    have hval : ∀ n, A (x n) = w n + z • ((x n : E)) := by
       intro n; rw [← hx n]; simp only [shiftMap_apply]; abel
-    simp only [this]
+    simp only [hval]
     exact hlim.add ((continuous_const_smul z).continuousAt.tendsto.comp hp)
   have hgraph : ((p, a + z • p) : E × E) ∈ A.graph := by
     refine (hA.isClosed).mem_of_tendsto (b := Filter.atTop)
@@ -202,6 +201,18 @@ theorem isClosed_range_shiftMap {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
   have hq2 : A q = a + z • p := hq.2
   simp only [shiftMap_apply, hq1, hq2]
   abel
+
+/-- **Closed range.**  The estimate turns a convergent sequence in the range into
+a Cauchy sequence of preimages; closedness of `A` (which self-adjointness
+supplies) identifies the limit. -/
+theorem isClosed_range_shiftMap {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
+    {z : ℂ} (hz : z.im ≠ 0) :
+    IsClosed (Set.range (shiftMap A z)) := by
+  have hsym : A.IsFormalAdjoint A := by
+    have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
+    rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
+  exact isClosed_range_shiftMap_of_lower_bound hA (abs_pos.mpr hz)
+    (norm_sub_smul_ge_abs_im hsym z)
 
 omit [CompleteSpace E] in
 /-- The shifted map `A - z` is injective for non-real `z`: the imaginary part of the quadratic form
