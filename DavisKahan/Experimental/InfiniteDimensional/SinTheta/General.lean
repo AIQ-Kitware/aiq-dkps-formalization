@@ -143,7 +143,7 @@ theorem norm_sylvester_le_of_orderedSeparation_rclike
     (TauCeti.SymmetricOperatorIdealFamily.mem_operatorNormFamily _)
   exact hsolve.2
 
-open Foundation.RealComplexification in
+open TauCeti.RealComplexification in
 open scoped TauCeti.DavisKahan.Experimental.Foundation.RealScalarRestriction in
 /-- **The universal `π/2` Sylvester estimate over a general `RCLike` field.**
 
@@ -197,7 +197,7 @@ theorem norm_sylvester_le_of_generalSeparation_rclike
       Foundation.realSpectrum (complexify (T.restrictScalars ℝ)) =
         Foundation.realSpectrum T := by
     intro G _ _ _ T
-    rw [Foundation.RealComplexification.realSpectrum_complexify (T.restrictScalars ℝ),
+    rw [TauCeti.DavisKahan.Experimental.Foundation.RealComplexification.realSpectrum_complexify (T.restrictScalars ℝ),
       Foundation.realSpectrum_eq_spectrum_restrictScalars T]
     rfl
   have hsepc : SpectraSeparated (complexify (A.restrictScalars ℝ)) ⊤
@@ -209,8 +209,8 @@ theorem norm_sylvester_le_of_generalSeparation_rclike
     rw [hreal E B] at hb
     exact (Foundation.spectraSeparated_top_iff A B d).1 hsep a ha b hb
   have hmain := norm_sylvester_le_of_generalSeparation hAc hBc hd hsepc hEqc
-  rwa [Foundation.RealComplexification.norm_complexify,
-    Foundation.RealComplexification.norm_complexify,
+  rwa [TauCeti.RealComplexification.norm_complexify,
+    TauCeti.RealComplexification.norm_complexify,
     ContinuousLinearMap.norm_restrictScalars,
     ContinuousLinearMap.norm_restrictScalars] at hmain
 

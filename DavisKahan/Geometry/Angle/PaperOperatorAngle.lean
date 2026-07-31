@@ -187,6 +187,8 @@ theorem paperSin_sq_add_paperCos_sq (U V : Submodule ℂ E)
 section Real
 
 open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.RealComplexification
+-- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
 open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
 open TauCeti.DavisKahanExt.Real
 

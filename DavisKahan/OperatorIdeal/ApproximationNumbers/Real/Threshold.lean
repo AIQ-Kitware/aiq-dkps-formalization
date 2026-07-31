@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT-5.6 Thinking
 -/
 
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
-import DavisKahan.SpectralTheory.Complexification.Basic
+import ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
@@ -43,8 +43,7 @@ namespace ApproximationNumbersReal
 
 open Module (finrank)
 open Filter
-open Foundation
-open Foundation.RealComplexification
+open TauCeti.RealComplexification
 
 noncomputable section
 

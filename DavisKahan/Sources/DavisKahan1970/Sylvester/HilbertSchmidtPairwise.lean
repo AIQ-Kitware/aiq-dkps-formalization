@@ -26,9 +26,9 @@ namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
+open TauCeti.RealComplexification
 open TauCeti.DavisKahanExt
 -- The complexification of a bounded operator sits under the foundation namespace.
-open Foundation
 
 noncomputable section
 

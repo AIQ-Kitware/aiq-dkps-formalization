@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.SpectralTheory.Compatibility
-import DavisKahan.SpectralTheory.Complexification.Basic
+import ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic
 import DavisKahan.SpectralTheory.Complexification.Subspace
 import DavisKahan.Experimental.InfiniteDimensional.Core.Forms
 import DavisKahan.SpectralTheory.OperatorAngle
