@@ -165,10 +165,27 @@ def cmd_dup(files, args) -> int:
     # Detected rather than listed, because the alias and its target usually have
     # *different* names -- that is why a name-based check never sees these clusters
     # and only the normalized-statement match finds them.
+    #: A declaration's chunk runs to the next *declaration*, so it swallows any
+    #: `section`/`variable`/`namespace`/`end`/`open` block that follows the proof.
+    #: Measuring "is this proof short" against that overcounts, and it cost a real
+    #: false positive: `graph_reduces_iff_solvesRiccati`'s proof is one line and was
+    #: measured as nine, so a genuine forwarding alias was reported as duplication.
+    STRUCTURAL = re.compile(r"^\s*(section|variable|namespace|end|open|@\[|/-)\b")
+
+    def proof_body(proof: str) -> str:
+        """The proof, cut at the first structural line that follows it."""
+        lines = proof.strip().splitlines()
+        out: list[str] = []
+        for line in lines:
+            if out and STRUCTURAL.match(line):
+                break
+            out.append(line)
+        return "\n".join(out).strip()
+
     def is_forwarder(group) -> bool:
         names = {n for _, _, n, _, _ in group}
         for _, _, name, _, proof in group:
-            body = proof.strip()
+            body = proof_body(proof)
             if len(body.splitlines()) <= 3 and any(
                     other != name and re.search(r"\b" + re.escape(other) + r"\b", body)
                     for other in names):
