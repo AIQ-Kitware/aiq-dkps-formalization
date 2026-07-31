@@ -30,7 +30,7 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
 import Acharyya2024.Common
-import ForTauCeti.Analysis.InnerProductSpace.GramMatrix
+import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 
 open scoped RealInnerProductSpace BigOperators
 

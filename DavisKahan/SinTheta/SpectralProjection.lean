@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
 import DavisKahan.SinTheta.BoundedPerturbation
 import DavisKahan.Sylvester.Unbounded.IntervalExterior
-import ForTauCeti.Analysis.InnerProductSpace.ProjectionGap
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!

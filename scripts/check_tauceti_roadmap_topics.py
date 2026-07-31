@@ -49,15 +49,15 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  ["Analysis.SpecialFunctions.Sqrt","Analysis.Normed.Operator.LinearIsometry",A+"Basic",A+"BasisSpan",A+"CourantFischer",
   A+"PositiveSqrt",A+"SelfAdjointFunctionalCalculus",A+"OperatorModulus",A+"Spectrum"]),
 ("T02","Polar decomposition and partial isometries",
- [A+"PartialIsometry",A+"PolarDecomposition",A+"PolarIsometry",A+"PolarPartialIsometry",
+ [A+"PartialIsometry",A+"Polar.Decomposition",A+"Polar.Isometry",A+"Polar.PartialIsometry",
   A+"NearIsometry",A+"IntertwiningUnitary"]),
 ("T03","Singular values and the singular system",
- [A+"SingularValues",A+"RectangularSingularValues",A+"SingularSystem",A+"MoorePenroseInverse"]),
+ [A+"Singular.Values",A+"RectangularSingularValues",A+"Singular.System",A+"MoorePenroseInverse"]),
 ("T04","Gram matrices, orthogonal projections, and spectral subspaces",
- [A+x for x in ["GramMatrix","ProjectionGeometry","ProjectionBlocks","ProjectionGap",
-   "ReducingSubspace","SpectralSubspace","SpectralGap","OrthogonalSeries"]]),
+ [A+x for x in ["Gram.Matrix","Projection.Geometry","Projection.Blocks","Projection.Gap",
+   "ReducingSubspace","Spectral.Subspace","Spectral.Gap","OrthogonalSeries"]]),
 ("T05","Majorization, Schur-Horn, and unitarily invariant norms",
- ["Analysis.Convex.Majorization",A+"SchurHorn",A+"SingularSubspace",A+"KyFan",
+ ["Analysis.Convex.Majorization",A+"SchurHorn",A+"Singular.Subspace",A+"KyFan",
   A+"UnitarilyInvariantNorm"]),
 ("T06","Principal angles, aligned bases, and finite frames",
  [A+x for x in ["PrincipalAngles","AlignedBasis","FiniteFrame"]]),
@@ -65,11 +65,11 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  [A+"RectangularUnitarilyInvariantNorm",A+"TwoDimensionalSingularValues"]
  +[A+"RectangularUnitarilyInvariantNorm."+x for x in ["Basic","BlockSum","Instances","Majorization"]]),
 ("T08","Angle geometry and eigenvalue perturbation",
- [A+x for x in ["GramOperator","AngleGeometry","FrameFactorization","HoffmanWielandt","EigenvalueChange"]]),
+ [A+x for x in ["Gram.Operator","AngleGeometry","FrameFactorization","HoffmanWielandt","EigenvalueChange"]]),
 ("T09","Approximation numbers",
  ["SetTheory.Cardinal.Lift","LinearAlgebra.Dimension.RankComp",
   "Analysis.Normed.Operator.FiniteRankCompact",
-  A+"SpectralCutoff"]+["Analysis.OperatorIdeal.ApproximationNumber."+x for x in
+  A+"Spectral.Cutoff"]+["Analysis.OperatorIdeal.ApproximationNumber."+x for x in
   ["Basic","Adjoint","Compact","CompactHilbert","Core","DiagonalExample","DiagonalSequence","Examples",
    "FiniteDimensional","FiniteRestriction","FiniteValueFibers","FiniteValueSeparation",
    "KyFan",
@@ -80,9 +80,9 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # would sit in T09, but it imports `Family.HilbertSchmidt` (here), so filing it there makes
  # T09 unsubmittable.  Fourth module to hit this; file by dependency and let `--check` say so.
  +["Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison"]
- +[A+"SchattenNorm",A+"HilbertSchmidtEnergy","Analysis.Normed.FiniteLpGauge","Topology.ENNRealLiminf"]),
+ +[A+"SchattenNorm",A+"HilbertSchmidt.Energy","Analysis.Normed.FiniteLpGauge","Topology.ENNRealLiminf"]),
 ("T11","Hilbert-Schmidt operators",
- [A+"HilbertSchmidt"+x for x in ["Lp","Space","Conjugation","Pythagoras"]]),
+ [A+"HilbertSchmidt."+x for x in ["Lp","Space","Conjugation","Pythagoras"]]),
 ("T12","The Haagerup-Zsido kernel and its Fourier transform",
  ["Analysis.Fourier.HaagerupZsido."+x for x in ["Defs","Fourier","Integrability"]]
  +["Analysis.Fourier.ExponentialAbs","Analysis.Fourier.HaagerupZsido.Kernel",
@@ -131,7 +131,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
    "Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar"]
  +[A+"BlockLowerBound"]),
 ("T16","Sylvester equations and the Rosenblum theorem",
- [A+x for x in ["Rosenblum","HilbertSchmidtBlock","CoerciveUnit"]]
+ [A+x for x in ["Rosenblum","HilbertSchmidt.Block","CoerciveUnit"]]
  +[A+"Sylvester."+x for x in ["Basic","Interval","SpectralDistance",
    "Bound","Operator","BlockIdentity","BlockEstimate","SpectralGap","Generator","Group"]]
  +[A+"Sylvester.Internal.ReciprocalMultiplier"+x for x in

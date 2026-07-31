@@ -7,7 +7,7 @@ import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
 import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics
 import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace
 import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
-import ForTauCeti.Analysis.InnerProductSpace.SingularSubspace
+import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 
 /-!

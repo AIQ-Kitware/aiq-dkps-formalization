@@ -5,8 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import DavisKahan.FiniteDimensional.Core.AngleOperators
+import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
 import DavisKahan.FiniteDimensional.Core.OperatorBlocks
-import ForTauCeti.Analysis.InnerProductSpace.SpectralGap
-import ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace
+import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 
 /-! # `DavisKahan/FiniteDimensional/Core` -/

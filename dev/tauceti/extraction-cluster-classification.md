@@ -57,7 +57,7 @@ Ownership classes: `mathlib` · `tauceti` · `davis-kahan` · `spectra-bridge` �
 * **PR order**: **PR 1** for the abstraction itself; **PR 2** for the
   symmetric-gauge/Calkin construction and Hilbert–Schmidt equivalences.
 * **PR 2 progress (2026-07-28)**: the Hilbert–Schmidt half is **staged and
-  building** — `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtEnergy.lean`
+  building** — `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidt/Energy.lean`
   and `ForTauCeti/Analysis/OperatorIdeal/Family/HilbertSchmidt.lean`, giving
   `TauCeti.hilbertSchmidtIdealFamily`, a second `SymmetricOperatorIdealFamily`
   built from orthonormal expansions rather than approximation numbers.  Both

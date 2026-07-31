@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtLp
+import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Lp
 
 /-!
 # `ℓ²` of columns as *the* Hilbert–Schmidt space

@@ -13,7 +13,7 @@ import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 -- `SpectraSeparated` is the *hypothesis* predicate of the challenge, not part of what is to
 -- be proved; the challenged theorems live in `DavisKahan.FiniteDimensional.Sylvester.All`,
 -- which only the paired leaderboard imports.
-import ForTauCeti.Analysis.InnerProductSpace.SpectralGap
+import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
 
 /-!
 ## Comparator maintenance rule

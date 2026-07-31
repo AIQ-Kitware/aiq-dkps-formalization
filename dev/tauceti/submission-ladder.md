@@ -76,7 +76,7 @@ base Tau Ceti has already accepted.
   - `Analysis.InnerProductSpace.CourantFischer`
   - `Analysis.InnerProductSpace.OperatorModulus`
   - `Analysis.InnerProductSpace.PartialIsometry`
-  - `Analysis.InnerProductSpace.PolarDecomposition`
+  - `Analysis.InnerProductSpace.Polar.Decomposition`
   - `Analysis.InnerProductSpace.PositiveSqrt`
   - `Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus`
 
@@ -85,7 +85,7 @@ base Tau Ceti has already accepted.
 **2 new, cumulative closed slice 9.**
 
   - `Analysis.InnerProductSpace.RectangularSingularValues`
-  - `Analysis.InnerProductSpace.SingularValues`
+  - `Analysis.InnerProductSpace.Singular.Values`
 
 ### Rung C — Rectangular approximation numbers  ← *this is the advertised PR1 topic*
 
@@ -101,9 +101,9 @@ base Tau Ceti has already accepted.
 
   - `Analysis.Convex.Majorization`
   - `Analysis.InnerProductSpace.KyFan`
-  - `Analysis.InnerProductSpace.ProjectionGeometry`
+  - `Analysis.InnerProductSpace.Projection.Geometry`
   - `Analysis.InnerProductSpace.SchurHorn`
-  - `Analysis.InnerProductSpace.SingularSubspace`
+  - `Analysis.InnerProductSpace.Singular.Subspace`
   - `Analysis.InnerProductSpace.Spectrum`
   - `Analysis.InnerProductSpace.UnitarilyInvariantNorm`
 
@@ -113,7 +113,7 @@ base Tau Ceti has already accepted.
 
   - `Analysis.InnerProductSpace.AlignedBasis`
   - `Analysis.InnerProductSpace.Basic`
-  - `Analysis.InnerProductSpace.GramMatrix`
+  - `Analysis.InnerProductSpace.Gram.Matrix`
   - `Analysis.InnerProductSpace.PrincipalAngles`
   - `Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm`
   - `Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic`
@@ -126,7 +126,7 @@ base Tau Ceti has already accepted.
 
 **13 new, cumulative closed slice 42.**
 
-  - `Analysis.InnerProductSpace.SpectralCutoff`
+  - `Analysis.InnerProductSpace.Spectral.Cutoff`
   - `Analysis.OperatorIdeal.ApproximationNumber.Adjoint`
   - `Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional`
   - `Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction`
@@ -151,21 +151,21 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `Analysis.InnerProductSpace.EigenvalueChange`
   - `Analysis.InnerProductSpace.FiniteFrame`
   - `Analysis.InnerProductSpace.FrameFactorization`
-  - `Analysis.InnerProductSpace.GramOperator`
-  - `Analysis.InnerProductSpace.HilbertSchmidtEnergy`
+  - `Analysis.InnerProductSpace.Gram.Operator`
+  - `Analysis.InnerProductSpace.HilbertSchmidt.Energy`
   - `Analysis.InnerProductSpace.HoffmanWielandt`
   - `Analysis.InnerProductSpace.MoorePenroseInverse`
   - `Analysis.InnerProductSpace.NearIsometry`
   - `Analysis.InnerProductSpace.OrthogonalSeries`
-  - `Analysis.InnerProductSpace.PolarIsometry`
-  - `Analysis.InnerProductSpace.PolarPartialIsometry`
-  - `Analysis.InnerProductSpace.ProjectionBlocks`
-  - `Analysis.InnerProductSpace.ProjectionGap`
+  - `Analysis.InnerProductSpace.Polar.Isometry`
+  - `Analysis.InnerProductSpace.Polar.PartialIsometry`
+  - `Analysis.InnerProductSpace.Projection.Blocks`
+  - `Analysis.InnerProductSpace.Projection.Gap`
   - `Analysis.InnerProductSpace.ReducingSubspace`
   - `Analysis.InnerProductSpace.SchattenNorm`
-  - `Analysis.InnerProductSpace.SingularSystem`
-  - `Analysis.InnerProductSpace.SpectralGap`
-  - `Analysis.InnerProductSpace.SpectralSubspace`
+  - `Analysis.InnerProductSpace.Singular.System`
+  - `Analysis.InnerProductSpace.Spectral.Gap`
+  - `Analysis.InnerProductSpace.Spectral.Subspace`
   - `Analysis.InnerProductSpace.TwoDimensionalSingularValues`
   - `Analysis.Normed.FiniteLpGauge`
   - `Analysis.Normed.Operator.FiniteRankCompact`
@@ -188,10 +188,10 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 **4 new, cumulative closed slice 82.**
 
-  - `Analysis.InnerProductSpace.HilbertSchmidtConjugation`
-  - `Analysis.InnerProductSpace.HilbertSchmidtLp`
-  - `Analysis.InnerProductSpace.HilbertSchmidtPythagoras`
-  - `Analysis.InnerProductSpace.HilbertSchmidtSpace`
+  - `Analysis.InnerProductSpace.HilbertSchmidt.Conjugation`
+  - `Analysis.InnerProductSpace.HilbertSchmidt.Lp`
+  - `Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras`
+  - `Analysis.InnerProductSpace.HilbertSchmidt.Space`
 
 ### Rung I — The Haagerup-Zsido kernel and its Fourier transform (T12)
 
@@ -282,7 +282,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 **18 new, cumulative closed slice 154.**
 
   - `Analysis.InnerProductSpace.CoerciveUnit`
-  - `Analysis.InnerProductSpace.HilbertSchmidtBlock`
+  - `Analysis.InnerProductSpace.HilbertSchmidt.Block`
   - `Analysis.InnerProductSpace.Rosenblum`
   - `Analysis.InnerProductSpace.Sylvester.Basic`
   - `Analysis.InnerProductSpace.Sylvester.BlockEstimate`

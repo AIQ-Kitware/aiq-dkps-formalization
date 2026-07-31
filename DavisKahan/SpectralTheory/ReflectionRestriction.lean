@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SpectralTheory.ClosedOperator.UnitaryConjugation
 import DavisKahan.SinTheta.SpectralProjection
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
-import ForTauCeti.Analysis.InnerProductSpace.ProjectionGap
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
 /-!
 # Reflection transport for unbounded spectral restrictions

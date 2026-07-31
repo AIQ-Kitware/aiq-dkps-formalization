@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockIdentity
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtBlock
+import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Block
 
 /-!
 # The per-block Sylvester estimate

@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
-import ForTauCeti.Analysis.InnerProductSpace.PolarPartialIsometry
+import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 
 /-!
 # Narrow Gram bands and the polar partial isometry

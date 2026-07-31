@@ -196,7 +196,7 @@ closure at 21,581 lines because Spectra builds the Hilbert tensor product by
 hand.  It does not have to be built: the column map `T ↦ (T eᵢ)` identifies
 `HS(F, E)` with `lp (fun _ => E) 2`, and Mathlib already carries the inner
 product (`lp.instInnerProductSpace`) and completeness.  Landed so far in
-`ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtLp.lean`:
+`ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidt/Lp.lean`:
 
 * `memLp_columns_iff` — Hilbert–Schmidt membership *is* `ℓ²` membership of the columns;
 * `summable_norm_columnSeries` — the column series of an `ℓ²` family converges absolutely.
@@ -291,7 +291,7 @@ are free; claim in `dev/LANES.md` before the first edit.
 
 **D3 is unblocked as of now.**  `HS(F, E)` has a Hilbert-space home built from
 Mathlib's `lp`, with no tensor-product development anywhere in the route.
-Importable API in `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtLp.lean`:
+Importable API in `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidt/Lp.lean`:
 
 | declaration | content |
 |---|---|
@@ -304,7 +304,7 @@ Importable API in `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtLp.lean`:
 Whoever takes D3 needs nothing further from me.
 
 
-`ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtLp.lean`.  Landed:
+`ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidt/Lp.lean`.  Landed:
 `memLp_columns_iff`, `summable_norm_columnSeries`, `summable_sq`,
 `tsum_sq_eq_norm_sq`.  In flight: `ofLp` and the round trips.
 

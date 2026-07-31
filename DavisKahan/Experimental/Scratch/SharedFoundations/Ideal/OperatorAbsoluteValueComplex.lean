@@ -10,7 +10,7 @@ recorded in the accompanying provenance ledger.
 import DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.TwoWayFactorization
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
-import ForTauCeti.Analysis.InnerProductSpace.PolarPartialIsometry
+import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 
 /-!
 # Absolute-value transport for square symmetric ideals

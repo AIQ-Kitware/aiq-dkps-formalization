@@ -232,7 +232,7 @@ Two near misses must not be mistaken for coverage, which is why this cluster is
 
 - `ForTauCeti/Analysis/InnerProductSpace/SelfAdjointFunctionalCalculus.lean` is
   built on `eigenvectorBasis` — **finite-dimensional**.
-- `ForTauCeti/Analysis/InnerProductSpace/SpectralCutoff.lean` is CFC over
+- `ForTauCeti/Analysis/InnerProductSpace/Spectral/Cutoff.lean` is CFC over
   **bounded positive** `E →L[ℂ] E`.
 
 Neither reaches the unbounded, measure-theoretic generality the Davis–Kahan

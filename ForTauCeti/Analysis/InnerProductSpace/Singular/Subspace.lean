@@ -25,7 +25,7 @@ identity `A A⋆ = U (A⋆A) U⁻¹` with `U = choosePolarUnitary A`.
 import Mathlib.Analysis.InnerProductSpace.SingularValues
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
 import ForTauCeti.Analysis.InnerProductSpace.SchurHorn
-import ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition
+import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
 
 
 /-! # Gram-operator perturbation

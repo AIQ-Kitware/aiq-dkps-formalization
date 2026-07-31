@@ -59,7 +59,7 @@ Use `exists_...` for noncanonical existential choices. Reserve a bare noun such 
 **Location**
 
 ```text
-ForTauCeti/Analysis/InnerProductSpace/PolarIsometry.lean
+ForTauCeti/Analysis/InnerProductSpace/Polar/Isometry.lean
 ```
 
 **Current declaration**
@@ -131,7 +131,7 @@ This does not block the approximation-number PR.
 **Location**
 
 ```text
-ForTauCeti/Analysis/InnerProductSpace/PolarDecomposition.lean
+ForTauCeti/Analysis/InnerProductSpace/Polar/Decomposition.lean
 ```
 
 **Current declaration**
@@ -435,7 +435,7 @@ The module docstring, which previously advertised "infinite dimensions", now sta
 
 | item | status |
 |---|---|
-| 1. `ContinuousLinearMap.polarIsometry` | **RESOLVED 2026-07-29 by rename — `polarIsometry` → `polarIsometryOfIsUnitModulus`, whole name family (17 declarations), and the four prose cross-references.** The hypothesis is now in the name, per this document's own policy. **The severity was understated: the declaration sat in the *root* `ContinuousLinearMap` namespace**, so it claimed Mathlib's unqualified classical name for an object requiring `IsUnit |M|`, alongside `ContinuousLinearMap.polarPartial` — the general object — in that same namespace. That is *block upstreaming*, not *rename before its PR*. Not deleted, because it carries the sharp near-isometry estimate `polarPartial` does not have; deleting remains the eventual end state once that estimate is restated over `polarPartial`. **VERDICT CORRECTED 2026-07-29 — see the item-1 addendum; do not delete this module on the strength of the text below.** The three results named as blockers have zero references and are trivially rehoused; the content actually at risk is the sharp near-isometry estimate, which `polarPartial` does **not** carry. Original text follows. **PARTIAL — reconciliation proved 2026-07-28** (`polarPartial_eq_comp_ringInverse_modulus`: the two agree wherever the light one is meaningful). Retirement still open, and larger than it looks: the module also carries two `IsUnit \|M\|` criteria and `‖\|M\| - 1‖ ≤ ‖M⋆M - 1‖`, none of them polar-decomposition results, which need rehousing before anything is deleted. Original situation: — the general partial isometry now exists as `ContinuousLinearMap.polarPartial` (`ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean`, 44 declarations), and `PolarIsometry.lean` carries a live `TODO` to prove `polarIsometry = polarPartial` under `IsUnit M.modulus` and then **retire** `polarIsometry` in favour of the general one. That supersedes the section's own recommendation: the audit proposed renaming to `polarIsometricFactorOfIsUnitModulus` and keeping the definition, but if the general object is available the honest move is deletion, not a longer name. Retiring it is the open lane; renaming it would entrench a definition that is scheduled to go. |
+| 1. `ContinuousLinearMap.polarIsometry` | **RESOLVED 2026-07-29 by rename — `polarIsometry` → `polarIsometryOfIsUnitModulus`, whole name family (17 declarations), and the four prose cross-references.** The hypothesis is now in the name, per this document's own policy. **The severity was understated: the declaration sat in the *root* `ContinuousLinearMap` namespace**, so it claimed Mathlib's unqualified classical name for an object requiring `IsUnit |M|`, alongside `ContinuousLinearMap.polarPartial` — the general object — in that same namespace. That is *block upstreaming*, not *rename before its PR*. Not deleted, because it carries the sharp near-isometry estimate `polarPartial` does not have; deleting remains the eventual end state once that estimate is restated over `polarPartial`. **VERDICT CORRECTED 2026-07-29 — see the item-1 addendum; do not delete this module on the strength of the text below.** The three results named as blockers have zero references and are trivially rehoused; the content actually at risk is the sharp near-isometry estimate, which `polarPartial` does **not** carry. Original text follows. **PARTIAL — reconciliation proved 2026-07-28** (`polarPartial_eq_comp_ringInverse_modulus`: the two agree wherever the light one is meaningful). Retirement still open, and larger than it looks: the module also carries two `IsUnit \|M\|` criteria and `‖\|M\| - 1‖ ≤ ‖M⋆M - 1‖`, none of them polar-decomposition results, which need rehousing before anything is deleted. Original situation: — the general partial isometry now exists as `ContinuousLinearMap.polarPartial` (`ForTauCeti/Analysis/InnerProductSpace/Polar/PartialIsometry.lean`, 44 declarations), and `PolarIsometry.lean` carries a live `TODO` to prove `polarIsometry = polarPartial` under `IsUnit M.modulus` and then **retire** `polarIsometry` in favour of the general one. That supersedes the section's own recommendation: the audit proposed renaming to `polarIsometricFactorOfIsUnitModulus` and keeping the definition, but if the general object is available the honest move is deletion, not a longer name. Retiring it is the open lane; renaming it would entrench a definition that is scheduled to go. |
 | 2. `TauCeti.polarUnitary` | **RESOLVED** — renamed `choosePolarUnitary`, `exists_polar_decomposition_unitary` added |
 | 3. `FiniteDimensional.inverseOnRange` | **RESOLVED** — alias family deleted |
 | 4. `UnitaryInvariantIdealFamily` | **RESOLVED** — alias deleted, 94 references repointed to `KyFanDominantIdealFamily` |
@@ -468,7 +468,7 @@ polar-decomposition results, which need rehousing before anything is deleted"*, 
    general object" would delete a theorem the general object does not provide.
 
 3. **The module reads as dead and is not.** Nothing imports
-   `ForTauCeti.Analysis.InnerProductSpace.PolarIsometry`; its only mentions outside itself are
+   `ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry`; its only mentions outside itself are
    three lines of prose. That looks like textbook dead code — but it is a *terminal* statement,
    and `NearIsometry.lean`, which **is** consumed and is pinned by
    `comparator/pending-near-isometry.json`, carries a design note naming it *"the general theorem
@@ -576,7 +576,7 @@ something any current gate measures.
 
 ## 9. `leftSingularVector` — total, with a junk value, but with real mitigations
 
-**Location:** `ForTauCeti/Analysis/InnerProductSpace/SingularSystem.lean:71` (77 references)
+**Location:** `ForTauCeti/Analysis/InnerProductSpace/Singular/System.lean:71` (77 references)
 
 The definition is `σᵢ⁻¹ • A vᵢ`, and its own docstring says: "At a zero singular value this
 definition evaluates to zero because division in a field is total." A singular vector is by

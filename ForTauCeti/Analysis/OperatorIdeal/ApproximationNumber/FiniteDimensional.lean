@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.SingularValues
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.Values
 public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 public import Mathlib.LinearAlgebra.Basis.Basic
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
