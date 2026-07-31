@@ -298,7 +298,7 @@ theorem one_sub_smul_resolvent_eq_cfcHom :
       = (Complex.I - z) • 1 + (Complex.I + z) • cayleyCoord hA := by
     ext w
     simp [cayleyDenomCM_apply, smul_eq_mul]
-  rw [hsplit, map_smul, map_add, map_smul, map_smul, map_one, cayleyCoord, cfcHom_id]
+  simp only [hsplit, map_smul, map_add, map_one, cayleyCoord, cfcHom_id]
   refine ContinuousLinearMap.ext fun ξ => ?_
   have h2 : (2 * Complex.I : ℂ) ≠ 0 := two_I_ne_zero
   have hU : cayley hA ξ = ξ - (2 * Complex.I) • resolvent A (negI_mem_resolventSet hA) ξ := by
@@ -363,8 +363,8 @@ theorem inverseCayley_im_eq_zero {w : ℂ} (hw : ‖w‖ = 1) (hw1 : w ≠ 1) :
   have hconj : (starRingEnd ℂ) w = w⁻¹ := by
     field_simp
     linear_combination hmul
-  rw [← Complex.conj_eq_iff_im, map_div₀, map_mul, Complex.conj_I, map_add, map_one,
-    map_sub, map_one, hconj]
+  rw [← Complex.conj_eq_iff_im]
+  simp only [map_div₀, map_mul, Complex.conj_I, map_add, map_one, map_sub, hconj]
   field_simp
   ring
 
