@@ -56,6 +56,14 @@ callers without any of the nine scripts changing.  That is deliberate: making
 them strict by default is a nine-file change with nine chances to alter
 behaviour, and it is not needed to get the guarantee.
 
+**Do not run `lake` while this is running.**  Five gates invoke `lake` and a
+concurrent build makes them fail with `build failed` -- which reads exactly like
+a regression and is not one.  On 2026-07-31 that cost a full investigation:
+`check_experimental_root_status` reported "lake build DavisKahan.Experimental did
+not succeed", and the same build run alone immediately afterwards was green
+(9210 jobs).  The suite was racing the author's own editing loop.  Use `--fast`
+if you need to keep building; it skips exactly those five.
+
     python3 scripts/run_gates.py              # every gate
     python3 scripts/run_gates.py --fast       # skip the ones that build Lean
     python3 scripts/run_gates.py --list       # show the classification, run nothing
