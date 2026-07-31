@@ -326,28 +326,85 @@ theorem ofFin_add_le {n : ℕ} (x y : Fin n → ℝ) :
   · simp only [ofFin, Finsupp.onFinset_apply, hi, dif_neg, not_false_iff]
     exact zero_le
 
+/-- A permutation of `Fin n` as a permutation of `ℕ`, fixing everything outside
+the range.
+
+Built by hand rather than through `Equiv.Perm.extendDomain` so that the transport
+equation below can be proved by direct computation on indices. -/
+def natPerm {n : ℕ} (π : Equiv.Perm (Fin n)) : Equiv.Perm ℕ where
+  toFun i := if h : i < n then (π ⟨i, h⟩ : ℕ) else i
+  invFun i := if h : i < n then (π.symm ⟨i, h⟩ : ℕ) else i
+  left_inv i := by
+    by_cases h : i < n
+    · simp only [dif_pos h, dif_pos (π ⟨i, h⟩).isLt]
+      simp
+    · simp [h]
+  right_inv i := by
+    by_cases h : i < n
+    · simp only [dif_pos h, dif_pos (π.symm ⟨i, h⟩).isLt]
+      simp
+    · simp [h]
+
+/-- `natPerm` acts as `π` inside the range. -/
+@[simp]
+theorem natPerm_apply_of_lt {n : ℕ} (π : Equiv.Perm (Fin n)) {i : ℕ} (h : i < n) :
+    natPerm π i = (π ⟨i, h⟩ : ℕ) := by
+  simp [natPerm, h]
+
+/-- `natPerm`'s inverse acts as `π.symm` inside the range. -/
+@[simp]
+theorem natPerm_symm_apply_of_lt {n : ℕ} (π : Equiv.Perm (Fin n)) {i : ℕ}
+    (h : i < n) : (natPerm π).symm i = (π.symm ⟨i, h⟩ : ℕ) := by
+  simp [natPerm, h]
+
+/-- **The transport equation.**  Permuting the coordinates of a finite vector
+corresponds to relabelling its `ofFin` image along `natPerm`.
+
+This is the step that makes `SymmetricGauge.symm` -- an axiom about
+`Equiv.Perm ℕ` -- usable against `FiniteSymmetricGauge.perm'`, which quantifies
+over `Equiv.Perm (Fin n)`.  It was the one obstruction isolated when the adapter
+was first attempted, and it is now discharged. -/
+theorem ofFin_comp_perm {n : ℕ} (x : Fin n → ℝ) (π : Equiv.Perm (Fin n)) :
+    ofFin (x ∘ π) = Finsupp.equivMapDomain (natPerm π).symm (ofFin x) := by
+  ext i
+  rw [Finsupp.equivMapDomain_apply]
+  by_cases hi : i < n
+  · have h1 : (ofFin (x ∘ π)) i = ⟨|x (π ⟨i, hi⟩)|, abs_nonneg _⟩ := by
+      simp only [ofFin, Finsupp.onFinset_apply, hi, dif_pos]
+      rfl
+    have h2 : ((natPerm π).symm).symm i = (π ⟨i, hi⟩ : ℕ) := by
+      simp [natPerm, hi]
+    rw [h1, h2]
+    have h3 : (ofFin x) ((π ⟨i, hi⟩ : ℕ)) = ⟨|x (π ⟨i, hi⟩)|, abs_nonneg _⟩ := by
+      simp only [ofFin, Finsupp.onFinset_apply, (π ⟨i, hi⟩).isLt, dif_pos]
+    rw [h3]
+  · have h2 : ((natPerm π).symm).symm i = i := by
+      simp [natPerm, hi]
+    rw [h2]
+    simp [ofFin, hi]
+
 /-! ### What remains for the transfer descent
 
-The adapter `SymmetricGauge → FiniteSymmetricGauge n`, `x ↦ Φ (ofFin x)`, is the
-route by which the Hardy--Littlewood--Pólya descent of
-`ForTauCeti.Analysis.Convex.Majorization` becomes available here.  Three of its
-four fields follow immediately from the lemmas above and the axioms:
+With `ofFin_comp_perm` proved, the adapter
+`SymmetricGauge → FiniteSymmetricGauge n`, `x ↦ Φ (ofFin x)`, has all four of its
+fields available in principle:
 
-* `add_le'` from `ofFin_add_le` then `mono` then `add_le`;
-* `real_smul'` from `|c • x| = |c| • |x|` and `smul`;
-* `neg_single'` because flipping one sign leaves `ofFin` unchanged.
+* `add_le'` -- `ofFin_add_le`, then `mono`, then `add_le`.  This is the one field
+  where `mono` does work invisible in the finite theory, where the corresponding
+  monotonicity is a consequence of the descent rather than an assumption;
+* `real_smul'` -- `|c • x| = |c| • |x|` and `smul`;
+* `perm'` -- `ofFin_comp_perm` followed by `symm`.  **This was the obstruction
+  and it is now discharged**;
+* `neg_single'` -- flipping one sign leaves `ofFin` unchanged.
 
-**The remaining obstruction is `perm'`, and it is a transport problem rather than
-an analytic one.**  `FiniteSymmetricGauge.perm'` quantifies over
-`Equiv.Perm (Fin n)`, while `SymmetricGauge.symm` quantifies over
-`Equiv.Perm ℕ`, so using the axiom requires lifting a permutation of `Fin n` to
-one of `ℕ` that fixes everything outside the range, and then showing
-`ofFin (x ∘ π) = Finsupp.equivMapDomain (lift π) (ofFin x)`.
-
-`Equiv.Perm.extendDomain` (`Mathlib/Algebra/Group/End.lean`) is the right tool --
-it extends a permutation along an `α ≃ Subtype p`, here `Fin n ≃ {i : ℕ // i < n}`
--- but the transport equation needs its own proof and is left for a follow-on
-rather than asserted here.  Everything above this section is proved and used.
+What is left is mechanical rather than mathematical: `real_smul'` and
+`neg_single'` need the `Finsupp`/`ℝ≥0` coercion bookkeeping written out (`ext`
+into `NNReal`, `push_cast`, `abs_mul`), and `neg_single'` needs its rewrite
+arranged so the motive stays type-correct under `Function.update`.  Once the
+adapter is assembled, `FiniteSymmetricGauge.le_of_prefixSum_le` and
+`mono_weaklyMajorized` pull back directly, and
+`extend_le_extend_of_forall_sum_le` becomes the lift of that finite statement
+through the supremum defining `extend`.
 -/
 
 end SymmetricGauge
