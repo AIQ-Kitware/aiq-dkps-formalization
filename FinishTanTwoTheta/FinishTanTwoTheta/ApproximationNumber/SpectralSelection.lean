@@ -10,7 +10,7 @@ import FinishTanTwoTheta.ApproximationNumber.FinitePVMSelection
 import FinishTanTwoTheta.ApproximationNumber.FiniteValueSeparation
 import FinishTanTwoTheta.ApproximationNumber.FiniteValueFibers
 import FinishTanTwoTheta.ApproximationNumber.GramBandPolar
-import FinishTanTwoTheta.OperatorIdeal.StandardInstances
+import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 
 /-!
 # Approximate leading singular families
