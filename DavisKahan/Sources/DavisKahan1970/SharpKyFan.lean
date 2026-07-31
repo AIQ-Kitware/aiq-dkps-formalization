@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.DavisKahan.StableRiccatiPair
+import DavisKahan.Sources.DavisKahan1970.StableRiccatiPair
 import DavisKahan.DoubleAngle.KyFanOrthonormal
 
 /-!
@@ -17,7 +17,6 @@ number calls are existing declarations in the repository.
 
 namespace TauCeti
 namespace DavisKahan
-namespace FinishTanTwoTheta
 
 open scoped InnerProductSpace BigOperators
 open DavisKahanExt
@@ -348,6 +347,5 @@ end CompleteSpaces
 
 end
 
-end FinishTanTwoTheta
 end DavisKahan
 end TauCeti
