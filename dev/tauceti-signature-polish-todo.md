@@ -993,7 +993,7 @@ three §5.3 P0s shared one root cause — every public statement said
 `T.toLinearMap.singularValues n`, leaking the `ContinuousLinearMap → LinearMap`
 coercion into the statement and into every downstream proof — so they are fixed
 together by the new module
-`ForTauCeti/Analysis/InnerProductSpace/SingularValues.lean`:
+`ForTauCeti/Analysis/InnerProductSpace/Singular/Values.lean`:
 `ContinuousLinearMap.singularValues T := T.toLinearMap.singularValues`, with the
 `@[simp]` bridge `toLinearMap_singularValues` (oriented so `simp` *removes* the
 coercion) and one-line delegations for the facts the operator layer uses.  The
@@ -1370,7 +1370,7 @@ not have resolved in generated docs.
 
 ### 8.2 ~~NearIsometry.lean~~ — P0 RESOLVED 2026-07-27
 
-| **Current file** | ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean (rewritten), ForTauCeti/Analysis/InnerProductSpace/PolarIsometry.lean (new), ForTauCeti/Analysis/SpecialFunctions/Sqrt.lean (new) |
+| **Current file** | ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean (rewritten), ForTauCeti/Analysis/InnerProductSpace/Polar/Isometry.lean (new), ForTauCeti/Analysis/SpecialFunctions/Sqrt.lean (new) |
 | --- | --- |
 | **Disposition** | **Done.**  Canonical object defined over `ℂ`; real finite-dimensional statement now returns the polar factorization; constant sharpened; scalar lemmas moved out. |
 

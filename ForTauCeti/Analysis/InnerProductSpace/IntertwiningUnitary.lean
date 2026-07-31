@@ -13,7 +13,7 @@ Milestone 2 of the operator polar decomposition project — COMPLETE
 `propext, Classical.choice, Quot.sound`). Tickets PD-13..PD-17.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition
+import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 
 

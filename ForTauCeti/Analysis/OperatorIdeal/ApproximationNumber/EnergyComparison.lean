@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy
-import ForTauCeti.Analysis.InnerProductSpace.SingularSystem
+import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
+import ForTauCeti.Analysis.InnerProductSpace.Singular.System
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
 import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
 import ForTauCeti.Topology.ENNRealLiminf

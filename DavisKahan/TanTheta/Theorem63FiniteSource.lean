@@ -10,7 +10,7 @@ import DavisKahan.DoubleAngle.KyFanOrthonormal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteSourceSingularSystem
-import ForTauCeti.Analysis.InnerProductSpace.SingularSubspace
+import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 
 /-!

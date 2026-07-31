@@ -7,7 +7,7 @@ import Mathlib.Analysis.InnerProductSpace.Spectrum
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import ForTauCeti.Analysis.InnerProductSpace.Spectrum
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 
 /-!
 # Elementary eigenbasis and Frobenius Davis--Kahan bounds

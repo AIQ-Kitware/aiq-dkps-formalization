@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics
-import ForTauCeti.Analysis.InnerProductSpace.SingularSubspace
-import ForTauCeti.Analysis.InnerProductSpace.GramOperator
+import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+import ForTauCeti.Analysis.InnerProductSpace.Gram.Operator
 import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
 
 /-!

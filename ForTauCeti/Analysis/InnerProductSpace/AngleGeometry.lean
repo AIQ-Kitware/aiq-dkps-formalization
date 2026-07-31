@@ -3,11 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace
+import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
-import ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition
-import ForTauCeti.Analysis.InnerProductSpace.ProjectionGap
+import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
 /-!
 # Directed principal-angle geometry

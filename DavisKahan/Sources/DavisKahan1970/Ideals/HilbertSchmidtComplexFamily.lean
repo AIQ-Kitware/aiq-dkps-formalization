@@ -7,7 +7,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtConjugation
+import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator

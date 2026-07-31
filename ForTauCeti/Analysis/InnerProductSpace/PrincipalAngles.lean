@@ -20,7 +20,7 @@ two families (which needs `singularValues_adjoint`, W0.1(d)), and the bridge
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
-import ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 import ForTauCeti.Analysis.InnerProductSpace.KyFan
 
 

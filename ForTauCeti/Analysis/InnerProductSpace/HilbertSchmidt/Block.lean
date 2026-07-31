@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group
 import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Commutant
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtPythagoras
+import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras
 
 /-!
 # Two-sided blocks on the Hilbert–Schmidt space

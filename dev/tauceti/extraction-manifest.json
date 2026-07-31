@@ -19,24 +19,24 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
         "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
-        "ForTauCeti.Analysis.InnerProductSpace.SingularValues",
+        "ForTauCeti.Analysis.InnerProductSpace.Singular.Values",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
         "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy",
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
         "ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt",
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralCutoff",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Cutoff",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
         "ForTauCeti.Analysis.InnerProductSpace.SchurHorn",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
         "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry",
-        "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition",
-        "ForTauCeti.Analysis.InnerProductSpace.SingularSubspace",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry",
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
+        "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry",
         "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
         "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
@@ -45,7 +45,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm",
         "ForTauCeti.Analysis.InnerProductSpace.Basic",
         "ForTauCeti.Analysis.Normed.Operator.LinearIsometry",
-        "ForTauCeti.Analysis.InnerProductSpace.GramMatrix",
+        "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization",
@@ -76,13 +76,13 @@
         "ForTauCeti.Analysis.InnerProductSpace.NearIsometry",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
         "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry",
-        "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition",
-        "ForTauCeti.Analysis.InnerProductSpace.PolarIsometry",
-        "ForTauCeti.Analysis.InnerProductSpace.PolarPartialIsometry",
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry",
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry",
         "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
-        "ForTauCeti.Analysis.InnerProductSpace.SingularSystem",
+        "ForTauCeti.Analysis.InnerProductSpace.Singular.System",
         "ForTauCeti.Analysis.SpecialFunctions.Sqrt"
       ]
     },
@@ -100,13 +100,13 @@
         "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
-        "ForTauCeti.Analysis.InnerProductSpace.GramMatrix",
+        "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
         "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry",
-        "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition",
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry",
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic",
@@ -116,7 +116,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.SchattenNorm",
         "ForTauCeti.Analysis.InnerProductSpace.SchurHorn",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
-        "ForTauCeti.Analysis.InnerProductSpace.SingularSubspace",
+        "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
         "ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm",
@@ -317,11 +317,11 @@
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.InnerProductSpace.BlockLowerBound",
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtBlock",
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtConjugation",
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtLp",
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtPythagoras",
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtSpace",
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Block",
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation",
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Lp",
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras",
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventOpen",
         "ForTauCeti.Analysis.InnerProductSpace.Rosenblum",
         "ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner",
@@ -345,9 +345,9 @@
         "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
         "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta",
         "ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector",
-        "ForTauCeti.Analysis.InnerProductSpace.GramOperator",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjectionBlocks",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjectionGap",
+        "ForTauCeti.Analysis.InnerProductSpace.Gram.Operator",
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds",
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
         "ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding",
@@ -356,9 +356,9 @@
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant",
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralGap",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex",
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds",
@@ -823,7 +823,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit 75fdc44; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.SingularSubspace"
+        "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -940,7 +940,7 @@
       "source_module": "ForMathlib.Analysis.InnerProductSpace.GramMatrix",
       "source_declarations": [],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.GramMatrix",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.GramMatrix",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
@@ -984,7 +984,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit 3676b55; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition"
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1003,9 +1003,9 @@
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
-        "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry",
-        "ForTauCeti.Analysis.InnerProductSpace.SingularSubspace",
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry",
+        "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.Spectrum"
       ],
       "blocked_dependencies": [],
@@ -1059,7 +1059,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit caa0966; authors Jon Crall, GPT-5.6 Thinking; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.SingularSystem"
+        "ForTauCeti.Analysis.InnerProductSpace.Singular.System"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1122,7 +1122,7 @@
       "source_module": "ForMathlib.Analysis.InnerProductSpace.PolarDecomposition",
       "source_declarations": [],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PolarDecomposition",
       "ownership_class": "tauceti",
       "roadmap_target": "operator-polar-decomposition",
@@ -1139,10 +1139,10 @@
       "upstream_pr": null
     },
     {
-      "source_module": "ForTauCeti.Analysis.InnerProductSpace.PolarIsometry",
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry",
       "source_declarations": [],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.PolarIsometry",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PolarIsometry",
       "ownership_class": "tauceti",
       "roadmap_target": "operator-polar-decomposition",
@@ -1187,7 +1187,7 @@
         "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry"
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1198,7 +1198,7 @@
       "source_module": "ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry",
       "source_declarations": [],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.ProjectionGeometry",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
@@ -1240,7 +1240,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit 3942779; authors Jon Crall, GPT 5.6 High; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.GramMatrix",
+        "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
@@ -1311,7 +1311,7 @@
       "source_module": "ForMathlib.Analysis.InnerProductSpace.SingularSubspace",
       "source_declarations": [],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SingularSubspace",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SingularSubspace",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
@@ -1319,7 +1319,7 @@
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
-        "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition",
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.SchurHorn"
       ],
       "blocked_dependencies": [],
@@ -1331,7 +1331,7 @@
       "source_module": "ForMathlib.Analysis.InnerProductSpace.SingularSystem",
       "source_declarations": [],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SingularSystem",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Singular.System",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SingularSystem",
       "ownership_class": "tauceti",
       "roadmap_target": "operator-polar-decomposition",
@@ -1346,10 +1346,10 @@
       "upstream_pr": null
     },
     {
-      "source_module": "ForTauCeti.Analysis.InnerProductSpace.SingularValues",
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Singular.Values",
       "source_declarations": [],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SingularValues",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Singular.Values",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SingularValues",
       "ownership_class": "tauceti",
       "roadmap_target": "approximation-number",
@@ -1749,7 +1749,7 @@
       "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantNorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.GramMatrix",
+        "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
@@ -1815,10 +1815,10 @@
       "upstream_pr": null
     },
     {
-      "source_module": "ForTauCeti.Analysis.InnerProductSpace.PolarPartialIsometry",
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry",
       "source_declarations": [],
       "current_namespace": "ContinuousLinearMap",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.PolarPartialIsometry",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PolarPartialIsometry",
       "ownership_class": "tauceti",
       "roadmap_target": "operator-polar-decomposition",
@@ -1834,10 +1834,10 @@
       "upstream_pr": null
     },
     {
-      "source_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy",
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
       "source_declarations": [],
       "current_namespace": "ContinuousLinearMap",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy",
       "ownership_class": "tauceti",
       "roadmap_target": "symmetric-operator-ideals",
@@ -1863,7 +1863,7 @@
       "provenance_class": "authored in place 2026-07-28: the Hilbert-Schmidt norm and the resulting TauCeti.SymmetricOperatorIdealFamily, the second instance of that structure after the Ky Fan families",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy",
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Basic"
       ],
       "blocked_dependencies": [],
@@ -1872,10 +1872,10 @@
       "upstream_pr": null
     },
     {
-      "source_module": "ForTauCeti.Analysis.InnerProductSpace.SpectralCutoff",
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Spectral.Cutoff",
       "source_declarations": [],
       "current_namespace": "ContinuousLinearMap",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SpectralCutoff",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Spectral.Cutoff",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SpectralCutoff",
       "ownership_class": "tauceti",
       "roadmap_target": "approximation-numbers",
@@ -1901,7 +1901,7 @@
       "provenance_class": "authored in place 2026-07-28: the hard half of the infinite-dimensional min-max theorem for approximation numbers, replacing the Spectra projection-valued-measure proof that DavisKahan/Interop/Spectra/ApproximationNumberMinMax.lean used to carry",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralCutoff",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Cutoff",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax"
       ],
@@ -2847,7 +2847,7 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtBlock"
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Block"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -3048,13 +3048,13 @@
         "tsum_enorm_sq_blockFun"
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtBlock",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Block",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidtBlock",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtPythagoras",
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras",
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Commutant",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group"
       ],
@@ -3077,17 +3077,17 @@
         "ofLp_smul"
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtConjugation",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidtConjugation",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtSpace"
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtPythagoras",
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group"
       ],
       "status": "staged",
@@ -3111,18 +3111,18 @@
         "tsum_sq_eq_norm_sq"
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtLp",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Lp",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidtLp",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy",
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
         "Mathlib"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtSpace"
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -3135,17 +3135,17 @@
         "tsum_tsum_energy_blocks"
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtPythagoras",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidtPythagoras",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtConjugation"
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtBlock"
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Block"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -3160,17 +3160,17 @@
         "ofLp_injective"
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtSpace",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidtSpace",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtLp"
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Lp"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtConjugation"
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -3288,7 +3288,7 @@
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtBlock",
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Block",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockIdentity"
       ],
       "blocked_dependencies": [],
@@ -3381,12 +3381,12 @@
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtConjugation",
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation",
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtBlock",
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Block",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator"
       ],
       "status": "staged",
@@ -3462,10 +3462,10 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition",
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjectionGap",
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace",
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm"
       ],
       "blocked_dependencies": [],
@@ -3514,7 +3514,7 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.ProjectionGap",
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds",
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator"
@@ -3570,13 +3570,13 @@
         "rightGram_sub_rightGram"
       ],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.GramOperator",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Gram.Operator",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.GramOperator",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.SingularSubspace"
+        "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -3603,7 +3603,7 @@
         "two_smul_offDiagonalPart_eq_sub_reflectionConjugate"
       ],
       "current_namespace": "Submodule",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.ProjectionBlocks",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.ProjectionBlocks",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
@@ -3613,7 +3613,7 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.ProjectionGap"
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -3629,18 +3629,18 @@
         "projectionGap_comm"
       ],
       "current_namespace": "Submodule.ContinuousLinearMap",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.ProjectionGap",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.ProjectionGap",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.ProjectionBlocks"
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace"
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -3688,7 +3688,7 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.ProjectionBlocks",
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
         "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex"
       ],
       "status": "staged",
@@ -3772,7 +3772,7 @@
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace"
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -3886,8 +3886,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant",
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralGap",
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance"
       ],
@@ -3936,13 +3936,13 @@
         "orderedInternalGap_of_spectrumIn_Iic_Ici"
       ],
       "current_namespace": "TauCeti.DavisKahanTheory",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SpectralGap",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SpectralGap",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace"
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -4008,21 +4008,21 @@
         "spectrumIn_restrict_iff"
       ],
       "current_namespace": "TauCeti.DavisKahanTheory",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SpectralSubspace",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjectionGap"
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
         "ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralGap",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds"
       ],
@@ -4048,8 +4048,8 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralGap",
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound"
       ],
       "blocked_dependencies": [],
@@ -4137,7 +4137,7 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound"
       ],
       "blocked_dependencies": [],
@@ -4335,8 +4335,8 @@
       "roadmap_target": "The Yu-Wang-Samworth population-gap variant of Davis-Kahan: the residual-column sandwich, the Frobenius sine and aligned-basis bounds, the rank-one corollary, and the rectangular singular-subspace extension.",
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.GramOperator",
-        "ForTauCeti.Analysis.InnerProductSpace.SingularSubspace",
+        "ForTauCeti.Analysis.InnerProductSpace.Gram.Operator",
+        "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual",
         "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics"
       ],

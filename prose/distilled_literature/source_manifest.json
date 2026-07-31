@@ -490,7 +490,7 @@
       "primary_url": "https://arxiv.org/abs/1312.5393",
       "target_note": "ChienWaldron2016_finite_frame_gram_rigidity.tex",
       "repo_evidence": [
-        "ForTauCeti/Analysis/InnerProductSpace/GramMatrix.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/Gram/Matrix.lean",
         "papers/GramRigidity-formalized-vs-literature.tex"
       ],
       "existing_assets": [],
@@ -689,7 +689,7 @@
       "target_note": "FanHoffman1955_nearest_unitary.tex",
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/PolarDecomposition.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/Polar/Decomposition.lean",
         "ForTauCeti/Analysis/InnerProductSpace/AlignedBasis.lean"
       ],
       "existing_assets": [],
@@ -940,7 +940,7 @@
       "target_note": "Higham1986_polar_decomposition.tex",
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/PolarDecomposition.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/Polar/Decomposition.lean"
       ],
       "existing_assets": [],
       "scope": "Polar decomposition algorithms, perturbation behavior, and nearest-unitary applications.",
@@ -1373,8 +1373,8 @@
         "ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean",
         "ForTauCeti/Analysis/InnerProductSpace/KyFan.lean",
         "ForTauCeti/Analysis/InnerProductSpace/SchurHorn.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/SingularSubspace.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/GramMatrix.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/Singular/Subspace.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/Gram/Matrix.lean",
         "papers/GramRigidity-formalized-vs-literature.tex"
       ],
       "existing_assets": [

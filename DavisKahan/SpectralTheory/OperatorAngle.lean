@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.Geometry.Angle.OperatorAngleReal
 import DavisKahan.Geometry.Angle.PaperOperatorAngle
-import ForTauCeti.Analysis.InnerProductSpace.ProjectionGap
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
 /-!
 # Canonical operator-angle compatibility surface

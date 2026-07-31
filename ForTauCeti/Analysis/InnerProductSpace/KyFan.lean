@@ -22,9 +22,9 @@ inequality for all Ky Fan norms — weak majorization
 
 import Mathlib.Analysis.InnerProductSpace.SingularValues
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.SingularSubspace
-import ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition
-import ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry
+import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 import ForTauCeti.Analysis.InnerProductSpace.Spectrum
 
 
