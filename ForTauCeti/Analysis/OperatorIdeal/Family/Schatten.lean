@@ -302,6 +302,38 @@ theorem enorm_comp_one_sub_basisTruncation_sq_le {ι : Type*} [DecidableEq ι]
     _ = _ := hilbertSchmidtEnergy_comp_one_sub_basisTruncation T b s
 
 
+omit [CompleteSpace H] in
+/-- **An operator of finite rank has the approximation numbers of its corestriction to its
+own range.**
+
+Both directions are one application of `approximationNumber_comp_le_mul_norm`: the
+orthogonal projection onto the range and the inclusion of the range are both of norm at most
+one, and composing with either recovers the other operator.  This is what lets the
+finite-source identity — which needs a finite-dimensional *target* — be applied to an
+operator whose target is an arbitrary Hilbert space. -/
+theorem approximationNumber_orthogonalProjectionOnto_range_comp {G₀ : Type*}
+    [NormedAddCommGroup G₀] [InnerProductSpace 𝕜' G₀] [FiniteDimensional 𝕜' G₀]
+    (A : G₀ →L[𝕜'] H) (n : ℕ) :
+    ((LinearMap.range (A : G₀ →ₗ[𝕜'] H)).orthogonalProjectionOnto ∘L A).approximationNumber n
+      = A.approximationNumber n := by
+  set W := LinearMap.range (A : G₀ →ₗ[𝕜'] H) with hW
+  have hval : ∀ x, ((W.orthogonalProjectionOnto (A x) : W) : H) = A x := fun x =>
+    congrArg Subtype.val
+      (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self (⟨A x, ⟨x, rfl⟩⟩ : W))
+  have hfactor : W.subtypeL ∘L (W.orthogonalProjectionOnto ∘L A) = A := by
+    ext x
+    exact hval x
+  refine le_antisymm ?_ ?_
+  · refine (approximationNumber_comp_le_norm_mul _ _ n).trans ?_
+    exact mul_le_of_le_one_left (A.approximationNumber_nonneg n)
+      (Submodule.orthogonalProjectionOnto_norm_le W)
+  · conv_lhs => rw [← hfactor]
+    refine (approximationNumber_comp_le_norm_mul _ _ n).trans ?_
+    exact mul_le_of_le_one_left
+      ((W.orthogonalProjectionOnto ∘L A).approximationNumber_nonneg n)
+      W.norm_subtypeL_le
+
+
 -- `G`'s completeness is carried by the `HilbertBasis` argument rather than used again, and
 -- the target's is not needed at all: the range factored through is finite-dimensional, so its
 -- orthogonal projection exists without completing `H`.
