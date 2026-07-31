@@ -72,11 +72,18 @@ symmetry — the two properties that characterize `S` as the modulus of `M` — 
 object" is recoverable from the statement.  If a real operator square root is added upstream,
 this file should be replaced by a specialization of the complex development.
 
-## TODO
+## Scalars: what is open, and what it would cost
 
-* `TODO(RCLike)`: generalize the operator results from `ℝ` to `RCLike 𝕜`.  The eigenbasis
-  machinery (`LinearMap.IsSymmetric.eigenvectorBasis`) already works over `RCLike`; only the
-  real-inner-product bookkeeping below would need to be redone.
+The operator results here are stated over `ℝ`.  The `RCLike` form is open, and the
+obstruction is bookkeeping rather than mathematics: the eigenbasis machinery
+(`LinearMap.IsSymmetric.eigenvectorBasis`) already works over `RCLike`, so what has to be
+redone is the real-inner-product arithmetic in the proofs below — the places where a real
+inner product is used as a real number without a `RCLike.re`.
+
+**This is a different situation from the entrywise operator-norm bound in
+`ForTauCeti/Analysis/Matrix/EntrywiseOpNorm.lean`**, whose `RCLike` form needs a
+re-derivation because `Matrix.toEuclideanLin` changes convention over `𝕜`.  Here the
+statements are convention-free and only the proofs move.
 
 ## References
 
