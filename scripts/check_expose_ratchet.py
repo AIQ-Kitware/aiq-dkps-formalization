@@ -91,7 +91,15 @@ BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 #: cover all six. What remains of the spectral-measure chain is `spectralPVM` and
 #: `specProjection` in `Construction.lean` plus the three in `BorelCalculus/PVM.lean` they
 #: drag along -- that is the `SpectralMeasure.lean` refactor, not an attribute edit.
-PER_DECL_BASELINE = 15
+#: Lowered 15 -> 14 by the `specProjection` slice, which the census had sized at five sites and
+#: which was twenty-two across five modules -- the undercount the Cayley slice predicted, since a
+#: removal surfaces only the first failure per declaration. Two rewrite lemmas carry all of them:
+#: `specProjection_def` against the projection-valued measure, for consumers of `norm_sq_proj_apply`
+#: and `inner_proj`, and `specProjection_eq_borelCalculus`, which collapses the whole
+#: `specProjection -> spectralPVM -> toProjValMeasure -> specProj` chain into the one equation the
+#: Borel-calculus consumers want. No statement changed. What is left of the chain is `spectralPVM`
+#: and the three in `BorelCalculus/PVM.lean` it drags along, plus the `specRestrict` carve-out.
+PER_DECL_BASELINE = 14
 
 PER_DECL = re.compile(r"^@\[expose\]\s*$|^@\[simps![^\]]*,\s*expose\]\s*$", re.M)
 
