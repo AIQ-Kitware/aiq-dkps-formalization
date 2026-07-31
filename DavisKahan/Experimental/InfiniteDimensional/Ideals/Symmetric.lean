@@ -289,7 +289,7 @@ noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofRectangular RectangularSymmetricIdealFamily.hilbertSchmidt
 
 /-- Ky Fan `k` gauge for positive `k`. -/
-noncomputable def kyFan [HasKyFanApproximationGaugeTriangle 𝕜]
+noncomputable def kyFan [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜]
     (k : ℕ) (hk : 0 < k) :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofRectangular (RectangularSymmetricIdealFamily.kyFan k hk)

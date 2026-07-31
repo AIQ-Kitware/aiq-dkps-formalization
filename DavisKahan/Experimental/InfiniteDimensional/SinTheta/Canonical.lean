@@ -38,7 +38,7 @@ surface selects the direct complex proof, while `RealCanonical` supplies the
 parallel real proof. -/
 theorem result
     [HasApproximationNumberStrongCutoff.{u, v, 0} 𝕜]
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     (P : FormBoundedIsometricSinThetaProblem (𝕜 := 𝕜) (E := E) (F := F)
       (G := G) (H := H) N) :

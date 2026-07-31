@@ -135,7 +135,7 @@ noncomputable def schatten (p : ℝ) (hp : 1 ≤ p) :
 
 /-- Ky Fan `k` gauges, with positive `k`, obtained from the already-proved
 approximation-number family. -/
-noncomputable def kyFan [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+noncomputable def kyFan [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (k : ℕ) (hk : 0 < k) :
     RectangularSymmetricIdealFamily (𝕜 := 𝕜) :=
   (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily
