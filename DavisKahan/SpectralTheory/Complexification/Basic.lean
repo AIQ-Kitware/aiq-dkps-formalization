@@ -446,8 +446,17 @@ theorem complexify_injective [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   · simp only [im_complex_smul, Complex.ofReal_re, Complex.ofReal_im, zero_smul, zero_add]
     rfl
 
-/-- A coordinate of a vector is no longer than the vector. -/
-theorem norm_re_le [NormedAddCommGroup E] (z : RealComplexification E) : ‖re z‖ ≤ ‖z‖ := by
+/-- A coordinate of a vector is no longer than the vector.
+
+**Was `private`, and no longer needs to be.**  It was made private to keep
+`ClosedOperatorComplexification.norm_re_le` — a verbatim copy one module later — unambiguous where
+both namespaces are opened together.  That copy has since been deleted in favour of this one, so
+this is now the only public statement of the inequality in its dependency cone and the two fixes
+must not both stand: with the sibling gone and this one private, every public copy reachable from
+`ClosedOperator/Complexification.lean` disappeared and the tree stopped building.  Two further
+copies remain elsewhere; see the `{lane:COMPLEXIFY-DEDUP}` row. -/
+theorem norm_re_le [NormedAddCommGroup E] (z : RealComplexification E) :
+    ‖re z‖ ≤ ‖z‖ := by
   have h := norm_sq z
   nlinarith [norm_nonneg (re z), norm_nonneg (im z), norm_nonneg z]
 
