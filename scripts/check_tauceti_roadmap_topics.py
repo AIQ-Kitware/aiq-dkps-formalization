@@ -122,7 +122,9 @@ TOPICS: list[tuple[str, str, list[str]]] = [
    "SpectralSupport","SpectralFormBounds","SpectralGapInverse","SpectralCutOperator",
    "SpectralProjectionGroup","SelfAdjointMaximal","StoneUniqueness","YosidaApproximation"]]
  +["Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank",
-   "Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection"]
+   "Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection",
+   # and `GramBandPolar` for the same reason two steps removed: it imports both of them.
+   "Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar"]
  +[A+"BlockLowerBound"]),
 ("T16","Sylvester equations and the Rosenblum theorem",
  [A+x for x in ["Rosenblum","HilbertSchmidtBlock","CoerciveUnit"]]
