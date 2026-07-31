@@ -155,8 +155,10 @@ end Finite
 
 section FiniteSource
 
+-- The source universe is left free rather than fixed to `v`: the consumer below applies this
+-- at `EuclideanSpace 𝕜' (Fin n)`, which lives in the scalar field's universe.
 variable {𝕜' : Type u} [RCLike 𝕜']
-variable {G H : Type v}
+variable {G H : Type*}
   [NormedAddCommGroup G] [InnerProductSpace 𝕜' G] [CompleteSpace G] [FiniteDimensional 𝕜' G]
   [NormedAddCommGroup H] [InnerProductSpace 𝕜' H] [CompleteSpace H] [FiniteDimensional 𝕜' H]
 
@@ -232,6 +234,73 @@ theorem norm_finiteBasisInclusion_apply {ι : Type*} (b : HilbertBasis ι 𝕜' 
   have h1 : 0 ≤ ‖finiteBasisInclusion b f x‖ := norm_nonneg _
   have h2 : 0 ≤ ‖x‖ := norm_nonneg _
   nlinarith [hsq, h1, h2]
+
+variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace 𝕜' H] [CompleteSpace H]
+  [FiniteDimensional 𝕜' H]
+
+-- `G`'s completeness is carried by the `HilbertBasis` argument rather than used again.
+omit [CompleteSpace G] in
+/-- **The Hilbert--Schmidt energy is at most the sum of squared approximation numbers.**
+
+Half of the `p = 2` identity.  A finite partial sum of the energy is the *whole* energy of
+`T ∘L finiteBasisInclusion b f`, whose source is finite-dimensional; there
+`hilbertSchmidtEnergy_eq_sum_approximationNumber_sq` turns it into squared approximation
+numbers, and composing with a norm-one map can only decrease them.  Taking the supremum over
+finite subsets gives the energy itself.
+
+Note that `Module.finrank` is never evaluated: the sum over `Fin (finrank _)` is bounded by
+the `tsum` over `ℕ` whatever that rank is, so the dimension of the auxiliary Euclidean space
+never has to be computed.
+
+**Two things are not proved here.**  The reverse inequality, which is the substance; and the
+removal of `[FiniteDimensional 𝕜' H]` from the target.  The latter is a factorization rather
+than a theorem — `T ∘L finiteBasisInclusion b f` has finite rank, so it factors through its
+own range as `W.subtypeL ∘L S` with `W` finite-dimensional, `subtypeL` isometric (so the
+energy is unchanged term by term) and `S = orthogonalProjection W ∘L T ∘L V` of norm at most
+`‖T‖` — but it is a factorization somebody has to build. -/
+theorem hilbertSchmidtEnergy_le_tsum_approximationNumber_sq {ι : Type v}
+    (T : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) :
+    T.hilbertSchmidtEnergy b ≤ ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) ^ 2 := by
+  classical
+  rw [T.hilbertSchmidtEnergy_eq_iSup_sum b]
+  refine iSup_le fun s => ?_
+  -- Enumerate `s` without needing an order on `ι`.
+  set e := s.equivFin with he
+  set f : Fin s.card → ι := fun j => (e.symm j : ι) with hfdef
+  have hf : Function.Injective f := by
+    intro j k hjk
+    have hsub : e.symm j = e.symm k := Subtype.ext hjk
+    simpa using congrArg e hsub
+  set V := finiteBasisInclusion b f with hV
+  have hVnorm : ‖V‖ ≤ 1 :=
+    ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
+      rw [norm_finiteBasisInclusion_apply b hf x, one_mul]
+  set c : HilbertBasis (Fin s.card) 𝕜' (EuclideanSpace 𝕜' (Fin s.card)) :=
+    (EuclideanSpace.basisFun (Fin s.card) 𝕜').toHilbertBasis with hc
+  have hcapply : ∀ j, V (c j) = b (f j) := by
+    intro j
+    rw [hc, hV, finiteBasisInclusion_apply]
+    simp [OrthonormalBasis.coe_toHilbertBasis, EuclideanSpace.basisFun_apply]
+  -- The partial sum is the whole energy of `T ∘L V`.
+  have hsum : ∑ i ∈ s, ‖T (b i)‖ₑ ^ 2 = (T ∘L V).hilbertSchmidtEnergy c := by
+    rw [hilbertSchmidtEnergy, tsum_fintype,
+      ← Finset.sum_attach s fun i => ‖T (b i)‖ₑ ^ 2]
+    refine Fintype.sum_equiv e (fun i : {x // x ∈ s} => ‖T (b (i : ι))‖ₑ ^ 2)
+      (fun j : Fin s.card => ‖(T ∘L V) (c j)‖ₑ ^ 2) fun i => ?_
+    rw [ContinuousLinearMap.comp_apply, hcapply, hfdef]
+    simp
+  rw [hsum, (T ∘L V).hilbertSchmidtEnergy_eq_sum_approximationNumber_sq c]
+  calc ∑ i : Fin (Module.finrank 𝕜' (EuclideanSpace 𝕜' (Fin s.card))),
+        ENNReal.ofReal ((T ∘L V).approximationNumber i) ^ 2
+      ≤ ∑ i : Fin (Module.finrank 𝕜' (EuclideanSpace 𝕜' (Fin s.card))),
+          ENNReal.ofReal (T.approximationNumber i) ^ 2 := by
+        refine Finset.sum_le_sum fun i _ => ?_
+        refine pow_le_pow_left' (ENNReal.ofReal_le_ofReal ?_) 2
+        refine (T.approximationNumber_comp_le_mul_norm V i).trans ?_
+        exact mul_le_of_le_one_right (T.approximationNumber_nonneg i) hVnorm
+    _ ≤ ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) ^ 2 := by
+        rw [Fin.sum_univ_eq_sum_range (fun n => ENNReal.ofReal (T.approximationNumber n) ^ 2)]
+        exact ENNReal.sum_le_tsum _
 
 end Comparison
 
