@@ -25,7 +25,7 @@ calculus approximation-number theorem is referenced.
 -/
 
 namespace TauCeti
-namespace FinishTanTwoTheta
+namespace DavisKahan
 
 open ApproximationNumber
 open scoped InnerProductSpace BigOperators
@@ -865,5 +865,5 @@ theorem kyFanApproximationGauge_doubleAngleTangentOperator
 
 end
 
-end FinishTanTwoTheta
+end DavisKahan
 end TauCeti
