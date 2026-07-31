@@ -139,71 +139,6 @@ private theorem norm_opNorm_smul_sub_apply_le (hA : A.IsSymmetric) {δ : ℝ} (h
     _ ≤ ‖(‖A‖ : 𝕜) • (1 : E →L[𝕜] E) - A‖ * ‖w‖ := ContinuousLinearMap.le_opNorm _ w
     _ ≤ (‖A‖ - δ) * ‖w‖ := by gcongr; exact norm_opNorm_smul_one_sub_le hA hδA hAc
 
-/-- **Operator-norm bound for the Sylvester equation, coercive (Lyapunov)
-form.**  If `A` and `B` are symmetric with quadratic forms at least
-`δ * ‖·‖ ^ 2`, and `A ∘L X + X ∘L B = Y`, then `‖X‖ ≤ ‖Y‖ / (2 * δ)`.
-
-The proof is integral-free: from the equation,
-`((‖A‖ + ‖B‖ : ℝ) : 𝕜) • X = Y + ((‖A‖ : 𝕜) • 1 - A) ∘L X + X ∘L ((‖B‖ : 𝕜) • 1 - B)`,
-the two correction operators have norms at most `‖A‖ - δ` and `‖B‖ - δ`, and
-taking norms lets `‖X‖` be solved for. -/
-theorem opNorm_le_div_of_comp_add_comp_eq (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ)
-    (hAc : ∀ x, δ * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
-    (hBc : ∀ v, δ * ‖v‖ ^ 2 ≤ RCLike.re ⟪B v, v⟫_𝕜)
-    (hXY : A ∘L X + X ∘L B = Y) : ‖X‖ ≤ ‖Y‖ / (2 * δ) := by
-  rcases eq_or_ne X 0 with rfl | hX
-  · simp only [norm_zero]
-    positivity
-  -- `X ≠ 0` puts nonzero vectors in both spaces, so coercivity gives `δ ≤ ‖A‖, ‖B‖`.
-  obtain ⟨v₀, hv₀⟩ := DFunLike.ne_iff.mp hX
-  simp only [zero_apply] at hv₀
-  have hδA : δ ≤ ‖A‖ := le_opNorm_of_le_re_inner_map_self hAc hv₀
-  have hδB : δ ≤ ‖B‖ :=
-    le_opNorm_of_le_re_inner_map_self hBc (x₀ := v₀) fun h => hv₀ (by rw [h]; exact map_zero X)
-  -- The absorption identity, applied to a vector.
-  have key : ∀ v, ((‖A‖ + ‖B‖ : ℝ) : 𝕜) • X v
-      = Y v + ((‖A‖ : 𝕜) • X v - A (X v)) + ((‖B‖ : 𝕜) • X v - X (B v)) := by
-    intro v
-    have hv : A (X v) + X (B v) = Y v := by
-      simpa [add_apply, ContinuousLinearMap.comp_apply] using
-        congrArg (fun W : F →L[𝕜] E => W v) hXY
-    rw [← hv]
-    push_cast
-    module
-  -- Take norms and absorb the two correction terms.
-  have hbound : ∀ v, (‖B‖ + δ) * ‖X v‖ ≤ (‖Y‖ + (‖B‖ - δ) * ‖X‖) * ‖v‖ := by
-    intro v
-    have hXBv : ‖(‖B‖ : 𝕜) • X v - X (B v)‖ ≤ ‖X‖ * ((‖B‖ - δ) * ‖v‖) := by
-      have hmap : (‖B‖ : 𝕜) • X v - X (B v) = X ((‖B‖ : 𝕜) • v - B v) := by
-        rw [map_sub, map_smul]
-      rw [hmap]
-      exact (X.le_opNorm _).trans <| by
-        gcongr
-        exact norm_opNorm_smul_sub_apply_le hB hδB hBc v
-    have h1 : (‖A‖ + ‖B‖) * ‖X v‖
-        ≤ ‖Y‖ * ‖v‖ + (‖A‖ - δ) * ‖X v‖ + ‖X‖ * ((‖B‖ - δ) * ‖v‖) :=
-      calc (‖A‖ + ‖B‖) * ‖X v‖ = ‖((‖A‖ + ‖B‖ : ℝ) : 𝕜) • X v‖ := by
-            rw [norm_smul, RCLike.norm_ofReal, abs_of_nonneg (by linarith)]
-        _ = ‖Y v + ((‖A‖ : 𝕜) • X v - A (X v)) + ((‖B‖ : 𝕜) • X v - X (B v))‖ := by
-            rw [key v]
-        _ ≤ ‖Y v‖ + ‖(‖A‖ : 𝕜) • X v - A (X v)‖ + ‖(‖B‖ : 𝕜) • X v - X (B v)‖ :=
-            norm_add₃_le
-        _ ≤ ‖Y‖ * ‖v‖ + (‖A‖ - δ) * ‖X v‖ + ‖X‖ * ((‖B‖ - δ) * ‖v‖) := by
-            gcongr
-            · exact Y.le_opNorm v
-            · exact norm_opNorm_smul_sub_apply_le hA hδA hAc (X v)
-    linarith
-  -- Solve the scalar inequality for `‖X‖`.
-  have hXle : ‖X‖ ≤ (‖Y‖ + (‖B‖ - δ) * ‖X‖) / (‖B‖ + δ) := by
-    refine X.opNorm_le_bound (by positivity) fun v => ?_
-    rw [div_mul_eq_mul_div, le_div_iff₀ (by linarith)]
-    calc ‖X v‖ * (‖B‖ + δ) = (‖B‖ + δ) * ‖X v‖ := mul_comm _ _
-      _ ≤ (‖Y‖ + (‖B‖ - δ) * ‖X‖) * ‖v‖ := hbound v
-  rw [le_div_iff₀ (by linarith)] at hXle
-  rw [le_div_iff₀ (by positivity)]
-  linarith
-
 /-- **Polar-absorption Sylvester bound.**  Let `H` be symmetric and
 coercive by `r + g`, let `T` have operator norm at most `r`, and suppose
 
@@ -260,51 +195,6 @@ theorem gap_mul_opNorm_le_of_comp_sub_comp_eq
           (mul_le_mul_of_nonneg_left hT (norm_nonneg X))
   linarith
 
-/-- **Operator-norm bound for the Sylvester equation, separated (Davis–Kahan)
-form.**  If the quadratic form of the symmetric operator `A` is at least
-`(c + g) * ‖·‖ ^ 2` while that of the symmetric operator `B` is at most
-`c * ‖·‖ ^ 2`, and `A ∘L X - X ∘L B = Y`, then `‖X‖ ≤ ‖Y‖ / g`.
-
-This is the estimate behind the operator-norm Davis–Kahan `sin Θ` theorem,
-with `A, B` compressions to spectral subspaces whose eigenvalue blocks are
-separated by the gap `g`. -/
-theorem opNorm_le_div_of_comp_sub_comp_eq (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {c g : ℝ} (hg : 0 < g)
-    (hAc : ∀ x, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
-    (hBc : ∀ v, RCLike.re ⟪B v, v⟫_𝕜 ≤ c * ‖v‖ ^ 2)
-    (hXY : A ∘L X - X ∘L B = Y) : ‖X‖ ≤ ‖Y‖ / g := by
-  -- Shift both operators to the midpoint `r = c + g/2` and apply the coercive
-  -- form with `δ = g/2`.
-  set r : ℝ := c + g / 2 with hr
-  have hA' : (A - (r : 𝕜) • (1 : E →L[𝕜] E)).IsSymmetric := fun x y => by
-    simp only [ContinuousLinearMap.coe_coe, sub_apply, smul_apply, one_apply_eq_self,
-      inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right, RCLike.conj_ofReal]
-    congr 1
-    exact hA x y
-  have hB' : ((r : 𝕜) • (1 : F →L[𝕜] F) - B).IsSymmetric :=
-    isSymmetric_ofReal_smul_one_sub hB r
-  have hAc' : ∀ x, g / 2 * ‖x‖ ^ 2 ≤ RCLike.re ⟪(A - (r : 𝕜) • (1 : E →L[𝕜] E)) x, x⟫_𝕜 := by
-    intro x
-    have hneg : (A - (r : 𝕜) • (1 : E →L[𝕜] E)) x = -(((r : 𝕜) • (1 : E →L[𝕜] E) - A) x) := by
-      simp [neg_sub]
-    rw [hneg, inner_neg_left, map_neg, re_inner_ofReal_smul_one_sub_apply_self, hr]
-    linarith [hAc x]
-  have hBc' : ∀ v, g / 2 * ‖v‖ ^ 2 ≤ RCLike.re ⟪((r : 𝕜) • (1 : F →L[𝕜] F) - B) v, v⟫_𝕜 := by
-    intro v
-    rw [re_inner_ofReal_smul_one_sub_apply_self, hr]
-    linarith [hBc v]
-  have hXY' : (A - (r : 𝕜) • (1 : E →L[𝕜] E)) ∘L X + X ∘L ((r : 𝕜) • (1 : F →L[𝕜] F) - B) = Y := by
-    ext v
-    have hv : A (X v) - X (B v) = Y v := by
-      simpa [sub_apply, ContinuousLinearMap.comp_apply] using
-        congrArg (fun W : F →L[𝕜] E => W v) hXY
-    simp only [add_apply, ContinuousLinearMap.comp_apply,
-      sub_apply, smul_apply,
-      one_apply_eq_self, map_sub, map_smul, ← hv]
-    module
-  have hfin := opNorm_le_div_of_comp_add_comp_eq hA' hB'
-    (by linarith : (0 : ℝ) < g / 2) hAc' hBc' hXY'
-  rwa [show 2 * (g / 2) = g by ring] at hfin
 
 end SylvesterBound
 
@@ -560,6 +450,60 @@ theorem le_div_of_comp_sub_comp_eq_rectangular
   rwa [show 2 * (g / 2) = g by ring] at hfin
 
 end RectangularAbstractSylvesterBound
+
+/-! ### The operator-norm case
+
+The operator-norm bounds are the rectangular abstract bounds at `N = ‖·‖`,
+whose four hypotheses are `norm_add_le`, `norm_smul` and `opNorm_comp_le`
+twice.  Two of the three are stated below as exactly that instantiation.
+
+The third, `gap_mul_opNorm_le_of_comp_sub_comp_eq`, stays a direct proof above
+because the abstract bounds *use* it: the polar absorption is where the
+operator norm is genuinely needed, and the seminorm `N` never enters it. -/
+
+section OperatorNormSylvesterBound
+
+variable {A : E →L[𝕜] E} {B : F →L[𝕜] F} {X Y : F →L[𝕜] E}
+
+/-- **Operator-norm bound for the Sylvester equation, coercive (Lyapunov)
+form.**  If `A` and `B` are symmetric with quadratic forms at least
+`δ * ‖·‖ ^ 2`, and `A ∘L X + X ∘L B = Y`, then `‖X‖ ≤ ‖Y‖ / (2 * δ)`.
+
+The argument is integral-free: from the equation,
+`((‖A‖ + ‖B‖ : ℝ) : 𝕜) • X = Y + ((‖A‖ : 𝕜) • 1 - A) ∘L X + X ∘L ((‖B‖ : 𝕜) • 1 - B)`,
+the two correction operators have norms at most `‖A‖ - δ` and `‖B‖ - δ`, and
+taking norms lets `‖X‖` be solved for.  It is carried out once, in
+`le_div_of_comp_add_comp_eq_rectangular`; this is that bound at `N = ‖·‖`. -/
+theorem opNorm_le_div_of_comp_add_comp_eq (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hAc : ∀ x, δ * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
+    (hBc : ∀ v, δ * ‖v‖ ^ 2 ≤ RCLike.re ⟪B v, v⟫_𝕜)
+    (hXY : A ∘L X + X ∘L B = Y) : ‖X‖ ≤ ‖Y‖ / (2 * δ) :=
+  le_div_of_comp_add_comp_eq_rectangular (N := fun f : F →L[𝕜] E => ‖f‖)
+    (fun f g => norm_add_le f g) (fun a f => norm_smul a f)
+    (fun C f => ContinuousLinearMap.opNorm_comp_le C f)
+    (fun f C => ContinuousLinearMap.opNorm_comp_le f C)
+    hA hB hδ hAc hBc hXY
+
+/-- **Operator-norm bound for the Sylvester equation, separated (Davis–Kahan)
+form.**  If the quadratic form of `A` is at least `c + g` and that of `B` at
+most `c`, and `A ∘L X - X ∘L B = Y`, then `‖X‖ ≤ ‖Y‖ / g`.
+
+This is the constant-one estimate behind the dimension-free `sin Θ` theorem:
+the gap `g` divides the residual with no `π / 2` and no dimensional factor.
+It is `le_div_of_comp_sub_comp_eq_rectangular` at `N = ‖·‖`. -/
+theorem opNorm_le_div_of_comp_sub_comp_eq (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {c g : ℝ} (hg : 0 < g)
+    (hAc : ∀ x, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
+    (hBc : ∀ v, RCLike.re ⟪B v, v⟫_𝕜 ≤ c * ‖v‖ ^ 2)
+    (hXY : A ∘L X - X ∘L B = Y) : ‖X‖ ≤ ‖Y‖ / g :=
+  le_div_of_comp_sub_comp_eq_rectangular (N := fun f : F →L[𝕜] E => ‖f‖)
+    (fun f g => norm_add_le f g) (fun a f => norm_smul a f)
+    (fun C f => ContinuousLinearMap.opNorm_comp_le C f)
+    (fun f C => ContinuousLinearMap.opNorm_comp_le f C)
+    hA hB hg hAc hBc hXY
+
+end OperatorNormSylvesterBound
 
 /-! ### The square case
 
