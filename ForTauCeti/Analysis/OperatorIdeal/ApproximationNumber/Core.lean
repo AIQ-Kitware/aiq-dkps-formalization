@@ -19,18 +19,9 @@ strong-cutoff and infinite-dimensional Ky Fan arguments. It intentionally does
 not import the real localization module, so the real proof can depend on this
 foundation without creating an import cycle.
 
-The public aggregate and downstream ideal-family construction remain in
-`ApproximationNumbers`.
-
-## Namespace
-
-The enclosing namespace is still `TauCeti.DavisKahan.Experimental.ExactSinTheta`,
-which is a paper's name and a staging word inside a library staged for Tau Ceti.
-That is **recorded debt, not a decision**: the mathematics here is generic
-approximation-number theory and the namespace should say so.  It is not renamed
-in the same change as the move because the name has 359 references across four
-libraries and `comparator/*.json` holds declaration names as data, so a rename is
-its own piece of work with its own build.
+The downstream ideal-family construction is `ForTauCeti.Analysis.OperatorIdeal.Family`;
+the paper library's own aggregate is `DavisKahan/OperatorIdeal/ApproximationNumbers/`,
+which is a different library and is not what a reader of this module wants.
 
 ## Provenance
 
