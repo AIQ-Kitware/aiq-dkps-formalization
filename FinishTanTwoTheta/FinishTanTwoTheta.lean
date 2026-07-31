@@ -7,7 +7,7 @@ import DavisKahan.OperatorIdeal.Majorization.WeakSubmajorization
 import DavisKahan.Sources.DavisKahan1970.Ideals.SequenceGauge
 import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
 import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
-import FinishTanTwoTheta.ApproximationNumber.SpectralSelection
+import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
 import FinishTanTwoTheta.FunctionalCalculus.DoubleAngleTangent
 import FinishTanTwoTheta.DavisKahan.StableRiccatiPair
 import FinishTanTwoTheta.DavisKahan.SharpKyFan
