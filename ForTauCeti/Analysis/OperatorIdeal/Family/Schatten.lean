@@ -50,8 +50,15 @@ layer is the tool here, not the obstacle.
 
 `hilbertSchmidtENorm` is built from the Hilbert--Schmidt energy through a Hilbert basis and
 never mentions approximation numbers, so `schattenIdealFamily 2 = hilbertSchmidtIdealFamily`
-is not the arithmetic identity its `p = 1` twin is: it needs Parseval together with the
-singular-value decomposition, and that bridge does not exist in this library.  Completeness
+is not the arithmetic identity its `p = 1` twin is.
+
+**The singular-value side of that bridge does exist**, contrary to what this paragraph said
+before 2026-07-31: `TauCeti.norm_apply_rightSingularBasis` in
+`ForTauCeti/Analysis/InnerProductSpace/SingularSystem.lean` proves `‖A vᵢ‖ = σᵢ` on the right
+singular basis, which is Parseval for a finite-dimensional source once summed.  What is open
+is the passage from finite-rank restrictions to the whole operator: the energy and the
+Schatten gauge are each a supremum, and that they run over the same directed family is not
+proved here.  Completeness
 of the family is likewise open, as it is for the trace-class family.
 
 ## Provenance
