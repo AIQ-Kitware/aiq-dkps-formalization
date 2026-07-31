@@ -12,15 +12,19 @@ import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 For each `k > 0` the `k`th Ky Fan gauge is a norm on the ideal it defines — which, `k` being
 finite, is all of `E →L[𝕜] F` — and so gives a `TauCeti.SymmetricOperatorIdealFamily`.
 
-## One capability class, one layer down
+## The capability, one layer down
 
-`DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean` builds the same family
-over a general `RCLike` field under a `HasKyFanApproximationGaugeTriangle` hypothesis: it
-*assumes* the triangle inequality for the gauge.  The family here instead assumes
-`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`, the single fact that inequality is
-proved from, and derives the rest.  Both fields are instances of it — `ℂ` from the
-continuous functional calculus, `ℝ` by complexification — so this family exists over `ℝ` as
-well, which the assumed-triangle version could only reach by assumption.
+The family is built over any scalar field satisfying
+`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`, and both `ℝ` and `ℂ` are instances of
+it — the first by complexification, the second from the continuous functional calculus.
+
+That class is deliberately one layer below the property this construction needs.  What
+`gauge_add_le` wants is the Ky Fan triangle inequality; assuming *that* would be assuming a
+theorem, so the class assumes the min--max lower bound it is proved from and the inequality
+is derived.  `DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean` builds the
+same family from the same hypothesis, and
+`TauCeti.kyFanSymmetricIdealFamily_eq_kyFanIdealFamily` records that the two agree by
+`rfl`.
 `TauCeti.kyFanSymmetricIdealFamily_eq_kyFanIdealFamily` records that the two agree wherever
 both are defined.
 
@@ -46,10 +50,10 @@ operator-norm limit back into an ideal-norm limit.
   `toReal_gauge_kyFanSymmetricIdealFamily, isComplete_kyFanSymmetricIdealFamily}`.
 * Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
-* Extraction class: **copied and specialised**.  The construction is the original one with
-  the scalar field fixed to `ℂ` and the `HasKyFanApproximationGaugeTriangle` hypothesis
-  discharged rather than assumed.  The declaration named in the original as its "intended
-  destination" is this one.
+* Extraction class: **copied and restated over a weaker hypothesis**.  The construction is
+  the original one; where it assumed the Ky Fan triangle inequality outright, this one
+  assumes only `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and derives it.  The
+  declaration named in the original as its "intended destination" is this one.
 * Spectra influence: **none**, as of the replacement of the min--max bridge on 2026-07-28.
 -/
 

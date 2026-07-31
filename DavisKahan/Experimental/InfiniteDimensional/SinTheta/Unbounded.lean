@@ -37,7 +37,7 @@ variable {E F G H : Type v}
 /-- Isometric finite-interval/exterior specialization. -/
 theorem sinTheta_unbounded_of_intervalExteriorGap
     [HasApproximationNumberStrongCutoff.{u, v, 0} 𝕜]
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
@@ -61,7 +61,7 @@ theorem sinTheta_unbounded_of_intervalExteriorGap
 /-- Isometric headline specialization of the complete unbounded block theorem. -/
 theorem sinTheta_unbounded
     [HasApproximationNumberStrongCutoff.{u, v, 0} 𝕜]
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
     (hA : D.A.IsSelfAdjoint)
@@ -234,7 +234,7 @@ variable {E F G H : Type v}
 /-- Exact isometric finite-interval/exterior endpoint. -/
 theorem sinTheta_unbounded_exact_of_intervalExteriorGap
     [HasApproximationNumberStrongCutoff.{u, v, 0} 𝕜]
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
@@ -263,7 +263,7 @@ theorem sinTheta_unbounded_exact_of_intervalExteriorGap
 /-- Exact isometric headline specialization of the complete unbounded theorem. -/
 theorem sinTheta_unbounded_exact
     [HasApproximationNumberStrongCutoff.{u, v, 0} 𝕜]
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
     (F₀ : H →L[𝕜] E)
