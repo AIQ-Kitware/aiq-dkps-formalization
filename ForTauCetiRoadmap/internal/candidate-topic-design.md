@@ -1,30 +1,18 @@
 # Candidate roadmap topic design for Tau Ceti
 
-**Proposal, 2026-07-29, `edward (aiq-gpu)` lane COORD.** A partition of all 160
-`ForTauCeti` modules into **22 roadmap topics**, ordered as a submission ladder.
-This is a candidate design meant to be argued with; the numbers in it are not.
+This internal design partitions all **187** `ForTauCeti` modules into **25 stable topic
+keys**, including the `T15a`/`T15b`/`T15c` split and the later `T23` spectral-band bridge.
+The keys are dependency-sized implementation stages; the public specification groups them
+into six roadmaps under `HilbertSpaceOperatorTheory/`.
 
-> **Consolidation, 2026-07-30 (lane ROADMAP-HOLISTIC).** The topics below remain
-> the module-level partition and the PR-sized submission stages, but they are no
-> longer one directory each: they group into **six holistic roadmaps** sized
-> like real `TauCetiRoadmap` entries, each covering its topics as Parts —
-> `FiniteDimensionalOperators` (T01–T04), `MajorizationAndAngles` (T05–T08),
-> `OperatorIdeals` (T09–T11), `SpectralTheory` (T13–T15c),
-> `SpectralSubspacePerturbation` (T12, T16–T18), and `MatrixStatistics`
-> (T19–T22). The grouping is forced to stay honest by the same checker: each
-> roadmap README declares its topics, and
-> `check_tauceti_roadmap_topics.py --roadmaps` derives the roadmap-level DAG
-> and fails on a missing topic, a double claim, or a coarse cycle. The
-> T05–T08 grouping in particular is not taste: finding 3 below (geometry and
-> norms interleave) makes any split of those four cyclic at roadmap
-> granularity. See [`README.md`](README.md) for the meta-roadmap.
-
-Validate with:
+Roadmap ownership is declared in [`topic-map.md`](topic-map.md), not in public roadmap prose.
+The checker validates both the module partition and the roadmap-level DAG:
 
 ```sh
 python3 scripts/check_tauceti_roadmap_topics.py          # report
 python3 scripts/check_tauceti_roadmap_topics.py --check  # exit 1 on any violation
-python3 scripts/check_tauceti_roadmap_topics.py --topic T15
+python3 scripts/check_tauceti_roadmap_topics.py --topic T15c
+python3 scripts/check_tauceti_roadmap_topics.py --roadmaps
 ```
 
 ## Why a new design was needed
@@ -62,7 +50,7 @@ asserted** — it is the exact set of topics a reviewer must already have accept
 printed by the checker.
 
 | # | Topic | n | Needs |
-|---|---|---|---|
+|---|---|---:|---|
 | **T01** | Positive square root, operator modulus, functional calculus | 9 | **— independent** |
 | **T02** | Polar decomposition and partial isometries | 6 | T01 |
 | **T03** | Singular values and the singular system | 4 | T01 |
@@ -72,48 +60,30 @@ printed by the checker.
 | **T07** | Rectangular unitarily invariant norms | 6 | T03, T04, T05, T06 |
 | **T08** | Angle geometry and eigenvalue perturbation | 5 | T01, T02, T04, T05, T06, T07 |
 | **T09** | Approximation numbers | 21 | T01, T03, T05, T07 |
-| **T10** | Symmetric operator ideals and Schatten norms | 9 | T05, T07, T09 |
+| **T10** | Symmetric operator ideals and Schatten norms | 12 | T03, T05, T07, T09 |
 | **T11** | Hilbert–Schmidt operators | 4 | T10 |
 | **T12** | The Haagerup–Zsidó kernel and its Fourier transform | 8 | **— independent** |
 | **T13** | One-parameter unitary groups and Stone's theorem | 5 | **— independent** |
 | **T14** | Borel functional calculus and projection-valued measures | 11 | **— independent** |
 | **T15a** | Closed operators on `LinearPMap`: graphs, constructions, form bounds | 7 | T04 |
 | **T15b** | Resolvents of self-adjoint `LinearPMap` operators, semiboundedness | 7 | **— independent** |
-| **T15c** | The spectral measure of an unbounded self-adjoint operator, and Stone | 13 | T09, T13, T14, T15a, T15b |
+| **T15c** | The spectral measure of an unbounded self-adjoint operator, and Stone | 12 | T13, T14, T15b |
+| **T23** | Approximation numbers and finite ranks of spectral bands | 3 | T02, T09, T15a, T15c |
 | **T16** | Sylvester equations and the Rosenblum theorem | 18 | T04, T07, T11, T12, T13, T15b, T15c |
-| **T17** | Spectral subspace perturbation: the Davis–Kahan sin-Θ theorems | 11 | T01, T03–T08, T15a, T16 |
+| **T17** | Spectral subspace perturbation: the Davis–Kahan sin-Θ theorems | 15 | T01, T03–T09, T15a, T16 |
 | **T18** | The Yu–Wang–Samworth statistical variant | 3 | T01, T05, T06, T08, T17 |
 | **T19** | Matrix spectra and spectral measurability | 6 | T01, T14 |
 | **T20** | Sample moments and matrix concentration | 5 | T19 |
 | **T21** | Matrix rank factorization and positive semidefiniteness | 2 | **— independent** |
 | **T22** | Berge's maximum theorem and approximate minimizers | 2 | **— independent** |
 
-**178 modules.  This table is generated from
-`scripts/check_tauceti_roadmap_topics.py --needs`, not maintained by hand**, and it was
-regenerated on 2026-07-31 because it had drifted from the gate that enforces it.  The
-drift is recorded rather than silently corrected, because two of the design's headline
-claims moved:
-
-- **T15 is three topics, not one.**  The table carried a single `T15` of 24 modules; the
-  design was split into `T15a`/`T15b`/`T15c` (7 + 7 + 13 = 27) and the table never
-  followed.  The split matters for submission order: **`T15b` is fully independent** —
-  resolvents of self-adjoint partial maps need nothing accepted first — while `T15c`
-  needs five topics including `T09`.
-- **T09 is 21 modules, not 11, and needs T05 as well.**  The document's headline finding
-  — *"T09 needs only T01, T03 and T07"* — is no longer true; majorization (`T05`) entered
-  its closure as the Ky Fan layer grew.  The correction is small in submission terms
-  (`T05` is 5 modules and sits below `T07` anyway) but the sentence as written would
-  have been checked and found wrong by a reviewer.
-- **T13 is now fully independent**, where the table said it needs `T02`.  That is a
-  strengthening of the design's own point about Stone's theorem, not a weakening.
-
-Counts that moved without changing the shape: T02 5→6, T13 6→5, T16 15→18, T17 10→11.
-
-*Do not edit the counts or the `needs` column by hand: both are printed by
-`python3 scripts/check_tauceti_roadmap_topics.py --needs`, and the gate of the same
-name checks them against the import graph.  Reconciled again on 2026-07-31 after a
-three-way collision on this file, when T09 had moved 20 → 21, T14 10 → 11 and the
-total 176 → 178.*
+**187 modules.** The table is generated from
+`scripts/check_tauceti_roadmap_topics.py --needs`; do not edit its counts or dependency
+column by hand. `T23` separates three approximation-number consequences of spectral bands
+from the foundational spectral-measure topic. This preserves the intrinsic ownership
+boundary: self-adjoint spectral theory no longer depends on operator ideals, while the
+operator-ideal roadmap explicitly consumes the spectral theory needed to prove those
+consequences.
 
 **This is a DAG, not a chain — that is the most useful property of the design.**
 The numbering is *a* valid submission order, but it is not the only one, and

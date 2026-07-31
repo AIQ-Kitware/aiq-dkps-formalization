@@ -140,10 +140,13 @@ theorem continuous_iInf_of_hemicontinuous {K : P → Set X}
     (hg : Continuous (Function.uncurry g)) :
     Continuous (fun p => ⨅ x : ↥(K p), g p ↑x) := sorry
 
-/-- **Berge, argmin half, varying constraint.**  The containment premise is no longer
-trivial: keeping the limit feasible is exactly what upper hemicontinuity of `K` buys. -/
+/-- **Berge, argmin half, varying constraint.** Upper hemicontinuity keeps limits of
+nearby feasible points feasible; lower hemicontinuity is separately needed so every feasible
+competitor at the limiting parameter can be approximated nearby. Nonempty compact values
+ensure the argmin correspondence is well-defined and nonempty. -/
 theorem upperHemicontinuousAt_isMinOn_of_hemicontinuous [T2Space X] {K : P → Set X}
-    (hKcompact : ∀ p, IsCompact (K p)) (hKu : ∀ p, UpperHemicontinuousAt K p)
+    (hKcompact : ∀ p, IsCompact (K p)) (hKne : ∀ p, (K p).Nonempty)
+    (hKu : ∀ p, UpperHemicontinuousAt K p) (hKl : ∀ p, LowerHemicontinuousAt K p)
     (hg : Continuous (Function.uncurry g)) (p₀ : P) :
     UpperHemicontinuousAt (fun p => {x ∈ K p | IsMinOn (g p) (K p) x}) p₀ := sorry
 

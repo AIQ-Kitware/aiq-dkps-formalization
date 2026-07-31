@@ -286,10 +286,14 @@ their four laws are B1's and not new work. -/
 /-- The `ℓᵖ` symmetric gauge, `Φ_p a = (∑ aₙ ^ p) ^ (1 / p)`, for `1 ≤ p`. -/
 noncomputable def schattenGauge (p : ℝ) (hp : 1 ≤ p) : SymmetricGauge := sorry
 
-/-- The Schatten-`p` family.  `p = ∞` is the operator-norm family and is the honest
-endpoint of the same scale rather than a separate definition. -/
+/-- The Schatten-`p` family for a finite real exponent `1 ≤ p`. -/
 noncomputable def schattenFamily (p : ℝ) (hp : 1 ≤ p) : OperatorIdealFamily.{0, v, w} ℂ :=
   symmetricGaugeFamily (schattenGauge p hp)
+
+/-- The `p = ∞` endpoint, specified separately because a real exponent cannot represent
+infinity. Its gauge is the operator norm, equivalently the supremum of the approximation
+numbers. -/
+noncomputable def schattenFamilyInf : OperatorIdealFamily.{0, v, w} ℂ := sorry
 
 /-- The scale is monotone, hence the ideals nest: `S_p ⊆ S_q` for `p ≤ q`.  Strictness
 is witnessed by a diagonal operator with coefficients `n ↦ n ^ (-1/r)`, `p < r < q` --
@@ -308,8 +312,8 @@ theorem tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy
     ∑' n, ENNReal.ofReal (approximationNumber T n) ^ 2 = hilbertSchmidtEnergy T b := sorry
 
 /-- **Milestone B3**: finite-dimensional Schatten `p`-norms for real `p ≥ 1` on
-the singular-value vector, with the endpoint identifications `S₁` nuclear,
-`S₂` Frobenius, `S∞` operator norm.
+the singular-value vector, with the finite endpoint identifications `S₁` nuclear and
+`S₂` Frobenius; `S∞` is the separately named operator-norm endpoint.
 
 This layer is **not** a special case of `schattenFamily` and does not wait on it: it is
 a rectangular unitarily invariant norm on a vector, consumed by the

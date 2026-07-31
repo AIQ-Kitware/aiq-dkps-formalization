@@ -64,7 +64,7 @@ Decide these up front; do not silently specialize.
 - **The Ky Fan trace inequality is stated for orthonormal families** `w : Fin k → E`, not
   for subspaces or projections: the perturbation arguments build the family from singular
   vectors, and the family form is what they can apply.
-- **Norm structures carry exactly three laws**: subadditivity, absolute homogeneity,
+- **Seminorm structures carry exactly three laws**: subadditivity, absolute homogeneity,
   two-sided unitary invariance. Positivity, vanishing at zero, adjoint invariance and the
   ideal property are derived, never assumed; definiteness is deliberately not required, so
   everything holds at the seminorm level and a consumer supplying a norm has three
@@ -136,7 +136,7 @@ majorization API should be followed rather than duplicated.
 (subadditive, absolutely homogeneous, permutation- and sign-flip-invariant functions). Then,
 on operators: the Schur weight matrix `schurWeight`; the Ky Fan sums
 `kyFanSum k A = ∑_{i<k} σᵢ(A)`; the diagonal operator `diagOp b x` of a real tuple in an
-orthonormal basis; and the three-law structure `UnitarilyInvariantNorm 𝕜 E`.
+orthonormal basis; and the three-law structure `UnitarilyInvariantSeminorm 𝕜 E`.
 
 **API to develop.**
 
@@ -152,7 +152,7 @@ orthonormal basis; and the three-law structure `UnitarilyInvariantNorm 𝕜 E`.
   nonnegative-real scaling; the bounded-factor domination `σᵢ(C∘A) ≤ c·σᵢ(A)`.
 - `diagOp` algebra (additive, symmetric, its singular values); the SVD factorization of an
   operator through a diagonal one; the **gauge representation** `N A = gauge(σ(A))`, so a
-  unitarily invariant norm is determined by the singular-value sequence; derived `nonneg`,
+  unitarily invariant seminorm is determined by the singular-value sequence; derived `nonneg`,
   `apply_zero`, `apply_adjoint`, and the ideal property `N (C ∘ₗ X) ≤ c · N X`; the
   Frobenius norm as the first instance.
 - Gram-perturbation groundwork: `‖A⋆y‖ ≤ c‖y‖` from an elementwise bound on `A`; the
@@ -226,7 +226,7 @@ unitarily invariant norm. The perturbation estimates downstream are proved once,
 dominations, and this Part turns each such proof into a statement about the operator norm,
 the Frobenius norm, every Ky Fan norm, the nuclear norm, and any norm a reader supplies.
 
-**Objects.** The three-law structure `RectangularUnitarilyInvariantNorm 𝕜 E F`; the
+**Objects.** The three-law structure `RectangularUnitarilyInvariantSeminorm 𝕜 E F`; the
 rectangular Ky Fan sums; the **two-sided unitary orbit** and finite orbit certificates (a
 finite combination `X = ∑ aᵢ • Uᵢ ∘ C ∘ Vᵢ` with coefficient mass tracked); the orthogonal
 **block sum** on Hilbert `L²` products; the planar sharpness models of two-dimensional

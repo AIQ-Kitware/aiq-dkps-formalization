@@ -93,19 +93,18 @@ Excluded:
         SpectralSubspacePerturbation                        (wave 4)
 ```
 
-| roadmap | modules | depends on |
-|---|---|---|
-| `HilbertSpaceOperatorFoundations` | 27 | — |
-| `MajorizationAndAngles` | 19 | foundations |
-| `SelfAdjointSpectralTheory` | 42 | foundations |
-| `OperatorIdeals` | 40 | foundations, majorization, self-adjoint spectral theory |
-| `MatrixSpectralStatistics` | 15 | foundations, self-adjoint spectral theory |
-| `SpectralSubspacePerturbation` | 44 | all of the above |
+| roadmap | mathematical prerequisites |
+|---|---|
+| `HilbertSpaceOperatorFoundations` | Mathlib |
+| `MajorizationAndAngles` | foundations |
+| `SelfAdjointSpectralTheory` | foundations |
+| `OperatorIdeals` | foundations, majorization, self-adjoint spectral theory |
+| `MatrixSpectralStatistics` | foundations, self-adjoint spectral theory |
+| `SpectralSubspacePerturbation` | all five preceding roadmaps |
 
-The module counts and the dependency column are derived from the import graph of the
-existing implementation, not asserted; they measure the size of the material a roadmap
-covers and are regenerated with `python3 scripts/check_tauceti_roadmap_topics.py
---roadmaps`. They say nothing about how much of it Tau Ceti or Mathlib may already have.
+These edges state mathematical ownership: each roadmap consumes public objects and theorems
+specified by its predecessors. Exact donor-module counts and import-graph diagnostics belong to
+this repository's internal topic map, not to the upstream mathematical specification.
 
 Reading the waves:
 

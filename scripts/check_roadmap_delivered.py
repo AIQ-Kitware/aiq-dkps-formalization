@@ -1,44 +1,18 @@
 #!/usr/bin/env python3
-"""Report, per roadmap topic, which suggested signatures are proved in the library.
+"""Report which representative roadmap signature names occur in the donor libraries.
 
-`ForTauCetiRoadmap/**/Suggested.lean` records target signatures whose bodies are
-deliberately `sorry` -- `ForTauCetiRoadmap.lean` exists so that a broken suggested
-signature is a build failure, and that guard has caught real elaboration errors.
-The bodies are therefore NOT the finding and this script never looks at them.  What
-it answers is the other question: *which of those target signatures already have a
-declaration of that name in the libraries*, so that whoever plans work can see where
-the staged tree stands.
-
-**This is an internal diagnostic and its output does not belong in a roadmap.**  A
-name match is evidence about spelling, not about mathematics: it does not check that
-the two statements agree, and roughly one match in eight resolves to more than one
-module.  Roadmap prose states what the mathematics should be; it is reviewed by
-reading it, not by running this.
-
-**Why this is a script and not a `grep`.**  The first hand-rolled check of
-`MajorizationAndAngles` reported **17 of 26 signatures missing**, including
-`cosThetaMap`, `kyFanSum`, `cosPrincipalAngles`, `prefixSum` and `sinThetaSq` --
-every one of which is present in the tree.  A per-name pattern cannot survive the
-variation in real Lean declaration syntax:
-
-* `_root_.` prefixes (`_root_.LinearMap.IsPositive.sqrt` -- this one produced a
-  false negative in a *second*, independent check);
-* attribute lines, `@[simp] theorem foo ...` inline or on the preceding line;
-* modifiers (`noncomputable`, `protected`, `scoped`, `private`);
-* namespace qualification, so the roadmap's short name is a suffix of the real one;
-* signatures that wrap, putting the name far from the keyword.
-
-So: index every declaration in the libraries **once**, key it on both the
-fully-qualified and the base name, and set-compare.  Do not grep per name.
-
-Exit status is always 0: an unmatched signature is ordinary outstanding work, not a
-defect.
+`ForTauCetiRoadmap/**/Suggested.lean` records proposed API signatures whose bodies are
+intentionally `sorry`.  This script is an internal planning aid: it indexes declaration
+names in the donor libraries and reports name matches, possible destinations, and
+ambiguities.  A name match is not semantic verification, proof that the statements agree,
+or evidence that a roadmap is complete.  Its output must not be copied into public roadmap
+prose.
 
 Usage:
-    python3 scripts/check_roadmap_delivered.py               # per-roadmap summary
-    python3 scripts/check_roadmap_delivered.py --topic OperatorIdeals
-    python3 scripts/check_roadmap_delivered.py --missing     # list what is outstanding
-    python3 scripts/check_roadmap_delivered.py --map         # per-signature destinations
+    python3 scripts/check_roadmap_delivered.py
+    python3 scripts/check_roadmap_delivered.py --topic HilbertSpaceOperatorFoundations
+    python3 scripts/check_roadmap_delivered.py --missing
+    python3 scripts/check_roadmap_delivered.py --map
     python3 scripts/check_roadmap_delivered.py --json
 """
 
@@ -63,6 +37,7 @@ DECL = re.compile(
     r"(?:_root_\.)?([A-Za-z_][A-Za-z0-9_'.’]*)",
     re.M,
 )
+
 
 def strip_block_comments(text: str) -> str:
     """Blank out `/- ... -/` regions so prose cannot look like a declaration.
@@ -143,10 +118,12 @@ def topic_signatures(topic_dir: pathlib.Path) -> list[str]:
     return out
 
 
+
 def analyse() -> list[dict]:
     index = declaration_index()
     results = []
-    for topic_dir in sorted(p.parent for p in ROADMAP.rglob("Suggested.lean")):
+    topic_dirs = sorted({p.parent for p in ROADMAP.rglob("Suggested.lean")})
+    for topic_dir in topic_dirs:
         names = topic_signatures(topic_dir)
         if not names:
             continue
@@ -161,7 +138,7 @@ def analyse() -> list[dict]:
             if others:
                 ambiguous[n] = sorted(hits)
         results.append({
-            "topic": topic_dir.name,
+            "topic": topic_dir.relative_to(ROADMAP).as_posix(),
             "total": len(names),
             "delivered": len(found),
             "missing": missing,
@@ -174,7 +151,7 @@ def analyse() -> list[dict]:
 def main() -> int:
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--topic", help="restrict to one topic directory name")
+    ap.add_argument("--topic", help="restrict to one roadmap path or leaf directory name")
     ap.add_argument("--missing", action="store_true", help="list undelivered signatures")
     ap.add_argument("--map", action="store_true", help="list where each signature landed")
     ap.add_argument("--ambiguous", action="store_true",
@@ -184,7 +161,8 @@ def main() -> int:
 
     results = analyse()
     if args.topic:
-        results = [r for r in results if r["topic"] == args.topic]
+        results = [r for r in results
+                   if r["topic"] == args.topic or pathlib.PurePosixPath(r["topic"]).name == args.topic]
         if not results:
             print(f"no such topic: {args.topic}")
             return 1
@@ -195,7 +173,8 @@ def main() -> int:
 
     for r in results:
         pct = 100.0 * r["delivered"] / r["total"]
-        print(f"  {r['topic']:<34} {r['delivered']:>3}/{r['total']:<3} ({pct:5.1f}%)")
+        print(f"         {r['topic']:<64} {r['delivered']:>3}/{r['total']:<3} "
+              f"({pct:5.1f}%)")
         if args.missing and r["missing"]:
             for n in r["missing"]:
                 print(f"           outstanding: {n}")
@@ -211,10 +190,11 @@ def main() -> int:
 
     total = sum(r["total"] for r in results)
     done = sum(r["delivered"] for r in results)
-    print(f"\nname matches: {done}/{total} suggested signatures have a declaration of "
-          f"that name ({100.0 * done / total:.1f}%)" if total else "no signatures found")
-    print("A name match is not a proof that the statements agree; this is a planning "
-          "aid, not a validation.")
+    print(f"\nroadmap delivery: {done}/{total} suggested signatures proved "
+          f"({100.0 * done / total:.1f}%)" if total else "no signatures found")
+
+    print("Name matches are an internal diagnostic only; they do not establish statement "
+          "equivalence or roadmap completion.")
     return 0
 
 
