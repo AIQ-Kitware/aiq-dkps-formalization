@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
+import Mathlib.Algebra.Group.Semiconj.Units
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.Normed.Operator.Banach
 
@@ -369,5 +370,43 @@ theorem norm_one_sub_inverse_one_add {B : E →L[𝕜] E} (hB : IsSelfAdjoint B)
     exact div_one_add_le_of_forall_sub_sq_le hs hstep2
   exact le_antisymm hupper hlower
 
+/-! ## `Ring.inverse` and semiconjugation
+
+This module's own summary says the inverse of a coercive operator "is then
+available through `Ring.inverse` or through `IsUnit.unit`".  These two lemmas are
+about that choice.  **Mathlib states the semiconjugation-respects-inverses fact
+only in the `Units` spelling** (`SemiconjBy.units_inv_right`), and every
+operator-algebra argument here gets its invertibility as `IsUnit` and its inverse
+through `Ring.inverse`, so using the Mathlib lemma means unfolding by hand at
+every site.  That unfolding was written out as the same six-line `calc` in
+**three** theorems of `DavisKahan/SpectralTheory/GraphSubspace.lean`, which is
+the file this module was written to support.
+
+They are stated for a `MonoidWithZero` and mention no inner product; they live
+here because this is where the `IsUnit`-to-`Ring.inverse` seam is already
+documented, and because `ForTauCeti`'s module-to-topic partition is total, so a
+general-algebra subtree would need a new roadmap topic.  See
+`{lane:ALG-PROMOTE-SEMICONJ}`. -/
+
 end ContinuousLinearMap
+
+/-- **`Ring.inverse` respects semiconjugation.**
+
+If `a` semiconjugates a unit `n` to a unit `m` — that is, `a * n = m * a` — then
+it semiconjugates their inverses.  This is `SemiconjBy.units_inv_right` in the
+`Ring.inverse` spelling. -/
+theorem ringInverse_semiconj {M : Type*} [MonoidWithZero M] {a n m : M}
+    (hn : IsUnit n) (hm : IsUnit m) (h : a * n = m * a) :
+    a * Ring.inverse n = Ring.inverse m * a := by
+  obtain ⟨un, rfl⟩ := hn
+  obtain ⟨um, rfl⟩ := hm
+  rw [Ring.inverse_unit, Ring.inverse_unit]
+  exact SemiconjBy.units_inv_right h
+
+/-- The commuting case, which is the one that actually appears: if `a` commutes
+with a unit `n`, it commutes with `Ring.inverse n`. -/
+theorem commute_ringInverse {M : Type*} [MonoidWithZero M] {a n : M}
+    (hn : IsUnit n) (h : Commute a n) : Commute a (Ring.inverse n) :=
+  ringInverse_semiconj hn hn h
+
 end TauCeti
