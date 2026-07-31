@@ -345,6 +345,62 @@ theorem approximationNumber_add_le
     _ = T.approximationNumber m + S.approximationNumber n + ε := by
       ring
 
+/-- **Composition multiplicativity across indices**: `a_{m+n}(S ∘ T) ≤ aₘ(S) · aₙ(T)`.
+
+The name carries `add` deliberately.  `approximationNumber_comp_comp_le` is the *two-sided ideal*
+bound `aₙ(L ∘ T ∘ R) ≤ ‖L‖ · aₙ(T) · ‖R‖`, a different theorem at a fixed index; this one splits
+the index, which is what makes the approximation numbers behave like a multiplicative scale and is
+the input to the Schatten Hölder inequalities.
+
+The approximant is `R₁ ∘ T + (S - R₁) ∘ R₂`, whose rank is at most `m + n` because each summand is
+bounded by the rank of *its own* finite-rank factor — the left one by `R₁`, the right one by `R₂`.
+The residual then factors as `(S - R₁) ∘ (T - R₂)`, so the two approximation errors multiply. -/
+theorem approximationNumber_comp_add_le_mul
+    {G : Type x} [NormedAddCommGroup G] [NormedSpace 𝕜 G]
+    (S : F →L[𝕜] G) (T : E →L[𝕜] F) (m n : ℕ) :
+    (S ∘L T).approximationNumber (m + n) ≤
+      S.approximationNumber m * T.approximationNumber n := by
+  apply le_of_forall_pos_le_add
+  intro ε hε
+  set a := S.approximationNumber m with ha
+  set b := T.approximationNumber n with hb
+  have ha0 : 0 ≤ a := S.approximationNumber_nonneg m
+  have hb0 : 0 ≤ b := T.approximationNumber_nonneg n
+  -- a tolerance small enough that `(a + δ)(b + δ) ≤ a * b + ε`
+  set δ := min 1 (ε / (a + b + 1)) with hδ
+  have hden : 0 < a + b + 1 := by positivity
+  have hδ0 : 0 < δ := lt_min one_pos (div_pos hε hden)
+  have hδ1 : δ ≤ 1 := min_le_left _ _
+  have hδε : δ * (a + b + 1) ≤ ε := by
+    have := min_le_right (1 : ℝ) (ε / (a + b + 1))
+    calc δ * (a + b + 1) ≤ (ε / (a + b + 1)) * (a + b + 1) :=
+          mul_le_mul_of_nonneg_right this hden.le
+      _ = ε := div_mul_cancel₀ ε hden.ne'
+  obtain ⟨R₁, hR₁rank, hR₁dist⟩ :=
+    S.exists_rank_le_norm_sub_lt_approximationNumber_add m hδ0
+  obtain ⟨R₂, hR₂rank, hR₂dist⟩ :=
+    T.exists_rank_le_norm_sub_lt_approximationNumber_add n hδ0
+  set Q : E →L[𝕜] G := R₁ ∘L T + (S - R₁) ∘L R₂ with hQ
+  have hQrank : Q.rank ≤ ((m + n : ℕ) : Cardinal) := by
+    calc
+      Q.rank ≤ (R₁ ∘L T).rank + ((S - R₁) ∘L R₂).rank := LinearMap.rank_add_le _ _
+      _ ≤ (m : Cardinal) + (n : Cardinal) :=
+          add_le_add ((ContinuousLinearMap.rank_comp_le_left T R₁).trans hR₁rank)
+            (ContinuousLinearMap.rank_comp_le_natCast_right R₂ (S - R₁) hR₂rank)
+      _ = ((m + n : ℕ) : Cardinal) := by norm_cast
+  have hres : (S ∘L T) - Q = (S - R₁) ∘L (T - R₂) := by
+    ext x
+    simp only [hQ, sub_apply, add_apply, ContinuousLinearMap.comp_apply, map_sub]
+    abel
+  exact le_of_lt <| calc
+    (S ∘L T).approximationNumber (m + n) ≤ ‖(S ∘L T) - Q‖ :=
+      (S ∘L T).approximationNumber_le_norm_sub hQrank
+    _ = ‖(S - R₁) ∘L (T - R₂)‖ := by rw [hres]
+    _ ≤ ‖S - R₁‖ * ‖T - R₂‖ := ContinuousLinearMap.opNorm_comp_le _ _
+    _ < (a + δ) * (b + δ) := by
+        refine mul_lt_mul'' hR₁dist hR₂dist (norm_nonneg _) (norm_nonneg _)
+    _ ≤ a * b + ε := by nlinarith [hδε, hδ0.le, hδ1, ha0, hb0]
+
 /-- Right ideal inequality for approximation numbers. -/
 theorem approximationNumber_comp_le_mul_norm
     {G : Type x} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
