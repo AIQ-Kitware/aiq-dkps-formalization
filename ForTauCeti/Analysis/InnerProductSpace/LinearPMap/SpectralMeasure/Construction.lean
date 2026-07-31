@@ -412,15 +412,30 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 
 /-- The spectral projection of an unbounded self-adjoint operator onto a Borel
 set of the real line. -/
--- `@[expose]` here is a recorded compromise, not a clean carve-out, and it is load-bearing:
--- removing it leaves the root spectral-measure module failing at a dozen-plus sites, two of
--- which rewrite by definition name (`rw [specProjection]`) and the rest of which need the
--- body to reduce. The rubric-clean fix is a `_def` lemma per definition plus rewiring every
--- call site, which is a refactor rather than an attribute change; it is recorded debt rather
--- than an endorsement.
-@[expose]
+-- **Not exposed.** It was, on the grounds that consumers rewrite by definition name and need
+-- the body to reduce; both were true of the call sites, and both are now served by the two
+-- rewrite lemmas below. Twenty-two sites across five modules, in three shapes: `show P = pvm.proj
+-- .. from rfl` (either direction), `exact h` against a Borel-calculus term, and two literal
+-- `rw [specProjection, spectralPVM, toProjValMeasure_proj, specProj]` chains, which collapse to
+-- `rw [specProjection_eq_borelCalculus]`.
 noncomputable def specProjection (B : Set ℝ) (hB : MeasurableSet B) : H →L[ℂ] H :=
   (spectralPVM hA).proj B hB
+
+/-- Rewrite form of `specProjection` against the projection-valued measure, for the consumers
+that want the `ProjValMeasure` API (`norm_sq_proj_apply`, `inner_proj`) rather than the Borel
+calculus underneath it. -/
+theorem specProjection_def (B : Set ℝ) (hB : MeasurableSet B) :
+    specProjection hA B hB = (spectralPVM hA).proj B hB := (rfl)
+
+/-- Rewrite form of `specProjection`, so a call site need not unfold the definition: the
+spectral projection of `B` is the Borel calculus of the indicator of the Cayley preimage
+of `B`.  This is the whole chain `specProjection → spectralPVM → toProjValMeasure →
+specProj` collapsed into the one equation consumers actually want. -/
+theorem specProjection_eq_borelCalculus (B : Set ℝ) (hB : MeasurableSet B) :
+    specProjection hA B hB
+      = BorelCalculus.borelCalculus (isStarNormal_cayley hA)
+          (BorelCalculus.isBddMeasurable_indicator (a := cayley hA)
+            (measurable_cayleyInv hA hB)) := (rfl)
 
 /-- The resolvent at `-i` as an image of the Borel calculus of the Cayley
 transform — the bridge that makes spectral projections commute with it. -/
