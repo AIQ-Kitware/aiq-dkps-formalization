@@ -77,7 +77,7 @@ second. -/
     (A : E₁ →ₗ[𝕜] F₁) (B : E₂ →ₗ[𝕜] F₂)
     (x : WithLp 2 (E₁ × E₂)) :
     orthogonalBlockSum A B x = WithLp.toLp 2 (A x.fst, B x.snd) :=
-  rfl
+  (rfl)
 
 /-- Scaling one block scales the block sum. -/
 @[simp] theorem orthogonalBlockSum_smul

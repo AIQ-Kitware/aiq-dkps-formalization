@@ -210,7 +210,7 @@ definitionally.  This is the lemma that turns Schatten statements into
 finite-vector ones. -/
 @[simp] theorem schattenNorm_apply (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
     schattenNorm p hp A = FiniteVector.lpGauge p (singularValueVector A) :=
-  rfl
+  (rfl)
 
 /-- The Schatten `p` norm is nonnegative. -/
 theorem schattenNorm_nonneg (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
@@ -370,7 +370,7 @@ noncomputable def schattenNormInf : RectangularUnitarilyInvariantNorm 𝕜 E F :
 Schatten scale. -/
 @[simp] theorem schattenNormInf_apply (A : E →ₗ[𝕜] F) :
     schattenNormInf A = ‖A.toContinuousLinearMap‖ :=
-  rfl
+  (rfl)
 
 end RectangularUnitarilyInvariantNorm
 end TauCeti

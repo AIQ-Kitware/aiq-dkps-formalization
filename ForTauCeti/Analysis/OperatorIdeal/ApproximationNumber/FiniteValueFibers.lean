@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import Mathlib.Data.Finset.Max
-import Mathlib.Data.Fintype.EquivFin
-import Mathlib.Data.Real.Basic
-import Mathlib.Tactic.Common
+module
+
+public import Mathlib.Data.Finset.Max
+public import Mathlib.Data.Fintype.EquivFin
+public import Mathlib.Data.Real.Basic
+public import Mathlib.Tactic.Common
 
 /-!
 # Fibers of a finite monotone value family
@@ -24,14 +26,17 @@ counting step that bounds a band by the index interval it occupies.
 
 ## Provenance
 
-Promoted from `FinishTanTwoTheta/FinishTanTwoTheta/ApproximationNumber/FiniteValueFibers.lean`
-under lane `FTT-PROMOTE-3` (2026-07-30), which moved it out of a library that
-is not a default build target.  The statements and proofs are unchanged; the
-enclosing namespace moved from `TauCeti.FinishTanTwoTheta` to
-`TauCeti.ApproximationNumber`, and `FinishTanTwoTheta.GroundedImports` — which
-imports `DavisKahan.All` and so cannot survive the move — was replaced by the
-Mathlib leaves the file actually uses.
+* Original module: authored for the Davis--Kahan tan-2-theta development, then
+  moved here once its dependencies were measured: the statements are about an
+  arbitrary `a : Fin n → ℝ` and use nothing but Mathlib.
+* Extraction class: **moved and renamespaced.**  Statements and proofs are
+  unchanged; only the enclosing namespace and the import list moved.
+* Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking;
+  Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none.**
 -/
+
+public section
 
 namespace TauCeti
 namespace ApproximationNumber
@@ -83,15 +88,18 @@ noncomputable def finiteValueLast {n : ℕ} (a : Fin n → ℝ)
     (label : FiniteValueLabel a) : Fin n :=
   (finiteValueFiber a label).max' (finiteValueFiber_nonempty a label)
 
-/-- The first fiber index carries the label's value. -/
-@[simp]
+/-- The first fiber index carries the label's value.
+
+Not `@[simp]`: the left-hand side `a (finiteValueFirst a label)` has the family `a`
+as head symbol, so simp would try it on every application of every function. -/
 theorem finiteValueFirst_value {n : ℕ} (a : Fin n → ℝ)
     (label : FiniteValueLabel a) : a (finiteValueFirst a label) = label.1 := by
   exact (mem_finiteValueFiber a label (finiteValueFirst a label)).mp
     (Finset.min'_mem _ _)
 
-/-- The last fiber index carries the label's value. -/
-@[simp]
+/-- The last fiber index carries the label's value.
+
+Not `@[simp]`, for the same reason as `finiteValueFirst_value`. -/
 theorem finiteValueLast_value {n : ℕ} (a : Fin n → ℝ)
     (label : FiniteValueLabel a) : a (finiteValueLast a label) = label.1 := by
   exact (mem_finiteValueFiber a label (finiteValueLast a label)).mp
