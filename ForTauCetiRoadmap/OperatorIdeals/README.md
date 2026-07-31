@@ -230,9 +230,20 @@ equal to `1`; (3) a rectangular diagonal map has approximation numbers its entri
 decreasingly, unequal dimensions included; (4) an explicit rank-`r` map has `aₙ = 0` for
 `n ≥ r`; (5) on a small diagonal matrix the orthogonal-tail infimum selects the span of the
 largest singular directions and returns the next singular value; (6) a diagonal compact
-operator with coefficients tending to zero has `aₙ → 0`.  (5) and (6) are open; (6) no
-longer waits on Milestone A3, which has landed — what it now needs is that the diagonal
-operator is compact, after which A3 supplies `aₙ → 0` directly.
+operator with coefficients tending to zero has `aₙ → 0`.  (5) is open.
+
+**(6) is proved** — `TauCeti.tendsto_approximationNumber_diagOpLp`
+(`ApproximationNumber/DiagonalSequence.lean`), for multiplication by a bounded sequence on
+`lp (fun _ : ℕ => 𝕜) 2`.  **The route this paragraph predicted is not the route it took, and
+the difference is the point of the example.**  The prediction was that (6) "needs that the
+diagonal operator is compact, after which A3 supplies `aₙ → 0` directly".  It does not: the
+`N`-th truncation has rank at most `N` and `‖T - T_N‖` is bounded by the tail of the
+coefficients, which gives `aₙ → 0` with no compactness anywhere — and compactness then falls
+out as a corollary (`TauCeti.isCompactOperator_diagOpLp`, through *approximable ⇒ compact*).
+Going through A3 would have proved the statement without touching the reason it is true,
+since the approximation numbers of a diagonal operator *are* its tail suprema.  Only the
+upper bound is proved; the matching lower bound needs the coefficients ordered, which the
+example does not assume.
 
 ## Part B — symmetric operator ideals and Schatten norms
 
@@ -442,7 +453,8 @@ argument rather than the predicted spectral theorem for `T⋆T`, and for an arbi
 domain rather than a Hilbert pair; `AN-B4-MINMAX`
 done, with the predicted witness `V := (ker R)ᗮ` and the ball-not-sphere sup formulation;
 `AN-ACCEPT` — examples (1), (2), (4) and the diagonal example (3) are proved with the
-defining infimum never unfolded; (5) and (6) remain.  The Ky Fan gauge and its triangle
+defining infimum never unfolded; (6) landed 2026-07-30 by direct truncation rather than
+through compactness, which it proves instead of assuming; (5) remains.  The Ky Fan gauge and its triangle
 inequality, claimed by the old symmetric-ideals roadmap as its own scope, are staged among
 the approximation-number modules; this consolidation dissolves that boundary question.
 
