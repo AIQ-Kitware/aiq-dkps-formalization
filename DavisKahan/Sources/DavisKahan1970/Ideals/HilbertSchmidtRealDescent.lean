@@ -50,10 +50,6 @@ variable {E F : Type v}
 local notation "Eℂ" => RealComplexification E
 local notation "Fℂ" => RealComplexification F
 
-/-! `realPartOperator` and `realPartOperator_apply` were declared here too.  The canonical
-statement in `Foundation.RealComplexification` is already the two-space one this file needs, so
-both are inherited through the `open` above; see lane `{lane:CPLX-DEDUP}`. -/
-
 /-- A complex operator maps the distinguished real copy into the real copy. -/
 def MapsRealCopy (T : Eℂ →L[ℂ] Fℂ) : Prop :=
   ∀ x : E, im (T (ofReal x)) = 0

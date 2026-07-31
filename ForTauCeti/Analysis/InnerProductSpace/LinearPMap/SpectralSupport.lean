@@ -126,7 +126,8 @@ theorem diag_eq_zero_of_subset_resolventSet
       rw [abs_le]
       exact ⟨by linarith [h.1], by linarith [h.2]⟩
   have hq := (spectralPVM hA).norm_sq_proj_apply u humeas ξ
-  rw [show (spectralPVM hA).proj u humeas = specProjection hA u humeas from rfl,
+  rw [show (spectralPVM hA).proj u humeas = specProjection hA u humeas from
+      (specProjection_def hA u humeas).symm,
     hzero] at hq
   simp only [zero_apply, norm_zero, ne_eq,
     OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow] at hq
@@ -141,7 +142,8 @@ theorem specProjection_eq_zero_of_subset_resolventSet
     specProjection hA B hB = 0 := by
   refine ContinuousLinearMap.ext fun ξ => ?_
   have hq := (spectralPVM hA).norm_sq_proj_apply B hB ξ
-  rw [show (spectralPVM hA).proj B hB = specProjection hA B hB from rfl,
+  rw [show (spectralPVM hA).proj B hB = specProjection hA B hB from
+      (specProjection_def hA B hB).symm,
     diag_eq_zero_of_subset_resolventSet hA B hB hres ξ] at hq
   simp only [ENNReal.toReal_zero] at hq
   have hz : ‖specProjection hA B hB ξ‖ = 0 :=
