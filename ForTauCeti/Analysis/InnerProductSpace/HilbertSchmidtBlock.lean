@@ -131,7 +131,7 @@ noncomputable def blockCLM :
 
 /-- The bundled block map acts as `blockFun`. -/
 @[simp] theorem blockCLM_apply (f : lp (fun _ : ι => E) 2) :
-    blockCLM b P Q f = blockFun b P Q f := rfl
+    blockCLM b P Q f = blockFun b P Q f := (rfl)
 
 end Defs
 
