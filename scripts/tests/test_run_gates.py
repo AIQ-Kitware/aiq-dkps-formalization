@@ -179,10 +179,23 @@ class RepositoryTest(unittest.TestCase):
         for gate in real:
             self.assertIn(gate.kind, {
                 "advisory (reported, cannot fail the run)",
+                "strict, --check withheld (it is a completion target)",
                 "soft (strict only with --check)",
                 "strict, accepts --check",
                 "strict, no flag",
             })
+
+    def test_check_is_stronger_list_names_gates_that_exist(self) -> None:
+        names = {gate.name for gate in run_gates.gates()}
+        for withheld in run_gates.CHECK_IS_STRONGER:
+            self.assertIn(withheld, names,
+                          f"CHECK_IS_STRONGER names a gate that does not exist: {withheld}")
+
+    def test_a_gate_with_a_stronger_check_is_not_given_the_flag(self) -> None:
+        """Accepting `--check` does not tell you what `--check` means."""
+        gates = {g.name: g for g in run_gates.gates()}
+        for name in run_gates.CHECK_IS_STRONGER:
+            self.assertNotIn("--check", gates[name].command())
 
     def test_advisory_list_names_gates_that_exist(self) -> None:
         """Same stale-name hazard as SLOW: an advisory exemption for a gate that
