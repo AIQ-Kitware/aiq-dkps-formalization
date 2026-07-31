@@ -236,10 +236,11 @@ theorem norm_finiteBasisInclusion_apply {ι : Type*} (b : HilbertBasis ι 𝕜' 
   nlinarith [hsq, h1, h2]
 
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace 𝕜' H] [CompleteSpace H]
-  [FiniteDimensional 𝕜' H]
 
--- `G`'s completeness is carried by the `HilbertBasis` argument rather than used again.
-omit [CompleteSpace G] in
+-- `G`'s completeness is carried by the `HilbertBasis` argument rather than used again, and
+-- the target's is not needed at all: the range factored through is finite-dimensional, so its
+-- orthogonal projection exists without completing `H`.
+omit [CompleteSpace G] [CompleteSpace H] in
 /-- **The Hilbert--Schmidt energy is at most the sum of squared approximation numbers.**
 
 Half of the `p = 2` identity.  A finite partial sum of the energy is the *whole* energy of
@@ -252,12 +253,15 @@ Note that `Module.finrank` is never evaluated: the sum over `Fin (finrank _)` is
 the `tsum` over `ℕ` whatever that rank is, so the dimension of the auxiliary Euclidean space
 never has to be computed.
 
-**Two things are not proved here.**  The reverse inequality, which is the substance; and the
-removal of `[FiniteDimensional 𝕜' H]` from the target.  The latter is a factorization rather
-than a theorem — `T ∘L finiteBasisInclusion b f` has finite rank, so it factors through its
-own range as `W.subtypeL ∘L S` with `W` finite-dimensional, `subtypeL` isometric (so the
-energy is unchanged term by term) and `S = orthogonalProjection W ∘L T ∘L V` of norm at most
-`‖T‖` — but it is a factorization somebody has to build. -/
+**The target needs no hypotheses at all**, not even completeness.  The finite-source identity
+this rests on wants a finite-dimensional target, because the singular system is built from a
+finite-dimensional adjoint — but `T ∘L finiteBasisInclusion b f` has finite rank, so it
+factors through its own range: `S = W.orthogonalProjectionOnto ∘L T ∘L V` has both spaces
+finite-dimensional, agrees with `T ∘L V` because the range is exactly `W`, and has norm at
+most `‖T‖`.
+
+**The reverse inequality is not proved here**, and is what stands between this and
+`TauCeti.schattenIdealFamily 𝕜 2 = TauCeti.hilbertSchmidtIdealFamily 𝕜`. -/
 theorem hilbertSchmidtEnergy_le_tsum_approximationNumber_sq {ι : Type v}
     (T : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) :
     T.hilbertSchmidtEnergy b ≤ ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) ^ 2 := by
@@ -289,15 +293,39 @@ theorem hilbertSchmidtEnergy_le_tsum_approximationNumber_sq {ι : Type v}
       (fun j : Fin s.card => ‖(T ∘L V) (c j)‖ₑ ^ 2) fun i => ?_
     rw [ContinuousLinearMap.comp_apply, hcapply, hfdef]
     simp
-  rw [hsum, (T ∘L V).hilbertSchmidtEnergy_eq_sum_approximationNumber_sq c]
+  -- `T ∘L V` has finite rank, so it factors through its own range, where the target is
+  -- finite-dimensional and the singular system is available.  The factor is isometric, so
+  -- the energy is unchanged term by term.
+  set W := LinearMap.range ((T ∘L V : EuclideanSpace 𝕜' (Fin s.card) →L[𝕜'] H) :
+    EuclideanSpace 𝕜' (Fin s.card) →ₗ[𝕜'] H) with hW
+  set P := (W.orthogonalProjectionOnto : H →L[𝕜'] W) with hP
+  set S := P ∘L (T ∘L V) with hS
+  have hSval : ∀ x, (S x : H) = (T ∘L V) x := by
+    intro x
+    have hmem : (T ∘L V) x ∈ W := ⟨x, rfl⟩
+    rw [hS, ContinuousLinearMap.comp_apply, hP]
+    exact congrArg Subtype.val
+      (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self (⟨(T ∘L V) x, hmem⟩ : W))
+  have henergy : (T ∘L V).hilbertSchmidtEnergy c = S.hilbertSchmidtEnergy c := by
+    rw [hilbertSchmidtEnergy, hilbertSchmidtEnergy]
+    refine tsum_congr fun j => ?_
+    rw [← hSval (c j)]
+    rfl
+  rw [hsum, henergy, S.hilbertSchmidtEnergy_eq_sum_approximationNumber_sq c]
   calc ∑ i : Fin (Module.finrank 𝕜' (EuclideanSpace 𝕜' (Fin s.card))),
-        ENNReal.ofReal ((T ∘L V).approximationNumber i) ^ 2
+        ENNReal.ofReal (S.approximationNumber i) ^ 2
       ≤ ∑ i : Fin (Module.finrank 𝕜' (EuclideanSpace 𝕜' (Fin s.card))),
           ENNReal.ofReal (T.approximationNumber i) ^ 2 := by
         refine Finset.sum_le_sum fun i _ => ?_
         refine pow_le_pow_left' (ENNReal.ofReal_le_ofReal ?_) 2
-        refine (T.approximationNumber_comp_le_mul_norm V i).trans ?_
-        exact mul_le_of_le_one_right (T.approximationNumber_nonneg i) hVnorm
+        refine (approximationNumber_comp_comp_le P T V i).trans ?_
+        have hPnorm : ‖P‖ ≤ 1 := by
+          rw [hP]; exact Submodule.orthogonalProjectionOnto_norm_le W
+        have hnn := T.approximationNumber_nonneg i
+        have hPa : ‖P‖ * T.approximationNumber i ≤ T.approximationNumber i :=
+          mul_le_of_le_one_left hnn hPnorm
+        exact le_trans
+          (mul_le_of_le_one_right (mul_nonneg (norm_nonneg P) hnn) hVnorm) hPa
     _ ≤ ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) ^ 2 := by
         rw [Fin.sum_univ_eq_sum_range (fun n => ENNReal.ofReal (T.approximationNumber n) ^ 2)]
         exact ENNReal.sum_le_tsum _
