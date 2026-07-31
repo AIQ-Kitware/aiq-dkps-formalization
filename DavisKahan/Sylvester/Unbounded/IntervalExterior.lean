@@ -44,6 +44,34 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
+namespace ExactSinTheta
+
+/-- **Interval/exterior separation** for two self-adjoint closed operators, stated over the
+Spectra spectrum.  Either orientation is permitted: one operator's real spectrum sits inside
+`[β, α]` while the other avoids the `δ`-enlargement `(β - δ, α + δ)`.
+
+`RealSpectrumIntervalExteriorGap` is the `realSpectrum` spelling of the same configuration.
+
+**Placed here rather than in either consumer.**  `Sylvester/Unbounded/AllGap.lean` and
+`SinTheta/Unbounded/IntervalExterior.lean` each carried a character-for-character copy of this
+definition (`SylvesterIntervalExteriorGap` and `SpectralIntervalExteriorGap`).  They are siblings
+— neither may import the other, since `SinTheta -> Sylvester` is the only permitted direction —
+so the single surviving definition has to live in the module they share. -/
+def SpectralIntervalExteriorGap
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
+    (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
+    (β α δ : ℝ) : Prop :=
+  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+        Set.Icc β α ∧
+    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B.toLinearPMap) ∨
+  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+        Set.Icc β α ∧
+    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap)
+
+end ExactSinTheta
+
 /-- **Form bounds from spectral inclusion.**  A closed self-adjoint operator
 with Spectra spectrum in `[β, α]` has its quadratic form in `[β, α]`:
 transported through the bounded realization and the centered norm bound. -/

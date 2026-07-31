@@ -32,24 +32,6 @@ variable {E F G H : Type v}
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- Interval/exterior separation for two self-adjoint closed operators, stated
-over the Spectra spectrum.  Either orientation is permitted.
-
-`RealSpectrumIntervalExteriorGap` is the `realSpectrum` spelling of the same
-configuration. -/
-def SpectralIntervalExteriorGap
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
-    (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G))
-    (β α δ : ℝ) : Prop :=
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
-        Set.Icc β α ∧
-    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B.toLinearPMap) ∨
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
-        Set.Icc β α ∧
-    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap)
-
 /-- Raw partial-map presentation of the Spectra interval/exterior boundary.
 The spectrum calls are the remaining Spectra dependency; no bundled operator is
 part of the mathematical input. -/

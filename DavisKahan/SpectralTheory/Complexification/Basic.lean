@@ -448,13 +448,10 @@ theorem complexify_injective [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- A coordinate of a vector is no longer than the vector.
 
-**`private` on purpose.**  `ClosedOperatorComplexification.norm_re_le` states exactly this, one
-module later, and both namespaces are opened together in
-`Sources/DavisKahan1970/Ideals/HilbertSchmidtRealDescent.lean` — a public copy here makes every
-unqualified use there ambiguous.  This file cannot import the other one (that is the direction
-of the dependency), so the duplicate stays private until someone deduplicates the four copies;
-see the `{lane:CPLX-DEDUP}` row. -/
-private theorem norm_re_le [NormedAddCommGroup E] (z : RealComplexification E) :
+This is the canonical copy.  `ClosedOperatorComplexification` carried its own until
+`jon (yardrat)` deleted it in `4dacc008` and pointed that module here; two further copies survive
+and are lane `{lane:CPLX-DEDUP}`. -/
+theorem norm_re_le [NormedAddCommGroup E] (z : RealComplexification E) :
     ‖re z‖ ≤ ‖z‖ := by
   have h := norm_sq z
   nlinarith [norm_nonneg (re z), norm_nonneg (im z), norm_nonneg z]
