@@ -342,4 +342,68 @@ theorem exists_modulus_isMinOn {P X : Type*} [PseudoMetricSpace P] [PseudoMetric
   obtain ⟨x₀, hx₀K, hx₀min, hclose⟩ := h p x hxK hxmin hpd
   exact ⟨x₀, hx₀K, hx₀min, hclose ()⟩
 
+/-! ### Varying constraints: the lower-hemicontinuous half
+
+The theorems above fix the feasible set `K`.  Berge's theorem allows `K` to vary
+with the parameter, and the two bounds on the value function then come from
+*different* hypotheses: lower hemicontinuity of `K` gives the upper bound, upper
+hemicontinuity together with compactness gives the lower one.
+
+This section supplies the first.  The content is that a feasible point at `p₀`
+can be approximately tracked at nearby parameters -- which is exactly what lower
+hemicontinuity says -- and joint continuity then transfers the value.
+-/
+
+/-- **Feasible points can be tracked, with their values.**
+
+If `K` is lower hemicontinuous at `p₀`, `g` is jointly continuous, and `y` is
+feasible at `p₀`, then for every `ε > 0` all nearby parameters admit a feasible
+point whose value beats `g p₀ y + ε`.
+
+Lower hemicontinuity alone gives a nearby *feasible* point; joint continuity is
+what makes its *value* close.  Neither hypothesis can be dropped: without the
+first the nearby constraint sets could avoid a neighbourhood of `y` entirely,
+and without the second a feasible point close to `y` need not have a close
+value. -/
+theorem eventually_exists_mem_lt_of_lowerHemicontinuousAt
+    {P X : Type*} [TopologicalSpace P] [TopologicalSpace X]
+    {K : P → Set X} {p₀ : P} (hKl : LowerHemicontinuousAt K p₀)
+    {g : P → X → ℝ} (hg : Continuous (Function.uncurry g))
+    {y : X} (hy : y ∈ K p₀) {ε : ℝ} (hε : 0 < ε) :
+    ∀ᶠ p in nhds p₀, ∃ x ∈ K p, g p x < g p₀ y + ε := by
+  -- The sublevel set of the jointly continuous `g` is open and contains `(p₀, y)`.
+  set W : Set (P × X) := {qx | g qx.1 qx.2 < g p₀ y + ε} with hW
+  have hWopen : IsOpen W := isOpen_lt hg continuous_const
+  have hmemW : (p₀, y) ∈ W := by simp [hW, hε]
+  -- Split it into a parameter neighbourhood and a state neighbourhood.
+  obtain ⟨N, u, hNopen, huopen, hpN, hyu, hsub⟩ :=
+    isOpen_prod_iff.mp hWopen p₀ y hmemW
+  -- Lower hemicontinuity tracks `y` into `u` at nearby parameters.
+  have htrack : ∀ᶠ p in nhds p₀, (K p ∩ u).Nonempty :=
+    (lowerHemicontinuousAt_iff.mp hKl) u huopen ⟨y, hy, hyu⟩
+  filter_upwards [htrack, hNopen.mem_nhds hpN] with p hp hpmem
+  obtain ⟨x, hxK, hxu⟩ := hp
+  exact ⟨x, hxK, hsub (Set.mk_mem_prod hpmem hxu)⟩
+
+/-- **The upper bound on the value function**, from lower hemicontinuity.
+
+`V p = ⨅ x ∈ K p, g p x` eventually beats `V p₀ + ε`.  This is the half of
+Berge's value theorem that lower hemicontinuity buys; the matching lower bound
+`V p₀ ≤ liminf V p` is where upper hemicontinuity and compactness of the
+constraint sets do their work, and is not proved here.
+
+The infimum is taken over the subtype `↥(K p)`, so a nonemptiness hypothesis is
+needed for it to be meaningful, and boundedness below for `ciInf_le` to apply. -/
+theorem eventually_iInf_lt_of_lowerHemicontinuousAt
+    {P X : Type*} [TopologicalSpace P] [TopologicalSpace X]
+    {K : P → Set X} {p₀ : P} (hKl : LowerHemicontinuousAt K p₀)
+    {g : P → X → ℝ} (hg : Continuous (Function.uncurry g))
+    (hbdd : ∀ p, BddBelow (Set.range fun x : ↥(K p) => g p ↑x))
+    {y : X} (hy : y ∈ K p₀) {ε : ℝ} (hε : 0 < ε) :
+    ∀ᶠ p in nhds p₀, (⨅ x : ↥(K p), g p ↑x) < g p₀ y + ε := by
+  filter_upwards [eventually_exists_mem_lt_of_lowerHemicontinuousAt hKl hg hy hε]
+    with p hp
+  obtain ⟨x, hxK, hxlt⟩ := hp
+  exact lt_of_le_of_lt (ciInf_le (hbdd p) ⟨x, hxK⟩) hxlt
+
 end TauCeti
