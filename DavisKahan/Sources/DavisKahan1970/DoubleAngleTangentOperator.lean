@@ -516,9 +516,8 @@ theorem norm_doubleAngleTangentOperator_comp_gramSpectralPVM_proj_Iic_le
   classical
   have hv0 : 0 ≤ v := hu0.trans huv.le
   have hdenv : 0 < 1 - v ^ 2 := by nlinarith
-  have htanv0 : 0 ≤ DavisKahanTheory.doubleAngleTangent v := by
-    unfold DavisKahanTheory.doubleAngleTangent
-    positivity
+  have htanv0 : 0 ≤ DavisKahanTheory.doubleAngleTangent v :=
+    DavisKahanTheory.doubleAngleTangent_nonneg hv0 hv1
   let PVM : ProjValMeasure E0 := gramSpectralPVM X
   let Q : E0 →L[ℂ] E0 := PVM.proj (Set.Iic (u ^ 2)) measurableSet_Iic
   let T := doubleAngleTangentOperator X hcontractive
