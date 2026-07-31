@@ -225,6 +225,41 @@ theorem boundedPVM_proj_comm (s : Set ℝ) (hs : MeasurableSet s) :
   rw [boundedPVM, toProjValMeasure_proj, specProj]
   exact borelCalculus_comm_self hT.isStarNormal _
 
+/-- **The real part of the quadratic form is the integral of the real
+coordinate against the diagonal measure**, together with the integrability that
+makes the integral meaningful.
+
+Stated because the two half-line bounds below are mirror images — an upper bound
+from `Ici` carrying no mass, a lower bound from `Iic` — and this fact is
+common to both and has no direction in it.  It was written out twice, fifteen
+identical lines each time; what genuinely differs between those theorems is
+only the final `integral_mono_ae` and which half-line is null. -/
+private theorem re_inner_eq_integral_reCoord
+    (hT : IsSelfAdjoint T) (ξ : H) :
+    (⟪T ξ, ξ⟫_ℂ).re =
+      ∫ w, reCoord (T := T) w ∂(diagMeasure hT.isStarNormal ξ) := by
+  have hcoord : IsBddMeasurable (fun w : spectrum ℂ T => (w : ℂ)) :=
+    isBddMeasurable_coord (a := T)
+  have hbc : ⟪ξ, borelCalculus hT.isStarNormal hcoord ξ⟫_ℂ =
+      ∫ w, (w : ℂ) ∂(diagMeasure hT.isStarNormal ξ) :=
+    inner_borelCalculus_self hT.isStarNormal hcoord ξ
+  rw [borelCalculus_coord hT.isStarNormal] at hbc
+  have hint : Integrable (fun w : spectrum ℂ T => (w : ℂ)) (diagMeasure hT.isStarNormal ξ) :=
+    hcoord.integrable _
+  have hre : (⟪ξ, T ξ⟫_ℂ).re = ∫ w, ((w : ℂ)).re ∂(diagMeasure hT.isStarNormal ξ) := by
+    rw [hbc]
+    simpa [RCLike.re_eq_complex_re] using (integral_re (𝕜 := ℂ) hint).symm
+  rw [← inner_conj_symm, Complex.conj_re]
+  exact hre
+
+/-- The real coordinate is integrable against the diagonal measure. -/
+private theorem integrable_reCoord (hT : IsSelfAdjoint T) (ξ : H) :
+    Integrable (fun w : spectrum ℂ T => reCoord (T := T) w)
+      (diagMeasure hT.isStarNormal ξ) := by
+  have hcoord : IsBddMeasurable (fun w : spectrum ℂ T => (w : ℂ)) :=
+    isBddMeasurable_coord (a := T)
+  simpa [reCoord, RCLike.re_eq_complex_re] using (hcoord.integrable _).re
+
 /-- **Form bound from a spectral half-line.**  If the spectral projection of
 `[c, ∞)` kills `ξ`, then the quadratic form of `T` at `ξ` is at most `c ‖ξ‖²`.
 
@@ -254,21 +289,11 @@ theorem re_inner_le_of_boundedPVM_proj_Ici_eq_zero (c : ℝ) {ξ : H}
     refine measure_mono_null (fun w hw => ?_) hnull
     exact not_lt.mp fun h => hw (le_of_lt h)
   -- the quadratic form is the integral of the coordinate
-  have hcoord : IsBddMeasurable (fun w : spectrum ℂ T => (w : ℂ)) :=
-    isBddMeasurable_coord (a := T)
-  have hform : (⟪T ξ, ξ⟫_ℂ).re = ∫ w, reCoord (T := T) w ∂μ := by
-    have hbc : ⟪ξ, borelCalculus ha hcoord ξ⟫_ℂ = ∫ w, (w : ℂ) ∂μ :=
-      inner_borelCalculus_self ha hcoord ξ
-    rw [borelCalculus_coord ha] at hbc
-    have hint : Integrable (fun w : spectrum ℂ T => (w : ℂ)) μ := hcoord.integrable μ
-    have hre : (⟪ξ, T ξ⟫_ℂ).re = ∫ w, ((w : ℂ)).re ∂μ := by
-      rw [hbc]
-      simpa [RCLike.re_eq_complex_re] using (integral_re (𝕜 := ℂ) hint).symm
-    rw [← inner_conj_symm, Complex.conj_re]
-    exact hre
+  have hform : (⟪T ξ, ξ⟫_ℂ).re = ∫ w, reCoord (T := T) w ∂μ :=
+    re_inner_eq_integral_reCoord hT ξ
   rw [hform]
-  have hintc : Integrable (fun w : spectrum ℂ T => reCoord (T := T) w) μ := by
-    simpa [reCoord, RCLike.re_eq_complex_re] using (hcoord.integrable μ).re
+  have hintc : Integrable (fun w : spectrum ℂ T => reCoord (T := T) w) μ :=
+    integrable_reCoord hT ξ
   calc ∫ w, reCoord (T := T) w ∂μ ≤ ∫ _w : spectrum ℂ T, c ∂μ :=
         integral_mono_ae hintc (integrable_const _) hae
     _ = c * ‖ξ‖ ^ 2 := by
@@ -297,21 +322,11 @@ theorem le_re_inner_of_boundedPVM_proj_Iic_eq_zero (c : ℝ) {ξ : H}
     rw [ae_iff]
     refine measure_mono_null (fun w hw => ?_) hnull
     exact le_of_lt (not_le.mp hw)
-  have hcoord : IsBddMeasurable (fun w : spectrum ℂ T => (w : ℂ)) :=
-    isBddMeasurable_coord (a := T)
-  have hform : (⟪T ξ, ξ⟫_ℂ).re = ∫ w, reCoord (T := T) w ∂μ := by
-    have hbc : ⟪ξ, borelCalculus ha hcoord ξ⟫_ℂ = ∫ w, (w : ℂ) ∂μ :=
-      inner_borelCalculus_self ha hcoord ξ
-    rw [borelCalculus_coord ha] at hbc
-    have hint : Integrable (fun w : spectrum ℂ T => (w : ℂ)) μ := hcoord.integrable μ
-    have hre : (⟪ξ, T ξ⟫_ℂ).re = ∫ w, ((w : ℂ)).re ∂μ := by
-      rw [hbc]
-      simpa [RCLike.re_eq_complex_re] using (integral_re (𝕜 := ℂ) hint).symm
-    rw [← inner_conj_symm, Complex.conj_re]
-    exact hre
+  have hform : (⟪T ξ, ξ⟫_ℂ).re = ∫ w, reCoord (T := T) w ∂μ :=
+    re_inner_eq_integral_reCoord hT ξ
   rw [hform]
-  have hintc : Integrable (fun w : spectrum ℂ T => reCoord (T := T) w) μ := by
-    simpa [reCoord, RCLike.re_eq_complex_re] using (hcoord.integrable μ).re
+  have hintc : Integrable (fun w : spectrum ℂ T => reCoord (T := T) w) μ :=
+    integrable_reCoord hT ξ
   calc c * ‖ξ‖ ^ 2 = ∫ _w : spectrum ℂ T, c ∂μ := by
         rw [integral_const, smul_eq_mul, measureReal_def, ← diagMeasure_univ_toReal ha ξ]
         ring

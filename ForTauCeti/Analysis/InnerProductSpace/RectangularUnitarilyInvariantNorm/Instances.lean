@@ -95,6 +95,19 @@ the projection. Consumers were working around that with `change`, which is the
 @[simp] theorem adjointTransport_coe_apply (A : E →ₗ[𝕜] F) :
     (adjointTransport N) A.adjoint = N A := adjointTransport_apply N A
 
+/-- The transported norm of a *negated* adjoint.
+
+`adjointTransport_coe_apply` cannot fire on this: it matches an argument of the
+form `A.adjoint`, and `-C.adjoint` has `Neg.neg` at the head, so simp sees no
+adjoint to cancel.  Callers that reverse a Sylvester equation land on exactly
+this shape — the reversal introduces the sign — and before 2026-07-30 two proofs
+in `Sylvester/Interval.lean` each carried an eight-line comment explaining the
+failure followed by the same `change`/`map_neg`/`adjoint_adjoint` fix by hand. -/
+@[simp] theorem adjointTransport_neg_adjoint_apply (C : E →ₗ[𝕜] F) :
+    (adjointTransport N) (-C.adjoint) = N C := by
+  change N ((-C.adjoint).adjoint) = N C
+  rw [map_neg, LinearMap.adjoint_adjoint, N.apply_neg]
+
 
 /-- Left ideal property.  This is Fan dominance applied to the pointwise
 singular-value bound for composition by a bounded left factor. -/

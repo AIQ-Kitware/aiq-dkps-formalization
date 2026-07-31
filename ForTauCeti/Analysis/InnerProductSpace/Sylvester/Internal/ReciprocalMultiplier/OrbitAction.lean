@@ -196,6 +196,34 @@ noncomputable def complexFourierPhase (x : ℝ) : unitary ℂ := by
   · rw [RCLike.star_def, RCLike.mul_conj, hz]
     norm_num
 
+/-- **Rotating a complex number by `θ` shifts its argument by `θ`.**
+`‖a‖ * exp((arg a + θ) i) = a * exp(θ i)`.
+
+Pure scalar arithmetic — split the exponential, re-associate, and close with
+`Complex.norm_mul_exp_arg_mul_I` — but it appeared twice as a fifteen-line
+`calc` buried inside two *operator* proofs, once here and once in
+`DoubledPhase.lean`.  Nothing in either copy mentioned the operators or bases
+around it, which is exactly why it read as incidental in both places. -/
+theorem norm_mul_exp_arg_add_mul_I (a : ℂ) (theta : ℝ) :
+    ((‖a‖ : ℝ) : ℂ) *
+        Complex.exp (((Complex.arg a + theta : ℝ) : ℂ) * Complex.I) =
+      a * Complex.exp ((theta : ℂ) * Complex.I) := by
+  calc
+    ((‖a‖ : ℝ) : ℂ) *
+        Complex.exp (((Complex.arg a + theta : ℝ) : ℂ) * Complex.I) =
+      ((‖a‖ : ℝ) : ℂ) *
+        (Complex.exp (((Complex.arg a : ℝ) : ℂ) * Complex.I) *
+          Complex.exp ((theta : ℂ) * Complex.I)) := by
+            rw [← Complex.exp_add]
+            congr 2
+            push_cast
+            ring
+    _ = (((‖a‖ : ℝ) : ℂ) *
+          Complex.exp (((Complex.arg a : ℝ) : ℂ) * Complex.I)) *
+        Complex.exp ((theta : ℂ) * Complex.I) := by ring
+    _ = a * Complex.exp ((theta : ℂ) * Complex.I) := by
+      rw [Complex.norm_mul_exp_arg_mul_I]
+
 /-- **`cos t * cos t + sin t * sin t = 1`.**
 
 Mathlib states the Pythagorean identity with squares
@@ -596,21 +624,7 @@ theorem norm_smul_doubledPhaseAction_arg_add
   rw [doubledPhaseAction_eq_complexScalarAction,
     doubledComplexScalarAction_real_smul]
   congr 1
-  calc
-    ((‖a‖ : ℝ) : ℂ) *
-        Complex.exp (((Complex.arg a + theta : ℝ) : ℂ) * Complex.I) =
-      ((‖a‖ : ℝ) : ℂ) *
-        (Complex.exp (((Complex.arg a : ℝ) : ℂ) * Complex.I) *
-          Complex.exp ((theta : ℂ) * Complex.I)) := by
-            rw [← Complex.exp_add]
-            congr 2
-            push_cast
-            ring
-    _ = (((‖a‖ : ℝ) : ℂ) *
-          Complex.exp (((Complex.arg a : ℝ) : ℂ) * Complex.I)) *
-        Complex.exp ((theta : ℂ) * Complex.I) := by ring
-    _ = a * Complex.exp ((theta : ℂ) * Complex.I) := by
-      rw [Complex.norm_mul_exp_arg_mul_I]
+  exact norm_mul_exp_arg_add_mul_I a theta
 
 /-- A finite complex Fourier sum acts on doubled real maps as a finite sum of
 nonnegatively weighted real phase rotations. -/
