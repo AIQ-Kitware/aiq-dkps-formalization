@@ -245,6 +245,19 @@ noncomputable def symmetricGaugeFamily (Φ : SymmetricGauge) : OperatorIdealFami
 domination.  This is the Hardy--Littlewood--Pólya transfer of the
 MajorizationAndAngles roadmap, lifted to sequences by monotone convergence along the
 truncations -- which is why `extend` is a supremum of truncations and nothing cleverer. -/
+-- AUDITED 2026-07-31.  **This signature is stated against the PLACEHOLDER class
+-- declared at line 177 of this file, whose only field is `True`** -- so `⟨trivial⟩`
+-- discharges it and proving it delivers nothing.  The real statement is
+-- `IsKyFanDominant` in
+-- `ForTauCeti/Analysis/OperatorIdeal/Family/KyFanDominance.lean`, a class on
+-- `SymmetricOperatorIdealFamily` whose field is the actual implication
+-- `(∀ k, A.kyFanGauge k ≤ B.kyFanGauge k) → gauge A ≤ gauge B`.  **That statement is
+-- PROVED**, as `TauCeti.isKyFanDominant_symmetricGaugeSymmetricFamily`
+-- (`ForTauCeti/Analysis/OperatorIdeal/Family/SymmetricGauge.lean:257`), for the
+-- adjoint-closed form of the construction.  Repointing this signature at the library
+-- class -- and at `symmetricGaugeSymmetricFamily`, since the real class lives on the
+-- symmetric family -- would make it deliverable; that is a roadmap decision, not a
+-- library one, so it is recorded rather than taken.
 instance isKyFanDominant_symmetricGaugeFamily (Φ : SymmetricGauge) :
     IsKyFanDominant (symmetricGaugeFamily Φ) := sorry
 
@@ -336,6 +349,14 @@ noncomputable def schattenNorm (p : ℝ)
 /-- **Milestone B4, block sums.**  The two-block comparison consumers actually use; the
 general statement is that the sequence of a block-diagonal sum is the decreasing
 rearrangement of the union of the summands' sequences. -/
+-- AUDITED 2026-07-31: **this one is already PROVED in place** -- its body is
+-- `Φ.gauge_add_le T₁ T₂`, not `sorry`.  A delivery checker keyed on declaration
+-- names reports it outstanding because no library declaration is called
+-- `gauge_blockSum_le`, which is a fact about spelling rather than about
+-- mathematics.  Nothing is owed here.  The *general* block-sum statement the
+-- docstring describes -- that the sequence of a block-diagonal sum is the
+-- decreasing rearrangement of the union of the summands' sequences -- is strictly
+-- stronger than what is stated and is genuinely open.
 theorem gauge_blockSum_le (Φ : OperatorIdealFamily ℂ) (T₁ T₂ : E →L[ℂ] F) :
     Φ.gauge (T₁ + T₂) ≤ Φ.gauge T₁ + Φ.gauge T₂ := Φ.gauge_add_le T₁ T₂
 
