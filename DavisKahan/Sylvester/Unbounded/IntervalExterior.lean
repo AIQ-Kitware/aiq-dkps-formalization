@@ -46,22 +46,18 @@ variable {E F : Type v}
 
 namespace ExactSinTheta
 
-/-- Interval/exterior separation for a Sylvester pair, over the Spectra
-spectrum.  Either orientation is permitted: one block's spectrum lies in
-`[β, α]` and the other's avoids `(β - δ, α + δ)`.
+/-- **Interval/exterior separation** for two self-adjoint closed operators, stated over the
+Spectra spectrum.  Either orientation is permitted: one operator's real spectrum sits inside
+`[β, α]` while the other avoids the `δ`-enlargement `(β - δ, α + δ)`.
 
-This is the hypothesis of the two orientation theorems below, and it lives here
-rather than with either of them because both the Sylvester capstone
-(`Sylvester/Unbounded/AllGap.lean`) and the sine-theta endpoint
-(`SinTheta/Unbounded/IntervalExterior.lean`) need it and this module is the one
-they already share.
+`RealSpectrumIntervalExteriorGap` is the `realSpectrum` spelling of the same configuration.
 
-`RealSpectrumIntervalExteriorGap` (`Sylvester/Gap.lean`) is the same
-configuration over `LinearPMap.realSpectrum`, with the exterior condition
-spelled as a containment rather than as a non-membership; it is a genuinely
-different proposition and `sylvesterIntervalExteriorGap_of_realSpectrum`
-transports it to this one. -/
-def SylvesterIntervalExteriorGap
+**Placed here rather than in either consumer.**  `Sylvester/Unbounded/AllGap.lean` and
+`SinTheta/Unbounded/IntervalExterior.lean` each carried a character-for-character copy of this
+definition (`SylvesterIntervalExteriorGap` and `SpectralIntervalExteriorGap`).  They are siblings
+— neither may import the other, since `SinTheta -> Sylvester` is the only permitted direction —
+so the single surviving definition has to live in the module they share. -/
+def SpectralIntervalExteriorGap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
     (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
     (β α δ : ℝ) : Prop :=
@@ -220,34 +216,6 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRig
     abel
   exact mem_and_gauge_le_of_boundedLeft_exteriorRight N hr0 hδ hRnorm'
     hdom hright hJnorm hEq' hC
-
-namespace ExactSinTheta
-
-/-- Interval/exterior separation for two closed self-adjoint blocks, stated over
-the Spectra spectrum: one block's spectrum lies in `[β, α]` and the other avoids
-`(β - δ, α + δ)`.  Either orientation is permitted.
-
-This is the single home for the configuration.  It lives here, below both
-`Sylvester/Unbounded/AllGap.lean` and `SinTheta/Unbounded/IntervalExterior.lean`,
-because both consume it and neither imports the other.
-
-`RealSpectrumIntervalExteriorGap` (`Sylvester/Gap.lean`) is the same
-configuration spelled through `realSpectrum`; the two spectra are identified by
-`realSpectrum_eq_spectraSpectrum`. -/
-def SpectralIntervalExteriorGap
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
-    (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
-    (β α δ : ℝ) : Prop :=
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
-        Set.Icc β α ∧
-    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B.toLinearPMap) ∨
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
-        Set.Icc β α ∧
-    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap)
-
-end ExactSinTheta
 
 end Experimental
 end DavisKahan
