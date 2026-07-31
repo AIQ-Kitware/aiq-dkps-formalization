@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-1144/1202 files reviewed · 1202 files · 279,229 lines · 118 groups
+1154/1204 files reviewed · 1204 files · 279,516 lines · 118 groups
 
 ## How to review
 
@@ -96,9 +96,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### .llm_resource_tally :: data/config
 
-*3 files, 1,436 lines — 3/3 reviewed*
+*3 files, 1,440 lines — 3/3 reviewed*
 
-- [x] `.llm_resource_tally/ledger/ledger.jsonl` — 1,383 lines · data/config
+- [x] `.llm_resource_tally/ledger/ledger.jsonl` — 1,387 lines · data/config
 - [x] `.llm_resource_tally/lifetime-totals.json` — 46 lines · data/config
 - [x] `.llm_resource_tally/settings.json` — 7 lines · data/config
 
@@ -1118,27 +1118,27 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T09 Approximation numbers
 
-*21 files, 5,253 lines — 15/21 reviewed*
+*21 files, 5,244 lines — 21/21 reviewed*
 
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Core.lean` — 687 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Core.lean` — 678 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean` — 536 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Spectral/Cutoff.lean` — 528 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMax.lean` — 503 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFan.lean` — 473 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteDimensional.lean` — 345 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteRestriction.lean` — 279 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/DiagonalSequence.lean` — 228 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/CompactHilbert.lean` — 179 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/DiagonalSequence.lean` — 228 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/CompactHilbert.lean` — 179 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxUpper.lean` — 177 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteValueFibers.lean` — 163 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteValueFibers.lean` — 163 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Examples.lean` — 146 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/SameSequence.lean` — 146 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Adjoint.lean` — 135 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Compact.lean` — 129 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteValueSeparation.lean` — 126 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteValueSeparation.lean` — 126 lines · Lean source
 - [x] `ForTauCeti/LinearAlgebra/Dimension/RankComp.lean` — 117 lines · Lean source
 - [x] `ForTauCeti/Analysis/Normed/Operator/FiniteRankCompact.lean` — 103 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/LeadingCutoff.lean` — 96 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/LeadingCutoff.lean` — 96 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/DiagonalExample.lean` — 91 lines · Lean source
 - [x] `ForTauCeti/SetTheory/Cardinal/Lift.lean` — 66 lines · Lean source
 
@@ -1233,17 +1233,17 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T15c The spectral measure of an unbounded self-adjoint operator, and Stone
 
-*15 files, 4,771 lines — 12/15 reviewed*
+*15 files, 4,771 lines — 15/15 reviewed*
 
 - [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure.lean` — 859 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/YosidaApproximation.lean` — 841 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure/Construction.lean` — 715 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/GramSpectralRank.lean` — 509 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/GramSpectralRank.lean` — 509 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralGapInverse.lean` — 312 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/GramBandPolar.lean` — 244 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/GramBandPolar.lean` — 244 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/StoneUniqueness.lean` — 240 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralFormBounds.lean` — 234 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FinitePVMSelection.lean` — 216 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FinitePVMSelection.lean` — 216 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralSupport.lean` — 157 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralGrid.lean` — 143 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralProjectionGroup.lean` — 89 lines · Lean source
@@ -1276,7 +1276,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T17 Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems
 
-*15 files, 5,252 lines — 11/15 reviewed*
+*15 files, 5,252 lines — 12/15 reviewed*
 
 - [x] `ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean` — 844 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/Complexification/Basic.lean` — 622 lines · Lean source
@@ -1285,7 +1285,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Residual/AngleEmbedding.lean` — 451 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/Vector.lean` — 439 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/SinTheta/OperatorNorm.lean` — 404 lines · Lean source
-- [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxReal.lean` — 306 lines · Lean source
+- [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxReal.lean` — 306 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/SpectralOrder/Real.lean` — 284 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Residual/Ritz.lean` — 276 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/SinTheta.lean` — 211 lines · Lean source
@@ -1473,11 +1473,11 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*160 files, 38,528 lines — 159/160 reviewed*
+*160 files, 38,529 lines — 159/160 reviewed*
 
 - [x] `dev/tauceti-signature-polish-todo.md` — 2,210 lines · documentation
 - [x] `dev/audit/FILE-CHECKLIST.md` — 1,827 lines · documentation
-- [x] `dev/LANES.md` — 1,824 lines · documentation
+- [x] `dev/LANES.md` — 1,825 lines · documentation
 - [x] `dev/davis-kahan-expert-completion-plan.md` — 1,589 lines · documentation
 - [x] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation
 - [x] `dev/tauceti/u1-linearpmap-migration.md` — 1,139 lines · documentation
@@ -1728,7 +1728,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### scripts :: tooling
 
-*63 files, 14,162 lines — 55/63 reviewed*
+*65 files, 14,453 lines — 55/65 reviewed*
 
 - [x] `scripts/lake_build_report.py` — 1,156 lines · tooling
 - [x] `scripts/check_davis_kahan_frontier.py` — 633 lines · tooling
@@ -1769,12 +1769,14 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `scripts/inventory_davis_kahan_debt.py` — 172 lines · tooling
 - [x] `scripts/tests/test_export_for_tauceti.py` — 164 lines · tooling
 - [x] `scripts/check_lane_format.py` — 162 lines · tooling
+- [ ] `scripts/tests/test_check_merge_losses.py` — 160 lines · tooling
 - [x] `scripts/tests/test_check_lane_graph_state.py` — 159 lines · tooling
 - [x] `scripts/generate_all_aggregates.py` — 152 lines · tooling
 - [x] `scripts/check_davis_kahan_1970_source_census.py` — 147 lines · tooling
 - [x] `scripts/inventory_admission_closure.py` — 143 lines · tooling
 - [x] `scripts/tests/test_check_dependency_layers.py` — 133 lines · tooling
 - [x] `scripts/check_experimental_root_status.py` — 132 lines · tooling
+- [ ] `scripts/check_merge_losses.py` — 131 lines · tooling
 - [x] `scripts/clean_orphan_build_artifacts.py` — 131 lines · tooling
 - [ ] `scripts/check_stale_build_artifacts.py` — 130 lines · tooling
 - [x] `scripts/check_davis_kahan_rebased_mathahead.py` — 128 lines · tooling
