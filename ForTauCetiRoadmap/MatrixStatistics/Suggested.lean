@@ -48,21 +48,30 @@ theorem exists_units_eq_mul_of_rank_factorization {r : ℕ} (M : Matrix m n 𝕜
       L' = L * (g : Matrix (Fin r) (Fin r) 𝕜) ∧
         R' = ((g⁻¹ : (Matrix (Fin r) (Fin r) 𝕜)ˣ) : Matrix (Fin r) (Fin r) 𝕜) * R := sorry
 
-/-- **Milestone A2, Gram factors.** Two Gram factors of the same size differ by a left
-unitary.  Open question deliberately left in the roadmap rather than settled here:
-whether the consumer wants `unitaryGroup` or a bundled `LinearIsometryEquiv`.
+end RankFactorization
+
+section GramUniqueness
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+
+/-- **Milestone A2, Gram factorization.**  Unique up to a *left unitary*, at a fixed
+factor size and with no rank hypothesis -- which is why this is not a corollary of the
+rank-factorization statement above.  The group differs (`unitaryGroup`, not the
+invertibles) because this one remembers an inner product.
+
 The quantifier side matters: the unitary acts on the `d` side.  In the
 multidimensional-scaling consumer that is exactly the rigid-motion indeterminacy of a
 recovered configuration; a unitary on the `n` side would be false and would look
-plausible.  The acting group differs from the rank-factorization statement above
-(`unitaryGroup`, not the invertibles) because this one remembers an inner product, and
-no rank hypothesis is needed -- which is why it is not a corollary of that one. -/
-theorem exists_mem_unitaryGroup_eq_mul_of_conjTranspose_mul_self
-    {𝕜 : Type*} [RCLike 𝕜] [PartialOrder 𝕜] [StarOrderedRing 𝕜] {n d : ℕ}
-    {A B : Matrix (Fin d) (Fin n) 𝕜} (h : Aᴴ * A = Bᴴ * B) :
-    ∃ U ∈ Matrix.unitaryGroup (Fin d) 𝕜, B = U * A := sorry
+plausible. -/
+theorem exists_unitary_mul_of_conjTranspose_mul_self_eq {n d : ℕ}
+    {A A' : Matrix (Fin d) (Fin n) 𝕜} (h : Aᴴ * A = A'ᴴ * A') :
+    ∃ U ∈ Matrix.unitaryGroup (Fin d) 𝕜, A' = U * A := sorry
+-- **Proved 2026-07-31** as `TauCeti.Matrix.exists_unitary_mul_of_conjTranspose_mul_self_eq` in
+-- `ForTauCeti/LinearAlgebra/Matrix/PosDef.lean`, axiom-clean and with this signature unchanged.
+-- The `sorry` stays because this file records target shapes and is not a build target.
 
-end RankFactorization
+end GramUniqueness
+
 /-! ## Part B -- Berge's maximum theorem over a fixed compact feasible set (T22) -/
 
 section Berge
@@ -265,7 +274,13 @@ with Weyl there.  In the other order the Chebyshev-plus-union-bound argument get
 twice, and the two probabilities are only coincidentally equal.
 
 **No symmetry hypothesis**, deliberately: an operator-norm bound needs none, while D1
-needs both matrices Hermitian to have eigenvalues at all. -/
+needs both matrices Hermitian to have eigenvalues at all.
+
+**Discharged 2026-07-31** as `TauCeti.measure_forall_norm_toEuclideanLin_sub_le_ge` in
+`ForTauCeti/Probability/Moments/MatrixConcentration.lean`, with this signature unchanged.
+The `sorry` below is kept because this file is the roadmap's signature record, not a
+build target; the proof is the sibling of `measure_forall_abs_sortedEigenvalues_sub_le_ge`
+over the shared entrywise event, exactly as the prose prescribes. -/
 theorem measure_forall_norm_toEuclideanLin_sub_le_ge
     (P : Measure Ω) [IsProbabilityMeasure P]
     (Shat : Ω → Matrix (Fin n) (Fin n) ℝ) (A : Matrix (Fin n) (Fin n) ℝ)

@@ -8,6 +8,8 @@ import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.LinearAlgebra.Matrix.Rank
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Analysis.InnerProductSpace.Adjoint
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import ForTauCeti.LinearAlgebra.Matrix.RankFactorization
 
 /-! # Rank-constrained positive-semidefinite factorization
@@ -95,7 +97,7 @@ destination package; declaration names, statements and proofs are unchanged.
 
 namespace TauCeti.Matrix
 
-open scoped BigOperators Matrix ComplexConjugate ComplexOrder
+open scoped BigOperators Matrix ComplexConjugate ComplexOrder InnerProductSpace
 open _root_.Matrix
 
 variable {𝕜 : Type*} [RCLike 𝕜] {n : ℕ}
@@ -208,5 +210,100 @@ theorem posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self
   refine ⟨posSemidef_conjTranspose_mul_self A, ?_⟩
   rw [rank_conjTranspose_mul_self]
   exact A.rank_le_height
+
+/-- Equal Gram matrices are exactly equal inner products between images. -/
+private theorem gram_inner {m d : ℕ} {A A' : Matrix (Fin d) (Fin m) 𝕜} (h : Aᴴ * A = A'ᴴ * A')
+    (x y : EuclideanSpace 𝕜 (Fin m)) :
+    ⟪Matrix.toEuclideanLin A x, Matrix.toEuclideanLin A y⟫_𝕜
+      = ⟪Matrix.toEuclideanLin A' x, Matrix.toEuclideanLin A' y⟫_𝕜 := by
+  have key : ∀ B : Matrix (Fin d) (Fin m) 𝕜,
+      ⟪Matrix.toEuclideanLin B x, Matrix.toEuclideanLin B y⟫_𝕜
+        = ⟪Matrix.toEuclideanLin (Bᴴ * B) x, y⟫_𝕜 := by
+    intro B
+    rw [show ((Bᴴ * B).toEuclideanLin) = (Bᴴ).toEuclideanLin ∘ₗ B.toEuclideanLin from ?_,
+      LinearMap.comp_apply, Matrix.toEuclideanLin_conjTranspose_eq_adjoint,
+      LinearMap.adjoint_inner_left]
+    · ext v i; simp [Matrix.toLpLin_apply, Matrix.mulVec_mulVec]
+  rw [key A, key A', h]
+
+/-- **Gram uniqueness: the configuration is determined up to a unitary.**  If two `d × n`
+matrices have the same Gram matrix `AᴴA`, they differ by a unitary acting on the `d` side.
+
+This is the rigid-motion indeterminacy of a recovered configuration in multidimensional scaling:
+the Gram matrix fixes all pairwise inner products, hence the configuration up to an isometry of
+the ambient `d`-dimensional space, and no more.
+
+**The quantifier side matters and the wrong side is plausible-looking.**  The unitary acts on
+`Fin d`, the ambient space; a unitary on the `n` side — permuting or mixing the points — is false.
+
+**No rank hypothesis**, which is why this is not a corollary of the rank-factorization statement:
+the factor size `d` is fixed in advance and may exceed the rank, and the group is the unitary group
+rather than the invertibles because this statement remembers the inner product.
+
+The proof is the standard one: equal Gram matrices make `A x ↦ A' x` a well-defined isometry of
+`range A` onto `range A'`, which `LinearIsometry.extend` extends to the ambient space; a linear
+isometry of a finite-dimensional space is an equivalence, and its matrix in an orthonormal basis
+is unitary. -/
+theorem exists_unitary_mul_of_conjTranspose_mul_self_eq {m d : ℕ}
+    {A A' : Matrix (Fin d) (Fin m) 𝕜} (h : Aᴴ * A = A'ᴴ * A') :
+    ∃ U ∈ Matrix.unitaryGroup (Fin d) 𝕜, A' = U * A := by
+  classical
+  set f := Matrix.toEuclideanLin A with hf
+  set f' := Matrix.toEuclideanLin A' with hf'
+  have hinner := gram_inner h
+  -- equal kernels
+  have hker : LinearMap.ker f ≤ LinearMap.ker f' := by
+    intro x hx
+    have := hinner x x
+    rw [LinearMap.mem_ker] at hx ⊢
+    rw [hx, inner_zero_left] at this
+    exact inner_self_eq_zero.mp this.symm
+  -- the induced map on the range
+  set L₀ : LinearMap.range f →ₗ[𝕜] EuclideanSpace 𝕜 (Fin d) :=
+    (LinearMap.ker f).liftQ f' hker ∘ₗ (f.quotKerEquivRange.symm : _ →ₗ[𝕜] _) with hL₀
+  have hL₀_apply : ∀ x, L₀ ⟨f x, ⟨x, rfl⟩⟩ = f' x := by
+    intro x
+    simp only [hL₀, LinearMap.comp_apply, LinearEquiv.coe_coe,
+      LinearMap.quotKerEquivRange_symm_apply_image, Submodule.mkQ_apply,
+      Submodule.liftQ_apply]
+  -- `L₀` preserves inner products, so it is an isometry of the range into the ambient space
+  have hL₀_inner : ∀ y z : LinearMap.range f, ⟪L₀ y, L₀ z⟫_𝕜 = ⟪y, z⟫_𝕜 := by
+    rintro ⟨-, x, rfl⟩ ⟨-, w, rfl⟩
+    rw [hL₀_apply, hL₀_apply, ← hinner]
+    rfl
+  set L : LinearMap.range f →ₗᵢ[𝕜] EuclideanSpace 𝕜 (Fin d) :=
+    { toLinearMap := L₀
+      norm_map' := fun y => by
+        simp only [@norm_eq_sqrt_re_inner 𝕜, hL₀_inner] } with hL
+  -- extend to a full isometry of the ambient space, which is unitary
+  set Lx : EuclideanSpace 𝕜 (Fin d) →ₗᵢ[𝕜] EuclideanSpace 𝕜 (Fin d) := L.extend with hLx
+  set Le : EuclideanSpace 𝕜 (Fin d) ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 (Fin d) :=
+    Lx.toLinearIsometryEquiv rfl with hLe
+  set b : OrthonormalBasis (Fin d) 𝕜 (EuclideanSpace 𝕜 (Fin d)) :=
+    EuclideanSpace.basisFun (Fin d) 𝕜 with hb
+  refine ⟨Le.toMatrix b.toBasis b.toBasis,
+    LinearIsometryEquiv.toMatrix_mem_unitaryGroup Le b b, ?_⟩
+  -- the extension agrees with `f ↦ f'` on the range, so the two matrices agree
+  have hmap : ∀ x, Le (Matrix.toEuclideanLin A x) = Matrix.toEuclideanLin A' x := by
+    intro x
+    have hx : Lx (f x) = L ⟨f x, ⟨x, rfl⟩⟩ :=
+      LinearIsometry.extend_apply L ⟨f x, ⟨x, rfl⟩⟩
+    have : Le (f x) = f' x := by
+      rw [hLe]; change Lx (f x) = f' x
+      rw [hx, hL]
+      exact hL₀_apply x
+    exact this
+  -- transport to matrices through `toEuclideanLin`
+  apply Matrix.toEuclideanLin.injective
+  ext x i
+  have hcomp : Matrix.toEuclideanLin (Le.toMatrix b.toBasis b.toBasis * A)
+      = (Matrix.toEuclideanLin (Le.toMatrix b.toBasis b.toBasis)) ∘ₗ Matrix.toEuclideanLin A := by
+    ext v j; simp [Matrix.toLpLin_apply, Matrix.mulVec_mulVec]
+  have hLeMat : Matrix.toEuclideanLin (Le.toMatrix b.toBasis b.toBasis)
+      = (Le : EuclideanSpace 𝕜 (Fin d) →ₗ[𝕜] EuclideanSpace 𝕜 (Fin d)) := by
+    rw [Matrix.toEuclideanLin_eq_toLin_orthonormal, hb]
+    exact Matrix.toLin_toMatrix _ _ _
+  rw [hcomp, LinearMap.comp_apply, hLeMat]
+  exact (congrArg (fun w => w i) (hmap x)).symm
 
 end TauCeti.Matrix
