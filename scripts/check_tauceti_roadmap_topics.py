@@ -71,7 +71,8 @@ TOPICS: list[tuple[str, str, list[str]]] = [
   "Analysis.Normed.Operator.FiniteRankCompact",
   A+"SpectralCutoff"]+["Analysis.OperatorIdeal.ApproximationNumber."+x for x in
   ["Basic","Adjoint","Compact","CompactHilbert","DiagonalExample","DiagonalSequence","Examples",
-   "FiniteDimensional","FiniteRestriction","FiniteValueFibers","FiniteValueSeparation","KyFan",
+   "FiniteDimensional","FiniteRestriction","FiniteValueFibers","FiniteValueSeparation",
+   "KyFan",
    "LeadingCutoff","MinMax","MinMaxUpper","SameSequence"]]),
 ("T10","Symmetric operator ideals and Schatten norms",
  ["Analysis.OperatorIdeal.Family."+x for x in ["Basic","HilbertSchmidt","KyFan","KyFanDominance","OperatorNorm","TraceClass"]]
@@ -109,10 +110,16 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  [A+"LinearPMap."+x for x in ["Resolvent","ResolventBound","ResolventOpen",
    "SelfAdjointResolvent","RealLowerBound"]]
  +["Analysis.CStarAlgebra.SelfAdjointGapInverse",A+"SeparatedIntertwiner"]),
+# `Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank` is approximation-number
+# material by subject but sits here by dependency: it imports `LinearPMap.Constructions`
+# (T15a) and `LinearPMap.SpectralFormBounds` (T15c), so filing it under T09 makes T09
+# unsubmittable -- `--check` reports it as a forward reference, which is how this was
+# caught when the module was lifted out of `DavisKahan` on 2026-07-31.
 ("T15c","The spectral measure of an unbounded self-adjoint operator, and Stone",
  [A+"LinearPMap."+x for x in ["SpectralMeasure","SpectralMeasure.Construction","SpectralGrid",
    "SpectralSupport","SpectralFormBounds","SpectralGapInverse","SpectralCutOperator",
    "SpectralProjectionGroup","SelfAdjointMaximal","StoneUniqueness","YosidaApproximation"]]
+ +["Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank"]
  +[A+"BlockLowerBound"]),
 ("T16","Sylvester equations and the Rosenblum theorem",
  [A+x for x in ["Rosenblum","HilbertSchmidtBlock","CoerciveUnit"]]
