@@ -107,6 +107,8 @@ RUNGS: list[tuple[str, str, list[str]]] = [
     # that no longer names a module.  Lane LADDER-EXT, `jon (yardrat)`, 2026-07-29.
     ("G", "Foundations completion — the rest of topics T01-T10", [
         "Analysis.Convex.Majorization",
+        "Analysis.OperatorIdeal.ApproximationNumber.CompactHilbert",
+        "Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample",
         "Analysis.InnerProductSpace.AlignedBasis",
         "Analysis.InnerProductSpace.AngleGeometry",
         "Analysis.InnerProductSpace.Basic",
@@ -214,6 +216,7 @@ RUNGS: list[tuple[str, str, list[str]]] = [
         "Analysis.InnerProductSpace.LinearPMap.Closed",
         "Analysis.InnerProductSpace.LinearPMap.Constructions",
         "Analysis.InnerProductSpace.LinearPMap.GraphCore",
+        "Analysis.InnerProductSpace.LinearPMap.SubmoduleAdjoint",
         "Analysis.InnerProductSpace.LinearPMap.Sylvester",
         "Analysis.InnerProductSpace.QuadraticFormBounds",
         "Analysis.InnerProductSpace.SpectralOrder.Complex",
