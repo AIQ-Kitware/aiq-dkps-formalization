@@ -139,7 +139,13 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # `SpectralOrder.Complex` in T15a -- but it imports `BoundedOperator.Projector`, which is here,
  # so filing it by subject makes T15a unsubmittable. Same lesson as
  # `ApproximationNumber.GramSpectralRank`: file by dependency, and `--check` is what says so.
- +[A+"SpectralOrder.Real",A+"Complexification.Basic",A+"Complexification.FunctionalCalculus"]
+ # `Complexification.{Basic,FunctionalCalculus}` are the real-complexification transport layer,
+ # lifted out of `DavisKahan` on 2026-07-31, and they sit here because `Basic` imports
+ # `SpectralOrder.Real`.  `ApproximationNumber.MinMaxReal` is approximation-number material and
+ # belongs with T09 by subject, but it is proved *by complexification* and so imports both of
+ # them; filing it under T09 would make T09 unsubmittable.  Third time, same rule.
+ +[A+"SpectralOrder.Real",A+"Complexification.Basic",A+"Complexification.FunctionalCalculus",
+   "Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal"]
  +[A+"ReducedExtension"]),
 ("T18","The Yu-Wang-Samworth statistical variant",
  [A+"YuWangSamworth."+x for x in ["Residual","SingularSubspace","Statistics"]]),

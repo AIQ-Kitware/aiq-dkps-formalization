@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking, Claude Opus 5
 -/
 
-import DavisKahan.OperatorIdeal.ApproximationNumbers.Real.Threshold
+import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
 
 /-!
 # Strong cutoffs and finite Ky Fan gauges over real Hilbert spaces
@@ -28,7 +29,7 @@ it is `Threshold.lean`'s transport through the complexification, which is a genu
 different proof and stays.  It is now isolated as
 `ContinuousLinearMap.HasMinMaxLowerBound`, everything above it is stated once against that
 predicate, and this module is what remains: three instantiations at
-`hasMinMaxLowerBound_real`.
+`TauCeti.ApproximationNumber.hasMinMaxLowerBound_real`.
 -/
 
 open scoped InnerProductSpace Topology
@@ -59,7 +60,7 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_real
       (fun i => approximationSingularValue n (K ∘L P i))
       l (𝓝 (approximationSingularValue n K)) :=
   approximationSingularValue_comp_strongProjection_tendsto_of_minMax
-    hasMinMaxLowerBound_real hPproj hP n K
+    TauCeti.ApproximationNumber.hasMinMaxLowerBound_real hPproj hP n K
 
 /-- Real-Hilbert-space cutoff convergence for finite Ky Fan gauges. -/
 theorem kyFanApproximationGauge_comp_strongProjection_tendsto_real
@@ -71,15 +72,15 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto_real
       (fun i => kyFanApproximationGauge k (K ∘L P i))
       l (𝓝 (kyFanApproximationGauge k K)) :=
   kyFanApproximationGauge_comp_strongProjection_tendsto_of_minMax
-    hasMinMaxLowerBound_real hPproj hP k K
+    TauCeti.ApproximationNumber.hasMinMaxLowerBound_real hPproj hP k K
 
 /-- **The real infinite-dimensional Ky Fan triangle inequality.**  No compactness and no
-finite-dimensionality; the only real-specific input is `hasMinMaxLowerBound_real`. -/
+finite-dimensionality; the only real-specific input is `TauCeti.ApproximationNumber.hasMinMaxLowerBound_real`. -/
 theorem kyFanApproximationGauge_add_le_real
     (k : ℕ) (K L : E →L[ℝ] F) :
     kyFanApproximationGauge k (K + L) ≤
       kyFanApproximationGauge k K + kyFanApproximationGauge k L :=
-  kyFanApproximationGauge_add_le_of_minMax hasMinMaxLowerBound_real k K L
+  kyFanApproximationGauge_add_le_of_minMax TauCeti.ApproximationNumber.hasMinMaxLowerBound_real k K L
 
 end
 

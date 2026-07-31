@@ -289,6 +289,7 @@ RUNGS: list[tuple[str, str, list[str]]] = [
         "Analysis.InnerProductSpace.BoundedOperator.Projector",
         "Analysis.InnerProductSpace.Complexification.Basic",
         "Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
+        "Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal",
         "Analysis.InnerProductSpace.SpectralOrder.Real",
         "Analysis.InnerProductSpace.BoundedOperator.SinTheta",
         "Analysis.InnerProductSpace.DoubleAngle.Vector",
