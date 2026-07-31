@@ -339,9 +339,9 @@ theorem sharp_doubleAngleTangentOperator_kyFan
     {X : E0 →L[ℂ] E1} (hX : SolvesRiccati B X)
     (hcontractive : ‖X‖ < 1) (k : ℕ) :
     d * kyFanApproximationGauge k
-        (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ≤
+        (TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive) ≤
       2 * kyFanApproximationGauge k B.B01 := by
-  rw [TauCeti.FinishTanTwoTheta.kyFanApproximationGauge_doubleAngleTangentOperator]
+  rw [TauCeti.DavisKahan.kyFanApproximationGauge_doubleAngleTangentOperator]
   exact sharp_transformed_prefix B hd0 hA0 hA1 hX hcontractive k
 
 end CompleteSpaces
