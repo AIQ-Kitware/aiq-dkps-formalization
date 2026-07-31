@@ -150,6 +150,25 @@ def cmd_dup(files, args) -> int:
     groups = [v for v in buckets.values()
               if len({f for f, _, _, _ in v}) > 1]
     groups.sort(key=len, reverse=True)
+
+    # A `ForTauCetiRoadmap/**/Suggested.lean` statement matching its `ForTauCeti`
+    # implementation is the roadmap *working*, not drift: those files say so
+    # themselves -- "Bodies are placeholders; the statements are the content",
+    # written with "names that follow the staged ForTauCeti implementation".
+    #
+    # Reported separately rather than dropped, because the match can also go stale
+    # in the other direction and someone should be able to see the pairs.  It is
+    # split out because on 2026-07-31 a `--dup --scope ForTauCeti` run was 22
+    # mirrors and 1 real duplicate, and a report that is 96% expected is a report
+    # nobody finishes reading -- the real one had been sitting in it unnoticed.
+    def is_mirror(g) -> bool:
+        files = {f for f, _, _, _ in g}
+        road = {f for f in files if f.startswith("ForTauCetiRoadmap/")}
+        return bool(road) and bool(files - road)
+
+    mirrors = [g for g in groups if is_mirror(g)]
+    groups = [g for g in groups if not is_mirror(g)]
+
     what = "definition BODIES" if args.dupdef else "theorem STATEMENTS"
     print(f"near-duplicate {what} spanning >1 file: {len(groups)}")
     print(f"declarations involved: {sum(len(g) for g in groups)}\n")
@@ -159,6 +178,16 @@ def cmd_dup(files, args) -> int:
         for rel, line, name, _ in sorted(g):
             print(f"      {rel}:{line}  {name}")
         print()
+    if mirrors:
+        print(f"roadmap mirrors (expected -- a Suggested.lean signature matching its "
+              f"implementation): {len(mirrors)}")
+        if args.mirrors:
+            for g in mirrors:
+                for rel, line, name, _ in sorted(g):
+                    print(f"      {rel}:{line}  {name}")
+                print()
+        else:
+            print("  pass --mirrors to list them")
     return 0
 
 
@@ -307,6 +336,8 @@ def cmd_defn(files, args) -> int:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--dup", action="store_true")
+    ap.add_argument("--mirrors", action="store_true",
+                    help="with --dup: list the roadmap-mirror groups instead of counting them")
     ap.add_argument("--dupdef", action="store_true",
                     help="duplicate DEFINITION bodies (type alone is not identity)")
     ap.add_argument("--big", action="store_true")
