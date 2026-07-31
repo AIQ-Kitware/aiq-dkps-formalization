@@ -172,6 +172,44 @@ def proofs_in(path: pathlib.Path) -> list[Proof]:
     return out
 
 
+#: A local binder introduced by the proof itself.
+BINDER = re.compile(r"^\s*(?:have|set|let|obtain)\s+([\w'⟨⟩,\s]+?)\s*[:←:=]")
+
+#: An identifier occurrence, loose enough to catch Lean's usual naming.
+IDENT = re.compile(r"[A-Za-z_][\w'!?]*")
+
+
+def extraction_cost(proof: "Proof") -> list[int]:
+    """For each multi-line `have`, how many *earlier local names* it references.
+
+    **This is the number that decides whether a long proof refactors**, and it is
+    not the scaffolding fraction.  A `have` is liftable to a standalone lemma only
+    if the arguments it needs can be written down; every earlier local name it
+    mentions is one more argument the lifted lemma must take.  A proof can be 2%
+    scaffolding -- ordinary tactic steps throughout -- and still resist extraction
+    because each step names five earlier ones.
+    """
+    body = [line for line in proof.body if line.strip()]
+    known: set[str] = set()
+    costs: list[int] = []
+    index = 0
+    while index < len(body):
+        match = BINDER.match(body[index])
+        if not match:
+            index += 1
+            continue
+        indent = len(body[index]) - len(body[index].lstrip())
+        end = index + 1
+        while end < len(body) and (len(body[end]) - len(body[end].lstrip())) > indent:
+            end += 1
+        block = " ".join(body[index:end])
+        if end - index > 1:
+            costs.append(len({w for w in IDENT.findall(block) if w in known}))
+        known.update(w for w in IDENT.findall(match.group(1)))
+        index = end
+    return costs
+
+
 def census(library: str) -> list[Proof]:
     found: list[Proof] = []
     for path in sorted((ROOT / library).rglob("*.lean")):
@@ -187,6 +225,10 @@ def main() -> int:
                         help="library to scan (repeatable; default both)")
     parser.add_argument("--min", type=int, default=50,
                         help="only proofs with at least this many body lines")
+    parser.add_argument("--extractable", action="store_true",
+                        help="report the extraction cost -- how many earlier local names "
+                             "each multi-line `have` references, which is what decides "
+                             "whether a long proof refactors")
     parser.add_argument("--list", action="store_true",
                         help="name every proof above --min, longest first")
     parser.add_argument("--scaffold-defn", choices=sorted(SCAFFOLD_DEFNS),
@@ -217,6 +259,20 @@ def main() -> int:
                          key=lambda p: -p.length)
         if over150:
             print(f"  over 150 body lines  {len(over150):3d}   worst {over150[0].length}")
+        if args.extractable:
+            import statistics
+            print("    proof                                            steps  median  max")
+            for proof in sorted(long_proofs, key=lambda p: -p.length)[:12]:
+                costs = extraction_cost(proof)
+                if not costs:
+                    continue
+                print(f"    {proof.name[:46]:<46} {len(costs):5d} "
+                      f"{statistics.median(costs):7.1f} {max(costs):4d}")
+            allc = [c for proof in long_proofs for c in extraction_cost(proof)]
+            if allc:
+                print(f"\n    {len(allc)} multi-line steps; median {statistics.median(allc):.1f} "
+                      f"earlier local names referenced, max {max(allc)}")
+                print("    A step referencing k earlier locals needs k extra arguments to lift.")
         if args.list:
             for proof in sorted(long_proofs, key=lambda p: -p.length):
                 rel = proof.path.relative_to(ROOT)

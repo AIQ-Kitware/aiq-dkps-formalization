@@ -117,6 +117,61 @@ class LengthTest(unittest.TestCase):
         self.assertNotIn("Experimental", str(census.ROOT))
 
 
+NESTED = """\
+theorem chained (h : True) : True := by
+  have free : True := by
+    have standalone := trivial
+    exact standalone
+  have a : True := h
+  have b : True := by
+    have inner := a
+    exact inner
+  have c : True := by
+    have inner2 := a
+    have inner3 := b
+    exact inner2
+  exact h
+"""
+
+
+class ExtractionCostTest(unittest.TestCase):
+    """The metric that decides refactorability, as against the scaffolding split.
+
+    A step referencing `k` earlier local names needs `k` extra arguments to lift
+    into a standalone lemma.  A proof can be 2% scaffolding and still resist
+    extraction because every step names several earlier ones -- which is the
+    finding this metric exists to make measurable.
+    """
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.dir = pathlib.Path(self._tmp.name)
+        census.SCAFFOLD = re.compile(census.SCAFFOLD_DEFNS["published"])
+
+    def tearDown(self) -> None:
+        self._tmp.cleanup()
+
+    def proof(self, body: str, name: str):
+        path = self.dir / "F.lean"
+        path.write_text(body, encoding="utf-8")
+        return {p.name: p for p in census.proofs_in(path)}[name]
+
+    def test_a_step_using_no_earlier_name_costs_nothing(self) -> None:
+        """The rare free lunch: these are the ones that actually lift."""
+        costs = census.extraction_cost(self.proof(NESTED, "chained"))
+        self.assertIn(0, costs)
+
+    def test_a_step_using_earlier_names_costs_them(self) -> None:
+        costs = census.extraction_cost(self.proof(NESTED, "chained"))
+        self.assertTrue(any(c >= 1 for c in costs),
+                        "no step was charged for the earlier `have`s it uses")
+
+    def test_one_line_steps_are_not_counted(self) -> None:
+        """Only multi-line steps are extraction candidates at all."""
+        single = "theorem t (h : True) : True := by\n  have a : True := h\n  exact a\n"
+        self.assertEqual(census.extraction_cost(self.proof(single, "t")), [])
+
+
 class RepositoryTest(unittest.TestCase):
     def setUp(self) -> None:
         census.SCAFFOLD = re.compile(census.SCAFFOLD_DEFNS["published"])
@@ -125,6 +180,19 @@ class RepositoryTest(unittest.TestCase):
         for library in ("ForTauCeti", "DavisKahan"):
             found = census.census(library)
             self.assertGreater(len(found), 100, library)
+
+    def test_the_long_proofs_are_not_cheaply_extractable(self) -> None:
+        """Pins the DK-LONGPROOF finding: low scaffolding does not mean liftable.
+
+        If this ever drops to a median of 0, the long proofs really have become
+        chains of independent steps and the campaign should be re-sized upward.
+        """
+        import statistics
+        costs = [c for p in census.census("DavisKahan") if p.length > 150
+                 for c in census.extraction_cost(p)]
+        self.assertGreater(len(costs), 100)
+        self.assertGreater(statistics.median(costs), 0,
+                           "long-proof steps no longer reference earlier locals -- re-size")
 
     def test_davis_kahan_has_the_long_proofs(self) -> None:
         """The finding `{lane:DK-LONGPROOF}` was posted on, pinned so a later
