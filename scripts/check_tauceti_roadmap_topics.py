@@ -76,6 +76,10 @@ TOPICS: list[tuple[str, str, list[str]]] = [
    "LeadingCutoff","MinMax","MinMaxUpper","SameSequence"]]),
 ("T10","Symmetric operator ideals and Schatten norms",
  ["Analysis.OperatorIdeal.Family."+x for x in ["Basic","HilbertSchmidt","KyFan","KyFanDominance","OperatorNorm","Schatten","TraceClass"]]
+ # `ApproximationNumber.EnergyComparison` is approximation-number material by subject and
+ # would sit in T09, but it imports `Family.HilbertSchmidt` (here), so filing it there makes
+ # T09 unsubmittable.  Fourth module to hit this; file by dependency and let `--check` say so.
+ +["Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison"]
  +[A+"SchattenNorm",A+"HilbertSchmidtEnergy","Analysis.Normed.FiniteLpGauge","Topology.ENNRealLiminf"]),
 ("T11","Hilbert-Schmidt operators",
  [A+"HilbertSchmidt"+x for x in ["Lp","Space","Conjugation","Pythagoras"]]),
