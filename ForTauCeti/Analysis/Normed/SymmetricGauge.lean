@@ -499,33 +499,42 @@ theorem ne_top_of_forall_sum_le {a b : ℕ → ℝ≥0∞}
   obtain ⟨m, _, hm⟩ := ENNReal.sum_eq_top.mp hle
   exact hbtop m hm
 
-/-! ### The remaining step of `extend_le_extend_of_forall_sum_le`
+/-- Prefix sums over `Fin N` restricted to indices below `k` agree with prefix
+sums over `Finset.range k`, when `k ≤ N`.
 
-The roadmap target (`ForTauCetiRoadmap/OperatorIdeals/Suggested.lean`) is
+`FiniteVector.prefixSum` filters `Finset.univ : Finset (Fin N)`, while the
+sequence hypotheses of the majorization argument are stated over
+`Finset.range k`.  Reconciling the two index sets is the only friction in
+transporting one to the other. -/
+theorem sum_filter_fin_eq_sum_range {N k : ℕ} (hk : k ≤ N) (g : ℕ → ℝ) :
+    ∑ i ∈ Finset.univ.filter (fun i : Fin N => (i : ℕ) < k), g (i : ℕ)
+      = ∑ n ∈ Finset.range k, g n := by
+  classical
+  rw [Finset.sum_filter]
+  rw [Fin.sum_univ_eq_sum_range (fun n => if n < k then g n else 0) N]
+  rw [← Finset.sum_filter]
+  congr 1
+  ext n
+  simp only [Finset.mem_filter, Finset.mem_range]
+  exact ⟨fun h => h.2, fun h => ⟨lt_of_lt_of_le h hk, h⟩⟩
 
-```
-theorem extend_le_extend_of_forall_sum_le (Φ : SymmetricGauge)
-    {a b : ℕ → ℝ≥0∞} (ha : Antitone a) (hb : Antitone b)
-    (h : ∀ k, ∑ n ∈ Finset.range k, a n ≤ ∑ n ∈ Finset.range k, b n) :
-    Φ.extend a ≤ Φ.extend b
-```
+/-- The `Fin N` view of a finite-valued sequence: coordinates as reals. -/
+noncomputable def finView (a : ℕ → ℝ≥0∞) (N : ℕ) (i : Fin N) : ℝ :=
+  ((a (i : ℕ)).toNNReal : ℝ)
 
-and it splits into three cases, of which **two are proved above**:
+/-- `finView` is nonnegative. -/
+theorem finView_nonneg (a : ℕ → ℝ≥0∞) (N : ℕ) (i : Fin N) : 0 ≤ finView a N i :=
+  (a (i : ℕ)).toNNReal.coe_nonneg
 
-* if some `b n = ⊤` then `extend_eq_top_of_eq_top` makes the right side `⊤`;
-* otherwise `ne_top_of_forall_sum_le` shows `a` is finite everywhere too;
-* **remaining:** with both finite, bound each `c` dominated by `a` using
-  `truncate a _ N` for `N` past `c`'s support -- `c ≤ truncate a _ N` termwise
-  gives `Φ c ≤ Φ (truncate a _ N)` by `mono`, and `truncate a _ N` is antitone
-  because `a` is -- then apply `le_of_prefixSum_le` against `truncate b _ N` and
-  finish with `le_extend_of_dominated` and `truncate_le`.
+/-- `finView` inherits antitonicity from the sequence.
 
-The one piece of friction in that last step, recorded so it is not rediscovered:
-`le_of_prefixSum_le` states its hypothesis with
-`∑ i ∈ Finset.univ.filter (fun i : Fin N => (i : ℕ) < k)`, whereas the sequence
-hypothesis here is over `Finset.range k`, so the two prefix-sum shapes must be
-reconciled before the descent can be applied.
--/
+Needs finiteness because `ENNReal.toNNReal` collapses `⊤` to `0`, which would
+break monotonicity exactly at an infinite coordinate. -/
+theorem finView_antitone {a : ℕ → ℝ≥0∞} (ha : Antitone a) (hfin : ∀ n, a n ≠ ⊤)
+    (N : ℕ) : Antitone (finView a N) := by
+  intro i j hij
+  simp only [finView]
+  exact_mod_cast ENNReal.toNNReal_mono (hfin _) (ha hij)
 
 end SymmetricGauge
 
