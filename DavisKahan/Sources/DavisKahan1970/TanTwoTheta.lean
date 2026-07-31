@@ -78,6 +78,14 @@ vectors, claiming every unitary-invariant norm.
    `GraphSubspace`/`Ideals.Symmetric`/`Sylvester.Resolvent` modules, which do
    not compile at present; that repair belongs to the Section 8 ownership
    area and is deliberately not attempted here.
+3. The **unrestricted** sharp infinite-dimensional ideal theorem is not
+   exported, and this is a refutation rather than a gap: the approximate
+   graph-domain singular-family route used by the retired completion
+   workspace is invalid, and the genuine unbounded Sylvester equation has a
+   nonzero commutator defect in general (`doubleAngleTangent_sylvesterEquation`
+   carries that defect explicitly).  Excluding the unsupported statement is
+   part of completing the surface correctly, not a weakening of anything
+   proved above.
 -/
 
 namespace TauCeti
