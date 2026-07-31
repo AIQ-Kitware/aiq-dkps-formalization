@@ -151,81 +151,45 @@ theorem norm_pair_sub_pair_le {f g : spectrum ℂ a → ℂ}
     (hdom : ∀ i : Fin 4, diagMeasure ha (pairVectors ψ ξ i) ≤ ν)
     (hf : Integrable f ν) (hg : Integrable g ν) :
     ‖pair ha f ψ ξ - pair ha g ψ ξ‖ ≤ ∫ x, ‖f x - g x‖ ∂ν := by
-  have key : ∀ i : Fin 4,
-      ‖(∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ i)))
-        - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ i)))‖
-        ≤ ∫ x, ‖f x - g x‖ ∂ν := by
+  set I := ∫ x, ‖f x - g x‖ ∂ν with hI
+  have hInn : 0 ≤ I := integral_nonneg fun _ => norm_nonneg _
+  -- the four polarization coordinates.  Naming them is the whole point: every step below
+  -- is a triangle inequality on `d 0 + i · d 1 - d 2 - i · d 3`, which is unreadable while
+  -- each `d i` is spelled out as a difference of two integrals against a diagonal measure.
+  set d : Fin 4 → ℂ := fun i =>
+    (∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ i)))
+      - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ i))) with hd
+  have key : ∀ i : Fin 4, ‖d i‖ ≤ I := by
     intro i
     set μ := diagMeasure ha (pairVectors ψ ξ i) with hμ
     have hfμ : Integrable f μ := hf.mono_measure (hdom i)
     have hgμ : Integrable g μ := hg.mono_measure (hdom i)
-    calc ‖(∫ x, f x ∂μ) - (∫ x, g x ∂μ)‖
-        = ‖∫ x, (f x - g x) ∂μ‖ := by rw [integral_sub hfμ hgμ]
+    calc ‖d i‖ = ‖∫ x, (f x - g x) ∂μ‖ := by rw [hd, integral_sub hfμ hgμ]
       _ ≤ ∫ x, ‖f x - g x‖ ∂μ := norm_integral_le_integral_norm _
-      _ ≤ ∫ x, ‖f x - g x‖ ∂ν :=
+      _ ≤ I :=
           integral_mono_measure (hdom i) (Filter.Eventually.of_forall fun _ => norm_nonneg _)
             (hf.sub hg).norm
   have hexp : pair ha f ψ ξ - pair ha g ψ ξ =
-      (1 / 4 : ℂ) *
-        (((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 0)))
-            - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 0))))
-          + Complex.I * ((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 1)))
-            - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 1))))
-          - ((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 2)))
-            - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 2))))
-          - Complex.I * ((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 3)))
-            - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 3))))) := by
-    simp only [pair, pairVectors, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+      (1 / 4 : ℂ) * (d 0 + Complex.I * d 1 - d 2 - Complex.I * d 3) := by
+    simp only [hd, pair, pairVectors, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
       Matrix.cons_val_two, Matrix.tail_cons, Matrix.cons_val_three]
     ring
-  set I := ∫ x, ‖f x - g x‖ ∂ν with hI
-  have hInn : 0 ≤ I := integral_nonneg fun _ => norm_nonneg _
-  rw [hexp]
-  rw [norm_mul]
-  have hquarter : ‖(1 / 4 : ℂ)‖ = 1 / 4 := by norm_num
-  rw [hquarter]
-  have hsum : ‖((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 0)))
-            - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 0))))
-          + Complex.I * ((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 1)))
-            - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 1))))
-          - ((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 2)))
-            - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 2))))
-          - Complex.I * ((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 3)))
-            - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 3))))‖ ≤ 4 * I := by
+  have hsum : ‖d 0 + Complex.I * d 1 - d 2 - Complex.I * d 3‖ ≤ 4 * I := by
     have h0 := key 0
-    have h1 := key 1
     have h2 := key 2
-    have h3 := key 3
-    have e1 : ‖Complex.I * ((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 1)))
-        - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 1))))‖ ≤ I := by
-      rw [norm_mul, Complex.norm_I, one_mul]; exact h1
-    have e3 : ‖Complex.I * ((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 3)))
-        - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 3))))‖ ≤ I := by
-      rw [norm_mul, Complex.norm_I, one_mul]; exact h3
-    calc _ ≤ ‖((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 0)))
-              - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 0))))
-            + Complex.I * ((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 1)))
-              - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 1))))
-            - ((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 2)))
-              - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 2))))‖
-          + ‖Complex.I * ((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 3)))
-              - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 3))))‖ := norm_sub_le _ _
-      _ ≤ (‖((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 0)))
-              - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 0))))
-            + Complex.I * ((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 1)))
-              - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 1))))‖
-          + ‖((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 2)))
-              - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 2))))‖) + I := by
-          gcongr
-          exact norm_sub_le _ _
-      _ ≤ ((‖((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 0)))
-              - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 0))))‖
-            + ‖Complex.I * ((∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ 1)))
-              - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ 1))))‖) + I) + I := by
-          gcongr
-          exact norm_add_le _ _
+    have e1 : ‖Complex.I * d 1‖ ≤ I := by
+      rw [norm_mul, Complex.norm_I, one_mul]; exact key 1
+    have e3 : ‖Complex.I * d 3‖ ≤ I := by
+      rw [norm_mul, Complex.norm_I, one_mul]; exact key 3
+    calc ‖d 0 + Complex.I * d 1 - d 2 - Complex.I * d 3‖
+        ≤ ‖d 0 + Complex.I * d 1 - d 2‖ + ‖Complex.I * d 3‖ := norm_sub_le _ _
+      _ ≤ (‖d 0 + Complex.I * d 1‖ + ‖d 2‖) + I := by gcongr; exact norm_sub_le _ _
+      _ ≤ ((‖d 0‖ + ‖Complex.I * d 1‖) + I) + I := by gcongr; exact norm_add_le _ _
       _ ≤ ((I + I) + I) + I := by gcongr
       _ = 4 * I := by ring
+  rw [hexp, norm_mul]
+  have hquarter : ‖(1 / 4 : ℂ)‖ = 1 / 4 := by norm_num
+  rw [hquarter]
   calc 1 / 4 * _ ≤ 1 / 4 * (4 * I) := by gcongr
     _ = I := by ring
 
