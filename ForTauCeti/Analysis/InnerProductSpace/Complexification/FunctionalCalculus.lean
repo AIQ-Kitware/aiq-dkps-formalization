@@ -17,19 +17,45 @@ Hilbert-space complexification.  A conjugation-fixed complex operator descends
 to a bounded real operator, and real continuous functional calculus preserves
 the fixed-point subalgebra.  These are the reusable seams needed for real
 infinite-dimensional polar factorization.
+
+## Main definitions and results
+
+* `TauCeti.RealComplexification.canonicalConjugation`: the canonical conjugation of a real
+  complexification, an antilinear isometric involution;
+* `TauCeti.RealComplexification.conjugateOperator`: the induced involution on bounded complex
+  operators, together with its ring, norm and adjoint laws;
+* `TauCeti.RealComplexification.conjugateOperator_cfc_eq`: continuous functional calculus
+  commutes with the conjugation, so the fixed-point subalgebra is preserved;
+* `TauCeti.RealComplexification.fixed_operator_maps_real_to_real`: a conjugation-fixed operator
+  descends to the real subspace;
+* `TauCeti.RealComplexification.complexify_adjoint` and `complexify_gram`: complexification
+  intertwines adjoints and Gram operators.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `DavisKahan/SpectralTheory/Complexification/FunctionalCalculus.lean`.
+* Extraction class: **moved**, not restated.  Its only non-Mathlib import is
+  `Complexification/Basic.lean`, which is already in `ForTauCeti`, so it depended on nothing
+  in the paper library.
+* The enclosing namespace was `TauCeti.DavisKahan.Experimental.ExactSinTheta.`
+  `RealComplexificationFunctionalCalculus`: two paper names, a staging word, and a repetition
+  of the parent.  It is now simply `TauCeti.RealComplexification`, the namespace of the
+  `complexify` it is about — which is where `complexify_adjoint` and `complexify_gram` belonged
+  all along.  The `scoped instance` moved with it, so consumers now write
+  `open scoped TauCeti.RealComplexification`.
+* Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking; Copyright (c) 2026
+  Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none**.
 -/
 
 open scoped InnerProductSpace ComplexConjugate Topology
 
 namespace TauCeti
-namespace DavisKahan
-namespace Experimental
-namespace ExactSinTheta
-namespace RealComplexificationFunctionalCalculus
+namespace RealComplexification
 
 open Module (finrank)
 open Filter
-open TauCeti.RealComplexification
 
 noncomputable section
 
@@ -47,7 +73,7 @@ what this was until 2026-07-30, and it forced three other modules to reinstall a
 declaration of the same instance; lemmas stated against one copy then had to be proved defeq
 against the other, which is what timed out `isDefEq` when `Threshold.lean` first tried to import
 this module's lemmas.  A scope gives every consumer the *same* declaration, so there is nothing
-to prove.  Open it with `open scoped RealComplexificationFunctionalCalculus`. -/
+to prove.  Open it with `open scoped RealComplexification`. -/
 noncomputable scoped instance complexOperatorRealAlgebra :
     Algebra ℝ (RealComplexification E →L[ℂ] RealComplexification E) :=
   Algebra.complexToReal
@@ -210,7 +236,8 @@ omit [CompleteSpace E] in
 /-- Conjugation is linear over `ℝ`.  Contrast `conjugateOperator_complex_smul`, where a
 complex scalar picks up a conjugate. -/
 @[simp]
-theorem conjugateOperator_real_smul (r : ℝ) (A : RealComplexification E →L[ℂ] RealComplexification E) :
+theorem conjugateOperator_real_smul (r : ℝ)
+    (A : RealComplexification E →L[ℂ] RealComplexification E) :
     conjugateOperator (r • A) = r • conjugateOperator A := by
   apply ContinuousLinearMap.ext
   intro z
@@ -309,7 +336,8 @@ noncomputable def conjugateOperatorHom :
 /-- The conjugation star-algebra map is continuous, being an isometry. -/
 theorem continuous_conjugateOperatorHom :
     Continuous (conjugateOperatorHom :
-      (RealComplexification E →L[ℂ] RealComplexification E) → (RealComplexification E →L[ℂ] RealComplexification E)) :=
+      (RealComplexification E →L[ℂ] RealComplexification E) →
+        (RealComplexification E →L[ℂ] RealComplexification E)) :=
   isometry_conjugateOperator.continuous
 
 omit [CompleteSpace E] in
@@ -351,9 +379,11 @@ omit [CompleteSpace E] in
 /-- A conjugation-fixed operator maps the real copy into itself: the imaginary coordinate
 of `A (ofReal x)` vanishes. -/
 theorem fixed_operator_maps_real_to_real
-    {A : RealComplexification E →L[ℂ] RealComplexification E} (hfix : conjugateOperator A = A) (x : E) :
+    {A : RealComplexification E →L[ℂ] RealComplexification E}
+    (hfix : conjugateOperator A = A) (x : E) :
     im (A (ofReal x)) = 0 := by
-  have hpoint := congrArg (fun B : RealComplexification E →L[ℂ] RealComplexification E => B (ofReal x)) hfix
+  have hpoint :=
+    congrArg (fun B : RealComplexification E →L[ℂ] RealComplexification E => B (ofReal x)) hfix
   have hcoord := congrArg im hpoint
   have hneg : -im (A (ofReal x)) = im (A (ofReal x)) := by
     simpa only [conjugateOperator_apply, conjugation_ofReal, im_conj] using hcoord
@@ -369,7 +399,8 @@ theorem fixed_operator_maps_real_to_real
 omit [CompleteSpace E] in
 /-- On the real copy, a conjugation-fixed operator is determined by its real restriction. -/
 theorem fixed_operator_on_ofReal
-    {A : RealComplexification E →L[ℂ] RealComplexification E} (hfix : conjugateOperator A = A) (x : E) :
+    {A : RealComplexification E →L[ℂ] RealComplexification E}
+    (hfix : conjugateOperator A = A) (x : E) :
     A (ofReal x) = ofReal (realPartOperator A x) := by
   apply RealComplexification.ext
   · simp
@@ -418,8 +449,5 @@ theorem complexify_gram (T : E →L[ℝ] F) :
 
 end
 
-end RealComplexificationFunctionalCalculus
-end ExactSinTheta
-end Experimental
-end DavisKahan
+end RealComplexification
 end TauCeti
