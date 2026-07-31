@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
 
+import ForTauCeti.Analysis.InnerProductSpace.SpectralCutoff
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
 import ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
@@ -92,63 +93,6 @@ adjoint and the Gram operator all live in
 opened above.  This module used to carry a `private` copy of all thirty of them; they were
 identical, so the copy is gone. -/
 
-/-! ## Continuous high-energy cutoff -/
-
-/-- A continuous cutoff which vanishes at energies at most `u²`, tends to one
-at high energy, and gives a tail operator bounded by `u`.
-
-Named `tailCutoff` rather than `spectralCutoff` because
-`ContinuousLinearMap.spectralCutoff` already exists in this library and is a
-different object — an *operator*, not this scalar profile. -/
-private def tailCutoff (u x : ℝ) : ℝ :=
-  1 - u ^ 2 / max x (u ^ 2)
-
-private theorem continuous_spectralCutoff (u : ℝ) (hu : 0 < u) :
-    Continuous (tailCutoff u) := by
-  have hden : ∀ x : ℝ, max x (u ^ 2) ≠ 0 := by
-    intro x hx
-    have hle : u ^ 2 ≤ max x (u ^ 2) := le_max_right _ _
-    have hu2 : 0 < u ^ 2 := sq_pos_of_pos hu
-    rw [hx] at hle
-    linarith
-  exact continuous_const.sub
-    (continuous_const.div (continuous_id.max continuous_const) hden)
-
-private theorem spectralCutoff_eq_zero_of_le
-    {u x : ℝ} (hu : 0 < u) (hx : x ≤ u ^ 2) :
-    tailCutoff u x = 0 := by
-  rw [tailCutoff, max_eq_right hx]
-  have hu2 : u ^ 2 ≠ 0 := pow_ne_zero 2 hu.ne'
-  rw [div_self hu2, sub_self]
-
-private theorem spectralCutoff_tail_bound
-    {u x : ℝ} (hu : 0 < u) (_hx0 : 0 ≤ x) :
-    x * (1 - tailCutoff u x) ^ 2 ≤ u ^ 2 := by
-  by_cases hx : x ≤ u ^ 2
-  · rw [spectralCutoff_eq_zero_of_le hu hx]
-    simpa using hx
-  · have hux : u ^ 2 < x := lt_of_not_ge hx
-    have hxpos : 0 < x := (sq_pos_of_pos hu).trans hux
-    rw [tailCutoff, max_eq_left hux.le]
-    have hid : 1 - (1 - u ^ 2 / x) = u ^ 2 / x := by ring
-    rw [hid]
-    have hmul : u ^ 4 ≤ u ^ 2 * x := by
-      nlinarith [sq_nonneg (u ^ 2)]
-    calc
-      x * (u ^ 2 / x) ^ 2 = u ^ 4 / x := by
-        field_simp [hxpos.ne']
-      _ ≤ u ^ 2 := (div_le_iff₀ hxpos).2 hmul
-
-private theorem spectralCutoff_lower_bound
-    {u x : ℝ} (hu : 0 < u) :
-    u ^ 2 * (tailCutoff u x) ^ 2 ≤
-      x * (tailCutoff u x) ^ 2 := by
-  by_cases hx : x ≤ u ^ 2
-  · rw [spectralCutoff_eq_zero_of_le hu hx]
-    simp
-  · exact mul_le_mul_of_nonneg_right (le_of_not_ge hx)
-      (sq_nonneg (tailCutoff u x))
-
 /-! ## The real threshold theorem -/
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -172,210 +116,6 @@ theorem finiteRestrictionApproximationNumbersReal_upperBound
     T.approximationNumber n ∈
       upperBounds (finiteRestrictionApproximationNumbersReal T n) :=
   T.finiteRestrictionApproximationNumbers_upperBound n
-
-/-- **Cutting an operator to the low end of its spectrum leaves norm at most `u`.**
-
-`cfc (1 - tailCutoff u) C`, for the Gram operator `C = S⋆S`, is the multiplier that keeps the
-part of the spectrum at or below `u ^ 2`.  Composing `S` with it gives an operator whose own
-Gram operator is `x * (1 - tailCutoff u x) ^ 2`, and the cutoff was chosen so that the
-functional calculus bounds that by `u ^ 2`.
-
-This is the smooth counterpart of
-`ContinuousLinearMap.norm_apply_le_of_spectralCutoff_apply_eq_zero`, which splits by a kernel
-instead.  A *smooth* multiplier is what this file needs: the cutoff has to complexify from a
-real operator, and only a continuous function of `C` is conjugation-fixed. -/
-private theorem norm_comp_cfc_one_sub_tailCutoff_le
-    (S : RealComplexification E →L[ℂ] RealComplexification F) {u : ℝ} (hu : 0 < u) :
-    ‖S ∘L cfc (fun x => 1 - tailCutoff u x) (S.adjoint ∘L S)‖ ≤ u := by
-  classical
-  set Tc := S with hTc
-  set C : RealComplexification E →L[ℂ] RealComplexification E := Tc.adjoint ∘L Tc with hCdef
-  have hu0 : 0 < u := hu
-  have hCnonneg : (0 : RealComplexification E →L[ℂ] RealComplexification E) ≤ C :=
-    (ContinuousLinearMap.nonneg_iff_isPositive _).2
-      (ContinuousLinearMap.isPositive_adjoint_comp_self Tc)
-  have hCspec_nonneg : ∀ x ∈ spectrum ℝ C, 0 ≤ x := fun x hx =>
-    spectrum_nonneg_of_nonneg hCnonneg hx
-  set p : ℝ → ℝ := tailCutoff u with hp
-  have hpcont : Continuous p := continuous_spectralCutoff u hu0
-  set q : ℝ → ℝ := fun x => 1 - p x with hq
-  have hqcont : Continuous q := continuous_const.sub hpcont
-  set Qc : RealComplexification E →L[ℂ] RealComplexification E := cfc q C with hQc
-  have hQcSelfAdjoint : IsSelfAdjoint Qc := cfc_predicate q C
-  have htailGram :
-      (Tc ∘L Qc).adjoint ∘L (Tc ∘L Qc) =
-        cfc (fun x => x * (q x) ^ 2) C := by
-    rw [ContinuousLinearMap.adjoint_comp, hQcSelfAdjoint.adjoint_eq]
-    calc
-      (Qc ∘L Tc.adjoint) ∘L (Tc ∘L Qc) =
-          (Qc ∘L C) ∘L Qc := by
-        simp only [C, ContinuousLinearMap.comp_assoc]
-      _ = cfc (fun x => x * (q x) ^ 2) C := by
-        change cfc q C * C * cfc q C = _
-        calc
-          cfc q C * C * cfc q C =
-              cfc q C * cfc (fun x : ℝ => x) C * cfc q C := by
-            rw [cfc_id' ℝ C]
-          _ = cfc (fun x : ℝ => q x * x) C * cfc q C := by
-            rw [cfc_mul q (fun x : ℝ => x) C
-              hqcont.continuousOn continuous_id.continuousOn]
-          _ = cfc (fun x : ℝ => (q x * x) * q x) C := by
-            rw [cfc_mul (fun x : ℝ => q x * x) q C
-              (hqcont.mul continuous_id).continuousOn hqcont.continuousOn]
-          _ = cfc (fun x => x * (q x) ^ 2) C := by
-            apply cfc_congr
-            intro x _
-            ring
-  -- and its Gram operator is `x * q x ^ 2`, which the cutoff bounds by `u ^ 2`.
-  have htailCfcNorm :
-      ‖cfc (fun x => x * (q x) ^ 2) C‖ ≤ u ^ 2 := by
-    refine norm_cfc_le (f := fun x : ℝ => x * (q x) ^ 2) (a := C)
-      (sq_nonneg u) ?_
-    intro x hx
-    have hx0 := hCspec_nonneg x hx
-    have hbound := spectralCutoff_tail_bound hu0 hx0
-    change |x * (1 - tailCutoff u x) ^ 2| ≤ u ^ 2
-    rw [abs_of_nonneg (mul_nonneg hx0 (sq_nonneg _))]
-    exact hbound
-  have htailComplex : ‖Tc ∘L Qc‖ ≤ u := by
-    have hsq : ‖Tc ∘L Qc‖ ^ 2 ≤ u ^ 2 := by
-      calc
-        ‖Tc ∘L Qc‖ ^ 2 =
-            ‖(Tc ∘L Qc).adjoint ∘L (Tc ∘L Qc)‖ := by
-              rw [sq, ContinuousLinearMap.norm_adjoint_comp_self]
-        _ = ‖cfc (fun x => x * (q x) ^ 2) C‖ := by rw [htailGram]
-        _ ≤ u ^ 2 := htailCfcNorm
-    exact le_of_sq_le_sq hsq hu0.le
-  exact htailComplex
-
-/-- **On the high end of the spectrum the modulus is bounded below by `u`.**
-
-The complement of the previous cutoff, `cfc (tailCutoff u) C`, lands where the Gram operator
-is at least `u ^ 2`.  The quadratic form of `cfc ((x - u ^ 2) * tailCutoff u x ^ 2) C` is
-nonnegative there, and reading that form through `S` is the stated inequality.
-
-This is the smooth counterpart of
-`ContinuousLinearMap.le_norm_apply_of_mem_orthogonal_ker_spectralCutoff`. -/
-private theorem mul_norm_cfc_tailCutoff_le_norm_apply
-    (S : RealComplexification E →L[ℂ] RealComplexification F) {u : ℝ} (hu : 0 < u)
-    (z : RealComplexification E) :
-    u * ‖cfc (tailCutoff u) (S.adjoint ∘L S) z‖ ≤
-      ‖S (cfc (tailCutoff u) (S.adjoint ∘L S) z)‖ := by
-  classical
-  set Tc := S with hTc
-  set C : RealComplexification E →L[ℂ] RealComplexification E := Tc.adjoint ∘L Tc with hCdef
-  have hu0 : 0 < u := hu
-  have hCnonneg : (0 : RealComplexification E →L[ℂ] RealComplexification E) ≤ C :=
-    (ContinuousLinearMap.nonneg_iff_isPositive _).2
-      (ContinuousLinearMap.isPositive_adjoint_comp_self Tc)
-  have hCspec_nonneg : ∀ x ∈ spectrum ℝ C, 0 ≤ x := fun x hx =>
-    spectrum_nonneg_of_nonneg hCnonneg hx
-  set p : ℝ → ℝ := tailCutoff u with hp
-  have hpcont : Continuous p := continuous_spectralCutoff u hu0
-  set Pc : RealComplexification E →L[ℂ] RealComplexification E := cfc p C with hPc
-  have hlowerCfcNonneg :
-      (0 : RealComplexification E →L[ℂ] RealComplexification E) ≤
-        cfc (fun x => (x - u ^ 2) * (p x) ^ 2) C := by
-    apply cfc_nonneg
-    intro x hx
-    have hx0 := hCspec_nonneg x hx
-    have hcut := spectralCutoff_lower_bound (x := x) hu0
-    change 0 ≤ (x - u ^ 2) * (tailCutoff u x) ^ 2
-    nlinarith
-  have hlowerIdentity :
-      cfc (fun x => (x - u ^ 2) * (p x) ^ 2) C =
-        Pc * C * Pc - u ^ 2 • (Pc * Pc) := by
-    have hpcmul : Pc * Pc = cfc (fun x => (p x) ^ 2) C := by
-      dsimp only [Pc]
-      calc
-        cfc p C * cfc p C = cfc (fun x : ℝ => p x * p x) C :=
-          (cfc_mul p p C hpcont.continuousOn hpcont.continuousOn).symm
-        _ = cfc (fun x => (p x) ^ 2) C := by
-          apply cfc_congr
-          intro x _
-          ring
-    have hpcCpc : Pc * C * Pc = cfc (fun x => x * (p x) ^ 2) C := by
-      dsimp only [Pc]
-      calc
-        cfc p C * C * cfc p C =
-            cfc p C * cfc (fun x : ℝ => x) C * cfc p C := by
-          rw [cfc_id' ℝ C]
-        _ = cfc (fun x : ℝ => p x * x) C * cfc p C := by
-          rw [cfc_mul p (fun x : ℝ => x) C
-            hpcont.continuousOn continuous_id.continuousOn]
-        _ = cfc (fun x : ℝ => (p x * x) * p x) C := by
-          rw [cfc_mul (fun x : ℝ => p x * x) p C
-            (hpcont.mul continuous_id).continuousOn hpcont.continuousOn]
-        _ = cfc (fun x => x * (p x) ^ 2) C := by
-          apply cfc_congr
-          intro x _
-          ring
-    have hscale :
-        u ^ 2 • (Pc * Pc) = cfc (fun x => u ^ 2 * (p x) ^ 2) C := by
-      rw [hpcmul]
-      calc
-        u ^ 2 • cfc (fun x => (p x) ^ 2) C =
-            @SMul.smul ℝ
-              (RealComplexification E →L[ℂ] RealComplexification E)
-              TauCeti.RealComplexification.complexOperatorRealAlgebra.toSMul (u ^ 2)
-              (cfc (fun x => (p x) ^ 2) C) := by
-          exact (restrictedReal_smul_operator_eq
-            (u ^ 2) (cfc (fun x => (p x) ^ 2) C)).symm
-        _ = cfc (fun x => u ^ 2 * (p x) ^ 2) C :=
-          (cfc_const_mul (u ^ 2) (fun x => (p x) ^ 2) C
-            (hpcont.fun_pow 2).continuousOn).symm
-    calc
-      cfc (fun x => (x - u ^ 2) * (p x) ^ 2) C =
-          cfc (fun x => x * (p x) ^ 2 - u ^ 2 * (p x) ^ 2) C := by
-        apply cfc_congr
-        intro x _
-        ring
-      _ = cfc (fun x => x * (p x) ^ 2) C -
-          cfc (fun x => u ^ 2 * (p x) ^ 2) C := by
-        exact cfc_sub (fun x => x * (p x) ^ 2)
-          (fun x => u ^ 2 * (p x) ^ 2) C
-          ((continuous_id.mul (hpcont.fun_pow 2)).continuousOn)
-          ((continuous_const.mul (hpcont.fun_pow 2)).continuousOn)
-      _ = Pc * C * Pc - u ^ 2 • (Pc * Pc) := by
-        rw [← hpcCpc, ← hscale]
-  have hPcLower : ∀ z : RealComplexification E, u * ‖Pc z‖ ≤ ‖Tc (Pc z)‖ := by
-    intro z
-    have hpositive :=
-      (ContinuousLinearMap.nonneg_iff_isPositive _).mp hlowerCfcNonneg
-    have hform := hpositive.re_inner_nonneg_left z
-    rw [hlowerIdentity] at hform
-    have henergy :
-        u ^ 2 * ‖Pc z‖ ^ 2 ≤ ‖Tc (Pc z)‖ ^ 2 := by
-      change 0 ≤
-        RCLike.re ⟪(Pc * C * Pc - u ^ 2 • (Pc * Pc)) z, z⟫_ℂ at hform
-      have hPcsa : IsSelfAdjoint Pc := cfc_predicate p C
-      have h1 :
-          RCLike.re ⟪(Pc * C * Pc) z, z⟫_ℂ = ‖Tc (Pc z)‖ ^ 2 := by
-        simp only [mul_apply_eq_comp]
-        have hadj : ⟪Pc (C (Pc z)), z⟫_ℂ = ⟪C (Pc z), Pc z⟫_ℂ := by
-          simpa only [hPcsa.adjoint_eq] using
-            (ContinuousLinearMap.adjoint_inner_left Pc z (C (Pc z)))
-        rw [hadj]
-        dsimp only [C]
-        exact (ContinuousLinearMap.apply_norm_sq_eq_inner_adjoint_left Tc (Pc z)).symm
-      have h2 :
-          RCLike.re ⟪(u ^ 2 • (Pc * Pc)) z, z⟫_ℂ =
-            u ^ 2 * ‖Pc z‖ ^ 2 := by
-        have hadj : ⟪Pc (Pc z), z⟫_ℂ = ⟪Pc z, Pc z⟫_ℂ := by
-          simpa only [hPcsa.adjoint_eq] using
-            (ContinuousLinearMap.adjoint_inner_left Pc z (Pc z))
-        simp only [smul_apply, mul_apply_eq_comp]
-        rw [inner_smul_left_eq_smul, hadj, inner_self_eq_norm_sq_to_K,
-          RCLike.smul_re, RCLike.re_ofReal_pow]
-      have hform' :
-          0 ≤ RCLike.re ⟪(Pc * C * Pc) z, z⟫_ℂ -
-            RCLike.re ⟪(u ^ 2 • (Pc * Pc)) z, z⟫_ℂ := by
-        simpa only [sub_apply, inner_sub_left, map_sub] using hform
-      rw [h1, h2] at hform'
-      linarith
-    exact le_of_sq_le_sq (by simpa [mul_pow] using henergy) (norm_nonneg _)
-  exact hPcLower z
-
 
 /-- Real spectral-threshold form of infinite-dimensional Courant--Fischer.
 Every strict nonnegative lower bound for `a_n(T)` is improved to a uniform
@@ -408,9 +148,9 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
   have hCfix : conjugateOperator C = C := by
     rw [hCeq, conjugateOperator_complexify]
   -- Split the spectrum of the Gram operator at `u ^ 2` with the continuous cutoff.
-  let p : ℝ → ℝ := tailCutoff u
+  let p : ℝ → ℝ := TauCeti.tailCutoff u
   let q : ℝ → ℝ := fun x => 1 - p x
-  have hpcont : Continuous p := continuous_spectralCutoff u hu0
+  have hpcont : Continuous p := TauCeti.continuous_tailCutoff u hu0
   have hqcont : Continuous q := continuous_const.sub hpcont
   let Pc : RealComplexification E →L[ℂ] RealComplexification E := cfc p C
   let Qc : RealComplexification E →L[ℂ] RealComplexification E := cfc q C
@@ -437,7 +177,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
     exact spectrum_nonneg_of_nonneg hCnonneg hx
   -- The high-energy piece: `T ∘L Q` has norm at most `u`.
   have htailComplex : ‖Tc ∘L Qc‖ ≤ u := by
-    have h := norm_comp_cfc_one_sub_tailCutoff_le Tc hu0
+    have h := ContinuousLinearMap.norm_comp_cfc_one_sub_tailCutoff_le Tc hu0
     simpa only [Qc, q, p, C, Tc] using h
   have htailReal : ‖T ∘L Q‖ ≤ u := by
     rw [← norm_complexify]
@@ -446,7 +186,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
   -- The low-energy piece: on the range of `P` the modulus is bounded below by `u`.
   have hPcLower : ∀ z : RealComplexification E, u * ‖Pc z‖ ≤ ‖Tc (Pc z)‖ := by
     intro z
-    have h := mul_norm_cfc_tailCutoff_le_norm_apply Tc hu0 z
+    have h := ContinuousLinearMap.mul_norm_cfc_tailCutoff_le_norm_apply Tc hu0 z
     simpa only [Pc, p, C, Tc] using h
   have hPLower : ∀ x : E, u * ‖P x‖ ≤ ‖T (P x)‖ := by
     intro x
