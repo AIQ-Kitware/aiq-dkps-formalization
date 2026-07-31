@@ -189,7 +189,46 @@ theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
     s = s * ‖x‖ := by rw [hxNorm, mul_one]
     _ ≤ ‖T x‖ := hV x hxV
 
+/-- Every positive tolerance admits a finite source restriction whose approximation number
+is within that tolerance of the ambient one.  This is the exact hypothesis
+`ContinuousLinearMap.kyFanGauge_add_le_of_exists_finiteRestriction` consumes, so it is the
+last step before the Ky Fan triangle inequality holds over any field with a min--max lower
+bound rather than over `ℂ` alone. -/
+theorem exists_finiteRestrictionApproximationNumber_add_gt
+    (h : HasMinMaxLowerBound 𝕜 E F) (T : E →L[𝕜] F) (n : ℕ) (ε : ℝ) (hε : 0 < ε) :
+    ∃ v : Fin (n + 1) → E,
+      T.approximationNumber n <
+        (T ∘L (Submodule.span 𝕜 (Set.range v)).subtypeL).approximationNumber n + ε := by
+  by_cases hsmall : T.approximationNumber n < ε
+  · exact ⟨fun _ => 0, hsmall.trans_le
+      (le_add_of_nonneg_left (ContinuousLinearMap.approximationNumber_nonneg _ _))⟩
+  · have hεle : ε ≤ T.approximationNumber n := le_of_not_gt hsmall
+    obtain ⟨v, hv⟩ := h.exists_finiteRestrictionApproximationNumber_gt_of_lt T n
+      (sub_nonneg.mpr hεle) (sub_lt_self _ hε)
+    exact ⟨v, by linarith⟩
+
 end HasMinMaxLowerBound
+
+/-- **The min--max lower bound, as a property of the scalar field alone.**
+
+`HasMinMaxLowerBound` is a statement about one *pair* of spaces.  An operator ideal family,
+by contrast, has to supply its laws for every pair at once, so it cannot take that predicate
+as an argument — it needs the field to satisfy it uniformly.  This class is that
+quantification and nothing more.
+
+Both fields are instances: `hasMinMaxLowerBoundEverywhere_complex` from the functional
+calculus, `TauCeti.ApproximationNumber.hasMinMaxLowerBoundEverywhere_real` by
+complexification.  Together they are what lets the trace-class family be built once over
+`RCLike 𝕜` rather than once per field.
+
+This is the same device as `HasKyFanApproximationGaugeTriangle` in the paper library, one
+layer lower: that class assumes the Ky Fan triangle inequality, this one assumes the single
+fact the triangle inequality is *proved from*. -/
+class HasMinMaxLowerBoundEverywhere (𝕜 : Type u) [RCLike 𝕜] : Prop where
+  out : ∀ {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F],
+    HasMinMaxLowerBound 𝕜 E F
 
 end Restriction
 
@@ -226,6 +265,11 @@ theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
           ∀ x ∈ Submodule.span ℂ (Set.range v), s * ‖x‖ ≤ ‖T x‖ :=
   hasMinMaxLowerBound_complex.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
     T n hr0
+
+/-- `ℂ` has the min--max lower bound for every pair of Hilbert spaces. -/
+instance hasMinMaxLowerBoundEverywhere_complex :
+    HasMinMaxLowerBoundEverywhere.{0, v} ℂ where
+  out := hasMinMaxLowerBound_complex
 
 end Complex
 

@@ -112,7 +112,7 @@ instance isKyFanDominant_kyFanIdealFamily (k : ℕ) (hk : 0 < k) :
 /-- The nuclear norm is the supremum of the Ky Fan gauges, so dominance is monotonicity of
 that supremum. -/
 instance isKyFanDominant_traceClassIdealFamily :
-    IsKyFanDominant (traceClassIdealFamily.{v}) where
+    IsKyFanDominant (traceClassIdealFamily.{v} ℂ) where
   gauge_le_of_forall_kyFanGauge_le {_E _F} _ _ _ _ _ _ {_A _B} h := by
     rw [gauge_traceClassIdealFamily, gauge_traceClassIdealFamily,
       ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge,

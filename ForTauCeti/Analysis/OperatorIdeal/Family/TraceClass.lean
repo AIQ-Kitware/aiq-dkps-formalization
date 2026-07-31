@@ -25,7 +25,12 @@ proof in this repository used to run through `vendor/Spectra`'s projection-value
 since 2026-07-28 it is `ContinuousLinearMap.kyFanGauge_add_le`, proved from Mathlib's
 continuous functional calculus, and the trace-class ideal follows immediately.
 
-Everything is stated over `ℂ`, which is where the Ky Fan triangle inequality lives.
+**Everything is stated over `RCLike 𝕜`.**  The Ky Fan triangle inequality is what the scalar
+field is needed for, and it now holds over any field satisfying
+`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` — a class with two instances, `ℂ` from
+the continuous functional calculus and `ℝ` by complexification.  So the family is built once
+and `traceClassIdealFamily ℝ` and `traceClassIdealFamily ℂ` are both instances of it, with no
+second copy of any argument.
 
 ## Main results
 
@@ -38,7 +43,7 @@ Everything is stated over `ℂ`, which is where the Ky Fan triangle inequality l
 * `TauCeti.traceClassIdealFamily`: the resulting symmetric operator ideal family.
 
 Unlike the Ky Fan families, whose carriers are provably `⊤`, this one need not be all of
-`E →L[ℂ] F`, so it is the first family here whose `ℝ≥0∞` gauge is expected to take the value
+`E →L[𝕜] F`, so it is the first family here whose `ℝ≥0∞` gauge is expected to take the value
 `∞`.  That it actually does — that some bounded operator is not trace class — is not proved
 here; it needs an infinite orthonormal family to exhibit one.
 
@@ -62,18 +67,19 @@ universe v
 
 section Basic
 
+variable {𝕜 : Type} [RCLike 𝕜]
 variable {E F : Type v}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- The **nuclear norm**: the sum of all approximation numbers, valued in `ℝ≥0∞` and so
 defined for every bounded operator. -/
-noncomputable def nuclearENorm (T : E →L[ℂ] F) : ℝ≥0∞ :=
+noncomputable def nuclearENorm (T : E →L[𝕜] F) : ℝ≥0∞ :=
   ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n)
 
 /-- The nuclear norm is the supremum of the Ky Fan gauges.  Every property of it below is
 read off this identity. -/
-theorem nuclearENorm_eq_iSup_kyFanGauge (T : E →L[ℂ] F) :
+theorem nuclearENorm_eq_iSup_kyFanGauge (T : E →L[𝕜] F) :
     T.nuclearENorm = ⨆ k : ℕ, ENNReal.ofReal (T.kyFanGauge k) := by
   rw [nuclearENorm, ENNReal.tsum_eq_iSup_nat]
   refine iSup_congr fun k => ?_
@@ -83,32 +89,34 @@ theorem nuclearENorm_eq_iSup_kyFanGauge (T : E →L[ℂ] F) :
 /-- Every finite Ky Fan gauge is dominated by the nuclear norm, of which it is a
 partial sum.  This is the inequality that makes the nuclear norm the supremum of
 the Ky Fan family rather than merely an upper bound for it. -/
-theorem ofReal_kyFanGauge_le_nuclearENorm (T : E →L[ℂ] F) (k : ℕ) :
+theorem ofReal_kyFanGauge_le_nuclearENorm (T : E →L[𝕜] F) (k : ℕ) :
     ENNReal.ofReal (T.kyFanGauge k) ≤ T.nuclearENorm := by
   rw [nuclearENorm_eq_iSup_kyFanGauge]
   exact le_iSup (fun j : ℕ => ENNReal.ofReal (T.kyFanGauge j)) k
 
 /-- The nuclear norm vanishes on the zero operator: all of its approximation
 numbers are `0`. -/
-@[simp] theorem nuclearENorm_zero : (0 : E →L[ℂ] F).nuclearENorm = 0 := by
+@[simp] theorem nuclearENorm_zero : (0 : E →L[𝕜] F).nuclearENorm = 0 := by
   simp [nuclearENorm]
 
 end Basic
 
 section Complete
 
+variable {𝕜 : Type} [RCLike 𝕜]
 variable {E F : Type v}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- **The triangle inequality**: the Ky Fan inequality in the limit. -/
-theorem nuclearENorm_add_le (S T : E →L[ℂ] F) :
+theorem nuclearENorm_add_le [HasMinMaxLowerBoundEverywhere.{0, v} 𝕜] (S T : E →L[𝕜] F) :
     (S + T).nuclearENorm ≤ S.nuclearENorm + T.nuclearENorm := by
   rw [nuclearENorm_eq_iSup_kyFanGauge]
   refine iSup_le fun k => ?_
   calc ENNReal.ofReal ((S + T).kyFanGauge k)
       ≤ ENNReal.ofReal (S.kyFanGauge k + T.kyFanGauge k) :=
-        ENNReal.ofReal_le_ofReal (S.kyFanGauge_add_le T k)
+        ENNReal.ofReal_le_ofReal
+          (kyFanGauge_add_le_of_hasMinMaxLowerBound HasMinMaxLowerBoundEverywhere.out S T k)
     _ = ENNReal.ofReal (S.kyFanGauge k) + ENNReal.ofReal (T.kyFanGauge k) :=
         ENNReal.ofReal_add (S.kyFanGauge_nonneg k) (T.kyFanGauge_nonneg k)
     _ ≤ S.nuclearENorm + T.nuclearENorm :=
@@ -118,7 +126,7 @@ theorem nuclearENorm_add_le (S T : E →L[ℂ] F) :
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- **Absolute homogeneity.**  Scaling an operator scales every approximation
 number, hence the whole sum. -/
-theorem nuclearENorm_smul (c : ℂ) (T : E →L[ℂ] F) :
+theorem nuclearENorm_smul (c : 𝕜) (T : E →L[𝕜] F) :
     (c • T).nuclearENorm = ‖c‖ₑ * T.nuclearENorm := by
   simp only [nuclearENorm, approximationNumber_smul,
     ENNReal.ofReal_mul (norm_nonneg c), ofReal_norm]
@@ -126,21 +134,21 @@ theorem nuclearENorm_smul (c : ℂ) (T : E →L[ℂ] F) :
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- **The nuclear norm dominates the operator norm**, being its zeroth term. -/
-theorem enorm_le_nuclearENorm (T : E →L[ℂ] F) : ‖T‖ₑ ≤ T.nuclearENorm := by
+theorem enorm_le_nuclearENorm (T : E →L[𝕜] F) : ‖T‖ₑ ≤ T.nuclearENorm := by
   rw [← ofReal_norm, ← T.approximationNumber_index_zero]
   exact ENNReal.le_tsum 0
 
 /-- **Adjoint invariance**, immediate from invariance of the approximation
 numbers.  This is the field that makes the trace-class family *symmetric*. -/
-theorem nuclearENorm_adjoint (T : E →L[ℂ] F) : T.adjoint.nuclearENorm = T.nuclearENorm := by
+theorem nuclearENorm_adjoint (T : E →L[𝕜] F) : T.adjoint.nuclearENorm = T.nuclearENorm := by
   simp only [nuclearENorm, approximationNumber_adjoint]
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- **The two-sided ideal bound.** -/
 theorem nuclearENorm_comp_le {G H : Type v}
-    [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (L : F →L[ℂ] G) (T : E →L[ℂ] F) (R : H →L[ℂ] E) :
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    (L : F →L[𝕜] G) (T : E →L[𝕜] F) (R : H →L[𝕜] E) :
     (L ∘L T ∘L R).nuclearENorm ≤ ‖L‖ₑ * T.nuclearENorm * ‖R‖ₑ := by
   calc (L ∘L T ∘L R).nuclearENorm
       ≤ ∑' n : ℕ, ENNReal.ofReal (‖L‖ * T.approximationNumber n * ‖R‖) :=
@@ -154,11 +162,11 @@ theorem nuclearENorm_comp_le {G H : Type v}
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- `T` is **trace class** when its nuclear norm is finite. -/
-def IsTraceClass (T : E →L[ℂ] F) : Prop := T.nuclearENorm ≠ ∞
+def IsTraceClass (T : E →L[𝕜] F) : Prop := T.nuclearENorm ≠ ∞
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Concretely, `T` is trace class exactly when its approximation numbers are summable. -/
-theorem isTraceClass_iff_summable (T : E →L[ℂ] F) :
+theorem isTraceClass_iff_summable (T : E →L[𝕜] F) :
     T.IsTraceClass ↔ Summable fun n => T.approximationNumber n := by
   rw [IsTraceClass, nuclearENorm]
   have hcoe : (fun n : ℕ => ENNReal.ofReal (T.approximationNumber n))
@@ -170,7 +178,7 @@ theorem isTraceClass_iff_summable (T : E →L[ℂ] F) :
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- On a trace-class operator every Ky Fan gauge is bounded by the nuclear norm read as a
 real number. -/
-theorem kyFanGauge_le_toReal_nuclearENorm (T : E →L[ℂ] F) (hT : T.IsTraceClass) (k : ℕ) :
+theorem kyFanGauge_le_toReal_nuclearENorm (T : E →L[𝕜] F) (hT : T.IsTraceClass) (k : ℕ) :
     T.kyFanGauge k ≤ T.nuclearENorm.toReal := by
   have h := T.ofReal_kyFanGauge_le_nuclearENorm k
   rw [← ENNReal.ofReal_toReal hT] at h
@@ -190,7 +198,9 @@ open ContinuousLinearMap
 
 Its carrier is `ContinuousLinearMap.IsTraceClass` definitionally, which unlike the Ky Fan
 carriers is not provably `⊤`. -/
-noncomputable def traceClassIdealFamily : SymmetricOperatorIdealFamily.{0, v} ℂ where
+noncomputable def traceClassIdealFamily (𝕜 : Type) [RCLike 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} 𝕜] :
+    SymmetricOperatorIdealFamily.{0, v} 𝕜 where
   gauge A := A.nuclearENorm
   gauge_add_le A B := A.nuclearENorm_add_le B
   gauge_smul c A := nuclearENorm_smul c A
@@ -198,15 +208,17 @@ noncomputable def traceClassIdealFamily : SymmetricOperatorIdealFamily.{0, v} �
   gauge_comp_le L A R := nuclearENorm_comp_le L A R
   gauge_adjoint A := A.nuclearENorm_adjoint
 
+variable {𝕜 : Type} [RCLike 𝕜]
+  [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} 𝕜]
 variable {E F : Type v}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- The gauge of the trace-class family *is* the nuclear norm, definitionally. -/
-@[simp] theorem gauge_traceClassIdealFamily (A : E →L[ℂ] F) :
-    (traceClassIdealFamily.{v}).gauge A = A.nuclearENorm := (rfl)
+@[simp] theorem gauge_traceClassIdealFamily (A : E →L[𝕜] F) :
+    ((traceClassIdealFamily.{v} 𝕜)).gauge A = A.nuclearENorm := (rfl)
 /-- Membership in the trace-class ideal is exactly `IsTraceClass`, so the generic
 carrier and the named predicate never diverge. -/
-theorem mem_traceClassIdealFamily_carrier_iff (A : E →L[ℂ] F) :
-    A ∈ (traceClassIdealFamily.{v}).toOperatorIdealFamily.carrier ↔ A.IsTraceClass := (Iff.rfl)
+theorem mem_traceClassIdealFamily_carrier_iff (A : E →L[𝕜] F) :
+    A ∈ ((traceClassIdealFamily.{v} 𝕜)).toOperatorIdealFamily.carrier ↔ A.IsTraceClass := (Iff.rfl)
 end TauCeti

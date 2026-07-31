@@ -474,6 +474,22 @@ theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound_real
   hasMinMaxLowerBound_real.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
     T n hr0
 
+/-- **The Ky Fan triangle inequality over real Hilbert spaces.**  The complex case is
+`ContinuousLinearMap.kyFanGauge_add_le`; both are the same theorem,
+`kyFanGauge_add_le_of_hasMinMaxLowerBound`, applied to the min--max lower bound for their
+field.  Over `ℝ` that bound is `hasMinMaxLowerBound_real`, which is where the
+complexification in this file is spent. -/
+theorem kyFanGauge_add_le_real (S T : E →L[ℝ] F) (k : ℕ) :
+    (S + T).kyFanGauge k ≤ S.kyFanGauge k + T.kyFanGauge k :=
+  ContinuousLinearMap.kyFanGauge_add_le_of_hasMinMaxLowerBound hasMinMaxLowerBound_real S T k
+
+/-- `ℝ` has the min--max lower bound for every pair of Hilbert spaces.  With this instance
+every construction stated over `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜` — the
+trace-class ideal family among them — is available at `ℝ` as well as at `ℂ`. -/
+instance hasMinMaxLowerBoundEverywhere_real :
+    ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} ℝ where
+  out := hasMinMaxLowerBound_real
+
 end
 
 end ApproximationNumber
