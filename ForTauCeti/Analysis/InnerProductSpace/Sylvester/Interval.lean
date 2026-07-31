@@ -53,8 +53,10 @@ omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 the two `m • X` terms cancel.
 
 It is the opening move of every shift-and-invert argument here, and was inlined
-in each of them; `opNorm_sylvester_le_of_intervalGap` and
-`uiNorm_sylvester_le_of_intervalGap` now share this one statement. -/
+in each of them.  Since 2026-07-30 the operator-norm interval/exterior estimate
+is the unitarily-invariant one at `opNorm` rather than a parallel proof, so the
+remaining consumers are `uiNorm_sylvester_le_of_intervalGap` and its
+ordered-gap sibling. -/
 private theorem sylvester_sub_smul_id (A : F →ₗ[𝕜] F) (B : E →ₗ[𝕜] E)
     (X C : E →ₗ[𝕜] F) (m : 𝕜) (hEq : A ∘ₗ X - X ∘ₗ B = C) :
     (A - m • LinearMap.id) ∘ₗ X - X ∘ₗ (B - m • LinearMap.id) = C := by
@@ -129,95 +131,6 @@ private theorem abs_comp_sub_comp_of_sylvester
     (choosePolarUnitary S).symm (C x)
   rw [← hSX, ← map_sub]
   exact congrArg (choosePolarUnitary S).symm hx
-
-/-- Sharp operator-norm interval/exterior Sylvester estimate.
-
-The analytic step is the dimension-free polar-absorption theorem in
-`SylvesterBound`.  Finite dimensionality is used only to turn the interval and
-exterior eigenvalue hypotheses into a strip norm bound for the inner operator
-and a coercive bound for the modulus of the outer operator. -/
-theorem opNorm_sylvester_le_of_intervalGap
-    {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
-    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {a b δ : ℝ} (hδ : 0 < δ) (hgap : IntervalSylvesterGap A B a b δ)
-    (hEq : A ∘ₗ X - X ∘ₗ B = C) :
-    δ * ‖X.toContinuousLinearMap‖ ≤ ‖C.toContinuousLinearMap‖ := by
-  rcases subsingleton_or_nontrivial E with _ | _
-  · have hX0 : X = 0 := by
-      ext x
-      have hx : x = 0 := Subsingleton.elim _ _
-      subst x
-      simp
-    rw [hX0]
-    simp
-  rcases subsingleton_or_nontrivial F with _ | _
-  · have hX0 : X = 0 := by
-      ext x
-      exact Subsingleton.elim _ _
-    rw [hX0]
-    simp
-  letI : NeZero (Module.finrank 𝕜 E) :=
-    ⟨Nat.ne_of_gt Module.finrank_pos⟩
-  letI : NeZero (Module.finrank 𝕜 F) :=
-    ⟨Nat.ne_of_gt Module.finrank_pos⟩
-  let j₀ : Fin (Module.finrank 𝕜 E) := ⟨0, Module.finrank_pos⟩
-  have hj₀ := hgap.1 (eigenvalue_mem_restrictedSpectrum_top hB j₀)
-  have hab : a ≤ b := hj₀.1.trans hj₀.2
-  let m : ℝ := (a + b) / 2
-  let r : ℝ := (b - a) / 2
-  let S : F →ₗ[𝕜] F := A - (m : 𝕜) • LinearMap.id
-  let T : E →ₗ[𝕜] E := B - (m : 𝕜) • LinearMap.id
-  let H : F →ₗ[𝕜] F := TauCeti.abs S
-  let U : F ≃ₗᵢ[𝕜] F := choosePolarUnitary S
-  let Z : E →ₗ[𝕜] F := U.symm.toLinearMap ∘ₗ X
-  let Y : E →ₗ[𝕜] F := U.symm.toLinearMap ∘ₗ C
-  have hr : 0 ≤ r := by simp only [r]; linarith
-  have hTnorm : ‖T.toContinuousLinearMap‖ ≤ r := by
-    simpa [T, m, r] using opNorm_shift_le_of_spectrumIn_Icc hB hab hgap.1
-  have hSlower : ∀ y, (r + δ) * ‖y‖ ≤ ‖S y‖ := by
-    simpa [S, m, r] using
-      norm_shift_lower_of_spectrumOutside hA hab hδ hgap.2
-  have hHsym : H.IsSymmetric := (TauCeti.isPositive_abs S).isSymmetric
-  have hHform : ∀ y, (r + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪H y, y⟫_𝕜 :=
-    le_re_inner_abs_self_of_norm_lower_bound hSlower
-  have hShift : S ∘ₗ X - X ∘ₗ T = C :=
-    sylvester_sub_smul_id A B X C (m : 𝕜) hEq
-  have hPolar : H ∘ₗ X - Z ∘ₗ T = Y :=
-    abs_comp_sub_comp_of_sylvester hShift
-  have hZnorm : ‖Z.toContinuousLinearMap‖ = ‖X.toContinuousLinearMap‖ := by
-    apply le_antisymm
-    · refine Z.toContinuousLinearMap.opNorm_le_bound (norm_nonneg _) fun x => ?_
-      -- `Z x` is `U.symm (X x)` by definition; `U.symm.norm_map` is an isometry lemma about
-      -- that composite, so it applies only once the goal names it.
-      change ‖U.symm (X x)‖ ≤ ‖X.toContinuousLinearMap‖ * ‖x‖
-      rw [U.symm.norm_map]
-      exact X.toContinuousLinearMap.le_opNorm x
-    · refine X.toContinuousLinearMap.opNorm_le_bound (norm_nonneg _) fun x => ?_
-      -- The reverse bound, for the same reason: `U.symm` is an isometry, so `‖X x‖` and
-      -- `‖Z x‖` are equal, but the rewrite needs the composite spelled out.
-      change ‖X x‖ ≤ ‖Z.toContinuousLinearMap‖ * ‖x‖
-      rw [← U.symm.norm_map (X x)]
-      exact Z.toContinuousLinearMap.le_opNorm x
-  have hYnorm : ‖Y.toContinuousLinearMap‖ = ‖C.toContinuousLinearMap‖ := by
-    apply le_antisymm
-    · refine Y.toContinuousLinearMap.opNorm_le_bound (norm_nonneg _) fun x => ?_
-      -- `Y x` is `U.symm (C x)` by definition; same isometry step as for `Z` above.
-      change ‖U.symm (C x)‖ ≤ ‖C.toContinuousLinearMap‖ * ‖x‖
-      rw [U.symm.norm_map]
-      exact C.toContinuousLinearMap.le_opNorm x
-    · refine C.toContinuousLinearMap.opNorm_le_bound (norm_nonneg _) fun x => ?_
-      -- The reverse bound for `Y`, matching the `Z` pair above.
-      change ‖C x‖ ≤ ‖Y.toContinuousLinearMap‖ * ‖x‖
-      rw [← U.symm.norm_map (C x)]
-      exact Y.toContinuousLinearMap.le_opNorm x
-  have hPolar' : H.toContinuousLinearMap ∘L X.toContinuousLinearMap -
-      Z.toContinuousLinearMap ∘L T.toContinuousLinearMap = Y.toContinuousLinearMap := by
-    ext x
-    simpa [ContinuousLinearMap.comp_apply] using LinearMap.congr_fun hPolar x
-  have hbound := ContinuousLinearMap.gap_mul_opNorm_le_of_comp_sub_comp_eq
-    (fun x y => hHsym x y) hr hδ hHform hTnorm
-    hZnorm hPolar'
-  rwa [hYnorm] at hbound
 
 private theorem uiNorm_sylvester_le_of_form_bounds_aux
     (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
@@ -488,6 +401,26 @@ theorem uiNorm_sylvester_le_of_intervalGap
   have hbound' : δ * N X ≤ N Y := by
     simpa [N', X', Y'] using hbound
   rwa [hYnorm] at hbound'
+
+/-- **Sharp constant-one interval/exterior Sylvester estimate in the operator
+norm.**  If the spectrum of `A` lies in `Icc a b` and that of `B` avoids
+`Ioo (a - δ) (b + δ)`, then `A ∘ₗ X - X ∘ₗ B = C` forces
+`δ ‖X‖ ≤ ‖C‖`.
+
+The operator norm is a rectangular unitarily invariant norm
+(`RectangularUnitarilyInvariantNorm.opNorm`, whose application is `‖·‖` by
+`rfl`), so this is the theorem directly above at that norm.  It was a separate
+82-line proof until 2026-07-30 — the same shift-and-invert argument, the same
+two `Subsingleton` cases, the same Neumann bound — placed *before* the general
+version in the file, which is why the specialisation was not visible. -/
+theorem opNorm_sylvester_le_of_intervalGap
+    {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {a b δ : ℝ} (hδ : 0 < δ) (hgap : IntervalSylvesterGap A B a b δ)
+    (hEq : A ∘ₗ X - X ∘ₗ B = C) :
+    δ * ‖X.toContinuousLinearMap‖ ≤ ‖C.toContinuousLinearMap‖ :=
+  uiNorm_sylvester_le_of_intervalGap RectangularUnitarilyInvariantNorm.opNorm
+    hA hB hδ hgap hEq
 
 /-- Sharp constant-one interval/exterior Sylvester estimate in either
 orientation.
