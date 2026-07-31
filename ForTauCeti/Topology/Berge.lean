@@ -640,4 +640,54 @@ theorem continuous_iInf_of_hemicontinuousAt
   · exact eventually_lt_iInf_of_iInf_lt (hKu p₀) (hKcompact p₀) hg hKne hKcompact hbdd hb
   · exact eventually_iInf_lt_of_lt_iInf (hKl p₀) (hKcompact p₀) (hKne p₀) hg hbdd hb
 
+/-- **Berge's argmin theorem, varying constraints.**
+
+The argmin correspondence `p ↦ {x ∈ K p | IsMinOn (g p) (K p) x}` is upper
+hemicontinuous.
+
+Minimality of a limit point is *not* proved by tracking comparison points into
+the nearby constraint sets — the value theorem subsumes that.  Along a sequence
+of minimizers, `g pₙ cₙ` **is** the value `V pₙ`, so joint continuity and
+`continuous_iInf_of_hemicontinuousAt` together force `g p₀ c₀ = V p₀`, and
+`V p₀ ≤ g p₀ y` for feasible `y` is then just `ciInf_le`. -/
+theorem upperHemicontinuousAt_isMinOn_of_hemicontinuousAt
+    {P X : Type*} [TopologicalSpace P] [FirstCountableTopology P]
+    [TopologicalSpace X] [RegularSpace X] [T2Space X] [FirstCountableTopology X]
+    [WeaklyLocallyCompactSpace X]
+    {K : P → Set X} (hKcompact : ∀ p, IsCompact (K p)) (hKne : ∀ p, (K p).Nonempty)
+    (hKu : ∀ p, UpperHemicontinuousAt K p) (hKl : ∀ p, LowerHemicontinuousAt K p)
+    {g : P → X → ℝ} (hg : Continuous (Function.uncurry g))
+    (hbdd : ∀ p, BddBelow (Set.range fun x : ↥(K p) => g p ↑x))
+    (p₀ : P) [(𝓝 p₀).IsCountablyGenerated] :
+    UpperHemicontinuousAt (fun p => {x ∈ K p | IsMinOn (g p) (K p) x}) p₀ := by
+  obtain ⟨C, hCcompact, hKC⟩ :=
+    exists_isCompact_eventually_subset_of_upperHemicontinuousAt (hKu p₀) (hKcompact p₀)
+  refine UpperHemicontinuousAt.of_sequences hCcompact.isSeqCompact
+    (hKC.mono fun p hp => (Set.sep_subset _ _).trans hp) ?_
+  intro p hp c hc c₀ hc₀
+  have hcK : ∀ n, c n ∈ K (p n) := fun n => (hc n).1
+  -- Feasibility of the limit, from upper hemicontinuity.
+  have hc₀K : c₀ ∈ K p₀ :=
+    mem_of_tendsto_of_upperHemicontinuousAt (hKu p₀) (hKcompact p₀).isClosed hp hcK hc₀
+  refine ⟨hc₀K, ?_⟩
+  -- Along minimizers the objective value *is* the value function.
+  have hval : ∀ n, g (p n) (c n) = ⨅ y : ↥(K (p n)), g (p n) ↑y := by
+    intro n
+    haveI : Nonempty ↥(K (p n)) := (hKne (p n)).to_subtype
+    exact le_antisymm (le_ciInf fun y => (isMinOn_iff.mp (hc n).2) ↑y y.2)
+      (ciInf_le (hbdd (p n)) ⟨c n, hcK n⟩)
+  -- Two limits of the same sequence: joint continuity, and the value theorem.
+  have hL : Tendsto (fun n => g (p n) (c n)) atTop (𝓝 (g p₀ c₀)) :=
+    (hg.tendsto (p₀, c₀)).comp (hp.prodMk_nhds hc₀)
+  have hV : Tendsto (fun n => g (p n) (c n)) atTop (𝓝 (⨅ y : ↥(K p₀), g p₀ ↑y)) := by
+    simp only [hval]
+    exact ((continuous_iInf_of_hemicontinuousAt hKcompact hKne hKu hKl hg hbdd).tendsto
+      p₀).comp hp
+  have heq : g p₀ c₀ = ⨅ y : ↥(K p₀), g p₀ ↑y := tendsto_nhds_unique hL hV
+  -- Minimality is then `ciInf_le`.
+  rw [isMinOn_iff]
+  intro y hy
+  rw [heq]
+  exact ciInf_le (hbdd p₀) ⟨y, hy⟩
+
 end TauCeti
