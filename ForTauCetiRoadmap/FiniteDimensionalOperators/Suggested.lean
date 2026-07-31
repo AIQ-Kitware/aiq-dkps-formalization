@@ -7,6 +7,28 @@ The roadmap prose (`README.md`) is definitive.  This file is representative,
 not exhaustive: it records target shapes for the central objects and headline
 milestones of each part, using names that follow the staged `ForTauCeti`
 implementation.  Bodies are placeholders; the statements are the content.
+
+## ✅ DELIVERED — every signature below is proved (verified 2026-07-31)
+
+**This topic is complete.**  All 32 declarations in this file exist and are
+proved in `ForTauCeti/**`; `README.md` records where each one landed.  Read
+this file as a *record* of the target shapes, not as a list of open work.
+
+Re-check with `python3 scripts/check_roadmap_delivered.py --topic
+FiniteDimensionalOperators`.
+
+**The `sorry` bodies here are deliberate and must not be "fixed".**  As
+`ForTauCetiRoadmap.lean` puts it, the library exists so that a broken
+suggested signature is a build failure.  Replacing a body with a proof would
+duplicate the library; deleting a signature would remove that guard.  The
+only thing that should ever change here is a *statement*, and only to track
+a deliberate rename in `ForTauCeti`.
+
+Two hand-rolled passes over this topic both under-counted, in different ways:
+one reported `sqrt` missing (it is `_root_.LinearMap.IsPositive.sqrt`); the
+other missed `norm_modulus_apply` and `singularValues_adjoint` entirely,
+because both are written `@[simp] theorem ...` with the attribute inline and
+the pattern was anchored on the declaration keyword.  Use the script.
 -/
 
 namespace TauCetiRoadmap.FiniteDimensionalOperators
