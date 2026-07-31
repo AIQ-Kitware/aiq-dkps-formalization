@@ -29,9 +29,9 @@ review is exactly a review of a future submission unit.
 - [x] `(root files) :: manifest/notes` — 1 files, 9 lines — **READY**
 - [x] `(root files) :: other` — 2 files, 34 lines — **READY**
 - [x] `(root files) :: tooling` — 2 files, 789 lines — **READY**
-- [x] `(root modules)` — 8 files, 78 lines — **blocked (7/8 files)**
+- [x] `(root modules)` — 8 files, 78 lines — **READY**
 - [x] `.claude :: data/config` — 1 files, 19 lines — **READY**
-- [x] `.llm_resource_tally :: data/config` — 3 files, 1,443 lines — **READY**
+- [x] `.llm_resource_tally :: data/config` — 3 files, 1,444 lines — **READY**
 - [x] `.llm_resource_tally :: documentation` — 1 files, 99 lines — **READY**
 - [x] `.llm_resource_tally :: other` — 3 files, 12 lines — **READY**
 - [x] `.llm_resource_tally :: tooling` — 17 files, 1,743 lines — **READY**
@@ -114,19 +114,19 @@ review is exactly a review of a future submission unit.
 - [x] `ForTauCeti :: T21 Matrix rank factorization and positive semidefiniteness` — 2 files, 503 lines — **READY**
 - [x] `ForTauCeti :: T22 Berge's maximum theorem and approximate minimizers` — 2 files, 490 lines — **READY**
 - [x] `ForTauCeti :: documentation` — 1 files, 445 lines — **READY**
-- [x] `ForTauCetiRoadmap :: documentation` — 8 files, 3,867 lines — **blocked (3/8 files)**
-- [ ] `ForTauCetiRoadmap/FiniteDimensionalOperators` — 1 files, 315 lines — **blocked (0/1 files)**
-- [ ] `ForTauCetiRoadmap/MajorizationAndAngles` — 1 files, 250 lines — **blocked (0/1 files)**
-- [ ] `ForTauCetiRoadmap/MatrixStatistics` — 1 files, 291 lines — **blocked (0/1 files)**
-- [ ] `ForTauCetiRoadmap/OperatorIdeals` — 1 files, 358 lines — **blocked (0/1 files)**
-- [ ] `ForTauCetiRoadmap/SpectralSubspacePerturbation` — 1 files, 551 lines — **blocked (0/1 files)**
-- [ ] `ForTauCetiRoadmap/SpectralTheory` — 1 files, 254 lines — **blocked (0/1 files)**
+- [x] `ForTauCetiRoadmap :: documentation` — 8 files, 3,867 lines — **READY**
+- [ ] `ForTauCetiRoadmap/FiniteDimensionalOperators` — 1 files, 315 lines — **READY**
+- [ ] `ForTauCetiRoadmap/MajorizationAndAngles` — 1 files, 250 lines — **READY**
+- [ ] `ForTauCetiRoadmap/MatrixStatistics` — 1 files, 291 lines — **READY**
+- [ ] `ForTauCetiRoadmap/OperatorIdeals` — 1 files, 358 lines — **READY**
+- [ ] `ForTauCetiRoadmap/SpectralSubspacePerturbation` — 1 files, 551 lines — **READY**
+- [ ] `ForTauCetiRoadmap/SpectralTheory` — 1 files, 254 lines — **READY**
 - [x] `Helm2025` — 4 files, 1,997 lines — **READY**
 - [x] `Helm2025 :: documentation` — 2 files, 683 lines — **READY**
 - [x] `Helm2025 :: other` — 1 files, 265 lines — **READY**
 - [x] `comparator :: data/config` — 22 files, 318 lines — **READY**
 - [x] `dev :: data/config` — 25 files, 11,472 lines — **READY**
-- [x] `dev :: documentation` — 162 files, 38,814 lines — **blocked (159/162 files)**
+- [x] `dev :: documentation` — 163 files, 38,950 lines — **READY**
 - [x] `dev :: manifest/notes` — 8 files, 119 lines — **READY**
 - [x] `dev/alternates` — 1 files, 412 lines — **READY**
 - [x] `docs :: documentation` — 33 files, 6,198 lines — **READY**
@@ -135,7 +135,7 @@ review is exactly a review of a future submission unit.
 - [x] `prose :: data/config` — 1 files, 1,488 lines — **READY**
 - [x] `prose :: documentation` — 3 files, 271 lines — **READY**
 - [x] `prose :: other` — 1 files, 2 lines — **READY**
-- [x] `scripts :: tooling` — 65 files, 14,453 lines — **blocked (55/65 files)**
+- [x] `scripts :: tooling` — 65 files, 14,453 lines — **READY**
 - [x] `tools :: build config` — 1 files, 179 lines — **READY**
 - [x] `tools :: documentation` — 1 files, 110 lines — **READY**
 - [x] `tools :: manifest/notes` — 1 files, 2 lines — **READY**
