@@ -484,6 +484,43 @@ quantifies over the two spaces, so it cannot be used directly. -/
 instance [N.IsComplete] : CompleteSpace (N.Elem E F) :=
   IsComplete.completeSpace
 
+/-- **Block sums: the gauge is squeezed between the maximum and the sum of the
+two block gauges.**
+
+For an operator split as `T = Q₁ T P₁ + Q₂ T P₂` with all four factors
+contractive — the shape a block-diagonal decomposition of source and target
+produces.
+
+**Both halves are formal from the family laws.**  The upper bound is
+`gauge_add_le` on the splitting; the lower is `gauge_comp_le`, the two-sided
+ideal law, with the contractivity hypotheses collapsing `‖Q‖ₑ * · * ‖P‖ₑ` to `·`.
+No approximation-number reasoning enters.
+
+The *general* block statement — that the approximation-number sequence of a
+block-diagonal sum is the decreasing rearrangement of the union of the summands'
+sequences — is genuinely harder and is **not** what this needs; anyone reaching
+for a rearrangement theorem here is solving the wrong problem. -/
+theorem gauge_blockSum_le {T : E →L[𝕜] F} {P₁ P₂ : E →L[𝕜] E} {Q₁ Q₂ : F →L[𝕜] F}
+    (hP₁ : ‖P₁‖ ≤ 1) (hP₂ : ‖P₂‖ ≤ 1) (hQ₁ : ‖Q₁‖ ≤ 1) (hQ₂ : ‖Q₂‖ ≤ 1)
+    (hsplit : Q₁ ∘L T ∘L P₁ + Q₂ ∘L T ∘L P₂ = T) :
+    max (N.gauge (Q₁ ∘L T ∘L P₁)) (N.gauge (Q₂ ∘L T ∘L P₂)) ≤ N.gauge T ∧
+      N.gauge T ≤ N.gauge (Q₁ ∘L T ∘L P₁) + N.gauge (Q₂ ∘L T ∘L P₂) := by
+  have hcomp : ∀ (Q : F →L[𝕜] F) (P : E →L[𝕜] E), ‖Q‖ ≤ 1 → ‖P‖ ≤ 1 →
+      N.gauge (Q ∘L T ∘L P) ≤ N.gauge T := by
+    intro Q P hQ hP
+    refine (N.gauge_comp_le Q T P).trans ?_
+    have h1 : ‖Q‖ₑ ≤ 1 := by
+      rw [← ofReal_norm, ← ENNReal.ofReal_one]
+      exact ENNReal.ofReal_le_ofReal hQ
+    have h2 : ‖P‖ₑ ≤ 1 := by
+      rw [← ofReal_norm, ← ENNReal.ofReal_one]
+      exact ENNReal.ofReal_le_ofReal hP
+    calc ‖Q‖ₑ * N.gauge T * ‖P‖ₑ ≤ 1 * N.gauge T * 1 := by gcongr
+      _ = N.gauge T := by simp
+  refine ⟨max_le (hcomp Q₁ P₁ hQ₁ hP₁) (hcomp Q₂ P₂ hQ₂ hP₂), ?_⟩
+  calc N.gauge T = N.gauge (Q₁ ∘L T ∘L P₁ + Q₂ ∘L T ∘L P₂) := by rw [hsplit]
+    _ ≤ N.gauge (Q₁ ∘L T ∘L P₁) + N.gauge (Q₂ ∘L T ∘L P₂) := N.gauge_add_le _ _
+
 end OperatorIdealFamily
 
 /-- A **symmetric** (adjoint-invariant) operator ideal family on Hilbert spaces.
