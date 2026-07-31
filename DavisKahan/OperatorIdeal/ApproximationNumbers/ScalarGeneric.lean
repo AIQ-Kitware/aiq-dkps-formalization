@@ -110,6 +110,27 @@ instance complexHasKyFanApproximationGaugeTriangle :
     HasKyFanApproximationGaugeTriangle.{0, v} ℂ where
   add_le := kyFanApproximationGauge_add_le_complex
 
+/-- **This capability is now derivable, so assuming it is redundant.**
+
+`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` assumes the min--max lower bound; the Ky
+Fan triangle inequality is *proved* from it by
+`ContinuousLinearMap.kyFanGauge_add_le_of_hasMinMaxLowerBound`.  So the two classes state the
+same capability one layer apart, and this instance is the bridge: every hypothesis
+`[HasKyFanApproximationGaugeTriangle 𝕜]` in this library now discharges from the deeper one
+without being edited.
+
+Retiring the shallower class is `{lane:DK-RETIRE-KYFANTRIANGLE}`; this instance is what makes
+that a deprecation rather than a refactor.  The two explicit instances above are kept because
+they are shorter proofs of the same thing at `ℝ` and `ℂ`, and removing them would make those
+fields depend on the whole min--max development. -/
+instance hasKyFanApproximationGaugeTriangle_of_hasMinMaxLowerBoundEverywhere
+    (𝕜 : Type u) [RCLike 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] :
+    HasKyFanApproximationGaugeTriangle.{u, v} 𝕜 where
+  add_le k K L :=
+    ContinuousLinearMap.kyFanGauge_add_le_of_hasMinMaxLowerBound
+      ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.out K L k
+
 /-- Real-Hilbert-space continuity of approximation numbers under strongly
 convergent orthogonal cutoffs. -/
 theorem approximationSingularValue_comp_strongProjection_tendsto_real
