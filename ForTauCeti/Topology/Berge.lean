@@ -486,4 +486,53 @@ theorem exists_subseq_tendsto_mem_of_upperHemicontinuousAt
       hψmono.tendsto_atTop)
   · exact hψtend
 
+/-- **Local boundedness comes free in a locally compact ambient space.**
+
+If `K p₀` is compact and `K` is upper hemicontinuous at `p₀`, then some compact
+`C` contains `K p` for every `p` near `p₀`.
+
+This reconciles `exists_subseq_tendsto_mem_of_upperHemicontinuousAt`, which
+assumes such a `C`, with the usual statement of Berge's theorem, which assumes
+only that each `K p` is compact.  Those are genuinely different hypotheses --
+individually compact sets can escape to infinity as `p → p₀` — but the escape
+needs a non-locally-compact ambient space, so it cannot happen here.
+
+The proof is the reason upper hemicontinuity is stated with neighbourhoods
+rather than with sets: `exists_compact_superset` puts `K p₀` inside the
+*interior* of a compact `C`, and that interior is an open set to which upper
+hemicontinuity directly applies. -/
+theorem exists_isCompact_eventually_subset_of_upperHemicontinuousAt
+    {P X : Type*} [TopologicalSpace P] [TopologicalSpace X]
+    [WeaklyLocallyCompactSpace X]
+    {K : P → Set X} {p₀ : P} (hKu : UpperHemicontinuousAt K p₀)
+    (hK₀ : IsCompact (K p₀)) :
+    ∃ C : Set X, IsCompact C ∧ ∀ᶠ p in 𝓝 p₀, K p ⊆ C := by
+  obtain ⟨C, hCcompact, hsub⟩ := exists_compact_superset hK₀
+  refine ⟨C, hCcompact, ?_⟩
+  -- `interior C` is open and contains `K p₀`, so it is a neighbourhood of it.
+  have hnhds : interior C ∈ 𝓝ˢ (K p₀) := isOpen_interior.mem_nhdsSet.mpr hsub
+  filter_upwards [(upperHemicontinuousAt_iff.mp hKu) (interior C) hnhds] with p hp
+  exact (subset_of_mem_nhdsSet hp).trans interior_subset
+
+/-- **The extraction, from Berge's own hypotheses.**
+
+`exists_subseq_tendsto_mem_of_upperHemicontinuousAt` with its local-boundedness
+assumption discharged by
+`exists_isCompact_eventually_subset_of_upperHemicontinuousAt`.  This is the form
+the value theorem consumes: compactness of the single set `K p₀`, upper
+hemicontinuity, and a locally compact ambient space. -/
+theorem exists_subseq_tendsto_mem_of_isCompact
+    {P X : Type*} [TopologicalSpace P] [TopologicalSpace X] [RegularSpace X]
+    [T2Space X] [FirstCountableTopology X] [WeaklyLocallyCompactSpace X]
+    {K : P → Set X} {p₀ : P} (hKu : UpperHemicontinuousAt K p₀)
+    (hK₀ : IsCompact (K p₀))
+    {p : ℕ → P} (hp : Tendsto p atTop (𝓝 p₀))
+    {x : ℕ → X} (hxK : ∀ k, x k ∈ K (p k)) :
+    ∃ φ : ℕ → ℕ, StrictMono φ ∧ ∃ x₀ ∈ K p₀,
+      Tendsto (fun t => x (φ t)) atTop (𝓝 x₀) := by
+  obtain ⟨C, hCcompact, hKC⟩ :=
+    exists_isCompact_eventually_subset_of_upperHemicontinuousAt hKu hK₀
+  exact exists_subseq_tendsto_mem_of_upperHemicontinuousAt hKu hK₀.isClosed
+    hCcompact hKC hp hxK
+
 end TauCeti
