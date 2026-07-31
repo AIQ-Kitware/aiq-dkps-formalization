@@ -139,15 +139,15 @@ private theorem diagonal_comp_diagonal (b : OrthonormalBasis (Fin d) ℝ E)
     (f g : Fin d → ℝ) :
     diagonal b f ∘ₗ diagonal b g = diagonal b (fun k => f k * g k) := by
   refine b.toBasis.ext fun k => ?_
-  rw [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, diagonal_basis, map_smul,
-    diagonal_basis, diagonal_basis, smul_smul, mul_comm]
+  simp only [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, diagonal_basis, map_smul,
+    smul_smul, mul_comm]
 
 /-- **A diagonal minus the identity is diagonal**, with factors `c k - 1`. -/
 private theorem diagonal_sub_id (b : OrthonormalBasis (Fin d) ℝ E) (c : Fin d → ℝ) :
     diagonal b c - LinearMap.id = diagonal b fun k => c k - 1 := by
   refine b.toBasis.ext fun k => ?_
-  rw [OrthonormalBasis.coe_toBasis, LinearMap.sub_apply, LinearMap.id_apply,
-    diagonal_basis, diagonal_basis, sub_smul, one_smul]
+  simp only [OrthonormalBasis.coe_toBasis, LinearMap.sub_apply, LinearMap.id_apply,
+    diagonal_basis, sub_smul, one_smul]
 
 /-- A diagonal operator acts on basis coordinates by scalar multiplication. -/
 private theorem repr_diagonal (b : OrthonormalBasis (Fin d) ℝ E) (c : Fin d → ℝ) (x : E)
