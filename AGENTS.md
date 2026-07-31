@@ -29,6 +29,13 @@ lives in [`dev/LANES.md`](dev/LANES.md); read its `## Rules` and
 A lane is in exactly one of three states and its row must say which: **open**
 (work to do, nobody doing it), **claimed** (an agent is working it *right now*),
 **completed** (finished — and the row moves to `dev/LANES-COMPLETED.md`).
+`claimed` means *actively working*, not *intending to* and not *worked on it
+yesterday*; if you stop, it goes back to open.
+
+**The nine-step loop is in `dev/LANES.md` under *The lane loop, start to
+finish*** — read it before your first claim. Four of its steps are pushes, and
+the ones agents skip are the second `lane.py check` (after pushing the claim) and
+closing the row when the work lands.
 
 The four that cost the most when skipped:
 
