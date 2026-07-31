@@ -32,6 +32,11 @@ Supporting API, upstream candidates:
 namespace TauCeti
 namespace DavisKahanExt
 
+-- `reflectionDefect` and its lemmas live in `TauCeti.DavisKahan`
+-- (`DavisKahan/BoundedOperator/Reflection.lean`); `DoubleAngle.lean` used to carry a verbatim
+-- copy inside this namespace, so consumers resolved them without an `open`.
+open DavisKahan
+
 open scoped InnerProductSpace
 
 /-- Conjugation by a continuous linear equivalence, as an algebra
