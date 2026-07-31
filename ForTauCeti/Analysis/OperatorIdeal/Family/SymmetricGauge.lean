@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Claude Opus 5
 -/
 import ForTauCeti.Analysis.Normed.SymmetricGauge
+import ForTauCeti.Analysis.Normed.SchattenGauge
 import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
@@ -272,5 +273,32 @@ instance isKyFanDominant_symmetricGaugeSymmetricFamily :
       exact ENNReal.ofReal_le_ofReal hk
     exact Φ.extend_le_extend_of_forall_sum_le (approxSeq_antitone A)
       (approxSeq_antitone B) hpre
+
+/-! ## The Schatten scale
+
+The Schatten classes are *obtained* from the symmetric-gauge construction rather
+than built separately, which is the roadmap's point: their four laws are the
+family's and not new work.
+-/
+
+/-- **The Schatten-`p` operator ideal family**, `symmetricGaugeFamily` at the
+`ℓᵖ` gauge.
+
+Distinct from `ForTauCeti.Analysis.OperatorIdeal.Family.Schatten.schattenIdealFamily`,
+which is the *square*, adjoint-closed, general-`RCLike` family gauged directly by
+`schattenENorm`.  This one is the rectangular `ℂ` family obtained through the
+gauge construction — the two are different objects with the same name in the
+literature, and an audit on 2026-07-31 found them being conflated by name. -/
+noncomputable def schattenFamily (p : ℝ) (hp : 1 ≤ p) : OperatorIdealFamily ℂ :=
+  symmetricGaugeFamily (schattenGauge p hp)
+
+/-- The Schatten family's gauge is the `ℓᵖ` gauge of the approximation-number
+sequence. -/
+@[simp]
+theorem schattenFamily_gauge {p : ℝ} (hp : 1 ≤ p) {E F : Type*}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (A : E →L[ℂ] F) :
+    (schattenFamily p hp).gauge A = (schattenGauge p hp).extend (approxSeq A) := rfl
 
 end TauCeti
