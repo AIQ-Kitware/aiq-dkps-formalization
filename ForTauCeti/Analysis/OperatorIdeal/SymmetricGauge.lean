@@ -27,7 +27,8 @@ arbitrary `ℝ≥0∞`-valued sequences.
 * `TauCeti.SymmetricGauge.single` — the gauge of a basis vector is its value;
   this is what `normalized'` and `symm'` buy together, and everything needing a
   scale goes through it.
-* `TauCeti.SymmetricGauge.extend_mono` — monotone in the sequence.
+* `TauCeti.SymmetricGauge.extend_mono` and `extend_smul` — monotone in the
+  sequence, and homogeneous under a nonnegative real scalar.
 * `TauCeti.SymmetricGauge.iSup_le_extend_le_tsum` — the two ends of the scale,
   `‖a‖_∞ ≤ Φ∞ a ≤ ∑ aₙ`, which is where `normalized` earns its place.
 
@@ -54,6 +55,16 @@ of the same support size — but the `range k` form is a *monotone* net indexed 
 `ℕ`, which is what a limit argument can use. Nothing in this file needs that
 equivalence, and the family construction that does should prove it rather than
 inherit it as a definition.
+
+## A correction worth keeping
+
+An earlier version of this docstring recorded `extend_smul` as blocked, saying
+Mathlib "does not appear to state directly" that `min` commutes with
+multiplication in `ℝ≥0∞`. **It does: `mul_min`.** The failing attempt had used
+`ENNReal.mul_min_eq_min_mul`, which does not exist, and a single wrong guess at a
+name became a recorded claim that the *fact* was absent. **Searching for a name
+is not searching for a fact**, and the negative result sat in a
+submission-library docstring where the next reader would have believed it.
 
 ## Not proved here, deliberately
 
@@ -288,20 +299,55 @@ it said anything, and would then say nothing here. -/
   refine le_trans ?_ (Φ.iSup_le_extend (fun _ => ⊤))
   simp
 
-/-! ### Homogeneity — not proved here
+/-- The truncation of a scaled sequence, at a scaled cap.
 
-`extend_smul`, `Φ∞ (c • a) = c * Φ∞ a`, is the remaining input
-`symmetricGaugeFamily.gauge_smul` needs, and it is **harder than the finite
-`smul'` field it lifts**.  The obstruction is the cap: `truncate` caps in
-`ℝ≥0∞` before converting, so scaling by `c` has to be matched by scaling the cap,
-and the two suprema then range over `m` and `m / c`.  That is true but it needs
-`min` to commute with multiplication in `ℝ≥0∞` at `c ≠ 0, ∞`, which Mathlib does
-not appear to state directly.
+The cap has to scale with the sequence: `truncate` caps in `ℝ≥0∞` before
+converting, so `c • truncate a k m` is the truncation of `c • a` at cap `c * m`,
+not at `m`.  `mul_min` is what makes the two sides agree. -/
+theorem smul_truncate (c : ℝ≥0) (a : ℕ → ℝ≥0∞) (k : ℕ) (m : ℝ≥0) :
+    c • truncate a k m = truncate (fun n => (c : ℝ≥0∞) * a n) k (c * m) := by
+  ext n
+  simp only [truncate_apply, Finsupp.smul_apply, smul_eq_mul]
+  split
+  · rw [← ENNReal.toNNReal_coe (r := c), ← ENNReal.toNNReal_mul,
+      ENNReal.toNNReal_coe, mul_min]
+    congr 2
+  · simp
 
-Recorded rather than half-proved: `{lane:FTC-SYMGAUGE}` slice 2 needs it, and an
-`extend_smul` that only holds for `c ≠ 0` because nobody checked the edge is
-worse than none.
--/
+/-- `extend` is homogeneous under a nonnegative real scalar.
+
+One of the inputs `symmetricGaugeFamily.gauge_smul` needs.  Both directions are
+the same computation read in opposite orders: the supremum over caps is what
+absorbs the scaling, which is why `extend` had to range over `m` at all. -/
+theorem extend_smul (c : ℝ≥0) (a : ℕ → ℝ≥0∞) :
+    Φ.extend (fun n => (c : ℝ≥0∞) * a n) = (c : ℝ≥0∞) * Φ.extend a := by
+  rcases eq_or_ne c 0 with rfl | hc
+  · simp
+  refine le_antisymm ?_ ?_
+  · refine iSup_le fun k => iSup_le fun m => ?_
+    have hm : (c : ℝ≥0∞) * ((m / c : ℝ≥0) : ℝ≥0∞) = (m : ℝ≥0∞) := by
+      rw [← ENNReal.coe_mul, mul_div_cancel₀ _ hc]
+    calc ((Φ (truncate (fun n => (c : ℝ≥0∞) * a n) k m) : ℝ≥0) : ℝ≥0∞)
+        = ((Φ (c • truncate a k (m / c)) : ℝ≥0) : ℝ≥0∞) := by
+          rw [smul_truncate, mul_div_cancel₀ _ hc]
+      _ = (c : ℝ≥0∞) * ((Φ (truncate a k (m / c)) : ℝ≥0) : ℝ≥0∞) := by
+          rw [Φ.smul]; push_cast; ring
+      _ ≤ (c : ℝ≥0∞) * Φ.extend a :=
+          mul_le_mul' le_rfl (le_iSup_of_le k (le_iSup
+            (fun m : ℝ≥0 => ((Φ (truncate a k m) : ℝ≥0) : ℝ≥0∞)) (m / c)))
+  · rw [extend, ENNReal.mul_iSup]
+    refine iSup_le fun k => ?_
+    rw [ENNReal.mul_iSup]
+    refine iSup_le fun m => ?_
+    calc (c : ℝ≥0∞) * ((Φ (truncate a k m) : ℝ≥0) : ℝ≥0∞)
+        = ((Φ (c • truncate a k m) : ℝ≥0) : ℝ≥0∞) := by
+          rw [Φ.smul]; push_cast; ring
+      _ = ((Φ (truncate (fun n => (c : ℝ≥0∞) * a n) k (c * m)) : ℝ≥0) : ℝ≥0∞) := by
+          rw [smul_truncate]
+      _ ≤ Φ.extend (fun n => (c : ℝ≥0∞) * a n) :=
+          le_iSup_of_le k (le_iSup
+            (fun m : ℝ≥0 => ((Φ (truncate (fun n => (c : ℝ≥0∞) * a n) k m) : ℝ≥0) : ℝ≥0∞))
+            (c * m))
 
 end SymmetricGauge
 
