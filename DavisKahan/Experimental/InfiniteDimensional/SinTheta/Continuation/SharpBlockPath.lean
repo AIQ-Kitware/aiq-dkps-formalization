@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSharpRadius
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationWitnessOffDiagonal
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.SharpRadius
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.WitnessOffDiagonal
 
 /-!
 # Sharp continuation block data along the affine path

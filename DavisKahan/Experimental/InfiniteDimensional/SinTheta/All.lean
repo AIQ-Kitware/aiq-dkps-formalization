@@ -16,7 +16,7 @@ import DavisKahan.SinTheta.Unbounded.AllGap
 import DavisKahan.SinTheta.Natural.SpectralSubspace
 import DavisKahan.SinTheta.Natural.Real
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Canonical
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationAll
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.All
 import DavisKahan.SinTheta.Specializations
 import DavisKahan.SinTheta.Unbounded.LegacyGap
 import DavisKahan.SinTheta.FrameFactorizationGeneric

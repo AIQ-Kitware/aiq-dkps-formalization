@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.ContinuationRieszIntegral
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationCore
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.Core
 
 /-!
 # Quantitative Riesz continuation along affine operator paths
