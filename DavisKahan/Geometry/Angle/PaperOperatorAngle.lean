@@ -7,6 +7,7 @@ import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.Geometry.Angle.OperatorAngleReal
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
+import DavisKahan.SpectralTheory.Complexification.FunctionalCalculus
 
 /-!
 # The literal operator angle of Davis--Kahan
@@ -192,18 +193,12 @@ open TauCeti.DavisKahanExt.Real
 variable {ER : Type*} [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
   [CompleteSpace ER]
 
-/-- Scalar restriction of the complexified operator algebra to the reals.  The
-declaration installing this in the complexification files is file-local, so it
-must be reinstalled here. -/
-noncomputable local instance complexOperatorRealAlgebra :
-    Algebra ℝ (RealComplexification ER →L[ℂ] RealComplexification ER) :=
-  Algebra.complexToReal
-
-/-- Real continuous functional calculus on the complexified operator algebra. -/
-noncomputable local instance realContinuousFunctionalCalculus :
-    ContinuousFunctionalCalculus ℝ
-      (RealComplexification ER →L[ℂ] RealComplexification ER) IsSelfAdjoint :=
-  IsSelfAdjoint.instContinuousFunctionalCalculus
+/-! The real algebra structure and the real continuous functional calculus on the
+complexified operator algebra are `scoped instance`s of
+`RealComplexificationFunctionalCalculus`, opened below.  They used to be reinstalled
+here as a second `local instance`, which made them a *different declaration* from the
+one the imported lemmas are stated against; see lane `{lane:CPLX-DEDUP-3}`. -/
+open scoped TauCeti.DavisKahan.Experimental.ExactSinTheta.RealComplexificationFunctionalCalculus
 
 /-- The literal real operator angle, represented canonically on the
 complexification. -/
