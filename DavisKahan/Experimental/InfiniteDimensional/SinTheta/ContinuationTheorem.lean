@@ -120,6 +120,22 @@ noncomputable def targetSelectedSpectralSubspace
     C.targetSeparatingContour.selfAdjoint s
     C.targetSeparatingContour.measurable_selected
 
+/-- The selected spectral projection at the source endpoint: the Riesz operator of `A`
+around the witness's common contour.
+
+The twin of `sourceSelectedSpectralSubspace`, and the operator whose subspace that is.  It
+takes the *witness's* contour rather than `sourceSeparatingContour.geometric`; the two agree
+by `geometric_eq`, and using the common one keeps the source and target endpoints visibly the
+same integral around the same curve. -/
+noncomputable def sourceSelectedProjection
+    (C : SpectralContinuationWitness A V s) : H →L[ℂ] H :=
+  fixedContourRieszOperator C.contour A
+
+/-- The selected spectral projection at the target endpoint. -/
+noncomputable def targetSelectedProjection
+    (C : SpectralContinuationWitness A V s) : H →L[ℂ] H :=
+  fixedContourRieszOperator C.contour (A + V)
+
 noncomputable instance sourceSelectedSpectralSubspace_hasOrthogonalProjection
     (C : SpectralContinuationWitness A V s) :
     C.sourceSelectedSpectralSubspace.HasOrthogonalProjection := by
