@@ -100,8 +100,8 @@ theorem sum_sub_finiteMean_eq_zero {n : ℕ} (z : Fin n → E) :
   · subst hn; simp
   · have hn0 : (n : 𝕜) ≠ 0 := Nat.cast_ne_zero.mpr hn.ne'
     rw [Finset.sum_sub_distrib, Finset.sum_const, Finset.card_univ, Fintype.card_fin,
-      sub_eq_zero, finiteMean, ← Nat.cast_smul_eq_nsmul 𝕜, smul_smul,
-      mul_inv_cancel₀ hn0, one_smul]
+      sub_eq_zero, finiteMean]
+    rw [← Nat.cast_smul_eq_nsmul 𝕜, smul_smul, mul_inv_cancel₀ hn0, one_smul]
 
 /-- Mean after appending one point: the mean moves toward the new point by the fraction
 `1/(n+1)` of the deviation `y - mean z`.  The formula also holds at `n = 0`, where the old
@@ -183,8 +183,9 @@ theorem centeredScatter_append {n : ℕ} (z : Fin n → E) (y : E) :
             (c * (c * inner 𝕜 δ x)) • δ) := by
         congr 1
         rw [Finset.sum_add_distrib, Finset.sum_sub_distrib, Finset.sum_sub_distrib,
-          Finset.sum_smul, ← Finset.smul_sum, Finset.sum_const, Finset.card_univ,
-          Fintype.card_fin, ← Nat.cast_smul_eq_nsmul 𝕜]
+          Finset.sum_smul, ← Finset.smul_sum]
+        simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin,
+          ← Nat.cast_smul_eq_nsmul 𝕜]
     _ = (∑ i, inner 𝕜 (z i - m) x • (z i - m)) +
           ((n : 𝕜) / ((n : 𝕜) + 1)) • (inner 𝕜 δ x • δ) := by
         rw [hzero', hzero, zero_smul, smul_zero, sub_zero, sub_zero]
