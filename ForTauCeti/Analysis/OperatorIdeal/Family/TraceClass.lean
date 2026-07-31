@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
+import ForTauCeti.Topology.ENNRealLiminf
 
 /-!
 # The trace-class ideal
@@ -63,11 +64,11 @@ public section
 
 namespace ContinuousLinearMap
 
-universe v
+universe u v
 
 section Basic
 
-variable {𝕜 : Type} [RCLike 𝕜]
+variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
@@ -103,13 +104,13 @@ end Basic
 
 section Complete
 
-variable {𝕜 : Type} [RCLike 𝕜]
+variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- **The triangle inequality**: the Ky Fan inequality in the limit. -/
-theorem nuclearENorm_add_le [HasMinMaxLowerBoundEverywhere.{0, v} 𝕜] (S T : E →L[𝕜] F) :
+theorem nuclearENorm_add_le [HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (S T : E →L[𝕜] F) :
     (S + T).nuclearENorm ≤ S.nuclearENorm + T.nuclearENorm := by
   rw [nuclearENorm_eq_iSup_kyFanGauge]
   refine iSup_le fun k => ?_
@@ -131,6 +132,11 @@ theorem nuclearENorm_smul (c : 𝕜) (T : E →L[𝕜] F) :
   simp only [nuclearENorm, approximationNumber_smul,
     ENNReal.ofReal_mul (norm_nonneg c), ofReal_norm]
   exact ENNReal.tsum_mul_left
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- The nuclear norm is unchanged by negation, term by term. -/
+@[simp] theorem nuclearENorm_neg (T : E →L[𝕜] F) : (-T).nuclearENorm = T.nuclearENorm := by
+  simp only [nuclearENorm, approximationNumber_neg]
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- **The nuclear norm dominates the operator norm**, being its zeroth term. -/
@@ -159,6 +165,26 @@ theorem nuclearENorm_comp_le {G H : Type v}
           ENNReal.ofReal_mul (norm_nonneg L), ofReal_norm]
         rw [ENNReal.tsum_mul_right, ENNReal.tsum_mul_left]
         rfl
+
+-- Lower semicontinuity is a statement about the sequence of approximation numbers, and
+-- those need no completeness.
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- **The nuclear norm is lower semicontinuous along operator-norm convergence.**
+
+Each approximation number is `1`-Lipschitz in the operator norm
+(`abs_approximationNumber_sub_approximationNumber_le`), so an operator-norm limit converges
+termwise; `ENNReal.tsum_le_liminf_tsum` then passes that to the sum.  This is the step the
+Ky Fan families get for free, because their gauge is a finite sum and therefore continuous. -/
+theorem nuclearENorm_le_liminf {u : Filter ℕ} [u.NeBot]
+    {T : ℕ → E →L[𝕜] F} {L : E →L[𝕜] F}
+    (hop : Filter.Tendsto (fun n => ‖T n - L‖) u (nhds 0)) :
+    L.nuclearENorm ≤ Filter.liminf (fun n => (T n).nuclearENorm) u := by
+  refine ENNReal.tsum_le_liminf_tsum fun i => ?_
+  refine (ENNReal.continuous_ofReal.tendsto _).comp ?_
+  rw [tendsto_iff_dist_tendsto_zero]
+  refine squeeze_zero (fun _ => dist_nonneg) (fun n => ?_) hop
+  rw [Real.dist_eq]
+  exact abs_approximationNumber_sub_approximationNumber_le (T n) L i
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- `T` is **trace class** when its nuclear norm is finite. -/
@@ -190,7 +216,7 @@ end ContinuousLinearMap
 
 namespace TauCeti
 
-universe v
+universe u v
 
 open ContinuousLinearMap
 
@@ -198,9 +224,9 @@ open ContinuousLinearMap
 
 Its carrier is `ContinuousLinearMap.IsTraceClass` definitionally, which unlike the Ky Fan
 carriers is not provably `⊤`. -/
-noncomputable def traceClassIdealFamily (𝕜 : Type) [RCLike 𝕜]
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} 𝕜] :
-    SymmetricOperatorIdealFamily.{0, v} 𝕜 where
+noncomputable def traceClassIdealFamily (𝕜 : Type u) [RCLike 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] :
+    SymmetricOperatorIdealFamily.{u, v} 𝕜 where
   gauge A := A.nuclearENorm
   gauge_add_le A B := A.nuclearENorm_add_le B
   gauge_smul c A := nuclearENorm_smul c A
@@ -208,17 +234,97 @@ noncomputable def traceClassIdealFamily (𝕜 : Type) [RCLike 𝕜]
   gauge_comp_le L A R := nuclearENorm_comp_le L A R
   gauge_adjoint A := A.nuclearENorm_adjoint
 
-variable {𝕜 : Type} [RCLike 𝕜]
-  [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} 𝕜]
+/-- **The trace-class ideal is complete.**
+
+The argument is the Hilbert--Schmidt one with the energy replaced by the nuclear norm, and
+it is worth saying which part is shared and which is not.  Shared: the gauge dominates the
+operator norm, so a gauge-Cauchy sequence has an operator-norm limit `L`; then lower
+semicontinuity of the gauge puts `L` in the ideal and gives convergence *in the gauge*.  Not
+shared: the semicontinuity itself.  Hilbert--Schmidt gets it from pointwise convergence on a
+basis; here it comes from `abs_approximationNumber_sub_approximationNumber_le`, the
+perturbation bound on the whole `s`-sequence, which needs no basis at all.
+
+Unlike the Ky Fan families the gauge is *not* equivalent to the operator norm, so the
+operator-norm limit is only the start of the argument rather than the whole of it. -/
+instance isComplete_traceClassIdealFamily {𝕜 : Type u} [RCLike 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] :
+    (traceClassIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.IsComplete where
+  completeSpace := by
+    intro E F _ _ _ _ _ _
+    refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
+    -- the gauge dominates the operator norm, so the sequence is Cauchy there too
+    have hop : CauchySeq fun n => (a n).val := by
+      rw [Metric.cauchySeq_iff] at ha ⊢
+      intro ε hε
+      obtain ⟨M, hM⟩ := ha ε hε
+      refine ⟨M, fun m hm n hn => lt_of_le_of_lt ?_ (hM m hm n hn)⟩
+      rw [dist_eq_norm, dist_eq_norm]
+      exact TauCeti.OperatorIdealFamily.Elem.norm_val_le (a m - a n)
+    obtain ⟨L, hL⟩ := cauchySeq_tendsto_of_complete hop
+    -- the tail of the Cauchy estimate, transported from the ideal norm to the gauge
+    have hcauchy : ∀ ε : ℝ, 0 < ε → ∃ N, ∀ n ≥ N,
+        (L - (a n).val).nuclearENorm ≤ ENNReal.ofReal ε := by
+      intro ε hε
+      rw [Metric.cauchySeq_iff] at ha
+      obtain ⟨N, hN⟩ := ha ε hε
+      refine ⟨N, fun n hn => ?_⟩
+      have hfatou : (L - (a n).val).nuclearENorm ≤
+          Filter.liminf (fun m => ((a m).val - (a n).val).nuclearENorm) Filter.atTop := by
+        refine ContinuousLinearMap.nuclearENorm_le_liminf ?_
+        have hd : Filter.Tendsto (fun m => dist ((a m).val) L) Filter.atTop (nhds 0) :=
+          tendsto_iff_dist_tendsto_zero.mp hL
+        simpa [dist_eq_norm] using hd
+      refine hfatou.trans ?_
+      have hev : ∀ᶠ m in Filter.atTop,
+          ((a m).val - (a n).val).nuclearENorm ≤ ENNReal.ofReal ε := by
+        filter_upwards [Filter.eventually_ge_atTop N] with m hm
+        have hd : ‖a m - a n‖ < ε := by simpa [dist_eq_norm] using hN m hm n hn
+        have heq : (traceClassIdealFamily.{u, v} 𝕜).gauge (a m - a n).val
+            = ((a m).val - (a n).val).nuclearENorm := rfl
+        rw [← heq, ← TauCeti.OperatorIdealFamily.Elem.enorm_eq_gauge, ← ofReal_norm]
+        exact ENNReal.ofReal_le_ofReal hd.le
+      calc Filter.liminf (fun m => ((a m).val - (a n).val).nuclearENorm) Filter.atTop
+          ≤ Filter.liminf (fun _ : ℕ => ENNReal.ofReal ε) Filter.atTop :=
+            Filter.liminf_le_liminf hev
+        _ = ENNReal.ofReal ε := Filter.liminf_const _
+    -- the limit lies in the ideal: it differs from a member by something of finite gauge
+    obtain ⟨N₁, hN₁⟩ := hcauchy 1 one_pos
+    have hmemL : L ∈ (traceClassIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.carrier := by
+      have hsplit : L = (L - (a N₁).val) + (a N₁).val := by abel
+      rw [TauCeti.OperatorIdealFamily.mem_carrier_iff, hsplit]
+      refine ne_top_of_le_ne_top ?_
+        ((traceClassIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.gauge_add_le _ _)
+      refine ENNReal.add_ne_top.mpr ⟨?_, (a N₁).gauge_val_ne_top⟩
+      exact ne_top_of_le_ne_top ENNReal.ofReal_ne_top (hN₁ N₁ le_rfl)
+    refine ⟨TauCeti.OperatorIdealFamily.Elem.mk hmemL, ?_⟩
+    rw [Metric.tendsto_atTop]
+    intro ε hε
+    obtain ⟨N, hN⟩ := hcauchy (ε / 2) (half_pos hε)
+    refine ⟨N, fun n hn => ?_⟩
+    have hgauge : ((a n).val - L).nuclearENorm ≤ ENNReal.ofReal (ε / 2) := by
+      have hneg : ((a n).val - L) = -(L - (a n).val) := by abel
+      rw [hneg, ContinuousLinearMap.nuclearENorm_neg]
+      exact hN n hn
+    have hle : ‖a n - TauCeti.OperatorIdealFamily.Elem.mk hmemL‖ ≤ ε / 2 := by
+      have := ENNReal.toReal_mono ENNReal.ofReal_ne_top hgauge
+      rwa [ENNReal.toReal_ofReal (by positivity)] at this
+    calc dist (a n) (TauCeti.OperatorIdealFamily.Elem.mk hmemL)
+        = ‖a n - TauCeti.OperatorIdealFamily.Elem.mk hmemL‖ := dist_eq_norm _ _
+      _ ≤ ε / 2 := hle
+      _ < ε := by linarith
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+  [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- The gauge of the trace-class family *is* the nuclear norm, definitionally. -/
 @[simp] theorem gauge_traceClassIdealFamily (A : E →L[𝕜] F) :
-    ((traceClassIdealFamily.{v} 𝕜)).gauge A = A.nuclearENorm := (rfl)
+    ((traceClassIdealFamily.{u, v} 𝕜)).gauge A = A.nuclearENorm := (rfl)
 /-- Membership in the trace-class ideal is exactly `IsTraceClass`, so the generic
 carrier and the named predicate never diverge. -/
 theorem mem_traceClassIdealFamily_carrier_iff (A : E →L[𝕜] F) :
-    A ∈ ((traceClassIdealFamily.{v} 𝕜)).toOperatorIdealFamily.carrier ↔ A.IsTraceClass := (Iff.rfl)
+    A ∈ ((traceClassIdealFamily.{u, v} 𝕜)).toOperatorIdealFamily.carrier ↔
+      A.IsTraceClass := (Iff.rfl)
 end TauCeti

@@ -246,10 +246,10 @@ complex-only one of the pair — the sentence this docstring used to end with, t
 capability class *"survives only for the real-scalar case"*, is out of date.  What survives
 is the redundancy: two classes stating the same capability at two depths, of which only the
 deeper one is now needed. -/
-theorem kyFanSymmetricIdealFamily_eq_kyFanIdealFamily (𝕜 : Type) [RCLike 𝕜]
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} 𝕜]
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} 𝕜] (k : ℕ) (hk : 0 < k) :
-    kyFanSymmetricIdealFamily.{0, v} (𝕜 := 𝕜) k hk = TauCeti.kyFanIdealFamily.{v} 𝕜 k hk :=
+theorem kyFanSymmetricIdealFamily_eq_kyFanIdealFamily (𝕜 : Type u) [RCLike 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
+    kyFanSymmetricIdealFamily.{u, v} (𝕜 := 𝕜) k hk
+      = TauCeti.kyFanIdealFamily.{u, v} 𝕜 k hk :=
   rfl
 
 /-- The real-valued Ky Fan gauge is recovered from the canonical one. -/

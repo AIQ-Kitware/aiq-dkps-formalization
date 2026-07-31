@@ -282,13 +282,49 @@ theorem schattenENorm_comp_le {p : ℝ} (hp0 : 0 < p) {G H : Type v}
           ← ENNReal.rpow_mul, mul_inv_cancel₀ hp0.ne', ENNReal.rpow_one, schattenENorm]
         ring
 
+-- Lower semicontinuity is about the approximation-number sequence; no completeness is used.
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- **The Schatten norm is lower semicontinuous along operator-norm convergence**, stated at
+the `p`-th power.
+
+Same shape as `nuclearENorm_le_liminf`: the summands are continuous images of the
+approximation numbers and `ENNReal.tsum_le_liminf_tsum` handles the sum.
+
+**Stated at the `p`-th power deliberately**, which is also why the Hilbert--Schmidt twin is
+stated at the square.  Pulling `^ p⁻¹` out of a `liminf` needs that map to commute with
+`liminf`, which is true but is a separate lemma about `ℝ≥0∞`; at the `p`-th power the sum is
+literally the `liminf`'s subject and nothing has to commute.  Consumers undo it with
+`ENNReal.rpow_le_rpow_iff`. -/
+theorem schattenENorm_rpow_le_liminf {p : ℝ} (hp0 : 0 < p) {u : Filter ℕ} [u.NeBot]
+    {T : ℕ → E →L[𝕜] F} {L : E →L[𝕜] F}
+    (hop : Filter.Tendsto (fun n => ‖T n - L‖) u (nhds 0)) :
+    L.schattenENorm p ^ p ≤ Filter.liminf (fun n => (T n).schattenENorm p ^ p) u := by
+  have hpow : ∀ S : E →L[𝕜] F, S.schattenENorm p ^ p
+      = ∑' i : ℕ, ENNReal.ofReal (S.approximationNumber i) ^ p := by
+    intro S
+    rw [schattenENorm, ← ENNReal.rpow_mul, inv_mul_cancel₀ hp0.ne', ENNReal.rpow_one]
+  simp only [hpow]
+  refine ENNReal.tsum_le_liminf_tsum fun i => ?_
+  refine (ENNReal.continuous_rpow_const.tendsto _).comp ?_
+  refine (ENNReal.continuous_ofReal.tendsto _).comp ?_
+  rw [tendsto_iff_dist_tendsto_zero]
+  refine squeeze_zero (fun _ => dist_nonneg) (fun n => ?_) hop
+  rw [Real.dist_eq]
+  exact abs_approximationNumber_sub_approximationNumber_le (T n) L i
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- The Schatten norm is unchanged by negation, term by term. -/
+@[simp] theorem schattenENorm_neg (p : ℝ) (T : E →L[𝕜] F) :
+    (-T).schattenENorm p = T.schattenENorm p := by
+  simp only [schattenENorm, approximationNumber_neg]
+
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- `T` is **Schatten-`p`** when its Schatten norm is finite. -/
 def IsSchattenClass (p : ℝ) (T : E →L[𝕜] F) : Prop := T.schattenENorm p ≠ ∞
 
 section AgreementAtOne
 
-variable {𝕜 : Type} [RCLike 𝕜]
+variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
@@ -313,7 +349,7 @@ end ContinuousLinearMap
 
 namespace TauCeti
 
-universe v
+universe u v
 
 open ContinuousLinearMap
 
@@ -322,9 +358,9 @@ open ContinuousLinearMap
 At `p = 1` its gauge is the nuclear norm and at `p = 2` the Hilbert--Schmidt norm; those two
 families are built separately in this directory from their own arguments, and agreeing with
 them is not asserted here. -/
-noncomputable def schattenIdealFamily (𝕜 : Type) [RCLike 𝕜]
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} 𝕜] {p : ℝ} (hp : 1 ≤ p) :
-    SymmetricOperatorIdealFamily.{0, v} 𝕜 where
+noncomputable def schattenIdealFamily (𝕜 : Type u) [RCLike 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] {p : ℝ} (hp : 1 ≤ p) :
+    SymmetricOperatorIdealFamily.{u, v} 𝕜 where
   gauge A := A.schattenENorm p
   gauge_add_le A B := schattenENorm_add_le hp A B
   gauge_smul c A := schattenENorm_smul (lt_of_lt_of_le zero_lt_one hp) c A
@@ -332,28 +368,104 @@ noncomputable def schattenIdealFamily (𝕜 : Type) [RCLike 𝕜]
   gauge_comp_le L A R := schattenENorm_comp_le (lt_of_lt_of_le zero_lt_one hp) L A R
   gauge_adjoint A := schattenENorm_adjoint p A
 
-variable {𝕜 : Type} [RCLike 𝕜]
-  [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} 𝕜]
+/-- **The Schatten ideal is complete**, for the same reason the trace-class ideal is: the
+gauge dominates the operator norm, so a gauge-Cauchy sequence has an operator-norm limit,
+and `schattenENorm_rpow_le_liminf` then puts that limit in the ideal and gives convergence
+in the gauge. -/
+instance isComplete_schattenIdealFamily {𝕜 : Type u} [RCLike 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] {p : ℝ} (hp : 1 ≤ p) :
+    (schattenIdealFamily.{u, v} 𝕜 hp).toOperatorIdealFamily.IsComplete where
+  completeSpace := by
+    intro E F _ _ _ _ _ _
+    have hp0 : (0 : ℝ) < p := lt_of_lt_of_le zero_lt_one hp
+    refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
+    have hop : CauchySeq fun n => (a n).val := by
+      rw [Metric.cauchySeq_iff] at ha ⊢
+      intro ε hε
+      obtain ⟨M, hM⟩ := ha ε hε
+      refine ⟨M, fun m hm n hn => lt_of_le_of_lt ?_ (hM m hm n hn)⟩
+      rw [dist_eq_norm, dist_eq_norm]
+      exact TauCeti.OperatorIdealFamily.Elem.norm_val_le (a m - a n)
+    obtain ⟨L, hL⟩ := cauchySeq_tendsto_of_complete hop
+    have hcauchy : ∀ ε : ℝ, 0 < ε → ∃ N, ∀ n ≥ N,
+        (L - (a n).val).schattenENorm p ≤ ENNReal.ofReal ε := by
+      intro ε hε
+      rw [Metric.cauchySeq_iff] at ha
+      obtain ⟨N, hN⟩ := ha ε hε
+      refine ⟨N, fun n hn => ?_⟩
+      have hfatou : (L - (a n).val).schattenENorm p ^ p ≤
+          Filter.liminf (fun m => ((a m).val - (a n).val).schattenENorm p ^ p)
+            Filter.atTop := by
+        refine ContinuousLinearMap.schattenENorm_rpow_le_liminf hp0 ?_
+        have hd : Filter.Tendsto (fun m => dist ((a m).val) L) Filter.atTop (nhds 0) :=
+          tendsto_iff_dist_tendsto_zero.mp hL
+        simpa [dist_eq_norm] using hd
+      have hev : ∀ᶠ m in Filter.atTop,
+          ((a m).val - (a n).val).schattenENorm p ^ p ≤ ENNReal.ofReal ε ^ p := by
+        filter_upwards [Filter.eventually_ge_atTop N] with m hm
+        have hd : ‖a m - a n‖ < ε := by simpa [dist_eq_norm] using hN m hm n hn
+        have hgauge : ((a m).val - (a n).val).schattenENorm p ≤ ENNReal.ofReal ε := by
+          have heq : (schattenIdealFamily.{u, v} 𝕜 hp).gauge (a m - a n).val
+              = ((a m).val - (a n).val).schattenENorm p := rfl
+          rw [← heq, ← TauCeti.OperatorIdealFamily.Elem.enorm_eq_gauge, ← ofReal_norm]
+          exact ENNReal.ofReal_le_ofReal hd.le
+        exact ENNReal.rpow_le_rpow hgauge hp0.le
+      have hle : Filter.liminf
+          (fun m => ((a m).val - (a n).val).schattenENorm p ^ p) Filter.atTop
+          ≤ ENNReal.ofReal ε ^ p := by
+        calc Filter.liminf
+              (fun m => ((a m).val - (a n).val).schattenENorm p ^ p) Filter.atTop
+            ≤ Filter.liminf (fun _ : ℕ => ENNReal.ofReal ε ^ p) Filter.atTop :=
+              Filter.liminf_le_liminf hev
+          _ = ENNReal.ofReal ε ^ p := Filter.liminf_const _
+      exact (ENNReal.rpow_le_rpow_iff hp0).mp (hfatou.trans hle)
+    obtain ⟨N₁, hN₁⟩ := hcauchy 1 one_pos
+    have hmemL : L ∈ (schattenIdealFamily.{u, v} 𝕜 hp).toOperatorIdealFamily.carrier := by
+      have hsplit : L = (L - (a N₁).val) + (a N₁).val := by abel
+      rw [TauCeti.OperatorIdealFamily.mem_carrier_iff, hsplit]
+      refine ne_top_of_le_ne_top ?_
+        ((schattenIdealFamily.{u, v} 𝕜 hp).toOperatorIdealFamily.gauge_add_le _ _)
+      refine ENNReal.add_ne_top.mpr ⟨?_, (a N₁).gauge_val_ne_top⟩
+      exact ne_top_of_le_ne_top ENNReal.ofReal_ne_top (hN₁ N₁ le_rfl)
+    refine ⟨TauCeti.OperatorIdealFamily.Elem.mk hmemL, ?_⟩
+    rw [Metric.tendsto_atTop]
+    intro ε hε
+    obtain ⟨N, hN⟩ := hcauchy (ε / 2) (half_pos hε)
+    refine ⟨N, fun n hn => ?_⟩
+    have hgauge : ((a n).val - L).schattenENorm p ≤ ENNReal.ofReal (ε / 2) := by
+      have hneg : ((a n).val - L) = -(L - (a n).val) := by abel
+      rw [hneg, ContinuousLinearMap.schattenENorm_neg]
+      exact hN n hn
+    have hle : ‖a n - TauCeti.OperatorIdealFamily.Elem.mk hmemL‖ ≤ ε / 2 := by
+      have := ENNReal.toReal_mono ENNReal.ofReal_ne_top hgauge
+      rwa [ENNReal.toReal_ofReal (by positivity)] at this
+    calc dist (a n) (TauCeti.OperatorIdealFamily.Elem.mk hmemL)
+        = ‖a n - TauCeti.OperatorIdealFamily.Elem.mk hmemL‖ := dist_eq_norm _ _
+      _ ≤ ε / 2 := hle
+      _ < ε := by linarith
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+  [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- The gauge of the Schatten family *is* the Schatten norm, definitionally. -/
 @[simp] theorem gauge_schattenIdealFamily {p : ℝ} (hp : 1 ≤ p) (A : E →L[𝕜] F) :
-    (schattenIdealFamily.{v} 𝕜 hp).gauge A = A.schattenENorm p := (rfl)
+    (schattenIdealFamily.{u, v} 𝕜 hp).gauge A = A.schattenENorm p := (rfl)
 
 /-- Membership in the Schatten ideal is exactly `IsSchattenClass`. -/
 theorem mem_schattenIdealFamily_carrier_iff {p : ℝ} (hp : 1 ≤ p) (A : E →L[𝕜] F) :
-    A ∈ (schattenIdealFamily.{v} 𝕜 hp).toOperatorIdealFamily.carrier ↔
+    A ∈ (schattenIdealFamily.{u, v} 𝕜 hp).toOperatorIdealFamily.carrier ↔
       A.IsSchattenClass p := (Iff.rfl)
 
 /-- **The Schatten ideal at `p = 1` is the trace-class ideal**, as families and not merely as
 gauges.  `OperatorIdealFamily.ext` is what makes the upgrade available: a family in this
 presentation is determined by its gauge, including off the ideal, so the two structures agree
 once their gauges do. -/
-theorem schattenIdealFamily_one_eq_traceClassIdealFamily (𝕜 : Type) [RCLike 𝕜]
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} 𝕜] :
-    schattenIdealFamily.{v} 𝕜 (le_refl (1 : ℝ)) = traceClassIdealFamily.{v} 𝕜 := by
+theorem schattenIdealFamily_one_eq_traceClassIdealFamily (𝕜 : Type u) [RCLike 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] :
+    schattenIdealFamily.{u, v} 𝕜 (le_refl (1 : ℝ)) = traceClassIdealFamily.{u, v} 𝕜 := by
   exact SymmetricOperatorIdealFamily.ext fun {_E _F} _ _ _ _ _ _ A => A.schattenENorm_one
 
 end TauCeti

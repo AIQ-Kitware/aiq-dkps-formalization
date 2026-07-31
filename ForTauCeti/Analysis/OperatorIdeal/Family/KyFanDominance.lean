@@ -58,13 +58,13 @@ public section
 
 namespace TauCeti
 
-universe v
+universe u v
 
 open ContinuousLinearMap
 
 /-- **Ky Fan dominance.**  Majorization of every finite Ky Fan gauge forces the ideal gauge
 to be dominated too. -/
-class IsKyFanDominant {𝕜 : Type} [RCLike 𝕜] (N : SymmetricOperatorIdealFamily.{0, v} 𝕜) :
+class IsKyFanDominant {𝕜 : Type u} [RCLike 𝕜] (N : SymmetricOperatorIdealFamily.{u, v} 𝕜) :
     Prop where
   /-- The dominance implication. -/
   gauge_le_of_forall_kyFanGauge_le :
@@ -76,14 +76,14 @@ class IsKyFanDominant {𝕜 : Type} [RCLike 𝕜] (N : SymmetricOperatorIdealFam
 
 namespace IsKyFanDominant
 
-variable {𝕜 : Type} [RCLike 𝕜]
+variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- Dominance in the two-part form the sine-theta development uses: a majorized operator is
 a member whenever the majorizing one is, and its gauge is no larger. -/
-theorem mem_carrier_and_gauge_le (N : SymmetricOperatorIdealFamily.{0, v} 𝕜)
+theorem mem_carrier_and_gauge_le (N : SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [IsKyFanDominant N] {A B : E →L[𝕜] F}
     (hB : B ∈ N.toOperatorIdealFamily.carrier)
     (hAB : ∀ k, A.kyFanGauge k ≤ B.kyFanGauge k) :
@@ -92,7 +92,7 @@ theorem mem_carrier_and_gauge_le (N : SymmetricOperatorIdealFamily.{0, v} 𝕜)
   exact ⟨ne_top_of_le_ne_top hB hle, hle⟩
 
 /-- Equal Ky Fan gauges force equal ideal gauges. -/
-theorem gauge_eq_of_forall_kyFanGauge_eq (N : SymmetricOperatorIdealFamily.{0, v} 𝕜)
+theorem gauge_eq_of_forall_kyFanGauge_eq (N : SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [IsKyFanDominant N] {A B : E →L[𝕜] F}
     (h : ∀ k, A.kyFanGauge k = B.kyFanGauge k) :
     N.gauge A = N.gauge B :=
@@ -103,25 +103,25 @@ theorem gauge_eq_of_forall_kyFanGauge_eq (N : SymmetricOperatorIdealFamily.{0, v
 end IsKyFanDominant
 
 /-- The operator norm is the first Ky Fan gauge, so dominance is the `k = 1` instance. -/
-instance isKyFanDominant_operatorNormFamily (𝕜 : Type) [RCLike 𝕜] :
-    IsKyFanDominant (operatorNormFamily.{0, v} 𝕜) where
+instance isKyFanDominant_operatorNormFamily (𝕜 : Type u) [RCLike 𝕜] :
+    IsKyFanDominant (operatorNormFamily.{u, v} 𝕜) where
   gauge_le_of_forall_kyFanGauge_le {_E _F} _ _ _ _ _ _ {_A _B} h := by
     have h1 := h 1
     rw [ContinuousLinearMap.kyFanGauge_one, ContinuousLinearMap.kyFanGauge_one] at h1
     simpa [operatorNormFamily] using ENNReal.ofReal_le_ofReal h1
 
 /-- A Ky Fan family is dominated by hypothesis at its own index. -/
-instance isKyFanDominant_kyFanIdealFamily (𝕜 : Type) [RCLike 𝕜]
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} 𝕜] (k : ℕ) (hk : 0 < k) :
-    IsKyFanDominant (kyFanIdealFamily.{v} 𝕜 k hk) where
+instance isKyFanDominant_kyFanIdealFamily (𝕜 : Type u) [RCLike 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
+    IsKyFanDominant (kyFanIdealFamily.{u, v} 𝕜 k hk) where
   gauge_le_of_forall_kyFanGauge_le {_E _F} _ _ _ _ _ _ {_A _B} h :=
     ENNReal.ofReal_le_ofReal (h k)
 
 /-- The nuclear norm is the supremum of the Ky Fan gauges, so dominance is monotonicity of
 that supremum. -/
-instance isKyFanDominant_traceClassIdealFamily (𝕜 : Type) [RCLike 𝕜]
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} 𝕜] :
-    IsKyFanDominant (traceClassIdealFamily.{v} 𝕜) where
+instance isKyFanDominant_traceClassIdealFamily (𝕜 : Type u) [RCLike 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] :
+    IsKyFanDominant (traceClassIdealFamily.{u, v} 𝕜) where
   gauge_le_of_forall_kyFanGauge_le {_E _F} _ _ _ _ _ _ {_A _B} h := by
     rw [gauge_traceClassIdealFamily, gauge_traceClassIdealFamily,
       ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge,
