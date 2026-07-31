@@ -13,6 +13,8 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor
 import DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence
 import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 import DavisKahan.Sources.DavisKahan1970.Ideals.SequenceGauge
+import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
+import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormDefinite
 import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
 
