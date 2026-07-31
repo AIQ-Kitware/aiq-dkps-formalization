@@ -3,16 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.GroundedImports
 import DavisKahan.OperatorIdeal.Majorization.WeakSubmajorization
 import DavisKahan.Sources.DavisKahan1970.Ideals.SequenceGauge
 import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
 import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
-import FinishTanTwoTheta.ApproximationNumber.SpectralSelection
-import FinishTanTwoTheta.FunctionalCalculus.DoubleAngleTangent
-import FinishTanTwoTheta.DavisKahan.StableRiccatiPair
-import FinishTanTwoTheta.DavisKahan.SharpKyFan
-import FinishTanTwoTheta.DavisKahan.SharpIdeal
+import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
+import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
+import DavisKahan.Sources.DavisKahan1970.StableRiccatiPair
+import DavisKahan.Sources.DavisKahan1970.SharpKyFan
+import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 import FinishTanTwoTheta.DavisKahan.PaperFaithful
 import DavisKahan.Sources.DavisKahan1970.Audits.DoubleAngleTangent
 

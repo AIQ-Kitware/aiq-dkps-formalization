@@ -206,18 +206,6 @@ theorem eigenvalues_abs (A : E →ₗ[𝕜] E) :
 
 /-! ### The Ky Fan trace inequality (F1.a–b) -/
 
-/-- Counting: the indices of `Fin n` below `k` number exactly `k`. -/
-private theorem card_filter_lt' {n k : ℕ} (hk : k ≤ n) :
-    (Finset.univ.filter (fun j : Fin n => (j : ℕ) < k)).card = k := by
-  rcases lt_or_eq_of_le hk with hlt | rfl
-  · have h : (Finset.univ.filter (fun j : Fin n => (j : ℕ) < k))
-        = Finset.Iio (⟨k, hlt⟩ : Fin n) := by
-      ext j; simp [Fin.lt_def]
-    rw [h, Fin.card_Iio]
-  · have h : (Finset.univ.filter (fun j : Fin k => (j : ℕ) < k)) = Finset.univ := by
-      ext j; simp
-    rw [h, Finset.card_univ, Fintype.card_fin]
-
 /-- **Fractional knapsack**: an antitone list, integrated against weights in
 `[0, 1]` of total mass exactly `k`, is at most its top-`k` sum. -/
 private theorem sum_mul_le_sum_top {n k : ℕ} (hk : k ≤ n) {lam c : Fin n → ℝ}
@@ -246,7 +234,7 @@ private theorem sum_mul_le_sum_top {n k : ℕ} (hk : k ≤ n) {lam c : Fin n →
         = ∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), lam j
           + t * (∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), c j) - t * k := by
       simp only [Finset.sum_add_distrib, ← Finset.mul_sum, Finset.sum_sub_distrib,
-        Finset.sum_const, card_filter_lt' hk, nsmul_eq_mul, mul_one]
+        Finset.sum_const, Finset.card_filter_lt hk, nsmul_eq_mul, mul_one]
       ring
     have htail_eq : ∑ j ∈ Finset.univ.filter (fun j : Fin n => ¬ (j : ℕ) < k), t * c j
         = t * ∑ j ∈ Finset.univ.filter (fun j : Fin n => ¬ (j : ℕ) < k), c j :=

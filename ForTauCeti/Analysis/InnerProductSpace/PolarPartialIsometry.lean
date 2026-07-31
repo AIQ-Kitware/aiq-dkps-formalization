@@ -78,8 +78,8 @@ subspace gives `polarPartial`.
 `ForTauCeti/Analysis/InnerProductSpace/PolarDecomposition.lean` has the partial-isometry
 factor for `LinearMap` endomorphisms in **finite dimensions**;
 `ForTauCeti/Analysis/InnerProductSpace/PolarIsometry.lean` has the *invertible* case in
-general, with its own `TODO` asking for exactly this module.  This is the general bounded
-statement that subsumes both directions of that gap.
+general.  This is the general bounded statement that subsumes both directions of that gap,
+which is why `PolarIsometry.lean` no longer carries the request it once did.
 
 ## Provenance
 

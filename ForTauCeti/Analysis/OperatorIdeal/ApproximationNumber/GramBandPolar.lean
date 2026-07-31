@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
-import FinishTanTwoTheta.ApproximationNumber.FinitePVMSelection
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
 import ForTauCeti.Analysis.InnerProductSpace.PolarPartialIsometry
 
 /-!
@@ -15,10 +15,20 @@ positive narrow spectral band for `X†X` lie in the polar initial space.  The
 band width controls the Gram residual, and a positive Gram residual controls
 the corresponding modulus residual.  The polar partial isometry then gives
 both approximate singular equations.
+
+## Provenance
+
+*Moved, not restated.*  Written in the `FinishTanTwoTheta` completion workspace and
+promoted here directly, like the `FinitePVMSelection` it imports.  **All three of its
+imports are `ForTauCeti` modules and none is from `DavisKahan`** — one of them only became
+so when `FinitePVMSelection` was promoted immediately before this, which is the argument
+for emptying that workspace bottom-up: each promotion turns the next module into a leaf.
+Statements and proofs are unchanged; the namespace moved from `TauCeti.FinishTanTwoTheta`
+to `TauCeti.ApproximationNumber`, matching its siblings.
 -/
 
 namespace TauCeti
-namespace FinishTanTwoTheta
+namespace ApproximationNumber
 
 open ApproximationNumber
 open scoped InnerProductSpace
@@ -229,5 +239,5 @@ theorem modulus_residual_le_of_gram_residual
 
 end
 
-end FinishTanTwoTheta
+end ApproximationNumber
 end TauCeti

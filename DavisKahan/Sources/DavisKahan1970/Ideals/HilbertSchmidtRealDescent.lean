@@ -35,8 +35,7 @@ namespace RectangularHilbertSchmidt
 
 open scoped InnerProductSpace
 open Filter Topology
-open Foundation
-open Foundation.RealComplexification
+open TauCeti.RealComplexification
 open ClosedOperatorComplexification
 
 noncomputable section

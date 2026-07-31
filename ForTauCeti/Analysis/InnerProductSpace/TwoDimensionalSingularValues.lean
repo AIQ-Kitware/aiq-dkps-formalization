@@ -264,8 +264,7 @@ theorem gramDetFinTwo_eq_mul_sq_singularValues
       = ‖A (e 0)‖ ^ 2 * ‖A (e 1)‖ ^ 2 - ‖⟪A (e 0), A (e 1)⟫_𝕜‖ ^ 2
     have key : M.det = ((‖A (e 0)‖ ^ 2 * ‖A (e 1)‖ ^ 2
         - ‖⟪A (e 0), A (e 1)⟫_𝕜‖ ^ 2 : ℝ) : 𝕜) := by
-      rw [Matrix.det_fin_two, hM 0 0, hM 0 1, hM 1 0, hM 1 1,
-        inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K,
+      simp only [Matrix.det_fin_two, hM, inner_self_eq_norm_sq_to_K,
         ← inner_conj_symm (A (e 1)) (A (e 0)), RCLike.mul_conj]
       push_cast
       ring

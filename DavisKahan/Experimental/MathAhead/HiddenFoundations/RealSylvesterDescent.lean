@@ -8,7 +8,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Basic
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.OrderedSemigroup
 import DavisKahan.OperatorIdeal.ComplexificationApproximation
-import DavisKahan.SpectralTheory.Complexification.FunctionalCalculus
+import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
 
 /-!
 # Real descent for the separated bounded Sylvester theorem
@@ -24,6 +24,7 @@ image belongs to the spectrum of the coordinatewise complexification.
 -/
 
 open scoped InnerProductSpace
+open TauCeti.RealComplexification
 
 namespace TauCeti
 namespace DavisKahan
@@ -34,7 +35,6 @@ namespace HiddenFoundations
 open DavisKahanExt
 open ExactSinTheta
 open ExactSinTheta.ComplexificationApproximation
-open ExactSinTheta.RealComplexificationFunctionalCalculus
 open RealComplexification
 
 noncomputable section
@@ -98,7 +98,7 @@ theorem isUnit_of_isUnit_complexify
     RrLinear.mkContinuous ‖R‖ (fun x => by
       calc
         ‖RrLinear x‖ ≤ ‖R (ofReal x)‖ :=
-          TauCeti.DavisKahan.Experimental.Foundation.RealComplexification.norm_re_le _
+          TauCeti.RealComplexification.norm_re_le _
         _ ≤ ‖R‖ * ‖ofReal x‖ := R.le_opNorm _
         _ = ‖R‖ * ‖x‖ := by rw [ofReal.norm_map])
   have hleftC : complexify T ∘L R = 1 := by

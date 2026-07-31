@@ -56,39 +56,48 @@ namespace ENNReal
 
 variable {ι : Type*}
 
-/-- **Minkowski's inequality at `p = 2` for `tsum`.**  Mathlib's `ENNReal.Lp_add_le` is
-stated for a `Finset`; this is the extension to an unconditional sum, which in `ℝ≥0∞` needs
-no summability hypothesis.
+/-- **Minkowski's inequality in `ℓᵖ` for `tsum`, over `ℝ≥0∞`.**  Mathlib's
+`ENNReal.Lp_add_le` is stated for a `Finset`, and its `tsum` counterpart exists only over
+`ℝ≥0` (`NNReal.Lp_add_le_tsum`), where it carries summability hypotheses on both summands.
+This is the `ℝ≥0∞` version, which needs no summability hypothesis at all — that is exactly
+why the operator-ideal gauges are `ℝ≥0∞`-valued, since it lets their laws hold
+unconditionally at non-members.
 
 The proof is the standard supremum argument: the finite inequality bounds every partial sum
-of the left side by the square of the right side, and `∑'` is the supremum of its partial
-sums. -/
+of the left side by the `p`-th power of the right side, and `∑'` is the supremum of its
+partial sums. -/
+theorem tsum_rpow_add_le {p : ℝ} (hp : 1 ≤ p) (f g : ι → ℝ≥0∞) :
+    (∑' i, (f i + g i) ^ p) ^ p⁻¹ ≤
+      (∑' i, f i ^ p) ^ p⁻¹ + (∑' i, g i ^ p) ^ p⁻¹ := by
+  have hp0 : (0 : ℝ) < p := lt_of_lt_of_le zero_lt_one hp
+  set A := (∑' i, f i ^ p) ^ p⁻¹ with hA
+  set B := (∑' i, g i ^ p) ^ p⁻¹ with hB
+  have hpow : ∀ x : ℝ≥0∞, (x ^ p⁻¹) ^ p = x := fun x => by
+    rw [← ENNReal.rpow_mul, inv_mul_cancel₀ hp0.ne', ENNReal.rpow_one]
+  have key : ∀ s : Finset ι, ∑ i ∈ s, (f i + g i) ^ p ≤ (A + B) ^ p := by
+    intro s
+    have hfin := ENNReal.Lp_add_le (s := s) (f := f) (g := g) (p := p) hp
+    rw [one_div] at hfin
+    have hfA : (∑ i ∈ s, f i ^ p) ^ p⁻¹ ≤ A :=
+      ENNReal.rpow_le_rpow (ENNReal.sum_le_tsum s) (by positivity)
+    have hgB : (∑ i ∈ s, g i ^ p) ^ p⁻¹ ≤ B :=
+      ENNReal.rpow_le_rpow (ENNReal.sum_le_tsum s) (by positivity)
+    calc ∑ i ∈ s, (f i + g i) ^ p
+        = ((∑ i ∈ s, (f i + g i) ^ p) ^ p⁻¹) ^ p := (hpow _).symm
+      _ ≤ (A + B) ^ p :=
+          ENNReal.rpow_le_rpow (hfin.trans (add_le_add hfA hgB)) hp0.le
+  have hsum : ∑' i, (f i + g i) ^ p ≤ (A + B) ^ p :=
+    ENNReal.tsum_eq_iSup_sum.trans_le (iSup_le key)
+  calc (∑' i, (f i + g i) ^ p) ^ p⁻¹
+      ≤ ((A + B) ^ p) ^ p⁻¹ := ENNReal.rpow_le_rpow hsum (by positivity)
+    _ = A + B := by rw [← ENNReal.rpow_mul, mul_inv_cancel₀ hp0.ne', ENNReal.rpow_one]
+
+/-- **Minkowski's inequality at `p = 2` for `tsum`**, the instance the Hilbert--Schmidt
+energy uses.  Stated separately because its consumers carry the `^ 2` in `ℕ`-power form. -/
 theorem tsum_sq_add_rpow_le (f g : ι → ℝ≥0∞) :
     (∑' i, (f i + g i) ^ 2) ^ (2 : ℝ)⁻¹ ≤
       (∑' i, f i ^ 2) ^ (2 : ℝ)⁻¹ + (∑' i, g i ^ 2) ^ (2 : ℝ)⁻¹ := by
-  simp only [← ENNReal.rpow_two]
-  set A := (∑' i, f i ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹ with hA
-  set B := (∑' i, g i ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹ with hB
-  have hsq : ∀ x : ℝ≥0∞, (x ^ (2 : ℝ)⁻¹) ^ (2 : ℝ) = x := fun x => by
-    rw [← ENNReal.rpow_mul]
-    norm_num
-  have key : ∀ s : Finset ι, ∑ i ∈ s, (f i + g i) ^ (2 : ℝ) ≤ (A + B) ^ (2 : ℝ) := by
-    intro s
-    have hfin := ENNReal.Lp_add_le (s := s) (f := f) (g := g) (p := 2) one_le_two
-    rw [one_div] at hfin
-    have hfA : (∑ i ∈ s, f i ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹ ≤ A :=
-      ENNReal.rpow_le_rpow (ENNReal.sum_le_tsum s) (by norm_num)
-    have hgB : (∑ i ∈ s, g i ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹ ≤ B :=
-      ENNReal.rpow_le_rpow (ENNReal.sum_le_tsum s) (by norm_num)
-    calc ∑ i ∈ s, (f i + g i) ^ (2 : ℝ)
-        = ((∑ i ∈ s, (f i + g i) ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹) ^ (2 : ℝ) := (hsq _).symm
-      _ ≤ (A + B) ^ (2 : ℝ) :=
-          ENNReal.rpow_le_rpow (hfin.trans (add_le_add hfA hgB)) (by norm_num)
-  have hsum : ∑' i, (f i + g i) ^ (2 : ℝ) ≤ (A + B) ^ (2 : ℝ) :=
-    ENNReal.tsum_eq_iSup_sum.trans_le (iSup_le key)
-  calc (∑' i, (f i + g i) ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹
-      ≤ ((A + B) ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹ := ENNReal.rpow_le_rpow hsum (by norm_num)
-    _ = A + B := by rw [← ENNReal.rpow_mul]; norm_num
+  simpa only [← ENNReal.rpow_two] using tsum_rpow_add_le (p := 2) one_le_two f g
 
 end ENNReal
 
@@ -246,6 +255,43 @@ theorem hilbertSchmidtENorm_comp_le (L : F →L[𝕜] G) (T : E →L[𝕜] F) (R
   gcongr
   exact L.hilbertSchmidtENorm_comp_left_le T
 
+/-- **Fatou for the Hilbert--Schmidt gauge.**  The gauge is lower semicontinuous along
+operator-norm convergence: if `T i → T` pointwise on a basis, the limit's energy is at most
+the `liminf` of the energies.
+
+This is the step that replaces the Ky Fan shortcut.  `kyFanIdealFamily` gets completeness
+from `‖A‖ ≤ kyFanGauge k A ≤ k ‖A‖`, so a gauge-Cauchy sequence is norm-Cauchy *and* the
+norm limit is automatically a gauge limit.  The Hilbert--Schmidt gauge is not equivalent to
+the operator norm, so the second half fails and the limit has to be controlled term by term
+instead -- which is Fatou's lemma in the shape a `tsum` of `ℝ≥0∞` already provides.
+
+The proof is by finite sections rather than through `MeasureTheory.lintegral_liminf_le`
+against the counting measure.  The two are the same argument, but the measure route obliges
+the *basis index type* to carry `MeasurableSpace`, `MeasurableSingletonClass` and
+`DiscreteMeasurableSpace`, and the filter to be countably generated, none of which the
+statement is about; `∑'` over `ℝ≥0∞` is already a supremum of finite partial sums, so the
+same Fatou step is `Filter.liminf_le_liminf` on each section. -/
+theorem hilbertSchmidtENorm_le_liminf {ι : Type*} (b : HilbertBasis ι 𝕜 E)
+    {u : Filter ℕ} [u.NeBot]
+    {T : ℕ → E →L[𝕜] F} {L : E →L[𝕜] F}
+    (hptwise : ∀ i, Filter.Tendsto (fun n => ‖T n (b i)‖ₑ ^ 2) u
+      (nhds (‖L (b i)‖ₑ ^ 2))) :
+    L.hilbertSchmidtENorm ^ (2 : ℝ) ≤
+      Filter.liminf (fun n => (T n).hilbertSchmidtENorm ^ (2 : ℝ)) u := by
+  classical
+  have hT : ∀ n, (T n).hilbertSchmidtENorm ^ (2 : ℝ) = ∑' i, ‖T n (b i)‖ₑ ^ 2 :=
+    fun n => (T n).hilbertSchmidtENorm_rpow_two b
+  rw [L.hilbertSchmidtENorm_rpow_two b, L.hilbertSchmidtEnergy_eq_iSup_sum b]
+  refine iSup_le fun s => ?_
+  have hfin : Filter.Tendsto (fun n => ∑ i ∈ s, ‖T n (b i)‖ₑ ^ 2) u
+      (nhds (∑ i ∈ s, ‖L (b i)‖ₑ ^ 2)) :=
+    tendsto_finsetSum _ fun i _ => hptwise i
+  calc ∑ i ∈ s, ‖L (b i)‖ₑ ^ 2
+      = Filter.liminf (fun n => ∑ i ∈ s, ‖T n (b i)‖ₑ ^ 2) u := hfin.liminf_eq.symm
+    _ ≤ Filter.liminf (fun n => (T n).hilbertSchmidtENorm ^ (2 : ℝ)) u :=
+        Filter.liminf_le_liminf (Filter.Eventually.of_forall fun n => by
+          rw [hT n]; exact ENNReal.sum_le_tsum s)
+
 end ContinuousLinearMap
 
 namespace TauCeti
@@ -267,6 +313,104 @@ noncomputable def hilbertSchmidtIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
   gauge_comp_le L A R := ContinuousLinearMap.hilbertSchmidtENorm_comp_le L A R
   gauge_adjoint A := A.hilbertSchmidtENorm_adjoint
 
+/-- **The Hilbert--Schmidt ideal is complete.**
+
+The `kyFanIdealFamily` route is unavailable here -- that one gets completeness from
+`‖A‖ ≤ kyFanGauge k A ≤ k ‖A‖`, so its gauge limit *is* its operator-norm limit -- and the
+Hilbert--Schmidt gauge is not equivalent to the operator norm.  What replaces it is
+`ContinuousLinearMap.hilbertSchmidtENorm_le_liminf`: take the operator-norm limit, which
+exists because the gauge dominates the operator norm, then bound its energy, and the energy
+of each difference, by the `liminf` along the sequence. -/
+instance isComplete_hilbertSchmidtIdealFamily {𝕜 : Type u} [RCLike 𝕜] :
+    (hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.IsComplete where
+  completeSpace := by
+    intro E F _ _ _ _ _ _
+    refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
+    -- the gauge dominates the operator norm, so the sequence is Cauchy there too
+    have hop : CauchySeq fun n => (a n).val := by
+      rw [Metric.cauchySeq_iff] at ha ⊢
+      intro ε hε
+      obtain ⟨M, hM⟩ := ha ε hε
+      refine ⟨M, fun m hm n hn => lt_of_le_of_lt ?_ (hM m hm n hn)⟩
+      rw [dist_eq_norm, dist_eq_norm]
+      exact TauCeti.OperatorIdealFamily.Elem.norm_val_le (a m - a n)
+    obtain ⟨L, hL⟩ := cauchySeq_tendsto_of_complete hop
+    obtain ⟨s, b, -⟩ := exists_hilbertBasis 𝕜 E
+    classical
+    -- pointwise, on each basis vector, the differences converge to the difference of limits
+    have hpt : ∀ (n : ℕ) (i : s),
+        Filter.Tendsto (fun m => ‖((a m).val - (a n).val) (b i)‖ₑ ^ 2) Filter.atTop
+          (nhds (‖(L - (a n).val) (b i)‖ₑ ^ 2)) := by
+      intro n i
+      have h1 : Filter.Tendsto (fun m => ((a m).val - (a n).val) (b i)) Filter.atTop
+          (nhds ((L - (a n).val) (b i))) := by
+        simpa using
+          ((ContinuousLinearMap.apply 𝕜 F (b i)).continuous.tendsto L).comp hL |>.sub
+            tendsto_const_nhds
+      exact (ENNReal.continuous_pow 2).tendsto _ |>.comp ((continuous_enorm.tendsto _).comp h1)
+    -- Fatou: the limit's energy is controlled by the tail of the Cauchy estimate
+    have hfatou : ∀ n : ℕ,
+        (L - (a n).val).hilbertSchmidtENorm ^ (2 : ℝ) ≤
+          Filter.liminf (fun m => ((a m).val - (a n).val).hilbertSchmidtENorm ^ (2 : ℝ))
+            Filter.atTop :=
+      fun n => ContinuousLinearMap.hilbertSchmidtENorm_le_liminf b (hpt n)
+    -- the Cauchy estimate, transported from the ideal norm to the gauge
+    have hcauchy : ∀ ε : ℝ, 0 < ε → ∃ N, ∀ n ≥ N,
+        (L - (a n).val).hilbertSchmidtENorm ≤ ENNReal.ofReal ε := by
+      intro ε hε
+      rw [Metric.cauchySeq_iff] at ha
+      obtain ⟨N, hN⟩ := ha ε hε
+      refine ⟨N, fun n hn => ?_⟩
+      have hev : ∀ᶠ m in Filter.atTop,
+          ((a m).val - (a n).val).hilbertSchmidtENorm ^ (2 : ℝ)
+            ≤ ENNReal.ofReal ε ^ (2 : ℝ) := by
+        filter_upwards [Filter.eventually_ge_atTop N] with m hm
+        have hd : ‖a m - a n‖ < ε := by simpa [dist_eq_norm] using hN m hm n hn
+        have hgauge : ((a m).val - (a n).val).hilbertSchmidtENorm ≤ ENNReal.ofReal ε := by
+          have heq : (hilbertSchmidtIdealFamily.{u, v} 𝕜).gauge (a m - a n).val
+              = ((a m).val - (a n).val).hilbertSchmidtENorm := rfl
+          rw [← heq, ← TauCeti.OperatorIdealFamily.Elem.enorm_eq_gauge, ← ofReal_norm]
+          exact ENNReal.ofReal_le_ofReal hd.le
+        exact ENNReal.rpow_le_rpow hgauge (by norm_num)
+      have hle : Filter.liminf
+          (fun m => ((a m).val - (a n).val).hilbertSchmidtENorm ^ (2 : ℝ))
+          Filter.atTop ≤ ENNReal.ofReal ε ^ (2 : ℝ) := by
+        calc Filter.liminf
+              (fun m => ((a m).val - (a n).val).hilbertSchmidtENorm ^ (2 : ℝ)) Filter.atTop
+            ≤ Filter.liminf (fun _ : ℕ => ENNReal.ofReal ε ^ (2 : ℝ)) Filter.atTop :=
+              Filter.liminf_le_liminf hev
+          _ = ENNReal.ofReal ε ^ (2 : ℝ) := Filter.liminf_const _
+      have h2 := (hfatou n).trans hle
+      have hpow : (0 : ℝ) < 2 := by norm_num
+      exact (ENNReal.rpow_le_rpow_iff hpow).mp h2
+    -- the limit lies in the ideal: it differs from a member by something of finite gauge
+    obtain ⟨N₁, hN₁⟩ := hcauchy 1 one_pos
+    have hmemL : L ∈ (hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.carrier := by
+      have hsplit : L = (L - (a N₁).val) + (a N₁).val := by abel
+      rw [TauCeti.OperatorIdealFamily.mem_carrier_iff, hsplit]
+      refine ne_top_of_le_ne_top ?_
+        ((hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.gauge_add_le _ _)
+      refine ENNReal.add_ne_top.mpr ⟨?_, (a N₁).gauge_val_ne_top⟩
+      exact ne_top_of_le_ne_top ENNReal.ofReal_ne_top (hN₁ N₁ le_rfl)
+    refine ⟨TauCeti.OperatorIdealFamily.Elem.mk hmemL, ?_⟩
+    rw [Metric.tendsto_atTop]
+    intro ε hε
+    obtain ⟨N, hN⟩ := hcauchy (ε / 2) (half_pos hε)
+    refine ⟨N, fun n hn => ?_⟩
+    have hgauge : ((a n).val - L).hilbertSchmidtENorm ≤ ENNReal.ofReal (ε / 2) := by
+      have hneg : ((a n).val - L) = -(L - (a n).val) := by abel
+      rw [hneg, ContinuousLinearMap.hilbertSchmidtENorm_neg]
+      exact hN n hn
+    have hle : ‖a n - TauCeti.OperatorIdealFamily.Elem.mk hmemL‖ ≤ ε / 2 := by
+      have hne : ((a n).val - L).hilbertSchmidtENorm ≠ ⊤ :=
+        ne_top_of_le_ne_top ENNReal.ofReal_ne_top hgauge
+      have := ENNReal.toReal_mono ENNReal.ofReal_ne_top hgauge
+      rwa [ENNReal.toReal_ofReal (by positivity)] at this
+    calc dist (a n) (TauCeti.OperatorIdealFamily.Elem.mk hmemL)
+        = ‖a n - TauCeti.OperatorIdealFamily.Elem.mk hmemL‖ := dist_eq_norm _ _
+      _ ≤ ε / 2 := hle
+      _ < ε := by linarith
+
 /-- Membership in the Hilbert--Schmidt ideal is exactly `IsHilbertSchmidt`. -/
 theorem mem_hilbertSchmidtIdealFamily_carrier_iff {𝕜 : Type u} [RCLike 𝕜] {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -279,4 +423,5 @@ theorem mem_hilbertSchmidtIdealFamily_carrier_iff {𝕜 : Type u} [RCLike 𝕜] 
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (A : E →L[𝕜] F) :
     (hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.gauge A =
       A.hilbertSchmidtENorm := (rfl)
+
 end TauCeti

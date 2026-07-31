@@ -19,6 +19,9 @@ source-shaped sine-theta capstones.
 -/
 
 open scoped InnerProductSpace
+open TauCeti.RealComplexification
+-- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
+open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
 
 namespace TauCeti
 namespace DavisKahan
@@ -57,7 +60,7 @@ namespace ExactSinTheta
 #check ClosedOperatorComplexification.unboundedSylvesterGap_complexify
 #check ComplexificationApproximation.approximationNumber_complexify
 #check ComplexificationApproximation.kyFanApproximationGauge_complexify
-#check RealComplexificationFunctionalCalculus.conjugateOperator_cfc_eq
+#check TauCeti.RealComplexification.conjugateOperator_cfc_eq
 #check sylvesterIntervalExteriorGap_of_realSpectrum
 #check davisKahan1970_sylvester_complex
 #check sinTheta_unbounded_exact_complex
@@ -113,7 +116,7 @@ namespace ExactSinTheta
 #print axioms ClosedOperatorComplexification.unboundedSylvesterGap_complexify
 #print axioms ComplexificationApproximation.approximationNumber_complexify
 #print axioms ComplexificationApproximation.kyFanApproximationGauge_complexify
-#print axioms RealComplexificationFunctionalCalculus.conjugateOperator_cfc_eq
+#print axioms TauCeti.RealComplexification.conjugateOperator_cfc_eq
 #print axioms sylvesterIntervalExteriorGap_of_realSpectrum
 #print axioms davisKahan1970_sylvester_complex
 #print axioms sinTheta_unbounded_exact_complex

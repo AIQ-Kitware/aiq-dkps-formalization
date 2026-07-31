@@ -311,7 +311,7 @@ theorem spectralCutoff_sylvester_equation
 section ApproximationNumberEndpointAssumptions
 
 variable [HasApproximationNumberStrongCutoff.{u, v, 0} 𝕜]
-variable [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+variable [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
 
 /-- Finite Ky Fan inequalities for all right spectral cutoffs pass to the
 original operators.  This is the topological limit step in the two-unbounded

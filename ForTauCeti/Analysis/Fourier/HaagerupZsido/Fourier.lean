@@ -150,11 +150,8 @@ private theorem realKernel_fourier_of_one_le {x : ℝ} (hx : 1 ≤ x) :
     filter_upwards [] with p
     rcases p with ⟨y, t⟩
     simp only [Function.uncurry_apply_pair, G]
-    rw [norm_mul, norm_mul, Complex.norm_real, Complex.norm_real,
-      Complex.norm_exp_ofReal_mul_I, mul_one, Real.norm_eq_abs,
-      Real.norm_eq_abs, Real.norm_eq_abs, abs_mul, abs_mul, abs_div, abs_two,
-      abs_of_pos (Real.exp_pos _),
-      abs_of_nonneg (mul_nonneg (abs_nonneg _) (Real.exp_pos _).le)]
+    simp only [norm_mul, Complex.norm_real, Complex.norm_exp_ofReal_mul_I, mul_one,
+      Real.norm_eq_abs, abs_abs, abs_div, abs_two, abs_of_pos (Real.exp_pos _)]
     nlinarith [mul_nonneg (mul_nonneg (abs_nonneg (weight y))
       (abs_nonneg (Real.sin t))) (Real.exp_pos (-y * |t|)).le]
   have hunfold (t : ℝ) :

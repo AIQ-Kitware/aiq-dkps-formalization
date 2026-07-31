@@ -158,47 +158,50 @@ theorem real_reciprocalOrbitInterpolation_mass_lower_bound
       (1 : ℝ) = (obstructionAlpha i - obstructionBeta j) *
         ∑ r, a r * (u r i * v r j) := by
     have h := congrArg (fun T : G →ₗ[ℝ] G => ⟪e i, T (e j)⟫_ℝ) (hinterp i j)
-    rw [LinearMap.smul_apply, LinearMap.smul_apply, real_inner_smul_right,
-      real_inner_smul_right, basisMatrixUnit_apply, e.inner_eq_one, one_smul,
-      e.inner_eq_one, LinearMap.sum_apply, LinearMap.sum_apply, inner_sum] at h
+    simp only [LinearMap.smul_apply, real_inner_smul_right, basisMatrixUnit_apply,
+      e.inner_eq_one, one_smul, LinearMap.sum_apply, inner_sum,
+      RCLike.ofReal_real_eq_id, id_eq] at h
+    -- `simp only` reaches further than the old `rw` chain did: it pulls `a r` out of the
+    -- inner product and collapses `1 * 1`, so `h` already *is* the first calc step.
     calc
-      (1 : ℝ) = (1 : ℝ) * 1 := (mul_one 1).symm
-      _ = (obstructionAlpha i - obstructionBeta j) *
-          ∑ r, ⟪e i, (a r • unitaryOrbitAction (U r) (V r))
+      (1 : ℝ) = (obstructionAlpha i - obstructionBeta j) *
+          ∑ r, a r * ⟪e i, (unitaryOrbitAction (U r) (V r))
             (basisMatrixUnit e e i j) (e j)⟫_ℝ := h
       _ = (obstructionAlpha i - obstructionBeta j) *
           ∑ r, a r * (u r i * v r j) := by
         congr 1
         apply Finset.sum_congr rfl
         intro r _
-        rw [LinearMap.smul_apply, LinearMap.smul_apply,
-          real_inner_smul_right, hterm r i j]
+        rw [hterm r i j]
   have hzero : (0 : ℕ) < Module.finrank ℝ G := by omega
   have hone : (1 : ℕ) < Module.finrank ℝ G := by omega
   set i₀ : Fin (Module.finrank ℝ G) := ⟨0, hzero⟩ with hi₀
   set i₁ : Fin (Module.finrank ℝ G) := ⟨1, hone⟩ with hi₁
+  -- `hscalar` says `1 = g * S` with `g` the gap at that entry, so `S = 1 / g` at every
+  -- entry; the four values below are that one identity at `g = -1, -3, 1, -1`.
+  have hS (i j : Fin (Module.finrank ℝ G)) (g : ℝ)
+      (hg : obstructionAlpha i - obstructionBeta j = g) (hg0 : g ≠ 0) :
+      (∑ r, a r * (u r i * v r j)) = 1 / g := by
+    have h := hscalar i j
+    rw [hg] at h
+    -- `eq_div_iff` rather than `field_simp`: the latter reassociates the summand to
+    -- `a r * u r i * v r j`, which makes the sum a different atom from the one in `h`.
+    rw [eq_div_iff hg0]
+    linarith
   have hS00 : (∑ r, a r * (u r i₀ * v r i₀)) = -1 := by
-    have h := hscalar i₀ i₀
-    rw [show obstructionAlpha i₀ - obstructionBeta i₀ = -1 by
-      simp [obstructionAlpha, obstructionBeta, hi₀]] at h
-    linarith
+    rw [hS i₀ i₀ (-1) (by simp [obstructionAlpha, obstructionBeta, hi₀]) (by norm_num)]
+    norm_num
   have hS01 : (∑ r, a r * (u r i₀ * v r i₁)) = -(1 / 3) := by
-    have h := hscalar i₀ i₁
-    rw [show obstructionAlpha i₀ - obstructionBeta i₁ = -3 by
-      simp [obstructionAlpha, obstructionBeta, hi₀, hi₁]
-      norm_num] at h
-    linarith
+    rw [hS i₀ i₁ (-3) (by simp [obstructionAlpha, obstructionBeta, hi₀, hi₁]; norm_num)
+      (by norm_num)]
+    norm_num
   have hS10 : (∑ r, a r * (u r i₁ * v r i₀)) = 1 := by
-    have h := hscalar i₁ i₀
-    rw [show obstructionAlpha i₁ - obstructionBeta i₀ = 1 by
-      simp [obstructionAlpha, obstructionBeta, hi₀, hi₁]] at h
-    linarith
+    rw [hS i₁ i₀ 1 (by simp [obstructionAlpha, obstructionBeta, hi₀, hi₁]) (by norm_num)]
+    norm_num
   have hS11 : (∑ r, a r * (u r i₁ * v r i₁)) = -1 := by
-    have h := hscalar i₁ i₁
-    rw [show obstructionAlpha i₁ - obstructionBeta i₁ = -1 by
-      simp [obstructionAlpha, obstructionBeta, hi₁]
-      norm_num] at h
-    linarith
+    rw [hS i₁ i₁ (-1) (by simp [obstructionAlpha, obstructionBeta, hi₁]; norm_num)
+      (by norm_num)]
+    norm_num
   let ℓ : Fin n → ℝ := fun r =>
     (u r i₁ * (v r i₀ - v r i₁) - u r i₀ * (v r i₀ + v r i₁)) / 2
   have hLval : (∑ r, a r * ℓ r) = 5 / 3 := by

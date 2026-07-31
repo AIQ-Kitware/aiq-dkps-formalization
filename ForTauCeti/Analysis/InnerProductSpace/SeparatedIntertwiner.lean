@@ -185,7 +185,7 @@ theorem cfcHom_intertwines
       rw [h1, h2, map_star, map_star, cfcHom_id, cfcHom_id]
       exact hstar
   | add f g hf hg =>
-      rw [map_add, map_add, map_add, map_add, ContinuousLinearMap.comp_add,
+      simp only [map_add, ContinuousLinearMap.comp_add,
         ContinuousLinearMap.add_comp, hf, hg]
   | mul f g hf hg =>
       rw [map_mul, map_mul, map_mul, map_mul]

@@ -120,9 +120,9 @@ theorem isUnit_one_add_star_mul_self (W : E →L[𝕜] E) :
     IsUnit (1 + star W * W) := by
   refine isUnit_of_coercive one_pos fun z => ?_
   have h : (1 + star W * W) z = z + star W (W z) := rfl
-  rw [h, inner_add_left, map_add, inner_self_eq_norm_sq,
-    ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left,
-    inner_self_eq_norm_sq]
+  rw [h]
+  simp only [inner_add_left, map_add, inner_self_eq_norm_sq,
+    ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
   nlinarith [sq_nonneg ‖W z‖]
 
 omit [CompleteSpace E] in

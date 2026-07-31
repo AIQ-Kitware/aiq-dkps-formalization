@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.FrameFactorizationGeneric
-import DavisKahan.SpectralTheory.Complexification.FunctionalCalculus
+import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
 import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
@@ -38,9 +38,8 @@ namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open Foundation
-open Foundation.RealComplexification
-open RealComplexificationFunctionalCalculus
+open TauCeti.RealComplexification
+open RealComplexification
 
 noncomputable section
 
@@ -53,10 +52,10 @@ variable {E F G : Type v}
 
 /-! The real algebra structure and the real continuous functional calculus on the
 complexified operator algebra are `scoped instance`s of
-`RealComplexificationFunctionalCalculus`, opened below.  They used to be reinstalled
+`RealComplexification`, opened below.  They used to be reinstalled
 here as a second `local instance`, which made them a *different declaration* from the
 one the imported lemmas are stated against; see lane `{lane:CPLX-DEDUP-3}`. -/
-open scoped TauCeti.DavisKahan.Experimental.ExactSinTheta.RealComplexificationFunctionalCalculus
+open scoped TauCeti.RealComplexification
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- A positive real lower-frame estimate survives coordinatewise

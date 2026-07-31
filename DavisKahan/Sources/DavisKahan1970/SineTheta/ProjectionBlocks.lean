@@ -107,7 +107,7 @@ theorem paperDiagonalPair_gauge_le
 
 /-- Lemma 6.2 simultaneously for every finite Ky Fan approximation gauge. -/
 theorem paperDiagonalPair_all_kyFan_le
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (K : E →L[𝕜] E) :
@@ -128,7 +128,7 @@ theorem paperDiagonalPair_all_kyFan_le
 
 /-- Literal source-norm form of Davis--Kahan Lemma 6.2. -/
 theorem paperDiagonalPair_paperNorm_le
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (N : PaperUnitaryInvariantNorm)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -139,7 +139,7 @@ theorem paperDiagonalPair_paperNorm_le
 
 /-- Real-valued source-norm form on the canonical ideal. -/
 theorem paperDiagonalPair_paperGauge_le
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (N : PaperUnitaryInvariantNorm)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]

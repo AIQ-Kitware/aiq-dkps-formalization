@@ -31,6 +31,8 @@ namespace ExactSinTheta
 open scoped InnerProductSpace BigOperators
 
 open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.RealComplexification
+-- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
 open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
 
 noncomputable section

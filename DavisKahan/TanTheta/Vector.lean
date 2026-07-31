@@ -28,6 +28,12 @@ approximate-supremum limit: near-maximizing vectors give
 continuity in `ε` yields the exact bound `δ κ ≤ ρ √(1 - κ²)`, after which
 the transfer to arbitrary vectors and the Cauchy--Schwarz duality back to
 the test side proceed exactly as in finite dimensions.
+
+**This is the version to submit upstream.**  The finite file is the one marked *staged for
+Mathlib*, but its statement is this one plus `[FiniteDimensional 𝕜 E]`; that file now says
+so too.  Both are kept — the finite proof is a different argument with its own consumer in
+`Alternative/` — and the primes on the names here are the only thing distinguishing the two
+sets of declarations, which is why a name-based duplicate check never saw the pair.
 -/
 
 namespace TauCeti

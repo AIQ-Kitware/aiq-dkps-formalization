@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
 
 /-!
 # Open obligations of the rectangular ideal families
@@ -42,90 +44,68 @@ noncomputable def compactOperatorNorm :
 
 /-- Hilbert--Schmidt operators as a coherent rectangular family.
 
-**Status corrected 2026-07-29 — most of this is now done, and the one missing
-piece is much smaller than the paragraph below used to claim.**
+**Closed 2026-07-31.**  This is `TauCeti.hilbertSchmidtIdealFamily` read through
+`toRectangular`, and no mathematics is restated here.
 
-The family itself **exists and is `RCLike`-general**:
-`TauCeti.hilbertSchmidtIdealFamily` in
-`ForTauCeti/Analysis/OperatorIdeal/Family/HilbertSchmidt.lean` supplies
-membership, the gauge, adjoint invariance and the ideal bounds.
+The history is worth one paragraph, because the docstring was right and stayed
+right while the obstacle moved.  On 2026-07-29 it was corrected from *"the
+required theory is not yet available"* to a **single** named obligation:
+`toRectangular` wants `[N.toOperatorIdealFamily.IsComplete]` and the
+Hilbert--Schmidt family had no such instance.  It also predicted that the
+obligation would not fall out the way `kyFan`'s did -- `kyFanIdealFamily` gets
+completeness from `‖A‖ ≤ ∑_{n<k} aₙ(A) ≤ k ‖A‖`, i.e. from the gauge being
+*equivalent* to the operator norm, which the Hilbert--Schmidt gauge is not.
 
-What blocks filling this slot is a **single** obligation: `toRectangular`
-requires `[N.toOperatorIdealFamily.IsComplete]`, and that instance does not
-exist for the Hilbert--Schmidt family.  Substituting the staged family fails
-with `failed to synthesize (hilbertSchmidtIdealFamily 𝕜).IsComplete`.
-
-That obligation will **not** fall out the way `kyFan`'s did.  `kyFanIdealFamily`
-gets completeness from the two-sided comparison `‖A‖ ≤ ∑_{n<k} aₙ(A) ≤ k ‖A‖` —
-that is, because the Ky Fan gauge is *equivalent to the operator norm*.  The
-Hilbert--Schmidt gauge is not, so the diagonal argument really is needed.
-
-Original note, retained for the construction route it describes: membership by
-summability of `‖A eᵢ‖²` over a Hilbert basis (basis independence via Parseval),
-the gauge as the square root of that sum, adjoint invariance by the double-sum
-symmetry, ideal control by termwise operator-norm bounds, and completeness by a
-diagonal argument. -/
+That prediction held exactly.  `isComplete_hilbertSchmidtIdealFamily` is proved
+by lower semicontinuity of the gauge along pointwise convergence on a basis,
+which is Fatou against the counting measure -- a genuinely different argument,
+as the docstring said it would have to be. -/
 noncomputable def hilbertSchmidt :
     RectangularSymmetricIdealFamily (𝕜 := 𝕜) :=
-  -- Open obligation (separate analytic campaign): the rectangular
-  -- Hilbert-Schmidt family over RCLike scalars; handed to the mathematics agent.
-  sorry
+  (TauCeti.hilbertSchmidtIdealFamily.{u, v} 𝕜).toRectangular
 
 /-- Trace-class operators as a coherent rectangular family.
 
-**Status corrected 2026-07-30.**  The sentence this docstring used to end
-with — "the required rectangular trace-class theory over `RCLike` scalars is
-not yet available in this development" — is no longer true as written.
-`TauCeti.traceClassIdealFamily` exists, in
-`ForTauCeti/Analysis/OperatorIdeal/Family/TraceClass.lean`, with the gauge
-`nuclearENorm`, adjoint invariance, and the ideal bounds all supplied.
+**Closed 2026-07-31.**  This is `TauCeti.traceClassIdealFamily` read through
+`toRectangular`; no mathematics is restated here.
 
-Two things are still missing, and they are much more specific than "the theory":
+Both of the obligations this docstring named on 2026-07-30 are discharged, and
+they turned out to be one obligation apart rather than two of a kind.  The
+`RCLike` generalisation was never about `nuclearENorm`, which does not mention
+the scalar field: it was the Ky Fan triangle inequality one layer below, and
+that now holds over any field with a min--max lower bound.  Completeness is
+lower semicontinuity of the gauge, which follows from each approximation number
+being `1`-Lipschitz in the operator norm together with Fatou for `tsum`.
 
-* it is stated **over `ℂ` only** (`SymmetricOperatorIdealFamily.{0, v} ℂ`),
-  because `nuclearENorm` is; the `RCLike` generalisation is the real work;
-* `toRectangular` wants `[N.toOperatorIdealFamily.IsComplete]`, and as with
-  `hilbertSchmidt` above that instance does not exist — and for the same
-  reason, since the trace norm is not equivalent to the operator norm, so the
-  `kyFan` route to completeness does not transfer.
-
-Construction route, retained: define the trace gauge through the singular-value
-sequence (equivalently `tr |A|`), with adjoint invariance from the shared
-singular values of `A` and `A⋆`, ideal control from singular-value
-domination, and completeness against the operator-norm limit. -/
-noncomputable def traceClass :
+The construction route this docstring used to recommend -- the trace gauge
+through the singular-value sequence -- is what `nuclearENorm` is, so the route
+was right and only the estimate of what remained was wrong. -/
+noncomputable def traceClass [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] :
     RectangularSymmetricIdealFamily (𝕜 := 𝕜) :=
-  -- Open obligation (separate analytic campaign): the rectangular trace-class
-  -- family over RCLike scalars; handed to the mathematics agent.
-  sorry
+  (TauCeti.traceClassIdealFamily.{u, v} 𝕜).toRectangular
 
 /-- Schatten `p` operators as a coherent rectangular family.
 
-**Status corrected 2026-07-30**, though less than for `traceClass` above.
-`ForTauCeti/Analysis/InnerProductSpace/SchattenNorm.lean` supplies the Schatten
-`p` gauge over general `RCLike` scalars, as a
-`RectangularUnitarilyInvariantNorm`, with the triangle inequality already
-factored exactly the way the route below describes — Ky Fan subadditivity plus
-`ℓᵖ` monotonicity under weak majorization.  What it does **not** supply is the
-infinite-dimensional case: it is stated for finite-dimensional `E` and `F` and
-indexes by `min (finrank E) (finrank F)`.
+**Closed 2026-07-31.**  This is `TauCeti.schattenIdealFamily` read through
+`toRectangular`.
 
-So the remaining work is the extension from a finite-dimensional
-unitarily-invariant norm to an operator ideal, not the Schatten theory itself.
+The 2026-07-30 note said the missing piece was *"the extension from a
+finite-dimensional unitarily-invariant norm to an operator ideal"*, and that is
+exactly what was built -- but not the way that note expected.  It anticipated a
+weak-majorization theory for infinite sequences, which does not exist in this
+repository and was not written: the finite `Fin n` theory is applied to each
+truncation of the approximation-number sequence, and the `tsum` is the supremum
+of those truncations.
 
-Construction route, retained: apply the `ℓᵖ` gauge to the approximation-number
-sequence; the triangle inequality is the Tomić--Weyl weak-majorization
-argument, and completeness follows from Fatou against the operator-norm
-limit. -/
-noncomputable def schatten (p : ℝ) (hp : 1 ≤ p) :
+Completeness is the trace-class argument with the exponent carried through. -/
+noncomputable def schatten [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+    {p : ℝ} (hp : 1 ≤ p) :
     RectangularSymmetricIdealFamily (𝕜 := 𝕜) :=
-  -- Open obligation (separate analytic campaign): the rectangular Schatten-p
-  -- family over RCLike scalars; handed to the mathematics agent.
-  sorry
+  (TauCeti.schattenIdealFamily.{u, v} 𝕜 hp).toRectangular
 
 /-- Ky Fan `k` gauges, with positive `k`, obtained from the already-proved
 approximation-number family. -/
-noncomputable def kyFan [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+noncomputable def kyFan [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (k : ℕ) (hk : 0 < k) :
     RectangularSymmetricIdealFamily (𝕜 := 𝕜) :=
   (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily

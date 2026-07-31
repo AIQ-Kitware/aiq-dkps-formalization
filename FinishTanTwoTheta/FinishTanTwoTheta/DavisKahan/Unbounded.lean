@@ -3,8 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.GroundedImports
-import FinishTanTwoTheta.DavisKahan.SharpIdeal
+import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 import DavisKahan.Riccati.UnboundedExistence
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 
@@ -107,7 +106,7 @@ variable {S : ContractiveReducingGraphSelection H} {k : ℕ} {ε : ℝ}
  family used by the transformed-prefix theorem. -/
 def toApproximateLeading
     (F : UnboundedApproximateLeadingSingularFamily H S k ε) :
-    TauCeti.FinishTanTwoTheta.ApproximateLeadingSingularFamily S.X k ε where
+    TauCeti.DavisKahan.ApproximateLeadingSingularFamily S.X k ε where
   count := F.count
   count_le := F.count_le
   right := fun i => ((F.right i : H.A0.domain) : E0)
@@ -149,7 +148,7 @@ theorem exists_unboundedApproximateLeadingSingularFamily
     {ε : ℝ} (hε : 0 < ε) :
     Nonempty (UnboundedApproximateLeadingSingularFamily H S k ε) := by
   classical
-  obtain ⟨F⟩ := TauCeti.FinishTanTwoTheta.exists_approximateLeadingSingularFamily
+  obtain ⟨F⟩ := TauCeti.DavisKahan.exists_approximateLeadingSingularFamily
     S.X k (show 0 < ε / 8 by positivity)
   have hdense0 := H.dense0
   have hdense1 := H.dense1
@@ -157,14 +156,21 @@ theorem exists_unboundedApproximateLeadingSingularFamily
   have hreduces := S.reduces
   have hstrong := S.strongSolvesRiccati
   have hpoint := (strongSolvesRiccati_iff_pointwise H S.X).1 hstrong
-  -- For each member of the finite ambient family, use density in the graph
-  -- norms of `A0` and `A1`; reduction supplies the corresponding adjoint-domain
-  -- approximation.  Since the family is finite, choose all tolerances below
-  -- the minimum singular-value margin and apply finite Gram--Schmidt.  The
-  -- resulting defects are the subtype differences displayed in the structure.
-  -- Every named input above is an existing declaration; the remaining proof is
-  -- the new finite graph-norm perturbation argument itself.
-  aesop
+  -- **This is where the proof stops, and the comment below is a plan, not an argument.**
+  --
+  -- The intended construction: for each member of the finite ambient family, use density in
+  -- the graph norms of `A0` and `A1`; reduction supplies the corresponding adjoint-domain
+  -- approximation.  Since the family is finite, choose all tolerances below the minimum
+  -- singular-value margin and apply finite Gram--Schmidt.  The resulting defects are the
+  -- subtype differences displayed in the structure.
+  --
+  -- Every named input above is an existing declaration; what is missing is the finite
+  -- graph-norm perturbation argument itself.  This line was `aesop`, which does not close
+  -- the goal — so the module did not compile, and nothing reported that because
+  -- `FinishTanTwoTheta` has no `globs` in `lakefile.toml` and is therefore never built as a
+  -- library.  A `sorry` is the honest form: it compiles, and `scripts/audit_scan.py --defn`
+  -- and the readiness gate can both see it.
+  sorry
 
 /-- Error term in the graph-norm stable scalar estimate. -/
 def unboundedStablePairError
@@ -460,7 +466,7 @@ theorem sharp_unbounded_doubleAngleTangentOperator_kyFan
     (hA1 : TauCeti.LinearPMap.SemiboundedBelow H.A1 d)
     (k : ℕ) :
     d * kyFanApproximationGauge k
-        (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator S.X S.norm_lt_one) ≤
+        (TauCeti.DavisKahan.doubleAngleTangentOperator S.X S.norm_lt_one) ≤
       2 * kyFanApproximationGauge k H.B01 := by
   have hXlt : ‖S.X‖ < 1 := S.norm_lt_one
   have hXnn : (0 : ℝ) ≤ ‖S.X‖ := norm_nonneg _
@@ -471,7 +477,7 @@ theorem sharp_unbounded_doubleAngleTangentOperator_kyFan
   have hXr : ‖S.X‖ ≤ r := by dsimp only [r]; linarith
   have hr1 : r < 1 := by dsimp only [r]; linarith
   have hden : 0 < 1 - r ^ 2 := by nlinarith
-  rw [TauCeti.FinishTanTwoTheta.kyFanApproximationGauge_doubleAngleTangentOperator]
+  rw [TauCeti.DavisKahan.kyFanApproximationGauge_doubleAngleTangentOperator]
   apply le_of_forall_pos_le_add
   intro η hη
   have hP0 : (0 : ℝ) ≤ 2 * (2 + 2 * r * ‖H.B01‖ + ‖H.B01‖) / (1 - r ^ 2) :=
@@ -494,7 +500,7 @@ theorem sharp_unbounded_doubleAngleTangentOperator_kyFan
   obtain ⟨F⟩ := exists_unboundedApproximateLeadingSingularFamily H S k hεpos
   have hselected := selected_unbounded_doubleAngleTangent_le_kyFan_add_error
     H S hd0 hr0 hr1 hεpos.le hA0 hA1 hXr F
-  have hprefix := TauCeti.FinishTanTwoTheta.sum_doubleAngleTangent_le_selected_add_tail
+  have hprefix := TauCeti.DavisKahan.sum_doubleAngleTangent_le_selected_add_tail
     S.X k hεpos.le hr0 hr1 hXr F.toApproximateLeading
   have hcountEq : F.toApproximateLeading.count = F.count := rfl
   rw [hcountEq] at hprefix
@@ -563,14 +569,14 @@ theorem sharp_unbounded_standardSymmetricIdeal_scaled
     (hA1 : TauCeti.LinearPMap.SemiboundedBelow H.A1 d)
     (hB : I.Mem H.B01) :
     I.Mem (((d / 2 : ℝ) : ℂ) •
-        TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator S.X S.norm_lt_one) ∧
+        TauCeti.DavisKahan.doubleAngleTangentOperator S.X S.norm_lt_one) ∧
       I.gauge (((d / 2 : ℝ) : ℂ) •
-          TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator S.X S.norm_lt_one) ≤
+          TauCeti.DavisKahan.doubleAngleTangentOperator S.X S.norm_lt_one) ≤
         I.gauge H.B01 := by
   have hfan : ∀ k : ℕ,
       kyFanApproximationGauge k
           (((d / 2 : ℝ) : ℂ) •
-            TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator S.X S.norm_lt_one) ≤
+            TauCeti.DavisKahan.doubleAngleTangentOperator S.X S.norm_lt_one) ≤
         kyFanApproximationGauge k H.B01.adjoint := by
     intro k
     rw [kyFanApproximationGauge_adjoint, kyFanApproximationGauge_smul,

@@ -7,7 +7,7 @@ import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.Geometry.Angle.OperatorAngleReal
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
-import DavisKahan.SpectralTheory.Complexification.FunctionalCalculus
+import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
 
 /-!
 # The literal operator angle of Davis--Kahan
@@ -187,6 +187,8 @@ theorem paperSin_sq_add_paperCos_sq (U V : Submodule ℂ E)
 section Real
 
 open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.RealComplexification
+-- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
 open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
 open TauCeti.DavisKahanExt.Real
 
@@ -195,10 +197,10 @@ variable {ER : Type*} [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
 
 /-! The real algebra structure and the real continuous functional calculus on the
 complexified operator algebra are `scoped instance`s of
-`RealComplexificationFunctionalCalculus`, opened below.  They used to be reinstalled
+`RealComplexification`, opened below.  They used to be reinstalled
 here as a second `local instance`, which made them a *different declaration* from the
 one the imported lemmas are stated against; see lane `{lane:CPLX-DEDUP-3}`. -/
-open scoped TauCeti.DavisKahan.Experimental.ExactSinTheta.RealComplexificationFunctionalCalculus
+open scoped TauCeti.RealComplexification
 
 /-- The literal real operator angle, represented canonically on the
 complexification. -/

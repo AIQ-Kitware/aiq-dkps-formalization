@@ -35,8 +35,10 @@ universe v
 
 namespace ClosedOperatorComplexification
 
-open Foundation
-open Foundation.RealComplexification
+open TauCeti.RealComplexification
+-- `Basic` moved to `ForTauCeti`; `Subspace` (and `complexifySubmodule`) is still here, so the
+-- namespace is split across the two libraries and both halves have to be opened.
+open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
 
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]

@@ -8,6 +8,7 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.All
 import DavisKahan.Sources.DavisKahan1970.Section9.All
 import DavisKahan.Sources.DavisKahan1970.SineTheta.All
 import DavisKahan.Sources.DavisKahan1970.Sylvester.All
+import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
 import DavisKahan.Sources.DavisKahan1970.FullPartIII
 import DavisKahan.Sources.DavisKahan1970.FullPartIIIExtensions
 import DavisKahan.Sources.DavisKahan1970.FullSineTheta
@@ -19,7 +20,10 @@ import DavisKahan.Sources.DavisKahan1970.Section4Dominance
 import DavisKahan.Sources.DavisKahan1970.Section4FiniteSurface
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
 import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle
+import DavisKahan.Sources.DavisKahan1970.SharpIdeal
+import DavisKahan.Sources.DavisKahan1970.SharpKyFan
 import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
+import DavisKahan.Sources.DavisKahan1970.StableRiccatiPair
 import DavisKahan.Sources.DavisKahan1970.TanTheta
 import DavisKahan.Sources.DavisKahan1970.TanTwoTheta
 

@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.Complexification.Basic
+import ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic
 import DavisKahan.SpectralTheory.Compatibility
 
 /-!
@@ -34,6 +34,9 @@ namespace Foundation
 namespace RealComplexification
 
 open scoped InnerProductSpace
+open TauCeti.RealComplexification
+-- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
+open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
 
 noncomputable section
 
