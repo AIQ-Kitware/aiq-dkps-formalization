@@ -11,6 +11,7 @@ import ForTauCeti.Analysis.Convex.Majorization
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
+import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 
 /-!
 # Symmetric norming functions on sequences
@@ -662,6 +663,64 @@ theorem symmetricGaugeENorm_add_le (Φ : SymmetricGauge) (S T : E →L[𝕜] F) 
         exact_mod_cast hfin
     _ ≤ symmetricGaugeENorm Φ S + symmetricGaugeENorm Φ T :=
         add_le_add (Φ.ofFin_le_extend (hnn S) k) (Φ.ofFin_le_extend (hnn T) k)
+
+-- Neither the min-max hypothesis nor completeness is used: this is pointwise.
+omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] in
+/-- **Ideal law 5 of 5**: the gauge is unchanged by passing to the adjoint.
+
+Pointwise, from `approximationNumber_adjoint`. -/
+theorem symmetricGaugeENorm_adjoint (Φ : SymmetricGauge) (A : E →L[𝕜] F) :
+    symmetricGaugeENorm Φ (ContinuousLinearMap.adjoint A) = symmetricGaugeENorm Φ A := by
+  simp only [symmetricGaugeENorm,
+    ContinuousLinearMap.approximationNumber_adjoint]
+
+-- The two-sided law is pointwise too: no min-max hypothesis, no completeness of
+-- the outer spaces.  Only subadditivity needs the Ky Fan inequality.
+omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+  [CompleteSpace E] [CompleteSpace F] in
+/-- The two-sided ideal law, from the two one-sided bounds. -/
+theorem symmetricGaugeENorm_comp_le (Φ : SymmetricGauge)
+    {G H : Type v}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    (L : F →L[𝕜] G) (A : E →L[𝕜] F) (R : H →L[𝕜] E) :
+    symmetricGaugeENorm Φ (L ∘L A ∘L R)
+      ≤ ‖L‖ₑ * symmetricGaugeENorm Φ A * ‖R‖ₑ := by
+  have hpt : ∀ n, ENNReal.ofReal ((L ∘L A ∘L R).approximationNumber n)
+      ≤ ‖L‖ₑ * (‖R‖ₑ * ENNReal.ofReal (A.approximationNumber n)) := by
+    intro n
+    have h1 := ContinuousLinearMap.approximationNumber_comp_le_norm_mul L (A ∘L R) n
+    have h2 := ContinuousLinearMap.approximationNumber_comp_le_mul_norm A R n
+    have hchain : (L ∘L A ∘L R).approximationNumber n ≤ ‖L‖ * (A.approximationNumber n * ‖R‖) :=
+      h1.trans (by
+        refine mul_le_mul_of_nonneg_left h2 (norm_nonneg L))
+    refine (ENNReal.ofReal_le_ofReal hchain).trans_eq ?_
+    rw [ENNReal.ofReal_mul (norm_nonneg L), ENNReal.ofReal_mul
+      (ContinuousLinearMap.approximationNumber_nonneg A n),
+      ofReal_norm, ofReal_norm]
+    ring
+  calc symmetricGaugeENorm Φ (L ∘L A ∘L R)
+      ≤ Φ.extend (fun n => ‖L‖ₑ *
+          (‖R‖ₑ * ENNReal.ofReal (A.approximationNumber n))) := Φ.extend_mono hpt
+    _ = ‖L‖ₑ * (‖R‖ₑ * symmetricGaugeENorm Φ A) := by
+        rw [show (‖L‖ₑ : ℝ≥0∞) = ((‖L‖₊ : ℝ≥0) : ℝ≥0∞) from rfl,
+          show (‖R‖ₑ : ℝ≥0∞) = ((‖R‖₊ : ℝ≥0) : ℝ≥0∞) from rfl,
+          Φ.extend_smul, Φ.extend_smul]
+        rfl
+    _ = ‖L‖ₑ * symmetricGaugeENorm Φ A * ‖R‖ₑ := by ring
+
+/-- **The operator ideal a symmetric norming function induces.**
+
+Milestone B1, and the five fields are the five laws above. -/
+noncomputable def symmetricGaugeFamily (𝕜 : Type u) [RCLike 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (Φ : SymmetricGauge) :
+    TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜 where
+  gauge A := symmetricGaugeENorm Φ A
+  gauge_add_le A B := symmetricGaugeENorm_add_le Φ A B
+  gauge_smul c A := symmetricGaugeENorm_smul Φ c A
+  enorm_le_gauge A := enorm_le_symmetricGaugeENorm Φ A
+  gauge_comp_le L A R := symmetricGaugeENorm_comp_le Φ L A R
+  gauge_adjoint A := symmetricGaugeENorm_adjoint Φ A
 
 end Triangle
 
