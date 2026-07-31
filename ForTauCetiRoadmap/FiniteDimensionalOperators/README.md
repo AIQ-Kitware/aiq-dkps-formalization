@@ -1,5 +1,49 @@
 # Roadmap: finite-dimensional operator theory — the functional calculus, polar decomposition, singular values, and spectral subspaces
 
+> ## ✅ DELIVERED — this topic is complete (verified 2026-07-31)
+>
+> **All 32 signatures in `Suggested.lean` are proved in the library.** This README is
+> kept for its design rationale, which still explains why the theory is shaped as it is —
+> but it is a **record, not a plan**. Nothing below is outstanding work.
+>
+> The `sorry` bodies in `Suggested.lean` are deliberate and must stay: `ForTauCetiRoadmap.lean`
+> exists *"so that a broken suggested signature is a build failure"*, a guard that has already
+> caught ten real elaboration errors. Proving a body duplicates the library; deleting a
+> signature removes the guard.
+>
+> Re-check with `python3 scripts/check_roadmap_delivered.py --topic FiniteDimensionalOperators`.
+>
+> ### Where each signature landed
+>
+> * **`InnerProductSpace/CourantFischer.lean`** — `abs_eigenvalues_sub_le_opNorm`, `eigenvalues_eq_iSup_iInf_re_inner`
+> * **`InnerProductSpace/Gram/Matrix.lean`** — `exists_linearIsometryEquiv_map_eq_of_inner_eq`, `rangeEquivOfInnerEq`
+> * **`InnerProductSpace/MoorePenroseInverse.lean`** — `eq_moorePenroseInverse_of_penrose`, `moorePenroseInverse`
+> * **`InnerProductSpace/OperatorModulus.lean`** — `modulus`, `norm_modulus_apply`
+> * **`InnerProductSpace/OrthogonalSeries.lean`** — `orthogonalFamily_of_pairwise_inner_eq_zero`
+> * **`InnerProductSpace/PartialIsometry.lean`** — `IsPartialIsometry`, `isPartialIsometry_iff_norm_map`
+> * **`InnerProductSpace/Polar/Decomposition.lean`** — `abs` ⚠, `exists_polar_decomposition_unitary`
+> * **`InnerProductSpace/Polar/PartialIsometry.lean`** — `polarInitial`, `polarInitial_orthogonal_eq_ker`, `polarPartial` ⚠, `polarPartial_comp_modulus`
+> * **`InnerProductSpace/PositiveSqrt.lean`** — `sqrt_unique`
+> * **`InnerProductSpace/Projection/Gap.lean`** — `norm_starProjection_sub_eq_max`
+> * **`InnerProductSpace/RectangularSingularValues.lean`** — `singularValues_adjoint` ⚠
+> * **`InnerProductSpace/SelfAdjointFunctionalCalculus.lean`** — `selfAdjointFunctionalCalculus`, `selfAdjointFunctionalCalculus_apply_of_apply_eq_smul`, `sqrt`
+> * **`InnerProductSpace/Singular/System.lean`** — `apply_rightSingularBasis_eq_smul_leftSingularVector`, `eq_sum_singularValue_rankOne`, `exists_orthonormalBasis_extending_leftSingularVector`, `leftSingularVector`, `rightSingularBasis`
+> * **`InnerProductSpace/Spectral/Gap.lean`** — `SpectraSeparated` ⚠
+> * **`InnerProductSpace/Spectral/Subspace.lean`** — `IsEigenvectorAt`, `restrictedSpectrum` ⚠, `spectralSubspace` ⚠
+>
+> ### ⚠ Ambiguous names — attribution is a best guess
+>
+> 6 of these base names are declared in more than one module, so the
+> destination above is inferred (prefer `ForTauCeti/`, then the shallowest path), not
+> proved. Confirm before relying on a specific file:
+>
+> * `SpectraSeparated` — `DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean`, `DavisKahan/SpectralTheory/AbstractSpectrum.lean`, `DavisKahan/SpectralTheory/Compatibility.lean`, `ForTauCeti/Analysis/InnerProductSpace/Spectral/Gap.lean`
+> * `abs` — `DavisKahan/Sources/DavisKahan1970/Ideals/UnitaryInvariantNormInstances.lean`, `ForTauCeti/Analysis/InnerProductSpace/Polar/Decomposition.lean`
+> * `polarPartial` — `DavisKahan/Geometry/Polar/PolarIsometryFinal.lean`, `ForTauCeti/Analysis/InnerProductSpace/Polar/PartialIsometry.lean`
+> * `restrictedSpectrum` — `DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean`, `DavisKahan/SpectralTheory/AbstractSpectrum.lean`, `DavisKahan/SpectralTheory/Compatibility.lean`, `ForTauCeti/Analysis/InnerProductSpace/Spectral/Subspace.lean`
+> * `singularValues_adjoint` — `ForTauCeti/Analysis/InnerProductSpace/RectangularSingularValues.lean`, `ForTauCeti/Analysis/InnerProductSpace/Singular/Subspace.lean`
+> * `spectralSubspace` — `DavisKahan/Experimental/InfiniteDimensional/SinTheta/General.lean`, `ForTauCeti/Analysis/InnerProductSpace/Spectral/Subspace.lean`
+
 Spectral perturbation theory — the Davis–Kahan sin Θ theorems and everything in their
 orbit — is written in a small, stable vocabulary: apply a real function to a symmetric
 operator; factor an operator through its modulus; expand a rectangular map in its
