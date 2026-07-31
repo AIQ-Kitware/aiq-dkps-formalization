@@ -80,8 +80,8 @@ follows an eigenvector step that produces exactly this shape, so naming it remov
 repetition rather than hiding it. -/
 private theorem re_inner_real_smul_self_of_norm_one {c : ℝ} {v : E} (hv : ‖v‖ = 1) :
     RCLike.re ⟪(c : 𝕜) • v, v⟫_𝕜 = c := by
-  rw [inner_smul_left, RCLike.conj_ofReal, RCLike.re_ofReal_mul, inner_self_eq_norm_sq, hv,
-    one_pow, mul_one]
+  rw [inner_smul_left, RCLike.conj_ofReal, RCLike.re_ofReal_mul, inner_self_eq_norm_sq, hv]
+  simp
 
 /-- **The adjoint preserves an operator-norm bound.** If `‖A x‖ ≤ c ‖x‖` for all
 `x`, then `‖A⋆ y‖ ≤ c ‖y‖` for all `y` — the elementwise form of `‖A⋆‖ = ‖A‖`.
