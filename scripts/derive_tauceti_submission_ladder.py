@@ -252,6 +252,7 @@ RUNGS: list[tuple[str, str, list[str]]] = [
     ("N", "The spectral measure of an unbounded self-adjoint operator, and Stone (T15c)", [
         "Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank",
         "Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection",
+        "Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar",
         "Analysis.InnerProductSpace.BlockLowerBound",
         "Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal",
         "Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator",
