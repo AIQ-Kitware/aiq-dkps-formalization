@@ -529,20 +529,6 @@ private theorem nonneg_of_add_le_of_smul (f : E →L[𝕜] E) : 0 ≤ N f :=
   rectangular_nonneg_of_add_le_of_smul hadd hsmul f
 
 include hadd hsmul hidealL hidealR in
-/-- **Abstract Sylvester bound, coercive (Lyapunov) form.**  For any operator
-seminorm `N` with the two-sided ideal property, if `A` and `B` are both
-`δ`-coercive then `A X + X B = Y` forces `N X ≤ N Y / (2 δ)`.
-
-The square case of `le_div_of_comp_add_comp_eq_rectangular`. -/
-theorem le_div_of_comp_add_comp_eq (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ)
-    (hAc : ∀ x, δ * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
-    (hBc : ∀ x, δ * ‖x‖ ^ 2 ≤ RCLike.re ⟪B x, x⟫_𝕜)
-    (hXY : A ∘L X + X ∘L B = Y) : N X ≤ N Y / (2 * δ) :=
-  le_div_of_comp_add_comp_eq_rectangular hadd hsmul hidealL hidealR
-    hA hB hδ hAc hBc hXY
-
-include hadd hsmul hidealL hidealR in
 /-- **Abstract Sylvester bound, separated (Davis–Kahan) form.**  For any
 operator seminorm `N` with the two-sided ideal property, if the quadratic form
 of `A` is at least `c + g` and that of `B` at most `c`, then `A X - X B = Y`

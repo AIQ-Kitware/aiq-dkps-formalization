@@ -173,9 +173,8 @@ omit [FiniteDimensional 𝕜 E] in
 theorem diagOp_comp (b : OrthonormalBasis (Fin n) 𝕜 E) (x y : Fin n → ℝ) :
     diagOp b x ∘ₗ diagOp b y = diagOp b (x * y) := by
   refine b.toBasis.ext fun j => ?_
-  rw [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, diagOp_apply_basis,
-    map_smul, diagOp_apply_basis, diagOp_apply_basis, smul_smul, Pi.mul_apply,
-    RCLike.ofReal_mul, mul_comm]
+  simp only [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, diagOp_apply_basis,
+    map_smul, smul_smul, Pi.mul_apply, RCLike.ofReal_mul, mul_comm]
 
 /-- The singular values of a diagonal operator with *antitone nonnegative*
 diagonal are the diagonal itself. -/
@@ -231,9 +230,8 @@ theorem exists_unitary_diagOp_factorization (hn : finrank 𝕜 E = n)
       = K.toLinearMap ∘ₗ diagOp b (fun i => A.singularValues (i : ℕ))
         ∘ₗ K.symm.toLinearMap := by
     refine w.toBasis.ext fun i => ?_
-    rw [OrthonormalBasis.coe_toBasis, habs_w i, LinearMap.comp_apply,
-      LinearMap.comp_apply, coe_toLinearMap_apply, coe_toLinearMap_apply,
-      hKsymm i, diagOp_apply_basis, map_smul, hKb i]
+    simp only [OrthonormalBasis.coe_toBasis, habs_w i, LinearMap.comp_apply,
+      coe_toLinearMap_apply, hKsymm i, diagOp_apply_basis, map_smul, hKb i]
   refine ⟨K.trans (choosePolarUnitary A), K.symm, ?_⟩
   ext v
   have hpolar := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary A) v
@@ -241,8 +239,7 @@ theorem exists_unitary_diagOp_factorization (hn : finrank 𝕜 E = n)
   have habsv := LinearMap.congr_fun habs v
   rw [LinearMap.comp_apply, LinearMap.comp_apply, coe_toLinearMap_apply,
     coe_toLinearMap_apply] at habsv
-  rw [hpolar, LinearMap.comp_apply, LinearMap.comp_apply,
-    coe_toLinearMap_apply, coe_toLinearMap_apply, habsv,
+  simp only [hpolar, LinearMap.comp_apply, coe_toLinearMap_apply, habsv,
     LinearIsometryEquiv.trans_apply]
   rfl
 
@@ -353,10 +350,9 @@ theorem gauge_perm (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ)
       = (b.equiv b π).symm.toLinearMap ∘ₗ diagOp b x
         ∘ₗ (b.equiv b π).toLinearMap := by
     refine b.toBasis.ext fun j => ?_
-    rw [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply,
-      LinearMap.comp_apply, coe_toLinearMap_apply, coe_toLinearMap_apply,
-      OrthonormalBasis.equiv_apply_basis, diagOp_apply_basis,
-      diagOp_apply_basis, map_smul, Function.comp_apply]
+    simp only [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply,
+      coe_toLinearMap_apply, OrthonormalBasis.equiv_apply_basis, diagOp_apply_basis,
+      map_smul, Function.comp_apply]
     congr 1
     rw [← OrthonormalBasis.equiv_apply_basis b b π j,
       LinearIsometryEquiv.symm_apply_apply]
@@ -375,9 +371,8 @@ theorem gauge_neg_single (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → �
     rw [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply,
       coe_toLinearMap_apply]
     rcases eq_or_ne i j with rfl | hij
-    · rw [Submodule.reflection_orthogonalComplement_singleton_eq_neg,
-        map_neg, diagOp_apply_basis, diagOp_apply_basis, Function.update_self,
-        RCLike.ofReal_neg, neg_smul]
+    · simp only [Submodule.reflection_orthogonalComplement_singleton_eq_neg,
+        map_neg, diagOp_apply_basis, Function.update_self, neg_smul]
     · have hmem : b i ∈ (𝕜 ∙ b j)ᗮ :=
         Submodule.mem_orthogonal_singleton_iff_inner_right.mpr
           (b.orthonormal.2 (Ne.symm hij))
