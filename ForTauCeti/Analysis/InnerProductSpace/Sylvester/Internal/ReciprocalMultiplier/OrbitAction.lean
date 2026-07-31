@@ -117,7 +117,7 @@ omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 theorem unitaryOrbitAction_apply
     (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) (T : E →ₗ[𝕜] F) :
     unitaryOrbitAction U V T = U.toLinearMap ∘ₗ T ∘ₗ V.toLinearMap :=
-  rfl
+  (rfl)
 
 /-- The unitary diagonal in an orthonormal basis with prescribed unit-modulus
 coordinate factors.  This is the finite-dimensional operator attached to one
@@ -323,7 +323,7 @@ noncomputable def doubledRealRotation
     doubledRealRotation theta x = WithLp.toLp 2
       (Real.cos theta • x.fst - Real.sin theta • x.snd,
         Real.sin theta • x.fst + Real.cos theta • x.snd) :=
-  rfl
+  (rfl)
 
 /-- A real diagonal map in an orthonormal basis. -/
 private noncomputable def basisDiagonalRealMap
@@ -526,7 +526,7 @@ def doubledComplexScalarAction
     doubledComplexScalarAction z T x = WithLp.toLp 2
       (z.re • T x.fst - z.im • T x.snd,
         z.im • T x.fst + z.re • T x.snd) :=
-  rfl
+  (rfl)
 
 /-- A doubled phase action is complex scalar action by its unit phase. -/
 theorem doubledPhaseAction_eq_complexScalarAction

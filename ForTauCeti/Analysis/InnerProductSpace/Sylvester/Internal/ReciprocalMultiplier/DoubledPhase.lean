@@ -229,7 +229,7 @@ def doubledComplexScalarMapAction (z : ℂ) (T : E' →ₗ[𝕜] F') :
     doubledComplexScalarMapAction z T x = WithLp.toLp 2
       (((z.re : ℝ) : 𝕜) • T x.fst - ((z.im : ℝ) : 𝕜) • T x.snd,
         ((z.im : ℝ) : 𝕜) • T x.fst + ((z.re : ℝ) : 𝕜) • T x.snd) :=
-  rfl
+  (rfl)
 
 /-- The doubled realization of multiplication by the phase `exp (θ i)` after
 applying a `𝕜`-linear map. -/
