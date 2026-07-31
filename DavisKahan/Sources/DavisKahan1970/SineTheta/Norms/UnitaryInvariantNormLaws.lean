@@ -82,10 +82,10 @@ theorem extendedGauge_smul (N : PaperUnitaryInvariantNorm)
 
 /-- Triangle inequality for each finite prefix gauge.
 
-The Ky Fan triangle inequality in infinite dimensions is an analytic input of
-the repository, supplied by `HasKyFanApproximationGaugeTriangle` (instantiated
-for `ℝ` and `ℂ`), so it is carried as a class assumption here. -/
-theorem prefixGauge_add_le [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+The Ky Fan triangle inequality in infinite dimensions is proved from the min--max lower
+bound, so what is carried here is the class asserting that bound over the scalar field,
+`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`, instantiated for `ℝ` and `ℂ`. -/
+theorem prefixGauge_add_le [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (N : PaperUnitaryInvariantNorm)
     (n : ℕ) (A B : E →L[𝕜] F) :
     N.prefixGauge n (A + B) ≤ N.prefixGauge n A + N.prefixGauge n B := by
@@ -129,7 +129,7 @@ theorem prefixGauge_add_le [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
   exact hmajor.trans (N.finiteGauge_add_le _ _)
 
 /-- Triangle inequality of the canonical infinite-dimensional extension. -/
-theorem extendedGauge_add_le [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+theorem extendedGauge_add_le [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (N : PaperUnitaryInvariantNorm)
     (A B : E →L[𝕜] F) :
     N.extendedGauge (A + B) ≤ N.extendedGauge A + N.extendedGauge B := by
@@ -291,7 +291,7 @@ theorem gauge_smul (N : PaperUnitaryInvariantNorm)
     ENNReal.toReal_ofReal (norm_nonneg c)]
 
 /-- The real gauge is subadditive on its canonical ideal. -/
-theorem gauge_add_le [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+theorem gauge_add_le [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (N : PaperUnitaryInvariantNorm)
     {A B : E →L[𝕜] F} (hA : N.Mem A) (hB : N.Mem B) :
     N.gauge (A + B) ≤ N.gauge A + N.gauge B := by

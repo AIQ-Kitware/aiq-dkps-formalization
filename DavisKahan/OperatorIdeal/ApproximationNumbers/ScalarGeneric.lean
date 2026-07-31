@@ -19,7 +19,7 @@ scalar-specific implementations, avoiding the former real-proof import cycle.
 
 ## Main definitions
 
-* `HasApproximationNumberStrongCutoff`, `HasKyFanApproximationGaugeTriangle`:
+* `HasApproximationNumberStrongCutoff`:
   the two analytic capabilities, separated from `RCLike` because that class is
   open while these facts are established for `ℝ` and `ℂ`.
 * `kyFanSymmetricIdealFamily`: the finite Ky Fan gauge as a **canonical**
@@ -73,18 +73,6 @@ class HasApproximationNumberStrongCutoff
           (fun i => approximationSingularValue n (K ∘L P i))
           l (𝓝 (approximationSingularValue n K))
 
-/-- Analytic capability asserting the finite Ky Fan triangle inequality over
-a scalar field. -/
-class HasKyFanApproximationGaugeTriangle
-    (𝕜 : Type u) [RCLike 𝕜] : Prop where
-  add_le :
-    ∀ {E F : Type v}
-      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-      (k : ℕ) (K L : E →L[𝕜] F),
-      kyFanApproximationGauge k (K + L) ≤
-        kyFanApproximationGauge k K + kyFanApproximationGauge k L
-
 /-- The strong-cutoff convergence holds over `ℝ`.  Supplied as an instance so
 the field-generic development can be used at `ℝ` without naming the real proof. -/
 instance realHasApproximationNumberStrongCutoff :
@@ -97,39 +85,6 @@ instance complexHasApproximationNumberStrongCutoff :
     HasApproximationNumberStrongCutoff.{0, v, w} ℂ where
   tendsto_comp_strongProjection :=
     approximationSingularValue_comp_strongProjection_tendsto_complex
-
-/-- The Ky Fan gauge satisfies the triangle inequality over `ℝ`.  This is the
-capability the real and complex routes prove separately, which is why it is a
-class rather than a theorem. -/
-instance realHasKyFanApproximationGaugeTriangle :
-    HasKyFanApproximationGaugeTriangle.{0, v} ℝ where
-  add_le := ApproximationNumbersReal.kyFanApproximationGauge_add_le_real
-
-/-- The Ky Fan gauge satisfies the triangle inequality over `ℂ`. -/
-instance complexHasKyFanApproximationGaugeTriangle :
-    HasKyFanApproximationGaugeTriangle.{0, v} ℂ where
-  add_le := kyFanApproximationGauge_add_le_complex
-
-/-- **This capability is now derivable, so assuming it is redundant.**
-
-`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` assumes the min--max lower bound; the Ky
-Fan triangle inequality is *proved* from it by
-`ContinuousLinearMap.kyFanGauge_add_le_of_hasMinMaxLowerBound`.  So the two classes state the
-same capability one layer apart, and this instance is the bridge: every hypothesis
-`[HasKyFanApproximationGaugeTriangle 𝕜]` in this library now discharges from the deeper one
-without being edited.
-
-Retiring the shallower class is `{lane:DK-RETIRE-KYFANTRIANGLE}`; this instance is what makes
-that a deprecation rather than a refactor.  The two explicit instances above are kept because
-they are shorter proofs of the same thing at `ℝ` and `ℂ`, and removing them would make those
-fields depend on the whole min--max development. -/
-instance hasKyFanApproximationGaugeTriangle_of_hasMinMaxLowerBoundEverywhere
-    (𝕜 : Type u) [RCLike 𝕜]
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] :
-    HasKyFanApproximationGaugeTriangle.{u, v} 𝕜 where
-  add_le k K L :=
-    ContinuousLinearMap.kyFanGauge_add_le_of_hasMinMaxLowerBound
-      ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.out K L k
 
 /-- Real-Hilbert-space continuity of approximation numbers under strongly
 convergent orthogonal cutoffs. -/
@@ -189,11 +144,12 @@ theorem approximationSingularValue_comp_strongProjection_tendsto
 
 /-- Ky Fan's addition inequality for approximation numbers. -/
 theorem kyFanApproximationGauge_add_le
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (k : ℕ) (K L : E →L[𝕜] F) :
     kyFanApproximationGauge k (K + L) ≤
       kyFanApproximationGauge k K + kyFanApproximationGauge k L :=
-  HasKyFanApproximationGaugeTriangle.add_le (𝕜 := 𝕜) k K L
+  ContinuousLinearMap.kyFanGauge_add_le_of_hasMinMaxLowerBound
+    ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.out K L k
 
 
 /-- Ky Fan gauges converge under strong orthogonal cutoffs. -/
@@ -220,8 +176,9 @@ The gauge is `ENNReal.ofReal` of `kyFanApproximationGauge k`, so it is finite
 everywhere — every bounded operator is a member
 (`carrier_kyFanSymmetricIdealFamily`) — and the four ideal laws are the
 real-valued ones transported along `ENNReal.ofReal`.  Only one of them,
-subadditivity, is mathematics rather than bookkeeping; it arrives through the
-`HasKyFanApproximationGaugeTriangle` capability class.
+subadditivity, is mathematics rather than bookkeeping; it arrives through
+`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`, the `ForTauCeti` class that assumes the
+min--max lower bound the Ky Fan triangle inequality is proved from.
 
 `hk : 0 < k` is needed for exactly one law: `enorm_le_gauge`.  At `k = 0` the
 gauge is identically `0`, which satisfies the other three but is not a norm.
@@ -232,7 +189,7 @@ both `kyFanApproximationGauge` and the capability class supplying its triangle
 inequality are defined in this library; it moves when the approximation-number
 layer is extracted. -/
 noncomputable def kyFanSymmetricIdealFamily
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
     TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜 where
   gauge A := ENNReal.ofReal (kyFanApproximationGauge k A)
   gauge_add_le A B := by
@@ -255,7 +212,7 @@ noncomputable def kyFanSymmetricIdealFamily
 Fan approximation gauge, definitionally. -/
 @[simp]
 theorem gauge_kyFanSymmetricIdealFamily
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
     (A : E →L[𝕜] F) :
     (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge A =
       ENNReal.ofReal (kyFanApproximationGauge k A) := rfl
@@ -263,7 +220,7 @@ theorem gauge_kyFanSymmetricIdealFamily
 /-- The Ky Fan gauge is never `∞`: it is `ENNReal.ofReal` of a real number.
 This is what makes every bounded operator a member of the finite Ky Fan ideal. -/
 theorem gauge_kyFanSymmetricIdealFamily_ne_top
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
     (A : E →L[𝕜] F) :
     (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge A ≠ ∞ :=
   ENNReal.ofReal_ne_top
@@ -272,7 +229,7 @@ theorem gauge_kyFanSymmetricIdealFamily_ne_top
 finite sum of approximation numbers, so it never reaches `∞`. -/
 @[simp]
 theorem carrier_kyFanSymmetricIdealFamily
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
     (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).toOperatorIdealFamily.carrier
       (E := E) (F := F) = ⊤ := by
   ext A
@@ -290,7 +247,7 @@ capability class *"survives only for the real-scalar case"*, is out of date.  Wh
 is the redundancy: two classes stating the same capability at two depths, of which only the
 deeper one is now needed. -/
 theorem kyFanSymmetricIdealFamily_eq_kyFanIdealFamily (𝕜 : Type) [RCLike 𝕜]
-    [HasKyFanApproximationGaugeTriangle.{0, v} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} 𝕜]
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} 𝕜] (k : ℕ) (hk : 0 < k) :
     kyFanSymmetricIdealFamily.{0, v} (𝕜 := 𝕜) k hk = TauCeti.kyFanIdealFamily.{v} 𝕜 k hk :=
   rfl
@@ -298,7 +255,7 @@ theorem kyFanSymmetricIdealFamily_eq_kyFanIdealFamily (𝕜 : Type) [RCLike 𝕜
 /-- The real-valued Ky Fan gauge is recovered from the canonical one. -/
 @[simp]
 theorem toReal_gauge_kyFanSymmetricIdealFamily
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
     (A : E →L[𝕜] F) :
     ((kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge A).toReal =
       kyFanApproximationGauge k A :=
@@ -312,7 +269,7 @@ bounded operators.  Both inequalities are needed: the first turns an ideal-norm
 Cauchy sequence into an operator-norm one, the second turns the operator-norm
 limit back into an ideal-norm limit. -/
 instance isComplete_kyFanSymmetricIdealFamily
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
     (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).toOperatorIdealFamily.IsComplete where
   completeSpace := by
     intro E F _ _ _ _ _ _
@@ -500,7 +457,7 @@ noncomputable def operatorNorm :
 
 Dominance is immediate: the gauge *is* the `k`-th Ky Fan gauge, so majorization
 at index `k` is the conclusion. -/
-noncomputable def kyFan [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+noncomputable def kyFan [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (k : ℕ) (hk : 0 < k) :
     KyFanDominantIdealFamily.{u, v} 𝕜 where
   toSymmetricOperatorIdealFamily := kyFanSymmetricIdealFamily k hk
@@ -522,14 +479,14 @@ historical record being deleted. -/
 
 /-- Every bounded operator belongs to the fixed finite Ky Fan family. -/
 @[simp]
-theorem kyFan_mem [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+theorem kyFan_mem [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
     (kyFan (𝕜 := 𝕜) k hk).Mem K :=
   gauge_kyFanSymmetricIdealFamily_ne_top k hk K
 
 /-- The concrete gauge of the fixed finite Ky Fan family. -/
 @[simp]
-theorem kyFan_gauge [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+theorem kyFan_gauge [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
     (kyFan (𝕜 := 𝕜) k hk).gauge K = kyFanApproximationGauge k K :=
   toReal_gauge_kyFanSymmetricIdealFamily k hk K
