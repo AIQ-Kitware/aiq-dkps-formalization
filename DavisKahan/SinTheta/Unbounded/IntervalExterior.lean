@@ -32,6 +32,24 @@ variable {E F G H : Type v}
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
+/-- Interval/exterior separation for two self-adjoint closed operators, stated
+over the Spectra spectrum.  Either orientation is permitted.
+
+`RealSpectrumIntervalExteriorGap` is the `realSpectrum` spelling of the same
+configuration. -/
+def SpectralIntervalExteriorGap
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
+    (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G))
+    (β α δ : ℝ) : Prop :=
+  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+        Set.Icc β α ∧
+    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B.toLinearPMap) ∨
+  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+        Set.Icc β α ∧
+    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap)
+
 /-- Raw partial-map presentation of the Spectra interval/exterior boundary.
 The spectrum calls are the remaining Spectra dependency; no bundled operator is
 part of the mathematical input. -/
@@ -47,7 +65,7 @@ def UnboundedIntervalExteriorGapPMap
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A)
 
-namespace SylvesterIntervalExteriorGap
+namespace SpectralIntervalExteriorGap
 
 omit [CompleteSpace F] [CompleteSpace G] in
 /-- View a source-facing interval/exterior gap through its canonical partial
@@ -55,11 +73,11 @@ maps. -/
 theorem toPMap
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G)}
-    {β α δ : ℝ} (h : SylvesterIntervalExteriorGap A B β α δ) :
+    {β α δ : ℝ} (h : SpectralIntervalExteriorGap A B β α δ) :
     UnboundedIntervalExteriorGapPMap A.toLinearPMap B.toLinearPMap β α δ := by
   exact h
 
-end SylvesterIntervalExteriorGap
+end SpectralIntervalExteriorGap
 
 /-- Generalized finite-interval unbounded sine-theta theorem at ideal-gauge
 scope, using Spectra spectrum hypotheses and no ordered half-line dependency. -/
@@ -74,7 +92,7 @@ theorem generalizedSinTheta_unbounded_of_spectralIntervalExteriorGap
     {β α δ ε : ℝ}
     (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : SylvesterIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
+    (hgap : SpectralIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
       δ * ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)

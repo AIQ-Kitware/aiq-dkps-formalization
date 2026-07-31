@@ -140,7 +140,7 @@ structure FiniteIntervalGeneralSinThetaProblem
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : SylvesterIntervalExteriorGap data.A₀ data.Λ₁
+  spectral_gap : SpectralIntervalExteriorGap data.A₀ data.Λ₁
     intervalLower intervalUpper gap
   residual_mem : N.Mem data.residual
 
