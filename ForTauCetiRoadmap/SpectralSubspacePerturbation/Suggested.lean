@@ -423,6 +423,13 @@ The norm is an ideal gauge from the OperatorIdeals roadmap rather than a unitari
 invariant norm on a finite-dimensional space: at this generality finiteness of the
 gauge is a *hypothesis* on the residual and a *conclusion* about `sin Θ`. -/
 -- DELIVERED: `DavisKahan.SinTheta.Unbounded.Core` (as `UnboundedSinThetaData`)
+-- NOT DELIVERED, and NOT merely renamed (audited 2026-07-31).
+-- `DavisKahan/SinTheta/Unbounded/Core.lean` has `UnboundedSinThetaData`, which is a
+-- REDESIGN rather than a rename: it bundles the operators as fields instead of taking
+-- them as parameters, generalizes `ℂ` to `RCLike`, wraps each operator in
+-- `ClosedOperator{Ambient,Trial,Complement}`, and carries a THIRD operator `Λ₁` with an
+-- `intertwines` field that the shape below does not have.  Reconciling the two is a
+-- design decision for the unbounded lane, not a roadmap edit.
 structure UnboundedSinThetaProblem
     (A : E →ₗ.[ℂ] E) (A₀ : H →ₗ.[ℂ] H) (X : H →L[ℂ] E) (R : H →L[ℂ] E) where
   /-- The ambient operator is self-adjoint; it is not assumed bounded. -/

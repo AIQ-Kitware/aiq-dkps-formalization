@@ -277,6 +277,15 @@ noncomputable def schattenGauge (p : ℝ) (hp : 1 ≤ p) : SymmetricGauge := sor
 /-- The Schatten-`p` family.  `p = ∞` is the operator-norm family and is the honest
 endpoint of the same scale rather than a separate definition. -/
 -- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.Family.Schatten` (as `schattenIdealFamily`)
+-- NOT DELIVERED, and NOT merely renamed (audited 2026-07-31).  `schattenIdealFamily`
+-- in `ForTauCeti/Analysis/OperatorIdeal/Family/Schatten.lean` is a DIFFERENT object:
+-- it is `SymmetricOperatorIdealFamily.{u, v} 𝕜` (square, adjoint-closed, general
+-- `RCLike`, extra `HasMinMaxLowerBoundEverywhere` instance) gauged directly by
+-- `schattenENorm`, whereas the signature below is a rectangular
+-- `OperatorIdealFamily.{0, v, w} ℂ` built THROUGH `symmetricGaugeFamily`.  That
+-- construction route is the point: `symmetricGaugeFamily` is itself one of the
+-- undelivered `SymmetricGauge` signatures in this file, so this statement cannot be
+-- discharged until that abstraction exists.  Do not mark this delivered by name match.
 noncomputable def schattenFamily (p : ℝ) (hp : 1 ≤ p) : OperatorIdealFamily.{0, v, w} ℂ :=
   symmetricGaugeFamily (schattenGauge p hp)
 
@@ -293,6 +302,12 @@ that needs no spectral theory, which is what lets Part C stand on its own.  The 
 must therefore be proved equal.  Both sides are basis-independent, so the statement is
 well-posed; this is the one place in Part B where Milestone A3 is genuinely needed. -/
 -- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison` (as `tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy_of_finiteDimensional`)
+-- NOT DELIVERED AS STATED, and NOT merely renamed (audited 2026-07-31).  The delivered
+-- forms are `tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy_of_hilbertBasis` and
+-- `..._of_finiteDimensional`.  One unconditional statement became TWO, each carrying an
+-- extra hypothesis -- that is a weakening, not a rename, and marking it delivered by
+-- name-prefix match would overstate what is proved.  Either weaken this statement to
+-- match one of the two, or prove the unconditional form.
 theorem tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy
     (T : F →L[ℂ] E) (b : HilbertBasis ι ℂ F) :
     ∑' n, ENNReal.ofReal (approximationNumber T n) ^ 2 = hilbertSchmidtEnergy T b := sorry
