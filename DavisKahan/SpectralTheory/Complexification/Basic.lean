@@ -448,13 +448,12 @@ theorem complexify_injective [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- A coordinate of a vector is no longer than the vector.
 
-**Was `private`, and no longer needs to be.**  It was made private to keep
-`ClosedOperatorComplexification.norm_re_le` — a verbatim copy one module later — unambiguous where
-both namespaces are opened together.  That copy has since been deleted in favour of this one, so
-this is now the only public statement of the inequality in its dependency cone and the two fixes
-must not both stand: with the sibling gone and this one private, every public copy reachable from
-`ClosedOperator/Complexification.lean` disappeared and the tree stopped building.  Two further
-copies remain elsewhere; see the `{lane:COMPLEXIFY-DEDUP}` row. -/
+This is the canonical copy, and it is public on purpose.  It was briefly `private`, to keep
+`ClosedOperatorComplexification`'s verbatim copy unambiguous where both namespaces are opened
+together; `edward (aiq-gpu)` then deleted that copy in `4dacc008` and pointed the module here.
+Those two fixes are correct separately and fatal together — with the sibling gone and this one
+private, no public copy was reachable from `ClosedOperator/Complexification.lean` and the tree
+stopped building.  Two further copies survive; see lane `{lane:CPLX-DEDUP}`. -/
 theorem norm_re_le [NormedAddCommGroup E] (z : RealComplexification E) :
     ‖re z‖ ≤ ‖z‖ := by
   have h := norm_sq z
