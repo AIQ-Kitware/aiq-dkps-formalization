@@ -9,9 +9,12 @@ The classes, measured rather than tabulated (2026-07-31, 27 gates):
 
   * **9 are soft** -- they print the finding and `return 1 if args.check else 0`,
     so without the flag a defect is indistinguishable from a clean run.
-  * **4 accept `--check`** and are strict either way.
-  * **14 take no `--check` at all** and are always strict.
-  * **1 is advisory** -- see `ADVISORY` below.
+  * **3 accept `--check`** and are strict either way.
+  * **15 take no `--check` at all** and are always strict.
+  * **1 is advisory** -- see `ADVISORY`.
+  * **1 accepts `--check` and is deliberately not given it** -- see
+    `CHECK_IS_STRONGER`, which is where deriving the classification from
+    `argparse` stops being enough.
 
 So the naive runner -- pass `--check` to everything -- is *worse than no runner*:
 fourteen gates die with `unrecognized arguments: --check`, turning fourteen
@@ -33,13 +36,33 @@ failure**: manifests, topic tables and roadmaps that named modules and went stal
 when the modules moved.  A list here would go stale the first time somebody adds
 a gate.  So the runner reads each script's own `argparse` setup and asks it.
 
+## Where deriving it stops working
+
+Reading `argparse` tells you a gate *accepts* `--check`.  It does not tell you
+what `--check` **means** there, and one gate means something else by it:
+`check_davis_kahan_frontier` is strict on real problems either way, and its
+`--check` additionally requires every paper result to be recursively grounded --
+a completion target, 59 of 80 today.  **That was found by running the suite, not
+by reading the code**, and it is why `CHECK_IS_STRONGER` is a short hand-written
+list with a reason per entry rather than another derivation.  Two entries of
+judgement beside twenty-seven derivations is the right ratio; twenty-seven
+entries of judgement would be the table this script exists to avoid.
+
 ## Consequence
 
-With `--check` passed wherever it is accepted, **every gate is strict at the
-point of use**, and the soft/strict split stops mattering to callers without any
-of the nine scripts changing.  That is deliberate: making them strict by default is a nine-file
-change with nine chances to alter behaviour, and it is not needed to get the
-guarantee.
+With `--check` passed wherever it is both accepted and meant, **every gate is
+strict at the point of use**, and the soft/strict split stops mattering to
+callers without any of the nine scripts changing.  That is deliberate: making
+them strict by default is a nine-file change with nine chances to alter
+behaviour, and it is not needed to get the guarantee.
+
+**Do not run `lake` while this is running.**  Five gates invoke `lake` and a
+concurrent build makes them fail with `build failed` -- which reads exactly like
+a regression and is not one.  On 2026-07-31 that cost a full investigation:
+`check_experimental_root_status` reported "lake build DavisKahan.Experimental did
+not succeed", and the same build run alone immediately afterwards was green
+(9210 jobs).  The suite was racing the author's own editing loop.  Use `--fast`
+if you need to keep building; it skips exactly those five.
 
     python3 scripts/run_gates.py              # every gate
     python3 scripts/run_gates.py --fast       # skip the ones that build Lean
@@ -87,6 +110,24 @@ ADVISORY = {
         "and every deliberate retirement; the list is for a human to adjudicate",
 }
 
+#: Gates where `--check` is not the soft/strict toggle it is everywhere else, but
+#: a **stronger, aspirational** criterion.  The runner deliberately does *not*
+#: pass the flag to these; their default mode is the regression gate.
+#:
+#: **This is the limit of deriving the classification from `argparse`, and it was
+#: found by running the suite rather than by reading the code.**  Accepting
+#: `--check` does not tell you what `--check` means.
+#: `check_davis_kahan_frontier` is strict on real problems either way; its
+#: `--check` *additionally* demands that every paper result be recursively
+#: grounded, which is a project-completion target (59 of 80 today).  Passing the
+#: flag would make the suite permanently red on an unmet ambition -- the same
+#: "trains everyone to ignore it" failure that `ADVISORY` exists to prevent.
+CHECK_IS_STRONGER = {
+    "check_davis_kahan_frontier":
+        "--check demands full recursive grounding of every paper result, a "
+        "completion target and not a regression; the default mode is the gate",
+}
+
 #: Recognised by reading the script rather than by running `--help`, which for
 #: the slow gates would mean starting a Lean build just to ask a question.
 CHECK_FLAG = re.compile(r"""add_argument\(\s*["']--check["']""")
@@ -100,7 +141,8 @@ class Gate:
         self.path = path
         self.name = path.stem
         source = path.read_text(encoding="utf-8")
-        self.takes_check = bool(CHECK_FLAG.search(source))
+        self.takes_check = (bool(CHECK_FLAG.search(source))
+                            and self.name not in CHECK_IS_STRONGER)
         self.soft = bool(SOFT.search(source))
 
     @property
@@ -109,6 +151,8 @@ class Gate:
 
     @property
     def kind(self) -> str:
+        if self.name in CHECK_IS_STRONGER:
+            return "strict, --check withheld (it is a completion target)"
         if self.advisory:
             return "advisory (reported, cannot fail the run)"
         if self.soft:
