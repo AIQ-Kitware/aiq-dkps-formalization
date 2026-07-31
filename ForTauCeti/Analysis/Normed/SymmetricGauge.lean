@@ -645,6 +645,61 @@ theorem extend_le_extend_of_forall_sum_le {a b : ℕ → ℝ≥0∞}
     _ ≤ Φ.extend b :=
         le_extend_of_dominated Φ b (truncate b hbfin N) (truncate_le b hbfin N)
 
+/-! ### Algebraic laws of the extension -/
+
+/-- The extension is monotone: a larger sequence has more dominated truncations.
+
+Immediate from the definition -- `Dominated a` embeds into `Dominated b` -- and
+it is the reason no separate "restriction" lemma is needed downstream. -/
+theorem extend_mono {a b : ℕ → ℝ≥0∞} (hab : ∀ i, a i ≤ b i) :
+    Φ.extend a ≤ Φ.extend b := by
+  refine iSup_le fun c => ?_
+  exact le_extend_of_dominated Φ b c.1 fun i => (c.2 i).trans (hab i)
+
+/-- Scaling a dominated sequence stays dominated, and scales the gauge. -/
+theorem smul_le_extend_smul (c : ℝ≥0) (a : ℕ → ℝ≥0∞) (d : Dominated a) :
+    (c : ℝ≥0∞) * (Φ d.1 : ℝ≥0∞) ≤ Φ.extend (fun i => (c : ℝ≥0∞) * a i) := by
+  have hdom : ∀ i, (((c • d.1) i : ℝ≥0) : ℝ≥0∞) ≤ (c : ℝ≥0∞) * a i := by
+    intro i
+    simp only [Finsupp.smul_apply, smul_eq_mul, ENNReal.coe_mul]
+    gcongr
+    exact d.2 i
+  have hb := le_extend_of_dominated Φ (fun i => (c : ℝ≥0∞) * a i) (c • d.1) hdom
+  rwa [Φ.smul, ENNReal.coe_mul] at hb
+
+/-- The extension is positively homogeneous.
+
+One direction is `smul_le_extend_smul` plus `ENNReal.mul_iSup`; the other runs the
+same argument at `c⁻¹`, which is why `c = 0` is handled separately -- scaling by
+zero collapses the index set rather than permuting it. -/
+theorem extend_smul (c : ℝ≥0) (a : ℕ → ℝ≥0∞) :
+    Φ.extend (fun i => (c : ℝ≥0∞) * a i) = (c : ℝ≥0∞) * Φ.extend a := by
+  rcases eq_or_ne c 0 with rfl | hc
+  · simp only [ENNReal.coe_zero, zero_mul]
+    refine le_antisymm (iSup_le fun d => ?_) (zero_le)
+    have hzero : d.1 = 0 := by
+      ext i; simpa using d.2 i
+    simp [hzero]
+  refine le_antisymm (iSup_le fun d => ?_) ?_
+  · -- `d ≤ c • a` gives `c⁻¹ • d ≤ a`, and `Φ d = c * Φ (c⁻¹ • d)`.
+    have hdom : ∀ i, (((c⁻¹ • d.1) i : ℝ≥0) : ℝ≥0∞) ≤ a i := by
+      intro i
+      have h := d.2 i
+      simp only [Finsupp.smul_apply, smul_eq_mul, ENNReal.coe_mul]
+      calc ((c⁻¹ : ℝ≥0) : ℝ≥0∞) * (d.1 i : ℝ≥0∞)
+          ≤ ((c⁻¹ : ℝ≥0) : ℝ≥0∞) * ((c : ℝ≥0∞) * a i) := by gcongr
+        _ = a i := by
+            rw [← mul_assoc, ← ENNReal.coe_mul, inv_mul_cancel₀ hc,
+              ENNReal.coe_one, one_mul]
+    have hb := le_extend_of_dominated Φ a (c⁻¹ • d.1) hdom
+    rw [Φ.smul] at hb
+    have hexp : (Φ d.1 : ℝ≥0∞) = (c : ℝ≥0∞) * ((c⁻¹ * Φ d.1 : ℝ≥0) : ℝ≥0∞) := by
+      rw [← ENNReal.coe_mul, ← mul_assoc, mul_inv_cancel₀ hc, one_mul]
+    rw [hexp]
+    gcongr
+  · simp only [extend, ENNReal.mul_iSup]
+    exact iSup_le fun d => smul_le_extend_smul Φ c a d
+
 end SymmetricGauge
 
 end TauCeti
