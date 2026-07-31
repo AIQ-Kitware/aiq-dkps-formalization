@@ -9,6 +9,7 @@ import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteSourceSingularSystem
 import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteValueFibers
 import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteValueSeparation
+import DavisKahan.OperatorIdeal.ApproximationNumbers.GramSpectralRank
 import DavisKahan.OperatorIdeal.ApproximationNumbers.LeadingCutoff
 import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
