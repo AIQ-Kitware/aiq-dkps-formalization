@@ -2,6 +2,23 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `DavisKahan/SpectralTheory/Complexification/Basic.lean`.
+* Extraction class: **moved**, not restated.  Its only non-Mathlib import is
+  `ForTauCeti`'s own `SpectralOrder/Real.lean`, so it depended on nothing in the paper
+  library; the enclosing namespace
+  `TauCeti.DavisKahan.Experimental.Foundation.RealComplexification` became
+  `TauCeti.RealComplexification`, dropping a paper's name and a staging word.
+* **The namespace is now split across the two libraries**, deliberately and visibly:
+  `Complexification/Subspace.lean` and its `complexifySubmodule` are still in `DavisKahan`
+  under the old path, so a consumer of both opens both.  That is recorded at each such
+  `open` rather than hidden, and it resolves when the rest of the cluster moves.
+* Original authors / copyright: Jon Crall, GPT-5.6 Thinking; Copyright (c) 2026
+  Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none**.
 -/
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Real
 import Mathlib.Algebra.Module.MinimalAxioms
@@ -37,9 +54,6 @@ No unbounded-operator, spectral-cutoff, or Ky Fan file depends on this module.
 -/
 
 namespace TauCeti
-namespace DavisKahan
-namespace Experimental
-namespace Foundation
 
 open scoped InnerProductSpace ComplexConjugate
 
@@ -350,7 +364,8 @@ def complexify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- The complexification of the identity is the identity. -/
 @[simp] theorem complexify_id [NormedAddCommGroup E] [InnerProductSpace ℝ E] :
-    complexify (ContinuousLinearMap.id ℝ E) = ContinuousLinearMap.id ℂ (RealComplexification E) := by
+    complexify (ContinuousLinearMap.id ℝ E) = ContinuousLinearMap.id ℂ (RealComplexification E)
+    := by
   apply ContinuousLinearMap.ext
   intro z
   apply RealComplexification.ext <;> simp
@@ -430,7 +445,9 @@ theorem norm_complexify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 /-- Complexification reflects equality of bounded real operators. -/
 theorem complexify_injective [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] :
-    Function.Injective (complexify : (E →L[ℝ] F) → RealComplexification E →L[ℂ] RealComplexification F) := by
+    Function.Injective
+      (complexify : (E →L[ℝ] F) → RealComplexification E →L[ℂ] RealComplexification F)
+    := by
   intro S T h
   apply ContinuousLinearMap.ext
   intro x
@@ -601,7 +618,4 @@ end RealComplexification
 
 end
 
-end Foundation
-end Experimental
-end DavisKahan
 end TauCeti
