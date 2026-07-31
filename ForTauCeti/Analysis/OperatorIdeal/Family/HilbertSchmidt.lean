@@ -6,8 +6,6 @@ Authors: Jon Crall, Claude Opus 5
 import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy
 import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 import Mathlib.Analysis.MeanInequalities
-import Mathlib.MeasureTheory.Integral.Lebesgue.Countable
-import Mathlib.MeasureTheory.Integral.Lebesgue.Add
 
 /-!
 # The Hilbert--Schmidt operator ideal
@@ -265,28 +263,34 @@ This is the step that replaces the Ky Fan shortcut.  `kyFanIdealFamily` gets com
 from `‖A‖ ≤ kyFanGauge k A ≤ k ‖A‖`, so a gauge-Cauchy sequence is norm-Cauchy *and* the
 norm limit is automatically a gauge limit.  The Hilbert--Schmidt gauge is not equivalent to
 the operator norm, so the second half fails and the limit has to be controlled term by term
-instead -- which is exactly Fatou's lemma against the counting measure. -/
-theorem hilbertSchmidtENorm_le_liminf {ι : Type*} [MeasurableSpace ι]
-    [MeasurableSingletonClass ι] [DiscreteMeasurableSpace ι] (b : HilbertBasis ι 𝕜 E)
-    {u : Filter ℕ} [u.NeBot] [u.IsCountablyGenerated]
+instead -- which is Fatou's lemma in the shape a `tsum` of `ℝ≥0∞` already provides.
+
+The proof is by finite sections rather than through `MeasureTheory.lintegral_liminf_le`
+against the counting measure.  The two are the same argument, but the measure route obliges
+the *basis index type* to carry `MeasurableSpace`, `MeasurableSingletonClass` and
+`DiscreteMeasurableSpace`, and the filter to be countably generated, none of which the
+statement is about; `∑'` over `ℝ≥0∞` is already a supremum of finite partial sums, so the
+same Fatou step is `Filter.liminf_le_liminf` on each section.  Lane `HS-SEMICONT-LIGHT`. -/
+theorem hilbertSchmidtENorm_le_liminf {ι : Type*} (b : HilbertBasis ι 𝕜 E)
+    {u : Filter ℕ} [u.NeBot]
     {T : ℕ → E →L[𝕜] F} {L : E →L[𝕜] F}
     (hptwise : ∀ i, Filter.Tendsto (fun n => ‖T n (b i)‖ₑ ^ 2) u
       (nhds (‖L (b i)‖ₑ ^ 2))) :
     L.hilbertSchmidtENorm ^ (2 : ℝ) ≤
       Filter.liminf (fun n => (T n).hilbertSchmidtENorm ^ (2 : ℝ)) u := by
   classical
-  have hL : L.hilbertSchmidtENorm ^ (2 : ℝ) = ∑' i, ‖L (b i)‖ₑ ^ 2 :=
-    L.hilbertSchmidtENorm_rpow_two b
   have hT : ∀ n, (T n).hilbertSchmidtENorm ^ (2 : ℝ) = ∑' i, ‖T n (b i)‖ₑ ^ 2 :=
     fun n => (T n).hilbertSchmidtENorm_rpow_two b
-  rw [hL]
-  simp only [hT]
-  have hlim : ∀ i, ‖L (b i)‖ₑ ^ 2 = Filter.liminf (fun n => ‖T n (b i)‖ₑ ^ 2) u :=
-    fun i => ((hptwise i).liminf_eq).symm
-  simp only [hlim]
-  simpa only [MeasureTheory.lintegral_count] using
-    MeasureTheory.lintegral_liminf_le (μ := MeasureTheory.Measure.count)
-      (f := fun n i => ‖T n (b i)‖ₑ ^ 2) (fun n => Measurable.of_discrete)
+  rw [L.hilbertSchmidtENorm_rpow_two b, L.hilbertSchmidtEnergy_eq_iSup_sum b]
+  refine iSup_le fun s => ?_
+  have hfin : Filter.Tendsto (fun n => ∑ i ∈ s, ‖T n (b i)‖ₑ ^ 2) u
+      (nhds (∑ i ∈ s, ‖L (b i)‖ₑ ^ 2)) :=
+    tendsto_finsetSum _ fun i _ => hptwise i
+  calc ∑ i ∈ s, ‖L (b i)‖ₑ ^ 2
+      = Filter.liminf (fun n => ∑ i ∈ s, ‖T n (b i)‖ₑ ^ 2) u := hfin.liminf_eq.symm
+    _ ≤ Filter.liminf (fun n => (T n).hilbertSchmidtENorm ^ (2 : ℝ)) u :=
+        Filter.liminf_le_liminf (Filter.Eventually.of_forall fun n => by
+          rw [hT n]; exact ENNReal.sum_le_tsum s)
 
 end ContinuousLinearMap
 
@@ -332,10 +336,6 @@ instance isComplete_hilbertSchmidtIdealFamily {𝕜 : Type u} [RCLike 𝕜] :
       exact TauCeti.OperatorIdealFamily.Elem.norm_val_le (a m - a n)
     obtain ⟨L, hL⟩ := cauchySeq_tendsto_of_complete hop
     obtain ⟨s, b, -⟩ := exists_hilbertBasis 𝕜 E
-    -- the counting measure the Fatou step integrates against needs these on the index
-    letI : MeasurableSpace s := ⊤
-    haveI : MeasurableSingletonClass s := ⟨fun _ => trivial⟩
-    haveI : DiscreteMeasurableSpace s := ⟨fun _ => trivial⟩
     classical
     -- pointwise, on each basis vector, the differences converge to the difference of limits
     have hpt : ∀ (n : ℕ) (i : s),
