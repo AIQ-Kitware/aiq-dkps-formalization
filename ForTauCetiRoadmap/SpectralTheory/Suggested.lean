@@ -25,6 +25,7 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteS
 
 /-- A strongly continuous one-parameter unitary group on a complex Hilbert
 space. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic`
 structure OneParameterUnitaryGroup (H : Type*) [NormedAddCommGroup H]
     [InnerProductSpace ℂ H] [CompleteSpace H] where
   U : ℝ → (H →L[ℂ] H)
@@ -35,10 +36,12 @@ structure OneParameterUnitaryGroup (H : Type*) [NormedAddCommGroup H]
 
 /-- The generator: a `LinearPMap` defined on exactly the vectors where the
 difference quotient converges. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic`
 noncomputable def generator (U : OneParameterUnitaryGroup H) : H →ₗ.[ℂ] H := sorry
 
 /-- **Stone's theorem, forward direction**: the generator is self-adjoint, with
 density of the domain derived rather than assumed. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone`
 theorem isSelfAdjoint_generator (U : OneParameterUnitaryGroup H) :
     IsSelfAdjoint (generator U) := sorry
 
@@ -50,6 +53,7 @@ Named for the conclusion, which is a relation: `commutant` conventionally names
 a *set* of operators, and the theorem also delivers domain invariance, so a
 noun-only name says neither thing.  The two conclusions are packaged as a
 dependent pair because the second cannot be stated without the first. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Commutant`
 theorem generator_commute (U : OneParameterUnitaryGroup H) (T : H →L[ℂ] H)
     (hT : ∀ t : ℝ, ∀ y : H, T (U.U t y) = U.U t (T y))
     (x : (generator U).domain) :
@@ -64,12 +68,14 @@ variable (a : H →L[ℂ] H)
 
 /-- The bounded Borel functional calculus of a normal operator, extending the
 continuous calculus along dominated convergence of diagonal measures. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Operator`
 noncomputable def borelCalculus (ha : IsStarNormal a)
     (f : spectrum ℂ a → ℂ) (hf : Measurable f) (hb : ∃ C, ∀ x, ‖f x‖ ≤ C) :
     H →L[ℂ] H := sorry
 
 /-- Multiplicativity of the Borel calculus, carried from the continuous calculus
 by the polarised transport principle. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Multiplicative`
 theorem borelCalculus_mul (ha : IsStarNormal a)
     {f g : spectrum ℂ a → ℂ} (hf : Measurable f) (hfb : ∃ C, ∀ x, ‖f x‖ ≤ C)
     (hg : Measurable g) (hgb : ∃ C, ∀ x, ‖g x‖ ≤ C)
@@ -79,6 +85,7 @@ theorem borelCalculus_mul (ha : IsStarNormal a)
 
 /-- A projection-valued measure on the Borel sets of `ℝ`: projections, countable
 additivity in the strong topology, and the diagonal scalar measures as data. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic`
 structure ProjValMeasure (H : Type*) [NormedAddCommGroup H]
     [InnerProductSpace ℂ H] [CompleteSpace H] where
   /-- The projection assigned to each Borel set.  Measurability is an argument, not a
@@ -112,10 +119,12 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [Complete
 
 /-- Perturbation of a partial map by an operator on its domain, the domain-aware
 sum that keeps the carrier a `LinearPMap`. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions`
 noncomputable def perturb (A : E →ₗ.[𝕜] E) (V : A.domain →ₗ[𝕜] E) : E →ₗ.[𝕜] E := sorry
 
 /-- Self-adjointness survives a bounded symmetric perturbation
 (Kato--Rellich at relative bound zero). -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions`
 theorem isSelfAdjoint_perturb_bounded {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
     {T : E →L[𝕜] E} (hT : IsSelfAdjoint T)
     (V : A.domain →ₗ[𝕜] E) (hV : ∀ x : A.domain, V x = T (x : E)) :
@@ -123,6 +132,7 @@ theorem isSelfAdjoint_perturb_bounded {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoin
 
 /-- A bounded map sends the domain of `B` into the domain of `A` -- the side
 condition without which `A (X x)` is not written down. -/
+-- DELIVERED: AMBIGUOUS -- `MapsDomainTo` is declared in 2 modules (`ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed`, `DavisKahan.SpectralTheory.ClosedOperator.Basic`); disambiguate before trusting this
 def MapsDomainTo (A : E →ₗ.[𝕜] E) (B : E →ₗ.[𝕜] E) (X : E →L[𝕜] E) : Prop :=
   ∀ x : B.domain, X (x : E) ∈ A.domain
 
@@ -130,6 +140,7 @@ def MapsDomainTo (A : E →ₗ.[𝕜] E) (B : E →ₗ.[𝕜] E) (X : E →L[�
 shape the perturbation roadmap consumes.  It is a structure rather than an
 equation between operators because the left-hand side does not typecheck without
 the domain transport, which is therefore a field. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester`
 structure SylvesterEquation (A B : E →ₗ.[𝕜] E) (X C : E →L[𝕜] E) : Prop where
   mapsTo_domain : MapsDomainTo A B X
   equation : ∀ x : B.domain,
@@ -144,10 +155,12 @@ not a statement one can name, and the API the spectral-gap results actually
 consume is the pair below plus a bridge in each direction. -/
 
 /-- Lower quadratic-form bound on a subspace. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds`
 def LowerFormBoundOn (A : E →L[𝕜] E) (U : Submodule 𝕜 E) (c : ℝ) : Prop :=
   ∀ x ∈ U, c * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜
 
 /-- Upper quadratic-form bound on a subspace. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds`
 def UpperFormBoundOn (A : E →L[𝕜] E) (U : Submodule 𝕜 E) (c : ℝ) : Prop :=
   ∀ x ∈ U, RCLike.re ⟪A x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2
 
@@ -157,6 +170,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteS
 
 /-- Restriction-spectrum lower bridge: a spectral half-line for the restriction
 is a form bound on the subspace. -/
+-- DELIVERED: AMBIGUOUS -- `lowerFormBoundOn_of_restriction_spectrum_subset_Ici` is declared in 2 modules (`ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex`, `ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Real`); disambiguate before trusting this
 theorem lowerFormBoundOn_of_restriction_spectrum_subset_Ici
     {A : E →L[ℂ] E} (hA : A.IsSymmetric) {U : Submodule ℂ E}
     [U.HasOrthogonalProjection] (hU : ∀ x ∈ U, A x ∈ U) {c : ℝ}
@@ -164,6 +178,7 @@ theorem lowerFormBoundOn_of_restriction_spectrum_subset_Ici
     LowerFormBoundOn A U c := sorry
 
 /-- Restriction-spectrum upper bridge, the mirror image. -/
+-- DELIVERED: AMBIGUOUS -- `upperFormBoundOn_of_restriction_spectrum_subset_Iic` is declared in 2 modules (`ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex`, `ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Real`); disambiguate before trusting this
 theorem upperFormBoundOn_of_restriction_spectrum_subset_Iic
     {A : E →L[ℂ] E} (hA : A.IsSymmetric) {U : Submodule ℂ E}
     [U.HasOrthogonalProjection] (hU : ∀ x ∈ U, A x ∈ U) {c : ℝ}
@@ -187,12 +202,14 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [Complete
 
 /-- The resolvent set of a partial map: the points where `A − z` has a bounded
 two-sided inverse. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent`
 def resolventSet (A : E →ₗ.[𝕜] E) : Set 𝕜 :=
   { z | ∃ R : E →L[𝕜] E,
       (∀ ψ : A.domain, R (A ψ - z • (ψ : E)) = (ψ : E)) ∧
       (∀ φ : E, ∃ h : R φ ∈ A.domain, A ⟨R φ, h⟩ - z • R φ = φ) }
 
 /-- The named resolvent at a point of the resolvent set. -/
+-- DELIVERED: AMBIGUOUS -- `resolvent` is declared in 2 modules (`ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound`, `DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent`); disambiguate before trusting this
 noncomputable def resolvent (A : E →ₗ.[𝕜] E) {z : 𝕜} (hz : z ∈ resolventSet A) :
     E →L[𝕜] E := sorry
 
@@ -201,10 +218,12 @@ section ComplexResolvent
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
 /-- A self-adjoint partial map has every non-real point in its resolvent set. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent`
 theorem mem_resolventSet_of_im_ne_zero {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
     {z : ℂ} (hz : z.im ≠ 0) : z ∈ resolventSet A := sorry
 
 /-- The quantitative resolvent bound `‖R z‖ ≤ |Im z|⁻¹`. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent`
 theorem norm_resolvent_le_of_im_ne_zero {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
     {z : ℂ} (hz : z.im ≠ 0) :
     ‖resolvent A (mem_resolventSet_of_im_ne_zero hA hz)‖ ≤ |z.im|⁻¹ := sorry
@@ -212,6 +231,7 @@ theorem norm_resolvent_le_of_im_ne_zero {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoi
 end ComplexResolvent
 
 /-- The first resolvent identity on the common resolvent set. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound`
 theorem resolvent_sub_resolvent {A : E →ₗ.[𝕜] E} {w z : 𝕜}
     (hw : w ∈ resolventSet A) (hz : z ∈ resolventSet A) (φ : E) :
     resolvent A hw φ - resolvent A hz φ
@@ -227,25 +247,30 @@ variable (A : H →ₗ.[ℂ] H)
 
 /-- **The spectral theorem**: the projection-valued measure of an unbounded
 self-adjoint operator, constructed through the Cayley transform. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction`
 noncomputable def spectralPVM (hA : IsSelfAdjoint A) : ProjValMeasure H := sorry
 
 /-- The resolvent formula: the diagonal matrix elements of the resolvent are
 Cauchy--Stieltjes transforms of the diagonal spectral measures. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction`
 theorem spectralPVM_resolvent_formula (hA : IsSelfAdjoint A) {z : ℂ}
     (hz : z.im ≠ 0) (hzr : z ∈ resolventSet A) (ξ : H) :
     ⟪ξ, resolvent A hzr ξ⟫_ℂ
       = ∫ s, ((s : ℂ) - z)⁻¹ ∂((spectralPVM A hA).diag ξ) := sorry
 
 /-- The unitary group generated by a self-adjoint operator, `t ↦ e^{itA}`. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation`
 noncomputable def genToGroup (hA : IsSelfAdjoint A) : OneParameterUnitaryGroup H := sorry
 
 /-- **Stone's theorem, uniqueness half**: the generator of the generated group
 is the operator, closing the loop with Part A. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness`
 theorem generator_genToGroup (hA : IsSelfAdjoint A) :
     generator (genToGroup A hA) = A := sorry
 
 /-- Yosida approximants: bounded self-adjoint approximations converging strongly
 on the domain, the bridge a Hilbert--Schmidt block argument needs. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation` (as `yosidaApprox`)
 noncomputable def yosidaApproximant (hA : IsSelfAdjoint A) (n : ℕ) : H →L[ℂ] H := sorry
 
 end SpectralMeasure
