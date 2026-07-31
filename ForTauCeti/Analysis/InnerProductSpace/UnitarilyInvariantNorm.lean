@@ -351,8 +351,8 @@ theorem gauge_perm (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ)
         ∘ₗ (b.equiv b π).toLinearMap := by
     refine b.toBasis.ext fun j => ?_
     simp only [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply,
-      coe_toLinearMap_apply, OrthonormalBasis.equiv_apply_basis,
-      diagOp_apply_basis, map_smul, Function.comp_apply]
+      coe_toLinearMap_apply, OrthonormalBasis.equiv_apply_basis, diagOp_apply_basis,
+      map_smul, Function.comp_apply]
     congr 1
     rw [← OrthonormalBasis.equiv_apply_basis b b π j,
       LinearIsometryEquiv.symm_apply_apply]
