@@ -21,8 +21,8 @@ block.
 
 This module states the ordered configurations as **operator-form bounds** —
 `SemiboundedBelow`/`SemiboundedAbove` — and the interval/exterior configuration
-over `LinearPMap.realSpectrum`.  `SpectralIntervalExteriorGap` and
-`SpectralSylvesterGap` (`SinTheta/Unbounded/IntervalExterior.lean`,
+over `LinearPMap.realSpectrum`.  `SylvesterIntervalExteriorGap` and
+`SpectralSylvesterGap` (`Sylvester/Unbounded/IntervalExterior.lean`,
 `Sylvester/Unbounded/AllGap.lean`) instead state all three configurations as
 **spectral containments** in `Set.Ici`/`Set.Iic`, which is the form Davis--Kahan
 1970 uses.
