@@ -149,9 +149,12 @@ the Ky Fan gauge `kyFanGauge T k = ∑_{n<k} aₙ(T)`.
 - The exact zero-based additive law `a_{m+n}(S + T) ≤ aₘ(S) + aₙ(T)`
   (`approximationNumber_add_le`; no truncated subtraction anywhere), with the Lipschitz
   bound `|aₙ(S) − aₙ(T)| ≤ ‖S − T‖` and norm-continuity of `T ↦ aₙ(T)`.
-- The two-sided ideal laws `aₙ(A ∘ T ∘ B) ≤ ‖A‖ aₙ(T) ‖B‖` and `aₙ(c • T) = ‖c‖ aₙ(T)`;
-  any stronger rank-splitting product inequality is a separate target, never implied by the
-  word "multiplicativity".
+- The two-sided ideal laws `aₙ(A ∘ T ∘ B) ≤ ‖A‖ aₙ(T) ‖B‖` (`approximationNumber_comp_comp_le`)
+  and `aₙ(c • T) = ‖c‖ aₙ(T)`; any stronger rank-splitting product inequality is a separate
+  target, never implied by the word "multiplicativity".  That separate target is
+  `a_{m+n}(S ∘ T) ≤ aₘ(S) · aₙ(T)`, and it is named `approximationNumber_comp_add_le_mul`:
+  the fixed-index ideal bound above already owns `approximationNumber_comp_comp_le`, and the
+  `add` records that this one splits the index, the way `approximationNumber_add_le` does.
 - **Rank and compactness:** `aₙ(T) = 0` when `rank T ≤ n`, with the finite-dimensional
   converse as an iff; `aₙ(T) → 0` iff `T` is a norm limit of finite-rank operators with
   `n`-th term of rank at most `n`

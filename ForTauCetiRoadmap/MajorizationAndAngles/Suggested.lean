@@ -147,25 +147,84 @@ theorem RectangularUnitarilyInvariantNorm.apply_le_of_kyFanSum_le
             ≤ ∑ i ∈ Finset.range k, B.singularValues i) :
     N.toFun A ≤ N.toFun B := sorry
 
-/-- The gauge of a block sum against the concatenated singular values, the shape
-consumed by two-subspace perturbation arguments. -/
-theorem RectangularUnitarilyInvariantNorm.blockSum_target : True := sorry
+/-! ### The orthogonal block sum
+
+A single `blockSum_target` placeholder stood here and identified no theorem: the block-sum
+layer is **four** results, and they are milestones in sequence rather than alternate names
+for one statement.  The last is the consumer-facing one. -/
+
+/-- The orthogonal block sum of two rectangular maps, on `WithLp 2` products. -/
+noncomputable def orthogonalBlockSum {E₁ E₂ F₁ F₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁]
+    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂]
+    (A : E₁ →ₗ[𝕜] F₁) (B : E₂ →ₗ[𝕜] F₂) :
+    WithLp 2 (E₁ × E₂) →ₗ[𝕜] WithLp 2 (F₁ × F₂) :=
+  LinearMap.withLpMap 2 (A.prodMap B)
+
+/-- Doubling repeats every singular value twice; the quotient `i / 2` is the interleaved
+sorted order of the two copies. -/
+theorem singularValues_orthogonalBlockSum_self (A : E →ₗ[𝕜] F) (i : ℕ) :
+    (orthogonalBlockSum A A).singularValues i = A.singularValues (i / 2) := sorry
+
+/-- **The principal endpoint.**  Two simultaneous rectangular Ky Fan majorizations combine
+sharply on the orthogonal block sum.  Not shortened to `blockSum_le`: the hypotheses are
+specifically Ky Fan majorization, and the longer name is what makes that interface
+discoverable. -/
+theorem orthogonalBlockSum_apply_le_of_kyFanSum_le
+    {E₁ E₂ F₁ F₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [FiniteDimensional 𝕜 F₁]
+    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [FiniteDimensional 𝕜 F₂]
+    (NB : RectangularUnitarilyInvariantNorm 𝕜
+      (WithLp 2 (E₁ × E₂)) (WithLp 2 (F₁ × F₂)))
+    {A C : E₁ →ₗ[𝕜] F₁} {B D : E₂ →ₗ[𝕜] F₂}
+    (hA : ∀ k, ∑ i ∈ Finset.range k, A.singularValues i
+            ≤ ∑ i ∈ Finset.range k, C.singularValues i)
+    (hB : ∀ k, ∑ i ∈ Finset.range k, B.singularValues i
+            ≤ ∑ i ∈ Finset.range k, D.singularValues i) :
+    NB.toFun (orthogonalBlockSum A B) ≤ NB.toFun (orthogonalBlockSum C D) := sorry
 
 /-! ## Part D -- angle geometry and eigenvalue perturbation (T08) -/
+
+/-- The cross projection `P_V P_U`, whose singular values are the principal cosines. -/
+noncomputable def cosThetaMap (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
+  ((V.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E) ∘ₗ
+    ((U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
+
+/-- Principal-angle cosines of a pair of subspaces: the singular values of the cross
+projection, sorted decreasingly and padded by zeros beyond the finite rank. -/
+noncomputable def principalCosines (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
+  (cosThetaMap U V).singularValues
 
 /-- The subspace-level principal cosines agree with the family-level ones on
 spans: the theorem that makes the Part B definition well-named. -/
 theorem principalCosines_span_eq_cosPrincipalAngles {u v : Fin d → E}
-    (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) : True := sorry
+    (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) :
+    principalCosines (Submodule.span 𝕜 (Set.range u)) (Submodule.span 𝕜 (Set.range v))
+      = cosPrincipalAngles hu hv := sorry
 
 /-- **The von Neumann trace core**: for symmetric `T`, `S`, the trace of `T ∘ S`
 is dominated by the sorted-eigenvalue pairing.  Proved from the rearrangement
 inequality, not cited. -/
 theorem sum_eigenvalues_mul_re_inner_self_le {T S : E →ₗ[𝕜] E}
-    (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hn : finrank 𝕜 E = n) : True := sorry
+    (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hn : finrank 𝕜 E = n) :
+    ∑ k, hT.eigenvalues hn k *
+        RCLike.re ⟪hT.eigenvectorBasis hn k, S (hT.eigenvectorBasis hn k)⟫_𝕜
+      ≤ ∑ i, hT.eigenvalues hn i * hS.eigenvalues hn i := sorry
 
 /-- **Hoffman--Wielandt**: the squared Euclidean distance between the sorted
-spectra of two symmetric operators is at most the squared Frobenius distance. -/
+spectra of two symmetric operators is at most the squared Frobenius distance.
+
+**Quantified over an arbitrary orthonormal basis `e`, and that is the point.**  The
+staged proof states the right-hand side against `hT.eigenvectorBasis`, which is enough
+to prove it but is not the invariant Frobenius statement a consumer wants.  This clean
+name belongs to the arbitrary-basis version; the eigenbasis-specialized theorem should
+be private, or qualified `..._eigenvectorBasis` if it stays public. -/
 theorem sum_sq_eigenvalues_sub_le_sum_sq_norm_apply {T S : E →ₗ[𝕜] E}
     (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hn : finrank 𝕜 E = n)
     (e : OrthonormalBasis (Fin n) 𝕜 E) :
@@ -173,9 +232,18 @@ theorem sum_sq_eigenvalues_sub_le_sum_sq_norm_apply {T S : E →ₗ[𝕜] E}
       ≤ ∑ k, ‖T (e k) - S (e k)‖ ^ 2 := sorry
 
 /-- **Davis's eigenvalue-change bound**, through Birkhoff's theorem and the
-permutation-orbit convex hull: the displacement of the sorted spectrum is
-controlled by the perturbation. -/
+permutation-orbit convex hull: under a spectral separation `γ` for `S`, a Frobenius
+perturbation smaller than `γ/√2` cannot move the sorted spectrum by more than it.
+
+The `γ` separation hypothesis and the `γ/√2` smallness threshold are both part of the
+statement; a name without them would read as an unconditional bound, which is false. -/
 theorem sum_sq_eigenvalues_sub_ge {T S : E →ₗ[𝕜] E}
-    (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hn : finrank 𝕜 E = n) : True := sorry
+    (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hn : finrank 𝕜 E = n)
+    {γ : ℝ} (hγ : 0 ≤ γ)
+    (hsep : ∀ i j, i ≠ j → γ ≤ |hS.eigenvalues hn i - hS.eigenvalues hn j|)
+    (hCH : ∑ i, (RCLike.re ⟪hT.eigenvectorBasis hn i, (S - T) (hT.eigenvectorBasis hn i)⟫_𝕜) ^ 2
+            ≤ (γ / Real.sqrt 2) ^ 2) :
+    ∑ i, (hT.eigenvalues hn i - hS.eigenvalues hn i) ^ 2
+      ≤ ∑ k, ‖(S - T) (hT.eigenvectorBasis hn k)‖ ^ 2 := sorry
 
 end TauCetiRoadmap.MajorizationAndAngles

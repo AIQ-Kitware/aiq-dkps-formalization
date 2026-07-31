@@ -50,10 +50,27 @@ theorem approximationNumber_add_le (S T : E →L[𝕜] F) (m n : ℕ) :
     approximationNumber (S + T) (m + n)
       ≤ approximationNumber S m + approximationNumber T n := sorry
 
-/-- Composition multiplicativity across indices. -/
-theorem approximationNumber_comp_comp_le (S : F →L[𝕜] G) (T : E →L[𝕜] F) (m n : ℕ) :
+/-- Composition multiplicativity across indices.
+
+**The name carries `add` deliberately.**  `approximationNumber_comp_comp_le` is
+already taken, by the *two-sided ideal* bound
+`aₙ(L ∘ T ∘ R) ≤ ‖L‖ · aₙ(T) · ‖R‖`, which is a different theorem at a fixed
+index; this one splits the index.  Naming the index addition also keeps it
+legible beside `approximationNumber_add_le` and distinguishes it from the
+fixed-index bounds `approximationNumber_comp_le_mul_norm` and
+`approximationNumber_comp_le_norm_mul`. -/
+theorem approximationNumber_comp_add_le_mul (S : F →L[𝕜] G) (T : E →L[𝕜] F) (m n : ℕ) :
     approximationNumber (S ∘L T) (m + n)
       ≤ approximationNumber S m * approximationNumber T n := sorry
+
+/-- The two-sided ideal inequality, at a fixed index.  Recorded here because it
+owns the name `approximationNumber_comp_comp_le`; the theorem above is the
+index-splitting statement and must not reuse it. -/
+theorem approximationNumber_comp_comp_le {G' H' : Type*}
+    [SeminormedAddCommGroup G'] [NormedSpace 𝕜 G']
+    [SeminormedAddCommGroup H'] [NormedSpace 𝕜 H']
+    (L : F →L[𝕜] G') (T : E →L[𝕜] F) (R : H' →L[𝕜] E) (n : ℕ) :
+    approximationNumber (L ∘L T ∘L R) n ≤ ‖L‖ * approximationNumber T n * ‖R‖ := sorry
 
 end ApproximationNumbers
 
@@ -73,9 +90,15 @@ theorem approximationNumber_eq_singularValues
     [FiniteDimensional ℂ E] [FiniteDimensional ℂ F] (T : E →L[ℂ] F) (n : ℕ) :
     approximationNumber T n = (T : E →ₗ[ℂ] F).singularValues n := sorry
 
-/-- The min-max principle: `aₙ(T)` as the max-min of `‖T x‖` over codimension-`n`
-constraints, the variational form the perturbation theory consumes. -/
-theorem le_approximationNumber_of_lt_rank (T : E →L[ℂ] F) (n : ℕ) : True := sorry
+/-- The min--max principle in the form the perturbation theory consumes: a subspace of
+rank greater than `n` on which `T` is `c`-coercive forces `aₙ(T) ≥ c`.
+
+Deliberately not called `approximationNumber_minmax`: this is one direction, and a name
+claiming the equality would overstate what the declaration says. -/
+theorem le_approximationNumber_of_lt_rank (T : E →L[ℂ] F) (n : ℕ) (V : Submodule ℂ E)
+    {c : ℝ} (hVrank : (n : Cardinal) < Module.rank ℂ V)
+    (hV : ∀ x : V, c * ‖(x : E)‖ ≤ ‖T (x : E)‖) :
+    c ≤ approximationNumber T n := sorry
 
 end HilbertIdentifications
 
@@ -124,12 +147,20 @@ theorem hilbertSchmidtEnergy_indep {ι' : Type y} (T : F →L[𝕜] E)
 
 /-- The nuclear gauge: the series of approximation numbers.  Its triangle
 inequality is the Ky Fan inequality in the limit. -/
-noncomputable def nuclearENorm (T : E →L[ℂ] F) : ℝ≥0∞ := sorry
+noncomputable def nuclearENorm (T : E →L[𝕜] F) : ℝ≥0∞ := sorry
 
-/-- **Milestone B2, the Ky Fan dominance principle**: a family whose gauge arises
-from a symmetric norming function is dominated along Ky Fan domination of the
-approximation numbers. -/
-theorem gauge_le_of_kyFan_le (Φ : OperatorIdealFamily ℂ) : True := sorry
+/-- **Milestone B2, the Ky Fan dominance principle.**  Dominance is a *property of a
+family*, not a theorem about every family: it is false for an arbitrary
+`OperatorIdealFamily`, and stating it as one would compete with the consumer-facing
+field the staged library already has,
+`IsKyFanDominant.gauge_le_of_forall_kyFanGauge_le`.
+
+What is genuinely open is the **construction**: a family built from a symmetric
+gauge is Ky Fan dominant.  Its name should follow the constructor's, so it is left
+unnamed here rather than guessed -- `isKyFanDominant_symmetricGaugeFamily` if the
+constructor lands as `symmetricGaugeFamily`. -/
+class IsKyFanDominant (Φ : OperatorIdealFamily ℂ) : Prop where
+  gauge_le_of_forall_kyFanGauge_le : True
 
 /-- **Milestone B3**: finite-dimensional Schatten `p`-norms for real `p ≥ 1` on
 the singular-value vector, with the endpoint identifications `S₁` nuclear,
@@ -161,7 +192,7 @@ noncomputable def columns (b : HilbertBasis ι 𝕜 F) (T : F →L[𝕜] E) : ι
 /-- Membership in `ℓ²` of the columns is exactly finiteness of the energy —
 the bridge from the model to the ideal theory of Part B. -/
 theorem memLp_columns_iff (b : HilbertBasis ι 𝕜 F) (T : F →L[𝕜] E) :
-    MeasureTheory.Memℓp (columns b T) 2 ↔ hilbertSchmidtEnergy T b ≠ ⊤ := sorry
+    Memℓp (columns b T) 2 ↔ hilbertSchmidtEnergy T b ≠ ⊤ := sorry
 
 /-- The representation map: an `ℓ²` family of columns determines a bounded
 operator through the absolutely convergent expansion against the basis. -/
