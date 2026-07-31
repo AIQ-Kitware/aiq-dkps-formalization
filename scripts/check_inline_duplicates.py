@@ -38,9 +38,9 @@ Each was chosen because it fires on one of the duplicates actually removed, and
 between them they cover all six.  `--why` prints which fired.
 
 **`general`** -- the statement, after transitively substituting every local
-`set`/`let` definition, names nothing bound inside the proof.  A statement built
-only from globals and the theorem's own binders *is* a general lemma, and general
-lemmas are the ones Mathlib already has.  Catches `hBsa`, `hnorm_sq_eq`, `hRsa`
+`set`/`let` definition, names nothing bound inside the proof.  This is the
+**weakest** of the three; see "Where `general` misleads" below before ranking by
+it.  Catches `hBsa`, `hnorm_sq_eq`, `hRsa`
 (only after substitution: `R` unfolds to `Ring.inverse N`, `N` to
 `1 + star (X * P) * (X * P)`, `P` to `projection U`).
 
@@ -78,6 +78,25 @@ Steps whose proof is shorter than `--min-body` are dropped, because a one-line
 default is 2 rather than 3 because `hBsa`, `hB'sa` and `htanv0` -- three of the
 six known duplicates -- have two-line proofs, and a default that misses half the
 evidence is the wrong default.
+
+## Where `general` misleads, measured
+
+**`general` is a weak signal and the docstring above oversold it.**  It says a
+statement built only from globals and the theorem's binders "*is* a general
+lemma, and general lemmas are the ones Mathlib already has".  The first half is
+true; the second does not follow.  On a proof whose *subject matter* is general
+algebra, nearly every step is general-looking and almost none is redundant.
+
+Measured, not guessed: `{lane:DK-LONGPROOF-4}` took
+`eigen_cos_two_theta_bound` (420 lines) because it scored **44 general
+candidates**, the densest in the tree -- and **one** survived.  The same lane's
+sibling `{lane:DK-LONGPROOF-2}` scored six and four survived.  The difference is
+visible in the scores themselves: the first had **0 `repeated`**, the second had
+duplicates confirmed by hand.
+
+So: **`repeated` is the signal to rank by**; read `general` as *extraction*
+density, and expect it to be mostly false positives on algebra-heavy proofs.
+`--only repeated` exists for this reason and is the recommended entry point.
 
 ## What it found that reading did not
 
