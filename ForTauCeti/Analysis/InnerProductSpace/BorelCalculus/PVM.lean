@@ -67,7 +67,6 @@ the relabelling `κ`. -/
 -- index subtypes by `.domain`, so the bodies must reduce. The rubric-clean fix is a
 -- `_def` lemma per definition plus rewiring every call site, which is a larger refactor
 -- than a conversion pass; it is recorded debt rather than an endorsement.
-@[expose]
 noncomputable def specProj (B : Set ℝ) (hB : MeasurableSet B) : H →L[ℂ] H :=
   borelCalculus ha (isBddMeasurable_indicator (a := a) (hκ hB))
 
@@ -83,7 +82,6 @@ theorem specProj_def (B : Set ℝ) (hB : MeasurableSet B) :
 /-- The relabelled diagonal measure. -/
 -- `@[expose]` for the same reason as `toProjValMeasure`, whose exposed body references
 -- this one. Recorded debt, not an endorsement.
-@[expose]
 noncomputable def specDiag (κ' : spectrum ℂ a → ℝ) (ξ : H) : Measure ℝ :=
   Measure.map κ' (diagMeasure ha ξ)
 
@@ -143,7 +141,6 @@ theorem specProj_inter (B₁ B₂ : Set ℝ) (hB₁ : MeasurableSet B₁) (hB₂
 measurable relabelling `κ` of its spectrum. -/
 -- `@[expose]` for the same reason as `spectralPVM`, which is built from this and whose
 -- exposed body cannot reference an unexposed one. Recorded debt, not an endorsement.
-@[expose]
 noncomputable def toProjValMeasure : TauCeti.ProjValMeasure H where
   proj := specProj ha hκ
   diag := specDiag ha κ

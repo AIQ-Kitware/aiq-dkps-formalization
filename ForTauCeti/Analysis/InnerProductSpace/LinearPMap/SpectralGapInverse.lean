@@ -168,7 +168,7 @@ theorem borelCalculus_mem_domain_of_coord_mul
     filter_upwards [hae] with w hw
     have hw1 : (w : ℂ) ≠ 1 := hw
     have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
-    have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := rfl
+    have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := by simp [hgsym]
     have hκval : ((κ w : ℝ) : ℂ) + Complex.I = (2 * Complex.I) / (1 - (w : ℂ)) :=
       cayleyInv_add_I hA hw1
     -- states the goal with the definition unfolded, in the shape the next step needs;
@@ -226,6 +226,7 @@ theorem specProjection_gapSet_apply {δ : ℝ} {ξ : H}
       (measurableSet_gapSet δ).compl ξ
     rw [hcompl] at hq
     simp only [ENNReal.toReal_zero] at hq
+    rw [← specProjection_def] at hq
     have hz : ‖specProjection hA (gapSet δ)ᶜ (measurableSet_gapSet δ).compl ξ‖ = 0 :=
       pow_eq_zero_iff (n := 2) (by norm_num) |>.mp hq
     exact norm_eq_zero.mp hz
@@ -233,10 +234,10 @@ theorem specProjection_gapSet_apply {δ : ℝ} {ξ : H}
   have happ := congrArg (fun T : H →L[ℂ] H => T ξ) hc
   simp only [sub_apply, ContinuousLinearMap.id_apply] at happ
   rw [show (spectralPVM hA).proj (gapSet δ)ᶜ (measurableSet_gapSet δ).compl
-      = specProjection hA (gapSet δ)ᶜ (measurableSet_gapSet δ).compl from rfl,
-    hzero] at happ
+      = specProjection hA (gapSet δ)ᶜ (measurableSet_gapSet δ).compl from by
+        rw [specProjection_def], hzero] at happ
   rw [show specProjection hA (gapSet δ) (measurableSet_gapSet δ)
-      = (spectralPVM hA).proj (gapSet δ) (measurableSet_gapSet δ) from rfl]
+      = (spectralPVM hA).proj (gapSet δ) (measurableSet_gapSet δ) from by rw [specProjection_def]]
   linear_combination (norm := module) happ
 
 /-! ## The endpoint -/
@@ -293,7 +294,8 @@ theorem apply_gapInverse {δ : ℝ} (hδ : 0 < δ) {ξ : H}
         Filter.Eventually.of_forall fun w => ?_
       exact congrFun hsplit w
     rw [hcongr, BorelCalculus.borelCalculus_add hU hindb (hgb.const_smul Complex.I),
-      BorelCalculus.borelCalculus_const_smul hU Complex.I hgb]
+      BorelCalculus.borelCalculus_const_smul hU Complex.I hgb,
+      specProjection_eq_borelCalculus]
     rfl
   rw [hrhs, specProjection_gapSet_apply hA hgap] at hval
   -- `gapInverse` and its unfolding are the same term but different atoms to

@@ -76,7 +76,8 @@ theorem cayleyInv_add_I {w : _root_.spectrum ℂ (cayley hA)} (hw1 : (w : ℂ) �
     spectrum.norm_eq_one_of_unitary (cayley_mem_unitary hA) w.2
   have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
   have hcast : ((cayleyInv hA w : ℝ) : ℂ) = Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ)) :=
-    Complex.ext rfl (by simpa using (inverseCayley_im_eq_zero hnorm hw1).symm)
+    Complex.ext (by simp [cayleyInv_def])
+      (by simpa using (inverseCayley_im_eq_zero hnorm hw1).symm)
   rw [hcast]
   field_simp
   ring
@@ -206,6 +207,11 @@ theorem specProjection_apply_sub_smul {M c r : ℝ}
     Complex.continuous_ofReal.measurable.comp (measurable_cayleyInv hA)
   have hindb : BorelCalculus.IsBddMeasurable ind :=
     BorelCalculus.isBddMeasurable_indicator (a := cayley hA) hSm
+  -- the spectral projection *is* this calculus; `specProjection_eq_borelCalculus` is what
+  -- replaces unfolding its body, and `IsBddMeasurable` is a `Prop`, so the two admissibility
+  -- proofs are interchangeable
+  have hP : specProjection hA B hB = BorelCalculus.borelCalculus hU hindb :=
+    specProjection_eq_borelCalculus hA B hB
   set q : _root_.spectrum ℂ (cayley hA) → ℂ :=
     fun w => ((κ w : ℂ) + Complex.I) * ind w with hq
   set pf : _root_.spectrum ℂ (cayley hA) → ℂ :=
@@ -253,7 +259,7 @@ theorem specProjection_apply_sub_smul {M c r : ℝ}
     filter_upwards [hae] with w hw
     have hw1 : (w : ℂ) ≠ 1 := hw
     have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
-    have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := rfl
+    have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := by simp [hgsym]
     have hκval : ((κ w : ℝ) : ℂ) + Complex.I = (2 * Complex.I) / (1 - (w : ℂ)) :=
       cayleyInv_add_I hA hw1
     -- states the goal with the definition unfolded, in the shape the next step needs.
@@ -287,7 +293,7 @@ theorem specProjection_apply_sub_smul {M c r : ℝ}
     have h := congrArg (fun L : H →L[ℂ] H => L y)
       ((BorelCalculus.borelCalculus_mul hU hgb hqb).symm.trans hprod)
     simp only [_root_.mul_apply_eq_comp] at h
-    rw [hRg]
+    rw [hRg, hP]
     exact h
   have hy : specProjection hA B hB y ∈ A.domain := by
     rw [← hPy]; exact resolvent_mem_domain hni (T y)
@@ -302,8 +308,7 @@ theorem specProjection_apply_sub_smul {M c r : ℝ}
     rw [heq, BorelCalculus.borelCalculus_add hU hqb hsm,
       BorelCalculus.borelCalculus_const_smul hU (-(Complex.I + (c : ℂ))) hindb]
     simp only [_root_.add_apply, _root_.smul_apply, hT]
-    rw [neg_smul, ← sub_eq_add_neg]
-    rfl
+    rw [neg_smul, ← sub_eq_add_neg, hP]
   have hgoal : A ⟨specProjection hA B hB y, hy⟩ - (c : ℂ) • specProjection hA B hB y
       = BorelCalculus.borelCalculus hU hpb y := by
     rw [hval]
@@ -350,7 +355,10 @@ theorem tendsto_specProjection_Icc (x : H) :
     intro τ
     have hSm : MeasurableSet (κ ⁻¹' Set.Icc (-τ) τ) :=
       measurable_cayleyInv hA measurableSet_Icc
-    rw [show ((spectralPVM hA).diag x) = Measure.map κ μ from rfl,
+    have hdiag : ((spectralPVM hA).diag x) = Measure.map κ μ := by
+      rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag,
+        BorelCalculus.specDiag_def, hμ, hκ]
+    rw [hdiag,
       Measure.map_apply (measurable_cayleyInv hA) measurableSet_Icc, hF,
       integral_indicator_const _ hSm, smul_eq_mul, mul_one,
       MeasureTheory.measureReal_def]
@@ -379,11 +387,11 @@ theorem tendsto_specProjection_Icc (x : H) :
         = ‖x‖ ^ 2 - (((spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal := by
     intro τ
     have hnormP : ‖specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x‖ ^ 2
-        = (((spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal :=
-      (spectralPVM hA).norm_sq_proj_apply _ _ x
+        = (((spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal := by
+      rw [specProjection_def]; exact (spectralPVM hA).norm_sq_proj_apply _ _ x
     have hinner : ⟪x, specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x⟫_ℂ
-        = ((((spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal : ℂ) :=
-      (spectralPVM hA).inner_proj _ _ x
+        = ((((spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal : ℂ) := by
+      rw [specProjection_def]; exact (spectralPVM hA).inner_proj _ _ x
     have hre : RCLike.re (⟪specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x, x⟫_ℂ)
         = (((spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal := by
       rw [← inner_conj_symm, hinner]
@@ -448,7 +456,8 @@ theorem re_inner_apply_bounds_of_subset_Icc {β α : ℝ} (hBsub : B ⊆ Set.Icc
     have hfix : specProjection hA B hB y = y := (mem_specRange_iff hA B hB y).mp hyK
     have hzero : ‖y‖ ^ 2 = 0 := by
       conv_lhs => rw [← hfix]
-      rw [show specProjection hA B hB y = (spectralPVM hA).proj B hB y from rfl,
+      rw [show specProjection hA B hB y = (spectralPVM hA).proj B hB y from
+          congrFun (congrArg _ (specProjection_def hA B hB)) y,
         (spectralPVM hA).norm_sq_proj_apply, hBempty, measure_empty, ENNReal.toReal_zero]
     have hy0 : y = 0 := norm_eq_zero.mp (pow_eq_zero_iff (n := 2) (by norm_num) |>.mp hzero)
     subst hy0
@@ -506,15 +515,13 @@ theorem truncation_comm_specProjection {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M)
     (C : Set ℝ) (hC : MeasurableSet C) :
     truncation hA B hB hbnd * specProjection hA C hC
       = specProjection hA C hC * truncation hA B hB hbnd := by
-  rw [truncation, specProjection, spectralPVM, BorelCalculus.toProjValMeasure_proj,
-    BorelCalculus.specProj]
+  rw [truncation, specProjection_eq_borelCalculus]
   exact BorelCalculus.borelCalculus_comm _ _ _
 
 /-- The truncation absorbs its own spectral projection. -/
 theorem truncation_mul_specProjection {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) :
     truncation hA B hB hbnd * specProjection hA B hB = truncation hA B hB hbnd := by
-  rw [truncation, specProjection, spectralPVM, BorelCalculus.toProjValMeasure_proj,
-    BorelCalculus.specProj, ← BorelCalculus.borelCalculus_mul]
+  rw [truncation, specProjection_eq_borelCalculus, ← BorelCalculus.borelCalculus_mul]
   refine BorelCalculus.borelCalculus_congr_ae _ _ _ fun η =>
     Filter.Eventually.of_forall fun w => ?_
   -- states the goal with the definition unfolded, in the shape the next step needs.
@@ -724,6 +731,11 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
   set ind : _root_.spectrum ℂ (cayley hA) → ℂ := cayleyIndicator hA B with hind
   have hindb : BorelCalculus.IsBddMeasurable ind :=
     BorelCalculus.isBddMeasurable_indicator (a := cayley hA) hSm
+  -- the spectral projection *is* this calculus; `specProjection_eq_borelCalculus` is what
+  -- replaces unfolding its body, and `IsBddMeasurable` is a `Prop`, so the two admissibility
+  -- proofs are interchangeable
+  have hP : specProjection hA B hB = BorelCalculus.borelCalculus hU hindb :=
+    specProjection_eq_borelCalculus hA B hB
   -- the inverting symbol and its `(κ + i)`-companion
   set f : _root_.spectrum ℂ (cayley hA) → ℂ := gapSymbol hA B lam with hf
   set hsym : _root_.spectrum ℂ (cayley hA) → ℂ :=
@@ -747,7 +759,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
     filter_upwards [hae] with w hw
     have hw1 : (w : ℂ) ≠ 1 := hw
     have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
-    have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := rfl
+    have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := by simp [hgsym]
     rw [hgval, cayleyInv_add_I hA hw1]
     field_simp
   -- `R(-i) ∘ T_hsym = T_f`
@@ -806,7 +818,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
     -- through the API lemma, not through the range body: `⟨Rop φ, hx⟩` would need
     -- `specRange` to reduce to a `LinearMap.range`, which is the only thing that kept
     -- that definition exposed.
-    exact (mem_specRange_iff hA B hB _).mpr hx
+    exact (mem_specRange_iff hA B hB _).mpr (by rw [hP]; exact hx)
   -- the left inverse
   have hkne : ∀ w : _root_.spectrum ℂ (cayley hA), ((κ w : ℂ) + Complex.I) ≠ 0 :=
     fun w => real_add_I_ne_zero (κ w)
@@ -842,8 +854,8 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
     have hy0 : resolvent A hni φ₀ = y := resolvent_apply_sub_smul hni ⟨y, hydom⟩
     have hsplit : A ⟨y, hydom⟩ - (lam : ℂ) • y = φ₀ - (Complex.I + (lam : ℂ)) • y := by
       rw [hφ₀]; module
-    have hPy : BorelCalculus.borelCalculus hU hindb y = y :=
-      (mem_specRange_iff hA B hB y).mp hyK
+    have hPy : BorelCalculus.borelCalculus hU hindb y = y := by
+      rw [← hP]; exact (mem_specRange_iff hA B hB y).mp hyK
     have hfin := congrArg (fun L : H →L[ℂ] H => L φ₀) hlefts'
     simp only [_root_.add_apply, _root_.smul_apply, _root_.mul_apply_eq_comp] at hfin
     rw [← hRg, hy0, hPy] at hfin
@@ -857,7 +869,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
         hmemdom ((φ : specRange hA B hB) : H)⟩
         - (lam : ℂ) • Rop ((φ : specRange hA B hB) : H)
         = ((φ : specRange hA B hB) : H)
-    rw [hright]
+    rw [hright, ← hP]
     exact (mem_specRange_iff hA B hB _).mp φ.2
 
 end ResolventGap

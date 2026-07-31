@@ -337,13 +337,6 @@ theorem conjugateOperator_cfc_eq
 
 /-! ## Descent of conjugation-fixed operators -/
 
-/-! ## Descent helpers live in `Complexification/Basic.lean`
-
-`norm_re_le`, `realPartOperator` and `realPartOperator_apply` were declared here as well, in
-`ExactSinTheta`, duplicating `Foundation.RealComplexification`.  They are used unqualified below
-and by consumers of this module, which `open Foundation.RealComplexification` resolves.  See lane
-`{lane:CPLX-DEDUP}` for why four copies existed. -/
-
 omit [CompleteSpace E] in
 /-- A conjugation-fixed operator maps the real copy into itself: the imaginary coordinate
 of `A (ofReal x)` vanishes. -/
