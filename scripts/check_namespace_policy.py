@@ -46,6 +46,10 @@ ALLOWED: dict[str, str] = {
     "Cardinal": "lifts and inequalities of Mathlib `Cardinal`s",
     "ContinuousLinearMap": "facts about a `ContinuousLinearMap` — norms, adjoints, composition",
     "ENNReal": "inequalities between `ℝ≥0∞`-valued functions, e.g. Minkowski at p = 2 for `tsum`",
+    "Finset": "counting facts about a `Finset`, in the shape Mathlib leaves them: "
+              "`card_filter_lt` is the filter form of `Fin.card_Iio`, which Mathlib "
+              "does not have, and it exists because two modules each carried a "
+              "`private` copy differing only by a prime on the name",
     "HilbertBasis": "Parseval-type identities for a Mathlib `HilbertBasis`",
     "IsPartialIsometry": "facts about Mathlib's `IsPartialIsometry` predicate",
     "LinearMap": "facts about a `LinearMap`, including its `IsPositive` / `IsSymmetric` predicates",

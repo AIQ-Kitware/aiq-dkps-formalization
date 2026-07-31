@@ -68,9 +68,11 @@ EXCLUDED: dict[str, str] = {
         "4 on 2026-07-31: the universe mismatch and the `Seminorm` fields are fixed, and "
         "what is left is two things pinned Mathlib does not have -- `Seminorm.integral_le`, "
         "which is the Bochner--Minkowski inequality the module exists to apply, and the "
-        "`†` adjoint notation, which is defined nowhere in this repository either.  Same "
-        "category as `compactOperatorNorm` and Schauder's theorem: the chain leaves the "
-        "repository.",
+        "`†` adjoint notation.  **Corrected 2026-07-31 by lane DK-EXPCOVER's own follow-up, "
+        "EXP-BUILD-ADJ: the notation is Mathlib's, localized in `LinearPMap`, so that half "
+        "needs `open scoped LinearPMap` and not a definition.**  What is genuinely absent "
+        "is `Seminorm.integral_le` alone -- same category as `compactOperatorNorm` and "
+        "Schauder's theorem: the chain leaves the repository.",
     "DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry":
         "21 errors against drifted Mathlib: `Continuous.ofReal` and "
         "`HasFDerivAtFilter.ofReal` are gone, and "

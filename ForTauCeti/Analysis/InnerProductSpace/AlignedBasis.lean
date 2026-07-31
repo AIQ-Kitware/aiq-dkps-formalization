@@ -18,7 +18,7 @@ values are the principal-angle cosines.
 -/
 
 import Mathlib.LinearAlgebra.Basis.Defs
-import ForTauCeti.Analysis.InnerProductSpace.SingularSubspace
+import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 
 
 /-! # The coordinate isometry of an orthonormal family

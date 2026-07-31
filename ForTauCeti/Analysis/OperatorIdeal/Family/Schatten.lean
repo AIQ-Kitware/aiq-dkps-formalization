@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 import ForTauCeti.Analysis.Normed.FiniteLpGauge
 import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
 import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy
+import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
 import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison
 

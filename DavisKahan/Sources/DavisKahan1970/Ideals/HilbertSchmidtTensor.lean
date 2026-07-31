@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtSpace
+import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space
 
 /-!
 # The `ℓ²` model of the paper Hilbert--Schmidt ideal

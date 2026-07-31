@@ -8,8 +8,8 @@ import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle
 import DavisKahan.Experimental.Frontier.CircleContour
 import DavisKahan.Experimental.Sources.DavisKahan1970.Section8.All
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSharpDiagonalResolvents
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSharpSchurComplement
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.SharpDiagonalResolvents
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.SharpSchurComplement
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
 
 /-!

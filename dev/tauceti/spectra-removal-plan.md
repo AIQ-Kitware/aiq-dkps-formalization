@@ -325,7 +325,7 @@ cluster.
 
 - `ForTauCeti/Analysis/InnerProductSpace/SelfAdjointFunctionalCalculus.lean` is
   built on `eigenvectorBasis` — **finite-dimensional**;
-- `ForTauCeti/Analysis/InnerProductSpace/SpectralCutoff.lean` is CFC over
+- `ForTauCeti/Analysis/InnerProductSpace/Spectral/Cutoff.lean` is CFC over
   **bounded positive** `E →L[ℂ] E`.
 
 Per Wave 5: identify the minimal DK-needed slice → **coordinate with Spectra's

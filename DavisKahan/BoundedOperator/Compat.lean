@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.ProjectionBlocks
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 
 /-!
 # The bounded Davis--Kahan vocabulary
