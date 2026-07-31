@@ -129,6 +129,30 @@ private theorem adjoint_orthogonalProjectionOnto_eq_subtype
     LinearMap.adjoint_adjoint,
     subtypeₗᵢ_toLinearMap_eq_subtype]
 
+/-- **The adjoint of a cross-block map.**  Projecting onto `W` after including `V` transposes to
+projecting onto `V` after including `W`.
+
+Both `sin Θ` block arguments in this file form the two off-diagonal blocks of a perturbation and
+then need each one's adjoint; without this the same three-lemma `simp only` is written once per
+block. -/
+private theorem adjoint_orthogonalProjectionOnto_comp_subtype
+    (W V : Submodule 𝕜 E) [W.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    LinearMap.adjoint (W.orthogonalProjectionOnto.toLinearMap ∘ₗ V.subtype) =
+      V.orthogonalProjectionOnto.toLinearMap ∘ₗ W.subtype := by
+  simp only [LinearMap.adjoint_comp, adjoint_subtypeLinearMap_eq_orthogonalProjectionOnto,
+    adjoint_orthogonalProjectionOnto_eq_subtype]
+
+/-- The same transposition with a symmetric operator inserted between the projection and the
+inclusion. -/
+private theorem adjoint_orthogonalProjectionOnto_comp_op_subtype
+    (W V : Submodule 𝕜 E) [W.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {T : E →ₗ[𝕜] E} (hT : LinearMap.adjoint T = T) :
+    LinearMap.adjoint (W.orthogonalProjectionOnto.toLinearMap ∘ₗ (T ∘ₗ V.subtype)) =
+      (V.orthogonalProjectionOnto.toLinearMap ∘ₗ T) ∘ₗ W.subtype := by
+  simp only [LinearMap.adjoint_comp, hT,
+    adjoint_subtypeLinearMap_eq_orthogonalProjectionOnto,
+    adjoint_orthogonalProjectionOnto_eq_subtype, LinearMap.comp_assoc]
+
 /-- Transporting the rectangular sine embedding on `U` back to the ambient
 square space gives the one-sided sine cross projection `P_{Vᗮ} P_U`. -/
 @[simp]
@@ -285,7 +309,17 @@ sum, and read the result back through the ambient norm.
 This is the middle third of `sinAngleOperator_perturbation_le`, stated
 separately because it is one step: everything between "the diagonals are Ky Fan
 dominated" and "the projector difference is norm dominated" belongs to it, and
-none of it mentions the spectral gap that produced the diagonal bounds. -/
+none of it mentions the spectral gap that produced the diagonal bounds.
+
+**Why it is still long after that split.**  Roughly a third of the body is ten
+`let`s naming the block-coordinate data: the two cross blocks `XUV`/`XVU` and
+their residuals `CUV`/`CVU`, the two orthogonal decompositions `EU`/`EV`, the
+transported norm `NB`, the two assembled block maps, and `liftBlock`.  Those are
+not intermediate *steps* and factoring them out means passing all ten back in as
+arguments, which trades length for a signature nobody can read.  The argument
+proper is four moves: block the two sides, scale out `δ`, transport the norm
+through `liftBlock`, and identify the two lifted blocks with the operators in
+the statement. -/
 private theorem uiNorm_projection_sub_le_of_kyFanSum_le
     (N : UnitarilyInvariantNorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -363,18 +397,14 @@ private theorem uiNorm_projection_sub_le_of_kyFanSum_le
     exact (EU.symm).adjoint_toLinearMap_eq_symm
   have hXVUadj :
       XVU.adjoint =
-        V.orthogonalProjectionOnto.toLinearMap ∘ₗ Uᗮ.subtype := by
-    simp only [XVU, LinearMap.adjoint_comp,
-      adjoint_subtypeLinearMap_eq_orthogonalProjectionOnto,
-      adjoint_orthogonalProjectionOnto_eq_subtype]
+        V.orthogonalProjectionOnto.toLinearMap ∘ₗ Uᗮ.subtype :=
+    adjoint_orthogonalProjectionOnto_comp_subtype Uᗮ V
   have hCVUadj :
       CVU.adjoint =
         (V.orthogonalProjectionOnto.toLinearMap ∘ₗ (A - B)) ∘ₗ
-          Uᗮ.subtype := by
-    simp only [CVU, LinearMap.adjoint_comp, map_sub,
-      hA.adjoint_eq, hB.adjoint_eq,
-      adjoint_subtypeLinearMap_eq_orthogonalProjectionOnto,
-      adjoint_orthogonalProjectionOnto_eq_subtype]
+          Uᗮ.subtype :=
+    adjoint_orthogonalProjectionOnto_comp_op_subtype Uᗮ V
+      (by simp only [map_sub, hA.adjoint_eq, hB.adjoint_eq])
   have hXlift : liftBlock Xblock = projection U - projection V := by
     ext x
     simp [liftBlock, Xblock, EU, EV, hEUadj, hXVUadj, XUV,
