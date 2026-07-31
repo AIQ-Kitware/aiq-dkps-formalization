@@ -36,15 +36,21 @@ universe u v
 
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
-variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+-- Source and target share a universe: `kyFanApproximationGauge_add_le` needs
+-- `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`, whose instance for `ℂ` quantifies over
+-- one space universe.  With `E : Type u` and `F : Type v` the instance never applies and the
+-- search for it is what times out below rather than failing outright.
+variable {F : Type u} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
   [CompleteSpace F]
 
 /-- The finite Ky Fan approximation gauge as a continuous seminorm. -/
 noncomputable def kyFanApproximationSeminorm (k : ℕ) :
     Seminorm ℂ (E →L[ℂ] F) where
   toFun := kyFanApproximationGauge k
-  smul' := fun c T => kyFanApproximationGauge_smul k c T
+  map_zero' := kyFanApproximationGauge_zero_map k
   add_le' := fun S T => kyFanApproximationGauge_add_le k S T
+  neg' := fun T => kyFanApproximationGauge_neg k T
+  smul' := fun c T => kyFanApproximationGauge_smul k c T
 
 @[simp]
 theorem kyFanApproximationSeminorm_apply (k : ℕ) (T : E →L[ℂ] F) :
