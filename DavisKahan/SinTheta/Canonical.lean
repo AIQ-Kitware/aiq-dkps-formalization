@@ -326,9 +326,17 @@ structure SpectralGeneralSinThetaProblem
 
 namespace SpectralGeneralSinThetaProblem
 
-/-- Every spectral package is a form-bounded package: the gap transports by
-`formBoundedSylvesterGap_of_spectral` and every other field is carried across
-unchanged. -/
+/-- **Every spectral package is a form-bounded package.**  Only the gap field changes, by
+`formBoundedSylvesterGap_of_spectral`, which transports the spectral gap in all three
+configurations; every other field is carried across unchanged.
+
+This is what makes the redundancy of the two packages a *theorem* rather than an observation,
+and it is why `result` below is a corollary rather than a second derivation.  The converse does
+not exist: recovering a spectral containment from a form bound is the half of the spectral
+theorem this tree does not have, so the redundancy runs one way only.
+
+Prose merged from `edward (aiq-gpu)`'s parallel implementation of this lane, which kept the
+structures in `SinTheta/Unbounded/AllGap.lean`; the relocation here is `jon (toothbrush)`'s. -/
 def toFormBounded
     {N : KyFanDominantIdealFamily (𝕜 := ℂ)}
     (P : SpectralGeneralSinThetaProblem (E := E) (F := F)
@@ -350,7 +358,9 @@ def toFormBounded
       P.complement_selfAdjoint P.spectral_gap
   residual_mem := P.residual_mem
 
-/-- Source-shaped generalized spectral all-gap endpoint. -/
+/-- Source-shaped generalized spectral all-gap endpoint, as a corollary of the form-bounded
+endpoint at `P.toFormBounded`.  The statement is unchanged: the conversion touches no field
+the conclusion mentions. -/
 theorem result
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (P : SpectralGeneralSinThetaProblem (E := E) (F := F)
