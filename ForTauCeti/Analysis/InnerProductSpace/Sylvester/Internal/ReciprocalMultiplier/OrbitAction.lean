@@ -196,6 +196,26 @@ noncomputable def complexFourierPhase (x : ℝ) : unitary ℂ := by
   · rw [RCLike.star_def, RCLike.mul_conj, hz]
     norm_num
 
+/-- **`cos t * cos t + sin t * sin t = 1`.**
+
+Mathlib states the Pythagorean identity with squares
+(`Real.sin_sq_add_cos_sq`), and every rotation-matrix computation in this
+cluster needs it with products, so it was being re-derived by `nlinarith` at each
+use — six times in this file and, in its cast form below, twice more in
+`DoubledPhase.lean`. -/
+theorem cos_mul_cos_add_sin_mul_sin (t : ℝ) :
+    Real.cos t * Real.cos t + Real.sin t * Real.sin t = 1 := by
+  nlinarith [Real.sin_sq_add_cos_sq t]
+
+/-- The same identity pushed into `𝕜`, which is the form the doubled-phase
+rotation needs when it works through `RCLike` coefficients. -/
+theorem cos_mul_cos_add_sin_mul_sin_cast (t : ℝ) :
+    ((Real.cos t : ℝ) : 𝕜) * ((Real.cos t : ℝ) : 𝕜) +
+      ((Real.sin t : ℝ) : 𝕜) * ((Real.sin t : ℝ) : 𝕜) = 1 := by
+  have h := congrArg (fun x : ℝ => (x : 𝕜)) (cos_mul_cos_add_sin_mul_sin t)
+  push_cast at h
+  simpa using h
+
 /-- The Fourier phase as a complex number is `exp(ix)`. -/
 @[simp]
 theorem complexFourierPhase_coe (x : ℝ) :
@@ -222,18 +242,14 @@ private noncomputable def realRotationLinearEquiv
     (Real.cos theta • x.1 + Real.sin theta • x.2,
       -Real.sin theta • x.1 + Real.cos theta • x.2)
   left_inv x := by
-    have htrig : Real.cos theta * Real.cos theta +
-        Real.sin theta * Real.sin theta = 1 := by
-      nlinarith [Real.sin_sq_add_cos_sq theta]
+    have htrig := cos_mul_cos_add_sin_mul_sin theta
     apply Prod.ext <;> dsimp
     · conv_rhs => rw [← one_smul ℝ x.1, ← htrig]
       module
     · conv_rhs => rw [← one_smul ℝ x.2, ← htrig]
       module
   right_inv x := by
-    have htrig : Real.cos theta * Real.cos theta +
-        Real.sin theta * Real.sin theta = 1 := by
-      nlinarith [Real.sin_sq_add_cos_sq theta]
+    have htrig := cos_mul_cos_add_sin_mul_sin theta
     apply Prod.ext <;> dsimp
     · conv_rhs => rw [← one_smul ℝ x.1, ← htrig]
       module
@@ -251,9 +267,7 @@ noncomputable def doubledRealRotation
     (theta : ℝ) : WithLp 2 (G × G) ≃ₗᵢ[ℝ] WithLp 2 (G × G) where
   __ := (realRotationLinearEquiv theta).withLpCongr 2
   norm_map' x := by
-    have htrig : Real.cos theta * Real.cos theta +
-        Real.sin theta * Real.sin theta = 1 := by
-      nlinarith [Real.sin_sq_add_cos_sq theta]
+    have htrig := cos_mul_cos_add_sin_mul_sin theta
     -- `doubledRealRotation` is a bundled `LinearIsometryEquiv`, so its application to a
     -- `WithLp` pair is not in normal form for the `norm_sq_eq_re_inner` rewrites below;
     -- no simp lemma unfolds a bundled equiv at a point.
@@ -328,9 +342,7 @@ private noncomputable def basisDoubledRealRotationLinearEquiv
   · intro r x
     apply Prod.ext <;> simp [C, S, smul_sub, smul_add]
   · intro x
-    have htrig (i : ι) : Real.cos (theta i) * Real.cos (theta i) +
-        Real.sin (theta i) * Real.sin (theta i) = 1 := by
-      nlinarith [Real.sin_sq_add_cos_sq (theta i)]
+    have htrig (i : ι) := cos_mul_cos_add_sin_mul_sin (theta i)
     apply Prod.ext
     · apply e.repr.injective
       ext i
@@ -343,9 +355,7 @@ private noncomputable def basisDoubledRealRotationLinearEquiv
         PiLp.add_apply, PiLp.sub_apply, PiLp.neg_apply]
       linear_combination (e.repr x.2 i) * htrig i
   · intro x
-    have htrig (i : ι) : Real.cos (theta i) * Real.cos (theta i) +
-        Real.sin (theta i) * Real.sin (theta i) = 1 := by
-      nlinarith [Real.sin_sq_add_cos_sq (theta i)]
+    have htrig (i : ι) := cos_mul_cos_add_sin_mul_sin (theta i)
     apply Prod.ext
     · apply e.repr.injective
       ext i
@@ -388,9 +398,7 @@ noncomputable def basisDoubledRealRotation
     intro i _
     simp only [map_sub, map_add, C, S, basisDiagonalRealMap_repr,
       PiLp.sub_apply, PiLp.add_apply, Real.norm_eq_abs, sq_abs]
-    have htrig : Real.cos (theta i) * Real.cos (theta i) +
-        Real.sin (theta i) * Real.sin (theta i) = 1 := by
-      nlinarith [Real.sin_sq_add_cos_sq (theta i)]
+    have htrig := cos_mul_cos_add_sin_mul_sin (theta i)
     linear_combination
       ((e.repr x.fst i) ^ 2 + (e.repr x.snd i) ^ 2) * htrig
 

@@ -132,15 +132,7 @@ private noncomputable def basisDoubledPhaseRotationLinearEquiv
   · intro r x
     apply Prod.ext <;> simp [C, S, smul_sub, smul_add]
   · intro x
-    have htrig (i : ι) : ((Real.cos (theta i) : ℝ) : 𝕜) *
-        ((Real.cos (theta i) : ℝ) : 𝕜) +
-        ((Real.sin (theta i) : ℝ) : 𝕜) * ((Real.sin (theta i) : ℝ) : 𝕜) = 1 := by
-      have h := congrArg (fun x : ℝ => (x : 𝕜))
-        (by nlinarith [Real.sin_sq_add_cos_sq (theta i)] :
-          Real.cos (theta i) * Real.cos (theta i) +
-            Real.sin (theta i) * Real.sin (theta i) = 1)
-      push_cast at h
-      simpa using h
+    have htrig (i : ι) := cos_mul_cos_add_sin_mul_sin_cast (𝕜 := 𝕜) (theta i)
     apply Prod.ext
     · apply e.repr.injective
       ext i
@@ -153,15 +145,7 @@ private noncomputable def basisDoubledPhaseRotationLinearEquiv
         PiLp.add_apply, PiLp.sub_apply, PiLp.neg_apply]
       linear_combination (e.repr x.2 i) * htrig i
   · intro x
-    have htrig (i : ι) : ((Real.cos (theta i) : ℝ) : 𝕜) *
-        ((Real.cos (theta i) : ℝ) : 𝕜) +
-        ((Real.sin (theta i) : ℝ) : 𝕜) * ((Real.sin (theta i) : ℝ) : 𝕜) = 1 := by
-      have h := congrArg (fun x : ℝ => (x : 𝕜))
-        (by nlinarith [Real.sin_sq_add_cos_sq (theta i)] :
-          Real.cos (theta i) * Real.cos (theta i) +
-            Real.sin (theta i) * Real.sin (theta i) = 1)
-      push_cast at h
-      simpa using h
+    have htrig (i : ι) := cos_mul_cos_add_sin_mul_sin_cast (𝕜 := 𝕜) (theta i)
     apply Prod.ext
     · apply e.repr.injective
       ext i
