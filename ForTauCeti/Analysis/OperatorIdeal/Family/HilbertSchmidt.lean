@@ -56,39 +56,48 @@ namespace ENNReal
 
 variable {ι : Type*}
 
-/-- **Minkowski's inequality at `p = 2` for `tsum`.**  Mathlib's `ENNReal.Lp_add_le` is
-stated for a `Finset`; this is the extension to an unconditional sum, which in `ℝ≥0∞` needs
-no summability hypothesis.
+/-- **Minkowski's inequality in `ℓᵖ` for `tsum`, over `ℝ≥0∞`.**  Mathlib's
+`ENNReal.Lp_add_le` is stated for a `Finset`, and its `tsum` counterpart exists only over
+`ℝ≥0` (`NNReal.Lp_add_le_tsum`), where it carries summability hypotheses on both summands.
+This is the `ℝ≥0∞` version, which needs no summability hypothesis at all — that is exactly
+why the operator-ideal gauges are `ℝ≥0∞`-valued, since it lets their laws hold
+unconditionally at non-members.
 
 The proof is the standard supremum argument: the finite inequality bounds every partial sum
-of the left side by the square of the right side, and `∑'` is the supremum of its partial
-sums. -/
+of the left side by the `p`-th power of the right side, and `∑'` is the supremum of its
+partial sums. -/
+theorem tsum_rpow_add_le {p : ℝ} (hp : 1 ≤ p) (f g : ι → ℝ≥0∞) :
+    (∑' i, (f i + g i) ^ p) ^ p⁻¹ ≤
+      (∑' i, f i ^ p) ^ p⁻¹ + (∑' i, g i ^ p) ^ p⁻¹ := by
+  have hp0 : (0 : ℝ) < p := lt_of_lt_of_le zero_lt_one hp
+  set A := (∑' i, f i ^ p) ^ p⁻¹ with hA
+  set B := (∑' i, g i ^ p) ^ p⁻¹ with hB
+  have hpow : ∀ x : ℝ≥0∞, (x ^ p⁻¹) ^ p = x := fun x => by
+    rw [← ENNReal.rpow_mul, inv_mul_cancel₀ hp0.ne', ENNReal.rpow_one]
+  have key : ∀ s : Finset ι, ∑ i ∈ s, (f i + g i) ^ p ≤ (A + B) ^ p := by
+    intro s
+    have hfin := ENNReal.Lp_add_le (s := s) (f := f) (g := g) (p := p) hp
+    rw [one_div] at hfin
+    have hfA : (∑ i ∈ s, f i ^ p) ^ p⁻¹ ≤ A :=
+      ENNReal.rpow_le_rpow (ENNReal.sum_le_tsum s) (by positivity)
+    have hgB : (∑ i ∈ s, g i ^ p) ^ p⁻¹ ≤ B :=
+      ENNReal.rpow_le_rpow (ENNReal.sum_le_tsum s) (by positivity)
+    calc ∑ i ∈ s, (f i + g i) ^ p
+        = ((∑ i ∈ s, (f i + g i) ^ p) ^ p⁻¹) ^ p := (hpow _).symm
+      _ ≤ (A + B) ^ p :=
+          ENNReal.rpow_le_rpow (hfin.trans (add_le_add hfA hgB)) hp0.le
+  have hsum : ∑' i, (f i + g i) ^ p ≤ (A + B) ^ p :=
+    ENNReal.tsum_eq_iSup_sum.trans_le (iSup_le key)
+  calc (∑' i, (f i + g i) ^ p) ^ p⁻¹
+      ≤ ((A + B) ^ p) ^ p⁻¹ := ENNReal.rpow_le_rpow hsum (by positivity)
+    _ = A + B := by rw [← ENNReal.rpow_mul, mul_inv_cancel₀ hp0.ne', ENNReal.rpow_one]
+
+/-- **Minkowski's inequality at `p = 2` for `tsum`**, the instance the Hilbert--Schmidt
+energy uses.  Stated separately because its consumers carry the `^ 2` in `ℕ`-power form. -/
 theorem tsum_sq_add_rpow_le (f g : ι → ℝ≥0∞) :
     (∑' i, (f i + g i) ^ 2) ^ (2 : ℝ)⁻¹ ≤
       (∑' i, f i ^ 2) ^ (2 : ℝ)⁻¹ + (∑' i, g i ^ 2) ^ (2 : ℝ)⁻¹ := by
-  simp only [← ENNReal.rpow_two]
-  set A := (∑' i, f i ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹ with hA
-  set B := (∑' i, g i ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹ with hB
-  have hsq : ∀ x : ℝ≥0∞, (x ^ (2 : ℝ)⁻¹) ^ (2 : ℝ) = x := fun x => by
-    rw [← ENNReal.rpow_mul]
-    norm_num
-  have key : ∀ s : Finset ι, ∑ i ∈ s, (f i + g i) ^ (2 : ℝ) ≤ (A + B) ^ (2 : ℝ) := by
-    intro s
-    have hfin := ENNReal.Lp_add_le (s := s) (f := f) (g := g) (p := 2) one_le_two
-    rw [one_div] at hfin
-    have hfA : (∑ i ∈ s, f i ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹ ≤ A :=
-      ENNReal.rpow_le_rpow (ENNReal.sum_le_tsum s) (by norm_num)
-    have hgB : (∑ i ∈ s, g i ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹ ≤ B :=
-      ENNReal.rpow_le_rpow (ENNReal.sum_le_tsum s) (by norm_num)
-    calc ∑ i ∈ s, (f i + g i) ^ (2 : ℝ)
-        = ((∑ i ∈ s, (f i + g i) ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹) ^ (2 : ℝ) := (hsq _).symm
-      _ ≤ (A + B) ^ (2 : ℝ) :=
-          ENNReal.rpow_le_rpow (hfin.trans (add_le_add hfA hgB)) (by norm_num)
-  have hsum : ∑' i, (f i + g i) ^ (2 : ℝ) ≤ (A + B) ^ (2 : ℝ) :=
-    ENNReal.tsum_eq_iSup_sum.trans_le (iSup_le key)
-  calc (∑' i, (f i + g i) ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹
-      ≤ ((A + B) ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹ := ENNReal.rpow_le_rpow hsum (by norm_num)
-    _ = A + B := by rw [← ENNReal.rpow_mul]; norm_num
+  simpa only [← ENNReal.rpow_two] using tsum_rpow_add_le (p := 2) one_le_two f g
 
 end ENNReal
 
