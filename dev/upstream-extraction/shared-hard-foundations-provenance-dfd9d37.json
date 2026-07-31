@@ -27,7 +27,7 @@
       "origin_commit": "dfd9d37ebc86421eea50ee79e71e2420d507878d",
       "origin_files": [
         "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
-        "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationSelectedReduction.lean"
+        "DavisKahan/Experimental/InfiniteDimensional/SinTheta/Continuation/SelectedReduction.lean"
       ],
       "adaptation": "packaging of existing genuine PVM and reduction results",
       "future_destination": "possible TauCeti bounded spectral-selection API"
