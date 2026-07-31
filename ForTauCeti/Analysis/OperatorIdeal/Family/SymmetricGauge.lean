@@ -6,6 +6,8 @@ Authors: Claude Opus 5
 import ForTauCeti.Analysis.Normed.SymmetricGauge
 import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
+import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
 
 /-!
 # The operator ideal family induced by a symmetric gauge
@@ -53,6 +55,8 @@ roadmap states the family over `ℂ`, and this is the reason.
 open scoped NNReal ENNReal
 
 namespace TauCeti
+
+universe u v
 
 open ContinuousLinearMap
 
@@ -202,5 +206,71 @@ theorem symmetricGaugeFamily_gauge {E F : Type*}
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     (A : E →L[ℂ] F) :
     (symmetricGaugeFamily Φ).gauge A = Φ.extend (approxSeq A) := rfl
+
+/-! ## The adjoint-closed form, and Ky Fan dominance
+
+`IsKyFanDominant` is a class on `SymmetricOperatorIdealFamily`, not on
+`OperatorIdealFamily`, so the dominance statement needs the adjoint-closed form
+of the construction.  That form differs in exactly one field, `gauge_adjoint`,
+which `ContinuousLinearMap.approximationNumber_adjoint` supplies outright: `T`
+and `T⋆` have the same approximation numbers, hence the same gauge.
+
+The universes collapse here — `SymmetricOperatorIdealFamily.{u, v}` uses one
+universe for source and target — because the adjoint exchanges them.  So this is
+the *square* companion of `symmetricGaugeFamily` rather than a replacement.
+-/
+
+section Symmetric
+
+variable {E F : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+
+/-- The gauge is unchanged by passing to the adjoint. -/
+theorem extend_approxSeq_adjoint (A : E →L[ℂ] F) :
+    Φ.extend (approxSeq (ContinuousLinearMap.adjoint A)) = Φ.extend (approxSeq A) := by
+  congr 1
+  funext n
+  simp only [approxSeq, ContinuousLinearMap.approximationNumber_adjoint]
+
+end Symmetric
+
+/-- **The adjoint-closed operator ideal family induced by a symmetric gauge.**
+
+The square companion of `symmetricGaugeFamily`: same gauge, plus the adjoint
+invariance that `SymmetricOperatorIdealFamily` requires. -/
+noncomputable def symmetricGaugeSymmetricFamily :
+    SymmetricOperatorIdealFamily.{0, v} ℂ where
+  toOperatorIdealFamily := symmetricGaugeFamily.{v, v} Φ
+  gauge_adjoint A := extend_approxSeq_adjoint Φ A
+
+/-- **Milestone B2.**  A family induced by a symmetric gauge is Ky Fan dominant.
+
+The hypothesis `∀ k, A.kyFanGauge k ≤ B.kyFanGauge k` *is* prefix-sum domination
+of the approximation-number sequences, which is exactly what
+`SymmetricGauge.extend_le_extend_of_forall_sum_le` consumes.  Antitonicity of
+both sequences is `approximationNumber_antitone`.
+
+So no part of the Hardy--Littlewood--Pólya argument appears here: it was done
+once, at the level of sequences, and this instance is its transport. -/
+instance isKyFanDominant_symmetricGaugeSymmetricFamily :
+    IsKyFanDominant (symmetricGaugeSymmetricFamily.{v} Φ) where
+  gauge_le_of_forall_kyFanGauge_le {E F _ _ _ _ _ _} {A B} h := by
+    have hpre : ∀ k, ∑ n ∈ Finset.range k, approxSeq A n
+        ≤ ∑ n ∈ Finset.range k, approxSeq B n := by
+      intro k
+      have hk := h k
+      simp only [ContinuousLinearMap.kyFanGauge] at hk
+      rw [show (∑ n ∈ Finset.range k, approxSeq A n)
+            = ENNReal.ofReal (∑ n ∈ Finset.range k, A.approximationNumber n) by
+          rw [ENNReal.ofReal_sum_of_nonneg
+            (fun i _ => A.approximationNumber_nonneg i)]; rfl,
+        show (∑ n ∈ Finset.range k, approxSeq B n)
+            = ENNReal.ofReal (∑ n ∈ Finset.range k, B.approximationNumber n) by
+          rw [ENNReal.ofReal_sum_of_nonneg
+            (fun i _ => B.approximationNumber_nonneg i)]; rfl]
+      exact ENNReal.ofReal_le_ofReal hk
+    exact Φ.extend_le_extend_of_forall_sum_le (approxSeq_antitone A)
+      (approxSeq_antitone B) hpre
 
 end TauCeti
