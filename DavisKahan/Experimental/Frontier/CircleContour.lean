@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 
 import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle
 import DavisKahan.SpectralTheory.ContinuationContour
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationTransport
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.Transport
 
 /-!
 # The circle as a proof-carrying continuation contour
