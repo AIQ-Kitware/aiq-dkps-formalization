@@ -457,6 +457,80 @@ theorem finiteBasisInclusion_comp_finiteBasisCoords {ι : Type*} [DecidableEq ι
   exact Finset.sum_congr rfl fun j _ => by rw [finiteBasisCoords_apply]
 
 
+omit [CompleteSpace G] in
+/-- **The energy of `T` restricted to a finite basis slice is that slice of the energy.**
+
+Extracted from the forward inequality's proof, where it was inline, because the reverse
+inequality needs the same computation. -/
+theorem hilbertSchmidtEnergy_comp_finiteBasisInclusion {ι : Type*} (T : G →L[𝕜'] H)
+    (b : HilbertBasis ι 𝕜' G) {n : ℕ} {f : Fin n → ι}
+    (c : HilbertBasis (Fin n) 𝕜' (EuclideanSpace 𝕜' (Fin n))) :
+    (T ∘L finiteBasisInclusion b f).hilbertSchmidtEnergy c
+      = ∑ j : Fin n, ‖T (b (f j))‖ₑ ^ 2 := by
+  classical
+  set d := (EuclideanSpace.basisFun (Fin n) 𝕜').toHilbertBasis with hd
+  rw [(T ∘L finiteBasisInclusion b f).hilbertSchmidtEnergy_indep c d,
+    hilbertSchmidtEnergy, tsum_fintype]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  have hdj : d j = EuclideanSpace.single j (1 : 𝕜') := by
+    simp [hd, OrthonormalBasis.coe_toHilbertBasis, EuclideanSpace.basisFun_apply]
+  rw [ContinuousLinearMap.comp_apply, hdj, finiteBasisInclusion_apply]
+  congr 2
+  rw [Finset.sum_eq_single j]
+  · simp
+  · intro k _ hkj
+    simp [Ne.symm hkj]
+  · intro h; exact absurd (Finset.mem_univ j) h
+
+
+omit [CompleteSpace G] in
+/-- **The reverse inequality, for a truncated operator.**
+
+`T ∘L basisTruncation b s` factors as `(T ∘L finiteBasisInclusion) ∘L finiteBasisCoords`, so
+its approximation numbers are dominated by those of the finite-source operator, whose squared
+sum *is* the corresponding slice of the energy.  No limit is involved — this is the reverse
+inequality at every finite stage. -/
+theorem tsum_approximationNumber_comp_basisTruncation_sq_le {ι : Type v}
+    (T : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) (s : Finset ι) :
+    ∑' n : ℕ, ENNReal.ofReal ((T ∘L basisTruncation b s).approximationNumber n) ^ 2
+      ≤ T.hilbertSchmidtEnergy b := by
+  classical
+  set e := s.equivFin with he
+  set f : Fin s.card → ι := fun j => (e.symm j : ι) with hfdef
+  have hf : Function.Injective f := by
+    intro j k hjk
+    have hsub : e.symm j = e.symm k := Subtype.ext hjk
+    simpa using congrArg e hsub
+  have himage : Finset.univ.image f = s := by
+    ext i
+    simp only [Finset.mem_image, Finset.mem_univ, true_and, hfdef]
+    exact ⟨by rintro ⟨j, rfl⟩; exact (e.symm j).2, fun hi => ⟨e ⟨i, hi⟩, by simp⟩⟩
+  set V := finiteBasisInclusion b f with hV
+  set Q := finiteBasisCoords b f with hQ
+  have hfactor : T ∘L basisTruncation b s = (T ∘L V) ∘L Q := by
+    rw [hV, hQ, ContinuousLinearMap.comp_assoc,
+      finiteBasisInclusion_comp_finiteBasisCoords b hf, himage]
+  set c := (EuclideanSpace.basisFun (Fin s.card) 𝕜').toHilbertBasis with hc
+  calc ∑' n : ℕ, ENNReal.ofReal ((T ∘L basisTruncation b s).approximationNumber n) ^ 2
+      ≤ ∑' n : ℕ, ENNReal.ofReal ((T ∘L V).approximationNumber n) ^ 2 := by
+        refine ENNReal.tsum_le_tsum fun n => ?_
+        refine pow_le_pow_left' (ENNReal.ofReal_le_ofReal ?_) 2
+        rw [hfactor]
+        refine (approximationNumber_comp_le_mul_norm (T ∘L V) Q n).trans ?_
+        exact mul_le_of_le_one_right ((T ∘L V).approximationNumber_nonneg n)
+          (norm_finiteBasisCoords_le b hf)
+    _ = (T ∘L V).hilbertSchmidtEnergy c :=
+        tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy _ c
+    _ = ∑ j : Fin s.card, ‖T (b (f j))‖ₑ ^ 2 :=
+        hilbertSchmidtEnergy_comp_finiteBasisInclusion T b c
+    _ = ∑ i ∈ s, ‖T (b i)‖ₑ ^ 2 := by
+        conv_rhs => rw [← himage]
+        rw [Finset.sum_image fun i _ j _ h => hf h]
+    _ ≤ T.hilbertSchmidtEnergy b := by
+        rw [hilbertSchmidtEnergy]
+        exact ENNReal.sum_le_tsum s
+
+
 -- `G`'s completeness is carried by the `HilbertBasis` argument rather than used again, and
 -- the target's is not needed at all: the range factored through is finite-dimensional, so its
 -- orthogonal projection exists without completing `H`.
