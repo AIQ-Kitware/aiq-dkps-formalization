@@ -64,7 +64,13 @@ EXCLUDED: dict[str, str] = {
     "DavisKahan.Experimental.InfiniteDimensional.OperatorBlocks.OffDiagonal":
         "17 errors against a drifted block API.",
     "DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner":
-        "8 errors against a drifted Ky Fan API.",
+        "**blocked on absent Mathlib, not on this repository.**  Narrowed from 8 errors to "
+        "4 on 2026-07-31: the universe mismatch and the `Seminorm` fields are fixed, and "
+        "what is left is two things pinned Mathlib does not have -- `Seminorm.integral_le`, "
+        "which is the Bochner--Minkowski inequality the module exists to apply, and the "
+        "`†` adjoint notation, which is defined nowhere in this repository either.  Same "
+        "category as `compactOperatorNorm` and Schauder's theorem: the chain leaves the "
+        "repository.",
     "DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry":
         "21 errors against drifted Mathlib: `Continuous.ofReal` and "
         "`HasFDerivAtFilter.ofReal` are gone, and "
