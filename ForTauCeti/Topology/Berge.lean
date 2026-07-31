@@ -448,4 +448,42 @@ theorem mem_of_tendsto_of_upperHemicontinuousAt
   obtain ⟨k, hkV, hkU⟩ := (hevk.and hUk).exists
   exact Set.disjoint_left.mp hUV hkU (subset_of_mem_nhdsSet hkV (hxK k))
 
+/-- **Subsequence extraction for a varying constraint family.**
+
+From feasible points `xₖ ∈ K pₖ` with `pₖ → p₀`, extract a convergent
+subsequence whose limit is feasible at `p₀`.
+
+**The local-boundedness hypothesis is what makes this possible and cannot be
+weakened to "each `K p` is compact":** a family of individually compact sets can
+march off to infinity as `p → p₀`, leaving no compact set to extract from.  A
+single compact `C` containing `K p` for all `p` near `p₀` is the standard Berge
+assumption and rules exactly that out.
+
+Given it, the two hemicontinuity lanes supply the rest: compactness of `C`
+produces the convergent subsequence, and
+`mem_of_tendsto_of_upperHemicontinuousAt` returns its limit to `K p₀`. -/
+theorem exists_subseq_tendsto_mem_of_upperHemicontinuousAt
+    {P X : Type*} [TopologicalSpace P] [TopologicalSpace X] [RegularSpace X]
+    [FirstCountableTopology X]
+    {K : P → Set X} {p₀ : P} (hKu : UpperHemicontinuousAt K p₀)
+    (hKclosed : IsClosed (K p₀))
+    {C : Set X} (hC : IsCompact C) (hKC : ∀ᶠ q in 𝓝 p₀, K q ⊆ C)
+    {p : ℕ → P} (hp : Tendsto p atTop (𝓝 p₀))
+    {x : ℕ → X} (hxK : ∀ k, x k ∈ K (p k)) :
+    ∃ φ : ℕ → ℕ, StrictMono φ ∧ ∃ x₀ ∈ K p₀,
+      Tendsto (fun t => x (φ t)) atTop (𝓝 x₀) := by
+  -- Past some index every point lies in the common compact set.
+  obtain ⟨N, hN⟩ := (hp.eventually hKC).exists_forall_of_atTop
+  -- Shift so that the whole tail is inside `C`, extract there.
+  have hmem : ∀ k, x (N + k) ∈ C := fun k => hN (N + k) (Nat.le_add_right N k) (hxK (N + k))
+  obtain ⟨x₀, _hx₀C, ψ, hψmono, hψtend⟩ := hC.tendsto_subseq hmem
+  refine ⟨fun t => N + ψ t, ?_, x₀, ?_, ?_⟩
+  · exact fun a b hab => Nat.add_lt_add_left (hψmono hab) N
+  · -- The limit is feasible, by upper hemicontinuity.
+    refine mem_of_tendsto_of_upperHemicontinuousAt hKu hKclosed
+      (p := fun t => p (N + ψ t)) ?_ (fun t => hxK (N + ψ t)) hψtend
+    exact hp.comp (tendsto_atTop_mono (fun t => Nat.le_add_left (ψ t) N)
+      hψmono.tendsto_atTop)
+  · exact hψtend
+
 end TauCeti
