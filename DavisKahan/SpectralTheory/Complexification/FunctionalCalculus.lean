@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.Complexification.Basic
+import ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
@@ -29,8 +29,7 @@ namespace RealComplexificationFunctionalCalculus
 
 open Module (finrank)
 open Filter
-open Foundation
-open Foundation.RealComplexification
+open TauCeti.RealComplexification
 
 noncomputable section
 

@@ -29,8 +29,8 @@ namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
+open TauCeti.RealComplexification
 
-open Foundation
 
 noncomputable section
 

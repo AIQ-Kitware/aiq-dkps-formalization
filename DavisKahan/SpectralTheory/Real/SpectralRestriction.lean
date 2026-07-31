@@ -35,8 +35,9 @@ namespace RealSpectralRestriction
 open ExactSinTheta
 open ExactSinTheta.ClosedOperatorComplexification
 open ExactSinTheta.RealComplexificationFunctionalCalculus
-open Foundation
-open Foundation.RealComplexification
+open TauCeti.RealComplexification
+-- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
+open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
 
 noncomputable section
 
