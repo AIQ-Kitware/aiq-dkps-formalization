@@ -1,7 +1,7 @@
 {
   "_schema": "tauceti-extraction-manifest/v1",
   "_comment": "Machine-readable record of the Tau Ceti extraction. `clusters` drives scripts/check_dependency_layers.py (rule 6, closure) and scripts/export_for_tauceti.py (staging->TauCeti copy). `records` carries the per-module provenance and ownership detail required by the campaign spec.",
-  "davis_kahan_commit": "8874c1789ce9a2cd0742c9974b1ede44bc5b66de",
+  "davis_kahan_commit": "2667c2c7fce94ebc208abc7d616bf672c7d6663e",
   "tauceti_submodule_commit": "92c79e5e0a618f8c5c2b9909be1ce50f6891dde7",
   "clusters": [
     {
@@ -30,8 +30,31 @@
         "ForTauCeti.Analysis.InnerProductSpace.SpectralCutoff",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
+        "ForTauCeti.Analysis.InnerProductSpace.SchurHorn",
+        "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
+        "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
+        "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry",
+        "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition",
+        "ForTauCeti.Analysis.InnerProductSpace.SingularSubspace",
+        "ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
+        "ForTauCeti.Analysis.InnerProductSpace.KyFan",
+        "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
+        "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
+        "ForTauCeti.Analysis.Convex.Majorization",
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.InnerProductSpace.Basic",
+        "ForTauCeti.Analysis.Normed.Operator.LinearIsometry",
+        "ForTauCeti.Analysis.InnerProductSpace.GramMatrix",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Instances",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan",
+        "ForTauCeti.Topology.ENNRealLiminf",
         "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass",
         "ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence"
@@ -624,7 +647,7 @@
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1 (roadmap area ForTauCetiRoadmap/OperatorIdeals, Part B: representation of an operator ideal family)",
-      "provenance_class": "redesigned: the free-data presentation (membership plus a total real gauge constrained only on members, one universe, hand-rolled completeness, fourteen fields) is replaced by a single `ℝ≥0∞` gauge with the ideal derived as its finiteness domain, giving structural extensionality and unconditional laws; space parameters are Hilbert, see the module docstring for why the Banach setting has no instance beyond the operator norm",
+      "provenance_class": "redesigned: the free-data presentation (membership plus a total real gauge constrained only on members, one universe, hand-rolled completeness, fourteen fields) is replaced by a single `\u211d\u22650\u221e` gauge with the ideal derived as its finiteness domain, giving structural extensionality and unconditional laws; space parameters are Hilbert, see the module docstring for why the Banach setting has no instance beyond the operator norm",
       "direct_dependencies": [
         "Mathlib"
       ],
@@ -645,7 +668,7 @@
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1 (roadmap area ForTauCetiRoadmap/OperatorIdeals, Part B: first instance of the canonical family; the Ky Fan instance is the second and is still parked in DavisKahan)",
-      "provenance_class": "redesigned alongside `Family.Basic`: the operator norm as an `OperatorIdealFamily` and a `SymmetricOperatorIdealFamily`, with the ideal-norm isometry to `E →L[𝕜] F` and the resulting `IsComplete` instance replacing the hand-rolled Cauchy criterion",
+      "provenance_class": "redesigned alongside `Family.Basic`: the operator norm as an `OperatorIdealFamily` and a `SymmetricOperatorIdealFamily`, with the ideal-norm isometry to `E \u2192L[\ud835\udd5c] F` and the resulting `IsComplete` instance replacing the hand-rolled Cauchy criterion",
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Basic"
@@ -1959,7 +1982,7 @@
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.KyFan",
       "ownership_class": "tauceti",
       "roadmap_target": "symmetric-operator-ideals",
-      "provenance_class": "copied and specialised 2026-07-28: the Ky Fan symmetric ideal family at 𝕜 = ℂ, with the HasKyFanApproximationGaugeTriangle capability hypothesis discharged rather than assumed; rfl-equal to the generic construction it came from",
+      "provenance_class": "copied and specialised 2026-07-28: the Ky Fan symmetric ideal family at \ud835\udd5c = \u2102, with the HasKyFanApproximationGaugeTriangle capability hypothesis discharged rather than assumed; rfl-equal to the generic construction it came from",
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",

@@ -140,12 +140,12 @@ base Tau Ceti has already accepted.
   - `Analysis.OperatorIdeal.Family.TraceClass`
   - `Topology.ENNRealLiminf`
 
-**Cumulative after F: 41 of 186 `ForTauCeti` modules.** Rungs A–F were the whole
+**Cumulative after F: 41 of 187 `ForTauCeti` modules.** Rungs A–F were the whole
 ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung G — Foundations completion — the rest of topics T01-T10
 
-**35 new, cumulative closed slice 77.**
+**36 new, cumulative closed slice 78.**
 
   - `Analysis.InnerProductSpace.AngleGeometry`
   - `Analysis.InnerProductSpace.EigenvalueChange`
@@ -174,6 +174,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `Analysis.OperatorIdeal.ApproximationNumber.Core`
   - `Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample`
   - `Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence`
+  - `Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison`
   - `Analysis.OperatorIdeal.ApproximationNumber.Examples`
   - `Analysis.OperatorIdeal.ApproximationNumber.FiniteValueFibers`
   - `Analysis.OperatorIdeal.ApproximationNumber.FiniteValueSeparation`
@@ -185,7 +186,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung H — Hilbert-Schmidt operators (T11)
 
-**4 new, cumulative closed slice 81.**
+**4 new, cumulative closed slice 82.**
 
   - `Analysis.InnerProductSpace.HilbertSchmidtConjugation`
   - `Analysis.InnerProductSpace.HilbertSchmidtLp`
@@ -194,7 +195,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung I — The Haagerup-Zsido kernel and its Fourier transform (T12)
 
-**8 new, cumulative closed slice 89.**
+**8 new, cumulative closed slice 90.**
 
   - `Analysis.Fourier.ExponentialAbs`
   - `Analysis.Fourier.HaagerupZsido.Defs`
@@ -207,7 +208,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung J — One-parameter unitary groups and Stone's theorem (T13)
 
-**6 new, cumulative closed slice 95.**
+**6 new, cumulative closed slice 96.**
 
   - `Analysis.InnerProductSpace.IntertwiningUnitary`
   - `Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic`
@@ -218,7 +219,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung K — Borel functional calculus and projection-valued measures (T14)
 
-**11 new, cumulative closed slice 106.**
+**11 new, cumulative closed slice 107.**
 
   - `Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure`
   - `Analysis.InnerProductSpace.BorelCalculus.Multiplicative`
@@ -234,7 +235,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung L — Closed operators on LinearPMap: graphs, constructions and form bounds (T15a)
 
-**7 new, cumulative closed slice 113.**
+**7 new, cumulative closed slice 114.**
 
   - `Analysis.InnerProductSpace.LinearPMap.Closed`
   - `Analysis.InnerProductSpace.LinearPMap.Constructions`
@@ -246,7 +247,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung M — Resolvents of self-adjoint LinearPMap operators, and semiboundedness (T15b)
 
-**7 new, cumulative closed slice 120.**
+**7 new, cumulative closed slice 121.**
 
   - `Analysis.CStarAlgebra.SelfAdjointGapInverse`
   - `Analysis.InnerProductSpace.LinearPMap.RealLowerBound`
@@ -258,7 +259,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung N — The spectral measure of an unbounded self-adjoint operator, and Stone (T15c)
 
-**15 new, cumulative closed slice 135.**
+**15 new, cumulative closed slice 136.**
 
   - `Analysis.InnerProductSpace.BlockLowerBound`
   - `Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal`
@@ -278,7 +279,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung O — Sylvester equations and the Rosenblum theorem (T16)
 
-**18 new, cumulative closed slice 153.**
+**18 new, cumulative closed slice 154.**
 
   - `Analysis.InnerProductSpace.CoerciveUnit`
   - `Analysis.InnerProductSpace.HilbertSchmidtBlock`
@@ -301,7 +302,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung P — Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems (T17)
 
-**15 new, cumulative closed slice 168.**
+**15 new, cumulative closed slice 169.**
 
   - `Analysis.InnerProductSpace.BoundedOperator.Projector`
   - `Analysis.InnerProductSpace.BoundedOperator.SinTheta`
@@ -321,7 +322,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung Q — The Yu-Wang-Samworth statistical variant (T18)
 
-**3 new, cumulative closed slice 171.**
+**3 new, cumulative closed slice 172.**
 
   - `Analysis.InnerProductSpace.YuWangSamworth.Residual`
   - `Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace`
@@ -329,7 +330,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung R — Matrix spectra and spectral measurability (T19)
 
-**6 new, cumulative closed slice 177.**
+**6 new, cumulative closed slice 178.**
 
   - `Analysis.Matrix.EntrywiseEigenvalue`
   - `Analysis.Matrix.EntrywiseOpNorm`
@@ -340,7 +341,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung S — Sample moments and matrix concentration (T20)
 
-**5 new, cumulative closed slice 182.**
+**5 new, cumulative closed slice 183.**
 
   - `Probability.Moments.CenteredScatter`
   - `Probability.Moments.MatrixConcentration`
@@ -350,18 +351,18 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung T — Matrix rank factorization and positive semidefiniteness (T21)
 
-**2 new, cumulative closed slice 184.**
+**2 new, cumulative closed slice 185.**
 
   - `LinearAlgebra.Matrix.PosDef`
   - `LinearAlgebra.Matrix.RankFactorization`
 
 ### Rung U — Berge's maximum theorem and approximate minimizers (T22)
 
-**2 new, cumulative closed slice 186.**
+**2 new, cumulative closed slice 187.**
 
   - `Topology.ApproxMinimizer`
   - `Topology.Berge`
-**Cumulative: 179 of 186 `ForTauCeti` modules — the ladder is total.**
+**Cumulative: 179 of 187 `ForTauCeti` modules — the ladder is total.**
 
 It briefly was not.  Three modules merged in after rung U closed on 2026-07-29
 and no rung's closure reached them; they were placed on 2026-07-30 by matching

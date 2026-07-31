@@ -67,7 +67,7 @@ noncomputable def toSpectralContinuationWitness
   spectrum_separated := by
     intro t ht x lam hlam
     have h := (R.separating t ht).spectrum_separated x lam hlam
-    rwa [R.margin_eq t ht] at h
+    rwa [R.margin_eq t ht, R.geometric_eq t ht] at h
 
 /-- The source endpoint is the genuine selected spectral projection. -/
 theorem sourceProjection_eq_spectralProjection
@@ -78,7 +78,8 @@ theorem sourceProjection_eq_spectralProjection
   let C := R.toSpectralContinuationWitness D
   have h := C.sourceSeparatingContour.fixedContourRieszOperator_eq_boundedSelfAdjointSpectralProjection
   simpa [C, toSpectralContinuationWitness,
-    SpectralContinuationWitness.sourceSelectedProjection] using h
+    SpectralContinuationWitness.sourceSelectedProjection,
+    SpectralContinuationWitness.sourceSeparatingContour_geometric] using h
 
 /-- The target endpoint is the genuine selected spectral projection. -/
 theorem targetProjection_eq_spectralProjection
@@ -90,7 +91,8 @@ theorem targetProjection_eq_spectralProjection
   let C := R.toSpectralContinuationWitness D
   have h := C.targetSeparatingContour.fixedContourRieszOperator_eq_boundedSelfAdjointSpectralProjection
   simpa [C, toSpectralContinuationWitness,
-    SpectralContinuationWitness.targetSelectedProjection] using h
+    SpectralContinuationWitness.targetSelectedProjection,
+    SpectralContinuationWitness.targetSeparatingContour_geometric] using h
 
 /-- The realized selected projection path is norm-continuous. -/
 theorem continuous_selectedProjectionPath
@@ -134,8 +136,8 @@ theorem existsUnique_endpointAngularOperator
           (R.toSpectralContinuationWitness D).sourceSelectedSpectralSubspace X =
         (R.toSpectralContinuationWitness D).targetSelectedSpectralSubspace ∧
       ‖X‖ < 1 := by
-  exact (R.toSpectralContinuationWitness D).
-    existsUnique_selectedEndpointAngularOperator hsmall
+  exact SpectralContinuationWitness.existsUnique_selectedEndpointAngularOperator
+    (R.toSpectralContinuationWitness D) hsmall
 
 end RealizedCircleContinuationData
 
@@ -162,7 +164,10 @@ noncomputable def CommonCircleGeometry.realize
   contour := G.geometric
   separating := fun t ht =>
     { geometric := G.geometric
-      selfAdjoint := D.hA.add (D.hE.smul t)
+      -- `IsSymmetric.smul` takes the conjugation-fixedness of the scalar, not the scalar;
+      -- for a real `t` viewed in `ℂ` that is `Complex.conj_ofReal`.
+      selfAdjoint := D.hA.add
+        (LinearMap.IsSymmetric.smul (c := (t : ℂ)) (by simp) D.hE)
       measurable_selected := D.hs
       spectralMargin := D.margin
       spectralMargin_pos := D.margin_pos
