@@ -36,37 +36,33 @@ theorem posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self
     {n d : ℕ} (B : Matrix (Fin n) (Fin n) 𝕜) :
     (B.PosSemidef ∧ B.rank ≤ d) ↔ ∃ A : Matrix (Fin d) (Fin n) 𝕜, B = Aᴴ * A := sorry
 
-/-- **Milestone A2, rank factorization.**  Unique up to a change of basis of the
-intermediate space.  `M.rank = r` is essential: at `r > M.rank` the factors are not
-related by any invertible `g`, since `L` may carry a redundant column. -/
-theorem exists_unique_mul_rankFactorization [DecidableEq m] {M : Matrix m n 𝕜} {r : ℕ}
+/-- **Milestone A2, general factors.** At minimal rank the factorization is unique up to
+the obvious `GL` action.  Stated as an existence over the group rather than through a
+quotient object: there is no quotient here, and inventing one would be an unasked-for
+design. `r = M.rank` is load-bearing -- above the rank the extra columns are
+unconstrained and the statement is false. -/
+theorem exists_units_eq_mul_of_rank_factorization {r : ℕ} (M : Matrix m n 𝕜)
     (hr : M.rank = r) {L L' : Matrix m (Fin r) 𝕜} {R R' : Matrix (Fin r) n 𝕜}
     (h : M = L * R) (h' : M = L' * R') :
     ∃ g : (Matrix (Fin r) (Fin r) 𝕜)ˣ,
       L' = L * (g : Matrix (Fin r) (Fin r) 𝕜) ∧
         R' = ((g⁻¹ : (Matrix (Fin r) (Fin r) 𝕜)ˣ) : Matrix (Fin r) (Fin r) 𝕜) * R := sorry
 
-end RankFactorization
-
-section GramUniqueness
-
-variable {𝕜 : Type*} [RCLike 𝕜]
-
-/-- **Milestone A2, Gram factorization.**  Unique up to a *left unitary*, at a fixed
-factor size and with no rank hypothesis -- which is why this is not a corollary of the
-rank-factorization statement above.  The group differs (`unitaryGroup`, not the
-invertibles) because this one remembers an inner product.
-
+/-- **Milestone A2, Gram factors.** Two Gram factors of the same size differ by a left
+unitary.  Open question deliberately left in the roadmap rather than settled here:
+whether the consumer wants `unitaryGroup` or a bundled `LinearIsometryEquiv`.
 The quantifier side matters: the unitary acts on the `d` side.  In the
 multidimensional-scaling consumer that is exactly the rigid-motion indeterminacy of a
 recovered configuration; a unitary on the `n` side would be false and would look
-plausible. -/
-theorem exists_unitary_mul_of_conjTranspose_mul_self_eq {n d : ℕ}
-    {A A' : Matrix (Fin d) (Fin n) 𝕜} (h : Aᴴ * A = A'ᴴ * A') :
-    ∃ U ∈ Matrix.unitaryGroup (Fin d) 𝕜, A' = U * A := sorry
+plausible.  The acting group differs from the rank-factorization statement above
+(`unitaryGroup`, not the invertibles) because this one remembers an inner product, and
+no rank hypothesis is needed -- which is why it is not a corollary of that one. -/
+theorem exists_mem_unitaryGroup_eq_mul_of_conjTranspose_mul_self
+    {𝕜 : Type*} [RCLike 𝕜] [PartialOrder 𝕜] [StarOrderedRing 𝕜] {n d : ℕ}
+    {A B : Matrix (Fin d) (Fin n) 𝕜} (h : Aᴴ * A = Bᴴ * B) :
+    ∃ U ∈ Matrix.unitaryGroup (Fin d) 𝕜, B = U * A := sorry
 
-end GramUniqueness
-
+end RankFactorization
 /-! ## Part B -- Berge's maximum theorem over a fixed compact feasible set (T22) -/
 
 section Berge
@@ -123,30 +119,26 @@ theorem continuous_iInf_of_isCompact
     (hK : IsCompact K) (hKne : K.Nonempty) (hg : Continuous (Function.uncurry g)) :
     Continuous (fun p => ⨅ x : ↥K, g p ↑x) := sorry
 
-/-- **Milestone B3 -- the classical theorem, with a varying constraint correspondence.**
+/-! ### Milestone B3 -- the classical theorem, over a varying constraint
 
-The fixed-`K` results above are the special case at constant `Γ`, **not** a step toward
-this: with `Γ` varying, an approximate-minimizer sequence need not stay in one compact
-set, so the engine that proves the fixed case does not generalize by adding a hypothesis.
+The two halves use *different* hypotheses on `K`, which is the content of the classical
+proof and the reason the fixed-`K` case is a special case rather than a step: upper
+semicontinuity of the value needs `K` upper hemicontinuous, lower semicontinuity needs it
+lower hemicontinuous. -/
 
-Continuity of the value function splits into two independent halves with opposite
-hypotheses -- lower semicontinuity from upper hemicontinuity of `Γ`, upper
-semicontinuity from lower hemicontinuity of `Γ` -- and stating it as one target hides
-that, and hides that one half is already available from Milestone B2.
+/-- **Berge, value half, varying constraint.** -/
+theorem continuous_iInf_of_hemicontinuous {K : P → Set X}
+    (hKcompact : ∀ p, IsCompact (K p)) (hKne : ∀ p, (K p).Nonempty)
+    (hKu : ∀ p, UpperHemicontinuousAt K p) (hKl : ∀ p, LowerHemicontinuousAt K p)
+    (hg : Continuous (Function.uncurry g)) :
+    Continuous (fun p => ⨅ x : ↥(K p), g p ↑x) := sorry
 
-`LowerHemicontinuous` is written here as a placeholder predicate: pinning its shape
-means checking what Mathlib currently supports, and if the lower half has since landed
-upstream this milestone shrinks to a connection layer. -/
-def LowerHemicontinuous (_Γ : P → Set X) : Prop := True
-
-/-- Placeholder for the upper half, for the same reason. -/
-def UpperHemicontinuous (_Γ : P → Set X) : Prop := True
-
-theorem continuous_value_of_hemicontinuous
-    {Γ : P → Set X} (hg : Continuous (Function.uncurry g))
-    (hne : ∀ p, (Γ p).Nonempty) (hcpt : ∀ p, IsCompact (Γ p))
-    (huhc : UpperHemicontinuous Γ) (hlhc : LowerHemicontinuous Γ) :
-    Continuous fun p => ⨅ x : ↥(Γ p), g p ↑x := sorry
+/-- **Berge, argmin half, varying constraint.**  The containment premise is no longer
+trivial: keeping the limit feasible is exactly what upper hemicontinuity of `K` buys. -/
+theorem upperHemicontinuousAt_isMinOn_of_hemicontinuous [T2Space X] {K : P → Set X}
+    (hKcompact : ∀ p, IsCompact (K p)) (hKu : ∀ p, UpperHemicontinuousAt K p)
+    (hg : Continuous (Function.uncurry g)) (p₀ : P) :
+    UpperHemicontinuousAt (fun p => {x ∈ K p | IsMinOn (g p) (K p) x}) p₀ := sorry
 
 end Berge
 
@@ -259,15 +251,18 @@ theorem centeredScatter_append (𝕜 : Type*) [RCLike 𝕜] {E : Type*} [NormedA
       ((n : 𝕜) / ((n : 𝕜) + 1)) •
         rankOne 𝕜 (y - finiteMean 𝕜 z) (y - finiteMean 𝕜 z) := sorry
 
-/-- **Milestone D2 -- the operator-norm deviation event.**
+/-- **Milestone D2 -- the operator-norm deviation event**, on the same hypotheses as the
+eigenvalue event above so that the two are visibly one event read two ways.
 
 **Not a corollary of D1.**  Eigenvalue closeness does not bound an operator-norm
 difference: two matrices can have identical spectra and differ by a rotation.  Both
 descend from the same entrywise event, D1 through Weyl's inequality and this through
 Part C's `norm_toEuclideanLin_le_of_entry_le` -- siblings, not parent and child.
-Extracting that entrywise event as a named lemma, with the Chebyshev and union-bound
-cost paid once, is part of the milestone; the probability is then literally the same
-number in both rather than two coincidentally equal bounds.
+
+So the route is a refactor, not a new probability argument: factor the entrywise event
+out of the eigenvalue theorem first, then compose it with the norm comparison here and
+with Weyl there.  In the other order the Chebyshev-plus-union-bound argument gets written
+twice, and the two probabilities are only coincidentally equal.
 
 **No symmetry hypothesis**, deliberately: an operator-norm bound needs none, while D1
 needs both matrices Hermitian to have eigenvalues at all.

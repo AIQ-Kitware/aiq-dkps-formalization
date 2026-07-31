@@ -24,14 +24,22 @@ introduced for this bounded operator.
 
 ## Provenance
 
-Promoted from `FinishTanTwoTheta/FinishTanTwoTheta/ApproximationNumber/GramSpectralRank.lean`
-under lane `FTT-PROMOTE-5` (2026-07-30), which moved it out of a library that
-is not a default build target.  The statements and proofs are unchanged; the
-enclosing namespace moved from `TauCeti.FinishTanTwoTheta` to
-`TauCeti.ApproximationNumber`, joining the three modules lane `FTT-PROMOTE-3`
-landed beside it, and `FinishTanTwoTheta.GroundedImports` — which imports
-`DavisKahan.All` and so cannot survive the move — was dropped in favour of the
-`ForTauCeti` leaves the file already named.
+*Moved, not restated.*  This module was written in the `FinishTanTwoTheta`
+completion workspace and reached its present home in two steps, the second of
+which is the one a reader should know about: **its imports are three `ForTauCeti`
+leaves and nothing else**, so it had been sitting in a library it did not depend
+on.  Statements, proofs and the `TauCeti.ApproximationNumber` namespace are
+unchanged throughout; only the enclosing library and the consumers' import lines
+moved.  `FinishTanTwoTheta.GroundedImports` was dropped along the way because it
+imports the whole Davis--Kahan aggregate and so could not travel.
+
+**Two hypotheses the move falsified, recorded because they are the argument for
+making such moves early.**  Under the stricter options this library is built with,
+the file needed `sub_apply` in place of a deprecated
+`ContinuousLinearMap.sub_apply` twice; and by *dependency* it is not
+approximation-number material at all — it imports `LinearPMap.Constructions` and
+`LinearPMap.SpectralFormBounds`, so it is submittable only after the unbounded
+spectral measure, not with the `a`-numbers its name suggests.
 -/
 
 namespace TauCeti
@@ -105,7 +113,7 @@ theorem specProjection_Ici_apply_eq_self_of_Iic_apply_eq_zero {c : ℝ} (x : H)
     _ = (ContinuousLinearMap.id ℂ H - P.proj (Set.Iio c) measurableSet_Iio) x := by
       rw [P.proj_compl]
     _ = x := by
-      rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply, hIio, sub_zero]
+      rw [sub_apply, ContinuousLinearMap.id_apply, hIio, sub_zero]
 
 /-- If the high closed half-line annihilates `x`, then the complementary low
 closed half-line fixes `x`. -/
@@ -144,7 +152,7 @@ theorem specProjection_Iic_apply_eq_self_of_Ici_apply_eq_zero {c : ℝ} (x : H)
     _ = (ContinuousLinearMap.id ℂ H - P.proj (Set.Ioi c) measurableSet_Ioi) x := by
       rw [P.proj_compl]
     _ = x := by
-      rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply, hIoi, sub_zero]
+      rw [sub_apply, ContinuousLinearMap.id_apply, hIoi, sub_zero]
 
 /-- **Vector-local lower energy bound.** If a domain vector has no spectral
 component in `(-∞, c]`, its quadratic form is at least `c ‖x‖²`. -/
