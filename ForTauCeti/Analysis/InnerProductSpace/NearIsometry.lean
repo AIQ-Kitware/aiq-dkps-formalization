@@ -197,14 +197,7 @@ This is the operator form of the scalar estimate that makes the near-isometry co
 private theorem norm_diagonal_apply_sub_self_le (b : OrthonormalBasis (Fin d) ℝ E)
     (c : Fin d → ℝ) {δ : ℝ} (hδ0 : 0 ≤ δ) (hc : ∀ k, |c k - 1| ≤ δ) (x : E) :
     ‖diagonal b c x - x‖ ≤ δ * ‖x‖ := by
-<<<<<<< HEAD
-  have hsub : diagonal b c - LinearMap.id = diagonal b fun k => c k - 1 := by
-    refine b.toBasis.ext fun k => ?_
-    simp only [OrthonormalBasis.coe_toBasis, LinearMap.sub_apply, LinearMap.id_apply,
-      diagonal_basis, sub_smul, one_smul]
-=======
   have hsub := diagonal_sub_id b c
->>>>>>> origin/yardrat-work
   have hx : diagonal b c x - x = diagonal b (fun k => c k - 1) x := by
     have := congrArg (fun T : E →ₗ[ℝ] E => T x) hsub
     simpa using this
@@ -388,27 +381,16 @@ theorem exists_linearIsometryEquiv_comp_polarFactor (M : E →ₗ[ℝ] E) {δ : 
     have : R ∘ₗ S = LinearMap.id := by
       rw [hS, hR, diagonal_comp_diagonal]
       refine b.toBasis.ext fun k => ?_
-<<<<<<< HEAD
-      simp only [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, LinearMap.id_apply, hS, hR,
-        diagonal_basis, map_smul, smul_smul,
-        mul_inv_cancel₀ (ne_of_gt (hsqrtpos k)), one_smul]
-=======
       rw [OrthonormalBasis.coe_toBasis, LinearMap.id_apply, diagonal_basis,
         inv_mul_cancel₀ (ne_of_gt (hsqrtpos k)), one_smul]
->>>>>>> origin/yardrat-work
     intro x
     exact congrArg (fun T : E →ₗ[ℝ] E => T x) this
   -- `S` is a square root of the Gram operator.
   have hSS : S ∘ₗ S = M.adjoint ∘ₗ M := by
     rw [hS, diagonal_comp_diagonal]
     refine b.toBasis.ext fun k => ?_
-<<<<<<< HEAD
-    simp only [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, hS, diagonal_basis, map_smul,
-      smul_smul, Real.mul_self_sqrt (le_of_lt (hμpos k))]
-=======
     rw [OrthonormalBasis.coe_toBasis, diagonal_basis,
       Real.mul_self_sqrt (le_of_lt (hμpos k))]
->>>>>>> origin/yardrat-work
     exact (hGbasis k).symm
   -- The candidate isometry `W₀ = M ∘ R`, which is orthonormal on the eigenbasis.
   set W₀ : E →ₗ[ℝ] E := M ∘ₗ R with hW
