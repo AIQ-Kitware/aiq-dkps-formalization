@@ -207,7 +207,8 @@ theorem sum_sq_eigenvalues_sub_le_sum_sq_norm_apply
       rw [inner_smul_right, RCLike.re_ofReal_mul, hS (u k) (u k)]
     have h3 : ‖(hT.eigenvalues hn k : 𝕜) • u k‖ ^ 2 = (hT.eigenvalues hn k) ^ 2 := by
       rw [norm_smul, mul_pow, RCLike.norm_ofReal, sq_abs,
-        (hT.eigenvectorBasis hn).orthonormal.norm_eq_one k, one_pow, mul_one]
+        (hT.eigenvectorBasis hn).orthonormal.norm_eq_one k]
+      simp
     rw [h1, norm_sub_sq (𝕜 := 𝕜), h2, h3]
   -- Sum the expansion; expand the LHS; use basis independence and von Neumann.
   have hRHS : ∑ k, ‖(S - T) (u k)‖ ^ 2

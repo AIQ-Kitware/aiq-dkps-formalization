@@ -238,8 +238,8 @@ theorem sum_sq_norm_aligned_le {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv
       hu.1 j, inner_re_symm]
     ring
   rw [Finset.sum_congr rfl fun j _ => hexp j, Finset.sum_sub_distrib, ← Finset.mul_sum,
-    sum_re_inner_u_aligned hu hv, Finset.sum_const, Finset.card_univ, Fintype.card_fin,
-    nsmul_eq_mul]
+    sum_re_inner_u_aligned hu hv]
+  simp
   have hkey := sum_overlap_le_sum_singularValues hu hv
   linarith
 
