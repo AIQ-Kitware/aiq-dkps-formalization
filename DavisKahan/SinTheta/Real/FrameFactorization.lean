@@ -51,18 +51,12 @@ variable {E F G : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace ℝ G] [CompleteSpace G]
 
-/-- Scalar restriction of the complex operator algebra to the reals.  This is the
-same real algebra structure that `RealComplexificationFunctionalCalculus` uses,
-and it must be reinstalled here because that declaration is file-local. -/
-noncomputable local instance complexOperatorRealAlgebra :
-    Algebra ℝ (RealComplexification E →L[ℂ] RealComplexification E) :=
-  Algebra.complexToReal
-
-/-- Real continuous functional calculus on the complexified operator algebra. -/
-noncomputable local instance realContinuousFunctionalCalculus :
-    ContinuousFunctionalCalculus ℝ
-      (RealComplexification E →L[ℂ] RealComplexification E) IsSelfAdjoint :=
-  IsSelfAdjoint.instContinuousFunctionalCalculus
+/-! The real algebra structure and the real continuous functional calculus on the
+complexified operator algebra are `scoped instance`s of
+`RealComplexificationFunctionalCalculus`, opened below.  They used to be reinstalled
+here as a second `local instance`, which made them a *different declaration* from the
+one the imported lemmas are stated against; see lane `{lane:CPLX-DEDUP-3}`. -/
+open scoped TauCeti.DavisKahan.Experimental.ExactSinTheta.RealComplexificationFunctionalCalculus
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- A positive real lower-frame estimate survives coordinatewise

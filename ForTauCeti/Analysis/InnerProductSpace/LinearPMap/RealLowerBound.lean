@@ -58,47 +58,16 @@ theorem injective_shiftMap_of_lower_bound (hc : 0 < c)
     le_antisymm (by nlinarith [norm_nonneg ((x : E))]) (norm_nonneg _)
   exact Subtype.ext (by simpa using hx0)
 
-/-- A lower bound makes the range of `A - z` closed. -/
-theorem isClosed_range_shiftMap_of_lower_bound (hA : IsSelfAdjoint A) (hc : 0 < c)
-    (hbd : ∀ x : A.domain, c * ‖(x : E)‖ ≤ ‖A x - z • (x : E)‖) :
-    IsClosed (Set.range (shiftMap A z)) := by
-  apply IsSeqClosed.isClosed
-  intro w a hw hlim
-  choose x hx using hw
-  have hwCauchy : CauchySeq w := hlim.cauchySeq
-  have hCauchy : CauchySeq fun n => ((x n : E)) := by
-    rw [Metric.cauchySeq_iff] at hwCauchy ⊢
-    intro ε hε
-    obtain ⟨N, hN⟩ := hwCauchy (c * ε) (by positivity)
-    refine ⟨N, fun m hm n hn => ?_⟩
-    have hest := hbd (x m - x n)
-    have hcoe : ((x m - x n : A.domain) : E) = (x m : E) - (x n : E) := rfl
-    have hAsub : A (x m - x n) = A (x m) - A (x n) := map_sub _ _ _
-    have hval : A (x m - x n) - z • ((x m - x n : A.domain) : E) = w m - w n := by
-      rw [hAsub, hcoe, smul_sub, ← hx m, ← hx n]
-      simp only [shiftMap_apply]
-      abel
-    rw [hval, hcoe] at hest
-    have hd : dist (w m) (w n) < c * ε := hN m hm n hn
-    rw [dist_eq_norm] at hd ⊢
-    nlinarith [norm_nonneg ((x m : E) - (x n : E))]
-  obtain ⟨p, hp⟩ := cauchySeq_tendsto_of_complete hCauchy
-  have hAx : Filter.Tendsto (fun n => A (x n)) Filter.atTop (nhds (a + z • p)) := by
-    have hval : ∀ n, A (x n) = w n + z • ((x n : E)) := by
-      intro n; rw [← hx n]; simp only [shiftMap_apply]; abel
-    simp only [hval]
-    exact hlim.add ((continuous_const_smul z).continuousAt.tendsto.comp hp)
-  have hgraph : ((p, a + z • p) : E × E) ∈ A.graph := by
-    refine (hA.isClosed).mem_of_tendsto (b := Filter.atTop)
-      (f := fun n => ((x n : E), A (x n))) ?_ ?_
-    · exact hp.prodMk_nhds hAx
-    · filter_upwards with n using A.mem_graph (x n)
-  obtain ⟨q, hq⟩ := (A.mem_graph_iff).mp hgraph
-  refine ⟨q, ?_⟩
-  have hq1 : (q : E) = p := hq.1
-  have hq2 : A q = a + z • p := hq.2
-  simp only [shiftMap_apply, hq1, hq2]
-  abel
+/-! `isClosed_range_shiftMap_of_lower_bound` moved to
+`LinearPMap/SelfAdjointResolvent.lean` on 2026-07-30: that module proves the
+`z.im ≠ 0` case of the same statement and could not cite this one, since this
+file is the one that does the importing.  Same namespace, so no consumer
+changed.
+
+(The previous wording began a line with the word "import", which
+`check_dependency_layers.py` reads as an import statement — it reported this
+module as importing a package called `runs`.  Prose inside a Lean file is
+scanned too.) -/
 
 /-- **Dense range, at a real point.**  A vector orthogonal to the range of
 `A - z` is an eigenvector at `z` — this is where `conj z = z` is used — and the
