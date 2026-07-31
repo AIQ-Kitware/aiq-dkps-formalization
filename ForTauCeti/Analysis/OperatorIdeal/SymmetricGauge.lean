@@ -488,6 +488,81 @@ theorem ofFin_le_extend (Φ : SymmetricGauge) {a : ℕ → ℝ} (ha : ∀ n, 0 �
   exact le_iSup_of_le k (le_iSup
     (fun m : ℝ≥0 => ((Φ (truncate (fun n => ENNReal.ofReal (a n)) k m) : ℝ≥0) : ℝ≥0∞)) m)
 
+/-- **Hardy–Littlewood–Pólya for sequences**: a symmetric gauge is monotone under
+weak majorization of antitone sequences.
+
+This is the sequence form of Milestone B2.  The finite transfer
+`FiniteSymmetricGauge.le_of_prefixSum_le` does the work at each truncation; the
+bridge `toFinite` carries `Φ` down to `Fin k` and `ofFin_le_extend` carries the
+answer back up.
+
+**`b` may be infinite, and that split is the only content the finite case does not
+already have.**  If some `b n = ∞` then `le_extend` makes `Φ∞ b = ∞`.  Otherwise
+every `b n` is finite and so is every `a n` — **not pointwise from the hypothesis**,
+which only compares prefix sums, but from the case `k = 1` together with `ha`. -/
+theorem extend_le_extend_of_forall_sum_le (Φ : SymmetricGauge) {a b : ℕ → ℝ≥0∞}
+    (ha : Antitone a)
+    (h : ∀ k, ∑ n ∈ Finset.range k, a n ≤ ∑ n ∈ Finset.range k, b n) :
+    Φ.extend a ≤ Φ.extend b := by
+  classical
+  by_cases htop : ∃ n, b n = ⊤
+  · obtain ⟨n, hn⟩ := htop
+    have := Φ.le_extend b n
+    rw [hn, top_le_iff] at this
+    simp [this]
+  push Not at htop
+  -- Every `a n` is finite: the prefix inequality at `k = 1` bounds `a 0`, and `a`
+  -- is antitone.
+  have ha0 : a 0 ≠ ⊤ := by
+    have h1 := h 1
+    simp only [Finset.range_one, Finset.sum_singleton] at h1
+    exact ne_top_of_le_ne_top (htop 0) h1
+  have hafin : ∀ n, a n ≠ ⊤ := fun n => ne_top_of_le_ne_top ha0 (ha (Nat.zero_le n))
+  refine iSup_le fun k => iSup_le fun m => ?_
+  -- Reduce both sides to the `Fin k` gauge and apply the finite transfer.
+  have hstep : (Φ.toFinite k) (fun i : Fin k => (a i).toReal)
+      ≤ (Φ.toFinite k) (fun i : Fin k => (b i).toReal) := by
+    refine FiniteSymmetricGauge.le_of_prefixSum_le (Φ := Φ.toFinite k)
+      (fun i j hij => by
+        simpa [ENNReal.toReal_le_toReal (hafin _) (hafin _)] using ha hij)
+      (fun i => ENNReal.toReal_nonneg) (fun i => ENNReal.toReal_nonneg) ?_
+    intro j
+    have hj := h (min j k)
+    have hre : ∀ f : ℕ → ℝ,
+        (∑ i : Fin k, if (i : ℕ) < j then f (i : ℕ) else 0)
+          = ∑ n ∈ Finset.range (min j k), f n := by
+      intro f
+      rw [Fin.sum_univ_eq_sum_range (fun n => if n < j then f n else 0) k,
+        ← Finset.sum_filter]
+      congr 1
+      ext n
+      simp [Finset.mem_filter, Finset.mem_range, and_comm]
+    have hcast : ∑ n ∈ Finset.range (min j k), (a n).toReal
+        ≤ ∑ n ∈ Finset.range (min j k), (b n).toReal := by
+      rw [← ENNReal.toReal_sum (fun n _ => hafin n), ← ENNReal.toReal_sum (fun n _ => htop n)]
+      exact ENNReal.toReal_mono (ENNReal.sum_ne_top.2 fun n _ => htop n) hj
+    simp only [Finset.sum_filter,
+      hre (fun n => (a n).toReal), hre (fun n => (b n).toReal)]
+    exact hcast
+  -- Both sequences are `ofReal` of their real parts, which is what lets the
+  -- `Fin k` machinery apply.
+  have harw : a = fun n => ENNReal.ofReal ((a n).toReal) :=
+    funext fun n => (ENNReal.ofReal_toReal (hafin n)).symm
+  have hbrw : b = fun n => ENNReal.ofReal ((b n).toReal) :=
+    funext fun n => (ENNReal.ofReal_toReal (htop n)).symm
+  calc ((Φ (truncate a k m) : ℝ≥0) : ℝ≥0∞)
+      ≤ ((Φ (ofFin (fun i : Fin k => (a i).toReal)) : ℝ≥0) : ℝ≥0∞) := by
+        have := Φ.mono (truncate_le_ofFin (a := fun n => (a n).toReal)
+          (fun n => ENNReal.toReal_nonneg) k m)
+        rw [← harw] at this
+        exact_mod_cast this
+    _ ≤ ((Φ (ofFin (fun i : Fin k => (b i).toReal)) : ℝ≥0) : ℝ≥0∞) := by
+        exact_mod_cast hstep
+    _ ≤ Φ.extend b := by
+        have := Φ.ofFin_le_extend (a := fun n => (b n).toReal)
+          (fun n => ENNReal.toReal_nonneg) k
+        rwa [← hbrw] at this
+
 /-! ### The gauge a symmetric norming function induces on operators
 
 `symmetricGaugeENorm Φ A = Φ∞ (a(A))`, the symmetric gauge read along the
