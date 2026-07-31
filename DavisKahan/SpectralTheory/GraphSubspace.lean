@@ -83,6 +83,28 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
+/-- **`Ring.inverse` respects semiconjugation.**
+
+If `a` semiconjugates a unit `n` to a unit `m` — that is, `a * n = m * a` — then
+it semiconjugates their inverses.
+
+**Mathlib has this as `SemiconjBy.units_inv_right`, in the `Units` spelling.**
+This is the `Ring.inverse` spelling, which is the one an operator-algebra
+argument reaches for, because invertibility arrives there as `IsUnit` rather
+than as a chosen `Units` element — and no bridge between the two spellings was
+in the library.  The commuting case `m = n` is the common one: `P` commutes with
+`N`, hence with `N⁻¹`.
+
+Deserves a home in a general algebra file rather than here; left in place so
+this lane stays additive and single-file. -/
+theorem ringInverse_semiconj {M : Type*} [MonoidWithZero M] {a n m : M}
+    (hn : IsUnit n) (hm : IsUnit m) (h : a * n = m * a) :
+    a * Ring.inverse n = Ring.inverse m * a := by
+  obtain ⟨un, rfl⟩ := hn
+  obtain ⟨um, rfl⟩ := hm
+  rw [Ring.inverse_unit, Ring.inverse_unit]
+  exact SemiconjBy.units_inv_right h
+
 /-- Graph subspace over `U` with angular operator `X`.
 
 Defined as the topological closure of the parametrized graph range
@@ -208,12 +230,7 @@ theorem projection_graphSubspace_formula
       _ = star X * X := by rw [hPsX]
       _ = star X * (X * P) := by rw [hXP]
       _ = (star X * X) * P := by rw [mul_assoc]
-  have hPR : P * R = R * P := by
-    calc P * R = (R * N) * (P * R) := by rw [hRN, one_mul]
-      _ = R * ((N * P) * R) := by rw [mul_assoc R N (P * R), ← mul_assoc N P R]
-      _ = R * ((P * N) * R) := by rw [hPN]
-      _ = (R * P) * (N * R) := by rw [mul_assoc P N R, ← mul_assoc R P (N * R)]
-      _ = R * P := by rw [hNR, mul_one]
+  have hPR : P * R = R * P := ringInverse_semiconj hNunit hNunit hPN
   have hsA : star A = P + star X := by rw [hA, star_add, hsP]
   have hPsA : P * star A = star A := by rw [hsA, mul_add, hPP, hPsX]
   have hsAA : star A * A = N * P := by
@@ -243,7 +260,11 @@ theorem projection_graphSubspace_formula
       simpa using h
     rw [happ, sub_self, inner_zero_right]
 
-set_option maxHeartbeats 1600000 in
+-- Measured after the extractions below: 400000 fails, 800000 succeeds.  The
+-- previous value was 1600000; heartbeats count allocations and are
+-- deterministic, so this is a reproducible bound rather than a machine-
+-- dependent one.
+set_option maxHeartbeats 800000 in
 /-- The operator-norm gap between a base subspace and the graph of an
 angular operator has the exact value `‖X‖ / √(1 + ‖X‖ ^ 2)`.
 
@@ -291,13 +312,9 @@ theorem norm_projection_sub_projection_graphSubspace
   -- self-adjointness of the inverse
   have hNsa : star N = N := by
     rw [hN, star_add, star_one, star_mul, star_star]
-  have hRsa : star R = R := by
-    have h1 : N * star R = 1 := by
-      have h := congrArg star hRN
-      rwa [star_mul, star_one, hNsa] at h
-    calc star R = (R * N) * star R := by rw [hRN, one_mul]
-      _ = R * (N * star R) := by rw [mul_assoc]
-      _ = R := by rw [h1, mul_one]
+  -- `IsSelfAdjoint a` is by definition `star a = a`, so `hNsa` is already the
+  -- hypothesis Mathlib's `IsSelfAdjoint.ringInverse` wants.
+  have hRsa : star R = R := IsSelfAdjoint.ringInverse hNsa
   -- commutation of `P` with `N` and `R`
   have hPN : P * N = N * P := by
     rw [hN, mul_add, add_mul, mul_one, one_mul]
@@ -306,12 +323,7 @@ theorem norm_projection_sub_projection_graphSubspace
       _ = star X * X := by rw [hPsX]
       _ = star X * (X * P) := by rw [hXP]
       _ = (star X * X) * P := by rw [mul_assoc]
-  have hPR : P * R = R * P := by
-    calc P * R = (R * N) * (P * R) := by rw [hRN, one_mul]
-      _ = R * ((N * P) * R) := by rw [mul_assoc R N (P * R), ← mul_assoc N P R]
-      _ = R * ((P * N) * R) := by rw [hPN]
-      _ = (R * P) * (N * R) := by rw [mul_assoc P N R, ← mul_assoc R P (N * R)]
-      _ = R * P := by rw [hNR, mul_one]
+  have hPR : P * R = R * P := ringInverse_semiconj hNunit hNunit hPN
   -- graph parametrization algebra
   have hsA : star A = P + star X := by rw [hA, star_add, hsP]
   have hPA : P * A = P := by rw [hA, mul_add, hPP, hPX, add_zero]
@@ -378,12 +390,7 @@ theorem norm_projection_sub_projection_graphSubspace
   -- intertwining and the `T₂` square
   have hXN : X * N = M * X := by
     rw [hN, hMdef, mul_add, mul_one, add_mul, one_mul, ← mul_assoc, mul_assoc]
-  have hXR : X * R = R' * X := by
-    calc X * R = (R' * M) * (X * R) := by rw [hR'M, one_mul]
-      _ = R' * ((M * X) * R) := by rw [mul_assoc R' M (X * R), ← mul_assoc M X R]
-      _ = R' * ((X * N) * R) := by rw [hXN]
-      _ = (R' * X) * (N * R) := by rw [mul_assoc X N R, ← mul_assoc R' X (N * R)]
-      _ = R' * X := by rw [hNR, mul_one]
+  have hXR : X * R = R' * X := ringInverse_semiconj hNunit hMunit hXN
   have hRsAA : R * (star A * A) = P := by
     rw [hsAA, ← mul_assoc, hRN, one_mul]
   have hT2sq : (X * R * star A) * star (X * R * star A) = 1 - R' := by
@@ -412,18 +419,14 @@ theorem norm_projection_sub_projection_graphSubspace
           calc R' * (X * star X) = (R' + R' * (X * star X)) - R' := by abel
             _ = 1 - R' := by rw [h1]
   -- exact norms of the two inverse defects
-  have hBsa : IsSelfAdjoint (star X * X) := by
-    show star (star X * X) = star X * X
-    rw [star_mul, star_star]
+  have hBsa : IsSelfAdjoint (star X * X) := IsSelfAdjoint.star_mul_self X
   have hBpos : ∀ z, 0 ≤ RCLike.re ⟪(star X * X) z, z⟫_𝕜 := by
     intro z
     have h : (star X * X) z = star X (X z) := rfl
     rw [h, ContinuousLinearMap.star_eq_adjoint,
       ContinuousLinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
     positivity
-  have hB'sa : IsSelfAdjoint (X * star X) := by
-    show star (X * star X) = X * star X
-    rw [star_mul, star_star]
+  have hB'sa : IsSelfAdjoint (X * star X) := IsSelfAdjoint.mul_star_self X
   have hB'pos : ∀ z, 0 ≤ RCLike.re ⟪(X * star X) z, z⟫_𝕜 := by
     intro z
     have h : (X * star X) z = X (star X z) := rfl
@@ -441,11 +444,7 @@ theorem norm_projection_sub_projection_graphSubspace
     have h := TauCeti.ContinuousLinearMap.norm_one_sub_inverse_one_add
       hB'sa hB'pos
     rw [← hMdef, ← hR'def] at h
-    have h2 : ‖star (star X) * star X‖ = ‖star X‖ * ‖star X‖ :=
-      CStarRing.norm_star_mul_self
-    have hss : star (star X) = X := star_star X
-    have hns : ‖star X‖ = ‖X‖ := norm_star X
-    rw [hss, hns] at h2
+    have h2 : ‖X * star X‖ = ‖X‖ * ‖X‖ := CStarRing.norm_self_mul_star
     rw [h2] at h
     rw [h]
     ring
@@ -455,13 +454,8 @@ theorem norm_projection_sub_projection_graphSubspace
   have hgsq : g ^ 2 = ‖X‖ ^ 2 / (1 + ‖X‖ ^ 2) := by
     rw [hgdef, div_pow, Real.sq_sqrt hsq1.le]
   have hg0 : 0 ≤ g := by rw [hgdef]; positivity
-  have hnorm_sq_eq : ∀ T : E →L[𝕜] E, ‖T * star T‖ = ‖T‖ ^ 2 := by
-    intro T
-    have h : ‖star (star T) * star T‖ = ‖star T‖ * ‖star T‖ :=
-      CStarRing.norm_star_mul_self
-    have hss : star (star T) = T := star_star T
-    have hns : ‖star T‖ = ‖T‖ := norm_star T
-    rw [hss, hns] at h
+  have hnorm_sq_eq : ∀ T : E →L[𝕜] E, ‖T * star T‖ = ‖T‖ ^ 2 := fun T => by
+    have h : ‖T * star T‖ = ‖T‖ * ‖T‖ := CStarRing.norm_self_mul_star
     rw [h, pow_two]
   have hT1norm : ‖P - R * star A‖ = g := by
     have hsq : ‖P - R * star A‖ ^ 2 = g ^ 2 := by
