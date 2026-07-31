@@ -104,7 +104,13 @@ BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 #: `spectralPVM -> toProjValMeasure.diag -> specDiag`). Measured per definition against a full
 #: build: `specDiag` 1 site, `toProjValMeasure` 6, `specProj` 7, with five shared between the
 #: last two -- so those two are one slice, `{lane:FTC-EXPOSE-SPECMEAS-PROJPVM}`, not two.
-PER_DECL_BASELINE = 13
+#: Lowered 13 -> 11 by the `PROJPVM` slice: `specProj` and `toProjValMeasure`, the last two in
+#: `BorelCalculus/PVM.lean`. It cost **one** site, not the eight measured a few hours earlier --
+#: `specProjection_eq_borelCalculus`, whose `rfl` reduced the whole
+#: `specProjection -> spectralPVM -> toProjValMeasure -> specProj` chain, now a four-lemma `rw`.
+#: The other seven sites had already been rewired by the `specProjection` slice, which introduced
+#: that very lemma. A per-declaration removal cost is only valid against the tree it was taken on.
+PER_DECL_BASELINE = 11
 
 PER_DECL = re.compile(r"^@\[expose\]\s*$|^@\[simps![^\]]*,\s*expose\]\s*$", re.M)
 
