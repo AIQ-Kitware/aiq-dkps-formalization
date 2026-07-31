@@ -1,558 +1,434 @@
-# Roadmap: spectral subspace perturbation — Sylvester equations, the Rosenblum theorem, and the Davis–Kahan sin Θ theorems
+# Spectral-subspace perturbation:
+# Sylvester equations, the Rosenblum theorem, and the Davis–Kahan sin Θ theorems
 
-Perturbation theory for self-adjoint operators asks how an invariant subspace moves
-when the operator does.  Davis and Kahan (1970) answered in the form the subject has
-used since: the displacement of a spectral subspace is the operator `sin Θ` built
-from the two orthogonal projections, and a spectral gap `δ` between the parts of the
-spectrum forces `δ · ‖sin Θ‖ ≤ ‖B − A‖` — in the operator norm, the Frobenius norm,
-and every unitarily invariant norm, with **constant one** under interval/exterior or
-ordered separation and the **sharp constant `π/2`** under arbitrary two-sided
-separation.  The engine is the Sylvester equation `A X − X B = C`: spectral
-separation makes it uniquely solvable with an a-priori bound, and the `sin Θ`
-theorems are that bound read through projection geometry.  Its qualitative limit is
-**Rosenblum's theorem** (an operator intertwining two self-adjoint operators with
-disjoint spectra is zero — for unbounded operators, the case that matters); its
-statistical variant (**Yu–Wang–Samworth**) moves the gap hypothesis from the
-perturbed spectrum to the unperturbed one, which is what a random sample covariance
-allows.  Mathlib has the static operator-theory stack but none of this layer: no
-operator angles, no Sylvester equations, no spectral-subspace perturbation theory,
-no statistical variant.
+Perturbation theory for self-adjoint operators asks how an invariant subspace moves when the
+operator does. Davis and Kahan (1970) answered in the form the subject has used since: the
+displacement of a spectral subspace is the operator `sin Θ` built from the two orthogonal
+projections, and a spectral gap `δ` between the parts of the spectrum forces
+`δ · ‖sin Θ‖ ≤ ‖B − A‖` — in the operator norm, the Frobenius norm, and every unitarily
+invariant norm, with **constant one** under interval/exterior or ordered separation and the
+sharp constant **`π/2`** under arbitrary two-sided separation.
 
-The goal is to **build the reusable theory of these objects**, not to race to the
-named theorems.  The bar for "done": a researcher in operator theory or statistics
-finds Sylvester equations with solvability and a-priori estimates at every relevant
-generality (bounded and domain-aware, operator norm through arbitrary unitarily
-invariant norms, constant one and `π/2`), the `sin Θ` family as consequences of that
-developed theory, and the statistical variant stated the way its consumers use it.
-A PR that proves a headline theorem but leaves the surrounding objects without their
-basic API is not yet what we want.  This roadmap is the **endpoint of the
-six-roadmap operator-theory program**: it consumes all four of
-FiniteDimensionalOperators, MajorizationAndAngles, OperatorIdeals, and
-SpectralTheory (see *Dependency ordering*).  That transitive depth is the honest
-cost of submitting Davis–Kahan as reusable mathematics rather than as one paper's
-formalization — every object the theorems quantify over must exist first.
+The engine is the Sylvester equation `A X − X B = C`: spectral separation makes it uniquely
+solvable with an a-priori bound, and the `sin Θ` theorems are that bound read through
+projection geometry. Its qualitative limit is **Rosenblum's theorem** — an operator
+intertwining two self-adjoint operators with disjoint spectra is zero, in the unbounded case
+that matters. Its statistical variant, **Yu–Wang–Samworth**, moves the gap hypothesis from
+the perturbed spectrum to the unperturbed one, which is what a random sample covariance
+allows.
 
-Suggested homes (paper-facing correspondence material lives in a source-facing
-layer and does not dictate the generic namespaces; `Suggested.lean` gives
-representative prototype signatures — the markdown stays definitive):
+Mathlib has the static operator-theory stack but none of this layer: no operator angles, no
+Sylvester equations, no spectral-subspace perturbation theory, no statistical variant.
+
+The goal is to build the reusable theory of these objects, not to race to the named theorems.
+The bar for done: a researcher in operator theory or statistics finds Sylvester equations with
+solvability and a-priori estimates at every relevant generality — bounded and domain-aware,
+operator norm through arbitrary unitarily invariant norms, constant one and `π/2` — the
+`sin Θ` family as consequences of that developed theory, and the statistical variant stated
+the way its consumers use it.
+
+This roadmap is the **endpoint of the
+[Hilbert-space operator theory](../README.md) family**: it consumes all five of the others.
+That transitive depth is the honest cost of stating Davis–Kahan over objects that exist
+rather than over objects assumed — every norm, angle, ideal and spectral projection its
+theorems quantify over is built first.
+
+Suggested homes:
 
 ```text
 TauCeti/Analysis/Fourier/HaagerupZsido/
 TauCeti/Analysis/Operator/Sylvester/
 TauCeti/Analysis/Operator/Perturbation/
-TauCeti/Analysis/InnerProductSpace/OperatorAngle/   (shared with MajorizationAndAngles)
 ```
 
-## Generality bar (decide these up front; do not silently specialize)
+## Generality bar
 
-- **Scalar fields, rectangular shapes.**  Algebraic and finite statements over
-  `[RCLike 𝕜]`; complex-calculus results over `ℂ` with explicit real descent.  The
-  `π/2` bound holds verbatim over `ℝ` and `ℂ` — the real case a theorem (via the
-  doubled-phase certificate, Part B), not a remark.  Estimates run between two
-  different Hilbert spaces with independent universes; endomorphisms are diagonal.
-- **Unbounded statements are canonical.**  The domain-aware forms — the Sylvester
-  equation `SylvesterEquation A B X C` on `LinearPMap` with domain transport as
-  data, spectra via the SpectralTheory roadmap's `resolventSet` complement — are
-  primary; bounded operators enter through `T.toLinearMap.toPMap ⊤`, finite
-  dimension through restriction.  Bounded/finite theorems are *specializations*.
-- **Norms: one statement per family.**  State results for an arbitrary
-  (rectangular) unitarily invariant seminorm — subadditive, absolutely homogeneous,
-  two-sided unitarily invariant, definiteness deliberately unbundled — with
-  operator, Frobenius, Ky Fan, Schatten forms as instantiations.  Ky Fan prefixes
-  plus Fan dominance is the pinned lifting route.
-- **Gap predicates and angles stay distinct.**  Ordered (`λ + δ ≤ μ`),
-  interval/exterior (one spectrum in `[a,b]`, the other outside `(a−δ, b+δ)`), and
-  pairwise (`δ ≤ |λ − μ|`) separation carry constants one, one, `π/2`; none is
-  silently strengthened, and `tan 2Θ` needs *ordered* internal separation
-  (interlacing spectra satisfy pairwise separation while an off-diagonal
-  perturbation produces a quarter turn).  One interval/exterior gap controls the
-  directed sine `P_{V^⊥} ∘ P_U` in every unitarily invariant norm; the symmetric
-  sine `|P_U − P_V|` needs the gap in both orientations (Proposition 6.1); only the
-  operator norm erases the difference, under equal ranks.  Both angles are API.
-- **Rosenblum without a Borel functional calculus.**  Both Cayley spectra contain
-  `1` once both operators are unbounded, so no continuous symbol separates them —
-  but `1` is a **null point for every diagonal spectral measure**, so continuous
-  symbols damped at `1` separate in the limit and dominated convergence finishes.
-  A reviewer should check the null claim rather than the proof: if it failed, the
-  argument would be wrong, not merely different.
-- **The constant `π/2`, honestly.**  Part A's kernel *attains* `π/2`; that no
-  admissible kernel beats it is a literature citation, not a target, and module
-  documentation must say so.  What *is* proved in Lean: every **real, undoubled**
-  interpolation certificate for the two-by-two obstruction data has coefficient
-  mass at least `5/3 > π/2` — so the real-field `π/2` theorem goes through the
-  doubled-phase certificate, never a real kernel.
-- **Kernel conventions (Part A).**  The real kernel `ℝ → ℝ` and the complex kernel
-  `ℝ → ℂ` (`k = −i·k_ℝ`) **both stay**: mass and positivity use the real one, the
-  Fourier identity states cleanly with the complex one.  The Laplace transform
-  integrates over `Set.Ioi 0` (`integrableOn_Ici_iff_integrableOn_Ioi` bridges).
-  The Fourier identity is a bare integral against `exp(i t x)` — the form an
-  operator is substituted into — with an explicit bridge to the `2π`-normalized `𝓕`.
-- **Population gaps in the statistical variant.**  Part D's hypothesis is a gap in
-  the spectrum of **one** designated (population) operator, the perturbed block
-  selected by *corresponding ordered eigenvalue indices*, not an arbitrary reducing
-  subspace.  Pinned so nobody "simplifies" it back to a two-sided gap.
+Decide these up front; do not silently specialize.
 
-## What Mathlib already has (consume, and connect to)
+- **Scalar fields, rectangular shapes.** Algebraic and finite statements over `[RCLike 𝕜]`;
+  complex-calculus results over `ℂ` with explicit real descent. The `π/2` bound holds
+  verbatim over `ℝ` and `ℂ` — the real case is a theorem, via the doubled-phase certificate
+  of Part B, and not a remark. Estimates run between two different Hilbert spaces with
+  independent universes; endomorphisms are the diagonal case.
+- **Unbounded statements are canonical.** The domain-aware forms — the Sylvester equation on
+  `LinearPMap` with domain transport as data, spectra via the
+  [`SelfAdjointSpectralTheory`](../SelfAdjointSpectralTheory/README.md) roadmap's
+  `resolventSet` complement — are primary; bounded operators enter through
+  `T.toLinearMap.toPMap ⊤`, finite dimension through restriction. Bounded and finite theorems
+  are *specializations*, and Part C says how that is made true in the code rather than only
+  in the prose.
+- **Norms: one statement per family.** State results for an arbitrary (rectangular) unitarily
+  invariant seminorm — subadditive, absolutely homogeneous, two-sided unitarily invariant,
+  definiteness deliberately unbundled — with operator, Frobenius, Ky Fan and Schatten forms
+  as instantiations. Ky Fan prefixes plus Fan dominance is the pinned lifting route.
+- **Gap predicates and angles stay distinct.** Ordered separation (`λ + δ ≤ μ`),
+  interval/exterior separation (one spectrum in `[a,b]`, the other outside `(a−δ, b+δ)`), and
+  pairwise separation (`δ ≤ |λ − μ|`) carry constants one, one and `π/2`. None is silently
+  strengthened, and `tan 2Θ` needs *ordered* internal separation: interlacing spectra satisfy
+  pairwise separation while an off-diagonal perturbation produces a quarter turn. One
+  interval/exterior gap controls the directed sine `P_{Vᗮ} ∘ P_U` in every unitarily invariant
+  norm; the symmetric sine `|P_U − P_V|` needs the gap in both orientations; only the operator
+  norm erases the difference, and only under equal ranks. Both angles are public API.
+  The two primitive predicates — pairwise and ordered — are owned by
+  [`HilbertSpaceOperatorFoundations`](../HilbertSpaceOperatorFoundations/README.md); the
+  interval/exterior and two-block forms are application shapes and are defined here.
+- **Rosenblum without a Borel functional calculus.** Both Cayley spectra contain `1` once
+  both operators are unbounded, so no continuous symbol separates them — but `1` is a **null
+  point for every diagonal spectral measure**, so continuous symbols damped at `1` separate
+  in the limit and dominated convergence finishes. A reviewer should check the null claim
+  rather than the proof: if it failed, the argument would be wrong rather than merely
+  different.
+- **The constant `π/2`, honestly.** Part A's kernel *attains* `π/2`; that no admissible kernel
+  beats it is a literature citation, not a target here, and the module documentation must say
+  so. What *is* proved is a partial converse: every **real, undoubled** interpolation
+  certificate for the two-by-two obstruction data has coefficient mass at least `5/3 > π/2` —
+  so the real-field `π/2` theorem goes through the doubled-phase certificate and never a real
+  kernel.
+- **Kernel conventions.** The real kernel `ℝ → ℝ` and the complex kernel `ℝ → ℂ`
+  (`k = −i·k_ℝ`) both stay: mass and positivity use the real one, the Fourier identity states
+  cleanly with the complex one. The Laplace transform integrates over `Set.Ioi 0`. The
+  Fourier identity is a bare integral against `exp(i t x)` — the form an operator is
+  substituted into — with an explicit bridge to Mathlib's `2π`-normalized transform.
+- **Population gaps in the statistical variant.** Part D's hypothesis is a gap in the spectrum
+  of **one** designated (population) operator, with the perturbed block selected by
+  *corresponding ordered eigenvalue indices* rather than as an arbitrary reducing subspace.
+  Pinned so that nobody simplifies it back to a two-sided gap.
 
-- **For Part A:** `𝓕` with inversion (⚠ the `2π` convention), the Bochner integral,
-  `Integrable`, `ExpDecay`, Poisson summation, `Real.tanh`, `Analysis/PSeries`.
+## What Mathlib already has
+
+- **For Part A:** the Fourier transform with inversion (mind the `2π` convention), the Bochner
+  integral, `Integrable`, exponential decay, Poisson summation, `Real.tanh`, `Analysis/PSeries`.
 - **Operators and geometry:** `ContinuousLinearMap`, adjoints, `IsSelfAdjoint`,
-  `LinearMap.IsSymmetric`, `spectrum`, `cfcHom` of a star-normal element, Urysohn's
-  lemma; `LinearPMap` with `adjoint` and `IsSelfAdjoint`;
-  `Submodule.starProjection`, `OrthonormalBasis`,
-  `LinearMap.IsSymmetric.eigenvectorBasis`/`eigenvalues`, `Module.finrank`,
-  `WithLp 2 (E × F)`, `lp`.
-- The spectral predicates, norms, angle operators, Hilbert–Schmidt space, and
-  unbounded spectral theory come from the sibling roadmaps itemized under
-  *Dependency ordering*.  Before implementing, search Zulip and open Mathlib PRs
-  for newly landed overlap; follow what is in motion rather than duplicating it.
+  `LinearMap.IsSymmetric`, `spectrum`, `cfcHom` of a star-normal element, Urysohn's lemma;
+  `LinearPMap` with `adjoint` and `IsSelfAdjoint`; `Submodule.starProjection`,
+  `OrthonormalBasis`, `LinearMap.IsSymmetric.eigenvectorBasis` and `eigenvalues`,
+  `Module.finrank`, `WithLp 2 (E × F)`, `lp`.
 
-Everything below is absent upstream.  Four parts, in submission order:
+The spectral predicates, norms, angle operators, Hilbert–Schmidt space and unbounded spectral
+theory come from the sibling roadmaps itemized under *Dependency ordering*. Before
+implementing, search the Lean Zulip and the open Mathlib pull requests for newly landed
+overlap and follow what is in motion rather than duplicating it. Everything below is absent
+upstream.
 
 ## Part A — the Haagerup–Zsidó kernel and its Fourier transform
 
-**Topic T12 of the candidate design** — independently submittable, no prerequisites.
+Independently submittable; no prerequisites.
 
-This part exists for a constant, and says so.  There is an explicit integrable
-`k : ℝ → ℂ` whose Fourier integral reproduces the reciprocal on the whole exterior
-region `1 ≤ |x|`, and whose total mass is exactly `π/2`.  Any kernel with the first
-property yields, on substituting a separated pair of self-adjoint operators for `x`,
-a Sylvester solution bound with constant `‖k‖₁`; a kernel with the right transform
-and worse mass proves a weaker Part B, so both halves — identity and mass — are
-milestones.  The mathematics is due to Haagerup and Zsidó, specified intrinsically.
+This Part exists for a constant, and says so. There is an explicit integrable `k : ℝ → ℂ`
+whose Fourier integral reproduces the reciprocal on the whole exterior region `1 ≤ |x|`, and
+whose total mass is exactly `π/2`. Any kernel with the first property yields, on substituting
+a separated pair of self-adjoint operators for `x`, a Sylvester solution bound with constant
+`‖k‖₁`; a kernel with the right transform and worse mass proves a weaker Part B. So both
+halves — identity and mass — are milestones. The mathematics is due to Haagerup and Zsidó and
+is specified here intrinsically.
 
-**Objects.**  A four-definition chain: `weight y = tanh (π y / 2)`;
+**Objects.** A four-definition chain: `weight y = tanh (π y / 2)`;
 `weightLaplaceTransform t = ∫ y in Ioi 0, weight y · e^{−|t| y}`;
 `realKernel t = (sin t / 2) · weightLaplaceTransform t`;
-`reciprocalKernel t = −i · realKernel t` (the rotation lands the transform on `1/x`).
+`reciprocalKernel t = −i · realKernel t`, the rotation that lands the transform on `1/x`.
 
 **API to develop.**
-- Parity, nonnegativity of the weight and its transform, continuity, measurability;
-  the kernel is odd, so the two-sided identity follows from `1 ≤ x` by reflection.
-- The scalar integral layer, each piece independently reusable: the two-sided
-  exponential (oscillatory Laplace transform, its `𝓕`, `=o[cocompact ℝ]` decay); the
-  closed-form Laplace transform of `|sin|` by periodic decomposition; Poisson
-  summation against the Cauchy kernel and the odd-pole expansion
-  `weight y / y = (4/π) ∑' n, (y² + (2n+1)²)⁻¹`; elementary Cauchy-type integrals.
-- One **product-integrability certificate** on `Ioi 0 × ℝ` licensing both the
-  Tonelli exchange in the mass computation and the later Fourier exchange; the
-  generic lemmas (absolute-sine periodicity, even-function integrability via
-  `Ioi 0`) placed generically, so a reviewer can take them without the topic.
 
-**Milestone A1 — the exterior identity and the exact mass.**
+- Parity, nonnegativity of the weight and its transform, continuity, measurability; the kernel
+  is odd, so the two-sided identity follows from `1 ≤ x` by reflection.
+- The scalar integral layer, each piece independently reusable: the two-sided exponential
+  (oscillatory Laplace transform, its Fourier transform, decay at infinity); the closed-form
+  Laplace transform of `|sin|` by periodic decomposition; Poisson summation against the Cauchy
+  kernel and the odd-pole expansion `weight y / y = (4/π) ∑' n, (y² + (2n+1)²)⁻¹`; elementary
+  Cauchy-type integrals.
+- One **product-integrability certificate** on `Ioi 0 × ℝ` licensing both the Tonelli exchange
+  in the mass computation and the later Fourier exchange, with the generic lemmas placed
+  generically so a reviewer can take them without the topic.
 
-```lean
-theorem reciprocalKernel_fourier (x : ℝ) (hx : 1 ≤ |x|) :
-    (∫ t : ℝ, reciprocalKernel t *
-        Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I))) = 1 / (x : ℂ)
+**Milestone A1 — the exterior identity and the exact mass.** The Fourier integral of
+`reciprocalKernel` is `1/x` for `1 ≤ |x|`, and `∫ ‖reciprocalKernel‖ = π/2`.
 
-theorem integral_norm_reciprocalKernel :
-    (∫ t : ℝ, ‖reciprocalKernel t‖) = Real.pi / 2
-```
+The mass is not an estimate. Tonelli gives
+`½ ∫_{y>0} weight y · (∫ |sin t| e^{−y|t|} dt) dy`; the inner integral is closed-form, and its
+product with `tanh(π y/2)` collapses — **the weight is chosen to make that cancellation
+exact** — leaving `∫_{y>0} (1+y²)⁻¹ = π/2`. That is the one sentence a reader should take away
+about why `tanh(π y/2)` appears at all.
 
-The mass is not an estimate: Tonelli gives
-`½ ∫_{y>0} weight y · (∫ |sin t| e^{−y|t|} dt) dy`, the inner integral is
-closed-form, and its product with `tanh(π y/2)` collapses — **the weight is chosen
-to make that cancellation exact** — leaving `∫_{y>0} (1+y²)⁻¹ = π/2`.  That is the
-one sentence a reader should take away about why `tanh(π y/2)` appears at all.
+**Milestone A2 — the normalization bridge** to Mathlib's Fourier transform, so users mixing
+the two conventions have a lemma rather than a warning.
 
-**Milestone A2 — the normalization bridge** to Mathlib's `𝓕` (per the generality
-bar), so users mixing the two conventions have a lemma, not a warning.
-**Acceptance examples**: the identity at a concrete `x`; the mass bounding one
-concrete convolution; documentation stating `π/2` is attained and minimality
-cited, not proved (the Lean-proved obstruction is Part B's `5/3`).
+**Acceptance examples.** The identity at a concrete `x`; the mass bounding one concrete
+convolution; documentation stating that `π/2` is attained and that minimality is cited rather
+than proved, the Lean-proved obstruction being Part B's `5/3`.
 
 ## Part B — Sylvester equations and the Rosenblum theorem
 
-**Topic T16 of the candidate design** — the hinge: consumes Part A and all four
-external roadmaps; Part C consumes it.
+The hinge: it consumes Part A and all four external roadmaps, and Part C consumes it.
 
-The headline is qualitative — an operator intertwining two self-adjoint operators
-with **disjoint** spectra is zero, `A` and `B` unbounded.  The quantitative
-companions — a-priori bounds on `‖X‖` when the spectra are **separated** by `δ` —
-are what Part C actually consumes.
+The headline is qualitative — an operator intertwining two self-adjoint operators with
+**disjoint** spectra is zero, with `A` and `B` unbounded. The quantitative companions — a-priori
+bounds on `‖X‖` when the spectra are **separated** by `δ` — are what Part C actually consumes.
 
-**Objects.**  The Sylvester operator `X ↦ A X − X B` on rectangular maps; the gap
-taxonomy of the generality bar; the domain-aware `SylvesterEquation` on `LinearPMap`
-(consumed from SpectralTheory, which owns the transport statement and excludes the
-estimates to here); the **Sylvester flow** `W t Z = U_A(t) ∘ Z ∘ U_B(t)⋆` on the
-Hilbert–Schmidt space.
+**Objects.** The Sylvester operator `X ↦ A X − X B` on rectangular maps; the gap taxonomy of
+the generality bar; the domain-aware Sylvester equation on `LinearPMap`, consumed from
+`SelfAdjointSpectralTheory`, which owns the transport statement and excludes the estimates to
+here; and the **Sylvester flow** `W t Z = U_A(t) ∘ Z ∘ U_B(t)⋆` on the Hilbert–Schmidt space.
 
 **API to develop.**
-- Finite core: injectivity under positive separation, the canonical eigenbasis
-  solution, the coordinate equation `(αᵢ − βⱼ) Xᵢⱼ = Cᵢⱼ`.
-- **Dimension-free operator-norm bounds**, integral-free, on arbitrary Hilbert
-  spaces, both orientations `A X ± X B = Y`: the coercive (Lyapunov) form
-  `‖X‖ ≤ ‖Y‖ / (2δ)` and the separated form `‖X‖ ≤ ‖Y‖ / g`, by shifting both
-  operators to the midpoint and solving for `‖X‖`; the operator-level Lax–Milgram
-  lemma making a coercive operator a unit.
-- **Interval/exterior separation, constant one, every rectangular unitarily
-  invariant norm**: polar absorption (shift the interval to its midpoint, replace
-  the exterior operator by its modulus, absorb the polar partial isometry into the
-  unknown), reverse orientation by adjoint transport.
-- **Pairwise separation, constant `π/2`**: the analytic root is a *simultaneous
-  Ky Fan prefix estimate* — one finite family of left/right unitaries realizing the
-  reciprocal multiplier on every coordinate matrix unit at once with mass at most
-  `π/2`, by finite Fourier interpolation against Part A's kernel (the `π/2` is
-  Part A's mass, not an unspecified constant); Fan dominance lifts it to every
-  unitarily invariant norm, orbit convexity packages the scaled solution as a
-  barycenter of the defect's unitary orbit, and the **Frobenius norm loses
-  nothing** (constant one, dividing the coordinate equation and summing squares).
-  The interpolation layer is internal, not public surface.
-- **The flow route to the unbounded theory**: the flow is a one-parameter unitary
-  group on the Hilbert–Schmidt space — unitarity from the OperatorIdeals
-  conjugation; strong continuity is the analytic content (the columns must go to
-  zero *together*; the energy split is carried in `ℝ≥0∞` so no finiteness side
-  conditions appear).  Stone's theorem hands back a self-adjoint generator,
-  **identified** — not defined, or nothing about Sylvester equations would be
-  proved — as `Z ↦ A Z − Z B`, domain membership a conclusion; separated spectra
-  force a generator gap at every Hilbert–Schmidt vector.  Unbounded endpoints
-  across a pairwise gap `δ`: `δ · ‖X‖₂ ≤ ‖C‖₂` (constant one) and
+
+- Finite core: injectivity under positive separation, the canonical eigenbasis solution, the
+  coordinate equation `(αᵢ − βⱼ) Xᵢⱼ = Cᵢⱼ`.
+- **Dimension-free operator-norm bounds**, integral-free, on arbitrary Hilbert spaces, in both
+  orientations `A X ± X B = Y`: the coercive (Lyapunov) form `‖X‖ ≤ ‖Y‖ / (2δ)` and the
+  separated form `‖X‖ ≤ ‖Y‖ / g`, by shifting both operators to the midpoint and solving for
+  `‖X‖`; the operator-level Lax–Milgram lemma making a coercive operator a unit.
+- **Interval/exterior separation, constant one, every rectangular unitarily invariant norm**:
+  polar absorption — shift the interval to its midpoint, replace the exterior operator by its
+  modulus, absorb the polar partial isometry into the unknown — with the reverse orientation
+  by adjoint transport.
+- **Pairwise separation, constant `π/2`**: the analytic root is a *simultaneous Ky Fan prefix
+  estimate* — one finite family of left and right unitaries realizing the reciprocal
+  multiplier on every coordinate matrix unit at once, with mass at most `π/2`, by finite
+  Fourier interpolation against Part A's kernel. The `π/2` is Part A's mass, not an
+  unspecified constant. Fan dominance lifts the estimate to every unitarily invariant norm,
+  orbit convexity packages the scaled solution as a barycenter of the defect's unitary orbit,
+  and the **Frobenius norm loses nothing** — constant one, by dividing the coordinate equation
+  and summing squares. The interpolation layer is internal, not public surface.
+- **The flow route to the unbounded theory**: the flow is a one-parameter unitary group on the
+  Hilbert–Schmidt space — unitarity from the `OperatorIdeals` conjugation theorem; strong
+  continuity is the analytic content, since the columns must go to zero *together*, and the
+  energy split is carried in `ℝ≥0∞` so no finiteness side conditions appear. Stone's theorem
+  hands back a self-adjoint generator, **identified** — not defined, or nothing about
+  Sylvester equations would be proved — as `Z ↦ A Z − Z B`, with domain membership a
+  conclusion; separated spectra force a generator gap at every Hilbert–Schmidt vector.
+  Unbounded endpoints across a pairwise gap `δ`: `δ · ‖X‖₂ ≤ ‖C‖₂` with constant one, and
   `δ · ‖X‖ ≤ (π/2) · ‖C‖` for bounded solutions of the domain-aware equation.
 
-**Milestone B1 — the a-priori bounds.**
+**Milestone B1 — the a-priori bounds**: the dimension-free coercive bound, the
+interval/exterior bound with constant one in every rectangular unitarily invariant norm, and
+the pairwise bound with `π/2`.
 
-```lean
-theorem opNorm_le_div_of_comp_sub_comp_eq
-    (hA : (A : E →ₗ[𝕜] E).IsSymmetric) (hB : (B : F →ₗ[𝕜] F).IsSymmetric)
-    {c g : ℝ} (hg : 0 < g)
-    (hAc : ∀ x, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
-    (hBc : ∀ v, RCLike.re ⟪B v, v⟫_𝕜 ≤ c * ‖v‖ ^ 2)
-    (hXY : A ∘L X - X ∘L B = Y) : ‖X‖ ≤ ‖Y‖ / g
+**Milestone B2 — Rosenblum's theorem** for self-adjoint `LinearPMap`s: a bounded operator
+intertwining two of them with disjoint spectra is zero.
 
-theorem uiNorm_sylvester_le_of_spectralDistance
-    (N : RectangularUnitarilyInvariantNorm 𝕜 E F) … (hδ : 0 < δ)
-    (hgap : SpectraSeparated A ⊤ B ⊤ δ) (hEq : A ∘ₗ X - X ∘ₗ B = C) :
-    δ * N X ≤ (Real.pi / 2) * N C
-```
-
-**Milestone B2 — Rosenblum's theorem** (`A`, `B` self-adjoint `LinearPMap`s):
-
-```lean
-theorem eq_zero_of_intertwines_of_disjoint_spectrum
-    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B) {X : F →L[ℂ] E}
-    (hmaps : ∀ y : B.domain, X (y : F) ∈ A.domain)
-    (hint : ∀ y : B.domain, A ⟨X (y : F), hmaps y⟩ = X (B y))
-    (hdisj : Disjoint (spectrum A) (spectrum B)) : X = 0
-```
-
-**Acceptance examples.**  The two-by-two obstruction data (`α = (−1,1)`, `β = (0,2)`,
-gap one) is admissible yet forces mass `≥ 5/3` on every real undoubled certificate;
-a bounded pair as total partial maps recovers bounded uniqueness; the coercive bound
-on a concrete multiplication pair.
+**Acceptance examples.** The two-by-two obstruction data (`α = (−1,1)`, `β = (0,2)`, gap one)
+is admissible yet forces mass `≥ 5/3` on every real undoubled certificate; a bounded pair as
+total partial maps recovers bounded uniqueness; the coercive bound on a concrete
+multiplication pair.
 
 ## Part C — the Davis–Kahan sin Θ theorems
 
-**Topic T17 of the candidate design** — consumes Part B; the acceptance suite is
-Davis–Kahan Part III.
+Consumes Part B; the acceptance suite is Davis–Kahan Part III.
 
-The `sin Θ` family is Part B read through projection geometry.  Two statement
-shapes, both API: the **residual** form (the numerical analyst's — an approximate
-invariant subspace with residual `R = A X − X M` is tilted by at most `‖R‖/δ`) and
-the **perturbation** form (the operator theorist's — invariant subspaces of `A` and
-`B` are tilted by at most `‖B − A‖/δ`), each for every relevant unitarily invariant
-norm, with the interval, spectral-projector, and concrete-norm corollaries.
+The `sin Θ` family is Part B read through projection geometry. Two statement shapes, both
+public API: the **residual** form — the numerical analyst's, where an approximate invariant
+subspace with residual `R = A X − X M` is tilted by at most `‖R‖/δ` — and the
+**perturbation** form — the operator theorist's, where invariant subspaces of `A` and `B` are
+tilted by at most `‖B − A‖/δ` — each for every relevant unitarily invariant norm, with the
+interval, spectral-projector and concrete-norm corollaries.
 
-**Objects.**  Consumed from MajorizationAndAngles: `sinThetaMap U V = P_{V^⊥} ∘ P_U`,
-the symmetric sine `|P_U − P_V|`, principal angles.  Built here: the trial-map layer
-— the compression `X⋆ A X` along a trial map (isometric or not), its residual, the
-Ritz residual (Rayleigh–Ritz makes it Frobenius-minimal), sine and cosine embeddings
-with their singular-value identifications; reduced extensions (a block operator
-extended by a scalar on the complement — the device turning spectral hypotheses into
-coercivity); graph subspaces, projection and gap formulas, angular operators.
+**Objects.** Consumed from `MajorizationAndAngles`: `sinThetaMap U V = P_{Vᗮ} ∘ P_U`, the
+symmetric sine `|P_U − P_V|`, and the principal angles. Built here: the trial-map layer — the
+compression `X⋆ A X` along a trial map, isometric or not, its residual, the Ritz residual
+(Rayleigh–Ritz makes it Frobenius-minimal), and the sine and cosine embeddings with their
+singular-value identifications; reduced extensions, a block operator extended by a scalar on
+the complement, which is the device that turns spectral hypotheses into coercivity; and graph
+subspaces with their projection and gap formulas and angular operators.
 
 **API to develop.**
-- **Dimension-free first.**  On arbitrary Hilbert spaces, from B1 alone: the directed
-  bound `‖P_V ∘ P_U‖ ≤ ‖B − A‖ / g` for invariant subspaces with quadratic-form
-  separation, and its projector-difference companions.
-- **Finite spectral forms.**  Spectral coercivity bridges convert eigenvalue
-  hypotheses into form bounds, giving: the residual theorem in every rectangular
-  unitarily invariant norm; the perturbation theorem in every square one (transport
-  across the subspace's isometric inclusion); canonical spectral-subspace and
-  spectral-projector statements with no eigenbasis in the API; the equal-rank bridge
-  `‖P_U − P_V‖ = ‖sinThetaMap U V‖`; Frobenius and Ky Fan corollaries; the `π/2`
-  two-sided form; the symmetric sharp theorem under the two-orientation gap.
-- **Double-angle and tangent theory.**  Davis's `sin 2θ` in per-eigenvector product
-  and angle forms; the one-sided `sin 2Θ` map `2 P_{U^⊥} P_V P_U` in unitarily
-  invariant norms; tangent estimates on the acute branch from Ritz residuals
-  (equal-rank and lower-rank); the sharp `tan 2θ` with vanishing-pinch (off-diagonal)
-  hypotheses and the quarter-turn conclusion, under *ordered* internal separation.
-- **Domain-aware forms.**  The unbounded `sin Θ` surface over SpectralTheory's
-  closed-operator layer: residual identities extended from a graph core to the full
-  domain; common-domain and common-core variants; bounded-residual and lower-frame
-  formulations; interval/exterior and pairwise-gap forms in the supported unitarily
-  invariant norms, the Hilbert–Schmidt case through Part B's flow; the bounded and
-  finite theorems as specializations.
-- **Graph subspaces and Riccati.**  The graph-reduction/Riccati equivalence (a graph
-  subspace is invariant iff its angular operator solves the Riccati equation);
-  existence, bounds, and uniqueness for contractive solutions under the gaps above.
 
-**Milestone C1 — the perturbation family** (with the canonical spectral-projector
-corollary `δ · ‖P_{spec A [a,b]} − P_{spec B [a,b]}‖ ≤ ‖B − A‖` under equal ranks):
+- **Dimension-free first.** On arbitrary Hilbert spaces, from Milestone B1 alone: the directed
+  bound `‖P_V ∘ P_U‖ ≤ ‖B − A‖ / g` for invariant subspaces with quadratic-form separation,
+  and its projector-difference companions.
+- **Finite spectral forms.** Spectral coercivity bridges convert eigenvalue hypotheses into
+  form bounds, giving the residual theorem in every rectangular unitarily invariant norm; the
+  perturbation theorem in every square one, by transport across the subspace's isometric
+  inclusion; canonical spectral-subspace and spectral-projector statements with no eigenbasis
+  in the API; the equal-rank bridge `‖P_U − P_V‖ = ‖sinThetaMap U V‖`; the Frobenius and Ky
+  Fan corollaries; the `π/2` two-sided form; and the symmetric sharp theorem under the
+  two-orientation gap.
+- **Double-angle and tangent theory.** Davis's `sin 2θ` in per-eigenvector product and angle
+  forms; the one-sided `sin 2Θ` map `2 P_{Uᗮ} P_V P_U` in unitarily invariant norms; tangent
+  estimates on the acute branch from Ritz residuals, equal-rank and lower-rank; and the sharp
+  `tan 2θ` with vanishing-pinch hypotheses and the quarter-turn conclusion, under *ordered*
+  internal separation.
+- **Domain-aware forms.** The unbounded `sin Θ` surface over the closed-operator layer:
+  residual identities extended from a graph core to the full domain; common-domain and
+  common-core variants; bounded-residual and lower-frame formulations; interval/exterior and
+  pairwise-gap forms in the supported unitarily invariant norms, with the Hilbert–Schmidt case
+  through Part B's flow; and the bounded and finite theorems as specializations.
+- **Graph subspaces and Riccati.** The graph-reduction/Riccati equivalence — a graph subspace
+  is invariant iff its angular operator solves the Riccati equation — with existence, bounds
+  and uniqueness for contractive solutions under the gaps above.
 
-```lean
-theorem sinTheta_perturbation_le
-    (N : UnitarilyInvariantNorm 𝕜 E)
-    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    (hU : ∀ x ∈ U, A x ∈ U) (hV : ∀ x ∈ V, B x ∈ V)
-    {a b δ : ℝ} (hδ : 0 < δ)
-    (hAin : SpectrumIn A U (Set.Icc a b))
-    (hBout : SpectrumIn B Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
-    δ * N (sinThetaMap U V) ≤ N (B - A)
-```
+**Milestone C1 — the perturbation family**, with the canonical spectral-projector corollary
+`δ · ‖P_{spec A [a,b]} − P_{spec B [a,b]}‖ ≤ ‖B − A‖` under equal ranks.
 
-**Milestone C2 — the two-sided `π/2` form**: under `SpectraSeparated A U B Vᗮ δ`
-alone, `δ * N (sinThetaMap U V) ≤ (π/2) * N (B − A)`.
+**Milestone C2 — the two-sided `π/2` form**: under pairwise separation of the selected
+`A`-spectrum from the complementary `B`-spectrum alone,
+`δ · N (sinThetaMap U V) ≤ (π/2) · N (B − A)` for every unitarily invariant `N`.
 
 ### Milestone C3 — the domain-aware `sin Θ` theorem
 
-**This is the roadmap's headline, and it is the one milestone whose statement a reader
-cannot reconstruct from the milestones around it.**  Everything above is a bounded or
-finite statement; the generality bar says the unbounded form is *canonical* and those are
-its specializations, so the canonical statement has to be written out rather than referred
-to.
+**This is the roadmap's headline, and the one milestone whose statement a reader cannot
+reconstruct from the milestones around it.** Everything above is bounded or finite; the
+generality bar says the unbounded form is canonical and those are its specializations, so the
+canonical statement has to be written out.
 
-**Objects.**  All from sibling roadmaps except the last two:
+**Data.** All from sibling roadmaps except the last two:
 
-- a self-adjoint `A : E →ₗ.[ℂ] E` on a `LinearPMap` (SpectralTheory roadmap), possibly
-  unbounded, with its spectrum via `resolventSet`;
-- a **trial map** `X : H →L[ℂ] E` with a **lower frame bound** `c > 0`
-  (`∀ h, c * ‖h‖ ≤ ‖X h‖`) — not required to be isometric, which is what makes the
-  statement *generalized* in the source's sense and what the Ritz layer of Part C needs;
-- a self-adjoint **trial block** `A₀` and a self-adjoint **complementary block** `Λ₁`,
-  together with an **orthogonal exact decomposition** identifying the complement as the
-  range of an exact map — the data that replaces "`V` is an invariant subspace" once no
-  spectral projection is available;
-- the **residual** `R`, a *bounded* operator even though `A` is not: the domain-aware
-  content is that `A X − X A₀` extends from a graph core to a bounded operator on all of
-  `H`, and the hypothesis is bounded-residual, never bounded-`A`;
-- the **norm**: a Ky Fan dominant symmetric ideal family `N` from the **OperatorIdeals**
-  roadmap (Part B), *not* a unitarily invariant norm on a finite-dimensional space.  This
-  is the load-bearing import: at this generality the norm must be a total `ℝ≥0∞` gauge
-  whose finiteness is a hypothesis on the residual and a *conclusion* about `sin Θ`;
-- the **gap**: a form-bounded Sylvester separation `g > 0` between `A₀` and `Λ₁`, in the
-  interval/exterior, ordered, or pairwise form of the generality bar, carrying constants
-  `1`, `1` and `π/2` respectively.
+- a self-adjoint `A : E →ₗ.[ℂ] E`, possibly unbounded, with its spectrum via `resolventSet`;
+- a **trial map** `X : H →L[ℂ] E` with a **lower frame bound** `c > 0` (`c‖h‖ ≤ ‖X h‖`), not
+  required to be isometric — which is what makes the statement *generalized* and what the
+  Ritz layer needs;
+- a self-adjoint **trial block** `A₀` on `H`, with `X` transporting `dom A₀` into `dom A`;
+- a self-adjoint **complementary block** `Λ` on `K` together with an **isometric embedding**
+  `Y : K →L[ℂ] E` whose range is *exactly* invariant: `A ∘ Y = Y ∘ Λ` on `dom Λ`. This is what
+  replaces "`V` is an invariant subspace" once no spectral projection is available, and
+  without it there is nothing for the sine operator to be an angle *to*;
+- the **residual** `R : H →L[ℂ] E`, a bounded operator even though `A` is not: the
+  domain-aware content is that `A X − X A₀` extends from a graph core to a bounded operator on
+  all of `H`, and the hypothesis is bounded-residual, never bounded-`A`;
+- the **gap** `g > 0`, a spectral separation between `A₀` and `Λ` in one of the three forms of
+  the generality bar, carrying constants `1`, `1` and `π/2` respectively.
 
-**Statement.**  Under those hypotheses, with `Θ` the directed sine operator built from `X`
-and the exact map:
+**The directed sine operator is constructed from that data**, not supplied: it is
+`sin Θ = Y⋆ ∘ X : H →L[ℂ] K`, the component of the trial map along the complementary range,
+read in the complementary coordinates. Constructing it is the whole point — a statement
+quantified over an arbitrary operator called `sin Θ` says nothing, because both sides scale
+independently.
 
-```text
-sin Θ ∈ N     and     g · c · N(sin Θ)  ≤  N(R).
-```
+**Statement.** `g · ‖sin Θ‖ ≤ ‖R‖` under ordered or interval/exterior separation, and
+`g · ‖sin Θ‖ ≤ (π/2) · ‖R‖` under pairwise separation. The mechanism is that the residual
+identity and the exact invariance of the complementary range make `Y⋆ X` solve the Sylvester
+equation `Λ S − S A₀ = Y⋆ R`, to which Milestone B1 applies; `Y⋆` is a contraction, so the
+right-hand side is bounded by `‖R‖`. Dividing by `‖X h‖` and using the frame bound turns the
+operator statement into the subspace one, `g · c · ‖sin Θ h‖ ≤ ‖R‖ · ‖X h‖`, where the
+left-hand side is the sine of the angle between the trial vector and the orthogonal complement
+of the complementary range, and `c = 1` recovers the classical form.
 
-**Two features of the conclusion are easy to miss and are the reason it is stated as a
-conjunction.**  First, *membership is part of the theorem*: the residual is assumed to lie
-in the ideal and the sine operator is *proved* to, which is exactly the content a bounded
-statement cannot express because there every operator is in every ideal's carrier or the
-carrier is `⊤`.  Second, the lower frame constant `c` multiplies the gap, so the bound
-degrades as the trial map degenerates — with `c = 1` for an isometric trial map, recovering
-the classical form.
+**Hypotheses are bundled as a record, deliberately.** A flat theorem takes upwards of a dozen
+arguments with non-obvious mutual constraints, and every specialization repeats all of them.
+Bundling them makes each specialization a *constructor* — bounded operators build the record
+with `A.toLinearMap.toPMap ⊤` and a trivial domain transport, and finite dimension adds
+`FiniteDimensional` and reads the blocks off an eigenbasis — so specializations are proved by
+supplying data rather than by re-proving the estimate. **This is the decision that makes
+"bounded and finite are specializations" true in the code rather than only in the prose**, and
+it is why the roadmap can carry one theorem where the literature carries a family.
 
-**Hypotheses are bundled as a record, deliberately.**  A flat theorem here takes upwards of
-a dozen arguments with non-obvious mutual constraints, and every specialization repeats all
-of them.  Bundling them (`UnboundedSinThetaProblem`) makes each specialization a
-*constructor* — bounded operators build the record with `A.toLinearMap.toPMap ⊤` and a
-trivial domain transport, finite dimension adds `FiniteDimensional` and reads the blocks
-off an eigenbasis — so the specializations are proved by supplying data, not by re-proving
-the estimate.  **This is the decision that makes "bounded and finite are specializations"
-true in the code rather than only in the prose**, and it is why the roadmap can carry one
-theorem where the literature carries a family.
+**The ideal-gauge form.** At this generality the natural norm is not a unitarily invariant norm
+on a finite-dimensional space but a Ky Fan dominant symmetric ideal gauge from
+[`OperatorIdeals`](../OperatorIdeals/README.md): a total `ℝ≥0∞` gauge whose finiteness is a
+*hypothesis* on the residual and a *conclusion* about `sin Θ`. In that form the conclusion is
+a conjunction — `sin Θ ∈ N` and `g · c · N(sin Θ) ≤ N(R)` — and the membership half is content
+a bounded statement cannot express, because there every operator lies in every carrier or the
+carrier is `⊤`. The two roadmaps must agree that the dominant class quantified over here is the
+class `OperatorIdeals` constructs from a symmetric gauge, **or this theorem quantifies over a
+class no other roadmap builds**; that reconciliation is the real dependency between them, and
+it is why C3 cannot land before `OperatorIdeals` Part B.
 
-**Status, stated precisely.**  The mathematics is **settled and machine-checked**, for both
-complex and real scalars, in the source-facing Davis–Kahan development this roadmap draws
-on: the complete Section 6 surface — the isometric theorem, the generalized lower-frame
-theorem, both directional gaps, the pairwise-gap square-norm theorem, common-domain and
-graph-core forms, real descent by complexification, and the sharpness and
-arbitrary-multiplicity equality models.  What is **open in this roadmap** is therefore not
-the proof:
+**Acceptance.** A reviewer should be able to check, without reading a proof: that no hypothesis
+says `A` is bounded; that boundedness of the residual is a hypothesis and the bound on the
+sine operator is a conclusion; that the sine operator is built from the data rather than
+quantified over; that instantiating the record with a bounded self-adjoint `A` and an isometric
+trial map yields Milestone C1 by construction; and that `π/2` appears only under pairwise
+separation, the other two gap forms carrying constant one.
 
-1. **Intrinsic restatement.**  The staged statements carry paper numbering and
-   paper-flavored names.  A Tau Ceti submission states the theorem in terms of the objects
-   above, with the source correspondence confined to a downstream wrapper — the editing
-   rule this repository's roadmaps are held to.
-2. **Norm-side reconciliation.**  The staged form quantifies over a Ky Fan dominant ideal
-   family; the OperatorIdeals roadmap now specifies that class as arising from a symmetric
-   gauge (its Milestones B1–B2).  The two must be the same object, or this theorem
-   quantifies over a class no other roadmap constructs.  **That reconciliation is the real
-   dependency between the two roadmaps, and it is why C3 cannot ship before OperatorIdeals
-   Part B.**
-3. **The specialization theorems as such.**  Bounded and finite forms exist and are proved;
-   what is missing is that they be *derived* from this record rather than proved beside it,
-   which is the claim the generality bar makes.
-4. **Real scalars without complexification bookkeeping.**  Real descent is proved by
-   complexification; the statement a reviewer would want is over `[RCLike 𝕜]` with the
-   descent internal.
-
-**Acceptance.**  A reviewer should be able to check, without reading the proof: that no
-hypothesis says `A` is bounded; that the residual's boundedness is a hypothesis and the
-sine operator's ideal membership is a conclusion; that instantiating the record with a
-bounded self-adjoint `A` and an isometric trial map yields Milestone C1 *by construction*;
-and that the `π/2` constant appears only under pairwise separation, the other two gap forms
-carrying constant one.
-
-**Acceptance suite — Davis–Kahan Part III.**  A source-facing layer recording the
-correspondence between the paper's statements and the reusable declarations, in real
-and complex forms: the generalized (trial-map) and ordinary `sin Θ` theorems;
-equal-rank and lower-rank Ritz-residual `tan Θ`; `sin 2Θ` in unitarily invariant
-norms; the sharp operator-norm `tan 2Θ` with the quarter-turn conclusion; the
-projector-difference companions; the paper's printed counterexample and sharpness
-statements; equality models of arbitrary finite multiplicity; explicit statements of
-what is *not* claimed.  Cross-checks between projection, singular-value,
-column-energy, and tensor formulations on small matrix models complete it.
+**Acceptance suite — Davis–Kahan Part III.** A source-facing layer recording the correspondence
+between the paper's statements and the reusable declarations, in real and complex forms: the
+generalized and ordinary `sin Θ` theorems; equal-rank and lower-rank Ritz-residual `tan Θ`;
+`sin 2Θ` in unitarily invariant norms; the sharp operator-norm `tan 2Θ` with the quarter-turn
+conclusion; the projector-difference companions; the paper's printed counterexample and
+sharpness statements; equality models of arbitrary finite multiplicity; and explicit statements
+of what is *not* claimed. Cross-checks between projection, singular-value, column-energy and
+tensor formulations on small matrix models complete it.
 
 ## Part D — the Yu–Wang–Samworth statistical variant
 
-**Topic T18 of the candidate design** — consumes Part C; a leaf.
+Consumes Part C; a leaf.
 
-Davis–Kahan hypothesizes a gap in the spectrum of one of the two operators — in
-practice the perturbed one.  That is the wrong shape for statistics: the perturbed
-operator is a *sample* covariance and its spectrum is random; what one can assume is
-a gap in the **population** spectrum.  Yu–Wang–Samworth is the variant stated that
-way — the one thing a reader coming from Part C will not expect — and the substance
-of this part is exactly that hypothesis change.  Its probabilistic inputs live in
-the MatrixStatistics roadmap; this part is the deterministic inequality they
-compose with.
+Davis–Kahan hypothesizes a gap in the spectrum of one of the two operators — in practice the
+perturbed one. That is the wrong shape for statistics: the perturbed operator is a *sample*
+covariance and its spectrum is random; what one can assume is a gap in the **population**
+spectrum. Yu–Wang–Samworth is the variant stated that way, and that hypothesis change is the
+substance of this Part. Its probabilistic inputs live in
+[`MatrixSpectralStatistics`](../MatrixSpectralStatistics/README.md); this Part is the
+deterministic inequality they compose with.
 
-**Objects.**  `PopulationGap A U Δ` (the population operator's internal gap across
-the selected block); `CorrespondingEigenblock` (blocks of the two operators selected
-by the *same ordered eigenvalue indices*); the Frobenius sine distance
-`sinThetaFrobenius U V`; the residual columns `(S − λⱼ(T)) uⱼ(S)` in the population
-eigenbasis; for rectangular data, left and right singular subspaces via the Gram
-operators and the Hermitian dilation `[[0, A⋆], [A, 0]]` on `WithLp 2 (E × F)`.
+**Objects.** `PopulationGap A U Δ`, the population operator's internal gap across the selected
+block; `CorrespondingEigenblock`, blocks of the two operators selected by the *same ordered
+eigenvalue indices*; the Frobenius sine distance; the residual columns
+`(S − λⱼ(T)) uⱼ(S)` in the population eigenbasis; and, for rectangular data, left and right
+singular subspaces via the Gram operators and the Hermitian dilation `[[0, A⋆], [A, 0]]`.
 
 **API to develop.**
-- The **complement identity**: the Frobenius sine of two equally indexed eigenblocks
-  equals the square root of the cross-block overlap sum
-  (`‖V₁ᵀ V̂‖_F = ‖sin Θ(V̂, V)‖_F`).  Every bound of the paper is proved as
-  cross-block energy and read back as an angle; this bridge is public API.
-- The **residual sandwich**, for an **arbitrary index block** (leading-only would
-  not cover the interval case): `Δ² · overlap ≤ ∑ⱼ ‖Rⱼ‖²` from the population gap
-  below, `∑ⱼ ‖Rⱼ‖² ≤ 4 ‖S − T‖²_F` above (each column splits into a perturbation
-  piece and a Hoffman–Wielandt eigenvalue piece); the operator-norm branch
+
+- The **complement identity**: the Frobenius sine of two equally indexed eigenblocks equals the
+  square root of the cross-block overlap sum. Every bound of the paper is proved as cross-block
+  energy and read back as an angle, so this bridge is public API rather than an internal step.
+- The **residual sandwich**, for an **arbitrary index block** — leading-only would not cover the
+  interval case: `Δ² · overlap ≤ ∑ⱼ ‖Rⱼ‖²` from the population gap below, and
+  `∑ⱼ ‖Rⱼ‖² ≤ 4 ‖S − T‖²_F` above, each column splitting into a perturbation piece and a
+  Hoffman–Wielandt eigenvalue piece; with the operator-norm branch
   `∑_{j∈s} ‖Rⱼ‖² ≤ 4 |s| ε²` via Weyl.
-- The **aligned-basis (Procrustes) surface**: orthonormal bases of the two blocks
-  with `√(∑ ‖vᵢ − uᵢ‖²) ≤ √2 · ‖sin Θ‖_F` — the usable form when eigenbases are
-  determined only up to rotation, i.e. in every application.
-- The **singular-subspace transfer**: the symmetric theorem applied to `A⋆A` and
-  `A A⋆`, the Gram perturbation bounded by `(‖Â‖ + ‖A‖) · ‖Â − A‖`, the
-  Hermitian-dilation form controlling both sides at once (its arbitrary-set gap
-  supports `π/2`, not constant one).
+- The **aligned-basis (Procrustes) surface**: orthonormal bases of the two blocks with
+  `√(∑ ‖vᵢ − uᵢ‖²) ≤ √2 · ‖sin Θ‖_F` — the usable form when eigenbases are determined only up
+  to rotation, which is every application.
+- The **singular-subspace transfer**: the symmetric theorem applied to `A⋆A` and `A A⋆`, the
+  Gram perturbation bounded by `(‖Â‖ + ‖A‖) · ‖Â − A‖`, and the Hermitian-dilation form
+  controlling both sides at once — whose arbitrary-set gap supports `π/2`, not constant one.
 
-**Milestone D1 — the population-gap theorem and its single-vector form.**
+**Milestone D1 — the population-gap theorem and its single-vector form**, the latter being the
+sign-aligned eigenvector corollary that statisticians quote.
 
-```lean
-theorem yuWangSamworth_sinTheta_le … (hcorr : CorrespondingEigenblock hA hB U V)
-    (hrank : finrank 𝕜 U = d) {Δ : ℝ} (hΔ : 0 < Δ) (hgap : PopulationGap A U Δ) :
-    sinThetaFrobenius U V ≤
-      2 * min (Real.sqrt d * ‖B - A‖) (frobeniusNorm (B - A)) / Δ
-
-theorem yuWangSamworth_eigenvector_le … :
-    ∃ c : 𝕜, ‖c‖ = 1 ∧ ‖c • v - u‖ ≤ 2 * Real.sqrt 2 * ‖B - A‖ / Δ
-```
-
-**Acceptance examples.**  A spiked model where the sample gap closes but the
-population gap does not; consistency — when a two-sided gap does hold, Part C's
-constant-one bound is stronger; a non-square matrix through the Gram route.  Cite
-and cross-check, never vendor, the related endpoints in
-`YuanheZ/lean-stat-learning-theory` and `facebookresearch/atlas-lean` (the latter
-statement comparison only; incompatible repository terms).
+**Acceptance examples.** A spiked model where the sample gap closes but the population gap does
+not; consistency — when a two-sided gap does hold, Part C's constant-one bound is stronger; a
+non-square matrix through the Gram route. Cite and cross-check, never vendor, the related
+endpoints in `YuanheZ/lean-stat-learning-theory` and `facebookresearch/atlas-lean`, the latter
+for statement comparison only, its repository terms being incompatible.
 
 ## Dependency ordering
 
-**Internal.**  Part A is independent and independently submittable — this roadmap's
-cheapest first contact with review.  Part B consumes Part A (the constant); Part C
-consumes Part B; Part D consumes Part C.  Within Part B the finite core, the
-dimension-free bounds, and the flow can proceed in parallel once their external
-inputs exist; within Part C the dimension-free layer precedes the finite spectral
-forms, and the domain-aware forms come last.
+**Internal.** Part A is independent and independently submittable — this roadmap's cheapest
+first contact with review. Part B consumes Part A for the constant; Part C consumes Part B;
+Part D consumes Part C. Within Part B the finite core, the dimension-free bounds and the flow
+can proceed in parallel once their external inputs exist; within Part C the dimension-free
+layer precedes the finite spectral forms, and the domain-aware forms come last.
 
-**External.**  FiniteDimensionalOperators: spectral subspaces, gap predicates,
-modulus, singular values (Parts B–D).  MajorizationAndAngles: the unitarily
-invariant norm structures with Fan dominance, principal angles, the angle
-operators, aligned bases, Weyl perturbation (Parts B–D).  OperatorIdeals: the
-Hilbert–Schmidt space, energy calculus, unitary conjugation (Parts B–C).
-SpectralTheory: unitary groups and Stone, the `LinearPMap` resolvent/spectrum layer
-with the Cayley transform and intertwining chain, the spectral measure and support,
-the domain-aware `SylvesterEquation` (Parts B–C).  Nothing here waits on
-MatrixStatistics.  The Tau Ceti OneParameterSemigroups roadmap pins the same
-representation decision (generators as `LinearPMap`); Part B's flow material builds
-against the SpectralTheory unitary-group API, which coordinates with that roadmap.
+**External.**
+[`HilbertSpaceOperatorFoundations`](../HilbertSpaceOperatorFoundations/README.md): spectral
+subspaces, the separation predicates, the modulus, singular values (Parts B–D).
+[`MajorizationAndAngles`](../MajorizationAndAngles/README.md): the unitarily invariant norm
+structures with Fan dominance, principal angles, the angle operators, aligned bases, Weyl
+perturbation (Parts B–D). [`OperatorIdeals`](../OperatorIdeals/README.md): the Hilbert–Schmidt
+space, the energy calculus, unitary conjugation, and the ideal-gauge class of Milestone C3
+(Parts B–C). [`SelfAdjointSpectralTheory`](../SelfAdjointSpectralTheory/README.md): unitary
+groups and Stone, the `LinearPMap` resolvent and spectrum layer with the Cayley transform and
+the intertwining chain, the spectral measure and its support, and the domain-aware Sylvester
+equation (Parts B–C). Nothing here waits on `MatrixSpectralStatistics`.
 
 ## References
 
-- C. Davis, W. M. Kahan, *The rotation of eigenvectors by a perturbation. III*,
-  SIAM J. Numer. Anal. 7 (1970), 1–46 — the principal worked source.
-- C. Davis, *The rotation of eigenvectors by a perturbation*, J. Math. Anal. Appl.
-  6 (1963), 159–173 — the `sin 2θ` theorem.
-- M. Rosenblum, *On the operator equation BX − XA = Q*, Duke Math. J. 23 (1956),
-  263–269.
-- R. Bhatia, C. Davis, A. McIntosh, *Perturbation of spectral subspaces and
-  solution of linear operator equations*, Linear Algebra Appl. 52/53 (1983), 45–67.
-- U. Haagerup and L. Zsidó — the extremal kernel attaining `π/2`; followed through
-  the Albeverio–Makarov–Motovilov reconstruction of the `π/2` provenance chain (see
-  the provenance section).
-- R. Bhatia, *Matrix Analysis*, GTM 169, Ch. VII.2 — Part B's separated bound is
-  the half-line case of Theorem VII.2.3 by an integral-free proof.
+- C. Davis, W. M. Kahan, *The rotation of eigenvectors by a perturbation. III*, SIAM J. Numer.
+  Anal. **7** (1970), 1–46 — the principal worked source.
+- C. Davis, *The rotation of eigenvectors by a perturbation*, J. Math. Anal. Appl. **6** (1963),
+  159–173 — the `sin 2θ` theorem.
+- M. Rosenblum, *On the operator equation BX − XA = Q*, Duke Math. J. **23** (1956), 263–269.
+- R. Bhatia, C. Davis, A. McIntosh, *Perturbation of spectral subspaces and solution of linear
+  operator equations*, Linear Algebra Appl. **52/53** (1983), 45–67.
+- U. Haagerup and L. Zsidó — the extremal kernel attaining `π/2`, followed through the
+  Albeverio–Makarov–Motovilov reconstruction of the provenance of the constant.
+- R. Bhatia, *Matrix Analysis*, GTM 169, Ch. VII.2 — Part B's separated bound is the half-line
+  case of Theorem VII.2.3, by an integral-free proof.
 - Y. Yu, T. Wang, R. J. Samworth, *A useful variant of the Davis–Kahan theorem for
-  statisticians*, Biometrika 102 (2015), 315–323 (arXiv 2014).
+  statisticians*, Biometrika **102** (2015), 315–323.
 
-## Provenance and decision record
+## Provenance
 
-*This section is secondary; a reader of the mathematics above can skip it.*
+A substantial implementation of all four Parts exists in the AIQ DKPS formalization (Kitware,
+Inc., Apache-2.0). It establishes feasibility and provides source provenance for integration,
+but this roadmap specifies the desired mathematics intrinsically and does not prescribe the
+donor API or proof architecture. In particular, the existing statements carry paper numbering and
+paper-flavoured names; a submission states the theorems in terms of the objects above, with the
+source correspondence confined to the downstream acceptance layer of Part C.
 
-**Staged implementation.**  All four parts are fully staged in this repository's
-`ForTauCeti/` tree (40 modules, no placeholders): T12 (8 modules), T16 (18), T17
-(11), T18 (3); `python3 scripts/check_tauceti_roadmap_topics.py --topic T12` (etc.)
-lists them and validates the DAG.  The staged results still require Tau Ceti review
-and migration; this roadmap is their specification.  Staged namespaces:
-`TauCeti.HaagerupZsido` (Part A), `TauCeti.ContinuousLinearMap` (dimension-free
-bounds), `TauCeti.LinearPMap` (unbounded layer), `TauCeti.DavisKahanTheory` (finite
-`sin Θ`/YWS — a source-flavored name integration should dissolve into canonical
-namespaces per `dev/tauceti/public-api-integration-review.md`).
-
-**Origin and licensing.**  Human-directed, mostly AI-authored (Davis–Kahan/DKPS
-formalization, Kitware, Inc., Apache-2.0).  The T16/T17 lineage contains material
-adapted from Spectra at upstream revision
-`8dbaaf6728d1342ae16acf79fd7eef7c59b37e63` (plus a recorded compatibility patch);
-integration must preserve licensing, identify copied/adapted/generalized/new
-material, and coordinate with the Spectra author or discuss publicly before reuse.
-T12 carries `Spectra influence: none`.  Before integration: coordinate with
-Tau Ceti maintainers on overlap, register intentions once PR boundaries are stable,
-re-search for newly landed APIs.  The `π/2` provenance chain follows the distilled
-Albeverio–Makarov–Motovilov reconstruction in `prose/distilled_literature/`; the
-correspondence layers map to the Davis–Kahan 1970 Part III and Yu–Wang–Samworth
-2014 digests in `prose/core-arguments/`.
-
-**Decision records from the superseded one-topic drafts** (this directory replaces
-`HaagerupZsidoKernel/`, `SylvesterRosenblum/`, `YuWangSamworth/`, and the earlier
-draft here, whose `Suggested.lean.md` sketch is superseded by `Suggested.lean`):
-
-- The T12 modules were written under lane ROADMAP-WRITE (2026-07-29); module paths
-  reflect the PLACE-SYLV reorganization of the kernel aggregate.
-- The reciprocal-multiplier development was split 2026-07-29 from one 2887-line
-  module into four along its mathematical seams; no statement, signature, proof,
-  attribute, or declaration name changed.
-- An earlier route through an explicit entrywise multiplier `(αᵢ − βⱼ)⁻¹` was
-  abandoned for the simultaneous Ky Fan prefix estimate; the coordinate-equation
-  lemma's documentation records this so the kernel's actual entry point (the
-  finite interpolation certificate) is not misattributed.
-- The YWS complement identity was `private` until 2026-07-29 (item
-  `YWS-S1-complement-identity`); public API by decision, per Part D.  YWS signature
-  audits: the eigenblock correspondence (`hcorr`) was added to exclude arbitrary
-  reducing subspaces at `B = A`; the Hermitian-dilation conclusion was corrected
-  from constant one to `π/2`.
-- The old T17 draft also scoped approximation numbers, Hilbert–Schmidt models, and
-  the closed-operator layer into this roadmap; the consolidation moved those to
-  OperatorIdeals and SpectralTheory, consumed here as external needs.  Its claim
-  that the repository "completes the source-general sine-theta surface" refers to
-  the wider DKPS tree: the *staged* T17 surface is the dimension-free bounded layer
-  plus the complete finite-dimensional family, and Part C's domain-aware milestone
-  C3 remains genuinely open in staging.  **What "open" means for C3 was sharpened on
-  2026-07-31** and the milestone now says so in full: the mathematics is settled and
-  machine-checked in the wider DKPS tree for both scalar fields, so the open work is
-  intrinsic restatement, reconciliation with the OperatorIdeals ideal-family class,
-  deriving the bounded and finite forms *from* the record rather than beside it, and real
-  scalars without complexification bookkeeping.  Recording that distinction matters: a
-  reader of the earlier one-clause milestone could not tell whether the theorem was
-  unproved or merely unstaged, and those call for different reviewers.
+Material in the Sylvester and `sin Θ` lineage was adapted from the Spectra Formalization
+Project at upstream revision `8dbaaf6728d1342ae16acf79fd7eef7c59b37e63`, with a recorded
+compatibility patch; the Haagerup–Zsidó kernel material has no such influence. Integration must
+preserve licensing, identify which material is copied, adapted, generalized or new, and
+coordinate with that project's author — or discuss the plan publicly — before reuse.

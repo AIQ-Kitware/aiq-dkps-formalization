@@ -19,7 +19,7 @@ namespace TauCetiRoadmap.MatrixSpectralStatistics
 open MeasureTheory InnerProductSpace
 open scoped ENNReal Matrix
 
-/-! ## Part A -- rank factorization and positive-semidefinite Gram factorization (T21) -/
+/-! ## Part A -- rank factorization and positive-semidefinite Gram factorization -/
 
 section RankFactorization
 
@@ -70,7 +70,7 @@ theorem exists_unitary_mul_of_conjTranspose_mul_self_eq {n d : ℕ}
 
 end GramUniqueness
 
-/-! ## Part B -- Berge's maximum theorem over a fixed compact feasible set (T22) -/
+/-! ## Part B -- Berge's maximum theorem over a fixed compact feasible set -/
 
 section Berge
 
@@ -106,7 +106,7 @@ placeholder. -/
 /-- **Berge, argmin half**: the argmin correspondence over a fixed compact
 feasible set is upper hemicontinuous, through Mathlib's own predicate.
 
-The clean name belongs to this statement.  The staged proof additionally assumes
+The clean name belongs to this statement.  The existing proof additionally assumes
 `[FirstCountableTopology X]`, which is a proof artifact -- it goes through the
 sequential characterization -- so if both versions coexist it is the *restricted* one
 that should be qualified (`..._of_firstCountable`) or kept private, not this one.
@@ -119,7 +119,7 @@ theorem upperHemicontinuousAt_isMinOn [T2Space X]
 
 /-- **Berge, value half**: the value function is continuous.
 
-Stated without `[FirstCountableTopology P]`.  The staged proof carries that hypothesis
+Stated without `[FirstCountableTopology P]`.  The existing proof carries that hypothesis
 and this is the intended endpoint, so the general theorem should own the clean name and
 the sequential one be qualified if it has to survive. -/
 theorem continuous_iInf_of_isCompact
@@ -149,14 +149,14 @@ theorem upperHemicontinuousAt_isMinOn_of_hemicontinuous [T2Space X] {K : P → S
 
 end Berge
 
-/-! ## Part C -- matrix spectra and spectral measurability (T19) -/
+/-! ## Part C -- matrix spectra and spectral measurability -/
 
 section MatrixSpectra
 
 variable {n : ℕ} {Ω : Type*} [MeasurableSpace Ω]
 
 /-- `Matrix` is a type-level `def`, so the pi `MeasurableSpace` instance does not fire
-through it.  The staged library names this instance for the same reason; without it the
+through it.  The existing implementation names this instance for the same reason; without it the
 measurability statement below does not elaborate. -/
 instance instMeasurableSpaceMatrix : MeasurableSpace (Matrix (Fin n) (Fin n) ℝ) :=
   inferInstanceAs (MeasurableSpace (Fin n → Fin n → ℝ))
@@ -212,7 +212,7 @@ end RCLikeComparisons
 
 end MatrixSpectra
 
-/-! ## Part D -- sample moments and matrix concentration (T20)
+/-! ## Part D -- sample moments and matrix concentration
 
 Chebyshev plus a union bound over `n²` entries, converted to a spectral bound
 by Part C.  The elementary route is dimension-suboptimal by design: matrix
@@ -250,7 +250,7 @@ noncomputable def centeredScatter (𝕜 : Type*) [RCLike 𝕜] {E : Type*} [Norm
 identity of the sample-moment layer.
 
 Named for the operation rather than as a target: this is an exact identity, and the
-staged library proves it under this name.  `_snoc` would be marginally more literal --
+existing implementation proves it under this name.  `_snoc` would be marginally more literal --
 the implementation appends with `Fin.snoc` -- but `append` names the mathematics. -/
 theorem centeredScatter_append (𝕜 : Type*) [RCLike 𝕜] {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace 𝕜 E] {n : ℕ} (z : Fin n → E) (y : E) :
