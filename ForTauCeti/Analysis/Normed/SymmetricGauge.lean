@@ -700,6 +700,86 @@ theorem extend_smul (c : ℝ≥0) (a : ℕ → ℝ≥0∞) :
   · simp only [extend, ENNReal.mul_iSup]
     exact iSup_le fun d => smul_le_extend_smul Φ c a d
 
+/-- The lower part of a splitting: `c` capped coordinatewise at `x`. -/
+noncomputable def capAt (c : ℕ →₀ ℝ≥0) (x : ℕ → ℝ≥0∞) : ℕ →₀ ℝ≥0 :=
+  Finsupp.onFinset c.support (fun i => min (c i) (x i).toNNReal)
+    (by
+      intro i hi
+      by_cases h : c i = 0
+      · simp [h] at hi
+      · exact Finsupp.mem_support_iff.mpr h)
+
+/-- The cap reads off coordinatewise as a minimum. -/
+@[simp]
+theorem capAt_apply (c : ℕ →₀ ℝ≥0) (x : ℕ → ℝ≥0∞) (i : ℕ) :
+    capAt c x i = min (c i) (x i).toNNReal := by
+  simp [capAt]
+
+/-- The cap is below `c`. -/
+theorem capAt_le (c : ℕ →₀ ℝ≥0) (x : ℕ → ℝ≥0∞) : capAt c x ≤ c := by
+  intro i; simp [capAt_apply]
+
+/-- The cap is dominated by `x`, provided `x` is finite where it matters. -/
+theorem capAt_le_ennreal (c : ℕ →₀ ℝ≥0) {x : ℕ → ℝ≥0∞} (hx : ∀ i, x i ≠ ⊤)
+    (i : ℕ) : ((capAt c x i : ℝ≥0) : ℝ≥0∞) ≤ x i := by
+  rw [capAt_apply]
+  calc ((min (c i) (x i).toNNReal : ℝ≥0) : ℝ≥0∞)
+      ≤ (((x i).toNNReal : ℝ≥0) : ℝ≥0∞) := by
+        exact_mod_cast min_le_right _ _
+    _ = x i := ENNReal.coe_toNNReal (hx i)
+
+/-- **Subadditivity of the extension.**
+
+The two `⊤` cases collapse the right-hand side, so the splitting argument only
+ever runs on finite-valued sequences -- the same reduction that makes
+`extend_le_extend_of_forall_sum_le` work.
+
+For the finite case, a dominated `c ≤ x + y` splits as `capAt c x` and the
+truncated difference `c - capAt c x`, and `Φ.add_le` finishes. -/
+theorem extend_add_le (x y : ℕ → ℝ≥0∞) :
+    Φ.extend (fun i => x i + y i) ≤ Φ.extend x + Φ.extend y := by
+  classical
+  by_cases hx : ∃ i, x i = ⊤
+  · obtain ⟨i, hi⟩ := hx
+    rw [Φ.extend_eq_top_of_eq_top hi]
+    simp
+  by_cases hy : ∃ i, y i = ⊤
+  · obtain ⟨i, hi⟩ := hy
+    rw [Φ.extend_eq_top_of_eq_top hi]
+    simp
+  have hxf : ∀ i, x i ≠ ⊤ := fun i hi => hx ⟨i, hi⟩
+  have hyf : ∀ i, y i ≠ ⊤ := fun i hi => hy ⟨i, hi⟩
+  refine iSup_le fun c => ?_
+  set c₁ := capAt c.1 x with hc₁
+  set c₂ := c.1 - c₁ with hc₂
+  -- `c₁ + c₂ = c` because `c₁ ≤ c` pointwise.
+  have hsplit : c₁ + c₂ = c.1 := by
+    ext i
+    have h1 : c₁ i ≤ c.1 i := capAt_le c.1 x i
+    simp only [hc₂, Finsupp.add_apply, Finsupp.tsub_apply]
+    exact_mod_cast add_tsub_cancel_of_le h1
+  -- `c₂` is dominated by `y`.
+  have hc₂y : ∀ i, ((c₂ i : ℝ≥0) : ℝ≥0∞) ≤ y i := by
+    intro i
+    have hcxy : ((c.1 i : ℝ≥0) : ℝ≥0∞) ≤ x i + y i := c.2 i
+    simp only [hc₂, Finsupp.tsub_apply, hc₁, capAt_apply]
+    rcases le_total (c.1 i) ((x i).toNNReal) with hle | hle
+    · simp [min_eq_left hle]
+    · rw [min_eq_right hle]
+      have hxc : ((x i).toNNReal : ℝ≥0∞) = x i := ENNReal.coe_toNNReal (hxf i)
+      have : ((c.1 i - (x i).toNNReal : ℝ≥0) : ℝ≥0∞) = (c.1 i : ℝ≥0∞) - x i := by
+        rw [ENNReal.coe_sub, hxc]
+      rw [this]
+      exact tsub_le_iff_right.mpr (by rwa [add_comm] at hcxy)
+  calc (Φ c.1 : ℝ≥0∞)
+      = (Φ (c₁ + c₂) : ℝ≥0∞) := by rw [hsplit]
+    _ ≤ ((Φ c₁ + Φ c₂ : ℝ≥0) : ℝ≥0∞) := by exact_mod_cast Φ.add_le c₁ c₂
+    _ = (Φ c₁ : ℝ≥0∞) + (Φ c₂ : ℝ≥0∞) := by push_cast; ring
+    _ ≤ Φ.extend x + Φ.extend y := by
+        gcongr
+        · exact le_extend_of_dominated Φ x c₁ (capAt_le_ennreal c.1 hxf)
+        · exact le_extend_of_dominated Φ y c₂ hc₂y
+
 end SymmetricGauge
 
 end TauCeti
