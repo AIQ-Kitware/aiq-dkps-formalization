@@ -275,7 +275,7 @@ noncomputable def sylvesterOp (t : ℝ) :
 
 /-- The bundled Sylvester operator acts as `sylvesterFun`. -/
 @[simp] theorem sylvesterOp_apply (t : ℝ) (f : lp (fun _ : ι => E) 2) :
-    sylvesterOp U V b t f = sylvesterFun U V b t f := rfl
+    sylvesterOp U V b t f = sylvesterFun U V b t f := (rfl)
 
 /-! ### Strong continuity -/
 
@@ -375,7 +375,7 @@ noncomputable def sylvesterGroup : OneParameterUnitaryGroup (lp (fun _ : ι => E
 
 /-- The bundled group acts as the Sylvester operator at each time. -/
 @[simp] theorem sylvesterGroup_apply (t : ℝ) :
-    (sylvesterGroup U V b).U t = sylvesterOp U V b t := rfl
+    (sylvesterGroup U V b).U t = sylvesterOp U V b t := (rfl)
 
 /-- **The generator of the Sylvester flow is self-adjoint.**
 

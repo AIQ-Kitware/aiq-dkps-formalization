@@ -133,7 +133,7 @@ def permuteCoords {n : ℕ} (w : EuclideanSpace ℝ (Fin n)) (π : Equiv.Perm (F
 
 /-- The coordinate permutation, unfolded. -/
 @[simp] lemma permEV_apply {n : ℕ} (w : EuclideanSpace ℝ (Fin n)) (π : Equiv.Perm (Fin n))
-    (i : Fin n) : permuteCoords w π i = w (π i) := rfl
+    (i : Fin n) : permuteCoords w π i = w (π i) := (rfl)
 
 /-- A coordinate permutation is an isometry: `‖permuteCoords w π‖ = ‖w‖`. -/
 lemma norm_permEV {n : ℕ} (w : EuclideanSpace ℝ (Fin n)) (π : Equiv.Perm (Fin n)) :
