@@ -191,6 +191,50 @@ theorem hilbertSchmidtEnergy_eq_sum_approximationNumber_sq {ι : Type*}
 
 end FiniteSource
 
+section Comparison
+
+variable {𝕜' : Type u} [RCLike 𝕜']
+variable {G : Type v} [NormedAddCommGroup G] [InnerProductSpace 𝕜' G] [CompleteSpace G]
+
+/-- The isometry of a finite slice of a Hilbert basis: `Euclidean` coordinates in, the
+corresponding finite combination of basis vectors out.
+
+It exists so that a *finite* partial sum of a Hilbert--Schmidt energy can be read as the
+energy of an operator with finite-dimensional source, where
+`hilbertSchmidtEnergy_eq_sum_approximationNumber_sq` applies. -/
+noncomputable def finiteBasisInclusion {ι : Type*} (b : HilbertBasis ι 𝕜' G) {n : ℕ}
+    (f : Fin n → ι) : EuclideanSpace 𝕜' (Fin n) →L[𝕜'] G :=
+  ∑ j, (EuclideanSpace.proj j).smulRight (b (f j))
+
+omit [CompleteSpace G] in
+/-- The inclusion in coordinates: a Euclidean vector becomes the corresponding finite
+combination of the selected basis vectors. -/
+@[simp] theorem finiteBasisInclusion_apply {ι : Type*} (b : HilbertBasis ι 𝕜' G) {n : ℕ}
+    (f : Fin n → ι) (x : EuclideanSpace 𝕜' (Fin n)) :
+    finiteBasisInclusion b f x = ∑ j, x j • b (f j) := by
+  simp [finiteBasisInclusion]
+
+-- Completeness of `G` is what makes `HilbertBasis` available at all, but the identity is a
+-- finite Parseval computation and does not use it again.
+omit [CompleteSpace G] in
+/-- The inclusion is an isometry, by Parseval on a finite orthonormal family. -/
+theorem norm_finiteBasisInclusion_apply {ι : Type*} (b : HilbertBasis ι 𝕜' G) {n : ℕ}
+    {f : Fin n → ι} (hf : Function.Injective f) (x : EuclideanSpace 𝕜' (Fin n)) :
+    ‖finiteBasisInclusion b f x‖ = ‖x‖ := by
+  have hon : Orthonormal 𝕜' fun j : Fin n => b (f j) := b.orthonormal.comp f hf
+  have hsq : ‖finiteBasisInclusion b f x‖ ^ 2 = ‖x‖ ^ 2 := by
+    rw [finiteBasisInclusion_apply, @norm_sq_eq_re_inner 𝕜', hon.inner_sum x x Finset.univ,
+      EuclideanSpace.norm_eq, Real.sq_sqrt (Finset.sum_nonneg fun _ _ => by positivity),
+      map_sum]
+    exact Finset.sum_congr rfl fun j _ => by
+      rw [RCLike.conj_mul]
+      simp
+  have h1 : 0 ≤ ‖finiteBasisInclusion b f x‖ := norm_nonneg _
+  have h2 : 0 ≤ ‖x‖ := norm_nonneg _
+  nlinarith [hsq, h1, h2]
+
+end Comparison
+
 section Gauge
 
 /-- The **Schatten `p`-norm**, valued in `ℝ≥0∞` and therefore defined for every bounded
