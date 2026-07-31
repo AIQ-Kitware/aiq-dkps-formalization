@@ -36,21 +36,6 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
-/-- Interval/exterior separation for a Sylvester pair, over the Spectra
-spectrum. -/
-def SylvesterIntervalExteriorGap
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
-    (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
-    (β α δ : ℝ) : Prop :=
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
-        Set.Icc β α ∧
-    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B.toLinearPMap) ∨
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
-        Set.Icc β α ∧
-    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap)
-
 /-- All three source gap configurations, each stated as a containment of the
 Spectra spectrum -- the form Davis--Kahan 1970 uses.
 
