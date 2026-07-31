@@ -178,14 +178,14 @@ theorem norm_sylvester_le_of_generalSeparation_rclike
   have hAc : IsSelfAdjointOperator (complexify (A.restrictScalars ℝ)) := by
     have hsa : IsSelfAdjoint (complexify (A.restrictScalars ℝ)) := by
       show ContinuousLinearMap.adjoint _ = _
-      rw [← TauCeti.DavisKahan.Experimental.ExactSinTheta.RealComplexificationFunctionalCalculus.complexify_adjoint]
+      rw [← TauCeti.RealComplexification.complexify_adjoint]
       exact congrArg complexify
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.2 hAr)
     exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.1 hsa
   have hBc : IsSelfAdjointOperator (complexify (B.restrictScalars ℝ)) := by
     have hsa : IsSelfAdjoint (complexify (B.restrictScalars ℝ)) := by
       show ContinuousLinearMap.adjoint _ = _
-      rw [← TauCeti.DavisKahan.Experimental.ExactSinTheta.RealComplexificationFunctionalCalculus.complexify_adjoint]
+      rw [← TauCeti.RealComplexification.complexify_adjoint]
       exact congrArg complexify
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.2 hBr)
     exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.1 hsa

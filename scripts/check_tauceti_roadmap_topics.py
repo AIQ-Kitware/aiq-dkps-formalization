@@ -136,7 +136,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # `SpectralOrder.Complex` in T15a -- but it imports `BoundedOperator.Projector`, which is here,
  # so filing it by subject makes T15a unsubmittable. Same lesson as
  # `ApproximationNumber.GramSpectralRank`: file by dependency, and `--check` is what says so.
- +[A+"SpectralOrder.Real",A+"Complexification.Basic"]
+ +[A+"SpectralOrder.Real",A+"Complexification.Basic",A+"Complexification.FunctionalCalculus"]
  +[A+"ReducedExtension"]),
 ("T18","The Yu-Wang-Samworth statistical variant",
  [A+"YuWangSamworth."+x for x in ["Residual","SingularSubspace","Statistics"]]),
