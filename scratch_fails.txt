@@ -1,0 +1,16 @@
+DavisKahan.Experimental.InfiniteDimensional.SinTheta.Unbounded
+DavisKahan.Experimental.InfiniteDimensional.Sylvester.All
+DavisKahan.Experimental.InfiniteDimensional.Sylvester.CutoffInterface
+DavisKahan.Experimental.InfiniteDimensional.Sylvester.OrderedEngineLegacy
+DavisKahan.Experimental.InfiniteDimensional.Sylvester.Unbounded
+DavisKahan.Experimental.MathAhead.All
+DavisKahan.Experimental.MathAhead.ContinuationAll
+DavisKahan.Experimental.MathAhead.HiddenFoundations.All
+DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry
+DavisKahan.Experimental.MathAhead.HiddenFoundations.ContourReuseBridge
+DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner
+DavisKahan.Experimental.MathAhead.HiddenFoundations.RealSylvesterDescent
+DavisKahan.Experimental.MathAhead.SylvesterAll
+DavisKahan.Experimental.Scratch.All
+DavisKahan.Experimental.Scratch.SharedFoundations.All
+DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.OperatorAbsoluteValueComplex
