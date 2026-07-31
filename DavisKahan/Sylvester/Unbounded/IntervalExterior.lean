@@ -50,7 +50,8 @@ namespace ExactSinTheta
 Spectra spectrum.  Either orientation is permitted: one operator's real spectrum sits inside
 `[β, α]` while the other avoids the `δ`-enlargement `(β - δ, α + δ)`.
 
-`RealSpectrumIntervalExteriorGap` is the `realSpectrum` spelling of the same configuration.
+`RealSpectrumIntervalExteriorGap` (`Sylvester/Gap.lean`) is the `realSpectrum` spelling of the
+same configuration; `realSpectrum_eq_spectraSpectrum` identifies the two spectra.
 
 **Placed here rather than in either consumer.**  `Sylvester/Unbounded/AllGap.lean` and
 `SinTheta/Unbounded/IntervalExterior.lean` each carried a character-for-character copy of this
