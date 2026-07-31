@@ -1,12 +1,6 @@
 {
   "schema_version": 3,
-  "as_of_commit": "dbc1919ba008e61a84f6897fac999abce8bbb74e",
-  "policy": "This registry records compiler status only. The checker compiles every active root and then runs lake build DavisKahan.Experimental, so omitted failures cannot be certified by an empty registry.",
-  "roots": [
-    {
-      "module": "DavisKahan/Experimental/Sources/DavisKahan1970/Section8/All.lean",
-      "status": "parked",
-      "reason": "Section 8 source surface. Nothing is wrong with its own source; SelectedBranch and SourceSurface import DavisKahan.Experimental.InfiniteDimensional, and four modules on that path have never produced an olean: Core.CompatibilitySinTwoTheta, Ideals.Symmetric, GraphSubspace, and Sylvester.Resolvent. Resolvent is on the critical path via Sylvester.Basic and calls a Contour.integral / Contour.IsClosed / Contour.Rectifiable API that exists nowhere in this repository, in Mathlib, or in vendored Spectra, so the other three unblock nothing. Parked until that API is written; promote back to DavisKahan/Sources/DavisKahan1970 once it compiles."
-    }
-  ]
+  "as_of_commit": "a4f93fe3",
+  "policy": "This registry records compiler status only. The checker compiles every active root and then runs lake build DavisKahan.Experimental, so omitted failures cannot be certified by an empty registry. Emptied 2026-07-31: the single parked root, DavisKahan/Experimental/Sources/DavisKahan1970/Section8/All.lean, compiles on its own and the four modules its reason named as blockers are gone from that path -- three no longer exist (Core.CompatibilitySinTwoTheta, GraphSubspace, Sylvester.Resolvent) and Ideals.Symmetric compiles. The Contour.integral / IsClosed / Rectifiable API it waited on is still absent from the repository, Mathlib and vendored Spectra; what changed is that nothing on this path calls it any more. Re-park by adding a root here if that stops being true.",
+  "roots": []
 }
