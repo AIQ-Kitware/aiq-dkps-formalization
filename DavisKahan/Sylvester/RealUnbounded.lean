@@ -23,7 +23,7 @@ namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open Foundation
+open TauCeti.RealComplexification
 
 noncomputable section
 
