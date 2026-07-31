@@ -262,18 +262,8 @@ theorem uiNorm_sylvester_le_of_orderedGap
     have hbound := uiNorm_sylvester_le_of_form_bounds_aux
       (RectangularUnitarilyInvariantNorm.adjointTransport N)
       hB hA hδ hBform hAform hEqAdj
-    have hXnorm :
-        (RectangularUnitarilyInvariantNorm.adjointTransport N) X.adjoint = N X := by
-      rw [RectangularUnitarilyInvariantNorm.adjointTransport_coe_apply]
-    have hCnorm :
-        (RectangularUnitarilyInvariantNorm.adjointTransport N) (-C.adjoint) = N C := by
-      -- `adjointTransport_coe_apply` cannot fire here: it matches an argument of the
-      -- form `A.adjoint`, and this one is `-C.adjoint`, i.e. a `Neg.neg` around the
-      -- adjoint rather than an adjoint at the head. `change` states the unfolded goal
-      -- so `map_neg` can pull the negation out first.
-      change N ((-C.adjoint).adjoint) = N C
-      rw [map_neg, LinearMap.adjoint_adjoint, N.apply_neg]
-    rw [hXnorm, hCnorm] at hbound
+    rw [RectangularUnitarilyInvariantNorm.adjointTransport_coe_apply,
+      RectangularUnitarilyInvariantNorm.adjointTransport_neg_adjoint_apply] at hbound
     exact hbound
 
 /-- Sharp constant-one interval/exterior Sylvester estimate in every
@@ -449,18 +439,8 @@ theorem uiNorm_sylvester_le_of_unorderedIntervalGap
     have hbound := uiNorm_sylvester_le_of_intervalGap
       (RectangularUnitarilyInvariantNorm.adjointTransport N)
       hB hA hδ hreverse hEqAdj
-    have hXnorm :
-        (RectangularUnitarilyInvariantNorm.adjointTransport N) X.adjoint = N X := by
-      rw [RectangularUnitarilyInvariantNorm.adjointTransport_coe_apply]
-    have hCnorm :
-        (RectangularUnitarilyInvariantNorm.adjointTransport N) (-C.adjoint) = N C := by
-      -- `adjointTransport_coe_apply` cannot fire here: it matches an argument of the
-      -- form `A.adjoint`, and this one is `-C.adjoint`, i.e. a `Neg.neg` around the
-      -- adjoint rather than an adjoint at the head. `change` states the unfolded goal
-      -- so `map_neg` can pull the negation out first.
-      change N ((-C.adjoint).adjoint) = N C
-      rw [map_neg, LinearMap.adjoint_adjoint, N.apply_neg]
-    rw [hXnorm, hCnorm] at hbound
+    rw [RectangularUnitarilyInvariantNorm.adjointTransport_coe_apply,
+      RectangularUnitarilyInvariantNorm.adjointTransport_neg_adjoint_apply] at hbound
     exact hbound
 
 /-- Ky Fan specialization of the sharp interval/exterior Sylvester
