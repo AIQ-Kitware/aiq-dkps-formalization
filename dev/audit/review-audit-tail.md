@@ -180,6 +180,34 @@ safe one.
 > because two modules each carried a `private` copy *differing only by a prime on
 > the name*. Which is this session's most repeated finding, arriving one last
 > time through the gate that AT-6 was written about.
+>
+> **Two more things were learned by running the suite rather than by reading it,
+> and neither was predictable from the source.**
+>
+> *Accepting `--check` does not tell you what `--check` means.*
+> `check_davis_kahan_frontier` takes the flag, so the derived classification gave
+> it one — and it failed, because there the flag is not a soft/strict toggle but
+> an extra demand that **every paper result be recursively grounded**, 59 of 80
+> today. That is a completion target. Passing it would have made the suite
+> permanently red on an unmet ambition, which is the same failure `ADVISORY`
+> had been added an hour earlier to prevent, reached by a different route. Hence
+> `CHECK_IS_STRONGER`, and hence the runner's admission that the derivation has a
+> boundary.
+>
+> *Five gates invoke `lake`, and a concurrent build fakes a regression.*
+> `check_experimental_root_status` reported *"lake build DavisKahan.Experimental
+> did not succeed"* — and the identical build, run alone thirty seconds later,
+> was green in 9210 jobs. The suite was racing this reviewer's own editing loop.
+> **The message is indistinguishable from a real break**, and it cost a full
+> investigation before the cause was found. Now documented at the top of
+> `run_gates.py`, with `--fast` recommended for anyone who needs to keep building.
+>
+> **The measured state of the suite, which nobody had ever had in one number:**
+> 27 gates, **1 genuinely failing** — `check_full_part_iii_math_ahead`, whose 45
+> findings are 37 `sorry`s in `DavisKahan/Experimental/**` that `{lane:EXP-UNBLOCK}`
+> tracks and 8 statements that drifted from a manifest dated 2026-07-20. That is
+> a real contract the repository does not satisfy, it belongs to lanes that exist,
+> and **it should stay red until they close it.** Everything else is green.
 
 ## No finding
 
