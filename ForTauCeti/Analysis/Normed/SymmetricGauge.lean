@@ -7,6 +7,7 @@ import Mathlib.Data.Finsupp.Order
 import Mathlib.Data.Finsupp.Basic
 import Mathlib.Data.NNReal.Basic
 import Mathlib.Algebra.BigOperators.Finsupp.Basic
+import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
 
 /-!
 # Symmetric gauges on finitely supported nonnegative sequences
@@ -22,8 +23,12 @@ ideals: an ideal gauge is a symmetric gauge applied to a singular-value sequence
   normalization and permutation invariance together;
 * `TauCeti.SymmetricGauge.le_apply` — `aᵢ ≤ Φ a` for every coordinate;
 * `TauCeti.SymmetricGauge.apply_le_sum` — `Φ a ≤ ∑ aᵢ`;
-* `TauCeti.SymmetricGauge.iSup_le_and_le_sum` — the two-sided bound
-  `sup aᵢ ≤ Φ a ≤ ∑ aᵢ` packaged together.
+* `TauCeti.SymmetricGauge.le_apply_and_le_sum` — the two-sided bound
+  `sup aᵢ ≤ Φ a ≤ ∑ aᵢ` packaged together;
+* `TauCeti.SymmetricGauge.extend` — the extension to arbitrary `ℝ≥0∞`-valued
+  sequences, as a supremum over dominated finitely supported sequences;
+* `TauCeti.SymmetricGauge.iSup_le_extend_le_tsum` — the same sandwich for the
+  extension, `⨆ aₙ ≤ Φ.extend a ≤ ∑' aₙ`.
 
 ## Why this is not `FiniteSymmetricGauge`
 
@@ -61,7 +66,7 @@ from the axioms:
   Apache 2.0.
 -/
 
-open scoped NNReal
+open scoped NNReal ENNReal
 
 namespace TauCeti
 
@@ -185,6 +190,77 @@ and it is the reason `normalized` is an axiom rather than a convention. -/
 theorem le_apply_and_le_sum (a : ℕ →₀ ℝ≥0) :
     (∀ i, a i ≤ Φ a) ∧ Φ a ≤ ∑ i ∈ a.support, a i :=
   ⟨fun i => le_apply Φ a i, apply_le_sum Φ a⟩
+
+/-! ## Extension to arbitrary `ℝ≥0∞`-valued sequences -/
+
+/-- The finitely supported nonnegative sequences dominated termwise by `a`.
+
+This is the index set of the supremum defining `extend`.  It is nonempty for
+every `a` -- the zero sequence always qualifies -- which is what makes the
+extension total. -/
+def Dominated (a : ℕ → ℝ≥0∞) : Type :=
+  {b : ℕ →₀ ℝ≥0 // ∀ i, (b i : ℝ≥0∞) ≤ a i}
+
+/-- The index set is never empty: the zero sequence is dominated by every `a`.
+
+This is what makes `extend` total — a supremum over an empty index set would be
+`0` regardless of `a`, which would break the lower bound. -/
+instance (a : ℕ → ℝ≥0∞) : Nonempty (Dominated a) :=
+  ⟨⟨0, by intro i; simp⟩⟩
+
+/-- The extension of a symmetric gauge to arbitrary `ℝ≥0∞`-valued sequences: the
+supremum of `Φ` over the finitely supported sequences dominated by `a`.
+
+**A supremum, not a `tsum`.**  The gauge must be total and genuinely `∞` off its
+ideal, and a supremum of an increasing net is total by construction; any route
+through summability reintroduces the side conditions the interface avoids.
+
+**On the decreasing rearrangement.**  The supremum is taken over *all* dominated
+finitely supported sequences, with no rearrangement.  That is equivalent to
+truncating the decreasing rearrangement, because `Φ` is permutation-invariant
+(`symm`) and monotone (`mono`), so the supremum is already rearrangement-
+independent; the rearrangement is a device for *computing* the value rather than
+part of its specification, and avoiding it here keeps this file free of a
+rearrangement API it would otherwise have to build first. -/
+noncomputable def extend (Φ : SymmetricGauge) (a : ℕ → ℝ≥0∞) : ℝ≥0∞ :=
+  ⨆ b : Dominated a, (Φ b.1 : ℝ≥0∞)
+
+/-- Each dominated finitely supported sequence bounds the extension from below. -/
+theorem le_extend_of_dominated (a : ℕ → ℝ≥0∞) (b : ℕ →₀ ℝ≥0)
+    (hb : ∀ i, (b i : ℝ≥0∞) ≤ a i) : (Φ b : ℝ≥0∞) ≤ Φ.extend a :=
+  le_iSup (f := fun b : Dominated a => (Φ b.1 : ℝ≥0∞)) ⟨b, hb⟩
+
+/-- **Lower half of the extended bound.**  Every coordinate is below the extension.
+
+This reaches `∞` correctly: when `a n = ∞` the argument supplies `single n c` for
+every finite `c`, so the supremum is not bounded by any real. -/
+theorem le_extend (a : ℕ → ℝ≥0∞) (n : ℕ) : a n ≤ Φ.extend a := by
+  -- It suffices to beat every finite `c` strictly below `a n`; when `a n = ∞`
+  -- that ranges over all of `ℝ≥0`, so the supremum is forced to `∞` as well.
+  refine ENNReal.le_of_forall_nnreal_lt fun c hc => ?_
+  have hdom : ∀ i, ((Finsupp.single n c) i : ℝ≥0∞) ≤ a i := by
+    intro i
+    by_cases hin : i = n
+    · subst hin; simpa using hc.le
+    · simp [hin]
+  have hb := le_extend_of_dominated Φ a (Finsupp.single n c) hdom
+  rwa [single Φ n c] at hb
+
+/-- **Upper half of the extended bound.**  The extension is below the total sum. -/
+theorem extend_le_tsum (a : ℕ → ℝ≥0∞) : Φ.extend a ≤ ∑' n, a n := by
+  refine iSup_le fun b => ?_
+  calc (Φ b.1 : ℝ≥0∞)
+      ≤ ((∑ i ∈ b.1.support, b.1 i : ℝ≥0) : ℝ≥0∞) := by
+        exact_mod_cast apply_le_sum Φ b.1
+    _ = ∑ i ∈ b.1.support, ((b.1 i : ℝ≥0) : ℝ≥0∞) := by push_cast; ring
+    _ ≤ ∑ i ∈ b.1.support, a i := Finset.sum_le_sum fun i _ => b.2 i
+    _ ≤ ∑' n, a n := ENNReal.sum_le_tsum _
+
+/-- **Both ends of the scale**, and the reason the normalization is not a
+restriction: the extension sits between the supremum and the sum. -/
+theorem iSup_le_extend_le_tsum (a : ℕ → ℝ≥0∞) :
+    (⨆ n, a n) ≤ Φ.extend a ∧ Φ.extend a ≤ ∑' n, a n :=
+  ⟨iSup_le fun n => le_extend Φ a n, extend_le_tsum Φ a⟩
 
 end SymmetricGauge
 
