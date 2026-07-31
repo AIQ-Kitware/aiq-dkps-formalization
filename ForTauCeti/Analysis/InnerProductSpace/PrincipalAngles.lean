@@ -433,11 +433,11 @@ private theorem isometryPadBasis_conj_apply [FiniteDimensional 𝕜 D] (ι : D �
   classical
   rw [isometryPadBasis_apply]
   by_cases h : (i : ℕ) < finrank 𝕜 D
-  · rw [dif_pos h, isometryPad_of_lt ι v h, LinearMap.comp_apply, LinearMap.comp_apply,
+  · simp only [dif_pos h, isometryPad_of_lt ι v h, LinearMap.comp_apply,
       LinearIsometry.adjoint_apply_apply, hv, map_smul, LinearIsometry.coe_toLinearMap]
-  · rw [dif_neg h, isometryPad_of_ge ι v h, LinearMap.comp_apply, LinearMap.comp_apply,
+  · simp only [dif_neg h, isometryPad_of_ge ι v h, LinearMap.comp_apply,
       LinearIsometry.adjoint_eq_zero_of_mem_orthogonal ι (SetLike.coe_mem _),
-      map_zero, map_zero, RCLike.ofReal_zero, zero_smul]
+      map_zero, zero_smul]
 
 end IsometryPad
 
