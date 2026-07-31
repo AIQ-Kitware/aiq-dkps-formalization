@@ -53,7 +53,7 @@ theorem sylvesterIntervalExteriorGap_of_realSpectrum
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {β α δ : ℝ}
     (hgap : RealSpectrumIntervalExteriorGap A B β α δ) :
-    SylvesterIntervalExteriorGap A B β α δ := by
+    SpectralIntervalExteriorGap A B β α δ := by
   rcases hgap with hgap | hgap
   · left
     constructor
@@ -128,7 +128,7 @@ theorem realSpectrumIntervalExteriorGap_of_spectral
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {β α δ : ℝ}
-    (hgap : SylvesterIntervalExteriorGap A B β α δ) :
+    (hgap : SpectralIntervalExteriorGap A B β α δ) :
     RealSpectrumIntervalExteriorGap A B β α δ := by
   rcases hgap with hgap | hgap
   · left
