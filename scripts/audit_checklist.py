@@ -17,11 +17,18 @@ Two checklists, because the findings are of two kinds:
   merge. A group cannot be reviewed before its files are, and this file records
   that dependency explicitly.
 
-**Checkboxes are preserved across regeneration.** Rerunning after files move or
-land keeps every `[x]`, adds new files unchecked, and drops vanished ones. That
-is the whole reason this is generated rather than hand-written: a 795-file
-checklist maintained by hand goes stale in a day, and then nobody trusts the
-marks.
+**Checkboxes are preserved across regeneration**, including across a rename.
+Rerunning after files move or land keeps every `[x]`, adds genuinely new files
+unchecked, and drops vanished ones. That is the whole reason this is generated
+rather than hand-written: a 1200-file checklist maintained by hand goes stale in
+a day, and then nobody trusts the marks.
+
+**A rename used to lose the mark**, because marks are keyed on path and a moved
+file looks like a deletion plus a new file. Lane `EXP-CONT` moved 23
+`Continuation*.lean` into `SinTheta/Continuation/` on 2026-07-31 and the count
+fell 1144 → 1121 for a change that altered no file's contents. Marks now carry
+through `git`'s own rename detection, so a *move* keeps its tick and an *edit*
+does not silently inherit one.
 
 `ForTauCeti` is grouped by its 22 **roadmap topics** rather than by directory,
 so its holistic review lands on the units that actually get submitted. Every
@@ -157,11 +164,39 @@ def group_of(path: str, topics: dict[str, str]) -> str:
     return parts[0]
 
 
+def renames() -> dict[str, str]:
+    """Old path -> new path, for files git sees as renamed but not yet committed.
+
+    Keyed on the *staged and unstaged* diff against `HEAD`, so a rename is carried
+    whether or not it has been committed when the checklist is regenerated.
+    """
+    out: dict[str, str] = {}
+    for args in (["diff", "--name-status", "-M", "HEAD"],
+                 ["diff", "--name-status", "-M", "--cached", "HEAD"]):
+        try:
+            res = subprocess.run(["git", *args], cwd=ROOT, capture_output=True,
+                                 text=True, check=False).stdout
+        except OSError:
+            continue
+        for line in res.splitlines():
+            parts = line.split("\t")
+            if len(parts) == 3 and parts[0].startswith("R"):
+                out[parts[1]] = parts[2]
+    return out
+
+
 def existing_marks(path: pathlib.Path) -> set[str]:
     if not path.exists():
         return set()
-    return {m.group(1) for m in
-            (DONE_RE.match(l) for l in path.read_text().splitlines()) if m}
+    marks = {m.group(1) for m in
+             (DONE_RE.match(l) for l in path.read_text().splitlines()) if m}
+    # A moved file is the same file: carry its mark to the new path.  Without this
+    # a pure rename silently un-reviews whatever it touches, which is exactly what
+    # a generated checklist exists to prevent.
+    for old, new in renames().items():
+        if old in marks:
+            marks.add(new)
+    return marks
 
 
 def lines_of(rel: str) -> int:

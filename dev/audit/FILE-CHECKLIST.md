@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-1144/1200 files reviewed · 1200 files · 278,945 lines · 118 groups
+1144/1200 files reviewed · 1200 files · 278,981 lines · 118 groups
 
 ## How to review
 
@@ -96,9 +96,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### .llm_resource_tally :: data/config
 
-*3 files, 1,428 lines — 3/3 reviewed*
+*3 files, 1,429 lines — 3/3 reviewed*
 
-- [x] `.llm_resource_tally/ledger/ledger.jsonl` — 1,375 lines · data/config
+- [x] `.llm_resource_tally/ledger/ledger.jsonl` — 1,376 lines · data/config
 - [x] `.llm_resource_tally/lifetime-totals.json` — 46 lines · data/config
 - [x] `.llm_resource_tally/settings.json` — 7 lines · data/config
 
@@ -1728,7 +1728,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### scripts :: tooling
 
-*61 files, 13,889 lines — 55/61 reviewed*
+*61 files, 13,924 lines — 55/61 reviewed*
 
 - [x] `scripts/lake_build_report.py` — 1,156 lines · tooling
 - [x] `scripts/check_davis_kahan_frontier.py` — 633 lines · tooling
@@ -1738,8 +1738,8 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `scripts/check_yu_wang_samworth_source_census.py` — 407 lines · tooling
 - [x] `scripts/check_tauceti_roadmap_topics.py` — 403 lines · tooling
 - [x] `scripts/refresh_tauceti_pr1_consistency.py` — 390 lines · tooling
+- [x] `scripts/audit_checklist.py` — 344 lines · tooling
 - [x] `scripts/upgrade_census_schema_v4.py` — 333 lines · tooling
-- [x] `scripts/audit_checklist.py` — 309 lines · tooling
 - [x] `scripts/check_dependency_layers.py` — 292 lines · tooling
 - [x] `scripts/render_distilled_literature_index.py` — 292 lines · tooling
 - [x] `scripts/check_lane_graph.py` — 272 lines · tooling

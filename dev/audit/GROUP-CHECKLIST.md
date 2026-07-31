@@ -31,7 +31,7 @@ review is exactly a review of a future submission unit.
 - [x] `(root files) :: tooling` — 2 files, 789 lines — **READY**
 - [x] `(root modules)` — 8 files, 78 lines — **blocked (7/8 files)**
 - [x] `.claude :: data/config` — 1 files, 19 lines — **READY**
-- [x] `.llm_resource_tally :: data/config` — 3 files, 1,428 lines — **READY**
+- [x] `.llm_resource_tally :: data/config` — 3 files, 1,429 lines — **READY**
 - [x] `.llm_resource_tally :: documentation` — 1 files, 99 lines — **READY**
 - [x] `.llm_resource_tally :: other` — 3 files, 12 lines — **READY**
 - [x] `.llm_resource_tally :: tooling` — 17 files, 1,743 lines — **READY**
@@ -135,7 +135,7 @@ review is exactly a review of a future submission unit.
 - [x] `prose :: data/config` — 1 files, 1,488 lines — **READY**
 - [x] `prose :: documentation` — 3 files, 271 lines — **READY**
 - [x] `prose :: other` — 1 files, 2 lines — **READY**
-- [x] `scripts :: tooling` — 61 files, 13,889 lines — **blocked (55/61 files)**
+- [x] `scripts :: tooling` — 61 files, 13,924 lines — **blocked (55/61 files)**
 - [x] `tools :: build config` — 1 files, 179 lines — **READY**
 - [x] `tools :: documentation` — 1 files, 110 lines — **READY**
 - [x] `tools :: manifest/notes` — 1 files, 2 lines — **READY**
