@@ -6,6 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy
 import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 import Mathlib.Analysis.MeanInequalities
+import Mathlib.MeasureTheory.Integral.Lebesgue.Countable
+import Mathlib.MeasureTheory.Integral.Lebesgue.Add
 
 /-!
 # The Hilbert--Schmidt operator ideal
@@ -245,6 +247,37 @@ theorem hilbertSchmidtENorm_comp_le (L : F →L[𝕜] G) (T : E →L[𝕜] F) (R
   refine ((L ∘L T).hilbertSchmidtENorm_comp_right_le R).trans ?_
   gcongr
   exact L.hilbertSchmidtENorm_comp_left_le T
+
+/-- **Fatou for the Hilbert--Schmidt gauge.**  The gauge is lower semicontinuous along
+operator-norm convergence: if `T i → T` pointwise on a basis, the limit's energy is at most
+the `liminf` of the energies.
+
+This is the step that replaces the Ky Fan shortcut.  `kyFanIdealFamily` gets completeness
+from `‖A‖ ≤ kyFanGauge k A ≤ k ‖A‖`, so a gauge-Cauchy sequence is norm-Cauchy *and* the
+norm limit is automatically a gauge limit.  The Hilbert--Schmidt gauge is not equivalent to
+the operator norm, so the second half fails and the limit has to be controlled term by term
+instead -- which is exactly Fatou's lemma against the counting measure. -/
+theorem hilbertSchmidtENorm_le_liminf {ι : Type*} [MeasurableSpace ι]
+    [MeasurableSingletonClass ι] [Countable ι] (b : HilbertBasis ι 𝕜 E)
+    {u : Filter ℕ} [u.NeBot] [u.IsCountablyGenerated]
+    {T : ℕ → E →L[𝕜] F} {L : E →L[𝕜] F}
+    (hptwise : ∀ i, Filter.Tendsto (fun n => ‖T n (b i)‖ₑ ^ 2) u
+      (nhds (‖L (b i)‖ₑ ^ 2))) :
+    L.hilbertSchmidtENorm ^ (2 : ℝ) ≤
+      Filter.liminf (fun n => (T n).hilbertSchmidtENorm ^ (2 : ℝ)) u := by
+  classical
+  have hL : L.hilbertSchmidtENorm ^ (2 : ℝ) = ∑' i, ‖L (b i)‖ₑ ^ 2 :=
+    L.hilbertSchmidtENorm_rpow_two b
+  have hT : ∀ n, (T n).hilbertSchmidtENorm ^ (2 : ℝ) = ∑' i, ‖T n (b i)‖ₑ ^ 2 :=
+    fun n => (T n).hilbertSchmidtENorm_rpow_two b
+  rw [hL]
+  simp only [hT]
+  have hlim : ∀ i, ‖L (b i)‖ₑ ^ 2 = Filter.liminf (fun n => ‖T n (b i)‖ₑ ^ 2) u :=
+    fun i => ((hptwise i).liminf_eq).symm
+  simp only [hlim]
+  simpa only [MeasureTheory.lintegral_count] using
+    MeasureTheory.lintegral_liminf_le (μ := MeasureTheory.Measure.count)
+      (f := fun n i => ‖T n (b i)‖ₑ ^ 2) (fun n => measurable_of_countable _)
 
 end ContinuousLinearMap
 
