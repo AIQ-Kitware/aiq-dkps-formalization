@@ -478,21 +478,8 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_reciprocalInterpolat
       (alpha i - beta j) * ⟪eF i, X (eE j)⟫_ℝ =
         ⟪eF i, C (eE j)⟫_ℝ := by
     simpa only [real_inner_comm] using hcoeff i j
-  let blockDiagonal :
-      (ER →ₗ[ℝ] FR) →ₗ[ℝ]
-        (WithLp 2 (ER × ER) →ₗ[ℝ] WithLp 2 (FR × FR)) := by
-    refine
-      { toFun := fun A =>
-          RectangularUnitarilyInvariantNorm.orthogonalBlockSum A A
-        map_add' := ?_
-        map_smul' := ?_ }
-    · intro A B
-      ext x
-      apply WithLp.ofLp_injective 2
-      apply Prod.ext <;>
-        simp [RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply]
-    · intro r A
-      exact RectangularUnitarilyInvariantNorm.orthogonalBlockSum_smul r A A
+  let blockDiagonal := RectangularUnitarilyInvariantNorm.orthogonalBlockSumDiagonal
+    (𝕜 := ℝ) (E₁ := ER) (F₁ := FR)
   have hblock (A : ER →ₗ[ℝ] FR) :
       RectangularUnitarilyInvariantNorm.orthogonalBlockSum A A =
         ∑ i, ∑ j, ⟪eF i, A (eE j)⟫_ℝ •
