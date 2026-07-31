@@ -10,6 +10,8 @@ import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
 import ForTauCeti.Analysis.Convex.Majorization
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
+import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 
 /-!
 # Symmetric norming functions on sequences
@@ -439,6 +441,53 @@ noncomputable def toFinite (Φ : SymmetricGauge) (n : ℕ) : FiniteSymmetricGaug
       · simp [hi]
     rw [h]
 
+/-- The capped `k`-truncation of a nonnegative real sequence is pointwise below
+the `ofFin` of its first `k` entries.
+
+**The cap is never active on a real sequence** — `min (ofReal (a n)) m ≤ ofReal (a n)`
+always — which is what lets the `ℝ≥0∞` gauge be compared with the finite one. -/
+theorem truncate_le_ofFin {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n) (k : ℕ) (m : ℝ≥0) :
+    truncate (fun n => ENNReal.ofReal (a n)) k m ≤ ofFin (fun i : Fin k => a i) := by
+  refine Finsupp.le_def.2 fun i => ?_
+  simp only [truncate_apply, ofFin_apply]
+  split
+  · rename_i hi
+    have h1 : min (ENNReal.ofReal (a i)) ((m : ℝ≥0∞)) ≤ ENNReal.ofReal (a i) :=
+      min_le_left _ _
+    have h2 : (min (ENNReal.ofReal (a i)) ((m : ℝ≥0∞))).toNNReal ≤ (a i).toNNReal := by
+      refine (ENNReal.toNNReal_mono (by simp) h1).trans ?_
+      rw [← ENNReal.ofNNReal_toNNReal, ENNReal.toNNReal_coe]
+    rwa [Real.nnabs_of_nonneg (ha i)]
+  · simp
+
+/-- The finite gauge of the first `k` entries is below the extended gauge.
+
+**This is the lemma that makes `toFinite` usable**: without it the bridge computes
+in the wrong direction.  It holds because `extend` is a supremum over the cap `m`,
+and for `m` above the finitely many entries the capped truncation *is* `ofFin`. -/
+theorem ofFin_le_extend (Φ : SymmetricGauge) {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n) (k : ℕ) :
+    ((Φ (ofFin (fun i : Fin k => a i)) : ℝ≥0) : ℝ≥0∞)
+      ≤ Φ.extend fun n => ENNReal.ofReal (a n) := by
+  classical
+  -- A cap above every one of the finitely many entries.
+  obtain ⟨m, hm⟩ : ∃ m : ℝ≥0, ∀ i : Fin k, (a i).toNNReal ≤ m :=
+    ⟨(Finset.univ.image fun i : Fin k => (a i).toNNReal).sup id,
+      fun i => Finset.le_sup (f := id) (Finset.mem_image_of_mem _ (Finset.mem_univ i))⟩
+  have heq : ofFin (fun i : Fin k => a i) = truncate (fun n => ENNReal.ofReal (a n)) k m := by
+    refine Finsupp.ext fun i => ?_
+    simp only [truncate_apply, ofFin_apply]
+    split
+    · rename_i hi
+      have hle : ENNReal.ofReal (a i) ≤ (m : ℝ≥0∞) := by
+        rw [← ENNReal.ofNNReal_toNNReal, ENNReal.coe_le_coe]
+        exact hm ⟨i, hi⟩
+      rw [min_eq_left hle, ← ENNReal.ofNNReal_toNNReal, ENNReal.toNNReal_coe,
+        Real.nnabs_of_nonneg (ha i)]
+    · simp
+  rw [heq]
+  exact le_iSup_of_le k (le_iSup
+    (fun m : ℝ≥0 => ((Φ (truncate (fun n => ENNReal.ofReal (a n)) k m) : ℝ≥0) : ℝ≥0∞)) m)
+
 /-! ### The gauge a symmetric norming function induces on operators
 
 `symmetricGaugeENorm Φ A = Φ∞ (a(A))`, the symmetric gauge read along the
@@ -550,6 +599,130 @@ theorem symmetricGaugeENorm_comp_right_le (Φ : SymmetricGauge)
         Φ.extend_mono hpt
     _ = (‖R‖₊ : ℝ≥0∞) * symmetricGaugeENorm Φ A := Φ.extend_smul _ _
     _ = symmetricGaugeENorm Φ A * ‖R‖ₑ := by rw [mul_comm]; rfl
+
+section Triangle
+
+universe u v
+
+variable {𝕜 : Type u} [RCLike 𝕜] [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+
+/-- **Ideal law 4 of 5: subadditivity.**
+
+This is Milestone B2, and it is the only law that is not a pointwise statement
+about approximation numbers.  `aₙ(S+T) ≤ aₙ(S) + aₙ(T)` is **false** in general;
+what is true is the prefix statement — the Ky Fan inequality — and getting from
+prefix sums to a symmetric gauge is weak majorization.
+
+The route is `Family/Schatten.lean`'s, at a general gauge instead of `ℓᵖ`: apply
+the `Fin k` theory to the truncation at each `k`.  **Where Schatten needs finite
+Minkowski to split the right-hand side, here `toFinite k` is a
+`FiniteSymmetricGauge` and its own `add_le` does it.** -/
+theorem symmetricGaugeENorm_add_le (Φ : SymmetricGauge) (S T : E →L[𝕜] F) :
+    symmetricGaugeENorm Φ (S + T)
+      ≤ symmetricGaugeENorm Φ S + symmetricGaugeENorm Φ T := by
+  have hnn : ∀ (A : E →L[𝕜] F) n, 0 ≤ A.approximationNumber n :=
+    fun A n => ContinuousLinearMap.approximationNumber_nonneg A n
+  refine iSup_le fun k => iSup_le fun m => ?_
+  -- The capped truncation is below the uncapped `Fin k` vector.
+  have hcap := Φ.mono (truncate_le_ofFin (hnn (S + T)) k m)
+  -- The finite gauge inequality, from Ky Fan through `le_of_prefixSum_le`.
+  have hfin : (Φ.toFinite k) (fun i : Fin k => (S + T).approximationNumber i)
+      ≤ (Φ.toFinite k) (fun i : Fin k => S.approximationNumber i)
+        + (Φ.toFinite k) (fun i : Fin k => T.approximationNumber i) := by
+    refine le_trans (FiniteSymmetricGauge.le_of_prefixSum_le (Φ := Φ.toFinite k)
+      (y := fun i : Fin k => S.approximationNumber i + T.approximationNumber i)
+      (fun i j hij => ContinuousLinearMap.approximationNumber_antitone _ hij)
+      (fun i => hnn _ _) (fun i => add_nonneg (hnn _ _) (hnn _ _)) ?_) ?_
+    · intro j
+      have hky := TauCeti.ApproximationNumber.kyFanApproximationGauge_add_le_of_minMax
+        (ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.out (𝕜 := 𝕜) (E := E) (F := F))
+        (min j k) S T
+      -- Reindex: a filtered sum over `Fin k` is a `range (min j k)` sum.
+      have hre : ∀ f : ℕ → ℝ,
+          (∑ a : Fin k, if (a : ℕ) < j then f (a : ℕ) else 0)
+            = ∑ n ∈ Finset.range (min j k), f n := by
+        intro f
+        rw [Fin.sum_univ_eq_sum_range (fun n => if n < j then f n else 0) k,
+          ← Finset.sum_filter]
+        congr 1
+        ext n
+        simp [Finset.mem_filter, Finset.mem_range, and_comm]
+      simp only [TauCeti.ApproximationNumber.kyFanApproximationGauge,
+        ContinuousLinearMap.kyFanGauge] at hky
+      simpa [FiniteVector.prefixSum, Finset.sum_filter, hre,
+        Finset.sum_add_distrib] using hky
+    · exact (Φ.toFinite k).add_le _ _
+  calc ((Φ (truncate (fun n => ENNReal.ofReal ((S + T).approximationNumber n)) k m) : ℝ≥0)
+        : ℝ≥0∞)
+      ≤ ((Φ (ofFin (fun i : Fin k => (S + T).approximationNumber i)) : ℝ≥0) : ℝ≥0∞) := by
+        exact_mod_cast hcap
+    _ ≤ ((Φ (ofFin (fun i : Fin k => S.approximationNumber i)) : ℝ≥0) : ℝ≥0∞)
+        + ((Φ (ofFin (fun i : Fin k => T.approximationNumber i)) : ℝ≥0) : ℝ≥0∞) := by
+        exact_mod_cast hfin
+    _ ≤ symmetricGaugeENorm Φ S + symmetricGaugeENorm Φ T :=
+        add_le_add (Φ.ofFin_le_extend (hnn S) k) (Φ.ofFin_le_extend (hnn T) k)
+
+-- Neither the min-max hypothesis nor completeness is used: this is pointwise.
+omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] in
+/-- **Ideal law 5 of 5**: the gauge is unchanged by passing to the adjoint.
+
+Pointwise, from `approximationNumber_adjoint`. -/
+theorem symmetricGaugeENorm_adjoint (Φ : SymmetricGauge) (A : E →L[𝕜] F) :
+    symmetricGaugeENorm Φ (ContinuousLinearMap.adjoint A) = symmetricGaugeENorm Φ A := by
+  simp only [symmetricGaugeENorm,
+    ContinuousLinearMap.approximationNumber_adjoint]
+
+-- The two-sided law is pointwise too: no min-max hypothesis, no completeness of
+-- the outer spaces.  Only subadditivity needs the Ky Fan inequality.
+omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+  [CompleteSpace E] [CompleteSpace F] in
+/-- The two-sided ideal law, from the two one-sided bounds. -/
+theorem symmetricGaugeENorm_comp_le (Φ : SymmetricGauge)
+    {G H : Type v}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    (L : F →L[𝕜] G) (A : E →L[𝕜] F) (R : H →L[𝕜] E) :
+    symmetricGaugeENorm Φ (L ∘L A ∘L R)
+      ≤ ‖L‖ₑ * symmetricGaugeENorm Φ A * ‖R‖ₑ := by
+  have hpt : ∀ n, ENNReal.ofReal ((L ∘L A ∘L R).approximationNumber n)
+      ≤ ‖L‖ₑ * (‖R‖ₑ * ENNReal.ofReal (A.approximationNumber n)) := by
+    intro n
+    have h1 := ContinuousLinearMap.approximationNumber_comp_le_norm_mul L (A ∘L R) n
+    have h2 := ContinuousLinearMap.approximationNumber_comp_le_mul_norm A R n
+    have hchain : (L ∘L A ∘L R).approximationNumber n ≤ ‖L‖ * (A.approximationNumber n * ‖R‖) :=
+      h1.trans (by
+        refine mul_le_mul_of_nonneg_left h2 (norm_nonneg L))
+    refine (ENNReal.ofReal_le_ofReal hchain).trans_eq ?_
+    rw [ENNReal.ofReal_mul (norm_nonneg L), ENNReal.ofReal_mul
+      (ContinuousLinearMap.approximationNumber_nonneg A n),
+      ofReal_norm, ofReal_norm]
+    ring
+  calc symmetricGaugeENorm Φ (L ∘L A ∘L R)
+      ≤ Φ.extend (fun n => ‖L‖ₑ *
+          (‖R‖ₑ * ENNReal.ofReal (A.approximationNumber n))) := Φ.extend_mono hpt
+    _ = ‖L‖ₑ * (‖R‖ₑ * symmetricGaugeENorm Φ A) := by
+        rw [show (‖L‖ₑ : ℝ≥0∞) = ((‖L‖₊ : ℝ≥0) : ℝ≥0∞) from rfl,
+          show (‖R‖ₑ : ℝ≥0∞) = ((‖R‖₊ : ℝ≥0) : ℝ≥0∞) from rfl,
+          Φ.extend_smul, Φ.extend_smul]
+        rfl
+    _ = ‖L‖ₑ * symmetricGaugeENorm Φ A * ‖R‖ₑ := by ring
+
+/-- **The operator ideal a symmetric norming function induces.**
+
+Milestone B1, and the five fields are the five laws above. -/
+noncomputable def symmetricGaugeFamily (𝕜 : Type u) [RCLike 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (Φ : SymmetricGauge) :
+    TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜 where
+  gauge A := symmetricGaugeENorm Φ A
+  gauge_add_le A B := symmetricGaugeENorm_add_le Φ A B
+  gauge_smul c A := symmetricGaugeENorm_smul Φ c A
+  enorm_le_gauge A := enorm_le_symmetricGaugeENorm Φ A
+  gauge_comp_le L A R := symmetricGaugeENorm_comp_le Φ L A R
+  gauge_adjoint A := symmetricGaugeENorm_adjoint Φ A
+
+end Triangle
 
 end Operators
 
