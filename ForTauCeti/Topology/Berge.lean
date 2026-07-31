@@ -566,4 +566,78 @@ theorem eventually_iInf_lt_of_lt_iInf
     with p hp
   linarith [hp]
 
+/-- **Lower semicontinuity of the value function under upper hemicontinuity.**
+
+`V p` eventually exceeds any bound strictly below `V p₀`.  This is the half that
+consumes the whole upper-hemicontinuity chain: the contradiction produces a
+*frequently* statement, first countability of the parameter space turns it into
+a sequence, and `exists_subseq_tendsto_mem_of_isCompact` extracts a limit
+feasible at `p₀` whose value would undercut `V p₀`. -/
+theorem eventually_lt_iInf_of_iInf_lt
+    {P X : Type*} [TopologicalSpace P] [FirstCountableTopology P]
+    [TopologicalSpace X] [RegularSpace X] [T2Space X] [FirstCountableTopology X]
+    [WeaklyLocallyCompactSpace X]
+    {K : P → Set X} {p₀ : P} (hKu : UpperHemicontinuousAt K p₀)
+    (hK₀ : IsCompact (K p₀))
+    {g : P → X → ℝ} (hg : Continuous (Function.uncurry g))
+    (hKne : ∀ p, (K p).Nonempty) (hKcompact : ∀ p, IsCompact (K p))
+    (hbdd : ∀ p, BddBelow (Set.range fun x : ↥(K p) => g p ↑x))
+    {b : ℝ} (hb : b < ⨅ x : ↥(K p₀), g p₀ ↑x) :
+    ∀ᶠ p in 𝓝 p₀, b < ⨅ x : ↥(K p), g p ↑x := by
+  by_contra hcon
+  -- Failure gives a sequence of parameters along which the value stays low.
+  rw [not_eventually] at hcon
+  obtain ⟨q, hqtend, hqle⟩ := exists_seq_forall_of_frequently hcon
+  -- At each, pick a minimizer; its value is the (low) infimum.
+  have hgcont : ∀ r : P, Continuous (g r) :=
+    fun r => hg.comp (continuous_const.prodMk continuous_id)
+  choose x hxK hxmin using fun k =>
+    (hKcompact (q k)).exists_isMinOn (hKne (q k)) (hgcont (q k)).continuousOn
+  have hxval : ∀ k, g (q k) (x k) = ⨅ y : ↥(K (q k)), g (q k) ↑y := by
+    intro k
+    haveI : Nonempty ↥(K (q k)) := (hKne (q k)).to_subtype
+    exact le_antisymm (le_ciInf fun y => (isMinOn_iff.mp (hxmin k)) ↑y y.2)
+      (ciInf_le (hbdd (q k)) ⟨x k, hxK k⟩)
+  -- Extract a convergent subsequence with feasible limit.
+  obtain ⟨φ, hφmono, x₀, hx₀K, hx₀tend⟩ :=
+    exists_subseq_tendsto_mem_of_isCompact hKu hK₀ hqtend hxK
+  -- Its value is a limit of values below `b`, hence at most `b`.
+  have hjoint : Tendsto (fun t => g (q (φ t)) (x (φ t))) atTop (𝓝 (g p₀ x₀)) :=
+    (hg.tendsto (p₀, x₀)).comp
+      ((hqtend.comp hφmono.tendsto_atTop).prodMk_nhds hx₀tend)
+  have hle : g p₀ x₀ ≤ b := by
+    refine le_of_tendsto hjoint ?_
+    filter_upwards with t
+    rw [hxval (φ t)]
+    exact not_lt.mp (hqle (φ t))
+  -- But `x₀` is feasible at `p₀`, so its value is at least `V p₀ > b`.
+  exact absurd (lt_of_lt_of_le hb (ciInf_le (hbdd p₀) ⟨x₀, hx₀K⟩)) (not_lt.mpr hle)
+
+/-- **Berge's value theorem, varying constraints.**
+
+The value function `V p = ⨅ x ∈ K p, g p x` is continuous when the constraint
+correspondence is compact-valued, nonempty-valued, and hemicontinuous in both
+senses, and the objective is jointly continuous.
+
+Each hypothesis is consumed exactly once and by a different half of the proof:
+**lower** hemicontinuity gives `V p < b` above `V p₀`
+(`eventually_iInf_lt_of_lt_iInf`), **upper** hemicontinuity gives `b < V p`
+below it (`eventually_lt_iInf_of_iInf_lt`), and the order characterisation of
+convergence in `ℝ` joins them. -/
+theorem continuous_iInf_of_hemicontinuousAt
+    {P X : Type*} [TopologicalSpace P] [FirstCountableTopology P]
+    [TopologicalSpace X] [RegularSpace X] [T2Space X] [FirstCountableTopology X]
+    [WeaklyLocallyCompactSpace X]
+    {K : P → Set X} (hKcompact : ∀ p, IsCompact (K p)) (hKne : ∀ p, (K p).Nonempty)
+    (hKu : ∀ p, UpperHemicontinuousAt K p) (hKl : ∀ p, LowerHemicontinuousAt K p)
+    {g : P → X → ℝ} (hg : Continuous (Function.uncurry g))
+    (hbdd : ∀ p, BddBelow (Set.range fun x : ↥(K p) => g p ↑x)) :
+    Continuous (fun p => ⨅ x : ↥(K p), g p ↑x) := by
+  rw [continuous_iff_continuousAt]
+  intro p₀
+  rw [ContinuousAt, tendsto_order]
+  refine ⟨fun b hb => ?_, fun b hb => ?_⟩
+  · exact eventually_lt_iInf_of_iInf_lt (hKu p₀) (hKcompact p₀) hg hKne hKcompact hbdd hb
+  · exact eventually_iInf_lt_of_lt_iInf (hKl p₀) (hKcompact p₀) (hKne p₀) hg hbdd hb
+
 end TauCeti
