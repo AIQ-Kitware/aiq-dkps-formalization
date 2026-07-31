@@ -90,28 +90,10 @@ section DoubledPhaseRotation
 variable {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
   [Fintype ι] [DecidableEq ι]
 
-/-- A diagonal map with real coefficients in an orthonormal basis of a
-`𝕜`-space. -/
-private noncomputable def basisDiagonalRealCoeffMap
-    (e : OrthonormalBasis ι 𝕜 G) (c : ι → ℝ) : G →ₗ[𝕜] G :=
-  e.toBasis.constr 𝕜 fun i => ((c i : ℝ) : 𝕜) • e i
-
-omit [DecidableEq ι] in
-@[simp] private theorem basisDiagonalRealCoeffMap_apply_basis
-    (e : OrthonormalBasis ι 𝕜 G) (c : ι → ℝ) (i : ι) :
-    basisDiagonalRealCoeffMap e c (e i) = ((c i : ℝ) : 𝕜) • e i := by
-  exact e.toBasis.constr_basis 𝕜 _ i
-
-omit [DecidableEq ι] in
-@[simp] private theorem basisDiagonalRealCoeffMap_repr
-    (e : OrthonormalBasis ι 𝕜 G) (c : ι → ℝ) (x : G) (i : ι) :
-    e.repr (basisDiagonalRealCoeffMap e c x) i =
-      ((c i : ℝ) : 𝕜) * e.repr x i := by
-  classical
-  rw [← e.sum_repr x]
-  simp only [map_sum, map_smul, basisDiagonalRealCoeffMap_apply_basis, smul_smul]
-  simp [Pi.single_apply]
-  ring
+/-! The diagonal map with real coefficients and its two lemmas used to be defined here as
+well, over the same `𝕜` and with proofs line-for-line identical to the upstream copy.  They
+now come from `…ReciprocalMultiplier/OrbitAction.lean`, which is upstream in the import
+order; the real-only version that lived there is the same construction at `𝕜 = ℝ`. -/
 
 /-- Coordinatewise phase rotations in an orthonormal basis of a `𝕜`-space,
 before transporting the product norm to `WithLp 2`. -/
@@ -189,7 +171,6 @@ noncomputable def basisDoubledPhaseRotation
       (by nlinarith [Real.sin_sq_add_cos_sq (theta i)])
       (e.repr x.fst i) (e.repr x.snd i)
 
-omit [DecidableEq ι] in
 /-- The doubled phase rotation on a basis vector. -/
 @[simp] theorem basisDoubledPhaseRotation_apply
     (e : OrthonormalBasis ι 𝕜 G) (theta : ι → ℝ) (x : WithLp 2 (G × G)) :
