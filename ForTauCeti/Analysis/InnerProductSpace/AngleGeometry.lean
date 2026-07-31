@@ -231,14 +231,22 @@ theorem IsAcute.symm {U V : Submodule 𝕜 E}
     (h : IsAcute U V) : IsAcute V U :=
   ⟨h.2, h.1⟩
 
-/-- The directed principal-sine sequences are symmetric for equal-rank
-subspaces.  Equal rank lets us choose orthonormal families with the same finite
-index type; the family-level complementary-Gram theorem then identifies the two
-directed cross-projection singular-value sequences. -/
-theorem principalSines_comm (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+/-- **Two equidimensional subspaces carry orthonormal families, on a common
+index type, spanning them.**
+
+`stdOrthonormalBasis` gives each subspace a basis; the content is the
+bookkeeping that puts both on `Fin (finrank 𝕜 U)` — `Fin.cast` across
+`finrank 𝕜 U = finrank 𝕜 V` — and the two `Submodule.eq_of_le_of_finrank_eq`
+arguments turning "spans a subspace of the right dimension" into "spans it".
+
+Stated existentially because that is all its callers want: the bases and the
+cast never escape, only `u`, `v`, their orthonormality and their spans.  It was
+written out twice in this file, in `principalSines_comm` and in
+`opNorm_projection_sub_eq_opNorm_sinThetaMap`, 29 identical lines each. -/
+private theorem exists_orthonormal_pair_spanning (U V : Submodule 𝕜 E)
     (hrank : finrank 𝕜 U = finrank 𝕜 V) :
-    principalSines U V = principalSines V U := by
+    ∃ u v : Fin (finrank 𝕜 U) → E, ∃ _ : Orthonormal 𝕜 u, ∃ _ : Orthonormal 𝕜 v,
+      Submodule.span 𝕜 (Set.range u) = U ∧ Submodule.span 𝕜 (Set.range v) = V := by
   classical
   let d := finrank 𝕜 U
   let bU := stdOrthonormalBasis 𝕜 U
@@ -273,6 +281,20 @@ theorem principalSines_comm (U V : Submodule 𝕜 E)
       exact (bV (Fin.cast hdV i)).2
     · rw [finrank_span_eq_card hv.linearIndependent, Fintype.card_fin]
       exact hdV
+  exact ⟨u, v, hu, hv, hspanU, hspanV⟩
+
+/-- The directed principal-sine sequences are symmetric for equal-rank
+subspaces.  Equal rank lets us choose orthonormal families with the same finite
+index type; the family-level complementary-Gram theorem then identifies the two
+directed cross-projection singular-value sequences. -/
+theorem principalSines_comm (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hrank : finrank 𝕜 U = finrank 𝕜 V) :
+    principalSines U V = principalSines V U := by
+  classical
+  let d := finrank 𝕜 U
+  obtain ⟨u, v, hu, hv, hspanU, hspanV⟩ :=
+    exists_orthonormal_pair_spanning U V hrank
   -- states the goal with the definition unfolded, in the shape the next step needs;
   -- there is no `_apply` lemma to rewrite with here.
   change
@@ -386,38 +408,8 @@ theorem opNorm_projection_sub_eq_opNorm_sinThetaMap (U V : Submodule 𝕜 E)
     subst V
     simp
   have hd : 0 < d := Nat.pos_of_ne_zero hd0
-  let bU := stdOrthonormalBasis 𝕜 U
-  let bV := stdOrthonormalBasis 𝕜 V
-  have hdV : d = finrank 𝕜 V := by simpa [d] using hrank
-  let u : Fin d → E := fun i => ((bU i : U) : E)
-  let v : Fin d → E := fun i => ((bV (Fin.cast hdV i) : V) : E)
-  have hu : Orthonormal 𝕜 u := by
-    rw [orthonormal_iff_ite]
-    intro i j
-    -- states the goal as the inner-product identity the structure lemma expects.
-    change ⟪bU i, bU j⟫_𝕜 = if i = j then 1 else 0
-    exact orthonormal_iff_ite.mp bU.orthonormal i j
-  have hv : Orthonormal 𝕜 v := by
-    rw [orthonormal_iff_ite]
-    intro i j
-    -- states the goal as the inner-product identity the structure lemma expects.
-    change ⟪bV (Fin.cast hdV i), bV (Fin.cast hdV j)⟫_𝕜 =
-      if i = j then 1 else 0
-    rw [orthonormal_iff_ite.mp bV.orthonormal]
-    simp only [Fin.cast_inj]
-  have hspanU : Submodule.span 𝕜 (Set.range u) = U := by
-    apply Submodule.eq_of_le_of_finrank_eq
-    · apply Submodule.span_le.mpr
-      rintro _ ⟨i, rfl⟩
-      exact (bU i).2
-    · rw [finrank_span_eq_card hu.linearIndependent, Fintype.card_fin]
-  have hspanV : Submodule.span 𝕜 (Set.range v) = V := by
-    apply Submodule.eq_of_le_of_finrank_eq
-    · apply Submodule.span_le.mpr
-      rintro _ ⟨i, rfl⟩
-      exact (bV (Fin.cast hdV i)).2
-    · rw [finrank_span_eq_card hv.linearIndependent, Fintype.card_fin]
-      exact hdV
+  obtain ⟨u, v, hu, hv, hspanU, hspanV⟩ :=
+    exists_orthonormal_pair_spanning U V hrank
   have hdirSpan :
       ‖(Submodule.span 𝕜 (Set.range u))ᗮ.starProjection ∘L
           (Submodule.span 𝕜 (Set.range v)).starProjection‖ =
