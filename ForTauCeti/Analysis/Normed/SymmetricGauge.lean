@@ -794,6 +794,38 @@ theorem extend_le_extend_of_le {Φ₁ Φ₂ : SymmetricGauge}
   calc (Φ₁ c.1 : ℝ≥0∞) ≤ (Φ₂ c.1 : ℝ≥0∞) := by exact_mod_cast h c.1
     _ ≤ Φ₂.extend a := le_extend_of_dominated Φ₂ a c.1 c.2
 
+/-- **The extension agrees with the gauge on finitely supported sequences.**
+
+The supremum defining `Φ.extend ↑c` is attained at `c` itself: `c` is dominated
+by its own coercion, and `mono` bounds every other dominated sequence by it.
+
+This is what reduces statements about `extend` to statements about `Φ`, and in
+particular what lets an equality of extensions be tested on finsupps. -/
+theorem extend_coe (c : ℕ →₀ ℝ≥0) :
+    Φ.extend (fun i => (c i : ℝ≥0∞)) = (Φ c : ℝ≥0∞) := by
+  refine le_antisymm (iSup_le fun d => ?_) ?_
+  · -- Every dominated `d` is below `c` termwise, so `mono` applies.
+    have hdc : d.1 ≤ c := by
+      intro i
+      have h := d.2 i
+      simp only at h
+      exact_mod_cast h
+    exact_mod_cast Φ.mono hdc
+  · exact le_extend_of_dominated Φ _ c fun i => le_rfl
+
+/-- Two gauges agreeing on every finitely supported sequence have equal
+extensions.
+
+Antisymmetry of `extend_le_extend_of_le`.  Together with `extend_coe` this is the
+reduction the Calkin-injectivity statement needs: it turns an equality of
+extensions into an equality of gauges on finsupps, which is where a realization
+argument can act. -/
+theorem extend_eq_extend_of_eq {Φ₁ Φ₂ : SymmetricGauge}
+    (h : ∀ c : ℕ →₀ ℝ≥0, Φ₁ c = Φ₂ c) (a : ℕ → ℝ≥0∞) :
+    Φ₁.extend a = Φ₂.extend a :=
+  le_antisymm (extend_le_extend_of_le (fun c => (h c).le) a)
+    (extend_le_extend_of_le (fun c => (h c).ge) a)
+
 end SymmetricGauge
 
 end TauCeti
