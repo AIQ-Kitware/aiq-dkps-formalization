@@ -5,12 +5,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import Mathlib
 
 /-!
-# Operator ideals: suggested signatures
+# Operator ideals: target signatures
 
-The roadmap prose is authoritative.  This file records representative target
-shapes using names already present in the staged `ForTauCeti` implementation;
-it is not exhaustive, and discharging everything here finishes neither a Part
-nor the roadmap.
+**This file is not the roadmap and is not exhaustive.** The definitive document is
+`README.md`. The statements here suggest Lean forms for particular milestones, so that
+contributors and reviewers converge on names and signatures; discharging all of them
+finishes neither a Part nor the roadmap. `sorry` is allowed in this human-owned roadmap
+library — these are goals, not proofs.
 -/
 
 namespace TauCetiRoadmap.OperatorIdeals
@@ -36,20 +37,16 @@ variable {H : Type y} [SeminormedAddCommGroup H] [NormedSpace 𝕜 H]
 
 /-- The `n`-th approximation number: the distance from `T` to the operators of
 rank at most `n`. -/
--- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic`
 noncomputable def approximationNumber (T : E →L[𝕜] F) (n : ℕ) : ℝ :=
   ⨅ R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)}, ‖T - R.1‖
 
--- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic`
 @[simp] theorem approximationNumber_index_zero (T : E →L[𝕜] F) :
     approximationNumber T 0 = ‖T‖ := sorry
 
--- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic`
 theorem approximationNumber_antitone (T : E →L[𝕜] F) :
     Antitone (approximationNumber T) := sorry
 
 /-- Additivity across indices: the mixed subadditivity law of `s`-number theory. -/
--- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic`
 theorem approximationNumber_add_le (S T : E →L[𝕜] F) (m n : ℕ) :
     approximationNumber (S + T) (m + n)
       ≤ approximationNumber S m + approximationNumber T n := sorry
@@ -63,18 +60,13 @@ index; this one splits the index.  Naming the index addition also keeps it
 legible beside `approximationNumber_add_le` and distinguishes it from the
 fixed-index bounds `approximationNumber_comp_le_mul_norm` and
 `approximationNumber_comp_le_norm_mul`. -/
--- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic`
 theorem approximationNumber_comp_add_le_mul (S : F →L[𝕜] G) (T : E →L[𝕜] F) (m n : ℕ) :
     approximationNumber (S ∘L T) (m + n)
       ≤ approximationNumber S m * approximationNumber T n := sorry
--- **Proved 2026-07-31** as `ContinuousLinearMap.approximationNumber_comp_add_le_mul` in
--- `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean`, axiom-clean, signature
--- unchanged. The `sorry` stays because this file records target shapes.
 
 /-- The two-sided ideal inequality, at a fixed index.  Recorded here because it
 owns the name `approximationNumber_comp_comp_le`; the theorem above is the
 index-splitting statement and must not reuse it. -/
--- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic`
 theorem approximationNumber_comp_comp_le {G' H' : Type*}
     [SeminormedAddCommGroup G'] [NormedSpace 𝕜 G']
     [SeminormedAddCommGroup H'] [NormedSpace 𝕜 H']
@@ -89,14 +81,12 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [Complete
 variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
 /-- Adjoint invariance, the Hilbert-space symmetry the Banach theory lacks. -/
--- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint`
 @[simp] theorem approximationNumber_adjoint (T : E →L[ℂ] F) (n : ℕ) :
     approximationNumber (ContinuousLinearMap.adjoint T) n
       = approximationNumber T n := sorry
 
 /-- On finite-dimensional inner-product spaces, the approximation numbers are the
 singular values: Eckart--Young. -/
--- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional`
 theorem approximationNumber_eq_singularValues
     [FiniteDimensional ℂ E] [FiniteDimensional ℂ F] (T : E →L[ℂ] F) (n : ℕ) :
     approximationNumber T n = (T : E →ₗ[ℂ] F).singularValues n := sorry
@@ -106,7 +96,6 @@ rank greater than `n` on which `T` is `c`-coercive forces `aₙ(T) ≥ c`.
 
 Deliberately not called `approximationNumber_minmax`: this is one direction, and a name
 claiming the equality would overstate what the declaration says. -/
--- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax`
 theorem le_approximationNumber_of_lt_rank (T : E →L[ℂ] F) (n : ℕ) (V : Submodule ℂ E)
     {c : ℝ} (hVrank : (n : Cardinal) < Module.rank ℂ V)
     (hV : ∀ x : V, c * ‖(x : E)‖ ≤ ‖T (x : E)‖) :
@@ -121,10 +110,14 @@ concrete norms are instances rather than parallel developments. -/
 
 section IdealFamilies
 
-/-- An operator ideal family over `𝕜`: a gauge on every Hilbert pair, with
-subadditivity, absolute homogeneity, domination of the operator norm, and the
-two-sided ideal law. -/
--- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.Family.Basic`
+/-- An operator ideal family over `𝕜`: a single gauge on every Hilbert pair, with the four
+laws — subadditivity, absolute homogeneity, domination of the operator norm, and the
+two-sided ideal law.  All four are unconditional, so nothing has to be said about
+non-members; the ideal itself is recovered as the finiteness domain of the gauge.
+
+The composition law is stated inside the family's two universes, which is what a
+rectangular family in two universes can express; the diagonal case, where the adjoint keeps
+source and target in one universe, is `SymmetricOperatorIdealFamily` below. -/
 structure OperatorIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
   gauge : ∀ {E : Type v} {F : Type w}
       [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -142,6 +135,25 @@ structure OperatorIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
       [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
       [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
       (A : E →L[𝕜] F), ‖A‖ₑ ≤ gauge A
+  gauge_comp_le : ∀ {E H : Type v} {F G : Type w}
+      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+      [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+      [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+      (L : F →L[𝕜] G) (A : E →L[𝕜] F) (R : H →L[𝕜] E),
+      gauge (L ∘L A ∘L R) ≤ ‖L‖ₑ * gauge A * ‖R‖ₑ
+
+/-- The **symmetric** family: the diagonal instantiation, extended by adjoint invariance.
+
+It is a second structure rather than an extra field because the adjoint exchanges source
+and target: `gauge_adjoint` compares the gauge at `(E, F)` with the gauge at `(F, E)`, which
+is only a statement inside one universe. -/
+structure SymmetricOperatorIdealFamily (𝕜 : Type u) [RCLike 𝕜]
+    extends OperatorIdealFamily.{u, v, v} 𝕜 where
+  gauge_adjoint : ∀ {E F : Type v}
+      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+      (A : E →L[𝕜] F), gauge (ContinuousLinearMap.adjoint A) = gauge A
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -150,32 +162,33 @@ variable {ι : Type x}
 
 /-- The Hilbert--Schmidt energy in `ℝ≥0∞`: no summability side conditions
 anywhere, and basis independence is a theorem rather than a hypothesis. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy`
 noncomputable def hilbertSchmidtEnergy (T : F →L[𝕜] E) (b : HilbertBasis ι 𝕜 F) : ℝ≥0∞ :=
   ∑' i, ‖T (b i)‖ₑ ^ 2
 
 /-- Basis independence of the energy, by Parseval and unconditional Fubini. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy`
 theorem hilbertSchmidtEnergy_indep {ι' : Type y} (T : F →L[𝕜] E)
     (b : HilbertBasis ι 𝕜 F) (c : HilbertBasis ι' 𝕜 F) :
     hilbertSchmidtEnergy T b = hilbertSchmidtEnergy T c := sorry
 
-/-- The nuclear gauge: the series of approximation numbers.  Its triangle
-inequality is the Ky Fan inequality in the limit. -/
--- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass`
-noncomputable def nuclearENorm (T : E →L[𝕜] F) : ℝ≥0∞ := sorry
+/-- The Ky Fan gauge: the sum of the first `k` approximation numbers.  It is the gauge every
+dominance statement is phrased against. -/
+noncomputable def kyFanGauge (T : E →L[𝕜] F) (k : ℕ) : ℝ :=
+  ∑ n ∈ Finset.range k, approximationNumber T n
 
-/-- **Milestone B2, the Ky Fan dominance principle.**  Dominance is a *property of a
-family*, not a theorem about every family: it is false for an arbitrary
-`OperatorIdealFamily`, and stating it as one would compete with the consumer-facing
-field the staged library already has,
-`IsKyFanDominant.gauge_le_of_forall_kyFanGauge_le`.
+/-- The nuclear gauge: the series of approximation numbers.  Its triangle inequality is the
+Ky Fan inequality in the limit. -/
+noncomputable def nuclearENorm (T : E →L[𝕜] F) : ℝ≥0∞ :=
+  ∑' n, ENNReal.ofReal (approximationNumber T n)
 
-What is genuinely open is the **construction**: a family built from a symmetric
-gauge is Ky Fan dominant.  See `isKyFanDominant_symmetricGaugeFamily` below. -/
--- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance`
-class IsKyFanDominant (Φ : OperatorIdealFamily ℂ) : Prop where
-  gauge_le_of_forall_kyFanGauge_le : True
+/-- **Ky Fan dominance as a property of a family.**  It is *false* for an arbitrary
+`OperatorIdealFamily` — the four laws do not force it — so it is a class over families
+rather than a theorem about them, and Milestone B2 is the statement that the
+symmetric-gauge construction always lands in this subclass. -/
+class IsKyFanDominant (Φ : OperatorIdealFamily.{0, v, w} ℂ) : Prop where
+  gauge_le_of_forall_kyFanGauge_le : ∀ {E : Type v} {F : Type w}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (A B : E →L[ℂ] F), (∀ k, kyFanGauge A k ≤ kyFanGauge B k) → Φ.gauge A ≤ Φ.gauge B
 
 end IdealFamilies
 
@@ -274,12 +287,10 @@ The Schatten classes are *obtained* from Milestone B1 rather than constructed, s
 their four laws are B1's and not new work. -/
 
 /-- The `ℓᵖ` symmetric gauge, `Φ_p a = (∑ aₙ ^ p) ^ (1 / p)`, for `1 ≤ p`. -/
--- DELIVERED: `DavisKahan.OperatorIdeal.ApproximationNumbers.SchattenApproximationFoundation`
 noncomputable def schattenGauge (p : ℝ) (hp : 1 ≤ p) : SymmetricGauge := sorry
 
 /-- The Schatten-`p` family.  `p = ∞` is the operator-norm family and is the honest
 endpoint of the same scale rather than a separate definition. -/
--- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.Family.Schatten` (as `schattenIdealFamily`)
 noncomputable def schattenFamily (p : ℝ) (hp : 1 ≤ p) : OperatorIdealFamily.{0, v, w} ℂ :=
   symmetricGaugeFamily (schattenGauge p hp)
 
@@ -295,7 +306,6 @@ purpose -- through the singular-value sequence, and through an orthonormal expan
 that needs no spectral theory, which is what lets Part C stand on its own.  The two
 must therefore be proved equal.  Both sides are basis-independent, so the statement is
 well-posed; this is the one place in Part B where Milestone A3 is genuinely needed. -/
--- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison` (as `tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy_of_finiteDimensional`)
 theorem tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy
     (T : F →L[ℂ] E) (b : HilbertBasis ι ℂ F) :
     ∑' n, ENNReal.ofReal (approximationNumber T n) ^ 2 = hilbertSchmidtEnergy T b := sorry
@@ -308,17 +318,25 @@ This layer is **not** a special case of `schattenFamily` and does not wait on it
 a rectangular unitarily invariant norm on a vector, consumed by the
 MajorizationAndAngles arm.  That the two agree in finite dimensions is a separate
 target, and without it a reader cannot tell whether `S₂` means one thing or two. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.SchattenNorm`
 noncomputable def schattenNorm (p : ℝ)
     {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [FiniteDimensional ℂ F]
     (T : E →ₗ[ℂ] F) : ℝ := sorry
 
-/-- **Milestone B4, block sums.**  The two-block comparison consumers actually use; the
-general statement is that the sequence of a block-diagonal sum is the decreasing
-rearrangement of the union of the summands' sequences. -/
-theorem gauge_blockSum_le (Φ : OperatorIdealFamily ℂ) (T₁ T₂ : E →L[ℂ] F) :
-    Φ.gauge (T₁ + T₂) ≤ Φ.gauge T₁ + Φ.gauge T₂ := Φ.gauge_add_le T₁ T₂
+/-- **Milestone B4, block sums.**  The two-block comparison consumers actually use, for an
+operator that is block-diagonal for orthogonal decompositions of source and target: its
+gauge is squeezed between the maximum and the sum of the two block gauges.
+
+The upper bound is subadditivity applied to the splitting; the lower bound is the two-sided
+ideal law applied to each compression, and is the half that is not formal.  The general
+statement — that the approximation-number sequence of a block-diagonal sum is the decreasing
+rearrangement of the union of the summands' sequences — is the milestone this specializes. -/
+theorem gauge_blockSum_le (Φ : OperatorIdealFamily.{0, v, w} ℂ)
+    {T : E →L[ℂ] F} {P₁ P₂ : E →L[ℂ] E} {Q₁ Q₂ : F →L[ℂ] F}
+    (hP₁ : ‖P₁‖ ≤ 1) (hP₂ : ‖P₂‖ ≤ 1) (hQ₁ : ‖Q₁‖ ≤ 1) (hQ₂ : ‖Q₂‖ ≤ 1)
+    (hsplit : Q₁ ∘L T ∘L P₁ + Q₂ ∘L T ∘L P₂ = T) :
+    max (Φ.gauge (Q₁ ∘L T ∘L P₁)) (Φ.gauge (Q₂ ∘L T ∘L P₂)) ≤ Φ.gauge T ∧
+      Φ.gauge T ≤ Φ.gauge (Q₁ ∘L T ∘L P₁) + Φ.gauge (Q₂ ∘L T ∘L P₂) := sorry
 
 end SymmetricGauges
 
@@ -336,29 +354,24 @@ variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [Complet
 variable {ι : Type x}
 
 /-- The columns of an operator in a Hilbert basis. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Lp`
 noncomputable def columns (b : HilbertBasis ι 𝕜 F) (T : F →L[𝕜] E) : ι → E :=
   fun i => T (b i)
 
 /-- Membership in `ℓ²` of the columns is exactly finiteness of the energy —
 the bridge from the model to the ideal theory of Part B. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Lp`
 theorem memLp_columns_iff (b : HilbertBasis ι 𝕜 F) (T : F →L[𝕜] E) :
     Memℓp (columns b T) 2 ↔ hilbertSchmidtEnergy T b ≠ ⊤ := sorry
 
 /-- The representation map: an `ℓ²` family of columns determines a bounded
 operator through the absolutely convergent expansion against the basis. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Lp`
 noncomputable def ofLp (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2) :
     F →L[𝕜] E := sorry
 
 /-- Round trip: the columns of the represented operator are the family. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Lp`
 theorem columns_ofLp (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2) :
     columns b (ofLp b f) = f := sorry
 
 /-- The `ℓ²` norm is the Hilbert--Schmidt norm. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space`
 theorem norm_sq_eq_tsum_norm_column_sq (b : HilbertBasis ι 𝕜 F)
     (f : lp (fun _ : ι => E) 2) :
     ‖f‖ ^ 2 = ∑' i, ‖ofLp b f (b i)‖ ^ 2 := sorry
@@ -366,7 +379,6 @@ theorem norm_sq_eq_tsum_norm_column_sq (b : HilbertBasis ι 𝕜 F)
 /-- **Milestone C1, isometric conjugation**: composition with a norm-preserving
 map on the left and a map with norm-preserving adjoint on the right preserves
 the energy — what makes the Sylvester flow a unitary group on this space. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation`
 theorem hilbertSchmidtEnergy_isometry_comp (b : HilbertBasis ι 𝕜 F)
     (U : E →L[𝕜] E) (hU : ∀ x, ‖U x‖ = ‖x‖) (T : F →L[𝕜] E) :
     hilbertSchmidtEnergy (U ∘L T) b = hilbertSchmidtEnergy T b := sorry
@@ -374,7 +386,6 @@ theorem hilbertSchmidtEnergy_isometry_comp (b : HilbertBasis ι 𝕜 F)
 /-- **Milestone C2, Pythagoras along an orthogonal family**: a family splitting
 every vector's norm splits the energy, with no countability or summability
 side conditions. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras`
 theorem tsum_energy_isometryFamily_comp {κ : Type y} (b : HilbertBasis ι 𝕜 F)
     (P : κ → (E →L[𝕜] E)) (hP : ∀ v : E, ∑' k, ‖P k v‖ₑ ^ 2 = ‖v‖ₑ ^ 2)
     (T : F →L[𝕜] E) :
