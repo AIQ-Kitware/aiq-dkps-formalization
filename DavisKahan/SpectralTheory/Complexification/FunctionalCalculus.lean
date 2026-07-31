@@ -40,11 +40,22 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 
-noncomputable local instance complexOperatorRealAlgebra :
+/-- Scalar restriction of the complex operator algebra to the reals.
+
+**`scoped`, deliberately, and not `local` or global.**  Global is the ℝ-algebra diamond that
+Mathlib declines to install for `Algebra.complexToReal`, so that door stays shut.  `local` was
+what this was until 2026-07-30, and it forced three other modules to reinstall a *second*
+declaration of the same instance; lemmas stated against one copy then had to be proved defeq
+against the other, which is what timed out `isDefEq` when `Threshold.lean` first tried to import
+this module's lemmas.  A scope gives every consumer the *same* declaration, so there is nothing
+to prove.  Open it with `open scoped RealComplexificationFunctionalCalculus`. -/
+noncomputable scoped instance complexOperatorRealAlgebra :
     Algebra ℝ (RealComplexification E →L[ℂ] RealComplexification E) :=
   Algebra.complexToReal
 
-noncomputable local instance realContinuousFunctionalCalculus :
+/-- Real continuous functional calculus on the complexified operator algebra.  `scoped` for the
+same reason as `complexOperatorRealAlgebra` above. -/
+noncomputable scoped instance realContinuousFunctionalCalculus :
     ContinuousFunctionalCalculus ℝ
       (RealComplexification E →L[ℂ] RealComplexification E) IsSelfAdjoint :=
   IsSelfAdjoint.instContinuousFunctionalCalculus
