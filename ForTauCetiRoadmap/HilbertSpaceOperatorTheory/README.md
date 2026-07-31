@@ -176,3 +176,17 @@ formalization (Kitware, Inc., Apache-2.0). It establishes feasibility and provid
 provenance for integration, but each roadmap here specifies the desired mathematics
 intrinsically and does not prescribe the donor API or proof architecture. Each roadmap's
 provenance section says what exists and under what terms.
+
+## Learning and compile-check companions
+
+The following family-level files are **non-normative companions**, not roadmap
+specifications:
+
+- [`references.md`](references.md) consolidates the bibliography from all six child
+  roadmaps and links to public source or publisher pages where available.
+- [`glossary.md`](glossary.md) explains the mathematical vocabulary, Lean notation, and
+  Mathlib concepts used in the proposed signatures.
+- [`All.lean`](All.lean) imports every child `Suggested.lean`, providing one file and one
+  module target for compile-checking the complete proposed signature surface.
+
+The child `README.md` files remain the definitive roadmap documents.
