@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.Real.ContinuousFunctionalCalculus
-import DavisKahan.SpectralTheory.Real.SpectralBridge
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Real
 import DavisKahan.SpectralTheory.Real.SpectralRestriction
 
 /-! # `DavisKahan/SpectralTheory/Real` -/

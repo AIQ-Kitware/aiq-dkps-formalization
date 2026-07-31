@@ -2,8 +2,24 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `DavisKahan/SpectralTheory/Real/SpectralBridge.lean`.
+* Extraction class: **moved**, not restated.  The five theorems are the **real-scalar
+  counterparts** of `SpectralOrder/Complex.lean`, name for name, and they were sitting in the
+  paper library while depending on nothing from it: their only `DavisKahan` import was the
+  alias layer `BoundedOperator/Compat.lean`, whose two names used here -- `Reduces` and
+  `opNorm_starProjection_sub_le_of_formBounds` -- resolve into `ForTauCeti` already.
+* Namespace: `TauCeti.DavisKahan.Experimental.Foundation.RealSpectralBridge` became
+  `TauCeti.SpectralOrder.Real`, matching its complex twin rather than carrying a paper's name
+  and a staging word into the library staged for Tau Ceti.
+* Original authors / copyright: Jon Crall; Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none** -- imports are `ForTauCeti` leaves and Mathlib.
 -/
-import DavisKahan.BoundedOperator.Compat
+import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
 
 /-!
@@ -59,10 +75,8 @@ embedding it into the restriction proof.
 -/
 
 namespace TauCeti
-namespace DavisKahan
-namespace Experimental
-namespace Foundation
-namespace RealSpectralBridge
+namespace SpectralOrder
+namespace Real
 
 open scoped InnerProductSpace
 
@@ -125,8 +139,7 @@ theorem upperFormBoundOn_top_of_spectrum_subset_Iic
     by_contra hempty
     rw [Set.not_nonempty_iff_eq_empty] at hempty
     have h0 : spectralRadius ℝ S = 0 := by
-      show (⨆ k ∈ spectrum ℝ S, (‖k‖₊ : ENNReal)) = 0
-      rw [hempty]
+      rw [spectralRadius, hempty]
       simp
     have hS0 : S = 0 := by
       have h1 : ((‖S‖₊ : ENNReal)) = 0 := by rw [← hrad]; exact h0
@@ -141,7 +154,7 @@ theorem upperFormBoundOn_top_of_spectrum_subset_Iic
   -- the norm of the shifted operator is at most `c + m`
   have hSnorm : ‖S‖ ≤ c + m := by
     have hboundE : spectralRadius ℝ S ≤ ENNReal.ofReal (c + m) := by
-      show (⨆ k ∈ spectrum ℝ S, (‖k‖₊ : ENNReal)) ≤ ENNReal.ofReal (c + m)
+      rw [spectralRadius]
       refine iSup₂_le fun μ hμ => ?_
       obtain ⟨hpos, hle⟩ := hSspec μ hμ
       calc ((‖μ‖₊ : ENNReal)) = ‖μ‖ₑ := rfl
@@ -172,7 +185,8 @@ theorem upperFormBoundOn_top_of_spectrum_subset_Iic
           have h := mul_le_mul_of_nonneg_right hSnorm (norm_nonneg x)
           exact mul_le_mul_of_nonneg_right h (norm_nonneg x)
       _ = (c + m) * ‖x‖ ^ 2 := by ring
-  show RCLike.re ⟪A x, x⟫_ℝ ≤ c * ‖x‖ ^ 2
+  -- `UpperFormBoundOn` is a `∀ x ∈ U, _` predicate, so the goal here is already the
+  -- pointwise inequality; the `RCLike.re` is definitionally the real inner product.
   have hre : RCLike.re ⟪A x, x⟫_ℝ = ⟪A x, x⟫_ℝ := rfl
   rw [hre, hinner]
   linarith
@@ -258,14 +272,12 @@ theorem opNorm_starProjection_sub_le_of_restriction_spectra
     (hWhi : spectrum ℝ (B.restrict hW.1) ⊆ Set.Ici (c + g))
     (hWlo : spectrum ℝ (B.restrict hW.2) ⊆ Set.Iic c) :
     ‖(U.starProjection - W.starProjection : E →L[ℝ] E)‖ ≤ ‖B - A‖ / g := by
-  apply DavisKahan.opNorm_starProjection_sub_le_of_formBounds hA hB hU hW hg
+  apply Submodule.opNorm_starProjection_sub_le_of_formBounds hA hB hU hW hg
   · exact lowerFormBoundOn_of_restriction_spectrum_subset_Ici hA hU.1 hUhi
   · exact upperFormBoundOn_of_restriction_spectrum_subset_Iic hA hU.2 hUlo
   · exact lowerFormBoundOn_of_restriction_spectrum_subset_Ici hB hW.1 hWhi
   · exact upperFormBoundOn_of_restriction_spectrum_subset_Iic hB hW.2 hWlo
 
-end RealSpectralBridge
-end Foundation
-end Experimental
-end DavisKahan
+end Real
+end SpectralOrder
 end TauCeti
