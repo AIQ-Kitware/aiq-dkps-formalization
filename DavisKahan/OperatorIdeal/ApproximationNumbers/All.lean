@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Real.All
 import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
+import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteSourceSingularSystem
 import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Real

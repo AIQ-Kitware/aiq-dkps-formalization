@@ -21,12 +21,31 @@ foundation without creating an import cycle.
 
 The public aggregate and downstream ideal-family construction remain in
 `ApproximationNumbers`.
+
+## Namespace
+
+The enclosing namespace is still `TauCeti.DavisKahan.Experimental.ExactSinTheta`,
+which is a paper's name and a staging word inside a library staged for Tau Ceti.
+That is **recorded debt, not a decision**: the mathematics here is generic
+approximation-number theory and the namespace should say so.  It is not renamed
+in the same change as the move because the name has 359 references across four
+libraries and `comparator/*.json` holds declaration names as data, so a rename is
+its own piece of work with its own build.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean`.
+* Extraction class: **moved**, not restated.  Statements, proofs and namespace are
+  unchanged by the move; what changed is the enclosing library, and with it the
+  build options the file is measured against.
+* Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking; Copyright (c)
+  2026 Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none** — imports are `ForTauCeti` leaves and Mathlib.
 -/
 
 namespace TauCeti
-namespace DavisKahan
-namespace Experimental
-namespace ExactSinTheta
+namespace ApproximationNumber
 
 open scoped InnerProductSpace
 open scoped Topology
@@ -663,7 +682,5 @@ theorem kyFanApproximationGauge_le_nat_mul_opNorm
     kyFanApproximationGauge k K ≤ (k : ℝ) * ‖K‖ :=
   K.kyFanGauge_le_nat_mul_opNorm k
 
-end ExactSinTheta
-end Experimental
-end DavisKahan
+end ApproximationNumber
 end TauCeti
