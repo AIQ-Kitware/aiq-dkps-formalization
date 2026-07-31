@@ -820,15 +820,8 @@ theorem doubleAngleTangent_approximationNumber_le
       · exact X.approximationNumber_nonneg n
       · exact hanti (Nat.le_of_lt_succ i.isLt)
       · exact (X.approximationNumber_le_norm i).trans_lt hcontractive
-    have hspanRange :
-        Submodule.span ℂ (Set.range right) ≤
-          LinearMap.range (familyIsometry hrightOrtho).toLinearMap := by
-      refine Submodule.span_le.2 ?_
-      intro y hy
-      obtain ⟨i, rfl⟩ := hy
-      refine ⟨EuclideanSpace.single i 1, ?_⟩
-      exact familyIsometry_single hrightOrtho i
-    obtain ⟨coeff, hzCoord⟩ := hspanRange hz
+    obtain ⟨coeff, hzCoord⟩ :=
+      TauCeti.span_range_le_range_familyIsometry hrightOrtho hz
     have hzCoord' : familyIsometry hrightOrtho coeff = z := hzCoord
     have hcoeffNorm : ‖coeff‖ = 1 := by
       rw [← hznorm, ← hzCoord', (familyIsometry hrightOrtho).norm_map]
