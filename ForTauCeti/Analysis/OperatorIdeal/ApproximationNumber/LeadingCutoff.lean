@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
-import Mathlib.Analysis.Complex.Basic
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+public import Mathlib.Analysis.Complex.Basic
 
 /-!
 # Leading approximation-number cutoff
@@ -22,14 +24,18 @@ while still below `k` — they are at most `ε`
 
 ## Provenance
 
-Promoted from `FinishTanTwoTheta/FinishTanTwoTheta/ApproximationNumber/LeadingCutoff.lean`
-under lane `FTT-PROMOTE-3` (2026-07-30), which moved it out of a library that
-is not a default build target.  The statements and proofs are unchanged; the
-enclosing namespace moved from `TauCeti.FinishTanTwoTheta` to
-`TauCeti.ApproximationNumber`, and `FinishTanTwoTheta.GroundedImports` — which
-imports `DavisKahan.All` and so cannot survive the move — was dropped, leaving
-the single `ForTauCeti` import the file actually uses.
+* Original module: authored for the Davis--Kahan tan-2-theta development, then
+  moved here because its only non-Mathlib dependency is
+  `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic`, the module it
+  extends.
+* Extraction class: **moved and renamespaced.**  Statements and proofs are
+  unchanged; only the enclosing namespace and the import list moved.
+* Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking;
+  Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none.**
 -/
+
+public section
 
 namespace TauCeti
 namespace ApproximationNumber

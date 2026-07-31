@@ -408,7 +408,7 @@ noncomputable def codomainIsometryTransport
     (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
     (ι : H →ₗᵢ[𝕜] F) (A : E →ₗ[𝕜] H) :
     N.codomainIsometryTransport ι A = N (ι.toLinearMap ∘ₗ A) :=
-  rfl
+  (rfl)
 
 /-- Pull a rectangular UI norm back along the adjoint of an isometric
 embedding of the domain.  The transported norm measures `A : H → F` by the
@@ -455,7 +455,7 @@ noncomputable def domainIsometryTransport
     (ι : H →ₗᵢ[𝕜] E) (A : H →ₗ[𝕜] F) :
     N.domainIsometryTransport ι A =
       N (A ∘ₗ LinearMap.adjoint ι.toLinearMap) :=
-  rfl
+  (rfl)
 
 
 end RectangularUnitarilyInvariantNorm

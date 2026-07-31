@@ -347,7 +347,7 @@ noncomputable def intertwiningUnitary (hnd : P.NonDegenerate P') : E ≃ₗᵢ[�
 isometry equivalence.  `simp` normal form for moving between the two views. -/
 @[simp] theorem coe_toLinearMap_intertwiningUnitary_apply (hnd : P.NonDegenerate P') (y : E) :
     (intertwiningUnitary hnd : E →ₗ[𝕜] E) y = intertwiningUnitary hnd y :=
-  rfl
+  (rfl)
 
 /-- The intertwining unitary acts blockwise: on each block it is the polar factor of `P'\_j P\_j`
 applied to the `j`-th component of `x`.  Unfolds the bundled `LinearIsometryEquiv` to the sum
