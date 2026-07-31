@@ -286,9 +286,13 @@ endpoint of the same scale rather than a separate definition. -/
 -- `RCLike`, extra `HasMinMaxLowerBoundEverywhere` instance) gauged directly by
 -- `schattenENorm`, whereas the signature below is a rectangular
 -- `OperatorIdealFamily.{0, v, w} ℂ` built THROUGH `symmetricGaugeFamily`.  That
--- construction route is the point: `symmetricGaugeFamily` is itself one of the
--- undelivered `SymmetricGauge` signatures in this file, so this statement cannot be
--- discharged until that abstraction exists.  Do not mark this delivered by name match.
+-- construction route is the point.  **UPDATED 2026-07-31: `symmetricGaugeFamily` now
+-- EXISTS** (`ForTauCeti/Analysis/OperatorIdeal/Family/SymmetricGauge.lean`), so the
+-- earlier note here -- that this could not be discharged until that abstraction was
+-- built -- is now out of date.  What still blocks this signature is only
+-- `schattenGauge` below: the family construction is available, the `ℓᵖ` gauge feeding
+-- it is not.  Still do not mark this delivered by matching the name
+-- `schattenIdealFamily`, which remains a different object.
 noncomputable def schattenFamily (p : ℝ) (hp : 1 ≤ p) : OperatorIdealFamily.{0, v, w} ℂ :=
   symmetricGaugeFamily (schattenGauge p hp)
 
