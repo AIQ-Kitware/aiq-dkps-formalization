@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-1144/1200 files reviewed · 1200 files · 278,985 lines · 118 groups
+1144/1202 files reviewed · 1202 files · 279,229 lines · 118 groups
 
 ## How to review
 
@@ -96,9 +96,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### .llm_resource_tally :: data/config
 
-*3 files, 1,432 lines — 3/3 reviewed*
+*3 files, 1,436 lines — 3/3 reviewed*
 
-- [x] `.llm_resource_tally/ledger/ledger.jsonl` — 1,379 lines · data/config
+- [x] `.llm_resource_tally/ledger/ledger.jsonl` — 1,383 lines · data/config
 - [x] `.llm_resource_tally/lifetime-totals.json` — 46 lines · data/config
 - [x] `.llm_resource_tally/settings.json` — 7 lines · data/config
 
@@ -1473,10 +1473,10 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*160 files, 38,526 lines — 159/160 reviewed*
+*160 files, 38,528 lines — 159/160 reviewed*
 
 - [x] `dev/tauceti-signature-polish-todo.md` — 2,210 lines · documentation
-- [x] `dev/audit/FILE-CHECKLIST.md` — 1,825 lines · documentation
+- [x] `dev/audit/FILE-CHECKLIST.md` — 1,827 lines · documentation
 - [x] `dev/LANES.md` — 1,824 lines · documentation
 - [x] `dev/davis-kahan-expert-completion-plan.md` — 1,589 lines · documentation
 - [x] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation
@@ -1728,7 +1728,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### scripts :: tooling
 
-*61 files, 13,924 lines — 55/61 reviewed*
+*63 files, 14,162 lines — 55/63 reviewed*
 
 - [x] `scripts/lake_build_report.py` — 1,156 lines · tooling
 - [x] `scripts/check_davis_kahan_frontier.py` — 633 lines · tooling
@@ -1776,6 +1776,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `scripts/tests/test_check_dependency_layers.py` — 133 lines · tooling
 - [x] `scripts/check_experimental_root_status.py` — 132 lines · tooling
 - [x] `scripts/clean_orphan_build_artifacts.py` — 131 lines · tooling
+- [ ] `scripts/check_stale_build_artifacts.py` — 130 lines · tooling
 - [x] `scripts/check_davis_kahan_rebased_mathahead.py` — 128 lines · tooling
 - [ ] `scripts/tests/test_derive_tauceti_submission_ladder.py` — 128 lines · tooling
 - [x] `scripts/audit_theorem62_hard_front.py` — 127 lines · tooling
@@ -1787,6 +1788,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `scripts/closed_operator_census.py` — 114 lines · tooling
 - [ ] `scripts/tests/test_check_experimental_coverage.py` — 110 lines · tooling
 - [x] `scripts/audit_full_paper_sine_theta.py` — 109 lines · tooling
+- [ ] `scripts/tests/test_check_stale_build_artifacts.py` — 108 lines · tooling
 - [x] `scripts/install_comparator_tools.sh` — 106 lines · tooling
 - [x] `scripts/check_conflict_markers.py` — 98 lines · tooling
 - [x] `scripts/check_general_sin_theta_api.py` — 83 lines · tooling
