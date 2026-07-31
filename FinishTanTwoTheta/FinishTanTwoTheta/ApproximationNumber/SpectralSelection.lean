@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import FinishTanTwoTheta.GroundedImports
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
-import FinishTanTwoTheta.ApproximationNumber.FinitePVMSelection
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteValueSeparation
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteValueFibers
