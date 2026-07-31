@@ -24,7 +24,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDi
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
 variable {n d : ℕ}
 
-/-! ## Part A -- majorization, Schur-Horn, and unitarily invariant norms (T05)
+/-! ## Part A -- majorization, Schur-Horn, and unitarily invariant norms
 
 The vector layer lives in `Analysis/Convex` with no operator imports; the
 operator layer pulls it back through singular values. -/
@@ -95,7 +95,7 @@ theorem UnitarilyInvariantNorm.eq_of_same_singularValues
     (N : UnitarilyInvariantNorm 𝕜 E) {A B : E →ₗ[𝕜] E}
     (h : A.singularValues = B.singularValues) : N.toFun A = N.toFun B := sorry
 
-/-! ## Part B -- principal angles, aligned bases, and finite frames (T06)
+/-! ## Part B -- principal angles, aligned bases, and finite frames
 
 Angles are singular values of the overlap operator, so nonnegativity, the `≤ 1`
 bound, ordering and symmetry are inherited rather than re-proved by induction. -/
@@ -126,7 +126,7 @@ theorem sinThetaSq_eq_card_sub_sum_sq {u v : Fin d → E} (hu : Orthonormal 𝕜
     (hv : Orthonormal 𝕜 v) :
     sinThetaSq hu hv = d - ∑ k : Fin d, cosPrincipalAngles hu hv (k : ℕ) ^ 2 := sorry
 
-/-! ## Part C -- rectangular unitarily invariant norms (T07) -/
+/-! ## Part C -- rectangular unitarily invariant norms -/
 
 /-- A unitarily invariant norm on rectangular operators `E →ₗ[𝕜] F`: the same
 three laws, with two-sided unitary invariance. -/
@@ -188,7 +188,7 @@ theorem orthogonalBlockSum_apply_le_of_kyFanSum_le
             ≤ ∑ i ∈ Finset.range k, D.singularValues i) :
     NB.toFun (orthogonalBlockSum A B) ≤ NB.toFun (orthogonalBlockSum C D) := sorry
 
-/-! ## Part D -- angle geometry and eigenvalue perturbation (T08) -/
+/-! ## Part D -- angle geometry and eigenvalue perturbation -/
 
 /-- The cross projection `P_V P_U`, whose singular values are the principal cosines. -/
 noncomputable def cosThetaMap (U V : Submodule 𝕜 E)
@@ -222,7 +222,7 @@ theorem sum_eigenvalues_mul_re_inner_self_le {T S : E →ₗ[𝕜] E}
 spectra of two symmetric operators is at most the squared Frobenius distance.
 
 **Quantified over an arbitrary orthonormal basis `e`, and that is the point.**  The
-staged proof states the right-hand side against `hT.eigenvectorBasis`, which is enough
+existing proof states the right-hand side against `hT.eigenvectorBasis`, which is enough
 to prove it but is not the invariant Frobenius statement a consumer wants.  This clean
 name belongs to the arbitrary-basis version; the eigenbasis-specialized theorem should
 be private, or qualified `..._eigenvectorBasis` if it stays public. -/

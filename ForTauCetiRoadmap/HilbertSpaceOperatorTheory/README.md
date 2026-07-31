@@ -103,7 +103,7 @@ Excluded:
 | `SpectralSubspacePerturbation` | 44 | all of the above |
 
 The module counts and the dependency column are derived from the import graph of the
-staged implementation, not asserted; they measure the size of the material a roadmap
+existing implementation, not asserted; they measure the size of the material a roadmap
 covers and are regenerated with `python3 scripts/check_tauceti_roadmap_topics.py
 --roadmaps`. They say nothing about how much of it Tau Ceti or Mathlib may already have.
 

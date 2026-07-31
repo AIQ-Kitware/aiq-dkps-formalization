@@ -24,7 +24,7 @@ open scoped InnerProductSpace ENNReal
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-! ## Part A -- one-parameter unitary groups and Stone's theorem (T13) -/
+/-! ## Part A -- one-parameter unitary groups and Stone's theorem -/
 
 /-- A strongly continuous one-parameter unitary group on a complex Hilbert
 space. -/
@@ -59,7 +59,7 @@ theorem generator_commute (U : OneParameterUnitaryGroup H) (T : H →L[ℂ] H)
     ∃ hmem : T (x : H) ∈ (generator U).domain,
       generator U ⟨T (x : H), hmem⟩ = T (generator U x) := sorry
 
-/-! ## Part B -- the Borel functional calculus and projection-valued measures (T14) -/
+/-! ## Part B -- the Borel functional calculus and projection-valued measures -/
 
 section BorelCalculus
 
@@ -106,7 +106,7 @@ structure ProjValMeasure (H : Type*) [NormedAddCommGroup H]
 
 end BorelCalculus
 
-/-! ## Part C -- closed operators on LinearPMap: graphs, constructions, form bounds (T15a) -/
+/-! ## Part C -- closed operators on LinearPMap: graphs, constructions, form bounds -/
 
 section ClosedOperators
 
@@ -177,7 +177,7 @@ end ComplexScalars
 
 end ClosedOperators
 
-/-! ## Part D -- resolvents of self-adjoint LinearPMap operators (T15b)
+/-! ## Part D -- resolvents of self-adjoint LinearPMap operators
 
 Mathlib's `spectrum`/`resolvent` are Banach-algebra notions and do not apply to
 a partial map, so the resolvent set is defined here and bridged to Mathlib's in
@@ -222,7 +222,7 @@ theorem resolvent_sub_resolvent {A : E →ₗ.[𝕜] E} {w z : 𝕜}
 
 end Resolvents
 
-/-! ## Part E -- the spectral measure of an unbounded self-adjoint operator (T15c) -/
+/-! ## Part E -- the spectral measure of an unbounded self-adjoint operator -/
 
 section SpectralMeasure
 
