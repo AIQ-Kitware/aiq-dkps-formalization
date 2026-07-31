@@ -372,6 +372,53 @@ theorem enorm_comp_one_sub_basisTruncation_sq_le {ι : Type*} [DecidableEq ι]
     _ = _ := hilbertSchmidtEnergy_comp_one_sub_basisTruncation T b s
 
 
+/-- The coordinate map dual to `finiteBasisInclusion`: a vector goes to its coefficients
+against the selected basis vectors.
+
+Written as a finite sum rather than as `finiteBasisInclusion b f |>.adjoint` so that nothing
+here depends on the adjoint API — the only fact needed about it is that its norm is at most
+one, and that is Bessel's inequality. -/
+noncomputable def finiteBasisCoords {ι : Type*} (b : HilbertBasis ι 𝕜' G) {n : ℕ}
+    (f : Fin n → ι) : G →L[𝕜'] EuclideanSpace 𝕜' (Fin n) :=
+  ∑ j, (innerSL 𝕜' (b (f j))).smulRight (EuclideanSpace.single j 1)
+
+omit [CompleteSpace G] in
+/-- The coordinate map in coordinates. -/
+@[simp] theorem finiteBasisCoords_apply {ι : Type*} (b : HilbertBasis ι 𝕜' G) {n : ℕ}
+    (f : Fin n → ι) (x : G) (j : Fin n) :
+    finiteBasisCoords b f x j = ⟪b (f j), x⟫_𝕜' := by
+  classical
+  simp [finiteBasisCoords, Pi.single_apply, mul_ite, mul_one, mul_zero]
+
+omit [CompleteSpace G] in
+/-- **The coordinate map is a contraction**, which is Bessel's inequality and nothing more. -/
+theorem norm_finiteBasisCoords_le {ι : Type*} (b : HilbertBasis ι 𝕜' G) {n : ℕ}
+    {f : Fin n → ι} (hf : Function.Injective f) : ‖finiteBasisCoords b f‖ ≤ 1 := by
+  refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_
+  have hon : Orthonormal 𝕜' fun j : Fin n => b (f j) := b.orthonormal.comp f hf
+  rw [one_mul, EuclideanSpace.norm_eq]
+  calc Real.sqrt (∑ j : Fin n, ‖finiteBasisCoords b f x j‖ ^ 2)
+      = Real.sqrt (∑ j : Fin n, ‖⟪b (f j), x⟫_𝕜'‖ ^ 2) := by
+        simp only [finiteBasisCoords_apply]
+    _ ≤ Real.sqrt (‖x‖ ^ 2) := Real.sqrt_le_sqrt (hon.sum_inner_products_le x)
+    _ = ‖x‖ := Real.sqrt_sq (norm_nonneg x)
+
+omit [CompleteSpace G] in
+/-- **The inclusion after the coordinates is the truncation.**
+
+`finiteBasisInclusion ∘L finiteBasisCoords` and `basisTruncation` are both `x ↦ ∑ⱼ ⟪bⱼ, x⟫ • bⱼ`
+over the selected indices; this records that, and it is what lets a truncated operator be
+factored through a finite-dimensional space without ever mentioning an adjoint. -/
+theorem finiteBasisInclusion_comp_finiteBasisCoords {ι : Type*} [DecidableEq ι]
+    (b : HilbertBasis ι 𝕜' G) {n : ℕ} {f : Fin n → ι} (hf : Function.Injective f) :
+    finiteBasisInclusion b f ∘L finiteBasisCoords b f
+      = basisTruncation b (Finset.univ.image f) := by
+  ext x
+  rw [ContinuousLinearMap.comp_apply, finiteBasisInclusion_apply, basisTruncation_apply,
+    Finset.sum_image fun i _ j _ h => hf h]
+  exact Finset.sum_congr rfl fun j _ => by rw [finiteBasisCoords_apply]
+
+
 -- `G`'s completeness is carried by the `HilbertBasis` argument rather than used again, and
 -- the target's is not needed at all: the range factored through is finite-dimensional, so its
 -- orthogonal projection exists without completing `H`.
