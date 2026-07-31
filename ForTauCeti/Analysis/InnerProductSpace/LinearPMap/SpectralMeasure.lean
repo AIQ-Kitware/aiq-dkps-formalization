@@ -76,7 +76,8 @@ theorem cayleyInv_add_I {w : _root_.spectrum ℂ (cayley hA)} (hw1 : (w : ℂ) �
     spectrum.norm_eq_one_of_unitary (cayley_mem_unitary hA) w.2
   have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
   have hcast : ((cayleyInv hA w : ℝ) : ℂ) = Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ)) :=
-    Complex.ext rfl (by simpa using (inverseCayley_im_eq_zero hnorm hw1).symm)
+    Complex.ext (by simp [cayleyInv_def])
+      (by simpa using (inverseCayley_im_eq_zero hnorm hw1).symm)
   rw [hcast]
   field_simp
   ring
@@ -253,7 +254,7 @@ theorem specProjection_apply_sub_smul {M c r : ℝ}
     filter_upwards [hae] with w hw
     have hw1 : (w : ℂ) ≠ 1 := hw
     have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
-    have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := rfl
+    have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := by simp [hgsym]
     have hκval : ((κ w : ℝ) : ℂ) + Complex.I = (2 * Complex.I) / (1 - (w : ℂ)) :=
       cayleyInv_add_I hA hw1
     -- states the goal with the definition unfolded, in the shape the next step needs.
@@ -747,7 +748,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
     filter_upwards [hae] with w hw
     have hw1 : (w : ℂ) ≠ 1 := hw
     have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
-    have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := rfl
+    have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := by simp [hgsym]
     rw [hgval, cayleyInv_add_I hA hw1]
     field_simp
   -- `R(-i) ∘ T_hsym = T_f`
