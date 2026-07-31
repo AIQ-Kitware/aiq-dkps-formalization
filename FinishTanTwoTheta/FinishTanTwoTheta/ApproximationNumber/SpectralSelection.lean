@@ -6,9 +6,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import FinishTanTwoTheta.GroundedImports
 import DavisKahan.OperatorIdeal.ApproximationNumbers.GramSpectralRank
 import FinishTanTwoTheta.ApproximationNumber.FinitePVMSelection
-import DavisKahan.OperatorIdeal.ApproximationNumbers.LeadingCutoff
-import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteValueSeparation
-import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteValueFibers
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteValueSeparation
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteValueFibers
 import FinishTanTwoTheta.ApproximationNumber.GramBandPolar
 import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 
