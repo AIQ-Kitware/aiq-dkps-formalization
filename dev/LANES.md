@@ -394,6 +394,34 @@ result and every lane id in either parent was checked to still have a row. Nothi
 in either pass, and the only rows that changed text are ones whose status legitimately
 advanced on one side.
 
+**Third pass, same evening, and this is the one that earns the "read both sides" rule.** Merged
+`toothbrush-work` (20 commits), `namek-work` (9), `yardrat-work` (3) and `worktree-aiq-gpu-docs` (6).
+`lake build` **9255**, the four non-default targets **9297**, all seven protocol gates plus
+dependency-layers, docstring-coverage and namespace-policy green, `scripts/tests` 112, lane ids
+preserved across all 17 merges. **`check_library_structure` is the one red**, on the three
+`EXP-PROMOTE-T2T` re-export shims — inside a live claim, so it is posted below, not fixed here.
+What the merges actually needed:
+
+- **A clean auto-merge produced two identical `def SpectralIntervalExteriorGap` in one namespace.**
+  namek and toothbrush both moved the surviving definition into
+  `Sylvester/Unbounded/IntervalExterior.lean`, one near the top and one at the bottom, so git took
+  both and no conflict marker appeared. Resolved to one, at namek's placement and provenance
+  docstring, with toothbrush's `realSpectrum_eq_spectraSpectrum` pointer grafted on. **Nothing but a
+  build or a grep would have caught this**, which is the third no-marker break in one evening after
+  the `norm_re_le` ambiguity and the private/public pair.
+- **A docstring conflict where one side had the attribution wrong**: namek's copy credited
+  `jon (yardrat)` with `4dacc008`, which is mine. Took toothbrush's version, which explains why the
+  two `norm_re_le` fixes were jointly fatal — the thing a future reader needs.
+- **A `{lane:}` marker pointing at no row.** `COMPLEXIFY-DEDUP` is referenced twice and registered
+  nowhere; the row that exists is namek's `CPLX-DEDUP`. Both references repointed.
+- **A board edit I got wrong and reversed.** The lane-format gate flagged `GAP-DEDUP-1` as carrying a
+  terminal *and* a held row, and I dropped toothbrush's marker on the assumption theirs was stale. It
+  was not — their status cell already read `DONE`. The held reading came from namek's cell, which
+  says DONE but *leads* with `claimed`, and `HELD_RE` anchors at the start. Marker restored; namek's
+  own terminal clause moved to the front of their cell. **The lesson is the gate's, not mine to
+  invent**: `scripts/tests/test_check_lane_graph_state.py` already records that the prefix must stay
+  inside the first clause.
+
 ### What to take, in priority order
 
 **Refreshed 2026-07-30, pass 8. Roadmap coverage is 18 of 24 and now exact.** The board has grown because
