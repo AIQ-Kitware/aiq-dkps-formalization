@@ -189,6 +189,7 @@ RUNGS: list[tuple[str, str, list[str]]] = [
         "Analysis.OperatorIdeal.Family.KyFan",
         "Analysis.OperatorIdeal.Family.KyFanDominance",
         "Analysis.OperatorIdeal.Family.OperatorNorm",
+        "Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison",
         "Analysis.OperatorIdeal.Family.Schatten",
         "Topology.ENNRealLiminf",
         "Analysis.OperatorIdeal.Family.TraceClass",
