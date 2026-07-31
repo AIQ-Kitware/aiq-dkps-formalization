@@ -300,7 +300,6 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 **12 new, cumulative closed slice 161.**
 
   - `Analysis.InnerProductSpace.BoundedOperator.Projector`
-  - `Analysis.InnerProductSpace.SpectralOrder.Real`
   - `Analysis.InnerProductSpace.BoundedOperator.SinTheta`
   - `Analysis.InnerProductSpace.DoubleAngle.Vector`
   - `Analysis.InnerProductSpace.ReducedExtension`
@@ -311,6 +310,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `Analysis.InnerProductSpace.SinTheta.OperatorNorm`
   - `Analysis.InnerProductSpace.SinTheta.Perturbation`
   - `Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant`
+  - `Analysis.InnerProductSpace.SpectralOrder.Real`
 
 ### Rung Q — The Yu-Wang-Samworth statistical variant (T18)
 
