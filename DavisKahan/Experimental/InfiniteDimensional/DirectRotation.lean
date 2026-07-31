@@ -383,41 +383,11 @@ theorem directRotation_intertwines
     simpa only [ContinuousLinearMap.comp_apply] using h
   rw [h1, h2]
 
-/-- The direct rotation maps one subspace onto the other. 
-
-Lean proof route for a weaker agent:
-
-1. Convert the intertwining identity into inclusion of `U.map W` in `V`.
-2. Use unitarity/surjectivity to compare orthogonal complements or apply the inverse rotation for the reverse inclusion.
-3. Conclude equality of submodules by antisymmetry.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct and should be derived from projection
-intertwining plus unitarity, not from basis choices.
-
-Preferred dependency route: Construct the polar factor of `QP + QᗮPᗮ`; prove
-intertwining before extremality, and use the Halmos decomposition only for the final
-minimization theorem.
--/
-theorem directRotation_maps_subspace
-    (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
-    U.map (directRotation U V hacute).toLinearMap = V := by
-  let W := directRotation U V hacute
-  have hW := directRotation_unitary U V hacute
-  have hint := directRotation_intertwines U V hacute
-  apply le_antisymm
-  · rintro y ⟨x, hx, rfl⟩
-    apply V.starProjection_eq_self_iff.mp
-    have h := congrArg (fun T : E →L[𝕜] E => T x) hint
-    simpa [U.starProjection_eq_self_iff.mpr hx] using h.symm
-  · intro y hy
-    obtain ⟨x, rfl⟩ := hW.2 y
-    have hx : projection U x ∈ U := U.starProjection_apply_mem x
-    refine ⟨projection U x, hx, ?_⟩
-    have h := congrArg (fun T : E →L[𝕜] E => T x) hint
-    simpa [V.starProjection_eq_self_iff.mpr hy] using h
-
+-- `directRotation_maps_subspace` stood here: the same statement as
+-- `DavisKahan/FiniteDimensional/DirectRotation/Basic.lean`'s `directRotation_map_eq`,
+-- under a different name, with a different proof, and with no consumer anywhere.  This
+-- file does not import that one, which is why it grew its own; `--dup` matches
+-- normalized statements and so was the only check that could see it.
 /-- Square of the direct rotation is the product of reflections. 
 
 Lean proof route for a weaker agent:
