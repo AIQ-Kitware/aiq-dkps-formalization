@@ -8,6 +8,7 @@ import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
 import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
 import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy
 import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+import ForTauCeti.Topology.ENNRealLiminf
 import ForTauCeti.Analysis.InnerProductSpace.SingularSystem
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
 
@@ -50,19 +51,24 @@ layer is the tool here, not the obstacle.
   `TauCeti.schattenIdealFamily_one_eq_traceClassIdealFamily`: at `p = 1` this *is* the
   trace-class ideal.  The `p = 2` counterpart is deliberately absent — see below.
 
-## What is not here
+## The `p = 2` bridge
 
 `hilbertSchmidtENorm` is built from the Hilbert--Schmidt energy through a Hilbert basis and
-never mentions approximation numbers, so `schattenIdealFamily 2 = hilbertSchmidtIdealFamily`
-is not the arithmetic identity its `p = 1` twin is.
+never mentions approximation numbers, so unlike its `p = 1` twin the agreement with the
+Schatten gauge is a theorem rather than arithmetic.  It is proved here, as
+`tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy_of_hilbertBasis`.
 
-**The singular-value side of that bridge does exist**, contrary to what this paragraph said
-before 2026-07-31: `TauCeti.norm_apply_rightSingularBasis` in
-`ForTauCeti/Analysis/InnerProductSpace/SingularSystem.lean` proves `‖A vᵢ‖ = σᵢ` on the right
-singular basis, which is Parseval for a finite-dimensional source once summed.  What is open
-is the passage from finite-rank restrictions to the whole operator: the energy and the
-Schatten gauge are each a supremum, and that they run over the same directed family is not
-proved here.  Completeness
+**Neither of the two routes one expects is the one taken.**  Not the singular-value
+decomposition of a compact operator: Mathlib's eigenvector basis is finite-dimensional only,
+and pinned Mathlib has no orthonormal eigenbasis for a compact self-adjoint operator.  Not an
+`ε`-argument either.  Instead both inequalities go through the *same* finite truncations of
+the basis — forward by reading the finite case exactly, reverse by Fatou along
+`Finset.atTop`.
+
+What is *not* here is the resulting equality of families,
+`schattenIdealFamily 𝕜 2 = hilbertSchmidtIdealFamily 𝕜`: the gauges are `hilbertSchmidtENorm`
+and `schattenENorm 2`, which are the square roots of the two sides above, so it is a matter of
+transporting the identity through `^ (2 : ℝ)⁻¹` and the two families' definitions.  Completeness
 of the family is likewise open, as it is for the trace-class family.
 
 ## Provenance
@@ -286,7 +292,8 @@ The sum over `Fin (finrank G₀)` is the whole `tsum`, because
 `approximationNumber_eq_zero_of_finrank_le` kills every later term.  This is the form the
 infinite-dimensional argument consumes, since there the Schatten gauge is a `tsum` over `ℕ`
 on both sides. -/
-theorem tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy {G₀ : Type*}
+theorem tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy_of_finiteDimensional
+    {G₀ : Type*}
     [NormedAddCommGroup G₀] [InnerProductSpace 𝕜' G₀] [CompleteSpace G₀]
     [FiniteDimensional 𝕜' G₀] {ι : Type*} (A : G₀ →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G₀) :
     ∑' n : ℕ, ENNReal.ofReal (A.approximationNumber n) ^ 2 = A.hilbertSchmidtEnergy b := by
@@ -520,7 +527,7 @@ theorem tsum_approximationNumber_comp_basisTruncation_sq_le {ι : Type v}
         exact mul_le_of_le_one_right ((T ∘L V).approximationNumber_nonneg n)
           (norm_finiteBasisCoords_le b hf)
     _ = (T ∘L V).hilbertSchmidtEnergy c :=
-        tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy _ c
+        tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy_of_finiteDimensional _ c
     _ = ∑ j : Fin s.card, ‖T (b (f j))‖ₑ ^ 2 :=
         hilbertSchmidtEnergy_comp_finiteBasisInclusion T b c
     _ = ∑ i ∈ s, ‖T (b i)‖ₑ ^ 2 := by
@@ -529,6 +536,90 @@ theorem tsum_approximationNumber_comp_basisTruncation_sq_le {ι : Type v}
     _ ≤ T.hilbertSchmidtEnergy b := by
         rw [hilbertSchmidtEnergy]
         exact ENNReal.sum_le_tsum s
+
+
+/-- **The truncation error vanishes along the finite subsets**, when the energy is finite.
+
+This is the only place finiteness of the energy is used: it is what makes the tail of a
+convergent sum small, and hence the truncated operator a genuine approximation. -/
+theorem tendsto_enorm_comp_one_sub_basisTruncation {ι : Type v}
+    (T : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) (h : T.hilbertSchmidtEnergy b ≠ ⊤) :
+    Filter.Tendsto (fun s : Finset ι => ‖T ∘L (1 - basisTruncation b s)‖ₑ ^ 2)
+      Filter.atTop (nhds 0) := by
+  classical
+  have hEq : ∀ s : Finset ι,
+      (∑' i, if i ∈ s then (0 : ℝ≥0∞) else ‖T (b i)‖ₑ ^ 2)
+        = ∑' x : ↑{x : ι | x ∉ s}, ‖T (b (x : ι))‖ₑ ^ 2 := by
+    intro s
+    rw [tsum_subtype {x : ι | x ∉ s} fun i => ‖T (b i)‖ₑ ^ 2]
+    exact tsum_congr fun i => by
+      by_cases hi : i ∈ s <;> simp [hi]
+  have hcompl := ENNReal.tendsto_tsum_compl_atTop_zero
+    (f := fun i => ‖T (b i)‖ₑ ^ 2) (by rwa [← hilbertSchmidtEnergy])
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hcompl
+    (Filter.Eventually.of_forall fun _ => by simp)
+    (Filter.Eventually.of_forall fun s => ?_)
+  exact (enorm_comp_one_sub_basisTruncation_sq_le T b s).trans (hEq s).le
+
+/-- **The reverse inequality: the Schatten-2 gauge is at most the Hilbert--Schmidt energy.**
+
+With the truncated case in hand, no `ε` is needed and no singular-value decomposition of a
+compact operator is needed either — the two routes one would expect.  Instead:
+`approximationNumber` is `1`-Lipschitz in the operator norm, the truncation error vanishes
+along `Finset.atTop`, so each approximation number of `T` is the limit of those of its
+truncations; `ENNReal.tsum_le_liminf_tsum` is Fatou for that limit, and every truncation is
+already bounded by the energy.
+
+**Fatou over an arbitrary filter is what makes this work.**  Restricting it to `ℕ` would force
+a sequence of finite subsets to be extracted from `Finset.atTop`, which needs choice and buys
+nothing. -/
+theorem tsum_approximationNumber_sq_le_hilbertSchmidtEnergy {ι : Type v}
+    (T : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) :
+    ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) ^ 2 ≤ T.hilbertSchmidtEnergy b := by
+  classical
+  rcases eq_or_ne (T.hilbertSchmidtEnergy b) ⊤ with hE | hE
+  · rw [hE]; exact le_top
+  have herr := tendsto_enorm_comp_one_sub_basisTruncation T b hE
+  -- each approximation number is the limit of those of the truncations
+  have hpt : ∀ n : ℕ, Filter.Tendsto
+      (fun s : Finset ι =>
+        ENNReal.ofReal ((T ∘L basisTruncation b s).approximationNumber n) ^ 2)
+      Filter.atTop (nhds (ENNReal.ofReal (T.approximationNumber n) ^ 2)) := by
+    intro n
+    refine (ENNReal.continuous_pow 2).tendsto _ |>.comp ?_
+    refine (ENNReal.continuous_ofReal.tendsto _).comp ?_
+    rw [tendsto_iff_dist_tendsto_zero]
+    have hnorm : Filter.Tendsto (fun s : Finset ι => ‖T ∘L (1 - basisTruncation b s)‖)
+        Filter.atTop (nhds 0) := by
+      rw [Metric.tendsto_nhds]
+      intro ε hε
+      have hpos : (0 : ℝ≥0∞) < ENNReal.ofReal (ε ^ 2 / 2) :=
+        ENNReal.ofReal_pos.mpr (by positivity)
+      filter_upwards [ENNReal.tendsto_nhds_zero.mp herr _ hpos] with s hs
+      have hsq : ‖T ∘L (1 - basisTruncation b s)‖ ^ 2 ≤ ε ^ 2 / 2 := by
+        have hrw : ‖T ∘L (1 - basisTruncation b s)‖ₑ ^ 2
+            = ENNReal.ofReal (‖T ∘L (1 - basisTruncation b s)‖ ^ 2) := by
+          rw [← ofReal_norm, ← ENNReal.ofReal_pow (norm_nonneg _)]
+        rw [hrw] at hs
+        exact (ENNReal.ofReal_le_ofReal_iff (by positivity)).mp hs
+      have hnn := norm_nonneg (T ∘L (1 - basisTruncation b s))
+      have hlt : ‖T ∘L (1 - basisTruncation b s)‖ < ε := by nlinarith
+      simpa [Real.dist_eq, abs_of_nonneg (norm_nonneg _)] using hlt
+    refine squeeze_zero (fun _ => dist_nonneg) (fun s => ?_) hnorm
+    rw [Real.dist_eq]
+    have hsub : T - T ∘L basisTruncation b s = T ∘L (1 - basisTruncation b s) := by
+      ext x; simp
+    calc |(T ∘L basisTruncation b s).approximationNumber n - T.approximationNumber n|
+        = |T.approximationNumber n - (T ∘L basisTruncation b s).approximationNumber n| :=
+          abs_sub_comm _ _
+      _ ≤ ‖T - T ∘L basisTruncation b s‖ :=
+          abs_approximationNumber_sub_approximationNumber_le _ _ n
+      _ = _ := by rw [hsub]
+  refine (ENNReal.tsum_le_liminf_tsum hpt).trans ?_
+  refine Filter.liminf_le_of_le (by isBoundedDefault) ?_
+  intro x hx
+  obtain ⟨s, hs⟩ := hx.exists
+  exact le_trans hs (tsum_approximationNumber_comp_basisTruncation_sq_le T b s)
 
 
 -- `G`'s completeness is carried by the `HilbertBasis` argument rather than used again, and
@@ -627,6 +718,17 @@ theorem hilbertSchmidtEnergy_le_tsum_approximationNumber_sq {ι : Type v}
     _ ≤ ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) ^ 2 := by
         rw [Fin.sum_univ_eq_sum_range (fun n => ENNReal.ofReal (T.approximationNumber n) ^ 2)]
         exact ENNReal.sum_le_tsum _
+
+/-- **The `p = 2` identity: the Schatten-2 gauge is the Hilbert--Schmidt energy.**
+
+Both inequalities are proved above — the forward one by truncating the basis and reading the
+finite case exactly, the reverse by Fatou against the same truncations. -/
+theorem tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy_of_hilbertBasis {ι : Type v}
+    (T : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) :
+    ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) ^ 2 = T.hilbertSchmidtEnergy b :=
+  le_antisymm (tsum_approximationNumber_sq_le_hilbertSchmidtEnergy T b)
+    (hilbertSchmidtEnergy_le_tsum_approximationNumber_sq T b)
+
 
 end Comparison
 

@@ -64,10 +64,12 @@ No hypothesis on `ι` is needed and no measure is involved: `∑'` is the suprem
 partial sums, a finite sum of convergent terms converges, and a partial sum is at most the
 whole.
 
-The filter is arbitrary rather than `atTop` because the consumers apply it along a
-subsequence as often as along the sequence itself. -/
-theorem tsum_le_liminf_tsum {ι : Type*} {u : Filter ℕ} [u.NeBot]
-    {f : ℕ → ι → ℝ≥0∞} {g : ι → ℝ≥0∞}
+**Both the index type and the filter are arbitrary.**  The filter is not restricted to `ℕ`
+because a consumer may approximate along `Finset.atTop` — the finite subsets of a Hilbert
+basis, ordered by inclusion — where extracting a sequence would need countable choice and
+buy nothing: the proof uses only `NeBot` and continuity of finite sums. -/
+theorem tsum_le_liminf_tsum {ι : Type*} {β : Type*} {u : Filter β} [u.NeBot]
+    {f : β → ι → ℝ≥0∞} {g : ι → ℝ≥0∞}
     (h : ∀ i, Filter.Tendsto (fun n => f n i) u (nhds (g i))) :
     ∑' i, g i ≤ Filter.liminf (fun n => ∑' i, f n i) u := by
   classical
