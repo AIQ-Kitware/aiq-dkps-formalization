@@ -35,8 +35,18 @@ bound of it by the entrywise norm):
 
 The matrix bound's constant `n` is loose (the Frobenius bound gives `√(card)`);
 it is the form produced by an entrywise sup bound and consumed by operator-norm
-spectral-perturbation arguments. TODO(RCLike): the matrix bound is stated over
-`ℝ`; the `RCLike` generalization is routine (`‖A i j‖`, `RCLike.norm_ofReal`).
+spectral-perturbation arguments.
+
+**The matrix bound is stated over `ℝ`, and the `RCLike` form is open — but it is
+not the routine transport an earlier version of this docstring promised.**
+`Matrix.toEuclideanLin` over a general `𝕜` carries the conjugate-linear
+convention on one side, so the entrywise hypothesis composes through `‖·‖` rather
+than through the real absolute value and **the factor `n` has to be re-derived**
+rather than transported.  Restating the real proof with `[RCLike 𝕜]` written over
+it is the move the operator-ideal roadmap's generality bar forbids, and it is the
+first thing a reader who trusts the word *routine* will try.  The `ℓ¹`-versus-`ℓ²`
+companion, `sum_norm_le_sqrt_card_mul_norm`, is already `RCLike` and is not
+affected.
 
 ## Provenance
 
