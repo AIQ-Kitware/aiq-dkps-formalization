@@ -491,6 +491,45 @@ theorem norm_comp_starProjection_orthogonal_eq_sSup_unitClosedBall
   rw [T.norm_comp_starProjection_orthogonal_eq_norm_comp_subtypeL V]
   exact ((T ∘L Vᗮ.subtypeL).sSup_unitClosedBall_eq_norm).symm
 
+/-- **A spectral band bounds an approximation number.**
+
+If `P` is an orthogonal projection of rank at most `r` and `T` is bounded by `δ`
+off its range, then `aᵣ(T) ≤ δ`.  The competitor is `T ∘L P`, whose rank is at
+most `P`'s.
+
+**`0 ≤ δ` is not defensive padding.**  Without it the statement is false: at
+`P = 1` the band hypothesis reads `0 ≤ 0` and holds for *any* `δ`, and taking
+`r ≥ finrank E` makes the conclusion `0 ≤ δ`, which fails at `δ = -1`.  The
+corresponding signature in `ForTauCetiRoadmap` omits the hypothesis and is false
+as written; see `{lane:FTC-SPECTRALBAND}`.
+
+`hidem` and `hsa` are used in exactly one place: they make `1 - P` a star
+projection, hence a contraction, which is what turns the band bound
+`δ * ‖x - P x‖` into `δ * ‖x‖`. -/
+theorem approximationNumber_le_of_spectral_band [CompleteSpace F₁]
+    {T : E₁ →L[𝕜] F₁} {P : E₁ →L[𝕜] E₁} {r : ℕ} {δ : ℝ}
+    (hδ : 0 ≤ δ) (hidem : IsIdempotentElem P) (hsa : IsSelfAdjoint P)
+    (hrank : P.rank ≤ (r : Cardinal))
+    (hband : ∀ x : E₁, ‖T (x - P x)‖ ≤ δ * ‖x - P x‖) :
+    T.approximationNumber r ≤ δ := by
+  -- `1 - P` is a star projection, hence a contraction.
+  have hproj : IsStarProjection (1 - P : E₁ →L[𝕜] E₁) :=
+    IsStarProjection.one_sub ⟨hidem, hsa⟩
+  have hcontr : ∀ x : E₁, ‖x - P x‖ ≤ ‖x‖ := by
+    intro x
+    have hle : ‖(1 - P : E₁ →L[𝕜] E₁)‖ ≤ 1 := IsStarProjection.norm_le _ hproj
+    calc ‖x - P x‖ = ‖(1 - P : E₁ →L[𝕜] E₁) x‖ := by simp
+      _ ≤ ‖(1 - P : E₁ →L[𝕜] E₁)‖ * ‖x‖ := (1 - P : E₁ →L[𝕜] E₁).le_opNorm x
+      _ ≤ 1 * ‖x‖ := by gcongr
+      _ = ‖x‖ := one_mul _
+  -- The competitor `T ∘L P` has rank at most `r` and misses by at most `δ`.
+  refine le_trans (T.approximationNumber_le_norm_sub (R := T ∘L P) ?_) ?_
+  · exact ContinuousLinearMap.rank_comp_le_natCast_right P T hrank
+  · refine ContinuousLinearMap.opNorm_le_bound _ hδ fun x => ?_
+    have hval : (T - T ∘L P) x = T (x - P x) := by simp
+    rw [hval]
+    exact (hband x).trans (mul_le_mul_of_nonneg_left (hcontr x) hδ)
+
 end OrthogonalTailLower
 
 end InfiniteDimensionalMinMaxLower
