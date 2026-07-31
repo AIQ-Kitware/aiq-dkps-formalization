@@ -24,11 +24,11 @@ arbitrary `ℝ≥0∞`-valued sequences.
 
 ## Main results
 
-* `TauCeti.SymmetricGauge.extend_coe_finsupp` — `extend` agrees with the gauge on
-  a finitely supported sequence, so the extension deserves the name.
+* `TauCeti.SymmetricGauge.single` — the gauge of a basis vector is its value;
+  this is what `normalized'` and `symm'` buy together, and everything needing a
+  scale goes through it.
 * `TauCeti.SymmetricGauge.extend_mono` — monotone in the sequence.
-* `TauCeti.SymmetricGauge.iSup_le_extend` and
-  `TauCeti.SymmetricGauge.extend_le_tsum` — the two ends of the scale,
+* `TauCeti.SymmetricGauge.iSup_le_extend_le_tsum` — the two ends of the scale,
   `‖a‖_∞ ≤ Φ∞ a ≤ ∑ aₙ`, which is where `normalized` earns its place.
 
 ## Design
@@ -54,6 +54,26 @@ of the same support size — but the `range k` form is a *monotone* net indexed 
 `ℕ`, which is what a limit argument can use. Nothing in this file needs that
 equivalence, and the family construction that does should prove it rather than
 inherit it as a definition.
+
+## Not proved here, deliberately
+
+`extend_coe_finsupp` — that `extend` restricted to a finitely supported sequence
+is the gauge itself — is **not** in this file. It is true and it is the obvious
+next lemma, but it needs the extremality of `range k` truncations noted above,
+which is the same fact `symmetricGaugeFamily` needs. Proving it twice, or proving
+it here and having the family slice restate it, is how one fact ends up with two
+names. It belongs to the second slice of `{lane:FTC-SYMGAUGE}`.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: authored directly in `ForTauCeti`; it has had no prior home.
+  The signatures are `ForTauCetiRoadmap/OperatorIdeals/Suggested.lean`'s, which
+  recorded them as Milestone B1 targets; this is their first implementation.
+* Extraction class: **authored in place** for the Tau Ceti staging layer.
+* Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026
+  Kitware, Inc.; Apache 2.0.
+* Spectra influence: none.
 -/
 
 open scoped ENNReal NNReal
@@ -91,17 +111,23 @@ instance : CoeFun SymmetricGauge fun _ => (ℕ →₀ ℝ≥0) → ℝ≥0 :=
 
 variable (Φ : SymmetricGauge)
 
+/-- Subadditivity, as a theorem rather than a structure field. -/
 @[simp] theorem add_le (a b : ℕ →₀ ℝ≥0) : Φ (a + b) ≤ Φ a + Φ b := Φ.add_le' a b
 
+/-- Positive homogeneity. -/
 @[simp] theorem smul (c : ℝ≥0) (a : ℕ →₀ ℝ≥0) : Φ (c • a) = c * Φ a := Φ.smul' c a
 
+/-- Permutation invariance. -/
 @[simp] theorem symm (σ : Equiv.Perm ℕ) (a : ℕ →₀ ℝ≥0) :
     Φ (Finsupp.equivMapDomain σ a) = Φ a := Φ.symm' σ a
 
+/-- Monotonicity in the termwise order. -/
 theorem mono {a b : ℕ →₀ ℝ≥0} (h : a ≤ b) : Φ a ≤ Φ b := Φ.mono' h
 
+/-- The first basis vector has gauge one. -/
 @[simp] theorem normalized : Φ (Finsupp.single 0 1) = 1 := Φ.normalized'
 
+/-- A gauge kills zero, by homogeneity at `c = 0`. -/
 @[simp] theorem map_zero : Φ 0 = 0 := by
   have h := Φ.smul 0 0
   simpa using h
@@ -152,6 +178,7 @@ noncomputable def truncate (a : ℕ → ℝ≥0∞) (k : ℕ) (m : ℝ≥0) : �
       · simpa using h
       · simp [h] at hn)
 
+/-- The truncation, pointwise.  Definitional -- see `truncate`. -/
 @[simp] theorem truncate_apply (a : ℕ → ℝ≥0∞) (k : ℕ) (m : ℝ≥0) (n : ℕ) :
     truncate a k m n = if n < k then (min (a n) (m : ℝ≥0∞)).toNNReal else 0 := rfl
 
@@ -167,6 +194,7 @@ cuts, which is the value the gauge should take. -/
 noncomputable def extend (Φ : SymmetricGauge) (a : ℕ → ℝ≥0∞) : ℝ≥0∞ :=
   ⨆ k : ℕ, ⨆ m : ℝ≥0, (Φ (truncate a k m) : ℝ≥0∞)
 
+/-- Truncation is monotone in the sequence, at fixed length and cap. -/
 theorem truncate_mono {a b : ℕ → ℝ≥0∞} (h : ∀ n, a n ≤ b n) (k : ℕ) (m : ℝ≥0) :
     truncate a k m ≤ truncate b k m := by
   refine Finsupp.le_def.2 fun n => ?_
@@ -176,6 +204,7 @@ theorem truncate_mono {a b : ℕ → ℝ≥0∞} (h : ∀ n, a n ≤ b n) (k : �
     exact ne_top_of_le_ne_top (ENNReal.coe_ne_top (r := m)) (min_le_right _ _)
   · exact le_rfl
 
+/-- The extension is monotone in the sequence. -/
 theorem extend_mono {a b : ℕ → ℝ≥0∞} (h : ∀ n, a n ≤ b n) :
     Φ.extend a ≤ Φ.extend b :=
   iSup_mono fun k => iSup_mono fun m => by
