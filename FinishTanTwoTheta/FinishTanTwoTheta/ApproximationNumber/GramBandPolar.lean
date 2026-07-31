@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.ApproximationNumber.GramSpectralRank
+import DavisKahan.OperatorIdeal.ApproximationNumbers.GramSpectralRank
 import FinishTanTwoTheta.ApproximationNumber.FinitePVMSelection
 import ForTauCeti.Analysis.InnerProductSpace.PolarPartialIsometry
 
@@ -20,6 +20,7 @@ both approximate singular equations.
 namespace TauCeti
 namespace FinishTanTwoTheta
 
+open ApproximationNumber
 open scoped InnerProductSpace
 open Set
 

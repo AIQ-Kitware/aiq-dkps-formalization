@@ -28,6 +28,7 @@ calculus approximation-number theorem is referenced.
 namespace TauCeti
 namespace FinishTanTwoTheta
 
+open ApproximationNumber
 open scoped InnerProductSpace BigOperators
 open Set
 open DavisKahan.Experimental.ExactSinTheta
