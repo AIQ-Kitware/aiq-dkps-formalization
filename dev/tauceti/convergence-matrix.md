@@ -62,7 +62,7 @@ Upstream roadmap / PR     — the ForTauCetiRoadmap area this maps to
 
 - **Track A (now): approximation numbers.** Deduplicate (Wave 1) and polish the
   approximation-number cluster, then pursue
-  [`ForTauCetiRoadmap/OperatorIdeals` Part A](../../ForTauCetiRoadmap/OperatorIdeals/README.md).
+  [`OperatorIdeals` Part A](../../ForTauCetiRoadmap/HilbertSpaceOperatorTheory/OperatorIdeals/README.md).
   Independent of the unbounded/semigroup/PDE architecture, so it does not block
   on Track B.
 - **Track B (now): convergence audit.** Perform the convergence audit and

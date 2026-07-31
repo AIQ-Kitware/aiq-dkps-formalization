@@ -7,6 +7,5 @@
 -- to resolve; without it `lake build ForTauCetiRoadmap` reports "some modules have
 -- bad imports" while every module underneath elaborates fine.
 --
--- The library exists so that a broken suggested signature is a build failure. It was
--- not one before: three of the six files carried ten elaboration errors, in files
--- whose whole purpose is to show a reviewer what the API will look like.
+-- The library exists so that a suggested signature which stops elaborating is a build
+-- failure rather than a document that quietly went stale.

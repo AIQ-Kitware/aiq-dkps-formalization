@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """Validate the candidate Tau Ceti roadmap topic design against the import graph.
 
-`ForTauCetiRoadmap/CANDIDATE-TOPIC-DESIGN.md` partitions every `ForTauCeti`
+`ForTauCetiRoadmap/internal/candidate-topic-design.md` partitions every `ForTauCeti`
 module into fine-grained topics (`T01`..`T22`, with the `T15a/b/c` split),
 ordered so that each is reviewable on its own against a base Tau Ceti has
-already accepted. Since 2026-07-30 the topics group into a handful of
-**holistic roadmap directories** (one directory covers several topics as its
-Parts); the grouping is declared by each roadmap README and validated here,
-including acyclicity of the roadmap-level DAG.
+already accepted. The topics group into **roadmap directories** under
+`ForTauCetiRoadmap/`, one directory covering several topics as its Parts. The
+grouping is declared in `ForTauCetiRoadmap/internal/topic-map.md` -- a sidecar,
+so that the roadmap READMEs stay mathematical prose and carry none of these
+identifiers -- and is validated here, including acyclicity of the roadmap-level
+dependency graph.
 
 This tool is what makes that proposal checkable rather than plausible. It
 enforces three properties, each of which the first hand-drawn draft violated:
@@ -99,8 +101,8 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 # nearly three times the median.  Lane T15-SPLIT cut it into the three chains the
 # T04-T20 audit found, which barely touch: closedness/graphs, resolvents, and the
 # spectral measure.  Keys are suffixed rather than renumbered on purpose: pushing
-# T16-T22 up would invalidate every `Txx` reference in the audit files, in
-# CANDIDATE-TOPIC-DESIGN.md and in the written roadmaps, for no gain.
+# T16-T22 up would invalidate every `Txx` reference in the audit files and in
+# `internal/candidate-topic-design.md`, for no gain.
 # The audit proposed the cut; the import graph moved three modules across it.
 # `RealLowerBound` imports `SelfAdjointResolvent`, `SelfAdjointMaximal` imports
 # `SpectralMeasure`, and `SpectralGapInverse` imports `SpectralSupport`, so each
