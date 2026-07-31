@@ -15,6 +15,7 @@ import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
 import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
 import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
+import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
 
 /-!
 # Symmetric norming functions on sequences
@@ -715,6 +716,37 @@ theorem extend_eq_iSup_ofFin (Φ : SymmetricGauge) {a : ℕ → ℝ} (ha : ∀ n
   refine le_iSup_of_le k ?_
   exact_mod_cast Φ.mono (truncate_le_ofFin ha k m)
 
+/-- The `ℓᵖ` gauge of a `Fin k` restriction, as a `Finset.range k` sum.
+
+The bridge between `lpGaugeFinsupp`, which sums over a `Finsupp`'s support, and
+the `range k` partial sums that a `tsum` decomposes into.  Needed by Milestone
+B3's reconciliation in both directions. -/
+theorem lpGaugeFinsupp_ofFin {p : ℝ} (hp : 0 < p) {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n)
+    (k : ℕ) :
+    lpGaugeFinsupp p (ofFin (fun i : Fin k => a i))
+      = (∑ n ∈ Finset.range k, (a n).toNNReal ^ p) ^ (1 / p) := by
+  classical
+  have hsupp : (ofFin (fun i : Fin k => a i)).support ⊆ Finset.range k := by
+    intro n hn
+    by_contra hk
+    rw [Finsupp.mem_support_iff] at hn
+    exact hn (by simp [ofFin_apply, Finset.mem_range.not.1 hk])
+  rw [lpGaugeFinsupp_eq hp _ hsupp]
+  congr 1
+  refine Finset.sum_congr rfl fun n hn => ?_
+  have hk : n < k := Finset.mem_range.1 hn
+  simp [ofFin_apply, hk, Real.nnabs_of_nonneg (ha n)]
+
+/-- `rpow` with a positive exponent commutes with suprema on `ℝ≥0∞`.
+
+Mathlib has `ENNReal.iSup_pow` for *natural* powers only, but
+`ENNReal.orderIsoRpow` makes the real-exponent case immediate — an order
+isomorphism preserves suprema. -/
+theorem iSup_rpow {ι : Sort*} [Nonempty ι] (f : ι → ℝ≥0∞) {r : ℝ} (hr : 0 < r) :
+    (⨆ i, f i) ^ r = ⨆ i, f i ^ r := by
+  have h := (ENNReal.orderIsoRpow r hr).map_iSup f
+  simpa only [ENNReal.orderIsoRpow_apply] using h
+
 /-! ### The gauge a symmetric norming function induces on operators
 
 `symmetricGaugeENorm Φ A = Φ∞ (a(A))`, the symmetric gauge read along the
@@ -1064,6 +1096,41 @@ theorem gauge_schattenFamily_antitone {p q : ℝ} (hp : 1 ≤ p) (hq : 1 ≤ q)
   simp only [schattenFamily, symmetricGaugeFamily, symmetricGaugeENorm, extend]
   refine iSup_mono fun k => iSup_mono fun m => ?_
   exact_mod_cast lpGaugeFinsupp_antitone (zero_lt_one.trans_le hp) hpq _
+
+-- The min-max hypothesis is not used: this is an identity of two gauges, not an
+-- ideal law.
+omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, u} 𝕜] in
+/-- **Milestone B3's reconciliation obligation, discharged.**
+
+`symmetricGaugeENorm (schattenGauge p hp)` and `TauCeti.schattenENorm p` are the
+same function, so the ideal `{lane:FTC-SCHATTENGAUGE}` *obtained* from Milestone
+B1 is the ideal `Family/Schatten.lean` *constructs* from its own argument.
+
+**The two are built along different routes and that is the point of proving it.**
+This side is a supremum over capped truncations of a `Finsupp`-valued gauge; that
+side is a `tsum`.  They meet once the cap is removed by `extend_eq_iSup_ofFin`
+and the `tsum` is opened by `ENNReal.tsum_eq_iSup_nat`, leaving two suprema over
+the same partial sums — and `iSup_rpow` carries the exponent across. -/
+theorem symmetricGaugeENorm_schattenGauge {p : ℝ} (hp : 1 ≤ p)
+    {E F : Type u} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (T : E →L[𝕜] F) :
+    symmetricGaugeENorm (schattenGauge p hp) T = ContinuousLinearMap.schattenENorm p T := by
+  have hp0 : (0 : ℝ) < p := zero_lt_one.trans_le hp
+  have hinv : (0 : ℝ) < 1 / p := by positivity
+  have hnn : ∀ n, 0 ≤ T.approximationNumber n := fun n =>
+    ContinuousLinearMap.approximationNumber_nonneg T n
+  rw [symmetricGaugeENorm, (schattenGauge p hp).extend_eq_iSup_ofFin hnn,
+    ContinuousLinearMap.schattenENorm, ENNReal.tsum_eq_iSup_nat, ← one_div,
+    iSup_rpow _ hinv]
+  refine iSup_congr fun k => ?_
+  rw [show (schattenGauge p hp) (ofFin (fun i : Fin k => T.approximationNumber i))
+      = lpGaugeFinsupp p (ofFin (fun i : Fin k => T.approximationNumber i)) from rfl,
+    lpGaugeFinsupp_ofFin hp0 hnn k]
+  rw [ENNReal.coe_rpow_of_nonneg _ hinv.le, ENNReal.ofNNReal_finsetSum]
+  congr 1
+  refine Finset.sum_congr rfl fun n _ => ?_
+  rw [ENNReal.coe_rpow_of_nonneg _ hp0.le, ENNReal.ofNNReal_toNNReal]
 
 end Calkin
 
