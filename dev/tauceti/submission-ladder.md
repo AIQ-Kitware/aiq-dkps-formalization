@@ -139,7 +139,7 @@ base Tau Ceti has already accepted.
   - `Analysis.OperatorIdeal.Family.OperatorNorm`
   - `Analysis.OperatorIdeal.Family.TraceClass`
 
-**Cumulative after F: 41 of 178 `ForTauCeti` modules.** Rungs A–F were the whole
+**Cumulative after F: 41 of 179 `ForTauCeti` modules.** Rungs A–F were the whole
 ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung G — Foundations completion — the rest of topics T01-T10
@@ -297,9 +297,10 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung P — Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems (T17)
 
-**11 new, cumulative closed slice 160.**
+**12 new, cumulative closed slice 161.**
 
   - `Analysis.InnerProductSpace.BoundedOperator.Projector`
+  - `Analysis.InnerProductSpace.SpectralOrder.Real`
   - `Analysis.InnerProductSpace.BoundedOperator.SinTheta`
   - `Analysis.InnerProductSpace.DoubleAngle.Vector`
   - `Analysis.InnerProductSpace.ReducedExtension`
@@ -313,7 +314,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung Q — The Yu-Wang-Samworth statistical variant (T18)
 
-**3 new, cumulative closed slice 163.**
+**3 new, cumulative closed slice 164.**
 
   - `Analysis.InnerProductSpace.YuWangSamworth.Residual`
   - `Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace`
@@ -321,7 +322,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung R — Matrix spectra and spectral measurability (T19)
 
-**6 new, cumulative closed slice 169.**
+**6 new, cumulative closed slice 170.**
 
   - `Analysis.Matrix.EntrywiseEigenvalue`
   - `Analysis.Matrix.EntrywiseOpNorm`
@@ -332,7 +333,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung S — Sample moments and matrix concentration (T20)
 
-**5 new, cumulative closed slice 174.**
+**5 new, cumulative closed slice 175.**
 
   - `Probability.Moments.CenteredScatter`
   - `Probability.Moments.MatrixConcentration`
@@ -342,18 +343,18 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung T — Matrix rank factorization and positive semidefiniteness (T21)
 
-**2 new, cumulative closed slice 176.**
+**2 new, cumulative closed slice 177.**
 
   - `LinearAlgebra.Matrix.PosDef`
   - `LinearAlgebra.Matrix.RankFactorization`
 
 ### Rung U — Berge's maximum theorem and approximate minimizers (T22)
 
-**2 new, cumulative closed slice 178.**
+**2 new, cumulative closed slice 179.**
 
   - `Topology.ApproxMinimizer`
   - `Topology.Berge`
-**Cumulative: 178 of 178 `ForTauCeti` modules — the ladder is total.**
+**Cumulative: 179 of 179 `ForTauCeti` modules — the ladder is total.**
 
 It briefly was not.  Three modules merged in after rung U closed on 2026-07-29
 and no rung's closure reached them; they were placed on 2026-07-30 by matching
