@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.ClosedOperator.Complexification
-import DavisKahan.SpectralTheory.Complexification.FunctionalCalculus
+import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
 import DavisKahan.SpectralTheory.Complexification.Subspace
 import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
 import DavisKahan.SpectralTheory.SpectralRestrictionOperator
@@ -34,7 +34,6 @@ namespace RealSpectralRestriction
 
 open ExactSinTheta
 open ExactSinTheta.ClosedOperatorComplexification
-open ExactSinTheta.RealComplexificationFunctionalCalculus
 open TauCeti.RealComplexification
 -- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
 open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
@@ -406,7 +405,7 @@ theorem realSelfAdjointSpectralProjection_isSelfAdjoint
     IsSelfAdjoint (realSelfAdjointSpectralProjection A hA S hS) := by
   rw [ContinuousLinearMap.isSelfAdjoint_iff']
   apply RealComplexification.complexify_injective
-  rw [RealComplexificationFunctionalCalculus.complexify_adjoint,
+  rw [TauCeti.RealComplexification.complexify_adjoint,
     complexify_realSelfAdjointSpectralProjection]
   exact (TauCeti.LinearPMap.spectralPVM
     (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)).isSelfAdjoint_proj S hS

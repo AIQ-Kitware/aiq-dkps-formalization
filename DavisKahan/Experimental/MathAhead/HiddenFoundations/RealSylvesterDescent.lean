@@ -8,7 +8,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Basic
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.OrderedSemigroup
 import DavisKahan.OperatorIdeal.ComplexificationApproximation
-import DavisKahan.SpectralTheory.Complexification.FunctionalCalculus
+import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
 
 /-!
 # Real descent for the separated bounded Sylvester theorem
@@ -35,7 +35,6 @@ namespace HiddenFoundations
 open DavisKahanExt
 open ExactSinTheta
 open ExactSinTheta.ComplexificationApproximation
-open ExactSinTheta.RealComplexificationFunctionalCalculus
 open RealComplexification
 
 noncomputable section
