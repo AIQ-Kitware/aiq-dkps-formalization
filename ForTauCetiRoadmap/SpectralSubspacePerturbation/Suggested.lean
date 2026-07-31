@@ -353,6 +353,78 @@ theorem sin_two_theta_le
 
 end FiniteSinTheta
 
+/-! ### Milestone C3 -- the domain-aware `sin Θ` theorem
+
+The roadmap's headline, and the only milestone whose statement cannot be
+reconstructed from the ones around it.  Hypotheses are bundled as a record on
+purpose: a flat theorem takes a dozen mutually constrained arguments and every
+specialization repeats all of them, whereas with a record each specialization is
+a *constructor* -- which is what makes "bounded and finite are specializations"
+true in the code rather than only in the prose. -/
+
+section DomainAwareSinTheta
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+  [CompleteSpace E]
+variable {H : Type w} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+/-- A lower frame bound for a trial map: the constant that replaces isometry.
+`c = 1` recovers the classical isometric statement, and the bound of Milestone C3
+degrades with `c` as the trial map degenerates. -/
+def LowerFrameBound (X : H →L[ℂ] E) (c : ℝ) : Prop :=
+  ∀ h : H, c * ‖h‖ ≤ ‖X h‖
+
+/-- The hypotheses of the domain-aware `sin Θ` theorem, as data.
+
+`A` is self-adjoint and *possibly unbounded*; nothing here says otherwise.  What is
+bounded is the **residual**: `A ∘ X - X ∘ A₀` extends from a graph core to a bounded
+operator on all of `H`, and that is the hypothesis -- bounded residual, never
+bounded `A`.
+
+The norm is an ideal gauge from the OperatorIdeals roadmap rather than a unitarily
+invariant norm on a finite-dimensional space: at this generality finiteness of the
+gauge is a *hypothesis* on the residual and a *conclusion* about `sin Θ`. -/
+structure UnboundedSinThetaProblem
+    (A : E →ₗ.[ℂ] E) (A₀ : H →ₗ.[ℂ] H) (X : H →L[ℂ] E) (R : H →L[ℂ] E) where
+  /-- The ambient operator is self-adjoint; it is not assumed bounded. -/
+  ambient_selfAdjoint : IsSelfAdjoint A
+  /-- The trial block is self-adjoint. -/
+  trial_selfAdjoint : IsSelfAdjoint A₀
+  /-- The trial map lands in the ambient domain on the trial domain. -/
+  mapsTo_domain : ∀ h : A₀.domain, X (h : H) ∈ A.domain
+  /-- The residual identity on the trial domain: this is where domain-awareness
+  lives, and it is why `R` can be bounded while `A` is not. -/
+  residual : ∀ h : A₀.domain,
+    A ⟨X (h : H), mapsTo_domain h⟩ - X (A₀ h) = R (h : H)
+  /-- The lower frame constant of the trial map. -/
+  frameLowerBound : ℝ
+  frameLowerBound_pos : 0 < frameLowerBound
+  lowerFrame : LowerFrameBound X frameLowerBound
+  /-- The spectral separation, in one of the three forms of the generality bar;
+  the constant in the conclusion is `1` for interval/exterior and ordered
+  separation and `π/2` for pairwise separation. -/
+  gap : ℝ
+  gap_pos : 0 < gap
+
+/-- **Milestone C3.**  The conclusion is a conjunction on purpose: ideal
+*membership* of the sine operator is part of the theorem, not a side condition.
+A bounded statement cannot express that -- there the carrier is `⊤` or the
+membership is vacuous -- which is precisely why the unbounded form is canonical
+and the bounded ones are specializations.
+
+Stated here with the operator norm standing in for the ideal gauge, since the
+gauge lives in the OperatorIdeals roadmap; reconciling the two is open work
+recorded in the roadmap prose. -/
+theorem sinTheta_domainAware_le
+    {A : E →ₗ.[ℂ] E} {A₀ : H →ₗ.[ℂ] H} {X R : H →L[ℂ] E}
+    (P : UnboundedSinThetaProblem A A₀ X R)
+    (sinTheta : H →L[ℂ] E) :
+    P.gap * P.frameLowerBound * ‖sinTheta‖ ≤ ‖R‖ := by
+  sorry
+
+end DomainAwareSinTheta
+
 section Riccati
 
 variable {U : Type v} [NormedAddCommGroup U] [InnerProductSpace ℂ U]
