@@ -697,6 +697,24 @@ theorem extend_le_extend_of_forall_sum_le (Φ : SymmetricGauge) {a b : ℕ → �
           (fun n => ENNReal.toReal_nonneg) k
         rwa [← hbrw] at this
 
+/-- **On a nonnegative real sequence the cap in `extend` is inert.**
+
+`extend` is a supremum over a length `k` *and* a value cap `m`, and the cap is
+what stops it being compared with anything written as a `tsum`.  For a real
+sequence every entry is finite, so the cap is never active and the double
+supremum collapses to one index.
+
+**This is the form any comparison against a `tsum` needs** — Milestone B3's
+reconciliation of `symmetricGaugeENorm (schattenGauge p hp)` against
+`schattenENorm p` among them. -/
+theorem extend_eq_iSup_ofFin (Φ : SymmetricGauge) {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n) :
+    Φ.extend (fun n => ENNReal.ofReal (a n))
+      = ⨆ k : ℕ, ((Φ (ofFin (fun i : Fin k => a i)) : ℝ≥0) : ℝ≥0∞) := by
+  refine le_antisymm ?_ (iSup_le fun k => Φ.ofFin_le_extend ha k)
+  refine iSup_le fun k => iSup_le fun m => ?_
+  refine le_iSup_of_le k ?_
+  exact_mod_cast Φ.mono (truncate_le_ofFin ha k m)
+
 /-! ### The gauge a symmetric norming function induces on operators
 
 `symmetricGaugeENorm Φ A = Φ∞ (a(A))`, the symmetric gauge read along the
