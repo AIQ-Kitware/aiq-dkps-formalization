@@ -26,11 +26,23 @@ Several agents work this repository at once, on separate branches. Coordination
 lives in [`dev/LANES.md`](dev/LANES.md); read its `## Rules` and
 `## Branch and sync protocol` before autonomous work.
 
-The three that cost the most when skipped:
+A lane is in exactly one of three states and its row must say which: **open**
+(work to do, nobody doing it), **claimed** (an agent is working it *right now*),
+**completed** (finished — and the row moves to `dev/LANES-COMPLETED.md`).
+
+The four that cost the most when skipped:
 
 - **Claim → commit → push → then edit.** A row you have committed but not pushed
   is invisible to every other agent. Two agents once claimed the same lane three
   minutes apart and both did all of it.
+- **Close the lane in the same push as the work, and archive the row.** A
+  finished lane whose row still says `claimed` reads as *do not take* — five of
+  them were blocking other agents on 2026-07-30, and two more had said "CLAIMED,
+  edits not yet started" long after the work landed. `check_lane_graph`
+  classifies a row by the **first word of its status cell**, so `DONE` has to
+  lead; appending it to a cell that opens with `claimed` leaves the lane HELD. If
+  you stop without finishing, say `released` and push that — silence reads as
+  ownership.
 - **`git fetch --all` and check every remote branch before claiming**, then merge
   what is ahead of you so the row lands on current state. Re-fetch more often
   while you have a channel open with another agent — their branch moves while
