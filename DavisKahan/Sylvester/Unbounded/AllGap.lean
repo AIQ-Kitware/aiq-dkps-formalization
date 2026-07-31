@@ -11,10 +11,10 @@ import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
-# Genuine-spectrum all-gap unbounded Sylvester theorem
+# Spectral all-gap unbounded Sylvester theorem
 
 This module states the source-facing all-gap predicate entirely through the
-genuine Spectra spectrum.  It covers the interval/exterior configuration and
+Spectra spectrum.  It covers the interval/exterior configuration and
 both ordered half-line configurations.  The capstone converts the ordered
 spectral containments to form bounds and then calls the direct interface-parametric finite-Ky-Fan
 engine instantiated by the vendored Spectra cutoffs.
@@ -36,34 +36,19 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
-/-- Interval/exterior separation for a Sylvester pair, over the Spectra
-spectrum. -/
-def SylvesterIntervalExteriorGap
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
-    (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
-    (β α δ : ℝ) : Prop :=
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
-        Set.Icc β α ∧
-    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B.toLinearPMap) ∨
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
-        Set.Icc β α ∧
-    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap)
-
 /-- All three source gap configurations, each stated as a containment of the
 Spectra spectrum -- the form Davis--Kahan 1970 uses.
 
 `FormBoundedSylvesterGap` states the two ordered configurations as operator-form
 bounds instead; it implies this predicate, and no converse is proved. -/
-inductive UnboundedSylvesterGap
+inductive SpectralSylvesterGap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
     (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
     (δ : ℝ) : Prop where
   | intervalExterior
       {β α : ℝ}
       (hβα : β ≤ α)
-      (hgap : SylvesterIntervalExteriorGap A B β α δ)
+      (hgap : SpectralIntervalExteriorGap A B β α δ)
   | leftAboveRightBelow
       (c : ℝ)
       (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
@@ -86,7 +71,7 @@ theorem davisKahan1970_sylvester_of_spectrumGap
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap A B δ)
+    (hgap : SpectralSylvesterGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧

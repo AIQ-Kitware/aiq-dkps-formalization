@@ -23,24 +23,24 @@ namespace TauCeti
 namespace DavisKahan1970
 
 /-- Complete generalized 1970 target, including ordered half-lines. -/
-alias GeneralSinThetaProblem :=
-  DavisKahan.Experimental.ExactSinTheta.GeneralSinThetaProblem
+alias FormBoundedGeneralSinThetaProblem :=
+  DavisKahan.Experimental.ExactSinTheta.FormBoundedGeneralSinThetaProblem
 
 /-- Completed genuine-spectrum finite interval/exterior problem. -/
 alias FiniteIntervalGeneralSinThetaProblem :=
   DavisKahan.Experimental.ExactSinTheta.FiniteIntervalGeneralSinThetaProblem
 
-alias IsometricSinThetaProblem :=
-  DavisKahan.Experimental.ExactSinTheta.IsometricSinThetaProblem
+alias FormBoundedIsometricSinThetaProblem :=
+  DavisKahan.Experimental.ExactSinTheta.FormBoundedIsometricSinThetaProblem
 
 /-- Real lower-frame version of the complete source-shaped problem. -/
 alias RealGeneralSinThetaProblem :=
   DavisKahan.Experimental.ExactSinTheta.RealGeneralSinThetaProblem
 
 alias generalizedSinTheta :=
-  DavisKahan.Experimental.ExactSinTheta.GeneralSinThetaProblem.result
+  DavisKahan.Experimental.ExactSinTheta.FormBoundedGeneralSinThetaProblem.result
 alias generalizedSinTheta_complementaryBlock :=
-  DavisKahan.Experimental.ExactSinTheta.GeneralSinThetaProblem.complementaryBlock_result
+  DavisKahan.Experimental.ExactSinTheta.FormBoundedGeneralSinThetaProblem.complementaryBlock_result
 
 /-- Completed generalized finite interval/exterior theorem. -/
 alias generalizedSinTheta_finiteInterval :=
@@ -51,15 +51,15 @@ alias generalizedSinTheta_finiteInterval_complementaryBlock :=
   DavisKahan.Experimental.ExactSinTheta.FiniteIntervalGeneralSinThetaProblem.complementaryBlock_result
 
 alias sinTheta :=
-  DavisKahan.Experimental.ExactSinTheta.IsometricSinThetaProblem.result_complex
+  DavisKahan.Experimental.ExactSinTheta.FormBoundedIsometricSinThetaProblem.result_complex
 
 /-- Explicit complex name for the manuscript's default scalar convention. -/
 alias sinTheta_complex :=
-  DavisKahan.Experimental.ExactSinTheta.IsometricSinThetaProblem.result_complex
+  DavisKahan.Experimental.ExactSinTheta.FormBoundedIsometricSinThetaProblem.result_complex
 
 /-- Real source-facing isometric theorem. -/
 alias sinTheta_real :=
-  DavisKahan.Experimental.ExactSinTheta.IsometricSinThetaProblem.result_real
+  DavisKahan.Experimental.ExactSinTheta.FormBoundedIsometricSinThetaProblem.result_real
 
 /-- Real unbounded isometric theorem from a measurable exact spectral set. -/
 alias sinTheta_real_spectralSubspace :=

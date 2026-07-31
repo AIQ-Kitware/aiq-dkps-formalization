@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import FinishTanTwoTheta.GroundedImports
-import FinishTanTwoTheta.Sequence.MinimalCompletion
+import DavisKahan.Sources.DavisKahan1970.Ideals.SequenceGauge
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 import DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence
 

@@ -65,7 +65,7 @@ noncomputable def toGeneral
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (P : BoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
-    GeneralSinThetaProblem (E := E) (F := F)
+    FormBoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N := by
   let D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G) := {
     A := TauCeti.DavisKahanExt.ClosedOperator.ofBounded P.A
@@ -123,7 +123,7 @@ theorem result
               P.frameLowerBound_pos)
         ≤ N.gauge
             (generalResidual P.A P.X P.A₀) :=
-  GeneralSinThetaProblem.result N (P.toGeneral N)
+  FormBoundedGeneralSinThetaProblem.result N (P.toGeneral N)
 
 end BoundedGeneralSinThetaProblem
 

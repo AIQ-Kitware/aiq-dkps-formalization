@@ -27,7 +27,7 @@ operators and all spectral hypotheses phrased through the Spectra spectrum:
 The interval block is secretly bounded (`BoundedFromSpectrum`), the
 exterior block carries the Spectra-backed shifted resolvent
 (`twoSidedShiftedInverseBound_of_spectrum_gap`), and the ideal-scope
-Neumann engines of `GenuineUnboundedGauge` finish both orientations.
+Neumann engines of `SinTheta/Unbounded/Gauge.lean` finish both orientations.
 -/
 
 open scoped InnerProductSpace
@@ -188,6 +188,34 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRig
     abel
   exact mem_and_gauge_le_of_boundedLeft_exteriorRight N hr0 hδ hRnorm'
     hdom hright hJnorm hEq' hC
+
+namespace ExactSinTheta
+
+/-- Interval/exterior separation for two closed self-adjoint blocks, stated over
+the Spectra spectrum: one block's spectrum lies in `[β, α]` and the other avoids
+`(β - δ, α + δ)`.  Either orientation is permitted.
+
+This is the single home for the configuration.  It lives here, below both
+`Sylvester/Unbounded/AllGap.lean` and `SinTheta/Unbounded/IntervalExterior.lean`,
+because both consume it and neither imports the other.
+
+`RealSpectrumIntervalExteriorGap` (`Sylvester/Gap.lean`) is the same
+configuration spelled through `realSpectrum`; the two spectra are identified by
+`realSpectrum_eq_spectraSpectrum`. -/
+def SpectralIntervalExteriorGap
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
+    (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
+    (β α δ : ℝ) : Prop :=
+  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+        Set.Icc β α ∧
+    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B.toLinearPMap) ∨
+  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+        Set.Icc β α ∧
+    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap)
+
+end ExactSinTheta
 
 end Experimental
 end DavisKahan

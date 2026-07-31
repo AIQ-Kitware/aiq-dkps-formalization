@@ -12,7 +12,8 @@ import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 The two ordered half-line configurations are packaged behind one small record.
 This leaf contains only the record and its source-facing contract, so a direct
 implementation need not import the legacy unbounded Sylvester theorem.  The
-compatibility implementation remains isolated in `GenuineOrderedEngineLegacy`.
+compatibility implementation remains isolated in
+`Experimental/InfiniteDimensional/Sylvester/OrderedEngineLegacy.lean`.
 -/
 
 open scoped InnerProductSpace

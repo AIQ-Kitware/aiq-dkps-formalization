@@ -46,8 +46,8 @@ are not the preferred user entry point.
 Keep the following, but document them as internal or historical:
 
 - `UnboundedSinThetaData`;
-- `GeneralSinThetaProblem` and `RealGeneralSinThetaProblem`;
-- `IsometricSinThetaProblem.result` over an arbitrary `RCLike` implementation;
+- `FormBoundedGeneralSinThetaProblem` and `RealGeneralSinThetaProblem`;
+- `FormBoundedIsometricSinThetaProblem.result` over an arbitrary `RCLike` implementation;
 - legacy spectrum and gap predicates needed by source-shaped statements;
 - finite interval/exterior records.
 

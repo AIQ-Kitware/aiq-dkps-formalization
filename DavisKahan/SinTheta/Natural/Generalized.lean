@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SinTheta.Natural.Genuine
+import DavisKahan.SinTheta.Natural.SpectralSubspace
 
 /-!
 # Generalized complex sine-theta theorem from natural spectral inputs
@@ -42,7 +42,7 @@ theorem generalizedSinTheta_unbounded_spectralSubspace_of_spectrumGap
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
       A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
-    (hgap : UnboundedSylvesterGap A0
+    (hgap : SpectralSylvesterGap A0
       (selfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
     (hR : N.Mem Rop) :
     N.Mem
