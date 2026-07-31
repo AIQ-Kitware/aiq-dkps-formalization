@@ -205,7 +205,7 @@ theorem singularValues_diagOp (hn : finrank 𝕜 E = n)
 omit [FiniteDimensional 𝕜 E] in
 @[simp]
 private theorem coe_toLinearMap_apply (U : E ≃ₗᵢ[𝕜] E) (v : E) :
-    U.toLinearMap v = U v := rfl
+    U.toLinearMap v = U v := (rfl)
 
 /-- **Operator SVD**: relative to *any* fixed orthonormal basis `b`, every
 square operator factors as `A = U ∘ diag(σ(A)) ∘ V` with `U, V` unitary. -/
@@ -421,7 +421,7 @@ noncomputable def finiteSymmetricGauge (N : UnitarilyInvariantNorm 𝕜 E)
 
 /-- The induced finite symmetric gauge, unfolded. -/
 @[simp] theorem finiteSymmetricGauge_apply (b : OrthonormalBasis (Fin n) 𝕜 E)
-    (x : Fin n → ℝ) : N.finiteSymmetricGauge b x = N.gauge b x := rfl
+    (x : Fin n → ℝ) : N.finiteSymmetricGauge b x = N.gauge b x := (rfl)
 
 /-- Shrinking one coordinate of `y` (in absolute value) does not increase the
 gauge: `update y j t` with `|t| ≤ y j` is a convex combination of `y` and its

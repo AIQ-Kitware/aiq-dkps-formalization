@@ -258,7 +258,7 @@ noncomputable def opNorm : RectangularUnitarilyInvariantNorm 𝕜 E F where
 /-- The rectangular operator norm is the ordinary operator norm of the
 continuous-linear-map view, definitionally. -/
 @[simp] theorem opNorm_apply (A : E →ₗ[𝕜] F) :
-    opNorm A = ‖A.toContinuousLinearMap‖ := rfl
+    opNorm A = ‖A.toContinuousLinearMap‖ := (rfl)
 
 /-- Frobenius/Hilbert--Schmidt norm as a rectangular UI norm. -/
 noncomputable def frobenius : RectangularUnitarilyInvariantNorm 𝕜 E F where
