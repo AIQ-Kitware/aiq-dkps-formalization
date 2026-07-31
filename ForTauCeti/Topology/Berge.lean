@@ -406,4 +406,46 @@ theorem eventually_iInf_lt_of_lowerHemicontinuousAt
   obtain ⟨x, hxK, hxlt⟩ := hp
   exact lt_of_le_of_lt (ciInf_le (hbdd p) ⟨x, hxK⟩) hxlt
 
+/-! ### Varying constraints: the upper-hemicontinuous half
+
+Where lower hemicontinuity above gave the *upper* bound on the value function,
+upper hemicontinuity gives the reverse one, and it does so through a single
+fact: a limit of feasible points stays feasible.
+-/
+
+/-- **Feasibility passes to limits under upper hemicontinuity.**
+
+If `pₖ → p₀`, each `xₖ` is feasible at `pₖ`, and `xₖ → x₀`, then `x₀` is
+feasible at `p₀`.
+
+**This is the step that fails without upper hemicontinuity**: nothing otherwise
+stops the constraint sets from collapsing away from `x₀` in the limit, and a
+minimizer extracted from the `xₖ` would not be a competitor at `p₀`.
+
+The separation hypotheses are genuine rather than artifacts.  `x₀ ∉ K p₀` with
+`K p₀` closed gives disjoint opens `U ∋ x₀` and `V ⊇ K p₀`; upper
+hemicontinuity puts `K p` inside `V` eventually, while convergence puts `xₖ`
+inside `U` eventually, and `xₖ ∈ K pₖ` then contradicts disjointness. -/
+theorem mem_of_tendsto_of_upperHemicontinuousAt
+    {P X : Type*} [TopologicalSpace P] [TopologicalSpace X] [RegularSpace X]
+    {K : P → Set X} {p₀ : P} (hKu : UpperHemicontinuousAt K p₀)
+    (hKclosed : IsClosed (K p₀))
+    {p : ℕ → P} (hp : Tendsto p atTop (𝓝 p₀))
+    {x : ℕ → X} (hxK : ∀ k, x k ∈ K (p k))
+    {x₀ : X} (hx : Tendsto x atTop (𝓝 x₀)) :
+    x₀ ∈ K p₀ := by
+  by_contra hx₀
+  -- Separate the point from the closed constraint set.
+  obtain ⟨U, V, hUopen, hVopen, hx₀U, hKV, hUV⟩ :=
+    SeparatedNhds.of_isCompact_isClosed (isCompact_singleton (x := x₀)) hKclosed
+      (Set.disjoint_singleton_left.mpr hx₀)
+  -- Upper hemicontinuity pushes the nearby constraint sets into `V`.
+  have hVnhds : V ∈ 𝓝ˢ (K p₀) := hVopen.mem_nhdsSet.mpr hKV
+  have hev : ∀ᶠ q in 𝓝 p₀, V ∈ 𝓝ˢ (K q) := (upperHemicontinuousAt_iff.mp hKu) V hVnhds
+  have hevk : ∀ᶠ k in atTop, V ∈ 𝓝ˢ (K (p k)) := hp.eventually hev
+  -- Convergence puts the points into `U`.
+  have hUk : ∀ᶠ k in atTop, x k ∈ U := hx (hUopen.mem_nhds (hx₀U rfl))
+  obtain ⟨k, hkV, hkU⟩ := (hevk.and hUk).exists
+  exact Set.disjoint_left.mp hUV hkU (subset_of_mem_nhdsSet hkV (hxK k))
+
 end TauCeti
