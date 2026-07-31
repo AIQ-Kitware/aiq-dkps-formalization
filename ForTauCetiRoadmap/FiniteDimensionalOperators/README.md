@@ -1,5 +1,38 @@
 # Roadmap: finite-dimensional operator theory — the functional calculus, polar decomposition, singular values, and spectral subspaces
 
+> ## ✅ DELIVERED — this topic is complete (verified 2026-07-31)
+>
+> **All 30 signatures in `Suggested.lean` are proved in the library.** This README is
+> kept for its design rationale, which still describes why the theory is shaped the way
+> it is — but it is a **record, not a plan**. Nothing below is outstanding work.
+>
+> The `sorry` bodies in `Suggested.lean` are deliberate and must stay: `ForTauCetiRoadmap.lean`
+> exists *"so that a broken suggested signature is a build failure"*. The statements are
+> the content; the bodies are placeholders by design.
+>
+> ### Where each signature landed
+>
+> * **`CourantFischer.lean`** — `abs_eigenvalues_sub_le_opNorm`, `eigenvalues_eq_iSup_iInf_re_inner`
+> * **`Gram/Matrix.lean`** — `exists_linearIsometryEquiv_map_eq_of_inner_eq`, `rangeEquivOfInnerEq`
+> * **`MoorePenroseInverse.lean`** — `eq_moorePenroseInverse_of_penrose`, `moorePenroseInverse`
+> * **`OperatorModulus.lean`** — `modulus`
+> * **`OrthogonalSeries.lean`** — `orthogonalFamily_of_pairwise_inner_eq_zero`
+> * **`PartialIsometry.lean`** — `IsPartialIsometry`, `isPartialIsometry_iff_norm_map`
+> * **`Polar/Decomposition.lean`** — `abs`, `exists_polar_decomposition_unitary`
+> * **`Polar/PartialIsometry.lean`** — `polarInitial`, `polarInitial_orthogonal_eq_ker`, `polarPartial`, `polarPartial_comp_modulus`
+> * **`PositiveSqrt.lean`** — `sqrt_unique`
+> * **`Projection/Gap.lean`** — `norm_starProjection_sub_eq_max`
+> * **`SelfAdjointFunctionalCalculus.lean`** — `selfAdjointFunctionalCalculus`, `selfAdjointFunctionalCalculus_apply_of_apply_eq_smul`, `sqrt`
+> * **`Singular/System.lean`** — `apply_rightSingularBasis_eq_smul_leftSingularVector`, `eq_sum_singularValue_rankOne`, `exists_orthonormalBasis_extending_leftSingularVector`, `leftSingularVector`, `rightSingularBasis`
+> * **`Spectral/Gap.lean`** — `SpectraSeparated`
+> * **`Spectral/Subspace.lean`** — `IsEigenvectorAt`, `restrictedSpectrum`, `spectralSubspace`
+>
+> Verified name-by-name against `ForTauCeti/**` and `DavisKahan/**`, not by topic-level
+> count. One caution for anyone re-running the check: `sqrt` is declared as
+> `_root_.LinearMap.IsPositive.sqrt`, so a pattern anchored on `def sqrt` at line start
+> reports it missing when it is present.
+
+
 Spectral perturbation theory — the Davis–Kahan sin Θ theorems and everything in their
 orbit — is written in a small, stable vocabulary: apply a real function to a symmetric
 operator; factor an operator through its modulus; expand a rectangular map in its
