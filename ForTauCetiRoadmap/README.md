@@ -18,9 +18,9 @@ signatures.
 ## Reading and editing
 
 The `README.md` of a roadmap is its specification and is definitive. `Suggested.lean`
-records representative target signatures with `sorry` bodies; the bodies are the point of
-the file, since `ForTauCetiRoadmap.lean` makes the directory a Lean library and so turns a
-signature that no longer elaborates into a build failure. Build the library with
+records representative target signatures; the signatures are the point of the file. The
+`sorry` bodies let `ForTauCetiRoadmap.lean` make the directory a Lean library, so a proposed
+API that no longer elaborates becomes a build failure. Build the library with
 `lake build ForTauCetiRoadmap`; it is not a default target.
 
 Specify mathematics intrinsically. A roadmap says what should be true and what the public

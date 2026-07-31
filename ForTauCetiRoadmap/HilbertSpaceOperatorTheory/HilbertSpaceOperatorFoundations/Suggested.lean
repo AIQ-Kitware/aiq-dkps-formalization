@@ -25,13 +25,32 @@ open scoped InnerProductSpace
 
 universe u v w
 
-/-- A **partial isometry**, stated algebraically in a star monoid: `u u⋆ u = u`. Mathlib
-has no such predicate. One definition serves `E →ₗ[𝕜] E`, `E →L[ℂ] F` and any C⋆-algebra;
-the geometric characterization — norm-preserving on `(ker u)ᗮ` — is a theorem. -/
+/-- A **partial isometry** in a star monoid: `u u⋆ u = u`. This abstraction covers
+endomorphisms and C⋆-algebra elements. Rectangular maps require carrier-specific predicates
+using typed composition, because taking the adjoint changes source and target. -/
 def IsPartialIsometry {R : Type*} [Monoid R] [StarMul R] (u : R) : Prop :=
   u * star u * u = u
 
 namespace LinearMap
+
+section PartialIsometry
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
+variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
+
+/-- A rectangular linear map is a partial isometry when the typed equation
+`u u† u = u` holds. This is the same equation as the star-monoid predicate, but it
+cannot be expressed as multiplication in one carrier when source and target differ. -/
+def IsPartialIsometry (u : E →ₗ[𝕜] F) : Prop :=
+  u ∘ₗ u.adjoint ∘ₗ u = u
+
+/-- On endomorphisms, the carrier-specific and star-monoid predicates agree. -/
+theorem isPartialIsometry_iff_starMul {u : E →ₗ[𝕜] E} :
+    u.IsPartialIsometry ↔ _root_.IsPartialIsometry u := by
+  sorry
+
+end PartialIsometry
 
 section FunctionalCalculus
 
@@ -140,7 +159,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteD
 /-- Operator characterization: a partial isometry is exactly a map that is norm-preserving
 on the orthogonal complement of its kernel (Conway VI.3.2). -/
 theorem isPartialIsometry_iff_norm_map {u : E →ₗ[𝕜] E} :
-    IsPartialIsometry u ↔ ∀ x ∈ (LinearMap.ker u)ᗮ, ‖u x‖ = ‖x‖ := by
+    u.IsPartialIsometry ↔ ∀ x ∈ (LinearMap.ker u)ᗮ, ‖u x‖ = ‖x‖ := by
   sorry
 
 /-- Polar decomposition with a genuine unitary factor, available for every endomorphism of
@@ -272,13 +291,31 @@ end LinearMap
 
 namespace ContinuousLinearMap
 
+section PartialIsometry
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+
+/-- A rectangular bounded operator is a partial isometry when `u u† u = u`, expressed
+with typed composition. -/
+def IsPartialIsometry (u : E →L[𝕜] F) : Prop :=
+  u ∘L u.adjoint ∘L u = u
+
+/-- The geometric characterization of a rectangular bounded partial isometry. -/
+theorem isPartialIsometry_iff_norm_map {u : E →L[𝕜] F} :
+    u.IsPartialIsometry ↔ ∀ x ∈ (LinearMap.ker u.toLinearMap)ᗮ, ‖u x‖ = ‖x‖ := by
+  sorry
+
+end PartialIsometry
+
 section RectangularModulus
 
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
 /-- **The rectangular modulus** `|T| = (T⋆T)^(1/2)`, through Mathlib's continuous
-functional calculus: complex and rectangular where `LinearMap.modulus` is `RCLike` and
+functional calculus: complex and rectangular where `LinearMap.operatorAbs` is `RCLike` and
 square, and defined on complete spaces of any dimension. -/
 noncomputable def modulus (T : E →L[ℂ] F) : E →L[ℂ] E :=
   CFC.sqrt (T.adjoint ∘L T)
@@ -295,6 +332,11 @@ noncomputable def polarInitial (M : E →L[ℂ] F) : Submodule ℂ E :=
 /-- The polar partial isometry of a bounded rectangular complex operator: isometric on the
 initial space, zero on its orthogonal complement. -/
 noncomputable def polarPartial (M : E →L[ℂ] F) : E →L[ℂ] F :=
+  sorry
+
+/-- The polar factor is a rectangular partial isometry. -/
+theorem polarPartial_isPartialIsometry (M : E →L[ℂ] F) :
+    (polarPartial M).IsPartialIsometry := by
   sorry
 
 /-- The rectangular polar decomposition `M = W |M|` (Conway VI.3.9). -/
@@ -415,6 +457,10 @@ def IsEigenvectorAt (A : E →ₗ[𝕜] E) (lam : ℝ) (x : E) : Prop :=
 /-- The point spectrum of `A` carried by `U`. -/
 def restrictedSpectrum (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) : Set ℝ :=
   {lam | ∃ x, x ∈ U ∧ IsEigenvectorAt A lam x}
+
+/-- Every eigenvalue of `A` carried by `U` lies in `Ω`. -/
+def SpectrumIn (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (Ω : Set ℝ) : Prop :=
+  restrictedSpectrum A U ⊆ Ω
 
 /-- The canonical spectral subspace selected by a real set. -/
 noncomputable def spectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) : Submodule 𝕜 E :=

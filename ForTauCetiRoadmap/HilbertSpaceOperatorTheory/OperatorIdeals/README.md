@@ -332,8 +332,9 @@ milestone, and nothing else in Part B needs A2 directly.
 
 ### Milestone B3 — Schatten `p` in infinite dimensions, and the reconciliation
 
-`schattenGauge p` for `1 ≤ p ≤ ∞`, with `Φ_p a = (∑ aₙ^p)^{1/p}` and `Φ_∞ = ‖·‖_∞` as the
-honest endpoint of the same scale rather than a separate definition; and
+`schattenGauge p` for each finite real exponent `1 ≤ p`, with
+`Φ_p a = (∑ aₙ^p)^{1/p}`, and a separately named infinity endpoint
+`schattenFamilyInf` whose gauge is `Φ_∞ = ‖·‖_∞`; for finite `p`,
 `schattenFamily p = symmetricGaugeFamily (schattenGauge p)`, so **the Schatten classes are
 obtained rather than constructed**, and their laws are B1's.
 
@@ -341,7 +342,7 @@ obtained rather than constructed**, and their laws are B1's.
   are termwise, normalization is by inspection.
 - The endpoint identifications, each an equality of *families* and not merely of gauges on
   the ideal: `schattenFamily 1` is the trace-class family, `schattenFamily 2` has the
-  Hilbert–Schmidt gauge, `schattenFamily ∞` is the operator-norm family.
+  Hilbert–Schmidt gauge, and `schattenFamilyInf` is the operator-norm family.
 - The scale is monotone — `p ≤ q → gauge_q T ≤ gauge_p T`, hence `S_p ⊆ S_q` — with the
   inclusions strict, witnessed by a diagonal operator with coefficients `n ↦ n^{-1/r}` for
   `p < r < q`, the same diagonal machinery as Part A's acceptance example (6).

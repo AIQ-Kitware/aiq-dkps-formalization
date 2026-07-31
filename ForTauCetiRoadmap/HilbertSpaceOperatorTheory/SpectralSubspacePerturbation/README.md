@@ -1,5 +1,4 @@
-# Spectral-subspace perturbation:
-# Sylvester equations, the Rosenblum theorem, and the Davis–Kahan sin Θ theorems
+# Spectral-subspace perturbation: Sylvester equations, the Rosenblum theorem, and the Davis–Kahan sin Θ theorems
 
 Perturbation theory for self-adjoint operators asks how an invariant subspace moves when the
 operator does. Davis and Kahan (1970) answered in the form the subject has used since: the
@@ -32,6 +31,11 @@ This roadmap is the **endpoint of the
 That transitive depth is the honest cost of stating Davis–Kahan over objects that exist
 rather than over objects assumed — every norm, angle, ideal and spectral projection its
 theorems quantify over is built first.
+
+Its `Suggested.lean` imports the sibling signature files and uses their declarations directly.
+In particular, spectral predicates come from operator foundations, invariant seminorms from
+majorization and angles, and the rectangular domain-aware Sylvester equation and resolvent
+vocabulary from self-adjoint spectral theory. No dependent roadmap redeclares those objects.
 
 Suggested homes:
 
