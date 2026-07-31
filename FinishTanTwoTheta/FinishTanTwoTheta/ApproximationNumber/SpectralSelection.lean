@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import FinishTanTwoTheta.GroundedImports
-import FinishTanTwoTheta.ApproximationNumber.GramSpectralRank
+import DavisKahan.OperatorIdeal.ApproximationNumbers.GramSpectralRank
 import FinishTanTwoTheta.ApproximationNumber.FinitePVMSelection
 import DavisKahan.OperatorIdeal.ApproximationNumbers.LeadingCutoff
 import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteValueSeparation
