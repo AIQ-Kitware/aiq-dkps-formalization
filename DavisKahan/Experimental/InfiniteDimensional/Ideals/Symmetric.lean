@@ -275,13 +275,17 @@ noncomputable def compactOperator :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofRectangular RectangularSymmetricIdealFamily.compactOperatorNorm
 
-/-- Schatten `p` ideal. -/
-noncomputable def schatten (p : ℝ) (hp : 1 ≤ p) :
+/-- Schatten `p` ideal.  Carries the min--max hypothesis its family now needs: the
+family stopped being a `sorry` on 2026-07-31 and acquired that family's real
+hypotheses along with its real definition. -/
+noncomputable def schatten [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜]
+    {p : ℝ} (hp : 1 ≤ p) :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular (RectangularSymmetricIdealFamily.schatten p hp)
+  ofRectangular (RectangularSymmetricIdealFamily.schatten hp)
 
 /-- Trace-class ideal. -/
-noncomputable def traceClass : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
+noncomputable def traceClass [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜] :
+    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofRectangular RectangularSymmetricIdealFamily.traceClass
 
 /-- Hilbert--Schmidt ideal. -/
@@ -289,7 +293,7 @@ noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofRectangular RectangularSymmetricIdealFamily.hilbertSchmidt
 
 /-- Ky Fan `k` gauge for positive `k`. -/
-noncomputable def kyFan [HasKyFanApproximationGaugeTriangle 𝕜]
+noncomputable def kyFan [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜]
     (k : ℕ) (hk : 0 < k) :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofRectangular (RectangularSymmetricIdealFamily.kyFan k hk)

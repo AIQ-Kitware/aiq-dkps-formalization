@@ -104,6 +104,31 @@ private theorem sum_sq_norm_repr_eq_sq_norm (b : OrthonormalBasis (Fin n) 𝕜 E
   simp_rw [b.repr_apply_apply]
   exact b.sum_sq_norm_inner_right x
 
+namespace Finset
+
+/-- **The first `k` indices of `Fin n` number exactly `k`.**
+
+A `Finset` counting fact with no eigenvalue content, kept here because this is the module
+both of its consumers already import — `Analysis/InnerProductSpace/KyFan.lean` for the Ky Fan
+trace inequality and `Analysis/OperatorIdeal/ApproximationNumber/FiniteDimensional.lean` for
+a span dimension.  Each had its own `private` copy, differing only by a prime on the name.
+
+Mathlib has `Fin.card_Iio` but not this filter form, which is the shape a `Finset.sum_const`
+leaves behind. -/
+theorem card_filter_lt {n k : ℕ} (hk : k ≤ n) :
+    (Finset.univ.filter (fun j : Fin n => (j : ℕ) < k)).card = k := by
+  classical
+  rcases lt_or_eq_of_le hk with hlt | rfl
+  · have h : (Finset.univ.filter (fun j : Fin n => (j : ℕ) < k))
+        = Finset.Iio (⟨k, hlt⟩ : Fin n) := by
+      ext j; simp [Fin.lt_def]
+    rw [h, Fin.card_Iio]
+  · have h : (Finset.univ.filter (fun j : Fin k => (j : ℕ) < k)) = Finset.univ := by
+      ext j; simp
+    rw [h, Finset.card_univ, Fintype.card_fin]
+
+end Finset
+
 namespace LinearMap.IsSymmetric
 
 variable [FiniteDimensional 𝕜 E] {T S : E →ₗ[𝕜] E}

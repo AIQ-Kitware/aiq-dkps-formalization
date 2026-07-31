@@ -331,7 +331,7 @@ theorem sin_two_arccos_le (hT : T.IsSymmetric) (hH : H.IsSymmetric)
   have hxsum : y + z = x := by rw [hzdef]; abel
   have hpyth : ‖y‖ ^ 2 + ‖z‖ ^ 2 = 1 := by
     have h := norm_add_sq (𝕜 := 𝕜) y z
-    rw [hxsum, hx, hyz, map_zero, mul_zero, add_zero, one_pow] at h
+    simp only [hxsum, hx, hyz, map_zero, mul_zero, add_zero, one_pow] at h
     linarith
   have hc1 : ‖y‖ ≤ 1 := by nlinarith [norm_nonneg y, sq_nonneg ‖z‖, sq_nonneg (‖y‖ - 1)]
   rw [Real.sin_two_mul, Real.cos_arccos (by linarith [norm_nonneg y]) hc1, Real.sin_arccos]

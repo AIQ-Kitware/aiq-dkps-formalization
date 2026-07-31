@@ -92,7 +92,7 @@ theorem restrictedDisplacement_opNorm_le
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Every fixed positive Ky Fan gauge is a direct specialization. -/
 theorem restrictedDisplacement_kyFan_le
-    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     {A B : E →L[𝕜] F}
     (D : RestrictedDisplacementApproximationDominance A B)
     (k : ℕ) :

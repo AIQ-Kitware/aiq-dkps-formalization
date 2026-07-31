@@ -373,7 +373,7 @@ theorem sum_sq_eigenvalues_sub_ge (hT : T.IsSymmetric) (hS : S.IsSymmetric)
       = ∑ i, (W₀ i - hT.eigenvalues hn i) ^ 2 := by
     rw [EuclideanSpace.norm_sq_eq]
     refine Finset.sum_congr rfl fun i _ => ?_
-    rw [PiLp.sub_apply, PiLp.sub_apply, Real.norm_eq_abs, sq_abs, hea, hea, hea, hci i]
+    simp only [PiLp.sub_apply, Real.norm_eq_abs, sq_abs, hea, hci i]
   rw [normLift_sq, normLift_sq, normLift_sq, hRHS] at hL4
   exact hL4
 

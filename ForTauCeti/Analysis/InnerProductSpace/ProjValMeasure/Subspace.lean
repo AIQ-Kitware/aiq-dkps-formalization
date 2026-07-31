@@ -19,6 +19,22 @@ namespace*, and that was true when they were adapters over `Spectra.ProjValMeasu
 from outside.  The structure was repointed to `TauCeti.ProjValMeasure` on
 2026-07-28 and now lives in this directory, so the adapters sit beside the thing
 they adapt rather than in a bridge that no longer bridges anything.
+
+## Provenance
+
+* **Original repository:** Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* **Original module:** `DavisKahan/SpectralTheory/PVMSubspace.lean`, moved here on
+  2026-07-31 when the structure it adapts had already been repointed from
+  `Spectra.ProjValMeasure` to `TauCeti.ProjValMeasure` (2026-07-28).
+* **Original authors / copyright / licence:** Jon Crall, OpenAI GPT-5.6 Thinking;
+  Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
+* **Extraction class:** *moved, not restated.*  No statement, signature, proof,
+  attribute, declaration name or namespace changed; the move is a file boundary
+  and the imports it forces.
+* **Spectra influence:** none remaining.  The declarations were adapters over
+  `Spectra.ProjValMeasure` when they were written; the structure underneath is
+  `TauCeti`'s own, and the `ForTauCeti` import firewall admits only Mathlib,
+  `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
 -/
 
 open scoped InnerProductSpace

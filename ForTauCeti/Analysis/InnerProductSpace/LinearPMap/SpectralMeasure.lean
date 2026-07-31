@@ -231,17 +231,8 @@ theorem specProjection_apply_sub_smul {M c r : ℝ}
       rw [hq]; simp only [h2, mul_one]; exact h1
     · have h2 : ind w = 0 := by rw [hind]; exact cayleyIndicator_of_notMem hA B hw
       rw [hq]; simp only [h2, mul_zero, norm_zero]; positivity
-  have hpb : BorelCalculus.IsBddMeasurable pf := by
-    refine ⟨(hmeasκ.sub measurable_const).mul hindb.measurable, r, hr, fun w => ?_⟩
-    by_cases hw : w ∈ S
-    · have hκB : κ w ∈ B := hw
-      have h2 : ind w = 1 := by rw [hind]; exact cayleyIndicator_of_mem hA B hw
-      rw [hpf]; simp only [h2, mul_one]
-      rw [show ((κ w : ℂ) - (c : ℂ)) = ((κ w - c : ℝ) : ℂ) by push_cast; ring,
-        Complex.norm_real, Real.norm_eq_abs]
-      exact hcr _ hκB
-    · have h2 : ind w = 0 := by rw [hind]; exact cayleyIndicator_of_notMem hA B hw
-      rw [hpf]; simp only [h2, mul_zero, norm_zero]; exact hr
+  -- `pf` is `truncSymbol hA B c`, so its admissibility is the lemma above, not a new argument
+  have hpb : BorelCalculus.IsBddMeasurable pf := isBddMeasurable_truncSymbol hA B hB hr hcr
   -- the resolvent as a Borel-calculus image
   set gsym : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
     (2 * Complex.I)⁻¹ • (1 - cayleyCoord hA) with hgsym
@@ -268,17 +259,6 @@ theorem specProjection_apply_sub_smul {M c r : ℝ}
     rw [hgval, hqw, hκval]
     field_simp
   -- the shifted symbol is the difference of the two Borel-calculus images
-  have hpfb : ∀ w, ‖pf w‖ ≤ r := by
-    intro w
-    by_cases hw : w ∈ S
-    · have hκB : κ w ∈ B := hw
-      have h2 : ind w = 1 := by rw [hind]; exact cayleyIndicator_of_mem hA B hw
-      rw [hpf]; simp only [h2, mul_one]
-      rw [show ((κ w : ℂ) - (c : ℂ)) = ((κ w - c : ℝ) : ℂ) by push_cast; ring,
-        Complex.norm_real, Real.norm_eq_abs]
-      exact hcr _ hκB
-    · have h2 : ind w = 0 := by rw [hind]; exact cayleyIndicator_of_notMem hA B hw
-      rw [hpf]; simp only [h2, mul_zero, norm_zero]; exact hr
   set hsm := hindb.const_smul (-(Complex.I + (c : ℂ))) with hhsm
   have heq : BorelCalculus.borelCalculus hU hpb
       = BorelCalculus.borelCalculus hU (hqb.add hsm) := by

@@ -70,13 +70,13 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  ["SetTheory.Cardinal.Lift","LinearAlgebra.Dimension.RankComp",
   "Analysis.Normed.Operator.FiniteRankCompact",
   A+"SpectralCutoff"]+["Analysis.OperatorIdeal.ApproximationNumber."+x for x in
-  ["Basic","Adjoint","Compact","CompactHilbert","DiagonalExample","DiagonalSequence","Examples",
+  ["Basic","Adjoint","Compact","CompactHilbert","Core","DiagonalExample","DiagonalSequence","Examples",
    "FiniteDimensional","FiniteRestriction","FiniteValueFibers","FiniteValueSeparation",
    "KyFan",
    "LeadingCutoff","MinMax","MinMaxUpper","SameSequence"]]),
 ("T10","Symmetric operator ideals and Schatten norms",
- ["Analysis.OperatorIdeal.Family."+x for x in ["Basic","HilbertSchmidt","KyFan","KyFanDominance","OperatorNorm","TraceClass"]]
- +[A+"SchattenNorm",A+"HilbertSchmidtEnergy","Analysis.Normed.FiniteLpGauge"]),
+ ["Analysis.OperatorIdeal.Family."+x for x in ["Basic","HilbertSchmidt","KyFan","KyFanDominance","OperatorNorm","Schatten","TraceClass"]]
+ +[A+"SchattenNorm",A+"HilbertSchmidtEnergy","Analysis.Normed.FiniteLpGauge","Topology.ENNRealLiminf"]),
 ("T11","Hilbert-Schmidt operators",
  [A+"HilbertSchmidt"+x for x in ["Lp","Space","Conjugation","Pythagoras"]]),
 ("T12","The Haagerup-Zsido kernel and its Fourier transform",
@@ -89,7 +89,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  +[A+"SkewAdjointExponential"]),
 ("T14","Borel functional calculus and projection-valued measures",
  [A+"BorelCalculus."+x for x in ["DiagonalMeasure","Multiplicative","Operator","PVM","Polarization"]]
- +[A+"ProjValMeasure.Basic",A+"ProjValMeasure.Additivity",
+ +[A+"ProjValMeasure.Basic",A+"ProjValMeasure.Additivity",A+"ProjValMeasure.Subspace",
    "MeasureTheory.CfcMeasurable","MeasureTheory.CompactExists","MeasureTheory.HellySelection"]),
 # T15 was one 25-module, 6,700-line topic -- the biggest by both measures and
 # nearly three times the median.  Lane T15-SPLIT cut it into the three chains the
@@ -115,11 +115,16 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 # (T15a) and `LinearPMap.SpectralFormBounds` (T15c), so filing it under T09 makes T09
 # unsubmittable -- `--check` reports it as a forward reference, which is how this was
 # caught when the module was lifted out of `DavisKahan` on 2026-07-31.
+# `ApproximationNumber.FinitePVMSelection` is here for the same reason and one step
+# removed: it imports `GramSpectralRank`, so it inherits that dependency wholesale.
 ("T15c","The spectral measure of an unbounded self-adjoint operator, and Stone",
  [A+"LinearPMap."+x for x in ["SpectralMeasure","SpectralMeasure.Construction","SpectralGrid",
    "SpectralSupport","SpectralFormBounds","SpectralGapInverse","SpectralCutOperator",
    "SpectralProjectionGroup","SelfAdjointMaximal","StoneUniqueness","YosidaApproximation"]]
- +["Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank"]
+ +["Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank",
+   "Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection",
+   # and `GramBandPolar` for the same reason two steps removed: it imports both of them.
+   "Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar"]
  +[A+"BlockLowerBound"]),
 ("T16","Sylvester equations and the Rosenblum theorem",
  [A+x for x in ["Rosenblum","HilbertSchmidtBlock","CoerciveUnit"]]
@@ -132,6 +137,17 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  [A+"SinTheta."+x for x in ["OperatorNorm","Perturbation","DirectedBounds","UnitarilyInvariant"]]
  +[A+"Residual."+x for x in ["AngleEmbedding","Ritz","TrialMap"]]
  +[A+"DoubleAngle.Vector"]+[A+"BoundedOperator."+x for x in ["Projector","SinTheta"]]
+ # `SpectralOrder.Real` is form-bound material by subject and would sit with
+ # `SpectralOrder.Complex` in T15a -- but it imports `BoundedOperator.Projector`, which is here,
+ # so filing it by subject makes T15a unsubmittable. Same lesson as
+ # `ApproximationNumber.GramSpectralRank`: file by dependency, and `--check` is what says so.
+ # `Complexification.{Basic,FunctionalCalculus}` are the real-complexification transport layer,
+ # lifted out of `DavisKahan` on 2026-07-31, and they sit here because `Basic` imports
+ # `SpectralOrder.Real`.  `ApproximationNumber.MinMaxReal` is approximation-number material and
+ # belongs with T09 by subject, but it is proved *by complexification* and so imports both of
+ # them; filing it under T09 would make T09 unsubmittable.  Third time, same rule.
+ +[A+"SpectralOrder.Real",A+"Complexification.Basic",A+"Complexification.FunctionalCalculus",
+   "Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal"]
  +[A+"ReducedExtension"]),
 ("T18","The Yu-Wang-Samworth statistical variant",
  [A+"YuWangSamworth."+x for x in ["Residual","SingularSubspace","Statistics"]]),

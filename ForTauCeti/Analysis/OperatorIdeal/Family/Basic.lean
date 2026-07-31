@@ -506,6 +506,24 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E F : Type v}
 variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+/-- **A symmetric family is determined by its gauge**, the same way an
+`OperatorIdealFamily` is: the extra field is a `Prop`, so once the underlying
+families agree there is nothing left to compare.
+
+Without this, an equality of two symmetric families has to be proved by
+destructuring both, which does not go through — the hypothesis still mentions
+the undestructured terms. -/
+@[ext]
+theorem ext {N M : SymmetricOperatorIdealFamily.{u, v} 𝕜}
+    (h : ∀ {E F : Type v}
+      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+      (A : E →L[𝕜] F), N.gauge A = M.gauge A) : N = M := by
+  cases N
+  cases M
+  congr 1
+  exact OperatorIdealFamily.ext h
+
 variable (N : SymmetricOperatorIdealFamily.{u, v} 𝕜)
 
 /-- The ideal of a symmetric family is stable under adjoints. -/

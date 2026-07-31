@@ -136,7 +136,7 @@ theorem pow_mulVec_eigenvector {B : Matrix (Fin n) (Fin n) ℝ} {v : Fin n → �
   induction t with
   | zero => simp
   | succ t ih =>
-      rw [pow_succ, ← Matrix.mulVec_mulVec, hv, Matrix.mulVec_smul, ih, smul_smul, pow_succ]
+      simp only [pow_succ, ← Matrix.mulVec_mulVec, hv, Matrix.mulVec_smul, ih, smul_smul]
       ring_nf
 
 /-- A polynomial of a matrix acts on an eigenvector by the polynomial of the
@@ -149,8 +149,9 @@ theorem aeval_mulVec_eigenvector {B : Matrix (Fin n) (Fin n) ℝ} {v : Fin n →
       rw [map_add, Matrix.add_mulVec, hp, hq, Polynomial.eval_add, add_smul]
   | monomial t a =>
       rw [Polynomial.aeval_monomial, Polynomial.eval_monomial,
-        Algebra.algebraMap_eq_smul_one, smul_mul_assoc, one_mul,
-        Matrix.smul_mulVec, pow_mulVec_eigenvector hv t, smul_smul]
+        Algebra.algebraMap_eq_smul_one]
+      simp only [smul_mul_assoc, one_mul, Matrix.smul_mulVec,
+        pow_mulVec_eigenvector hv t, smul_smul]
 
 /-- The eigen-equation for the sorted eigendata, in `mulVec` form. -/
 theorem mulVec_eigenvectorBasis {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian)

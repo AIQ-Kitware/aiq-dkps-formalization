@@ -261,7 +261,7 @@ The gauge triangle inequality is what makes this true, and it is available for
 the real and complex scalar fields; it is a property of the field, not an
 assumption about the operators involved. -/
 theorem PaperUnitaryInvariantNorm.mem_add
-    [HasKyFanApproximationGaugeTriangle.{u, u} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, u} 𝕜]
     (N : PaperUnitaryInvariantNorm)
     {E F : Type u}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -275,7 +275,7 @@ theorem PaperUnitaryInvariantNorm.mem_add
 
 /-- Membership in a source ideal is closed under finite sums. -/
 theorem PaperUnitaryInvariantNorm.mem_finset_sum
-    [HasKyFanApproximationGaugeTriangle.{u, u} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, u} 𝕜]
     (N : PaperUnitaryInvariantNorm)
     {E F : Type u}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -301,7 +301,7 @@ theorem PaperUnitaryInvariantNorm.mem_finset_sum
 /-- The multiplicity-`m` complementary inclusion belongs to every source
 unitarily invariant ideal. -/
 theorem finiteMultiplicityComplementMap_mem
-    [HasKyFanApproximationGaugeTriangle.{u, u} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, u} 𝕜]
     (m : ℕ) (N : PaperUnitaryInvariantNorm) :
     N.Mem (finiteMultiplicityComplementMap (𝕜 := 𝕜) m) := by
   rw [finiteMultiplicityComplementMap_eq_sum_coordinateColumn]
@@ -317,7 +317,7 @@ theorem finiteMultiplicityComplementMap_mem
 
 /-- The sine block belongs to every source ideal. -/
 theorem finiteMultiplicitySineBlock_mem
-    [HasKyFanApproximationGaugeTriangle.{u, u} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, u} 𝕜]
     (m : ℕ) (theta : ℝ) (N : PaperUnitaryInvariantNorm) :
     N.Mem (finiteMultiplicitySineBlock (𝕜 := 𝕜) m theta) := by
   unfold finiteMultiplicitySineBlock PaperUnitaryInvariantNorm.Mem
@@ -328,7 +328,7 @@ theorem finiteMultiplicitySineBlock_mem
 /-- Equality in Theorem 6.1 at every finite multiplicity and simultaneously
 for every normalized source norm. -/
 theorem Theorem6_1_finiteMultiplicity_equality_every_norm
-    [HasKyFanApproximationGaugeTriangle.{u, u} 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, u} 𝕜]
     (m : ℕ) (N : PaperUnitaryInvariantNorm)
     {delta theta : ℝ} (hdelta : 0 ≤ delta) :
     N.gauge (finiteMultiplicityResidual (𝕜 := 𝕜) m delta theta) =

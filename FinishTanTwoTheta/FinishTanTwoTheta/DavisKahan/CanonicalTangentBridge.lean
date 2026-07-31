@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.FunctionalCalculus.DoubleAngleTangent
+import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
 import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRiccati
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.SpectralTheory.GraphSubspace
@@ -52,7 +52,11 @@ open TauCeti.DavisKahan.Experimental.ExactSinTheta
 -- not under `TauCeti.DavisKahan.FinishTanTwoTheta`, so they are not in scope here by
 -- enclosure. `SharpIdeal.lean` fully qualifies every use instead; this open is the
 -- same fix in one line. The namespace split itself is a library-organisation defect.
-open TauCeti.FinishTanTwoTheta
+-- `DoubleAngleTangentOperator` moved to `DavisKahan/Sources/DavisKahan1970/` on 2026-07-31
+-- (lane `FTT-PROMOTE-DAT`), taking its declarations into `TauCeti.DavisKahan`; the old
+-- namespace is no longer in this module's import closure at all, so opening it is an error
+-- rather than a no-op.
+open TauCeti.DavisKahan
 
 noncomputable section
 

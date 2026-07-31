@@ -87,20 +87,6 @@ variable {E : Type v} {F : Type w}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
 
-/-- The first `k` indices of `Fin n` have cardinality `k`. -/
-private theorem card_filter_lt {n k : ℕ} (hk : k ≤ n) :
-    (Finset.univ.filter (fun j : Fin n => (j : ℕ) < k)).card = k := by
-  rcases lt_or_eq_of_le hk with hlt | rfl
-  · have h : (Finset.univ.filter (fun j : Fin n => (j : ℕ) < k)) =
-        Finset.Iio (⟨k, hlt⟩ : Fin n) := by
-      ext j
-      simp [Fin.lt_def]
-    rw [h, Fin.card_Iio]
-  · have h : (Finset.univ.filter (fun j : Fin k => (j : ℕ) < k)) = Finset.univ := by
-      ext j
-      simp
-    rw [h, Finset.card_univ, Fintype.card_fin]
-
 /-- Lower Eckart--Young inequality in operator-norm form: an operator of rank
 at most `n` cannot approximate `T` more closely than the `n`th singular value
 of `T`. -/
@@ -220,7 +206,7 @@ private theorem approximationNumber_le_singularValues
     let k : Fin (finrank 𝕜 E) := ⟨n, hnlt⟩
     have hWdim : finrank 𝕜 W = n := by
       dsimp only [W]
-      rw [b.finrank_spanIndices_set, Set.toFinset_setOf, card_filter_lt hnlt.le]
+      rw [b.finrank_spanIndices_set, Set.toFinset_setOf, Finset.card_filter_lt hnlt.le]
     have hPrank : W.starProjection.rank = (n : Cardinal) := by
       -- states the goal with the definition unfolded, in the shape the next step needs;
       -- there is no `_apply` lemma to rewrite with here.

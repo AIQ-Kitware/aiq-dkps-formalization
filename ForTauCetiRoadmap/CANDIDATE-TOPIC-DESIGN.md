@@ -64,46 +64,84 @@ printed by the checker.
 | # | Topic | n | Needs |
 |---|---|---|---|
 | **T01** | Positive square root, operator modulus, functional calculus | 9 | **— independent** |
-| **T02** | Polar decomposition and partial isometries | 5 | T01 |
+| **T02** | Polar decomposition and partial isometries | 6 | T01 |
 | **T03** | Singular values and the singular system | 4 | T01 |
 | **T04** | Gram matrices, orthogonal projections, and spectral subspaces | 8 | T01 |
 | **T05** | Majorization, Schur–Horn, and unitarily invariant norms | 5 | T01, T02, T04 |
-| **T06** | Principal angles, aligned bases, and finite frames | 3 | T03–T05 |
-| **T07** | Rectangular unitarily invariant norms | 6 | T03–T06 |
-| **T08** | Angle geometry and eigenvalue perturbation | 5 | T01, T02, T04–T07 |
-| **T09** | Approximation numbers | 11 | T01, T03, T07 |
+| **T06** | Principal angles, aligned bases, and finite frames | 3 | T03, T04, T05 |
+| **T07** | Rectangular unitarily invariant norms | 6 | T03, T04, T05, T06 |
+| **T08** | Angle geometry and eigenvalue perturbation | 5 | T01, T02, T04, T05, T06, T07 |
+| **T09** | Approximation numbers | 21 | T01, T03, T05, T07 |
 | **T10** | Symmetric operator ideals and Schatten norms | 9 | T05, T07, T09 |
 | **T11** | Hilbert–Schmidt operators | 4 | T10 |
 | **T12** | The Haagerup–Zsidó kernel and its Fourier transform | 8 | **— independent** |
-| **T13** | One-parameter unitary groups and Stone's theorem | 6 | T02 |
-| **T14** | Borel functional calculus and projection-valued measures | 10 | **— independent** |
-| **T15** | Unbounded self-adjoint operators on `LinearPMap` | 24 | T04, T13, T14 |
-| **T16** | Sylvester equations and the Rosenblum theorem | 15 | T04, T07, T11, T12, T13, T15 |
-| **T17** | Spectral subspace perturbation: the Davis–Kahan sin-Θ theorems | 10 | T01, T03–T08, T15, T16 |
+| **T13** | One-parameter unitary groups and Stone's theorem | 5 | **— independent** |
+| **T14** | Borel functional calculus and projection-valued measures | 11 | **— independent** |
+| **T15a** | Closed operators on `LinearPMap`: graphs, constructions, form bounds | 7 | T04 |
+| **T15b** | Resolvents of self-adjoint `LinearPMap` operators, semiboundedness | 7 | **— independent** |
+| **T15c** | The spectral measure of an unbounded self-adjoint operator, and Stone | 13 | T09, T13, T14, T15a, T15b |
+| **T16** | Sylvester equations and the Rosenblum theorem | 18 | T04, T07, T11, T12, T13, T15b, T15c |
+| **T17** | Spectral subspace perturbation: the Davis–Kahan sin-Θ theorems | 11 | T01, T03–T08, T15a, T16 |
 | **T18** | The Yu–Wang–Samworth statistical variant | 3 | T01, T05, T06, T08, T17 |
 | **T19** | Matrix spectra and spectral measurability | 6 | T01, T14 |
 | **T20** | Sample moments and matrix concentration | 5 | T19 |
 | **T21** | Matrix rank factorization and positive semidefiniteness | 2 | **— independent** |
 | **T22** | Berge's maximum theorem and approximate minimizers | 2 | **— independent** |
 
+**178 modules.  This table is generated from
+`scripts/check_tauceti_roadmap_topics.py --needs`, not maintained by hand**, and it was
+regenerated on 2026-07-31 because it had drifted from the gate that enforces it.  The
+drift is recorded rather than silently corrected, because two of the design's headline
+claims moved:
+
+- **T15 is three topics, not one.**  The table carried a single `T15` of 24 modules; the
+  design was split into `T15a`/`T15b`/`T15c` (7 + 7 + 13 = 27) and the table never
+  followed.  The split matters for submission order: **`T15b` is fully independent** —
+  resolvents of self-adjoint partial maps need nothing accepted first — while `T15c`
+  needs five topics including `T09`.
+- **T09 is 21 modules, not 11, and needs T05 as well.**  The document's headline finding
+  — *"T09 needs only T01, T03 and T07"* — is no longer true; majorization (`T05`) entered
+  its closure as the Ky Fan layer grew.  The correction is small in submission terms
+  (`T05` is 5 modules and sits below `T07` anyway) but the sentence as written would
+  have been checked and found wrong by a reviewer.
+- **T13 is now fully independent**, where the table said it needs `T02`.  That is a
+  strengthening of the design's own point about Stone's theorem, not a weakening.
+
+Counts that moved without changing the shape: T02 5→6, T13 6→5, T16 15→18, T17 10→11.
+
+*Do not edit the counts or the `needs` column by hand: both are printed by
+`python3 scripts/check_tauceti_roadmap_topics.py --needs`, and the gate of the same
+name checks them against the import graph.  Reconciled again on 2026-07-31 after a
+three-way collision on this file, when T09 had moved 20 → 21, T14 10 → 11 and the
+total 176 → 178.*
+
 **This is a DAG, not a chain — that is the most useful property of the design.**
 The numbering is *a* valid submission order, but it is not the only one, and
 several topics need far less than their position suggests:
 
-- **Five topics are fully independent** and can go first, in any order or at
-  once: **T01**, **T12** (Haagerup–Zsidó, 8 modules), **T14** (Borel calculus
-  and PVMs, 10 modules), and the two ex-`ForMathlib` pairs **T21** and **T22**.
-- **T09, approximation numbers — the advertised PR1 topic — needs only T01, T03
-  and T07**, not the eight topics its position implies. That is the corrected
-  version of the submission ladder's headline finding.
-- **T13 needs only T02.** Stone's theorem does not wait on the norm or ideal
-  theory at all.
+- **Seven topics are fully independent** and can go first, in any order or at
+  once: **T01**, **T12** (Haagerup–Zsidó, 8 modules), **T13** (Stone, 5),
+  **T14** (Borel calculus and PVMs, 11), **T15b** (resolvents of self-adjoint
+  partial maps, 7), and the two ex-`ForMathlib` pairs **T21** and **T22**.
+  Two of those seven are new since the design was written, and both are worth
+  noticing: `T13` shed its `T02` dependency, and the `T15` split exposed `T15b`,
+  which had been buried inside a 24-module block that looked like it needed
+  everything.
+- **T09, approximation numbers — the advertised PR1 topic — needs T01, T03, T05
+  and T07**, not the eight topics its position implies. The `T05` entry is new:
+  majorization joined the closure as the Ky Fan layer grew, and the earlier
+  claim of *"only T01, T03 and T07"* no longer holds. It is a small correction
+  in submission terms — `T05` is 5 modules and already sits below `T07` — but a
+  reviewer checking the sentence would have found it false.
+- **T13 needs nothing at all**, where this document previously said it needs
+  `T02`. Stone's theorem does not wait on the polar decomposition either.
 - **T19/T20 are a near-independent statistical arm**, reachable via T14 alone.
 
 Three observations worth arguing about:
 
-- **T17 is the endpoint, and its transitive depth is real.** It needs T15 and
-  T16, and through them most of the library. That is the honest cost of
+- **T17 is the endpoint, and its transitive depth is real.** It needs T15a and
+  T16, and through them most of the library — note it needs only the *first*
+  slice of the old T15 directly, though T16 pulls in T15b and T15c. That is the honest cost of
   submitting Davis–Kahan as reusable mathematics rather than as one paper's
   formalization. The lever for getting sin-Θ upstream sooner is not reordering —
   it is finding out which of T01–T16 Tau Ceti already has.
@@ -281,7 +319,10 @@ correction to the *reading* of where it belongs, not to the tree.
   The first real reviewer contact should be used to find out how much of
   T01–T08 is already upstream, because that is what determines whether T17 is 14
   topics away or four.
-- **Whether T15 splits**, and where.
+- ~~**Whether T15 splits**, and where.~~  **Settled 2026-07-29 (lane `T15-SPLIT`):**
+  into T15a (closedness and graphs), T15b (resolvents and semiboundedness) and
+  T15c (the spectral measure and Stone), which is how the table above reads.  Left struck through rather than deleted,
+  because the open-questions list is also a record of what got decided.
 - **`M-SWITCH`** — how the clusters actually go upstream once a topic is
   accepted — is still open and still jon's call.
 - **Topic names.** These are ours, not Tau Ceti's. The `tauceti-target:v1`

@@ -275,6 +275,19 @@ theorem rectangularKyFanSum_orthogonalBlockSum_self
       rw [Finset.sum_add_distrib]
       ring
 
+/-- The restricted real action on `𝕜`-linear maps is scalar multiplication by the coerced
+real.  Immediate from `realModuleLinearMap = Module.compHom _ (algebraMap ℝ 𝕜)`, but it is
+needed at three different pairs of spaces in the proof below — the two summands and the
+block — so it is stated once here rather than three times there. -/
+private theorem real_smul_linearMap_eq {X Y : Type*}
+    [NormedAddCommGroup X] [InnerProductSpace 𝕜 X]
+    [NormedAddCommGroup Y] [InnerProductSpace 𝕜 Y]
+    (r : ℝ) (T : X →ₗ[𝕜] Y) : r • T = ((r : 𝕜)) • T := by
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
+  change (algebraMap ℝ 𝕜 r) • T = ((r : 𝕜)) • T
+  rfl
+
 /-- Real orbit-convex domination is stable under orthogonal block sums.
 
 This is the sharp coupling seam needed by the symmetric projector theorem:
@@ -340,25 +353,6 @@ theorem orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
           intro j _
           rw [← Finset.sum_smul, ← Finset.sum_mul, hwsum, one_mul]
         _ = B := htsum
-    have real_smul_first_eq (r : ℝ) (T : E₁ →ₗ[𝕜] F₁) :
-        r • T = ((r : 𝕜)) • T := by
-      -- states the goal with the definition unfolded, in the shape the next step needs;
-      -- there is no `_apply` lemma to rewrite with here.
-      change (algebraMap ℝ 𝕜 r) • T = ((r : 𝕜)) • T
-      rfl
-    have real_smul_second_eq (r : ℝ) (T : E₂ →ₗ[𝕜] F₂) :
-        r • T = ((r : 𝕜)) • T := by
-      -- states the goal with the definition unfolded, in the shape the next step needs;
-      -- there is no `_apply` lemma to rewrite with here.
-      change (algebraMap ℝ 𝕜 r) • T = ((r : 𝕜)) • T
-      rfl
-    have real_smul_block_eq (r : ℝ)
-        (T : WithLp 2 (E₁ × E₂) →ₗ[𝕜] WithLp 2 (F₁ × F₂)) :
-        r • T = ((r : 𝕜)) • T := by
-      -- states the goal with the definition unfolded, in the shape the next step needs;
-      -- there is no `_apply` lemma to rewrite with here.
-      change (algebraMap ℝ 𝕜 r) • T = ((r : 𝕜)) • T
-      rfl
     have hfirst' :
         (∑ p : ι × κ, (((w p.1 * v p.2 : ℝ) : 𝕜)) • z p.1) = A := by
       calc
@@ -366,7 +360,7 @@ theorem orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
             ∑ p : ι × κ, (w p.1 * v p.2) • z p.1 := by
           apply Finset.sum_congr rfl
           intro p _
-          exact (real_smul_first_eq (w p.1 * v p.2) (z p.1)).symm
+          exact (real_smul_linearMap_eq (w p.1 * v p.2) (z p.1)).symm
         _ = A := hfirst
     have hsecond' :
         (∑ p : ι × κ, (((w p.1 * v p.2 : ℝ) : 𝕜)) • t p.2) = B := by
@@ -375,7 +369,7 @@ theorem orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
             ∑ p : ι × κ, (w p.1 * v p.2) • t p.2 := by
           apply Finset.sum_congr rfl
           intro p _
-          exact (real_smul_second_eq (w p.1 * v p.2) (t p.2)).symm
+          exact (real_smul_linearMap_eq (w p.1 * v p.2) (t p.2)).symm
         _ = B := hsecond
     calc
       ∑ p : ι × κ, (w p.1 * v p.2) •
@@ -384,7 +378,7 @@ theorem orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
             orthogonalBlockSum (z p.1) (t p.2) := by
         apply Finset.sum_congr rfl
         intro p _
-        exact real_smul_block_eq (w p.1 * v p.2)
+        exact real_smul_linearMap_eq (w p.1 * v p.2)
           (orthogonalBlockSum (z p.1) (t p.2))
       _ = orthogonalBlockSum
           (∑ p : ι × κ, (((w p.1 * v p.2 : ℝ) : 𝕜)) • z p.1)

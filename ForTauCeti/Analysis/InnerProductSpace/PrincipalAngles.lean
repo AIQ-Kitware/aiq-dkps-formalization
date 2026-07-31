@@ -448,11 +448,11 @@ private theorem isometryPadBasis_conj_apply [FiniteDimensional 𝕜 D] (ι : D �
   classical
   rw [isometryPadBasis_apply]
   by_cases h : (i : ℕ) < finrank 𝕜 D
-  · rw [dif_pos h, isometryPad_of_lt ι v h, LinearMap.comp_apply, LinearMap.comp_apply,
+  · simp only [dif_pos h, isometryPad_of_lt ι v h, LinearMap.comp_apply,
       LinearIsometry.adjoint_apply_apply, hv, map_smul, LinearIsometry.coe_toLinearMap]
-  · rw [dif_neg h, isometryPad_of_ge ι v h, LinearMap.comp_apply, LinearMap.comp_apply,
+  · simp only [dif_neg h, isometryPad_of_ge ι v h, LinearMap.comp_apply,
       LinearIsometry.adjoint_eq_zero_of_mem_orthogonal ι (SetLike.coe_mem _),
-      map_zero, map_zero, RCLike.ofReal_zero, zero_smul]
+      map_zero, zero_smul]
 
 end IsometryPad
 
@@ -747,6 +747,56 @@ to the ambient cross projections.
   `ForTauCeti` staging modules.
 -/
 
+/-- **The Gram operator of the coordinate sine map is `1 - M⋆M`,** where `M = overlapOp hv hu`.
+
+Stated once for the same reason `comp_starProjection_span_range_factor` is: the theorem below
+needs it at `(u, v)` and again at `(v, u)`, and the two instances were written out in full --
+forty lines each, identical under the swap. -/
+private theorem adjoint_comp_starProjection_orthogonal_comp_familyIsometry
+    {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) :
+    LinearMap.adjoint
+        ((((Submodule.span 𝕜 (Set.range v))ᗮ.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
+          ∘ₗ (familyIsometry hu).toLinearMap)
+        ∘ₗ ((((Submodule.span 𝕜 (Set.range v))ᗮ.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
+          ∘ₗ (familyIsometry hu).toLinearMap) =
+      LinearMap.id - LinearMap.adjoint (overlapOp hv hu) ∘ₗ overlapOp hv hu := by
+  apply LinearMap.ext
+  intro x
+  refine ext_inner_right 𝕜 fun y => ?_
+  simp only [LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.id_apply]
+  rw [LinearMap.adjoint_inner_left, inner_sub_left, LinearMap.adjoint_inner_left]
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
+  change
+    ⟪(Submodule.span 𝕜 (Set.range v))ᗮ.starProjection (familyIsometry hu x),
+        (Submodule.span 𝕜 (Set.range v))ᗮ.starProjection (familyIsometry hu y)⟫_𝕜 =
+      ⟪x, y⟫_𝕜 - ⟪overlapOp hv hu x, overlapOp hv hu y⟫_𝕜
+  rw [← (Submodule.span 𝕜 (Set.range v))ᗮ.inner_starProjection_left_eq_right,
+    (Submodule.span 𝕜 (Set.range v))ᗮ.starProjection_eq_self_iff.mpr
+      ((Submodule.span 𝕜 (Set.range v))ᗮ.starProjection_apply_mem _)]
+  have hperp :
+      (Submodule.span 𝕜 (Set.range v))ᗮ.starProjection (familyIsometry hu x) =
+        familyIsometry hu x -
+          (Submodule.span 𝕜 (Set.range v)).starProjection (familyIsometry hu x) := by
+    have h := congrArg
+      (fun T : E →L[𝕜] E => T (familyIsometry hu x))
+      (Submodule.starProjection_orthogonal' (Submodule.span 𝕜 (Set.range v)))
+    simpa only [sub_apply, one_apply_eq_self] using h
+  rw [hperp, inner_sub_left, (familyIsometry hu).inner_map_map,
+    starProjection_span_range_eq_comp hv]
+  congr 1
+  calc
+    ⟪familyIsometry hv
+        ((familyIsometry hv).toLinearMap.adjoint (familyIsometry hu x)),
+        familyIsometry hu y⟫_𝕜 =
+        ⟪(familyIsometry hv).toLinearMap.adjoint (familyIsometry hu x),
+          (familyIsometry hv).toLinearMap.adjoint (familyIsometry hu y)⟫_𝕜 :=
+      (LinearMap.adjoint_inner_right (familyIsometry hv).toLinearMap
+        ((familyIsometry hv).toLinearMap.adjoint (familyIsometry hu x))
+        (familyIsometry hu y)).symm
+    _ = ⟪overlapOp hv hu x, overlapOp hv hu y⟫_𝕜 := by
+      rfl
+
 /-- The coordinate sine maps associated with two equal-length orthonormal
 families have the same singular values in the two directions. -/
 theorem singularValues_orthogonal_familyIsometry_comm
@@ -765,81 +815,11 @@ theorem singularValues_orthogonal_familyIsometry_comm
   let Svu : EuclideanSpace 𝕜 (Fin d) →ₗ[𝕜] E := PuPerp ∘ₗ Iv
   let M : EuclideanSpace 𝕜 (Fin d) →ₗ[𝕜] EuclideanSpace 𝕜 (Fin d) := overlapOp hv hu
   have hgramUV : LinearMap.adjoint Suv ∘ₗ Suv =
-      LinearMap.id - LinearMap.adjoint M ∘ₗ M := by
-    apply LinearMap.ext
-    intro x
-    refine ext_inner_right 𝕜 fun y => ?_
-    simp only [LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.id_apply]
-    rw [LinearMap.adjoint_inner_left, inner_sub_left, LinearMap.adjoint_inner_left]
-    -- states the goal with the definition unfolded, in the shape the next step needs;
-    -- there is no `_apply` lemma to rewrite with here.
-    change
-      ⟪(Submodule.span 𝕜 (Set.range v))ᗮ.starProjection (familyIsometry hu x),
-          (Submodule.span 𝕜 (Set.range v))ᗮ.starProjection (familyIsometry hu y)⟫_𝕜 =
-        ⟪x, y⟫_𝕜 - ⟪overlapOp hv hu x, overlapOp hv hu y⟫_𝕜
-    rw [← (Submodule.span 𝕜 (Set.range v))ᗮ.inner_starProjection_left_eq_right,
-      (Submodule.span 𝕜 (Set.range v))ᗮ.starProjection_eq_self_iff.mpr
-        ((Submodule.span 𝕜 (Set.range v))ᗮ.starProjection_apply_mem _)]
-    have hperp :
-        (Submodule.span 𝕜 (Set.range v))ᗮ.starProjection (familyIsometry hu x) =
-          familyIsometry hu x -
-            (Submodule.span 𝕜 (Set.range v)).starProjection (familyIsometry hu x) := by
-      have h := congrArg
-        (fun T : E →L[𝕜] E => T (familyIsometry hu x))
-        (Submodule.starProjection_orthogonal' (Submodule.span 𝕜 (Set.range v)))
-      simpa only [sub_apply, one_apply_eq_self] using h
-    rw [hperp, inner_sub_left, (familyIsometry hu).inner_map_map,
-      starProjection_span_range_eq_comp hv]
-    congr 1
-    calc
-      ⟪familyIsometry hv
-          ((familyIsometry hv).toLinearMap.adjoint (familyIsometry hu x)),
-          familyIsometry hu y⟫_𝕜 =
-          ⟪(familyIsometry hv).toLinearMap.adjoint (familyIsometry hu x),
-            (familyIsometry hv).toLinearMap.adjoint (familyIsometry hu y)⟫_𝕜 :=
-        (LinearMap.adjoint_inner_right (familyIsometry hv).toLinearMap
-          ((familyIsometry hv).toLinearMap.adjoint (familyIsometry hu x))
-          (familyIsometry hu y)).symm
-      _ = ⟪overlapOp hv hu x, overlapOp hv hu y⟫_𝕜 := by
-        rfl
+      LinearMap.id - LinearMap.adjoint M ∘ₗ M :=
+    adjoint_comp_starProjection_orthogonal_comp_familyIsometry hu hv
   have hgramVU : LinearMap.adjoint Svu ∘ₗ Svu =
-      LinearMap.id - LinearMap.adjoint (overlapOp hu hv) ∘ₗ overlapOp hu hv := by
-    apply LinearMap.ext
-    intro x
-    refine ext_inner_right 𝕜 fun y => ?_
-    simp only [LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.id_apply]
-    rw [LinearMap.adjoint_inner_left, inner_sub_left, LinearMap.adjoint_inner_left]
-    -- states the goal with the definition unfolded, in the shape the next step needs;
-    -- there is no `_apply` lemma to rewrite with here.
-    change
-      ⟪(Submodule.span 𝕜 (Set.range u))ᗮ.starProjection (familyIsometry hv x),
-          (Submodule.span 𝕜 (Set.range u))ᗮ.starProjection (familyIsometry hv y)⟫_𝕜 =
-        ⟪x, y⟫_𝕜 - ⟪overlapOp hu hv x, overlapOp hu hv y⟫_𝕜
-    rw [← (Submodule.span 𝕜 (Set.range u))ᗮ.inner_starProjection_left_eq_right,
-      (Submodule.span 𝕜 (Set.range u))ᗮ.starProjection_eq_self_iff.mpr
-        ((Submodule.span 𝕜 (Set.range u))ᗮ.starProjection_apply_mem _)]
-    have hperp :
-        (Submodule.span 𝕜 (Set.range u))ᗮ.starProjection (familyIsometry hv x) =
-          familyIsometry hv x -
-            (Submodule.span 𝕜 (Set.range u)).starProjection (familyIsometry hv x) := by
-      have h := congrArg
-        (fun T : E →L[𝕜] E => T (familyIsometry hv x))
-        (Submodule.starProjection_orthogonal' (Submodule.span 𝕜 (Set.range u)))
-      simpa only [sub_apply, one_apply_eq_self] using h
-    rw [hperp, inner_sub_left, (familyIsometry hv).inner_map_map,
-      starProjection_span_range_eq_comp hu]
-    congr 1
-    calc
-      ⟪familyIsometry hu
-          ((familyIsometry hu).toLinearMap.adjoint (familyIsometry hv x)),
-          familyIsometry hv y⟫_𝕜 =
-          ⟪(familyIsometry hu).toLinearMap.adjoint (familyIsometry hv x),
-            (familyIsometry hu).toLinearMap.adjoint (familyIsometry hv y)⟫_𝕜 :=
-        (LinearMap.adjoint_inner_right (familyIsometry hu).toLinearMap
-          ((familyIsometry hu).toLinearMap.adjoint (familyIsometry hv x))
-          (familyIsometry hv y)).symm
-      _ = ⟪overlapOp hu hv x, overlapOp hu hv y⟫_𝕜 := by
-        rfl
+      LinearMap.id - LinearMap.adjoint (overlapOp hu hv) ∘ₗ overlapOp hu hv :=
+    adjoint_comp_starProjection_orthogonal_comp_familyIsometry hv hu
   have hMadj : LinearMap.adjoint M = overlapOp hu hv := by
     simpa only [M] using overlapOp_adjoint hv hu
   have hgramVU' : LinearMap.adjoint Svu ∘ₗ Svu =

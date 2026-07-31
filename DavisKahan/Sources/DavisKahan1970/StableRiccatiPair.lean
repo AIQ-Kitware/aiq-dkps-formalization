@@ -3,9 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.GroundedImports
-import FinishTanTwoTheta.FunctionalCalculus.DoubleAngleTangent
-import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedRiccatiEstimate
+import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
+import DavisKahan.Riccati.BoundedSharpEstimates
 
 /-!
 # Stable paired-singular-vector Riccati estimate
@@ -19,7 +18,6 @@ written explicitly and vanishes with `ε`.
 
 namespace TauCeti
 namespace DavisKahan
-namespace FinishTanTwoTheta
 
 open scoped InnerProductSpace
 open DavisKahanExt
@@ -261,6 +259,5 @@ theorem stableSingularPair_doubleAngleTangent_le
 
 end
 
-end FinishTanTwoTheta
 end DavisKahan
 end TauCeti

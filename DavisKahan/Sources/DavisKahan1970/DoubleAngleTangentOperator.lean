@@ -3,8 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.GroundedImports
-import FinishTanTwoTheta.ApproximationNumber.SpectralSelection
+import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
 import DavisKahan.DoubleAngle.TanTwoThetaKyFan
 import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
@@ -26,7 +25,7 @@ calculus approximation-number theorem is referenced.
 -/
 
 namespace TauCeti
-namespace FinishTanTwoTheta
+namespace DavisKahan
 
 open ApproximationNumber
 open scoped InnerProductSpace BigOperators
@@ -651,7 +650,7 @@ theorem doubleAngleTangent_approximationNumber_le
     apply lt_min
     · linarith
     · positivity
-  obtain ⟨F⟩ := exists_approximateLeadingSingularFamily X (n + 1) hεpos
+  obtain ⟨F⟩ := TauCeti.DavisKahan.exists_approximateLeadingSingularFamily X (n + 1) hεpos
   rcases F with
     ⟨count, hcount_le, right, left, hrightOrtho, hleftOrtho,
       _hselected, happlyResidual, hadjointResidual, htailSmall⟩
@@ -866,5 +865,5 @@ theorem kyFanApproximationGauge_doubleAngleTangentOperator
 
 end
 
-end FinishTanTwoTheta
+end DavisKahan
 end TauCeti
