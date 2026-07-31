@@ -19,7 +19,7 @@ Ky Fan gauge forces its own gauge to be dominated:
 This is the hypothesis under which the infinite-dimensional Davis--Kahan estimates hold for
 a general unitarily invariant norm, and by the Ky Fan dominance principle it holds for every
 symmetric gauge.  That principle — weak majorization implies domination for all symmetric
-gauges — is Milestone B2 of `ForTauCetiRoadmap/OperatorIdeals/README.md` and is *not*
+gauges — is Milestone B2 of `ForTauCetiRoadmap/OperatorIdeals/README.md` [stale] and is *not*
 proved here; what is proved is that the three families staged so far satisfy the property
 directly, each in one line, without going near majorization theory.
 
