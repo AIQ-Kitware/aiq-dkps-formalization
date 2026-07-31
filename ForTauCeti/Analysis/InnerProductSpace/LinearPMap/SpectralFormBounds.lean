@@ -69,9 +69,9 @@ theorem specProjection_eq_one_of_compl_eq_zero {S : Set ℝ} (hS : MeasurableSet
   have h1 : (spectralPVM hA).proj Sᶜ hS.compl
       = ContinuousLinearMap.id ℂ H - (spectralPVM hA).proj S hS :=
     (spectralPVM hA).proj_compl S hS
-  rw [show (spectralPVM hA).proj Sᶜ hS.compl = specProjection hA Sᶜ hS.compl from rfl,
-    hz] at h1
-  rw [show specProjection hA S hS = (spectralPVM hA).proj S hS from rfl,
+  rw [show (spectralPVM hA).proj Sᶜ hS.compl = specProjection hA Sᶜ hS.compl from by
+      rw [specProjection_def], hz] at h1
+  rw [show specProjection hA S hS = (spectralPVM hA).proj S hS from by rw [specProjection_def],
     -- states the goal with the definition unfolded, in the shape the next step needs;
     -- there is no `_apply` lemma to rewrite with here.
     show (1 : H →L[ℂ] H) = ContinuousLinearMap.id ℂ H from ContinuousLinearMap.one_def]
@@ -93,13 +93,13 @@ theorem specProjection_Icc_eq_symm_of_Ici_eq_one {c τ : ℝ}
   have hinter := (spectralPVM hA).proj_inter (Set.Ici c) (Set.Icc (-τ) τ)
     measurableSet_Ici measurableSet_Icc
   rw [show (spectralPVM hA).proj (Set.Ici c) measurableSet_Ici
-      = specProjection hA (Set.Ici c) measurableSet_Ici from rfl, hone, one_mul] at hinter
+      = specProjection hA (Set.Ici c) measurableSet_Ici from by
+          rw [specProjection_def], hone, one_mul] at hinter
   rw [show specProjection hA (Set.Icc c τ) measurableSet_Icc
-      = (spectralPVM hA).proj (Set.Icc c τ) measurableSet_Icc from rfl,
+      = (spectralPVM hA).proj (Set.Icc c τ) measurableSet_Icc from by rw [specProjection_def],
     (spectralPVM hA).proj_congr hset.symm measurableSet_Icc
       (measurableSet_Ici.inter measurableSet_Icc),
-    ← hinter]
-  rfl
+    ← hinter, specProjection_def]
 
 /-- The interval cutoffs of a spectral half-line converge strongly to the
 identity. -/
@@ -120,8 +120,10 @@ theorem le_re_inner_of_specProjection_Iio_eq_zero {c : ℝ}
   have hcompl : (Set.Ici c)ᶜ = Set.Iio c := Set.compl_Ici
   have hz' : specProjection hA (Set.Ici c)ᶜ measurableSet_Ici.compl = 0 := by
     rw [show specProjection hA (Set.Ici c)ᶜ measurableSet_Ici.compl
-        = (spectralPVM hA).proj (Set.Ici c)ᶜ measurableSet_Ici.compl from rfl,
-      (spectralPVM hA).proj_congr hcompl measurableSet_Ici.compl measurableSet_Iio]
+        = (spectralPVM hA).proj (Set.Ici c)ᶜ measurableSet_Ici.compl from by
+            rw [specProjection_def],
+      (spectralPVM hA).proj_congr hcompl measurableSet_Ici.compl measurableSet_Iio,
+      ← specProjection_def]
     exact hz
   have hone := specProjection_eq_one_of_compl_eq_zero hA measurableSet_Ici hz'
   -- the cut-off bound, for each `τ`
@@ -162,8 +164,10 @@ theorem re_inner_le_of_specProjection_Ioi_eq_zero {c : ℝ}
   have hcompl : (Set.Iic c)ᶜ = Set.Ioi c := Set.compl_Iic
   have hz' : specProjection hA (Set.Iic c)ᶜ measurableSet_Iic.compl = 0 := by
     rw [show specProjection hA (Set.Iic c)ᶜ measurableSet_Iic.compl
-        = (spectralPVM hA).proj (Set.Iic c)ᶜ measurableSet_Iic.compl from rfl,
-      (spectralPVM hA).proj_congr hcompl measurableSet_Iic.compl measurableSet_Ioi]
+        = (spectralPVM hA).proj (Set.Iic c)ᶜ measurableSet_Iic.compl from by
+            rw [specProjection_def],
+      (spectralPVM hA).proj_congr hcompl measurableSet_Iic.compl measurableSet_Ioi,
+      ← specProjection_def]
     exact hz
   have hone := specProjection_eq_one_of_compl_eq_zero hA measurableSet_Iic hz'
   -- the symmetric cutoffs, intersected with `(-∞, c]`
@@ -182,14 +186,13 @@ theorem re_inner_le_of_specProjection_Ioi_eq_zero {c : ℝ}
     have hinter := (spectralPVM hA).proj_inter (Set.Iic c) (Set.Icc (-τ) τ)
       measurableSet_Iic measurableSet_Icc
     rw [show (spectralPVM hA).proj (Set.Iic c) measurableSet_Iic
-        = specProjection hA (Set.Iic c) measurableSet_Iic from rfl, hone,
+        = specProjection hA (Set.Iic c) measurableSet_Iic from by rw [specProjection_def], hone,
       one_mul] at hinter
     rw [show specProjection hA (Set.Icc (-τ) c) measurableSet_Icc
-        = (spectralPVM hA).proj (Set.Icc (-τ) c) measurableSet_Icc from rfl,
+        = (spectralPVM hA).proj (Set.Icc (-τ) c) measurableSet_Icc from by rw [specProjection_def],
       (spectralPVM hA).proj_congr (hset τ hτ).symm measurableSet_Icc
         (measurableSet_Iic.inter measurableSet_Icc),
-      ← hinter]
-    rfl
+      ← hinter, specProjection_def]
   have hlim : ∀ v : H, Filter.Tendsto
       (fun τ : ℝ => specProjection hA (Set.Icc (-τ) c) measurableSet_Icc v)
       Filter.atTop (nhds v) := by
