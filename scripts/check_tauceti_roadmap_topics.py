@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 """Validate the candidate Tau Ceti roadmap topic design against the import graph.
 
-`ForTauCetiRoadmap/internal/candidate-topic-design.md` partitions every `ForTauCeti`
+`ForTauCetiRoadmap/CANDIDATE-TOPIC-DESIGN.md` partitions every `ForTauCeti`
 module into fine-grained topics (`T01`..`T22`, with the `T15a/b/c` split),
 ordered so that each is reviewable on its own against a base Tau Ceti has
-already accepted. The topics group into **roadmap directories** under
-`ForTauCetiRoadmap/`, one directory covering several topics as its Parts. The
-grouping is declared in `ForTauCetiRoadmap/internal/topic-map.md` -- a sidecar,
-so that the roadmap READMEs stay mathematical prose and carry none of these
-identifiers -- and is validated here, including acyclicity of the roadmap-level
-dependency graph.
+already accepted. Since 2026-07-30 the topics group into a handful of
+**holistic roadmap directories** (one directory covers several topics as its
+Parts); the grouping is declared by the internal roadmap-to-topic map and validated
+here, including acyclicity of the roadmap-level DAG.
 
 This tool is what makes that proposal checkable rather than plausible. It
 enforces three properties, each of which the first hand-drawn draft violated:
@@ -101,8 +99,8 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 # nearly three times the median.  Lane T15-SPLIT cut it into the three chains the
 # T04-T20 audit found, which barely touch: closedness/graphs, resolvents, and the
 # spectral measure.  Keys are suffixed rather than renumbered on purpose: pushing
-# T16-T22 up would invalidate every `Txx` reference in the audit files and in
-# `internal/candidate-topic-design.md`, for no gain.
+# T16-T22 up would invalidate every `Txx` reference in the audit files, in
+# CANDIDATE-TOPIC-DESIGN.md and in the written roadmaps, for no gain.
 # The audit proposed the cut; the import graph moved three modules across it.
 # `RealLowerBound` imports `SelfAdjointResolvent`, `SelfAdjointMaximal` imports
 # `SpectralMeasure`, and `SpectralGapInverse` imports `SpectralSupport`, so each
@@ -121,17 +119,10 @@ TOPICS: list[tuple[str, str, list[str]]] = [
    "SpectralSupport","SpectralFormBounds","SpectralGapInverse","SpectralCutOperator",
    "SpectralProjectionGroup","SelfAdjointMaximal","StoneUniqueness","YosidaApproximation"]]
  +[A+"BlockLowerBound"]),
-# Approximation numbers and finite ranks of spectral bands. These three modules are
-# operator-ideal material that *consumes* the unbounded spectral measure, so they must be
-# submitted after T15c -- but they are not spectral theory, and while they sat inside T15c
-# they were the sole source of the `T15c -> T09` and `T15c -> T02` edges, which made the
-# spectral-theory roadmap look like a consumer of the operator-ideal roadmap. Nothing
-# outside the three imports any of them, so they split off cleanly as a leaf topic owned by
-# `OperatorIdeals`. The key is stable and is not renumbered: its position in this list, not
-# its number, is its place in the ladder.
 ("T23","Approximation numbers and finite ranks of spectral bands",
- ["Analysis.OperatorIdeal.ApproximationNumber."+x for x in
-  ["GramSpectralRank","FinitePVMSelection","GramBandPolar"]]),
+ ["Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank",
+  "Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection",
+  "Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar"]),
 ("T16","Sylvester equations and the Rosenblum theorem",
  [A+x for x in ["Rosenblum","HilbertSchmidt.Block","CoerciveUnit"]]
  +[A+"Sylvester."+x for x in ["Basic","Interval","SpectralDistance",
@@ -178,40 +169,33 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 INTENTIONAL_ORPHANS: dict[str, str] = {}
 
 
-TOPIC_MAP = ROOT / "ForTauCetiRoadmap" / "internal" / "topic-map.md"
-TOPIC_MAP_ROW = re.compile(r"^\|\s*`([A-Za-z0-9_/]+)`\s*\|\s*((?:T\d+[a-c]?\s*)+)\|", re.M)
-
-
 def roadmap_coverage() -> tuple[list, list, list, list, dict]:
     """(covered, missing, unexpected orphans, intentional orphans, dir->topics).
 
-    Topic keys are internal bookkeeping, so they are declared in the sidecar
-    `ForTauCetiRoadmap/internal/topic-map.md` rather than inside the roadmap READMEs:
-    a roadmap README is a mathematical specification for a human reviewer and should
-    not carry this repository's identifiers. The sidecar is one table, and every
-    property below is still checked against it.
-
-    A roadmap directory is any directory holding a `README.md` and a `Suggested.lean`,
-    found at any depth under `ForTauCetiRoadmap/` (the family groups them one level
-    down). One that the map does not mention is an ORPHAN; a topic no directory owns
-    is MISSING; a topic two directories claim is an error, since the partition of
-    topics into roadmaps must stay disjoint.
+    Public roadmap prose deliberately contains no internal topic keys.  The mapping
+    therefore lives in `ForTauCetiRoadmap/internal/topic-map.md`, whose table assigns
+    each leaf roadmap directory the fine-grained topics it owns.  A leaf roadmap is a
+    directory containing `Suggested.lean`; family indexes and `internal/` are not
+    roadmaps and are ignored by construction.
     """
     root = ROOT / "ForTauCetiRoadmap"
-    dirs = {str(p.parent.relative_to(root)) for p in root.rglob("README.md")
-            if (p.parent / "Suggested.lean").exists()} if root.exists() else set()
+    topic_map = root / "internal" / "topic-map.md"
 
-    text = TOPIC_MAP.read_text(errors="ignore") if TOPIC_MAP.exists() else ""
+    leaf_dirs = {p.parent.relative_to(root).as_posix()
+                 for p in root.rglob("Suggested.lean")} if root.exists() else set()
+
+    rows: dict[str, list[str]] = {}
+    if topic_map.exists():
+        text = topic_map.read_text(errors="ignore")
+        row_re = re.compile(
+            r"^\|\s*`([^`]+)`\s*\|\s*((?:T\d+[a-c]?\s*)+)\|\s*$", re.M)
+        for directory, raw_keys in row_re.findall(text):
+            rows[directory] = re.findall(r"T\d+[a-c]?", raw_keys)
+
     declared: dict[str, list[str]] = defaultdict(list)   # topic key -> directories
-    mapped: set[str] = set()
-    for name, keys in TOPIC_MAP_ROW.findall(text):
-        mapped.add(name)
-        for k in dict.fromkeys(keys.split()):
-            declared[k].append(name)
-    undeclared = dirs - mapped
-    # a mapped directory that does not exist is as bad as an unmapped one that does
-    orphans_missing_dir = sorted(f"{n} (in the topic map, but no such roadmap directory)"
-                                 for n in mapped - dirs)
+    for directory, keys in rows.items():
+        for key in dict.fromkeys(keys):
+            declared[key].append(directory)
 
     known = {k for k, _, _ in TOPICS}
     covered, missing, doubled = [], [], []
@@ -221,19 +205,22 @@ def roadmap_coverage() -> tuple[list, list, list, list, dict]:
             doubled.append(f"topic {key} declared by {', '.join(owners)}")
         (covered if owners else missing).append((key, title, owners[0] if owners else None))
 
-    # a directory claiming a topic the design does not define is an error, not an orphan
-    bogus = sorted(f"{d} (declares unknown topic {k})"
-                   for k, ds in declared.items() if k not in known for d in ds)
-    intentional = sorted(undeclared & set(INTENTIONAL_ORPHANS))
-    orphans = (sorted(undeclared - set(INTENTIONAL_ORPHANS)) + orphans_missing_dir
-               + bogus + doubled)
+    bogus_topics = sorted(
+        f"{directory} (declares unknown topic {key})"
+        for key, directories in declared.items() if key not in known
+        for directory in directories)
+    unmapped_leaves = sorted(leaf_dirs - set(rows))
+    missing_leaves = sorted(
+        f"{directory} (mapped directory has no Suggested.lean)"
+        for directory in set(rows) - leaf_dirs)
+    orphans = unmapped_leaves + missing_leaves + bogus_topics + doubled
 
     groups: dict[str, list[str]] = defaultdict(list)     # directory -> topics, design order
     for key, _, _ in TOPICS:
         owners = declared.get(key, [])
         if owners:
             groups[owners[0]].append(key)
-    return covered, missing, orphans, intentional, dict(groups)
+    return covered, missing, orphans, [], dict(groups)
 
 
 def roadmap_dag(groups: dict[str, list[str]], topic_needs: dict[str, set[str]]
@@ -330,9 +317,8 @@ def main(argv: list[str] | None = None) -> int:
             ts = groups[name]
             n = sum(sizes[t] for t in ts)
             need = sorted(needs[name], key=lambda x: min(order[t] for t in groups[x]))
-            short = lambda s: s.rsplit("/", 1)[-1]
-            print(f"  {short(name):<32} {' '.join(ts):<24} {n:3} modules  "
-                  f"needs: {', '.join(map(short, need)) if need else '— independent'}")
+            print(f"  {name:<30} {' '.join(ts):<28} {n:3} modules  "
+                  f"needs: {', '.join(need) if need else '— independent'}")
         print()
         for key, title, dd in missing:
             print(f"  MISSING  {key:<5} {title}")

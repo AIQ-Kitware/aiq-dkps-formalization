@@ -112,6 +112,7 @@ section ClosedOperators
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- Perturbation of a partial map by an operator on its domain, the domain-aware
 sum that keeps the carrier a `LinearPMap`. -/
@@ -124,19 +125,20 @@ theorem isSelfAdjoint_perturb_bounded {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoin
     (V : A.domain →ₗ[𝕜] E) (hV : ∀ x : A.domain, V x = T (x : E)) :
     IsSelfAdjoint (perturb A V) := sorry
 
-/-- A bounded map sends the domain of `B` into the domain of `A` -- the side
-condition without which `A (X x)` is not written down. -/
-def MapsDomainTo (A : E →ₗ.[𝕜] E) (B : E →ₗ.[𝕜] E) (X : E →L[𝕜] E) : Prop :=
-  ∀ x : B.domain, X (x : E) ∈ A.domain
+/-- A bounded rectangular map sends the domain of `B` into the domain of `A` -- the
+side condition without which `A (X x)` is not written down. -/
+def MapsDomainTo (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) (X : F →L[𝕜] E) : Prop :=
+  ∀ x : B.domain, X (x : F) ∈ A.domain
 
-/-- The domain-aware Sylvester equation `A X − X B = C` on partial maps, the
-shape the perturbation roadmap consumes.  It is a structure rather than an
-equation between operators because the left-hand side does not typecheck without
-the domain transport, which is therefore a field. -/
-structure SylvesterEquation (A B : E →ₗ.[𝕜] E) (X C : E →L[𝕜] E) : Prop where
+/-- The rectangular domain-aware Sylvester equation `A X − X B = C` on partial maps.
+It is a structure rather than an equation between operators because the left-hand side
+does not typecheck without domain transport, which is therefore a field. The square case
+is obtained by setting `E = F`. -/
+structure SylvesterEquation (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
+    (X C : F →L[𝕜] E) : Prop where
   mapsTo_domain : MapsDomainTo A B X
   equation : ∀ x : B.domain,
-    A ⟨X (x : E), mapsTo_domain x⟩ - X (B x) = C (x : E)
+    A ⟨X (x : F), mapsTo_domain x⟩ - X (B x) = C (x : F)
 
 /-! ### The form-bound vocabulary
 
@@ -194,6 +196,10 @@ def resolventSet (A : E →ₗ.[𝕜] E) : Set 𝕜 :=
   { z | ∃ R : E →L[𝕜] E,
       (∀ ψ : A.domain, R (A ψ - z • (ψ : E)) = (ψ : E)) ∧
       (∀ φ : E, ∃ h : R φ ∈ A.domain, A ⟨R φ, h⟩ - z • R φ = φ) }
+
+/-- The spectrum of a partial linear map, defined as the complement of its resolvent set. -/
+def spectrum (A : E →ₗ.[𝕜] E) : Set 𝕜 :=
+  (resolventSet A)ᶜ
 
 /-- The named resolvent at a point of the resolvent set. -/
 noncomputable def resolvent (A : E →ₗ.[𝕜] E) {z : 𝕜} (hz : z ∈ resolventSet A) :

@@ -1,5 +1,4 @@
-# Hilbert-space operator foundations:
-# functional calculus, polar decomposition, singular systems, and projection geometry
+# Hilbert-space operator foundations: functional calculus, polar decomposition, singular systems, and projection geometry
 
 Spectral perturbation theory is written in a small, stable vocabulary: apply a real
 function to a self-adjoint operator; factor an operator through its modulus; expand a
@@ -61,10 +60,13 @@ Decide these up front; do not silently specialize.
   `E →L[𝕜] E` only for `𝕜 = ℂ`. One is more general in the field, the other in the shape;
   deleting either loses theorems, and a theorem proves they agree wherever both are
   defined.
-- **One partial-isometry notion, stated algebraically.** `IsPartialIsometry u` is
-  `u * star u * u = u` in a monoid with `StarMul`, so it applies verbatim to `E →ₗ[𝕜] E`,
-  to `E →L[ℂ] F`, and to any C⋆-algebra. The geometric characterization — isometric on
-  `(ker u)ᗮ`, zero on `ker u` — is a theorem, never the definition.
+- **One equation, with carrier-appropriate predicates.** In a star monoid,
+  `IsPartialIsometry u` means `u * star u * u = u`; this covers endomorphisms and abstract
+  C⋆-algebra elements. A rectangular map `u : E → F` is not an element of one monoid, so
+  `LinearMap.IsPartialIsometry` and `ContinuousLinearMap.IsPartialIsometry` state the typed
+  equation `u ∘ u† ∘ u = u`. The endomorphism predicates are proved equivalent, and the
+  geometric characterization — isometric on `(ker u)ᗮ`, zero on `ker u` — is a theorem,
+  never the definition.
 - **Three polar factorizations, one hierarchy.** Finite-dimensional endomorphisms over
   `RCLike` factor through a genuine unitary; a rectangular complex operator with invertible
   modulus factors through an isometry; a general bounded rectangular complex operator
@@ -195,11 +197,12 @@ generalization loses something:
 | isometric factor | genuine **unitary** `E ≃ₗᵢ[𝕜] E` | **partial isometry** |
 
 The obstruction is upstream, in Part A: the two moduli have complementary limitations, so
-there is no single modulus and hence no single polar decomposition subsuming both. The two
-decompositions share exactly one piece of vocabulary — the algebraic partial-isometry
-predicate — and nothing else.
+there is no single modulus and hence no single polar decomposition subsuming both. Their
+partial-isometry predicates share the same equation, but rectangular maps require typed
+composition rather than multiplication in one carrier.
 
-**Objects.** `IsPartialIsometry`; the polar factor `polarFactor A` (the partial isometry
+**Objects.** The star-monoid and carrier-specific partial-isometry predicates; the polar
+factor `polarFactor A` (the partial isometry
 `|A| x ↦ A x` extended by zero) and its unitary witnesses (`polarUnitaryEquiv`, canonical
 as `A |A|⁻¹` when `A` is invertible; `choosePolarUnitary` in general); on the rectangular
 side, the initial space `polarInitial M` (the closure of `range |M|`), the partial isometry
@@ -242,8 +245,8 @@ factors assemble into a unitary `U` with `U ∘ₗ Pⱼ = P'ⱼ ∘ₗ U` for ev
 modulus-inverse-times-operator construction applied to a projection pair.
 
 **Acceptance criteria.** That the two decompositions are not redundant (the table above, in
-particular that the general one is `ℂ`-only); that `IsPartialIsometry` is stated
-algebraically, so the shared vocabulary really is shared; and that
+particular that the general one is `ℂ`-only); that square and rectangular partial-isometry
+predicates state the same typed equation and agree in the endomorphism case; and that
 `polarInitial M = (ker M)ᗮ` is a theorem.
 
 ## Part C — singular values and the singular system

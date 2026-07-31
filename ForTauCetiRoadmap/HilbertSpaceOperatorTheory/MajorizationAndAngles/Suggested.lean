@@ -33,22 +33,23 @@ operator layer pulls it back through singular values. -/
 def prefixSum (k : ℕ) (x : Fin n → ℝ) : ℝ :=
   ∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < k), x i
 
-/-- A set of real tuples that is convex, transposition-closed, and closed under
-the elementary Robin Hood transfer.  Gauge sublevel sets are the motivating
-instances. -/
+/-- A symmetric convex set of real tuples: convex, permutation-invariant, and invariant
+under changing the sign of one coordinate. Gauge sublevel sets are the motivating instances.
+The sign symmetry is essential for descent under *weak* majorization, which may reduce the
+total sum; Robin Hood transfers alone preserve it. -/
 structure IsSymmetricConvex (K : Set (Fin n → ℝ)) : Prop where
   convex : Convex ℝ K
-  transposition_mem : ∀ (σ : Equiv.Perm (Fin n)), ∀ x ∈ K, x ∘ σ ∈ K
-  transfer_mem : ∀ x ∈ K, ∀ i j : Fin n, ∀ t ∈ Set.Icc (0 : ℝ) 1,
-    (fun k => if k = i then (1 - t) * x i + t * x j
-              else if k = j then t * x i + (1 - t) * x j else x k) ∈ K
+  perm_mem : ∀ (σ : Equiv.Perm (Fin n)), ∀ x ∈ K, x ∘ σ ∈ K
+  signFlip_mem : ∀ x ∈ K, ∀ i : Fin n,
+    (fun j => if j = i then -x j else x j) ∈ K
 
-/-- **The transfer descent**: a symmetric-convex set containing `y` contains every
-antitone nonnegative tuple whose prefix sums `y` dominates.  The engine under
-every unitarily invariant norm inequality of this roadmap. -/
+/-- **Weak-majorization descent.** A symmetric convex set containing a nonnegative tuple
+`y` contains every antitone nonnegative tuple whose prefix sums are bounded by those of `y`.
+The nonnegativity of both tuples and coordinate-sign symmetry supply the downward solidity
+that weak, rather than strong, majorization requires. -/
 theorem IsSymmetricConvex.mem_of_prefixSum_le {K : Set (Fin n → ℝ)}
     (hK : IsSymmetricConvex K) {y z : Fin n → ℝ} (hy : y ∈ K)
-    (hz : Antitone z) (hz0 : ∀ i, 0 ≤ z i)
+    (hy0 : ∀ i, 0 ≤ y i) (hz : Antitone z) (hz0 : ∀ i, 0 ≤ z i)
     (h : ∀ k, prefixSum k z ≤ prefixSum k y) : z ∈ K := sorry
 
 /-- The Schur--Horn weight: squared moduli of the eigenbasis coefficients of an
@@ -74,9 +75,9 @@ so every Ky Fan norm satisfies the triangle inequality at once. -/
 theorem kyFanSum_add_le (k : ℕ) (A B : E →ₗ[𝕜] E) :
     kyFanSum k (A + B) ≤ kyFanSum k A + kyFanSum k B := sorry
 
-/-- A unitarily invariant norm on square operators: the three laws, with
-positivity and the rest derived. -/
-structure UnitarilyInvariantNorm (𝕜 E : Type*) [RCLike 𝕜] [NormedAddCommGroup E]
+/-- A unitarily invariant seminorm on square operators. Definiteness is deliberately not
+bundled; concrete norm instances may add it separately. -/
+structure UnitarilyInvariantSeminorm (𝕜 E : Type*) [RCLike 𝕜] [NormedAddCommGroup E]
     [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] where
   toFun : (E →ₗ[𝕜] E) → ℝ
   add_le' : ∀ A B, toFun (A + B) ≤ toFun A + toFun B
@@ -84,15 +85,18 @@ structure UnitarilyInvariantNorm (𝕜 E : Type*) [RCLike 𝕜] [NormedAddCommGr
   unitary_invariant' : ∀ (U V : unitary (E →ₗ[𝕜] E)) (A),
     toFun ((U : E →ₗ[𝕜] E) ∘ₗ A ∘ₗ (V : E →ₗ[𝕜] E)) = toFun A
 
-/-- **Fan dominance**: Ky Fan domination implies domination in every unitarily
-invariant norm. -/
-theorem UnitarilyInvariantNorm.apply_le_of_kyFanSum_le
-    (N : UnitarilyInvariantNorm 𝕜 E) {A B : E →ₗ[𝕜] E}
+instance : CoeFun (UnitarilyInvariantSeminorm 𝕜 E) fun _ => (E →ₗ[𝕜] E) → ℝ :=
+  ⟨UnitarilyInvariantSeminorm.toFun⟩
+
+/-- **Fan dominance**: Ky Fan domination implies domination in every unitarily invariant
+seminorm, hence in every norm instance. -/
+theorem UnitarilyInvariantSeminorm.apply_le_of_kyFanSum_le
+    (N : UnitarilyInvariantSeminorm 𝕜 E) {A B : E →ₗ[𝕜] E}
     (h : ∀ k, kyFanSum k A ≤ kyFanSum k B) : N.toFun A ≤ N.toFun B := sorry
 
-/-- A unitarily invariant norm is determined by the singular-value sequence. -/
-theorem UnitarilyInvariantNorm.eq_of_same_singularValues
-    (N : UnitarilyInvariantNorm 𝕜 E) {A B : E →ₗ[𝕜] E}
+/-- A unitarily invariant seminorm is determined by the singular-value sequence. -/
+theorem UnitarilyInvariantSeminorm.eq_of_same_singularValues
+    (N : UnitarilyInvariantSeminorm 𝕜 E) {A B : E →ₗ[𝕜] E}
     (h : A.singularValues = B.singularValues) : N.toFun A = N.toFun B := sorry
 
 /-! ## Part B -- principal angles, aligned bases, and finite frames
@@ -128,9 +132,9 @@ theorem sinThetaSq_eq_card_sub_sum_sq {u v : Fin d → E} (hu : Orthonormal 𝕜
 
 /-! ## Part C -- rectangular unitarily invariant norms -/
 
-/-- A unitarily invariant norm on rectangular operators `E →ₗ[𝕜] F`: the same
-three laws, with two-sided unitary invariance. -/
-structure RectangularUnitarilyInvariantNorm (𝕜 E F : Type*) [RCLike 𝕜]
+/-- A unitarily invariant seminorm on rectangular operators `E →ₗ[𝕜] F`: the same
+three laws, with two-sided unitary invariance and no definiteness axiom. -/
+structure RectangularUnitarilyInvariantSeminorm (𝕜 E F : Type*) [RCLike 𝕜]
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F] where
   toFun : (E →ₗ[𝕜] F) → ℝ
@@ -139,11 +143,15 @@ structure RectangularUnitarilyInvariantNorm (𝕜 E F : Type*) [RCLike 𝕜]
   unitary_invariant' : ∀ (U : unitary (F →ₗ[𝕜] F)) (V : unitary (E →ₗ[𝕜] E)) (A),
     toFun ((U : F →ₗ[𝕜] F) ∘ₗ A ∘ₗ (V : E →ₗ[𝕜] E)) = toFun A
 
+instance : CoeFun (RectangularUnitarilyInvariantSeminorm 𝕜 E F)
+    fun _ => (E →ₗ[𝕜] F) → ℝ :=
+  ⟨RectangularUnitarilyInvariantSeminorm.toFun⟩
+
 /-- **Rectangular Fan dominance**: Ky Fan domination of the singular values gives
 domination in every rectangular unitarily invariant norm — one estimate yields
 the operator, Frobenius, Ky Fan and nuclear norms at once. -/
-theorem RectangularUnitarilyInvariantNorm.apply_le_of_kyFanSum_le
-    (N : RectangularUnitarilyInvariantNorm 𝕜 E F) {A B : E →ₗ[𝕜] F}
+theorem RectangularUnitarilyInvariantSeminorm.apply_le_of_kyFanSum_le
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F) {A B : E →ₗ[𝕜] F}
     (h : ∀ k, ∑ i ∈ Finset.range k, A.singularValues i
             ≤ ∑ i ∈ Finset.range k, B.singularValues i) :
     N.toFun A ≤ N.toFun B := sorry
@@ -179,7 +187,7 @@ theorem orthogonalBlockSum_apply_le_of_kyFanSum_le
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
     [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [FiniteDimensional 𝕜 F₁]
     [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [FiniteDimensional 𝕜 F₂]
-    (NB : RectangularUnitarilyInvariantNorm 𝕜
+    (NB : RectangularUnitarilyInvariantSeminorm 𝕜
       (WithLp 2 (E₁ × E₂)) (WithLp 2 (F₁ × F₂)))
     {A C : E₁ →ₗ[𝕜] F₁} {B D : E₂ →ₗ[𝕜] F₂}
     (hA : ∀ k, ∑ i ∈ Finset.range k, A.singularValues i
