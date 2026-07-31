@@ -139,7 +139,7 @@ base Tau Ceti has already accepted.
   - `Analysis.OperatorIdeal.Family.OperatorNorm`
   - `Analysis.OperatorIdeal.Family.TraceClass`
 
-**Cumulative after F: 41 of 170 `ForTauCeti` modules.** Rungs A–F were the whole
+**Cumulative after F: 41 of 171 `ForTauCeti` modules.** Rungs A–F were the whole
 ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung G — Foundations completion — the rest of topics T01-T10
@@ -343,7 +343,21 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
   - `Topology.ApproxMinimizer`
   - `Topology.Berge`
-**Cumulative: 166 of 170 `ForTauCeti` modules — the ladder is total.**
+**Cumulative: 168 of 171 `ForTauCeti` modules — three are off the ladder.**
+
+The ladder was total when rung U closed on 2026-07-29.  It stopped being total
+when three modules arrived afterwards and no rung's closure reaches them:
+
+  - `Analysis.InnerProductSpace.LinearPMap.SubmoduleAdjoint`
+  - `Analysis.OperatorIdeal.ApproximationNumber.CompactHilbert`
+  - `Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample`
+
+A module is on the ladder when some rung imports it, directly or transitively.
+These three are leaves nobody imports yet, which is exactly what a new result
+looks like before anything consumes it — not an error, but it does mean a
+submission built from the rungs would not carry them.  Placing each one is a
+rung decision, so it is filed as a lane rather than done here; run
+`scripts/derive_tauceti_submission_ladder.py` for the current list.
 
 ## The number that makes the case
 

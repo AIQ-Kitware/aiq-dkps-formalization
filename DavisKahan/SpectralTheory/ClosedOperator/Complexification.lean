@@ -61,8 +61,23 @@ theorem continuous_im : Continuous (im : Eℂ → E) :=
   continuous_snd.comp (WithLp.homeomorphProd 2 E E).continuous
 
 omit [InnerProductSpace ℝ E] [CompleteSpace E] in
-/-- Each coordinate norm is bounded by the L2 norm.  The real-coordinate half is
-`Foundation.RealComplexification.norm_re_le`, opened above. -/
+/-- Each coordinate norm is bounded by the L2 norm.
+
+**Restored 2026-07-30.**  A deduplication pass deleted this in favour of
+`Foundation.RealComplexification.norm_re_le` and left a comment saying that one
+is "opened above".  It is not usable: that copy is deliberately `private`, and
+its own docstring says why — `Sources/DavisKahan1970/Ideals/HilbertSchmidtRealDescent.lean`
+opens both namespaces at once, so a public copy there makes every unqualified
+use in that file ambiguous, and `Complexification/Basic.lean` cannot import the
+module that would fix it because the dependency runs the other way.  So the two
+copies are not redundant under the current namespace layout; removing one breaks
+the build, which is what happened.  See the `{lane:CPLX-DEDUP}` row. -/
+theorem norm_re_le (z : Eℂ) : ‖re z‖ ≤ ‖z‖ := by
+  rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), RealComplexification.norm_sq]
+  nlinarith [sq_nonneg ‖im z‖]
+
+omit [InnerProductSpace ℝ E] [CompleteSpace E] in
+/-- Each coordinate norm is bounded by the L2 norm. -/
 theorem norm_im_le (z : Eℂ) : ‖im z‖ ≤ ‖z‖ := by
   rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), RealComplexification.norm_sq]
   nlinarith [sq_nonneg ‖re z‖]
