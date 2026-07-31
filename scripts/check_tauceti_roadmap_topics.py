@@ -115,11 +115,14 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 # (T15a) and `LinearPMap.SpectralFormBounds` (T15c), so filing it under T09 makes T09
 # unsubmittable -- `--check` reports it as a forward reference, which is how this was
 # caught when the module was lifted out of `DavisKahan` on 2026-07-31.
+# `ApproximationNumber.FinitePVMSelection` is here for the same reason and one step
+# removed: it imports `GramSpectralRank`, so it inherits that dependency wholesale.
 ("T15c","The spectral measure of an unbounded self-adjoint operator, and Stone",
  [A+"LinearPMap."+x for x in ["SpectralMeasure","SpectralMeasure.Construction","SpectralGrid",
    "SpectralSupport","SpectralFormBounds","SpectralGapInverse","SpectralCutOperator",
    "SpectralProjectionGroup","SelfAdjointMaximal","StoneUniqueness","YosidaApproximation"]]
- +["Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank"]
+ +["Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank",
+   "Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection"]
  +[A+"BlockLowerBound"]),
 ("T16","Sylvester equations and the Rosenblum theorem",
  [A+x for x in ["Rosenblum","HilbertSchmidtBlock","CoerciveUnit"]]

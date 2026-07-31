@@ -136,7 +136,7 @@ theorem pow_mulVec_eigenvector {B : Matrix (Fin n) (Fin n) ℝ} {v : Fin n → �
   induction t with
   | zero => simp
   | succ t ih =>
-      rw [pow_succ, ← Matrix.mulVec_mulVec, hv, Matrix.mulVec_smul, ih, smul_smul, pow_succ]
+      simp only [pow_succ, ← Matrix.mulVec_mulVec, hv, Matrix.mulVec_smul, ih, smul_smul]
       ring_nf
 
 /-- A polynomial of a matrix acts on an eigenvector by the polynomial of the
