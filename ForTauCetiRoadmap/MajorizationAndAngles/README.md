@@ -1,5 +1,41 @@
 # Roadmap: majorization, unitarily invariant norms, and the geometry of principal angles
 
+> ## ✅ DELIVERED — this topic is complete (verified 2026-07-31)
+>
+> **All 26 signatures in `Suggested.lean` are proved in the library.** This README is
+> kept for its design rationale, which still explains why the theory is shaped as it is —
+> but it is a **record, not a plan**. Nothing below is outstanding work.
+>
+> The `sorry` bodies in `Suggested.lean` are deliberate and must stay: `ForTauCetiRoadmap.lean`
+> exists *"so that a broken suggested signature is a build failure"*, a guard that has already
+> caught ten real elaboration errors. Proving a body duplicates the library; deleting a
+> signature removes the guard.
+>
+> Re-check with `python3 scripts/check_roadmap_delivered.py --topic MajorizationAndAngles`.
+>
+> ### Where each signature landed
+>
+> * **`Convex/Majorization.lean`** — `IsSymmetricConvex`, `IsSymmetricConvex.mem_of_prefixSum_le`, `prefixSum`
+> * **`InnerProductSpace/AlignedBasis.lean`** — `familyIsometry`, `overlapOp`
+> * **`InnerProductSpace/AngleGeometry.lean`** — `cosThetaMap`, `principalCosines`, `principalCosines_span_eq_cosPrincipalAngles`
+> * **`InnerProductSpace/EigenvalueChange.lean`** — `sum_sq_eigenvalues_sub_ge`
+> * **`InnerProductSpace/HoffmanWielandt.lean`** — `sum_eigenvalues_mul_re_inner_self_le`, `sum_sq_eigenvalues_sub_le_sum_sq_norm_apply`
+> * **`InnerProductSpace/KyFan.lean`** — `kyFanSum`, `kyFanSum_add_le`
+> * **`InnerProductSpace/PrincipalAngles.lean`** — `cosPrincipalAngles`, `sinThetaSq`, `sinThetaSq_eq_card_sub_sum_sq`
+> * **`InnerProductSpace/RectangularUnitarilyInvariantNorm/Basic.lean`** — `RectangularUnitarilyInvariantNorm`
+> * **`InnerProductSpace/RectangularUnitarilyInvariantNorm/BlockSum.lean`** — `orthogonalBlockSum`, `orthogonalBlockSum_apply_le_of_kyFanSum_le`, `singularValues_orthogonalBlockSum_self`
+> * **`InnerProductSpace/SchurHorn.lean`** — `convexOn_sum_re_inner_orthonormalBasis_self_le`, `schurWeight`
+> * **`InnerProductSpace/UnitarilyInvariantNorm.lean`** — `RectangularUnitarilyInvariantNorm.apply_le_of_kyFanSum_le` ⚠, `UnitarilyInvariantNorm`, `UnitarilyInvariantNorm.apply_le_of_kyFanSum_le` ⚠, `UnitarilyInvariantNorm.eq_of_same_singularValues`
+>
+> ### ⚠ Ambiguous names — attribution is a best guess
+>
+> 2 of these base names are declared in more than one module, so the
+> destination above is inferred (prefer `ForTauCeti/`, then the shallowest path), not
+> proved. Confirm before relying on a specific file:
+>
+> * `RectangularUnitarilyInvariantNorm.apply_le_of_kyFanSum_le` — `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm/Majorization.lean`, `ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean`
+> * `UnitarilyInvariantNorm.apply_le_of_kyFanSum_le` — `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm/Majorization.lean`, `ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean`
+
 How far does an eigenvector rotate when its operator is perturbed? The classical answers —
 Davis–Kahan, Hoffman–Wielandt, Yu–Wang–Samworth — measure the rotation in **principal angles**
 between subspaces and size the perturbation in a **unitarily invariant norm**, and both of those
