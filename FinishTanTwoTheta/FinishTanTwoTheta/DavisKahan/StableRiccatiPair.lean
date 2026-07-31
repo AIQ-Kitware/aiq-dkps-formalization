@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import FinishTanTwoTheta.GroundedImports
 import FinishTanTwoTheta.FunctionalCalculus.DoubleAngleTangent
-import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedRiccatiEstimate
+import DavisKahan.Riccati.BoundedSharpEstimates
 
 /-!
 # Stable paired-singular-vector Riccati estimate

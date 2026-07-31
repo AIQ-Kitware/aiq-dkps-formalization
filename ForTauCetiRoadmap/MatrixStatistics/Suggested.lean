@@ -48,6 +48,12 @@ theorem exists_units_eq_mul_of_rank_factorization {r : ℕ} (M : Matrix m n 𝕜
       L' = L * (g : Matrix (Fin r) (Fin r) 𝕜) ∧
         R' = ((g⁻¹ : (Matrix (Fin r) (Fin r) 𝕜)ˣ) : Matrix (Fin r) (Fin r) 𝕜) * R := sorry
 
+end RankFactorization
+
+section GramUniqueness
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+
 /-- **Milestone A2, Gram factors.** Two Gram factors of the same size differ by a left
 unitary.  Open question deliberately left in the roadmap rather than settled here:
 whether the consumer wants `unitaryGroup` or a bundled `LinearIsometryEquiv`.
@@ -66,7 +72,6 @@ theorem exists_unitary_mul_of_conjTranspose_mul_self_eq {n d : ℕ}
 
 end GramUniqueness
 
-end RankFactorization
 /-! ## Part B -- Berge's maximum theorem over a fixed compact feasible set (T22) -/
 
 section Berge
