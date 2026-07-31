@@ -355,7 +355,7 @@ that defines it. -/
 theorem intertwiningUnitary_apply (hnd : P.NonDegenerate P') (x : E) :
     intertwiningUnitary hnd x = ∑ j, polarFactor (P'.proj j ∘ₗ P.proj j) (P.proj j x) := by
   have h : intertwiningUnitary hnd x
-      = (∑ j, polarFactor (P'.proj j ∘ₗ P.proj j) ∘ₗ P.proj j : E →ₗ[𝕜] E) x := rfl
+      = (∑ j, polarFactor (P'.proj j ∘ₗ P.proj j) ∘ₗ P.proj j : E →ₗ[𝕜] E) x := (rfl)
   rw [h, LinearMap.sum_apply]
   simp only [LinearMap.comp_apply]
 

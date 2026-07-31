@@ -199,7 +199,7 @@ theorem norm_sq_cfcHom_apply (g : C(_root_.spectrum ℂ a, ℂ)) (v : H) :
   have hstar : (cfcHom ha g).adjoint = cfcHom ha (star g) := by
     rw [← ContinuousLinearMap.star_eq_adjoint, ← map_star]
   have hfun : (fun w => (starRingEnd ℂ) (g w) * g w)
-      = fun w => ((star g * g : C(_root_.spectrum ℂ a, ℂ)) w) := rfl
+      = fun w => ((star g * g : C(_root_.spectrum ℂ a, ℂ)) w) := (rfl)
   have key : ⟪v, cfcHom ha (star g * g) v⟫_ℂ = ⟪cfcHom ha g v, cfcHom ha g v⟫_ℂ := by
     rw [map_mul]
     -- states the goal as the inner-product identity the structure lemma expects.

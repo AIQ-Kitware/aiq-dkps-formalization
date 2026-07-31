@@ -72,7 +72,7 @@ noncomputable def columns (b : HilbertBasis ι 𝕜 F) (T : F →L[𝕜] E) : ι
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The `i`-th column is the operator applied to the `i`-th basis vector. -/
 @[simp] theorem columns_apply (b : HilbertBasis ι 𝕜 F) (T : F →L[𝕜] E) (i : ι) :
-    columns b T i = T (b i) := rfl
+    columns b T i = T (b i) := (rfl)
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The zero operator has zero columns. -/
@@ -216,7 +216,7 @@ omit [CompleteSpace F] in
 coefficients. -/
 @[simp]
 theorem ofLp_apply (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2) (x : F) :
-    ofLp b f x = ∑' i, (b.repr x i) • f i := rfl
+    ofLp b f x = ∑' i, (b.repr x i) • f i := (rfl)
 omit [CompleteSpace F] in
 /-- The operator norm of a represented operator is at most the `ℓ²` norm of its
 column family: the Hilbert–Schmidt norm dominates the operator norm. -/
