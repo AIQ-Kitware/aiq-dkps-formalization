@@ -41,16 +41,16 @@ private theorem half_mul_kyFan_le_adjoint
     {X : E0 →L[ℂ] E1} (hX : SolvesRiccati B X)
     (hcontractive : ‖X‖ < 1) (k : ℕ) :
     (d / 2) * kyFanApproximationGauge k
-        (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ≤
+        (TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive) ≤
       kyFanApproximationGauge k B.B01.adjoint := by
   have hsharp := sharp_doubleAngleTangentOperator_kyFan
     B hd.le hA0 hA1 hX hcontractive k
   rw [kyFanApproximationGauge_adjoint]
   calc
     (d / 2) * kyFanApproximationGauge k
-        (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) =
+        (TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive) =
         (d * kyFanApproximationGauge k
-          (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive)) / 2 := by
+          (TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive)) / 2 := by
       ring
     _ ≤ kyFanApproximationGauge k B.B01 := by
       linarith
@@ -67,12 +67,12 @@ theorem sharp_standardSymmetricIdeal_scaled
     (hcontractive : ‖X‖ < 1)
     (hB : I.Mem B.B01) :
     I.Mem (((d / 2 : ℝ) : ℂ) •
-        TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ∧
+        TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive) ∧
       I.gauge (((d / 2 : ℝ) : ℂ) •
-          TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ≤
+          TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive) ≤
         I.gauge B.B01 := by
   let T : E0 →L[ℂ] E1 :=
-    TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive
+    TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive
   let S : E0 →L[ℂ] E1 := (((d / 2 : ℝ) : ℂ) • T)
   have hBadj : I.Mem B.B01.adjoint := I.mem_adjoint hB
   have hscalarNorm : ‖(((d / 2 : ℝ) : ℂ))‖ = d / 2 := by
@@ -102,12 +102,12 @@ theorem sharp_paperUnitaryInvariantNorm
     {X : E0 →L[ℂ] E1} (hX : SolvesRiccati B X)
     (hcontractive : ‖X‖ < 1)
     (hB : N.Mem B.B01) :
-    N.Mem (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ∧
+    N.Mem (TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive) ∧
       d * N.gauge
-          (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ≤
+          (TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive) ≤
         2 * N.gauge B.B01 := by
   let T : E0 →L[ℂ] E1 :=
-    TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive
+    TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive
   have hBadj : N.Mem B.B01.adjoint :=
     (N.mem_adjoint_iff B.B01).mpr hB
   have hfan : ∀ k : ℕ,
@@ -139,9 +139,9 @@ theorem sharp_schattenMaximal
     (hcontractive : ‖X‖ < 1)
     (hB : (TauCeti.SymmetricIdeal.paperLpNorm p hp).Mem B.B01) :
     (TauCeti.SymmetricIdeal.paperLpNorm p hp).Mem
-        (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ∧
+        (TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive) ∧
       d * (TauCeti.SymmetricIdeal.paperLpNorm p hp).gauge
-          (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ≤
+          (TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive) ≤
         2 * (TauCeti.SymmetricIdeal.paperLpNorm p hp).gauge B.B01 :=
   sharp_paperUnitaryInvariantNorm
     (TauCeti.SymmetricIdeal.paperLpNorm p hp)
@@ -157,9 +157,9 @@ theorem sharp_nuclear
     (hcontractive : ‖X‖ < 1)
     (hB : paperNuclearNorm.Mem B.B01) :
     paperNuclearNorm.Mem
-        (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ∧
+        (TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive) ∧
       d * paperNuclearNorm.gauge
-          (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ≤
+          (TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive) ≤
         2 * paperNuclearNorm.gauge B.B01 :=
   sharp_paperUnitaryInvariantNorm paperNuclearNorm
     B hd hA0 hA1 hX hcontractive hB
