@@ -64,6 +64,9 @@ plausible. -/
 theorem exists_unitary_mul_of_conjTranspose_mul_self_eq {n d : ℕ}
     {A A' : Matrix (Fin d) (Fin n) 𝕜} (h : Aᴴ * A = A'ᴴ * A') :
     ∃ U ∈ Matrix.unitaryGroup (Fin d) 𝕜, A' = U * A := sorry
+-- **Proved 2026-07-31** as `TauCeti.Matrix.exists_unitary_mul_of_conjTranspose_mul_self_eq` in
+-- `ForTauCeti/LinearAlgebra/Matrix/PosDef.lean`, axiom-clean and with this signature unchanged.
+-- The `sorry` stays because this file records target shapes and is not a build target.
 
 end GramUniqueness
 
