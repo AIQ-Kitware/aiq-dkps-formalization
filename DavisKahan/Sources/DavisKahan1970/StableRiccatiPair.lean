@@ -18,7 +18,6 @@ written explicitly and vanishes with `ε`.
 
 namespace TauCeti
 namespace DavisKahan
-namespace FinishTanTwoTheta
 
 open scoped InnerProductSpace
 open DavisKahanExt
@@ -260,6 +259,5 @@ theorem stableSingularPair_doubleAngleTangent_le
 
 end
 
-end FinishTanTwoTheta
 end DavisKahan
 end TauCeti
