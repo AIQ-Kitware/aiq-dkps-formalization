@@ -17,24 +17,39 @@ needs.  Its two ordered constructors let both diagonal blocks be genuinely
 unbounded; only the interval/exterior constructor requires a bounded spectral
 block.
 
-## Why these names, and not the unqualified ones
+## Two spellings of the same configurations
 
 This module states the ordered configurations as **operator-form bounds** —
 `SemiboundedBelow`/`SemiboundedAbove` — and the interval/exterior configuration
-over `LinearPMap.realSpectrum`.  The unqualified names
-`UnboundedIntervalExteriorGap` and `UnboundedSylvesterGap`
-(`SinTheta/Unbounded/IntervalExterior.lean`,
+over `LinearPMap.realSpectrum`.  `SpectralIntervalExteriorGap` and
+`SpectralSylvesterGap` (`SinTheta/Unbounded/IntervalExterior.lean`,
 `Sylvester/Unbounded/AllGap.lean`) instead state all three configurations as
 **spectral containments** in `Set.Ici`/`Set.Iic`, which is the form Davis--Kahan
 1970 uses.
 
-The two surfaces are related in one direction only:
-`Sylvester/Unbounded/LegacyGap.lean` proves form-bounded ⇒ spectral, and no
-converse is proved here.  So the predicates in this module are the *stronger
-hypothesis*, and a theorem stated over them is the *weaker theorem*.  The
-unqualified name therefore belongs to the spectral surface, and these carry the
-qualifier that says what they additionally assume.  They remain the convenient
-entry point when the form bound is what a caller has in hand.
+For self-adjoint blocks the two describe the same configurations — a form bound
+`⟪Ax, x⟫ ≥ c‖x‖²` and a spectral containment `spectrum A ⊆ Set.Ici c` are the
+spectral theorem apart — but they are different propositions, and **only one
+direction is proved here**:
+
+* `formBoundedSylvesterGap_of_spectral` gives `SpectralSylvesterGap → `
+  `FormBoundedSylvesterGap` in **every** configuration, the ordered branches by
+  `semiboundedBelow_of_spectrum_subset_Ici` and its mirror
+  (`SpectralTheory/OrderedHalfLine.lean`), the interval branch by
+  `realSpectrum_eq_spectraSpectrum`;
+* the converse holds for the **interval/exterior branch only**
+  (`SpectralSylvesterGap.intervalExterior_of_formBounded`).  Recovering a
+  spectral containment from a form bound is the half of the spectral theorem
+  this tree does not have.
+
+**So the form-bounded predicate is the weaker hypothesis, and a theorem stated
+over it is the stronger theorem** — which is exactly how the endpoints are
+arranged: `davisKahan1970_sylvester_complex` takes this predicate, and
+`davisKahan1970_sylvester_of_spectrumGap` is available at the spectral one.
+
+Neither predicate carries an unqualified name.  They are equivalent mathematics
+stated two ways, so a bare `SylvesterGap` would leave a reader asking which one
+it is; each name says how its ordered configurations are given.
 -/
 
 namespace TauCeti
@@ -78,10 +93,10 @@ genuinely unbounded; only the interval/exterior constructor has a bounded
 spectral block.
 
 For self-adjoint blocks `SemiboundedBelow A c` and
-`ofReal ⁻¹' spectrum A ⊆ Set.Ici c` describe the same configuration, but they are
-different propositions: only the form-bounded ⇒ spectral direction is proved, in
-`Sylvester/Unbounded/LegacyGap.lean`.  `UnboundedSylvesterGap` is the spectral
-spelling. -/
+`ofReal ⁻¹' spectrum A ⊆ Set.Ici c` describe the same configuration but are
+different propositions.  `SpectralSylvesterGap` is the spectral spelling and
+implies this one (`formBoundedSylvesterGap_of_spectral`); the converse is proved
+for the `intervalExterior` constructor only. -/
 inductive linearPMap_FormBoundedSylvesterGap
     (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) (δ : ℝ) : Prop where
   | intervalExterior
@@ -119,9 +134,10 @@ Representation shim for the partial-map predicate; every component
 the `TauCeti.LinearPMap` layer, so the two spellings are definitionally equal at
 `A.toLinearPMap` and `cases`/`rcases` see the underlying constructors directly.
 
-`UnboundedSylvesterGap` is the spectral spelling and is the weaker hypothesis;
-`UnboundedSylvesterGap.intervalExterior_of_formBounded` converts this one to
-it. -/
+`SpectralSylvesterGap` is the spectral spelling and implies this one in every
+configuration (`formBoundedSylvesterGap_of_spectral`), so this is the weaker
+hypothesis.  In the other direction only the interval/exterior constructor
+transports, by `SpectralSylvesterGap.intervalExterior_of_formBounded`. -/
 abbrev FormBoundedSylvesterGap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
     (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F))

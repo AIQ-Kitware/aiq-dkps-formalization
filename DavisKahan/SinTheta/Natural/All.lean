@@ -7,8 +7,8 @@ import DavisKahan.SinTheta.Natural.Bounded
 import DavisKahan.SinTheta.Natural.Examples
 import DavisKahan.SinTheta.Natural.GapConvenience
 import DavisKahan.SinTheta.Natural.Generalized
-import DavisKahan.SinTheta.Natural.Genuine
 import DavisKahan.SinTheta.Natural.Real
 import DavisKahan.SinTheta.Natural.Reducing
+import DavisKahan.SinTheta.Natural.SpectralSubspace
 
 /-! # `DavisKahan/SinTheta/Natural` -/

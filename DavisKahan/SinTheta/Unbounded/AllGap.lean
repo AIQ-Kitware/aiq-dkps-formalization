@@ -9,10 +9,10 @@ import DavisKahan.Sylvester.Unbounded.AllGap
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
-# Genuine-spectrum all-gap unbounded sine-theta theorem
+# Spectral all-gap unbounded sine-theta theorem
 
 This leaf exposes the complete generalized and isometric unbounded sine-theta
-statements with all three gap configurations phrased through the genuine
+statements with all three gap configurations phrased through the Spectra
 Spectra spectrum.  It reuses the domain-aware residual identity, lower-frame
 normalization, and exact-angle identification already present in the canonical
 unbounded development.
@@ -36,7 +36,7 @@ variable {E F G H : Type v}
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- Raw partial-map presentation of the three genuine Spectra all-gap cases. -/
+/-- Raw partial-map presentation of the three spectral all-gap cases. -/
 inductive UnboundedSylvesterGapPMap
     (A : F →ₗ.[ℂ] F) (B : G →ₗ.[ℂ] G) (δ : ℝ) : Prop where
   | intervalExterior {β α : ℝ} (hβα : β ≤ α)
@@ -59,7 +59,7 @@ omit [CompleteSpace E] [CompleteSpace F] [CompleteSpace G] in
 theorem toClosed
     (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
     {δ : ℝ} (h : UnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ) :
-    UnboundedSylvesterGap D.toClosed.A₀ D.toClosed.Λ₁ δ := by
+    SpectralSylvesterGap D.toClosed.A₀ D.toClosed.Λ₁ δ := by
   cases h with
   | intervalExterior hβα hgap =>
       exact .intervalExterior hβα hgap
@@ -70,15 +70,15 @@ theorem toClosed
 
 end UnboundedSylvesterGapPMap
 
-namespace UnboundedSylvesterGap
+namespace SpectralSylvesterGap
 
 omit [CompleteSpace F] [CompleteSpace G] in
-/-- View a source-facing genuine all-gap condition through canonical partial
+/-- View a source-facing spectral all-gap condition through canonical partial
 maps. -/
 theorem toPMap
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G)}
-    {δ : ℝ} (h : UnboundedSylvesterGap A B δ) :
+    {δ : ℝ} (h : SpectralSylvesterGap A B δ) :
     UnboundedSylvesterGapPMap A.toLinearPMap B.toLinearPMap δ := by
   cases h with
   | intervalExterior hβα hgap =>
@@ -88,9 +88,9 @@ theorem toPMap
   | leftBelowRightAbove c hA hB =>
       exact .leftBelowRightAbove c hA hB
 
-end UnboundedSylvesterGap
+end SpectralSylvesterGap
 
-/-- Generalized complementary-block theorem with a genuine all-gap spectral
+/-- Generalized complementary-block theorem with a spectral all-gap
 hypothesis. -/
 theorem generalizedSinTheta_unbounded_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
@@ -102,7 +102,7 @@ theorem generalizedSinTheta_unbounded_of_spectrumGap
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : SpectralSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
         (sinThetaBlock D.X D.F₁ hframe hε) ∧
@@ -124,7 +124,7 @@ theorem generalizedSinTheta_unbounded_of_spectrumGap
     _ ≤ N.gauge (-(D.residual.adjoint ∘L D.F₁)) := hRaw.2
     _ ≤ N.gauge D.residual := hC.2
 
-/-- Raw partial-map generalized sine-theta endpoint for the genuine all-gap
+/-- Raw partial-map generalized sine-theta endpoint for the spectral all-gap
 Spectra boundary. -/
 theorem linearPMap_generalizedSinTheta_unbounded_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
@@ -144,7 +144,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_of_spectrumGap
   exact generalizedSinTheta_unbounded_of_spectrumGap N D.toClosed
     hA hA₀ hΛ₁ hF₁ hδ hε hframe hgap.toClosed hR
 
-/-- Exact directed-angle form of the genuine all-gap generalized theorem. -/
+/-- Exact directed-angle form of the spectral all-gap generalized theorem. -/
 theorem generalizedSinTheta_unbounded_exact_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
@@ -156,7 +156,7 @@ theorem generalizedSinTheta_unbounded_exact_of_spectrumGap
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : SpectralSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
         (directedSinThetaOperator D.X F₀ hframe hε) ∧
@@ -172,7 +172,7 @@ theorem generalizedSinTheta_unbounded_exact_of_spectrumGap
   rw [hAngle.2]
   exact hBlock.2
 
-/-- Raw partial-map exact directed-angle endpoint for the genuine all-gap
+/-- Raw partial-map exact directed-angle endpoint for the spectral all-gap
 Spectra boundary. -/
 theorem linearPMap_generalizedSinTheta_unbounded_exact_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
@@ -201,7 +201,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_exact_of_spectrumGap
   rw [hAngle.2]
   exact hBlock.2
 
-/-- Raw partial-map isometric specialization of the genuine all-gap endpoint.
+/-- Raw partial-map isometric specialization of the spectral all-gap endpoint.
 It is derived from the raw lower-frame theorem at frame bound one. -/
 theorem linearPMap_sinTheta_unbounded_exact_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
@@ -226,7 +226,7 @@ theorem linearPMap_sinTheta_unbounded_exact_of_spectrumGap
   rw [directedSinThetaOperator_eq_of_isometry D.X F₀ hX] at hGeneral
   simpa using hGeneral
 
-/-- Exact isometric specialization of the genuine all-gap theorem. -/
+/-- Exact isometric specialization of the spectral all-gap theorem. -/
 theorem sinTheta_unbounded_exact_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
@@ -237,7 +237,7 @@ theorem sinTheta_unbounded_exact_of_spectrumGap
     (hX : IsometricEmbedding D.X)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : SpectralSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
         ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
@@ -255,9 +255,14 @@ theorem sinTheta_unbounded_exact_of_spectrumGap
   rw [hAngle.2]
   exact hRaw.2.trans hC.2
 
-/-- Complete source-shaped input package for the generalized genuine all-gap
-theorem. -/
-structure GenuineGeneralSinThetaProblem
+/-- Complete source-shaped input package for the generalized all-gap theorem,
+with the spectral gap stated as `SpectralSylvesterGap`.
+
+`FormBoundedGeneralSinThetaProblem` is the same package over the form-bounded
+gap, and is the more general of the two: `formBoundedSylvesterGap_of_spectral`
+builds it from this one, so `result` here is a corollary of `result` there.
+`SinTheta/Canonical.lean` records the details. -/
+structure SpectralGeneralSinThetaProblem
     (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
@@ -270,15 +275,15 @@ structure GenuineGeneralSinThetaProblem
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : UnboundedSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : SpectralSylvesterGap data.A₀ data.Λ₁ gap
   residual_mem : N.Mem data.residual
 
-namespace GenuineGeneralSinThetaProblem
+namespace SpectralGeneralSinThetaProblem
 
-/-- Source-shaped generalized genuine all-gap endpoint. -/
+/-- Source-shaped generalized spectral all-gap endpoint. -/
 theorem result
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (P : GenuineGeneralSinThetaProblem (E := E) (F := F)
+    (P : SpectralGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         (directedSinThetaOperator P.data.X P.exactMap
@@ -293,11 +298,14 @@ theorem result
       P.complement_selfAdjoint P.exact_decomposition P.gap_pos
       P.frameLowerBound_pos P.lowerFrame P.spectral_gap P.residual_mem
 
-end GenuineGeneralSinThetaProblem
+end SpectralGeneralSinThetaProblem
 
-/-- Complete source-shaped input package for the isometric genuine all-gap
-theorem. -/
-structure GenuineIsometricSinThetaProblem
+/-- Complete source-shaped input package for the isometric all-gap theorem, with
+the spectral gap stated as `SpectralSylvesterGap`.
+
+This package is `ℂ`-only; `FormBoundedIsometricSinThetaProblem` is the
+`RCLike`-generic form-bounded counterpart. -/
+structure SpectralIsometricSinThetaProblem
     (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
@@ -308,15 +316,15 @@ structure GenuineIsometricSinThetaProblem
   exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
   gap : ℝ
   gap_pos : 0 < gap
-  spectral_gap : UnboundedSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : SpectralSylvesterGap data.A₀ data.Λ₁ gap
   residual_mem : N.Mem data.residual
 
-namespace GenuineIsometricSinThetaProblem
+namespace SpectralIsometricSinThetaProblem
 
-/-- Source-shaped isometric genuine all-gap endpoint. -/
+/-- Source-shaped isometric spectral all-gap endpoint. -/
 theorem result
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (P : GenuineIsometricSinThetaProblem (E := E) (F := F)
+    (P : SpectralIsometricSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         ((ContinuousLinearMap.id ℂ E -
@@ -330,7 +338,7 @@ theorem result
       P.complement_selfAdjoint P.trial_isometry P.exact_decomposition
       P.gap_pos P.spectral_gap P.residual_mem
 
-end GenuineIsometricSinThetaProblem
+end SpectralIsometricSinThetaProblem
 
 end ExactSinTheta
 end Experimental

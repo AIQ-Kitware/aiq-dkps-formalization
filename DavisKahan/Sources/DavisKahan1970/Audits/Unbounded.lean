@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SinTheta.Natural.Genuine
+import DavisKahan.SinTheta.Natural.SpectralSubspace
 import DavisKahan.SinTheta.Natural.Real
 import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
 import DavisKahan.Sylvester.RealUnbounded
@@ -49,8 +49,8 @@ namespace ExactSinTheta
 #check realSpectralSubspace_orthogonalExactDecomposition
 #check sinTheta_unbounded_real_spectralSubspace
 #check generalizedSinTheta_unbounded_real_spectralSubspace
-#check GenuineGeneralSinThetaProblem.result
-#check GenuineIsometricSinThetaProblem.result
+#check SpectralGeneralSinThetaProblem.result
+#check SpectralIsometricSinThetaProblem.result
 #check TauCeti.DavisKahanExt.ClosedOperator.realResolventSet
 #check realSpectrum_eq_spectraSpectrum
 #check ClosedOperatorComplexification.isSelfAdjoint_complexify
@@ -69,9 +69,9 @@ namespace ExactSinTheta
 #check lowerFramePolarData_real_nonempty
 #check generalizedSinTheta_unbounded_exact_real
 #check directedSinThetaOperatorReal_eq_of_isometry
-#check IsometricSinThetaProblem.result_complex
-#check IsometricSinThetaProblem.result_real
-#check GeneralSinThetaProblem.result
+#check FormBoundedIsometricSinThetaProblem.result_complex
+#check FormBoundedIsometricSinThetaProblem.result_real
+#check FormBoundedGeneralSinThetaProblem.result
 #check RealGeneralSinThetaProblem.result
 #check BoundedGeneralSinThetaProblem.result
 #check RealBoundedGeneralSinThetaProblem.result
@@ -105,8 +105,8 @@ namespace ExactSinTheta
 #print axioms realSpectralSubspace_orthogonalExactDecomposition
 #print axioms sinTheta_unbounded_real_spectralSubspace
 #print axioms generalizedSinTheta_unbounded_real_spectralSubspace
-#print axioms GenuineGeneralSinThetaProblem.result
-#print axioms GenuineIsometricSinThetaProblem.result
+#print axioms SpectralGeneralSinThetaProblem.result
+#print axioms SpectralIsometricSinThetaProblem.result
 #print axioms TauCeti.DavisKahanExt.ClosedOperator.realSpectrum
 #print axioms realSpectrum_eq_spectraSpectrum
 #print axioms ClosedOperatorComplexification.isSelfAdjoint_complexify
@@ -125,9 +125,9 @@ namespace ExactSinTheta
 #print axioms lowerFramePolarData_real_nonempty
 #print axioms generalizedSinTheta_unbounded_exact_real
 #print axioms directedSinThetaOperatorReal_eq_of_isometry
-#print axioms IsometricSinThetaProblem.result_complex
-#print axioms IsometricSinThetaProblem.result_real
-#print axioms GeneralSinThetaProblem.result
+#print axioms FormBoundedIsometricSinThetaProblem.result_complex
+#print axioms FormBoundedIsometricSinThetaProblem.result_real
+#print axioms FormBoundedGeneralSinThetaProblem.result
 #print axioms RealGeneralSinThetaProblem.result
 #print axioms BoundedGeneralSinThetaProblem.result
 #print axioms RealBoundedGeneralSinThetaProblem.result

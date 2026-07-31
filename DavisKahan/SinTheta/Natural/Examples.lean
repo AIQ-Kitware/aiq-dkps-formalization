@@ -48,7 +48,7 @@ example
     (hReq : ∀ x : A0.domain,
       A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap A0
+    (hgap : SpectralSylvesterGap A0
       (selfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ) :
     δ * ‖(ContinuousLinearMap.id ℂ E -
         selfAdjointSpectralSubspaceInclusion A hA S hS ∘L
@@ -72,7 +72,7 @@ example
     (hReq : ∀ x : A0.domain,
       A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap A0
+    (hgap : SpectralSylvesterGap A0
       (selfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ) :
     δ * kyFanApproximationGauge 2
         ((ContinuousLinearMap.id ℂ E -
@@ -134,7 +134,7 @@ example
     (A0 : F →L[ℂ] F) (hA0 : A0.IsSymmetric)
     (X : F →L[ℂ] E) (hX : IsometricEmbedding X)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGap
+    (hgap : SpectralSylvesterGap
       (ClosedOperator.ofBounded A0)
       (selfAdjointSpectralRestriction (ClosedOperator.ofBounded A)
         (ClosedOperator.ofBounded_isSelfAdjoint A hA) Sᶜ hS.compl) δ) :

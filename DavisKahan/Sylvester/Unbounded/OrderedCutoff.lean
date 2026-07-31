@@ -147,8 +147,12 @@ theorem kyFanApproximationGauge_le_of_leftCutoff_le
 
 omit [HasApproximationNumberStrongCutoff 𝕜] [HasKyFanApproximationGaugeTriangle 𝕜] in
 /-- Double spectral cutoff turns a domain-aware equation into an ordinary
-bounded equation between the filled truncations. -/
-theorem doubleGenuineCutoff_filled_sylvester_equation
+bounded equation between the filled truncations, parametrically in the cutoff
+and truncation interfaces.
+
+`doubleSpectralCutoff_filled_sylvester_equation` is the concrete instantiation at
+`spectralCutoff` and `boundedSpectralTruncation`. -/
+theorem doubleCutoff_filled_sylvester_equation
     {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
@@ -282,7 +286,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
     filledTruncation_upperBound B hB PCB TCB hτB hBc
   have hEqCut : AF ∘L Xc - Xc ∘L BF = Cc := by
     simpa only [AF, BF, Xc, Cc] using
-      doubleGenuineCutoff_filled_sylvester_equation hA hB PCA TCA PCB TCB hEq
+      doubleCutoff_filled_sylvester_equation hA hB PCA TCA PCB TCB hEq
         (c + δ) c τA τB
   let B0 : F →L[𝕜] F :=
     BF - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 F
@@ -390,7 +394,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
     filledTruncation_lowerBound B hB PCB TCB hτB hBc
   have hEqCut : AF ∘L Xc - Xc ∘L BF = Cc := by
     simpa only [AF, BF, Xc, Cc] using
-      doubleGenuineCutoff_filled_sylvester_equation hA hB PCA TCA PCB TCB hEq
+      doubleCutoff_filled_sylvester_equation hA hB PCA TCA PCB TCB hEq
         c (c + δ) τA τB
   let A0 : E →L[𝕜] E :=
     AF - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E

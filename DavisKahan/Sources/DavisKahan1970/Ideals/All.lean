@@ -12,6 +12,7 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtRealDescent
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor
 import DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence
 import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
+import DavisKahan.Sources.DavisKahan1970.Ideals.SequenceGauge
 import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormDefinite
 import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
 
