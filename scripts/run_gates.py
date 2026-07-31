@@ -5,16 +5,19 @@
 wrong differently** -- which is finding AT-6 in `dev/audit/review-audit-tail.md`,
 and which this script exists to end.
 
-The classes, measured rather than tabulated (2026-07-31, 27 gates):
+The classes, measured rather than tabulated (2026-07-31, 29 gates):
 
   * **9 are soft** -- they print the finding and `return 1 if args.check else 0`,
     so without the flag a defect is indistinguishable from a clean run.
-  * **3 accept `--check`** and are strict either way.
-  * **15 take no `--check` at all** and are always strict.
-  * **1 is advisory** -- see `ADVISORY`.
+  * **4 accept `--check`** and are strict either way.
+  * **16 take no `--check` at all** and are always strict.
+  * **2 are advisory** -- see `ADVISORY`.
   * **1 accepts `--check` and is deliberately not given it** -- see
     `CHECK_IS_STRONGER`, which is where deriving the classification from
     `argparse` stops being enough.
+
+  (`--list` prints the current split; the counts above are a snapshot and the
+  classification itself is always derived, never read from this comment.)
 
 So the naive runner -- pass `--check` to everything -- is *worse than no runner*:
 fourteen gates die with `unrecognized arguments: --check`, turning fourteen
@@ -105,6 +108,10 @@ SLOW = {
 #: Wiring it into the runner as a gate contradicted its own documentation within
 #: an hour of writing it.  A rename is not a defect and never becomes one.
 ADVISORY = {
+    "check_inline_duplicates":
+        "reports inline `have` steps that may be re-proving an existing lemma; it "
+        "cannot elaborate, so every finding is a candidate for a human to confirm, "
+        "and a `have` may legitimately restate a global fact in a usable form",
     "check_merge_losses":
         "reports every declaration a merge dropped, which includes every rename "
         "and every deliberate retirement; the list is for a human to adjudicate",
