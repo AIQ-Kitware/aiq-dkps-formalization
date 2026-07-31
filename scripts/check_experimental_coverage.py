@@ -65,8 +65,13 @@ EXCLUDED: dict[str, str] = {
         "17 errors against a drifted block API.",
     "DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner":
         "8 errors against a drifted Ky Fan API.",
-    "DavisKahan.Experimental.MathAhead.HiddenFoundations.ContourReuseBridge":
-        "7 errors against a drifted contour API.",
+    "DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry":
+        "21 errors against drifted Mathlib: `Continuous.ofReal` and "
+        "`HasFDerivAtFilter.ofReal` are gone, and "
+        "`circleIntegral_sub_center_inv_smul_of_differentiable_on_off_countable` has "
+        "renamed arguments.  **Newly visible on 2026-07-31**: it inherited its exclusion "
+        "from `ContourReuseBridge` until that was repaired, and repairing one module is "
+        "what exposed the next.",
     "DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.OperatorAbsoluteValueComplex":
         "KyFanDominantIdealFamily.gaugeReal no longer exists.",
     "DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.ReflectionTransport":
