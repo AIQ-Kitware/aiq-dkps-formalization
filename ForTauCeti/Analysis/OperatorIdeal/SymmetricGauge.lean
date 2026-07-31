@@ -442,6 +442,52 @@ noncomputable def schattenGauge (p : ℝ) (hp : 1 ≤ p) : SymmetricGauge where
     rw [lpGaugeFinsupp]
     simp [NNReal.one_rpow, one_div]
 
+/-- Every entry is below the gauge. -/
+theorem le_lpGaugeFinsupp {p : ℝ} (hp : 0 < p) (a : ℕ →₀ ℝ≥0) (n : ℕ) :
+    a n ≤ lpGaugeFinsupp p a := by
+  classical
+  by_cases hn : n ∈ a.support
+  · have hterm : a n ^ p ≤ ∑ m ∈ a.support, a m ^ p :=
+      Finset.single_le_sum (f := fun m => a m ^ p) (fun _ _ => zero_le) hn
+    have := NNReal.rpow_le_rpow hterm (by positivity : (0:ℝ) ≤ 1 / p)
+    rwa [← NNReal.rpow_mul, mul_one_div_cancel hp.ne', NNReal.rpow_one] at this
+  · have h0 : a n = 0 := by simpa using hn
+    rw [h0]
+    exact zero_le
+
+/-- **The `ℓᵖ` scale is antitone in `p`.**
+
+Not available from Mathlib for the counting measure: `eLpNorm` comparison needs a
+probability measure, which is the opposite normalisation.  The direct argument is
+short — every entry is below `M = Φ_p a`, so `aₙ ^ q ≤ aₙ ^ p * M ^ (q - p)`, and
+summing gives `Φ_q a ^ q ≤ M ^ q`. -/
+theorem lpGaugeFinsupp_antitone {p q : ℝ} (hp : 0 < p) (hpq : p ≤ q)
+    (a : ℕ →₀ ℝ≥0) : lpGaugeFinsupp q a ≤ lpGaugeFinsupp p a := by
+  classical
+  have hq : (0 : ℝ) < q := hp.trans_le hpq
+  set M : ℝ≥0 := lpGaugeFinsupp p a with hM
+  -- Each term of the `q`-sum is bounded using `aₙ ≤ M`.
+  have hterm : ∀ n ∈ a.support, a n ^ q ≤ a n ^ p * M ^ (q - p) := by
+    intro n _
+    have han : a n ≤ M := le_lpGaugeFinsupp hp a n
+    calc a n ^ q = a n ^ p * a n ^ (q - p) := by
+          rw [← NNReal.rpow_add' (by linarith)]
+          ring_nf
+      _ ≤ a n ^ p * M ^ (q - p) :=
+          mul_le_mul' le_rfl (NNReal.rpow_le_rpow han (by linarith))
+  have hsum : ∑ n ∈ a.support, a n ^ q ≤ M ^ q := by
+    refine (Finset.sum_le_sum hterm).trans ?_
+    rw [← Finset.sum_mul]
+    have hMp : (∑ n ∈ a.support, a n ^ p) = M ^ p := by
+      rw [hM, lpGaugeFinsupp, ← NNReal.rpow_mul, one_div,
+        inv_mul_cancel₀ hp.ne', NNReal.rpow_one]
+    rw [hMp, ← NNReal.rpow_add' (by linarith)]
+    ring_nf
+    exact le_rfl
+  calc lpGaugeFinsupp q a = (∑ n ∈ a.support, a n ^ q) ^ (1 / q) := rfl
+    _ ≤ (M ^ q) ^ (1 / q) := NNReal.rpow_le_rpow hsum (by positivity)
+    _ = M := by rw [← NNReal.rpow_mul, mul_one_div_cancel hq.ne', NNReal.rpow_one]
+
 /-! ### Restriction to `Fin n`
 
 The bridge to `TauCeti.FiniteSymmetricGauge`, which is what lets the finite
@@ -984,6 +1030,22 @@ B3's reconciliation obligation; nothing here claims it. -/
 noncomputable def schattenFamily (p : ℝ) (hp : 1 ≤ p) :
     TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜 :=
   symmetricGaugeFamily.{u, u} 𝕜 (schattenGauge p hp)
+
+/-- **The Schatten scale is antitone in `p`**, hence the ideals nest.
+
+`extend` is a supremum over truncations of the *same* sequence, so the pointwise
+comparison of the two gauges on each truncation is all that is needed — the
+finite content is `lpGaugeFinsupp_antitone`. -/
+theorem gauge_schattenFamily_antitone {p q : ℝ} (hp : 1 ≤ p) (hq : 1 ≤ q)
+    (hpq : p ≤ q) {E F : Type u}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (T : E →L[𝕜] F) :
+    (schattenFamily.{u} (𝕜 := 𝕜) q hq).gauge T
+      ≤ (schattenFamily.{u} (𝕜 := 𝕜) p hp).gauge T := by
+  simp only [schattenFamily, symmetricGaugeFamily, symmetricGaugeENorm, extend]
+  refine iSup_mono fun k => iSup_mono fun m => ?_
+  exact_mod_cast lpGaugeFinsupp_antitone (zero_lt_one.trans_le hp) hpq _
 
 end Calkin
 
