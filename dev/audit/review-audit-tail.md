@@ -143,6 +143,44 @@ strict by default and add `--report` for the soft form, or add one runner that
 passes `--check` to all of them. The first is better — the default should be the
 safe one.
 
+> **CLOSED 2026-07-31 by `{lane:BUILD-STALE}`, and both halves of that last
+> sentence were wrong.** `scripts/run_gates.py` exists; the numbers above are
+> superseded and the recommended fix was the worse of the two.
+>
+> **The counts have moved: 27 gates, not 20 — 9 soft, not 6.** Three soft gates
+> were added after this was written, two of them by the author of this document,
+> which is the ordinary way a hand-written count decays.
+>
+> **"Add one runner that passes `--check` to all of them" would have made things
+> worse.** Fourteen gates take no `--check` at all and die with `unrecognized
+> arguments`, so that runner turns fourteen passing checks red while saying
+> nothing about the nine that matter. Both naive runners were tried in one
+> session — the other, passing nothing, silently accepts every finding the nine
+> report.
+>
+> **"Make the six strict by default" is a nine-file change with nine chances to
+> alter behaviour, and it buys nothing the runner does not.** With `--check`
+> passed wherever it is accepted, every gate is strict at the point of use, and
+> no gate script changes. The classification is *derived* — the runner reads each
+> script's own `argparse` — because a hand-kept table of which gates take the
+> flag is a second thing to keep in sync, and that is the failure this whole
+> audit spent the day repairing.
+>
+> **A fourth class had to be invented within the hour, and the author's own gate
+> forced it.** `check_merge_losses` reports every declaration a merge dropped,
+> which includes every legitimate rename; its own docstring says `--check` is
+> "for a human after a merge session and not for a hook". Wiring it in as a gate
+> contradicted its documentation immediately, so `run_gates.py` has an `ADVISORY`
+> set: run, reported in full, cannot fail the run.
+>
+> **The runner immediately surfaced a real finding that had been invisible for as
+> long as `check_namespace_policy` had been soft** — `CourantFischer.lean`
+> declares into `Finset`. Adjudicated and permitted: `Finset.card_filter_lt` is
+> the filter form of `Fin.card_Iio`, which Mathlib lacks, and it exists precisely
+> because two modules each carried a `private` copy *differing only by a prime on
+> the name*. Which is this session's most repeated finding, arriving one last
+> time through the gate that AT-6 was written about.
+
 ## No finding
 
 `Sylvester/Spectrum.lean` (573 lines, 12 declarations), `Sylvester/-
