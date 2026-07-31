@@ -69,7 +69,7 @@ theorem specProjection_eq_zero_of_norm_resolvent_mul_lt_one
     specProjection hA B hB = 0 := by
   refine ContinuousLinearMap.ext fun y => ?_
   set x : H := specProjection hA B hB y with hxdef
-  have hxrange : x ∈ specRange hA B hB := ⟨y, rfl⟩
+  have hxrange : x ∈ specRange hA B hB := specProjection_mem_specRange hA B hB y
   have hmem : x ∈ A.domain :=
     mem_domain_of_mem_specRange_of_bounded hA B hB hbnd hxrange
   have hb : ‖A ⟨x, hmem⟩ - (c : ℂ) • x‖ ≤ r * ‖x‖ :=
