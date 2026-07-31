@@ -7,6 +7,7 @@ import ForTauCeti.Analysis.Normed.FiniteLpGauge
 import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
 import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
 import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy
+import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
 import ForTauCeti.Analysis.InnerProductSpace.SingularSystem
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
 
@@ -235,7 +236,71 @@ theorem norm_finiteBasisInclusion_apply {ι : Type*} (b : HilbertBasis ι 𝕜' 
   have h2 : 0 ≤ ‖x‖ := norm_nonneg _
   nlinarith [hsq, h1, h2]
 
+/-- The orthogonal projection onto the span of a finite slice of a Hilbert basis, written as
+a finite sum so that continuity is free. -/
+noncomputable def basisTruncation {ι : Type*} (b : HilbertBasis ι 𝕜' G) (s : Finset ι) :
+    G →L[𝕜'] G :=
+  ∑ i ∈ s, (innerSL 𝕜' (b i)).smulRight (b i)
+
+omit [CompleteSpace G] in
+/-- The truncation in coordinates. -/
+theorem basisTruncation_apply {ι : Type*} (b : HilbertBasis ι 𝕜' G) (s : Finset ι) (x : G) :
+    basisTruncation b s x = ∑ i ∈ s, ⟪b i, x⟫_𝕜' • b i := by
+  simp [basisTruncation]
+
+omit [CompleteSpace G] in
+/-- The truncation fixes the selected basis vectors and kills the rest — so its complement
+`1 - basisTruncation b s` does the opposite, which is what makes the tail estimate below a
+statement about the *unselected* part of the energy. -/
+theorem basisTruncation_apply_basis {ι : Type*} [DecidableEq ι] (b : HilbertBasis ι 𝕜' G)
+    (s : Finset ι) (j : ι) :
+    basisTruncation b s (b j) = if j ∈ s then b j else 0 := by
+  classical
+  rw [basisTruncation_apply]
+  by_cases hj : j ∈ s
+  · rw [if_pos hj, Finset.sum_eq_single j]
+    · rw [orthonormal_iff_ite.mp b.orthonormal, if_pos rfl, one_smul]
+    · intro i _ hij
+      rw [orthonormal_iff_ite.mp b.orthonormal, if_neg hij, zero_smul]
+    · intro h; exact absurd hj h
+  · rw [if_neg hj, Finset.sum_eq_zero]
+    intro i hi
+    rw [orthonormal_iff_ite.mp b.orthonormal, if_neg (by rintro rfl; exact hj hi), zero_smul]
+
+
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace 𝕜' H] [CompleteSpace H]
+
+omit [CompleteSpace G] [CompleteSpace H] in
+/-- **The energy of the truncation error is the unselected part of the energy.**
+
+`1 - basisTruncation b s` kills the selected basis vectors and fixes the rest, so composing
+`T` with it leaves exactly the terms outside `s`. -/
+theorem hilbertSchmidtEnergy_comp_one_sub_basisTruncation {ι : Type*} [DecidableEq ι]
+    (T : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) (s : Finset ι) :
+    (T ∘L (1 - basisTruncation b s)).hilbertSchmidtEnergy b =
+      ∑' i, if i ∈ s then 0 else ‖T (b i)‖ₑ ^ 2 := by
+  rw [hilbertSchmidtEnergy]
+  refine tsum_congr fun i => ?_
+  rw [ContinuousLinearMap.comp_apply, sub_apply, one_apply_eq_self,
+    basisTruncation_apply_basis]
+  by_cases hi : i ∈ s <;> simp [hi]
+
+/-- **The truncation error is bounded by the tail of the energy.**
+
+The operator norm of any operator is at most its Hilbert--Schmidt norm, and the
+Hilbert--Schmidt norm of the truncation error is the tail computed above.  This is the one
+estimate the reverse inequality needs that the forward one does not. -/
+theorem enorm_comp_one_sub_basisTruncation_sq_le {ι : Type*} [DecidableEq ι]
+    (T : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) (s : Finset ι) :
+    ‖T ∘L (1 - basisTruncation b s)‖ₑ ^ 2 ≤
+      ∑' i, if i ∈ s then 0 else ‖T (b i)‖ₑ ^ 2 := by
+  calc ‖T ∘L (1 - basisTruncation b s)‖ₑ ^ 2
+      ≤ (T ∘L (1 - basisTruncation b s)).hilbertSchmidtENorm ^ 2 :=
+        pow_le_pow_left' (enorm_le_hilbertSchmidtENorm _) 2
+    _ = (T ∘L (1 - basisTruncation b s)).hilbertSchmidtEnergy b :=
+        hilbertSchmidtENorm_sq _ b
+    _ = _ := hilbertSchmidtEnergy_comp_one_sub_basisTruncation T b s
+
 
 -- `G`'s completeness is carried by the `HilbertBasis` argument rather than used again, and
 -- the target's is not needed at all: the range factored through is finite-dimensional, so its
