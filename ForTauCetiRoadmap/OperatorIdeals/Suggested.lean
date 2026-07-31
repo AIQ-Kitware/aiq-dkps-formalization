@@ -201,6 +201,7 @@ normalized gauge on finitely supported nonnegative sequences.
 `symm` is stated against `Equiv.Perm ℕ` acting by precomposition on the finitely
 supported sequence, which is what makes "symmetric" a property of `Φ` rather than a
 property of the sequences it is applied to. -/
+-- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.SymmetricGauge`
 structure SymmetricGauge where
   /-- The underlying gauge on finitely supported nonnegative sequences. -/
   toFun : (ℕ →₀ ℝ≥0) → ℝ≥0
@@ -224,10 +225,12 @@ rearrangement.
 **A supremum, not a `tsum`.**  The gauge must be total and genuinely `∞` off its
 ideal, and a supremum of an increasing net is total by construction; any route
 through summability reintroduces the side conditions the interface avoids. -/
+-- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.SymmetricGauge`
 noncomputable def SymmetricGauge.extend (Φ : SymmetricGauge) (a : ℕ → ℝ≥0∞) : ℝ≥0∞ :=
   sorry
 
 /-- Both ends of the scale, and the reason the normalization is not a restriction. -/
+-- DELIVERED: `ForTauCeti.Analysis.OperatorIdeal.SymmetricGauge`
 theorem SymmetricGauge.iSup_le_extend_le_tsum (Φ : SymmetricGauge) (a : ℕ → ℝ≥0∞) :
     (⨆ n, a n) ≤ Φ.extend a ∧ Φ.extend a ≤ ∑' n, a n := sorry
 
