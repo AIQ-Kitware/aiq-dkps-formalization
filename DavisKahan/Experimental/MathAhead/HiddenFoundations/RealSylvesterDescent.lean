@@ -97,7 +97,8 @@ theorem isUnit_of_isUnit_complexify
   let Rr : E →L[ℝ] E :=
     RrLinear.mkContinuous ‖R‖ (fun x => by
       calc
-        ‖RrLinear x‖ ≤ ‖R (ofReal x)‖ := norm_re_le _
+        ‖RrLinear x‖ ≤ ‖R (ofReal x)‖ :=
+          TauCeti.DavisKahan.Experimental.Foundation.RealComplexification.norm_re_le _
         _ ≤ ‖R‖ * ‖ofReal x‖ := R.le_opNorm _
         _ = ‖R‖ * ‖x‖ := by rw [ofReal.norm_map])
   have hleftC : complexify T ∘L R = 1 := by

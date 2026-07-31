@@ -316,29 +316,9 @@ private theorem conjugateOperator_cfc_eq
 
 /-! ## Descent of conjugation-fixed operators -/
 
-omit [InnerProductSpace ℝ E] [CompleteSpace E] in
-private theorem norm_re_le (z : RealComplexification E) : ‖re z‖ ≤ ‖z‖ := by
-  rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), norm_sq]
-  nlinarith [sq_nonneg ‖im z‖]
-
-/-- Restrict a complex operator to the real copy and take its real coordinate. -/
-private noncomputable def realPartOperator
-    (A : RealComplexification E →L[ℂ] RealComplexification E) :
-    E →L[ℝ] E := by
-  let L : E →ₗ[ℝ] E :=
-    { toFun := fun x => re (A (ofReal x))
-      map_add' := fun x y => by simp
-      map_smul' := fun r x => by simp }
-  exact L.mkContinuous ‖A‖ fun x => by
-    calc
-      ‖re (A (ofReal x))‖ ≤ ‖A (ofReal x)‖ := norm_re_le _
-      _ ≤ ‖A‖ * ‖ofReal x‖ := A.le_opNorm _
-      _ = ‖A‖ * ‖x‖ := by rw [ofReal.norm_map]
-
-omit [CompleteSpace E] in
-@[simp]
-private theorem realPartOperator_apply (A : RealComplexification E →L[ℂ] RealComplexification E) (x : E) :
-    realPartOperator A x = re (A (ofReal x)) := rfl
+/-! `norm_re_le`, `realPartOperator` and `realPartOperator_apply` were `private` copies here of the
+`Foundation.RealComplexification` declarations, which this module already opens.  Being `private`
+they were invisible to every duplication gate the repository runs — see lane `{lane:CPLX-DEDUP}`. -/
 
 omit [CompleteSpace E] in
 private theorem fixed_operator_maps_real_to_real

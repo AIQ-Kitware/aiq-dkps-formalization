@@ -5,7 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Unbounded.Core
 import DavisKahan.SinTheta.Unbounded.IntervalExterior
-import DavisKahan.SinTheta.Canonical
 import DavisKahan.Sylvester.Unbounded.AllGap
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
@@ -20,12 +19,6 @@ unbounded development.
 
 No continuation, graph-selection, Riccati, Section 8, aggregate, or public
 facade file is imported or modified here.
-
-`SinTheta/Canonical.lean` **is** imported, and the direction is deliberate: the
-form-bounded package there is the more general of the two, so
-`SpectralGeneralSinThetaProblem.result` is a corollary of the form-bounded
-endpoint and the corollary has to see what it is a corollary of.  Nothing in
-`Canonical.lean`'s import cone reaches this module, so the edge is acyclic.
 -/
 
 open scoped InnerProductSpace
@@ -262,120 +255,6 @@ theorem sinTheta_unbounded_exact_of_spectrumGap
   rw [hAngle.2]
   exact hRaw.2.trans hC.2
 
-/-- Complete source-shaped input package for the generalized all-gap theorem,
-with the spectral gap stated as `SpectralSylvesterGap`.
-
-`FormBoundedGeneralSinThetaProblem` is the same package over the form-bounded
-gap, and is the more general of the two: `formBoundedSylvesterGap_of_spectral`
-builds it from this one, so `result` here is a corollary of `result` there.
-`SinTheta/Canonical.lean` records the details. -/
-structure SpectralGeneralSinThetaProblem
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
-  data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
-  exactMap : H →L[ℂ] E
-  ambient_selfAdjoint : data.A.IsSelfAdjoint
-  trial_selfAdjoint : data.A₀.IsSelfAdjoint
-  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
-  exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
-  gap : ℝ
-  frameLowerBound : ℝ
-  gap_pos : 0 < gap
-  frameLowerBound_pos : 0 < frameLowerBound
-  lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : SpectralSylvesterGap data.A₀ data.Λ₁ gap
-  residual_mem : N.Mem data.residual
-
-namespace SpectralGeneralSinThetaProblem
-
-/-- **Every spectral package is a form-bounded package.**  Only the gap field
-changes, by `formBoundedSylvesterGap_of_spectral`, which transports the spectral
-gap in all three configurations; every other field is carried across unchanged.
-
-This is what makes the redundancy of the two packages a *theorem* rather than an
-observation, and it is why `result` below is a corollary rather than a second
-derivation.  The converse does not exist: recovering a spectral containment from
-a form bound is the half of the spectral theorem this tree does not have, so the
-redundancy runs one way only. -/
-def toFormBounded
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (P : SpectralGeneralSinThetaProblem (E := E) (F := F)
-      (G := G) (H := H) N) :
-    FormBoundedGeneralSinThetaProblem (E := E) (F := F)
-      (G := G) (H := H) N where
-  data := P.data
-  exactMap := P.exactMap
-  ambient_selfAdjoint := P.ambient_selfAdjoint
-  trial_selfAdjoint := P.trial_selfAdjoint
-  complement_selfAdjoint := P.complement_selfAdjoint
-  exact_decomposition := P.exact_decomposition
-  gap := P.gap
-  frameLowerBound := P.frameLowerBound
-  gap_pos := P.gap_pos
-  frameLowerBound_pos := P.frameLowerBound_pos
-  lowerFrame := P.lowerFrame
-  spectral_gap :=
-    formBoundedSylvesterGap_of_spectral P.trial_selfAdjoint
-      P.complement_selfAdjoint P.spectral_gap
-  residual_mem := P.residual_mem
-
-/-- Source-shaped generalized spectral all-gap endpoint, as a corollary of the
-form-bounded endpoint at `P.toFormBounded`.  The statement is unchanged: the
-conversion touches no field the conclusion mentions. -/
-theorem result
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (P : SpectralGeneralSinThetaProblem (E := E) (F := F)
-      (G := G) (H := H) N) :
-    N.Mem
-        (directedSinThetaOperator P.data.X P.exactMap
-          P.lowerFrame P.frameLowerBound_pos) ∧
-      P.gap * P.frameLowerBound *
-          N.gauge
-            (directedSinThetaOperator P.data.X P.exactMap
-              P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.gauge P.data.residual :=
-  FormBoundedGeneralSinThetaProblem.result N (P.toFormBounded N)
-
-end SpectralGeneralSinThetaProblem
-
-/-- Complete source-shaped input package for the isometric all-gap theorem, with
-the spectral gap stated as `SpectralSylvesterGap`.
-
-This package is `ℂ`-only; `FormBoundedIsometricSinThetaProblem` is the
-`RCLike`-generic form-bounded counterpart. -/
-structure SpectralIsometricSinThetaProblem
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
-  data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
-  exactMap : H →L[ℂ] E
-  ambient_selfAdjoint : data.A.IsSelfAdjoint
-  trial_selfAdjoint : data.A₀.IsSelfAdjoint
-  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
-  trial_isometry : IsometricEmbedding data.X
-  exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
-  gap : ℝ
-  gap_pos : 0 < gap
-  spectral_gap : SpectralSylvesterGap data.A₀ data.Λ₁ gap
-  residual_mem : N.Mem data.residual
-
-namespace SpectralIsometricSinThetaProblem
-
-/-- Source-shaped isometric spectral all-gap endpoint. -/
-theorem result
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (P : SpectralIsometricSinThetaProblem (E := E) (F := F)
-      (G := G) (H := H) N) :
-    N.Mem
-        ((ContinuousLinearMap.id ℂ E -
-          P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X) ∧
-      P.gap * N.gauge
-          ((ContinuousLinearMap.id ℂ E -
-            P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X)
-        ≤ N.gauge P.data.residual :=
-  sinTheta_unbounded_exact_of_spectrumGap
-    N P.data P.exactMap P.ambient_selfAdjoint P.trial_selfAdjoint
-      P.complement_selfAdjoint P.trial_isometry P.exact_decomposition
-      P.gap_pos P.spectral_gap P.residual_mem
-
-end SpectralIsometricSinThetaProblem
 
 end ExactSinTheta
 end Experimental
