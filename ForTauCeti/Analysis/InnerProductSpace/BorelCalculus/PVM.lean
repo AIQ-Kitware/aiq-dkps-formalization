@@ -101,8 +101,8 @@ the relabelled diagonal measure gives to the set. -/
 theorem inner_specProj_self (B : Set ℝ) (hB : MeasurableSet B) (ξ : H) :
     ⟪ξ, specProj ha hκ B hB ξ⟫_ℂ = (((specDiag ha κ ξ) B).toReal : ℂ) := by
   rw [specProj, inner_borelCalculus_self, integral_indicator_const _ (hκ hB),
-    specDiag, Measure.map_apply hκ hB, Complex.real_smul, mul_one,
-    MeasureTheory.measureReal_def]
+    specDiag, Measure.map_apply hκ hB]
+  simp [Complex.real_smul, MeasureTheory.measureReal_def]
 
 /-- The whole line carries the identity. -/
 theorem specProj_univ :

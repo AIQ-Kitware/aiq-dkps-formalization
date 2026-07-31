@@ -164,7 +164,7 @@ theorem notMem_spectrum_resolvent {A : E →ₗ.[𝕜] E} {z : 𝕜}
   -- `R (T φ) = μ⁻¹ • S φ`, the one computation both directions rest on.
   have hRT : ∀ φ : E, R (T φ) = μ⁻¹ • S φ := by
     intro φ
-    rw [hTapp, map_smul, map_add, map_smul, hRS φ, smul_smul, hinv', one_smul]
+    simp only [hTapp, map_smul, map_add, hRS φ, smul_smul, hinv', one_smul]
     module
   have hleft : (algebraMap 𝕜 (E →L[𝕜] E) μ - R) * T = 1 := by
     refine ContinuousLinearMap.ext fun φ => ?_
