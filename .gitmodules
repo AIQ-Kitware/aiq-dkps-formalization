@@ -1,3 +1,9 @@
 [submodule "external/TauCeti"]
 	path = external/TauCeti
 	url = https://github.com/TauCetiProject/TauCeti.git
+[submodule "submodules/TauCetiRoadmap"]
+	path = submodules/TauCetiRoadmap
+	url = https://github.com/TauCetiProject/TauCetiRoadmap.git
+[submodule "submodules/TauCetiReview"]
+	path = submodules/TauCetiReview
+	url = https://github.com/TauCetiProject/TauCetiReview.git
