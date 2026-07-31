@@ -160,17 +160,10 @@ theorem posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self
     (B.PosSemidef ∧ B.rank ≤ d) ↔ ∃ A : Matrix (Fin d) (Fin n) 𝕜, B = Aᴴ * A
 ```
 
-<<<<<<< HEAD
-**Milestone A2 — uniqueness up to the obvious action.** This is what a reviewer asks
-immediately after seeing an existence iff, and it is the difference between a
-*factorization theorem* and an existence lemma.  Two statements, and the hypotheses
-differ in a way that is easy to get wrong:
-=======
 **Milestone A2 — uniqueness up to the obvious action** (open, and now specified). This is
 what a reviewer asks immediately after seeing an existence iff, and it is the difference
 between a *factorization theorem* and an existence lemma.  Two statements, whose acting
 groups differ in a way that is easy to get wrong:
->>>>>>> origin/namek-work
 
 ```lean
 -- rank factorization at the exact rank: unique up to a change of basis of the
@@ -214,14 +207,11 @@ recorded because it is the one hypothesis a reader is most likely to drop.)*
 recovers points from a Gram matrix; the recovered configuration is meaningful only up to a
 rigid motion, and `A' = U * A` is exactly that indeterminacy.  A statement quantified the
 other way — a unitary on the `n` side — would be false and would look plausible.
-<<<<<<< HEAD
-=======
 
 **Decided.** Existence over the group rather than a quotient type; minimal rank only.
 **Open.** Whether the Gram statement wants `unitaryGroup` or a bundled
 `LinearIsometryEquiv` — the answer depends on which the eventual consumer holds, and there
 is no consumer yet, so it is not decided here.
->>>>>>> origin/namek-work
 
 **Acceptance examples.** The Gram matrix of `n` explicit points in `𝕜^d` has rank `≤ d`;
 a diagonal PSD matrix factors through its number of nonzero entries; the easy direction
@@ -270,11 +260,7 @@ theorem continuous_iInf_of_isCompact
     Continuous (fun p => ⨅ x : ↥K, g p ↑x)
 ```
 
-<<<<<<< HEAD
-**Milestone B3 — the classical theorem: a varying constraint correspondence.** This is the
-=======
 **Milestone B3 — the classical theorem: a varying constraint correspondence** (open, and now specified). This is the
->>>>>>> origin/namek-work
 classical statement's actual generality and the first thing a reviewer who knows Berge will
 ask for.  **The fixed-constraint case above is a special case of it, not a step toward
 it** — the engine that proves the fixed case does not generalize by adding a hypothesis,
@@ -323,15 +309,9 @@ hemicontinuity of `Γ`, and each half is provable on its own.  A roadmap that as
 "Berge's theorem" as a single target hides that it is two independent lemmas with opposite
 hypotheses — and hides that half of it is already available from Milestone B2.
 
-<<<<<<< HEAD
-**Scope, honestly.**  Only the lower-hemicontinuity half and the correspondence vocabulary
-are genuinely new; if Mathlib has since acquired either, this milestone shrinks to a
-connection layer, and checking that is the first step rather than a formality.
-=======
 **Scope, honestly.**  The vocabulary is upstream, so what is genuinely new here is the two
 theorems above and nothing else — this milestone is smaller than it looks, and mistaking it
 for "define hemicontinuity, then prove Berge" is what makes it look large.
->>>>>>> origin/namek-work
 
 **Declarations.** `continuous_iInf_of_hemicontinuous` for the value half over a varying
 `K : P → Set X`, and `upperHemicontinuousAt_isMinOn_of_hemicontinuous` for the argmin
@@ -371,12 +351,9 @@ symmetry via `Matrix.isSymmetric_toEuclideanLin_iff`); the decreasingly sorted s
 - **Norm comparisons** (gap 1): `sum_norm_le_sqrt_card_mul_norm`
   (`ℓ¹ ≤ √card · ℓ²` on `EuclideanSpace`) and `norm_toEuclideanLin_le_of_entry_le`
   (`∀ i j, |A i j| ≤ ε` gives `‖toEuclideanLin A x‖ ≤ n · ε · ‖x‖`). The factor `n` is
-<<<<<<< HEAD
-=======
 - **Norm comparisons** (gap 1): `sum_norm_le_sqrt_card_mul_norm`
   (`ℓ¹ ≤ √card · ℓ²` on `EuclideanSpace`) and `norm_toEuclideanLin_le_of_entry_le`
   (`∀ i j, |A i j| ≤ ε` gives `‖toEuclideanLin A x‖ ≤ n · ε · ‖x‖`). The factor `n` is
->>>>>>> origin/namek-work
   what a statistician pays and must stay visible.
 
   **Exactly one of the two is open.**  `sum_norm_le_sqrt_card_mul_norm` is *already* stated
@@ -415,17 +392,10 @@ symmetry via `Matrix.isSymmetric_toEuclideanLin_iff`); the decreasingly sorted s
 
   **The eigenvalue statements downstream stay real for now.**  `sortedEigenvalues` is built
   on `LinearMap.IsSymmetric.eigenvalues`, and generalizing the *spectral* layer is a
-<<<<<<< HEAD
-  different and larger question than generalizing these two norm inequalities.  Doing the
-  norm half alone is worthwhile because it is what the operator-norm deviation event
-  (Milestone D2) consumes, and it removes a `ℝ`-only hypothesis from the entry point of
-  the Part rather than from its interior.
-=======
   different and larger question than generalizing this one norm inequality.  Doing the norm
   half alone is worthwhile because it is what the operator-norm deviation event (Milestone
   D2) consumes, and it removes a `ℝ`-only hypothesis from the entry point of the Part
   rather than from its interior.
->>>>>>> origin/namek-work
 - **Entrywise eigenvalue perturbation**: Weyl's inequality (consumed from the
   FiniteDimensionalOperators roadmap, `abs_eigenvalue_sub_eigenvalue_le`) composed with
   the comparison gives `abs_sortedEigenvalues_sub_le_of_entry_le` — entrywise `ε`-close
@@ -633,14 +603,7 @@ Davis–Kahan/DKPS formalization repository (Kitware, Inc., Apache 2.0), under
 plus `ForTauCeti/MeasureTheory/Function/ConvergenceInMeasure.lean` and
 `ForTauCeti/MeasureTheory/Measure/Typeclasses/Probability.lean`; Part D ↔
 `ForTauCeti/Probability/Moments/{Variance,SampleMean,SampleCovariance,CenteredScatter,MatrixConcentration}.lean`.
-<<<<<<< HEAD
-Milestones A2, B3, C1's `RCLike` comparisons, and D2 are open (not staged) — **all four
-were specified in full on 2026-07-31**, with statements and the reasons each is not a
-corollary of its neighbour; before that they were named but not written down, which is the
-one thing a roadmap may not do with its own open work. Decision
-=======
 Milestones A2, B3, C1's `RCLike` comparisons, and D2 are open (not staged) and, since 2026-07-31, **specified**: each names its declarations, its route, and what is decided versus still open, and each has a representative signature in `Suggested.lean` that elaborates under `lake build ForTauCetiRoadmap`. Four findings came out of writing them down rather than out of proving anything. **A2 is false above minimal rank** — at `r > M.rank` the extra columns are unconstrained, so the statement carries `r = M.rank` and not the `≤ r` of A1. **B3's two halves need different hypotheses on the constraint correspondence**, which is why the fixed-constraint case is a special case and not a step toward it. **C1's `RCLike` gap is one declaration, not two** — `sum_norm_le_sqrt_card_mul_norm` is already general — and it *does* transport: `toEuclideanLin` is `𝕜`-linear with no conjugation, so both constants survive, which is the opposite of what the first draft of this paragraph said and was settled against the pinned Mathlib signature. **D2 needs no new probability**, only that the entrywise event be factored out of the eigenvalue theorem first; in the other order the Chebyshev-plus-union-bound argument gets written twice. **Two agents specified these four independently on the same day**, which is how three of the findings acquired a second witness and how the fourth was caught. Decision
->>>>>>> origin/namek-work
 records carried over: Parts A/B lived in the retired `ForMathlib` staging tree until
 2026-07-29 (lane FM-RETIRE, worked twice; the namespace reconciliation to `TauCeti.*` is
 recorded in `ForTauCeti/Topology/Berge.lean`); several Part A/B statements are pinned as
