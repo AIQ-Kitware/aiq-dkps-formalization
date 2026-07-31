@@ -82,6 +82,25 @@ globs = ["ForTauCeti.*"]
 # is a warning Tau Ceti's CI would reject.
 leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, weak.linter.style.longFile = 1500, weak.linter.style.longFileDefValue = 1500, weak.linter.style.header = false }
 
+# The roadmap's suggested-signature files.  A library rather than a gate script, for the
+# reason the defect record gives: they were broken for an unknown length of time -- ten
+# elaboration errors across three of the six -- because nothing built them, and a library
+# is the mechanism that makes `lake build` the signal instead of a separate command
+# nobody remembers to run.
+#
+# `warningAsError` is deliberately OFF, unlike the `ForTauCeti` block above.  Every
+# declaration in these files is a `sorry`: that is what a suggested signature *is*, and
+# turning "declaration uses `sorry`" into an error would make the library unbuildable by
+# construction.  The linters stay on, so a genuine style regression still shows up.
+#
+# Not in `defaultTargets`: these are drafts for a reviewer, not submission material, so
+# `lake build` with no argument leaves them alone.  Build them with
+# `lake build ForTauCetiRoadmap`.
+[[lean_lib]]
+name = "ForTauCetiRoadmap"
+globs = ["ForTauCetiRoadmap.*"]
+leanOptions = { warningAsError = false }
+
 [[lean_lib]]
 name = "DavisKahan"
 
