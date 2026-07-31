@@ -71,12 +71,12 @@ printed by the checker.
 | **T06** | Principal angles, aligned bases, and finite frames | 3 | T03, T04, T05 |
 | **T07** | Rectangular unitarily invariant norms | 6 | T03, T04, T05, T06 |
 | **T08** | Angle geometry and eigenvalue perturbation | 5 | T01, T02, T04, T05, T06, T07 |
-| **T09** | Approximation numbers | 20 | T01, T03, T05, T07 |
+| **T09** | Approximation numbers | 21 | T01, T03, T05, T07 |
 | **T10** | Symmetric operator ideals and Schatten norms | 9 | T05, T07, T09 |
 | **T11** | Hilbert–Schmidt operators | 4 | T10 |
 | **T12** | The Haagerup–Zsidó kernel and its Fourier transform | 8 | **— independent** |
 | **T13** | One-parameter unitary groups and Stone's theorem | 5 | **— independent** |
-| **T14** | Borel functional calculus and projection-valued measures | 10 | **— independent** |
+| **T14** | Borel functional calculus and projection-valued measures | 11 | **— independent** |
 | **T15a** | Closed operators on `LinearPMap`: graphs, constructions, form bounds | 7 | T04 |
 | **T15b** | Resolvents of self-adjoint `LinearPMap` operators, semiboundedness | 7 | **— independent** |
 | **T15c** | The spectral measure of an unbounded self-adjoint operator, and Stone | 13 | T09, T13, T14, T15a, T15b |
@@ -88,7 +88,7 @@ printed by the checker.
 | **T21** | Matrix rank factorization and positive semidefiniteness | 2 | **— independent** |
 | **T22** | Berge's maximum theorem and approximate minimizers | 2 | **— independent** |
 
-**176 modules.  This table is generated from
+**178 modules.  This table is generated from
 `scripts/check_tauceti_roadmap_topics.py --needs`, not maintained by hand**, and it was
 regenerated on 2026-07-31 because it had drifted from the gate that enforces it.  The
 drift is recorded rather than silently corrected, because two of the design's headline
@@ -99,7 +99,7 @@ claims moved:
   followed.  The split matters for submission order: **`T15b` is fully independent** —
   resolvents of self-adjoint partial maps need nothing accepted first — while `T15c`
   needs five topics including `T09`.
-- **T09 is 20 modules, not 11, and needs T05 as well.**  The document's headline finding
+- **T09 is 21 modules, not 11, and needs T05 as well.**  The document's headline finding
   — *"T09 needs only T01, T03 and T07"* — is no longer true; majorization (`T05`) entered
   its closure as the Ky Fan layer grew.  The correction is small in submission terms
   (`T05` is 5 modules and sits below `T07` anyway) but the sentence as written would
@@ -109,13 +109,19 @@ claims moved:
 
 Counts that moved without changing the shape: T02 5→6, T13 6→5, T16 15→18, T17 10→11.
 
+*Do not edit the counts or the `needs` column by hand: both are printed by
+`python3 scripts/check_tauceti_roadmap_topics.py --needs`, and the gate of the same
+name checks them against the import graph.  Reconciled again on 2026-07-31 after a
+three-way collision on this file, when T09 had moved 20 → 21, T14 10 → 11 and the
+total 176 → 178.*
+
 **This is a DAG, not a chain — that is the most useful property of the design.**
 The numbering is *a* valid submission order, but it is not the only one, and
 several topics need far less than their position suggests:
 
 - **Seven topics are fully independent** and can go first, in any order or at
   once: **T01**, **T12** (Haagerup–Zsidó, 8 modules), **T13** (Stone, 5),
-  **T14** (Borel calculus and PVMs, 10), **T15b** (resolvents of self-adjoint
+  **T14** (Borel calculus and PVMs, 11), **T15b** (resolvents of self-adjoint
   partial maps, 7), and the two ex-`ForMathlib` pairs **T21** and **T22**.
   Two of those seven are new since the design was written, and both are worth
   noticing: `T13` shed its `T02` dependency, and the `T15` split exposed `T15b`,
@@ -313,7 +319,10 @@ correction to the *reading* of where it belongs, not to the tree.
   The first real reviewer contact should be used to find out how much of
   T01–T08 is already upstream, because that is what determines whether T17 is 14
   topics away or four.
-- ~~**Whether T15 splits**, and where.~~ **Settled 2026-07-29 and now reflected in the table above: three topics, `T15a`/`T15b`/`T15c`.** Left in this list struck through rather than deleted, because the open-questions list is also a record of what got decided.
+- ~~**Whether T15 splits**, and where.~~  **Settled 2026-07-29 (lane `T15-SPLIT`):**
+  into T15a (closedness and graphs), T15b (resolvents and semiboundedness) and
+  T15c (the spectral measure and Stone), which is how the table above reads.  Left struck through rather than deleted,
+  because the open-questions list is also a record of what got decided.
 - **`M-SWITCH`** — how the clusters actually go upstream once a topic is
   accepted — is still open and still jon's call.
 - **Topic names.** These are ours, not Tau Ceti's. The `tauceti-target:v1`

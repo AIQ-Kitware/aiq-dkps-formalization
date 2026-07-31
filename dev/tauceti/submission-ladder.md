@@ -139,7 +139,7 @@ base Tau Ceti has already accepted.
   - `Analysis.OperatorIdeal.Family.OperatorNorm`
   - `Analysis.OperatorIdeal.Family.TraceClass`
 
-**Cumulative after F: 41 of 176 `ForTauCeti` modules.** Rungs A–F were the whole
+**Cumulative after F: 41 of 177 `ForTauCeti` modules.** Rungs A–F were the whole
 ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung G — Foundations completion — the rest of topics T01-T10
@@ -255,7 +255,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung N — The spectral measure of an unbounded self-adjoint operator, and Stone (T15c)
 
-**12 new, cumulative closed slice 129.**
+**13 new, cumulative closed slice 130.**
 
   - `Analysis.InnerProductSpace.BlockLowerBound`
   - `Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal`
@@ -269,10 +269,11 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `Analysis.InnerProductSpace.LinearPMap.SpectralSupport`
   - `Analysis.InnerProductSpace.LinearPMap.StoneUniqueness`
   - `Analysis.InnerProductSpace.LinearPMap.YosidaApproximation`
+  - `Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank`
 
 ### Rung O — Sylvester equations and the Rosenblum theorem (T16)
 
-**18 new, cumulative closed slice 147.**
+**18 new, cumulative closed slice 148.**
 
   - `Analysis.InnerProductSpace.CoerciveUnit`
   - `Analysis.InnerProductSpace.HilbertSchmidtBlock`
@@ -295,7 +296,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung P — Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems (T17)
 
-**11 new, cumulative closed slice 158.**
+**11 new, cumulative closed slice 159.**
 
   - `Analysis.InnerProductSpace.BoundedOperator.Projector`
   - `Analysis.InnerProductSpace.BoundedOperator.SinTheta`
@@ -311,7 +312,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung Q — The Yu-Wang-Samworth statistical variant (T18)
 
-**3 new, cumulative closed slice 161.**
+**3 new, cumulative closed slice 162.**
 
   - `Analysis.InnerProductSpace.YuWangSamworth.Residual`
   - `Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace`
@@ -319,7 +320,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung R — Matrix spectra and spectral measurability (T19)
 
-**6 new, cumulative closed slice 167.**
+**6 new, cumulative closed slice 168.**
 
   - `Analysis.Matrix.EntrywiseEigenvalue`
   - `Analysis.Matrix.EntrywiseOpNorm`
@@ -330,7 +331,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung S — Sample moments and matrix concentration (T20)
 
-**5 new, cumulative closed slice 172.**
+**5 new, cumulative closed slice 173.**
 
   - `Probability.Moments.CenteredScatter`
   - `Probability.Moments.MatrixConcentration`
@@ -340,18 +341,18 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung T — Matrix rank factorization and positive semidefiniteness (T21)
 
-**2 new, cumulative closed slice 174.**
+**2 new, cumulative closed slice 175.**
 
   - `LinearAlgebra.Matrix.PosDef`
   - `LinearAlgebra.Matrix.RankFactorization`
 
 ### Rung U — Berge's maximum theorem and approximate minimizers (T22)
 
-**2 new, cumulative closed slice 176.**
+**2 new, cumulative closed slice 177.**
 
   - `Topology.ApproxMinimizer`
   - `Topology.Berge`
-**Cumulative: 176 of 176 `ForTauCeti` modules — the ladder is total.**
+**Cumulative: 177 of 177 `ForTauCeti` modules — the ladder is total.**
 
 It briefly was not.  Three modules merged in after rung U closed on 2026-07-29
 and no rung's closure reached them; they were placed on 2026-07-30 by matching
