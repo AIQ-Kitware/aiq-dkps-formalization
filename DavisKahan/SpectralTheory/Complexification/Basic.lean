@@ -459,6 +459,32 @@ theorem norm_re_le [NormedAddCommGroup E] (z : RealComplexification E) :
   have h := norm_sq z
   nlinarith [norm_nonneg (re z), norm_nonneg (im z), norm_nonneg z]
 
+/-- **Restrict a bounded complex operator to the real copy and keep its real coordinate.**
+No invariance assumption is needed to define this map: the bound comes from `norm_re_le` and
+`ofReal.norm_map` alone.
+
+This is the canonical statement, stated between two spaces.  The endomorphism case is this one at
+`F := E`. -/
+noncomputable def realPartOperator [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    (T : RealComplexification E →L[ℂ] RealComplexification F) : E →L[ℝ] F := by
+  let L : E →ₗ[ℝ] F :=
+    { toFun := fun x => re (T (ofReal x))
+      map_add' := fun x y => by simp
+      map_smul' := fun r x => by simp }
+  exact L.mkContinuous ‖T‖ fun x => by
+    calc
+      ‖L x‖ ≤ ‖T (ofReal x)‖ := norm_re_le _
+      _ ≤ ‖T‖ * ‖ofReal x‖ := T.le_opNorm _
+      _ = ‖T‖ * ‖x‖ := by rw [ofReal.norm_map]
+
+/-- Pointwise formula for `realPartOperator`: embed, apply, take the real coordinate. -/
+@[simp]
+theorem realPartOperator_apply [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    (T : RealComplexification E →L[ℂ] RealComplexification F) (x : E) :
+    realPartOperator T x = re (T (ofReal x)) := rfl
+
 /-- Every vector is its real part plus `i` times its imaginary part. -/
 theorem eq_ofReal_add_I_smul_ofReal [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     (z : RealComplexification E) : z = ofReal (re z) + Complex.I • ofReal (im z) := by

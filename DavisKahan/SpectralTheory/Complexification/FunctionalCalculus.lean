@@ -337,31 +337,12 @@ theorem conjugateOperator_cfc_eq
 
 /-! ## Descent of conjugation-fixed operators -/
 
-omit [InnerProductSpace ℝ E] [CompleteSpace E] in
-/-- Taking the real coordinate of a complexified vector does not increase the norm. -/
-theorem norm_re_le (z : RealComplexification E) : ‖re z‖ ≤ ‖z‖ := by
-  rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), norm_sq]
-  nlinarith [sq_nonneg ‖im z‖]
+/-! ## Descent helpers live in `Complexification/Basic.lean`
 
-/-- Restrict a complex operator to the real copy and take its real coordinate. -/
-noncomputable def realPartOperator
-    (A : RealComplexification E →L[ℂ] RealComplexification E) :
-    E →L[ℝ] E := by
-  let L : E →ₗ[ℝ] E :=
-    { toFun := fun x => re (A (ofReal x))
-      map_add' := fun x y => by simp
-      map_smul' := fun r x => by simp }
-  exact L.mkContinuous ‖A‖ fun x => by
-    calc
-      ‖re (A (ofReal x))‖ ≤ ‖A (ofReal x)‖ := norm_re_le _
-      _ ≤ ‖A‖ * ‖ofReal x‖ := A.le_opNorm _
-      _ = ‖A‖ * ‖x‖ := by rw [ofReal.norm_map]
-
-omit [CompleteSpace E] in
-/-- Pointwise formula for the real restriction: embed, apply, take the real coordinate. -/
-@[simp]
-theorem realPartOperator_apply (A : RealComplexification E →L[ℂ] RealComplexification E) (x : E) :
-    realPartOperator A x = re (A (ofReal x)) := rfl
+`norm_re_le`, `realPartOperator` and `realPartOperator_apply` were declared here as well, in
+`ExactSinTheta`, duplicating `Foundation.RealComplexification`.  They are used unqualified below
+and by consumers of this module, which `open Foundation.RealComplexification` resolves.  See lane
+`{lane:CPLX-DEDUP}` for why four copies existed. -/
 
 omit [CompleteSpace E] in
 /-- A conjugation-fixed operator maps the real copy into itself: the imaginary coordinate
