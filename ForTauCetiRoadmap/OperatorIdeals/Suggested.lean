@@ -62,6 +62,9 @@ fixed-index bounds `approximationNumber_comp_le_mul_norm` and
 theorem approximationNumber_comp_add_le_mul (S : F →L[𝕜] G) (T : E →L[𝕜] F) (m n : ℕ) :
     approximationNumber (S ∘L T) (m + n)
       ≤ approximationNumber S m * approximationNumber T n := sorry
+-- **Proved 2026-07-31** as `ContinuousLinearMap.approximationNumber_comp_add_le_mul` in
+-- `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean`, axiom-clean, signature
+-- unchanged. The `sorry` stays because this file records target shapes.
 
 /-- The two-sided ideal inequality, at a fixed index.  Recorded here because it
 owns the name `approximationNumber_comp_comp_le`; the theorem above is the
