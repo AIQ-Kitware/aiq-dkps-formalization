@@ -446,25 +446,38 @@ theorem complexify_injective [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   · simp only [im_complex_smul, Complex.ofReal_re, Complex.ofReal_im, zero_smul, zero_add]
     rfl
 
-/-- A coordinate of a vector is no longer than the vector.
+/-- **A coordinate of a vector is no longer than the vector.**  The single
+statement of `‖re z‖ ≤ ‖z‖` in this repository, and the earliest in import
+order, so every consumer can reach it.
 
-This is now the only copy, and it is public on purpose.  It was briefly `private`, to keep
-`ClosedOperatorComplexification`'s verbatim copy unambiguous where both namespaces are opened
-together; `edward (aiq-gpu)` then deleted that copy in `4dacc008` and pointed the module here.
-Those two fixes are correct separately and fatal together — with the sibling gone and this one
-private, no public copy was reachable from `ClosedOperator/Complexification.lean` and the tree
-stopped building.  Lane `{lane:CPLX-DEDUP}` then removed the remaining duplicates. -/
+It was `private` until 2026-07-30, guarded by a note saying a public copy would make
+unqualified uses ambiguous in `Sources/DavisKahan1970/Ideals/HilbertSchmidtRealDescent.lean`,
+which opens two of the namespaces that had a copy.  That was true, and it was the wrong
+conclusion: the ambiguity came from the *other three* copies, not from this one being visible.
+
+Getting there took a broken tree first, and the sequence is worth keeping.  `edward (aiq-gpu)`
+deleted the `ClosedOperatorComplexification` sibling in `4dacc008` and pointed that module here;
+separately this one was still `private`.  Each fix is right alone and they are fatal together —
+with the sibling gone and this one private, no public copy was reachable from
+`ClosedOperator/Complexification.lean` and the build stopped.  Lane `{lane:CPLX-DEDUP-1}` then
+deleted the remaining copies and made this one public, which is the state described above. -/
 theorem norm_re_le [NormedAddCommGroup E] (z : RealComplexification E) :
     ‖re z‖ ≤ ‖z‖ := by
   have h := norm_sq z
   nlinarith [norm_nonneg (re z), norm_nonneg (im z), norm_nonneg z]
 
-/-- **Restrict a bounded complex operator to the real copy and keep its real coordinate.**
-No invariance assumption is needed to define this map: the bound comes from `norm_re_le` and
-`ofReal.norm_map` alone.
+/-- **Restrict a complex operator to the real copy and take its real
+coordinate.**  No invariance assumption is needed to define this: the map is
+`x ↦ re (T (ofReal x))` for any bounded `T`, and it is bounded by `‖T‖` because
+neither coordinate projection nor the real embedding changes a norm.
 
-This is the canonical statement, stated between two spaces.  The endomorphism case is this one at
-`F := E`. -/
+Stated **rectangularly**, between two different spaces.  Three copies of this
+definition existed until 2026-07-30 and they were not three copies of one thing:
+`Sources/DavisKahan1970/Ideals/HilbertSchmidtRealDescent.lean` had the
+rectangular one while `Complexification/FunctionalCalculus.lean` and
+`OperatorIdeal/ApproximationNumbers/Real/Threshold.lean` had the square case,
+which is this at `F = E`.  This module is the only one all three consumers
+import, so it is where the general form belongs. -/
 noncomputable def realPartOperator [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F]
     (T : RealComplexification E →L[ℂ] RealComplexification F) : E →L[ℝ] F := by
@@ -474,11 +487,12 @@ noncomputable def realPartOperator [NormedAddCommGroup E] [InnerProductSpace ℝ
       map_smul' := fun r x => by simp }
   exact L.mkContinuous ‖T‖ fun x => by
     calc
-      ‖L x‖ ≤ ‖T (ofReal x)‖ := norm_re_le _
+      ‖re (T (ofReal x))‖ ≤ ‖T (ofReal x)‖ := norm_re_le _
       _ ≤ ‖T‖ * ‖ofReal x‖ := T.le_opNorm _
       _ = ‖T‖ * ‖x‖ := by rw [ofReal.norm_map]
 
-/-- Pointwise formula for `realPartOperator`: embed, apply, take the real coordinate. -/
+/-- Pointwise formula for the real restriction: embed, apply, take the real
+coordinate. -/
 @[simp]
 theorem realPartOperator_apply [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F]
