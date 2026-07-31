@@ -54,15 +54,15 @@ section GramUniqueness
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 
-/-- **Milestone A2, Gram factors.** Two Gram factors of the same size differ by a left
-unitary.  Open question deliberately left in the roadmap rather than settled here:
-whether the consumer wants `unitaryGroup` or a bundled `LinearIsometryEquiv`.
+/-- **Milestone A2, Gram factorization.**  Unique up to a *left unitary*, at a fixed
+factor size and with no rank hypothesis -- which is why this is not a corollary of the
+rank-factorization statement above.  The group differs (`unitaryGroup`, not the
+invertibles) because this one remembers an inner product.
+
 The quantifier side matters: the unitary acts on the `d` side.  In the
 multidimensional-scaling consumer that is exactly the rigid-motion indeterminacy of a
 recovered configuration; a unitary on the `n` side would be false and would look
-plausible.  The acting group differs from the rank-factorization statement above
-(`unitaryGroup`, not the invertibles) because this one remembers an inner product, and
-no rank hypothesis is needed -- which is why it is not a corollary of that one. -/
+plausible. -/
 theorem exists_unitary_mul_of_conjTranspose_mul_self_eq {n d : ℕ}
     {A A' : Matrix (Fin d) (Fin n) 𝕜} (h : Aᴴ * A = A'ᴴ * A') :
     ∃ U ∈ Matrix.unitaryGroup (Fin d) 𝕜, A' = U * A := sorry
@@ -71,6 +71,7 @@ theorem exists_unitary_mul_of_conjTranspose_mul_self_eq {n d : ℕ}
 -- The `sorry` stays because this file records target shapes and is not a build target.
 
 end GramUniqueness
+
 /-! ## Part B -- Berge's maximum theorem over a fixed compact feasible set (T22) -/
 
 section Berge
