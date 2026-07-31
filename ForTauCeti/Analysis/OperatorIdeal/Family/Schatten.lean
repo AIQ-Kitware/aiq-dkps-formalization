@@ -154,6 +154,45 @@ theorem lpGauge_approximationNumber_add_le {p : ℝ} (hp : 1 ≤ p) (S T : E →
 
 end Finite
 
+section Corestriction
+
+variable {𝕜' : Type u} [RCLike 𝕜']
+variable {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace 𝕜' H₀]
+
+/-- **An operator of finite rank has the approximation numbers of its corestriction to its
+own range.**
+
+Both directions are one application of `approximationNumber_comp_le_mul_norm`: the
+orthogonal projection onto the range and the inclusion of the range are both of norm at most
+one, and composing with either recovers the other operator.  This is what lets the
+finite-source identity — which needs a finite-dimensional *target* — be applied to an
+operator whose target is an arbitrary Hilbert space. -/
+theorem approximationNumber_orthogonalProjectionOnto_range_comp {G₀ : Type*}
+    [NormedAddCommGroup G₀] [InnerProductSpace 𝕜' G₀] [FiniteDimensional 𝕜' G₀]
+    (A : G₀ →L[𝕜'] H₀) (n : ℕ) :
+    ((LinearMap.range (A : G₀ →ₗ[𝕜'] H₀)).orthogonalProjectionOnto ∘L A).approximationNumber n
+      = A.approximationNumber n := by
+  set W := LinearMap.range (A : G₀ →ₗ[𝕜'] H₀) with hW
+  have hval : ∀ x, ((W.orthogonalProjectionOnto (A x) : W) : H₀) = A x := fun x =>
+    congrArg Subtype.val
+      (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self (⟨A x, ⟨x, rfl⟩⟩ : W))
+  have hfactor : W.subtypeL ∘L (W.orthogonalProjectionOnto ∘L A) = A := by
+    ext x
+    exact hval x
+  refine le_antisymm ?_ ?_
+  · refine (approximationNumber_comp_le_norm_mul _ _ n).trans ?_
+    exact mul_le_of_le_one_left (A.approximationNumber_nonneg n)
+      (Submodule.orthogonalProjectionOnto_norm_le W)
+  · conv_lhs => rw [← hfactor]
+    refine (approximationNumber_comp_le_norm_mul _ _ n).trans ?_
+    exact mul_le_of_le_one_left
+      ((W.orthogonalProjectionOnto ∘L A).approximationNumber_nonneg n)
+      W.norm_subtypeL_le
+
+
+
+end Corestriction
+
 section FiniteSource
 
 -- The source universe is left free rather than fixed to `v`: the consumer below applies this
@@ -171,11 +210,11 @@ evaluate the energy in the right singular basis, where `‖A vᵢ‖ = σᵢ` by
 `TauCeti.norm_apply_rightSingularBasis`, and read the singular values as approximation
 numbers by `approximationNumber_eq_singularValues`.
 
-**The general case is not this plus bookkeeping.** Both sides are suprema — the energy over
-finite subsets of a Hilbert basis, the Schatten gauge over `Finset ℕ` — and that those two
-directed families agree is a separate statement, not proved here. -/
-theorem hilbertSchmidtEnergy_eq_sum_approximationNumber_sq {ι : Type*}
-    (A : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) :
+**The target's finite-dimensionality is an artefact of the singular system** and is removed
+immediately below; it is needed only because `TauCeti.rightSingularBasis` is built from a
+finite-dimensional adjoint. -/
+private theorem hilbertSchmidtEnergy_eq_sum_approximationNumber_sq_of_finiteDimensional
+    {ι : Type*} (A : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) :
     A.hilbertSchmidtEnergy b =
       ∑ i : Fin (Module.finrank 𝕜' G),
         ENNReal.ofReal (A.approximationNumber i) ^ 2 := by
@@ -191,6 +230,37 @@ theorem hilbertSchmidtEnergy_eq_sum_approximationNumber_sq {ι : Type*}
     TauCeti.norm_apply_rightSingularBasis _ i
   rw [← ofReal_norm, hnorm, A.approximationNumber_eq_singularValues (i : ℕ)]
   rfl
+
+/-- **The Hilbert--Schmidt energy is the sum of squared approximation numbers**, for an
+operator out of a finite-dimensional space and into *any* Hilbert space.
+
+The singular system needs a finite-dimensional target, so the proof corestricts `A` to its
+own range — finite-dimensional because the source is — where
+`approximationNumber_orthogonalProjectionOnto_range_comp` says the approximation numbers are
+unchanged and the corestriction is norm-preserving, so the energy is unchanged term by term.
+
+**The infinite-dimensional-source case is not this plus bookkeeping.** Both sides are then
+suprema — the energy over finite subsets of a Hilbert basis, the Schatten gauge over
+`Finset ℕ` — and that those two directed families agree is a separate statement. -/
+theorem hilbertSchmidtEnergy_eq_sum_approximationNumber_sq {G₀ : Type*}
+    [NormedAddCommGroup G₀] [InnerProductSpace 𝕜' G₀] [CompleteSpace G₀]
+    [FiniteDimensional 𝕜' G₀] {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace 𝕜' H₀]
+    {ι : Type*} (A : G₀ →L[𝕜'] H₀) (b : HilbertBasis ι 𝕜' G₀) :
+    A.hilbertSchmidtEnergy b =
+      ∑ i : Fin (Module.finrank 𝕜' G₀), ENNReal.ofReal (A.approximationNumber i) ^ 2 := by
+  classical
+  set W := LinearMap.range ((A : G₀ →L[𝕜'] H₀) : G₀ →ₗ[𝕜'] H₀) with hW
+  set S := W.orthogonalProjectionOnto ∘L A with hS
+  have hSval : ∀ x, (S x : H₀) = A x := fun x =>
+    congrArg Subtype.val
+      (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self (⟨A x, ⟨x, rfl⟩⟩ : W))
+  have henergy : A.hilbertSchmidtEnergy b = S.hilbertSchmidtEnergy b := by
+    rw [hilbertSchmidtEnergy, hilbertSchmidtEnergy]
+    exact tsum_congr fun i => by rw [← hSval (b i)]; rfl
+  rw [henergy, S.hilbertSchmidtEnergy_eq_sum_approximationNumber_sq_of_finiteDimensional b]
+  exact Finset.sum_congr rfl fun i _ =>
+    congrArg (fun r : ℝ => ENNReal.ofReal r ^ 2)
+      (approximationNumber_orthogonalProjectionOnto_range_comp A (i : ℕ))
 
 end FiniteSource
 
@@ -300,38 +370,6 @@ theorem enorm_comp_one_sub_basisTruncation_sq_le {ι : Type*} [DecidableEq ι]
     _ = (T ∘L (1 - basisTruncation b s)).hilbertSchmidtEnergy b :=
         hilbertSchmidtENorm_sq _ b
     _ = _ := hilbertSchmidtEnergy_comp_one_sub_basisTruncation T b s
-
-
-omit [CompleteSpace H] in
-/-- **An operator of finite rank has the approximation numbers of its corestriction to its
-own range.**
-
-Both directions are one application of `approximationNumber_comp_le_mul_norm`: the
-orthogonal projection onto the range and the inclusion of the range are both of norm at most
-one, and composing with either recovers the other operator.  This is what lets the
-finite-source identity — which needs a finite-dimensional *target* — be applied to an
-operator whose target is an arbitrary Hilbert space. -/
-theorem approximationNumber_orthogonalProjectionOnto_range_comp {G₀ : Type*}
-    [NormedAddCommGroup G₀] [InnerProductSpace 𝕜' G₀] [FiniteDimensional 𝕜' G₀]
-    (A : G₀ →L[𝕜'] H) (n : ℕ) :
-    ((LinearMap.range (A : G₀ →ₗ[𝕜'] H)).orthogonalProjectionOnto ∘L A).approximationNumber n
-      = A.approximationNumber n := by
-  set W := LinearMap.range (A : G₀ →ₗ[𝕜'] H) with hW
-  have hval : ∀ x, ((W.orthogonalProjectionOnto (A x) : W) : H) = A x := fun x =>
-    congrArg Subtype.val
-      (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self (⟨A x, ⟨x, rfl⟩⟩ : W))
-  have hfactor : W.subtypeL ∘L (W.orthogonalProjectionOnto ∘L A) = A := by
-    ext x
-    exact hval x
-  refine le_antisymm ?_ ?_
-  · refine (approximationNumber_comp_le_norm_mul _ _ n).trans ?_
-    exact mul_le_of_le_one_left (A.approximationNumber_nonneg n)
-      (Submodule.orthogonalProjectionOnto_norm_le W)
-  · conv_lhs => rw [← hfactor]
-    refine (approximationNumber_comp_le_norm_mul _ _ n).trans ?_
-    exact mul_le_of_le_one_left
-      ((W.orthogonalProjectionOnto ∘L A).approximationNumber_nonneg n)
-      W.norm_subtypeL_le
 
 
 -- `G`'s completeness is carried by the `HilbertBasis` argument rather than used again, and
