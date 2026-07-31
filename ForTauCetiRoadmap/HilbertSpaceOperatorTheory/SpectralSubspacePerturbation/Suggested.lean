@@ -1,25 +1,22 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, Claude Fable 5
 -/
 import Mathlib
 
 /-!
-# Spectral subspace perturbation: suggested signatures
+# Spectral-subspace perturbation: target signatures
 
-`README.md` is the definitive specification; this file is representative, not
-exhaustive.  It records target shapes for the central objects and headline
-milestones of each Part, using names already present in the staged
-`ForTauCeti` implementation, idealized to clean `TauCeti`-style forms.  It
-supersedes the earlier markdown signature sketch (`Suggested.lean.md`).
-Named declarations correspond to staged results; unnamed examples are the
-genuinely open targets.  Every body is a placeholder.
+**This file is not the roadmap and is not exhaustive.** The definitive document is
+`README.md`. The statements here suggest Lean forms for particular milestones, so that
+contributors and reviewers converge on names and signatures; discharging all of them
+finishes neither a Part nor the roadmap. `sorry` is allowed in this human-owned roadmap
+library — these are goals, not proofs.
 
-The common-objects section restates, minimally, vocabulary owned by the
-sibling roadmaps (FiniteDimensionalOperators for the spectral predicates,
-MajorizationAndAngles for norms and angles) so that the signatures below
-elaborate; those restatements are consumed here, not specified here.
+The common-objects section restates, minimally, vocabulary owned by the sibling roadmaps —
+`HilbertSpaceOperatorFoundations` for the spectral predicates, `MajorizationAndAngles` for
+norms and angles — so that the signatures below elaborate. Those restatements are consumed
+here, not specified here.
 -/
 
 namespace TauCetiRoadmap.SpectralSubspacePerturbation
@@ -40,45 +37,32 @@ variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- The finite-dimensional point spectrum of `A` carried by `U`: real
 eigenvalues with an eigenvector in `U`. -/
--- DELIVERED: AMBIGUOUS -- `restrictedSpectrum` is declared in 4 modules (`ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace`, `DavisKahan.Alternative.FiniteDimensional.Sylvester.ContinuousLinearMapBridge`, `DavisKahan.SpectralTheory.AbstractSpectrum`, `DavisKahan.SpectralTheory.Compatibility`); disambiguate before trusting this
 def restrictedSpectrum (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) : Set ℝ :=
   {lam | ∃ x, x ∈ U ∧ x ≠ 0 ∧ A x = (lam : 𝕜) • x}
 
 /-- Every eigenvalue of `A` carried by `U` lies in `Ω`. -/
--- DELIVERED: AMBIGUOUS -- `SpectrumIn` is declared in 3 modules (`ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace`, `DavisKahan.SpectralTheory.AbstractSpectrum`, `DavisKahan.SpectralTheory.Compatibility`); disambiguate before trusting this
 def SpectrumIn (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (Ω : Set ℝ) : Prop :=
   restrictedSpectrum A U ⊆ Ω
 
 /-- Two restricted spectra are separated by at least `δ`. -/
--- DELIVERED: AMBIGUOUS -- `SpectraSeparated` is declared in 4 modules (`ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap`, `DavisKahan.Alternative.FiniteDimensional.Sylvester.ContinuousLinearMapBridge`, `DavisKahan.SpectralTheory.AbstractSpectrum`, `DavisKahan.SpectralTheory.Compatibility`); disambiguate before trusting this
 def SpectraSeparated (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
     (B : F →ₗ[𝕜] F) (V : Submodule 𝕜 F) (δ : ℝ) : Prop :=
   ∀ lam μ, lam ∈ restrictedSpectrum A U → μ ∈ restrictedSpectrum B V →
     δ ≤ |lam - μ|
 
 /-- Canonical finite-dimensional spectral subspace selected by a real set. -/
--- DELIVERED: AMBIGUOUS -- `spectralSubspace` is declared in 2 modules (`ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace`, `DavisKahan.Experimental.InfiniteDimensional.SinTheta.General`); disambiguate before trusting this
 noncomputable def spectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
     Submodule 𝕜 E :=
   Submodule.span 𝕜 {x | ∃ lam ∈ Ω, x ≠ 0 ∧ A x = (lam : 𝕜) • x}
 
 /-- The directed sine cross-projection `P_{Vᗮ} ∘ P_U`. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.AngleGeometry`
 noncomputable def sinThetaMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   ((Vᗮ.starProjection ∘L U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
 
-/-- The Frobenius (Hilbert–Schmidt) norm through the standard orthonormal
-basis; basis independence is part of the consumed norm API.
-
-**Already staged, under a different name (checked 2026-07-31).**  This is
-`TauCeti.UnitarilyInvariantNorm.frobenius` in
-`ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean`, whose `toFun` is
-character-for-character this body, with the rectangular twin in
-`RectangularUnitarilyInvariantNorm/Instances.lean` and basis independence proved as
-`frobenius_apply`.  The Yu--Wang--Samworth files already consume it under that name.  Kept here
-only because this file records target *shapes*; there is nothing to prove. -/
--- DELIVERED: AMBIGUOUS -- `frobenius` is declared in 2 modules (`ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Instances`, `ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm`); disambiguate before trusting this (as `frobenius`)
+/-- The Frobenius (Hilbert–Schmidt) norm, through the standard orthonormal basis; basis
+independence belongs to the norm API consumed from `MajorizationAndAngles`, which is where
+this instance is specified. -/
 noncomputable def frobeniusNorm [FiniteDimensional 𝕜 E] (T : E →ₗ[𝕜] F) : ℝ :=
   Real.sqrt (∑ i, ‖T (stdOrthonormalBasis 𝕜 E i)‖ ^ 2)
 
@@ -88,7 +72,6 @@ end CommonObjects
 finite-dimensional inner-product spaces: subadditive, absolutely homogeneous,
 invariant under composition with linear isometry equivalences on both sides.
 Definiteness is deliberately not bundled. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic`
 structure RectangularUnitarilyInvariantNorm (𝕜 E F : Type*) [RCLike 𝕜]
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
@@ -106,10 +89,7 @@ instance {𝕜 E F : Type*} [RCLike 𝕜]
       fun _ => (E →ₗ[𝕜] F) → ℝ :=
   ⟨RectangularUnitarilyInvariantNorm.toFun⟩
 
-/-- Square unitarily invariant seminorms as the diagonal of the rectangular
-family.  (The staged implementation carries a separate square structure; the
-roadmap treats the square case as the diagonal instance.) -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm`
+/-- Square unitarily invariant seminorms as the diagonal of the rectangular family. -/
 abbrev UnitarilyInvariantNorm (𝕜 E : Type*) [RCLike 𝕜] [NormedAddCommGroup E]
     [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] :=
   RectangularUnitarilyInvariantNorm 𝕜 E E
@@ -119,36 +99,30 @@ abbrev UnitarilyInvariantNorm (𝕜 E : Type*) [RCLike 𝕜] [NormedAddCommGroup
 section HaagerupZsido
 
 /-- The hyperbolic weight, chosen so the mass computation collapses exactly. -/
--- DELIVERED: `ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs`
 noncomputable def weight (y : ℝ) : ℝ :=
   Real.tanh (Real.pi * y / 2)
 
 /-- The Laplace transform of the weight at `|t|`. -/
--- DELIVERED: `ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs`
 noncomputable def weightLaplaceTransform (t : ℝ) : ℝ :=
   ∫ y in Set.Ioi (0 : ℝ), weight y * Real.exp (-|t| * y)
 
 /-- The real Haagerup–Zsidó kernel. -/
--- DELIVERED: `ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs`
 noncomputable def realKernel (t : ℝ) : ℝ :=
   (Real.sin t / 2) * weightLaplaceTransform t
 
 /-- The complex kernel; the rotation by `-i` makes the Fourier identity land
 on `1 / x` rather than `i / x`. -/
--- DELIVERED: `ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs`
 noncomputable def reciprocalKernel (t : ℝ) : ℂ :=
   -Complex.I * (realKernel t : ℂ)
 
 /-- Oddness; the two-sided Fourier identity follows from `1 ≤ x` by
 reflection. -/
--- DELIVERED: `ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs`
 theorem reciprocalKernel_neg (t : ℝ) :
     reciprocalKernel (-t) = -reciprocalKernel t := by
   sorry
 
 /-- Closed-form Laplace transform of `|sin|`, the inner integral of the mass
 computation. -/
--- DELIVERED: `ForTauCeti.Analysis.SpecialFunctions.Integral.SineLaplace`
 theorem integral_abs_sin_mul_exp_neg_abs {y : ℝ} (hy : 0 < y) :
     (∫ t : ℝ, |Real.sin t| * Real.exp (-y * |t|)) =
       2 * ((1 + Real.exp (-Real.pi * y)) /
@@ -156,14 +130,12 @@ theorem integral_abs_sin_mul_exp_neg_abs {y : ℝ} (hy : 0 < y) :
   sorry
 
 /-- **Milestone A1, first half: the exterior Fourier identity.** -/
--- DELIVERED: `ForTauCeti.Analysis.Fourier.HaagerupZsido.Fourier`
 theorem reciprocalKernel_fourier (x : ℝ) (hx : 1 ≤ |x|) :
     (∫ t : ℝ, reciprocalKernel t *
         Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I))) = 1 / (x : ℂ) := by
   sorry
 
 /-- **Milestone A1, second half: the exact mass `π / 2`.** -/
--- DELIVERED: `ForTauCeti.Analysis.Fourier.HaagerupZsido.Integrability`
 theorem integral_norm_reciprocalKernel :
     (∫ t : ℝ, ‖reciprocalKernel t‖) = Real.pi / 2 := by
   sorry
@@ -181,7 +153,6 @@ variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 /-- **Dimension-free separated Sylvester bound** (integral-free, arbitrary
 Hilbert spaces, both scalar fields): quadratic-form separation of size `g`
 gives `‖X‖ ≤ ‖Y‖ / g`. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound`
 theorem opNorm_le_div_of_comp_sub_comp_eq
     {A : E →L[𝕜] E} {B : F →L[𝕜] F} {X Y : F →L[𝕜] E}
     (hA : (A : E →ₗ[𝕜] E).IsSymmetric) (hB : (B : F →ₗ[𝕜] F).IsSymmetric)
@@ -203,7 +174,6 @@ variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- **Interval/exterior separation, constant one, every rectangular unitarily
 invariant norm.** -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval`
 theorem uiNorm_sylvester_le_of_intervalGap
     (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
@@ -218,7 +188,6 @@ theorem uiNorm_sylvester_le_of_intervalGap
 /-- **Arbitrary pairwise separation, the sharp constant `π / 2`** (the mass of
 the Part A kernel), lifted from the simultaneous Ky Fan prefix estimate by Fan
 dominance. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance`
 theorem uiNorm_sylvester_le_of_spectralDistance
     (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
@@ -238,7 +207,6 @@ variable {H : Type v} [NormedAddCommGroup H] [NormedSpace 𝕜 H]
 /-- The resolvent set of a partial linear map: `z` such that `A - z` has a
 two-sided bounded inverse.  (Owned by the SpectralTheory roadmap; restated
 so the statements below elaborate.) -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent`
 def resolventSet (A : H →ₗ.[𝕜] H) : Set 𝕜 :=
   { z | ∃ R : H →L[𝕜] H,
       (∀ ψ : A.domain, R (A ψ - z • (ψ : H)) = (ψ : H)) ∧
@@ -246,7 +214,6 @@ def resolventSet (A : H →ₗ.[𝕜] H) : Set 𝕜 :=
 
 /-- The spectrum of a partial linear map: the complement of the resolvent
 set, with codomain `Set 𝕜` and no self-adjointness built in. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent`
 def spectrum (A : H →ₗ.[𝕜] H) : Set 𝕜 :=
   (resolventSet A)ᶜ
 
@@ -262,7 +229,6 @@ variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
 /-- The domain-aware Sylvester equation `A X - X B = C` for partial linear
 maps, with domain transport as data.  (The transport statement is owned by
 the SpectralTheory roadmap; the estimates attach to it here.) -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester`
 structure SylvesterEquation (A : E →ₗ.[ℂ] E) (B : F →ₗ.[ℂ] F)
     (X C : F →L[ℂ] E) : Prop where
   mapsTo_domain : ∀ y : B.domain, X (y : F) ∈ A.domain
@@ -273,7 +239,6 @@ structure SylvesterEquation (A : E →ₗ.[ℂ] E) (B : F →ₗ.[ℂ] F)
 two self-adjoint partial maps with disjoint spectra is zero.  Proved without
 a Borel functional calculus: `1` is a null point for every diagonal spectral
 measure, so damped continuous Cayley symbols separate in the limit. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.Rosenblum`
 theorem eq_zero_of_intertwines_of_disjoint_spectrum
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B) {X : F →L[ℂ] E}
@@ -305,7 +270,6 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 
 /-- **The dimension-free operator-norm `sin Θ` theorem, coercivity form**: on
 an arbitrary Hilbert space, from the dimension-free Sylvester bound alone. -/
--- DELIVERED: AMBIGUOUS -- `sinTheta_directed_coercive` is declared in 2 modules (`ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta`, `DavisKahan.Experimental.InfiniteDimensional.SinTheta.General`); disambiguate before trusting this
 theorem sinTheta_directed_coercive
     {A B : E →L[𝕜] E}
     (hA : (A : E →ₗ[𝕜] E).IsSymmetric) (hB : (B : E →ₗ[𝕜] E).IsSymmetric)
@@ -328,7 +292,6 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 
 /-- **Milestone C1 — Davis–Kahan `sin Θ`, perturbation form, every square
 unitarily invariant norm**, under the interval/exterior gap. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation`
 theorem sinTheta_perturbation_le
     (N : UnitarilyInvariantNorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -344,7 +307,6 @@ theorem sinTheta_perturbation_le
 /-- **Canonical spectral-projector Davis–Kahan theorem** with no eigenbasis
 in the API; the equal-rank hypothesis turns the directed estimate into the
 full projector difference. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation`
 theorem opNorm_spectralProjection_sub_spectralProjection_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
@@ -361,7 +323,6 @@ theorem opNorm_spectralProjection_sub_spectralProjection_le
 /-- **Milestone C2 — the two-sided `π/2` form**: arbitrary pairwise
 separation of the selected `A`-spectrum from the complementary `B`-spectrum,
 every square unitarily invariant norm. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation`
 theorem sinTheta_perturbation_le_of_spectralDistance
     (N : UnitarilyInvariantNorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -375,7 +336,6 @@ theorem sinTheta_perturbation_le_of_spectralDistance
 /-- **Davis's `sin 2θ` theorem, per-eigenvector product form**: for a unit
 eigenvector `x` of the perturbed operator and `P` the projection onto the
 invariant subspace, `(b - a) · ‖P x‖ · ‖x - P x‖ ≤ ε`. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector`
 theorem sin_two_theta_le
     {T P : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (hP : P.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
@@ -398,31 +358,37 @@ specialization repeats all of them, whereas with a record each specialization is
 a *constructor* -- which is what makes "bounded and finite are specializations"
 true in the code rather than only in the prose. -/
 
+/-- A lower frame bound for a trial map: the constant that replaces isometry.
+`c = 1` recovers the classical isometric statement, and the bound below degrades with `c`
+as the trial map degenerates. -/
+def LowerFrameBound {H E : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] (X : H →L[ℂ] E) (c : ℝ) : Prop :=
+  ∀ h : H, c * ‖h‖ ≤ ‖X h‖
+
 section DomainAwareSinTheta
 
-variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-  [CompleteSpace E]
-variable {H : Type w} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-  [CompleteSpace H]
-
-/-- A lower frame bound for a trial map: the constant that replaces isometry.
-`c = 1` recovers the classical isometric statement, and the bound of Milestone C3
-degrades with `c` as the trial map degenerates. -/
--- DELIVERED: AMBIGUOUS -- `LowerFrameBound` is declared in 2 modules (`ForTauCeti.Analysis.InnerProductSpace.FrameFactorization`, `DavisKahan.SinTheta.FrameFactorization`); disambiguate before trusting this
-def LowerFrameBound (X : H →L[ℂ] E) (c : ℝ) : Prop :=
-  ∀ h : H, c * ‖h‖ ≤ ‖X h‖
+variable (E H K : Type w)
+variable [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+variable [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+variable [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
 
 /-- The hypotheses of the domain-aware `sin Θ` theorem, as data.
 
-`A` is self-adjoint and *possibly unbounded*; nothing here says otherwise.  What is
-bounded is the **residual**: `A ∘ X - X ∘ A₀` extends from a graph core to a bounded
-operator on all of `H`, and that is the hypothesis -- bounded residual, never
-bounded `A`.
+`ambient` is self-adjoint and *possibly unbounded*; nothing here says otherwise.  What is
+bounded is the **residual**: `A ∘ X − X ∘ A₀` extends from a graph core to a bounded
+operator on all of `H`, and that is the hypothesis — bounded residual, never bounded `A`.
 
-The norm is an ideal gauge from the OperatorIdeals roadmap rather than a unitarily
-invariant norm on a finite-dimensional space: at this generality finiteness of the
-gauge is a *hypothesis* on the residual and a *conclusion* about `sin Θ`. -/
--- DELIVERED: `DavisKahan.SinTheta.Unbounded.Core` (as `UnboundedSinThetaData`)
+The complementary data is what replaces "`V` is an invariant subspace" once no spectral
+projection is available: an isometric embedding `complEmbedding : K →L[ℂ] E` whose range is
+*exactly* invariant, intertwining `complBlock` with `ambient`.  Without it there is nothing
+for the sine operator to be an angle *to*.
+
+Hypotheses are bundled as a record deliberately.  A flat theorem takes upwards of a dozen
+mutually constrained arguments and every specialization repeats all of them; with a record,
+each specialization is a *constructor* — bounded operators build it from
+`T.toLinearMap.toPMap ⊤` with a trivial domain transport, and finite dimension reads the
+blocks off an eigenbasis.  That is what makes "bounded and finite are specializations" true
+in the code and not only in the prose. -/
 -- NOT DELIVERED, and NOT merely renamed (audited 2026-07-31).
 -- `DavisKahan/SinTheta/Unbounded/Core.lean` has `UnboundedSinThetaData`, which is a
 -- REDESIGN rather than a rename: it bundles the operators as fields instead of taking
@@ -430,52 +396,75 @@ gauge is a *hypothesis* on the residual and a *conclusion* about `sin Θ`. -/
 -- `ClosedOperator{Ambient,Trial,Complement}`, and carries a THIRD operator `Λ₁` with an
 -- `intertwines` field that the shape below does not have.  Reconciling the two is a
 -- design decision for the unbounded lane, not a roadmap edit.
-structure UnboundedSinThetaProblem
-    (A : E →ₗ.[ℂ] E) (A₀ : H →ₗ.[ℂ] H) (X : H →L[ℂ] E) (R : H →L[ℂ] E) where
-  /-- The ambient operator is self-adjoint; it is not assumed bounded. -/
-  ambient_selfAdjoint : IsSelfAdjoint A
-  /-- The trial block is self-adjoint. -/
-  trial_selfAdjoint : IsSelfAdjoint A₀
-  /-- The trial map lands in the ambient domain on the trial domain. -/
-  mapsTo_domain : ∀ h : A₀.domain, X (h : H) ∈ A.domain
-  /-- The residual identity on the trial domain: this is where domain-awareness
-  lives, and it is why `R` can be bounded while `A` is not. -/
-  residual : ∀ h : A₀.domain,
-    A ⟨X (h : H), mapsTo_domain h⟩ - X (A₀ h) = R (h : H)
+structure UnboundedSinThetaProblem where
+  /-- The ambient operator, self-adjoint and not assumed bounded. -/
+  ambient : E →ₗ.[ℂ] E
+  ambient_selfAdjoint : IsSelfAdjoint ambient
+  /-- The self-adjoint trial block. -/
+  trialBlock : H →ₗ.[ℂ] H
+  trialBlock_selfAdjoint : IsSelfAdjoint trialBlock
+  /-- The trial map, not required to be isometric. -/
+  trial : H →L[ℂ] E
+  /-- Domain transport for the trial map. -/
+  trial_mapsTo : ∀ h : trialBlock.domain, trial (h : H) ∈ ambient.domain
+  /-- The residual: bounded on all of `H`, even though `ambient` need not be. -/
+  residual : H →L[ℂ] E
+  /-- The residual identity on the trial domain.  This is where domain-awareness lives, and
+  it is why `residual` can be bounded while `ambient` is not. -/
+  residual_eq : ∀ h : trialBlock.domain,
+    ambient ⟨trial (h : H), trial_mapsTo h⟩ - trial (trialBlock h) = residual (h : H)
+  /-- The self-adjoint complementary block. -/
+  complBlock : K →ₗ.[ℂ] K
+  complBlock_selfAdjoint : IsSelfAdjoint complBlock
+  /-- The complementary embedding, isometric onto the complementary spectral subspace. -/
+  complEmbedding : K →L[ℂ] E
+  complEmbedding_isometry : ∀ k : K, ‖complEmbedding k‖ = ‖k‖
+  complEmbedding_mapsTo : ∀ k : complBlock.domain, complEmbedding (k : K) ∈ ambient.domain
+  /-- The complementary range is *exactly* invariant — the residual there is zero. -/
+  complEmbedding_intertwines : ∀ k : complBlock.domain,
+    ambient ⟨complEmbedding (k : K), complEmbedding_mapsTo k⟩ = complEmbedding (complBlock k)
   /-- The lower frame constant of the trial map. -/
-  frameLowerBound : ℝ
-  frameLowerBound_pos : 0 < frameLowerBound
-  lowerFrame : LowerFrameBound X frameLowerBound
-  /-- The spectral separation, in one of the three forms of the generality bar;
-  the constant in the conclusion is `1` for interval/exterior and ordered
-  separation and `π/2` for pairwise separation. -/
+  frameConst : ℝ
+  frameConst_pos : 0 < frameConst
+  frame : LowerFrameBound trial frameConst
+  /-- The spectral separation between the two blocks, in the pairwise form; the
+  interval/exterior and ordered forms are strictly stronger hypotheses under which the
+  constant in the conclusion improves from `π/2` to one. -/
   gap : ℝ
   gap_pos : 0 < gap
+  gap_separates :
+    ∀ z ∈ spectrum trialBlock, ∀ w ∈ spectrum complBlock, gap ≤ ‖z - w‖
 
-/-- **Milestone C3.**  The sine operator is *determined by the data* -- it is
-built from the trial map `X`, exactly as the delivered
-`TauCeti.DavisKahan.sinTheta_unbounded_opNorm` concludes about
-`D.X.adjoint ∘L D.F₁`.
+variable {E H K}
 
-**Corrected 2026-07-31 (`{lane:ROADMAP-GAPS-DK}`): this signature previously took
-`sinTheta : H →L[ℂ] E` as a free argument with no hypothesis relating it to `P`,
-and was therefore FALSE, not merely unproved** -- `P.gap` and `P.frameLowerBound`
-are positive by the structure's own fields, so the left side scales without bound
-in `sinTheta` while `‖R‖` is fixed, and the type is inhabited (it is delivered as
-`UnboundedSinThetaData`).  **A `Suggested.lean` signature is compiled so that a
-*broken* one is a build failure; a *false* one elaborates fine**, so the guard
-this library exists to provide cannot catch this class.
+/-- **The directed sine operator of the problem**, constructed from the data rather than
+supplied: the component of the trial map along the complementary range, read in the
+complementary coordinates.  For an isometric trial map this is `sin Θ` between the two
+subspaces; for a general trial map the frame constant converts between the two, which is
+what the second bound below records. -/
+noncomputable def UnboundedSinThetaProblem.sinTheta
+    (P : UnboundedSinThetaProblem E H K) : H →L[ℂ] K :=
+  ContinuousLinearMap.adjoint P.complEmbedding ∘L P.trial
 
-Stated here with the operator norm standing in for the ideal gauge, since the
-gauge lives in the OperatorIdeals roadmap; reconciling the two is open work
-recorded in the roadmap prose.  **The docstring formerly promised a conjunction
-carrying ideal *membership* of the sine operator** -- that half is precisely the
-reconciliation that is open, so it is named here rather than asserted in a
-statement that cannot yet express it. -/
-theorem sinTheta_domainAware_le
-    {A : E →ₗ.[ℂ] E} {A₀ : H →ₗ.[ℂ] H} {X R : H →L[ℂ] E}
-    (P : UnboundedSinThetaProblem A A₀ X R) :
-    P.gap * P.frameLowerBound * ‖X‖ ≤ ‖R‖ := by
+/-- **Milestone C3, operator-norm form.**  The residual identity and the exact invariance of
+the complementary range turn `sinTheta` into the solution of a Sylvester equation with
+right-hand side `complEmbedding⋆ ∘ residual`, and the spectral separation bounds it.
+
+Nothing here says `ambient` is bounded; boundedness of the residual is a hypothesis, and
+the bound on the sine operator is the conclusion. -/
+theorem UnboundedSinThetaProblem.gap_mul_norm_sinTheta_le
+    (P : UnboundedSinThetaProblem E H K) :
+    P.gap * ‖P.sinTheta‖ ≤ (Real.pi / 2) * ‖P.residual‖ := by
+  sorry
+
+/-- **Milestone C3, subspace form.**  Dividing by `‖trial h‖`, the left-hand side is the
+sine of the angle between the trial vector and the orthogonal complement of the
+complementary range; the frame constant is the price of a trial map that is not isometric,
+and at `frameConst = 1` the classical statement is recovered. -/
+theorem UnboundedSinThetaProblem.gap_mul_frameConst_mul_norm_sinTheta_apply_le
+    (P : UnboundedSinThetaProblem E H K) (h : H) :
+    P.gap * P.frameConst * ‖P.sinTheta h‖ ≤
+      (Real.pi / 2) * ‖P.residual‖ * ‖P.trial h‖ := by
   sorry
 
 end DomainAwareSinTheta
@@ -515,14 +504,12 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 
 /-- Population-only gap: the selected block of `A` is separated from its own
 complementary block.  No hypothesis on the perturbed spectrum. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 def PopulationGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (Δ : ℝ) : Prop :=
   SpectraSeparated A U A Uᗮ Δ
 
 /-- `U` and `V` are eigenblocks of `A` and `B` selected by the same ordered
 eigenvalue indices — the branch selection that excludes arbitrary reducing
 subspaces when `B = A`. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 def CorrespondingEigenblock {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     (U V : Submodule 𝕜 E) : Prop :=
@@ -531,7 +518,6 @@ def CorrespondingEigenblock {A B : E →ₗ[𝕜] E}
       V = Submodule.span 𝕜 (⇑(hB.eigenvectorBasis hn) '' (s : Set (Fin n)))
 
 /-- Frobenius sine distance in canonical subspace notation. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 noncomputable def sinThetaFrobenius (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   frobeniusNorm (sinThetaMap U V)
@@ -539,7 +525,6 @@ noncomputable def sinThetaFrobenius (U V : Submodule 𝕜 E)
 /-- **The complement identity**: the Frobenius sine of two equally indexed
 blocks is exactly the square root of the cross-block overlap sum — the bridge
 between the paper's cross-block energies and angles, public by decision. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
     (bT bS : OrthonormalBasis (Fin n) 𝕜 E) (s : Finset (Fin n)) :
     sinThetaFrobenius
@@ -549,7 +534,6 @@ theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
   sorry
 
 /-- **Milestone D1 — the exact Yu–Wang–Samworth population-gap theorem.** -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 theorem yuWangSamworth_sinTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
@@ -565,7 +549,6 @@ theorem yuWangSamworth_sinTheta_le
 /-- **The aligned-basis (Procrustes) surface**: orthonormal bases of the two
 blocks whose pointwise discrepancy is controlled — the usable form when
 eigenbases are determined only up to rotation. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 theorem yuWangSamworth_alignedBasis_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
@@ -584,7 +567,6 @@ theorem yuWangSamworth_alignedBasis_le
 
 /-- **The single-vector bound**: the rank-one, sign-aligned eigenvector
 corollary — the headline statisticians quote. -/
--- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 theorem yuWangSamworth_eigenvector_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {u v : E} (hu : ‖u‖ = 1) (hv : ‖v‖ = 1)
