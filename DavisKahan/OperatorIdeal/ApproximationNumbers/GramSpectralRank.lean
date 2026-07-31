@@ -3,7 +3,6 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.GroundedImports
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
@@ -22,10 +21,21 @@ The proofs are explicit min--max arguments.  No tactic search, compactness, or
 singular-vector attainment is used.  The spectral measure is Tau Ceti's native
 `LinearPMap.spectralPVM`; no Spectra self-adjoint wrapper or Stone group is
 introduced for this bounded operator.
+
+## Provenance
+
+Promoted from `FinishTanTwoTheta/FinishTanTwoTheta/ApproximationNumber/GramSpectralRank.lean`
+under lane `FTT-PROMOTE-5` (2026-07-30), which moved it out of a library that
+is not a default build target.  The statements and proofs are unchanged; the
+enclosing namespace moved from `TauCeti.FinishTanTwoTheta` to
+`TauCeti.ApproximationNumber`, joining the three modules lane `FTT-PROMOTE-3`
+landed beside it, and `FinishTanTwoTheta.GroundedImports` — which imports
+`DavisKahan.All` and so cannot survive the move — was dropped in favour of the
+`ForTauCeti` leaves the file already named.
 -/
 
 namespace TauCeti
-namespace FinishTanTwoTheta
+namespace ApproximationNumber
 
 open scoped InnerProductSpace
 open Set
@@ -310,9 +320,11 @@ theorem re_inner_gramOperator (X : E0 →L[ℂ] E1) (x : E0) :
 def gramLinearPMap (X : E0 →L[ℂ] E1) : E0 →ₗ.[ℂ] E0 :=
   ((gramOperator X : E0 →ₗ[ℂ] E0).toPMap ⊤)
 
+/-- The Gram partial map is everywhere defined: it comes from a bounded operator. -/
 @[simp] theorem gramLinearPMap_domain (X : E0 →L[ℂ] E1) :
     (gramLinearPMap X).domain = ⊤ := rfl
 
+/-- On its domain the Gram partial map is the bounded Gram operator. -/
 @[simp] theorem gramLinearPMap_apply (X : E0 →L[ℂ] E1)
     (x : (gramLinearPMap X).domain) :
     gramLinearPMap X x = gramOperator X (x : E0) := rfl
@@ -484,5 +496,5 @@ theorem rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt
 
 end
 
-end FinishTanTwoTheta
+end ApproximationNumber
 end TauCeti
