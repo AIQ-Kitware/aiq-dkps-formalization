@@ -22,7 +22,7 @@ open Filter Topology
 
 universe u v w x y
 
-/-! ## Part A -- approximation numbers (T09)
+/-! ## Part A -- approximation numbers
 
 Field-generic on normed spaces; the Hilbert identifications come later in the
 Part.  Zero-based indexing: `a₀(T) = ‖T‖`. -/
@@ -103,7 +103,7 @@ theorem le_approximationNumber_of_lt_rank (T : E →L[ℂ] F) (n : ℕ) (V : Sub
 
 end HilbertIdentifications
 
-/-! ## Part B -- symmetric operator ideals and Schatten norms (T10)
+/-! ## Part B -- symmetric operator ideals and Schatten norms
 
 One interface, gauge-valued in `ℝ≥0∞`, quantified over all Hilbert pairs; the
 concrete norms are instances rather than parallel developments. -/
@@ -340,7 +340,7 @@ theorem gauge_blockSum_le (Φ : OperatorIdealFamily.{0, v, w} ℂ)
 
 end SymmetricGauges
 
-/-! ## Part C -- Hilbert-Schmidt operators as `ℓ²` of columns (T11)
+/-! ## Part C -- Hilbert-Schmidt operators as `ℓ²` of columns
 
 `lp (fun _ : ι => E) 2` is the Hilbert--Schmidt space; it arrives with Mathlib's
 inner product and completeness already proved, which the tensor-product model
@@ -392,5 +392,34 @@ theorem tsum_energy_isometryFamily_comp {κ : Type y} (b : HilbertBasis ι 𝕜 
     ∑' k, hilbertSchmidtEnergy ((P k) ∘L T) b = hilbertSchmidtEnergy T b := sorry
 
 end HilbertSchmidt
+
+/-! ## Part D -- approximation numbers of spectral bands
+
+The one Part that depends on `SelfAdjointSpectralTheory`.  Its statements are about
+approximation numbers, so this roadmap owns them; only the proofs are spectral theory. -/
+
+section SpectralBands
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+
+/-- **Milestone D1 -- a spectral cutoff bounds the approximation numbers.**
+
+Stated here in the bounded form, where the band is presented by its orthogonal projection
+and by the bound `T` satisfies off it: the compression `T ∘ P` is an admissible approximant
+of rank at most `r`, so the residual bound transfers to `a_r(T)` directly.
+
+The unbounded form replaces `P` by a spectral projection of the `SelfAdjointSpectralTheory`
+roadmap's spectral measure, and is the statement the perturbation roadmap consumes: it lets
+an argument bound an ideal gauge from a *spectral* hypothesis rather than from a rank
+hypothesis. -/
+theorem approximationNumber_le_of_spectral_band
+    {T : E →L[ℂ] F} {P : E →L[ℂ] E} {r : ℕ} {δ : ℝ}
+    (hidem : IsIdempotentElem P) (hsa : IsSelfAdjoint P)
+    (hrank : P.rank ≤ (r : Cardinal))
+    (hband : ∀ x : E, ‖T (x - P x)‖ ≤ δ * ‖x - P x‖) :
+    approximationNumber T r ≤ δ := sorry
+
+end SpectralBands
 
 end TauCetiRoadmap.OperatorIdeals

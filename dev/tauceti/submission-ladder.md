@@ -425,7 +425,7 @@ Two of the three blocks needed nothing but naming. The third dissolved on
 inspection:
 
 - **Seven of the eight "no roadmap" orphans are topic T12**, whose roadmap
-  (now Part A of `ForTauCetiRoadmap/SpectralSubspacePerturbation/`) was written the same day. They are
+  (now Part A of `ForTauCetiRoadmap/HilbertSpaceOperatorTheory/SpectralSubspacePerturbation/`) was written the same day. They are
   rung I.
 - **The eighth, `Analysis.CStarAlgebra.SelfAdjointGapInverse`, was never an
   orphan** — the topic table already assigns it to T15 (now T15b), where it lands
