@@ -242,7 +242,7 @@ overlap operator, definitionally.  This is the bridge that lets angle statements
 be proved by singular-value arguments. -/
 @[simp] theorem cosPrincipalAngles_eq {u v : Fin d → E} (hu : Orthonormal 𝕜 u)
     (hv : Orthonormal 𝕜 v) (i : ℕ) :
-    cosPrincipalAngles hu hv i = (overlapOp hu hv).singularValues i := rfl
+    cosPrincipalAngles hu hv i = (overlapOp hu hv).singularValues i := (rfl)
 
 omit [FiniteDimensional 𝕜 E] in
 /-- The coordinate isometry maps into the span of the family. -/

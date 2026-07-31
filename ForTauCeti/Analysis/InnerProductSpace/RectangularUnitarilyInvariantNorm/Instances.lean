@@ -258,7 +258,7 @@ noncomputable def opNorm : RectangularUnitarilyInvariantNorm 𝕜 E F where
 /-- The rectangular operator norm is the ordinary operator norm of the
 continuous-linear-map view, definitionally. -/
 @[simp] theorem opNorm_apply (A : E →ₗ[𝕜] F) :
-    opNorm A = ‖A.toContinuousLinearMap‖ := rfl
+    opNorm A = ‖A.toContinuousLinearMap‖ := (rfl)
 
 /-- Frobenius/Hilbert--Schmidt norm as a rectangular UI norm. -/
 noncomputable def frobenius : RectangularUnitarilyInvariantNorm 𝕜 E F where
@@ -485,7 +485,7 @@ theorem frobenius_subtype_comp
 @[simp]
 theorem kyFan_apply (k : ℕ) (A : E →ₗ[𝕜] F) :
     kyFan k A = rectangularKyFanSum k A :=
-  rfl
+  (rfl)
 
 /-- A finite two-sided unitary-orbit certificate bounds every rectangular
 Ky Fan prefix by the same certificate mass.
@@ -505,7 +505,7 @@ values past the rank are zero automatically. -/
 @[simp]
 theorem nuclear_apply (A : E →ₗ[𝕜] F) :
     nuclear A = ∑ i : Fin (finrank 𝕜 E), A.singularValues (i : ℕ) :=
-  rfl
+  (rfl)
 
 /-- The rectangular Frobenius norm is the Euclidean norm of the complete
 finite singular-value list. -/
@@ -584,7 +584,7 @@ itself on square operators. -/
 @[simp] theorem toRectangular_apply
     (N : UnitarilyInvariantNorm 𝕜 E) (A : E →ₗ[𝕜] E) :
     N.toRectangular A = N A :=
-  rfl
+  (rfl)
 
 end UnitarilyInvariantNorm
 end TauCeti
