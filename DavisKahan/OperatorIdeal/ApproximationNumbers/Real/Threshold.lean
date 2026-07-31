@@ -316,6 +316,10 @@ private theorem conjugateOperator_cfc_eq
 
 /-! ## Descent of conjugation-fixed operators -/
 
+/-! `norm_re_le`, `realPartOperator` and `realPartOperator_apply` were `private` copies here of the
+`Foundation.RealComplexification` declarations, which this module already opens.  Being `private`
+they were invisible to every duplication gate the repository runs — see lane `{lane:CPLX-DEDUP}`. -/
+
 omit [CompleteSpace E] in
 private theorem fixed_operator_maps_real_to_real
     {A : RealComplexification E →L[ℂ] RealComplexification E} (hfix : conjugateOperator A = A) (x : E) :
