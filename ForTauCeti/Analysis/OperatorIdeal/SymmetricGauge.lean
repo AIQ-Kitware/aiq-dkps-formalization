@@ -273,6 +273,36 @@ theorem iSup_le_extend_le_tsum (a : ℕ → ℝ≥0∞) :
     (⨆ n, a n) ≤ Φ.extend a ∧ Φ.extend a ≤ ∑' n, a n :=
   ⟨Φ.iSup_le_extend a, Φ.extend_le_tsum a⟩
 
+/-- The extension of the zero sequence is zero. -/
+@[simp] theorem extend_zero : Φ.extend (fun _ => 0) = 0 := by
+  simp [extend, show ∀ k m, truncate (fun _ : ℕ => (0 : ℝ≥0∞)) k m = 0 from
+    fun k m => by ext n; simp]
+
+/-- The extension of the everywhere-infinite sequence is `∞`.
+
+Worth stating because it is the property `extend` was built as a supremum to
+have: a definition routed through `tsum` would need the sequence summable before
+it said anything, and would then say nothing here. -/
+@[simp] theorem extend_top : Φ.extend (fun _ => ⊤) = ⊤ := by
+  refine top_le_iff.1 ?_
+  refine le_trans ?_ (Φ.iSup_le_extend (fun _ => ⊤))
+  simp
+
+/-! ### Homogeneity — not proved here
+
+`extend_smul`, `Φ∞ (c • a) = c * Φ∞ a`, is the remaining input
+`symmetricGaugeFamily.gauge_smul` needs, and it is **harder than the finite
+`smul'` field it lifts**.  The obstruction is the cap: `truncate` caps in
+`ℝ≥0∞` before converting, so scaling by `c` has to be matched by scaling the cap,
+and the two suprema then range over `m` and `m / c`.  That is true but it needs
+`min` to commute with multiplication in `ℝ≥0∞` at `c ≠ 0, ∞`, which Mathlib does
+not appear to state directly.
+
+Recorded rather than half-proved: `{lane:FTC-SYMGAUGE}` slice 2 needs it, and an
+`extend_smul` that only holds for `c ≠ 0` because nobody checked the edge is
+worse than none.
+-/
+
 end SymmetricGauge
 
 end TauCeti
