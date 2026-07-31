@@ -71,7 +71,6 @@ theorem exists_unitary_mul_of_conjTranspose_mul_self_eq {n d : ℕ}
 -- The `sorry` stays because this file records target shapes and is not a build target.
 
 end GramUniqueness
-
 /-! ## Part B -- Berge's maximum theorem over a fixed compact feasible set (T22) -/
 
 section Berge
