@@ -160,39 +160,58 @@ theorem posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self
     (B.PosSemidef ∧ B.rank ≤ d) ↔ ∃ A : Matrix (Fin d) (Fin n) 𝕜, B = Aᴴ * A
 ```
 
-**Milestone A2 — uniqueness up to the obvious action.** This is what a reviewer asks
-immediately after seeing an existence iff, and it is the difference between a
-*factorization theorem* and an existence lemma.  Two statements, and the hypotheses
-differ in a way that is easy to get wrong:
+**Milestone A2 — uniqueness up to the obvious action** (open, and now specified). This is
+what a reviewer asks immediately after seeing an existence iff, and it is the difference
+between a *factorization theorem* and an existence lemma.  Two statements, whose acting
+groups differ in a way that is easy to get wrong:
 
 ```lean
 -- rank factorization at the exact rank: unique up to a change of basis of the
 -- intermediate space.  `r = M.rank` is essential -- at `r > M.rank` the factors are
--- not related by any invertible `g`, since `L` may have a redundant column.
-theorem exists_unique_mul_rankFactorization {r : ℕ} (hr : M.rank = r)
+-- not related by any invertible `g`, since `L` may carry a redundant column.
+theorem exists_units_eq_mul_of_rank_factorization {r : ℕ} (hr : M.rank = r)
     {L L' : Matrix m (Fin r) 𝕜} {R R' : Matrix (Fin r) n 𝕜}
     (h : M = L * R) (h' : M = L' * R') :
     ∃ g : GL (Fin r) 𝕜, L' = L * g ∧ R' = (g⁻¹ : Matrix (Fin r) (Fin r) 𝕜) * R
 
--- Gram factorization: unique up to a left unitary, *at a fixed factor size*.  The
--- unitary is on the `d` side, not the `n` side, and no rank hypothesis is needed --
--- which is why this one is not a corollary of the theorem above.
-theorem exists_unitary_mul_of_conjTranspose_mul_self_eq {n d : ℕ}
+-- Gram factorization: unique up to a left unitary, *at a fixed factor size*, with no
+-- rank hypothesis -- which is why this one is not a corollary of the theorem above.
+theorem exists_mem_unitaryGroup_eq_mul_of_conjTranspose_mul_self {n d : ℕ}
     {A A' : Matrix (Fin d) (Fin n) 𝕜} (h : Aᴴ * A = A'ᴴ * A') :
     ∃ U ∈ Matrix.unitaryGroup (Fin d) 𝕜, A' = U * A
 ```
 
+Each is stated as an existence over the acting group rather than as a quotient — there is
+no quotient object here and inventing one would be a second, unasked-for design.
+
 **Why they are one milestone and not two.**  They are the two uniqueness statements of the
-same Part and they share a proof idea — both say the factor is determined by its Gram data
-up to the symmetry group of the intermediate space — but the groups differ (`GL` versus
+same Part and they share an idea — the factor is determined by its Gram data up to the
+symmetry group of the intermediate space — but the groups differ (`GL` versus
 `unitaryGroup`) because the second remembers an inner product and the first does not.
 Stating them together is what stops a reader assuming the general-field statement carries
 a unitary.
+
+**Route.** Both are linear algebra over the *column space*, not matrix algebra. At
+`r = M.rank` the columns of `L` are a basis of `range M.mulVecLin`, so two factorizations
+give two bases of one space and `g` is the change of basis; the Gram case adds that
+`Aᴴ A = A'ᴴ A'` makes `x ↦ A' x` an isometry on `range Aᴴ`, extended to a unitary by
+`LinearIsometry.extend`.
+
+**Only the minimal-rank case is claimed.**  At `r > M.rank` the factors are *not* unique
+up to `GL (Fin r)` — the extra columns are unconstrained — so the statement carries
+`r = M.rank` rather than the `≤ r` of Milestone A1.  *(Two agents specified this milestone
+independently on 2026-07-31 and reached that restriction separately; the agreement is
+recorded because it is the one hypothesis a reader is most likely to drop.)*
 
 **The MDS consumer fixes the second one's shape.**  Classical multidimensional scaling
 recovers points from a Gram matrix; the recovered configuration is meaningful only up to a
 rigid motion, and `A' = U * A` is exactly that indeterminacy.  A statement quantified the
 other way — a unitary on the `n` side — would be false and would look plausible.
+
+**Decided.** Existence over the group rather than a quotient type; minimal rank only.
+**Open.** Whether the Gram statement wants `unitaryGroup` or a bundled
+`LinearIsometryEquiv` — the answer depends on which the eventual consumer holds, and there
+is no consumer yet, so it is not decided here.
 
 **Acceptance examples.** The Gram matrix of `n` explicit points in `𝕜^d` has rank `≤ d`;
 a diagonal PSD matrix factors through its number of nonzero entries; the easy direction
@@ -241,7 +260,7 @@ theorem continuous_iInf_of_isCompact
     Continuous (fun p => ⨅ x : ↥K, g p ↑x)
 ```
 
-**Milestone B3 — the classical theorem: a varying constraint correspondence.** This is the
+**Milestone B3 — the classical theorem: a varying constraint correspondence** (open, and now specified). This is the
 classical statement's actual generality and the first thing a reviewer who knows Berge will
 ask for.  **The fixed-constraint case above is a special case of it, not a step toward
 it** — the engine that proves the fixed case does not generalize by adding a hypothesis,
@@ -249,9 +268,11 @@ because with `K` varying the approximate-minimizer sequence need not stay in one
 set.
 
 **Objects the milestone must add.**  A correspondence `Γ : P → Set X` together with the
-two hemicontinuity properties, stated in whichever form Mathlib's own predicates support
-(`UpperHemicontinuousAt` exists; the lower half needs checking against the current library
-before a shape is pinned):
+two hemicontinuity properties.  **Both predicates already exist upstream** —
+`UpperHemicontinuousAt` and `LowerHemicontinuousAt` in
+`Mathlib/Topology/Semicontinuity/Hemicontinuity.lean` — so nothing here defines a
+hemicontinuity notion, and a draft that introduced a placeholder for the lower half was
+wrong to:
 
 - `Γ` is **nonempty- and compact-valued** — both essential, and for opposite reasons: the
   first makes the value function finite, the second is what makes an argmin exist at all;
@@ -267,11 +288,18 @@ before a shape is pinned):
 values**.
 
 ```lean
-theorem continuous_value_of_hemicontinuous
-    {g : P → X → ℝ} (hg : Continuous fun q : P × X => g q.1 q.2)
-    {Γ : P → Set X} (hne : ∀ p, (Γ p).Nonempty) (hcpt : ∀ p, IsCompact (Γ p))
-    (huhc : UpperHemicontinuous Γ) (hlhc : LowerHemicontinuous Γ) :
-    Continuous fun p => ⨅ x : Γ p, g p x
+theorem continuous_iInf_of_hemicontinuous {K : P → Set X}
+    (hKcompact : ∀ p, IsCompact (K p)) (hKne : ∀ p, (K p).Nonempty)
+    (hKu : ∀ p, UpperHemicontinuousAt K p) (hKl : ∀ p, LowerHemicontinuousAt K p)
+    (hg : Continuous (Function.uncurry g)) :
+    Continuous (fun p => ⨅ x : ↥(K p), g p ↑x)
+
+-- the argmin half; the containment premise is no longer trivial, and keeping the
+-- limit feasible is exactly what upper hemicontinuity of `K` buys
+theorem upperHemicontinuousAt_isMinOn_of_hemicontinuous [T2Space X] {K : P → Set X}
+    (hKcompact : ∀ p, IsCompact (K p)) (hKu : ∀ p, UpperHemicontinuousAt K p)
+    (hg : Continuous (Function.uncurry g)) (p₀ : P) :
+    UpperHemicontinuousAt (fun p => {x ∈ K p | IsMinOn (g p) (K p) x}) p₀
 ```
 
 **The decomposition is the substance, and it should be stated in the roadmap because it is
@@ -281,9 +309,27 @@ hemicontinuity of `Γ`, and each half is provable on its own.  A roadmap that as
 "Berge's theorem" as a single target hides that it is two independent lemmas with opposite
 hypotheses — and hides that half of it is already available from Milestone B2.
 
-**Scope, honestly.**  Only the lower-hemicontinuity half and the correspondence vocabulary
-are genuinely new; if Mathlib has since acquired either, this milestone shrinks to a
-connection layer, and checking that is the first step rather than a formality.
+**Scope, honestly.**  The vocabulary is upstream, so what is genuinely new here is the two
+theorems above and nothing else — this milestone is smaller than it looks, and mistaking it
+for "define hemicontinuity, then prove Berge" is what makes it look large.
+
+**Declarations.** `continuous_iInf_of_hemicontinuous` for the value half over a varying
+`K : P → Set X`, and `upperHemicontinuousAt_isMinOn_of_hemicontinuous` for the argmin
+half; `IsMinOn` and Mathlib's `UpperHemicontinuousAt`/`LowerHemicontinuousAt` throughout,
+with no new correspondence API.
+
+**Route.** Upper semicontinuity of the value comes from upper hemicontinuity of `K` plus
+compactness, and lower semicontinuity from lower hemicontinuity — the two halves use
+*different* hypotheses, which is the content of the classical proof and the reason the
+fixed-`K` case cannot be extended by weakening one of them. The argmin half is then the
+closed-graph argument already used at fixed `K`, with the containment premise no longer
+trivial: it needs `K` upper hemicontinuous to keep the limit feasible.
+
+**Decided.** Mathlib's hemicontinuity predicates, not a bespoke correspondence structure.
+**Open.** Whether the sequential characterizations force `[FirstCountableTopology]` here
+as they do at fixed `K` — at fixed `K` that hypothesis is a proof artifact the roadmap
+asks to remove, and whether the varying case can avoid it is genuinely unknown, so it is
+not promised.
 
 **Acceptance examples.** `g p x = ‖x − p‖²` on a compact `K`: the argmin correspondence
 is the metric projection and the modulus form is nontrivial exactly where the projection
@@ -305,37 +351,51 @@ symmetry via `Matrix.isSymmetric_toEuclideanLin_iff`); the decreasingly sorted s
 - **Norm comparisons** (gap 1): `sum_norm_le_sqrt_card_mul_norm`
   (`ℓ¹ ≤ √card · ℓ²` on `EuclideanSpace`) and `norm_toEuclideanLin_le_of_entry_le`
   (`∀ i j, |A i j| ≤ ε` gives `‖toEuclideanLin A x‖ ≤ n · ε · ‖x‖`). The factor `n` is
+- **Norm comparisons** (gap 1): `sum_norm_le_sqrt_card_mul_norm`
+  (`ℓ¹ ≤ √card · ℓ²` on `EuclideanSpace`) and `norm_toEuclideanLin_le_of_entry_le`
+  (`∀ i j, |A i j| ≤ ε` gives `‖toEuclideanLin A x‖ ≤ n · ε · ‖x‖`). The factor `n` is
   what a statistician pays and must stay visible.
 
-  **The `RCLike` forms of both are open, and the reason they are not automatic is worth
-  stating.**  The real statements are proved; the general ones read
+  **Exactly one of the two is open.**  `sum_norm_le_sqrt_card_mul_norm` is *already* stated
+  over `[RCLike 𝕜]`; the missing declaration is `norm_toEuclideanLin_le_of_entry_le` over
+  `[RCLike 𝕜]`:
 
   ```lean
-  theorem sum_norm_le_sqrt_card_mul_norm {𝕜 : Type*} [RCLike 𝕜] {n : Type*} [Fintype n]
-      (x : EuclideanSpace 𝕜 n) :
-      ∑ i, ‖x i‖ ≤ Real.sqrt (Fintype.card n) * ‖x‖
-
   theorem norm_toEuclideanLin_le_of_entry_le {𝕜 : Type*} [RCLike 𝕜] {n : ℕ}
       {A : Matrix (Fin n) (Fin n) 𝕜} {ε : ℝ} (hε : 0 ≤ ε)
       (hentry : ∀ i j, ‖A i j‖ ≤ ε) (x : EuclideanSpace 𝕜 (Fin n)) :
       ‖Matrix.toEuclideanLin A x‖ ≤ (n : ℝ) * ε * ‖x‖
   ```
 
-  Cauchy–Schwarz and the triangle inequality are field-generic, so **no new mathematics is
-  involved**; what the port costs is that the real proofs use `|·|` and `Real`-specific
-  order lemmas where the general ones need `‖·‖` and `RCLike.re`/`norm_sum_le`.  Two
-  consequences follow and both are decisions rather than bookkeeping: the entrywise bound
-  is a bound on `‖A i j‖`, not on a real absolute value, so **complex Hermitian matrices
-  are covered by the same statement**; and the two constants — `√card` and `n` — are
-  unchanged by the generalization, which is the fact a reviewer will want asserted, since a
-  complexification argument would have cost a factor of two.
+  **No conjugation is involved, and this was checked rather than assumed.**  A natural
+  worry is that `toEuclideanLin` over `𝕜` carries the inner product's conjugate-linear
+  convention on one side, so that the `n` factor would have to be re-derived rather than
+  transported.  It does not: in the pinned Mathlib
+  (`Mathlib/Analysis/InnerProductSpace/PiL2.lean`) `toEuclideanLin` is a `𝕜`-**linear**
+  equiv and reduces to `toEuclideanLin M v = toLp (M *ᵥ ofLp v)` — plain matrix–vector
+  multiplication.  Conjugation enters the *adjoint* (`conjTranspose`), which this bound
+  never touches.  *(Recorded because two agents specified this milestone independently on
+  2026-07-31 and disagreed here; the resolution is the Mathlib signature, not either
+  agent's recollection.)*
+
+  So the port is proof hygiene, not new mathematics: Cauchy–Schwarz and the triangle
+  inequality are field-generic, and what it costs is that the real proof uses absolute
+  values and `Real`-specific order lemmas where the general one needs norms.  Two
+  consequences are decisions rather than bookkeeping: the entrywise hypothesis becomes a
+  bound on `‖A i j‖`, so **complex Hermitian matrices are covered by the same statement**;
+  and **both constants survive unchanged**, which a complexification argument would not
+  have managed.
+
+  **Do not, however, state it by writing `[RCLike 𝕜]` over the existing proof and hoping**
+  — that is the move this roadmap's generality bar forbids, and the reason the milestone is
+  listed as open rather than as a rename.
 
   **The eigenvalue statements downstream stay real for now.**  `sortedEigenvalues` is built
   on `LinearMap.IsSymmetric.eigenvalues`, and generalizing the *spectral* layer is a
-  different and larger question than generalizing these two norm inequalities.  Doing the
-  norm half alone is worthwhile because it is what the operator-norm deviation event
-  (Milestone D2) consumes, and it removes a `ℝ`-only hypothesis from the entry point of
-  the Part rather than from its interior.
+  different and larger question than generalizing this one norm inequality.  Doing the norm
+  half alone is worthwhile because it is what the operator-norm deviation event (Milestone
+  D2) consumes, and it removes a `ℝ`-only hypothesis from the entry point of the Part
+  rather than from its interior.
 - **Entrywise eigenvalue perturbation**: Weyl's inequality (consumed from the
   FiniteDimensionalOperators roadmap, `abs_eigenvalue_sub_eigenvalue_le`) composed with
   the comparison gives `abs_sortedEigenvalues_sub_le_of_entry_le` — entrywise `ε`-close
@@ -465,6 +525,22 @@ norm bound, whereas D1 needs both matrices Hermitian to have eigenvalues at all.
 the hypothesis where it is not used is what lets this event be consumed by a
 Davis–Kahan application that has already discharged symmetry elsewhere.
 
+**Declaration.** `measure_forall_norm_toEuclideanLin_sub_le_ge`, named for its conclusion
+the way the eigenvalue event `measure_forall_abs_sortedEigenvalues_sub_le_ge` is, and
+stated on the *same* hypotheses so the two are visibly one event read two ways.
+
+**Route.** The entrywise event is already proved inside the eigenvalue milestone; this
+milestone extracts it and composes it with `norm_toEuclideanLin_le_of_entry_le` instead
+of with Weyl. So the work is a refactor, not a new probability argument: **factor the
+entrywise event out of `measure_forall_abs_sortedEigenvalues_sub_le_ge` as its own
+declaration first**, then both events become one line each. Doing it in the other order
+duplicates the Chebyshev-plus-union-bound argument, which is the mistake this note exists
+to prevent.
+
+**Decided.** The elementary route and its `n²` constant, recorded below.
+**Open.** Nothing about the statement; only the refactor order above, which is a
+recommendation rather than a constraint.
+
 **The route is deliberately elementary, and the statement must say so.** Chebyshev plus a
 union bound costs a factor `n` (entrywise-to-operator) and `n²` (union bound); a matrix
 Bernstein / Tropp-style inequality would give `log n` dimension dependence, at the price
@@ -527,10 +603,7 @@ Davis–Kahan/DKPS formalization repository (Kitware, Inc., Apache 2.0), under
 plus `ForTauCeti/MeasureTheory/Function/ConvergenceInMeasure.lean` and
 `ForTauCeti/MeasureTheory/Measure/Typeclasses/Probability.lean`; Part D ↔
 `ForTauCeti/Probability/Moments/{Variance,SampleMean,SampleCovariance,CenteredScatter,MatrixConcentration}.lean`.
-Milestones A2, B3, C1's `RCLike` comparisons, and D2 are open (not staged) — **all four
-were specified in full on 2026-07-31**, with statements and the reasons each is not a
-corollary of its neighbour; before that they were named but not written down, which is the
-one thing a roadmap may not do with its own open work. Decision
+Milestones A2, B3, C1's `RCLike` comparisons, and D2 are open (not staged) and, since 2026-07-31, **specified**: each names its declarations, its route, and what is decided versus still open, and each has a representative signature in `Suggested.lean` that elaborates under `lake build ForTauCetiRoadmap`. Four findings came out of writing them down rather than out of proving anything. **A2 is false above minimal rank** — at `r > M.rank` the extra columns are unconstrained, so the statement carries `r = M.rank` and not the `≤ r` of A1. **B3's two halves need different hypotheses on the constraint correspondence**, which is why the fixed-constraint case is a special case and not a step toward it. **C1's `RCLike` gap is one declaration, not two** — `sum_norm_le_sqrt_card_mul_norm` is already general — and it *does* transport: `toEuclideanLin` is `𝕜`-linear with no conjugation, so both constants survive, which is the opposite of what the first draft of this paragraph said and was settled against the pinned Mathlib signature. **D2 needs no new probability**, only that the entrywise event be factored out of the eigenvalue theorem first; in the other order the Chebyshev-plus-union-bound argument gets written twice. **Two agents specified these four independently on the same day**, which is how three of the findings acquired a second witness and how the fourth was caught. Decision
 records carried over: Parts A/B lived in the retired `ForMathlib` staging tree until
 2026-07-29 (lane FM-RETIRE, worked twice; the namespace reconciliation to `TauCeti.*` is
 recorded in `ForTauCeti/Topology/Berge.lean`); several Part A/B statements are pinned as
