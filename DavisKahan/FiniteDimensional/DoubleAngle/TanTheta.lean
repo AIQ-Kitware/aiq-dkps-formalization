@@ -345,6 +345,45 @@ theorem eigenvalue_notMem_gap_of_diagonal_form (hS : S.IsSymmetric)
     mul_pos (show (0 : ℝ) < b - μ by linarith [hc.2]) hp2]
 
 omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
+/-- `w ↦ Ĵ(S w − c w)` is additive.
+
+It is a composition of linear maps, so this and `reflectionShift_smul` below hold
+with **no hypothesis on `S`, `V` or the shift at all** -- neither symmetry nor
+invariance.  Stated separately because inside a proof they read as steps needing
+the ambient hypotheses, and a reader then has to check whether they do. -/
+private theorem reflectionShift_add (S : E →ₗ[𝕜] E) (V : Submodule 𝕜 E)
+    [V.HasOrthogonalProjection] (c : ℝ) (v w : E) :
+    V.reflection (S (v + w) - ((c : ℝ) : 𝕜) • (v + w))
+      = V.reflection (S v - ((c : ℝ) : 𝕜) • v)
+        + V.reflection (S w - ((c : ℝ) : 𝕜) • w) := by
+  rw [← map_add]
+  congr 1
+  rw [map_add, smul_add]
+  abel
+
+omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
+/-- `w ↦ Ĵ(S w − c w)` is real-homogeneous.  See `reflectionShift_add`. -/
+private theorem reflectionShift_smul (S : E →ₗ[𝕜] E) (V : Submodule 𝕜 E)
+    [V.HasOrthogonalProjection] (c : ℝ) (t : ℝ) (w : E) :
+    V.reflection (S ((t : 𝕜) • w) - ((c : ℝ) : 𝕜) • ((t : 𝕜) • w))
+      = (t : 𝕜) • V.reflection (S w - ((c : ℝ) : 𝕜) • w) := by
+  rw [← map_smul]
+  congr 1
+  rw [map_smul, smul_sub, smul_comm]
+
+omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
+/-- A reflection is an isometry, so a bound on `S − T` bounds every form built
+from `J(S − T)`.  The only input is the norm bound itself. -/
+private theorem norm_inner_reflection_sub_le {S T : E →ₗ[𝕜] E} {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] {ε : ℝ} (hε : ∀ x, ‖(S - T) x‖ ≤ ε * ‖x‖) (v w : E) :
+    ‖⟪v, U.reflection ((S - T) w)⟫_𝕜‖ ≤ ε * (‖v‖ * ‖w‖) := by
+  calc ‖⟪v, U.reflection ((S - T) w)⟫_𝕜‖
+      ≤ ‖v‖ * ‖U.reflection ((S - T) w)‖ := norm_inner_le_norm _ _
+    _ = ‖v‖ * ‖(S - T) w‖ := by rw [LinearIsometryEquiv.norm_map]
+    _ ≤ ‖v‖ * (ε * ‖w‖) := mul_le_mul_of_nonneg_left (hε w) (norm_nonneg v)
+    _ = ε * (‖v‖ * ‖w‖) := by ring
+
+omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
 set_option maxHeartbeats 1600000 in
 /-- The eigenvector analysis behind the tan 2Θ theorem (plan step G2.2b).  At
 a unit eigenvector `x` of `(P − P̂)²` with eigenvalue `ν`, write `J, Ĵ` for the
@@ -402,6 +441,14 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
     rw [h1]
     exact (LinearIsometryEquiv.inner_map_map V.reflection _ _).symm
   -- assembled doubled forms
+  --
+  -- `hAA` and `hKF` are one argument run twice with opposite signs: `J(S−c)`
+  -- against `S(J·)−cJ·` adds to `2·J(T−c)` and subtracts to `2·J(S−T)`, because
+  -- `J` commutes with `T−c` and anticommutes with `S−T`.  The splitting of
+  -- `S − c` that both need is the same, so it is named once.
+  have hsplit : ∀ w, S w - (((a + b) / 2 : ℝ) : 𝕜) • w
+      = (T w - (((a + b) / 2 : ℝ) : 𝕜) • w) + (S - T) w := fun w => by
+    simp only [LinearMap.sub_apply]; abel
   have hAA : ∀ v w,
       ⟪V.reflection (U.reflection v),
           V.reflection (S w - (((a + b) / 2 : ℝ) : 𝕜) • w)⟫_𝕜
@@ -412,10 +459,7 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
     have hAK : U.reflection (S w - (((a + b) / 2 : ℝ) : 𝕜) • w)
         + (S (U.reflection w) - (((a + b) / 2 : ℝ) : 𝕜) • U.reflection w)
         = (2 : 𝕜) • U.reflection (T w - (((a + b) / 2 : ℝ) : 𝕜) • w) := by
-      have hsw : S w - (((a + b) / 2 : ℝ) : 𝕜) • w
-          = (T w - (((a + b) / 2 : ℝ) : 𝕜) • w) + (S - T) w := by
-        simp only [LinearMap.sub_apply]; abel
-      rw [hsw, map_add, hJH, hJT]
+      rw [hsplit w, map_add, hJH, hJT]
       simp only [LinearMap.sub_apply]
       module
     rw [← hbrA, ← hbrB, ← inner_add_right, hAK, inner_smul_right]
@@ -429,20 +473,12 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
     have hKK : U.reflection (S w - (((a + b) / 2 : ℝ) : 𝕜) • w)
         - (S (U.reflection w) - (((a + b) / 2 : ℝ) : 𝕜) • U.reflection w)
         = (2 : 𝕜) • U.reflection ((S - T) w) := by
-      have hsw : S w - (((a + b) / 2 : ℝ) : 𝕜) • w
-          = (T w - (((a + b) / 2 : ℝ) : 𝕜) • w) + (S - T) w := by
-        simp only [LinearMap.sub_apply]; abel
-      rw [hsw, map_add, hJT, hJH]
+      rw [hsplit w, map_add, hJT, hJH]
       simp only [LinearMap.sub_apply]
       module
     rw [← hbrA, ← hbrB, ← inner_sub_right, hKK, inner_smul_right]
-  have hKb : ∀ v w, ‖⟪v, U.reflection ((S - T) w)⟫_𝕜‖ ≤ ε * (‖v‖ * ‖w‖) := by
-    intro v w
-    calc ‖⟪v, U.reflection ((S - T) w)⟫_𝕜‖
-        ≤ ‖v‖ * ‖U.reflection ((S - T) w)‖ := norm_inner_le_norm _ _
-      _ = ‖v‖ * ‖(S - T) w‖ := by rw [LinearIsometryEquiv.norm_map]
-      _ ≤ ‖v‖ * (ε * ‖w‖) := mul_le_mul_of_nonneg_left (hε w) (norm_nonneg v)
-      _ = ε * (‖v‖ * ‖w‖) := by ring
+  have hKb : ∀ v w, ‖⟪v, U.reflection ((S - T) w)⟫_𝕜‖ ≤ ε * (‖v‖ * ‖w‖) :=
+    norm_inner_reflection_sub_le hε
   have hRform : ∀ w, (b - a) / 2 * ‖w‖ ^ 2
       ≤ RCLike.re ⟪w, V.reflection (S w - (((a + b) / 2 : ℝ) : 𝕜) • w)⟫_𝕜 :=
     fun w => le_re_inner_reflection_map hS hVinv hVb hVa w
@@ -456,19 +492,12 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
       inner_smul_left, inner_smul_right, RCLike.conj_ofReal, hS]
   have hRadd : ∀ v w, V.reflection (S (v + w) - (((a + b) / 2 : ℝ) : 𝕜) • (v + w))
       = V.reflection (S v - (((a + b) / 2 : ℝ) : 𝕜) • v)
-        + V.reflection (S w - (((a + b) / 2 : ℝ) : 𝕜) • w) := by
-    intro v w
-    rw [← map_add]
-    congr 1
-    rw [map_add, smul_add]
-    abel
+        + V.reflection (S w - (((a + b) / 2 : ℝ) : 𝕜) • w) :=
+    reflectionShift_add S V ((a + b) / 2)
   have hRsmul : ∀ (t : ℝ) w, V.reflection (S ((t : 𝕜) • w)
         - (((a + b) / 2 : ℝ) : 𝕜) • ((t : 𝕜) • w))
-      = (t : 𝕜) • V.reflection (S w - (((a + b) / 2 : ℝ) : 𝕜) • w) := by
-    intro t w
-    rw [← map_smul]
-    congr 1
-    rw [map_smul, smul_sub, smul_comm]
+      = (t : 𝕜) • V.reflection (S w - (((a + b) / 2 : ℝ) : 𝕜) • w) :=
+    reflectionShift_smul S V ((a + b) / 2)
   -- the invariant plane
   set y : E := U.reflection (V.reflection x) with hydef
   set z : E := V.reflection (U.reflection x) with hzdef

@@ -40,25 +40,30 @@ variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- The finite-dimensional point spectrum of `A` carried by `U`: real
 eigenvalues with an eigenvector in `U`. -/
+-- DELIVERED: AMBIGUOUS -- `restrictedSpectrum` is declared in 4 modules (`ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace`, `DavisKahan.Alternative.FiniteDimensional.Sylvester.ContinuousLinearMapBridge`, `DavisKahan.SpectralTheory.AbstractSpectrum`, `DavisKahan.SpectralTheory.Compatibility`); disambiguate before trusting this
 def restrictedSpectrum (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) : Set ℝ :=
   {lam | ∃ x, x ∈ U ∧ x ≠ 0 ∧ A x = (lam : 𝕜) • x}
 
 /-- Every eigenvalue of `A` carried by `U` lies in `Ω`. -/
+-- DELIVERED: AMBIGUOUS -- `SpectrumIn` is declared in 3 modules (`ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace`, `DavisKahan.SpectralTheory.AbstractSpectrum`, `DavisKahan.SpectralTheory.Compatibility`); disambiguate before trusting this
 def SpectrumIn (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (Ω : Set ℝ) : Prop :=
   restrictedSpectrum A U ⊆ Ω
 
 /-- Two restricted spectra are separated by at least `δ`. -/
+-- DELIVERED: AMBIGUOUS -- `SpectraSeparated` is declared in 4 modules (`ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap`, `DavisKahan.Alternative.FiniteDimensional.Sylvester.ContinuousLinearMapBridge`, `DavisKahan.SpectralTheory.AbstractSpectrum`, `DavisKahan.SpectralTheory.Compatibility`); disambiguate before trusting this
 def SpectraSeparated (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
     (B : F →ₗ[𝕜] F) (V : Submodule 𝕜 F) (δ : ℝ) : Prop :=
   ∀ lam μ, lam ∈ restrictedSpectrum A U → μ ∈ restrictedSpectrum B V →
     δ ≤ |lam - μ|
 
 /-- Canonical finite-dimensional spectral subspace selected by a real set. -/
+-- DELIVERED: AMBIGUOUS -- `spectralSubspace` is declared in 2 modules (`ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace`, `DavisKahan.Experimental.InfiniteDimensional.SinTheta.General`); disambiguate before trusting this
 noncomputable def spectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
     Submodule 𝕜 E :=
   Submodule.span 𝕜 {x | ∃ lam ∈ Ω, x ≠ 0 ∧ A x = (lam : 𝕜) • x}
 
 /-- The directed sine cross-projection `P_{Vᗮ} ∘ P_U`. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.AngleGeometry`
 noncomputable def sinThetaMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   ((Vᗮ.starProjection ∘L U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
@@ -73,6 +78,7 @@ character-for-character this body, with the rectangular twin in
 `RectangularUnitarilyInvariantNorm/Instances.lean` and basis independence proved as
 `frobenius_apply`.  The Yu--Wang--Samworth files already consume it under that name.  Kept here
 only because this file records target *shapes*; there is nothing to prove. -/
+-- DELIVERED: AMBIGUOUS -- `frobenius` is declared in 2 modules (`ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Instances`, `ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm`); disambiguate before trusting this (as `frobenius`)
 noncomputable def frobeniusNorm [FiniteDimensional 𝕜 E] (T : E →ₗ[𝕜] F) : ℝ :=
   Real.sqrt (∑ i, ‖T (stdOrthonormalBasis 𝕜 E i)‖ ^ 2)
 
@@ -82,6 +88,7 @@ end CommonObjects
 finite-dimensional inner-product spaces: subadditive, absolutely homogeneous,
 invariant under composition with linear isometry equivalences on both sides.
 Definiteness is deliberately not bundled. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic`
 structure RectangularUnitarilyInvariantNorm (𝕜 E F : Type*) [RCLike 𝕜]
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
@@ -102,6 +109,7 @@ instance {𝕜 E F : Type*} [RCLike 𝕜]
 /-- Square unitarily invariant seminorms as the diagonal of the rectangular
 family.  (The staged implementation carries a separate square structure; the
 roadmap treats the square case as the diagonal instance.) -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm`
 abbrev UnitarilyInvariantNorm (𝕜 E : Type*) [RCLike 𝕜] [NormedAddCommGroup E]
     [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] :=
   RectangularUnitarilyInvariantNorm 𝕜 E E
@@ -111,30 +119,36 @@ abbrev UnitarilyInvariantNorm (𝕜 E : Type*) [RCLike 𝕜] [NormedAddCommGroup
 section HaagerupZsido
 
 /-- The hyperbolic weight, chosen so the mass computation collapses exactly. -/
+-- DELIVERED: `ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs`
 noncomputable def weight (y : ℝ) : ℝ :=
   Real.tanh (Real.pi * y / 2)
 
 /-- The Laplace transform of the weight at `|t|`. -/
+-- DELIVERED: `ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs`
 noncomputable def weightLaplaceTransform (t : ℝ) : ℝ :=
   ∫ y in Set.Ioi (0 : ℝ), weight y * Real.exp (-|t| * y)
 
 /-- The real Haagerup–Zsidó kernel. -/
+-- DELIVERED: `ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs`
 noncomputable def realKernel (t : ℝ) : ℝ :=
   (Real.sin t / 2) * weightLaplaceTransform t
 
 /-- The complex kernel; the rotation by `-i` makes the Fourier identity land
 on `1 / x` rather than `i / x`. -/
+-- DELIVERED: `ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs`
 noncomputable def reciprocalKernel (t : ℝ) : ℂ :=
   -Complex.I * (realKernel t : ℂ)
 
 /-- Oddness; the two-sided Fourier identity follows from `1 ≤ x` by
 reflection. -/
+-- DELIVERED: `ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs`
 theorem reciprocalKernel_neg (t : ℝ) :
     reciprocalKernel (-t) = -reciprocalKernel t := by
   sorry
 
 /-- Closed-form Laplace transform of `|sin|`, the inner integral of the mass
 computation. -/
+-- DELIVERED: `ForTauCeti.Analysis.SpecialFunctions.Integral.SineLaplace`
 theorem integral_abs_sin_mul_exp_neg_abs {y : ℝ} (hy : 0 < y) :
     (∫ t : ℝ, |Real.sin t| * Real.exp (-y * |t|)) =
       2 * ((1 + Real.exp (-Real.pi * y)) /
@@ -142,12 +156,14 @@ theorem integral_abs_sin_mul_exp_neg_abs {y : ℝ} (hy : 0 < y) :
   sorry
 
 /-- **Milestone A1, first half: the exterior Fourier identity.** -/
+-- DELIVERED: `ForTauCeti.Analysis.Fourier.HaagerupZsido.Fourier`
 theorem reciprocalKernel_fourier (x : ℝ) (hx : 1 ≤ |x|) :
     (∫ t : ℝ, reciprocalKernel t *
         Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I))) = 1 / (x : ℂ) := by
   sorry
 
 /-- **Milestone A1, second half: the exact mass `π / 2`.** -/
+-- DELIVERED: `ForTauCeti.Analysis.Fourier.HaagerupZsido.Integrability`
 theorem integral_norm_reciprocalKernel :
     (∫ t : ℝ, ‖reciprocalKernel t‖) = Real.pi / 2 := by
   sorry
@@ -165,6 +181,7 @@ variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 /-- **Dimension-free separated Sylvester bound** (integral-free, arbitrary
 Hilbert spaces, both scalar fields): quadratic-form separation of size `g`
 gives `‖X‖ ≤ ‖Y‖ / g`. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound`
 theorem opNorm_le_div_of_comp_sub_comp_eq
     {A : E →L[𝕜] E} {B : F →L[𝕜] F} {X Y : F →L[𝕜] E}
     (hA : (A : E →ₗ[𝕜] E).IsSymmetric) (hB : (B : F →ₗ[𝕜] F).IsSymmetric)
@@ -186,6 +203,7 @@ variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- **Interval/exterior separation, constant one, every rectangular unitarily
 invariant norm.** -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval`
 theorem uiNorm_sylvester_le_of_intervalGap
     (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
@@ -200,6 +218,7 @@ theorem uiNorm_sylvester_le_of_intervalGap
 /-- **Arbitrary pairwise separation, the sharp constant `π / 2`** (the mass of
 the Part A kernel), lifted from the simultaneous Ky Fan prefix estimate by Fan
 dominance. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance`
 theorem uiNorm_sylvester_le_of_spectralDistance
     (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
@@ -219,6 +238,7 @@ variable {H : Type v} [NormedAddCommGroup H] [NormedSpace 𝕜 H]
 /-- The resolvent set of a partial linear map: `z` such that `A - z` has a
 two-sided bounded inverse.  (Owned by the SpectralTheory roadmap; restated
 so the statements below elaborate.) -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent`
 def resolventSet (A : H →ₗ.[𝕜] H) : Set 𝕜 :=
   { z | ∃ R : H →L[𝕜] H,
       (∀ ψ : A.domain, R (A ψ - z • (ψ : H)) = (ψ : H)) ∧
@@ -226,6 +246,7 @@ def resolventSet (A : H →ₗ.[𝕜] H) : Set 𝕜 :=
 
 /-- The spectrum of a partial linear map: the complement of the resolvent
 set, with codomain `Set 𝕜` and no self-adjointness built in. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent`
 def spectrum (A : H →ₗ.[𝕜] H) : Set 𝕜 :=
   (resolventSet A)ᶜ
 
@@ -241,6 +262,7 @@ variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
 /-- The domain-aware Sylvester equation `A X - X B = C` for partial linear
 maps, with domain transport as data.  (The transport statement is owned by
 the SpectralTheory roadmap; the estimates attach to it here.) -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester`
 structure SylvesterEquation (A : E →ₗ.[ℂ] E) (B : F →ₗ.[ℂ] F)
     (X C : F →L[ℂ] E) : Prop where
   mapsTo_domain : ∀ y : B.domain, X (y : F) ∈ A.domain
@@ -251,6 +273,7 @@ structure SylvesterEquation (A : E →ₗ.[ℂ] E) (B : F →ₗ.[ℂ] F)
 two self-adjoint partial maps with disjoint spectra is zero.  Proved without
 a Borel functional calculus: `1` is a null point for every diagonal spectral
 measure, so damped continuous Cayley symbols separate in the limit. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.Rosenblum`
 theorem eq_zero_of_intertwines_of_disjoint_spectrum
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B) {X : F →L[ℂ] E}
@@ -282,6 +305,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 
 /-- **The dimension-free operator-norm `sin Θ` theorem, coercivity form**: on
 an arbitrary Hilbert space, from the dimension-free Sylvester bound alone. -/
+-- DELIVERED: AMBIGUOUS -- `sinTheta_directed_coercive` is declared in 2 modules (`ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta`, `DavisKahan.Experimental.InfiniteDimensional.SinTheta.General`); disambiguate before trusting this
 theorem sinTheta_directed_coercive
     {A B : E →L[𝕜] E}
     (hA : (A : E →ₗ[𝕜] E).IsSymmetric) (hB : (B : E →ₗ[𝕜] E).IsSymmetric)
@@ -304,6 +328,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 
 /-- **Milestone C1 — Davis–Kahan `sin Θ`, perturbation form, every square
 unitarily invariant norm**, under the interval/exterior gap. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation`
 theorem sinTheta_perturbation_le
     (N : UnitarilyInvariantNorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -319,6 +344,7 @@ theorem sinTheta_perturbation_le
 /-- **Canonical spectral-projector Davis–Kahan theorem** with no eigenbasis
 in the API; the equal-rank hypothesis turns the directed estimate into the
 full projector difference. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation`
 theorem opNorm_spectralProjection_sub_spectralProjection_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
@@ -335,6 +361,7 @@ theorem opNorm_spectralProjection_sub_spectralProjection_le
 /-- **Milestone C2 — the two-sided `π/2` form**: arbitrary pairwise
 separation of the selected `A`-spectrum from the complementary `B`-spectrum,
 every square unitarily invariant norm. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation`
 theorem sinTheta_perturbation_le_of_spectralDistance
     (N : UnitarilyInvariantNorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -348,6 +375,7 @@ theorem sinTheta_perturbation_le_of_spectralDistance
 /-- **Davis's `sin 2θ` theorem, per-eigenvector product form**: for a unit
 eigenvector `x` of the perturbed operator and `P` the projection onto the
 invariant subspace, `(b - a) · ‖P x‖ · ‖x - P x‖ ≤ ε`. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector`
 theorem sin_two_theta_le
     {T P : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (hP : P.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
@@ -380,6 +408,7 @@ variable {H : Type w} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 /-- A lower frame bound for a trial map: the constant that replaces isometry.
 `c = 1` recovers the classical isometric statement, and the bound of Milestone C3
 degrades with `c` as the trial map degenerates. -/
+-- DELIVERED: AMBIGUOUS -- `LowerFrameBound` is declared in 2 modules (`ForTauCeti.Analysis.InnerProductSpace.FrameFactorization`, `DavisKahan.SinTheta.FrameFactorization`); disambiguate before trusting this
 def LowerFrameBound (X : H →L[ℂ] E) (c : ℝ) : Prop :=
   ∀ h : H, c * ‖h‖ ≤ ‖X h‖
 
@@ -393,6 +422,7 @@ bounded `A`.
 The norm is an ideal gauge from the OperatorIdeals roadmap rather than a unitarily
 invariant norm on a finite-dimensional space: at this generality finiteness of the
 gauge is a *hypothesis* on the residual and a *conclusion* about `sin Θ`. -/
+-- DELIVERED: `DavisKahan.SinTheta.Unbounded.Core` (as `UnboundedSinThetaData`)
 structure UnboundedSinThetaProblem
     (A : E →ₗ.[ℂ] E) (A₀ : H →ₗ.[ℂ] H) (X : H →L[ℂ] E) (R : H →L[ℂ] E) where
   /-- The ambient operator is self-adjoint; it is not assumed bounded. -/
@@ -468,12 +498,14 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 
 /-- Population-only gap: the selected block of `A` is separated from its own
 complementary block.  No hypothesis on the perturbed spectrum. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 def PopulationGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (Δ : ℝ) : Prop :=
   SpectraSeparated A U A Uᗮ Δ
 
 /-- `U` and `V` are eigenblocks of `A` and `B` selected by the same ordered
 eigenvalue indices — the branch selection that excludes arbitrary reducing
 subspaces when `B = A`. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 def CorrespondingEigenblock {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     (U V : Submodule 𝕜 E) : Prop :=
@@ -482,6 +514,7 @@ def CorrespondingEigenblock {A B : E →ₗ[𝕜] E}
       V = Submodule.span 𝕜 (⇑(hB.eigenvectorBasis hn) '' (s : Set (Fin n)))
 
 /-- Frobenius sine distance in canonical subspace notation. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 noncomputable def sinThetaFrobenius (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   frobeniusNorm (sinThetaMap U V)
@@ -489,6 +522,7 @@ noncomputable def sinThetaFrobenius (U V : Submodule 𝕜 E)
 /-- **The complement identity**: the Frobenius sine of two equally indexed
 blocks is exactly the square root of the cross-block overlap sum — the bridge
 between the paper's cross-block energies and angles, public by decision. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
     (bT bS : OrthonormalBasis (Fin n) 𝕜 E) (s : Finset (Fin n)) :
     sinThetaFrobenius
@@ -498,6 +532,7 @@ theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
   sorry
 
 /-- **Milestone D1 — the exact Yu–Wang–Samworth population-gap theorem.** -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 theorem yuWangSamworth_sinTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
@@ -513,6 +548,7 @@ theorem yuWangSamworth_sinTheta_le
 /-- **The aligned-basis (Procrustes) surface**: orthonormal bases of the two
 blocks whose pointwise discrepancy is controlled — the usable form when
 eigenbases are determined only up to rotation. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 theorem yuWangSamworth_alignedBasis_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
@@ -531,6 +567,7 @@ theorem yuWangSamworth_alignedBasis_le
 
 /-- **The single-vector bound**: the rank-one, sign-aligned eigenvector
 corollary — the headline statisticians quote. -/
+-- DELIVERED: `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 theorem yuWangSamworth_eigenvector_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {u v : E} (hu : ‖u‖ = 1) (hv : ‖v‖ = 1)
