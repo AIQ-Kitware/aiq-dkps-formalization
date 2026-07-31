@@ -215,8 +215,7 @@ theorem hasEigenvalue_adjointCompSelf_iff_selfCompAdjoint
     Module.End.HasEigenvalue (A.adjoint.comp A) μ ↔
       Module.End.HasEigenvalue (A.comp A.adjoint) μ := by
   have h := finrank_eigenspace_adjointCompSelf_eq_selfCompAdjoint A μ hμ
-  rw [Module.End.hasEigenvalue_iff, Module.End.hasEigenvalue_iff, ne_eq, ne_eq,
-    ← Submodule.finrank_eq_zero, ← Submodule.finrank_eq_zero, h]
+  simp only [Module.End.hasEigenvalue_iff, ne_eq, ← Submodule.finrank_eq_zero, h]
 
 /-! ### Equality of the sorted nonzero spectra -/
 
