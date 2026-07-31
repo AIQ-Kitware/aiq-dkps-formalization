@@ -7,6 +7,7 @@ import Mathlib.Data.Finsupp.Order
 import Mathlib.Topology.Instances.ENNReal.Lemmas
 import Mathlib.Order.CompleteLattice.Finset
 import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
+import ForTauCeti.Analysis.Convex.Majorization
 
 /-!
 # Symmetric norming functions on sequences
@@ -348,6 +349,46 @@ theorem extend_smul (c : ℝ≥0) (a : ℕ → ℝ≥0∞) :
           le_iSup_of_le k (le_iSup
             (fun m : ℝ≥0 => ((Φ (truncate (fun n => (c : ℝ≥0∞) * a n) k m) : ℝ≥0) : ℝ≥0∞))
             (c * m))
+
+/-! ### Restriction to `Fin n` — designed, not landed
+
+The bridge to `TauCeti.FiniteSymmetricGauge` is what would let the finite
+Hardy–Littlewood–Pólya transfer `FiniteSymmetricGauge.le_of_prefixSum_le` reach
+sequences, and it is the missing piece of Milestone B2 — **the transfer itself is
+complete** in `ForTauCeti/Analysis/Convex/Majorization.lean`.
+
+It is designed here and not landed, because a partial construction cannot go into
+this library: a `sorry` in `ForTauCeti` breaks `check_tauceti_readiness`'s
+zero-escape guarantee, and an unused `ofFin` with no consumer is the dead code
+`{lane:FTC-DEAD}` exists to remove.  So the obligations are recorded instead.
+
+**The shape.**  `toFinite (Φ : SymmetricGauge) (n : ℕ) : FiniteSymmetricGauge n`
+sending `x : Fin n → ℝ` to `(Φ (ofFin x) : ℝ)`, where `ofFin` is
+`Finsupp.onFinset (Finset.range n) (fun i => if h : i < n then Real.nnabs (x ⟨i, h⟩) else 0)`.
+
+**Absolute values are what reconcile the two structures**, and they are not a
+convenience: `FiniteSymmetricGauge` is `ℝ`-valued with a `neg_single'` field and
+an `|c|` in its homogeneity, while `SymmetricGauge` is `ℝ≥0`-valued with neither.
+Taking `|·|` on the way in discharges both.
+
+**The four field obligations, in increasing difficulty:**
+
+* `neg_single'` — immediate; `Function.update` at one index and `Real.nnabs`
+  ignores the sign.
+* `add_le'` — `Φ.add_le` is not enough on its own.  `ofFin (x + y) ≤ ofFin x + ofFin y`
+  pointwise (from `abs_add`), then `Φ.mono` and then `Φ.add_le`.
+* `real_smul'` — `Real.nnabs` is a `MonoidHom`, so `nnabs (c • x) = nnabs c * nnabs x`
+  pointwise, then `Φ.smul`.  The `|c|` in the finite structure's field is exactly
+  what makes this match.
+* `perm'` — **the real work, and the reason this is a separate slice.**
+  `Equiv.Perm.extendDomain (σ : Equiv.Perm (Fin n)) (f : Fin n ≃ {i // i < n})`
+  gives the permutation of `ℕ` fixing everything from `n` on, and
+  `Equiv.Perm.extendDomain_apply_image` together with
+  `extendDomain_apply_not_subtype` transports it through `ofFin` to meet
+  `Φ.symm'`.  Both lemmas exist in `Mathlib.Logic.Equiv.Basic`; the work is
+  matching `Finsupp.equivMapDomain` against them, since `equivMapDomain` reindexes
+  by the inverse.
+-/
 
 end SymmetricGauge
 
