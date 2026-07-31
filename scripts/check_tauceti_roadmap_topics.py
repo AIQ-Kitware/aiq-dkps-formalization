@@ -80,7 +80,11 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # would sit in T09, but it imports `Family.HilbertSchmidt` (here), so filing it there makes
  # T09 unsubmittable.  Fourth module to hit this; file by dependency and let `--check` say so.
  +["Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison"]
- +[A+"SchattenNorm",A+"HilbertSchmidt.Energy","Analysis.Normed.FiniteLpGauge","Topology.ENNRealLiminf"]),
+ +[A+"SchattenNorm",A+"HilbertSchmidt.Energy","Analysis.Normed.FiniteLpGauge","Topology.ENNRealLiminf"]
+ # `OperatorIdeal.SymmetricGauge` is the Gohberg--Krein symmetric norming function and the
+ # abstraction the three concrete gauges are instances of; it belongs with the ideal families
+ # it will induce, and it imports only Mathlib, so it sorts to the front of this topic.
+ +["Analysis.OperatorIdeal.SymmetricGauge"]),
 ("T11","Hilbert-Schmidt operators",
  [A+"HilbertSchmidt."+x for x in ["Lp","Space","Conjugation","Pythagoras"]]),
 ("T12","The Haagerup-Zsido kernel and its Fourier transform",
