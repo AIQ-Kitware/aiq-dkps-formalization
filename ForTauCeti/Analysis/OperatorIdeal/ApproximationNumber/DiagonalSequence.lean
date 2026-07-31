@@ -261,11 +261,19 @@ The argument, so that whoever takes it does not re-derive it:
 * Then `(D − R) x = D x`, and `‖D x‖² = ∑_{i ≤ n} ‖cᵢ‖² ‖xᵢ‖² ≥ ‖cₙ‖²` by
   antitonicity of `‖c ·‖` and `∑ ‖xᵢ‖² = 1`.
 
-**The fiddly part is the last step, not the linear algebra**: it is an `lp 2`
-coordinate computation on a vector known only to lie in a span, and this module
-has no lemma reading the norm of such a vector off its coordinates — everything
-here goes through `lp.norm_mono` against an explicit comparison vector, which
-bounds but does not compute.
+**Correction (2026-07-31, same lane).**  An earlier version of this note called
+the last step the obstacle, on the grounds that the module has no lemma reading
+an `lp 2` norm off coordinates.  **That is wrong, and in the useful direction:
+`lp.norm_mono` does exactly this step.**  Apply it to `‖cₙ • x‖ ≤ ‖D x‖`, whose
+pointwise hypothesis `‖cₙ xᵢ‖ ≤ ‖cᵢ xᵢ‖` holds for `i ≤ n` by antitonicity and
+holds vacuously for `i > n` because `x` lies in the span.  That is the same
+technique `norm_sub_truncDiagOpLp_le` already uses, one inequality reversed.
+
+**So the remaining obstacle is the linear algebra after all**: producing the unit
+`x` in the span with `R x = 0`.  Rank-nullity gives it, but it has to be set up
+against a concrete `(n+1)`-dimensional model — for instance by pulling back along
+the coefficient map `(Fin (n+1) → 𝕜) →ₗ[𝕜] lp _ 2` and observing that `R`
+composed with it cannot be injective.
 -/
 
 end TauCeti
