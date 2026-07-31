@@ -160,31 +160,6 @@ theorem posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self
     (B.PosSemidef ∧ B.rank ≤ d) ↔ ∃ A : Matrix (Fin d) (Fin n) 𝕜, B = Aᴴ * A
 ```
 
-<<<<<<< HEAD
-**Milestone A2 — uniqueness up to the obvious action** (open, and now specified). A rank
-factorization is unique up to `L ↦ L * g`, `R ↦ g⁻¹ * R` for `g` in `GL (Fin r) 𝕜` (at
-`r = M.rank`), and two Gram factors of the same size differ by a left element of
-`Matrix.unitaryGroup (Fin d) 𝕜`. This is what a reviewer asks after seeing an existence
-iff.
-
-**Declarations.** `exists_units_eq_mul_of_rank_factorization` for the general factor
-pair and `exists_mem_unitaryGroup_eq_mul_of_conjTranspose_mul_self` for the Gram case,
-each stated as an existence over the acting group rather than as a quotient — there is no
-quotient object here and inventing one would be a second, unasked-for design.
-
-**Route.** Both directions are linear algebra over the *column space*, not matrix
-algebra. At `r = M.rank` the columns of `L` are a basis of `range M.mulVecLin`, so two
-factorizations give two bases of one space and `g` is the change of basis; the Gram case
-adds that `Aᴴ A = Bᴴ B` makes `x ↦ B x` an isometry on `range Aᴴ`, extended to a unitary
-by `LinearIsometry.extend`. **Only the minimal-rank case is claimed**: at `r > M.rank`
-the factors are *not* unique up to `GL (Fin r)` — the extra columns are unconstrained —
-and the statement must carry `r = M.rank` rather than the `≤ r` of Milestone A1.
-
-**Decided.** Existence-over-the-group rather than a quotient type; minimal rank only.
-**Open.** Whether the Gram statement wants `unitaryGroup` or a bundled
-`LinearIsometryEquiv` — the answer depends on which the eventual consumer holds, and
-there is no consumer yet, so it is not decided here.
-=======
 **Milestone A2 — uniqueness up to the obvious action.** This is what a reviewer asks
 immediately after seeing an existence iff, and it is the difference between a
 *factorization theorem* and an existence lemma.  Two statements, and the hypotheses
@@ -218,7 +193,6 @@ a unitary.
 recovers points from a Gram matrix; the recovered configuration is meaningful only up to a
 rigid motion, and `A' = U * A` is exactly that indeterminacy.  A statement quantified the
 other way — a unitary on the `n` side — would be false and would look plausible.
->>>>>>> origin/yardrat-work
 
 **Acceptance examples.** The Gram matrix of `n` explicit points in `𝕜^d` has rank `≤ d`;
 a diagonal PSD matrix factors through its number of nonzero entries; the easy direction
@@ -267,14 +241,6 @@ theorem continuous_iInf_of_isCompact
     Continuous (fun p => ⨅ x : ↥K, g p ↑x)
 ```
 
-<<<<<<< HEAD
-**Milestone B3 — the classical theorem** (open, and now specified). The parameter-varying
-constraint correspondence (upper and lower hemicontinuous, compact- and nonempty-valued),
-and the lower-hemicontinuity half — hence the maximum theorem proper. This is the
-classical statement's actual generality and the first thing a reviewer who knows Berge
-will ask for; the fixed-constraint case above is the special case the argmin engine gives
-directly, not a step toward it.
-=======
 **Milestone B3 — the classical theorem: a varying constraint correspondence.** This is the
 classical statement's actual generality and the first thing a reviewer who knows Berge will
 ask for.  **The fixed-constraint case above is a special case of it, not a step toward
@@ -318,7 +284,6 @@ hypotheses — and hides that half of it is already available from Milestone B2.
 **Scope, honestly.**  Only the lower-hemicontinuity half and the correspondence vocabulary
 are genuinely new; if Mathlib has since acquired either, this milestone shrinks to a
 connection layer, and checking that is the first step rather than a formality.
->>>>>>> origin/yardrat-work
 
 **Declarations.** `continuous_iInf_of_hemicontinuous` for the value half over a varying
 `K : P → Set X`, and `upperHemicontinuousAt_isMinOn_of_hemicontinuous` for the argmin
@@ -358,21 +323,6 @@ symmetry via `Matrix.isSymmetric_toEuclideanLin_iff`); the decreasingly sorted s
 - **Norm comparisons** (gap 1): `sum_norm_le_sqrt_card_mul_norm`
   (`ℓ¹ ≤ √card · ℓ²` on `EuclideanSpace`) and `norm_toEuclideanLin_le_of_entry_le`
   (`∀ i j, |A i j| ≤ ε` gives `‖toEuclideanLin A x‖ ≤ n · ε · ‖x‖`). The factor `n` is
-<<<<<<< HEAD
-  what a statistician pays and must stay visible; the `RCLike` forms of both are part of
-  this milestone.
-
-  **The `RCLike` half is open, and it is not a generalisation-by-typeclass.** The real
-  statements are `sum_norm_le_sqrt_card_mul_norm` (already `RCLike`) and
-  `norm_toEuclideanLin_le_of_entry_le` (stated over `ℝ`); the missing declaration is
-  `norm_toEuclideanLin_le_of_entry_le` over `RCLike 𝕜`, and the obstruction is real:
-  `Matrix.toEuclideanLin` over `𝕜` carries the conjugate-linear convention on one side,
-  so the entrywise bound composes through `‖·‖` rather than through the real absolute
-  value and the `n` factor must be re-derived rather than transported. **Do not state it
-  by writing `[RCLike 𝕜]` over the existing proof** — that is the failure the generality
-  bar of this roadmap names, and the whole point of listing this as open is that the real
-  case does not simply lift.
-=======
   what a statistician pays and must stay visible.
 
   **The `RCLike` forms of both are open, and the reason they are not automatic is worth
@@ -404,7 +354,6 @@ symmetry via `Matrix.isSymmetric_toEuclideanLin_iff`); the decreasingly sorted s
   norm half alone is worthwhile because it is what the operator-norm deviation event
   (Milestone D2) consumes, and it removes a `ℝ`-only hypothesis from the entry point of
   the Part rather than from its interior.
->>>>>>> origin/yardrat-work
 - **Entrywise eigenvalue perturbation**: Weyl's inequality (consumed from the
   FiniteDimensionalOperators roadmap, `abs_eigenvalue_sub_eigenvalue_le`) composed with
   the comparison gives `abs_sortedEigenvalues_sub_le_of_entry_le` — entrywise `ε`-close
@@ -608,14 +557,10 @@ Davis–Kahan/DKPS formalization repository (Kitware, Inc., Apache 2.0), under
 plus `ForTauCeti/MeasureTheory/Function/ConvergenceInMeasure.lean` and
 `ForTauCeti/MeasureTheory/Measure/Typeclasses/Probability.lean`; Part D ↔
 `ForTauCeti/Probability/Moments/{Variance,SampleMean,SampleCovariance,CenteredScatter,MatrixConcentration}.lean`.
-<<<<<<< HEAD
-Milestones A2, B3, C1's `RCLike` comparisons, and D2 are open (not staged) and, since 2026-07-31, **specified**: each names its declarations, its route, and what is decided versus still open, and each has a representative signature in `Suggested.lean` that elaborates under `lake build ForTauCetiRoadmap`. Three findings came out of writing them down rather than out of proving anything. **A2 is false above minimal rank** — at `r > M.rank` the extra columns are unconstrained, so the statement carries `r = M.rank` and not the `≤ r` of A1. **B3's two halves need different hypotheses on the constraint correspondence**, which is why the fixed-constraint case is a special case and not a step toward it. **C1's `RCLike` comparison does not lift by typeclass**: `toEuclideanLin` over `𝕜` carries the conjugate-linear convention on one side, so the `n` factor has to be re-derived — writing `[RCLike 𝕜]` over the real proof is exactly the move this roadmap's generality bar forbids. **D2 needs no new probability**, only that the entrywise event be factored out of the eigenvalue theorem first; in the other order the Chebyshev-plus-union-bound argument gets written twice. Decision
-=======
 Milestones A2, B3, C1's `RCLike` comparisons, and D2 are open (not staged) — **all four
 were specified in full on 2026-07-31**, with statements and the reasons each is not a
 corollary of its neighbour; before that they were named but not written down, which is the
 one thing a roadmap may not do with its own open work. Decision
->>>>>>> origin/yardrat-work
 records carried over: Parts A/B lived in the retired `ForMathlib` staging tree until
 2026-07-29 (lane FM-RETIRE, worked twice; the namespace reconciliation to `TauCeti.*` is
 recorded in `ForTauCeti/Topology/Berge.lean`); several Part A/B statements are pinned as

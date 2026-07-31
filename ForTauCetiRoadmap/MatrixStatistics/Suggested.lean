@@ -36,36 +36,16 @@ theorem posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self
     {n d : ℕ} (B : Matrix (Fin n) (Fin n) 𝕜) :
     (B.PosSemidef ∧ B.rank ≤ d) ↔ ∃ A : Matrix (Fin d) (Fin n) 𝕜, B = Aᴴ * A := sorry
 
-<<<<<<< HEAD
-/-- **Milestone A2, general factors.** At minimal rank the factorization is unique up to
-the obvious `GL` action.  Stated as an existence over the group rather than through a
-quotient object: there is no quotient here, and inventing one would be an unasked-for
-design. `r = M.rank` is load-bearing -- above the rank the extra columns are
-unconstrained and the statement is false. -/
-theorem exists_units_eq_mul_of_rank_factorization {r : ℕ} (M : Matrix m n 𝕜)
-=======
 /-- **Milestone A2, rank factorization.**  Unique up to a change of basis of the
 intermediate space.  `M.rank = r` is essential: at `r > M.rank` the factors are not
 related by any invertible `g`, since `L` may carry a redundant column. -/
 theorem exists_unique_mul_rankFactorization [DecidableEq m] {M : Matrix m n 𝕜} {r : ℕ}
->>>>>>> origin/yardrat-work
     (hr : M.rank = r) {L L' : Matrix m (Fin r) 𝕜} {R R' : Matrix (Fin r) n 𝕜}
     (h : M = L * R) (h' : M = L' * R') :
     ∃ g : (Matrix (Fin r) (Fin r) 𝕜)ˣ,
       L' = L * (g : Matrix (Fin r) (Fin r) 𝕜) ∧
         R' = ((g⁻¹ : (Matrix (Fin r) (Fin r) 𝕜)ˣ) : Matrix (Fin r) (Fin r) 𝕜) * R := sorry
 
-<<<<<<< HEAD
-/-- **Milestone A2, Gram factors.** Two Gram factors of the same size differ by a left
-unitary.  Open question deliberately left in the roadmap rather than settled here:
-whether the consumer wants `unitaryGroup` or a bundled `LinearIsometryEquiv`. -/
-theorem exists_mem_unitaryGroup_eq_mul_of_conjTranspose_mul_self
-    {𝕜 : Type*} [RCLike 𝕜] [PartialOrder 𝕜] [StarOrderedRing 𝕜] {n d : ℕ}
-    {A B : Matrix (Fin d) (Fin n) 𝕜} (h : Aᴴ * A = Bᴴ * B) :
-    ∃ U ∈ Matrix.unitaryGroup (Fin d) 𝕜, B = U * A := sorry
-
-=======
->>>>>>> origin/yardrat-work
 end RankFactorization
 
 section GramUniqueness
@@ -143,28 +123,6 @@ theorem continuous_iInf_of_isCompact
     (hK : IsCompact K) (hKne : K.Nonempty) (hg : Continuous (Function.uncurry g)) :
     Continuous (fun p => ⨅ x : ↥K, g p ↑x) := sorry
 
-<<<<<<< HEAD
-/-! ### Milestone B3 -- the classical theorem, over a varying constraint
-
-The two halves use *different* hypotheses on `K`, which is the content of the classical
-proof and the reason the fixed-`K` case is a special case rather than a step: upper
-semicontinuity of the value needs `K` upper hemicontinuous, lower semicontinuity needs it
-lower hemicontinuous. -/
-
-/-- **Berge, value half, varying constraint.** -/
-theorem continuous_iInf_of_hemicontinuous {K : P → Set X}
-    (hKcompact : ∀ p, IsCompact (K p)) (hKne : ∀ p, (K p).Nonempty)
-    (hKu : ∀ p, UpperHemicontinuousAt K p) (hKl : ∀ p, LowerHemicontinuousAt K p)
-    (hg : Continuous (Function.uncurry g)) :
-    Continuous (fun p => ⨅ x : ↥(K p), g p ↑x) := sorry
-
-/-- **Berge, argmin half, varying constraint.**  The containment premise is no longer
-trivial: keeping the limit feasible is exactly what upper hemicontinuity of `K` buys. -/
-theorem upperHemicontinuousAt_isMinOn_of_hemicontinuous [T2Space X] {K : P → Set X}
-    (hKcompact : ∀ p, IsCompact (K p)) (hKu : ∀ p, UpperHemicontinuousAt K p)
-    (hg : Continuous (Function.uncurry g)) (p₀ : P) :
-    UpperHemicontinuousAt (fun p => {x ∈ K p | IsMinOn (g p) (K p) x}) p₀ := sorry
-=======
 /-- **Milestone B3 -- the classical theorem, with a varying constraint correspondence.**
 
 The fixed-`K` results above are the special case at constant `Γ`, **not** a step toward
@@ -189,7 +147,6 @@ theorem continuous_value_of_hemicontinuous
     (hne : ∀ p, (Γ p).Nonempty) (hcpt : ∀ p, IsCompact (Γ p))
     (huhc : UpperHemicontinuous Γ) (hlhc : LowerHemicontinuous Γ) :
     Continuous fun p => ⨅ x : ↥(Γ p), g p ↑x := sorry
->>>>>>> origin/yardrat-work
 
 end Berge
 
@@ -302,15 +259,6 @@ theorem centeredScatter_append (𝕜 : Type*) [RCLike 𝕜] {E : Type*} [NormedA
       ((n : 𝕜) / ((n : 𝕜) + 1)) •
         rankOne 𝕜 (y - finiteMean 𝕜 z) (y - finiteMean 𝕜 z) := sorry
 
-<<<<<<< HEAD
-/-- **Milestone D2 -- the operator-norm deviation event**, on the same hypotheses as the
-eigenvalue event above so that the two are visibly one event read two ways.
-
-The route is a refactor, not a new probability argument: factor the entrywise event out
-of the eigenvalue theorem first, then compose it with `norm_toEuclideanLin_le_of_entry_le`
-here and with Weyl there. In the other order the Chebyshev-plus-union-bound argument gets
-written twice. -/
-=======
 /-- **Milestone D2 -- the operator-norm deviation event.**
 
 **Not a corollary of D1.**  Eigenvalue closeness does not bound an operator-norm
@@ -323,7 +271,6 @@ number in both rather than two coincidentally equal bounds.
 
 **No symmetry hypothesis**, deliberately: an operator-norm bound needs none, while D1
 needs both matrices Hermitian to have eigenvalues at all. -/
->>>>>>> origin/yardrat-work
 theorem measure_forall_norm_toEuclideanLin_sub_le_ge
     (P : Measure Ω) [IsProbabilityMeasure P]
     (Shat : Ω → Matrix (Fin n) (Fin n) ℝ) (A : Matrix (Fin n) (Fin n) ℝ)
