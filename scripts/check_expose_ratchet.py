@@ -85,7 +85,13 @@ BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 #: `specProjection_mem_specRange`, and four rewired call sites that were proving membership
 #: with `⟨y, rfl⟩`.  The remaining eight need the `SpectralMeasure.lean` refactor, not an
 #: attribute edit: removing them leaves that module failing at a dozen-plus sites.
-PER_DECL_BASELINE = 17
+#: Lowered 17 -> 15 the same day by the Cayley slice: `cayleyInv` and `cayleyCoord` are the
+#: two leaves of the chain, and between them they held six call sites, every one of which was
+#: a `rfl` against a body. `cayleyInv_def` (new) and `cayleyCoord_apply` (already there)
+#: cover all six. What remains of the spectral-measure chain is `spectralPVM` and
+#: `specProjection` in `Construction.lean` plus the three in `BorelCalculus/PVM.lean` they
+#: drag along -- that is the `SpectralMeasure.lean` refactor, not an attribute edit.
+PER_DECL_BASELINE = 15
 
 PER_DECL = re.compile(r"^@\[expose\]\s*$|^@\[simps![^\]]*,\s*expose\]\s*$", re.M)
 

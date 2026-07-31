@@ -168,7 +168,7 @@ theorem borelCalculus_mem_domain_of_coord_mul
     filter_upwards [hae] with w hw
     have hw1 : (w : ℂ) ≠ 1 := hw
     have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
-    have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := rfl
+    have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := by simp [hgsym]
     have hκval : ((κ w : ℝ) : ℂ) + Complex.I = (2 * Complex.I) / (1 - (w : ℂ)) :=
       cayleyInv_add_I hA hw1
     -- states the goal with the definition unfolded, in the shape the next step needs;

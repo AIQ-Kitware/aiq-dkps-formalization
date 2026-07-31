@@ -123,13 +123,18 @@ theorem injective_one_sub_cayley :
 /-- The **inverse Cayley map** `w ↦ i(1+w)/(1-w)`, as a real-valued relabelling
 of the spectrum of the Cayley transform.  Its value at `w = 1` is junk; see
 `diagMeasure_cayley_preimage_one`. -/
--- `@[expose]` as part of the spectral-measure chain: an exposed body cannot reference an
--- unexposed one, and this is reached from `spectralPVM`. Recorded debt. Measured rather
--- than assumed: with the attribute removed the root spectral-measure module fails to
--- elaborate, and the compiler names this definition as one it could not unfold.
-@[expose]
+-- **Not exposed.** It was, as part of the spectral-measure chain; three call sites relied
+-- on the body reducing, all of them proving a `Complex.ext` real-part goal by `rfl`, and
+-- `cayleyInv_def` below covers them. Note that `measurable_cayleyInv` still `unfold`s this
+-- definition, which is fine: that is inside the defining module, where the body is visible
+-- whatever the attribute says.
 noncomputable def cayleyInv (w : _root_.spectrum ℂ (cayley hA)) : ℝ :=
   (Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))).re
+
+/-- Rewrite form of `cayleyInv`, so a call site need not unfold the definition.  It is the
+real part of the Cayley expression, which is what makes the value at `w = 1` junk. -/
+theorem cayleyInv_def (w : _root_.spectrum ℂ (cayley hA)) :
+    cayleyInv hA w = (Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))).re := (rfl)
 
 /-- The inverse Cayley relabelling is measurable.  Measurability, not continuity, is all that is
 available and all that is needed: the map is genuinely singular at `w = 1`. -/
@@ -226,11 +231,9 @@ theorem cayley_denom_ne_zero {z : ℂ} (hz : z.im ≠ 0) {w : ℂ} (hw : ‖w‖
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {z : ℂ} (hz : z.im ≠ 0)
 
 /-- The coordinate function on the spectrum of the Cayley transform. -/
--- `@[expose]` as part of the spectral-measure chain: an exposed body cannot reference an
--- unexposed one, and this is reached from `spectralPVM`. Recorded debt. Measured rather
--- than assumed: with the attribute removed the root spectral-measure module fails to
--- elaborate, and the compiler names this definition as one it could not unfold.
-@[expose]
+-- **Not exposed.** It was, as part of the spectral-measure chain; the three call sites that
+-- relied on the body reducing were all the same `have hgval : gsym w = _ := rfl` against a
+-- `set`-bound symbol, and `cayleyCoord_apply` — which already existed — discharges them.
 noncomputable def cayleyCoord : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
   (ContinuousMap.id ℂ).restrict (_root_.spectrum ℂ (cayley hA))
 
