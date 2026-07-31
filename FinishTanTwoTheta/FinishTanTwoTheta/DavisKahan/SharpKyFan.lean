@@ -92,7 +92,7 @@ theorem selected_doubleAngleTangent_le_kyFan_add_error
     (hA1 : ∀ z : E1, d * ‖z‖ ^ 2 ≤ RCLike.re ⟪B.A1 z, z⟫_ℂ)
     {X : E0 →L[ℂ] E1} (hX : SolvesRiccati B X)
     (hXr : ‖X‖ ≤ r) {k : ℕ}
-    (F : TauCeti.FinishTanTwoTheta.ApproximateLeadingSingularFamily X k ε) :
+    (F : TauCeti.DavisKahan.ApproximateLeadingSingularFamily X k ε) :
     d * (∑ i : Fin F.count,
         DavisKahanTheory.doubleAngleTangent (X.approximationNumber i)) ≤
       2 * kyFanApproximationGauge k B.B01 +
@@ -175,13 +175,13 @@ theorem transformed_prefix_le_kyFan_add_error
     (hA1 : ∀ z : E1, d * ‖z‖ ^ 2 ≤ RCLike.re ⟪B.A1 z, z⟫_ℂ)
     {X : E0 →L[ℂ] E1} (hX : SolvesRiccati B X)
     (hXr : ‖X‖ ≤ r) {k : ℕ}
-    (F : TauCeti.FinishTanTwoTheta.ApproximateLeadingSingularFamily X k ε) :
+    (F : TauCeti.DavisKahan.ApproximateLeadingSingularFamily X k ε) :
     d * (∑ n ∈ Finset.range k,
         DavisKahanTheory.doubleAngleTangent (X.approximationNumber n)) ≤
       2 * kyFanApproximationGauge k B.B01 +
         (F.count : ℝ) * uniformStablePairError B r ε +
         d * ((k - F.count : ℕ) : ℝ) * ((2 / (1 - r ^ 2)) * ε) := by
-  have hprefix := TauCeti.FinishTanTwoTheta.sum_doubleAngleTangent_le_selected_add_tail
+  have hprefix := TauCeti.DavisKahan.sum_doubleAngleTangent_le_selected_add_tail
     X k hε0 hr0 hr1 hXr F
   have hselected := selected_doubleAngleTangent_le_kyFan_add_error
     B hd0 hr0 hr1 hε0 hA0 hA1 hX hXr F
@@ -241,7 +241,7 @@ theorem sharp_transformed_prefix
     exact lt_min zero_lt_one (div_pos hη hC1)
   have hε0 : 0 ≤ ε := hεpos.le
   have hε1 : ε ≤ 1 := min_le_left _ _
-  obtain ⟨F⟩ := TauCeti.FinishTanTwoTheta.exists_approximateLeadingSingularFamily
+  obtain ⟨F⟩ := TauCeti.DavisKahan.exists_approximateLeadingSingularFamily
     X k hεpos
   have hraw := transformed_prefix_le_kyFan_add_error
     B hd0 hr0 hr1 hε0 hA0 hA1 hX hXr F

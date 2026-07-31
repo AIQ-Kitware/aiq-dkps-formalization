@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.ApproximationNumber.SpectralSelection
+import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
 import DavisKahan.DoubleAngle.TanTwoThetaKyFan
 import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
@@ -650,7 +650,7 @@ theorem doubleAngleTangent_approximationNumber_le
     apply lt_min
     · linarith
     · positivity
-  obtain ⟨F⟩ := exists_approximateLeadingSingularFamily X (n + 1) hεpos
+  obtain ⟨F⟩ := TauCeti.DavisKahan.exists_approximateLeadingSingularFamily X (n + 1) hεpos
   rcases F with
     ⟨count, hcount_le, right, left, hrightOrtho, hleftOrtho,
       _hselected, happlyResidual, hadjointResidual, htailSmall⟩
