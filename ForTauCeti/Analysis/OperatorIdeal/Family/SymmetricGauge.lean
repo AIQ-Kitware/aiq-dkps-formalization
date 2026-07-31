@@ -301,4 +301,19 @@ theorem schattenFamily_gauge {p : ℝ} (hp : 1 ≤ p) {E F : Type*}
     (A : E →L[ℂ] F) :
     (schattenFamily p hp).gauge A = (schattenGauge p hp).extend (approxSeq A) := rfl
 
+/-- **The Schatten scale is antitone**, hence the ideals nest: `S_p ⊆ S_q` for
+`p ≤ q`.
+
+Entirely a transport: `schattenGaugeFun_antitone` is the `ℓ`-scale nesting at
+the level of finitely supported sequences, and `extend_le_extend_of_le` carries
+it to the extension, which is the family's gauge by definition. -/
+theorem gauge_schattenFamily_antitone {p q : ℝ} (hp : 1 ≤ p) (hq : 1 ≤ q)
+    (hpq : p ≤ q) {E F : Type*}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (T : E →L[ℂ] F) :
+    (schattenFamily q hq).gauge T ≤ (schattenFamily p hp).gauge T :=
+  SymmetricGauge.extend_le_extend_of_le
+    (fun c => schattenGaugeFun_antitone hp hq hpq c) (approxSeq T)
+
 end TauCeti
