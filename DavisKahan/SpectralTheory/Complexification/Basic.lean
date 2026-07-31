@@ -446,15 +446,17 @@ theorem complexify_injective [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   · simp only [im_complex_smul, Complex.ofReal_re, Complex.ofReal_im, zero_smul, zero_add]
     rfl
 
-/-- A coordinate of a vector is no longer than the vector.
+/-- **A coordinate of a vector is no longer than the vector.**  The single
+statement of `‖re z‖ ≤ ‖z‖` in this repository, and the earliest in import
+order, so every consumer can reach it.
 
-**`private` on purpose.**  `ClosedOperatorComplexification.norm_re_le` states exactly this, one
-module later, and both namespaces are opened together in
-`Sources/DavisKahan1970/Ideals/HilbertSchmidtRealDescent.lean` — a public copy here makes every
-unqualified use there ambiguous.  This file cannot import the other one (that is the direction
-of the dependency), so the duplicate stays private until someone deduplicates the four copies;
-see the `{lane:CPLX-DEDUP}` row. -/
-private theorem norm_re_le [NormedAddCommGroup E] (z : RealComplexification E) :
+It was `private` until 2026-07-30, guarded by a note saying a public copy would
+make unqualified uses ambiguous in
+`Sources/DavisKahan1970/Ideals/HilbertSchmidtRealDescent.lean`, which opens two
+of the namespaces that had a copy.  That was true, and it was the wrong
+conclusion: the ambiguity came from the *other three* copies, not from this one
+being visible.  With them gone there is one name to resolve to. -/
+theorem norm_re_le [NormedAddCommGroup E] (z : RealComplexification E) :
     ‖re z‖ ≤ ‖z‖ := by
   have h := norm_sq z
   nlinarith [norm_nonneg (re z), norm_nonneg (im z), norm_nonneg z]

@@ -337,12 +337,6 @@ theorem conjugateOperator_cfc_eq
 
 /-! ## Descent of conjugation-fixed operators -/
 
-omit [InnerProductSpace ℝ E] [CompleteSpace E] in
-/-- Taking the real coordinate of a complexified vector does not increase the norm. -/
-theorem norm_re_le (z : RealComplexification E) : ‖re z‖ ≤ ‖z‖ := by
-  rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), norm_sq]
-  nlinarith [sq_nonneg ‖im z‖]
-
 /-- Restrict a complex operator to the real copy and take its real coordinate. -/
 noncomputable def realPartOperator
     (A : RealComplexification E →L[ℂ] RealComplexification E) :
