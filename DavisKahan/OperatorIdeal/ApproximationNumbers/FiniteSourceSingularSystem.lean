@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.SingularSystem
-import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
 
 /-!
 # Singular systems with finite source and arbitrary Hilbert codomain

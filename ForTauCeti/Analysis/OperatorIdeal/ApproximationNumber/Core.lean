@@ -206,6 +206,37 @@ theorem IsOrthogonalProjectionMap.norm_le_one
   intro x
   simpa only [one_mul] using hP.norm_apply_le x
 
+/-- **A finite-dimensional operator norm is controlled by the values on a basis.**  With
+`e` the coordinate isomorphism of `b`, `‖T‖ ≤ ‖e‖ * ∑ⱼ ‖T (b j)‖`.
+
+Extracted from `tendsto_opNorm_zero_of_finiteDimensional`, whose whole content is that
+this bound tends to zero: the estimate is a statement about one operator and does not
+mention the net, so keeping it inside the limit argument hid a reusable fact behind a
+thirty-line `calc`. -/
+private theorem opNorm_le_norm_equivFun_mul_sum_basis
+    {V : Type vG} {G : Type vH}
+    [NormedAddCommGroup V] [NormedSpace 𝕜 V] [FiniteDimensional 𝕜 V]
+    [NormedAddCommGroup G] [NormedSpace 𝕜 G]
+    (b : Module.Basis (Module.Basis.ofVectorSpaceIndex 𝕜 V) 𝕜 V)
+    (T : V →L[𝕜] G) :
+    ‖T‖ ≤ ‖b.equivFunL.toContinuousLinearMap‖ * ∑ j, ‖T (b j)‖ := by
+  set e := b.equivFunL.toContinuousLinearMap with he
+  refine T.opNorm_le_bound
+    (mul_nonneg (norm_nonneg _) (Finset.sum_nonneg fun _ _ => norm_nonneg _)) fun x => ?_
+  calc
+    ‖T x‖ = ‖T (∑ j, b.repr x j • b j)‖ := by rw [b.sum_repr]
+    _ = ‖∑ j, b.repr x j • T (b j)‖ := by rw [map_sum]; simp only [map_smul]
+    _ ≤ ∑ j, ‖b.repr x j • T (b j)‖ := norm_sum_le _ _
+    _ = ∑ j, ‖b.repr x j‖ * ‖T (b j)‖ :=
+      Finset.sum_congr rfl fun j _ => norm_smul _ _
+    _ ≤ ∑ j, (‖e‖ * ‖x‖) * ‖T (b j)‖ := by
+      refine Finset.sum_le_sum fun j _ => mul_le_mul_of_nonneg_right ?_ (norm_nonneg _)
+      calc ‖b.repr x j‖ = ‖e x j‖ := by rfl
+        _ ≤ ‖e x‖ := norm_le_pi_norm (e x) j
+        _ ≤ ‖e‖ * ‖x‖ := e.le_opNorm x
+    _ = (‖e‖ * ‖x‖) * ∑ j, ‖T (b j)‖ := by rw [Finset.mul_sum]
+    _ = (‖e‖ * ∑ j, ‖T (b j)‖) * ‖x‖ := by ring
+
 /-- On a finite-dimensional source, pointwise convergence of bounded linear
 maps to zero upgrades to convergence in operator norm. -/
 theorem tendsto_opNorm_zero_of_finiteDimensional
@@ -227,36 +258,7 @@ theorem tendsto_opNorm_zero_of_finiteDimensional
     simpa only [norm_zero, Finset.sum_const_zero] using hsum'
   have hC : Tendsto C l (𝓝 0) := by
     simpa only [C, mul_zero] using tendsto_const_nhds.mul hsum
-  have hbound : ∀ i, ‖T i‖ ≤ C i := by
-    intro i
-    apply (T i).opNorm_le_bound
-    · exact mul_nonneg (norm_nonneg _) (Finset.sum_nonneg fun _ _ => norm_nonneg _)
-    · intro x
-      calc
-        ‖T i x‖ = ‖T i (∑ j, b.repr x j • b j)‖ := by
-          rw [b.sum_repr]
-        _ = ‖∑ j, b.repr x j • T i (b j)‖ := by
-          rw [map_sum]
-          simp only [map_smul]
-        _ ≤ ∑ j, ‖b.repr x j • T i (b j)‖ :=
-          norm_sum_le _ _
-        _ = ∑ j, ‖b.repr x j‖ * ‖T i (b j)‖ := by
-          apply Finset.sum_congr rfl
-          intro j hj
-          exact norm_smul _ _
-        _ ≤ ∑ j, (‖e‖ * ‖x‖) * ‖T i (b j)‖ := by
-          apply Finset.sum_le_sum
-          intro j hj
-          apply mul_le_mul_of_nonneg_right _ (norm_nonneg _)
-          calc
-            ‖b.repr x j‖ = ‖e x j‖ := by rfl
-            _ ≤ ‖e x‖ := norm_le_pi_norm (e x) j
-            _ ≤ ‖e‖ * ‖x‖ := e.le_opNorm x
-        _ = (‖e‖ * ‖x‖) * ∑ j, ‖T i (b j)‖ := by
-          rw [Finset.mul_sum]
-        _ = C i * ‖x‖ := by
-          dsimp only [C]
-          ring
+  have hbound : ∀ i, ‖T i‖ ≤ C i := fun i => opNorm_le_norm_equivFun_mul_sum_basis b (T i)
   exact squeeze_zero (fun i => norm_nonneg (T i)) hbound hC
 
 section StrongCutoff
@@ -264,6 +266,25 @@ section StrongCutoff
 variable {E₀ : Type vE0} {F₀ : Type vF0}
   [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
   [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
+
+omit [CompleteSpace F₀] [CompleteSpace E₀] in
+/-- **Post-composing with an orthogonal projection cannot raise an approximation number.**
+A projection is a contraction, so this is the ideal inequality with `‖P‖ ≤ 1` discharged.
+
+Extracted from the convergence theorem below, where it was the `hUpper` half: it is a
+statement about one projection with no net in sight, and it is the half a reader can check
+without reading the localization argument. -/
+theorem approximationSingularValue_comp_le_of_isOrthogonalProjection
+    {P : E₀ →L[𝕜] E₀} (hP : IsOrthogonalProjectionMap P) (n : ℕ) (K : E₀ →L[𝕜] F₀) :
+    approximationSingularValue n (K ∘L P) ≤ approximationSingularValue n K := by
+  have hnormNN : ‖P‖ ≤ (1 : ℝ) := by exact_mod_cast hP.norm_le_one
+  have hNN : (K ∘L P).approximationNumber n ≤ K.approximationNumber n := by
+    calc (K ∘L P).approximationNumber n ≤ K.approximationNumber n * ‖P‖ :=
+          K.approximationNumber_comp_le_mul_norm P n
+      _ ≤ K.approximationNumber n * 1 :=
+          mul_le_mul_of_nonneg_left hnormNN (K.approximationNumber_nonneg n)
+      _ = K.approximationNumber n := by rw [mul_one]
+  exact_mod_cast hNN
 
 omit [CompleteSpace F₀] [CompleteSpace E₀] in
 /-- **Cutoff convergence.**  Along a net of orthogonal projections converging strongly to the
@@ -283,22 +304,14 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_of_minMax
     Tendsto
       (fun i => approximationSingularValue n (K ∘L P i))
       l (𝓝 (approximationSingularValue n K)) := by
+  -- Two halves, and they are not symmetric.  `hUpper` is the ideal inequality and is now a
+  -- lemma of its own; `hLower` is the whole content: pick a coercive subspace `V` witnessing
+  -- `r < aₙ(K)`, note `K ∘ P i` agrees with `K` on `V` in the limit because `V` is
+  -- finite-dimensional (`tendsto_opNorm_zero_of_finiteDimensional`), and transport the
+  -- coercivity.  The min--max hypothesis enters only in producing `V`.
   have hUpper : ∀ i,
-      approximationSingularValue n (K ∘L P i) ≤
-        approximationSingularValue n K := by
-    intro i
-    have hnormNN : ‖P i‖ ≤ (1 : ℝ) := by
-      exact_mod_cast (hPproj i).norm_le_one
-    have hNN : (K ∘L P i).approximationNumber n ≤
-        K.approximationNumber n := by
-      calc
-        (K ∘L P i).approximationNumber n
-            ≤ K.approximationNumber n * ‖P i‖ :=
-          K.approximationNumber_comp_le_mul_norm (P i) n
-        _ ≤ K.approximationNumber n * 1 :=
-          mul_le_mul_of_nonneg_left hnormNN (K.approximationNumber_nonneg n)
-        _ = K.approximationNumber n := by rw [mul_one]
-    exact_mod_cast hNN
+      approximationSingularValue n (K ∘L P i) ≤ approximationSingularValue n K :=
+    fun i => approximationSingularValue_comp_le_of_isOrthogonalProjection (hPproj i) n K
   have hLower : ∀ r : ℝ,
       r < approximationSingularValue n K →
       ∀ᶠ i in l, r < approximationSingularValue n (K ∘L P i) := by

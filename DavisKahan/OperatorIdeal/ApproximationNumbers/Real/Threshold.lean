@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
 
-import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
 import DavisKahan.SpectralTheory.Complexification.Basic
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
