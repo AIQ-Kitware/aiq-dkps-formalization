@@ -158,7 +158,7 @@
       "spectra_module": "Spectra.QuantumMechanics.Channels.TraceClass.PartialIsometry"
     },
     {
-      "consumer": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationSharpSchurComplement.lean",
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/Continuation/SharpSchurComplement.lean",
       "spectra_module": "Spectra.Resolvent.Defs"
     },
     {
@@ -238,7 +238,7 @@
       "spectra_module": "Spectra.SpectralTheory.Essential.Weyl"
     },
     {
-      "consumer": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationSelectedReduction.lean",
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/Continuation/SelectedReduction.lean",
       "spectra_module": "Spectra.SpectralTheory.Measure.GeneratorLink"
     },
     {
@@ -262,7 +262,7 @@
       "spectra_module": "Spectra.SpectralTheory.ResolventForm"
     },
     {
-      "consumer": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationSpectralIdentification.lean",
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/Continuation/SpectralIdentification.lean",
       "spectra_module": "Spectra.SpectralTheory.ResolventForm"
     },
     {
@@ -302,7 +302,7 @@
       "spectra_module": "Spectra.StoneBridge.CalculusBridge"
     },
     {
-      "consumer": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationSpectralIdentification.lean",
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/Continuation/SpectralIdentification.lean",
       "spectra_module": "Spectra.StoneBridge.CalculusBridge"
     },
     {

@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.Experimental.Frontier.Section8
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationWitnessGraph
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
 
 /-!
 # Reusing the production contour continuation layer

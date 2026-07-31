@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
-public import ForTauCeti.Analysis.InnerProductSpace.SpectralCutoff
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Cutoff
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 public import Mathlib.LinearAlgebra.Dimension.RankNullity
 

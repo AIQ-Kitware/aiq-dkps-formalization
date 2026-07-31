@@ -51,7 +51,7 @@ still imports the donor — nothing is half-migrated.
 
 ### Y3 slice (a) — the generic Gram API  *(done)*
 
-`ForTauCeti/Analysis/InnerProductSpace/GramOperator.lean`: `rightGram`,
+`ForTauCeti/Analysis/InnerProductSpace/Gram/Operator.lean`: `rightGram`,
 `leftGram`, their symmetry, the two perturbation identities, the two
 `opNorm_*Gram_sub_le` bounds. Axiom-clean, warning-free.
 `DavisKahan/Specialized/SingularSubspace.lean` imports it; its copies deleted.

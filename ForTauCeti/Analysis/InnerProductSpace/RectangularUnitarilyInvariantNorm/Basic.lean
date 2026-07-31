@@ -7,7 +7,7 @@ Authors: Jon Crall, Claude Fable 5
 import ForTauCeti.Analysis.InnerProductSpace.KyFan
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
-import ForTauCeti.Analysis.InnerProductSpace.GramMatrix
+import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
 import Mathlib.Analysis.InnerProductSpace.ProdL2
 import Mathlib.Analysis.Convex.Caratheodory

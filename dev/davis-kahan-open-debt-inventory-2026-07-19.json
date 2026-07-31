@@ -596,9 +596,9 @@
         103,
         117
       ],
-      "module": "DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationRoadmap",
+      "module": "DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.Roadmap",
       "note": "candidate work for the full-paper roadmap",
-      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationRoadmap.lean"
+      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/Continuation/Roadmap.lean"
     },
     {
       "category": "unclassified",

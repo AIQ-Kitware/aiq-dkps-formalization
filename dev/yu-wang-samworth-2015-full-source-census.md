@@ -82,7 +82,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **source anchor**: Section 1, principal angles and sin-Theta (definition, section 1)
 * **summary**: For V, V-hat with orthonormal columns the principal angles are the arccosines of the singular values of V-hat^T V, and the Frobenius sine distance satisfies ‖sin Theta‖_F^2 = d - ‖V-hat^T V‖_F^2.
 * **status**: `compiled_generalized` / **verification**: `proved_in_build`
-* **lean declarations**: `TauCeti.DavisKahanTheory.sinThetaFrobenius`, `TauCeti.DavisKahanTheory.sinThetaSq_eq_sinThetaFrobenius_sq_of_spans`, `TauCeti.DavisKahanTheory.sinThetaFrobenius_eq_sqrt_sum_cross`
+* **lean declarations**: `TauCeti.sinThetaFrobenius`, `TauCeti.sinThetaSq_eq_sinThetaFrobenius_sq_of_spans`, `TauCeti.sinThetaFrobenius_eq_sqrt_sum_cross`
 * **notes**: The Lean development defines the sine distance intrinsically on subspaces rather than on a matrix of chosen columns, and then proves it agrees with the span-based form. That is why no basis is a hypothesis anywhere downstream. The bridge lemma `sinThetaFrobenius_eq_sqrt_sum_cross` was `private` until 2026-07-29 and is now public.
 * **next action**: None.
 
@@ -91,7 +91,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **source anchor**: Section 1, orthogonal complement identity (identity, section 1)
 * **summary**: The cross-block energy against an orthonormal complement of V equals the Frobenius sine distance.
 * **status**: `compiled_generalized` / **verification**: `proved_in_build`
-* **lean declarations**: `TauCeti.DavisKahanTheory.sinThetaFrobenius_eq_sqrt_sum_cross`
+* **lean declarations**: `TauCeti.sinThetaFrobenius_eq_sqrt_sum_cross`
 * **notes**: Closed 2026-07-29. The identity was proved all along but the declaration was `private`, so nothing outside its module could cite it and this row correctly read `absent` -- the one item in this census where the mathematics existed and the API did not. It is now public, with a docstring saying why. **The census is what found it**: a coverage claim assembled from the Lean side would have counted the proof and never noticed that no reader could reach it.
 * **next action**: None.
 
@@ -100,7 +100,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **source anchor**: Section 1, Procrustes alignment (lemma, section 1)
 * **summary**: Minimizing over orthogonal O gives ‖V-hat O - V‖_F^2 = 2 sum (1 - cos theta_j) <= 2 sum sin^2 theta_j.
 * **status**: `compiled_generalized` / **verification**: `proved_in_build`
-* **lean declarations**: `TauCeti.sum_sq_norm_aligned_le`, `TauCeti.sum_sq_norm_aligned_le_sinThetaSq`, `TauCeti.DavisKahanTheory.exists_aligned_orthonormalBasis`
+* **lean declarations**: `TauCeti.sum_sq_norm_aligned_le`, `TauCeti.sum_sq_norm_aligned_le_sinThetaSq`, `TauCeti.exists_aligned_orthonormalBasis`
 * **notes**: The sqrt-2 step is the whole reason the aligned-basis constant is 2^{3/2} rather than 2. It lives in ForTauCeti as a reusable orthonormal-family result, not as a matrix Procrustes computation.
 * **next action**: None.
 
@@ -119,7 +119,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **source anchor**: Section 1, equation (1) (equation, section 1)
 * **summary**: For r = s = j the baseline specializes to a single-eigenvector sine bound with a mixed gap, and after choosing the sign so v-hat^T v >= 0, ‖v-hat - v‖ <= sqrt 2 sin theta.
 * **status**: `compiled_specialization` / **verification**: `proved_in_build`
-* **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_intervalBlock_le`
+* **lean declarations**: `TauCeti.yuWangSamworth_intervalBlock_le`
 * **gaps**: `literal-index-wrappers`
 * **notes**: The sign-choice half is available as the rank-one case of the aligned-basis machinery rather than as a separate mixed-gap statement; the census does not claim a source-shaped wrapper for equation (1) itself.
 * **next action**: Optional: state equation (1) with literal index j and a mixed gap, purely for source recognizability.
@@ -129,7 +129,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **source anchor**: Theorem 2 (theorem, section 2)
 * **summary**: With only the two exterior POPULATION gaps Delta = min(lambda_{r-1} - lambda_r, lambda_s - lambda_{s+1}) > 0, ‖sin Theta(V-hat, V)‖_F <= 2 min(sqrt d ‖E‖_op, ‖E‖_F) / Delta.
 * **status**: `compiled_exact` / **verification**: `proved_in_build`
-* **lean declarations**: `TauCeti.DavisKahanTheory.PopulationGap`, `TauCeti.DavisKahanTheory.CorrespondingEigenblock`, `TauCeti.DavisKahanTheory.yuWangSamworth_sinTheta_le`, `TauCeti.sqrt_sum_cross_le_of_population_gap`
+* **lean declarations**: `TauCeti.PopulationGap`, `TauCeti.CorrespondingEigenblock`, `TauCeti.yuWangSamworth_sinTheta_le`, `TauCeti.sqrt_sum_cross_le_of_population_gap`
 * **notes**: This is the paper's headline and it is the best-guarded result in the census: it is in the default build AND pinned by comparator/pending-yu-wang-samworth.json, whose Leaderboard runs `#print axioms TauCeti.sqrt_sum_cross_le_of_population_gap`. The min over the dimension-scaled operator norm and the Frobenius norm is proved as printed, not as one branch.
 * **next action**: None.
 
@@ -138,7 +138,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **source anchor**: Theorem 2, aligned-basis conclusion (theorem, section 2)
 * **summary**: There exists O-hat in O(d) with ‖V-hat O-hat - V‖_F <= 2^{3/2} min(sqrt d ‖E‖_op, ‖E‖_F) / Delta.
 * **status**: `compiled_exact` / **verification**: `proved_in_build`
-* **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_alignedBasis_le`
+* **lean declarations**: `TauCeti.yuWangSamworth_alignedBasis_le`
 * **notes**: Stated as the existence of two orthonormal families spanning U and V with the bound on the sum of squared differences, which is the basis-free content of 'there exists an orthogonal alignment'. Constant 2 * sqrt 2 = 2^{3/2} as printed.
 * **next action**: None.
 
@@ -196,7 +196,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **source anchor**: Corollary 3 (corollary, section 2)
 * **summary**: With Delta_j = min(lambda_{j-1} - lambda_j, lambda_j - lambda_{j+1}) > 0, sin Theta(v-hat, v) <= 2 ‖E‖_op / Delta_j, and after sign alignment ‖v-hat - v‖ <= 2^{3/2} ‖E‖_op / Delta_j.
 * **status**: `compiled_exact` / **verification**: `proved_in_build`
-* **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_eigenvector_le`
+* **lean declarations**: `TauCeti.yuWangSamworth_eigenvector_le`
 * **gaps**: `numbering-conflict`
 * **notes**: The Lean statement produces a unit scalar c with ‖c • v - u‖ <= 2 sqrt 2 ‖B - A‖ / Delta, which is the sign choice in the RCLike setting -- over the reals c = +-1 recovers the printed statement, and over the complexes a phase is the honest generalization. The distilled tex calls this Corollary 1; see gap `numbering-conflict`.
 * **next action**: None.
@@ -215,7 +215,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **source anchor**: Theorem 4 (theorem, section 4)
 * **summary**: For rectangular A, A-hat with D = A-hat - A and Delta_sv = min(sigma_{r-1}^2 - sigma_r^2, sigma_s^2 - sigma_{s+1}^2) > 0, ‖sin Theta(V-hat, V)‖_F <= 2 (2 sigma_1 + ‖D‖_op) min(sqrt d ‖D‖_op, ‖D‖_F) / Delta_sv.
 * **status**: `compiled_exact` / **verification**: `partially_in_build`
-* **lean declarations**: `TauCeti.DavisKahanTheory.rightSingularSubspace`, `TauCeti.DavisKahanTheory.rightSingularSubspace_sinTheta_le`, `TauCeti.DavisKahanTheory.CorrespondingRightSingularBlock`, `TauCeti.DavisKahanTheory.RightSingularPopulationGap`, `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_opNormCoefficient_le`
+* **lean declarations**: `TauCeti.rightSingularSubspace`, `TauCeti.rightSingularSubspace_sinTheta_le`, `TauCeti.DavisKahanTheory.CorrespondingRightSingularBlock`, `TauCeti.DavisKahanTheory.RightSingularPopulationGap`, `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_opNormCoefficient_le`
 * **gaps**: `unguarded-completion-lane`, `numbering-conflict`
 * **notes**: Split across two homes, which is why this row is only partly guarded: the subspace definition and a sine bound are in the default build via ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/SingularSubspace.lean, but the exact paper coefficient (2 sigma_1 + ‖D‖_op) lives in the completion lane. The route is the paper's own: transport to squared Gram operators, then apply the symmetric theorem.
 * **next action**: Guard the completion lane, or migrate the coefficient theorems into DavisKahan/Specialized.
@@ -225,7 +225,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **source anchor**: Theorem 4, left singular blocks (theorem, section 4)
 * **summary**: The paper states that the identical bounds hold for the corresponding left singular-vector blocks U, U-hat.
 * **status**: `compiled_exact` / **verification**: `partially_in_build`
-* **lean declarations**: `TauCeti.DavisKahanTheory.leftSingularSubspace`, `TauCeti.DavisKahanTheory.leftSingularSubspace_sinTheta_le`, `TauCeti.DavisKahanTheory.CorrespondingLeftSingularBlock`, `TauCeti.DavisKahanTheory.LeftSingularPopulationGap`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_opNormCoefficient_le`
+* **lean declarations**: `TauCeti.leftSingularSubspace`, `TauCeti.leftSingularSubspace_sinTheta_le`, `TauCeti.DavisKahanTheory.CorrespondingLeftSingularBlock`, `TauCeti.DavisKahanTheory.LeftSingularPopulationGap`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_opNormCoefficient_le`
 * **gaps**: `unguarded-completion-lane`
 * **notes**: Proved as its own statement rather than by an adjoint-symmetry argument from the right-hand case, so the two are independently checkable.
 * **next action**: Same as YWS-T4-right.
@@ -265,7 +265,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **source anchor**: Appendix, self-adjoint dilation route (exposition, section appendix)
 * **summary**: The repository additionally proves the singular-subspace bound through the Hermitian dilation [[0, A*],[A, 0]] rather than through squared Gram matrices.
 * **status**: `not_proof_debt` / **verification**: `proved_in_build`
-* **lean declarations**: `TauCeti.DavisKahanTheory.hermitianDilation`, `TauCeti.DavisKahanTheory.isSymmetric_hermitianDilation`, `TauCeti.DavisKahanTheory.hermitianDilation_sq`, `TauCeti.DavisKahanTheory.singularSubspace_dilation_sinTheta_le`
+* **lean declarations**: `TauCeti.hermitianDilation`, `TauCeti.isSymmetric_hermitianDilation`, `TauCeti.hermitianDilation_sq`, `TauCeti.singularSubspace_dilation_sinTheta_le`
 * **gaps**: `not-proof-debt`
 * **notes**: Mathematically equivalent to the paper's route and recorded here explicitly so that nobody attributes it to Yu, Wang and Samworth. The distilled tex's transcription audit makes the same point.
 * **next action**: None. Keep the attribution note attached to these declarations.

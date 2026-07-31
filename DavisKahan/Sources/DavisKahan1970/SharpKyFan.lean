@@ -11,8 +11,8 @@ import DavisKahan.DoubleAngle.KyFanOrthonormal
 
 This file performs the finite approximate-family sum and the epsilon limit.
 The only nonroutine input is the local spectral-selection theorem from
-`ApproximationNumber.SpectralSelection`; all variational and approximation-
-number calls are existing declarations in the repository.
+`DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection`; all variational and
+approximation-number calls are existing declarations in the repository.
 -/
 
 namespace TauCeti

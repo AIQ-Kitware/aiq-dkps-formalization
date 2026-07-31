@@ -27,8 +27,8 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import ForTauCeti.Analysis.InnerProductSpace.SpectralGap
-import ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace
+import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
+import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 
 /-! # The subspace Davis–Kahan sin 2Θ theorem, every unitarily invariant norm
 

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.SpectralCutoff
+import ForTauCeti.Analysis.InnerProductSpace.Spectral.Cutoff
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
 import ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
