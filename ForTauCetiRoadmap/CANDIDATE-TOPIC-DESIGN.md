@@ -64,27 +64,36 @@ printed by the checker.
 | # | Topic | n | Needs |
 |---|---|---|---|
 | **T01** | Positive square root, operator modulus, functional calculus | 9 | **— independent** |
-| **T02** | Polar decomposition and partial isometries | 5 | T01 |
+| **T02** | Polar decomposition and partial isometries | 6 | T01 |
 | **T03** | Singular values and the singular system | 4 | T01 |
 | **T04** | Gram matrices, orthogonal projections, and spectral subspaces | 8 | T01 |
 | **T05** | Majorization, Schur–Horn, and unitarily invariant norms | 5 | T01, T02, T04 |
 | **T06** | Principal angles, aligned bases, and finite frames | 3 | T03–T05 |
 | **T07** | Rectangular unitarily invariant norms | 6 | T03–T06 |
 | **T08** | Angle geometry and eigenvalue perturbation | 5 | T01, T02, T04–T07 |
-| **T09** | Approximation numbers | 11 | T01, T03, T07 |
+| **T09** | Approximation numbers | 20 | T01, T03, T07 |
 | **T10** | Symmetric operator ideals and Schatten norms | 9 | T05, T07, T09 |
 | **T11** | Hilbert–Schmidt operators | 4 | T10 |
 | **T12** | The Haagerup–Zsidó kernel and its Fourier transform | 8 | **— independent** |
-| **T13** | One-parameter unitary groups and Stone's theorem | 6 | T02 |
-| **T14** | Borel functional calculus and projection-valued measures | 10 | **— independent** |
-| **T15** | Unbounded self-adjoint operators on `LinearPMap` | 24 | T04, T13, T14 |
-| **T16** | Sylvester equations and the Rosenblum theorem | 15 | T04, T07, T11, T12, T13, T15 |
-| **T17** | Spectral subspace perturbation: the Davis–Kahan sin-Θ theorems | 10 | T01, T03–T08, T15, T16 |
+| **T13** | One-parameter unitary groups and Stone's theorem | 5 | T02 |
+| **T14** | Borel functional calculus and projection-valued measures | 11 | **— independent** |
+| **T15a** | Closed operators on `LinearPMap`: graphs, constructions and form bounds | 7 | T04, T14 |
+| **T15b** | Resolvents of self-adjoint `LinearPMap` operators, and semiboundedness | 7 | T15a |
+| **T15c** | The spectral measure of an unbounded self-adjoint operator, and Stone | 13 | T13, T15b |
+| **T16** | Sylvester equations and the Rosenblum theorem | 18 | T04, T07, T11, T12, T13, T15c |
+| **T17** | Spectral subspace perturbation: the Davis–Kahan sin-Θ theorems | 11 | T01, T03–T08, T15c, T16 |
 | **T18** | The Yu–Wang–Samworth statistical variant | 3 | T01, T05, T06, T08, T17 |
 | **T19** | Matrix spectra and spectral measurability | 6 | T01, T14 |
 | **T20** | Sample moments and matrix concentration | 5 | T19 |
 | **T21** | Matrix rank factorization and positive semidefiniteness | 2 | **— independent** |
 | **T22** | Berge's maximum theorem and approximate minimizers | 2 | **— independent** |
+
+*Module counts in this table are generated from `TOPICS` in
+`scripts/check_tauceti_roadmap_topics.py`, which the gate of the same name checks
+against the tree — regenerate them from there rather than editing by hand.  They
+were last reconciled on 2026-07-31 (lane `ROADMAP-TOPIC-COUNTS`), when six were
+stale and the T15 row still described a topic that had been split two days
+earlier.*
 
 **This is a DAG, not a chain — that is the most useful property of the design.**
 The numbering is *a* valid submission order, but it is not the only one, and
@@ -92,7 +101,7 @@ several topics need far less than their position suggests:
 
 - **Five topics are fully independent** and can go first, in any order or at
   once: **T01**, **T12** (Haagerup–Zsidó, 8 modules), **T14** (Borel calculus
-  and PVMs, 10 modules), and the two ex-`ForMathlib` pairs **T21** and **T22**.
+  and PVMs, 11 modules), and the two ex-`ForMathlib` pairs **T21** and **T22**.
 - **T09, approximation numbers — the advertised PR1 topic — needs only T01, T03
   and T07**, not the eight topics its position implies. That is the corrected
   version of the submission ladder's headline finding.
@@ -102,7 +111,7 @@ several topics need far less than their position suggests:
 
 Three observations worth arguing about:
 
-- **T17 is the endpoint, and its transitive depth is real.** It needs T15 and
+- **T17 is the endpoint, and its transitive depth is real.** It needs T15c and
   T16, and through them most of the library. That is the honest cost of
   submitting Davis–Kahan as reusable mathematics rather than as one paper's
   formalization. The lever for getting sin-Θ upstream sooner is not reordering —
@@ -281,7 +290,9 @@ correction to the *reading* of where it belongs, not to the tree.
   The first real reviewer contact should be used to find out how much of
   T01–T08 is already upstream, because that is what determines whether T17 is 14
   topics away or four.
-- **Whether T15 splits**, and where.
+- ~~**Whether T15 splits**, and where.~~  **Settled 2026-07-29 (lane `T15-SPLIT`):**
+  into T15a (closedness and graphs), T15b (resolvents and semiboundedness) and
+  T15c (the spectral measure and Stone), which is how the table above reads.
 - **`M-SWITCH`** — how the clusters actually go upstream once a topic is
   accepted — is still open and still jon's call.
 - **Topic names.** These are ours, not Tau Ceti's. The `tauceti-target:v1`
