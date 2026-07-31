@@ -445,12 +445,35 @@ noncomputable def toFinite (Φ : SymmetricGauge) (n : ℕ) : FiniteSymmetricGaug
 approximation numbers.  This is `symmetricGaugeFamily`'s gauge, and the three
 laws below are three of the five `OperatorIdealFamily` fields.
 
-**`gauge_add_le` is not here.**  It is Milestone B2: the `(m+n)` form
-`approximationNumber_add_le` has to become a prefix-sum inequality before
-`toFinite` can hand it to `FiniteSymmetricGauge.le_of_prefixSum_le`, and that
-index-pairing argument is its own piece of work.  The structure is therefore not
-assembled yet — a `SymmetricOperatorIdealFamily` with four of five fields is not
-a thing that can exist, and a `sorry` would fail `check_tauceti_readiness`.
+**`gauge_add_le` is not here**, and the structure is therefore not assembled: a
+`SymmetricOperatorIdealFamily` with four of five fields is not a thing that can
+exist, and a `sorry` would fail `check_tauceti_readiness`.
+
+**Its route is settled, and it is `Family/Schatten.lean`'s, generalised.**  That
+module solves the identical problem for the `ℓᵖ` gauge in
+`lpGauge_approximationNumber_add_le`, whose docstring states the argument: the
+truncated sequences are *weakly majorized* — antitone and nonnegative because
+approximation numbers are, prefix-comparable because that comparison **is**
+`kyFanGauge_add_le` — so a monotone-under-weak-majorization lemma applies.
+
+Every ingredient for the general case now exists:
+
+* `kyFanApproximationGauge_add_le_of_minMax` gives
+  `∑_{i<k} aᵢ(S+T) ≤ ∑_{i<k} aᵢ(S) + ∑_{i<k} aᵢ(T)`, so `a(S+T)` is weakly
+  majorized by the **pointwise sum** `a(S) + a(T)`;
+* `FiniteSymmetricGauge.mono_weaklyMajorized` (`Analysis/Convex/Majorization.lean`)
+  turns that into a gauge inequality, at `Φ.toFinite k` — which is what the
+  bridge above was built for;
+* `Φ.add_le'` then splits the right-hand side.
+
+**Where Schatten needs finite Minkowski to split, a general symmetric gauge needs
+only its own subadditivity** — which is the one place the general argument is
+*simpler* than the `ℓᵖ` one, and worth knowing before anyone reaches for a
+Minkowski analogue that does not exist here.
+
+The remaining work is the `ℝ≥0∞` bookkeeping: `extend` caps at `m` before
+converting, so the weak-majorization hypothesis has to be established for the
+capped truncations rather than for `a` itself.
 
 The `ENNReal.ofReal` convention is `schattenENorm`'s, deliberately, so that the
 two gauges read the same way.
