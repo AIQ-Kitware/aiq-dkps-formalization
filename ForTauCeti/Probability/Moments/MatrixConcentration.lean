@@ -15,6 +15,7 @@ Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); prose symbol `Ŝ` → `Shat
 -/
 
 import ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue
+import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
 import ForTauCeti.Probability.Moments.Variance
 
 
@@ -159,5 +160,62 @@ theorem measure_forall_sortedEigenvalues_ge_ge
   intro ω hω k
   have hk := abs_le.mp (hω k)
   linarith [hk.1]
+
+/-- **Operator-norm deviation of a random matrix.**  With probability
+`≥ 1 − n² v / η²`, the perturbation `Shat(ω) − A` has Euclidean operator norm at most
+`n · η`, in the pointwise form `‖(Shat ω − A) x‖ ≤ n η ‖x‖`.
+
+**No symmetry hypothesis**, deliberately: an operator-norm bound needs none, and dropping it
+here is what lets a Davis--Kahan application consume this event after discharging symmetry
+elsewhere.  Contrast `measure_forall_abs_sortedEigenvalues_sub_le_ge`, which needs both matrices
+Hermitian in order to have eigenvalues at all.
+
+**This is a sibling of that theorem, not a corollary of it.**  Eigenvalue closeness does not
+bound an operator-norm difference — two matrices can have identical spectra and differ by a
+rotation.  Both descend from the same entrywise event `measure_exists_entry_gt_le`, one through
+Weyl's inequality and this one through `norm_toEuclideanLin_le_of_entry_le`, so the probability
+`1 − n² v / η²` is literally the same number rather than two coincidentally equal bounds.
+
+The route is elementary — Chebyshev plus a union bound — and costs a factor `n` entrywise-to-
+operator and `n²` from the union bound.  **The bound is not sharp in the dimension**: a matrix
+Bernstein inequality would give `log n` dependence, at the price of matrix Laplace-transform
+machinery Mathlib does not have.  Nothing downstream may treat the `n`-dependence as intrinsic. -/
+theorem measure_forall_norm_toEuclideanLin_sub_le_ge
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    (Shat : Ω → Matrix (Fin n) (Fin n) ℝ) (A : Matrix (Fin n) (Fin n) ℝ)
+    (hmeas : ∀ k l, Measurable (fun ω => Shat ω k l))
+    (hint : ∀ k l, Integrable (fun ω => (Shat ω k l - A k l) ^ 2) P)
+    {v η : ℝ} (hη : 0 < η) (hmoment : ∀ k l, ∫ ω, (Shat ω k l - A k l) ^ 2 ∂P ≤ v) :
+    P {ω | ∀ x : EuclideanSpace ℝ (Fin n),
+        ‖Matrix.toEuclideanLin (Shat ω - A) x‖ ≤ (n : ℝ) * η * ‖x‖}
+      ≥ 1 - ENNReal.ofReal ((n : ℝ) ^ 2 * v / η ^ 2) := by
+  -- the good (all-entries-close) event is contained in the operator-norm event
+  have hcontain :
+      {ω | ∀ k l : Fin n, |Shat ω k l - A k l| ≤ η}
+        ⊆ {ω | ∀ x : EuclideanSpace ℝ (Fin n),
+            ‖Matrix.toEuclideanLin (Shat ω - A) x‖ ≤ (n : ℝ) * η * ‖x‖} := by
+    intro ω hω x
+    exact norm_toEuclideanLin_le_of_entry_le (fun i j => by simpa using hω i j) x
+  -- the bad (some-entry-far) event, bounded above by the shared entrywise estimate
+  have hbad : P {ω | ∃ k l, η < |Shat ω k l - A k l|}
+      ≤ ENNReal.ofReal ((n : ℝ) ^ 2 * v / η ^ 2) :=
+    measure_exists_entry_gt_le P Shat A hint hη hmoment
+  have hbad_meas : MeasurableSet {ω | ∃ k l, η < |Shat ω k l - A k l|} := by
+    have hunion : {ω | ∃ k l, η < |Shat ω k l - A k l|}
+        = ⋃ k : Fin n, ⋃ l : Fin n, {ω | η < |Shat ω k l - A k l|} := by
+      ext ω; simp only [Set.mem_setOf_eq, Set.mem_iUnion]
+    rw [hunion]
+    refine MeasurableSet.iUnion fun k => MeasurableSet.iUnion fun l => ?_
+    exact measurableSet_lt measurable_const
+      (continuous_abs.measurable.comp ((hmeas k l).sub measurable_const))
+  have hcompl : {ω | ∀ k l : Fin n, |Shat ω k l - A k l| ≤ η}
+      = {ω | ∃ k l, η < |Shat ω k l - A k l|}ᶜ := by
+    ext ω
+    simp only [Set.mem_setOf_eq, Set.mem_compl_iff, not_exists, not_lt]
+  have hgood : 1 - ENNReal.ofReal ((n : ℝ) ^ 2 * v / η ^ 2)
+      ≤ P {ω | ∀ k l : Fin n, |Shat ω k l - A k l| ≤ η} := by
+    rw [hcompl, prob_compl_eq_one_sub hbad_meas]
+    exact tsub_le_tsub_left hbad 1
+  exact le_trans hgood (measure_mono hcontain)
 
 end TauCeti
