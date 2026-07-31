@@ -123,13 +123,18 @@ theorem injective_one_sub_cayley :
 /-- The **inverse Cayley map** `w ↦ i(1+w)/(1-w)`, as a real-valued relabelling
 of the spectrum of the Cayley transform.  Its value at `w = 1` is junk; see
 `diagMeasure_cayley_preimage_one`. -/
--- `@[expose]` as part of the spectral-measure chain: an exposed body cannot reference an
--- unexposed one, and this is reached from `spectralPVM`. Recorded debt. Measured rather
--- than assumed: with the attribute removed the root spectral-measure module fails to
--- elaborate, and the compiler names this definition as one it could not unfold.
-@[expose]
+-- **Not exposed.** It was, as part of the spectral-measure chain; three call sites relied
+-- on the body reducing, all of them proving a `Complex.ext` real-part goal by `rfl`, and
+-- `cayleyInv_def` below covers them. Note that `measurable_cayleyInv` still `unfold`s this
+-- definition, which is fine: that is inside the defining module, where the body is visible
+-- whatever the attribute says.
 noncomputable def cayleyInv (w : _root_.spectrum ℂ (cayley hA)) : ℝ :=
   (Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))).re
+
+/-- Rewrite form of `cayleyInv`, so a call site need not unfold the definition.  It is the
+real part of the Cayley expression, which is what makes the value at `w = 1` junk. -/
+theorem cayleyInv_def (w : _root_.spectrum ℂ (cayley hA)) :
+    cayleyInv hA w = (Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))).re := (rfl)
 
 /-- The inverse Cayley relabelling is measurable.  Measurability, not continuity, is all that is
 available and all that is needed: the map is genuinely singular at `w = 1`. -/
@@ -226,11 +231,9 @@ theorem cayley_denom_ne_zero {z : ℂ} (hz : z.im ≠ 0) {w : ℂ} (hw : ‖w‖
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {z : ℂ} (hz : z.im ≠ 0)
 
 /-- The coordinate function on the spectrum of the Cayley transform. -/
--- `@[expose]` as part of the spectral-measure chain: an exposed body cannot reference an
--- unexposed one, and this is reached from `spectralPVM`. Recorded debt. Measured rather
--- than assumed: with the attribute removed the root spectral-measure module fails to
--- elaborate, and the compiler names this definition as one it could not unfold.
-@[expose]
+-- **Not exposed.** It was, as part of the spectral-measure chain; the three call sites that
+-- relied on the body reducing were all the same `have hgval : gsym w = _ := rfl` against a
+-- `set`-bound symbol, and `cayleyCoord_apply` — which already existed — discharges them.
 noncomputable def cayleyCoord : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
   (ContinuousMap.id ℂ).restrict (_root_.spectrum ℂ (cayley hA))
 
@@ -411,15 +414,30 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 
 /-- The spectral projection of an unbounded self-adjoint operator onto a Borel
 set of the real line. -/
--- `@[expose]` here is a recorded compromise, not a clean carve-out, and it is load-bearing:
--- removing it leaves the root spectral-measure module failing at a dozen-plus sites, two of
--- which rewrite by definition name (`rw [specProjection]`) and the rest of which need the
--- body to reduce. The rubric-clean fix is a `_def` lemma per definition plus rewiring every
--- call site, which is a refactor rather than an attribute change; it is recorded debt rather
--- than an endorsement.
-@[expose]
+-- **Not exposed.** It was, on the grounds that consumers rewrite by definition name and need
+-- the body to reduce; both were true of the call sites, and both are now served by the two
+-- rewrite lemmas below. Twenty-two sites across five modules, in three shapes: `show P = pvm.proj
+-- .. from rfl` (either direction), `exact h` against a Borel-calculus term, and two literal
+-- `rw [specProjection, spectralPVM, toProjValMeasure_proj, specProj]` chains, which collapse to
+-- `rw [specProjection_eq_borelCalculus]`.
 noncomputable def specProjection (B : Set ℝ) (hB : MeasurableSet B) : H →L[ℂ] H :=
   (spectralPVM hA).proj B hB
+
+/-- Rewrite form of `specProjection` against the projection-valued measure, for the consumers
+that want the `ProjValMeasure` API (`norm_sq_proj_apply`, `inner_proj`) rather than the Borel
+calculus underneath it. -/
+theorem specProjection_def (B : Set ℝ) (hB : MeasurableSet B) :
+    specProjection hA B hB = (spectralPVM hA).proj B hB := (rfl)
+
+/-- Rewrite form of `specProjection`, so a call site need not unfold the definition: the
+spectral projection of `B` is the Borel calculus of the indicator of the Cayley preimage
+of `B`.  This is the whole chain `specProjection → spectralPVM → toProjValMeasure →
+specProj` collapsed into the one equation consumers actually want. -/
+theorem specProjection_eq_borelCalculus (B : Set ℝ) (hB : MeasurableSet B) :
+    specProjection hA B hB
+      = BorelCalculus.borelCalculus (isStarNormal_cayley hA)
+          (BorelCalculus.isBddMeasurable_indicator (a := cayley hA)
+            (measurable_cayleyInv hA hB)) := (rfl)
 
 /-- The resolvent at `-i` as an image of the Borel calculus of the Cayley
 transform — the bridge that makes spectral projections commute with it. -/
