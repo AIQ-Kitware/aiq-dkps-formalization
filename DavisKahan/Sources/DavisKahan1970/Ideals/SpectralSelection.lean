@@ -27,7 +27,7 @@ or tactic search is used.
 -/
 
 namespace TauCeti
-namespace FinishTanTwoTheta
+namespace DavisKahan
 
 open scoped InnerProductSpace BigOperators
 open Set
@@ -63,10 +63,12 @@ namespace ApproximateLeadingSingularFamily
 
 variable {X : E0 →L[ℂ] E1} {k : ℕ} {ε : ℝ}
 
+/-- The right vectors of an approximate leading singular family are unit vectors. -/
 @[simp] theorem norm_right (F : ApproximateLeadingSingularFamily X k ε)
     (i : Fin F.count) : ‖F.right i‖ = 1 :=
   F.right_orthonormal.norm_eq_one i
 
+/-- The left vectors of an approximate leading singular family are unit vectors. -/
 @[simp] theorem norm_left (F : ApproximateLeadingSingularFamily X k ε)
     (i : Fin F.count) : ‖F.left i‖ = 1 :=
   F.left_orthonormal.norm_eq_one i
@@ -486,5 +488,5 @@ theorem sum_doubleAngleTangent_le_selected_add_tail
 
 end
 
-end FinishTanTwoTheta
+end DavisKahan
 end TauCeti

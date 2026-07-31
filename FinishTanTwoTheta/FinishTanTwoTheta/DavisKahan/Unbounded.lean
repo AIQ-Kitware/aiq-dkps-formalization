@@ -106,7 +106,7 @@ variable {S : ContractiveReducingGraphSelection H} {k : ℕ} {ε : ℝ}
  family used by the transformed-prefix theorem. -/
 def toApproximateLeading
     (F : UnboundedApproximateLeadingSingularFamily H S k ε) :
-    TauCeti.FinishTanTwoTheta.ApproximateLeadingSingularFamily S.X k ε where
+    TauCeti.DavisKahan.ApproximateLeadingSingularFamily S.X k ε where
   count := F.count
   count_le := F.count_le
   right := fun i => ((F.right i : H.A0.domain) : E0)
@@ -148,7 +148,7 @@ theorem exists_unboundedApproximateLeadingSingularFamily
     {ε : ℝ} (hε : 0 < ε) :
     Nonempty (UnboundedApproximateLeadingSingularFamily H S k ε) := by
   classical
-  obtain ⟨F⟩ := TauCeti.FinishTanTwoTheta.exists_approximateLeadingSingularFamily
+  obtain ⟨F⟩ := TauCeti.DavisKahan.exists_approximateLeadingSingularFamily
     S.X k (show 0 < ε / 8 by positivity)
   have hdense0 := H.dense0
   have hdense1 := H.dense1
@@ -493,7 +493,7 @@ theorem sharp_unbounded_doubleAngleTangentOperator_kyFan
   obtain ⟨F⟩ := exists_unboundedApproximateLeadingSingularFamily H S k hεpos
   have hselected := selected_unbounded_doubleAngleTangent_le_kyFan_add_error
     H S hd0 hr0 hr1 hεpos.le hA0 hA1 hXr F
-  have hprefix := TauCeti.FinishTanTwoTheta.sum_doubleAngleTangent_le_selected_add_tail
+  have hprefix := TauCeti.DavisKahan.sum_doubleAngleTangent_le_selected_add_tail
     S.X k hεpos.le hr0 hr1 hXr F.toApproximateLeading
   have hcountEq : F.toApproximateLeading.count = F.count := rfl
   rw [hcountEq] at hprefix
