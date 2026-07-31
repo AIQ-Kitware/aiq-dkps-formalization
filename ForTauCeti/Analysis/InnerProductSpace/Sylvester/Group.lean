@@ -309,7 +309,7 @@ theorem tendsto_norm_sylvesterFun_sub_zero (f : lp (fun _ : ι => E) 2) :
   have hsplit : ∀ r : ℝ, sylvesterFun U V b r f - f = g₁ r + g₂ r := by
     intro r
     refine ofLp_injective b ?_
-    rw [ofLp_sub, ofLp_sylvesterFun, ofLp_add, hg₁, hg₂, ofLp_ofOperator, ofLp_ofOperator, conjOp]
+    simp only [ofLp_sub, ofLp_sylvesterFun, ofLp_add, hg₁, hg₂, ofLp_ofOperator, conjOp]
     ext x
     simp [hT]
   -- each piece tends to zero
@@ -328,8 +328,10 @@ theorem tendsto_norm_sylvesterFun_sub_zero (f : lp (fun _ : ι => E) 2) :
     have hrw : ∀ r : ℝ, (ofLp b (g₂ r)).hilbertSchmidtEnergy b
         = ∑' j, ‖V.U r (T.adjoint (c j)) - T.adjoint (c j)‖ₑ ^ 2 := by
       intro r
-      rw [hg₂, ofLp_ofOperator, ContinuousLinearMap.hilbertSchmidtEnergy_adjoint _ b c, map_sub,
-        ContinuousLinearMap.adjoint_comp, adjoint_U_neg, energy_sub_comp_eq]
+      rw [hg₂, ofLp_ofOperator,
+        ContinuousLinearMap.hilbertSchmidtEnergy_adjoint _ b c]
+      simp only [map_sub, ContinuousLinearMap.adjoint_comp, adjoint_U_neg]
+      exact energy_sub_comp_eq _ _ _
     simp_rw [hrw]
     exact tendsto_energy_sub_comp c T.adjoint hTadjtop (fun r => V.U r)
       (fun r => norm_preserving V r) (fun x => V.strong_continuous x)
