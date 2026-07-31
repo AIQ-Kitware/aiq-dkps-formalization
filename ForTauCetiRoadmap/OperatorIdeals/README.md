@@ -118,7 +118,13 @@ are representative, neither exhaustive nor prescriptive about proof architecture
   completeness for `1 ≤ p`, and `Memℓp`.
 - **`ℝ≥0∞` machinery:** `ENNReal.tsum_comm` — the unconditional Fubini exchange that is the
   whole content of adjoint invariance for the Hilbert–Schmidt energy — and
-  `ENNReal.Lp_add_le` (finite Minkowski; its `tsum` form at `p = 2` is a Part B target).
+  `ENNReal.Lp_add_le` (finite Minkowski).  Its `tsum` form was listed here as a Part B
+  target; that was half wrong.  `NNReal.Lp_add_le_tsum` exists at general `p`
+  (`Mathlib/Analysis/MeanInequalities.lean:817`) but carries summability hypotheses on both
+  summands, and there is no `ENNReal` `tsum` version in Mathlib at all — which is why the
+  energy layer wrote its own.  **Supplied here since 2026-07-31** as
+  `ENNReal.tsum_rpow_add_le` at `1 ≤ p`, with no summability hypothesis (lane
+  `EXP-UNBLOCK-MINKOWSKI`); upstreaming it remains a reasonable Mathlib contribution.
 - **Work in motion:** Mathlib PR
   [#32126](https://github.com/leanprover-community/mathlib4/pull/32126) drafts a zero-based
   `ContinuousLinearMap.singularValue : ℕ → ℝ≥0` for normed spaces; see also the
@@ -287,7 +293,8 @@ inherits the operator norm, which is the wrong instance); `IsComplete`, complete
   `ℝ≥0∞` (no summability side conditions anywhere): Parseval in `ℝ≥0∞`, the rectangular
   adjoint swap by unconditional Fubini, hence **basis independence**
   (`hilbertSchmidtEnergy_indep`); the norm `hilbertSchmidtENorm` (its square root) with
-  Minkowski at `p = 2` extended to `tsum`, domination of the operator norm, adjoint
+  Minkowski extended to `tsum` (`ENNReal.tsum_rpow_add_le`, proved at general `1 ≤ p` and
+  applied here at `p = 2`), domination of the operator norm, adjoint
   invariance, the two-sided ideal bound, the predicate `IsHilbertSchmidt`; the family
   `hilbertSchmidtIdealFamily`, built from orthonormal expansions and sharing no machinery
   with the approximation-number instances — the evidence that the interface is not shaped
@@ -421,7 +428,7 @@ obtained rather than constructed**, and their four laws are B1's, not new work.
 **API to develop.**
 
 - `Φ_p` is a symmetric gauge: subadditivity is Minkowski in `ℓᵖ` (finite form from Mathlib,
-  the `tsum` form at general `p` following the `p = 2` pattern of the energy layer),
+  the `tsum` form at general `p` now available as `ENNReal.tsum_rpow_add_le`),
   monotonicity and symmetry are termwise, normalization is by inspection.
 - The endpoint identifications, each an equality of *families*, not merely of gauges on the
   ideal: `schattenFamily 1 = traceClassIdealFamily`, `schattenFamily 2` has gauge the
