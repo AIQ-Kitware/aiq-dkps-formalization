@@ -9,7 +9,7 @@ import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteValueSeparation
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteValueFibers
-import FinishTanTwoTheta.ApproximationNumber.GramBandPolar
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar
 import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 
 /-!
