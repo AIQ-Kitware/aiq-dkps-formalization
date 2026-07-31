@@ -191,6 +191,23 @@ theorem approximationNumber_orthogonalProjectionOnto_range_comp {G₀ : Type*}
 
 
 
+/-- **Approximation numbers of an operator out of a finite-dimensional space vanish beyond
+that dimension**, because the operator is its own approximant of that rank.
+
+The rank bound goes through `LinearMap.finrank_range_le` rather than
+`LinearMap.rank_le_domain`: the latter fixes both spaces in one universe, and the consumer
+here has a Euclidean source in the scalar field's universe and an arbitrary target. -/
+theorem approximationNumber_eq_zero_of_finrank_le {G₀ : Type*} [NormedAddCommGroup G₀]
+    [InnerProductSpace 𝕜' G₀] [FiniteDimensional 𝕜' G₀] (A : G₀ →L[𝕜'] H₀) {n : ℕ}
+    (hn : Module.finrank 𝕜' G₀ ≤ n) : A.approximationNumber n = 0 := by
+  refine le_antisymm ?_ (A.approximationNumber_nonneg n)
+  have hrank : (A : G₀ →ₗ[𝕜'] H₀).rank ≤ (n : Cardinal) := by
+    have h := LinearMap.finrank_range_le (A : G₀ →ₗ[𝕜'] H₀)
+    rw [LinearMap.rank, ← Module.finrank_eq_rank]
+    exact_mod_cast h.trans hn
+  simpa using A.approximationNumber_le_norm_sub (R := A) hrank
+
+
 end Corestriction
 
 section FiniteSource
@@ -261,6 +278,27 @@ theorem hilbertSchmidtEnergy_eq_sum_approximationNumber_sq {G₀ : Type*}
   exact Finset.sum_congr rfl fun i _ =>
     congrArg (fun r : ℝ => ENNReal.ofReal r ^ 2)
       (approximationNumber_orthogonalProjectionOnto_range_comp A (i : ℕ))
+
+omit [CompleteSpace H] [FiniteDimensional 𝕜' H] in
+/-- **The `p = 2` identity for a finite-dimensional source, as a `tsum` over `ℕ`.**
+
+The sum over `Fin (finrank G₀)` is the whole `tsum`, because
+`approximationNumber_eq_zero_of_finrank_le` kills every later term.  This is the form the
+infinite-dimensional argument consumes, since there the Schatten gauge is a `tsum` over `ℕ`
+on both sides. -/
+theorem tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy {G₀ : Type*}
+    [NormedAddCommGroup G₀] [InnerProductSpace 𝕜' G₀] [CompleteSpace G₀]
+    [FiniteDimensional 𝕜' G₀] {ι : Type*} (A : G₀ →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G₀) :
+    ∑' n : ℕ, ENNReal.ofReal (A.approximationNumber n) ^ 2 = A.hilbertSchmidtEnergy b := by
+  classical
+  rw [A.hilbertSchmidtEnergy_eq_sum_approximationNumber_sq b,
+    Fin.sum_univ_eq_sum_range (fun n => ENNReal.ofReal (A.approximationNumber n) ^ 2)
+      (Module.finrank 𝕜' G₀)]
+  refine tsum_eq_sum fun n hn => ?_
+  rw [approximationNumber_eq_zero_of_finrank_le A
+    (le_of_not_gt fun h => hn (Finset.mem_range.mpr h))]
+  simp
+
 
 end FiniteSource
 
