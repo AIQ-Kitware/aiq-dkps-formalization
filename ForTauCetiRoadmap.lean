@@ -1,0 +1,12 @@
+-- Root of the `ForTauCetiRoadmap` library.
+--
+-- Intentionally empty, exactly as `ForTauCeti.lean` is: the lakefile's
+-- `globs = ["ForTauCetiRoadmap.*"]` is authoritative for what gets built, so every
+-- `ForTauCetiRoadmap/**/Suggested.lean` is compiled directly and nothing imports this
+-- root. It exists because a `lean_lib` named `ForTauCetiRoadmap` needs a root module
+-- to resolve; without it `lake build ForTauCetiRoadmap` reports "some modules have
+-- bad imports" while every module underneath elaborates fine.
+--
+-- The library exists so that a broken suggested signature is a build failure. It was
+-- not one before: three of the six files carried ten elaboration errors, in files
+-- whose whole purpose is to show a reviewer what the API will look like.
