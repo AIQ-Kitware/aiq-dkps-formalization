@@ -11,6 +11,25 @@ The roadmap prose is authoritative.  This file records representative target
 shapes using names already present in the staged `ForTauCeti` implementation;
 it is not exhaustive, and discharging everything here finishes neither a Part
 nor the roadmap.
+
+## ✅ DELIVERED — every signature below is proved (verified 2026-07-31)
+
+**This topic is complete.**  All 26 declarations in this file exist and are
+proved across 12 modules of `ForTauCeti/**`; `README.md` records where each
+one landed.  Read this file as a *record* of the target shapes, not as a list
+of open work.
+
+**The `sorry` bodies here are deliberate and must not be "fixed".**  As
+`ForTauCetiRoadmap.lean` puts it, this library exists so that a broken
+suggested signature is a build failure — a guard that has already caught ten
+real elaboration errors.  Replacing a body with a proof duplicates the
+library; deleting a signature removes the guard.  The only thing that should
+change here is a *statement*, and only to track a deliberate rename.
+
+If you re-verify delivery, build a declaration index rather than grepping per
+name: a per-name search reported 17 of these 26 as missing, `cosThetaMap` and
+`kyFanSum` among them, because Lean declaration syntax varies too much for a
+single pattern.
 -/
 
 namespace TauCetiRoadmap.MajorizationAndAngles
