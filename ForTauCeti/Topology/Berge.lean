@@ -535,4 +535,35 @@ theorem exists_subseq_tendsto_mem_of_isCompact
   exact exists_subseq_tendsto_mem_of_upperHemicontinuousAt hKu hK₀.isClosed
     hCcompact hKC hp hxK
 
+/-- **Upper semicontinuity of the value function under lower hemicontinuity.**
+
+`V p = ⨅ x ∈ K p, g p x` eventually falls below any bound strictly above
+`V p₀`.  With the matching lower statement this gives continuity of `V`; the two
+halves are *not* symmetric — this one is what lower hemicontinuity buys, and the
+other needs upper hemicontinuity and the compactness extraction.
+
+The compactness of `K p₀` is used only to produce a genuine minimizer there, so
+that the bound from `eventually_iInf_lt_of_lowerHemicontinuousAt` can be stated
+against `V p₀` itself rather than against an approximate value. -/
+theorem eventually_iInf_lt_of_lt_iInf
+    {P X : Type*} [TopologicalSpace P] [TopologicalSpace X]
+    {K : P → Set X} {p₀ : P} (hKl : LowerHemicontinuousAt K p₀)
+    (hK₀ : IsCompact (K p₀)) (hK₀ne : (K p₀).Nonempty)
+    {g : P → X → ℝ} (hg : Continuous (Function.uncurry g))
+    (hbdd : ∀ p, BddBelow (Set.range fun x : ↥(K p) => g p ↑x))
+    {b : ℝ} (hb : (⨅ x : ↥(K p₀), g p₀ ↑x) < b) :
+    ∀ᶠ p in 𝓝 p₀, (⨅ x : ↥(K p), g p ↑x) < b := by
+  haveI : Nonempty ↥(K p₀) := hK₀ne.to_subtype
+  have hgcont : Continuous (g p₀) := hg.comp (continuous_const.prodMk continuous_id)
+  -- A genuine minimizer at `p₀`, so the bound can be stated against `V p₀`.
+  obtain ⟨y, hyK, hymin⟩ := hK₀.exists_isMinOn hK₀ne hgcont.continuousOn
+  have hyval : (⨅ x : ↥(K p₀), g p₀ ↑x) = g p₀ y :=
+    le_antisymm (ciInf_le (hbdd p₀) ⟨y, hyK⟩)
+      (le_ciInf fun x => (isMinOn_iff.mp hymin) ↑x x.2)
+  -- Feed the gap `b - V p₀` to the lower-hemicontinuity bound.
+  have hε : 0 < b - g p₀ y := by rw [hyval] at hb; linarith
+  filter_upwards [eventually_iInf_lt_of_lowerHemicontinuousAt hKl hg hbdd hyK hε]
+    with p hp
+  linarith [hp]
+
 end TauCeti
