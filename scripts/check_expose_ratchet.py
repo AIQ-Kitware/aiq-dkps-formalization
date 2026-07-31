@@ -85,7 +85,7 @@ BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 #: `specProjection_mem_specRange`, and four rewired call sites that were proving membership
 #: with `⟨y, rfl⟩`.  The remaining eight need the `SpectralMeasure.lean` refactor, not an
 #: attribute edit: removing them leaves that module failing at a dozen-plus sites.
-PER_DECL_BASELINE = 17
+PER_DECL_BASELINE = 16
 
 PER_DECL = re.compile(r"^@\[expose\]\s*$|^@\[simps![^\]]*,\s*expose\]\s*$", re.M)
 
