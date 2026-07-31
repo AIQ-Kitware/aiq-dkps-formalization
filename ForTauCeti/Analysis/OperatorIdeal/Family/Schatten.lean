@@ -49,7 +49,10 @@ layer is the tool here, not the obstacle.
 * `TauCeti.schattenIdealFamily`: the resulting symmetric operator ideal family;
 * `ContinuousLinearMap.schattenENorm_one` and
   `TauCeti.schattenIdealFamily_one_eq_traceClassIdealFamily`: at `p = 1` this *is* the
-  trace-class ideal.  The `p = 2` counterpart is deliberately absent — see below.
+  trace-class ideal;
+* `ContinuousLinearMap.schattenENorm_two` and
+  `TauCeti.schattenIdealFamily_two_eq_hilbertSchmidtIdealFamily`: at `p = 2` it is the
+  Hilbert--Schmidt ideal.
 
 ## The `p = 2` bridge
 
@@ -65,10 +68,11 @@ and pinned Mathlib has no orthonormal eigenbasis for a compact self-adjoint oper
 the basis — forward by reading the finite case exactly, reverse by Fatou along
 `Finset.atTop`.
 
-What is *not* here is the resulting equality of families,
-`schattenIdealFamily 𝕜 2 = hilbertSchmidtIdealFamily 𝕜`: the gauges are `hilbertSchmidtENorm`
-and `schattenENorm 2`, which are the square roots of the two sides above, so it is a matter of
-transporting the identity through `^ (2 : ℝ)⁻¹` and the two families' definitions.  Completeness
+The family-level consequences are here too:
+`TauCeti.schattenIdealFamily_two_eq_hilbertSchmidtIdealFamily` and its `p = 1` twin
+`TauCeti.schattenIdealFamily_one_eq_traceClassIdealFamily`.  **So the three named families
+in this directory are three presentations of one scale**, not three unrelated
+constructions.  Completeness
 of the family is likewise open, as it is for the trace-class family.
 
 ## Provenance
@@ -932,6 +936,26 @@ theorem schattenENorm_one (T : E →L[𝕜] F) : T.schattenENorm 1 = T.nuclearEN
 
 end AgreementAtOne
 
+section AgreementAtTwo
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E F : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+
+/-- **The Schatten-2 norm is the Hilbert--Schmidt norm.**  Both are the square root of the
+same `ℝ≥0∞` quantity, by the identity above. -/
+theorem schattenENorm_two (T : E →L[𝕜] F) :
+    T.schattenENorm 2 = T.hilbertSchmidtENorm := by
+  classical
+  obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 E
+  rw [schattenENorm, T.hilbertSchmidtENorm_eq b,
+    ← tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy_of_hilbertBasis T b]
+  norm_num
+
+
+end AgreementAtTwo
+
 end Gauge
 
 end ContinuousLinearMap
@@ -1056,5 +1080,19 @@ theorem schattenIdealFamily_one_eq_traceClassIdealFamily (𝕜 : Type u) [RCLike
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] :
     schattenIdealFamily.{u, v} 𝕜 (le_refl (1 : ℝ)) = traceClassIdealFamily.{u, v} 𝕜 := by
   exact SymmetricOperatorIdealFamily.ext fun {_E _F} _ _ _ _ _ _ A => A.schattenENorm_one
+
+/-- **The Schatten ideal at `p = 2` is the Hilbert--Schmidt ideal**, as families.
+
+Together with `schattenIdealFamily_one_eq_traceClassIdealFamily` this places the two named
+families of this directory inside the Schatten scale, so the three constructions in
+`Analysis/OperatorIdeal/Family/` are three presentations of one object rather than three
+objects. -/
+theorem schattenIdealFamily_two_eq_hilbertSchmidtIdealFamily (𝕜 : Type u) [RCLike 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] :
+    schattenIdealFamily.{u, v} 𝕜 (one_le_two (α := ℝ))
+      = hilbertSchmidtIdealFamily.{u, v} 𝕜 :=
+  SymmetricOperatorIdealFamily.ext fun {_E _F} _ _ _ _ _ _ A =>
+    ContinuousLinearMap.schattenENorm_two A
+
 
 end TauCeti
