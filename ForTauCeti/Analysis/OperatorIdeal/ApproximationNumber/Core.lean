@@ -45,9 +45,7 @@ its own piece of work with its own build.
 -/
 
 namespace TauCeti
-namespace DavisKahan
-namespace Experimental
-namespace ExactSinTheta
+namespace ApproximationNumber
 
 open scoped InnerProductSpace
 open scoped Topology
@@ -684,7 +682,5 @@ theorem kyFanApproximationGauge_le_nat_mul_opNorm
     kyFanApproximationGauge k K ≤ (k : ℝ) * ‖K‖ :=
   K.kyFanGauge_le_nat_mul_opNorm k
 
-end ExactSinTheta
-end Experimental
-end DavisKahan
+end ApproximationNumber
 end TauCeti
