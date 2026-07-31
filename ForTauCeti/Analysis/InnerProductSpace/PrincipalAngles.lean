@@ -118,6 +118,21 @@ theorem sinThetaSq_eq_sub_overlap {u v : Fin d → E} (hu : Orthonormal 𝕜 u)
   unfold cosPrincipalAngles
   exact sum_sq_singularValues_overlapOp hu hv
 
+/-- **`‖sin Θ‖²_F = d − ∑ cos²θₖ`.**  The cosine form of `sinThetaSq_eq_sub_overlap`: the same
+identity with the overlap sum left as the principal cosines rather than expanded into inner
+products.
+
+This is the shape the Davis--Kahan and Yu--Wang--Samworth arguments use, where the cosines are
+carried symbolically and only the *sum* matters; `sinThetaSq_eq_sub_overlap` is the shape wanted
+when the overlap has to be estimated entrywise.  Both are one step from the definition, and having
+each spelled out saves every consumer the `Finset.sum_sub_distrib` dance. -/
+theorem sinThetaSq_eq_card_sub_sum_sq {u v : Fin d → E} (hu : Orthonormal 𝕜 u)
+    (hv : Orthonormal 𝕜 v) :
+    sinThetaSq hu hv = (d : ℝ) - ∑ k : Fin d, cosPrincipalAngles hu hv (k : ℕ) ^ 2 := by
+  unfold sinThetaSq
+  rw [Finset.sum_sub_distrib, Finset.sum_const, Finset.card_univ, Fintype.card_fin,
+    nsmul_eq_mul, mul_one]
+
 /-- The squared sine of the principal angles is nonnegative: each summand `1 - cos²θₖ` is, because
 the cosines lie in `[0, 1]`. -/
 theorem sinThetaSq_nonneg {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) :
