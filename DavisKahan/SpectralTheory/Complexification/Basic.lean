@@ -450,12 +450,17 @@ theorem complexify_injective [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 statement of `‖re z‖ ≤ ‖z‖` in this repository, and the earliest in import
 order, so every consumer can reach it.
 
-It was `private` until 2026-07-30, guarded by a note saying a public copy would
-make unqualified uses ambiguous in
-`Sources/DavisKahan1970/Ideals/HilbertSchmidtRealDescent.lean`, which opens two
-of the namespaces that had a copy.  That was true, and it was the wrong
-conclusion: the ambiguity came from the *other three* copies, not from this one
-being visible.  With them gone there is one name to resolve to. -/
+It was `private` until 2026-07-30, guarded by a note saying a public copy would make
+unqualified uses ambiguous in `Sources/DavisKahan1970/Ideals/HilbertSchmidtRealDescent.lean`,
+which opens two of the namespaces that had a copy.  That was true, and it was the wrong
+conclusion: the ambiguity came from the *other three* copies, not from this one being visible.
+
+Getting there took a broken tree first, and the sequence is worth keeping.  `edward (aiq-gpu)`
+deleted the `ClosedOperatorComplexification` sibling in `4dacc008` and pointed that module here;
+separately this one was still `private`.  Each fix is right alone and they are fatal together —
+with the sibling gone and this one private, no public copy was reachable from
+`ClosedOperator/Complexification.lean` and the build stopped.  Lane `{lane:CPLX-DEDUP-1}` then
+deleted the remaining copies and made this one public, which is the state described above. -/
 theorem norm_re_le [NormedAddCommGroup E] (z : RealComplexification E) :
     ‖re z‖ ≤ ‖z‖ := by
   have h := norm_sq z

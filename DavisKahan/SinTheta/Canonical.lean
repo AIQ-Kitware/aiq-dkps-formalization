@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Unbounded.IntervalExterior
+import DavisKahan.SinTheta.Unbounded.AllGap
 import DavisKahan.SinTheta.Unbounded.LegacyGap
 
 /-!
@@ -289,6 +290,144 @@ noncomputable def toGeneral
 end FormBoundedIsometricSinThetaProblem
 
 end ComplexIsometricBridge
+
+section SpectralPackages
+
+universe v
+
+variable {E F G H : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+
+/-- Complete source-shaped input package for the generalized all-gap theorem,
+with the spectral gap stated as `SpectralSylvesterGap`.
+
+`FormBoundedGeneralSinThetaProblem` is the same package over the form-bounded
+gap, and is the more general of the two: `formBoundedSylvesterGap_of_spectral`
+builds it from this one, so `result` here is a corollary of `result` there.
+`SinTheta/Canonical.lean` records the details. -/
+structure SpectralGeneralSinThetaProblem
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
+  data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
+  exactMap : H →L[ℂ] E
+  ambient_selfAdjoint : data.A.IsSelfAdjoint
+  trial_selfAdjoint : data.A₀.IsSelfAdjoint
+  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
+  exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
+  gap : ℝ
+  frameLowerBound : ℝ
+  gap_pos : 0 < gap
+  frameLowerBound_pos : 0 < frameLowerBound
+  lowerFrame : LowerFrameBound data.X frameLowerBound
+  spectral_gap : SpectralSylvesterGap data.A₀ data.Λ₁ gap
+  residual_mem : N.Mem data.residual
+
+namespace SpectralGeneralSinThetaProblem
+
+/-- Every spectral package is a form-bounded package: the gap transports by
+`formBoundedSylvesterGap_of_spectral` and every other field is carried across
+unchanged. -/
+def toFormBounded
+    {N : KyFanDominantIdealFamily (𝕜 := ℂ)}
+    (P : SpectralGeneralSinThetaProblem (E := E) (F := F)
+      (G := G) (H := H) N) :
+    FormBoundedGeneralSinThetaProblem (E := E) (F := F) (G := G) (H := H) N where
+  data := P.data
+  exactMap := P.exactMap
+  ambient_selfAdjoint := P.ambient_selfAdjoint
+  trial_selfAdjoint := P.trial_selfAdjoint
+  complement_selfAdjoint := P.complement_selfAdjoint
+  exact_decomposition := P.exact_decomposition
+  gap := P.gap
+  frameLowerBound := P.frameLowerBound
+  gap_pos := P.gap_pos
+  frameLowerBound_pos := P.frameLowerBound_pos
+  lowerFrame := P.lowerFrame
+  spectral_gap :=
+    formBoundedSylvesterGap_of_spectral P.trial_selfAdjoint
+      P.complement_selfAdjoint P.spectral_gap
+  residual_mem := P.residual_mem
+
+/-- Source-shaped generalized spectral all-gap endpoint. -/
+theorem result
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (P : SpectralGeneralSinThetaProblem (E := E) (F := F)
+      (G := G) (H := H) N) :
+    N.Mem
+        (directedSinThetaOperator P.data.X P.exactMap
+          P.lowerFrame P.frameLowerBound_pos) ∧
+      P.gap * P.frameLowerBound *
+          N.gauge
+            (directedSinThetaOperator P.data.X P.exactMap
+              P.lowerFrame P.frameLowerBound_pos)
+        ≤ N.gauge P.data.residual :=
+  FormBoundedGeneralSinThetaProblem.result N P.toFormBounded
+
+end SpectralGeneralSinThetaProblem
+
+/-- Complete source-shaped input package for the isometric all-gap theorem, with
+the spectral gap stated as `SpectralSylvesterGap`.
+
+This package is `ℂ`-only; `FormBoundedIsometricSinThetaProblem` is the
+`RCLike`-generic form-bounded counterpart. -/
+structure SpectralIsometricSinThetaProblem
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
+  data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
+  exactMap : H →L[ℂ] E
+  ambient_selfAdjoint : data.A.IsSelfAdjoint
+  trial_selfAdjoint : data.A₀.IsSelfAdjoint
+  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
+  trial_isometry : IsometricEmbedding data.X
+  exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
+  gap : ℝ
+  gap_pos : 0 < gap
+  spectral_gap : SpectralSylvesterGap data.A₀ data.Λ₁ gap
+  residual_mem : N.Mem data.residual
+
+namespace SpectralIsometricSinThetaProblem
+
+/-- Every spectral isometric package is a form-bounded one, by the same gap
+transport. -/
+def toFormBounded
+    {N : KyFanDominantIdealFamily (𝕜 := ℂ)}
+    (P : SpectralIsometricSinThetaProblem (E := E) (F := F)
+      (G := G) (H := H) N) :
+    FormBoundedIsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
+      (G := G) (H := H) N where
+  data := P.data
+  exactMap := P.exactMap
+  ambient_selfAdjoint := P.ambient_selfAdjoint
+  trial_selfAdjoint := P.trial_selfAdjoint
+  complement_selfAdjoint := P.complement_selfAdjoint
+  trial_isometry := P.trial_isometry
+  exact_decomposition := P.exact_decomposition
+  gap := P.gap
+  gap_pos := P.gap_pos
+  spectral_gap :=
+    formBoundedSylvesterGap_of_spectral P.trial_selfAdjoint
+      P.complement_selfAdjoint P.spectral_gap
+  residual_mem := P.residual_mem
+
+/-- Source-shaped isometric spectral all-gap endpoint. -/
+theorem result
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (P : SpectralIsometricSinThetaProblem (E := E) (F := F)
+      (G := G) (H := H) N) :
+    N.Mem
+        ((ContinuousLinearMap.id ℂ E -
+          P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X) ∧
+      P.gap * N.gauge
+          ((ContinuousLinearMap.id ℂ E -
+            P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X)
+        ≤ N.gauge P.data.residual :=
+  FormBoundedIsometricSinThetaProblem.result_complex N P.toFormBounded
+
+end SpectralIsometricSinThetaProblem
+
+end SpectralPackages
+
 
 end ExactSinTheta
 end Experimental

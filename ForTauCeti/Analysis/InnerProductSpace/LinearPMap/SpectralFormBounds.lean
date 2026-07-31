@@ -131,7 +131,8 @@ theorem le_re_inner_of_specProjection_Iio_eq_zero {c : ℝ}
             specProjection hA (Set.Icc c τ) measurableSet_Icc (x : H)⟫_ℂ).re := by
     intro τ
     set y : H := specProjection hA (Set.Icc c τ) measurableSet_Icc (x : H) with hy
-    have hyK : y ∈ specRange hA (Set.Icc c τ) measurableSet_Icc := ⟨(x : H), rfl⟩
+    have hyK : y ∈ specRange hA (Set.Icc c τ) measurableSet_Icc :=
+      specProjection_mem_specRange hA (Set.Icc c τ) measurableSet_Icc (x : H)
     have hymem : y ∈ A.domain :=
       specProjection_mem_domain hA (Set.Icc c τ) measurableSet_Icc x
     have hAy : A ⟨y, hymem⟩
@@ -202,7 +203,8 @@ theorem re_inner_le_of_specProjection_Ioi_eq_zero {c : ℝ}
         ≤ c * ‖specProjection hA (Set.Icc (-τ) c) measurableSet_Icc (x : H)‖ ^ 2 := by
     intro τ
     set y : H := specProjection hA (Set.Icc (-τ) c) measurableSet_Icc (x : H) with hy
-    have hyK : y ∈ specRange hA (Set.Icc (-τ) c) measurableSet_Icc := ⟨(x : H), rfl⟩
+    have hyK : y ∈ specRange hA (Set.Icc (-τ) c) measurableSet_Icc :=
+      specProjection_mem_specRange hA (Set.Icc (-τ) c) measurableSet_Icc (x : H)
     have hymem : y ∈ A.domain :=
       specProjection_mem_domain hA (Set.Icc (-τ) c) measurableSet_Icc x
     have hAy : A ⟨y, hymem⟩

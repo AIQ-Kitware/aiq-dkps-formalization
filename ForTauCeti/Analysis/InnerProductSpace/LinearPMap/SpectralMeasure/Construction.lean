@@ -124,8 +124,9 @@ theorem injective_one_sub_cayley :
 of the spectrum of the Cayley transform.  Its value at `w = 1` is junk; see
 `diagMeasure_cayley_preimage_one`. -/
 -- `@[expose]` as part of the spectral-measure chain: an exposed body cannot reference an
--- unexposed one, and this is reached from `spectralPVM`. Recorded debt, tracked as lane
--- FTC-EXPOSE-SPECMEAS.
+-- unexposed one, and this is reached from `spectralPVM`. Recorded debt. Measured rather
+-- than assumed: with the attribute removed the root spectral-measure module fails to
+-- elaborate, and the compiler names this definition as one it could not unfold.
 @[expose]
 noncomputable def cayleyInv (w : _root_.spectrum ℂ (cayley hA)) : ℝ :=
   (Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))).re
@@ -137,11 +138,12 @@ theorem measurable_cayleyInv : Measurable (cayleyInv hA) := by
   fun_prop
 
 /-- **The spectral measure of an unbounded self-adjoint operator.** -/
--- `@[expose]` here is a recorded compromise, not a clean carve-out. Consumers in this
--- module rewrite by definition name (`rw [specProjection, spectralPVM, specProj]`) and
--- index subtypes by `.domain`, so the bodies must reduce. The rubric-clean fix is a
--- `_def` lemma per definition plus rewiring every call site, which is a larger refactor
--- than a conversion pass; it is recorded debt rather than an endorsement.
+-- `@[expose]` here is a recorded compromise, not a clean carve-out, and it is load-bearing:
+-- removing it leaves the root spectral-measure module failing at a dozen-plus sites, two of
+-- which rewrite by definition name (`rw [specProjection]`) and the rest of which need the
+-- body to reduce. The rubric-clean fix is a `_def` lemma per definition plus rewiring every
+-- call site, which is a refactor rather than an attribute change; it is recorded debt rather
+-- than an endorsement.
 @[expose]
 noncomputable def spectralPVM : TauCeti.ProjValMeasure H :=
   BorelCalculus.toProjValMeasure (isStarNormal_cayley hA) (measurable_cayleyInv hA)
@@ -225,8 +227,9 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {z : ℂ} (hz : z.im ≠ 
 
 /-- The coordinate function on the spectrum of the Cayley transform. -/
 -- `@[expose]` as part of the spectral-measure chain: an exposed body cannot reference an
--- unexposed one, and this is reached from `spectralPVM`. Recorded debt, tracked as lane
--- FTC-EXPOSE-SPECMEAS.
+-- unexposed one, and this is reached from `spectralPVM`. Recorded debt. Measured rather
+-- than assumed: with the attribute removed the root spectral-measure module fails to
+-- elaborate, and the compiler names this definition as one it could not unfold.
 @[expose]
 noncomputable def cayleyCoord : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
   (ContinuousMap.id ℂ).restrict (_root_.spectrum ℂ (cayley hA))
@@ -406,11 +409,12 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 
 /-- The spectral projection of an unbounded self-adjoint operator onto a Borel
 set of the real line. -/
--- `@[expose]` here is a recorded compromise, not a clean carve-out. Consumers in this
--- module rewrite by definition name (`rw [specProjection, spectralPVM, specProj]`) and
--- index subtypes by `.domain`, so the bodies must reduce. The rubric-clean fix is a
--- `_def` lemma per definition plus rewiring every call site, which is a larger refactor
--- than a conversion pass; it is recorded debt rather than an endorsement.
+-- `@[expose]` here is a recorded compromise, not a clean carve-out, and it is load-bearing:
+-- removing it leaves the root spectral-measure module failing at a dozen-plus sites, two of
+-- which rewrite by definition name (`rw [specProjection]`) and the rest of which need the
+-- body to reduce. The rubric-clean fix is a `_def` lemma per definition plus rewiring every
+-- call site, which is a refactor rather than an attribute change; it is recorded debt rather
+-- than an endorsement.
 @[expose]
 noncomputable def specProjection (B : Set ℝ) (hB : MeasurableSet B) : H →L[ℂ] H :=
   (spectralPVM hA).proj B hB
@@ -519,9 +523,10 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ) (hB : Measu
 
 /-- The **spectral range** of `A` over a Borel set: the range of the spectral
 projection, a closed, orthogonally complemented subspace. -/
--- `@[expose]` as part of the spectral-measure chain: consumers construct membership with
--- `⟨y, h⟩`, which needs the range body to reduce. Recorded debt.
-@[expose]
+-- **Not exposed, and it does not need to be.** This definition carried `@[expose]` on the
+-- grounds that consumers construct membership with `⟨y, h⟩`, which needs the range body to
+-- reduce; that was true of the call sites and not of the mathematics. There were four such
+-- sites, and `specProjection_mem_specRange` below now covers all of them.
 noncomputable def specRange : Submodule ℂ H := (specProjection hA B hB).range
 
 /-- A vector lies in the spectral range exactly when the spectral projection fixes it -- the usable
@@ -537,6 +542,17 @@ theorem mem_specRange_iff (x : H) :
     exact h
   · intro hx
     exact ⟨x, hx⟩
+
+/-- **Every spectral projection image lies in the spectral range.**  This is the membership a
+consumer wants, and it is stated because the alternative is `⟨y, rfl⟩`, which proves the same
+thing only by making `specRange` reduce to a `LinearMap.range` — the one call pattern that
+kept the definition's body exposed across module boundaries. -/
+theorem specProjection_mem_specRange (y : H) :
+    specProjection hA B hB y ∈ specRange hA B hB :=
+  (mem_specRange_iff hA B hB _).mpr <| by
+    have h2 := congrArg (fun T : H →L[ℂ] H => T y)
+      (isIdempotentElem_specProjection hA B hB)
+    simpa only [_root_.mul_apply_eq_comp] using h2
 
 /-- The spectral range is complete, being the range of an idempotent bounded operator and hence
 closed in `H`. -/
@@ -566,11 +582,12 @@ theorem apply_mem_specRange {x : A.domain} (hx : (x : H) ∈ specRange hA B hB) 
 
 /-- **The restriction of a self-adjoint operator to one of its spectral
 ranges.** -/
--- `@[expose]` here is a recorded compromise, not a clean carve-out. Consumers in this
--- module rewrite by definition name (`rw [specProjection, spectralPVM, specProj]`) and
--- index subtypes by `.domain`, so the bodies must reduce. The rubric-clean fix is a
--- `_def` lemma per definition plus rewiring every call site, which is a larger refactor
--- than a conversion pass; it is recorded debt rather than an endorsement.
+-- `@[expose]` is load-bearing here and is a clean carve-out rather than debt: the domain of
+-- the restriction is `A.domain.comap _`, so `specRestrict_domain` and `specRestrict_apply`
+-- cannot be *stated* — not merely proved — without `.domain` reducing, exactly as for
+-- `addBounded` and `perturb`. Measured, not assumed: with the attribute removed the
+-- elaborator rejects `specRestrict_apply`'s statement at `x.property`, reporting
+-- `specRestrict` as the definition it could not unfold.
 @[expose]
 noncomputable def specRestrict : specRange hA B hB →ₗ.[ℂ] specRange hA B hB where
   domain := A.domain.comap (specRange hA B hB).subtype
