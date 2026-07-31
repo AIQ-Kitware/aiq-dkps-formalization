@@ -7,6 +7,7 @@ import Mathlib.Data.Finsupp.Order
 import Mathlib.Topology.Instances.ENNReal.Lemmas
 import Mathlib.Order.CompleteLattice.Finset
 import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
+import Mathlib.Analysis.MeanInequalities
 import ForTauCeti.Analysis.Convex.Majorization
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
@@ -355,6 +356,91 @@ theorem extend_smul (c : ℝ≥0) (a : ℕ → ℝ≥0∞) :
           le_iSup_of_le k (le_iSup
             (fun m : ℝ≥0 => ((Φ (truncate (fun n => (c : ℝ≥0∞) * a n) k m) : ℝ≥0) : ℝ≥0∞))
             (c * m))
+
+/-! ### The `ℓᵖ` symmetric norming function
+
+`schattenGauge p` is the sequence-indexed counterpart of
+`TauCeti.lpSymmetricGauge` in `ForTauCeti/Analysis/Normed/FiniteLpGauge.lean`,
+which is the `Fin n` version.  Neither replaces the other; they are related by
+`toFinite`.
+
+**Why it is here rather than beside the finite one:** with it,
+`symmetricGaugeFamily (schattenGauge p hp)` is the Schatten-`p` ideal and all
+five ideal laws come free — which is the roadmap's own framing, that the Schatten
+classes are *obtained* from Milestone B1 rather than constructed.
+-/
+
+/-- The `ℓᵖ` gauge of a finitely supported nonnegative sequence. -/
+noncomputable def lpGaugeFinsupp (p : ℝ) (a : ℕ →₀ ℝ≥0) : ℝ≥0 :=
+  (∑ n ∈ a.support, a n ^ p) ^ (1 / p)
+
+/-- The sum defining `lpGaugeFinsupp` is unchanged by enlarging the index set:
+outside the support the terms are `0 ^ p = 0`.
+
+**This is the whole difference between a `Finsupp`-valued gauge and a `Fin n`
+one**, and it is used at every field below — Minkowski and monotonicity both need
+one common `Finset` for two or three different supports. -/
+theorem sum_rpow_eq_of_support_subset {p : ℝ} (hp : 0 < p) (a : ℕ →₀ ℝ≥0)
+    {s : Finset ℕ} (hs : a.support ⊆ s) :
+    ∑ n ∈ s, a n ^ p = ∑ n ∈ a.support, a n ^ p := by
+  refine (Finset.sum_subset hs fun n _ hn => ?_).symm
+  have h0 : a n = 0 := by simpa using hn
+  rw [h0, NNReal.zero_rpow hp.ne']
+
+/-- Evaluate `lpGaugeFinsupp` over any finset containing the support. -/
+theorem lpGaugeFinsupp_eq {p : ℝ} (hp : 0 < p) (a : ℕ →₀ ℝ≥0)
+    {s : Finset ℕ} (hs : a.support ⊆ s) :
+    lpGaugeFinsupp p a = (∑ n ∈ s, a n ^ p) ^ (1 / p) := by
+  rw [lpGaugeFinsupp, sum_rpow_eq_of_support_subset hp a hs]
+
+/-- **The `ℓᵖ` symmetric norming function**, `Φ_p a = (∑ aₙ ^ p) ^ (1/p)`.
+
+Only `add_le'` has content — it is Minkowski, `NNReal.Lp_add_le`.  The other four
+fields are sum manipulations, and each one needs
+`sum_rpow_eq_of_support_subset` to put two different supports on one `Finset`. -/
+noncomputable def schattenGauge (p : ℝ) (hp : 1 ≤ p) : SymmetricGauge where
+  toFun := lpGaugeFinsupp p
+  add_le' a b := by
+    have hp0 : (0 : ℝ) < p := zero_lt_one.trans_le hp
+    set s : Finset ℕ := (a + b).support ∪ a.support ∪ b.support with hsdef
+    have hab : (a + b).support ⊆ s := by simp [hsdef, Finset.subset_union_left]
+    have ha : a.support ⊆ s := by
+      intro n hn
+      simp only [hsdef, Finset.mem_union]
+      exact Or.inl (Or.inr hn)
+    have hb : b.support ⊆ s := by
+      intro n hn
+      simp only [hsdef, Finset.mem_union]
+      exact Or.inr hn
+    rw [lpGaugeFinsupp_eq hp0 _ hab, lpGaugeFinsupp_eq hp0 _ ha,
+      lpGaugeFinsupp_eq hp0 _ hb]
+    simpa using NNReal.Lp_add_le s (fun n => a n) (fun n => b n) hp
+  smul' c a := by
+    have hp0 : (0 : ℝ) < p := zero_lt_one.trans_le hp
+    have hsub : (c • a).support ⊆ a.support := Finsupp.support_smul
+    rw [lpGaugeFinsupp_eq hp0 _ hsub, lpGaugeFinsupp]
+    have : ∀ n ∈ a.support, ((c • a) n) ^ p = c ^ p * a n ^ p := by
+      intro n _
+      simp [NNReal.mul_rpow]
+    rw [Finset.sum_congr rfl this, ← Finset.mul_sum, NNReal.mul_rpow,
+      ← NNReal.rpow_mul, mul_one_div_cancel hp0.ne', NNReal.rpow_one]
+  symm' σ a := by
+    have hp0 : (0 : ℝ) < p := zero_lt_one.trans_le hp
+    rw [lpGaugeFinsupp, lpGaugeFinsupp]
+    congr 1
+    refine Finset.sum_nbij' (fun n => σ.symm n) (fun n => σ n) ?_ ?_ ?_ ?_ ?_ <;>
+      intro n hn <;> simp_all [Finsupp.equivMapDomain_apply]
+  mono' a b hab := by
+    have hp0 : (0 : ℝ) < p := zero_lt_one.trans_le hp
+    have hsub : a.support ⊆ a.support ∪ b.support := Finset.subset_union_left
+    have hsub' : b.support ⊆ a.support ∪ b.support := Finset.subset_union_right
+    rw [lpGaugeFinsupp_eq hp0 _ hsub, lpGaugeFinsupp_eq hp0 _ hsub']
+    refine NNReal.rpow_le_rpow (Finset.sum_le_sum fun n _ => ?_) (by positivity)
+    exact NNReal.rpow_le_rpow (Finsupp.le_def.1 hab n) hp0.le
+  normalized' := by
+    have hp0 : (0 : ℝ) < p := zero_lt_one.trans_le hp
+    rw [lpGaugeFinsupp]
+    simp [NNReal.one_rpow, one_div]
 
 /-! ### Restriction to `Fin n`
 
@@ -884,6 +970,20 @@ instance isKyFanDominant_symmetricGaugeFamily (Φ : SymmetricGauge) :
     rw [← ENNReal.ofReal_sum_of_nonneg (fun n _ => hnn A n),
       ← ENNReal.ofReal_sum_of_nonneg (fun n _ => hnn B n)]
     exact ENNReal.ofReal_le_ofReal (hAB k)
+
+/-- **The Schatten-`p` ideal, obtained rather than constructed.**
+
+All five ideal laws are `symmetricGaugeFamily`'s, which is the roadmap's own
+framing: *"the Schatten classes are obtained from Milestone B1 rather than
+constructed, so their four laws are B1's and not new work."*
+
+This is **not** asserted to agree with `TauCeti.schattenIdealFamily` in
+`Family/Schatten.lean`, which is built from its own argument through the
+`tsum`-based `schattenENorm`.  The two should agree and proving it is Milestone
+B3's reconciliation obligation; nothing here claims it. -/
+noncomputable def schattenFamily (p : ℝ) (hp : 1 ≤ p) :
+    TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜 :=
+  symmetricGaugeFamily.{u, u} 𝕜 (schattenGauge p hp)
 
 end Calkin
 
