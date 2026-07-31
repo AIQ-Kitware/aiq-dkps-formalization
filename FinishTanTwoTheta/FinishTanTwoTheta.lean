@@ -9,7 +9,7 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
 import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
 import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
-import FinishTanTwoTheta.DavisKahan.StableRiccatiPair
+import DavisKahan.Sources.DavisKahan1970.StableRiccatiPair
 import FinishTanTwoTheta.DavisKahan.SharpKyFan
 import FinishTanTwoTheta.DavisKahan.SharpIdeal
 import FinishTanTwoTheta.DavisKahan.PaperFaithful
