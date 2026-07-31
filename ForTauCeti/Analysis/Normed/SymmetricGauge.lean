@@ -276,36 +276,42 @@ value, read as a finitely supported sequence on `ℕ`.
 -/
 
 /-- The componentwise absolute value of a finite real vector, as a finitely
-supported nonnegative sequence on `ℕ`. -/
+supported nonnegative sequence on `ℕ`.
+
+Uses `Real.nnabs` rather than an anonymous `⟨|x i|, _⟩`: the latter carries a
+proof inside the term, so every rewrite has to happen under a dependent pair and
+`rw` reports the motive as ill-typed.  `Real.nnabs` is a `MonoidWithZeroHom`, so
+`map_mul` also supplies the scaling law below for free. -/
 noncomputable def ofFin {n : ℕ} (x : Fin n → ℝ) : ℕ →₀ ℝ≥0 :=
   Finsupp.onFinset (Finset.range n)
-    (fun i => if h : i < n then ⟨|x ⟨i, h⟩|, abs_nonneg _⟩ else 0)
+    (fun i => if h : i < n then Real.nnabs (x ⟨i, h⟩) else 0)
     (by
       intro i hi
       by_cases h : i < n
       · exact Finset.mem_range.mpr h
       · simp [h] at hi)
 
-/-- `ofFin` reads off the absolute value at an in-range index. -/
+/-- `ofFin` reads off `Real.nnabs` at an in-range index. -/
 @[simp]
-theorem ofFin_apply {n : ℕ} (x : Fin n → ℝ) (i : Fin n) :
-    (ofFin x) (i : ℕ) = ⟨|x i|, abs_nonneg _⟩ := by
-  simp only [ofFin, Finsupp.onFinset_apply, i.isLt, dif_pos]
+theorem ofFin_apply {n : ℕ} (x : Fin n → ℝ) {i : ℕ} (h : i < n) :
+    (ofFin x) i = Real.nnabs (x ⟨i, h⟩) := by
+  simp only [ofFin, Finsupp.onFinset_apply, h, dif_pos]
+
+/-- `ofFin` vanishes outside the range. -/
+@[simp]
+theorem ofFin_apply_of_le {n : ℕ} (x : Fin n → ℝ) {i : ℕ} (h : ¬ i < n) :
+    (ofFin x) i = 0 := by
+  simp only [ofFin, Finsupp.onFinset_apply, h, dif_neg, not_false_iff]
 
 /-- `ofFin` is monotone in the componentwise order on absolute values. -/
 theorem ofFin_le_ofFin {n : ℕ} {x y : Fin n → ℝ}
     (h : ∀ i, |x i| ≤ |y i|) : ofFin x ≤ ofFin y := by
   intro i
   by_cases hi : i < n
-  · have hxy := h ⟨i, hi⟩
-    have : (ofFin x) i = ⟨|x ⟨i, hi⟩|, abs_nonneg _⟩ := by
-      simp only [ofFin, Finsupp.onFinset_apply, hi, dif_pos]
-    have h2 : (ofFin y) i = ⟨|y ⟨i, hi⟩|, abs_nonneg _⟩ := by
-      simp only [ofFin, Finsupp.onFinset_apply, hi, dif_pos]
-    rw [this, h2, ← NNReal.coe_le_coe]
-    exact hxy
-  · simp only [ofFin, Finsupp.onFinset_apply, hi, dif_neg, not_false_iff]
-    exact zero_le
+  · rw [ofFin_apply x hi, ofFin_apply y hi, ← NNReal.coe_le_coe,
+      Real.coe_nnabs, Real.coe_nnabs]
+    exact h ⟨i, hi⟩
+  · simp [ofFin_apply_of_le, hi]
 
 /-- The absolute value of a sum is dominated termwise by the sum of the absolute
 values, transported to `ofFin`.  This is the step that needs `mono`. -/
@@ -313,18 +319,33 @@ theorem ofFin_add_le {n : ℕ} (x y : Fin n → ℝ) :
     ofFin (x + y) ≤ ofFin x + ofFin y := by
   intro i
   by_cases hi : i < n
-  · have habs : |(x + y) ⟨i, hi⟩| ≤ |x ⟨i, hi⟩| + |y ⟨i, hi⟩| := by
-      simpa using abs_add_le (x ⟨i, hi⟩) (y ⟨i, hi⟩)
-    have e0 : (ofFin (x + y)) i = ⟨|(x + y) ⟨i, hi⟩|, abs_nonneg _⟩ := by
-      simp only [ofFin, Finsupp.onFinset_apply, hi, dif_pos]
-    have e1 : (ofFin x) i = ⟨|x ⟨i, hi⟩|, abs_nonneg _⟩ := by
-      simp only [ofFin, Finsupp.onFinset_apply, hi, dif_pos]
-    have e2 : (ofFin y) i = ⟨|y ⟨i, hi⟩|, abs_nonneg _⟩ := by
-      simp only [ofFin, Finsupp.onFinset_apply, hi, dif_pos]
-    rw [Finsupp.add_apply, e0, e1, e2, ← NNReal.coe_le_coe]
-    exact habs
-  · simp only [ofFin, Finsupp.onFinset_apply, hi, dif_neg, not_false_iff]
-    exact zero_le
+  · rw [ofFin_apply (x + y) hi, Finsupp.add_apply, ofFin_apply x hi,
+      ofFin_apply y hi, ← NNReal.coe_le_coe]
+    push_cast
+    simpa using abs_add_le (x ⟨i, hi⟩) (y ⟨i, hi⟩)
+  · simp [ofFin_apply_of_le, hi]
+
+/-- Scaling a finite vector scales its `ofFin` image by the absolute value. -/
+theorem ofFin_smul {n : ℕ} (c : ℝ) (x : Fin n → ℝ) :
+    ofFin (c • x) = Real.nnabs c • ofFin x := by
+  ext i
+  by_cases hi : i < n
+  · rw [ofFin_apply (c • x) hi, Finsupp.smul_apply, ofFin_apply x hi,
+      smul_eq_mul]
+    simp [map_mul]
+  · simp [ofFin_apply_of_le, hi]
+
+/-- Flipping the sign of a single coordinate leaves the `ofFin` image unchanged. -/
+theorem ofFin_update_neg {n : ℕ} (x : Fin n → ℝ) (j : Fin n) :
+    ofFin (Function.update x j (-(x j))) = ofFin x := by
+  ext i
+  by_cases hi : i < n
+  · rw [ofFin_apply _ hi, ofFin_apply x hi]
+    by_cases hij : (⟨i, hi⟩ : Fin n) = j
+    · rw [hij, Function.update_self]
+      simp
+    · rw [Function.update_of_ne hij]
+  · simp [ofFin_apply_of_le, hi]
 
 /-- A permutation of `Fin n` as a permutation of `ℕ`, fixing everything outside
 the range.
@@ -362,50 +383,69 @@ corresponds to relabelling its `ofFin` image along `natPerm`.
 
 This is the step that makes `SymmetricGauge.symm` -- an axiom about
 `Equiv.Perm ℕ` -- usable against `FiniteSymmetricGauge.perm'`, which quantifies
-over `Equiv.Perm (Fin n)`.  It was the one obstruction isolated when the adapter
-was first attempted, and it is now discharged. -/
+over `Equiv.Perm (Fin n)`. -/
 theorem ofFin_comp_perm {n : ℕ} (x : Fin n → ℝ) (π : Equiv.Perm (Fin n)) :
     ofFin (x ∘ π) = Finsupp.equivMapDomain (natPerm π).symm (ofFin x) := by
   ext i
   rw [Finsupp.equivMapDomain_apply]
   by_cases hi : i < n
-  · have h1 : (ofFin (x ∘ π)) i = ⟨|x (π ⟨i, hi⟩)|, abs_nonneg _⟩ := by
-      simp only [ofFin, Finsupp.onFinset_apply, hi, dif_pos]
-      rfl
-    have h2 : ((natPerm π).symm).symm i = (π ⟨i, hi⟩ : ℕ) := by
+  · have h2 : ((natPerm π).symm).symm i = (π ⟨i, hi⟩ : ℕ) := by
       simp [natPerm, hi]
-    rw [h1, h2]
-    have h3 : (ofFin x) ((π ⟨i, hi⟩ : ℕ)) = ⟨|x (π ⟨i, hi⟩)|, abs_nonneg _⟩ := by
-      simp only [ofFin, Finsupp.onFinset_apply, (π ⟨i, hi⟩).isLt, dif_pos]
-    rw [h3]
-  · have h2 : ((natPerm π).symm).symm i = i := by
-      simp [natPerm, hi]
-    rw [h2]
-    simp [ofFin, hi]
+    rw [ofFin_apply _ hi, h2, ofFin_apply x (π ⟨i, hi⟩).isLt]
+    rfl
+  · have h2 : ((natPerm π).symm).symm i = i := by simp [natPerm, hi]
+    rw [h2, ofFin_apply_of_le _ hi, ofFin_apply_of_le _ hi]
 
-/-! ### What remains for the transfer descent
+/-- **The adapter.**  A symmetric gauge restricts to a `FiniteSymmetricGauge` on
+each `Fin n`, by applying it to the componentwise absolute value.
 
-With `ofFin_comp_perm` proved, the adapter
-`SymmetricGauge → FiniteSymmetricGauge n`, `x ↦ Φ (ofFin x)`, has all four of its
-fields available in principle:
+This is what lets the Hardy--Littlewood--Pólya transfer descent of
+`ForTauCeti.Analysis.Convex.Majorization` be *used* here rather than reproved.
+Each field is one axiom of `SymmetricGauge` composed with one `ofFin` lemma:
 
-* `add_le'` -- `ofFin_add_le`, then `mono`, then `add_le`.  This is the one field
-  where `mono` does work invisible in the finite theory, where the corresponding
-  monotonicity is a consequence of the descent rather than an assumption;
-* `real_smul'` -- `|c • x| = |c| • |x|` and `smul`;
-* `perm'` -- `ofFin_comp_perm` followed by `symm`.  **This was the obstruction
-  and it is now discharged**;
-* `neg_single'` -- flipping one sign leaves `ofFin` unchanged.
+* `add_le'` -- `ofFin_add_le`, then `mono`, then `add_le`.  **This is the one
+  field where `mono` does work that is invisible in the finite theory**, where
+  the corresponding monotonicity is a consequence of the descent rather than an
+  assumption;
+* `real_smul'` -- `ofFin_smul` then `smul`;
+* `perm'` -- `ofFin_comp_perm` then `symm`.  The axiom speaks of `Equiv.Perm ℕ`
+  and the field of `Equiv.Perm (Fin n)`; the transport equation is what makes
+  them meet, and it was the last obstruction;
+* `neg_single'` -- `ofFin_update_neg`, which needs nothing about `Φ` at all. -/
+noncomputable def toFiniteSymmetricGauge (Φ : SymmetricGauge) (n : ℕ) :
+    FiniteSymmetricGauge n where
+  toFun x := (Φ (ofFin x) : ℝ)
+  add_le' x y := by
+    have h : Φ (ofFin (x + y)) ≤ Φ (ofFin x) + Φ (ofFin y) :=
+      (Φ.mono (ofFin_add_le x y)).trans (Φ.add_le _ _)
+    exact_mod_cast h
+  real_smul' c x := by
+    rw [ofFin_smul, Φ.smul]
+    simp [Real.coe_nnabs]
+  perm' x π := by rw [ofFin_comp_perm, Φ.symm]
+  neg_single' x j := by rw [ofFin_update_neg]
 
-What is left is mechanical rather than mathematical: `real_smul'` and
-`neg_single'` need the `Finsupp`/`ℝ≥0` coercion bookkeeping written out (`ext`
-into `NNReal`, `push_cast`, `abs_mul`), and `neg_single'` needs its rewrite
-arranged so the motive stays type-correct under `Function.update`.  Once the
-adapter is assembled, `FiniteSymmetricGauge.le_of_prefixSum_le` and
-`mono_weaklyMajorized` pull back directly, and
-`extend_le_extend_of_forall_sum_le` becomes the lift of that finite statement
-through the supremum defining `extend`.
--/
+/-- **The transfer descent, available for `SymmetricGauge`.**  If `z` is antitone
+and nonnegative and every prefix sum of `z` is dominated by that of `y`, then
+`Φ (ofFin z) ≤ Φ (ofFin y)`.
+
+This is `FiniteSymmetricGauge.le_of_prefixSum_le` pulled back along the adapter:
+no part of the Hardy--Littlewood--Pólya argument is repeated here, which was the
+point of building the adapter rather than reproving the descent. -/
+theorem le_of_prefixSum_le (Φ : SymmetricGauge) {n : ℕ} {z y : Fin n → ℝ}
+    (hz_anti : Antitone z) (hz0 : ∀ i, 0 ≤ z i) (hy0 : ∀ i, 0 ≤ y i)
+    (hpre : ∀ k : ℕ,
+      ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < k, z i
+        ≤ ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < k, y i) :
+    Φ (ofFin z) ≤ Φ (ofFin y) := by
+  have h := (Φ.toFiniteSymmetricGauge n).le_of_prefixSum_le hz_anti hz0 hy0 hpre
+  exact_mod_cast h
+
+/-- Weak majorization implies domination under every symmetric gauge. -/
+theorem mono_weaklyMajorized (Φ : SymmetricGauge) {n : ℕ} {x y : Fin n → ℝ}
+    (h : FiniteVector.WeaklyMajorized x y) : Φ (ofFin x) ≤ Φ (ofFin y) := by
+  have := (Φ.toFiniteSymmetricGauge n).mono_weaklyMajorized h
+  exact_mod_cast this
 
 end SymmetricGauge
 
