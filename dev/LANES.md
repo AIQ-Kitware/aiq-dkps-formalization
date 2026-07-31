@@ -19,15 +19,52 @@ account of why an approach does not work — but **claim only from this file**.
 
 ## Rules
 
-- **Claim before the first edit.** Add/refresh your row below, commit it,
-  **push it**, then work. Committing is not claiming — see *Branch and sync
-  protocol* below.
+**A lane is in exactly one of three states, and its row is the only thing that
+says which.** Get this right and the rest of the file is detail.
+
+- **open** — there is work to do and **nobody is doing it**. Row is in this file
+  with no owner; `python3 scripts/lane.py free` offers it.
+- **claimed** — an agent is working it **right now**. Row is in this file.
+- **completed** — the work is finished. Row moves to
+  [`LANES-COMPLETED.md`](LANES-COMPLETED.md).
+
+`claimed` means *actively working*, not *intending to*, not *worked on it
+yesterday*, not *owner of record*. **If you stop, it goes back to open.**
+
+### The lane loop, start to finish
+
+```text
+1. lane.py free                 pick one; nothing else tells you what is takeable
+2. lane.py check <LANE>         refuses if anyone holds it, on any branch
+3. write the row, commit, PUSH  ← before the first edit, not with the first result
+4. lane.py check <LANE> again   the push is your serialization point
+5. do the work
+6. build + gates, by exit code  never by piping into grep/tail -- see below
+7. DONE first in the status cell, commit, PUSH
+8. move the row to LANES-COMPLETED.md, PUSH
+9. fetch + merge the other remotes, PUSH
+```
+
+Steps 3, 7, 8 and 9 are each a **push**. A row that is committed but not pushed
+is a note to yourself; work that is finished but not pushed is invisible; a
+finished row left on the live board is read and skipped by everyone after you.
+
+The two steps agents actually skip are **4** and **7–8**. Skipping 4 cost a
+duplicated lane on 2026-07-30 by 92 seconds. Skipping 7–8 left five *finished*
+lanes printed under `HELD — do not take`, blocking other agents on work that was
+already done — see *Three ways the board lies* and *Closing a lane is a push, not
+a commit* below.
+
+### The rest of the rules
+
 - A claim covers the **listed declarations**, not the whole file. Two agents may
   work different declarations in one file if both are listed.
-- **Release explicitly** when done (set status `done` or remove the row).
 - **Unlisted = unclaimed.** If you want something not listed, add a row first.
-- If two claims would overlap, the earlier-committed row wins; the other agent
-  picks something else.
+- If two claims would overlap, **the earlier-committed row wins**; the other
+  agent picks something else. Compare with
+  `git log -1 --format=%cI -S '<row text>' <branch> -- dev/LANES.md`.
+- **Release explicitly when you stop**, even mid-lane: `released — not started,
+  taking X instead` is a complete and useful row. Silence reads as ownership.
 
 ### When these rules apply — and when they do not
 
@@ -302,32 +339,23 @@ earlier**; both agents did the whole lane. The same agent ran the second check o
 the next lane and it caught `CPLX-DEDUP-3` being taken mid-merge, which is the
 only reason that one was not worked twice as well.
 
-### A lane is in exactly one of three states, and the row must say which
+### Why a finished row leaves the live board
 
-- **open** — there is work to do and **nobody is doing it**. Row lives in
-  `LANES.md`, with no owner, so `lane.py free` offers it.
-- **claimed** — an agent is **actively working on it right now**. Row lives in
-  `LANES.md`.
-- **completed** — the work is finished. Row lives in **`LANES-COMPLETED.md`**.
+The three states are defined under [*Rules*](#rules); this is the half that
+needs a reason rather than a definition.
 
-(Written as a list, not a table: `check_lane_format` treats every line starting
-with `|` as a lane row, so an illustrative markdown table inside this file is
-reported as four malformed rows. Do not add one.)
+**A completed lane moves to [`LANES-COMPLETED.md`](LANES-COMPLETED.md),
+verbatim.** `check_lane_graph` reads both files, so the lane still reports DONE
+and its id stays reserved — what changes is that the live board holds only live
+work. That is what the archive is for: `LANES.md` reached **661 KB across 213
+rows, 170 of them finished**, and it is the file every agent is told to read
+first. A finished row left in place costs every later agent the same attention as
+a live one, for nothing.
 
-Three consequences, and each one has been broken:
-
-- **`claimed` is not a reservation.** It means *actively working*, not *intending
-  to*, not *worked on this yesterday*, not *owner of record*. If you stop, the
-  row goes back to **open** — see *Release explicitly when you stop* below.
-- **A finished lane does not stay on the live board.** Advertise it as completed
-  and **move the row to [`LANES-COMPLETED.md`](LANES-COMPLETED.md)**, verbatim.
-  `check_lane_graph` reads both files, so the lane still reports DONE and its id
-  stays reserved; what changes is that the live board holds only live work. This
-  is why the archive exists — `LANES.md` reached 661 KB with 170 finished rows in
-  it, and it is the file every agent is told to read first.
-- **Open means takeable.** A row that is neither claimed nor finished — measured,
-  posted, waiting — belongs on the live board with no owner, so `lane.py free`
-  can offer it.
+> **Do not illustrate any of this with a markdown table.**
+> `check_lane_format` treats every line starting with `|` as a lane row, so a
+> three-row explanatory table is reported as four malformed rows. Use a list.
+> (Found the hard way while writing this section.)
 
 ### Closing a lane is a push, not a commit
 
@@ -363,18 +391,27 @@ Four rules follow, in the order they bite:
   the status cell and push that. `released — not started, taking X instead` is a
   complete and useful row. Silence reads as ownership.
 
-**Gate yourself with `--check`, and never through a pipe.**
+**`scripts/` has two conventions and you have to know which one you are running.**
+
+- **Report by default, gate only with `--check`** — `check_lane_format`,
+  `check_lane_graph`, `check_namespace_policy`, `check_conflict_markers`,
+  `check_expose_ratchet`, `check_submission_prose`. **These exit 0 with findings
+  unless you pass `--check`.**
+- **Gate by default** (no `--check` flag at all) — `check_dependency_layers`,
+  `check_docstring_coverage`, `check_declaration_name_drift`,
+  `check_library_structure`.
+
+So `python3 scripts/check_lane_format.py && git push` **pushes a malformed row**,
+and `… | tail -1 && git push` does too, for a second and independent reason: a
+pipeline's status is the *last* command's. Both happened on 2026-07-30 and put a
+12-cell row on the board.
+
+When in doubt, run it and read `$?` yourself rather than chaining:
 
 ```sh
-python3 scripts/check_lane_format.py --check && git commit … && git push …
+python3 scripts/check_lane_format.py --help | grep -q -- --check && F=--check || F=
+python3 scripts/check_lane_format.py $F > /tmp/g.out 2>&1; echo "exit=$?"; tail -2 /tmp/g.out
 ```
-
-**`check_lane_format.py` without `--check` always exits 0**, findings or not — it
-is a report by default and a gate only when asked. So
-`check_lane_format.py && git push` pushes a malformed row, and
-`check_lane_format.py | tail -1 && git push` does too, for a second and
-independent reason: a pipeline's status is the *last* command's. Both happened on
-2026-07-30 and put a 12-cell row on the board.
 
 The same trap in its other form: `lake build … | grep -E "^error|Build completed"`
 exits 0 on a **failing** build, because grep matched the `error:` lines. A broken
