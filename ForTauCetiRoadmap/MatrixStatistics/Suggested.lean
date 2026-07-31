@@ -57,10 +57,14 @@ recovered configuration; a unitary on the `n` side would be false and would look
 plausible.  The acting group differs from the rank-factorization statement above
 (`unitaryGroup`, not the invertibles) because this one remembers an inner product, and
 no rank hypothesis is needed -- which is why it is not a corollary of that one. -/
-theorem exists_mem_unitaryGroup_eq_mul_of_conjTranspose_mul_self
-    {𝕜 : Type*} [RCLike 𝕜] [PartialOrder 𝕜] [StarOrderedRing 𝕜] {n d : ℕ}
-    {A B : Matrix (Fin d) (Fin n) 𝕜} (h : Aᴴ * A = Bᴴ * B) :
-    ∃ U ∈ Matrix.unitaryGroup (Fin d) 𝕜, B = U * A := sorry
+theorem exists_unitary_mul_of_conjTranspose_mul_self_eq {n d : ℕ}
+    {A A' : Matrix (Fin d) (Fin n) 𝕜} (h : Aᴴ * A = A'ᴴ * A') :
+    ∃ U ∈ Matrix.unitaryGroup (Fin d) 𝕜, A' = U * A := sorry
+-- **Proved 2026-07-31** as `TauCeti.Matrix.exists_unitary_mul_of_conjTranspose_mul_self_eq` in
+-- `ForTauCeti/LinearAlgebra/Matrix/PosDef.lean`, axiom-clean and with this signature unchanged.
+-- The `sorry` stays because this file records target shapes and is not a build target.
+
+end GramUniqueness
 
 end RankFactorization
 /-! ## Part B -- Berge's maximum theorem over a fixed compact feasible set (T22) -/
