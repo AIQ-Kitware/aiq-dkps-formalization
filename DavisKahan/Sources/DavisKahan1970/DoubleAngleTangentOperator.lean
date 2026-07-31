@@ -666,6 +666,92 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
   rw [herr]
   exact htail.trans_lt hfv
 
+/-- **A diagonal reweighting by factors at least `c` does not shrink a unit
+vector below `c`.**
+
+If every weight `w i` is at least `c ≥ 0`, then the pointwise product `w · coeff`
+has Euclidean norm at least `c‖coeff‖`.  Stated at `‖coeff‖ = 1` because that is
+how the min--max argument uses it.
+
+Nothing here is about Davis--Kahan, angles or approximation numbers; it was a
+pair of nested `have`s twenty lines inside `doubleAngleTangent_approximationNumber_le`,
+where it read as part of that argument. -/
+theorem le_norm_toLp_mul_of_le {m : ℕ} {c : ℝ} (hc : 0 ≤ c)
+    {w : Fin m → ℝ} (hw : ∀ i, c ≤ w i)
+    {coeff : EuclideanSpace ℂ (Fin m)} (hcoeff : ‖coeff‖ = 1) :
+    c ≤ ‖(WithLp.toLp 2 (fun i => (w i : ℂ) * coeff i) : EuclideanSpace ℂ (Fin m))‖ := by
+  have hw0 : ∀ i, 0 ≤ w i := fun i => hc.trans (hw i)
+  have hcoeffSq : (∑ i : Fin m, ‖coeff i‖ ^ 2) = 1 := by
+    rw [← EuclideanSpace.norm_sq_eq, hcoeff, one_pow]
+  have hprodSq :
+      ‖(WithLp.toLp 2 (fun i => (w i : ℂ) * coeff i) : EuclideanSpace ℂ (Fin m))‖ ^ 2 =
+        ∑ i : Fin m, (w i) ^ 2 * ‖coeff i‖ ^ 2 := by
+    rw [EuclideanSpace.norm_sq_eq]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    change ‖(w i : ℂ) * coeff i‖ ^ 2 = w i ^ 2 * ‖coeff i‖ ^ 2
+    rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (hw0 i)]
+    ring
+  refine (sq_le_sq₀ hc (norm_nonneg _)).mp ?_
+  calc
+    c ^ 2 = c ^ 2 * (∑ i : Fin m, ‖coeff i‖ ^ 2) := by rw [hcoeffSq, mul_one]
+    _ = ∑ i : Fin m, c ^ 2 * ‖coeff i‖ ^ 2 := by rw [Finset.mul_sum]
+    _ ≤ ∑ i : Fin m, (w i) ^ 2 * ‖coeff i‖ ^ 2 :=
+      Finset.sum_le_sum fun i _ =>
+        mul_le_mul_of_nonneg_right (pow_le_pow_left₀ hc (hw i) 2) (sq_nonneg _)
+    _ = _ := hprodSq.symm
+
+/-- **An operator that is close to a diagonal model on an orthonormal family is
+close to it on the whole span, with only a `√d` loss.**
+
+If `T` sends each `right i` to within `b` of `(tau i) • left i`, then on any unit
+combination of the `right i` it lands within `√d * b` of the same combination of
+the `(tau i) • left i`.  The `√d` is Cauchy--Schwarz on the coefficient vector
+(`sum_norm_le_sqrt_card_mul_norm`) and nothing else.
+
+This is the estimate that lets the min--max argument report the *achieved*
+values `tau i` instead of exact singular data; it was two nested `have`s inside
+`doubleAngleTangent_approximationNumber_le` and mentions nothing from that
+argument. -/
+theorem norm_apply_sub_familyIsometry_le {d : ℕ} (T : E0 →L[ℂ] E1)
+    {right : Fin d → E0} {left : Fin d → E1}
+    (hright : Orthonormal ℂ right) (hleft : Orthonormal ℂ left)
+    (tau : Fin d → ℝ) (coeff : EuclideanSpace ℂ (Fin d)) {b : ℝ} (hb : 0 ≤ b)
+    (hpair : ∀ i, ‖T (right i) - (tau i : ℂ) • left i‖ ≤ b)
+    (hcoeff : ‖coeff‖ = 1) :
+    ‖T (familyIsometry hright coeff) -
+        familyIsometry hleft
+          (WithLp.toLp 2 (fun i => (tau i : ℂ) * coeff i) :
+            EuclideanSpace ℂ (Fin d))‖ ≤ Real.sqrt d * b := by
+  have hL1 : (∑ i : Fin d, ‖coeff i‖) ≤ Real.sqrt d := by
+    have h := TauCeti.sum_norm_le_sqrt_card_mul_norm coeff
+    rw [hcoeff, mul_one] at h
+    simpa using h
+  have hidentity :
+      T (familyIsometry hright coeff) -
+          familyIsometry hleft
+            (WithLp.toLp 2 (fun i => (tau i : ℂ) * coeff i) :
+              EuclideanSpace ℂ (Fin d)) =
+        ∑ i : Fin d, coeff i • (T (right i) - (tau i : ℂ) • left i) := by
+    rw [familyIsometry_apply, familyIsometry_apply, map_sum]
+    simp only [map_smul]
+    rw [← Finset.sum_sub_distrib]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    change coeff i • T (right i) - ((tau i : ℂ) * coeff i) • left i =
+      coeff i • (T (right i) - (tau i : ℂ) • left i)
+    module
+  rw [hidentity]
+  calc
+    ‖∑ i : Fin d, coeff i • (T (right i) - (tau i : ℂ) • left i)‖
+        ≤ ∑ i : Fin d, ‖coeff i • (T (right i) - (tau i : ℂ) • left i)‖ :=
+      norm_sum_le _ _
+    _ = ∑ i : Fin d, ‖coeff i‖ * ‖T (right i) - (tau i : ℂ) • left i‖ := by
+      exact Finset.sum_congr rfl fun i _ => by rw [norm_smul]
+    _ ≤ ∑ i : Fin d, ‖coeff i‖ * b :=
+      Finset.sum_le_sum fun i _ =>
+        mul_le_mul_of_nonneg_left (hpair i) (norm_nonneg _)
+    _ = (∑ i : Fin d, ‖coeff i‖) * b := by rw [Finset.sum_mul]
+    _ ≤ Real.sqrt d * b := mul_le_mul_of_nonneg_right hL1 hb
+
 /-- Lower min--max bound for the transformed approximation number. -/
 theorem doubleAngleTangent_approximationNumber_le
     (X : E0 →L[ℂ] E1) (hcontractive : ‖X‖ < 1) (n : ℕ) :
@@ -746,116 +832,33 @@ theorem doubleAngleTangent_approximationNumber_le
     have hzCoord' : familyIsometry hrightOrtho coeff = z := hzCoord
     have hcoeffNorm : ‖coeff‖ = 1 := by
       rw [← hznorm, ← hzCoord', (familyIsometry hrightOrtho).norm_map]
-    have hcoeffL1 :
-        (∑ i : Fin (n + 1), ‖coeff i‖) ≤ Real.sqrt (n + 1) := by
-      have h := TauCeti.sum_norm_le_sqrt_card_mul_norm coeff
-      rw [hcoeffNorm, mul_one] at h
-      simpa using h
     let tau : Fin (n + 1) → ℝ := fun i =>
       DavisKahanTheory.doubleAngleTangent (X.approximationNumber i)
     let tau0 : ℝ :=
       DavisKahanTheory.doubleAngleTangent (X.approximationNumber n)
-    have htau0 : 0 ≤ tau0 := by
-      dsimp only [tau0]
-      unfold DavisKahanTheory.doubleAngleTangent
-      have hden : 0 < 1 - (X.approximationNumber n) ^ 2 := by
-        nlinarith [X.approximationNumber_nonneg n,
-          (X.approximationNumber_le_norm n).trans_lt hcontractive]
-      exact div_nonneg
-        (mul_nonneg (by norm_num) (X.approximationNumber_nonneg n)) hden.le
-    have htauNonneg : ∀ i : Fin (n + 1), 0 ≤ tau i := by
-      intro i
-      dsimp only [tau]
-      unfold DavisKahanTheory.doubleAngleTangent
-      have hden : 0 < 1 - (X.approximationNumber i) ^ 2 := by
-        nlinarith [X.approximationNumber_nonneg (i : ℕ),
-          (X.approximationNumber_le_norm (i : ℕ)).trans_lt hcontractive]
-      exact div_nonneg
-        (mul_nonneg (by norm_num) (X.approximationNumber_nonneg (i : ℕ))) hden.le
+    -- `doubleAngleTangent_nonneg` is imported from `DavisKahan.DoubleAngle`;
+    -- this re-derived it by `unfold` and `div_nonneg`.
+    have htau0 : 0 ≤ tau0 :=
+      DavisKahanTheory.doubleAngleTangent_nonneg (X.approximationNumber_nonneg n)
+        ((X.approximationNumber_le_norm n).trans_lt hcontractive)
     have htauLower : ∀ i : Fin (n + 1), tau0 ≤ tau i := by
       intro i
       exact htanmono i
     let diagonalCoeff : EuclideanSpace ℂ (Fin (n + 1)) :=
       WithLp.toLp 2 (fun i => (tau i : ℂ) * coeff i)
     let diagonal : E1 := familyIsometry hleftOrtho diagonalCoeff
-    have hcoeffSq :
-        (∑ i : Fin (n + 1), ‖coeff i‖ ^ 2) = 1 := by
-      rw [← EuclideanSpace.norm_sq_eq, hcoeffNorm, one_pow]
-    have hdiagonalCoeffSq :
-        ‖diagonalCoeff‖ ^ 2 =
-          ∑ i : Fin (n + 1), (tau i) ^ 2 * ‖coeff i‖ ^ 2 := by
-      rw [EuclideanSpace.norm_sq_eq]
-      apply Finset.sum_congr rfl
-      intro i _
-      change ‖(tau i : ℂ) * coeff i‖ ^ 2 =
-        tau i ^ 2 * ‖coeff i‖ ^ 2
-      rw [norm_mul, Complex.norm_real, Real.norm_eq_abs,
-        abs_of_nonneg (htauNonneg i)]
-      ring
     have hdiagonalLower : tau0 ≤ ‖diagonal‖ := by
-      apply (sq_le_sq₀ htau0 (norm_nonneg diagonal)).mp
-      calc
-        tau0 ^ 2 = tau0 ^ 2 *
-            (∑ i : Fin (n + 1), ‖coeff i‖ ^ 2) := by
-              rw [hcoeffSq, mul_one]
-        _ = ∑ i : Fin (n + 1), tau0 ^ 2 * ‖coeff i‖ ^ 2 := by
-              rw [Finset.mul_sum]
-        _ ≤ ∑ i : Fin (n + 1), (tau i) ^ 2 * ‖coeff i‖ ^ 2 := by
-              apply Finset.sum_le_sum
-              intro i _
-              exact mul_le_mul_of_nonneg_right
-                (pow_le_pow_left₀ htau0 (htauLower i) 2)
-                (sq_nonneg ‖coeff i‖)
-        _ = ‖diagonalCoeff‖ ^ 2 := hdiagonalCoeffSq.symm
-        _ = ‖diagonal‖ ^ 2 := by
-              dsimp only [diagonal]
-              rw [(familyIsometry hleftOrtho).norm_map]
-    have hresidualIdentity :
-        doubleAngleTangentOperator X hcontractive z - diagonal =
-          ∑ i : Fin (n + 1), coeff i •
-            (doubleAngleTangentOperator X hcontractive (right i) -
-              (tau i : ℂ) • left i) := by
-      rw [← hzCoord']
-      dsimp only [diagonal]
-      rw [familyIsometry_apply, familyIsometry_apply, map_sum]
-      simp only [map_smul]
-      rw [← Finset.sum_sub_distrib]
-      apply Finset.sum_congr rfl
-      intro i _
-      change
-        coeff i • doubleAngleTangentOperator X hcontractive (right i) -
-            ((tau i : ℂ) * coeff i) • left i =
-          coeff i •
-            (doubleAngleTangentOperator X hcontractive (right i) -
-              (tau i : ℂ) • left i)
-      module
+      dsimp only [diagonal, diagonalCoeff]
+      rw [(familyIsometry hleftOrtho).norm_map]
+      exact le_norm_toLp_mul_of_le htau0 htauLower hcoeffNorm
     have hresidualBound :
         ‖doubleAngleTangentOperator X hcontractive z - diagonal‖ ≤
           Real.sqrt (n + 1) * (C * ε) := by
-      rw [hresidualIdentity]
-      calc
-        ‖∑ i : Fin (n + 1), coeff i •
-            (doubleAngleTangentOperator X hcontractive (right i) -
-              (tau i : ℂ) • left i)‖
-            ≤ ∑ i : Fin (n + 1),
-                ‖coeff i •
-                  (doubleAngleTangentOperator X hcontractive (right i) -
-                    (tau i : ℂ) • left i)‖ := norm_sum_le _ _
-        _ = ∑ i : Fin (n + 1), ‖coeff i‖ *
-              ‖doubleAngleTangentOperator X hcontractive (right i) -
-                (tau i : ℂ) • left i‖ := by
-              apply Finset.sum_congr rfl
-              intro i _
-              rw [norm_smul]
-        _ ≤ ∑ i : Fin (n + 1), ‖coeff i‖ * (C * ε) := by
-              apply Finset.sum_le_sum
-              intro i _
-              exact mul_le_mul_of_nonneg_left (hpair i) (norm_nonneg _)
-        _ = (∑ i : Fin (n + 1), ‖coeff i‖) * (C * ε) := by
-              rw [Finset.sum_mul]
-        _ ≤ Real.sqrt (n + 1) * (C * ε) :=
-              mul_le_mul_of_nonneg_right hcoeffL1
-                (mul_nonneg hC0 hεpos.le)
+      have hfam := norm_apply_sub_familyIsometry_le
+        (doubleAngleTangentOperator X hcontractive) hrightOrtho hleftOrtho tau coeff
+        (mul_nonneg hC0 hεpos.le) hpair hcoeffNorm
+      rw [← hzCoord']
+      simpa only [diagonal, diagonalCoeff, Nat.cast_add, Nat.cast_one] using hfam
     have hresidualEta :
         ‖doubleAngleTangentOperator X hcontractive z - diagonal‖ ≤ η := by
       have hsqrtPos : 0 < Real.sqrt (n + 1) := Real.sqrt_pos.2 (by positivity)
