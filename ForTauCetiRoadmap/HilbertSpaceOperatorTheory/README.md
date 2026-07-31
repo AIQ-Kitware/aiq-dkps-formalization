@@ -93,19 +93,18 @@ Excluded:
         SpectralSubspacePerturbation                        (wave 4)
 ```
 
-| roadmap | modules | depends on |
-|---|---|---|
-| `HilbertSpaceOperatorFoundations` | 27 | — |
-| `MajorizationAndAngles` | 19 | foundations |
-| `SelfAdjointSpectralTheory` | 42 | foundations |
-| `OperatorIdeals` | 40 | foundations, majorization, self-adjoint spectral theory |
-| `MatrixSpectralStatistics` | 15 | foundations, self-adjoint spectral theory |
-| `SpectralSubspacePerturbation` | 44 | all of the above |
+| roadmap | mathematical prerequisites |
+|---|---|
+| `HilbertSpaceOperatorFoundations` | Mathlib |
+| `MajorizationAndAngles` | foundations |
+| `SelfAdjointSpectralTheory` | foundations |
+| `OperatorIdeals` | foundations, majorization, self-adjoint spectral theory |
+| `MatrixSpectralStatistics` | foundations, self-adjoint spectral theory |
+| `SpectralSubspacePerturbation` | all five preceding roadmaps |
 
-The module counts and the dependency column are derived from the import graph of the
-existing implementation, not asserted; they measure the size of the material a roadmap
-covers and are regenerated with `python3 scripts/check_tauceti_roadmap_topics.py
---roadmaps`. They say nothing about how much of it Tau Ceti or Mathlib may already have.
+These edges state mathematical ownership: each roadmap consumes public objects and theorems
+specified by its predecessors. Exact donor-module counts and import-graph diagnostics belong to
+this repository's internal topic map, not to the upstream mathematical specification.
 
 Reading the waves:
 
@@ -177,3 +176,17 @@ formalization (Kitware, Inc., Apache-2.0). It establishes feasibility and provid
 provenance for integration, but each roadmap here specifies the desired mathematics
 intrinsically and does not prescribe the donor API or proof architecture. Each roadmap's
 provenance section says what exists and under what terms.
+
+## Learning and compile-check companions
+
+The following family-level files are **non-normative companions**, not roadmap
+specifications:
+
+- [`references.md`](references.md) consolidates the bibliography from all six child
+  roadmaps and links to public source or publisher pages where available.
+- [`glossary.md`](glossary.md) explains the mathematical vocabulary, Lean notation, and
+  Mathlib concepts used in the proposed signatures.
+- [`All.lean`](All.lean) imports every child `Suggested.lean`, providing one file and one
+  module target for compile-checking the complete proposed signature surface.
+
+The child `README.md` files remain the definitive roadmap documents.

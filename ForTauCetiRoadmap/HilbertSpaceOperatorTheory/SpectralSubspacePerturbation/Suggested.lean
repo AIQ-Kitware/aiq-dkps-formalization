@@ -2,7 +2,9 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import Mathlib
+import ForTauCetiRoadmap.HilbertSpaceOperatorTheory.HilbertSpaceOperatorFoundations.Suggested
+import ForTauCetiRoadmap.HilbertSpaceOperatorTheory.MajorizationAndAngles.Suggested
+import ForTauCetiRoadmap.HilbertSpaceOperatorTheory.SelfAdjointSpectralTheory.Suggested
 
 /-!
 # Spectral-subspace perturbation: target signatures
@@ -13,10 +15,10 @@ contributors and reviewers converge on names and signatures; discharging all of 
 finishes neither a Part nor the roadmap. `sorry` is allowed in this human-owned roadmap
 library — these are goals, not proofs.
 
-The common-objects section restates, minimally, vocabulary owned by the sibling roadmaps —
-`HilbertSpaceOperatorFoundations` for the spectral predicates, `MajorizationAndAngles` for
-norms and angles — so that the signatures below elaborate. Those restatements are consumed
-here, not specified here.
+This file imports the sibling signature files and consumes their proposed public vocabulary.
+It does not redeclare spectral predicates, unitarily invariant seminorms, resolvents, or the
+domain-aware Sylvester equation; the imports therefore build-check that the family proposes one
+compatible API rather than several local approximations.
 -/
 
 namespace TauCetiRoadmap.SpectralSubspacePerturbation
@@ -27,72 +29,27 @@ open MeasureTheory
 
 universe u v w
 
-/-! ## Common objects (consumed from the sibling roadmaps) -/
+/-! ## Local derived objects
 
-section CommonObjects
+The spectral predicates and seminorm structures used below are imported from their owner
+roadmaps. Only perturbation-specific constructions are declared here. -/
+
+section LocalObjects
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
-
-/-- The finite-dimensional point spectrum of `A` carried by `U`: real
-eigenvalues with an eigenvector in `U`. -/
-def restrictedSpectrum (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) : Set ℝ :=
-  {lam | ∃ x, x ∈ U ∧ x ≠ 0 ∧ A x = (lam : 𝕜) • x}
-
-/-- Every eigenvalue of `A` carried by `U` lies in `Ω`. -/
-def SpectrumIn (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (Ω : Set ℝ) : Prop :=
-  restrictedSpectrum A U ⊆ Ω
-
-/-- Two restricted spectra are separated by at least `δ`. -/
-def SpectraSeparated (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
-    (B : F →ₗ[𝕜] F) (V : Submodule 𝕜 F) (δ : ℝ) : Prop :=
-  ∀ lam μ, lam ∈ restrictedSpectrum A U → μ ∈ restrictedSpectrum B V →
-    δ ≤ |lam - μ|
-
-/-- Canonical finite-dimensional spectral subspace selected by a real set. -/
-noncomputable def spectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
-    Submodule 𝕜 E :=
-  Submodule.span 𝕜 {x | ∃ lam ∈ Ω, x ≠ 0 ∧ A x = (lam : 𝕜) • x}
 
 /-- The directed sine cross-projection `P_{Vᗮ} ∘ P_U`. -/
 noncomputable def sinThetaMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   ((Vᗮ.starProjection ∘L U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
 
-/-- The Frobenius (Hilbert–Schmidt) norm, through the standard orthonormal basis; basis
-independence belongs to the norm API consumed from `MajorizationAndAngles`, which is where
-this instance is specified. -/
+/-- The Frobenius (Hilbert–Schmidt) norm through the standard orthonormal basis. -/
 noncomputable def frobeniusNorm [FiniteDimensional 𝕜 E] (T : E →ₗ[𝕜] F) : ℝ :=
   Real.sqrt (∑ i, ‖T (stdOrthonormalBasis 𝕜 E i)‖ ^ 2)
 
-end CommonObjects
-
-/-- A unitarily invariant seminorm on rectangular linear maps between
-finite-dimensional inner-product spaces: subadditive, absolutely homogeneous,
-invariant under composition with linear isometry equivalences on both sides.
-Definiteness is deliberately not bundled. -/
-structure RectangularUnitarilyInvariantNorm (𝕜 E F : Type*) [RCLike 𝕜]
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
-    where
-  toFun : (E →ₗ[𝕜] F) → ℝ
-  add_le' : ∀ A B, toFun (A + B) ≤ toFun A + toFun B
-  smul' : ∀ (a : 𝕜) A, toFun (a • A) = ‖a‖ * toFun A
-  invariant' : ∀ (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) A,
-    toFun (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) = toFun A
-
-instance {𝕜 E F : Type*} [RCLike 𝕜]
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F] :
-    CoeFun (RectangularUnitarilyInvariantNorm 𝕜 E F)
-      fun _ => (E →ₗ[𝕜] F) → ℝ :=
-  ⟨RectangularUnitarilyInvariantNorm.toFun⟩
-
-/-- Square unitarily invariant seminorms as the diagonal of the rectangular family. -/
-abbrev UnitarilyInvariantNorm (𝕜 E : Type*) [RCLike 𝕜] [NormedAddCommGroup E]
-    [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] :=
-  RectangularUnitarilyInvariantNorm 𝕜 E E
+end LocalObjects
 
 /-! ## Part A -- the Haagerup–Zsidó kernel and its Fourier transform -/
 
@@ -175,12 +132,12 @@ variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 /-- **Interval/exterior separation, constant one, every rectangular unitarily
 invariant norm.** -/
 theorem uiNorm_sylvester_le_of_intervalGap
-    (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
+    (N : MajorizationAndAngles.RectangularUnitarilyInvariantSeminorm 𝕜 E F)
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hBin : SpectrumIn B ⊤ (Set.Icc a b))
-    (hAout : SpectrumIn A ⊤ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)})
+    (hBin : HilbertSpaceOperatorFoundations.SpectrumIn B ⊤ (Set.Icc a b))
+    (hAout : HilbertSpaceOperatorFoundations.SpectrumIn A ⊤ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)})
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
     δ * N X ≤ N C := by
   sorry
@@ -189,35 +146,16 @@ theorem uiNorm_sylvester_le_of_intervalGap
 the Part A kernel), lifted from the simultaneous Ky Fan prefix estimate by Fan
 dominance. -/
 theorem uiNorm_sylvester_le_of_spectralDistance
-    (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
+    (N : MajorizationAndAngles.RectangularUnitarilyInvariantSeminorm 𝕜 E F)
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : HilbertSpaceOperatorFoundations.SpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
     δ * N X ≤ (Real.pi / 2) * N C := by
   sorry
 
 end FiniteDimensionalSylvester
 
-section UnboundedSpectrum
-
-variable {𝕜 : Type u} [NontriviallyNormedField 𝕜]
-variable {H : Type v} [NormedAddCommGroup H] [NormedSpace 𝕜 H]
-
-/-- The resolvent set of a partial linear map: `z` such that `A - z` has a
-two-sided bounded inverse.  (Owned by the SpectralTheory roadmap; restated
-so the statements below elaborate.) -/
-def resolventSet (A : H →ₗ.[𝕜] H) : Set 𝕜 :=
-  { z | ∃ R : H →L[𝕜] H,
-      (∀ ψ : A.domain, R (A ψ - z • (ψ : H)) = (ψ : H)) ∧
-      (∀ φ : H, ∃ h : R φ ∈ A.domain, A ⟨R φ, h⟩ - z • R φ = φ) }
-
-/-- The spectrum of a partial linear map: the complement of the resolvent
-set, with codomain `Set 𝕜` and no self-adjointness built in. -/
-def spectrum (A : H →ₗ.[𝕜] H) : Set 𝕜 :=
-  (resolventSet A)ᶜ
-
-end UnboundedSpectrum
 
 section Unbounded
 
@@ -225,15 +163,6 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
   [CompleteSpace F]
-
-/-- The domain-aware Sylvester equation `A X - X B = C` for partial linear
-maps, with domain transport as data.  (The transport statement is owned by
-the SpectralTheory roadmap; the estimates attach to it here.) -/
-structure SylvesterEquation (A : E →ₗ.[ℂ] E) (B : F →ₗ.[ℂ] F)
-    (X C : F →L[ℂ] E) : Prop where
-  mapsTo_domain : ∀ y : B.domain, X (y : F) ∈ A.domain
-  equation : ∀ y : B.domain,
-    A ⟨X (y : F), mapsTo_domain y⟩ - X (B y) = C (y : F)
 
 /-- **Milestone B2 — Rosenblum's theorem.**  A bounded operator intertwining
 two self-adjoint partial maps with disjoint spectra is zero.  Proved without
@@ -244,7 +173,7 @@ theorem eq_zero_of_intertwines_of_disjoint_spectrum
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B) {X : F →L[ℂ] E}
     (hmaps : ∀ y : B.domain, X (y : F) ∈ A.domain)
     (hint : ∀ y : B.domain, A ⟨X (y : F), hmaps y⟩ = X (B y))
-    (hdisj : Disjoint (spectrum A) (spectrum B)) :
+    (hdisj : Disjoint (SelfAdjointSpectralTheory.spectrum A) (SelfAdjointSpectralTheory.spectrum B)) :
     X = 0 := by
   sorry
 
@@ -253,9 +182,10 @@ target.  The Hilbert–Schmidt form with constant one, through the Sylvester
 flow's generator gap, is the companion target. -/
 example {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
-    {X C : F →L[ℂ] E} (hEq : SylvesterEquation A B X C)
+    {X C : F →L[ℂ] E} (hEq : SelfAdjointSpectralTheory.SylvesterEquation A B X C)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : ∀ z ∈ spectrum A, ∀ w ∈ spectrum B, δ ≤ ‖z - w‖) :
+    (hgap : ∀ z ∈ SelfAdjointSpectralTheory.spectrum A,
+      ∀ w ∈ SelfAdjointSpectralTheory.spectrum B, δ ≤ ‖z - w‖) :
     δ * ‖X‖ ≤ (Real.pi / 2) * ‖C‖ := by
   sorry
 
@@ -293,14 +223,14 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 /-- **Milestone C1 — Davis–Kahan `sin Θ`, perturbation form, every square
 unitarily invariant norm**, under the interval/exterior gap. -/
 theorem sinTheta_perturbation_le
-    (N : UnitarilyInvariantNorm 𝕜 E)
+    (N : MajorizationAndAngles.UnitarilyInvariantSeminorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
     (hU : ∀ x ∈ U, A x ∈ U) (hV : ∀ x ∈ V, B x ∈ V)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hAin : SpectrumIn A U (Set.Icc a b))
-    (hBout : SpectrumIn B Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
+    (hAin : HilbertSpaceOperatorFoundations.SpectrumIn A U (Set.Icc a b))
+    (hBout : HilbertSpaceOperatorFoundations.SpectrumIn B Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * N (sinThetaMap U V) ≤ N (B - A) := by
   sorry
 
@@ -310,13 +240,13 @@ full projector difference. -/
 theorem opNorm_spectralProjection_sub_spectralProjection_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hrank : finrank 𝕜 (spectralSubspace A (Set.Icc a b)) =
-      finrank 𝕜 (spectralSubspace B (Set.Icc a b)))
-    (hAin : SpectrumIn A (spectralSubspace A (Set.Icc a b)) (Set.Icc a b))
-    (hBout : SpectrumIn B (spectralSubspace B (Set.Icc a b))ᗮ
+    (hrank : finrank 𝕜 (HilbertSpaceOperatorFoundations.spectralSubspace A (Set.Icc a b)) =
+      finrank 𝕜 (HilbertSpaceOperatorFoundations.spectralSubspace B (Set.Icc a b)))
+    (hAin : HilbertSpaceOperatorFoundations.SpectrumIn A (HilbertSpaceOperatorFoundations.spectralSubspace A (Set.Icc a b)) (Set.Icc a b))
+    (hBout : HilbertSpaceOperatorFoundations.SpectrumIn B (HilbertSpaceOperatorFoundations.spectralSubspace B (Set.Icc a b))ᗮ
       {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
-    δ * ‖((spectralSubspace A (Set.Icc a b)).starProjection -
-        (spectralSubspace B (Set.Icc a b)).starProjection : E →L[𝕜] E)‖ ≤
+    δ * ‖((HilbertSpaceOperatorFoundations.spectralSubspace A (Set.Icc a b)).starProjection -
+        (HilbertSpaceOperatorFoundations.spectralSubspace B (Set.Icc a b)).starProjection : E →L[𝕜] E)‖ ≤
       ‖(B - A).toContinuousLinearMap‖ := by
   sorry
 
@@ -324,12 +254,12 @@ theorem opNorm_spectralProjection_sub_spectralProjection_le
 separation of the selected `A`-spectrum from the complementary `B`-spectrum,
 every square unitarily invariant norm. -/
 theorem sinTheta_perturbation_le_of_spectralDistance
-    (N : UnitarilyInvariantNorm 𝕜 E)
+    (N : MajorizationAndAngles.UnitarilyInvariantSeminorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
     (hU : ∀ x ∈ U, A x ∈ U) (hV : ∀ x ∈ V, B x ∈ V)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated A U B Vᗮ δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : HilbertSpaceOperatorFoundations.SpectraSeparated A U B Vᗮ δ) :
     δ * N (sinThetaMap U V) ≤ (Real.pi / 2) * N (B - A) := by
   sorry
 
@@ -426,7 +356,7 @@ structure UnboundedSinThetaProblem where
   gap : ℝ
   gap_pos : 0 < gap
   gap_separates :
-    ∀ z ∈ spectrum trialBlock, ∀ w ∈ spectrum complBlock, gap ≤ ‖z - w‖
+    ∀ z ∈ SelfAdjointSpectralTheory.spectrum trialBlock, ∀ w ∈ SelfAdjointSpectralTheory.spectrum complBlock, gap ≤ ‖z - w‖
 
 variable {E H K}
 
@@ -498,7 +428,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 /-- Population-only gap: the selected block of `A` is separated from its own
 complementary block.  No hypothesis on the perturbed spectrum. -/
 def PopulationGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (Δ : ℝ) : Prop :=
-  SpectraSeparated A U A Uᗮ Δ
+  HilbertSpaceOperatorFoundations.SpectraSeparated A U A Uᗮ Δ
 
 /-- `U` and `V` are eigenblocks of `A` and `B` selected by the same ordered
 eigenvalue indices — the branch selection that excludes arbitrary reducing
@@ -567,7 +497,7 @@ theorem yuWangSamworth_eigenvector_le
     (hcorr : CorrespondingEigenblock hA hB
       (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}))
     (hΔ : 0 < Δ)
-    (hgap : ∀ ν ∈ restrictedSpectrum A (Submodule.span 𝕜 {u})ᗮ,
+    (hgap : ∀ ν ∈ HilbertSpaceOperatorFoundations.restrictedSpectrum A (Submodule.span 𝕜 {u})ᗮ,
       Δ ≤ |lam - ν|) :
     ∃ c : 𝕜, ‖c‖ = 1 ∧
       ‖c • v - u‖ ≤

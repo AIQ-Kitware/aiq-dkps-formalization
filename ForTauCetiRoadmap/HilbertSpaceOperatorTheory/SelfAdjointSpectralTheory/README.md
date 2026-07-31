@@ -1,5 +1,4 @@
-# Self-adjoint spectral theory:
-# the Borel functional calculus, unbounded operators, and Stone's theorem
+# Self-adjoint spectral theory: the Borel functional calculus, unbounded operators, and Stone's theorem
 
 The spectral theorem for unbounded self-adjoint operators is the most consequential absence
 in Mathlib's operator theory. Mathlib has the static stack — `ContinuousLinearMap` with
@@ -303,8 +302,9 @@ becomes code.
 - Shifted-inverse data and the elementary real resolvent predicates `realResolventSet`,
   `realSpectrum`, `SpectralSetsSeparated` — the hypothesis shapes Part D's quantitative
   statements consume.
-- The domain-aware **Sylvester equation** `SylvesterEquation A B X C` with domain transport
-  as a field, its module structure, the bounded case as a full-domain instance, and
+- The rectangular domain-aware **Sylvester equation** `SylvesterEquation A B X C` with domain transport
+  as a field, allowing different source and target Hilbert spaces; its module structure,
+  the bounded case as a full-domain instance, and
   `HasBoundedEverywhereInverse`. Transport statements only; the estimates belong to the
   perturbation roadmap.
 - **Quadratic-form bounds**: `LowerFormBoundOn` and `UpperFormBoundOn` for a bounded operator
