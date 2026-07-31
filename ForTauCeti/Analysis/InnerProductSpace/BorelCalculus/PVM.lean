@@ -83,7 +83,6 @@ theorem specProj_def (B : Set ℝ) (hB : MeasurableSet B) :
 /-- The relabelled diagonal measure. -/
 -- `@[expose]` for the same reason as `toProjValMeasure`, whose exposed body references
 -- this one. Recorded debt, not an endorsement.
-@[expose]
 noncomputable def specDiag (κ' : spectrum ℂ a → ℝ) (ξ : H) : Measure ℝ :=
   Measure.map κ' (diagMeasure ha ξ)
 
