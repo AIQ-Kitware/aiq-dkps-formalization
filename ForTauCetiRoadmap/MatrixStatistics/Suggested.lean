@@ -265,13 +265,7 @@ with Weyl there.  In the other order the Chebyshev-plus-union-bound argument get
 twice, and the two probabilities are only coincidentally equal.
 
 **No symmetry hypothesis**, deliberately: an operator-norm bound needs none, while D1
-needs both matrices Hermitian to have eigenvalues at all.
-
-**Discharged 2026-07-31** as `TauCeti.measure_forall_norm_toEuclideanLin_sub_le_ge` in
-`ForTauCeti/Probability/Moments/MatrixConcentration.lean`, with this signature unchanged.
-The `sorry` below is kept because this file is the roadmap's signature record, not a
-build target; the proof is the sibling of `measure_forall_abs_sortedEigenvalues_sub_le_ge`
-over the shared entrywise event, exactly as the prose prescribes. -/
+needs both matrices Hermitian to have eigenvalues at all. -/
 theorem measure_forall_norm_toEuclideanLin_sub_le_ge
     (P : Measure Ω) [IsProbabilityMeasure P]
     (Shat : Ω → Matrix (Fin n) (Fin n) ℝ) (A : Matrix (Fin n) (Fin n) ℝ)

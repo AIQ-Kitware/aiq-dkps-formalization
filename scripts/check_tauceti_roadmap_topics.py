@@ -70,7 +70,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  ["SetTheory.Cardinal.Lift","LinearAlgebra.Dimension.RankComp",
   "Analysis.Normed.Operator.FiniteRankCompact",
   A+"SpectralCutoff"]+["Analysis.OperatorIdeal.ApproximationNumber."+x for x in
-  ["Basic","Adjoint","Compact","CompactHilbert","DiagonalExample","DiagonalSequence","Examples",
+  ["Basic","Adjoint","Compact","CompactHilbert","Core","DiagonalExample","DiagonalSequence","Examples",
    "FiniteDimensional","FiniteRestriction","FiniteValueFibers","FiniteValueSeparation",
    "KyFan",
    "LeadingCutoff","MinMax","MinMaxUpper","SameSequence"]]),
