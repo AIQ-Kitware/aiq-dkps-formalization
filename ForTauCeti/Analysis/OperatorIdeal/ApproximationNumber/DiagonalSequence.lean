@@ -224,4 +224,48 @@ theorem isCompactOperator_diagOpLp [ProperSpace 𝕜] (c : ℕ → 𝕜) {K : �
   (diagOpLp c hK hc).isCompactOperator_of_tendsto_approximationNumber
     (tendsto_approximationNumber_diagOpLp c hK hc hc0)
 
+/-- **The approximation numbers of a diagonal operator are bounded by its
+coefficients**, when those are antitone in norm.
+
+The competitor is the truncation the module already builds: `truncDiagOpLp c n`
+has rank at most `n` by `rank_truncDiagOpLp_le`, and misses by at most the tail
+`sup_{i ≥ n} ‖cᵢ‖ = ‖cₙ‖` by `norm_sub_truncDiagOpLp_le`.
+
+`tendsto_approximationNumber_diagOpLp` already runs exactly this argument to get
+the limit; **it never records the value, which is what
+`{lane:FTC-DIAGEXACT}` exists to supply.** -/
+theorem approximationNumber_diagOpLp_le (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤ K)
+    (hc : ∀ i, ‖c i‖ ≤ K) (hanti : Antitone fun i => ‖c i‖) (n : ℕ) :
+    (diagOpLp c hK hc).approximationNumber n ≤ ‖c n‖ := by
+  refine le_trans
+    (ContinuousLinearMap.approximationNumber_le_norm_sub _ (rank_truncDiagOpLp_le c n hK hc)) ?_
+  exact norm_sub_truncDiagOpLp_le c n hK hc (norm_nonneg _) fun i hi => hanti hi
+
+/-! ### The matching lower bound — not proved here
+
+`aₙ(diagOpLp c) = ‖cₙ‖` needs the reverse of `approximationNumber_diagOpLp_le`,
+and **that half is the whole of `{lane:FTC-DIAGEXACT}`**; the upper bound above is
+a composition of two lemmas this module already had.
+
+**Why the distinction is not bookkeeping**: `symmetricGaugeFamily_injective`
+needs the *value*, not a bound, so the upper bound alone unblocks nothing
+downstream.
+
+The argument, so that whoever takes it does not re-derive it:
+
+* `ContinuousLinearMap.le_approximationNumber_iff` reduces the goal to: every `R`
+  of rank at most `n` satisfies `‖cₙ‖ ≤ ‖D − R‖`.
+* Work on the span of the first `n + 1` basis vectors `lp.single 2 i 1`, which
+  has dimension `n + 1`.  `R` restricted there has rank at most `n`, so by
+  rank–nullity its kernel is nontrivial; take a unit `x` in it.
+* Then `(D − R) x = D x`, and `‖D x‖² = ∑_{i ≤ n} ‖cᵢ‖² ‖xᵢ‖² ≥ ‖cₙ‖²` by
+  antitonicity of `‖c ·‖` and `∑ ‖xᵢ‖² = 1`.
+
+**The fiddly part is the last step, not the linear algebra**: it is an `lp 2`
+coordinate computation on a vector known only to lie in a span, and this module
+has no lemma reading the norm of such a vector off its coordinates — everything
+here goes through `lp.norm_mono` against an explicit comparison vector, which
+bounds but does not compute.
+-/
+
 end TauCeti
