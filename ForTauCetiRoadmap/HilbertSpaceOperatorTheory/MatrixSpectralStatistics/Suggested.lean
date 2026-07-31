@@ -5,15 +5,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import Mathlib
 
 /-!
-# Matrix spectra, concentration, and the toolkit of spectral statistics: suggested signatures
+# Matrix spectra, concentration, and the toolkit of spectral statistics: target signatures
 
-The roadmap prose is authoritative.  This file records representative target
-shapes using names already present in the staged `ForTauCeti` implementation;
-it is not exhaustive, and discharging everything here finishes neither a Part
-nor the roadmap.
+**This file is not the roadmap and is not exhaustive.** The definitive document is
+`README.md`. The statements here suggest Lean forms for particular milestones, so that
+contributors and reviewers converge on names and signatures; discharging all of them
+finishes neither a Part nor the roadmap. `sorry` is allowed in this human-owned roadmap
+library — these are goals, not proofs.
 -/
 
-namespace TauCetiRoadmap.MatrixStatistics
+namespace TauCetiRoadmap.MatrixSpectralStatistics
 
 open MeasureTheory InnerProductSpace
 open scoped ENNReal Matrix
@@ -25,14 +26,12 @@ section RankFactorization
 variable {𝕜 : Type*} [Field 𝕜] {m n : Type*} [Fintype m] [Fintype n] [DecidableEq n]
 
 /-- Rank at most `r` is exactly factorization through `Fin r`. -/
--- DELIVERED: `ForTauCeti.LinearAlgebra.Matrix.RankFactorization`
 theorem rank_le_iff_exists_eq_mul (M : Matrix m n 𝕜) (r : ℕ) :
     M.rank ≤ r ↔ ∃ (L : Matrix m (Fin r) 𝕜) (R : Matrix (Fin r) n 𝕜), M = L * R := sorry
 
 /-- **The multidimensional-scaling embedding step**, as an iff: a matrix is
 positive semidefinite of rank at most `d` exactly when it is the Gram matrix of
 `n` points in `d`-dimensional space. -/
--- DELIVERED: `ForTauCeti.LinearAlgebra.Matrix.PosDef`
 theorem posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self
     {𝕜 : Type*} [RCLike 𝕜] [PartialOrder 𝕜] [StarOrderedRing 𝕜]
     {n d : ℕ} (B : Matrix (Fin n) (Fin n) 𝕜) :
@@ -65,13 +64,9 @@ The quantifier side matters: the unitary acts on the `d` side.  In the
 multidimensional-scaling consumer that is exactly the rigid-motion indeterminacy of a
 recovered configuration; a unitary on the `n` side would be false and would look
 plausible. -/
--- DELIVERED: `ForTauCeti.LinearAlgebra.Matrix.PosDef`
 theorem exists_unitary_mul_of_conjTranspose_mul_self_eq {n d : ℕ}
     {A A' : Matrix (Fin d) (Fin n) 𝕜} (h : Aᴴ * A = A'ᴴ * A') :
     ∃ U ∈ Matrix.unitaryGroup (Fin d) 𝕜, A' = U * A := sorry
--- **Proved 2026-07-31** as `TauCeti.Matrix.exists_unitary_mul_of_conjTranspose_mul_self_eq` in
--- `ForTauCeti/LinearAlgebra/Matrix/PosDef.lean`, axiom-clean and with this signature unchanged.
--- The `sorry` stays because this file records target shapes and is not a build target.
 
 end GramUniqueness
 
@@ -85,7 +80,6 @@ variable {K : Set X} {g : P → X → ℝ}
 /-- Compactness form of approximate-minimizer stability: an approximate minimizing
 sequence on a compact feasible set has a subsequence converging to a true minimizer.
 This one is proved, and it is the statement the Berge argument below consumes. -/
--- DELIVERED: `ForTauCeti.Topology.ApproxMinimizer`
 theorem exists_subseq_tendsto_isMinOn_of_approxMinOn [FirstCountableTopology X]
     (hK : IsCompact K) {F : X → ℝ} (hF : Continuous F)
     {z : ℕ → X} (hz : ∀ k, z k ∈ K)
@@ -118,7 +112,6 @@ sequential characterization -- so if both versions coexist it is the *restricted
 that should be qualified (`..._of_firstCountable`) or kept private, not this one.
 
 `IsMinOn` rather than an invented argmin-set API: the predicate is Mathlib's. -/
--- DELIVERED: `ForTauCeti.Topology.Berge`
 theorem upperHemicontinuousAt_isMinOn [T2Space X]
     (hK : IsCompact K) (hg : Continuous (Function.uncurry g))
     (p₀ : P) [(nhds p₀).IsCountablyGenerated] :
@@ -129,7 +122,6 @@ theorem upperHemicontinuousAt_isMinOn [T2Space X]
 Stated without `[FirstCountableTopology P]`.  The staged proof carries that hypothesis
 and this is the intended endpoint, so the general theorem should own the clean name and
 the sequential one be qualified if it has to survive. -/
--- DELIVERED: `ForTauCeti.Topology.Berge`
 theorem continuous_iInf_of_isCompact
     (hK : IsCompact K) (hKne : K.Nonempty) (hg : Continuous (Function.uncurry g)) :
     Continuous (fun p => ⨅ x : ↥K, g p ↑x) := sorry
@@ -166,34 +158,29 @@ variable {n : ℕ} {Ω : Type*} [MeasurableSpace Ω]
 /-- `Matrix` is a type-level `def`, so the pi `MeasurableSpace` instance does not fire
 through it.  The staged library names this instance for the same reason; without it the
 measurability statement below does not elaborate. -/
--- DELIVERED: `ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable`
 instance instMeasurableSpaceMatrix : MeasurableSpace (Matrix (Fin n) (Fin n) ℝ) :=
   inferInstanceAs (MeasurableSpace (Fin n → Fin n → ℝ))
 
 /-- Sorted eigenvalues of a Hermitian matrix, the ordering every perturbation
 statement below is stated against. -/
--- DELIVERED: `ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable`
 noncomputable def sortedEigenvalues {A : Matrix (Fin n) (Fin n) ℝ}
     (hA : A.IsHermitian) : Fin n → ℝ := sorry
 
 /-- **Weyl composed with the entrywise bridge**: an entrywise `ε`-perturbation
 moves each sorted eigenvalue by at most `n·ε`.  The entrywise-to-operator-norm
 comparison is one of the two Mathlib gaps this Part states precisely. -/
--- DELIVERED: `ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue`
 theorem abs_sortedEigenvalues_sub_le_of_entry_le {A Ahat : Matrix (Fin n) (Fin n) ℝ}
     (hA : A.IsHermitian) (hAhat : Ahat.IsHermitian)
     {ε : ℝ} (hentry : ∀ i j, |Ahat i j - A i j| ≤ ε) (k : Fin n) :
     |sortedEigenvalues hAhat k - sortedEigenvalues hA k| ≤ (n : ℝ) * ε := sorry
 
 /-- The spectral `h`-transform of a Hermitian matrix. -/
--- DELIVERED: `ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable`
 noncomputable def specTransform (h : ℝ → ℝ) {A : Matrix (Fin n) (Fin n) ℝ}
     (hA : A.IsHermitian) : Matrix (Fin n) (Fin n) ℝ := sorry
 
 /-- **Spectral measurability**: the `h`-transform of a measurable Hermitian
 random matrix is measurable — without which no probability statement about a
 sample eigenspace is well-posed. -/
--- DELIVERED: `ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable`
 theorem measurable_specTransform (h : ℝ → ℝ) (hh : Continuous h)
     {Bm : Ω → Matrix (Fin n) (Fin n) ℝ} (hBmeas : Measurable Bm)
     (hsym : ∀ ω, (Bm ω).IsHermitian) :
@@ -212,12 +199,10 @@ section RCLikeComparisons
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 
--- DELIVERED: `ForTauCeti.Analysis.Matrix.EntrywiseOpNorm`
 theorem sum_norm_le_sqrt_card_mul_norm {ι : Type*} [Fintype ι]
     (x : EuclideanSpace 𝕜 ι) :
     ∑ i, ‖x i‖ ≤ Real.sqrt (Fintype.card ι) * ‖x‖ := sorry
 
--- DELIVERED: `ForTauCeti.Analysis.Matrix.EntrywiseOpNorm`
 theorem norm_toEuclideanLin_le_of_entry_le {n : ℕ} {A : Matrix (Fin n) (Fin n) 𝕜}
     {ε : ℝ} (hε : 0 ≤ ε) (hentry : ∀ i j, ‖A i j‖ ≤ ε)
     (x : EuclideanSpace 𝕜 (Fin n)) :
@@ -241,7 +226,6 @@ variable {n : ℕ} {Ω : Type*} [MeasurableSpace Ω]
 /-- **Eigenvalue concentration of a sample matrix**: second moments of the
 entries give, by Chebyshev and a union bound, simultaneous control of every
 sorted eigenvalue with probability `1 − n²v/η²`. -/
--- DELIVERED: `ForTauCeti.Probability.Moments.MatrixConcentration`
 theorem measure_forall_abs_sortedEigenvalues_sub_le_ge
     (P : Measure Ω) [IsProbabilityMeasure P]
     (Shat : Ω → Matrix (Fin n) (Fin n) ℝ) (A : Matrix (Fin n) (Fin n) ℝ)
@@ -253,13 +237,11 @@ theorem measure_forall_abs_sortedEigenvalues_sub_le_ge
         ≤ (n : ℝ) * η} ≥ 1 - ENNReal.ofReal ((n : ℝ) ^ 2 * v / η ^ 2) := sorry
 
 /-- The empirical mean of a finite family. -/
--- DELIVERED: `ForTauCeti.Probability.Moments.CenteredScatter`
 noncomputable def finiteMean (𝕜 : Type*) [RCLike 𝕜] {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace 𝕜 E] {n : ℕ} (z : Fin n → E) : E :=
   ((n : 𝕜)⁻¹) • ∑ i, z i
 
 /-- The unnormalized centered scatter operator `∑ᵢ (zᵢ − mean z) ⊗ (zᵢ − mean z)`. -/
--- DELIVERED: `ForTauCeti.Probability.Moments.CenteredScatter`
 noncomputable def centeredScatter (𝕜 : Type*) [RCLike 𝕜] {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace 𝕜 E] {n : ℕ} (z : Fin n → E) : E →L[𝕜] E :=
   ∑ i, rankOne 𝕜 (z i - finiteMean 𝕜 z) (z i - finiteMean 𝕜 z)
@@ -270,7 +252,6 @@ identity of the sample-moment layer.
 Named for the operation rather than as a target: this is an exact identity, and the
 staged library proves it under this name.  `_snoc` would be marginally more literal --
 the implementation appends with `Fin.snoc` -- but `append` names the mathematics. -/
--- DELIVERED: `ForTauCeti.Probability.Moments.CenteredScatter`
 theorem centeredScatter_append (𝕜 : Type*) [RCLike 𝕜] {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace 𝕜 E] {n : ℕ} (z : Fin n → E) (y : E) :
     centeredScatter 𝕜 (Fin.snoc z y) = centeredScatter 𝕜 z +
@@ -292,7 +273,6 @@ twice, and the two probabilities are only coincidentally equal.
 
 **No symmetry hypothesis**, deliberately: an operator-norm bound needs none, while D1
 needs both matrices Hermitian to have eigenvalues at all. -/
--- DELIVERED: `ForTauCeti.Probability.Moments.MatrixConcentration`
 theorem measure_forall_norm_toEuclideanLin_sub_le_ge
     (P : Measure Ω) [IsProbabilityMeasure P]
     (Shat : Ω → Matrix (Fin n) (Fin n) ℝ) (A : Matrix (Fin n) (Fin n) ℝ)
@@ -305,4 +285,4 @@ theorem measure_forall_norm_toEuclideanLin_sub_le_ge
 
 end Concentration
 
-end TauCetiRoadmap.MatrixStatistics
+end TauCetiRoadmap.MatrixSpectralStatistics
