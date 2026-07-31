@@ -437,7 +437,9 @@ theorem specProjection_eq_borelCalculus (B : Set ℝ) (hB : MeasurableSet B) :
     specProjection hA B hB
       = BorelCalculus.borelCalculus (isStarNormal_cayley hA)
           (BorelCalculus.isBddMeasurable_indicator (a := cayley hA)
-            (measurable_cayleyInv hA hB)) := (rfl)
+            (measurable_cayleyInv hA hB)) := by
+  rw [specProjection_def, spectralPVM_def, BorelCalculus.toProjValMeasure_proj,
+    BorelCalculus.specProj_def]
 
 /-- The resolvent at `-i` as an image of the Borel calculus of the Cayley
 transform — the bridge that makes spectral projections commute with it. -/
