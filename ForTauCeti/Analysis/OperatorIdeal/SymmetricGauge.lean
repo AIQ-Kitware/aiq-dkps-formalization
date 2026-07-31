@@ -350,45 +350,92 @@ theorem extend_smul (c : ℝ≥0) (a : ℕ → ℝ≥0∞) :
             (fun m : ℝ≥0 => ((Φ (truncate (fun n => (c : ℝ≥0∞) * a n) k m) : ℝ≥0) : ℝ≥0∞))
             (c * m))
 
-/-! ### Restriction to `Fin n` — designed, not landed
+/-! ### Restriction to `Fin n`
 
-The bridge to `TauCeti.FiniteSymmetricGauge` is what would let the finite
+The bridge to `TauCeti.FiniteSymmetricGauge`, which is what lets the finite
 Hardy–Littlewood–Pólya transfer `FiniteSymmetricGauge.le_of_prefixSum_le` reach
-sequences, and it is the missing piece of Milestone B2 — **the transfer itself is
-complete** in `ForTauCeti/Analysis/Convex/Majorization.lean`.
-
-It is designed here and not landed, because a partial construction cannot go into
-this library: a `sorry` in `ForTauCeti` breaks `check_tauceti_readiness`'s
-zero-escape guarantee, and an unused `ofFin` with no consumer is the dead code
-`{lane:FTC-DEAD}` exists to remove.  So the obligations are recorded instead.
-
-**The shape.**  `toFinite (Φ : SymmetricGauge) (n : ℕ) : FiniteSymmetricGauge n`
-sending `x : Fin n → ℝ` to `(Φ (ofFin x) : ℝ)`, where `ofFin` is
-`Finsupp.onFinset (Finset.range n) (fun i => if h : i < n then Real.nnabs (x ⟨i, h⟩) else 0)`.
+sequences.  **The transfer itself is not reproved here** — it exists complete in
+`ForTauCeti/Analysis/Convex/Majorization.lean`; only the restriction was missing,
+and it is Milestone B2's blocker rather than the majorization argument.
 
 **Absolute values are what reconcile the two structures**, and they are not a
-convenience: `FiniteSymmetricGauge` is `ℝ`-valued with a `neg_single'` field and
-an `|c|` in its homogeneity, while `SymmetricGauge` is `ℝ≥0`-valued with neither.
-Taking `|·|` on the way in discharges both.
-
-**The four field obligations, in increasing difficulty:**
-
-* `neg_single'` — immediate; `Function.update` at one index and `Real.nnabs`
-  ignores the sign.
-* `add_le'` — `Φ.add_le` is not enough on its own.  `ofFin (x + y) ≤ ofFin x + ofFin y`
-  pointwise (from `abs_add`), then `Φ.mono` and then `Φ.add_le`.
-* `real_smul'` — `Real.nnabs` is a `MonoidHom`, so `nnabs (c • x) = nnabs c * nnabs x`
-  pointwise, then `Φ.smul`.  The `|c|` in the finite structure's field is exactly
-  what makes this match.
-* `perm'` — **the real work, and the reason this is a separate slice.**
-  `Equiv.Perm.extendDomain (σ : Equiv.Perm (Fin n)) (f : Fin n ≃ {i // i < n})`
-  gives the permutation of `ℕ` fixing everything from `n` on, and
-  `Equiv.Perm.extendDomain_apply_image` together with
-  `extendDomain_apply_not_subtype` transports it through `ofFin` to meet
-  `Φ.symm'`.  Both lemmas exist in `Mathlib.Logic.Equiv.Basic`; the work is
-  matching `Finsupp.equivMapDomain` against them, since `equivMapDomain` reindexes
-  by the inverse.
+convenience.  `FiniteSymmetricGauge` is `ℝ`-valued with a `neg_single'` field and
+an `|c|` in its homogeneity; `SymmetricGauge` is `ℝ≥0`-valued with neither.
+Taking `|·|` on the way in is what discharges both, and it is why `add_le'` needs
+`mono'` on top of `add_le'` rather than `add_le'` alone.
 -/
+
+/-- A real vector on `Fin n` as a finitely supported nonnegative sequence:
+absolute values, extended by zero. -/
+noncomputable def ofFin {n : ℕ} (x : Fin n → ℝ) : ℕ →₀ ℝ≥0 :=
+  Finsupp.onFinset (Finset.range n)
+    (fun i => if h : i < n then Real.nnabs (x ⟨i, h⟩) else 0)
+    (fun i hi => by
+      by_cases h : i < n
+      · simpa using h
+      · simp [h] at hi)
+
+/-- `ofFin`, pointwise.  Definitional, as for `truncate_apply`. -/
+@[simp] theorem ofFin_apply {n : ℕ} (x : Fin n → ℝ) (i : ℕ) :
+    ofFin x i = if h : i < n then Real.nnabs (x ⟨i, h⟩) else 0 := rfl
+
+/-- Restriction of a symmetric gauge to `Fin n`.
+
+`perm'` is the field that needs work: a permutation of `Fin n` becomes one of `ℕ`
+by `Equiv.Perm.extendDomain`, fixing everything from `n` on.  **The extension is
+built from `π.symm`, not `π`** — `Finsupp.equivMapDomain` reindexes by the
+*inverse*, so composing with `π` on the vector side corresponds to extending
+`π.symm` on the index side.  Getting that backwards typechecks right up to the
+final goal and then fails with `π` against `π.symm`. -/
+noncomputable def toFinite (Φ : SymmetricGauge) (n : ℕ) : FiniteSymmetricGauge n where
+  toFun x := (Φ (ofFin x) : ℝ)
+  add_le' x y := by
+    have h : ofFin (x + y) ≤ ofFin x + ofFin y := by
+      refine Finsupp.le_def.2 fun i => ?_
+      by_cases hi : i < n
+      · simp only [ofFin_apply, Finsupp.add_apply, dif_pos hi, Pi.add_apply]
+        exact_mod_cast abs_add_le (x ⟨i, hi⟩) (y ⟨i, hi⟩)
+      · simp [hi]
+    exact_mod_cast (Φ.mono h).trans (Φ.add_le _ _)
+  real_smul' c x := by
+    have h : ofFin (c • x) = Real.nnabs c • ofFin x := by
+      refine Finsupp.ext fun i => ?_
+      by_cases hi : i < n
+      · simp only [ofFin_apply, dif_pos hi, Finsupp.smul_apply, smul_eq_mul,
+          Pi.smul_apply, smul_eq_mul]
+        exact map_mul Real.nnabs c (x ⟨i, hi⟩)
+      · simp [hi]
+    rw [h, Φ.smul]
+    push_cast
+    ring
+  perm' x π := by
+    classical
+    -- Extend `π` to `ℕ`, fixing everything from `n` on.
+    -- built from `π.symm`, because `equivMapDomain` reindexes by the *inverse*
+    set e : Equiv.Perm ℕ :=
+      Equiv.Perm.extendDomain π.symm (Fin.equivSubtype (n := n)) with he
+    have h : ofFin (x ∘ π) = Finsupp.equivMapDomain e (ofFin x) := by
+      refine Finsupp.ext fun i => ?_
+      by_cases hi : i < n
+      · have : e.symm i = ((π ⟨i, hi⟩ : Fin n) : ℕ) := by
+          rw [he, Equiv.Perm.extendDomain_symm, Equiv.symm_symm]
+          simpa using Equiv.Perm.extendDomain_apply_image π
+            (Fin.equivSubtype (n := n)) ⟨i, hi⟩
+        simp [Finsupp.equivMapDomain_apply, this, hi, (π ⟨i, hi⟩).isLt]
+      · have : e.symm i = i := by
+          rw [he, Equiv.Perm.extendDomain_symm]
+          exact Equiv.Perm.extendDomain_apply_not_subtype _ _ hi
+        simp [Finsupp.equivMapDomain_apply, this, hi]
+    rw [h, Φ.symm]
+  neg_single' x j := by
+    have h : ofFin (Function.update x j (-x j)) = ofFin x := by
+      refine Finsupp.ext fun i => ?_
+      by_cases hi : i < n
+      · by_cases hij : (⟨i, hi⟩ : Fin n) = j
+        · subst hij; simp [hi, ← Real.toNNReal_abs, abs_neg]
+        · simp [Function.update_of_ne hij, hi]
+      · simp [hi]
+    rw [h]
 
 end SymmetricGauge
 
