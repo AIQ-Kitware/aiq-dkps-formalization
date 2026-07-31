@@ -113,10 +113,15 @@ def main(argv=None) -> int:
     keep: list[str] = []
     move: list[str] = []
     already = 0
+    # Count lanes over every row that leaves the live board, not just the ones
+    # appended: when a merge has put already-archived rows back, `move` is empty
+    # and reporting "0 lanes" beside a non-zero row count reads like a bug.
+    lanes_due: set[str] = set()
     for line in lines:
         cells = row_cells(line)
         marker = LANE_RE.search(cells[5]) if cells else None
         if marker and state[marker.group(1)] == "done":
+            lanes_due.add(marker.group(1))
             if line in archived:
                 already += 1          # a merge put it back on the live board
             else:
@@ -125,7 +130,7 @@ def main(argv=None) -> int:
             continue
         keep.append(line)
 
-    lanes_moved = sorted({LANE_RE.search(row_cells(l)[5]).group(1) for l in move})
+    lanes_moved = sorted(lanes_due)
     due = len(move) + already
 
     if args.check:
