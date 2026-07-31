@@ -270,7 +270,7 @@ against the counting measure.  The two are the same argument, but the measure ro
 the *basis index type* to carry `MeasurableSpace`, `MeasurableSingletonClass` and
 `DiscreteMeasurableSpace`, and the filter to be countably generated, none of which the
 statement is about; `∑'` over `ℝ≥0∞` is already a supremum of finite partial sums, so the
-same Fatou step is `Filter.liminf_le_liminf` on each section.  Lane `HS-SEMICONT-LIGHT`. -/
+same Fatou step is `Filter.liminf_le_liminf` on each section. -/
 theorem hilbertSchmidtENorm_le_liminf {ι : Type*} (b : HilbertBasis ι 𝕜 E)
     {u : Filter ℕ} [u.NeBot]
     {T : ℕ → E →L[𝕜] F} {L : E →L[𝕜] F}
