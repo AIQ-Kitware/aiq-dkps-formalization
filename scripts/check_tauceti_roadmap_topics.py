@@ -123,6 +123,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
    "SpectralProjectionGroup","SelfAdjointMaximal","StoneUniqueness","YosidaApproximation"]]
  +["Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank",
    "Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection",
+   # and `GramBandPolar` for the same reason two steps removed: it imports both of them.
    "Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar"]
  +[A+"BlockLowerBound"]),
 ("T16","Sylvester equations and the Rosenblum theorem",
