@@ -225,13 +225,11 @@ theorem norm_starProjection_sub_eq_max (U V : Submodule 𝕜 E)
   have hBP : B * P = 0 := by
     rw [hBdef, mul_assoc, show (1 - P) * P = 0 by rw [sub_mul, one_mul, hPid, sub_self], mul_zero]
   have hPB : P * B = 0 := by
-    rw [hBdef, ← mul_assoc, ← mul_assoc,
-      -- states the goal with the definition unfolded, in the shape the next step needs;
-      -- there is no `_apply` lemma to rewrite with here.
-      show P * (1 - P) = 0 by rw [mul_sub, mul_one, hPid, sub_self], zero_mul, zero_mul]
+    simp only [hBdef, ← mul_assoc,
+      show P * (1 - P) = 0 by rw [mul_sub, mul_one, hPid, sub_self], zero_mul]
   have hA' : A = P - P * Q * P := by rw [hAdef, mul_sub, mul_one, sub_mul, hPid]
   have hB' : B = Q - Q * P - P * Q + P * Q * P := by
-    rw [hBdef, sub_mul, one_mul, sub_mul, mul_sub, mul_one, mul_sub, mul_one]; abel
+    simp only [hBdef, sub_mul, one_mul, mul_sub, mul_one]; abel
   have hPQsq : (P - Q) * (P - Q) = A + B := by
     have lhs : (P - Q) * (P - Q) = P + Q - P * Q - Q * P := by
       rw [sub_mul, mul_sub, mul_sub, hPid, hQid]; abel

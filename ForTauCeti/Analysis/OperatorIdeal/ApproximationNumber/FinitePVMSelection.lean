@@ -12,12 +12,22 @@ import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 Tau Ceti supplies the native projection-valued measure and projection algebra,
 but not the finite-dimensional selection wrapper needed by the approximation-
 number argument.  This file supplies that wrapper without tactic search.
+
+## Provenance
+
+*Moved, not restated.*  Written in the `FinishTanTwoTheta` completion workspace and
+promoted here directly, without the intermediate stop in `DavisKahan` that
+`FinishTanTwoTheta.ApproximationNumber.GramSpectralRank` made: this module imports one
+`ForTauCeti` leaf and one Mathlib file and **nothing from `DavisKahan`**, so the paper
+library was never on its dependency path and routing it through would only have created a
+second move to undo.  Statements and proofs are unchanged; the namespace moved from
+`TauCeti.FinishTanTwoTheta` to `TauCeti.ApproximationNumber`, matching the sibling it
+imports.
 -/
 
 namespace TauCeti
-namespace FinishTanTwoTheta
+namespace ApproximationNumber
 
-open ApproximationNumber
 open scoped InnerProductSpace
 open Set
 
@@ -201,5 +211,5 @@ theorem natCast_sub_le_rank_pvm_Icc_of_cutoff_bounds
 
 end
 
-end FinishTanTwoTheta
+end ApproximationNumber
 end TauCeti
