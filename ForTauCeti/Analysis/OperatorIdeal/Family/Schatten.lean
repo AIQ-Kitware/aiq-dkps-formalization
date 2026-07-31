@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import ForTauCeti.Analysis.Normed.FiniteLpGauge
 import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
+import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
 
 /-!
 # The Schatten-`p` operator ideals
@@ -40,7 +41,18 @@ layer is the tool here, not the obstacle.
 * `ContinuousLinearMap.schattenENorm_add_le`: the triangle inequality;
 * `ContinuousLinearMap.schattenENorm_smul`, `_adjoint`, `_comp_le`: the remaining ideal laws;
 * `ContinuousLinearMap.IsSchattenClass`: the membership predicate;
-* `TauCeti.schattenIdealFamily`: the resulting symmetric operator ideal family.
+* `TauCeti.schattenIdealFamily`: the resulting symmetric operator ideal family;
+* `ContinuousLinearMap.schattenENorm_one` and
+  `TauCeti.schattenIdealFamily_one_eq_traceClassIdealFamily`: at `p = 1` this *is* the
+  trace-class ideal.  The `p = 2` counterpart is deliberately absent — see below.
+
+## What is not here
+
+`hilbertSchmidtENorm` is built from the Hilbert--Schmidt energy through a Hilbert basis and
+never mentions approximation numbers, so `schattenIdealFamily 2 = hilbertSchmidtIdealFamily`
+is not the arithmetic identity its `p = 1` twin is: it needs Parseval together with the
+singular-value decomposition, and that bridge does not exist in this library.  Completeness
+of the family is likewise open, as it is for the trace-class family.
 
 ## Provenance
 
@@ -274,6 +286,27 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- `T` is **Schatten-`p`** when its Schatten norm is finite. -/
 def IsSchattenClass (p : ℝ) (T : E →L[𝕜] F) : Prop := T.schattenENorm p ≠ ∞
 
+section AgreementAtOne
+
+variable {𝕜 : Type} [RCLike 𝕜]
+variable {E F : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- **At `p = 1` the Schatten norm is the nuclear norm.**  Both are `tsum`s of the same
+sequence and the exponents are `1` and `1⁻¹`, so this is arithmetic in `ℝ≥0∞` rather than a
+theorem about operators.
+
+The `p = 2` counterpart is *not* arithmetic and is not proved here: `hilbertSchmidtENorm` is
+built from the Hilbert--Schmidt energy through a basis and never mentions approximation
+numbers, so relating the two needs Parseval together with the singular-value decomposition —
+a statement this library does not contain. -/
+theorem schattenENorm_one (T : E →L[𝕜] F) : T.schattenENorm 1 = T.nuclearENorm := by
+  simp [schattenENorm, nuclearENorm]
+
+end AgreementAtOne
+
 end Gauge
 
 end ContinuousLinearMap
@@ -313,5 +346,14 @@ variable {E F : Type v}
 theorem mem_schattenIdealFamily_carrier_iff {p : ℝ} (hp : 1 ≤ p) (A : E →L[𝕜] F) :
     A ∈ (schattenIdealFamily.{v} 𝕜 hp).toOperatorIdealFamily.carrier ↔
       A.IsSchattenClass p := (Iff.rfl)
+
+/-- **The Schatten ideal at `p = 1` is the trace-class ideal**, as families and not merely as
+gauges.  `OperatorIdealFamily.ext` is what makes the upgrade available: a family in this
+presentation is determined by its gauge, including off the ideal, so the two structures agree
+once their gauges do. -/
+theorem schattenIdealFamily_one_eq_traceClassIdealFamily (𝕜 : Type) [RCLike 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} 𝕜] :
+    schattenIdealFamily.{v} 𝕜 (le_refl (1 : ℝ)) = traceClassIdealFamily.{v} 𝕜 := by
+  exact SymmetricOperatorIdealFamily.ext fun {_E _F} _ _ _ _ _ _ A => A.schattenENorm_one
 
 end TauCeti
