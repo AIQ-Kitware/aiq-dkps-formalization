@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import FinishTanTwoTheta.GroundedImports
 import FinishTanTwoTheta.DavisKahan.SharpKyFan
-import FinishTanTwoTheta.OperatorIdeal.StandardFanDominance
+import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
 
 /-!
 # Sharp standard-ideal `tan 2Theta`
@@ -59,7 +59,7 @@ private theorem half_mul_kyFan_le_adjoint
 /-- Sharp endpoint for every standard symmetric completion, formulated in the
 scale-invariant common form. -/
 theorem sharp_standardSymmetricIdeal_scaled
-    (I : TauCeti.FinishTanTwoTheta.StandardSymmetricIdeal)
+    (I : TauCeti.SymmetricIdeal.StandardSymmetricIdeal)
     (B : BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     {d : ℝ} (hd : 0 < d)
     (hA0 : ∀ z : E0, RCLike.re ⟪B.A0 z, z⟫_ℂ ≤ 0)
@@ -86,7 +86,7 @@ theorem sharp_standardSymmetricIdeal_scaled
     simpa only [S, T, kyFanApproximationGauge_smul, hscalarNorm] using
       half_mul_kyFan_le_adjoint B hd hA0 hA1 hX hcontractive k
   have hfan : I.Mem S ∧ I.gauge S ≤ I.gauge B.B01.adjoint :=
-    TauCeti.FinishTanTwoTheta.standard_fanDominance I hBadj hdom
+    TauCeti.SymmetricIdeal.standard_fanDominance I hBadj hdom
   change I.Mem S ∧ I.gauge S ≤ I.gauge B.B01
   refine ⟨hfan.1, ?_⟩
   calc
@@ -138,14 +138,14 @@ theorem sharp_schattenMaximal
     (hA1 : ∀ z : E1, d * ‖z‖ ^ 2 ≤ RCLike.re ⟪B.A1 z, z⟫_ℂ)
     {X : E0 →L[ℂ] E1} (hX : SolvesRiccati B X)
     (hcontractive : ‖X‖ < 1)
-    (hB : (TauCeti.FinishTanTwoTheta.paperLpNorm p hp).Mem B.B01) :
-    (TauCeti.FinishTanTwoTheta.paperLpNorm p hp).Mem
+    (hB : (TauCeti.SymmetricIdeal.paperLpNorm p hp).Mem B.B01) :
+    (TauCeti.SymmetricIdeal.paperLpNorm p hp).Mem
         (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ∧
-      d * (TauCeti.FinishTanTwoTheta.paperLpNorm p hp).gauge
+      d * (TauCeti.SymmetricIdeal.paperLpNorm p hp).gauge
           (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ≤
-        2 * (TauCeti.FinishTanTwoTheta.paperLpNorm p hp).gauge B.B01 :=
+        2 * (TauCeti.SymmetricIdeal.paperLpNorm p hp).gauge B.B01 :=
   sharp_paperUnitaryInvariantNorm
-    (TauCeti.FinishTanTwoTheta.paperLpNorm p hp)
+    (TauCeti.SymmetricIdeal.paperLpNorm p hp)
     B hd hA0 hA1 hX hcontractive hB
 
 /-- Trace/nuclear specialization. -/

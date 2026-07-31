@@ -446,19 +446,58 @@ theorem complexify_injective [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   · simp only [im_complex_smul, Complex.ofReal_re, Complex.ofReal_im, zero_smul, zero_add]
     rfl
 
-/-- A coordinate of a vector is no longer than the vector.
+/-- **A coordinate of a vector is no longer than the vector.**  The single
+statement of `‖re z‖ ≤ ‖z‖` in this repository, and the earliest in import
+order, so every consumer can reach it.
 
-**Was `private`, and no longer needs to be.**  It was made private to keep
-`ClosedOperatorComplexification.norm_re_le` — a verbatim copy one module later — unambiguous where
-both namespaces are opened together.  That copy has since been deleted in favour of this one, so
-this is now the only public statement of the inequality in its dependency cone and the two fixes
-must not both stand: with the sibling gone and this one private, every public copy reachable from
-`ClosedOperator/Complexification.lean` disappeared and the tree stopped building.  Two further
-copies remain elsewhere; see the `{lane:CPLX-DEDUP}` row. -/
+It was `private` until 2026-07-30, guarded by a note saying a public copy would make
+unqualified uses ambiguous in `Sources/DavisKahan1970/Ideals/HilbertSchmidtRealDescent.lean`,
+which opens two of the namespaces that had a copy.  That was true, and it was the wrong
+conclusion: the ambiguity came from the *other three* copies, not from this one being visible.
+
+Getting there took a broken tree first, and the sequence is worth keeping.  `edward (aiq-gpu)`
+deleted the `ClosedOperatorComplexification` sibling in `4dacc008` and pointed that module here;
+separately this one was still `private`.  Each fix is right alone and they are fatal together —
+with the sibling gone and this one private, no public copy was reachable from
+`ClosedOperator/Complexification.lean` and the build stopped.  Lane `{lane:CPLX-DEDUP-1}` then
+deleted the remaining copies and made this one public, which is the state described above. -/
 theorem norm_re_le [NormedAddCommGroup E] (z : RealComplexification E) :
     ‖re z‖ ≤ ‖z‖ := by
   have h := norm_sq z
   nlinarith [norm_nonneg (re z), norm_nonneg (im z), norm_nonneg z]
+
+/-- **Restrict a complex operator to the real copy and take its real
+coordinate.**  No invariance assumption is needed to define this: the map is
+`x ↦ re (T (ofReal x))` for any bounded `T`, and it is bounded by `‖T‖` because
+neither coordinate projection nor the real embedding changes a norm.
+
+Stated **rectangularly**, between two different spaces.  Three copies of this
+definition existed until 2026-07-30 and they were not three copies of one thing:
+`Sources/DavisKahan1970/Ideals/HilbertSchmidtRealDescent.lean` had the
+rectangular one while `Complexification/FunctionalCalculus.lean` and
+`OperatorIdeal/ApproximationNumbers/Real/Threshold.lean` had the square case,
+which is this at `F = E`.  This module is the only one all three consumers
+import, so it is where the general form belongs. -/
+noncomputable def realPartOperator [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    (T : RealComplexification E →L[ℂ] RealComplexification F) : E →L[ℝ] F := by
+  let L : E →ₗ[ℝ] F :=
+    { toFun := fun x => re (T (ofReal x))
+      map_add' := fun x y => by simp
+      map_smul' := fun r x => by simp }
+  exact L.mkContinuous ‖T‖ fun x => by
+    calc
+      ‖re (T (ofReal x))‖ ≤ ‖T (ofReal x)‖ := norm_re_le _
+      _ ≤ ‖T‖ * ‖ofReal x‖ := T.le_opNorm _
+      _ = ‖T‖ * ‖x‖ := by rw [ofReal.norm_map]
+
+/-- Pointwise formula for the real restriction: embed, apply, take the real
+coordinate. -/
+@[simp]
+theorem realPartOperator_apply [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    (T : RealComplexification E →L[ℂ] RealComplexification F) (x : E) :
+    realPartOperator T x = re (T (ofReal x)) := rfl
 
 /-- Every vector is its real part plus `i` times its imaginary part. -/
 theorem eq_ofReal_add_I_smul_ofReal [NormedAddCommGroup E] [InnerProductSpace ℝ E]

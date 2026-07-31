@@ -4,13 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import FinishTanTwoTheta.GroundedImports
-import FinishTanTwoTheta.ApproximationNumber.GramSpectralRank
-import FinishTanTwoTheta.ApproximationNumber.LeadingCutoff
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
 import FinishTanTwoTheta.ApproximationNumber.FinitePVMSelection
-import FinishTanTwoTheta.ApproximationNumber.FiniteValueSeparation
-import FinishTanTwoTheta.ApproximationNumber.FiniteValueFibers
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteValueSeparation
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteValueFibers
 import FinishTanTwoTheta.ApproximationNumber.GramBandPolar
-import FinishTanTwoTheta.OperatorIdeal.StandardInstances
+import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 
 /-!
 # Approximate leading singular families
@@ -31,6 +31,7 @@ namespace FinishTanTwoTheta
 
 open scoped InnerProductSpace BigOperators
 open Set
+open ApproximationNumber
 
 noncomputable section
 

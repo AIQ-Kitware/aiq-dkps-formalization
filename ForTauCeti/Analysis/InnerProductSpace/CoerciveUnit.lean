@@ -213,6 +213,43 @@ private lemma tendsto_sub_sq_div_add_sub_sq {b : ℝ} (hb : 0 < b) :
   rw [← h2]
   exact h1.mono_left nhdsWithin_le_nhds
 
+/-- **Passing to the limit in the lower bound.**  If `b/(1+b)` is approached from below by the
+family `(b-ε)²/(b + (b-ε)²)` and every member is `≤ K`, then so is the limit.
+
+Pure real analysis, stated separately because it is the only place in
+`norm_one_sub_inverse_one_add` where anything topological happens: the rest of the lower bound is
+Cauchy--Schwarz and algebra. -/
+private theorem div_one_add_le_of_forall_sub_sq_le {b K : ℝ} (hb : 0 < b)
+    (h : ∀ ε ∈ Set.Ioo (0 : ℝ) b, (b - ε) ^ 2 / (b + (b - ε) ^ 2) ≤ K) :
+    b / (1 + b) ≤ K := by
+  have hcont := tendsto_sub_sq_div_add_sub_sq (b := b) hb
+  haveI : (nhdsWithin (0 : ℝ) (Set.Ioo 0 b)).NeBot := by
+    apply mem_closure_iff_nhdsWithin_neBot.mp
+    rw [closure_Ioo hb.ne]
+    exact ⟨le_refl 0, hb.le⟩
+  exact le_of_tendsto hcont
+    (by filter_upwards [self_mem_nhdsWithin] with ε hε using h ε hε)
+
+omit [CompleteSpace E] in
+/-- Cauchy--Schwarz bound on the quadratic form of a bounded operator. -/
+private theorem re_inner_apply_self_le_norm_mul_sq (B : E →L[𝕜] E) (y : E) :
+    RCLike.re ⟪B y, y⟫_𝕜 ≤ ‖B‖ * ‖y‖ ^ 2 := by
+  calc RCLike.re ⟪B y, y⟫_𝕜 ≤ ‖⟪B y, y⟫_𝕜‖ := RCLike.re_le_norm _
+    _ ≤ ‖B y‖ * ‖y‖ := norm_inner_le_norm _ _
+    _ ≤ (‖B‖ * ‖y‖) * ‖y‖ :=
+        mul_le_mul_of_nonneg_right (B.le_opNorm y) (norm_nonneg _)
+    _ = ‖B‖ * ‖y‖ ^ 2 := by ring
+
+omit [CompleteSpace E] in
+/-- Expansion of `‖(1 + B) y‖²`.  The two cross terms are conjugate, so they add to twice the real
+part — no self-adjointness of `B` is needed, only conjugate symmetry of the inner product. -/
+private theorem norm_one_add_apply_sq (B : E →L[𝕜] E) (y : E) :
+    ‖(1 + B) y‖ ^ 2 = ‖y‖ ^ 2 + 2 * RCLike.re ⟪B y, y⟫_𝕜 + ‖B y‖ ^ 2 := by
+  have hNy : (1 + B) y = y + B y := rfl
+  have hswap : RCLike.re ⟪y, B y⟫_𝕜 = RCLike.re ⟪B y, y⟫_𝕜 := by
+    rw [← inner_conj_symm, RCLike.conj_re]
+  rw [hNy, norm_add_sq (𝕜 := 𝕜), hswap]
+
 /-- Exact operator norm of `1 - (1 + B)⁻¹` for a positive operator `B`:
 the value is `‖B‖ / (1 + ‖B‖)`.  The inverse is interpreted through
 `Ring.inverse`; the operator `1 + B` is coercive, so this is a genuine
@@ -255,20 +292,11 @@ theorem norm_one_sub_inverse_one_add {B : E →L[𝕜] E} (hB : IsSelfAdjoint B)
     -- there is no `_apply` lemma to rewrite with here.
     change star (1 - R) = 1 - R
     rw [star_sub, star_one, hRsa]
-  have hbs : ∀ y, RCLike.re ⟪B y, y⟫_𝕜 ≤ ‖B‖ * ‖y‖ ^ 2 := by
-    intro y
-    calc RCLike.re ⟪B y, y⟫_𝕜 ≤ ‖⟪B y, y⟫_𝕜‖ := RCLike.re_le_norm _
-      _ ≤ ‖B y‖ * ‖y‖ := norm_inner_le_norm _ _
-      _ ≤ (‖B‖ * ‖y‖) * ‖y‖ :=
-          mul_le_mul_of_nonneg_right (B.le_opNorm y) (norm_nonneg _)
-      _ = ‖B‖ * ‖y‖ ^ 2 := by ring
+  have hbs : ∀ y, RCLike.re ⟪B y, y⟫_𝕜 ≤ ‖B‖ * ‖y‖ ^ 2 :=
+    re_inner_apply_self_le_norm_mul_sq B
   have hNsq : ∀ y, ‖N y‖ ^ 2
-      = ‖y‖ ^ 2 + 2 * RCLike.re ⟪B y, y⟫_𝕜 + ‖B y‖ ^ 2 := by
-    intro y
-    have hNy : N y = y + B y := rfl
-    have hswap : RCLike.re ⟪y, B y⟫_𝕜 = RCLike.re ⟪B y, y⟫_𝕜 := by
-      rw [← inner_conj_symm, RCLike.conj_re]
-    rw [hNy, norm_add_sq (𝕜 := 𝕜), hswap]
+      = ‖y‖ ^ 2 + 2 * RCLike.re ⟪B y, y⟫_𝕜 + ‖B y‖ ^ 2 :=
+    norm_one_add_apply_sq B
   have hval : ∀ y, RCLike.re ⟪(1 - R) (N y), N y⟫_𝕜
       = RCLike.re ⟪B y, y⟫_𝕜 + ‖B y‖ ^ 2 := by
     intro y
@@ -338,13 +366,7 @@ theorem norm_one_sub_inverse_one_add {B : E →L[𝕜] E} (hB : IsSelfAdjoint B)
         rw [div_le_div_iff₀ (by nlinarith [sq_nonneg (‖B‖ - ε)]) (by linarith)]
         nlinarith [hr2, sq_nonneg (‖B‖ - ε)]
       linarith
-    have hcont := tendsto_sub_sq_div_add_sub_sq (b := ‖B‖) hs
-    haveI hNB : (nhdsWithin (0 : ℝ) (Set.Ioo 0 ‖B‖)).NeBot := by
-      apply mem_closure_iff_nhdsWithin_neBot.mp
-      rw [closure_Ioo hs.ne]
-      exact ⟨le_refl 0, hs.le⟩
-    exact le_of_tendsto hcont
-      (by filter_upwards [self_mem_nhdsWithin] with ε hε using hstep2 ε hε)
+    exact div_one_add_le_of_forall_sub_sq_le hs hstep2
   exact le_antisymm hupper hlower
 
 end ContinuousLinearMap

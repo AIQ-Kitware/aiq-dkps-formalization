@@ -478,21 +478,8 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_reciprocalInterpolat
       (alpha i - beta j) * ⟪eF i, X (eE j)⟫_ℝ =
         ⟪eF i, C (eE j)⟫_ℝ := by
     simpa only [real_inner_comm] using hcoeff i j
-  let blockDiagonal :
-      (ER →ₗ[ℝ] FR) →ₗ[ℝ]
-        (WithLp 2 (ER × ER) →ₗ[ℝ] WithLp 2 (FR × FR)) := by
-    refine
-      { toFun := fun A =>
-          RectangularUnitarilyInvariantNorm.orthogonalBlockSum A A
-        map_add' := ?_
-        map_smul' := ?_ }
-    · intro A B
-      ext x
-      apply WithLp.ofLp_injective 2
-      apply Prod.ext <;>
-        simp [RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply]
-    · intro r A
-      exact RectangularUnitarilyInvariantNorm.orthogonalBlockSum_smul r A A
+  let blockDiagonal := RectangularUnitarilyInvariantNorm.orthogonalBlockSumDiagonal
+    (𝕜 := ℝ) (E₁ := ER) (F₁ := FR)
   have hblock (A : ER →ₗ[ℝ] FR) :
       RectangularUnitarilyInvariantNorm.orthogonalBlockSum A A =
         ∑ i, ∑ j, ⟪eF i, A (eE j)⟫_ℝ •
@@ -557,7 +544,10 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_reciprocalInterpolat
 This formulation matches the classical extremal result, whose sharp constant
 is an infimum.  No attaining Fourier density and no compactness argument for
 the family of frequencies is required: apply the finite orbit estimate at
-mass `π / 2 + ε`, then let `ε` decrease to zero in `ℝ`. -/
+mass `π / 2 + ε`, then let `ε` decrease to zero in `ℝ` — carried out once, for
+every `RCLike` scalar, in
+`kyFan_reciprocalMultiplier_le_of_approximateFourierInterpolation`, of which
+this is the `ℂ` instance. -/
 theorem kyFan_reciprocalMultiplier_le_complex_of_approximateFourierInterpolation
     {EC FC : Type*}
     [NormedAddCommGroup EC] [InnerProductSpace ℂ EC]
@@ -579,39 +569,19 @@ theorem kyFan_reciprocalMultiplier_le_complex_of_approximateFourierInterpolation
     (k : ℕ) :
     δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
       (Real.pi / 2) *
-        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C := by
-  let K := RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C
-  have hK0 : 0 ≤ K := by
-    dsimp [K, RectangularUnitarilyInvariantNorm.rectangularKyFanSum]
-    exact Finset.sum_nonneg fun i _ => C.singularValues_nonneg (i : ℕ)
-  apply le_of_forall_pos_le_add
-  intro η hη
-  let ε := η / (K + 1)
-  have hdenom : 0 < K + 1 := by positivity
-  have hε : 0 < ε := div_pos hη hdenom
-  have hinterp :=
-    hasReciprocalOrbitInterpolation_of_finiteFourierInterpolation
-      eF eE α β (hfourier ε hε)
-  have hcert := finiteUnitaryOrbitCertificate_of_reciprocalInterpolation
-    eF eE α β hinterp hcoeff
-  have hbound :=
-    RectangularUnitarilyInvariantNorm.rectangularKyFanSum_le_of_finiteUnitaryOrbitCertificate
-      k hcert
-  rw [RectangularUnitarilyInvariantNorm.rectangularKyFanSum_real_smul
-    k X hδ.le] at hbound
-  have hεK : ε * K ≤ η := by
-    rw [show ε = η / (K + 1) by rfl, div_mul_eq_mul_div,
-      div_le_iff₀ hdenom]
-    nlinarith
-  calc
-    δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
-        (Real.pi / 2 + ε) * K := hbound
-    _ = (Real.pi / 2) * K + ε * K := by ring
-    _ ≤ (Real.pi / 2) * K + η := by gcongr
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C :=
+  kyFan_reciprocalMultiplier_le_of_approximateFourierInterpolation
+    eF eE α β hδ hfourier hcoeff k
 
 /-- Approximate finite scalar Fourier interpolations imply the sharp real Ky
-Fan estimate.  Complex coefficients first descend to orthogonal actions on two
-real copies; duplication of every singular value then cancels the factor two. -/
+Fan estimate.
+
+The real specialisation of `kyFan_reciprocalMultiplier_le_of_approximateFourierInterpolation`.
+The doubled orthogonal descent that makes the real case work — complex
+coefficients act on two real copies, and duplication of every singular value
+cancels the factor two — is carried by that generic proof for every `RCLike`
+scalar; the only thing to do here is drop the `ℝ → ℝ` coercion from the
+coefficient hypothesis with `RCLike.ofReal_real_eq_id`. -/
 theorem kyFan_reciprocalMultiplier_le_real_of_approximateFourierInterpolation
     {ER FR : Type*}
     [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
@@ -632,52 +602,10 @@ theorem kyFan_reciprocalMultiplier_le_real_of_approximateFourierInterpolation
     (k : ℕ) :
     delta * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
       (Real.pi / 2) *
-        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C := by
-  let K := RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C
-  have hK0 : 0 ≤ K := by
-    dsimp [K, RectangularUnitarilyInvariantNorm.rectangularKyFanSum]
-    exact Finset.sum_nonneg fun i _ => C.singularValues_nonneg (i : ℕ)
-  apply le_of_forall_pos_le_add
-  intro eta heta
-  let eps := eta / (K + 1)
-  have hdenom : 0 < K + 1 := by positivity
-  have heps : 0 < eps := div_pos heta hdenom
-  have hinterp :=
-    hasDoubledRealReciprocalOrbitInterpolation_of_finiteFourierInterpolation
-      eF eE alpha beta (hfourier eps heps)
-  have hcert :=
-    finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_reciprocalInterpolation
-      eF eE alpha beta hinterp hcoeff
-  have hbound :=
-    RectangularUnitarilyInvariantNorm.rectangularKyFanSum_le_of_finiteUnitaryOrbitCertificate
-      (2 * k) hcert
-  have hscale :
-      RectangularUnitarilyInvariantNorm.rectangularKyFanSum (2 * k)
-          (delta • RectangularUnitarilyInvariantNorm.orthogonalBlockSum X X) =
-        delta * RectangularUnitarilyInvariantNorm.rectangularKyFanSum (2 * k)
-          (RectangularUnitarilyInvariantNorm.orthogonalBlockSum X X) := by
-    simpa only [RCLike.ofReal_real_eq_id, id_eq] using
-      (RectangularUnitarilyInvariantNorm.rectangularKyFanSum_real_smul
-        (𝕜 := ℝ) (2 * k)
-        (RectangularUnitarilyInvariantNorm.orthogonalBlockSum X X) hdelta.le)
-  rw [hscale,
-    RectangularUnitarilyInvariantNorm.rectangularKyFanSum_orthogonalBlockSum_self,
-    RectangularUnitarilyInvariantNorm.rectangularKyFanSum_orthogonalBlockSum_self]
-      at hbound
-  have hbound' :
-      delta * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
-        (Real.pi / 2 + eps) * K := by
-    dsimp only [K] at hbound ⊢
-    nlinarith
-  have hepsK : eps * K ≤ eta := by
-    rw [show eps = eta / (K + 1) by rfl, div_mul_eq_mul_div,
-      div_le_iff₀ hdenom]
-    nlinarith
-  calc
-    delta * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
-        (Real.pi / 2 + eps) * K := hbound'
-    _ = (Real.pi / 2) * K + eps * K := by ring
-    _ ≤ (Real.pi / 2) * K + eta := by gcongr
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C :=
+  kyFan_reciprocalMultiplier_le_of_approximateFourierInterpolation
+    eF eE alpha beta hdelta hfourier
+    (by simpa only [RCLike.ofReal_real_eq_id, id_eq] using hcoeff) k
 
 /-- A sharp integrable reciprocal kernel implies the unconditional complex
 Ky Fan reciprocal-multiplier estimate.
@@ -706,20 +634,13 @@ theorem kyFan_reciprocalMultiplier_le_complex_of_integrableKernel
     (k : ℕ) :
     δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
       (Real.pi / 2) *
-        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C := by
-  apply kyFan_reciprocalMultiplier_le_complex_of_approximateFourierInterpolation
-    eF eE α β hδ _ hcoeff k
-  intro eps heps
-  apply hasFiniteReciprocalFourierInterpolation_of_normalized α β hδ
-  apply hasFiniteReciprocalFourierInterpolation_pi_div_two_add_eps_of_integrableKernel
-    (fun i => α i / δ) (fun j => β j / δ) _ heps hkernel
-  intro i j
-  rw [show α i / δ - β j / δ = (α i - β j) / δ by ring]
-  rw [abs_div, abs_of_pos hδ]
-  exact (le_div_iff₀ hδ).2 (by simpa using hgap i j)
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C :=
+  kyFan_reciprocalMultiplier_le_of_integrableKernel
+    eF eE α β hδ hgap hkernel hcoeff k
 
 /-- A sharp integrable reciprocal kernel implies the sharp real Ky Fan
-estimate through doubled orthogonal rotations and singular-value descent. -/
+estimate, as the real specialisation of the generic
+`kyFan_reciprocalMultiplier_le_of_integrableKernel`. -/
 theorem kyFan_reciprocalMultiplier_le_real_of_integrableKernel
     {ER FR : Type*}
     [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
@@ -739,18 +660,10 @@ theorem kyFan_reciprocalMultiplier_le_real_of_integrableKernel
     (k : ℕ) :
     delta * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
       (Real.pi / 2) *
-        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C := by
-  apply kyFan_reciprocalMultiplier_le_real_of_approximateFourierInterpolation
-    eF eE alpha beta hdelta _ hcoeff k
-  intro eps heps
-  apply hasFiniteReciprocalFourierInterpolation_of_normalized alpha beta hdelta
-  apply hasFiniteReciprocalFourierInterpolation_pi_div_two_add_eps_of_integrableKernel
-    (fun i => alpha i / delta) (fun j => beta j / delta) _ heps hkernel
-  intro i j
-  rw [show alpha i / delta - beta j / delta =
-    (alpha i - beta j) / delta by ring]
-  rw [abs_div, abs_of_pos hdelta]
-  exact (le_div_iff₀ hdelta).2 (by simpa using hgap i j)
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C :=
+  kyFan_reciprocalMultiplier_le_of_integrableKernel
+    eF eE alpha beta hdelta hgap hkernel
+    (by simpa only [RCLike.ofReal_real_eq_id, id_eq] using hcoeff) k
 
 /-- **Unconditional sharp complex Ky Fan reciprocal-multiplier estimate.**
 The explicit Haagerup--Zsidó kernel supplies the analytic certificate; no

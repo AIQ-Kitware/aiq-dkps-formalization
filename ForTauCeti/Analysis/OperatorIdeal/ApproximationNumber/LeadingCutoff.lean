@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.GroundedImports
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+public import Mathlib.Analysis.Complex.Basic
 
 /-!
 # Leading approximation-number cutoff
@@ -12,10 +14,31 @@ import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 This file isolates the elementary finite-prefix bookkeeping used by spectral
 selection.  `leadingCount X k ε` is the first index below `k` at which the
 approximation numbers fall to `ε`, or `k` if no such index exists.
+
+The two facts that make it usable are complementary and are the reason the
+definition is stated with `Nat.find` rather than as a `Finset.card`: strictly
+before the cutoff the approximation numbers exceed `ε`
+(`approximationNumber_gt_of_lt_leadingCount`), and from the cutoff onwards —
+while still below `k` — they are at most `ε`
+(`approximationNumber_le_of_leadingCount_le`, which uses antitonicity).
+
+## Provenance
+
+* Original module: authored for the Davis--Kahan tan-2-theta development, then
+  moved here because its only non-Mathlib dependency is
+  `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic`, the module it
+  extends.
+* Extraction class: **moved and renamespaced.**  Statements and proofs are
+  unchanged; only the enclosing namespace and the import list moved.
+* Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking;
+  Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none.**
 -/
 
+public section
+
 namespace TauCeti
-namespace FinishTanTwoTheta
+namespace ApproximationNumber
 
 noncomputable section
 
@@ -28,6 +51,7 @@ variable {E1 : Type v} [NormedAddCommGroup E1] [NormedSpace ℂ E1]
 noncomputable def leadingCount (X : E0 →L[ℂ] E1) (k : ℕ) (ε : ℝ) : ℕ :=
   if h : ∃ n : ℕ, n < k ∧ X.approximationNumber n ≤ ε then Nat.find h else k
 
+/-- The cutoff never runs past the prefix length it is measured inside. -/
 @[simp]
 theorem leadingCount_le (X : E0 →L[ℂ] E1) (k : ℕ) (ε : ℝ) :
     leadingCount X k ε ≤ k := by
@@ -67,5 +91,5 @@ theorem approximationNumber_le_of_leadingCount_le
 
 end
 
-end FinishTanTwoTheta
+end ApproximationNumber
 end TauCeti

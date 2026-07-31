@@ -152,7 +152,96 @@ section Multiplicative
 
 variable (ha : IsStarNormal a) {f g : spectrum ℂ a → ℂ}
 
-/-- **Multiplicativity of the Borel calculus, in matrix-element form.** -/
+/-- Pointwise product estimate: replacing both factors costs each factor's bound times the
+other's error.  Split as `P * Q - F * G = P * (Q - G) + (P - F) * G`. -/
+private theorem norm_mul_sub_mul_le {P Q F G : ℂ} {cP cG : ℝ}
+    (hP : ‖P‖ ≤ cP) (hG : ‖G‖ ≤ cG) :
+    ‖P * Q - F * G‖ ≤ cP * ‖Q - G‖ + cG * ‖P - F‖ := by
+  have hsplit : P * Q - F * G = P * (Q - G) + (P - F) * G := by ring
+  rw [hsplit]
+  refine le_trans (norm_add_le _ _) ?_
+  rw [norm_mul, norm_mul]
+  have e1 : ‖P‖ * ‖Q - G‖ ≤ cP * ‖Q - G‖ :=
+    mul_le_mul_of_nonneg_right hP (norm_nonneg _)
+  have e2 : ‖P - F‖ * ‖G‖ ≤ cG * ‖P - F‖ := by
+    rw [mul_comm ‖P - F‖ ‖G‖]
+    exact mul_le_mul_of_nonneg_right hG (norm_nonneg _)
+  linarith
+
+/-- An `L¹` error measured against a smaller measure is bounded by the same error against a
+larger one.  Used once per approximant, and the `norm_sub_rev` flip is what makes the two
+directions match. -/
+private theorem integral_norm_sub_le_of_measure_le {α : Type*} [MeasurableSpace α]
+    {μ ν : Measure α} (hμν : μ ≤ ν)
+    {u v : α → ℂ} (h : Integrable (fun x => v x - u x) ν) :
+    ∫ x, ‖u x - v x‖ ∂μ ≤ ∫ x, ‖v x - u x‖ ∂ν := by
+  have hrev : ∀ x, ‖u x - v x‖ = ‖v x - u x‖ := fun x => norm_sub_rev _ _
+  simp only [hrev]
+  exact integral_mono_measure hμν
+    (Filter.Eventually.of_forall fun _ => norm_nonneg _) h.norm
+
+/-- **The `L¹` half of step 5.**  If `u` approximates `F` and `v` approximates `G`, each against
+its own dominating measure, the product `u * v` approximates `F * G` against the smaller measure
+with the two errors weighted by the opposite factor's bound.
+
+Stated separately because it is the only genuinely quantitative step of
+`pair_mul_eq_inner_comp`: everything around it is bookkeeping about which measure dominates
+which. -/
+private theorem integral_norm_mul_sub_mul_le {α : Type*} [MeasurableSpace α]
+    {μ ν₁ ν₂ : Measure α} [IsFiniteMeasure μ] (h₁ : μ ≤ ν₁) (h₂ : μ ≤ ν₂)
+    {u v F G : α → ℂ} {cu cG δ₁ δ₂ : ℝ}
+    (hcu : ∀ x, ‖u x‖ ≤ cu) (hcG : ∀ x, ‖G x‖ ≤ cG) (hcu0 : 0 ≤ cu) (hcG0 : 0 ≤ cG)
+    (huv : Integrable (fun x => u x * v x - F x * G x) μ)
+    (hvG : Integrable (fun x => v x - G x) μ) (huF : Integrable (fun x => u x - F x) μ)
+    (hvG₂ : Integrable (fun x => G x - v x) ν₂) (huF₁ : Integrable (fun x => F x - u x) ν₁)
+    (hδ₂ : ∫ x, ‖G x - v x‖ ∂ν₂ ≤ δ₂) (hδ₁ : ∫ x, ‖F x - u x‖ ∂ν₁ ≤ δ₁) :
+    ∫ x, ‖u x * v x - F x * G x‖ ∂μ ≤ cu * δ₂ + cG * δ₁ := by
+  calc ∫ x, ‖u x * v x - F x * G x‖ ∂μ
+      ≤ ∫ x, (cu * ‖v x - G x‖ + cG * ‖u x - F x‖) ∂μ :=
+        integral_mono huv.norm
+          ((hvG.norm.const_mul cu).add (huF.norm.const_mul cG))
+          (fun x => norm_mul_sub_mul_le (hcu x) (hcG x))
+    _ = cu * (∫ x, ‖v x - G x‖ ∂μ) + cG * (∫ x, ‖u x - F x‖ ∂μ) := by
+        rw [integral_add (hvG.norm.const_mul cu) (huF.norm.const_mul cG),
+          integral_const_mul, integral_const_mul]
+    _ ≤ cu * δ₂ + cG * δ₁ := by
+        have hv' : ∫ x, ‖v x - G x‖ ∂μ ≤ δ₂ :=
+          le_trans (integral_norm_sub_le_of_measure_le h₂ hvG₂) hδ₂
+        have hu' : ∫ x, ‖u x - F x‖ ∂μ ≤ δ₁ :=
+          le_trans (integral_norm_sub_le_of_measure_le h₁ huF₁) hδ₁
+        have t1 := mul_le_mul_of_nonneg_left hv' hcu0
+        have t2 := mul_le_mul_of_nonneg_left hu' hcG0
+        linarith
+
+/-- **Replacing a bounded measurable symbol by a continuous approximant, at one pair.**
+
+Steps 1 and 3 of `pair_mul_eq_inner_comp` are this lemma at `(ψ, η)` and `(ζ, ξ)`; extracting it
+is what keeps the two from being the same six lines twice. -/
+private theorem norm_pair_sub_cfcHom_le (ha : IsStarNormal a) {u : spectrum ℂ a → ℂ}
+    (hu : IsBddMeasurable u) (ν : Measure (spectrum ℂ a)) [IsFiniteMeasure ν] (ψ ξ : H)
+    (hdom : ∀ k : Fin 4, diagMeasure ha (pairVectors ψ ξ k) ≤ ν)
+    (r : C(spectrum ℂ a, ℂ)) (hri : Integrable (fun x => (r : spectrum ℂ a → ℂ) x) ν)
+    {δ : ℝ} (hrle : ∫ x, ‖u x - r x‖ ∂ν ≤ δ) :
+    ‖pair ha u ψ ξ - ⟪ψ, cfcHom ha r ξ⟫_ℂ‖ ≤ δ := by
+  rw [← pair_of_continuous ha r ψ ξ]
+  exact le_trans (norm_pair_sub_pair_le ha ν ψ ξ hdom (hu.integrable ν) hri) hrle
+
+/-- **Multiplicativity of the Borel calculus, in matrix-element form.**
+
+The proof is an `ε`-argument in five steps, and what remains inline after the four preliminary
+lemmas above is the scaffolding they cannot absorb: three measures, each needing its own
+`IsFiniteMeasure` instance, and two applications of `exists_continuous_integral_norm_sub_le`
+whose outputs (`p`, `q`) every later step mentions.
+
+1. replace `f` by a continuous `p` at the pair `(ψ, η)` — `norm_pair_sub_cfcHom_le`;
+2. move `p` to the left slot, turning `(ψ, η)` into `(ζ, ξ)` with `ζ = p⋆ ψ`;
+3. replace `g` by a continuous `q` at `(ζ, ξ)` — the same lemma again;
+4. recombine `p` and `q` into the single continuous symbol `p * q`;
+5. replace the continuous product by the Borel one — `integral_norm_mul_sub_mul_le`, which is
+   where the quantitative content lives.
+
+The `ε'` of step 3 is `ε / (1 + ‖p‖)`, chosen after `p` is known so that step 5's `‖p‖ * ε'`
+term is bounded by `ε` regardless of how large `‖p‖` turned out to be. -/
 theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
     (ψ ξ : H) :
     pair ha (fun x => f x * g x) ψ ξ
@@ -190,9 +279,8 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
   -- step 1: replace `f` by `p` at the pair `(ψ, η)`
   have hdom₁ : ∀ k : Fin 4, diagMeasure ha (pairVectors ψ η k) ≤ ν₁ := fun k =>
     Measure.le_add_left (diagMeasure_le_sum ha (pairVectors ψ η) k)
-  have step1 : ‖pair ha f ψ η - ⟪ψ, cfcHom ha p η⟫_ℂ‖ ≤ ε := by
-    rw [← pair_of_continuous ha p ψ η]
-    exact le_trans (norm_pair_sub_pair_le ha ν₁ ψ η hdom₁ (hf.integrable ν₁) hpi) hple
+  have step1 : ‖pair ha f ψ η - ⟪ψ, cfcHom ha p η⟫_ℂ‖ ≤ ε :=
+    norm_pair_sub_cfcHom_le ha hf ν₁ ψ η hdom₁ p hpi hple
   -- step 2: move `p` to the left slot
   have hadj : ∀ w : H, ⟪ψ, cfcHom ha p w⟫_ℂ = ⟪ζ, w⟫_ℂ := by
     intro w
@@ -203,9 +291,8 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
   -- step 3: replace `g` by `q` at the pair `(ζ, ξ)`
   have hdom₂ : ∀ k : Fin 4, diagMeasure ha (pairVectors ζ ξ k) ≤ ν₂ := fun k =>
     Measure.le_add_left (diagMeasure_le_sum ha (pairVectors ζ ξ) k)
-  have step3 : ‖pair ha g ζ ξ - ⟪ζ, cfcHom ha q ξ⟫_ℂ‖ ≤ ε' := by
-    rw [← pair_of_continuous ha q ζ ξ]
-    exact le_trans (norm_pair_sub_pair_le ha ν₂ ζ ξ hdom₂ (hg.integrable ν₂) hqi) hqle
+  have step3 : ‖pair ha g ζ ξ - ⟪ζ, cfcHom ha q ξ⟫_ℂ‖ ≤ ε' :=
+    norm_pair_sub_cfcHom_le ha hg ν₂ ζ ξ hdom₂ q hqi hqle
   -- step 4: recombine into a single continuous symbol
   have step4 : ⟪ζ, cfcHom ha q ξ⟫_ℂ = pair ha (fun x => p x * q x) ψ ξ := by
     have hpc : pair ha (fun x => p x * q x) ψ ξ = ⟪ψ, cfcHom ha (p * q) ξ⟫_ℂ :=
@@ -221,57 +308,17 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
   have hpq : IsBddMeasurable (fun x => p x * q x) :=
     (IsBddMeasurable.of_continuous p).mul (IsBddMeasurable.of_continuous q)
   have hfg : IsBddMeasurable (fun x => f x * g x) := hf.mul hg
-  have hptwise : ∀ x,
-      ‖p x * q x - f x * g x‖ ≤ ‖p‖ * ‖q x - g x‖ + hg.chooseBound * ‖p x - f x‖ := by
-    intro x
-    have hsplit : p x * q x - f x * g x = p x * (q x - g x) + (p x - f x) * g x := by ring
-    rw [hsplit]
-    refine le_trans (norm_add_le _ _) ?_
-    rw [norm_mul, norm_mul]
-    have e1 : ‖p x‖ * ‖q x - g x‖ ≤ ‖p‖ * ‖q x - g x‖ :=
-      mul_le_mul_of_nonneg_right (p.norm_coe_le_norm x) (norm_nonneg _)
-    have e2 : ‖p x - f x‖ * ‖g x‖ ≤ hg.chooseBound * ‖p x - f x‖ := by
-      rw [mul_comm ‖p x - f x‖ ‖g x‖]
-      exact mul_le_mul_of_nonneg_right (hg.norm_le_chooseBound x) (norm_nonneg _)
-    linarith
-  have hintq : Integrable (fun x => ‖q x - g x‖) νP :=
-    ((IsBddMeasurable.of_continuous q).integrable νP |>.sub (hg.integrable νP)).norm
-  have hintp : Integrable (fun x => ‖p x - f x‖) νP :=
-    ((IsBddMeasurable.of_continuous p).integrable νP |>.sub (hf.integrable νP)).norm
   have step5 : ‖pair ha (fun x => p x * q x) ψ ξ - pair ha (fun x => f x * g x) ψ ξ‖
       ≤ ‖p‖ * ε' + hg.chooseBound * ε := by
     refine le_trans (norm_pair_sub_pair_le ha νP ψ ξ hdomP (hpq.integrable νP)
       (hfg.integrable νP)) ?_
-    calc ∫ x, ‖p x * q x - f x * g x‖ ∂νP
-        ≤ ∫ x, (‖p‖ * ‖q x - g x‖ + hg.chooseBound * ‖p x - f x‖) ∂νP :=
-          integral_mono ((hpq.integrable νP).sub (hfg.integrable νP)).norm
-            (((hintq.const_mul ‖p‖)).add (hintp.const_mul hg.chooseBound)) hptwise
-      _ = ‖p‖ * (∫ x, ‖q x - g x‖ ∂νP) + hg.chooseBound * (∫ x, ‖p x - f x‖ ∂νP) := by
-          rw [integral_add ((hintq.const_mul ‖p‖)) (hintp.const_mul hg.chooseBound),
-            integral_const_mul, integral_const_mul]
-      _ ≤ ‖p‖ * ε' + hg.chooseBound * ε := by
-          have hq' : ∫ x, ‖q x - g x‖ ∂νP ≤ ε' := by
-            have hmono : ∫ x, ‖q x - g x‖ ∂νP ≤ ∫ x, ‖g x - q x‖ ∂ν₂ := by
-              have hrev : ∀ x, ‖q x - g x‖ = ‖g x - q x‖ := fun x => norm_sub_rev _ _
-              simp only [hrev]
-              exact integral_mono_measure hdomP₂
-                (Filter.Eventually.of_forall fun _ => norm_nonneg _)
-                ((hg.integrable ν₂).sub hqi).norm
-            exact le_trans hmono hqle
-          have hp' : ∫ x, ‖p x - f x‖ ∂νP ≤ ε := by
-            have hmono : ∫ x, ‖p x - f x‖ ∂νP ≤ ∫ x, ‖f x - p x‖ ∂ν₁ := by
-              have hrev : ∀ x, ‖p x - f x‖ = ‖f x - p x‖ := fun x => norm_sub_rev _ _
-              simp only [hrev]
-              exact integral_mono_measure hdomP₁
-                (Filter.Eventually.of_forall fun _ => norm_nonneg _)
-                ((hf.integrable ν₁).sub hpi).norm
-            exact le_trans hmono hple
-          have hbnn := hg.chooseBound_nonneg
-          have t1 : ‖p‖ * (∫ x, ‖q x - g x‖ ∂νP) ≤ ‖p‖ * ε' :=
-            mul_le_mul_of_nonneg_left hq' (norm_nonneg p)
-          have t2 : hg.chooseBound * (∫ x, ‖p x - f x‖ ∂νP) ≤ hg.chooseBound * ε :=
-            mul_le_mul_of_nonneg_left hp' hbnn
-          linarith
+    exact integral_norm_mul_sub_mul_le hdomP₁ hdomP₂
+      (fun x => p.norm_coe_le_norm x) (fun x => hg.norm_le_chooseBound x)
+      (norm_nonneg p) hg.chooseBound_nonneg
+      ((hpq.integrable νP).sub (hfg.integrable νP))
+      (((IsBddMeasurable.of_continuous q).integrable νP).sub (hg.integrable νP))
+      (((IsBddMeasurable.of_continuous p).integrable νP).sub (hf.integrable νP))
+      ((hg.integrable ν₂).sub hqi) ((hf.integrable ν₁).sub hpi) hqle hple
   -- assemble
   have hpε : ‖p‖ * ε' ≤ ε := by
     rw [hε', mul_div_assoc', div_le_iff₀ hpnn]

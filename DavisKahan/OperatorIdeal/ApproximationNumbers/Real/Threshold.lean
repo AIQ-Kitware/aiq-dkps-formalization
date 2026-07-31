@@ -10,6 +10,7 @@ import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unique
+import DavisKahan.SpectralTheory.Complexification.FunctionalCalculus
 
 /-!
 # The real threshold theorem for approximation numbers
@@ -53,20 +54,19 @@ variable {E : Type v} {F : Type vF}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 
-noncomputable local instance complexOperatorRealAlgebra :
-    Algebra ℝ (RealComplexification E →L[ℂ] RealComplexification E) :=
-  Algebra.complexToReal
-
-noncomputable local instance realContinuousFunctionalCalculus :
-    ContinuousFunctionalCalculus ℝ
-      (RealComplexification E →L[ℂ] RealComplexification E) IsSelfAdjoint :=
-  IsSelfAdjoint.instContinuousFunctionalCalculus
+/-! The real algebra structure and the real continuous functional calculus on the complexified
+operator algebra are `scoped instance`s of `RealComplexificationFunctionalCalculus`, opened here.
+They used to be reinstalled in this file as a second `local instance`, which made them a
+*different declaration* from the one that module's lemmas are stated against — and proving the
+two defeq is what timed out `isDefEq` when this file first tried to import them.  See lane
+`{lane:CPLX-DEDUP-3}`. -/
+open scoped TauCeti.DavisKahan.Experimental.ExactSinTheta.RealComplexificationFunctionalCalculus
 
 omit [CompleteSpace E] in
 private theorem restrictedReal_smul_operator_eq
     (r : ℝ) (A : RealComplexification E →L[ℂ] RealComplexification E) :
     @SMul.smul ℝ (RealComplexification E →L[ℂ] RealComplexification E)
-        complexOperatorRealAlgebra.toSMul r A = r • A := by
+        TauCeti.DavisKahan.Experimental.ExactSinTheta.RealComplexificationFunctionalCalculus.complexOperatorRealAlgebra.toSMul r A = r • A := by
   apply ContinuousLinearMap.ext
   intro z
   change (r : ℂ) • A z = r • A z
@@ -267,9 +267,9 @@ private noncomputable def conjugateOperatorHom :
     rw [Algebra.algebraMap_eq_smul_one]
     change conjugateOperator
         (@SMul.smul ℝ (RealComplexification E →L[ℂ] RealComplexification E)
-          complexOperatorRealAlgebra.toSMul r 1) =
+          TauCeti.DavisKahan.Experimental.ExactSinTheta.RealComplexificationFunctionalCalculus.complexOperatorRealAlgebra.toSMul r 1) =
       @SMul.smul ℝ (RealComplexification E →L[ℂ] RealComplexification E)
-        complexOperatorRealAlgebra.toSMul r 1
+        TauCeti.DavisKahan.Experimental.ExactSinTheta.RealComplexificationFunctionalCalculus.complexOperatorRealAlgebra.toSMul r 1
     rw [restrictedReal_smul_operator_eq,
       conjugateOperator_real_smul, conjugateOperator_one]
   map_star' A := by
@@ -315,30 +315,6 @@ private theorem conjugateOperator_cfc_eq
   exact happ.symm
 
 /-! ## Descent of conjugation-fixed operators -/
-
-omit [InnerProductSpace ℝ E] [CompleteSpace E] in
-private theorem norm_re_le (z : RealComplexification E) : ‖re z‖ ≤ ‖z‖ := by
-  rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), norm_sq]
-  nlinarith [sq_nonneg ‖im z‖]
-
-/-- Restrict a complex operator to the real copy and take its real coordinate. -/
-private noncomputable def realPartOperator
-    (A : RealComplexification E →L[ℂ] RealComplexification E) :
-    E →L[ℝ] E := by
-  let L : E →ₗ[ℝ] E :=
-    { toFun := fun x => re (A (ofReal x))
-      map_add' := fun x y => by simp
-      map_smul' := fun r x => by simp }
-  exact L.mkContinuous ‖A‖ fun x => by
-    calc
-      ‖re (A (ofReal x))‖ ≤ ‖A (ofReal x)‖ := norm_re_le _
-      _ ≤ ‖A‖ * ‖ofReal x‖ := A.le_opNorm _
-      _ = ‖A‖ * ‖x‖ := by rw [ofReal.norm_map]
-
-omit [CompleteSpace E] in
-@[simp]
-private theorem realPartOperator_apply (A : RealComplexification E →L[ℂ] RealComplexification E) (x : E) :
-    realPartOperator A x = re (A (ofReal x)) := rfl
 
 omit [CompleteSpace E] in
 private theorem fixed_operator_maps_real_to_real
@@ -634,7 +610,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
         u ^ 2 • cfc (fun x => (p x) ^ 2) C =
             @SMul.smul ℝ
               (RealComplexification E →L[ℂ] RealComplexification E)
-              complexOperatorRealAlgebra.toSMul (u ^ 2)
+              TauCeti.DavisKahan.Experimental.ExactSinTheta.RealComplexificationFunctionalCalculus.complexOperatorRealAlgebra.toSMul (u ^ 2)
               (cfc (fun x => (p x) ^ 2) C) := by
           exact (restrictedReal_smul_operator_eq
             (u ^ 2) (cfc (fun x => (p x) ^ 2) C)).symm

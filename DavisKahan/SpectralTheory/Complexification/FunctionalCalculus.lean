@@ -40,11 +40,22 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 
-noncomputable local instance complexOperatorRealAlgebra :
+/-- Scalar restriction of the complex operator algebra to the reals.
+
+**`scoped`, deliberately, and not `local` or global.**  Global is the ℝ-algebra diamond that
+Mathlib declines to install for `Algebra.complexToReal`, so that door stays shut.  `local` was
+what this was until 2026-07-30, and it forced three other modules to reinstall a *second*
+declaration of the same instance; lemmas stated against one copy then had to be proved defeq
+against the other, which is what timed out `isDefEq` when `Threshold.lean` first tried to import
+this module's lemmas.  A scope gives every consumer the *same* declaration, so there is nothing
+to prove.  Open it with `open scoped RealComplexificationFunctionalCalculus`. -/
+noncomputable scoped instance complexOperatorRealAlgebra :
     Algebra ℝ (RealComplexification E →L[ℂ] RealComplexification E) :=
   Algebra.complexToReal
 
-noncomputable local instance realContinuousFunctionalCalculus :
+/-- Real continuous functional calculus on the complexified operator algebra.  `scoped` for the
+same reason as `complexOperatorRealAlgebra` above. -/
+noncomputable scoped instance realContinuousFunctionalCalculus :
     ContinuousFunctionalCalculus ℝ
       (RealComplexification E →L[ℂ] RealComplexification E) IsSelfAdjoint :=
   IsSelfAdjoint.instContinuousFunctionalCalculus
@@ -336,32 +347,6 @@ theorem conjugateOperator_cfc_eq
   exact happ.symm
 
 /-! ## Descent of conjugation-fixed operators -/
-
-omit [InnerProductSpace ℝ E] [CompleteSpace E] in
-/-- Taking the real coordinate of a complexified vector does not increase the norm. -/
-theorem norm_re_le (z : RealComplexification E) : ‖re z‖ ≤ ‖z‖ := by
-  rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), norm_sq]
-  nlinarith [sq_nonneg ‖im z‖]
-
-/-- Restrict a complex operator to the real copy and take its real coordinate. -/
-noncomputable def realPartOperator
-    (A : RealComplexification E →L[ℂ] RealComplexification E) :
-    E →L[ℝ] E := by
-  let L : E →ₗ[ℝ] E :=
-    { toFun := fun x => re (A (ofReal x))
-      map_add' := fun x y => by simp
-      map_smul' := fun r x => by simp }
-  exact L.mkContinuous ‖A‖ fun x => by
-    calc
-      ‖re (A (ofReal x))‖ ≤ ‖A (ofReal x)‖ := norm_re_le _
-      _ ≤ ‖A‖ * ‖ofReal x‖ := A.le_opNorm _
-      _ = ‖A‖ * ‖x‖ := by rw [ofReal.norm_map]
-
-omit [CompleteSpace E] in
-/-- Pointwise formula for the real restriction: embed, apply, take the real coordinate. -/
-@[simp]
-theorem realPartOperator_apply (A : RealComplexification E →L[ℂ] RealComplexification E) (x : E) :
-    realPartOperator A x = re (A (ofReal x)) := rfl
 
 omit [CompleteSpace E] in
 /-- A conjugation-fixed operator maps the real copy into itself: the imaginary coordinate

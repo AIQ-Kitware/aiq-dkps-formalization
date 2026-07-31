@@ -3,7 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.GroundedImports
+module
+
+public import Mathlib.Data.Finset.Max
+public import Mathlib.Data.Fintype.EquivFin
+public import Mathlib.Data.Real.Basic
+public import Mathlib.Tactic.Common
 
 /-!
 # Fibers of a finite monotone value family
@@ -12,10 +17,29 @@ This file packages the finite bookkeeping for repeated approximation-number
 values.  A value label is one value occurring in a finite family; its fiber
 has canonical first and last indices and a canonical enumeration by a finite
 type.
+
+Nothing here mentions an operator: the statements are about an arbitrary
+`a : Fin n → ℝ`, and the approximation-number reading is supplied by the
+caller.  The spectral-selection argument uses the fibers to group equal
+approximation numbers into bands, and `finiteValueFiber_card_le_span` is the
+counting step that bounds a band by the index interval it occupies.
+
+## Provenance
+
+* Original module: authored for the Davis--Kahan tan-2-theta development, then
+  moved here once its dependencies were measured: the statements are about an
+  arbitrary `a : Fin n → ℝ` and use nothing but Mathlib.
+* Extraction class: **moved and renamespaced.**  Statements and proofs are
+  unchanged; only the enclosing namespace and the import list moved.
+* Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking;
+  Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none.**
 -/
 
+public section
+
 namespace TauCeti
-namespace FinishTanTwoTheta
+namespace ApproximationNumber
 
 noncomputable section
 
@@ -38,6 +62,7 @@ noncomputable def finiteValueFiber {n : ℕ} (a : Fin n → ℝ)
     (label : FiniteValueLabel a) : Finset (Fin n) :=
   Finset.univ.filter fun i => a i = label.1
 
+/-- Membership in a fiber is exactly carrying that fiber's value. -/
 @[simp]
 theorem mem_finiteValueFiber {n : ℕ} (a : Fin n → ℝ)
     (label : FiniteValueLabel a) (i : Fin n) :
@@ -63,13 +88,18 @@ noncomputable def finiteValueLast {n : ℕ} (a : Fin n → ℝ)
     (label : FiniteValueLabel a) : Fin n :=
   (finiteValueFiber a label).max' (finiteValueFiber_nonempty a label)
 
-@[simp]
+/-- The first fiber index carries the label's value.
+
+Not `@[simp]`: the left-hand side `a (finiteValueFirst a label)` has the family `a`
+as head symbol, so simp would try it on every application of every function. -/
 theorem finiteValueFirst_value {n : ℕ} (a : Fin n → ℝ)
     (label : FiniteValueLabel a) : a (finiteValueFirst a label) = label.1 := by
   exact (mem_finiteValueFiber a label (finiteValueFirst a label)).mp
     (Finset.min'_mem _ _)
 
-@[simp]
+/-- The last fiber index carries the label's value.
+
+Not `@[simp]`, for the same reason as `finiteValueFirst_value`. -/
 theorem finiteValueLast_value {n : ℕ} (a : Fin n → ℝ)
     (label : FiniteValueLabel a) : a (finiteValueLast a label) = label.1 := by
   exact (mem_finiteValueFiber a label (finiteValueLast a label)).mp
@@ -128,5 +158,5 @@ theorem finiteValueFiber_card_le_span {n : ℕ} (a : Fin n → ℝ)
 
 end
 
-end FinishTanTwoTheta
+end ApproximationNumber
 end TauCeti

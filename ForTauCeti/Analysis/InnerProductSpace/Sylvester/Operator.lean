@@ -62,7 +62,7 @@ noncomputable def sylvesterOperatorL (A : F →L[𝕜] F) (B : E →L[𝕜] E) :
 @[simp]
 theorem sylvesterOperatorL_apply (A : F →L[𝕜] F) (B : E →L[𝕜] E) (X : E →L[𝕜] F) :
     sylvesterOperatorL A B X = A ∘L X - X ∘L B :=
-  rfl
+  (rfl)
 
 /-- The bundled and unbundled Sylvester operators agree, definitionally.  Stated
 so the two cannot drift apart. -/
