@@ -263,6 +263,31 @@ private theorem le_re_inner_reflection_map (hT : T.IsSymmetric) {U : Submodule �
     linear_combination (b - a) / 2 * hpyth
   linarith [h1, h2, hswap1, hswap2, hpyth']
 
+/-- **The anticommutator of two reflections, in terms of the projection
+difference.**
+
+`R_U R_V + R_V R_U = 2 - 4 (P_U - P_V)²` for any two subspaces with orthogonal
+projections.  This is the algebraic identity that makes a *double* angle appear:
+composing the two reflections in either order and symmetrising leaves exactly the
+square of the projection difference, and `(P_U - P_V)²` is the operator whose
+spectrum the double-angle bounds are about.
+
+Nothing here is finite-dimensional or about eigenvalues; it was seven lines
+inside `eigen_cos_two_theta_bound`, where a reader looking for *why* reflections
+produce a double angle would not find it. -/
+theorem reflection_add_reflection_comm (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (x : E) :
+    U.reflection (V.reflection x) + V.reflection (U.reflection x) =
+      (2 : 𝕜) • x - (4 : 𝕜) •
+        ((U.starProjection - V.starProjection : E →L[𝕜] E)
+          ((U.starProjection - V.starProjection : E →L[𝕜] E) x)) := by
+  have hPP : U.starProjection (U.starProjection x) = U.starProjection x :=
+    Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
+  have hPvPv : V.starProjection (V.starProjection x) = V.starProjection x :=
+    Submodule.starProjection_eq_self_iff.mpr (V.starProjection_apply_mem x)
+  simp only [reflection_apply_ofNat_smul, sub_apply, map_sub, map_smul, hPP, hPvPv]
+  module
+
 end ReflectionAlgebra
 
 section Headline
@@ -506,17 +531,7 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
   have hyn : ‖y‖ = 1 := by
     rw [hydef, LinearIsometryEquiv.norm_map, LinearIsometryEquiv.norm_map, hxn]
   have hJJsum : y + z = ((2 * (1 - 2 * ν) : ℝ) : 𝕜) • x := by
-    have hexp : U.reflection (V.reflection x) + V.reflection (U.reflection x)
-        = (2 : 𝕜) • x - (4 : 𝕜) • ((U.starProjection - V.starProjection : E →L[𝕜] E)
-            ((U.starProjection - V.starProjection : E →L[𝕜] E) x)) := by
-      have hPP : U.starProjection (U.starProjection x) = U.starProjection x :=
-        Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
-      have hPvPv : V.starProjection (V.starProjection x) = V.starProjection x :=
-        Submodule.starProjection_eq_self_iff.mpr (V.starProjection_apply_mem x)
-      simp only [reflection_apply_ofNat_smul, sub_apply, map_sub,
-        map_smul, hPP, hPvPv]
-      module
-    rw [hydef, hzdef, hexp, hYx,
+    rw [hydef, hzdef, reflection_add_reflection_comm U V x, hYx,
       show ((2 * (1 - 2 * ν) : ℝ) : 𝕜) = (2 : 𝕜) - (4 : 𝕜) * (ν : 𝕜) from by push_cast; ring]
     module
   have hz' : z = ((2 * (1 - 2 * ν) : ℝ) : 𝕜) • x - y := by rw [← hJJsum]; abel
