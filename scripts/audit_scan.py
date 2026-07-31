@@ -150,10 +150,33 @@ def cmd_dup(files, args) -> int:
             if len(norm) < args.min_chars:
                 continue
             h = hashlib.sha1(norm.encode()).hexdigest()[:12]
-            buckets[h].append((rel, line, name, norm))
+            buckets[h].append((rel, line, name, norm, proof))
     groups = [v for v in buckets.values()
-              if len({f for f, _, _, _ in v}) > 1]
+              if len({f for f, _, _, _, _ in v}) > 1]
     groups.sort(key=len, reverse=True)
+
+    # A *forwarding alias* is not duplication: its whole proof is an application of
+    # the very theorem it shares a statement with, so there is one proof and two
+    # names -- which is what a compatibility layer is for.  `DavisKahan` has several
+    # deliberately (`BoundedOperator/Compat.lean` documents the pattern), and they
+    # differ from a real copy in the one way that matters: deleting the alias loses
+    # a name, deleting a copy loses nothing.
+    #
+    # Detected rather than listed, because the alias and its target usually have
+    # *different* names -- that is why a name-based check never sees these clusters
+    # and only the normalized-statement match finds them.
+    def is_forwarder(group) -> bool:
+        names = {n for _, _, n, _, _ in group}
+        for _, _, name, _, proof in group:
+            body = proof.strip()
+            if len(body.splitlines()) <= 3 and any(
+                    other != name and re.search(r"\b" + re.escape(other) + r"\b", body)
+                    for other in names):
+                return True
+        return False
+
+    forwarders = [g for g in groups if is_forwarder(g)]
+    groups = [g for g in groups if not is_forwarder(g)]
 
     # A `ForTauCetiRoadmap/**/Suggested.lean` statement matching its `ForTauCeti`
     # implementation is the roadmap *working*, not drift: those files say so
@@ -166,7 +189,7 @@ def cmd_dup(files, args) -> int:
     # mirrors and 1 real duplicate, and a report that is 96% expected is a report
     # nobody finishes reading -- the real one had been sitting in it unnoticed.
     def is_mirror(g) -> bool:
-        files = {f for f, _, _, _ in g}
+        files = {f for f, _, _, _, _ in g}
         road = {f for f in files if f.startswith("ForTauCetiRoadmap/")}
         return bool(road) and bool(files - road)
 
@@ -179,15 +202,24 @@ def cmd_dup(files, args) -> int:
     for g in groups[:args.top]:
         print(f"--- {len(g)} declarations share a normalized statement")
         print(f"    {g[0][3][:150]}")
-        for rel, line, name, _ in sorted(g):
+        for rel, line, name, _, _ in sorted(g):
             print(f"      {rel}:{line}  {name}")
         print()
+    if forwarders:
+        print(f"forwarding aliases (expected -- one proof, two names): {len(forwarders)}")
+        if args.mirrors:
+            for g in forwarders:
+                for rel, line, name, _, _ in sorted(g):
+                    print(f"      {rel}:{line}  {name}")
+                print()
+        else:
+            print("  pass --mirrors to list them")
     if mirrors:
         print(f"roadmap mirrors (expected -- a Suggested.lean signature matching its "
               f"implementation): {len(mirrors)}")
         if args.mirrors:
             for g in mirrors:
-                for rel, line, name, _ in sorted(g):
+                for rel, line, name, _, _ in sorted(g):
                     print(f"      {rel}:{line}  {name}")
                 print()
         else:
