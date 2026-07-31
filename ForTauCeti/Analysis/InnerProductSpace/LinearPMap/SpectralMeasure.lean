@@ -803,7 +803,10 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
     have hx := congrArg (fun L : H →L[ℂ] H => L φ)
       ((BorelCalculus.borelCalculus_mul hU hindb hfb).symm.trans hindf)
     simp only [_root_.mul_apply_eq_comp] at hx
-    exact ⟨Rop φ, hx⟩
+    -- through the API lemma, not through the range body: `⟨Rop φ, hx⟩` would need
+    -- `specRange` to reduce to a `LinearMap.range`, which is the only thing that kept
+    -- that definition exposed.
+    exact (mem_specRange_iff hA B hB _).mpr hx
   -- the left inverse
   have hkne : ∀ w : _root_.spectrum ℂ (cayley hA), ((κ w : ℂ) + Complex.I) ≠ 0 :=
     fun w => real_add_I_ne_zero (κ w)
