@@ -447,6 +447,86 @@ theorem mono_weaklyMajorized (Φ : SymmetricGauge) {n : ℕ} {x y : Fin n → �
   have := (Φ.toFiniteSymmetricGauge n).mono_weaklyMajorized h
   exact_mod_cast this
 
+/-- If any coordinate is infinite, so is the extension.
+
+This is the case that makes the `⨆`-definition of `extend` behave: the gauge is
+`∞` off its ideal without any summability hypothesis. -/
+theorem extend_eq_top_of_eq_top {a : ℕ → ℝ≥0∞} {n : ℕ} (h : a n = ⊤) :
+    Φ.extend a = ⊤ :=
+  top_unique (h ▸ le_extend Φ a n)
+
+/-- Truncation of a finite-valued sequence to the first `N` coordinates, as a
+finitely supported nonnegative sequence.
+
+Stated for `a : ℕ → ℝ≥0∞` together with a proof that every coordinate is finite,
+because that is the shape the majorization argument produces after its infinite
+cases are discharged. -/
+noncomputable def truncate (a : ℕ → ℝ≥0∞) (_ha : ∀ n, a n ≠ ⊤) (N : ℕ) : ℕ →₀ ℝ≥0 :=
+  Finsupp.onFinset (Finset.range N)
+    (fun i => if i < N then (a i).toNNReal else 0)
+    (by
+      intro i hi
+      by_cases h : i < N
+      · exact Finset.mem_range.mpr h
+      · simp [h] at hi)
+
+/-- The truncation is dominated by the sequence it truncates. -/
+theorem truncate_le (a : ℕ → ℝ≥0∞) (ha : ∀ n, a n ≠ ⊤) (N : ℕ) (i : ℕ) :
+    ((truncate a ha N) i : ℝ≥0∞) ≤ a i := by
+  by_cases h : i < N
+  · simp only [truncate, Finsupp.onFinset_apply, h, if_pos]
+    rw [ENNReal.coe_toNNReal (ha i)]
+  · simp [truncate, h]
+
+/-- **Finiteness transfers backwards along prefix-sum domination.**
+
+If every prefix sum of `a` is dominated by that of `b` and `b` is finite in every
+coordinate, then so is `a`.  A single infinite coordinate of `a` would make its
+prefix sum at `n + 1` equal `⊤`, which the hypothesis would force onto a prefix
+sum of `b` that is a finite sum of finite terms.
+
+This is the step that lets the majorization argument discharge `ℝ≥0∞` and work
+with honest finitely supported truncations. -/
+theorem ne_top_of_forall_sum_le {a b : ℕ → ℝ≥0∞}
+    (hbtop : ∀ n, b n ≠ ⊤)
+    (h : ∀ k, ∑ n ∈ Finset.range k, a n ≤ ∑ n ∈ Finset.range k, b n) :
+    ∀ n, a n ≠ ⊤ := by
+  intro n hn
+  have hsum : ∑ m ∈ Finset.range (n + 1), a m = ⊤ :=
+    ENNReal.sum_eq_top.mpr ⟨n, Finset.self_mem_range_succ n, hn⟩
+  have hle := h (n + 1)
+  rw [hsum, top_le_iff] at hle
+  obtain ⟨m, _, hm⟩ := ENNReal.sum_eq_top.mp hle
+  exact hbtop m hm
+
+/-! ### The remaining step of `extend_le_extend_of_forall_sum_le`
+
+The roadmap target (`ForTauCetiRoadmap/OperatorIdeals/Suggested.lean`) is
+
+```
+theorem extend_le_extend_of_forall_sum_le (Φ : SymmetricGauge)
+    {a b : ℕ → ℝ≥0∞} (ha : Antitone a) (hb : Antitone b)
+    (h : ∀ k, ∑ n ∈ Finset.range k, a n ≤ ∑ n ∈ Finset.range k, b n) :
+    Φ.extend a ≤ Φ.extend b
+```
+
+and it splits into three cases, of which **two are proved above**:
+
+* if some `b n = ⊤` then `extend_eq_top_of_eq_top` makes the right side `⊤`;
+* otherwise `ne_top_of_forall_sum_le` shows `a` is finite everywhere too;
+* **remaining:** with both finite, bound each `c` dominated by `a` using
+  `truncate a _ N` for `N` past `c`'s support -- `c ≤ truncate a _ N` termwise
+  gives `Φ c ≤ Φ (truncate a _ N)` by `mono`, and `truncate a _ N` is antitone
+  because `a` is -- then apply `le_of_prefixSum_le` against `truncate b _ N` and
+  finish with `le_extend_of_dominated` and `truncate_le`.
+
+The one piece of friction in that last step, recorded so it is not rediscovered:
+`le_of_prefixSum_le` states its hypothesis with
+`∑ i ∈ Finset.univ.filter (fun i : Fin N => (i : ℕ) < k)`, whereas the sequence
+hypothesis here is over `Finset.range k`, so the two prefix-sum shapes must be
+reconciled before the descent can be applied.
+-/
+
 end SymmetricGauge
 
 end TauCeti
