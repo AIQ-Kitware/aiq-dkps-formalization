@@ -22,6 +22,25 @@ arbitrary test subspace `Z` of the same dimension whose compression has
 spectrum at distance `≥ (β−α)/2 + δ` from the strip's midpoint; conclusion
 `tan ∠(Z, V) ≤ ‖residual‖ / δ`, stated per test vector so that the tangent's
 pole never appears.
+**Read this before staging it for Mathlib: the repository proves the same theorem without
+`[FiniteDimensional 𝕜 E]`.**  `TauCeti.DavisKahanExt.tan_theta_le'` in
+`DavisKahan/TanTheta/Vector.lean` has a statement identical to `tan_theta_le` below,
+hypothesis for hypothesis and conclusion for conclusion, over a complete space with no
+dimension assumption.  Its proof replaces the maximizer used here — which is where finite
+dimensionality enters, through compactness of the unit sphere of `Vᗮ` — with the operator
+norm of the compressed projection `P_Z|_{Vᗮ}` and an approximate-supremum limit.
+
+**So the module to submit is that one, not this one.**  Proposing the finite-dimensional
+form while the dimension-free form is proved two directories away is a weaker contribution
+and an obvious review finding.
+
+This file is kept deliberately, and not as a duplicate: the argument below is a different
+one, elementary and coordinate-free, and
+`DavisKahan/Alternative/FiniteDimensional/API/ClassicalProseLike.lean` consumes it on
+purpose, the way the rest of `Alternative/` keeps a second presentation of a result.  What
+was missing was this paragraph — the two files shared three statements and only one of them
+named the other.
+
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
