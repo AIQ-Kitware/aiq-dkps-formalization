@@ -70,8 +70,8 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  ["SetTheory.Cardinal.Lift","LinearAlgebra.Dimension.RankComp",
   "Analysis.Normed.Operator.FiniteRankCompact",
   A+"SpectralCutoff"]+["Analysis.OperatorIdeal.ApproximationNumber."+x for x in
-  ["Basic","Adjoint","Compact","CompactHilbert","DiagonalExample","Examples","FiniteDimensional",
-   "FiniteRestriction","KyFan","MinMax","MinMaxUpper","SameSequence"]]),
+  ["Basic","Adjoint","Compact","CompactHilbert","DiagonalExample","DiagonalSequence","Examples",
+   "FiniteDimensional","FiniteRestriction","KyFan","MinMax","MinMaxUpper","SameSequence"]]),
 ("T10","Symmetric operator ideals and Schatten norms",
  ["Analysis.OperatorIdeal.Family."+x for x in ["Basic","HilbertSchmidt","KyFan","KyFanDominance","OperatorNorm","TraceClass"]]
  +[A+"SchattenNorm",A+"HilbertSchmidtEnergy","Analysis.Normed.FiniteLpGauge"]),
