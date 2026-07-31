@@ -13,6 +13,7 @@ import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
 import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
+import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
 
 /-!
 # Symmetric norming functions on sequences
@@ -863,6 +864,26 @@ theorem symmetricGaugeFamily_injective {Φ Ψ : SymmetricGauge}
     have hinf : ∀ Θ : SymmetricGauge, Θ.extend a = ⊤ := fun Θ =>
       top_le_iff.1 (hsup ▸ Θ.iSup_le_extend a)
     rw [hinf Φ, hinf Ψ]
+
+/-- **Milestone B2 at the ideal-family API**: every family induced by a symmetric
+gauge respects Ky Fan domination.
+
+**The Hardy–Littlewood–Pólya transfer is not proved here** — it is
+`extend_le_extend_of_forall_sum_le`, and this instance is the packaging that
+exposes it.  `kyFanGauge T k` is by definition `∑_{n<k} aₙ(T)`, so the hypothesis
+*is* that lemma's prefix comparison; all that happens below is moving it across
+`ENNReal.ofReal`, which is monotone and additive on nonnegatives. -/
+instance isKyFanDominant_symmetricGaugeFamily (Φ : SymmetricGauge) :
+    TauCeti.IsKyFanDominant (symmetricGaugeFamily.{u, u} 𝕜 Φ) where
+  gauge_le_of_forall_kyFanGauge_le {E F} _ _ _ _ _ _ {A B} hAB := by
+    refine Φ.extend_le_extend_of_forall_sum_le
+      (fun i j hij => ENNReal.ofReal_le_ofReal
+        (ContinuousLinearMap.approximationNumber_antitone _ hij)) fun k => ?_
+    have hnn : ∀ (T : E →L[𝕜] F) n, 0 ≤ T.approximationNumber n :=
+      fun T n => ContinuousLinearMap.approximationNumber_nonneg T n
+    rw [← ENNReal.ofReal_sum_of_nonneg (fun n _ => hnn A n),
+      ← ENNReal.ofReal_sum_of_nonneg (fun n _ => hnn B n)]
+    exact ENNReal.ofReal_le_ofReal (hAB k)
 
 end Calkin
 
