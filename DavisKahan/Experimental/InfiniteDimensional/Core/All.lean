@@ -11,7 +11,7 @@ import DavisKahan.SpectralTheory.OperatorAngle
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.Geometry.Angle.OperatorAngleReal
 import DavisKahan.SpectralTheory.Real.ContinuousFunctionalCalculus
-import DavisKahan.SpectralTheory.Real.SpectralBridge
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Real
 import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
 import DavisKahan.Experimental.InfiniteDimensional.Core.Unbounded
 import DavisKahan.Sylvester.ClosedSylvesterEquation
