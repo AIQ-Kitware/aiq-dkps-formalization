@@ -110,7 +110,7 @@ BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 #: `specProjection -> spectralPVM -> toProjValMeasure -> specProj` chain, now a four-lemma `rw`.
 #: The other seven sites had already been rewired by the `specProjection` slice, which introduced
 #: that very lemma. A per-declaration removal cost is only valid against the tree it was taken on.
-PER_DECL_BASELINE = 11
+PER_DECL_BASELINE = 10
 
 PER_DECL = re.compile(r"^@\[expose\]\s*$|^@\[simps![^\]]*,\s*expose\]\s*$", re.M)
 
