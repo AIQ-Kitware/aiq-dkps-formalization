@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.Real.SpectralBridge
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Real
 import Mathlib.Algebra.Module.MinimalAxioms
 import Mathlib.Analysis.InnerProductSpace.ProdL2
 import Mathlib.Analysis.Normed.Operator.Banach
