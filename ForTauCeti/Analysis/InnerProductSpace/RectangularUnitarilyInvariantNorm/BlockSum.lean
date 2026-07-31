@@ -93,6 +93,27 @@ second. -/
   apply WithLp.ofLp_injective 2
   simp [orthogonalBlockSum]
 
+/-- **Doubling a map onto the diagonal of a block sum, as a linear map.**
+`A ↦ A ⊕ A`.
+
+Linear because `orthogonalBlockSum` is additive and homogeneous in each
+argument separately.  Stated as a definition because it was built twice inside
+proofs — as a `let` with its `map_add'` and `map_smul'` obligations discharged
+inline, twelve identical lines each time, in the two
+`finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_*` theorems.  Nothing about
+it depends on the certificate machinery those proofs are doing. -/
+noncomputable def orthogonalBlockSumDiagonal
+    {E₁ F₁ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] :
+    (E₁ →ₗ[𝕜] F₁) →ₗ[𝕜] (WithLp 2 (E₁ × E₁) →ₗ[𝕜] WithLp 2 (F₁ × F₁)) where
+  toFun A := orthogonalBlockSum A A
+  map_add' A B := by
+    ext x
+    apply WithLp.ofLp_injective 2
+    apply Prod.ext <;> simp [orthogonalBlockSum_apply]
+  map_smul' r A := orthogonalBlockSum_smul r A A
+
 /-- The adjoint of an orthogonal block sum is the block sum of the adjoints. -/
 @[simp] theorem orthogonalBlockSum_adjoint
     {E₁ E₂ F₁ F₂ : Type*}
