@@ -60,8 +60,14 @@ theorem injective_shiftMap_of_lower_bound (hc : 0 < c)
 
 /-! `isClosed_range_shiftMap_of_lower_bound` moved to
 `LinearPMap/SelfAdjointResolvent.lean` on 2026-07-30: that module proves the
-`z.im ≠ 0` case of the same statement and could not cite this one, because the
-import runs this way round.  Same namespace, so no consumer changed. -/
+`z.im ≠ 0` case of the same statement and could not cite this one, since this
+file is the one that does the importing.  Same namespace, so no consumer
+changed.
+
+(The previous wording began a line with the word "import", which
+`check_dependency_layers.py` reads as an import statement — it reported this
+module as importing a package called `runs`.  Prose inside a Lean file is
+scanned too.) -/
 
 /-- **Dense range, at a real point.**  A vector orthogonal to the range of
 `A - z` is an eigenvector at `z` — this is where `conj z = z` is used — and the
