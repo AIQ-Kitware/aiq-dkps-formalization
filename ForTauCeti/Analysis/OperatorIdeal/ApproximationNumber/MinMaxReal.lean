@@ -95,12 +95,16 @@ identical, so the copy is gone. -/
 /-! ## Continuous high-energy cutoff -/
 
 /-- A continuous cutoff which vanishes at energies at most `u²`, tends to one
-at high energy, and gives a tail operator bounded by `u`. -/
-private def spectralCutoff (u x : ℝ) : ℝ :=
+at high energy, and gives a tail operator bounded by `u`.
+
+Named `tailCutoff` rather than `spectralCutoff` because
+`ContinuousLinearMap.spectralCutoff` already exists in this library and is a
+different object — an *operator*, not this scalar profile. -/
+private def tailCutoff (u x : ℝ) : ℝ :=
   1 - u ^ 2 / max x (u ^ 2)
 
 private theorem continuous_spectralCutoff (u : ℝ) (hu : 0 < u) :
-    Continuous (spectralCutoff u) := by
+    Continuous (tailCutoff u) := by
   have hden : ∀ x : ℝ, max x (u ^ 2) ≠ 0 := by
     intro x hx
     have hle : u ^ 2 ≤ max x (u ^ 2) := le_max_right _ _
@@ -112,20 +116,20 @@ private theorem continuous_spectralCutoff (u : ℝ) (hu : 0 < u) :
 
 private theorem spectralCutoff_eq_zero_of_le
     {u x : ℝ} (hu : 0 < u) (hx : x ≤ u ^ 2) :
-    spectralCutoff u x = 0 := by
-  rw [spectralCutoff, max_eq_right hx]
+    tailCutoff u x = 0 := by
+  rw [tailCutoff, max_eq_right hx]
   have hu2 : u ^ 2 ≠ 0 := pow_ne_zero 2 hu.ne'
   rw [div_self hu2, sub_self]
 
 private theorem spectralCutoff_tail_bound
     {u x : ℝ} (hu : 0 < u) (_hx0 : 0 ≤ x) :
-    x * (1 - spectralCutoff u x) ^ 2 ≤ u ^ 2 := by
+    x * (1 - tailCutoff u x) ^ 2 ≤ u ^ 2 := by
   by_cases hx : x ≤ u ^ 2
   · rw [spectralCutoff_eq_zero_of_le hu hx]
     simpa using hx
   · have hux : u ^ 2 < x := lt_of_not_ge hx
     have hxpos : 0 < x := (sq_pos_of_pos hu).trans hux
-    rw [spectralCutoff, max_eq_left hux.le]
+    rw [tailCutoff, max_eq_left hux.le]
     have hid : 1 - (1 - u ^ 2 / x) = u ^ 2 / x := by ring
     rw [hid]
     have hmul : u ^ 4 ≤ u ^ 2 * x := by
@@ -137,13 +141,13 @@ private theorem spectralCutoff_tail_bound
 
 private theorem spectralCutoff_lower_bound
     {u x : ℝ} (hu : 0 < u) :
-    u ^ 2 * (spectralCutoff u x) ^ 2 ≤
-      x * (spectralCutoff u x) ^ 2 := by
+    u ^ 2 * (tailCutoff u x) ^ 2 ≤
+      x * (tailCutoff u x) ^ 2 := by
   by_cases hx : x ≤ u ^ 2
   · rw [spectralCutoff_eq_zero_of_le hu hx]
     simp
   · exact mul_le_mul_of_nonneg_right (le_of_not_ge hx)
-      (sq_nonneg (spectralCutoff u x))
+      (sq_nonneg (tailCutoff u x))
 
 /-! ## The real threshold theorem -/
 
@@ -200,7 +204,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
   have hCfix : conjugateOperator C = C := by
     rw [hCeq, conjugateOperator_complexify]
   -- Split the spectrum of the Gram operator at `u ^ 2` with the continuous cutoff.
-  let p : ℝ → ℝ := spectralCutoff u
+  let p : ℝ → ℝ := tailCutoff u
   let q : ℝ → ℝ := fun x => 1 - p x
   have hpcont : Continuous p := continuous_spectralCutoff u hu0
   have hqcont : Continuous q := continuous_const.sub hpcont
@@ -261,7 +265,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
     intro x hx
     have hx0 := hCspec_nonneg x hx
     have hbound := spectralCutoff_tail_bound hu0 hx0
-    change |x * (1 - spectralCutoff u x) ^ 2| ≤ u ^ 2
+    change |x * (1 - tailCutoff u x) ^ 2| ≤ u ^ 2
     rw [abs_of_nonneg (mul_nonneg hx0 (sq_nonneg _))]
     exact hbound
   have htailComplex : ‖Tc ∘L Qc‖ ≤ u := by
@@ -285,7 +289,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
     intro x hx
     have hx0 := hCspec_nonneg x hx
     have hcut := spectralCutoff_lower_bound (x := x) hu0
-    change 0 ≤ (x - u ^ 2) * (spectralCutoff u x) ^ 2
+    change 0 ≤ (x - u ^ 2) * (tailCutoff u x) ^ 2
     nlinarith
   have hlowerIdentity :
       cfc (fun x => (x - u ^ 2) * (p x) ^ 2) C =
