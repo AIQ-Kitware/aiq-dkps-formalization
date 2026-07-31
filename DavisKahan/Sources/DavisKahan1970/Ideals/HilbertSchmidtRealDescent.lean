@@ -60,7 +60,7 @@ noncomputable def realPartOperator
       map_smul' := fun r x => by simp }
   exact L.mkContinuous ‖T‖ fun x => by
     calc
-      ‖L x‖ ≤ ‖T (ofReal x)‖ := norm_re_le _
+      ‖L x‖ ≤ ‖T (ofReal x)‖ := Foundation.RealComplexification.norm_re_le _
       _ ≤ ‖T‖ * ‖ofReal x‖ := T.le_opNorm _
       _ = ‖T‖ * ‖x‖ := by rw [ofReal.norm_map]
 
