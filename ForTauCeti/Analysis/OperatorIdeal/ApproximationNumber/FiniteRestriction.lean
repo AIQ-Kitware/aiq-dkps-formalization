@@ -221,9 +221,9 @@ calculus, `TauCeti.ApproximationNumber.hasMinMaxLowerBoundEverywhere_real` by
 complexification.  Together they are what lets the trace-class family be built once over
 `RCLike 𝕜` rather than once per field.
 
-This is the same device as `HasKyFanApproximationGaugeTriangle` in the paper library, one
-layer lower: that class assumes the Ky Fan triangle inequality, this one assumes the single
-fact the triangle inequality is *proved from*. -/
+Note what it does *not* assume: the Ky Fan triangle inequality itself.  Assuming that would
+be assuming a theorem, and this class is one layer below it — the inequality is derived, in
+`ContinuousLinearMap.kyFanGauge_add_le_of_hasMinMaxLowerBound`. -/
 class HasMinMaxLowerBoundEverywhere (𝕜 : Type u) [RCLike 𝕜] : Prop where
   out : ∀ {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
