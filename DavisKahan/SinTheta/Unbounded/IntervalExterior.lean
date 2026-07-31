@@ -47,7 +47,7 @@ def UnboundedIntervalExteriorGapPMap
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A)
 
-namespace SpectralIntervalExteriorGap
+namespace SylvesterIntervalExteriorGap
 
 omit [CompleteSpace F] [CompleteSpace G] in
 /-- View a source-facing interval/exterior gap through its canonical partial
@@ -55,11 +55,11 @@ maps. -/
 theorem toPMap
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G)}
-    {β α δ : ℝ} (h : SpectralIntervalExteriorGap A B β α δ) :
+    {β α δ : ℝ} (h : SylvesterIntervalExteriorGap A B β α δ) :
     UnboundedIntervalExteriorGapPMap A.toLinearPMap B.toLinearPMap β α δ := by
   exact h
 
-end SpectralIntervalExteriorGap
+end SylvesterIntervalExteriorGap
 
 /-- Generalized finite-interval unbounded sine-theta theorem at ideal-gauge
 scope, using Spectra spectrum hypotheses and no ordered half-line dependency. -/
@@ -74,7 +74,7 @@ theorem generalizedSinTheta_unbounded_of_spectralIntervalExteriorGap
     {β α δ ε : ℝ}
     (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : SpectralIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
+    (hgap : SylvesterIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
       δ * ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)
