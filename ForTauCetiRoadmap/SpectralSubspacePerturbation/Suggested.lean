@@ -64,7 +64,15 @@ noncomputable def sinThetaMap (U V : Submodule 𝕜 E)
   ((Vᗮ.starProjection ∘L U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
 
 /-- The Frobenius (Hilbert–Schmidt) norm through the standard orthonormal
-basis; basis independence is part of the consumed norm API. -/
+basis; basis independence is part of the consumed norm API.
+
+**Already staged, under a different name (checked 2026-07-31).**  This is
+`TauCeti.UnitarilyInvariantNorm.frobenius` in
+`ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean`, whose `toFun` is
+character-for-character this body, with the rectangular twin in
+`RectangularUnitarilyInvariantNorm/Instances.lean` and basis independence proved as
+`frobenius_apply`.  The Yu--Wang--Samworth files already consume it under that name.  Kept here
+only because this file records target *shapes*; there is nothing to prove. -/
 noncomputable def frobeniusNorm [FiniteDimensional 𝕜 E] (T : E →ₗ[𝕜] F) : ℝ :=
   Real.sqrt (∑ i, ‖T (stdOrthonormalBasis 𝕜 E i)‖ ^ 2)
 
