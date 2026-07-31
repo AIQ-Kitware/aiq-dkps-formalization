@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.SpectralTheory.OperatorAngle
-import ForTauCeti.Algebra.RingInverse
 import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 import Mathlib.Analysis.Normed.Operator.Banach
 import Mathlib.Analysis.Normed.Ring.Units
