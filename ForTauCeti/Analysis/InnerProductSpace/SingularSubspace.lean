@@ -166,9 +166,9 @@ private theorem re_inner_gram_eigenvectorBasis_self
     (hsym : (A.adjoint ∘ₗ A).IsSymmetric) (hn : Module.finrank 𝕜 E = n) (k : Fin n) :
     RCLike.re ⟪(A.adjoint ∘ₗ A) (hsym.eigenvectorBasis hn k),
         hsym.eigenvectorBasis hn k⟫_𝕜 = hsym.eigenvalues hn k := by
-  rw [hsym.apply_eigenvectorBasis hn k, inner_smul_left, RCLike.conj_ofReal,
-    RCLike.re_ofReal_mul, inner_self_eq_norm_sq,
-    (hsym.eigenvectorBasis hn).orthonormal.norm_eq_one k, one_pow, mul_one]
+  rw [hsym.apply_eigenvectorBasis hn k,
+    re_inner_real_smul_self_of_norm_one
+      ((hsym.eigenvectorBasis hn).orthonormal.norm_eq_one k)]
 
 /-- **Contraction ⇒ singular values ≤ 1.** If `A` is a contraction
 (`‖A x‖ ≤ ‖x‖`), then every singular value satisfies `σᵢ(A) ≤ 1`.  Each eigenvalue
@@ -185,11 +185,7 @@ theorem singularValues_le_one_of_contraction {A : E →ₗ[𝕜] F}
     rw [LinearMap.comp_apply, LinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
   have heig : RCLike.re ⟪(A.adjoint ∘ₗ A) (hSsym.eigenvectorBasis hn i),
       hSsym.eigenvectorBasis hn i⟫_𝕜 = hSsym.eigenvalues hn i := by
-<<<<<<< HEAD
-    rw [hSsym.apply_eigenvectorBasis hn i, re_inner_real_smul_self_of_norm_one hunit]
-=======
     exact re_inner_gram_eigenvectorBasis_self A hSsym hn i
->>>>>>> origin/yardrat-work
   have heval : hSsym.eigenvalues hn i ≤ 1 := by
     rw [← heig, hquad]
     have := h (hSsym.eigenvectorBasis hn i)
@@ -320,14 +316,7 @@ theorem exists_norm_apply_eq_singularValues_last (A : E →ₗ[𝕜] F) (hn : fi
   have hsym := A.isSymmetric_adjoint_comp_self
   refine ⟨hsym.eigenvectorBasis hn k, (hsym.eigenvectorBasis hn).orthonormal.norm_eq_one k, ?_⟩
   have hsq : ‖A (hsym.eigenvectorBasis hn k)‖ ^ 2 = A.singularValues (n - 1) ^ 2 := by
-<<<<<<< HEAD
-    rw [sq_norm_apply_eq_re_inner_gram, hsym.apply_eigenvectorBasis hn k,
-      re_inner_real_smul_self_of_norm_one
-        ((hsym.eigenvectorBasis hn).orthonormal.norm_eq_one k),
-      A.sq_singularValues_of_lt hn hlast]
-=======
     rw [sq_norm_apply_eigenvectorBasis A hsym hn k, A.sq_singularValues_of_lt hn hlast]
->>>>>>> origin/yardrat-work
   have := congrArg Real.sqrt hsq
   rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (A.singularValues_nonneg _)] at this
 
@@ -360,14 +349,7 @@ theorem exists_norm_apply_eq_singularValues_zero (A : E →ₗ[𝕜] F) (hn : fi
   refine ⟨hsym.eigenvectorBasis hn ⟨0, hn0⟩,
     (hsym.eigenvectorBasis hn).orthonormal.norm_eq_one _, ?_⟩
   have hsq : ‖A (hsym.eigenvectorBasis hn ⟨0, hn0⟩)‖ ^ 2 = A.singularValues 0 ^ 2 := by
-<<<<<<< HEAD
-    rw [sq_norm_apply_eq_re_inner_gram, hsym.apply_eigenvectorBasis hn _,
-      re_inner_real_smul_self_of_norm_one
-        ((hsym.eigenvectorBasis hn).orthonormal.norm_eq_one _),
-      A.sq_singularValues_of_lt hn hn0]
-=======
     rw [sq_norm_apply_eigenvectorBasis A hsym hn _, A.sq_singularValues_of_lt hn hn0]
->>>>>>> origin/yardrat-work
   have := congrArg Real.sqrt hsq
   rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (A.singularValues_nonneg _)] at this
 
