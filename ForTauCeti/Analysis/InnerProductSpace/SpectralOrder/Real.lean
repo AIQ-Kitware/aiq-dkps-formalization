@@ -23,55 +23,47 @@ import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
 
 /-!
-# Real spectral bridge roadmap
+# The real spectral-order bridge
 
-The supported bounded theorem is already scalar-generic.  This module records
-the missing real-Hilbert-space bridge from actual spectra to quadratic-form
-bounds.  A direct Rayleigh-shift proof is preferred; complexification is a
-secondary route.  The declarations here are excluded from the supported
-umbrella until the bridge is discharged.
--/
+From the **spectrum** of a symmetric real operator to **quadratic-form bounds**,
+and from there to the real Davis--Kahan estimate on restrictions.  This is the
+real-scalar counterpart of `SpectralOrder/Complex.lean`, name for name.
 
+## Main results
 
-/-! ## Weak-agent execution plan: the real spectral-order bridge
+* `upperFormBoundOn_top_of_spectrum_subset_Iic` — `spectrum ℝ A ⊆ Iic c` implies
+  `A.UpperFormBoundOn ⊤ c`.  This is the bridge; everything below is transport.
+* `lowerFormBoundOn_top_of_spectrum_subset_Ici` — its negation.
+* `upperFormBoundOn_of_restriction_spectrum_subset_Iic` and
+  `lowerFormBoundOn_of_restriction_spectrum_subset_Ici` — the same on a reducing
+  subspace.
+* `opNorm_starProjection_sub_le_of_restriction_spectra` — the sharp real
+  Davis--Kahan bound `‖P_U − P_W‖ ≤ ‖B − A‖ / g` from the spectra of the actual
+  restrictions.
 
-Do not try to prove `upperFormBoundOn_top_of_spectrum_subset_Iic` by rewriting
-complex CFC theorems under real scalars; the missing instance is the substance
-of the problem.  Choose one of the following routes and complete its helper
-API first.
+## How the bridge is proved, and why not the other way
 
-### Preferred route: minimal norm-preserving complexification
+**Over `ℝ` there is no continuous functional calculus to appeal to**, so the
+obvious route — rewrite the complex CFC theorems under real scalars — is not
+available: the missing instance *is* the problem.  Two routes were open, a
+norm-preserving complexification and constructing the real CFC instance
+outright; the proof below takes neither, and instead runs the direct
+Rayleigh shift, which needs no new instance at all.
 
-1. Introduce a complex Hilbert space `Complexification E` and an isometric
-   real-linear embedding `ofReal : E →ₗᵢ[ℝ] Complexification E`.
-2. Extend a real bounded operator `A` to a complex-linear operator
-   `complexify A`, with simp lemmas for application to `ofReal x`, adjoint,
-   subtraction, scalar shifts, and quadratic forms.
-3. Prove self-adjointness transports and prove the real spectrum is the real
-   part of the complex spectrum for self-adjoint `A`.  It is enough here to
-   prove the one-sided implication needed for the upper spectral bound.
-4. Apply the existing complex theorem
-   `upperFormBoundOn_top_of_spectrum_subset_Iic` to `complexify A` and pull the
-   quadratic-form inequality back along `ofReal`.
+Choose `m > ‖A‖` and set `S = A + m • 1`.  Translating the spectrum
+(`spectrum.singleton_add_eq`) puts every spectral value of `S` in `(0, m + c]`;
+`ContinuousLinearMap.spectralRadius_eq_nnnorm` for self-adjoint `S`, together
+with positivity of that shifted spectrum, gives `‖S‖ ≤ m + c`; then
+`abs_re_inner_le_norm` applied to `S x`, minus `m * ‖x‖ ^ 2`, is the claim.
 
-Keep complexification lemmas in the dedicated foundation module; this bridge
-should contain only the final transport.
+**The seam is the third step, and it is the reason a norm bound will not do.**
+`spectralRadius` records *absolute values*, so the argument has to use the
+positivity of the shifted spectrum explicitly before it can convert the
+spectral-radius supremum into the upper endpoint `c`.  A bound of the form
+`‖A‖ ≤ c` loses exactly that sign information and is insufficient.
 
-### Alternative route: real CFC/star order
-
-Construct the missing real continuous-functional-calculus instance for
-self-adjoint operators, then prove that spectrum containment of `cI-A` in
-`[0,∞)` implies positivity.  Convert positivity to the displayed quadratic
-form inequality.  Do not use the norm bound `‖A‖ ≤ c`; it loses sign
-information and is insufficient.
-
-### Proof organization
-
-First prove a global theorem on `⊤`; the lower theorem is negation, and the
-restricted theorems should remain pure transport through
-`ContinuousLinearMap.IsSymmetric.restrict_of_invariant`.  Test every coercion
-between continuous and plain linear maps in a tiny local `example` before
-embedding it into the restriction proof.
+Downstream real results reduce to this single theorem, so it should not be
+replaced by an opaque real-spectrum definition.
 -/
 
 namespace TauCeti
@@ -84,27 +76,22 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
 
 /-- Real spectral upper bound implies a global quadratic-form upper bound.
 
-This is the one genuinely missing theorem in the real bridge.  The preferred
-proof is the direct Rayleigh-shift argument:
+**This is the bridge**: every other real result in this module is transport off
+it.  The proof is the direct Rayleigh shift:
 
 1. choose `m > ‖A‖` and set `S = A + m • 1`;
 2. translate the spectrum with `spectrum.singleton_add_eq`, so every spectral
    value of `S` lies in `(0, m + c]`;
 3. use `ContinuousLinearMap.spectralRadius_eq_nnnorm` for the self-adjoint
-   operator `S` and positivity of its real spectrum to show `‖S‖ ≤ m + c`;
-4. apply `abs_re_inner_le_norm` (or the Rayleigh quotient bound) to `S x` and
-   subtract `m * ‖x‖ ^ 2`.
+   operator `S` and positivity of its real spectrum to get `‖S‖ ≤ m + c`;
+4. apply `abs_re_inner_le_norm` to `S x` and subtract `m * ‖x‖ ^ 2`.
 
-The technical seam is step 3: `spectralRadius` records absolute values, so the
-proof must explicitly use the positive shifted spectrum before converting the
-spectral-radius supremum into the upper endpoint.  Do not replace this theorem
-with an opaque real-spectrum definition; all downstream real results reduce to
-this single bridge.
-
-Implementation strategy: isolate lemmas for shifted-spectrum positivity,
-nonemptiness of a real self-adjoint spectrum from
-`spectralRadius_eq_nnnorm`, and conversion of the attained spectral radius to
-an ordinary real norm before assembling the final Rayleigh estimate. -/
+The seam is step 3: `spectralRadius` records absolute values, so the proof uses
+the positivity of the shifted spectrum explicitly before converting the
+spectral-radius supremum into the upper endpoint `c`.  **A bound of the form
+`‖A‖ ≤ c` loses exactly that sign information and does not suffice** -- which is
+also why this theorem should not be replaced by an opaque real-spectrum
+definition. -/
 theorem upperFormBoundOn_top_of_spectrum_subset_Iic
     (A : E →L[ℝ] E) (hA : A.IsSymmetric) {c : ℝ}
     (hσ : spectrum ℝ A ⊆ Set.Iic c) :
@@ -259,8 +246,9 @@ theorem lowerFormBoundOn_of_restriction_spectrum_subset_Ici
   change c * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℝ at h
   exact h
 
-/-- Target sharp real Davis--Kahan theorem from spectra of actual
-restrictions. -/
+/-- The sharp real Davis--Kahan bound, from the spectra of the actual
+restrictions: if the two halves of `A` and of `B` are each separated by the gap
+`g`, then `‖P_U − P_W‖ ≤ ‖B − A‖ / g`. -/
 theorem opNorm_starProjection_sub_le_of_restriction_spectra
     {A B : E →L[ℝ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U W : Submodule ℝ E} [U.HasOrthogonalProjection]
