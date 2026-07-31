@@ -44,38 +44,6 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
-namespace ExactSinTheta
-
-/-- Interval/exterior separation for a Sylvester pair, over the Spectra
-spectrum.  Either orientation is permitted: one block's spectrum lies in
-`[β, α]` and the other's avoids `(β - δ, α + δ)`.
-
-This is the hypothesis of the two orientation theorems below, and it lives here
-rather than with either of them because both the Sylvester capstone
-(`Sylvester/Unbounded/AllGap.lean`) and the sine-theta endpoint
-(`SinTheta/Unbounded/IntervalExterior.lean`) need it and this module is the one
-they already share.
-
-`RealSpectrumIntervalExteriorGap` (`Sylvester/Gap.lean`) is the same
-configuration over `LinearPMap.realSpectrum`, with the exterior condition
-spelled as a containment rather than as a non-membership; it is a genuinely
-different proposition and `sylvesterIntervalExteriorGap_of_realSpectrum`
-transports it to this one. -/
-def SylvesterIntervalExteriorGap
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
-    (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
-    (β α δ : ℝ) : Prop :=
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
-        Set.Icc β α ∧
-    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B.toLinearPMap) ∨
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
-        Set.Icc β α ∧
-    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap)
-
-end ExactSinTheta
-
 /-- **Form bounds from spectral inclusion.**  A closed self-adjoint operator
 with Spectra spectrum in `[β, α]` has its quadratic form in `[β, α]`:
 transported through the bounded realization and the centered norm bound. -/

@@ -98,7 +98,7 @@ At least one diagonal block has bounded spectrum, so this is not the fully
 two-unbounded theorem.
 
 `generalizedSinTheta_unbounded_of_spectralIntervalExteriorGap` is the same statement over
-`SylvesterIntervalExteriorGap`, the Spectra-spectrum spelling of the same
+`SpectralIntervalExteriorGap`, the Spectra-spectrum spelling of the same
 configuration. -/
 theorem generalizedSinTheta_unbounded_of_realSpectrumIntervalExteriorGap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
