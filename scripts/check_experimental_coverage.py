@@ -62,7 +62,16 @@ EXCLUDED: dict[str, str] = {
         "declarations that are still unresolved' -- the interface it was written "
         "against left ClosedOperator/Basic.lean and took the fields with it.",
     "DavisKahan.Experimental.InfiniteDimensional.OperatorBlocks.OffDiagonal":
-        "17 errors against a drifted block API.",
+        "**CLASS: written against an interface that was never built.**  19 errors, and the "
+        "reason recorded here until 2026-07-31 -- 'a drifted block API' -- was wrong in the "
+        "way that matters, because 'drifted' invites a repair.  The file references "
+        "`riccatiEquation_of_graph_reduces`, `diagonalBlock`, `offDiagonalBlock`, "
+        "`ContinuedSpectralDatum`, `twoAngleTransform` and "
+        "`exists_continuedSpectralDatum_of_offDiagonal`; **six of those seven names are "
+        "absent from the entire repository** (only `tanTwoAngleOperator` exists), and "
+        "`git log --all -S` over each shows the only file that has ever contained them is "
+        "this one.  Nothing moved out from under it.  Delete-or-rewrite is a decision for "
+        "an owner, not a repair -- same disposition as `Core/Unbounded` below.",
     "DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner":
         "**blocked on absent Mathlib, not on this repository.**  Narrowed from 8 errors to "
         "4 on 2026-07-31: the universe mismatch and the `Seminorm` fields are fixed, and "
@@ -72,14 +81,27 @@ EXCLUDED: dict[str, str] = {
         "EXP-BUILD-ADJ: the notation is Mathlib's, localized in `LinearPMap`, so that half "
         "needs `open scoped LinearPMap` and not a definition.**  What is genuinely absent "
         "is `Seminorm.integral_le` alone -- same category as `compactOperatorNorm` and "
-        "Schauder's theorem: the chain leaves the repository.",
+        "Schauder's theorem: the chain leaves the repository.  "
+        "**CLASS: one external blocker plus two local errors, re-measured 2026-07-31.**  Of "
+        "the 7 errors, exactly one is external (`Seminorm.integral_le` at :71).  The other "
+        "two roots are local and neither needs Mathlib: a type mismatch at :62, and at :77 "
+        "the `\u2020` adjoint notation applied to a `ContinuousLinearMap` -- `\u2020` is "
+        "Mathlib\'s and is scoped to `LinearPMap`, so it is not merely out of scope here, "
+        "it is the wrong notation for a bounded operator.  The two errors at :122/:123 are "
+        "cascade: :77 fails, so the theorem it heads never registers, and its own use "
+        "below reports an unknown identifier.  **So this module is nearer to building than "
+        "an error count suggests** -- but it cannot reach green while :71 stands.",
     "DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry":
-        "21 errors against drifted Mathlib: `Continuous.ofReal` and "
-        "`HasFDerivAtFilter.ofReal` are gone, and "
-        "`circleIntegral_sub_center_inv_smul_of_differentiable_on_off_countable` has "
-        "renamed arguments.  **Newly visible on 2026-07-31**: it inherited its exclusion "
-        "from `ContourReuseBridge` until that was repaired, and repairing one module is "
-        "what exposed the next.",
+        "**CLASS: drifted Mathlib, and the only one of the four that is genuinely "
+        "repairable here.**  21 errors, and every unknown name has a live Mathlib "
+        "successor: `circleIntegral_def` -> `circleIntegral_def_Icc`; "
+        "`Complex.circleIntegral_eq_zero_of_differentiable_on_ball` -> "
+        "`circleIntegral_eq_zero_of_differentiable_on_off_countable` (generalised, so the "
+        "argument list changes); `Complex.abs.map_sub` -> renamed with the `Complex.abs` "
+        "restructuring.  Also `Continuous.ofReal` and `HasFDerivAtFilter.ofReal`.  "
+        "**Newly visible on 2026-07-31**: it inherited its exclusion from "
+        "`ContourReuseBridge` until that was repaired, and repairing one module is what "
+        "exposed the next.",
     "DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.OperatorAbsoluteValueComplex":
         "KyFanDominantIdealFamily.gaugeReal no longer exists.",
     "DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.ReflectionTransport":
