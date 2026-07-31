@@ -183,7 +183,7 @@ private theorem norm_diagonal_apply_sub_self_le (b : OrthonormalBasis (Fin d) �
     ‖diagonal b c x - x‖ ≤ δ * ‖x‖ := by
   have hsub : diagonal b c - LinearMap.id = diagonal b fun k => c k - 1 := by
     refine b.toBasis.ext fun k => ?_
-    rw [OrthonormalBasis.coe_toBasis, LinearMap.sub_apply, LinearMap.id_apply, diagonal_basis,
+    simp only [OrthonormalBasis.coe_toBasis, LinearMap.sub_apply, LinearMap.id_apply,
       diagonal_basis, sub_smul, one_smul]
   have hx : diagonal b c x - x = diagonal b (fun k => c k - 1) x := by
     have := congrArg (fun T : E →ₗ[ℝ] E => T x) hsub
@@ -367,16 +367,16 @@ theorem exists_linearIsometryEquiv_comp_polarFactor (M : E →ₗ[ℝ] E) {δ : 
   have hRS : ∀ x : E, R (S x) = x := by
     have : R ∘ₗ S = LinearMap.id := by
       refine b.toBasis.ext fun k => ?_
-      rw [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, LinearMap.id_apply, hS, hR,
-        diagonal_basis, map_smul, diagonal_basis, smul_smul,
+      simp only [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, LinearMap.id_apply, hS, hR,
+        diagonal_basis, map_smul, smul_smul,
         mul_inv_cancel₀ (ne_of_gt (hsqrtpos k)), one_smul]
     intro x
     exact congrArg (fun T : E →ₗ[ℝ] E => T x) this
   -- `S` is a square root of the Gram operator.
   have hSS : S ∘ₗ S = M.adjoint ∘ₗ M := by
     refine b.toBasis.ext fun k => ?_
-    rw [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, hS, diagonal_basis, map_smul,
-      diagonal_basis, smul_smul, Real.mul_self_sqrt (le_of_lt (hμpos k))]
+    simp only [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, hS, diagonal_basis, map_smul,
+      smul_smul, Real.mul_self_sqrt (le_of_lt (hμpos k))]
     exact (hGbasis k).symm
   -- The candidate isometry `W₀ = M ∘ R`, which is orthonormal on the eigenbasis.
   set W₀ : E →ₗ[ℝ] E := M ∘ₗ R with hW
