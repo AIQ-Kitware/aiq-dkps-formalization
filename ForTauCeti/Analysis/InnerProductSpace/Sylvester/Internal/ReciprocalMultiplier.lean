@@ -679,6 +679,29 @@ theorem kyFan_reciprocalMultiplier_le_real_of_approximateFourierInterpolation
     _ = (Real.pi / 2) * K + eps * K := by ring
     _ ≤ (Real.pi / 2) * K + eta := by gcongr
 
+/-- **The gap hypothesis supplies the Fourier interpolation, at every tolerance.**
+Given a separation `δ ≤ |α i - β j|` and an integrable `π / 2` kernel, the
+normalised arrays `α / δ`, `β / δ` are separated by `1`, so the kernel gives a
+finite interpolation of mass `π / 2 + ε` and `..._of_normalized` scales it back.
+
+Scalar-free, and stated because the complex and real Ky Fan bounds below each
+consumed it inline in nine identical lines — identical because there is no
+scalar field in it at all: `α`, `β`, `δ` and `ε` are real throughout, and the
+operators do not appear. -/
+private theorem hasFiniteReciprocalFourierInterpolation_of_gap
+    {m n : ℕ} (α : Fin m → ℝ) (β : Fin n → ℝ) {δ : ℝ} (hδ : 0 < δ)
+    (hgap : ∀ i j, δ ≤ |α i - β j|)
+    (hkernel : HasIntegrableReciprocalFourierKernel (Real.pi / 2))
+    (ε : ℝ) (hε : 0 < ε) :
+    HasFiniteReciprocalFourierInterpolation α β δ (Real.pi / 2 + ε) := by
+  apply hasFiniteReciprocalFourierInterpolation_of_normalized α β hδ
+  apply hasFiniteReciprocalFourierInterpolation_pi_div_two_add_eps_of_integrableKernel
+    (fun i => α i / δ) (fun j => β j / δ) _ hε hkernel
+  intro i j
+  rw [show α i / δ - β j / δ = (α i - β j) / δ by ring]
+  rw [abs_div, abs_of_pos hδ]
+  exact (le_div_iff₀ hδ).2 (by simpa using hgap i j)
+
 /-- A sharp integrable reciprocal kernel implies the unconditional complex
 Ky Fan reciprocal-multiplier estimate.
 
@@ -707,16 +730,9 @@ theorem kyFan_reciprocalMultiplier_le_complex_of_integrableKernel
     δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
       (Real.pi / 2) *
         RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C := by
-  apply kyFan_reciprocalMultiplier_le_complex_of_approximateFourierInterpolation
-    eF eE α β hδ _ hcoeff k
-  intro eps heps
-  apply hasFiniteReciprocalFourierInterpolation_of_normalized α β hδ
-  apply hasFiniteReciprocalFourierInterpolation_pi_div_two_add_eps_of_integrableKernel
-    (fun i => α i / δ) (fun j => β j / δ) _ heps hkernel
-  intro i j
-  rw [show α i / δ - β j / δ = (α i - β j) / δ by ring]
-  rw [abs_div, abs_of_pos hδ]
-  exact (le_div_iff₀ hδ).2 (by simpa using hgap i j)
+  exact kyFan_reciprocalMultiplier_le_complex_of_approximateFourierInterpolation
+    eF eE α β hδ
+    (hasFiniteReciprocalFourierInterpolation_of_gap α β hδ hgap hkernel) hcoeff k
 
 /-- A sharp integrable reciprocal kernel implies the sharp real Ky Fan
 estimate through doubled orthogonal rotations and singular-value descent. -/
@@ -740,17 +756,9 @@ theorem kyFan_reciprocalMultiplier_le_real_of_integrableKernel
     delta * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
       (Real.pi / 2) *
         RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C := by
-  apply kyFan_reciprocalMultiplier_le_real_of_approximateFourierInterpolation
-    eF eE alpha beta hdelta _ hcoeff k
-  intro eps heps
-  apply hasFiniteReciprocalFourierInterpolation_of_normalized alpha beta hdelta
-  apply hasFiniteReciprocalFourierInterpolation_pi_div_two_add_eps_of_integrableKernel
-    (fun i => alpha i / delta) (fun j => beta j / delta) _ heps hkernel
-  intro i j
-  rw [show alpha i / delta - beta j / delta =
-    (alpha i - beta j) / delta by ring]
-  rw [abs_div, abs_of_pos hdelta]
-  exact (le_div_iff₀ hdelta).2 (by simpa using hgap i j)
+  exact kyFan_reciprocalMultiplier_le_real_of_approximateFourierInterpolation
+    eF eE alpha beta hdelta
+    (hasFiniteReciprocalFourierInterpolation_of_gap alpha beta hdelta hgap hkernel) hcoeff k
 
 /-- **Unconditional sharp complex Ky Fan reciprocal-multiplier estimate.**
 The explicit Haagerup--Zsidó kernel supplies the analytic certificate; no
