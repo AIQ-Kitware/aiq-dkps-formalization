@@ -113,6 +113,51 @@ theorem abs_doubleAngleTangent_sub_le {r s t : ℝ}
         ((1 - s ^ 2) * (1 - t ^ 2)) :=
       mul_le_mul_of_nonneg_left hlow (by positivity)
 
+/-- **Right-continuity of the scalar double-angle tangent, in the `ε` form.**
+
+Any contractive value can be raised strictly without raising its tangent by
+more than a prescribed `ε`.  This is what lets the finite-rank approximant
+argument work at a cutoff `v > a_n(X)` strictly above the approximation number
+while still reporting a bound of `doubleAngleTangent (a_n X) + ε`.
+
+**The proof is `abs_doubleAngleTangent_sub_le` and arithmetic.**  That lemma
+already supplies a Lipschitz constant on every `[0, r]` with `r < 1`, which is
+exactly what choosing `v` needs; the bound is used opaquely here so that no
+caller depends on the particular constant. -/
+theorem exists_gt_doubleAngleTangent_lt_add {a ε : ℝ}
+    (ha0 : 0 ≤ a) (ha1 : a < 1) (hε : 0 < ε) :
+    ∃ v : ℝ, a < v ∧ v < 1 ∧
+      DavisKahanTheory.doubleAngleTangent v <
+        DavisKahanTheory.doubleAngleTangent a + ε := by
+  obtain ⟨r, har, hr1⟩ : ∃ r : ℝ, a < r ∧ r < 1 :=
+    ⟨(a + 1) / 2, by linarith, by linarith⟩
+  have hr0 : 0 ≤ r := ha0.trans har.le
+  have hdr : 0 < 1 - r ^ 2 := by nlinarith
+  obtain ⟨L, hL0, hLip⟩ : ∃ L : ℝ, 0 < L ∧ ∀ s t : ℝ, 0 ≤ s → 0 ≤ t → s ≤ r → t ≤ r →
+      |DavisKahanTheory.doubleAngleTangent s -
+        DavisKahanTheory.doubleAngleTangent t| ≤ L * |s - t| :=
+    ⟨2 * (1 + r ^ 2) / (1 - r ^ 2) ^ 2, by positivity,
+      fun s t hs ht hsr htr => abs_doubleAngleTangent_sub_le hs ht hsr htr hr1⟩
+  set step : ℝ := min ((r - a) / 2) (ε / (2 * L)) with hstepdef
+  have hstep0 : 0 < step := lt_min (by linarith) (by positivity)
+  have hstepr : a + step ≤ r := by
+    have h := min_le_left ((r - a) / 2) (ε / (2 * L))
+    rw [← hstepdef] at h
+    linarith
+  have hstepL : L * step < ε := by
+    have h := min_le_right ((r - a) / 2) (ε / (2 * L))
+    rw [← hstepdef] at h
+    have hmul : L * step ≤ L * (ε / (2 * L)) := mul_le_mul_of_nonneg_left h hL0.le
+    have heq : L * (ε / (2 * L)) = ε / 2 := by field_simp
+    linarith
+  refine ⟨a + step, by linarith, by linarith, ?_⟩
+  have hkey := hLip (a + step) a (by linarith) ha0 hstepr har.le
+  have habs : |a + step - a| = step := by
+    rw [show a + step - a = step by ring, abs_of_pos hstep0]
+  rw [habs] at hkey
+  linarith [(le_abs_self (DavisKahanTheory.doubleAngleTangent (a + step) -
+    DavisKahanTheory.doubleAngleTangent a)).trans hkey]
+
 /-- Positive denominator in graph coordinates. -/
 def doubleAngleDenominator (X : E0 →L[ℂ] E1) : E0 →L[ℂ] E0 :=
   ContinuousLinearMap.id ℂ E0 - X.adjoint ∘L X
@@ -159,6 +204,82 @@ theorem norm_ringInverse_doubleAngleDenominator_le
     ‖∑' n : ℕ, T ^ n‖ ≤ (1 - ‖T‖)⁻¹ := hgeom
     _ ≤ (1 - r ^ 2)⁻¹ := by
       exact inv_anti₀ hdenr (by linarith)
+
+/-- **The Gram spectral projections commute with the Gram operator.**
+
+Stated for an arbitrary measurable band: the argument that uses it only ever
+needs `Set.Iic (u ^ 2)`, but nothing in the proof looks at the band, and a
+lemma that names one is a lemma the next cutoff cannot reuse. -/
+theorem gramOperator_comm_gramSpectralPVM_proj (X : E0 →L[ℂ] E1)
+    (s : Set ℝ) (hs : MeasurableSet s) (y : E0) :
+    gramOperator X ((gramSpectralPVM X).proj s hs y) =
+      (gramSpectralPVM X).proj s hs (gramOperator X y) := by
+  have hyDom : y ∈ (gramLinearPMap X).domain := by
+    rw [gramLinearPMap_domain]
+    exact Submodule.mem_top
+  have hcomm := LinearPMap.specProjection_apply_domain
+    (gramLinearPMap_isSelfAdjoint X) s hs
+    (⟨y, hyDom⟩ : (gramLinearPMap X).domain)
+  exact hcomm
+
+/-- The graph denominator inherits the commutation, being `1` minus the Gram
+operator. -/
+theorem doubleAngleDenominator_comm_gramSpectralPVM_proj (X : E0 →L[ℂ] E1)
+    (s : Set ℝ) (hs : MeasurableSet s) (y : E0) :
+    doubleAngleDenominator X ((gramSpectralPVM X).proj s hs y) =
+      (gramSpectralPVM X).proj s hs (doubleAngleDenominator X y) := by
+  have hCQ' :
+      (ContinuousLinearMap.adjoint X ∘SL X) ((gramSpectralPVM X).proj s hs y) =
+        (gramSpectralPVM X).proj s hs
+          ((ContinuousLinearMap.adjoint X ∘SL X) y) := by
+    simpa only [gramOperator] using gramOperator_comm_gramSpectralPVM_proj X s hs y
+  dsimp only [doubleAngleDenominator]
+  rw [sub_apply, ContinuousLinearMap.id_apply, sub_apply,
+    ContinuousLinearMap.id_apply, map_sub, hCQ']
+
+/-- **The graph denominator is bounded below by `1 - v²` on any vector of
+`X`-energy at most `v²`.**
+
+`norm_ringInverse_doubleAngleDenominator_le` is the global version and can only
+use `‖X‖`.  This is the local one, and it is what turns a *spectral cutoff* at
+`v` into a bound on `(1 - X* X)⁻¹`: on a vector drawn from the band below `v²`
+the denominator does not shrink by more than `1 - v²`, however large `‖X‖` is
+elsewhere.  That distinction is the whole reason the cutoff argument works, and
+it was previously an unnamed `have` eighty lines inside a single proof.
+
+No hypothesis on `v` is needed: for `v ^ 2 > 1` the conclusion is negative on
+the left and holds trivially. -/
+theorem mul_norm_le_norm_doubleAngleDenominator_apply
+    (X : E0 →L[ℂ] E1) {v : ℝ} {w : E0}
+    (hXw : ‖X w‖ ^ 2 ≤ v ^ 2 * ‖w‖ ^ 2) :
+    (1 - v ^ 2) * ‖w‖ ≤ ‖doubleAngleDenominator X w‖ := by
+  rcases eq_or_ne w 0 with hw | hw
+  · simp [hw]
+  have hwnorm : 0 < ‖w‖ := norm_pos_iff.mpr hw
+  have hwInner : (⟪w, w⟫_ℂ).re = ‖w‖ ^ 2 := inner_self_eq_norm_sq (𝕜 := ℂ) w
+  have hgramInner :
+      (⟪(ContinuousLinearMap.adjoint X ∘SL X) w, w⟫_ℂ).re = ‖X w‖ ^ 2 := by
+    rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.adjoint_inner_left]
+    exact inner_self_eq_norm_sq (𝕜 := ℂ) (X w)
+  have hDform :
+      (⟪doubleAngleDenominator X w, w⟫_ℂ).re = ‖w‖ ^ 2 - ‖X w‖ ^ 2 := by
+    dsimp only [doubleAngleDenominator]
+    rw [sub_apply, ContinuousLinearMap.id_apply, inner_sub_left, Complex.sub_re,
+      hwInner, hgramInner]
+  have hcoer :
+      (1 - v ^ 2) * ‖w‖ ^ 2 ≤ (⟪doubleAngleDenominator X w, w⟫_ℂ).re := by
+    rw [hDform]; nlinarith
+  have hupper :
+      (⟪doubleAngleDenominator X w, w⟫_ℂ).re ≤
+        ‖doubleAngleDenominator X w‖ * ‖w‖ := by
+    calc
+      (⟪doubleAngleDenominator X w, w⟫_ℂ).re ≤ ‖⟪doubleAngleDenominator X w, w⟫_ℂ‖ :=
+        RCLike.re_le_norm (⟪doubleAngleDenominator X w, w⟫_ℂ : ℂ)
+      _ ≤ ‖doubleAngleDenominator X w‖ * ‖w‖ := norm_inner_le_norm _ _
+  have hmain :
+      (1 - v ^ 2) * ‖w‖ * ‖w‖ ≤ ‖doubleAngleDenominator X w‖ * ‖w‖ := by
+    nlinarith
+  exact le_of_mul_le_mul_right hmain hwnorm
 
 /-- Canonical tangent of twice the graph angle. -/
 noncomputable def doubleAngleTangentOperator
@@ -372,13 +493,137 @@ theorem norm_doubleAngleTangentOperator_apply_sub_le
             (by positivity : 0 ≤ 2 / (1 - r ^ 2))
     _ = (2 / (1 - r ^ 2) + 4 * r ^ 2 / (1 - r ^ 2) ^ 2) * ε := by ring
 
+/-- **The tangent operator is small on the low Gram spectral band.**
+
+`‖2 X (1 - X* X)⁻¹ Q‖ ≤ doubleAngleTangent v` for `Q` the Gram spectral
+projection of `(-∞, u²]` and any `u < v < 1`.  **This is the analytic content of
+the finite-rank approximant below**; the rank half of that theorem is
+bookkeeping, and this is the estimate.
+
+The mechanism, which the inline version buried: `w = (1 - X* X)⁻¹ q` lies in the
+*same* band as `q`, because the denominator commutes with the projection
+(`doubleAngleDenominator_comm_gramSpectralPVM_proj`) and is injective.  So `w`
+has Gram energy at most `u² < v²`, and
+`mul_norm_le_norm_doubleAngleDenominator_apply` turns that into the bound on
+`‖w‖` itself.  The strict inequality `u < v` is what makes the two spectral sets
+disjoint and is used nowhere else. -/
+theorem norm_doubleAngleTangentOperator_comp_gramSpectralPVM_proj_Iic_le
+    (X : E0 →L[ℂ] E1) (hcontractive : ‖X‖ < 1) {u v : ℝ}
+    (hu0 : 0 ≤ u) (huv : u < v) (hv1 : v < 1) :
+    ‖doubleAngleTangentOperator X hcontractive ∘L
+        (gramSpectralPVM X).proj (Set.Iic (u ^ 2)) measurableSet_Iic‖ ≤
+      DavisKahanTheory.doubleAngleTangent v := by
+  classical
+  have hv0 : 0 ≤ v := hu0.trans huv.le
+  have hdenv : 0 < 1 - v ^ 2 := by nlinarith
+  have htanv0 : 0 ≤ DavisKahanTheory.doubleAngleTangent v := by
+    unfold DavisKahanTheory.doubleAngleTangent
+    positivity
+  let PVM : ProjValMeasure E0 := gramSpectralPVM X
+  let Q : E0 →L[ℂ] E0 := PVM.proj (Set.Iic (u ^ 2)) measurableSet_Iic
+  let T := doubleAngleTangentOperator X hcontractive
+  show ‖T ∘L Q‖ ≤ DavisKahanTheory.doubleAngleTangent v
+  refine ContinuousLinearMap.opNorm_le_bound _ htanv0 fun x => ?_
+  let q : E0 := Q x
+  let D : E0 →L[ℂ] E0 := doubleAngleDenominator X
+  let Dinv : E0 →L[ℂ] E0 := Ring.inverse D
+  let w : E0 := Dinv q
+  have hQidem : Q q = q := by
+    have hidem := PVM.proj_idem (Set.Iic (u ^ 2)) measurableSet_Iic
+    have happly := congrArg (fun S : E0 →L[ℂ] E0 => S x) hidem
+    simpa only [q, Q, mul_apply_eq_comp,
+      ContinuousLinearMap.comp_apply] using happly
+  have hDQ (y : E0) : D (Q y) = Q (D y) :=
+    doubleAngleDenominator_comm_gramSpectralPVM_proj X (Set.Iic (u ^ 2))
+      measurableSet_Iic y
+  have hunit : IsUnit D := isUnit_doubleAngleDenominator X hcontractive
+  have hinj : Function.Injective D :=
+    (ContinuousLinearMap.isUnit_iff_bijective.mp hunit).1
+  have hDw : D w = q := by
+    have hmul := Ring.mul_inverse_cancel D hunit
+    have happly := DFunLike.congr_fun hmul q
+    simpa only [w, Dinv, mul_apply_eq_comp,
+      ContinuousLinearMap.comp_apply, one_apply_eq_self] using happly
+  have hQw : Q w = w := by
+    apply hinj
+    rw [hDQ, hDw, hQidem]
+  have huvSq : u ^ 2 < v ^ 2 := by nlinarith
+  have hhighZero :
+      (gramSpectralPVM X).proj (Set.Ici (v ^ 2)) measurableSet_Ici w = 0 := by
+    rw [← hQw]
+    have hinter : Set.Ici (v ^ 2) ∩ Set.Iic (u ^ 2) = ∅ := by
+      ext s
+      simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Iic,
+        Set.mem_empty_iff_false, iff_false]
+      exact fun hs => (not_le_of_gt huvSq) (hs.1.trans hs.2)
+    change (gramSpectralPVM X).proj (Set.Ici (v ^ 2)) measurableSet_Ici
+      ((gramSpectralPVM X).proj (Set.Iic (u ^ 2)) measurableSet_Iic w) = 0
+    rw [← mul_apply_eq_comp,
+      (gramSpectralPVM X).proj_inter,
+      (gramSpectralPVM X).proj_congr hinter
+        (measurableSet_Ici.inter measurableSet_Iic) MeasurableSet.empty,
+      (gramSpectralPVM X).proj_empty, zero_apply]
+  have hwDom : w ∈ (gramLinearPMap X).domain := by
+    rw [gramLinearPMap_domain]
+    exact Submodule.mem_top
+  have hhighZero' :
+      LinearPMap.specProjection (gramLinearPMap_isSelfAdjoint X)
+          (Set.Ici (v ^ 2)) measurableSet_Ici w = 0 := by
+    change (gramSpectralPVM X).proj (Set.Ici (v ^ 2)) measurableSet_Ici w = 0
+    exact hhighZero
+  have henergy := LinearPMap.re_inner_le_of_specProjection_Ici_apply_eq_zero
+    (gramLinearPMap_isSelfAdjoint X)
+    (⟨w, hwDom⟩ : (gramLinearPMap X).domain) hhighZero'
+  have hXenergy : ‖X w‖ ^ 2 ≤ v ^ 2 * ‖w‖ ^ 2 := by
+    calc
+      ‖X w‖ ^ 2 = (⟪gramOperator X w, w⟫_ℂ).re :=
+        (re_inner_gramOperator X w).symm
+      _ = (⟪gramLinearPMap X
+          (⟨w, hwDom⟩ : (gramLinearPMap X).domain), w⟫_ℂ).re := by
+        rw [gramLinearPMap_apply]
+      _ ≤ v ^ 2 * ‖w‖ ^ 2 := henergy
+  have hwBound : ‖w‖ ≤ (1 - v ^ 2)⁻¹ * ‖q‖ := by
+    have hlow : (1 - v ^ 2) * ‖w‖ ≤ ‖D w‖ :=
+      mul_norm_le_norm_doubleAngleDenominator_apply X hXenergy
+    rw [hDw] at hlow
+    calc
+      ‖w‖ ≤ ‖q‖ / (1 - v ^ 2) := by
+        apply (le_div_iff₀ hdenv).2
+        simpa only [mul_comm] using hlow
+      _ = (1 - v ^ 2)⁻¹ * ‖q‖ := by rw [div_eq_inv_mul]
+  have hqNorm : ‖q‖ ≤ ‖x‖ := by
+    dsimp only [q, Q]
+    exact PVM.norm_proj_apply_le (Set.Iic (u ^ 2)) measurableSet_Iic x
+  have hXw : ‖X w‖ ≤ v * ‖w‖ := by
+    apply (sq_le_sq₀ (norm_nonneg _) (mul_nonneg hv0 (norm_nonneg _))).mp
+    simpa only [mul_pow] using hXenergy
+  change ‖(2 : ℂ) • X w‖ ≤ DavisKahanTheory.doubleAngleTangent v * ‖x‖
+  rw [norm_smul]
+  have hnormTwo : ‖(2 : ℂ)‖ = 2 := by norm_num
+  rw [hnormTwo]
+  unfold DavisKahanTheory.doubleAngleTangent
+  calc
+    2 * ‖X w‖ ≤ 2 * (v * ‖w‖) :=
+      mul_le_mul_of_nonneg_left hXw (by norm_num)
+    _ ≤ 2 * (v * ((1 - v ^ 2)⁻¹ * ‖q‖)) := by gcongr
+    _ ≤ 2 * (v * ((1 - v ^ 2)⁻¹ * ‖x‖)) := by gcongr
+    _ = (2 * v / (1 - v ^ 2)) * ‖x‖ := by
+      rw [div_eq_mul_inv]
+      ring
+
 /-- Spectral-cutoff upper approximant for the transformed operator.
 
-For `u > a_n(X)`, the Gram projection of `(u^2,∞)` has rank at most `n`;
-otherwise the existing min--max lower theorem would force `a_n(X) > u`.
-Composing the tangent with that projection gives the required finite-rank
-approximant, and the complementary spectral energy bound gives norm at most
-`doubleAngleTangent u`.
+For `u > a_n(X)`, the Gram projection `P` of `(u², ∞)` has rank at most `n`;
+otherwise the min--max lower theorem would force `a_n(X) > u`.  Composing the
+tangent with `P` gives the finite-rank approximant, and the error `T - T ∘L P`
+is `T` on the complementary band, which
+`norm_doubleAngleTangentOperator_comp_gramSpectralPVM_proj_Iic_le` bounds.
+
+**What is left here is the assembly.**  The three facts it rests on are named:
+`exists_gt_doubleAngleTangent_lt_add` picks `v`,
+`rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt` handles `P`, and
+the band estimate handles the tail.  A reader checking this theorem is checking
+that the three fit together, which is what it should be for.
 -/
 theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
     (X : E0 →L[ℂ] E1) (hcontractive : ‖X‖ < 1) (n : ℕ)
@@ -391,63 +636,11 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
   let a := X.approximationNumber n
   have ha0 : 0 ≤ a := X.approximationNumber_nonneg n
   have ha1 : a < 1 := (X.approximationNumber_le_norm n).trans_lt hcontractive
-  obtain ⟨v, hav, hv1, hfv⟩ : ∃ v : ℝ,
-      a < v ∧ v < 1 ∧
-      DavisKahanTheory.doubleAngleTangent v <
-        DavisKahanTheory.doubleAngleTangent a + ε := by
-    -- The scalar transform is rational and continuous on `(-1,1)`.
-    have hdena : 0 < 1 - a ^ 2 := by nlinarith
-    let step : ℝ := min ((1 - a) / 2) (ε * (1 - a ^ 2) ^ 2 / 16)
-    have hstep0 : 0 < step := by
-      dsimp [step]
-      exact lt_min (by nlinarith)
-        (div_pos (mul_pos hε (sq_pos_of_pos hdena)) (by norm_num))
-    have hstepHalf : step ≤ (1 - a) / 2 := by
-      exact min_le_left _ _
-    have hstepEps : step ≤ ε * (1 - a ^ 2) ^ 2 / 16 := by
-      exact min_le_right _ _
-    refine ⟨a + step, ?_, ?_, ?_⟩
-    · exact lt_add_of_pos_right a hstep0
-    · nlinarith
-    · unfold DavisKahanTheory.doubleAngleTangent
-      have hdenu : 0 < 1 - (a + step) ^ 2 := by
-        nlinarith
-      have hdenHalf : (1 - a ^ 2) / 2 ≤ 1 - (a + step) ^ 2 := by
-        nlinarith
-      have hau : 1 + a * (a + step) ≤ 2 := by
-        nlinarith
-      have hgap :
-          2 * step * (1 + a * (a + step)) <
-            ε * (1 - a ^ 2) * (1 - (a + step) ^ 2) := by
-        have hleft :
-            2 * step * (1 + a * (a + step)) ≤ 4 * step := by
-          nlinarith
-        have hmid : 4 * step ≤ ε * (1 - a ^ 2) ^ 2 / 4 := by
-          nlinarith
-        have hright :
-            ε * (1 - a ^ 2) ^ 2 / 4 <
-              ε * (1 - a ^ 2) * (1 - (a + step) ^ 2) := by
-          nlinarith
-        exact hleft.trans_lt (hmid.trans_lt hright)
-      have hdiff :
-          (2 * a / (1 - a ^ 2) + ε) * (1 - (a + step) ^ 2) -
-              2 * (a + step) =
-            (ε * (1 - a ^ 2) * (1 - (a + step) ^ 2) -
-                2 * step * (1 + a * (a + step))) /
-              (1 - a ^ 2) := by
-        field_simp [ne_of_gt hdena]
-        ring
-      apply (div_lt_iff₀ hdenu).2
-      rw [← sub_pos]
-      rw [hdiff]
-      exact div_pos (sub_pos.mpr hgap) hdena
+  obtain ⟨v, hav, hv1, hfv⟩ := exists_gt_doubleAngleTangent_lt_add ha0 ha1 hε
   let u : ℝ := (a + v) / 2
   have hau : a < u := by dsimp only [u]; linarith
   have huv : u < v := by dsimp only [u]; linarith
   have hu0 : 0 ≤ u := ha0.trans hau.le
-  have hv0 : 0 ≤ v := hu0.trans huv.le
-  have hu1 : u < 1 := huv.trans hv1
-  let C : E0 →L[ℂ] E0 := gramOperator X
   let PVM : ProjValMeasure E0 := gramSpectralPVM X
   let P : E0 →L[ℂ] E0 := PVM.proj (Set.Ioi (u ^ 2)) measurableSet_Ioi
   let Q : E0 →L[ℂ] E0 := PVM.proj (Set.Iic (u ^ 2)) measurableSet_Iic
@@ -467,154 +660,9 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
     ext x
     change T x - T (P x) = T (Q x)
     rw [hQeq, sub_apply, ContinuousLinearMap.id_apply, map_sub]
-  have htail : ‖T ∘L Q‖ ≤ DavisKahanTheory.doubleAngleTangent v := by
-    have hdenv : 0 < 1 - v ^ 2 := by nlinarith
-    have htanv0 : 0 ≤ DavisKahanTheory.doubleAngleTangent v := by
-      unfold DavisKahanTheory.doubleAngleTangent
-      positivity
-    refine ContinuousLinearMap.opNorm_le_bound _ htanv0 fun x => ?_
-    let q : E0 := Q x
-    let D : E0 →L[ℂ] E0 := doubleAngleDenominator X
-    let Dinv : E0 →L[ℂ] E0 := Ring.inverse D
-    let w : E0 := Dinv q
-    have hQidem : Q q = q := by
-      have hidem := PVM.proj_idem (Set.Iic (u ^ 2)) measurableSet_Iic
-      have happly := congrArg (fun S : E0 →L[ℂ] E0 => S x) hidem
-      simpa only [q, Q, mul_apply_eq_comp,
-        ContinuousLinearMap.comp_apply] using happly
-    have hCQ (y : E0) : C (Q y) = Q (C y) := by
-      have hyDom : y ∈ (gramLinearPMap X).domain := by
-        rw [gramLinearPMap_domain]
-        exact Submodule.mem_top
-      have hcomm := LinearPMap.specProjection_apply_domain
-        (gramLinearPMap_isSelfAdjoint X) (Set.Iic (u ^ 2)) measurableSet_Iic
-        (⟨y, hyDom⟩ : (gramLinearPMap X).domain)
-      change gramOperator X (Q y) = Q (gramOperator X y) at hcomm
-      simpa only [C] using hcomm
-    have hDQ (y : E0) : D (Q y) = Q (D y) := by
-      have hCQ' :
-          (ContinuousLinearMap.adjoint X ∘SL X) (Q y) =
-            Q ((ContinuousLinearMap.adjoint X ∘SL X) y) := by
-        simpa only [C, gramOperator] using hCQ y
-      dsimp only [D, doubleAngleDenominator]
-      rw [sub_apply, ContinuousLinearMap.id_apply, sub_apply,
-        ContinuousLinearMap.id_apply, map_sub, hCQ']
-    have hunit : IsUnit D := by
-      dsimp only [D]
-      exact isUnit_doubleAngleDenominator X hcontractive
-    have hinj : Function.Injective D :=
-      (ContinuousLinearMap.isUnit_iff_bijective.mp hunit).1
-    have hDw : D w = q := by
-      have hmul := Ring.mul_inverse_cancel D hunit
-      have happly := DFunLike.congr_fun hmul q
-      simpa only [w, Dinv, mul_apply_eq_comp,
-        ContinuousLinearMap.comp_apply, one_apply_eq_self] using happly
-    have hQw : Q w = w := by
-      apply hinj
-      rw [hDQ, hDw, hQidem]
-    have huvSq : u ^ 2 < v ^ 2 := by nlinarith
-    have hhighZero :
-        (gramSpectralPVM X).proj (Set.Ici (v ^ 2)) measurableSet_Ici w = 0 := by
-      rw [← hQw]
-      have hinter : Set.Ici (v ^ 2) ∩ Set.Iic (u ^ 2) = ∅ := by
-        ext t
-        simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Iic,
-          Set.mem_empty_iff_false, iff_false]
-        exact fun ht => (not_le_of_gt huvSq) (ht.1.trans ht.2)
-      change (gramSpectralPVM X).proj (Set.Ici (v ^ 2)) measurableSet_Ici
-        ((gramSpectralPVM X).proj (Set.Iic (u ^ 2)) measurableSet_Iic w) = 0
-      rw [← mul_apply_eq_comp,
-        (gramSpectralPVM X).proj_inter,
-        (gramSpectralPVM X).proj_congr hinter
-          (measurableSet_Ici.inter measurableSet_Iic) MeasurableSet.empty,
-        (gramSpectralPVM X).proj_empty, zero_apply]
-    have hwDom : w ∈ (gramLinearPMap X).domain := by
-      rw [gramLinearPMap_domain]
-      exact Submodule.mem_top
-    have hhighZero' :
-        LinearPMap.specProjection (gramLinearPMap_isSelfAdjoint X)
-            (Set.Ici (v ^ 2)) measurableSet_Ici w = 0 := by
-      change (gramSpectralPVM X).proj (Set.Ici (v ^ 2)) measurableSet_Ici w = 0
-      exact hhighZero
-    have henergy := LinearPMap.re_inner_le_of_specProjection_Ici_apply_eq_zero
-      (gramLinearPMap_isSelfAdjoint X)
-      (⟨w, hwDom⟩ : (gramLinearPMap X).domain) hhighZero'
-    have hXenergy : ‖X w‖ ^ 2 ≤ v ^ 2 * ‖w‖ ^ 2 := by
-      calc
-        ‖X w‖ ^ 2 = (⟪gramOperator X w, w⟫_ℂ).re :=
-          (re_inner_gramOperator X w).symm
-        _ = (⟪gramLinearPMap X
-            (⟨w, hwDom⟩ : (gramLinearPMap X).domain), w⟫_ℂ).re := by
-          rw [gramLinearPMap_apply]
-        _ ≤ v ^ 2 * ‖w‖ ^ 2 := henergy
-    have hDcoercive :
-        (1 - v ^ 2) * ‖w‖ ^ 2 ≤ (⟪D w, w⟫_ℂ).re := by
-      have hwInner : (⟪w, w⟫_ℂ).re = ‖w‖ ^ 2 :=
-        inner_self_eq_norm_sq (𝕜 := ℂ) w
-      have hgramInner : (⟪C w, w⟫_ℂ).re = ‖X w‖ ^ 2 := by
-        dsimp only [C, gramOperator]
-        rw [ContinuousLinearMap.comp_apply,
-          ContinuousLinearMap.adjoint_inner_left]
-        exact inner_self_eq_norm_sq (𝕜 := ℂ) (X w)
-      have hgramInner' :
-          (⟪(ContinuousLinearMap.adjoint X ∘SL X) w, w⟫_ℂ).re =
-            ‖X w‖ ^ 2 := by
-        simpa only [C, gramOperator] using hgramInner
-      have hDform :
-          (⟪D w, w⟫_ℂ).re = ‖w‖ ^ 2 - ‖X w‖ ^ 2 := by
-        dsimp only [D, doubleAngleDenominator]
-        rw [sub_apply, ContinuousLinearMap.id_apply, inner_sub_left,
-          Complex.sub_re, hwInner, hgramInner']
-      rw [hDform]
-      nlinarith
-    have hinnerUpper :
-        (⟪D w, w⟫_ℂ).re ≤ ‖D w‖ * ‖w‖ := by
-      calc
-        (⟪D w, w⟫_ℂ).re ≤ ‖⟪D w, w⟫_ℂ‖ :=
-          RCLike.re_le_norm (⟪D w, w⟫_ℂ : ℂ)
-        _ ≤ ‖D w‖ * ‖w‖ := norm_inner_le_norm _ _
-    have hwBound : ‖w‖ ≤ (1 - v ^ 2)⁻¹ * ‖q‖ := by
-      by_cases hw : w = 0
-      · have hrhs : 0 ≤ (1 - v ^ 2)⁻¹ * ‖q‖ :=
-          mul_nonneg (inv_nonneg.mpr hdenv.le) (norm_nonneg q)
-        simpa only [hw, norm_zero] using hrhs
-      have hwnorm : 0 < ‖w‖ := norm_pos_iff.mpr hw
-      have hmain : (1 - v ^ 2) * ‖w‖ ^ 2 ≤ ‖q‖ * ‖w‖ := by
-        calc
-          (1 - v ^ 2) * ‖w‖ ^ 2 ≤ (⟪D w, w⟫_ℂ).re := hDcoercive
-          _ ≤ ‖D w‖ * ‖w‖ := hinnerUpper
-          _ = ‖q‖ * ‖w‖ := by rw [hDw]
-      have hcancel : (1 - v ^ 2) * ‖w‖ ≤ ‖q‖ := by
-        apply le_of_mul_le_mul_right
-        · simpa only [pow_two, mul_assoc] using hmain
-        · exact hwnorm
-      calc
-        ‖w‖ ≤ ‖q‖ / (1 - v ^ 2) := by
-          apply (le_div_iff₀ hdenv).2
-          simpa only [mul_comm] using hcancel
-        _ = (1 - v ^ 2)⁻¹ * ‖q‖ := by rw [div_eq_inv_mul]
-    have hqNorm : ‖q‖ ≤ ‖x‖ := by
-      dsimp only [q, Q]
-      exact PVM.norm_proj_apply_le (Set.Iic (u ^ 2)) measurableSet_Iic x
-    have hXw : ‖X w‖ ≤ v * ‖w‖ := by
-      apply (sq_le_sq₀ (norm_nonneg _) (mul_nonneg hv0 (norm_nonneg _))).mp
-      simpa only [mul_pow] using hXenergy
-    change ‖(2 : ℂ) • X w‖ ≤
-      DavisKahanTheory.doubleAngleTangent v * ‖x‖
-    rw [norm_smul]
-    have hnormTwo : ‖(2 : ℂ)‖ = 2 := by norm_num
-    rw [hnormTwo]
-    unfold DavisKahanTheory.doubleAngleTangent
-    calc
-      2 * ‖X w‖ ≤ 2 * (v * ‖w‖) :=
-        mul_le_mul_of_nonneg_left hXw (by norm_num)
-      _ ≤ 2 * (v * ((1 - v ^ 2)⁻¹ * ‖q‖)) := by
-        gcongr
-      _ ≤ 2 * (v * ((1 - v ^ 2)⁻¹ * ‖x‖)) := by
-        gcongr
-      _ = (2 * v / (1 - v ^ 2)) * ‖x‖ := by
-        rw [div_eq_mul_inv]
-        ring
+  have htail : ‖T ∘L Q‖ ≤ DavisKahanTheory.doubleAngleTangent v :=
+    norm_doubleAngleTangentOperator_comp_gramSpectralPVM_proj_Iic_le
+      X hcontractive hu0 huv hv1
   refine ⟨R, hRrank, ?_⟩
   rw [herr]
   exact htail.trans_lt hfv
