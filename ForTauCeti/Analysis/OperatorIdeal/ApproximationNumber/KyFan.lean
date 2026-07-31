@@ -212,7 +212,8 @@ section Compression
 variable {E : Type v} {F : Type w}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-
+-- Neither space needs to be complete: completeness is what `HasMinMaxLowerBound` is proved
+-- from, not what the passage from it to the triangle inequality uses.
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Restricting to a larger source subspace can only increase an approximation number. -/
 theorem approximationNumber_restrict_mono (T : E →L[𝕜] F) (n : ℕ) {U V : Submodule 𝕜 E}
@@ -416,24 +417,42 @@ end Localization
 
 section Triangle
 
+section AnyField
+
+variable {E : Type v} {F : Type w}
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+
+-- Neither space needs to be complete here: completeness is what `HasMinMaxLowerBound` is
+-- proved from, not what the passage from it to the triangle inequality uses.
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- **The Ky Fan triangle inequality over any scalar field with a min--max lower bound.**
+
+This is the general statement: `kyFanGauge_add_le_of_exists_finiteRestriction` needs a finite
+source restriction for every tolerance, and `HasMinMaxLowerBound` is exactly what produces
+one.  The two concrete fields are corollaries — `kyFanGauge_add_le` over `ℂ` below and
+`TauCeti.ApproximationNumber.kyFanGauge_add_le_real` over `ℝ` — and neither repeats any part
+of the argument. -/
+theorem kyFanGauge_add_le_of_hasMinMaxLowerBound (h : HasMinMaxLowerBound 𝕜 E F)
+    (S T : E →L[𝕜] F) (k : ℕ) :
+    (S + T).kyFanGauge k ≤ S.kyFanGauge k + T.kyFanGauge k :=
+  kyFanGauge_add_le_of_exists_finiteRestriction
+    (fun n ε hε => h.exists_finiteRestrictionApproximationNumber_add_gt (S + T) n ε hε) k
+
+end AnyField
+
 variable {E : Type v} {F : Type w}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
 /-- Every positive tolerance admits a finite source restriction whose approximation number
-is within that tolerance of the ambient one. -/
+is within that tolerance of the ambient one, over `ℂ`. -/
 theorem exists_finiteRestrictionApproximationNumber_add_gt
     (T : E →L[ℂ] F) (n : ℕ) (ε : ℝ) (hε : 0 < ε) :
     ∃ v : Fin (n + 1) → E,
       T.approximationNumber n <
-        (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n + ε := by
-  by_cases hsmall : T.approximationNumber n < ε
-  · exact ⟨fun _ => 0, hsmall.trans_le
-      (le_add_of_nonneg_left (ContinuousLinearMap.approximationNumber_nonneg _ _))⟩
-  · have hεle : ε ≤ T.approximationNumber n := le_of_not_gt hsmall
-    obtain ⟨v, hv⟩ := T.exists_finiteRestrictionApproximationNumber_gt_of_lt n
-      (sub_nonneg.mpr hεle) (sub_lt_self _ hε)
-    exact ⟨v, by linarith⟩
+        (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n + ε :=
+  hasMinMaxLowerBound_complex.exists_finiteRestrictionApproximationNumber_add_gt T n ε hε
 
 /-- **The Ky Fan triangle inequality**, in full generality: arbitrary bounded operators
 between complex Hilbert spaces, no compactness or finite-dimensionality.
@@ -444,8 +463,7 @@ symmetric operator ideal built on approximation numbers depends on.  The argumen
 min-max input it consumes. -/
 theorem kyFanGauge_add_le (S T : E →L[ℂ] F) (k : ℕ) :
     (S + T).kyFanGauge k ≤ S.kyFanGauge k + T.kyFanGauge k :=
-  kyFanGauge_add_le_of_exists_finiteRestriction
-    (fun n ε hε => (S + T).exists_finiteRestrictionApproximationNumber_add_gt n ε hε) k
+  kyFanGauge_add_le_of_hasMinMaxLowerBound hasMinMaxLowerBound_complex S T k
 
 end Triangle
 

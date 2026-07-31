@@ -80,14 +80,24 @@ not yet available in this development" — is no longer true as written.
 `ForTauCeti/Analysis/OperatorIdeal/Family/TraceClass.lean`, with the gauge
 `nuclearENorm`, adjoint invariance, and the ideal bounds all supplied.
 
-Two things are still missing, and they are much more specific than "the theory":
+**Status corrected again 2026-07-31: the first of the two remaining gaps is
+closed.**  `traceClassIdealFamily` is now
+`(𝕜 : Type) [RCLike 𝕜] [HasMinMaxLowerBoundEverywhere.{0, v} 𝕜] :
+SymmetricOperatorIdealFamily.{0, v} 𝕜`, with instances of that class for both
+`ℝ` and `ℂ`, so it fits an `RCLike`-general slot.  What made it `ℂ`-only was
+never `nuclearENorm`, which never mentions the field; it was the Ky Fan
+triangle inequality one layer down, and that now holds over any field with a
+min--max lower bound.
 
-* it is stated **over `ℂ` only** (`SymmetricOperatorIdealFamily.{0, v} ℂ`),
-  because `nuclearENorm` is; the `RCLike` generalisation is the real work;
+One thing is still missing:
+
 * `toRectangular` wants `[N.toOperatorIdealFamily.IsComplete]`, and as with
   `hilbertSchmidt` above that instance does not exist — and for the same
   reason, since the trace norm is not equivalent to the operator norm, so the
-  `kyFan` route to completeness does not transfer.
+  `kyFan` route to completeness does not transfer.  Note that `hilbertSchmidt`'s
+  half of this *was* proved on 2026-07-31; the trace-class half is open, and its
+  gauge is a supremum of Ky Fan gauges rather than a `tsum`, so the Fatou input
+  is not the same one.
 
 Construction route, retained: define the trace gauge through the singular-value
 sequence (equivalently `tr |A|`), with adjoint invariance from the shared
