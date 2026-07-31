@@ -445,20 +445,30 @@ structure UnboundedSinThetaProblem
   gap : ℝ
   gap_pos : 0 < gap
 
-/-- **Milestone C3.**  The conclusion is a conjunction on purpose: ideal
-*membership* of the sine operator is part of the theorem, not a side condition.
-A bounded statement cannot express that -- there the carrier is `⊤` or the
-membership is vacuous -- which is precisely why the unbounded form is canonical
-and the bounded ones are specializations.
+/-- **Milestone C3.**  The sine operator is *determined by the data* -- it is
+built from the trial map `X`, exactly as the delivered
+`TauCeti.DavisKahan.sinTheta_unbounded_opNorm` concludes about
+`D.X.adjoint ∘L D.F₁`.
+
+**Corrected 2026-07-31 (`{lane:ROADMAP-GAPS-DK}`): this signature previously took
+`sinTheta : H →L[ℂ] E` as a free argument with no hypothesis relating it to `P`,
+and was therefore FALSE, not merely unproved** -- `P.gap` and `P.frameLowerBound`
+are positive by the structure's own fields, so the left side scales without bound
+in `sinTheta` while `‖R‖` is fixed, and the type is inhabited (it is delivered as
+`UnboundedSinThetaData`).  **A `Suggested.lean` signature is compiled so that a
+*broken* one is a build failure; a *false* one elaborates fine**, so the guard
+this library exists to provide cannot catch this class.
 
 Stated here with the operator norm standing in for the ideal gauge, since the
 gauge lives in the OperatorIdeals roadmap; reconciling the two is open work
-recorded in the roadmap prose. -/
+recorded in the roadmap prose.  **The docstring formerly promised a conjunction
+carrying ideal *membership* of the sine operator** -- that half is precisely the
+reconciliation that is open, so it is named here rather than asserted in a
+statement that cannot yet express it. -/
 theorem sinTheta_domainAware_le
     {A : E →ₗ.[ℂ] E} {A₀ : H →ₗ.[ℂ] H} {X R : H →L[ℂ] E}
-    (P : UnboundedSinThetaProblem A A₀ X R)
-    (sinTheta : H →L[ℂ] E) :
-    P.gap * P.frameLowerBound * ‖sinTheta‖ ≤ ‖R‖ := by
+    (P : UnboundedSinThetaProblem A A₀ X R) :
+    P.gap * P.frameLowerBound * ‖X‖ ≤ ‖R‖ := by
   sorry
 
 end DomainAwareSinTheta
