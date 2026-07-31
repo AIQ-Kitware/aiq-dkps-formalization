@@ -316,25 +316,6 @@ private theorem conjugateOperator_cfc_eq
 
 /-! ## Descent of conjugation-fixed operators -/
 
-/-- Restrict a complex operator to the real copy and take its real coordinate. -/
-private noncomputable def realPartOperator
-    (A : RealComplexification E →L[ℂ] RealComplexification E) :
-    E →L[ℝ] E := by
-  let L : E →ₗ[ℝ] E :=
-    { toFun := fun x => re (A (ofReal x))
-      map_add' := fun x y => by simp
-      map_smul' := fun r x => by simp }
-  exact L.mkContinuous ‖A‖ fun x => by
-    calc
-      ‖re (A (ofReal x))‖ ≤ ‖A (ofReal x)‖ := norm_re_le _
-      _ ≤ ‖A‖ * ‖ofReal x‖ := A.le_opNorm _
-      _ = ‖A‖ * ‖x‖ := by rw [ofReal.norm_map]
-
-omit [CompleteSpace E] in
-@[simp]
-private theorem realPartOperator_apply (A : RealComplexification E →L[ℂ] RealComplexification E) (x : E) :
-    realPartOperator A x = re (A (ofReal x)) := rfl
-
 omit [CompleteSpace E] in
 private theorem fixed_operator_maps_real_to_real
     {A : RealComplexification E →L[ℂ] RealComplexification E} (hfix : conjugateOperator A = A) (x : E) :

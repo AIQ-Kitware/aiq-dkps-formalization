@@ -50,28 +50,6 @@ variable {E F : Type v}
 local notation "Eℂ" => RealComplexification E
 local notation "Fℂ" => RealComplexification F
 
-/-- Restrict a bounded complex operator to the real copy and retain its real
-coordinate.  No invariance assumption is needed to define this map. -/
-noncomputable def realPartOperator
-    (T : Eℂ →L[ℂ] Fℂ) : E →L[ℝ] F := by
-  let L : E →ₗ[ℝ] F :=
-    { toFun := fun x => re (T (ofReal x))
-      map_add' := fun x y => by simp
-      map_smul' := fun r x => by simp }
-  exact L.mkContinuous ‖T‖ fun x => by
-    calc
-      ‖L x‖ ≤ ‖T (ofReal x)‖ := Foundation.RealComplexification.norm_re_le _
-      _ ≤ ‖T‖ * ‖ofReal x‖ := T.le_opNorm _
-      _ = ‖T‖ * ‖x‖ := by rw [ofReal.norm_map]
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- The real-part operator acts by taking the real coordinate of the
-complexified image of the real-coordinate embedding. -/
-@[simp]
-theorem realPartOperator_apply
-    (T : Eℂ →L[ℂ] Fℂ) (x : E) :
-    realPartOperator T x = re (T (ofReal x)) := rfl
-
 /-- A complex operator maps the distinguished real copy into the real copy. -/
 def MapsRealCopy (T : Eℂ →L[ℂ] Fℂ) : Prop :=
   ∀ x : E, im (T (ofReal x)) = 0
