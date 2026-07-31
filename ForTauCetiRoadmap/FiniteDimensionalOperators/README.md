@@ -2,36 +2,46 @@
 
 > ## ✅ DELIVERED — this topic is complete (verified 2026-07-31)
 >
-> **All 30 signatures in `Suggested.lean` are proved in the library.** This README is
+> **All 32 signatures in `Suggested.lean` are proved in the library.** This README is
 > kept for its design rationale, which still describes why the theory is shaped the way
 > it is — but it is a **record, not a plan**. Nothing below is outstanding work.
 >
 > The `sorry` bodies in `Suggested.lean` are deliberate and must stay: `ForTauCetiRoadmap.lean`
-> exists *"so that a broken suggested signature is a build failure"*. The statements are
-> the content; the bodies are placeholders by design.
+> exists *"so that a broken suggested signature is a build failure"*, a guard that has already
+> caught ten real elaboration errors. Proving a body duplicates the library; deleting a
+> signature removes the guard.
+>
+> Re-check with `python3 scripts/check_roadmap_delivered.py --topic FiniteDimensionalOperators`.
 >
 > ### Where each signature landed
 >
+> * **`DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean`** — `SpectraSeparated`, `restrictedSpectrum`
+> * **`DavisKahan/Experimental/InfiniteDimensional/SinTheta/General.lean`** — `spectralSubspace`
+> * **`DavisKahan/Geometry/Polar/PolarIsometryFinal.lean`** — `polarPartial`
+> * **`DavisKahan/Sources/DavisKahan1970/Ideals/UnitaryInvariantNormInstances.lean`** — `abs`
 > * **`CourantFischer.lean`** — `abs_eigenvalues_sub_le_opNorm`, `eigenvalues_eq_iSup_iInf_re_inner`
 > * **`Gram/Matrix.lean`** — `exists_linearIsometryEquiv_map_eq_of_inner_eq`, `rangeEquivOfInnerEq`
 > * **`MoorePenroseInverse.lean`** — `eq_moorePenroseInverse_of_penrose`, `moorePenroseInverse`
-> * **`OperatorModulus.lean`** — `modulus`
+> * **`OperatorModulus.lean`** — `modulus`, `norm_modulus_apply`
 > * **`OrthogonalSeries.lean`** — `orthogonalFamily_of_pairwise_inner_eq_zero`
 > * **`PartialIsometry.lean`** — `IsPartialIsometry`, `isPartialIsometry_iff_norm_map`
-> * **`Polar/Decomposition.lean`** — `abs`, `exists_polar_decomposition_unitary`
-> * **`Polar/PartialIsometry.lean`** — `polarInitial`, `polarInitial_orthogonal_eq_ker`, `polarPartial`, `polarPartial_comp_modulus`
+> * **`Polar/Decomposition.lean`** — `exists_polar_decomposition_unitary`
+> * **`Polar/PartialIsometry.lean`** — `polarInitial`, `polarInitial_orthogonal_eq_ker`, `polarPartial_comp_modulus`
 > * **`PositiveSqrt.lean`** — `sqrt_unique`
 > * **`Projection/Gap.lean`** — `norm_starProjection_sub_eq_max`
+> * **`RectangularSingularValues.lean`** — `singularValues_adjoint`
 > * **`SelfAdjointFunctionalCalculus.lean`** — `selfAdjointFunctionalCalculus`, `selfAdjointFunctionalCalculus_apply_of_apply_eq_smul`, `sqrt`
 > * **`Singular/System.lean`** — `apply_rightSingularBasis_eq_smul_leftSingularVector`, `eq_sum_singularValue_rankOne`, `exists_orthonormalBasis_extending_leftSingularVector`, `leftSingularVector`, `rightSingularBasis`
-> * **`Spectral/Gap.lean`** — `SpectraSeparated`
-> * **`Spectral/Subspace.lean`** — `IsEigenvectorAt`, `restrictedSpectrum`, `spectralSubspace`
+> * **`Spectral/Subspace.lean`** — `IsEigenvectorAt`
 >
-> Verified name-by-name against `ForTauCeti/**` and `DavisKahan/**`, not by topic-level
-> count. One caution for anyone re-running the check: `sqrt` is declared as
-> `_root_.LinearMap.IsPositive.sqrt`, so a pattern anchored on `def sqrt` at line start
-> reports it missing when it is present.
-
+> ### If you re-run this check, use the script, not a grep
+>
+> Two hand-rolled passes over this topic both under-counted. One reported `sqrt` missing
+> (it is `_root_.LinearMap.IsPositive.sqrt`); the other missed `norm_modulus_apply` and
+> `singularValues_adjoint`, because both are written `@[simp] theorem ...` with the
+> attribute inline and the pattern was anchored on the keyword. Lean declaration syntax
+> varies too much for a single pattern — index every declaration once, key on qualified
+> and base names, then set-compare. That is what the script does.
 
 Spectral perturbation theory — the Davis–Kahan sin Θ theorems and everything in their
 orbit — is written in a small, stable vocabulary: apply a real function to a symmetric

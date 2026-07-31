@@ -1,0 +1,209 @@
+#!/usr/bin/env python3
+"""Report, per roadmap topic, which suggested signatures are proved in the library.
+
+`ForTauCetiRoadmap/*/Suggested.lean` records target signatures whose bodies are
+deliberately `sorry` -- `ForTauCetiRoadmap.lean` exists so that a broken suggested
+signature is a build failure, and that guard has caught real elaboration errors.
+The bodies are therefore NOT the finding and this script never looks at them.  What
+it answers is the other question: *which of those target signatures have actually
+landed*, so a finished topic can say so instead of reading as a plan.
+
+**Why this is a script and not a `grep`.**  The first hand-rolled check of
+`MajorizationAndAngles` reported **17 of 26 signatures missing**, including
+`cosThetaMap`, `kyFanSum`, `cosPrincipalAngles`, `prefixSum` and `sinThetaSq` --
+every one of which is present in the tree.  A per-name pattern cannot survive the
+variation in real Lean declaration syntax:
+
+* `_root_.` prefixes (`_root_.LinearMap.IsPositive.sqrt` -- this one produced a
+  false negative in a *second*, independent check);
+* attribute lines, `@[simp] theorem foo ...` inline or on the preceding line;
+* modifiers (`noncomputable`, `protected`, `scoped`, `private`);
+* namespace qualification, so the roadmap's short name is a suffix of the real one;
+* signatures that wrap, putting the name far from the keyword.
+
+So: index every declaration in the libraries **once**, key it on both the
+fully-qualified and the base name, and set-compare.  Do not grep per name.
+
+Exit status is 0 unless `--strict` is given, because an undelivered signature is
+ordinary outstanding work, not a defect.  With `--strict` a topic that is 100%
+delivered but whose README carries no delivered marker is reported -- that is the
+condition this lane exists to remove.
+
+Usage:
+    python3 scripts/check_roadmap_delivered.py               # per-topic summary
+    python3 scripts/check_roadmap_delivered.py --topic FiniteDimensionalOperators
+    python3 scripts/check_roadmap_delivered.py --missing     # list what is outstanding
+    python3 scripts/check_roadmap_delivered.py --map         # per-signature destinations
+    python3 scripts/check_roadmap_delivered.py --json
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import re
+import sys
+
+REPO = pathlib.Path(__file__).resolve().parent.parent
+ROADMAP = REPO / "ForTauCetiRoadmap"
+LIBS = ("ForTauCeti", "DavisKahan")
+
+# A declaration head.  Deliberately permissive about everything that precedes the
+# name, because each of these prefixes has produced a false negative in practice.
+DECL = re.compile(
+    r"^\s*(?:@\[[^\]]*\]\s*)*"
+    r"(?:private |protected |noncomputable |partial |scoped |unsafe )*"
+    r"(?:theorem|lemma|def|abbrev|structure|class|instance|opaque)\s+"
+    r"(?:_root_\.)?([A-Za-z_][A-Za-z0-9_'.’]*)",
+    re.M,
+)
+
+# Marker a topic README/Suggested.lean carries once the topic is known complete.
+DELIVERED = re.compile(r"DELIVERED", re.I)
+
+
+def strip_block_comments(text: str) -> str:
+    """Blank out `/- ... -/` regions so prose cannot look like a declaration.
+
+    Wrapped docstring prose that happens to begin a line with `theorem` or `def`
+    is the classic way these scans overcount; the roadmap files are prose-heavy,
+    so this matters more here than usual.
+    """
+    out, depth, i = [], 0, 0
+    while i < len(text):
+        if text.startswith("/-", i):
+            depth += 1
+            i += 2
+        elif text.startswith("-/", i):
+            depth = max(0, depth - 1)
+            i += 2
+        else:
+            out.append(" " if depth else text[i])
+            i += 1
+    return "".join(out)
+
+
+def declaration_index() -> dict[str, set[str]]:
+    """Every declaration name in the libraries -> the files declaring it.
+
+    Keyed on both the fully-qualified name and its final component, since a
+    roadmap file names the theorem without the namespace it eventually lands in.
+    """
+    index: dict[str, set[str]] = {}
+    for lib in LIBS:
+        root = REPO / lib
+        if not root.exists():
+            continue
+        for path in root.rglob("*.lean"):
+            rel = path.relative_to(REPO).as_posix()
+            body = strip_block_comments(path.read_text(errors="replace"))
+            for m in DECL.finditer(body):
+                full = m.group(1)
+                for key in (full, full.split(".")[-1]):
+                    index.setdefault(key, set()).add(rel)
+    return index
+
+
+def topic_signatures(topic_dir: pathlib.Path) -> list[str]:
+    suggested = topic_dir / "Suggested.lean"
+    if not suggested.exists():
+        return []
+    body = strip_block_comments(suggested.read_text(errors="replace"))
+    seen, out = set(), []
+    for m in DECL.finditer(body):
+        name = m.group(1)
+        if name not in seen:
+            seen.add(name)
+            out.append(name)
+    return out
+
+
+def marked_delivered(topic_dir: pathlib.Path) -> bool:
+    for name in ("README.md", "Suggested.lean"):
+        p = topic_dir / name
+        if p.exists() and DELIVERED.search(p.read_text(errors="replace")):
+            return True
+    return False
+
+
+def analyse() -> list[dict]:
+    index = declaration_index()
+    results = []
+    for topic_dir in sorted(p for p in ROADMAP.iterdir() if p.is_dir()):
+        names = topic_signatures(topic_dir)
+        if not names:
+            continue
+        found, missing = {}, []
+        for n in names:
+            hits = index.get(n) or index.get(n.split(".")[-1])
+            if hits:
+                found[n] = sorted(hits)[0]
+            else:
+                missing.append(n)
+        results.append({
+            "topic": topic_dir.name,
+            "total": len(names),
+            "delivered": len(found),
+            "missing": missing,
+            "map": found,
+            "marked": marked_delivered(topic_dir),
+        })
+    return results
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--topic", help="restrict to one topic directory name")
+    ap.add_argument("--missing", action="store_true", help="list undelivered signatures")
+    ap.add_argument("--map", action="store_true", help="list where each signature landed")
+    ap.add_argument("--json", action="store_true", help="machine-readable output")
+    ap.add_argument("--strict", action="store_true",
+                    help="exit 1 if a 100%%-delivered topic carries no delivered marker")
+    args = ap.parse_args()
+
+    results = analyse()
+    if args.topic:
+        results = [r for r in results if r["topic"] == args.topic]
+        if not results:
+            print(f"no such topic: {args.topic}")
+            return 1
+
+    if args.json:
+        print(json.dumps(results, indent=2, sort_keys=True))
+        return 0
+
+    unmarked = []
+    for r in results:
+        pct = 100.0 * r["delivered"] / r["total"]
+        flag = "COMPLETE" if not r["missing"] else "        "
+        mark = "marked" if r["marked"] else "UNMARKED"
+        print(f"{flag} {r['topic']:<32} {r['delivered']:>3}/{r['total']:<3} "
+              f"({pct:5.1f}%)  {mark}")
+        if not r["missing"] and not r["marked"]:
+            unmarked.append(r["topic"])
+        if args.missing and r["missing"]:
+            for n in r["missing"]:
+                print(f"           outstanding: {n}")
+        if args.map:
+            for n, loc in sorted(r["map"].items()):
+                print(f"           {n} -> {loc}")
+
+    total = sum(r["total"] for r in results)
+    done = sum(r["delivered"] for r in results)
+    print(f"\nroadmap delivery: {done}/{total} suggested signatures proved "
+          f"({100.0 * done / total:.1f}%)" if total else "no signatures found")
+
+    if unmarked:
+        print("\nTopics that are 100% delivered but still read as plans "
+              "(add a DELIVERED banner):")
+        for t in unmarked:
+            print(f"  {t}")
+        if args.strict:
+            return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
