@@ -9,8 +9,10 @@ Staged for Tau Ceti, roadmap topic T09.  Formalized by Claude Opus 5
 module
 
 public import Mathlib.Analysis.Normed.Lp.lpHolder
+public import Mathlib.Analysis.InnerProductSpace.l2Space
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 
 /-!
 # The infinite-dimensional diagonal acceptance example
@@ -241,49 +243,70 @@ theorem approximationNumber_diagOpLp_le (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤
     (ContinuousLinearMap.approximationNumber_le_norm_sub _ (rank_truncDiagOpLp_le c n hK hc)) ?_
   exact norm_sub_truncDiagOpLp_le c n hK hc (norm_nonneg _) fun i hi => hanti hi
 
-/-! ### The matching lower bound — not proved here
+/-- Coordinates beyond `n` vanish on the span of the first `n + 1` basis vectors. -/
+theorem apply_eq_zero_of_mem_span_single {n : ℕ}
+    {x : lp (fun _ : ℕ => 𝕜) 2}
+    (hx : x ∈ Submodule.span 𝕜 (Set.range fun i : Fin (n + 1) =>
+      lp.single 2 (i : ℕ) (1 : 𝕜)))
+    {i : ℕ} (hi : n < i) : x i = 0 := by
+  induction hx using Submodule.span_induction with
+  | mem y hy =>
+      obtain ⟨j, rfl⟩ := hy
+      have hne : (j : ℕ) ≠ i := by omega
+      simp [lp.single_apply, hne]
+  | zero => simp
+  | add y z _ _ hy hz => simp [hy, hz]
+  | smul a y _ hy => simp [hy]
 
-`aₙ(diagOpLp c) = ‖cₙ‖` needs the reverse of `approximationNumber_diagOpLp_le`,
-and **that half is the whole of `{lane:FTC-DIAGEXACT}`**; the upper bound above is
-a composition of two lemmas this module already had.
+/-- **The matching lower bound**: on the span of the first `n + 1` basis vectors
+the diagonal operator is bounded below by `‖cₙ‖`.
 
-**Why the distinction is not bookkeeping**: `symmetricGaugeFamily_injective`
-needs the *value*, not a bound, so the upper bound alone unblocks nothing
-downstream.
+`lp.norm_mono` does the work, one inequality reversed from
+`norm_sub_truncDiagOpLp_le`: compare `‖cₙ‖ • x` against `D x` coordinatewise,
+where the hypothesis holds for `i ≤ n` by antitonicity and **vacuously for
+`i > n` because `x` lies in the span**. -/
+theorem le_approximationNumber_diagOpLp (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤ K)
+    (hc : ∀ i, ‖c i‖ ≤ K) (hanti : Antitone fun i => ‖c i‖) (n : ℕ) :
+    ‖c n‖ ≤ (diagOpLp c hK hc).approximationNumber n := by
+  classical
+  refine ContinuousLinearMap.le_approximationNumber_of_linearIndependent _ n
+    (fun i : Fin (n + 1) =>
+      (lp.single 2 (i : ℕ) (1 : 𝕜) : lp (fun _ : ℕ => 𝕜) 2)) ?_ ?_
+  · -- The basis vectors are linearly independent: they have disjoint supports.
+    refine linearIndependent_iff'.2 fun s g hg j hj => ?_
+    have hcoord := congrArg (fun y : lp (fun _ : ℕ => 𝕜) 2 => y (j : ℕ)) hg
+    simp only [lp.coeFn_sum, Finset.sum_apply, lp.coeFn_smul, Pi.smul_apply,
+      smul_eq_mul, lp.coeFn_zero, Pi.zero_apply] at hcoord
+    rw [Finset.sum_eq_single j] at hcoord
+    · simpa using hcoord
+    · intro k _ hkj
+      have hne : (k : ℕ) ≠ (j : ℕ) := fun h => hkj (Fin.ext h)
+      simp [lp.single_apply, hne]
+    · intro h; exact absurd hj h
+  · intro x hx hx1
+    have hpt : ∀ i, ‖(((‖c n‖ : 𝕜)) • x) i‖ ≤ ‖(diagOpLp c hK hc x) i‖ := by
+      intro i
+      rw [lp.coeFn_smul]
+      simp only [Pi.smul_apply, smul_eq_mul, diagOpLp_apply, norm_mul,
+        RCLike.norm_ofReal, abs_of_nonneg (norm_nonneg (c n))]
+      by_cases hi : i ≤ n
+      · exact mul_le_mul_of_nonneg_right (hanti hi) (norm_nonneg _)
+      · rw [apply_eq_zero_of_mem_span_single hx (Nat.lt_of_not_le hi)]
+        simp
+    have hnorm := lp.norm_mono (p := 2) (by norm_num) hpt
+    rw [norm_smul, RCLike.norm_ofReal, abs_of_nonneg (norm_nonneg (c n)), hx1,
+      mul_one] at hnorm
+    exact hnorm
 
-The argument, so that whoever takes it does not re-derive it:
+/-- **The approximation numbers of a diagonal operator are its coefficients.**
 
-* `ContinuousLinearMap.le_approximationNumber_iff` reduces the goal to: every `R`
-  of rank at most `n` satisfies `‖cₙ‖ ≤ ‖D − R‖`.
-* Work on the span of the first `n + 1` basis vectors `lp.single 2 i 1`, which
-  has dimension `n + 1`.  `R` restricted there has rank at most `n`, so by
-  rank–nullity its kernel is nontrivial; take a unit `x` in it.
-* Then `(D − R) x = D x`, and `‖D x‖² = ∑_{i ≤ n} ‖cᵢ‖² ‖xᵢ‖² ≥ ‖cₙ‖²` by
-  antitonicity of `‖c ·‖` and `∑ ‖xᵢ‖² = 1`.
-
-**Correction (2026-07-31, same lane).**  An earlier version of this note called
-the last step the obstacle, on the grounds that the module has no lemma reading
-an `lp 2` norm off coordinates.  **That is wrong, and in the useful direction:
-`lp.norm_mono` does exactly this step.**  Apply it to `‖cₙ • x‖ ≤ ‖D x‖`, whose
-pointwise hypothesis `‖cₙ xᵢ‖ ≤ ‖cᵢ xᵢ‖` holds for `i ≤ n` by antitonicity and
-holds vacuously for `i > n` because `x` lies in the span.  That is the same
-technique `norm_sub_truncDiagOpLp_le` already uses, one inequality reversed.
-
-**So the remaining obstacle is the linear algebra after all**: producing the unit
-`x` in the span with `R x = 0`.  The concrete route, with the Mathlib entry point:
-
-* let `ι : (Fin (n+1) → 𝕜) →ₗ[𝕜] lp (fun _ : ℕ => 𝕜) 2` send `w` to
-  `∑ i, w i • lp.single 2 i 1`, and set `g := R.toLinearMap ∘ₗ ι`;
-* `LinearMap.finrank_range_add_finrank_ker g` gives
-  `finrank (range g) + finrank (ker g) = n + 1`, and `range g ≤ range R` with
-  `R.rank ≤ n` forces `finrank (range g) ≤ n`, hence `ker g ≠ ⊥`;
-* take `w ≠ 0` in that kernel and `x := ι w`, which is nonzero because `ι` is
-  injective — the `lp.single 2 i 1` are linearly independent.
-
-**The `Cardinal`-to-`finrank` step is the one to watch**: `rank` is stated as
-`R.rank ≤ (n : Cardinal)` while rank-nullity is in `finrank`, and the conversion
-needs `range R` known finite-dimensional, which the rank bound supplies but not
-definitionally.
--/
+This is the identity `{lane:FTC-DIAGEXACT}` was posted for, and the one
+`symmetricGaugeFamily_injective` needs: it gives, for every antitone nonnegative
+bounded sequence, an operator realising it as an approximation-number sequence. -/
+theorem approximationNumber_diagOpLp (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤ K)
+    (hc : ∀ i, ‖c i‖ ≤ K) (hanti : Antitone fun i => ‖c i‖) (n : ℕ) :
+    (diagOpLp c hK hc).approximationNumber n = ‖c n‖ :=
+  le_antisymm (approximationNumber_diagOpLp_le c hK hc hanti n)
+    (le_approximationNumber_diagOpLp c hK hc hanti n)
 
 end TauCeti
