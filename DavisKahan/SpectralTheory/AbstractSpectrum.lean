@@ -389,6 +389,21 @@ noncomputable scoped instance realNormedSpace
     NormedSpace ℝ E :=
   NormedSpace.restrictScalars ℝ 𝕜 E
 
+/-- `E` as a *real inner product* space, by taking the real part of the
+`𝕜`-inner product.
+
+Mathlib declares `InnerProductSpace.rclikeToReal` as a reducible non-instance on
+purpose — installing it globally would clash with the `𝕜`-structure — so it is
+`scoped` here alongside the other two.  **`scoped` rather than `local`, and that
+is not a style choice**: lanes `{lane:CPLX-DEDUP-3}` and `{lane:CPLX-DEDUP-4}`
+measured what happens when the same instance is re-declared `local` in several
+files, which is that `isDefEq` has to prove two distinct declarations defeq and
+diverges.  One declaration, opened where needed, has nothing to prove. -/
+noncomputable scoped instance realInnerProductSpace
+    {𝕜 : Type*} [RCLike 𝕜] {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] :
+    InnerProductSpace ℝ E :=
+  InnerProductSpace.rclikeToReal 𝕜 E
+
 /-- The restricted `ℝ`-action is compatible with the ambient `𝕜`-action. -/
 scoped instance realTower
     {𝕜 : Type*} [RCLike 𝕜] {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] :

@@ -140,6 +140,10 @@ theorem singularValues_real_smul (A : E →ₗ[𝕜] F) {r : ℝ} (hr : 0 ≤ r)
       ext x
       simp only [LinearMap.comp_apply, LinearMap.smul_apply, map_smul, smul_smul,
         ← RCLike.ofReal_mul, sq]
+    -- Not shortened: every step here is a congruence term applied to explicit arguments
+    -- (`congrFun (eigenvalues_congr ..) ⟨i, hi⟩`), not a name `simp` could pick up, and the
+    -- order is forced -- the two `eigenvalues_*` rewrites must fire before `Real.sqrt_mul`
+    -- has a product to split.
     rw [(((r : 𝕜)) • A).singularValues_of_lt rfl hi, A.singularValues_of_lt rfl hi,
       congrFun (eigenvalues_congr hgram (((r : 𝕜)) • A).isSymmetric_adjoint_comp_self
         (isSymmetric_real_smul A.isSymmetric_adjoint_comp_self (r ^ 2)) rfl) ⟨i, hi⟩,
@@ -163,8 +167,7 @@ theorem singularValues_comp_le {C : F →ₗ[𝕜] F'} {c : ℝ} (hc : 0 ≤ c)
         rw [LinearMap.comp_apply, LinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
       have h2 : RCLike.re ⟪(((c ^ 2 : ℝ) : 𝕜) • (A.adjoint ∘ₗ A)) x, x⟫_𝕜
           = c ^ 2 * ‖A x‖ ^ 2 := by
-        rw [LinearMap.smul_apply, inner_smul_left, RCLike.conj_ofReal, RCLike.re_ofReal_mul,
-          LinearMap.comp_apply, LinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
+        simp [inner_smul_left, LinearMap.adjoint_inner_left]
       rw [h1, h2]
       have h3 : ‖(C ∘ₗ A) x‖ ≤ c * ‖A x‖ := hC (A x)
       nlinarith [norm_nonneg ((C ∘ₗ A) x), norm_nonneg (A x),
@@ -242,8 +245,8 @@ private theorem sum_mul_le_sum_top {n k : ℕ} (hk : k ≤ n) {lam c : Fin n →
         (lam j + t * (c j - 1))
         = ∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), lam j
           + t * (∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), c j) - t * k := by
-      rw [Finset.sum_add_distrib, ← Finset.mul_sum, Finset.sum_sub_distrib, Finset.sum_const,
-        card_filter_lt' hk, nsmul_eq_mul, mul_one, mul_sub]
+      simp only [Finset.sum_add_distrib, ← Finset.mul_sum, Finset.sum_sub_distrib,
+        Finset.sum_const, card_filter_lt' hk, nsmul_eq_mul, mul_one]
       ring
     have htail_eq : ∑ j ∈ Finset.univ.filter (fun j : Fin n => ¬ (j : ℕ) < k), t * c j
         = t * ∑ j ∈ Finset.univ.filter (fun j : Fin n => ¬ (j : ℕ) < k), c j :=
@@ -321,8 +324,8 @@ theorem sum_re_inner_le_sum_eigenvalues_top {S : E →ₗ[𝕜] E} (hS : S.IsSym
       intro i
       simp_rw [b.repr_apply_apply]
       rw [b.sum_sq_norm_inner_right (w i), hw.1 i, one_pow]
-    rw [hcomm, Finset.sum_congr rfl fun i _ => hone i, Finset.sum_const, Finset.card_univ,
-      Fintype.card_fin, nsmul_eq_mul, mul_one]
+    rw [hcomm, Finset.sum_congr rfl fun i _ => hone i]
+    simp
 
 /-! ### The Ky Fan variational principle (F1.c) -/
 
@@ -435,7 +438,8 @@ theorem exists_orthonormal_re_sum_inner_map_eq (A : E →ₗ[𝕜] E) {k : ℕ}
     rw [hu]
     simp only
     rw [h1, (choosePolarUnitary A).inner_map_map, h2, inner_smul_right,
-      inner_self_eq_norm_sq_to_K, hvon.1 i, RCLike.ofReal_one, one_pow, mul_one]
+      inner_self_eq_norm_sq_to_K, hvon.1 i]
+    simp
   rw [Finset.sum_congr rfl fun i _ => hterm i]
   rw [show (∑ i : Fin k, ((A.singularValues (i : ℕ) : ℝ) : 𝕜))
       = ((∑ i : Fin k, A.singularValues (i : ℕ) : ℝ) : 𝕜) by push_cast; rfl,
