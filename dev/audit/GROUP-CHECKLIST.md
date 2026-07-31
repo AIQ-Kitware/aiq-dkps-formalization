@@ -31,7 +31,7 @@ review is exactly a review of a future submission unit.
 - [x] `(root files) :: tooling` — 2 files, 789 lines — **READY**
 - [x] `(root modules)` — 8 files, 78 lines — **blocked (7/8 files)**
 - [x] `.claude :: data/config` — 1 files, 19 lines — **READY**
-- [x] `.llm_resource_tally :: data/config` — 3 files, 1,436 lines — **READY**
+- [x] `.llm_resource_tally :: data/config` — 3 files, 1,440 lines — **READY**
 - [x] `.llm_resource_tally :: documentation` — 1 files, 99 lines — **READY**
 - [x] `.llm_resource_tally :: other` — 3 files, 12 lines — **READY**
 - [x] `.llm_resource_tally :: tooling` — 17 files, 1,743 lines — **READY**
@@ -97,7 +97,7 @@ review is exactly a review of a future submission unit.
 - [x] `ForTauCeti :: T06 Principal angles, aligned bases, and finite frames` — 3 files, 1,362 lines — **READY**
 - [x] `ForTauCeti :: T07 Rectangular unitarily invariant norms` — 6 files, 2,448 lines — **READY**
 - [x] `ForTauCeti :: T08 Angle geometry and eigenvalue perturbation` — 5 files, 1,591 lines — **READY**
-- [x] `ForTauCeti :: T09 Approximation numbers` — 21 files, 5,253 lines — **blocked (15/21 files)**
+- [x] `ForTauCeti :: T09 Approximation numbers` — 21 files, 5,244 lines — **READY**
 - [x] `ForTauCeti :: T10 Symmetric operator ideals and Schatten norms` — 12 files, 3,917 lines — **blocked (9/12 files)**
 - [x] `ForTauCeti :: T11 Hilbert-Schmidt operators` — 4 files, 635 lines — **READY**
 - [x] `ForTauCeti :: T12 The Haagerup-Zsido kernel and its Fourier transform` — 8 files, 2,055 lines — **READY**
@@ -105,9 +105,9 @@ review is exactly a review of a future submission unit.
 - [x] `ForTauCeti :: T14 Borel functional calculus and projection-valued measures` — 11 files, 2,738 lines — **blocked (10/11 files)**
 - [x] `ForTauCeti :: T15a Closed operators on LinearPMap: graphs, constructions and form bounds` — 7 files, 2,000 lines — **blocked (6/7 files)**
 - [x] `ForTauCeti :: T15b Resolvents of self-adjoint LinearPMap operators, and semiboundedness` — 7 files, 1,677 lines — **READY**
-- [x] `ForTauCeti :: T15c The spectral measure of an unbounded self-adjoint operator, and Stone` — 15 files, 4,771 lines — **blocked (12/15 files)**
+- [x] `ForTauCeti :: T15c The spectral measure of an unbounded self-adjoint operator, and Stone` — 15 files, 4,771 lines — **READY**
 - [x] `ForTauCeti :: T16 Sylvester equations and the Rosenblum theorem` — 18 files, 7,117 lines — **READY**
-- [x] `ForTauCeti :: T17 Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems` — 15 files, 5,252 lines — **blocked (11/15 files)**
+- [x] `ForTauCeti :: T17 Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems` — 15 files, 5,252 lines — **blocked (12/15 files)**
 - [x] `ForTauCeti :: T18 The Yu-Wang-Samworth statistical variant` — 3 files, 1,100 lines — **READY**
 - [x] `ForTauCeti :: T19 Matrix spectra and spectral measurability` — 6 files, 923 lines — **READY**
 - [x] `ForTauCeti :: T20 Sample moments and matrix concentration` — 5 files, 964 lines — **READY**
@@ -126,7 +126,7 @@ review is exactly a review of a future submission unit.
 - [x] `Helm2025 :: other` — 1 files, 265 lines — **READY**
 - [x] `comparator :: data/config` — 22 files, 318 lines — **READY**
 - [x] `dev :: data/config` — 25 files, 11,472 lines — **READY**
-- [x] `dev :: documentation` — 160 files, 38,528 lines — **blocked (159/160 files)**
+- [x] `dev :: documentation` — 160 files, 38,531 lines — **blocked (159/160 files)**
 - [x] `dev :: manifest/notes` — 8 files, 119 lines — **READY**
 - [x] `dev/alternates` — 1 files, 412 lines — **READY**
 - [x] `docs :: documentation` — 33 files, 6,198 lines — **READY**
@@ -135,7 +135,7 @@ review is exactly a review of a future submission unit.
 - [x] `prose :: data/config` — 1 files, 1,488 lines — **READY**
 - [x] `prose :: documentation` — 3 files, 271 lines — **READY**
 - [x] `prose :: other` — 1 files, 2 lines — **READY**
-- [x] `scripts :: tooling` — 63 files, 14,162 lines — **blocked (55/63 files)**
+- [x] `scripts :: tooling` — 65 files, 14,453 lines — **blocked (55/65 files)**
 - [x] `tools :: build config` — 1 files, 179 lines — **READY**
 - [x] `tools :: documentation` — 1 files, 110 lines — **READY**
 - [x] `tools :: manifest/notes` — 1 files, 2 lines — **READY**
