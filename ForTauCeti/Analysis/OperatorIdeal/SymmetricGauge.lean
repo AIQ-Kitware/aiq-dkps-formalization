@@ -8,6 +8,8 @@ import Mathlib.Topology.Instances.ENNReal.Lemmas
 import Mathlib.Order.CompleteLattice.Finset
 import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
 import ForTauCeti.Analysis.Convex.Majorization
+import Mathlib.Analysis.InnerProductSpace.Adjoint
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 
 /-!
 # Symmetric norming functions on sequences
@@ -350,45 +352,183 @@ theorem extend_smul (c : ℝ≥0) (a : ℕ → ℝ≥0∞) :
             (fun m : ℝ≥0 => ((Φ (truncate (fun n => (c : ℝ≥0∞) * a n) k m) : ℝ≥0) : ℝ≥0∞))
             (c * m))
 
-/-! ### Restriction to `Fin n` — designed, not landed
+/-! ### Restriction to `Fin n`
 
-The bridge to `TauCeti.FiniteSymmetricGauge` is what would let the finite
+The bridge to `TauCeti.FiniteSymmetricGauge`, which is what lets the finite
 Hardy–Littlewood–Pólya transfer `FiniteSymmetricGauge.le_of_prefixSum_le` reach
-sequences, and it is the missing piece of Milestone B2 — **the transfer itself is
-complete** in `ForTauCeti/Analysis/Convex/Majorization.lean`.
-
-It is designed here and not landed, because a partial construction cannot go into
-this library: a `sorry` in `ForTauCeti` breaks `check_tauceti_readiness`'s
-zero-escape guarantee, and an unused `ofFin` with no consumer is the dead code
-`{lane:FTC-DEAD}` exists to remove.  So the obligations are recorded instead.
-
-**The shape.**  `toFinite (Φ : SymmetricGauge) (n : ℕ) : FiniteSymmetricGauge n`
-sending `x : Fin n → ℝ` to `(Φ (ofFin x) : ℝ)`, where `ofFin` is
-`Finsupp.onFinset (Finset.range n) (fun i => if h : i < n then Real.nnabs (x ⟨i, h⟩) else 0)`.
+sequences.  **The transfer itself is not reproved here** — it exists complete in
+`ForTauCeti/Analysis/Convex/Majorization.lean`; only the restriction was missing,
+and it is Milestone B2's blocker rather than the majorization argument.
 
 **Absolute values are what reconcile the two structures**, and they are not a
-convenience: `FiniteSymmetricGauge` is `ℝ`-valued with a `neg_single'` field and
-an `|c|` in its homogeneity, while `SymmetricGauge` is `ℝ≥0`-valued with neither.
-Taking `|·|` on the way in discharges both.
-
-**The four field obligations, in increasing difficulty:**
-
-* `neg_single'` — immediate; `Function.update` at one index and `Real.nnabs`
-  ignores the sign.
-* `add_le'` — `Φ.add_le` is not enough on its own.  `ofFin (x + y) ≤ ofFin x + ofFin y`
-  pointwise (from `abs_add`), then `Φ.mono` and then `Φ.add_le`.
-* `real_smul'` — `Real.nnabs` is a `MonoidHom`, so `nnabs (c • x) = nnabs c * nnabs x`
-  pointwise, then `Φ.smul`.  The `|c|` in the finite structure's field is exactly
-  what makes this match.
-* `perm'` — **the real work, and the reason this is a separate slice.**
-  `Equiv.Perm.extendDomain (σ : Equiv.Perm (Fin n)) (f : Fin n ≃ {i // i < n})`
-  gives the permutation of `ℕ` fixing everything from `n` on, and
-  `Equiv.Perm.extendDomain_apply_image` together with
-  `extendDomain_apply_not_subtype` transports it through `ofFin` to meet
-  `Φ.symm'`.  Both lemmas exist in `Mathlib.Logic.Equiv.Basic`; the work is
-  matching `Finsupp.equivMapDomain` against them, since `equivMapDomain` reindexes
-  by the inverse.
+convenience.  `FiniteSymmetricGauge` is `ℝ`-valued with a `neg_single'` field and
+an `|c|` in its homogeneity; `SymmetricGauge` is `ℝ≥0`-valued with neither.
+Taking `|·|` on the way in is what discharges both, and it is why `add_le'` needs
+`mono'` on top of `add_le'` rather than `add_le'` alone.
 -/
+
+/-- A real vector on `Fin n` as a finitely supported nonnegative sequence:
+absolute values, extended by zero. -/
+noncomputable def ofFin {n : ℕ} (x : Fin n → ℝ) : ℕ →₀ ℝ≥0 :=
+  Finsupp.onFinset (Finset.range n)
+    (fun i => if h : i < n then Real.nnabs (x ⟨i, h⟩) else 0)
+    (fun i hi => by
+      by_cases h : i < n
+      · simpa using h
+      · simp [h] at hi)
+
+/-- `ofFin`, pointwise.  Definitional, as for `truncate_apply`. -/
+@[simp] theorem ofFin_apply {n : ℕ} (x : Fin n → ℝ) (i : ℕ) :
+    ofFin x i = if h : i < n then Real.nnabs (x ⟨i, h⟩) else 0 := rfl
+
+/-- Restriction of a symmetric gauge to `Fin n`.
+
+`perm'` is the field that needs work: a permutation of `Fin n` becomes one of `ℕ`
+by `Equiv.Perm.extendDomain`, fixing everything from `n` on.  **The extension is
+built from `π.symm`, not `π`** — `Finsupp.equivMapDomain` reindexes by the
+*inverse*, so composing with `π` on the vector side corresponds to extending
+`π.symm` on the index side.  Getting that backwards typechecks right up to the
+final goal and then fails with `π` against `π.symm`. -/
+noncomputable def toFinite (Φ : SymmetricGauge) (n : ℕ) : FiniteSymmetricGauge n where
+  toFun x := (Φ (ofFin x) : ℝ)
+  add_le' x y := by
+    have h : ofFin (x + y) ≤ ofFin x + ofFin y := by
+      refine Finsupp.le_def.2 fun i => ?_
+      by_cases hi : i < n
+      · simp only [ofFin_apply, Finsupp.add_apply, dif_pos hi, Pi.add_apply]
+        exact_mod_cast abs_add_le (x ⟨i, hi⟩) (y ⟨i, hi⟩)
+      · simp [hi]
+    exact_mod_cast (Φ.mono h).trans (Φ.add_le _ _)
+  real_smul' c x := by
+    have h : ofFin (c • x) = Real.nnabs c • ofFin x := by
+      refine Finsupp.ext fun i => ?_
+      by_cases hi : i < n
+      · simp only [ofFin_apply, dif_pos hi, Finsupp.smul_apply, smul_eq_mul,
+          Pi.smul_apply, smul_eq_mul]
+        exact map_mul Real.nnabs c (x ⟨i, hi⟩)
+      · simp [hi]
+    rw [h, Φ.smul]
+    push_cast
+    ring
+  perm' x π := by
+    classical
+    -- Extend `π` to `ℕ`, fixing everything from `n` on.
+    -- built from `π.symm`, because `equivMapDomain` reindexes by the *inverse*
+    set e : Equiv.Perm ℕ :=
+      Equiv.Perm.extendDomain π.symm (Fin.equivSubtype (n := n)) with he
+    have h : ofFin (x ∘ π) = Finsupp.equivMapDomain e (ofFin x) := by
+      refine Finsupp.ext fun i => ?_
+      by_cases hi : i < n
+      · have : e.symm i = ((π ⟨i, hi⟩ : Fin n) : ℕ) := by
+          rw [he, Equiv.Perm.extendDomain_symm, Equiv.symm_symm]
+          simpa using Equiv.Perm.extendDomain_apply_image π
+            (Fin.equivSubtype (n := n)) ⟨i, hi⟩
+        simp [Finsupp.equivMapDomain_apply, this, hi, (π ⟨i, hi⟩).isLt]
+      · have : e.symm i = i := by
+          rw [he, Equiv.Perm.extendDomain_symm]
+          exact Equiv.Perm.extendDomain_apply_not_subtype _ _ hi
+        simp [Finsupp.equivMapDomain_apply, this, hi]
+    rw [h, Φ.symm]
+  neg_single' x j := by
+    have h : ofFin (Function.update x j (-x j)) = ofFin x := by
+      refine Finsupp.ext fun i => ?_
+      by_cases hi : i < n
+      · by_cases hij : (⟨i, hi⟩ : Fin n) = j
+        · subst hij; simp [hi, ← Real.toNNReal_abs, abs_neg]
+        · simp [Function.update_of_ne hij, hi]
+      · simp [hi]
+    rw [h]
+
+/-! ### The gauge a symmetric norming function induces on operators
+
+`symmetricGaugeENorm Φ A = Φ∞ (a(A))`, the symmetric gauge read along the
+approximation numbers.  This is `symmetricGaugeFamily`'s gauge, and the three
+laws below are three of the five `OperatorIdealFamily` fields.
+
+**`gauge_add_le` is not here.**  It is Milestone B2: the `(m+n)` form
+`approximationNumber_add_le` has to become a prefix-sum inequality before
+`toFinite` can hand it to `FiniteSymmetricGauge.le_of_prefixSum_le`, and that
+index-pairing argument is its own piece of work.  The structure is therefore not
+assembled yet — a `SymmetricOperatorIdealFamily` with four of five fields is not
+a thing that can exist, and a `sorry` would fail `check_tauceti_readiness`.
+
+The `ENNReal.ofReal` convention is `schattenENorm`'s, deliberately, so that the
+two gauges read the same way.
+-/
+
+section Operators
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+
+/-- The gauge a symmetric norming function induces on operators: `Φ` read along
+the approximation numbers, valued in `ℝ≥0∞` and so defined for every bounded
+operator — it is `∞` exactly off the ideal. -/
+noncomputable def symmetricGaugeENorm (Φ : SymmetricGauge) (A : E →L[𝕜] F) : ℝ≥0∞ :=
+  Φ.extend fun n => ENNReal.ofReal (A.approximationNumber n)
+
+-- Completeness is not used: the bound is `a₀ A = ‖A‖` and one entry of a supremum.
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- **Ideal law 1 of 5**: the induced gauge dominates the operator norm.
+
+`a₀ A = ‖A‖`, and `le_extend` says every entry is below the gauge — which is
+where `normalized'` and `symm'` are finally paying for themselves, through
+`single_one`. -/
+theorem enorm_le_symmetricGaugeENorm (Φ : SymmetricGauge) (A : E →L[𝕜] F) :
+    ‖A‖ₑ ≤ symmetricGaugeENorm Φ A := by
+  have h := Φ.le_extend (fun n => ENNReal.ofReal (A.approximationNumber n)) 0
+  rw [ContinuousLinearMap.approximationNumber_index_zero, ofReal_norm] at h
+  exact h
+
+-- Completeness is unused: `approximationNumber_smul` is an identity of reals.
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- **Ideal law 2 of 5**: the induced gauge is absolutely homogeneous.
+
+`approximationNumber_smul` scales every entry by `‖c‖`, and slice 2a's
+`extend_smul` moves the scalar out of the gauge. -/
+theorem symmetricGaugeENorm_smul (Φ : SymmetricGauge) (c : 𝕜) (A : E →L[𝕜] F) :
+    symmetricGaugeENorm Φ (c • A) = ‖c‖ₑ * symmetricGaugeENorm Φ A := by
+  have hpt : ∀ n, ENNReal.ofReal ((c • A).approximationNumber n)
+      = (‖c‖₊ : ℝ≥0∞) * ENNReal.ofReal (A.approximationNumber n) := by
+    intro n
+    rw [ContinuousLinearMap.approximationNumber_smul, ENNReal.ofReal_mul (norm_nonneg c)]
+    congr 1
+    rw [ENNReal.ofReal_eq_coe_nnreal (norm_nonneg c)]
+    rfl
+  simp only [symmetricGaugeENorm, hpt]
+  rw [Φ.extend_smul]
+  rfl
+
+-- Completeness is unused: both composition bounds are inequalities of reals.
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- **Ideal law 3 of 5, one side**: pre-composition.
+
+`aₙ (A ∘L R) ≤ aₙ A * ‖R‖` entrywise, then `extend_mono` and `extend_smul`. -/
+theorem symmetricGaugeENorm_comp_right_le (Φ : SymmetricGauge)
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+    (A : E →L[𝕜] F) (R : H →L[𝕜] E) :
+    symmetricGaugeENorm Φ (A ∘L R) ≤ symmetricGaugeENorm Φ A * ‖R‖ₑ := by
+  have hpt : ∀ n, ENNReal.ofReal ((A ∘L R).approximationNumber n)
+      ≤ (‖R‖₊ : ℝ≥0∞) * ENNReal.ofReal (A.approximationNumber n) := by
+    intro n
+    calc ENNReal.ofReal ((A ∘L R).approximationNumber n)
+        ≤ ENNReal.ofReal (A.approximationNumber n * ‖R‖) :=
+          ENNReal.ofReal_le_ofReal
+            (ContinuousLinearMap.approximationNumber_comp_le_mul_norm A R n)
+      _ = (‖R‖₊ : ℝ≥0∞) * ENNReal.ofReal (A.approximationNumber n) := by
+          rw [ENNReal.ofReal_mul (ContinuousLinearMap.approximationNumber_nonneg A n),
+            mul_comm]
+          congr 1
+          rw [ENNReal.ofReal_eq_coe_nnreal (norm_nonneg R)]
+          rfl
+  calc symmetricGaugeENorm Φ (A ∘L R)
+      ≤ Φ.extend (fun n => (‖R‖₊ : ℝ≥0∞) * ENNReal.ofReal (A.approximationNumber n)) :=
+        Φ.extend_mono hpt
+    _ = (‖R‖₊ : ℝ≥0∞) * symmetricGaugeENorm Φ A := Φ.extend_smul _ _
+    _ = symmetricGaugeENorm Φ A * ‖R‖ₑ := by rw [mul_comm]; rfl
+
+end Operators
 
 end SymmetricGauge
 
