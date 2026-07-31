@@ -321,7 +321,6 @@ theorem ofFin_add_le {n : ℕ} (x y : Fin n → ℝ) :
   by_cases hi : i < n
   · rw [ofFin_apply (x + y) hi, Finsupp.add_apply, ofFin_apply x hi,
       ofFin_apply y hi, ← NNReal.coe_le_coe]
-    push_cast
     simpa using abs_add_le (x ⟨i, hi⟩) (y ⟨i, hi⟩)
   · simp [ofFin_apply_of_le, hi]
 
@@ -535,6 +534,116 @@ theorem finView_antitone {a : ℕ → ℝ≥0∞} (ha : Antitone a) (hfin : ∀ 
   intro i j hij
   simp only [finView]
   exact_mod_cast ENNReal.toNNReal_mono (hfin _) (ha hij)
+
+/-- The `ofFin` image of the `Fin N` view is exactly the truncation.
+
+Both send `i < N` to `(a i).toNNReal` and everything else to `0`; the only
+content is that `Real.nnabs` is the identity on a nonnegative coordinate. -/
+theorem ofFin_finView (a : ℕ → ℝ≥0∞) (ha : ∀ n, a n ≠ ⊤) (N : ℕ) :
+    ofFin (finView a N) = truncate a ha N := by
+  ext i
+  by_cases hi : i < N
+  · rw [ofFin_apply _ hi]
+    have hn : Real.nnabs ((a i).toNNReal : ℝ) = (a i).toNNReal := by
+      rw [← NNReal.coe_inj, Real.coe_nnabs]
+      exact abs_of_nonneg (a i).toNNReal.coe_nonneg
+    simp only [finView, truncate, Finsupp.onFinset_apply, hi, if_pos]
+    exact_mod_cast hn
+  · rw [ofFin_apply_of_le _ hi]
+    simp [truncate, hi]
+
+/-- A finite prefix sum of finite terms, pushed through `toNNReal`. -/
+theorem coe_sum_toNNReal {a : ℕ → ℝ≥0∞} (ha : ∀ n, a n ≠ ⊤) (k : ℕ) :
+    ((∑ n ∈ Finset.range k, (a n).toNNReal : ℝ≥0) : ℝ≥0∞)
+      = ∑ n ∈ Finset.range k, a n := by
+  push_cast
+  exact Finset.sum_congr rfl fun i _ => ENNReal.coe_toNNReal (ha i)
+
+/-- Prefix sums of the `Fin N` views inherit the sequence domination. -/
+theorem prefixSum_finView_le {a b : ℕ → ℝ≥0∞}
+    (ha : ∀ n, a n ≠ ⊤) (hb : ∀ n, b n ≠ ⊤)
+    (h : ∀ k, ∑ n ∈ Finset.range k, a n ≤ ∑ n ∈ Finset.range k, b n)
+    (N k : ℕ) :
+    FiniteVector.prefixSum k (finView a N)
+      ≤ FiniteVector.prefixSum k (finView b N) := by
+  classical
+  -- The statement only has content for `k ≤ N`; past `N` both filters are all
+  -- of `Finset.univ`, so the prefix sums are the ones at `N`.
+  have key : ∀ m, m ≤ N →
+      FiniteVector.prefixSum m (finView a N)
+        ≤ FiniteVector.prefixSum m (finView b N) := by
+    intro m hm
+    simp only [FiniteVector.prefixSum, finView]
+    rw [sum_filter_fin_eq_sum_range hm (fun n => ((a n).toNNReal : ℝ)),
+      sum_filter_fin_eq_sum_range hm (fun n => ((b n).toNNReal : ℝ))]
+    have hcoe : ((∑ n ∈ Finset.range m, (a n).toNNReal : ℝ≥0) : ℝ≥0∞)
+        ≤ ((∑ n ∈ Finset.range m, (b n).toNNReal : ℝ≥0) : ℝ≥0∞) := by
+      rw [coe_sum_toNNReal ha, coe_sum_toNNReal hb]; exact h m
+    have hnn : (∑ n ∈ Finset.range m, (a n).toNNReal)
+        ≤ ∑ n ∈ Finset.range m, (b n).toNNReal := by
+      exact_mod_cast hcoe
+    exact_mod_cast hnn
+  by_cases hk : k ≤ N
+  · exact key k hk
+  · have hkN : N ≤ k := (not_le.mp hk).le
+    have hfa : ∀ j : ℕ, N ≤ j →
+        Finset.univ.filter (fun i : Fin N => (i : ℕ) < j) = Finset.univ :=
+      fun j hj => Finset.filter_true_of_mem fun i _ => lt_of_lt_of_le i.isLt hj
+    rw [FiniteVector.prefixSum, FiniteVector.prefixSum, hfa k hkN]
+    have hN := key N (le_refl N)
+    rw [FiniteVector.prefixSum, FiniteVector.prefixSum, hfa N (le_refl N)] at hN
+    exact hN
+
+/-- **Weak majorization implies domination, for the extension.**
+
+If `a` and `b` are antitone and every prefix sum of `a` is dominated by the
+corresponding prefix sum of `b`, then `Φ.extend a ≤ Φ.extend b`.
+
+Three cases, and only the last is the transfer descent:
+
+* some `b n = ⊤`, so the right side is `⊤`;
+* otherwise `ne_top_of_forall_sum_le` makes `a` finite everywhere too;
+* with both finite, every finitely supported `c ≤ a` is bounded by a truncation
+  of `a`, which *is* antitone, and `le_of_prefixSum_le` compares it to the
+  matching truncation of `b`. -/
+theorem extend_le_extend_of_forall_sum_le {a b : ℕ → ℝ≥0∞}
+    (ha : Antitone a) (_hb : Antitone b)
+    (h : ∀ k, ∑ n ∈ Finset.range k, a n ≤ ∑ n ∈ Finset.range k, b n) :
+    Φ.extend a ≤ Φ.extend b := by
+  classical
+  by_cases hbtop : ∃ n, b n = ⊤
+  · obtain ⟨n, hn⟩ := hbtop
+    rw [Φ.extend_eq_top_of_eq_top hn]
+    exact le_top
+  have hbfin : ∀ n, b n ≠ ⊤ := by
+    intro n hn; exact hbtop ⟨n, hn⟩
+  have hafin : ∀ n, a n ≠ ⊤ := ne_top_of_forall_sum_le hbfin h
+  refine iSup_le fun c => ?_
+  -- Pick `N` past the support of `c`.
+  obtain ⟨N, hN⟩ := c.1.support.exists_nat_subset_range
+  -- `c ≤ truncate a N`, so `mono` bounds `Φ c`.
+  have hct : c.1 ≤ truncate a hafin N := by
+    intro i
+    by_cases hi : i < N
+    · have hle : (c.1 i : ℝ≥0∞) ≤ a i := c.2 i
+      have : (c.1 i : ℝ≥0∞) ≤ ((truncate a hafin N) i : ℝ≥0∞) := by
+        simpa [truncate, hi, ENNReal.coe_toNNReal (hafin i)] using hle
+      exact_mod_cast this
+    · have : c.1 i = 0 := by
+        by_contra hne
+        exact hi (Finset.mem_range.mp (hN (Finsupp.mem_support_iff.mpr hne)))
+      simp [this]
+  -- The two truncations are the `ofFin` images of the `Fin N` views.
+  have hAt : Φ (truncate a hafin N) ≤ Φ (truncate b hbfin N) := by
+    rw [← ofFin_finView a hafin N, ← ofFin_finView b hbfin N]
+    exact Φ.le_of_prefixSum_le (finView_antitone ha hafin N)
+      (finView_nonneg a N) (finView_nonneg b N)
+      (fun k => prefixSum_finView_le hafin hbfin h N k)
+  calc (Φ c.1 : ℝ≥0∞)
+      ≤ (Φ (truncate a hafin N) : ℝ≥0∞) := by exact_mod_cast Φ.mono hct
+    _ ≤ (Φ (truncate b hbfin N) : ℝ≥0∞) := by exact_mod_cast hAt
+    _ ≤ Φ.extend b :=
+        le_extend_of_dominated Φ b (truncate b hbfin N) (truncate_le b hbfin N)
 
 end SymmetricGauge
 
