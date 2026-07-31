@@ -15,7 +15,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact
 /-!
 # The infinite-dimensional diagonal acceptance example
 
-Acceptance example (6) of `ForTauCetiRoadmap/OperatorIdeals/README.md`: a
+Acceptance example (6) of `ForTauCetiRoadmap/OperatorIdeals/README.md` [stale]: a
 diagonal operator on `ℓ²` whose coefficients tend to zero has vanishing
 approximation numbers, hence is compact.
 
