@@ -77,8 +77,16 @@ HIT_BASELINE = 0
 #: the same way.  The decoration must be optional and must sit between the keyword and the
 #: id, which is exactly where a writer puts it.  `\s+` already spans a newline, which
 #: matters: three of the fifteen had wrapped between `lane` and the id.
+#: `(?:\s|--)+` rather than `\s+`, for the same reason the decoration is optional, and it
+#: was a live hole rather than a hypothetical one.  `\s+` spans a newline, which the note
+#: above relies on -- but in a **line-comment** block the next line starts with `--`, so
+#: `Recorded debt, tracked as lane\n-- FTC-EXPOSE-SPECMEAS.` has a non-whitespace run
+#: between the keyword and the id and did not match.  Two such references sat in
+#: `SpectralMeasure/Construction.lean` while this gate reported a clean tree at baseline 0.
+#: They are gone now and widening the pattern finds nothing, so the fix costs no baseline;
+#: it is here so that the next one is caught rather than measured after the fact.
 LANE_ID = re.compile(
-    r"\b[Ll]anes?\s+[`*_]{0,2}(?:[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+|Y\d+|T\d+[a-c]?)\b")
+    r"\b[Ll]anes?(?:\s|--)+[`*_]{0,2}(?:[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+|Y\d+|T\d+[a-c]?)\b")
 
 #: Paths that do not exist in the destination repository, or at all.
 #:

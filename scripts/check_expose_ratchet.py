@@ -76,7 +76,16 @@ BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 #:     `toProjValMeasure`, `specDiag`, and six more, one build at a time.  The clean fix
 #:     is a `_def` lemma per definition plus rewiring the call sites: lane
 #:     FTC-EXPOSE-SPECMEAS.  Lowering this number is that lane's job.
-PER_DECL_BASELINE = 18
+#: Lowered 18 -> 17 on 2026-07-30 by the census slice of lane FTC-EXPOSE-SPECMEAS, which
+#: removed each of the nine spectral-measure exposures and let the compiler say which are
+#: load-bearing.  The result is worth recording because it is not what the site comments
+#: said: eight of the nine are genuinely needed at this toolchain, `specRange` was not, and
+#: `specRestrict` is a clean carve-out rather than debt (its `_apply` lemma cannot be
+#: *stated* without `.domain` reducing).  `specRange` cost one API lemma,
+#: `specProjection_mem_specRange`, and four rewired call sites that were proving membership
+#: with `⟨y, rfl⟩`.  The remaining eight need the `SpectralMeasure.lean` refactor, not an
+#: attribute edit: removing them leaves that module failing at a dozen-plus sites.
+PER_DECL_BASELINE = 17
 
 PER_DECL = re.compile(r"^@\[expose\]\s*$|^@\[simps![^\]]*,\s*expose\]\s*$", re.M)
 
