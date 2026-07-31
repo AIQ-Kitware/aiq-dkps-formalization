@@ -431,8 +431,12 @@ theorem measure_forall_abs_sortedEigenvalues_sub_le_ge
 ```
 
 **Milestone D2 — the operator-norm deviation event.** The event the spectral-subspace
-perturbation statistics consumes *directly*, and the last statement in the roadmap that is
-not yet written down:
+perturbation statistics consumes *directly*.  **Written down and proved 2026-07-31** as
+`TauCeti.measure_forall_norm_toEuclideanLin_sub_le_ge` in
+`ForTauCeti/Probability/Moments/MatrixConcentration.lean` — axiom-clean, and structured as this
+section prescribes: the entrywise event is factored out as `measure_exists_entry_gt_le` and both
+D1 and D2 read off it, so the probability `1 − n² v/η²` is literally the same number in both.
+It was, until then, the last statement in this roadmap not yet written down:
 
 ```lean
 theorem measure_forall_norm_toEuclideanLin_sub_le_ge
