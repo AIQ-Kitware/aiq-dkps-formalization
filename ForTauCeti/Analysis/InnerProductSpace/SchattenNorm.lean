@@ -158,14 +158,6 @@ theorem singularValueVector_add_weaklyMajorized (A B : E →ₗ[𝕜] F) :
       prefixSum_singularValueVector]
     exact rectangularKyFanSum_add_le k A B
 
-/-- Historical spelling of singular-value weak subadditivity retained for
-downstream candidate modules. -/
-theorem singularValues_add_weaklyMajorized (A B : E →ₗ[𝕜] F) :
-    FiniteVector.WeaklyMajorized
-      (singularValueVector (A + B))
-      (singularValueVector A + singularValueVector B) :=
-  singularValueVector_add_weaklyMajorized A B
-
 /-- Singular-value vectors scale by the norm of the scalar. -/
 theorem singularValueVector_smul (a : 𝕜) (A : E →ₗ[𝕜] F) :
     singularValueVector (a • A) = ‖a‖ • singularValueVector A := by
