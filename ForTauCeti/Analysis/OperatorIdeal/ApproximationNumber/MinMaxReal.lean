@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
 
-import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
 import ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
@@ -19,27 +19,50 @@ This module proves the real spectral-threshold form of the accepted complex
 infinite-dimensional Courant--Fischer localization theorem, together with its
 LUB / epsilon characterizations.
 
-The pinned continuous-functional-calculus API is available for bounded operators
-on complex Hilbert spaces, but not directly for bounded operators on real
-Hilbert spaces.  The first sections build the transport infrastructure: the
-canonical conjugation on the complexification, the descent of conjugation-fixed
-operators back to the real Hilbert space, the relation of complexification to
-the Gram operator and the adjoint, and the continuous high-energy spectral
-cutoff.  The transport helpers are `private`; the public results are:
+Mathlib's continuous functional calculus is available for bounded operators on complex
+Hilbert spaces but not directly for bounded operators on real ones, so the proof works on
+the complexification and descends.  The transport it needs — the canonical conjugation, the
+descent of conjugation-fixed operators, and the complexification laws for the adjoint and
+the Gram operator — is
+`ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus`.  What is local
+to this file is the continuous high-energy spectral cutoff, which is `private`.
 
-* `exists_linearIndependent_lowerBound_of_lt_approximationNumber_real`;
-* `exists_finiteRestrictionApproximationNumber_gt_of_lt_real`;
-* `approximationNumber_isLUB_finiteRestrictions_real`;
-* `lt_approximationNumber_iff_exists_finiteDimensional_lowerBound_real`.
+## Main results
+
+* `TauCeti.ApproximationNumber.exists_linearIndependent_lowerBound_of_lt_approximationNumber_real`:
+  every strict lower bound for `aₙ(T)` is realized by a uniform lower modulus on a real
+  `(n+1)`-dimensional subspace — the real Courant--Fischer localization;
+* `TauCeti.ApproximationNumber.hasMinMaxLowerBound_real`: the packaged form, which is the
+  hypothesis `kyFanGauge_add_le_of_exists_finiteRestriction` takes over `RCLike 𝕜` and which
+  until now only `ℂ` could discharge;
+* `TauCeti.ApproximationNumber.exists_finiteRestrictionApproximationNumber_gt_of_lt_real`;
+* `TauCeti.ApproximationNumber.approximationNumber_isLUB_finiteRestrictions_real`;
+* `TauCeti.ApproximationNumber.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound_real`.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `DavisKahan/OperatorIdeal/ApproximationNumbers/Real/Threshold.lean`.
+* Extraction class: **moved**, not restated.  Of its three non-Mathlib imports, two were
+  already `ForTauCeti` and the third,
+  `DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean`, is an export shim whose own
+  docstring says every declaration in it is a forwarding name — so the module depended on no
+  mathematics in the paper library.
+* Namespace `TauCeti.DavisKahan.Experimental.ExactSinTheta.ApproximationNumbersReal` became
+  `TauCeti.ApproximationNumber`, the namespace of the `approximationNumber` these theorems
+  are about.  The `_real` suffix stays: it distinguishes each statement from its `_complex`
+  twin, which is what the suffix has always meant here.
+* **317 lines came off on the way in.**  The module carried a `private` copy of thirty
+  transport lemmas that are declaration-for-declaration the public API it already imported.
+* Original authors / copyright: Jon Crall, GPT-5.6 Thinking; Copyright (c) 2026 Kitware,
+  Inc.; Apache 2.0.
+* Spectra influence: **none**.
 -/
 
 open scoped InnerProductSpace ComplexConjugate Topology
 
 namespace TauCeti
-namespace DavisKahan
-namespace Experimental
-namespace ExactSinTheta
-namespace ApproximationNumbersReal
+namespace ApproximationNumber
 
 open Module (finrank)
 open Filter
@@ -162,7 +185,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
   have hru : r < u := by dsimp only [u, a]; linarith
   have hua : u < a := by dsimp only [u, a]; linarith
   have hu0 : 0 < u := by linarith
-
+  -- Transport to the complexification: the functional calculus is available there.
   let Tc : RealComplexification E →L[ℂ] RealComplexification F := complexify T
   let C0 : E →L[ℝ] E := T.adjoint ∘L T
   let C : RealComplexification E →L[ℂ] RealComplexification E := Tc.adjoint ∘L Tc
@@ -176,7 +199,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
   have hC : IsSelfAdjoint C := IsSelfAdjoint.of_nonneg hCnonneg
   have hCfix : conjugateOperator C = C := by
     rw [hCeq, conjugateOperator_complexify]
-
+  -- Split the spectrum of the Gram operator at `u ^ 2` with the continuous cutoff.
   let p : ℝ → ℝ := spectralCutoff u
   let q : ℝ → ℝ := fun x => 1 - p x
   have hpcont : Continuous p := continuous_spectralCutoff u hu0
@@ -200,11 +223,11 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
     rw [hQcEq]
     dsimp only [Q]
     rw [complexify_sub, complexify_id, hPcComplexify]
-
+  -- `C` is a Gram operator, so its real spectrum is nonnegative.
   have hCspec_nonneg : ∀ x ∈ spectrum ℝ C, 0 ≤ x := by
     intro x hx
     exact spectrum_nonneg_of_nonneg hCnonneg hx
-
+  -- The high-energy piece: `T ∘L Q` has norm at most `u`.
   have hQcSelfAdjoint : IsSelfAdjoint Qc := cfc_predicate q C
   have htailGram :
       (Tc ∘L Qc).adjoint ∘L (Tc ∘L Qc) =
@@ -230,7 +253,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
             apply cfc_congr
             intro x _
             ring
-
+  -- and its Gram operator is `x * q x ^ 2`, which the cutoff bounds by `u ^ 2`.
   have htailCfcNorm :
       ‖cfc (fun x => x * (q x) ^ 2) C‖ ≤ u ^ 2 := by
     refine norm_cfc_le (f := fun x : ℝ => x * (q x) ^ 2) (a := C)
@@ -254,7 +277,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
     rw [← norm_complexify]
     rw [complexify_comp, hQcComplexify]
     exact htailComplex
-
+  -- The low-energy piece: on the range of `P` the modulus is bounded below by `u`.
   have hlowerCfcNonneg :
       (0 : RealComplexification E →L[ℂ] RealComplexification E) ≤
         cfc (fun x => (x - u ^ 2) * (p x) ^ 2) C := by
@@ -369,7 +392,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
         rw [hPcReal]
         dsimp only [Tc]
         rw [complexify_ofReal, ofReal.norm_map]
-
+  -- If `P` had rank at most `n` it would exhibit `a_n(T) ≤ u`, contradicting `u < a`.
   have hPrank : ¬ P.rank ≤ (n : Cardinal) := by
     intro hP
     let R : E →L[ℝ] F := T ∘L P
@@ -389,7 +412,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
         _ = ‖T ∘L Q‖ := by rw [herr]
         _ ≤ u := htailReal
     exact (not_le_of_gt hua) hau
-
+  -- So `P.range` has rank at least `n + 1`; extract the independent family from it.
   let W : Submodule ℝ E := P.range
   have hnrank : ((n + 1 : ℕ) : Cardinal) ≤ Module.rank ℝ W := by
     change ((n + 1 : ℕ) : Cardinal) ≤ P.rank
@@ -453,8 +476,5 @@ theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound_real
 
 end
 
-end ApproximationNumbersReal
-end ExactSinTheta
-end Experimental
-end DavisKahan
+end ApproximationNumber
 end TauCeti

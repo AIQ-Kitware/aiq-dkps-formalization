@@ -292,7 +292,7 @@ theorem approximationNumber_le_complexify
     exact (lt_of_not_ge hr0).trans_le
       (ContinuousLinearMap.approximationNumber_nonneg _ n)
   obtain ⟨s, hrs, v, hv, hV⟩ :=
-    ApproximationNumbersReal.exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
+    TauCeti.ApproximationNumber.exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
       T n hr0 hr
   have hs0 : 0 ≤ s := hr0.trans hrs.le
   have hvC : LinearIndependent ℂ (fun i => ofReal (v i)) :=
