@@ -270,10 +270,20 @@ holds vacuously for `i > n` because `x` lies in the span.  That is the same
 technique `norm_sub_truncDiagOpLp_le` already uses, one inequality reversed.
 
 **So the remaining obstacle is the linear algebra after all**: producing the unit
-`x` in the span with `R x = 0`.  Rank-nullity gives it, but it has to be set up
-against a concrete `(n+1)`-dimensional model — for instance by pulling back along
-the coefficient map `(Fin (n+1) → 𝕜) →ₗ[𝕜] lp _ 2` and observing that `R`
-composed with it cannot be injective.
+`x` in the span with `R x = 0`.  The concrete route, with the Mathlib entry point:
+
+* let `ι : (Fin (n+1) → 𝕜) →ₗ[𝕜] lp (fun _ : ℕ => 𝕜) 2` send `w` to
+  `∑ i, w i • lp.single 2 i 1`, and set `g := R.toLinearMap ∘ₗ ι`;
+* `LinearMap.finrank_range_add_finrank_ker g` gives
+  `finrank (range g) + finrank (ker g) = n + 1`, and `range g ≤ range R` with
+  `R.rank ≤ n` forces `finrank (range g) ≤ n`, hence `ker g ≠ ⊥`;
+* take `w ≠ 0` in that kernel and `x := ι w`, which is nonzero because `ι` is
+  injective — the `lp.single 2 i 1` are linearly independent.
+
+**The `Cardinal`-to-`finrank` step is the one to watch**: `rank` is stated as
+`R.rank ≤ (n : Cardinal)` while rank-nullity is in `finrank`, and the conversion
+needs `range R` known finite-dimensional, which the rank bound supplies but not
+definitionally.
 -/
 
 end TauCeti
