@@ -10,7 +10,7 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
 import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
 import DavisKahan.Sources.DavisKahan1970.StableRiccatiPair
-import FinishTanTwoTheta.DavisKahan.SharpKyFan
+import DavisKahan.Sources.DavisKahan1970.SharpKyFan
 import FinishTanTwoTheta.DavisKahan.SharpIdeal
 import FinishTanTwoTheta.DavisKahan.PaperFaithful
 import DavisKahan.Sources.DavisKahan1970.Audits.DoubleAngleTangent
