@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
 """Report, per roadmap topic, which suggested signatures are proved in the library.
 
-`ForTauCetiRoadmap/*/Suggested.lean` records target signatures whose bodies are
+`ForTauCetiRoadmap/**/Suggested.lean` records target signatures whose bodies are
 deliberately `sorry` -- `ForTauCetiRoadmap.lean` exists so that a broken suggested
 signature is a build failure, and that guard has caught real elaboration errors.
 The bodies are therefore NOT the finding and this script never looks at them.  What
-it answers is the other question: *which of those target signatures have actually
-landed*, so a finished topic can say so instead of reading as a plan.
+it answers is the other question: *which of those target signatures already have a
+declaration of that name in the libraries*, so that whoever plans work can see where
+the staged tree stands.
+
+**This is an internal diagnostic and its output does not belong in a roadmap.**  A
+name match is evidence about spelling, not about mathematics: it does not check that
+the two statements agree, and roughly one match in eight resolves to more than one
+module.  Roadmap prose states what the mathematics should be; it is reviewed by
+reading it, not by running this.
 
 **Why this is a script and not a `grep`.**  The first hand-rolled check of
 `MajorizationAndAngles` reported **17 of 26 signatures missing**, including
@@ -24,14 +31,12 @@ variation in real Lean declaration syntax:
 So: index every declaration in the libraries **once**, key it on both the
 fully-qualified and the base name, and set-compare.  Do not grep per name.
 
-Exit status is 0 unless `--strict` is given, because an undelivered signature is
-ordinary outstanding work, not a defect.  With `--strict` a topic that is 100%
-delivered but whose README carries no delivered marker is reported -- that is the
-condition this lane exists to remove.
+Exit status is always 0: an unmatched signature is ordinary outstanding work, not a
+defect.
 
 Usage:
-    python3 scripts/check_roadmap_delivered.py               # per-topic summary
-    python3 scripts/check_roadmap_delivered.py --topic FiniteDimensionalOperators
+    python3 scripts/check_roadmap_delivered.py               # per-roadmap summary
+    python3 scripts/check_roadmap_delivered.py --topic OperatorIdeals
     python3 scripts/check_roadmap_delivered.py --missing     # list what is outstanding
     python3 scripts/check_roadmap_delivered.py --map         # per-signature destinations
     python3 scripts/check_roadmap_delivered.py --json
@@ -58,10 +63,6 @@ DECL = re.compile(
     r"(?:_root_\.)?([A-Za-z_][A-Za-z0-9_'.’]*)",
     re.M,
 )
-
-# Marker a topic README/Suggested.lean carries once the topic is known complete.
-DELIVERED = re.compile(r"DELIVERED", re.I)
-
 
 def strip_block_comments(text: str) -> str:
     """Blank out `/- ... -/` regions so prose cannot look like a declaration.
@@ -142,18 +143,10 @@ def topic_signatures(topic_dir: pathlib.Path) -> list[str]:
     return out
 
 
-def marked_delivered(topic_dir: pathlib.Path) -> bool:
-    for name in ("README.md", "Suggested.lean"):
-        p = topic_dir / name
-        if p.exists() and DELIVERED.search(p.read_text(errors="replace")):
-            return True
-    return False
-
-
 def analyse() -> list[dict]:
     index = declaration_index()
     results = []
-    for topic_dir in sorted(p for p in ROADMAP.iterdir() if p.is_dir()):
+    for topic_dir in sorted(p.parent for p in ROADMAP.rglob("Suggested.lean")):
         names = topic_signatures(topic_dir)
         if not names:
             continue
@@ -174,7 +167,6 @@ def analyse() -> list[dict]:
             "missing": missing,
             "map": found,
             "ambiguous": ambiguous,
-            "marked": marked_delivered(topic_dir),
         })
     return results
 
@@ -188,8 +180,6 @@ def main() -> int:
     ap.add_argument("--ambiguous", action="store_true",
                     help="list signatures whose name is declared in more than one module")
     ap.add_argument("--json", action="store_true", help="machine-readable output")
-    ap.add_argument("--strict", action="store_true",
-                    help="exit 1 if a 100%%-delivered topic carries no delivered marker")
     args = ap.parse_args()
 
     results = analyse()
@@ -203,15 +193,9 @@ def main() -> int:
         print(json.dumps(results, indent=2, sort_keys=True))
         return 0
 
-    unmarked = []
     for r in results:
         pct = 100.0 * r["delivered"] / r["total"]
-        flag = "COMPLETE" if not r["missing"] else "        "
-        mark = "marked" if r["marked"] else "UNMARKED"
-        print(f"{flag} {r['topic']:<32} {r['delivered']:>3}/{r['total']:<3} "
-              f"({pct:5.1f}%)  {mark}")
-        if not r["missing"] and not r["marked"]:
-            unmarked.append(r["topic"])
+        print(f"  {r['topic']:<34} {r['delivered']:>3}/{r['total']:<3} ({pct:5.1f}%)")
         if args.missing and r["missing"]:
             for n in r["missing"]:
                 print(f"           outstanding: {n}")
@@ -227,16 +211,10 @@ def main() -> int:
 
     total = sum(r["total"] for r in results)
     done = sum(r["delivered"] for r in results)
-    print(f"\nroadmap delivery: {done}/{total} suggested signatures proved "
-          f"({100.0 * done / total:.1f}%)" if total else "no signatures found")
-
-    if unmarked:
-        print("\nTopics that are 100% delivered but still read as plans "
-              "(add a DELIVERED banner):")
-        for t in unmarked:
-            print(f"  {t}")
-        if args.strict:
-            return 1
+    print(f"\nname matches: {done}/{total} suggested signatures have a declaration of "
+          f"that name ({100.0 * done / total:.1f}%)" if total else "no signatures found")
+    print("A name match is not a proof that the statements agree; this is a planning "
+          "aid, not a validation.")
     return 0
 
 

@@ -114,22 +114,22 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  [A+"LinearPMap."+x for x in ["Resolvent","ResolventBound","ResolventOpen",
    "SelfAdjointResolvent","RealLowerBound"]]
  +["Analysis.CStarAlgebra.SelfAdjointGapInverse",A+"SeparatedIntertwiner"]),
-# `Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank` is approximation-number
-# material by subject but sits here by dependency: it imports `LinearPMap.Constructions`
-# (T15a) and `LinearPMap.SpectralFormBounds` (T15c), so filing it under T09 makes T09
-# unsubmittable -- `--check` reports it as a forward reference, which is how this was
-# caught when the module was lifted out of `DavisKahan` on 2026-07-31.
-# `ApproximationNumber.FinitePVMSelection` is here for the same reason and one step
-# removed: it imports `GramSpectralRank`, so it inherits that dependency wholesale.
 ("T15c","The spectral measure of an unbounded self-adjoint operator, and Stone",
  [A+"LinearPMap."+x for x in ["SpectralMeasure","SpectralMeasure.Construction","SpectralGrid",
    "SpectralSupport","SpectralFormBounds","SpectralGapInverse","SpectralCutOperator",
    "SpectralProjectionGroup","SelfAdjointMaximal","StoneUniqueness","YosidaApproximation"]]
- +["Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank",
-   "Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection",
-   # and `GramBandPolar` for the same reason two steps removed: it imports both of them.
-   "Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar"]
  +[A+"BlockLowerBound"]),
+# Approximation numbers and finite ranks of spectral bands. These three modules are
+# operator-ideal material that *consumes* the unbounded spectral measure, so they must be
+# submitted after T15c -- but they are not spectral theory, and while they sat inside T15c
+# they were the sole source of the `T15c -> T09` and `T15c -> T02` edges, which made the
+# spectral-theory roadmap look like a consumer of the operator-ideal roadmap. Nothing
+# outside the three imports any of them, so they split off cleanly as a leaf topic owned by
+# `OperatorIdeals`. The key is stable and is not renumbered: its position in this list, not
+# its number, is its place in the ladder.
+("T23","Approximation numbers and finite ranks of spectral bands",
+ ["Analysis.OperatorIdeal.ApproximationNumber."+x for x in
+  ["GramSpectralRank","FinitePVMSelection","GramBandPolar"]]),
 ("T16","Sylvester equations and the Rosenblum theorem",
  [A+x for x in ["Rosenblum","HilbertSchmidt.Block","CoerciveUnit"]]
  +[A+"Sylvester."+x for x in ["Basic","Interval","SpectralDistance",
@@ -176,34 +176,40 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 INTENTIONAL_ORPHANS: dict[str, str] = {}
 
 
+TOPIC_MAP = ROOT / "ForTauCetiRoadmap" / "internal" / "topic-map.md"
+TOPIC_MAP_ROW = re.compile(r"^\|\s*`([A-Za-z0-9_/]+)`\s*\|\s*((?:T\d+[a-c]?\s*)+)\|", re.M)
+
+
 def roadmap_coverage() -> tuple[list, list, list, list, dict]:
     """(covered, missing, unexpected orphans, intentional orphans, dir->topics).
 
-    The directory-to-topic mapping is DERIVED, not maintained: each roadmap README
-    declares every topic it covers ("**Topic T19 of the candidate design.**"), so
-    writing a new roadmap needs no edit here. A hand-maintained map went stale three
-    times in one day -- once per roadmap another agent wrote -- and each time it
-    reported that agent's finished work as an ORPHAN covering no topic.
+    Topic keys are internal bookkeeping, so they are declared in the sidecar
+    `ForTauCetiRoadmap/internal/topic-map.md` rather than inside the roadmap READMEs:
+    a roadmap README is a mathematical specification for a human reviewer and should
+    not carry this repository's identifiers. The sidecar is one table, and every
+    property below is still checked against it.
 
-    Since the 2026-07-30 consolidation a roadmap directory covers SEVERAL topics
-    (the topics are its Parts, in submission order), so every declaration in a
-    README counts, not just the first. A topic declared by two directories is an
-    error: the partition of topics into roadmaps must stay disjoint too.
+    A roadmap directory is any directory holding a `README.md` and a `Suggested.lean`,
+    found at any depth under `ForTauCetiRoadmap/` (the family groups them one level
+    down). One that the map does not mention is an ORPHAN; a topic no directory owns
+    is MISSING; a topic two directories claim is an error, since the partition of
+    topics into roadmaps must stay disjoint.
     """
     root = ROOT / "ForTauCetiRoadmap"
-    dirs = {d.name for d in root.iterdir() if d.is_dir()} if root.exists() else set()
+    dirs = {str(p.parent.relative_to(root)) for p in root.rglob("README.md")
+            if (p.parent / "Suggested.lean").exists()} if root.exists() else set()
 
+    text = TOPIC_MAP.read_text(errors="ignore") if TOPIC_MAP.exists() else ""
     declared: dict[str, list[str]] = defaultdict(list)   # topic key -> directories
-    undeclared: set[str] = set()
-    for name in sorted(dirs):
-        readme = root / name / "README.md"
-        keys = re.findall(r"\*\*Topic\s+(T\d+[a-c]?)\b", readme.read_text(errors="ignore")) \
-            if readme.exists() else []
-        if keys:
-            for k in dict.fromkeys(keys):     # dedup, keep order
-                declared[k].append(name)
-        else:
-            undeclared.add(name)
+    mapped: set[str] = set()
+    for name, keys in TOPIC_MAP_ROW.findall(text):
+        mapped.add(name)
+        for k in dict.fromkeys(keys.split()):
+            declared[k].append(name)
+    undeclared = dirs - mapped
+    # a mapped directory that does not exist is as bad as an unmapped one that does
+    orphans_missing_dir = sorted(f"{n} (in the topic map, but no such roadmap directory)"
+                                 for n in mapped - dirs)
 
     known = {k for k, _, _ in TOPICS}
     covered, missing, doubled = [], [], []
@@ -217,7 +223,8 @@ def roadmap_coverage() -> tuple[list, list, list, list, dict]:
     bogus = sorted(f"{d} (declares unknown topic {k})"
                    for k, ds in declared.items() if k not in known for d in ds)
     intentional = sorted(undeclared & set(INTENTIONAL_ORPHANS))
-    orphans = sorted(undeclared - set(INTENTIONAL_ORPHANS)) + bogus + doubled
+    orphans = (sorted(undeclared - set(INTENTIONAL_ORPHANS)) + orphans_missing_dir
+               + bogus + doubled)
 
     groups: dict[str, list[str]] = defaultdict(list)     # directory -> topics, design order
     for key, _, _ in TOPICS:
@@ -321,8 +328,9 @@ def main(argv: list[str] | None = None) -> int:
             ts = groups[name]
             n = sum(sizes[t] for t in ts)
             need = sorted(needs[name], key=lambda x: min(order[t] for t in groups[x]))
-            print(f"  {name:<30} {' '.join(ts):<28} {n:3} modules  "
-                  f"needs: {', '.join(need) if need else '— independent'}")
+            short = lambda s: s.rsplit("/", 1)[-1]
+            print(f"  {short(name):<32} {' '.join(ts):<24} {n:3} modules  "
+                  f"needs: {', '.join(map(short, need)) if need else '— independent'}")
         print()
         for key, title, dd in missing:
             print(f"  MISSING  {key:<5} {title}")
