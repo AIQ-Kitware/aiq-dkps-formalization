@@ -261,11 +261,29 @@ The argument, so that whoever takes it does not re-derive it:
 * Then `(D − R) x = D x`, and `‖D x‖² = ∑_{i ≤ n} ‖cᵢ‖² ‖xᵢ‖² ≥ ‖cₙ‖²` by
   antitonicity of `‖c ·‖` and `∑ ‖xᵢ‖² = 1`.
 
-**The fiddly part is the last step, not the linear algebra**: it is an `lp 2`
-coordinate computation on a vector known only to lie in a span, and this module
-has no lemma reading the norm of such a vector off its coordinates — everything
-here goes through `lp.norm_mono` against an explicit comparison vector, which
-bounds but does not compute.
+**Correction (2026-07-31, same lane).**  An earlier version of this note called
+the last step the obstacle, on the grounds that the module has no lemma reading
+an `lp 2` norm off coordinates.  **That is wrong, and in the useful direction:
+`lp.norm_mono` does exactly this step.**  Apply it to `‖cₙ • x‖ ≤ ‖D x‖`, whose
+pointwise hypothesis `‖cₙ xᵢ‖ ≤ ‖cᵢ xᵢ‖` holds for `i ≤ n` by antitonicity and
+holds vacuously for `i > n` because `x` lies in the span.  That is the same
+technique `norm_sub_truncDiagOpLp_le` already uses, one inequality reversed.
+
+**So the remaining obstacle is the linear algebra after all**: producing the unit
+`x` in the span with `R x = 0`.  The concrete route, with the Mathlib entry point:
+
+* let `ι : (Fin (n+1) → 𝕜) →ₗ[𝕜] lp (fun _ : ℕ => 𝕜) 2` send `w` to
+  `∑ i, w i • lp.single 2 i 1`, and set `g := R.toLinearMap ∘ₗ ι`;
+* `LinearMap.finrank_range_add_finrank_ker g` gives
+  `finrank (range g) + finrank (ker g) = n + 1`, and `range g ≤ range R` with
+  `R.rank ≤ n` forces `finrank (range g) ≤ n`, hence `ker g ≠ ⊥`;
+* take `w ≠ 0` in that kernel and `x := ι w`, which is nonzero because `ι` is
+  injective — the `lp.single 2 i 1` are linearly independent.
+
+**The `Cardinal`-to-`finrank` step is the one to watch**: `rank` is stated as
+`R.rank ≤ (n : Cardinal)` while rank-nullity is in `finrank`, and the conversion
+needs `range R` known finite-dimensional, which the rank bound supplies but not
+definitionally.
 -/
 
 end TauCeti
