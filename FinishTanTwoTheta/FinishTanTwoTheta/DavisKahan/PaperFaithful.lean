@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.DavisKahan.SharpIdeal
+import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 import FinishTanTwoTheta.DavisKahan.InfiniteQuarterAcute
 import FinishTanTwoTheta.DavisKahan.CanonicalTangentBridge
 import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
@@ -72,7 +72,7 @@ noncomputable def paperTanTwoThetaRepresentative
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   letI : CompleteSpace (Uᗮ : Submodule ℂ E) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  exact TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator
+  exact TauCeti.DavisKahan.doubleAngleTangentOperator
     (TauCeti.DavisKahanExt.quarterAcuteAngularCoordinate U V hquarter)
     (TauCeti.DavisKahanExt.norm_quarterAcuteAngularCoordinate_lt_one U V hquarter)
 
@@ -347,7 +347,7 @@ private theorem graphCoordinate_paper_bound_of_quarterAcute
         2 * N.gauge H
   have hrepresentative :
       paperTanTwoThetaRepresentative U V hquarter =
-        TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive := rfl
+        TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive := rfl
   rw [hrepresentative]
   refine ⟨hsharp.1, hsharp.2.trans ?_⟩
   calc

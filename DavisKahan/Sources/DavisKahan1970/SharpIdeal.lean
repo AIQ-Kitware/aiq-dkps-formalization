@@ -17,7 +17,6 @@ unscaled using the repository's existing real-gauge theorem.
 
 namespace TauCeti
 namespace DavisKahan
-namespace FinishTanTwoTheta
 
 open scoped InnerProductSpace
 open DavisKahanExt
@@ -166,6 +165,5 @@ theorem sharp_nuclear
 
 end
 
-end FinishTanTwoTheta
 end DavisKahan
 end TauCeti

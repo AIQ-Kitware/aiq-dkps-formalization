@@ -78,7 +78,11 @@ def lean_files(scope: str | None) -> list[pathlib.Path]:
     paths = [p for p in out.splitlines() if p and not p.startswith(SKIP)]
     if scope:
         paths = [p for p in paths if p.startswith(scope)]
-    return [ROOT / p for p in paths]
+    # `git ls-files` reports the *index*, which during a half-staged rename still
+    # names a path that no longer exists on disk.  Skipping those turns a
+    # traceback into a correct report of the tree as it stands; a detector that
+    # crashes mid-refactor is a detector nobody runs mid-refactor.
+    return [ROOT / p for p in paths if (ROOT / p).is_file()]
 
 
 def strip_comments(text: str) -> str:
