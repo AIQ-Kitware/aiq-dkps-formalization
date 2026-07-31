@@ -126,6 +126,22 @@ private theorem diagonal_basis (b : OrthonormalBasis (Fin d) ℝ E) (c : Fin d �
   have := b.toBasis.constr_basis ℝ (fun j => c j • b j) k
   rwa [OrthonormalBasis.coe_toBasis] at this
 
+/-- **Diagonals compose pointwise.**  `diagonal b f ∘ₗ diagonal b g` is the
+diagonal of the pointwise product. -/
+private theorem diagonal_comp_diagonal (b : OrthonormalBasis (Fin d) ℝ E)
+    (f g : Fin d → ℝ) :
+    diagonal b f ∘ₗ diagonal b g = diagonal b (fun k => f k * g k) := by
+  refine b.toBasis.ext fun k => ?_
+  rw [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, diagonal_basis, map_smul,
+    diagonal_basis, diagonal_basis, smul_smul, mul_comm]
+
+/-- **A diagonal minus the identity is diagonal**, with factors `c k - 1`. -/
+private theorem diagonal_sub_id (b : OrthonormalBasis (Fin d) ℝ E) (c : Fin d → ℝ) :
+    diagonal b c - LinearMap.id = diagonal b fun k => c k - 1 := by
+  refine b.toBasis.ext fun k => ?_
+  rw [OrthonormalBasis.coe_toBasis, LinearMap.sub_apply, LinearMap.id_apply,
+    diagonal_basis, diagonal_basis, sub_smul, one_smul]
+
 /-- A diagonal operator acts on basis coordinates by scalar multiplication. -/
 private theorem repr_diagonal (b : OrthonormalBasis (Fin d) ℝ E) (c : Fin d → ℝ) (x : E)
     (k : Fin d) : b.repr (diagonal b c x) k = c k * b.repr x k := by
@@ -181,10 +197,7 @@ This is the operator form of the scalar estimate that makes the near-isometry co
 private theorem norm_diagonal_apply_sub_self_le (b : OrthonormalBasis (Fin d) ℝ E)
     (c : Fin d → ℝ) {δ : ℝ} (hδ0 : 0 ≤ δ) (hc : ∀ k, |c k - 1| ≤ δ) (x : E) :
     ‖diagonal b c x - x‖ ≤ δ * ‖x‖ := by
-  have hsub : diagonal b c - LinearMap.id = diagonal b fun k => c k - 1 := by
-    refine b.toBasis.ext fun k => ?_
-    simp only [OrthonormalBasis.coe_toBasis, LinearMap.sub_apply, LinearMap.id_apply,
-      diagonal_basis, sub_smul, one_smul]
+  have hsub := diagonal_sub_id b c
   have hx : diagonal b c x - x = diagonal b (fun k => c k - 1) x := by
     have := congrArg (fun T : E →ₗ[ℝ] E => T x) hsub
     simpa using this
@@ -366,17 +379,18 @@ theorem exists_linearIsometryEquiv_comp_polarFactor (M : E →ₗ[ℝ] E) {δ : 
   set R : E →ₗ[ℝ] E := diagonal b (fun k => (Real.sqrt (μ k))⁻¹) with hR
   have hRS : ∀ x : E, R (S x) = x := by
     have : R ∘ₗ S = LinearMap.id := by
+      rw [hS, hR, diagonal_comp_diagonal]
       refine b.toBasis.ext fun k => ?_
-      simp only [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, LinearMap.id_apply, hS, hR,
-        diagonal_basis, map_smul, smul_smul,
-        mul_inv_cancel₀ (ne_of_gt (hsqrtpos k)), one_smul]
+      rw [OrthonormalBasis.coe_toBasis, LinearMap.id_apply, diagonal_basis,
+        inv_mul_cancel₀ (ne_of_gt (hsqrtpos k)), one_smul]
     intro x
     exact congrArg (fun T : E →ₗ[ℝ] E => T x) this
   -- `S` is a square root of the Gram operator.
   have hSS : S ∘ₗ S = M.adjoint ∘ₗ M := by
+    rw [hS, diagonal_comp_diagonal]
     refine b.toBasis.ext fun k => ?_
-    simp only [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, hS, diagonal_basis, map_smul,
-      smul_smul, Real.mul_self_sqrt (le_of_lt (hμpos k))]
+    rw [OrthonormalBasis.coe_toBasis, diagonal_basis,
+      Real.mul_self_sqrt (le_of_lt (hμpos k))]
     exact (hGbasis k).symm
   -- The candidate isometry `W₀ = M ∘ R`, which is orthonormal on the eigenbasis.
   set W₀ : E →ₗ[ℝ] E := M ∘ₗ R with hW
