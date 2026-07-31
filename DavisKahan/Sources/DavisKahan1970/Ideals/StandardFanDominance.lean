@@ -3,7 +3,6 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.GroundedImports
 import DavisKahan.Sources.DavisKahan1970.Ideals.SequenceGauge
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 import DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence
@@ -28,7 +27,7 @@ claiming an unproved property of the raw closure.
 -/
 
 namespace TauCeti
-namespace FinishTanTwoTheta
+namespace SymmetricIdeal
 
 open scoped BigOperators
 open DavisKahan.Experimental.ExactSinTheta
@@ -203,5 +202,5 @@ theorem standard_fanDominance
 
 end
 
-end FinishTanTwoTheta
+end SymmetricIdeal
 end TauCeti
