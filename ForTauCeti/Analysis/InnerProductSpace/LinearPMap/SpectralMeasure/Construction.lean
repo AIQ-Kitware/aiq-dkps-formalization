@@ -142,14 +142,16 @@ theorem measurable_cayleyInv : Measurable (cayleyInv hA) := by
   unfold cayleyInv
   fun_prop
 
-/-- **The spectral measure of an unbounded self-adjoint operator.** -/
--- `@[expose]` here is a recorded compromise, not a clean carve-out, and it is load-bearing:
--- removing it leaves the root spectral-measure module failing at a dozen-plus sites, two of
--- which rewrite by definition name (`rw [specProjection]`) and the rest of which need the
--- body to reduce. The rubric-clean fix is a `_def` lemma per definition plus rewiring every
--- call site, which is a refactor rather than an attribute change; it is recorded debt rather
--- than an endorsement.
-@[expose]
+/-- **The spectral measure of an unbounded self-adjoint operator.**
+
+Not exposed, and it no longer needs to be.  This definition carried `@[expose]` with a comment
+recording that removing it broke the root spectral-measure module at a dozen-plus sites.  That
+was true when it was written and is no longer: the sites were retired by the rewrite lemmas the
+chain acquired — `specProjection_eq_borelCalculus` and `specProjection_def` here,
+`spectralPVM_def`, and `toProjValMeasure_proj`/`_diag` and `specProj_def`/`specDiag_def` in
+`BorelCalculus/PVM.lean` — after which removing the attribute cost **zero** sites.  A consumer
+that rewrites by lemma rather than reducing through a body does not care whether the body is
+exposed, so each such rewiring retires consumers for every definition in the chain at once. -/
 noncomputable def spectralPVM : TauCeti.ProjValMeasure H :=
   BorelCalculus.toProjValMeasure (isStarNormal_cayley hA) (measurable_cayleyInv hA)
 
