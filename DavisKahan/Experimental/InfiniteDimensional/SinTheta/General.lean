@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RestrictionCompat
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.SpectralBridge
+import DavisKahan.SpectralTheory.Complexification.Spectrum
 import Mathlib.Analysis.InnerProductSpace.StarOrder
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
 
@@ -142,18 +143,76 @@ theorem norm_sylvester_le_of_orderedSeparation_rclike
     (TauCeti.SymmetricOperatorIdealFamily.mem_operatorNormFamily _)
   exact hsolve.2
 
-/-- **Leaf obligation.** The universal `π/2` Sylvester estimate over a general
-`RCLike` field.  The `ℂ` case is `norm_sylvester_le_of_generalSeparation`
-(`Sylvester/Basic`, Fourier route); the general case is its complexification
-transport. -/
+open Foundation.RealComplexification in
+open scoped TauCeti.DavisKahan.Experimental.Foundation.RealScalarRestriction in
+/-- **The universal `π/2` Sylvester estimate over a general `RCLike` field.**
+
+Proved by restricting scalars to `ℝ` and complexifying, which is the route the
+leaf obligation this replaced described as "its complexification transport". -/
 theorem norm_sylvester_le_of_generalSeparation_rclike
     {A : F →L[𝕜] F} {B : E →L[𝕜] E} {X C : E →L[𝕜] F}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
     (hEq : sylvesterOperator A B X = C) :
-    d * ‖X‖ ≤ (Real.pi / 2) * ‖C‖ :=
-  sorry
+    d * ‖X‖ ≤ (Real.pi / 2) * ‖C‖ := by
+  have hEqr : (A.restrictScalars ℝ) ∘L (X.restrictScalars ℝ)
+      - (X.restrictScalars ℝ) ∘L (B.restrictScalars ℝ) = C.restrictScalars ℝ := by
+    ext x
+    have := congrArg (fun T : E →L[𝕜] F => T x) hEq
+    simpa [sylvesterOperator] using this
+  have hEqc : sylvesterOperator (complexify (A.restrictScalars ℝ))
+      (complexify (B.restrictScalars ℝ)) (complexify (X.restrictScalars ℝ)) =
+      complexify (C.restrictScalars ℝ) := by
+    show complexify (A.restrictScalars ℝ) ∘L complexify (X.restrictScalars ℝ)
+      - complexify (X.restrictScalars ℝ) ∘L complexify (B.restrictScalars ℝ) = _
+    rw [← complexify_comp, ← complexify_comp, ← complexify_sub, hEqr]
+  -- self-adjointness survives both steps: restricting scalars takes the real part
+  -- of the form, and `complexify_adjoint` moves the adjoint through the second.
+  have hsymr : ∀ (G : Type v) (_ : NormedAddCommGroup G) (_ : InnerProductSpace 𝕜 G),
+      True := fun _ _ _ => trivial
+  have hAr : (A.restrictScalars ℝ).IsSymmetric := fun x y => by
+    simpa [real_inner_eq_re_inner (𝕜 := 𝕜)] using congrArg RCLike.re (hA x y)
+  have hBr : (B.restrictScalars ℝ).IsSymmetric := fun x y => by
+    simpa [real_inner_eq_re_inner (𝕜 := 𝕜)] using congrArg RCLike.re (hB x y)
+  have hAc : IsSelfAdjointOperator (complexify (A.restrictScalars ℝ)) := by
+    have hsa : IsSelfAdjoint (complexify (A.restrictScalars ℝ)) := by
+      show ContinuousLinearMap.adjoint _ = _
+      rw [← TauCeti.DavisKahan.Experimental.ExactSinTheta.RealComplexificationFunctionalCalculus.complexify_adjoint]
+      exact congrArg complexify
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.2 hAr)
+    exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.1 hsa
+  have hBc : IsSelfAdjointOperator (complexify (B.restrictScalars ℝ)) := by
+    have hsa : IsSelfAdjoint (complexify (B.restrictScalars ℝ)) := by
+      show ContinuousLinearMap.adjoint _ = _
+      rw [← TauCeti.DavisKahan.Experimental.ExactSinTheta.RealComplexificationFunctionalCalculus.complexify_adjoint]
+      exact congrArg complexify
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.2 hBr)
+    exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.1 hsa
+  -- the separation survives both steps: `realSpectrum` is what a `⊤`-separation
+  -- hypothesis is about, it is the `ℝ`-spectrum after restricting scalars, and it
+  -- is unchanged by complexification.
+  have hreal : ∀ (G : Type v) [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+      [CompleteSpace G] (T : G →L[𝕜] G),
+      Foundation.realSpectrum (complexify (T.restrictScalars ℝ)) =
+        Foundation.realSpectrum T := by
+    intro G _ _ _ T
+    rw [Foundation.RealComplexification.realSpectrum_complexify (T.restrictScalars ℝ),
+      Foundation.realSpectrum_eq_spectrum_restrictScalars T]
+    rfl
+  have hsepc : SpectraSeparated (complexify (A.restrictScalars ℝ)) ⊤
+      (complexify (B.restrictScalars ℝ)) ⊤ d := by
+    show Foundation.SpectraSeparated _ ⊤ _ ⊤ d
+    rw [Foundation.spectraSeparated_top_iff]
+    intro a ha b hb
+    rw [hreal F A] at ha
+    rw [hreal E B] at hb
+    exact (Foundation.spectraSeparated_top_iff A B d).1 hsep a ha b hb
+  have hmain := norm_sylvester_le_of_generalSeparation hAc hBc hd hsepc hEqc
+  rwa [Foundation.RealComplexification.norm_complexify,
+    Foundation.RealComplexification.norm_complexify,
+    ContinuousLinearMap.norm_restrictScalars,
+    ContinuousLinearMap.norm_restrictScalars] at hmain
 
 /-- Residual `sin Θ` theorem for an isometric trial map.
 

@@ -367,6 +367,73 @@ theorem InternalGap.mono_gap
   intro a ha b hb
   exact hed.trans (h.2.2 a ha b hb)
 
+/-! ## Restriction of scalars to `ℝ`
+
+`realSpectrum` pulls `spectrum 𝕜 A` back along `ℝ → 𝕜`.  The lemma below identifies it with an
+honest real spectrum — that of `A` viewed as a continuous `ℝ`-linear map — which is what lets an
+`ℝ`-only theorem be applied to an operator over a general `RCLike` field.  `RCLike` admits no case
+split into `ℝ` and `ℂ`, so restriction of scalars is the only uniform route.
+
+**The two instances are `scoped`, deliberately.**  Mathlib keeps `NormedSpace.restrictScalars` and
+`InnerProductSpace.rclikeToReal` out of the instance graph because a global `Module ℝ E` alongside
+`Module 𝕜 E` is a diamond; `local` would work here but would force every consumer to install a
+*second* declaration of the same instance, and two defeq-but-distinct instances is what makes
+`isDefEq` searches blow up (see lane `{lane:CPLX-DEDUP-3}`, where exactly that timed out a build).
+A scope gives every consumer the same declaration. -/
+
+namespace RealScalarRestriction
+
+/-- `E` as a normed space over `ℝ`, by restricting its `𝕜`-structure. -/
+noncomputable scoped instance realNormedSpace
+    {𝕜 : Type*} [RCLike 𝕜] {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] :
+    NormedSpace ℝ E :=
+  NormedSpace.restrictScalars ℝ 𝕜 E
+
+/-- `E` as a *real inner product* space, by taking the real part of the
+`𝕜`-inner product.
+
+Mathlib declares `InnerProductSpace.rclikeToReal` as a reducible non-instance on
+purpose — installing it globally would clash with the `𝕜`-structure — so it is
+`scoped` here alongside the other two.  **`scoped` rather than `local`, and that
+is not a style choice**: lanes `{lane:CPLX-DEDUP-3}` and `{lane:CPLX-DEDUP-4}`
+measured what happens when the same instance is re-declared `local` in several
+files, which is that `isDefEq` has to prove two distinct declarations defeq and
+diverges.  One declaration, opened where needed, has nothing to prove. -/
+noncomputable scoped instance realInnerProductSpace
+    {𝕜 : Type*} [RCLike 𝕜] {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] :
+    InnerProductSpace ℝ E :=
+  InnerProductSpace.rclikeToReal 𝕜 E
+
+/-- The restricted `ℝ`-action is compatible with the ambient `𝕜`-action. -/
+scoped instance realTower
+    {𝕜 : Type*} [RCLike 𝕜] {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] :
+    IsScalarTower ℝ 𝕜 E :=
+  ⟨fun r c x => by
+    rw [Algebra.smul_def, mul_smul]
+    rfl⟩
+
+end RealScalarRestriction
+
+open scoped RealScalarRestriction in
+/-- **The real spectrum is the spectrum after restricting scalars to `ℝ`.**
+
+Both sides are the failure of `r - A` to be invertible, and `ContinuousLinearMap.isUnit_iff_bijective`
+reduces each to bijectivity of the *same* underlying function: the inverse of a `𝕜`-linear
+continuous bijection is automatically `𝕜`-linear, so nothing is lost by forgetting the `𝕜`-structure.
+
+This is the step that lets a theorem proved over `ℝ` reach an operator over a general `RCLike`
+field. -/
+theorem realSpectrum_eq_spectrum_restrictScalars
+    [CompleteSpace E] (A : E →L[𝕜] E) :
+    realSpectrum A = spectrum ℝ (A.restrictScalars ℝ) := by
+  ext r
+  show ((r : 𝕜) ∈ spectrum 𝕜 A) ↔ _
+  rw [spectrum.mem_iff, spectrum.mem_iff, not_iff_not,
+    ContinuousLinearMap.isUnit_iff_bijective, ContinuousLinearMap.isUnit_iff_bijective]
+  have hfun : ⇑((algebraMap ℝ (E →L[ℝ] E)) r - A.restrictScalars ℝ)
+      = ⇑((algebraMap 𝕜 (E →L[𝕜] E)) (r : 𝕜) - A) := rfl
+  rw [hfun]
+
 end Foundation
 end Experimental
 end DavisKahan

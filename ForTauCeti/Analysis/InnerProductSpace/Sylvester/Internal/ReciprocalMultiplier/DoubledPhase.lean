@@ -513,21 +513,8 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_doubledInterpolation
     simpa only [map_mul, map_sub, RCLike.conj_ofReal, inner_conj_symm,
       RCLike.ofReal_sub] using
       congrArg (starRingEnd 𝕜) (hcoeff i j)
-  let blockDiagonal :
-      (E →ₗ[𝕜] F) →ₗ[𝕜]
-        (WithLp 2 (E × E) →ₗ[𝕜] WithLp 2 (F × F)) := by
-    refine
-      { toFun := fun A =>
-          RectangularUnitarilyInvariantNorm.orthogonalBlockSum A A
-        map_add' := ?_
-        map_smul' := ?_ }
-    · intro A B
-      ext x
-      apply WithLp.ofLp_injective 2
-      apply Prod.ext <;>
-        simp [RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply]
-    · intro r A
-      exact RectangularUnitarilyInvariantNorm.orthogonalBlockSum_smul r A A
+  let blockDiagonal := RectangularUnitarilyInvariantNorm.orthogonalBlockSumDiagonal
+    (𝕜 := 𝕜) (E₁ := E) (F₁ := F)
   have hblock (A : E →ₗ[𝕜] F) :
       RectangularUnitarilyInvariantNorm.orthogonalBlockSum A A =
         ∑ i, ∑ j, ⟪eF i, A (eE j)⟫_𝕜 •

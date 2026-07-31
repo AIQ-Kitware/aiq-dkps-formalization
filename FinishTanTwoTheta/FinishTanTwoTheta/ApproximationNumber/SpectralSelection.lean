@@ -5,10 +5,10 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import FinishTanTwoTheta.GroundedImports
 import FinishTanTwoTheta.ApproximationNumber.GramSpectralRank
-import FinishTanTwoTheta.ApproximationNumber.LeadingCutoff
 import FinishTanTwoTheta.ApproximationNumber.FinitePVMSelection
-import FinishTanTwoTheta.ApproximationNumber.FiniteValueSeparation
-import FinishTanTwoTheta.ApproximationNumber.FiniteValueFibers
+import DavisKahan.OperatorIdeal.ApproximationNumbers.LeadingCutoff
+import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteValueSeparation
+import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteValueFibers
 import FinishTanTwoTheta.ApproximationNumber.GramBandPolar
 import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 
@@ -31,6 +31,7 @@ namespace FinishTanTwoTheta
 
 open scoped InnerProductSpace BigOperators
 open Set
+open ApproximationNumber
 
 noncomputable section
 
