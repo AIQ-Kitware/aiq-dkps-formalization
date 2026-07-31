@@ -69,6 +69,20 @@ variable {𝕜 E F : Type*} [RCLike 𝕜]
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
 
+omit [FiniteDimensional 𝕜 E] in
+/-- **The quadratic form of a real dilation at a unit vector is the dilation factor**:
+`re ⟪(c : 𝕜) • v, v⟫ = c` when `‖v‖ = 1`.
+
+Stated because four proofs in this file each spelled it out as the same seven-lemma
+rewrite -- `inner_smul_left`, `RCLike.conj_ofReal`, `RCLike.re_ofReal_mul`,
+`inner_self_eq_norm_sq`, the unit-norm fact, `one_pow`, `mul_one`. Every use of it here
+follows an eigenvector step that produces exactly this shape, so naming it removes the
+repetition rather than hiding it. -/
+private theorem re_inner_real_smul_self_of_norm_one {c : ℝ} {v : E} (hv : ‖v‖ = 1) :
+    RCLike.re ⟪(c : 𝕜) • v, v⟫_𝕜 = c := by
+  rw [inner_smul_left, RCLike.conj_ofReal, RCLike.re_ofReal_mul, inner_self_eq_norm_sq, hv,
+    one_pow, mul_one]
+
 /-- **The adjoint preserves an operator-norm bound.** If `‖A x‖ ≤ c ‖x‖` for all
 `x`, then `‖A⋆ y‖ ≤ c ‖y‖` for all `y` — the elementwise form of `‖A⋆‖ = ‖A‖`.
 Proof: `‖A⋆ y‖² = re⟪y, A (A⋆ y)⟫ ≤ ‖y‖ ‖A (A⋆ y)‖ ≤ c ‖y‖ ‖A⋆ y‖`. -/
@@ -135,8 +149,7 @@ theorem sum_re_inner_abs_self_eq_sum_singularValues (A : E →ₗ[𝕜] E)
   rw [show abs A (w k)
         = (Real.sqrt (hP.isSymmetric.eigenvalues rfl k) : 𝕜) • w k from
       hP.sqrt_apply_eigenvectorBasis k,
-    inner_smul_left, RCLike.conj_ofReal, RCLike.re_ofReal_mul, inner_self_eq_norm_sq,
-    w.orthonormal.norm_eq_one k, one_pow, mul_one]
+    re_inner_real_smul_self_of_norm_one (w.orthonormal.norm_eq_one k)]
   exact (A.singularValues_fin rfl k).symm
 
 /-- **Contraction ⇒ singular values ≤ 1.** If `A` is a contraction
@@ -154,8 +167,7 @@ theorem singularValues_le_one_of_contraction {A : E →ₗ[𝕜] F}
     rw [LinearMap.comp_apply, LinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
   have heig : RCLike.re ⟪(A.adjoint ∘ₗ A) (hSsym.eigenvectorBasis hn i),
       hSsym.eigenvectorBasis hn i⟫_𝕜 = hSsym.eigenvalues hn i := by
-    rw [hSsym.apply_eigenvectorBasis hn i, inner_smul_left, RCLike.conj_ofReal,
-      RCLike.re_ofReal_mul, inner_self_eq_norm_sq, hunit, one_pow, mul_one]
+    rw [hSsym.apply_eigenvectorBasis hn i, re_inner_real_smul_self_of_norm_one hunit]
   have heval : hSsym.eigenvalues hn i ≤ 1 := by
     rw [← heig, hquad]
     have := h (hSsym.eigenvectorBasis hn i)
@@ -279,9 +291,9 @@ theorem exists_norm_apply_eq_singularValues_last (A : E →ₗ[𝕜] F) (hn : fi
   have hsym := A.isSymmetric_adjoint_comp_self
   refine ⟨hsym.eigenvectorBasis hn k, (hsym.eigenvectorBasis hn).orthonormal.norm_eq_one k, ?_⟩
   have hsq : ‖A (hsym.eigenvectorBasis hn k)‖ ^ 2 = A.singularValues (n - 1) ^ 2 := by
-    rw [sq_norm_apply_eq_re_inner_gram, hsym.apply_eigenvectorBasis hn k, inner_smul_left,
-      RCLike.conj_ofReal, RCLike.re_ofReal_mul, inner_self_eq_norm_sq,
-      (hsym.eigenvectorBasis hn).orthonormal.norm_eq_one k, one_pow, mul_one,
+    rw [sq_norm_apply_eq_re_inner_gram, hsym.apply_eigenvectorBasis hn k,
+      re_inner_real_smul_self_of_norm_one
+        ((hsym.eigenvectorBasis hn).orthonormal.norm_eq_one k),
       A.sq_singularValues_of_lt hn hlast]
   have := congrArg Real.sqrt hsq
   rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (A.singularValues_nonneg _)] at this
@@ -315,9 +327,9 @@ theorem exists_norm_apply_eq_singularValues_zero (A : E →ₗ[𝕜] F) (hn : fi
   refine ⟨hsym.eigenvectorBasis hn ⟨0, hn0⟩,
     (hsym.eigenvectorBasis hn).orthonormal.norm_eq_one _, ?_⟩
   have hsq : ‖A (hsym.eigenvectorBasis hn ⟨0, hn0⟩)‖ ^ 2 = A.singularValues 0 ^ 2 := by
-    rw [sq_norm_apply_eq_re_inner_gram, hsym.apply_eigenvectorBasis hn _, inner_smul_left,
-      RCLike.conj_ofReal, RCLike.re_ofReal_mul, inner_self_eq_norm_sq,
-      (hsym.eigenvectorBasis hn).orthonormal.norm_eq_one _, one_pow, mul_one,
+    rw [sq_norm_apply_eq_re_inner_gram, hsym.apply_eigenvectorBasis hn _,
+      re_inner_real_smul_self_of_norm_one
+        ((hsym.eigenvectorBasis hn).orthonormal.norm_eq_one _),
       A.sq_singularValues_of_lt hn hn0]
   have := congrArg Real.sqrt hsq
   rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (A.singularValues_nonneg _)] at this
