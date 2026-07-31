@@ -6,6 +6,9 @@ Authors: Jon Crall, Claude Opus 5
 import ForTauCeti.Analysis.Normed.FiniteLpGauge
 import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
 import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
+import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy
+import ForTauCeti.Analysis.InnerProductSpace.SingularSystem
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
 
 /-!
 # The Schatten-`p` operator ideals
@@ -149,6 +152,44 @@ theorem lpGauge_approximationNumber_add_le {p : ℝ} (hp : 1 ≤ p) (S T : E →
     _ ≤ _ := TauCeti.FiniteVector.lpGauge_add_le hp _ _
 
 end Finite
+
+section FiniteSource
+
+variable {𝕜' : Type u} [RCLike 𝕜']
+variable {G H : Type v}
+  [NormedAddCommGroup G] [InnerProductSpace 𝕜' G] [CompleteSpace G] [FiniteDimensional 𝕜' G]
+  [NormedAddCommGroup H] [InnerProductSpace 𝕜' H] [CompleteSpace H] [FiniteDimensional 𝕜' H]
+
+/-- **The Hilbert--Schmidt energy is the sum of squared approximation numbers**, for an
+operator out of a finite-dimensional space.
+
+This is the `p = 2` identity between the two gauges, in the one case where it is not a limit:
+evaluate the energy in the right singular basis, where `‖A vᵢ‖ = σᵢ` by
+`TauCeti.norm_apply_rightSingularBasis`, and read the singular values as approximation
+numbers by `approximationNumber_eq_singularValues`.
+
+**The general case is not this plus bookkeeping.** Both sides are suprema — the energy over
+finite subsets of a Hilbert basis, the Schatten gauge over `Finset ℕ` — and that those two
+directed families agree is a separate statement, not proved here. -/
+theorem hilbertSchmidtEnergy_eq_sum_approximationNumber_sq {ι : Type*}
+    (A : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) :
+    A.hilbertSchmidtEnergy b =
+      ∑ i : Fin (Module.finrank 𝕜' G),
+        ENNReal.ofReal (A.approximationNumber i) ^ 2 := by
+  classical
+  set v := (TauCeti.rightSingularBasis (A : G →ₗ[𝕜'] H)).toHilbertBasis with hv
+  rw [A.hilbertSchmidtEnergy_indep b v, hilbertSchmidtEnergy, tsum_fintype]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  have hvi : v i = TauCeti.rightSingularBasis (A : G →ₗ[𝕜'] H) i := by
+    simp [hv, OrthonormalBasis.coe_toHilbertBasis]
+  rw [hvi]
+  have hnorm : ‖A (TauCeti.rightSingularBasis (A : G →ₗ[𝕜'] H) i)‖
+      = (A : G →ₗ[𝕜'] H).singularValues i :=
+    TauCeti.norm_apply_rightSingularBasis _ i
+  rw [← ofReal_norm, hnorm, A.approximationNumber_eq_singularValues (i : ℕ)]
+  rfl
+
+end FiniteSource
 
 section Gauge
 
