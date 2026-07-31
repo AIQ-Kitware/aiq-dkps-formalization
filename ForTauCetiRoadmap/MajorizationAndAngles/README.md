@@ -11,6 +11,8 @@
 > caught ten real elaboration errors. Proving a body duplicates the library; deleting a
 > signature removes the guard.
 >
+> Re-check with `python3 scripts/check_roadmap_delivered.py --topic MajorizationAndAngles`.
+>
 > ### Where each signature landed
 >
 > * **`Convex/Majorization.lean`** — `IsSymmetricConvex`, `IsSymmetricConvex.mem_of_prefixSum_le`, `prefixSum`
@@ -22,19 +24,17 @@
 > * **`InnerProductSpace/PrincipalAngles.lean`** — `cosPrincipalAngles`, `sinThetaSq`, `sinThetaSq_eq_card_sub_sum_sq`
 > * **`InnerProductSpace/RectangularUnitarilyInvariantNorm/Basic.lean`** — `RectangularUnitarilyInvariantNorm`
 > * **`InnerProductSpace/RectangularUnitarilyInvariantNorm/BlockSum.lean`** — `orthogonalBlockSum`, `orthogonalBlockSum_apply_le_of_kyFanSum_le`, `singularValues_orthogonalBlockSum_self`
-> * **`InnerProductSpace/RectangularUnitarilyInvariantNorm/Majorization.lean`** — `RectangularUnitarilyInvariantNorm.apply_le_of_kyFanSum_le`, `UnitarilyInvariantNorm.apply_le_of_kyFanSum_le`
 > * **`InnerProductSpace/SchurHorn.lean`** — `convexOn_sum_re_inner_orthonormalBasis_self_le`, `schurWeight`
-> * **`InnerProductSpace/UnitarilyInvariantNorm.lean`** — `UnitarilyInvariantNorm`, `UnitarilyInvariantNorm.eq_of_same_singularValues`
+> * **`InnerProductSpace/UnitarilyInvariantNorm.lean`** — `RectangularUnitarilyInvariantNorm.apply_le_of_kyFanSum_le` ⚠, `UnitarilyInvariantNorm`, `UnitarilyInvariantNorm.apply_le_of_kyFanSum_le` ⚠, `UnitarilyInvariantNorm.eq_of_same_singularValues`
 >
-> ### If you re-run this check, use a declaration index, not a per-name grep
+> ### ⚠ Ambiguous names — attribution is a best guess
 >
-> A first pass here used `grep` per name and reported **17 of these 26 as missing**, including
-> `cosThetaMap`, `kyFanSum`, `cosPrincipalAngles`, `prefixSum` and `sinThetaSq` — all of which
-> are present. Lean declaration syntax varies too much for one pattern (`_root_.` prefixes,
-> attribute lines, `noncomputable`, namespace qualification, wrapped signatures). Index every
-> declaration in `ForTauCeti/**` and `DavisKahan/**` once, key on both qualified and base
-> names, then set-compare.
-
+> 2 of these base names are declared in more than one module, so the
+> destination above is inferred (prefer `ForTauCeti/`, then the shallowest path), not
+> proved. Confirm before relying on a specific file:
+>
+> * `RectangularUnitarilyInvariantNorm.apply_le_of_kyFanSum_le` — `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm/Majorization.lean`, `ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean`
+> * `UnitarilyInvariantNorm.apply_le_of_kyFanSum_le` — `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm/Majorization.lean`, `ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean`
 
 How far does an eigenvector rotate when its operator is perturbed? The classical answers —
 Davis–Kahan, Hoffman–Wielandt, Yu–Wang–Samworth — measure the rotation in **principal angles**

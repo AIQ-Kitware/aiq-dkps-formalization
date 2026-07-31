@@ -105,6 +105,29 @@ def declaration_index() -> dict[str, set[str]]:
     return index
 
 
+def resolve(hits: set[str]) -> tuple[str, list[str]]:
+    """Pick the module a roadmap signature most likely refers to, and report rivals.
+
+    A base name can be declared in several modules, and picking the first
+    alphabetically is silently wrong often enough to matter: an early version of
+    this script attributed the roadmap's `spectralSubspace` to
+    `DavisKahan/Experimental/.../SinTheta/General.lean` -- a `sorry`ed escape --
+    rather than to `ForTauCeti/.../Spectral/Subspace.lean`, and `abs` to a
+    `DavisKahan/Sources/**` instance file rather than to `Polar/Decomposition`.
+    Five of 32 attributions in one published banner were wrong that way.
+
+    The roadmap describes what should land in `ForTauCeti`, so prefer it, then
+    prefer the shallowest path (a canonical home sits above a bridge or a
+    compatibility shim).  Ambiguity is always REPORTED rather than hidden --
+    a confident wrong answer is worse here than a flagged uncertain one.
+    """
+    ranked = sorted(
+        hits,
+        key=lambda p: (0 if p.startswith("ForTauCeti/") else 1, p.count("/"), p),
+    )
+    return ranked[0], ranked[1:]
+
+
 def topic_signatures(topic_dir: pathlib.Path) -> list[str]:
     suggested = topic_dir / "Suggested.lean"
     if not suggested.exists():
@@ -134,19 +157,23 @@ def analyse() -> list[dict]:
         names = topic_signatures(topic_dir)
         if not names:
             continue
-        found, missing = {}, []
+        found, missing, ambiguous = {}, [], {}
         for n in names:
             hits = index.get(n) or index.get(n.split(".")[-1])
-            if hits:
-                found[n] = sorted(hits)[0]
-            else:
+            if not hits:
                 missing.append(n)
+                continue
+            choice, others = resolve(hits)
+            found[n] = choice
+            if others:
+                ambiguous[n] = sorted(hits)
         results.append({
             "topic": topic_dir.name,
             "total": len(names),
             "delivered": len(found),
             "missing": missing,
             "map": found,
+            "ambiguous": ambiguous,
             "marked": marked_delivered(topic_dir),
         })
     return results
@@ -158,6 +185,8 @@ def main() -> int:
     ap.add_argument("--topic", help="restrict to one topic directory name")
     ap.add_argument("--missing", action="store_true", help="list undelivered signatures")
     ap.add_argument("--map", action="store_true", help="list where each signature landed")
+    ap.add_argument("--ambiguous", action="store_true",
+                    help="list signatures whose name is declared in more than one module")
     ap.add_argument("--json", action="store_true", help="machine-readable output")
     ap.add_argument("--strict", action="store_true",
                     help="exit 1 if a 100%%-delivered topic carries no delivered marker")
@@ -188,7 +217,13 @@ def main() -> int:
                 print(f"           outstanding: {n}")
         if args.map:
             for n, loc in sorted(r["map"].items()):
-                print(f"           {n} -> {loc}")
+                mark = "  [AMBIGUOUS]" if n in r["ambiguous"] else ""
+                print(f"           {n} -> {loc}{mark}")
+        if args.ambiguous and r["ambiguous"]:
+            for n, hits in sorted(r["ambiguous"].items()):
+                print(f"           ambiguous: {n}")
+                for h in hits:
+                    print(f"               {h}")
 
     total = sum(r["total"] for r in results)
     done = sum(r["delivered"] for r in results)
