@@ -325,27 +325,38 @@ noncomputable def doubledRealRotation
         Real.sin theta • x.fst + Real.cos theta • x.snd) :=
   (rfl)
 
-/-- A real diagonal map in an orthonormal basis. -/
-private noncomputable def basisDiagonalRealMap
-    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
-    [Fintype ι] [DecidableEq ι]
-    (e : OrthonormalBasis ι ℝ G) (c : ι → ℝ) : G →ₗ[ℝ] G :=
-  e.toBasis.constr ℝ fun i => c i • e i
+/-- **A diagonal map with real coefficients in an orthonormal basis of a `𝕜`-space.**
 
-@[simp] private theorem basisDiagonalRealMap_apply_basis
-    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+Stated over `RCLike 𝕜` rather than over `ℝ`, and not `private`, because the same
+construction is needed downstream in `…ReciprocalMultiplier/DoubledPhase.lean`: at
+`𝕜 = ℝ` the coercion is the identity, so a separate real version would be this one
+under another name.  It lives here rather than there because this file is upstream
+in the import order and a `private` definition is not visible across files. -/
+noncomputable def basisDiagonalRealCoeffMap
+    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
     [Fintype ι] [DecidableEq ι]
-    (e : OrthonormalBasis ι ℝ G) (c : ι → ℝ) (i : ι) :
-    basisDiagonalRealMap e c (e i) = c i • e i := by
-  exact e.toBasis.constr_basis ℝ _ i
+    (e : OrthonormalBasis ι 𝕜 G) (c : ι → ℝ) : G →ₗ[𝕜] G :=
+  e.toBasis.constr 𝕜 fun i => ((c i : ℝ) : 𝕜) • e i
 
-@[simp] private theorem basisDiagonalRealMap_repr
-    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+/-- The diagonal map acts on a basis vector by its coefficient. -/
+@[simp] theorem basisDiagonalRealCoeffMap_apply_basis
+    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
     [Fintype ι] [DecidableEq ι]
-    (e : OrthonormalBasis ι ℝ G) (c : ι → ℝ) (x : G) (i : ι) :
-    e.repr (basisDiagonalRealMap e c x) i = c i * e.repr x i := by
+    (e : OrthonormalBasis ι 𝕜 G) (c : ι → ℝ) (i : ι) :
+    basisDiagonalRealCoeffMap e c (e i) = ((c i : ℝ) : 𝕜) • e i := by
+  exact e.toBasis.constr_basis 𝕜 _ i
+
+/-- The diagonal map scales each coordinate by its coefficient.  This is the form the
+rotation arguments consume: they work coordinatewise in `e.repr` rather than through the
+map itself. -/
+@[simp] theorem basisDiagonalRealCoeffMap_repr
+    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    [Fintype ι] [DecidableEq ι]
+    (e : OrthonormalBasis ι 𝕜 G) (c : ι → ℝ) (x : G) (i : ι) :
+    e.repr (basisDiagonalRealCoeffMap e c x) i = ((c i : ℝ) : 𝕜) * e.repr x i := by
+  classical
   rw [← e.sum_repr x]
-  simp only [map_sum, map_smul, basisDiagonalRealMap_apply_basis, smul_smul]
+  simp only [map_sum, map_smul, basisDiagonalRealCoeffMap_apply_basis, smul_smul]
   simp [Pi.single_apply]
   ring
 
@@ -356,8 +367,8 @@ private noncomputable def basisDoubledRealRotationLinearEquiv
     [Fintype ι] [DecidableEq ι]
     (e : OrthonormalBasis ι ℝ G) (theta : ι → ℝ) :
     (G × G) ≃ₗ[ℝ] (G × G) := by
-  let C := basisDiagonalRealMap e fun i => Real.cos (theta i)
-  let S := basisDiagonalRealMap e fun i => Real.sin (theta i)
+  let C := basisDiagonalRealCoeffMap e fun i => Real.cos (theta i)
+  let S := basisDiagonalRealCoeffMap e fun i => Real.sin (theta i)
   refine
     { toFun := fun x => (C x.1 - S x.2, S x.1 + C x.2)
       invFun := fun x => (C x.1 + S x.2, -S x.1 + C x.2)
@@ -374,12 +385,12 @@ private noncomputable def basisDoubledRealRotationLinearEquiv
     apply Prod.ext
     · apply e.repr.injective
       ext i
-      simp only [map_add, map_sub, C, S, basisDiagonalRealMap_repr,
+      simp only [map_add, map_sub, C, S, basisDiagonalRealCoeffMap_repr,
         PiLp.add_apply, PiLp.sub_apply]
       linear_combination (e.repr x.1 i) * htrig i
     · apply e.repr.injective
       ext i
-      simp only [map_add, map_sub, map_neg, C, S, basisDiagonalRealMap_repr,
+      simp only [map_add, map_sub, map_neg, C, S, basisDiagonalRealCoeffMap_repr,
         PiLp.add_apply, PiLp.sub_apply, PiLp.neg_apply]
       linear_combination (e.repr x.2 i) * htrig i
   · intro x
@@ -387,12 +398,12 @@ private noncomputable def basisDoubledRealRotationLinearEquiv
     apply Prod.ext
     · apply e.repr.injective
       ext i
-      simp only [map_add, map_sub, map_neg, C, S, basisDiagonalRealMap_repr,
+      simp only [map_add, map_sub, map_neg, C, S, basisDiagonalRealCoeffMap_repr,
         PiLp.add_apply, PiLp.sub_apply, PiLp.neg_apply]
       linear_combination (e.repr x.1 i) * htrig i
     · apply e.repr.injective
       ext i
-      simp only [map_add, map_neg, C, S, basisDiagonalRealMap_repr,
+      simp only [map_add, map_neg, C, S, basisDiagonalRealCoeffMap_repr,
         PiLp.add_apply, PiLp.neg_apply]
       linear_combination (e.repr x.2 i) * htrig i
 
@@ -404,8 +415,8 @@ noncomputable def basisDoubledRealRotation
     WithLp 2 (G × G) ≃ₗᵢ[ℝ] WithLp 2 (G × G) where
   __ := (basisDoubledRealRotationLinearEquiv e theta).withLpCongr 2
   norm_map' x := by
-    let C := basisDiagonalRealMap e fun i => Real.cos (theta i)
-    let S := basisDiagonalRealMap e fun i => Real.sin (theta i)
+    let C := basisDiagonalRealCoeffMap e fun i => Real.cos (theta i)
+    let S := basisDiagonalRealCoeffMap e fun i => Real.sin (theta i)
     have hparseval (z : G) : ∑ i, ‖e.repr z i‖ ^ 2 = ‖z‖ ^ 2 := by
       simp_rw [e.repr_apply_apply]
       exact e.sum_sq_norm_inner_right z
@@ -424,7 +435,7 @@ noncomputable def basisDoubledRealRotation
       ← Finset.sum_add_distrib, ← Finset.sum_add_distrib]
     apply Finset.sum_congr rfl
     intro i _
-    simp only [map_sub, map_add, C, S, basisDiagonalRealMap_repr,
+    simp only [map_sub, map_add, C, S, basisDiagonalRealCoeffMap_repr,
       PiLp.sub_apply, PiLp.add_apply, Real.norm_eq_abs, sq_abs]
     have htrig := cos_mul_cos_add_sin_mul_sin (theta i)
     linear_combination
@@ -437,10 +448,10 @@ noncomputable def basisDoubledRealRotation
     (e : OrthonormalBasis ι ℝ G) (theta : ι → ℝ)
     (x : WithLp 2 (G × G)) :
     basisDoubledRealRotation e theta x = WithLp.toLp 2
-      (basisDiagonalRealMap e (fun i => Real.cos (theta i)) x.fst -
-          basisDiagonalRealMap e (fun i => Real.sin (theta i)) x.snd,
-        basisDiagonalRealMap e (fun i => Real.sin (theta i)) x.fst +
-          basisDiagonalRealMap e (fun i => Real.cos (theta i)) x.snd) := by
+      (basisDiagonalRealCoeffMap e (fun i => Real.cos (theta i)) x.fst -
+          basisDiagonalRealCoeffMap e (fun i => Real.sin (theta i)) x.snd,
+        basisDiagonalRealCoeffMap e (fun i => Real.sin (theta i)) x.fst +
+          basisDiagonalRealCoeffMap e (fun i => Real.cos (theta i)) x.snd) := by
   rfl
 
 /-- Its action on the first summand. -/
@@ -451,14 +462,14 @@ noncomputable def basisDoubledRealRotation
     basisDoubledRealRotation e theta (WithLp.toLp 2 (e i, 0)) =
       WithLp.toLp 2
         (Real.cos (theta i) • e i, Real.sin (theta i) • e i) := by
-  -- `basisDoubledRealRotation` is defined by composing two `basisDiagonalRealMap`s; no
+  -- `basisDoubledRealRotation` is defined by composing two `basisDiagonalRealCoeffMap`s; no
   -- simp lemma unfolds that composition at a basis vector, and the rewrites below are
   -- stated for the component maps.
   change WithLp.toLp 2
-    (basisDiagonalRealMap e (fun q => Real.cos (theta q)) (e i) -
-        basisDiagonalRealMap e (fun q => Real.sin (theta q)) 0,
-      basisDiagonalRealMap e (fun q => Real.sin (theta q)) (e i) +
-        basisDiagonalRealMap e (fun q => Real.cos (theta q)) 0) = _
+    (basisDiagonalRealCoeffMap e (fun q => Real.cos (theta q)) (e i) -
+        basisDiagonalRealCoeffMap e (fun q => Real.sin (theta q)) 0,
+      basisDiagonalRealCoeffMap e (fun q => Real.sin (theta q)) (e i) +
+        basisDiagonalRealCoeffMap e (fun q => Real.cos (theta q)) 0) = _
   simp
 
 /-- Its action on the second summand. -/
@@ -472,10 +483,10 @@ noncomputable def basisDoubledRealRotation
   -- As at the previous lemma: the composition defining `basisDoubledRealRotation` has to
   -- be exposed before the component-map rewrites can apply.
   change WithLp.toLp 2
-    (basisDiagonalRealMap e (fun q => Real.cos (theta q)) 0 -
-        basisDiagonalRealMap e (fun q => Real.sin (theta q)) (e i),
-      basisDiagonalRealMap e (fun q => Real.sin (theta q)) 0 +
-        basisDiagonalRealMap e (fun q => Real.cos (theta q)) (e i)) = _
+    (basisDiagonalRealCoeffMap e (fun q => Real.cos (theta q)) 0 -
+        basisDiagonalRealCoeffMap e (fun q => Real.sin (theta q)) (e i),
+      basisDiagonalRealCoeffMap e (fun q => Real.sin (theta q)) 0 +
+        basisDiagonalRealCoeffMap e (fun q => Real.cos (theta q)) (e i)) = _
   simp
 
 /-- The doubled-real map corresponding to multiplication by the complex phase
