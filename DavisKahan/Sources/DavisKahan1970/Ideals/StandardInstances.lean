@@ -3,8 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.GroundedImports
-import FinishTanTwoTheta.OperatorIdeal.StandardFanDominance
+import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
 import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
 import ForTauCeti.Analysis.Normed.FiniteLpGauge
 
@@ -17,7 +16,7 @@ result then applies to both their maximal and minimal completions.
 -/
 
 namespace TauCeti
-namespace FinishTanTwoTheta
+namespace SymmetricIdeal
 
 open scoped BigOperators
 open DavisKahan.Experimental.ExactSinTheta
@@ -145,5 +144,5 @@ noncomputable def nuclearIdeal : StandardSymmetricIdeal :=
 
 end
 
-end FinishTanTwoTheta
+end SymmetricIdeal
 end TauCeti
