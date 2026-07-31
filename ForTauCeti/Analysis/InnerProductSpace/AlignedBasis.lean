@@ -105,6 +105,16 @@ noncomputable def familyIsometry {v : Fin d → E} (hv : Orthonormal 𝕜 v) :
   · intro i _ hik; rw [PiLp.single_apply, if_neg hik, zero_smul]
   · intro hk; exact absurd (Finset.mem_univ k) hk
 
+/-- **The span of the family is contained in the isometry's range.**
+
+Immediate from `familyIsometry_single`, and the form the containment is actually
+needed in: a vector known to lie in `span (range v)` can be given coordinates. -/
+theorem span_range_le_range_familyIsometry {v : Fin d → E} (hv : Orthonormal 𝕜 v) :
+    Submodule.span 𝕜 (Set.range v) ≤ LinearMap.range (familyIsometry hv).toLinearMap := by
+  refine Submodule.span_le.2 ?_
+  rintro y ⟨i, rfl⟩
+  exact ⟨EuclideanSpace.single i 1, familyIsometry_single hv i⟩
+
 variable [FiniteDimensional 𝕜 E]
 
 /-- **The overlap operator** of two orthonormal families `u, v`: the compression

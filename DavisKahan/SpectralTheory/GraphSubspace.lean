@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.SpectralTheory.OperatorAngle
+import ForTauCeti.Algebra.RingInverse
 import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 import Mathlib.Analysis.Normed.Operator.Banach
 import Mathlib.Analysis.Normed.Ring.Units
@@ -82,28 +83,6 @@ open scoped InnerProductSpace
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
-
-/-- **`Ring.inverse` respects semiconjugation.**
-
-If `a` semiconjugates a unit `n` to a unit `m` — that is, `a * n = m * a` — then
-it semiconjugates their inverses.
-
-**Mathlib has this as `SemiconjBy.units_inv_right`, in the `Units` spelling.**
-This is the `Ring.inverse` spelling, which is the one an operator-algebra
-argument reaches for, because invertibility arrives there as `IsUnit` rather
-than as a chosen `Units` element — and no bridge between the two spellings was
-in the library.  The commuting case `m = n` is the common one: `P` commutes with
-`N`, hence with `N⁻¹`.
-
-Deserves a home in a general algebra file rather than here; left in place so
-this lane stays additive and single-file. -/
-theorem ringInverse_semiconj {M : Type*} [MonoidWithZero M] {a n m : M}
-    (hn : IsUnit n) (hm : IsUnit m) (h : a * n = m * a) :
-    a * Ring.inverse n = Ring.inverse m * a := by
-  obtain ⟨un, rfl⟩ := hn
-  obtain ⟨um, rfl⟩ := hm
-  rw [Ring.inverse_unit, Ring.inverse_unit]
-  exact SemiconjBy.units_inv_right h
 
 /-- Graph subspace over `U` with angular operator `X`.
 
@@ -230,7 +209,7 @@ theorem projection_graphSubspace_formula
       _ = star X * X := by rw [hPsX]
       _ = star X * (X * P) := by rw [hXP]
       _ = (star X * X) * P := by rw [mul_assoc]
-  have hPR : P * R = R * P := ringInverse_semiconj hNunit hNunit hPN
+  have hPR : P * R = R * P := TauCeti.ringInverse_semiconj hNunit hNunit hPN
   have hsA : star A = P + star X := by rw [hA, star_add, hsP]
   have hPsA : P * star A = star A := by rw [hsA, mul_add, hPP, hPsX]
   have hsAA : star A * A = N * P := by
@@ -323,7 +302,7 @@ theorem norm_projection_sub_projection_graphSubspace
       _ = star X * X := by rw [hPsX]
       _ = star X * (X * P) := by rw [hXP]
       _ = (star X * X) * P := by rw [mul_assoc]
-  have hPR : P * R = R * P := ringInverse_semiconj hNunit hNunit hPN
+  have hPR : P * R = R * P := TauCeti.ringInverse_semiconj hNunit hNunit hPN
   -- graph parametrization algebra
   have hsA : star A = P + star X := by rw [hA, star_add, hsP]
   have hPA : P * A = P := by rw [hA, mul_add, hPP, hPX, add_zero]
@@ -390,7 +369,7 @@ theorem norm_projection_sub_projection_graphSubspace
   -- intertwining and the `T₂` square
   have hXN : X * N = M * X := by
     rw [hN, hMdef, mul_add, mul_one, add_mul, one_mul, ← mul_assoc, mul_assoc]
-  have hXR : X * R = R' * X := ringInverse_semiconj hNunit hMunit hXN
+  have hXR : X * R = R' * X := TauCeti.ringInverse_semiconj hNunit hMunit hXN
   have hRsAA : R * (star A * A) = P := by
     rw [hsAA, ← mul_assoc, hRN, one_mul]
   have hT2sq : (X * R * star A) * star (X * R * star A) = 1 - R' := by
