@@ -8,6 +8,7 @@ import Mathlib.Data.Finsupp.Basic
 import Mathlib.Data.NNReal.Basic
 import Mathlib.Algebra.BigOperators.Finsupp.Basic
 import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
+import ForTauCeti.Analysis.Convex.Majorization
 
 /-!
 # Symmetric gauges on finitely supported nonnegative sequences
@@ -261,6 +262,93 @@ restriction: the extension sits between the supremum and the sum. -/
 theorem iSup_le_extend_le_tsum (a : ℕ → ℝ≥0∞) :
     (⨆ n, a n) ≤ Φ.extend a ∧ Φ.extend a ≤ ∑' n, a n :=
   ⟨iSup_le fun n => le_extend Φ a n, extend_le_tsum Φ a⟩
+
+/-! ## Bridge to the finite majorization theory
+
+`ForTauCeti.Analysis.Convex.Majorization` proves the Hardy--Littlewood--Pólya
+transfer descent for `FiniteSymmetricGauge`, on `(Fin n → ℝ) → ℝ`.  That layer is
+not directly usable here -- this gauge lives on `(ℕ →₀ ℝ≥0) → ℝ≥0` and takes
+`mono` and `normalized` as axioms where the finite one takes sign conditions --
+so the descent is imported through an adapter rather than reproved.
+
+The adapter sends `x : Fin n → ℝ` to `Φ` applied to the componentwise absolute
+value, read as a finitely supported sequence on `ℕ`.
+-/
+
+/-- The componentwise absolute value of a finite real vector, as a finitely
+supported nonnegative sequence on `ℕ`. -/
+noncomputable def ofFin {n : ℕ} (x : Fin n → ℝ) : ℕ →₀ ℝ≥0 :=
+  Finsupp.onFinset (Finset.range n)
+    (fun i => if h : i < n then ⟨|x ⟨i, h⟩|, abs_nonneg _⟩ else 0)
+    (by
+      intro i hi
+      by_cases h : i < n
+      · exact Finset.mem_range.mpr h
+      · simp [h] at hi)
+
+/-- `ofFin` reads off the absolute value at an in-range index. -/
+@[simp]
+theorem ofFin_apply {n : ℕ} (x : Fin n → ℝ) (i : Fin n) :
+    (ofFin x) (i : ℕ) = ⟨|x i|, abs_nonneg _⟩ := by
+  simp only [ofFin, Finsupp.onFinset_apply, i.isLt, dif_pos]
+
+/-- `ofFin` is monotone in the componentwise order on absolute values. -/
+theorem ofFin_le_ofFin {n : ℕ} {x y : Fin n → ℝ}
+    (h : ∀ i, |x i| ≤ |y i|) : ofFin x ≤ ofFin y := by
+  intro i
+  by_cases hi : i < n
+  · have hxy := h ⟨i, hi⟩
+    have : (ofFin x) i = ⟨|x ⟨i, hi⟩|, abs_nonneg _⟩ := by
+      simp only [ofFin, Finsupp.onFinset_apply, hi, dif_pos]
+    have h2 : (ofFin y) i = ⟨|y ⟨i, hi⟩|, abs_nonneg _⟩ := by
+      simp only [ofFin, Finsupp.onFinset_apply, hi, dif_pos]
+    rw [this, h2, ← NNReal.coe_le_coe]
+    exact hxy
+  · simp only [ofFin, Finsupp.onFinset_apply, hi, dif_neg, not_false_iff]
+    exact zero_le
+
+/-- The absolute value of a sum is dominated termwise by the sum of the absolute
+values, transported to `ofFin`.  This is the step that needs `mono`. -/
+theorem ofFin_add_le {n : ℕ} (x y : Fin n → ℝ) :
+    ofFin (x + y) ≤ ofFin x + ofFin y := by
+  intro i
+  by_cases hi : i < n
+  · have habs : |(x + y) ⟨i, hi⟩| ≤ |x ⟨i, hi⟩| + |y ⟨i, hi⟩| := by
+      simpa using abs_add_le (x ⟨i, hi⟩) (y ⟨i, hi⟩)
+    have e0 : (ofFin (x + y)) i = ⟨|(x + y) ⟨i, hi⟩|, abs_nonneg _⟩ := by
+      simp only [ofFin, Finsupp.onFinset_apply, hi, dif_pos]
+    have e1 : (ofFin x) i = ⟨|x ⟨i, hi⟩|, abs_nonneg _⟩ := by
+      simp only [ofFin, Finsupp.onFinset_apply, hi, dif_pos]
+    have e2 : (ofFin y) i = ⟨|y ⟨i, hi⟩|, abs_nonneg _⟩ := by
+      simp only [ofFin, Finsupp.onFinset_apply, hi, dif_pos]
+    rw [Finsupp.add_apply, e0, e1, e2, ← NNReal.coe_le_coe]
+    exact habs
+  · simp only [ofFin, Finsupp.onFinset_apply, hi, dif_neg, not_false_iff]
+    exact zero_le
+
+/-! ### What remains for the transfer descent
+
+The adapter `SymmetricGauge → FiniteSymmetricGauge n`, `x ↦ Φ (ofFin x)`, is the
+route by which the Hardy--Littlewood--Pólya descent of
+`ForTauCeti.Analysis.Convex.Majorization` becomes available here.  Three of its
+four fields follow immediately from the lemmas above and the axioms:
+
+* `add_le'` from `ofFin_add_le` then `mono` then `add_le`;
+* `real_smul'` from `|c • x| = |c| • |x|` and `smul`;
+* `neg_single'` because flipping one sign leaves `ofFin` unchanged.
+
+**The remaining obstruction is `perm'`, and it is a transport problem rather than
+an analytic one.**  `FiniteSymmetricGauge.perm'` quantifies over
+`Equiv.Perm (Fin n)`, while `SymmetricGauge.symm` quantifies over
+`Equiv.Perm ℕ`, so using the axiom requires lifting a permutation of `Fin n` to
+one of `ℕ` that fixes everything outside the range, and then showing
+`ofFin (x ∘ π) = Finsupp.equivMapDomain (lift π) (ofFin x)`.
+
+`Equiv.Perm.extendDomain` (`Mathlib/Algebra/Group/End.lean`) is the right tool --
+it extends a permutation along an `α ≃ Subtype p`, here `Fin n ≃ {i : ℕ // i < n}`
+-- but the transport equation needs its own proof and is left for a follow-on
+rather than asserted here.  Everything above this section is proved and used.
+-/
 
 end SymmetricGauge
 
