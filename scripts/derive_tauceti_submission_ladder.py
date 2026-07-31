@@ -108,6 +108,7 @@ RUNGS: list[tuple[str, str, list[str]]] = [
     ("G", "Foundations completion — the rest of topics T01-T10", [
         "Analysis.Convex.Majorization",
         "Analysis.OperatorIdeal.ApproximationNumber.CompactHilbert",
+        "Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence",
         "Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample",
         "Analysis.InnerProductSpace.AlignedBasis",
         "Analysis.InnerProductSpace.AngleGeometry",
@@ -386,9 +387,51 @@ def report(data: dict) -> None:
     print(f"Off the ladder: {len(data['off_ladder'])}")
 
 
+def suggested_rung(module: str) -> str | None:
+    """The rung a module belongs on, read off its roadmap topic.
+
+    Every rung from G onwards *is* a roadmap topic -- the rung titles carry the
+    topic id in parentheses -- and `check_tauceti_roadmap_topics.py` already
+    records which topic each module belongs to.  So an unplaced module does not
+    need a judgement call; it needs the two tables joined.
+
+    Returns `None` when the module has no topic, which is the only case that is
+    genuinely a decision.
+    """
+    try:
+        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+        import check_tauceti_roadmap_topics as topics
+    except Exception:
+        return None
+    topic = next((tid for tid, _title, mods in topics.TOPICS if module in mods), None)
+    if topic is None:
+        return None
+    for key, title, _seeds in RUNGS:
+        if f"({topic})" in title:
+            return f"{key} — {title}"
+    # Rung G is stated as a range rather than a single topic ("the rest of
+    # topics T01-T10"), which is why an exact `(T09)` match misses it.
+    for key, title, _seeds in RUNGS:
+        for lo, hi in re.findall(r"T(\d\d)-T(\d\d)", title):
+            if topic[1:3].isdigit() and lo <= topic[1:3] <= hi:
+                return f"{key} — {title}"
+    return (f"no rung carries topic {topic}; either the topic is new or rung "
+            f"titles and the topic table have drifted apart")
+
+
 def check(data: dict) -> int:
     """Fail when the ladder document disagrees with the tree."""
     problems: list[str] = []
+    # An unplaced module is the usual cause of a stale count, and the count
+    # alone names neither the module nor the fix.  Report the module first.
+    for module in data["off_ladder"]:
+        rung = suggested_rung(module)
+        where = (f"seed it in rung {rung}" if rung
+                 else "it has no roadmap topic, so its rung is a decision")
+        problems.append(
+            f"{module} is on no rung -- {where} "
+            f"(RUNGS in {pathlib.Path(__file__).name}), then re-sync the document "
+            f"counts from --json")
     for r in data["rungs"]:
         for s in r["unknown_seeds"]:
             problems.append(f"rung {r['rung']} seeds a module that does not exist: {s}")

@@ -63,6 +63,78 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-! ## Residual form -/
 
+/-- **The residual `sin Θ` reduction, with the Sylvester estimate as a
+hypothesis.**
+
+Every residual `sin Θ` theorem in this file does the same forty-seven lines
+before it does anything specific: restrict `A` to `Uᗮ`, compress the isometry
+and the residual to that block, transport the norm along `Uᗮ.subtypeₗᵢ`, check
+the Sylvester equation, and bound the compression of the residual by the
+residual.  What distinguishes them is only *which* Sylvester estimate closes the
+last step, so that estimate is the hypothesis here.
+
+The constant `c` is a parameter rather than `1` because the general
+disjoint-spectrum form carries `π / 2`; without it this lemma would serve two of
+the three theorems and look like the shape was wrong. -/
+private theorem sinTheta_residual_le_of_sylvester
+    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} {δ c : ℝ} (hc : 0 ≤ c)
+    (hsylv : ∀ Y C : F →ₗ[𝕜] (Uᗮ : Submodule 𝕜 E),
+      A.restrict (isInvariant_orthogonal_of_isSymmetric hA hU) ∘ₗ Y - Y ∘ₗ M = C →
+        δ * (N.codomainIsometryTransport Uᗮ.subtypeₗᵢ) Y
+          ≤ c * (N.codomainIsometryTransport Uᗮ.subtypeₗᵢ) C) :
+    δ * N (sinThetaEmbedding U X) ≤ c * N (residual A X M) := by
+  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
+  let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
+  let Y : F →ₗ[𝕜] Uᗮ :=
+    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
+  let C : F →ₗ[𝕜] Uᗮ :=
+    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ residual A X M
+  let NU : RectangularUnitarilyInvariantNorm 𝕜 F Uᗮ :=
+    N.codomainIsometryTransport Uᗮ.subtypeₗᵢ
+  have hAU : AU.IsSymmetric := isSymmetric_restrict hA hUperp
+  have hEq : AU ∘ₗ Y - Y ∘ₗ M = C := by
+    ext x
+    have hx := LinearMap.congr_fun
+      (sylvester_sinThetaEmbedding_eq_projectedResidual hA hU X M) x
+    simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
+      LinearMap.comp_apply] using hx
+  have hY : NU Y = N (sinThetaEmbedding U X) := by
+    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
+    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
+    -- longer discharges -- tried, and it fails here.
+    change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) = N (sinThetaEmbedding U X)
+    congr 1
+  have hC : NU C =
+      N (complementaryProjection U ∘ₗ residual A X M) := by
+    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
+    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
+    -- longer discharges -- tried, and it fails here.
+    change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
+      N (complementaryProjection U ∘ₗ residual A X M)
+    congr 1
+  have hproj : ‖(complementaryProjection U).toContinuousLinearMap‖ ≤ 1 := by
+    refine (complementaryProjection U).toContinuousLinearMap.opNorm_le_bound
+      zero_le_one fun x => ?_
+    -- names the projection application so the operator-norm bound applies directly.
+    change ‖Uᗮ.starProjection x‖ ≤ 1 * ‖x‖
+    simpa using Uᗮ.norm_starProjection_apply_le x
+  have hC_le : NU C ≤ N (residual A X M) := by
+    rw [hC]
+    calc
+      N (complementaryProjection U ∘ₗ residual A X M)
+          ≤ ‖(complementaryProjection U).toContinuousLinearMap‖ *
+              N (residual A X M) :=
+        N.comp_le_opNorm_mul _ _
+      _ ≤ 1 * N (residual A X M) :=
+        mul_le_mul_of_nonneg_right hproj (N.nonneg _)
+      _ = N (residual A X M) := one_mul _
+  have hS := hsylv Y C hEq
+  rw [hY] at hS
+  exact hS.trans (mul_le_mul_of_nonneg_left hC_le hc)
+
 /-- **Davis--Kahan `sin Θ`, residual form, every UI norm.**
 
 The spectrum of the approximate coordinate operator `M` lies in `[a,b]`, the
@@ -78,58 +150,16 @@ theorem sinTheta_residual_le
     (hMspec : SpectrumIn M ⊤ (Set.Icc a b))
     (hAspec : SpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * N (sinThetaEmbedding U X) ≤ N (residual A X M) := by
-  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
-  let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
-  let Y : F →ₗ[𝕜] Uᗮ :=
-    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
-  let C : F →ₗ[𝕜] Uᗮ :=
-    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ residual A X M
-  let NU : RectangularUnitarilyInvariantNorm 𝕜 F Uᗮ :=
-    N.codomainIsometryTransport Uᗮ.subtypeₗᵢ
-  have hAU : AU.IsSymmetric := isSymmetric_restrict hA hUperp
-  have hgap : IntervalSylvesterGap AU M a b δ := by
+  refine (sinTheta_residual_le_of_sylvester (c := 1) N hA hU X zero_le_one
+    ?_).trans_eq (one_mul _)
+  intro Y C hEq
+  have hgap : IntervalSylvesterGap
+      (A.restrict (isInvariant_orthogonal_of_isSymmetric hA hU)) M a b δ := by
     refine ⟨hMspec, ?_⟩
-    exact (spectrumIn_restrict_iff A hUperp _).2 hAspec
-  have hEq : AU ∘ₗ Y - Y ∘ₗ M = C := by
-    ext x
-    have hx := LinearMap.congr_fun
-      (sylvester_sinThetaEmbedding_eq_projectedResidual hA hU X M) x
-    simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
-      LinearMap.comp_apply] using hx
-  have hY : NU Y = N (sinThetaEmbedding U X) := by
-    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
-    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
-    -- longer discharges -- tried, and it fails here.
-    change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) = N (sinThetaEmbedding U X)
-    congr 1
-  have hC : NU C =
-      N (complementaryProjection U ∘ₗ residual A X M) := by
-    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
-    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
-    -- longer discharges -- tried, and it fails here.
-    change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
-      N (complementaryProjection U ∘ₗ residual A X M)
-    congr 1
-  have hproj : ‖(complementaryProjection U).toContinuousLinearMap‖ ≤ 1 := by
-    refine (complementaryProjection U).toContinuousLinearMap.opNorm_le_bound
-      zero_le_one fun x => ?_
-    -- names the projection application so the operator-norm bound applies directly.
-    change ‖Uᗮ.starProjection x‖ ≤ 1 * ‖x‖
-    simpa using Uᗮ.norm_starProjection_apply_le x
-  have hC_le : NU C ≤ N (residual A X M) := by
-    rw [hC]
-    calc
-      N (complementaryProjection U ∘ₗ residual A X M)
-          ≤ ‖(complementaryProjection U).toContinuousLinearMap‖ *
-              N (residual A X M) :=
-        N.comp_le_opNorm_mul _ _
-      _ ≤ 1 * N (residual A X M) :=
-        mul_le_mul_of_nonneg_right hproj (N.nonneg _)
-      _ = N (residual A X M) := one_mul _
-  have hSylvester :=
-    uiNorm_sylvester_le_of_intervalGap NU hAU hM hδ hgap hEq
-  rw [hY] at hSylvester
-  exact hSylvester.trans hC_le
+    exact (spectrumIn_restrict_iff A (isInvariant_orthogonal_of_isSymmetric hA hU) _).2 hAspec
+  exact (uiNorm_sylvester_le_of_intervalGap (N.codomainIsometryTransport Uᗮ.subtypeₗᵢ)
+    (isSymmetric_restrict hA (isInvariant_orthogonal_of_isSymmetric hA hU)) hM hδ hgap
+    hEq).trans_eq (one_mul _).symm
 
 /-- Ordered half-line residual form.
 -/
@@ -140,16 +170,11 @@ theorem sinTheta_residual_le_of_orderedGap
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
     δ * N (sinThetaEmbedding U X) ≤ N (residual A X M) := by
-  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
-  let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
-  let Y : F →ₗ[𝕜] Uᗮ :=
-    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
-  let C : F →ₗ[𝕜] Uᗮ :=
-    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ residual A X M
-  let NU : RectangularUnitarilyInvariantNorm 𝕜 F Uᗮ :=
-    N.codomainIsometryTransport Uᗮ.subtypeₗᵢ
-  have hAU : AU.IsSymmetric := isSymmetric_restrict hA hUperp
-  have hgap' : OrderedSylvesterGap AU M δ := by
+  refine (sinTheta_residual_le_of_sylvester (c := 1) N hA hU X zero_le_one
+    ?_).trans_eq (one_mul _)
+  intro Y C hEq
+  have hUperp := isInvariant_orthogonal_of_isSymmetric hA hU
+  have hgap' : OrderedSylvesterGap (A.restrict hUperp) M δ := by
     left
     intro lam μ hlam hμ
     apply hgap lam μ hlam
@@ -158,46 +183,8 @@ theorem sinTheta_residual_le_of_orderedGap
     change μ ∈ restrictedSpectrum (A.restrict hUperp) ⊤ at hμ
     rw [restrictedSpectrum_restrict A hUperp] at hμ
     exact hμ
-  have hEq : AU ∘ₗ Y - Y ∘ₗ M = C := by
-    ext x
-    have hx := LinearMap.congr_fun
-      (sylvester_sinThetaEmbedding_eq_projectedResidual hA hU X M) x
-    simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
-      LinearMap.comp_apply] using hx
-  have hY : NU Y = N (sinThetaEmbedding U X) := by
-    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
-    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
-    -- longer discharges -- tried, and it fails here.
-    change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) = N (sinThetaEmbedding U X)
-    congr 1
-  have hC : NU C =
-      N (complementaryProjection U ∘ₗ residual A X M) := by
-    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
-    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
-    -- longer discharges -- tried, and it fails here.
-    change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
-      N (complementaryProjection U ∘ₗ residual A X M)
-    congr 1
-  have hproj : ‖(complementaryProjection U).toContinuousLinearMap‖ ≤ 1 := by
-    refine (complementaryProjection U).toContinuousLinearMap.opNorm_le_bound
-      zero_le_one fun x => ?_
-    -- names the projection application so the operator-norm bound applies directly.
-    change ‖Uᗮ.starProjection x‖ ≤ 1 * ‖x‖
-    simpa using Uᗮ.norm_starProjection_apply_le x
-  have hC_le : NU C ≤ N (residual A X M) := by
-    rw [hC]
-    calc
-      N (complementaryProjection U ∘ₗ residual A X M)
-          ≤ ‖(complementaryProjection U).toContinuousLinearMap‖ *
-              N (residual A X M) :=
-        N.comp_le_opNorm_mul _ _
-      _ ≤ 1 * N (residual A X M) :=
-        mul_le_mul_of_nonneg_right hproj (N.nonneg _)
-      _ = N (residual A X M) := one_mul _
-  have hSylvester :=
-    uiNorm_sylvester_le_of_orderedGap NU hAU hM hδ hgap' hEq
-  rw [hY] at hSylvester
-  exact hSylvester.trans hC_le
+  exact (uiNorm_sylvester_le_of_orderedGap (N.codomainIsometryTransport Uᗮ.subtypeₗᵢ)
+    (isSymmetric_restrict hA hUperp) hM hδ hgap' hEq).trans_eq (one_mul _).symm
 
 /-- General disjoint-spectrum residual form.  The `π/2` loss is the
 Bhatia--Davis--McIntosh extension, not the sharp interval/exterior theorem.
@@ -212,73 +199,20 @@ theorem sinTheta_residual_le_of_spectralDistance
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : SpectraSeparated M ⊤ A Uᗮ δ) :
     δ * N (sinThetaEmbedding U X) ≤ (Real.pi / 2) * N (residual A X M) := by
-  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
-  let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
-  let Y : F →ₗ[𝕜] Uᗮ :=
-    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
-  let C : F →ₗ[𝕜] Uᗮ :=
-    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ residual A X M
-  let NU : RectangularUnitarilyInvariantNorm 𝕜 F Uᗮ :=
-    N.codomainIsometryTransport Uᗮ.subtypeₗᵢ
-  have hAU : AU.IsSymmetric := isSymmetric_restrict hA hUperp
-  have hgap' : SpectraSeparated AU ⊤ M ⊤ δ := by
+  refine sinTheta_residual_le_of_sylvester (c := Real.pi / 2) N hA hU X
+    (by positivity) ?_
+  intro Y C hEq
+  have hUperp := isInvariant_orthogonal_of_isSymmetric hA hU
+  have hgap' : SpectraSeparated (A.restrict hUperp) ⊤ M ⊤ δ := by
     intro lam μ hlam hμ
     have hlam' : lam ∈ restrictedSpectrum A Uᗮ := by
       rw [← restrictedSpectrum_restrict A hUperp]
       exact hlam
     have hsep := hgap μ lam hμ hlam'
     simpa [abs_sub_comm] using hsep
-  have hEq : AU ∘ₗ Y - Y ∘ₗ M = C := by
-    ext x
-    have hx := LinearMap.congr_fun
-      (sylvester_sinThetaEmbedding_eq_projectedResidual hA hU X M) x
-    simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
-      LinearMap.comp_apply] using hx
-  have hY : NU Y = N (sinThetaEmbedding U X) := by
-    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
-    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
-    -- longer discharges -- tried, and it fails here.
-    change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) = N (sinThetaEmbedding U X)
-    congr 1
-  have hC : NU C =
-      N (complementaryProjection U ∘ₗ residual A X M) := by
-    -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
-    -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
-    -- longer discharges -- tried, and it fails here.
-    change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
-      N (complementaryProjection U ∘ₗ residual A X M)
-    congr 1
-  have hproj : ‖(complementaryProjection U).toContinuousLinearMap‖ ≤ 1 := by
-    refine (complementaryProjection U).toContinuousLinearMap.opNorm_le_bound
-      zero_le_one fun x => ?_
-    -- names the projection application so the operator-norm bound applies directly.
-    change ‖Uᗮ.starProjection x‖ ≤ 1 * ‖x‖
-    simpa using Uᗮ.norm_starProjection_apply_le x
-  have hC_le : NU C ≤ N (residual A X M) := by
-    rw [hC]
-    calc
-      N (complementaryProjection U ∘ₗ residual A X M)
-          ≤ ‖(complementaryProjection U).toContinuousLinearMap‖ *
-              N (residual A X M) :=
-        N.comp_le_opNorm_mul _ _
-      _ ≤ 1 * N (residual A X M) :=
-        mul_le_mul_of_nonneg_right hproj (N.nonneg _)
-      _ = N (residual A X M) := one_mul _
-  have hSylvester :=
-    uiNorm_sylvester_le_of_spectralDistance NU hAU hM hδ hgap' hEq
-  rw [hY] at hSylvester
-  calc
-    δ * N (sinThetaEmbedding U X)
-        ≤ (Real.pi / 2) * NU C := hSylvester
-    _ ≤ (Real.pi / 2) * N (residual A X M) :=
-      mul_le_mul_of_nonneg_left hC_le (by positivity)
-
-/-! ## Operator-norm one-sided (directed) form
-
-This is the robust first capstone: the one-sided operator-norm `sin Θ` estimate,
-proved by feeding the spectral-gap coercivity bridge into the dimension-free
-operator-norm Sylvester theorem `norm_starProjection_comp_starProjection_le`.
-No principal-angle or equal-rank geometry is needed. -/
+  exact uiNorm_sylvester_le_of_spectralDistance
+    (N.codomainIsometryTransport Uᗮ.subtypeₗᵢ)
+    (isSymmetric_restrict hA hUperp) hM hδ hgap' hEq
 
 /-- **One-sided operator-norm Davis--Kahan `sin Θ` theorem (spectral-hypothesis
 form).**  If `A, B` are symmetric, `U` reduces `A` with `U`-carried spectrum
