@@ -108,6 +108,7 @@ RUNGS: list[tuple[str, str, list[str]]] = [
     ("G", "Foundations completion — the rest of topics T01-T10", [
         "Analysis.Convex.Majorization",
         "Analysis.OperatorIdeal.ApproximationNumber.CompactHilbert",
+        "Analysis.OperatorIdeal.ApproximationNumber.Core",
         "Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence",
         "Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample",
         "Analysis.InnerProductSpace.AlignedBasis",
