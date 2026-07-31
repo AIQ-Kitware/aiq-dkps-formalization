@@ -175,7 +175,7 @@ theorem norm_apply_le_of_spectralCutoff_apply_eq_zero {A : E →L[ℂ] E} (hA : 
   have happ : ((A + (s : ℝ) • 1) * A.spectralCutoff s) y = 0 := by
     rw [mul_apply_eq_comp]
     simp [hy]
-  rw [sub_apply, add_apply, happ, add_zero, smul_apply, one_apply_eq_self,
+  simp only [sub_apply, add_apply, happ, add_zero, smul_apply, one_apply_eq_self,
     inner_sub_left, map_sub, re_inner_mul_self hsa y,
     re_inner_real_smul_self (s ^ 2) y] at hform
   have hsq : ‖A y‖ ^ 2 ≤ (s * ‖y‖) ^ 2 := by nlinarith
@@ -209,9 +209,8 @@ theorem le_norm_apply_of_mem_orthogonal_ker_spectralCutoff {A : E →L[ℂ] E} (
     · rw [max_eq_right h]; linarith
     · rw [max_eq_left h.le]; linarith
   have hform := nonneg_re_inner hnn y
-  rw [sub_apply, sub_apply, hzero, smul_apply, one_apply_eq_self,
-    inner_sub_left, inner_sub_left, map_sub, map_sub, re_inner_real_smul_self s y] at hform
-  simp only [inner_zero_left, map_zero, zero_sub, neg_sub] at hform
+  simp only [sub_apply, hzero, smul_apply, one_apply_eq_self, inner_sub_left,
+    map_sub, re_inner_real_smul_self s y, zero_sub, neg_sub] at hform
   have hcs : RCLike.re ⟪A y, y⟫_ℂ ≤ ‖A y‖ * ‖y‖ :=
     le_trans (RCLike.re_le_norm _) (norm_inner_le_norm _ _)
   rcases eq_or_ne y 0 with rfl | hy0
