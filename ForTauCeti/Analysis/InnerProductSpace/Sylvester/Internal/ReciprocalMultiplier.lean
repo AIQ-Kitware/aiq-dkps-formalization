@@ -158,21 +158,21 @@ theorem real_reciprocalOrbitInterpolation_mass_lower_bound
       (1 : ℝ) = (obstructionAlpha i - obstructionBeta j) *
         ∑ r, a r * (u r i * v r j) := by
     have h := congrArg (fun T : G →ₗ[ℝ] G => ⟪e i, T (e j)⟫_ℝ) (hinterp i j)
-    rw [LinearMap.smul_apply, LinearMap.smul_apply, real_inner_smul_right,
-      real_inner_smul_right, basisMatrixUnit_apply, e.inner_eq_one, one_smul,
-      e.inner_eq_one, LinearMap.sum_apply, LinearMap.sum_apply, inner_sum] at h
+    simp only [LinearMap.smul_apply, real_inner_smul_right, basisMatrixUnit_apply,
+      e.inner_eq_one, one_smul, LinearMap.sum_apply, inner_sum,
+      RCLike.ofReal_real_eq_id, id_eq] at h
+    -- `simp only` reaches further than the old `rw` chain did: it pulls `a r` out of the
+    -- inner product and collapses `1 * 1`, so `h` already *is* the first calc step.
     calc
-      (1 : ℝ) = (1 : ℝ) * 1 := (mul_one 1).symm
-      _ = (obstructionAlpha i - obstructionBeta j) *
-          ∑ r, ⟪e i, (a r • unitaryOrbitAction (U r) (V r))
+      (1 : ℝ) = (obstructionAlpha i - obstructionBeta j) *
+          ∑ r, a r * ⟪e i, (unitaryOrbitAction (U r) (V r))
             (basisMatrixUnit e e i j) (e j)⟫_ℝ := h
       _ = (obstructionAlpha i - obstructionBeta j) *
           ∑ r, a r * (u r i * v r j) := by
         congr 1
         apply Finset.sum_congr rfl
         intro r _
-        rw [LinearMap.smul_apply, LinearMap.smul_apply,
-          real_inner_smul_right, hterm r i j]
+        rw [hterm r i j]
   have hzero : (0 : ℕ) < Module.finrank ℝ G := by omega
   have hone : (1 : ℕ) < Module.finrank ℝ G := by omega
   set i₀ : Fin (Module.finrank ℝ G) := ⟨0, hzero⟩ with hi₀
