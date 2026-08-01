@@ -10,6 +10,7 @@ import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
+import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
 
 /-!
 # The operator ideal family induced by a symmetric gauge
@@ -260,6 +261,38 @@ theorem symmetricGaugeFamily_injective {Φ Ψ : SymmetricGauge}
     have hinf : ∀ Θ : SymmetricGauge, Θ.extend a = ⊤ := fun Θ =>
       top_le_iff.1 (hsup ▸ Θ.iSup_le_extend a)
     rw [hinf Φ, hinf Ψ]
+
+/-- **Milestone B3's reconciliation.**  The Schatten ideal *obtained* from a symmetric
+gauge is the one `Family/Schatten.lean` *constructs*.
+
+The two routes are genuinely different: this side is a supremum over truncations of a
+`Finsupp`-valued gauge, the other a `tsum`.  Three facts make them meet —
+`extend_eq_iSup_ofFin` removes the cap, `ENNReal.tsum_eq_iSup_nat` opens the `tsum` into
+the same partial sums, and `iSup_rpow` carries the exponent across. -/
+theorem extend_approxSeq_schattenGauge {p : ℝ} (hp : 1 ≤ p) {E F : Type u}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (T : E →L[ℂ] F) :
+    (schattenGauge p hp).extend (approxSeq T)
+      = ContinuousLinearMap.schattenENorm p T := by
+  have hp0 : (0 : ℝ) < p := zero_lt_one.trans_le hp
+  have hinv : (0 : ℝ) < 1 / p := by positivity
+  have hnn : ∀ n, 0 ≤ T.approximationNumber n := fun n =>
+    ContinuousLinearMap.approximationNumber_nonneg T n
+  rw [show approxSeq T = fun n => ENNReal.ofReal (T.approximationNumber n) from rfl,
+    (schattenGauge p hp).extend_eq_iSup_ofFin hnn,
+    ContinuousLinearMap.schattenENorm, ENNReal.tsum_eq_iSup_nat, ← one_div,
+    iSup_rpow _ hinv]
+  refine iSup_congr fun k => ?_
+  rw [show (schattenGauge p hp)
+        (SymmetricGauge.ofFin (fun i : Fin k => T.approximationNumber i))
+      = schattenGaugeFun p
+        (SymmetricGauge.ofFin (fun i : Fin k => T.approximationNumber i)) from rfl,
+    schattenGaugeFun_ofFin hp0 hnn k]
+  rw [ENNReal.coe_rpow_of_nonneg _ hinv.le, ENNReal.ofNNReal_finsetSum]
+  congr 1
+  refine Finset.sum_congr rfl fun n _ => ?_
+  rw [ENNReal.coe_rpow_of_nonneg _ hp0.le, ENNReal.ofNNReal_toNNReal]
 
 /-! ## The adjoint-closed form, and Ky Fan dominance
 

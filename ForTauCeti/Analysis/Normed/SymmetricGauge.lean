@@ -419,6 +419,56 @@ theorem ofFin_update_neg {n : ℕ} (x : Fin n → ℝ) (j : Fin n) :
     · rw [Function.update_of_ne hij]
   · simp [ofFin_apply_of_le, hi]
 
+/-- The capped truncation of a nonnegative real sequence sits below its `Fin k` view. -/
+theorem cappedTruncate_le_ofFin {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n) (k : ℕ) (m : ℝ≥0) :
+    cappedTruncate (fun n => ENNReal.ofReal (a n)) k m ≤ ofFin (fun i : Fin k => a i) := by
+  refine Finsupp.le_def.2 fun i => ?_
+  simp only [cappedTruncate_apply]
+  by_cases hi : i < k
+  · rw [if_pos hi, ofFin_apply _ hi]
+    have h2 : (min (ENNReal.ofReal (a i)) ((m : ℝ≥0∞))).toNNReal ≤ (a i).toNNReal := by
+      refine (ENNReal.toNNReal_mono (by simp) (min_le_left _ _)).trans ?_
+      rw [← ENNReal.ofNNReal_toNNReal, ENNReal.toNNReal_coe]
+    rwa [Real.nnabs_of_nonneg (ha i)]
+  · rw [if_neg hi, ofFin_apply_of_le _ hi]
+
+/-- Each `Fin k` view is below the extension of the sequence. -/
+theorem ofFin_le_extend (Φ : SymmetricGauge) {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n) (k : ℕ) :
+    ((Φ (ofFin (fun i : Fin k => a i)) : ℝ≥0) : ℝ≥0∞)
+      ≤ Φ.extend fun n => ENNReal.ofReal (a n) := by
+  classical
+  obtain ⟨m, hm⟩ : ∃ m : ℝ≥0, ∀ i : Fin k, (a i).toNNReal ≤ m :=
+    ⟨(Finset.univ.image fun i : Fin k => (a i).toNNReal).sup id,
+      fun i => Finset.le_sup (f := id) (Finset.mem_image_of_mem _ (Finset.mem_univ i))⟩
+  have heq : ofFin (fun i : Fin k => a i)
+      = cappedTruncate (fun n => ENNReal.ofReal (a n)) k m := by
+    refine Finsupp.ext fun i => ?_
+    simp only [cappedTruncate_apply]
+    by_cases hi : i < k
+    · rw [if_pos hi, ofFin_apply _ hi]
+      have hle : ENNReal.ofReal (a i) ≤ (m : ℝ≥0∞) := by
+        rw [← ENNReal.ofNNReal_toNNReal, ENNReal.coe_le_coe]
+        exact hm ⟨i, hi⟩
+      rw [min_eq_left hle, ← ENNReal.ofNNReal_toNNReal, ENNReal.toNNReal_coe,
+        Real.nnabs_of_nonneg (ha i)]
+    · rw [if_neg hi, ofFin_apply_of_le _ hi]
+  rw [heq, Φ.extend_eq_iSup_cappedTruncate]
+  exact le_iSup_of_le k (le_iSup
+    (fun m : ℝ≥0 => ((Φ (cappedTruncate (fun n => ENNReal.ofReal (a n)) k m) : ℝ≥0) : ℝ≥0∞)) m)
+
+/-- **The extension of a nonnegative real sequence collapses to one index.**
+
+`extend`'s supremum ranges over a length and a cap; on a sequence that is already
+real-valued the cap is never active, so the `Fin k` views alone realise it. -/
+theorem extend_eq_iSup_ofFin (Φ : SymmetricGauge) {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n) :
+    Φ.extend (fun n => ENNReal.ofReal (a n))
+      = ⨆ k : ℕ, ((Φ (ofFin (fun i : Fin k => a i)) : ℝ≥0) : ℝ≥0∞) := by
+  refine le_antisymm ?_ (iSup_le fun k => Φ.ofFin_le_extend ha k)
+  rw [Φ.extend_eq_iSup_cappedTruncate]
+  refine iSup_le fun k => iSup_le fun m => ?_
+  refine le_iSup_of_le k ?_
+  exact_mod_cast Φ.mono (cappedTruncate_le_ofFin ha k m)
+
 /-- A permutation of `Fin n` as a permutation of `ℕ`, fixing everything outside
 the range.
 

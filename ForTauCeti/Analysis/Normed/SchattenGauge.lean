@@ -35,7 +35,7 @@ the inequality, is the substance of `add_le`.
   Apache 2.0.
 -/
 
-open scoped NNReal
+open scoped NNReal ENNReal
 
 namespace TauCeti
 
@@ -193,5 +193,35 @@ theorem schattenGaugeFun_antitone (hp : 1 ≤ p) {q : ℝ} (hq : 1 ≤ q) (hpq :
   calc schattenGaugeFun q c = (∑ i ∈ c.support, c i ^ q) ^ (1 / q) := rfl
     _ ≤ (M ^ q) ^ (1 / q) := NNReal.rpow_le_rpow hsum (by positivity)
     _ = M := by rw [← NNReal.rpow_mul, mul_one_div, div_self hq0.ne', NNReal.rpow_one]
+
+/-- `rpow` with a positive exponent commutes with suprema on `ℝ≥0∞`.
+
+Mathlib has `ENNReal.iSup_pow` for *natural* powers only; `ENNReal.orderIsoRpow` makes the
+real-exponent case immediate, since an order isomorphism preserves suprema.
+
+This is a general `ℝ≥0∞` fact with no Schatten content.  It lives here because that is where
+its only consumer is; if a second one appears, move it somewhere shared rather than copying
+it. -/
+theorem iSup_rpow {ι : Sort*} [Nonempty ι] (f : ι → ℝ≥0∞) {r : ℝ} (hr : 0 < r) :
+    (⨆ i, f i) ^ r = ⨆ i, f i ^ r := by
+  have h := (ENNReal.orderIsoRpow r hr).map_iSup f
+  simpa only [ENNReal.orderIsoRpow_apply] using h
+
+/-- The Schatten gauge of a `Fin k` view is the `ℓᵖ` norm of the first `k` entries. -/
+theorem schattenGaugeFun_ofFin {p : ℝ} (hp : 0 < p) {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n)
+    (k : ℕ) :
+    schattenGaugeFun p (SymmetricGauge.ofFin (fun i : Fin k => a i))
+      = (∑ n ∈ Finset.range k, (a n).toNNReal ^ p) ^ (1 / p) := by
+  classical
+  have hsupp : (SymmetricGauge.ofFin (fun i : Fin k => a i)).support ⊆ Finset.range k := by
+    intro n hn
+    by_contra hk
+    rw [Finsupp.mem_support_iff] at hn
+    exact hn (SymmetricGauge.ofFin_apply_of_le _ (Finset.mem_range.not.1 hk))
+  rw [schattenGaugeFun_eq_sum_of_subset hp _ hsupp]
+  congr 1
+  refine Finset.sum_congr rfl fun n hn => ?_
+  have hk : n < k := Finset.mem_range.1 hn
+  rw [SymmetricGauge.ofFin_apply _ hk, Real.nnabs_of_nonneg (ha n)]
 
 end TauCeti
