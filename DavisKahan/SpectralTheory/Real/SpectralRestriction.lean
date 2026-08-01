@@ -284,6 +284,9 @@ theorem conjugateOperator_specProjection (A : RealClosedOperator) (hA : A.IsSelf
     rw [hind, MeasureTheory.integral_indicator_const _ hSm]
     simp
   refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
+  -- Left as a `rw` chain on purpose: `simp only` with this same list fails to synthesize an
+  -- instance that `rw` obtains from the rewritten form; simp normalises before the instance
+  -- argument is determined.
   rw [conjugateOperator_apply, inner_conjugation_right, ← inner_conj_symm,
     TauCeti.LinearPMap.specProjection, TauCeti.LinearPMap.spectralPVM,
     TauCeti.BorelCalculus.toProjValMeasure_proj, TauCeti.BorelCalculus.specProj,
@@ -299,9 +302,9 @@ theorem conjugateOperator_specProjection (A : RealClosedOperator) (hA : A.IsSelf
       = conjugation (ξ + Complex.I • ψ) := by
     rw [map_add, conjugation_complex_smul, Complex.conj_I]
     module
-  rw [TauCeti.BorelCalculus.pair, TauCeti.BorelCalculus.pair, h1, h2, h3, h4,
-    diagMeasure_conjugation A hA, diagMeasure_conjugation A hA,
-    diagMeasure_conjugation A hA, diagMeasure_conjugation A hA]
+  -- The `rw` chain this replaced listed `pair` twice and `diagMeasure_conjugation` four
+  -- times, once per occurrence; `simp only` reaches them all in one pass.
+  simp only [TauCeti.BorelCalculus.pair, h1, h2, h3, h4, diagMeasure_conjugation A hA]
   have e1 := hIreal (ξ + ψ)
   have e2 := hIreal (ξ + Complex.I • ψ)
   have e3 := hIreal (ξ - ψ)

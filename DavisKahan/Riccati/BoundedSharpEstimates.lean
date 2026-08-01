@@ -495,6 +495,9 @@ private theorem re_inner_real_scalar_id
     (c : ℝ) (z : F) :
     RCLike.re
         ⟪(algebraMap ℝ (F →L[ℂ] F) c) z, z⟫_ℂ = c * ‖z‖ ^ 2 := by
+  -- Left as a `rw` chain on purpose: `simp only` with this same list fails to synthesize an
+  -- instance that `rw` obtains from the rewritten form; simp normalises before the instance
+  -- argument is determined.
   rw [Algebra.algebraMap_eq_smul_one, smul_apply, one_apply_eq_self,
     RCLike.real_smul_eq_coe_smul (K := ℂ), inner_smul_left,
     RCLike.conj_ofReal, RCLike.re_ofReal_mul, inner_self_eq_norm_sq]

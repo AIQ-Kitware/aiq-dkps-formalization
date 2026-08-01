@@ -347,8 +347,14 @@ theorem eigenvalue_notMem_gap_of_diagonal_form (hS : S.IsSymmetric)
   have hp2 : (0 : ℝ) < ‖p‖ ^ 2 := pow_pos (norm_pos_iff.mpr hp0n) 2
   have hq2 : (0 : ℝ) < ‖m‖ ^ 2 := pow_pos (norm_pos_iff.mpr hm0n) 2
   have hval_p : RCLike.re ⟪S x, p⟫_𝕜 = μ * ‖p‖ ^ 2 := by
-    simp only [hval p, hsplit, inner_add_left, map_add, inner_self_eq_norm_sq, hmp, map_zero, add_zero]
+    -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the goal unsolved: at
+    -- least one lemma here has to fire at one occurrence, in order, and simp's normal form loses
+    -- the intermediate shape.
+    rw [hval p, hsplit, inner_add_left, map_add, inner_self_eq_norm_sq, hmp, map_zero, add_zero]
   have hval_m : RCLike.re ⟪S x, m⟫_𝕜 = μ * ‖m‖ ^ 2 := by
+    -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the goal unsolved: at
+    -- least one lemma here has to fire at one occurrence, in order, and simp's normal form loses
+    -- the intermediate shape.
     rw [hval m, hsplit, inner_add_left, map_add, hpm, map_zero, zero_add, inner_self_eq_norm_sq]
   have decomp_p : RCLike.re ⟪S x, p⟫_𝕜
       = RCLike.re ⟪S p, p⟫_𝕜 + RCLike.re ⟪S p, m⟫_𝕜 := by
@@ -513,6 +519,9 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
   have hRsym : ∀ v w, ⟪V.reflection (S v - (((a + b) / 2 : ℝ) : 𝕜) • v), w⟫_𝕜
       = ⟪v, V.reflection (S w - (((a + b) / 2 : ℝ) : 𝕜) • w)⟫_𝕜 := by
     intro v w
+    -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the goal unsolved: at
+    -- least one lemma here has to fire at one occurrence, in order, and simp's normal form loses
+    -- the intermediate shape.
     rw [inner_reflection_left_eq_right, hJvS w, inner_sub_left, inner_sub_right,
       inner_smul_left, inner_smul_right, RCLike.conj_ofReal, hS]
   have hRadd : ∀ v w, V.reflection (S (v + w) - (((a + b) / 2 : ℝ) : 𝕜) • (v + w))
@@ -544,6 +553,9 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
           rw [inner_reflection_left_eq_right]
   have hγre : RCLike.re γ = 1 - 2 * ν := by
     have h2 : γ + (starRingEnd 𝕜) γ = ((2 * (1 - 2 * ν) : ℝ) : 𝕜) := by
+      -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the goal unsolved:
+      -- at least one lemma here has to fire at one occurrence, in order, and simp's normal form
+      -- loses the intermediate shape.
       rw [← hγconj, hγdef, ← inner_add_right, hJJsum, inner_smul_right,
         inner_self_eq_norm_sq_to_K, hxn]
       norm_num
@@ -576,7 +588,7 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
   have hw' : V.reflection (U.reflection w₂) = ((‖w₂‖ ^ 2 : ℝ) : 𝕜) • x + γ • w₂ := by
     have hJvJy : V.reflection (U.reflection y) = x := by
       rw [hydef, Submodule.reflection_reflection, Submodule.reflection_reflection]
-    rw [hw₂def, map_sub, map_sub, map_smul, map_smul, hJvJy, ← hzdef, hzw, smul_sub,
+    simp only [hw₂def, map_sub, map_sub, map_smul, map_smul, hJvJy, ← hzdef, hzw, smul_sub,
       smul_smul, RCLike.mul_conj,
       show ((‖γ‖ : ℝ) : 𝕜) ^ 2 = 1 - ((‖w₂‖ ^ 2 : ℝ) : 𝕜) from by
         rw [show ((‖γ‖ : ℝ) : 𝕜) ^ 2 = ((‖γ‖ ^ 2 : ℝ) : 𝕜) from by push_cast; ring, hs2]
@@ -631,6 +643,9 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
   have hE4 : ⟪V.reflection (S w₂ - (((a + b) / 2 : ℝ) : 𝕜) • w₂),
         V.reflection (U.reflection w₂)⟫_𝕜
       = ((‖w₂‖ ^ 2 : ℝ) : 𝕜) * (starRingEnd 𝕜) G + γ * Q₂ := by
+    -- Left as a `rw` chain on purpose: `simp only` with this same list rejects `← inner_conj_symm`
+    -- as a possibly-looping simp theorem. A reversed rewrite applied once, in position, is what
+    -- `rw` is for.
     rw [← inner_conj_symm, hE3, map_add, map_mul, map_mul, RCLike.conj_ofReal,
       RCLike.conj_conj, hQ₂conj]
   -- I1: the (x,x) coercivity

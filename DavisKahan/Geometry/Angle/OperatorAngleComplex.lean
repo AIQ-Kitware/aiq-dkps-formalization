@@ -136,6 +136,8 @@ theorem adjoint_cross_mul_cross (U W : Submodule ℂ E)
     star (W.starProjection ∘L U.starProjection) *
         (W.starProjection ∘L U.starProjection) =
       U.starProjection ∘L W.starProjection ∘L U.starProjection := by
+  -- Left as a `rw` chain on purpose: `simp only` with this same list breaks the enclosing `calc`:
+  -- it normalises the left-hand side past the form the next step declares.
   rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_comp,
     ← ContinuousLinearMap.star_eq_adjoint, ← ContinuousLinearMap.star_eq_adjoint,
     (isSelfAdjoint_starProjection U).star_eq,

@@ -260,6 +260,9 @@ theorem singularValues_tanThetaEmbedding
     simp only [OrthonormalBasis.repr_apply_apply, LinearMap.comp_apply,
       OrthonormalBasis.coe_toBasis, T, b]
     rw [LinearMap.adjoint_inner_right]
+    -- Left as a `rw` chain on purpose: `simp only` with this same list makes no progress: every
+    -- lemma here needs the goal in the shape the previous rewrite leaves it, and simp matches
+    -- against the original.
     rw [tanThetaEmbedding_apply_rightSingularBasis U X htrans j,
       tanThetaEmbedding_apply_rightSingularBasis U X htrans i,
       inner_smul_left, inner_smul_right, map_inv₀, RCLike.conj_ofReal,

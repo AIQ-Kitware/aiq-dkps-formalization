@@ -373,6 +373,9 @@ theorem singularValues_of_isPositive {A : E →ₗ[𝕜] E} (hA : A.IsPositive)
       (fun a b hab => pow_le_pow_left₀ (hA.nonneg_eigenvalues rfl b)
         (hA.isSymmetric.eigenvalues_antitone rfl hab) 2)
       (fun i => by
+        -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the goal
+        -- unsolved: at least one lemma here has to fire at one occurrence, in order, and simp's
+        -- normal form loses the intermediate shape.
         rw [LinearMap.comp_apply, hA.isSymmetric.apply_eigenvectorBasis,
           map_smul, hA.isSymmetric.adjoint_eq,
           hA.isSymmetric.apply_eigenvectorBasis, smul_smul,

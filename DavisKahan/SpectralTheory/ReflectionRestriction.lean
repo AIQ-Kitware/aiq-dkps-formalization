@@ -93,6 +93,9 @@ theorem reflectedOffdiag_adjoint
     {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) :
     (Vᗮ.starProjection ∘L A ∘L V.starProjection).adjoint =
       V.starProjection ∘L A ∘L Vᗮ.starProjection := by
+  -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the goal unsolved: at
+  -- least one lemma here has to fire at one occurrence, in order, and simp's normal form loses the
+  -- intermediate shape.
   rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp,
     ← ContinuousLinearMap.star_eq_adjoint,
     ← ContinuousLinearMap.star_eq_adjoint,

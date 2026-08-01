@@ -353,6 +353,9 @@ theorem principalOrthogonalVector_mem
     have h2 : ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V)
           (principalSourceVector U V i) =
         ((principalPlaneCosine U V i ^ 2 : ℝ) : 𝕜) • principalSourceVector U V i := by
+      -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the goal unsolved:
+      -- at least one lemma here has to fire at one occurrence, in order, and simp's normal form
+      -- loses the intermediate shape.
       rw [← abs_mul_self, LinearMap.comp_apply, hC, map_smul, hC, smul_smul,
         ← RCLike.ofReal_mul, ← sq]
     rw [← h1, h2]
