@@ -325,29 +325,8 @@ theorem highProb_mse_le_of_subevent
   -- Conclusion: for every target ε > 0, with high probability (eventually in n) MSE(ŷ_NN) ≤ ε.
   ∀ ε : ℝ, 0 < ε →
     HighProbAtTop μ hμ (fun n => {ω | MSE Pf (fun f => score f Qstar) (fun f => hNN n ω f) ≤ ε}) := by
-      have h_mse_bound : ∀ ε > 0, ∃ N : ℕ, ∀ n > N, ∀ ω ∈ {ω | ∀ f, ‖ψHat n ω f - ψ f‖ ≤ c n} ∩ {ω | ∀ f, ∃ i : Fin n, ‖ψ (f_ref n ω i) - ψ f‖ ≤ Real.sqrt ε / (2 * γ)}, MSE Pf (fun f => score f Qstar) (fun f => hNN n ω f) ≤ ε := by
-        intro ε hε_pos
-        obtain ⟨N, hN⟩ : ∃ N : ℕ, ∀ n > N, ∀ ω ∈ {ω | ∀ f, ‖ψHat n ω f - ψ f‖ ≤ c n} ∩ {ω | ∀ f, ∃ i : Fin n, ‖ψ (f_ref n ω i) - ψ f‖ ≤ Real.sqrt ε / (2 * γ)}, ∀ f, |hNN n ω f - score f Qstar| ≤ Real.sqrt ε := by
-          obtain ⟨N, hN⟩ : ∃ N : ℕ, ∀ n > N, ∀ ω ∈ {ω | ∀ f, ‖ψHat n ω f - ψ f‖ ≤ c n} ∩ {ω | ∀ f, ∃ i : Fin n, ‖ψ (f_ref n ω i) - ψ f‖ ≤ Real.sqrt ε / (2 * γ)}, ∀ f, |hNN n ω f - score f Qstar| ≤ γ * (Real.sqrt ε / (2 * γ) + 4 * c n) := by
-            use 1;
-            intro n hn ω hω f;
-            rw [ h_hNN_def n ω f hn.le ];
-            exact step5_pointwise_error n ( fun i => ψ ( f_ref n ω i ) ) ( fun i => ψHat n ω ( f_ref n ω i ) ) ( ψ f ) ( ψHat n ω f ) ( nnIndex ( by linarith ) ( fun i => ψHat n ω ( f_ref n ω i ) ) ( ψHat n ω f ) ) ( nnIndex_isArgmin ( by linarith ) ( fun i => ψHat n ω ( f_ref n ω i ) ) ( ψHat n ω f ) ) ( c n ) ( Real.sqrt ε / ( 2 * γ ) ) γ ( fun i => hω.1 ( f_ref n ω i ) ) ( hω.1 f ) ( by obtain ⟨ i, hi ⟩ := hω.2 f; exact ⟨ i, hi ⟩ ) ( fun i => score ( f_ref n ω i ) Qstar ) ( score f Qstar ) ( fun i => h_lip Qstar ( f_ref n ω i ) f ) h_gamma_pos.le ( by positivity ) ( h_c_nonneg n );
-          obtain ⟨ N', hN' ⟩ := Metric.tendsto_atTop.mp h_c_tendsto ( Real.sqrt ε / ( 8 * γ ) ) ( by positivity );
-          exact ⟨ Max.max N N', fun n hn ω hω f => le_trans ( hN n ( lt_of_le_of_lt ( le_max_left _ _ ) hn ) ω hω f ) ( by nlinarith [ abs_lt.mp ( hN' n ( le_of_lt ( lt_of_le_of_lt ( le_max_right _ _ ) hn ) ) ), Real.sqrt_nonneg ε, Real.sq_sqrt hε_pos.le, mul_div_cancel₀ ( Real.sqrt ε ) ( by positivity : ( 2 * γ ) ≠ 0 ), mul_div_cancel₀ ( Real.sqrt ε ) ( by positivity : ( 8 * γ ) ≠ 0 ), h_c_nonneg n ] ) ⟩;
-        use N;
-        intro n hn ω hω
-        have h_mse_le : ∫ f, (hNN n ω f - score f Qstar) ^ 2 ∂Pf ≤ ∫ f, (Real.sqrt ε) ^ 2 ∂Pf := by
-          refine' MeasureTheory.integral_mono_of_nonneg _ _ _;
-          · exact Filter.Eventually.of_forall fun f => sq_nonneg _;
-          · norm_num;
-          · filter_upwards [ ] with f using by simpa using pow_le_pow_left₀ ( abs_nonneg _ ) ( hN n hn ω hω f ) 2;
-        have h_eq : MSE Pf (fun f => score f Qstar) (fun f => hNN n ω f)
-            = ∫ f, (hNN n ω f - score f Qstar) ^ 2 ∂Pf := by
-          simp only [MSE, sqLoss]
-        rw [h_eq]
-        refine h_mse_le.trans ?_
-        simp [Real.sq_sqrt hε_pos.le]
+      have h_mse_bound := mse_le_of_lipschitz_on_cover Pf ψ ψHat f_ref score Qstar γ
+        h_lip h_gamma_pos c h_c_tendsto h_c_nonneg hNN h_hNN_def
       intro ε hε_pos
       obtain ⟨N, hN⟩ := h_mse_bound ε hε_pos
       have h_inter : HighProbAtTop μ hμ (fun n => E n ∩ {ω | ∀ f, ∃ i : Fin n, ‖ψ (f_ref n ω i) - ψ f‖ ≤ Real.sqrt ε / (2 * γ)}) := by
