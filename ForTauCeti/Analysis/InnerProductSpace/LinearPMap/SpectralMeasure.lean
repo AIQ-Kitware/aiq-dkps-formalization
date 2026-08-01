@@ -243,12 +243,7 @@ theorem specProjection_apply_sub_smul {M c r : ℝ}
   -- the product symbol is the indicator, off the Cayley singularity
   have hprod : BorelCalculus.borelCalculus hU (hgb.mul hqb)
       = BorelCalculus.borelCalculus hU hindb := by
-    refine BorelCalculus.borelCalculus_congr_ae hU _ _ fun η => ?_
-    have hae : ∀ᵐ w ∂(BorelCalculus.diagMeasure hU η),
-        w ∉ ((Subtype.val : _root_.spectrum ℂ (cayley hA) → ℂ) ⁻¹' {1}) :=
-      MeasureTheory.compl_mem_ae_iff.mpr (diagMeasure_cayley_preimage_one hA η)
-    filter_upwards [hae] with w hw
-    have hw1 : (w : ℂ) ≠ 1 := hw
+    refine borelCalculus_congr_of_ne_one hA _ _ fun w hw1 => ?_
     have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
     have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := by simp [hgsym]
     have hκval : ((κ w : ℝ) : ℂ) + Complex.I = (2 * Complex.I) / (1 - (w : ℂ)) :=
