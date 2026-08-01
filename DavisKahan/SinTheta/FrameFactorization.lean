@@ -235,31 +235,26 @@ theorem lowerFramePolarData_nonempty
   let sqrt : F →L[ℂ] F := gram ^ (1 / 2 : ℝ)
   let invSqrt : F →L[ℂ] F := gram ^ (-1 / 2 : ℝ)
   let gramInv : F →L[ℂ] F := Ring.inverse gram
+  -- The three compositions below are one `rpow_add` each, differing only in the exponents;
+  -- naming that step keeps the difference visible instead of repeating the calc three times.
+  have hrpow : ∀ s t : ℝ, gram ^ s * gram ^ t = gram ^ (s + t) :=
+    fun _ _ => (CFC.rpow_add hgram_unit).symm
   have hinvSqrt_sqrt : invSqrt ∘L sqrt = ContinuousLinearMap.id ℂ F := by
     change invSqrt * sqrt = 1
     calc
-      invSqrt * sqrt = gram ^ (-1 / 2 : ℝ) * gram ^ (1 / 2 : ℝ) := by
-        rfl
-      _ = gram ^ ((-1 / 2 : ℝ) + (1 / 2 : ℝ)) :=
-        (CFC.rpow_add hgram_unit).symm
+      invSqrt * sqrt = gram ^ ((-1 / 2 : ℝ) + (1 / 2 : ℝ)) := hrpow _ _
       _ = gram ^ (0 : ℝ) := by norm_num
       _ = 1 := CFC.rpow_zero gram hgram_nonneg
   have hsqrt_invSqrt : sqrt ∘L invSqrt = ContinuousLinearMap.id ℂ F := by
     change sqrt * invSqrt = 1
     calc
-      sqrt * invSqrt = gram ^ (1 / 2 : ℝ) * gram ^ (-1 / 2 : ℝ) := by
-        rfl
-      _ = gram ^ ((1 / 2 : ℝ) + (-1 / 2 : ℝ)) :=
-        (CFC.rpow_add hgram_unit).symm
+      sqrt * invSqrt = gram ^ ((1 / 2 : ℝ) + (-1 / 2 : ℝ)) := hrpow _ _
       _ = gram ^ (0 : ℝ) := by norm_num
       _ = 1 := CFC.rpow_zero gram hgram_nonneg
   have hsqrt_sq : sqrt ∘L sqrt = X.adjoint ∘L X := by
     change sqrt * sqrt = gram
     calc
-      sqrt * sqrt = gram ^ (1 / 2 : ℝ) * gram ^ (1 / 2 : ℝ) := by
-        rfl
-      _ = gram ^ ((1 / 2 : ℝ) + (1 / 2 : ℝ)) :=
-        (CFC.rpow_add hgram_unit).symm
+      sqrt * sqrt = gram ^ ((1 / 2 : ℝ) + (1 / 2 : ℝ)) := hrpow _ _
       _ = gram ^ (1 : ℝ) := by norm_num
       _ = gram := CFC.rpow_one gram hgram_nonneg
   have hinvSqrt_adjoint : invSqrt.adjoint = invSqrt := by
