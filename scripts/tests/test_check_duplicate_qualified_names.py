@@ -81,11 +81,10 @@ class RepositoryTest(unittest.TestCase):
         found = dup.offenders()
         self.assertLessEqual(len(found), dup.DUPLICATE_BASELINE, sorted(found))
 
-    def test_the_baseline_is_the_known_symmetricgauge_collision_and_nothing_else(self) -> None:
-        """If a finding ever appears that is NOT this pair, the baseline is hiding it."""
-        for name, files in dup.offenders().items():
-            self.assertTrue(all("SymmetricGauge.lean" in f for f in files),
-                            f"{name} is a collision the baseline was not measured for: {files}")
+    def test_the_tree_is_clean(self) -> None:
+        """The `SymmetricGauge` collision was resolved on 2026-08-01 by renaming the
+        orphaned structure to `TruncationGauge`; the baseline is 0 and any finding is new."""
+        self.assertEqual(dup.offenders(), {})
 
     def test_it_is_wired_into_the_gate_runner(self) -> None:
         import run_gates
