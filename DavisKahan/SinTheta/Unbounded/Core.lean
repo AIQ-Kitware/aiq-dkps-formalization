@@ -177,6 +177,42 @@ theorem unbounded_adjoint_residual_block_identity
   have hA_symm := hA.isSymmetric
   have hA₀P : D.A₀.toLinearPMap.adjoint = D.A₀.toLinearPMap :=
     (D.A₀.isSelfAdjoint_iff_toLinearPMap_adjoint_eq).mp hA₀
+  have key : ∀ (y : D.Λ₁.domain) (x : D.A₀.domain),
+      ⟪D.X.adjoint (D.F₁ (D.Λ₁.toLinearMap y)) -
+          D.residual.adjoint (D.F₁ (y : G)), (x : F)⟫_𝕜 =
+        ⟪D.X.adjoint (D.F₁ (y : G)), D.A₀.toLinearMap x⟫_𝕜 := by
+    intro y x
+    let z : F := D.X.adjoint (D.F₁ (y : G))
+    let w : F :=
+      D.X.adjoint (D.F₁ (D.Λ₁.toLinearMap y)) -
+        D.residual.adjoint (D.F₁ (y : G))
+    show ⟪w, (x : F)⟫_𝕜 = ⟪z, D.A₀.toLinearMap x⟫_𝕜
+    let Fx : D.A.domain := ⟨D.X (x : F), D.X_maps_domain x⟩
+    let Fy : D.A.domain := ⟨D.F₁ (y : G), D.F₁_maps_domain y⟩
+    calc
+      ⟪w, (x : F)⟫_𝕜 =
+          ⟪D.F₁ (D.Λ₁.toLinearMap y), D.X (x : F)⟫_𝕜 -
+            ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
+        rw [inner_sub_left,
+          D.X.adjoint_inner_left (x : F) (D.F₁ (D.Λ₁.toLinearMap y)),
+          D.residual.adjoint_inner_left (x : F) (D.F₁ (y : G))]
+      _ = ⟪D.A.toLinearMap Fy, D.X (x : F)⟫_𝕜 -
+            ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
+        rw [← D.intertwines y]
+      _ = ⟪D.F₁ (y : G), D.A.toLinearMap Fx⟫_𝕜 -
+            ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
+        have hsymm :
+            ⟪D.A.toLinearMap Fy, D.X (x : F)⟫_𝕜 =
+              ⟪D.F₁ (y : G), D.A.toLinearMap Fx⟫_𝕜 := by
+          simpa only [
+            TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply,
+            Fx, Fy] using hA_symm Fy Fx
+        rw [hsymm]
+      _ = ⟪D.F₁ (y : G), D.X (D.A₀.toLinearMap x)⟫_𝕜 := by
+        rw [← D.residual_eq x, inner_sub_right]
+        abel
+      _ = ⟪z, D.A₀.toLinearMap x⟫_𝕜 := by
+        rw [← D.X.adjoint_inner_left (D.A₀.toLinearMap x) (D.F₁ (y : G))]
   refine ⟨?_, ?_⟩
   · intro y
     let z : F := D.X.adjoint (D.F₁ (y : G))
@@ -184,34 +220,7 @@ theorem unbounded_adjoint_residual_block_identity
       D.X.adjoint (D.F₁ (D.Λ₁.toLinearMap y)) -
         D.residual.adjoint (D.F₁ (y : G))
     have hw : ∀ x : D.A₀.domain,
-        ⟪w, (x : F)⟫_𝕜 = ⟪z, D.A₀.toLinearMap x⟫_𝕜 := by
-      intro x
-      let Fx : D.A.domain := ⟨D.X (x : F), D.X_maps_domain x⟩
-      let Fy : D.A.domain := ⟨D.F₁ (y : G), D.F₁_maps_domain y⟩
-      calc
-        ⟪w, (x : F)⟫_𝕜 =
-            ⟪D.F₁ (D.Λ₁.toLinearMap y), D.X (x : F)⟫_𝕜 -
-              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          rw [inner_sub_left,
-            D.X.adjoint_inner_left (x : F) (D.F₁ (D.Λ₁.toLinearMap y)),
-            D.residual.adjoint_inner_left (x : F) (D.F₁ (y : G))]
-        _ = ⟪D.A.toLinearMap Fy, D.X (x : F)⟫_𝕜 -
-              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          rw [← D.intertwines y]
-        _ = ⟪D.F₁ (y : G), D.A.toLinearMap Fx⟫_𝕜 -
-              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          have hsymm :
-              ⟪D.A.toLinearMap Fy, D.X (x : F)⟫_𝕜 =
-                ⟪D.F₁ (y : G), D.A.toLinearMap Fx⟫_𝕜 := by
-            simpa only [
-              TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply,
-              Fx, Fy] using hA_symm Fy Fx
-          rw [hsymm]
-        _ = ⟪D.F₁ (y : G), D.X (D.A₀.toLinearMap x)⟫_𝕜 := by
-          rw [← D.residual_eq x, inner_sub_right]
-          abel
-        _ = ⟪z, D.A₀.toLinearMap x⟫_𝕜 := by
-          rw [← D.X.adjoint_inner_left (D.A₀.toLinearMap x) (D.F₁ (y : G))]
+        ⟪w, (x : F)⟫_𝕜 = ⟪z, D.A₀.toLinearMap x⟫_𝕜 := key y
     have hzAdj : z ∈ D.A₀.toLinearPMap.adjoint.domain :=
       LinearPMap.mem_adjoint_domain_of_exists z ⟨w, hw⟩
     have hz : z ∈ D.A₀.toLinearPMap.domain := by
@@ -224,34 +233,7 @@ theorem unbounded_adjoint_residual_block_identity
       D.X.adjoint (D.F₁ (D.Λ₁.toLinearMap y)) -
         D.residual.adjoint (D.F₁ (y : G))
     have hw : ∀ x : D.A₀.domain,
-        ⟪w, (x : F)⟫_𝕜 = ⟪z, D.A₀.toLinearMap x⟫_𝕜 := by
-      intro x
-      let Fx : D.A.domain := ⟨D.X (x : F), D.X_maps_domain x⟩
-      let Fy : D.A.domain := ⟨D.F₁ (y : G), D.F₁_maps_domain y⟩
-      calc
-        ⟪w, (x : F)⟫_𝕜 =
-            ⟪D.F₁ (D.Λ₁.toLinearMap y), D.X (x : F)⟫_𝕜 -
-              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          rw [inner_sub_left,
-            D.X.adjoint_inner_left (x : F) (D.F₁ (D.Λ₁.toLinearMap y)),
-            D.residual.adjoint_inner_left (x : F) (D.F₁ (y : G))]
-        _ = ⟪D.A.toLinearMap Fy, D.X (x : F)⟫_𝕜 -
-              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          rw [← D.intertwines y]
-        _ = ⟪D.F₁ (y : G), D.A.toLinearMap Fx⟫_𝕜 -
-              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          have hsymm :
-              ⟪D.A.toLinearMap Fy, D.X (x : F)⟫_𝕜 =
-                ⟪D.F₁ (y : G), D.A.toLinearMap Fx⟫_𝕜 := by
-            simpa only [
-              TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply,
-              Fx, Fy] using hA_symm Fy Fx
-          rw [hsymm]
-        _ = ⟪D.F₁ (y : G), D.X (D.A₀.toLinearMap x)⟫_𝕜 := by
-          rw [← D.residual_eq x, inner_sub_right]
-          abel
-        _ = ⟪z, D.A₀.toLinearMap x⟫_𝕜 := by
-          rw [← D.X.adjoint_inner_left (D.A₀.toLinearMap x) (D.F₁ (y : G))]
+        ⟪w, (x : F)⟫_𝕜 = ⟪z, D.A₀.toLinearMap x⟫_𝕜 := key y
     have hzAdj : z ∈ D.A₀.toLinearPMap.adjoint.domain :=
       LinearPMap.mem_adjoint_domain_of_exists z ⟨w, hw⟩
     have hzDomPMap : z ∈ D.A₀.toLinearPMap.domain := by
@@ -310,6 +292,40 @@ theorem linearPMap_unbounded_adjoint_residual_block_identity
     rw [hA₀P] at hformal
     intro x y
     exact hformal x y
+  have key : ∀ (y : D.Λ₁.domain) (x : D.A₀.domain),
+      ⟪D.X.adjoint (D.F₁ (D.Λ₁ y)) -
+          D.residual.adjoint (D.F₁ (y : G)), (x : F)⟫_𝕜 =
+        ⟪D.X.adjoint (D.F₁ (y : G)), D.A₀ x⟫_𝕜 := by
+    intro y x
+    let z : F := D.X.adjoint (D.F₁ (y : G))
+    let w : F :=
+      D.X.adjoint (D.F₁ (D.Λ₁ y)) -
+        D.residual.adjoint (D.F₁ (y : G))
+    show ⟪w, (x : F)⟫_𝕜 = ⟪z, D.A₀ x⟫_𝕜
+    let Fx : D.A.domain := ⟨D.X (x : F), D.X_maps_domain x⟩
+    let Fy : D.A.domain := ⟨D.F₁ (y : G), D.F₁_maps_domain y⟩
+    calc
+      ⟪w, (x : F)⟫_𝕜 =
+          ⟪D.F₁ (D.Λ₁ y), D.X (x : F)⟫_𝕜 -
+            ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
+        rw [inner_sub_left,
+          D.X.adjoint_inner_left (x : F) (D.F₁ (D.Λ₁ y)),
+          D.residual.adjoint_inner_left (x : F) (D.F₁ (y : G))]
+      _ = ⟪D.A Fy, D.X (x : F)⟫_𝕜 -
+            ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
+        rw [← D.intertwines y]
+      _ = ⟪D.F₁ (y : G), D.A Fx⟫_𝕜 -
+            ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
+        have hsymm :
+            ⟪D.A Fy, D.X (x : F)⟫_𝕜 =
+              ⟪D.F₁ (y : G), D.A Fx⟫_𝕜 := by
+          simpa only [Fx, Fy] using hA_symm Fy Fx
+        rw [hsymm]
+      _ = ⟪D.F₁ (y : G), D.X (D.A₀ x)⟫_𝕜 := by
+        rw [← D.residual_eq x, inner_sub_right]
+        abel
+      _ = ⟪z, D.A₀ x⟫_𝕜 := by
+        rw [← D.X.adjoint_inner_left (D.A₀ x) (D.F₁ (y : G))]
   refine ⟨?_, ?_⟩
   · intro y
     let z : F := D.X.adjoint (D.F₁ (y : G))
@@ -317,32 +333,7 @@ theorem linearPMap_unbounded_adjoint_residual_block_identity
       D.X.adjoint (D.F₁ (D.Λ₁ y)) -
         D.residual.adjoint (D.F₁ (y : G))
     have hw : ∀ x : D.A₀.domain,
-        ⟪w, (x : F)⟫_𝕜 = ⟪z, D.A₀ x⟫_𝕜 := by
-      intro x
-      let Fx : D.A.domain := ⟨D.X (x : F), D.X_maps_domain x⟩
-      let Fy : D.A.domain := ⟨D.F₁ (y : G), D.F₁_maps_domain y⟩
-      calc
-        ⟪w, (x : F)⟫_𝕜 =
-            ⟪D.F₁ (D.Λ₁ y), D.X (x : F)⟫_𝕜 -
-              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          rw [inner_sub_left,
-            D.X.adjoint_inner_left (x : F) (D.F₁ (D.Λ₁ y)),
-            D.residual.adjoint_inner_left (x : F) (D.F₁ (y : G))]
-        _ = ⟪D.A Fy, D.X (x : F)⟫_𝕜 -
-              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          rw [← D.intertwines y]
-        _ = ⟪D.F₁ (y : G), D.A Fx⟫_𝕜 -
-              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          have hsymm :
-              ⟪D.A Fy, D.X (x : F)⟫_𝕜 =
-                ⟪D.F₁ (y : G), D.A Fx⟫_𝕜 := by
-            simpa only [Fx, Fy] using hA_symm Fy Fx
-          rw [hsymm]
-        _ = ⟪D.F₁ (y : G), D.X (D.A₀ x)⟫_𝕜 := by
-          rw [← D.residual_eq x, inner_sub_right]
-          abel
-        _ = ⟪z, D.A₀ x⟫_𝕜 := by
-          rw [← D.X.adjoint_inner_left (D.A₀ x) (D.F₁ (y : G))]
+        ⟪w, (x : F)⟫_𝕜 = ⟪z, D.A₀ x⟫_𝕜 := key y
     have hzAdj : z ∈ D.A₀.adjoint.domain :=
       LinearPMap.mem_adjoint_domain_of_exists z ⟨w, hw⟩
     have hz : z ∈ D.A₀.domain := by
@@ -355,32 +346,7 @@ theorem linearPMap_unbounded_adjoint_residual_block_identity
       D.X.adjoint (D.F₁ (D.Λ₁ y)) -
         D.residual.adjoint (D.F₁ (y : G))
     have hw : ∀ x : D.A₀.domain,
-        ⟪w, (x : F)⟫_𝕜 = ⟪z, D.A₀ x⟫_𝕜 := by
-      intro x
-      let Fx : D.A.domain := ⟨D.X (x : F), D.X_maps_domain x⟩
-      let Fy : D.A.domain := ⟨D.F₁ (y : G), D.F₁_maps_domain y⟩
-      calc
-        ⟪w, (x : F)⟫_𝕜 =
-            ⟪D.F₁ (D.Λ₁ y), D.X (x : F)⟫_𝕜 -
-              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          rw [inner_sub_left,
-            D.X.adjoint_inner_left (x : F) (D.F₁ (D.Λ₁ y)),
-            D.residual.adjoint_inner_left (x : F) (D.F₁ (y : G))]
-        _ = ⟪D.A Fy, D.X (x : F)⟫_𝕜 -
-              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          rw [← D.intertwines y]
-        _ = ⟪D.F₁ (y : G), D.A Fx⟫_𝕜 -
-              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          have hsymm :
-              ⟪D.A Fy, D.X (x : F)⟫_𝕜 =
-                ⟪D.F₁ (y : G), D.A Fx⟫_𝕜 := by
-            simpa only [Fx, Fy] using hA_symm Fy Fx
-          rw [hsymm]
-        _ = ⟪D.F₁ (y : G), D.X (D.A₀ x)⟫_𝕜 := by
-          rw [← D.residual_eq x, inner_sub_right]
-          abel
-        _ = ⟪z, D.A₀ x⟫_𝕜 := by
-          rw [← D.X.adjoint_inner_left (D.A₀ x) (D.F₁ (y : G))]
+        ⟪w, (x : F)⟫_𝕜 = ⟪z, D.A₀ x⟫_𝕜 := key y
     have hzAdj : z ∈ D.A₀.adjoint.domain :=
       LinearPMap.mem_adjoint_domain_of_exists z ⟨w, hw⟩
     have hzDom : z ∈ D.A₀.domain := by
