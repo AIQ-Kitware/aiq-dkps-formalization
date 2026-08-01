@@ -108,9 +108,7 @@ theorem coercive_of_selfAdjoint_spectrum_exterior
     algebraMap ℝ (K →L[ℂ] K) ((α + β) / 2) with hM₁def
   have hM₁sa : IsSelfAdjoint M₁ := by
     rw [hM₁def]
-    refine IsSelfAdjoint.sub (R := K →L[ℂ] K) ?_ ?_
-    · exact hM
-    · exact IsSelfAdjoint.algebraMap _ (IsSelfAdjoint.all _)
+    exact TauCeti.DavisKahanExt.isSelfAdjoint_sub_algebraMap hM _
   have hM₁spec : ∀ x ∈ spectrum ℝ M₁,
       (β - α) / 2 + δ ≤ |x| := by
     intro x hx

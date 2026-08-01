@@ -35,6 +35,17 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 
 set_option maxHeartbeats 1600000 in
+/-- **Shifting a self-adjoint operator by a real scalar keeps it self-adjoint.**
+
+Derived three times across this file and `UnboundedSpectrum.lean`, each time
+over a differently-named space. -/
+theorem isSelfAdjoint_sub_algebraMap {K : Type*} [NormedAddCommGroup K]
+    [InnerProductSpace ℂ K] [CompleteSpace K] {M : K →L[ℂ] K}
+    (hM : IsSelfAdjoint M) (c : ℝ) :
+    IsSelfAdjoint (M - algebraMap ℝ (K →L[ℂ] K) c) :=
+  IsSelfAdjoint.sub (R := K →L[ℂ] K) hM
+    (IsSelfAdjoint.algebraMap _ (IsSelfAdjoint.all _))
+
 /-- **Quadratic-form strip from an interval compression spectrum.**  If the
 spectrum of the compression `T|_W` lies in `[α, β]`, then the quadratic
 form of `T` on `W` lies in the same strip. -/
@@ -51,9 +62,7 @@ theorem formBounds_of_compress_spectrum_subset_Icc
     algebraMap ℝ (W →L[ℂ] W) ((α + β) / 2) with hM₁def
   have hM₁sa : IsSelfAdjoint M₁ := by
     rw [hM₁def]
-    refine IsSelfAdjoint.sub (R := ↥W →L[ℂ] ↥W) ?_ ?_
-    · exact hMsa
-    · exact IsSelfAdjoint.algebraMap _ (IsSelfAdjoint.all _)
+    exact isSelfAdjoint_sub_algebraMap hMsa _
   have hM₁spec : spectrum ℝ M₁ ⊆
       Set.Icc (-((β - α) / 2)) ((β - α) / 2) := by
     intro x hx
@@ -133,9 +142,7 @@ theorem coercive_of_compress_spectrum_exterior
     algebraMap ℝ (Z →L[ℂ] Z) ((α + β) / 2) with hM₁def
   have hM₁sa : IsSelfAdjoint M₁ := by
     rw [hM₁def]
-    refine IsSelfAdjoint.sub (R := ↥Z →L[ℂ] ↥Z) ?_ ?_
-    · exact hMsa
-    · exact IsSelfAdjoint.algebraMap _ (IsSelfAdjoint.all _)
+    exact isSelfAdjoint_sub_algebraMap hMsa _
   have hM₁spec : ∀ x ∈ spectrum ℝ M₁, (β - α) / 2 + δ ≤ |x| := by
     intro x hx
     rw [hM₁def, ← spectrum.sub_singleton_eq] at hx
