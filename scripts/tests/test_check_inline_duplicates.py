@@ -226,10 +226,30 @@ class HelperTest(unittest.TestCase):
 
 
 class RepositoryTest(unittest.TestCase):
-    def test_the_scan_finds_steps_in_both_libraries(self) -> None:
+    def test_every_library_has_sources(self) -> None:
         for library in dupes.LIBRARIES:
-            files = dupes.lean_files(library)
-            self.assertGreater(len(files), 10, library)
+            self.assertGreater(len(dupes.lean_files(library)), 0, library)
+
+    def test_the_library_list_is_derived_from_the_lakefile(self) -> None:
+        """It was hardcoded to two of nine and nothing said so.
+
+        Seven libraries -- 136 files -- were never scanned.  If someone adds a
+        `[[lean_lib]]` this must pick it up without an edit here.
+        """
+        declared = {block.split('name = "')[1].split('"')[0]
+                    for block in dupes.LAKEFILE.read_text(encoding="utf-8")
+                                              .split("[[lean_lib]]")[1:]
+                    if 'name = "' in block}
+        expected = {n for n in declared
+                    if (dupes.ROOT / n).is_dir() and n not in dupes.NOT_PRODUCTION}
+        self.assertEqual(set(dupes.LIBRARIES), expected)
+        self.assertGreater(len(dupes.LIBRARIES), 2,
+                           "the hardcoded two-library list is back")
+
+    def test_non_production_libraries_are_excluded(self) -> None:
+        """`ForTauCetiRoadmap` is all `sorry`; `Challenge` is calibration."""
+        for name in dupes.NOT_PRODUCTION:
+            self.assertNotIn(name, dupes.LIBRARIES)
 
     def test_experimental_is_excluded(self) -> None:
         for library in dupes.LIBRARIES:

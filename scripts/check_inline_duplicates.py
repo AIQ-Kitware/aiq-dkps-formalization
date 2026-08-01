@@ -160,10 +160,45 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
-#: Production libraries.  `Experimental/` is excluded everywhere else in this
-#: repository's tooling and is excluded here for the same reason: it is a
-#: scratch tree and its duplicates are not defects.
-LIBRARIES = ("ForTauCeti", "DavisKahan")
+#: Every Lean library the lakefile declares, read from the lakefile rather than
+#: listed here.
+#:
+#: **This was hardcoded to `("ForTauCeti", "DavisKahan")` and that was wrong.**
+#: The repository declares nine libraries; the other seven -- `Acharyya2024`,
+#: `Acharyya2025`, `DkpsQuench2026`, `Helm2025`, `FinishTanTwoTheta`,
+#: `FinishYuWangSamworth` and `Challenge`, 136 files between them -- were never
+#: scanned, and nothing said so.  A hardcoded list of what to check is the same
+#: defect as a hardcoded list of gates, which `run_gates.py` exists to avoid.
+#:
+#: `Experimental/` is still excluded, for the reason it is excluded everywhere
+#: else in this repository's tooling: it is a scratch tree and its duplicates
+#: are not defects.
+LAKEFILE = ROOT / "lakefile.toml"
+
+LIB_RE = re.compile(r'^\s*name\s*=\s*"([A-Za-z0-9_]+)"\s*$', re.MULTILINE)
+
+
+#: Declared libraries that are not production code, so duplication in them is
+#: not a defect.  `ForTauCetiRoadmap` is suggested *signatures*: every
+#: declaration is a `sorry`, so every proof body is the same one token.
+#: `Challenge` is comparator material for community calibration, deliberately
+#: not a default build target.
+NOT_PRODUCTION = {"ForTauCetiRoadmap", "Challenge"}
+
+
+def libraries() -> tuple[str, ...]:
+    """Library names from the lakefile, keeping only production source trees."""
+    text = LAKEFILE.read_text(encoding="utf-8")
+    names = []
+    for block in text.split("[[lean_lib]]")[1:]:
+        match = LIB_RE.search(block)
+        if (match and (ROOT / match.group(1)).is_dir()
+                and match.group(1) not in NOT_PRODUCTION):
+            names.append(match.group(1))
+    return tuple(names)
+
+
+LIBRARIES = libraries()
 
 OPENERS = "([{⟨⦃"
 CLOSERS = ")]}⟩⦄"
