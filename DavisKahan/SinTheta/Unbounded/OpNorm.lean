@@ -46,6 +46,17 @@ theorem sinTheta_unbounded_opNorm
     hA₀.isSymmetric D.A₀.toLinearPMap_dense hβα hδ hA₀low hA₀high hΛres hEq
   simpa [norm_neg] using h
 
+/-- **A self-adjoint `A₀` is symmetric**, in the form the unbounded sin-Theta
+bounds use.  Derived identically here and in `Gauge.lean`. -/
+theorem isSymmetric_A₀_of_isSelfAdjoint
+    (D : UnboundedSinThetaDataPMap (𝕜 := 𝕜) (E := E) (F := F) (G := G))
+    (hA₀ : _root_.IsSelfAdjoint D.A₀) :
+    TauCeti.LinearPMap.IsSymmetric D.A₀ := by
+  have hformal := LinearPMap.adjoint_isFormalAdjoint D.A₀_dense
+  rw [LinearPMap.isSelfAdjoint_def.mp hA₀] at hformal
+  intro x y
+  exact hformal x y
+
 /-- Raw partial-map operator-norm sine-theta estimate.  The form and
 shifted-inverse hypotheses stay over `LinearPMap` throughout. -/
 theorem linearPMap_sinTheta_unbounded_opNorm
@@ -58,11 +69,8 @@ theorem linearPMap_sinTheta_unbounded_opNorm
     (hΛres : TauCeti.LinearPMap.TwoSidedShiftedInverseBound D.Λ₁ ((α + β) / 2)
       ((α - β) / 2 + δ)) :
     δ * ‖D.X.adjoint ∘L D.F₁‖ ≤ ‖D.residual.adjoint ∘L D.F₁‖ := by
-  have hA₀sym : TauCeti.LinearPMap.IsSymmetric D.A₀ := by
-    have hformal := LinearPMap.adjoint_isFormalAdjoint D.A₀_dense
-    rw [LinearPMap.isSelfAdjoint_def.mp hA₀] at hformal
-    intro x y
-    exact hformal x y
+  have hA₀sym : TauCeti.LinearPMap.IsSymmetric D.A₀ :=
+    isSymmetric_A₀_of_isSelfAdjoint D hA₀
   have hEq := linearPMap_unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
   have h := linearPMap_norm_sylvester_le_of_exteriorInterval
     (A := D.A₀) (B := D.Λ₁)

@@ -98,11 +98,8 @@ theorem linearPMap_sinTheta_unbounded_gauge
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
       δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) ≤
         N.gaugeReal (D.residual.adjoint ∘L D.F₁) := by
-  have hA₀sym : TauCeti.LinearPMap.IsSymmetric D.A₀ := by
-    have hformal := LinearPMap.adjoint_isFormalAdjoint D.A₀_dense
-    rw [LinearPMap.isSelfAdjoint_def.mp hA₀] at hformal
-    intro x y
-    exact hformal x y
+  have hA₀sym : TauCeti.LinearPMap.IsSymmetric D.A₀ :=
+    isSymmetric_A₀_of_isSelfAdjoint D hA₀
   obtain ⟨S, hSnorm, hSeq⟩ :=
     linearPMap_exists_bounded_shift_extension hA₀sym
       D.A₀_dense hβα hA₀low hA₀high

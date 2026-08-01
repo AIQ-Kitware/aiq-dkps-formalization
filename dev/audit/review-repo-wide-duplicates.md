@@ -113,23 +113,42 @@ demands, not whether the statement demands more.**
 `subspaceGap_eq_max_directedGap` needed exactly the same extra `CompleteSpace E`
 and went through, because both of *its* callers have one.
 
-### What the remaining 14 look like
+### What the remaining five look like — and two diagnoses I got wrong
 
-All are 4–8 lines.  Several have idiosyncratic obstructions found by trying:
+**Identical-body groups are down to 5 (about 25 lines).**  Every one has a
+checked reason, and each is a *decision* rather than a mechanical edit.
 
-* `RosenblumExistence:hAs` — the two sites prove the same statement from
-  *different* hypotheses (open ball against closed ball), so one lemma does not
-  serve both.
-* `SinTheta/Unbounded` `hA₀sym` — the two enclosing theorems spell their
-  self-adjointness hypothesis differently (`D.A₀.IsSelfAdjoint` against
-  `_root_.IsSelfAdjoint D.A₀`).
-* `Theorem63FiniteSource:hyVperp` — normalised bodies match, but the raw text has
-  drifted in wrapping, so a text splice finds one site and not the other.
-* `UniformConcentration` `hXbar`/`hint` — a two-fact bundle needing bullet
-  structure; a hand edit, not a scripted one.
+**Two entries earlier in this note were wrong, and the error was the same both
+times: I compared a hypothesis at one site against a different hypothesis at the
+other.**
 
-**None is blocked by mathematics.**  Each is a twenty-minute hand edit by someone
-reading both sites, which is the shape all of this work has.
+* `RosenblumExistence:hAs` — I wrote that the two sites prove the same statement
+  from an open-ball and a closed-ball hypothesis.  They do not; I had compared
+  `hA` at one site with `hB` at the other.  Both carry the identical `hA`, and
+  the extraction went through.
+* `SinTheta/Unbounded:hA₀sym` — I wrote that the two theorems spell
+  self-adjointness differently.  Each *file* contains both spellings, but the two
+  duplicate sites use the same one.  Extracted.
+
+**The lesson is narrow and worth stating**: when a group looks blocked by
+mismatched hypotheses, check that the two things being compared are the two
+things the duplicate sites actually use.
+
+The five that remain:
+
+* `Section3Nonacute:hrange` — the copies sit in branches that each bind their own
+  `x`, so a `∀`-quantified hoist does not typecheck at the second site without
+  restructuring both branches.
+* `OperatorAngleComplex:hsq2` — **the only one blocked by elaboration.**  See the
+  instance-availability section above.
+* `OneParameterUnitaryGroup`/`Sylvester.Generator:hneg` — no common `ForTauCeti`
+  ancestor; a new module needs a roadmap topic, which is
+  `{lane:TAUCETI-ROADMAP-SUBMISSION}`'s call.
+* `OrderedCutoff`/`OrderedFromCutoffs:hpoint` — the natural home is in
+  `ForTauCeti`'s approximation-number layer, so it is a cross-library placement
+  decision rather than a move.
+* `QueryEfficiency` `Finite`/`Infinite:hlipschitz` — the two files share no import
+  edge.
 
 ## Largest groups still open at the time of writing
 
