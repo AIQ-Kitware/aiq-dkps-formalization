@@ -162,4 +162,21 @@ noncomputable def infiniteEstimator
     (liftedReferenceSampler (Ωresp := Ωresp) f_ref)
     score Qstar n ω f
 
+/-- **Relaxing a Lipschitz constant to `max c 1`.**
+
+Both the finite and the infinite subset theorems set `gamma := max c 1` to get a
+positive constant, then re-derive the Lipschitz bound at `gamma` in the same
+three lines.  Stated over the *statement* of `score_lipschitz` rather than either
+assumption structure, since the two carry the field independently. -/
+theorem lipschitz_le_max_one {d : Nat}
+    {score : Model Q X → Finset Q → Real} {Qstar : Finset Q}
+    {perspective : Model Q X → Vec d} {c : Real}
+    (hlip : ∀ f g, |score f Qstar - score g Qstar| ≤
+      c * ‖perspective f - perspective g‖) :
+    ∀ f g, |score f Qstar - score g Qstar| ≤
+      max c 1 * ‖perspective f - perspective g‖ := by
+  intro f g
+  exact (hlip f g).trans
+    (mul_le_mul_of_nonneg_right (le_max_left c 1) (norm_nonneg _))
+
 end DkpsQuench2026.QueryEfficiency

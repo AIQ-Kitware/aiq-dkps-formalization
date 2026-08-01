@@ -90,11 +90,8 @@ theorem finiteFixedSubset
     exact lt_of_lt_of_le zero_lt_one (le_max_right D.lipschitzConstant 1)
   have hlipschitz : ∀ f g,
       |score f Qstar - score g Qstar| ≤
-        gamma * ‖D.perspective f - D.perspective g‖ := by
-    intro f g
-    exact (H.score_lipschitz f g).trans
-      (mul_le_mul_of_nonneg_right
-        (le_max_left D.lipschitzConstant 1) (norm_nonneg _))
+        gamma * ‖D.perspective f - D.perspective g‖ :=
+    lipschitz_le_max_one H.score_lipschitz
   change HighProbQQueryEfficient (Q := Q) (X := X)
     (jointStageMeasure μref μresp) hμjoint Pf sqLoss
     (yFull score Qstar)
