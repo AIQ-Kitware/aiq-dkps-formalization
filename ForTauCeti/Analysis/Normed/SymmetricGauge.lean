@@ -231,6 +231,61 @@ theorem le_extend_of_dominated (a : ℕ → ℝ≥0∞) (b : ℕ →₀ ℝ≥0)
     (hb : ∀ i, (b i : ℝ≥0∞) ≤ a i) : (Φ b : ℝ≥0∞) ≤ Φ.extend a :=
   le_iSup (f := fun b : Dominated a => (Φ b.1 : ℝ≥0∞)) ⟨b, hb⟩
 
+/-- The truncation of `a` to its first `k` entries, capped at `m`.
+
+Distinct from `truncate` below, which has no cap and requires every entry finite; this one
+is total, which is what the extension's supremum needs.
+
+The cap is applied in `ℝ≥0∞`, **before** the conversion to `ℝ≥0`: `ENNReal.toNNReal ∞ = 0`,
+so capping after the conversion would read an infinite entry as zero and destroy
+monotonicity. -/
+noncomputable def cappedTruncate (a : ℕ → ℝ≥0∞) (k : ℕ) (m : ℝ≥0) : ℕ →₀ ℝ≥0 :=
+  Finsupp.onFinset (Finset.range k)
+    (fun n => if n < k then (min (a n) (m : ℝ≥0∞)).toNNReal else 0)
+    (fun n hn => by
+      by_cases h : n < k
+      · simpa using h
+      · simp [h] at hn)
+
+/-- The capped truncation, pointwise.  Definitional -- see `cappedTruncate`. -/
+@[simp] theorem cappedTruncate_apply (a : ℕ → ℝ≥0∞) (k : ℕ) (m : ℝ≥0) (n : ℕ) :
+    cappedTruncate a k m n = if n < k then (min (a n) (m : ℝ≥0∞)).toNNReal else 0 := rfl
+
+/-- **`extend` is also the supremum over capped truncations.**
+
+`extend` is defined here as a supremum over *all* dominated finitely supported sequences.
+This says the two-parameter family `cappedTruncate a k m` already realises that supremum.
+
+**Recorded because `ForTauCeti` currently contains a second `SymmetricGauge` whose `extend`
+is defined by the right-hand side here** (`Analysis/OperatorIdeal/SymmetricGauge.lean`).
+The two are different constructions that agree, and reconciling them is a proof obligation
+rather than a renaming; this is that obligation from this side, so a proof written against
+either definition can be transported to the other.  See `{lane:FTC-SYMGAUGE-COLLIDE}`. -/
+theorem extend_eq_iSup_cappedTruncate (Φ : SymmetricGauge) (a : ℕ → ℝ≥0∞) :
+    Φ.extend a = ⨆ k : ℕ, ⨆ m : ℝ≥0, (Φ (cappedTruncate a k m) : ℝ≥0∞) := by
+  refine le_antisymm (iSup_le fun b => ?_) (iSup_le fun k => iSup_le fun m => ?_)
+  · obtain ⟨k, hk⟩ : ∃ k, ∀ n ∈ b.1.support, n < k :=
+      ⟨b.1.support.sup id + 1, fun n hn => Nat.lt_succ_of_le (Finset.le_sup (f := id) hn)⟩
+    refine le_iSup_of_le k (le_iSup_of_le (b.1.support.sup b.1) ?_)
+    refine (ENNReal.coe_le_coe).2 (Φ.mono (Finsupp.le_def.2 fun n => ?_))
+    simp only [cappedTruncate_apply]
+    by_cases hn : n < k
+    · simp only [hn, if_true]
+      have hb : (b.1 n : ℝ≥0∞) ≤ min (a n) ((b.1.support.sup b.1 : ℝ≥0) : ℝ≥0∞) := by
+        refine le_min (b.2 n) ?_
+        by_cases hmem : n ∈ b.1.support
+        · exact_mod_cast Finset.le_sup (f := b.1) hmem
+        · simp [Finsupp.notMem_support_iff.mp hmem]
+      exact ENNReal.le_toNNReal_of_coe_le hb
+        (ne_top_of_le_ne_top ENNReal.coe_ne_top (min_le_right _ _))
+    · have : n ∉ b.1.support := fun hmem => hn (hk n hmem)
+      simp [Finsupp.notMem_support_iff.mp this, hn]
+  · refine le_extend_of_dominated Φ a _ fun i => ?_
+    simp only [cappedTruncate_apply]
+    split
+    · exact le_trans ENNReal.coe_toNNReal_le_self (min_le_left _ _)
+    · simp
+
 /-- **Lower half of the extended bound.**  Every coordinate is below the extension.
 
 This reaches `∞` correctly: when `a n = ∞` the argument supplies `single n c` for
