@@ -92,6 +92,14 @@ spectral-radius supremum into the upper endpoint `c`.  **A bound of the form
 `‖A‖ ≤ c` loses exactly that sign information and does not suffice** -- which is
 also why this theorem should not be replaced by an opaque real-spectrum
 definition. -/
+-- **This proof is 81 lines where `SpectralOrder/Complex.lean`'s counterpart is 2, and the
+-- difference is the field, not the factoring.**  The complex file delegates to
+-- `re_inner_le_of_spectrum_subset_Iic`, whose whole content is
+-- `le_algebraMap_of_spectrum_le` from Mathlib's C⋆-algebra order API.  That route is
+-- unavailable here: it needs `StarOrderedRing (E →L[ℝ] E)`, which Mathlib does not
+-- provide for a real Hilbert space.  Checked 2026-08-01 by trying it -- the failure is
+-- `failed to synthesize StarOrderedRing (E →L[ℝ] E)`, immediate and cheap to reproduce.
+-- Hence the shift by `‖A‖ + 1` to positive spectrum and the argument by hand.
 theorem upperFormBoundOn_top_of_spectrum_subset_Iic
     (A : E →L[ℝ] E) (hA : A.IsSymmetric) {c : ℝ}
     (hσ : spectrum ℝ A ⊆ Set.Iic c) :
