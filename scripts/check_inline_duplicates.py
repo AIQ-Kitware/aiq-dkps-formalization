@@ -66,6 +66,19 @@ being two different statements, proved from different lemmas.  **Sibling proofs
 that share a naming convention will always do this.**  Before extracting, read
 the `let`/`set` bindings at both sites; it takes seconds and it is not optional.
 
+**A third mode, and the sharpest of the three: a `repeated` match on a
+statement that carries no information.**  `Function.Injective f` matched across
+`GramSpectralRank.lean` and `FinitePVMSelection.lean` -- **two completely
+different proofs**, one a Gram-energy argument and one a spectral splitting, that
+happen to both call their map `f`.  The statement is one global head applied to a
+local name; there is nothing in it to match *on*.
+
+**This mode cuts both ways and cannot be filtered out.**  `CauchySeq fun n =>
+(a n).val` is equally thin and was a genuine four-way duplicate, collapsed into
+`Elem.cauchySeq_val`.  So a thin match is not evidence either way -- it is a
+prompt to read both sites, nothing more.  The report marks these `(thin: content
+1)`; treat the mark as "the tool has no opinion here".
+
 **The opposite blind spot is just as real** (`{lane:DK-LONGPROOF-7}`):
 `RitzResidual.lean` and `Theorem63FiniteSource.lean` contain the same witness
 construction line for line, over `LinearMap`/`𝕜` and `ContinuousLinearMap`/`ℂ`
@@ -204,6 +217,10 @@ class Step:
         self.path = path
         self.line = line
         self.signals: list[str] = []
+        #: Distinct non-local identifiers in the statement.  A `repeated` match on
+        #: a statement of content 1 -- `Function.Injective f`, `CauchySeq g` --
+        #: says almost nothing; see the docstring.
+        self.content = 0
 
     @property
     def body_length(self) -> int:
@@ -342,6 +359,12 @@ def classify(steps: list[Step], min_body: int, max_body: int | None = None,
             step.signals.append("self-contained")
         if by_statement[step.statement] > 1:
             step.signals.append("repeated")
+        # A dotted token rooted at a local -- `B.IsFormalAdjoint` where `B` is a
+        # local `let` -- carries no more information than `B` itself does.
+        step.content = len({n for n in IDENT.findall(expanded)
+                            if n not in opaque and n not in locals_
+                            and n.split(".")[0] not in opaque
+                            and n.split(".")[0] not in locals_})
         if only and only not in step.signals:
             continue
         if step.signals:
@@ -396,7 +419,9 @@ def main(argv=None) -> int:
     print()
     for step in findings[:args.top]:
         why = f"  [{', '.join(step.signals)}]" if args.why else ""
-        print(f"  {step.body_length:3d} lines  {step.where}  {step.decl}:{step.name}{why}")
+        thin = "  (thin: content 1)" if step.content <= 1 else ""
+        print(f"  {step.body_length:3d} lines  {step.where}  "
+              f"{step.decl}:{step.name}{why}{thin}")
         print(f"            {step.statement[:140]}")
     if len(findings) > args.top:
         print(f"\n  ... {len(findings) - args.top} more not shown (raise --top)")

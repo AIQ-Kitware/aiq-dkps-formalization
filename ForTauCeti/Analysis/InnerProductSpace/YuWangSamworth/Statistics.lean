@@ -377,26 +377,12 @@ theorem exists_aligned_orthonormalBasis
   let bV := stdOrthonormalBasis 𝕜 V
   let u : Fin d → E := fun i => ((bU (Fin.cast hrankU.symm i) : U) : E)
   let v0 : Fin d → E := fun i => ((bV (Fin.cast hrankV.symm i) : V) : E)
-  have hu : Orthonormal 𝕜 u := by
-    rw [orthonormal_iff_ite]
-    intro i j
-    -- After `orthonormal_iff_ite` the goal is phrased through the subtype (or
-    -- `Fin.cast`) coercion; `orthonormal_iff_ite.mp` is stated for the underlying
-    -- vectors, so the coercion has to be discharged before it can apply.
-    change ⟪bU (Fin.cast hrankU.symm i), bU (Fin.cast hrankU.symm j)⟫_𝕜 =
-      if i = j then 1 else 0
-    rw [orthonormal_iff_ite.mp bU.orthonormal]
-    simp only [Fin.cast_inj]
-  have hv0 : Orthonormal 𝕜 v0 := by
-    rw [orthonormal_iff_ite]
-    intro i j
-    -- After `orthonormal_iff_ite` the goal is phrased through the subtype (or
-    -- `Fin.cast`) coercion; `orthonormal_iff_ite.mp` is stated for the underlying
-    -- vectors, so the coercion has to be discharged before it can apply.
-    change ⟪bV (Fin.cast hrankV.symm i), bV (Fin.cast hrankV.symm j)⟫_𝕜 =
-      if i = j then 1 else 0
-    rw [orthonormal_iff_ite.mp bV.orthonormal]
-    simp only [Fin.cast_inj]
+  have hu : Orthonormal 𝕜 u :=
+    (bU.orthonormal.comp_linearIsometry U.subtypeₗᵢ).comp _
+      (Fin.cast_injective hrankU.symm)
+  have hv0 : Orthonormal 𝕜 v0 :=
+    (bV.orthonormal.comp_linearIsometry V.subtypeₗᵢ).comp _
+      (Fin.cast_injective hrankV.symm)
   have hspanU : Submodule.span 𝕜 (Set.range u) = U := by
     apply Submodule.eq_of_le_of_finrank_eq
     · apply Submodule.span_le.mpr
