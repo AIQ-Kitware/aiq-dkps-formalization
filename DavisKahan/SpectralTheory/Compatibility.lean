@@ -150,6 +150,20 @@ theorem subspaceGap_comm (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     subspaceGap U V = subspaceGap V U := U.projectionGap_comm V
 
+/-- **The subspace gap is the larger of the two directed gaps.**
+
+Derived inline in `mul_subspaceGap_le_of_two_directedGap_le` and in
+`sinTheta_spectrum_symmetric`, six lines each. -/
+theorem subspaceGap_eq_max_directedGap [CompleteSpace E] (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    subspaceGap U V = max (directedGap U V) (directedGap V U) := by
+  show ‖U.starProjection - V.starProjection‖ =
+    max ‖Vᗮ.starProjection ∘L U.starProjection‖
+      ‖Uᗮ.starProjection ∘L V.starProjection‖
+  rw [Submodule.norm_starProjection_sub_eq_max,
+    Submodule.starProjection_orthogonal' V,
+    Submodule.starProjection_orthogonal' U]
+
 theorem directedGap_le_subspaceGap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     directedGap U V ≤ subspaceGap U V := U.directedProjectionGap_le_projectionGap V

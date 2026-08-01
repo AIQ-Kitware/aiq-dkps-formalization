@@ -36,13 +36,8 @@ theorem mul_subspaceGap_le_of_two_directedGap_le
     (hVU : δ * directedGap V U ≤ r) :
     δ * subspaceGap U V ≤ r := by
   have hmax : subspaceGap U V =
-      max (directedGap U V) (directedGap V U) := by
-    show ‖U.starProjection - V.starProjection‖ =
-      max ‖Vᗮ.starProjection ∘L U.starProjection‖
-        ‖Uᗮ.starProjection ∘L V.starProjection‖
-    rw [Submodule.norm_starProjection_sub_eq_max,
-      Submodule.starProjection_orthogonal' V,
-      Submodule.starProjection_orthogonal' U]
+      max (directedGap U V) (directedGap V U) :=
+    TauCeti.DavisKahanExt.subspaceGap_eq_max_directedGap U V
   rw [hmax, mul_max_of_nonneg _ _ hδ]
   exact max_le hUV hVU
 
