@@ -163,6 +163,23 @@ omit [CompleteSpace E] in
 /-- The shifted map `A - z`, unfolded. -/
 @[simp] theorem shiftMap_apply (A : E →ₗ.[ℂ] E) (z : ℂ) (x : A.domain) :
     shiftMap A z x = A x - z • (x : E) := (rfl)
+
+omit [CompleteSpace E] in
+/-- **The shifted range has trivial orthogonal complement**, given that nothing
+nonzero is orthogonal to it.
+
+The `Submodule.eq_bot_iff` unfolding and the `inner_eq_zero_symm` flip are the
+same at both call sites; only the reason a vector orthogonal to the range must
+vanish differs, so that is the hypothesis. -/
+theorem orthogonal_range_shiftMap_eq_bot {A : E →ₗ.[ℂ] E} {z : ℂ}
+    (h0 : ∀ y : E, (∀ x : A.domain, ⟪y, A x - z • (x : E)⟫_ℂ = 0) → y = 0) :
+    (LinearMap.range (shiftMap A z))ᗮ = ⊥ := by
+  rw [Submodule.eq_bot_iff]
+  intro y hy
+  refine h0 y fun x => ?_
+  have h := hy (shiftMap A z x) ⟨x, rfl⟩
+  rwa [inner_eq_zero_symm] at h
+
 /-- **A lower bound makes the range of `A - z` closed.**
 
 Stated with the bound as a hypothesis so both users can reach it: the
@@ -247,12 +264,8 @@ theorem surjective_shiftMap {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
   have : K.HasOrthogonalProjection :=
     haveI : CompleteSpace K := hKclosed.completeSpace_coe
     inferInstance
-  have hperp : Kᗮ = ⊥ := by
-    rw [Submodule.eq_bot_iff]
-    intro y hy
-    refine eq_zero_of_orthogonal_shiftRange hA hz fun x => ?_
-    have h := hy (shiftMap A z x) ⟨x, rfl⟩
-    rwa [inner_eq_zero_symm] at h
+  have hperp : Kᗮ = ⊥ :=
+    orthogonal_range_shiftMap_eq_bot fun _ hy => eq_zero_of_orthogonal_shiftRange hA hz hy
   have hKtop : K = ⊤ := Submodule.orthogonal_eq_bot_iff.mp hperp
   intro y
   have : y ∈ K := hKtop ▸ Submodule.mem_top
