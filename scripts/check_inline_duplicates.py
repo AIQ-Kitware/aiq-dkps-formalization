@@ -57,6 +57,15 @@ because an edit failed with `unknown identifier` in a theorem nobody had read.
 This signal does no alpha-renaming, so it finds textual twins only -- a real
 limit, and the reason it is one signal of three rather than the whole script.
 
+**It also has a false-positive mode, found on `{lane:DK-LONGPROOF-6}` and worth
+checking every time.**  Textual matching cannot see what a local name *denotes*.
+`projection_mul_spectraDirectRotation_mul_projection` and its complementary twin
+each open with `let P := ...` -- one `projection U`, the other
+`complementaryProjection U` -- so `S * P = Q * P` is reported as repeated while
+being two different statements, proved from different lemmas.  **Sibling proofs
+that share a naming convention will always do this.**  Before extracting, read
+the `let`/`set` bindings at both sites; it takes seconds and it is not optional.
+
 ## Two products from one scan, and how to ask for each
 
 Ranking by proof length was the obvious thing to do and it turned out to answer a
