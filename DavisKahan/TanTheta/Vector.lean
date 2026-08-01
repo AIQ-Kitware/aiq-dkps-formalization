@@ -235,6 +235,58 @@ theorem mul_le_mul_sqrt_one_sub_sq_of_chain
       (by filter_upwards [self_mem_nhdsWithin] with ε hε using hev ε hε)
     simpa using hlim
 
+omit [CompleteSpace E] in
+/-- **The per-vector tangent bound from a compression bound.**
+
+If `‖P_Z u‖ ≤ κ‖u‖` on `Vᗮ` and `δ κ ≤ ρ √(1 - κ²)`, then
+`δ ‖P_Z u‖ ≤ ρ ‖u - P_Z u‖` there.  Pythagoras turns the compression bound
+into the tangent bound; the hypothesis is what
+`mul_le_mul_sqrt_one_sub_sq_of_chain` supplies.
+
+Shared by the bounded and unbounded per-vector theorems, which had it
+character-for-character apart from two local hypothesis names. -/
+theorem mul_norm_starProjection_le_of_compression_bound
+    {Z V : Submodule 𝕜 E} [Z.HasOrthogonalProjection] {κ δ ρ : ℝ}
+    (hκ0 : 0 ≤ κ) (hκ1 : κ ≤ 1) (hδ : 0 < δ) (hρ0 : 0 ≤ ρ)
+    (hmax : ∀ v ∈ Vᗮ, ‖Z.starProjection v‖ ≤ κ * ‖v‖)
+    (hκineq : δ * κ ≤ ρ * Real.sqrt (1 - κ ^ 2)) :
+    ∀ u ∈ Vᗮ, δ * ‖Z.starProjection u‖ ≤ ρ * ‖u - Z.starProjection u‖ := by
+  intro u huV
+  have hPu : ‖Z.starProjection u‖ ≤ κ * ‖u‖ := hmax u huV
+  have hpyu : ‖Z.starProjection u‖ ^ 2 + ‖u - Z.starProjection u‖ ^ 2 =
+      ‖u‖ ^ 2 := norm_sq_starProjection_add_norm_sq_sub Z u
+  have h1κ2 : (0 : ℝ) ≤ 1 - κ ^ 2 := by nlinarith [hκ1, hκ0]
+  have hsq : (δ * ‖Z.starProjection u‖) ^ 2 ≤
+      (ρ * ‖u - Z.starProjection u‖) ^ 2 := by
+    have hδκsq : (δ * κ) ^ 2 ≤ ρ ^ 2 * (1 - κ ^ 2) := by
+      calc (δ * κ) ^ 2
+          ≤ (ρ * Real.sqrt (1 - κ ^ 2)) ^ 2 :=
+            pow_le_pow_left₀ (mul_nonneg hδ.le hκ0) hκineq 2
+        _ = ρ ^ 2 * Real.sqrt (1 - κ ^ 2) ^ 2 := by ring
+        _ = ρ ^ 2 * (1 - κ ^ 2) := by rw [Real.sq_sqrt h1κ2]
+    have hPu2 : ‖Z.starProjection u‖ ^ 2 ≤ κ ^ 2 * ‖u‖ ^ 2 := by
+      nlinarith [hPu, norm_nonneg (Z.starProjection u), norm_nonneg u,
+        hκ0]
+    calc (δ * ‖Z.starProjection u‖) ^ 2
+        = δ ^ 2 * ‖Z.starProjection u‖ ^ 2 := by ring
+      _ ≤ δ ^ 2 * (κ ^ 2 * ‖u‖ ^ 2) :=
+          mul_le_mul_of_nonneg_left hPu2 (sq_nonneg δ)
+      _ = (δ * κ) ^ 2 * ‖u‖ ^ 2 := by ring
+      _ ≤ ρ ^ 2 * (1 - κ ^ 2) * ‖u‖ ^ 2 :=
+          mul_le_mul_of_nonneg_right hδκsq (sq_nonneg _)
+      _ = ρ ^ 2 * ‖u‖ ^ 2 - ρ ^ 2 * (κ ^ 2 * ‖u‖ ^ 2) := by ring
+      _ ≤ ρ ^ 2 * ‖u‖ ^ 2 - ρ ^ 2 * ‖Z.starProjection u‖ ^ 2 := by
+          have := mul_le_mul_of_nonneg_left hPu2 (sq_nonneg ρ)
+          linarith
+      _ = ρ ^ 2 * (‖u‖ ^ 2 - ‖Z.starProjection u‖ ^ 2) := by ring
+      _ = ρ ^ 2 * ‖u - Z.starProjection u‖ ^ 2 := by
+          rw [show ‖u - Z.starProjection u‖ ^ 2 =
+            ‖u‖ ^ 2 - ‖Z.starProjection u‖ ^ 2 by linarith [hpyu]]
+      _ = (ρ * ‖u - Z.starProjection u‖) ^ 2 := by ring
+  have := Real.sqrt_le_sqrt hsq
+  rwa [Real.sqrt_sq (mul_nonneg hδ.le (norm_nonneg _)),
+    Real.sqrt_sq (mul_nonneg hρ0 (norm_nonneg _))] at this
+
 /-- **The Davis--Kahan `tan Θ` theorem on an infinite-dimensional Hilbert
 space** (per-vector, pole-free form).  `T` symmetric; `V` a `T`-invariant
 subspace with the complementary quadratic form in the strip `[α, β]`; `Z` a
@@ -315,42 +367,8 @@ theorem tan_theta_le' (hT : T.IsSymmetric)
       (fun x => rfl) hchain
   -- the complementary-side tangent bound on all of `Vᗮ`
   have hkey : ∀ u ∈ Vᗮ,
-      δ * ‖Z.starProjection u‖ ≤ ρ * ‖u - Z.starProjection u‖ := by
-    intro u huV
-    have hPu : ‖Z.starProjection u‖ ≤ κ * ‖u‖ := hmax u huV
-    have hpyu : ‖Z.starProjection u‖ ^ 2 + ‖u - Z.starProjection u‖ ^ 2 =
-        ‖u‖ ^ 2 := norm_sq_starProjection_add_norm_sq_sub Z u
-    have h1κ2 : (0 : ℝ) ≤ 1 - κ ^ 2 := by nlinarith [hκ1, hκ0]
-    have hsq : (δ * ‖Z.starProjection u‖) ^ 2 ≤
-        (ρ * ‖u - Z.starProjection u‖) ^ 2 := by
-      have hδκsq : (δ * κ) ^ 2 ≤ ρ ^ 2 * (1 - κ ^ 2) := by
-        calc (δ * κ) ^ 2
-            ≤ (ρ * Real.sqrt (1 - κ ^ 2)) ^ 2 :=
-              pow_le_pow_left₀ (mul_nonneg hδ.le hκ0) hκineq 2
-          _ = ρ ^ 2 * Real.sqrt (1 - κ ^ 2) ^ 2 := by ring
-          _ = ρ ^ 2 * (1 - κ ^ 2) := by rw [Real.sq_sqrt h1κ2]
-      have hPu2 : ‖Z.starProjection u‖ ^ 2 ≤ κ ^ 2 * ‖u‖ ^ 2 := by
-        nlinarith [hPu, norm_nonneg (Z.starProjection u), norm_nonneg u,
-          hκ0]
-      calc (δ * ‖Z.starProjection u‖) ^ 2
-          = δ ^ 2 * ‖Z.starProjection u‖ ^ 2 := by ring
-        _ ≤ δ ^ 2 * (κ ^ 2 * ‖u‖ ^ 2) :=
-            mul_le_mul_of_nonneg_left hPu2 (sq_nonneg δ)
-        _ = (δ * κ) ^ 2 * ‖u‖ ^ 2 := by ring
-        _ ≤ ρ ^ 2 * (1 - κ ^ 2) * ‖u‖ ^ 2 :=
-            mul_le_mul_of_nonneg_right hδκsq (sq_nonneg _)
-        _ = ρ ^ 2 * ‖u‖ ^ 2 - ρ ^ 2 * (κ ^ 2 * ‖u‖ ^ 2) := by ring
-        _ ≤ ρ ^ 2 * ‖u‖ ^ 2 - ρ ^ 2 * ‖Z.starProjection u‖ ^ 2 := by
-            have := mul_le_mul_of_nonneg_left hPu2 (sq_nonneg ρ)
-            linarith
-        _ = ρ ^ 2 * (‖u‖ ^ 2 - ‖Z.starProjection u‖ ^ 2) := by ring
-        _ = ρ ^ 2 * ‖u - Z.starProjection u‖ ^ 2 := by
-            rw [show ‖u - Z.starProjection u‖ ^ 2 =
-              ‖u‖ ^ 2 - ‖Z.starProjection u‖ ^ 2 by linarith [hpyu]]
-        _ = (ρ * ‖u - Z.starProjection u‖) ^ 2 := by ring
-    have := Real.sqrt_le_sqrt hsq
-    rwa [Real.sqrt_sq (mul_nonneg hδ.le (norm_nonneg _)),
-      Real.sqrt_sq (mul_nonneg hρ0 (norm_nonneg _))] at this
+      δ * ‖Z.starProjection u‖ ≤ ρ * ‖u - Z.starProjection u‖ :=
+    mul_norm_starProjection_le_of_compression_bound hκ0 hκ1 hδ hρ0 hmax hκineq
   -- Cauchy–Schwarz duality back to the test side.
   intro x hxZ
   have huV : x - V.starProjection x ∈ Vᗮ :=
