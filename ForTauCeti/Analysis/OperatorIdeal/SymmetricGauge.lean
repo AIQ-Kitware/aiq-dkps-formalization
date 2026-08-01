@@ -27,18 +27,18 @@ arbitrary `ℝ≥0∞`-valued sequences.
 
 ## Main definitions
 
-* `TauCeti.SymmetricGauge` — the structure.
-* `TauCeti.SymmetricGauge.extend` — the extension to `ℕ → ℝ≥0∞`, as a supremum
+* `TauCeti.TruncationGauge` — the structure.
+* `TauCeti.TruncationGauge.extend` — the extension to `ℕ → ℝ≥0∞`, as a supremum
   over finitely supported truncations.
 
 ## Main results
 
-* `TauCeti.SymmetricGauge.single` — the gauge of a basis vector is its value;
+* `TauCeti.TruncationGauge.single` — the gauge of a basis vector is its value;
   this is what `normalized'` and `symm'` buy together, and everything needing a
   scale goes through it.
-* `TauCeti.SymmetricGauge.extend_mono` and `extend_smul` — monotone in the
+* `TauCeti.TruncationGauge.extend_mono` and `extend_smul` — monotone in the
   sequence, and homogeneous under a nonnegative real scalar.
-* `TauCeti.SymmetricGauge.iSup_le_extend_le_tsum` — the two ends of the scale,
+* `TauCeti.TruncationGauge.iSup_le_extend_le_tsum` — the two ends of the scale,
   `‖a‖_∞ ≤ Φ∞ a ≤ ∑ aₙ`, which is where `normalized` earns its place.
 
 ## Design
@@ -107,7 +107,7 @@ sequences.
 `symm'` is stated against `Equiv.Perm ℕ` acting by precomposition, which is what
 makes "symmetric" a property of `Φ` rather than a property of the sequences it is
 applied to. -/
-structure SymmetricGauge where
+structure TruncationGauge where
   /-- The underlying gauge on finitely supported nonnegative sequences. -/
   toFun : (ℕ →₀ ℝ≥0) → ℝ≥0
   /-- Subadditivity. -/
@@ -123,13 +123,13 @@ structure SymmetricGauge where
   and with it the two-sided bound `‖a‖_∞ ≤ Φ a ≤ ∑ aₙ`. -/
   normalized' : toFun (Finsupp.single 0 1) = 1
 
-namespace SymmetricGauge
+namespace TruncationGauge
 
 /-- Apply a symmetric gauge directly, writing `Φ a` for `Φ.toFun a`. -/
-instance : CoeFun SymmetricGauge fun _ => (ℕ →₀ ℝ≥0) → ℝ≥0 :=
-  ⟨SymmetricGauge.toFun⟩
+instance : CoeFun TruncationGauge fun _ => (ℕ →₀ ℝ≥0) → ℝ≥0 :=
+  ⟨TruncationGauge.toFun⟩
 
-variable (Φ : SymmetricGauge)
+variable (Φ : TruncationGauge)
 
 /-- Subadditivity, as a theorem rather than a structure field. -/
 @[simp] theorem add_le (a b : ℕ →₀ ℝ≥0) : Φ (a + b) ≤ Φ a + Φ b := Φ.add_le' a b
@@ -211,7 +211,7 @@ stylistic choice: `ENNReal.toNNReal ∞ = 0`, so `min (a n).toNNReal m` reads an
 infinite entry as *zero* and is not monotone in `a`.  Capping first sends `∞` to
 `m`, and the supremum over `m` then recovers `∞` as the supremum of the finite
 cuts, which is the value the gauge should take. -/
-noncomputable def extend (Φ : SymmetricGauge) (a : ℕ → ℝ≥0∞) : ℝ≥0∞ :=
+noncomputable def extend (Φ : TruncationGauge) (a : ℕ → ℝ≥0∞) : ℝ≥0∞ :=
   ⨆ k : ℕ, ⨆ m : ℝ≥0, (Φ (truncate a k m) : ℝ≥0∞)
 
 /-- Truncation is monotone in the sequence, at fixed length and cap. -/
@@ -314,8 +314,8 @@ it said anything, and would then say nothing here. -/
 says the restriction to that family costs nothing: the same value is obtained by ranging
 over every `b : ℕ →₀ ℝ≥0` dominated by `a`.
 
-**Recorded because `ForTauCeti` currently contains a second `SymmetricGauge` whose `extend`
-is defined by the right-hand side here** (`Analysis/Normed/SymmetricGauge.lean`), and
+**Recorded because `ForTauCeti` currently contains a second `TruncationGauge` whose `extend`
+is defined by the right-hand side here** (`Analysis/Normed/TruncationGauge.lean`), and
 reconciling the two is a proof obligation, not a renaming — the two definitions are
 different constructions that happen to agree.  This is that obligation, discharged on the
 side that can state it.  See `{lane:FTC-SYMGAUGE-COLLIDE}`.
@@ -323,7 +323,7 @@ side that can state it.  See `{lane:FTC-SYMGAUGE-COLLIDE}`.
 Both directions are short and neither needs more than `Φ.mono`: every truncation is
 dominated, and conversely a dominated `b` has finite support, so it sits below the
 truncation at any length past its support and any cap above its values. -/
-theorem extend_eq_iSup_dominated (Φ : SymmetricGauge) (a : ℕ → ℝ≥0∞) :
+theorem extend_eq_iSup_dominated (Φ : TruncationGauge) (a : ℕ → ℝ≥0∞) :
     Φ.extend a
       = ⨆ b : {b : ℕ →₀ ℝ≥0 // ∀ i, (b i : ℝ≥0∞) ≤ a i}, (Φ b.1 : ℝ≥0∞) := by
   refine le_antisymm (iSup_le fun k => iSup_le fun m => ?_) (iSup_le fun b => ?_)
@@ -441,7 +441,7 @@ theorem lpGaugeFinsupp_eq {p : ℝ} (hp : 0 < p) (a : ℕ →₀ ℝ≥0)
 Only `add_le'` has content — it is Minkowski, `NNReal.Lp_add_le`.  The other four
 fields are sum manipulations, and each one needs
 `sum_rpow_eq_of_support_subset` to put two different supports on one `Finset`. -/
-noncomputable def schattenGauge (p : ℝ) (hp : 1 ≤ p) : SymmetricGauge where
+noncomputable def schattenGauge (p : ℝ) (hp : 1 ≤ p) : TruncationGauge where
   toFun := lpGaugeFinsupp p
   add_le' a b := by
     have hp0 : (0 : ℝ) < p := zero_lt_one.trans_le hp
@@ -541,7 +541,7 @@ and it is Milestone B2's blocker rather than the majorization argument.
 
 **Absolute values are what reconcile the two structures**, and they are not a
 convenience.  `FiniteSymmetricGauge` is `ℝ`-valued with a `neg_single'` field and
-an `|c|` in its homogeneity; `SymmetricGauge` is `ℝ≥0`-valued with neither.
+an `|c|` in its homogeneity; `TruncationGauge` is `ℝ≥0`-valued with neither.
 Taking `|·|` on the way in is what discharges both, and it is why `add_le'` needs
 `mono'` on top of `add_le'` rather than `add_le'` alone.
 -/
@@ -568,7 +568,7 @@ built from `π.symm`, not `π`** — `Finsupp.equivMapDomain` reindexes by the
 *inverse*, so composing with `π` on the vector side corresponds to extending
 `π.symm` on the index side.  Getting that backwards typechecks right up to the
 final goal and then fails with `π` against `π.symm`. -/
-noncomputable def toFinite (Φ : SymmetricGauge) (n : ℕ) : FiniteSymmetricGauge n where
+noncomputable def toFinite (Φ : TruncationGauge) (n : ℕ) : FiniteSymmetricGauge n where
   toFun x := (Φ (ofFin x) : ℝ)
   add_le' x y := by
     have h : ofFin (x + y) ≤ ofFin x + ofFin y := by
@@ -642,7 +642,7 @@ theorem truncate_le_ofFin {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n) (k : ℕ) (m
 **This is the lemma that makes `toFinite` usable**: without it the bridge computes
 in the wrong direction.  It holds because `extend` is a supremum over the cap `m`,
 and for `m` above the finitely many entries the capped truncation *is* `ofFin`. -/
-theorem ofFin_le_extend (Φ : SymmetricGauge) {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n) (k : ℕ) :
+theorem ofFin_le_extend (Φ : TruncationGauge) {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n) (k : ℕ) :
     ((Φ (ofFin (fun i : Fin k => a i)) : ℝ≥0) : ℝ≥0∞)
       ≤ Φ.extend fun n => ENNReal.ofReal (a n) := by
   classical
@@ -677,7 +677,7 @@ answer back up.
 already have.**  If some `b n = ∞` then `le_extend` makes `Φ∞ b = ∞`.  Otherwise
 every `b n` is finite and so is every `a n` — **not pointwise from the hypothesis**,
 which only compares prefix sums, but from the case `k = 1` together with `ha`. -/
-theorem extend_le_extend_of_forall_sum_le (Φ : SymmetricGauge) {a b : ℕ → ℝ≥0∞}
+theorem extend_le_extend_of_forall_sum_le (Φ : TruncationGauge) {a b : ℕ → ℝ≥0∞}
     (ha : Antitone a)
     (h : ∀ k, ∑ n ∈ Finset.range k, a n ≤ ∑ n ∈ Finset.range k, b n) :
     Φ.extend a ≤ Φ.extend b := by
@@ -750,7 +750,7 @@ supremum collapses to one index.
 **This is the form any comparison against a `tsum` needs** — Milestone B3's
 reconciliation of `symmetricGaugeENorm (schattenGauge p hp)` against
 `schattenENorm p` among them. -/
-theorem extend_eq_iSup_ofFin (Φ : SymmetricGauge) {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n) :
+theorem extend_eq_iSup_ofFin (Φ : TruncationGauge) {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n) :
     Φ.extend (fun n => ENNReal.ofReal (a n))
       = ⨆ k : ℕ, ((Φ (ofFin (fun i : Fin k => a i)) : ℝ≥0) : ℝ≥0∞) := by
   refine le_antisymm ?_ (iSup_le fun k => Φ.ofFin_le_extend ha k)
@@ -838,7 +838,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [Complete
 /-- The gauge a symmetric norming function induces on operators: `Φ` read along
 the approximation numbers, valued in `ℝ≥0∞` and so defined for every bounded
 operator — it is `∞` exactly off the ideal. -/
-noncomputable def symmetricGaugeENorm (Φ : SymmetricGauge) (A : E →L[𝕜] F) : ℝ≥0∞ :=
+noncomputable def symmetricGaugeENorm (Φ : TruncationGauge) (A : E →L[𝕜] F) : ℝ≥0∞ :=
   Φ.extend fun n => ENNReal.ofReal (A.approximationNumber n)
 
 -- Completeness is not used: the bound is `a₀ A = ‖A‖` and one entry of a supremum.
@@ -848,7 +848,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 `a₀ A = ‖A‖`, and `le_extend` says every entry is below the gauge — which is
 where `normalized'` and `symm'` are finally paying for themselves, through
 `single_one`. -/
-theorem enorm_le_symmetricGaugeENorm (Φ : SymmetricGauge) (A : E →L[𝕜] F) :
+theorem enorm_le_symmetricGaugeENorm (Φ : TruncationGauge) (A : E →L[𝕜] F) :
     ‖A‖ₑ ≤ symmetricGaugeENorm Φ A := by
   have h := Φ.le_extend (fun n => ENNReal.ofReal (A.approximationNumber n)) 0
   rw [ContinuousLinearMap.approximationNumber_index_zero, ofReal_norm] at h
@@ -860,7 +860,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 
 `approximationNumber_smul` scales every entry by `‖c‖`, and slice 2a's
 `extend_smul` moves the scalar out of the gauge. -/
-theorem symmetricGaugeENorm_smul (Φ : SymmetricGauge) (c : 𝕜) (A : E →L[𝕜] F) :
+theorem symmetricGaugeENorm_smul (Φ : TruncationGauge) (c : 𝕜) (A : E →L[𝕜] F) :
     symmetricGaugeENorm Φ (c • A) = ‖c‖ₑ * symmetricGaugeENorm Φ A := by
   have hpt : ∀ n, ENNReal.ofReal ((c • A).approximationNumber n)
       = (‖c‖₊ : ℝ≥0∞) * ENNReal.ofReal (A.approximationNumber n) := by
@@ -878,7 +878,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- **Ideal law 3 of 5, one side**: pre-composition.
 
 `aₙ (A ∘L R) ≤ aₙ A * ‖R‖` entrywise, then `extend_mono` and `extend_smul`. -/
-theorem symmetricGaugeENorm_comp_right_le (Φ : SymmetricGauge)
+theorem symmetricGaugeENorm_comp_right_le (Φ : TruncationGauge)
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     (A : E →L[𝕜] F) (R : H →L[𝕜] E) :
     symmetricGaugeENorm Φ (A ∘L R) ≤ symmetricGaugeENorm Φ A * ‖R‖ₑ := by
@@ -920,7 +920,7 @@ The route is `Family/Schatten.lean`'s, at a general gauge instead of `ℓᵖ`: a
 the `Fin k` theory to the truncation at each `k`.  **Where Schatten needs finite
 Minkowski to split the right-hand side, here `toFinite k` is a
 `FiniteSymmetricGauge` and its own `add_le` does it.** -/
-theorem symmetricGaugeENorm_add_le (Φ : SymmetricGauge) (S T : E →L[𝕜] F) :
+theorem symmetricGaugeENorm_add_le (Φ : TruncationGauge) (S T : E →L[𝕜] F) :
     symmetricGaugeENorm Φ (S + T)
       ≤ symmetricGaugeENorm Φ S + symmetricGaugeENorm Φ T := by
   have hnn : ∀ (A : E →L[𝕜] F) n, 0 ≤ A.approximationNumber n :=
@@ -970,7 +970,7 @@ omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] in
 /-- **Ideal law 5 of 5**: the gauge is unchanged by passing to the adjoint.
 
 Pointwise, from `approximationNumber_adjoint`. -/
-theorem symmetricGaugeENorm_adjoint (Φ : SymmetricGauge) (A : E →L[𝕜] F) :
+theorem symmetricGaugeENorm_adjoint (Φ : TruncationGauge) (A : E →L[𝕜] F) :
     symmetricGaugeENorm Φ (ContinuousLinearMap.adjoint A) = symmetricGaugeENorm Φ A := by
   simp only [symmetricGaugeENorm,
     ContinuousLinearMap.approximationNumber_adjoint]
@@ -980,7 +980,7 @@ theorem symmetricGaugeENorm_adjoint (Φ : SymmetricGauge) (A : E →L[𝕜] F) :
 omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
   [CompleteSpace E] [CompleteSpace F] in
 /-- The two-sided ideal law, from the two one-sided bounds. -/
-theorem symmetricGaugeENorm_comp_le (Φ : SymmetricGauge)
+theorem symmetricGaugeENorm_comp_le (Φ : TruncationGauge)
     {G H : Type v}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
@@ -1014,7 +1014,7 @@ theorem symmetricGaugeENorm_comp_le (Φ : SymmetricGauge)
 
 Milestone B1, and the five fields are the five laws above. -/
 noncomputable def symmetricGaugeFamily (𝕜 : Type u) [RCLike 𝕜]
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (Φ : SymmetricGauge) :
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (Φ : TruncationGauge) :
     TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜 where
   gauge A := symmetricGaugeENorm Φ A
   gauge_add_le A B := symmetricGaugeENorm_add_le Φ A B
@@ -1049,7 +1049,7 @@ equality into the sequence equality.
 Surjectivity — that every symmetric ideal arises this way — is *not* claimed; it
 is the substantial half of Calkin's theorem and needs a separability hypothesis
 nothing else here needs. -/
-theorem symmetricGaugeFamily_injective {Φ Ψ : SymmetricGauge}
+theorem symmetricGaugeFamily_injective {Φ Ψ : TruncationGauge}
     (h : symmetricGaugeFamily.{u, u} 𝕜 Φ = symmetricGaugeFamily.{u, u} 𝕜 Ψ)
     {a : ℕ → ℝ≥0∞} (ha : Antitone a) :
     Φ.extend a = Ψ.extend a := by
@@ -1085,7 +1085,7 @@ theorem symmetricGaugeFamily_injective {Φ Ψ : SymmetricGauge}
       lift b to ℝ≥0 using hb.ne
       obtain ⟨n, hn⟩ := hbdd b
       exact ⟨n, hn⟩
-    have hinf : ∀ Θ : SymmetricGauge, Θ.extend a = ⊤ := fun Θ =>
+    have hinf : ∀ Θ : TruncationGauge, Θ.extend a = ⊤ := fun Θ =>
       top_le_iff.1 (hsup ▸ Θ.iSup_le_extend a)
     rw [hinf Φ, hinf Ψ]
 
@@ -1097,7 +1097,7 @@ gauge respects Ky Fan domination.
 exposes it.  `kyFanGauge T k` is by definition `∑_{n<k} aₙ(T)`, so the hypothesis
 *is* that lemma's prefix comparison; all that happens below is moving it across
 `ENNReal.ofReal`, which is monotone and additive on nonnegatives. -/
-instance isKyFanDominant_symmetricGaugeFamily (Φ : SymmetricGauge) :
+instance isKyFanDominant_symmetricGaugeFamily (Φ : TruncationGauge) :
     TauCeti.IsKyFanDominant (symmetricGaugeFamily.{u, u} 𝕜 Φ) where
   gauge_le_of_forall_kyFanGauge_le {E F} _ _ _ _ _ _ {A B} hAB := by
     refine Φ.extend_le_extend_of_forall_sum_le
@@ -1178,6 +1178,6 @@ end Calkin
 
 end Operators
 
-end SymmetricGauge
+end TruncationGauge
 
 end TauCeti

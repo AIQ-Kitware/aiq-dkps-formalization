@@ -47,19 +47,16 @@ EXCLUDED_PARTS = {"Experimental"}
 #: Libraries whose declarations share one namespace tree and must not collide.
 SCOPES = ("ForTauCeti", "DavisKahan")
 
-#: Ratcheted, not zero, and the distinction is deliberate.  All 14 of today's findings are
-#: the SINGLE unresolved `TauCeti.SymmetricGauge` collision tracked by
-#: `{lane:FTC-SYMGAUGE-COLLIDE}` -- two agents built the same abstraction in parallel, and
-#: choosing which 800-1100 line module survives is a decision, not a cleanup.
+#: **Zero, since 2026-08-01.**  It was 14 for one day: `ForTauCeti` held two structures
+#: called `TauCeti.SymmetricGauge`, and the ratchet existed so that a SECOND collision would
+#: fail the suite while that one was being resolved.  It was resolved by renaming the
+#: orphaned module's structure to `TruncationGauge` -- the gate's own advice, "qualify them
+#: into distinct namespaces" -- which was safe because nothing imported that module and
+#: because `check_roadmap_delivered` indexes final components, so its 163/191 was unchanged.
 #:
-#: Failing the suite outright until that decision lands would leave it red for days over
-#: one known defect, which is the "trains everyone to ignore the suite" failure `ADVISORY`
-#: exists to prevent.  Failing on any INCREASE catches the second occurrence on the commit
-#: that introduces it, which is the whole value.
-#:
-#: **The number may only fall.**  It goes to 0 when the collision is resolved.
-#: Measured 2026-08-01.
-DUPLICATE_BASELINE = 14
+#: **The number may only fall, and it has reached the floor.**  Any finding now is a new
+#: collision, and it fails immediately.
+DUPLICATE_BASELINE = 0
 
 BLOCK_COMMENT = re.compile(r"/-.*?-/", re.S)
 LINE_COMMENT = re.compile(r"--.*?$", re.M)
