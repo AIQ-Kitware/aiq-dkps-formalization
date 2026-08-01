@@ -211,7 +211,18 @@ BIND = re.compile(r"^\s*(?:set|let)\s+(?P<name>[^\s:=]+)\s*(?::[^=]*)?:=\s*(?P<b
                   r"(?:\s+with\s+\S+)?\s*$")
 
 #: Names a tactic introduces into scope.
-INTRO = re.compile(r"^\s*(?:intro|intros|rintro)\s+(?P<names>.*?)\s*$")
+#:
+#: `choose` and `rcases`/`obtain` bind exactly like `intro` does, and missing any
+#: of them makes `self-contained` fire on a step that does cite an earlier local.
+#: That happened: `hallOrtho` in `exists_gramSpectralBandModel` cites
+#: `hblockOrtho`, which `choose blockVec hblockOrtho hblockMem using hselect`
+#: introduces, and the step was reported as needing only theorem binders.
+#: The binder list stops at `:=`, `using` or `with`; everything after those is a
+#: *term*, and treating its identifiers as locals makes cited lemma names look
+#: like proof-local hypotheses.  The ground-truth test caught exactly that.
+INTRO = re.compile(
+    r"^\s*(?:intro|intros|rintro|choose|rcases|obtain)\s+(?P<names>.*?)"
+    r"(?:\s*:=|\s+using\s|\s+with\s|$)")
 
 IDENT = re.compile(r"[A-Za-z_][A-Za-z0-9_'!?]*(?:\.[A-Za-z_][A-Za-z0-9_'!?]*)*")
 
