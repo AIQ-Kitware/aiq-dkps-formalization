@@ -339,13 +339,8 @@ theorem sinTheta_spectrum_symmetric
   have h2 : d * directedGap V U ≤ ‖A - B‖ :=
     sinTheta_spectrum hB hA hV hU hd hab' hVspec' hUspec'
   rw [show A - B = -(B - A) by abel, norm_neg] at h2
-  have hmax : subspaceGap U V = max (directedGap U V) (directedGap V U) := by
-    show ‖U.starProjection - V.starProjection‖ =
-      max ‖Vᗮ.starProjection ∘L U.starProjection‖
-        ‖Uᗮ.starProjection ∘L V.starProjection‖
-    rw [Submodule.norm_starProjection_sub_eq_max,
-      Submodule.starProjection_orthogonal' V,
-      Submodule.starProjection_orthogonal' U]
+  have hmax : subspaceGap U V = max (directedGap U V) (directedGap V U) :=
+    TauCeti.DavisKahanExt.subspaceGap_eq_max_directedGap U V
   rw [hmax, mul_max_of_nonneg _ _ hd.le]
   exact max_le h1 h2
 
