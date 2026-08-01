@@ -362,6 +362,31 @@ theorem gaugeReal_finset_sum_le (s : Finset ι) (A : ι → E →L[𝕜] F)
 
 /-! ### The operator-norm family -/
 
+/-- **Partial sums differ in gauge by at most the majorant's partial sums.**
+
+With `P n = ∑_{j<n} t j` and any real `c` dominating each `N.gaugeReal (t j)`, the gauge of
+`P m - P n` is at most `∑_{j<m} c j - ∑_{j<n} c j`.  This is the hypothesis
+`gaugeReal_sub_lt_of_cauchy_majorant` consumes, and both Neumann-series constructions --
+bounded and unbounded -- had derived it inline from the same two `Finset.sum_Ico_eq_sub`
+steps.  Stated over an arbitrary majorant `c` rather than the geometric `q ^ j * g₀` both
+call sites use, because nothing in the argument looks at its shape. -/
+theorem gaugeReal_sum_range_sub_le {t : ℕ → E →L[𝕜] F} {c : ℕ → ℝ}
+    (htmem : ∀ n, N.Mem (t n)) (htgauge : ∀ n, N.gaugeReal (t n) ≤ c n)
+    {m n : ℕ} (hnm : n ≤ m) :
+    N.gaugeReal ((∑ j ∈ Finset.range m, t j) - ∑ j ∈ Finset.range n, t j)
+      ≤ (∑ j ∈ Finset.range m, c j) - ∑ j ∈ Finset.range n, c j := by
+  have hsum : (∑ j ∈ Finset.range m, t j) - ∑ j ∈ Finset.range n, t j
+      = ∑ j ∈ Finset.Ico n m, t j := (Finset.sum_Ico_eq_sub _ hnm).symm
+  have hG : ∑ j ∈ Finset.Ico n m, c j
+      = (∑ j ∈ Finset.range m, c j) - ∑ j ∈ Finset.range n, c j :=
+    Finset.sum_Ico_eq_sub _ hnm
+  rw [hsum, ← hG]
+  calc
+    N.gaugeReal (∑ j ∈ Finset.Ico n m, t j)
+        ≤ ∑ j ∈ Finset.Ico n m, N.gaugeReal (t j) :=
+      N.gaugeReal_finset_sum_le (Finset.Ico n m) t fun j _ => htmem j
+    _ ≤ ∑ j ∈ Finset.Ico n m, c j := Finset.sum_le_sum fun j _ => htgauge j
+
 /-- Every bounded operator lies in the operator-norm ideal.  In the historical
 record this was `True` by construction; canonically it is finiteness of `‖·‖ₑ`. -/
 @[simp] theorem mem_operatorNormFamily (A : E →L[𝕜] F) :
