@@ -111,6 +111,46 @@ def static_errors(manifest: dict[str, object]) -> list[str]:
     return errors
 
 
+def rebaseline(manifest: dict[str, object], reason: str) -> list[str]:
+    """Recompute stored hashes for declarations whose statement has changed.
+
+    **This rewrites the contract, so it is deliberately not automatic.**  The
+    manifest is a record of what was restored on 2026-07-20 and its whole value
+    is that it does not drift silently.  A rebaseline is correct only when the
+    divergence is a deliberate, checked change -- and the reason goes into
+    `source_corrections` beside the 2026-07-20 entries, so the record says what
+    happened rather than merely agreeing with the code again.
+    """
+    changed: list[str] = []
+    cache: dict[str, dict[str, str]] = {}
+    for record in manifest["restored_declarations"]:
+        path = record["path"]
+        if path not in cache:
+            source = ROOT / path
+            if not source.exists():
+                continue
+            cache[path] = declaration_blocks(source.read_text(encoding="utf8"))
+        block = cache[path].get(record["name"])
+        if block is None:
+            continue
+        try:
+            digest = hashlib.sha256(
+                normalized_signature(block).encode("utf8")).hexdigest()
+        except ValueError:
+            continue
+        if digest != record["signature_sha256"]:
+            record["signature_sha256"] = digest
+            changed.append(f"{path}:{record['name']}")
+    if changed:
+        manifest.setdefault("source_corrections", []).append({
+            "correction": reason,
+            "date": "2026-07-31",
+            "declarations": sorted({name.split(":")[-1] for name in changed}),
+            "path": sorted({name.split(":")[0] for name in changed}),
+        })
+    return changed
+
+
 def manifest_modules(manifest: dict[str, object]) -> list[str]:
     modules = {record["path"] for record in manifest["restored_declarations"]}
     modules.update(manifest.get("additional_compilation_modules", ()))
@@ -142,6 +182,14 @@ def main() -> int:
         help="check signatures and proof markers without invoking Lean",
     )
     parser.add_argument(
+        "--rebaseline",
+        metavar="REASON",
+        help="recompute the stored signature hash of every declaration whose statement "
+             "has changed, recording REASON in `source_corrections`.  Use ONLY after "
+             "confirming by hand that each change is deliberate and mathematically "
+             "sound; this rewrites the contract the gate enforces.",
+    )
+    parser.add_argument(
         "--module",
         action="append",
         default=[],
@@ -150,6 +198,17 @@ def main() -> int:
     args = parser.parse_args()
 
     manifest = json.loads(MANIFEST.read_text(encoding="utf8"))
+    if args.rebaseline:
+        changed = rebaseline(manifest, args.rebaseline)
+        if not changed:
+            print("nothing to rebaseline: every stored signature already matches")
+            return 0
+        MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf8")
+        print(f"rebaselined {len(changed)} signature(s):")
+        for name in changed:
+            print(f"  - {name}")
+        print("\nRe-run without --rebaseline to check the result.")
+        return 0
     errors = static_errors(manifest)
     if errors:
         print("Full Part III math-ahead static contract: FAILED")

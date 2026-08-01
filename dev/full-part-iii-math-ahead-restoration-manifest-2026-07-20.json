@@ -128,17 +128,17 @@
     {
       "name": "sinTwoTheta_residual_le",
       "path": "DavisKahan/FiniteDimensional/DoubleAngle/SinTwoThetaResidual.lean",
-      "signature_sha256": "232abc91b0b055169c9cc99cb22128cdc91c957f785c953ea1810796617f9c5e"
+      "signature_sha256": "660988aa7554bc4fe532e4cc65ba63e2707020069dd8dff91eac575d1d915e22"
     },
     {
       "name": "generalizedSinTheta_frobenius_le_of_spectralDistance",
       "path": "DavisKahan/FiniteDimensional/Generalized.lean",
-      "signature_sha256": "ef4f6c1f8c5938c677e8c1986784a7e65443b0948159da0aef5587a59d0373f2"
+      "signature_sha256": "c5a048db865578dc12eaf9e073c84007cef8ce4ca59a6704b1dceb07397b4ddf"
     },
     {
       "name": "generalizedSinTheta_nuclear_le_of_spectralDistance",
       "path": "DavisKahan/FiniteDimensional/Generalized.lean",
-      "signature_sha256": "e3c4955aab4f5cb3cf67a80b158183e248f1f1812c0435c32cec7f88be9e6a96"
+      "signature_sha256": "0e7cc502186e3f53efa0c099ff421f45c62966cf44d0e136bd597f13c2aadb12"
     },
     {
       "name": "sinTwoTheta_acute_of_small_perturbation",
@@ -158,7 +158,7 @@
     {
       "name": "isTransverse_of_tanTheta_residual_gap",
       "path": "DavisKahan/FiniteDimensional/Residual/AngleEmbeddings.lean",
-      "signature_sha256": "5b8c034b36d8eaa6fbb2e4d683f5c8a802e0d6dd7214f25d363fc394e0ede0f7"
+      "signature_sha256": "bc697d465eb52c70de6361d13da5e75f662a03859cf044d343258f5f50d219af"
     },
     {
       "name": "singularValues_graphOperator",
@@ -173,12 +173,12 @@
     {
       "name": "tanTheta_residual_le",
       "path": "DavisKahan/FiniteDimensional/Residual/AngleEmbeddings.lean",
-      "signature_sha256": "03b3f8b5ecda7e45167790ba7cb2e1e13cf149b981cd2c9cb8651a9ea7a8bbe4"
+      "signature_sha256": "9799f099404ce3800c4e660037bdfd20de0374b5a6489280ad7e2d62ca79efb5"
     },
     {
       "name": "tanTheta_vector_le",
       "path": "DavisKahan/FiniteDimensional/Residual/AngleEmbeddings.lean",
-      "signature_sha256": "c22b6e3dc4aa3011942a5088afb9d9490ffc19b6e909cb19b09eaac0fd71f92b"
+      "signature_sha256": "dce9be7cdb8457c46ae671b0167c4a4ba03dee4fe957a908ccc0fc698ec8bd24"
     },
     {
       "name": "tanTwoThetaEmbedding",
@@ -228,12 +228,12 @@
     {
       "name": "tanThetaMap_perturbation_le",
       "path": "DavisKahan/FiniteDimensional/TanTheta/GraphOperator.lean",
-      "signature_sha256": "a68fac28a11313179258452d37546b1aa829207fc555fa024cf11fb881f61a97"
+      "signature_sha256": "308913deda0bbd69f88250afb8cb77fb611b203d5684114b8130368db25ab781"
     },
     {
       "name": "tanTheta_perturbation_le",
       "path": "DavisKahan/FiniteDimensional/TanTheta/GraphOperator.lean",
-      "signature_sha256": "86a933e25e2803f3244ad0aa73e3b488ed7b7a5c9cf9a1f09db491cb744147c9"
+      "signature_sha256": "af4bbf1995202b8d0c497eb1efa1840513bd14191924cbe750871579eca57087"
     }
   ],
   "retired_historical_modules": [
@@ -305,6 +305,26 @@
         "directRotation_minimizes_restrictedDisplacement_uiNorm"
       ],
       "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean"
+    },
+    {
+      "correction": "Rename Reduces to IsInvariant. The name meant two different predicates in one library: TauCeti.DavisKahanTheory.Reduces was invariance alone, while ContinuousLinearMap.Reduces was the two-sided condition. The weaker one was renamed IsInvariant on 2026-07-30 (commit 71c3f5f7). The eight signatures below changed by that rename only -- the hypothesis is the same proposition under a clearer name -- and the manifest had been frozen at 2026-07-20, so the gate had been red on a stale baseline ever since.",
+      "date": "2026-07-31",
+      "declarations": [
+        "generalizedSinTheta_frobenius_le_of_spectralDistance",
+        "generalizedSinTheta_nuclear_le_of_spectralDistance",
+        "isTransverse_of_tanTheta_residual_gap",
+        "sinTwoTheta_residual_le",
+        "tanThetaMap_perturbation_le",
+        "tanTheta_perturbation_le",
+        "tanTheta_residual_le",
+        "tanTheta_vector_le"
+      ],
+      "path": [
+        "DavisKahan/FiniteDimensional/DoubleAngle/SinTwoThetaResidual.lean",
+        "DavisKahan/FiniteDimensional/Generalized.lean",
+        "DavisKahan/FiniteDimensional/Residual/AngleEmbeddings.lean",
+        "DavisKahan/FiniteDimensional/TanTheta/GraphOperator.lean"
+      ]
     }
   ]
 }
