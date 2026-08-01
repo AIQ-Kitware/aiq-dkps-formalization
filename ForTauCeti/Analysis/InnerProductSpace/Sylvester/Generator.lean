@@ -128,10 +128,8 @@ theorem tendsto_genDiffQuot_neg_time (x : (generator V).domain) :
     Tendsto (fun t : ℝ => ((I * (t : ℂ))⁻¹) • (V.U (-t) (x : F) - (x : F)))
       (𝓝[≠] (0 : ℝ)) (𝓝 (-(generator V x))) := by
   have hneg : Tendsto (fun t : ℝ => -t) (𝓝[≠] (0 : ℝ)) (𝓝[≠] (0 : ℝ)) := by
-    apply tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within
-    · simpa using (continuous_neg.tendsto (0 : ℝ)).mono_left nhdsWithin_le_nhds
-    · filter_upwards [self_mem_nhdsWithin] with t ht
-      simpa using ht
+    exact (continuous_neg.tendsto' 0 0 neg_zero).inf
+      (tendsto_principal_principal.2 fun t ht => by simpa using ht)
   refine (((generator_tendsto V x).comp hneg).neg).congr fun t => ?_
   rw [Function.comp_apply, genDiffQuot_apply, ← neg_smul]
   congr 1
