@@ -300,6 +300,39 @@ theorem gaugeReal_eq_zero_iff {A : E →L[𝕜] F} (hA : N.Mem A) :
   rintro rfl
   exact N.gaugeReal_zero
 
+/-- **A gauge-Cauchy criterion from a real Cauchy majorant.**
+
+If the gauge of `P m - P n` is bounded by `G m - G n` whenever `n ≤ m`, and `G` is Cauchy,
+then the `P n` are Cauchy in gauge.  The `≤` hypothesis is one-sided on purpose -- that is
+how such a bound arises, from a monotone partial-sum estimate -- so the proof splits on
+`le_total` and flips the difference with `gaugeReal_neg` in the other case.
+
+Both Neumann-series constructions need this, one bounded and one unbounded, and each had
+written it out; they differed only in the name of the threshold. -/
+theorem gaugeReal_sub_lt_of_cauchy_majorant {P : ℕ → E →L[𝕜] F} {G : ℕ → ℝ}
+    (hPmem : ∀ n, N.Mem (P n))
+    (hgap : ∀ {m n : ℕ}, n ≤ m → N.gaugeReal (P m - P n) ≤ G m - G n)
+    (hGcauchy : CauchySeq G) :
+    ∀ ε : ℝ, 0 < ε → ∃ M, ∀ m n, M ≤ m → M ≤ n → N.gaugeReal (P m - P n) < ε := by
+  intro ε hε
+  obtain ⟨M, hM⟩ := Metric.cauchySeq_iff.mp hGcauchy ε hε
+  refine ⟨M, fun m n hm hn => ?_⟩
+  rcases le_total n m with h | h
+  · refine lt_of_le_of_lt (hgap h) ?_
+    calc
+      G m - G n ≤ |G m - G n| := le_abs_self _
+      _ = dist (G m) (G n) := (Real.dist_eq _ _).symm
+      _ < ε := hM m hm n hn
+  · have hswap : N.gaugeReal (P m - P n) = N.gaugeReal (P n - P m) := by
+      rw [show P m - P n = -(P n - P m) from by abel,
+        N.gaugeReal_neg (N.sub_mem (hPmem n) (hPmem m))]
+    rw [hswap]
+    refine lt_of_le_of_lt (hgap h) ?_
+    calc
+      G n - G m ≤ |G n - G m| := le_abs_self _
+      _ = dist (G n) (G m) := (Real.dist_eq _ _).symm
+      _ < ε := hM n hn m hm
+
 variable {ι : Type*}
 
 /-- Ideals are closed under finite sums. -/

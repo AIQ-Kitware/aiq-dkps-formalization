@@ -273,25 +273,8 @@ theorem sylvesterNeumannPartialSum_cauchy
       (summable_geometric_of_lt_one hq0 hratio).mul_right g₀
     exact hsummable.hasSum.tendsto_sum_nat.cauchySeq
   have hPcauchy : ∀ ε : ℝ, 0 < ε → ∃ M, ∀ m n, M ≤ m → M ≤ n →
-      N.gaugeReal (P m - P n) < ε := by
-    intro ε hε
-    obtain ⟨M, hM⟩ := Metric.cauchySeq_iff.mp hGcauchy ε hε
-    refine ⟨M, fun m n hm hn => ?_⟩
-    rcases le_total n m with hnm | hmn
-    · refine lt_of_le_of_lt (hgap hnm) ?_
-      calc
-        G m - G n ≤ |G m - G n| := le_abs_self _
-        _ = dist (G m) (G n) := (Real.dist_eq _ _).symm
-        _ < ε := hM m hm n hn
-    · have hswap : N.gaugeReal (P m - P n) = N.gaugeReal (P n - P m) := by
-        rw [show P m - P n = -(P n - P m) from by abel,
-          N.gaugeReal_neg (N.sub_mem (hPmem n) (hPmem m))]
-      rw [hswap]
-      refine lt_of_le_of_lt (hgap hmn) ?_
-      calc
-        G n - G m ≤ |G n - G m| := le_abs_self _
-        _ = dist (G n) (G m) := (Real.dist_eq _ _).symm
-        _ < ε := hM n hn m hm
+      N.gaugeReal (P m - P n) < ε :=
+    N.gaugeReal_sub_lt_of_cauchy_majorant hPmem hgap hGcauchy
   simpa only [P, t] using hPcauchy
 
 /-- The ideal-norm limit of the Neumann series. -/
