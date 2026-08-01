@@ -91,6 +91,26 @@ private theorem exists_ambient_unitary_intertwining
   simpa only [LinearMap.comp_apply, LinearIsometry.coe_toLinearMap,
     LinearIsometryEquiv.coe_toLinearEquiv, LinearEquiv.coe_coe] using hW x
 
+
+/-- **The adjoint form of the intertwining**, which is what the coordinate-lift
+calculations actually apply.
+
+Taking adjoints in `W ∘ ι = ι ∘ U` and using that the adjoint of an isometric
+equivalence is its inverse turns the statement inside out.  Derived twice below
+from the same `exists_ambient_unitary_intertwining` call. -/
+private theorem adjoint_comp_symm_of_intertwining
+    {H K : Type*}
+    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+    [NormedAddCommGroup K] [InnerProductSpace 𝕜 K]
+    [FiniteDimensional 𝕜 K] [FiniteDimensional 𝕜 H]
+    {ι : H →ₗᵢ[𝕜] K} {U : H ≃ₗᵢ[𝕜] H} {W : K ≃ₗᵢ[𝕜] K}
+    (hW : W.toLinearMap ∘ₗ ι.toLinearMap = ι.toLinearMap ∘ₗ U.toLinearMap) :
+    LinearMap.adjoint ι.toLinearMap ∘ₗ W.symm.toLinearMap =
+      U.symm.toLinearMap ∘ₗ LinearMap.adjoint ι.toLinearMap := by
+  have h := congrArg LinearMap.adjoint hW
+  simpa only [LinearMap.adjoint_comp, W.adjoint_toLinearMap_eq_symm,
+    U.adjoint_toLinearMap_eq_symm] using h
+
 /-- Lift an endomorphism of a common coordinate space to a rectangular map by
 an isometric codomain embedding and a coisometric domain projection. -/
 private noncomputable def coordinateLift
@@ -143,11 +163,7 @@ private noncomputable def coordinateSquareNorm
     obtain ⟨WE, hWE⟩ := exists_ambient_unitary_intertwining ιE V.symm
     have hadj : LinearMap.adjoint ιE.toLinearMap ∘ₗ WE.symm.toLinearMap =
         V.toLinearMap ∘ₗ LinearMap.adjoint ιE.toLinearMap := by
-      have h := congrArg LinearMap.adjoint hWE
-      simpa only [LinearMap.adjoint_comp,
-        WE.adjoint_toLinearMap_eq_symm,
-        (V.symm).adjoint_toLinearMap_eq_symm,
-        LinearIsometryEquiv.symm_symm] using h
+      simpa using adjoint_comp_symm_of_intertwining hWE
     have hlift : coordinateLift ιE ιF
           (U.toLinearMap ∘ₗ X ∘ₗ V.toLinearMap) =
         UF.toLinearMap ∘ₗ coordinateLift ιE ιF X ∘ₗ
@@ -275,10 +291,7 @@ private theorem coordinateLift_unitary_factorization
   obtain ⟨WE, hWE⟩ := exists_ambient_unitary_intertwining ιE V.symm
   have hadj : LinearMap.adjoint ιE.toLinearMap ∘ₗ WE.symm.toLinearMap =
       V.toLinearMap ∘ₗ LinearMap.adjoint ιE.toLinearMap := by
-    have h := congrArg LinearMap.adjoint hWE
-    simpa only [LinearMap.adjoint_comp, WE.adjoint_toLinearMap_eq_symm,
-      (V.symm).adjoint_toLinearMap_eq_symm,
-      LinearIsometryEquiv.symm_symm] using h
+    simpa using adjoint_comp_symm_of_intertwining hWE
   refine ⟨UF, WE.symm, ?_⟩
   ext z
   simp only [coordinateLift, LinearMap.comp_apply]
