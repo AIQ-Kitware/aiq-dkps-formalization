@@ -230,3 +230,36 @@ The extraction that did land is worth stating as a pattern: the two cutoff theor
 `p = 1 - tailCutoff u`.  **Neither proof ever looks at what `p` is**, which is the test
 worth applying before extracting anything: not "is this statement general?" but "does the
 enclosing proof use any property of the thing that makes it look local?"
+
+## Clustering on bodies, not statements (2026-08-01)
+
+Grouping candidate steps by **statement text** — what the tool does — returns **zero**
+multi-site groups in `ForTauCeti` at 10+ body lines.  Clustering the same steps by
+**token-similarity of their proof bodies** returns three pairs at 15+ lines.
+
+**The statement key is what hides them.**  `GramSpectralRank.lean` proved the same 36-line
+argument in two theorems, one over `Set.Ici c` and one over `Set.Iic c`; the statements
+differ, so no statement-keyed scan will ever pair them, and the bodies rate 0.869.  The
+same for `hprod` in `SpectralGapInverse.lean` and `SpectralMeasure.lean` at 0.893 — same
+reduction, different symbols.
+
+Both were extracted.  What was left behind is what the pairing is *for*:
+
+| pair | ratio | verdict |
+|---|---|---|
+| `GramSpectralRank` `hlim_of_fix` ×2 | 0.869 | **extracted** — `tendsto_specProjection_inter_of_fix` takes the set algebra as an `∀ᶠ τ` hypothesis |
+| `hprod` in `SpectralGapInverse` / `SpectralMeasure` | 0.893 | **extracted** — `borelCalculus_congr_of_ne_one` in their common ancestor |
+| `horbit` in `DoubledPhase` / `Fourier` | 0.879 | parallel API — do not collapse |
+| `hsylv` in `BoundedOperator/SinTheta` / `SinTheta/OperatorNorm` | 0.833 | parallel API — do not collapse |
+
+**The two that stayed have the same shape as each other, and it is worth naming.**  Each
+sits on a *matched pair of definitions* maintained deliberately: `doubledPhaseMapAction`
+against `doubledPhaseAction`, `basisDoubledPhaseRotation` against
+`basisDoubledRealRotation`, `re_inner_reducedExtension_self'` against
+`re_inner_reducedExtension_self`.  **When a duplicated proof rests on an API that already
+exists in two matched forms, the duplication is the API's, not the proof's** — and
+collapsing it is a decision about the API, of the kind posted as `TANTHETA-WITNESS-UNIFY`.
+
+Ratio alone does not separate these: 0.879 was left and 0.869 was extracted.  What
+separates them is whether the differing names are *ad-hoc* (`Ici`/`Iic`, `h`/`q`) or
+*systematic* (a whole parallel vocabulary).  Look at the names, not the number.

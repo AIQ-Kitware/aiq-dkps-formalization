@@ -211,6 +211,25 @@ theorem diagMeasure_cayley_preimage_one (ξ : H) :
   rw [MeasureTheory.measureReal_def] at this
   exact (ENNReal.toReal_eq_zero_iff _).mp this |>.resolve_right (measure_ne_top _ _)
 
+/-- **Two bounded Borel symbols agreeing off the Cayley singularity have the same calculus.**
+
+`diagMeasure_cayley_preimage_one` makes `{1}` null for every diagonal measure, so an
+almost-everywhere statement only has to be checked where `w ≠ 1`.  Two spectral files
+opened their symbol-comparison proofs with exactly this reduction, written out both
+times; this is that reduction, once. -/
+theorem borelCalculus_congr_of_ne_one
+    {f g : _root_.spectrum ℂ (cayley hA) → ℂ}
+    (hf : BorelCalculus.IsBddMeasurable f) (hg : BorelCalculus.IsBddMeasurable g)
+    (h : ∀ w : _root_.spectrum ℂ (cayley hA), (w : ℂ) ≠ 1 → f w = g w) :
+    BorelCalculus.borelCalculus (isStarNormal_cayley hA) hf
+      = BorelCalculus.borelCalculus (isStarNormal_cayley hA) hg := by
+  refine BorelCalculus.borelCalculus_congr_ae (isStarNormal_cayley hA) hf hg fun η => ?_
+  have hae : ∀ᵐ w ∂(BorelCalculus.diagMeasure (isStarNormal_cayley hA) η),
+      w ∉ ((Subtype.val : _root_.spectrum ℂ (cayley hA) → ℂ) ⁻¹' {1}) :=
+    MeasureTheory.compl_mem_ae_iff.mpr (diagMeasure_cayley_preimage_one hA η)
+  filter_upwards [hae] with w hw
+  exact h w hw
+
 end Cayley
 
 section ResolventFormula
