@@ -185,7 +185,7 @@ theorem cutoff_split (A : E →L[ℂ] E) (hA : 0 ≤ A) (s : ℝ) :
     (s ^ 2 : ℝ) • (1 : E →L[ℂ] E) + (A + (s : ℝ) • 1) * A.spectralCutoff s - A * A
       = cfc (fun t : ℝ => s ^ 2 + (t + s) * max (t - s) 0 - t * t) A := by
   have hsa : IsSelfAdjoint A := IsSelfAdjoint.of_nonneg hA
-  rw [spectralCutoff,
+  simp only [spectralCutoff,
     cfc_sub (a := A) (fun t : ℝ => s ^ 2 + (t + s) * max (t - s) 0) (fun t : ℝ => t * t),
     cfc_add (a := A) (fun _ : ℝ => s ^ 2) (fun t : ℝ => (t + s) * max (t - s) 0),
     cfc_mul (fun t : ℝ => t + s) (fun t : ℝ => max (t - s) 0) A,

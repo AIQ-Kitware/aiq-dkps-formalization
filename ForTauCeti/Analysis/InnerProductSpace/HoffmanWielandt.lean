@@ -165,7 +165,7 @@ theorem sum_sq_norm_apply_eq_sum_sq_eigenvalues
   have hterm : ∀ j k, ‖⟪hS.eigenvectorBasis hn j, S (e k)⟫_𝕜‖ ^ 2
       = (hS.eigenvalues hn j) ^ 2 * ‖⟪hS.eigenvectorBasis hn j, e k⟫_𝕜‖ ^ 2 := by
     intro j k
-    rw [← hS (hS.eigenvectorBasis hn j) (e k), hS.apply_eigenvectorBasis hn j,
+    simp only [← hS (hS.eigenvectorBasis hn j) (e k), hS.apply_eigenvectorBasis hn j,
       inner_smul_left, RCLike.conj_ofReal, norm_mul, mul_pow, RCLike.norm_ofReal, sq_abs]
   calc ∑ k, ‖S (e k)‖ ^ 2
       = ∑ k, ∑ j, ‖⟪hS.eigenvectorBasis hn j, S (e k)⟫_𝕜‖ ^ 2 :=

@@ -81,7 +81,7 @@ private theorem le_eigenvalues_of_norm_lower_bound {H : F →ₗ[𝕜] F}
   have hi : c * ‖hHsym.eigenvectorBasis rfl i‖ ≤ ‖H (hHsym.eigenvectorBasis rfl i)‖ :=
     hlow (hHsym.eigenvectorBasis rfl i)
   have hnonneg := hpos.nonneg_eigenvalues rfl i
-  rw [hHsym.apply_eigenvectorBasis rfl i, norm_smul, RCLike.norm_ofReal,
+  simp only [hHsym.apply_eigenvectorBasis rfl i, norm_smul, RCLike.norm_ofReal,
     abs_of_nonneg hnonneg,
     (hHsym.eigenvectorBasis rfl).orthonormal.norm_eq_one, mul_one, mul_one] at hi
   exact hi

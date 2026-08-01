@@ -175,12 +175,12 @@ theorem unitaryOrbitAction_basisMatrixUnit
   change basisDiagonalUnitary eF ζF
       (basisMatrixUnit eF eE i j (basisDiagonalUnitary eE ζE (eE q))) =
     (((ζF i : 𝕜) * (ζE j : 𝕜)) • basisMatrixUnit eF eE i j) (eE q)
-  rw [basisDiagonalUnitary_apply_basis, map_smul, map_smul,
+  simp only [basisDiagonalUnitary_apply_basis, map_smul, map_smul,
     basisMatrixUnit_apply, LinearMap.smul_apply, basisMatrixUnit_apply,
     eE.inner_eq_ite]
   by_cases hjq : j = q
   · subst q
-    simp only [ite_true, one_smul, basisDiagonalUnitary_apply_basis]
+    simp only [ite_true, one_smul]
     rw [smul_smul, mul_comm]
   · simp [hjq]
 

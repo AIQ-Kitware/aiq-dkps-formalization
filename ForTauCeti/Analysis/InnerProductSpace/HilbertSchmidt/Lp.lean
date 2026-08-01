@@ -205,6 +205,11 @@ noncomputable def ofLp (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2)
           (s * ‖b.repr x i‖ ^ 2 + ‖f i‖ ^ 2 / s) / 2 :=
         (((hsq1.mul_left s).add (hsq2.div_const s)).div_const 2)
       refine (Summable.tsum_le_tsum hterm hsum hdom).trans ?_
+      -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the
+      -- goal unsolved.  `tsum_div_const` appears twice and has to fire at two different
+      -- depths, before and after the sum is split; to `simp only` those are one rule
+      -- reaching a normal form, and the intermediate shape the later lemmas need is
+      -- never on the goal.
       rw [tsum_div_const, Summable.tsum_add (hsq1.mul_left s) (hsq2.div_const s),
         Summable.tsum_mul_left, tsum_div_const, hcoef, hcol, hs]
       · field_simp

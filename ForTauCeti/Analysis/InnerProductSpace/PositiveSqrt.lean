@@ -123,6 +123,9 @@ theorem apply_eq_smul_of_apply_apply_eq_smul {S : E →ₗ[𝕜] E} (hS : S.IsPo
     have hSw : S w = (-(μ : 𝕜)) • w := by
       rw [neg_smul, eq_neg_iff_add_eq_zero]; exact hkey
     have h1 := hS.re_inner_nonneg_left w
+    -- Left as a `rw` chain on purpose: `simp only` with this same list reports
+    -- `← RCLike.ofReal_neg` as a possibly-looping simp theorem and fails.  A reversed
+    -- rewrite that is applied once, in position, is exactly what `rw` is for.
     rw [hSw, inner_smul_left, map_neg, RCLike.conj_ofReal, ← RCLike.ofReal_neg,
       RCLike.re_ofReal_mul, ← norm_sq_eq_re_inner] at h1
     have hw0 : w = 0 := by

@@ -166,7 +166,7 @@ theorem generator_sylvesterGroup_apply
         = U.U t (Z (((I * (t : ℂ))⁻¹) • (V.U (-t) (x : F) - (x : F))))
           + genDiffQuot U (Z (x : F)) t := by
     intro t
-    rw [genDiffQuot_apply, ofLp_smul, ofLp_sub, sylvesterGroup_apply, sylvesterOp_apply,
+    simp only [genDiffQuot_apply, ofLp_smul, ofLp_sub, sylvesterGroup_apply, sylvesterOp_apply,
       ofLp_sylvesterFun, conjOp, genDiffQuot_apply]
     simp only [smul_apply, sub_apply, ContinuousLinearMap.comp_apply, map_smul, map_sub, ← hZ]
     rw [← smul_add]

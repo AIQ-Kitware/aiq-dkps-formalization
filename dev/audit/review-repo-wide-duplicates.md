@@ -193,3 +193,40 @@ over different objects, and thin statements the tool has no opinion about.
 "Unclassified" means nobody has yet read both sites to decide which of the four
 categories it is.  That reading is the work, and it is cheap; the extraction is
 the easy part.
+
+## The filter, pointed at `ForTauCeti` (2026-08-01)
+
+The `general` AND `self-contained` filter had **only ever been run over `DavisKahan/**`**.
+Over `ForTauCeti/**` proofs above 80 body lines it returns **6 blocks / 144 lines**, and
+all six are now classified.  The split is the useful part, because only two were work:
+
+| block | verdict |
+|---|---|
+| `Cutoff.lean:hlowerIdentity` (47) + `:hpcCpc` (15) | **extracted** — and they were one target, not two: `hpcCpc` is nested *inside* `hlowerIdentity` |
+| `SinTheta/OperatorNorm.lean:hsylv` (23) / `BoundedOperator/SinTheta.lean:hsylv` (22) | deliberate parallel accounts — do not collapse |
+| `Fourier.lean:hunfold` (20) | local `let` scaffolding — extraction makes it worse |
+| `Majorization.lean:hneg` (17) | already a wrapper around an extracted lemma |
+
+**Two of six were real, and the reason the other four were not is the same each time: the
+statement is general but its *setting* is not.**
+
+`hunfold` and `hneg` both name a proof-local `let` — `G`, the Fubini integrand, and `K`,
+the convex hull's index set — that the enclosing proof uses at seven and several sites
+respectively.  A standalone lemma has to take that definition as a hypothesis, which is
+strictly worse than the inline step.  **`let`-bound scaffolding used pervasively is not
+extractable, however general the statement reads**, and the tool cannot see the difference
+because substitution makes the statement look global either way.
+
+The two `hsylv` blocks rate **0.833 on tokens** and sit at the tail of ~60 lines of
+parallel development.  One works with `LinearMap`s coerced to continuous maps, the other
+natively with continuous maps, and Mathlib-side helpers exist in **matched primed/unprimed
+forms** — `re_inner_reducedExtension_self'` and `re_inner_reducedExtension_self` — built to
+support exactly that pairing.  **Infrastructure deliberately maintained in two forms is not
+drift.**  Collapsing it is the same class of decision as `TANTHETA-WITNESS-UNIFY`.
+
+The extraction that did land is worth stating as a pattern: the two cutoff theorems in
+`Spectral/Cutoff.lean` had each written out the same four-step `calc` for
+`cfc p C * C * cfc p C = cfc (x * p x ^ 2) C`, at `p = tailCutoff u` and at
+`p = 1 - tailCutoff u`.  **Neither proof ever looks at what `p` is**, which is the test
+worth applying before extracting anything: not "is this statement general?" but "does the
+enclosing proof use any property of the thing that makes it look local?"

@@ -369,9 +369,9 @@ private theorem diagOp_update_neg {d : ℕ} (q : Fin d → ℝ) (j : Fin d) :
   simp only [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply,
     LinearIsometryEquiv.coe_toLinearEquiv, LinearEquiv.coe_coe]
   rcases eq_or_ne i j with rfl | hij
-  · rw [Submodule.reflection_orthogonalComplement_singleton_eq_neg,
-      map_neg, diagOp_apply_basis, diagOp_apply_basis,
-      Function.update_self, RCLike.ofReal_neg, neg_smul]
+  · simp only [Submodule.reflection_orthogonalComplement_singleton_eq_neg,
+      map_neg, diagOp_apply_basis,
+      Function.update_self, neg_smul]
   · have hmem : (EuclideanSpace.basisFun (Fin d) 𝕜) i ∈
         (𝕜 ∙ (EuclideanSpace.basisFun (Fin d) 𝕜) j)ᗮ :=
       Submodule.mem_orthogonal_singleton_iff_inner_right.mpr

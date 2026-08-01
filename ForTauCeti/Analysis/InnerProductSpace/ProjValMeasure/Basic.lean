@@ -155,8 +155,9 @@ lemma proj_union (P : ProjValMeasure H) {B₁ B₂ : Set ℝ}
     (hB₁ : MeasurableSet B₁) (hB₂ : MeasurableSet B₂) (hd : Disjoint B₁ B₂) :
     P.proj (B₁ ∪ B₂) (hB₁.union hB₂) = P.proj B₁ hB₁ + P.proj B₂ hB₂ :=
   op_ext_of_inner_self fun ξ => by
-    rw [add_apply, inner_add_right, P.inner_proj, P.inner_proj,
-      P.inner_proj, measure_union hd hB₂,
+    -- `P.inner_proj` appeared three times in the `rw` chain this replaced, once per
+    -- occurrence; `simp only` reaches all three in one pass.
+    simp only [add_apply, inner_add_right, P.inner_proj, measure_union hd hB₂,
       ENNReal.toReal_add (measure_ne_top _ _) (measure_ne_top _ _)]
     push_cast
     ring

@@ -287,9 +287,10 @@ theorem schattenENorm_comp_le {p : ℝ} (hp0 : 0 < p) {G H : Type v}
     intro n
     have h := ENNReal.ofReal_le_ofReal (approximationNumber_comp_comp_le L T R n)
     refine le_trans (ENNReal.rpow_le_rpow h hp0.le) (le_of_eq ?_)
-    rw [ENNReal.ofReal_mul (mul_nonneg (norm_nonneg L) (T.approximationNumber_nonneg n)),
-      ENNReal.ofReal_mul (norm_nonneg L), ofReal_norm, ofReal_norm,
-      ENNReal.mul_rpow_of_nonneg _ _ hp0.le, ENNReal.mul_rpow_of_nonneg _ _ hp0.le,
+    -- The `rw` chain this replaced repeated `ofReal_norm` twice and
+    -- `mul_rpow_of_nonneg` three times, once per occurrence.
+    simp only [ENNReal.ofReal_mul (mul_nonneg (norm_nonneg L) (T.approximationNumber_nonneg n)),
+      ENNReal.ofReal_mul (norm_nonneg L), ofReal_norm,
       ENNReal.mul_rpow_of_nonneg _ _ hp0.le]
     ring
   calc (L ∘L T ∘L R).schattenENorm p
