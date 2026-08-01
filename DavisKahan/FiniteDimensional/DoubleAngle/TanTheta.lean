@@ -571,7 +571,7 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
         rw [hγdef, ← inner_conj_symm], RCLike.mul_conj]
       push_cast
       ring
-    rw [hw₂def, norm_sub_sq (𝕜 := 𝕜), hyn, norm_smul, hxn, hyx, RCLike.ofReal_re]
+    simp only [hw₂def, norm_sub_sq (𝕜 := 𝕜), hyn, norm_smul, hxn, hyx, RCLike.ofReal_re]
     ring
   have hw' : V.reflection (U.reflection w₂) = ((‖w₂‖ ^ 2 : ℝ) : 𝕜) • x + γ • w₂ := by
     have hJvJy : V.reflection (U.reflection y) = x := by
@@ -626,7 +626,7 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
   have hE3 : ⟪V.reflection (U.reflection w₂),
         V.reflection (S w₂ - (((a + b) / 2 : ℝ) : 𝕜) • w₂)⟫_𝕜
       = ((‖w₂‖ ^ 2 : ℝ) : 𝕜) * G + (starRingEnd 𝕜) γ * Q₂ := by
-    rw [hw', inner_add_left, inner_smul_left, inner_smul_left, RCLike.conj_ofReal,
+    simp only [hw', inner_add_left, inner_smul_left, inner_smul_left, RCLike.conj_ofReal,
       ← hGdef, ← hQ₂def]
   have hE4 : ⟪V.reflection (S w₂ - (((a + b) / 2 : ℝ) : 𝕜) • w₂),
         V.reflection (U.reflection w₂)⟫_𝕜
