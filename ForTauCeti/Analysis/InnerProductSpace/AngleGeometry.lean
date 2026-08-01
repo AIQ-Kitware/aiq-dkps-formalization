@@ -257,19 +257,10 @@ private theorem exists_orthonormal_pair_spanning (U V : Submodule 𝕜 E)
   have hu : Orthonormal 𝕜 u := bU.orthonormal.comp_linearIsometry U.subtypeₗᵢ
   have hv : Orthonormal 𝕜 v :=
     (bV.orthonormal.comp_linearIsometry V.subtypeₗᵢ).comp _ (Fin.cast_injective hdV)
-  have hspanU : Submodule.span 𝕜 (Set.range u) = U := by
-    apply Submodule.eq_of_le_of_finrank_eq
-    · apply Submodule.span_le.mpr
-      rintro _ ⟨i, rfl⟩
-      exact (bU i).2
-    · rw [finrank_span_eq_card hu.linearIndependent, Fintype.card_fin]
-  have hspanV : Submodule.span 𝕜 (Set.range v) = V := by
-    apply Submodule.eq_of_le_of_finrank_eq
-    · apply Submodule.span_le.mpr
-      rintro _ ⟨i, rfl⟩
-      exact (bV (Fin.cast hdV i)).2
-    · rw [finrank_span_eq_card hv.linearIndependent, Fintype.card_fin]
-      exact hdV
+  have hspanU : Submodule.span 𝕜 (Set.range u) = U :=
+    span_range_eq_of_orthonormal_of_mem hu (fun i => (bU i).2) rfl
+  have hspanV : Submodule.span 𝕜 (Set.range v) = V :=
+    span_range_eq_of_orthonormal_of_mem hv (fun i => (bV (Fin.cast hdV i)).2) hdV
   exact ⟨u, v, hu, hv, hspanU, hspanV⟩
 
 /-- The directed principal-sine sequences are symmetric for equal-rank
