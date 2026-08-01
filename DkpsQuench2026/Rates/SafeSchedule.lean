@@ -271,6 +271,19 @@ theorem safe_net_extension_budget
   rw [hnet]
   linarith [hprod]
 
+/-- **A natural power of `n + 1` tends to infinity**, cast to `ℝ`.
+
+Written out three times in this file, in `safe_scaled_cmdsEntrywiseRate_zero`,
+`safe_polar_expression_zero` and `safe_configBound_zero`, each time as the first
+step toward showing the corresponding reciprocal rate vanishes. -/
+theorem tendsto_natCast_succ_pow_atTop {k : ℕ} (hk : 1 ≤ k) :
+    Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ k) atTop atTop := by
+  have hnat : Tendsto (fun n : ℕ => (n + 1) ^ k) atTop atTop :=
+    tendsto_atTop_mono
+      (fun n => le_trans (Nat.le_succ n) (le_self_pow (by omega) (by omega))) tendsto_id
+  simp_rw [← Nat.cast_pow]
+  exact tendsto_natCast_atTop_atTop.comp hnat
+
 /-- The batch-size-scaled CMDS entry rate vanishes under the safe
 tolerance.
 
@@ -286,13 +299,9 @@ theorem safe_scaled_cmdsEntrywiseRate_zero
             (populationResponseBound + safeResponseTolerance n))
           (safeResponseTolerance n)) atTop (𝓝 0) := by
   have hm' : (m : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hm.ne'
-  have hpow : ∀ k : ℕ, 1 ≤ k → Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ k) atTop atTop := by
-    intro k hk
-    have hnat : Tendsto (fun n : ℕ => (n + 1) ^ k) atTop atTop :=
-      tendsto_atTop_mono
-        (fun n => le_trans (Nat.le_succ n) (le_self_pow (by omega) (by omega))) tendsto_id
-    simp_rw [← Nat.cast_pow]
-    exact tendsto_natCast_atTop_atTop.comp hnat
+  have hpow : ∀ k : ℕ, 1 ≤ k →
+      Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ k) atTop atTop :=
+    fun _ hk => tendsto_natCast_succ_pow_atTop hk
   have h2 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 2)⁻¹) atTop (𝓝 0) :=
     (hpow 2 (by norm_num)).inv_tendsto_atTop
   have h7 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 7)⁻¹) atTop (𝓝 0) :=
@@ -324,13 +333,9 @@ theorem safe_polar_expression_zero
       atTop (𝓝 0) := by
   have hm' : (m : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hm.ne'
   have hκ2 : (κ / 2 : ℝ) ≠ 0 := ne_of_gt (by positivity)
-  have hpow : ∀ k : ℕ, 1 ≤ k → Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ k) atTop atTop := by
-    intro k hk
-    have hnat : Tendsto (fun n : ℕ => (n + 1) ^ k) atTop atTop :=
-      tendsto_atTop_mono
-        (fun n => le_trans (Nat.le_succ n) (le_self_pow (by omega) (by omega))) tendsto_id
-    simp_rw [← Nat.cast_pow]
-    exact tendsto_natCast_atTop_atTop.comp hnat
+  have hpow : ∀ k : ℕ, 1 ≤ k →
+      Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ k) atTop atTop :=
+    fun _ hk => tendsto_natCast_succ_pow_atTop hk
   have h3 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹) atTop (𝓝 0) :=
     (hpow 3 (by norm_num)).inv_tendsto_atTop
   have h8 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 8)⁻¹) atTop (𝓝 0) :=
@@ -390,13 +395,8 @@ theorem safe_configBound_zero
   simp only [← hpt]
   -- `1/(n+1) → 0` and a generic zero-at-zero continuous composition tool.
   have hpow : ∀ k : ℕ, 1 ≤ k →
-      Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ k) atTop atTop := by
-    intro k hk
-    have hnat : Tendsto (fun n : ℕ => (n + 1) ^ k) atTop atTop :=
-      tendsto_atTop_mono
-        (fun n => le_trans (Nat.le_succ n) (le_self_pow (by omega) (by omega))) tendsto_id
-    simp_rw [← Nat.cast_pow]
-    exact tendsto_natCast_atTop_atTop.comp hnat
+      Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ k) atTop atTop :=
+    fun _ hk => tendsto_natCast_succ_pow_atTop hk
   have hu : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ))⁻¹) atTop (𝓝 0) := by
     simpa only [one_div, Nat.cast_add, Nat.cast_one] using
       (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
