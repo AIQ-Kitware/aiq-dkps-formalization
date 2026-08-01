@@ -362,6 +362,32 @@ theorem gaugeReal_finset_sum_le (s : Finset ι) (A : ι → E →L[𝕜] F)
 
 /-! ### The operator-norm family -/
 
+/-- **The gauge bound a Sylvester fixed point satisfies.**
+
+If `X = Inv ∘L (C + X ∘L B)` with `‖Inv‖ ≤ (ρ + δ)⁻¹` and `‖B‖ ≤ ρ`, then the gauge of `X`
+obeys the corresponding scalar inequality.  The bounded and unbounded Sylvester
+constructions both reach this point and had each written the same four-step `calc`; they
+differ only in whether the left inverse arrives as `hA.inv` or as a supplied `J`, which is
+what makes it a parameter here. -/
+theorem gaugeReal_le_of_comp_add_comp_fixedPoint
+    {Inv : F →L[𝕜] F} {B : E →L[𝕜] E} {X C : E →L[𝕜] F} {rho delta : ℝ}
+    (hpos : 0 < rho + delta) (hInv : ‖Inv‖ ≤ (rho + delta)⁻¹) (hB : ‖B‖ ≤ rho)
+    (hC : N.Mem C) (hXmem : N.Mem X) (hXBmem : N.Mem (X ∘L B))
+    (hfix : X = Inv ∘L (C + X ∘L B)) :
+    N.gaugeReal X ≤ (rho + delta)⁻¹ * (N.gaugeReal C + N.gaugeReal X * rho) := by
+  conv_lhs => rw [hfix]
+  calc
+    N.gaugeReal (Inv ∘L (C + X ∘L B))
+        ≤ ‖Inv‖ * N.gaugeReal (C + X ∘L B) :=
+      N.gaugeReal_comp_left_le_mul Inv (N.add_mem hC hXBmem)
+    _ ≤ (rho + delta)⁻¹ * N.gaugeReal (C + X ∘L B) :=
+      mul_le_mul_of_nonneg_right hInv (N.gaugeReal_nonneg (N.add_mem hC hXBmem))
+    _ ≤ (rho + delta)⁻¹ * (N.gaugeReal C + N.gaugeReal X * rho) := by
+      refine mul_le_mul_of_nonneg_left ?_ (inv_nonneg.mpr hpos.le)
+      refine (N.gaugeReal_add_le hC hXBmem).trans (add_le_add le_rfl ?_)
+      exact (N.gaugeReal_comp_right_le_mul B hXmem).trans
+        (mul_le_mul_of_nonneg_left hB (N.gaugeReal_nonneg hXmem))
+
 /-- **Partial sums differ in gauge by at most the majorant's partial sums.**
 
 With `P n = ∑_{j<n} t j` and any real `c` dominating each `N.gaugeReal (t j)`, the gauge of

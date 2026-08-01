@@ -240,19 +240,8 @@ theorem linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse
   have hXmem : N.Mem X := by rw [hXL]; exact hLmem
   -- the gauge estimate by absorption through the fixed point
   have hXBmem : N.Mem (X ∘L B) := N.comp_right_mem B hXmem
-  have hgauge : N.gaugeReal X ≤ (ρ + δ)⁻¹ * (N.gaugeReal C + N.gaugeReal X * ρ) := by
-    conv_lhs => rw [hfix]
-    calc N.gaugeReal (J ∘L (C + X ∘L B))
-        ≤ ‖J‖ * N.gaugeReal (C + X ∘L B) :=
-          N.gaugeReal_comp_left_le_mul J (N.add_mem hC hXBmem)
-      _ ≤ (ρ + δ)⁻¹ * N.gaugeReal (C + X ∘L B) :=
-          mul_le_mul_of_nonneg_right hInvNorm
-            (N.gaugeReal_nonneg (N.add_mem hC hXBmem))
-      _ ≤ (ρ + δ)⁻¹ * (N.gaugeReal C + N.gaugeReal X * ρ) := by
-          refine mul_le_mul_of_nonneg_left ?_ (inv_nonneg.mpr hρδ.le)
-          refine (N.gaugeReal_add_le hC hXBmem).trans (add_le_add le_rfl ?_)
-          exact (N.gaugeReal_comp_right_le_mul B hXmem).trans
-            (mul_le_mul_of_nonneg_left hB (N.gaugeReal_nonneg hXmem))
+  have hgauge : N.gaugeReal X ≤ (ρ + δ)⁻¹ * (N.gaugeReal C + N.gaugeReal X * ρ) :=
+    N.gaugeReal_le_of_comp_add_comp_fixedPoint hρδ hInvNorm hB hC hXmem hXBmem hfix
   refine ⟨hXmem, ?_⟩
   have hkey := mul_le_mul_of_nonneg_left hgauge hρδ.le
   rw [← mul_assoc, mul_inv_cancel₀ hρδ.ne', one_mul] at hkey
