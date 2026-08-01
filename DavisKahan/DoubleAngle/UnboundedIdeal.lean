@@ -272,6 +272,12 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
       δ * N.gaugeReal (U.subtypeL.adjoint ∘L Wc.subtypeL) ≤ N.gaugeReal R at hraw
   have hambient := projectionProduct_mem_and_gauge_le_overlap
     N U Wc hraw.1
+  -- Duplicated with `selfAdjointSpectralSubspace_compl_eq_orthogonal`'s own `hproj` in
+  -- `SpectralTheory/ReflectionRestriction.lean`, and NOT removable by citing that theorem:
+  -- it states the equality of the SUBSPACES, and rewriting with it under `starProjection`
+  -- gives "motive is not type correct" because `starProjection` takes a
+  -- `HasOrthogonalProjection` instance derived from the submodule.  Going through the
+  -- projections, as both copies do, is what avoids that.
   have hUcProjection : Uc.starProjection = Uᗮ.starProjection := by
     rw [← selfAdjointSpectralProjection_eq_starProjection
       A hA Bᶜ hB.compl]
