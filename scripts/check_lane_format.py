@@ -104,6 +104,21 @@ def main(argv=None) -> int:
                 named = OWNER_LANE_RE.search(owner)
                 pending.append((n, owner, named.group(1) if named else None))
             continue
+        # Rows routinely reference OTHER lanes by marker in their prose -- 28 do -- and
+        # that is fine, because both this tool and `check_lane_graph` read the FIRST
+        # marker in the cell and the convention is that the first one is the row's own.
+        # What is not fine is a row whose first marker is somebody else's lane.  Observed
+        # 2026-08-01: a DONE row for DK-LONGPROOF mentioned another lane in its prose and
+        # put its own marker at the END, so the row registered as that OTHER lane, marked
+        # it terminal, and left DK-LONGPROOF advertised as READY.  Both effects were
+        # silent and the row read correctly to a human.  Put your own marker first.
+        named = OWNER_LANE_RE.search(owner)
+        if named and named.group(1) != m.group(1) and named.group(1) in LANE_RE.findall(status):
+            findings.append(
+                f"{LANES.name}:{n}: owner cell says lane {named.group(1)}, but the status "
+                f"cell's FIRST marker is {{lane:{m.group(1)}}} -- the row registers under "
+                f"that one and silently changes ITS state instead. Put your own marker first.")
+
         lane, prose = m.group(1), bare(status)
         rec = per_lane.setdefault(lane, {"terminal": [], "held": [], "open": []})
         if TERMINAL_RE.match(prose):

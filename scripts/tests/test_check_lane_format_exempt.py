@@ -108,6 +108,35 @@ class ExemptionTest(unittest.TestCase):
         self.assertIn("terminal elsewhere", text)
 
 
+class MarkerOrderTest(ExemptionTest):
+    """The row's OWN marker must come first in its status cell."""
+
+    def test_own_marker_after_a_referenced_one_is_fatal(self) -> None:
+        """The exact bug, reproduced: a DONE row for FOO that mentions BAR first
+        registers as BAR, marks BAR terminal, and leaves FOO advertised as READY."""
+        body = row("agent -- lane FOO, DONE.",
+                   "**done** see also `{lane:BAR}` -- and `{lane:FOO}`")
+        code, text = self.run_on(body)
+        self.assertIn("owner cell says lane FOO", text)
+        self.assertIn("FIRST marker is {lane:BAR}", text)
+        self.assertEqual(code, 1, text)
+
+    def test_referencing_other_lanes_after_your_own_is_fine(self) -> None:
+        """28 live rows do this; it is the convention, not a defect."""
+        body = row("agent -- lane FOO, DONE.",
+                   "**done** `{lane:FOO}` -- supersedes `{lane:BAR}` and `{lane:BAZ}`")
+        code, text = self.run_on(body)
+        self.assertNotIn("FIRST marker", text)
+        self.assertEqual(code, 0, text)
+
+    def test_a_row_that_never_marks_its_own_lane_is_not_flagged_here(self) -> None:
+        """A posting row may register a lane it does not own; that is the markerless
+        check's business, not this one, and double-reporting would be noise."""
+        body = row("agent -- lane FOO, DONE.", "**done** `{lane:BAR}`")
+        _, text = self.run_on(body)
+        self.assertNotIn("FIRST marker", text)
+
+
 class LiveBoardTest(unittest.TestCase):
     def test_the_real_board_is_at_or_under_its_baseline(self) -> None:
         """The ratchet is the point; this fails when someone adds a bare row."""
