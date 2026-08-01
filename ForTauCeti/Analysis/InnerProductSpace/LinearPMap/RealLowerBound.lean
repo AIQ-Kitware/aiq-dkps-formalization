@@ -106,12 +106,9 @@ theorem mem_resolventSet_of_lower_bound (hA : IsSelfAdjoint A)
   have hproj : K.HasOrthogonalProjection :=
     haveI : CompleteSpace K := hKclosed.completeSpace_coe
     inferInstance
-  have hperp : Kᗮ = ⊥ := by
-    rw [Submodule.eq_bot_iff]
-    intro y hy
-    refine eq_zero_of_orthogonal_shiftRange_of_real hA hzre hc hbd fun x => ?_
-    have h := hy (shiftMap A z x) ⟨x, rfl⟩
-    rwa [inner_eq_zero_symm] at h
+  have hperp : Kᗮ = ⊥ :=
+    orthogonal_range_shiftMap_eq_bot fun _ hy =>
+      eq_zero_of_orthogonal_shiftRange_of_real hA hzre hc hbd hy
   have hKtop : K = ⊤ := Submodule.orthogonal_eq_bot_iff.mp hperp
   have hsurj : Function.Surjective (shiftMap A z) := by
     intro y
