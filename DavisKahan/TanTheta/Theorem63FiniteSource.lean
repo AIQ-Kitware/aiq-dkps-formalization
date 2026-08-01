@@ -221,6 +221,23 @@ theorem theorem63_singularValues_sine_lt_one
     simpa using hprojzero
   exact (finiteSourceRightSingularBasis S).orthonormal.ne_zero i hvzero
 
+/-- **A left singular vector of the directed sine block lies in `Vᗮ`.**
+
+Its range is contained there.  Derived twice below, the copies differing only in
+indentation. -/
+private theorem finiteSourceLeftSingularVector_mem_orthogonal
+    (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
+    (i : Fin (finrank ℂ Z)) :
+    finiteSourceLeftSingularVector (theorem63DirectedSineBlock Z V) i ∈ Vᗮ := by
+  have hyRange :
+      finiteSourceLeftSingularVector (theorem63DirectedSineBlock Z V) i ∈
+        (theorem63DirectedSineBlock Z V).range :=
+    finiteSourceLeftSingularVector_mem_range (theorem63DirectedSineBlock Z V) i
+  rcases hyRange with ⟨x, hx⟩
+  rw [← hx]
+  exact Vᗮ.starProjection_apply_mem ((x : Z) : H)
+
 /-- The subtype adjoint acts on a nonzero directed-sine left singular vector
 by the corresponding singular relation. -/
 theorem theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector
@@ -238,12 +255,8 @@ theorem theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector
   let y := finiteSourceLeftSingularVector S i
   have hSadj : S.adjoint y = ((finiteSourceSingularValue S i : ℝ) : ℂ) •
       finiteSourceRightSingularBasis S i := adjoint_apply_finiteSourceLeftSingularVector S hi
-  have hyVperp : y ∈ Vᗮ := by
-    have hyRange : y ∈ S.range := by
-      simpa [y] using finiteSourceLeftSingularVector_mem_range S i
-    rcases hyRange with ⟨x, hx⟩
-    rw [← hx]
-    exact Vᗮ.starProjection_apply_mem ((x : Z) : H)
+  have hyVperp : y ∈ Vᗮ :=
+    finiteSourceLeftSingularVector_mem_orthogonal Z V i
   apply ext_inner_right ℂ
   intro z
   calc
@@ -556,12 +569,8 @@ theorem theorem63ResidualWitness_scalar
     have hSadj : S.adjoint y = ((sigma : ℝ) : ℂ) • v := by
       simpa [S, sigma, v, y] using
         adjoint_apply_finiteSourceLeftSingularVector S hsigma_zero
-    have hyVperp : y ∈ Vᗮ := by
-      have hyRange : y ∈ S.range := by
-        simpa [y] using finiteSourceLeftSingularVector_mem_range S i
-      rcases hyRange with ⟨x, hx⟩
-      rw [← hx]
-      exact Vᗮ.starProjection_apply_mem ((x : Z) : H)
+    have hyVperp : y ∈ Vᗮ :=
+      finiteSourceLeftSingularVector_mem_orthogonal Z V i
     have hZadj : Z.subtypeL.adjoint y = ((sigma : ℝ) : ℂ) • v := by
       simpa [S, sigma, v, y] using
         theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector Z V hsigma_zero
