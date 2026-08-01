@@ -251,6 +251,34 @@ theorem highProb_prod_mk_right
   rw [hrect, Measure.prod_prod, measure_univ, one_mul]
   exact hN n hn
 
+/-- **The replicate mean is measurable.**  Derived twice below. -/
+private theorem measurable_modelReplicateMean {m p : Nat}
+    {μresp : Nat → Measure Ωresp} {replicates : Nat → Nat}
+    {Y : ∀ n, Model Q X → Fin (replicates n) → Ωresp → Acharyya2024.Mat m p}
+    {μmodel : Model Q X → Acharyya2024.Mat m p} {variance : Nat → Real}
+    (Hraw : RawIIDResponseModel μresp replicates Y μmodel variance) :
+    ∀ n f, Measurable (fun ω => modelReplicateMean replicates Y n ω f) := by
+  intro n f
+  simp only [modelReplicateMean, replicateMean]
+  exact (Finset.measurable_sum _ (fun k _ => Hraw.measurable n f k)).const_smul
+    ((replicates n : Real)⁻¹)
+
+/-- **The centred replicate mean is square-integrable.**  Derived twice below. -/
+private theorem integrable_sq_modelReplicateMean_sub {m p : Nat}
+    {μresp : Nat → Measure Ωresp} {replicates : Nat → Nat}
+    {Y : ∀ n, Model Q X → Fin (replicates n) → Ωresp → Acharyya2024.Mat m p}
+    {μmodel : Model Q X → Acharyya2024.Mat m p} {variance : Nat → Real}
+    (Hraw : RawIIDResponseModel μresp replicates Y μmodel variance) :
+    ∀ n f, Integrable
+      (fun ω => ‖modelReplicateMean replicates Y n ω f - μmodel f‖ ^ 2) (μresp n) := by
+  intro n f
+  haveI := Hraw.probability n
+  have hL2 : MemLp (fun ω => modelReplicateMean replicates Y n ω f) 2 (μresp n) := by
+    simp only [modelReplicateMean, replicateMean]
+    exact (memLp_finsetSum _ (fun k _ => Hraw.memLp_two n f k)).const_smul
+      ((replicates n : Real)⁻¹)
+  exact ((hL2.sub (memLp_const _)).norm).integrable_sq
+
 /-- Infinite-model augmented response concentration from raw iid replicates,
 shrinking perspective nets, and response regularity.
 
@@ -283,20 +311,8 @@ theorem highProb_augmentedRawResponseMean_infinite
       (augmentedUniformResponseMeanEvent
         (augmentedRawSampleMean f_ref replicates Y)
         (augmentedRawPopulationMean f_ref μmodel) η) := by
-  have hXbar : ∀ n f, Measurable (fun ω => modelReplicateMean replicates Y n ω f) := by
-    intro n f
-    simp only [modelReplicateMean, replicateMean]
-    exact (Finset.measurable_sum _ (fun k _ => Hraw.measurable n f k)).const_smul
-      ((replicates n : Real)⁻¹)
-  have hint : ∀ n f,
-      Integrable (fun ω => ‖modelReplicateMean replicates Y n ω f - μmodel f‖ ^ 2) (μresp n) := by
-    intro n f
-    haveI := Hraw.probability n
-    have hL2 : MemLp (fun ω => modelReplicateMean replicates Y n ω f) 2 (μresp n) := by
-      simp only [modelReplicateMean, replicateMean]
-      exact (memLp_finsetSum _ (fun k _ => Hraw.memLp_two n f k)).const_smul
-        ((replicates n : Real)⁻¹)
-    exact ((hL2.sub (memLp_const _)).norm).integrable_sq
+  have hXbar := measurable_modelReplicateMean Hraw
+  have hint := integrable_sq_modelReplicateMean_sub Hraw
   have hσ2 : ∀ n f,
       ∫ ω, ‖modelReplicateMean replicates Y n ω f - μmodel f‖ ^ 2 ∂(μresp n)
         ≤ variance n / replicates n := fun n f =>
@@ -353,20 +369,8 @@ noncomputable def augmentedRawResponseMeanSubevents_infinite
       (jointStageMeasure_probability μref hμref μresp Hraw.probability)
       (augmentedRawSampleMean f_ref replicates Y)
       (augmentedRawPopulationMean f_ref μmodel) η := by
-  have hXbar : ∀ n f, Measurable (fun ω => modelReplicateMean replicates Y n ω f) := by
-    intro n f
-    simp only [modelReplicateMean, replicateMean]
-    exact (Finset.measurable_sum _ (fun k _ => Hraw.measurable n f k)).const_smul
-      ((replicates n : Real)⁻¹)
-  have hint : ∀ n f,
-      Integrable (fun ω => ‖modelReplicateMean replicates Y n ω f - μmodel f‖ ^ 2) (μresp n) := by
-    intro n f
-    haveI := Hraw.probability n
-    have hL2 : MemLp (fun ω => modelReplicateMean replicates Y n ω f) 2 (μresp n) := by
-      simp only [modelReplicateMean, replicateMean]
-      exact (memLp_finsetSum _ (fun k _ => Hraw.memLp_two n f k)).const_smul
-        ((replicates n : Real)⁻¹)
-    exact ((hL2.sub (memLp_const _)).norm).integrable_sq
+  have hXbar := measurable_modelReplicateMean Hraw
+  have hint := integrable_sq_modelReplicateMean_sub Hraw
   have hσ2 : ∀ n f,
       ∫ ω, ‖modelReplicateMean replicates Y n ω f - μmodel f‖ ^ 2 ∂(μresp n)
         ≤ variance n / replicates n := fun n f =>
