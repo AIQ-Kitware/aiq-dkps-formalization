@@ -54,6 +54,76 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 noncomputable def principalHalfPhase (z : ℂ) : ℂ :=
   if z = -1 then 1 else (1 + z) / (‖1 + z‖ : ℂ)
 
+/-- **A coercive real quadratic form gives a lower bound on the operator.**
+
+If `c ‖x‖² ≤ Re ⟪C y, x⟫` and `‖y‖ = ‖x‖`, then `c ‖y‖ ≤ ‖C y‖`: Cauchy–Schwarz
+turns the form bound into a norm bound and the common norm cancels.
+
+`spectraDirectRotation_minimal` runs this twice, at `U` and at `Uᗮ`, two hundred
+lines apart — **a proof duplicating itself rather than duplicating a sibling**,
+which is why neither copy is visible to a reader.  See `{lane:DK-LONGPROOF-6}`. -/
+theorem mul_norm_le_norm_apply_of_re_inner_ge {C : H →L[ℂ] H} {c : ℝ} {x y : H}
+    (hform : c * ‖x‖ ^ 2 ≤ RCLike.re ⟪C y, x⟫_ℂ) (hnorm : ‖y‖ = ‖x‖) :
+    c * ‖y‖ ≤ ‖C y‖ := by
+  rcases eq_or_ne x 0 with rfl | hx0
+  · rw [norm_zero] at hnorm
+    rw [norm_eq_zero.mp hnorm]
+    simp
+  · have hxpos : 0 < ‖x‖ := norm_pos_iff.mpr hx0
+    have hcs : RCLike.re ⟪C y, x⟫_ℂ ≤ ‖C y‖ * ‖x‖ :=
+      (RCLike.re_le_norm ⟪C y, x⟫_ℂ).trans (norm_inner_le_norm (C y) x)
+    have hmul : (c * ‖x‖) * ‖x‖ ≤ ‖C y‖ * ‖x‖ := by
+      calc
+        (c * ‖x‖) * ‖x‖ = c * ‖x‖ ^ 2 := by ring
+        _ ≤ RCLike.re ⟪C y, x⟫_ℂ := hform
+        _ ≤ ‖C y‖ * ‖x‖ := hcs
+    rw [hnorm]
+    nlinarith only [hmul, hxpos]
+
+/-- **The principal half-phase of a unit complex number has nonnegative real
+part.**
+
+On the unit circle `Re (1 + z) = 1 + Re z ≥ 0`, and dividing by a positive norm
+keeps the sign.  Proved twice below by slightly different routes, inside two
+*operator* theorems where a scalar fact about `principalHalfPhase` is not where
+anyone would look for it.  See `{lane:DK-LONGPROOF-6}`. -/
+theorem principalHalfPhase_re_nonneg {z : ℂ} (hz : ‖z‖ = 1) (hzneg : z ≠ -1) :
+    0 ≤ (principalHalfPhase z).re := by
+  rw [principalHalfPhase, if_neg hzneg, Complex.div_ofReal_re]
+  have hnum : 0 ≤ (1 + z).re := by
+    have habs : |z.re| ≤ ‖z‖ := Complex.abs_re_le_norm z
+    rw [hz] at habs
+    simp only [Complex.add_re, Complex.one_re]
+    linarith [(abs_le.mp habs).1]
+  exact div_nonneg hnum (norm_nonneg _)
+
+/-- **The compression identity behind both diagonal blocks of the direct
+rotation**, as a statement about a ring.
+
+`(P D P) C = (C P) C` whenever `C` commutes with `P`, `D C = S`, `S P = Q P`,
+`C² = Cos` and `Cos P = P Q P`.  The two projection theorems below run this
+ten-line `calc` verbatim, once with `P = projection U` and once with
+`P = complementaryProjection U`.  See `{lane:DK-LONGPROOF-6}`.
+
+Their `hSP` and `hCosP` hypotheses look identical too, but are *not* the same
+statement: each proof names its own projection `P`, and the two are proved from
+different lemmas.  Only this step is shared, which is why only this step is
+lifted. -/
+theorem mul_compression_mul_eq_of_commute {R : Type*} [Ring R]
+    {C D P Q S Cos : R} (hCP : Commute C P) (hDC : D * C = S)
+    (hSP : S * P = Q * P) (hC2 : C * C = Cos) (hCosP : Cos * P = P * Q * P) :
+    (P * D * P) * C = (C * P) * C := by
+  calc
+    (P * D * P) * C = P * D * (P * C) := by noncomm_ring
+    _ = P * D * (C * P) := by rw [hCP.eq]
+    _ = P * (D * C) * P := by noncomm_ring
+    _ = P * S * P := by rw [hDC]
+    _ = P * Q * P := by rw [mul_assoc, hSP, ← mul_assoc]
+    _ = (C * C) * P := by rw [hC2, hCosP]
+    _ = C * (C * P) := by rw [mul_assoc]
+    _ = C * (P * C) := by rw [hCP.eq]
+    _ = (C * P) * C := by rw [← mul_assoc]
+
 /-- The half-phase has unit modulus on the unit circle away from the branch
 point. -/
 theorem abs_principalHalfPhase_of_abs_eq_one
@@ -455,15 +525,8 @@ theorem spectraDirectRotation_real_inner_nonneg
     have hre : (principalHalfPhase z).re = (1 + z).re / ‖1 + z‖ := by
       rw [principalHalfPhase, if_neg hzne, div_eq_inv_mul,
         ← Complex.ofReal_inv, Complex.re_ofReal_mul, inv_mul_eq_div]
-    have hnum : 0 ≤ (1 + z).re := by
-      have habs := Complex.abs_re_le_norm z
-      rw [hz1] at habs
-      have hb := abs_le.mp habs
-      simp only [Complex.add_re, Complex.one_re]
-      linarith [hb.1]
-    have hre0 : 0 ≤ (principalHalfPhase z).re := by
-      rw [hre]
-      positivity
+    have hre0 : 0 ≤ (principalHalfPhase z).re :=
+      principalHalfPhase_re_nonneg hz1 hzne
     calc (0 : ℂ) ≤ ((2 * (principalHalfPhase z).re : ℝ) : ℂ) :=
           Complex.zero_le_real.mpr (by linarith)
       _ = principalHalfPhase z + star (principalHalfPhase z) := by
@@ -766,16 +829,8 @@ theorem principalHalfPhase_displacement_minimal_scalar
   · rw [← sub_eq_zero.mp h]
   · have hw_eq : w = -principalHalfPhase z := by linear_combination h
     -- the principal branch has nonnegative real part
-    have hre : 0 ≤ (principalHalfPhase z).re := by
-      rw [principalHalfPhase, if_neg hzneg, Complex.div_ofReal_re]
-      have hz_re : -1 ≤ z.re := by
-        have habs : |z.re| ≤ ‖z‖ := Complex.abs_re_le_norm z
-        have := (abs_le.mp habs).1
-        linarith [hz ▸ this]
-      have hnum : 0 ≤ (1 + z).re := by
-        simp only [Complex.add_re, Complex.one_re]
-        linarith
-      exact div_nonneg hnum (norm_nonneg _)
+    have hre : 0 ≤ (principalHalfPhase z).re :=
+      principalHalfPhase_re_nonneg hz hzneg
     -- displacement comparison through the real part
     have hcmp : ‖principalHalfPhase z - 1‖ ^ 2 ≤
         ‖principalHalfPhase z + 1‖ ^ 2 := by
@@ -898,17 +953,8 @@ theorem projection_mul_spectraDirectRotation_mul_projection
     have hP := projection_sq U
     have hPcP := complementaryProjection_mul_projection U
     noncomm_ring [hP, hPcP]
-  have hmul : (P * D * P) * C = (C * P) * C := by
-    calc
-      (P * D * P) * C = P * D * (P * C) := by noncomm_ring
-      _ = P * D * (C * P) := by rw [hCP.eq]
-      _ = P * (D * C) * P := by noncomm_ring
-      _ = P * S * P := by rw [hDB]
-      _ = P * Q * P := by rw [mul_assoc, hSP, ← mul_assoc]
-      _ = (C * C) * P := by rw [hC2, hCosP]
-      _ = C * (C * P) := by rw [mul_assoc]
-      _ = C * (P * C) := by rw [hCP.eq]
-      _ = (C * P) * C := by rw [← mul_assoc]
+  have hmul : (P * D * P) * C = (C * P) * C :=
+    mul_compression_mul_eq_of_commute hCP hDB hSP hC2 hCosP
   have hmul' :
       (P * D * P) * (B : H →L[ℂ] H) =
         (C * P) * (B : H →L[ℂ] H) := by
@@ -970,17 +1016,8 @@ theorem complementaryProjection_mul_spectraDirectRotation_mul_complementaryProje
     have hPPc := projection_mul_complementaryProjection U
     have hPc := complementaryProjection_sq U
     noncomm_ring [hPPc, hPc]
-  have hmul : (P * D * P) * C = (C * P) * C := by
-    calc
-      (P * D * P) * C = P * D * (P * C) := by noncomm_ring
-      _ = P * D * (C * P) := by rw [hCP.eq]
-      _ = P * (D * C) * P := by noncomm_ring
-      _ = P * S * P := by rw [hDB]
-      _ = P * Q * P := by rw [mul_assoc, hSP, ← mul_assoc]
-      _ = (C * C) * P := by rw [hC2, hCosP]
-      _ = C * (C * P) := by rw [mul_assoc]
-      _ = C * (P * C) := by rw [hCP.eq]
-      _ = (C * P) * C := by rw [← mul_assoc]
+  have hmul : (P * D * P) * C = (C * P) * C :=
+    mul_compression_mul_eq_of_commute hCP hDB hSP hC2 hCosP
   have hmul' :
       (P * D * P) * (B : H →L[ℂ] H) =
         (C * P) * (B : H →L[ℂ] H) := by
@@ -1175,25 +1212,10 @@ theorem spectraDirectRotation_minimal
     have hWapp : W x = D y := by
       simpa only [mul_apply_eq_comp, hxy] using hWapp0
     rw [hWapp, hinnerU hy hxU] at hform
-    have hcs : RCLike.re ⟪C y, x⟫_ℂ ≤ ‖C y‖ * ‖x‖ := by
-      exact (RCLike.re_le_norm ⟪C y, x⟫_ℂ).trans
-        (norm_inner_le_norm (C y) x)
     have hnormA : ‖A x‖ = ‖x‖ :=
       Unitary.norm_map (⟨A, hAunit⟩ : unitary (H →L[ℂ] H)) x
     rw [hxy] at hnormA
-    rcases eq_or_ne x 0 with rfl | hx0
-    · simp at hxy
-      subst y
-      simp
-    · have hxpos : 0 < ‖x‖ := norm_pos_iff.mpr hx0
-      have hmul : (c * ‖x‖) * ‖x‖ ≤ ‖C y‖ * ‖x‖ := by
-        calc
-          (c * ‖x‖) * ‖x‖ = c * ‖x‖ ^ 2 := by ring
-          _ ≤ RCLike.re ⟪C y, x⟫_ℂ := hform
-          _ ≤ ‖C y‖ * ‖x‖ := hcs
-      have hcx : c * ‖x‖ ≤ ‖C y‖ := by
-        nlinarith only [hmul, hxpos]
-      simpa only [hnormA] using hcx
+    exact mul_norm_le_norm_apply_of_re_inner_ge hform hnormA
   have hlowUc : ∀ y ∈ Uᗮ, c * ‖y‖ ≤ ‖C y‖ := by
     intro y hy
     obtain ⟨x, hxy⟩ := hAsurj y
@@ -1217,25 +1239,10 @@ theorem spectraDirectRotation_minimal
     have hWapp : W x = D y := by
       simpa only [mul_apply_eq_comp, hxy] using hWapp0
     rw [hWapp, hinnerUc hy hxU] at hform
-    have hcs : RCLike.re ⟪C y, x⟫_ℂ ≤ ‖C y‖ * ‖x‖ := by
-      exact (RCLike.re_le_norm ⟪C y, x⟫_ℂ).trans
-        (norm_inner_le_norm (C y) x)
     have hnormA : ‖A x‖ = ‖x‖ :=
       Unitary.norm_map (⟨A, hAunit⟩ : unitary (H →L[ℂ] H)) x
     rw [hxy] at hnormA
-    rcases eq_or_ne x 0 with rfl | hx0
-    · simp at hxy
-      subst y
-      simp
-    · have hxpos : 0 < ‖x‖ := norm_pos_iff.mpr hx0
-      have hmul : (c * ‖x‖) * ‖x‖ ≤ ‖C y‖ * ‖x‖ := by
-        calc
-          (c * ‖x‖) * ‖x‖ = c * ‖x‖ ^ 2 := by ring
-          _ ≤ RCLike.re ⟪C y, x⟫_ℂ := hform
-          _ ≤ ‖C y‖ * ‖x‖ := hcs
-      have hcx : c * ‖x‖ ≤ ‖C y‖ := by
-        nlinarith only [hmul, hxpos]
-      simpa only [hnormA] using hcx
+    exact mul_norm_le_norm_apply_of_re_inner_ge hform hnormA
   have hCP : Commute C P := spectraCanonicalAbsoluteValue_commute_projection U V
   have hCPc : Commute C Pc := by
     rw [commute_iff_eq]
