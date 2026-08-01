@@ -343,7 +343,7 @@ theorem adjoint_defect_sq_le_of_normalized_pair
   have hinner_scaled :
       RCLike.re ⟪X.adjoint y, (‖X‖ : ℂ) • x⟫_ℂ = ‖X‖ * s := by
     rw [inner_smul_right, ← Complex.real_smul, RCLike.smul_re, hinner]
-  rw [norm_sub_sq (𝕜 := ℂ), hinner_scaled, norm_smul, Complex.norm_real,
+  simp only [norm_sub_sq (𝕜 := ℂ), hinner_scaled, norm_smul, Complex.norm_real,
     Real.norm_of_nonneg (norm_nonneg X), hxnorm, mul_one]
   nlinarith
 

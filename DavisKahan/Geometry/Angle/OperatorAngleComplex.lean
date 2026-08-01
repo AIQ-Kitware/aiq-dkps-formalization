@@ -776,7 +776,7 @@ noncomputable def cosTwoAngleOperatorC (U V : Submodule ℂ E)
 theorem isSelfAdjoint_cosTwoAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (cosTwoAngleOperatorC U V) := by
-  rw [cosTwoAngleOperatorC, IsSelfAdjoint, star_sub, star_mul, star_mul,
+  simp only [cosTwoAngleOperatorC, IsSelfAdjoint, star_sub, star_mul, star_mul,
     (isSelfAdjoint_cosAngleOperatorC U V).star_eq,
     (isSelfAdjoint_sinAngleOperatorDirectedC U V).star_eq]
 
