@@ -400,6 +400,19 @@ theorem directRotation_comm_abs_canonicalIntertwiner
   obtain ⟨y, rfl⟩ := hCsurj x
   exact LinearMap.congr_fun hSC y
 
+/-- **The modulus of the canonical intertwiner is surjective** on an acute pair.
+
+Injective because the intertwiner is a unit and `abs` shares its kernel, then
+injective-implies-surjective in finite dimensions.  Derived twice below. -/
+private theorem abs_canonicalIntertwiner_surjective (U V : Submodule 𝕜 E)
+    (hacute : IsAcute U V) :
+    Function.Surjective (TauCeti.abs (canonicalIntertwiner U V)) := by
+  have hCin : Function.Injective (TauCeti.abs (canonicalIntertwiner U V)) := by
+    rw [← LinearMap.ker_eq_bot, ker_abs,
+      (LinearMap.isUnit_iff_ker_eq_bot _).mp
+        (canonicalIntertwiner_isUnit_of_acute U V hacute)]
+  exact LinearMap.injective_iff_surjective.mp hCin
+
 /-- The intertwining identity `W P_U = P_V W`. -/
 theorem directRotation_comp_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -414,12 +427,8 @@ theorem directRotation_comp_projection (U V : Submodule 𝕜 E)
       polar_decomposition_of_isUnit (canonicalIntertwiner_isUnit_of_acute U V hacute)
   have hCP := projection_comm_abs_canonicalIntertwiner U V
   have hSP := canonicalIntertwiner_comp_projection U V
-  have hCsurj : Function.Surjective C := by
-    have hCin : Function.Injective C := by
-      rw [← LinearMap.ker_eq_bot, ker_abs,
-        (LinearMap.isUnit_iff_ker_eq_bot _).mp
-          (canonicalIntertwiner_isUnit_of_acute U V hacute)]
-    exact LinearMap.injective_iff_surjective.mp hCin
+  have hCsurj : Function.Surjective C :=
+    abs_canonicalIntertwiner_surjective U V hacute
   apply LinearMap.ext
   intro x
   obtain ⟨y, rfl⟩ := hCsurj x
@@ -571,12 +580,8 @@ theorem directRotation_sq (U V : Submodule 𝕜 E)
     simp only [W, LinearMap.comp_apply, LinearEquiv.coe_coe,
       LinearIsometryEquiv.coe_toLinearEquiv, LinearIsometryEquiv.symm_apply_apply,
       LinearMap.id_apply]
-  have hCsurj : Function.Surjective C := by
-    have hCin : Function.Injective C := by
-      rw [← LinearMap.ker_eq_bot, ker_abs,
-        (LinearMap.isUnit_iff_ker_eq_bot _).mp
-          (canonicalIntertwiner_isUnit_of_acute U V hacute)]
-    exact LinearMap.injective_iff_surjective.mp hCin
+  have hCsurj : Function.Surjective C :=
+    abs_canonicalIntertwiner_surjective U V hacute
   -- `W ∘ₗ C = R ∘ₗ (C ∘ₗ W.adjoint)` from the reflection identity `S = R S⋆`.
   have hWCeq : W ∘ₗ C = R ∘ₗ (C ∘ₗ W.adjoint) := by
     rw [← hstar, ← hRSstar]; exact hpolar.symm
