@@ -254,20 +254,9 @@ private theorem exists_orthonormal_pair_spanning (U V : Submodule 𝕜 E)
   have hdV : d = finrank 𝕜 V := by simpa only [d] using hrank
   let u : Fin d → E := fun i => ((bU i : U) : E)
   let v : Fin d → E := fun i => ((bV (Fin.cast hdV i) : V) : E)
-  have hu : Orthonormal 𝕜 u := by
-    rw [orthonormal_iff_ite]
-    intro i j
-    -- states the goal as the inner-product identity the structure lemma expects.
-    change ⟪bU i, bU j⟫_𝕜 = if i = j then 1 else 0
-    exact orthonormal_iff_ite.mp bU.orthonormal i j
-  have hv : Orthonormal 𝕜 v := by
-    rw [orthonormal_iff_ite]
-    intro i j
-    -- states the goal as the inner-product identity the structure lemma expects.
-    change ⟪bV (Fin.cast hdV i), bV (Fin.cast hdV j)⟫_𝕜 =
-      if i = j then 1 else 0
-    rw [orthonormal_iff_ite.mp bV.orthonormal]
-    simp only [Fin.cast_inj]
+  have hu : Orthonormal 𝕜 u := bU.orthonormal.comp_linearIsometry U.subtypeₗᵢ
+  have hv : Orthonormal 𝕜 v :=
+    (bV.orthonormal.comp_linearIsometry V.subtypeₗᵢ).comp _ (Fin.cast_injective hdV)
   have hspanU : Submodule.span 𝕜 (Set.range u) = U := by
     apply Submodule.eq_of_le_of_finrank_eq
     · apply Submodule.span_le.mpr
