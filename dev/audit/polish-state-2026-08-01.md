@@ -39,7 +39,7 @@ derivation in `Theorem62`'s Real section, and it is fixed.
 
 | lane | kind | first step |
 |---|---|---|
-| `FTC-SYMGAUGE-COLLIDE` | **decision, then a proof** | disambiguate one namespace, then prove the two `extend`s agree |
+| `FTC-SYMGAUGE-COLLIDE` | **the defect is fixed**; what is left is a design question | decide whether `TruncationGauge` is retired or kept |
 | `FTC-DOUBLED-UNIFY` (`horbit`) | **public-API decision** | confirm whether the real theorem is dead; its predicate is not |
 | `DK-BODYDUP` | two small targets left | `ShortRotationCounterexample` `hle`/`hle'` |
 | `EXP-BUILD-ADJ`, `FTT-PROMOTE` | **blocked on Mathlib** | nothing actionable here |
@@ -50,7 +50,7 @@ derivation in `Theorem62`'s Real section, and it is fixed.
 * `scripts/check_rw_chains.py` — the chain count.  **Do not re-derive this with a regex**;
   it was wrong twice that way, both times by counting commas inside a `by` block.
 * `scripts/check_duplicate_qualified_names.py` — one fully-qualified name from two modules.
-  Ratcheted at 14, all of them the single unresolved `SymmetricGauge` collision.
+  **Now at 0 and ratcheted there**, so any new collision fails immediately.
 * `scripts/check_inline_duplicates.py` — groups by **statement**.  It cannot pair a fact
   proved once over `Set.Ici c` and once over `Set.Iic c`; body-token clustering can, and
   that is how two real `ForTauCeti` duplicates were found.
@@ -75,3 +75,31 @@ derivation in `Theorem62`'s Real section, and it is fixed.
    occurrence count afterwards.
 6. **A size threshold selects against shared algebra.**  Facts proved in three places are
    usually short enough to retype; the 4-line floor is what found them.
+
+
+## Update, later on 2026-08-01: the `SymmetricGauge` collision is resolved
+
+`ForTauCeti` held two structures named `TauCeti.SymmetricGauge` with **14** fully-qualified
+names declared twice.  The orphaned module's structure and namespace are now
+`TruncationGauge`; the count is **0** and the ratchet is at the floor.
+
+**No mathematics was deleted, and the roadmap was unaffected** — delivery is 163/191 before
+and after, because `check_roadmap_delivered` indexes final components and the live module
+still provides `SymmetricGauge`.  Only the capitalised token moved.
+
+Two bridge theorems now let a proof written against either definition transport to the
+other: `extend_eq_iSup_dominated` (orphan side) and `extend_eq_iSup_cappedTruncate` (live
+side).  The two `extend`s are genuinely different constructions — a supremum over capped
+truncations against one over dominated finitely supported sequences — so this was a proof
+obligation, not a renaming.
+
+**The order matters, and getting it wrong is silent without the gate.**  Porting a
+declaration into the live module while the orphan still declared it took the count 14 → 16.
+Disambiguate first, then port, then retire.
+
+**What is left is a design question, not a defect.**  `TruncationGauge` is a complete
+1141-line development that nothing imports, carrying Milestones B1/B2/B3 and credited by the
+roadmap for three signatures.  Retiring it means porting ~30 declarations by the route now
+demonstrated; keeping it costs an unused module and the readiness OVERSIZE note.  **Do not
+split it for the OVERSIZE note while its fate is undecided** — that would be work thrown
+away if it is retired.
