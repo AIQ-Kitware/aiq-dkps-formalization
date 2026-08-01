@@ -97,11 +97,8 @@ theorem kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
     hPproj hP k K.adjoint
   have hpoint : ∀ i,
       kyFanApproximationGauge k (P i ∘L K) =
-        kyFanApproximationGauge k (K.adjoint ∘L P i) := by
-    intro i
-    rw [← kyFanApproximationGauge_adjoint k (P i ∘L K)]
-    simp only [ContinuousLinearMap.adjoint_comp]
-    rw [(hPproj i).2.clm_adjoint_eq]
+        kyFanApproximationGauge k (K.adjoint ∘L P i) :=
+    fun i => kyFanApproximationGauge_proj_comp_eq_adjoint_comp (hPproj i) K
   have hlimit : kyFanApproximationGauge k K =
       kyFanApproximationGauge k K.adjoint := by
     symm
