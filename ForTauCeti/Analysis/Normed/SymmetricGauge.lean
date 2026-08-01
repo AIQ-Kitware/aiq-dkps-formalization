@@ -306,6 +306,20 @@ theorem le_extend (a : ℕ → ℝ≥0∞) (n : ℕ) : a n ≤ Φ.extend a := by
 theorem iSup_le_extend (a : ℕ → ℝ≥0∞) : (⨆ n, a n) ≤ Φ.extend a :=
   iSup_le (Φ.le_extend a)
 
+/-- The extension of the zero sequence is zero. -/
+@[simp] theorem extend_zero : Φ.extend (fun _ => 0) = 0 := by
+  refine le_antisymm (iSup_le fun b => ?_) (by simp)
+  have hb : b.1 = 0 := Finsupp.ext fun i => by simpa using b.2 i
+  simp [hb]
+
+/-- The extension of the everywhere-infinite sequence is `∞`.
+
+Worth stating because it is the property `extend` was built as a supremum to have: a
+definition routed through `tsum` would need the sequence summable before it said anything,
+and would then say nothing here. -/
+@[simp] theorem extend_top : Φ.extend (fun _ => ⊤) = ⊤ :=
+  top_le_iff.1 (le_trans (by simp) (Φ.iSup_le_extend (fun _ => ⊤)))
+
 /-- Subadditivity over a finitely supported sequence: `Φ f ≤ ∑ fₙ`.
 
 Induction on the support, with `add_le` at each step and `single` at the leaves.
