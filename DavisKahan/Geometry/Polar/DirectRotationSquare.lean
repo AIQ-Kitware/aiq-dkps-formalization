@@ -1035,6 +1035,46 @@ theorem complementaryProjection_mul_spectraDirectRotation_mul_complementaryProje
     _ = (C * P) * ((B : H →L[ℂ] H) * Binv) := by rw [mul_assoc]
     _ = C * P := by rw [B.mul_inv, mul_one]
 
+/-- **A positive operator whose inverse is small is coercive.**
+
+If `R C = 1` with `R` positive self-adjoint and `‖R‖ ≤ c⁻¹`, then
+`c ‖z‖² ≤ Re ⟪C z, z⟫`.  This is the analytic core of
+`spectraDirectRotation_minimal` below, where it was fifty lines deep and
+unnamed; nothing in it is about direct rotations. -/
+private theorem re_inner_ge_of_inverse_norm_le
+    {C R : H →L[ℂ] H} {c : ℝ} (hc : 0 < c) (hRC : R * C = 1)
+    (hRsa : IsSelfAdjoint R) (hRpos : ∀ z : H, 0 ≤ RCLike.re ⟪R z, z⟫_ℂ)
+    (hRnorm : ‖R‖ ≤ c⁻¹) (hCpos : ∀ z : H, 0 ≤ RCLike.re ⟪C z, z⟫_ℂ) (z : H) :
+    c * ‖z‖ ^ 2 ≤ RCLike.re ⟪C z, z⟫_ℂ := by
+  have hRbound := TauCeti.ContinuousLinearMap.norm_apply_sq_le_of_positive
+    hRsa.isSymmetric hRpos (C z)
+  have hRCz : R (C z) = z := by
+    have h := congrArg (fun T : H →L[ℂ] H => T z) hRC
+    simpa only [mul_apply_eq_comp, one_apply_eq_self] using h
+  have hform : RCLike.re ⟪R (C z), C z⟫_ℂ =
+      RCLike.re ⟪C z, z⟫_ℂ := by
+    calc
+      RCLike.re ⟪R (C z), C z⟫_ℂ = RCLike.re ⟪z, C z⟫_ℂ := by
+        rw [hRCz]
+      _ = RCLike.re ⟪C z, z⟫_ℂ :=
+        inner_re_symm (𝕜 := ℂ) z (C z)
+  have hRbound' : ‖z‖ ^ 2 ≤
+      ‖R‖ * RCLike.re ⟪C z, z⟫_ℂ := by
+    calc
+      ‖z‖ ^ 2 = ‖R (C z)‖ ^ 2 := by rw [hRCz]
+      _ ≤ ‖R‖ * RCLike.re ⟪R (C z), C z⟫_ℂ := hRbound
+      _ = ‖R‖ * RCLike.re ⟪C z, z⟫_ℂ := by rw [hform]
+  have hz0 := hCpos z
+  have hmul := mul_le_mul_of_nonneg_right hRnorm hz0
+  have hzf : ‖z‖ ^ 2 ≤ c⁻¹ * RCLike.re ⟪C z, z⟫_ℂ :=
+    hRbound'.trans hmul
+  have hci : c * c⁻¹ = 1 := mul_inv_cancel₀ hc.ne'
+  calc
+    c * ‖z‖ ^ 2 ≤ c * (c⁻¹ * RCLike.re ⟪C z, z⟫_ℂ) :=
+      mul_le_mul_of_nonneg_left hzf hc.le
+    _ = RCLike.re ⟪C z, z⟫_ℂ := by
+      rw [← mul_assoc, hci, one_mul]
+
 /-- Operator-norm minimality of the acute direct rotation among unitaries
 transporting the source projection to the target projection.
 
@@ -1356,41 +1396,11 @@ theorem spectraDirectRotation_minimal
       simpa only [mul_apply_eq_comp, one_apply_eq_self] using h'
     have h' : c * ‖R z‖ ≤ ‖z‖ := by simpa only [hz] using h
     exact (le_inv_mul_iff₀ hc).2 h'
-  have hCcoer : ∀ z : H,
-      c * ‖z‖ ^ 2 ≤ RCLike.re ⟪C z, z⟫_ℂ := by
-    intro z
-    have hRbound := TauCeti.ContinuousLinearMap.norm_apply_sq_le_of_positive
-      hRsa.isSymmetric hRpos (C z)
-    have hRCz : R (C z) = z := by
-      have h := congrArg (fun T : H →L[ℂ] H => T z) hRC
-      simpa only [mul_apply_eq_comp, one_apply_eq_self] using h
-    have hform : RCLike.re ⟪R (C z), C z⟫_ℂ =
-        RCLike.re ⟪C z, z⟫_ℂ := by
-      calc
-        RCLike.re ⟪R (C z), C z⟫_ℂ = RCLike.re ⟪z, C z⟫_ℂ := by
-          rw [hRCz]
-        _ = RCLike.re ⟪C z, z⟫_ℂ :=
-          inner_re_symm (𝕜 := ℂ) z (C z)
-    have hRbound' : ‖z‖ ^ 2 ≤
-        ‖R‖ * RCLike.re ⟪C z, z⟫_ℂ := by
-      calc
-        ‖z‖ ^ 2 = ‖R (C z)‖ ^ 2 := by rw [hRCz]
-        _ ≤ ‖R‖ * RCLike.re ⟪R (C z), C z⟫_ℂ := hRbound
-        _ = ‖R‖ * RCLike.re ⟪C z, z⟫_ℂ := by rw [hform]
-    have hCpos :=
-      (ContinuousLinearMap.nonneg_iff_isPositive C).mp
+  have hCcoer : ∀ z : H, c * ‖z‖ ^ 2 ≤ RCLike.re ⟪C z, z⟫_ℂ := fun z =>
+    re_inner_ge_of_inverse_norm_le hc hRC hRsa hRpos hRnorm
+      (fun w => ((ContinuousLinearMap.nonneg_iff_isPositive C).mp
         (spectraOperatorAbsoluteValue_nonneg
-          (spectraCanonicalIntertwiner U V))
-    have hz0 := hCpos.re_inner_nonneg_left z
-    have hmul := mul_le_mul_of_nonneg_right hRnorm hz0
-    have hzf : ‖z‖ ^ 2 ≤ c⁻¹ * RCLike.re ⟪C z, z⟫_ℂ :=
-      hRbound'.trans hmul
-    have hci : c * c⁻¹ = 1 := mul_inv_cancel₀ hc.ne'
-    calc
-      c * ‖z‖ ^ 2 ≤ c * (c⁻¹ * RCLike.re ⟪C z, z⟫_ℂ) :=
-        mul_le_mul_of_nonneg_left hzf hc.le
-      _ = RCLike.re ⟪C z, z⟫_ℂ := by
-        rw [← mul_assoc, hci, one_mul]
+          (spectraCanonicalIntertwiner U V))).re_inner_nonneg_left w) z
   refine (D - 1).opNorm_le_bound (norm_nonneg (W - 1)) ?_
   intro x
   have hDdisp := norm_sub_one_apply_sq_of_mem_unitary D hDunit x
