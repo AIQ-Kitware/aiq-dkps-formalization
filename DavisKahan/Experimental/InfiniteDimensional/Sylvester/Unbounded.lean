@@ -8,6 +8,7 @@ import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.Experimental.InfiniteDimensional.Core.UnboundedSpectral
 import DavisKahan.Sylvester.Bounded
 import DavisKahan.Sylvester.Gap
+import DavisKahan.Sylvester.Unbounded.OrderedCutoff
 import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 
 /-!
@@ -205,66 +206,6 @@ theorem filledSpectralTruncation_upperBound
   rw [← hproj.2]
   linarith
 
-/-- A coercive bounded operator supplies explicit inverse data with the sharp
-inverse norm bound. -/
-theorem boundedInverseData_of_coercive
-    {H : Type v}
-    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    {A : H →L[𝕜] H} {a : ℝ} (ha : 0 < a)
-    (hcoer : ∀ x, a * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜) :
-    ∃ hInv : BoundedInverseData A, ‖hInv.inv‖ ≤ a⁻¹ := by
-  have hunit : IsUnit A :=
-    TauCeti.ContinuousLinearMap.isUnit_of_coercive ha hcoer
-  let J : H →L[𝕜] H := Ring.inverse A
-  have hJA : J ∘L A = ContinuousLinearMap.id 𝕜 H := by
-    exact Ring.inverse_mul_cancel A hunit
-  have hAJ : A ∘L J = ContinuousLinearMap.id 𝕜 H := by
-    exact Ring.mul_inverse_cancel A hunit
-  let hInv : BoundedInverseData A := ⟨J, hJA, hAJ⟩
-  refine ⟨hInv, ?_⟩
-  refine ContinuousLinearMap.opNorm_le_bound J (inv_nonneg.mpr ha.le) ?_
-  intro y
-  have hlow := TauCeti.ContinuousLinearMap.norm_smul_le_norm_apply_of_coercive
-    hcoer (J y)
-  have hJy : A (J y) = y := by
-    have h := congrArg (fun T : H →L[𝕜] H => T y) hAJ
-    simpa only [J, ContinuousLinearMap.comp_apply,
-      ContinuousLinearMap.id_apply] using h
-  rw [hJy] at hlow
-  calc
-    ‖J y‖ ≤ ‖y‖ / a := (le_div_iff₀ ha).2 (by simpa [mul_comm] using hlow)
-    _ = a⁻¹ * ‖y‖ := by rw [div_eq_mul_inv, mul_comm]
-
-/-- The negative-semidefinite shift of a bounded symmetric operator becomes a
-norm-bounded positive operator after adding its operator norm. -/
-theorem norm_add_opNorm_id_le_of_nonpos
-    {H : Type v}
-    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    {B : H →L[𝕜] H} (hBsym : B.IsSymmetric)
-    (hBnonpos : ∀ x, RCLike.re ⟪B x, x⟫_𝕜 ≤ 0) :
-    ‖B + ((‖B‖ : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 H‖ ≤ ‖B‖ := by
-  refine TauCeti.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
-    ?_ (norm_nonneg B) ?_
-  · exact hBsym.add (LinearMap.IsSymmetric.smul
-      (RCLike.conj_ofReal ‖B‖) LinearMap.IsSymmetric.id)
-  · intro x
-    have habs : |RCLike.re ⟪B x, x⟫_𝕜| ≤ ‖B‖ * ‖x‖ ^ 2 := by
-      calc
-        |RCLike.re ⟪B x, x⟫_𝕜| ≤ ‖⟪B x, x⟫_𝕜‖ := RCLike.abs_re_le_norm _
-        _ ≤ ‖B x‖ * ‖x‖ := norm_inner_le_norm _ _
-        _ ≤ (‖B‖ * ‖x‖) * ‖x‖ :=
-          mul_le_mul_of_nonneg_right (B.le_opNorm x) (norm_nonneg x)
-        _ = ‖B‖ * ‖x‖ ^ 2 := by ring
-    have hlower : -(‖B‖ * ‖x‖ ^ 2) ≤ RCLike.re ⟪B x, x⟫_𝕜 :=
-      (abs_le.mp habs).1
-    have hupper := hBnonpos x
-    simp only [add_apply, smul_apply, ContinuousLinearMap.id_apply,
-      inner_add_left, map_add, inner_smul_left, RCLike.conj_ofReal,
-      RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
-    rw [abs_of_nonneg]
-    · linarith
-    · linarith
-
 /-- Spectral cutoff converts the right block to a bounded Sylvester equation. -/
 theorem spectralCutoff_sylvester_equation
     {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
@@ -351,31 +292,6 @@ theorem kyFanApproximationGauge_le_of_spectralCutoff_le
   exact le_of_tendsto_of_tendsto
     (tendsto_const_nhds.mul hX) hC hcutEventually
 
-/-- Finite Ky Fan gauges also converge under strong orthogonal cutoffs on
-the target side. -/
-theorem kyFanApproximationGauge_left_comp_strongProjection_tendsto
-    {ι : Type} {P : ι → E →L[𝕜] E} {l : Filter ι}
-    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E))
-    (k : ℕ) (K : F →L[𝕜] E) :
-    Tendsto
-      (fun i => kyFanApproximationGauge k (P i ∘L K))
-      l (𝓝 (kyFanApproximationGauge k K)) := by
-  have hright := kyFanApproximationGauge_comp_strongProjection_tendsto
-    hPproj hP k K.adjoint
-  have hpoint : ∀ i,
-      kyFanApproximationGauge k (P i ∘L K) =
-        kyFanApproximationGauge k (K.adjoint ∘L P i) := by
-    intro i
-    rw [← kyFanApproximationGauge_adjoint k (P i ∘L K)]
-    simp only [ContinuousLinearMap.adjoint_comp]
-    rw [(hPproj i).2.clm_adjoint_eq]
-  have hlimit : kyFanApproximationGauge k K =
-      kyFanApproximationGauge k K.adjoint := by
-    symm
-    exact kyFanApproximationGauge_adjoint k K
-  simpa only [hpoint, hlimit] using hright
-
 /-- Left-cutoff finite Ky Fan inequalities pass to the original operators. -/
 theorem kyFanApproximationGauge_le_of_leftSpectralCutoff_le
     {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
@@ -397,9 +313,9 @@ theorem kyFanApproximationGauge_le_of_leftSpectralCutoff_le
       (ContinuousLinearMap.id 𝕜 E) := by
     intro x
     simpa using spectralCutoff_tendsto_identity A hA x
-  have hX := kyFanApproximationGauge_left_comp_strongProjection_tendsto
+  have hX := kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
     hPproj hPstrong k X
-  have hC := kyFanApproximationGauge_left_comp_strongProjection_tendsto
+  have hC := kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
     hPproj hPstrong k C
   have hcutEventually : ∀ᶠ τ : ℝ in atTop,
       δ * kyFanApproximationGauge k
@@ -570,7 +486,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded
     module
   have hB1norm : ‖B1‖ ≤ ρ := by
     rw [hB1eq]
-    exact norm_add_opNorm_id_le_of_nonpos hB0sym hB0nonpos
+    exact norm_add_opNorm_id_le_of_nonpos_direct hB0sym hB0nonpos
   have hA1coer : ∀ x, (ρ + δ) * ‖x‖ ^ 2 ≤
       RCLike.re ⟪A1 x, x⟫_𝕜 := by
     intro x
@@ -585,7 +501,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded
     linarith
   have hρδ : 0 < ρ + δ := by linarith
   obtain ⟨hA1inv, hA1invNorm⟩ :=
-    boundedInverseData_of_coercive hρδ hA1coer
+    boundedInverseData_of_coercive_direct hρδ hA1coer
   have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc := by
     ext x
     have hraw := congrArg (fun T : F →L[𝕜] E => T x) hEqCut
@@ -673,7 +589,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_swapped
     module
   have hA1norm : ‖A1‖ ≤ ρ := by
     rw [hA1eq]
-    exact norm_add_opNorm_id_le_of_nonpos hA0sym hA0nonpos
+    exact norm_add_opNorm_id_le_of_nonpos_direct hA0sym hA0nonpos
   have hB1coer : ∀ x, (ρ + δ) * ‖x‖ ^ 2 ≤
       RCLike.re ⟪B1 x, x⟫_𝕜 := by
     intro x
@@ -688,7 +604,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_swapped
     linarith
   have hρδ : 0 < ρ + δ := by linarith
   obtain ⟨hB1inv, hB1invNorm⟩ :=
-    boundedInverseData_of_coercive hρδ hB1coer
+    boundedInverseData_of_coercive_direct hρδ hB1coer
   have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc := by
     ext x
     have hraw := congrArg (fun T : F →L[𝕜] E => T x) hEqCut
