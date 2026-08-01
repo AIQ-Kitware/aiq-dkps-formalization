@@ -430,7 +430,7 @@ theorem projection_apply_directRotation_principalSourceVector
     (i : Fin (nontrivialAngleCount U V)) :
     projection U (directRotation U V hacute (principalSourceVector U V i)) =
       (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i := by
-  rw [directRotation_apply_principalSourceVector U V hacute i, map_add, map_smul, map_smul,
+  simp only [directRotation_apply_principalSourceVector U V hacute i, map_add, map_smul, map_smul,
     projection_apply_of_mem (principalSourceVector_mem U V hacute i),
     projection_apply_of_mem_orthogonal (principalOrthogonalVector_mem U V hacute i),
     smul_zero, add_zero]
@@ -476,7 +476,7 @@ theorem orthonormal_principalOrthogonalVector
       directRotation U V hacute (principalSourceVector U V j)⟫_𝕜 =
       ⟪principalSourceVector U V i, principalSourceVector U V j⟫_𝕜 :=
     (directRotation U V hacute).inner_map_map _ _
-  rw [principalOrthogonalVector, principalOrthogonalVector, inner_smul_left,
+  simp only [principalOrthogonalVector, principalOrthogonalVector, inner_smul_left,
     inner_smul_right, RCLike.conj_ofReal, inner_sub_left, inner_sub_right,
     inner_sub_right, inner_smul_left, inner_smul_right, inner_smul_left,
     inner_smul_right, RCLike.conj_ofReal, hRR, hdiag i j,

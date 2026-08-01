@@ -585,7 +585,9 @@ theorem directRotation_displacementSquare_kyFan
         (pinch U W.symm.toLinearMap + pinch U W.toLinearMap) := by
       simp only [H, B, hermitianPart, hBadj]
     simp only [P1]
-    rw [hA1', hpinch_smul, hpinch_sub, hpinch_id, hW2, hpinch_smul,
+    -- `hpinch_smul` appeared twice in the `rw` chain this replaced, once per
+    -- occurrence; `simp only` reaches both in one pass.
+    simp only [hA1', hpinch_smul, hpinch_sub, hpinch_id, hW2,
       hpinch_add, hHalf, add_comm (pinch U W.toLinearMap)]
   have hpositive0 : A0.IsPositive := displacementSquare_positive _
   have hA1pos : A1.IsPositive := displacementSquare_positive W.toLinearMap

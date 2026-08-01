@@ -715,17 +715,17 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
     rw [harg1, harg2, harg3, harg4, hzw]
     simp only [inner_add_left, inner_add_right, inner_sub_left, inner_sub_right,
       inner_smul_left, inner_smul_right, RCLike.conj_ofReal, RCLike.conj_conj]
-    rw [hw₂Rx, hF1, hF2, hF3, hF4, ← hQ₁def, ← hQ₂def, ← hGdef]
+    simp only [hw₂Rx, hF1, hF2, hF3, hF4, ← hQ₁def, ← hQ₂def, ← hGdef]
     push_cast
     ring
   -- norm bound on the tilted skew form
   have hn1 : ‖((‖w₂‖ : ℝ) : 𝕜) • x - w₂‖ ^ 2 = 2 * ‖w₂‖ ^ 2 := by
-    rw [norm_sub_sq (𝕜 := 𝕜), inner_smul_left, RCLike.conj_ofReal, hxw₂, mul_zero,
+    simp only [norm_sub_sq (𝕜 := 𝕜), inner_smul_left, RCLike.conj_ofReal, hxw₂, mul_zero,
       norm_smul, RCLike.norm_ofReal, abs_of_nonneg (norm_nonneg w₂), hxn]
     simp only [map_zero]
     ring
   have hn2 : ‖((‖w₂‖ : ℝ) : 𝕜) • x + w₂‖ ^ 2 = 2 * ‖w₂‖ ^ 2 := by
-    rw [norm_add_sq (𝕜 := 𝕜), inner_smul_left, RCLike.conj_ofReal, hxw₂, mul_zero,
+    simp only [norm_add_sq (𝕜 := 𝕜), inner_smul_left, RCLike.conj_ofReal, hxw₂, mul_zero,
       norm_smul, RCLike.norm_ofReal, abs_of_nonneg (norm_nonneg w₂), hxn]
     simp only [map_zero]
     ring
@@ -762,7 +762,7 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
     have him : RCLike.im (((r₁ * ‖w₂‖ ^ 2 + r₂ : ℝ) : 𝕜)
           * (γ - (starRingEnd 𝕜) γ - ((2 * ‖w₂‖ : ℝ) : 𝕜)))
         = (r₁ * ‖w₂‖ ^ 2 + r₂) * (2 * ν') := by
-      rw [← RCLike.real_smul_eq_coe_mul, RCLike.smul_im, map_sub, map_sub, RCLike.conj_im,
+      simp only [← RCLike.real_smul_eq_coe_mul, RCLike.smul_im, map_sub, map_sub, RCLike.conj_im,
         RCLike.ofReal_im, ← hν'def]
       ring
     have hnormsq : ‖((r₁ * ‖w₂‖ ^ 2 + r₂ : ℝ) : 𝕜)
@@ -799,7 +799,7 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
       linarith
     -- the `(x, x)` skew test
     have hKxx := hKF x x
-    rw [← hzdef, hE1, hE2, hG0, map_zero, sub_zero, sub_zero] at hKxx
+    simp only [← hzdef, hE1, hE2, hG0, map_zero, sub_zero, sub_zero] at hKxx
     have hkval : (γ - (starRingEnd 𝕜) γ) * ((r₁ : ℝ) : 𝕜)
         = 2 * ⟪x, U.reflection ((S - T) x)⟫_𝕜 := by
       rw [← hKxx, hQ₁real]
