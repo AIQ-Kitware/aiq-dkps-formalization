@@ -56,10 +56,19 @@ whether the Hilbert space was called `E` or `H` and whether the strip half-width
 appeared as `(β - α) / 2` or under its own name.
 
 Blank single-capital identifiers and compare with a similarity ratio before
-concluding that two bodies differ:
+concluding that two bodies differ — **and compare TOKENS, not lines**:
 
-    a = [re.sub(r"\b[A-Z]\b", "·", l) for l in normalised_body_of_site_1]
-    difflib.SequenceMatcher(None, a, b).ratio() > 0.75
+    def toks(step):
+        t = " ".join(" ".join(l.split()) for l in step.body if l.strip())
+        return re.sub(r"\b[A-Z]\b", "·", t).split()
+    difflib.SequenceMatcher(None, toks(a), toks(b)).ratio() > 0.9
+
+**The line-based version of this test is not good enough and cost a real miss.**
+It rated the two `hkey` blocks in `TanTheta/Vector.lean` and
+`TanTheta/UnboundedVector.lean` at **0.676**, and on that number they would have
+been left alone.  On tokens they rate **0.995** — they differ in two local
+hypothesis names and nothing else.  Line comparison is defeated by wrapping, and
+wrapping drift has appeared in five separate files in this sweep.
 
 Running that over all 33 differing groups took seconds and returned exactly the
 two.  **"Different text" is not "different proof"**, and the raw-text comparison
