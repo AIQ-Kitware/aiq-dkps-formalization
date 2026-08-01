@@ -326,6 +326,30 @@ section ComplexResolventDistance
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+/-- **The functional calculus of `w ↦ w - z` is the shift.** -/
+theorem cfc_sub_const_eq (A : H →L[ℂ] H) [IsStarNormal A] (z : ℂ) :
+    cfc (fun w : ℂ => w - z) A = A - z • (1 : H →L[ℂ] H) := by
+  rw [cfc_sub (fun w : ℂ => w) (fun _ : ℂ => z) A,
+    cfc_id' (R := ℂ) (a := A), cfc_const z A,
+    Algebra.algebraMap_eq_smul_one]
+
+/-- **The shift times the calculus of its reciprocal is the identity**, given
+that the symbol does not vanish on the spectrum.
+
+Derived identically here and in `CayleySelectorBridge`. -/
+theorem shift_mul_cfc_inv_eq_one (A : H →L[ℂ] H) [IsStarNormal A] (z : ℂ)
+    (hne : ∀ w ∈ spectrum ℂ A, w - z ≠ 0)
+    (hfcont : ContinuousOn (fun w : ℂ => w - z) (spectrum ℂ A))
+    (hgcont : ContinuousOn (fun w : ℂ => (w - z)⁻¹) (spectrum ℂ A)) :
+    (A - z • (1 : H →L[ℂ] H)) * cfc (fun w : ℂ => (w - z)⁻¹) A = 1 := by
+  have hmul : cfc (fun w : ℂ => w - z) A * cfc (fun w : ℂ => (w - z)⁻¹) A =
+      cfc (fun w : ℂ => (w - z) * (w - z)⁻¹) A :=
+    (cfc_mul _ _ A hfcont hgcont).symm
+  rw [← cfc_sub_const_eq A z, hmul,
+    cfc_congr (g := fun _ : ℂ => (1 : ℂ))
+      (fun w hw => mul_inv_cancel₀ (hne w hw)),
+    cfc_const_one ℂ A]
+
 /-- **The shifted spectral symbol never vanishes**, given a positive distance
 from the real spectrum.
 
@@ -373,11 +397,8 @@ theorem complex_inResolventSet_and_norm_resolvent_le_inv_distance
     (continuous_id.sub continuous_const).continuousOn
   have hgcont : ContinuousOn g (spectrum ℂ A) := hfcont.inv₀ hne
   let R : H →L[ℂ] H := cfc g A
-  have hshift : cfc f A = A - z • (1 : H →L[ℂ] H) := by
-    rw [show f = fun w : ℂ => w - z from rfl,
-      cfc_sub (fun w : ℂ => w) (fun _ : ℂ => z) A,
-      cfc_id' (R := ℂ) (a := A), cfc_const z A,
-      Algebra.algebraMap_eq_smul_one]
+  have hshift : cfc f A = A - z • (1 : H →L[ℂ] H) :=
+    cfc_sub_const_eq A z
   have hleft : R * (A - z • (1 : H →L[ℂ] H)) = 1 := by
     have hmul : cfc g A * cfc f A = cfc (fun w => g w * f w) A :=
       (cfc_mul g f A hgcont hfcont).symm
@@ -387,15 +408,8 @@ theorem complex_inResolventSet_and_norm_resolvent_le_inv_distance
       cfc_congr (g := fun _ : ℂ => (1 : ℂ))
         (fun w hw => by simpa [f, g] using inv_mul_cancel₀ (hne w hw)),
       cfc_const_one ℂ A]
-  have hright : (A - z • (1 : H →L[ℂ] H)) * R = 1 := by
-    have hmul : cfc f A * cfc g A = cfc (fun w => f w * g w) A :=
-      (cfc_mul f g A hfcont hgcont).symm
-    rw [← hshift]
-    change cfc f A * cfc g A = 1
-    rw [hmul,
-      cfc_congr (g := fun _ : ℂ => (1 : ℂ))
-        (fun w hw => by simpa [f, g] using mul_inv_cancel₀ (hne w hw)),
-      cfc_const_one ℂ A]
+  have hright : (A - z • (1 : H →L[ℂ] H)) * R = 1 :=
+    shift_mul_cfc_inv_eq_one A z hne hfcont hgcont
   have hz : InResolventSet A z := by
     refine ⟨R, ?_, ?_⟩
     · simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def]

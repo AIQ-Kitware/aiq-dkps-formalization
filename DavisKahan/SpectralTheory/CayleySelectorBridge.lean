@@ -116,20 +116,10 @@ theorem resolventOperator_eq_cfc_resolventSymbol
     (continuous_id.sub continuous_const).continuousOn
   have hgcont : ContinuousOn g (spectrum ℂ A) := hfcont.inv₀ hne
   let R : H →L[ℂ] H := cfc g A
-  have hshift : cfc f A = A - z • (1 : H →L[ℂ] H) := by
-    rw [show f = fun w : ℂ => w - z from rfl,
-      cfc_sub (fun w : ℂ => w) (fun _ : ℂ => z) A,
-      cfc_id' (R := ℂ) (a := A), cfc_const z A,
-      Algebra.algebraMap_eq_smul_one]
-  have hright : (A - z • (1 : H →L[ℂ] H)) * R = 1 := by
-    have hmul : cfc f A * cfc g A = cfc (fun w => f w * g w) A :=
-      (cfc_mul f g A hfcont hgcont).symm
-    rw [← hshift]
-    change cfc f A * cfc g A = 1
-    rw [hmul,
-      cfc_congr (g := fun _ : ℂ => (1 : ℂ))
-        (fun w hw => by simpa [f, g] using mul_inv_cancel₀ (hne w hw)),
-      cfc_const_one ℂ A]
+  have hshift : cfc f A = A - z • (1 : H →L[ℂ] H) :=
+    cfc_sub_const_eq A z
+  have hright : (A - z • (1 : H →L[ℂ] H)) * R = 1 :=
+    shift_mul_cfc_inv_eq_one A z hne hfcont hgcont
   have hz : InResolventSet A z :=
     complex_inResolventSet_of_distance A hA z delta hdelta hsep
   have hchosen := resolventOperator_mul_cancel A hz
