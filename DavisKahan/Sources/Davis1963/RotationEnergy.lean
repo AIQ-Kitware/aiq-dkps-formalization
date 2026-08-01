@@ -164,6 +164,16 @@ theorem totalRotation_le_two_mul_offDiagonal
     (hA.eigenvectorBasis hn)]
   exact h
 
+/-- **An operator-norm bound gives a pointwise bound.**
+
+Derived twice below from the same three lines. -/
+private theorem norm_apply_le_of_opNorm_le {H : E →ₗ[𝕜] E} {ε : ℝ}
+    (hHnorm : ‖H.toContinuousLinearMap‖ ≤ ε) (v : E) : ‖H v‖ ≤ ε * ‖v‖ := by
+  calc
+    ‖H v‖ ≤ ‖H.toContinuousLinearMap‖ * ‖v‖ :=
+      H.toContinuousLinearMap.le_opNorm v
+    _ ≤ ε * ‖v‖ := by gcongr
+
 /-- Sharp two-subspace product estimate, the 1963 ancestor of `sin 2Θ`.
 -/
 theorem sinTwoTheta_eigenvector_product_le
@@ -175,12 +185,8 @@ theorem sinTwoTheta_eigenvector_product_le
     {x : E} (hx : ‖x‖ = 1) (heig : (A + H) x = (lam : 𝕜) • x)
     (hHnorm : ‖H.toContinuousLinearMap‖ ≤ ε) :
     (b - a) * ‖projection U x‖ * ‖complementaryProjection U x‖ ≤ ε := by
-  have hHbound : ∀ v : E, ‖H v‖ ≤ ε * ‖v‖ := by
-    intro v
-    calc
-      ‖H v‖ ≤ ‖H.toContinuousLinearMap‖ * ‖v‖ :=
-        H.toContinuousLinearMap.le_opNorm v
-      _ ≤ ε * ‖v‖ := by gcongr
+  have hHbound : ∀ v : E, ‖H v‖ ≤ ε * ‖v‖ :=
+    norm_apply_le_of_opNorm_le hHnorm
   have heig' : A x + H x = (lam : 𝕜) • x := by
     simpa using heig
   simpa [projection, complementaryProjection, mul_assoc] using
@@ -199,12 +205,8 @@ theorem tanTwoTheta_eigenvector_product_le
     (hHnorm : ‖H.toContinuousLinearMap‖ ≤ ε) :
     (b - a) * ‖projection U x‖ * ‖complementaryProjection U x‖ ≤
       |‖projection U x‖ ^ 2 - ‖complementaryProjection U x‖ ^ 2| * ε := by
-  have hHbound : ∀ v : E, ‖H v‖ ≤ ε * ‖v‖ := by
-    intro v
-    calc
-      ‖H v‖ ≤ ‖H.toContinuousLinearMap‖ * ‖v‖ :=
-        H.toContinuousLinearMap.le_opNorm v
-      _ ≤ ε * ‖v‖ := by gcongr
+  have hHbound : ∀ v : E, ‖H v‖ ≤ ε * ‖v‖ :=
+    norm_apply_le_of_opNorm_le hHnorm
   obtain ⟨hHU, hHUperp⟩ := inner_blocks_eq_zero_of_isOffDiagonal U H hoff
   have heig' : A x + H x = (lam : 𝕜) • x := by
     simpa using heig
