@@ -73,6 +73,45 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
   [CompleteSpace F]
 
 set_option maxHeartbeats 1600000 in
+/-- **Shifting by the interval midpoint pushes an exterior spectrum off zero.** -/
+private theorem shifted_spectrum_exterior {G : Type*} [NormedAddCommGroup G]
+    [InnerProductSpace ℂ G] [CompleteSpace G] {S : G →L[ℂ] G} {a b d c r : ℝ}
+    (hc : c = (a + b) / 2) (hr : r = (b - a) / 2)
+    (hspec : ∀ x ∈ spectrum ℝ S, x ≤ a - d ∨ b + d ≤ x) :
+    ∀ x ∈ spectrum ℝ (S - algebraMap ℝ (G →L[ℂ] G) c), r + d ≤ |x| := by
+  intro x hx
+  rw [← spectrum.sub_singleton_eq] at hx
+  obtain ⟨y, hy, z, hz, hyz⟩ := Set.mem_sub.mp hx
+  rw [Set.mem_singleton_iff] at hz
+  rw [hz] at hyz
+  rw [← hyz]
+  rcases hspec y hy with h1 | h1
+  · have hle : y - c ≤ -(r + d) := by rw [hc, hr]; linarith
+    calc r + d ≤ -(y - c) := by linarith
+      _ ≤ |y - c| := neg_le_abs _
+  · have hge : r + d ≤ y - c := by rw [hc, hr]; linarith
+    exact hge.trans (le_abs_self _)
+
+/-- **...and centres an interior spectrum on `[-r, r]`.**
+
+Both Sylvester bounds in this file derived the pair inline. -/
+private theorem shifted_spectrum_interior {G : Type*} [NormedAddCommGroup G]
+    [InnerProductSpace ℂ G] [CompleteSpace G] {S : G →L[ℂ] G} {a b c r : ℝ}
+    (hc : c = (a + b) / 2) (hr : r = (b - a) / 2)
+    (hspec : spectrum ℝ S ⊆ Set.Icc a b) :
+    spectrum ℝ (S - algebraMap ℝ (G →L[ℂ] G) c) ⊆ Set.Icc (-r) r := by
+  intro x hx
+  rw [← spectrum.sub_singleton_eq] at hx
+  obtain ⟨y, hy, z, hz, hyz⟩ := Set.mem_sub.mp hx
+  rw [Set.mem_singleton_iff] at hz
+  rw [hz] at hyz
+  have hmem := hspec hy
+  rw [Set.mem_Icc] at hmem
+  rw [← hyz, Set.mem_Icc]
+  refine ⟨?_, ?_⟩
+  · rw [hc, hr]; linarith [hmem.1]
+  · rw [hc, hr]; linarith [hmem.2]
+
 /-- **Constant-one interval/exterior Sylvester estimate, genuine spectra.**
 If the spectrum of the self-adjoint `B` lies in `[a, b]` while the spectrum
 of the self-adjoint `A` avoids `(a - d, b + d)`, then any solution of
@@ -96,31 +135,10 @@ theorem norm_sylvester_le_of_spectrum_intervalExterior
   have hB₁sa : IsSelfAdjoint B₁ :=
     hB.sub (IsSelfAdjoint.algebraMap _ (IsSelfAdjoint.all c))
   -- spectral position of the shifted operators
-  have hA₁spec : ∀ x ∈ spectrum ℝ A₁, r + d ≤ |x| := by
-    intro x hx
-    rw [hA₁, ← spectrum.sub_singleton_eq] at hx
-    obtain ⟨y, hy, z, hz, hyz⟩ := Set.mem_sub.mp hx
-    rw [Set.mem_singleton_iff] at hz
-    subst hz
-    rw [← hyz]
-    rcases hAspec y hy with h1 | h1
-    · have hle : y - c ≤ -(r + d) := by rw [hc, hrdef]; linarith
-      calc r + d ≤ -(y - c) := by linarith
-        _ ≤ |y - c| := neg_le_abs _
-    · have hge : r + d ≤ y - c := by rw [hc, hrdef]; linarith
-      exact hge.trans (le_abs_self _)
-  have hB₁spec : spectrum ℝ B₁ ⊆ Set.Icc (-r) r := by
-    intro x hx
-    rw [hB₁, ← spectrum.sub_singleton_eq] at hx
-    obtain ⟨y, hy, z, hz, hyz⟩ := Set.mem_sub.mp hx
-    rw [Set.mem_singleton_iff] at hz
-    subst hz
-    have hmem := hBspec hy
-    rw [Set.mem_Icc] at hmem
-    rw [← hyz, Set.mem_Icc]
-    constructor
-    · rw [hc, hrdef]; linarith [hmem.1]
-    · rw [hc, hrdef]; linarith [hmem.2]
+  have hA₁spec : ∀ x ∈ spectrum ℝ A₁, r + d ≤ |x| :=
+    shifted_spectrum_exterior hc hrdef hAspec
+  have hB₁spec : spectrum ℝ B₁ ⊆ Set.Icc (-r) r :=
+    shifted_spectrum_interior hc hrdef hBspec
   have hB₁norm : ‖B₁‖ ≤ r :=
     (TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc hB₁sa hr0).mpr hB₁spec
   have hA₁unit : IsUnit A₁ := TauCeti.isUnit_of_forall_le_abs hrd hA₁spec
@@ -369,31 +387,10 @@ theorem mem_and_gauge_sylvester_le_of_spectrum_intervalExterior
     hA.sub (IsSelfAdjoint.algebraMap _ (IsSelfAdjoint.all c))
   have hB₁sa : IsSelfAdjoint B₁ :=
     hB.sub (IsSelfAdjoint.algebraMap _ (IsSelfAdjoint.all c))
-  have hA₁spec : ∀ x ∈ spectrum ℝ A₁, r + d ≤ |x| := by
-    intro x hx
-    rw [hA₁, ← spectrum.sub_singleton_eq] at hx
-    obtain ⟨y, hy, z, hz, hyz⟩ := Set.mem_sub.mp hx
-    rw [Set.mem_singleton_iff] at hz
-    subst hz
-    rw [← hyz]
-    rcases hAspec y hy with h1 | h1
-    · have hle : y - c ≤ -(r + d) := by rw [hc, hrdef]; linarith
-      calc r + d ≤ -(y - c) := by linarith
-        _ ≤ |y - c| := neg_le_abs _
-    · have hge : r + d ≤ y - c := by rw [hc, hrdef]; linarith
-      exact hge.trans (le_abs_self _)
-  have hB₁spec : spectrum ℝ B₁ ⊆ Set.Icc (-r) r := by
-    intro x hx
-    rw [hB₁, ← spectrum.sub_singleton_eq] at hx
-    obtain ⟨y, hy, z, hz, hyz⟩ := Set.mem_sub.mp hx
-    rw [Set.mem_singleton_iff] at hz
-    subst hz
-    have hmem := hBspec hy
-    rw [Set.mem_Icc] at hmem
-    rw [← hyz, Set.mem_Icc]
-    constructor
-    · rw [hc, hrdef]; linarith [hmem.1]
-    · rw [hc, hrdef]; linarith [hmem.2]
+  have hA₁spec : ∀ x ∈ spectrum ℝ A₁, r + d ≤ |x| :=
+    shifted_spectrum_exterior hc hrdef hAspec
+  have hB₁spec : spectrum ℝ B₁ ⊆ Set.Icc (-r) r :=
+    shifted_spectrum_interior hc hrdef hBspec
   have hB₁norm : ‖B₁‖ ≤ r :=
     (TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc hB₁sa hr0).mpr hB₁spec
   have hA₁unit : IsUnit A₁ := TauCeti.isUnit_of_forall_le_abs hrd hA₁spec
