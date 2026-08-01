@@ -73,6 +73,10 @@ derivation in `Theorem62`'s Real section, and it is fixed.
    claimed work the commit did not contain.
 5. **Aliasing leaves dead private definitions behind** and nothing warns.  Grep the
    occurrence count afterwards.
+5b. **Mathematical notation in a lane row needs its `|` escaped as `\|`.**  `|re ⟪x, y⟫|`
+   and `{q | p q}` are cell separators to the table parser, and an unescaped one drops the
+   whole row from every count as a FATAL finding.  Seven of the rows repaired today had it;
+   I then committed an eighth.
 6. **A size threshold selects against shared algebra.**  Facts proved in three places are
    usually short enough to retype; the 4-line floor is what found them.
 
