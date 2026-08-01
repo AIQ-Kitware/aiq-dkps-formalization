@@ -110,18 +110,8 @@ theorem resolventOperator_eq_cfc_resolventSymbol
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
   have hnormal : IsStarNormal A := hAsa.isStarNormal
-  have hne : ∀ w ∈ spectrum ℂ A, f w ≠ 0 := by
-    intro w hw hzero
-    obtain ⟨lam, hlam, rfl⟩ :=
-      hAsa.spectrumRestricts.algebraMap_image.symm ▸ hw
-    have hlamC : (lam : ℂ) ∈ spectrum ℂ A := by
-      rw [← hAsa.spectrumRestricts.algebraMap_image]
-      exact ⟨lam, hlam, rfl⟩
-    have hdist := hsep lam (by exact hlamC)
-    have heq : (lam : ℂ) = z :=
-      sub_eq_zero.mp (by simpa [f] using hzero)
-    rw [← heq, sub_self, norm_zero] at hdist
-    linarith
+  have hne : ∀ w ∈ spectrum ℂ A, f w ≠ 0 :=
+    sub_ne_zero_of_realSpectrum_separated A hA hdelta hsep
   have hfcont : ContinuousOn f (spectrum ℂ A) :=
     (continuous_id.sub continuous_const).continuousOn
   have hgcont : ContinuousOn g (spectrum ℂ A) := hfcont.inv₀ hne
