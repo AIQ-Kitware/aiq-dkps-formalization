@@ -265,43 +265,9 @@ theorem tanTheta_unbounded_vector_of_centered_bounds
     TauCeti.DavisKahanExt.mul_le_mul_sqrt_one_sub_sq_of_chain Wop hκdef hκ0 hhalf hδ hρ0
       (fun x => rfl) (fun u₀ hu₀V hu₀n => hchain u₀ hu₀V hu₀n)
   have hkey : ∀ u : H, ∀ hu : u ∈ Vᗮ,
-      δ * ‖Z.starProjection u‖ ≤ ρ * ‖u - Z.starProjection u‖ := by
-    intro u huV
-    have hPu : ‖Z.starProjection u‖ ≤ κ * ‖u‖ := hmax u huV
-    have hpyu : ‖Z.starProjection u‖ ^ 2 +
-        ‖u - Z.starProjection u‖ ^ 2 = ‖u‖ ^ 2 :=
-      norm_sq_starProjection_add_norm_sq_sub Z u
-    have h1κ2 : (0 : ℝ) ≤ 1 - κ ^ 2 := by nlinarith [hκ1, hκ0]
-    have hsq : (δ * ‖Z.starProjection u‖) ^ 2 ≤
-        (ρ * ‖u - Z.starProjection u‖) ^ 2 := by
-      have hδκsq : (δ * κ) ^ 2 ≤ ρ ^ 2 * (1 - κ ^ 2) := by
-        calc
-          (δ * κ) ^ 2 ≤ (ρ * Real.sqrt (1 - κ ^ 2)) ^ 2 :=
-            pow_le_pow_left₀ (mul_nonneg hδ.le hκ0) hκineq 2
-          _ = ρ ^ 2 * Real.sqrt (1 - κ ^ 2) ^ 2 := by ring
-          _ = ρ ^ 2 * (1 - κ ^ 2) := by rw [Real.sq_sqrt h1κ2]
-      have hPu2 : ‖Z.starProjection u‖ ^ 2 ≤ κ ^ 2 * ‖u‖ ^ 2 := by
-        nlinarith [hPu, norm_nonneg (Z.starProjection u), norm_nonneg u, hκ0]
-      calc
-        (δ * ‖Z.starProjection u‖) ^ 2 =
-            δ ^ 2 * ‖Z.starProjection u‖ ^ 2 := by ring
-        _ ≤ δ ^ 2 * (κ ^ 2 * ‖u‖ ^ 2) :=
-          mul_le_mul_of_nonneg_left hPu2 (sq_nonneg δ)
-        _ = (δ * κ) ^ 2 * ‖u‖ ^ 2 := by ring
-        _ ≤ ρ ^ 2 * (1 - κ ^ 2) * ‖u‖ ^ 2 :=
-          mul_le_mul_of_nonneg_right hδκsq (sq_nonneg _)
-        _ = ρ ^ 2 * ‖u‖ ^ 2 - ρ ^ 2 * (κ ^ 2 * ‖u‖ ^ 2) := by ring
-        _ ≤ ρ ^ 2 * ‖u‖ ^ 2 - ρ ^ 2 * ‖Z.starProjection u‖ ^ 2 := by
-          have hmul := mul_le_mul_of_nonneg_left hPu2 (sq_nonneg ρ)
-          linarith
-        _ = ρ ^ 2 * (‖u‖ ^ 2 - ‖Z.starProjection u‖ ^ 2) := by ring
-        _ = ρ ^ 2 * ‖u - Z.starProjection u‖ ^ 2 := by
-          rw [show ‖u - Z.starProjection u‖ ^ 2 =
-            ‖u‖ ^ 2 - ‖Z.starProjection u‖ ^ 2 by linarith [hpyu]]
-        _ = (ρ * ‖u - Z.starProjection u‖) ^ 2 := by ring
-    have hsqrt := Real.sqrt_le_sqrt hsq
-    rwa [Real.sqrt_sq (mul_nonneg hδ.le (norm_nonneg _)),
-      Real.sqrt_sq (mul_nonneg hρ0 (norm_nonneg _))] at hsqrt
+      δ * ‖Z.starProjection u‖ ≤ ρ * ‖u - Z.starProjection u‖ := fun u hu =>
+    TauCeti.DavisKahanExt.mul_norm_starProjection_le_of_compression_bound
+      hκ0 hκ1 hδ hρ0 hmax hκineq u hu
   intro x hxZ
   have huV : x - V.starProjection x ∈ Vᗮ :=
     V.sub_starProjection_mem_orthogonal x
