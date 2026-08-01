@@ -50,6 +50,17 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 variable {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
   [FiniteDimensional 𝕜 G]
 
+/-- **The rank of a map is at most either dimension.**
+
+`finrank (range A) ≤ min (finrank E) (finrank F)`: the codomain bound is
+`Submodule.finrank_le` and the domain bound is rank–nullity.  Both theorems
+below open by establishing this for `A` and for `B`, four blocks in all. -/
+theorem finrank_range_le_min (A : E →ₗ[𝕜] F) :
+    finrank 𝕜 (LinearMap.range A) ≤ min (finrank 𝕜 E) (finrank 𝕜 F) := by
+  refine le_min ?_ (Submodule.finrank_le _)
+  have := A.finrank_range_add_finrank_ker
+  omega
+
 namespace RectangularUnitarilyInvariantNorm
 
 variable (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
@@ -447,16 +458,8 @@ theorem mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
       rfl
     exact coordinateLift_diagOp_mem_convexHull_of_conj ιE ιF
       (LinearIsometryEquiv.refl 𝕜 _) R hdiag' hq
-  have hrankA : finrank 𝕜 A.range ≤ d := by
-    apply le_min
-    · have hnull := A.finrank_range_add_finrank_ker
-      omega
-    · exact Submodule.finrank_le _
-  have hrankB : finrank 𝕜 B.range ≤ d := by
-    apply le_min
-    · have hnull := B.finrank_range_add_finrank_ker
-      omega
-    · exact Submodule.finrank_le _
+  have hrankA : finrank 𝕜 A.range ≤ d := finrank_range_le_min A
+  have hrankB : finrank 𝕜 B.range ≤ d := finrank_range_le_min B
   have hLy : L y ∈ twoSidedUnitaryOrbit B := by
     have hsigma : (L y).singularValues = B.singularValues := by
       -- unfolds the private helper `coordinateLift`. It has no `_apply` lemma because
@@ -523,20 +526,8 @@ theorem apply_le_of_kyFanSum_le {A B : E →ₗ[𝕜] F}
   let ιF := initialCoordinateIsometry (𝕜 := 𝕜) (K := F) hdF
   let XA := singularValueDiagonal d A
   let XB := singularValueDiagonal d B
-  have hrankA : finrank 𝕜 A.range ≤ d := by
-    have hdom : finrank 𝕜 A.range ≤ finrank 𝕜 E := by
-      have hranknull := A.finrank_range_add_finrank_ker
-      omega
-    have hcod : finrank 𝕜 A.range ≤ finrank 𝕜 F := Submodule.finrank_le _
-    dsimp [d]
-    exact le_min hdom hcod
-  have hrankB : finrank 𝕜 B.range ≤ d := by
-    have hdom : finrank 𝕜 B.range ≤ finrank 𝕜 E := by
-      have hranknull := B.finrank_range_add_finrank_ker
-      omega
-    have hcod : finrank 𝕜 B.range ≤ finrank 𝕜 F := Submodule.finrank_le _
-    dsimp [d]
-    exact le_min hdom hcod
+  have hrankA : finrank 𝕜 A.range ≤ d := finrank_range_le_min A
+  have hrankB : finrank 𝕜 B.range ≤ d := finrank_range_le_min B
   have hσA : XA.singularValues = A.singularValues := by
     simpa only [XA] using singularValues_singularValueDiagonal A hrankA
   have hσB : XB.singularValues = B.singularValues := by
