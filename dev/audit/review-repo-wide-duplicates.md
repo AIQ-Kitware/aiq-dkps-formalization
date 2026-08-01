@@ -48,6 +48,23 @@ duplicate.
 on purpose.  **This is the category that must not be collapsed**, and the two
 instances found are both documented as intentional by their own authors.
 
+**(5) The same proof over differently-*named* variables.**  Discovered late, by
+which point 493 lines had been shelved as category (4) on the strength of
+"different bodies".  Two groups were really this, including **the largest single
+duplicate in the repository**: fifty-five lines written twice, differing only in
+whether the Hilbert space was called `E` or `H` and whether the strip half-width
+appeared as `(β - α) / 2` or under its own name.
+
+Blank single-capital identifiers and compare with a similarity ratio before
+concluding that two bodies differ:
+
+    a = [re.sub(r"\b[A-Z]\b", "·", l) for l in normalised_body_of_site_1]
+    difflib.SequenceMatcher(None, a, b).ratio() > 0.75
+
+Running that over all 33 differing groups took seconds and returned exactly the
+two.  **"Different text" is not "different proof"**, and the raw-text comparison
+that separates category (1) cannot see the difference.
+
 ## The two parallel accounts — do not collapse without a decision
 
 **`tan_theta_le` / `tan_theta_le'`.**  `DavisKahan/FiniteDimensional/TanTheta/Vector.lean`
