@@ -9,6 +9,7 @@ import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
 
 /-!
 # The operator ideal family induced by a symmetric gauge
@@ -207,6 +208,58 @@ theorem symmetricGaugeFamily_gauge {E F : Type*}
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     (A : E →L[ℂ] F) :
     (symmetricGaugeFamily Φ).gauge A = Φ.extend (approxSeq A) := rfl
+
+/-- **Milestone B1, the direction of the Calkin correspondence claimed here.**
+
+Two symmetric gauges inducing the same operator ideal agree on antitone sequences, so the
+ideal really is a function of the singular-value sequence alone.
+
+**The proof splits on boundedness, which the roadmap's statement does not show.**  An
+unbounded antitone sequence is realised by *no* bounded operator, so the realisation route
+does not apply to it — and does not have to: `le_extend` makes both sides `∞`, and the
+equation holds because neither gauge can see past the supremum.  A bounded sequence is
+realised by `diagOpLp`, and `approximationNumber_diagOpLp` turns the operator equality into
+the sequence equality.
+
+Surjectivity — that every symmetric ideal arises this way — is **not** claimed; it is the
+substantial half of Calkin's theorem and needs a separability hypothesis nothing else here
+needs. -/
+theorem symmetricGaugeFamily_injective {Φ Ψ : SymmetricGauge}
+    (h : symmetricGaugeFamily.{0, 0} Φ = symmetricGaugeFamily.{0, 0} Ψ)
+    {a : ℕ → ℝ≥0∞} (ha : Antitone a) :
+    Φ.extend a = Ψ.extend a := by
+  classical
+  by_cases hbdd : ∃ K : ℝ≥0, ∀ n, a n ≤ (K : ℝ≥0∞)
+  · obtain ⟨K, hK⟩ := hbdd
+    set c : ℕ → ℂ := fun n => (((a n).toReal : ℝ) : ℂ) with hcdef
+    have hafin : ∀ n, a n ≠ ⊤ := fun n => ne_top_of_le_ne_top (by simp) (hK n)
+    have hcnorm : ∀ n, ‖c n‖ = (a n).toReal := fun n => by
+      simp [hcdef, abs_of_nonneg ENNReal.toReal_nonneg]
+    have hK0 : (0 : ℝ) ≤ (K : ℝ) := K.coe_nonneg
+    have hcK : ∀ i, ‖c i‖ ≤ (K : ℝ) := fun i => by
+      rw [hcnorm i]
+      exact (ENNReal.toReal_le_toReal (hafin i) (by simp)).2 (hK i)
+    have hcanti : Antitone fun i => ‖c i‖ := fun i j hij => by
+      simp only [hcnorm]
+      exact (ENNReal.toReal_le_toReal (hafin j) (hafin i)).2 (ha hij)
+    have hop := congrArg
+      (fun N : OperatorIdealFamily.{0, 0, 0} ℂ =>
+        N.gauge (TauCeti.diagOpLp c hK0 hcK)) h
+    simp only [symmetricGaugeFamily_gauge] at hop
+    have hrw : approxSeq (TauCeti.diagOpLp c hK0 hcK) = a := by
+      funext n
+      rw [approxSeq, TauCeti.approximationNumber_diagOpLp c hK0 hcK hcanti n, hcnorm n,
+        ENNReal.ofReal_toReal (hafin n)]
+    rwa [hrw] at hop
+  · push Not at hbdd
+    have hsup : (⨆ n, a n) = ⊤ := by
+      refine iSup_eq_top.2 fun b hb => ?_
+      lift b to ℝ≥0 using hb.ne
+      obtain ⟨n, hn⟩ := hbdd b
+      exact ⟨n, hn⟩
+    have hinf : ∀ Θ : SymmetricGauge, Θ.extend a = ⊤ := fun Θ =>
+      top_le_iff.1 (hsup ▸ Θ.iSup_le_extend a)
+    rw [hinf Φ, hinf Ψ]
 
 /-! ## The adjoint-closed form, and Ky Fan dominance
 
