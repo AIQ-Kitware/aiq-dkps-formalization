@@ -231,6 +231,26 @@ theorem doubledPhaseMapAction_apply (theta : ℝ) (T : E' →ₗ[𝕜] F')
   simp [doubledPhaseMapAction, doubledComplexScalarMapAction_apply,
     Complex.exp_mul_I, Complex.cos_ofReal_re, Complex.sin_ofReal_re]
 
+/-- **The real doubled-phase action is the general one at `𝕜 = ℝ`.**
+
+`doubledPhaseAction` (in `OrbitAction.lean`) and `doubledPhaseMapAction` are built by
+different routes -- the first composes a real rotation with `orthogonalBlockSum T T`, the
+second applies the complex scalar `exp (θ * I)` blockwise over a general `𝕜` -- and this
+says the two constructions agree where both are defined.
+
+Recorded because thirteen declarations exist in matched `…Action` / `…MapAction` forms and
+three separate duplicated proofs across these files are downstream of that split; anyone
+unifying them needs this fact first, and it turning out to be `rfl`-adjacent is the
+evidence that the parallelism is presentational rather than load-bearing. -/
+theorem doubledPhaseAction_eq_doubledPhaseMapAction
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    (theta : ℝ) (T : ER →ₗ[ℝ] FR) :
+    doubledPhaseAction theta T = doubledPhaseMapAction theta T := by
+  ext x
+  simp
+
 /-- Complex-scalar block action is additive in the scalar. -/
 theorem doubledComplexScalarMapAction_add
     (z w : ℂ) (T : E' →ₗ[𝕜] F') :
