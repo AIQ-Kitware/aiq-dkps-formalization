@@ -239,7 +239,7 @@ theorem paperHilbertSchmidtNorm_smul
     (c : 𝕜) (A : E →L[𝕜] F)
     (_hA : IsPaperHilbertSchmidt A) :
     paperHilbertSchmidtNorm (c • A) = ‖c‖ * paperHilbertSchmidtNorm A := by
-  rw [paperHilbertSchmidtNorm, paperHilbertSchmidtEnergy_smul,
+  simp only [paperHilbertSchmidtNorm, paperHilbertSchmidtEnergy_smul,
     ENNReal.toReal_mul, ENNReal.toReal_ofReal (sq_nonneg _),
     Real.sqrt_mul (sq_nonneg ‖c‖), Real.sqrt_sq (norm_nonneg c),
     paperHilbertSchmidtNorm]

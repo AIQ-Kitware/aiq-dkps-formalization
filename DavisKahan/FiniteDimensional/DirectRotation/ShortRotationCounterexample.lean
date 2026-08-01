@@ -516,7 +516,7 @@ theorem singularValues_displacement_W (j : Fin 4) :
 theorem kyFanSum_displacement_W :
     kyFanSum 4 (LinearMap.id - Wlin) = 2 * Real.sqrt 2 := by
   rw [kyFanSum_eq_sum_fin, Fin.sum_univ_four]
-  rw [singularValues_displacement_W 0, singularValues_displacement_W 1,
+  simp only [singularValues_displacement_W 0, singularValues_displacement_W 1,
     singularValues_displacement_W 2, singularValues_displacement_W 3,
     show ((![2, 2, 0, 0] : Fin 4 → ℝ) 2) = 0 from rfl,
     show ((![2, 2, 0, 0] : Fin 4 → ℝ) 3) = 0 from rfl,

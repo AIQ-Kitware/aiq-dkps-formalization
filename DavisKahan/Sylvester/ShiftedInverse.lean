@@ -178,7 +178,7 @@ theorem linearPMap_norm_shift_apply_le_of_form_bounds
       exact inv_mul_cancel₀ hnw.ne'
     have hval : RCLike.re ⟪S v', (w' : F)⟫_𝕜 =
         a * (b * RCLike.re ⟪S v, (w : F)⟫_𝕜) := by
-      rw [hSv', hw', Submodule.coe_smul, inner_smul_left, inner_smul_right,
+      simp only [hSv', hw', Submodule.coe_smul, inner_smul_left, inner_smul_right,
         RCLike.conj_ofReal, ← mul_assoc, ← RCLike.ofReal_mul,
         RCLike.re_ofReal_mul]
       ring

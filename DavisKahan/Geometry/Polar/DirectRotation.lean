@@ -85,7 +85,7 @@ theorem star_spectraCanonicalIntertwiner
       Vᗮ.starProjection * Uᗮ.starProjection) =
       U.starProjection * V.starProjection +
         Uᗮ.starProjection * Vᗮ.starProjection
-  rw [star_add, star_mul, star_mul,
+  simp only [star_add, star_mul, star_mul,
     (isSelfAdjoint_starProjection U).star_eq,
     (isSelfAdjoint_starProjection V).star_eq,
     (isSelfAdjoint_starProjection Uᗮ).star_eq,

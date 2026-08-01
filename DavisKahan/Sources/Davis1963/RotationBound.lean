@@ -188,7 +188,7 @@ theorem intertwiningUnitary_apply_ofOrthonormalBasis {b b' : OrthonormalBasis (F
       (OrthonormalBasis.isPositive_spanIndicesProjection b {i}).adjoint_eq,
       (OrthonormalBasis.isPositive_spanIndicesProjection b' {i}).adjoint_eq]
     -- Pᵢ (P'ᵢ (P'ᵢ (Pᵢ (b i)))) = (c * conj c) • b i = ‖c‖² • b i
-    rw [hPb, OrthonormalBasis.spanIndicesProjection_singleton_apply, LinearMap.comp_apply, map_smul,
+    simp only [hPb, OrthonormalBasis.spanIndicesProjection_singleton_apply, LinearMap.comp_apply, map_smul,
         hP'b',
       map_smul, OrthonormalBasis.spanIndicesProjection_singleton_apply, smul_smul,
       ← inner_conj_symm (b i) (b' i), RCLike.mul_conj, pow_two]
@@ -220,7 +220,7 @@ theorem sqSinAngle_ofOrthonormalBasis {b b' : OrthonormalBasis (Fin n) 𝕜 E}
   have hscalar : ‖⟪b' i, b i⟫_𝕜‖⁻¹ * ‖⟪b' i, b i⟫_𝕜‖ ^ 2 = ‖⟪b' i, b i⟫_𝕜‖ := by
     rw [pow_two, ← mul_assoc, inv_mul_cancel₀ hcnorm, one_mul]
   unfold OrthoProjFamily.sqSinAngle
-  rw [intertwiningUnitary_apply_ofOrthonormalBasis h i, inner_smul_right,
+  simp only [intertwiningUnitary_apply_ofOrthonormalBasis h i, inner_smul_right,
     ← inner_conj_symm (b i) (b' i), mul_assoc, RCLike.mul_conj, ← RCLike.ofReal_pow,
     ← RCLike.ofReal_mul, hscalar, RCLike.norm_ofReal, abs_norm]
 
@@ -311,7 +311,7 @@ theorem sum_sq_eigenvalues_sub_diag_eq (hT : T.IsSymmetric) (hS : S.IsSymmetric)
         = ∑ j ∈ Finset.univ.erase i,
           ‖⟪hT.eigenvectorBasis hn j, (S - T) (hT.eigenvectorBasis hn i)⟫_𝕜‖ ^ 2 :=
       Finset.sum_congr rfl fun j hj => by rw [hoff j (Finset.ne_of_mem_erase hj)]
-    rw [← (hT.eigenvectorBasis hn).sum_sq_norm_inner_right (S (hT.eigenvectorBasis hn i)),
+    simp only [← (hT.eigenvectorBasis hn).sum_sq_norm_inner_right (S (hT.eigenvectorBasis hn i)),
       ← (hT.eigenvectorBasis hn).sum_sq_norm_inner_right ((S - T) (hT.eigenvectorBasis hn i)),
       ← h1, ← h2, hsum, norm_sq_inner_map_self hS, norm_sq_inner_map_self (hS.sub hT)]
     ring

@@ -119,7 +119,7 @@ theorem inner_sinThetaMap_apply_eq_zero_of_orthogonal_family
           projection V (principalSourceVector U V i) := by
       rw [sinThetaMap, LinearMap.comp_apply, projection_apply_of_mem hu]
       exact Submodule.starProjection_orthogonal_val _
-    rw [hsin, projection_apply_principalSourceVector U V hacute i,
+    simp only [hsin, projection_apply_principalSourceVector U V hacute i,
       directRotation_apply_principalSourceVector U V hacute i, inner_sub_left,
       inner_smul_left, inner_add_left, inner_smul_left, inner_smul_left,
       hzu i, hzj i]
@@ -520,7 +520,7 @@ theorem singularValues_directRotation_displacement
         hperp_u hperp_j
       have habs := abs_canonicalIntertwiner_apply_eq_self_of_projection_eq U V hproj
       rw [hgram]
-      rw [LinearMap.smul_apply, LinearMap.sub_apply, LinearMap.id_apply, habs,
+      simp only [LinearMap.smul_apply, LinearMap.sub_apply, LinearMap.id_apply, habs,
         sub_self, smul_zero, hμ]
       simp [dif_neg hk]
   -- Identify the sorted eigenvalues.

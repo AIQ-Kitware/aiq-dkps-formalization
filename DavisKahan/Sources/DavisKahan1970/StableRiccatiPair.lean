@@ -107,7 +107,7 @@ theorem stableSingularPair_doubleAngleTangent_le
         RCLike.re ⟪B.A1 (X x), y⟫_ℂ =
           s * RCLike.re ⟪B.A1 y, y⟫_ℂ +
             RCLike.re ⟪B.A1 e0, y⟫_ℂ := by
-      rw [hXexpand, map_add, map_smul, inner_add_left,
+      simp only [hXexpand, map_add, map_smul, inner_add_left,
         inner_smul_left, Complex.conj_ofReal, map_add,
         re_ofReal_mul_complex]
     rw [hA1expand]
@@ -206,7 +206,7 @@ theorem stableSingularPair_doubleAngleTangent_le
             ⟪B.B01 ((s : ℂ) • y + e0), (s : ℂ) • x + e1⟫_ℂ := by
               rw [hXexpand, hXadjExpand]
         _ = _ := by
-              rw [map_add, map_smul, inner_add_left, inner_add_right,
+              simp only [map_add, map_smul, inner_add_left, inner_add_right,
                 inner_add_right, inner_smul_left, inner_smul_right,
                 inner_smul_left, inner_smul_right,
                 Complex.conj_ofReal]

@@ -104,7 +104,7 @@ theorem semibounded_of_spectrum_subset_Icc
         (((β + α) / 2 : ℝ) : ℂ) • (x : F), (x : F)⟫_ℂ =
         RCLike.re ⟪B.toLinearMap x, (x : F)⟫_ℂ -
           (β + α) / 2 * ‖(x : F)‖ ^ 2 := by
-      rw [inner_sub_left, map_sub, inner_smul_left, Complex.conj_ofReal,
+      simp only [inner_sub_left, map_sub, inner_smul_left, Complex.conj_ofReal,
         ← Complex.real_smul, RCLike.smul_re, inner_self_eq_norm_sq]
     have h2 : |RCLike.re ⟪B.toLinearMap x -
         (((β + α) / 2 : ℝ) : ℂ) • (x : F), (x : F)⟫_ℂ| ≤

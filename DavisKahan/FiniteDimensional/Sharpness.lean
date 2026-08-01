@@ -218,14 +218,14 @@ noncomputable def modelTanTwoThetaPerturbation (a b θ : ℝ) :
 /-- The rotated generator's overlap with `e0` is `cos θ`. -/
 @[simp] theorem inner_uθ_e0 (θ : ℝ) :
     ⟪uθ (𝕜 := 𝕜) θ, e0⟫_𝕜 = (Real.cos θ : 𝕜) := by
-  rw [uθ, inner_add_left, inner_smul_left, inner_smul_left,
+  simp only [uθ, inner_add_left, inner_smul_left, inner_smul_left,
     inner_e0_e0, inner_e1_e0, RCLike.conj_ofReal, RCLike.conj_ofReal]
   ring
 
 /-- The rotated generator's overlap with `e1` is `sin θ`. -/
 @[simp] theorem inner_uθ_e1 (θ : ℝ) :
     ⟪uθ (𝕜 := 𝕜) θ, e1⟫_𝕜 = (Real.sin θ : 𝕜) := by
-  rw [uθ, inner_add_left, inner_smul_left, inner_smul_left,
+  simp only [uθ, inner_add_left, inner_smul_left, inner_smul_left,
     inner_e0_e1, inner_e1_e1, RCLike.conj_ofReal, RCLike.conj_ofReal]
   ring
 

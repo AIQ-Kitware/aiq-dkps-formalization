@@ -226,7 +226,7 @@ theorem star_crossedDefectQuarterTurn_mul_self
     crossedDefectQuarterTurn_apply_regular U V J hr
   have hQx : crossedDefectQuarterTurn U V J x =
       (J ⟨s, hs⟩ : H) - (J.symm ⟨t, ht⟩ : H) := by
-    rw [hxr, map_add, map_add, hQr, add_zero,
+    simp only [hxr, map_add, map_add, hQr, add_zero,
       show crossedDefectQuarterTurn U V J s = (J ⟨s, hs⟩ : H) from
         crossedDefectQuarterTurn_apply_source U V J ⟨s, hs⟩,
       show crossedDefectQuarterTurn U V J t = -(J.symm ⟨t, ht⟩ : H) from
@@ -351,7 +351,7 @@ theorem polarRange_canonicalIntertwiner_eq_regular :
         (spectraCanonicalIntertwiner U V) y
       rw [hy, norm_zero, norm_eq_zero] at hn
       exact hn
-  rw [polarRange, ContinuousLinearMap.polarInitial,
+  simp only [polarRange, ContinuousLinearMap.polarInitial,
     ← Submodule.orthogonal_orthogonal_eq_closure,
     ContinuousLinearMap.orthogonal_range,
     ← ContinuousLinearMap.star_eq_adjoint,
@@ -375,7 +375,7 @@ theorem polarFinalRange_canonicalIntertwiner_eq_regular :
     polarFinalRange
         (spectraCanonicalIntertwiner U V) =
       (crossedDefectSum U V)ᗮ := by
-  rw [polarFinalRange, ContinuousLinearMap.polarFinal,
+  simp only [polarFinalRange, ContinuousLinearMap.polarFinal,
     ← Submodule.orthogonal_orthogonal_eq_closure,
     ContinuousLinearMap.orthogonal_range,
     ← ContinuousLinearMap.star_eq_adjoint,
@@ -819,7 +819,7 @@ theorem nonacuteDirectRotation_compressions_nonnegative
           ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply,
           ContinuousLinearEquiv.coe_coe,
           LinearIsometryEquiv.coe_toContinuousLinearEquiv]
-      rw [hval, hpS, map_zero, Submodule.coe_zero, zero_sub, map_neg, neg_eq_zero]
+      simp only [hval, hpS, map_zero, Submodule.coe_zero, zero_sub, map_neg, neg_eq_zero]
       exact (Submodule.starProjection_apply_eq_zero_iff _).mpr
         (Submodule.le_orthogonal_orthogonal U
           (mem_halmosSourceDefect.mp (J.symm _).property).1)
@@ -832,7 +832,7 @@ theorem nonacuteDirectRotation_crossed_blocks
     complementaryProjection U * nonacuteDirectRotation U V J * projection U =
       -star (projection U * nonacuteDirectRotation U V J *
         complementaryProjection U) := by
-  rw [nonacuteDirectRotation, mul_add, add_mul, mul_add, add_mul,
+  simp only [nonacuteDirectRotation, mul_add, add_mul, mul_add, add_mul,
     star_add, neg_add]
   congr 1
   · exact canonicalPolarFactor_crossed_blocks_general U V
