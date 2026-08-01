@@ -93,19 +93,23 @@ theorem interfaceCutoff_complement_identities
   rw [sq, sq, sq]
   linarith
 
-/-- A lower bound on the cutoff range becomes a global lower bound after
-filling the orthogonal complement by the same scalar. -/
-theorem interfaceFilledTruncation_lowerBound
+/-- **The orthogonal decomposition a cutoff interface induces**, bundled.
+
+`T.truncation τ x` is orthogonal to the complement `x - P.cutoff τ x`; the real
+part of the truncation's form is carried entirely by the cutoff part; and the
+complement's form is its squared norm.  Both interface bounds below derived all
+three inline, thirty lines each. -/
+private theorem interfaceCutoff_orthogonality
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
     {hA : A.IsSelfAdjoint}
-    (P : SpectralCutoffInterface A hA)
-    (T : BoundedTruncationInterface A hA P)
-    {a τ : ℝ} (hτ : 0 ≤ τ) (ha : SemiboundedBelow A a) :
-    ∀ x, a * ‖x‖ ^ 2 ≤
-      RCLike.re ⟪interfaceFilledTruncation P T a τ x, x⟫_ℂ := by
-  intro x
+    (P : SpectralCutoffInterface A hA) (T : BoundedTruncationInterface A hA P)
+    (τ : ℝ) (x : H) :
+    ⟪T.truncation τ x, x - P.cutoff τ x⟫_ℂ = 0 ∧
+      RCLike.re ⟪T.truncation τ x, x⟫_ℂ =
+        RCLike.re ⟪T.truncation τ x, P.cutoff τ x⟫_ℂ ∧
+      RCLike.re ⟪x - P.cutoff τ x, x⟫_ℂ = ‖x - P.cutoff τ x‖ ^ 2 := by
   have hproj := interfaceCutoff_complement_identities P τ x
   have hcomm := T.commutes_cutoff τ
   have hPT : P.cutoff τ (T.truncation τ x) = T.truncation τ x := by
@@ -150,6 +154,37 @@ theorem interfaceFilledTruncation_lowerBound
       _ = ‖x - P.cutoff τ x‖ ^ 2 := by
         rw [inner_add_right, map_add, hQorth, map_zero, zero_add,
           inner_self_eq_norm_sq]
+  exact ⟨hTorth, hTinner, hQinner⟩
+
+/-- A lower bound on the cutoff range becomes a global lower bound after
+filling the orthogonal complement by the same scalar. -/
+theorem interfaceFilledTruncation_lowerBound
+    {H : Type v}
+    [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
+    {hA : A.IsSelfAdjoint}
+    (P : SpectralCutoffInterface A hA)
+    (T : BoundedTruncationInterface A hA P)
+    {a τ : ℝ} (hτ : 0 ≤ τ) (ha : SemiboundedBelow A a) :
+    ∀ x, a * ‖x‖ ^ 2 ≤
+      RCLike.re ⟪interfaceFilledTruncation P T a τ x, x⟫_ℂ := by
+  intro x
+  have hproj := interfaceCutoff_complement_identities P τ x
+  have hcomm := T.commutes_cutoff τ
+  have hPT : P.cutoff τ (T.truncation τ x) = T.truncation τ x := by
+    have h := congrArg (fun S : H →L[ℂ] H => S x) hcomm.2
+    simpa only [ContinuousLinearMap.comp_apply] using h
+  have hPP : P.cutoff τ (P.cutoff τ x) = P.cutoff τ x := by
+    have h := congrArg (fun S : H →L[ℂ] H => S x)
+      (P.isOrthogonalProjection τ).1
+    simpa only [ContinuousLinearMap.comp_apply] using h
+  have hPQ : P.cutoff τ (x - P.cutoff τ x) = 0 := by
+    rw [map_sub, hPP, sub_self]
+  obtain ⟨hTorth, hTinner, hQinner⟩ :=
+    interfaceCutoff_orthogonality P T τ x
+  have hQorth : ⟪x - P.cutoff τ x, P.cutoff τ x⟫_ℂ = 0 := by
+    rw [← inner_conj_symm, hproj.1, map_zero]
+  have hx : x = P.cutoff τ x + (x - P.cutoff τ x) := by abel
   have hcut := T.lowerBound ha hτ x
   change a * ‖x‖ ^ 2 ≤
     RCLike.re ⟪T.truncation τ x +
@@ -186,39 +221,11 @@ theorem interfaceFilledTruncation_upperBound
     simpa only [ContinuousLinearMap.comp_apply] using h
   have hPQ : P.cutoff τ (x - P.cutoff τ x) = 0 := by
     rw [map_sub, hPP, sub_self]
-  have hTorth : ⟪T.truncation τ x, x - P.cutoff τ x⟫_ℂ = 0 := by
-    calc
-      ⟪T.truncation τ x, x - P.cutoff τ x⟫_ℂ =
-          ⟪P.cutoff τ (T.truncation τ x), x - P.cutoff τ x⟫_ℂ := by
-        rw [hPT]
-      _ = ⟪T.truncation τ x, P.cutoff τ (x - P.cutoff τ x)⟫_ℂ :=
-        (P.isOrthogonalProjection τ).2
-          (T.truncation τ x) (x - P.cutoff τ x)
-      _ = 0 := by simp only [hPQ, inner_zero_right]
+  obtain ⟨hTorth, hTinner, hQinner⟩ :=
+    interfaceCutoff_orthogonality P T τ x
   have hQorth : ⟪x - P.cutoff τ x, P.cutoff τ x⟫_ℂ = 0 := by
     rw [← inner_conj_symm, hproj.1, map_zero]
   have hx : x = P.cutoff τ x + (x - P.cutoff τ x) := by abel
-  have hTinner : RCLike.re ⟪T.truncation τ x, x⟫_ℂ =
-      RCLike.re ⟪T.truncation τ x, P.cutoff τ x⟫_ℂ := by
-    calc
-      RCLike.re ⟪T.truncation τ x, x⟫_ℂ =
-          RCLike.re ⟪T.truncation τ x,
-            P.cutoff τ x + (x - P.cutoff τ x)⟫_ℂ :=
-        congrArg RCLike.re
-          (congrArg (fun y => ⟪T.truncation τ x, y⟫_ℂ) hx)
-      _ = RCLike.re ⟪T.truncation τ x, P.cutoff τ x⟫_ℂ := by
-        rw [inner_add_right, map_add, hTorth, map_zero, add_zero]
-  have hQinner : RCLike.re ⟪x - P.cutoff τ x, x⟫_ℂ =
-      ‖x - P.cutoff τ x‖ ^ 2 := by
-    calc
-      RCLike.re ⟪x - P.cutoff τ x, x⟫_ℂ =
-          RCLike.re ⟪x - P.cutoff τ x,
-            P.cutoff τ x + (x - P.cutoff τ x)⟫_ℂ :=
-        congrArg RCLike.re
-          (congrArg (fun y => ⟪x - P.cutoff τ x, y⟫_ℂ) hx)
-      _ = ‖x - P.cutoff τ x‖ ^ 2 := by
-        rw [inner_add_right, map_add, hQorth, map_zero, zero_add,
-          inner_self_eq_norm_sq]
   have hcut := T.upperBound ha hτ x
   change RCLike.re ⟪T.truncation τ x +
       (a : ℂ) • (x - P.cutoff τ x), x⟫_ℂ ≤ a * ‖x‖ ^ 2
