@@ -87,6 +87,50 @@ is `{lane:TAUCETI-ROADMAP-SUBMISSION}`'s call.  `ringInverse_semiconj` hit the
 same wall and was parked in `CoerciveUnit.lean`, which has a good but imperfect
 claim to it.
 
+## Where the sweep got to
+
+**Identical-body groups: 32 → 14; duplicated volume 248 → 70 lines.**  Eighteen
+extractions, every one confirmed byte-identical across its sites before any edit,
+each verified by a full `lake build` (9274 jobs) and pushed separately.
+
+**The 33 differing-body groups (493 lines) were not touched and mostly should not
+be.**  They are category (2) and (4): the `tan_theta_le` finite/general/unbounded
+triple alone is 211 lines of deliberate parallel accounts, and `DkpsQuench2026`'s
+augmented-CMDS pair carries an in-source comment saying a cleanup-only refactor
+is *deferred* on purpose.
+
+### A fifth category: blocked by instance availability
+
+A genuine duplicate can resist extraction for a reason that is neither
+mathematical nor editorial.  `hsq2` in `Geometry/Angle/OperatorAngleComplex.lean`
+states a fact about `Uᗮ.starProjection`, so a standalone lemma needs
+`Uᗮ.HasOrthogonalProjection`; inline, that instance is already elaborated from
+the enclosing theorem's statement, but extracted, the second call site can only
+reach it through `CompleteSpace E`, which that theorem does not have.
+
+**The test is whether the call sites can supply what the standalone statement
+demands, not whether the statement demands more.**
+`subspaceGap_eq_max_directedGap` needed exactly the same extra `CompleteSpace E`
+and went through, because both of *its* callers have one.
+
+### What the remaining 14 look like
+
+All are 4–8 lines.  Several have idiosyncratic obstructions found by trying:
+
+* `RosenblumExistence:hAs` — the two sites prove the same statement from
+  *different* hypotheses (open ball against closed ball), so one lemma does not
+  serve both.
+* `SinTheta/Unbounded` `hA₀sym` — the two enclosing theorems spell their
+  self-adjointness hypothesis differently (`D.A₀.IsSelfAdjoint` against
+  `_root_.IsSelfAdjoint D.A₀`).
+* `Theorem63FiniteSource:hyVperp` — normalised bodies match, but the raw text has
+  drifted in wrapping, so a text splice finds one site and not the other.
+* `UniformConcentration` `hXbar`/`hint` — a two-fact bundle needing bullet
+  structure; a hand edit, not a scripted one.
+
+**None is blocked by mathematics.**  Each is a twenty-minute hand edit by someone
+reading both sites, which is the shape all of this work has.
+
 ## Largest groups still open at the time of writing
 
 | lines × sites | where | category |
