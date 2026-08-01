@@ -162,15 +162,12 @@ theorem borelCalculus_mem_domain_of_coord_mul
   have hprod : BorelCalculus.borelCalculus hU (hgb.mul hq)
       = BorelCalculus.borelCalculus hU hh := by
     refine borelCalculus_congr_of_ne_one hA _ _ fun w hw1 => ?_
-    have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
     have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := by simp [hgsym]
-    have hκval : ((κ w : ℝ) : ℂ) + Complex.I = (2 * Complex.I) / (1 - (w : ℂ)) :=
-      cayleyInv_add_I hA hw1
     -- states the goal with the definition unfolded, in the shape the next step needs;
     -- there is no `_apply` lemma to rewrite with here.
     change gsym w * (((κ w : ℂ) + Complex.I) * h w) = h w
-    rw [hgval, hκval]
-    field_simp
+    rw [hgval, ← mul_assoc,
+      inv_two_I_mul_one_sub_mul_cayleyInv_add_I hA hw1, one_mul]
   set T := BorelCalculus.borelCalculus hU hq with hT
   have hPy : resolvent A hni (T ξ)
       = BorelCalculus.borelCalculus hU hh ξ := by
