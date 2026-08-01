@@ -197,13 +197,14 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
   have hXint : ∀ x : A₀.domain,
       A.toLinearMap ⟨X (x : U), hXdom x⟩ = X (A₀.toLinearMap x) :=
     selfAdjointSpectralRestriction_inclusion_intertwines A hA B hB
+  -- Shared by `hFdom` and `hFint` below, which otherwise open with the same
+  -- three lines.  The rest of their common preamble is entangled with the
+  -- `Λ.domain`/`A.domain` coercions and is left in place deliberately.
+  have hzΛ : ∀ y : ΛJ.domain, e.symm (y : Wc) ∈ Λ.domain := fun y =>
+    (mem_unitaryConjugate_domain_iff e Λ hΛ).mp (by simpa only [ΛJ] using y.property)
   have hFdom : ∀ y : ΛJ.domain, F₁ (y : Wc) ∈ A.domain := by
     intro y
-    have hyConj : (y : Wc) ∈ (unitaryConjugate e Λ hΛ).domain := by
-      simpa only [ΛJ] using y.property
-    have hyΛ : e.symm (y : Wc) ∈ Λ.domain :=
-      (mem_unitaryConjugate_domain_iff e Λ hΛ).mp hyConj
-    let z : Λ.domain := ⟨e.symm (y : Wc), hyΛ⟩
+    let z : Λ.domain := ⟨e.symm (y : Wc), hzΛ y⟩
     have hzdom : (((z : Uc) : H)) ∈ A.domain :=
       selfAdjointSpectralRestriction_inclusion_mem_domain
         A hA Bᶜ hB.compl z
@@ -221,11 +222,7 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
       (A.addBounded R).toLinearMap ⟨F₁ (y : Wc), hFdom y⟩ =
         F₁ (ΛJ.toLinearMap y) := by
     intro y
-    have hyConj : (y : Wc) ∈ (unitaryConjugate e Λ hΛ).domain := by
-      simpa only [ΛJ] using y.property
-    have hyΛ : e.symm (y : Wc) ∈ Λ.domain :=
-      (mem_unitaryConjugate_domain_iff e Λ hΛ).mp hyConj
-    let z : Λ.domain := ⟨e.symm (y : Wc), hyΛ⟩
+    let z : Λ.domain := ⟨e.symm (y : Wc), hzΛ y⟩
     have hzdom : (((z : Uc) : H)) ∈ A.domain :=
       selfAdjointSpectralRestriction_inclusion_mem_domain
         A hA Bᶜ hB.compl z

@@ -159,6 +159,53 @@ noncomputable def graphProjectionFormula
     Ring.inverse (1 + star (X * projection U) * (X * projection U)) *
     star (projection U + X * projection U)
 
+/-! ### Basic consequences of `IsAngularOperator`
+
+The definition gives `X P = X` and `P X = 0`.  The four facts below are what
+every argument about the graph actually uses, and **both theorems in this
+section derived all four inline**, so a third one would have derived them a
+third time.  See `{lane:DK-LONGPROOF-8}`. -/
+
+variable {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] {X : E →L[𝕜] E}
+
+/-- `X` maps into `Uᗮ`, so its adjoint kills `U`. -/
+theorem star_mul_projection_of_isAngularOperator (hX : IsAngularOperator U X) :
+    star X * projection U = 0 := by
+  have hPX : projection U * X = 0 := hX.2
+  have h := congrArg star hPX
+  rwa [star_mul, (isSelfAdjoint_starProjection U).star_eq, star_zero] at h
+
+/-- Dually, `P` fixes the range of `X⋆`. -/
+theorem projection_mul_star_of_isAngularOperator (hX : IsAngularOperator U X) :
+    projection U * star X = star X := by
+  have hXP : X * projection U = X := hX.1
+  have h := congrArg star hXP
+  rwa [star_mul, (isSelfAdjoint_starProjection U).star_eq] at h
+
+/-- The graph denominator `1 + X⋆X` commutes with `P`. -/
+theorem projection_commute_one_add_star_mul_self_of_isAngularOperator
+    (hX : IsAngularOperator U X) :
+    projection U * (1 + star X * X) = (1 + star X * X) * projection U := by
+  have hXP : X * projection U = X := hX.1
+  rw [mul_add, add_mul, mul_one, one_mul]
+  congr 1
+  calc projection U * (star X * X) = (projection U * star X) * X := by rw [mul_assoc]
+    _ = star X * X := by rw [projection_mul_star_of_isAngularOperator hX]
+    _ = star X * (X * projection U) := by rw [hXP]
+    _ = (star X * X) * projection U := by rw [mul_assoc]
+
+/-- The graph parametrisation `A = P + X` has `A⋆A = (1 + X⋆X) P`. -/
+theorem star_mul_self_of_isAngularOperator (hX : IsAngularOperator U X) :
+    star (projection U + X) * (projection U + X) =
+      (1 + star X * X) * projection U := by
+  have hPP : projection U * projection U = projection U :=
+    (U.isIdempotentElem_starProjection).eq
+  have hXP : X * projection U = X := hX.1
+  have hPX : projection U * X = 0 := hX.2
+  rw [star_add, (isSelfAdjoint_starProjection U).star_eq, add_mul, mul_add, mul_add,
+    hPP, hPX, star_mul_projection_of_isAngularOperator hX, add_mul, one_mul,
+    mul_assoc, hXP, add_zero, zero_add]
+
 /-- Projection onto a graph subspace in terms of the angular operator.
 
 The proof avoids functional-calculus square roots entirely: with
@@ -177,12 +224,8 @@ theorem projection_graphSubspace_formula
   have hPX : P * X = 0 := hX.2
   have hPP : P * P = P := (U.isIdempotentElem_starProjection).eq
   have hsP : star P = P := (isSelfAdjoint_starProjection U).star_eq
-  have hsXP : star X * P = 0 := by
-    have h := congrArg star hPX
-    rwa [star_mul, hsP, star_zero] at h
-  have hPsX : P * star X = star X := by
-    have h := congrArg star hXP
-    rwa [star_mul, hsP] at h
+  have hsXP : star X * P = 0 := star_mul_projection_of_isAngularOperator hX
+  have hPsX : P * star X = star X := projection_mul_star_of_isAngularOperator hX
   set A : E →L[𝕜] E := P + X * P with hAdef
   set N : E →L[𝕜] E := 1 + star (X * P) * (X * P) with hNdef
   set R : E →L[𝕜] E := Ring.inverse N with hRdef
@@ -202,18 +245,14 @@ theorem projection_graphSubspace_formula
   have hNR : N * R = 1 := Ring.mul_inverse_cancel N hNunit
   have hRN : R * N = 1 := Ring.inverse_mul_cancel N hNunit
   have hPN : P * N = N * P := by
-    rw [hN, mul_add, add_mul, mul_one, one_mul]
-    congr 1
-    calc P * (star X * X) = (P * star X) * X := by rw [mul_assoc]
-      _ = star X * X := by rw [hPsX]
-      _ = star X * (X * P) := by rw [hXP]
-      _ = (star X * X) * P := by rw [mul_assoc]
+    rw [hN]
+    exact projection_commute_one_add_star_mul_self_of_isAngularOperator hX
   have hPR : P * R = R * P := TauCeti.ringInverse_semiconj hNunit hNunit hPN
   have hsA : star A = P + star X := by rw [hA, star_add, hsP]
   have hPsA : P * star A = star A := by rw [hsA, mul_add, hPP, hPsX]
   have hsAA : star A * A = N * P := by
-    rw [hsA, hA, add_mul, mul_add, mul_add, hPP, hPX, hsXP, hN, add_mul, one_mul,
-      mul_assoc, hXP, add_zero, zero_add]
+    rw [hA, hN]
+    exact star_mul_self_of_isAngularOperator hX
   have hsAQ : star A * (A * R * star A) = star A := by
     have h1 : star A * (A * R * star A) = (star A * A) * (R * star A) := by
       simp only [mul_assoc]
@@ -261,12 +300,8 @@ theorem norm_projection_sub_projection_graphSubspace
   have hPX : P * X = 0 := hX.2
   have hPP : P * P = P := (U.isIdempotentElem_starProjection).eq
   have hsP : star P = P := (isSelfAdjoint_starProjection U).star_eq
-  have hsXP : star X * P = 0 := by
-    have h := congrArg star hPX
-    rwa [star_mul, hsP, star_zero] at h
-  have hPsX : P * star X = star X := by
-    have h := congrArg star hXP
-    rwa [star_mul, hsP] at h
+  have hsXP : star X * P = 0 := star_mul_projection_of_isAngularOperator hX
+  have hPsX : P * star X = star X := projection_mul_star_of_isAngularOperator hX
   set A : E →L[𝕜] E := P + X * P with hAdef
   set N : E →L[𝕜] E := 1 + star (X * P) * (X * P) with hNdef
   set R : E →L[𝕜] E := Ring.inverse N with hRdef
@@ -295,12 +330,8 @@ theorem norm_projection_sub_projection_graphSubspace
   have hRsa : star R = R := IsSelfAdjoint.ringInverse hNsa
   -- commutation of `P` with `N` and `R`
   have hPN : P * N = N * P := by
-    rw [hN, mul_add, add_mul, mul_one, one_mul]
-    congr 1
-    calc P * (star X * X) = (P * star X) * X := by rw [mul_assoc]
-      _ = star X * X := by rw [hPsX]
-      _ = star X * (X * P) := by rw [hXP]
-      _ = (star X * X) * P := by rw [mul_assoc]
+    rw [hN]
+    exact projection_commute_one_add_star_mul_self_of_isAngularOperator hX
   have hPR : P * R = R * P := TauCeti.ringInverse_semiconj hNunit hNunit hPN
   -- graph parametrization algebra
   have hsA : star A = P + star X := by rw [hA, star_add, hsP]
@@ -308,8 +339,8 @@ theorem norm_projection_sub_projection_graphSubspace
   have hPsA : P * star A = star A := by rw [hsA, mul_add, hPP, hPsX]
   have hsAP : star A * P = P := by rw [hsA, add_mul, hPP, hsXP, add_zero]
   have hsAA : star A * A = N * P := by
-    rw [hsA, hA, add_mul, mul_add, mul_add, hPP, hPX, hsXP, hN, add_mul, one_mul,
-      mul_assoc, hXP, add_zero, zero_add]
+    rw [hA, hN]
+    exact star_mul_self_of_isAngularOperator hX
   -- the two one-sided blocks
   have hPQ : P * (A * R * star A) = R * star A := by
     calc P * (A * R * star A) = ((P * A) * R) * star A := by
