@@ -243,6 +243,26 @@ theorem all_kyFanApproximationGauge_le_of_cutoff_le
   exact kyFanApproximationGauge_le_of_cutoff_le hB PCB k
     (fun τ hτ => hcut τ hτ k)
 
+/-- **Shifting both blocks of a Sylvester equation by the same scalar leaves it
+unchanged.**
+
+`(A - m) X - X (B - m) = A X - X B`, because the two `m X` terms cancel.  Both
+semibounded-direct bounds below derived this inline. -/
+private theorem sylvester_shift_invariant
+    (AF : E →L[𝕜] E) (BF : F →L[𝕜] F) (Xc : F →L[𝕜] E) (Cc : F →L[𝕜] E)
+    (m : ℝ) (hEqCut : AF ∘L Xc - Xc ∘L BF = Cc) :
+    (AF - ((m : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E) ∘L Xc -
+        Xc ∘L (BF - ((m : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 F) = Cc := by
+  ext x
+  have hraw := congrArg (fun T : F →L[𝕜] E => T x) hEqCut
+  simp only [ContinuousLinearMap.comp_apply, sub_apply,
+    smul_apply, ContinuousLinearMap.id_apply, map_sub, map_smul] at hraw ⊢
+  calc
+    AF (Xc x) - ((m : ℝ) : 𝕜) • Xc x -
+        (Xc (BF x) - ((m : ℝ) : 𝕜) • Xc x) =
+      AF (Xc x) - Xc (BF x) := by module
+    _ = Cc x := hraw
+
 /-- Ky Fan estimate obtained from bounded spectral truncations. -/
 theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
     {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
@@ -331,16 +351,8 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
   have hρδ : 0 < ρ + δ := by linarith
   obtain ⟨hA1inv, hA1invNorm⟩ :=
     boundedInverseData_of_coercive_direct hρδ hA1coer
-  have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc := by
-    ext x
-    have hraw := congrArg (fun T : F →L[𝕜] E => T x) hEqCut
-    simp only [A1, B1, ContinuousLinearMap.comp_apply, sub_apply,
-      smul_apply, ContinuousLinearMap.id_apply, map_sub, map_smul] at hraw ⊢
-    calc
-      AF (Xc x) - ((m : ℝ) : 𝕜) • Xc x -
-          (Xc (BF x) - ((m : ℝ) : 𝕜) • Xc x) =
-        AF (Xc x) - Xc (BF x) := by module
-      _ = Cc x := hraw
+  have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc :=
+    sylvester_shift_invariant AF BF Xc Cc m hEqCut
   have hmain := sylvester_mem_and_gauge_le_of_bound_inverse
     (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
     hA1inv B1 hρ hδ hA1invNorm hB1norm hEqShift
@@ -439,16 +451,8 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
   have hρδ : 0 < ρ + δ := by linarith
   obtain ⟨hB1inv, hB1invNorm⟩ :=
     boundedInverseData_of_coercive_direct hρδ hB1coer
-  have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc := by
-    ext x
-    have hraw := congrArg (fun T : F →L[𝕜] E => T x) hEqCut
-    simp only [A1, B1, ContinuousLinearMap.comp_apply, sub_apply,
-      smul_apply, ContinuousLinearMap.id_apply, map_sub, map_smul] at hraw ⊢
-    calc
-      AF (Xc x) - ((m : ℝ) : 𝕜) • Xc x -
-          (Xc (BF x) - ((m : ℝ) : 𝕜) • Xc x) =
-        AF (Xc x) - Xc (BF x) := by module
-      _ = Cc x := hraw
+  have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc :=
+    sylvester_shift_invariant AF BF Xc Cc m hEqCut
   have hmain := sylvester_mem_and_gauge_le_of_bound_inverse_swapped
     (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
     hB1inv A1 hρ hδ hB1invNorm hA1norm hEqShift
