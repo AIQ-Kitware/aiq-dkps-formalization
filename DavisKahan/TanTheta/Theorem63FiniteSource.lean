@@ -271,6 +271,35 @@ noncomputable def theorem63ResidualWitness
     (((Real.sqrt (1 - sigma ^ 2) : ℝ) : ℂ)⁻¹) •
       (finiteSourceLeftSingularVector S i - ((sigma : ℝ) : ℂ) • (v : H))
 
+/-- **Adjoint transfer along a real singular relation**, for a continuous linear
+map.
+
+If `Z⋆ y = σ • v` with `σ` real, testing `Z w` against `y` is testing `w` against
+`v`, scaled by `σ`.  `orthonormal_theorem63ResidualWitness` below proves
+instances of this **three times** — twice at `⟪v_i, yj⟫` in two branches, once
+mirrored at `⟪yi, v_j⟫`.
+
+`RitzResidual.lean` carries the `LinearMap` twin of this pair, for the same
+reason and in the same shape; the two developments are analogous rather than
+textually identical, which is why no textual check pairs them.  See
+`{lane:DK-LONGPROOF-7}`. -/
+theorem inner_apply_right_of_adjointL_eq_smul {K : Type*} [NormedAddCommGroup K]
+    [InnerProductSpace ℂ K] [CompleteSpace K] [CompleteSpace H]
+    {Z : K →L[ℂ] H} {y : H} {v : K} {σ : ℝ}
+    (h : ContinuousLinearMap.adjoint Z y = ((σ : ℝ) : ℂ) • v) (w : K) :
+    ⟪Z w, y⟫_ℂ = ((σ : ℝ) : ℂ) * ⟪w, v⟫_ℂ := by
+  rw [← ContinuousLinearMap.adjoint_inner_right, h, inner_smul_right]
+
+/-- The mirrored form, with the singular vector on the left.  `σ` being real is
+what makes the conjugate disappear. -/
+theorem inner_apply_left_of_adjointL_eq_smul {K : Type*} [NormedAddCommGroup K]
+    [InnerProductSpace ℂ K] [CompleteSpace K] [CompleteSpace H]
+    {Z : K →L[ℂ] H} {y : H} {v : K} {σ : ℝ}
+    (h : ContinuousLinearMap.adjoint Z y = ((σ : ℝ) : ℂ) • v) (w : K) :
+    ⟪y, Z w⟫_ℂ = ((σ : ℝ) : ℂ) * ⟪v, w⟫_ℂ := by
+  rw [← ContinuousLinearMap.adjoint_inner_left, h, inner_smul_left,
+    Complex.conj_ofReal]
+
 /-- The residual witnesses form an orthonormal family once the source gap has
 excluded the tangent pole. -/
 theorem orthonormal_theorem63ResidualWitness
@@ -381,12 +410,8 @@ theorem orthonormal_theorem63ResidualWitness
             theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector Z V hj
         have hvi_yj :
             ⟪(v_i : H), yj⟫_ℂ =
-              ((sigma_j : ℝ) : ℂ) * ⟪v_i, v_j⟫_ℂ := by
-          calc
-            ⟪(v_i : H), yj⟫_ℂ = ⟪v_i, Z.subtypeL.adjoint yj⟫_ℂ :=
-              (ContinuousLinearMap.adjoint_inner_right Z.subtypeL v_i yj).symm
-            _ = ⟪v_i, ((sigma_j : ℝ) : ℂ) • v_j⟫_ℂ := by rw [hZadjj]
-            _ = _ := by rw [inner_smul_right]
+              ((sigma_j : ℝ) : ℂ) * ⟪v_i, v_j⟫_ℂ :=
+          inner_apply_right_of_adjointL_eq_smul hZadjj v_i
         have hraw :
             ⟪(v_i : H),
               yj - ((sigma_j : ℝ) : ℂ) • (v_j : H)⟫_ℂ = 0 := by
@@ -438,20 +463,12 @@ theorem orthonormal_theorem63ResidualWitness
               ⟨i, hi⟩ ⟨j, hj⟩)
         have hyi_vj :
             ⟪yi, (v_j : H)⟫_ℂ =
-              ((sigma_i : ℝ) : ℂ) * ⟪v_i, v_j⟫_ℂ := by
-          calc
-            ⟪yi, (v_j : H)⟫_ℂ = ⟪Z.subtypeL.adjoint yi, v_j⟫_ℂ :=
-              (ContinuousLinearMap.adjoint_inner_left Z.subtypeL v_j yi).symm
-            _ = ⟪((sigma_i : ℝ) : ℂ) • v_i, v_j⟫_ℂ := by rw [hZadji]
-            _ = _ := by rw [inner_smul_left, Complex.conj_ofReal]
+              ((sigma_i : ℝ) : ℂ) * ⟪v_i, v_j⟫_ℂ :=
+          inner_apply_left_of_adjointL_eq_smul hZadji v_j
         have hvi_yj :
             ⟪(v_i : H), yj⟫_ℂ =
-              ((sigma_j : ℝ) : ℂ) * ⟪v_i, v_j⟫_ℂ := by
-          calc
-            ⟪(v_i : H), yj⟫_ℂ = ⟪v_i, Z.subtypeL.adjoint yj⟫_ℂ :=
-              (ContinuousLinearMap.adjoint_inner_right Z.subtypeL v_i yj).symm
-            _ = ⟪v_i, ((sigma_j : ℝ) : ℂ) • v_j⟫_ℂ := by rw [hZadjj]
-            _ = _ := by rw [inner_smul_right]
+              ((sigma_j : ℝ) : ℂ) * ⟪v_i, v_j⟫_ℂ :=
+          inner_apply_right_of_adjointL_eq_smul hZadjj v_i
         have hraw :
             ⟪yi - ((sigma_i : ℝ) : ℂ) • (v_i : H),
               yj - ((sigma_j : ℝ) : ℂ) • (v_j : H)⟫_ℂ = 0 := by

@@ -191,6 +191,28 @@ noncomputable def tanThetaResidualWitness
     (((Real.sqrt (1 - σ ^ 2) : ℝ) : 𝕜)⁻¹) •
       (leftSingularVector S i - ((σ : ℝ) : 𝕜) • X v)
 
+/-- **Adjoint transfer along a real singular relation.**
+
+If `X⋆ y = σ • v` with `σ` real, then testing `X w` against `y` is testing `w`
+against `v`, scaled by `σ`.  Two lines, and
+`orthonormal_tanThetaResidualWitness` below proves an instance of it **three
+times**: twice at `⟪X vi, yj⟫` in two different branches, once at `⟪yi, X vj⟫`
+in the mirrored form.  See `{lane:DK-LONGPROOF-7}`. -/
+theorem inner_apply_right_of_adjoint_eq_smul [FiniteDimensional 𝕜 E]
+    [FiniteDimensional 𝕜 F] {X : E →ₗ[𝕜] F} {y : F} {v : E} {σ : ℝ}
+    (h : X.adjoint y = ((σ : ℝ) : 𝕜) • v) (w : E) :
+    ⟪X w, y⟫_𝕜 = ((σ : ℝ) : 𝕜) * ⟪w, v⟫_𝕜 := by
+  rw [← LinearMap.adjoint_inner_right, h, inner_smul_right]
+
+/-- The mirrored form of `inner_apply_right_of_adjoint_eq_smul`, with the
+singular vector on the left.  `σ` being real is what makes the conjugate
+disappear. -/
+theorem inner_apply_left_of_adjoint_eq_smul [FiniteDimensional 𝕜 E]
+    [FiniteDimensional 𝕜 F] {X : E →ₗ[𝕜] F} {y : F} {v : E} {σ : ℝ}
+    (h : X.adjoint y = ((σ : ℝ) : 𝕜) • v) (w : E) :
+    ⟪y, X w⟫_𝕜 = ((σ : ℝ) : 𝕜) * ⟪v, w⟫_𝕜 := by
+  rw [← LinearMap.adjoint_inner_left, h, inner_smul_left, RCLike.conj_ofReal]
+
 /-- The residual witnesses form an orthonormal family once the tangent has no pole. -/
 theorem orthonormal_tanThetaResidualWitness
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
@@ -299,14 +321,8 @@ theorem orthonormal_tanThetaResidualWitness
           simpa [S, σj, vj, yj] using
             adjoint_apply_sinTheta_leftSingularVector U X hj
         have hXvi_yj :
-            ⟪X.toLinearMap vi, yj⟫_𝕜 = ((σj : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 := by
-          calc
-            ⟪X.toLinearMap vi, yj⟫_𝕜 =
-                ⟪vi, X.toLinearMap.adjoint yj⟫_𝕜 :=
-              (LinearMap.adjoint_inner_right X.toLinearMap vi yj).symm
-            _ = ⟪vi, ((σj : ℝ) : 𝕜) • vj⟫_𝕜 := by rw [hXadjj]
-            _ = ((σj : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 := by
-              rw [inner_smul_right]
+            ⟪X.toLinearMap vi, yj⟫_𝕜 = ((σj : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 :=
+          inner_apply_right_of_adjoint_eq_smul hXadjj vi
         have hraw :
             ⟪X.toLinearMap vi,
               yj - ((σj : ℝ) : 𝕜) • X.toLinearMap vj⟫_𝕜 = 0 := by
@@ -357,23 +373,11 @@ theorem orthonormal_tanThetaResidualWitness
             (orthonormal_iff_ite.mp (orthonormal_leftSingularVector_subtype S)
               ⟨i, hi⟩ ⟨j, hj⟩)
         have hyi_Xvj :
-            ⟪yi, X.toLinearMap vj⟫_𝕜 = ((σi : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 := by
-          calc
-            ⟪yi, X.toLinearMap vj⟫_𝕜 =
-                ⟪X.toLinearMap.adjoint yi, vj⟫_𝕜 :=
-              (LinearMap.adjoint_inner_left X.toLinearMap vj yi).symm
-            _ = ⟪((σi : ℝ) : 𝕜) • vi, vj⟫_𝕜 := by rw [hXadji]
-            _ = ((σi : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 := by
-              rw [inner_smul_left, RCLike.conj_ofReal]
+            ⟪yi, X.toLinearMap vj⟫_𝕜 = ((σi : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 :=
+          inner_apply_left_of_adjoint_eq_smul hXadji vj
         have hXvi_yj :
-            ⟪X.toLinearMap vi, yj⟫_𝕜 = ((σj : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 := by
-          calc
-            ⟪X.toLinearMap vi, yj⟫_𝕜 =
-                ⟪vi, X.toLinearMap.adjoint yj⟫_𝕜 :=
-              (LinearMap.adjoint_inner_right X.toLinearMap vi yj).symm
-            _ = ⟪vi, ((σj : ℝ) : 𝕜) • vj⟫_𝕜 := by rw [hXadjj]
-            _ = ((σj : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 := by
-              rw [inner_smul_right]
+            ⟪X.toLinearMap vi, yj⟫_𝕜 = ((σj : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 :=
+          inner_apply_right_of_adjoint_eq_smul hXadjj vi
         have hraw :
             ⟪yi - ((σi : ℝ) : 𝕜) • X.toLinearMap vi,
               yj - ((σj : ℝ) : 𝕜) • X.toLinearMap vj⟫_𝕜 = 0 := by
