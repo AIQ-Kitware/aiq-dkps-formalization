@@ -45,9 +45,18 @@ LANES = ROOT / "dev/LANES.md"
 #: is ratcheted, because 60 historical rows predate the convention and most are terminal
 #: rows for lanes already marked elsewhere.  New ones are what cause collisions, so the
 #: number may only fall.  Measured 2026-07-30.
+#:
+#: **"May only fall" was unobeyable until 2026-08-01.**  The state check below prescribes
+#: dropping the `{lane:}` marker from a superseded row, and doing that turns a marked row
+#: into a markerless one -- so clearing a fatal finding RAISED this number.  One merge
+#: brought 22 such rows.  Markerless rows are counted because a second agent will take
+#: work already in progress; a lane that is terminal elsewhere cannot be taken, so those
+#: rows are now exempted (and the count of exemptions is printed, never silent).
 MARKERLESS_BASELINE = 52
 
 LANE_RE = re.compile(r"\{lane:([A-Za-z0-9()\-_]+)\}")
+#: The lane a row NAMES in its prose, as opposed to the one it registers with a marker.
+OWNER_LANE_RE = re.compile(r"\blane ([A-Za-z0-9()\-_]+)")
 NEEDS_RE = re.compile(r"\{needs:[^}]*\}")
 SEPARATOR = re.compile(r"^\s*\|[\s:|-]+\|\s*$")
 CONFLICT = re.compile(r"^(<{7}|={7}|>{7})")
@@ -71,6 +80,7 @@ def main(argv=None) -> int:
     lines = LANES.read_text().splitlines()
     findings: list[str] = []       # always fatal
     markerless: list[str] = []     # ratcheted
+    pending: list[tuple[int, str, str | None]] = []   # decided after per_lane is known
 
     for n, line in enumerate(lines, 1):
         if CONFLICT.match(line):
@@ -91,10 +101,8 @@ def main(argv=None) -> int:
         m = LANE_RE.search(status)
         if m is None:
             if ANNOUNCES.search(owner):
-                markerless.append(
-                    f"{LANES.name}:{n}: row announces a claim/completion but carries no "
-                    f"{{lane:...}} marker, so the lane graph cannot see it -- "
-                    f"{re.sub(r'[*]+', '', owner).strip()[:70]}")
+                named = OWNER_LANE_RE.search(owner)
+                pending.append((n, owner, named.group(1) if named else None))
             continue
         lane, prose = m.group(1), bare(status)
         rec = per_lane.setdefault(lane, {"terminal": [], "held": [], "open": []})
@@ -120,6 +128,23 @@ def main(argv=None) -> int:
                     f"{LANES.name}:{n}: lane {lane} reads as OPEN because its status does "
                     f"not BEGIN with a terminal keyword, though the row says it is finished "
                     f"-- write `DONE - ...`, not `unclaimed ... DONE`")
+
+    # A markerless row that names a lane which is TERMINAL elsewhere cannot cause the
+    # collision this check exists to prevent -- nobody claims a finished lane.  Exempting
+    # them is what makes the ratchet fall instead of rise when a superseded claim row has
+    # its marker correctly dropped, which is the remedy the state check itself prescribes.
+    exempt = 0
+    for n, owner, named in pending:
+        if named and per_lane.get(named, {}).get("terminal"):
+            exempt += 1
+            continue
+        markerless.append(
+            f"{LANES.name}:{n}: row announces a claim/completion but carries no "
+            f"{{lane:...}} marker, so the lane graph cannot see it -- "
+            f"{re.sub(r'[*]+', '', owner).strip()[:70]}")
+    if exempt:
+        print(f"lane-format check: {exempt} markerless row(s) exempted -- each names a lane "
+              f"that is terminal elsewhere, so it cannot collide.")
 
     for lane, rec in sorted(per_lane.items()):
         if rec["terminal"] and rec["held"]:
