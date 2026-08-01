@@ -95,6 +95,23 @@ theorem measure_exists_entry_gt_le
         rw [← ENNReal.ofReal_mul (Nat.cast_nonneg n), ← ENNReal.ofReal_mul (Nat.cast_nonneg n)]
         congr 1; ring
 
+/-- **The some-entry-far event is measurable.**
+
+It is a finite union over entries of `{η < |Ŝ k l − A k l|}`, each measurable
+because the entry is.  Both concentration theorems below opened with this same
+seven-line block, differing only in the name they gave the union step. -/
+theorem measurableSet_exists_entry_gt {Shat : Ω → Matrix (Fin n) (Fin n) ℝ}
+    {A : Matrix (Fin n) (Fin n) ℝ} {η : ℝ}
+    (hmeas : ∀ k l, Measurable (fun ω => Shat ω k l)) :
+    MeasurableSet {ω | ∃ k l, η < |Shat ω k l - A k l|} := by
+  have hunion : {ω | ∃ k l, η < |Shat ω k l - A k l|}
+      = ⋃ k : Fin n, ⋃ l : Fin n, {ω | η < |Shat ω k l - A k l|} := by
+    ext ω; simp only [Set.mem_setOf_eq, Set.mem_iUnion]
+  rw [hunion]
+  refine MeasurableSet.iUnion fun k => MeasurableSet.iUnion fun l => ?_
+  exact measurableSet_lt measurable_const
+    (continuous_abs.measurable.comp ((hmeas k l).sub measurable_const))
+
 /-- **Eigenvalue concentration of a random Hermitian matrix.**  With probability
 `≥ 1 − n² v / η²`, every sorted eigenvalue of `Shat(ω)` is within `n · η` of the
 corresponding eigenvalue of `A`. -/
@@ -200,14 +217,8 @@ theorem measure_forall_norm_toEuclideanLin_sub_le_ge
   have hbad : P {ω | ∃ k l, η < |Shat ω k l - A k l|}
       ≤ ENNReal.ofReal ((n : ℝ) ^ 2 * v / η ^ 2) :=
     measure_exists_entry_gt_le P Shat A hint hη hmoment
-  have hbad_meas : MeasurableSet {ω | ∃ k l, η < |Shat ω k l - A k l|} := by
-    have hunion : {ω | ∃ k l, η < |Shat ω k l - A k l|}
-        = ⋃ k : Fin n, ⋃ l : Fin n, {ω | η < |Shat ω k l - A k l|} := by
-      ext ω; simp only [Set.mem_setOf_eq, Set.mem_iUnion]
-    rw [hunion]
-    refine MeasurableSet.iUnion fun k => MeasurableSet.iUnion fun l => ?_
-    exact measurableSet_lt measurable_const
-      (continuous_abs.measurable.comp ((hmeas k l).sub measurable_const))
+  have hbad_meas : MeasurableSet {ω | ∃ k l, η < |Shat ω k l - A k l|} :=
+    measurableSet_exists_entry_gt hmeas
   have hcompl : {ω | ∀ k l : Fin n, |Shat ω k l - A k l| ≤ η}
       = {ω | ∃ k l, η < |Shat ω k l - A k l|}ᶜ := by
     ext ω
