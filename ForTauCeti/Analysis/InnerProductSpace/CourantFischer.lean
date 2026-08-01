@@ -96,6 +96,16 @@ open scoped InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] {n : ℕ}
 
+/-- **Two subspaces whose dimensions overshoot the ambient one must meet.**
+
+The contrapositive of `Submodule.finrank_add_finrank_le_of_disjoint`, in the
+form the min--max arguments below use it; both of them derived it inline from
+`finrank_sup_add_finrank_inf_eq`. -/
+theorem inf_ne_bot_of_finrank_lt [FiniteDimensional 𝕜 E] {V W : Submodule 𝕜 E}
+    (h : finrank 𝕜 E < finrank 𝕜 V + finrank 𝕜 W) : V ⊓ W ≠ ⊥ := fun hbot =>
+  absurd (Submodule.finrank_add_finrank_le_of_disjoint (disjoint_iff.mpr hbot))
+    (by omega)
+
 /-- Parseval: in an orthonormal basis the squared norms of the coordinates sum
 to the squared norm.  Thin wrapper around
 `OrthonormalBasis.sum_sq_norm_inner_right`. -/
@@ -210,13 +220,8 @@ theorem exists_unit_vector_re_inner_le_eigenvalue
     rw [hV, hWdim]
     have hk : (k : ℕ) < n := k.2
     omega
-  have hinf : V ⊓ W ≠ ⊥ := by
-    intro hbot
-    have hle := Submodule.finrank_sup_add_finrank_inf_eq V W
-    rw [hbot, finrank_bot, add_zero] at hle
-    have hsup : finrank 𝕜 (↑(V ⊔ W) : Submodule 𝕜 E) ≤ n := by
-      rw [← hn]; exact Submodule.finrank_le _
-    omega
+  have hinf : V ⊓ W ≠ ⊥ :=
+    inf_ne_bot_of_finrank_lt (by omega)
   obtain ⟨z, hz, hz0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hinf
   obtain ⟨hzV, hzW⟩ := Submodule.mem_inf.mp hz
   have hz0' : ‖z‖ ≠ 0 := norm_ne_zero_iff.mpr hz0
@@ -405,14 +410,8 @@ theorem eigenvalues_eq_of_eigenbasis
     set W := w.spanIndices ↑(Finset.Ici k) with hW
     have hWdim : finrank 𝕜 W = n - (k : ℕ) := by
       rw [hW, w.finrank_spanIndices, Fin.card_Ici]
-    have hinf : V ⊓ W ≠ ⊥ := by
-      intro hbot
-      have hle := Submodule.finrank_sup_add_finrank_inf_eq V W
-      rw [hbot, finrank_bot, add_zero] at hle
-      have hsup : finrank 𝕜 (↑(V ⊔ W) : Submodule 𝕜 E) ≤ n := by
-        rw [← hn]; exact Submodule.finrank_le _
-      have hk : (k : ℕ) < n := k.2
-      omega
+    have hinf : V ⊓ W ≠ ⊥ :=
+      inf_ne_bot_of_finrank_lt (by have hk : (k : ℕ) < n := k.2; omega)
     obtain ⟨z, hz, hz0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hinf
     obtain ⟨hzV, hzW⟩ := Submodule.mem_inf.mp hz
     have hz0' : ‖z‖ ≠ 0 := norm_ne_zero_iff.mpr hz0
