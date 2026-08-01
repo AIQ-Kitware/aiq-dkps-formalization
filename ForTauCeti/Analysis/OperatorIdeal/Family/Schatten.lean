@@ -419,13 +419,8 @@ instance isComplete_schattenIdealFamily {𝕜 : Type u} [RCLike 𝕜]
     intro E F _ _ _ _ _ _
     have hp0 : (0 : ℝ) < p := lt_of_lt_of_le zero_lt_one hp
     refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
-    have hop : CauchySeq fun n => (a n).val := by
-      rw [Metric.cauchySeq_iff] at ha ⊢
-      intro ε hε
-      obtain ⟨M, hM⟩ := ha ε hε
-      refine ⟨M, fun m hm n hn => lt_of_le_of_lt ?_ (hM m hm n hn)⟩
-      rw [dist_eq_norm, dist_eq_norm]
-      exact TauCeti.OperatorIdealFamily.Elem.norm_val_le (a m - a n)
+    have hop : CauchySeq fun n => (a n).val :=
+      TauCeti.OperatorIdealFamily.Elem.cauchySeq_val ha
     obtain ⟨L, hL⟩ := cauchySeq_tendsto_of_complete hop
     have hcauchy : ∀ ε : ℝ, 0 < ε → ∃ N, ∀ n ≥ N,
         (L - (a n).val).schattenENorm p ≤ ENNReal.ofReal ε := by

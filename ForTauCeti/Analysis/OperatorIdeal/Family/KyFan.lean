@@ -126,13 +126,8 @@ instance isComplete_kyFanIdealFamily (k : ℕ) (hk : 0 < k) :
         ‖x‖ = x.val.kyFanGauge k :=
       fun x => ENNReal.toReal_ofReal (x.val.kyFanGauge_nonneg k)
     refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
-    have hop : CauchySeq fun n => (a n).val := by
-      rw [Metric.cauchySeq_iff] at ha ⊢
-      intro ε hε
-      obtain ⟨M, hM⟩ := ha ε hε
-      refine ⟨M, fun m hm n hn => lt_of_le_of_lt ?_ (hM m hm n hn)⟩
-      rw [dist_eq_norm, dist_eq_norm, hnorm]
-      exact ContinuousLinearMap.opNorm_le_kyFanGauge _ hk
+    have hop : CauchySeq fun n => (a n).val :=
+      TauCeti.OperatorIdealFamily.Elem.cauchySeq_val ha
     obtain ⟨L, hL⟩ := cauchySeq_tendsto_of_complete hop
     refine ⟨TauCeti.OperatorIdealFamily.Elem.mk (gauge_kyFanIdealFamily_ne_top k hk L), ?_⟩
     have hkR : (0 : ℝ) < k := by exact_mod_cast hk

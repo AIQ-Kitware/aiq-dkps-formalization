@@ -253,13 +253,8 @@ instance isComplete_traceClassIdealFamily {𝕜 : Type u} [RCLike 𝕜]
     intro E F _ _ _ _ _ _
     refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
     -- the gauge dominates the operator norm, so the sequence is Cauchy there too
-    have hop : CauchySeq fun n => (a n).val := by
-      rw [Metric.cauchySeq_iff] at ha ⊢
-      intro ε hε
-      obtain ⟨M, hM⟩ := ha ε hε
-      refine ⟨M, fun m hm n hn => lt_of_le_of_lt ?_ (hM m hm n hn)⟩
-      rw [dist_eq_norm, dist_eq_norm]
-      exact TauCeti.OperatorIdealFamily.Elem.norm_val_le (a m - a n)
+    have hop : CauchySeq fun n => (a n).val :=
+      TauCeti.OperatorIdealFamily.Elem.cauchySeq_val ha
     obtain ⟨L, hL⟩ := cauchySeq_tendsto_of_complete hop
     -- the tail of the Cauchy estimate, transported from the ideal norm to the gauge
     have hcauchy : ∀ ε : ℝ, 0 < ε → ∃ N, ∀ n ≥ N,

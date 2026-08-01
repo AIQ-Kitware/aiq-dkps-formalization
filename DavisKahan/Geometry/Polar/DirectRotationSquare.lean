@@ -54,6 +54,7 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 noncomputable def principalHalfPhase (z : ℂ) : ℂ :=
   if z = -1 then 1 else (1 + z) / (‖1 + z‖ : ℂ)
 
+omit [CompleteSpace H] in
 /-- **A coercive real quadratic form gives a lower bound on the operator.**
 
 If `c ‖x‖² ≤ Re ⟪C y, x⟫` and `‖y‖ = ‖x‖`, then `c ‖y‖ ≤ ‖C y‖`: Cauchy–Schwarz

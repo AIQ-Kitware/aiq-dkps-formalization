@@ -284,7 +284,7 @@ reason and in the same shape; the two developments are analogous rather than
 textually identical, which is why no textual check pairs them.  See
 `{lane:DK-LONGPROOF-7}`. -/
 theorem inner_apply_right_of_adjointL_eq_smul {K : Type*} [NormedAddCommGroup K]
-    [InnerProductSpace ℂ K] [CompleteSpace K] [CompleteSpace H]
+    [InnerProductSpace ℂ K] [CompleteSpace K]
     {Z : K →L[ℂ] H} {y : H} {v : K} {σ : ℝ}
     (h : ContinuousLinearMap.adjoint Z y = ((σ : ℝ) : ℂ) • v) (w : K) :
     ⟪Z w, y⟫_ℂ = ((σ : ℝ) : ℂ) * ⟪w, v⟫_ℂ := by
@@ -293,7 +293,7 @@ theorem inner_apply_right_of_adjointL_eq_smul {K : Type*} [NormedAddCommGroup K]
 /-- The mirrored form, with the singular vector on the left.  `σ` being real is
 what makes the conjugate disappear. -/
 theorem inner_apply_left_of_adjointL_eq_smul {K : Type*} [NormedAddCommGroup K]
-    [InnerProductSpace ℂ K] [CompleteSpace K] [CompleteSpace H]
+    [InnerProductSpace ℂ K] [CompleteSpace K]
     {Z : K →L[ℂ] H} {y : H} {v : K} {σ : ℝ}
     (h : ContinuousLinearMap.adjoint Z y = ((σ : ℝ) : ℂ) • v) (w : K) :
     ⟪y, Z w⟫_ℂ = ((σ : ℝ) : ℂ) * ⟪v, w⟫_ℂ := by
