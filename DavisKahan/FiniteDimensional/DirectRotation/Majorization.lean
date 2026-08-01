@@ -72,7 +72,7 @@ theorem re_inner_hermitianPart (A : E →ₗ[𝕜] E) (x : E) :
     RCLike.re ⟪hermitianPart A x, x⟫_𝕜 = RCLike.re ⟪A x, x⟫_𝕜 := by
   have hconj : RCLike.re ⟪x, A x⟫_𝕜 = RCLike.re ⟪A x, x⟫_𝕜 := by
     rw [← inner_conj_symm (A x) x, RCLike.conj_re]
-  rw [hermitianPart_apply, inner_smul_left, RCLike.conj_ofReal,
+  simp only [hermitianPart_apply, inner_smul_left, RCLike.conj_ofReal,
     inner_add_left, LinearMap.adjoint_inner_left, RCLike.re_ofReal_mul,
     map_add, hconj]
   ring
@@ -94,7 +94,7 @@ theorem displacementSquare_apply_inner (W : E →ₗ[𝕜] E) (x : E) :
       LinearMap.adjoint (LinearMap.id - W) := by
     rw [map_sub, LinearMap.adjoint_id]
   -- `congr 2` peels past the norm and leaves the false `x - W x = W x - x`
-  rw [displacementSquare, LinearMap.comp_apply, he,
+  simp only [displacementSquare, LinearMap.comp_apply, he,
     LinearMap.adjoint_inner_left, inner_self_eq_norm_sq,
     LinearMap.sub_apply, LinearMap.id_apply, norm_sub_rev]
 
@@ -136,7 +136,7 @@ theorem projection_intertwines_of_map_eq
   -- the goal carries `W.toLinearEquiv`; the membership facts carry `W`
   simp only [LinearMap.comp_apply, map_add,
     LinearIsometryEquiv.coe_toLinearEquiv, LinearEquiv.coe_coe]
-  rw [projection_apply_of_mem hU, projection_apply_of_mem_orthogonal hperp,
+  simp only [projection_apply_of_mem hU, projection_apply_of_mem_orthogonal hperp,
     add_zero, projection_apply_of_mem (U.starProjection_apply_mem x),
     projection_apply_of_mem_orthogonal (Uᗮ.starProjection_apply_mem x),
     map_zero, add_zero]

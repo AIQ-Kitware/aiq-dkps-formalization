@@ -182,7 +182,7 @@ theorem conjugateOperator_cayley (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
           (ClosedOperatorComplexification.complexify A).toLinearPMap hni) := by
     rw [conjugateOperator_tauCetiResolvent A hA (by simp) hni hconjI,
       TauCeti.LinearPMap.adjoint_resolvent hAℂ hni hconjI]
-  rw [TauCeti.LinearPMap.cayley, conjugateOperator_sub, conjugateOperator_one,
+  simp only [TauCeti.LinearPMap.cayley, conjugateOperator_sub, conjugateOperator_one,
     conjugateOperator_complex_smul, hkey, star_sub, star_one, star_smul,
     ContinuousLinearMap.star_eq_adjoint]
   rfl
@@ -204,7 +204,7 @@ theorem conjugateOperator_cfcHom {U : Eℂ →L[ℂ] Eℂ} (hU : IsStarNormal U)
       map_zero' := by rw [star_zero, map_zero, conjugateOperator_zero]
       map_add' := fun g h => by rw [star_add, map_add, conjugateOperator_add]
       commutes' := fun c => by
-        rw [Algebra.algebraMap_eq_smul_one, star_smul, star_one, map_smul, map_one,
+        simp only [Algebra.algebraMap_eq_smul_one, star_smul, star_one, map_smul, map_one,
           conjugateOperator_complex_smul, conjugateOperator_one,
           Algebra.algebraMap_eq_smul_one]
         congr 1
