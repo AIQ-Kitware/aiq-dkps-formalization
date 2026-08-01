@@ -308,6 +308,48 @@ it said anything, and would then say nothing here. -/
   refine le_trans ?_ (Φ.iSup_le_extend (fun _ => ⊤))
   simp
 
+/-- **`extend` is the supremum over ALL dominated finitely supported sequences.**
+
+`extend` is defined as a supremum over the two-parameter family `truncate a k m`.  This
+says the restriction to that family costs nothing: the same value is obtained by ranging
+over every `b : ℕ →₀ ℝ≥0` dominated by `a`.
+
+**Recorded because `ForTauCeti` currently contains a second `SymmetricGauge` whose `extend`
+is defined by the right-hand side here** (`Analysis/Normed/SymmetricGauge.lean`), and
+reconciling the two is a proof obligation, not a renaming — the two definitions are
+different constructions that happen to agree.  This is that obligation, discharged on the
+side that can state it.  See `{lane:FTC-SYMGAUGE-COLLIDE}`.
+
+Both directions are short and neither needs more than `Φ.mono`: every truncation is
+dominated, and conversely a dominated `b` has finite support, so it sits below the
+truncation at any length past its support and any cap above its values. -/
+theorem extend_eq_iSup_dominated (Φ : SymmetricGauge) (a : ℕ → ℝ≥0∞) :
+    Φ.extend a
+      = ⨆ b : {b : ℕ →₀ ℝ≥0 // ∀ i, (b i : ℝ≥0∞) ≤ a i}, (Φ b.1 : ℝ≥0∞) := by
+  refine le_antisymm (iSup_le fun k => iSup_le fun m => ?_) (iSup_le fun b => ?_)
+  · refine le_iSup_of_le ⟨truncate a k m, fun i => ?_⟩ le_rfl
+    simp only [truncate_apply]
+    split
+    · exact le_trans ENNReal.coe_toNNReal_le_self (min_le_left _ _)
+    · simp
+  · obtain ⟨k, hk⟩ : ∃ k, ∀ n ∈ b.1.support, n < k :=
+      ⟨b.1.support.sup id + 1, fun n hn => Nat.lt_succ_of_le (Finset.le_sup (f := id) hn)⟩
+    refine le_iSup_of_le k (le_iSup_of_le (b.1.support.sup b.1) ?_)
+    refine (ENNReal.coe_le_coe).2 (Φ.mono (Finsupp.le_def.2 fun n => ?_))
+    simp only [truncate_apply]
+    by_cases hn : n < k
+    · simp only [hn, if_true]
+      have hb : (b.1 n : ℝ≥0∞) ≤ min (a n) ((b.1.support.sup b.1 : ℝ≥0) : ℝ≥0∞) := by
+        refine le_min (b.2 n) ?_
+        by_cases hmem : n ∈ b.1.support
+        · exact_mod_cast Finset.le_sup (f := b.1) hmem
+        · simp [Finsupp.notMem_support_iff.mp hmem]
+      have hfin : min (a n) ((b.1.support.sup b.1 : ℝ≥0) : ℝ≥0∞) ≠ ⊤ :=
+        ne_top_of_le_ne_top (ENNReal.coe_ne_top) (min_le_right _ _)
+      exact ENNReal.le_toNNReal_of_coe_le hb hfin
+    · have : n ∉ b.1.support := fun hmem => hn (hk n hmem)
+      simp [Finsupp.notMem_support_iff.mp this, hn]
+
 /-- The truncation of a scaled sequence, at a scaled cap.
 
 The cap has to scale with the sequence: `truncate` caps in `ℝ≥0∞` before
