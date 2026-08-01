@@ -1264,60 +1264,38 @@ theorem spectraDirectRotation_minimal
     re_inner_eq_of_diagonal_block Uᗮ
       (complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
         U V hacute) hy hx
-  have hlowU : ∀ y ∈ U, c * ‖y‖ ≤ ‖C y‖ := by
-    intro y hy
+  -- `hlowU` and `hlowUc` were the same 26-line argument written twice, differing only in
+  -- `U`/`Uᗮ`, `P`/`Pc`, `hAcomm`/`hAcommc` and `hinnerU`/`hinnerUc`.  Taking the subspace
+  -- as a parameter makes those four differences the four arguments.
+  have hlowOn : ∀ (S : Submodule ℂ H) [S.HasOrthogonalProjection],
+      Commute A S.starProjection →
+      (∀ {y x : H}, y ∈ S → x ∈ S →
+        RCLike.re ⟪D y, x⟫_ℂ = RCLike.re ⟪C y, x⟫_ℂ) →
+      ∀ y ∈ S, c * ‖y‖ ≤ ‖C y‖ := by
+    intro S _ hcomm hinner y hy
     obtain ⟨x, hxy⟩ := hAsurj y
-    have hcommapp : A (P x) = P (A x) := by
-      have h := congrArg (fun T : H →L[ℂ] H => T x) hAcomm.eq
+    have hcommapp : A (S.starProjection x) = S.starProjection (A x) := by
+      have h := congrArg (fun T : H →L[ℂ] H => T x) hcomm.eq
       simpa only [mul_apply_eq_comp] using h
-    have hAP : A (P x) = A x := by
+    have hAP : A (S.starProjection x) = A x := by
       calc
-        A (P x) = P (A x) := hcommapp
-        _ = P y := by rw [hxy]
-        _ = y := by
-          dsimp [P]
-          exact U.starProjection_eq_self_iff.mpr hy
+        A (S.starProjection x) = S.starProjection (A x) := hcommapp
+        _ = S.starProjection y := by rw [hxy]
+        _ = y := S.starProjection_eq_self_iff.mpr hy
         _ = A x := hxy.symm
-    have hPx : P x = x := hAinj hAP
-    have hxU : x ∈ U := by
-      apply U.starProjection_eq_self_iff.mp
-      simpa only [P] using hPx
+    have hPx : S.starProjection x = x := hAinj hAP
+    have hxS : x ∈ S := S.starProjection_eq_self_iff.mp hPx
     have hform := hWform x
     have hWapp0 := congrArg (fun T : H →L[ℂ] H => T x) hWeq
     have hWapp : W x = D y := by
       simpa only [mul_apply_eq_comp, hxy] using hWapp0
-    rw [hWapp, hinnerU hy hxU] at hform
+    rw [hWapp, hinner hy hxS] at hform
     have hnormA : ‖A x‖ = ‖x‖ :=
       Unitary.norm_map (⟨A, hAunit⟩ : unitary (H →L[ℂ] H)) x
     rw [hxy] at hnormA
     exact mul_norm_le_norm_apply_of_re_inner_ge hform hnormA
-  have hlowUc : ∀ y ∈ Uᗮ, c * ‖y‖ ≤ ‖C y‖ := by
-    intro y hy
-    obtain ⟨x, hxy⟩ := hAsurj y
-    have hcommapp : A (Pc x) = Pc (A x) := by
-      have h := congrArg (fun T : H →L[ℂ] H => T x) hAcommc.eq
-      simpa only [mul_apply_eq_comp] using h
-    have hAP : A (Pc x) = A x := by
-      calc
-        A (Pc x) = Pc (A x) := hcommapp
-        _ = Pc y := by rw [hxy]
-        _ = y := by
-          dsimp [Pc]
-          exact Uᗮ.starProjection_eq_self_iff.mpr hy
-        _ = A x := hxy.symm
-    have hPx : Pc x = x := hAinj hAP
-    have hxU : x ∈ Uᗮ := by
-      apply Uᗮ.starProjection_eq_self_iff.mp
-      simpa only [Pc] using hPx
-    have hform := hWform x
-    have hWapp0 := congrArg (fun T : H →L[ℂ] H => T x) hWeq
-    have hWapp : W x = D y := by
-      simpa only [mul_apply_eq_comp, hxy] using hWapp0
-    rw [hWapp, hinnerUc hy hxU] at hform
-    have hnormA : ‖A x‖ = ‖x‖ :=
-      Unitary.norm_map (⟨A, hAunit⟩ : unitary (H →L[ℂ] H)) x
-    rw [hxy] at hnormA
-    exact mul_norm_le_norm_apply_of_re_inner_ge hform hnormA
+  have hlowU : ∀ y ∈ U, c * ‖y‖ ≤ ‖C y‖ := hlowOn U hAcomm hinnerU
+  have hlowUc : ∀ y ∈ Uᗮ, c * ‖y‖ ≤ ‖C y‖ := hlowOn Uᗮ hAcommc hinnerUc
   have hCP : Commute C P := spectraCanonicalAbsoluteValue_commute_projection U V
   have hCPc : Commute C Pc := by
     rw [commute_iff_eq]
