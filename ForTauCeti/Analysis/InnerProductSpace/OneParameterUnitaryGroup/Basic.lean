@@ -211,10 +211,8 @@ lemma generator_isFormalAdjoint (U : OneParameterUnitaryGroup (H := H)) :
       (𝓝 ⟪(x : H), generator U y⟫_ℂ) := tendsto_const_nhds.inner (generator_tendsto U y)
   -- negation preserves the punctured neighbourhood of 0
   have hneg : Tendsto (fun t : ℝ => -t) (𝓝[≠] (0 : ℝ)) (𝓝[≠] (0 : ℝ)) := by
-    apply tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within
-    · simpa using (continuous_neg.tendsto (0 : ℝ)).mono_left nhdsWithin_le_nhds
-    · filter_upwards [self_mem_nhdsWithin] with t ht
-      simpa using ht
+    exact (continuous_neg.tendsto' 0 0 neg_zero).inf
+      (tendsto_principal_principal.2 fun t ht => by simpa using ht)
   have hgy' : Tendsto (fun t : ℝ => ⟪(x : H), genDiffQuot U (y : H) (-t)⟫_ℂ) (𝓝[≠] 0)
       (𝓝 ⟪(x : H), generator U y⟫_ℂ) := hgy.comp hneg
   -- pointwise identity on the punctured neighbourhood
