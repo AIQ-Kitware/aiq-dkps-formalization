@@ -283,3 +283,44 @@ With that applied, `DavisKahan` is at **three** pairs above 15 lines and 0.80 to
 three verified as parallel accounts that should not be collapsed mechanically:
 `hform` (1.00, inside the `tan_theta_le`/`tan_theta_le'` pair), `key` (0.936, over
 `UnboundedSinThetaData` against `UnboundedSinThetaDataPMap`), and the nested pair above.
+
+## The body-size floor was the binding constraint (2026-08-01)
+
+Every sweep in this file until now used a minimum body size between 10 and 20 lines.  That
+floor, not the signals and not the similarity metric, is what left work on the table.
+
+Dropping it to **4** and asking only for statements proved in more than one *file*:
+
+* `ForTauCeti` — **one** group, the known thin false positive (`Function.Injective f` over
+  two unrelated maps).  The library is genuinely exhausted.
+* `DavisKahan` — **nine** groups, of which three were real and are now extracted.
+
+**Shared algebra is short by nature.**  The three-site identity `gsym w * (κ w + i) = 1`
+is eight lines; the two `hgap` blocks are eleven and twelve.  A size threshold selects
+against precisely the thing worth extracting, because a fact that appears in three proofs
+is usually a fact small enough to retype.
+
+The other durable result: **the bounded and unbounded Sylvester constructions were largely
+one argument written twice.**  `gaugeReal_sub_lt_of_cauchy_majorant`,
+`gaugeReal_sum_range_sub_le` and `gaugeReal_le_of_comp_add_comp_fixedPoint` all came out of
+that one file pair, and it took three scans at three thresholds to see it.  When two
+theorems share one step, look for the rest.
+
+### The six shapes that are NOT extractable, with the test for each
+
+Collected because each cost a real investigation, and the ratio does not distinguish them:
+
+1. **Parallel API.** The differing names are a whole matched vocabulary
+   (`doubledPhaseMapAction`/`doubledPhaseAction`). *Test:* read the names, not the number.
+2. **Nested.** One step is inside the other, so they share tokens by construction.
+   *Test:* filter overlapping line ranges before ranking.
+3. **`let`-bound scaffolding.** The statement names a proof-local definition used
+   throughout. *Test:* would the lemma have to take the definition as a hypothesis?
+4. **One statement, two derivations.** `htGauge` is proved from a term bound at one site
+   and by induction at the other. *Test:* compare the bodies, not the statements.
+5. **Same shape, different object.** Two `hres` blocks state `Orthonormal 𝕜 (s.restrict v)`
+   over different families — one interleaved over `Fin (2m)`, one plain over `Fin m`.
+6. **Instance-blocked.** `Uc.starProjection = Uᗮ.starProjection` cannot cite the
+   subspace-level theorem that proves it: rewriting under `starProjection` gives *motive is
+   not type correct*, because the `HasOrthogonalProjection` instance is derived from the
+   submodule.  *Test:* try the one-line citation early; the failure is immediate and cheap.
