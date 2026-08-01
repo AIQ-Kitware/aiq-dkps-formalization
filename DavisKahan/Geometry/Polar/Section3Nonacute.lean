@@ -413,6 +413,22 @@ theorem canonicalPolarFactor_mem_regular (x : H) :
     ((polarRange
       (spectraCanonicalIntertwiner U V)).orthogonalProjectionOnto x)
 
+/-- **The crossed quarter-turn lands in the crossed defect sum.**
+
+Its two summands are the images of the source and target defect projections.
+Derived twice in the theorem below, once per orthogonality it establishes. -/
+private theorem crossedDefectQuarterTurn_mem_crossedDefectSum
+    (J : halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V) (x : H) :
+    crossedDefectQuarterTurn U V J x ∈ crossedDefectSum U V := by
+  let s := (halmosSourceDefect U V).orthogonalProjectionOnto x
+  let t := (halmosTargetDefect U V).orthogonalProjectionOnto x
+  refine Submodule.mem_sup.mpr
+    ⟨-(J.symm t : H), Submodule.neg_mem _ (J.symm t).property,
+      (J s : H), (J s).property, ?_⟩
+  simp [crossedDefectQuarterTurn, sourceToTargetDefect,
+    targetToSourceDefect, s, t]
+  abel
+
 /-- The canonical polar factor and defect quarter-turn have orthogonal initial
 and final blocks. -/
 theorem canonicalPolarFactor_orthogonal_defectQuarterTurn
@@ -428,15 +444,7 @@ theorem canonicalPolarFactor_orthogonal_defectQuarterTurn
       ContinuousLinearMap.star_eq_adjoint]
     refine ext_inner_right ℂ fun y => ?_
     rw [ContinuousLinearMap.adjoint_inner_left, inner_zero_left]
-    have hrange : crossedDefectQuarterTurn U V J x ∈ crossedDefectSum U V := by
-      let s := (halmosSourceDefect U V).orthogonalProjectionOnto x
-      let t := (halmosTargetDefect U V).orthogonalProjectionOnto x
-      refine Submodule.mem_sup.mpr
-        ⟨-(J.symm t : H), Submodule.neg_mem _ (J.symm t).property,
-          (J s : H), (J s).property, ?_⟩
-      simp [crossedDefectQuarterTurn, sourceToTargetDefect,
-        targetToSourceDefect, s, t]
-      abel
+    have hrange := crossedDefectQuarterTurn_mem_crossedDefectSum U V J x
     have hyreg := canonicalPolarFactor_mem_regular U V y
     exact Submodule.inner_right_of_mem_orthogonal hrange hyreg
   have hsecond : star (crossedDefectQuarterTurn U V J) *
@@ -447,15 +455,7 @@ theorem canonicalPolarFactor_orthogonal_defectQuarterTurn
       star (crossedDefectQuarterTurn U V J) = 0 := by
     rw [star_crossedDefectQuarterTurn]
     ext x
-    have hrange : crossedDefectQuarterTurn U V J x ∈ crossedDefectSum U V := by
-      let s := (halmosSourceDefect U V).orthogonalProjectionOnto x
-      let t := (halmosTargetDefect U V).orthogonalProjectionOnto x
-      refine Submodule.mem_sup.mpr
-        ⟨-(J.symm t : H), Submodule.neg_mem _ (J.symm t).property,
-          (J s : H), (J s).property, ?_⟩
-      simp [crossedDefectQuarterTurn, sourceToTargetDefect,
-        targetToSourceDefect, s, t]
-      abel
+    have hrange := crossedDefectQuarterTurn_mem_crossedDefectSum U V J x
     simp [mul_apply_eq_comp,
       canonicalPolarFactor_apply_crossedDefect_eq_zero U V hrange]
   have hfourth : crossedDefectQuarterTurn U V J *
