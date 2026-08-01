@@ -209,12 +209,8 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
       selfAdjointSpectralRestriction_inclusion_mem_domain
         A hA Bᶜ hB.compl z
     let za : A.domain := ⟨((z : Uc) : H), hzdom⟩
-    have hy : (y : H) = V.reflectionOperator (za : H) := by
-      symm
-      calc
-        V.reflectionOperator (za : H) =
-            ((e (e.symm (y : Wc)) : Wc) : H) := rfl
-        _ = (y : H) := congrArg Subtype.val (e.apply_symm_apply (y : Wc))
+    have hy : (y : H) = V.reflectionOperator (za : H) :=
+      (congrArg Subtype.val (e.apply_symm_apply (y : Wc))).symm
     change (y : H) ∈ A.domain
     rw [hy]
     exact hJdom za
@@ -227,12 +223,8 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
       selfAdjointSpectralRestriction_inclusion_mem_domain
         A hA Bᶜ hB.compl z
     let za : A.domain := ⟨((z : Uc) : H), hzdom⟩
-    have hy : (y : H) = V.reflectionOperator (za : H) := by
-      symm
-      calc
-        V.reflectionOperator (za : H) =
-            ((e (e.symm (y : Wc)) : Wc) : H) := rfl
-        _ = (y : H) := congrArg Subtype.val (e.apply_symm_apply (y : Wc))
+    have hy : (y : H) = V.reflectionOperator (za : H) :=
+      (congrArg Subtype.val (e.apply_symm_apply (y : Wc))).symm
     have hsub :
         (⟨F₁ (y : Wc), hFdom y⟩ : (A.addBounded R).domain) =
           ⟨V.reflectionOperator (za : H), hJdom za⟩ :=
