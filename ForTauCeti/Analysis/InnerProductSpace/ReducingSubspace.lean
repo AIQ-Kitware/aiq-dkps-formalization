@@ -97,6 +97,49 @@ theorem IsSymmetric.restrict_of_invariant {A : E →L[𝕜] E} (hA : A.IsSymmetr
 
 end ContinuousLinearMap
 
+namespace LinearMap
+
+/-- **A symmetric map that nearly reduces `Z` moves `Zᗮ` only slightly into `Z`.**
+
+If `‖T x - Z.starProjection (T x)‖ ≤ ρ ‖x‖` for every `x ∈ Z` -- the quantitative form of
+"`T` reduces `Z`" -- then for `w ⊥ Z` the part of `T w` lying in `Z` is at most `ρ ‖w‖`.
+Symmetry is what lets the estimate be read on either side of the inner product.
+
+At `ρ = 0` this is the qualitative statement: a symmetric map reducing `Z` maps `Zᗮ` into
+`Zᗮ`, which is `ContinuousLinearMap.IsSymmetric.reduces_of_invariant` above in bounded
+form. -/
+theorem norm_starProjection_apply_le_of_mem_orthogonal
+    {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric)
+    {Z : Submodule 𝕜 E} [Z.HasOrthogonalProjection] {rho : ℝ} (hrho0 : 0 ≤ rho)
+    (hrho : ∀ x ∈ Z, ‖T x - Z.starProjection (T x)‖ ≤ rho * ‖x‖)
+    {w : E} (hw : w ∈ Zᗮ) : ‖Z.starProjection (T w)‖ ≤ rho * ‖w‖ := by
+  set z := Z.starProjection (T w) with hz
+  have hzZ : z ∈ Z := Z.starProjection_apply_mem _
+  have hsq : ‖z‖ ^ 2 ≤ rho * ‖w‖ * ‖z‖ := by
+    have h0 : ⟪z, z⟫_𝕜 = ⟪T w, z⟫_𝕜 := by
+      conv_lhs => rw [hz]
+      rw [Z.inner_starProjection_left_eq_right,
+        Submodule.starProjection_eq_self_iff.mpr hzZ]
+    have h1 : ⟪T w, z⟫_𝕜 = ⟪w, T z - Z.starProjection (T z)⟫_𝕜 := by
+      rw [hT w z, inner_sub_right,
+        Submodule.inner_left_of_mem_orthogonal
+          (Z.starProjection_apply_mem (T z)) hw, sub_zero]
+    calc ‖z‖ ^ 2 = RCLike.re ⟪z, z⟫_𝕜 := (inner_self_eq_norm_sq z).symm
+      _ = RCLike.re ⟪w, T z - Z.starProjection (T z)⟫_𝕜 := by rw [h0, h1]
+      _ ≤ ‖⟪w, T z - Z.starProjection (T z)⟫_𝕜‖ := RCLike.re_le_norm _
+      _ ≤ ‖w‖ * ‖T z - Z.starProjection (T z)‖ := norm_inner_le_norm _ _
+      _ ≤ ‖w‖ * (rho * ‖z‖) := by
+          have := hrho z hzZ
+          gcongr
+      _ = rho * ‖w‖ * ‖z‖ := by ring
+  rcases eq_or_ne ‖z‖ 0 with h0 | h0
+  · rw [h0]
+    positivity
+  · have hzpos : 0 < ‖z‖ := lt_of_le_of_ne (norm_nonneg _) (Ne.symm h0)
+    nlinarith [hsq, hzpos]
+
+end LinearMap
+
 namespace Submodule
 
 /-- A subspace admitting an orthogonal projection is complete when the ambient

@@ -47,6 +47,7 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
+import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 
 /-! # The Davis–Kahan tan Θ theorem (gated statement)
 
@@ -213,29 +214,8 @@ finishes. -/
 theorem norm_starProjection_map_le_of_mem_orthogonal (hT : T.IsSymmetric)
     {Z : Submodule 𝕜 E} [Z.HasOrthogonalProjection] {ρ : ℝ} (hρ0 : 0 ≤ ρ)
     (hρ : ∀ x ∈ Z, ‖T x - Z.starProjection (T x)‖ ≤ ρ * ‖x‖)
-    {w : E} (hw : w ∈ Zᗮ) : ‖Z.starProjection (T w)‖ ≤ ρ * ‖w‖ := by
-  set z := Z.starProjection (T w) with hz
-  have hzZ : z ∈ Z := Z.starProjection_apply_mem _
-  have hsq : ‖z‖ ^ 2 ≤ ρ * ‖w‖ * ‖z‖ := by
-    have h0 : ⟪z, z⟫_𝕜 = ⟪T w, z⟫_𝕜 := by
-      conv_lhs => rw [hz]
-      rw [Z.inner_starProjection_left_eq_right, Submodule.starProjection_eq_self_iff.mpr hzZ]
-    have h1 : ⟪T w, z⟫_𝕜 = ⟪w, T z - Z.starProjection (T z)⟫_𝕜 := by
-      rw [hT w z, inner_sub_right,
-        Submodule.inner_left_of_mem_orthogonal (Z.starProjection_apply_mem (T z)) hw, sub_zero]
-    calc ‖z‖ ^ 2 = RCLike.re ⟪z, z⟫_𝕜 := (inner_self_eq_norm_sq z).symm
-      _ = RCLike.re ⟪w, T z - Z.starProjection (T z)⟫_𝕜 := by rw [h0, h1]
-      _ ≤ ‖⟪w, T z - Z.starProjection (T z)⟫_𝕜‖ := RCLike.re_le_norm _
-      _ ≤ ‖w‖ * ‖T z - Z.starProjection (T z)‖ := norm_inner_le_norm _ _
-      _ ≤ ‖w‖ * (ρ * ‖z‖) := by
-          have := hρ z hzZ
-          gcongr
-      _ = ρ * ‖w‖ * ‖z‖ := by ring
-  rcases eq_or_ne ‖z‖ 0 with h0 | h0
-  · rw [h0]
-    positivity
-  · have hzpos : 0 < ‖z‖ := lt_of_le_of_ne (norm_nonneg _) (Ne.symm h0)
-    nlinarith [hsq, hzpos]
+    {w : E} (hw : w ∈ Zᗮ) : ‖Z.starProjection (T w)‖ ≤ ρ * ‖w‖ :=
+  _root_.LinearMap.norm_starProjection_apply_le_of_mem_orthogonal hT hρ0 hρ hw
 
 omit [CompleteSpace E] in
 set_option linter.unusedVariables false in
