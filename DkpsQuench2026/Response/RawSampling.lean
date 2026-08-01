@@ -234,6 +234,26 @@ theorem integral_norm_sq_augmentedRawSampleMean_sub_population_le
       (integral_mono hInt.integral_prod_left (integrable_const _) hfib) (le_of_eq hconst)
   · rw [integral_undef hInt]; exact hC0
 
+/-- **The augmented raw sample mean is jointly measurable.**
+
+Derived twice below; the two copies differ only in indentation, which is why a
+text search finds one of them. -/
+private theorem measurable_augmentedRawSampleMean {m p : Nat}
+    {μresp : Nat → Measure Ωresp} {replicates : Nat → Nat}
+    {f_ref : ∀ n, Ωref → Fin n → Model Q X}
+    {Y : ∀ n, Model Q X → Fin (replicates n) → Ωresp → Acharyya2024.Mat m p}
+    {μmodel : Model Q X → Acharyya2024.Mat m p} {variance : Nat → Real}
+    (Hraw : RawIIDResponseModel μresp replicates Y μmodel variance)
+    {n : Nat} {f : Model Q X} {i : Fin (n + 1)}
+    (hpair : Measurable (fun ω : Ωref × Ωresp =>
+      (augmentedModelAt f_ref n ω.1 f i, ω.2))) :
+    Measurable (fun ω : Ωref × Ωresp =>
+      augmentedRawSampleMean f_ref replicates Y n ω f i) := by
+  simp only [augmentedRawSampleMean, modelReplicateMean, replicateMean]
+  exact (Finset.measurable_sum _
+    (fun k _ => (Hraw.jointly_measurable n k).comp hpair)).const_smul
+    ((replicates n : Real)⁻¹)
+
 /-- Measurability and integrability package for augmented raw sample errors.
 -/
 theorem integrable_sq_augmentedRawSampleMean_sub_population
@@ -261,12 +281,7 @@ theorem integrable_sq_augmentedRawSampleMean_sub_population
   have hpair : Measurable (fun ω : Ωref × Ωresp =>
       (augmentedModelAt f_ref n ω.1 f i, ω.2)) :=
     (hsel.comp measurable_fst).prodMk measurable_snd
-  have hmeasSample : Measurable (fun ω : Ωref × Ωresp =>
-      augmentedRawSampleMean f_ref replicates Y n ω f i) := by
-    simp only [augmentedRawSampleMean, modelReplicateMean, replicateMean]
-    exact (Finset.measurable_sum _
-      (fun k _ => (Hraw.jointly_measurable n k).comp hpair)).const_smul
-      ((replicates n : Real)⁻¹)
+  have hmeasSample := measurable_augmentedRawSampleMean Hraw hpair
   have hmeasPop : Measurable (fun ω : Ωref × Ωresp =>
       augmentedRawPopulationMean f_ref μmodel n ω f i) := by
     simp only [augmentedRawPopulationMean]
@@ -340,12 +355,7 @@ theorem measurableSet_augmentedRawResponseMeanEvent_finite
     have hpair : Measurable (fun ω : Ωref × Ωresp =>
         (augmentedModelAt f_ref n ω.1 f i, ω.2)) :=
       (hsel.comp measurable_fst).prodMk measurable_snd
-    have hmeasSample : Measurable (fun ω : Ωref × Ωresp =>
-        augmentedRawSampleMean f_ref replicates Y n ω f i) := by
-      simp only [augmentedRawSampleMean, modelReplicateMean, replicateMean]
-      exact (Finset.measurable_sum _
-        (fun k _ => (Hraw.jointly_measurable n k).comp hpair)).const_smul
-        ((replicates n : Real)⁻¹)
+    have hmeasSample := measurable_augmentedRawSampleMean Hraw hpair
     have hmeasPop : Measurable (fun ω : Ωref × Ωresp =>
         augmentedRawPopulationMean f_ref μmodel n ω f i) := by
       simp only [augmentedRawPopulationMean]
