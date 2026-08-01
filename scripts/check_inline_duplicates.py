@@ -66,6 +66,14 @@ being two different statements, proved from different lemmas.  **Sibling proofs
 that share a naming convention will always do this.**  Before extracting, read
 the `let`/`set` bindings at both sites; it takes seconds and it is not optional.
 
+**The opposite blind spot is just as real** (`{lane:DK-LONGPROOF-7}`):
+`RitzResidual.lean` and `Theorem63FiniteSource.lean` contain the same witness
+construction line for line, over `LinearMap`/`𝕜` and `ContinuousLinearMap`/`ℂ`
+respectively.  A cross-file scan of the two returns exactly one match, `0 < c`,
+which is noise.  **Textual matching reports a match that is not one, and misses
+one that is** -- both because it matches text rather than meaning, which is the
+same property that makes it cost a second instead of a rebuild.
+
 ## Two products from one scan, and how to ask for each
 
 Ranking by proof length was the obvious thing to do and it turned out to answer a
