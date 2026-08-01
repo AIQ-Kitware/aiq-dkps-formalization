@@ -82,6 +82,19 @@ theorem cayleyInv_add_I {w : _root_.spectrum ℂ (cayley hA)} (hw1 : (w : ℂ) �
   field_simp
   ring
 
+/-- **The Cayley symbol and `κ + i` are reciprocal off the singularity.**
+
+`(2i)⁻¹(1 - w)` is the value of the symbol every construction here calls `gsym`, and this
+says it inverts `κ(w) + i`.  Three proofs -- two `hprod`s and one `hgae`, in this file and
+in `SpectralGapInverse.lean` -- each derived it inline from `cayleyInv_add_I` and
+`field_simp`; it is one line of algebra and belongs beside the identity it uses. -/
+theorem inv_two_I_mul_one_sub_mul_cayleyInv_add_I
+    {w : _root_.spectrum ℂ (cayley hA)} (hw1 : (w : ℂ) ≠ 1) :
+    (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) * (((cayleyInv hA w : ℝ) : ℂ) + Complex.I) = 1 := by
+  have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
+  rw [cayleyInv_add_I hA hw1]
+  field_simp
+
 variable (B : Set ℝ) (hB : MeasurableSet B)
 
 /-- The symbol `(κ - c) · 1_B` of the shifted bounded truncation. -/
@@ -244,15 +257,12 @@ theorem specProjection_apply_sub_smul {M c r : ℝ}
   have hprod : BorelCalculus.borelCalculus hU (hgb.mul hqb)
       = BorelCalculus.borelCalculus hU hindb := by
     refine borelCalculus_congr_of_ne_one hA _ _ fun w hw1 => ?_
-    have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
     have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := by simp [hgsym]
-    have hκval : ((κ w : ℝ) : ℂ) + Complex.I = (2 * Complex.I) / (1 - (w : ℂ)) :=
-      cayleyInv_add_I hA hw1
     -- states the goal with the definition unfolded, in the shape the next step needs.
     change gsym w * q w = ind w
     have hqw : q w = ((κ w : ℂ) + Complex.I) * ind w := rfl
-    rw [hgval, hqw, hκval]
-    field_simp
+    rw [hgval, hqw, ← mul_assoc,
+      inv_two_I_mul_one_sub_mul_cayleyInv_add_I hA hw1, one_mul]
   -- the shifted symbol is the difference of the two Borel-calculus images
   set hsm := hindb.const_smul (-(Complex.I + (c : ℂ))) with hhsm
   have heq : BorelCalculus.borelCalculus hU hpb
@@ -737,10 +747,9 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
     have hae := MeasureTheory.compl_mem_ae_iff.mpr (diagMeasure_cayley_preimage_one hA η)
     filter_upwards [hae] with w hw
     have hw1 : (w : ℂ) ≠ 1 := hw
-    have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
     have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := by simp [hgsym]
-    rw [hgval, cayleyInv_add_I hA hw1]
-    field_simp
+    rw [hgval]
+    exact inv_two_I_mul_one_sub_mul_cayleyInv_add_I hA hw1
   -- `R(-i) ∘ T_hsym = T_f`
   have hcomp : BorelCalculus.borelCalculus hU (hgb.mul hhb)
       = BorelCalculus.borelCalculus hU hfb := by
