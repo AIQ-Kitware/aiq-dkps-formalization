@@ -68,6 +68,39 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 
+/-- **A vector fixed by the projection for `S` is the limit of its truncations.**
+
+`tendsto_specProjection_Icc` says the symmetric truncations `Set.Icc (-τ) τ` converge
+strongly to the identity.  If `v` is already fixed by the projection for `S`, the
+truncations may be intersected with `S` first and still converge to `v`.
+
+The two half-line bounds below are exactly this at `S = Set.Ici c` and `S = Set.Iic c`,
+whose truncations are `Set.Icc c τ` and `Set.Icc (-τ) c`.  **Only the set algebra differs
+between them**, and that is what `hset` takes as an argument -- everything after it, the
+`proj_congr`/`proj_inter` calculation, was written out twice. -/
+private theorem tendsto_specProjection_inter_of_fix
+    {S : Set ℝ} (hS : MeasurableSet S) {T : ℝ → Set ℝ} (hT : ∀ τ, MeasurableSet (T τ))
+    (hset : ∀ᶠ τ : ℝ in Filter.atTop, Set.Icc (-τ) τ ∩ S = T τ)
+    (v : H) (hv : specProjection hA S hS v = v) :
+    Filter.Tendsto (fun τ : ℝ => specProjection hA (T τ) (hT τ) v)
+      Filter.atTop (nhds v) := by
+  refine (tendsto_specProjection_Icc hA v).congr' ?_
+  filter_upwards [hset] with τ hτset
+  let P := spectralPVM hA
+  change P.proj (Set.Icc (-τ) τ) measurableSet_Icc v = P.proj (T τ) (hT τ) v
+  symm
+  calc
+    P.proj (T τ) (hT τ) v =
+        P.proj (Set.Icc (-τ) τ ∩ S) (measurableSet_Icc.inter hS) v := by
+      exact congrArg (fun R : H →L[ℂ] H => R v)
+        (P.proj_congr hτset.symm (hT τ) (measurableSet_Icc.inter hS))
+    _ = (P.proj (Set.Icc (-τ) τ) measurableSet_Icc * P.proj S hS) v := by
+      rw [P.proj_inter]
+    _ = P.proj (Set.Icc (-τ) τ) measurableSet_Icc v := by
+      change P.proj (Set.Icc (-τ) τ) measurableSet_Icc (P.proj S hS v) = _
+      change P.proj S hS v = v at hv
+      rw [hv]
+
 /-! ## Vector-local half-line bounds
 
 The global lemmas above assume an entire half-line projection is the zero
@@ -174,38 +207,18 @@ theorem le_re_inner_of_specProjection_Iic_apply_eq_zero {c : ℝ} (x : A.domain)
       specProjection hA (Set.Ici c) measurableSet_Ici v = v →
       Filter.Tendsto
         (fun τ : ℝ => specProjection hA (Set.Icc c τ) measurableSet_Icc v)
-        Filter.atTop (nhds v) := by
-    intro v hv
-    refine (tendsto_specProjection_Icc hA v).congr' ?_
-    filter_upwards [Filter.eventually_ge_atTop |c|] with τ hτ
-    obtain ⟨hτ1, hτ2⟩ := abs_le.mp hτ
-    have hset : Set.Icc (-τ) τ ∩ Set.Ici c = Set.Icc c τ := by
-      ext s
-      simp only [Set.mem_inter_iff, Set.mem_Icc, Set.mem_Ici]
-      constructor
-      · rintro ⟨⟨hs1, hs2⟩, hs3⟩
-        exact ⟨hs3, hs2⟩
-      · rintro ⟨hs1, hs2⟩
-        exact ⟨⟨by linarith, hs2⟩, hs1⟩
-    let P := spectralPVM hA
-    change P.proj (Set.Icc (-τ) τ) measurableSet_Icc v =
-      P.proj (Set.Icc c τ) measurableSet_Icc v
-    symm
-    calc
-      P.proj (Set.Icc c τ) measurableSet_Icc v =
-          P.proj (Set.Icc (-τ) τ ∩ Set.Ici c)
-            (measurableSet_Icc.inter measurableSet_Ici) v := by
-        exact congrArg (fun T : H →L[ℂ] H => T v)
-          (P.proj_congr hset.symm measurableSet_Icc
-            (measurableSet_Icc.inter measurableSet_Ici))
-      _ = (P.proj (Set.Icc (-τ) τ) measurableSet_Icc *
-          P.proj (Set.Ici c) measurableSet_Ici) v := by
-        rw [P.proj_inter]
-      _ = P.proj (Set.Icc (-τ) τ) measurableSet_Icc v := by
-        change P.proj (Set.Icc (-τ) τ) measurableSet_Icc
-          (P.proj (Set.Ici c) measurableSet_Ici v) = _
-        change P.proj (Set.Ici c) measurableSet_Ici v = v at hv
-        rw [hv]
+        Filter.atTop (nhds v) :=
+    tendsto_specProjection_inter_of_fix hA measurableSet_Ici
+      (fun _ => measurableSet_Icc) <| by
+        filter_upwards [Filter.eventually_ge_atTop |c|] with τ hτ
+        obtain ⟨hτ1, hτ2⟩ := abs_le.mp hτ
+        ext s
+        simp only [Set.mem_inter_iff, Set.mem_Icc, Set.mem_Ici]
+        constructor
+        · rintro ⟨⟨hs1, hs2⟩, hs3⟩
+          exact ⟨hs3, hs2⟩
+        · rintro ⟨hs1, hs2⟩
+          exact ⟨⟨by linarith, hs2⟩, hs1⟩
   have hbound : ∀ τ : ℝ,
       c * ‖specProjection hA (Set.Icc c τ) measurableSet_Icc (x : H)‖ ^ 2
         ≤ (⟪specProjection hA (Set.Icc c τ) measurableSet_Icc (A x),
@@ -237,38 +250,18 @@ theorem re_inner_le_of_specProjection_Ici_apply_eq_zero {c : ℝ} (x : A.domain)
       specProjection hA (Set.Iic c) measurableSet_Iic v = v →
       Filter.Tendsto
         (fun τ : ℝ => specProjection hA (Set.Icc (-τ) c) measurableSet_Icc v)
-        Filter.atTop (nhds v) := by
-    intro v hv
-    refine (tendsto_specProjection_Icc hA v).congr' ?_
-    filter_upwards [Filter.eventually_ge_atTop |c|] with τ hτ
-    obtain ⟨hτ1, hτ2⟩ := abs_le.mp hτ
-    have hset : Set.Icc (-τ) τ ∩ Set.Iic c = Set.Icc (-τ) c := by
-      ext s
-      simp only [Set.mem_inter_iff, Set.mem_Icc, Set.mem_Iic]
-      constructor
-      · rintro ⟨⟨hs1, hs2⟩, hs3⟩
-        exact ⟨hs1, hs3⟩
-      · rintro ⟨hs1, hs2⟩
-        exact ⟨⟨hs1, by linarith⟩, hs2⟩
-    let P := spectralPVM hA
-    change P.proj (Set.Icc (-τ) τ) measurableSet_Icc v =
-      P.proj (Set.Icc (-τ) c) measurableSet_Icc v
-    symm
-    calc
-      P.proj (Set.Icc (-τ) c) measurableSet_Icc v =
-          P.proj (Set.Icc (-τ) τ ∩ Set.Iic c)
-            (measurableSet_Icc.inter measurableSet_Iic) v := by
-        exact congrArg (fun T : H →L[ℂ] H => T v)
-          (P.proj_congr hset.symm measurableSet_Icc
-            (measurableSet_Icc.inter measurableSet_Iic))
-      _ = (P.proj (Set.Icc (-τ) τ) measurableSet_Icc *
-          P.proj (Set.Iic c) measurableSet_Iic) v := by
-        rw [P.proj_inter]
-      _ = P.proj (Set.Icc (-τ) τ) measurableSet_Icc v := by
-        change P.proj (Set.Icc (-τ) τ) measurableSet_Icc
-          (P.proj (Set.Iic c) measurableSet_Iic v) = _
-        change P.proj (Set.Iic c) measurableSet_Iic v = v at hv
-        rw [hv]
+        Filter.atTop (nhds v) :=
+    tendsto_specProjection_inter_of_fix hA measurableSet_Iic
+      (fun _ => measurableSet_Icc) <| by
+        filter_upwards [Filter.eventually_ge_atTop |c|] with τ hτ
+        obtain ⟨hτ1, hτ2⟩ := abs_le.mp hτ
+        ext s
+        simp only [Set.mem_inter_iff, Set.mem_Icc, Set.mem_Iic]
+        constructor
+        · rintro ⟨⟨hs1, hs2⟩, hs3⟩
+          exact ⟨hs1, hs3⟩
+        · rintro ⟨hs1, hs2⟩
+          exact ⟨⟨hs1, by linarith⟩, hs2⟩
   have hbound : ∀ τ : ℝ,
       (⟪specProjection hA (Set.Icc (-τ) c) measurableSet_Icc (A x),
           specProjection hA (Set.Icc (-τ) c) measurableSet_Icc (x : H)⟫_ℂ).re
