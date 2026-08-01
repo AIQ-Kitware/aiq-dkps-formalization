@@ -111,22 +111,8 @@ theorem coercive_of_selfAdjoint_spectrum_exterior
     exact TauCeti.DavisKahanExt.isSelfAdjoint_sub_algebraMap hM _
   have hM₁spec : ∀ x ∈ spectrum ℝ M₁,
       (β - α) / 2 + δ ≤ |x| := by
-    intro x hx
-    rw [hM₁def, ← spectrum.sub_singleton_eq] at hx
-    obtain ⟨y, hy, z, hz, hyz⟩ := Set.mem_sub.mp hx
-    rw [Set.mem_singleton_iff] at hz
-    subst hz
-    rw [← hyz]
-    rcases hspec y hy with hleft | hright
-    · have hle : y - (α + β) / 2 ≤ -((β - α) / 2 + δ) := by
-        linarith
-      calc
-        (β - α) / 2 + δ ≤ -(y - (α + β) / 2) := by
-          linarith
-        _ ≤ |y - (α + β) / 2| := neg_le_abs _
-    · have hge : (β - α) / 2 + δ ≤ y - (α + β) / 2 := by
-        linarith
-      exact hge.trans (le_abs_self _)
+    rw [hM₁def]
+    exact TauCeti.DavisKahanExt.le_abs_of_spectrum_exterior hspec
   have hM₁unit : IsUnit M₁ :=
     TauCeti.isUnit_of_forall_le_abs (A := K →L[ℂ] K) hrd hM₁spec
   set J : K →L[ℂ] K := Ring.inverse M₁

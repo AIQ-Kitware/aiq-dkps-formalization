@@ -125,6 +125,33 @@ theorem formBounds_of_compress_spectrum_subset_Icc
     linarith
 
 set_option maxHeartbeats 1600000 in
+/-- **Centring an exterior spectrum pushes it off zero.**
+
+Subtracting the midpoint `(α + β)/2` from an operator whose spectrum avoids
+`(α - δ, β + δ)` leaves a spectrum at distance at least `(β - α)/2 + δ` from
+zero.  Derived here and in `UnboundedSpectrum.lean`.
+
+`Sylvester/Spectrum.lean` carries `shifted_spectrum_exterior`, the same fact in
+that tree's own phrasing; the two trees share no ancestor, so they are stated
+twice rather than shared. -/
+theorem le_abs_of_spectrum_exterior {K : Type*} [NormedAddCommGroup K]
+    [InnerProductSpace ℂ K] [CompleteSpace K] {M : K →L[ℂ] K} {α β δ : ℝ}
+    (hspec : ∀ x ∈ spectrum ℝ M, x ≤ α - δ ∨ β + δ ≤ x) :
+    ∀ x ∈ spectrum ℝ (M - algebraMap ℝ (K →L[ℂ] K) ((α + β) / 2)),
+      (β - α) / 2 + δ ≤ |x| := by
+  intro x hx
+  rw [← spectrum.sub_singleton_eq] at hx
+  obtain ⟨y, hy, z, hz, hyz⟩ := Set.mem_sub.mp hx
+  rw [Set.mem_singleton_iff] at hz
+  rw [hz] at hyz
+  rw [← hyz]
+  rcases hspec y hy with h1 | h1
+  · have hle : y - (α + β) / 2 ≤ -((β - α) / 2 + δ) := by linarith
+    calc (β - α) / 2 + δ ≤ -(y - (α + β) / 2) := by linarith
+      _ ≤ |y - (α + β) / 2| := neg_le_abs _
+  · have hge : (β - α) / 2 + δ ≤ y - (α + β) / 2 := by linarith
+    exact hge.trans (le_abs_self _)
+
 /-- **Coercivity from an exterior compression spectrum.**  If the spectrum
 of the compression `T|_Z` avoids `(α - δ, β + δ)`, then the centered
 compression is coercive at distance `(β - α)/2 + δ` from the midpoint. -/
@@ -144,18 +171,8 @@ theorem coercive_of_compress_spectrum_exterior
     rw [hM₁def]
     exact isSelfAdjoint_sub_algebraMap hMsa _
   have hM₁spec : ∀ x ∈ spectrum ℝ M₁, (β - α) / 2 + δ ≤ |x| := by
-    intro x hx
-    rw [hM₁def, ← spectrum.sub_singleton_eq] at hx
-    obtain ⟨y, hy, z, hz, hyz⟩ := Set.mem_sub.mp hx
-    rw [Set.mem_singleton_iff] at hz
-    subst hz
-    rw [← hyz]
-    rcases hspec y hy with h1 | h1
-    · have hle : y - (α + β) / 2 ≤ -((β - α) / 2 + δ) := by linarith
-      calc (β - α) / 2 + δ ≤ -(y - (α + β) / 2) := by linarith
-        _ ≤ |y - (α + β) / 2| := neg_le_abs _
-    · have hge : (β - α) / 2 + δ ≤ y - (α + β) / 2 := by linarith
-      exact hge.trans (le_abs_self _)
+    rw [hM₁def]
+    exact le_abs_of_spectrum_exterior hspec
   have hM₁unit : IsUnit M₁ :=
     TauCeti.isUnit_of_forall_le_abs (A := ↥Z →L[ℂ] ↥Z) hrd hM₁spec
   set J : ↥Z →L[ℂ] ↥Z := Ring.inverse M₁
