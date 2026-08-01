@@ -280,6 +280,8 @@ theorem filledTruncation_lowerBound
   have hcut := Tcut.lowerBound ha hτ x
   change a * ‖x‖ ^ 2 ≤
     RCLike.re ⟪T x + ((a : ℝ) : 𝕜) • (x - P x), x⟫_𝕜
+  -- Left as a `rw` chain on purpose: `simp only` with this same list leaves `linarith` unable to
+  -- close the goal: simp normalises the arithmetic past the shape the hypotheses are stated in.
   rw [inner_add_left, map_add, inner_smul_left, RCLike.conj_ofReal,
     RCLike.re_ofReal_mul, hTinner, hQinner]
   rw [← hproj.2]
@@ -319,6 +321,8 @@ theorem filledTruncation_upperBound
   have hcut := Tcut.upperBound ha hτ x
   change RCLike.re ⟪T x + ((a : ℝ) : 𝕜) • (x - P x), x⟫_𝕜 ≤
     a * ‖x‖ ^ 2
+  -- Left as a `rw` chain on purpose: `simp only` with this same list leaves `linarith` unable to
+  -- close the goal: simp normalises the arithmetic past the shape the hypotheses are stated in.
   rw [inner_add_left, map_add, inner_smul_left, RCLike.conj_ofReal,
     RCLike.re_ofReal_mul, hTinner, hQinner]
   rw [← hproj.2]

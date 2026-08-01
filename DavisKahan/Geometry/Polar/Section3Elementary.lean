@@ -251,6 +251,9 @@ theorem spectraDirectRotation_complementCompression_nonnegative
     have hcomm : Commute C (complementaryProjection U) := by
       have hcomp : complementaryProjection U = 1 - projection U :=
         Submodule.starProjection_orthogonal' U
+      -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the goal unsolved:
+      -- at least one lemma here has to fire at one occurrence, in order, and simp's normal form
+      -- loses the intermediate shape.
       rw [commute_iff_eq, hcomp, mul_sub, mul_one, sub_mul, one_mul,
         (spectraCanonicalAbsoluteValue_commute_projection U V).eq]
     calc

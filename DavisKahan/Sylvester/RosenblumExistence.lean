@@ -360,6 +360,9 @@ theorem rosenblumSolution_comp_sub_comp (X : F →L[ℂ] E) (hr : 0 < radius)
     circleIntegral.integral_congr hr.le fun z hz => by
       rw [mem_sphere, dist_eq_norm] at hz
       exact rosenblumIntegrand_comp_sub X (hAs z hz) (hBs z hz)
+  -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the goal unsolved: at
+  -- least one lemma here has to fire at one occurrence, in order, and simp's normal form loses the
+  -- intermediate shape.
   rw [rosenblumSolution, hcongr, circleIntegral_resolvent_sub A B X hr.le hAs hBs,
     circleRieszProjection_eq_one A hr hA, circleRieszProjection_eq_zero B hr hB,
     ContinuousLinearMap.one_def, ContinuousLinearMap.id_comp,

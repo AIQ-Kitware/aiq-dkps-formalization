@@ -200,6 +200,9 @@ theorem isSelfAdjoint_compressOperator {T : E →L[ℂ] E}
     (hT : IsSelfAdjoint T) (U : Submodule ℂ E) [U.HasOrthogonalProjection]
     [CompleteSpace U] :
     IsSelfAdjoint (compressOperator U T) := by
+  -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the goal unsolved: at
+  -- least one lemma here has to fire at one occurrence, in order, and simp's normal form loses the
+  -- intermediate shape.
   rw [ContinuousLinearMap.isSelfAdjoint_iff', compressOperator,
     ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp,
     Submodule.adjoint_subtypeL, Submodule.adjoint_orthogonalProjectionOnto,
