@@ -193,20 +193,20 @@ theorem filledTruncation_tendsto_on_domain
   rw [hfun]
   exact hfill
 
-/-- A lower form bound on a cutoff range becomes a global lower bound after
-filling the orthogonal complement by the same scalar. -/
-theorem filledTruncation_lowerBound
-    {H : Type v}
+/-- **The orthogonal decomposition a cutoff projection induces**, bundled.
+
+`T x` is orthogonal to the complement `x - P x`; the real part of `T`'s form is
+carried by the cutoff part; and the complement's form is its squared norm.
+Both filled-truncation bounds below derived all three inline. -/
+private theorem cutoff_orthogonality {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
-    (hA : A.IsSelfAdjoint)
-    (Pcut : SpectralCutoffInterface A hA)
-    (Tcut : BoundedTruncationInterface A hA Pcut)
-    {a τ : ℝ} (hτ : 0 ≤ τ)
-    (ha : SemiboundedBelow A a) :
-    ∀ x, a * ‖x‖ ^ 2 ≤
-      RCLike.re ⟪filledTruncation A hA Pcut Tcut a τ x, x⟫_𝕜 := by
-  intro x
+    (hA : A.IsSelfAdjoint) (Pcut : SpectralCutoffInterface A hA)
+    (Tcut : BoundedTruncationInterface A hA Pcut) (τ : ℝ) (x : H) :
+    ⟪Tcut.truncation τ x, x - Pcut.cutoff τ x⟫_𝕜 = 0 ∧
+      RCLike.re ⟪Tcut.truncation τ x, x⟫_𝕜 =
+        RCLike.re ⟪Tcut.truncation τ x, Pcut.cutoff τ x⟫_𝕜 ∧
+      RCLike.re ⟪x - Pcut.cutoff τ x, x⟫_𝕜 = ‖x - Pcut.cutoff τ x‖ ^ 2 := by
   let P := Pcut.cutoff τ
   let T := Tcut.truncation τ
   have hproj := cutoff_complement_identities A hA Pcut Tcut τ x
@@ -244,6 +244,39 @@ theorem filledTruncation_lowerBound
       _ = ‖x - P x‖ ^ 2 := by
         rw [inner_add_right, map_add, hQorth, map_zero, zero_add,
           inner_self_eq_norm_sq]
+  exact ⟨hTorth, hTinner, hQinner⟩
+
+/-- A lower form bound on a cutoff range becomes a global lower bound after
+filling the orthogonal complement by the same scalar. -/
+theorem filledTruncation_lowerBound
+    {H : Type v}
+    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (hA : A.IsSelfAdjoint)
+    (Pcut : SpectralCutoffInterface A hA)
+    (Tcut : BoundedTruncationInterface A hA Pcut)
+    {a τ : ℝ} (hτ : 0 ≤ τ)
+    (ha : SemiboundedBelow A a) :
+    ∀ x, a * ‖x‖ ^ 2 ≤
+      RCLike.re ⟪filledTruncation A hA Pcut Tcut a τ x, x⟫_𝕜 := by
+  intro x
+  let P := Pcut.cutoff τ
+  let T := Tcut.truncation τ
+  have hproj := cutoff_complement_identities A hA Pcut Tcut τ x
+  have hcomm := Tcut.commutes_cutoff τ
+  have hPT : P (T x) = T x := by
+    have h := congrArg (fun S : H →L[𝕜] H => S x) hcomm.2
+    simpa only [P, T, ContinuousLinearMap.comp_apply] using h
+  have hPP : P (P x) = P x := by
+    have h := congrArg (fun S : H →L[𝕜] H => S x)
+      (Pcut.isOrthogonalProjection τ).1
+    simpa only [P, ContinuousLinearMap.comp_apply] using h
+  have hPQ : P (x - P x) = 0 := by rw [map_sub, hPP, sub_self]
+  obtain ⟨hTorth, hTinner, hQinner⟩ :=
+    cutoff_orthogonality A hA Pcut Tcut τ x
+  have hQorth : ⟪x - P x, P x⟫_𝕜 = 0 := by
+    rw [← inner_conj_symm, hproj.1, map_zero]
+  have hx : x = P x + (x - P x) := by abel
   have hcut := Tcut.lowerBound ha hτ x
   change a * ‖x‖ ^ 2 ≤
     RCLike.re ⟪T x + ((a : ℝ) : 𝕜) • (x - P x), x⟫_𝕜
@@ -278,31 +311,11 @@ theorem filledTruncation_upperBound
       (Pcut.isOrthogonalProjection τ).1
     simpa only [P, ContinuousLinearMap.comp_apply] using h
   have hPQ : P (x - P x) = 0 := by rw [map_sub, hPP, sub_self]
-  have hTorth : ⟪T x, x - P x⟫_𝕜 = 0 := by
-    calc
-      ⟪T x, x - P x⟫_𝕜 = ⟪P (T x), x - P x⟫_𝕜 := by rw [hPT]
-      _ = ⟪T x, P (x - P x)⟫_𝕜 :=
-        (Pcut.isOrthogonalProjection τ).2 (T x) (x - P x)
-      _ = 0 := by simp only [hPQ, inner_zero_right]
+  obtain ⟨hTorth, hTinner, hQinner⟩ :=
+    cutoff_orthogonality A hA Pcut Tcut τ x
   have hQorth : ⟪x - P x, P x⟫_𝕜 = 0 := by
     rw [← inner_conj_symm, hproj.1, map_zero]
   have hx : x = P x + (x - P x) := by abel
-  have hTinner : RCLike.re ⟪T x, x⟫_𝕜 =
-      RCLike.re ⟪T x, P x⟫_𝕜 := by
-    calc
-      RCLike.re ⟪T x, x⟫_𝕜 =
-          RCLike.re ⟪T x, P x + (x - P x)⟫_𝕜 :=
-        congrArg RCLike.re (congrArg (fun y => ⟪T x, y⟫_𝕜) hx)
-      _ = RCLike.re ⟪T x, P x⟫_𝕜 := by
-        rw [inner_add_right, map_add, hTorth, map_zero, add_zero]
-  have hQinner : RCLike.re ⟪x - P x, x⟫_𝕜 = ‖x - P x‖ ^ 2 := by
-    calc
-      RCLike.re ⟪x - P x, x⟫_𝕜 =
-          RCLike.re ⟪x - P x, P x + (x - P x)⟫_𝕜 :=
-        congrArg RCLike.re (congrArg (fun y => ⟪x - P x, y⟫_𝕜) hx)
-      _ = ‖x - P x‖ ^ 2 := by
-        rw [inner_add_right, map_add, hQorth, map_zero, zero_add,
-          inner_self_eq_norm_sq]
   have hcut := Tcut.upperBound ha hτ x
   change RCLike.re ⟪T x + ((a : ℝ) : 𝕜) • (x - P x), x⟫_𝕜 ≤
     a * ‖x‖ ^ 2

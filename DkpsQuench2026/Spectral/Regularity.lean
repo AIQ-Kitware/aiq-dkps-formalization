@@ -125,6 +125,34 @@ theorem referenceEmpiricalCovariance_entry_eq_product_sub_mean_mul_mean
     field_simp
     ring
 
+/-- **Each coordinate of an i.i.d. reference sampler has law `Pf`.**
+
+Immediate from the joint law at the cylinder that constrains one coordinate.
+Both compact-i.i.d. regularity theorems below opened with this fifteen-line
+derivation. -/
+theorem map_referenceCoordinate_eq
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μref : Nat → Measure Ωref)
+    (f_ref : ∀ n, Ωref → Fin n → Model Q X)
+    (hiid : IIDReferenceSampler Pf μref f_ref) :
+    ∀ (n : Nat) (i : Fin n),
+      (μref n).map (fun ωref => f_ref n ωref i) = Pf := by
+  intro n i
+  apply Measure.ext
+  intro A hA
+  rw [Measure.map_apply (hiid.measurable n i) hA]
+  have hj := hiid.joint_law n (fun j => if j = i then A else Set.univ)
+    (fun j => by by_cases h : j = i <;> simp [h, hA])
+  have hset : {ωref | ∀ j, f_ref n ωref j ∈ if j = i then A else Set.univ}
+      = (fun ωref => f_ref n ωref i) ⁻¹' A := by
+    ext ωref
+    simp only [Set.mem_setOf_eq, Set.mem_preimage]
+    exact ⟨fun h => by have := h i; simpa using this,
+      fun h j => by by_cases hji : j = i <;> simp [hji, h]⟩
+  rw [hset] at hj
+  rw [hj]
+  simp only [apply_ite Pf, measure_univ, Finset.prod_ite_eq', Finset.mem_univ, if_true]
+
 /-- Scalar weak law for one perspective coordinate mean.
 -/
 theorem highProb_referenceCoordinateMean_of_compact_iid
@@ -140,22 +168,8 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
       |referenceCoordinateMean ψ f_ref n ωref a -
         ∫ f, ψ f a ∂Pf| ≤ ε}) := by
   have hmap : ∀ (n : Nat) (i : Fin n),
-      (μref n).map (fun ωref => f_ref n ωref i) = Pf := by
-    intro n i
-    apply Measure.ext
-    intro A hA
-    rw [Measure.map_apply (hiid.measurable n i) hA]
-    have hj := hiid.joint_law n (fun j => if j = i then A else Set.univ)
-      (fun j => by by_cases h : j = i <;> simp [h, hA])
-    have hset : {ωref | ∀ j, f_ref n ωref j ∈ if j = i then A else Set.univ}
-        = (fun ωref => f_ref n ωref i) ⁻¹' A := by
-      ext ωref
-      simp only [Set.mem_setOf_eq, Set.mem_preimage]
-      exact ⟨fun h => by have := h i; simpa using this,
-        fun h j => by by_cases hji : j = i <;> simp [hji, h]⟩
-    rw [hset] at hj
-    rw [hj]
-    simp only [apply_ite Pf, measure_univ, Finset.prod_ite_eq', Finset.mem_univ, if_true]
+      (μref n).map (fun ωref => f_ref n ωref i) = Pf :=
+    map_referenceCoordinate_eq Pf μref f_ref hiid
   obtain ⟨rB, hrB⟩ := hcompact.isBounded.subset_closedBall 0
   set B := max 0 rB with hBdef
   have hB0 : 0 ≤ B := le_max_left _ _
@@ -356,22 +370,8 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
       |referenceCoordinateProductMean ψ f_ref n ωref a b -
         ∫ f, ψ f a * ψ f b ∂Pf| ≤ ε}) := by
   have hmap : ∀ (n : Nat) (i : Fin n),
-      (μref n).map (fun ωref => f_ref n ωref i) = Pf := by
-    intro n i
-    apply Measure.ext
-    intro A hA
-    rw [Measure.map_apply (hiid.measurable n i) hA]
-    have hj := hiid.joint_law n (fun j => if j = i then A else Set.univ)
-      (fun j => by by_cases h : j = i <;> simp [h, hA])
-    have hset : {ωref | ∀ j, f_ref n ωref j ∈ if j = i then A else Set.univ}
-        = (fun ωref => f_ref n ωref i) ⁻¹' A := by
-      ext ωref
-      simp only [Set.mem_setOf_eq, Set.mem_preimage]
-      exact ⟨fun h => by have := h i; simpa using this,
-        fun h j => by by_cases hji : j = i <;> simp [hji, h]⟩
-    rw [hset] at hj
-    rw [hj]
-    simp only [apply_ite Pf, measure_univ, Finset.prod_ite_eq', Finset.mem_univ, if_true]
+      (μref n).map (fun ωref => f_ref n ωref i) = Pf :=
+    map_referenceCoordinate_eq Pf μref f_ref hiid
   obtain ⟨rB, hrB⟩ := hcompact.isBounded.subset_closedBall 0
   set B := max 0 rB with hBdef
   have hB0 : 0 ≤ B := le_max_left _ _
