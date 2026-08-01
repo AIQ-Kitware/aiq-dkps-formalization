@@ -540,6 +540,20 @@ theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
   rw [hdnorm] at hhom
   linarith
 
+/-- **A Ky Fan gauge is unchanged by moving an orthogonal projection across the
+adjoint.**
+
+`‖P K‖_(k) = ‖K⋆ P‖_(k)` for an orthogonal projection `P`.  Derived identically
+in `Sylvester/Unbounded/OrderedCutoff.lean` and
+`Sylvester/Unbounded/OrderedFromCutoffs.lean`, which share no import edge. -/
+theorem kyFanApproximationGauge_proj_comp_eq_adjoint_comp
+    {k : ℕ} {P : F →L[𝕜] F} (hP : IsOrthogonalProjectionMap P) (K : E →L[𝕜] F) :
+    kyFanApproximationGauge k (P ∘L K) =
+      kyFanApproximationGauge k (K.adjoint ∘L P) := by
+  rw [← kyFanApproximationGauge_adjoint k (P ∘L K)]
+  simp only [ContinuousLinearMap.adjoint_comp]
+  rw [hP.2.clm_adjoint_eq]
+
 end ExactSinTheta
 end Experimental
 end DavisKahan
