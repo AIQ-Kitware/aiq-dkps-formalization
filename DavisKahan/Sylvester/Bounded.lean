@@ -255,19 +255,8 @@ theorem sylvesterNeumannPartialSum_cauchy
         rw [pow_succ', mul_pow]
         ring
   have hgap : ∀ {m n : ℕ}, n ≤ m →
-      N.gaugeReal (P m - P n) ≤ G m - G n := by
-    intro m n hnm
-    have hsum : P m - P n = ∑ j ∈ Finset.Ico n m, t j :=
-      (Finset.sum_Ico_eq_sub _ hnm).symm
-    have hG : ∑ j ∈ Finset.Ico n m, q ^ j * g₀ = G m - G n :=
-      Finset.sum_Ico_eq_sub _ hnm
-    rw [hsum, ← hG]
-    calc
-      N.gaugeReal (∑ j ∈ Finset.Ico n m, t j)
-          ≤ ∑ j ∈ Finset.Ico n m, N.gaugeReal (t j) :=
-        N.gaugeReal_finset_sum_le (Finset.Ico n m) t fun j _ => htmem j
-      _ ≤ ∑ j ∈ Finset.Ico n m, q ^ j * g₀ :=
-        Finset.sum_le_sum fun j _ => htGauge j
+      N.gaugeReal (P m - P n) ≤ G m - G n :=
+    fun {_ _} hnm => N.gaugeReal_sum_range_sub_le htmem htGauge hnm
   have hGcauchy : CauchySeq G := by
     have hsummable : Summable (fun j : ℕ => q ^ j * g₀) :=
       (summable_geometric_of_lt_one hq0 hratio).mul_right g₀
