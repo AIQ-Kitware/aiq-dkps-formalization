@@ -475,6 +475,20 @@ theorem isSelfAdjoint_cosAngleExtendedC (U V : Submodule ℂ E)
     IsSelfAdjoint (cosAngleExtendedC U V) :=
   (isSelfAdjoint_cosAngleOperatorC U V).add (isSelfAdjoint_starProjection _)
 
+omit [CompleteSpace E] in
+/-- **Pythagoras across a subspace and its orthogonal complement.** -/
+private theorem norm_sq_eq_starProjection_add_orthogonal (U : Submodule ℂ E)
+    [U.HasOrthogonalProjection] (x : E) :
+    ‖x‖ ^ 2 = ‖U.starProjection x‖ ^ 2 + ‖Uᗮ.starProjection x‖ ^ 2 := by
+  have horth' : ⟪U.starProjection x, Uᗮ.starProjection x⟫_ℂ = 0 :=
+    (Submodule.mem_orthogonal U _).mp
+      (Uᗮ.starProjection_apply_mem x) _ (U.starProjection_apply_mem x)
+  have h := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero
+    (U.starProjection x) (Uᗮ.starProjection x) horth'
+  rw [U.starProjection_add_starProjection_orthogonal x] at h
+  rw [sq, sq, sq]
+  linarith
+
 /-- **Global coercivity of the extended cosine in the acute regime.** -/
 theorem norm_cosAngleExtendedC_apply_ge (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (x : E) :
@@ -515,13 +529,7 @@ theorem norm_cosAngleExtendedC_apply_ge (U V : Submodule ℂ E)
       horth
     rw [himg, sq, sq, sq]
     linarith
-  have hsq2 : ‖x‖ ^ 2 =
-      ‖U.starProjection x‖ ^ 2 + ‖Uᗮ.starProjection x‖ ^ 2 := by
-    have h := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero
-      (U.starProjection x) (Uᗮ.starProjection x) horth'
-    rw [U.starProjection_add_starProjection_orthogonal x] at h
-    rw [sq, sq, sq]
-    linarith
+  have hsq2 := norm_sq_eq_starProjection_add_orthogonal U x
   -- coercivity on the source component
   have hcoer := norm_cosAngleOperatorC_apply_ge U V
     (U.starProjection_apply_mem x)
@@ -739,13 +747,7 @@ theorem norm_add_starProjection_orthogonal_apply_ge
       (S (U.starProjection x)) (Uᗮ.starProjection x) horth
     rw [himg, sq, sq, sq]
     linarith
-  have hsq2 : ‖x‖ ^ 2 =
-      ‖U.starProjection x‖ ^ 2 + ‖Uᗮ.starProjection x‖ ^ 2 := by
-    have h := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero
-      (U.starProjection x) (Uᗮ.starProjection x) horth'
-    rw [U.starProjection_add_starProjection_orthogonal x] at h
-    rw [sq, sq, sq]
-    linarith
+  have hsq2 := norm_sq_eq_starProjection_add_orthogonal U x
   have hlow1 : c * ‖U.starProjection x‖ ≤ ‖S (U.starProjection x)‖ :=
     hcoer _ (U.starProjection_apply_mem x)
   have hfinal : (c * ‖x‖) ^ 2 ≤ ‖(S + Uᗮ.starProjection) x‖ ^ 2 := by
