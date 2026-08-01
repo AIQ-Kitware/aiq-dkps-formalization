@@ -360,13 +360,43 @@ map itself. -/
   simp [Pi.single_apply]
   ring
 
-/-- Coordinatewise real rotations in an orthonormal basis, before transporting
-the product norm to `WithLp 2`. -/
-private noncomputable def basisDoubledRealRotationLinearEquiv
-    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
-    [Fintype ι] [DecidableEq ι]
-    (e : OrthonormalBasis ι ℝ G) (theta : ι → ℝ) :
-    (G × G) ≃ₗ[ℝ] (G × G) := by
+/-- Rotation invariance of the pairwise squared norm over `RCLike` scalars. -/
+private theorem rotation_norm_sq_pair {c s : ℝ}
+    (h : c * c + s * s = 1) (p q : 𝕜) :
+    ‖(c : 𝕜) * p - (s : 𝕜) * q‖ ^ 2 + ‖(s : 𝕜) * p + (c : 𝕜) * q‖ ^ 2 =
+      ‖p‖ ^ 2 + ‖q‖ ^ 2 := by
+  have hcast : (c : 𝕜) * (c : 𝕜) + (s : 𝕜) * (s : 𝕜) = 1 := by
+    have hc := congrArg (fun x : ℝ => (x : 𝕜)) h
+    push_cast at hc
+    simpa using hc
+  have key : ((‖(c : 𝕜) * p - (s : 𝕜) * q‖ ^ 2 +
+        ‖(s : 𝕜) * p + (c : 𝕜) * q‖ ^ 2 : ℝ) : 𝕜) =
+      ((‖p‖ ^ 2 + ‖q‖ ^ 2 : ℝ) : 𝕜) := by
+    push_cast
+    rw [← RCLike.mul_conj ((c : 𝕜) * p - (s : 𝕜) * q),
+      ← RCLike.mul_conj ((s : 𝕜) * p + (c : 𝕜) * q),
+      ← RCLike.mul_conj p, ← RCLike.mul_conj q]
+    simp only [map_sub, map_add, map_mul, RCLike.conj_ofReal]
+    linear_combination
+      (p * (starRingEnd 𝕜) p + q * (starRingEnd 𝕜) q) * hcast
+  exact_mod_cast key
+
+
+section DoubledPhaseRotation
+
+variable {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+  [Fintype ι] [DecidableEq ι]
+
+/-! The diagonal map with real coefficients and its two lemmas used to be defined here as
+well, over the same `𝕜` and with proofs line-for-line identical to the upstream copy.  They
+now come from `…ReciprocalMultiplier/OrbitAction.lean`, which is upstream in the import
+order; the real-only version that lived there is the same construction at `𝕜 = ℝ`. -/
+
+/-- Coordinatewise phase rotations in an orthonormal basis of a `𝕜`-space,
+before transporting the product norm to `WithLp 2`. -/
+private noncomputable def basisDoubledPhaseRotationLinearEquiv
+    (e : OrthonormalBasis ι 𝕜 G) (theta : ι → ℝ) :
+    (G × G) ≃ₗ[𝕜] (G × G) := by
   let C := basisDiagonalRealCoeffMap e fun i => Real.cos (theta i)
   let S := basisDiagonalRealCoeffMap e fun i => Real.sin (theta i)
   refine
@@ -381,7 +411,7 @@ private noncomputable def basisDoubledRealRotationLinearEquiv
   · intro r x
     apply Prod.ext <;> simp [C, S, smul_sub, smul_add]
   · intro x
-    have htrig (i : ι) := cos_mul_cos_add_sin_mul_sin (theta i)
+    have htrig (i : ι) := cos_mul_cos_add_sin_mul_sin_cast (𝕜 := 𝕜) (theta i)
     apply Prod.ext
     · apply e.repr.injective
       ext i
@@ -394,7 +424,7 @@ private noncomputable def basisDoubledRealRotationLinearEquiv
         PiLp.add_apply, PiLp.sub_apply, PiLp.neg_apply]
       linear_combination (e.repr x.2 i) * htrig i
   · intro x
-    have htrig (i : ι) := cos_mul_cos_add_sin_mul_sin (theta i)
+    have htrig (i : ι) := cos_mul_cos_add_sin_mul_sin_cast (𝕜 := 𝕜) (theta i)
     apply Prod.ext
     · apply e.repr.injective
       ext i
@@ -407,39 +437,56 @@ private noncomputable def basisDoubledRealRotationLinearEquiv
         PiLp.add_apply, PiLp.neg_apply]
       linear_combination (e.repr x.2 i) * htrig i
 
-/-- Coordinatewise phase rotations on two real copies of a Hilbert space. -/
-noncomputable def basisDoubledRealRotation
-    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
-    [Fintype ι] [DecidableEq ι]
-    (e : OrthonormalBasis ι ℝ G) (theta : ι → ℝ) :
-    WithLp 2 (G × G) ≃ₗᵢ[ℝ] WithLp 2 (G × G) where
-  __ := (basisDoubledRealRotationLinearEquiv e theta).withLpCongr 2
+/-- Coordinatewise phase rotations on two orthogonal copies of a `𝕜`-Hilbert
+space.  This is the generic doubled realization of the diagonal phase
+unitary with angles `theta`. -/
+noncomputable def basisDoubledPhaseRotation
+    (e : OrthonormalBasis ι 𝕜 G) (theta : ι → ℝ) :
+    WithLp 2 (G × G) ≃ₗᵢ[𝕜] WithLp 2 (G × G) where
+  __ := (basisDoubledPhaseRotationLinearEquiv e theta).withLpCongr 2
   norm_map' x := by
     let C := basisDiagonalRealCoeffMap e fun i => Real.cos (theta i)
     let S := basisDiagonalRealCoeffMap e fun i => Real.sin (theta i)
     have hparseval (z : G) : ∑ i, ‖e.repr z i‖ ^ 2 = ‖z‖ ^ 2 := by
       simp_rw [e.repr_apply_apply]
       exact e.sum_sq_norm_inner_right z
-    -- Same reason as the rotation case above: `doubledRealPhase` is a bundled equiv, so
-    -- its value at a pair is not syntactically a `WithLp.toLp` until it is said to be.
+    -- names the application so the norm bound applies to it directly.
     change ‖WithLp.toLp 2 (C x.fst - S x.snd, S x.fst + C x.snd)‖ = ‖x‖
     rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _),
       WithLp.prod_norm_sq_eq_of_L2, WithLp.prod_norm_sq_eq_of_L2]
-    -- `WithLp.prod_norm_sq_eq_of_L2` fires on both sides but leaves them as squared norms
-    -- of the *pair*; the Parseval rewrites below need the two components separately.
+    -- names the application so the norm bound applies to it directly.
     change ‖C x.fst - S x.snd‖ ^ 2 + ‖S x.fst + C x.snd‖ ^ 2 =
       ‖x.fst‖ ^ 2 + ‖x.snd‖ ^ 2
-    rw [
-      ← hparseval (C x.fst - S x.snd), ← hparseval (S x.fst + C x.snd),
+    rw [← hparseval (C x.fst - S x.snd), ← hparseval (S x.fst + C x.snd),
       ← hparseval x.fst, ← hparseval x.snd,
       ← Finset.sum_add_distrib, ← Finset.sum_add_distrib]
     apply Finset.sum_congr rfl
     intro i _
     simp only [map_sub, map_add, C, S, basisDiagonalRealCoeffMap_repr,
-      PiLp.sub_apply, PiLp.add_apply, Real.norm_eq_abs, sq_abs]
-    have htrig := cos_mul_cos_add_sin_mul_sin (theta i)
-    linear_combination
-      ((e.repr x.fst i) ^ 2 + (e.repr x.snd i) ^ 2) * htrig
+      PiLp.sub_apply, PiLp.add_apply]
+    exact rotation_norm_sq_pair
+      (by nlinarith [Real.sin_sq_add_cos_sq (theta i)])
+      (e.repr x.fst i) (e.repr x.snd i)
+
+/-- The doubled phase rotation on a basis vector. -/
+@[simp] theorem basisDoubledPhaseRotation_apply
+    (e : OrthonormalBasis ι 𝕜 G) (theta : ι → ℝ) (x : WithLp 2 (G × G)) :
+    basisDoubledPhaseRotation e theta x = WithLp.toLp 2
+      (basisDiagonalRealCoeffMap e (fun i => Real.cos (theta i)) x.fst -
+          basisDiagonalRealCoeffMap e (fun i => Real.sin (theta i)) x.snd,
+        basisDiagonalRealCoeffMap e (fun i => Real.sin (theta i)) x.fst +
+          basisDiagonalRealCoeffMap e (fun i => Real.cos (theta i)) x.snd) := by
+  rfl
+
+end DoubledPhaseRotation
+
+/-- Coordinatewise phase rotations on two real copies of a Hilbert space. -/
+noncomputable def basisDoubledRealRotation
+    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+    [Fintype ι] [DecidableEq ι]
+    (e : OrthonormalBasis ι ℝ G) (theta : ι → ℝ) :
+    WithLp 2 (G × G) ≃ₗᵢ[ℝ] WithLp 2 (G × G) :=
+  basisDoubledPhaseRotation e theta
 
 /-- The doubled real rotation on a basis vector. -/
 @[simp] theorem basisDoubledRealRotation_apply
