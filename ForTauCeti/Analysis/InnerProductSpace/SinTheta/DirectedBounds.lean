@@ -63,6 +63,27 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-! ## Residual form -/
 
+omit [FiniteDimensional 𝕜 F] in
+/-- **The projected Sylvester equation, with the coercions discharged.**
+
+`sylvester_sinThetaEmbedding_eq_projectedResidual` states the identity
+pointwise; this is the operator form the norm estimates use, and both
+`sinTheta_residual_le_of_sylvester` here and
+`frobenius_sinTheta_residual_le_of_spectralDistance` in `Perturbation.lean`
+unfolded it the same way. -/
+theorem sylvester_projectedResidual_eq {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
+    {U : Submodule 𝕜 E} (hU : IsInvariant A U)
+    (hUperp : IsInvariant A Uᗮ) (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F) :
+    (A.restrict hUperp) ∘ₗ
+        (Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap) -
+      (Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap) ∘ₗ M =
+      Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ residual A X M := by
+  ext x
+  have hx := LinearMap.congr_fun
+    (sylvester_sinThetaEmbedding_eq_projectedResidual hA hU X M) x
+  simpa [sinThetaEmbedding, complementaryProjection, projection,
+    LinearMap.comp_apply] using hx
+
 /-- **The residual `sin Θ` reduction, with the Sylvester estimate as a
 hypothesis.**
 
@@ -95,12 +116,8 @@ private theorem sinTheta_residual_le_of_sylvester
   let NU : RectangularUnitarilyInvariantNorm 𝕜 F Uᗮ :=
     N.codomainIsometryTransport Uᗮ.subtypeₗᵢ
   have hAU : AU.IsSymmetric := isSymmetric_restrict hA hUperp
-  have hEq : AU ∘ₗ Y - Y ∘ₗ M = C := by
-    ext x
-    have hx := LinearMap.congr_fun
-      (sylvester_sinThetaEmbedding_eq_projectedResidual hA hU X M) x
-    simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
-      LinearMap.comp_apply] using hx
+  have hEq : AU ∘ₗ Y - Y ∘ₗ M = C :=
+    sylvester_projectedResidual_eq hA hU hUperp X M
   have hY : NU Y = N (sinThetaEmbedding U X) := by
     -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
     -- can close. `simp only [NU]` normalises further and leaves goals `congr` no

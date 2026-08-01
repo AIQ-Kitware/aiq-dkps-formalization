@@ -712,12 +712,8 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
       exact hlam
     have hsep := hgap mu lam hmu hlam'
     simpa [abs_sub_comm] using hsep
-  have hEq : AU ∘ₗ Y - Y ∘ₗ M = C := by
-    ext x
-    have hx := LinearMap.congr_fun
-      (sylvester_sinThetaEmbedding_eq_projectedResidual hA hU X M) x
-    simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
-      LinearMap.comp_apply] using hx
+  have hEq : AU ∘ₗ Y - Y ∘ₗ M = C :=
+    sylvester_projectedResidual_eq hA hU hUperp X M
   have hSylv := frobenius_sylvester_le_of_spectraSeparated
     hAU hM hδ hgap' hEq
   have hY : RectangularUnitarilyInvariantNorm.frobenius Y =
