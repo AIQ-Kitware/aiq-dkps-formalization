@@ -103,6 +103,23 @@ private theorem le_re_inner_abs_self_of_norm_lower_bound
   rw [TauCeti.norm_abs_apply]
   exact hlow y
 
+/-- **The adjoint of a Sylvester equation, in the sign the norm bounds want.**
+
+From `A X − X B = C` with `A`, `B` symmetric, taking adjoints gives
+`X⋆ A − B X⋆ = C⋆`; negating puts it in the orientation the interval-gap
+estimates apply.  Both of them derived this in seven lines. -/
+private theorem sylvester_adjoint_neg {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E}
+    {X C : E →ₗ[𝕜] F} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    (hEq : A ∘ₗ X - X ∘ₗ B = C) :
+    B ∘ₗ X.adjoint - X.adjoint ∘ₗ A = -C.adjoint := by
+  have hadj : X.adjoint ∘ₗ A - B ∘ₗ X.adjoint = C.adjoint := by
+    simpa only [map_sub, LinearMap.adjoint_comp, hA.adjoint_eq, hB.adjoint_eq] using
+      congrArg (fun T : E →ₗ[𝕜] F => T.adjoint) hEq
+  calc
+    B ∘ₗ X.adjoint - X.adjoint ∘ₗ A
+        = -(X.adjoint ∘ₗ A - B ∘ₗ X.adjoint) := by abel
+    _ = -C.adjoint := congrArg Neg.neg hadj
+
 omit [FiniteDimensional 𝕜 E] in
 /-- **A Sylvester equation transports along the polar decomposition.**  Writing
 `S = U |S|`, the equation `S X - X T = C` becomes `|S| X - (U⁻¹X) T = U⁻¹C`:
@@ -251,14 +268,8 @@ theorem uiNorm_sylvester_le_of_orderedGap
         hAB c (hB.eigenvalues rfl j)
           (eigenvalue_mem_restrictedSpectrum_top hA i₀)
           (eigenvalue_mem_restrictedSpectrum_top hB j)
-    have hadj : X.adjoint ∘ₗ A - B ∘ₗ X.adjoint = C.adjoint := by
-      simpa only [map_sub, LinearMap.adjoint_comp, hA.adjoint_eq, hB.adjoint_eq] using
-        congrArg (fun T : E →ₗ[𝕜] F => T.adjoint) hEq
-    have hEqAdj : B ∘ₗ X.adjoint - X.adjoint ∘ₗ A = -C.adjoint := by
-      calc
-        B ∘ₗ X.adjoint - X.adjoint ∘ₗ A
-            = -(X.adjoint ∘ₗ A - B ∘ₗ X.adjoint) := by abel
-        _ = -C.adjoint := congrArg Neg.neg hadj
+    have hEqAdj : B ∘ₗ X.adjoint - X.adjoint ∘ₗ A = -C.adjoint :=
+      sylvester_adjoint_neg hA hB hEq
     have hbound := uiNorm_sylvester_le_of_form_bounds_aux
       (RectangularUnitarilyInvariantNorm.adjointTransport N)
       hB hA hδ hBform hAform hEqAdj
@@ -428,14 +439,8 @@ theorem uiNorm_sylvester_le_of_unorderedIntervalGap
     δ * N X ≤ N C := by
   rcases hgap with hforward | hreverse
   · exact uiNorm_sylvester_le_of_intervalGap N hA hB hδ hforward hEq
-  · have hadj : X.adjoint ∘ₗ A - B ∘ₗ X.adjoint = C.adjoint := by
-      simpa only [map_sub, LinearMap.adjoint_comp, hA.adjoint_eq, hB.adjoint_eq] using
-        congrArg (fun T : E →ₗ[𝕜] F => T.adjoint) hEq
-    have hEqAdj : B ∘ₗ X.adjoint - X.adjoint ∘ₗ A = -C.adjoint := by
-      calc
-        B ∘ₗ X.adjoint - X.adjoint ∘ₗ A =
-            -(X.adjoint ∘ₗ A - B ∘ₗ X.adjoint) := by abel
-        _ = -C.adjoint := congrArg Neg.neg hadj
+  · have hEqAdj : B ∘ₗ X.adjoint - X.adjoint ∘ₗ A = -C.adjoint :=
+      sylvester_adjoint_neg hA hB hEq
     have hbound := uiNorm_sylvester_le_of_intervalGap
       (RectangularUnitarilyInvariantNorm.adjointTransport N)
       hB hA hδ hreverse hEqAdj
