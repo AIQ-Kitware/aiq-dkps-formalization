@@ -144,30 +144,28 @@ theorem lowerFramePolarData_real_nonempty
     simpa [sqrtR] using complexify_realPartOperator hsqrt_fix
   have hinvSqrt_complexify : complexify invSqrtR = invSqrtC := by
     simpa [invSqrtR] using complexify_realPartOperator hinvSqrt_fix
+  -- The three compositions below are one `rpow_add` each, differing only in the exponents;
+  -- naming that step keeps the difference visible instead of repeating the calc three times.
+  have hrpow : ∀ s t : ℝ, gramC ^ s * gramC ^ t = gramC ^ (s + t) :=
+    fun _ _ => (CFC.rpow_add hgram_unit).symm
   have hinvSqrt_sqrtC :
       invSqrtC ∘L sqrtC = ContinuousLinearMap.id ℂ (RealComplexification F) := by
     change invSqrtC * sqrtC = 1
     calc
-      invSqrtC * sqrtC = gramC ^ (-1 / 2 : ℝ) * gramC ^ (1 / 2 : ℝ) := by rfl
-      _ = gramC ^ ((-1 / 2 : ℝ) + (1 / 2 : ℝ)) :=
-        (CFC.rpow_add hgram_unit).symm
+      invSqrtC * sqrtC = gramC ^ ((-1 / 2 : ℝ) + (1 / 2 : ℝ)) := hrpow _ _
       _ = gramC ^ (0 : ℝ) := by norm_num
       _ = 1 := CFC.rpow_zero gramC hgram_nonneg
   have hsqrt_invSqrtC :
       sqrtC ∘L invSqrtC = ContinuousLinearMap.id ℂ (RealComplexification F) := by
     change sqrtC * invSqrtC = 1
     calc
-      sqrtC * invSqrtC = gramC ^ (1 / 2 : ℝ) * gramC ^ (-1 / 2 : ℝ) := by rfl
-      _ = gramC ^ ((1 / 2 : ℝ) + (-1 / 2 : ℝ)) :=
-        (CFC.rpow_add hgram_unit).symm
+      sqrtC * invSqrtC = gramC ^ ((1 / 2 : ℝ) + (-1 / 2 : ℝ)) := hrpow _ _
       _ = gramC ^ (0 : ℝ) := by norm_num
       _ = 1 := CFC.rpow_zero gramC hgram_nonneg
   have hsqrt_sqC : sqrtC ∘L sqrtC = gramC := by
     change sqrtC * sqrtC = gramC
     calc
-      sqrtC * sqrtC = gramC ^ (1 / 2 : ℝ) * gramC ^ (1 / 2 : ℝ) := by rfl
-      _ = gramC ^ ((1 / 2 : ℝ) + (1 / 2 : ℝ)) :=
-        (CFC.rpow_add hgram_unit).symm
+      sqrtC * sqrtC = gramC ^ ((1 / 2 : ℝ) + (1 / 2 : ℝ)) := hrpow _ _
       _ = gramC ^ (1 : ℝ) := by norm_num
       _ = gramC := CFC.rpow_one gramC hgram_nonneg
   have hinvSqrt_sqrtR :
