@@ -267,7 +267,7 @@ theorem circleIntegral_resolvent_sub (C : F →L[ℂ] E) (hr : 0 ≤ radius)
         Ring.inverse (z • (1 : F →L[ℂ] F) - B) :=
     circleIntegral_map (ContinuousLinearMap.compL ℂ F F E C) _ _ _
       (circleIntegrable_ringInverse B hr hB)
-  rw [circleIntegral.integral_sub hLA hLB, hmapA, hmapB, smul_sub,
+  simp only [circleIntegral.integral_sub hLA hLB, hmapA, hmapB, smul_sub,
     circleRieszProjection, circleRieszProjection,
     ContinuousLinearMap.smul_comp, ContinuousLinearMap.comp_smul]
 
@@ -305,7 +305,7 @@ theorem comp_rosenblumSolution_sub_comp (hr : 0 ≤ radius)
       (center : ℂ) radius := by
     simpa using
       circleIntegrable_map ((ContinuousLinearMap.compL ℂ F F E).flip B) hint
-  rw [rosenblumSolution, ContinuousLinearMap.comp_smul,
+  simp only [rosenblumSolution, ContinuousLinearMap.comp_smul,
     ContinuousLinearMap.smul_comp, ← smul_sub,
     comp_circleIntegral A _ _ _ hint, circleIntegral_comp B _ _ _ hint,
     ← circleIntegral.integral_sub hAint hBint,
@@ -326,7 +326,7 @@ theorem comp_rosenblumSolution_sub_comp_eq (hr : 0 < radius)
     notMem_spectrum_of_norm_eq_radius hA
   have hBs : ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius → z ∉ spectrum ℂ B := fun z hz =>
     hB z (by rw [mem_closedBall, dist_eq_norm, hz])
-  rw [comp_rosenblumSolution_sub_comp A B C hr.le hAs hBs,
+  simp only [comp_rosenblumSolution_sub_comp A B C hr.le hAs hBs,
     circleRieszProjection_eq_one A hr hA,
     circleRieszProjection_eq_zero B hr hB,
     ContinuousLinearMap.one_def, ContinuousLinearMap.id_comp,
