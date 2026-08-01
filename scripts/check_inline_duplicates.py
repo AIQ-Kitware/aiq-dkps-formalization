@@ -346,6 +346,12 @@ def steps_in(path: pathlib.Path) -> list[Step]:
             signature = parts[0]
             typed = split_top_level(signature, ":")
             if typed is None:
+                # `have h := e` with no ascribed type.  There is no statement to
+                # compare, but the NAME still enters scope, and forgetting that
+                # makes a later step citing it look self-contained.
+                bare = IDENT.search(signature)
+                if bare:
+                    locals_.append((depth, bare.group(0)))
                 index = cursor + 1
                 continue
             binder, statement = typed
