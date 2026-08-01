@@ -115,6 +115,10 @@ ADVISORY = {
     "check_merge_losses":
         "reports every declaration a merge dropped, which includes every rename "
         "and every deliberate retirement; the list is for a human to adjudicate",
+    "check_rw_chains":
+        "reports `rw` chains the proof-quality rubric calls brittle; three live ones "
+        "in ForTauCeti are correct and documented in-source, because `simp only` with "
+        "the same lemmas either loops or cannot reach the intermediate shape",
 }
 
 #: Gates where `--check` is not the soft/strict toggle it is everywhere else, but
