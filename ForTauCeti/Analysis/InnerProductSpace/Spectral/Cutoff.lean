@@ -324,6 +324,74 @@ section SmoothCutoff
 
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
+/-- **Compressing `C` by `cfc p C` is the calculus applied to `x * p x ^ 2`.**
+
+Both cutoff bounds below need this, at `p = tailCutoff u` and at `p = 1 - tailCutoff u`,
+and each had written the same four-step `calc` out in full. -/
+theorem cfc_mul_self_mul_eq_cfc_mul_sq {C : E →L[ℂ] E} (hC : IsSelfAdjoint C)
+    {p : ℝ → ℝ} (hpcont : Continuous p) :
+    cfc p C * C * cfc p C = cfc (fun x => x * (p x) ^ 2) C := by
+  calc
+    cfc p C * C * cfc p C =
+        cfc p C * cfc (fun x : ℝ => x) C * cfc p C := by
+      rw [cfc_id' ℝ C]
+    _ = cfc (fun x : ℝ => p x * x) C * cfc p C := by
+      rw [cfc_mul p (fun x : ℝ => x) C
+        hpcont.continuousOn continuous_id.continuousOn]
+    _ = cfc (fun x : ℝ => (p x * x) * p x) C := by
+      rw [cfc_mul (fun x : ℝ => p x * x) p C
+        (hpcont.mul continuous_id).continuousOn hpcont.continuousOn]
+    _ = cfc (fun x => x * (p x) ^ 2) C := by
+      apply cfc_congr
+      intro x _
+      ring
+
+/-- **A weighted spectral identity, read through the continuous functional calculus.**
+
+The pointwise identity `(x - u ^ 2) * p x ^ 2 = x * p x ^ 2 - u ^ 2 * p x ^ 2` becomes an
+operator identity: the left side is `cfc p C * C * cfc p C`, the compression of `C` by
+`cfc p C`, and the right side is `u ^ 2` times `cfc p C ^ 2`.
+
+Nothing here is about cutoffs.  `p` is any continuous real function and `u` any real
+number, which is why this is stated on its own rather than inline: the cutoff lemma below
+uses it at `p = tailCutoff u`, and the argument never looks at what `p` is. -/
+theorem cfc_sub_sq_mul_eq_compression_sub_smul {C : E →L[ℂ] E} (hC : IsSelfAdjoint C)
+    {p : ℝ → ℝ} (hpcont : Continuous p) (u : ℝ) :
+    cfc (fun x => (x - u ^ 2) * (p x) ^ 2) C =
+      cfc p C * C * cfc p C - u ^ 2 • (cfc p C * cfc p C) := by
+  have hpcmul : cfc p C * cfc p C = cfc (fun x => (p x) ^ 2) C := by
+    calc
+      cfc p C * cfc p C = cfc (fun x : ℝ => p x * p x) C :=
+        (cfc_mul p p C hpcont.continuousOn hpcont.continuousOn).symm
+      _ = cfc (fun x => (p x) ^ 2) C := by
+        apply cfc_congr
+        intro x _
+        ring
+  have hpcCpc : cfc p C * C * cfc p C = cfc (fun x => x * (p x) ^ 2) C :=
+    cfc_mul_self_mul_eq_cfc_mul_sq hC hpcont
+  have hscale :
+      u ^ 2 • (cfc p C * cfc p C) = cfc (fun x => u ^ 2 * (p x) ^ 2) C := by
+    rw [hpcmul]
+    -- No detour through a scoped real-algebra instance is needed here: off the
+    -- complexification there is only one `Module ℝ (E →L[ℂ] E)` and `cfc_const_mul`
+    -- applies directly.  That detour is what tied this argument to one Hilbert space.
+    exact (cfc_const_mul (u ^ 2) (fun x => (p x) ^ 2) C
+      (hpcont.fun_pow 2).continuousOn).symm
+  calc
+    cfc (fun x => (x - u ^ 2) * (p x) ^ 2) C =
+        cfc (fun x => x * (p x) ^ 2 - u ^ 2 * (p x) ^ 2) C := by
+      apply cfc_congr
+      intro x _
+      ring
+    _ = cfc (fun x => x * (p x) ^ 2) C -
+        cfc (fun x => u ^ 2 * (p x) ^ 2) C := by
+      exact cfc_sub (fun x => x * (p x) ^ 2)
+        (fun x => u ^ 2 * (p x) ^ 2) C
+        ((continuous_id.mul (hpcont.fun_pow 2)).continuousOn)
+        ((continuous_const.mul (hpcont.fun_pow 2)).continuousOn)
+    _ = cfc p C * C * cfc p C - u ^ 2 • (cfc p C * cfc p C) := by
+      rw [← hpcCpc, ← hscale]
+
 /-- **Cutting an operator to the low end of its spectrum leaves norm at most `u`.**
 
 `cfc (1 - tailCutoff u) C`, for the Gram operator `C = S⋆S`, is the multiplier that keeps
@@ -348,6 +416,8 @@ theorem norm_comp_cfc_one_sub_tailCutoff_le
       (ContinuousLinearMap.isPositive_adjoint_comp_self Tc)
   have hCspec_nonneg : ∀ x ∈ spectrum ℝ C, 0 ≤ x := fun x hx =>
     spectrum_nonneg_of_nonneg hCnonneg hx
+  have hCsa : IsSelfAdjoint C :=
+    (ContinuousLinearMap.isPositive_adjoint_comp_self Tc).isSelfAdjoint
   set p : ℝ → ℝ := TauCeti.tailCutoff u with hp
   have hpcont : Continuous p := TauCeti.continuous_tailCutoff u hu0
   set q : ℝ → ℝ := fun x => 1 - p x with hq
@@ -362,22 +432,8 @@ theorem norm_comp_cfc_one_sub_tailCutoff_le
       (Qc ∘L Tc.adjoint) ∘L (Tc ∘L Qc) =
           (Qc ∘L C) ∘L Qc := by
         simp only [C, ContinuousLinearMap.comp_assoc]
-      _ = cfc (fun x => x * (q x) ^ 2) C := by
-        change cfc q C * C * cfc q C = _
-        calc
-          cfc q C * C * cfc q C =
-              cfc q C * cfc (fun x : ℝ => x) C * cfc q C := by
-            rw [cfc_id' ℝ C]
-          _ = cfc (fun x : ℝ => q x * x) C * cfc q C := by
-            rw [cfc_mul q (fun x : ℝ => x) C
-              hqcont.continuousOn continuous_id.continuousOn]
-          _ = cfc (fun x : ℝ => (q x * x) * q x) C := by
-            rw [cfc_mul (fun x : ℝ => q x * x) q C
-              (hqcont.mul continuous_id).continuousOn hqcont.continuousOn]
-          _ = cfc (fun x => x * (q x) ^ 2) C := by
-            apply cfc_congr
-            intro x _
-            ring
+      _ = cfc (fun x => x * (q x) ^ 2) C :=
+        cfc_mul_self_mul_eq_cfc_mul_sq hCsa hqcont
   -- and its Gram operator is `x * q x ^ 2`, which the cutoff bounds by `u ^ 2`.
   have htailCfcNorm :
       ‖cfc (fun x => x * (q x) ^ 2) C‖ ≤ u ^ 2 := by
@@ -422,6 +478,8 @@ theorem mul_norm_cfc_tailCutoff_le_norm_apply
       (ContinuousLinearMap.isPositive_adjoint_comp_self Tc)
   have hCspec_nonneg : ∀ x ∈ spectrum ℝ C, 0 ≤ x := fun x hx =>
     spectrum_nonneg_of_nonneg hCnonneg hx
+  have hCsa : IsSelfAdjoint C :=
+    (ContinuousLinearMap.isPositive_adjoint_comp_self Tc).isSelfAdjoint
   set p : ℝ → ℝ := TauCeti.tailCutoff u with hp
   have hpcont : Continuous p := TauCeti.continuous_tailCutoff u hu0
   set Pc : E →L[ℂ] E := cfc p C with hPc
@@ -436,54 +494,8 @@ theorem mul_norm_cfc_tailCutoff_le_norm_apply
     nlinarith
   have hlowerIdentity :
       cfc (fun x => (x - u ^ 2) * (p x) ^ 2) C =
-        Pc * C * Pc - u ^ 2 • (Pc * Pc) := by
-    have hpcmul : Pc * Pc = cfc (fun x => (p x) ^ 2) C := by
-      dsimp only [Pc]
-      calc
-        cfc p C * cfc p C = cfc (fun x : ℝ => p x * p x) C :=
-          (cfc_mul p p C hpcont.continuousOn hpcont.continuousOn).symm
-        _ = cfc (fun x => (p x) ^ 2) C := by
-          apply cfc_congr
-          intro x _
-          ring
-    have hpcCpc : Pc * C * Pc = cfc (fun x => x * (p x) ^ 2) C := by
-      dsimp only [Pc]
-      calc
-        cfc p C * C * cfc p C =
-            cfc p C * cfc (fun x : ℝ => x) C * cfc p C := by
-          rw [cfc_id' ℝ C]
-        _ = cfc (fun x : ℝ => p x * x) C * cfc p C := by
-          rw [cfc_mul p (fun x : ℝ => x) C
-            hpcont.continuousOn continuous_id.continuousOn]
-        _ = cfc (fun x : ℝ => (p x * x) * p x) C := by
-          rw [cfc_mul (fun x : ℝ => p x * x) p C
-            (hpcont.mul continuous_id).continuousOn hpcont.continuousOn]
-        _ = cfc (fun x => x * (p x) ^ 2) C := by
-          apply cfc_congr
-          intro x _
-          ring
-    have hscale :
-        u ^ 2 • (Pc * Pc) = cfc (fun x => u ^ 2 * (p x) ^ 2) C := by
-      rw [hpcmul]
-      -- No detour through a scoped real-algebra instance is needed here: off the
-      -- complexification there is only one `Module ℝ (E →L[ℂ] E)` and `cfc_const_mul`
-      -- applies directly.  That detour is what tied this argument to one Hilbert space.
-      exact (cfc_const_mul (u ^ 2) (fun x => (p x) ^ 2) C
-        (hpcont.fun_pow 2).continuousOn).symm
-    calc
-      cfc (fun x => (x - u ^ 2) * (p x) ^ 2) C =
-          cfc (fun x => x * (p x) ^ 2 - u ^ 2 * (p x) ^ 2) C := by
-        apply cfc_congr
-        intro x _
-        ring
-      _ = cfc (fun x => x * (p x) ^ 2) C -
-          cfc (fun x => u ^ 2 * (p x) ^ 2) C := by
-        exact cfc_sub (fun x => x * (p x) ^ 2)
-          (fun x => u ^ 2 * (p x) ^ 2) C
-          ((continuous_id.mul (hpcont.fun_pow 2)).continuousOn)
-          ((continuous_const.mul (hpcont.fun_pow 2)).continuousOn)
-      _ = Pc * C * Pc - u ^ 2 • (Pc * Pc) := by
-        rw [← hpcCpc, ← hscale]
+        Pc * C * Pc - u ^ 2 • (Pc * Pc) :=
+    cfc_sub_sq_mul_eq_compression_sub_smul hCsa hpcont u
   have hPcLower : ∀ z : E, u * ‖Pc z‖ ≤ ‖Tc (Pc z)‖ := by
     intro z
     have hpositive :=
