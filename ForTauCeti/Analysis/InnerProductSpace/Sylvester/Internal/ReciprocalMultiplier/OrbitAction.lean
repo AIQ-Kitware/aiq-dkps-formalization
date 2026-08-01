@@ -489,6 +489,144 @@ noncomputable def basisDoubledRealRotation
         basisDiagonalRealCoeffMap e (fun q => Real.cos (theta q)) (e i)) = _
   simp
 
+section DoubledScalarAction
+
+variable {E' F' : Type*}
+  [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E']
+  [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F']
+
+/-- The `𝕜`-linear `2 × 2` block action of a complex scalar on a doubled
+`𝕜`-linear map.  The real and imaginary parts act as real scalars embedded
+in `𝕜`. -/
+def doubledComplexScalarMapAction (z : ℂ) (T : E' →ₗ[𝕜] F') :
+    WithLp 2 (E' × E') →ₗ[𝕜] WithLp 2 (F' × F') where
+  toFun x := WithLp.toLp 2
+    (((z.re : ℝ) : 𝕜) • T x.fst - ((z.im : ℝ) : 𝕜) • T x.snd,
+      ((z.im : ℝ) : 𝕜) • T x.fst + ((z.re : ℝ) : 𝕜) • T x.snd)
+  map_add' x y := by
+    apply WithLp.ofLp_injective 2
+    apply Prod.ext <;> simp <;> module
+  map_smul' r x := by
+    apply WithLp.ofLp_injective 2
+    apply Prod.ext <;> simp [smul_smul] <;> module
+
+/-- The doubled complex scalar map action, unfolded. -/
+@[simp] theorem doubledComplexScalarMapAction_apply
+    (z : ℂ) (T : E' →ₗ[𝕜] F') (x : WithLp 2 (E' × E')) :
+    doubledComplexScalarMapAction z T x = WithLp.toLp 2
+      (((z.re : ℝ) : 𝕜) • T x.fst - ((z.im : ℝ) : 𝕜) • T x.snd,
+        ((z.im : ℝ) : 𝕜) • T x.fst + ((z.re : ℝ) : 𝕜) • T x.snd) :=
+  (rfl)
+
+/-- The doubled realization of multiplication by the phase `exp (θ i)` after
+applying a `𝕜`-linear map. -/
+noncomputable def doubledPhaseMapAction (theta : ℝ) (T : E' →ₗ[𝕜] F') :
+    WithLp 2 (E' × E') →ₗ[𝕜] WithLp 2 (F' × F') :=
+  doubledComplexScalarMapAction
+    (Complex.exp ((theta : ℂ) * Complex.I)) T
+
+/-- The doubled phase action, unfolded. -/
+@[simp]
+theorem doubledPhaseMapAction_apply (theta : ℝ) (T : E' →ₗ[𝕜] F')
+    (x : WithLp 2 (E' × E')) :
+    doubledPhaseMapAction theta T x = WithLp.toLp 2
+      (((Real.cos theta : ℝ) : 𝕜) • T x.fst -
+          ((Real.sin theta : ℝ) : 𝕜) • T x.snd,
+        ((Real.sin theta : ℝ) : 𝕜) • T x.fst +
+          ((Real.cos theta : ℝ) : 𝕜) • T x.snd) := by
+  simp [doubledPhaseMapAction, doubledComplexScalarMapAction_apply,
+    Complex.exp_mul_I, Complex.cos_ofReal_re, Complex.sin_ofReal_re]
+
+/-- Complex-scalar block action is additive in the scalar. -/
+theorem doubledComplexScalarMapAction_add
+    (z w : ℂ) (T : E' →ₗ[𝕜] F') :
+    doubledComplexScalarMapAction (z + w) T =
+      doubledComplexScalarMapAction z T +
+        doubledComplexScalarMapAction w T := by
+  ext x
+  apply WithLp.ofLp_injective 2
+  apply Prod.ext <;>
+    simp [doubledComplexScalarMapAction_apply, Complex.add_re,
+      Complex.add_im] <;>
+    module
+
+/-- Real scaling of the complex-scalar block action agrees with
+multiplication of the complex scalar by that real number. -/
+theorem doubledComplexScalarMapAction_real_smul
+    (r : ℝ) (z : ℂ) (T : E' →ₗ[𝕜] F') :
+    ((r : ℝ) : 𝕜) • doubledComplexScalarMapAction z T =
+      doubledComplexScalarMapAction ((r : ℂ) * z) T := by
+  ext x
+  apply WithLp.ofLp_injective 2
+  apply Prod.ext <;>
+    simp [doubledComplexScalarMapAction_apply, smul_sub, smul_add, smul_smul]
+
+/-- A real complex scalar acts as the corresponding `𝕜`-scalar on the
+orthogonal block sum. -/
+theorem doubledComplexScalarMapAction_ofReal
+    (r : ℝ) (T : E' →ₗ[𝕜] F') :
+    doubledComplexScalarMapAction (r : ℂ) T =
+      ((r : ℝ) : 𝕜) •
+        RectangularUnitarilyInvariantNorm.orthogonalBlockSum T T := by
+  ext x
+  apply WithLp.ofLp_injective 2
+  apply Prod.ext <;>
+    simp [doubledComplexScalarMapAction_apply,
+      RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply]
+
+/-- A finite sum of complex-scalar block actions is the action of the scalar
+sum. -/
+theorem sum_doubledComplexScalarMapAction
+    {ι : Type*} [Fintype ι]
+    (z : ι → ℂ) (T : E' →ₗ[𝕜] F') :
+    ∑ i, doubledComplexScalarMapAction (z i) T =
+      doubledComplexScalarMapAction (∑ i, z i) T := by
+  classical
+  classical
+  have h (s : Finset ι) :
+      s.sum (fun i => doubledComplexScalarMapAction (z i) T) =
+        doubledComplexScalarMapAction (s.sum z) T := by
+    induction s using Finset.induction_on with
+    | empty =>
+        simp only [Finset.sum_empty]
+        ext x
+        apply WithLp.ofLp_injective 2
+        -- one closing `simp` rather than `simp only` + `exact`: the flexible-tactic
+        -- linter objects to a lemma-carrying `simp` that leaves a goal behind.
+        simp [doubledComplexScalarMapAction, Prod.ext_iff]
+    | @insert a s ha ih =>
+        rw [Finset.sum_insert ha, Finset.sum_insert ha, ih,
+          doubledComplexScalarMapAction_add]
+  exact h Finset.univ
+
+/-- Polar decomposition of one complex Fourier coefficient over `𝕜`: its
+norm becomes a nonnegative real weight and its argument an additional
+doubled phase angle. -/
+theorem norm_smul_doubledPhaseMapAction_arg_add
+    (a : ℂ) (theta : ℝ) (T : E' →ₗ[𝕜] F') :
+    ((‖a‖ : ℝ) : 𝕜) • doubledPhaseMapAction (Complex.arg a + theta) T =
+      doubledComplexScalarMapAction
+        (a * Complex.exp ((theta : ℂ) * Complex.I)) T := by
+  rw [doubledPhaseMapAction, doubledComplexScalarMapAction_real_smul]
+  congr 1
+  exact norm_mul_exp_arg_add_mul_I a theta
+
+/-- A finite complex Fourier sum acts on doubled `𝕜`-linear maps as a finite
+sum of nonnegatively weighted phase rotations. -/
+theorem sum_norm_smul_doubledPhaseMapAction_arg_add
+    {ι : Type*} [Fintype ι]
+    (a : ι → ℂ) (theta : ι → ℝ) (T : E' →ₗ[𝕜] F') :
+    ∑ r, ((‖a r‖ : ℝ) : 𝕜) •
+        doubledPhaseMapAction (Complex.arg (a r) + theta r) T =
+      doubledComplexScalarMapAction
+        (∑ r, a r * Complex.exp (((theta r : ℝ) : ℂ) * Complex.I)) T := by
+  classical
+  classical
+  simp_rw [norm_smul_doubledPhaseMapAction_arg_add]
+  exact sum_doubledComplexScalarMapAction _ T
+
+end DoubledScalarAction
+
 /-- The doubled-real map corresponding to multiplication by the complex phase
 `exp (theta * I)` after applying a real rectangular map. -/
 noncomputable def doubledPhaseAction
@@ -497,8 +635,7 @@ noncomputable def doubledPhaseAction
     [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
     (theta : ℝ) (T : ER →ₗ[ℝ] FR) :
     WithLp 2 (ER × ER) →ₗ[ℝ] WithLp 2 (FR × FR) :=
-  (doubledRealRotation (G := FR) theta).toLinearMap ∘ₗ
-    RectangularUnitarilyInvariantNorm.orthogonalBlockSum T T
+  doubledPhaseMapAction theta T
 
 /-- The doubled phase action, unfolded. -/
 @[simp] theorem doubledPhaseAction_apply
@@ -509,24 +646,39 @@ noncomputable def doubledPhaseAction
     doubledPhaseAction theta T x = WithLp.toLp 2
       (Real.cos theta • T x.fst - Real.sin theta • T x.snd,
         Real.sin theta • T x.fst + Real.cos theta • T x.snd) := by
-  rfl
+  -- No longer `rfl`: `doubledPhaseAction` is now the general action at `𝕜 = ℝ`, whose
+  -- scalar is `exp (θ * I)`, so `cos`/`sin` arrive through `Complex.exp_mul_I` rather
+  -- than by unfolding a rotation matrix.
+  simp [doubledPhaseAction]
+
+/-- **The real doubled-phase action is the general one at `𝕜 = ℝ`.**
+
+`doubledPhaseAction` (in `OrbitAction.lean`) and `doubledPhaseMapAction` are built by
+different routes -- the first composes a real rotation with `orthogonalBlockSum T T`, the
+second applies the complex scalar `exp (θ * I)` blockwise over a general `𝕜` -- and this
+says the two constructions agree where both are defined.
+
+Recorded because thirteen declarations exist in matched `…Action` / `…MapAction` forms and
+three separate duplicated proofs across these files are downstream of that split; anyone
+unifying them needs this fact first, and it turning out to be `rfl`-adjacent is the
+evidence that the parallelism is presentational rather than load-bearing. -/
+theorem doubledPhaseAction_eq_doubledPhaseMapAction
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    (theta : ℝ) (T : ER →ₗ[ℝ] FR) :
+    doubledPhaseAction theta T = doubledPhaseMapAction theta T := by
+  ext x
+  simp
 
 /-- The real `2 × 2` block action of a complex scalar on a doubled real map. -/
-def doubledComplexScalarAction
+noncomputable def doubledComplexScalarAction
     {ER FR : Type*}
     [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
     [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
     (z : ℂ) (T : ER →ₗ[ℝ] FR) :
-    WithLp 2 (ER × ER) →ₗ[ℝ] WithLp 2 (FR × FR) where
-  toFun x := WithLp.toLp 2
-    (z.re • T x.fst - z.im • T x.snd,
-      z.im • T x.fst + z.re • T x.snd)
-  map_add' x y := by
-    apply WithLp.ofLp_injective 2
-    apply Prod.ext <;> simp <;> module
-  map_smul' r x := by
-    apply WithLp.ofLp_injective 2
-    apply Prod.ext <;> simp [smul_smul] <;> module
+    WithLp 2 (ER × ER) →ₗ[ℝ] WithLp 2 (FR × FR) :=
+  doubledComplexScalarMapAction z T
 
 /-- The doubled complex scalar action, unfolded. -/
 @[simp] theorem doubledComplexScalarAction_apply
@@ -602,24 +754,8 @@ theorem sum_doubledComplexScalarAction
     [Fintype ι]
     (z : ι → ℂ) (T : ER →ₗ[ℝ] FR) :
     ∑ i, doubledComplexScalarAction (z i) T =
-      doubledComplexScalarAction (∑ i, z i) T := by
-  classical
-  classical
-  have h (s : Finset ι) :
-      s.sum (fun i => doubledComplexScalarAction (z i) T) =
-        doubledComplexScalarAction (s.sum z) T := by
-    induction s using Finset.induction_on with
-    | empty =>
-        simp only [Finset.sum_empty]
-        ext x
-        apply WithLp.ofLp_injective 2
-        -- one closing `simp` rather than `simp only` + `exact`: the flexible-tactic
-        -- linter objects to a lemma-carrying `simp` that leaves a goal behind.
-        simp [doubledComplexScalarAction, Prod.ext_iff]
-    | @insert a s ha ih =>
-        rw [Finset.sum_insert ha, Finset.sum_insert ha, ih,
-          doubledComplexScalarAction_add]
-  exact h Finset.univ
+      doubledComplexScalarAction (∑ i, z i) T :=
+  sum_doubledComplexScalarMapAction z T
 
 /-- Polar decomposition of one complex Fourier coefficient: its norm becomes
 a nonnegative real weight and its argument becomes an additional doubled-real
