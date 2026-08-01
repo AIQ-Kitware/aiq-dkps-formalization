@@ -466,6 +466,22 @@ theorem norm_val_le (A : N.Elem E F) : ‖A.val‖ ≤ ‖A‖ := by
   have h := ENNReal.toReal_mono A.gauge_val_ne_top (N.enorm_le_gauge A.val)
   rwa [← norm_def, toReal_enorm] at h
 
+/-- **A gauge-Cauchy sequence is operator-norm Cauchy**, because the ideal norm
+dominates the operator norm.
+
+This is the first step of every `IsComplete` proof: get a limit in the ambient
+bounded operators, then show it stays in the ideal.  It was written out
+identically in all four of `HilbertSchmidt`, `KyFan`, `Schatten` and
+`TraceClass`, three of them character for character. -/
+theorem cauchySeq_val {a : ℕ → N.Elem E F} (ha : CauchySeq a) :
+    CauchySeq fun n => (a n).val := by
+  rw [Metric.cauchySeq_iff] at ha ⊢
+  intro ε hε
+  obtain ⟨M, hM⟩ := ha ε hε
+  refine ⟨M, fun m hm n hn => lt_of_le_of_lt ?_ (hM m hm n hn)⟩
+  rw [dist_eq_norm, dist_eq_norm]
+  exact norm_val_le (a m - a n)
+
 end Elem
 
 /-- Completeness of an ideal family, stated as `CompleteSpace` for the ideal

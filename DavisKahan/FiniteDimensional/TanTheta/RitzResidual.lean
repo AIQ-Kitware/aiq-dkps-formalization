@@ -198,8 +198,7 @@ against `v`, scaled by `σ`.  Two lines, and
 `orthonormal_tanThetaResidualWitness` below proves an instance of it **three
 times**: twice at `⟪X vi, yj⟫` in two different branches, once at `⟪yi, X vj⟫`
 in the mirrored form.  See `{lane:DK-LONGPROOF-7}`. -/
-theorem inner_apply_right_of_adjoint_eq_smul [FiniteDimensional 𝕜 E]
-    [FiniteDimensional 𝕜 F] {X : E →ₗ[𝕜] F} {y : F} {v : E} {σ : ℝ}
+theorem inner_apply_right_of_adjoint_eq_smul {X : E →ₗ[𝕜] F} {y : F} {v : E} {σ : ℝ}
     (h : X.adjoint y = ((σ : ℝ) : 𝕜) • v) (w : E) :
     ⟪X w, y⟫_𝕜 = ((σ : ℝ) : 𝕜) * ⟪w, v⟫_𝕜 := by
   rw [← LinearMap.adjoint_inner_right, h, inner_smul_right]
@@ -207,8 +206,7 @@ theorem inner_apply_right_of_adjoint_eq_smul [FiniteDimensional 𝕜 E]
 /-- The mirrored form of `inner_apply_right_of_adjoint_eq_smul`, with the
 singular vector on the left.  `σ` being real is what makes the conjugate
 disappear. -/
-theorem inner_apply_left_of_adjoint_eq_smul [FiniteDimensional 𝕜 E]
-    [FiniteDimensional 𝕜 F] {X : E →ₗ[𝕜] F} {y : F} {v : E} {σ : ℝ}
+theorem inner_apply_left_of_adjoint_eq_smul {X : E →ₗ[𝕜] F} {y : F} {v : E} {σ : ℝ}
     (h : X.adjoint y = ((σ : ℝ) : 𝕜) • v) (w : E) :
     ⟪y, X w⟫_𝕜 = ((σ : ℝ) : 𝕜) * ⟪v, w⟫_𝕜 := by
   rw [← LinearMap.adjoint_inner_left, h, inner_smul_left, RCLike.conj_ofReal]

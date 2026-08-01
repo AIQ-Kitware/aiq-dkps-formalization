@@ -700,6 +700,7 @@ theorem le_norm_toLp_mul_of_le {m : ℕ} {c : ℝ} (hc : 0 ≤ c)
         mul_le_mul_of_nonneg_right (pow_le_pow_left₀ hc (hw i) 2) (sq_nonneg _)
     _ = _ := hprodSq.symm
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- **An operator that is close to a diagonal model on an orthonormal family is
 close to it on the whole span, with only a `√d` loss.**
 
