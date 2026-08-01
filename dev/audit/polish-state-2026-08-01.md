@@ -107,3 +107,21 @@ roadmap for three signatures.  Retiring it means porting ~30 declarations by the
 demonstrated; keeping it costs an unused module and the readiness OVERSIZE note.  **Do not
 split it for the OVERSIZE note while its fate is undecided** — that would be work thrown
 away if it is retired.
+
+
+## A scan direction added 2026-08-01: repeats *within* one proof
+
+Every sweep in this file compares different declarations.  A step written two or three
+times inside a single long proof is invisible to all of them, and there are nine such cases
+across the two libraries (proofs over 60 lines, blocks of 6+ lines, nesting filtered).
+
+Three were worth taking; the other six each have a checked reason not to, and two of those
+reasons generalise:
+
+* **A shared lemma can make an enclosing hypothesis unused.**  Collapsing five copies of an
+  inner-product bound in `stableSingularPair_doubleAngleTangent_le` left its `hε0 : 0 ≤ ε`
+  unreferenced, because the lemma derives nonnegativity from the norm bound.  Fixing that
+  is a statement change, which `RUB-LONGPROOF` forbids.  **That is why the repetition is
+  there.**
+* **Fix one side of a Real/Complex pair, check the twin.**  `FrameFactorization` had the
+  same three-way repeat on both sides; the first scan only reached the real one.
