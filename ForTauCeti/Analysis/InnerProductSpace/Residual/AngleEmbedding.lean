@@ -160,7 +160,7 @@ theorem cosThetaGram_add_sinThetaGram_eq_id (U : Submodule 𝕜 E)
   have hPUperp :
       Uᗮ.starProjection (Uᗮ.starProjection (X y)) = Uᗮ.starProjection (X y) :=
     Submodule.starProjection_eq_self_iff.mpr (Uᗮ.starProjection_apply_mem _)
-  rw [U.inner_starProjection_left_eq_right,
+  simp only [U.inner_starProjection_left_eq_right,
     Uᗮ.inner_starProjection_left_eq_right, hPU, hPUperp,
     ← inner_add_right, U.starProjection_add_starProjection_orthogonal,
     X.inner_map_map]

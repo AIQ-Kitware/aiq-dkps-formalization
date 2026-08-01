@@ -258,7 +258,7 @@ theorem sum_sq_norm_aligned_le {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv
       = 2 - 2 * RCLike.re ⟪u j, familyIsometry hv
           ((choosePolarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))⟫_𝕜 := by
     intro j
-    rw [norm_sub_sq (𝕜 := 𝕜), (familyIsometry hv).norm_map,
+    simp only [norm_sub_sq (𝕜 := 𝕜), (familyIsometry hv).norm_map,
       (choosePolarUnitary (overlapOp hu hv)).symm.norm_map, PiLp.norm_single 2, norm_one,
       hu.1 j, inner_re_symm]
     ring

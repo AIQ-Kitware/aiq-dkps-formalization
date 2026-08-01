@@ -94,7 +94,7 @@ theorem inner_eigenvectorBasis_residualColumn (hT : T.IsSymmetric) (hS : S.IsSym
     ⟪hT.eigenvectorBasis hn k, residualColumn hT hS hn j⟫_𝕜
       = ((hT.eigenvalues hn j - hT.eigenvalues hn k : ℝ) : 𝕜)
           * ⟪hT.eigenvectorBasis hn k, hS.eigenvectorBasis hn j⟫_𝕜 := by
-  rw [residualColumn, inner_sub_right, inner_smul_right,
+  simp only [residualColumn, inner_sub_right, inner_smul_right,
     ← hT (hT.eigenvectorBasis hn k) (hS.eigenvectorBasis hn j),
     hT.apply_eigenvectorBasis hn k, inner_smul_left, RCLike.conj_ofReal]
   push_cast
