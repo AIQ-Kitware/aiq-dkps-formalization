@@ -310,6 +310,52 @@ def projectedResidual
     (P : PaperRealTheorem62Data (E := E) (F := F) (G := G) (H := H)) :
     G →L[ℝ] F := -(P.data.residual.adjoint ∘L P.data.F₁)
 
+/-- Whitening introduces exactly the source factor `epsilon^(-1)`.
+
+The real mirror of `PaperTheorem62Data.canonicalSinTheta_frame_bound`.  The complex section
+factors this out and its `result` cites it; the real section had inlined the same
+derivation into `result`, which is the only reason the two sections looked different. -/
+theorem canonicalSinTheta_frame_bound
+    (P : PaperRealTheorem62Data (E := E) (F := F) (G := G) (H := H))
+    (hraw : IsPaperHilbertSchmidt P.rawOverlap) :
+    IsPaperHilbertSchmidt P.canonicalSinTheta ∧
+      P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta ≤
+        paperHilbertSchmidtNorm P.rawOverlap := by
+  let Q := lowerFramePolarDataReal P.data.X P.lowerFrame P.frameLowerBound_pos
+  have hcanonical : P.canonicalSinTheta = Q.invSqrt.adjoint ∘L P.rawOverlap := by
+    simp [canonicalSinTheta, rawOverlap, sinThetaBlockOfPolarData,
+      frameIsometryOfPolarData, Q, ContinuousLinearMap.adjoint_comp,
+      ContinuousLinearMap.comp_assoc]
+  have hmem : IsPaperHilbertSchmidt P.canonicalSinTheta := by
+    rw [hcanonical]
+    have h := hraw.comp Q.invSqrt.adjoint (ContinuousLinearMap.id ℝ G)
+    rwa [ContinuousLinearMap.comp_id] at h
+  have hnorm : ‖Q.invSqrt.adjoint‖ ≤ P.frameLowerBound⁻¹ := by
+    simpa using Q.invSqrt_norm_le
+  have hcomp : paperHilbertSchmidtNorm P.canonicalSinTheta ≤
+      ‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.rawOverlap := by
+    have h := paperHilbertSchmidtNorm_comp_le
+      Q.invSqrt.adjoint hraw (ContinuousLinearMap.id ℝ G)
+    rw [ContinuousLinearMap.comp_id] at h
+    rw [hcanonical]
+    exact h.trans (mul_le_of_le_one_right
+      (mul_nonneg (norm_nonneg _) (paperHilbertSchmidtNorm_nonneg _))
+      ContinuousLinearMap.norm_id_le)
+  refine ⟨hmem, ?_⟩
+  calc
+    P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta
+        ≤ P.frameLowerBound *
+            (‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.rawOverlap) :=
+      mul_le_mul_of_nonneg_left hcomp P.frameLowerBound_pos.le
+    _ ≤ P.frameLowerBound *
+          (P.frameLowerBound⁻¹ * paperHilbertSchmidtNorm P.rawOverlap) :=
+      mul_le_mul_of_nonneg_left
+        (mul_le_mul_of_nonneg_right hnorm
+          (paperHilbertSchmidtNorm_nonneg P.rawOverlap))
+        P.frameLowerBound_pos.le
+    _ = paperHilbertSchmidtNorm P.rawOverlap := by
+      rw [← mul_assoc, mul_inv_cancel₀ P.frameLowerBound_pos.ne', one_mul]
+
 /-- Real Theorem 6.2, proved by exact complexification of the square-norm
 Sylvester step and the scalar-generic lower-frame algebra. -/
 theorem result
@@ -332,42 +378,7 @@ theorem result
     P.trial_selfAdjoint P.complement_selfAdjoint P.gap_pos
     P.spectral_distance hEq hProjected
   have hrawHS : IsPaperHilbertSchmidt P.rawOverlap := hraw.1
-  let Q := lowerFramePolarDataReal P.data.X P.lowerFrame P.frameLowerBound_pos
-  have hcanonical : P.canonicalSinTheta = Q.invSqrt.adjoint ∘L P.rawOverlap := by
-    simp [canonicalSinTheta, rawOverlap, sinThetaBlockOfPolarData,
-      frameIsometryOfPolarData, Q, ContinuousLinearMap.adjoint_comp,
-      ContinuousLinearMap.comp_assoc]
-  have hcanonmem : IsPaperHilbertSchmidt P.canonicalSinTheta := by
-    rw [hcanonical]
-    have h := hrawHS.comp Q.invSqrt.adjoint (ContinuousLinearMap.id ℝ G)
-    rwa [ContinuousLinearMap.comp_id] at h
-  have hframe :
-      P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta ≤
-        paperHilbertSchmidtNorm P.rawOverlap := by
-    have hnorm : ‖Q.invSqrt.adjoint‖ ≤ P.frameLowerBound⁻¹ := by
-      simpa using Q.invSqrt_norm_le
-    have hcomp : paperHilbertSchmidtNorm P.canonicalSinTheta ≤
-        ‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.rawOverlap := by
-      have h := paperHilbertSchmidtNorm_comp_le
-        Q.invSqrt.adjoint hrawHS (ContinuousLinearMap.id ℝ G)
-      rw [ContinuousLinearMap.comp_id] at h
-      rw [hcanonical]
-      exact h.trans (mul_le_of_le_one_right
-        (mul_nonneg (norm_nonneg _) (paperHilbertSchmidtNorm_nonneg _))
-        ContinuousLinearMap.norm_id_le)
-    calc
-      P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta
-          ≤ P.frameLowerBound *
-            (‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.rawOverlap) :=
-        mul_le_mul_of_nonneg_left hcomp P.frameLowerBound_pos.le
-      _ ≤ P.frameLowerBound *
-          (P.frameLowerBound⁻¹ * paperHilbertSchmidtNorm P.rawOverlap) :=
-        mul_le_mul_of_nonneg_left
-          (mul_le_mul_of_nonneg_right hnorm
-            (paperHilbertSchmidtNorm_nonneg P.rawOverlap))
-          P.frameLowerBound_pos.le
-      _ = paperHilbertSchmidtNorm P.rawOverlap := by
-        rw [← mul_assoc, mul_inv_cancel₀ P.frameLowerBound_pos.ne', one_mul]
+  obtain ⟨hcanonmem, hframe⟩ := P.canonicalSinTheta_frame_bound hrawHS
   have hprojNorm : paperHilbertSchmidtNorm P.projectedResidual ≤
       paperHilbertSchmidtNorm P.data.residual := by
     have hF₁ : ‖P.data.F₁‖ ≤ 1 :=
