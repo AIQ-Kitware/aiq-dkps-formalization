@@ -37,6 +37,21 @@ abbrev SpectraSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
 end ContinuousLinearMapBridge
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- **Spectral separation transfers to the underlying linear maps.**
+
+Membership in the top submodule is free, so the eigenvector witnesses carry
+across unchanged.  All three bridge theorems below did this inline. -/
+private theorem spectraSeparated_toLinearMap
+    [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
+    {A : F →L[𝕜] F} {B : E →L[𝕜] E} {d : ℝ}
+    (hsep : ContinuousLinearMapBridge.SpectraSeparated A ⊤ B ⊤ d) :
+    TauCeti.SpectraSeparated A.toLinearMap ⊤ B.toLinearMap ⊤ d := by
+  intro a b ha hb
+  rcases ha with ⟨x, -, ⟨hx0, hxeig⟩⟩
+  rcases hb with ⟨y, -, ⟨hy0, hyeig⟩⟩
+  exact hsep a ⟨x, Submodule.mem_top, hx0, hxeig⟩
+    b ⟨y, Submodule.mem_top, hy0, hyeig⟩
+
 /-- Finite-dimensional rectangular unitarily invariant Sylvester estimate.
 
 For self-adjoint `A` and `B` with spectra separated by `d > 0`, every
@@ -67,12 +82,8 @@ theorem ideal_sylvester_le
   have hB' : B'.IsSymmetric := by
     intro x y
     exact hB x y
-  have hsep' : TauCeti.SpectraSeparated A' ⊤ B' ⊤ d := by
-    intro a b ha hb
-    rcases ha with ⟨x, -, ⟨hx0, hxeig⟩⟩
-    rcases hb with ⟨y, -, ⟨hy0, hyeig⟩⟩
-    exact hsep a ⟨x, Submodule.mem_top, hx0, hxeig⟩
-      b ⟨y, Submodule.mem_top, hy0, hyeig⟩
+  have hsep' : TauCeti.SpectraSeparated A' ⊤ B' ⊤ d :=
+    spectraSeparated_toLinearMap hsep
   have hEq' : A' ∘ₗ X' - X' ∘ₗ B' = C' := by
     ext x
     have hpoint := congrArg (fun T : E →L[𝕜] F => T x) hEq
@@ -106,12 +117,8 @@ theorem ideal_sylvester_le_complex
   have hB' : B'.IsSymmetric := by
     intro x y
     exact hB x y
-  have hsep' : TauCeti.SpectraSeparated A' ⊤ B' ⊤ d := by
-    intro a b ha hb
-    rcases ha with ⟨x, -, ⟨hx0, hxeig⟩⟩
-    rcases hb with ⟨y, -, ⟨hy0, hyeig⟩⟩
-    exact hsep a ⟨x, Submodule.mem_top, hx0, hxeig⟩
-      b ⟨y, Submodule.mem_top, hy0, hyeig⟩
+  have hsep' : TauCeti.SpectraSeparated A' ⊤ B' ⊤ d :=
+    spectraSeparated_toLinearMap hsep
   have hEq' : A' ∘ₗ X' - X' ∘ₗ B' = C' := by
     ext x
     have hpoint := congrArg (fun T : EC →L[ℂ] FC => T x) hEq
@@ -145,12 +152,8 @@ theorem ideal_sylvester_le_real
   have hB' : B'.IsSymmetric := by
     intro x y
     exact hB x y
-  have hsep' : TauCeti.SpectraSeparated A' ⊤ B' ⊤ d := by
-    intro a b ha hb
-    rcases ha with ⟨x, -, ⟨hx0, hxeig⟩⟩
-    rcases hb with ⟨y, -, ⟨hy0, hyeig⟩⟩
-    exact hsep a ⟨x, Submodule.mem_top, hx0, hxeig⟩
-      b ⟨y, Submodule.mem_top, hy0, hyeig⟩
+  have hsep' : TauCeti.SpectraSeparated A' ⊤ B' ⊤ d :=
+    spectraSeparated_toLinearMap hsep
   have hEq' : A' ∘ₗ X' - X' ∘ₗ B' = C' := by
     ext x
     have hpoint := congrArg (fun T : ER →L[ℝ] FR => T x) hEq
