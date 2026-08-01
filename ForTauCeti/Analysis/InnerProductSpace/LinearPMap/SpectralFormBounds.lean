@@ -61,6 +61,33 @@ section HalfLine
 
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 
+/-- **The two-sided form bound on a spectral band**, compressed to that band.
+
+On `Icc β α` the quadratic form of `A` is squeezed between `β‖·‖²` and `α‖·‖²`,
+after compressing both arguments to the band.  Both half-line results below and
+both of their `GramSpectralRank` counterparts are this lemma at a particular
+band: `Icc c τ` with the lower half, `Icc (-τ) c` with the upper.  All four
+wrote it out. -/
+theorem re_inner_specProjection_Icc_bounds {α β : ℝ} (x : A.domain) :
+    β * ‖specProjection hA (Set.Icc β α) measurableSet_Icc (x : H)‖ ^ 2 ≤
+        (⟪specProjection hA (Set.Icc β α) measurableSet_Icc (A x),
+          specProjection hA (Set.Icc β α) measurableSet_Icc (x : H)⟫_ℂ).re ∧
+      (⟪specProjection hA (Set.Icc β α) measurableSet_Icc (A x),
+          specProjection hA (Set.Icc β α) measurableSet_Icc (x : H)⟫_ℂ).re ≤
+        α * ‖specProjection hA (Set.Icc β α) measurableSet_Icc (x : H)‖ ^ 2 := by
+  set y : H := specProjection hA (Set.Icc β α) measurableSet_Icc (x : H) with hy
+  have hyK : y ∈ specRange hA (Set.Icc β α) measurableSet_Icc :=
+    specProjection_mem_specRange hA (Set.Icc β α) measurableSet_Icc (x : H)
+  have hymem : y ∈ A.domain :=
+    specProjection_mem_domain hA (Set.Icc β α) measurableSet_Icc x
+  have hAy : A ⟨y, hymem⟩ =
+      specProjection hA (Set.Icc β α) measurableSet_Icc (A x) :=
+    specProjection_apply_domain hA (Set.Icc β α) measurableSet_Icc x
+  have h := re_inner_apply_bounds_of_subset_Icc hA (Set.Icc β α) measurableSet_Icc
+    (β := β) (α := α) Set.Subset.rfl hyK hymem
+  rw [hAy] at h
+  exact h
+
 /-- If a half-line's complement carries no spectral projection, the half-line
 carries the identity. -/
 theorem specProjection_eq_one_of_compl_eq_zero {S : Set ℝ} (hS : MeasurableSet S)
@@ -130,19 +157,8 @@ theorem le_re_inner_of_specProjection_Iio_eq_zero {c : ℝ}
   have hbound : ∀ τ : ℝ,
       c * ‖specProjection hA (Set.Icc c τ) measurableSet_Icc (x : H)‖ ^ 2
         ≤ (⟪specProjection hA (Set.Icc c τ) measurableSet_Icc (A x),
-            specProjection hA (Set.Icc c τ) measurableSet_Icc (x : H)⟫_ℂ).re := by
-    intro τ
-    set y : H := specProjection hA (Set.Icc c τ) measurableSet_Icc (x : H) with hy
-    have hyK : y ∈ specRange hA (Set.Icc c τ) measurableSet_Icc :=
-      specProjection_mem_specRange hA (Set.Icc c τ) measurableSet_Icc (x : H)
-    have hymem : y ∈ A.domain :=
-      specProjection_mem_domain hA (Set.Icc c τ) measurableSet_Icc x
-    have hAy : A ⟨y, hymem⟩
-        = specProjection hA (Set.Icc c τ) measurableSet_Icc (A x) :=
-      specProjection_apply_domain hA (Set.Icc c τ) measurableSet_Icc x
-    have h := (re_inner_apply_bounds_of_subset_Icc hA (Set.Icc c τ) measurableSet_Icc
-      (β := c) (α := τ) Set.Subset.rfl hyK hymem).1
-    rwa [hAy] at h
+            specProjection hA (Set.Icc c τ) measurableSet_Icc (x : H)⟫_ℂ).re :=
+    fun τ => (re_inner_specProjection_Icc_bounds hA (α := τ) (β := c) x).1
   -- pass to the limit
   have hlx := tendsto_specProjection_Icc_right hA hone (x : H)
   have hlA := tendsto_specProjection_Icc_right hA hone (A x)
@@ -203,19 +219,8 @@ theorem re_inner_le_of_specProjection_Ioi_eq_zero {c : ℝ}
   have hbound : ∀ τ : ℝ,
       (⟪specProjection hA (Set.Icc (-τ) c) measurableSet_Icc (A x),
           specProjection hA (Set.Icc (-τ) c) measurableSet_Icc (x : H)⟫_ℂ).re
-        ≤ c * ‖specProjection hA (Set.Icc (-τ) c) measurableSet_Icc (x : H)‖ ^ 2 := by
-    intro τ
-    set y : H := specProjection hA (Set.Icc (-τ) c) measurableSet_Icc (x : H) with hy
-    have hyK : y ∈ specRange hA (Set.Icc (-τ) c) measurableSet_Icc :=
-      specProjection_mem_specRange hA (Set.Icc (-τ) c) measurableSet_Icc (x : H)
-    have hymem : y ∈ A.domain :=
-      specProjection_mem_domain hA (Set.Icc (-τ) c) measurableSet_Icc x
-    have hAy : A ⟨y, hymem⟩
-        = specProjection hA (Set.Icc (-τ) c) measurableSet_Icc (A x) :=
-      specProjection_apply_domain hA (Set.Icc (-τ) c) measurableSet_Icc x
-    have h := (re_inner_apply_bounds_of_subset_Icc hA (Set.Icc (-τ) c) measurableSet_Icc
-      (β := -τ) (α := c) Set.Subset.rfl hyK hymem).2
-    rwa [hAy] at h
+        ≤ c * ‖specProjection hA (Set.Icc (-τ) c) measurableSet_Icc (x : H)‖ ^ 2 :=
+    fun τ => (re_inner_specProjection_Icc_bounds hA (α := c) (β := -τ) x).2
   have hleft : Filter.Tendsto
       (fun τ : ℝ => (⟪specProjection hA (Set.Icc (-τ) c) measurableSet_Icc (A x),
           specProjection hA (Set.Icc (-τ) c) measurableSet_Icc (x : H)⟫_ℂ).re)
