@@ -255,7 +255,12 @@ theorem generator_genToGroup (hA : IsSelfAdjoint A) :
 
 /-- Yosida approximants: bounded self-adjoint approximations converging strongly
 on the domain, the bridge a Hilbert--Schmidt block argument needs. -/
-noncomputable def yosidaApproximant (hA : IsSelfAdjoint A) (n : ℕ) : H →L[ℂ] H := sorry
+-- Statement corrected 2026-07-31 to track the delivered signature: the index is
+-- `ℕ+`, not `ℕ`.  This is not cosmetic.  The approximant is `Aₙ = n² R(in) - in`,
+-- which is only defined for `n ≠ 0` -- at `n = 0` the resolvent is taken at `0`,
+-- which is not in the resolvent set of a general self-adjoint `A`.  The original
+-- `ℕ` here was mis-stated, and the delivery fixed it.
+noncomputable def yosidaApproximant (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H := sorry
 
 end SpectralMeasure
 
