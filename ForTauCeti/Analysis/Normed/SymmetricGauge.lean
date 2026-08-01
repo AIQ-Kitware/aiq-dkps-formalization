@@ -302,6 +302,24 @@ theorem le_extend (a : ℕ → ℝ≥0∞) (n : ℕ) : a n ≤ Φ.extend a := by
   have hb := le_extend_of_dominated Φ a (Finsupp.single n c) hdom
   rwa [single Φ n c] at hb
 
+/-- The supremum of the sequence is below its extension. -/
+theorem iSup_le_extend (a : ℕ → ℝ≥0∞) : (⨆ n, a n) ≤ Φ.extend a :=
+  iSup_le (Φ.le_extend a)
+
+/-- Subadditivity over a finitely supported sequence: `Φ f ≤ ∑ fₙ`.
+
+Induction on the support, with `add_le` at each step and `single` at the leaves.
+This is the finite half of the high end of the scale. -/
+theorem le_sum (f : ℕ →₀ ℝ≥0) : Φ f ≤ f.sum fun _ v => v := by
+  classical
+  induction f using Finsupp.induction with
+  | zero => simp
+  | single_add n b g hng hb ih =>
+      rw [Finsupp.sum_add_index' (by simp) (by simp)]
+      refine (Φ.add_le _ _).trans ?_
+      gcongr
+      simp [Finsupp.sum_single_index]
+
 /-- **Upper half of the extended bound.**  The extension is below the total sum. -/
 theorem extend_le_tsum (a : ℕ → ℝ≥0∞) : Φ.extend a ≤ ∑' n, a n := by
   refine iSup_le fun b => ?_
