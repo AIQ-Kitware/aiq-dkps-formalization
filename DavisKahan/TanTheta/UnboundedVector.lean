@@ -261,61 +261,9 @@ theorem tanTheta_unbounded_vector_of_centered_bounds
         norm_sub_le _ _
       _ ≤ κ * halfWidth + ρ * ‖u₀ - Z.starProjection u₀‖ :=
         add_le_add h2 h3
-  have hκineq : δ * κ ≤ ρ * Real.sqrt (1 - κ ^ 2) := by
-    rcases eq_or_lt_of_le hκ0 with hκz | hκpos
-    · rw [← hκz, mul_zero]
-      positivity
-    · have hev : ∀ ε ∈ Set.Ioo (0 : ℝ) κ,
-          δ * κ ≤ (halfWidth + δ) * ε +
-            ρ * Real.sqrt (1 - (κ - ε) ^ 2) := by
-        intro ε hε
-        obtain ⟨x, hx1, hxlt⟩ :=
-          Wop.exists_lt_apply_of_lt_opNorm (r := κ - ε)
-            (by rw [hκdef] at hε ⊢; linarith [hε.1])
-        have hu₀V : (x : H) ∈ Vᗮ := x.2
-        have hu₀n : ‖(x : H)‖ ≤ 1 := le_of_lt hx1
-        have halt : κ - ε < ‖Z.starProjection (x : H)‖ := hxlt
-        have hεκ : (0 : ℝ) ≤ κ - ε := by linarith [hε.2]
-        have hpy := norm_sq_starProjection_add_norm_sq_sub Z (x : H)
-        have hb : ‖(x : H) - Z.starProjection (x : H)‖ ≤
-            Real.sqrt (1 - (κ - ε) ^ 2) := by
-          have hb2 : ‖(x : H) - Z.starProjection (x : H)‖ ^ 2 ≤
-              1 - (κ - ε) ^ 2 := by
-            have hn1 : ‖(x : H)‖ ^ 2 ≤ 1 :=
-              pow_le_one₀ (norm_nonneg _) hu₀n
-            have h2 : (κ - ε) ^ 2 ≤
-                ‖Z.starProjection (x : H)‖ ^ 2 := by
-              nlinarith [halt, hεκ]
-            linarith
-          calc
-            ‖(x : H) - Z.starProjection (x : H)‖ =
-                Real.sqrt (‖(x : H) - Z.starProjection (x : H)‖ ^ 2) :=
-              (Real.sqrt_sq (norm_nonneg _)).symm
-            _ ≤ Real.sqrt (1 - (κ - ε) ^ 2) := Real.sqrt_le_sqrt hb2
-        have hstep := hchain (x : H) hu₀V hu₀n
-        have hbρ : ρ * ‖(x : H) - Z.starProjection (x : H)‖ ≤
-            ρ * Real.sqrt (1 - (κ - ε) ^ 2) :=
-          mul_le_mul_of_nonneg_left hb hρ0
-        have hlhs : (halfWidth + δ) * (κ - ε) ≤
-            (halfWidth + δ) * ‖Z.starProjection (x : H)‖ := by
-          have hpos : (0 : ℝ) ≤ halfWidth + δ := by linarith
-          nlinarith [halt]
-        nlinarith [hstep, hbρ, hlhs]
-      have hcont : ContinuousWithinAt
-          (fun ε : ℝ => (halfWidth + δ) * ε +
-            ρ * Real.sqrt (1 - (κ - ε) ^ 2))
-          (Set.Ioo 0 κ) 0 := by
-        apply Continuous.continuousWithinAt
-        exact (continuous_const.mul continuous_id).add
-          (continuous_const.mul (Real.continuous_sqrt.comp
-            (continuous_const.sub
-              ((continuous_const.sub continuous_id).pow 2))))
-      haveI hne : (nhdsWithin (0 : ℝ) (Set.Ioo 0 κ)).NeBot := by
-        rw [← mem_closure_iff_nhdsWithin_neBot, closure_Ioo hκpos.ne]
-        exact ⟨le_refl 0, hκpos.le⟩
-      have hlim := ge_of_tendsto hcont
-        (by filter_upwards [self_mem_nhdsWithin] with ε hε using hev ε hε)
-      simpa using hlim
+  have hκineq : δ * κ ≤ ρ * Real.sqrt (1 - κ ^ 2) :=
+    TauCeti.DavisKahanExt.mul_le_mul_sqrt_one_sub_sq_of_chain Wop hκdef hκ0 hhalf hδ hρ0
+      (fun x => rfl) (fun u₀ hu₀V hu₀n => hchain u₀ hu₀V hu₀n)
   have hkey : ∀ u : H, ∀ hu : u ∈ Vᗮ,
       δ * ‖Z.starProjection u‖ ≤ ρ * ‖u - Z.starProjection u‖ := by
     intro u huV
