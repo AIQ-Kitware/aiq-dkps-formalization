@@ -113,42 +113,48 @@ demands, not whether the statement demands more.**
 `subspaceGap_eq_max_directedGap` needed exactly the same extra `CompleteSpace E`
 and went through, because both of *its* callers have one.
 
-### What the remaining five look like — and two diagnoses I got wrong
+### What is left: two groups, nine lines
 
-**Identical-body groups are down to 5 (about 25 lines).**  Every one has a
-checked reason, and each is a *decision* rather than a mechanical edit.
+**Identical-body duplication is down from 32 groups / 248 lines to 2 groups /
+9 lines.**  Thirty extractions, each confirmed byte-identical across its sites
+before any edit, each verified by a full `lake build` at 9274 jobs.
 
-**Two entries earlier in this note were wrong, and the error was the same both
-times: I compared a hypothesis at one site against a different hypothesis at the
-other.**
+**Six entries this note previously called blocked were not blocked.**  Every one
+failed for a reason about *my* approach rather than about the code, and the
+pattern is worth stating because it will recur:
 
-* `RosenblumExistence:hAs` — I wrote that the two sites prove the same statement
-  from an open-ball and a closed-ball hypothesis.  They do not; I had compared
-  `hA` at one site with `hB` at the other.  Both carry the identical `hA`, and
-  the extraction went through.
-* `SinTheta/Unbounded:hA₀sym` — I wrote that the two theorems spell
-  self-adjointness differently.  Each *file* contains both spellings, but the two
-  duplicate sites use the same one.  Extracted.
+* **Two were mis-diagnosed by comparing the wrong pair.**  `RosenblumExistence`
+  — I compared `hA` at one site against `hB` at the other.  `SinTheta/Unbounded`
+  — each *file* holds two spellings of self-adjointness, but both duplicate
+  sites use the same one.
+* **One was the wrong shape.**  `Section3Nonacute:hrange` failed as a
+  `∀`-quantified hoist because the two branches bind their own `x`; a standalone
+  lemma *taking* `x` needs no hoisting and went straight through.
+* **One needed the statement, not the structure.**  `hlipschitz`'s two sites
+  belong to different assumption structures that each carry `score_lipschitz`
+  independently; a lemma over the *field's statement* covers both.
+* **One had a nearer home than I looked for.**  `hpoint` did not need a
+  cross-library placement: `OperatorIdeal/ApproximationNumbers/ScalarGeneric` is
+  a DavisKahan-internal common ancestor with the right scalar generality.  The
+  `Real/` modules beside it are real-Hilbert-space specific, which is presumably
+  why I assumed the only home was upstream.
+* **Two were indentation drift**, where the normalised bodies match but the raw
+  text differs by a nesting level.  Matching both indentations explicitly is a
+  two-pattern replace, not an obstruction.
 
-**The lesson is narrow and worth stating**: when a group looks blocked by
-mismatched hypotheses, check that the two things being compared are the two
-things the duplicate sites actually use.
+**The two that genuinely remain:**
 
-The five that remain:
-
-* `Section3Nonacute:hrange` — the copies sit in branches that each bind their own
-  `x`, so a `∀`-quantified hoist does not typecheck at the second site without
-  restructuring both branches.
-* `OperatorAngleComplex:hsq2` — **the only one blocked by elaboration.**  See the
-  instance-availability section above.
-* `OneParameterUnitaryGroup`/`Sylvester.Generator:hneg` — no common `ForTauCeti`
-  ancestor; a new module needs a roadmap topic, which is
-  `{lane:TAUCETI-ROADMAP-SUBMISSION}`'s call.
-* `OrderedCutoff`/`OrderedFromCutoffs:hpoint` — the natural home is in
-  `ForTauCeti`'s approximation-number layer, so it is a cross-library placement
-  decision rather than a move.
-* `QueryEfficiency` `Finite`/`Infinite:hlipschitz` — the two files share no import
-  edge.
+* `OperatorAngleComplex:hsq2` (5 lines × 2) — **the only case blocked by
+  elaboration.**  This file carries no `CompleteSpace E`; each caller can mention
+  `Uᗮ.starProjection` only because its own statement does, and no standalone
+  formulation tried — explicit complement instance, hypothesis-carried
+  complement, or leaving the component to unify — lets the second call site
+  supply what the lemma demands.
+* `OneParameterUnitaryGroup`/`Sylvester.Generator:hneg` (4 lines × 2) — the two
+  `ForTauCeti` files share **no common ancestor at all**; their import closures
+  are disjoint.  A home means a new module, and `ForTauCeti`'s module-to-topic
+  partition is total, so that needs a roadmap topic.  **`jon`'s call**, not a
+  refactor.
 
 ## Largest groups still open at the time of writing
 
