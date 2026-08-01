@@ -170,21 +170,21 @@ theorem doubleAngleTangent_scalar
   -- sandwich the invariance relation between `v` and `u`
   have hmain : ⟪v, (A + H) (u + T u)⟫_𝕜 =
       ((t : ℝ) : 𝕜) * ⟪u, (A + H) (u + T u)⟫_𝕜 := by
-    rw [hy, inner_add_right, inner_add_right, hwz v hvmem y hyU, zero_add,
+    simp only [hy, inner_add_right, inner_add_right, hwz v hvmem y hyU, zero_add,
       hzw u humem (T y) (hTmem y), add_zero, ← LinearMap.adjoint_inner_left,
       hTav, inner_smul_left, RCLike.conj_ofReal]
   -- expand both sides through off-diagonality
   have hAv : A v ∈ Uᗮ := apply_mem_orthogonal_of_isSymmetric hA hAU hvmem
   have hexpL : ⟪v, (A + H) (u + T u)⟫_𝕜 =
       ⟪v, H u⟫_𝕜 + ((t : ℝ) : 𝕜) * ⟪v, A v⟫_𝕜 := by
-    rw [hTu, LinearMap.add_apply, map_add, map_add, map_smul, map_smul,
+    simp only [hTu, LinearMap.add_apply, map_add, map_add, map_smul, map_smul,
       inner_add_right, inner_add_right, inner_add_right, inner_smul_right,
       inner_smul_right, hwz v hvmem (A u) (hAU u humem),
       hwz v hvmem (H v) (hHUperp v hvmem)]
     ring
   have hexpR : ⟪u, (A + H) (u + T u)⟫_𝕜 =
       ⟪u, A u⟫_𝕜 + ((t : ℝ) : 𝕜) * ⟪u, H v⟫_𝕜 := by
-    rw [hTu, LinearMap.add_apply, map_add, map_add, map_smul, map_smul,
+    simp only [hTu, LinearMap.add_apply, map_add, map_add, map_smul, map_smul,
       inner_add_right, inner_add_right, inner_add_right, inner_smul_right,
       inner_smul_right, hzw u humem (A v) hAv,
       hzw u humem (H u) (hHU u humem)]

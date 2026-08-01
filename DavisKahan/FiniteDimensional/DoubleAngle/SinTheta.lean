@@ -420,7 +420,7 @@ theorem apply_orthogonal_starProjection_comp_starProjection_comp
       ContinuousLinearMap.coe_coe, Function.comp_apply, LinearMap.comp_apply]
   -- `M⋆ = P ∘ Ph ∘ Q`, hence `M⋆M = C − C∘C`.
   have hMadj : LinearMap.adjoint M = P ∘ₗ Ph ∘ₗ Q := by
-    rw [hMcoe, LinearMap.adjoint_comp, LinearMap.adjoint_comp, hPadj, hPhadj, hQadj,
+    simp only [hMcoe, LinearMap.adjoint_comp, LinearMap.adjoint_comp, hPadj, hPhadj, hQadj,
       LinearMap.comp_assoc]
   have hMM : LinearMap.adjoint M ∘ₗ M = C - C ∘ₗ C := by
     rw [hMadj, hMcoe]

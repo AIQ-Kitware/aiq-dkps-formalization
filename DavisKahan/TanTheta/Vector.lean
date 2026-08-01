@@ -110,7 +110,7 @@ theorem norm_map_sub_midpoint_smul_le' (hT : T.IsSymmetric)
     have hval : RCLike.re ⟪S (W.starProjection y), W.starProjection y⟫_𝕜
         = RCLike.re ⟪T (W.starProjection y), W.starProjection y⟫_𝕜
           - (α + β) / 2 * ‖W.starProjection y‖ ^ 2 := by
-      rw [hSapp, inner_sub_left, inner_smul_left, RCLike.conj_ofReal,
+      simp only [hSapp, inner_sub_left, inner_smul_left, RCLike.conj_ofReal,
         map_sub, RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
     have hPy := W.starProjection_apply_mem y
     have h1 := ha _ hPy

@@ -264,7 +264,7 @@ theorem singularValues_restrictedDisplacement_directRotation
         rw [hbk, hv]; simp [dif_pos hk]
       rw [hgram, hsrc]
       have hu := principalSourceVector_mem U V hacute ⟨(k : ℕ), hk⟩
-      rw [LinearMap.comp_apply, LinearMap.comp_apply,
+      simp only [LinearMap.comp_apply, LinearMap.comp_apply,
         projection_apply_of_mem hu, LinearMap.smul_apply, LinearMap.sub_apply,
         LinearMap.id_apply,
         abs_canonicalIntertwiner_apply_principalSourceVector U V hacute
@@ -301,7 +301,7 @@ theorem singularValues_restrictedDisplacement_directRotation
         rw [← this, hperp_u i]
       have habs := abs_canonicalIntertwiner_apply_eq_self_of_orthogonal_sources
         U V hPmem hPperp
-      rw [hgram, LinearMap.comp_apply, LinearMap.comp_apply,
+      simp only [hgram, LinearMap.comp_apply, LinearMap.comp_apply,
         LinearMap.smul_apply, LinearMap.sub_apply, LinearMap.id_apply, habs,
         sub_self, smul_zero, map_zero, hμ]
       simp [dif_neg hk]

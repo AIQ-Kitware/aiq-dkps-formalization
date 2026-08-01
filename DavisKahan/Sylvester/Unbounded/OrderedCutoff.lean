@@ -199,7 +199,7 @@ theorem doubleCutoff_filled_sylvester_equation
   have hPBFilled :
       PB (filledTruncation B hB PCB TCB b τB x) = TB x := by
     change PB (TB x + ((b : ℝ) : 𝕜) • (x - PB x)) = TB x
-    rw [map_add, map_smul, hPBTB, map_sub, hPBPBx, sub_self, smul_zero,
+    simp only [map_add, map_smul, hPBTB, map_sub, hPBPBx, sub_self, smul_zero,
       add_zero]
   have hAFilled :
       filledTruncation A hA PCA TCA a τA (PA (X (PB x))) =

@@ -192,7 +192,7 @@ theorem interfaceFilledTruncation_lowerBound
   have hre : ∀ w : ℂ, RCLike.re ((a : ℂ) * w) = a * RCLike.re w := by
     intro w
     simp [RCLike.re_to_complex]
-  rw [inner_add_left, map_add, inner_smul_left, Complex.conj_ofReal,
+  simp only [inner_add_left, map_add, inner_smul_left, Complex.conj_ofReal,
     hre, hTinner, hQinner]
   rw [← hproj.2]
   linarith
@@ -232,7 +232,7 @@ theorem interfaceFilledTruncation_upperBound
   have hre : ∀ w : ℂ, RCLike.re ((a : ℂ) * w) = a * RCLike.re w := by
     intro w
     simp [RCLike.re_to_complex]
-  rw [inner_add_left, map_add, inner_smul_left, Complex.conj_ofReal,
+  simp only [inner_add_left, map_add, inner_smul_left, Complex.conj_ofReal,
     hre, hTinner, hQinner]
   rw [← hproj.2]
   linarith
@@ -372,7 +372,7 @@ theorem interfaceDoubleCutoff_sylvester_equation
   have hPBFilled :
       PB (interfaceFilledTruncation PBi TBi b τB x) = TB x := by
     change PB (TB x + (b : ℂ) • (x - PB x)) = TB x
-    rw [map_add, map_smul, hPBTB, map_sub, hPBPBx, sub_self,
+    simp only [map_add, map_smul, hPBTB, map_sub, hPBPBx, sub_self,
       smul_zero, add_zero]
   have hAFilled :
       interfaceFilledTruncation PAi TAi a τA (PA (X (PB x))) =

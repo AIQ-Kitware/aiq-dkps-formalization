@@ -417,7 +417,7 @@ theorem norm_doubleAngleTangentOperator_apply_sub_le
         simp [ne_of_gt hdens]
       rw [smul_sub, smul_smul, hscalar, one_smul]
       module
-    rw [hidentity, norm_neg, norm_smul, Complex.norm_real,
+    simp only [hidentity, norm_neg, norm_smul, Complex.norm_real,
       Real.norm_eq_abs, abs_inv, abs_of_pos hdens]
     calc
       (1 - s ^ 2)⁻¹ * ‖Q (D x - ((1 - s ^ 2 : ℝ) : ℂ) • x)‖

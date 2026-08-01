@@ -499,7 +499,7 @@ theorem orthonormal_theorem63ResidualWitness
             ((((cj : ℝ) : ℂ)⁻¹) •
               (yj - ((sigma_j : ℝ) : ℂ) • (v_j : H))) := by
           simp [theorem63ResidualWitness, S, sigma_j, v_j, yj, cj, hj]
-        rw [hwi, hwj, inner_smul_left, inner_smul_right,
+        simp only [hwi, hwj, inner_smul_left, inner_smul_right,
           hraw, mul_zero, mul_zero]
 
 /-- Approximation-number formulation of the paper's instruction that

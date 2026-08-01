@@ -124,7 +124,7 @@ theorem sum_cross_norm_inner_eigenvectorBasis_sq_le_offDiag_block
     intro i hi j hj
     have hsq : ‖⟪u i, (S - T) (v j)⟫_𝕜‖ ^ 2
         = (hS.eigenvalues hn j - hT.eigenvalues hn i) ^ 2 * ‖⟪u i, v j⟫_𝕜‖ ^ 2 := by
-      rw [hu, hv, inner_eigenvectorBasis_map_sub_eigenvectorBasis hT hS hn i j,
+      simp only [hu, hv, inner_eigenvectorBasis_map_sub_eigenvectorBasis hT hS hn i j,
         norm_mul, RCLike.norm_ofReal, mul_pow, sq_abs]
     have hsqgap : gap ^ 2 ≤ (hS.eigenvalues hn j - hT.eigenvalues hn i) ^ 2 := by
       rw [show (hS.eigenvalues hn j - hT.eigenvalues hn i) ^ 2

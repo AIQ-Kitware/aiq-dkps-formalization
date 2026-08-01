@@ -132,7 +132,7 @@ theorem abs_principalHalfPhase_of_abs_eq_one
     ‖principalHalfPhase z‖ = 1 := by
   have h1z : (1 : ℂ) + z ≠ 0 := fun h => hz (by linear_combination h)
   have hne : ‖1 + z‖ ≠ 0 := norm_ne_zero_iff.mpr h1z
-  rw [principalHalfPhase, if_neg hz, norm_div, Complex.norm_real,
+  simp only [principalHalfPhase, if_neg hz, norm_div, Complex.norm_real,
     Real.norm_eq_abs, abs_of_nonneg (norm_nonneg _), div_self hne]
 
 /-- Scalar principal-square-root identity. -/

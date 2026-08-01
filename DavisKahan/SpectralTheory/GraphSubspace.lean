@@ -202,7 +202,7 @@ theorem star_mul_self_of_isAngularOperator (hX : IsAngularOperator U X) :
     (U.isIdempotentElem_starProjection).eq
   have hXP : X * projection U = X := hX.1
   have hPX : projection U * X = 0 := hX.2
-  rw [star_add, (isSelfAdjoint_starProjection U).star_eq, add_mul, mul_add, mul_add,
+  simp only [star_add, (isSelfAdjoint_starProjection U).star_eq, add_mul, mul_add, mul_add,
     hPP, hPX, star_mul_projection_of_isAngularOperator hX, add_mul, one_mul,
     mul_assoc, hXP, add_zero, zero_add]
 
@@ -256,7 +256,7 @@ theorem projection_graphSubspace_formula
   have hsAQ : star A * (A * R * star A) = star A := by
     have h1 : star A * (A * R * star A) = (star A * A) * (R * star A) := by
       simp only [mul_assoc]
-    rw [h1, hsAA, mul_assoc N P (R * star A), ← mul_assoc P R (star A), hPR,
+    simp only [h1, hsAA, mul_assoc N P (R * star A), ← mul_assoc P R (star A), hPR,
       mul_assoc R P (star A), hPsA, ← mul_assoc, hNR, one_mul]
   rw [hformula]
   refine ContinuousLinearMap.ext fun z => ?_
@@ -398,7 +398,10 @@ theorem norm_projection_sub_projection_graphSubspace
       _ = 1 - R := h1RP
   -- intertwining and the `T₂` square
   have hXN : X * N = M * X := by
-    rw [hN, hMdef, mul_add, mul_one, add_mul, one_mul, ← mul_assoc, mul_assoc]
+    -- The `rw` chain this replaced ran `← mul_assoc` then `mul_assoc`, two directed
+    -- steps; to `simp only` they are one rule reaching a normal form, so the
+    -- reversed copy is dead.
+    simp only [hN, hMdef, mul_add, mul_one, add_mul, one_mul, mul_assoc]
   have hXR : X * R = R' * X := TauCeti.ringInverse_semiconj hNunit hMunit hXN
   have hRsAA : R * (star A * A) = P := by
     rw [hsAA, ← mul_assoc, hRN, one_mul]
@@ -647,7 +650,7 @@ private theorem acuteAngularOperator_spec
   have hPQPP : P * Q * P * P = P * Q * P := by
     rw [mul_assoc, hPP]
   have hPT : P * T = T * P := by
-    rw [hTdef, mul_add, add_mul, hPPQP, hPQPP, hP1P, h1PP, add_zero]
+    simp only [hTdef, mul_add, add_mul, hPPQP, hPQPP, hP1P, h1PP, add_zero]
   have hPR : P * R = R * P := by
     calc P * R = (R * T) * (P * R) := by rw [hRT, one_mul]
       _ = R * ((T * P) * R) := by rw [mul_assoc R T (P * R), ← mul_assoc T P R]
@@ -679,7 +682,7 @@ private theorem acuteAngularOperator_spec
   have hXP : ((1 - P) * Q * R * P) * P = (1 - P) * Q * R * P := by
     rw [mul_assoc, hPP]
   have hPX : P * ((1 - P) * Q * R * P) = 0 := by
-    rw [← mul_assoc, ← mul_assoc, ← mul_assoc, hP1P, zero_mul, zero_mul, zero_mul]
+    simp only [← mul_assoc, ← mul_assoc, ← mul_assoc, hP1P, zero_mul, zero_mul, zero_mul]
   -- the parametrized graph map collapses to `Q R P`
   have hsum : P + (1 - P) * Q * R * P = Q * R * P := by
     rw [one_sub_mul, sub_mul, sub_mul, hPQRP]

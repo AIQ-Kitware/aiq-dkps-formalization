@@ -395,7 +395,7 @@ theorem orthonormal_tanThetaResidualWitness
               ((((cj : ℝ) : 𝕜)⁻¹) •
                 (yj - ((σj : ℝ) : 𝕜) • X.toLinearMap vj)) := by
           simp [tanThetaResidualWitness, S, σj, vj, yj, cj, hj]
-        rw [hwi, hwj, inner_smul_left, inner_smul_right,
+        simp only [hwi, hwj, inner_smul_left, inner_smul_right,
           hraw, mul_zero, mul_zero]
 
 /-- The scalar spectral-gap estimate for one principal tangent.

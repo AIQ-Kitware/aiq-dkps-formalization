@@ -322,7 +322,7 @@ theorem circleRieszProjection_eq_one (A : H →L[ℂ] H) {center radius : ℝ}
       (2 * Real.pi * Complex.I) • (1 : H →L[ℂ] H) := by
     rw [circleIntegral.integral_smul_const,
       circleIntegral.integral_sub_inv_of_mem_ball (mem_ball_self hr)]
-  rw [circleRieszProjection, hsplit, circleIntegral.integral_add hrem hprin,
+  simp only [circleRieszProjection, hsplit, circleIntegral.integral_add hrem hprin,
     circleIntegral_rieszRemainder_eq_zero A hr hspec, zero_add, hprin_val,
     smul_smul, inv_mul_cancel₀ Complex.two_pi_I_ne_zero, one_smul]
 

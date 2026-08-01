@@ -122,7 +122,7 @@ theorem sameHalmosInvariant_of_pairEquiv
     rw [halmosExteriorPart, Submodule.map_inf _ hinj, hUc, hVc]
   -- the trivial and generic parts map correctly
   have hTrivial : (halmosTrivialPart U₁ V₁).map e.toLinearMap = halmosTrivialPart U₂ V₂ := by
-    rw [halmosTrivialPart, Submodule.map_sup, Submodule.map_sup, Submodule.map_sup,
+    simp only [halmosTrivialPart, Submodule.map_sup, Submodule.map_sup, Submodule.map_sup,
       hCommon, hSource, hTarget, hExterior]
   have hGen : (halmosGenericPart U₁ V₁).map e.toLinearMap = halmosGenericPart U₂ V₂ := by
     rw [halmosGenericPart, Submodule.map_orthogonal_equiv, hTrivial]

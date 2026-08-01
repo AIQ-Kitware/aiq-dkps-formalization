@@ -182,7 +182,7 @@ theorem paperPlanarTrialMap_isometry (theta : ℝ) :
     -- Pythagoras is stated in `mul_self` form, so the square is opened first.
     have hpyth :=
       norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ horthSmul
-    rw [norm_smul, norm_smul, norm_paperPlaneE0, norm_paperPlaneE1, mul_one,
+    simp only [norm_smul, norm_smul, norm_paperPlaneE0, norm_paperPlaneE1, mul_one,
       mul_one, RCLike.norm_ofReal, RCLike.norm_ofReal] at hpyth
     rw [sq, hpyth, ← sq, ← sq, sq_abs, sq_abs]
     exact Real.cos_sq_add_sin_sq theta
@@ -342,7 +342,7 @@ private theorem paperReal_norm_sq_combo (a b : ℝ) :
     rw [real_inner_smul_left, real_inner_smul_right, paperReal_inner_e0_e1]
     ring
   have hpyth := norm_add_sq_eq_norm_sq_add_norm_sq_real horth
-  rw [norm_smul, norm_smul, norm_paperPlaneE0, norm_paperPlaneE1, mul_one,
+  simp only [norm_smul, norm_smul, norm_paperPlaneE0, norm_paperPlaneE1, mul_one,
     mul_one, Real.norm_eq_abs, Real.norm_eq_abs] at hpyth
   rw [sq, hpyth, ← sq, ← sq, sq_abs, sq_abs]
 
