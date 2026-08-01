@@ -1075,6 +1075,60 @@ private theorem re_inner_ge_of_inverse_norm_le
     _ = RCLike.re ⟪C z, z⟫_ℂ := by
       rw [← mul_assoc, hci, one_mul]
 
+/-- **A lower bound on two orthogonal pieces is a lower bound overall.**
+
+If `C` maps `U` into `U` and `Uᗮ` into `Uᗮ`, and is bounded below by `c` on
+each, then it is bounded below by `c` on all of `H`: Pythagoras on both sides
+of the decomposition.  Nothing here is about direct rotations. -/
+private theorem norm_apply_ge_of_orthogonal_pieces
+    {C : H →L[ℂ] H} {U : Submodule ℂ H} [U.HasOrthogonalProjection] {c : ℝ}
+    (hc : 0 < c) (hCU : ∀ y ∈ U, C y ∈ U) (hCUc : ∀ y ∈ Uᗮ, C y ∈ Uᗮ)
+    (hlowU : ∀ y ∈ U, c * ‖y‖ ≤ ‖C y‖) (hlowUc : ∀ y ∈ Uᗮ, c * ‖y‖ ≤ ‖C y‖)
+    (z : H) : c * ‖z‖ ≤ ‖C z‖ := by
+  let u : H := U.starProjection z
+  let v : H := Uᗮ.starProjection z
+  have hu : u ∈ U := U.starProjection_apply_mem z
+  have hv : v ∈ Uᗮ := Uᗮ.starProjection_apply_mem z
+  have hCu : C u ∈ U := hCU u hu
+  have hCv : C v ∈ Uᗮ := hCUc v hv
+  have hzuv : u + v = z := by
+    change U.starProjection z + Uᗮ.starProjection z = z
+    rw [Submodule.starProjection_orthogonal_val]
+    abel
+  have hCuv : C u + C v = C z := by rw [← map_add, hzuv]
+  have huv : ⟪u, v⟫_ℂ = 0 :=
+    Submodule.inner_right_of_mem_orthogonal hu hv
+  have hCuvorth : ⟪C u, C v⟫_ℂ = 0 :=
+    Submodule.inner_right_of_mem_orthogonal hCu hCv
+  have hnormz : ‖z‖ ^ 2 = ‖u‖ ^ 2 + ‖v‖ ^ 2 := by
+    rw [← hzuv, norm_add_sq (𝕜 := ℂ), huv, map_zero]
+    ring
+  have hnormC : ‖C z‖ ^ 2 = ‖C u‖ ^ 2 + ‖C v‖ ^ 2 := by
+    rw [← hCuv, norm_add_sq (𝕜 := ℂ), hCuvorth, map_zero]
+    ring
+  have huLow := hlowU u hu
+  have hvLow := hlowUc v hv
+  have huSq0 : (c * ‖u‖) ^ 2 ≤ ‖C u‖ ^ 2 :=
+    (sq_le_sq₀ (mul_nonneg hc.le (norm_nonneg u))
+      (norm_nonneg (C u))).2 huLow
+  have hvSq0 : (c * ‖v‖) ^ 2 ≤ ‖C v‖ ^ 2 :=
+    (sq_le_sq₀ (mul_nonneg hc.le (norm_nonneg v))
+      (norm_nonneg (C v))).2 hvLow
+  have huSq : c ^ 2 * ‖u‖ ^ 2 ≤ ‖C u‖ ^ 2 := by
+    calc
+      c ^ 2 * ‖u‖ ^ 2 = (c * ‖u‖) ^ 2 := by ring
+      _ ≤ ‖C u‖ ^ 2 := huSq0
+  have hvSq : c ^ 2 * ‖v‖ ^ 2 ≤ ‖C v‖ ^ 2 := by
+    calc
+      c ^ 2 * ‖v‖ ^ 2 = (c * ‖v‖) ^ 2 := by ring
+      _ ≤ ‖C v‖ ^ 2 := hvSq0
+  have hsq : (c * ‖z‖) ^ 2 ≤ ‖C z‖ ^ 2 := by
+    rw [show (c * ‖z‖) ^ 2 = c ^ 2 * ‖z‖ ^ 2 by ring,
+      hnormz, hnormC]
+    nlinarith only [huSq, hvSq]
+  exact (sq_le_sq₀ (mul_nonneg hc.le (norm_nonneg z))
+    (norm_nonneg (C z))).mp hsq
+
 /-- Operator-norm minimality of the acute direct rotation among unitaries
 transporting the source projection to the target projection.
 
@@ -1291,61 +1345,21 @@ theorem spectraDirectRotation_minimal
     rw [Submodule.starProjection_orthogonal']
     change C * (1 - P) = (1 - P) * C
     rw [mul_sub, mul_one, sub_mul, one_mul, hCP.eq]
-  have hlow : ∀ z : H, c * ‖z‖ ≤ ‖C z‖ := by
-    intro z
-    let u : H := P z
-    let v : H := Pc z
-    have hu : u ∈ U := U.starProjection_apply_mem z
-    have hv : v ∈ Uᗮ := Uᗮ.starProjection_apply_mem z
-    have hCu : C u ∈ U := by
-      apply U.starProjection_eq_self_iff.mp
-      have h := congrArg (fun T : H →L[ℂ] H => T u) hCP.eq
-      rw [mul_apply_eq_comp, mul_apply_eq_comp,
-        U.starProjection_eq_self_iff.mpr hu] at h
-      exact h.symm
-    have hCv : C v ∈ Uᗮ := by
-      apply Uᗮ.starProjection_eq_self_iff.mp
-      have h := congrArg (fun T : H →L[ℂ] H => T v) hCPc.eq
-      rw [mul_apply_eq_comp, mul_apply_eq_comp,
-        Uᗮ.starProjection_eq_self_iff.mpr hv] at h
-      exact h.symm
-    have hzuv : u + v = z := by
-      change U.starProjection z + Uᗮ.starProjection z = z
-      rw [Submodule.starProjection_orthogonal_val]
-      abel
-    have hCuv : C u + C v = C z := by rw [← map_add, hzuv]
-    have huv : ⟪u, v⟫_ℂ = 0 :=
-      Submodule.inner_right_of_mem_orthogonal hu hv
-    have hCuvorth : ⟪C u, C v⟫_ℂ = 0 :=
-      Submodule.inner_right_of_mem_orthogonal hCu hCv
-    have hnormz : ‖z‖ ^ 2 = ‖u‖ ^ 2 + ‖v‖ ^ 2 := by
-      rw [← hzuv, norm_add_sq (𝕜 := ℂ), huv, map_zero]
-      ring
-    have hnormC : ‖C z‖ ^ 2 = ‖C u‖ ^ 2 + ‖C v‖ ^ 2 := by
-      rw [← hCuv, norm_add_sq (𝕜 := ℂ), hCuvorth, map_zero]
-      ring
-    have huLow := hlowU u hu
-    have hvLow := hlowUc v hv
-    have huSq0 : (c * ‖u‖) ^ 2 ≤ ‖C u‖ ^ 2 :=
-      (sq_le_sq₀ (mul_nonneg hc.le (norm_nonneg u))
-        (norm_nonneg (C u))).2 huLow
-    have hvSq0 : (c * ‖v‖) ^ 2 ≤ ‖C v‖ ^ 2 :=
-      (sq_le_sq₀ (mul_nonneg hc.le (norm_nonneg v))
-        (norm_nonneg (C v))).2 hvLow
-    have huSq : c ^ 2 * ‖u‖ ^ 2 ≤ ‖C u‖ ^ 2 := by
-      calc
-        c ^ 2 * ‖u‖ ^ 2 = (c * ‖u‖) ^ 2 := by ring
-        _ ≤ ‖C u‖ ^ 2 := huSq0
-    have hvSq : c ^ 2 * ‖v‖ ^ 2 ≤ ‖C v‖ ^ 2 := by
-      calc
-        c ^ 2 * ‖v‖ ^ 2 = (c * ‖v‖) ^ 2 := by ring
-        _ ≤ ‖C v‖ ^ 2 := hvSq0
-    have hsq : (c * ‖z‖) ^ 2 ≤ ‖C z‖ ^ 2 := by
-      rw [show (c * ‖z‖) ^ 2 = c ^ 2 * ‖z‖ ^ 2 by ring,
-        hnormz, hnormC]
-      nlinarith only [huSq, hvSq]
-    exact (sq_le_sq₀ (mul_nonneg hc.le (norm_nonneg z))
-      (norm_nonneg (C z))).mp hsq
+  have hlow : ∀ z : H, c * ‖z‖ ≤ ‖C z‖ :=
+    norm_apply_ge_of_orthogonal_pieces hc
+      (fun y hy => by
+        apply U.starProjection_eq_self_iff.mp
+        have h := congrArg (fun T : H →L[ℂ] H => T y) hCP.eq
+        rw [mul_apply_eq_comp, mul_apply_eq_comp,
+          U.starProjection_eq_self_iff.mpr hy] at h
+        exact h.symm)
+      (fun y hy => by
+        apply Uᗮ.starProjection_eq_self_iff.mp
+        have h := congrArg (fun T : H →L[ℂ] H => T y) hCPc.eq
+        rw [mul_apply_eq_comp, mul_apply_eq_comp,
+          Uᗮ.starProjection_eq_self_iff.mpr hy] at h
+        exact h.symm)
+      hlowU hlowUc
   let Cunit := spectraCanonicalAbsoluteValueUnit U V hacute
   let R : H →L[ℂ] H := (↑(Cunit⁻¹) : H →L[ℂ] H)
   have hCcoe : (Cunit : H →L[ℂ] H) = C := by
