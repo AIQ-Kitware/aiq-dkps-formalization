@@ -104,6 +104,20 @@ section SelfAdjoint
 
 variable [CompleteSpace E]
 
+omit [CompleteSpace E] in
+/-- **Orthogonality to the shifted range identifies the adjoint's action.**
+
+`⟪y, A x - z x⟫ = 0` for every `x` says exactly `⟪conj z • y, x⟫ = ⟪y, A x⟫`,
+which is what puts `y` in the adjoint's domain.  Used identically here and in
+`RealLowerBound`. -/
+theorem inner_conj_smul_eq_of_orthogonal_shiftRange {A : E →ₗ.[ℂ] E} {z : ℂ} {y : E}
+    (hy : ∀ x : A.domain, ⟪y, A x - z • (x : E)⟫_ℂ = 0) (x : A.domain) :
+    ⟪(starRingEnd ℂ) z • y, (x : E)⟫_ℂ = ⟪y, A x⟫_ℂ := by
+  have h := hy x
+  rw [inner_sub_right, inner_smul_right, sub_eq_zero] at h
+  rw [inner_smul_left, starRingEnd_self_apply]
+  exact h.symm
+
 /-- **Dense range.**  A vector orthogonal to the range of `A - z` would make
 `z ⟪y, y⟫` real; since `⟪y, y⟫` is a nonnegative real, a non-real `z` forces
 `y = 0`.
@@ -117,12 +131,8 @@ theorem eq_zero_of_orthogonal_shiftRange {A : E →ₗ.[ℂ] E}
     (hy : ∀ x : A.domain, ⟪y, A x - z • (x : E)⟫_ℂ = 0) : y = 0 := by
   have hdense : Dense (A.domain : Set E) := hA.dense_domain
   -- `⟪conj z • y, x⟫ = ⟪y, A x⟫`, which puts `y` in the adjoint's domain
-  have hEq : ∀ x : A.domain, ⟪(starRingEnd ℂ) z • y, (x : E)⟫_ℂ = ⟪y, A x⟫_ℂ := by
-    intro x
-    have h := hy x
-    rw [inner_sub_right, inner_smul_right, sub_eq_zero] at h
-    rw [inner_smul_left, starRingEnd_self_apply]
-    exact h.symm
+  have hEq : ∀ x : A.domain, ⟪(starRingEnd ℂ) z • y, (x : E)⟫_ℂ = ⟪y, A x⟫_ℂ :=
+    inner_conj_smul_eq_of_orthogonal_shiftRange hy
   have hmem : y ∈ (_root_.LinearPMap.adjoint A).domain :=
     _root_.LinearPMap.mem_adjoint_domain_of_exists _ ⟨(starRingEnd ℂ) z • y, hEq⟩
   have hmemA : y ∈ A.domain := by

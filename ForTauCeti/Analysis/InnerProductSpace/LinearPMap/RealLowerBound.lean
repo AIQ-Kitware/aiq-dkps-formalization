@@ -77,12 +77,8 @@ theorem eq_zero_of_orthogonal_shiftRange_of_real (hA : IsSelfAdjoint A)
     (hbd : ∀ x : A.domain, c * ‖(x : E)‖ ≤ ‖A x - z • (x : E)‖)
     {y : E} (hy : ∀ x : A.domain, ⟪y, A x - z • (x : E)⟫_ℂ = 0) : y = 0 := by
   have hdense : Dense (A.domain : Set E) := hA.dense_domain
-  have hEq : ∀ x : A.domain, ⟪(starRingEnd ℂ) z • y, (x : E)⟫_ℂ = ⟪y, A x⟫_ℂ := by
-    intro x
-    have h := hy x
-    rw [inner_sub_right, inner_smul_right, sub_eq_zero] at h
-    rw [inner_smul_left, starRingEnd_self_apply]
-    exact h.symm
+  have hEq : ∀ x : A.domain, ⟪(starRingEnd ℂ) z • y, (x : E)⟫_ℂ = ⟪y, A x⟫_ℂ :=
+    inner_conj_smul_eq_of_orthogonal_shiftRange hy
   have hmem : y ∈ (_root_.LinearPMap.adjoint A).domain :=
     _root_.LinearPMap.mem_adjoint_domain_of_exists _ ⟨(starRingEnd ℂ) z • y, hEq⟩
   have hmemA : y ∈ A.domain := by
