@@ -52,6 +52,23 @@ private theorem spectraSeparated_toLinearMap
   exact hsep a ⟨x, Submodule.mem_top, hx0, hxeig⟩
     b ⟨y, Submodule.mem_top, hy0, hyeig⟩
 
+/-- **The Sylvester equation, pushed down to the underlying linear maps.**
+
+All three bridge theorems below restate `sylvesterOperator A B X = C` this way,
+over `𝕜`, over `ℂ` and over `ℝ`; the proof is the same three lines each time, so
+the lemma carries its own scalar field. -/
+private theorem sylvesterOperator_toLinearMap {𝕜' : Type*} [RCLike 𝕜']
+    {E' F' : Type*} [NormedAddCommGroup E'] [InnerProductSpace 𝕜' E']
+    [NormedAddCommGroup F'] [InnerProductSpace 𝕜' F']
+    {A : F' →L[𝕜'] F'} {B : E' →L[𝕜'] E'} {X C : E' →L[𝕜'] F'}
+    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
+    A.toLinearMap ∘ₗ X.toLinearMap - X.toLinearMap ∘ₗ B.toLinearMap =
+      C.toLinearMap := by
+  ext x
+  have hpoint := congrArg (fun T : E' →L[𝕜'] F' => T x) hEq
+  change A (X x) - X (B x) = C x at hpoint
+  simpa using hpoint
+
 /-- Finite-dimensional rectangular unitarily invariant Sylvester estimate.
 
 For self-adjoint `A` and `B` with spectra separated by `d > 0`, every
@@ -84,11 +101,8 @@ theorem ideal_sylvester_le
     exact hB x y
   have hsep' : TauCeti.SpectraSeparated A' ⊤ B' ⊤ d :=
     spectraSeparated_toLinearMap hsep
-  have hEq' : A' ∘ₗ X' - X' ∘ₗ B' = C' := by
-    ext x
-    have hpoint := congrArg (fun T : E →L[𝕜] F => T x) hEq
-    change A (X x) - X (B x) = C x at hpoint
-    simpa [A', B', X', C'] using hpoint
+  have hEq' : A' ∘ₗ X' - X' ∘ₗ B' = C' :=
+    sylvesterOperator_toLinearMap hEq
   simpa [X', C'] using
     uiNorm_sylvester_le_of_spectralDistance
       N hA' hB' hd hsep' hEq'
@@ -119,11 +133,8 @@ theorem ideal_sylvester_le_complex
     exact hB x y
   have hsep' : TauCeti.SpectraSeparated A' ⊤ B' ⊤ d :=
     spectraSeparated_toLinearMap hsep
-  have hEq' : A' ∘ₗ X' - X' ∘ₗ B' = C' := by
-    ext x
-    have hpoint := congrArg (fun T : EC →L[ℂ] FC => T x) hEq
-    change A (X x) - X (B x) = C x at hpoint
-    simpa [A', B', X', C'] using hpoint
+  have hEq' : A' ∘ₗ X' - X' ∘ₗ B' = C' :=
+    sylvesterOperator_toLinearMap hEq
   simpa [X', C'] using
     uiNorm_sylvester_le_of_spectralDistance_complex
       N hA' hB' hd hsep' hEq'
@@ -154,11 +165,8 @@ theorem ideal_sylvester_le_real
     exact hB x y
   have hsep' : TauCeti.SpectraSeparated A' ⊤ B' ⊤ d :=
     spectraSeparated_toLinearMap hsep
-  have hEq' : A' ∘ₗ X' - X' ∘ₗ B' = C' := by
-    ext x
-    have hpoint := congrArg (fun T : ER →L[ℝ] FR => T x) hEq
-    change A (X x) - X (B x) = C x at hpoint
-    simpa [A', B', X', C'] using hpoint
+  have hEq' : A' ∘ₗ X' - X' ∘ₗ B' = C' :=
+    sylvesterOperator_toLinearMap hEq
   simpa [X', C'] using
     uiNorm_sylvester_le_of_spectralDistance_real
       N hA' hB' hd hsep' hEq'
