@@ -1230,12 +1230,16 @@ theorem spectraDirectRotation_minimal
           (projection U * star D) * W
         rw [← mul_assoc, star_spectraDirectRotation_intertwines U V hacute]
       _ = P * A := by simp only [A]; rw [mul_assoc]
-  have hAcommc : Commute A Pc := by
+  -- Commuting with `P` is the same as commuting with its complement, and both `A` and `C`
+  -- need it below; the six lines were written out twice.
+  have hcommPc : ∀ T : H →L[ℂ] H, Commute T P → Commute T Pc := by
+    intro T hT
     rw [commute_iff_eq]
-    change A * Uᗮ.starProjection = Uᗮ.starProjection * A
+    change T * Uᗮ.starProjection = Uᗮ.starProjection * T
     rw [Submodule.starProjection_orthogonal']
-    change A * (1 - P) = (1 - P) * A
-    rw [mul_sub, mul_one, sub_mul, one_mul, hAcomm.eq]
+    change T * (1 - P) = (1 - P) * T
+    rw [mul_sub, mul_one, sub_mul, one_mul, hT.eq]
+  have hAcommc : Commute A Pc := hcommPc A hAcomm
   have hWeq : W = D * A := by
     calc
       W = 1 * W := (one_mul W).symm
@@ -1297,12 +1301,7 @@ theorem spectraDirectRotation_minimal
   have hlowU : ∀ y ∈ U, c * ‖y‖ ≤ ‖C y‖ := hlowOn U hAcomm hinnerU
   have hlowUc : ∀ y ∈ Uᗮ, c * ‖y‖ ≤ ‖C y‖ := hlowOn Uᗮ hAcommc hinnerUc
   have hCP : Commute C P := spectraCanonicalAbsoluteValue_commute_projection U V
-  have hCPc : Commute C Pc := by
-    rw [commute_iff_eq]
-    change C * Uᗮ.starProjection = Uᗮ.starProjection * C
-    rw [Submodule.starProjection_orthogonal']
-    change C * (1 - P) = (1 - P) * C
-    rw [mul_sub, mul_one, sub_mul, one_mul, hCP.eq]
+  have hCPc : Commute C Pc := hcommPc C hCP
   have hlow : ∀ z : H, c * ‖z‖ ≤ ‖C z‖ :=
     norm_apply_ge_of_orthogonal_pieces hc
       (fun y hy => by
