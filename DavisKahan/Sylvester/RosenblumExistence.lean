@@ -275,6 +275,17 @@ end Integration
 
 section Main
 
+/-- **A spectrum inside the open ball misses the circle.**
+
+Derived identically in both Rosenblum identities below. -/
+private theorem notMem_spectrum_of_norm_eq_radius {S : E →L[ℂ] E} {center radius : ℝ}
+    (hS : spectrum ℂ S ⊆ ball ((center : ℂ)) radius) :
+    ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius → z ∉ spectrum ℂ S := by
+  intro z hz hmem
+  have hb := hS hmem
+  rw [mem_ball, dist_eq_norm, hz] at hb
+  exact absurd hb (lt_irrefl _)
+
 variable (A : E →L[ℂ] E) (B : F →L[ℂ] F) (C : F →L[ℂ] E) {center radius : ℝ}
 
 /-- The Sylvester operator applied to the Rosenblum solution, before the two
@@ -311,11 +322,8 @@ theorem comp_rosenblumSolution_sub_comp_eq (hr : 0 < radius)
     (hB : ∀ z : ℂ, z ∈ closedBall ((center : ℂ)) radius → z ∉ spectrum ℂ B) :
     A ∘L rosenblumSolution A B C center radius -
       rosenblumSolution A B C center radius ∘L B = C := by
-  have hAs : ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius → z ∉ spectrum ℂ A := by
-    intro z hz hmem
-    have hb := hA hmem
-    rw [mem_ball, dist_eq_norm, hz] at hb
-    exact absurd hb (lt_irrefl _)
+  have hAs : ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius → z ∉ spectrum ℂ A :=
+    notMem_spectrum_of_norm_eq_radius hA
   have hBs : ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius → z ∉ spectrum ℂ B := fun z hz =>
     hB z (by rw [mem_closedBall, dist_eq_norm, hz])
   rw [comp_rosenblumSolution_sub_comp A B C hr.le hAs hBs,
@@ -340,11 +348,8 @@ theorem rosenblumSolution_comp_sub_comp (X : F →L[ℂ] E) (hr : 0 < radius)
     (hA : spectrum ℂ A ⊆ ball ((center : ℂ)) radius)
     (hB : ∀ z : ℂ, z ∈ closedBall ((center : ℂ)) radius → z ∉ spectrum ℂ B) :
     rosenblumSolution A B (A ∘L X - X ∘L B) center radius = X := by
-  have hAs : ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius → z ∉ spectrum ℂ A := by
-    intro z hz hmem
-    have hb := hA hmem
-    rw [mem_ball, dist_eq_norm, hz] at hb
-    exact absurd hb (lt_irrefl _)
+  have hAs : ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius → z ∉ spectrum ℂ A :=
+    notMem_spectrum_of_norm_eq_radius hA
   have hBs : ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius → z ∉ spectrum ℂ B := fun z hz =>
     hB z (by rw [mem_closedBall, dist_eq_norm, hz])
   have hcongr : (∮ z in C((center : ℂ), radius),
