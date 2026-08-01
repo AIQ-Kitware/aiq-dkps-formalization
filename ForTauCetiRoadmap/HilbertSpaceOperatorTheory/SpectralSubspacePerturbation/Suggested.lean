@@ -319,6 +319,13 @@ each specialization is a *constructor* — bounded operators build it from
 `T.toLinearMap.toPMap ⊤` with a trivial domain transport, and finite dimension reads the
 blocks off an eigenbasis.  That is what makes "bounded and finite are specializations" true
 in the code and not only in the prose. -/
+-- NOT DELIVERED, and NOT merely renamed (audited 2026-07-31).
+-- `DavisKahan/SinTheta/Unbounded/Core.lean` has `UnboundedSinThetaData`, which is a
+-- REDESIGN rather than a rename: it bundles the operators as fields instead of taking
+-- them as parameters, generalizes `ℂ` to `RCLike`, wraps each operator in
+-- `ClosedOperator{Ambient,Trial,Complement}`, and carries a THIRD operator `Λ₁` with an
+-- `intertwines` field that the shape below does not have.  Reconciling the two is a
+-- design decision for the unbounded lane, not a roadmap edit.
 structure UnboundedSinThetaProblem where
   /-- The ambient operator, self-adjoint and not assumed bounded. -/
   ambient : E →ₗ.[ℂ] E

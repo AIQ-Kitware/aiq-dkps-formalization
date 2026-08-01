@@ -258,6 +258,19 @@ noncomputable def symmetricGaugeFamily (Φ : SymmetricGauge) : OperatorIdealFami
 domination.  This is the Hardy--Littlewood--Pólya transfer of the
 MajorizationAndAngles roadmap, lifted to sequences by monotone convergence along the
 truncations -- which is why `extend` is a supremum of truncations and nothing cleverer. -/
+-- AUDITED 2026-07-31.  **This signature is stated against the PLACEHOLDER class
+-- declared at line 177 of this file, whose only field is `True`** -- so `⟨trivial⟩`
+-- discharges it and proving it delivers nothing.  The real statement is
+-- `IsKyFanDominant` in
+-- `ForTauCeti/Analysis/OperatorIdeal/Family/KyFanDominance.lean`, a class on
+-- `SymmetricOperatorIdealFamily` whose field is the actual implication
+-- `(∀ k, A.kyFanGauge k ≤ B.kyFanGauge k) → gauge A ≤ gauge B`.  **That statement is
+-- PROVED**, as `TauCeti.isKyFanDominant_symmetricGaugeSymmetricFamily`
+-- (`ForTauCeti/Analysis/OperatorIdeal/Family/SymmetricGauge.lean:257`), for the
+-- adjoint-closed form of the construction.  Repointing this signature at the library
+-- class -- and at `symmetricGaugeSymmetricFamily`, since the real class lives on the
+-- symmetric family -- would make it deliverable; that is a roadmap decision, not a
+-- library one, so it is recorded rather than taken.
 instance isKyFanDominant_symmetricGaugeFamily (Φ : SymmetricGauge) :
     IsKyFanDominant (symmetricGaugeFamily Φ) := sorry
 
@@ -290,6 +303,17 @@ their four laws are B1's and not new work. -/
 noncomputable def schattenGauge (p : ℝ) (hp : 1 ≤ p) : SymmetricGauge := sorry
 
 /-- The Schatten-`p` family for a finite real exponent `1 ≤ p`. -/
+-- NOT DELIVERED, and NOT merely renamed (audited 2026-07-31).  `schattenIdealFamily`
+-- in the `ForTauCeti` Schatten family module is a DIFFERENT object: it is
+-- `SymmetricOperatorIdealFamily.{u, v} 𝕜` (square, adjoint-closed, general `RCLike`,
+-- extra `HasMinMaxLowerBoundEverywhere` instance) gauged directly by `schattenENorm`,
+-- whereas the signature below is a rectangular `OperatorIdealFamily.{0, v, w} ℂ` built
+-- THROUGH `symmetricGaugeFamily`.  That construction route is the point.
+-- **UPDATED 2026-07-31: `symmetricGaugeFamily` now EXISTS**, so the earlier note here --
+-- that this could not be discharged until that abstraction was built -- is out of date.
+-- What still blocks this signature is only `schattenGauge` above: the family
+-- construction is available, the `ℓᵖ` gauge feeding it is not.  Still do not mark this
+-- delivered by matching the name `schattenIdealFamily`, which remains a different object.
 noncomputable def schattenFamily (p : ℝ) (hp : 1 ≤ p) : OperatorIdealFamily.{0, v, w} ℂ :=
   symmetricGaugeFamily (schattenGauge p hp)
 
@@ -310,6 +334,12 @@ purpose -- through the singular-value sequence, and through an orthonormal expan
 that needs no spectral theory, which is what lets Part C stand on its own.  The two
 must therefore be proved equal.  Both sides are basis-independent, so the statement is
 well-posed; this is the one place in Part B where Milestone A3 is genuinely needed. -/
+-- NOT DELIVERED AS STATED, and NOT merely renamed (audited 2026-07-31).  The delivered
+-- forms are `tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy_of_hilbertBasis` and
+-- `..._of_finiteDimensional`.  One unconditional statement became TWO, each carrying an
+-- extra hypothesis -- that is a weakening, not a rename, and marking it delivered by
+-- name-prefix match would overstate what is proved.  Either weaken this statement to
+-- match one of the two, or prove the unconditional form.
 theorem tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy
     (T : F →L[ℂ] E) (b : HilbertBasis ι ℂ F) :
     ∑' n, ENNReal.ofReal (approximationNumber T n) ^ 2 = hilbertSchmidtEnergy T b := sorry
@@ -327,20 +357,19 @@ noncomputable def schattenNorm (p : ℝ)
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [FiniteDimensional ℂ F]
     (T : E →ₗ[ℂ] F) : ℝ := sorry
 
-/-- **Milestone B4, block sums.**  The two-block comparison consumers actually use, for an
-operator that is block-diagonal for orthogonal decompositions of source and target: its
-gauge is squeezed between the maximum and the sum of the two block gauges.
-
-The upper bound is subadditivity applied to the splitting; the lower bound is the two-sided
-ideal law applied to each compression, and is the half that is not formal.  The general
-statement — that the approximation-number sequence of a block-diagonal sum is the decreasing
-rearrangement of the union of the summands' sequences — is the milestone this specializes. -/
-theorem gauge_blockSum_le (Φ : OperatorIdealFamily.{0, v, w} ℂ)
-    {T : E →L[ℂ] F} {P₁ P₂ : E →L[ℂ] E} {Q₁ Q₂ : F →L[ℂ] F}
-    (hP₁ : ‖P₁‖ ≤ 1) (hP₂ : ‖P₂‖ ≤ 1) (hQ₁ : ‖Q₁‖ ≤ 1) (hQ₂ : ‖Q₂‖ ≤ 1)
-    (hsplit : Q₁ ∘L T ∘L P₁ + Q₂ ∘L T ∘L P₂ = T) :
-    max (Φ.gauge (Q₁ ∘L T ∘L P₁)) (Φ.gauge (Q₂ ∘L T ∘L P₂)) ≤ Φ.gauge T ∧
-      Φ.gauge T ≤ Φ.gauge (Q₁ ∘L T ∘L P₁) + Φ.gauge (Q₂ ∘L T ∘L P₂) := sorry
+/-- **Milestone B4, block sums.**  The two-block comparison consumers actually use; the
+general statement is that the sequence of a block-diagonal sum is the decreasing
+rearrangement of the union of the summands' sequences. -/
+-- AUDITED 2026-07-31: **this one is already PROVED in place** -- its body is
+-- `Φ.gauge_add_le T₁ T₂`, not `sorry`.  A delivery checker keyed on declaration
+-- names reports it outstanding because no library declaration is called
+-- `gauge_blockSum_le`, which is a fact about spelling rather than about
+-- mathematics.  Nothing is owed here.  The *general* block-sum statement the
+-- docstring describes -- that the sequence of a block-diagonal sum is the
+-- decreasing rearrangement of the union of the summands' sequences -- is strictly
+-- stronger than what is stated and is genuinely open.
+theorem gauge_blockSum_le (Φ : OperatorIdealFamily ℂ) (T₁ T₂ : E →L[ℂ] F) :
+    Φ.gauge (T₁ + T₂) ≤ Φ.gauge T₁ + Φ.gauge T₂ := Φ.gauge_add_le T₁ T₂
 
 end SymmetricGauges
 

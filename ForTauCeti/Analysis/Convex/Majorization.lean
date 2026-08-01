@@ -8,6 +8,7 @@ import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Algebra.Order.Field.Basic
 import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.FieldSimp
+import Mathlib.Data.Fin.Tuple.Sort
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.LinearCombination
 
@@ -703,6 +704,46 @@ theorem mono_weaklyMajorized {x y : Fin n → ℝ}
     (h : FiniteVector.WeaklyMajorized x y) : Φ x ≤ Φ y := by
   have hy : y ∈ {v : Fin n → ℝ | Φ v ≤ Φ y} := by exact le_refl (Φ y)
   exact (Φ.isSymmetricConvex_sublevel (Φ y)).mem_of_weaklyMajorized h hy
+
+/-! ### Antitone rearrangement
+
+`Tuple.sort` produces a *monotone* rearrangement.  Several results downstream --
+realizing a sequence as the approximation numbers of a diagonal operator, and
+the block-sum statement that the sequence of a block-diagonal sum is the
+decreasing rearrangement of the union -- need the *antitone* one instead.
+
+Composing the sorting permutation with `Fin.rev` supplies it, and a symmetric
+gauge cannot tell the difference, since permutation invariance is one of its
+axioms.
+-/
+
+/-- `Fin.rev` as a permutation: it is an involution. -/
+def revPerm (n : ℕ) : Equiv.Perm (Fin n) :=
+  Function.Involutive.toPerm Fin.rev Fin.rev_rev
+
+/-- `revPerm` acts as `Fin.rev`. -/
+@[simp]
+theorem revPerm_apply {n : ℕ} (i : Fin n) : revPerm n i = i.rev := rfl
+
+/-- The permutation putting a tuple into antitone order: sort, then reverse. -/
+noncomputable def antitoneSortPerm {n : ℕ} (f : Fin n → ℝ) : Equiv.Perm (Fin n) :=
+  (revPerm n).trans (Tuple.sort f)
+
+/-- **The rearrangement is antitone.**
+
+`Tuple.monotone_sort` makes `f ∘ sort f` monotone, and `Fin.rev` is strictly
+antitone, so the composite reverses order. -/
+theorem antitone_comp_antitoneSortPerm {n : ℕ} (f : Fin n → ℝ) :
+    Antitone (f ∘ antitoneSortPerm f) := by
+  intro i j hij
+  have hrev : (j : Fin n).rev ≤ (i : Fin n).rev := Fin.rev_le_rev.mpr hij
+  exact Tuple.monotone_sort f hrev
+
+/-- A finite symmetric gauge does not see the rearrangement. -/
+theorem apply_antitoneSortPerm {n : ℕ}
+    (Φ : FiniteSymmetricGauge n) (f : Fin n → ℝ) :
+    Φ (f ∘ antitoneSortPerm f) = Φ f :=
+  Φ.perm f (antitoneSortPerm f)
 
 end FiniteSymmetricGauge
 
