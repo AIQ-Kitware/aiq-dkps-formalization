@@ -347,7 +347,7 @@ theorem eigenvalue_notMem_gap_of_diagonal_form (hS : S.IsSymmetric)
   have hp2 : (0 : ℝ) < ‖p‖ ^ 2 := pow_pos (norm_pos_iff.mpr hp0n) 2
   have hq2 : (0 : ℝ) < ‖m‖ ^ 2 := pow_pos (norm_pos_iff.mpr hm0n) 2
   have hval_p : RCLike.re ⟪S x, p⟫_𝕜 = μ * ‖p‖ ^ 2 := by
-    rw [hval p, hsplit, inner_add_left, map_add, inner_self_eq_norm_sq, hmp, map_zero, add_zero]
+    simp only [hval p, hsplit, inner_add_left, map_add, inner_self_eq_norm_sq, hmp, map_zero, add_zero]
   have hval_m : RCLike.re ⟪S x, m⟫_𝕜 = μ * ‖m‖ ^ 2 := by
     rw [hval m, hsplit, inner_add_left, map_add, hpm, map_zero, zero_add, inner_self_eq_norm_sq]
   have decomp_p : RCLike.re ⟪S x, p⟫_𝕜
