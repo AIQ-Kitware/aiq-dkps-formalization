@@ -84,7 +84,15 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # `OperatorIdeal.SymmetricGauge` is the Gohberg--Krein symmetric norming function and the
  # abstraction the three concrete gauges are instances of; it belongs with the ideal families
  # it will induce, and it imports only Mathlib, so it sorts to the front of this topic.
- +["Analysis.OperatorIdeal.SymmetricGauge"]),
+ +["Analysis.OperatorIdeal.SymmetricGauge"]
+ # Added 2026-08-01 when merging `fable/sylvester-upstream-leaves`, which brought three
+ # modules and no topic for any of them, so the partition stopped being total and both
+ # `--check` gates went red.  All three are the same subject as the line above:
+ # `Normed.SymmetricGauge` is the sequence-space gauge, `Normed.SchattenGauge` the `ℓᵖ`
+ # instance of it, and `Family.SymmetricGauge` the ideal family it induces.
+ # **`CANDIDATE-TOPIC-DESIGN.md` still does not list them, and that file is `jon`'s.**
+ +["Analysis.Normed.SymmetricGauge","Analysis.Normed.SchattenGauge",
+   "Analysis.OperatorIdeal.Family.SymmetricGauge"]),
 ("T11","Hilbert-Schmidt operators",
  [A+"HilbertSchmidt."+x for x in ["Lp","Space","Conjugation","Pythagoras"]]),
 ("T12","The Haagerup-Zsido kernel and its Fourier transform",
