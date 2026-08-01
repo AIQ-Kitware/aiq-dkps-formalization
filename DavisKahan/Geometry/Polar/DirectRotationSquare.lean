@@ -1129,6 +1129,32 @@ private theorem norm_apply_ge_of_orthogonal_pieces
   exact (sq_le_sq₀ (mul_nonneg hc.le (norm_nonneg z))
     (norm_nonneg (C z))).mp hsq
 
+/-- **A diagonal block identity transfers to the inner product on that block.**
+
+If `K.starProjection ∘ D ∘ K.starProjection = C ∘ K.starProjection` as
+operators, then `Re ⟪D y, x⟫ = Re ⟪C y, x⟫` for `y, x ∈ K`.  Applied below at
+`U` and at `Uᗮ`, which had the same twenty-seven lines each. -/
+private theorem re_inner_eq_of_diagonal_block {D C : H →L[ℂ] H}
+    (K : Submodule ℂ H) [K.HasOrthogonalProjection]
+    (hdiag : K.starProjection * D * K.starProjection = C * K.starProjection)
+    {y x : H} (hy : y ∈ K) (hx : x ∈ K) :
+    RCLike.re ⟪D y, x⟫_ℂ = RCLike.re ⟪C y, x⟫_ℂ := by
+  have happ0 : K.starProjection (D (K.starProjection y)) = C (K.starProjection y) := by
+    simpa only [mul_apply_eq_comp] using
+      congrArg (fun T : H →L[ℂ] H => T y) hdiag
+  have hpy : K.starProjection y = y := K.starProjection_eq_self_iff.mpr hy
+  have happ : K.starProjection (D y) = C y := by rw [hpy] at happ0; exact happ0
+  have hpx : K.starProjection x = x := K.starProjection_eq_self_iff.mpr hx
+  have hsym : ⟪K.starProjection (D y), x⟫_ℂ = ⟪D y, x⟫_ℂ := by
+    calc
+      ⟪K.starProjection (D y), x⟫_ℂ = ⟪D y, K.starProjection x⟫_ℂ :=
+        K.starProjection_isSymmetric (D y) x
+      _ = ⟪D y, x⟫_ℂ := by rw [hpx]
+  calc
+    RCLike.re ⟪D y, x⟫_ℂ = RCLike.re ⟪K.starProjection (D y), x⟫_ℂ :=
+      congrArg RCLike.re hsym.symm
+    _ = RCLike.re ⟪C y, x⟫_ℂ := by rw [happ]
+
 /-- Operator-norm minimality of the acute direct rotation among unitaries
 transporting the source projection to the target projection.
 
@@ -1230,60 +1256,14 @@ theorem spectraDirectRotation_minimal
     dsimp [c]
     nlinarith only [hop2, hdisp]
   have hinnerU : ∀ {y x : H}, y ∈ U → x ∈ U →
-      RCLike.re ⟪D y, x⟫_ℂ = RCLike.re ⟪C y, x⟫_ℂ := by
-    intro y x hy hx
-    have hdiag := projection_mul_spectraDirectRotation_mul_projection
-      U V hacute
-    have happ0 : P (D (P y)) = C (P y) := by
-      simpa only [mul_apply_eq_comp] using
-        congrArg (fun T : H →L[ℂ] H => T y) hdiag
-    have hpy : P y = y := by
-      dsimp [P]
-      exact U.starProjection_eq_self_iff.mpr hy
-    have happ : P (D y) = C y := by
-      rw [hpy] at happ0
-      exact happ0
-    have hpx : U.starProjection x = x :=
-      U.starProjection_eq_self_iff.mpr hx
-    have hsym : ⟪P (D y), x⟫_ℂ = ⟪D y, x⟫_ℂ := by
-      change ⟪U.starProjection (D y), x⟫_ℂ = ⟪D y, x⟫_ℂ
-      calc
-        ⟪U.starProjection (D y), x⟫_ℂ =
-            ⟪D y, U.starProjection x⟫_ℂ :=
-          U.starProjection_isSymmetric (D y) x
-        _ = ⟪D y, x⟫_ℂ := by rw [hpx]
-    calc
-      RCLike.re ⟪D y, x⟫_ℂ = RCLike.re ⟪P (D y), x⟫_ℂ :=
-        congrArg RCLike.re hsym.symm
-      _ = RCLike.re ⟪C y, x⟫_ℂ := by rw [happ]
+      RCLike.re ⟪D y, x⟫_ℂ = RCLike.re ⟪C y, x⟫_ℂ := fun hy hx =>
+    re_inner_eq_of_diagonal_block U
+      (projection_mul_spectraDirectRotation_mul_projection U V hacute) hy hx
   have hinnerUc : ∀ {y x : H}, y ∈ Uᗮ → x ∈ Uᗮ →
-      RCLike.re ⟪D y, x⟫_ℂ = RCLike.re ⟪C y, x⟫_ℂ := by
-    intro y x hy hx
-    have hdiag :=
-      complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
-        U V hacute
-    have happ0 : Pc (D (Pc y)) = C (Pc y) := by
-      simpa only [mul_apply_eq_comp] using
-        congrArg (fun T : H →L[ℂ] H => T y) hdiag
-    have hpy : Pc y = y := by
-      dsimp [Pc]
-      exact Uᗮ.starProjection_eq_self_iff.mpr hy
-    have happ : Pc (D y) = C y := by
-      rw [hpy] at happ0
-      exact happ0
-    have hpx : Uᗮ.starProjection x = x :=
-      Uᗮ.starProjection_eq_self_iff.mpr hx
-    have hsym : ⟪Pc (D y), x⟫_ℂ = ⟪D y, x⟫_ℂ := by
-      change ⟪Uᗮ.starProjection (D y), x⟫_ℂ = ⟪D y, x⟫_ℂ
-      calc
-        ⟪Uᗮ.starProjection (D y), x⟫_ℂ =
-            ⟪D y, Uᗮ.starProjection x⟫_ℂ :=
-          Uᗮ.starProjection_isSymmetric (D y) x
-        _ = ⟪D y, x⟫_ℂ := by rw [hpx]
-    calc
-      RCLike.re ⟪D y, x⟫_ℂ = RCLike.re ⟪Pc (D y), x⟫_ℂ :=
-        congrArg RCLike.re hsym.symm
-      _ = RCLike.re ⟪C y, x⟫_ℂ := by rw [happ]
+      RCLike.re ⟪D y, x⟫_ℂ = RCLike.re ⟪C y, x⟫_ℂ := fun hy hx =>
+    re_inner_eq_of_diagonal_block Uᗮ
+      (complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
+        U V hacute) hy hx
   have hlowU : ∀ y ∈ U, c * ‖y‖ ≤ ‖C y‖ := by
     intro y hy
     obtain ⟨x, hxy⟩ := hAsurj y
