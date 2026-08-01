@@ -383,18 +383,12 @@ theorem exists_aligned_orthonormalBasis
   have hv0 : Orthonormal 𝕜 v0 :=
     (bV.orthonormal.comp_linearIsometry V.subtypeₗᵢ).comp _
       (Fin.cast_injective hrankV.symm)
-  have hspanU : Submodule.span 𝕜 (Set.range u) = U := by
-    apply Submodule.eq_of_le_of_finrank_eq
-    · apply Submodule.span_le.mpr
-      rintro _ ⟨i, rfl⟩
-      exact (bU (Fin.cast hrankU.symm i)).2
-    · rw [finrank_span_eq_card hu.linearIndependent, Fintype.card_fin, hrankU]
-  have hspanV0 : Submodule.span 𝕜 (Set.range v0) = V := by
-    apply Submodule.eq_of_le_of_finrank_eq
-    · apply Submodule.span_le.mpr
-      rintro _ ⟨i, rfl⟩
-      exact (bV (Fin.cast hrankV.symm i)).2
-    · rw [finrank_span_eq_card hv0.linearIndependent, Fintype.card_fin, hrankV]
+  have hspanU : Submodule.span 𝕜 (Set.range u) = U :=
+    span_range_eq_of_orthonormal_of_mem hu
+      (fun i => (bU (Fin.cast hrankU.symm i)).2) hrankU.symm
+  have hspanV0 : Submodule.span 𝕜 (Set.range v0) = V :=
+    span_range_eq_of_orthonormal_of_mem hv0
+      (fun i => (bV (Fin.cast hrankV.symm i)).2) hrankV.symm
   let O := choosePolarUnitary (overlapOp hu hv0)
   let v : Fin d → E := fun i =>
     familyIsometry hv0 (O.symm (EuclideanSpace.single i 1))
@@ -409,15 +403,10 @@ theorem exists_aligned_orthonormalBasis
           if i = j then 1 else 0
     rw [(familyIsometry hv0).inner_map_map, O.symm.inner_map_map]
     exact orthonormal_iff_ite.mp EuclideanSpace.orthonormal_single i j
-  have hspanV : Submodule.span 𝕜 (Set.range v) = V := by
-    apply Submodule.eq_of_le_of_finrank_eq
-    · apply Submodule.span_le.mpr
-      rintro _ ⟨i, rfl⟩
-      have hi := familyIsometry_mem_span hv0
-        (O.symm (EuclideanSpace.single i 1))
-      rw [hspanV0] at hi
-      exact hi
-    · rw [finrank_span_eq_card hv.linearIndependent, Fintype.card_fin, hrankV]
+  have hspanV : Submodule.span 𝕜 (Set.range v) = V :=
+    span_range_eq_of_orthonormal_of_mem hv
+      (fun i => hspanV0 ▸ familyIsometry_mem_span hv0
+        (O.symm (EuclideanSpace.single i 1))) hrankV.symm
   have hsum := sum_sq_norm_aligned_le_sinThetaSq hu hv0
   have hbridge := sinThetaSq_eq_sinThetaFrobenius_sq_of_spans
     hu hv0 hspanU hspanV0

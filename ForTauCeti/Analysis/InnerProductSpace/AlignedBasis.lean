@@ -105,6 +105,21 @@ noncomputable def familyIsometry {v : Fin d → E} (hv : Orthonormal 𝕜 v) :
   · intro i _ hik; rw [PiLp.single_apply, if_neg hik, zero_smul]
   · intro hk; exact absurd (Finset.mem_univ k) hk
 
+/-- **An orthonormal family of the right size, lying in `V`, spans `V`.**
+
+Containment gives one inequality and `finrank_span_eq_card` gives equality of
+dimensions, which is all `Submodule.eq_of_le_of_finrank_eq` needs.  Written out
+four times across `AngleGeometry` and `YuWangSamworth/Statistics`, once per
+subspace in each. -/
+theorem span_range_eq_of_orthonormal_of_mem {V : Submodule 𝕜 E}
+    [FiniteDimensional 𝕜 V] {v : Fin d → E} (hv : Orthonormal 𝕜 v)
+    (hmem : ∀ i, v i ∈ V) (hd : d = finrank 𝕜 V) :
+    Submodule.span 𝕜 (Set.range v) = V := by
+  refine Submodule.eq_of_le_of_finrank_eq (Submodule.span_le.mpr ?_) ?_
+  · rintro _ ⟨i, rfl⟩
+    exact hmem i
+  · rw [finrank_span_eq_card hv.linearIndependent, Fintype.card_fin, hd]
+
 /-- **The span of the family is contained in the isometry's range.**
 
 Immediate from `familyIsometry_single`, and the form the containment is actually
