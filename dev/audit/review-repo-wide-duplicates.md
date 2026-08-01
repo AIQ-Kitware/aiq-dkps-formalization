@@ -263,3 +263,23 @@ collapsing it is a decision about the API, of the kind posted as `TANTHETA-WITNE
 Ratio alone does not separate these: 0.879 was left and 0.869 was extracted.  What
 separates them is whether the differing names are *ad-hoc* (`Ici`/`Iic`, `h`/`q`) or
 *systematic* (a whole parallel vocabulary).  Look at the names, not the number.
+
+## The blind spot in body-clustering: nesting (2026-08-01)
+
+Token-similarity over proof bodies found the two real `ForTauCeti` duplicates that
+statement-keyed grouping could not.  It also produces a false positive that ranking will
+not filter out, and it produced it twice:
+
+* `Cutoff.lean` — `hpcCpc` (15 lines) sits **inside** `hlowerIdentity` (47), and both were
+  reported as candidates.  Extracting the outer one subsumed the inner.
+* `CosineAngle.lean` — `htrig` (31) sits **inside** `hsquare` (43), rated 0.875, and is
+  not a duplicate of anything.
+
+A `have` and the block containing it share most of their tokens by construction.  **Filter
+pairs whose line ranges nest before ranking**, or a fraction of every candidate list is an
+enclosing block paired with its own sub-step.
+
+With that applied, `DavisKahan` is at **three** pairs above 15 lines and 0.80 tokens, all
+three verified as parallel accounts that should not be collapsed mechanically:
+`hform` (1.00, inside the `tan_theta_le`/`tan_theta_le'` pair), `key` (0.936, over
+`UnboundedSinThetaData` against `UnboundedSinThetaDataPMap`), and the nested pair above.
