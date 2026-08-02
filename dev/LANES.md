@@ -609,6 +609,45 @@ What the merges actually needed:
   invent**: `scripts/tests/test_check_lane_graph_state.py` already records that the prefix must stay
   inside the first clause.
 
+**Fourth pass — 2026-08-02, `edward (aiq-gpu)`. Nothing to merge, and the whole value of the
+pass is the two red gates it produced, neither of which was a regression.** Every remote branch —
+including `fable/sylvester-upstream-leaves`, `namek/d4-repoint-pending-d4b`, `doop/ols-quench` and
+`jonwork`, which this record had not been tracking — was already an ancestor of `origin/main`, so
+`aiq-gpu-work` fast-forwarded `b24cd414` → `efc559f9` (892 commits, 195 of them merges) and no
+merge resolution was required. `lake build` **9277**, the five non-default targets **9310**
+(`ForTauCetiRoadmap` is new to that list), `check_merge_losses`, `check_duplicate_qualified_names`,
+`check_private_shadows_public`, lane-format, lane-graph and conflict-markers all green.
+**`run_gates` first reported 3 of 31 failing; the correct count is 1, and the two that cleared are
+worth writing down because both read exactly like regressions and neither is one.**
+
+- **`check_stale_build_artifacts` was red for a purely local reason: 448 files for 112 modules
+  whose sources were deleted somewhere in the 892 commits.** Fast-forwarding a long way over a warm
+  `.lake` leaves the oleans of every deleted module importable, and the gate is right to call that
+  dangerous — `check_davis_kahan_frontier` writes a probe that imports by name and would silently
+  get the ghost. `--fix` clears it. **The trap is that the gate is new since `b24cd414`, so its
+  first red on any long-absent checkout is expected rather than alarming**, and the fix is local:
+  nothing is committed and nothing about `main` changes.
+- **`check_davis_kahan_frontier` was red because `DavisKahan.Experimental.Frontier.All` had never
+  been built here, and no target anybody runs builds it.** It is outside `defaultTargets`, outside
+  the four non-default libraries, and *not* reachable from `DavisKahan.Experimental` — the gate
+  invokes `lake env lean`, which elaborates against existing oleans and builds nothing, so a
+  missing olean surfaces as `object file ... does not exist` and then as **eighty** un-emitted probe
+  markers. That output reads as a catastrophic frontier failure. `lake build
+  DavisKahan.Experimental.Frontier.All` (9109 jobs) turns it green at
+  **59/80 recursively grounded, which is exactly the baseline `run_gates.py` documents.** This is a
+  second instance of the class that script's header already names — *a gate that fails in a way
+  indistinguishable from a regression for a reason that is not one* — and the first instance
+  (concurrent `lake`) is the reason `--fast` exists. **Add this target to whatever you build before
+  running the suite; `lake build` alone will never cover it.**
+
+The single genuine red is **`check_full_part_iii_math_ahead`**, and it is pre-existing rather than
+inherited from this pass: the unfinished proof terms it names sit in `Experimental/`, and comparing
+`b24cd414` with `efc559f9` the counts are unchanged or **lower** — `Ideals/Rectangular.lean` 4 → 1,
+`SinTheta/General.lean` 3 → 2, `Section9Analytic.lean` and `DirectRotation.lean` flat. The gate is a
+completion target over the declared-unfinished tree, not a merge check, and it moved in the right
+direction. **`check_library_structure`, red in the third pass on the three `EXP-PROMOTE-T2T`
+re-export shims, is green: those modules are gone from the source tree.**
+
 ### What to take, in priority order
 
 **Refreshed 2026-07-30, pass 8. Roadmap coverage is 18 of 24 and now exact.** The board has grown because
