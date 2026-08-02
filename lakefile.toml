@@ -3,7 +3,7 @@ version = "0.1.0"
 keywords = ["math", "formalization", "DKPS", "MDS", "spectral-perturbation"]
 # The ordinary build is the complete claimed-mathematics build.  Admission-
 # dependent API experiments are available explicitly as DavisKahan.Experimental.
-defaultTargets = ["ForTauCeti", "DavisKahan.All", "Acharyya2024", "Acharyya2025", "DkpsQuench2026", "Helm2025"]
+defaultTargets = ["ForTauCeti", "RoadmapBridge", "DavisKahan.All", "Acharyya2024", "Acharyya2025", "DkpsQuench2026", "Helm2025"]
 
 # Standalone Lean workspace for Davis--Kahan and four DKPS paper developments.
 # The libraries share one Mathlib checkout/build and are intentionally kept as
@@ -100,6 +100,19 @@ leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, we
 name = "ForTauCetiRoadmap"
 globs = ["ForTauCetiRoadmap.*"]
 leanOptions = { warningAsError = false }
+
+# The roadmap bridge.  `ForTauCetiRoadmap` states the proposed signatures against Mathlib
+# alone with `sorry` bodies; `ForTauCeti` proves the mathematics; nothing connected the two,
+# so "delivered" was decided by comparing declaration *names* across the two trees.  Each
+# module here restates a roadmap signature verbatim and discharges it with the delivered
+# declaration, so the correspondence is checked by the compiler.
+#
+# In `defaultTargets` deliberately, unlike `ForTauCetiRoadmap`: the whole point is that the
+# claim is re-verified on every build.  A bridge outside the default build would rot exactly
+# the way the suggested-signature files did.
+[[lean_lib]]
+name = "RoadmapBridge"
+globs = ["RoadmapBridge.*"]
 
 [[lean_lib]]
 name = "DavisKahan"
