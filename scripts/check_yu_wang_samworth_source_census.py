@@ -388,17 +388,29 @@ def main() -> int:
     elif not MD_PATH.exists() or MD_PATH.read_text(encoding="utf8") != rendered:
         fail(f"{MD_PATH.relative_to(ROOT)} is stale; re-run with --render")
 
+    # Lead with what the default build guarantees.  The old summary opened with
+    # "CLEAN" and reported 19 "formalized", folding `proved_outside_build` and
+    # `partially_in_build` in with the 10 results the build actually guards --
+    # so a number that reads as progress counted nine results the build cannot
+    # see, which is exactly how a target outside `defaultTargets` rots unnoticed.
     total = len(items)
-    formalized = sum(1 for i in items
-                     if i["verification"] in {"proved_in_build",
-                                              "proved_outside_build",
-                                              "partially_in_build"})
     guarded = sum(1 for i in items if i["verification"] == "proved_in_build")
+    outside = sum(1 for i in items if i["verification"] == "proved_outside_build")
+    partial = sum(1 for i in items if i["verification"] == "partially_in_build")
     debt = sum(1 for i in items if i["verification"] == "absent"
                and i["status"] != "not_proof_debt")
-    print(f"Yu--Wang--Samworth full source census: CLEAN ({total} items; "
-          f"{formalized} formalized, of which {guarded} guarded by the default "
-          f"build; {debt} unformalized and still proof debt)")
+    print(f"Yu--Wang--Samworth full source census: {guarded}/{total} proved in "
+          f"the default build ({outside} proved outside it, {partial} partial, "
+          f"{debt} unformalized and still proof debt)")
+
+    at_risk = sorted(i["id"] for i in items
+                     if i["verification"] in {"proved_outside_build",
+                                              "partially_in_build"})
+    if at_risk:
+        print("  proved but unguarded by `lake build`: " + ", ".join(at_risk))
+    missing = sorted(i["id"] for i in items if i["verification"] == "absent")
+    if missing:
+        print("  not proved: " + ", ".join(missing))
     return 0
 
 

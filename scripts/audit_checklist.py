@@ -303,10 +303,9 @@ must justify that. For each file, look for and record:
 - **API shape** — a definition with no consumers, a wrapper restating one
   hypothesis, an abstraction used twice and inlined a third time.
 
-**Write findings into a review document under `dev/audit/`, one per group**, and
-mark each finding with the lane it belongs to (`{{lane:ID}}`) so
-`scripts/check_lane_graph.py` can pick it up. A finding without a lane is a
-complaint; a finding with a lane is work.
+**Fix what you find.** If a finding is too large to fix in the same pass, write
+it into a review document under `dev/audit/`, one per group -- but the default is
+to fix it, not to file it.
 
 **Mark a file `[x]` only when its findings are written down**, not when it has
 been read. An unrecorded review is indistinguishable from no review.

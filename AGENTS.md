@@ -20,48 +20,47 @@ hand-count). The ledger `.llm_resource_tally/ledger/` (at this repo's root) is a
 per-session, concurrency-safe, and stores measurements only.
 <!-- END llm_resource_tally -->
 
-## Parallel agent coordination
+## What counts as progress
 
-Several agents work this repository at once, on separate branches. Coordination
-lives in [`dev/LANES.md`](dev/LANES.md); read its `## Rules` and
-`## Branch and sync protocol` before autonomous work.
+**jon, 2026-08-02.** The deliverable is **polished, Tau Ceti-ready proofs.**
+Mathematics proved, stated the way an upstream reviewer would want to read it,
+and registered against the paper target it answers. Nothing else is progress.
 
-A lane is in exactly one of three states and its row must say which: **open**
-(work to do, nobody doing it), **claimed** (an agent is working it *right now*),
-**completed** (finished — and the row moves to `dev/LANES-COMPLETED.md`).
-`claimed` means *actively working*, not *intending to* and not *worked on it
-yesterday*; if you stop, it goes back to open.
+**One agent works this repository, on `main`.** The lane system — `dev/LANES.md`,
+claims, the nine-step loop, the branch protocol — is retired. It existed to keep
+four agents off each other's files; with one agent it is pure overhead. Do not
+claim lanes, do not write lane rows, do not maintain the board.
 
-**The nine-step loop is in `dev/LANES.md` under *The lane loop, start to
-finish*** — read it before your first claim. Four of its steps are pushes, and
-the ones agents skip are the second `lane.py check` (after pushing the claim) and
-closing the row when the work lands.
+### Do not build tooling to avoid maintaining the repository
 
-The four that cost the most when skipped:
+This is the failure mode that has cost this project the most, and it is seductive
+because it is *easy* and *feels* like rigor. The repository accumulated dozens of
+checkers, checkers for the checkers, and tests for those — most unmaintained, some
+broken, several reporting numbers nobody has ever acted on. Every hour spent there
+is an hour not spent proving a theorem.
 
-- **Claim → commit → push → then edit.** A row you have committed but not pushed
-  is invisible to every other agent. Two agents once claimed the same lane three
-  minutes apart and both did all of it.
-- **Close the lane in the same push as the work, and archive the row.** A
-  finished lane whose row still says `claimed` reads as *do not take* — five of
-  them were blocking other agents on 2026-07-30, and two more had said "CLAIMED,
-  edits not yet started" long after the work landed. `check_lane_graph`
-  classifies a row by the **first word of its status cell**, so `DONE` has to
-  lead; appending it to a cell that opens with `claimed` leaves the lane HELD. If
-  you stop without finishing, say `released` and push that — silence reads as
-  ownership.
-- **`git fetch --all` and check every remote branch before claiming**, then merge
-  what is ahead of you so the row lands on current state. Re-fetch more often
-  while you have a channel open with another agent — their branch moves while
-  you work.
-- **Never resolve a `.lean` conflict with a blanket take-theirs/take-mine.** Both
-  sides compile, so no gate catches what it drops; this has silently lost
-  docstrings once and nearly lost a 161-line port.
+Concretely, and these are rules, not suggestions:
 
-**These rules bind autonomous lane work.** If your human handed you a specific
-task, you are not required to claim a row for it — but if a live row already
-names your files, coordinate rather than overwrite, and claim once a direct task
-grows into a multi-file campaign.
+- **Do not add a new `scripts/check_*.py`.** If you believe one is needed, say so
+  and why, and let the human decide. The bar is a defect that has actually
+  occurred and that a person cannot see by reading the file.
+- **Do not write tests for scripts.** They are maintenance tools, not products.
+- **A check that reports findings nobody acts on is worse than no check** — it
+  trains everyone to ignore output. Delete it rather than "fixing" it.
+- **Prefer deleting a script to repairing it.** If it broke because the tree moved
+  and nobody noticed, that is evidence it was not load-bearing.
+- **Never automate what maintenance is supposed to do.** The censuses in `dev/`
+  map paper results to Lean declarations. When a declaration is renamed or moved,
+  **edit the census by hand in the same commit.** That is the job. Attempting to
+  infer the mapping automatically is what produced the name-matching machinery
+  that reports theorems as delivered when they are not.
+
+### Report status in terms of the mathematics
+
+A summary line must say what is *proved*, not whether a file agrees with itself.
+"CLEAN (48 items)" told readers for weeks that the Davis--Kahan census was
+healthy while Theorems 8.1 and 8.2 — the paper's headline results — did not
+compile at all. Counts of rows are not counts of progress.
 
 ## Lean proof-engineering rules
 
@@ -137,8 +136,7 @@ Mathlib      TauCeti
   may import only `Mathlib` / `ForMathlib`. Enforced by
   `scripts/check_dependency_layers.py`; this firewall shapes migration order (a
   `ForMathlib` file migrates only once no remaining `ForMathlib` file imports it).
-  **`ForMathlib` is being retired entirely** — 4 modules remain; see lane
-  `FM-RETIRE` in `dev/LANES.md`.
+  **`ForMathlib` is being retired entirely** — 4 modules remain.
 - `DavisKahan` remains its own package and the paper-facing home of the work; it
   may consume `ForTauCeti`.
 - **Spectra is gone from the build.** In-scope `import Spectra` is **0**, the
@@ -164,8 +162,8 @@ Mathlib      TauCeti
   the older "temporary staging layer / successful terminal state is empty or
   deleted" wording — since superseded in `lakefile.toml` and
   `ForTauCeti/README.md` — and planned toward draining the library into
-  `external/TauCeti` and deleting it. **If you are about to write a lane, a
-  task, or a doc that ends in deleting `ForTauCeti`, or that treats it as
+  `external/TauCeti` and deleting it. **If you are about to plan work that ends
+  in deleting `ForTauCeti`, or that treats it as
   something to be emptied: stop.** The related failure is running
   `scripts/export_for_tauceti.py --write` as part of ordinary work; it belongs
   to an actual submission, and run otherwise it leaves untracked copies in the
@@ -202,8 +200,8 @@ A green build is an invariant to preserve during a migration, not a reason to
 avoid the migration. When Mathlib or Tau Ceti already forces the canonical
 representation, agents must not classify the work as indefinitely "design-stage"
 or keep extending a parallel local abstraction because doing so is easier.
-Instead, claim the representation lane, introduce a temporary downstream adapter,
-migrate consumers in dependency order, and delete or demote the old foundation.
+Instead, do the migration: introduce a temporary downstream adapter, migrate
+consumers in dependency order, and delete or demote the old foundation.
 
 For unbounded operators the representation decision is **closed**:
 
@@ -216,9 +214,9 @@ temporary only:    DKPS ClosedOperator compatibility adapter
 Tau Ceti's semigroup generator is already a `LinearPMap`, and Spectra's
 self-adjoint operator is also based on a `LinearPMap`. There is no remaining
 architectural question that can justify postponing U1. The active execution
-contract is `dev/tauceti/u1-linearpmap-migration.md`; its lane claim in
-`dev/LANES.md` owns the representation migration while leaving Spectra PVM /
-functional-calculus work and paper theorem redesign out of scope.
+contract is `dev/tauceti/u1-linearpmap-migration.md`, which covers the
+representation migration while leaving Spectra PVM / functional-calculus work and
+paper theorem redesign out of scope.
 
 Overall ordering: `0` inventory/equivalence map → `1` internal dedup → `2`
 refactor onto Tau Ceti structures → `3` port missing Spectra foundations → `4`
@@ -259,15 +257,14 @@ mark work provisional, and do not wait on upstream.
 **The acceptance test is a demonstration.** We show this repository to Tau Ceti
 and they say: *"yes, that's ready — please submit these roadmaps as PRs, then
 push up the code and merge it."* Anything in the repository that would make a
-reviewer hesitate at that moment is a defect, and by the rule below it needs a
-lane.
+reviewer hesitate at that moment is a defect, and the response to a defect is to
+fix it — not to file it, track it, or build something that counts it.
 
 Two consequences that settle recurring questions:
 
-- **No lane is ever blocked on upstream acceptance.** How the clusters actually
+- **No work is ever blocked on upstream acceptance.** How the clusters actually
   go upstream is a real question, but it is *not* a prerequisite for any work
-  here and must never be recorded as one. A lane blocked on a third party is a
-  lane nobody can take.
+  here and must never be recorded as one.
 - **The `scope` rubric is rehearsed against `ForTauCetiRoadmap`.** The real
   `TauCetiReview` reviewer reads the upstream roadmap repo, so in a real
   submission our roadmap has no standing — that is a true fact about the future
@@ -477,7 +474,7 @@ deliberately not in `defaultTargets`, so a fully green default build does not
 compile a single one of these modules. `Challenge/**/Leaderboard.lean` names
 library declarations in `#print axioms`, and `comparator/*.json` stores them as
 plain strings, so neither the compiler nor a `DavisKahan`-wide grep will notice a
-rename that orphans them. Every rename lane must therefore (a) grep the whole
+rename that orphans them. Every rename must therefore (a) grep the whole
 repository, `Challenge/` and `comparator/*.json` included, not just the Lean
 libraries, and (b) build this library explicitly. The signature pre-flight
 `scripts/check_comparator_signatures.py` takes `--no-build` and a single config

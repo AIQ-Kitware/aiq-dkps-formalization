@@ -97,29 +97,18 @@ SLOW = {
     "check_full_part_iii_math_ahead",
 }
 
-#: Investigative reports that live in `scripts/check_*.py` but are **not gates**:
-#: they fire on ordinary, correct activity, so failing the suite on them would
-#: train everyone to ignore the suite.  They are run and their output is shown,
-#: but they cannot fail the run.
+#: Empty, and kept empty deliberately (2026-08-02).
 #:
-#: `check_merge_losses` is the case that forced this distinction, and it is the
-#: author's own doing: its docstring says `--check` is "for a human after a merge
-#: session and not for a hook, because it fires on every legitimate rename".
-#: Wiring it into the runner as a gate contradicted its own documentation within
-#: an hour of writing it.  A rename is not a defect and never becomes one.
-ADVISORY = {
-    "check_inline_duplicates":
-        "reports inline `have` steps that may be re-proving an existing lemma; it "
-        "cannot elaborate, so every finding is a candidate for a human to confirm, "
-        "and a `have` may legitimately restate a global fact in a usable form",
-    "check_merge_losses":
-        "reports every declaration a merge dropped, which includes every rename "
-        "and every deliberate retirement; the list is for a human to adjudicate",
-    "check_rw_chains":
-        "reports `rw` chains the proof-quality rubric calls brittle; three live ones "
-        "in ForTauCeti are correct and documented in-source, because `simp only` with "
-        "the same lemmas either loops or cannot reach the intermediate shape",
-}
+#: This held three scripts that were run but could not fail the suite, because
+#: each fired on ordinary correct activity: `check_inline_duplicates` (which
+#: printed 3,305 findings, ending "... 3302 more not shown"), `check_merge_losses`
+#: (every rename reads as a loss) and `check_rw_chains`.  All three are deleted.
+#:
+#: A check whose output nobody acts on is worse than no check -- it trains
+#: everyone to ignore the suite -- and "advisory" was the mechanism that let such
+#: checks accumulate instead of being removed.  **If you find yourself wanting to
+#: add an entry here, delete the script instead.**
+ADVISORY: dict[str, str] = {}
 
 #: Gates where `--check` is not the soft/strict toggle it is everywhere else, but
 #: a **stronger, aspirational** criterion.  The runner deliberately does *not*
