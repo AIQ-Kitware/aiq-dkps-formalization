@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Refuse a tree with committed merge-conflict markers, anywhere.
 
-`check_lane_format.py` already refuses markers in `dev/LANES.md`, because that file
-had been pushed with them twice.  But the same failure is not specific to that file.
+`dev/LANES.md` had been pushed with markers twice, which is where this started.
+But the same failure is not specific to that file.
 On 2026-07-30 an integration merge left markers in **two `.lean` files**, and nothing
 noticed until `lake build` reported `unexpected token '<<<'` several minutes later.
 The merge had reported the conflict; the report scrolled past inside a backgrounded

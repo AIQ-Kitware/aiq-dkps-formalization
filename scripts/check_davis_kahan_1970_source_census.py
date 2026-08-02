@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -83,10 +84,23 @@ def main() -> int:
                      f"move it into lean_declarations")
 
     # --- schema 4: the compile-backed verification axis --------------------
-    # Note this check is deliberately weak: it matches only the short name
-    # after the last dot, so a reference in the wrong namespace passes.  The
-    # authoritative check is scripts/probe_census_declarations.py --verify,
-    # which resolves every name against the real build.
+    # The textual check above is deliberately weak: it matches only the short
+    # name after the last dot, so a reference in the wrong namespace passes.
+    # `probe_census_declarations.py --verify` is the authoritative check -- it
+    # resolves every name against the real build -- and for months nothing ran
+    # it, because `run_gates.py` discovers `scripts/check_*.py` and the probe is
+    # not named that.  So the weak check was the only one anyone saw, and it
+    # reported CLEAN.  Run the real one here rather than pointing at it.
+    if shutil.which("lake") is not None:
+        probe = subprocess.run(
+            [sys.executable, str(ROOT / "scripts/probe_census_declarations.py"), "--verify"],
+            cwd=ROOT,
+        )
+        if probe.returncode:
+            return probe.returncode
+    else:
+        print("NOTE: lake unavailable; declaration resolution was NOT verified")
+
     verifications = set(data.get("verification_definitions", {}))
     if not verifications:
         fail("schema 4 requires verification_definitions")
@@ -138,7 +152,35 @@ def main() -> int:
     if result.returncode:
         return result.returncode
 
-    print(f"Davis--Kahan full source census: CLEAN ({len(items)} items)")
+    # Report the mathematics, not the file's agreement with itself.  This line
+    # used to read "CLEAN (48 items)", which is true of a self-consistent census
+    # in which nothing is proved: it counts rows, and every row is a row whether
+    # its theorem compiles or does not exist.  Theorems 8.1 and 8.2 -- the paper's
+    # headline sin-Theta results -- are `not_compiling`, and the old summary said
+    # CLEAN above them.
+    counts: dict[str, int] = {}
+    for item in items:
+        counts[item.get("verification", "unknown")] = (
+            counts.get(item.get("verification", "unknown"), 0) + 1
+        )
+    proved = counts.get("proved_in_build", 0)
+    order = ("proved_in_build", "proved_conditional", "partially_in_build",
+             "proved_outside_build", "not_compiling", "absent", "not_applicable")
+    detail = ", ".join(f"{counts[k]} {k}" for k in order if counts.get(k))
+    for k in sorted(counts):
+        if k not in order:
+            detail += f", {counts[k]} {k}"
+    print(f"Davis--Kahan full source census: {proved}/{len(items)} proved in the "
+          f"default build ({detail})")
+
+    # Name the source results that are not proved.  A reader must not have to
+    # cross-reference the JSON to discover that a headline theorem is missing.
+    unproved = sorted(
+        item["id"] for item in items
+        if item.get("verification") in {"not_compiling", "absent"}
+    )
+    if unproved:
+        print("  not proved: " + ", ".join(unproved))
     return 0
 
 
