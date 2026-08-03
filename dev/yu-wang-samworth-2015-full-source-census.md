@@ -14,9 +14,7 @@ Two independent axes. `status` is the mathematical judgement against the printed
 | --- | --- |
 | `absent` | 2 |
 | `not_applicable` | 1 |
-| `partially_in_build` | 2 |
-| `proved_in_build` | 10 |
-| `proved_outside_build` | 7 |
+| `proved_in_build` | 19 |
 
 ## Items
 
@@ -25,7 +23,7 @@ Two independent axes. `status` is the mathematical judgement against the printed
 | `YWS-S1-principal-angles` | 1 | Section 1, principal angles and sin-Theta | Principal angles, sin-Theta, and the Frobenius sine identity | `compiled_generalized` | `proved_in_build` |
 | `YWS-S1-complement-identity` | 1 | Section 1, orthogonal complement identity | ‖V_1^T V-hat‖_F = ‖sin Theta(V-hat, V)‖_F | `compiled_generalized` | `proved_in_build` |
 | `YWS-S1-procrustes` | 1 | Section 1, Procrustes alignment | Procrustes alignment: ‖V-hat O - V‖_F <= sqrt 2 ‖sin Theta‖_F | `compiled_generalized` | `proved_in_build` |
-| `YWS-T1-baseline` | 1 | Theorem 1 | Theorem 1 -- the statistical Davis--Kahan baseline (mixed gap) | `compiled_generalized` | `proved_outside_build` |
+| `YWS-T1-baseline` | 1 | Theorem 1 | Theorem 1 -- the statistical Davis--Kahan baseline (mixed gap) | `compiled_generalized` | `proved_in_build` |
 | `YWS-T1-eq1` | 1 | Section 1, equation (1) | Equation (1) -- the eigenvector specialization of the baseline | `compiled_specialization` | `proved_in_build` |
 | `YWS-T2-sinTheta` | 2 | Theorem 2 | Theorem 2, first conclusion -- the population-gap sine bound | `compiled_exact` | `proved_in_build` |
 | `YWS-T2-alignedBasis` | 2 | Theorem 2, aligned-basis conclusion | Theorem 2, second conclusion -- existence of an aligned orthogonal frame | `compiled_exact` | `proved_in_build` |
@@ -33,17 +31,17 @@ Two independent axes. `status` is the mathematical judgement against the printed
 | `YWS-T2-opnorm-numerator` | 2 | Section 2, operator-norm numerator | The residual is bounded by 2 sqrt d ‖E‖_op | `compiled_exact` | `proved_in_build` |
 | `YWS-S2-sharpness-orthogonal` | 2 | Section 2, sharpness example with orthogonal target subspaces | Sharpness example: orthogonal top-d eigenspaces | `not_represented` | `absent` |
 | `YWS-S2-sharpness-planar` | 2 | Section 2, sharpness scale for nearby one-dimensional eigenspaces | Sharpness example: planar rotation, nearby one-dimensional eigenspaces | `not_represented` | `absent` |
-| `YWS-EQ4-double-angle` | 2 | Equation (4) | Equation (4) -- the double-angle identity, FALSE AS PRINTED | `compiled_corrected` | `proved_outside_build` |
+| `YWS-EQ4-double-angle` | 2 | Equation (4) | Equation (4) -- the double-angle identity, FALSE AS PRINTED | `compiled_corrected` | `proved_in_build` |
 | `YWS-C3-rankone` | 2 | Corollary 3 | Corollary 3 -- the rank-one (single eigenvector) form | `compiled_exact` | `proved_in_build` |
 | `YWS-S3-applications` | 3 | Section 3, audit of statistical applications | Section 3 -- audit of how statisticians actually apply Davis--Kahan | `not_proof_debt` | `not_applicable` |
-| `YWS-T4-right` | 4 | Theorem 4 | Theorem 4 -- right singular subspaces, population squared-singular gap | `compiled_exact` | `partially_in_build` |
-| `YWS-T4-left` | 4 | Theorem 4, left singular blocks | Theorem 4 -- the identical statement for left singular subspaces | `compiled_exact` | `partially_in_build` |
-| `YWS-T4-aligned` | 4 | Theorem 4, aligned-frame conclusion | Theorem 4 -- the aligned-frame conclusion, both sides | `compiled_exact` | `proved_outside_build` |
-| `YWS-T4-rankone` | 4 | Theorem 4, rank-one singular-vector consequence | Rank-one singular-vector corollaries (beyond the printed paper) | `compiled_generalized` | `proved_outside_build` |
-| `YWS-A-eq10-12` | appendix | Appendix, equations (10)-(12) | Appendix equations (10)-(12) -- the Gram transport identities | `compiled_exact` | `proved_outside_build` |
+| `YWS-T4-right` | 4 | Theorem 4 | Theorem 4 -- right singular subspaces, population squared-singular gap | `compiled_exact` | `proved_in_build` |
+| `YWS-T4-left` | 4 | Theorem 4, left singular blocks | Theorem 4 -- the identical statement for left singular subspaces | `compiled_exact` | `proved_in_build` |
+| `YWS-T4-aligned` | 4 | Theorem 4, aligned-frame conclusion | Theorem 4 -- the aligned-frame conclusion, both sides | `compiled_exact` | `proved_in_build` |
+| `YWS-T4-rankone` | 4 | Theorem 4, rank-one singular-vector consequence | Rank-one singular-vector corollaries (beyond the printed paper) | `compiled_generalized` | `proved_in_build` |
+| `YWS-A-eq10-12` | appendix | Appendix, equations (10)-(12) | Appendix equations (10)-(12) -- the Gram transport identities | `compiled_exact` | `proved_in_build` |
 | `YWS-A-dilation-alternative` | appendix | Appendix, self-adjoint dilation route | The self-adjoint dilation route is a modern alternative, not the paper's | `not_proof_debt` | `proved_in_build` |
-| `YWS-L5-inequality` | appendix | Lemma 5 | Lemma 5, inequality half -- orthogonal compression cannot increase the Frobenius norm | `compiled_generalized` | `proved_outside_build` |
-| `YWS-L5-equality` | appendix | Lemma 5, orthonormal-row equality | Lemma 5, equality half -- orthonormal rows give equality | `compiled_generalized` | `proved_outside_build` |
+| `YWS-L5-inequality` | appendix | Lemma 5 | Lemma 5, inequality half -- orthogonal compression cannot increase the Frobenius norm | `compiled_generalized` | `proved_in_build` |
+| `YWS-L5-equality` | appendix | Lemma 5, orthonormal-row equality | Lemma 5, equality half -- orthonormal rows give equality | `compiled_generalized` | `proved_in_build` |
 
 ## Gaps
 
@@ -108,7 +106,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 
 * **source anchor**: Theorem 1 (theorem, section 1)
 * **summary**: With a mixed spectral separation delta > 0 between the perturbed and population blocks, ‖sin Theta(V-hat, V)‖_F <= ‖Sigma-hat - Sigma‖_F / delta; the paper notes both norms may be replaced by the operator norm or any orthogonally invariant norm.
-* **status**: `compiled_generalized` / **verification**: `proved_outside_build`
+* **status**: `compiled_generalized` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_theorem1_uiNorm_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_theorem1_frobenius_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_theorem1_opNorm_le`
 * **gaps**: `unguarded-completion-lane`
 * **notes**: The paper's 'any orthogonally invariant norm' remark is the primary Lean statement, not an afterthought: `yuWangSamworth_theorem1_uiNorm_le` takes a `UnitarilyInvariantNorm` and the Frobenius and operator forms are its specializations. So the strongest advertised form is the one that is proved.
@@ -185,7 +183,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 
 * **source anchor**: Equation (4) (equation, section 2)
 * **summary**: The paper rewrites sin^2(2 theta) in terms of ‖v-hat - v‖^2. The printed right-hand side omits a square on the factor (2 - ‖v-hat - v‖^2).
-* **status**: `compiled_corrected` / **verification**: `proved_outside_build`
+* **status**: `compiled_corrected` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_equation4`, `TauCeti.DavisKahanTheory.yuWangSamworth_equation4_printed_counterexample`
 * **gaps**: `unguarded-completion-lane`
 * **notes**: This is the census's one genuine source defect and it is machine-checked in both directions: the corrected identity is proved, and the printed polynomial is refuted by `norm_num` at inner product 3/5. Substituting t = ‖v-hat - v‖^2 = 2 - 2c gives sin^2(2 theta) = (1/4) t (2-t)^2 (4-t), and the printed form has (2-t) to the first power. The distilled tex reproduced the ERRONEOUS printed form at its equation (YWS-3) until 2026-07-29, so the repository asserted the false identity in one artifact while refuting it in another; the tex is now corrected, carries the derivation, and cross-references both Lean theorems.
@@ -214,7 +212,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 
 * **source anchor**: Theorem 4 (theorem, section 4)
 * **summary**: For rectangular A, A-hat with D = A-hat - A and Delta_sv = min(sigma_{r-1}^2 - sigma_r^2, sigma_s^2 - sigma_{s+1}^2) > 0, ‖sin Theta(V-hat, V)‖_F <= 2 (2 sigma_1 + ‖D‖_op) min(sqrt d ‖D‖_op, ‖D‖_F) / Delta_sv.
-* **status**: `compiled_exact` / **verification**: `partially_in_build`
+* **status**: `compiled_exact` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.rightSingularSubspace`, `TauCeti.rightSingularSubspace_sinTheta_le`, `TauCeti.DavisKahanTheory.CorrespondingRightSingularBlock`, `TauCeti.DavisKahanTheory.RightSingularPopulationGap`, `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_opNormCoefficient_le`
 * **gaps**: `unguarded-completion-lane`, `numbering-conflict`
 * **notes**: Split across two homes, which is why this row is only partly guarded: the subspace definition and a sine bound are in the default build via ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/SingularSubspace.lean, but the exact paper coefficient (2 sigma_1 + ‖D‖_op) lives in the completion lane. The route is the paper's own: transport to squared Gram operators, then apply the symmetric theorem.
@@ -224,7 +222,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 
 * **source anchor**: Theorem 4, left singular blocks (theorem, section 4)
 * **summary**: The paper states that the identical bounds hold for the corresponding left singular-vector blocks U, U-hat.
-* **status**: `compiled_exact` / **verification**: `partially_in_build`
+* **status**: `compiled_exact` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.leftSingularSubspace`, `TauCeti.leftSingularSubspace_sinTheta_le`, `TauCeti.DavisKahanTheory.CorrespondingLeftSingularBlock`, `TauCeti.DavisKahanTheory.LeftSingularPopulationGap`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_opNormCoefficient_le`
 * **gaps**: `unguarded-completion-lane`
 * **notes**: Proved as its own statement rather than by an adjoint-symmetry argument from the right-hand case, so the two are independently checkable.
@@ -234,7 +232,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 
 * **source anchor**: Theorem 4, aligned-frame conclusion (theorem, section 4)
 * **summary**: Some O-hat in O(d) satisfies ‖V-hat O-hat - V‖_F <= 2^{3/2} (2 sigma_1 + ‖D‖_op) min(sqrt d ‖D‖_op, ‖D‖_F) / Delta_sv, and likewise on the left.
-* **status**: `compiled_exact` / **verification**: `proved_outside_build`
+* **status**: `compiled_exact` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularAlignedBasis_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularAlignedBasis_le`
 * **gaps**: `unguarded-completion-lane`, `private-helper-only`
 * **notes**: Factored through a single generic Gram transport result so that no perturbation argument is duplicated between the symmetric and rectangular cases. That transport result (`yuWangSamworth_gram_alignedBasis_le`) is `private`, which is the right call for an internal factoring step and is why it is not listed here.
@@ -244,7 +242,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 
 * **source anchor**: Theorem 4, rank-one singular-vector consequence (corollary, section 4)
 * **summary**: Direct right and left single-singular-vector bounds, obtained by reusing the symmetric rank-one theorem on Gram operators.
-* **status**: `compiled_generalized` / **verification**: `proved_outside_build`
+* **status**: `compiled_generalized` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularVector_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularVector_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularVector_opNormCoefficient_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularVector_opNormCoefficient_le`
 * **gaps**: `unguarded-completion-lane`
 * **notes**: The paper does not print these; the lane adds them because the rectangular rank-one case is what applications actually use. Recorded so that the census is not read as claiming they are source items.
@@ -254,7 +252,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 
 * **source anchor**: Appendix, equations (10)-(12) (identity, section appendix)
 * **summary**: The identities converting a rectangular perturbation bound into a symmetric one on A^T A and A A^T, producing the (2 sigma_1 + ‖D‖_op) coefficient.
-* **status**: `compiled_exact` / **verification**: `proved_outside_build`
+* **status**: `compiled_exact` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.frobenius_rightGram_sub_le`, `TauCeti.DavisKahanTheory.frobenius_leftGram_sub_le`, `TauCeti.DavisKahanTheory.opNorm_rightGram_sub_le_paperCoefficient`, `TauCeti.DavisKahanTheory.opNorm_leftGram_sub_le_paperCoefficient`, `TauCeti.DavisKahanTheory.frobenius_rightGram_sub_le_paperCoefficient`, `TauCeti.DavisKahanTheory.frobenius_leftGram_sub_le_paperCoefficient`, `TauCeti.DavisKahanTheory.sum_opNorm_le_paperCoefficient`
 * **gaps**: `unguarded-completion-lane`
 * **notes**: Proved for both the Frobenius and operator branches separately, which is what makes the min in Theorem 4's numerator legitimate rather than a bound on one branch quoted for both.
@@ -274,7 +272,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 
 * **source anchor**: Lemma 5 (lemma, section appendix)
 * **summary**: If U and W have orthonormal columns then ‖U^T M W‖_F <= ‖M‖_F.
-* **status**: `compiled_generalized` / **verification**: `proved_outside_build`
+* **status**: `compiled_generalized` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_lemma5_columns`, `TauCeti.DavisKahanTheory.yuWangSamworth_lemma5_isometricColumns`, `TauCeti.DavisKahanTheory.yuWangSamworth_lemma5_orthonormalColumns`
 * **gaps**: `unguarded-completion-lane`, `numbering-conflict`
 * **notes**: Restated as a two-sided ideal estimate for the rectangular Frobenius norm rather than copied as a matrix-only helper, with bundled linear-isometry wrappers exposing the paper's orthonormal-column hypothesis directly. The distilled tex calls this Appendix Lemma 1; see gap `numbering-conflict`.
@@ -284,7 +282,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 
 * **source anchor**: Lemma 5, orthonormal-row equality (lemma, section appendix)
 * **summary**: If instead U and W have orthonormal rows then ‖U^T M W‖_F = ‖M‖_F.
-* **status**: `compiled_generalized` / **verification**: `proved_outside_build`
+* **status**: `compiled_generalized` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_lemma5_rows`, `TauCeti.DavisKahanTheory.yuWangSamworth_lemma5_orthonormalRows`
 * **gaps**: `unguarded-completion-lane`, `private-helper-only`
 * **notes**: The equality half is the direction the appendix proof actually consumes; the inequality half is the one usually quoted. Both are proved. The row-side norm-preservation step `rectangularFrobenius_comp_adjoint_linearIsometry` is `private`; both public forms are listed.

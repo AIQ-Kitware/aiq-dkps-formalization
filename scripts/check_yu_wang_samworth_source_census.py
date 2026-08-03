@@ -20,12 +20,13 @@ Two independent axes, following the Davis--Kahan 1970 census:
     so *resolved* means *reachable from a target that is actually built*, not
     *a string that appears somewhere in the tree*.
 
-The distinction that matters for this paper is ``proved_in_build`` versus
-``proved_outside_build``.  ``FinishYuWangSamworth`` is not a default target, so
-its theorems are proved but unguarded: a refactor can break them and CI will
-stay green.  The census reports that split as a headline rather than burying
-it, because "the lane represents every numbered result" and "CI protects every
-numbered result" are different claims and only the first is currently true.
+``FinishYuWangSamworth`` used not to be a default target, so its theorems were
+proved but unguarded: a refactor could break them and CI would stay green.  Nine
+rows sat in ``proved_outside_build``, including Theorem 1, both halves of
+Theorem 4, Lemma 5 and the appendix Gram identities -- the paper's headline
+results, none of them protected.  It joined ``defaultTargets`` on 2026-08-02
+(sorry-free across all 12 files), so "the lane represents every numbered result"
+and "CI protects every numbered result" are now the same claim.
 
 Usage:
     python3 scripts/check_yu_wang_samworth_source_census.py           # fast gate
@@ -261,10 +262,14 @@ def derive_verification(item: dict, resolved: dict[str, str]) -> str:
     where = {resolved.get(d, "unresolved") for d in decls}
     if "unresolved" in where:
         return "partially_in_build" if where - {"unresolved"} else "absent"
-    if where == {"in_build"}:
+    # `FinishYuWangSamworth` joined `defaultTargets` on 2026-08-02, so a
+    # declaration reachable from it is guarded by `lake build` exactly as one in
+    # `DavisKahan.All` is.  The two keys are still probed separately because
+    # knowing *which* library carries a result is useful, but neither is
+    # "outside the build" any more, and `proved_outside_build` is now
+    # unreachable from this function rather than merely unused.
+    if where <= {"in_build", "completion_lane"}:
         return "proved_in_build"
-    if where == {"completion_lane"}:
-        return "proved_outside_build"
     return "partially_in_build"
 
 

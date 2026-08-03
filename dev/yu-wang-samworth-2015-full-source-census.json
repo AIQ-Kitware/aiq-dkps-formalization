@@ -16,9 +16,9 @@
     "not_proof_debt": "Exposition, literature comparison, or a definition absorbed into a different formulation. Should be documented but is not formalization debt and must not be counted as a gap."
   },
   "verification_definitions": {
-    "proved_in_build": "Every declaration resolves against `DavisKahan.All`, which is a default build target. The default build carries no sorry, so this is a proof continuously re-checked by CI.",
-    "proved_outside_build": "Every declaration resolves, but only against `FinishYuWangSamworth`, which is NOT a default target. The mathematics is done and compiles; it is not guarded against regression, and a refactor elsewhere can break it while CI stays green.",
-    "partially_in_build": "Some declarations resolve against the default build and some only against the completion lane, so the row's source claim is only partly guarded by CI.",
+    "proved_in_build": "Every declaration resolves against a default build target -- `DavisKahan.All` or `FinishYuWangSamworth`, which joined `defaultTargets` on 2026-08-02. The default build carries no sorry, so this is a proof continuously re-checked by CI.",
+    "proved_outside_build": "Every declaration resolves, but only against a library outside `defaultTargets`, so the mathematics is done and nothing would notice if it broke. NO ROW IS IN THIS STATE: `FinishYuWangSamworth` was the only such library for this paper and it is now a default target. Kept as a definition so that a future row landing here is read correctly rather than looking like a new category.",
+    "partially_in_build": "Some declarations resolve against a default target and some do not, so the row's source claim is only partly guarded by CI.",
     "absent": "No declaration exists.",
     "not_applicable": "An exposition or literature-comparison item. No formalization is intended, so the row is not proof debt and must not be counted as a gap."
   },
@@ -120,7 +120,7 @@
       "title": "Theorem 1 -- the statistical Davis--Kahan baseline (mixed gap)",
       "summary": "With a mixed spectral separation delta > 0 between the perturbed and population blocks, ‖sin Theta(V-hat, V)‖_F <= ‖Sigma-hat - Sigma‖_F / delta; the paper notes both norms may be replaced by the operator norm or any orthogonally invariant norm.",
       "status": "compiled_generalized",
-      "verification": "proved_outside_build",
+      "verification": "proved_in_build",
       "lean_declarations": [
         "TauCeti.DavisKahanTheory.yuWangSamworth_theorem1_uiNorm_le",
         "TauCeti.DavisKahanTheory.yuWangSamworth_theorem1_frobenius_le",
@@ -270,7 +270,7 @@
       "title": "Equation (4) -- the double-angle identity, FALSE AS PRINTED",
       "summary": "The paper rewrites sin^2(2 theta) in terms of ‖v-hat - v‖^2. The printed right-hand side omits a square on the factor (2 - ‖v-hat - v‖^2).",
       "status": "compiled_corrected",
-      "verification": "proved_outside_build",
+      "verification": "proved_in_build",
       "lean_declarations": [
         "TauCeti.DavisKahanTheory.yuWangSamworth_equation4",
         "TauCeti.DavisKahanTheory.yuWangSamworth_equation4_printed_counterexample"
@@ -323,7 +323,7 @@
       "title": "Theorem 4 -- right singular subspaces, population squared-singular gap",
       "summary": "For rectangular A, A-hat with D = A-hat - A and Delta_sv = min(sigma_{r-1}^2 - sigma_r^2, sigma_s^2 - sigma_{s+1}^2) > 0, ‖sin Theta(V-hat, V)‖_F <= 2 (2 sigma_1 + ‖D‖_op) min(sqrt d ‖D‖_op, ‖D‖_F) / Delta_sv.",
       "status": "compiled_exact",
-      "verification": "partially_in_build",
+      "verification": "proved_in_build",
       "lean_declarations": [
         "TauCeti.rightSingularSubspace",
         "TauCeti.rightSingularSubspace_sinTheta_le",
@@ -347,7 +347,7 @@
       "title": "Theorem 4 -- the identical statement for left singular subspaces",
       "summary": "The paper states that the identical bounds hold for the corresponding left singular-vector blocks U, U-hat.",
       "status": "compiled_exact",
-      "verification": "partially_in_build",
+      "verification": "proved_in_build",
       "lean_declarations": [
         "TauCeti.leftSingularSubspace",
         "TauCeti.leftSingularSubspace_sinTheta_le",
@@ -370,7 +370,7 @@
       "title": "Theorem 4 -- the aligned-frame conclusion, both sides",
       "summary": "Some O-hat in O(d) satisfies ‖V-hat O-hat - V‖_F <= 2^{3/2} (2 sigma_1 + ‖D‖_op) min(sqrt d ‖D‖_op, ‖D‖_F) / Delta_sv, and likewise on the left.",
       "status": "compiled_exact",
-      "verification": "proved_outside_build",
+      "verification": "proved_in_build",
       "lean_declarations": [
         "TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularAlignedBasis_le",
         "TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularAlignedBasis_le"
@@ -390,7 +390,7 @@
       "title": "Rank-one singular-vector corollaries (beyond the printed paper)",
       "summary": "Direct right and left single-singular-vector bounds, obtained by reusing the symmetric rank-one theorem on Gram operators.",
       "status": "compiled_generalized",
-      "verification": "proved_outside_build",
+      "verification": "proved_in_build",
       "lean_declarations": [
         "TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularVector_le",
         "TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularVector_le",
@@ -411,7 +411,7 @@
       "title": "Appendix equations (10)-(12) -- the Gram transport identities",
       "summary": "The identities converting a rectangular perturbation bound into a symmetric one on A^T A and A A^T, producing the (2 sigma_1 + ‖D‖_op) coefficient.",
       "status": "compiled_exact",
-      "verification": "proved_outside_build",
+      "verification": "proved_in_build",
       "lean_declarations": [
         "TauCeti.DavisKahanTheory.frobenius_rightGram_sub_le",
         "TauCeti.DavisKahanTheory.frobenius_leftGram_sub_le",
@@ -456,7 +456,7 @@
       "title": "Lemma 5, inequality half -- orthogonal compression cannot increase the Frobenius norm",
       "summary": "If U and W have orthonormal columns then ‖U^T M W‖_F <= ‖M‖_F.",
       "status": "compiled_generalized",
-      "verification": "proved_outside_build",
+      "verification": "proved_in_build",
       "lean_declarations": [
         "TauCeti.DavisKahanTheory.yuWangSamworth_lemma5_columns",
         "TauCeti.DavisKahanTheory.yuWangSamworth_lemma5_isometricColumns",
@@ -477,7 +477,7 @@
       "title": "Lemma 5, equality half -- orthonormal rows give equality",
       "summary": "If instead U and W have orthonormal rows then ‖U^T M W‖_F = ‖M‖_F.",
       "status": "compiled_generalized",
-      "verification": "proved_outside_build",
+      "verification": "proved_in_build",
       "lean_declarations": [
         "TauCeti.DavisKahanTheory.yuWangSamworth_lemma5_rows",
         "TauCeti.DavisKahanTheory.yuWangSamworth_lemma5_orthonormalRows"
