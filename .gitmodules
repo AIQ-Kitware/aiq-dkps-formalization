@@ -3,7 +3,7 @@
 	url = https://github.com/TauCetiProject/TauCeti.git
 [submodule "submodules/TauCetiRoadmap"]
 	path = submodules/TauCetiRoadmap
-	url = https://github.com/TauCetiProject/TauCetiRoadmap.git
+	url = https://github.com/Erotemic/TauCetiRoadmap.git
 [submodule "submodules/TauCetiReview"]
 	path = submodules/TauCetiReview
 	url = https://github.com/TauCetiProject/TauCetiReview.git
