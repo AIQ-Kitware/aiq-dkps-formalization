@@ -3,7 +3,7 @@ version = "0.1.0"
 keywords = ["math", "formalization", "DKPS", "MDS", "spectral-perturbation"]
 # The ordinary build is the complete claimed-mathematics build.  Admission-
 # dependent API experiments are available explicitly as DavisKahan.Experimental.
-defaultTargets = ["ForTauCeti", "RoadmapBridge", "DavisKahan.All", "Acharyya2024", "Acharyya2025", "DkpsQuench2026", "Helm2025"]
+defaultTargets = ["ForTauCeti", "RoadmapBridge", "DavisKahan.All", "FinishYuWangSamworth", "Acharyya2024", "Acharyya2025", "DkpsQuench2026", "Helm2025"]
 
 # Standalone Lean workspace for Davis--Kahan and four DKPS paper developments.
 # The libraries share one Mathlib checkout/build and are intentionally kept as
@@ -140,6 +140,12 @@ srcDir = "FinishTanTwoTheta"
 
 # Citation-priority completion lane for Yu--Wang--Samworth (2015).  The source
 # is isolated organizationally but shares the root dependency graph and .lake.
+#
+# In `defaultTargets` since 2026-08-02.  It is sorry-free across all 12 files and
+# it carries the paper's headline results -- Theorem 1, both halves of Theorem 4,
+# Lemma 5, and the appendix Gram identities.  Outside the default build those were
+# proved but unguarded: nine census rows read `proved_outside_build`, meaning the
+# mathematics is done and nothing would notice if it broke.
 [[lean_lib]]
 name = "FinishYuWangSamworth"
 srcDir = "FinishYuWangSamworth"
