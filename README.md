@@ -5,47 +5,90 @@ models, centered on the data kernel perspective space (DKPS) and the
 multidimensional-scaling / spectral-perturbation infrastructure needed to make
 those theorem statements precise.
 
-This repository focuses on six active Lean libraries:
+`ForTauCeti` is the deliverable. Everything else either feeds it or consumes it.
 
-| Library        | Role                                                                                                                    |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------|
-| `ForMathlib`   | Mathlib-staging library for reusable, paper-agnostic infrastructure. |
-| `DavisKahan`  | Davis--Kahan perturbation library targeting the full Hilbert-space 1970 theory; the stable finite branch is a valuable specialization, while bounded, ideal-norm, and unbounded coverage remain active. |
-| `Acharyya2024` | Asymptotic DKPS/raw-stress MDS consistency for model representations.                                                   |
-| `Acharyya2025` | Finite-sample concentration for response-based vector embeddings, including a proved CMDS spectral perturbation bridge. |
-| `DkpsQuench2026` | Query-efficiency theorem family for DKPS-based benchmark prediction from cached responses.                             |
-| `Helm2025`     | Transfer of statistical-inference guarantees from population DKPS embeddings to estimated/aligned embeddings.           |
+## The libraries
 
-The active libraries formalize more than paper-facing wrappers.  They include
-supporting mathematics for raw-stress multidimensional scaling, classical MDS
-double-centering, finite-dimensional spectral perturbation, orthogonal-alignment
-(Gram rigidity / polar factor) bookkeeping, sample-mean concentration,
-high-probability event propagation, and consistency transfer.
+**`lake build` builds these.** A result not reachable from one of them is not
+guarded: it may be proved and still break unnoticed, which is why the censuses
+report "proved in the default build" rather than "proved".
+
+| Library | Role |
+| --- | --- |
+| `ForTauCeti` | **The product.** The elegant, paper-independent operator-theory library staged for upstream, with declarations already carrying their final `TauCeti.*` namespaces. Polished roadmaps are generated *from* it. |
+| `DavisKahan` | The paper-facing Davis--Kahan library, targeting the full Hilbert-space 1970 theory rather than its finite-dimensional specialization. May consume `ForTauCeti`. |
+| `FinishYuWangSamworth` | Yu--Wang--Samworth (2015): Theorem 1, both halves of Theorem 4, Lemma 5 and the appendix Gram identities. Sorry-free. |
+| `RoadmapBridge` | Discharges roadmap signatures with the delivered declarations, so "delivered" is a claim the compiler checks rather than a name match. |
+| `Acharyya2024` | Asymptotic DKPS/raw-stress MDS consistency for model representations. |
+| `Acharyya2025` | Finite-sample concentration for response-based vector embeddings, including a proved CMDS spectral-perturbation bridge. |
+| `DkpsQuench2026` | Query-efficiency theorem family for DKPS-based benchmark prediction from cached responses. |
+| `Helm2025` | Transfer of statistical-inference guarantees from population DKPS embeddings to estimated/aligned embeddings. |
+
+**Outside the default build, deliberately.** Each is built by naming it:
+
+| Library | Why it is not guarded |
+| --- | --- |
+| `ForTauCetiRoadmap` | The roadmap's suggested signatures. Every declaration is a `sorry` — that is what a suggested signature *is* — so it cannot be built under `warningAsError`. |
+| `DavisKahan.Experimental` | The working frontier. Carries `sorry`s by design, and the material graduates into `DavisKahan` or `ForTauCeti` when finished. |
+| `FinishTanTwoTheta` | The tan-2-theta completion lane; three `sorry`s remain. |
+| `Challenge` | Comparator challenges, which are posed problems rather than results. |
+
+The libraries formalize more than paper-facing wrappers. They include supporting
+mathematics for raw-stress multidimensional scaling, classical MDS
+double-centering, spectral perturbation, orthogonal-alignment (Gram rigidity /
+polar factor) bookkeeping, operator ideals and approximation numbers,
+sample-mean concentration, high-probability event propagation, and consistency
+transfer.
+
+`ForMathlib` is **gone**, retired into `ForTauCeti` in full. There is no second
+staging area.
+
+## Where the project actually stands
+
+Two censuses map each numbered result of a source paper to the Lean declarations
+that discharge it, and both report against the build rather than against
+themselves:
+
+```bash
+python3 scripts/check_davis_kahan_1970_source_census.py
+python3 scripts/check_yu_wang_samworth_source_census.py
+```
+
+They are maintained by hand. When a declaration is renamed or moved, the census
+entry is edited in the same commit — that is the maintenance, and inferring it
+automatically is what previously produced status that looked healthy and was not.
 
 ## Repository layout
 
 ```text
 .
-├── ForMathlib.lean        # root module for the Mathlib-staging library
-├── ForMathlib/            # staged reusable Mathlib additions
-├── DavisKahan.lean        # root module for the stable Davis--Kahan library
-├── DavisKahan/            # bounded, finite, source, specialized, alternative, and experimental branches
-├── Acharyya2024.lean      # root module for the 2024 consistency library
-├── Acharyya2024/          # raw-stress MDS, probability, second moments, paper-facing consistency
-├── Acharyya2025.lean      # root module for the 2025 concentration library
-├── Acharyya2025/          # CMDS, Weyl/Davis-Kahan, Gram rigidity/polar factor, aligned finite-sample rates
-├── DkpsQuench2026.lean    # root module for the 2026 Quench formalization
-├── DkpsQuench2026/        # subject-oriented paper, geometry, response, spectral, rate, and query-efficiency modules
-├── Helm2025.lean          # root module for the statistical-inference transfer layer
-├── Helm2025/              # population/estimated DKPS transfer theorem statements and bridge
-├── Challenge/             # comparator challenges (MathlibCandidate / MathlibPending) + manifest
-├── comparator/            # per-PR comparator configs
-├── docs/                  # planning trackers (docs/planning) and challenge how-to (docs/challenge)
-├── dev/                   # engineering memory: benchmark questions + debug postmortems (agent-readable)
-├── external/Spectra       # Git submodule for collaborative spectral/operator infrastructure
-├── lakefile.toml          # Lake workspace for the six active libraries
-├── lake-manifest.json     # pinned dependency manifest
-└── lean-toolchain         # Lean toolchain pin
+├── ForTauCeti.lean          # root module for the deliverable
+├── ForTauCeti/              # the staged upstream library: operator ideals, approximation
+│                            #   numbers, polar decomposition, spectral order, sin-theta
+├── ForTauCetiRoadmap.lean   # root module for the suggested-signature library
+├── ForTauCetiRoadmap/       # proposed signatures, stated against Mathlib alone (all `sorry`)
+├── RoadmapBridge.lean       # root module for the roadmap-to-delivery bridge
+├── RoadmapBridge/           # each roadmap signature discharged by the delivered declaration
+├── DavisKahan.lean          # root module for the paper-facing Davis--Kahan library
+├── DavisKahan/              # Sources/ (source-faithful 1970), FiniteDimensional/, SinTheta/,
+│                            #   Sylvester/, SpectralTheory/, Experimental/ (the frontier)
+├── FinishYuWangSamworth/    # Yu--Wang--Samworth completion lane (sorry-free)
+├── FinishTanTwoTheta/       # tan-2-theta completion lane (3 `sorry`s, not in the default build)
+├── Acharyya2024{.lean,/}    # raw-stress MDS, probability, second moments, consistency
+├── Acharyya2025{.lean,/}    # CMDS, Weyl/Davis--Kahan, Gram rigidity, finite-sample rates
+├── DkpsQuench2026{.lean,/}  # geometry, response, spectral, rate, query-efficiency modules
+├── Helm2025{.lean,/}        # population/estimated DKPS transfer statements and bridge
+├── Challenge/               # comparator challenges (MathlibCandidate / MathlibPending)
+├── comparator/              # per-PR comparator configs
+├── dev/                     # engineering memory, the source censuses, and audit records
+├── docs/                    # planning trackers and challenge how-to
+├── external/TauCeti         # submodule: the upstream target repository
+├── submodules/              # read-only mirrors of TauCetiRoadmap and TauCetiReview
+├── retired/                 # provenance for the closed Spectra collaboration
+├── scripts/                 # the census tools and the build gates (`scripts/run_gates.py`)
+├── lakefile.toml            # Lake workspace: 8 default targets, 4 deliberately outside
+├── lake-manifest.json       # pinned dependency manifest
+└── lean-toolchain           # Lean toolchain pin
 ```
 
 The sidecar files such as `Acharyya2025.lean` are normal Lean root modules.  The
@@ -89,31 +132,43 @@ both describe finished work.
 
 ```bash
 lake exe cache get
-lake build ForMathlib DavisKahan Acharyya2024 Acharyya2025 DkpsQuench2026 Helm2025
+lake build
 ```
 
-To build everything declared in `lakefile.toml`:
+`lake build` builds every default target. The four libraries deliberately left
+outside it are built by name, and a change to any of them is invisible to a plain
+`lake build` — which is how they rot:
 
 ```bash
-lake build
+lake build ForTauCetiRoadmap FinishTanTwoTheta Challenge DavisKahan.Experimental
+```
+
+The gates are Python and run separately. Do not run `lake` at the same time —
+five gates shell out to it and a concurrent build makes them report failures that
+are not real:
+
+```bash
+python3 scripts/run_gates.py          # all of them
+python3 scripts/run_gates.py --fast   # skip the five that build Lean
 ```
 
 ## Formalization scope
 
-### `ForMathlib`
+### `ForTauCeti`
 
-Staging area for upstream Mathlib contributions extracted from the paper
-libraries: results are restated in Mathlib idiom (e.g. generalized from `ℝ` to
-`RCLike 𝕜`), placed in files mirroring their proposed Mathlib destination
-paths, and import only Mathlib.  The paper libraries import these general
-versions and keep only thin paper-facing specializations.  See
-`ForTauCeti/README.md` for the package policy and
-`planning/mathlib-candidates.md` for the ranked candidate list.
+The library this repository exists to produce: reusable operator theory in
+upstream idiom, generalized past the papers that motivated it (typically from `ℝ`
+to `RCLike 𝕜`, and from finite dimensions to a Hilbert space), with declarations
+already in their final `TauCeti.*` namespaces and provenance on every module. The
+paper libraries import it and keep only thin paper-facing specializations.
+
+It is not a holding pen and there is no terminal state in which it is empty; the
+roadmaps and mechanical ports are generated **from** it. See
+`ForTauCeti/README.md`.
 
 ### `DavisKahan`
 
-Canonical spectral-subspace perturbation theory extracted from the former
-`ForMathlib` staging monoliths. The project target is the full Hilbert-space
+Canonical spectral-subspace perturbation theory. The project target is the full Hilbert-space
 scope of Davis--Kahan (1970), including the bounded main body, arbitrary
 unitary-invariant norm scope, and unbounded self-adjoint passages. `import
 DavisKahan` currently exposes supported bounded-operator results, the strong
@@ -121,7 +176,7 @@ finite-dimensional specialization, and a finite Part III facade; this import
 must not be interpreted as a full-paper completion claim. Other source
 surfaces, specialized endpoints, alternative proofs, and mirrored experiments
 require explicit imports; `DavisKahan.All` collects all proof-finished branches.
-General-purpose linear-algebra infrastructure remains in `ForMathlib`. See
+General-purpose linear-algebra infrastructure lives in `ForTauCeti`. See
 `DavisKahan/README.md` and
 `docs/planning/davis-kahan-full-paper-goal.md`.
 
