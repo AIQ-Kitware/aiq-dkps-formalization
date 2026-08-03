@@ -132,11 +132,12 @@ Mathlib      TauCeti
         DavisKahan   (DavisKahan / paper may import ForTauCeti)
 ```
 
-- `ForTauCeti` may import only `Mathlib` / `TauCeti` / `ForTauCeti`. `ForMathlib`
-  may import only `Mathlib` / `ForMathlib`. Enforced by
-  `scripts/check_dependency_layers.py`; this firewall shapes migration order (a
-  `ForMathlib` file migrates only once no remaining `ForMathlib` file imports it).
-  **`ForMathlib` is being retired entirely** — 4 modules remain.
+- `ForTauCeti` may import only `Mathlib` / `TauCeti` / `ForTauCeti`. Enforced by
+  `scripts/check_dependency_layers.py`.
+  **`ForMathlib` is gone** — the retirement finished and the directory no longer
+  exists. This entry said "4 modules remain" until 2026-08-02, well after the
+  last one was migrated; if you are reading a migration instruction about it
+  anywhere, that document is stale.
 - `DavisKahan` remains its own package and the paper-facing home of the work; it
   may consume `ForTauCeti`.
 - **Spectra is gone from the build.** In-scope `import Spectra` is **0**, the
@@ -176,8 +177,7 @@ Mathlib      TauCeti
 
 ### Convergence before submission (the phase that actually matters)
 
-The near-term job is **not** "copy `ForMathlib` files to `ForTauCeti`, then
-submit them." We carry three independently evolved operator-theory stacks — DKPS
+The near-term job is **not** "stage files into `ForTauCeti`, then submit them." We carry three independently evolved operator-theory stacks — DKPS
 local abstractions, Tau Ceti canonical abstractions, and Spectra donor
 abstractions — that must collapse into **one Tau Ceti-native stack** before most
 PRs, without losing the genuinely new Davis--Kahan mathematics or Spectra
