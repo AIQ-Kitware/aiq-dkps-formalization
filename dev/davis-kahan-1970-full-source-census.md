@@ -51,8 +51,8 @@ no `sorry` and no `axiom`, so a declaration reachable from
 | `proved_in_build` | 34 |
 | `proved_conditional` | 5 |
 | `partially_in_build` | 0 |
-| `proved_outside_build` | 0 |
-| `not_compiling` | 2 |
+| `proved_outside_build` | 2 |
+| `not_compiling` | 0 |
 | `absent` | 4 |
 | `not_applicable` | 3 |
 
@@ -74,14 +74,6 @@ in front of it. This includes rows that are already
 the source-numbered wrapper is still missing. Obstructions marked
 `mechanical` need only wiring or a restatement; `hard_math` needs new
 mathematics.
-
-### `contour-integration-library` -- hard_math
-
-**Operator-valued contour integration and Riesz projections**
-
-DavisKahan/Experimental/InfiniteDimensional/Sylvester/Resolvent.lean calls Contour.integral, Contour.IsClosed, Contour.Rectifiable, Contour.index and Contour.cauchyIndicatorFormula. None of these is defined in this repository, in Mathlib, or in vendored Spectra: the module was written against an API that was never implemented. This is the single largest remaining item. Resolvent sits on the critical path via Sylvester.Basic, so the other three never-compiled Experimental modules (Core.CompatibilitySinTwoTheta, Ideals.Symmetric, GraphSubspace) unblock nothing on their own.
-
-Gates: DK-8.1-thm (not_compiling), DK-8.2-thm (not_compiling)
 
 ### `free-beam-closed-operator` -- hard_math
 
@@ -122,6 +114,14 @@ Gates: DK-9-model (proved_conditional), DK-9.1-9.4 (proved_conditional), DK-9.5-
 The mathematics is in the build in a more general form; what is missing is a statement carrying the paper's numbering, scope and hypotheses, so the facade can cite it.
 
 Gates: S1-block-residual (proved_in_build), S2-tan-theta (proved_in_build), S2-sin-two-theta (proved_in_build), S2-tan-two-theta (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.1-prop (proved_in_build), DK-3.3-prop (proved_in_build), DK-3.4-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-4.1-prop (proved_in_build), DK-5.1-thm (proved_in_build), DK-5.2-thm (proved_in_build), DK-5.1-lem (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
+
+### `section8-promotion-out-of-experimental` -- mechanical
+
+**Promote the proved Section 8 theorems out of Experimental**
+
+Theorems 8.1 and 8.2 are PROVED. `DavisKahan/Experimental/Frontier/Section8.lean` is 857 lines and sorry-free, and `#print axioms` on `theorem8_1_selectedBranch_and_spectralRepulsion` and `theorem8_2_perturbationHalfGap_selectedBranch` gives exactly [propext, Classical.choice, Quot.sound]. What remains is guarding them: the module lives under `DavisKahan.Experimental.Frontier`, which is not a default target, so `lake build` never touches it. Promotion is not a one-line `defaultTargets` edit -- measured 2026-08-02, Section 8's transitive closure is 199 repository modules carrying 11 `sorry`s, in Experimental.InfiniteDimensional {DirectRotation (6), SinTheta.General (2), Ideals.Symmetric, Ideals.Rectangular, DoubleAngle}. Five of Section8.lean's seven imports reach all five of those modules, so the dependency cannot be trimmed; the sorried Experimental base has to be finished or the needed results rehomed. Only `Sources.DavisKahan1970.Section8RieszCircle` (50 modules) and `ForTauCeti...SpectralOrder.Complex` (3) are already clean.
+
+Gates: DK-8.1-thm (proved_outside_build), DK-8.2-thm (proved_outside_build)
 
 ### Not attributed to a blocker
 
@@ -532,25 +532,25 @@ DK-6.3-lem (absent)
 
 - **Kind:** `theorem`
 - **Status:** `candidate_under_repair`
-- **Verification:** `not_compiling`
+- **Verification:** `proved_outside_build`
 - **Mathematics:** Under tan(2 Theta) hypotheses, the acute branch is equivalent to the selected spectral ordering; a canonical reducing subspace exists and satisfies operator, eigenvalue, and symmetric-gauge repulsion inequalities.
-- **Blocked by:** `contour-integration-library`
+- **Blocked by:** `section8-promotion-out-of-experimental`
 - **Current Lean references:** `TauCeti.DavisKahan1970.Section8.maximalAngle_selectedSpectralSubspaces_lt_pi_div_four`, `TauCeti.DavisKahan1970.Section8.orientedSpectralRepulsionConclusion`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_of_rotatedBlockData`, `TauCeti.DavisKahan1970.Section8.theorem8_1_selectedBranch_and_spectralRepulsion`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_of_rotatedBlockData`
 - **Not reachable from `DavisKahan.All`:** `TauCeti.DavisKahan1970.Section8.maximalAngle_selectedSpectralSubspaces_lt_pi_div_four`, `TauCeti.DavisKahan1970.Section8.orientedSpectralRepulsionConclusion`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_of_rotatedBlockData`, `TauCeti.DavisKahan1970.Section8.theorem8_1_selectedBranch_and_spectralRepulsion`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_of_rotatedBlockData`
-- **Assessment:** A source-facing candidate assembles the continuation-selected reducing branch, unitary transport, strict quarter-acuteness, full-spectrum gap exclusion, and restricted-spectrum separation.  The exact quadratic-form algebra behind part (i) is also proved from an abstract rotated-block decomposition and sine/cosine Pythagoras certificate.  The unrestricted construction from the exact tan(2 Theta) hypotheses, the converse branch characterization, the concrete direct-rotation instantiation of part (i), and parts (ii)--(iii) remain open.
-- **Next action:** Blocked, not merely unfinished. The package does not compile: it needs the operator-valued contour integration API (see blockers). Four named theorems were never written -- see planned_declarations. Only then instantiate the compression certificates with concrete direct-rotation blocks.
+- **Assessment:** Theorems 8.1's conclusion is packaged as `Theorem81SourceConclusion` and proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` gives [propext, Classical.choice, Quot.sound]. The status stays `candidate_under_repair` because that axis is fidelity to the printed statement, which compiling does not establish -- not because anything fails to build.
+- **Next action:** Guard it. The mathematics is done and unguarded: the module is under `DavisKahan.Experimental.Frontier`, outside every default target. See blocker `section8-promotion-out-of-experimental` for the measured cost. Separately, audit `Theorem81SourceConclusion` against the printed Theorem 8.1 to settle the status axis.
 
 #### Theorem 8.2: Smallness selects the acute branch
 
 - **Kind:** `theorem`
 - **Status:** `candidate_under_repair`
-- **Verification:** `not_compiling`
+- **Verification:** `proved_outside_build`
 - **Mathematics:** If the perturbation or residual norm is below half the gap, the sine double-angle estimate is accompanied by Theta < pi/4.
-- **Blocked by:** `contour-integration-library`
+- **Blocked by:** `section8-promotion-out-of-experimental`
 - **Current Lean references:** `TauCeti.DavisKahan1970.Section8.PerturbationHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.ResidualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem82_branch_of_residualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_selectedBranch`
 - **Not reachable from `DavisKahan.All`:** `TauCeti.DavisKahan1970.Section8.PerturbationHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.ResidualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem82_branch_of_residualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_selectedBranch`
-- **Assessment:** The strict selected-branch conclusion is now exposed under explicit perturbation and residual half-gap bridge records. The general continuation machinery behind the conclusion is admission-free. Constructing those bridges from the exact printed half-gap hypotheses, and the Krein replacement step for the residual alternative, remain open.
-- **Next action:** Blocked on the same contour-integration API. Then prove the half-gap spectral enclosure / common-contour constructor and formalize the Krein residual-to-perturbation replacement.
+- **Assessment:** `theorem8_2_perturbationHalfGap_selectedBranch` and `theorem8_2_residualHalfGap_selectedBranch` are proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` on the perturbation form gives [propext, Classical.choice, Quot.sound]. The half-gap bridges (`perturbationHalfGapBridge_of_sourceHypotheses`, `residualHalfGapBridge_of_sourceHypotheses`) are proved too.
+- **Next action:** Guard it -- same promotion as DK-8.1-thm, same blocker. Then audit the two half-gap branches against the printed Theorem 8.2.
 
 ### Section 9
 
