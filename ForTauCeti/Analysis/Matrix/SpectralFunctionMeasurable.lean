@@ -55,15 +55,26 @@ variable {n : ℕ}
 
 /-- `Matrix` is a type-level def, so the pi `MeasurableSpace` instance does not
 fire on it automatically; register the entrywise σ-algebra (matching the pi
-topology used by `continuous_aeval`).  (To be reconciled with Mathlib's matrix
-measurable structure at PR time.) -/
-instance instMeasurableSpaceMatrix : MeasurableSpace (Matrix (Fin n) (Fin n) ℝ) :=
-  inferInstanceAs (MeasurableSpace (Fin n → Fin n → ℝ))
+topology used by `continuous_aeval`).
+
+Stated for an arbitrary index pair and entry type rather than `Matrix (Fin n) (Fin n) ℝ`.
+Nothing here uses finiteness of the index or the field structure of the entries -- the
+σ-algebra is the pi one transported across a type-level `def` -- and the narrow version
+would have to be widened before this could go to Mathlib.  (To be reconciled with
+Mathlib's matrix measurable structure at PR time.) -/
+instance instMeasurableSpaceMatrix {m n α : Type*} [MeasurableSpace α] :
+    MeasurableSpace (Matrix m n α) :=
+  inferInstanceAs (MeasurableSpace (m → n → α))
 
 /-- Matrices carry the Borel σ-algebra of their entrywise topology, so spectral functions of a
-matrix can be shown measurable entrywise. -/
-instance instBorelSpaceMatrix : BorelSpace (Matrix (Fin n) (Fin n) ℝ) :=
-  inferInstanceAs (BorelSpace (Fin n → Fin n → ℝ))
+matrix can be shown measurable entrywise.
+
+The hypotheses are exactly `Pi.borelSpace`'s, applied twice: countability of each index and
+second countability of the entry type are what make the product σ-algebra Borel. -/
+instance instBorelSpaceMatrix {m n α : Type*} [Countable m] [Countable n]
+    [TopologicalSpace α] [MeasurableSpace α] [SecondCountableTopology α] [BorelSpace α] :
+    BorelSpace (Matrix m n α) :=
+  inferInstanceAs (BorelSpace (m → n → α))
 
 /-- The symmetric-operator structure of `toEuclideanLin B` for a Hermitian `B`. -/
 theorem opSym {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian) :
