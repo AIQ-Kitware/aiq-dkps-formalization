@@ -44,10 +44,6 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 
 variable [FiniteDimensional 𝕜 E]
 
-/-- Population-only gap around a selected spectral set. -/
-def PopulationGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (Δ : ℝ) : Prop :=
-  InternalGap A U Δ
-
 /-- `U` and `V` are spectral blocks with the same ordered eigenvalue indices
 for `A` and `B`.  This is the finite branch-selection datum used by the
 Yu--Wang--Samworth population-gap theorem. -/
@@ -130,7 +126,7 @@ theorem yuWangSamworth_sinTheta_le
     [V.HasOrthogonalProjection] (_hU : IsInvariant A U) (_hV : IsInvariant B V)
     (hcorr : CorrespondingEigenblock hA hB U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d) {Δ : ℝ} (hΔ : 0 < Δ)
-    (hgap : PopulationGap A U Δ) :
+    (hgap : InternalGap A U Δ) :
     sinThetaFrobenius U V ≤
       2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ := by
@@ -142,16 +138,18 @@ theorem yuWangSamworth_sinTheta_le
       Δ ≤ |hA.eigenvalues hn j - hA.eigenvalues hn k| := by
     intro j hj k hk
     apply hgap (hA.eigenvalues hn j) (hA.eigenvalues hn k)
-    · refine ⟨hA.eigenvectorBasis hn j, ?_, ?_, hA.apply_eigenvectorBasis hn j⟩
-      · rw [OrthonormalBasis.spanIndices]
-        exact Submodule.subset_span ⟨j, hj, rfl⟩
-      · exact (hA.eigenvectorBasis hn).orthonormal.ne_zero j
-    · refine ⟨hA.eigenvectorBasis hn k, ?_, ?_, hA.apply_eigenvectorBasis hn k⟩
-      · rw [OrthonormalBasis.orthogonal_spanIndices, OrthonormalBasis.spanIndices]
-        apply Submodule.subset_span
-        refine ⟨k, ?_, rfl⟩
-        simpa using hk
-      · exact (hA.eigenvectorBasis hn).orthonormal.ne_zero k
+    · refine mem_restrictedSpectrum ?_
+        ((hA.eigenvectorBasis hn).orthonormal.ne_zero j)
+        (hA.apply_eigenvectorBasis hn j)
+      rw [OrthonormalBasis.spanIndices]
+      exact Submodule.subset_span ⟨j, hj, rfl⟩
+    · refine mem_restrictedSpectrum ?_
+        ((hA.eigenvectorBasis hn).orthonormal.ne_zero k)
+        (hA.apply_eigenvectorBasis hn k)
+      rw [OrthonormalBasis.orthogonal_spanIndices, OrthonormalBasis.spanIndices]
+      apply Submodule.subset_span
+      refine ⟨k, ?_, rfl⟩
+      simpa using hk
   have hsine : sinThetaFrobenius
       ((hA.eigenvectorBasis hn).spanIndices ↑s)
       ((hB.eigenvectorBasis hn).spanIndices ↑s) =
@@ -424,7 +422,7 @@ theorem yuWangSamworth_alignedBasis_le
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     (hcorr : CorrespondingEigenblock hA hB U V)
     {d : ℕ} (hrankU : finrank 𝕜 U = d) (hrankV : finrank 𝕜 V = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : PopulationGap A U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : InternalGap A U Δ) :
     ∃ (u v : Fin d → E), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
       Submodule.span 𝕜 (Set.range u) = U ∧
       Submodule.span 𝕜 (Set.range v) = V ∧
@@ -510,9 +508,9 @@ theorem yuWangSamworth_eigenvector_le
   have hrankV : finrank 𝕜 (Submodule.span 𝕜 {v}) = 1 := finrank_span_singleton hv0
   -- The restricted spectrum of `A` on the eigenline is exactly `{lam}`, so the internal
   -- gap follows from `hgap`.
-  have hgap' : PopulationGap A (Submodule.span 𝕜 {u}) Δ := by
+  have hgap' : InternalGap A (Submodule.span 𝕜 {u}) Δ := by
     intro l ν hl hν
-    obtain ⟨x, hxU, hx0, hAx⟩ := hl
+    obtain ⟨x, hxU, hx0, hAx⟩ := mem_restrictedSpectrum_iff.mp hl
     rw [Submodule.mem_span_singleton] at hxU
     obtain ⟨a, rfl⟩ := hxU
     have heq : (lam : 𝕜) • (a • u) = (l : 𝕜) • (a • u) := by
