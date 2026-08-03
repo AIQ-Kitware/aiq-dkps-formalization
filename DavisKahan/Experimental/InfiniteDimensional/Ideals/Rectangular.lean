@@ -32,14 +32,23 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 
 /-- Compact operators equipped with the ordinary operator norm.
 
-The adjoint-invariance field is Schauder's theorem for Hilbert-space
-adjoints, which the pinned Mathlib does not yet provide; that single field
-remains an open obligation. -/
+**The Schauder obligation is discharged** (2026-08-02).  This docstring used to say
+the adjoint-invariance field was blocked on "Schauder's theorem for Hilbert-space
+adjoints, which the pinned Mathlib does not yet provide".  It is now proved, as
+`ContinuousLinearMap.isCompactOperator_adjoint` in
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Adjoint.lean`, and cheaply:
+compactness on a complete Hilbert target *is* the vanishing of the approximation
+numbers, and those are adjoint-invariant, so the two operators have the same
+sequence.
+
+What is left is not mathematics.  `RectangularSymmetricIdealFamily` is the legacy
+record that `RECT-DELETE` is retiring, and this row is one of its remaining
+catalogue slots; filling in a dozen fields of a type slated for deletion is work
+that the deletion would immediately discard.  When a canonical compact-operator
+family is wanted, build it against the current `SymmetricOperatorIdealFamily` and
+take `adjoint_mem` from the theorem above. -/
 noncomputable def compactOperatorNorm :
     RectangularSymmetricIdealFamily (𝕜 := 𝕜) :=
-  -- Open obligation: the compact-operator family is complete save for adjoint
-  -- invariance (Schauder's theorem, absent from pinned Mathlib) and the
-  -- ideal/composition norm names; handed to the mathematics agent.
   sorry
 
 /-- Hilbert--Schmidt operators as a coherent rectangular family.

@@ -7,6 +7,7 @@ module
 
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CompactHilbert
 public import ForTauCeti.LinearAlgebra.Dimension.RankComp
 
 /-!
@@ -126,6 +127,43 @@ theorem approximationNumber_adjoint (T : E →L[𝕜] F) (n : ℕ) :
   · exact approximationNumber_adjoint_le T n
   · simpa only [ContinuousLinearMap.adjoint_adjoint] using
       (approximationNumber_adjoint_le T.adjoint n)
+
+/-- Adjoint invariance as an equality of sequences, which is the form the
+compactness transfer below needs: `Tendsto` sees the whole function, not a
+pointwise value, so the `@[simp]` lemma above cannot be applied under it. -/
+theorem approximationNumber_adjoint_eq (T : E →L[𝕜] F) :
+    T.adjoint.approximationNumber = T.approximationNumber :=
+  funext fun n => approximationNumber_adjoint T n
+
+/-- **Schauder's theorem for Hilbert spaces: the adjoint of a compact operator is
+compact.**
+
+The usual proof is the Arzelà--Ascoli argument on the unit ball of the dual, and
+that is what pinned Mathlib lacks for this setting.  Here it is a corollary of
+material this directory already has, and the reason it is cheap is worth stating:
+compactness on a complete Hilbert target *is* the vanishing of the approximation
+numbers (`isCompactOperator_iff_tendsto_approximationNumber`), and the
+approximation numbers are adjoint-invariant (`approximationNumber_adjoint`).  So
+the two operators have the *same* sequence, not merely comparable ones, and the
+transfer is an equality rewrite rather than an estimate.
+
+Recorded in `DavisKahan/Experimental/InfiniteDimensional/Ideals/Rectangular.lean`
+as an open obligation -- "Schauder's theorem for Hilbert-space adjoints, which the
+pinned Mathlib does not yet provide" -- blocking the adjoint-invariance field of
+the compact-operator ideal family. -/
+theorem isCompactOperator_adjoint {T : E →L[𝕜] F} (hT : IsCompactOperator T) :
+    IsCompactOperator T.adjoint := by
+  rw [isCompactOperator_iff_tendsto_approximationNumber, approximationNumber_adjoint_eq]
+  exact (isCompactOperator_iff_tendsto_approximationNumber T).1 hT
+
+/-- Schauder's theorem in both directions.  `T.adjoint.adjoint = T` makes the
+converse immediate, so the equivalence costs nothing beyond the statement. -/
+@[simp]
+theorem isCompactOperator_adjoint_iff {T : E →L[𝕜] F} :
+    IsCompactOperator T.adjoint ↔ IsCompactOperator T :=
+  ⟨fun h => by
+      simpa only [ContinuousLinearMap.adjoint_adjoint] using isCompactOperator_adjoint h,
+    isCompactOperator_adjoint⟩
 
 end ContinuousLinearMap
 
