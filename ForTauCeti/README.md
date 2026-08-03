@@ -217,13 +217,46 @@ Field projection consults `open`s, not the enclosing namespace — so a file tha
 inside `namespace TauCeti` is *not* covered, which is the trap. Every file using dot notation
 on these declarations needs `open TauCeti`, **including the file that declares them**.
 
-**Migration status.** `Analysis/InnerProductSpace/QuadraticFormBounds.lean` is converted, as
-a validated pilot; converting it required `open TauCeti` in four consumers
-(`SpectralOrder/Real`, `SpectralOrder/Complex`, `BoundedOperator/SinTheta`,
-`BoundedOperator/Projector`). Roughly 33 files and ~356 declarations still sit in root
-Mathlib namespaces under the old rule. Convert opportunistically; write new material this way
-from the start. The failure mode is always a hard `Invalid field` error, never a silent
-change, so a green build is proof of correctness here.
+**Write all new material this way.** The rest of this section is the outstanding migration.
+
+## TODO: migrate ~40 files off root Mathlib namespaces
+
+`Analysis/InnerProductSpace/QuadraticFormBounds.lean` is converted as a validated pilot;
+it needed `open TauCeti` in four consumers (`SpectralOrder/Real`, `SpectralOrder/Complex`,
+`BoundedOperator/SinTheta`, `BoundedOperator/Projector`). **Roughly 39 files and ~390
+declarations remain.**
+
+A scripted bulk pass was attempted and reverted. It does not converge, because the files
+are not structurally uniform. Do this **per file, verified individually**, the way the pilot
+was done. The four failure classes, all with known remedies:
+
+1. **Trailing bare `end`.** A file ending with `end` (closing a `section` or `noncomputable
+   section`) needs `end TauCeti` at EOF, *after* it — not after the last named `end`.
+   Getting this backwards breaks ~10 files one way and ~2 the other.
+2. **Root-level declarations before the namespace block.** `PartialIsometry.lean` defines
+   `IsPartialIsometry` at root and *then* opens `namespace IsPartialIsometry`. Wrap the whole
+   file body, from after the last `import`, or the definition is left behind. Note `open
+   IsPartialIsometry` fails there — it is a definition, not a namespace.
+3. **Bare-name resolution.** Inside root `namespace LinearMap`, a proof may write `rank` for
+   `LinearMap.rank`; inside `TauCeti.LinearMap` it cannot. Add `open LinearMap` — but only
+   where that namespace genuinely exists, and only where the build asks for it.
+4. **Ambiguity.** An `open` can make a name ambiguous rather than resolve it (`map_sub`
+   against `_root_.map_sub`). Fix by dropping the unnecessary `open` or qualifying with
+   `_root_.`. **Do not add `open`s speculatively** — every ambiguity seen so far was caused by
+   an `open` that the file did not need.
+
+**Seven of the ~40 already contain a `namespace TauCeti` block** and need their two blocks
+merged rather than a wrap; they are the ones to leave for last, along with
+`CourantFischer`, `HilbertSchmidt/Energy`, `LinearPMap/SubmoduleAdjoint`, `Polar/Isometry`,
+`Polar/PartialIsometry`, `Sylvester/Operator` and `LinearAlgebra/Dimension/RankComp`.
+
+**Consumers outside `ForTauCeti` were never reached** — `DavisKahan`, `FinishYuWangSamworth`,
+`FinishTanTwoTheta`, `Challenge` and the paper libraries all import this one and will need
+their own `open TauCeti` pass. Build every library, not just `defaultTargets`.
+
+Nothing here changes any mathematics: every failure observed was name resolution, and the
+apparent proof breakage (`unsolved goals`, `Type mismatch`) was cascade from unresolved names
+in the same file. A green build across all eleven libraries is proof of correctness.
 
 ### 3. Mirror the final destination tree
 
