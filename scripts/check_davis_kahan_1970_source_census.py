@@ -173,8 +173,16 @@ def main() -> int:
     print(f"Davis--Kahan full source census: {proved}/{len(items)} proved in the "
           f"default build ({detail})")
 
-    # Name the source results that are not proved.  A reader must not have to
-    # cross-reference the JSON to discover that a headline theorem is missing.
+    # Name the source results that are not proved, and separately those that are
+    # proved but unguarded.  A reader must not have to cross-reference the JSON,
+    # and the two are different obligations: one needs mathematics, the other
+    # needs a module moved into a default target.
+    at_risk = sorted(
+        item["id"] for item in items
+        if item.get("verification") in {"proved_outside_build", "partially_in_build"}
+    )
+    if at_risk:
+        print("  proved but unguarded by `lake build`: " + ", ".join(at_risk))
     unproved = sorted(
         item["id"] for item in items
         if item.get("verification") in {"not_compiling", "absent"}
