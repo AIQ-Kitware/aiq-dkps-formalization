@@ -37,6 +37,7 @@ library.
 
 namespace Submodule
 
+open TauCeti
 open scoped InnerProductSpace
 
 variable {𝕜 : Type*} [RCLike 𝕜]

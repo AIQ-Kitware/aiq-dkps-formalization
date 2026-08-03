@@ -70,6 +70,7 @@ namespace TauCeti
 namespace SpectralOrder
 namespace Real
 
+open TauCeti
 open scoped InnerProductSpace
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]

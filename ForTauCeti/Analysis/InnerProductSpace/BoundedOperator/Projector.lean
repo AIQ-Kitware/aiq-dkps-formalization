@@ -35,6 +35,7 @@ collided with its own target once this file moved into `Submodule`.
 
 namespace Submodule
 
+open TauCeti
 open scoped InnerProductSpace
 
 variable {𝕜 H : Type*} [RCLike 𝕜]
