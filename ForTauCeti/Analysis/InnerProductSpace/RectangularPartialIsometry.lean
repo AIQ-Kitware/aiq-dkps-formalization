@@ -41,6 +41,19 @@ than a competitor.  The proof is the associativity difference and nothing else -
 
 The polar decomposition is the consumer: `M = W |M|` with `W` a partial isometry needs
 exactly this predicate when `M` is rectangular, since `W` maps `E` to `F`.
+
+## Provenance
+
+* Original repository: none — written directly in `ForTauCeti` on 2026-08-02.
+* Extraction class: **new**.  This is not a move or a generalization of existing
+  material.  `ForTauCeti.Analysis.InnerProductSpace.PartialIsometry` carries the
+  square theory and stays unchanged; the rectangular predicate is the roadmap's
+  `HilbertSpaceOperatorFoundations` target `isPartialIsometry_iff_starMul`, which
+  presupposes a `LinearMap.IsPartialIsometry` that did not exist.
+* Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026
+  Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none** — this module imports only a sibling `ForTauCeti`
+  staging module.
 -/
 
 namespace LinearMap
