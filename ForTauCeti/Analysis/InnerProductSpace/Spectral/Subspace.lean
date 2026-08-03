@@ -47,17 +47,39 @@ is exactly why the names had to be separated. -/
 def IsInvariant (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
   ∀ x ∈ U, A x ∈ U
 
-/-- A nonzero eigenvector of a symmetric operator at a real eigenvalue. -/
-def IsEigenvectorAt (A : E →ₗ[𝕜] E) (lam : ℝ) (x : E) : Prop :=
-  x ≠ 0 ∧ A x = (lam : 𝕜) • x
-
 /-- The finite-dimensional point spectrum of `A` carried by `U`.
 
 For symmetric operators this is the spectrum of the restriction to `U` once
 `U` reduces `A`.  The definition avoids exposing a choice of restricted
-coordinate space in theorem statements. -/
+coordinate space in theorem statements.
+
+Eigenvectors are Mathlib's `Module.End.HasEigenvector` rather than a local predicate; the
+only thing a local one added was to fix the eigenvalue as real, which is a property of the
+`lam : ℝ` binder here and not of the notion of eigenvector. -/
 def restrictedSpectrum (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) : Set ℝ :=
-  {lam | ∃ x, x ∈ U ∧ IsEigenvectorAt A lam x}
+  {lam | ∃ x, x ∈ U ∧ Module.End.HasEigenvector A (lam : 𝕜) x}
+
+omit [FiniteDimensional 𝕜 E] in
+/-- **The membership characterization**, in the eigenvalue-equation form that consumers
+want.
+
+`restrictedSpectrum` is stated through `Module.End.HasEigenvector` so that Mathlib's
+eigenspace API applies to it, but almost every proof needs the equation `A x = lam • x`
+rather than membership in an eigenspace.  This lemma is the only place the two are
+converted, so a proof never destructures the definition and the internal shape of
+`HasEigenvector` -- which orders its conjuncts `(mem_eigenspace, ne_zero)` -- stops being
+part of this definition's public interface. -/
+theorem mem_restrictedSpectrum_iff {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E} {lam : ℝ} :
+    lam ∈ restrictedSpectrum A U ↔ ∃ x ∈ U, x ≠ 0 ∧ A x = (lam : 𝕜) • x :=
+  ⟨fun ⟨x, hxU, hxEig, hx0⟩ => ⟨x, hxU, hx0, Module.End.mem_eigenspace_iff.mp hxEig⟩,
+    fun ⟨x, hxU, hx0, hxEig⟩ => ⟨x, hxU, Module.End.mem_eigenspace_iff.mpr hxEig, hx0⟩⟩
+
+omit [FiniteDimensional 𝕜 E] in
+/-- The introduction rule: a nonzero eigenvector in `U` witnesses its eigenvalue. -/
+theorem mem_restrictedSpectrum {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E} {lam : ℝ} {x : E}
+    (hxU : x ∈ U) (hx0 : x ≠ 0) (hxEig : A x = (lam : 𝕜) • x) :
+    lam ∈ restrictedSpectrum A U :=
+  mem_restrictedSpectrum_iff.mpr ⟨x, hxU, hx0, hxEig⟩
 
 /-- Every eigenvalue of `A` carried by `U` lies in `Ω`. -/
 def SpectrumIn (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (Ω : Set ℝ) : Prop :=
@@ -66,7 +88,7 @@ def SpectrumIn (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (Ω : Set ℝ) : Pr
 /-- Canonical finite-dimensional spectral subspace selected by a real set. -/
 noncomputable def spectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
     Submodule 𝕜 E :=
-  Submodule.span 𝕜 {x | ∃ lam ∈ Ω, IsEigenvectorAt A lam x}
+  Submodule.span 𝕜 {x | ∃ lam ∈ Ω, Module.End.HasEigenvector A (lam : 𝕜) x}
 
 /-- Canonical orthogonal spectral projector. -/
 noncomputable def spectralProjection (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
@@ -119,7 +141,7 @@ theorem isInvariant_spectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
   intro x hx
   refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
   · rintro y ⟨lam, hlam, hy⟩
-    rw [hy.2]
+    rw [Module.End.mem_eigenspace_iff.mp hy.1]
     exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨lam, hlam, hy⟩)
   · simp
   · intro x y _ _ hx hy
@@ -152,12 +174,15 @@ theorem restrictedSpectrum_restrict (A : E →ₗ[𝕜] E)
     restrictedSpectrum (A.restrict hU) ⊤ = restrictedSpectrum A U := by
   ext lam
   constructor
-  · rintro ⟨x, -, hx0, hxEig⟩
-    refine ⟨(x : E), x.2, fun hx => hx0 (Subtype.ext hx), ?_⟩
+  · intro hlam
+    obtain ⟨x, -, hx0, hxEig⟩ := mem_restrictedSpectrum_iff.mp hlam
+    refine mem_restrictedSpectrum x.2 (fun hx => hx0 (Subtype.ext hx)) ?_
     have h := congrArg (Subtype.val) hxEig
     rwa [LinearMap.coe_restrict_apply, Submodule.coe_smul] at h
-  · rintro ⟨x, hxU, hx0, hxEig⟩
-    refine ⟨⟨x, hxU⟩, Submodule.mem_top, fun hxu => hx0 (congrArg Subtype.val hxu), ?_⟩
+  · intro hlam
+    obtain ⟨x, hxU, hx0, hxEig⟩ := mem_restrictedSpectrum_iff.mp hlam
+    refine mem_restrictedSpectrum (x := ⟨x, hxU⟩) Submodule.mem_top
+      (fun hxu => hx0 (congrArg Subtype.val hxu)) ?_
     apply Subtype.ext
     rw [LinearMap.coe_restrict_apply, Submodule.coe_smul]
     exact hxEig
@@ -246,9 +271,9 @@ theorem re_inner_le_of_spectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
   have hA'sym : (A.restrict hU).IsSymmetric := isSymmetric_restrict hA hU
   have hev : ∀ i, hA'sym.eigenvalues rfl i ≤ c := fun i => by
     have hmem : hA'sym.eigenvalues rfl i ∈ restrictedSpectrum (A.restrict hU) ⊤ :=
-      ⟨hA'sym.eigenvectorBasis rfl i, Submodule.mem_top,
-        (hA'sym.eigenvectorBasis rfl).orthonormal.ne_zero i,
-        hA'sym.apply_eigenvectorBasis rfl i⟩
+      mem_restrictedSpectrum Submodule.mem_top
+        ((hA'sym.eigenvectorBasis rfl).orthonormal.ne_zero i)
+        (hA'sym.apply_eigenvectorBasis rfl i)
     rw [restrictedSpectrum_restrict] at hmem
     exact hspec hmem
   have hquad := re_inner_le_of_forall_eigenvalue_le hA'sym rfl hev ⟨x, hx⟩
@@ -265,9 +290,9 @@ theorem le_re_inner_of_spectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
   have hA'sym : (A.restrict hU).IsSymmetric := isSymmetric_restrict hA hU
   have hev : ∀ i, c ≤ hA'sym.eigenvalues rfl i := fun i => by
     have hmem : hA'sym.eigenvalues rfl i ∈ restrictedSpectrum (A.restrict hU) ⊤ :=
-      ⟨hA'sym.eigenvectorBasis rfl i, Submodule.mem_top,
-        (hA'sym.eigenvectorBasis rfl).orthonormal.ne_zero i,
-        hA'sym.apply_eigenvectorBasis rfl i⟩
+      mem_restrictedSpectrum Submodule.mem_top
+        ((hA'sym.eigenvectorBasis rfl).orthonormal.ne_zero i)
+        (hA'sym.apply_eigenvectorBasis rfl i)
     rw [restrictedSpectrum_restrict] at hmem
     exact hspec hmem
   have hquad := le_re_inner_of_forall_le_eigenvalue hA'sym rfl hev ⟨x, hx⟩
@@ -286,7 +311,7 @@ omit [FiniteDimensional 𝕜 E] in
 theorem spectralSubspace_eq_span_eigenvectors (A : E →ₗ[𝕜] E)
     (Ω : Set ℝ) :
     spectralSubspace A Ω =
-      Submodule.span 𝕜 {x | ∃ lam ∈ Ω, IsEigenvectorAt A lam x} :=
+      Submodule.span 𝕜 {x | ∃ lam ∈ Ω, Module.End.HasEigenvector A (lam : 𝕜) x} :=
   rfl
 
 

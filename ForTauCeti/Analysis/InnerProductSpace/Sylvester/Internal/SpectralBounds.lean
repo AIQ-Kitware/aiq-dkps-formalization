@@ -48,9 +48,9 @@ theorem eigenvalue_mem_restrictedSpectrum_top
     {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric)
     (i : Fin (Module.finrank 𝕜 E)) :
     hT.eigenvalues rfl i ∈ restrictedSpectrum T ⊤ :=
-  ⟨hT.eigenvectorBasis rfl i, Submodule.mem_top,
-    (hT.eigenvectorBasis rfl).orthonormal.ne_zero i,
-    hT.apply_eigenvectorBasis rfl i⟩
+  mem_restrictedSpectrum Submodule.mem_top
+    ((hT.eigenvectorBasis rfl).orthonormal.ne_zero i)
+    (hT.apply_eigenvectorBasis rfl i)
 
 /-- An upper bound on all eigenvalues gives an upper bound on the quadratic form, via the
 eigenbasis expansion. -/

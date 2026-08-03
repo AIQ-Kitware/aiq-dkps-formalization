@@ -101,17 +101,13 @@ theorem sylvesterOperator_injective {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E
   let α : ℝ := hA.eigenvalues rfl i
   let β : ℝ := hB.eigenvalues rfl j
   have hα : α ∈ restrictedSpectrum A ⊤ :=
-    ⟨hA.eigenvectorBasis rfl i, Submodule.mem_top,
-      (hA.eigenvectorBasis rfl).orthonormal.ne_zero i,
-      by
-        dsimp [α]
-        exact hA.apply_eigenvectorBasis rfl i⟩
+    mem_restrictedSpectrum Submodule.mem_top
+      ((hA.eigenvectorBasis rfl).orthonormal.ne_zero i)
+      (by dsimp [α]; exact hA.apply_eigenvectorBasis rfl i)
   have hβ : β ∈ restrictedSpectrum B ⊤ :=
-    ⟨hB.eigenvectorBasis rfl j, Submodule.mem_top,
-      (hB.eigenvectorBasis rfl).orthonormal.ne_zero j,
-      by
-        dsimp [β]
-        exact hB.apply_eigenvectorBasis rfl j⟩
+    mem_restrictedSpectrum Submodule.mem_top
+      ((hB.eigenvectorBasis rfl).orthonormal.ne_zero j)
+      (by dsimp [β]; exact hB.apply_eigenvectorBasis rfl j)
   have hαβ : α ≠ β := by
     have habs : 0 < |α - β| := lt_of_lt_of_le hδ (hgap α β hα hβ)
     exact sub_ne_zero.mp (abs_pos.mp habs)

@@ -327,7 +327,7 @@ private theorem exists_intervalGap_of_orderedGap
       hM.eigenvalues_antitone rfl (Fin.zero_le i)
   have hlowerSpec : ∀ lam, lam ∈ restrictedSpectrum M ⊤ → β ≤ lam := by
     intro lam hlam
-    rcases hlam with ⟨x, _hxTop, hx0, hxEig⟩
+    rcases mem_restrictedSpectrum_iff.mp hlam with ⟨x, -, hx0, hxEig⟩
     have hxnorm : 0 < ‖x‖ := norm_pos_iff.mpr hx0
     have hbound := M.toContinuousLinearMap.le_opNorm x
     change ‖M x‖ ≤ ‖M.toContinuousLinearMap‖ * ‖x‖ at hbound
@@ -341,14 +341,14 @@ private theorem exists_intervalGap_of_orderedGap
     hlowerSpec α (eigenvalue_mem_restrictedSpectrum_top hM iTop)
   have hMspec : SpectrumIn M ⊤ (Set.Icc β α) := by
     intro lam hlam
-    rcases hlam with ⟨x, hxTop, hx0, hxEig⟩
+    rcases mem_restrictedSpectrum_iff.mp hlam with ⟨x, hxTop, hx0, hxEig⟩
     have hxnorm : 0 < ‖x‖ ^ 2 := sq_pos_of_pos (norm_pos_iff.mpr hx0)
     have hray : RCLike.re ⟪M x, x⟫_𝕜 = lam * ‖x‖ ^ 2 := by
       rw [hxEig, inner_smul_left, RCLike.conj_ofReal,
         RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
     have hu := hupper x
     rw [hray] at hu
-    exact ⟨hlowerSpec lam ⟨x, hxTop, hx0, hxEig⟩, by nlinarith⟩
+    exact ⟨hlowerSpec lam (mem_restrictedSpectrum hxTop hx0 hxEig), by nlinarith⟩
   have hAspec : SpectrumIn A Uᗮ (Set.Ici (α + δ)) := by
     intro μ hμ
     exact hgap α μ

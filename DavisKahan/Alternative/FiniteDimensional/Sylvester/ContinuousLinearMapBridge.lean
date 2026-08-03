@@ -47,8 +47,8 @@ private theorem spectraSeparated_toLinearMap
     (hsep : ContinuousLinearMapBridge.SpectraSeparated A ⊤ B ⊤ d) :
     TauCeti.SpectraSeparated A.toLinearMap ⊤ B.toLinearMap ⊤ d := by
   intro a b ha hb
-  rcases ha with ⟨x, -, ⟨hx0, hxeig⟩⟩
-  rcases hb with ⟨y, -, ⟨hy0, hyeig⟩⟩
+  rcases TauCeti.mem_restrictedSpectrum_iff.mp ha with ⟨x, -, hx0, hxeig⟩
+  rcases TauCeti.mem_restrictedSpectrum_iff.mp hb with ⟨y, -, hy0, hyeig⟩
   exact hsep a ⟨x, Submodule.mem_top, hx0, hxeig⟩
     b ⟨y, Submodule.mem_top, hy0, hyeig⟩
 

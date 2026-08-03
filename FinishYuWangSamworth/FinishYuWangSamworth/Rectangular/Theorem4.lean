@@ -48,14 +48,14 @@ def CorrespondingLeftSingularBlock (A Â : E →ₗ[𝕜] F)
     (isSymmetric_leftGram Â) U V
 
 /-- Population squared-singular-value gap for a right singular block. -/
-def RightSingularPopulationGap (A : E →ₗ[𝕜] F)
+def RightSingularInternalGap (A : E →ₗ[𝕜] F)
     (U : Submodule 𝕜 E) (Δ : ℝ) : Prop :=
-  PopulationGap (rightGram A) U Δ
+  InternalGap (rightGram A) U Δ
 
 /-- Population squared-singular-value gap for a left singular block. -/
-def LeftSingularPopulationGap (A : E →ₗ[𝕜] F)
+def LeftSingularInternalGap (A : E →ₗ[𝕜] F)
     (U : Submodule 𝕜 F) (Δ : ℝ) : Prop :=
-  PopulationGap (leftGram A) U Δ
+  InternalGap (leftGram A) U Δ
 
 private theorem correspondingEigenblock_reduces_population
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
@@ -118,7 +118,7 @@ private theorem yuWangSamworth_gram_sinTheta_le
     (hcorr : CorrespondingEigenblock hG hĜ U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
     {Δ c perturbOp perturbFrob : ℝ} (hΔ : 0 < Δ)
-    (hgap : PopulationGap G U Δ)
+    (hgap : InternalGap G U Δ)
     (hop : ‖(Ĝ - G).toContinuousLinearMap‖ ≤ c * perturbOp)
     (hfrob : UnitarilyInvariantNorm.frobenius 𝕜 H (Ĝ - G) ≤
       c * perturbFrob) :
@@ -148,7 +148,7 @@ private theorem yuWangSamworth_gram_alignedBasis_le
     (hcorr : CorrespondingEigenblock hG hĜ U V)
     {d : ℕ} (hrankU : finrank 𝕜 U = d)
     {Δ c perturbOp perturbFrob : ℝ} (hΔ : 0 < Δ)
-    (hgap : PopulationGap G U Δ)
+    (hgap : InternalGap G U Δ)
     (hop : ‖(Ĝ - G).toContinuousLinearMap‖ ≤ c * perturbOp)
     (hfrob : UnitarilyInvariantNorm.frobenius 𝕜 H (Ĝ - G) ≤
       c * perturbFrob) :
@@ -185,7 +185,7 @@ theorem yuWangSamworth_rightSingularSubspace_opNormCoefficient_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingRightSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : RightSingularPopulationGap A U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : RightSingularInternalGap A U Δ) :
     sinThetaFrobenius U V ≤
       2 * (2 * ‖A.toContinuousLinearMap‖ +
           ‖(Â - A).toContinuousLinearMap‖) *
@@ -195,7 +195,7 @@ theorem yuWangSamworth_rightSingularSubspace_opNormCoefficient_le
     (isSymmetric_rightGram A) (isSymmetric_rightGram Â)
     (by simpa only [CorrespondingRightSingularBlock] using hcorr)
     hrank hΔ
-    (by simpa only [RightSingularPopulationGap] using hgap)
+    (by simpa only [RightSingularInternalGap] using hgap)
   · exact opNorm_rightGram_sub_le_paperCoefficient A Â
   · exact frobenius_rightGram_sub_le_paperCoefficient A Â
 
@@ -205,7 +205,7 @@ theorem yuWangSamworth_leftSingularSubspace_opNormCoefficient_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingLeftSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : LeftSingularPopulationGap A U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : LeftSingularInternalGap A U Δ) :
     sinThetaFrobenius U V ≤
       2 * (2 * ‖A.toContinuousLinearMap‖ +
           ‖(Â - A).toContinuousLinearMap‖) *
@@ -215,7 +215,7 @@ theorem yuWangSamworth_leftSingularSubspace_opNormCoefficient_le
     (isSymmetric_leftGram A) (isSymmetric_leftGram Â)
     (by simpa only [CorrespondingLeftSingularBlock] using hcorr)
     hrank hΔ
-    (by simpa only [LeftSingularPopulationGap] using hgap)
+    (by simpa only [LeftSingularInternalGap] using hgap)
   · exact opNorm_leftGram_sub_le_paperCoefficient A Â
   · exact frobenius_leftGram_sub_le_paperCoefficient A Â
 
@@ -225,7 +225,7 @@ theorem yuWangSamworth_rightSingularAlignedBasis_opNormCoefficient_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingRightSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : RightSingularPopulationGap A U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : RightSingularInternalGap A U Δ) :
     ∃ (u v : Fin d → E), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
       Submodule.span 𝕜 (Set.range u) = U ∧
       Submodule.span 𝕜 (Set.range v) = V ∧
@@ -239,7 +239,7 @@ theorem yuWangSamworth_rightSingularAlignedBasis_opNormCoefficient_le
     (isSymmetric_rightGram A) (isSymmetric_rightGram Â)
     (by simpa only [CorrespondingRightSingularBlock] using hcorr)
     hrank hΔ
-    (by simpa only [RightSingularPopulationGap] using hgap)
+    (by simpa only [RightSingularInternalGap] using hgap)
   · exact opNorm_rightGram_sub_le_paperCoefficient A Â
   · exact frobenius_rightGram_sub_le_paperCoefficient A Â
 
@@ -249,7 +249,7 @@ theorem yuWangSamworth_leftSingularAlignedBasis_opNormCoefficient_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingLeftSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : LeftSingularPopulationGap A U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : LeftSingularInternalGap A U Δ) :
     ∃ (u v : Fin d → F), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
       Submodule.span 𝕜 (Set.range u) = U ∧
       Submodule.span 𝕜 (Set.range v) = V ∧
@@ -263,7 +263,7 @@ theorem yuWangSamworth_leftSingularAlignedBasis_opNormCoefficient_le
     (isSymmetric_leftGram A) (isSymmetric_leftGram Â)
     (by simpa only [CorrespondingLeftSingularBlock] using hcorr)
     hrank hΔ
-    (by simpa only [LeftSingularPopulationGap] using hgap)
+    (by simpa only [LeftSingularInternalGap] using hgap)
   · exact opNorm_leftGram_sub_le_paperCoefficient A Â
   · exact frobenius_leftGram_sub_le_paperCoefficient A Â
 
@@ -285,7 +285,7 @@ theorem yuWangSamworth_rightSingularSubspace_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingRightSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : RightSingularPopulationGap A U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : RightSingularInternalGap A U Δ) :
     sinThetaFrobenius U V ≤
       2 * (2 * A.singularValues 0 +
           ‖(Â - A).toContinuousLinearMap‖) *
@@ -301,7 +301,7 @@ theorem yuWangSamworth_leftSingularSubspace_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingLeftSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : LeftSingularPopulationGap A U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : LeftSingularInternalGap A U Δ) :
     sinThetaFrobenius U V ≤
       2 * (2 * A.singularValues 0 +
           ‖(Â - A).toContinuousLinearMap‖) *
@@ -317,7 +317,7 @@ theorem yuWangSamworth_rightSingularAlignedBasis_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingRightSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : RightSingularPopulationGap A U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : RightSingularInternalGap A U Δ) :
     ∃ (u v : Fin d → E), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
       Submodule.span 𝕜 (Set.range u) = U ∧
       Submodule.span 𝕜 (Set.range v) = V ∧
@@ -337,7 +337,7 @@ theorem yuWangSamworth_leftSingularAlignedBasis_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingLeftSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : LeftSingularPopulationGap A U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : LeftSingularInternalGap A U Δ) :
     ∃ (u v : Fin d → F), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
       Submodule.span 𝕜 (Set.range u) = U ∧
       Submodule.span 𝕜 (Set.range v) = V ∧

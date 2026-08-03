@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import Mathlib.Analysis.InnerProductSpace.Adjoint
+import Mathlib.Analysis.InnerProductSpace.Positive
 
 /-!
 # Quadratic-form bounds on subspaces
@@ -41,6 +42,48 @@ def LowerFormBoundOn (A : E →L[𝕜] E) (U : Submodule 𝕜 E) (c : ℝ) : Pro
 /-- Upper quadratic-form bound on a subspace. -/
 def UpperFormBoundOn (A : E →L[𝕜] E) (U : Submodule 𝕜 E) (c : ℝ) : Prop :=
   ∀ x ∈ U, RCLike.re ⟪A x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2
+
+/-! ### Basic theory
+
+The two ways a form bound weakens -- in the constant and in the subspace -- and the
+identification of the degenerate case with Mathlib's `IsPositive`.  A consumer holding a
+bound on `U` at constant `c` and needing one on a subspace of `U`, or at a worse constant,
+should not have to reprove it from the definition. -/
+
+/-- A lower form bound weakens as the constant decreases. -/
+theorem LowerFormBoundOn.mono_const {A : E →L[𝕜] E} {U : Submodule 𝕜 E} {c c' : ℝ}
+    (h : A.LowerFormBoundOn U c) (hc : c' ≤ c) : A.LowerFormBoundOn U c' :=
+  fun x hx => (mul_le_mul_of_nonneg_right hc (sq_nonneg ‖x‖)).trans (h x hx)
+
+/-- A lower form bound restricts to a smaller subspace. -/
+theorem LowerFormBoundOn.mono_subspace {A : E →L[𝕜] E} {U U' : Submodule 𝕜 E} {c : ℝ}
+    (h : A.LowerFormBoundOn U c) (hU : U' ≤ U) : A.LowerFormBoundOn U' c :=
+  fun x hx => h x (hU hx)
+
+/-- An upper form bound weakens as the constant increases. -/
+theorem UpperFormBoundOn.mono_const {A : E →L[𝕜] E} {U : Submodule 𝕜 E} {c c' : ℝ}
+    (h : A.UpperFormBoundOn U c) (hc : c ≤ c') : A.UpperFormBoundOn U c' :=
+  fun x hx => (h x hx).trans (mul_le_mul_of_nonneg_right hc (sq_nonneg ‖x‖))
+
+/-- An upper form bound restricts to a smaller subspace. -/
+theorem UpperFormBoundOn.mono_subspace {A : E →L[𝕜] E} {U U' : Submodule 𝕜 E} {c : ℝ}
+    (h : A.UpperFormBoundOn U c) (hU : U' ≤ U) : A.UpperFormBoundOn U' c :=
+  fun x hx => h x (hU hx)
+
+/-- **The grounding to Mathlib.**  A positive operator is exactly one with the zero lower
+form bound on the whole space; this is the direction that makes Mathlib's positivity API
+usable wherever a form bound is held. -/
+theorem IsPositive.lowerFormBoundOn_top {A : E →L[𝕜] E} (hA : A.IsPositive) :
+    A.LowerFormBoundOn ⊤ 0 :=
+  fun x _ => by simpa [ContinuousLinearMap.reApplyInnerSelf] using hA.2 x
+
+/-- The converse: symmetry plus the zero lower bound on `⊤` is positivity.  Together with
+`IsPositive.lowerFormBoundOn_top` this pins `LowerFormBoundOn _ ⊤ 0` as a generalization of
+Mathlib's predicate rather than a competitor to it. -/
+theorem isPositive_of_lowerFormBoundOn_top {A : E →L[𝕜] E} (hsym : A.IsSymmetric)
+    (h : A.LowerFormBoundOn ⊤ 0) : A.IsPositive :=
+  ⟨hsym, fun x => by
+    simpa [ContinuousLinearMap.reApplyInnerSelf] using h x Submodule.mem_top⟩
 
 end ContinuousLinearMap
 
