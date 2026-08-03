@@ -56,6 +56,8 @@ exactly this predicate when `M` is rectangular, since `W` maps `E` to `F`.
   staging module.
 -/
 
+open scoped InnerProductSpace
+
 namespace LinearMap
 
 variable {𝕜 : Type*} [RCLike 𝕜]
@@ -81,6 +83,73 @@ theorem isPartialIsometry_iff_starMul {u : E →ₗ[𝕜] E} :
     u.IsPartialIsometry ↔ _root_.IsPartialIsometry u := by
   simp only [LinearMap.IsPartialIsometry, _root_.IsPartialIsometry, star_eq_adjoint,
     Module.End.mul_eq_comp, LinearMap.comp_assoc]
+
+/-- **Operator characterization, rectangular**: `u` is a partial isometry exactly when it
+preserves norms on the orthogonal complement of its kernel (Conway VI.3.2).
+
+The square version in `ForTauCeti.Analysis.InnerProductSpace.PartialIsometry` proves this
+through star-monoid algebra, via `star_mul_self_eq_starProjection`.  That route is closed
+here -- `star u` would be an `F →ₗ[𝕜] E` and there is no carrier holding both -- so the
+argument is written directly: `u⋆ u` is the orthogonal projection onto `(ker u)ᗮ`, which is
+what both directions turn on. -/
+theorem isPartialIsometry_iff_norm_map {u : E →ₗ[𝕜] F} :
+    u.IsPartialIsometry ↔ ∀ x ∈ (LinearMap.ker u)ᗮ, ‖u x‖ = ‖x‖ := by
+  constructor
+  · intro hu x hx
+    have hux : u (u.adjoint (u x)) = u x := by
+      have := LinearMap.congr_fun hu x
+      simpa only [LinearMap.comp_apply] using this
+    -- `u⋆ u x` and `x` agree, because their difference lies in `ker u` and in `(ker u)ᗮ`
+    have hmemO : u.adjoint (u x) ∈ (LinearMap.ker u)ᗮ := by
+      rw [LinearMap.orthogonal_ker]; exact LinearMap.mem_range_self _ _
+    have hdiffO : x - u.adjoint (u x) ∈ (LinearMap.ker u)ᗮ := Submodule.sub_mem _ hx hmemO
+    have hdiffK : x - u.adjoint (u x) ∈ LinearMap.ker u := by
+      rw [LinearMap.mem_ker, map_sub, hux, sub_self]
+    have hadj : u.adjoint (u x) = x := by
+      have hz : ⟪x - u.adjoint (u x), x - u.adjoint (u x)⟫_𝕜 = 0 :=
+        Submodule.inner_right_of_mem_orthogonal hdiffK hdiffO
+      have := inner_self_eq_zero.mp hz
+      rw [sub_eq_zero] at this
+      exact this.symm
+    have hsq : ‖u x‖ ^ 2 = ‖x‖ ^ 2 := by
+      rw [InnerProductSpace.norm_sq_eq_re_inner (𝕜 := 𝕜) (u x),
+        InnerProductSpace.norm_sq_eq_re_inner (𝕜 := 𝕜) x,
+        ← LinearMap.adjoint_inner_left, hadj]
+    rw [← Real.sqrt_sq (norm_nonneg (u x)), ← Real.sqrt_sq (norm_nonneg x), hsq]
+  · intro h
+    have hinner : ∀ a ∈ (LinearMap.ker u)ᗮ, ∀ b ∈ (LinearMap.ker u)ᗮ,
+        ⟪u a, u b⟫_𝕜 = ⟪a, b⟫_𝕜 := by
+      have hg : ∀ w : ((LinearMap.ker u)ᗮ), ‖(u ∘ₗ ((LinearMap.ker u)ᗮ).subtype) w‖ = ‖w‖ := by
+        intro w; simpa using h w.1 w.2
+      intro a ha b hb
+      have hmap := (LinearMap.norm_map_iff_inner_map_map
+        (u ∘ₗ ((LinearMap.ker u)ᗮ).subtype)).mp hg ⟨a, ha⟩ ⟨b, hb⟩
+      simpa using hmap
+    ext x
+    have hq : u.adjoint (u x) ∈ (LinearMap.ker u)ᗮ := by
+      rw [LinearMap.orthogonal_ker]; exact LinearMap.mem_range_self _ _
+    set P := ((LinearMap.ker u)ᗮ).starProjection with hP
+    have hPx : P x ∈ (LinearMap.ker u)ᗮ := Submodule.starProjection_apply_mem _ _
+    have hux : u x = u (P x) := by
+      have hmem0 : x - P x ∈ LinearMap.ker u := by
+        have h1 : x - P x ∈ ((LinearMap.ker u)ᗮ)ᗮ := by
+          rw [hP]; exact Submodule.sub_starProjection_mem_orthogonal x
+        rwa [Submodule.orthogonal_orthogonal] at h1
+      rw [LinearMap.mem_ker, map_sub, sub_eq_zero] at hmem0
+      exact hmem0
+    have hqP : u.adjoint (u x) = P x := by
+      have hmem : u.adjoint (u x) - P x ∈ (LinearMap.ker u)ᗮ := Submodule.sub_mem _ hq hPx
+      set w := u.adjoint (u x) - P x with hw
+      have hzero : ⟪w, w⟫_𝕜 = 0 := by
+        have e1 : ⟪u.adjoint (u x), w⟫_𝕜 = ⟪P x, w⟫_𝕜 := by
+          rw [LinearMap.adjoint_inner_left, hux, hinner (P x) hPx w hmem]
+        calc ⟪w, w⟫_𝕜 = ⟪u.adjoint (u x), w⟫_𝕜 - ⟪P x, w⟫_𝕜 := by rw [hw, inner_sub_left]
+          _ = 0 := by rw [e1, sub_self]
+      have hw0 := inner_self_eq_zero.mp hzero
+      rw [hw, sub_eq_zero] at hw0
+      exact hw0
+    simp only [LinearMap.comp_apply, hqP]
+    exact hux.symm
 
 /-- Partial isometries are closed under adjoint, in the rectangular setting.
 
