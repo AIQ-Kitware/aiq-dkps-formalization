@@ -34,6 +34,7 @@ namespace TauCeti
 namespace SpectralOrder
 namespace Complex
 
+open TauCeti
 open scoped InnerProductSpace
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]

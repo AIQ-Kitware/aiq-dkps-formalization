@@ -178,18 +178,52 @@ wrap them in a `ForTauCeti` namespace. The module *path* is temporarily
 `ForTauCeti...`, but declaration *names* are already the names they will carry in
 Tau Ceti, so that integration is a file move, not a mass rename.
 
-Two namespace forms appear, both final:
+**Everything goes under `namespace TauCeti`, including material that extends a Mathlib
+type's namespace.** A declaration about `A : E →L[𝕜] E` is written
 
-* **Extensions of canonical Mathlib namespaces** — e.g.
-  `ContinuousLinearMap.approximationNumber`, `Cardinal.le_natCast_of_lift_le`.
-  These stay in the Mathlib namespace so that dot notation resolves and the name
-  matches the eventual Mathlib upstreaming target. (Lean field projection binds
-  `T.approximationNumber` only to a literal `ContinuousLinearMap.approximationNumber`
-  and does not consult an enclosing `TauCeti` namespace, so wrapping these in
-  `namespace TauCeti` would break every dot-notation proof. This is flagged for
-  Tau Ceti maintainer review.)
-* **New generic declarations** — placed under `namespace TauCeti` (e.g.
-  `TauCeti.specSubspace`), the Tau Ceti house convention.
+```lean
+namespace TauCeti
+namespace ContinuousLinearMap
+open TauCeti          -- needed even here; see below
+def LowerFormBoundOn (A : E →L[𝕜] E) … 
+end ContinuousLinearMap
+end TauCeti
+```
+
+giving `TauCeti.ContinuousLinearMap.LowerFormBoundOn`. This matches the destination
+library: see `external/TauCeti`, `Analysis/Fredholm/Basic.lean` (`namespace TauCeti` at 51,
+`namespace ContinuousLinearMap` at 202) and `LinearAlgebra/TotallyReal.lean` (`namespace
+TauCeti` at 21, `namespace Submodule` at 99). Tau Ceti never extends a root Mathlib
+namespace.
+
+**Why, and it is not stylistic.** This repository cannot upstream to Mathlib — Mathlib does
+not accept AI-authored contributions, which is the reason Tau Ceti exists. So a name taken
+in a root Mathlib namespace is a bet that Mathlib will never want it, and a bet that can
+never be settled by coordination: if Mathlib later adds `ContinuousLinearMap.foo`, our
+`ContinuousLinearMap.foo` becomes ambiguous at every use site and *we* must rename.
+`TauCeti.ContinuousLinearMap.foo` cannot collide with anything Mathlib does, ever.
+
+**Dot notation still works, through `open TauCeti`.** An earlier version of this rule
+claimed that nesting "would break every dot-notation proof". That is half right and the
+half that is wrong matters. Measured:
+
+| context | `A.LowerFormBoundOn` resolves? |
+|---|---|
+| inside `namespace TauCeti` | **no** |
+| with `open TauCeti` | **yes** |
+| neither | no |
+
+Field projection consults `open`s, not the enclosing namespace — so a file that merely sits
+inside `namespace TauCeti` is *not* covered, which is the trap. Every file using dot notation
+on these declarations needs `open TauCeti`, **including the file that declares them**.
+
+**Migration status.** `Analysis/InnerProductSpace/QuadraticFormBounds.lean` is converted, as
+a validated pilot; converting it required `open TauCeti` in four consumers
+(`SpectralOrder/Real`, `SpectralOrder/Complex`, `BoundedOperator/SinTheta`,
+`BoundedOperator/Projector`). Roughly 33 files and ~356 declarations still sit in root
+Mathlib namespaces under the old rule. Convert opportunistically; write new material this way
+from the start. The failure mode is always a hard `Invalid field` error, never a silent
+change, so a green build is proof of correctness here.
 
 ### 3. Mirror the final destination tree
 

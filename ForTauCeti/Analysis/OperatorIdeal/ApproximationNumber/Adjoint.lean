@@ -20,13 +20,18 @@ inner-product-space imports.
 
 ## Namespace note
 
-These declarations extend the existing Mathlib namespace `ContinuousLinearMap`
-rather than living under `TauCeti`, so that dot notation
-(`T.approximationNumber_adjoint`) resolves and the names match the eventual
-Mathlib upstreaming target. Lean field projection binds `T.foo` only to the
-literal `ContinuousLinearMap.foo` and does not consult the enclosing `TauCeti`
-namespace. This is a deliberate API choice, flagged for Tau Ceti maintainer
-review.
+These declarations still sit in the **root** Mathlib namespace `ContinuousLinearMap`,
+which is no longer the convention: Tau Ceti mirrors Mathlib type namespaces *inside*
+`namespace TauCeti`, and `ForTauCeti/README.md` § "Final namespaces from day one"
+now says so.
+
+The justification previously recorded here was that field projection binds `T.foo`
+only to a literal `ContinuousLinearMap.foo`, so nesting would break dot notation.
+That is only half true — it does not consult the *enclosing namespace*, but it does
+consult `open`s, so `open TauCeti` restores it. Nesting costs an `open` per consuming
+file and nothing else.
+
+This module is on the migration list, not an exception to the rule.
 
 ## Provenance
 
