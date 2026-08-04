@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
 import ForTauCeti.Analysis.InnerProductSpace.PartialIsometry
+import ForTauCeti.Analysis.InnerProductSpace.RectangularPartialIsometry
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.Analysis.Normed.Operator.Extend
 
@@ -376,6 +377,11 @@ invertibility or finite-dimensionality hypothesis.  This is the algebraic form o
 theorem polarPartial_comp_adjoint_comp_polarPartial (M : E →L[ℂ] F) :
     M.polarPartial ∘L M.polarPartial.adjoint ∘L M.polarPartial = M.polarPartial := by
   rw [M.adjoint_comp_polarPartial, M.polarPartial_comp_starProjection]
+
+/-- **The rectangular polar factor is a partial isometry** (Conway VI.3.9). -/
+theorem polarPartial_isPartialIsometry (M : E →L[ℂ] F) :
+    M.polarPartial.IsPartialIsometry :=
+  M.polarPartial_comp_adjoint_comp_polarPartial
 
 /-- The adjoint form of the partial-isometry identity, `W⋆ W W⋆ = W⋆`. -/
 theorem adjoint_comp_polarPartial_comp_adjoint (M : E →L[ℂ] F) :

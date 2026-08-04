@@ -92,6 +92,30 @@ argument to the elementary ordered Sylvester theorem. -/
 def OrderedInternalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (δ : ℝ) : Prop :=
   OrderedGap A U A Uᗮ δ ∨ OrderedGap A Uᗮ A U δ
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+/-- The conversion between the two primitives, and the reason both are named: a theorem
+family stated against the weaker hypothesis applies to a caller holding the stronger one. -/
+theorem SpectraSeparated.of_orderedGap {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E}
+    {B : F →ₗ[𝕜] F} {V : Submodule 𝕜 F} {δ : ℝ} (hδ : 0 ≤ δ)
+    (h : OrderedGap A U B V δ) : SpectraSeparated A U B V δ := by
+  intro lam μ hlam hμ
+  have hle : lam + δ ≤ μ := h lam μ hlam hμ
+  rw [abs_sub_comm, abs_of_nonneg (by linarith : (0 : ℝ) ≤ μ - lam)]
+  linarith
+
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+/-- Spectral inclusion on opposite sides of a cut gives ordered separation: the bridge that
+turns a hypothesis a caller can check into the one the theorems consume. -/
+theorem orderedGap_of_restrictedSpectrum_subset {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E}
+    {B : F →ₗ[𝕜] F} {V : Submodule 𝕜 F} {a δ : ℝ}
+    (hA : restrictedSpectrum A U ⊆ Set.Iic a)
+    (hB : restrictedSpectrum B V ⊆ Set.Ici (a + δ)) :
+    OrderedGap A U B V δ := by
+  intro lam μ hlam hμ
+  have h1 : lam ≤ a := hA hlam
+  have h2 : a + δ ≤ μ := hB hμ
+  linarith
+
 omit [FiniteDimensional 𝕜 E] in
 /-- Spectral inclusion on opposite sides of a cut gives the corresponding
 ordered internal gap. -/
