@@ -334,6 +334,91 @@ theorem genericCrossBlock_eq_zero_iff (m : genericLeftHalf U V) :
   exact Subtype.ext
     (eq_zero_of_mem_inf_generic_left_of_mem_orthogonal_right U V m.2 hmV)
 
+
+/-! ## The mirrored block on the `Uᗮ`-half
+
+Everything above has a mirror obtained by swapping `U` for `Uᗮ`, and the mirror
+of `genericCrossBlock_eq_zero_iff` is what says the cross block has *dense
+range* as well as trivial kernel — the two together are what make its polar
+factor a unitary `M ≃ₗᵢ N` rather than a mere partial isometry.
+-/
+
+omit [CompleteSpace H] in
+/-- On the `Uᗮ`-half of the generic part, a vector lying in `V` is zero. -/
+theorem eq_zero_of_mem_inf_generic_right_of_mem_right
+    {x : H} (hx : x ∈ genericRightHalf U V) (hxV : x ∈ V) : x = 0 := by
+  have : x ∈ halmosGenericPart U V ⊓ (Uᗮ ⊓ V) := ⟨hx.2, hx.1, hxV⟩
+  simpa [halmosGenericPart_inf_inf_eq_bot_leftCompl_right U V] using this
+
+omit [CompleteSpace H] in
+/-- On the `Uᗮ`-half of the generic part, a vector orthogonal to `V` is zero. -/
+theorem eq_zero_of_mem_inf_generic_right_of_mem_orthogonal_right
+    {x : H} (hx : x ∈ genericRightHalf U V) (hxV : x ∈ Vᗮ) : x = 0 := by
+  have : x ∈ halmosGenericPart U V ⊓ (Uᗮ ⊓ Vᗮ) := ⟨hx.2, hx.1, hxV⟩
+  simpa [halmosGenericPart_inf_inf_eq_bot_leftCompl_rightCompl U V] using this
+
+/-- On the generic part, projecting onto the `Uᗮ`-half is projecting onto
+`Uᗮ`. -/
+theorem starProjection_genericRightHalf_of_mem_generic {g : H}
+    (hg : g ∈ halmosGenericPart U V) :
+    (genericRightHalf U V).starProjection g = g - U.starProjection g := by
+  refine Submodule.eq_starProjection_of_mem_of_inner_eq_zero
+    (sub_starProjection_mem_genericRightHalf U V hg) ?_
+  intro w hw
+  have hcancel : g - (g - U.starProjection g) = U.starProjection g := by abel
+  rw [hcancel]
+  exact (Submodule.mem_orthogonal _ _).mp hw.1 _ (U.starProjection_apply_mem g)
+
+/-- **The mirrored cross block** `B' = P_M P_V |_N`, the adjoint entry. -/
+noncomputable def genericCrossBlockMirror :
+    genericRightHalf U V →L[ℂ] genericLeftHalf U V :=
+  (genericLeftHalf U V).orthogonalProjectionOnto ∘L V.starProjection ∘L
+    (genericRightHalf U V).subtypeL
+
+/-- `P_V` splits into the two blocks on the `Uᗮ`-half as well. -/
+theorem starProjection_eq_mirror_add_of_mem_right (n : genericRightHalf U V) :
+    V.starProjection (n : H) =
+      ((genericCrossBlockMirror U V n : genericLeftHalf U V) : H) +
+        (V.starProjection (n : H) -
+          U.starProjection (V.starProjection (n : H))) := by
+  have hgen : V.starProjection (n : H) ∈ halmosGenericPart U V :=
+    projection_mem_halmosGenericPart_right U V n.2.2
+  have hM : ((genericCrossBlockMirror U V n : genericLeftHalf U V) : H) =
+      U.starProjection (V.starProjection (n : H)) := by
+    have h : ((genericCrossBlockMirror U V n : genericLeftHalf U V) : H) =
+        (genericLeftHalf U V).starProjection (V.starProjection (n : H)) := by
+      simp [genericCrossBlockMirror]
+    rw [h, starProjection_genericLeftHalf_of_mem_generic U V hgen]
+  rw [hM]
+  abel
+
+/-- **The mirrored cross block has trivial kernel.**  Same argument as
+`genericCrossBlock_eq_zero_iff` with `U` and `Uᗮ` exchanged: if `B' n = 0` then
+`P_V n` lies in `N`, hence in `N ⊓ V = ⊥`, so `n ⊥ V`, so `n = 0`.
+
+Trivial kernel here is trivial *cokernel* for `genericCrossBlock`; with
+`genericCrossBlock_eq_zero_iff` this is what makes the polar factor a
+unitary. -/
+theorem genericCrossBlockMirror_eq_zero_iff (n : genericRightHalf U V) :
+    genericCrossBlockMirror U V n = 0 ↔ n = 0 := by
+  refine ⟨fun hB => ?_, fun hn => by rw [hn, map_zero]⟩
+  have hgen : V.starProjection (n : H) ∈ halmosGenericPart U V :=
+    projection_mem_halmosGenericPart_right U V n.2.2
+  have hsplit := starProjection_eq_mirror_add_of_mem_right U V n
+  rw [hB] at hsplit
+  simp only [Submodule.coe_zero, zero_add] at hsplit
+  -- The `M`-component is gone, so `P_V n` is its own `N`-component.
+  have hmemN : V.starProjection (n : H) ∈ genericRightHalf U V := by
+    rw [← starProjection_genericRightHalf_of_mem_generic U V hgen] at hsplit
+    exact hsplit ▸ (genericRightHalf U V).starProjection_apply_mem _
+  have hzero : V.starProjection (n : H) = 0 :=
+    eq_zero_of_mem_inf_generic_right_of_mem_right U V hmemN
+      (V.starProjection_apply_mem _)
+  have hnV : (n : H) ∈ Vᗮ := by
+    rwa [Submodule.starProjection_apply_eq_zero_iff] at hzero
+  exact Subtype.ext
+    (eq_zero_of_mem_inf_generic_right_of_mem_orthogonal_right U V n.2 hnV)
+
 end HiddenFoundations
 end MathAhead
 end Experimental
