@@ -5,6 +5,12 @@ Measured with `scripts/check_roadmap_delivered.py`, which reads
 
 **189/198 name matches (95.5%)**, from 174/198 (87.9%) at the start of the conformance pass.
 
+Note that removing the false hypotheses from `upperHemicontinuousAt_isMinOn` did **not** move
+this number, because the checker was already counting it as delivered on the strength of the
+name while the statement assumed strictly more. The percentage went up when renames landed and
+stayed flat when a real defect was fixed, which is the clearest available argument for reading
+the classification below instead of the number.
+
 | topic | | |
 |---|---|---|
 | MajorizationAndAngles | 26/26 | 100% |
@@ -63,19 +69,39 @@ classification below as the real state, not the number.
 8. **`exists_units_eq_mul_of_rank_factorization`** — Milestone A2 uniqueness. The roadmap's own
    Acknowledgements already say A2 is specified and not implemented.
 
-### Over-strong hypotheses — the theorem exists, the signature does not match
+### Over-strong hypotheses
 
-9. **`continuous_iInf_of_hemicontinuous`** and **`upperHemicontinuousAt_isMinOn_of_hemicontinuous`**
-   — delivered as `..._of_hemicontinuousAt` (the better name; the hypotheses really are
-   pointwise), but carrying `[FirstCountableTopology P] [RegularSpace X] [T2Space X]
-   [FirstCountableTopology X] [WeaklyLocallyCompactSpace X]`, none of which the roadmap
-   assumes. Same defect as `upperHemicontinuousAt_isMinOn`, which carries an extra
-   `[FirstCountableTopology X]` and which the *name* checker scores as delivered — the
-   over-counting direction, and the reason `RoadmapBridge` exists.
+**`upperHemicontinuousAt_isMinOn` — resolved.** It carried `[FirstCountableTopology X]`,
+`[T2Space X]` and `[(𝓝 p₀).IsCountablyGenerated]`; the roadmap assumed none and called the
+first a proof artifact of the sequential route. Correct: Mathlib's
+`IsCompact.eventually_forall_of_forall_eventually` is a tube lemma with no countability, and
+gives uniform closeness of `g p` to `g p₀` on compact `K` directly. The delivered signature
+now carries none of the three, and the sequential proof was replaced rather than kept beside
+the new one.
 
-   Removing them is real proof work: Mathlib's `UpperHemicontinuousAt.of_sequences` is the
-   sequential route that forces first-countability, so the general proof cannot go through it.
-   The roadmap is explicit that the hypothesis is a proof artifact rather than incidental.
+**`continuous_iInf_of_hemicontinuous` and `upperHemicontinuousAt_isMinOn_of_hemicontinuous`
+— a different case, and a question for the roadmap.** These are the *varying*-constraint
+theorems, delivered as `..._of_hemicontinuousAt` (the better name — the hypotheses really are
+pointwise) with `[FirstCountableTopology P] [RegularSpace X] [T2Space X]
+[FirstCountableTopology X] [WeaklyLocallyCompactSpace X]`.
+
+The first-countability binders are probably artifacts of the same sequential route and worth
+attacking the same way. **Local compactness is not.** `Berge.lean` documents why, at
+`exists_subseq_tendsto_mem_of_upperHemicontinuousAt`:
+
+> The local-boundedness hypothesis is what makes this possible and **cannot be weakened to
+> "each `K p` is compact"**: a family of individually compact sets can march off to infinity
+> as `p → p₀`, leaving no compact set to extract from.
+
+The roadmap's own README agrees the varying case is not the fixed case plus a hypothesis:
+"the argument that proves the fixed case does not generalize by adding a hypothesis, because
+with `K` varying the approximate-minimizer sequence need not stay in one compact set."
+
+So the roadmap states these with only `[TopologicalSpace P] [TopologicalSpace X]` while the
+mathematics appears to need a local-boundedness assumption. That is the same shape as the
+Milestone D1 defect — a hypothesis the statement needs and does not carry — but unlike D1 it
+is **not confirmed**, because no counterexample has been constructed here. It should be
+reviewed before anyone tries to deliver the signature as written.
 
 ## Roadmap defects found and fixed
 
