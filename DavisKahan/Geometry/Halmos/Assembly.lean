@@ -25,6 +25,38 @@ The remaining brick is the generic model: an isometry of the generic parts that
 intertwines the two cosine-square operators has to be upgraded to one that
 intertwines both projections.  That is the input `eg` here, and it is where the
 mathematics still missing lives.
+
+## Overlap with `Geometry/Polar/TwoProjectionOperatorClassification.lean`
+
+**That file already assembles a trivial-part equivalence and a generic-part
+equivalence into an ambient unitary**, via `Submodule.orthogonalDecomposition`
+and `withLpProdCongr`, and concludes its own
+`twoProjection_operator_classification`.  This file's `halmosGlobalEquiv` does
+the same outer step by a different route, so the outer glue is genuinely
+duplicated.  That was not noticed until after this module was written; it is
+recorded here rather than left silent.
+
+What is *not* duplicated, and is why this module exists:
+
+* That file takes `trivialEquiv` as **given**, packaged in
+  `TwoProjectionOperatorEquivalence` together with a hypothesis that it
+  intertwines the restricted projections.  A caller does not have that — a
+  caller has four isometries of the four elementary summands.  This file builds
+  `trivialEquiv` from them (`halmosTrivialEquiv`, three `orthogonalSupGlue`s)
+  and shows **no intertwining hypothesis on the elementary summands is needed**:
+  it is automatic, because `common ≤ U ⊓ V`, `source ≤ U ⊓ Vᗮ`,
+  `target ≤ Uᗮ ⊓ V` and `exterior ≤ Uᗮ ⊓ Vᗮ`.
+* The structural lemmas `inf_halmosTrivialPart_left`/`_right`,
+  `starProjection_trivial_mem_left`/`_right` and
+  `eq_sup_inf_halmosTrivialPart_inf_halmosGenericPart` are new.
+* `ForTauCeti.orthogonalSupGlue` (gluing across `A ⊔ B`) has no counterpart
+  there; `orthogonalDecomposition` only splits a space against one complement.
+
+**Consolidation is a follow-up**: `halmosGlobalEquiv` and its four
+`map_halmosGlobalEquiv_*` lemmas should be replaced by a constructor
+`TwoProjectionOperatorEquivalence` built from the four summand isometries, so
+the outer assembly exists once.  Doing it needs the trivial-part intertwining
+fields proved from the summand data, which is the one piece not yet written.
 -/
 
 open scoped InnerProductSpace
