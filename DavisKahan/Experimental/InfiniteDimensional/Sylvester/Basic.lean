@@ -8,7 +8,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Ideals.CompactIntegral
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.FourierSemigroup
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.OrderedSemigroup
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 
 /-!
 # Infinite-dimensional bounded Sylvester equations

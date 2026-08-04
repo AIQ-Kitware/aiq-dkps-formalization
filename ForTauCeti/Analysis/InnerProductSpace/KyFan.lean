@@ -39,7 +39,7 @@ For operators on finite-dimensional inner product spaces over `𝕜 = ℝ, ℂ`:
   `re ∑ᵢ ⟪uᵢ, A vᵢ⟫` over orthonormal `k`-families `u, v`;
 * **weak majorization** `kyFanSum k (A + B) ≤ kyFanSum k A + kyFanSum k B` —
   the triangle inequality for every Ky Fan norm simultaneously, the engine of
-  the Fan dominance principle (`UnitarilyInvariantNorm.lean`);
+  the Fan dominance principle (`UnitarilyInvariantSeminorm.lean`);
 * unitary invariance, adjoint invariance, and nonnegative-real scaling of
   singular values and Ky Fan sums, plus the bounded-factor domination
   `σᵢ(C ∘ A) ≤ c σᵢ(A)` (Loewner monotonicity of the Gram eigenvalues).
@@ -318,7 +318,7 @@ theorem sum_re_inner_le_sum_eigenvalues_top {S : E →ₗ[𝕜] E} (hS : S.IsSym
 /-! ### The Ky Fan variational principle (F1.c) -/
 
 /-- Index plumbing: a top-`k` filtered sum over `Fin n` is a sum over `Fin k`.
-(Not `private`: `UnitarilyInvariantNorm.lean` consumes it to convert `kyFanSum`
+(Not `private`: `UnitarilyInvariantSeminorm.lean` consumes it to convert `kyFanSum`
 domination into the prefix-sum hypothesis of the T-transform descent.) -/
 theorem sum_filter_lt_eq_sum_fin {n k : ℕ} (hk : k ≤ n) (f : ℕ → ℝ) :
     ∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), f (j : ℕ)

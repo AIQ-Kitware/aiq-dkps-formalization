@@ -41,7 +41,7 @@ The zero operator needs nothing: `approximationNumber_zero` already says every
 gives `aᵢ (diagOp b x) = x i` for antitone nonnegative `x`.  It is not here because
 this file is a `module` and `TauCeti.diagOp` is not: a `module` may only import
 other `module`s, and nothing in `diagOp`'s neighbourhood has been converted.  That
-file says to fold itself back in once `UnitarilyInvariantNorm.lean` becomes a
+file says to fold itself back in once `UnitarilyInvariantSeminorm.lean` becomes a
 `module`.  Note the reason above is *not* the one this note used to give — the
 singular values of a diagonal map (`TauCeti.singularValues_diagOp`) do exist; the
 module boundary is the whole of what is left.

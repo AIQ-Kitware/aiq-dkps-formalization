@@ -57,7 +57,7 @@ def CorrespondingEigenblock {A B : E →ₗ[𝕜] E}
 /-- Frobenius sine distance in canonical subspace notation. -/
 noncomputable def sinThetaFrobenius (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
-  UnitarilyInvariantNorm.frobenius 𝕜 E (sinThetaMap U V)
+  UnitarilyInvariantSeminorm.frobenius 𝕜 E (sinThetaMap U V)
 
 /-- **The complement identity.**  The canonical Frobenius sine of two equally
 indexed eigenblocks is exactly the square root of the cross-block overlap sum
@@ -80,7 +80,7 @@ theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
   let V : Submodule 𝕜 E := Submodule.span 𝕜 (bS '' (↑s : Set (Fin n)))
   have hn : finrank 𝕜 E = n := by
     rw [Module.finrank_eq_card_basis bT.toBasis, Fintype.card_fin]
-  rw [sinThetaFrobenius, UnitarilyInvariantNorm.frobenius_apply 𝕜 E _ hn bT]
+  rw [sinThetaFrobenius, UnitarilyInvariantSeminorm.frobenius_apply 𝕜 E _ hn bT]
   congr 1
   have hcol : ∀ i : Fin n,
       ‖sinThetaMap U V (bT i)‖ ^ 2 =
@@ -129,7 +129,7 @@ theorem yuWangSamworth_sinTheta_le
     (hgap : InternalGap A U Δ) :
     sinThetaFrobenius U V ≤
       2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-        (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ := by
+        (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ := by
   classical
   obtain ⟨n, hn, s, rfl, rfl⟩ := hcorr
   have hcard : s.card = d := by
@@ -190,13 +190,13 @@ theorem yuWangSamworth_sinTheta_le
   have hfrobBound :
       Real.sqrt (∑ j ∈ s, ∑ k ∈ sᶜ,
         ‖⟪hA.eigenvectorBasis hn k, hB.eigenvectorBasis hn j⟫_𝕜‖ ^ 2)
-        ≤ 2 * UnitarilyInvariantNorm.frobenius 𝕜 E (B - A) / Δ := by
+        ≤ 2 * UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A) / Δ := by
     have hfrob := sqrt_sum_cross_le_of_population_gap hA hB hn s hΔ hindexGap
-    rw [UnitarilyInvariantNorm.frobenius_apply 𝕜 E (B - A) hn
+    rw [UnitarilyInvariantSeminorm.frobenius_apply 𝕜 E (B - A) hn
       (hA.eigenvectorBasis hn)]
     exact hfrob
   rcases le_total (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-      (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) with hle | hle
+      (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) with hle | hle
   · rw [min_eq_left hle]
     exact hopBound
   · rw [min_eq_right hle]
@@ -232,7 +232,7 @@ theorem yuWangSamworth_intervalBlock_le
     (hgap : InternalGap A U Δ) :
     sinThetaFrobenius U V ≤
       2 * min (Real.sqrt (finrank 𝕜 U) * ‖(B - A).toContinuousLinearMap‖)
-        (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ := by
+        (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ := by
   obtain ⟨n, hn, s, -, hVp⟩ := id hcorr
   refine yuWangSamworth_sinTheta_le hA hB ?_ ?_ hcorr rfl hΔ hgap
   · rw [hUeq]; exact isInvariant_spectralSubspace A (Set.Icc a b)
@@ -429,22 +429,22 @@ theorem yuWangSamworth_alignedBasis_le
       Real.sqrt (∑ i, ‖v i - u i‖ ^ 2) ≤
         2 * Real.sqrt 2 *
           min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-            (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ := by
+            (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ := by
   obtain ⟨u, v, hu, hv, hspanU, hspanV, hsum⟩ :=
     exists_aligned_orthonormalBasis hrankU hrankV
   refine ⟨u, v, hu, hv, hspanU, hspanV, ?_⟩
   have hsine := yuWangSamworth_sinTheta_le hA hB hU hV hcorr hrankU hΔ hgap
   have hsnn : (0 : ℝ) ≤ sinThetaFrobenius U V :=
-    (UnitarilyInvariantNorm.frobenius 𝕜 E).nonneg _
+    (UnitarilyInvariantSeminorm.frobenius 𝕜 E).nonneg _
   calc Real.sqrt (∑ i, ‖v i - u i‖ ^ 2)
       ≤ Real.sqrt (2 * sinThetaFrobenius U V ^ 2) := Real.sqrt_le_sqrt hsum
     _ = Real.sqrt 2 * sinThetaFrobenius U V := by
         rw [Real.sqrt_mul (by norm_num : (0 : ℝ) ≤ 2), Real.sqrt_sq hsnn]
     _ ≤ Real.sqrt 2 * (2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-          (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ) :=
+          (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ) :=
         mul_le_mul_of_nonneg_left hsine (Real.sqrt_nonneg 2)
     _ = 2 * Real.sqrt 2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-          (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ := by ring
+          (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ := by ring
 
 omit [FiniteDimensional 𝕜 E] in
 /-- **The span of an eigenvector is invariant.**  If `A u = lam • u` then every
@@ -547,7 +547,7 @@ theorem yuWangSamworth_eigenvector_le
   rw [key, ← hsum1]
   refine hbound.trans ?_
   have hmin : min (Real.sqrt (↑(1 : ℕ)) * ‖(B - A).toContinuousLinearMap‖)
-      (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A))
+      (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A))
       ≤ ‖(B - A).toContinuousLinearMap‖ :=
     (min_le_left _ _).trans_eq (by rw [Nat.cast_one, Real.sqrt_one, one_mul])
   gcongr

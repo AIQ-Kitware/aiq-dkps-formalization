@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 
 /-!
 # Finite coordinate tangent perturbation bounds
@@ -28,7 +28,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- Ordered-gap perturbation theorem for the canonical coordinate tangent. -/
 theorem tanTheta_perturbation_le
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
@@ -40,7 +40,7 @@ theorem tanTheta_perturbation_le
 
 /-- The same result under the graph-operator compatibility name. -/
 theorem tanThetaMap_perturbation_le
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
@@ -60,7 +60,7 @@ theorem opNorm_tanTheta_le
     δ * ‖(tanThetaEmbedding U X).toContinuousLinearMap‖ ≤
       ‖(residual A X M).toContinuousLinearMap‖ := by
   simpa using tanTheta_perturbation_le
-    (RectangularUnitarilyInvariantNorm.opNorm (𝕜 := 𝕜) (E := F) (F := E))
+    (RectangularUnitarilyInvariantSeminorm.opNorm (𝕜 := 𝕜) (E := F) (F := E))
     hA hU X hM hGalerkin hδ hgap
 
 /-- Frobenius coordinate tangent bound. -/
@@ -70,10 +70,10 @@ theorem frobenius_tanTheta_le
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
-    δ * RectangularUnitarilyInvariantNorm.frobenius (tanThetaEmbedding U X) ≤
-      RectangularUnitarilyInvariantNorm.frobenius (residual A X M) :=
+    δ * RectangularUnitarilyInvariantSeminorm.frobenius (tanThetaEmbedding U X) ≤
+      RectangularUnitarilyInvariantSeminorm.frobenius (residual A X M) :=
   tanTheta_perturbation_le
-    (RectangularUnitarilyInvariantNorm.frobenius (𝕜 := 𝕜) (E := F) (F := E))
+    (RectangularUnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := E))
     hA hU X hM hGalerkin hδ hgap
 
 /-- Ky Fan coordinate tangent bound. -/
@@ -83,13 +83,13 @@ theorem kyFan_tanTheta_le
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) (k : ℕ) :
-    δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+    δ * RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
         (tanThetaEmbedding U X) ≤
-      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
         (residual A X M) := by
-  simpa [RectangularUnitarilyInvariantNorm.kyFan_apply] using
+  simpa [RectangularUnitarilyInvariantSeminorm.kyFan_apply] using
     tanTheta_perturbation_le
-      (RectangularUnitarilyInvariantNorm.kyFan
+      (RectangularUnitarilyInvariantSeminorm.kyFan
         (𝕜 := 𝕜) (E := F) (F := E) k)
       hA hU X hM hGalerkin hδ hgap
 

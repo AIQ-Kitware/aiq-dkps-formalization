@@ -4,19 +4,19 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.BlockSum
 
 /-!
 # Concrete rectangular unitarily invariant norms
 
 Adjoint transport, composition bounds, the zero extension, and the operator, Frobenius,
 Ky Fan and nuclear norms, together with the bridges to and from the square
-`UnitarilyInvariantNorm`.
+`UnitarilyInvariantSeminorm`.
 
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm`,
+* Original module: `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm`,
   split out on 2026-07-28 because that file had grown to 2124 lines while Tau Ceti's
   `lean_lib` enforces a hard 1500-line ceiling, and 1000 for a newly added file.
 * Extraction class: **split**.  No statement, proof or declaration name changed; only
@@ -41,9 +41,9 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 variable {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
   [FiniteDimensional 𝕜 G]
 
-namespace RectangularUnitarilyInvariantNorm
+namespace RectangularUnitarilyInvariantSeminorm
 
-variable (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
+variable (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
 
 /- `Module ℝ (E →ₗ[𝕜] F)` is a *local* instance in `Basic`, so it does not survive the
 import.  Re-enable it here; making it global would put a second `Module ℝ` structure on
@@ -53,8 +53,8 @@ attribute [local instance] realModuleLinearMap
 
 /-- Adjoint transport to the transposed rectangular norm. -/
 noncomputable def adjointTransport
-    (N : RectangularUnitarilyInvariantNorm 𝕜 E F) :
-    RectangularUnitarilyInvariantNorm 𝕜 F E where
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F) :
+    RectangularUnitarilyInvariantSeminorm 𝕜 F E where
   toFun A := N A.adjoint
   add_le' A B := by
     simpa only [map_add] using N.add_le A.adjoint B.adjoint
@@ -238,7 +238,7 @@ theorem singularValues_zeroExtension (A : E →ₗ[𝕜] F) :
       singularValues_comp_adjoint_linearIsometry ιE A
 
 /-- Operator norm as a rectangular UI norm. -/
-noncomputable def opNorm : RectangularUnitarilyInvariantNorm 𝕜 E F where
+noncomputable def opNorm : RectangularUnitarilyInvariantSeminorm 𝕜 E F where
   toFun A := ‖A.toContinuousLinearMap‖
   add_le' A B := by
     rw [map_add]
@@ -261,7 +261,7 @@ continuous-linear-map view, definitionally. -/
     opNorm A = ‖A.toContinuousLinearMap‖ := (rfl)
 
 /-- Frobenius/Hilbert--Schmidt norm as a rectangular UI norm. -/
-noncomputable def frobenius : RectangularUnitarilyInvariantNorm 𝕜 E F where
+noncomputable def frobenius : RectangularUnitarilyInvariantSeminorm 𝕜 E F where
   toFun A := Real.sqrt
     (∑ i, ‖A (stdOrthonormalBasis 𝕜 E i)‖ ^ 2)
   add_le' A B := by
@@ -273,7 +273,7 @@ noncomputable def frobenius : RectangularUnitarilyInvariantNorm 𝕜 E F where
       refine pow_le_pow_left₀ (norm_nonneg _) ?_ 2
       rw [LinearMap.add_apply]
       exact norm_add_le _ _
-    exact hmono.trans (UnitarilyInvariantNorm.sqrt_sum_add_sq_le _ _)
+    exact hmono.trans (UnitarilyInvariantSeminorm.sqrt_sum_add_sq_le _ _)
   smul' a A := by
     have h : ∀ i, ‖(a • A) (stdOrthonormalBasis 𝕜 E i)‖ ^ 2 =
         ‖a‖ ^ 2 * ‖A (stdOrthonormalBasis 𝕜 E i)‖ ^ 2 := fun i => by
@@ -426,7 +426,7 @@ theorem rectangularKyFanSum_add_le (k : ℕ)
   exact kyFanSum_add_le k _ _
 
 /-- Ky Fan `k`-norm. -/
-noncomputable def kyFan (k : ℕ) : RectangularUnitarilyInvariantNorm 𝕜 E F where
+noncomputable def kyFan (k : ℕ) : RectangularUnitarilyInvariantSeminorm 𝕜 E F where
   toFun A := rectangularKyFanSum k A
   add_le' A B := rectangularKyFanSum_add_le k A B
   smul' a A := by
@@ -438,7 +438,7 @@ noncomputable def kyFan (k : ℕ) : RectangularUnitarilyInvariantNorm 𝕜 E F w
     rw [singularValues_unitary_comp, singularValues_comp_unitary]
 
 /-- Nuclear/trace norm. -/
-noncomputable def nuclear : RectangularUnitarilyInvariantNorm 𝕜 E F :=
+noncomputable def nuclear : RectangularUnitarilyInvariantSeminorm 𝕜 E F :=
   kyFan (finrank 𝕜 E)
 
 /-- The rectangular Frobenius norm is the square root of the sum of squared
@@ -550,19 +550,19 @@ theorem nuclear_le_sqrt_finrank_mul_frobenius (A : E →ₗ[𝕜] F) :
   simpa [one_mul, one_pow, Finset.sum_const, Finset.card_fin, nsmul_eq_mul]
     using hcs
 
-end RectangularUnitarilyInvariantNorm
+end RectangularUnitarilyInvariantSeminorm
 
 /-- Restrict a rectangular UI norm to square maps. -/
-noncomputable def RectangularUnitarilyInvariantNorm.toSquare
-    (N : RectangularUnitarilyInvariantNorm 𝕜 E E) :
-    UnitarilyInvariantNorm 𝕜 E where
+noncomputable def RectangularUnitarilyInvariantSeminorm.toSquare
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E E) :
+    UnitarilyInvariantSeminorm 𝕜 E where
   toFun := N.toFun
   add_le' := N.add_le'
   smul' := N.smul'
   invariant' := N.invariant'
 
 
-namespace UnitarilyInvariantNorm
+namespace UnitarilyInvariantSeminorm
 
 
 variable {𝕜 : Type*} [RCLike 𝕜]
@@ -571,8 +571,8 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 
 /-- Embed the existing square abstraction into the rectangular API. -/
 noncomputable def toRectangular
-    (N : UnitarilyInvariantNorm 𝕜 E) :
-    RectangularUnitarilyInvariantNorm 𝕜 E E where
+    (N : UnitarilyInvariantSeminorm 𝕜 E) :
+    RectangularUnitarilyInvariantSeminorm 𝕜 E E where
   toFun := N.toFun
   add_le' := N.add_le'
   smul' := N.smul'
@@ -582,9 +582,9 @@ noncomputable def toRectangular
 /-- A square unitarily invariant norm, read as a rectangular one, agrees with
 itself on square operators. -/
 @[simp] theorem toRectangular_apply
-    (N : UnitarilyInvariantNorm 𝕜 E) (A : E →ₗ[𝕜] E) :
+    (N : UnitarilyInvariantSeminorm 𝕜 E) (A : E →ₗ[𝕜] E) :
     N.toRectangular A = N A :=
   (rfl)
 
-end UnitarilyInvariantNorm
+end UnitarilyInvariantSeminorm
 end TauCeti

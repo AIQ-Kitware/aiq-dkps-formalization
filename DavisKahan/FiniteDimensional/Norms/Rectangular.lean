@@ -14,12 +14,12 @@ canonical reusable module
 `ForMathlib.Analysis.InnerProductSpace.SchattenNorm`.
 
 This import preserves the historical experimental module path while exposing
-the same `RectangularUnitarilyInvariantNorm.schatten` and `mem_schatten`
+the same `RectangularUnitarilyInvariantSeminorm.schatten` and `mem_schatten`
 interface to downstream files.
 -/
 
 namespace TauCeti
-namespace RectangularUnitarilyInvariantNorm
+namespace RectangularUnitarilyInvariantSeminorm
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -38,8 +38,8 @@ noncomputable def ofSquareFamily
     [FiniteDimensional 𝕜 F]
     (Ns : ∀ (H : Type (max uE uF)) [NormedAddCommGroup H]
       [InnerProductSpace 𝕜 H] [FiniteDimensional 𝕜 H],
-      UnitarilyInvariantNorm 𝕜 H) :
-    RectangularUnitarilyInvariantNorm 𝕜 E F where
+      UnitarilyInvariantSeminorm 𝕜 H) :
+    RectangularUnitarilyInvariantSeminorm 𝕜 E F where
   toFun A := Ns (WithLp 2 (E × F)) (zeroExtension A)
   add_le' A B := by
     rw [zeroExtension_add]
@@ -65,7 +65,7 @@ variable {E F : Type*}
 /-- Historical finite-dimensional rectangular Schatten declaration.  Its
 implementation is the canonical production construction. -/
 noncomputable def schatten (p : ℝ) (hp : 1 ≤ p) :
-    RectangularUnitarilyInvariantNorm 𝕜 E F where
+    RectangularUnitarilyInvariantSeminorm 𝕜 E F where
   toFun A := schattenNorm (𝕜 := 𝕜) (E := E) (F := F) p hp A
   add_le' A B := schattenNorm_add_le p hp A B
   smul' a A := schattenNorm_smul p hp a A
@@ -77,5 +77,5 @@ theorem mem_schatten (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
   change 0 ≤ schattenNorm (𝕜 := 𝕜) (E := E) (F := F) p hp A
   exact schattenNorm_nonneg p hp A
 
-end RectangularUnitarilyInvariantNorm
+end RectangularUnitarilyInvariantSeminorm
 end TauCeti

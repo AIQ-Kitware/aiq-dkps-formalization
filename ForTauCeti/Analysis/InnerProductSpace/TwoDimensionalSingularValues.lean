@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT-5.6 Thinking
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.KyFan
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
 
 /-!

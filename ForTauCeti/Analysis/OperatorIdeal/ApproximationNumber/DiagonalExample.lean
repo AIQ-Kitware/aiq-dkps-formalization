@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
 /-!
 # The diagonal acceptance example
@@ -20,13 +20,13 @@ reason that is temporary and worth stating plainly.
 
 `Examples.lean` is a `module` in the new Lean module system, and a `module` may
 only import other `module`s.  `TauCeti.diagOp` and `TauCeti.singularValues_diagOp`
-live in `ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean`,
+live in `ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean`,
 which has not been converted yet — nor has anything in its import closure that
 mentions `diagOp`.  The reverse direction is allowed, so a plain file like this
 one can import both halves.
 
 **This file should be deleted and its theorem moved into `Examples.lean` as soon
-as `UnitarilyInvariantNorm.lean` becomes a `module`.**  It exists to deliver an
+as `UnitarilyInvariantSeminorm.lean` becomes a `module`.**  It exists to deliver an
 acceptance example rather than to leave it blocked on a migration, and it has no
 other reason to be separate.
 

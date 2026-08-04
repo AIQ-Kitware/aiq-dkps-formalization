@@ -44,8 +44,8 @@ private theorem isPaperHilbertSchmidt_finite
 
 /-- A rectangular Frobenius norm is invariant under adjoint. -/
 theorem rectangularFrobenius_adjoint (A : E →ₗ[𝕜] F) :
-    RectangularUnitarilyInvariantNorm.frobenius A.adjoint =
-      RectangularUnitarilyInvariantNorm.frobenius A := by
+    RectangularUnitarilyInvariantSeminorm.frobenius A.adjoint =
+      RectangularUnitarilyInvariantSeminorm.frobenius A := by
   letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
   letI : CompleteSpace F := FiniteDimensional.complete 𝕜 F
   have h := paperHilbertSchmidtNorm_adjoint A.toContinuousLinearMap
@@ -62,9 +62,9 @@ square product; this is the cross-dimensional ideal estimate needed for Gram
 operators. -/
 theorem frobenius_comp_rectangular_le_opNorm_mul
     (C : F →ₗ[𝕜] E) (A : E →ₗ[𝕜] F) :
-    UnitarilyInvariantNorm.frobenius 𝕜 E (C ∘ₗ A) ≤
+    UnitarilyInvariantSeminorm.frobenius 𝕜 E (C ∘ₗ A) ≤
       ‖C.toContinuousLinearMap‖ *
-        RectangularUnitarilyInvariantNorm.frobenius A := by
+        RectangularUnitarilyInvariantSeminorm.frobenius A := by
   letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
   letI : CompleteSpace F := FiniteDimensional.complete 𝕜 F
   have hA : IsPaperHilbertSchmidt A.toContinuousLinearMap :=
@@ -98,9 +98,9 @@ theorem rectangularFrobenius_twoSided_comp_le
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
       [FiniteDimensional 𝕜 H]
     (L : F →ₗ[𝕜] G) (A : E →ₗ[𝕜] F) (R : H →ₗ[𝕜] E) :
-    RectangularUnitarilyInvariantNorm.frobenius (L ∘ₗ A ∘ₗ R) ≤
+    RectangularUnitarilyInvariantSeminorm.frobenius (L ∘ₗ A ∘ₗ R) ≤
       ‖L.toContinuousLinearMap‖ *
-        RectangularUnitarilyInvariantNorm.frobenius A *
+        RectangularUnitarilyInvariantSeminorm.frobenius A *
           ‖R.toContinuousLinearMap‖ := by
   letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
   letI : CompleteSpace F := FiniteDimensional.complete 𝕜 F
@@ -122,86 +122,86 @@ theorem rectangularFrobenius_twoSided_comp_le
 /-- Frobenius perturbation bound for the right Gram operator. -/
 theorem frobenius_rightGram_sub_le
     (A Â : E →ₗ[𝕜] F) :
-    UnitarilyInvariantNorm.frobenius 𝕜 E
+    UnitarilyInvariantSeminorm.frobenius 𝕜 E
         (rightGram Â - rightGram A) ≤
       (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
-        RectangularUnitarilyInvariantNorm.frobenius (Â - A) := by
+        RectangularUnitarilyInvariantSeminorm.frobenius (Â - A) := by
   let D : E →ₗ[𝕜] F := Â - A
   have hidentity :
       rightGram Â - rightGram A =
         Â.adjoint ∘ₗ D + D.adjoint ∘ₗ A := by
     simpa only [D] using rightGram_sub_rightGram A Â
   rw [hidentity]
-  refine (UnitarilyInvariantNorm.frobenius 𝕜 E).add_le _ _ |>.trans ?_
+  refine (UnitarilyInvariantSeminorm.frobenius 𝕜 E).add_le _ _ |>.trans ?_
   have hleft :
-      UnitarilyInvariantNorm.frobenius 𝕜 E (Â.adjoint ∘ₗ D) ≤
+      UnitarilyInvariantSeminorm.frobenius 𝕜 E (Â.adjoint ∘ₗ D) ≤
         ‖Â.toContinuousLinearMap‖ *
-          RectangularUnitarilyInvariantNorm.frobenius D := by
+          RectangularUnitarilyInvariantSeminorm.frobenius D := by
     have h := frobenius_comp_rectangular_le_opNorm_mul Â.adjoint D
     simpa only [LinearMap.adjoint_toContinuousLinearMap,
       LinearIsometryEquiv.norm_map] using h
   have hright :
-      UnitarilyInvariantNorm.frobenius 𝕜 E (D.adjoint ∘ₗ A) ≤
+      UnitarilyInvariantSeminorm.frobenius 𝕜 E (D.adjoint ∘ₗ A) ≤
         ‖A.toContinuousLinearMap‖ *
-          RectangularUnitarilyInvariantNorm.frobenius D := by
+          RectangularUnitarilyInvariantSeminorm.frobenius D := by
     have h := frobenius_comp_rectangular_le_opNorm_mul A.adjoint D
-    rw [← (UnitarilyInvariantNorm.frobenius 𝕜 E).apply_adjoint
+    rw [← (UnitarilyInvariantSeminorm.frobenius 𝕜 E).apply_adjoint
       (D.adjoint ∘ₗ A), LinearMap.adjoint_comp,
       LinearMap.adjoint_adjoint]
     simpa only [LinearMap.adjoint_toContinuousLinearMap,
       LinearIsometryEquiv.norm_map] using h
   calc
-    UnitarilyInvariantNorm.frobenius 𝕜 E (Â.adjoint ∘ₗ D) +
-          UnitarilyInvariantNorm.frobenius 𝕜 E (D.adjoint ∘ₗ A)
+    UnitarilyInvariantSeminorm.frobenius 𝕜 E (Â.adjoint ∘ₗ D) +
+          UnitarilyInvariantSeminorm.frobenius 𝕜 E (D.adjoint ∘ₗ A)
         ≤ ‖Â.toContinuousLinearMap‖ *
-              RectangularUnitarilyInvariantNorm.frobenius D +
+              RectangularUnitarilyInvariantSeminorm.frobenius D +
             ‖A.toContinuousLinearMap‖ *
-              RectangularUnitarilyInvariantNorm.frobenius D :=
+              RectangularUnitarilyInvariantSeminorm.frobenius D :=
       add_le_add hleft hright
     _ = (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
-          RectangularUnitarilyInvariantNorm.frobenius D := by ring
+          RectangularUnitarilyInvariantSeminorm.frobenius D := by ring
 
 /-- Frobenius perturbation bound for the left Gram operator. -/
 theorem frobenius_leftGram_sub_le
     (A Â : E →ₗ[𝕜] F) :
-    UnitarilyInvariantNorm.frobenius 𝕜 F
+    UnitarilyInvariantSeminorm.frobenius 𝕜 F
         (leftGram Â - leftGram A) ≤
       (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
-        RectangularUnitarilyInvariantNorm.frobenius (Â - A) := by
+        RectangularUnitarilyInvariantSeminorm.frobenius (Â - A) := by
   let D : E →ₗ[𝕜] F := Â - A
   have hidentity :
       leftGram Â - leftGram A =
         D ∘ₗ Â.adjoint + A ∘ₗ D.adjoint := by
     simpa only [D] using leftGram_sub_leftGram A Â
   rw [hidentity]
-  refine (UnitarilyInvariantNorm.frobenius 𝕜 F).add_le _ _ |>.trans ?_
+  refine (UnitarilyInvariantSeminorm.frobenius 𝕜 F).add_le _ _ |>.trans ?_
   have hleft :
-      UnitarilyInvariantNorm.frobenius 𝕜 F (D ∘ₗ Â.adjoint) ≤
+      UnitarilyInvariantSeminorm.frobenius 𝕜 F (D ∘ₗ Â.adjoint) ≤
         ‖Â.toContinuousLinearMap‖ *
-          RectangularUnitarilyInvariantNorm.frobenius D := by
+          RectangularUnitarilyInvariantSeminorm.frobenius D := by
     have h := frobenius_comp_rectangular_le_opNorm_mul
       (E := F) (F := E) Â D.adjoint
-    rw [← (UnitarilyInvariantNorm.frobenius 𝕜 F).apply_adjoint
+    rw [← (UnitarilyInvariantSeminorm.frobenius 𝕜 F).apply_adjoint
       (D ∘ₗ Â.adjoint), LinearMap.adjoint_comp,
       LinearMap.adjoint_adjoint]
     simpa only [rectangularFrobenius_adjoint] using h
   have hright :
-      UnitarilyInvariantNorm.frobenius 𝕜 F (A ∘ₗ D.adjoint) ≤
+      UnitarilyInvariantSeminorm.frobenius 𝕜 F (A ∘ₗ D.adjoint) ≤
         ‖A.toContinuousLinearMap‖ *
-          RectangularUnitarilyInvariantNorm.frobenius D := by
+          RectangularUnitarilyInvariantSeminorm.frobenius D := by
     have h := frobenius_comp_rectangular_le_opNorm_mul
       (E := F) (F := E) A D.adjoint
     simpa only [rectangularFrobenius_adjoint] using h
   calc
-    UnitarilyInvariantNorm.frobenius 𝕜 F (D ∘ₗ Â.adjoint) +
-          UnitarilyInvariantNorm.frobenius 𝕜 F (A ∘ₗ D.adjoint)
+    UnitarilyInvariantSeminorm.frobenius 𝕜 F (D ∘ₗ Â.adjoint) +
+          UnitarilyInvariantSeminorm.frobenius 𝕜 F (A ∘ₗ D.adjoint)
         ≤ ‖Â.toContinuousLinearMap‖ *
-              RectangularUnitarilyInvariantNorm.frobenius D +
+              RectangularUnitarilyInvariantSeminorm.frobenius D +
             ‖A.toContinuousLinearMap‖ *
-              RectangularUnitarilyInvariantNorm.frobenius D :=
+              RectangularUnitarilyInvariantSeminorm.frobenius D :=
       add_le_add hleft hright
     _ = (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
-          RectangularUnitarilyInvariantNorm.frobenius D := by ring
+          RectangularUnitarilyInvariantSeminorm.frobenius D := by ring
 
 omit [FiniteDimensional 𝕜 F] in
 /-- The common Gram coefficient is bounded by the source-shaped
@@ -253,28 +253,28 @@ theorem opNorm_leftGram_sub_le_paperCoefficient
 coefficient displayed in Yu--Wang--Samworth Theorem 4. -/
 theorem frobenius_rightGram_sub_le_paperCoefficient
     (A Â : E →ₗ[𝕜] F) :
-    UnitarilyInvariantNorm.frobenius 𝕜 E
+    UnitarilyInvariantSeminorm.frobenius 𝕜 E
         (rightGram Â - rightGram A) ≤
       (2 * ‖A.toContinuousLinearMap‖ +
           ‖(Â - A).toContinuousLinearMap‖) *
-        RectangularUnitarilyInvariantNorm.frobenius (Â - A) := by
+        RectangularUnitarilyInvariantSeminorm.frobenius (Â - A) := by
   refine (frobenius_rightGram_sub_le A Â).trans ?_
   exact mul_le_mul_of_nonneg_right
     (sum_opNorm_le_paperCoefficient A Â)
-    ((RectangularUnitarilyInvariantNorm.frobenius (𝕜 := 𝕜)).nonneg _)
+    ((RectangularUnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜)).nonneg _)
 
 /-- Left-Gram Frobenius counterpart with the exact paper coefficient. -/
 theorem frobenius_leftGram_sub_le_paperCoefficient
     (A Â : E →ₗ[𝕜] F) :
-    UnitarilyInvariantNorm.frobenius 𝕜 F
+    UnitarilyInvariantSeminorm.frobenius 𝕜 F
         (leftGram Â - leftGram A) ≤
       (2 * ‖A.toContinuousLinearMap‖ +
           ‖(Â - A).toContinuousLinearMap‖) *
-        RectangularUnitarilyInvariantNorm.frobenius (Â - A) := by
+        RectangularUnitarilyInvariantSeminorm.frobenius (Â - A) := by
   refine (frobenius_leftGram_sub_le A Â).trans ?_
   exact mul_le_mul_of_nonneg_right
     (sum_opNorm_le_paperCoefficient A Â)
-    ((RectangularUnitarilyInvariantNorm.frobenius (𝕜 := 𝕜)).nonneg _)
+    ((RectangularUnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜)).nonneg _)
 
 end DavisKahanTheory
 end TauCeti

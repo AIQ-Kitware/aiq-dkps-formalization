@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 
 import ForTauCeti.Analysis.Convex.Majorization
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic
 
 /-!
 # Ky Fan majorization for rectangular unitarily invariant norms
@@ -25,7 +25,7 @@ spaces, and the transport of equal singular-value data by the rectangular SVD.
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm`,
+* Original module: `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm`,
   split out on 2026-07-28 because that file had grown to 2124 lines while Tau Ceti's
   `lean_lib` enforces a hard 1500-line ceiling, and 1000 for a newly added file.
 * Extraction class: **split**.  No statement, proof or declaration name changed; only
@@ -61,9 +61,9 @@ theorem finrank_range_le_min (A : E →ₗ[𝕜] F) :
   have := A.finrank_range_add_finrank_ker
   omega
 
-namespace RectangularUnitarilyInvariantNorm
+namespace RectangularUnitarilyInvariantSeminorm
 
-variable (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
+variable (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
 
 /- `Module ℝ (E →ₗ[𝕜] F)` is a *local* instance in `Basic`, so it does not survive the
 import.  Re-enable it here; making it global would put a second `Module ℝ` structure on
@@ -140,9 +140,9 @@ unitary invariance. -/
 private noncomputable def coordinateSquareNorm
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]
-    (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
     (ιE : H →ₗᵢ[𝕜] E) (ιF : H →ₗᵢ[𝕜] F) :
-    UnitarilyInvariantNorm 𝕜 H where
+    UnitarilyInvariantSeminorm 𝕜 H where
   toFun X := N (coordinateLift ιE ιF X)
   add_le' X Y := by
     have hmap : coordinateLift ιE ιF (X + Y) =
@@ -221,7 +221,7 @@ private theorem singularValues_singularValueDiagonal
 private theorem apply_eq_coordinateSquareNorm
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]
-    (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
     (ιE : H →ₗᵢ[𝕜] E) (ιF : H →ₗᵢ[𝕜] F)
     (A : E →ₗ[𝕜] F) (X : H →ₗ[𝕜] H)
     (hσ : X.singularValues = A.singularValues) :
@@ -550,7 +550,7 @@ theorem apply_le_of_kyFanSum_le {A B : E →ₗ[𝕜] F}
   have hNB : N B = coordinateSquareNorm N ιE ιF XB :=
     apply_eq_coordinateSquareNorm N ιE ιF B XB hσB
   rw [hNA, hNB]
-  apply UnitarilyInvariantNorm.apply_le_of_kyFanSum_le
+  apply UnitarilyInvariantSeminorm.apply_le_of_kyFanSum_le
   intro k
   rw [kyFanSum_eq_sum_fin, kyFanSum_eq_sum_fin, hσA, hσB]
   exact h k
@@ -583,7 +583,7 @@ theorem apply_le_of_mem_convexHull_twoSidedUnitaryOrbit
   simpa using N.apply_le_of_finiteUnitaryOrbitCertificate hcert
 
 
-end RectangularUnitarilyInvariantNorm
+end RectangularUnitarilyInvariantSeminorm
 
 
 end TauCeti

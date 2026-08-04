@@ -8,7 +8,7 @@ import Mathlib.Topology.Algebra.Module.FiniteDimension
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 
 /-!
 # Approximation-number foundation and scalar-specific analytic endpoints
@@ -477,7 +477,7 @@ theorem rectangularKyFanSum_le_kyFanApproximationGauge
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
     [FiniteDimensional 𝕜 F₀]
     (k : ℕ) (A : E₀ →ₗ[𝕜] F₀) :
-    TauCeti.RectangularUnitarilyInvariantNorm.rectangularKyFanSum k A ≤
+    TauCeti.RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k A ≤
       kyFanApproximationGauge k A.toContinuousLinearMap :=
   (ContinuousLinearMap.rectangularKyFanSum_eq_kyFanGauge k A).le
 
@@ -490,7 +490,7 @@ theorem rectangularKyFanSum_eq_kyFanApproximationGauge
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
     [FiniteDimensional 𝕜 F₀]
     (k : ℕ) (A : E₀ →ₗ[𝕜] F₀) :
-    TauCeti.RectangularUnitarilyInvariantNorm.rectangularKyFanSum k A =
+    TauCeti.RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k A =
       kyFanApproximationGauge k A.toContinuousLinearMap :=
   ContinuousLinearMap.rectangularKyFanSum_eq_kyFanGauge k A
 

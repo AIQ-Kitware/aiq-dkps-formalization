@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 import ForTauCeti.Analysis.InnerProductSpace.Singular.System
 import ForTauCeti.Analysis.InnerProductSpace.KyFan
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 
 /-!
 # The `tan 2Θ` theorem for every unitarily invariant norm
@@ -222,7 +222,7 @@ end Scalar
 
 section KyFan
 
-open RectangularUnitarilyInvariantNorm
+open RectangularUnitarilyInvariantSeminorm
 
 variable {A H T : E →ₗ[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
   {a b : ℝ}
@@ -480,7 +480,7 @@ invariant norm** (finite-dimensional graph-coordinate form).
 singular values are the double-angle tangents of the principal angles
 between `U` and the perturbed invariant graph subspace. -/
 theorem tanTwoTheta0_offDiagonal_le
-    (N : RectangularUnitarilyInvariantNorm 𝕜 E E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E E)
     (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     (hAU : ∀ x ∈ U, A x ∈ U)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)

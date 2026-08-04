@@ -7,7 +7,7 @@ Staged for Tau Ceti, roadmap topic T05.  Mathlib is not the destination
 (`ForTauCeti/README.md`); what follows is where this material would have gone on
 the closed Mathlib track —
 additions to `Mathlib/Analysis/InnerProductSpace/` (new file
-`UnitarilyInvariantNorm.lean`).
+`UnitarilyInvariantSeminorm.lean`).
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 
@@ -18,7 +18,7 @@ and the **Fan dominance principle**: Ky Fan domination
 `∀ k, kyFanSum k A ≤ kyFanSum k B` implies `N A ≤ N B` for every unitarily
 invariant norm `N`.  The engine is the Hardy–Littlewood–Pólya transfer descent of
 `ForTauCeti.Analysis.Convex.Majorization`, applied to the gauge through
-`UnitarilyInvariantNorm.finiteSymmetricGauge`: no weak-majorization completion and no
+`UnitarilyInvariantSeminorm.finiteSymmetricGauge`: no weak-majorization completion and no
 Birkhoff decomposition, each transform step costing one triangle inequality, one
 homogeneity, and one swap-permutation invariance of the gauge.
 -/
@@ -39,19 +39,19 @@ For a finite-dimensional inner product space `E` over `𝕜 = ℝ, ℂ`:
 * `TauCeti.exists_unitary_diagOp_factorization` — the **operator SVD**:
   every `A : E →ₗ[𝕜] E` factors as `U ∘ₗ diagOp b σ(A) ∘ₗ V` with `U, V`
   unitary, relative to *any* fixed orthonormal basis `b`;
-* `TauCeti.UnitarilyInvariantNorm`: subadditive, absolutely homogeneous,
+* `TauCeti.UnitarilyInvariantSeminorm`: subadditive, absolutely homogeneous,
   and invariant under composition with unitaries on both sides (seminorm
   axioms — positivity is never needed for Davis–Kahan);
-* `TauCeti.UnitarilyInvariantNorm.apply_eq_gauge` — the **symmetric-gauge
+* `TauCeti.UnitarilyInvariantSeminorm.apply_eq_gauge` — the **symmetric-gauge
   representation** `N A = Φ_N(σ(A))` where `Φ_N x := N (diagOp b x)`;
-* `TauCeti.UnitarilyInvariantNorm.finiteSymmetricGauge` — the gauge as a
+* `TauCeti.UnitarilyInvariantSeminorm.finiteSymmetricGauge` — the gauge as a
   `TauCeti.FiniteSymmetricGauge`, which is what makes the majorization theory apply;
-* `TauCeti.UnitarilyInvariantNorm.gauge_le_gauge_of_prefix_sums_le` — the
+* `TauCeti.UnitarilyInvariantSeminorm.gauge_le_gauge_of_prefix_sums_le` — the
   **T-transform descent**: for `z` antitone nonnegative and `y` nonnegative,
   prefix-sum domination `∀ m, ∑_{i<m} z ≤ ∑_{i<m} y` forces `Φ z ≤ Φ y`;
-* `TauCeti.UnitarilyInvariantNorm.apply_le_of_kyFanSum_le` — the
+* `TauCeti.UnitarilyInvariantSeminorm.apply_le_of_kyFanSum_le` — the
   **Fan dominance principle**;
-* `TauCeti.UnitarilyInvariantNorm.apply_adjoint` — `N (A⋆) = N A`.
+* `TauCeti.UnitarilyInvariantSeminorm.apply_adjoint` — `N (A⋆) = N A`.
 
 The descent replaces the classical majorization pipeline (weak-majorization completion +
 the Hardy–Littlewood–Pólya *characterization* by doubly stochastic matrices + Birkhoff) by
@@ -252,7 +252,7 @@ and invariant under composition with unitaries on both sides.
 Positivity (`N A = 0 → A = 0`) is deliberately *not* required — the
 Davis–Kahan pipeline never uses it, and every consequence below (gauge
 representation, Fan dominance) holds at the seminorm level. -/
-structure UnitarilyInvariantNorm (𝕜 E : Type*) [RCLike 𝕜]
+structure UnitarilyInvariantSeminorm (𝕜 E : Type*) [RCLike 𝕜]
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
     where
   /-- The underlying function on square operators. -/
@@ -265,13 +265,13 @@ structure UnitarilyInvariantNorm (𝕜 E : Type*) [RCLike 𝕜]
   invariant' : ∀ (U V : E ≃ₗᵢ[𝕜] E) (A : E →ₗ[𝕜] E),
     toFun (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) = toFun A
 
-namespace UnitarilyInvariantNorm
+namespace UnitarilyInvariantSeminorm
 
 /-- Apply a unitarily invariant norm directly to an operator, writing `N A` for `N.toFun A`. -/
-instance : CoeFun (UnitarilyInvariantNorm 𝕜 E) fun _ => (E →ₗ[𝕜] E) → ℝ :=
-  ⟨UnitarilyInvariantNorm.toFun⟩
+instance : CoeFun (UnitarilyInvariantSeminorm 𝕜 E) fun _ => (E →ₗ[𝕜] E) → ℝ :=
+  ⟨UnitarilyInvariantSeminorm.toFun⟩
 
-variable (N : UnitarilyInvariantNorm 𝕜 E)
+variable (N : UnitarilyInvariantSeminorm 𝕜 E)
 
 /-- Subadditivity of a unitarily invariant norm. -/
 theorem add_le (A B : E →ₗ[𝕜] E) : N (A + B) ≤ N A + N B := N.add_le' A B
@@ -326,7 +326,7 @@ orthonormal basis `b`: the norm of the diagonal operator with diagonal `x`.
 Defined on *all* real vectors, not only sorted nonnegative ones — the
 T-transform descent exploits its subadditivity, homogeneity, permutation
 invariance, and single-coordinate sign invariance on arbitrary vectors. -/
-noncomputable def gauge (N : UnitarilyInvariantNorm 𝕜 E)
+noncomputable def gauge (N : UnitarilyInvariantSeminorm 𝕜 E)
     (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : ℝ :=
   N (diagOp b x)
 
@@ -406,7 +406,7 @@ fields are exactly `gauge_add_le`, `gauge_real_smul`, `gauge_perm` and `gauge_ne
 which is what makes the Hardy--Littlewood--Pólya transfer theory
 (`ForTauCeti.Analysis.Convex.Majorization`) apply verbatim: everything below is that theory
 read through this packaging, not a second proof of it. -/
-noncomputable def finiteSymmetricGauge (N : UnitarilyInvariantNorm 𝕜 E)
+noncomputable def finiteSymmetricGauge (N : UnitarilyInvariantSeminorm 𝕜 E)
     (b : OrthonormalBasis (Fin n) 𝕜 E) : FiniteSymmetricGauge n where
   toFun := N.gauge b
   add_le' := N.gauge_add_le b
@@ -570,7 +570,7 @@ theorem sqrt_sum_add_sq_le {m : ℕ} (f g : Fin m → ℝ) :
 /-- **The Frobenius (Hilbert–Schmidt) norm as a unitarily invariant norm.**
 `A ↦ √(∑ᵢ ‖A bᵢ‖²)` over the standard orthonormal basis. -/
 noncomputable def frobenius (𝕜 E : Type*) [RCLike 𝕜] [NormedAddCommGroup E]
-    [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : UnitarilyInvariantNorm 𝕜 E where
+    [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : UnitarilyInvariantSeminorm 𝕜 E where
   toFun A := Real.sqrt (∑ i, ‖A (stdOrthonormalBasis 𝕜 E i)‖ ^ 2)
   add_le' A B := by
     have hmono : Real.sqrt (∑ i, ‖(A + B) (stdOrthonormalBasis 𝕜 E i)‖ ^ 2)
@@ -621,6 +621,6 @@ theorem frobenius_sq (A : E →ₗ[𝕜] E) (hn : finrank 𝕜 E = n)
   rw [frobenius_apply 𝕜 E A hn b,
     Real.sq_sqrt (Finset.sum_nonneg fun i _ => sq_nonneg _)]
 
-end UnitarilyInvariantNorm
+end UnitarilyInvariantSeminorm
 
 end TauCeti

@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
@@ -35,7 +35,7 @@ approximation numbers.  The exception, and the reason this module exists, is
 which is *false* term by term — `aₙ` is not subadditive — and is proved in three steps:
 
 1. in finite dimensions it is the Ky Fan norm inequality of
-   `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm`, transported
+   `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantSeminorm`, transported
    along `ContinuousLinearMap.approximationNumber_eq_singularValues`;
 2. for a finite-dimensional *source* and arbitrary codomain, compress the codomain to the
    (finite-dimensional) range of `S ⊕ T`, which changes no approximation number;
@@ -187,9 +187,9 @@ variable {E : Type v} {F : Type w}
 
 /-- In finite dimensions the Ky Fan gauge is the rectangular Ky Fan singular-value sum. -/
 theorem rectangularKyFanSum_eq_kyFanGauge (k : ℕ) (A : E →ₗ[𝕜] F) :
-    TauCeti.RectangularUnitarilyInvariantNorm.rectangularKyFanSum k A =
+    TauCeti.RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k A =
       A.toContinuousLinearMap.kyFanGauge k := by
-  unfold TauCeti.RectangularUnitarilyInvariantNorm.rectangularKyFanSum
+  unfold TauCeti.RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum
     kyFanGauge
   rw [Fin.sum_univ_eq_sum_range]
   exact Finset.sum_congr rfl fun n _ =>
@@ -202,7 +202,7 @@ theorem kyFanGauge_add_le_of_finiteDimensional (k : ℕ) (A B : E →ₗ[𝕜] F
       A.toContinuousLinearMap.kyFanGauge k + B.toContinuousLinearMap.kyFanGauge k := by
   rw [← rectangularKyFanSum_eq_kyFanGauge k (A + B),
     ← rectangularKyFanSum_eq_kyFanGauge k A, ← rectangularKyFanSum_eq_kyFanGauge k B]
-  exact (TauCeti.RectangularUnitarilyInvariantNorm.kyFan
+  exact (TauCeti.RectangularUnitarilyInvariantSeminorm.kyFan
     (𝕜 := 𝕜) (E := E) (F := F) k).add_le A B
 
 end FiniteDimensional

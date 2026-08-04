@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Fable 5
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Spectrum
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
 /-!
 # Davis's variational theorem for the restricted displacement
@@ -353,7 +353,7 @@ for every UI norm `N`, over any `RCLike` field, with no largest-angle
 threshold.  `IsAcute` is required, but only because `directRotation` is
 defined from it. -/
 theorem uiNorm_restrictedDisplacement_le
-    (N : UnitarilyInvariantNorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V)

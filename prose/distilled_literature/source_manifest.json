@@ -614,7 +614,7 @@
       "target_note": "vonNeumann1937_trace_and_symmetric_norms.tex",
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/HoffmanWielandt.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean",
         "papers/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [],
@@ -639,7 +639,7 @@
       "target_note": "Fan1949_eigenvalue_sums.tex",
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/KyFan.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean"
       ],
       "existing_assets": [],
       "scope": "Extremal eigenvalue sums and the variational principles underlying Ky Fan norms and dominance.",
@@ -737,7 +737,7 @@
       "primary_url": "https://doi.org/10.1093/qmath/11.1.50",
       "target_note": "Mirsky1960_symmetric_gauge_ui_norms.tex",
       "repo_evidence": [
-        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean",
         "prose/core-arguments/Davis-Kahan-1970-part-III-core-arguments.tex"
       ],
       "existing_assets": [],
@@ -1245,7 +1245,7 @@
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/Sylvester/Bound.lean",
         "ForTauCeti/Analysis/InnerProductSpace/SinTheta/UnitarilyInvariant.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean"
       ],
       "existing_assets": [],
       "scope": "Selected Chapters III, IV, and VII theorem chains used by the formalization.",
@@ -1346,7 +1346,7 @@
       "target_note": "MarshallOlkinArnold2011_selected_majorization.tex",
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/SchurHorn.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean"
       ],
       "existing_assets": [],
       "scope": "Selected Schur majorization, Karamata, and weak-majorization results.",

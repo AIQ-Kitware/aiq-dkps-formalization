@@ -10,7 +10,7 @@ import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
 import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
 import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
 import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
@@ -157,7 +157,7 @@ private theorem adjoint_orthogonalProjectionOnto_comp_op_subtype
 square space gives the one-sided sine cross projection `P_{Vᗮ} P_U`. -/
 @[simp]
 private theorem domainTransport_sinThetaEmbedding_apply
-    (N : UnitarilyInvariantNorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E)
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
     (N.toRectangular.domainIsometryTransport U.subtypeₗᵢ)
@@ -173,7 +173,7 @@ private theorem domainTransport_sinThetaEmbedding_apply
 /-- The transported residual of the reducing inclusion is bounded by the
 ambient perturbation norm. -/
 private theorem domainTransport_residual_le
-    (N : UnitarilyInvariantNorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : IsInvariant A U) :
     (N.toRectangular.domainIsometryTransport U.subtypeₗᵢ)
@@ -212,14 +212,14 @@ private theorem domainTransport_residual_le
 /-- **Davis--Kahan `sin Θ`, perturbation form, every square UI norm.**
 -/
 theorem sinTheta_perturbation_le
-    (N : UnitarilyInvariantNorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A B U V a b δ) :
     δ * N (sinThetaMap U V) ≤ N (B - A) := by
-  let NU : RectangularUnitarilyInvariantNorm 𝕜 U E :=
+  let NU : RectangularUnitarilyInvariantSeminorm 𝕜 U E :=
     N.toRectangular.domainIsometryTransport U.subtypeₗᵢ
   have hM : (A.restrict hU).IsSymmetric := isSymmetric_restrict hA hU
   have hMspec : SpectrumIn (A.restrict hU) ⊤ (Set.Icc a b) :=
@@ -259,10 +259,10 @@ private theorem kyFanSum_smul_compression_le_of_intervalExteriorGap
     (hU : IsInvariant A U) (hWperp : IsInvariant B Wᗮ)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A B U W a b δ) (k : ℕ) :
-    RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+    RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
         (((δ : ℝ) : 𝕜) •
           (Wᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype)) ≤
-      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
         (Wᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ ((B - A) ∘ₗ U.subtype)) := by
   set AU : U →ₗ[𝕜] U := A.restrict hU with hAUdef
   set BWperp : Wᗮ →ₗ[𝕜] Wᗮ := B.restrict hWperp with hBWdef
@@ -295,9 +295,9 @@ private theorem kyFanSum_smul_compression_le_of_intervalExteriorGap
   -- states the goal with the local definitions unfolded, in the exact shape the
   -- following rewrite needs. `simp only` on those definitions normalises further
   -- and the rewrite then has nothing to match -- tried, and it fails here.
-  change (RectangularUnitarilyInvariantNorm.kyFan k) (((δ : ℝ) : 𝕜) • X) ≤
-    (RectangularUnitarilyInvariantNorm.kyFan k) C
-  rw [(RectangularUnitarilyInvariantNorm.kyFan k).smul_eq,
+  change (RectangularUnitarilyInvariantSeminorm.kyFan k) (((δ : ℝ) : 𝕜) • X) ≤
+    (RectangularUnitarilyInvariantSeminorm.kyFan k) C
+  rw [(RectangularUnitarilyInvariantSeminorm.kyFan k).smul_eq,
     RCLike.norm_ofReal, abs_of_nonneg hδ.le]
   exact kyFan_sylvester_le_of_intervalGap hBWperp hAU hδ hgap' hEq k
 
@@ -321,19 +321,19 @@ proper is four moves: block the two sides, scale out `δ`, transport the norm
 through `liftBlock`, and identify the two lifted blocks with the operators in
 the statement. -/
 private theorem uiNorm_projection_sub_le_of_kyFanSum_le
-    (N : UnitarilyInvariantNorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
-    (hkyUV : ∀ k, RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+    (hkyUV : ∀ k, RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
         (((δ : ℝ) : 𝕜) •
           (Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype)) ≤
-      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
         (Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ ((B - A) ∘ₗ U.subtype)))
-    (hkyVU : ∀ k, RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+    (hkyVU : ∀ k, RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
         (((δ : ℝ) : 𝕜) •
           (-(Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ V.subtype).adjoint)) ≤
-      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
         (Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ
           ((A - B) ∘ₗ V.subtype)).adjoint) :
     δ * N (projection U - projection V) ≤
@@ -350,28 +350,28 @@ private theorem uiNorm_projection_sub_le_of_kyFanSum_le
   let EV : E ≃ₗᵢ[𝕜] WithLp 2 (Vᗮ × V) :=
     V.orthogonalDecomposition.trans
       (LinearIsometryEquiv.withLpProdComm 2 𝕜 V Vᗮ)
-  let NB : RectangularUnitarilyInvariantNorm 𝕜
+  let NB : RectangularUnitarilyInvariantSeminorm 𝕜
       (WithLp 2 (U × Uᗮ)) (WithLp 2 (Vᗮ × V)) :=
-    RectangularUnitarilyInvariantNorm.domainIsometryTransport
+    RectangularUnitarilyInvariantSeminorm.domainIsometryTransport
       (N.toRectangular.codomainIsometryTransport EV.symm.toLinearIsometry)
       EU.symm.toLinearIsometry
-  let Xblock := RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+  let Xblock := RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
     XUV (-XVU.adjoint)
-  let Cblock := RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+  let Cblock := RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
     CUV CVU.adjoint
   have hNBscaled : NB (((δ : ℝ) : 𝕜) • Xblock) ≤ NB Cblock := by
     have h :=
-      RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply_le_of_kyFanSum_le
+      RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum_apply_le_of_kyFanSum_le
         NB hkyUV hkyVU
     -- states the goal with the local definitions unfolded, in the exact shape the
     -- following rewrite needs. `simp only` on those definitions normalises further
     -- and the rewrite then has nothing to match -- tried, and it fails here.
     change NB (((δ : ℝ) : 𝕜) •
-        RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+        RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
           XUV (-XVU.adjoint)) ≤
-      NB (RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+      NB (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
         CUV CVU.adjoint)
-    rw [← RectangularUnitarilyInvariantNorm.orthogonalBlockSum_smul]
+    rw [← RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum_smul]
     exact h
   have hNB : δ * NB Xblock ≤ NB Cblock := by
     rw [NB.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hδ.le] at hNBscaled
@@ -408,14 +408,14 @@ private theorem uiNorm_projection_sub_le_of_kyFanSum_le
   have hXlift : liftBlock Xblock = projection U - projection V := by
     ext x
     simp [liftBlock, Xblock, EU, EV, hEUadj, hXVUadj, XUV,
-      RectangularUnitarilyInvariantNorm.orthogonalBlockSum,
+      RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum,
       projection, Submodule.orthogonalDecomposition_apply,
       LinearMap.comp_apply]
   have hClift : liftBlock Cblock =
       (B - A) ∘ₗ projection U - projection V ∘ₗ (B - A) := by
     ext x
     (simp [liftBlock, Cblock, EU, EV, hEUadj, CUV, hCVUadj,
-      RectangularUnitarilyInvariantNorm.orthogonalBlockSum,
+      RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum,
       projection, Submodule.orthogonalDecomposition_apply,
       LinearMap.comp_apply]; module)
   rw [hNB_apply, hNB_apply, hXlift, hClift] at hNB
@@ -430,7 +430,7 @@ two arbitrary mixed spectral-distance gaps support only the separate
 Davis--Kahan Proposition 6.1 configuration.
 -/
 theorem sinAngleOperator_perturbation_le
-    (N : UnitarilyInvariantNorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
@@ -448,9 +448,9 @@ theorem sinAngleOperator_perturbation_le
     Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ
       ((B - A) ∘ₗ U.subtype)
   have hkyUV : ∀ k,
-      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
           (((δ : ℝ) : 𝕜) • XUV) ≤
-        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CUV :=
+        RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k CUV :=
     kyFanSum_smul_compression_le_of_intervalExteriorGap hA hB hU hVperp hδ hgapUV
   -- The mirrored compression, for the other diagonal.
   let XVU : V →ₗ[𝕜] Uᗮ :=
@@ -459,57 +459,57 @@ theorem sinAngleOperator_perturbation_le
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ
       ((A - B) ∘ₗ V.subtype)
   have hkyVU : ∀ k,
-      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
           (((δ : ℝ) : 𝕜) • (-XVU.adjoint)) ≤
-        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU.adjoint := by
+        RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k CVU.adjoint := by
     intro k
     have hbase0 :=
       kyFanSum_smul_compression_le_of_intervalExteriorGap hB hA hV hUperp hδ hgapVU k
-    have hbase : δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k XVU ≤
-        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU := by
+    have hbase : δ * RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k XVU ≤
+        RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k CVU := by
       -- the extracted lemma states the bound with `δ` inside the norm; this pulls it
       -- out, which is the form the adjoint manipulations below expect.
-      rw [show RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+      rw [show RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
               (((δ : ℝ) : 𝕜) • XVU) =
-            δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k XVU from by
+            δ * RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k XVU from by
           -- `rectangularKyFanSum` is `kyFan` under a different name; naming the `kyFan`
           -- form is what lets `smul_eq` fire on the scalar.
-          change (RectangularUnitarilyInvariantNorm.kyFan k) (((δ : ℝ) : 𝕜) • XVU) = _
-          rw [(RectangularUnitarilyInvariantNorm.kyFan k).smul_eq,
+          change (RectangularUnitarilyInvariantSeminorm.kyFan k) (((δ : ℝ) : 𝕜) • XVU) = _
+          rw [(RectangularUnitarilyInvariantSeminorm.kyFan k).smul_eq,
             RCLike.norm_ofReal, abs_of_nonneg hδ.le]
           rfl] at hbase0
       exact hbase0
     have hleft :
-        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+        RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
             (-XVU.adjoint) =
-          RectangularUnitarilyInvariantNorm.rectangularKyFanSum k XVU := by
+          RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k XVU := by
       calc
-        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+        RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
             (-XVU.adjoint) =
-            RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+            RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
               XVU.adjoint := by
-          exact (RectangularUnitarilyInvariantNorm.kyFan k).apply_neg XVU.adjoint
-        _ = RectangularUnitarilyInvariantNorm.rectangularKyFanSum k XVU := by
-          unfold RectangularUnitarilyInvariantNorm.rectangularKyFanSum
+          exact (RectangularUnitarilyInvariantSeminorm.kyFan k).apply_neg XVU.adjoint
+        _ = RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k XVU := by
+          unfold RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum
           exact Finset.sum_congr rfl fun i _ =>
             XVU.singularValues_adjoint_apply (i : ℕ)
     have hright :
-        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU.adjoint =
-          RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU := by
-      unfold RectangularUnitarilyInvariantNorm.rectangularKyFanSum
+        RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k CVU.adjoint =
+          RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k CVU := by
+      unfold RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum
       exact Finset.sum_congr rfl fun i _ =>
         CVU.singularValues_adjoint_apply (i : ℕ)
     calc
-      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
           (((δ : ℝ) : 𝕜) • (-XVU.adjoint)) =
-          δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+          δ * RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
             (-XVU.adjoint) :=
-        RectangularUnitarilyInvariantNorm.rectangularKyFanSum_real_smul
+        RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum_real_smul
           k (-XVU.adjoint) hδ.le
-      _ = δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k XVU := by
+      _ = δ * RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k XVU := by
         rw [hleft]
-      _ ≤ RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU := hbase
-      _ = RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU.adjoint :=
+      _ ≤ RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k CVU := hbase
+      _ = RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k CVU.adjoint :=
         hright.symm
   -- Orthogonal decompositions of the ambient space along each subspace.
   have hNB : δ * N (projection U - projection V) ≤
@@ -546,14 +546,14 @@ theorem sinAngleOperator_perturbation_le
 /-- Ordered half-line perturbation form.
 -/
 theorem sinTheta_perturbation_le_of_orderedGap
-    (N : UnitarilyInvariantNorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : OrderedGap A U B Vᗮ δ) :
     δ * N (sinThetaMap U V) ≤ N (B - A) := by
-  let NU : RectangularUnitarilyInvariantNorm 𝕜 U E :=
+  let NU : RectangularUnitarilyInvariantSeminorm 𝕜 U E :=
     N.toRectangular.domainIsometryTransport U.subtypeₗᵢ
   have hM : (A.restrict hU).IsSymmetric := isSymmetric_restrict hA hU
   have hgap' : OrderedGap (A.restrict hU) ⊤ B Vᗮ δ := by
@@ -583,7 +583,7 @@ theorem sinTheta_perturbation_le_of_orderedGap
 /-- Canonical spectral-projector statement with no eigenbasis in the API.
 -/
 theorem sinTheta_spectralSubspace_le
-    (N : UnitarilyInvariantNorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hAselected : SpectrumIn A (spectralSubspace A (Set.Icc a b)) (Set.Icc a b))
@@ -695,9 +695,9 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : SpectraSeparated M ⊤ A Uᗮ δ) :
-    δ * RectangularUnitarilyInvariantNorm.frobenius
+    δ * RectangularUnitarilyInvariantSeminorm.frobenius
         (sinThetaEmbedding U X) ≤
-      RectangularUnitarilyInvariantNorm.frobenius (residual A X M) := by
+      RectangularUnitarilyInvariantSeminorm.frobenius (residual A X M) := by
   have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
   let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
   let Y : F →ₗ[𝕜] Uᗮ :=
@@ -716,13 +716,13 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
     sylvester_projectedResidual_eq hA hU hUperp X M
   have hSylv := frobenius_sylvester_le_of_spectraSeparated
     hAU hM hδ hgap' hEq
-  have hY : RectangularUnitarilyInvariantNorm.frobenius Y =
-      RectangularUnitarilyInvariantNorm.frobenius (sinThetaEmbedding U X) := by
-    rw [← RectangularUnitarilyInvariantNorm.frobenius_subtype_comp Uᗮ Y]
+  have hY : RectangularUnitarilyInvariantSeminorm.frobenius Y =
+      RectangularUnitarilyInvariantSeminorm.frobenius (sinThetaEmbedding U X) := by
+    rw [← RectangularUnitarilyInvariantSeminorm.frobenius_subtype_comp Uᗮ Y]
     congr 1
-  have hC : RectangularUnitarilyInvariantNorm.frobenius C ≤
-      RectangularUnitarilyInvariantNorm.frobenius (residual A X M) := by
-    exact RectangularUnitarilyInvariantNorm.frobenius_projection_comp_le
+  have hC : RectangularUnitarilyInvariantSeminorm.frobenius C ≤
+      RectangularUnitarilyInvariantSeminorm.frobenius (residual A X M) := by
+    exact RectangularUnitarilyInvariantSeminorm.frobenius_projection_comp_le
       Uᗮ (residual A X M)
   rw [hY] at hSylv
   exact hSylv.trans hC
@@ -772,9 +772,9 @@ theorem frobenius_sinTheta_le
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A B U V a b δ) :
-    δ * UnitarilyInvariantNorm.frobenius 𝕜 E (sinThetaMap U V) ≤
-      UnitarilyInvariantNorm.frobenius 𝕜 E (B - A) := by
-  exact sinTheta_perturbation_le (UnitarilyInvariantNorm.frobenius 𝕜 E)
+    δ * UnitarilyInvariantSeminorm.frobenius 𝕜 E (sinThetaMap U V) ≤
+      UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A) := by
+  exact sinTheta_perturbation_le (UnitarilyInvariantSeminorm.frobenius 𝕜 E)
     hA hB hU hV hδ hgap
 
 /-- Ky Fan form, simultaneously controlling every singular-value prefix.
@@ -786,13 +786,13 @@ theorem kyFan_sinTheta_le
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A B U V a b δ) (k : ℕ) :
     δ * kyFanSum k (sinThetaMap U V) ≤ kyFanSum k (B - A) := by
-  let NK : UnitarilyInvariantNorm 𝕜 E :=
-    (RectangularUnitarilyInvariantNorm.kyFan
+  let NK : UnitarilyInvariantSeminorm 𝕜 E :=
+    (RectangularUnitarilyInvariantSeminorm.kyFan
       (𝕜 := 𝕜) (E := E) (F := E) k).toSquare
   have h := sinTheta_perturbation_le NK hA hB hU hV hδ hgap
-  simpa [NK, RectangularUnitarilyInvariantNorm.toSquare,
-    RectangularUnitarilyInvariantNorm.kyFan_apply,
-    RectangularUnitarilyInvariantNorm.rectangularKyFanSum,
+  simpa [NK, RectangularUnitarilyInvariantSeminorm.toSquare,
+    RectangularUnitarilyInvariantSeminorm.kyFan_apply,
+    RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum,
     kyFanSum_eq_sum_fin] using h
 
 /-- General two-sided spectral separation with the `π/2` constant.  The
@@ -800,14 +800,14 @@ ambient transport proof is complete; the only open analytic input is the Ky Fan
 separated reciprocal-multiplier theorem in `Sylvester.lean`.
 -/
 theorem sinTheta_perturbation_le_of_spectralDistance
-    (N : UnitarilyInvariantNorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : SpectraSeparated A U B Vᗮ δ) :
     δ * N (sinThetaMap U V) ≤ (Real.pi / 2) * N (B - A) := by
-  let NU : RectangularUnitarilyInvariantNorm 𝕜 U E :=
+  let NU : RectangularUnitarilyInvariantSeminorm 𝕜 U E :=
     N.toRectangular.domainIsometryTransport U.subtypeₗᵢ
   have hM : (A.restrict hU).IsSymmetric := isSymmetric_restrict hA hU
   have hgap' : SpectraSeparated (A.restrict hU) ⊤ B Vᗮ δ := by

@@ -93,12 +93,12 @@ shape
 
 with the directed `sin Θ` operator and the gap hypotheses named explicitly. -/
 theorem partIII_sinTheta_uiNorm_prose_like
-    (N : UnitarilyInvariantNorm 𝕜 E) {T S : E →ₗ[𝕜] E}
+    (N : UnitarilyInvariantSeminorm 𝕜 E) {T S : E →ₗ[𝕜] E}
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {c g : ℝ} (hgap : AboveBelowGapProseLike T S U V c g) :
     N ((directedSinThetaOperatorProseLike U V : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (S - T) / g := by
-  exact UnitarilyInvariantNorm.apply_starProjection_comp_starProjection_le N
+  exact UnitarilyInvariantSeminorm.apply_starProjection_comp_starProjection_le N
     hgap.T_symm hgap.S_symm hgap.U_inv hgap.V_inv hgap.gap_pos
     hgap.U_above hgap.V_below
 
@@ -126,7 +126,7 @@ This wrapper is one layer closer to the paper statement than
 spectral containment hypotheses, then discharged by the existing spectral
 coercivity bridge. -/
 theorem partIII_sinTheta_uiNorm_spectral_prose_like
-    (N : UnitarilyInvariantNorm 𝕜 E) {T S : E →ₗ[𝕜] E}
+    (N : UnitarilyInvariantSeminorm 𝕜 E) {T S : E →ₗ[𝕜] E}
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {c g : ℝ} (hgap : AboveBelowSpectralGapProseLike T S U V c g) :
     N ((directedSinThetaOperatorProseLike U V : E →L[𝕜] E) : E →ₗ[𝕜] E)
@@ -156,7 +156,7 @@ This is the most paper-like wrapper in this file: choose spectral sets `s` and
 obtain the usual `‖sin Θ‖ ≤ ‖S - T‖ / g` estimate for every unitarily invariant
 norm. -/
 theorem partIII_sinTheta_uiNorm_canonical_spectral_prose_like
-    (N : UnitarilyInvariantNorm 𝕜 E) {T S : E →ₗ[𝕜] E}
+    (N : UnitarilyInvariantSeminorm 𝕜 E) {T S : E →ₗ[𝕜] E}
     {s t : Set ℝ} {c g : ℝ} (hgap : CanonicalSpectralGapProseLike T S s t c g) :
     N ((directedSinThetaOperatorProseLike (spectralSubspace T s) (spectralSubspace S t) :
         E →L[𝕜] E) : E →ₗ[𝕜] E)
