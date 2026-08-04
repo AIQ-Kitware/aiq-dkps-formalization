@@ -101,8 +101,16 @@ rather than in the code: judging by what something is called rather than by what
    while the roadmap's `schattenFamilyInf : OperatorIdealFamily.{0, v, w} ℂ` carries no such
    hypothesis. Constructing the endpoint through `symmetricGaugeFamily` therefore yields a
    *different, hypothesis-bearing* object from the one specified.
-8. **`exists_units_eq_mul_of_rank_factorization`** — Milestone A2 uniqueness. The roadmap's own
-   Acknowledgements already say A2 is specified and not implemented.
+8. **`exists_units_eq_mul_of_rank_factorization`** — Milestone A2 uniqueness. **Checked**, not
+   taken on the roadmap's word. `LinearAlgebra/Matrix/RankFactorization.lean` has only the
+   existence direction (`exists_eq_mul_rank`, `exists_eq_mul_of_rank_le`,
+   `rank_le_iff_exists_eq_mul`); none of the uniqueness machinery is present.
+
+   The mathematics is classical and the shape is clear — at the exact rank both factors have
+   full column rank and share `M`'s column space, so `L' = L g` for a unique invertible `g`,
+   and injectivity of `L` then forces `R' = g⁻¹ R` — but every step of it has to be written,
+   including the full-column-rank facts. This is the largest of the three remaining, and the
+   roadmap's own Acknowledgements already record A2 as specified and not implemented.
 
 ### Over-strong hypotheses
 
