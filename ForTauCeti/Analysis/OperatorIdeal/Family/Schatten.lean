@@ -57,7 +57,7 @@ layer is the tool here, not the obstacle.
 `hilbertSchmidtENorm` is built from the Hilbert--Schmidt energy through a Hilbert basis and
 never mentions approximation numbers, so unlike its `p = 1` twin the agreement with the
 Schatten gauge is a theorem rather than arithmetic.  It is proved here, as
-`tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy_of_hilbertBasis`.
+`tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy`.
 
 **Neither of the two routes one expects is the one taken.**  Not the singular-value
 decomposition of a compact operator: Mathlib's eigenvector basis is finite-dimensional only,
@@ -378,7 +378,7 @@ theorem schattenENorm_two (T : E →L[𝕜] F) :
   classical
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 E
   rw [schattenENorm, T.hilbertSchmidtENorm_eq b,
-    ← tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy_of_hilbertBasis T b]
+    ← tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy T b]
   norm_num
 
 
