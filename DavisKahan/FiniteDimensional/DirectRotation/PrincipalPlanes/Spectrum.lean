@@ -92,7 +92,7 @@ theorem abs_canonicalIntertwiner_apply_eq_self_of_orthogonal_sources
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {x : E} (hxU : x ∈ U)
     (hx : ∀ i, ⟪principalSourceVector U V i, x⟫_𝕜 = 0) :
-    TauCeti.abs (canonicalIntertwiner U V) x = x := by
+    TauCeti.operatorAbs (canonicalIntertwiner U V) x = x := by
   have hxV := mem_of_mem_orthogonal_sources U V hxU hx
   exact abs_canonicalIntertwiner_apply_eq_self_of_projection_eq U V
     (by rw [projection_apply_of_mem hxU, projection_apply_of_mem hxV])
@@ -231,7 +231,7 @@ theorem adjoint_comp_displacement_directRotation
     (LinearMap.id - (directRotation U V hacute).toLinearMap).adjoint ∘ₗ
         (LinearMap.id - (directRotation U V hacute).toLinearMap) =
       (2 : 𝕜) • (LinearMap.id -
-        TauCeti.abs (canonicalIntertwiner U V)) := by
+        TauCeti.operatorAbs (canonicalIntertwiner U V)) := by
   have htwo := two_smul_abs_canonicalIntertwiner U V hacute
   have hadj : (directRotation U V hacute).toLinearMap.adjoint =
       (directRotation U V hacute).symm.toLinearMap :=

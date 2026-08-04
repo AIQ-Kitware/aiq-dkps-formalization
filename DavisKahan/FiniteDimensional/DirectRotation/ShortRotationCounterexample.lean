@@ -250,7 +250,7 @@ theorem gram_canonicalIntertwiner :
 
 /-- The operator cosine is the scalar `√½`. -/
 theorem abs_canonicalIntertwiner_eq :
-    TauCeti.abs (canonicalIntertwiner U4 V4) =
+    TauCeti.operatorAbs (canonicalIntertwiner U4 V4) =
       Real.sqrt 2⁻¹ • LinearMap.id := by
   have hpos : (Real.sqrt 2⁻¹ • (LinearMap.id : E4 →ₗ[ℝ] E4)).IsPositive := by
     refine ⟨fun x y => ?_, fun x => ?_⟩

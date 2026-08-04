@@ -134,19 +134,19 @@ The modulus `|A| = √(A⋆A)` is diagonal in the `A⋆A`-eigenbasis with entrie
 `√λᵢ(A⋆A) = σᵢ(A)`, and the trace is basis-independent. -/
 theorem sum_re_inner_abs_self_eq_sum_singularValues (A : E →ₗ[𝕜] E)
     {n : ℕ} (hn : finrank 𝕜 E = n) (b : OrthonormalBasis (Fin n) 𝕜 E) :
-    ∑ k, RCLike.re ⟪abs A (b k), b k⟫_𝕜 = ∑ i : Fin n, A.singularValues (i : ℕ) := by
+    ∑ k, RCLike.re ⟪operatorAbs A (b k), b k⟫_𝕜 = ∑ i : Fin n, A.singularValues (i : ℕ) := by
   subst hn
   have hP := LinearMap.isPositive_adjoint_comp_self A
-  have hsym : (abs A).IsSymmetric := (isPositive_abs A).isSymmetric
+  have hsym : (operatorAbs A).IsSymmetric := (isPositive_operatorAbs A).isSymmetric
   -- Basis independence: the trace of `|A|` is the same in any basis.
   have key : ∀ b' : OrthonormalBasis (Fin (finrank 𝕜 E)) 𝕜 E,
-      ∑ k, RCLike.re ⟪abs A (b' k), b' k⟫_𝕜
+      ∑ k, RCLike.re ⟪operatorAbs A (b' k), b' k⟫_𝕜
         = ∑ i : Fin (finrank 𝕜 E), hsym.eigenvalues rfl i :=
     fun b' => sum_re_inner_orthonormalBasis_self_eq_sum_eigenvalues hsym rfl b'
   rw [key b, ← key (hP.isSymmetric.eigenvectorBasis rfl)]
   refine Finset.sum_congr rfl fun k _ => ?_
   set w := hP.isSymmetric.eigenvectorBasis rfl with hw
-  rw [show abs A (w k)
+  rw [show operatorAbs A (w k)
         = (Real.sqrt (hP.isSymmetric.eigenvalues rfl k) : 𝕜) • w k from
       hP.sqrt_apply_eigenvectorBasis k,
     re_inner_real_smul_self_of_norm_one (w.orthonormal.norm_eq_one k)]
@@ -216,7 +216,7 @@ is a contraction, then `∑ₖ ‖A bₖ‖² ≤ ∑ₖ re⟪|A| bₖ, bₖ⟫`
 (orthogonal-Procrustes) argument: `∑‖wⱼ − uⱼ‖² = 2d − 2∑σ ≤ 2d − 2∑σ² = 2·sinΘ²`. -/
 theorem sum_sq_norm_le_sum_re_inner_abs_of_contraction {A : E →ₗ[𝕜] E}
     (h : ∀ x, ‖A x‖ ≤ ‖x‖) {n : ℕ} (hn : finrank 𝕜 E = n) (b : OrthonormalBasis (Fin n) 𝕜 E) :
-    ∑ k, ‖A (b k)‖ ^ 2 ≤ ∑ k, RCLike.re ⟪abs A (b k), b k⟫_𝕜 := by
+    ∑ k, ‖A (b k)‖ ^ 2 ≤ ∑ k, RCLike.re ⟪operatorAbs A (b k), b k⟫_𝕜 := by
   rw [← sum_sq_singularValues A hn b, sum_re_inner_abs_self_eq_sum_singularValues A hn b]
   refine Finset.sum_le_sum fun i _ => ?_
   have h1 := singularValues_le_one_of_contraction h hn i
@@ -455,15 +455,17 @@ theorem comp_adjoint_eq_conj_adjoint_comp (A : E →ₗ[𝕜] E) :
     A ∘ₗ A.adjoint = (choosePolarUnitary A).toLinearMap ∘ₗ (A.adjoint ∘ₗ A)
       ∘ₗ (choosePolarUnitary A).symm.toLinearMap := by
   set U := choosePolarUnitary A with hU
-  have hpolar : A = U.toLinearMap ∘ₗ abs A := polar_decomposition_choosePolarUnitary A
-  have hadj : A.adjoint = abs A ∘ₗ U.symm.toLinearMap := by
+  have hpolar : A = U.toLinearMap ∘ₗ operatorAbs A := polar_decomposition_choosePolarUnitary A
+  have hadj : A.adjoint = operatorAbs A ∘ₗ U.symm.toLinearMap := by
     conv_lhs => rw [hpolar]
-    rw [LinearMap.adjoint_comp, (isPositive_abs A).adjoint_eq, U.adjoint_toLinearMap_eq_symm]
+    rw [LinearMap.adjoint_comp, (isPositive_operatorAbs A).adjoint_eq,
+      U.adjoint_toLinearMap_eq_symm]
   calc A ∘ₗ A.adjoint
-      = (U.toLinearMap ∘ₗ abs A) ∘ₗ (abs A ∘ₗ U.symm.toLinearMap) := by rw [← hpolar, ← hadj]
-    _ = U.toLinearMap ∘ₗ (abs A ∘ₗ abs A) ∘ₗ U.symm.toLinearMap := by
+      = (U.toLinearMap ∘ₗ operatorAbs A) ∘ₗ (operatorAbs A ∘ₗ U.symm.toLinearMap) := by
+        rw [← hpolar, ← hadj]
+    _ = U.toLinearMap ∘ₗ (operatorAbs A ∘ₗ operatorAbs A) ∘ₗ U.symm.toLinearMap := by
         ext v; simp only [LinearMap.comp_apply]
-    _ = U.toLinearMap ∘ₗ (A.adjoint ∘ₗ A) ∘ₗ U.symm.toLinearMap := by rw [abs_mul_self A]
+    _ = U.toLinearMap ∘ₗ (A.adjoint ∘ₗ A) ∘ₗ U.symm.toLinearMap := by rw [operatorAbs_mul_self A]
 
 /-- The Gram operators of `A` and `A⋆` have equal sorted eigenvalues. -/
 theorem eigenvalues_gram_adjoint (A : E →ₗ[𝕜] E) (hn : finrank 𝕜 E = n) :

@@ -525,7 +525,7 @@ theorem nuclear_adjoint_comp_self_eq_sum_sq_norm
     nuclear (A.adjoint ∘ₗ A) = ∑ i, ‖A (b i)‖ ^ 2 := by
   let G := A.adjoint ∘ₗ A
   have hG : G.IsPositive := LinearMap.isPositive_adjoint_comp_self A
-  have hGabs : TauCeti.abs G = G := by
+  have hGabs : TauCeti.operatorAbs G = G := by
     symm
     exact (LinearMap.isPositive_adjoint_comp_self G).sqrt_unique hG (by
       rw [hG.adjoint_eq])

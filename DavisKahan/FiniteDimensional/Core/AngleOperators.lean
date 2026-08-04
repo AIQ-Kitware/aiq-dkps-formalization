@@ -71,7 +71,7 @@ independence through finite functional calculus (equivalently, apply
 noncomputable def angleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   TauCeti.selfAdjointFunctionalCalculus
-    (TauCeti.isPositive_abs (projection U - projection V)).isSymmetric
+    (TauCeti.isPositive_operatorAbs (projection U - projection V)).isSymmetric
     Real.arcsin
 
 /-- `tan Θ` on the full ambient space.  In non-acute configurations this is
@@ -86,7 +86,7 @@ noncomputable def tanAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   TauCeti.selfAdjointFunctionalCalculus
     (TauCeti.selfAdjointFunctionalCalculus_isSymmetric
-      (TauCeti.isPositive_abs (projection U - projection V)).isSymmetric Real.arcsin)
+      (TauCeti.isPositive_operatorAbs (projection U - projection V)).isSymmetric Real.arcsin)
     safeTan
 
 /-- `tan (2 Θ)` on the full ambient space.
@@ -99,7 +99,7 @@ noncomputable def tanTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   TauCeti.selfAdjointFunctionalCalculus
     (TauCeti.selfAdjointFunctionalCalculus_isSymmetric
-      (TauCeti.isPositive_abs (projection U - projection V)).isSymmetric Real.arcsin)
+      (TauCeti.isPositive_operatorAbs (projection U - projection V)).isSymmetric Real.arcsin)
     safeTanTwo
 
 /-- Orthogonal complements preserve the nontrivial principal angles.

@@ -41,10 +41,10 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 Gram operators coincide, `|A|⋆|A| = |A|² = A⋆A`.  This is the finite-dimensional
 `σ(|A|) = σ(A)` used to identify difference-of-projector singular values with the
 `sin Θ` operator's. -/
-theorem singularValues_abs (A : E →ₗ[𝕜] E) :
-    (TauCeti.abs A).singularValues = A.singularValues := by
+theorem singularValues_operatorAbs (A : E →ₗ[𝕜] E) :
+    (TauCeti.operatorAbs A).singularValues = A.singularValues := by
   refine TauCeti.singularValues_eq_of_gram_eq ?_
-  rw [(TauCeti.isPositive_abs A).adjoint_eq, TauCeti.abs_mul_self]
+  rw [(TauCeti.isPositive_operatorAbs A).adjoint_eq, TauCeti.operatorAbs_mul_self]
 
 /-- The cosine cross-projection `P_V P_U`. -/
 noncomputable def cosThetaMap (U V : Submodule 𝕜 E)
@@ -57,17 +57,17 @@ noncomputable def sinThetaMap (U V : Submodule 𝕜 E)
   complementaryProjection V ∘ₗ projection U
 
 /-- `cos Θ` on the full ambient space, `|P_V P_U|`.  Its singular values are the
-principal-angle cosines (`singularValues_abs` and `singularValues_cosThetaMap`). -/
+principal-angle cosines (`singularValues_operatorAbs` and `singularValues_cosThetaMap`). -/
 noncomputable def cosAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  TauCeti.abs (cosThetaMap U V)
+  TauCeti.operatorAbs (cosThetaMap U V)
 
 /-- `sin Θ` on the full ambient space, the modulus `|P_U - P_V|` of the projector
 difference.  This is the symmetric full-space sine operator; its singular values
 are those of `P_U - P_V` (`singularValues_projection_sub_projection`). -/
 noncomputable def sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  TauCeti.abs (projection U - projection V)
+  TauCeti.operatorAbs (projection U - projection V)
 
 /-- The one-sided finite-dimensional `sin (2 Θ)` map supported on `U`.
 
@@ -321,12 +321,12 @@ theorem principalCosines_comm (U V : Submodule 𝕜 E)
   rw [principalCosines, principalCosines, ← hadj, TauCeti.singularValues_adjoint]
 
 /-- The singular values of `P_U-P_V` are the full-space `sin Θ` values: with
-`sinAngleOperator = |P_U - P_V|` and `σ(|T|) = σ(T)` (`singularValues_abs`). -/
+`sinAngleOperator = |P_U - P_V|` and `σ(|T|) = σ(T)` (`singularValues_operatorAbs`). -/
 theorem singularValues_projection_sub_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     (projection U - projection V).singularValues =
       (sinAngleOperator U V).singularValues := by
-  rw [sinAngleOperator, singularValues_abs]
+  rw [sinAngleOperator, singularValues_operatorAbs]
 
 /-- **A unitarily invariant norm depends only on the singular-value sequence.**
 Via the gauge representation `apply_eq_gauge` of the operator SVD. -/
