@@ -126,13 +126,13 @@ reviewed before anyone tries to deliver the signature as written.
   `P = 1` the band hypothesis reads `0 ≤ 0` and holds for every `δ`, and `r ≥ finrank E` makes
   the conclusion `0 ≤ δ`, false at `δ = -1`. Fixed and pushed as `970b0a4`.
 
-## Roadmap defects found and not fixed
+## Roadmap defects: the remaining open question
 
-- The `Local derived objects` section of `SpectralSubspacePerturbation/Suggested.lean` is
-  captioned *"Only perturbation-specific constructions are declared here"*, but `sinThetaMap`
-  and `frobeniusNorm` are not perturbation-specific — that file's own README says they are
-  *"Consumed from `MajorizationAndAngles`"*, which never declares them. A reviewer reading the
-  signature file would assign ownership contrary to the prose.
+- ~~The `Local derived objects` caption~~ — **fixed and pushed** as `15407fa`. The section
+  claimed only perturbation-specific constructions were declared there while holding
+  `sinThetaMap` and `frobeniusNorm`, which the file's own README lists as consumed from
+  `MajorizationAndAngles` — a roadmap that never declares them. The caption now says they are
+  restated locally so the file elaborates, and belong to that roadmap.
 
 ## The namespace migration is a decision, not cleanup — attempted and reverted
 
@@ -219,8 +219,13 @@ see one theorem wearing two names, which is how Part D's copy of the Part A
 singular-value-determination lemma survived (identical proof, different name, different file;
 the roadmap had explicitly warned against restating it). Found by hashing normalised proof
 bodies; that scan also flagged `hasDerivAt_expTime_apply'` in `StoneUniqueness.lean` as a
-restatement of a `private` lemma in `SkewAdjointExponential.lean`, differing only in
-`expTime B s (B ψ)` versus `(expTime B s * B) ψ`, with both carrying `@[simp]`. Not yet fixed.
+restatement of a `private` lemma in `SkewAdjointExponential.lean`.
+
+**Both are now clear.** Re-running the scan over the current tree returns one group, and it is a
+false positive: `conjugateOperator_zero`/`_add`/`_neg`/`_sub`/`_real_smul` in
+`Complexification/FunctionalCalculus.lean` share a tactic script (`ext`, then `simp
+[conjugateOperator_apply]`) while proving five different statements. Identical proofs are not
+duplicated theorems when the statements differ.
 
 ## The module system: done, 192/192
 
@@ -251,10 +256,14 @@ How it went, for whoever does this to another package:
   declaration X ... would need to be public` is exactly what it says: an `@[expose]` definition
   may not reference a `private` one.
 
-Final exposure count is **169 across 192 files**, against upstream's 305 across 1212. That is
-denser than upstream, and the honest reading is that some of it is over-applied: the loop
-exposed what Lean asked for rather than asking whether a rewrite lemma would have been better.
-Trimming it is a real follow-up — remove an attribute, rebuild, keep the removal if it holds.
+Final exposure count is **160 across 192 files**, against upstream's 305 across 1212. I assumed
+that density meant the attribute was over-applied and tested it: stripped all 153 standalone
+`@[expose]` lines and let the Lean-driven loop re-add only what it demanded, from zero. It came
+back to 144. **The trim was 9 attributes, not the half I expected**, so the set was close to
+minimal already and the density gap is not sloppiness — `ForTauCeti` is unusually thick with
+`Prop`-valued predicates and bundled seminorm structures whose bodies consumers legitimately
+reduce through (`rcases` on a gap hypothesis, `.1`/`.2` on a `Dominated`, `simp` through a
+`toSquare`). Upstream is broader and shallower. Do not expect a big win from trimming this.
 
 ### Where the house style was followed instead
 

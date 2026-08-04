@@ -131,7 +131,6 @@ theorem operatorAbs_apply_mem_orthogonal_ker (A : E →ₗ[𝕜] E) (x : E) :
 
 /-- The restriction of the modulus `|A|` to `(ker A)ᗮ = range |A|`, as a linear automorphism of
 `(ker A)ᗮ` — the invertible core of `|A|`, which the polar factor inverts. -/
-@[expose]
 noncomputable def operatorAbsRestrict (A : E →ₗ[𝕜] E) : ↥((ker A)ᗮ) ≃ₗ[𝕜] ↥((ker A)ᗮ) :=
   LinearEquiv.ofBijective
       ((operatorAbs A).restrict fun x _ => operatorAbs_apply_mem_orthogonal_ker A x) <| by
