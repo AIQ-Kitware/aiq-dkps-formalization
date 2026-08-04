@@ -12,7 +12,15 @@ import json
 import sys
 from pathlib import Path
 
-from .index import Decl, build_index, ensure_index, filter_decls, index_path
+from .index import (
+    Decl,
+    build_index,
+    by_name,
+    closure,
+    ensure_index,
+    filter_decls,
+    index_path,
+)
 from .project import ProjectError, find_project
 
 
@@ -76,6 +84,7 @@ def cmd_query(args) -> int:
             module=args.module,
             name=args.name,
             axiom=args.axiom,
+            uses=getattr(args, "uses", None),
         ),
         key=lambda d: (d.module, d.name),
     )
@@ -126,6 +135,43 @@ def cmd_stats(args) -> int:
             f"{c['prop_stub']:12d}"
         )
     return 0
+
+
+def cmd_deps(args) -> int:
+    """What a declaration needs — directly, or transitively within the library."""
+    project, library = _resolve(args)
+    decls = ensure_index(project, library, refresh=args.refresh, verbose=not args.json)
+    table = by_name(decls)
+    if args.decl not in table:
+        print(f"no declaration named {args.decl!r}", file=sys.stderr)
+        return 1
+    if args.transitive or args.local:
+        found = closure(
+            decls,
+            args.decl,
+            library=library if args.local else None,
+            depth=0 if args.transitive else 1,
+        )
+    else:
+        start = table[args.decl]
+        found = sorted(
+            (table[d] for d in start.deps if d in table),
+            key=lambda d: (d.module, d.name),
+        )
+    _emit(found, args)
+    return 0
+
+
+def cmd_rdeps(args) -> int:
+    """Which declarations reference this one."""
+    args.uses = args.decl
+    args.kind = getattr(args, "kind", None)
+    args.name = None
+    args.axiom = None
+    args.sorried = getattr(args, "sorried", None)
+    args.is_prop = None
+    args.prop_valued = getattr(args, "prop_valued", None)
+    return cmd_query(args)
 
 
 def cmd_axioms(args) -> int:
@@ -193,6 +239,7 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--name", help="substring match on the declaration name")
         sp.add_argument("--axiom", help="substring match within the axiom closure")
         sp.add_argument("--names", action="store_true", help="print bare names")
+        sp.add_argument("--uses", help="only declarations referencing this constant")
         if with_sorried:
             group = sp.add_mutually_exclusive_group()
             group.add_argument(
@@ -230,6 +277,32 @@ def build_parser() -> argparse.ArgumentParser:
         help="group modules by this many name components (0 = full module)",
     )
     p.set_defaults(func=cmd_stats)
+
+    p = sub.add_parser(
+        "deps", help="what a declaration references (--local: only same-library helpers)"
+    )
+    add_common(p)
+    p.add_argument("decl", help="full or short declaration name")
+    p.add_argument("--refresh", action="store_true")
+    p.add_argument("--names", action="store_true")
+    p.add_argument(
+        "--transitive", action="store_true", help="follow dependencies all the way down"
+    )
+    p.add_argument(
+        "--local", action="store_true",
+        help="only declarations from this library, followed transitively -- the "
+             "'what would I have to bring along' question",
+    )
+    p.set_defaults(func=cmd_deps)
+
+    p = sub.add_parser("rdeps", help="declarations that reference this one")
+    add_common(p)
+    p.add_argument("decl", help="full or short declaration name")
+    p.add_argument("--refresh", action="store_true")
+    p.add_argument("--names", action="store_true")
+    p.add_argument("--module")
+    p.add_argument("--kind", choices=["def", "theorem", "axiom", "inductive", "ctor"])
+    p.set_defaults(func=cmd_rdeps, sorried=None, prop_valued=None, is_prop=None)
 
     p = sub.add_parser("axioms", help="axiom closure of one declaration")
     add_common(p)

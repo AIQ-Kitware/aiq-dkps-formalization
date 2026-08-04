@@ -39,7 +39,16 @@ leanq stubs --kind def           # every definition reaching sorryAx
 leanq stubs --prop-valued        # predicates stubbed out: `def Foo : X → Prop := sorry`
 leanq query --name Schatten --json
 leanq axioms myTheorem           # the axiom closure of one declaration
+leanq deps myDef --local         # helpers from *this* library that myDef needs
+leanq deps myDef --transitive    # everything it reaches, Mathlib included
+leanq rdeps myDef                # who references myDef
+leanq query --uses myDef         # same, composable with the other filters
 ```
+
+`deps --local` answers "what would I have to bring along to restate this somewhere else": it
+follows only declarations from the same library, since Mathlib is available wherever you land.
+That question came up as "which of these stubbed definitions could I fill in without dragging
+in scaffolding", was first answered with a regex over source text, and was wrong.
 
 `--lib` picks the library when a project builds more than one; `--project` points at a project
 other than the working directory. Every subcommand takes `--json`, and `query`/`stubs` take

@@ -28,6 +28,7 @@ class Decl:
     sorried: bool
     line: int
     axioms: tuple[str, ...]
+    deps: tuple[str, ...]
 
     @classmethod
     def from_json(cls, obj: dict) -> "Decl":
@@ -40,6 +41,7 @@ class Decl:
             sorried=obj["sorried"],
             line=obj.get("line", 0),
             axioms=tuple(obj.get("axioms", ())),
+            deps=tuple(obj.get("deps", ())),
         )
 
     def to_json(self) -> dict:
@@ -52,6 +54,7 @@ class Decl:
             "sorried": self.sorried,
             "line": self.line,
             "axioms": list(self.axioms),
+            "deps": list(self.deps),
         }
 
     @property
@@ -171,6 +174,7 @@ def filter_decls(
     module: str | None = None,
     name: str | None = None,
     axiom: str | None = None,
+    uses: str | None = None,
 ) -> Iterator[Decl]:
     """Apply the CLI's filters.  ``module`` and ``name`` are substring matches."""
     for decl in decls:
@@ -188,4 +192,46 @@ def filter_decls(
             continue
         if axiom is not None and not any(axiom in a for a in decl.axioms):
             continue
+        if uses is not None and not any(
+            d == uses or d.rsplit(".", 1)[-1] == uses for d in decl.deps
+        ):
+            continue
         yield decl
+
+
+def by_name(decls: Iterable[Decl]) -> dict[str, Decl]:
+    """Index by full name, with short names as a fallback key."""
+    table: dict[str, Decl] = {}
+    for decl in decls:
+        table[decl.name] = decl
+        table.setdefault(decl.short_name, decl)
+    return table
+
+
+def closure(
+    decls: Iterable[Decl], root: str, *, library: str | None = None, depth: int = 0
+) -> list[Decl]:
+    """Everything ``root`` transitively needs, restricted to declarations we have.
+
+    With ``library`` set, only declarations from that library are followed, which is the
+    "what would I have to bring along" question: dependencies on Mathlib are already available
+    wherever the declaration is restated, local helpers are not.
+    """
+    table = by_name(decls)
+    start = table.get(root)
+    if start is None:
+        return []
+    seen: dict[str, Decl] = {}
+    frontier = [(start, 0)]
+    while frontier:
+        decl, level = frontier.pop()
+        for dep in decl.deps:
+            target = table.get(dep) or table.get(dep.rsplit(".", 1)[-1])
+            if target is None or target.name in seen or target.name == start.name:
+                continue
+            if library is not None and not target.module.startswith(library):
+                continue
+            seen[target.name] = target
+            if depth == 0 or level + 1 < depth:
+                frontier.append((target, level + 1))
+    return sorted(seen.values(), key=lambda d: (d.module, d.name))

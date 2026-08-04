@@ -84,7 +84,11 @@ def emit (root : Name) : MetaM Unit := do
           | some r => pure r.range.pos.line
           | none => pure 0
         catch _ => pure 0
+      -- constants named by the type and the value: what this declaration would drag along
+      let used := (ci.type.getUsedConstants ++ (ci.value?.map Expr.getUsedConstants).getD #[])
+      let deps := used.toList.filter (fun d => !d.isInternal && d != n) |>.eraseDups
       let axStr := String.intercalate "," (ax.toList.map fun a => "\"" ++ esc a.toString ++ "\"")
+      let depStr := String.intercalate "," (deps.map fun d => "\"" ++ esc d.toString ++ "\"")
       IO.println <| "{"
         ++ "\"name\":\"" ++ esc n.toString ++ "\","
         ++ "\"module\":\"" ++ esc modName.toString ++ "\","
@@ -93,7 +97,8 @@ def emit (root : Name) : MetaM Unit := do
         ++ "\"propValued\":" ++ (if pv then "true" else "false") ++ ","
         ++ "\"sorried\":" ++ (if ax.contains ``sorryAx then "true" else "false") ++ ","
         ++ "\"line\":" ++ toString line ++ ","
-        ++ "\"axioms\":[" ++ axStr ++ "]"
+        ++ "\"axioms\":[" ++ axStr ++ "],"
+        ++ "\"deps\":[" ++ depStr ++ "]"
         ++ "}"
 
 end DeclIndex
