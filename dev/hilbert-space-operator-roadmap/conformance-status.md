@@ -93,6 +93,13 @@ rather than in the code: judging by what something is called rather than by what
    eigenvalue set. Then the `StarAlgHom` assembles and
    `cfcHom_eq_of_continuous_of_map_id` applies.
 
+   For the second, `IsSelfAdjoint.spectrumRestricts`
+   (`Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Instances.lean`) is the
+   real-spectrum machinery, and `Module.End.hasEigenvalue_iff_mem_spectrum` connects the
+   complex spectrum to eigenvalues in finite dimension. Both ends exist; the join is the
+   `ℝ`/`ℂ` restriction interface, which is the genuinely interface-heavy part of this entry
+   and the reason it is the last one standing.
+
    This entry has now been wrong four times. Its history is left visible rather than tidied,
    because the pattern is the useful part.
 
