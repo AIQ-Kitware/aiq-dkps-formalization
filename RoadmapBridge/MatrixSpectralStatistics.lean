@@ -28,13 +28,15 @@ instance of each is recorded below:
 * **It under-counts.** `singularValues_toLinearMap` is reported outstanding; the identical
   statement is delivered as `ContinuousLinearMap.toLinearMap_singularValues`, `rfl` on both
   sides, differing only in the order of the two words in the name.
-* **It over-counts, which is the dangerous direction.** `upperHemicontinuousAt_isMinOn` is
-  reported *delivered* because a declaration of that name exists -- but the delivered one
-  assumes `[FirstCountableTopology X]` and the roadmap's does not.  The roadmap is explicit
-  that this is unacceptable rather than incidental: the extra hypothesis is "a proof
-  artifact -- it goes through the sequential characterization -- so if both versions coexist
-  it is the *restricted* one that should be qualified (`..._of_firstCountable`) or kept
-  private, not this one."  A name-equality check cannot see that, and scores it as done.
+* **It over-counts, which is the dangerous direction.** `upperHemicontinuousAt_isMinOn` was
+  reported *delivered* while the delivered one assumed `[FirstCountableTopology X]` and the
+  roadmap's did not -- a gap a name-equality check cannot see, and scores as done.  The
+  roadmap was right that the hypothesis was a proof artifact of the sequential route:
+  `ForTauCeti.Topology.Berge` now proves it from the tube lemma
+  `IsCompact.eventually_forall_of_forall_eventually` instead, and the delivered signature
+  carries neither `[FirstCountableTopology X]`, `[T2Space X]`, nor
+  `[(𝓝 p₀).IsCountablyGenerated]`.  The example is kept because the *failure mode* is the
+  point, not this instance of it.
 
 So the bridge entries below are stated so that **failure to elaborate is the finding**.
 Where the roadmap's statement is genuinely stronger than what is proved, there is no entry
