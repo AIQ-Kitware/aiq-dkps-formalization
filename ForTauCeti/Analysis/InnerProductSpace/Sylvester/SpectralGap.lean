@@ -81,7 +81,8 @@ section Gap
 variable {A : E →ₗ.[ℂ] E} {Bop : F →ₗ.[ℂ] F}
 
 /-- The spectral projection of the `k`-th grid cell. -/
-private noncomputable def gridProj (hA : IsSelfAdjoint A) (ε : ℝ) (k : ℤ) : E →L[ℂ] E :=
+@[expose]
+noncomputable def gridProj (hA : IsSelfAdjoint A) (ε : ℝ) (k : ℤ) : E →L[ℂ] E :=
   TauCeti.LinearPMap.specProjection hA (TauCeti.LinearPMap.gridCell ε k)
     (TauCeti.LinearPMap.measurableSet_gridCell ε k)
 

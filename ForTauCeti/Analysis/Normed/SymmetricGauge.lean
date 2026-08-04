@@ -204,6 +204,7 @@ theorem le_apply_and_le_sum (a : ℕ →₀ ℝ≥0) :
 This is the index set of the supremum defining `extend`.  It is nonempty for
 every `a` -- the zero sequence always qualifies -- which is what makes the
 extension total. -/
+@[expose]
 def Dominated (a : ℕ → ℝ≥0∞) : Type :=
   {b : ℕ →₀ ℝ≥0 // ∀ i, (b i : ℝ≥0∞) ≤ a i}
 
@@ -375,6 +376,7 @@ Uses `Real.nnabs` rather than an anonymous `⟨|x i|, _⟩`: the latter carries 
 proof inside the term, so every rewrite has to happen under a dependent pair and
 `rw` reports the motive as ill-typed.  `Real.nnabs` is a `MonoidWithZeroHom`, so
 `map_mul` also supplies the scaling law below for free. -/
+@[expose]
 noncomputable def ofFin {n : ℕ} (x : Fin n → ℝ) : ℕ →₀ ℝ≥0 :=
   Finsupp.onFinset (Finset.range n)
     (fun i => if h : i < n then Real.nnabs (x ⟨i, h⟩) else 0)
@@ -603,6 +605,7 @@ finitely supported nonnegative sequence.
 Stated for `a : ℕ → ℝ≥0∞` together with a proof that every coordinate is finite,
 because that is the shape the majorization argument produces after its infinite
 cases are discharged. -/
+@[expose]
 noncomputable def truncate (a : ℕ → ℝ≥0∞) (_ha : ∀ n, a n ≠ ⊤) (N : ℕ) : ℕ →₀ ℝ≥0 :=
   Finsupp.onFinset (Finset.range N)
     (fun i => if i < N then (a i).toNNReal else 0)

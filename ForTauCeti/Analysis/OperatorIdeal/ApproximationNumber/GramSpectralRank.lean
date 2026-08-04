@@ -90,8 +90,8 @@ private theorem tendsto_specProjection_inter_of_fix
       Filter.atTop (nhds v) := by
   refine (tendsto_specProjection_Icc hA v).congr' ?_
   filter_upwards [hset] with τ hτset
-  let P := spectralPVM hA
-  change P.proj (Set.Icc (-τ) τ) measurableSet_Icc v = P.proj (T τ) (hT τ) v
+  set P := spectralPVM hA with hP
+  simp only [specProjection_def]
   symm
   calc
     P.proj (T τ) (hT τ) v =
@@ -101,8 +101,8 @@ private theorem tendsto_specProjection_inter_of_fix
     _ = (P.proj (Set.Icc (-τ) τ) measurableSet_Icc * P.proj S hS) v := by
       rw [P.proj_inter]
     _ = P.proj (Set.Icc (-τ) τ) measurableSet_Icc v := by
-      change P.proj (Set.Icc (-τ) τ) measurableSet_Icc (P.proj S hS v) = _
-      change P.proj S hS v = v at hv
+      rw [mul_apply_eq_comp]
+      simp only [specProjection_def] at hv
       rw [hv]
 
 /-! ## Vector-local half-line bounds
@@ -118,7 +118,7 @@ closed half-line fixes `x`. -/
 theorem specProjection_Ici_apply_eq_self_of_Iic_apply_eq_zero {c : ℝ} (x : H)
     (hz : specProjection hA (Set.Iic c) measurableSet_Iic x = 0) :
     specProjection hA (Set.Ici c) measurableSet_Ici x = x := by
-  let P := spectralPVM hA
+  set P := spectralPVM hA with hP
   have hIio : P.proj (Set.Iio c) measurableSet_Iio x = 0 := by
     have hset : Set.Iio c ∩ Set.Iic c = Set.Iio c := by
       ext s
@@ -136,12 +136,10 @@ theorem specProjection_Ici_apply_eq_self_of_Iic_apply_eq_zero {c : ℝ} (x : H)
           (P.proj_congr hset (measurableSet_Iio.inter measurableSet_Iic)
             measurableSet_Iio)).symm
       _ = 0 := by
-        change P.proj (Set.Iio c) measurableSet_Iio
-            (P.proj (Set.Iic c) measurableSet_Iic x) = 0
-        change P.proj (Set.Iic c) measurableSet_Iic x = 0 at hz
-        rw [hz, map_zero]
+        simp only [specProjection_def, ← hP] at hz
+        rw [mul_apply_eq_comp, hz, map_zero]
   have hcompl : (Set.Iio c)ᶜ = Set.Ici c := Set.compl_Iio
-  change P.proj (Set.Ici c) measurableSet_Ici x = x
+  simp only [specProjection_def]
   calc
     P.proj (Set.Ici c) measurableSet_Ici x =
         P.proj (Set.Iio c)ᶜ measurableSet_Iio.compl x := by
@@ -157,7 +155,7 @@ closed half-line fixes `x`. -/
 theorem specProjection_Iic_apply_eq_self_of_Ici_apply_eq_zero {c : ℝ} (x : H)
     (hz : specProjection hA (Set.Ici c) measurableSet_Ici x = 0) :
     specProjection hA (Set.Iic c) measurableSet_Iic x = x := by
-  let P := spectralPVM hA
+  set P := spectralPVM hA with hP
   have hIoi : P.proj (Set.Ioi c) measurableSet_Ioi x = 0 := by
     have hset : Set.Ioi c ∩ Set.Ici c = Set.Ioi c := by
       ext s
@@ -175,12 +173,10 @@ theorem specProjection_Iic_apply_eq_self_of_Ici_apply_eq_zero {c : ℝ} (x : H)
           (P.proj_congr hset (measurableSet_Ioi.inter measurableSet_Ici)
             measurableSet_Ioi)).symm
       _ = 0 := by
-        change P.proj (Set.Ioi c) measurableSet_Ioi
-            (P.proj (Set.Ici c) measurableSet_Ici x) = 0
-        change P.proj (Set.Ici c) measurableSet_Ici x = 0 at hz
-        rw [hz, map_zero]
+        simp only [specProjection_def, ← hP] at hz
+        rw [mul_apply_eq_comp, hz, map_zero]
   have hcompl : (Set.Ioi c)ᶜ = Set.Iic c := Set.compl_Ioi
-  change P.proj (Set.Iic c) measurableSet_Iic x = x
+  simp only [specProjection_def]
   calc
     P.proj (Set.Iic c) measurableSet_Iic x =
         P.proj (Set.Ioi c)ᶜ measurableSet_Ioi.compl x := by
@@ -333,7 +329,9 @@ asking the elaborator to unfold the full spectral construction through a
 theorem gramSpectralPVM_proj_eq_specProjection (X : E0 →L[ℂ] E1)
     (B : Set ℝ) (hB : MeasurableSet B) :
     (gramSpectralPVM X).proj B hB =
-      TauCeti.LinearPMap.specProjection (gramLinearPMap_isSelfAdjoint X) B hB := rfl
+      TauCeti.LinearPMap.specProjection (gramLinearPMap_isSelfAdjoint X) B hB := by
+  rw [TauCeti.LinearPMap.specProjection_def]
+  rfl
 
 /-- A strict lower threshold for `a_n(X)` forces at least `n+1` dimensions in
 `E_{X†X}([r²,∞))`. -/

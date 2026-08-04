@@ -67,6 +67,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
 /-- Right Gram operator `A⋆A`. -/
+@[expose]
 noncomputable def rightGram (A : E →ₗ[𝕜] F) : E →ₗ[𝕜] E :=
   A.adjoint ∘ₗ A
 
@@ -75,6 +76,7 @@ theorem isSymmetric_rightGram (A : E →ₗ[𝕜] F) : (rightGram A).IsSymmetric
   simpa [rightGram] using A.isSymmetric_adjoint_comp_self
 
 /-- Left Gram operator `AA⋆`. -/
+@[expose]
 noncomputable def leftGram (A : E →ₗ[𝕜] F) : F →ₗ[𝕜] F :=
   A ∘ₗ A.adjoint
 

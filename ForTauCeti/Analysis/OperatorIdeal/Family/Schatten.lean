@@ -169,6 +169,7 @@ section Gauge
 
 /-- The **Schatten `p`-norm**, valued in `ℝ≥0∞` and therefore defined for every bounded
 operator: it is `∞` exactly when `T` is not Schatten-`p`. -/
+@[expose]
 noncomputable def schattenENorm (p : ℝ) (T : E →L[𝕜] F) : ℝ≥0∞ :=
   (∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) ^ p) ^ p⁻¹
 

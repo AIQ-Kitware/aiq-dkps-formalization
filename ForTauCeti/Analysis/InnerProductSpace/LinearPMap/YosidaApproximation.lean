@@ -127,6 +127,7 @@ noncomputable def yosidaApproximant (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[�
   (n : ℂ) ^ 2 • resolventAtIn hA n - (I * (n : ℂ)) • ContinuousLinearMap.id ℂ H
 
 /-- The symmetric Yosida approximant `(n²/2)(R(in) + R(-in))`. -/
+@[expose]
 noncomputable def yosidaApproximantSym (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
   ((n : ℂ) ^ 2 / 2) • (resolventAtIn hA n + resolventAtNegIn hA n)
 
@@ -832,6 +833,7 @@ theorem continuous_expLimit (hA : IsSelfAdjoint A) (ψ : H) :
 
 /-- **Stone's theorem, the construction half.**  A self-adjoint operator
 generates a one-parameter unitary group. -/
+@[expose]
 noncomputable def genToGroup (hA : IsSelfAdjoint A) : TauCeti.OneParameterUnitaryGroup H where
   U := expLimit hA
   unitary := inner_expLimit hA

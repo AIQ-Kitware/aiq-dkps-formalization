@@ -87,6 +87,7 @@ theorem mem_restrictedSpectrum {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E} {la
   mem_restrictedSpectrum_iff.mpr ⟨x, hxU, hx0, hxEig⟩
 
 /-- Every eigenvalue of `A` carried by `U` lies in `Ω`. -/
+@[expose]
 def SpectrumIn (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (Ω : Set ℝ) : Prop :=
   restrictedSpectrum A U ⊆ Ω
 
@@ -97,17 +98,20 @@ noncomputable def spectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
   Submodule.span 𝕜 {x | ∃ lam ∈ Ω, Module.End.HasEigenvector A (lam : 𝕜) x}
 
 /-- Canonical orthogonal spectral projector. -/
+@[expose]
 noncomputable def spectralProjection (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
     E →ₗ[𝕜] E :=
   ((spectralSubspace A Ω).starProjection : E →L[𝕜] E)
 
 /-- The orthogonal projector onto a finite-dimensional subspace, as a linear
 map. -/
+@[expose]
 noncomputable def projection (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
     E →ₗ[𝕜] E :=
   ((U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
 
 /-- The complementary projector. -/
+@[expose]
 noncomputable def complementaryProjection (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   projection Uᗮ

@@ -111,6 +111,7 @@ theorem restrictedReal_smul_operator_eq
 /-! ## Canonical conjugation on the complexification -/
 
 /-- Canonical conjugation, bundled as an antiunitary involution. -/
+@[expose]
 noncomputable def canonicalConjugation :
     RealComplexification E ≃ₗᵢ⋆[ℂ] RealComplexification E where
   toFun := conjugation

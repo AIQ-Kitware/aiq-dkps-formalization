@@ -24,11 +24,13 @@ variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 namespace Submodule
 
 /-- Operator-norm gap between two orthogonal projections. -/
+@[expose]
 noncomputable def projectionGap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   ‖U.starProjection - V.starProjection‖
 
 /-- Directed gap from `U` to `V`. -/
+@[expose]
 noncomputable def directedProjectionGap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   ‖Vᗮ.starProjection ∘L U.starProjection‖

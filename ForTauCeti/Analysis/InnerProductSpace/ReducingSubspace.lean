@@ -40,6 +40,7 @@ namespace ContinuousLinearMap
 
 /-- A subspace reduces a bounded operator when it and its orthogonal complement
 are invariant. -/
+@[expose]
 def Reduces (A : E →L[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
   (∀ x ∈ U, A x ∈ U) ∧ (∀ x ∈ Uᗮ, A x ∈ Uᗮ)
 
