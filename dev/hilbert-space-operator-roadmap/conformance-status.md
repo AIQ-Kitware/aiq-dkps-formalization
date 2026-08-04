@@ -97,9 +97,11 @@ rather than in the code: judging by what something is called rather than by what
    homogeneity, and for permutation-invariance it needed only the two characterising bounds
    (`le_supGaugeFinsupp`, `supGaugeFinsupp_le`) rather than reasoning about `Finset.sup` at all.
 
-   *Remaining computation*: `supGauge.extend (fun n => aₙ A) = ‖A‖`. It should collapse —
-   `a` is antitone, so the sup of a capped truncation is `min (a₀ A) m`, and the supremum over
-   caps recovers `a₀ A = ‖A‖`.
+   *The computation is done*: `supGauge_extend_of_antitone` proves
+   `supGauge.extend a = a 0` for any antitone `a : ℕ → ℝ≥0∞`. Since approximation numbers are
+   antitone, `Φ_∞ (a T) = a₀ T = ‖T‖` — the whole mathematical content of "the `∞` endpoint is
+   the operator-norm gauge". Every capped truncation is bounded by `a 0`, and the existing
+   `le_extend` supplies the reverse.
 
    *Remaining decision*, which is not mine: our `symmetricGaugeFamily` carries
    `[ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜]` while the roadmap's

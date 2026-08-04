@@ -1073,6 +1073,28 @@ noncomputable def supGauge : TruncationGauge where
     · by_cases hn : n = 0 <;> simp [hn]
     · simpa using le_supGaugeFinsupp (Finsupp.single (0 : ℕ) (1 : ℝ≥0)) 0
 
+/-- **The `∞` gauge collapses to the leading term on an antitone sequence.**
+
+Every capped truncation is bounded by `a 0`, and `le_extend` supplies the reverse, so the
+supremum over lengths and caps recovers the first entry.  For approximation numbers this says
+`Φ_∞ (a T) = a₀ T = ‖T‖`, which is the sense in which the `∞` endpoint of the Schatten scale
+is the operator-norm gauge. -/
+theorem supGauge_extend_of_antitone {a : ℕ → ℝ≥0∞} (ha : Antitone a) :
+    supGauge.extend a = a 0 := by
+  refine le_antisymm ?_ (supGauge.le_extend a 0)
+  rcases eq_or_ne (a 0) ⊤ with h0 | h0
+  · simp [h0]
+  refine iSup_le fun k => iSup_le fun m => ?_
+  have hle : supGaugeFinsupp (truncate a k m) ≤ (a 0).toNNReal := by
+    refine supGaugeFinsupp_le fun n => ?_
+    rw [truncate_apply]
+    split
+    · exact ENNReal.toNNReal_mono h0 (le_trans (min_le_left _ _) (ha (Nat.zero_le n)))
+    · exact zero_le
+  calc ((supGauge (truncate a k m) : ℝ≥0) : ℝ≥0∞) ≤ (((a 0).toNNReal : ℝ≥0) : ℝ≥0∞) := by
+        exact_mod_cast hle
+    _ = a 0 := ENNReal.coe_toNNReal h0
+
 section Calkin
 
 universe u
