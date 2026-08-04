@@ -108,33 +108,12 @@ rather than in the code: judging by what something is called rather than by what
    `schattenFamilyInf : OperatorIdealFamily.{0, v, w} ℂ` carries no hypothesis, so routing the
    endpoint through `symmetricGaugeFamily` yields a different object from the one specified.
 
-8. **`exists_units_eq_mul_of_rank_factorization`** — Milestone A2 uniqueness. **Checked**, not
-   taken on the roadmap's word. `LinearAlgebra/Matrix/RankFactorization.lean` has only the
-   existence direction (`exists_eq_mul_rank`, `exists_eq_mul_of_rank_le`,
-   `rank_le_iff_exists_eq_mul`); none of the uniqueness machinery is present.
-
-   The shape is classical: at the exact rank both factors have full column rank and share
-   `M`'s column space, so `L' = L g` for a unique invertible `g`, and injectivity of `L` then
-   forces `R' = g⁻¹ R`.
-
-   **The key tool exists and I twice said it did not.** `Mathlib.Algebra.Module.Projective`
-   has
-
-   ```
-   projective_lifting_property [Projective R P] (f : M →ₗ[R] N) (g : P →ₗ[R] N)
-       (hf : Function.Surjective f) : ∃ h : P →ₗ[R] M, f ∘ₗ h = g
-   ```
-
-   and `Fin r → 𝕜` is free, hence projective. Corestricting `L` to its range makes it
-   surjective, and `range L' ≤ range L` (from the rank equality) puts `L'` in the target, so
-   the lifting property produces `G` with `L ∘ₗ G = L'` directly. The same in the other
-   direction gives `G'`, and injectivity of `L` — full column rank at the exact rank — turns
-   `G G' = 1` and `G' G = 1` into the `Units` witness.
-
-   What is left is genuinely a body of work rather than a missing tool: the `Matrix` ↔
-   `LinearMap` transport, the rank-to-injectivity and column-space-equality steps, and
-   assembling the `Units`. The roadmap's Acknowledgements already record A2 as specified and
-   not implemented.
+8. ~~**`exists_units_eq_mul_of_rank_factorization`**~~ — **delivered.** Milestone A2. I called
+   this blocked three times, the last after a search I reported as coming back empty; it did
+   not, I searched badly. `Module.projective_lifting_property` is the engine, and the proof is
+   four helpers: `injective_mulVecLin_of_rank_eq` (rank-nullity on `Fin r → 𝕜`),
+   `rank_left_factor_eq`, `range_left_factor_eq`, and a left-cancellation lemma. Lifting both
+   ways gives `G` and `G'`; injectivity turns `G G' = 1` and `G' G = 1` into the `Units`.
 
 ### Over-strong hypotheses
 

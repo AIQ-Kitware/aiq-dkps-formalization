@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 
 import Mathlib.LinearAlgebra.Matrix.Rank
 import Mathlib.LinearAlgebra.Dimension.Free
+import Mathlib.Algebra.Module.Projective
 
 /-! # Rank factorization
 
@@ -188,5 +189,122 @@ theorem rank_le_iff_exists_eq_mul (M : Matrix m n 𝕜) (r : ℕ) :
   calc (L * R).rank ≤ L.rank := Matrix.rank_mul_le_left L R
     _ ≤ Fintype.card (Fin r) := L.rank_le_card_width
     _ = r := Fintype.card_fin r
+
+/-! ### Uniqueness of a rank factorization
+
+At the exact rank the two factors are determined up to a change of basis of the intermediate
+space. The engine is `Module.projective_lifting_property`: `Fin r → 𝕜` is free, hence projective, so
+a map into `range L.mulVecLin` lifts along `L`. -/
+
+section Uniqueness
+
+variable {r : ℕ}
+
+/-- At the exact rank the left factor has trivial kernel: rank-nullity on `Fin r → 𝕜`. -/
+theorem injective_mulVecLin_of_rank_eq {L : Matrix m (Fin r) 𝕜} (h : L.rank = r) :
+    Function.Injective L.mulVecLin := by
+  rw [← LinearMap.ker_eq_bot]
+  have hrk := LinearMap.finrank_range_add_finrank_ker L.mulVecLin
+  rw [show finrank 𝕜 (LinearMap.range L.mulVecLin) = r from h,
+    Module.finrank_pi 𝕜, Fintype.card_fin] at hrk
+  have : finrank 𝕜 (LinearMap.ker L.mulVecLin) = 0 := by omega
+  exact Submodule.finrank_eq_zero.mp this
+
+omit [DecidableEq n] in
+/-- A factorization at the exact rank forces the left factor to have that rank: it is at most
+`r` because it has `r` columns, and at least `r` because it dominates `M`. -/
+theorem rank_left_factor_eq {M : Matrix m n 𝕜} {L : Matrix m (Fin r) 𝕜}
+    {R : Matrix (Fin r) n 𝕜} (hM : M.rank = r) (h : M = L * R) : L.rank = r := by
+  refine le_antisymm (by simpa using L.rank_le_card_width) ?_
+  calc r = M.rank := hM.symm
+    _ = (L * R).rank := by rw [h]
+    _ ≤ L.rank := Matrix.rank_mul_le_left L R
+
+omit [DecidableEq n] in
+/-- At the exact rank the left factor spans the same column space as `M`. -/
+theorem range_left_factor_eq {M : Matrix m n 𝕜} {L : Matrix m (Fin r) 𝕜}
+    {R : Matrix (Fin r) n 𝕜} (hM : M.rank = r) (h : M = L * R) :
+    LinearMap.range L.mulVecLin = LinearMap.range M.mulVecLin := by
+  refine (Submodule.eq_of_le_of_finrank_eq ?_ ?_).symm
+  · rw [h, Matrix.mulVecLin_mul]
+    exact LinearMap.range_comp_le_range _ _
+  · rw [show finrank 𝕜 (LinearMap.range M.mulVecLin) = M.rank from rfl,
+      show finrank 𝕜 (LinearMap.range L.mulVecLin) = L.rank from rfl, hM,
+      rank_left_factor_eq hM h]
+
+omit [Fintype n] [DecidableEq n] in
+/-- **The lifting step.**  A matrix whose column space sits inside another's factors through
+it. `Fin r → 𝕜` is free, hence projective, so `Module.projective_lifting_property` supplies the
+factor directly. -/
+theorem exists_mul_eq_of_range_le {L L' : Matrix m (Fin r) 𝕜}
+    (h : LinearMap.range L'.mulVecLin ≤ LinearMap.range L.mulVecLin) :
+    ∃ G : Matrix (Fin r) (Fin r) 𝕜, L * G = L' := by
+  obtain ⟨φ, hφ⟩ := Module.projective_lifting_property L.mulVecLin.rangeRestrict
+    (L'.mulVecLin.codRestrict (LinearMap.range L.mulVecLin) fun x => h ⟨x, rfl⟩)
+    L.mulVecLin.surjective_rangeRestrict
+  refine ⟨LinearMap.toMatrix' φ, ?_⟩
+  have hcomp : L.mulVecLin ∘ₗ φ = L'.mulVecLin := by
+    refine LinearMap.ext fun x => ?_
+    have := congrArg (fun ψ : (Fin r → 𝕜) →ₗ[𝕜] LinearMap.range L.mulVecLin =>
+      ((ψ x : LinearMap.range L.mulVecLin) : m → 𝕜)) hφ
+    simpa using this
+  have := congrArg LinearMap.toMatrix' hcomp
+  rwa [← Matrix.toLin'_apply' L, ← Matrix.toLin'_apply' L', LinearMap.toMatrix'_comp,
+    LinearMap.toMatrix'_toLin', LinearMap.toMatrix'_toLin'] at this
+
+omit [Fintype n] [DecidableEq n] in
+-- `Fintype p` and `DecidableEq p` are used by `*ᵥ` and `Pi.single` in the proof but do not
+-- appear in the statement, which is exactly what these two linters flag.
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedDecidableInType false in
+/-- Left cancellation against an injective factor. -/
+theorem eq_of_mul_left_cancel {p : Type*} [Fintype p] [DecidableEq p]
+    {L : Matrix m (Fin r) 𝕜} (hL : Function.Injective L.mulVecLin)
+    {A B : Matrix (Fin r) p 𝕜} (hAB : L * A = L * B) : A = B := by
+  have hmv : ∀ x, A *ᵥ x = B *ᵥ x := by
+    intro x
+    refine hL ?_
+    have := congrArg (fun N : Matrix m p 𝕜 => N *ᵥ x) hAB
+    simpa [← Matrix.mulVec_mulVec] using this
+  ext i j
+  have := congrFun (hmv (Pi.single j 1)) i
+  simpa [Matrix.mulVec, dotProduct, Pi.single_apply] using this
+
+omit [DecidableEq n] in
+/-- **Milestone A2 — uniqueness of a rank factorization.**
+
+At the exact rank the two factors are determined up to the obvious `GL` action: `L' = L g`
+and `R' = g⁻¹ R`. Stated as an existence over the group rather than through a quotient.
+
+`r = M.rank` is load-bearing. Above the rank the extra columns are unconstrained and the
+statement is false; the proof uses it twice, once for each factor's injectivity. -/
+theorem exists_units_eq_mul_of_rank_factorization {M : Matrix m n 𝕜} (hM : M.rank = r)
+    {L L' : Matrix m (Fin r) 𝕜} {R R' : Matrix (Fin r) n 𝕜}
+    (h : M = L * R) (h' : M = L' * R') :
+    ∃ g : (Matrix (Fin r) (Fin r) 𝕜)ˣ,
+      L' = L * (g : Matrix (Fin r) (Fin r) 𝕜) ∧
+        R' = ((g⁻¹ : (Matrix (Fin r) (Fin r) 𝕜)ˣ) : Matrix (Fin r) (Fin r) 𝕜) * R := by
+  classical
+  have hrange : LinearMap.range L'.mulVecLin = LinearMap.range L.mulVecLin := by
+    rw [range_left_factor_eq hM h', range_left_factor_eq hM h]
+  obtain ⟨G, hG⟩ := exists_mul_eq_of_range_le (L := L) (L' := L') hrange.le
+  obtain ⟨G', hG'⟩ := exists_mul_eq_of_range_le (L := L') (L' := L) hrange.ge
+  have hLinj := injective_mulVecLin_of_rank_eq (rank_left_factor_eq hM h)
+  have hL'inj := injective_mulVecLin_of_rank_eq (rank_left_factor_eq hM h')
+  have hGG' : G * G' = 1 := by
+    refine eq_of_mul_left_cancel hLinj ?_
+    rw [← Matrix.mul_assoc, hG, hG', Matrix.mul_one]
+  have hG'G : G' * G = 1 := by
+    refine eq_of_mul_left_cancel hL'inj ?_
+    rw [← Matrix.mul_assoc, hG', hG, Matrix.mul_one]
+  refine ⟨⟨G, G', hGG', hG'G⟩, hG.symm, ?_⟩
+  -- `L R = M = L' R' = L G R'`, so `R = G R'` by injectivity of `L`.
+  have hR : R = G * R' := by
+    refine eq_of_mul_left_cancel hLinj ?_
+    rw [← Matrix.mul_assoc, hG, ← h, h']
+  rw [hR, ← Matrix.mul_assoc]
+  simp [hG'G]
+
+end Uniqueness
 
 end TauCeti.Matrix
