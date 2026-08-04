@@ -23,6 +23,23 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
+/-- **Pythagoras across an orthogonal projection**:
+`‖P_K x‖² + ‖x − P_K x‖² = ‖x‖²`.
+
+`x` splits into its projection and the complementary component, which are orthogonal, so the
+norms add in square. Stated for any submodule carrying an orthogonal projection. -/
+theorem norm_sq_starProjection_add_norm_sq_sub (K : Submodule 𝕜 F)
+    [K.HasOrthogonalProjection] (x : F) :
+    ‖K.starProjection x‖ ^ 2 + ‖x - K.starProjection x‖ ^ 2 = ‖x‖ ^ 2 := by
+  have horth : ⟪K.starProjection x, x - K.starProjection x⟫_𝕜 = 0 :=
+    Submodule.inner_right_of_mem_orthogonal (K.starProjection_apply_mem x)
+      (K.sub_starProjection_mem_orthogonal x)
+  have hx : K.starProjection x + (x - K.starProjection x) = x := by abel
+  calc ‖K.starProjection x‖ ^ 2 + ‖x - K.starProjection x‖ ^ 2
+      = ‖K.starProjection x + (x - K.starProjection x)‖ ^ 2 := by
+        rw [norm_add_sq (𝕜 := 𝕜), horth, map_zero]; ring
+    _ = ‖x‖ ^ 2 := by rw [hx]
+
 /-! The three bridge lemmas hold for an orthonormal family in *any* inner product
 space: the span of a finite subfamily is finite-dimensional, so it always carries
 an orthogonal projection (the `HasOrthogonalProjection` instance is automatic when
