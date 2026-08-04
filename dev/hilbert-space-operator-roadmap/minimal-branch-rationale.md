@@ -37,27 +37,52 @@ Two more went for a different reason. `approximationNumber : ℕ → ℝ` collid
 collision and the `singularValues` accessor question with it. `SpectralSubspacePerturbation`
 went because it is application-shaped throughout and depends on everything else.
 
-## What stayed that still carries risk
+## Second pass: cutting what had evidence against it (`b1c9231`)
 
-Naming these here rather than letting "minimal" imply "uncontroversial":
+The first pass left four risks in place. A second pass removed every definition with a
+*documented* objection, as opposed to one I merely disliked. 99 elaborated constants to 72;
+all four roadmaps survive.
 
-- **`selfAdjointFunctionalCalculus`** — a bespoke `RCLike` finite functional calculus
-  alongside Mathlib's `cfc`, which is registered only over `ℂ` in this setting. The only
-  *shape* risk left in the branch. It stayed because `IsPositive.sqrt` is the calculus at
-  `Real.sqrt` and `operatorAbs` is the sqrt of `A⋆A`, so cutting it takes the polar
-  decomposition and the singular systems with it — the spine of the foundations. A reviewer
-  could reasonably ask for `cfc` to be generalized instead.
-- **`operatorAbs`** — the roadmap already flags the name as a placeholder awaiting review.
-- **`resolventSet` / `spectrum` for `LinearPMap`** — the SelfAdjointSpectralTheory README says
-  this notion should be shared with the one-parameter semigroups roadmap. It is declared here.
-- **`IsMoorePenroseInverse`, `IsPartialIsometry`, `LowerFormBoundOn`, `UpperFormBoundOn`** —
-  invented predicates, but one-line `Prop`s that unbundle into loose hypotheses mechanically
-  if rejected.
+| cut | the evidence |
+|---|---|
+| `selfAdjointFunctionalCalculus` | parallels Mathlib's `cfc`; the roadmap's own text says `cfc` is registered only over `ℂ`, so this is a generalization request wearing a new name |
+| `IsPositive.sqrt`, `operatorAbs` | downstream of it; `operatorAbs` is additionally flagged in the roadmap as a placeholder name awaiting review |
+| `resolventSet`, `spectrum`, `resolvent` | the SelfAdjointSpectralTheory conventions section says the one-parameter semigroups roadmap owns the notion and "that definition should be shared" |
+| `IsMoorePenroseInverse`, `moorePenroseInverse` | `conformance-status.md` records a live disagreement: the roadmap states it with loose hypotheses, we deliver a bundle |
+| `ContinuousLinearMap.singularValues` | collides with Mathlib PR #32126's `ContinuousLinearMap.singularValue` |
+
+Cutting `IsMoorePenroseInverse` forces cutting `moorePenroseInverse` too: without the
+predicate the construction has no characterization, and a definition with no theorems is
+worse than no definition.
+
+**Deliberately kept**, because no evidence stands against them — checked, and none duplicates
+anything in Mathlib: `IsPartialIsometry` (three carrier-specific forms), `LowerFormBoundOn`,
+`UpperFormBoundOn`, `restrictedSpectrum`, `SpectraSeparated`, `OrderedGap`, `InternalGap`,
+`SpectrumIn`. All are one-line `Prop`s that unbundle into loose hypotheses if a reviewer
+objects. The plain definitions with one obvious formula — `modulus`, `polarInitial`,
+`polarPartial`, `sortedEigenvalues`, `specTransform`, the principal-angle vocabulary,
+`perturb` — also stayed.
+
+## Sizes
+
+| branch state | elaborated constants | roadmaps |
+|---|---|---|
+| full (`hilbert-space-operator-theory`) | 248 | 6 |
+| first pass (`7bf65e1`) | 99 | 4 |
+| evidence-driven (`b1c9231`) | **72** | 4 |
+
+For reference, two lines I measured and did not take: dropping every `Prop`-def and structure
+as well leaves 47 constants and collapses SelfAdjointSpectralTheory to two declarations;
+allowing no definitions whatsoever leaves 16 theorems, which is a coherent list of Mathlib
+gaps but is no longer a roadmap, since pinning names and signatures is what `Suggested.lean`
+is for.
 
 ## Verification
 
-- Dependency-closed: 110 elaborated constants in the kept slice, zero dependency edges out of
-  it into the removed material. Checked against the `leanq` index, not by regex.
+- Dependency-closed: zero dependency edges out of the kept material into the removed.
+  Checked against a `leanq` index built from the minimal branch itself, not inferred by regex
+  from the full branch — three separate source-regex counts disagreed with the elaborator
+  before I stopped trusting them.
 - `lake build` green, 8536 jobs, 0 errors.
 - All relative markdown links resolve; no reference to a removed roadmap survives.
 - Part letters are unchanged (Majorization keeps B and D, SelfAdjoint keeps C and D,
