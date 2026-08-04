@@ -171,7 +171,10 @@ def run(manifest: dict, cluster: str | None, write: bool) -> Result:
                     f"{'...' if len(decls) > 6 else ''})")
         else:
             if not target.exists():
-                res.fail(f"{final}: target missing ({target}); run --write")
+                # A module we add rather than update is absent upstream by
+                # definition, so absence is not drift.  `--write` creates it.
+                res.log(f"NEW {final} ({len(decls)} decls) -> "
+                        f"{target.relative_to(TAUCETI_ROOT)}")
                 continue
             existing = target.read_text(encoding="utf-8")
             if existing == new_text:
