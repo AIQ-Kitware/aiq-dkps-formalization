@@ -104,6 +104,32 @@ theorem selfAdjointFunctionalCalculus_isSymmetric
           (hT.eigenvectorBasis rfl i)).smul
             (RCLike.conj_ofReal (f (hT.eigenvalues rfl i)))).add hs
 
+/-- **The calculus is bounded by the sup of the symbol on the spectrum.**
+
+Parseval in the eigenbasis: the calculus multiplies the `i`-th coordinate of `x` by
+`f (λᵢ)`, so the squared norm is a weighted sum of the coordinate weights. This is the
+estimate continuity of `f ↦ calculus hT f` rests on. -/
+theorem norm_selfAdjointFunctionalCalculus_apply_le {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric)
+    (f : ℝ → ℝ) {M : ℝ} (hM0 : 0 ≤ M) (hM : ∀ i, |f (hT.eigenvalues rfl i)| ≤ M) (x : E) :
+    ‖selfAdjointFunctionalCalculus hT f x‖ ≤ M * ‖x‖ := by
+  classical
+  set b := hT.eigenvectorBasis rfl with hb
+  set S := selfAdjointFunctionalCalculus hT f with hS
+  have hSsym : S.IsSymmetric := selfAdjointFunctionalCalculus_isSymmetric hT f
+  have hcoord : ∀ i, ⟪b i, S x⟫_𝕜 = ((f (hT.eigenvalues rfl i) : ℝ) : 𝕜) * ⟪b i, x⟫_𝕜 := by
+    intro i
+    rw [← hSsym (b i) x, hS, selfAdjointFunctionalCalculus_apply_eigenvectorBasis,
+      inner_smul_left, RCLike.conj_ofReal]
+  have hsq : ‖S x‖ ^ 2 ≤ M ^ 2 * ‖x‖ ^ 2 := by
+    rw [← b.sum_sq_norm_inner_right (S x), ← b.sum_sq_norm_inner_right x, Finset.mul_sum]
+    refine Finset.sum_le_sum fun i _ => ?_
+    rw [hcoord i, norm_mul, mul_pow, RCLike.norm_ofReal]
+    have hsq2 : |f (hT.eigenvalues rfl i)| ^ 2 ≤ M ^ 2 := by
+      nlinarith [abs_nonneg (f (hT.eigenvalues rfl i)), hM i]
+    exact mul_le_mul_of_nonneg_right hsq2 (by positivity)
+  have h1 : (0 : ℝ) ≤ M * ‖x‖ := mul_nonneg hM0 (norm_nonneg x)
+  nlinarith [norm_nonneg (S x), hsq, h1]
+
 /-- The identity function recovers the original symmetric operator. -/
 theorem selfAdjointFunctionalCalculus_id
     {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) :

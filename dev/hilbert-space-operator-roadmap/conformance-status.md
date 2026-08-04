@@ -81,14 +81,20 @@ rather than in the code: judging by what something is called rather than by what
    * additivity and real-homogeneity were four lines each and are now delivered as
      `selfAdjointFunctionalCalculus_add` and `selfAdjointFunctionalCalculus_smul`.
 
-   **Only continuity in `f` is genuinely absent**, and — checked this time — there is no norm
-   machinery on the calculus at all: no pointwise bound, no operator-norm bound, nothing
-   mentioning `‖·‖`. Continuity needs the pointwise estimate
-   `‖calculus hT f x‖ ≤ (⨆ i, |f (λᵢ)|) * ‖x‖` first, by Parseval in the eigenbasis.
+   **The norm bound is now delivered too.**
+   `norm_selfAdjointFunctionalCalculus_apply_le` proves
+   `‖calculus hT f x‖ ≤ M * ‖x‖` whenever `M` dominates `|f|` on the eigenvalues, by Parseval
+   in the eigenbasis — about 25 lines. I had written that there was "no norm machinery at
+   all", which was true of the file and false as a statement about difficulty.
 
-   With that, plus the identification of `spectrum ℝ T.toContinuousLinearMap` with the
-   eigenvalue set, the `StarAlgHom` bundle assembles and
-   `cfcHom_eq_of_continuous_of_map_id` applies. Three pieces, not one and not four.
+   So of the obligations this entry has claimed at various points — four, then one, then
+   three — what is actually left is **two**: continuity of `f ↦ calculus hT f` packaged from
+   the bound above, and the identification of `spectrum ℝ T.toContinuousLinearMap` with the
+   eigenvalue set. Then the `StarAlgHom` assembles and
+   `cfcHom_eq_of_continuous_of_map_id` applies.
+
+   This entry has now been wrong four times. Its history is left visible rather than tidied,
+   because the pattern is the useful part.
 
    The methodological point is the transferable part: verifying one half of a claim and
    asserting the other, then reporting the whole as checked, is worse than an admitted guess,
