@@ -114,23 +114,17 @@ rather than in the code: judging by what something is called rather than by what
      `HasEigenvalue T (λᵢ : ℂ)`;
    * `spectrum.preimage_algebraMap` drops a complex-spectrum membership to `spectrum ℝ`.
 
-   **The gap is the middle step.** `Module.End.HasEigenvalue.mem_spectrum` lands in
-   `spectrum ℂ T` with `T : Module.End ℂ H`, whereas the bridge needs
-   `spectrum ℂ T.toContinuousLinearMap` in the algebra `H →L[ℂ] H`.
+   **The gap is closed.** `endAlgEquivContinuousLinearMap` upgrades
+   `LinearMap.toContinuousLinearMap` to an `AlgEquiv` via `AlgEquiv.ofLinearEquiv` — three
+   lines, since `map_one` and `map_mul` are `ext`-then-`rfl` for endomorphism composition.
+   Mathlib has the linear equivalence but not this upgrade. With it,
+   `eigenvalues_mem_spectrum_toContinuousLinearMap` follows: `HasEigenvector` from
+   `apply_eigenvectorBasis`, `AlgEquiv.spectrum_eq` across to the bounded algebra, then
+   `spectrum.preimage_algebraMap` down to `ℝ`.
 
-   Searched: Mathlib has **no** `AlgEquiv` between `Module.End 𝕜 E` and `E →L[𝕜] E`, and no
-   spectrum lemma for `toContinuousLinearMap`. This is a real negative, run rather than
-   assumed.
-
-   **But the construction is short.** In finite dimension every linear endomorphism is
-   continuous, so `LinearMap.toContinuousLinearMap` is already a linear equivalence;
-   `AlgEquiv.ofLinearEquiv` (`Mathlib/Algebra/Algebra/Equiv.lean:594`) upgrades a
-   `LinearEquiv` to an `AlgEquiv` given `map_one` and `map_mul`, both of which are `rfl`-level
-   for composition of endomorphisms. Then `AlgEquiv.spectrum_eq` transfers the membership.
-
-   So the whole remaining CFC obligation is: build that `AlgEquiv`, and assemble the
-   `StarAlgHom`. Estimated small — though this entry's estimates have been wrong five times,
-   so weigh that accordingly.
+   **So the only thing left on this entry is the `StarAlgHom` assembly itself**, with every
+   ingredient now in hand: `_add`, `_smul`, `_comp`, `_isSymmetric`, `_one`, `_pow`, the
+   Parseval bound, and this containment.
 
    For the real-spectrum machinery generally, `IsSelfAdjoint.spectrumRestricts`
    (`Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Instances.lean`) is the

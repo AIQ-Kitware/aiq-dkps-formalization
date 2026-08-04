@@ -447,6 +447,41 @@ section CFCBridge
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [FiniteDimensional ℂ H]
   [CompleteSpace H]
 
+/-- **Endomorphisms and bounded operators are the same algebra in finite dimension.**
+
+Every linear endomorphism of a finite-dimensional normed space is continuous, so
+`LinearMap.toContinuousLinearMap` is a linear equivalence; composition is the multiplication
+on both sides, which makes it an algebra equivalence. Mathlib has the linear equivalence but
+not this upgrade, and `AlgEquiv.spectrum_eq` across it is what carries eigenvalue facts about
+a `Module.End` over to the `ContinuousLinearMap` the functional calculus is stated for. -/
+noncomputable def endAlgEquivContinuousLinearMap : Module.End ℂ H ≃ₐ[ℂ] (H →L[ℂ] H) :=
+  AlgEquiv.ofLinearEquiv LinearMap.toContinuousLinearMap (by ext x; rfl)
+    (fun f g => by ext x; rfl)
+
+omit [CompleteSpace H] in
+/-- **Each eigenvalue lies in the real spectrum of the bounded operator.**
+
+The containment the continuous functional calculus bridge needs: it lets a
+`g : C(spectrum ℝ T.toContinuousLinearMap, ℝ)` be extended off the spectrum without changing
+the finite calculus, and turns the Parseval bound of
+`norm_selfAdjointFunctionalCalculus_apply_le` into `‖φ g‖ ≤ ‖g‖_∞`. -/
+theorem eigenvalues_mem_spectrum_toContinuousLinearMap {T : H →ₗ[ℂ] H} (hT : T.IsSymmetric)
+    (i : Fin (Module.finrank ℂ H)) :
+    (hT.eigenvalues rfl i : ℝ) ∈ spectrum ℝ T.toContinuousLinearMap := by
+  have hvec : Module.End.HasEigenvector T ((hT.eigenvalues rfl i : ℝ) : ℂ)
+      (hT.eigenvectorBasis rfl i) := by
+    constructor
+    · rw [Module.End.mem_eigenspace_iff]
+      exact hT.apply_eigenvectorBasis rfl i
+    · simpa using (hT.eigenvectorBasis rfl).orthonormal.ne_zero i
+  have hev := Module.End.hasEigenvalue_of_hasEigenvector hvec
+  have hC : ((hT.eigenvalues rfl i : ℝ) : ℂ) ∈ spectrum ℂ T.toContinuousLinearMap := by
+    have hsp := AlgEquiv.spectrum_eq endAlgEquivContinuousLinearMap T
+    rw [show T.toContinuousLinearMap = endAlgEquivContinuousLinearMap T from rfl, hsp]
+    exact hev.mem_spectrum
+  rw [← spectrum.preimage_algebraMap (R := ℝ) ℂ]
+  exact hC
+
 /-- The spectral modulus agrees with the C⋆-algebra `CFC.abs` on `E →L[ℂ] E`, transported across
 the definitional `LinearMap ↔ ContinuousLinearMap` adjoint bridge (`adjoint_toContinuousLinearMap`
 is `rfl`). This is what makes the decomposition literally "via CFC". -/
