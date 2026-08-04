@@ -645,7 +645,7 @@ theorem hilbertSchmidtEnergy_le_tsum_approximationNumber_sq {ι : Type v}
 
 Both inequalities are proved above — the forward one by truncating the basis and reading the
 finite case exactly, the reverse by Fatou against the same truncations. -/
-theorem tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy_of_hilbertBasis {ι : Type v}
+theorem tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy {ι : Type v}
     (T : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) :
     ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) ^ 2 = T.hilbertSchmidtEnergy b :=
   le_antisymm (tsum_approximationNumber_sq_le_hilbertSchmidtEnergy T b)

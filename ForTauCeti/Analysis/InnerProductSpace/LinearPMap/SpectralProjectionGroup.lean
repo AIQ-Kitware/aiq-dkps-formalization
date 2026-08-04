@@ -49,12 +49,12 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ) (hB : Measu
 /-- A spectral projection commutes with the symmetric Yosida approximant, which
 is a linear combination of two resolvents. -/
 theorem specProjection_comm_yosidaApproxSym (n : ℕ+) :
-    Commute (specProjection hA B hB) (yosidaApproxSym hA n) := by
+    Commute (specProjection hA B hB) (yosidaApproximantSym hA n) := by
   have h1 : Commute (specProjection hA B hB) (resolventAtIn hA n) :=
     specProjection_comm_resolvent' hA (I_mul_pnat_im_ne_zero n) _ B hB
   have h2 : Commute (specProjection hA B hB) (resolventAtNegIn hA n) :=
     specProjection_comm_resolvent' hA (neg_I_mul_pnat_im_ne_zero n) _ B hB
-  rw [yosidaApproxSym]
+  rw [yosidaApproximantSym]
   exact (h1.add_right h2).smul_right ((n : ℂ) ^ 2 / 2)
 
 /-- A spectral projection commutes with each bounded exponential approximant. -/
