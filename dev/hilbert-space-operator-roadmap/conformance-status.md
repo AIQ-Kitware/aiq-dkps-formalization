@@ -66,7 +66,19 @@ rather than in the code: judging by what something is called rather than by what
 ### Genuinely missing mathematics — not renames
 
 5. **`selfAdjointFunctionalCalculus_toContinuousLinearMap_eq_cfc`** — the `RCLike` calculus
-   agrees with Mathlib's CFC over `ℂ`. Part A milestone; nothing in the tree proves it.
+   agrees with Mathlib's CFC over `ℂ`. Part A milestone. **Checked, not guessed**, and this
+   one really is a development rather than a lookup.
+
+   The `sqrt` special case is delivered (`operatorAbs_toContinuousLinearMap_eq_cfcAbs`) but it
+   goes through `CFC.sqrt_unique`, a characterisation peculiar to square roots. A general `f`
+   has to go through uniqueness of the continuous functional calculus, which means exhibiting
+   `f ↦ selfAdjointFunctionalCalculus hT f` as a *continuous star-algebra homomorphism*
+   sending `id` to `T` and invoking `cfc_unique`.
+
+   `SelfAdjointFunctionalCalculus.lean` has `..._id`, `..._comp`, `..._isSymmetric`,
+   `..._congr` and the eigenvector action. It does **not** have additivity, multiplicativity
+   as an algebra map, star-preservation, or continuity in `f` — the four obligations a
+   `StarAlgHom` bundle needs. That is the work, and it is real.
 6. ~~**`isCompactOperator_of_hilbertSchmidtEnergy_ne_top`**~~ — **delivered.** Hilbert--Schmidt
    implies compact. I classified this as missing mathematics twice and was wrong both times:
    first claiming the obstacle was reconciling a `Finset ι` net with an `ℕ` sequence (it is
