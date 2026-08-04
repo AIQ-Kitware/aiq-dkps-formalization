@@ -220,13 +220,13 @@ theorem exists_unitary_diagOp_factorization (hn : finrank 𝕜 E = n)
     rw [hK, OrthonormalBasis.equiv_apply_basis, Equiv.refl_apply]
   have hKsymm : ∀ i, K.symm (w i) = b i := fun i => by
     rw [← hKb i, LinearIsometryEquiv.symm_apply_apply]
-  have habs_w : ∀ i, abs A (w i)
+  have habs_w : ∀ i, operatorAbs A (w i)
       = ((A.singularValues (i : ℕ) : ℝ) : 𝕜) • w i := by
     intro i
-    rw [show abs A = (LinearMap.isPositive_adjoint_comp_self A).sqrt from rfl,
+    rw [show operatorAbs A = (LinearMap.isPositive_adjoint_comp_self A).sqrt from rfl,
       (LinearMap.isPositive_adjoint_comp_self A).sqrt_apply_eigenvectorBasis i,
       ← A.singularValues_fin rfl i]
-  have habs : abs A
+  have habs : operatorAbs A
       = K.toLinearMap ∘ₗ diagOp b (fun i => A.singularValues (i : ℕ))
         ∘ₗ K.symm.toLinearMap := by
     refine w.toBasis.ext fun i => ?_

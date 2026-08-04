@@ -38,7 +38,7 @@ orthogonal complement and therefore participates in the full-space formula
 `R = C + J S`. -/
 noncomputable def directRotationCosine (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  TauCeti.abs (canonicalIntertwiner U V)
+  TauCeti.operatorAbs (canonicalIntertwiner U V)
 
 /-- The partial complex structure on the nonzero-angle space.  Total
 Moore--Penrose inversion makes it zero on the zero-angle space. -/
@@ -58,7 +58,7 @@ theorem ker_sinAngleOperator_le_ker_directRotation_sub_cosine
       ((directRotation U V hacute).toLinearMap - directRotationCosine U V).ker := by
   intro x hx
   have hxD : x ∈ (projection U - projection V).ker := by
-    simpa [sinAngleOperator, ker_abs] using hx
+    simpa [sinAngleOperator, ker_operatorAbs] using hx
   have hproj : projection U x = projection V x :=
     sub_eq_zero.mp (by
       simpa [LinearMap.sub_apply] using LinearMap.mem_ker.mp hxD)

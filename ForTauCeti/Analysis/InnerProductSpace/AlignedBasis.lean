@@ -208,7 +208,7 @@ theorem inner_u_aligned_eq {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : O
     ⟪u j, familyIsometry hv ((choosePolarUnitary (overlapOp hu hv)).symm
           (EuclideanSpace.single j 1))⟫_𝕜
       = ⟪(choosePolarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1),
-          abs (overlapOp hu hv)
+          operatorAbs (overlapOp hu hv)
             ((choosePolarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))⟫_𝕜 := by
   set M := overlapOp hu hv with hM
   set O := choosePolarUnitary M with hO
@@ -220,7 +220,7 @@ theorem inner_u_aligned_eq {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : O
   rw [hstep]
   -- `M = O ∘ |M|`, then `O` unitary moves across the inner product.
   have hpolar : M (O.symm (EuclideanSpace.single j 1))
-      = O (abs M (O.symm (EuclideanSpace.single j 1))) := by
+      = O (operatorAbs M (O.symm (EuclideanSpace.single j 1))) := by
     have h1 := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary M)
       (O.symm (EuclideanSpace.single j 1))
     rw [LinearMap.comp_apply] at h1
@@ -240,7 +240,7 @@ theorem sum_re_inner_u_aligned {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv
     ((EuclideanSpace.basisFun (Fin d) 𝕜).map (choosePolarUnitary (overlapOp hu hv)).symm)]
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [inner_u_aligned_eq hu hv j, OrthonormalBasis.map_apply, EuclideanSpace.basisFun_apply,
-    (isPositive_abs (overlapOp hu hv)).isSymmetric
+    (isPositive_operatorAbs (overlapOp hu hv)).isSymmetric
       ((choosePolarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))
       ((choosePolarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))]
 
