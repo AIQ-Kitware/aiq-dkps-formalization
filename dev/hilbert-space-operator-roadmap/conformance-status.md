@@ -93,6 +93,12 @@ rather than in the code: judging by what something is called rather than by what
    eigenvalue set. Then the `StarAlgHom` assembles and
    `cfcHom_eq_of_continuous_of_map_id` applies.
 
+   **A shortcut that does not exist.** If Mathlib had `cfc f a` acting on an eigenvector of
+   `a`, both sides would be determined on the eigenbasis and the bridge would collapse to a
+   basis comparison. It does not — searched for under several phrasings, nothing. So the
+   `StarAlgHom` route is the principled one, and this negative is one I actually ran, unlike
+   the one I fabricated for A2 earlier in this pass.
+
    For the second, `IsSelfAdjoint.spectrumRestricts`
    (`Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Instances.lean`) is the
    real-spectrum machinery, and `Module.End.hasEigenvalue_iff_mem_spectrum` connects the
