@@ -58,6 +58,26 @@ def CorrespondingEigenblock {A B : E →ₗ[𝕜] E}
     U = (hA.eigenvectorBasis hn).spanIndices ↑s ∧
       V = (hB.eigenvectorBasis hn).spanIndices ↑s
 
+/-- **The introduction rule for `CorrespondingEigenblock`.**
+
+Every theorem below *consumes* this hypothesis, and the only elimination it
+needs is the `obtain` in `yuWangSamworth_sinTheta_le`, which is in this file and
+so can see the definition.  A caller outside the file could not build one at
+all: the body is not exposed, and there was no introduction rule — which is why
+the hypothesis had no instance anywhere in the repository until
+`ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/TopEigenblock.lean`.
+
+Supplying the rule rather than `@[expose]`-ing the definition keeps the index
+bookkeeping an implementation detail; see the general rule against exposing
+bodies recorded on `spectralPVM`. -/
+theorem correspondingEigenblock_of_spanIndices {A B : E →ₗ[𝕜] E}
+    {hA : A.IsSymmetric} {hB : B.IsSymmetric} {U V : Submodule 𝕜 E}
+    {n : ℕ} (hn : finrank 𝕜 E = n) (s : Finset (Fin n))
+    (hU : U = (hA.eigenvectorBasis hn).spanIndices ↑s)
+    (hV : V = (hB.eigenvectorBasis hn).spanIndices ↑s) :
+    CorrespondingEigenblock hA hB U V :=
+  ⟨n, hn, s, hU, hV⟩
+
 /-- Frobenius sine distance in canonical subspace notation. -/
 noncomputable def sinThetaFrobenius (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
