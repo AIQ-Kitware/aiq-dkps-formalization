@@ -303,7 +303,6 @@ The finite calculus consumes `ℝ → ℝ`, while `cfcHom` is stated on `C(spect
 is the bridge between the two.  It is multiplicative and additive outright — both sides
 vanish off `S` — and `selfAdjointFunctionalCalculus_indicator` covers the unit, the one
 operation it does not respect. -/
-@[expose]
 noncomputable def extendSymbol {S : Set ℝ} (g : C(S, ℝ)) : ℝ → ℝ :=
   fun x => if h : x ∈ S then g ⟨x, h⟩ else 0
 
