@@ -24,12 +24,20 @@ brick (2) of the converse of the Halmos two-projection classification: on the
 four elementary Halmos summands a glued map automatically intertwines both
 projections, so the whole assembly reduces to iterating this lemma.
 
+A decomposition into more than two pieces is not of that shape — the pieces are
+mutually orthogonal but none is the ambient complement of another — so
+`orthogonalSupGlue` gives the companion form `(A ⊔ B) ≃ₗᵢ (A' ⊔ B')` for
+orthogonal `A, B`.  Iterating it handles any finite orthogonal family, and
+`orthogonalGlue` then closes off against the ambient complement.
+
 ## Main results
 
-* `TauCeti.orthogonalGlue`: the glued isometric equivalence.
+* `TauCeti.orthogonalGlue`: the glued isometric equivalence across `A` and `Aᗮ`.
 * `TauCeti.orthogonalGlue_apply_of_mem` / `_of_mem_orthogonal`: it restricts to
   `f` and to `g`.
 * `TauCeti.map_orthogonalGlue`: it carries `A` onto `A'` (and `Aᗮ` onto `A'ᗮ`).
+* `TauCeti.orthogonalSupGlue`: the same for two orthogonal summands, landing in
+  `A' ⊔ B'`.
 -/
 
 public section
@@ -41,6 +49,11 @@ namespace TauCeti
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
 variable {H' : Type*} [NormedAddCommGroup H'] [InnerProductSpace 𝕜 H']
+/-- Orthogonality of submodules is symmetric. -/
+theorem le_orthogonal_symm {K L : Submodule 𝕜 H} (h : K ≤ Lᗮ) : L ≤ Kᗮ :=
+  fun y hy => (Submodule.mem_orthogonal _ _).mpr fun _u hu =>
+    inner_eq_zero_symm.mp ((Submodule.mem_orthogonal _ _).mp (h hu) y hy)
+
 variable {A : Submodule 𝕜 H} [A.HasOrthogonalProjection]
   [Aᗮ.HasOrthogonalProjection]
 variable {A' : Submodule 𝕜 H'} [A'.HasOrthogonalProjection]
@@ -201,5 +214,144 @@ theorem map_orthogonalGlue_orthogonal (f : A ≃ₗᵢ[𝕜] A') (g : Aᗮ ≃�
       orthogonalGlue f g (g.symm ⟨y, hy⟩ : H) from rfl,
       orthogonalGlue_apply_of_mem_orthogonal f g (g.symm ⟨y, hy⟩).2]
     simp
+
+/-! ## Gluing across an orthogonal pair of summands
+
+`orthogonalGlue` glues a subspace to its *ambient* orthogonal complement.  A
+decomposition into more than two pieces is not of that shape — the pieces are
+mutually orthogonal but none is the ambient complement of another — so the
+companion form below glues `A` and `B` into `A ⊔ B`, and iterating it handles
+any finite orthogonal family.
+-/
+
+section Sup
+
+variable {A B : Submodule 𝕜 H} [A.HasOrthogonalProjection]
+  [B.HasOrthogonalProjection]
+variable {A' B' : Submodule 𝕜 H'} [A'.HasOrthogonalProjection]
+  [B'.HasOrthogonalProjection]
+
+/-- The ambient map underlying the `sup` glue.  Defined on all of `H`; only its
+restriction to `A ⊔ B` is meaningful. -/
+noncomputable def supGlueAmbient (f : A ≃ₗᵢ[𝕜] A') (g : B ≃ₗᵢ[𝕜] B') :
+    H →ₗ[𝕜] H' :=
+  (A'.subtype ∘ₗ (f.toLinearEquiv : A →ₗ[𝕜] A') ∘ₗ
+      (A.orthogonalProjectionOnto : H →ₗ[𝕜] A)) +
+    (B'.subtype ∘ₗ (g.toLinearEquiv : B →ₗ[𝕜] B') ∘ₗ
+      (B.orthogonalProjectionOnto : H →ₗ[𝕜] B))
+
+omit [A'.HasOrthogonalProjection] [B'.HasOrthogonalProjection] in
+theorem supGlueAmbient_apply (f : A ≃ₗᵢ[𝕜] A') (g : B ≃ₗᵢ[𝕜] B') (x : H) :
+    supGlueAmbient f g x =
+      (f (A.orthogonalProjectionOnto x) : H') +
+        (g (B.orthogonalProjectionOnto x) : H') := by
+  simp [supGlueAmbient]
+
+omit [A'.HasOrthogonalProjection] [B'.HasOrthogonalProjection] in
+/-- On `A` the ambient map is `f`; the `B`-component vanishes because `A ⊥ B`. -/
+theorem supGlueAmbient_apply_of_mem_left (hAB : A ≤ Bᗮ) (f : A ≃ₗᵢ[𝕜] A')
+    (g : B ≃ₗᵢ[𝕜] B') {x : H} (hx : x ∈ A) :
+    supGlueAmbient f g x = (f ⟨x, hx⟩ : H') := by
+  have hA : A.orthogonalProjectionOnto x = ⟨x, hx⟩ := by
+    apply Subtype.ext
+    simpa using Submodule.starProjection_eq_self_iff.mpr hx
+  have hB : B.orthogonalProjectionOnto x = 0 := by
+    apply Subtype.ext
+    have : B.starProjection x = 0 := by
+      rw [Submodule.starProjection_apply_eq_zero_iff]
+      exact hAB hx
+    simpa using this
+  rw [supGlueAmbient_apply, hA, hB]
+  simp
+
+omit [A'.HasOrthogonalProjection] [B'.HasOrthogonalProjection] in
+/-- On `B` the ambient map is `g`. -/
+theorem supGlueAmbient_apply_of_mem_right (hAB : A ≤ Bᗮ) (f : A ≃ₗᵢ[𝕜] A')
+    (g : B ≃ₗᵢ[𝕜] B') {x : H} (hx : x ∈ B) :
+    supGlueAmbient f g x = (g ⟨x, hx⟩ : H') := by
+  have hBA : B ≤ Aᗮ := le_orthogonal_symm hAB
+  have hB : B.orthogonalProjectionOnto x = ⟨x, hx⟩ := by
+    apply Subtype.ext
+    simpa using Submodule.starProjection_eq_self_iff.mpr hx
+  have hA : A.orthogonalProjectionOnto x = 0 := by
+    apply Subtype.ext
+    have : A.starProjection x = 0 := by
+      rw [Submodule.starProjection_apply_eq_zero_iff]
+      exact hBA hx
+    simpa using this
+  rw [supGlueAmbient_apply, hA, hB]
+  simp
+
+omit [A'.HasOrthogonalProjection] [B'.HasOrthogonalProjection] in
+/-- On `A ⊔ B` the ambient map is norm-preserving. -/
+theorem norm_supGlueAmbient_of_mem_sup (hAB : A ≤ Bᗮ) (hAB' : A' ≤ B'ᗮ)
+    (f : A ≃ₗᵢ[𝕜] A') (g : B ≃ₗᵢ[𝕜] B') {x : H} (hx : x ∈ A ⊔ B) :
+    ‖supGlueAmbient f g x‖ = ‖x‖ := by
+  obtain ⟨a, ha, b, hb, rfl⟩ := Submodule.mem_sup.mp hx
+  rw [map_add, supGlueAmbient_apply_of_mem_left hAB f g ha,
+    supGlueAmbient_apply_of_mem_right hAB f g hb]
+  have hperp' : ⟪(f ⟨a, ha⟩ : H'), (g ⟨b, hb⟩ : H')⟫_𝕜 = 0 :=
+    Submodule.inner_right_of_mem_orthogonal (f ⟨a, ha⟩).2
+      (le_orthogonal_symm hAB' (g ⟨b, hb⟩).2)
+  have hperp : ⟪a, b⟫_𝕜 = 0 :=
+    inner_eq_zero_symm.mp ((Submodule.mem_orthogonal _ _).mp (hAB ha) b hb)
+  have hfa : ‖(f ⟨a, ha⟩ : H')‖ = ‖a‖ := by
+    rw [Submodule.norm_coe, f.norm_map, Submodule.coe_norm]
+  have hgb : ‖(g ⟨b, hb⟩ : H')‖ = ‖b‖ := by
+    rw [Submodule.norm_coe, g.norm_map, Submodule.coe_norm]
+  have hsq : ‖(f ⟨a, ha⟩ : H') + (g ⟨b, hb⟩ : H')‖ ^ 2 = ‖a + b‖ ^ 2 := by
+    rw [@norm_add_sq 𝕜, @norm_add_sq 𝕜, hperp', hperp, hfa, hgb]
+  have h1 : (0 : ℝ) ≤ ‖(f ⟨a, ha⟩ : H') + (g ⟨b, hb⟩ : H')‖ := norm_nonneg _
+  have h2 : (0 : ℝ) ≤ ‖a + b‖ := norm_nonneg _
+  nlinarith
+
+omit [A'.HasOrthogonalProjection] [B'.HasOrthogonalProjection] in
+/-- The ambient map sends `A ⊔ B` into `A' ⊔ B'`. -/
+theorem supGlueAmbient_mem_sup (hAB : A ≤ Bᗮ) (f : A ≃ₗᵢ[𝕜] A')
+    (g : B ≃ₗᵢ[𝕜] B') {x : H} (hx : x ∈ A ⊔ B) :
+    supGlueAmbient f g x ∈ A' ⊔ B' := by
+  obtain ⟨a, ha, b, hb, rfl⟩ := Submodule.mem_sup.mp hx
+  rw [map_add, supGlueAmbient_apply_of_mem_left hAB f g ha,
+    supGlueAmbient_apply_of_mem_right hAB f g hb]
+  exact Submodule.add_mem _ (Submodule.mem_sup_left (f ⟨a, ha⟩).2)
+    (Submodule.mem_sup_right (g ⟨b, hb⟩).2)
+
+omit [A'.HasOrthogonalProjection] [B'.HasOrthogonalProjection] in
+/-- Every element of `A' ⊔ B'` is hit from `A ⊔ B`. -/
+theorem supGlueAmbient_surjOn (hAB : A ≤ Bᗮ) (f : A ≃ₗᵢ[𝕜] A')
+    (g : B ≃ₗᵢ[𝕜] B') {y : H'} (hy : y ∈ A' ⊔ B') :
+    ∃ x ∈ A ⊔ B, supGlueAmbient f g x = y := by
+  obtain ⟨a', ha', b', hb', rfl⟩ := Submodule.mem_sup.mp hy
+  refine ⟨(f.symm ⟨a', ha'⟩ : H) + (g.symm ⟨b', hb'⟩ : H),
+    Submodule.add_mem _ (Submodule.mem_sup_left (f.symm ⟨a', ha'⟩).2)
+      (Submodule.mem_sup_right (g.symm ⟨b', hb'⟩).2), ?_⟩
+  rw [map_add, supGlueAmbient_apply_of_mem_left hAB f g (f.symm ⟨a', ha'⟩).2,
+    supGlueAmbient_apply_of_mem_right hAB f g (g.symm ⟨b', hb'⟩).2]
+  simp
+
+/-- **Gluing across an orthogonal pair of summands.**  Matched isometries on two
+orthogonal subspaces assemble into one on their join. -/
+noncomputable def orthogonalSupGlue (hAB : A ≤ Bᗮ) (hAB' : A' ≤ B'ᗮ)
+    (f : A ≃ₗᵢ[𝕜] A') (g : B ≃ₗᵢ[𝕜] B') :
+    (A ⊔ B : Submodule 𝕜 H) ≃ₗᵢ[𝕜] (A' ⊔ B' : Submodule 𝕜 H') := by
+  refine LinearIsometryEquiv.ofSurjective
+    { toLinearMap :=
+        LinearMap.codRestrict (A' ⊔ B')
+          ((supGlueAmbient f g).domRestrict (A ⊔ B))
+          (fun x => supGlueAmbient_mem_sup hAB f g x.2)
+      norm_map' := fun x => ?_ } ?_
+  · change ‖supGlueAmbient f g (x : H)‖ = ‖x‖
+    rw [norm_supGlueAmbient_of_mem_sup hAB hAB' f g x.2, Submodule.coe_norm]
+  · intro y
+    obtain ⟨x, hx, hxy⟩ := supGlueAmbient_surjOn hAB f g y.2
+    exact ⟨⟨x, hx⟩, Subtype.ext hxy⟩
+
+omit [A'.HasOrthogonalProjection] [B'.HasOrthogonalProjection] in
+theorem coe_orthogonalSupGlue (hAB : A ≤ Bᗮ) (hAB' : A' ≤ B'ᗮ)
+    (f : A ≃ₗᵢ[𝕜] A') (g : B ≃ₗᵢ[𝕜] B') (x : (A ⊔ B : Submodule 𝕜 H)) :
+    (orthogonalSupGlue hAB hAB' f g x : H') = supGlueAmbient f g (x : H) := by
+  simp [orthogonalSupGlue]
+
+end Sup
 
 end TauCeti
