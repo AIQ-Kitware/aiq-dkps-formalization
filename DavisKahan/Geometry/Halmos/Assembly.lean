@@ -250,6 +250,54 @@ theorem halmosGlobalEquiv_apply_of_mem_generic
     halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg x = (eg ⟨x, hx⟩ : H₂) :=
   TauCeti.orthogonalGlue_apply_of_mem_orthogonal _ _ hx
 
+/-! ### How the trivial-part isometry acts on each elementary summand
+
+`halmosTrivialEquiv` is a nested pair of `orthogonalSupGlue`s, so reading it off
+on a summand is two applications of `coe_orthogonalSupGlue` followed by the
+matching `supGlueAmbient_apply_of_mem_left/right`.
+-/
+
+variable (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
+  (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)
+  (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
+  (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
+
+theorem coe_halmosTrivialEquiv_of_mem_common {x : H₁}
+    (hx : x ∈ halmosCommonPart U₁ V₁) (hxT : x ∈ halmosTrivialPart U₁ V₁) :
+    (halmosTrivialEquiv U₁ V₁ U₂ V₂ ec es et ee ⟨x, hxT⟩ : H₂) =
+      (ec ⟨x, hx⟩ : H₂) := by
+  rw [halmosTrivialEquiv, TauCeti.coe_orthogonalSupGlue,
+    TauCeti.supGlueAmbient_apply_of_mem_left (commonSupSource_le_orthogonal_targetSupExterior U₁ V₁) _ _ (Submodule.mem_sup_left hx),
+    TauCeti.coe_orthogonalSupGlue,
+    TauCeti.supGlueAmbient_apply_of_mem_left (halmosCommon_le_sourceDefect_orthogonal U₁ V₁) _ _ hx]
+
+theorem coe_halmosTrivialEquiv_of_mem_source {x : H₁}
+    (hx : x ∈ halmosSourceDefect U₁ V₁) (hxT : x ∈ halmosTrivialPart U₁ V₁) :
+    (halmosTrivialEquiv U₁ V₁ U₂ V₂ ec es et ee ⟨x, hxT⟩ : H₂) =
+      (es ⟨x, hx⟩ : H₂) := by
+  rw [halmosTrivialEquiv, TauCeti.coe_orthogonalSupGlue,
+    TauCeti.supGlueAmbient_apply_of_mem_left (commonSupSource_le_orthogonal_targetSupExterior U₁ V₁) _ _ (Submodule.mem_sup_right hx),
+    TauCeti.coe_orthogonalSupGlue,
+    TauCeti.supGlueAmbient_apply_of_mem_right (halmosCommon_le_sourceDefect_orthogonal U₁ V₁) _ _ hx]
+
+theorem coe_halmosTrivialEquiv_of_mem_target {x : H₁}
+    (hx : x ∈ halmosTargetDefect U₁ V₁) (hxT : x ∈ halmosTrivialPart U₁ V₁) :
+    (halmosTrivialEquiv U₁ V₁ U₂ V₂ ec es et ee ⟨x, hxT⟩ : H₂) =
+      (et ⟨x, hx⟩ : H₂) := by
+  rw [halmosTrivialEquiv, TauCeti.coe_orthogonalSupGlue,
+    TauCeti.supGlueAmbient_apply_of_mem_right (commonSupSource_le_orthogonal_targetSupExterior U₁ V₁) _ _ (Submodule.mem_sup_left hx),
+    TauCeti.coe_orthogonalSupGlue,
+    TauCeti.supGlueAmbient_apply_of_mem_left (halmosTargetDefect_le_exterior_orthogonal U₁ V₁) _ _ hx]
+
+theorem coe_halmosTrivialEquiv_of_mem_exterior {x : H₁}
+    (hx : x ∈ halmosExteriorPart U₁ V₁) (hxT : x ∈ halmosTrivialPart U₁ V₁) :
+    (halmosTrivialEquiv U₁ V₁ U₂ V₂ ec es et ee ⟨x, hxT⟩ : H₂) =
+      (ee ⟨x, hx⟩ : H₂) := by
+  rw [halmosTrivialEquiv, TauCeti.coe_orthogonalSupGlue,
+    TauCeti.supGlueAmbient_apply_of_mem_right (commonSupSource_le_orthogonal_targetSupExterior U₁ V₁) _ _ (Submodule.mem_sup_right hx),
+    TauCeti.coe_orthogonalSupGlue,
+    TauCeti.supGlueAmbient_apply_of_mem_right (halmosTargetDefect_le_exterior_orthogonal U₁ V₁) _ _ hx]
+
 /-- The global isometry carries the trivial part onto the trivial part. -/
 theorem map_halmosGlobalEquiv_trivial
     (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
