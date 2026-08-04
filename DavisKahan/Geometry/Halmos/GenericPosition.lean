@@ -136,6 +136,115 @@ theorem eq_zero_of_mem_inf_generic_left_of_mem_right
   have : x ∈ halmosGenericPart U V ⊓ (U ⊓ V) := ⟨hx.2, hx.1, hxV⟩
   simpa [halmosGenericPart_inf_inf_eq_bot_left_right U V] using this
 
+/-! ## The cosine block
+
+In the `M ⊕ N` coordinates of `halmosGenericPart_eq_sup_inf_left`, the second
+projection has a self-adjoint block matrix whose upper-left corner is the
+compression of `P_V` to `M`.  That corner is Halmos's `cos²Θ`: its quadratic
+form is `‖P_V m‖²`, so generic position says exactly that it and `1 - cos²Θ`
+have trivial kernel — the spectrum avoids both endpoints, which is the analytic
+form of "every angle is strictly between `0` and `π/2`".
+-/
+
+/-- The `U`-half of the generic part. -/
+noncomputable abbrev genericLeftHalf : Submodule ℂ H := U ⊓ halmosGenericPart U V
+
+/-- The `Uᗮ`-half of the generic part. -/
+noncomputable abbrev genericRightHalf : Submodule ℂ H :=
+  Uᗮ ⊓ halmosGenericPart U V
+
+/-- The quadratic form of an orthogonal projector is the squared norm of the
+projection. -/
+theorem inner_starProjection_self (W : Submodule ℂ H)
+    [W.HasOrthogonalProjection] (x : H) :
+    ⟪W.starProjection x, x⟫_ℂ = ((‖W.starProjection x‖ : ℝ) : ℂ) ^ 2 := by
+  have hmem := W.starProjection_apply_mem x
+  have hperp := W.sub_starProjection_mem_orthogonal x
+  have hsplit : W.starProjection x + (x - W.starProjection x) = x := by abel
+  calc ⟪W.starProjection x, x⟫_ℂ
+      = ⟪W.starProjection x,
+          W.starProjection x + (x - W.starProjection x)⟫_ℂ := by rw [hsplit]
+    _ = ⟪W.starProjection x, W.starProjection x⟫_ℂ +
+          ⟪W.starProjection x, x - W.starProjection x⟫_ℂ := inner_add_right _ _ _
+    _ = ((‖W.starProjection x‖ : ℝ) : ℂ) ^ 2 := by
+        rw [Submodule.inner_right_of_mem_orthogonal hmem hperp, add_zero,
+          inner_self_eq_norm_sq_to_K]
+        norm_cast
+
+/-- Pythagoras across a projector. -/
+theorem norm_sq_eq_starProjection_add_orthogonal (W : Submodule ℂ H)
+    [W.HasOrthogonalProjection] (x : H) :
+    ‖x‖ ^ 2 = ‖W.starProjection x‖ ^ 2 + ‖x - W.starProjection x‖ ^ 2 := by
+  have hperp : ⟪W.starProjection x, x - W.starProjection x⟫_ℂ = 0 :=
+    Submodule.inner_right_of_mem_orthogonal (W.starProjection_apply_mem x)
+      (W.sub_starProjection_mem_orthogonal x)
+  have hsplit : W.starProjection x + (x - W.starProjection x) = x := by abel
+  have hpy := @norm_add_sq ℂ _ _ _ _ (W.starProjection x)
+    (x - W.starProjection x)
+  rw [hsplit, hperp] at hpy
+  simp only [map_zero, mul_zero, add_zero] at hpy
+  linarith
+
+/-- **Halmos's `cos²Θ`** on the `U`-half of the generic part: the compression of
+`P_V`. -/
+noncomputable def genericCosineBlock :
+    genericLeftHalf U V →L[ℂ] genericLeftHalf U V :=
+  DavisKahanExt.compressOperator (genericLeftHalf U V) V.starProjection
+
+/-- **The quadratic form of the cosine block is `‖P_V m‖²`.**  Everything below
+is read off this identity. -/
+theorem re_inner_genericCosineBlock (m : genericLeftHalf U V) :
+    RCLike.re ⟪genericCosineBlock U V m, m⟫_ℂ =
+      ‖V.starProjection (m : H)‖ ^ 2 := by
+  have hcoe : ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
+      (genericLeftHalf U V).starProjection (V.starProjection (m : H)) := by
+    simp [genericCosineBlock, DavisKahanExt.compressOperator]
+  have h1 : ⟪genericCosineBlock U V m, m⟫_ℂ =
+      ⟪V.starProjection (m : H), (m : H)⟫_ℂ := by
+    calc ⟪genericCosineBlock U V m, m⟫_ℂ
+        = ⟪((genericCosineBlock U V m : genericLeftHalf U V) : H), (m : H)⟫_ℂ :=
+          rfl
+      _ = ⟪(genericLeftHalf U V).starProjection (V.starProjection (m : H)),
+            (m : H)⟫_ℂ := by rw [hcoe]
+      _ = ⟪V.starProjection (m : H),
+            (genericLeftHalf U V).starProjection (m : H)⟫_ℂ :=
+          (genericLeftHalf U V).inner_starProjection_left_eq_right _ _
+      _ = ⟪V.starProjection (m : H), (m : H)⟫_ℂ := by
+          rw [Submodule.starProjection_eq_self_iff.mpr m.2]
+  rw [h1, inner_starProjection_self]
+  norm_cast
+
+/-- **The cosine block is strictly positive.**  Its quadratic form vanishes only
+at `0`, because a vector of the `U`-half orthogonal to `V` is zero. -/
+theorem re_inner_genericCosineBlock_pos {m : genericLeftHalf U V} (hm : m ≠ 0) :
+    0 < RCLike.re ⟪genericCosineBlock U V m, m⟫_ℂ := by
+  rw [re_inner_genericCosineBlock]
+  have hne : V.starProjection (m : H) ≠ 0 := by
+    intro hzero
+    have hmV : (m : H) ∈ Vᗮ := by
+      rwa [Submodule.starProjection_apply_eq_zero_iff] at hzero
+    exact hm (Subtype.ext
+      (eq_zero_of_mem_inf_generic_left_of_mem_orthogonal_right U V m.2 hmV))
+  have hpos : 0 < ‖V.starProjection (m : H)‖ := norm_pos_iff.mpr hne
+  positivity
+
+/-- **The cosine block never reaches `1`.**  A vector of the `U`-half lying in
+`V` is zero, so the complementary component is always nonzero. -/
+theorem re_inner_genericCosineBlock_lt {m : genericLeftHalf U V} (hm : m ≠ 0) :
+    RCLike.re ⟪genericCosineBlock U V m, m⟫_ℂ < ‖m‖ ^ 2 := by
+  rw [re_inner_genericCosineBlock]
+  have hne : (m : H) - V.starProjection (m : H) ≠ 0 := by
+    intro hzero
+    have heq : (m : H) = V.starProjection (m : H) := by
+      rw [← sub_eq_zero]; exact hzero
+    exact hm (Subtype.ext (eq_zero_of_mem_inf_generic_left_of_mem_right U V m.2
+      (heq ▸ V.starProjection_apply_mem (m : H))))
+  have hpos : 0 < ‖(m : H) - V.starProjection (m : H)‖ := norm_pos_iff.mpr hne
+  have hpy := norm_sq_eq_starProjection_add_orthogonal V (m : H)
+  have hcoe : ‖(m : H)‖ = ‖m‖ := Submodule.norm_coe m
+  rw [hcoe] at hpy
+  nlinarith
+
 end HiddenFoundations
 end MathAhead
 end Experimental
