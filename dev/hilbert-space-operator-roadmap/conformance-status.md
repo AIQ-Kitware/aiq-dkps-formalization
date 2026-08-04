@@ -139,23 +139,35 @@ the two namespaces, including three the roadmap names by hand — `extend`,
 conformance number**: the checker matches those names, but cannot tell that the delivered ones
 hang off a structure the roadmap does not have.
 
-The merge is well defined and contained (`TruncationGauge` is referenced only inside its own
-file, 32 times), but it is not a rename:
+**Correction to an earlier version of this section, and to commit `753f23f6`'s message.**
+That version said the thirteen same-named declarations across the two namespaces are
+duplicates to be deleted. They are not. Only the lemmas that speak about `Φ` alone are
+genuine duplicates (`le_sum`, and the five accessors that merely unprime a field). The
+`extend` family is **two different constructions wearing the same names**:
 
-1. add `import ForTauCeti.Analysis.Normed.SymmetricGauge` — no cycle, the Normed module
-   imports only Mathlib and `Convex.Majorization`;
-2. delete the `structure TruncationGauge` block and the **13 duplicated declarations**
-   (`extend`, `extend_eq_iSup_ofFin`, `extend_le_extend_of_forall_sum_le`, `extend_le_tsum`,
-   `extend_mono`, `extend_smul`, `iSup_le_extend`, `iSup_le_extend_le_tsum`, `le_extend`,
-   `le_sum`, `ofFin`, `ofFin_le_extend`, `truncate`) — left in place they would collide in one
-   namespace;
-3. rename `TruncationGauge` to `SymmetricGauge` throughout, and the five primed field
-   accessors to their unprimed spellings;
-4. re-verify the **26 declarations unique to `TruncationGauge`** — the Schatten scale
-   (`schattenGauge`, `schattenFamily`, `gauge_schattenFamily_antitone`), the `ℓᵖ` gauge, and
-   the `symmetricGaugeENorm` family all sit on it.
+```lean
+-- Analysis/Normed/SymmetricGauge.lean          -- domination
+SymmetricGauge.extend Φ a = ⨆ b : Dominated a, (Φ b.1 : ℝ≥0∞)
 
-Not attempted here rather than attempted and left half-done.
+-- Analysis/OperatorIdeal/SymmetricGauge.lean   -- capped truncation
+TruncationGauge.extend Φ a = ⨆ k, ⨆ m, (Φ (truncate a k m) : ℝ≥0∞)
+```
+
+and their `truncate`s differ too — one takes a length and a `≠ ⊤` proof, the other a length
+and a cap. So the merge is not deletion; it is reconciling two constructions, which means
+either proving them equal or choosing one and reproving its dependents. That is mathematics,
+not packaging, and it is why this is recorded rather than done.
+
+**Which one the roadmap wants.** Its `SymmetricGauge.extend` body is `sorry`, so the
+signature does not pin the construction, but the prose does: *"`extend` is a supremum of
+truncations and nothing cleverer"*, and B1 specifies `Φ∞ a = ⨆ N, Φ (truncate a N)` over
+truncations of the decreasing rearrangement. **`TruncationGauge` is the one that matches the
+spec**; the module actually named `SymmetricGauge` takes the domination route. So the merge
+direction is the opposite of what the naming suggests.
+
+Still true and still worth doing: the *structures* are duplicated, one concept has two
+spellings, and `TruncationGauge` is confined to its own file (32 references). What is not
+true is that it can be done by deleting collisions.
 
 ## What the gates cannot see
 
