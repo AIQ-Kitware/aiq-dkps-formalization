@@ -1026,6 +1026,53 @@ noncomputable def symmetricGaugeFamily (𝕜 : Type u) [RCLike 𝕜]
 
 end Triangle
 
+/-! ### The `∞` endpoint gauge
+
+`Φ_∞ a = ⨆ n, a n`, the sup norm of a finitely supported nonnegative sequence.  It sits at
+the top of the Schatten scale and, unlike the finite exponents, needs no `ℓᵖ` machinery: four
+of the five axioms follow from the two characterising bounds below, and only homogeneity
+touches `Finset.sup` directly. -/
+
+/-- The sup norm of a finitely supported nonnegative sequence. -/
+noncomputable def supGaugeFinsupp (a : ℕ →₀ ℝ≥0) : ℝ≥0 := a.support.sup a
+
+/-- Every term is bounded by the sup. -/
+theorem le_supGaugeFinsupp (a : ℕ →₀ ℝ≥0) (n : ℕ) : a n ≤ supGaugeFinsupp a := by
+  by_cases hn : n ∈ a.support
+  · exact Finset.le_sup hn
+  · simp only [Finsupp.notMem_support_iff] at hn
+    simp [hn]
+
+/-- The sup is the least such bound. -/
+theorem supGaugeFinsupp_le {a : ℕ →₀ ℝ≥0} {c : ℝ≥0} (h : ∀ n, a n ≤ c) :
+    supGaugeFinsupp a ≤ c :=
+  Finset.sup_le fun n _ => h n
+
+/-- `Φ_∞`, the symmetric gauge at the top of the Schatten scale. -/
+noncomputable def supGauge : TruncationGauge where
+  toFun := supGaugeFinsupp
+  add_le' a b := supGaugeFinsupp_le fun n => by
+    simpa using add_le_add (le_supGaugeFinsupp a n) (le_supGaugeFinsupp b n)
+  smul' c a := by
+    classical
+    rcases eq_or_ne c 0 with rfl | hc
+    · simp [supGaugeFinsupp]
+    · have hsupp : (c • a).support = a.support := by
+        ext n
+        simp [Finsupp.mem_support_iff, hc]
+      simp only [supGaugeFinsupp, hsupp, NNReal.mul_finset_sup]
+      exact Finset.sup_congr rfl fun n _ => by simp
+  symm' σ a := by
+    refine le_antisymm (supGaugeFinsupp_le fun n => ?_) (supGaugeFinsupp_le fun n => ?_)
+    · simpa [Finsupp.equivMapDomain_apply] using le_supGaugeFinsupp a (σ.symm n)
+    · simpa [Finsupp.equivMapDomain_apply] using
+        le_supGaugeFinsupp (Finsupp.equivMapDomain σ a) (σ n)
+  mono' a b h := supGaugeFinsupp_le fun n => le_trans (h n) (le_supGaugeFinsupp b n)
+  normalized' := by
+    refine le_antisymm (supGaugeFinsupp_le fun n => ?_) ?_
+    · by_cases hn : n = 0 <;> simp [hn]
+    · simpa using le_supGaugeFinsupp (Finsupp.single (0 : ℕ) (1 : ℝ≥0)) 0
+
 section Calkin
 
 universe u

@@ -89,18 +89,23 @@ rather than in the code: judging by what something is called rather than by what
    simply exposes the factorisation already inside
    `tsum_approximationNumber_comp_basisTruncation_sq_le` as a rank bound.
 
-7. **`schattenFamilyInf`** — **checked.** The roadmap wants the `∞` endpoint defined from the
-   `Φ_∞` gauge and then *proved* equal to the operator-norm family. Building it honestly means
-   (a) a `TruncationGauge` whose `toFun` is the sup norm on `ℕ →₀ ℝ≥0`, with its five axioms,
-   and (b) computing `Φ_∞.extend (fun n => aₙ A) = a₀ A = ‖A‖` — a real calculation through
-   the capped-truncation machinery, since `a` is antitone and the sup collapses to the first
-   term.
+7. **`schattenFamilyInf`** — **the gauge is now built**; what remains is one computation and
+   one decision.
 
-   There is also a **signature mismatch worth deciding before anyone builds it**: our
-   `symmetricGaugeFamily` carries `[ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜]`,
-   while the roadmap's `schattenFamilyInf : OperatorIdealFamily.{0, v, w} ℂ` carries no such
-   hypothesis. Constructing the endpoint through `symmetricGaugeFamily` therefore yields a
-   *different, hypothesis-bearing* object from the one specified.
+   `supGauge : TruncationGauge` carries `Φ_∞ a = ⨆ n, a n` with all five axioms proved. I had
+   recorded this as needing `Finset.sup` machinery; it needed `NNReal.mul_finset_sup` for
+   homogeneity, and for permutation-invariance it needed only the two characterising bounds
+   (`le_supGaugeFinsupp`, `supGaugeFinsupp_le`) rather than reasoning about `Finset.sup` at all.
+
+   *Remaining computation*: `supGauge.extend (fun n => aₙ A) = ‖A‖`. It should collapse —
+   `a` is antitone, so the sup of a capped truncation is `min (a₀ A) m`, and the supremum over
+   caps recovers `a₀ A = ‖A‖`.
+
+   *Remaining decision*, which is not mine: our `symmetricGaugeFamily` carries
+   `[ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜]` while the roadmap's
+   `schattenFamilyInf : OperatorIdealFamily.{0, v, w} ℂ` carries no hypothesis, so routing the
+   endpoint through `symmetricGaugeFamily` yields a different object from the one specified.
+
 8. **`exists_units_eq_mul_of_rank_factorization`** — Milestone A2 uniqueness. **Checked**, not
    taken on the roadmap's word. `LinearAlgebra/Matrix/RankFactorization.lean` has only the
    existence direction (`exists_eq_mul_rank`, `exists_eq_mul_of_rank_le`,
