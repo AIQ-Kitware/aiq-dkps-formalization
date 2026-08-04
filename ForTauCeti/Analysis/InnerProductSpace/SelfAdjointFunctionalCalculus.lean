@@ -243,6 +243,32 @@ theorem selfAdjointFunctionalCalculus_apply_of_apply_eq_smul
     rw [hcoeff]
     simp
 
+/-- The constant function `1` gives the identity operator. -/
+theorem selfAdjointFunctionalCalculus_one {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) :
+    selfAdjointFunctionalCalculus hT (fun _ => (1 : ℝ)) = LinearMap.id := by
+  apply (hT.eigenvectorBasis rfl).toBasis.ext
+  intro i
+  rw [OrthonormalBasis.coe_toBasis, selfAdjointFunctionalCalculus_apply_eigenvectorBasis]
+  simp
+
+/-- **The calculus agrees with polynomial evaluation on monomials.**
+
+Induction on `n` from `..._one` and `..._comp`; the base is the identity operator and the
+step is multiplicativity of the symbol. This is what makes the calculus an algebra map
+extending `Polynomial.aeval`, the property any route to the Mathlib CFC goes through. -/
+theorem selfAdjointFunctionalCalculus_pow {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (n : ℕ) :
+    selfAdjointFunctionalCalculus hT (fun x => x ^ n) = T ^ n := by
+  induction n with
+  | zero =>
+      simpa [pow_zero, Module.End.one_eq_id] using selfAdjointFunctionalCalculus_one hT
+  | succ k ih =>
+      have hmul := selfAdjointFunctionalCalculus_comp hT (fun x => x ^ k) id
+      have : (fun x : ℝ => x ^ k * id x) = fun x : ℝ => x ^ (k + 1) := by
+        funext x; simp [pow_succ]
+      rw [this] at hmul
+      rw [← hmul, ih, selfAdjointFunctionalCalculus_id, pow_succ]
+      rfl
+
 /-- Every operator commuting with a symmetric map commutes with its finite
 real functional calculus.  This includes repeated eigenvalues: the proof uses
 that the commuting operator preserves each eigenspace. -/
