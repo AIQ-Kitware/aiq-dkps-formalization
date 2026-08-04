@@ -222,63 +222,63 @@ bodies; that scan also flagged `hasDerivAt_expTime_apply'` in `StoneUniqueness.l
 restatement of a `private` lemma in `SkewAdjointExponential.lean`, differing only in
 `expTime B s (B ψ)` versus `(expTime B s * B) ψ`, with both carrying `@[simp]`. Not yet fixed.
 
-## The largest mechanical-submission gap: the module system
+## The module system: done, 192/192
 
-Upstream Tau Ceti is **1212/1212 files** on Lean's module system (`module`, `public import`,
+Upstream Tau Ceti is 1212/1212 files on Lean's module system (`module`, `public import`,
 `public section`). `ForTauCeti` was **68/192**, plus 13 files carrying a `public section` that
-does nothing because the file is not a `module`. Every unconverted file is hand-work at
-submission time, so this — not the remaining name matches — is what stands between here and a
-mechanical port.
+did nothing because the file was not a `module`. Every unconverted file was hand-work at
+submission time, so this — not the remaining name matches — was the real gap.
 
-The conversion lives on the branch **`module-system-conversion`**, not on `main`, because it is
-not green yet: **27 errors in 13 files**, down from 90. It is off `main` so downstream stays
-green, and it is pushed so the remaining work is reviewable rather than lost.
+**`ForTauCeti` is now 192/192 and green.** The conversion is on `main`.
 
-What the branch establishes:
+How it went, for whoever does this to another package:
 
 * Conversion is **all-or-nothing**. A `module` may not import a non-`module`, so no
-  downward-closed subset short of the whole package builds.
-* The mechanical part is genuinely mechanical, and
+  downward-closed subset short of the whole package builds. There is no incremental path.
+* The mechanical part is mechanical, and
   `dev/hilbert-space-operator-roadmap/module-system-conversion.py` does it: insert `module`
   after the copyright block, `import` → `public import`, add `public section` after the module
-  docstring. It handled all 124 files.
-* The diff is **structural only** — 234 `module`/`public section` lines, 49 `@[expose]`, two
-  Mathlib imports, two hand edits. **No theorem statement changed.**
-* Two classes of breakage, both of which Lean names precisely. Missing imports, because the
-  module system drops transitive name visibility (`Unknown constant Finset.sum_le_sum`,
-  `Finite.bddAbove_range`). And unexposed definition bodies, under `definitions were not
-  unfolded because their definition is not exposed`.
-* Exposure density ends at 53/192 = 0.28 per file, against upstream's 305/1212 = 0.25. The
-  attribute is not being over-applied relative to the destination.
+  docstring. **114 of the 124 files needed nothing else.**
+* Errors do not fall monotonically. Each fix unblocks a file, which lets the build reach its
+  dependents, which surface their own. The count went 90 → 27 → 36 → 16 → 12 → 9 → 4 → 0 across
+  frontiers, and every rise was progress rather than regression.
+* Lean names the fix in almost every case. `Unknown constant` means a transitive import the
+  module system no longer carries — `Finset.sum_le_sum` and `Finite.bddAbove_range` each needed
+  one direct `public import`. `definitions were not unfolded because their definition is not
+  exposed`, `Function expected at`, `is not an inductive datatype`, `Invalid projection` and
+  `Expected a definition with an exposed body` all name a definition that needs `@[expose]` —
+  overwhelmingly `Prop`-valued predicates whose whole purpose is to unfold. And `A private
+  declaration X ... would need to be public` is exactly what it says: an `@[expose]` definition
+  may not reference a `private` one.
 
-### What is left, and why it is proof work
+Final exposure count is **169 across 192 files**, against upstream's 305 across 1212. That is
+denser than upstream, and the honest reading is that some of it is over-applied: the loop
+exposed what Lean asked for rather than asking whether a rewrite lemma would have been better.
+Trimming it is a real follow-up — remove an attribute, rebuild, keep the removal if it holds.
 
-Seven of the 27 are `change` tactics in `GramSpectralRank` that unfold `specProjection`. That
-definition's docstring in `LinearPMap/SpectralMeasure/Construction.lean` records a deliberate
-decision: its `@[expose]` was **removed** once `spectralPVM_def`, `specProjection_def`,
-`toProjValMeasure_proj`/`_diag` and `specProj_def`/`specDiag_def` retired every consumer, at a
-cost of zero sites — and draws the general rule that a consumer which rewrites by lemma rather
-than reducing through a body does not care whether the body is exposed. Exposing it again would
-undo that. `specProjection` and `spectralPVM` are therefore denylisted in the fixer, and those
-seven sites need rewiring to the `_def` lemmas.
+### Where the house style was followed instead
 
-The other 20 are `rfl`, `introN`, projection and type-mismatch failures in `SinTheta`,
-`SpectralGrid`, `SymmetricGauge`, `SpectralOrder/Complex`, `Spectral/Subspace`,
-`PrincipalAngles`, `Rosenblum`, `StoneUniqueness`, `EnergyComparison`, `DiagonalExample` and
-`SpectralProjectionGroup` — each a proof that reduced through a body and now needs a lemma.
+Four places had a recorded decision against exposing, and were rewired rather than exposed.
 
-The house-style pattern is already demonstrated on the branch. `extendSymbol` gained
-`extendSymbol_apply_of_not_mem` and `extendSymbol_eq_indicator`; two `simp [extendSymbol, ...]`
-call sites in `Polar/Decomposition` collapsed to `exact extendSymbol_eq_indicator _ _ fun _ _ =>
-rfl`, and the body no longer has to be reducible for them. One structural rule also surfaced:
-an `@[expose]` definition may not reference a `private` one, which is why `operatorAbsRestrict`
-stopped being private.
+`specProjection` and `spectralPVM` were denylisted in the fixer. Their docstring in
+`LinearPMap/SpectralMeasure/Construction.lean` records that `@[expose]` was **removed** once
+`spectralPVM_def`, `specProjection_def`, `toProjValMeasure_proj`/`_diag` and
+`specProj_def`/`specDiag_def` retired every consumer at a cost of zero sites. The seven
+`change` tactics in `GramSpectralRank` now go through `specProjection_def`; `Rosenblum` goes
+through `spectralPVM_def → toProjValMeasure_diag → specDiag_def`, the exact chain the docstring
+names.
 
-Two cautions for whoever picks this up. The converter's "already annotated" guard originally
-matched the word *exposed* in a docstring, which is the only reason it skipped `spectralPVM`;
-that guard is now precise and the denylist is explicit, so do not rely on luck. And a broad
-name harvest from error text annotates files without reducing errors — drive the fixer from
-Lean's own `not exposed` diagnostic, not from identifiers scraped out of type mismatches.
+`specRange` likewise documents that it is not exposed and that `specProjection_mem_specRange`
+covers the construction sites. `GramBandPolar`'s three `change`s now use that lemma and
+`mem_specRange_iff`.
+
+`extendSymbol` gained `extendSymbol_apply_of_not_mem` and `extendSymbol_eq_indicator`, which
+collapsed two `simp [extendSymbol, ...]` sites in `Polar/Decomposition` to a single lemma
+application — the pattern the `spectralPVM` note argues for, applied to a new definition.
+
+Two general facts worth keeping. `(f * g) x` no longer reduces by `change`; `mul_apply_eq_comp`
+is the lemma. And a `let`-bound local will not match a hypothesis rewritten to the unfolded
+form — `set ... with h` and fold back with `← h`.
 
 ## `PosDef` collided with an unrelated upstream file — retargeted
 
