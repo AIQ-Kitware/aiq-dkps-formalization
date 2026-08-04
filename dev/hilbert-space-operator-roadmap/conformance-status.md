@@ -25,7 +25,17 @@ the classification below instead of the number.
 (renames, and roadmap-local scaffolding that is not ours to deliver). Treat the
 classification below as the real state, not the number.
 
-## The nine outstanding, classified
+## Treat the "missing mathematics" list as unverified
+
+Of the four items originally listed there, two have since been delivered by simply attempting
+them -- Berge's first-countability and Hilbert--Schmidt implies compact. In both cases the
+blockage was a description I had written or read, not the mathematics. **The remaining two
+deserve an attempt before anyone believes they are blocked.**
+
+That is the same failure this conformance pass exists to catch, committed in the assessment
+rather than in the code: judging by what something is called rather than by what it says.
+
+## The outstanding items, classified
 
 ### Not a gap — do not "fix" these
 
@@ -57,27 +67,16 @@ classification below as the real state, not the number.
 
 5. **`selfAdjointFunctionalCalculus_toContinuousLinearMap_eq_cfc`** — the `RCLike` calculus
    agrees with Mathlib's CFC over `ℂ`. Part A milestone; nothing in the tree proves it.
-6. **`isCompactOperator_of_hilbertSchmidtEnergy_ne_top`** — Hilbert--Schmidt implies compact.
-   Attempted and reverted; the tree is unchanged. The route is clear and the pieces are all
-   present, so this is the most tractable of the four:
+6. ~~**`isCompactOperator_of_hilbertSchmidtEnergy_ne_top`**~~ — **delivered.** Hilbert--Schmidt
+   implies compact. I classified this as missing mathematics twice and was wrong both times:
+   first claiming the obstacle was reconciling a `Finset ι` net with an `ℕ` sequence (it is
+   not -- one `s` from the net gives a rank bound at a single index and antitonicity finishes),
+   then claiming it needed a long proof (the four remaining blockers were lemma-name lookups:
+   `finrank_euclideanSpace_fin`, `Module.finrank_eq_rank`, `ofReal_norm`, and
+   `ContinuousLinearMap.one_def`). Proved via a new `rank_comp_basisTruncation_le`, which
+   simply exposes the factorisation already inside
+   `tsum_approximationNumber_comp_basisTruncation_sq_le` as a rank bound.
 
-   * `tendsto_enorm_comp_one_sub_basisTruncation` gives `‖T ∘L (1 − basisTruncation b s)‖ₑ² → 0`
-     along `Finset ι`, from finite energy;
-   * `T ∘L basisTruncation b s` factors as `(T ∘L finiteBasisInclusion) ∘L finiteBasisCoords`
-     through `EuclideanSpace 𝕜 (Fin s.card)` — that factorisation is already proved inside
-     `tsum_approximationNumber_comp_basisTruncation_sq_le`, it is simply not exposed as a rank
-     bound;
-   * `ContinuousLinearMap.rank_comp_le_natCast_right` then bounds the rank by `s.card`, and
-     `approximationNumber_le_norm_sub` turns that into `a_{s.card}(T) < ε`;
-   * `approximationNumber_antitone` and `isCompactOperator_of_tendsto_approximationNumber`
-     finish.
-
-   Two things blocked a quick landing, both mechanical rather than mathematical: the rank of a
-   map into `EuclideanSpace 𝕜 (Fin n)` needs the right Mathlib spelling (`rank_euclideanSpace`
-   does not exist under that name), and `EnergyComparison` does not currently import
-   `ApproximationNumber.Compact` — there is no cycle, so the import is safe to add.
-
-   The Peter--Weyl roadmap depends on this one.
 7. **`schattenFamilyInf`** — the roadmap wants the `∞` endpoint defined from the `Φ_∞` gauge
    and then *proved* equal to the operator-norm family, "an equality of *families* and not
    merely of gauges". Defining it as an alias for `operatorNormFamily` would make that
