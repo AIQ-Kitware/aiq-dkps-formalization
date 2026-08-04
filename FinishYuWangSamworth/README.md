@@ -15,8 +15,10 @@ The lane now represents every numbered mathematical result in the paper:
 3. rank-one Corollary 3;
 4. exact right and left Theorem 4, including aligned frames;
 5. Appendix Lemma 5 in a basis-free compression API;
-6. the Section 2 orthogonal-blocks sharpness example, which exhibits the
-   aligned-basis constant and dimension dependence as unimprovable.
+6. both Section 2 sharpness examples.
+
+Every numbered result and every sharpness claim of the paper is now proved in
+the default build.
 
 It additionally exposes direct right and left rank-one singular-vector
 corollaries and a corrected form of equation (4).
@@ -39,12 +41,21 @@ source defect rather than asserting the false printed formula.
 
 ## Sharpness
 
-`Symmetric/OrthogonalSharpness.lean` formalizes the paper's first sharpness
-construction against the *same* hypotheses Theorem 2 carries, so it is an
-instance of `yuWangSamworth_alignedBasis_le` rather than a numerical
-coincidence.  Both printed equalities are proved: every aligned orthonormal
-pair is at distance exactly `√(2d)`, and `‖sin Θ‖_F = √d`, against a bound of
-`√(2d)(1+ε)`.
+Both of the paper's sharpness constructions are formalized against the *same*
+hypotheses the theorems carry, so each is a genuine instance rather than a
+numerical coincidence.
+
+`Symmetric/OrthogonalSharpness.lean` — orthogonal top-`d` eigenspaces.  Every
+aligned orthonormal pair is at distance exactly `√(2d)` and `‖sin Θ‖_F = √d`,
+against a bound of `√(2d)(1+ε)`: the aligned-basis constant `2^{3/2}` and the
+`√d` dimension dependence are unimprovable.
+
+`Symmetric/PlanarSharpness.lean` — two nearby lines.  Stated without
+coordinates: `diag(3,1)` is `twoLevelOperator 1 3` on a line, conjugation moves
+the line, and `twoLevelOperator_sub` makes the perturbation `2 (P_v̂ − P_v)`.
+The sine bound is tight up to *exactly* the factor `2` at every angle, so the
+constant is pinned in the small-angle regime too — which the orthogonal-blocks
+example cannot do.
 
 Building it required the first-ever *constructor* for `CorrespondingEigenblock`
 (`ForTauCeti/.../YuWangSamworth/TopEigenblock.lean`): that hypothesis is

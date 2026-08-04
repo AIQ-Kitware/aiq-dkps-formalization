@@ -83,6 +83,15 @@ noncomputable def sinThetaFrobenius (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   UnitarilyInvariantSeminorm.frobenius 𝕜 E (sinThetaMap U V)
 
+/-- **The characteristic lemma.**  `sinThetaFrobenius` is a name for the
+Frobenius norm of the sine cross-projection; the definition is not exposed, so a
+consumer outside this file needs this equation to compute with it. -/
+theorem sinThetaFrobenius_eq (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    sinThetaFrobenius U V =
+      UnitarilyInvariantSeminorm.frobenius 𝕜 E (sinThetaMap U V) := by
+  rw [sinThetaFrobenius]
+
 /-- **The complement identity.**  The canonical Frobenius sine of two equally
 indexed eigenblocks is exactly the square root of the cross-block overlap sum
 used by Yu--Wang--Samworth: in the paper's matrix notation,
