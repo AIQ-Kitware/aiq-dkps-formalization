@@ -130,8 +130,23 @@ rather than in the code: judging by what something is called rather than by what
    is `0` off the spectrum, the constant is `1`) is invisible to the calculus.
 
    Ingredients in hand: `_add`, `_smul`, `_comp`, `_isSymmetric`, `_one`, `_pow`, the Parseval
-   bound, the eigenvalue containment, and `_indicator`. What remains is writing the
-   `StarAlgHom` fields, each of which is one of the above plus `_indicator`.
+   bound, the eigenvalue containment, `_indicator`, and `extendSymbol` with its algebra.
+
+   **The assembly was attempted and reverted; the tree is unchanged and green.** Four of the
+   six `StarAlgHom` fields compiled — `map_one'`, `map_zero'`, `map_add'`, and `commutes'` —
+   using exactly the composition described above. The two that did not, and why:
+
+   * `map_mul'`: `selfAdjointFunctionalCalculus_comp` is stated with an explicit lambda
+     (`fun x => f x * g x`) while the goal carries `f * g` on `ℝ → ℝ`. Defeq, but `rw` will
+     not match, and Lean normalises the lambda back to `*` so restating `extendSymbol_mul`
+     either way does not help. The fix is a Pi-form multiplicativity lemma
+     `calculus (f * g) = calculus f ∘ₗ calculus g`, proved by `.symm` from `_comp`. Adding
+     that broke the `by_cases … <;> simp` proofs of `extendSymbol_mul`/`_add`, which were
+     written against the lambda statements — the two changes have to be made together.
+   * `map_star'`: `ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric` is the right bridge and
+     the direction typechecks; it was the `map_mul'` cascade that took the file down.
+
+   So this is one coordinated edit away, not an open problem.
 
    For the real-spectrum machinery generally, `IsSelfAdjoint.spectrumRestricts`
    (`Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Instances.lean`) is the
