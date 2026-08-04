@@ -121,6 +121,42 @@ So the question is not "when do we do the migration" but "does Tau Ceti want dot
 already flagged it as one, and doing it unilaterally would either break `T.foo` everywhere or
 require an `open TauCeti.ContinuousLinearMap` in every consumer.
 
+## Open, and the largest remaining polish item: one gauge concept, two structures
+
+`SymmetricGauge` (`Analysis/Normed/SymmetricGauge.lean`) and `TruncationGauge`
+(`Analysis/OperatorIdeal/SymmetricGauge.lean`) are **the same structure declared twice** —
+same carrier `(ℕ →₀ ℝ≥0) → ℝ≥0`, same five conditions, same docstrings, differing only by a
+prime on every field name:
+
+| `SymmetricGauge` | `TruncationGauge` |
+|---|---|
+| `add_le` `smul` `symm` `mono` `normalized` | `add_le'` `smul'` `symm'` `mono'` `normalized'` |
+
+The roadmap specifies exactly one, named `SymmetricGauge`, and `ForTauCeti/README.md` states
+the goal as "one canonical spelling per concept". Thirteen declarations are duplicated across
+the two namespaces, including three the roadmap names by hand — `extend`,
+`extend_le_extend_of_forall_sum_le`, `iSup_le_extend_le_tsum`. **This is an over-count in the
+conformance number**: the checker matches those names, but cannot tell that the delivered ones
+hang off a structure the roadmap does not have.
+
+The merge is well defined and contained (`TruncationGauge` is referenced only inside its own
+file, 32 times), but it is not a rename:
+
+1. add `import ForTauCeti.Analysis.Normed.SymmetricGauge` — no cycle, the Normed module
+   imports only Mathlib and `Convex.Majorization`;
+2. delete the `structure TruncationGauge` block and the **13 duplicated declarations**
+   (`extend`, `extend_eq_iSup_ofFin`, `extend_le_extend_of_forall_sum_le`, `extend_le_tsum`,
+   `extend_mono`, `extend_smul`, `iSup_le_extend`, `iSup_le_extend_le_tsum`, `le_extend`,
+   `le_sum`, `ofFin`, `ofFin_le_extend`, `truncate`) — left in place they would collide in one
+   namespace;
+3. rename `TruncationGauge` to `SymmetricGauge` throughout, and the five primed field
+   accessors to their unprimed spellings;
+4. re-verify the **26 declarations unique to `TruncationGauge`** — the Schatten scale
+   (`schattenGauge`, `schattenFamily`, `gauge_schattenFamily_antitone`), the `ℓᵖ` gauge, and
+   the `symmetricGaugeENorm` family all sit on it.
+
+Not attempted here rather than attempted and left half-done.
+
 ## What the gates cannot see
 
 `check_duplicate_qualified_names` reports 0 and is correct — it compares *names*. It cannot

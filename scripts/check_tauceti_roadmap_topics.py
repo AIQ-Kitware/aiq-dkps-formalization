@@ -58,12 +58,12 @@ TOPICS: list[tuple[str, str, list[str]]] = [
    "ReducingSubspace","Spectral.Subspace","Spectral.Gap","OrthogonalSeries"]]),
 ("T05","Majorization, Schur-Horn, and unitarily invariant norms",
  ["Analysis.Convex.Majorization",A+"SchurHorn",A+"Singular.Subspace",A+"KyFan",
-  A+"UnitarilyInvariantNorm"]),
+  A+"UnitarilyInvariantSeminorm"]),
 ("T06","Principal angles, aligned bases, and finite frames",
  [A+x for x in ["PrincipalAngles","AlignedBasis","FiniteFrame"]]),
 ("T07","Rectangular unitarily invariant norms",
- [A+"RectangularUnitarilyInvariantNorm",A+"TwoDimensionalSingularValues"]
- +[A+"RectangularUnitarilyInvariantNorm."+x for x in ["Basic","BlockSum","Instances","Majorization"]]),
+ [A+"RectangularUnitarilyInvariantSeminorm",A+"TwoDimensionalSingularValues"]
+ +[A+"RectangularUnitarilyInvariantSeminorm."+x for x in ["Basic","BlockSum","Instances","Majorization"]]),
 ("T08","Angle geometry and eigenvalue perturbation",
  [A+x for x in ["Gram.Operator","AngleGeometry","FrameFactorization","HoffmanWielandt","EigenvalueChange"]]),
 ("T09","Approximation numbers",
