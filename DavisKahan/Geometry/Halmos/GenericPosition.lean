@@ -419,6 +419,62 @@ theorem genericCrossBlockMirror_eq_zero_iff (n : genericRightHalf U V) :
   exact Subtype.ext
     (eq_zero_of_mem_inf_generic_right_of_mem_orthogonal_right U V n.2 hnV)
 
+
+/-! ## Relation to the frontier's chosen invariant
+
+`SameHalmosOperatorInvariant` (Frontier/Section3) records the generic part by
+the unitary-equivalence class of `genericHalmosCosineSq U V`, the compression of
+`P_U P_V P_U + P_Uᗮ P_Vᗮ P_Uᗮ` to `G`.  On the `U`-half that operator *is* the
+cosine block, which the lemma below proves.
+
+**This exposes a design question about the invariant, worth stating plainly.**
+On the `Uᗮ`-half the same operator is `1 - D`, and under the identification of
+the two halves that is again the cosine block.  So `genericHalmosCosineSq` is
+`A ⊕ A`, not `A`.  Recovering `A` from `A ⊕ A` up to unitary equivalence is a
+multiplicity-halving statement — precisely the Hahn--Hellinger material the
+frontier lists as its `hard_math` blocker — whereas the pair `(U, V)` is
+determined by `A` alone by elementary means.  If the invariant were recorded as
+the cosine block on the `U`-half instead, the classification would not need
+multiplicity theory at all.
+-/
+
+/-- **On the `U`-half, the frontier's generic cosine-square operator is the
+cosine block.** -/
+theorem coe_genericHalmosCosineSq_of_mem_left (m : genericLeftHalf U V) :
+    ((genericHalmosCosineSq U V ⟨(m : H), m.2.2⟩ :
+        halmosGenericPart U V) : H) =
+      ((genericCosineBlock U V m : genericLeftHalf U V) : H) := by
+  have hmU : U.starProjection (m : H) = (m : H) :=
+    Submodule.starProjection_eq_self_iff.mpr m.2.1
+  have hmUc : Uᗮ.starProjection (m : H) = 0 := by
+    rw [Submodule.starProjection_apply_eq_zero_iff]
+    simpa using m.2.1
+  -- Only the first summand survives on the `U`-half.
+  have hval : halmosCosineSq U V (m : H) =
+      U.starProjection (V.starProjection (m : H)) := by
+    show U.starProjection (V.starProjection (U.starProjection (m : H))) +
+      Uᗮ.starProjection (Vᗮ.starProjection (Uᗮ.starProjection (m : H))) = _
+    rw [hmU, hmUc, map_zero, map_zero, add_zero]
+  have hgen : halmosCosineSq U V (m : H) ∈ halmosGenericPart U V := by
+    rw [hval]
+    exact projection_mem_halmosGenericPart_left U V
+      (projection_mem_halmosGenericPart_right U V m.2.2)
+  have hL : ((genericHalmosCosineSq U V ⟨(m : H), m.2.2⟩ :
+      halmosGenericPart U V) : H) = halmosCosineSq U V (m : H) := by
+    have h : ((genericHalmosCosineSq U V ⟨(m : H), m.2.2⟩ :
+        halmosGenericPart U V) : H) =
+        (halmosGenericPart U V).starProjection (halmosCosineSq U V (m : H)) := by
+      simp [genericHalmosCosineSq, DavisKahanExt.compressOperator]
+    rw [h, Submodule.starProjection_eq_self_iff.mpr hgen]
+  have hR : ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
+      U.starProjection (V.starProjection (m : H)) := by
+    have h : ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
+        (genericLeftHalf U V).starProjection (V.starProjection (m : H)) := by
+      simp [genericCosineBlock, DavisKahanExt.compressOperator]
+    rw [h, starProjection_genericLeftHalf_of_mem_generic U V
+      (projection_mem_halmosGenericPart_right U V m.2.2)]
+  rw [hL, hR, hval]
+
 end HiddenFoundations
 end MathAhead
 end Experimental
