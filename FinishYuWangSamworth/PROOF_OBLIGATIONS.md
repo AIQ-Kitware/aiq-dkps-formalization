@@ -26,8 +26,6 @@ the printed equation (4).
 ## Remaining non-numbered source-fidelity work
 
 * package the smaller residual numerator mentioned after Theorem 2;
-* formalize the **planar-rotation** sharpness example (the orthogonal-blocks
-  one landed 2026-08-04, `Symmetric/OrthogonalSharpness.lean`);
 * add optional wrappers whose hypotheses are literal contiguous matrix indices
   `r..s` rather than intrinsic corresponding-block predicates;
 * migrate reusable results from this completion lane into canonical modules.
@@ -50,9 +48,15 @@ references.
 
 ## Census state (2026-08-04)
 
-`dev/yu-wang-samworth-2015-full-source-census.json`: **20 of 22 rows proved in
-the default build**, 1 exposition row not proof debt, 1 unformalized —
-`YWS-S2-sharpness-planar`.
+`dev/yu-wang-samworth-2015-full-source-census.json`: **21 of 22 rows proved in
+the default build; the 22nd is an exposition row that is not proof debt.  There
+is no unformalized proof debt left for this paper.**
+
+Both Section 2 sharpness examples landed 2026-08-04
+(`Symmetric/OrthogonalSharpness.lean`, `Symmetric/PlanarSharpness.lean`), so the
+census now certifies not only that the paper's bounds hold but that its
+constants and dimension dependence are unimprovable — which is half of what
+makes the paper useful and was previously unrepresented.
 
 Two rows named declarations that do not exist: an unrecorded
 `PopulationGap` → `InternalGap` rename left `TauCeti.PopulationGap`,

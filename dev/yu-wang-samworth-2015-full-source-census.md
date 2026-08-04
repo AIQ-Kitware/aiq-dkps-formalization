@@ -12,9 +12,8 @@ Two independent axes. `status` is the mathematical judgement against the printed
 
 | verification | items |
 | --- | --- |
-| `absent` | 1 |
 | `not_applicable` | 1 |
-| `proved_in_build` | 20 |
+| `proved_in_build` | 21 |
 
 ## Items
 
@@ -30,7 +29,7 @@ Two independent axes. `status` is the mathematical judgement against the printed
 | `YWS-T2-residual` | 2 | Theorem 2, residual form | Theorem 2's sharper residual forms | `compiled_generalized` | `proved_in_build` |
 | `YWS-T2-opnorm-numerator` | 2 | Section 2, operator-norm numerator | The residual is bounded by 2 sqrt d ‖E‖_op | `compiled_exact` | `proved_in_build` |
 | `YWS-S2-sharpness-orthogonal` | 2 | Section 2, sharpness example with orthogonal target subspaces | Sharpness example: orthogonal top-d eigenspaces | `compiled_generalized` | `proved_in_build` |
-| `YWS-S2-sharpness-planar` | 2 | Section 2, sharpness scale for nearby one-dimensional eigenspaces | Sharpness example: planar rotation, nearby one-dimensional eigenspaces | `not_represented` | `absent` |
+| `YWS-S2-sharpness-planar` | 2 | Section 2, sharpness scale for nearby one-dimensional eigenspaces | Sharpness example: planar rotation, nearby one-dimensional eigenspaces | `compiled_generalized` | `proved_in_build` |
 | `YWS-EQ4-double-angle` | 2 | Equation (4) | Equation (4) -- the double-angle identity, FALSE AS PRINTED | `compiled_corrected` | `proved_in_build` |
 | `YWS-C3-rankone` | 2 | Corollary 3 | Corollary 3 -- the rank-one (single eigenvector) form | `compiled_exact` | `proved_in_build` |
 | `YWS-S3-applications` | 3 | Section 3, audit of statistical applications | Section 3 -- audit of how statisticians actually apply Davis--Kahan | `not_proof_debt` | `not_applicable` |
@@ -48,10 +47,6 @@ Two independent axes. `status` is the mathematical judgement against the printed
 ### `numbering-conflict` (source_audit) — The repository carries two incompatible numberings for this paper
 
 `FinishYuWangSamworth` and every Lean declaration name use a flat sequence -- Theorem 1, Theorem 2, Corollary 3, Theorem 4, Lemma 5 -- and cite arXiv:1405.0680. `prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex` restarts the counter per environment type: its `\sourceanchor` lines name the same rank-one corollary as **Corollary 1**, the same rectangular theorem as **Theorem 3**, and the same appendix lemma as **Appendix Lemma 1**. The two agree only on Theorem 1 and Theorem 2. Neither artifact can settle it, because the transcription both were derived from is not in the tree and the published article is not either. This census keys on the flat sequence because the Lean names do, so that a reader can get from a row to a declaration without a translation table -- that is a tie-break, not a finding. **Resolving it requires one look at the published Biometrika article, and until someone does that, any statement of the form 'we have Theorem 3' is ambiguous in this repository.**
-
-### `sharpness-examples` (mechanical) — One of the two sharpness examples is formalized
-
-The paper gives two explicit constructions showing its constants cannot be improved: a diagonal pair whose top-`d` eigenspaces are orthogonal, and a planar rotation model for nearby one-dimensional eigenspaces. **The orthogonal-blocks example is done** (2026-08-04, `Symmetric/OrthogonalSharpness.lean`, row `YWS-S2-sharpness-orthogonal`); the planar-rotation example (`YWS-S2-sharpness-planar`) is still absent. Until it lands the census can certify the aligned-basis constant and dimension dependence as unimprovable but says nothing about the small-angle regime, where the paper claims the sine bound is tight up to 2 and the vector bound up to 2^{3/2}. The remaining work is mechanical: `ForTauCeti/Analysis/InnerProductSpace/BasisDiagonal.lean` now supplies the diagonal spectral theory and `TwoDimensionalSingularValues.lean` the planar singular values.
 
 ### `residual-numerator` (mechanical) — The sharper residual form of Theorem 2 has no source-facing wrapper
 
@@ -162,7 +157,6 @@ Corrected 2026-08-04: the row named `TauCeti.PopulationGap`, which does not exis
 * **summary**: Sigma = diag(3,...,3,1,...,1) and Sigma-hat = diag(2-eps,...,2-eps,2,...,2) have orthogonal top-d eigenspaces, forcing ‖V-hat O - V‖_F = sqrt(2d) for every O and matching the aligned-basis constant up to (1+eps).
 * **status**: `compiled_generalized` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_sharpness_orthogonalBlocks`, `TauCeti.DavisKahanTheory.dist_orthogonalSharpness_aligned`, `TauCeti.DavisKahanTheory.sinThetaFrobenius_orthogonalSharpness`, `TauCeti.DavisKahanTheory.orthogonal_orthogonalSharpness`, `TauCeti.DavisKahanTheory.correspondingEigenblock_orthogonalSharpness`, `TauCeti.DavisKahanTheory.internalGap_orthogonalSharpness`, `TauCeti.DavisKahanTheory.opNorm_orthogonalSharpness_perturbation`
-* **gaps**: `sharpness-examples`
 * **notes**: Formalized 2026-08-04 in `FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/OrthogonalSharpness.lean`. `compiled_generalized` rather than `compiled_exact`: the model is stated for an arbitrary orthonormal basis of an arbitrary finite-dimensional RCLike inner product space, which specializes to the paper's real `p x p` matrices at `EuclideanSpace R (Fin p)`. The example is checked against the theorem's own hypotheses -- `correspondingEigenblock_orthogonalSharpness` supplies the branch-selection datum and `internalGap_orthogonalSharpness` the population gap -- so it is an instance of `yuWangSamworth_alignedBasis_le`, not a numerical coincidence. Both printed equalities are proved: every aligned orthonormal pair is at distance exactly sqrt(2d), and ||sin Theta||_F = sqrt d. The bound's operator-norm branch equals sqrt(2d)(1+eps).
 
 This row is what forced the `CorrespondingEigenblock` constructor: the hypothesis had no instance anywhere in the repository until `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/TopEigenblock.lean`, so no concrete pair of covariance operators had ever been checked against it.
@@ -172,11 +166,14 @@ This row is what forced the `CorrespondingEigenblock` constructor: the hypothesi
 
 * **source anchor**: Section 2, sharpness scale for nearby one-dimensional eigenspaces (example, section 2)
 * **summary**: Sigma = diag(3,1) and Sigma-hat = R_eps Sigma R_eps^T give sin Theta = eps against a bound of 2 eps, so the sine bound is tight up to 2 and the vector bound up to 2^{3/2} even at small angles.
-* **status**: `not_represented` / **verification**: `absent`
-* **planned declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_sharpness_planarRotation`
-* **gaps**: `sharpness-examples`
-* **notes**: Mechanical rather than hard. `DavisKahan/FiniteDimensional/Sharpness.lean` already fixes a single explicit planar model for the Davis--Kahan sharpness results and computes its singular values extensionally, and `ForTauCeti/Analysis/InnerProductSpace/TwoDimensionalSingularValues.lean` exists to serve exactly this kind of model.
-* **next action**: Instantiate the existing planar sharpness model at Sigma = diag(3,1) and the rotation R_eps.
+* **status**: `compiled_generalized` / **verification**: `proved_in_build`
+* **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_sharpness_planarRotation`, `TauCeti.DavisKahanTheory.sinThetaFrobenius_planarSharpness`, `TauCeti.DavisKahanTheory.opNorm_planarSharpness_perturbation`, `TauCeti.DavisKahanTheory.norm_sub_sq_planarSharpness`, `TauCeti.DavisKahanTheory.correspondingEigenblock_planarSharpness`, `TauCeti.DavisKahanTheory.internalGap_planarSharpness`, `TauCeti.DavisKahanTheory.norm_projection_orthogonal_span_singleton`
+* **notes**: Formalized 2026-08-04 in `FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/PlanarSharpness.lean`. `compiled_generalized`, and the generalization is the interesting part: `Sigma = diag(3,1)` is the operator that is 3 on a line and 1 on its complement -- `TauCeti.twoLevelOperator 1 3 (k * v)` -- and conjugating by a rotation only moves the line. So the pair (Sigma, Sigma-hat) is two two-level models over the same levels, `twoLevelOperator_sub` gives Sigma-hat - Sigma = 2 (P_v-hat - P_v) with no matrix entries, and nothing forces the ambient space to be 2-dimensional: every conclusion holds for two lines in any finite-dimensional space, of which the paper's R^2 is the smallest case. The rotation parameter is replaced by the overlap c = <v, v-hat>, with the paper's eps = sqrt(1 - c^2) the sine.
+
+All three displayed quantities are proved: ||sin Theta||_F = eps, ||v-hat - v||^2 = 2 - 2c, and 2||E||_op/(3-1) = 2 eps -- so the sine bound is tight up to *exactly* the factor 2 the paper claims, at every angle. The example is checked against the theorem's own hypotheses (`correspondingEigenblock_planarSharpness`, `internalGap_planarSharpness`).
+
+Source note: the paper prints v-hat = (sqrt(1-eps^2), -eps)^T, which is the leading eigenvector of R_eps^T Sigma R_eps rather than of R_eps Sigma R_eps^T. The sign changes none of the displayed quantities -- all three depend on v-hat only through <v, v-hat> -- so the model fixes the overlap rather than a sign convention. Recorded rather than silently corrected.
+* **next action**: None outstanding.
 
 ### `YWS-EQ4-double-angle` — Equation (4) -- the double-angle identity, FALSE AS PRINTED
 

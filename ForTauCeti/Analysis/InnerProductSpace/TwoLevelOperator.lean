@@ -160,6 +160,13 @@ theorem internalGap_twoLevelOperator :
   rw [hb, ha]
   exact le_abs_self _
 
+/-- Mathlib's sorted eigenvalue list of the model is bounded by the top level. -/
+theorem eigenvalues_twoLevelOperator_le [FiniteDimensional 𝕜 E] {n : ℕ}
+    (hab : a ≤ b) (hn : finrank 𝕜 E = n) (i : Fin n) :
+    (isSymmetric_twoLevelOperator (a := a) (b := b) (U := U)).eigenvalues hn i ≤ b :=
+  le_of_hasEigenvalue_twoLevelOperator hab
+    (isSymmetric_twoLevelOperator.hasEigenvalue_eigenvalues hn i)
+
 /-- **Two models over the same levels differ by a scaled projector
 difference.**  This is what turns a perturbation norm into an angle. -/
 theorem twoLevelOperator_sub :
