@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Report which representative roadmap signature names occur in the donor libraries.
 
-`ForTauCetiRoadmap/**/Suggested.lean` records proposed API signatures whose bodies are
+`submodules/TauCetiRoadmap/**/Suggested.lean` records the submitted API signatures whose bodies are
 intentionally `sorry`.  This script is an internal planning aid: it indexes declaration
 names in the donor libraries and reports name matches, possible destinations, and
 ambiguities.  A name match is not semantic verification, proof that the statements agree,
@@ -25,7 +25,7 @@ import re
 import sys
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
-ROADMAP = REPO / "ForTauCetiRoadmap"
+ROADMAP = REPO / "submodules/TauCetiRoadmap/TauCetiRoadmap/HilbertSpaceOperatorTheory"
 LIBS = ("ForTauCeti", "DavisKahan")
 
 # A declaration head.  Deliberately permissive about everything that precedes the

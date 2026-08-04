@@ -9,7 +9,7 @@ import ForTauCeti.Analysis.InnerProductSpace.Singular.Values
 /-!
 # Roadmap bridge: `MatrixSpectralStatistics`
 
-**What this file is for.** `ForTauCetiRoadmap/**/Suggested.lean` states the signatures the
+**What this file is for.** `submodules/TauCetiRoadmap/**/Suggested.lean` states the signatures the
 roadmap proposes, against `Mathlib` alone, with `sorry` bodies.  `ForTauCeti` proves the
 mathematics.  Nothing connected the two: `scripts/check_roadmap_delivered.py` compares
 *declaration names* between the two trees, and its own output says so --
@@ -42,7 +42,7 @@ and the reason is recorded in `Gaps` at the bottom, not silently omitted.
 
 ## The part that makes name matching unfixable, rather than merely inaccurate
 
-`ForTauCetiRoadmap` introduces **81 definitions and structures of its own** across the six
+The submitted roadmap introduces **81 definitions and structures of its own** across the six
 topics, and states its theorems about those.  A theorem name shared between the two trees
 therefore certifies nothing until the *definitions underneath it* are known to agree, and
 they agree for two quite different reasons that look identical from outside:
