@@ -106,10 +106,20 @@ rather than in the code: judging by what something is called rather than by what
    operations still match. Containment also gives the norm bound `‖φ g‖ ≤ ‖g‖_∞` from
    `norm_selfAdjointFunctionalCalculus_apply_le`, which is the continuity obligation.
 
-   Route for the containment: `Module.End.HasEigenvalue.mem_spectrum` puts `(λᵢ : ℂ)` in
-   `spectrum ℂ T` as a `Module.End`; an algebra equivalence carries that to
-   `spectrum ℂ T.toContinuousLinearMap`; and `spectrum.preimage_algebraMap` drops it to
-   `spectrum ℝ`. Three interface steps, all with named tools.
+   Route for the containment, **attempted and reverted; the tree is unchanged**. Two of the
+   three steps go through as written:
+
+   * `Module.End.HasEigenvector` is built from `hT.apply_eigenvectorBasis` and the basis
+     vectors being nonzero, and `Module.End.hasEigenvalue_of_hasEigenvector` gives
+     `HasEigenvalue T (λᵢ : ℂ)`;
+   * `spectrum.preimage_algebraMap` drops a complex-spectrum membership to `spectrum ℝ`.
+
+   **The gap is the middle step**, and naming it is the point of this note:
+   `Module.End.HasEigenvalue.mem_spectrum` lands in `spectrum ℂ T` with `T : Module.End ℂ H`,
+   whereas the calculus bridge needs `spectrum ℂ T.toContinuousLinearMap` in the algebra
+   `H →L[ℂ] H`. In finite dimension those algebras are isomorphic and `AlgEquiv.spectrum_eq`
+   transfers spectra, but the equivalence has to be produced — it is not sitting in the tree,
+   and finding or building it is the actual remaining work on this entry.
 
    For the real-spectrum machinery generally, `IsSelfAdjoint.spectrumRestricts`
    (`Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Instances.lean`) is the
