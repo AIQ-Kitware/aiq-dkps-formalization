@@ -328,14 +328,6 @@ theorem singularValues_projection_sub_projection (U V : Submodule 𝕜 E)
       (sinAngleOperator U V).singularValues := by
   rw [sinAngleOperator, singularValues_operatorAbs]
 
-/-- **A unitarily invariant norm depends only on the singular-value sequence.**
-Via the gauge representation `apply_eq_gauge` of the operator SVD. -/
-theorem _root_.TauCeti.UnitarilyInvariantSeminorm.eq_of_singularValues_eq
-    (N : UnitarilyInvariantSeminorm 𝕜 E) {A B : E →ₗ[𝕜] E}
-    (h : A.singularValues = B.singularValues) : N A = N B := by
-  rw [N.apply_eq_gauge rfl (stdOrthonormalBasis 𝕜 E) A,
-    N.apply_eq_gauge rfl (stdOrthonormalBasis 𝕜 E) B, h]
-
 /-- **The full projector-difference UI-norm bridge.**  Every unitarily invariant
 norm of `P_U - P_V` equals that of the full `sin Θ` operator `|P_U - P_V|`, since
 they share the singular-value sequence.  This is the only projection-geometry
@@ -343,7 +335,7 @@ rewrite the final UI-norm projector theorem needs. -/
 theorem uiNorm_projection_sub_eq_sinAngleOperator (N : UnitarilyInvariantSeminorm 𝕜 E)
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     N (projection U - projection V) = N (sinAngleOperator U V) :=
-  N.eq_of_singularValues_eq (singularValues_projection_sub_projection U V)
+  N.eq_of_same_singularValues (singularValues_projection_sub_projection U V)
 
 omit [FiniteDimensional 𝕜 E] in
 /-- The one-sided double-angle map is exactly twice the cross block.
