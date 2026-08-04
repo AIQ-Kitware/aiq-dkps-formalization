@@ -132,21 +132,22 @@ rather than in the code: judging by what something is called rather than by what
    Ingredients in hand: `_add`, `_smul`, `_comp`, `_isSymmetric`, `_one`, `_pow`, the Parseval
    bound, the eigenvalue containment, `_indicator`, and `extendSymbol` with its algebra.
 
-   **The assembly was attempted and reverted; the tree is unchanged and green.** Four of the
-   six `StarAlgHom` fields compiled — `map_one'`, `map_zero'`, `map_add'`, and `commutes'` —
-   using exactly the composition described above. The two that did not, and why:
+   **The bundle is built.** `calculusStarAlgHom` is a
+   `C(spectrum ℝ T.toContinuousLinearMap, ℝ) →⋆ₐ[ℝ] (H →L[ℂ] H)`, all six fields, each the
+   corresponding calculus lemma composed with `_indicator` and the eigenvalue containment.
 
-   * `map_mul'`: `selfAdjointFunctionalCalculus_comp` is stated with an explicit lambda
-     (`fun x => f x * g x`) while the goal carries `f * g` on `ℝ → ℝ`. Defeq, but `rw` will
-     not match, and Lean normalises the lambda back to `*` so restating `extendSymbol_mul`
-     either way does not help. The fix is a Pi-form multiplicativity lemma
-     `calculus (f * g) = calculus f ∘ₗ calculus g`, proved by `.symm` from `_comp`. Adding
-     that broke the `by_cases … <;> simp` proofs of `extendSymbol_mul`/`_add`, which were
-     written against the lambda statements — the two changes have to be made together.
-   * `map_star'`: `ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric` is the right bridge and
-     the direction typechecks; it was the `map_mul'` cascade that took the file down.
+   Two Lean details cost most of the iterations and are worth knowing:
 
-   So this is one coordinated edit away, not an open problem.
+   * `selfAdjointFunctionalCalculus_comp` has a lambda pattern (`fun x => f x * g x`), and
+     `rw` cannot unify it higher-order. Supplying the arguments explicitly —
+     `← selfAdjointFunctionalCalculus_comp hT (extendSymbol g₁) (extendSymbol g₂)` — fixes it.
+   * the `extendSymbol` algebra lemmas must be stated in whichever form the *calculus* lemma
+     uses: lambda for `_comp`'s multiplication, `Pi` for `_add`. Mixing them fails with
+     "did not find an occurrence of the pattern" on terms that display identically.
+
+   What remains for the roadmap theorem itself is continuity of this hom (immediate from
+   `norm_selfAdjointFunctionalCalculus_apply_le` and the containment) and `φ (id) = a`, then
+   `cfcHom_eq_of_continuous_of_map_id`.
 
    For the real-spectrum machinery generally, `IsSelfAdjoint.spectrumRestricts`
    (`Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Instances.lean`) is the

@@ -282,6 +282,16 @@ theorem selfAdjointFunctionalCalculus_indicator {T : E →ₗ[𝕜] E} (hT : T.I
       = selfAdjointFunctionalCalculus hT g :=
   selfAdjointFunctionalCalculus_congr hT fun i => Set.indicator_of_mem (hS i) g
 
+/-- Multiplicativity in pointwise-product form, the shape an algebra map needs.
+
+`selfAdjointFunctionalCalculus_comp` states this with an explicit lambda. `f * g` on `ℝ → ℝ`
+is that lambda definitionally, but `rw` matches syntactically and Lean normalises the lambda
+to `*`, so the algebra-map fields need this spelling. -/
+theorem selfAdjointFunctionalCalculus_mul {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (f g : ℝ → ℝ) :
+    selfAdjointFunctionalCalculus hT (f * g)
+      = selfAdjointFunctionalCalculus hT f ∘ₗ selfAdjointFunctionalCalculus hT g :=
+  (selfAdjointFunctionalCalculus_comp hT f g).symm
+
 open scoped Classical in
 /-- Extend a continuous function on a subset of `ℝ` to all of `ℝ` by zero.
 
@@ -304,9 +314,9 @@ theorem extendSymbol_mul {S : Set ℝ} (g₁ g₂ : C(S, ℝ)) :
 
 open scoped Classical in
 theorem extendSymbol_add {S : Set ℝ} (g₁ g₂ : C(S, ℝ)) :
-    extendSymbol (g₁ + g₂) = fun x => extendSymbol g₁ x + extendSymbol g₂ x := by
+    extendSymbol (g₁ + g₂) = extendSymbol g₁ + extendSymbol g₂ := by
   funext x
-  by_cases hx : x ∈ S <;> simp [extendSymbol, hx]
+  by_cases hx : x ∈ S <;> simp [extendSymbol, Pi.add_apply, hx]
 
 open scoped Classical in
 @[simp] theorem extendSymbol_zero {S : Set ℝ} :

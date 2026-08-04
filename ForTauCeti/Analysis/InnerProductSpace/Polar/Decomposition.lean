@@ -482,6 +482,51 @@ theorem eigenvalues_mem_spectrum_toContinuousLinearMap {T : H →ₗ[ℂ] H} (hT
   rw [← spectrum.preimage_algebraMap (R := ℝ) ℂ]
   exact hC
 
+open scoped Classical in
+/-- **The finite calculus as a continuous star-algebra homomorphism.**
+
+The bundle `cfcHom_eq_of_continuous_of_map_id` consumes. A symbol on the spectrum is extended
+by zero; `selfAdjointFunctionalCalculus_indicator` together with the eigenvalue containment
+makes that extension invisible, so each field is the corresponding algebraic lemma about the
+calculus. -/
+noncomputable def calculusStarAlgHom {T : H →ₗ[ℂ] H} (hT : T.IsSymmetric) :
+    C(spectrum ℝ T.toContinuousLinearMap, ℝ) →⋆ₐ[ℝ] (H →L[ℂ] H) where
+  toFun g := (selfAdjointFunctionalCalculus hT (extendSymbol g)).toContinuousLinearMap
+  map_one' := by
+    rw [extendSymbol_one_eq_indicator,
+      selfAdjointFunctionalCalculus_indicator hT
+        (eigenvalues_mem_spectrum_toContinuousLinearMap hT),
+      selfAdjointFunctionalCalculus_one hT]
+    ext x; rfl
+  map_mul' g₁ g₂ := by
+    -- explicit arguments: the lambda pattern in `_comp` defeats higher-order unification
+    rw [extendSymbol_mul,
+      ← selfAdjointFunctionalCalculus_comp hT (extendSymbol g₁) (extendSymbol g₂)]
+    ext x; rfl
+  map_zero' := by
+    rw [extendSymbol_zero, selfAdjointFunctionalCalculus_zero hT]
+    ext x; rfl
+  map_add' g₁ g₂ := by
+    rw [extendSymbol_add, selfAdjointFunctionalCalculus_add hT]
+    ext x; rfl
+  commutes' r := by
+    have hr : extendSymbol (algebraMap ℝ C(spectrum ℝ T.toContinuousLinearMap, ℝ) r)
+        = (spectrum ℝ T.toContinuousLinearMap).indicator (fun _ => r) := by
+      funext x
+      by_cases hx : x ∈ spectrum ℝ T.toContinuousLinearMap <;>
+        simp [extendSymbol, Set.indicator, hx]
+    rw [hr, selfAdjointFunctionalCalculus_indicator hT
+        (eigenvalues_mem_spectrum_toContinuousLinearMap hT),
+      show (fun _ : ℝ => r) = r • (fun _ : ℝ => (1 : ℝ)) from by funext _; simp,
+      selfAdjointFunctionalCalculus_smul hT, selfAdjointFunctionalCalculus_one hT]
+    ext x; simp [Algebra.algebraMap_eq_smul_one]
+  map_star' g := by
+    have hstar : star g = g := rfl
+    rw [hstar]
+    refine (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr ?_).symm
+    intro x y
+    exact selfAdjointFunctionalCalculus_isSymmetric hT (extendSymbol g) x y
+
 /-- The spectral modulus agrees with the C⋆-algebra `CFC.abs` on `E →L[ℂ] E`, transported across
 the definitional `LinearMap ↔ ContinuousLinearMap` adjoint bridge (`adjoint_toContinuousLinearMap`
 is `rfl`). This is what makes the decomposition literally "via CFC". -/
