@@ -3,8 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import Mathlib.Analysis.MeanInequalities
-import ForTauCeti.Analysis.Convex.Majorization
+module
+
+public import Mathlib.Analysis.MeanInequalities
+public import ForTauCeti.Analysis.Convex.Majorization
+public import Mathlib.Data.Fintype.Order
 
 
 /-!
@@ -42,6 +45,8 @@ lives in `ForTauCeti.Analysis.Convex.Majorization`.
   `ForTauCeti` staging modules.
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped BigOperators
@@ -51,6 +56,7 @@ namespace FiniteVector
 variable {n m : ℕ}
 
 /-- The finite real `ℓᵖ` gauge. -/
+@[expose]
 noncomputable def lpGauge (p : ℝ) (x : Fin n → ℝ) : ℝ :=
   (∑ i, |x i| ^ p) ^ (1 / p)
 

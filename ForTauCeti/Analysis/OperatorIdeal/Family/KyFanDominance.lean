@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
-import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+public import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
 
 /-!
 # Ky Fan dominance

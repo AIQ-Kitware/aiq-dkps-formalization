@@ -78,6 +78,7 @@ positive singular values occupy `0 ≤ i < finrank 𝕜 T.range`.  This matches
 it is why the approximation numbers of
 `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean` are indexed
 the same way. -/
+@[expose]
 noncomputable def singularValues (T : E →L[𝕜] F) : ℕ →₀ ℝ :=
   T.toLinearMap.singularValues
 

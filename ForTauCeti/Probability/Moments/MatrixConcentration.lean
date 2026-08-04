@@ -13,10 +13,11 @@ entrywise Chebyshev + union bound, then entrywise → operator-norm → Weyl).
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); prose symbol `Ŝ` → `Shat`
 (matching the Lean variable, clearing the Mathlib unicode-allowlist linter).
 -/
+module
 
-import ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue
-import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
-import ForTauCeti.Probability.Moments.Variance
+public import ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue
+public import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
+public import ForTauCeti.Probability.Moments.Variance
 
 
 /-! # Eigenvalue concentration of a random Hermitian matrix
@@ -50,6 +51,8 @@ concentration — no matrix Bernstein/Hoeffding needed (at the cost of the loose
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 open scoped Matrix ENNReal
 open MeasureTheory

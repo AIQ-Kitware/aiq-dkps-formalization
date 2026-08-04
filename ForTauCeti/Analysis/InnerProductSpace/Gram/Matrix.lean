@@ -18,12 +18,13 @@ about an arbitrary pair of linear maps, whose `@[simp]` apply lemma carries an
 arbitrary membership proof so that every downstream proof is a short `simp`;
 the span, ambient, and `gram` statements are thin corollaries.
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.GramMatrix
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.LinearAlgebra.Isomorphisms
-import ForTauCeti.Analysis.InnerProductSpace.Basic
-import ForTauCeti.Analysis.Normed.Operator.LinearIsometry
+public import Mathlib.Analysis.InnerProductSpace.GramMatrix
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.LinearAlgebra.Isomorphisms
+public import ForTauCeti.Analysis.InnerProductSpace.Basic
+public import ForTauCeti.Analysis.Normed.Operator.LinearIsometry
 
 
 /-! # Gram matrix rigidity
@@ -70,6 +71,8 @@ turns "equal Gram data" into an isometry of spans:
   (2016), no. 2, 976–994, arXiv:1312.5393 — the frame-theoretic form: finite
   frames are unitarily equivalent iff their Gram matrices coincide.
 -/
+
+public section
 
 namespace TauCeti
 

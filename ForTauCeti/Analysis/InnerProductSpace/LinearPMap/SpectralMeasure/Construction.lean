@@ -128,6 +128,7 @@ of the spectrum of the Cayley transform.  Its value at `w = 1` is junk; see
 -- `cayleyInv_def` below covers them. Note that `measurable_cayleyInv` still `unfold`s this
 -- definition, which is fine: that is inside the defining module, where the body is visible
 -- whatever the attribute says.
+@[expose]
 noncomputable def cayleyInv (w : _root_.spectrum ℂ (cayley hA)) : ℝ :=
   (Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))).re
 

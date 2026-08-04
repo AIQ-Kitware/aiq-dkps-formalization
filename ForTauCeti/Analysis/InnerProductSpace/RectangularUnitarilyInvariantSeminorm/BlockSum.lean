@@ -3,8 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization
 
 /-!
 # Orthogonal block sums of rectangular maps
@@ -26,6 +27,8 @@ majorization statements that transfer to it.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 
@@ -56,6 +59,7 @@ The construction is the linear lift of `LinearMap.prodMap`; it sends
 `(x₁,x₂)` to `(A x₁,B x₂)`.  It is used to assemble the two directed sine
 blocks without a triangle inequality and therefore without losing the sharp
 constant. -/
+@[expose]
 noncomputable def orthogonalBlockSum
     {E₁ E₂ F₁ F₂ : Type*}
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
@@ -102,6 +106,7 @@ proofs — as a `let` with its `map_add'` and `map_smul'` obligations discharged
 inline, twelve identical lines each time, in the two
 `finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_*` theorems.  Nothing about
 it depends on the certificate machinery those proofs are doing. -/
+@[expose]
 noncomputable def orthogonalBlockSumDiagonal
     {E₁ F₁ : Type*}
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]

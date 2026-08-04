@@ -3,10 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
+module
 
-import Mathlib.LinearAlgebra.Matrix.Rank
-import Mathlib.LinearAlgebra.Dimension.Free
-import Mathlib.Algebra.Module.Projective
+public import Mathlib.LinearAlgebra.Matrix.Rank
+public import Mathlib.LinearAlgebra.Dimension.Free
+public import Mathlib.Algebra.Module.Projective
 
 /-! # Rank factorization
 
@@ -94,6 +95,8 @@ and the list of pins updated to match is recorded once, in
 `ForTauCeti/Topology/Berge.lean`.
 
 -/
+
+public section
 
 /-!
 ### Provenance

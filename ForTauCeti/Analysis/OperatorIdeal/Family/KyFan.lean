@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
-import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 
 /-!
 # The Ky Fan operator ideals
@@ -71,6 +73,7 @@ open ContinuousLinearMap
 
 `hk : 0 < k` is needed for exactly one law, `enorm_le_gauge`: at `k = 0` the gauge is
 identically `0`, which satisfies the other three but is not a norm. -/
+@[expose]
 noncomputable def kyFanIdealFamily (𝕜 : Type u) [RCLike 𝕜]
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
     SymmetricOperatorIdealFamily.{u, v} 𝕜 where

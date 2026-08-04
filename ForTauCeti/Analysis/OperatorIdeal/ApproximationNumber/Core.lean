@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
-import Mathlib.Topology.Algebra.Module.FiniteDimension
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
+public import Mathlib.Topology.Algebra.Module.FiniteDimension
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 
 /-!
 # Approximation-number foundation and scalar-specific analytic endpoints
@@ -34,6 +36,8 @@ which is a different library and is not what a reader of this module wants.
   2026 Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none** — imports are `ForTauCeti` leaves and Mathlib.
 -/
+
+public section
 
 namespace TauCeti
 namespace ApproximationNumber
@@ -412,6 +416,7 @@ end StrongCutoff
 This is `ContinuousLinearMap.kyFanGauge` with the arguments in the paper's order; the
 theory lives in `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFan.lean` and
 every statement below delegates to it. -/
+@[expose]
 noncomputable def kyFanApproximationGauge
     (k : ℕ) (K : E →L[𝕜] F) : ℝ :=
   K.kyFanGauge k

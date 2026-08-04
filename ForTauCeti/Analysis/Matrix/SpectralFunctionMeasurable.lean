@@ -16,17 +16,18 @@ Claude Opus 4.8 (name the two `MeasurableSpace`/`BorelSpace` instances so the
 auto-name carries no underscore; `opSym` `def` → `theorem` since it is
 Prop-valued; `rwa` consolidation).
 -/
+module
 
-import Mathlib.Analysis.Matrix.Spectrum
-import Mathlib.Analysis.Matrix.Hermitian
-import Mathlib.Topology.ContinuousMap.StoneWeierstrass
-import Mathlib.Topology.ContinuousMap.Polynomial
-import Mathlib.Topology.Algebra.Polynomial
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Metric
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Metrizable
-import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
-import ForTauCeti.MeasureTheory.CfcMeasurable
+public import Mathlib.Analysis.Matrix.Spectrum
+public import Mathlib.Analysis.Matrix.Hermitian
+public import Mathlib.Topology.ContinuousMap.StoneWeierstrass
+public import Mathlib.Topology.ContinuousMap.Polynomial
+public import Mathlib.Topology.Algebra.Polynomial
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Metric
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Metrizable
+public import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
+public import ForTauCeti.MeasureTheory.CfcMeasurable
 
 
 /-! # Measurability of a continuous spectral function of a Hermitian matrix family
@@ -45,6 +46,8 @@ interval), each of which is an entrywise polynomial in the entries of `B`.
 * `TauCeti.Matrix.specTransform`
 * `TauCeti.Matrix.measurable_specTransform`
 -/
+
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix Topology
 open MeasureTheory Filter Polynomial Set
@@ -82,6 +85,7 @@ theorem opSym {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian) :
   Matrix.isSymmetric_toEuclideanLin_iff.mpr hB
 
 /-- The sorted (decreasing) eigenvalues of `toEuclideanLin B` for Hermitian `B`. -/
+@[expose]
 noncomputable def sortedEigenvalues {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian) :
     Fin n → ℝ :=
   (opSym hB).eigenvalues finrank_euclideanSpace_fin

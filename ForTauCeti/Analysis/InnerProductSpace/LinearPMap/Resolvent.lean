@@ -93,6 +93,7 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E]
 /-- The **resolvent set** of `A`: those `z` for which `A - z` admits a two-sided
 bounded inverse `R : E →L[𝕜] E` — a left inverse on `dom A`, and a right inverse
 on all of `E` whose values land back in `dom A`. -/
+@[expose]
 def resolventSet (A : E →ₗ.[𝕜] E) : Set 𝕜 :=
   { z | ∃ R : E →L[𝕜] E,
       (∀ ψ : A.domain, R (A ψ - z • (ψ : E)) = (ψ : E)) ∧
@@ -104,6 +105,7 @@ def resolventSet (A : E →ₗ.[𝕜] E) : Set 𝕜 :=
 Unlike Spectra's `Set ℝ` version this makes no self-adjointness assumption; for a
 self-adjoint operator the spectrum is real, but that is a theorem rather than
 part of the definition. -/
+@[expose]
 def spectrum (A : E →ₗ.[𝕜] E) : Set 𝕜 :=
   (resolventSet A)ᶜ
 

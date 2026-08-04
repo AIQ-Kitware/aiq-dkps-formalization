@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
-import Mathlib.Analysis.SpecialFunctions.Complex.Arg
-import Mathlib.Analysis.Complex.Circle
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+public import Mathlib.Analysis.SpecialFunctions.Complex.Arg
+public import Mathlib.Analysis.Complex.Circle
 
 /-!
 # Unitary orbit actions on coordinate matrix units
@@ -46,6 +48,8 @@ before the sin-Θ closure moved into the staging layer.
 Literature bridge for the group as a whole:
 `prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex`.
 -/
+
+public section
 
 namespace TauCeti
 
@@ -100,6 +104,7 @@ theorem sum_basisMatrixUnit
 
 /-- The linear action on rectangular maps induced by left and right unitary
 composition. -/
+@[expose]
 noncomputable def unitaryOrbitAction
     (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) :
     (E →ₗ[𝕜] F) →ₗ[𝕜] (E →ₗ[𝕜] F) where
@@ -185,6 +190,7 @@ theorem unitaryOrbitAction_basisMatrixUnit
   · simp [hjq]
 
 /-- The complex unitary phase with angular frequency parameter `x`. -/
+@[expose]
 noncomputable def complexFourierPhase (x : ℝ) : unitary ℂ := by
   let z : ℂ := Circle.exp x
   have hz : ‖z‖ = 1 := Circle.norm_coe (Circle.exp x)

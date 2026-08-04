@@ -61,6 +61,7 @@ variable {𝕜 E ι : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductS
 
 /-- The subspace spanned by the orthonormal basis vectors `b i` for indices
 `i ∈ s`. -/
+@[expose]
 noncomputable def spanIndices (b : OrthonormalBasis ι 𝕜 E) (s : Set ι) :
     Submodule 𝕜 E :=
   Submodule.span 𝕜 (b '' s)

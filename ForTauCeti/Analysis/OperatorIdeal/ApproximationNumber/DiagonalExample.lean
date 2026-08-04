@@ -3,9 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
+module
 
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
 /-!
 # The diagonal acceptance example
@@ -57,6 +58,8 @@ a concrete operator the roadmap names.
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none** — imports only sibling `ForTauCeti` modules.
 -/
+
+public section
 
 namespace ContinuousLinearMap
 

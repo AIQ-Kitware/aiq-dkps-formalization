@@ -11,10 +11,11 @@ additions to `Mathlib/Probability/Moments/` (new file
 
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 -/
+module
 
-import Mathlib.Probability.Moments.Variance
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.MeasureTheory.Function.L2Space
+public import Mathlib.Probability.Moments.Variance
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.MeasureTheory.Function.L2Space
 
 
 /-! # Mean-squared error of the sample mean
@@ -61,6 +62,8 @@ is the coordinatewise reduction over an orthonormal basis.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 

@@ -12,13 +12,14 @@ Sub-dev III of the operator polar decomposition project — COMPLETE
 (proof-complete; reduction uses only:
 `propext, Classical.choice, Quot.sound`). Tickets PD-08..PD-12.
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt
-import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
-import ForTauCeti.Analysis.InnerProductSpace.PartialIsometry
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
-import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
-import Mathlib.Analysis.InnerProductSpace.StarOrder
+public import ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt
+public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
+public import ForTauCeti.Analysis.InnerProductSpace.PartialIsometry
+public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
+public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+public import Mathlib.Analysis.InnerProductSpace.StarOrder
 
 
 /-! # Operator polar decomposition `A = U |A|` (Sub-dev III)
@@ -57,6 +58,8 @@ partial isometry; adding invertibility of the modulus buys it back as an
 isometry. That is the whole hierarchy.
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace
@@ -87,6 +90,7 @@ rectangular construction. This is the spelling the submitted roadmap states.
 
 /-- The **modulus** `|A| = (A⋆A)^{1/2}` of an operator, via the spectral square root of the
 positive operator `A⋆A`. HJ 7.3.1 (`Q = (A⋆A)^{1/2}`). -/
+@[expose]
 noncomputable def operatorAbs (A : E →ₗ[𝕜] E) : E →ₗ[𝕜] E :=
   (LinearMap.isPositive_adjoint_comp_self A).sqrt
 
@@ -127,7 +131,8 @@ theorem operatorAbs_apply_mem_orthogonal_ker (A : E →ₗ[𝕜] E) (x : E) :
 
 /-- The restriction of the modulus `|A|` to `(ker A)ᗮ = range |A|`, as a linear automorphism of
 `(ker A)ᗮ` — the invertible core of `|A|`, which the polar factor inverts. -/
-private noncomputable def operatorAbsRestrict (A : E →ₗ[𝕜] E) : ↥((ker A)ᗮ) ≃ₗ[𝕜] ↥((ker A)ᗮ) :=
+@[expose]
+noncomputable def operatorAbsRestrict (A : E →ₗ[𝕜] E) : ↥((ker A)ᗮ) ≃ₗ[𝕜] ↥((ker A)ᗮ) :=
   LinearEquiv.ofBijective
       ((operatorAbs A).restrict fun x _ => operatorAbs_apply_mem_orthogonal_ker A x) <| by
     have hinj : Function.Injective
@@ -145,6 +150,7 @@ private noncomputable def operatorAbsRestrict (A : E →ₗ[𝕜] E) : ↥((ker 
 
 /-- The **polar factor** `U` of `A`: the partial isometry that is the isometry `|A| x ↦ A x` on
 `range |A| = (ker A)ᗮ`, extended by `0` on `ker A`. Conway VI.3.9. -/
+@[expose]
 noncomputable def polarFactor (A : E →ₗ[𝕜] E) : E →ₗ[𝕜] E :=
   A ∘ₗ ((ker A)ᗮ).subtype ∘ₗ (operatorAbsRestrict A).symm.toLinearMap
     ∘ₗ (((ker A)ᗮ).orthogonalProjectionOnto : E →L[𝕜] ↥((ker A)ᗮ)).toLinearMap
@@ -236,6 +242,7 @@ theorem isPartialIsometry_polarFactor (A : E →ₗ[𝕜] E) :
 
 /-- When `A` is invertible, `|A|` is invertible and the polar factor is the unitary `U = A |A|⁻¹`,
 packaged as a `LinearIsometryEquiv`. HJ 7.3.1(b) (`U` uniquely determined if `A` nonsingular). -/
+@[expose]
 noncomputable def polarUnitaryEquiv {A : E →ₗ[𝕜] E} (hA : IsUnit A) : E ≃ₗᵢ[𝕜] E :=
   have hinj : Function.Injective (polarFactor A) := by
     rw [← LinearMap.ker_eq_bot, ker_polarFactor]
@@ -512,9 +519,7 @@ noncomputable def calculusStarAlgHom {T : H →ₗ[ℂ] H} (hT : T.IsSymmetric) 
   commutes' r := by
     have hr : extendSymbol (algebraMap ℝ C(spectrum ℝ T.toContinuousLinearMap, ℝ) r)
         = (spectrum ℝ T.toContinuousLinearMap).indicator (fun _ => r) := by
-      funext x
-      by_cases hx : x ∈ spectrum ℝ T.toContinuousLinearMap <;>
-        simp [extendSymbol, Set.indicator, hx]
+      exact extendSymbol_eq_indicator _ _ fun _ _ => rfl
     rw [hr, selfAdjointFunctionalCalculus_indicator hT
         (eigenvalues_mem_spectrum_toContinuousLinearMap hT),
       show (fun _ : ℝ => r) = r • (fun _ : ℝ => (1 : ℝ)) from by funext _; simp,
@@ -537,9 +542,7 @@ theorem calculusStarAlgHom_id {T : H →ₗ[ℂ] H} (hT : T.IsSymmetric) :
   have hext : extendSymbol
       (ContinuousMap.restrict (spectrum ℝ T.toContinuousLinearMap) (ContinuousMap.id ℝ))
       = (spectrum ℝ T.toContinuousLinearMap).indicator (id : ℝ → ℝ) := by
-    funext x
-    by_cases hx : x ∈ spectrum ℝ T.toContinuousLinearMap <;>
-      simp [extendSymbol, Set.indicator, hx]
+    exact extendSymbol_eq_indicator _ _ fun _ _ => rfl
   have key : (selfAdjointFunctionalCalculus hT (extendSymbol
       (ContinuousMap.restrict (spectrum ℝ T.toContinuousLinearMap)
         (ContinuousMap.id ℝ)))).toContinuousLinearMap = T.toContinuousLinearMap := by

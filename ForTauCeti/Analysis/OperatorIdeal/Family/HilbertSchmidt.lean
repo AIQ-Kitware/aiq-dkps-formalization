@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
-import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
-import Mathlib.Analysis.MeanInequalities
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
+public import Mathlib.Analysis.MeanInequalities
 
 /-!
 # The Hilbert--Schmidt operator ideal
@@ -304,6 +306,7 @@ This is the second instance of `TauCeti.SymmetricOperatorIdealFamily`, after the
 families of `DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean`.  The two are
 built from unrelated mathematics — approximation numbers there, orthonormal expansions here
 — which is the evidence that the structure captures the right notion. -/
+@[expose]
 noncomputable def hilbertSchmidtIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
     SymmetricOperatorIdealFamily.{u, v} 𝕜 where
   gauge A := A.hilbertSchmidtENorm

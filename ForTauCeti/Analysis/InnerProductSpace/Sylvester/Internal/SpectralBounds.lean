@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 
 /-!
 # Internal finite-dimensional spectral bounds for Sylvester estimates
@@ -31,6 +33,8 @@ Y3(b2) and Y3(b3) are what made it possible: before them this file's import
 closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 
 -/
+
+public section
 
 namespace TauCeti
 

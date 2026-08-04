@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap
-import ForTauCeti.Analysis.InnerProductSpace.FrameFactorization
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap
+public import ForTauCeti.Analysis.InnerProductSpace.FrameFactorization
 
 /-!
 # Principal-angle embeddings for trial subspaces
@@ -35,6 +37,8 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -47,6 +51,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 /-- Sine map from approximate coordinates into the orthogonal complement of
 an exact subspace. -/
+@[expose]
 noncomputable def sinThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   complementaryProjection U ∘ₗ X.toLinearMap

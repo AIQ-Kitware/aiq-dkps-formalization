@@ -10,7 +10,9 @@ decomposition.
 
 Formalized by Claude Opus 5 (claude-opus-5[1m]).
 -/
-import ForTauCeti.Analysis.InnerProductSpace.PartialIsometry
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.PartialIsometry
 
 /-!
 # Partial isometries between different spaces
@@ -56,6 +58,8 @@ exactly this predicate when `M` is rectangular, since `W` maps `E` to `F`.
   staging module.
 -/
 
+public section
+
 open scoped InnerProductSpace
 
 namespace LinearMap
@@ -70,6 +74,7 @@ variable {E F : Type*}
 This is the Moore--Penrose-style identity that the algebraic `u * star u * u = u`
 becomes when source and target differ and no single carrier holds both `u` and its
 adjoint. -/
+@[expose]
 def IsPartialIsometry (u : E →ₗ[𝕜] F) : Prop :=
   u ∘ₗ u.adjoint ∘ₗ u = u
 
@@ -180,6 +185,7 @@ The same typed equation as `LinearMap.IsPartialIsometry`, stated on the bounded 
 that consumers on complete spaces -- the rectangular polar decomposition in particular --
 never leave `→L`.  A rectangular map is not an element of one monoid, so the star-monoid
 predicate `u * star u * u = u` is unavailable here. -/
+@[expose]
 def IsPartialIsometry (u : E →L[𝕜] F) : Prop :=
   u ∘L u.adjoint ∘L u = u
 

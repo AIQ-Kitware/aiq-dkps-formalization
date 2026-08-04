@@ -3,14 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Claude Opus 5
 -/
-import ForTauCeti.Analysis.Normed.SymmetricGauge
-import ForTauCeti.Analysis.Normed.SchattenGauge
-import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
-import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
-import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
+module
+
+public import ForTauCeti.Analysis.Normed.SymmetricGauge
+public import ForTauCeti.Analysis.Normed.SchattenGauge
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
+public import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
 
 /-!
 # The operator ideal family induced by a symmetric gauge
@@ -54,6 +56,8 @@ roadmap states the family over `ℂ`, and this is the reason.
 * Original authors / copyright: Claude Opus 5; Copyright (c) 2026 Kitware, Inc.;
   Apache 2.0.
 -/
+
+public section
 
 open scoped NNReal ENNReal
 
@@ -194,6 +198,7 @@ end Laws
 `gauge A = Φ∞ (a(A))`: the extended gauge applied to the approximation-number
 sequence.  The four laws are the four theorems above, each of which is one
 approximation-number fact composed with one law of `SymmetricGauge.extend`. -/
+@[expose]
 noncomputable def symmetricGaugeFamily : OperatorIdealFamily ℂ where
   gauge A := Φ.extend (approxSeq A)
   gauge_add_le A B := extend_approxSeq_add_le Φ A B
@@ -375,6 +380,7 @@ which is the *square*, adjoint-closed, general-`RCLike` family gauged directly b
 `schattenENorm`.  This one is the rectangular `ℂ` family obtained through the
 gauge construction — the two are different objects with the same name in the
 literature, and an audit on 2026-07-31 found them being conflated by name. -/
+@[expose]
 noncomputable def schattenFamily (p : ℝ) (hp : 1 ≤ p) : OperatorIdealFamily ℂ :=
   symmetricGaugeFamily (schattenGauge p hp)
 

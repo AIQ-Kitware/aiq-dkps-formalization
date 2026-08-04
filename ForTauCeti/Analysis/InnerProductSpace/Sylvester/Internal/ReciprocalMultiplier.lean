@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.DoubledPhase
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.DoubledPhase
 
 /-!
 # Finite reciprocal multipliers
@@ -49,6 +51,8 @@ before the whole remaining sin-Θ closure moved into the staging layer;
 Y3(b2) and Y3(b3) are what made that possible, since before them this import
 closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
+
+public section
 
 namespace TauCeti
 

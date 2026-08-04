@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
 /-!
 # Directed principal-angle geometry
@@ -29,6 +31,8 @@ inner-product-space component into `ForTauCeti`: before that this file's import
 closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -47,11 +51,13 @@ theorem singularValues_operatorAbs (A : E →ₗ[𝕜] E) :
   rw [(TauCeti.isPositive_operatorAbs A).adjoint_eq, TauCeti.operatorAbs_mul_self]
 
 /-- The cosine cross-projection `P_V P_U`. -/
+@[expose]
 noncomputable def cosThetaMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   projection V ∘ₗ projection U
 
 /-- The sine cross-projection `P_{Vᗮ} P_U`. -/
+@[expose]
 noncomputable def sinThetaMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   complementaryProjection V ∘ₗ projection U
@@ -81,6 +87,7 @@ noncomputable def sinTwoAngleOperator (U V : Submodule 𝕜 E)
 /-- Principal-angle cosines: the singular values of the cross projection
 `P_V P_U`, sorted decreasingly and padded by zeros beyond the finite rank.  These
 are symmetric in `U, V` because `(P_V P_U)⋆ = P_U P_V` (`principalCosines_comm`). -/
+@[expose]
 noncomputable def principalCosines (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
   (cosThetaMap U V).singularValues
@@ -89,6 +96,7 @@ noncomputable def principalCosines (U V : Submodule 𝕜 E)
 `P_{Vᗮ} P_U`.  In equal-dimension configurations these are the sines of the
 principal angles; when `dim U ≠ dim V` the directed map also records the
 `π/2` "defect" directions, so this is not symmetric in `U, V` in general. -/
+@[expose]
 noncomputable def principalSines (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
   (sinThetaMap U V).singularValues
@@ -126,6 +134,7 @@ theorem principalAngles_self (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
   simp [principalAngles, h]
 
 /-- The pair has no angle `π/2`; equivalently, `P_V` is injective on `U`. -/
+@[expose]
 def IsTransverse (U V : Submodule 𝕜 E) [V.HasOrthogonalProjection] : Prop :=
   ∀ x ∈ U, V.starProjection x = 0 → x = 0
 
@@ -206,6 +215,7 @@ theorem isAcute_of_projectionGap_lt_one {U V : Submodule 𝕜 E}
 for `tan (2 Θ)` before the canonical branch is selected.  The arbitrary
 reducing subspace in the raw `tan 2Θ` theorem may have angles on either side
 of `π/4`; the theorem itself excludes equality. -/
+@[expose]
 def AvoidsQuarterTurn (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
   ∀ i, principalAngles U V i ≠ Real.pi / 4

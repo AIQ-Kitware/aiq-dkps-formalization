@@ -3,10 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 -/
+module
 
-import Mathlib.Topology.Sequences
-import Mathlib.Topology.Order.Compact
-import Mathlib.Topology.Instances.Real.Lemmas
+public import Mathlib.Topology.Sequences
+public import Mathlib.Topology.Order.Compact
+public import Mathlib.Topology.Instances.Real.Lemmas
 
 /-! # Stability of minimizers under approximate minimization
 
@@ -54,6 +55,8 @@ Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
   Mathlib, `TauCeti` and `ForTauCeti` (rule 2 of
   `scripts/check_dependency_layers.py`); this module imports Mathlib only.
 -/
+
+public section
 
 /-!
 ### Provenance
