@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 
 
 /-!
@@ -293,7 +293,7 @@ theorem opNorm_trialGramSqrtEquiv_symm_le
 /-- Right-composition by the inverse frame coordinate costs at most the inverse
 lower-frame constant in every rectangular unitarily invariant norm. -/
 theorem uiNorm_comp_trialGramSqrtEquiv_symm_le
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
     {ε : ℝ} (hframe : LowerFrameBound X ε) (hε : 0 < ε)
     (A : F →ₗ[𝕜] E) :

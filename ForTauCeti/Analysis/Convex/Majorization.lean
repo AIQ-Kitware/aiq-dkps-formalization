@@ -63,8 +63,8 @@ one convexity application and one closure property.
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original modules: `ForTauCeti.Analysis.Normed.FiniteLpGauge` (the `FiniteVector`
   vocabulary, `FiniteSymmetricGauge`, and its majorization monotonicity),
-  `ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm` and
-  `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization`
+  `ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm` and
+  `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization`
   (two further copies of the same descent, now deleted in favour of this one).
 * Extraction class: **split and generalized**.  The moved declarations keep their names and
   statements; the descent itself was restated for a symmetric-convex set, which is the common

@@ -18,11 +18,11 @@ The norm-free construction of `A, B, X, Y` is shared verbatim with the
 operator-norm theorem (`exists_isSymmetric_comp_sub_comp_eq`); only the final
 estimate differs — here it is the abstract Sylvester bound
 `TauCeti.ContinuousLinearMap.le_div_of_comp_sub_comp_eq`, fed the operator seminorm
-induced by `N`, whose operator-ideal property is `UnitarilyInvariantNorm`'s
+induced by `N`, whose operator-ideal property is `UnitarilyInvariantSeminorm`'s
 `apply_comp_le`.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
 
 /-! # The unitarily-invariant-norm Davis–Kahan sin-Θ theorem
@@ -35,7 +35,7 @@ bounds the cross-projection:
 
 ## Main results
 
-* `TauCeti.UnitarilyInvariantNorm.apply_starProjection_comp_starProjection_le`:
+* `TauCeti.UnitarilyInvariantSeminorm.apply_starProjection_comp_starProjection_le`:
   the part-III `sin Θ` bound, every unitarily invariant norm.
 
 ## References
@@ -65,15 +65,15 @@ open Module (finrank)
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E] [CompleteSpace E] {T S : E →ₗ[𝕜] E}
 
-namespace UnitarilyInvariantNorm
+namespace UnitarilyInvariantSeminorm
 
 /-- **The operator norm is a unitarily invariant norm.**  The witnessing
 instance: two-sided unitary invariance is precisely
 `opNorm_comp_linearIsometryEquiv` / `opNorm_linearIsometryEquiv_comp`.  Its
-existence shows the `UnitarilyInvariantNorm` structure is inhabited, so the
+existence shows the `UnitarilyInvariantSeminorm` structure is inhabited, so the
 part-III theorem below is not vacuous. -/
 noncomputable def opNorm (𝕜 E : Type*) [RCLike 𝕜] [NormedAddCommGroup E]
-    [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : UnitarilyInvariantNorm 𝕜 E where
+    [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : UnitarilyInvariantSeminorm 𝕜 E where
   toFun A := ‖LinearMap.toContinuousLinearMap A‖
   add_le' A B := by rw [map_add]; exact norm_add_le _ _
   smul' a A := by rw [map_smul]; exact norm_smul a _
@@ -91,7 +91,7 @@ for every unitarily invariant norm `N` and every `g > 0`,
 `N (V.starProjection ∘ U.starProjection) ≤ N (S − T) / g`.  The left side is
 `N (sin Θ)`, so this is the part-III `‖sin Θ‖ ≤ ‖S − T‖ / g` in every unitarily
 invariant norm; Frobenius and operator norm are the instances. -/
-theorem apply_starProjection_comp_starProjection_le (N : UnitarilyInvariantNorm 𝕜 E)
+theorem apply_starProjection_comp_starProjection_le (N : UnitarilyInvariantSeminorm 𝕜 E)
     (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hUinv : ∀ x ∈ U, T x ∈ U) (hVinv : ∀ x ∈ V, S x ∈ V)
@@ -172,6 +172,6 @@ theorem frobenius_starProjection_comp_starProjection_le
       ≤ frobenius 𝕜 E (S - T) / g :=
   (frobenius 𝕜 E).apply_starProjection_comp_starProjection_le hT hS hUinv hVinv hg hU hV
 
-end UnitarilyInvariantNorm
+end UnitarilyInvariantSeminorm
 
 end TauCeti

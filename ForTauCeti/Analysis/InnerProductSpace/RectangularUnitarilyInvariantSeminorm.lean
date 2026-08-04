@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Instances
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.BlockSum
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Instances
 
 /-!
 # Rectangular unitarily invariant norms
@@ -19,7 +19,7 @@ gives the whole theory, exactly as before the split.
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm`,
+* Original module: `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm`,
   split out on 2026-07-28 because that file had grown to 2124 lines while Tau Ceti's
   `lean_lib` enforces a hard 1500-line ceiling, and 1000 for a newly added file.
 * Extraction class: **split**.  No statement, proof or declaration name changed; only

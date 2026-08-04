@@ -6,7 +6,7 @@ tan-Theta endpoint. No dimension comparison between the trial and invariant
 subspaces is assumed.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
 /-!
 ## Comparator maintenance rule

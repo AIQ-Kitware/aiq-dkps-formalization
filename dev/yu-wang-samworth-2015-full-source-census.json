@@ -129,7 +129,7 @@
       "gap_refs": [
         "unguarded-completion-lane"
       ],
-      "notes": "The paper's 'any orthogonally invariant norm' remark is the primary Lean statement, not an afterthought: `yuWangSamworth_theorem1_uiNorm_le` takes a `UnitarilyInvariantNorm` and the Frobenius and operator forms are its specializations. So the strongest advertised form is the one that is proved.",
+      "notes": "The paper's 'any orthogonally invariant norm' remark is the primary Lean statement, not an afterthought: `yuWangSamworth_theorem1_uiNorm_le` takes a `UnitarilyInvariantSeminorm` and the Frobenius and operator forms are its specializations. So the strongest advertised form is the one that is proved.",
       "next_action": "Wire FinishYuWangSamworth into a default target, or migrate these three into DavisKahan/Specialized."
     },
     {

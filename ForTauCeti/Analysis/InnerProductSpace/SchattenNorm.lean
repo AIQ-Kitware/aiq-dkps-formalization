@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 import ForTauCeti.Analysis.Normed.FiniteLpGauge
 
 
@@ -25,7 +25,7 @@ The triangle inequality is factored into the two canonical ingredients:
 2. finite `ℓᵖ` gauges are monotone under weak majorization and satisfy
    Minkowski's inequality.
 
-The resulting object is a `RectangularUnitarilyInvariantNorm`, so it inherits
+The resulting object is a `RectangularUnitarilyInvariantSeminorm`, so it inherits
 the existing two-sided unitary invariance, orbit-certificate bounds, Fan
 dominance bridges, and operator-ideal inequalities.
 
@@ -55,7 +55,7 @@ variable {E : Type uE} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 variable {F : Type uF} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
-namespace RectangularUnitarilyInvariantNorm
+namespace RectangularUnitarilyInvariantSeminorm
 
 /-- The canonical finite singular-value vector for a rectangular map. -/
 noncomputable def singularValueVector (A : E →ₗ[𝕜] F) :
@@ -183,7 +183,7 @@ theorem singularValueVector_comp_unitary
 
 /-- Rectangular Schatten `p` norm for a real exponent `p ≥ 1`. -/
 noncomputable def schattenNorm (p : ℝ) (hp : 1 ≤ p) :
-    RectangularUnitarilyInvariantNorm 𝕜 E F where
+    RectangularUnitarilyInvariantSeminorm 𝕜 E F where
   toFun A := FiniteVector.lpGauge p (singularValueVector A)
   add_le' A B :=
     calc
@@ -362,7 +362,7 @@ theorem schattenNorm_two_apply (A : E →ₗ[𝕜] F) :
   rw [sum_sq_singularValueVector_eq_sum_domain, ← Real.sqrt_eq_rpow]
 
 /-- Schatten infinity norm is the existing rectangular operator norm. -/
-noncomputable def schattenNormInf : RectangularUnitarilyInvariantNorm 𝕜 E F :=
+noncomputable def schattenNormInf : RectangularUnitarilyInvariantSeminorm 𝕜 E F :=
   opNorm
 
 /-- The `S∞` norm evaluates to the ordinary operator norm, definitionally —
@@ -372,5 +372,5 @@ Schatten scale. -/
     schattenNormInf A = ‖A.toContinuousLinearMap‖ :=
   (rfl)
 
-end RectangularUnitarilyInvariantNorm
+end RectangularUnitarilyInvariantSeminorm
 end TauCeti

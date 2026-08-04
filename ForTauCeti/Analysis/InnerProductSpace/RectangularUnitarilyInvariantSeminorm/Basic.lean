@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 
 import ForTauCeti.Analysis.InnerProductSpace.KyFan
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
 import Mathlib.Analysis.InnerProductSpace.ProdL2
@@ -22,7 +22,7 @@ the domain or the codomain.
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm`,
+* Original module: `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm`,
   split out on 2026-07-28 because that file had grown to 2124 lines while Tau Ceti's
   `lean_lib` enforces a hard 1500-line ceiling, and 1000 for a newly added file.
 * Extraction class: **split**.  No statement, proof or declaration name changed; only
@@ -49,10 +49,10 @@ variable {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
 
 /-- A unitarily invariant seminorm on rectangular linear maps.
 
-As in the existing square `UnitarilyInvariantNorm`, definiteness is deliberately
+As in the existing square `UnitarilyInvariantSeminorm`, definiteness is deliberately
 not bundled: the Davis--Kahan inequalities and Fan dominance use only
 subadditivity, absolute homogeneity, and two-sided unitary invariance. -/
-structure RectangularUnitarilyInvariantNorm (𝕜 E F : Type*)
+structure RectangularUnitarilyInvariantSeminorm (𝕜 E F : Type*)
     [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
     [FiniteDimensional 𝕜 E] [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
     [FiniteDimensional 𝕜 F] where
@@ -62,18 +62,18 @@ structure RectangularUnitarilyInvariantNorm (𝕜 E F : Type*)
   invariant' : ∀ (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) A,
     toFun (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) = toFun A
 
-namespace RectangularUnitarilyInvariantNorm
+namespace RectangularUnitarilyInvariantSeminorm
 
 /-- Prefix sum of singular values for a rectangular map. -/
 noncomputable def rectangularKyFanSum (k : ℕ) (A : E →ₗ[𝕜] F) : ℝ :=
   ∑ i : Fin k, A.singularValues (i : ℕ)
 
 /-- Apply a rectangular UI seminorm directly to a map, writing `N A` for `N.toFun A`. -/
-instance : CoeFun (RectangularUnitarilyInvariantNorm 𝕜 E F)
+instance : CoeFun (RectangularUnitarilyInvariantSeminorm 𝕜 E F)
     fun _ => (E →ₗ[𝕜] F) → ℝ :=
-  ⟨RectangularUnitarilyInvariantNorm.toFun⟩
+  ⟨RectangularUnitarilyInvariantSeminorm.toFun⟩
 
-variable (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
+variable (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
 
 
 /-- A rectangular UI seminorm vanishes at zero. -/
@@ -372,9 +372,9 @@ codomain.  The transported norm measures `A : E → H` by measuring
 noncomputable def codomainIsometryTransport
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]
-    (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
     (ι : H →ₗᵢ[𝕜] F) :
-    RectangularUnitarilyInvariantNorm 𝕜 E H where
+    RectangularUnitarilyInvariantSeminorm 𝕜 E H where
   toFun A := N (ι.toLinearMap ∘ₗ A)
   add_le' A B := by
     have hmap : ι.toLinearMap ∘ₗ (A + B) =
@@ -405,7 +405,7 @@ noncomputable def codomainIsometryTransport
 @[simp] theorem codomainIsometryTransport_apply
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]
-    (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
     (ι : H →ₗᵢ[𝕜] F) (A : E →ₗ[𝕜] H) :
     N.codomainIsometryTransport ι A = N (ι.toLinearMap ∘ₗ A) :=
   (rfl)
@@ -416,9 +416,9 @@ zero-padded map `A ∘ ι⋆ : E → F`. -/
 noncomputable def domainIsometryTransport
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]
-    (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
     (ι : H →ₗᵢ[𝕜] E) :
-    RectangularUnitarilyInvariantNorm 𝕜 H F where
+    RectangularUnitarilyInvariantSeminorm 𝕜 H F where
   toFun A := N (A ∘ₗ LinearMap.adjoint ι.toLinearMap)
   add_le' A B := by
     have hmap : (A + B) ∘ₗ LinearMap.adjoint ι.toLinearMap =
@@ -451,14 +451,14 @@ noncomputable def domainIsometryTransport
 @[simp] theorem domainIsometryTransport_apply
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]
-    (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
     (ι : H →ₗᵢ[𝕜] E) (A : H →ₗ[𝕜] F) :
     N.domainIsometryTransport ι A =
       N (A ∘ₗ LinearMap.adjoint ι.toLinearMap) :=
   (rfl)
 
 
-end RectangularUnitarilyInvariantNorm
+end RectangularUnitarilyInvariantSeminorm
 
 
 end TauCeti

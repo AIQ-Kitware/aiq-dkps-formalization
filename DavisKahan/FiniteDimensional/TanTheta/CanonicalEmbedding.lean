@@ -24,7 +24,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- Canonical directed-tangent specialization of the paper theorem. -/
 theorem tanThetaEmbedding_ritzResidual_le
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)

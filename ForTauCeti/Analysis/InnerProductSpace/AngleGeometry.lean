@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
 import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
@@ -330,8 +330,8 @@ theorem singularValues_projection_sub_projection (U V : Submodule 𝕜 E)
 
 /-- **A unitarily invariant norm depends only on the singular-value sequence.**
 Via the gauge representation `apply_eq_gauge` of the operator SVD. -/
-theorem _root_.TauCeti.UnitarilyInvariantNorm.eq_of_singularValues_eq
-    (N : UnitarilyInvariantNorm 𝕜 E) {A B : E →ₗ[𝕜] E}
+theorem _root_.TauCeti.UnitarilyInvariantSeminorm.eq_of_singularValues_eq
+    (N : UnitarilyInvariantSeminorm 𝕜 E) {A B : E →ₗ[𝕜] E}
     (h : A.singularValues = B.singularValues) : N A = N B := by
   rw [N.apply_eq_gauge rfl (stdOrthonormalBasis 𝕜 E) A,
     N.apply_eq_gauge rfl (stdOrthonormalBasis 𝕜 E) B, h]
@@ -340,7 +340,7 @@ theorem _root_.TauCeti.UnitarilyInvariantNorm.eq_of_singularValues_eq
 norm of `P_U - P_V` equals that of the full `sin Θ` operator `|P_U - P_V|`, since
 they share the singular-value sequence.  This is the only projection-geometry
 rewrite the final UI-norm projector theorem needs. -/
-theorem uiNorm_projection_sub_eq_sinAngleOperator (N : UnitarilyInvariantNorm 𝕜 E)
+theorem uiNorm_projection_sub_eq_sinAngleOperator (N : UnitarilyInvariantSeminorm 𝕜 E)
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     N (projection U - projection V) = N (sinAngleOperator U V) :=
   N.eq_of_singularValues_eq (singularValues_projection_sub_projection U V)

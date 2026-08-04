@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization
 
 /-!
 # Orthogonal block sums of rectangular maps
@@ -15,7 +15,7 @@ majorization statements that transfer to it.
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm`,
+* Original module: `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm`,
   split out on 2026-07-28 because that file had grown to 2124 lines while Tau Ceti's
   `lean_lib` enforces a hard 1500-line ceiling, and 1000 for a newly added file.
 * Extraction class: **split**.  No statement, proof or declaration name changed; only
@@ -40,9 +40,9 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 variable {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
   [FiniteDimensional 𝕜 G]
 
-namespace RectangularUnitarilyInvariantNorm
+namespace RectangularUnitarilyInvariantSeminorm
 
-variable (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
+variable (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
 
 /- `Module ℝ (E →ₗ[𝕜] F)` is a *local* instance in `Basic`, so it does not survive the
 import.  Re-enable it here; making it global would put a second `Module ℝ` structure on
@@ -410,7 +410,7 @@ theorem orthogonalBlockSum_apply_le_of_kyFanSum_le
     [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂]
     [FiniteDimensional 𝕜 E₁] [FiniteDimensional 𝕜 E₂]
     [FiniteDimensional 𝕜 F₁] [FiniteDimensional 𝕜 F₂]
-    (NB : RectangularUnitarilyInvariantNorm 𝕜
+    (NB : RectangularUnitarilyInvariantSeminorm 𝕜
       (WithLp 2 (E₁ × E₂)) (WithLp 2 (F₁ × F₂)))
     {A C : E₁ →ₗ[𝕜] F₁} {B D : E₂ →ₗ[𝕜] F₂}
     (hA : ∀ k, rectangularKyFanSum k A ≤ rectangularKyFanSum k C)
@@ -431,7 +431,7 @@ theorem apply_le_of_singularValues_le {A B : E →ₗ[𝕜] F}
   exact Finset.sum_le_sum fun i _ => h (i : ℕ)
 
 
-end RectangularUnitarilyInvariantNorm
+end RectangularUnitarilyInvariantSeminorm
 
 
 end TauCeti

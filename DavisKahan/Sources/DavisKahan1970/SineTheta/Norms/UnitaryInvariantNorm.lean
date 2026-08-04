@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
 import Mathlib.Data.ENNReal.Inv
@@ -55,7 +55,7 @@ and complex operators, and to rectangular operators through their singular
 values. -/
 structure PaperUnitaryInvariantNorm where
   finiteNorm : ∀ n : ℕ,
-    TauCeti.UnitarilyInvariantNorm ℂ (EuclideanSpace ℂ (Fin n))
+    TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
   normalized :
     (finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ)
       (fun _ => 1) = 1

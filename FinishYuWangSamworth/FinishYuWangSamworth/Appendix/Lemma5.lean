@@ -35,29 +35,29 @@ theorem yuWangSamworth_lemma5_columns
     (A : E →ₗ[𝕜] F) (U : P →ₗ[𝕜] F) (W : Q →ₗ[𝕜] E)
     (hU : ‖U.toContinuousLinearMap‖ ≤ 1)
     (hW : ‖W.toContinuousLinearMap‖ ≤ 1) :
-    RectangularUnitarilyInvariantNorm.frobenius
+    RectangularUnitarilyInvariantSeminorm.frobenius
         (U.adjoint ∘ₗ A ∘ₗ W) ≤
-      RectangularUnitarilyInvariantNorm.frobenius A := by
+      RectangularUnitarilyInvariantSeminorm.frobenius A := by
   have h := rectangularFrobenius_twoSided_comp_le U.adjoint A W
   have hUnorm :
       ‖U.adjoint.toContinuousLinearMap‖ = ‖U.toContinuousLinearMap‖ := by
     simp only [LinearMap.adjoint_toContinuousLinearMap,
       LinearIsometryEquiv.norm_map]
   rw [hUnorm] at h
-  have hF : 0 ≤ RectangularUnitarilyInvariantNorm.frobenius A :=
-    (RectangularUnitarilyInvariantNorm.frobenius (𝕜 := 𝕜)).nonneg A
+  have hF : 0 ≤ RectangularUnitarilyInvariantSeminorm.frobenius A :=
+    (RectangularUnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜)).nonneg A
   calc
-    RectangularUnitarilyInvariantNorm.frobenius (U.adjoint ∘ₗ A ∘ₗ W)
+    RectangularUnitarilyInvariantSeminorm.frobenius (U.adjoint ∘ₗ A ∘ₗ W)
         ≤ ‖U.toContinuousLinearMap‖ *
-            RectangularUnitarilyInvariantNorm.frobenius A *
+            RectangularUnitarilyInvariantSeminorm.frobenius A *
               ‖W.toContinuousLinearMap‖ := h
-    _ ≤ 1 * RectangularUnitarilyInvariantNorm.frobenius A *
+    _ ≤ 1 * RectangularUnitarilyInvariantSeminorm.frobenius A *
           ‖W.toContinuousLinearMap‖ := by
       exact mul_le_mul_of_nonneg_right
         (mul_le_mul_of_nonneg_right hU hF) (norm_nonneg _)
-    _ ≤ 1 * RectangularUnitarilyInvariantNorm.frobenius A * 1 := by
+    _ ≤ 1 * RectangularUnitarilyInvariantSeminorm.frobenius A * 1 := by
       exact mul_le_mul_of_nonneg_left hW (by simpa using hF)
-    _ = RectangularUnitarilyInvariantNorm.frobenius A := by ring
+    _ = RectangularUnitarilyInvariantSeminorm.frobenius A := by ring
 
 /-- Lemma 5 with the source's orthonormal-column hypotheses expressed
 coordinate-freely as pointwise norm preservation. -/
@@ -69,9 +69,9 @@ theorem yuWangSamworth_lemma5_isometricColumns
     (A : E →ₗ[𝕜] F) (U : P →ₗ[𝕜] F) (W : Q →ₗ[𝕜] E)
     (hU : ∀ x : P, ‖U x‖ = ‖x‖)
     (hW : ∀ x : Q, ‖W x‖ = ‖x‖) :
-    RectangularUnitarilyInvariantNorm.frobenius
+    RectangularUnitarilyInvariantSeminorm.frobenius
         (U.adjoint ∘ₗ A ∘ₗ W) ≤
-      RectangularUnitarilyInvariantNorm.frobenius A := by
+      RectangularUnitarilyInvariantSeminorm.frobenius A := by
   have hUnorm : ‖U.toContinuousLinearMap‖ ≤ 1 := by
     refine U.toContinuousLinearMap.opNorm_le_bound zero_le_one ?_
     intro x
@@ -109,9 +109,9 @@ theorem yuWangSamworth_lemma5_orthonormalColumns
     {Q : Type*} [NormedAddCommGroup Q] [InnerProductSpace 𝕜 Q]
       [FiniteDimensional 𝕜 Q]
     (A : E →ₗ[𝕜] F) (U : P →ₗᵢ[𝕜] F) (W : Q →ₗᵢ[𝕜] E) :
-    RectangularUnitarilyInvariantNorm.frobenius
+    RectangularUnitarilyInvariantSeminorm.frobenius
         (U.toLinearMap.adjoint ∘ₗ A ∘ₗ W.toLinearMap) ≤
-      RectangularUnitarilyInvariantNorm.frobenius A := by
+      RectangularUnitarilyInvariantSeminorm.frobenius A := by
   exact yuWangSamworth_lemma5_columns A U.toLinearMap W.toLinearMap
     (linearIsometry_opNorm_le_one U) (linearIsometry_opNorm_le_one W)
 
@@ -126,15 +126,15 @@ theorem yuWangSamworth_lemma5_rows
     (hU : ‖U.toContinuousLinearMap‖ ≤ 1)
     (hW : ‖W.toContinuousLinearMap‖ ≤ 1)
     (hrecover : U ∘ₗ (U.adjoint ∘ₗ A ∘ₗ W) ∘ₗ W.adjoint = A) :
-    RectangularUnitarilyInvariantNorm.frobenius
+    RectangularUnitarilyInvariantSeminorm.frobenius
         (U.adjoint ∘ₗ A ∘ₗ W) =
-      RectangularUnitarilyInvariantNorm.frobenius A := by
+      RectangularUnitarilyInvariantSeminorm.frobenius A := by
   let C : Q →ₗ[𝕜] P := U.adjoint ∘ₗ A ∘ₗ W
   have hCdef : C = U.adjoint ∘ₗ A ∘ₗ W := rfl
   have hrecoverC : U ∘ₗ C ∘ₗ W.adjoint = A := by
     simpa only [hCdef] using hrecover
-  have hC : 0 ≤ RectangularUnitarilyInvariantNorm.frobenius C :=
-    (RectangularUnitarilyInvariantNorm.frobenius (𝕜 := 𝕜)).nonneg C
+  have hC : 0 ≤ RectangularUnitarilyInvariantSeminorm.frobenius C :=
+    (RectangularUnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜)).nonneg C
   have hWnorm :
       ‖W.adjoint.toContinuousLinearMap‖ = ‖W.toContinuousLinearMap‖ := by
     simp only [LinearMap.adjoint_toContinuousLinearMap,
@@ -142,50 +142,50 @@ theorem yuWangSamworth_lemma5_rows
   apply le_antisymm
   · simpa only [hCdef] using yuWangSamworth_lemma5_columns A U W hU hW
   · calc
-      RectangularUnitarilyInvariantNorm.frobenius A =
-          RectangularUnitarilyInvariantNorm.frobenius
+      RectangularUnitarilyInvariantSeminorm.frobenius A =
+          RectangularUnitarilyInvariantSeminorm.frobenius
             (U ∘ₗ C ∘ₗ W.adjoint) := by rw [hrecoverC]
       _ ≤ ‖U.toContinuousLinearMap‖ *
-            RectangularUnitarilyInvariantNorm.frobenius C *
+            RectangularUnitarilyInvariantSeminorm.frobenius C *
               ‖W.adjoint.toContinuousLinearMap‖ :=
         rectangularFrobenius_twoSided_comp_le U C W.adjoint
       _ = ‖U.toContinuousLinearMap‖ *
-            RectangularUnitarilyInvariantNorm.frobenius C *
+            RectangularUnitarilyInvariantSeminorm.frobenius C *
               ‖W.toContinuousLinearMap‖ := by rw [hWnorm]
-      _ ≤ 1 * RectangularUnitarilyInvariantNorm.frobenius C *
+      _ ≤ 1 * RectangularUnitarilyInvariantSeminorm.frobenius C *
             ‖W.toContinuousLinearMap‖ := by
         exact mul_le_mul_of_nonneg_right
           (mul_le_mul_of_nonneg_right hU hC) (norm_nonneg _)
-      _ ≤ 1 * RectangularUnitarilyInvariantNorm.frobenius C * 1 := by
+      _ ≤ 1 * RectangularUnitarilyInvariantSeminorm.frobenius C * 1 := by
         exact mul_le_mul_of_nonneg_left hW (by simpa using hC)
-      _ = RectangularUnitarilyInvariantNorm.frobenius C := by ring
-      _ = RectangularUnitarilyInvariantNorm.frobenius
+      _ = RectangularUnitarilyInvariantSeminorm.frobenius C := by ring
+      _ = RectangularUnitarilyInvariantSeminorm.frobenius
             (U.adjoint ∘ₗ A ∘ₗ W) := by rw [hCdef]
 
 /-- Precomposition by the adjoint of a linear isometry preserves the
 rectangular Frobenius norm.  This is the row-side analogue of
-`RectangularUnitarilyInvariantNorm.frobenius_linearIsometry_comp`. -/
+`RectangularUnitarilyInvariantSeminorm.frobenius_linearIsometry_comp`. -/
 private theorem rectangularFrobenius_comp_adjoint_linearIsometry
     {Q : Type*} [NormedAddCommGroup Q] [InnerProductSpace 𝕜 Q]
       [FiniteDimensional 𝕜 Q]
     (A : E →ₗ[𝕜] F) (W : E →ₗᵢ[𝕜] Q) :
-    RectangularUnitarilyInvariantNorm.frobenius
+    RectangularUnitarilyInvariantSeminorm.frobenius
         (A ∘ₗ W.toLinearMap.adjoint) =
-      RectangularUnitarilyInvariantNorm.frobenius A := by
+      RectangularUnitarilyInvariantSeminorm.frobenius A := by
   calc
-    RectangularUnitarilyInvariantNorm.frobenius
+    RectangularUnitarilyInvariantSeminorm.frobenius
         (A ∘ₗ W.toLinearMap.adjoint) =
-        RectangularUnitarilyInvariantNorm.frobenius
+        RectangularUnitarilyInvariantSeminorm.frobenius
           (A ∘ₗ W.toLinearMap.adjoint).adjoint :=
       (rectangularFrobenius_adjoint
         (A ∘ₗ W.toLinearMap.adjoint)).symm
-    _ = RectangularUnitarilyInvariantNorm.frobenius
+    _ = RectangularUnitarilyInvariantSeminorm.frobenius
           (W.toLinearMap ∘ₗ A.adjoint) := by
       rw [LinearMap.adjoint_comp, LinearMap.adjoint_adjoint]
-    _ = RectangularUnitarilyInvariantNorm.frobenius A.adjoint :=
-      RectangularUnitarilyInvariantNorm.frobenius_linearIsometry_comp
+    _ = RectangularUnitarilyInvariantSeminorm.frobenius A.adjoint :=
+      RectangularUnitarilyInvariantSeminorm.frobenius_linearIsometry_comp
         W A.adjoint
-    _ = RectangularUnitarilyInvariantNorm.frobenius A :=
+    _ = RectangularUnitarilyInvariantSeminorm.frobenius A :=
       rectangularFrobenius_adjoint A
 
 /-- Lemma 5 in the literal orthonormal-row API.  Here `U` and `W` bundle the
@@ -200,17 +200,17 @@ theorem yuWangSamworth_lemma5_orthonormalRows
     {Q : Type*} [NormedAddCommGroup Q] [InnerProductSpace 𝕜 Q]
       [FiniteDimensional 𝕜 Q]
     (A : E →ₗ[𝕜] F) (U : F →ₗᵢ[𝕜] P) (W : E →ₗᵢ[𝕜] Q) :
-    RectangularUnitarilyInvariantNorm.frobenius
+    RectangularUnitarilyInvariantSeminorm.frobenius
         (U.toLinearMap ∘ₗ (A ∘ₗ W.toLinearMap.adjoint)) =
-      RectangularUnitarilyInvariantNorm.frobenius A := by
+      RectangularUnitarilyInvariantSeminorm.frobenius A := by
   calc
-    RectangularUnitarilyInvariantNorm.frobenius
+    RectangularUnitarilyInvariantSeminorm.frobenius
         (U.toLinearMap ∘ₗ (A ∘ₗ W.toLinearMap.adjoint)) =
-        RectangularUnitarilyInvariantNorm.frobenius
+        RectangularUnitarilyInvariantSeminorm.frobenius
           (A ∘ₗ W.toLinearMap.adjoint) :=
-      RectangularUnitarilyInvariantNorm.frobenius_linearIsometry_comp
+      RectangularUnitarilyInvariantSeminorm.frobenius_linearIsometry_comp
         U (A ∘ₗ W.toLinearMap.adjoint)
-    _ = RectangularUnitarilyInvariantNorm.frobenius A :=
+    _ = RectangularUnitarilyInvariantSeminorm.frobenius A :=
       rectangularFrobenius_comp_adjoint_linearIsometry A W
 
 end DavisKahanTheory
