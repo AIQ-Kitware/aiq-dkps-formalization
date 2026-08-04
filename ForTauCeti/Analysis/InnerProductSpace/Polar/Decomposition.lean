@@ -558,6 +558,35 @@ theorem norm_calculusStarAlgHom_le {T : H →ₗ[ℂ] H} (hT : T.IsSymmetric)
   rw [extendSymbol_apply_of_mem _ hmem]
   simpa using g.norm_coe_le_norm ⟨_, hmem⟩
 
+/-- **The two calculi agree**: the `RCLike` finite functional calculus, transported to bounded
+operators, is Mathlib's continuous functional calculus.
+
+Part A's milestone.  `calculusStarAlgHom` is continuous and sends the identity symbol to the
+operator, so `cfcHom_eq_of_continuous_of_map_id` identifies it with `cfcHom`; the extension of
+a symbol off the spectrum is invisible to the finite calculus, by
+`selfAdjointFunctionalCalculus_indicator` and the eigenvalue containment. -/
+theorem selfAdjointFunctionalCalculus_toContinuousLinearMap_eq_cfc {T : H →ₗ[ℂ] H}
+    (hT : T.IsSymmetric) (f : ℝ → ℝ) (hf : Continuous f) :
+    (selfAdjointFunctionalCalculus hT f).toContinuousLinearMap
+      = cfc f T.toContinuousLinearMap := by
+  have ha : IsSelfAdjoint T.toContinuousLinearMap :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
+  have hcont : Continuous (calculusStarAlgHom hT) :=
+    AddMonoidHomClass.continuous_of_bound (calculusStarAlgHom hT) 1 fun g => by
+      rw [one_mul]; exact norm_calculusStarAlgHom_le hT g
+  have hhom : cfcHom ha = calculusStarAlgHom hT :=
+    cfcHom_eq_of_continuous_of_map_id ha _ hcont (calculusStarAlgHom_id hT)
+  rw [cfc_apply f T.toContinuousLinearMap ha hf.continuousOn, hhom]
+  have key : (selfAdjointFunctionalCalculus hT
+      (extendSymbol (⟨_, hf.continuousOn.restrict⟩ :
+        C(spectrum ℝ T.toContinuousLinearMap, ℝ)))).toContinuousLinearMap
+      = (selfAdjointFunctionalCalculus hT f).toContinuousLinearMap := by
+    congr 1
+    refine selfAdjointFunctionalCalculus_congr hT fun i => ?_
+    rw [extendSymbol_apply_of_mem _ (eigenvalues_mem_spectrum_toContinuousLinearMap hT i)]
+    rfl
+  exact key.symm
+
 /-- The spectral modulus agrees with the C⋆-algebra `CFC.abs` on `E →L[ℂ] E`, transported across
 the definitional `LinearMap ↔ ContinuousLinearMap` adjoint bridge (`adjoint_toContinuousLinearMap`
 is `rfl`). This is what makes the decomposition literally "via CFC". -/
