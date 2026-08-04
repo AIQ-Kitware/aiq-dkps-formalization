@@ -128,13 +128,12 @@ These were examined and kept on purpose. Flagging them again is churn.
 
 ## Open
 
-1. **`deliberately`** — 11 in the READMEs after round 4 (12 before it), plus 5 in
+1. **`deliberately`** — 9 in the READMEs after round 5 (12 before round 4), plus 5 in
    `Suggested.lean` files. Awaiting the user's call. (An earlier count of 43 was wrong.)
    Do not act unilaterally.
 2. Open items in `considerations.md`: the `→L`/`→ₗ` bridge for `IsPartialIsometry`; the
    `operatorAbs`/`modulus` naming; `OperatorIdealFamily`'s ℂ-only scalars and universe pin.
-3. Examined in round 4 and left alone, but arguable if a fifth pass is wanted — flag, do not
-   cut unilaterally:
+3. Examined and left alone through round 5 — flag, do not cut unilaterally:
    - `The reason is not brevity:` (Foundations, the Moore–Penrose predicate) — negation
      then assertion, but the assertion is real;
    - `The arbitrary basis is the point:` (Majorization, Hoffman–Wielandt);
@@ -144,6 +143,11 @@ These were examined and kept on purpose. Flagging them again is churn.
    - `**Why "Hilbert-space" and not "finite-dimensional"**` (Foundations) — reads as
      title-justification, but its content is a real generality decision;
    - `differing on three axes` (Foundations, Part B) above a four-row table.
+4. **The shared Acknowledgements sentence**, *"The public API and proof structure may change
+   during integration"*, is in all six children plus the index — noted in review, no
+   instruction given. It is the deliberate house form (11/27 accepted roadmaps carry an
+   Acknowledgements; the form is short — name the source, link it, license, stop). Left in
+   place. If it should be cut or varied, that is a decision, not an oversight.
 
 ## Settled by round 4 — do not reopen
 
