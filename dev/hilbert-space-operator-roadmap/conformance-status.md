@@ -145,9 +145,19 @@ rather than in the code: judging by what something is called rather than by what
      uses: lambda for `_comp`'s multiplication, `Pi` for `_add`. Mixing them fails with
      "did not find an occurrence of the pattern" on terms that display identically.
 
-   What remains for the roadmap theorem itself is continuity of this hom (immediate from
-   `norm_selfAdjointFunctionalCalculus_apply_le` and the containment) and `φ (id) = a`, then
-   `cfcHom_eq_of_continuous_of_map_id`.
+   **Both hypotheses of `cfcHom_eq_of_continuous_of_map_id` are now delivered too**:
+   `calculusStarAlgHom_id` (`φ (restrict id) = a`) and `norm_calculusStarAlgHom_le`
+   (`‖φ g‖ ≤ ‖g‖`, which gives continuity since `φ` is `ℝ`-linear).
+
+   So the roadmap theorem is one application of `cfcHom_eq_of_continuous_of_map_id` plus the
+   step from `cfcHom` to `cfc` — `cfc f a = cfcHom ha (restrict f)` for `f` continuous on the
+   spectrum, and `extendSymbol (restrict f)` agrees with `f` on the eigenvalues, so
+   `_indicator` closes it.
+
+   Lean note for that last step: applying a bundled `StarAlgHom` does not beta-reduce under
+   `rw`, and the `show` tactic is linted against changing goals here. State the unfolded
+   equation as a `have` and close with `exact`; that is how `calculusStarAlgHom_id` is
+   written.
 
    For the real-spectrum machinery generally, `IsSelfAdjoint.spectrumRestricts`
    (`Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Instances.lean`) is the
