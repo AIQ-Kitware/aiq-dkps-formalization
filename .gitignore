@@ -27,3 +27,6 @@ dev/reference-repos/
 *.toc
 *.tar.gz
 *.gz
+
+# leanq declaration indexes (regenerable)
+.leanq/
