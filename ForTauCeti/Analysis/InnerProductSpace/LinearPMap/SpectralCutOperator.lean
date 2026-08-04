@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
 
 /-!
 # `A - c` on a spectral range, as a bounded operator
@@ -34,6 +36,8 @@ operators.
 *New.*  Everything here is a repackaging of `specProjection_apply_sub_smul`.
 -/
 
+public section
+
 open scoped InnerProductSpace
 
 namespace TauCeti
@@ -43,6 +47,7 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteS
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ) (hB : MeasurableSet B)
 
 /-- `A - c`, cut down to the spectral range of `B`, as a bounded operator. -/
+@[expose]
 noncomputable def specCutOp {c r : ℝ} (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r) :
     H →L[ℂ] H :=
   BorelCalculus.borelCalculus (isStarNormal_cayley hA)

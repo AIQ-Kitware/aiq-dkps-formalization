@@ -14,9 +14,10 @@ sandwich `Δ ‖sinΘ‖_F ≤ ‖R‖_F ≤ 2 ‖S − T‖_F`, where the lower
 population-gap separation estimate (both eigenvalue multipliers come from `T`)
 and the upper bound is Hoffman–Wielandt.
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.HoffmanWielandt
+public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import ForTauCeti.Analysis.InnerProductSpace.HoffmanWielandt
 
 /-! # The Yu–Wang–Samworth Davis–Kahan variant (Frobenius, population gap)
 
@@ -69,6 +70,8 @@ closure this file rests on out of `ForMathlib` and `DavisKahan` entirely, so the
 last edge to sever was this one.
 
 -/
+
+public section
 
 namespace TauCeti
 open scoped InnerProductSpace BigOperators

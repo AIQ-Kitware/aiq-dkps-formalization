@@ -3,10 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 High, Claude Fable 5
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.Positive
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
+public import Mathlib.Analysis.InnerProductSpace.Positive
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
 
 
 /-!
@@ -40,6 +41,8 @@ correspondence between lower frame bounds and spectral floors of the Gram operat
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 

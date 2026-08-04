@@ -3,10 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 High, Claude Fable 5
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.SingularValues
-import Mathlib.Analysis.InnerProductSpace.Positive
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import Mathlib.Analysis.InnerProductSpace.SingularValues
+public import Mathlib.Analysis.InnerProductSpace.Positive
+public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
 
 
 /-!
@@ -54,6 +55,8 @@ spots, and that variant does not elaborate on the pinned toolchain (its `calc` f
 `sq_singularValues_selfCompAdjoint` provokes a `whnf` heartbeat blow-up), which is why this
 file rewrote that proof.
 -/
+
+public section
 
 namespace TauCeti
 

@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds
-import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
-import Mathlib.Analysis.InnerProductSpace.StarOrder
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds
+public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+public import Mathlib.Analysis.InnerProductSpace.StarOrder
 
 /-!
 # Complex spectral order and quadratic forms
@@ -29,6 +31,8 @@ bounds.
 * Spectra influence: **none** — the `ForTauCeti` import firewall admits only
   Mathlib, `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
 -/
+
+public section
 
 namespace TauCeti
 namespace SpectralOrder

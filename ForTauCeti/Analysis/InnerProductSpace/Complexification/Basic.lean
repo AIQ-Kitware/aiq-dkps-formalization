@@ -20,10 +20,12 @@ Authors: Jon Crall, GPT-5.6 Thinking
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none**.
 -/
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Real
-import Mathlib.Algebra.Module.MinimalAxioms
-import Mathlib.Analysis.InnerProductSpace.ProdL2
-import Mathlib.Analysis.Normed.Operator.Banach
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Real
+public import Mathlib.Algebra.Module.MinimalAxioms
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
+public import Mathlib.Analysis.Normed.Operator.Banach
 
 /-!
 # Complexification of real Hilbert spaces
@@ -52,6 +54,8 @@ The construction includes:
 
 No unbounded-operator, spectral-cutoff, or Ky Fan file depends on this module.
 -/
+
+public section
 
 namespace TauCeti
 
@@ -253,6 +257,7 @@ theorem inner_apply [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   rfl
 
 /-- The canonical embedding of a real Hilbert space into its complexification. -/
+@[expose]
 def ofReal [NormedAddCommGroup E] [InnerProductSpace ℝ E] :
     E →ₗᵢ[ℝ] RealComplexification E where
   toFun x := mk x 0

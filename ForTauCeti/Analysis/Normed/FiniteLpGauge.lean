@@ -3,8 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import Mathlib.Analysis.MeanInequalities
-import ForTauCeti.Analysis.Convex.Majorization
+module
+
+public import Mathlib.Analysis.MeanInequalities
+public import ForTauCeti.Analysis.Convex.Majorization
+public import Mathlib.Data.Fintype.Order
 
 
 /-!
@@ -41,6 +44,8 @@ lives in `ForTauCeti.Analysis.Convex.Majorization`.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 

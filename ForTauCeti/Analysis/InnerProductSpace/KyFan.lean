@@ -19,13 +19,14 @@ positive square root), and its consequence, the simultaneous triangle
 inequality for all Ky Fan norms — weak majorization
 `σ(A + B) ≺_w σ(A) + σ(B)`.
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.SingularValues
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
-import ForTauCeti.Analysis.InnerProductSpace.Spectrum
+public import Mathlib.Analysis.InnerProductSpace.SingularValues
+public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
+public import ForTauCeti.Analysis.InnerProductSpace.Spectrum
 
 
 /-! # Ky Fan sums of singular values
@@ -50,6 +51,8 @@ For operators on finite-dimensional inner product spaces over `𝕜 = ℝ, ℂ`:
 * K. Fan, *On a theorem of Weyl concerning eigenvalues of linear
   transformations I*, Proc. Nat. Acad. Sci. USA 35 (1949), 652–655.
 -/
+
+public section
 
 namespace TauCeti
 

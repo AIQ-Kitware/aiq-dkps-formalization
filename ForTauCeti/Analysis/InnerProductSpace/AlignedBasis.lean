@@ -16,9 +16,10 @@ the coordinate isometry `EuclideanSpace 𝕜 (Fin d) →ₗᵢ E` attached to an
 orthonormal family, used to build the `d × d` overlap operator whose singular
 values are the principal-angle cosines.
 -/
+module
 
-import Mathlib.LinearAlgebra.Basis.Defs
-import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+public import Mathlib.LinearAlgebra.Basis.Defs
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 
 
 /-! # The coordinate isometry of an orthonormal family
@@ -50,6 +51,8 @@ principal angles between `span u` and `span v`.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 

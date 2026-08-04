@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap
-import ForTauCeti.Analysis.InnerProductSpace.FrameFactorization
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap
+public import ForTauCeti.Analysis.InnerProductSpace.FrameFactorization
 
 /-!
 # Principal-angle embeddings for trial subspaces
@@ -34,6 +36,8 @@ Y3(b2) and Y3(b3) are what made it possible: before them this file's import
 closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 
 -/
+
+public section
 
 namespace TauCeti
 

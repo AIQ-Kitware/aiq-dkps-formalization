@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 
 /-!
 # Finite-dimensional Sylvester equations
@@ -34,6 +36,8 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 
 -/
 
+public section
+
 namespace TauCeti
 
 open TauCeti
@@ -46,6 +50,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 /-- Sylvester operator `X ↦ A X - X B`. -/
+@[expose]
 noncomputable def sylvesterOperator (A : F →ₗ[𝕜] F) (B : E →ₗ[𝕜] E) :
     (E →ₗ[𝕜] F) →ₗ[𝕜] (E →ₗ[𝕜] F) where
   toFun X := A ∘ₗ X - X ∘ₗ B

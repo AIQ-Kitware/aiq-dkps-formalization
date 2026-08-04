@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
 
 /-!
 # A self-adjoint operator bounded below at a real point
@@ -36,6 +38,8 @@ so that the caller supplies the lower bound the non-real case gets for free.
 *New.*  The closed-range argument follows `isClosed_range_shiftMap`, with the
 lower bound abstracted out of it.
 -/
+
+public section
 
 open scoped InnerProductSpace
 

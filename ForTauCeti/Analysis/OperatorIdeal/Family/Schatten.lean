@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.Normed.FiniteLpGauge
-import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
-import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
-import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison
+module
+
+public import ForTauCeti.Analysis.Normed.FiniteLpGauge
+public import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
+public import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
+public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
+public import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison
 
 /-!
 # The Schatten-`p` operator ideals

@@ -18,10 +18,11 @@ flat overlap operator `overlapOp` (from `AlignedBasis.lean`).  This packages the
 two families (which needs `singularValues_adjoint`, W0.1(d)), and the bridge
 `‖sin Θ‖²_F = d − overlap` to the flat overlap sum.
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
-import ForTauCeti.Analysis.InnerProductSpace.KyFan
+public import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
+public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 
 
 /-! # Principal angles between subspaces
@@ -54,6 +55,8 @@ Davis–Kahan development.
 * `TauCeti.sum_sq_norm_aligned_le_sinThetaSq`: the Yu–Wang–Samworth
   aligned-basis bound restated as `∑ⱼ ‖wⱼ − uⱼ‖² ≤ 2 ‖sin Θ‖²_F`.
 -/
+
+public section
 
 namespace TauCeti
 

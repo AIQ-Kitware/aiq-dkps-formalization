@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
-import Mathlib.Topology.Algebra.InfiniteSum.Order
-import Mathlib.Topology.Instances.ENNReal.Lemmas
+module
+
+public import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
+public import Mathlib.Topology.Algebra.InfiniteSum.Order
+public import Mathlib.Topology.Instances.ENNReal.Lemmas
 
 /-!
 # Fatou's lemma for `tsum` over `ℝ≥0∞`

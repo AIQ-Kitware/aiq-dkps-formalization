@@ -10,8 +10,9 @@ additions to `Mathlib/Probability/Moments/Variance.lean`.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
+module
 
-import Mathlib.Probability.Moments.Variance
+public import Mathlib.Probability.Moments.Variance
 
 
 /-! # Uncentered second-moment Chebyshev inequality
@@ -37,6 +38,8 @@ below, applied to error norms `Y = ‖Xᵢ - μᵢ‖`.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 

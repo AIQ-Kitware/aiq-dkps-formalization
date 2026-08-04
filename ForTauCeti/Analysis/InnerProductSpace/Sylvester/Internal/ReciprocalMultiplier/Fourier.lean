@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.OrbitAction
-import ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel
-import Mathlib.Analysis.Convex.Integral
-import Mathlib.Analysis.Real.Pi.Bounds
-import Mathlib.MeasureTheory.SpecificCodomains.Pi
-import Mathlib.LinearAlgebra.Lagrange
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.OrbitAction
+public import ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel
+public import Mathlib.Analysis.Convex.Integral
+public import Mathlib.Analysis.Real.Pi.Bounds
+public import Mathlib.MeasureTheory.SpecificCodomains.Pi
+public import Mathlib.LinearAlgebra.Lagrange
 
 /-!
 # Finite Fourier interpolation of the reciprocal
@@ -50,6 +52,8 @@ before the sin-Θ closure moved into the staging layer.
 Literature bridge for the group as a whole:
 `prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex`.
 -/
+
+public section
 
 namespace TauCeti
 

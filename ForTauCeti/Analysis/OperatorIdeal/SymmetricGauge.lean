@@ -3,20 +3,22 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import Mathlib.Data.Finsupp.Order
-import Mathlib.Topology.Instances.ENNReal.Lemmas
-import Mathlib.Order.CompleteLattice.Finset
-import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
-import Mathlib.Analysis.MeanInequalities
-import ForTauCeti.Analysis.Convex.Majorization
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
-import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
-import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
-import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
-import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+module
+
+public import Mathlib.Data.Finsupp.Order
+public import Mathlib.Topology.Instances.ENNReal.Lemmas
+public import Mathlib.Order.CompleteLattice.Finset
+public import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
+public import Mathlib.Analysis.MeanInequalities
+public import ForTauCeti.Analysis.Convex.Majorization
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
+public import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
+public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 
 /-!
 # Symmetric norming functions on sequences
@@ -97,6 +99,8 @@ names. It belongs to the second slice of `{lane:FTC-SYMGAUGE}`.
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: none.
 -/
+
+public section
 
 open scoped ENNReal NNReal
 

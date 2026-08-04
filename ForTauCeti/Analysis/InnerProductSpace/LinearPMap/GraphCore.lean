@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall
 -/
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.Topology.Algebra.Module.LinearPMap
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Topology.Algebra.Module.LinearPMap
 
 /-!
 # Graph cores of a partial linear map

@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 # Reducing subspaces for bounded operators
@@ -25,6 +27,8 @@ Davis--Kahan theory.
 * Spectra influence: **none** — the `ForTauCeti` import firewall admits only
   Mathlib, `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
 -/
+
+public section
 
 
 open scoped InnerProductSpace

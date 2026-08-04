@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 
 /-!
 # Finite-dimensional spectral-gap predicates
@@ -30,6 +32,8 @@ The move became possible only once Y3(b2) took the `ForMathlib`
 inner-product-space component into `ForTauCeti`: before that this file's import
 closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
+
+public section
 
 namespace TauCeti
 

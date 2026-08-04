@@ -13,11 +13,12 @@ Sub-dev I of the operator polar decomposition project — COMPLETE
 (proof-complete; reduction uses only:
 `propext, Classical.choice, Quot.sound`). Tickets PD-01..PD-04.
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.Positive
-import Mathlib.Analysis.InnerProductSpace.Spectrum
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
+public import Mathlib.Analysis.InnerProductSpace.Positive
+public import Mathlib.Analysis.InnerProductSpace.Spectrum
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 
 
 /-! # The positive square root of a positive symmetric operator (Sub-dev I)
@@ -46,6 +47,8 @@ on `E →L[ℂ] E`; the RCLike operator route needs it because the C⋆-algebra/
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 open scoped InnerProductSpace
 open InnerProductSpace

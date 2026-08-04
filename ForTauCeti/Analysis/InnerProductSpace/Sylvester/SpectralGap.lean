@@ -3,13 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate
-import ForTauCeti.Analysis.InnerProductSpace.BlockLowerBound
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate
+public import ForTauCeti.Analysis.InnerProductSpace.BlockLowerBound
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse
 
 /-!
 # The Sylvester spectral gap
@@ -45,6 +47,8 @@ six siblings of the same family used a flat `Sylvester*` prefix in the directory
 one family now has one convention.  Path change and import repoint only — no statement,
 signature, proof, attribute, declaration name or namespace changed.
 -/
+
+public section
 
 open scoped InnerProductSpace ENNReal
 open TauCeti.OneParameterUnitaryGroup (generator)

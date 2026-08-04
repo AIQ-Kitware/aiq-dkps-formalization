@@ -3,11 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
-import Mathlib.Algebra.Group.Semiconj.Units
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.Analysis.Normed.Operator.Banach
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
+public import Mathlib.Algebra.Group.Semiconj.Units
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.Normed.Operator.Banach
 
 /-! # Coercive bounded operators are units
 
@@ -45,6 +46,8 @@ closed range, and a trivial orthogonal complement of the range.
 * Spectra influence: **none** — the `ForTauCeti` import firewall admits only
   Mathlib, `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
 -/
+
+public section
 
 namespace TauCeti
 namespace ContinuousLinearMap

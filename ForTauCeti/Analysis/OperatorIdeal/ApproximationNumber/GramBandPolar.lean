@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
-import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 
 /-!
 # Narrow Gram bands and the polar partial isometry
@@ -26,6 +28,8 @@ for emptying that workspace bottom-up: each promotion turns the next module into
 Statements and proofs are unchanged; the namespace moved from `TauCeti.FinishTanTwoTheta`
 to `TauCeti.ApproximationNumber`, matching its siblings.
 -/
+
+public section
 
 namespace TauCeti
 namespace ApproximationNumber

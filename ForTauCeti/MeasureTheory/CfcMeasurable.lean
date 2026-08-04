@@ -13,13 +13,14 @@ restrict-cover measurability criterion).
 
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 -/
+module
 
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continuity
-import Mathlib.Analysis.Normed.Algebra.Spectrum
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Metric
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Order
-import Mathlib.MeasureTheory.MeasurableSpace.Embedding
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continuity
+public import Mathlib.Analysis.Normed.Algebra.Spectrum
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Metric
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Order
+public import Mathlib.MeasureTheory.MeasurableSpace.Embedding
 
 
 /-! # Measurability of the continuous functional calculus in the element
@@ -58,6 +59,8 @@ sample matrix — is, and the events one cares about depend only on that Gram.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 

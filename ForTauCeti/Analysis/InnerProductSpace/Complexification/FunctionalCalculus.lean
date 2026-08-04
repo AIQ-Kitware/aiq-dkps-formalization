@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unique
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unique
 
 /-!
 # Real descent for bounded functional calculus
@@ -48,6 +50,8 @@ infinite-dimensional polar factorization.
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none**.
 -/
+
+public section
 
 open scoped InnerProductSpace ComplexConjugate Topology
 

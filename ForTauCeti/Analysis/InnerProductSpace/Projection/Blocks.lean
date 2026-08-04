@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 
 /-!
 # Projection blocks and reflections
@@ -24,6 +26,8 @@ subspace.  This module is independent of the Davis--Kahan theory.
 * Spectra influence: **none** — the `ForTauCeti` import firewall admits only
   Mathlib, `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
 -/
+
+public section
 
 
 open scoped InnerProductSpace

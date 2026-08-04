@@ -3,11 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.BlockSum
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Instances
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.BlockSum
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Instances
 
 /-!
 # Rectangular unitarily invariant norms
@@ -30,3 +31,5 @@ gives the whole theory, exactly as before the split.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section

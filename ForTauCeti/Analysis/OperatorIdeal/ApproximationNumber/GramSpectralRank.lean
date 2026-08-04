@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
 
 /-!
 # Spectral ranks of Gram cutoffs
@@ -41,6 +43,8 @@ approximation-number material at all — it imports `LinearPMap.Constructions` a
 `LinearPMap.SpectralFormBounds`, so it is submittable only after the unbounded
 spectral measure, not with the `a`-numbers its name suggests.
 -/
+
+public section
 
 namespace TauCeti
 namespace ApproximationNumber
@@ -278,6 +282,7 @@ end LocalHalfLine
 end LinearPMap
 
 /-- The bounded positive Gram operator. -/
+@[expose]
 def gramOperator (X : E0 →L[ℂ] E1) : E0 →L[ℂ] E0 :=
   X.adjoint ∘L X
 
@@ -298,6 +303,7 @@ theorem re_inner_gramOperator (X : E0 →L[ℂ] E1) (x : E0) :
   norm_cast
 
 /-- The bounded Gram operator viewed as an everywhere-defined partial map. -/
+@[expose]
 def gramLinearPMap (X : E0 →L[ℂ] E1) : E0 →ₗ.[ℂ] E0 :=
   ((gramOperator X : E0 →ₗ[ℂ] E0).toPMap ⊤)
 
@@ -316,6 +322,7 @@ theorem gramLinearPMap_isSelfAdjoint (X : E0 →L[ℂ] E1) :
   LinearPMap.isSelfAdjoint_toPMap_top (gramOperator_isSelfAdjoint X)
 
 /-- The native Tau Ceti spectral PVM of `X†X`. -/
+@[expose]
 noncomputable def gramSpectralPVM (X : E0 →L[ℂ] E1) : ProjValMeasure E0 :=
   LinearPMap.spectralPVM (gramLinearPMap_isSelfAdjoint X)
 

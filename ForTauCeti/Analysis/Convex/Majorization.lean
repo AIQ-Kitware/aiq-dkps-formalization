@@ -3,14 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking, Claude Fable 5, Claude Opus 5
 -/
-import Mathlib.Analysis.Convex.Basic
-import Mathlib.Algebra.BigOperators.Fin
-import Mathlib.Algebra.Order.Field.Basic
-import Mathlib.Data.Real.Basic
-import Mathlib.Tactic.FieldSimp
-import Mathlib.Data.Fin.Tuple.Sort
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.LinearCombination
+module
+
+public import Mathlib.Analysis.Convex.Basic
+public import Mathlib.Algebra.BigOperators.Fin
+public import Mathlib.Algebra.Order.Field.Basic
+public import Mathlib.Data.Real.Basic
+public import Mathlib.Tactic.FieldSimp
+public import Mathlib.Data.Fin.Tuple.Sort
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.LinearCombination
+public import Mathlib.Algebra.Order.BigOperators.Group.Finset
 
 /-!
 # Weak majorization and the Hardy–Littlewood–Pólya transfer lemma
@@ -74,6 +77,8 @@ one convexity application and one closure property.
 * Spectra influence: **none** — this module imports only Mathlib.
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped BigOperators
@@ -86,6 +91,7 @@ variable {n m : ℕ}
 
 /-- Sum of the first `k` coordinates of a finite vector.  For `k ≥ n` this is
 its full sum. -/
+@[expose]
 def prefixSum (k : ℕ) (x : Fin n → ℝ) : ℝ :=
   ∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < k), x i
 
@@ -193,6 +199,7 @@ end WeaklyMajorized
 /-! ### Zero padding -/
 
 /-- Right zero-padding from length `n` to length `n + m`. -/
+@[expose]
 def zeroPadRight (x : Fin n → ℝ) : Fin (n + m) → ℝ :=
   fun i => if hi : (i : ℕ) < n then x ⟨i, hi⟩ else 0
 
@@ -718,6 +725,7 @@ axioms.
 -/
 
 /-- `Fin.rev` as a permutation: it is an involution. -/
+@[expose]
 def revPerm (n : ℕ) : Equiv.Perm (Fin n) :=
   Function.Involutive.toPerm Fin.rev Fin.rev_rev
 

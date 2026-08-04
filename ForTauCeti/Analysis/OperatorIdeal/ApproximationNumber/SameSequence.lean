@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 
 /-!
 # Operators with the same approximation-number sequence
