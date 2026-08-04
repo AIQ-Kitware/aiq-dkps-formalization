@@ -739,6 +739,70 @@ theorem adjoint_comp_genericCrossBlock :
     simpa using this
   rwa [sub_eq_zero] at h0
 
+
+/-! ## The lower-right block, and `D B = B (1 - A)`
+
+`D` is the compression of `P_V` to the `Uᗮ`-half.  Idempotence of `P_V` applied
+to a vector of `M` and read in the `N`-coordinate gives `B A + D B = B`, i.e.
+`D B = B (1 - A)`.  Since `B` has dense range this pins `D` down completely in
+terms of `A` and the halves-equivalence — the last block of the `2 × 2` model.
+-/
+
+/-- The lower-right block of `P_V`, on the `Uᗮ`-half. -/
+noncomputable def genericSineBlock :
+    genericRightHalf U V →L[ℂ] genericRightHalf U V :=
+  DavisKahanExt.compressOperator (genericRightHalf U V) V.starProjection
+
+/-- **`D B = B (1 - A)`.**  The `(2,1)` entry of `P_V² = P_V`. -/
+theorem genericSineBlock_comp_genericCrossBlock :
+    genericSineBlock U V ∘L genericCrossBlock U V =
+      genericCrossBlock U V -
+        genericCrossBlock U V ∘L genericCosineBlock U V := by
+  refine ContinuousLinearMap.ext fun m => ?_
+  apply Subtype.ext
+  -- Coercions of the three blocks.
+  have hB : ∀ x : genericLeftHalf U V,
+      ((genericCrossBlock U V x : genericRightHalf U V) : H) =
+        (genericRightHalf U V).starProjection (V.starProjection (x : H)) :=
+    fun x => by simp [genericCrossBlock]
+  have hD : ((genericSineBlock U V (genericCrossBlock U V m) :
+      genericRightHalf U V) : H) =
+      (genericRightHalf U V).starProjection
+        (V.starProjection ((genericCrossBlock U V m : genericRightHalf U V) : H)) := by
+    simp [genericSineBlock, DavisKahanExt.compressOperator]
+  -- Idempotence of `P_V` on `m`, split along `M ⊕ N`.
+  have hidem : V.starProjection (V.starProjection (m : H)) =
+      V.starProjection (m : H) :=
+    Submodule.starProjection_eq_self_iff.mpr (V.starProjection_apply_mem _)
+  have hsplit := starProjection_eq_cosineBlock_add_crossBlock U V m
+  have hAmem : ((genericCosineBlock U V m : genericLeftHalf U V) : H) ∈
+      (genericRightHalf U V)ᗮ :=
+    genericLeftHalf_le_orthogonal_genericRightHalf U V (genericCosineBlock U V m).2
+  have hAzero : (genericRightHalf U V).starProjection
+      ((genericCosineBlock U V m : genericLeftHalf U V) : H) = 0 := by
+    rw [Submodule.starProjection_apply_eq_zero_iff]
+    exact hAmem
+  have hBfix : (genericRightHalf U V).starProjection
+      ((genericCrossBlock U V m : genericRightHalf U V) : H) =
+      ((genericCrossBlock U V m : genericRightHalf U V) : H) :=
+    Submodule.starProjection_eq_self_iff.mpr (genericCrossBlock U V m).2
+  -- Apply `P_N` to `P_V (A m) + P_V (B m) = A m + B m`.
+  have hexp : V.starProjection ((genericCosineBlock U V m : genericLeftHalf U V) : H) +
+      V.starProjection ((genericCrossBlock U V m : genericRightHalf U V) : H) =
+      ((genericCosineBlock U V m : genericLeftHalf U V) : H) +
+        ((genericCrossBlock U V m : genericRightHalf U V) : H) := by
+    have h1 := congrArg V.starProjection hsplit
+    rw [hidem, map_add] at h1
+    rw [hsplit] at h1
+    exact h1.symm
+  have hkey := congrArg (genericRightHalf U V).starProjection hexp
+  rw [map_add, map_add, hAzero, hBfix, zero_add] at hkey
+  rw [← hB (genericCosineBlock U V m)] at hkey
+  simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.sub_apply,
+    Submodule.coe_sub]
+  rw [hD]
+  linear_combination (norm := module) hkey
+
 end HiddenFoundations
 end MathAhead
 end Experimental
