@@ -53,6 +53,23 @@ noncomputable def selfAdjointFunctionalCalculus
         (hT.eigenvectorBasis rfl i)
         (hT.eigenvectorBasis rfl i)).toLinearMap
 
+/-- The calculus is additive in the symbol: a finite sum of rank-one terms, added
+coefficientwise. -/
+theorem selfAdjointFunctionalCalculus_add {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (f g : ℝ → ℝ) :
+    selfAdjointFunctionalCalculus hT (f + g)
+      = selfAdjointFunctionalCalculus hT f + selfAdjointFunctionalCalculus hT g := by
+  simp only [selfAdjointFunctionalCalculus, ← Finset.sum_add_distrib]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  simp [add_smul, RCLike.ofReal_add]
+
+/-- The calculus is real-homogeneous in the symbol. -/
+theorem selfAdjointFunctionalCalculus_smul {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (c : ℝ)
+    (f : ℝ → ℝ) :
+    selfAdjointFunctionalCalculus hT (c • f) = (c : 𝕜) • selfAdjointFunctionalCalculus hT f := by
+  simp only [selfAdjointFunctionalCalculus, Finset.smul_sum]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  simp [smul_smul, RCLike.ofReal_mul]
+
 /-- The functional calculus acts diagonally in the chosen eigenbasis. -/
 theorem selfAdjointFunctionalCalculus_apply_eigenvectorBasis
     {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (f : ℝ → ℝ)
