@@ -10,8 +10,9 @@ additions to `Mathlib/Analysis/InnerProductSpace/Spectrum.lean`.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.Spectrum
+public import Mathlib.Analysis.InnerProductSpace.Spectrum
 
 
 /-! # Eigenvector cross-term identity for a perturbation
@@ -39,6 +40,8 @@ are controlled by the perturbation `S - T` divided by the eigenvalue gap.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 

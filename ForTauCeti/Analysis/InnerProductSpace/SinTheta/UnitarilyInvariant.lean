@@ -21,9 +21,10 @@ estimate differs — here it is the abstract Sylvester bound
 induced by `N`, whose operator-ideal property is `UnitarilyInvariantSeminorm`'s
 `apply_comp_le`.
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
 
 /-! # The unitarily-invariant-norm Davis–Kahan sin-Θ theorem
 
@@ -58,6 +59,8 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 
 -/
 
+public section
+
 namespace TauCeti
 open scoped InnerProductSpace
 open Module (finrank)
@@ -72,6 +75,7 @@ instance: two-sided unitary invariance is precisely
 `opNorm_comp_linearIsometryEquiv` / `opNorm_linearIsometryEquiv_comp`.  Its
 existence shows the `UnitarilyInvariantSeminorm` structure is inhabited, so the
 part-III theorem below is not vacuous. -/
+@[expose]
 noncomputable def opNorm (𝕜 E : Type*) [RCLike 𝕜] [NormedAddCommGroup E]
     [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : UnitarilyInvariantSeminorm 𝕜 E where
   toFun A := ‖LinearMap.toContinuousLinearMap A‖

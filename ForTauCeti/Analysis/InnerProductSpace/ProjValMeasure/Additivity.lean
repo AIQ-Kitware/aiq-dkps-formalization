@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic
 
 /-!
 # A projection-valued measure splits norms along a partition
@@ -32,6 +34,8 @@ block argument for the Sylvester spectral gap uses.
 
 *New.*
 -/
+
+public section
 
 open scoped ENNReal NNReal InnerProductSpace
 open MeasureTheory

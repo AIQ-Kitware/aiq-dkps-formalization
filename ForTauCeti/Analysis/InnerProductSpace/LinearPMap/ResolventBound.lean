@@ -61,6 +61,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E]
 
 /-- The bounded two-sided inverse of `A - z`, for `z` in the resolvent set. -/
+@[expose]
 noncomputable def resolvent (A : E →ₗ.[𝕜] E) {z : 𝕜} (hz : z ∈ resolventSet A) :
     E →L[𝕜] E :=
   (mem_resolventSet_iff.mp hz).choose

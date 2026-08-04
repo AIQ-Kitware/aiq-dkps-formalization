@@ -3,20 +3,22 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import Mathlib.Data.Finsupp.Order
-import Mathlib.Topology.Instances.ENNReal.Lemmas
-import Mathlib.Order.CompleteLattice.Finset
-import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
-import Mathlib.Analysis.MeanInequalities
-import ForTauCeti.Analysis.Convex.Majorization
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
-import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
-import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
-import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
-import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+module
+
+public import Mathlib.Data.Finsupp.Order
+public import Mathlib.Topology.Instances.ENNReal.Lemmas
+public import Mathlib.Order.CompleteLattice.Finset
+public import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
+public import Mathlib.Analysis.MeanInequalities
+public import ForTauCeti.Analysis.Convex.Majorization
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
+public import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
+public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 
 /-!
 # Symmetric norming functions on sequences
@@ -97,6 +99,8 @@ names. It belongs to the second slice of `{lane:FTC-SYMGAUGE}`.
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: none.
 -/
+
+public section
 
 open scoped ENNReal NNReal
 
@@ -192,6 +196,7 @@ Built with `Finsupp.onFinset` rather than as a sum of `Finsupp.single`s so that
 `truncate_apply` below is definitional: every fact about `extend` is a pointwise
 fact about this function, and a sum of singles would put `Finset.sum_apply'`
 between the two. -/
+@[expose]
 noncomputable def truncate (a : ℕ → ℝ≥0∞) (k : ℕ) (m : ℝ≥0) : ℕ →₀ ℝ≥0 :=
   Finsupp.onFinset (Finset.range k)
     (fun n => if n < k then (min (a n) (m : ℝ≥0∞)).toNNReal else 0)
@@ -443,6 +448,7 @@ theorem lpGaugeFinsupp_eq {p : ℝ} (hp : 0 < p) (a : ℕ →₀ ℝ≥0)
 Only `add_le'` has content — it is Minkowski, `NNReal.Lp_add_le`.  The other four
 fields are sum manipulations, and each one needs
 `sum_rpow_eq_of_support_subset` to put two different supports on one `Finset`. -/
+@[expose]
 noncomputable def schattenGauge (p : ℝ) (hp : 1 ≤ p) : TruncationGauge where
   toFun := lpGaugeFinsupp p
   add_le' a b := by
@@ -550,6 +556,7 @@ Taking `|·|` on the way in is what discharges both, and it is why `add_le'` nee
 
 /-- A real vector on `Fin n` as a finitely supported nonnegative sequence:
 absolute values, extended by zero. -/
+@[expose]
 noncomputable def ofFin {n : ℕ} (x : Fin n → ℝ) : ℕ →₀ ℝ≥0 :=
   Finsupp.onFinset (Finset.range n)
     (fun i => if h : i < n then Real.nnabs (x ⟨i, h⟩) else 0)
@@ -1015,6 +1022,7 @@ theorem symmetricGaugeENorm_comp_le (Φ : TruncationGauge)
 /-- **The operator ideal a symmetric norming function induces.**
 
 Milestone B1, and the five fields are the five laws above. -/
+@[expose]
 noncomputable def symmetricGaugeFamily (𝕜 : Type u) [RCLike 𝕜]
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (Φ : TruncationGauge) :
     TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜 where
@@ -1190,6 +1198,7 @@ This is **not** asserted to agree with `TauCeti.schattenIdealFamily` in
 `Family/Schatten.lean`, which is built from its own argument through the
 `tsum`-based `schattenENorm`.  The two should agree and proving it is Milestone
 B3's reconciliation obligation; nothing here claims it. -/
+@[expose]
 noncomputable def schattenFamily (p : ℝ) (hp : 1 ≤ p) :
     TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜 :=
   symmetricGaugeFamily.{u, u} 𝕜 (schattenGauge p hp)

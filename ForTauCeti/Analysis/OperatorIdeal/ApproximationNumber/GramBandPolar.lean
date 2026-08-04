@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
-import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 
 /-!
 # Narrow Gram bands and the polar partial isometry
@@ -26,6 +28,8 @@ for emptying that workspace bottom-up: each promotion turns the next module into
 Statements and proofs are unchanged; the namespace moved from `TauCeti.FinishTanTwoTheta`
 to `TauCeti.ApproximationNumber`, matching its siblings.
 -/
+
+public section
 
 namespace TauCeti
 namespace ApproximationNumber
@@ -71,13 +75,15 @@ theorem mem_polarInitial_of_mem_gramBand
     have hcomm := LinearPMap.specProjection_apply_domain
       (gramLinearPMap_isSelfAdjoint X) (Set.Icc lo hi) measurableSet_Icc
       (⟨z, hzDom⟩ : (gramLinearPMap X).domain)
-    change gramOperator X (P z) = P (gramOperator X z) at hcomm
+    simp only [gramLinearPMap_apply, ← gramSpectralPVM_proj_eq_specProjection] at hcomm
     rw [hzGram, map_zero] at hcomm
     exact hcomm
   have hPzRange : P z ∈ LinearPMap.specRange
       (gramLinearPMap_isSelfAdjoint X) (Set.Icc lo hi) measurableSet_Icc := by
-    change P z ∈ P.range
-    exact ⟨z, rfl⟩
+    rw [show P = TauCeti.LinearPMap.specProjection (gramLinearPMap_isSelfAdjoint X)
+        (Set.Icc lo hi) measurableSet_Icc from
+      gramSpectralPVM_proj_eq_specProjection X _ _]
+    exact LinearPMap.specProjection_mem_specRange _ _ _ z
   have hform := (LinearPMap.re_inner_apply_bounds_of_subset_Icc
     (gramLinearPMap_isSelfAdjoint X) (Set.Icc lo hi) measurableSet_Icc
     (β := lo) (α := hi) Set.Subset.rfl hPzRange hPzDom).1
@@ -139,8 +145,13 @@ theorem gram_residual_le_of_mem_band
       linarith [hs.2]
   have hxRange : x ∈ LinearPMap.specRange
       (gramLinearPMap_isSelfAdjoint X) (Set.Icc a b) measurableSet_Icc := by
-    change x ∈ ((gramSpectralPVM X).proj (Set.Icc a b) measurableSet_Icc).range
-    simpa only [a, b] using hx
+    obtain ⟨y, rfl⟩ := (by simpa only [a, b] using hx :
+      x ∈ ((gramSpectralPVM X).proj (Set.Icc a b) measurableSet_Icc).range)
+    rw [show ((gramSpectralPVM X).proj (Set.Icc a b) measurableSet_Icc)
+        = TauCeti.LinearPMap.specProjection (gramLinearPMap_isSelfAdjoint X)
+          (Set.Icc a b) measurableSet_Icc from
+      gramSpectralPVM_proj_eq_specProjection X _ _]
+    exact LinearPMap.specProjection_mem_specRange _ _ _ y
   have hxDom : x ∈ (gramLinearPMap X).domain := by
     rw [gramLinearPMap_domain]
     exact Submodule.mem_top

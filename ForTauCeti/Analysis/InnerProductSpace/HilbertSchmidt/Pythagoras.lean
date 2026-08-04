@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
 
 /-!
 # Splitting the Hilbert–Schmidt energy along an orthogonal family
@@ -46,6 +48,8 @@ substitutes under a `tsum` with no summability side-condition.
 
 *New.*
 -/
+
+public section
 
 open scoped ENNReal NNReal
 

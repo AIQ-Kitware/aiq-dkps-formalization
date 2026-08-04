@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Claude Opus 5
 -/
-import ForTauCeti.Analysis.Normed.SymmetricGauge
-import Mathlib.Analysis.MeanInequalities
+module
+
+public import ForTauCeti.Analysis.Normed.SymmetricGauge
+public import Mathlib.Analysis.MeanInequalities
 
 /-!
 # The `ℓᵖ` symmetric gauge
@@ -35,6 +37,8 @@ the inequality, is the substance of `add_le`.
   Apache 2.0.
 -/
 
+public section
+
 open scoped NNReal ENNReal
 
 namespace TauCeti
@@ -43,6 +47,7 @@ variable {p : ℝ}
 
 /-- The underlying `ℓᵖ` gauge function on finitely supported nonnegative
 sequences. -/
+@[expose]
 noncomputable def schattenGaugeFun (p : ℝ) (a : ℕ →₀ ℝ≥0) : ℝ≥0 :=
   (∑ i ∈ a.support, a i ^ p) ^ (1 / p)
 
@@ -131,6 +136,7 @@ theorem schattenGaugeFun_normalized (hp : 1 ≤ p) :
 
 Feeding this to `TauCeti.symmetricGaugeFamily` produces the Schatten-`p`
 operator ideal family, which is what the roadmap's `schattenFamily` names. -/
+@[expose]
 noncomputable def schattenGauge (p : ℝ) (hp : 1 ≤ p) : SymmetricGauge where
   toFun := schattenGaugeFun p
   add_le := schattenGaugeFun_add_le hp

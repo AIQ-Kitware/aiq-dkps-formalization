@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
-import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
-import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+public import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
+public import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
 
 /-!
 # Population-gap and statistical Davis--Kahan variants
@@ -33,6 +35,8 @@ closure this file rests on out of `ForMathlib` and `DavisKahan` entirely, so the
 last edge to sever was this one.
 
 -/
+
+public section
 
 namespace TauCeti
 

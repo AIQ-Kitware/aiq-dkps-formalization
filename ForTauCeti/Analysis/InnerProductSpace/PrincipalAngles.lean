@@ -18,10 +18,11 @@ flat overlap operator `overlapOp` (from `AlignedBasis.lean`).  This packages the
 two families (which needs `singularValues_adjoint`, W0.1(d)), and the bridge
 `‖sin Θ‖²_F = d − overlap` to the flat overlap sum.
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
-import ForTauCeti.Analysis.InnerProductSpace.KyFan
+public import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
+public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 
 
 /-! # Principal angles between subspaces
@@ -55,6 +56,8 @@ Davis–Kahan development.
   aligned-basis bound restated as `∑ⱼ ‖wⱼ − uⱼ‖² ≤ 2 ‖sin Θ‖²_F`.
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -66,6 +69,7 @@ variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpac
 /-- **The cosines of the principal angles** between the subspaces spanned by two
 orthonormal families `u, v : Fin d → E`: the (sorted, `ℕ →₀ ℝ`-indexed) singular
 values of the overlap operator `overlapOp hu hv`. -/
+@[expose]
 noncomputable def cosPrincipalAngles {u v : Fin d → E} (hu : Orthonormal 𝕜 u)
     (hv : Orthonormal 𝕜 v) : ℕ →₀ ℝ :=
   (overlapOp hu hv).singularValues
@@ -102,6 +106,7 @@ theorem cosPrincipalAngles_comm {u v : Fin d → E} (hu : Orthonormal 𝕜 u)
 
 /-- **The squared Frobenius sine** `‖sin Θ‖²_F = ∑ᵢ sin²θᵢ = ∑ᵢ (1 − cos²θᵢ)`
 between the subspaces spanned by two orthonormal families of the same size. -/
+@[expose]
 noncomputable def sinThetaSq {u v : Fin d → E} (hu : Orthonormal 𝕜 u)
     (hv : Orthonormal 𝕜 v) : ℝ :=
   ∑ k : Fin d, (1 - cosPrincipalAngles hu hv (k : ℕ) ^ 2)

@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 
 
 /-!
@@ -26,6 +28,8 @@ This module is independent of Davis--Kahan spectral-gap assumptions.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 
@@ -122,6 +126,7 @@ theorem GramLowerBound.injective {X : F →ₗ[𝕜] E} {ε : ℝ}
   (hgram.lowerFrameBound hε.le).injective hε
 
 /-- The positive square root of the Gram operator `X⋆ X`. -/
+@[expose]
 noncomputable def trialGramSqrt (X : F →ₗ[𝕜] E) : F →ₗ[𝕜] F :=
   X.isPositive_adjoint_comp_self.sqrt
 
@@ -155,6 +160,7 @@ theorem trialGramSqrt_injective {X : F →ₗ[𝕜] E}
 
 /-- For an injective trial map, the positive Gram square root is an invertible
 coordinate map. -/
+@[expose]
 noncomputable def trialGramSqrtEquiv (X : F →ₗ[𝕜] E)
     (hX : Function.Injective X) : F ≃ₗ[𝕜] F :=
   let hinj := trialGramSqrt_injective hX
@@ -180,6 +186,7 @@ theorem norm_trialGramSqrtEquiv_apply (X : F →ₗ[𝕜] E)
   exact norm_trialGramSqrt_apply X x
 
 /-- Isometric polar factor of an injective rectangular trial map. -/
+@[expose]
 noncomputable def orthonormalizedEmbedding (X : F →ₗ[𝕜] E)
     (hX : Function.Injective X) : F →ₗᵢ[𝕜] E where
   toLinearMap := X ∘ₗ (trialGramSqrtEquiv X hX).symm.toLinearMap
@@ -230,6 +237,7 @@ structure TrialMapFrameFactorization (X : F →ₗ[𝕜] E) where
   range_eq : LinearMap.range isometry.toLinearMap = LinearMap.range X
 
 /-- The canonical Gram/polar factorization of an injective trial map. -/
+@[expose]
 noncomputable def trialMapFrameFactorization (X : F →ₗ[𝕜] E)
     (hX : Function.Injective X) : TrialMapFrameFactorization X where
   isometry := orthonormalizedEmbedding X hX

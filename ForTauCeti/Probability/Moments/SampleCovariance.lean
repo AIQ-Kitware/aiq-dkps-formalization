@@ -15,9 +15,10 @@ sample-mean second-moment identity applied to the coordinate products.
 
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 -/
+module
 
-import ForTauCeti.Probability.Moments.MatrixConcentration
-import ForTauCeti.Probability.Moments.SampleMean
+public import ForTauCeti.Probability.Moments.MatrixConcentration
+public import ForTauCeti.Probability.Moments.SampleMean
 
 /-!
 # SampleCovariance
@@ -35,6 +36,8 @@ import ForTauCeti.Probability.Moments.SampleMean
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 
 open scoped Matrix ENNReal

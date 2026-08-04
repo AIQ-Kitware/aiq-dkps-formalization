@@ -22,10 +22,11 @@ Appl. 6 (1963), Theorem 4.1 (pp. 168–170).  See
 `TauCeti/prose/non-distributable/Davis-1963-...tex` lines 641–754 and the
 decomposition in `.mathlib-quality/decomposition.md`.
 -/
+module
 
-import Mathlib.Analysis.Convex.Birkhoff
-import Mathlib.GroupTheory.Perm.Support
-import ForTauCeti.Analysis.InnerProductSpace.SchurHorn
+public import Mathlib.Analysis.Convex.Birkhoff
+public import Mathlib.GroupTheory.Perm.Support
+public import ForTauCeti.Analysis.InnerProductSpace.SchurHorn
 
 
 /-! # Davis's eigenvalue-change lower bound (Davis 1963, Theorem 4.1)
@@ -59,6 +60,8 @@ no vector-majorization API is needed.
 * Chandler Davis, *The rotation of eigenvectors by a perturbation*, J. Math. Anal. Appl.
   6 (1963), 159–173, Theorem 4.1.
 -/
+
+public section
 
 namespace TauCeti
 

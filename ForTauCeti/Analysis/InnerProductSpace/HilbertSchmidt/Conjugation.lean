@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space
 
 /-!
 # Conjugating a Hilbert–Schmidt operator by isometries
@@ -37,6 +39,8 @@ argument needs; no source is followed for its presentation.
 *New.*  The donor obtains the same invariance from the tensor factorisation
 `U ⊗ conj V` of the conjugation map; nothing of that is used or reproduced.
 -/
+
+public section
 
 open scoped ENNReal NNReal
 

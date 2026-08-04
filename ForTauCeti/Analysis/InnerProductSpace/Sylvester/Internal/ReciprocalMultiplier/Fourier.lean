@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.OrbitAction
-import ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel
-import Mathlib.Analysis.Convex.Integral
-import Mathlib.Analysis.Real.Pi.Bounds
-import Mathlib.MeasureTheory.SpecificCodomains.Pi
-import Mathlib.LinearAlgebra.Lagrange
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.OrbitAction
+public import ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel
+public import Mathlib.Analysis.Convex.Integral
+public import Mathlib.Analysis.Real.Pi.Bounds
+public import Mathlib.MeasureTheory.SpecificCodomains.Pi
+public import Mathlib.LinearAlgebra.Lagrange
 
 /-!
 # Finite Fourier interpolation of the reciprocal
@@ -50,6 +52,8 @@ before the sin-Θ closure moved into the staging layer.
 Literature bridge for the group as a whole:
 `prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex`.
 -/
+
+public section
 
 namespace TauCeti
 
@@ -249,6 +253,7 @@ finite real frequency arrays.
 The certificate is deliberately independent of Hilbert spaces, matrix units,
 singular values, and norms on operators.  Its coefficient mass is the finite
 analogue of the total variation of the classical reciprocal Fourier measure. -/
+@[expose]
 def HasFiniteReciprocalFourierInterpolation
     {m n : ℕ} (α : Fin m → ℝ) (β : Fin n → ℝ)
     (δ mass : ℝ) : Prop :=
@@ -275,6 +280,7 @@ def HasApproximateFiniteReciprocalFourierInterpolation
 /-- A reciprocal interpolation on real coordinate matrix units after doubling
 both Hilbert spaces.  Complex Fourier coefficients have been replaced by real
 weights and coordinatewise orthogonal rotations. -/
+@[expose]
 def HasDoubledRealReciprocalOrbitInterpolation
     {ER FR : Type*}
     [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
@@ -749,6 +755,7 @@ the orbit average by the coordinate difference gives `δ` times the matrix
 unit.  Positive separation guarantees that this is equivalent to reciprocal
 interpolation, while the division-free form is substantially more robust in
 the downstream finite algebra. -/
+@[expose]
 def HasReciprocalOrbitInterpolation
     (eF : OrthonormalBasis (Fin (Module.finrank 𝕜 F)) 𝕜 F)
     (eE : OrthonormalBasis (Fin (Module.finrank 𝕜 E)) 𝕜 E)

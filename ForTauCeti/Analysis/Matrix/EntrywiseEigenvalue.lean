@@ -12,10 +12,11 @@ addition to `Mathlib/Analysis/Matrix/Spectrum.lean`
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); golfed (collapse a
 `have … := by rw [map_sub]; rw [hsub]` to a single `rw [← map_sub]`).
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
-import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
+public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
+public import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
 
 
 /-! # Eigenvalue perturbation from entrywise closeness
@@ -44,6 +45,8 @@ matrices are entrywise `ε`-close, their sorted eigenvalues differ by at most
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 open scoped Matrix
 open Module

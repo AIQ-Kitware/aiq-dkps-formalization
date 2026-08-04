@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Lp
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Lp
 
 /-!
 # `ℓ²` of columns as *the* Hilbert–Schmidt space
@@ -48,6 +50,8 @@ structure intact.  The proofs share nothing with the donor's: they are three
 short consequences of `ofLp_columns` and `columns_ofLp`, where the donor's go
 through the universal property of the tensor product.
 -/
+
+public section
 
 open scoped ENNReal NNReal
 

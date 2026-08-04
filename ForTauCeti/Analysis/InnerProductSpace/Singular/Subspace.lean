@@ -21,11 +21,12 @@ eigenvalue invariance of a symmetric operator under unitary conjugation
 (`eigenvalues_conj_unitary`, a Courant–Fischer consequence) applied to the polar
 identity `A A⋆ = U (A⋆A) U⁻¹` with `U = choosePolarUnitary A`.
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.SingularValues
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.SchurHorn
-import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
+public import Mathlib.Analysis.InnerProductSpace.SingularValues
+public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import ForTauCeti.Analysis.InnerProductSpace.SchurHorn
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
 
 
 /-! # Gram-operator perturbation
@@ -58,6 +59,8 @@ terms of `Â − A`.
 * Y. Yu, T. Wang, R. J. Samworth, *A useful variant of the Davis–Kahan theorem
   for statisticians*, Biometrika 102 (2015), §"singular-vector extension".
 -/
+
+public section
 
 namespace TauCeti
 

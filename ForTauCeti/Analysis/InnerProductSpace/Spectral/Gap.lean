@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 
 /-!
 # Finite-dimensional spectral-gap predicates
@@ -31,6 +33,8 @@ inner-product-space component into `ForTauCeti`: before that this file's import
 closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -43,6 +47,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
 /-- Two restricted spectra are separated by at least `δ`. -/
+@[expose]
 def SpectraSeparated (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
     (B : F →ₗ[𝕜] F) (V : Submodule 𝕜 F) (δ : ℝ) : Prop :=
   ∀ lam μ, lam ∈ restrictedSpectrum A U → μ ∈ restrictedSpectrum B V →
@@ -50,6 +55,7 @@ def SpectraSeparated (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
 
 /-- The mixed separation used by the `sin Θ` theorem: the selected block of
 `A` is separated from the complementary block of `B`. -/
+@[expose]
 def HybridGap (A B : E →ₗ[𝕜] E) (U V : Submodule 𝕜 E) (δ : ℝ) : Prop :=
   SpectraSeparated A U B Vᗮ δ
 
@@ -61,6 +67,7 @@ the sharp `tan (2Θ)` theorem: interlacing spectra can satisfy absolute
 separation while an off-diagonal perturbation produces a quarter-turn angle.
 That theorem requires `OrderedInternalGap` (or an equivalent two-sided form
 ordering). -/
+@[expose]
 def InternalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (δ : ℝ) : Prop :=
   SpectraSeparated A U A Uᗮ δ
 
@@ -75,12 +82,14 @@ def TwoBlockFormGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
     (∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_𝕜 ≤ a * ‖x‖ ^ 2)
 
 /-- The interval/exterior form of the mixed gap. -/
+@[expose]
 def IntervalExteriorGap (A B : E →ₗ[𝕜] E) (U V : Submodule 𝕜 E)
     (a b δ : ℝ) : Prop :=
   SpectrumIn A U (Set.Icc a b) ∧
     SpectrumIn B Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}
 
 /-- The one-sided gap used by the tangent theorems. -/
+@[expose]
 def OrderedGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
     (B : F →ₗ[𝕜] F) (V : Submodule 𝕜 F) (δ : ℝ) : Prop :=
   ∀ lam μ, lam ∈ restrictedSpectrum A U → μ ∈ restrictedSpectrum B V →

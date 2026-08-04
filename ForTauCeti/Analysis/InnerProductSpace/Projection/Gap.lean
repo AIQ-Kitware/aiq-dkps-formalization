@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 
 /-!
 # Gap geometry for orthogonally complemented subspaces
 
 The symmetric and directed projection gaps over arbitrary `RCLike` scalars.
 -/
+
+public section
 
 
 open scoped InnerProductSpace
@@ -20,11 +24,13 @@ variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 namespace Submodule
 
 /-- Operator-norm gap between two orthogonal projections. -/
+@[expose]
 noncomputable def projectionGap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   ‖U.starProjection - V.starProjection‖
 
 /-- Directed gap from `U` to `V`. -/
+@[expose]
 noncomputable def directedProjectionGap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   ‖Vᗮ.starProjection ∘L U.starProjection‖

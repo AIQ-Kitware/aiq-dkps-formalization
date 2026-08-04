@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
 
 /-!
 # Spectral projections commute with the unitary group
@@ -36,6 +38,8 @@ spectral projections and the flow.
 `YosidaApproximation.lean` and `SkewAdjointExponential.lean`; this is the
 composition none of them performs.
 -/
+
+public section
 
 open scoped InnerProductSpace
 open Complex Filter Topology

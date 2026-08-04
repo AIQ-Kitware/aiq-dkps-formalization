@@ -18,9 +18,11 @@ Authors: Jon Crall, GPT 5.6 High
 * Original authors / copyright: Jon Crall; Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none** -- imports are `ForTauCeti` leaves and Mathlib.
 -/
-import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import Mathlib.Analysis.InnerProductSpace.Rayleigh
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import Mathlib.Analysis.InnerProductSpace.Rayleigh
 
 /-!
 # The real spectral-order bridge
@@ -65,6 +67,8 @@ spectral-radius supremum into the upper endpoint `c`.  A bound of the form
 Downstream real results reduce to this single theorem, so it should not be
 replaced by an opaque real-spectrum definition.
 -/
+
+public section
 
 namespace TauCeti
 namespace SpectralOrder

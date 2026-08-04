@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics
-import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.Gram.Operator
-import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.Gram.Operator
+public import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
 
 /-!
 # Singular-subspace Davis--Kahan and Wedin-style corollaries
@@ -39,6 +41,8 @@ closure this file rests on out of `ForMathlib` and `DavisKahan` entirely, so the
 last edge to sever was this one.
 
 -/
+
+public section
 
 namespace TauCeti
 

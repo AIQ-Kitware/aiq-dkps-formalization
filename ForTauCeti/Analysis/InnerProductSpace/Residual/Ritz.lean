@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 
 /-!
 # Ritz compression and residual
@@ -34,6 +36,8 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -51,6 +55,7 @@ noncomputable def compression (A : E →ₗ[𝕜] E) (X : F →ₗᵢ[𝕜] E) :
 
 /-- Residual of an approximate invariant pair represented by an isometric
 embedding. -/
+@[expose]
 noncomputable def residual (A : E →ₗ[𝕜] E) (X : F →ₗᵢ[𝕜] E)
     (M : F →ₗ[𝕜] F) : F →ₗ[𝕜] E :=
   A ∘ₗ X.toLinearMap - X.toLinearMap ∘ₗ M
@@ -62,6 +67,7 @@ noncomputable def ritzResidual (A : E →ₗ[𝕜] E) (X : F →ₗᵢ[𝕜] E) 
   residual A X (compression A X)
 
 /-- The represented approximate subspace. -/
+@[expose]
 def approximateSubspace (X : F →ₗᵢ[𝕜] E) : Submodule 𝕜 E :=
   LinearMap.range X.toLinearMap
 

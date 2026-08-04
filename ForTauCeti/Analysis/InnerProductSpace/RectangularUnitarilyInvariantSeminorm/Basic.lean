@@ -3,14 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.KyFan
-import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
-import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
-import Mathlib.Analysis.InnerProductSpace.ProdL2
-import Mathlib.Analysis.Convex.Caratheodory
+public import ForTauCeti.Analysis.InnerProductSpace.KyFan
+public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
+public import Mathlib.Analysis.Convex.Caratheodory
 
 /-!
 # Rectangular unitarily invariant norms: the structure and its basic laws
@@ -33,6 +34,8 @@ the domain or the codomain.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 
@@ -65,6 +68,7 @@ structure RectangularUnitarilyInvariantSeminorm (𝕜 E F : Type*)
 namespace RectangularUnitarilyInvariantSeminorm
 
 /-- Prefix sum of singular values for a rectangular map. -/
+@[expose]
 noncomputable def rectangularKyFanSum (k : ℕ) (A : E →ₗ[𝕜] F) : ℝ :=
   ∑ i : Fin k, A.singularValues (i : ℕ)
 
@@ -123,6 +127,7 @@ barycentric target for the arbitrary-spectrum `π/2` proof.
 The definition is field-uniform: over `ℝ`, the only scalar phases absorbed into
 the orbit are the real unitary signs, while a complex proof must descend to a
 real orbit before invoking this API. -/
+@[expose]
 def twoSidedUnitaryOrbit (C : E →ₗ[𝕜] F) : Set (E →ₗ[𝕜] F) :=
   {Y | ∃ (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E),
     Y = U.toLinearMap ∘ₗ C ∘ₗ V.toLinearMap}
@@ -136,6 +141,7 @@ norms is at most `mass`.
 For the arbitrary-spectrum `π/2` theorem, the difficult analytic task is exactly
 to construct such a certificate for `((δ : 𝕜) • X)` from the Sylvester defect
 `C` with mass `π / 2`. -/
+@[expose]
 def HasFiniteUnitaryOrbitCertificate
     (mass : ℝ) (X C : E →ₗ[𝕜] F) : Prop :=
   ∃ n : ℕ, ∃ a : Fin n → 𝕜,
@@ -369,6 +375,7 @@ theorem apply_eq_of_singularValues_eq {A B : E →ₗ[𝕜] F}
 /-- Pull a rectangular UI norm back along an isometric embedding of the
 codomain.  The transported norm measures `A : E → H` by measuring
 `ι ∘ A : E → F`. -/
+@[expose]
 noncomputable def codomainIsometryTransport
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]
@@ -413,6 +420,7 @@ noncomputable def codomainIsometryTransport
 /-- Pull a rectangular UI norm back along the adjoint of an isometric
 embedding of the domain.  The transported norm measures `A : H → F` by the
 zero-padded map `A ∘ ι⋆ : E → F`. -/
+@[expose]
 noncomputable def domainIsometryTransport
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]
