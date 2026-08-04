@@ -62,6 +62,118 @@ theorem sup_le_orthogonal_sup {K L M N : Submodule ℂ H} (h₁ : K ≤ Mᗮ)
 
 end OrthogonalPairs
 
+/-! ## How `U` and `V` sit across the trivial/generic split
+
+To show an assembled isometry carries `U₁` to `U₂` one has to split a vector of
+`U₁` into a trivial and a generic piece *that are themselves in `U₁`*, and know
+what the trivial piece looks like.  Both facts are recorded here; neither was in
+`TwoProjections.lean`, which carries the dual statements (the projections
+preserve the summands) but not these.
+-/
+
+section Structure
+
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+variable (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+  [V.HasOrthogonalProjection]
+
+omit [CompleteSpace H] in
+/-- The trivial part reduces the source projection. -/
+theorem starProjection_left_reduces_halmosTrivialPart :
+    U.starProjection.Reduces (halmosTrivialPart U V) :=
+  ContinuousLinearMap.IsSymmetric.reduces_of_invariant
+    U.starProjection_isSymmetric
+    fun y hy => projection_mem_halmosTrivialPart_left U V (x := y) hy
+
+omit [CompleteSpace H] in
+/-- The trivial part reduces the target projection. -/
+theorem starProjection_right_reduces_halmosTrivialPart :
+    V.starProjection.Reduces (halmosTrivialPart U V) :=
+  ContinuousLinearMap.IsSymmetric.reduces_of_invariant
+    V.starProjection_isSymmetric
+    fun y hy => projection_mem_halmosTrivialPart_right U V (x := y) hy
+
+/-- **`U` is split by the trivial/generic decomposition.**  The trivial-part
+projector maps `U` into itself, so a vector of `U` decomposes into a trivial and
+a generic piece each still in `U`. -/
+theorem starProjection_trivial_mem_left {x : H} (hx : x ∈ U) :
+    (halmosTrivialPart U V).starProjection x ∈ U := by
+  have h := ContinuousLinearMap.starProjection_apply_comm_of_reduces
+    U.starProjection (halmosTrivialPart U V)
+    (starProjection_left_reduces_halmosTrivialPart U V) x
+  rw [Submodule.starProjection_eq_self_iff.mpr hx] at h
+  exact h ▸ U.starProjection_apply_mem _
+
+/-- The same for `V`. -/
+theorem starProjection_trivial_mem_right {x : H} (hx : x ∈ V) :
+    (halmosTrivialPart U V).starProjection x ∈ V := by
+  have h := ContinuousLinearMap.starProjection_apply_comm_of_reduces
+    V.starProjection (halmosTrivialPart U V)
+    (starProjection_right_reduces_halmosTrivialPart U V) x
+  rw [Submodule.starProjection_eq_self_iff.mpr hx] at h
+  exact h ▸ V.starProjection_apply_mem _
+
+omit [CompleteSpace H] in
+/-- A vector in both `U` and `Uᗮ` is zero. -/
+private theorem eq_zero_of_mem_of_mem_orthogonal {K : Submodule ℂ H} {x : H}
+    (h₁ : x ∈ K) (h₂ : x ∈ Kᗮ) : x = 0 :=
+  inner_self_eq_zero.mp ((Submodule.mem_orthogonal _ _).mp h₂ x h₁)
+
+omit [CompleteSpace H] in
+/-- **The part of `U` inside the trivial summand is `common ⊔ source`.**  The
+other two elementary summands lie in `Uᗮ`, so they contribute nothing. -/
+theorem inf_halmosTrivialPart_left :
+    U ⊓ halmosTrivialPart U V =
+      halmosCommonPart U V ⊔ halmosSourceDefect U V := by
+  refine le_antisymm ?_ ?_
+  · rintro x ⟨hxU, hxT⟩
+    obtain ⟨p, hp, q, hq, rfl⟩ := Submodule.mem_sup.mp hxT
+    -- `p` already lies in `U`; hence so does `q`, which also lies in `Uᗮ`.
+    have hcsU : halmosCommonPart U V ⊔ halmosSourceDefect U V ≤ U :=
+      sup_le inf_le_left inf_le_left
+    have hteUc : halmosTargetDefect U V ⊔ halmosExteriorPart U V ≤ Uᗮ :=
+      sup_le inf_le_left inf_le_left
+    have hpU : p ∈ U := hcsU hp
+    have hqU : q ∈ U := by
+      have hq' : q = p + q - p := by abel
+      rw [hq']
+      exact U.sub_mem hxU hpU
+    have hqUc : q ∈ Uᗮ := hteUc hq
+    rw [eq_zero_of_mem_of_mem_orthogonal hqU hqUc, add_zero]
+    exact hp
+  · exact sup_le (le_inf inf_le_left (halmosCommonPart_le_trivial U V))
+      (le_inf inf_le_left (halmosSourceDefect_le_trivial U V))
+
+omit [CompleteSpace H] in
+/-- **The part of `V` inside the trivial summand is `common ⊔ target`.** -/
+theorem inf_halmosTrivialPart_right :
+    V ⊓ halmosTrivialPart U V =
+      halmosCommonPart U V ⊔ halmosTargetDefect U V := by
+  refine le_antisymm ?_ ?_
+  · rintro x ⟨hxV, hxT⟩
+    obtain ⟨p, hp, q, hq, rfl⟩ := Submodule.mem_sup.mp hxT
+    -- Here the `V`-part is split across the two halves, so regroup by hand.
+    obtain ⟨c, hc, s, hs, rfl⟩ := Submodule.mem_sup.mp hp
+    obtain ⟨t, ht, e, he, rfl⟩ := Submodule.mem_sup.mp hq
+    have hcV : c ∈ V := hc.2
+    have htV : t ∈ V := ht.2
+    have hsVc : s ∈ Vᗮ := hs.2
+    have heVc : e ∈ Vᗮ := he.2
+    have hrest : s + e ∈ V := by
+      have : s + e = c + s + (t + e) - (c + t) := by abel
+      rw [this]
+      exact V.sub_mem hxV (V.add_mem hcV htV)
+    have hrestc : s + e ∈ Vᗮ := Vᗮ.add_mem hsVc heVc
+    have hse : s + e = 0 := eq_zero_of_mem_of_mem_orthogonal hrest hrestc
+    have hsplit : c + s + (t + e) = c + t + (s + e) := by abel
+    rw [hsplit, hse, add_zero]
+    exact Submodule.mem_sup.mpr ⟨c, hc, t, ht, rfl⟩
+  · exact sup_le (le_inf inf_le_right (halmosCommonPart_le_trivial U V))
+      (le_inf inf_le_right (halmosTargetDefect_le_trivial U V))
+
+end Structure
+
 variable (U₁ V₁ : Submodule ℂ H₁) [U₁.HasOrthogonalProjection]
   [V₁.HasOrthogonalProjection]
 variable (U₂ V₂ : Submodule ℂ H₂) [U₂.HasOrthogonalProjection]
