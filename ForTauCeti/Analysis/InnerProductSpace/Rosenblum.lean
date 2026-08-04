@@ -246,7 +246,9 @@ theorem ae_cayleyInv_mem_spectrum (v : E) :
           (cayleyInv hA ⁻¹' (Complex.ofReal ⁻¹' resolventSet A)) := by
     rw [show (spectralPVM hA).diag v
         = Measure.map (cayleyInv hA) (BorelCalculus.diagMeasure (isStarNormal_cayley hA) v)
-      from rfl, Measure.map_apply (measurable_cayleyInv hA) hmeas]
+      from by
+        rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag, BorelCalculus.specDiag_def],
+      Measure.map_apply (measurable_cayleyInv hA) hmeas]
   rw [hmap] at hzero
   have := MeasureTheory.compl_mem_ae_iff.mpr hzero
   filter_upwards [this] with w hw

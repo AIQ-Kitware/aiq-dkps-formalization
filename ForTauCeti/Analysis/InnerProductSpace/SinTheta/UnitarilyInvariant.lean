@@ -75,6 +75,7 @@ instance: two-sided unitary invariance is precisely
 `opNorm_comp_linearIsometryEquiv` / `opNorm_linearIsometryEquiv_comp`.  Its
 existence shows the `UnitarilyInvariantSeminorm` structure is inhabited, so the
 part-III theorem below is not vacuous. -/
+@[expose]
 noncomputable def opNorm (𝕜 E : Type*) [RCLike 𝕜] [NormedAddCommGroup E]
     [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : UnitarilyInvariantSeminorm 𝕜 E where
   toFun A := ‖LinearMap.toContinuousLinearMap A‖

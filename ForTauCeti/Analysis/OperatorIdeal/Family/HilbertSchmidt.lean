@@ -306,6 +306,7 @@ This is the second instance of `TauCeti.SymmetricOperatorIdealFamily`, after the
 families of `DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean`.  The two are
 built from unrelated mathematics — approximation numbers there, orthonormal expansions here
 — which is the evidence that the structure captures the right notion. -/
+@[expose]
 noncomputable def hilbertSchmidtIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
     SymmetricOperatorIdealFamily.{u, v} 𝕜 where
   gauge A := A.hilbertSchmidtENorm

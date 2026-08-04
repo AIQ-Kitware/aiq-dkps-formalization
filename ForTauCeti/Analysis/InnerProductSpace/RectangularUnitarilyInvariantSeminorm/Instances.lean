@@ -241,6 +241,7 @@ theorem singularValues_zeroExtension (A : E →ₗ[𝕜] F) :
       singularValues_comp_adjoint_linearIsometry ιE A
 
 /-- Operator norm as a rectangular UI norm. -/
+@[expose]
 noncomputable def opNorm : RectangularUnitarilyInvariantSeminorm 𝕜 E F where
   toFun A := ‖A.toContinuousLinearMap‖
   add_le' A B := by
@@ -264,6 +265,7 @@ continuous-linear-map view, definitionally. -/
     opNorm A = ‖A.toContinuousLinearMap‖ := (rfl)
 
 /-- Frobenius/Hilbert--Schmidt norm as a rectangular UI norm. -/
+@[expose]
 noncomputable def frobenius : RectangularUnitarilyInvariantSeminorm 𝕜 E F where
   toFun A := Real.sqrt
     (∑ i, ‖A (stdOrthonormalBasis 𝕜 E i)‖ ^ 2)
@@ -429,6 +431,7 @@ theorem rectangularKyFanSum_add_le (k : ℕ)
   exact kyFanSum_add_le k _ _
 
 /-- Ky Fan `k`-norm. -/
+@[expose]
 noncomputable def kyFan (k : ℕ) : RectangularUnitarilyInvariantSeminorm 𝕜 E F where
   toFun A := rectangularKyFanSum k A
   add_le' A B := rectangularKyFanSum_add_le k A B
@@ -441,6 +444,7 @@ noncomputable def kyFan (k : ℕ) : RectangularUnitarilyInvariantSeminorm 𝕜 E
     rw [singularValues_unitary_comp, singularValues_comp_unitary]
 
 /-- Nuclear/trace norm. -/
+@[expose]
 noncomputable def nuclear : RectangularUnitarilyInvariantSeminorm 𝕜 E F :=
   kyFan (finrank 𝕜 E)
 
@@ -556,6 +560,7 @@ theorem nuclear_le_sqrt_finrank_mul_frobenius (A : E →ₗ[𝕜] F) :
 end RectangularUnitarilyInvariantSeminorm
 
 /-- Restrict a rectangular UI norm to square maps. -/
+@[expose]
 noncomputable def RectangularUnitarilyInvariantSeminorm.toSquare
     (N : RectangularUnitarilyInvariantSeminorm 𝕜 E E) :
     UnitarilyInvariantSeminorm 𝕜 E where
@@ -573,6 +578,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 
 /-- Embed the existing square abstraction into the rectangular API. -/
+@[expose]
 noncomputable def toRectangular
     (N : UnitarilyInvariantSeminorm 𝕜 E) :
     RectangularUnitarilyInvariantSeminorm 𝕜 E E where

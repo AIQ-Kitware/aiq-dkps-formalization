@@ -65,6 +65,7 @@ noncomputable section
 
 /-- The complexification of a real normed space, represented by its real and
 imaginary coordinates with the L2 product norm. -/
+@[expose]
 def RealComplexification (E : Type*) := WithLp 2 (E × E)
 
 namespace RealComplexification
@@ -102,14 +103,17 @@ instance instNormedSpaceReal [NormedAddCommGroup E] [NormedSpace ℝ E] :
   inferInstanceAs (NormedSpace ℝ (WithLp 2 (E × E)))
 
 /-- Construct a complexified vector from its real and imaginary coordinates. -/
+@[expose]
 def mk (x y : E) : RealComplexification E :=
   WithLp.toLp 2 (x, y)
 
 /-- The real coordinate of a complexified vector. -/
+@[expose]
 def re (z : RealComplexification E) : E :=
   (WithLp.ofLp z).1
 
 /-- The imaginary coordinate of a complexified vector. -/
+@[expose]
 def im (z : RealComplexification E) : E :=
   (WithLp.ofLp z).2
 
@@ -285,6 +289,7 @@ def ofReal [NormedAddCommGroup E] [InnerProductSpace ℝ E] :
   apply RealComplexification.ext <;> simp
 
 /-- Complex conjugation on the complexification. -/
+@[expose]
 def conjugation [NormedAddCommGroup E] [InnerProductSpace ℝ E] :
     RealComplexification E →ₗᵢ[ℝ] RealComplexification E where
   toFun z := mk (re z) (-im z)
@@ -318,6 +323,7 @@ def conjugation [NormedAddCommGroup E] [InnerProductSpace ℝ E] :
   module
 
 /-- Coordinatewise extension of a bounded real-linear operator. -/
+@[expose]
 def complexify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F]
     (T : E →L[ℝ] F) : RealComplexification E →L[ℂ] RealComplexification F := by
@@ -500,6 +506,7 @@ rectangular one while `Complexification/FunctionalCalculus.lean` and
 `OperatorIdeal/ApproximationNumbers/Real/Threshold.lean` had the square case,
 which is this at `F = E`.  This module is the only one all three consumers
 import, so it is where the general form belongs. -/
+@[expose]
 noncomputable def realPartOperator [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F]
     (T : RealComplexification E →L[ℂ] RealComplexification F) : E →L[ℝ] F := by
@@ -549,6 +556,7 @@ theorem im_apply_ofReal_eq_zero [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 Paired with `complexify_realify` this says `complexify` is a bijection onto the operators
 commuting with `conjugation` — the surjectivity half that `complexify_injective` leaves open. -/
+@[expose]
 noncomputable def realify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F]
     (T : RealComplexification E →L[ℂ] RealComplexification F) : E →L[ℝ] F :=

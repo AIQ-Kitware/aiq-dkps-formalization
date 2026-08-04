@@ -572,6 +572,7 @@ theorem sqrt_sum_add_sq_le {m : ℕ} (f g : Fin m → ℝ) :
 
 /-- **The Frobenius (Hilbert–Schmidt) norm as a unitarily invariant norm.**
 `A ↦ √(∑ᵢ ‖A bᵢ‖²)` over the standard orthonormal basis. -/
+@[expose]
 noncomputable def frobenius (𝕜 E : Type*) [RCLike 𝕜] [NormedAddCommGroup E]
     [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : UnitarilyInvariantSeminorm 𝕜 E where
   toFun A := Real.sqrt (∑ i, ‖A (stdOrthonormalBasis 𝕜 E i)‖ ^ 2)
