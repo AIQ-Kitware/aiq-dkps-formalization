@@ -91,6 +91,36 @@ classification below as the real state, not the number.
   *"Consumed from `MajorizationAndAngles`"*, which never declares them. A reviewer reading the
   signature file would assign ownership contrary to the prose.
 
+## The namespace migration is a decision, not cleanup — attempted and reverted
+
+`ForTauCeti/README.md` carries a TODO to move ~39 files off root Mathlib namespaces, on the
+grounds that "Tau Ceti never extends a root Mathlib namespace". Measured with namespace
+nesting tracked properly, that is **39 files and 318 declarations** — the README's estimate
+was right. (A grep for `^namespace ContinuousLinearMap` reports 66, because Lean does not
+indent a nested namespace, so root-level and nested-inside-`TauCeti` look identical.)
+
+**Do not start this as a mechanical lane.** Three things say so:
+
+1. **`check_namespace_policy.py` passes today.** It allowlists 12 root Mathlib namespaces
+   with a stated reason for each ("facts about a `LinearMap`, including its `IsPositive` /
+   `IsSymmetric` predicates"). By this repository's own gate the current state is correct.
+2. **`MinMax.lean` documents the opposite decision, deliberately**, under a `Namespace note`:
+   declarations extend `ContinuousLinearMap` "so that dot notation resolves and the names
+   match the eventual Mathlib upstreaming target … Lean field projection binds `T.foo` only
+   to the literal `ContinuousLinearMap.foo` and does not consult the enclosing `TauCeti`
+   namespace. This is a deliberate API choice, **flagged for Tau Ceti maintainer review**."
+3. **The cost is `open` churn, which is the thing this work is meant to avoid.** A trial
+   migration of the three smallest files (`SetTheory/Cardinal/Lift`, `Topology/ENNRealLiminf`,
+   `LinearAlgebra/Dimension/RankComp`) cascaded immediately: `RankComp` needed `open LinearMap`
+   for bare names that had resolved through the enclosing root namespace, and four
+   `ApproximationNumber` modules then needed `open TauCeti`, with more behind them. Reverted;
+   the tree is green.
+
+So the question is not "when do we do the migration" but "does Tau Ceti want dot notation on
+`ContinuousLinearMap`, or names under `TauCeti`?" That is a maintainer decision, the repo has
+already flagged it as one, and doing it unilaterally would either break `T.foo` everywhere or
+require an `open TauCeti.ContinuousLinearMap` in every consumer.
+
 ## What the gates cannot see
 
 `check_duplicate_qualified_names` reports 0 and is correct — it compares *names*. It cannot
