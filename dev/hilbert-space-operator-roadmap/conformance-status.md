@@ -3,7 +3,7 @@
 Measured with `scripts/check_roadmap_delivered.py`, which reads
 `submodules/TauCetiRoadmap/TauCetiRoadmap/HilbertSpaceOperatorTheory`.
 
-**189/198 name matches (95.5%)**, from 174/198 (87.9%) at the start of the conformance pass.
+**193/198 name matches (97.5%)**, from 174/198 (87.9%) at the start of the conformance pass.
 
 Note that removing the false hypotheses from `upperHemicontinuousAt_isMinOn` did **not** move
 this number, because the checker was already counting it as delivered on the strength of the
@@ -14,11 +14,11 @@ the classification below instead of the number.
 | topic | | |
 |---|---|---|
 | MajorizationAndAngles | 26/26 | 100% |
+| OperatorIdeals | 39/39 | 100% |
 | SelfAdjointSpectralTheory | 35/35 | 100% |
+| HilbertSpaceOperatorFoundations | 49/51 | 96.1% |
 | SpectralSubspacePerturbation | 24/25 | 96.0% |
-| OperatorIdeals | 37/39 | 94.9% |
-| HilbertSpaceOperatorFoundations | 48/51 | 94.1% |
-| MatrixSpectralStatistics | 19/22 | 86.4% |
+| MatrixSpectralStatistics | 20/22 | 90.9% |
 
 **The percentage is softer than it looks, in both directions.** Name matching over-counts
 (a delivered declaration can carry hypotheses the roadmap does not) and under-counts
@@ -225,48 +225,74 @@ restatement of a `private` lemma in `SkewAdjointExponential.lean`, differing onl
 ## The largest mechanical-submission gap: the module system
 
 Upstream Tau Ceti is **1212/1212 files** on Lean's module system (`module`, `public import`,
-`public section`). `ForTauCeti` is **68/192**, plus 13 files carrying a `public section` that
+`public section`). `ForTauCeti` was **68/192**, plus 13 files carrying a `public section` that
 does nothing because the file is not a `module`. Every unconverted file is hand-work at
 submission time, so this — not the remaining name matches — is what stands between here and a
 mechanical port.
 
-Conversion was attempted and reverted. The measured result, which is the useful part:
+The conversion lives on the branch **`module-system-conversion`**, not on `main`, because it is
+not green yet: **27 errors in 13 files**, down from 90. It is off `main` so downstream stays
+green, and it is pushed so the remaining work is reviewable rather than lost.
 
-* `dev/hilbert-space-operator-roadmap/module-system-conversion.py` converts a file
-  mechanically (insert `module` after the copyright block, `import` → `public import`, add
-  `public section` after the module docstring). It handled all 124 files.
-* Conversion is **all-or-nothing**: a `module` may not import a non-`module`, so no
+What the branch establishes:
+
+* Conversion is **all-or-nothing**. A `module` may not import a non-`module`, so no
   downward-closed subset short of the whole package builds.
-* **114 of 124** then compiled with no further work.
-* The rest needed two things. Missing imports, because the module system drops transitive
-  name visibility — `Finset.sum_le_sum`, `Finite.bddAbove_range` and friends must be imported
-  directly, and Lean names them precisely (`Unknown constant`). And exposed definition bodies,
-  which Lean also names precisely, under `definitions were not unfolded because their
-  definition is not exposed`.
-* That left **20 errors in 8 files**: `Polar/Decomposition`, `Normed/SymmetricGauge`,
-  `GramBandPolar`, `Spectral/Subspace`, `BoundedOperator/SinTheta`, `EnergyComparison`,
-  `Rosenblum`, `SpectralProjectionGroup`.
+* The mechanical part is genuinely mechanical, and
+  `dev/hilbert-space-operator-roadmap/module-system-conversion.py` does it: insert `module`
+  after the copyright block, `import` → `public import`, add `public section` after the module
+  docstring. It handled all 124 files.
+* The diff is **structural only** — 234 `module`/`public section` lines, 49 `@[expose]`, two
+  Mathlib imports, two hand edits. **No theorem statement changed.**
+* Two classes of breakage, both of which Lean names precisely. Missing imports, because the
+  module system drops transitive name visibility (`Unknown constant Finset.sum_le_sum`,
+  `Finite.bddAbove_range`). And unexposed definition bodies, under `definitions were not
+  unfolded because their definition is not exposed`.
+* Exposure density ends at 53/192 = 0.28 per file, against upstream's 305/1212 = 0.25. The
+  attribute is not being over-applied relative to the destination.
 
-The reason to stop rather than push through is a decision already recorded in the tree.
-`spectralPVM` in `LinearPMap/SpectralMeasure/Construction.lean` documents that its `@[expose]`
-was **removed** once `spectralPVM_def`, `specProjection_def`, `toProjValMeasure_proj`/`_diag`
-and `specProj_def`/`specDiag_def` retired every consumer, at a cost of zero sites — and draws
-the general rule: a consumer that rewrites by lemma rather than reducing through a body does
-not care whether the body is exposed. Blanket `@[expose]` is the style that note moved away
-from. Finishing in house style means writing the `_def` lemmas and rewiring the call sites in
-those 8 files, which is real work, not a mechanical pass.
+### What is left, and why it is proof work
 
-The converter script skipped `spectralPVM` by luck — its "already annotated" guard matched the
-word *exposed* in that very docstring. Anyone rerunning it should not rely on that.
+Seven of the 27 are `change` tactics in `GramSpectralRank` that unfold `specProjection`. That
+definition's docstring in `LinearPMap/SpectralMeasure/Construction.lean` records a deliberate
+decision: its `@[expose]` was **removed** once `spectralPVM_def`, `specProjection_def`,
+`toProjValMeasure_proj`/`_diag` and `specProj_def`/`specDiag_def` retired every consumer, at a
+cost of zero sites — and draws the general rule that a consumer which rewrites by lemma rather
+than reducing through a body does not care whether the body is exposed. Exposing it again would
+undo that. `specProjection` and `spectralPVM` are therefore denylisted in the fixer, and those
+seven sites need rewiring to the `_def` lemmas.
 
-## `PosDef` collides with an unrelated upstream file
+The other 20 are `rfl`, `introN`, projection and type-mismatch failures in `SinTheta`,
+`SpectralGrid`, `SymmetricGauge`, `SpectralOrder/Complex`, `Spectral/Subspace`,
+`PrincipalAngles`, `Rosenblum`, `StoneUniqueness`, `EnergyComparison`, `DiagonalExample` and
+`SpectralProjectionGroup` — each a proof that reduced through a body and now needs a lemma.
+
+The house-style pattern is already demonstrated on the branch. `extendSymbol` gained
+`extendSymbol_apply_of_not_mem` and `extendSymbol_eq_indicator`; two `simp [extendSymbol, ...]`
+call sites in `Polar/Decomposition` collapsed to `exact extendSymbol_eq_indicator _ _ fun _ _ =>
+rfl`, and the body no longer has to be reducible for them. One structural rule also surfaced:
+an `@[expose]` definition may not reference a `private` one, which is why `operatorAbsRestrict`
+stopped being private.
+
+Two cautions for whoever picks this up. The converter's "already annotated" guard originally
+matched the word *exposed* in a docstring, which is the only reason it skipped `spectralPVM`;
+that guard is now precise and the denylist is explicit, so do not rely on luck. And a broad
+name harvest from error text annotates files without reducing errors — drive the fixer from
+Lean's own `not exposed` diagnostic, not from identifiers scraped out of type mismatches.
+
+## `PosDef` collided with an unrelated upstream file — retargeted
 
 `export_for_tauceti.py --check` failed on every module we would *add*, because a module absent
 upstream is by definition absent, and the check treated that as drift. It now reports those as
-`NEW` and fails only on genuine divergence. One survives:
+`NEW` and fails only on genuine divergence. That left one real failure.
 
-`ForTauCeti.LinearAlgebra.Matrix.PosDef` maps onto
-`external/TauCeti/TauCeti/LinearAlgebra/Matrix/PosDef.lean`, which already exists upstream as a
-different 112-line file with different content and its own copyright. `--write` would refuse it
-(it is not in `protected`), and should. The module needs either a different target name or a
-merge into the existing upstream file; it is the one place where submission is not a copy.
+`ForTauCeti.LinearAlgebra.Matrix.PosDef` targeted
+`external/TauCeti/TauCeti/LinearAlgebra/Matrix/PosDef.lean`, which already exists upstream and is
+about something else entirely: positive definiteness of an *integer* matrix, and whether
+positivity over `ℤ` survives casting to `ℚ`. Ours is rank-constrained PSD Gram factorization.
+Same path, unrelated subjects, so a merge would have been wrong; `--write` refuses it, correctly,
+since the module is not in `protected`.
+
+Retargeted in the manifest to `TauCeti.LinearAlgebra.Matrix.PosSemidefFactorization`, which
+describes the contents and no longer collides. The staging module keeps its name; only
+`final_tauceti_module` moved.

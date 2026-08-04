@@ -4457,7 +4457,7 @@
       ],
       "current_namespace": "ForMathlib.Matrix",
       "staging_module": "ForTauCeti.LinearAlgebra.Matrix.PosDef",
-      "final_tauceti_module": "TauCeti.LinearAlgebra.Matrix.PosDef",
+      "final_tauceti_module": "TauCeti.LinearAlgebra.Matrix.PosSemidefFactorization",
       "ownership_class": "tauceti",
       "roadmap_target": "Matrix rank factorization and PSD realization, Berge's maximum theorem and the approximate-minimizer lemma.",
       "provenance_class": "moved verbatim from the retired ForMathlib library; namespace deliberately unchanged (comparator pins)",
