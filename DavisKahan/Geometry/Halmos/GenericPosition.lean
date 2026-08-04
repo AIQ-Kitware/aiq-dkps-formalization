@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Geometry.Halmos.Assembly
+import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 
 /-!
 # The generic Halmos summand is in generic position
@@ -566,6 +567,81 @@ theorem orthogonal_range_genericCrossBlock_eq_bot :
     exact (Submodule.mem_orthogonal _ _).mp hn _ ⟨m, rfl⟩
   have := hzero (genericCrossBlockMirror U V n)
   exact inner_self_eq_zero.mp this
+
+
+/-! ## The two halves are unitarily equivalent
+
+`B : M → N` is injective with dense range, so its polar factor is isometric on
+all of `M` (the initial space is `(ker B)ᗮ = ⊤`) and has closed dense range,
+hence is onto `N`.  That unitary `M ≃ₗᵢ N` is the coordinatization: it presents
+the generic part as `K ⊕ K` with `P_U` the first coordinate projection.
+-/
+
+instance instCompleteSpaceGenericLeftHalf :
+    CompleteSpace (genericLeftHalf U V) :=
+  (genericLeftHalf U V).isComplete_coe_of_hasOrthogonalProjection.completeSpace_coe
+
+instance instCompleteSpaceGenericRightHalf :
+    CompleteSpace (genericRightHalf U V) :=
+  (genericRightHalf U V).isComplete_coe_of_hasOrthogonalProjection.completeSpace_coe
+
+/-- The cross block has trivial kernel, as a submodule statement. -/
+theorem ker_genericCrossBlock :
+    LinearMap.ker (genericCrossBlock U V : genericLeftHalf U V →ₗ[ℂ]
+      genericRightHalf U V) = ⊥ := by
+  rw [Submodule.eq_bot_iff]
+  intro m hm
+  exact (genericCrossBlock_eq_zero_iff U V m).mp hm
+
+/-- The polar factor of the cross block is isometric on the whole `U`-half: its
+initial space is all of `M`, because `B` is injective. -/
+theorem polarInitial_genericCrossBlock :
+    (genericCrossBlock U V).polarInitial = ⊤ := by
+  rw [← Submodule.orthogonal_eq_bot_iff]
+  rw [ContinuousLinearMap.polarInitial_orthogonal_eq_ker]
+  exact ker_genericCrossBlock U V
+
+/-- **The two halves of the generic part are unitarily equivalent**, via the
+polar factor of the cross block. -/
+noncomputable def genericHalvesEquiv :
+    genericLeftHalf U V ≃ₗᵢ[ℂ] genericRightHalf U V := by
+  refine LinearIsometryEquiv.ofSurjective
+    { toLinearMap := (genericCrossBlock U V).polarPartial.toLinearMap
+      norm_map' := fun m => ?_ } ?_
+  · exact ContinuousLinearMap.norm_polarPartial_apply_of_mem _
+      (by rw [polarInitial_genericCrossBlock]; trivial)
+  · -- The range is closed and dense, hence everything.
+    have hsub : LinearMap.range (genericCrossBlock U V : genericLeftHalf U V →ₗ[ℂ]
+        genericRightHalf U V) ≤
+        LinearMap.range ((genericCrossBlock U V).polarPartial :
+          genericLeftHalf U V →ₗ[ℂ] genericRightHalf U V) := by
+      rintro _ ⟨m, rfl⟩
+      exact ⟨(genericCrossBlock U V).modulus m,
+        ContinuousLinearMap.polarPartial_apply_modulus _ m⟩
+    have hclosed : IsClosed
+        ((LinearMap.range ((genericCrossBlock U V).polarPartial :
+          genericLeftHalf U V →ₗ[ℂ] genericRightHalf U V) :
+          Set (genericRightHalf U V))) :=
+      ContinuousLinearMap.isClosed_range_polarPartial _
+    haveI : (LinearMap.range ((genericCrossBlock U V).polarPartial :
+        genericLeftHalf U V →ₗ[ℂ] genericRightHalf U V)).HasOrthogonalProjection := by
+      haveI : CompleteSpace (LinearMap.range ((genericCrossBlock U V).polarPartial :
+          genericLeftHalf U V →ₗ[ℂ] genericRightHalf U V)) :=
+        hclosed.completeSpace_coe
+      exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
+    have htop : LinearMap.range ((genericCrossBlock U V).polarPartial :
+        genericLeftHalf U V →ₗ[ℂ] genericRightHalf U V) = ⊤ := by
+      rw [← Submodule.orthogonal_eq_bot_iff, Submodule.eq_bot_iff]
+      intro n hn
+      have : n ∈ (LinearMap.range (genericCrossBlock U V : genericLeftHalf U V →ₗ[ℂ]
+          genericRightHalf U V))ᗮ := fun u hu => hn u (hsub hu)
+      rw [orthogonal_range_genericCrossBlock_eq_bot U V] at this
+      simpa using this
+    intro n
+    have : n ∈ LinearMap.range ((genericCrossBlock U V).polarPartial :
+        genericLeftHalf U V →ₗ[ℂ] genericRightHalf U V) := by
+      rw [htop]; trivial
+    exact this
 
 end HiddenFoundations
 end MathAhead
