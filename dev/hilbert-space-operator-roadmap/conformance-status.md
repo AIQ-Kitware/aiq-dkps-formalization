@@ -75,6 +75,13 @@ rather than in the code: judging by what something is called rather than by what
    `f ↦ selfAdjointFunctionalCalculus hT f` as a *continuous star-algebra homomorphism*
    sending `id` to `T` and invoking `cfc_unique`.
 
+   **Re-verified against the actual uniqueness lemma.** `cfcHom_eq_of_continuous_of_map_id`
+   takes `φ : C(spectrum R a, R) →⋆ₐ[R] A` together with `Continuous φ` and `φ (id) = a` —
+   precisely the bundle named below, so this is not a case of having searched for the wrong
+   thing. Of the eight "blocked" calls made during this pass, this is the only one that
+   survived checking, and it is the only one that was made by enumerating what the file has
+   and lacks rather than by inferring difficulty.
+
    `SelfAdjointFunctionalCalculus.lean` has `..._id`, `..._comp`, `..._isSymmetric`,
    `..._congr` and the eigenvector action. It does **not** have additivity, multiplicativity
    as an algebra map, star-preservation, or continuity in `f` — the four obligations a
