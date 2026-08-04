@@ -245,6 +245,95 @@ theorem re_inner_genericCosineBlock_lt {m : genericLeftHalf U V} (hm : m ≠ 0) 
   rw [hcoe] at hpy
   nlinarith
 
+/-! ## The cross block
+
+The off-diagonal block `B = P_N P_V |_M` is the one that identifies the two
+halves with each other.  Its kernel is trivial — and the argument needs no
+functional calculus at all, only generic position twice: if `B m = 0` then
+`P_V m` lies in `M`, hence in `M ⊓ V = ⊥`, so `m ⊥ V`, so `m = 0`.
+-/
+
+/-- On the generic part, projecting onto the `U`-half is projecting onto `U`. -/
+theorem starProjection_genericLeftHalf_of_mem_generic {g : H}
+    (hg : g ∈ halmosGenericPart U V) :
+    (genericLeftHalf U V).starProjection g = U.starProjection g := by
+  refine Submodule.eq_starProjection_of_mem_of_inner_eq_zero
+    ⟨U.starProjection_apply_mem g,
+      projection_mem_halmosGenericPart_left U V hg⟩ ?_
+  intro w hw
+  exact inner_eq_zero_symm.mp ((Submodule.mem_orthogonal _ _).mp
+    (U.sub_starProjection_mem_orthogonal g) w hw.1)
+
+/-- The complementary component of a generic vector lands in the `Uᗮ`-half. -/
+theorem sub_starProjection_mem_genericRightHalf {g : H}
+    (hg : g ∈ halmosGenericPart U V) :
+    g - U.starProjection g ∈ genericRightHalf U V :=
+  ⟨U.sub_starProjection_mem_orthogonal g,
+    (halmosGenericPart U V).sub_mem hg
+      (projection_mem_halmosGenericPart_left U V hg)⟩
+
+/-- **The Halmos cross block** `B = P_N P_V |_M`. -/
+noncomputable def genericCrossBlock :
+    genericLeftHalf U V →L[ℂ] genericRightHalf U V :=
+  (genericRightHalf U V).orthogonalProjectionOnto ∘L V.starProjection ∘L
+    (genericLeftHalf U V).subtypeL
+
+/-- **`P_V` splits into the two blocks on the `U`-half.**  This is the statement
+that `A` and `B` really are the two entries of `P_V`'s first column. -/
+theorem starProjection_eq_cosineBlock_add_crossBlock (m : genericLeftHalf U V) :
+    V.starProjection (m : H) =
+      ((genericCosineBlock U V m : genericLeftHalf U V) : H) +
+        ((genericCrossBlock U V m : genericRightHalf U V) : H) := by
+  have hgen : V.starProjection (m : H) ∈ halmosGenericPart U V :=
+    projection_mem_halmosGenericPart_right U V m.2.2
+  have hM : ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
+      U.starProjection (V.starProjection (m : H)) := by
+    have h : ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
+        (genericLeftHalf U V).starProjection (V.starProjection (m : H)) := by
+      simp [genericCosineBlock, DavisKahanExt.compressOperator]
+    rw [h, starProjection_genericLeftHalf_of_mem_generic U V hgen]
+  have hN : ((genericCrossBlock U V m : genericRightHalf U V) : H) =
+      (genericRightHalf U V).starProjection (V.starProjection (m : H)) := by
+    simp [genericCrossBlock]
+  rw [hM, hN]
+  -- The `N`-component of a generic vector is what is left after `P_U`.
+  have hsplit : (genericRightHalf U V).starProjection
+      (V.starProjection (m : H)) =
+      V.starProjection (m : H) - U.starProjection (V.starProjection (m : H)) := by
+    refine Submodule.eq_starProjection_of_mem_of_inner_eq_zero
+      (sub_starProjection_mem_genericRightHalf U V hgen) ?_
+    intro w hw
+    have hcancel : V.starProjection (m : H) -
+        (V.starProjection (m : H) - U.starProjection (V.starProjection (m : H)))
+        = U.starProjection (V.starProjection (m : H)) := by abel
+    rw [hcancel]
+    exact (Submodule.mem_orthogonal _ _).mp hw.1 _
+      (U.starProjection_apply_mem _)
+  rw [hsplit]
+  abel
+
+/-- **The cross block has trivial kernel.**  Generic position twice: if
+`B m = 0` then `P_V m` lies in `M`, hence in `M ⊓ V = ⊥`, so `m ⊥ V`, so
+`m = 0`.  No functional calculus. -/
+theorem genericCrossBlock_eq_zero_iff (m : genericLeftHalf U V) :
+    genericCrossBlock U V m = 0 ↔ m = 0 := by
+  refine ⟨fun hB => ?_, fun hm => by rw [hm, map_zero]⟩
+  -- With the cross component gone, `P_V m` is the cosine component, so it is in `M`.
+  have hsplit := starProjection_eq_cosineBlock_add_crossBlock U V m
+  rw [hB] at hsplit
+  simp only [Submodule.coe_zero, add_zero] at hsplit
+  have hmemM : V.starProjection (m : H) ∈ genericLeftHalf U V :=
+    hsplit ▸ (genericCosineBlock U V m).2
+  -- It is also in `V`, and `M ⊓ V = ⊥` by generic position.
+  have hzero : V.starProjection (m : H) = 0 :=
+    eq_zero_of_mem_inf_generic_left_of_mem_right U V hmemM
+      (V.starProjection_apply_mem _)
+  -- So `m ⊥ V`, and `M ⊓ Vᗮ = ⊥`.
+  have hmV : (m : H) ∈ Vᗮ := by
+    rwa [Submodule.starProjection_apply_eq_zero_iff] at hzero
+  exact Subtype.ext
+    (eq_zero_of_mem_inf_generic_left_of_mem_orthogonal_right U V m.2 hmV)
+
 end HiddenFoundations
 end MathAhead
 end Experimental
