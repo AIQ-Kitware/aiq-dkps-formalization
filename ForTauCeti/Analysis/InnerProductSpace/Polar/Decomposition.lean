@@ -527,6 +527,37 @@ noncomputable def calculusStarAlgHom {T : H →ₗ[ℂ] H} (hT : T.IsSymmetric) 
     intro x y
     exact selfAdjointFunctionalCalculus_isSymmetric hT (extendSymbol g) x y
 
+/-- The bundle sends the identity symbol to the operator, one of the two hypotheses of
+`cfcHom_eq_of_continuous_of_map_id`. -/
+theorem calculusStarAlgHom_id {T : H →ₗ[ℂ] H} (hT : T.IsSymmetric) :
+    calculusStarAlgHom hT
+        (ContinuousMap.restrict (spectrum ℝ T.toContinuousLinearMap) (ContinuousMap.id ℝ))
+      = T.toContinuousLinearMap := by
+  have hmem := eigenvalues_mem_spectrum_toContinuousLinearMap hT
+  have hext : extendSymbol
+      (ContinuousMap.restrict (spectrum ℝ T.toContinuousLinearMap) (ContinuousMap.id ℝ))
+      = (spectrum ℝ T.toContinuousLinearMap).indicator (id : ℝ → ℝ) := by
+    funext x
+    by_cases hx : x ∈ spectrum ℝ T.toContinuousLinearMap <;>
+      simp [extendSymbol, Set.indicator, hx]
+  have key : (selfAdjointFunctionalCalculus hT (extendSymbol
+      (ContinuousMap.restrict (spectrum ℝ T.toContinuousLinearMap)
+        (ContinuousMap.id ℝ)))).toContinuousLinearMap = T.toContinuousLinearMap := by
+    rw [hext, selfAdjointFunctionalCalculus_indicator hT hmem,
+      selfAdjointFunctionalCalculus_id hT]
+  exact key
+
+/-- The bundle is bounded by the sup norm of the symbol, hence continuous: the other
+hypothesis of `cfcHom_eq_of_continuous_of_map_id`. -/
+theorem norm_calculusStarAlgHom_le {T : H →ₗ[ℂ] H} (hT : T.IsSymmetric)
+    (g : C(spectrum ℝ T.toContinuousLinearMap, ℝ)) :
+    ‖calculusStarAlgHom hT g‖ ≤ ‖g‖ := by
+  refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg g) fun x => ?_
+  refine norm_selfAdjointFunctionalCalculus_apply_le hT _ (norm_nonneg g) (fun i => ?_) x
+  have hmem := eigenvalues_mem_spectrum_toContinuousLinearMap hT i
+  rw [extendSymbol_apply_of_mem _ hmem]
+  simpa using g.norm_coe_le_norm ⟨_, hmem⟩
+
 /-- The spectral modulus agrees with the C⋆-algebra `CFC.abs` on `E →L[ℂ] E`, transported across
 the definitional `LinearMap ↔ ContinuousLinearMap` adjoint bridge (`adjoint_toContinuousLinearMap`
 is `rfl`). This is what makes the decomposition literally "via CFC". -/
