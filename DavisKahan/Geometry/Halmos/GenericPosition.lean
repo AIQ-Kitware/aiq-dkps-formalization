@@ -803,6 +803,26 @@ theorem genericSineBlock_comp_genericCrossBlock :
   rw [hD]
   linear_combination (norm := module) hkey
 
+
+/-- **The polar identity for the cross block**: `Φ |B| = B`.  This is what makes
+`Φ` usable in the transport step — everything about `B` is `Φ` applied to a
+function of `A`. -/
+theorem genericHalvesEquiv_modulus (m : genericLeftHalf U V) :
+    genericHalvesEquiv U V ((genericCrossBlock U V).modulus m) =
+      genericCrossBlock U V m :=
+  ContinuousLinearMap.polarPartial_apply_modulus _ m
+
+/-- **The modulus of the cross block squares to `A - A²`.**  With
+`ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq` — uniqueness of the
+nonnegative square root — this is what will let a unitary intertwining `A`
+intertwine `|B|`. -/
+theorem modulus_genericCrossBlock_mul_self :
+    (genericCrossBlock U V).modulus * (genericCrossBlock U V).modulus =
+      genericCosineBlock U V -
+        genericCosineBlock U V ∘L genericCosineBlock U V := by
+  rw [ContinuousLinearMap.modulus_mul_self]
+  exact adjoint_comp_genericCrossBlock U V
+
 end HiddenFoundations
 end MathAhead
 end Experimental
