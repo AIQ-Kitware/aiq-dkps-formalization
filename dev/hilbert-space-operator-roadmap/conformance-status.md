@@ -221,3 +221,52 @@ the roadmap had explicitly warned against restating it). Found by hashing normal
 bodies; that scan also flagged `hasDerivAt_expTime_apply'` in `StoneUniqueness.lean` as a
 restatement of a `private` lemma in `SkewAdjointExponential.lean`, differing only in
 `expTime B s (B ψ)` versus `(expTime B s * B) ψ`, with both carrying `@[simp]`. Not yet fixed.
+
+## The largest mechanical-submission gap: the module system
+
+Upstream Tau Ceti is **1212/1212 files** on Lean's module system (`module`, `public import`,
+`public section`). `ForTauCeti` is **68/192**, plus 13 files carrying a `public section` that
+does nothing because the file is not a `module`. Every unconverted file is hand-work at
+submission time, so this — not the remaining name matches — is what stands between here and a
+mechanical port.
+
+Conversion was attempted and reverted. The measured result, which is the useful part:
+
+* `dev/hilbert-space-operator-roadmap/module-system-conversion.py` converts a file
+  mechanically (insert `module` after the copyright block, `import` → `public import`, add
+  `public section` after the module docstring). It handled all 124 files.
+* Conversion is **all-or-nothing**: a `module` may not import a non-`module`, so no
+  downward-closed subset short of the whole package builds.
+* **114 of 124** then compiled with no further work.
+* The rest needed two things. Missing imports, because the module system drops transitive
+  name visibility — `Finset.sum_le_sum`, `Finite.bddAbove_range` and friends must be imported
+  directly, and Lean names them precisely (`Unknown constant`). And exposed definition bodies,
+  which Lean also names precisely, under `definitions were not unfolded because their
+  definition is not exposed`.
+* That left **20 errors in 8 files**: `Polar/Decomposition`, `Normed/SymmetricGauge`,
+  `GramBandPolar`, `Spectral/Subspace`, `BoundedOperator/SinTheta`, `EnergyComparison`,
+  `Rosenblum`, `SpectralProjectionGroup`.
+
+The reason to stop rather than push through is a decision already recorded in the tree.
+`spectralPVM` in `LinearPMap/SpectralMeasure/Construction.lean` documents that its `@[expose]`
+was **removed** once `spectralPVM_def`, `specProjection_def`, `toProjValMeasure_proj`/`_diag`
+and `specProj_def`/`specDiag_def` retired every consumer, at a cost of zero sites — and draws
+the general rule: a consumer that rewrites by lemma rather than reducing through a body does
+not care whether the body is exposed. Blanket `@[expose]` is the style that note moved away
+from. Finishing in house style means writing the `_def` lemmas and rewiring the call sites in
+those 8 files, which is real work, not a mechanical pass.
+
+The converter script skipped `spectralPVM` by luck — its "already annotated" guard matched the
+word *exposed* in that very docstring. Anyone rerunning it should not rely on that.
+
+## `PosDef` collides with an unrelated upstream file
+
+`export_for_tauceti.py --check` failed on every module we would *add*, because a module absent
+upstream is by definition absent, and the check treated that as drift. It now reports those as
+`NEW` and fails only on genuine divergence. One survives:
+
+`ForTauCeti.LinearAlgebra.Matrix.PosDef` maps onto
+`external/TauCeti/TauCeti/LinearAlgebra/Matrix/PosDef.lean`, which already exists upstream as a
+different 112-line file with different content and its own copyright. `--write` would refuse it
+(it is not in `protected`), and should. The module needs either a different target name or a
+merge into the existing upstream file; it is the one place where submission is not a copy.

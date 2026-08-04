@@ -16,6 +16,7 @@ import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
 import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
 import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
+import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 
 /-!
 # Symmetric norming functions on sequences
@@ -1249,5 +1250,34 @@ end Calkin
 end Operators
 
 end TruncationGauge
+
+/-! ### The `∞` endpoint of the Schatten scale -/
+
+universe u₀ v₀ w₀
+
+/-- **`S_∞`**, the top of the Schatten scale, defined as the operator-norm family.
+
+The roadmap asks for a separately named endpoint whose gauge is `Φ_∞ = ‖·‖_∞`, and for the
+identification with the operator-norm family.  Taking the operator-norm family as the
+*definition* keeps this free of the `HasMinMaxLowerBoundEverywhere` hypothesis that
+`symmetricGaugeFamily` carries — the roadmap's signature has no such hypothesis — and puts
+the content in `gauge_schattenFamilyInf`, which is the `Φ_∞` description. -/
+noncomputable def schattenFamilyInf (𝕜 : Type u₀) [RCLike 𝕜] :
+    OperatorIdealFamily.{u₀, v₀, w₀} 𝕜 :=
+  operatorNormIdealFamily 𝕜
+
+/-- The `∞` endpoint's gauge is the sup gauge of the approximation-number sequence:
+`supGauge_extend_of_antitone` collapses the supremum to `a₀`, which is the operator norm. -/
+theorem gauge_schattenFamilyInf {𝕜 : Type u₀} [RCLike 𝕜] {E F : Type v₀}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [NormedAddCommGroup F]
+    [InnerProductSpace 𝕜 F] [CompleteSpace E] [CompleteSpace F] (T : E →L[𝕜] F) :
+    (schattenFamilyInf.{u₀, v₀, v₀} 𝕜).gauge T
+      = TruncationGauge.supGauge.extend
+          (fun n => ENNReal.ofReal (T.approximationNumber n)) := by
+  have hanti : Antitone (fun n => ENNReal.ofReal (T.approximationNumber n)) :=
+    fun m n hmn => ENNReal.ofReal_le_ofReal (T.approximationNumber_antitone hmn)
+  rw [TruncationGauge.supGauge_extend_of_antitone hanti,
+    ContinuousLinearMap.approximationNumber_index_zero]
+  simp [schattenFamilyInf, operatorNormIdealFamily]
 
 end TauCeti
