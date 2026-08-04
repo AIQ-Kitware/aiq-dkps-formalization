@@ -113,11 +113,28 @@ rather than in the code: judging by what something is called rather than by what
    existence direction (`exists_eq_mul_rank`, `exists_eq_mul_of_rank_le`,
    `rank_le_iff_exists_eq_mul`); none of the uniqueness machinery is present.
 
-   The mathematics is classical and the shape is clear — at the exact rank both factors have
-   full column rank and share `M`'s column space, so `L' = L g` for a unique invertible `g`,
-   and injectivity of `L` then forces `R' = g⁻¹ R` — but every step of it has to be written,
-   including the full-column-rank facts. This is the largest of the three remaining, and the
-   roadmap's own Acknowledgements already record A2 as specified and not implemented.
+   The shape is classical: at the exact rank both factors have full column rank and share
+   `M`'s column space, so `L' = L g` for a unique invertible `g`, and injectivity of `L` then
+   forces `R' = g⁻¹ R`.
+
+   **The key tool exists and I twice said it did not.** `Mathlib.Algebra.Module.Projective`
+   has
+
+   ```
+   projective_lifting_property [Projective R P] (f : M →ₗ[R] N) (g : P →ₗ[R] N)
+       (hf : Function.Surjective f) : ∃ h : P →ₗ[R] M, f ∘ₗ h = g
+   ```
+
+   and `Fin r → 𝕜` is free, hence projective. Corestricting `L` to its range makes it
+   surjective, and `range L' ≤ range L` (from the rank equality) puts `L'` in the target, so
+   the lifting property produces `G` with `L ∘ₗ G = L'` directly. The same in the other
+   direction gives `G'`, and injectivity of `L` — full column rank at the exact rank — turns
+   `G G' = 1` and `G' G = 1` into the `Units` witness.
+
+   What is left is genuinely a body of work rather than a missing tool: the `Matrix` ↔
+   `LinearMap` transport, the rank-to-injectivity and column-space-equality steps, and
+   assembling the `Units`. The roadmap's Acknowledgements already record A2 as specified and
+   not implemented.
 
 ### Over-strong hypotheses
 
