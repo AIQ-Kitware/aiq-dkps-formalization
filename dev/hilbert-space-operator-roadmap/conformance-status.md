@@ -149,10 +149,27 @@ rather than in the code: judging by what something is called rather than by what
    `calculusStarAlgHom_id` (`φ (restrict id) = a`) and `norm_calculusStarAlgHom_le`
    (`‖φ g‖ ≤ ‖g‖`, which gives continuity since `φ` is `ℝ`-linear).
 
-   So the roadmap theorem is one application of `cfcHom_eq_of_continuous_of_map_id` plus the
-   step from `cfcHom` to `cfc` — `cfc f a = cfcHom ha (restrict f)` for `f` continuous on the
-   spectrum, and `extendSymbol (restrict f)` agrees with `f` on the eigenvalues, so
-   `_indicator` closes it.
+   **The final theorem was attempted and reverted; the tree is unchanged and green.** The
+   skeleton is right and two spellings are wrong:
+
+   ```lean
+   have ha : IsSelfAdjoint T.toContinuousLinearMap :=
+     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
+   have hcont : Continuous (calculusStarAlgHom hT) :=
+     AddMonoidHomClass.continuous_of_bound (calculusStarAlgHom hT) 1 fun g => by
+       simpa using norm_calculusStarAlgHom_le hT g          -- ← goal not closed by `simpa`
+   have hhom : cfcHom ha = calculusStarAlgHom hT :=
+     cfcHom_eq_of_continuous_of_map_id ha _ hcont (calculusStarAlgHom_id hT)
+   rw [cfc_apply f T.toContinuousLinearMap ha hf.continuousOn, hhom]
+   -- then `selfAdjointFunctionalCalculus_congr` against
+   -- `eigenvalues_mem_spectrum_toContinuousLinearMap`
+   ```
+
+   The two fixes needed: `cfc_apply` builds its `ContinuousMap` as `⟨_, hf.restrict⟩` where
+   `hf : ContinuousOn f (spectrum ℝ a)`, so the same term downstream must be written with
+   `hf.continuousOn |>.restrict` and not `Continuous.restrict`, which wants a `MapsTo`; and
+   the `simpa` closing the norm bound leaves a goal, so the `1 * ‖g‖` normalisation needs
+   doing by hand.
 
    Lean note for that last step: applying a bundled `StarAlgHom` does not beta-reduce under
    `rw`, and the `show` tactic is linted against changing goals here. State the unfolded
