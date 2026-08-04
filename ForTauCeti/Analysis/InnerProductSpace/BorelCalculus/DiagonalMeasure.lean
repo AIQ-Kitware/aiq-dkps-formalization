@@ -160,7 +160,6 @@ noncomputable def diagFunctional (ξ : H) :
 @[simp] theorem diagFunctional_apply (ξ : H) (g : C_c(spectrum ℂ a, ℝ)) :
     diagFunctional ha ξ g = (⟪ξ, cfcHom ha (ofRealLM g.toContinuousMap) ξ⟫_ℂ).re := (rfl)
 /-- The **diagonal spectral measure** of a normal operator at a vector. -/
-@[expose]
 noncomputable def diagMeasure (ξ : H) : Measure (spectrum ℂ a) :=
   RealRMK.rieszMeasure (diagFunctional ha ξ)
 

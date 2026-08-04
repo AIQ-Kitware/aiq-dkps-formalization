@@ -664,7 +664,6 @@ theorem sum_filter_fin_eq_sum_range {N k : ℕ} (hk : k ≤ N) (g : ℕ → ℝ)
   exact ⟨fun h => h.2, fun h => ⟨lt_of_lt_of_le h hk, h⟩⟩
 
 /-- The `Fin N` view of a finite-valued sequence: coordinates as reals. -/
-@[expose]
 noncomputable def finView (a : ℕ → ℝ≥0∞) (N : ℕ) (i : Fin N) : ℝ :=
   ((a (i : ℕ)).toNNReal : ℝ)
 

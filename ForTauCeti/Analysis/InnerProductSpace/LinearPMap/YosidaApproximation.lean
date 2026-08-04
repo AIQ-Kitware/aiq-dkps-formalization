@@ -645,7 +645,6 @@ theorem cauchySeq_expApprox (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
 /-! ### The limit flow `exp(itA)` -/
 
 /-- The strong limit of the approximating flows, pointwise. -/
-@[expose]
 noncomputable def expLimitFun (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) : H :=
   limUnder atTop (fun n : ℕ+ => expApprox hA n t ψ)
 

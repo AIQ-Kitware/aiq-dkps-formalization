@@ -125,7 +125,6 @@ theorem tendsto_damp {w : ℂ} (hw : w ≠ 1) :
 /-- The damped, pulled-back separator as a scalar symbol on `ℂ`.  Continuous
 **everywhere**, including at the Cayley singularity `w = 1`, where the damping
 factor squeezes it to zero. -/
-@[expose]
 noncomputable def cayleySymbolFun (f : C(ℝ, ℝ)) (n : ℕ) (w : ℂ) : ℂ :=
   ((f (cayleyCoordFun w) * damp n w : ℝ) : ℂ)
 
