@@ -52,7 +52,6 @@ namespace LinearPMap
 variable {ε : ℝ}
 
 /-- The `k`-th cell of the `ε`-grid on the line. -/
-@[expose]
 def gridCell (ε : ℝ) (k : ℤ) : Set ℝ := Ico ((k : ℝ) * ε) (((k : ℝ) + 1) * ε)
 
 /-- Grid cells are measurable, being half-open intervals, so each admits a spectral projection. -/
