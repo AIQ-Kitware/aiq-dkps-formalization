@@ -99,7 +99,19 @@ rather than in the code: judging by what something is called rather than by what
    `StarAlgHom` route is the principled one, and this negative is one I actually ran, unlike
    the one I fabricated for A2 earlier in this pass.
 
-   For the second, `IsSelfAdjoint.spectrumRestricts`
+   **The second obligation is narrower than "identify the spectrum".** The `StarAlgHom` only
+   needs each eigenvalue to *lie in* `spectrum ℝ T.toContinuousLinearMap`, not equality of the
+   two sets: the calculus depends on `f` only through its values at the eigenvalues, so a
+   `g : C(spectrum ℝ a, ℝ)` can be extended by zero off the spectrum and the algebra
+   operations still match. Containment also gives the norm bound `‖φ g‖ ≤ ‖g‖_∞` from
+   `norm_selfAdjointFunctionalCalculus_apply_le`, which is the continuity obligation.
+
+   Route for the containment: `Module.End.HasEigenvalue.mem_spectrum` puts `(λᵢ : ℂ)` in
+   `spectrum ℂ T` as a `Module.End`; an algebra equivalence carries that to
+   `spectrum ℂ T.toContinuousLinearMap`; and `spectrum.preimage_algebraMap` drops it to
+   `spectrum ℝ`. Three interface steps, all with named tools.
+
+   For the real-spectrum machinery generally, `IsSelfAdjoint.spectrumRestricts`
    (`Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Instances.lean`) is the
    real-spectrum machinery, and `Module.End.hasEigenvalue_iff_mem_spectrum` connects the
    complex spectrum to eigenvalues in finite dimension. Both ends exist; the join is the
