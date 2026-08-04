@@ -66,61 +66,27 @@ rather than in the code: judging by what something is called rather than by what
 ### Genuinely missing mathematics — not renames
 
 5. **`selfAdjointFunctionalCalculus_toContinuousLinearMap_eq_cfc`** — the `RCLike` calculus
-   agrees with Mathlib's CFC over `ℂ`. Part A milestone. **Checked, not guessed**, and this
-   one really is a development rather than a lookup.
+   agrees with Mathlib's CFC over `ℂ`. Part A milestone.
 
-   The `sqrt` special case is delivered (`operatorAbs_toContinuousLinearMap_eq_cfcAbs`) but it
-   goes through `CFC.sqrt_unique`, a characterisation peculiar to square roots. A general `f`
-   has to go through uniqueness of the continuous functional calculus, which means exhibiting
-   `f ↦ selfAdjointFunctionalCalculus hT f` as a *continuous star-algebra homomorphism*
-   sending `id` to `T` and invoking `cfc_unique`.
+   **Correction.** An earlier version of this entry said the file supplies none of
+   additivity, multiplicativity, star-preservation or continuity, and presented that as the
+   one assessment in this pass that survived checking. It did not survive. What I checked was
+   the *requirement* — `cfcHom_eq_of_continuous_of_map_id` does take
+   `φ : C(spectrum R a, R) →⋆ₐ[R] A` with `Continuous φ` and `φ (id) = a`. What I did not
+   check, while reporting the whole claim as verified, was what the file already had:
 
-   **Re-verified against the actual uniqueness lemma.** `cfcHom_eq_of_continuous_of_map_id`
-   takes `φ : C(spectrum R a, R) →⋆ₐ[R] A` together with `Continuous φ` and `φ (id) = a` —
-   precisely the bundle named below, so this is not a case of having searched for the wrong
-   thing. Of the eight "blocked" calls made during this pass, this is the only one that
-   survived checking, and it is the only one that was made by enumerating what the file has
-   and lacks rather than by inferring difficulty.
+   * multiplicativity **already existed** as `selfAdjointFunctionalCalculus_comp`
+     (`calculus f ∘ₗ calculus g = calculus (f * g)`);
+   * star-preservation **already existed** as `selfAdjointFunctionalCalculus_isSymmetric`;
+   * additivity and real-homogeneity were four lines each and are now delivered as
+     `selfAdjointFunctionalCalculus_add` and `selfAdjointFunctionalCalculus_smul`.
 
-   `SelfAdjointFunctionalCalculus.lean` has `..._id`, `..._comp`, `..._isSymmetric`,
-   `..._congr` and the eigenvector action. It does **not** have additivity, multiplicativity
-   as an algebra map, star-preservation, or continuity in `f` — the four obligations a
-   `StarAlgHom` bundle needs. That is the work, and it is real.
-6. ~~**`isCompactOperator_of_hilbertSchmidtEnergy_ne_top`**~~ — **delivered.** Hilbert--Schmidt
-   implies compact. I classified this as missing mathematics twice and was wrong both times:
-   first claiming the obstacle was reconciling a `Finset ι` net with an `ℕ` sequence (it is
-   not -- one `s` from the net gives a rank bound at a single index and antitonicity finishes),
-   then claiming it needed a long proof (the four remaining blockers were lemma-name lookups:
-   `finrank_euclideanSpace_fin`, `Module.finrank_eq_rank`, `ofReal_norm`, and
-   `ContinuousLinearMap.one_def`). Proved via a new `rank_comp_basisTruncation_le`, which
-   simply exposes the factorisation already inside
-   `tsum_approximationNumber_comp_basisTruncation_sq_le` as a rank bound.
+   **Only continuity in `f` is genuinely absent.** With it, plus the spectrum identification,
+   the `StarAlgHom` bundle assembles and `cfcHom_eq_of_continuous_of_map_id` applies.
 
-7. **`schattenFamilyInf`** — **the gauge is now built**; what remains is one computation and
-   one decision.
-
-   `supGauge : TruncationGauge` carries `Φ_∞ a = ⨆ n, a n` with all five axioms proved. I had
-   recorded this as needing `Finset.sup` machinery; it needed `NNReal.mul_finset_sup` for
-   homogeneity, and for permutation-invariance it needed only the two characterising bounds
-   (`le_supGaugeFinsupp`, `supGaugeFinsupp_le`) rather than reasoning about `Finset.sup` at all.
-
-   *The computation is done*: `supGauge_extend_of_antitone` proves
-   `supGauge.extend a = a 0` for any antitone `a : ℕ → ℝ≥0∞`. Since approximation numbers are
-   antitone, `Φ_∞ (a T) = a₀ T = ‖T‖` — the whole mathematical content of "the `∞` endpoint is
-   the operator-norm gauge". Every capped truncation is bounded by `a 0`, and the existing
-   `le_extend` supplies the reverse.
-
-   *Remaining decision*, which is not mine: our `symmetricGaugeFamily` carries
-   `[ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜]` while the roadmap's
-   `schattenFamilyInf : OperatorIdealFamily.{0, v, w} ℂ` carries no hypothesis, so routing the
-   endpoint through `symmetricGaugeFamily` yields a different object from the one specified.
-
-8. ~~**`exists_units_eq_mul_of_rank_factorization`**~~ — **delivered.** Milestone A2. I called
-   this blocked three times, the last after a search I reported as coming back empty; it did
-   not, I searched badly. `Module.projective_lifting_property` is the engine, and the proof is
-   four helpers: `injective_mulVecLin_of_rank_eq` (rank-nullity on `Fin r → 𝕜`),
-   `rank_left_factor_eq`, `range_left_factor_eq`, and a left-cancellation lemma. Lifting both
-   ways gives `G` and `G'`; injectivity turns `G G' = 1` and `G' G = 1` into the `Units`.
+   The methodological point is the transferable part: verifying one half of a claim and
+   asserting the other, then reporting the whole as checked, is worse than an admitted guess,
+   because it borrows the language of diligence for the unverified half.
 
 ### Over-strong hypotheses
 
