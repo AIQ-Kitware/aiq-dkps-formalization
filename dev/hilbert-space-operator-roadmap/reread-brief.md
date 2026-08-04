@@ -1,35 +1,52 @@
 # Reread brief — HilbertSpaceOperatorTheory READMEs
 
-Working note for the post-compaction full read. Not part of the PR (main repo, not the
-submodule). Delete when the reread is done.
+Working note. Not part of the PR (main repo, not the submodule).
+
+**The reread happened, and round 4 landed as `c47ecd7`.** What remains useful here is the
+settled-decisions record below — chiefly *Deliberately KEPT* and *Facts established* — which
+exists so a fifth round does not re-find them. Everything in *Open* still needs a decision.
 
 ## Why this exists
 
-Three rounds of prose cutting have each *introduced* the thing the next round found:
+Each round of prose cutting *introduced* the thing the next round found:
 
 | round | cut | introduced |
 |---|---|---|
 | 1 | reviewer asides, tone words | the "bar for done" paragraph, ×6 |
 | 2 | "bar for done" | `not only X`, ×4 |
-| 3 | `not only` | `Each object should … its basic API`, ×5 |
+| 3 | `not only` | `Each object should … its basic API`, ×5 → 6 |
+| 4 | that template, and the prose about the prose | — checked; see below |
 
 The cause is method, not judgment: editing against grep hits and diff hunks cannot show six
-file openings at once, so the same sentence gets written six times unnoticed. **The reread
-must be sequential and whole-file.** Its purpose is to catch document-level problems, which
-is the one thing the greps cannot do.
+file openings at once, so the same sentence gets written six times unnoticed. **A cutting
+pass must end with a sequential whole-file read.** That is the one thing greps cannot do.
 
-## Scope of the reread
+Round 4 also proved the *other* half of the failure: three of the four defects it repaired
+were grammar breaks left by rounds 1–3, where the cut word was carrying the sentence's verb
+or its meaning. `genuine` → `holds` inverted a claim; `worth` and one relative clause each
+took a subject and verb with them.
 
-Read all six child READMEs and the family index end to end. Produce **findings, not edits**,
-unless told otherwise. Look for:
+## What round 4 did
 
-1. Regenerated templates — near-identical sentences across files (see the open question below).
-2. Broken antecedents — a term defined in a paragraph that was deleted. This happened once:
-   removing Majorization's intro orphaned "Suggested home: … for the engine".
-3. Sections that no longer read correctly after their lead-in line was removed, especially
-   *Worked examples (acceptance criteria)*.
-4. Sentence fragments and grammar breaks from single-word deletions.
-5. Content that is now a truism — a sentence left saying nothing after its substance was cut.
+- Repaired four shipped defects (the three above plus an orphaned bold).
+- Deleted the fourth-generation template: `Each object should … basic API` (6/6 → 1) and
+  `Not in Mathlib:` (6/6 → 0; it restated the heading two lines above it).
+- Cut prose whose subject is the document: the `says so` family, `Why this is a milestone`,
+  `This debt is incurred knowingly`, `A specification omitting this would hide …`,
+  `Structuring the proof that way is part of the milestone`, and four standalone
+  `This is what lets/needs` justifications.
+- Cut one duplicated dependency list, one restated pair of missing lemmas, three
+  non-duplication assertions where one suffices, and the `most consequential absence`
+  superlative.
+- Rewrapped the ragged lines rounds 1–3 left at their edit sites.
+
+Verification that ran after, and should run after any future pass:
+
+- no sentence over 45 chars in more than one file (except the house Acknowledgements line
+  and a shared reference entry);
+- the six file openings printed side by side and read as distinct;
+- no broken relative link; no line over 100 cols except those carrying long URLs;
+- `git status` shows READMEs only — no `Suggested.lean` touched.
 
 ## Settled — do not reopen
 
@@ -109,20 +126,37 @@ These were examined and kept on purpose. Flagging them again is churn.
   mirrors them under `namespace TauCeti`. Migration TODO for `ForTauCeti` (~39 files / ~390
   declarations) is recorded in `ForTauCeti/README.md`.
 
-## Open — decide during the reread
+## Open
 
-1. **`deliberately`, 12 occurrences.** Awaiting the user's call. (An earlier count of 43 was
-   wrong.) Do not act unilaterally.
-2. **The six criterion sentences.** The question is *whether they should exist*, not what they
-   should say — that has been answered wrong three times. Current recommendation:
-   - **delete** in `SelfAdjointSpectralTheory` and `MatrixSpectralStatistics` — both have
-     decayed to truisms, and each file's *What is missing* already lists the deliverables;
-   - **keep** in `HilbertSpaceOperatorFoundations`, `MajorizationAndAngles`, `OperatorIdeals`
-     — these name specific API (closure/composition laws; invariances and variational
-     characterizations; unconditional interface laws);
-   - `SpectralSubspacePerturbation`'s is a different sentence naming real generalities — keep.
-3. Open items in `considerations.md`: the `→L`/`→ₗ` bridge for `IsPartialIsometry`; the
+1. **`deliberately`** — 11 in the READMEs after round 4 (12 before it), plus 5 in
+   `Suggested.lean` files. Awaiting the user's call. (An earlier count of 43 was wrong.)
+   Do not act unilaterally.
+2. Open items in `considerations.md`: the `→L`/`→ₗ` bridge for `IsPartialIsometry`; the
    `operatorAbs`/`modulus` naming; `OperatorIdealFamily`'s ℂ-only scalars and universe pin.
+3. Examined in round 4 and left alone, but arguable if a fifth pass is wanted — flag, do not
+   cut unilaterally:
+   - `The reason is not brevity:` (Foundations, the Moore–Penrose predicate) — negation
+     then assertion, but the assertion is real;
+   - `The arbitrary basis is the point:` (Majorization, Hoffman–Wielandt);
+   - `is specified here intrinsically` (Perturbation, Part A) — residue of a cut phrase;
+   - `The approximants are public and named because … not about a limit appearing from
+     nowhere` (SelfAdjoint, Part E);
+   - `**Why "Hilbert-space" and not "finite-dimensional"**` (Foundations) — reads as
+     title-justification, but its content is a real generality decision;
+   - `differing on three axes` (Foundations, Part B) above a four-row table.
+
+## Settled by round 4 — do not reopen
+
+- **The criterion sentence.** Deleted in `MajorizationAndAngles`, `SelfAdjointSpectralTheory`
+  and `MatrixSpectralStatistics`; reduced to its content (no `Each object should` opener) in
+  `OperatorIdeals`; kept in `HilbertSpaceOperatorFoundations` (names specific API, and
+  "defined once at its natural generality" is that file's thesis) and in
+  `SpectralSubspacePerturbation` (a different sentence, naming real generalities).
+- **`Not in Mathlib:`** — gone from all six. The heading `## What is missing (build here)`
+  carries it. Do not re-add.
+- The `OperatorIdeals` Acknowledgements design-history paragraph ("Two design decisions …")
+  was deleted rather than repaired. If provenance value is wanted there, that is a decision
+  to revisit deliberately, not an oversight.
 
 ## Method rules, learned the hard way
 
