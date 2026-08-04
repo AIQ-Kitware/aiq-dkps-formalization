@@ -58,9 +58,25 @@ classification below as the real state, not the number.
 5. **`selfAdjointFunctionalCalculus_toContinuousLinearMap_eq_cfc`** — the `RCLike` calculus
    agrees with Mathlib's CFC over `ℂ`. Part A milestone; nothing in the tree proves it.
 6. **`isCompactOperator_of_hilbertSchmidtEnergy_ne_top`** — Hilbert--Schmidt implies compact.
-   Both ends exist (`tendsto_enorm_comp_one_sub_basisTruncation` from finite energy;
-   `isCompactOperator_of_tendsto_approximationNumber`) but the join is real work: the first is
-   a net over `Finset ι`, the second a sequence over `ℕ`, and reconciling them is the content.
+   Attempted and reverted; the tree is unchanged. The route is clear and the pieces are all
+   present, so this is the most tractable of the four:
+
+   * `tendsto_enorm_comp_one_sub_basisTruncation` gives `‖T ∘L (1 − basisTruncation b s)‖ₑ² → 0`
+     along `Finset ι`, from finite energy;
+   * `T ∘L basisTruncation b s` factors as `(T ∘L finiteBasisInclusion) ∘L finiteBasisCoords`
+     through `EuclideanSpace 𝕜 (Fin s.card)` — that factorisation is already proved inside
+     `tsum_approximationNumber_comp_basisTruncation_sq_le`, it is simply not exposed as a rank
+     bound;
+   * `ContinuousLinearMap.rank_comp_le_natCast_right` then bounds the rank by `s.card`, and
+     `approximationNumber_le_norm_sub` turns that into `a_{s.card}(T) < ε`;
+   * `approximationNumber_antitone` and `isCompactOperator_of_tendsto_approximationNumber`
+     finish.
+
+   Two things blocked a quick landing, both mechanical rather than mathematical: the rank of a
+   map into `EuclideanSpace 𝕜 (Fin n)` needs the right Mathlib spelling (`rank_euclideanSpace`
+   does not exist under that name), and `EnergyComparison` does not currently import
+   `ApproximationNumber.Compact` — there is no cycle, so the import is safe to add.
+
    The Peter--Weyl roadmap depends on this one.
 7. **`schattenFamilyInf`** — the roadmap wants the `∞` endpoint defined from the `Φ_∞` gauge
    and then *proved* equal to the operator-norm family, "an equality of *families* and not
