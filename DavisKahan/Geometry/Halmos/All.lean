@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Geometry.Halmos.Assembly
 import DavisKahan.Geometry.Halmos.Classification
+import DavisKahan.Geometry.Halmos.GenericPosition
 import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 import DavisKahan.Geometry.Halmos.TwoProjections
 import DavisKahan.Geometry.Halmos.UnitaryEquivalence
