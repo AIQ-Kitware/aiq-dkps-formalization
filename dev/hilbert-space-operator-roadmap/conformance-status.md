@@ -122,9 +122,16 @@ rather than in the code: judging by what something is called rather than by what
    `apply_eigenvectorBasis`, `AlgEquiv.spectrum_eq` across to the bounded algebra, then
    `spectrum.preimage_algebraMap` down to `ℝ`.
 
-   **So the only thing left on this entry is the `StarAlgHom` assembly itself**, with every
-   ingredient now in hand: `_add`, `_smul`, `_comp`, `_isSymmetric`, `_one`, `_pow`, the
-   Parseval bound, and this containment.
+   **So the only thing left on this entry is the `StarAlgHom` assembly itself**, and its
+   awkward step is also handled: `selfAdjointFunctionalCalculus_indicator` says extending a
+   symbol by zero off any set containing the eigenvalues leaves the operator unchanged. That
+   is what lets a `g : C(spectrum ℝ a, ℝ)` become an `ℝ → ℝ` without the algebra operations
+   drifting — `Set.indicator` commutes with `+` and `*`, and the mismatch at `1` (indicator
+   is `0` off the spectrum, the constant is `1`) is invisible to the calculus.
+
+   Ingredients in hand: `_add`, `_smul`, `_comp`, `_isSymmetric`, `_one`, `_pow`, the Parseval
+   bound, the eigenvalue containment, and `_indicator`. What remains is writing the
+   `StarAlgHom` fields, each of which is one of the above plus `_indicator`.
 
    For the real-spectrum machinery generally, `IsSelfAdjoint.spectrumRestricts`
    (`Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Instances.lean`) is the

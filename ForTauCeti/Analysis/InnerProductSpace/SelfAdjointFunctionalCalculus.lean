@@ -269,6 +269,19 @@ theorem selfAdjointFunctionalCalculus_pow {T : E →ₗ[𝕜] E} (hT : T.IsSymme
       rw [← hmul, ih, selfAdjointFunctionalCalculus_id, pow_succ]
       rfl
 
+/-- **Extending a symbol by zero off a set containing the spectrum changes nothing.**
+
+The calculus sees `f` only at the eigenvalues, so restricting a symbol to any set containing
+them and extending by zero leaves the operator alone. This is what lets a
+`g : C(spectrum ℝ a, ℝ)` be turned into an `ℝ → ℝ` for the finite calculus without the
+algebra operations drifting: `indicator` commutes with `+` and `*`, and the mismatch at `1`
+is invisible here. -/
+theorem selfAdjointFunctionalCalculus_indicator {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric)
+    {S : Set ℝ} (hS : ∀ i, hT.eigenvalues rfl i ∈ S) (g : ℝ → ℝ) :
+    selfAdjointFunctionalCalculus hT (S.indicator g)
+      = selfAdjointFunctionalCalculus hT g :=
+  selfAdjointFunctionalCalculus_congr hT fun i => Set.indicator_of_mem (hS i) g
+
 /-- Every operator commuting with a symmetric map commutes with its finite
 real functional calculus.  This includes repeated eigenvalues: the proof uses
 that the commuting operator preserves each eigenspace. -/
