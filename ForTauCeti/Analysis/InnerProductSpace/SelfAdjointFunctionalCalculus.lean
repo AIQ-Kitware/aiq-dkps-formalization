@@ -282,6 +282,44 @@ theorem selfAdjointFunctionalCalculus_indicator {T : E →ₗ[𝕜] E} (hT : T.I
       = selfAdjointFunctionalCalculus hT g :=
   selfAdjointFunctionalCalculus_congr hT fun i => Set.indicator_of_mem (hS i) g
 
+open scoped Classical in
+/-- Extend a continuous function on a subset of `ℝ` to all of `ℝ` by zero.
+
+The finite calculus consumes `ℝ → ℝ`, while `cfcHom` is stated on `C(spectrum ℝ a, ℝ)`; this
+is the bridge between the two.  It is multiplicative and additive outright — both sides
+vanish off `S` — and `selfAdjointFunctionalCalculus_indicator` covers the unit, the one
+operation it does not respect. -/
+noncomputable def extendSymbol {S : Set ℝ} (g : C(S, ℝ)) : ℝ → ℝ :=
+  fun x => if h : x ∈ S then g ⟨x, h⟩ else 0
+
+open scoped Classical in
+@[simp] theorem extendSymbol_apply_of_mem {S : Set ℝ} (g : C(S, ℝ)) {x : ℝ} (hx : x ∈ S) :
+    extendSymbol g x = g ⟨x, hx⟩ := dif_pos hx
+
+open scoped Classical in
+theorem extendSymbol_mul {S : Set ℝ} (g₁ g₂ : C(S, ℝ)) :
+    extendSymbol (g₁ * g₂) = fun x => extendSymbol g₁ x * extendSymbol g₂ x := by
+  funext x
+  by_cases hx : x ∈ S <;> simp [extendSymbol, hx]
+
+open scoped Classical in
+theorem extendSymbol_add {S : Set ℝ} (g₁ g₂ : C(S, ℝ)) :
+    extendSymbol (g₁ + g₂) = fun x => extendSymbol g₁ x + extendSymbol g₂ x := by
+  funext x
+  by_cases hx : x ∈ S <;> simp [extendSymbol, hx]
+
+open scoped Classical in
+@[simp] theorem extendSymbol_zero {S : Set ℝ} :
+    extendSymbol (0 : C(S, ℝ)) = fun _ => 0 := by
+  funext x
+  by_cases hx : x ∈ S <;> simp [extendSymbol, hx]
+
+open scoped Classical in
+theorem extendSymbol_one_eq_indicator {S : Set ℝ} :
+    extendSymbol (1 : C(S, ℝ)) = S.indicator (fun _ => 1) := by
+  funext x
+  by_cases hx : x ∈ S <;> simp [extendSymbol, Set.indicator, hx]
+
 /-- Every operator commuting with a symmetric map commutes with its finite
 real functional calculus.  This includes repeated eigenvalues: the proof uses
 that the commuting operator preserves each eigenspace. -/
