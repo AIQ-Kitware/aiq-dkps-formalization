@@ -25,7 +25,14 @@ the classification below instead of the number.
 (renames, and roadmap-local scaffolding that is not ours to deliver). Treat the
 classification below as the real state, not the number.
 
-## Treat the "missing mathematics" list as unverified
+## The "missing mathematics" list is empty
+
+All five items originally recorded there are delivered: Berge without first countability,
+Hilbert--Schmidt implies compact, the Schatten `∞` gauge with its collapse, Milestone A2's
+rank-factorization uniqueness, and the CFC bridge. Each was called blocked at least once, and
+in every case the blockage was a description rather than the mathematics.
+
+## What was, at the time, treated as unverified
 
 Of the four items originally listed there, two have since been delivered by simply attempting
 them -- Berge's first-countability and Hilbert--Schmidt implies compact. In both cases the
@@ -65,130 +72,19 @@ rather than in the code: judging by what something is called rather than by what
 
 ### Genuinely missing mathematics — not renames
 
-5. **`selfAdjointFunctionalCalculus_toContinuousLinearMap_eq_cfc`** — the `RCLike` calculus
-   agrees with Mathlib's CFC over `ℂ`. Part A milestone.
+5. ~~**`selfAdjointFunctionalCalculus_toContinuousLinearMap_eq_cfc`**~~ — **delivered.**
+   Part A's milestone: the `RCLike` finite calculus, transported to bounded operators, is
+   Mathlib's continuous functional calculus.
 
-   **Correction.** An earlier version of this entry said the file supplies none of
-   additivity, multiplicativity, star-preservation or continuity, and presented that as the
-   one assessment in this pass that survived checking. It did not survive. What I checked was
-   the *requirement* — `cfcHom_eq_of_continuous_of_map_id` does take
-   `φ : C(spectrum R a, R) →⋆ₐ[R] A` with `Continuous φ` and `φ (id) = a`. What I did not
-   check, while reporting the whole claim as verified, was what the file already had:
+   The route, in the order it was built: the algebra laws (`_add`, `_smul`, `_comp`,
+   `_isSymmetric`, `_one`, `_pow`), the Parseval norm bound, the `Module.End`↔`ContinuousLinearMap`
+   algebra equivalence, the eigenvalue containment in the real spectrum, `extendSymbol` with
+   `_indicator` to make extension off the spectrum invisible, then `calculusStarAlgHom` and
+   its two hypotheses, and finally `cfcHom_eq_of_continuous_of_map_id`.
 
-   * multiplicativity **already existed** as `selfAdjointFunctionalCalculus_comp`
-     (`calculus f ∘ₗ calculus g = calculus (f * g)`);
-   * star-preservation **already existed** as `selfAdjointFunctionalCalculus_isSymmetric`;
-   * additivity and real-homogeneity were four lines each and are now delivered as
-     `selfAdjointFunctionalCalculus_add` and `selfAdjointFunctionalCalculus_smul`.
-
-   **The norm bound is now delivered too.**
-   `norm_selfAdjointFunctionalCalculus_apply_le` proves
-   `‖calculus hT f x‖ ≤ M * ‖x‖` whenever `M` dominates `|f|` on the eigenvalues, by Parseval
-   in the eigenbasis — about 25 lines. I had written that there was "no norm machinery at
-   all", which was true of the file and false as a statement about difficulty.
-
-   So of the obligations this entry has claimed at various points — four, then one, then
-   three — what is actually left is **two**: continuity of `f ↦ calculus hT f` packaged from
-   the bound above, and the identification of `spectrum ℝ T.toContinuousLinearMap` with the
-   eigenvalue set. Then the `StarAlgHom` assembles and
-   `cfcHom_eq_of_continuous_of_map_id` applies.
-
-   **A shortcut that does not exist.** If Mathlib had `cfc f a` acting on an eigenvector of
-   `a`, both sides would be determined on the eigenbasis and the bridge would collapse to a
-   basis comparison. It does not — searched for under several phrasings, nothing. So the
-   `StarAlgHom` route is the principled one, and this negative is one I actually ran, unlike
-   the one I fabricated for A2 earlier in this pass.
-
-   **The second obligation is narrower than "identify the spectrum".** The `StarAlgHom` only
-   needs each eigenvalue to *lie in* `spectrum ℝ T.toContinuousLinearMap`, not equality of the
-   two sets: the calculus depends on `f` only through its values at the eigenvalues, so a
-   `g : C(spectrum ℝ a, ℝ)` can be extended by zero off the spectrum and the algebra
-   operations still match. Containment also gives the norm bound `‖φ g‖ ≤ ‖g‖_∞` from
-   `norm_selfAdjointFunctionalCalculus_apply_le`, which is the continuity obligation.
-
-   Route for the containment, **attempted and reverted; the tree is unchanged**. Two of the
-   three steps go through as written:
-
-   * `Module.End.HasEigenvector` is built from `hT.apply_eigenvectorBasis` and the basis
-     vectors being nonzero, and `Module.End.hasEigenvalue_of_hasEigenvector` gives
-     `HasEigenvalue T (λᵢ : ℂ)`;
-   * `spectrum.preimage_algebraMap` drops a complex-spectrum membership to `spectrum ℝ`.
-
-   **The gap is closed.** `endAlgEquivContinuousLinearMap` upgrades
-   `LinearMap.toContinuousLinearMap` to an `AlgEquiv` via `AlgEquiv.ofLinearEquiv` — three
-   lines, since `map_one` and `map_mul` are `ext`-then-`rfl` for endomorphism composition.
-   Mathlib has the linear equivalence but not this upgrade. With it,
-   `eigenvalues_mem_spectrum_toContinuousLinearMap` follows: `HasEigenvector` from
-   `apply_eigenvectorBasis`, `AlgEquiv.spectrum_eq` across to the bounded algebra, then
-   `spectrum.preimage_algebraMap` down to `ℝ`.
-
-   **So the only thing left on this entry is the `StarAlgHom` assembly itself**, and its
-   awkward step is also handled: `selfAdjointFunctionalCalculus_indicator` says extending a
-   symbol by zero off any set containing the eigenvalues leaves the operator unchanged. That
-   is what lets a `g : C(spectrum ℝ a, ℝ)` become an `ℝ → ℝ` without the algebra operations
-   drifting — `Set.indicator` commutes with `+` and `*`, and the mismatch at `1` (indicator
-   is `0` off the spectrum, the constant is `1`) is invisible to the calculus.
-
-   Ingredients in hand: `_add`, `_smul`, `_comp`, `_isSymmetric`, `_one`, `_pow`, the Parseval
-   bound, the eigenvalue containment, `_indicator`, and `extendSymbol` with its algebra.
-
-   **The bundle is built.** `calculusStarAlgHom` is a
-   `C(spectrum ℝ T.toContinuousLinearMap, ℝ) →⋆ₐ[ℝ] (H →L[ℂ] H)`, all six fields, each the
-   corresponding calculus lemma composed with `_indicator` and the eigenvalue containment.
-
-   Two Lean details cost most of the iterations and are worth knowing:
-
-   * `selfAdjointFunctionalCalculus_comp` has a lambda pattern (`fun x => f x * g x`), and
-     `rw` cannot unify it higher-order. Supplying the arguments explicitly —
-     `← selfAdjointFunctionalCalculus_comp hT (extendSymbol g₁) (extendSymbol g₂)` — fixes it.
-   * the `extendSymbol` algebra lemmas must be stated in whichever form the *calculus* lemma
-     uses: lambda for `_comp`'s multiplication, `Pi` for `_add`. Mixing them fails with
-     "did not find an occurrence of the pattern" on terms that display identically.
-
-   **Both hypotheses of `cfcHom_eq_of_continuous_of_map_id` are now delivered too**:
-   `calculusStarAlgHom_id` (`φ (restrict id) = a`) and `norm_calculusStarAlgHom_le`
-   (`‖φ g‖ ≤ ‖g‖`, which gives continuity since `φ` is `ℝ`-linear).
-
-   **The final theorem was attempted and reverted; the tree is unchanged and green.** The
-   skeleton is right and two spellings are wrong:
-
-   ```lean
-   have ha : IsSelfAdjoint T.toContinuousLinearMap :=
-     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
-   have hcont : Continuous (calculusStarAlgHom hT) :=
-     AddMonoidHomClass.continuous_of_bound (calculusStarAlgHom hT) 1 fun g => by
-       simpa using norm_calculusStarAlgHom_le hT g          -- ← goal not closed by `simpa`
-   have hhom : cfcHom ha = calculusStarAlgHom hT :=
-     cfcHom_eq_of_continuous_of_map_id ha _ hcont (calculusStarAlgHom_id hT)
-   rw [cfc_apply f T.toContinuousLinearMap ha hf.continuousOn, hhom]
-   -- then `selfAdjointFunctionalCalculus_congr` against
-   -- `eigenvalues_mem_spectrum_toContinuousLinearMap`
-   ```
-
-   The two fixes needed: `cfc_apply` builds its `ContinuousMap` as `⟨_, hf.restrict⟩` where
-   `hf : ContinuousOn f (spectrum ℝ a)`, so the same term downstream must be written with
-   `hf.continuousOn |>.restrict` and not `Continuous.restrict`, which wants a `MapsTo`; and
-   the `simpa` closing the norm bound leaves a goal, so the `1 * ‖g‖` normalisation needs
-   doing by hand.
-
-   Lean note for that last step: applying a bundled `StarAlgHom` does not beta-reduce under
-   `rw`, and the `show` tactic is linted against changing goals here. State the unfolded
-   equation as a `have` and close with `exact`; that is how `calculusStarAlgHom_id` is
-   written.
-
-   For the real-spectrum machinery generally, `IsSelfAdjoint.spectrumRestricts`
-   (`Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Instances.lean`) is the
-   real-spectrum machinery, and `Module.End.hasEigenvalue_iff_mem_spectrum` connects the
-   complex spectrum to eigenvalues in finite dimension. Both ends exist; the join is the
-   `ℝ`/`ℂ` restriction interface, which is the genuinely interface-heavy part of this entry
-   and the reason it is the last one standing.
-
-   This entry has now been wrong four times. Its history is left visible rather than tidied,
-   because the pattern is the useful part.
-
-   The methodological point is the transferable part: verifying one half of a claim and
-   asserting the other, then reporting the whole as checked, is worse than an admitted guess,
-   because it borrows the language of diligence for the unverified half.
+   This entry was described as blocked, or as needing four obligations, then one, then three,
+   then two, then one again, across six revisions. Every number came from estimating; every
+   correction came from opening a file. The final assembly took four reverts.
 
 ### Over-strong hypotheses
 
