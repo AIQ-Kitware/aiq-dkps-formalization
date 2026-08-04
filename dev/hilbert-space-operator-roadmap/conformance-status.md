@@ -81,8 +81,14 @@ rather than in the code: judging by what something is called rather than by what
    * additivity and real-homogeneity were four lines each and are now delivered as
      `selfAdjointFunctionalCalculus_add` and `selfAdjointFunctionalCalculus_smul`.
 
-   **Only continuity in `f` is genuinely absent.** With it, plus the spectrum identification,
-   the `StarAlgHom` bundle assembles and `cfcHom_eq_of_continuous_of_map_id` applies.
+   **Only continuity in `f` is genuinely absent**, and — checked this time — there is no norm
+   machinery on the calculus at all: no pointwise bound, no operator-norm bound, nothing
+   mentioning `‖·‖`. Continuity needs the pointwise estimate
+   `‖calculus hT f x‖ ≤ (⨆ i, |f (λᵢ)|) * ‖x‖` first, by Parseval in the eigenbasis.
+
+   With that, plus the identification of `spectrum ℝ T.toContinuousLinearMap` with the
+   eigenvalue set, the `StarAlgHom` bundle assembles and
+   `cfcHom_eq_of_continuous_of_map_id` applies. Three pieces, not one and not four.
 
    The methodological point is the transferable part: verifying one half of a claim and
    asserting the other, then reporting the whole as checked, is worse than an admitted guess,
