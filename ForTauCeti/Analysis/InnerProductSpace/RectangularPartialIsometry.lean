@@ -165,3 +165,30 @@ theorem IsPartialIsometry.adjoint {u : E →ₗ[𝕜] F} (hu : u.IsPartialIsomet
   simpa only [LinearMap.adjoint_comp, LinearMap.adjoint_adjoint, LinearMap.comp_assoc] using h
 
 end LinearMap
+
+namespace ContinuousLinearMap
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E F : Type*}
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+
+/-- **Partial isometry between possibly different spaces**, bounded form:
+`u ∘L u.adjoint ∘L u = u`.
+
+The same typed equation as `LinearMap.IsPartialIsometry`, stated on the bounded carrier so
+that consumers on complete spaces -- the rectangular polar decomposition in particular --
+never leave `→L`.  A rectangular map is not an element of one monoid, so the star-monoid
+predicate `u * star u * u = u` is unavailable here. -/
+def IsPartialIsometry (u : E →L[𝕜] F) : Prop :=
+  u ∘L u.adjoint ∘L u = u
+
+/-- The adjoint of a partial isometry is a partial isometry. -/
+theorem IsPartialIsometry.adjoint {u : E →L[𝕜] F} (hu : u.IsPartialIsometry) :
+    u.adjoint.IsPartialIsometry := by
+  have h := congrArg ContinuousLinearMap.adjoint hu
+  unfold ContinuousLinearMap.IsPartialIsometry
+  simpa only [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_adjoint,
+    ← ContinuousLinearMap.comp_assoc] using h
+
+end ContinuousLinearMap
