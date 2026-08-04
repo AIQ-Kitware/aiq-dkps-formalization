@@ -172,6 +172,30 @@ theorem inf_halmosTrivialPart_right :
   · exact sup_le (le_inf inf_le_right (halmosCommonPart_le_trivial U V))
       (le_inf inf_le_right (halmosTargetDefect_le_trivial U V))
 
+/-- **`U` is the join of its trivial and generic parts.** -/
+theorem eq_sup_inf_halmosTrivialPart_inf_halmosGenericPart :
+    U = (U ⊓ halmosTrivialPart U V) ⊔ (U ⊓ halmosGenericPart U V) := by
+  refine le_antisymm (fun x hx => ?_) (sup_le inf_le_left inf_le_left)
+  refine Submodule.mem_sup.mpr
+    ⟨(halmosTrivialPart U V).starProjection x,
+      ⟨starProjection_trivial_mem_left U V hx,
+        (halmosTrivialPart U V).starProjection_apply_mem x⟩,
+      x - (halmosTrivialPart U V).starProjection x,
+      ⟨U.sub_mem hx (starProjection_trivial_mem_left U V hx),
+        (halmosTrivialPart U V).sub_starProjection_mem_orthogonal x⟩, by abel⟩
+
+/-- The same for `V`. -/
+theorem eq_sup_inf_halmosTrivialPart_inf_halmosGenericPart_right :
+    V = (V ⊓ halmosTrivialPart U V) ⊔ (V ⊓ halmosGenericPart U V) := by
+  refine le_antisymm (fun x hx => ?_) (sup_le inf_le_left inf_le_left)
+  refine Submodule.mem_sup.mpr
+    ⟨(halmosTrivialPart U V).starProjection x,
+      ⟨starProjection_trivial_mem_right U V hx,
+        (halmosTrivialPart U V).starProjection_apply_mem x⟩,
+      x - (halmosTrivialPart U V).starProjection x,
+      ⟨V.sub_mem hx (starProjection_trivial_mem_right U V hx),
+        (halmosTrivialPart U V).sub_starProjection_mem_orthogonal x⟩, by abel⟩
+
 end Structure
 
 variable (U₁ V₁ : Submodule ℂ H₁) [U₁.HasOrthogonalProjection]
@@ -321,6 +345,196 @@ theorem map_halmosGlobalEquiv_generic
         (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
       halmosGenericPart U₂ V₂ :=
   TauCeti.map_orthogonalGlue_orthogonal _ _
+
+/-- The assembled isometry carries the common summand onto the common summand. -/
+theorem map_halmosGlobalEquiv_common
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂) :
+    (halmosCommonPart U₁ V₁).map
+        (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
+      halmosCommonPart U₂ V₂ := by
+  refine le_antisymm ?_ ?_
+  · rintro _ ⟨c, hc, rfl⟩
+    have hct : c ∈ halmosTrivialPart U₁ V₁ := halmosCommonPart_le_trivial U₁ V₁ hc
+    change halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg c ∈ _
+    rw [halmosGlobalEquiv_apply_of_mem_trivial U₁ V₁ U₂ V₂ ec es et ee eg hct,
+      coe_halmosTrivialEquiv_of_mem_common U₁ V₁ U₂ V₂ ec es et ee hc hct]
+    exact (ec ⟨c, hc⟩).2
+  · intro d hd
+    refine ⟨(ec.symm ⟨d, hd⟩ : H₁), (ec.symm ⟨d, hd⟩).2, ?_⟩
+    have hct : (ec.symm ⟨d, hd⟩ : H₁) ∈ halmosTrivialPart U₁ V₁ :=
+      halmosCommonPart_le_trivial U₁ V₁ (ec.symm ⟨d, hd⟩).2
+    change halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg _ = d
+    rw [halmosGlobalEquiv_apply_of_mem_trivial U₁ V₁ U₂ V₂ ec es et ee eg hct,
+      coe_halmosTrivialEquiv_of_mem_common U₁ V₁ U₂ V₂ ec es et ee
+        (ec.symm ⟨d, hd⟩).2 hct]
+    simp
+/-- The assembled isometry carries the source summand onto the source summand. -/
+theorem map_halmosGlobalEquiv_source
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂) :
+    (halmosSourceDefect U₁ V₁).map
+        (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
+      halmosSourceDefect U₂ V₂ := by
+  refine le_antisymm ?_ ?_
+  · rintro _ ⟨c, hc, rfl⟩
+    have hct : c ∈ halmosTrivialPart U₁ V₁ := halmosSourceDefect_le_trivial U₁ V₁ hc
+    change halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg c ∈ _
+    rw [halmosGlobalEquiv_apply_of_mem_trivial U₁ V₁ U₂ V₂ ec es et ee eg hct,
+      coe_halmosTrivialEquiv_of_mem_source U₁ V₁ U₂ V₂ ec es et ee hc hct]
+    exact (es ⟨c, hc⟩).2
+  · intro d hd
+    refine ⟨(es.symm ⟨d, hd⟩ : H₁), (es.symm ⟨d, hd⟩).2, ?_⟩
+    have hct : (es.symm ⟨d, hd⟩ : H₁) ∈ halmosTrivialPart U₁ V₁ :=
+      halmosSourceDefect_le_trivial U₁ V₁ (es.symm ⟨d, hd⟩).2
+    change halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg _ = d
+    rw [halmosGlobalEquiv_apply_of_mem_trivial U₁ V₁ U₂ V₂ ec es et ee eg hct,
+      coe_halmosTrivialEquiv_of_mem_source U₁ V₁ U₂ V₂ ec es et ee
+        (es.symm ⟨d, hd⟩).2 hct]
+    simp
+/-- The assembled isometry carries the target summand onto the target summand. -/
+theorem map_halmosGlobalEquiv_target
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂) :
+    (halmosTargetDefect U₁ V₁).map
+        (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
+      halmosTargetDefect U₂ V₂ := by
+  refine le_antisymm ?_ ?_
+  · rintro _ ⟨c, hc, rfl⟩
+    have hct : c ∈ halmosTrivialPart U₁ V₁ := halmosTargetDefect_le_trivial U₁ V₁ hc
+    change halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg c ∈ _
+    rw [halmosGlobalEquiv_apply_of_mem_trivial U₁ V₁ U₂ V₂ ec es et ee eg hct,
+      coe_halmosTrivialEquiv_of_mem_target U₁ V₁ U₂ V₂ ec es et ee hc hct]
+    exact (et ⟨c, hc⟩).2
+  · intro d hd
+    refine ⟨(et.symm ⟨d, hd⟩ : H₁), (et.symm ⟨d, hd⟩).2, ?_⟩
+    have hct : (et.symm ⟨d, hd⟩ : H₁) ∈ halmosTrivialPart U₁ V₁ :=
+      halmosTargetDefect_le_trivial U₁ V₁ (et.symm ⟨d, hd⟩).2
+    change halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg _ = d
+    rw [halmosGlobalEquiv_apply_of_mem_trivial U₁ V₁ U₂ V₂ ec es et ee eg hct,
+      coe_halmosTrivialEquiv_of_mem_target U₁ V₁ U₂ V₂ ec es et ee
+        (et.symm ⟨d, hd⟩).2 hct]
+    simp
+/-- The assembled isometry carries the exterior summand onto the exterior summand. -/
+theorem map_halmosGlobalEquiv_exterior
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂) :
+    (halmosExteriorPart U₁ V₁).map
+        (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
+      halmosExteriorPart U₂ V₂ := by
+  refine le_antisymm ?_ ?_
+  · rintro _ ⟨c, hc, rfl⟩
+    have hct : c ∈ halmosTrivialPart U₁ V₁ := halmosExteriorPart_le_trivial U₁ V₁ hc
+    change halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg c ∈ _
+    rw [halmosGlobalEquiv_apply_of_mem_trivial U₁ V₁ U₂ V₂ ec es et ee eg hct,
+      coe_halmosTrivialEquiv_of_mem_exterior U₁ V₁ U₂ V₂ ec es et ee hc hct]
+    exact (ee ⟨c, hc⟩).2
+  · intro d hd
+    refine ⟨(ee.symm ⟨d, hd⟩ : H₁), (ee.symm ⟨d, hd⟩).2, ?_⟩
+    have hct : (ee.symm ⟨d, hd⟩ : H₁) ∈ halmosTrivialPart U₁ V₁ :=
+      halmosExteriorPart_le_trivial U₁ V₁ (ee.symm ⟨d, hd⟩).2
+    change halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg _ = d
+    rw [halmosGlobalEquiv_apply_of_mem_trivial U₁ V₁ U₂ V₂ ec es et ee eg hct,
+      coe_halmosTrivialEquiv_of_mem_exterior U₁ V₁ U₂ V₂ ec es et ee
+        (ee.symm ⟨d, hd⟩).2 hct]
+    simp
+
+/-- The assembled isometry carries the `U`-part of the generic summand where the
+generic hypothesis says it does. -/
+theorem map_halmosGlobalEquiv_inf_generic_left
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂)
+    (hgU : ∀ y : halmosGenericPart U₁ V₁, ((eg y : H₂) ∈ U₂ ↔ (y : H₁) ∈ U₁)) :
+    (U₁ ⊓ halmosGenericPart U₁ V₁).map
+        (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
+      U₂ ⊓ halmosGenericPart U₂ V₂ := by
+  refine le_antisymm ?_ ?_
+  · rintro _ ⟨x, ⟨hxU, hxg⟩, rfl⟩
+    change halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg x ∈ _
+    rw [halmosGlobalEquiv_apply_of_mem_generic U₁ V₁ U₂ V₂ ec es et ee eg hxg]
+    exact ⟨(hgU ⟨x, hxg⟩).mpr hxU, (eg ⟨x, hxg⟩).2⟩
+  · rintro y ⟨hyU, hyg⟩
+    refine ⟨(eg.symm ⟨y, hyg⟩ : H₁), ⟨?_, (eg.symm ⟨y, hyg⟩).2⟩, ?_⟩
+    · refine (hgU (eg.symm ⟨y, hyg⟩)).mp ?_
+      simpa using hyU
+    · change halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg _ = y
+      rw [halmosGlobalEquiv_apply_of_mem_generic U₁ V₁ U₂ V₂ ec es et ee eg
+        (eg.symm ⟨y, hyg⟩).2]
+      simp
+
+/-- The same for `V`. -/
+theorem map_halmosGlobalEquiv_inf_generic_right
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂)
+    (hgV : ∀ y : halmosGenericPart U₁ V₁, ((eg y : H₂) ∈ V₂ ↔ (y : H₁) ∈ V₁)) :
+    (V₁ ⊓ halmosGenericPart U₁ V₁).map
+        (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
+      V₂ ⊓ halmosGenericPart U₂ V₂ := by
+  refine le_antisymm ?_ ?_
+  · rintro _ ⟨x, ⟨hxV, hxg⟩, rfl⟩
+    change halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg x ∈ _
+    rw [halmosGlobalEquiv_apply_of_mem_generic U₁ V₁ U₂ V₂ ec es et ee eg hxg]
+    exact ⟨(hgV ⟨x, hxg⟩).mpr hxV, (eg ⟨x, hxg⟩).2⟩
+  · rintro y ⟨hyV, hyg⟩
+    refine ⟨(eg.symm ⟨y, hyg⟩ : H₁), ⟨?_, (eg.symm ⟨y, hyg⟩).2⟩, ?_⟩
+    · refine (hgV (eg.symm ⟨y, hyg⟩)).mp ?_
+      simpa using hyV
+    · change halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg _ = y
+      rw [halmosGlobalEquiv_apply_of_mem_generic U₁ V₁ U₂ V₂ ec es et ee eg
+        (eg.symm ⟨y, hyg⟩).2]
+      simp
+
+/-- **The assembled isometry carries `U₁` onto `U₂`.** -/
+theorem map_halmosGlobalEquiv_left
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂)
+    (hgU : ∀ y : halmosGenericPart U₁ V₁, ((eg y : H₂) ∈ U₂ ↔ (y : H₁) ∈ U₁)) :
+    U₁.map (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap = U₂ := by
+  have hsplit : U₁.map (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
+      ((U₁ ⊓ halmosTrivialPart U₁ V₁) ⊔ (U₁ ⊓ halmosGenericPart U₁ V₁)).map
+        (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap :=
+    congrArg (fun K : Submodule ℂ H₁ =>
+      K.map (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap)
+      (eq_sup_inf_halmosTrivialPart_inf_halmosGenericPart U₁ V₁)
+  rw [hsplit, Submodule.map_sup, inf_halmosTrivialPart_left U₁ V₁, Submodule.map_sup,
+    map_halmosGlobalEquiv_common U₁ V₁ U₂ V₂ ec es et ee eg,
+    map_halmosGlobalEquiv_source U₁ V₁ U₂ V₂ ec es et ee eg,
+    map_halmosGlobalEquiv_inf_generic_left U₁ V₁ U₂ V₂ ec es et ee eg hgU,
+    ← inf_halmosTrivialPart_left U₂ V₂,
+    ← eq_sup_inf_halmosTrivialPart_inf_halmosGenericPart U₂ V₂]
+
+/-- **The assembled isometry carries `V₁` onto `V₂`.** -/
+theorem map_halmosGlobalEquiv_right
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂)
+    (hgV : ∀ y : halmosGenericPart U₁ V₁, ((eg y : H₂) ∈ V₂ ↔ (y : H₁) ∈ V₁)) :
+    V₁.map (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap = V₂ := by
+  have hsplit : V₁.map (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
+      ((V₁ ⊓ halmosTrivialPart U₁ V₁) ⊔ (V₁ ⊓ halmosGenericPart U₁ V₁)).map
+        (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap :=
+    congrArg (fun K : Submodule ℂ H₁ =>
+      K.map (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap)
+      (eq_sup_inf_halmosTrivialPart_inf_halmosGenericPart_right U₁ V₁)
+  rw [hsplit, Submodule.map_sup, inf_halmosTrivialPart_right U₁ V₁, Submodule.map_sup,
+    map_halmosGlobalEquiv_common U₁ V₁ U₂ V₂ ec es et ee eg,
+    map_halmosGlobalEquiv_target U₁ V₁ U₂ V₂ ec es et ee eg,
+    map_halmosGlobalEquiv_inf_generic_right U₁ V₁ U₂ V₂ ec es et ee eg hgV,
+    ← inf_halmosTrivialPart_right U₂ V₂,
+    ← eq_sup_inf_halmosTrivialPart_inf_halmosGenericPart_right U₂ V₂]
+
+/-- **Brick (2), complete.**  Matched isometries of the four elementary Halmos
+summands together with a generic-part isometry that respects `U` and `V`
+assemble into a unitary equivalence of the ordered pairs.
+
+The elementary summands need no compatibility hypothesis: `common ≤ U ⊓ V`,
+`source ≤ U ⊓ Vᗮ`, `target ≤ Uᗮ ⊓ V` and `exterior ≤ Uᗮ ⊓ Vᗮ`, so *any*
+isometry between matched summands lands where it must.  The only real input is
+`hgU`/`hgV` on the generic part — which is exactly what brick (1), the generic
+`2 × 2` model, has to supply. -/
+theorem pairOfSubspacesUnitaryEquivalent_of_summandEquivs
+    (ec' : halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
+    (es' : halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)
+    (et' : halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
+    (ee' : halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂)
+    (hgU : ∀ y : halmosGenericPart U₁ V₁, ((eg y : H₂) ∈ U₂ ↔ (y : H₁) ∈ U₁))
+    (hgV : ∀ y : halmosGenericPart U₁ V₁, ((eg y : H₂) ∈ V₂ ↔ (y : H₁) ∈ V₁)) :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ :=
+  ⟨halmosGlobalEquiv U₁ V₁ U₂ V₂ ec' es' et' ee' eg,
+    map_halmosGlobalEquiv_left U₁ V₁ U₂ V₂ ec' es' et' ee' eg hgU,
+    map_halmosGlobalEquiv_right U₁ V₁ U₂ V₂ ec' es' et' ee' eg hgV⟩
 
 end HiddenFoundations
 end MathAhead
