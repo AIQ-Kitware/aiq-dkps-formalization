@@ -643,6 +643,102 @@ noncomputable def genericHalvesEquiv :
       rw [htop]; trivial
     exact this
 
+
+/-! ## `B* B = A - A²`
+
+The quadratic-form identity upgrades to an operator identity.  Working with the
+full complex inner product rather than its real part avoids any appeal to
+"a self-adjoint operator with vanishing quadratic form is zero": both sides are
+literally the same complex number.
+
+This is the relation that makes `|B|` a function of `A`, which is what the
+transport step needs — a unitary intertwining `A` then intertwines `|B|` by
+uniqueness of positive square roots.
+-/
+
+/-- The cosine block is self-adjoint. -/
+theorem isSelfAdjoint_genericCosineBlock :
+    IsSelfAdjoint (genericCosineBlock U V) :=
+  DavisKahanExt.isSelfAdjoint_compressOperator (isSelfAdjoint_starProjection V)
+    (genericLeftHalf U V)
+
+/-- The complex-valued form of `re_inner_genericCosineBlock`. -/
+theorem inner_genericCosineBlock_self (m : genericLeftHalf U V) :
+    ⟪genericCosineBlock U V m, m⟫_ℂ =
+      ((‖V.starProjection (m : H)‖ : ℝ) : ℂ) ^ 2 := by
+  have hcoe : ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
+      (genericLeftHalf U V).starProjection (V.starProjection (m : H)) := by
+    simp [genericCosineBlock, DavisKahanExt.compressOperator]
+  calc ⟪genericCosineBlock U V m, m⟫_ℂ
+      = ⟪((genericCosineBlock U V m : genericLeftHalf U V) : H), (m : H)⟫_ℂ := rfl
+    _ = ⟪(genericLeftHalf U V).starProjection (V.starProjection (m : H)),
+          (m : H)⟫_ℂ := by rw [hcoe]
+    _ = ⟪V.starProjection (m : H),
+          (genericLeftHalf U V).starProjection (m : H)⟫_ℂ :=
+        (genericLeftHalf U V).inner_starProjection_left_eq_right _ _
+    _ = ⟪V.starProjection (m : H), (m : H)⟫_ℂ := by
+        rw [Submodule.starProjection_eq_self_iff.mpr m.2]
+    _ = ((‖V.starProjection (m : H)‖ : ℝ) : ℂ) ^ 2 :=
+        inner_starProjection_self V (m : H)
+
+/-- **`B* B = A - A²`**, the classical Halmos relation, obtained from the
+quadratic form rather than from the `2 × 2` block algebra. -/
+theorem adjoint_comp_genericCrossBlock :
+    (ContinuousLinearMap.adjoint (genericCrossBlock U V)) ∘L
+        genericCrossBlock U V =
+      genericCosineBlock U V -
+        genericCosineBlock U V ∘L genericCosineBlock U V := by
+  have hkey : ∀ m : genericLeftHalf U V,
+      ⟪((ContinuousLinearMap.adjoint (genericCrossBlock U V)) ∘L
+          genericCrossBlock U V -
+        (genericCosineBlock U V -
+          genericCosineBlock U V ∘L genericCosineBlock U V)) m, m⟫_ℂ = 0 := by
+    intro m
+    have hBB : ⟪(ContinuousLinearMap.adjoint (genericCrossBlock U V))
+        (genericCrossBlock U V m), m⟫_ℂ =
+        ((‖genericCrossBlock U V m‖ : ℝ) : ℂ) ^ 2 := by
+      rw [ContinuousLinearMap.adjoint_inner_left, inner_self_eq_norm_sq_to_K]
+      norm_cast
+    have hAA : ⟪genericCosineBlock U V (genericCosineBlock U V m), m⟫_ℂ =
+        ((‖genericCosineBlock U V m‖ : ℝ) : ℂ) ^ 2 := by
+      have h2 := (isSelfAdjoint_genericCosineBlock U V).adjoint_eq
+      have h1 : ⟪genericCosineBlock U V (genericCosineBlock U V m), m⟫_ℂ =
+          ⟪genericCosineBlock U V m, genericCosineBlock U V m⟫_ℂ := by
+        calc ⟪genericCosineBlock U V (genericCosineBlock U V m), m⟫_ℂ
+            = ⟪(ContinuousLinearMap.adjoint (genericCosineBlock U V))
+                (genericCosineBlock U V m), m⟫_ℂ := by rw [h2]
+          _ = ⟪genericCosineBlock U V m, genericCosineBlock U V m⟫_ℂ :=
+              ContinuousLinearMap.adjoint_inner_left _ _ _
+      rw [h1, inner_self_eq_norm_sq_to_K]
+      norm_cast
+    have hnorms := norm_sq_genericCrossBlock U V m
+    rw [re_inner_genericCosineBlock] at hnorms
+    simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.comp_apply,
+      inner_sub_left]
+    rw [hBB, hAA, inner_genericCosineBlock_self]
+    have : (‖genericCrossBlock U V m‖ : ℝ) ^ 2 =
+        ‖V.starProjection (m : H)‖ ^ 2 - ‖genericCosineBlock U V m‖ ^ 2 := by
+      linarith
+    rw [show ((‖genericCrossBlock U V m‖ : ℝ) : ℂ) ^ 2 =
+      (((‖genericCrossBlock U V m‖ : ℝ) ^ 2 : ℝ) : ℂ) by norm_cast, this]
+    push_cast
+    ring
+  have hzero := (inner_map_self_eq_zero
+    (((ContinuousLinearMap.adjoint (genericCrossBlock U V)) ∘L
+        genericCrossBlock U V -
+      (genericCosineBlock U V -
+        genericCosineBlock U V ∘L genericCosineBlock U V)) :
+      genericLeftHalf U V →ₗ[ℂ] genericLeftHalf U V)).mp hkey
+  have h0 : (ContinuousLinearMap.adjoint (genericCrossBlock U V)) ∘L
+      genericCrossBlock U V -
+      (genericCosineBlock U V -
+        genericCosineBlock U V ∘L genericCosineBlock U V) = 0 := by
+    refine ContinuousLinearMap.ext fun m => ?_
+    have := congrArg (fun f : genericLeftHalf U V →ₗ[ℂ] genericLeftHalf U V => f m)
+      hzero
+    simpa using this
+  rwa [sub_eq_zero] at h0
+
 end HiddenFoundations
 end MathAhead
 end Experimental
