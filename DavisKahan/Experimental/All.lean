@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.All
 import DavisKahan.Experimental.Sources.All
+import DavisKahan.Experimental.Frontier.All
 
 /-! # Experimental Davis--Kahan theory
 
@@ -20,4 +21,22 @@ opened with — so it contributed nothing but the note, while its own 94-module
 directory went unaggregated and it stood as a permanent rule-3 violation.  The note
 is the part worth keeping; the sub-aggregates (`InfiniteDimensional/Core/All.lean`
 and its siblings) cover the subtree.
+
+## Why `Frontier.All` is imported here
+
+`DavisKahan/Experimental/Frontier/**` holds the remaining Davis--Kahan 1970
+frontier statements — the Section 3 classification spine, the
+infinite-dimensional Section 4 propositions, and the Section 9 analytic model —
+together with the `sorry`s that mark what is still open.  Until 2026-08-04
+**nothing in the repository imported any of it.**  `lake build` did not reach it,
+`lake build DavisKahan.Experimental` did not reach it, and neither did
+`Challenge` or `FinishTanTwoTheta`; it compiled only when a module was named
+explicitly on the command line, which nothing and nobody did routinely.
+
+That is the same defect the `RoadmapBridge` block in `lakefile.toml` records for
+the suggested-signature files: a tree that nothing builds is a tree that rots
+silently, and the fix is an import rather than a checker.  It is imported *here*
+rather than into a default target because the frontier's whole purpose is to
+carry `sorry`s, so it cannot live under `warningAsError`.  `lake build
+DavisKahan.Experimental` now covers it.
 -/
