@@ -475,6 +475,98 @@ theorem coe_genericHalmosCosineSq_of_mem_left (m : genericLeftHalf U V) :
       (projection_mem_halmosGenericPart_right U V m.2.2)]
   rw [hL, hR, hval]
 
+
+/-! ## The cross block is the adjoint of its mirror, and has dense range
+
+`‖B m‖² = ⟪A m, m⟫ - ‖A m‖²` is Pythagoras applied to `P_V m = A m + B m`, whose
+two summands are orthogonal because `M ≤ U` and `N ≤ Uᗮ`.  In the classical
+account this identity is `B*B = A(1 - A)`; here it is needed only in quadratic
+form.
+
+`B'` is the adjoint of `B`, so `genericCrossBlockMirror_eq_zero_iff` says exactly
+that `B` has dense range.  Trivial kernel and dense range together are what make
+the polar factor of `B` a unitary `M ≃ₗᵢ N`.
+-/
+
+omit [CompleteSpace H] in
+/-- The two halves of the generic part are orthogonal. -/
+theorem genericLeftHalf_le_orthogonal_genericRightHalf :
+    genericLeftHalf U V ≤ (genericRightHalf U V)ᗮ := by
+  intro x hx
+  rw [Submodule.mem_orthogonal]
+  intro u hu
+  exact inner_eq_zero_symm.mp
+    ((Submodule.mem_orthogonal _ _).mp hu.1 x hx.1)
+
+/-- **`‖B m‖² = ⟪A m, m⟫ - ‖A m‖²`.**  The quadratic form of `B*B = A(1 - A)`,
+by Pythagoras on `P_V m = A m + B m`. -/
+theorem norm_sq_genericCrossBlock (m : genericLeftHalf U V) :
+    ‖genericCrossBlock U V m‖ ^ 2 =
+      RCLike.re ⟪genericCosineBlock U V m, m⟫_ℂ -
+        ‖genericCosineBlock U V m‖ ^ 2 := by
+  have hperp : ⟪((genericCosineBlock U V m : genericLeftHalf U V) : H),
+      ((genericCrossBlock U V m : genericRightHalf U V) : H)⟫_ℂ = 0 :=
+    (Submodule.mem_orthogonal _ _).mp
+      (genericLeftHalf_le_orthogonal_genericRightHalf U V
+        (genericCosineBlock U V m).2) _ (genericCrossBlock U V m).2
+      |> inner_eq_zero_symm.mp
+  have hpy := @norm_add_sq ℂ _ _ _ _
+    ((genericCosineBlock U V m : genericLeftHalf U V) : H)
+    ((genericCrossBlock U V m : genericRightHalf U V) : H)
+  rw [← starProjection_eq_cosineBlock_add_crossBlock U V m, hperp] at hpy
+  simp only [map_zero, mul_zero, add_zero] at hpy
+  have hA : ‖((genericCosineBlock U V m : genericLeftHalf U V) : H)‖ =
+      ‖genericCosineBlock U V m‖ := Submodule.norm_coe _
+  have hB : ‖((genericCrossBlock U V m : genericRightHalf U V) : H)‖ =
+      ‖genericCrossBlock U V m‖ := Submodule.norm_coe _
+  rw [hA, hB] at hpy
+  rw [re_inner_genericCosineBlock]
+  linarith
+
+/-- **`B'` is the adjoint of `B`.** -/
+theorem inner_genericCrossBlock (m : genericLeftHalf U V)
+    (n : genericRightHalf U V) :
+    ⟪genericCrossBlock U V m, n⟫_ℂ = ⟪m, genericCrossBlockMirror U V n⟫_ℂ := by
+  have hBcoe : ((genericCrossBlock U V m : genericRightHalf U V) : H) =
+      (genericRightHalf U V).starProjection (V.starProjection (m : H)) := by
+    simp [genericCrossBlock]
+  have hB'coe : ((genericCrossBlockMirror U V n : genericLeftHalf U V) : H) =
+      (genericLeftHalf U V).starProjection (V.starProjection (n : H)) := by
+    simp [genericCrossBlockMirror]
+  calc ⟪genericCrossBlock U V m, n⟫_ℂ
+      = ⟪(genericRightHalf U V).starProjection (V.starProjection (m : H)),
+          (n : H)⟫_ℂ := by rw [← hBcoe]; rfl
+    _ = ⟪V.starProjection (m : H),
+          (genericRightHalf U V).starProjection (n : H)⟫_ℂ :=
+        (genericRightHalf U V).inner_starProjection_left_eq_right _ _
+    _ = ⟪V.starProjection (m : H), (n : H)⟫_ℂ := by
+        rw [Submodule.starProjection_eq_self_iff.mpr n.2]
+    _ = ⟪(m : H), V.starProjection (n : H)⟫_ℂ :=
+        V.inner_starProjection_left_eq_right _ _
+    _ = ⟪(genericLeftHalf U V).starProjection (m : H),
+          V.starProjection (n : H)⟫_ℂ := by
+        rw [Submodule.starProjection_eq_self_iff.mpr m.2]
+    _ = ⟪(m : H), (genericLeftHalf U V).starProjection
+          (V.starProjection (n : H))⟫_ℂ := by
+        rw [(genericLeftHalf U V).inner_starProjection_left_eq_right]
+    _ = ⟪m, genericCrossBlockMirror U V n⟫_ℂ := by rw [← hB'coe]; rfl
+
+/-- **The cross block has dense range.**  A vector of `N` orthogonal to the
+range is killed by the mirror, hence zero. -/
+theorem orthogonal_range_genericCrossBlock_eq_bot :
+    (LinearMap.range (genericCrossBlock U V : genericLeftHalf U V →ₗ[ℂ]
+      genericRightHalf U V))ᗮ = ⊥ := by
+  rw [Submodule.eq_bot_iff]
+  intro n hn
+  refine (genericCrossBlockMirror_eq_zero_iff U V n).mp ?_
+  have hzero : ∀ m : genericLeftHalf U V,
+      ⟪m, genericCrossBlockMirror U V n⟫_ℂ = 0 := by
+    intro m
+    rw [← inner_genericCrossBlock]
+    exact (Submodule.mem_orthogonal _ _).mp hn _ ⟨m, rfl⟩
+  have := hzero (genericCrossBlockMirror U V n)
+  exact inner_self_eq_zero.mp this
+
 end HiddenFoundations
 end MathAhead
 end Experimental
