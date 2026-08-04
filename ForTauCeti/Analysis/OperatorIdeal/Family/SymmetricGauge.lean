@@ -49,7 +49,7 @@ roadmap states the family over `ℂ`, and this is the reason.
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Extraction class: **new**.  Written against the target signature in
-  `ForTauCetiRoadmap/OperatorIdeals/Suggested.lean`.
+  `TauCetiRoadmap/HilbertSpaceOperatorTheory/OperatorIdeals/Suggested.lean`.
 * Roadmap topic: `OperatorIdeals`.
 * Original authors / copyright: Claude Opus 5; Copyright (c) 2026 Kitware, Inc.;
   Apache 2.0.

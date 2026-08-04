@@ -88,8 +88,9 @@ names. It belongs to the second slice of `{lane:FTC-SYMGAUGE}`.
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForTauCeti`; it has had no prior home.
-  The signatures are `ForTauCetiRoadmap/OperatorIdeals/Suggested.lean`'s, which
-  recorded them as Milestone B1 targets; this is their first implementation.
+  The signatures are
+  `TauCetiRoadmap/HilbertSpaceOperatorTheory/OperatorIdeals/Suggested.lean`'s, which recorded
+  them as Milestone B1 targets; this is their first implementation.
 * Extraction class: **authored in place** for the Tau Ceti staging layer.
 * Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.

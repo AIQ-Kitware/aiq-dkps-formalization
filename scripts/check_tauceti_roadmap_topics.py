@@ -185,16 +185,20 @@ def roadmap_coverage() -> tuple[list, list, list, list, dict]:
     """(covered, missing, unexpected orphans, intentional orphans, dir->topics).
 
     Public roadmap prose deliberately contains no internal topic keys.  The mapping
-    therefore lives in `ForTauCetiRoadmap/internal/topic-map.md`, whose table assigns
+    therefore lives in `dev/tauceti/roadmap-topic-map.md`, whose table assigns
     each leaf roadmap directory the fine-grained topics it owns.  A leaf roadmap is a
     directory containing `Suggested.lean`; family indexes and `internal/` are not
     roadmaps and are ignored by construction.
     """
-    root = ROOT / "ForTauCetiRoadmap"
-    topic_map = root / "internal" / "topic-map.md"
+    root = ROOT / "submodules/TauCetiRoadmap/TauCetiRoadmap"
+    topic_map = ROOT / "dev" / "tauceti" / "roadmap-topic-map.md"
 
-    leaf_dirs = {p.parent.relative_to(root).as_posix()
-                 for p in root.rglob("Suggested.lean")} if root.exists() else set()
+    # The topic map covers this repository's family only; the submodule carries 24 other
+    # families whose Suggested.lean files are not ours to deliver.
+    family = "HilbertSpaceOperatorTheory"
+    leaf_dirs = {d for d in ({p.parent.relative_to(root).as_posix()
+                              for p in root.rglob("Suggested.lean")} if root.exists() else set())
+                 if d.startswith(family + "/")}
 
     rows: dict[str, list[str]] = {}
     if topic_map.exists():

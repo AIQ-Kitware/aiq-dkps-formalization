@@ -93,23 +93,14 @@ leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, we
 # turning "declaration uses `sorry`" into an error would make the library unbuildable by
 # construction.  The linters stay on, so a genuine style regression still shows up.
 #
-# Not in `defaultTargets`: these are drafts for a reviewer, not submission material, so
-# `lake build` with no argument leaves them alone.  Build them with
-# `lake build ForTauCetiRoadmap`.
-[[lean_lib]]
-name = "ForTauCetiRoadmap"
-globs = ["ForTauCetiRoadmap.*"]
-leanOptions = { warningAsError = false }
-
-# The roadmap bridge.  `ForTauCetiRoadmap` states the proposed signatures against Mathlib
-# alone with `sorry` bodies; `ForTauCeti` proves the mathematics; nothing connected the two,
-# so "delivered" was decided by comparing declaration *names* across the two trees.  Each
-# module here restates a roadmap signature verbatim and discharges it with the delivered
-# declaration, so the correspondence is checked by the compiler.
+# The roadmap bridge.  The submitted roadmap
+# (`submodules/TauCetiRoadmap/**/Suggested.lean`) states the proposed signatures against
+# Mathlib alone with `sorry` bodies; `ForTauCeti` proves the mathematics.  Each module here
+# restates a roadmap signature verbatim and discharges it with the delivered declaration, so
+# the correspondence is checked by the compiler rather than by comparing declaration names.
 #
-# In `defaultTargets` deliberately, unlike `ForTauCetiRoadmap`: the whole point is that the
-# claim is re-verified on every build.  A bridge outside the default build would rot exactly
-# the way the suggested-signature files did.
+# In `defaultTargets` deliberately: the whole point is that the claim is re-verified on every
+# build.  A bridge outside the default build would rot the way the staging tree did.
 [[lean_lib]]
 name = "RoadmapBridge"
 globs = ["RoadmapBridge.*"]
