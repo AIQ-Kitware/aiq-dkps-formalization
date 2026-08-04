@@ -3,12 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 -/
+module
 
-import ForTauCeti.Topology.ApproxMinimizer
-import Mathlib.Order.Filter.AtTopBot.CountablyGenerated
-import Mathlib.Topology.Constructions.SumProd
-import Mathlib.Analysis.SpecificLimits.Basic
-import Mathlib.Topology.Semicontinuity.Hemicontinuity
+public import ForTauCeti.Topology.ApproxMinimizer
+public import Mathlib.Order.Filter.AtTopBot.CountablyGenerated
+public import Mathlib.Topology.Constructions.SumProd
+public import Mathlib.Analysis.SpecificLimits.Basic
+public import Mathlib.Topology.Semicontinuity.Hemicontinuity
 
 /-! # Upper hemicontinuity of the argmin correspondence over a fixed compact set
 
@@ -83,6 +84,8 @@ Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); golfed a terminal
   Mathlib, `TauCeti` and `ForTauCeti` (rule 2 of
   `scripts/check_dependency_layers.py`); this module imports Mathlib only.
 -/
+
+public section
 
 /-!
 ### Provenance

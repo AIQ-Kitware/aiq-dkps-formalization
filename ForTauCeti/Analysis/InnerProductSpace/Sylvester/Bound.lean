@@ -3,8 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.Rayleigh
+public import Mathlib.Analysis.InnerProductSpace.Rayleigh
 
 /-! # An operator-norm bound for the Sylvester equation
 
@@ -51,6 +52,8 @@ taken in the `LinearMap.IsSymmetric` sense, with no reference to adjoints.
 * C. Davis and W. M. Kahan, *The rotation of eigenvectors by a
   perturbation. III*, SIAM J. Numer. Anal. 7 (1970), 1–46.
 -/
+
+public section
 
 namespace TauCeti
 

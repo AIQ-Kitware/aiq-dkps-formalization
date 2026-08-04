@@ -21,9 +21,10 @@ estimate differs — here it is the abstract Sylvester bound
 induced by `N`, whose operator-ideal property is `UnitarilyInvariantSeminorm`'s
 `apply_comp_le`.
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
 
 /-! # The unitarily-invariant-norm Davis–Kahan sin-Θ theorem
 
@@ -57,6 +58,8 @@ Y3(b2) and Y3(b3) are what made it possible: before them this file's import
 closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 
 -/
+
+public section
 
 namespace TauCeti
 open scoped InnerProductSpace

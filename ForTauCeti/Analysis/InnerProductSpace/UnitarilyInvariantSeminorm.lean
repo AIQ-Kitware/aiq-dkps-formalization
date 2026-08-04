@@ -22,10 +22,11 @@ invariant norm `N`.  The engine is the Hardy–Littlewood–Pólya transfer desc
 Birkhoff decomposition, each transform step costing one triangle inequality, one
 homogeneity, and one swap-permutation invariance of the gauge.
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.KyFan
-import ForTauCeti.Analysis.Convex.Majorization
-import Mathlib.Analysis.InnerProductSpace.Projection.Reflection
+public import ForTauCeti.Analysis.InnerProductSpace.KyFan
+public import ForTauCeti.Analysis.Convex.Majorization
+public import Mathlib.Analysis.InnerProductSpace.Projection.Reflection
 
 
 /-! # Unitarily invariant norms and the Fan dominance principle
@@ -69,6 +70,8 @@ set, in `ForTauCeti.Analysis.Convex.Majorization`.
 * L. Mirsky, *Symmetric gauge functions and unitarily invariant norms*,
   Quart. J. Math. Oxford 11 (1960), 50–59.
 -/
+
+public section
 
 namespace TauCeti
 

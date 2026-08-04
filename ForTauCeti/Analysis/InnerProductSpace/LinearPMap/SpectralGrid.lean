@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
-import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
+public import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity
 
 /-!
 # The `ε`-grid on the line, and which of its cells carry spectrum
@@ -40,6 +42,8 @@ exactly the three facts (measurable, disjoint, covering) the decomposition uses.
 directly from `Int.floor` rather than transported.
 -/
 
+public section
+
 open Set
 
 namespace TauCeti
@@ -48,6 +52,7 @@ namespace LinearPMap
 variable {ε : ℝ}
 
 /-- The `k`-th cell of the `ε`-grid on the line. -/
+@[expose]
 def gridCell (ε : ℝ) (k : ℤ) : Set ℝ := Ico ((k : ℝ) * ε) (((k : ℝ) + 1) * ε)
 
 /-- Grid cells are measurable, being half-open intervals, so each admits a spectral projection. -/

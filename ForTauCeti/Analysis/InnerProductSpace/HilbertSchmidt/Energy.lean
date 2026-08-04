@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.Analysis.InnerProductSpace.l2Space
-import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.InnerProductSpace.l2Space
+public import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
 
 /-!
 # The Hilbert--Schmidt energy of a bounded operator
@@ -107,6 +109,7 @@ namespace ContinuousLinearMap
 the sum of the squared norms of the columns of `T`.  It is the square of the
 Hilbert--Schmidt norm, and by `hilbertSchmidtEnergy_indep` it does not in fact depend on
 `b`. -/
+@[expose]
 noncomputable def hilbertSchmidtEnergy (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E) : ℝ≥0∞ :=
   ∑' i, ‖T (b i)‖ₑ ^ 2
 

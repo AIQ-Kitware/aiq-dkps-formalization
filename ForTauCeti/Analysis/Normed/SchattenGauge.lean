@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Claude Opus 5
 -/
-import ForTauCeti.Analysis.Normed.SymmetricGauge
-import Mathlib.Analysis.MeanInequalities
+module
+
+public import ForTauCeti.Analysis.Normed.SymmetricGauge
+public import Mathlib.Analysis.MeanInequalities
 
 /-!
 # The `ℓᵖ` symmetric gauge
@@ -34,6 +36,8 @@ the inequality, is the substance of `add_le`.
 * Original authors / copyright: Claude Opus 5; Copyright (c) 2026 Kitware, Inc.;
   Apache 2.0.
 -/
+
+public section
 
 open scoped NNReal ENNReal
 

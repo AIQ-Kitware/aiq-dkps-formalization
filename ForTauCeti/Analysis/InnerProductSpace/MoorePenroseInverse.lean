@@ -3,8 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.Singular.System
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
 
 
 /-!
@@ -54,6 +55,8 @@ be constructed from the singular system.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 

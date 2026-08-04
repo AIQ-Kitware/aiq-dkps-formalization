@@ -3,13 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall
 -/
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unital
-import Mathlib.Topology.ContinuousMap.StoneWeierstrass
-import Mathlib.Algebra.Star.Unitary
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unital
+public import Mathlib.Topology.ContinuousMap.StoneWeierstrass
+public import Mathlib.Algebra.Star.Unitary
 
 /-!
 # Intertwiners of spectrally separated operators
@@ -129,6 +131,7 @@ theorem cayley_intertwines {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
 /-- Restriction of a symbol along an inclusion of compact sets, as a star algebra
 homomorphism.  Bundling it this way is what lets the induction below move `+`,
 `*` and `star` across the restriction for free. -/
+@[expose]
 noncomputable def symbolRestrict {K s : Set ℂ} (h : s ⊆ K) :
     C(K, ℂ) →⋆ₐ[ℂ] C(s, ℂ) :=
   ContinuousMap.compStarAlgHom' ℂ ℂ ⟨Set.inclusion h, continuous_inclusion h⟩

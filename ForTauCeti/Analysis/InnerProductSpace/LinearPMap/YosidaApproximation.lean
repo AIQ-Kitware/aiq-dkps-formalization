@@ -96,10 +96,12 @@ theorem norm_I_mul_pnat (n : ℕ+) : ‖I * (n : ℂ)‖ = (n : ℝ) := by
 variable {A : H →ₗ.[ℂ] H}
 
 /-- The resolvent at `z = in`. -/
+@[expose]
 noncomputable def resolventAtIn (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
   resolvent A (mem_resolventSet_of_im_ne_zero hA (I_mul_pnat_im_ne_zero n))
 
 /-- The resolvent at `z = -in`. -/
+@[expose]
 noncomputable def resolventAtNegIn (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
   resolvent A (mem_resolventSet_of_im_ne_zero hA (neg_I_mul_pnat_im_ne_zero n))
 
@@ -642,6 +644,7 @@ theorem cauchySeq_expApprox (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
 /-! ### The limit flow `exp(itA)` -/
 
 /-- The strong limit of the approximating flows, pointwise. -/
+@[expose]
 noncomputable def expLimitFun (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) : H :=
   limUnder atTop (fun n : ℕ+ => expApprox hA n t ψ)
 
@@ -673,6 +676,7 @@ theorem norm_expLimitFun (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
   simpa only [norm_expApprox] using tendsto_const_nhds
 
 /-- The limit flow `exp(itA)` as a bounded operator. -/
+@[expose]
 noncomputable def expLimit (hA : IsSelfAdjoint A) (t : ℝ) : H →L[ℂ] H :=
   LinearMap.mkContinuous
     { toFun := expLimitFun hA t

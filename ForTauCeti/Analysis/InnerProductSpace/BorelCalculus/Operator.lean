@@ -370,6 +370,7 @@ theorem norm_borelVector_le (hf : IsBddMeasurable f) (ξ : H) :
 
 /-- **The bounded Borel functional calculus.**  The unique bounded operator
 whose matrix elements are the polarised diagonal integrals of `f`. -/
+@[expose]
 noncomputable def borelCalculus (hf : IsBddMeasurable f) : H →L[ℂ] H :=
   LinearMap.mkContinuous
     { toFun := borelVector ha hf

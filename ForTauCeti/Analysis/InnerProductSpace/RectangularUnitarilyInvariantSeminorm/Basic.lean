@@ -3,14 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.KyFan
-import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
-import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
-import Mathlib.Analysis.InnerProductSpace.ProdL2
-import Mathlib.Analysis.Convex.Caratheodory
+public import ForTauCeti.Analysis.InnerProductSpace.KyFan
+public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
+public import Mathlib.Analysis.Convex.Caratheodory
 
 /-!
 # Rectangular unitarily invariant norms: the structure and its basic laws
@@ -33,6 +34,8 @@ the domain or the codomain.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 

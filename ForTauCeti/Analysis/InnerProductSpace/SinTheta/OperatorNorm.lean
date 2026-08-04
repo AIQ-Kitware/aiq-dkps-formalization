@@ -14,13 +14,14 @@ quadratic form is `≤ c‖·‖²`.  The operator norm `‖Q̂ ∘L P‖` *is* 
 Built on the Sylvester operator bound (`opNorm_le_div_of_comp_sub_comp_eq`)
 without any dimension factor.
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.ReducedExtension
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
-import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
-import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import ForTauCeti.Analysis.InnerProductSpace.ReducedExtension
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
+public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 /-! # The operator-norm Davis–Kahan sin-Θ theorem
 
@@ -65,6 +66,8 @@ Y3(b2) and Y3(b3) are what made it possible: before them this file's import
 closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 
 -/
+
+public section
 
 namespace TauCeti
 

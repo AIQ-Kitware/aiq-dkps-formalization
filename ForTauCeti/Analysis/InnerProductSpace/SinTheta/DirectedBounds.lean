@@ -3,19 +3,21 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
-import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
-import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 
 /-!
 # Davis--Kahan `sin Θ`: residual, directed and projector-difference bounds
@@ -49,6 +51,8 @@ the point that 1110-line file was divided at its
 That file in turn was `DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean`
 before the sin-Θ closure moved into the staging layer.
 -/
+
+public section
 
 namespace TauCeti
 

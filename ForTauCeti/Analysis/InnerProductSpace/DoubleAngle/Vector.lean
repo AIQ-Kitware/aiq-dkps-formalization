@@ -23,10 +23,11 @@ mixed term directly (no rotation, no half-angle) gives
 `(b − a)·(‖Px‖·‖x − Px‖) ≤ |‖Px‖² − ‖x − Px‖²|·ε`, i.e. `tan 2θ ≤ 2ε/(b − a)`,
 with no smallness assumption on the perturbation.
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.Projection.Basic
-import Mathlib.Analysis.InnerProductSpace.Symmetric
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
+public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
+public import Mathlib.Analysis.InnerProductSpace.Symmetric
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
 
 /-! # The Davis sin 2θ theorem (per-eigenvector, product form)
 
@@ -98,6 +99,8 @@ Y3(b2) and Y3(b3) are what made it possible: before them this file's import
 closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 
 -/
+
+public section
 
 namespace TauCeti
 open scoped InnerProductSpace

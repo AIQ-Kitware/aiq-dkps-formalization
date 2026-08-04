@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
 /-!
 # Finite-dimensional spectral subspaces
@@ -26,6 +28,8 @@ inner-product-space component into `ForTauCeti`: before that this file's import
 closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -44,6 +48,7 @@ reader meeting `IsInvariant A U` in a docstring could not tell which.  For a
 symmetric operator the two coincide, and `isInvariant_orthogonal_of_isSymmetric`
 is what supplies that; but the implication is one-directional in general, which
 is exactly why the names had to be separated. -/
+@[expose]
 def IsInvariant (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
   ∀ x ∈ U, A x ∈ U
 
@@ -86,6 +91,7 @@ def SpectrumIn (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (Ω : Set ℝ) : Pr
   restrictedSpectrum A U ⊆ Ω
 
 /-- Canonical finite-dimensional spectral subspace selected by a real set. -/
+@[expose]
 noncomputable def spectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
     Submodule 𝕜 E :=
   Submodule.span 𝕜 {x | ∃ lam ∈ Ω, Module.End.HasEigenvector A (lam : 𝕜) x}

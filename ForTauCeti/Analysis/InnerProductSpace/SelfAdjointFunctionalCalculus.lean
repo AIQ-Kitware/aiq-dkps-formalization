@@ -3,10 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.Positive
-import Mathlib.Analysis.InnerProductSpace.Spectrum
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import Mathlib.Analysis.InnerProductSpace.Positive
+public import Mathlib.Analysis.InnerProductSpace.Spectrum
+public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
 
 
 /-!
@@ -34,6 +35,8 @@ totalized tangent functions used by finite-dimensional operator-angle theory.
   `ForTauCeti` staging modules.
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -45,6 +48,7 @@ variable {𝕜 E : Type*} [RCLike 𝕜]
 
 /-- Apply a real function to the spectrum of a finite-dimensional symmetric
 endomorphism. -/
+@[expose]
 noncomputable def selfAdjointFunctionalCalculus
     {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (f : ℝ → ℝ) : E →ₗ[𝕜] E :=
   ∑ i : Fin (finrank 𝕜 E),
@@ -299,12 +303,28 @@ The finite calculus consumes `ℝ → ℝ`, while `cfcHom` is stated on `C(spect
 is the bridge between the two.  It is multiplicative and additive outright — both sides
 vanish off `S` — and `selfAdjointFunctionalCalculus_indicator` covers the unit, the one
 operation it does not respect. -/
+@[expose]
 noncomputable def extendSymbol {S : Set ℝ} (g : C(S, ℝ)) : ℝ → ℝ :=
   fun x => if h : x ∈ S then g ⟨x, h⟩ else 0
 
 open scoped Classical in
 @[simp] theorem extendSymbol_apply_of_mem {S : Set ℝ} (g : C(S, ℝ)) {x : ℝ} (hx : x ∈ S) :
     extendSymbol g x = g ⟨x, hx⟩ := dif_pos hx
+
+open scoped Classical in
+/-- Off `S` the extension is zero.  With `extendSymbol_apply_of_mem` this determines
+`extendSymbol` pointwise, so a consumer never has to reduce through the body. -/
+@[simp] theorem extendSymbol_apply_of_not_mem {S : Set ℝ} (g : C(S, ℝ)) {x : ℝ} (hx : x ∉ S) :
+    extendSymbol g x = 0 := dif_neg hx
+
+/-- `extendSymbol` as a set indicator, the form the calculus bridge consumes. -/
+theorem extendSymbol_eq_indicator {S : Set ℝ} (g : C(S, ℝ)) (f : ℝ → ℝ)
+    (hf : ∀ (x : ℝ) (hx : x ∈ S), f x = g ⟨x, hx⟩) :
+    extendSymbol g = S.indicator f := by
+  funext x
+  by_cases hx : x ∈ S
+  · rw [extendSymbol_apply_of_mem g hx, Set.indicator_of_mem hx, hf x hx]
+  · rw [extendSymbol_apply_of_not_mem g hx, Set.indicator_of_notMem hx]
 
 open scoped Classical in
 theorem extendSymbol_mul {S : Set ℝ} (g₁ g₂ : C(S, ℝ)) :
@@ -359,6 +379,7 @@ duplicate has been collapsed; the uniqueness theory that only the square root
 has (`sqrt_unique`, `ker_sqrt`, `range_sqrt`, `sqrt_mul_self`) is unchanged and
 still lives in `ForTauCeti/Analysis/InnerProductSpace/PositiveSqrt.lean`, which now
 imports this module rather than the other way round. -/
+@[expose]
 noncomputable def _root_.LinearMap.IsPositive.sqrt
     {T : E →ₗ[𝕜] E} (hT : T.IsPositive) : E →ₗ[𝕜] E :=
   selfAdjointFunctionalCalculus hT.isSymmetric Real.sqrt

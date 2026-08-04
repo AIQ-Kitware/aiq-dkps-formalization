@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal
-import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal
+public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone
 
 /-!
 # Stone's theorem, the uniqueness half
@@ -64,6 +66,8 @@ second-order Duhamel estimate brings in `‖Aₙ² ψ‖`, which blows up with `
   generator's domain, is never required.
 * **Semantic differences from a donor:** not applicable.
 -/
+
+public section
 
 open scoped InnerProductSpace
 open Filter Topology Complex MeasureTheory intervalIntegral
