@@ -82,19 +82,51 @@ theorem corollary4_1_restrictedDisplacement_idealGauge
 noncomputable def basisAngleSquareCost (W : H →L[ℂ] H) (x : H) : ℝ :=
   1 - (RCLike.re ⟪x, W x⟫_ℂ) ^ 2
 
-/-- Davis--Kahan 1970, Proposition 4.2: every finite partial sum along an
-orthonormal source family is bounded below by the corresponding direct-rotation
-principal-angle energy. -/
+/-! ### Proposition 4.2, and a transcription defect in its earlier form
+
+**This statement used to quantify over an arbitrary `Finset` of an arbitrary
+orthonormal family in `U`, and in that form it is FALSE.**  Recorded here with
+the argument, because the earlier form was audited as "sound" and it is not, and
+because the singleton instance is the natural thing to attack first.
+
+Take `ι := Unit`, so the sum has one term.  The claim becomes
+`(re ⟪x, D x⟫)² ≥ (re ⟪x, W x⟫)²` for a single unit `x ∈ U`.  Now:
+
+* `re ⟪x, D x⟫ = ⟪C x, x⟫` with `C = |S|` the positive Halmos cosine
+  (`re_inner_spectraDirectRotation_eq_absoluteValue`);
+* for unit `x ∈ U`, `‖C x‖ = ‖P_V x‖`, because
+  `C² = 1 - (P_U - P_V)²` and `(P_U - P_V) x = x - P_V x` has square norm
+  `1 - ‖P_V x‖²`;
+* any admissible `W` sends `x` into `V` with `‖W x‖ = 1`, so
+  `re ⟪x, W x⟫ = re ⟪P_V x, W x⟫ ≤ ‖P_V x‖`, **with equality** for the `W`
+  determined by `W x = P_V x / ‖P_V x‖` — which exists whenever `U` and `V` have
+  equal finite dimension, since any unit vector of `U` maps to any unit vector of
+  `V` under some isometry, and `Uᗮ → Vᗮ` may be chosen freely;
+* Cauchy--Schwarz gives `⟪C x, x⟫ ≤ ‖C x‖` **strictly** unless `x` is an
+  eigenvector of `C`.
+
+So *every* unit `x ∈ U` that is not a principal vector refutes the singleton
+case.  Concretely, in `ℂ⁴` with principal angles `0` and `π/3` (acute, since
+`sin(π/3) < 1`) and `x = (e₁ + e₂)/√2`: `⟪C x, x⟫ = 3/4` while
+`‖P_V x‖ = √(5/8) ≈ 0.7906`, so the competitor's cost `1 - 5/8 = 3/8` is
+*smaller* than the direct rotation's `1 - 9/16 = 7/16`.
+
+The defect is a missing hypothesis, not a wrong theorem: the source quantifies
+over an orthonormal **basis** of `U`, and the inequality is a statement about the
+total energy, which no proper subfamily inherits.  Summing the same `ℂ⁴` example
+over the full basis `{(e₁±e₂)/√2}` restores it: `1.025 < 1.125`.
+
+The statement below therefore carries the basis hypothesis.  It is finite-index;
+the infinite-dimensional form additionally needs the summability convention that
+`DK-4.2-prop` records as open. -/
 theorem proposition4_2_basisAngleSquareSum
-    {ι : Type*} (s : Finset ι) (v : ι → H)
-    (hv : Orthonormal ℂ v)
-    (hvU : ∀ i, v i ∈ U)
+    {ι : Type*} [Fintype ι] (b : OrthonormalBasis ι ℂ U)
     (hacute : IsAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W) :
-    ∑ i ∈ s, basisAngleSquareCost W (v i) ≥
-      ∑ i ∈ s,
-        basisAngleSquareCost (spectraDirectRotation U V hacute) (v i) := by
+    ∑ i, basisAngleSquareCost W ((b i : H)) ≥
+      ∑ i,
+        basisAngleSquareCost (spectraDirectRotation U V hacute) ((b i : H)) := by
   sorry
 
 /-- Davis--Kahan 1970, Proposition 4.3: every approximation number of the
