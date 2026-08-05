@@ -291,6 +291,29 @@ assumed. -/
 alias theorem6_3_generalizedTanTheta_source_ideal_unconditional :=
   ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal_directedTangent
 
+/-! ### The equal-rank tangent theorem
+
+Section 2's tangent theorem is about a pair of subspaces of **equal** rank, so
+it cannot be obtained by specialising a statement that assumes
+`rank Z < rank V`.  It does not have to be: the printed `dim X(E₀) < dim X(F₀)`
+does one job — under the paper's separability convention it forces the trial
+coordinate space to be finite-dimensional — and here that is an explicit
+instance hypothesis.  Lean had already recorded the redundancy, binding the
+comparison as `_hStrictDimension` and never using it.
+
+`theorem6_3_equalRank_tanTheta_ideal` is the residual half of the Section 2
+tangent theorem at arbitrary unitarily invariant ideal-gauge scope, in an
+arbitrary complete complex Hilbert space, with a finite-dimensional trial
+space and no dimension comparison. -/
+
+/-- The equal-rank tangent bound from form bounds. -/
+alias theorem6_3_equalRank_tanTheta_formBounds :=
+  ExactTanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank
+
+/-- The equal-rank tangent bound in the source's spectral-separation form. -/
+alias theorem6_3_equalRank_tanTheta_ideal :=
+  ExactTanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral
+
 end GeneralizedTangent
 
 section DoubleAngleSourceWrappers
