@@ -858,6 +858,43 @@ theorem norm_canonicalIntertwiner_apply_sq_ge (U V : Submodule 𝕜 E)
 
 omit [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
   [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
+/-- A unitary operator, bundled as a linear isometry equivalence.
+
+`IsUnitaryOperator` is norm preservation plus surjectivity; injectivity is free
+from the first, so the bundling costs only that observation.  It is what lets
+Mathlib's `Submodule.map_orthogonal_equiv` be applied to a unitary given in the
+unbundled form this file uses. -/
+noncomputable def isUnitaryOperatorEquiv {W : E →L[𝕜] E} (hW : IsUnitaryOperator W) :
+    E ≃ₗᵢ[𝕜] E where
+  toLinearEquiv := LinearEquiv.ofBijective W.toLinearMap
+    ⟨fun x y hxy => by
+        have h0 : W (x - y) = 0 := by
+          rw [map_sub]
+          exact sub_eq_zero.mpr hxy
+        have hz : ‖x - y‖ = 0 := by rw [← hW.1 (x - y), h0, norm_zero]
+        exact sub_eq_zero.mp (norm_eq_zero.mp hz),
+      hW.2⟩
+  norm_map' := hW.1
+
+omit [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
+/-- **A unitary carrying `U` onto `V` carries `Uᗮ` onto `Vᗮ`.**
+
+Needed for the `Uᗮ` half of the competitor bound, where `W` has to be known to
+land in `Vᗮ`.  Mathlib proves it for a bundled isometry equivalence; this is the
+unbundled restatement. -/
+theorem map_orthogonal_of_isUnitaryOperator {W : E →L[𝕜] E}
+    (hW : IsUnitaryOperator W) {U V : Submodule 𝕜 E}
+    (hmap : U.map W.toLinearMap = V) :
+    Uᗮ.map W.toLinearMap = Vᗮ := by
+  have h := Submodule.map_orthogonal_equiv (K := U) (isUnitaryOperatorEquiv hW)
+  have hcoe : (((isUnitaryOperatorEquiv hW).toLinearEquiv : E →ₗ[𝕜] E)) =
+      W.toLinearMap := rfl
+  rw [hcoe, hmap] at h
+  exact h
+
+omit [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
 /-- **On the source subspace, `Δ` and the target projection are complementary**:
 for `x ∈ U`, `‖Δ x‖² = ‖x‖² − ‖P_V x‖²`, because `Δ x = x − P_V x` there and
 `x − P_V x ⊥ V`.
@@ -905,6 +942,40 @@ theorem re_inner_apply_le_of_mapsTo
   calc RCLike.re ⟪W x, V.starProjection x⟫_𝕜
       ≤ ‖W x‖ * ‖V.starProjection x‖ := re_inner_le_norm _ _
     _ = ‖V.starProjection x‖ * ‖x‖ := by rw [hW.1 x]; ring
+
+omit [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
+/-- The `Uᗮ` half of `norm_projection_sub_apply_sq_of_mem`.
+
+`P_Uᗮ − P_Vᗮ = −(P_U − P_V)`, so the complement case is the source case applied
+to `Uᗮ, Vᗮ`; no new geometry. -/
+theorem norm_projection_sub_apply_sq_of_mem_orthogonal (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {x : E} (hx : x ∈ Uᗮ) :
+    ‖(projection U - projection V : E →L[𝕜] E) x‖ ^ 2 =
+      ‖x‖ ^ 2 - ‖Vᗮ.starProjection x‖ ^ 2 := by
+  have h := norm_projection_sub_apply_sq_of_mem Uᗮ Vᗮ hx
+  have happ : (projection Uᗮ - projection Vᗮ : E →L[𝕜] E) x =
+      -((projection U - projection V : E →L[𝕜] E) x) := by
+    simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.neg_apply,
+      Submodule.starProjection_orthogonal_apply]
+    abel
+  rw [happ, norm_neg] at h
+  exact h
+
+omit [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
+/-- The `Uᗮ` half of the competitor bound: `re ⟪W x, x⟫ ≤ ‖P_Vᗮ x‖ ‖x‖` for
+`x ∈ Uᗮ`.
+
+Same proof as the source half, run on the complements, which is legitimate
+because a unitary carrying `U` onto `V` carries `Uᗮ` onto `Vᗮ`. -/
+theorem re_inner_apply_le_of_mapsTo_orthogonal
+    {W : E →L[𝕜] E} (hW : IsUnitaryOperator W) {U V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hmap : U.map W.toLinearMap = V) {x : E} (hx : x ∈ Uᗮ) :
+    RCLike.re ⟪W x, x⟫_𝕜 ≤ ‖Vᗮ.starProjection x‖ * ‖x‖ :=
+  re_inner_apply_le_of_mapsTo hW (map_orthogonal_of_isUnitaryOperator hW hmap) hx
 
 /-! ### Displacement of the direct rotation
 
