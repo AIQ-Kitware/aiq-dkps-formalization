@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 4.8, GPT 5.6 High
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds
-public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+public import ForTauCeti.Analysis.InnerProductSpace.Basic
 public import Mathlib.Analysis.InnerProductSpace.StarOrder
 
 /-!

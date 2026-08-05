@@ -28,7 +28,6 @@ report "proved in the default build" rather than "proved".
 
 | Library | Why it is not guarded |
 | --- | --- |
-| `ForTauCetiRoadmap` | The roadmap's suggested signatures. Every declaration is a `sorry` — that is what a suggested signature *is* — so it cannot be built under `warningAsError`. |
 | `DavisKahan.Experimental` | The working frontier. Carries `sorry`s by design, and the material graduates into `DavisKahan` or `ForTauCeti` when finished. |
 | `FinishTanTwoTheta` | The tan-2-theta completion lane; three `sorry`s remain. |
 | `Challenge` | Comparator challenges, which are posed problems rather than results. |
@@ -65,8 +64,6 @@ automatically is what previously produced status that looked healthy and was not
 ├── ForTauCeti.lean          # root module for the deliverable
 ├── ForTauCeti/              # the staged upstream library: operator ideals, approximation
 │                            #   numbers, polar decomposition, spectral order, sin-theta
-├── ForTauCetiRoadmap.lean   # root module for the suggested-signature library
-├── ForTauCetiRoadmap/       # proposed signatures, stated against Mathlib alone (all `sorry`)
 ├── RoadmapBridge.lean       # root module for the roadmap-to-delivery bridge
 ├── RoadmapBridge/           # each roadmap signature discharged by the delivered declaration
 ├── DavisKahan.lean          # root module for the paper-facing Davis--Kahan library
@@ -140,7 +137,7 @@ outside it are built by name, and a change to any of them is invisible to a plai
 `lake build` — which is how they rot:
 
 ```bash
-lake build ForTauCetiRoadmap FinishTanTwoTheta Challenge DavisKahan.Experimental
+lake build FinishTanTwoTheta Challenge DavisKahan.Experimental
 ```
 
 The gates are Python and run separately. Do not run `lake` at the same time —

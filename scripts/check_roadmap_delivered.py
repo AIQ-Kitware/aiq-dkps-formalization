@@ -10,7 +10,7 @@ prose.
 
 Usage:
     python3 scripts/check_roadmap_delivered.py
-    python3 scripts/check_roadmap_delivered.py --topic HilbertSpaceOperatorFoundations
+    python3 scripts/check_roadmap_delivered.py --topic Majorization
     python3 scripts/check_roadmap_delivered.py --missing
     python3 scripts/check_roadmap_delivered.py --map
     python3 scripts/check_roadmap_delivered.py --json
@@ -25,7 +25,7 @@ import re
 import sys
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
-ROADMAP = REPO / "submodules/TauCetiRoadmap/TauCetiRoadmap/HilbertSpaceOperatorTheory"
+ROADMAP = REPO / "submodules/TauCetiRoadmap/TauCetiRoadmap"
 LIBS = ("ForTauCeti", "DavisKahan")
 
 # A declaration head.  Deliberately permissive about everything that precedes the

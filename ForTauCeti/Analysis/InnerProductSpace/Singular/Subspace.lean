@@ -397,13 +397,6 @@ theorem isSymmetric_conj_unitary {S : E →ₗ[𝕜] E} (hS : S.IsSymmetric) (U 
     _ = ⟪U (U.symm x), U (S (U.symm y))⟫_𝕜 := (U.inner_map_map _ _).symm
     _ = ⟪x, U (S (U.symm y))⟫_𝕜 := by rw [LinearIsometryEquiv.apply_symm_apply]
 
-/-- Sorted eigenvalues are congruent along an operator equality (the eigenvalue
-enumeration depends only on the operator, not on the symmetry proof). -/
-theorem eigenvalues_congr {S₁ S₂ : E →ₗ[𝕜] E} (h : S₁ = S₂)
-    (hS₁ : S₁.IsSymmetric) (hS₂ : S₂.IsSymmetric) (hn : finrank 𝕜 E = n) :
-    hS₁.eigenvalues hn = hS₂.eigenvalues hn := by
-  subst h; rfl
-
 /-- One direction of unitary-conjugation eigenvalue invariance:
 `λₖ(S) ≤ λₖ(U S U⁻¹)`.  Courant–Fischer — a witness `(k+1)`-subspace for `S`
 maps under `U` to one for the conjugate, on which the same Rayleigh values

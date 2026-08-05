@@ -82,7 +82,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
   {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
 
-/-- Roadmap `HilbertSpaceOperatorFoundations.singularValues_toLinearMap`, discharged by the
+/-- Roadmap `PolarDecomposition.singularValues_toLinearMap`, discharged by the
 delivered `ContinuousLinearMap.toLinearMap_singularValues`.
 
 The two statements are literally the same equation; the delivered name orders the words the

@@ -6,7 +6,6 @@ Authors: Jon Crall, Claude Fable 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
-public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
