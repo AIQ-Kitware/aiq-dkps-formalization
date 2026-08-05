@@ -73,9 +73,15 @@ opaque term, so nothing about it can be established.
 The invertibility of the intertwiner and of its absolute value on acute pairs
 were on that list until 2026-08-04 and are now proved: the Gram operator is
 `1 - (P - Q)^2`, and acuteness *is* `‖P - Q‖ < 1`, so the Neumann series inverts
-it.  Only the Halmos two-projection decomposition remains a genuinely missing
-polar-campaign ingredient, used by `directRotation_sq` and
-`directRotation_minimal`.
+it.
+
+`directRotation_sq` was on that list too, and — like the commutation lemma
+below — did not belong there.  Both Gram operators of `S` equal `1 - (P - Q)^2`,
+so `S` is **normal**; the square identity then reduces to two ring identities in
+`P` and `Q` and one cancellation of a unit.  See the section on it below.  The
+Halmos two-projection decomposition is now used by `directRotation_minimal`
+alone, and there it is genuinely needed: the statement is an inequality between
+operator norms, not an algebraic identity.
 
 The commutation of the absolute value with the projection was on that list
 until 2026-07-30 and did not belong there: it needs no polar decomposition and
@@ -509,32 +515,158 @@ theorem directRotation_intertwines
 -- under a different name, with a different proof, and with no consumer anywhere.  This
 -- file does not import that one, which is why it grew its own; `--dup` matches
 -- normalized statements and so was the only check that could see it.
-/-- Square of the direct rotation is the product of reflections. 
+/-! ### The square of the direct rotation
 
-Lean proof route for a weaker agent:
+**This was parked as needing the Halmos two-projection decomposition — it does
+not need it.**  The whole identity is symmetry algebra in the two symmetries
+`J_U = 2P − 1` and `J_V = 2Q − 1`:
 
-1. Use the polar/trigonometric formula for the direct rotation on the two-projection decomposition.
-2. Verify the scalar `2×2` identity that two equal angle rotations compose to the product of reflections.
-3. Extend the identity over the trivial reducing summands and close by operator extensionality.
+* `J_V J_U = 2S − 1`, a ring identity with no idempotency at all;
+* `S` is **normal**, because the two Gram operators computed above are the *same*
+  operator `1 − (P − Q)²`.  Normality is what makes `|S|` commute with `S`, and
+  that is the only place a functional calculus enters;
+* `S² = (2S − 1)(S⋆S)`, a ring identity modulo `P² = P`, `Q² = Q`.
 
+Dividing the third by the invertible `S⋆S = |S|²` turns the polar factor's square
+into `2S − 1`.  No reducing summands, no angle fibers, no scalar rotation
+identity. -/
+
+/-- **Polar cancellation in a bare monoid.**
+
+If `a` commutes with the inverse of a unit `u`, and `a² = c u²`, then the "polar
+factor" `a u⁻¹` squares to `c`.  Stated for a monoid because that is all the
+direct-rotation square uses: the whole content is that `u⁻¹` can be moved past
+`a` and then cancelled against `u`. -/
+private theorem sq_mul_units_inv_eq {M : Type*} [Monoid M] {a c : M} {u : Mˣ}
+    (hcomm : Commute ((↑u⁻¹ : M)) a) (hsq : a * a = c * ((u : M) * (u : M))) :
+    a * (↑u⁻¹ : M) * (a * (↑u⁻¹ : M)) = c := by
+  calc a * (↑u⁻¹ : M) * (a * (↑u⁻¹ : M))
+      = a * ((↑u⁻¹ : M) * a) * (↑u⁻¹ : M) := by simp only [mul_assoc]
+    _ = a * (a * (↑u⁻¹ : M)) * (↑u⁻¹ : M) := by rw [hcomm.eq]
+    _ = a * a * ((↑u⁻¹ : M) * (↑u⁻¹ : M)) := by simp only [mul_assoc]
+    _ = c * ((u : M) * (u : M)) * ((↑u⁻¹ : M) * (↑u⁻¹ : M)) := by rw [hsq]
+    _ = c * ((u : M) * (((u : M) * (↑u⁻¹ : M)) * (↑u⁻¹ : M))) := by
+        simp only [mul_assoc]
+    _ = c := by rw [u.mul_inv, one_mul, u.mul_inv, mul_one]
+
+/-- **The canonical intertwiner is normal.**
+
+Both Gram operators were computed above and are literally the same operator
+`1 − (P − Q)²`, so `S⋆S = S S⋆` needs no further work.  This is the fact that
+lets the absolute value commute with `S` itself, not merely with `P_U`. -/
+theorem canonicalIntertwiner_isStarNormal (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    star (canonicalIntertwiner U V) * canonicalIntertwiner U V =
+      canonicalIntertwiner U V * star (canonicalIntertwiner U V) := by
+  rw [adjoint_mul_canonicalIntertwiner, canonicalIntertwiner_mul_adjoint]
+
+/-- **The absolute value commutes with the intertwiner itself.**
+
+`S` is normal, so `S` commutes with `S⋆S`; the continuous functional calculus
+transports that to `|S|`.  Compare `canonicalAbsoluteValue_commutes_projection`,
+which is the same argument run against `P_U` instead of `S`. -/
+theorem canonicalAbsoluteValue_commutes_canonicalIntertwiner (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Commute (operatorAbsoluteValue (canonicalIntertwiner U V))
+      (canonicalIntertwiner U V) := by
+  set S : E →L[𝕜] E := canonicalIntertwiner U V with hSdef
+  have hcomm : Commute (star S * S) S := by
+    show star S * S * S = S * (star S * S)
+    calc star S * S * S = (S * star S) * S := by
+          rw [hSdef, adjoint_mul_canonicalIntertwiner, canonicalIntertwiner_mul_adjoint]
+      _ = S * (star S * S) := mul_assoc _ _ _
+  exact hcomm.cfcₙ_nnreal _
+
+omit [CompleteSpace E] [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
+/-- **The product of the two reflections is `2S − 1`.**
+
+`J_V J_U = (2Q − 1)(2P − 1) = 4QP − 2P − 2Q + 1`, and `S = 2QP − P − Q + 1`, so
+the two sides agree as *polynomials*: the identity needs neither idempotency nor
+self-adjointness of the projections. -/
+theorem reflectionOperator_mul_reflectionOperator_eq (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    (V.reflectionOperator : E →L[𝕜] E) * U.reflectionOperator =
+      canonicalIntertwiner U V + canonicalIntertwiner U V - 1 := by
+  have hU : (U.reflectionOperator : E →L[𝕜] E) = projection U + projection U - 1 := by
+    rw [Submodule.reflectionOperator_eq_two_smul_sub_id, two_smul]
+    rfl
+  have hV : (V.reflectionOperator : E →L[𝕜] E) = projection V + projection V - 1 := by
+    rw [Submodule.reflectionOperator_eq_two_smul_sub_id, two_smul]
+    rfl
+  have hPc : complementaryProjection U = 1 - projection U :=
+    U.starProjection_orthogonal'
+  have hQc : complementaryProjection V = 1 - projection V :=
+    V.starProjection_orthogonal'
+  rw [hU, hV, canonicalIntertwiner, hPc, hQc]
+  simp only [← ContinuousLinearMap.mul_def]
+  noncomm_ring
+
+/-- **The square identity for the intertwiner**: `S² = (2S − 1)(S⋆S)`.
+
+With `S⋆S = 1 − (P − Q)²` this is a ring identity modulo `P² = P` and `Q² = Q`;
+both sides normalise to `4QPQP − 2QPQ − 2PQP + QP + PQ − P − Q + 1`. -/
+theorem canonicalIntertwiner_sq_eq (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    canonicalIntertwiner U V * canonicalIntertwiner U V =
+      (canonicalIntertwiner U V + canonicalIntertwiner U V - 1) *
+        (star (canonicalIntertwiner U V) * canonicalIntertwiner U V) := by
+  have hP : projection U * projection U = projection U :=
+    U.isIdempotentElem_starProjection
+  have hQ : projection V * projection V = projection V :=
+    V.isIdempotentElem_starProjection
+  have hPP : ∀ X : E →L[𝕜] E, projection U * (projection U * X) = projection U * X :=
+    fun X => by rw [← mul_assoc, hP]
+  have hQQ : ∀ X : E →L[𝕜] E, projection V * (projection V * X) = projection V * X :=
+    fun X => by rw [← mul_assoc, hQ]
+  have hPc : complementaryProjection U = 1 - projection U :=
+    U.starProjection_orthogonal'
+  have hQc : complementaryProjection V = 1 - projection V :=
+    V.starProjection_orthogonal'
+  rw [adjoint_mul_canonicalIntertwiner, canonicalIntertwiner, hPc, hQc]
+  simp only [← ContinuousLinearMap.mul_def]
+  noncomm_ring [hP, hQ]
+  simp only [hPP, hQQ]
+  abel
+
+/-- Square of the direct rotation is the product of reflections.
+
+Proved from `canonicalIntertwiner_sq_eq` by cancelling the invertible Gram
+operator: writing `W = S |S|⁻¹` and using that `|S|⁻¹` commutes with `S`,
+
+`W² = S² (|S|²)⁻¹ = (2S − 1)(S⋆S)(S⋆S)⁻¹ = 2S − 1 = J_V J_U`.
 
 Ext-agent signature audit (GPT 5.6 High): Correct with the stated reflection order for
 the convention that the direct rotation maps `U` to `V`; verify the orientation on the
 planar model before general assembly.
-
-Preferred dependency route: Construct the polar factor of `QP + QᗮPᗮ`; prove
-intertwining before extremality, and use the Halmos decomposition only for the final
-minimization theorem.
 -/
 theorem directRotation_sq
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
     directRotation U V hacute ∘L directRotation U V hacute =
-      reflectionOperator V ∘L reflectionOperator U :=
-  -- **Leaf obligation.** Requires the Halmos two-projection decomposition
-  -- framework (reducing summands, angle fibers, scalar rotation identity) —
-  -- the parked polar-decomposition campaign; see the proof route above.
-  sorry
+      reflectionOperator V ∘L reflectionOperator U := by
+  -- `|S|` commutes with `S`, hence so does its inverse.
+  have hcomm : Commute ((↑(canonicalAbsoluteValueUnit U V hacute)⁻¹ : E →L[𝕜] E))
+      (canonicalIntertwiner U V) := by
+    refine Commute.units_inv_left ?_
+    rw [coe_canonicalAbsoluteValueUnit]
+    exact canonicalAbsoluteValue_commutes_canonicalIntertwiner U V
+  -- `|S|² = S⋆S`.
+  have hAA : (↑(canonicalAbsoluteValueUnit U V hacute) : E →L[𝕜] E) *
+      (↑(canonicalAbsoluteValueUnit U V hacute) : E →L[𝕜] E) =
+      star (canonicalIntertwiner U V) * canonicalIntertwiner U V := by
+    rw [coe_canonicalAbsoluteValueUnit, ContinuousLinearMap.mul_def,
+      operatorAbsoluteValue_sq, ← ContinuousLinearMap.mul_def]
+  -- `S² = (2S − 1) |S|²`.
+  have hsq : canonicalIntertwiner U V * canonicalIntertwiner U V =
+      (canonicalIntertwiner U V + canonicalIntertwiner U V - 1) *
+        ((↑(canonicalAbsoluteValueUnit U V hacute) : E →L[𝕜] E) *
+          (↑(canonicalAbsoluteValueUnit U V hacute) : E →L[𝕜] E)) := by
+    rw [hAA]
+    exact canonicalIntertwiner_sq_eq U V
+  simp only [directRotation, ← ContinuousLinearMap.mul_def]
+  rw [reflectionOperator_mul_reflectionOperator_eq]
+  exact sq_mul_units_inv_eq hcomm hsq
 
 /-- Direct rotation minimizes maximal displacement from the identity.
 

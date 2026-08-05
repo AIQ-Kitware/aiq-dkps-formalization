@@ -79,6 +79,19 @@ theorem reflectionOperator_involutive (U : Submodule 𝕜 E)
   change U.reflection (U.reflection x) = x
   exact U.reflection_reflection x
 
+/-- **The reflection in operator form**: `J_U = 2 P_U - I`.
+
+The pointwise formula `reflectionOperator_apply` is what `simp` uses, but the
+two-projection algebra needs the operator identity, so that products of two
+reflections can be expanded by ring normalisation rather than by chasing
+vectors. -/
+theorem reflectionOperator_eq_two_smul_sub_id (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] :
+    U.reflectionOperator =
+      (2 : 𝕜) • U.starProjection - ContinuousLinearMap.id 𝕜 E := by
+  ext x
+  simp
+
 /-- Reflection preserves norms. -/
 theorem reflectionOperator_norm_map (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (x : E) :
