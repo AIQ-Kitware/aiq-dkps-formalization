@@ -11,8 +11,8 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 11 |
-| `compiled_specialization` | 6 |
+| `compiled_exact` | 12 |
+| `compiled_specialization` | 5 |
 | `compiled_general_infrastructure` | 18 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
@@ -131,7 +131,7 @@ Gates: DK-9-model (proved_conditional), DK-9.1-9.4 (proved_conditional), DK-9.5-
 
 The mathematics is in the build in a more general form; what is missing is a statement carrying the paper's numbering, scope and hypotheses, so the facade can cite it.
 
-Gates: S1-block-residual (proved_in_build), S2-tan-theta (proved_in_build), S2-sin-two-theta (proved_in_build), S2-tan-two-theta (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.4-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-4.1-prop (proved_in_build), DK-5.2-thm (proved_in_build), DK-5.1-lem (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
+Gates: S1-block-residual (proved_in_build), S2-sin-two-theta (proved_in_build), S2-tan-two-theta (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.4-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-4.1-prop (proved_in_build), DK-5.2-thm (proved_in_build), DK-5.1-lem (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
 
 ### `frontier-tree-unguarded` -- mechanical
 
@@ -198,11 +198,10 @@ Gates: DK-8.1-thm (proved_outside_build), DK-8.2-thm (proved_outside_build)
 #### Section 2, tan theta theorem: Single-angle tangent theorem
 
 - **Kind:** `unnumbered_theorem`
-- **Status:** `compiled_specialization`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** One-sided spectral separation plus the Rayleigh–Ritz/off-diagonal condition gives residual and perturbation tangent bounds in every unitary-invariant norm.
-- **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`, `TauCeti.DavisKahanExt.tanTheta_spectrum`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`, `TauCeti.DavisKahanExt.tanTheta_spectrum`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral`, `TauCeti.DavisKahan.Experimental.MathAhead.Section2.theorem63Residual_eq_neg_of_invariant`, `TauCeti.DavisKahan.Experimental.MathAhead.Section2.theorem6_3_perturbation_equalRank`
 - **Assessment:** Finite arbitrary-UI-norm and Hilbert-space operator-norm forms are compiled. The source Hilbert-space arbitrary-UI-norm residual and perturbation statements remain open.
 
 **2026-08-05: the Theorem 6.3 core this row is told to reuse is now unconditional.** It had been stated relative to a tangent representative that nothing constructed; `ExactTanTheta.theorem63DirectedTangent` is now that representative and `theorem6_3_all_kyFan_core_directedTangent` needs no hypothesis beyond the printed ones.  See DK-6.3-thm for the details.  What remains for this row is unchanged: the source Hilbert-space arbitrary-UI-norm residual and perturbation statements at EQUAL rank -- Theorem 6.3 assumes `rank Z < rank V`, and the strict inequality is genuinely used only to make the directed reading meaningful, so the equal-rank statement needs its own argument, not a specialisation.
@@ -212,7 +211,13 @@ Gates: DK-8.1-thm (proved_outside_build), DK-8.2-thm (proved_outside_build)
 WHY THE RANK HYPOTHESIS COULD SIMPLY GO.  Davis and Kahan's `dim X(E_0) < dim X(F_0)` does one job in the printed argument: under the paper's global separability convention it forces the trial coordinate space to be finite-dimensional, because every infinite-dimensional closed subspace of a separable space has the same Hilbert dimension.  In the formalisation finite-dimensionality of `Z` is an explicit instance, so the comparison is redundant -- and Lean had been recording that for some time, binding it as `_hStrictDimension` in `theorem6_3_generalizedTanTheta_of_formBounds` and never using it.  Nothing had to be reproved; the hypothesis had to be *noticed*.
 
 This half also depends on the tangent representative built the same day (see DK-6.3-thm), so it is unconditional in both senses: no assumed representative and no dimension comparison.
-- **Next action:** One obligation left for this row: the **perturbation** companion.  The residual half is proved at source scope by `theorem6_3_generalizedTanTheta_equalRank_spectral`; what is missing is the form in which the trial space comes from a perturbed operator rather than from a Rayleigh--Ritz residual.  Do not re-derive a tangent representative (exists) and do not reintroduce a rank comparison (redundant).
+
+**THE PERTURBATION COMPANION IS DONE, 2026-08-05, and it needed no new estimate.** `theorem6_3_perturbation_equalRank` (`Sources/DavisKahan1970/Section2TanThetaPerturbation.lean`, default build, axiom-clean): if the finite-dimensional trial space `Z` is invariant for the perturbed operator `T + E`, and `T` reduces `V` with the source gap, then `delta * N(tan Theta_0) <= N(E restricted to Z)` for every Fan-dominant unitarily invariant ideal gauge, in an arbitrary complete complex Hilbert space, with no rank comparison and no assumed tangent representative.
+
+THE BRIDGE IS ONE LINE OF ALGEBRA.  `residual(T,Z) = P_Zperp T|_Z = P_Zperp (T+E)|_Z - P_Zperp E|_Z = - P_Zperp E|_Z`, because invariance of `Z` under `T+E` kills the middle term (`theorem63Residual_eq_neg_of_invariant`).  So the residual is a contraction applied to the restricted perturbation; approximation numbers dominate termwise, and Fan dominance carries that to the ideal gauge.  No part of the tangent estimate had to be redone.
+
+WHY THE RIGHT-HAND SIDE IS `E` RESTRICTED TO `Z`, not `E`: the two live in different spaces (`Z -> H` versus `H -> H`), so an ideal gauge cannot compare them at all, and the restriction is both what the estimate controls and the sharper statement.
+- **Next action:** Nothing outstanding for the bounded theorem.  Both halves are proved at source scope -- residual (`theorem6_3_generalizedTanTheta_equalRank_spectral`) and perturbation (`theorem6_3_perturbation_equalRank`) -- for equal-rank pairs, arbitrary complete complex Hilbert space, arbitrary Fan-dominant unitarily invariant ideal gauge, with the tangent representative constructed rather than assumed.  The unbounded scope is S2-unbounded-scope's, not this row's.
 
 #### Section 2, sin 2 theta theorem: Double-angle sine theorem
 
