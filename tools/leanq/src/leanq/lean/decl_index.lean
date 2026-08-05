@@ -25,8 +25,9 @@ every declaration in a module under that prefix is indexed and nothing else.
 
 `<modulesFile>` holds one module name per line, and all of them are imported. Pass it: a root
 module is not required to import its own library. `TauCetiRoadmap.lean` imports 23 modules and
-omits `HilbertSpaceOperatorTheory` entirely, because the lakefile globs the library in rather
-than aggregating it — so importing only the root silently indexes nothing for that roadmap.
+omits `OperatorTheory` and `BergeMaximumTheorem` entirely, because the lakefile globs the
+library in rather than aggregating it — so importing only the root silently indexes nothing
+for those roadmaps.
 Reporting zero for an unimported module is worse than a wrong regex, and this is the guard.
 
 Fields: `name`, `module`, `kind`, `isProp` (the declaration is itself a proof), `propValued`

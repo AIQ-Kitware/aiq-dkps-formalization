@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.Basic
+public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 public import ForTauCeti.Analysis.Convex.Majorization
 public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic
 
