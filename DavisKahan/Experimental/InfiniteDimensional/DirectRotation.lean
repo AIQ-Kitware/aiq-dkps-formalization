@@ -70,9 +70,12 @@ the square identity `|S|² = S⋆S` and the self-adjointness of `|S|`.  Both wer
 previously unprovable rather than merely unproved — an escaped `def` is an
 opaque term, so nothing about it can be established.
 
-The invertibility of the intertwiner and of its absolute value on acute pairs,
-and the Halmos two-projection decomposition, remain genuinely missing
-polar-campaign ingredients and stay isolated as leaf obligations.
+The invertibility of the intertwiner and of its absolute value on acute pairs
+were on that list until 2026-08-04 and are now proved: the Gram operator is
+`1 - (P - Q)^2`, and acuteness *is* `‖P - Q‖ < 1`, so the Neumann series inverts
+it.  Only the Halmos two-projection decomposition remains a genuinely missing
+polar-campaign ingredient, used by `directRotation_sq` and
+`directRotation_minimal`.
 
 The commutation of the absolute value with the projection was on that list
 until 2026-07-30 and did not belong there: it needs no polar decomposition and
@@ -105,37 +108,155 @@ theorem operatorAbsoluteValue_isSelfAdjoint (S : E →L[𝕜] E) :
     IsSelfAdjoint (operatorAbsoluteValue S) :=
   (operatorAbsoluteValue_nonneg S).isSelfAdjoint
 
-/-- **Leaf obligation.** On an acute pair the canonical intertwiner is a unit:
-`S⋆S` is bounded below by a positive scalar. -/
+/-! ### Invertibility on acute pairs
+
+Formerly four leaf obligations.  They are all one computation: the Gram operator
+of `S = QP + Q'P'` is
+
+`S⋆S = S S⋆ = 1 − (P − Q)²`,
+
+so acuteness — which *is* `‖P − Q‖ < 1` — puts the Gram operator within distance
+`‖P − Q‖² < 1` of the identity, where the Neumann series inverts it.  An element
+of a monoid whose products with a fixed element are units on both sides is
+itself a unit, so `S` and `|S|` follow. -/
+
+/-- An element with a left inverse and a right inverse is a unit: the two
+inverses coincide.  Stated for a bare monoid because both uses below — the
+intertwiner against its adjoint, and its absolute value against itself — have
+that shape. -/
+private theorem isUnit_of_isUnit_mul_both {R : Type*} [Monoid R] {a b : R}
+    (hl : IsUnit (b * a)) (hr : IsUnit (a * b)) : IsUnit a := by
+  obtain ⟨u, hu⟩ := hl
+  obtain ⟨v, hv⟩ := hr
+  have hla : ((↑u⁻¹ : R) * b) * a = 1 := by
+    rw [mul_assoc, ← hu, u.inv_mul]
+  have har : a * (b * (↑v⁻¹ : R)) = 1 := by
+    rw [← mul_assoc, ← hv, v.mul_inv]
+  have hlr : (↑u⁻¹ : R) * b = b * (↑v⁻¹ : R) := by
+    calc (↑u⁻¹ : R) * b = ((↑u⁻¹ : R) * b) * 1 := (mul_one _).symm
+      _ = ((↑u⁻¹ : R) * b) * (a * (b * (↑v⁻¹ : R))) := by rw [har]
+      _ = (((↑u⁻¹ : R) * b) * a) * (b * (↑v⁻¹ : R)) := (mul_assoc _ _ _).symm
+      _ = 1 * (b * (↑v⁻¹ : R)) := by rw [hla]
+      _ = b * (↑v⁻¹ : R) := one_mul _
+  exact ⟨⟨a, (↑u⁻¹ : R) * b, by rw [hlr]; exact har, hla⟩, rfl⟩
+
+/-- **The Gram operator of the canonical intertwiner is `1 − (P − Q)²`.**
+
+Expanding `S⋆S = (PQ + P'Q')(QP + Q'P')` and using `QQ' = 0` leaves
+`PQP + P'Q'P'`, which is Halmos's squared cosine. -/
+theorem adjoint_mul_canonicalIntertwiner (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    star (canonicalIntertwiner U V) * canonicalIntertwiner U V =
+      1 - (projection U - projection V) * (projection U - projection V) := by
+  have hP : projection U * projection U = projection U :=
+    U.isIdempotentElem_starProjection
+  have hQ : projection V * projection V = projection V :=
+    V.isIdempotentElem_starProjection
+  have hQQ : ∀ X : E →L[𝕜] E, projection V * (projection V * X) = projection V * X :=
+    fun X => by rw [← mul_assoc, hQ]
+  have hPc : complementaryProjection U = 1 - projection U :=
+    U.starProjection_orthogonal'
+  have hQc : complementaryProjection V = 1 - projection V :=
+    V.starProjection_orthogonal'
+  rw [canonicalIntertwiner, hPc, hQc]
+  simp only [← ContinuousLinearMap.mul_def, star_add, star_mul, star_sub, star_one,
+    (isSelfAdjoint_starProjection U).star_eq, (isSelfAdjoint_starProjection V).star_eq]
+  noncomm_ring [hP, hQ]
+  simp only [hQQ]
+  abel
+
+/-- **The same on the other side**: `S S⋆ = 1 − (P − Q)²` as well, since
+`(Q − P)² = (P − Q)²`. -/
+theorem canonicalIntertwiner_mul_adjoint (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    canonicalIntertwiner U V * star (canonicalIntertwiner U V) =
+      1 - (projection U - projection V) * (projection U - projection V) := by
+  have hP : projection U * projection U = projection U :=
+    U.isIdempotentElem_starProjection
+  have hQ : projection V * projection V = projection V :=
+    V.isIdempotentElem_starProjection
+  have hPP : ∀ X : E →L[𝕜] E, projection U * (projection U * X) = projection U * X :=
+    fun X => by rw [← mul_assoc, hP]
+  have hPc : complementaryProjection U = 1 - projection U :=
+    U.starProjection_orthogonal'
+  have hQc : complementaryProjection V = 1 - projection V :=
+    V.starProjection_orthogonal'
+  rw [canonicalIntertwiner, hPc, hQc]
+  simp only [← ContinuousLinearMap.mul_def, star_add, star_mul, star_sub, star_one,
+    (isSelfAdjoint_starProjection U).star_eq, (isSelfAdjoint_starProjection V).star_eq]
+  noncomm_ring [hP, hQ]
+  simp only [hPP]
+  abel
+
+/-- **On an acute pair the Gram operator is a unit**, by the Neumann series:
+`‖(P − Q)²‖ ≤ ‖P − Q‖² < 1`. -/
+theorem isUnit_one_sub_projection_sub_sq (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    IsUnit (1 - (projection U - projection V) * (projection U - projection V) :
+      E →L[𝕜] E) := by
+  have hgap : ‖(projection U - projection V : E →L[𝕜] E)‖ < 1 := hacute
+  have hnn : (0 : ℝ) ≤ ‖(projection U - projection V : E →L[𝕜] E)‖ := norm_nonneg _
+  have hnorm : ‖((projection U - projection V) * (projection U - projection V) :
+      E →L[𝕜] E)‖ < 1 := by
+    refine lt_of_le_of_lt (norm_mul_le _ _) ?_
+    nlinarith
+  exact (Units.val_oneSub _ hnorm) ▸ (Units.oneSub _ hnorm).isUnit
+
+/-- **On an acute pair the canonical intertwiner is a unit.** -/
+theorem isUnit_canonicalIntertwiner (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) : IsUnit (canonicalIntertwiner U V) :=
+  isUnit_of_isUnit_mul_both
+    ((adjoint_mul_canonicalIntertwiner U V) ▸
+      isUnit_one_sub_projection_sub_sq U V hacute)
+    ((canonicalIntertwiner_mul_adjoint U V) ▸
+      isUnit_one_sub_projection_sub_sq U V hacute)
+
+/-- **On an acute pair the absolute value of the canonical intertwiner is a
+unit**, since `|S|² = S⋆S`. -/
+theorem isUnit_operatorAbsoluteValue_canonicalIntertwiner (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    IsUnit (operatorAbsoluteValue (canonicalIntertwiner U V)) := by
+  have hsq : operatorAbsoluteValue (canonicalIntertwiner U V) *
+      operatorAbsoluteValue (canonicalIntertwiner U V) =
+      1 - (projection U - projection V) * (projection U - projection V) := by
+    rw [ContinuousLinearMap.mul_def, operatorAbsoluteValue_sq,
+      ← ContinuousLinearMap.mul_def, adjoint_mul_canonicalIntertwiner]
+  have h := hsq ▸ isUnit_one_sub_projection_sub_sq U V hacute
+  exact isUnit_of_isUnit_mul_both h h
+
+/-- On an acute pair the canonical intertwiner is a unit:
+`S⋆S = 1 − (P − Q)²` is within distance `‖P − Q‖² < 1` of the identity. -/
 noncomputable def canonicalIntertwinerUnit (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (_hacute : IsAcute U V) : (E →L[𝕜] E)ˣ :=
-  sorry
+    (hacute : IsAcute U V) : (E →L[𝕜] E)ˣ :=
+  (isUnit_canonicalIntertwiner U V hacute).unit
 
-/-- **Leaf obligation.** The intertwiner unit carries the canonical
-intertwiner. -/
+/-- The intertwiner unit carries the canonical intertwiner. -/
 theorem coe_canonicalIntertwinerUnit (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
     ((canonicalIntertwinerUnit U V hacute : (E →L[𝕜] E)ˣ) : E →L[𝕜] E) =
       canonicalIntertwiner U V :=
-  sorry
+  (isUnit_canonicalIntertwiner U V hacute).unit_spec
 
-/-- **Leaf obligation.** On an acute pair the absolute value of the canonical
-intertwiner is a unit. -/
+/-- On an acute pair the absolute value of the canonical intertwiner is a
+unit. -/
 noncomputable def canonicalAbsoluteValueUnit (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (_hacute : IsAcute U V) : (E →L[𝕜] E)ˣ :=
-  sorry
+    (hacute : IsAcute U V) : (E →L[𝕜] E)ˣ :=
+  (isUnit_operatorAbsoluteValue_canonicalIntertwiner U V hacute).unit
 
-/-- **Leaf obligation.** The absolute-value unit carries the absolute value of
-the canonical intertwiner. -/
+/-- The absolute-value unit carries the absolute value of the canonical
+intertwiner. -/
 theorem coe_canonicalAbsoluteValueUnit (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
     ((canonicalAbsoluteValueUnit U V hacute : (E →L[𝕜] E)ˣ) : E →L[𝕜] E) =
       operatorAbsoluteValue (canonicalIntertwiner U V) :=
-  sorry
+  (isUnit_operatorAbsoluteValue_canonicalIntertwiner U V hacute).unit_spec
 
 omit [CompleteSpace E] [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
   [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
