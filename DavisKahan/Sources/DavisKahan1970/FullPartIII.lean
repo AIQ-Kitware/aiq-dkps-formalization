@@ -134,6 +134,32 @@ alias complex_directRotation_unique :=
 alias complex_directRotation_minimal :=
   DavisKahan.Experimental.spectraDirectRotation_minimal
 
+/-! ### Proposition 3.3, both directions
+
+The square identity `W² = J_V J_U` alone does not characterise `W`: a unitary
+has many square roots.  Proposition 3.3 says `W` is the **principal** one, and
+these four aliases carry that word.
+
+* `complex_directRotation_hermitianPart` is the forward half — the Hermitian
+  part of `W` is `2|S|`, hence positive, so `W`'s spectrum avoids the closed
+  left half-plane.
+* `complex_directRotation_principal_of_sq` is the converse, and in the acute
+  case it is *stronger* than the printed statement: no crossed-intersection
+  mapping condition is needed, because on an acute pair a nonnegative-real-part
+  unitary square root of the reflection product is already forced to be `W`.
+
+The diagonal-block aliases belong to Proposition 3.1, whose characterisation
+clause is "positivity of its diagonal blocks": both compressions of `W` to `U`
+and to `Uᗮ` are the positive Halmos cosine `|S|`. -/
+alias complex_directRotation_hermitianPart :=
+  DavisKahan.Experimental.spectraDirectRotation_add_star_eq_two_smul_absoluteValue
+alias complex_directRotation_principal_of_sq :=
+  DavisKahan.Experimental.spectraDirectRotation_unique_of_sq
+alias complex_directRotation_diagonalBlock :=
+  DavisKahan.Experimental.projection_mul_spectraDirectRotation_mul_projection
+alias complex_directRotation_complementaryDiagonalBlock :=
+  DavisKahan.Experimental.complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
+
 /-! ## Graph and Riccati theory -/
 alias bounded_coercive_isUnit :=
   TauCeti.ContinuousLinearMap.isUnit_of_coercive
