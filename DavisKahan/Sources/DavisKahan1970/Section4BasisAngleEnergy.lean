@@ -221,6 +221,59 @@ theorem sum_displacementAngleSineSq_ge
   rw [h]
   exact b.orthonormal.1 i
 
+/-! ### The infinite-dimensional summability convention
+
+`DK-4.2-prop` recorded the infinite-dimensional form as needing a convention for
+summing `1 - ‖C bᵢ‖²` over an infinite basis.  With the paper's basis-free
+right-hand side there is nothing to settle, for two reasons.
+
+First, the estimate is **termwise** — `displacementAngleSineSq_ge` constrains one
+unit vector of `U` at a time — so no completeness or even orthogonality is used
+and the inequality survives passage to any subfamily.  (That is exactly what
+fails for the wrong right-hand side `∑ᵢ cost D bᵢ`, which is a genuine total
+statement; see the module docstring.)
+
+Second, taking the sums in `ℝ≥0∞` makes them unconditionally defined: divergence
+is a value, not a failure, and `ENNReal.tsum_le_tsum` turns the termwise bound
+into the infinite one with no hypothesis at all. -/
+
+/-- Proposition 4.2 over an arbitrary finite subfamily of unit vectors of `U`.
+
+Orthonormality is not needed for the inequality — it is what makes the two sides
+the paper's *energies* — so the estimate does not depend on the family being a
+basis, or even orthogonal. -/
+theorem sum_displacementAngleSineSq_ge_of_mem
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] (W : H →L[ℂ] H)
+    (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * projection U = projection V * W)
+    {ι : Type*} (b : ι → H) (hb : ∀ i, b i ∈ U) (hbnorm : ∀ i, ‖b i‖ = 1)
+    (s : Finset ι) :
+    ∑ i ∈ s, (1 - ‖spectraOperatorAbsoluteValue
+        (spectraCanonicalIntertwiner U V) (b i)‖ ^ 2) ≤
+      ∑ i ∈ s, displacementAngleSineSq W (b i) :=
+  Finset.sum_le_sum fun i _ =>
+    displacementAngleSineSq_ge U V W hWunitary hWmap (hb i) (hbnorm i)
+
+/-- **Proposition 4.2, infinite-dimensional form, with no summability
+convention.**
+
+In `ℝ≥0∞` both sums are unconditionally defined and the inequality is the
+termwise one.  The index type is arbitrary — in particular it may be infinite,
+and the family need not be complete. -/
+theorem tsum_displacementAngleSineSq_ge_of_mem
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] (W : H →L[ℂ] H)
+    (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * projection U = projection V * W)
+    {ι : Type*} (b : ι → H) (hb : ∀ i, b i ∈ U) (hbnorm : ∀ i, ‖b i‖ = 1) :
+    ∑' i, ENNReal.ofReal (1 - ‖spectraOperatorAbsoluteValue
+        (spectraCanonicalIntertwiner U V) (b i)‖ ^ 2) ≤
+      ∑' i, ENNReal.ofReal (displacementAngleSineSq W (b i)) :=
+  ENNReal.tsum_le_tsum fun i =>
+    ENNReal.ofReal_le_ofReal
+      (displacementAngleSineSq_ge U V W hWunitary hWmap (hb i) (hbnorm i))
+
 /-- **The bound of Proposition 4.2 is attained by the direct rotation on a
 principal vector.**
 
