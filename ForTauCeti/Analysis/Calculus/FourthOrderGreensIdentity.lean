@@ -137,4 +137,41 @@ theorem integral_fourthDeriv_mul_eq_mul_fourthDeriv
     simp_rw [mul_comm]
   rw [step1, step2, step4, step3, hmid]
 
+/-- **The quadratic form of the free-beam operator**: under free-end boundary
+conditions the fourth derivative pairs with `u` as the square of the second
+derivative,
+
+`∫₀¹ u ⬝ (d⁴u/dx⁴) = ∫₀¹ (d²u/dx²)²`.
+
+Two integrations by parts rather than four, and only `u`'s own four boundary
+conditions are used.  This is the form identity behind positivity: the right-hand
+side is a square, so the operator is nonnegative on its free-end domain, which is
+what a Friedrichs-style construction of the self-adjoint realisation rests on.
+
+It is the diagonal case of `integral_fourthDeriv_mul_eq_mul_fourthDeriv` made
+quantitative — the symmetry says the form is symmetric, this says what the form
+*is*. -/
+theorem integral_mul_fourthDeriv_self_eq_integral_secondDeriv_sq
+    {u u1 u2 u3 u4 : ℝ → ℝ}
+    (hu : Continuous u) (hu1 : Continuous u1) (hu2 : Continuous u2)
+    (hu3 : Continuous u3) (hu4 : Continuous u4)
+    (hdu : ∀ x, HasDerivAt u (u1 x) x) (hdu1 : ∀ x, HasDerivAt u1 (u2 x) x)
+    (hdu2 : ∀ x, HasDerivAt u2 (u3 x) x) (hdu3 : ∀ x, HasDerivAt u3 (u4 x) x)
+    (hu2zero : u2 0 = 0) (hu2one : u2 1 = 0)
+    (hu3zero : u3 0 = 0) (hu3one : u3 1 = 0) :
+    ∫ x in (0 : ℝ)..1, u x * u4 x = ∫ x in (0 : ℝ)..1, u2 x ^ 2 := by
+  have stepA : ∫ x in (0 : ℝ)..1, u x * u4 x = -∫ x in (0 : ℝ)..1, u1 x * u3 x := by
+    have h := integral_mul_deriv_eq_deriv_mul_unitInterval hu hu3 hu1 hu4 hdu hdu3
+    rw [h, hu3zero, hu3one]
+    ring
+  have stepB : ∫ x in (0 : ℝ)..1, u1 x * u3 x = -∫ x in (0 : ℝ)..1, u2 x * u2 x := by
+    have h := integral_mul_deriv_eq_deriv_mul_unitInterval hu1 hu2 hu2 hu3 hdu1 hdu2
+    rw [h, hu2zero, hu2one]
+    ring
+  have hsq : ∫ x in (0 : ℝ)..1, u2 x * u2 x = ∫ x in (0 : ℝ)..1, u2 x ^ 2 := by
+    congr 1 with x
+    ring
+  rw [stepA, stepB, hsq]
+  ring
+
 end TauCeti
