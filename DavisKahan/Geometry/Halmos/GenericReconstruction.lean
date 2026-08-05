@@ -379,6 +379,90 @@ theorem pairOfSubspacesUnitaryEquivalent_of_cosineBlockEquiv
 
 end TwoSpaces
 
+/-! ## Theorem 3.1's operator-level spine, in the paper's own invariant -/
+
+section Classification
+
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁]
+  [CompleteSpace H₁]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂]
+  [CompleteSpace H₂]
+variable (U₁ V₁ : Submodule ℂ H₁) [U₁.HasOrthogonalProjection]
+  [V₁.HasOrthogonalProjection]
+variable (U₂ V₂ : Submodule ℂ H₂) [U₂.HasOrthogonalProjection]
+  [V₂.HasOrthogonalProjection]
+
+/-- **Forward direction, in the paper's invariant.**  A pair-equivalence carries
+the `U`-half of the generic part onto the `U`-half, and there it intertwines the
+cosine blocks. -/
+theorem exists_cosineBlockEquiv_of_pairEquiv
+    (h : Frontier.PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂) :
+    ∃ W : genericLeftHalf U₁ V₁ ≃ₗᵢ[ℂ] genericLeftHalf U₂ V₂,
+      ∀ m, W (genericCosineBlock U₁ V₁ m) = genericCosineBlock U₂ V₂ (W m) := by
+  obtain ⟨e, hU, hV⟩ := h
+  have hinj : Function.Injective (e.toLinearMap : H₁ → H₂) := by simpa using e.injective
+  have hGen := map_halmosGenericPart U₁ V₁ U₂ V₂ e hU hV
+  have hM : (genericLeftHalf U₁ V₁).map e.toLinearMap = genericLeftHalf U₂ V₂ := by
+    rw [genericLeftHalf, Submodule.map_inf _ hinj, hU, hGen]
+  refine ⟨summandEquiv e _ hM, fun m => ?_⟩
+  apply Subtype.ext
+  simp only [coe_summandEquiv, genericCosineBlock, DavisKahanExt.compressOperator,
+    ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply,
+    Submodule.coe_orthogonalProjectionOnto_apply]
+  calc e ((genericLeftHalf U₁ V₁).starProjection (V₁.starProjection (m : H₁)))
+      = (genericLeftHalf U₂ V₂).starProjection (e (V₁.starProjection (m : H₁))) :=
+        isometryEquiv_intertwines_projection e hM _
+    _ = (genericLeftHalf U₂ V₂).starProjection (V₂.starProjection (e (m : H₁))) :=
+        congrArg (genericLeftHalf U₂ V₂).starProjection
+          (isometryEquiv_intertwines_projection e hV (m : H₁))
+
+/-- **Davis--Kahan 1970 Theorem 3.1's complete invariant, in the paper's own
+terms.**
+
+The four elementary Halmos multiplicities, together with the
+unitary-equivalence class of the angle operator `cos²Θ` *on the `U`-side* — the
+compression of `P_V` to `U ⊓ generic`.  That is the operator whose spectral
+multiplicity function the paper's Theorem 3.1 uses.
+
+Contrast `SameHalmosOperatorInvariant` in `Frontier/Section3`, which records the
+symmetrized `P_U P_V P_U + P_Uᗮ P_Vᗮ P_Uᗮ` instead: on the generic part that is
+the cosine block on the `U`-half and `1 - D` on the `Uᗮ`-half, so it carries the
+angle data with multiplicity doubled. -/
+structure SameHalmosCosineBlockInvariant : Prop where
+  common : Nonempty (halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
+  sourceDefect : Nonempty
+    (halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)
+  targetDefect : Nonempty
+    (halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
+  exterior : Nonempty (halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
+  cosineBlock : ∃ W : genericLeftHalf U₁ V₁ ≃ₗᵢ[ℂ] genericLeftHalf U₂ V₂,
+    ∀ m, W (genericCosineBlock U₁ V₁ m) = genericCosineBlock U₂ V₂ (W m)
+
+/-- **Davis--Kahan 1970, Theorem 3.1: the operator-level classification, both
+directions.**
+
+Two ordered pairs of subspaces of two complex Hilbert spaces are unitarily
+equivalent *as pairs* exactly when their four elementary Halmos summands are
+isometric and their angle operators `cos²Θ` are unitarily equivalent.
+
+No compactness, no finite dimension, no separability, no direct-integral
+presentation, and — with the invariant read on the `U`-side, as the paper reads
+it — no spectral-multiplicity theory: the reconstruction in
+`pairOfSubspacesUnitaryEquivalent_of_cosineBlockEquiv` is elementary, driven by
+the polar decomposition of the Halmos cross block. -/
+theorem pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant :
+    Frontier.PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
+      SameHalmosCosineBlockInvariant U₁ V₁ U₂ V₂ := by
+  constructor
+  · intro h
+    obtain ⟨hc, hs, ht, he, _⟩ := sameHalmosInvariant_of_pairEquiv U₁ V₁ U₂ V₂ h
+    exact ⟨hc, hs, ht, he, exists_cosineBlockEquiv_of_pairEquiv U₁ V₁ U₂ V₂ h⟩
+  · rintro ⟨⟨ec⟩, ⟨es⟩, ⟨et⟩, ⟨ee⟩, W, hW⟩
+    exact pairOfSubspacesUnitaryEquivalent_of_cosineBlockEquiv U₁ V₁ U₂ V₂ W hW
+      ec es et ee
+
+end Classification
+
 end HiddenFoundations
 end MathAhead
 end Experimental
