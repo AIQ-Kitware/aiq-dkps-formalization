@@ -18,10 +18,10 @@ splitting of the generic part along `U`.
 
 Both facts are prerequisites for brick (1) of the converse of
 `twoProjection_operator_classification`: the reconstruction of a pair-compatible
-unitary of the generic parts from a unitary equivalence of the generic
-cosine-square operators.  With `Assembly.lean` supplying brick (2), that
-reconstruction is the last thing standing between the repository and Davis--Kahan
-Theorem 3.1's constructive spine.
+unitary of the generic parts from a unitary equivalence of the angle operators.
+That reconstruction is carried out in `GenericReconstruction.lean`, and with
+`Assembly.lean` supplying brick (2) it completes Davis--Kahan Theorem 3.1's
+constructive spine in both directions.
 -/
 
 open scoped InnerProductSpace
@@ -428,15 +428,19 @@ the unitary-equivalence class of `genericHalmosCosineSq U V`, the compression of
 `P_U P_V P_U + P_Uᗮ P_Vᗮ P_Uᗮ` to `G`.  On the `U`-half that operator *is* the
 cosine block, which the lemma below proves.
 
-**This exposes a design question about the invariant, worth stating plainly.**
-On the `Uᗮ`-half the same operator is `1 - D`, and under the identification of
-the two halves that is again the cosine block.  So `genericHalmosCosineSq` is
-`A ⊕ A`, not `A`.  Recovering `A` from `A ⊕ A` up to unitary equivalence is a
-multiplicity-halving statement — precisely the Hahn--Hellinger material the
-frontier lists as its `hard_math` blocker — whereas the pair `(U, V)` is
-determined by `A` alone by elementary means.  If the invariant were recorded as
-the cosine block on the `U`-half instead, the classification would not need
-multiplicity theory at all.
+**This exposed a design defect in the invariant, since corrected.**  On the
+`Uᗮ`-half the same operator is `1 - D`, and under the identification of the two
+halves that is again the cosine block.  So `genericHalmosCosineSq` is `A ⊕ A`,
+not `A`.  Recovering `A` from `A ⊕ A` up to unitary equivalence is a
+multiplicity-halving statement — Hahn--Hellinger, which Mathlib does not have —
+whereas the pair `(U, V)` is determined by `A` alone by elementary means, and
+Davis and Kahan state Theorem 3.1 for the angle operator on the `U`-side anyway.
+
+On 2026-08-04 `SameHalmosOperatorInvariant.generic` (Frontier/Section3) was
+re-pointed at `genericCosineBlock`, which is what let
+`twoProjection_operator_classification` be proved in both directions.  The lemma
+below is the bridge that justified the change: it is the proof that the two
+readings agree on the `U`-half.
 -/
 
 /-- **On the `U`-half, the frontier's generic cosine-square operator is the

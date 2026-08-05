@@ -31,17 +31,20 @@ That candidate works because each of the other three blocks is pinned by `A`:
 * `D` is pinned by `D B = B (1 - A)` together with the *dense range* of `B`;
 * `B'` is the adjoint of `B`, so it follows from the `B` case.
 
-## What this does and does not close
+## What this closes
 
-This is the whole of brick (1) as it bears on the *geometry*.  What it does not
-supply is the passage from the frontier's recorded invariant
-`genericHalmosCosineSq` to the cosine block `A` used here: on the generic part
-that operator is `A` on the `M`-half and `1 - D` on the `N`-half, so a unitary
-equivalence of the recorded invariants is an equivalence of `A₁ ⊕ A₁'` with
-`A₂ ⊕ A₂'`, and halving that multiplicity is Hahn--Hellinger theory.  Recording
-the compression to the `U`-half instead would remove multiplicity theory from
-Theorem 3.1's critical path entirely; see the discussion in
-`GenericPosition.lean` and the `two-subspace-classification` blocker.
+Brick (1), and with `Assembly.lean`'s brick (2) the whole converse of
+Davis--Kahan Theorem 3.1.  The frontier statement
+`Frontier.Section3.twoProjection_operator_classification` is grounded by `:=` on
+the classification proved at the end of this file.
+
+The frontier used to record the generic part by `genericHalmosCosineSq`, the
+compression of the symmetrized `P_U P_V P_U + P_Uᗮ P_Vᗮ P_Uᗮ`.  On the generic
+part that is `A` on the `M`-half and `1 - D` on the `N`-half — `A ⊕ A` — so a
+unitary equivalence of the recorded invariants was an equivalence of `A₁ ⊕ A₁'`
+with `A₂ ⊕ A₂'`, and halving that multiplicity is Hahn--Hellinger theory.  The
+invariant now records the cosine block on the `U`-side, which is what Davis and
+Kahan state Theorem 3.1 for, and multiplicity theory left the critical path.
 
 ## Main results
 
@@ -424,10 +427,12 @@ unitary-equivalence class of the angle operator `cos²Θ` *on the `U`-side* — 
 compression of `P_V` to `U ⊓ generic`.  That is the operator whose spectral
 multiplicity function the paper's Theorem 3.1 uses.
 
-Contrast `SameHalmosOperatorInvariant` in `Frontier/Section3`, which records the
-symmetrized `P_U P_V P_U + P_Uᗮ P_Vᗮ P_Uᗮ` instead: on the generic part that is
-the cosine block on the `U`-half and `1 - D` on the `Uᗮ`-half, so it carries the
-angle data with multiplicity doubled. -/
+`SameHalmosOperatorInvariant` in `Frontier/Section3` records exactly this, and
+`twoProjection_operator_classification` is grounded by `:=` on the theorem
+below.  It used to record the symmetrized `P_U P_V P_U + P_Uᗮ P_Vᗮ P_Uᗮ`, which
+on the generic part is the cosine block on the `U`-half and `1 - D` on the
+`Uᗮ`-half — the same angle data with multiplicity doubled, which is what put
+Hahn--Hellinger on the critical path. -/
 structure SameHalmosCosineBlockInvariant : Prop where
   common : Nonempty (halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
   sourceDefect : Nonempty
