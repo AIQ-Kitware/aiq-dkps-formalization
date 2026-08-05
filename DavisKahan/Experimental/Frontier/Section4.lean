@@ -10,6 +10,10 @@ import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 -- and the Fan-dominant ideal bridge for Corollary 4.1.  This module depends only
 -- on source-facing analysis, never on this frontier file, so the edge is acyclic.
 import DavisKahan.Experimental.MathAhead.Section4.InfiniteProposition41
+-- production Proposition 4.2 (`Sources/DavisKahan1970/Section4BasisAngleEnergy`),
+-- which this file's statement is grounded on by `:=`.  Production never imports
+-- the frontier, so the edge is acyclic.
+import DavisKahan.Sources.DavisKahan1970.Section4BasisAngleEnergy
 
 /-!
 # Section 4 frontier: valid extremal properties of the direct rotation
@@ -116,18 +120,62 @@ over an orthonormal **basis** of `U`, and the inequality is a statement about th
 total energy, which no proper subfamily inherits.  Summing the same `ℂ⁴` example
 over the full basis `{(e₁±e₂)/√2}` restores it: `1.025 < 1.125`.
 
-The statement below therefore carries the basis hypothesis.  It is finite-index;
-the infinite-dimensional form additionally needs the summability convention that
-`DK-4.2-prop` records as open. -/
+### A SECOND defect in the same statement, found 2026-08-05
+
+Adding the basis hypothesis was necessary and **not sufficient**.  The form
+
+```
+∑ᵢ cost W bᵢ  ≥  ∑ᵢ cost D bᵢ      -- the SAME basis on both sides
+```
+
+is still false, because the right-hand side is not the paper's.  The paper's
+right-hand side is the sum of squared *principal* sines, which is
+basis-independent; `∑ᵢ cost D bᵢ` is not — it is minimised at the principal
+basis and strictly larger elsewhere, since `re ⟪bᵢ, D bᵢ⟫ = ⟪C bᵢ, bᵢ⟫` falls
+strictly below `‖C bᵢ‖` off the eigenvectors of `C`.
+
+Counterexample, in `ℝ⁴` (so also in `ℂ⁴`).  Take `U = span(e₁, e₂)` and `V` at
+principal angles `0` and `arccos (1/10)`; the pair is acute, since
+`‖P_U − P_V‖ = √(1 − 1/100) < 1`.  Rotate the basis of `U` by `0.2` radians.
+Then
+
+* the direct rotation costs `1.051417`;
+* an explicit admissible competitor — an orthogonal `4 × 4` matrix `W` with
+  `W P_U = P_V W`, obtained as the maximiser of `∑ᵢ (re ⟪bᵢ, W bᵢ⟫)²` over the
+  admissible class, a rank-one pencil computation — costs `1.028237`;
+* the principal-sine sum, which is what Proposition 4.2 actually bounds by, is
+  `0.99`, and both numbers exceed it.
+
+So the statement below is written against the paper's basis-free right-hand
+side `∑ᵢ (1 − ‖C bᵢ‖²) = dim U − tr((C|_U)²)`, and it is proved.  The direct
+rotation attains it on a principal basis — that is
+`proposition4_2_attained_on_principal_vector` — which is the sense in which it
+is the minimiser.
+
+It is finite-index; the infinite-dimensional form additionally needs the
+summability convention that `DK-4.2-prop` records as open. -/
 theorem proposition4_2_basisAngleSquareSum
     {ι : Type*} [Fintype ι] (b : OrthonormalBasis ι ℂ U)
-    (hacute : IsAcute U V) (W : H →L[ℂ] H)
+    (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W) :
     ∑ i, basisAngleSquareCost W ((b i : H)) ≥
-      ∑ i,
-        basisAngleSquareCost (spectraDirectRotation U V hacute) ((b i : H)) := by
-  sorry
+      ∑ i, (1 - ‖spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+        ((b i : H))‖ ^ 2) :=
+  MathAhead.Section4.sum_displacementAngleSineSq_ge U V b W hWunitary hWmap
+
+/-- The bound of `proposition4_2_basisAngleSquareSum` is attained by the direct
+rotation at a principal vector, so it is the true minimum and the direct
+rotation is a minimiser. -/
+theorem proposition4_2_attained_on_principal_vector
+    (hacute : IsAcute U V) {x : H} {μ : ℝ} (hμ : 0 ≤ μ) (hxnorm : ‖x‖ = 1)
+    (hCx : spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x =
+      (μ : ℂ) • x) :
+    basisAngleSquareCost (spectraDirectRotation U V hacute) x =
+      1 - ‖spectraOperatorAbsoluteValue
+        (spectraCanonicalIntertwiner U V) x‖ ^ 2 :=
+  MathAhead.Section4.displacementAngleSineSq_directRotation_eq_of_smul U V
+    hacute hμ hxnorm hCx
 
 /-- Davis--Kahan 1970, Proposition 4.3: every approximation number of the
 squared full displacement is minimized by the direct rotation. -/

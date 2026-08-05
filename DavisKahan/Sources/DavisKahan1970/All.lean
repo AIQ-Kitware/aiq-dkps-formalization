@@ -16,6 +16,7 @@ import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
 import DavisKahan.Sources.DavisKahan1970.PartIII
 import DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface
+import DavisKahan.Sources.DavisKahan1970.Section4BasisAngleEnergy
 import DavisKahan.Sources.DavisKahan1970.Section4Dominance
 import DavisKahan.Sources.DavisKahan1970.Section4FiniteSurface
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
