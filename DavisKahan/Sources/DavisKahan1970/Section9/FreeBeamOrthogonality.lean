@@ -125,6 +125,47 @@ theorem integral_mode_mul_eq_zero_of_ne
   · exact absurd (sub_eq_zero.mp h) hne
   · exact h
 
+/-! ### The Rayleigh identity and positivity -/
+
+/-- **Rayleigh identity for a free-end mode**: `β⁴ ∫ u² = ∫ (u'')²`.
+
+The quadratic form of the fourth-derivative operator evaluated on an
+eigenfunction.  Read left to right it computes the form; read right to left it
+says the eigenvalue is a ratio of two squares, which is where positivity comes
+from. -/
+theorem beta_pow_four_mul_integral_mode_sq
+    {beta a b c d : ℝ} (hu : FreeBoundary beta a b c d) :
+    beta ^ 4 * ∫ x in (0 : ℝ)..1, mode beta a b c d x ^ 2 =
+      ∫ x in (0 : ℝ)..1, modeD2 beta a b c d x ^ 2 := by
+  obtain ⟨hu2zero, hu3zero, hu2one, hu3one⟩ := hu
+  have h := TauCeti.integral_mul_fourthDeriv_self_eq_integral_secondDeriv_sq
+    (continuous_mode beta a b c d) (continuous_modeD1 beta a b c d)
+    (continuous_modeD2 beta a b c d) (continuous_modeD3 beta a b c d)
+    (continuous_modeD4 beta a b c d)
+    (hasDerivAt_mode beta a b c d) (hasDerivAt_modeD1 beta a b c d)
+    (hasDerivAt_modeD2 beta a b c d) (hasDerivAt_modeD3 beta a b c d)
+    hu2zero hu2one hu3zero hu3one
+  rw [← h, ← intervalIntegral.integral_const_mul]
+  congr 1 with x
+  show beta ^ 4 * mode beta a b c d x ^ 2 =
+    mode beta a b c d x * modeD4 beta a b c d x
+  simp only [modeD4]
+  ring
+
+/-- **The free-beam operator is nonnegative on its free-end domain.**
+
+Immediate from the Rayleigh identity, since the right-hand side integrates a
+square.  This is the positivity a Friedrichs-style construction of the
+self-adjoint realisation needs, and it is also why the paper's eigenvalues
+`α₁ ≤ α₂ ≤ …` are indexed as nonnegative reals. -/
+theorem nonneg_beta_pow_four_mul_integral_mode_sq
+    {beta a b c d : ℝ} (hu : FreeBoundary beta a b c d) :
+    0 ≤ beta ^ 4 * ∫ x in (0 : ℝ)..1, mode beta a b c d x ^ 2 := by
+  rw [beta_pow_four_mul_integral_mode_sq hu]
+  refine intervalIntegral.integral_nonneg (by norm_num) ?_
+  intro x _
+  positivity
+
 end
 
 end FreeBeam
