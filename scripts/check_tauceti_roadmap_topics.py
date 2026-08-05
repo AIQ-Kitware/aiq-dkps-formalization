@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate the candidate Tau Ceti roadmap topic design against the import graph.
 
-`dev/tauceti/internal/candidate-topic-design.md` partitions every `ForTauCeti`
+`dev/tauceti/roadmap-candidate-topic-design.md` partitions every `ForTauCeti`
 module into fine-grained topics (`T01`..`T22`, with the `T15a/b/c` split),
 ordered so that each is reviewable on its own against a base Tau Ceti has
 already accepted. Since 2026-07-30 the topics group into a handful of
@@ -46,15 +46,17 @@ IMPORT_RE = re.compile(r"^\s*(?:public\s+)?import\s+(\S+)\s*$", re.M)
 # makes --check fail, which is the point: the design must stay total.
 TOPICS: list[tuple[str, str, list[str]]] = [
 ("T01","Positive square root, operator modulus, functional calculus",
- ["Analysis.SpecialFunctions.Sqrt","Analysis.Normed.Operator.LinearIsometry",A+"Basic",A+"BasisSpan",A+"CourantFischer",
+ ["Analysis.SpecialFunctions.Sqrt",A+"BasisSpan",A+"CourantFischer",
   A+"PositiveSqrt",A+"SelfAdjointFunctionalCalculus",A+"OperatorModulus",A+"Spectrum"]),
 ("T02","Polar decomposition and partial isometries",
  [A+"PartialIsometry",A+"RectangularPartialIsometry",A+"Polar.Decomposition",A+"Polar.Isometry",
   A+"Polar.PartialIsometry",A+"NearIsometry",A+"IntertwiningUnitary"]),
 ("T03","Singular values and the singular system",
  [A+"Singular.Values",A+"RectangularSingularValues",A+"Singular.System",A+"MoorePenroseInverse"]),
-("T26","Projection geometry, orthogonal series, reducing subspaces, and Gram rigidity",
- [A+x for x in ["Gram.Matrix","OrthogonalSeries","Projection.Geometry","ReducingSubspace"]]),
+("T26","Inner-product identities, linear isometries, Gram rigidity, orthogonal series, "
+       "projection geometry, and reducing subspaces",
+ ["Analysis.Normed.Operator.LinearIsometry",A+"Basic"]
+ +[A+x for x in ["Gram.Matrix","OrthogonalSeries","Projection.Geometry","ReducingSubspace"]]),
 ("T04","Projection blocks, the projection gap, and spectral subspaces",
  [A+x for x in ["Projection.Blocks","Projection.Gap","Spectral.Gap","Spectral.Subspace"]]),
 ("T05","Majorization, Schur-Horn, and unitarily invariant norms",
