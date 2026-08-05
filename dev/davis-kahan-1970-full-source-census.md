@@ -13,11 +13,11 @@ authoritative; this Markdown file is generated from it.
 | --- | ---: |
 | `compiled_exact` | 9 |
 | `compiled_specialization` | 5 |
-| `compiled_general_infrastructure` | 16 |
+| `compiled_general_infrastructure` | 17 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
 | `partial_or_wrapper_missing` | 11 |
-| `not_represented` | 2 |
+| `not_represented` | 1 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
 | `not_a_completion_obligation` | 3 |
@@ -48,12 +48,12 @@ no `sorry` and no `axiom`, so a declaration reachable from
 
 | Verification | Count |
 | --- | ---: |
-| `proved_in_build` | 35 |
+| `proved_in_build` | 36 |
 | `proved_conditional` | 5 |
 | `partially_in_build` | 0 |
 | `proved_outside_build` | 3 |
 | `not_compiling` | 0 |
-| `absent` | 2 |
+| `absent` | 1 |
 | `not_applicable` | 3 |
 
 ## Verification meanings
@@ -95,9 +95,15 @@ Gates: DK-9-model (proved_conditional), DK-9.8 (proved_conditional)
 
 **Two-projection canonical decomposition and multiplicity theory**
 
-Section 3's classification results need the Halmos two-subspace canonical form together with spectral multiplicity functions, and the infinite-dimensional existence statement needs cardinal-valued dimension bookkeeping rather than a finite-rank stand-in. **RE-SCOPED 2026-08-04.** The multiplicity requirement is an artefact of how the invariant is recorded, not of the mathematics: `genericHalmosCosineSq` is `A (+) A` rather than `A`, so the classification as stated needs multiplicity-halving. The constructive spine through the cosine block on the U-half needs none of it, and is nearly complete -- see the DK-3.1-thm notes and `DavisKahan/Geometry/Halmos/{Assembly,GenericPosition}.lean`.
+Section 3's classification results need the Halmos two-subspace canonical form together with spectral multiplicity functions, and the infinite-dimensional existence statement needs cardinal-valued dimension bookkeeping rather than a finite-rank stand-in.
 
-Gates: DK-3.2-prop (proved_outside_build), DK-3.1-thm (absent), DK-3.1-cor (absent)
+**RE-SCOPED 2026-08-04 (first time).** The multiplicity requirement is an artefact of how the invariant is recorded, not of the mathematics: `genericHalmosCosineSq` is `A (+) A` rather than `A`, so the classification as stated needs multiplicity-halving. The constructive spine through the cosine block on the U-half needs none of it.
+
+**RESOLVED FOR THE CLASSIFICATION 2026-08-04 (second time).** That spine is complete and in the default build: `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`, both directions, admission-free, for arbitrary complex Hilbert spaces. The Halmos canonical form is no longer a blocker for anything.
+
+**WHAT STILL BLOCKS.** Only the *phrasing* of Theorem 3.1 in terms of spectral multiplicity functions, which needs Hahn--Hellinger (a translation of the invariant, absent from Mathlib), and the cardinal-valued dimension bookkeeping for the Section 4 infinite-dimensional existence statement. Corollary 3.1 needs neither -- it needs the compact-operator equivalence criterion instead. This blocker should be split along those three lines the next time it is touched.
+
+Gates: DK-3.2-prop (proved_outside_build), DK-3.1-thm (proved_in_build), DK-3.1-cor (absent)
 
 ### `section9-certificate-discharge` -- mixed
 
@@ -323,23 +329,23 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 #### Theorem 3.1: Classification of pairs of subspaces
 
 - **Kind:** `theorem`
-- **Status:** `not_represented`
-- **Verification:** `absent`
+- **Status:** `compiled_general_infrastructure`
+- **Verification:** `proved_in_build`
 - **Mathematics:** Spectral multiplicity functions of the two angle operators classify dimension-compatible subspace pairs up to isometric equivalence.
 - **Blocked by:** `two-subspace-classification`
-- **Current Lean references:** none identified
-- **Assessment:** The current angle API does not provide this full classification theorem.
+- **Current Lean references:** `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.SameHalmosCosineBlockInvariant`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.exists_cosineBlockEquiv_of_pairEquiv`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_of_cosineBlockEquiv`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.genericTransport`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_of_summandEquivs`
+- **Assessment:** **PROVED 2026-08-04, in the paper's own invariant, both directions, admission-free.**
 
-FINDING 2026-08-04, and it is worse than `not_represented` suggests. A statement does exist -- `TauCeti.DavisKahan.Experimental.Frontier.Section3.theorem3_1_spectralMultiplicity_classification` -- but its proof is `sorry` **and so is its premise**: `TauCeti.DavisKahan.Experimental.Frontier.SameSpectralMultiplicity` is `noncomputable def ... : Prop := by sorry` (`DavisKahan/Experimental/Frontier/Core.lean`). A `Prop`-valued definition with a `sorry` body asserts nothing, so the theorem is not merely unproved -- it is vacuous, and filling in the proof would certify nothing. Formalizing Theorem 3.1 honestly requires first *defining* spectral multiplicity (measure class plus a cardinal-valued multiplicity function) and proving the Hahn--Hellinger classification, which Mathlib does not have. Verified by `#print axioms`: both reach `sorryAx`.
+`pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant` (`DavisKahan/Geometry/Halmos/GenericReconstruction.lean`): two ordered pairs of subspaces of two complex Hilbert spaces are unitarily equivalent as pairs **iff** their four elementary Halmos summands are linearly isometric and their angle operators `cos^2 Theta` -- the compression of `P_V` to `U /\ generic` -- are unitarily equivalent. No compactness, no finite dimension, no separability, no direct-integral presentation. `#print axioms` gives exactly [propext, Classical.choice, Quot.sound], and the module is reachable from `DavisKahan.All`, so CI guards it.
 
-PROGRESS 2026-08-04 on the constructive spine (the route that does NOT need multiplicity theory).
+Brick (2) (`pairOfSubspacesUnitaryEquivalent_of_summandEquivs`, Assembly.lean) glues the four elementary summand isometries and a pair-compatible generic-part isometry into a global unitary. Brick (1) (GenericReconstruction.lean) supplies the generic-part isometry from the cosine block alone, and the extension is *forced*: `B = Phi |B|` has `Phi : M ~= N` unitary, so the only candidate on the U-perp half is `W' := Phi_2 W Phi_1^-1`, and each remaining block is pinned by `A` -- `|B|` is the unique nonnegative square root of `A - A^2`, `D` is pinned by `D B = B (1-A)` plus the dense range of `B`, and `B'` is the adjoint of `B`.
 
-**Brick (2) is DONE**: `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_of_summandEquivs` (`DavisKahan/Geometry/Halmos/Assembly.lean`, sorry-free) assembles matched isometries of the four elementary Halmos summands plus a generic-part isometry respecting U and V into a pair-equivalence. The elementary summands need NO compatibility hypothesis -- that is automatic from common <= U ⊓ V, source <= U ⊓ V-perp, target <= U-perp ⊓ V, exterior <= U-perp ⊓ V-perp.
+**WHAT IS AND IS NOT LEFT, stated precisely.** The paper phrases Theorem 3.1 with *spectral multiplicity functions* of the angle operators; the theorem above uses the *unitary-equivalence class* of the same operator. The two phrasings differ by Hahn--Hellinger -- 'two self-adjoint operators are unitarily equivalent iff their multiplicity data agree' -- which is a translation of the invariant, not a step in Davis and Kahan's argument. So what remains for the literal printed sentence is a multiplicity theory Mathlib does not have; the classification content of the theorem is done.
 
-**Brick (1) is most of the way**: `DavisKahan/Geometry/Halmos/GenericPosition.lean` (sorry-free) establishes generic position, the splitting G = M ⊕ N, the cosine block A with spectrum strictly inside (0,1), the cross block B with trivial kernel and dense range, `B* B = A - A^2`, the halves-equivalence `genericHalvesEquiv : M ~= N` (the polar factor of B), `Phi |B| = B`, `|B|^2 = A - A^2`, and `D B = B (1 - A)`. Three steps remain: W|B1| = |B2|W by uniqueness of the nonnegative square root (`ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq`), D = Phi (1-A) Phi^-1, and the transport/glue.
+**Why the U-side invariant, and not the frontier's.** `SameHalmosOperatorInvariant.generic` records `genericHalmosCosineSq`, the compression of `P_U P_V P_U + P_Uperp P_Vperp P_Uperp`. On the generic part that operator is the cosine block on the U-half and `1 - D` on the U-perp half, i.e. `A (+) A` (`coe_genericHalmosCosineSq_of_mem_left` proves the M half). Recovering `A` from `A (+) A` is multiplicity-halving -- Hahn--Hellinger again, and this time gratuitously, since the pair is determined by `A` alone by elementary means. Davis and Kahan state Theorem 3.1 for the angle operator on the U-side, so recording the cosine block is the paper-faithful reading; the symmetrized operator was a repository choice that doubled the multiplicity.
 
-**DESIGN FINDING that changes what this row costs.** `genericHalmosCosineSq U V` is `A (+) A`, not `A`: it is the cosine block on M and `1 - D` on N, and under the identification of the halves that is again the cosine block (`coe_genericHalmosCosineSq_of_mem_left` proves the M half). So `SameHalmosOperatorInvariant.generic` records `A (+) A`. Recovering `A` from `A (+) A` up to unitary equivalence is multiplicity-halving -- exactly the Hahn-Hellinger material listed as the `two-subspace-classification` hard_math blocker -- whereas the pair (U,V) is determined by `A` alone by elementary means. **If the invariant recorded the cosine block on the U-half instead, this row would need no multiplicity theory at all.** That changes the frontier's stated invariant, so it is a maintainer decision and has not been made.
-- **Next action:** Define spectral multiplicity for real. Until `SameSpectralMultiplicity` asserts something, no proof of this row means anything.
+HISTORY. The pre-existing frontier statement `TauCeti.DavisKahan.Experimental.Frontier.Section3.theorem3_1_spectralMultiplicity_classification` remains `sorry`, and is **vacuous** besides: its premise `TauCeti.DavisKahan.Experimental.Frontier.SameSpectralMultiplicity` is `noncomputable def ... : Prop := by sorry` (`DavisKahan/Experimental/Frontier/Core.lean`), and a Prop-valued definition with a `sorry` body asserts nothing. Its sibling `twoProjection_operator_classification` (Frontier/Section3) also remains `sorry` in the converse direction, for the `A (+) A` reason above and no other. Neither is on this row's evidence path any more.
+- **Next action:** Two independent follow-ups, neither blocking the mathematics above. (a) Re-point `SameHalmosOperatorInvariant.generic` at the cosine block on the U-half, then `twoProjection_operator_classification`'s converse closes by `:=` on `pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`. (b) For the literal printed phrasing, build spectral multiplicity (measure class plus cardinal-valued multiplicity function) and prove Hahn--Hellinger, then bridge unitary equivalence to multiplicity equality.
 
 #### Corollary 3.1: Compact classification by angle eigenvalues
 
@@ -354,7 +360,9 @@ PROGRESS 2026-08-04 on the constructive spine (the route that does NOT need mult
 FINDING 2026-08-04: a statement exists, `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_1_compact_angleList_classification`, with a `sorry` proof (verified by `#print axioms`). Unlike DK-3.1-thm its statement is *not* vacuous -- `compactAngleEigenvalueList` is a real definition (the approximation-number sequence) and is axiom-clean. What it needs is the converse of `twoProjection_operator_classification`, itself `sorry`, plus the compact positive spectral theorem.
 
 PROGRESS 2026-08-04: same brick (1)/(2) work as DK-3.1-thm applies -- see that row. This row additionally needs the compact positive spectral theorem (equal approximation-number lists imply unitary equivalence), which is independent of the multiplicity question.
-- **Next action:** Defer until the general classification and compact spectral multiplicity bridge exist.
+
+RE-SCOPED 2026-08-04. Theorem 3.1's classification is proved (see DK-3.1-thm), so the dependency that made this row 'defer' is discharged. Feeding it requires exhibiting the cosine block `genericCosineBlock U V` as a compact operator when `P_U P_V P_U` is compact, and then a compact-operator unitary-equivalence criterion. Note the paper's 'including possible zero multiplicity' bookkeeping lands on the four elementary summands, which the invariant already carries separately.
+- **Next action:** The general classification now exists in the U-side invariant (`pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`), so this row no longer waits on it. What is left is genuinely the compact bridge: for a compact positive contraction, unitary equivalence iff equal decreasing eigenvalue lists with multiplicity, plus the kernel dimension. That is elementary spectral theory of compact self-adjoint operators, not Hahn--Hellinger.
 
 #### Proposition 3.5: Angle commutation and eigenspace geometry
 
