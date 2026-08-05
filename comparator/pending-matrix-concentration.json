@@ -2,7 +2,7 @@
   "challenge_module": "Challenge.MathlibPending.MatrixConcentration.Conformance",
   "solution_module": "Challenge.MathlibPending.MatrixConcentration.Leaderboard",
   "theorem_names": [
-    "TauCeti.measure_forall_sortedEigenvalues_ge_ge"
+    "TauCeti.measure_forall_eigenvalues₀_ge_ge"
   ],
   "permitted_axioms": [
     "propext",

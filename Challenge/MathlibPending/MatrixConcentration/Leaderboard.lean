@@ -4,4 +4,4 @@
 -/
 import ForTauCeti.Probability.Moments.MatrixConcentration
 
-#print axioms TauCeti.measure_forall_sortedEigenvalues_ge_ge
+#print axioms TauCeti.measure_forall_eigenvalues₀_ge_ge
