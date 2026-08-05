@@ -5,7 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import Mathlib
 import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 import ForTauCeti.Analysis.InnerProductSpace.SchattenNorm
-import ForTauCeti.LinearAlgebra.Matrix.RankFactorization
 
 /-!
 # Roadmap bridge: cross-module integration seams
@@ -15,7 +14,7 @@ import ForTauCeti.LinearAlgebra.Matrix.RankFactorization
 single module failing to compile.  Every entry is an anonymous `example`, so it asserts
 nothing and adds no public name: its only job is to stop elaborating if the seam moves.
 
-The seams are not hypothetical.  All four are recorded regressions or review findings:
+The seams are not hypothetical.  All three are recorded regressions or review findings:
 
 1. **A redundant hypothesis on a public signature.**  `sinTheta_spectralSubspace_le` used to
    take an `hAselected : SpectrumIn A (spectralSubspace A (Set.Icc a b)) (Set.Icc a b)`
@@ -26,19 +25,14 @@ The seams are not hypothetical.  All four are recorded regressions or review fin
    seminorm, the Schatten `S₂` norm and the Hilbert--Schmidt energy are four separate
    definitions in four modules.  Three theorems relate them; this file checks that the
    composite chain closes, which no one of the three does on its own.
-3. **A signature that two files had to agree on.**  `TauCeti.Matrix.rank_le_iff_exists_eq_mul`
-   carried an unused `[DecidableEq n]` only because
-   `Challenge/MathlibPending/RankFactorization/Conformance.lean` restated it that way.  Both
-   have dropped it; the examples below hold the delivered signature to that shape.
-4. **A deleted compatibility layer.**  `DavisKahan/SpectralTheory/Compatibility.lean` held 46
+3. **A deleted compatibility layer.**  `DavisKahan/SpectralTheory/Compatibility.lean` held 46
    forwarding declarations and was removed.  This file imports canonical owner modules
    directly and names nothing from that layer.
 
 ## What this file deliberately does not claim
 
-Three items remain unresolved and no example here is arranged to suggest otherwise:
-unbounded graph/Riccati existence, contractivity, bounds and uniqueness; the identification of
-`Matrix.sortedEigenvalues` with Mathlib's `Matrix.IsHermitian.eigenvalues₀`; and the exact
+Two items remain unresolved and no example here is arranged to suggest otherwise:
+unbounded graph/Riccati existence, contractivity, bounds and uniqueness; and the exact
 spectral-cutoff approximation-number theorem naming the spectral projection, the compression,
 the finite-rank hypothesis and the conclusion in one statement.
 -/
@@ -137,45 +131,5 @@ example (A : E →ₗ[𝕜] E) :
   rfl
 
 end Frobenius
-
-/-! ## Seam 3 — rank factorization without `[DecidableEq n]`
-
-The three theorems no longer carry `[DecidableEq n]`.  It appeared in their type and was used
-only by the `Pi.single` witness inside one proof, where `classical` now supplies it; the
-conformance statement moved in the same commit.
-
-These examples restate all three at the signature the roadmap proposes — `[Field 𝕜]`,
-`[Fintype m]`, `[Fintype n]` — and discharge each by **direct application**, with no
-`classical` and no instance argument.  That is the check worth having: a `classical` here
-would hide a re-added instance, and applying the theorem term-for-term cannot.
-
-`[Fintype m]` is the roadmap's binder, not the library's — `Matrix.rank` needs only
-`[Fintype n]`, so the delivered theorems are strictly more general than these examples and
-elaborate with the extra instance simply unused. -/
-
-section RankFactorization
-
-open Module (finrank)
-
-/-- The exact rank factorization, inner dimension `Fin M.rank`. -/
-example {𝕜 m n : Type*} [Field 𝕜] [Fintype m] [Fintype n] (M : Matrix m n 𝕜) :
-    ∃ (L : Matrix m (Fin M.rank) 𝕜) (R : Matrix (Fin M.rank) n 𝕜), M = L * R :=
-  TauCeti.Matrix.exists_eq_mul_rank M
-
-/-- The zero-padded form, for any `r ≥ M.rank`. -/
-example {𝕜 m n : Type*} [Field 𝕜] [Fintype m] [Fintype n]
-    (M : Matrix m n 𝕜) {r : ℕ} (h : M.rank ≤ r) :
-    ∃ (L : Matrix m (Fin r) 𝕜) (R : Matrix (Fin r) n 𝕜), M = L * R :=
-  TauCeti.Matrix.exists_eq_mul_of_rank_le M h
-
-/-- **The headline characterization**, and the declaration `Leaderboard.lean` names in its
-axiom audit: `M.rank ≤ r ↔ ∃ L R, M = L * R`.  This is the roadmap's actual
-rank-factorization result, not a weakened surrogate — the forward direction is the
-factorization and the reverse is the rank bound. -/
-example {𝕜 m n : Type*} [Field 𝕜] [Fintype m] [Fintype n] (M : Matrix m n 𝕜) (r : ℕ) :
-    M.rank ≤ r ↔ ∃ (L : Matrix m (Fin r) 𝕜) (R : Matrix (Fin r) n 𝕜), M = L * R :=
-  TauCeti.Matrix.rank_le_iff_exists_eq_mul M r
-
-end RankFactorization
 
 end RoadmapBridge.Integration

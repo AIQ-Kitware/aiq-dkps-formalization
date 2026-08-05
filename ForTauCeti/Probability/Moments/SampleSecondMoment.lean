@@ -111,11 +111,11 @@ theorem isHermitian_sampleSecondMoment {n d : ℕ}
 /-- **Second-moment eigenvalue lower bound (high probability).**  Given a
 per-entry mean-square bound `v` for `M̂ − M`, with `M` the population second
 moment (e.g. `v = σ²/n` from `integral_sq_sampleSecondMoment_entry_le` under iid
-coordinates), with probability `≥ 1 − d² v / η²` every sorted eigenvalue of the
+coordinates), with probability `≥ 1 − d² v / η²` every eigenvalue of the
 empirical second moment `M̂(ω)` exceeds the corresponding eigenvalue of `M` minus
 `d · η`.  Taking `η = c / (2d)` keeps a population eigenvalue floored at `c`
 above `c / 2` with high probability — the eigengap the DKPS `halign` route needs. -/
-theorem measure_forall_sampleSecondMoment_sortedEigenvalues_ge_ge {n d : ℕ}
+theorem measure_forall_sampleSecondMoment_eigenvalues₀_ge_ge {n d : ℕ}
     (P : Measure Ω) [IsProbabilityMeasure P]
     (V : Fin n → Ω → EuclideanSpace ℝ (Fin d))
     (populationSecondMoment : Matrix (Fin d) (Fin d) ℝ)
@@ -126,15 +126,15 @@ theorem measure_forall_sampleSecondMoment_sortedEigenvalues_ge_ge {n d : ℕ}
     {v η : ℝ} (hη : 0 < η)
     (hmoment : ∀ k l,
       ∫ ω, (sampleSecondMoment V ω k l - populationSecondMoment k l) ^ 2 ∂P ≤ v) :
-    P {ω | ∀ k : Fin d,
-        Matrix.sortedEigenvalues hPopHermitian k - (d : ℝ) * η ≤
-          Matrix.sortedEigenvalues (isHermitian_sampleSecondMoment V ω) k}
+    P {ω | ∀ k : Fin (Fintype.card (Fin d)),
+        hPopHermitian.eigenvalues₀ k - (d : ℝ) * η ≤
+          (isHermitian_sampleSecondMoment V ω).eigenvalues₀ k}
       ≥ 1 - ENNReal.ofReal ((d : ℝ) ^ 2 * v / η ^ 2) := by
   have hmeas : ∀ k l : Fin d, Measurable fun ω => sampleSecondMoment V ω k l := by
     intro k l
     refine Measurable.const_mul ?_ _
     exact Finset.measurable_sum _ fun i _ => (hVmeas i k).mul (hVmeas i l)
-  exact measure_forall_sortedEigenvalues_ge_ge P (sampleSecondMoment V) populationSecondMoment
+  exact measure_forall_eigenvalues₀_ge_ge P (sampleSecondMoment V) populationSecondMoment
     (isHermitian_sampleSecondMoment V) hPopHermitian hmeas hint hη hmoment
 
 end TauCeti
