@@ -11,9 +11,9 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 13 |
+| `compiled_exact` | 16 |
 | `compiled_specialization` | 4 |
-| `compiled_general_infrastructure` | 18 |
+| `compiled_general_infrastructure` | 15 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
 | `partial_or_wrapper_missing` | 8 |
@@ -131,7 +131,7 @@ Gates: DK-9-model (proved_conditional), DK-9.1-9.4 (proved_conditional), DK-9.5-
 
 The mathematics is in the build in a more general form; what is missing is a statement carrying the paper's numbering, scope and hypotheses, so the facade can cite it.
 
-Gates: S1-block-residual (proved_in_build), S2-sin-two-theta (proved_in_build), S2-tan-two-theta (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.4-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-4.1-prop (proved_in_build), DK-5.2-thm (proved_in_build), DK-5.1-lem (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
+Gates: S1-block-residual (proved_in_build), S2-sin-two-theta (proved_in_build), S2-tan-two-theta (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.4-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-5.2-thm (proved_in_build), DK-5.1-lem (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
 
 ### `frontier-tree-unguarded` -- mechanical
 
@@ -454,23 +454,26 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 #### Proposition 4.1: Pointwise and singular-value extremality of the direct rotation
 
 - **Kind:** `proposition`
-- **Status:** `compiled_general_infrastructure`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** For any unitary carrying P to Q, an orthonormal sequence experiences angles at least the principal angles; equivalently the singular values of (1-V)|P are minimized by the direct rotation and equal 2 sin(theta_k/2).
-- **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_le`, `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_directRotation`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_le`, `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_directRotation`, `TauCeti.DavisKahan1970.Proposition4_1`, `TauCeti.DavisKahan1970.Proposition4_1_directRotationValues`
 - **Assessment:** The finite pointwise singular-value theorem is compiled: every singular value of the restricted displacement (1-V)P is minimized by the direct rotation, whose values are the doubled half-angle sines 2 sin(theta_k/2).  A source-numbered wrapper and the infinite-dimensional scope remain open.
-- **Next action:** Add a DavisKahan1970 source wrapper and audit the infinite-dimensional statement.
+
+**SOURCE WRAPPER ADDED 2026-08-05**, in `DavisKahan/Sources/DavisKahan1970/Section4.lean` (namespace `TauCeti.DavisKahan1970`), so the facade can cite the paper's numbering directly.  The wrappers are `alias`es over the already-compiled general theorems, so they carry the exact statements.  The infinite-dimensional form is proved in `Experimental/MathAhead/Section4/InfiniteProposition41.lean` by a spectral-cutoff min--max argument; it is NOT aliased here, because no production module may import `Experimental` and `lake build` does not yet guard that chain.
+- **Next action:** Source wrapper done.  What remains is beyond-source hardening: promote `Experimental/MathAhead/Section4/InfiniteProposition41.lean` into the default build so the infinite-dimensional form is guarded.  MEASURED 2026-08-05: its import closure is 24 Experimental modules, of which exactly two carry a real tactic `sorry` -- `InfiniteDimensional/DirectRotation.lean:1203` and `InfiniteDimensional/SinTheta/General.lean:1128`.  Discharge those two or split the dependency; the other three modules that grep as `sorry` mention it only in prose.
 
 #### Corollary 4.1: UI-norm minimality of direct rotation displacement
 
 - **Kind:** `corollary`
-- **Status:** `compiled_general_infrastructure`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** The direct rotation minimizes the norm of (1-V)P for every unitary-invariant norm.
-- **Current Lean references:** `TauCeti.DavisKahanTheory.uiNorm_restrictedDisplacement_le`, `TauCeti.DavisKahanTheory.directRotation_minimizes_restrictedDisplacement_uiNorm`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.uiNorm_restrictedDisplacement_le`, `TauCeti.DavisKahanTheory.directRotation_minimizes_restrictedDisplacement_uiNorm`, `TauCeti.DavisKahan1970.Corollary4_1`, `TauCeti.DavisKahan1970.Corollary4_1_minimizer`
 - **Assessment:** Compiled without any angle restriction, for every unitarily invariant norm, over every RCLike field (finite dimension).  The earlier note conflating this row with Proposition 4.4 is resolved: the corollary concerns the restricted displacement and needs no angle hypothesis.
-- **Next action:** Proved. directRotation_minimizes_restrictedDisplacement_uiNorm compiles but only under DavisKahan/Experimental; promote it into the build, then add a DavisKahan1970 source wrapper and audit the infinite-dimensional statement.
+
+**SOURCE WRAPPER ADDED 2026-08-05**, in `DavisKahan/Sources/DavisKahan1970/Section4.lean` (namespace `TauCeti.DavisKahan1970`), so the facade can cite the paper's numbering directly.  The wrappers are `alias`es over the already-compiled general theorems, so they carry the exact statements.
+- **Next action:** Nothing outstanding at source scope.  CORRECTION 2026-08-05: the previous next_action said `directRotation_minimizes_restrictedDisplacement_uiNorm` 'compiles but only under DavisKahan/Experimental'.  That is stale -- it is in `DavisKahan/FiniteDimensional/DirectRotation.lean`, production, and the census checker verifies this row as proved_in_build.  The source wrapper is now present too.  Beyond-source: the infinite-dimensional ideal-gauge companion (`corollary4_1_restrictedDisplacement_idealGauge`) still lives under Experimental.
 
 #### Proposition 4.2: Basis-angle square-sum extremality
 
@@ -507,10 +510,10 @@ The frontier statement `proposition4_2_basisAngleSquareSum` is no longer `sorry`
 #### Proposition 4.3: Squared displacement UI-norm minimality
 
 - **Kind:** `proposition`
-- **Status:** `compiled_general_infrastructure`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** The direct rotation minimizes the UI norm of (1-V*) (1-V).
-- **Current Lean references:** `TauCeti.DavisKahanTheory.directRotation_displacementSquare_kyFan`, `TauCeti.DavisKahanTheory.directRotation_displacementSquare_uiNorm`, `TauCeti.DavisKahanTheory.directRotation_minimizes_displacementSquare_uiNorm`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.directRotation_displacementSquare_kyFan`, `TauCeti.DavisKahanTheory.directRotation_displacementSquare_uiNorm`, `TauCeti.DavisKahanTheory.directRotation_minimizes_displacementSquare_uiNorm`, `TauCeti.DavisKahan1970.Proposition4_3`, `TauCeti.DavisKahan1970.Proposition4_3_kyFan`, `TauCeti.DavisKahan1970.Proposition4_3_minimizer`
 - **Assessment:** Compiled for every unitarily invariant norm over every RCLike field (finite dimension), via Fan-Hoffman majorization of the pinched competitor and two-block pinching contraction.
 
 VERIFIED 2026-08-04: the finite-dimensional UI-norm minimality is compiled, axiom-clean and in the default build. The **infinite-dimensional** form is stated in `DavisKahan/Experimental/Frontier/Section4.lean` and is `sorry` (`#print axioms` reaches `sorryAx`). Proposition 4.1's infinite form *is* proved, in `Experimental/MathAhead/Section4/InfiniteProposition41.lean`, by a spectral-cutoff min-max argument -- that is the pattern to follow.
@@ -535,7 +538,9 @@ TWO THINGS THAT TURNED OUT NOT TO BE EXTRA WORK.  (i) **Proposition 4.1 for the 
 ONE BRICK WAS MISSING AND IS NOW BUILT: `a_n(X*X) = a_n(X)^2`, in `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/GramSquare.lean`.  Proposition 4.1 dominates approximation numbers at the FIRST power, 4.3 is about the Gram operator of the displacement, and nothing else bridges them.  Its hard direction cannot be done by pointwise norm domination -- `norm(X*Xx) >= s norm(x)` on a subspace only gives `norm(Xx) >= (s/norm X) norm(x)`, the wrong power -- so the optimal subspace has to be spectral and the proof runs through the Gram spectral projections.  That lemma is also precisely why 4.3 survives while 4.4 does not: sums of SQUARES of the approximation numbers are dominated at every `k`, and the sums themselves are not.
 
 The infinite form lives under `DavisKahan/Experimental`, so `lake build` does not guard it.  Promoting it is the remaining work on this row, together with the exact source wrapper.
-- **Next action:** The mathematics is DONE -- the infinite-dimensional Ky Fan form is proved.  What remains is guarding and wrapping: promote `Experimental/MathAhead/Section4/InfiniteProposition43.lean` (and `InfiniteProposition41.lean`, which it consumes) plus `directRotation_minimizes_displacementSquare_uiNorm` into the default build -- MEASURE THE IMPORT CLOSURE FIRST, the Section 8 chain turned out to be 42 modules with a `sorry` in it -- then add `DavisKahan1970`-namespaced source wrappers for `directRotation_displacementSquare_kyFan` / `_uiNorm`.  Do NOT attempt pointwise approximation-number domination: it is false (notes), and it would contradict this repository's own refutation of Proposition 4.4.
+
+**SOURCE WRAPPER ADDED 2026-08-05**, in `DavisKahan/Sources/DavisKahan1970/Section4.lean` (namespace `TauCeti.DavisKahan1970`), so the facade can cite the paper's numbering directly.  The wrappers are `alias`es over the already-compiled general theorems, so they carry the exact statements.
+- **Next action:** Source wrapper done, and the infinite-dimensional Ky Fan form is proved.  What remains is beyond-source hardening: promote `Experimental/MathAhead/Section4/InfiniteProposition43.lean` (and `InfiniteProposition41.lean`, which it consumes) into the default build.  MEASURED 2026-08-05: the closure is 25 Experimental modules with exactly two real tactic `sorry`s, at `InfiniteDimensional/DirectRotation.lean:1203` and `InfiniteDimensional/SinTheta/General.lean:1128`.  Do NOT attempt pointwise approximation-number domination: it is false (notes), and it would contradict this repository's own refutation of Proposition 4.4.
 
 #### Proposition 4.4: Real-space full displacement minimality below pi/3
 
