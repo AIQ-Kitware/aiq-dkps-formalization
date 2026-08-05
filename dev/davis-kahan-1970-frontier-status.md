@@ -48,8 +48,8 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 - Manifest nodes: **80**
 - Textually present: **80**
 - Paper result rows represented in the frontier: **32**
-- Census rows requiring frontier coverage: **18**
-- Census rows mapped: **18**
+- Census rows requiring frontier coverage: **16**
+- Census rows mapped: **16**
 - Declarations resolving in Lean: **80**
 - Declarations with admission-free Lean closure: **61**
 - Recursively grounded manifest nodes: **59**
