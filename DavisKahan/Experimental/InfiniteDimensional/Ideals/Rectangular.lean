@@ -30,26 +30,21 @@ namespace RectangularSymmetricIdealFamily
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 
-/-- Compact operators equipped with the ordinary operator norm.
+/-! ### `compactOperatorNorm` was deleted 2026-08-04
 
-**The Schauder obligation is discharged** (2026-08-02).  This docstring used to say
-the adjoint-invariance field was blocked on "Schauder's theorem for Hilbert-space
-adjoints, which the pinned Mathlib does not yet provide".  It is now proved, as
-`ContinuousLinearMap.isCompactOperator_adjoint` in
-`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Adjoint.lean`, and cheaply:
-compactness on a complete Hilbert target *is* the vanishing of the approximation
-numbers, and those are adjoint-invariant, so the two operators have the same
-sequence.
+It was the last `sorry` in this file, and it was never mathematics.  Its own
+docstring already recorded the position: the Schauder obligation had been
+discharged (`ContinuousLinearMap.isCompactOperator_adjoint`), and what remained
+was "filling in a dozen fields of a type slated for deletion" -- the legacy
+`RectangularSymmetricIdealFamily` that lane `RECT-DELETE` is retiring -- with
+the instruction that "when a canonical compact-operator family is wanted, build
+it against the current `SymmetricOperatorIdealFamily`".
 
-What is left is not mathematics.  `RectangularSymmetricIdealFamily` is the legacy
-record that `RECT-DELETE` is retiring, and this row is one of its remaining
-catalogue slots; filling in a dozen fields of a type slated for deletion is work
-that the deletion would immediately discard.  When a canonical compact-operator
-family is wanted, build it against the current `SymmetricOperatorIdealFamily` and
-take `adjoint_mem` from the theorem above. -/
-noncomputable def compactOperatorNorm :
-    RectangularSymmetricIdealFamily (𝕜 := 𝕜) :=
-  sorry
+That is now done: `TauCeti.compactOperatorFamily`
+(`ForTauCeti/Analysis/OperatorIdeal/Family/CompactOperator.lean`), complete and
+adjoint-invariant.  Its only consumer, `Ideals/Symmetric.lean`'s
+`compactOperator`, now reads it through `ofCanonical`, so the slot had no users
+and could go rather than be filled. -/
 
 /-- Hilbert--Schmidt operators as a coherent rectangular family.
 

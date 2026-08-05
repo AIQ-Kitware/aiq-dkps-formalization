@@ -7,6 +7,7 @@ import DavisKahan.SpectralTheory.OperatorAngle
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.Rectangular
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.OperatorIdeal.CanonicalRealView
+import ForTauCeti.Analysis.OperatorIdeal.Family.CompactOperator
 
 /-!
 # Symmetric norm ideals
@@ -270,10 +271,15 @@ noncomputable def operatorNorm : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
 
 /-! Concrete square ideals obtained from the rectangular families. -/
 
-/-- Compact operators with the ordinary operator norm. -/
+/-- Compact operators with the ordinary operator norm.
+
+Built from the **canonical** family, not the legacy rectangular record.  This is
+the second catalogue entry to make that move (after `operatorNorm`), and it is
+what let `RectangularSymmetricIdealFamily.compactOperatorNorm` be deleted: that
+slot was a `sorry`, and it was this row's only consumer. -/
 noncomputable def compactOperator :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular RectangularSymmetricIdealFamily.compactOperatorNorm
+  ofCanonical (TauCeti.compactOperatorFamily 𝕜)
 
 /-- Schatten `p` ideal.  Carries the min--max hypothesis its family now needs: the
 family stopped being a `sorry` on 2026-07-31 and acquired that family's real
