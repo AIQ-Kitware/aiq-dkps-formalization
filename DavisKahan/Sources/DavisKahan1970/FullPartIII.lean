@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.PartIII
+import ForTauCeti.Analysis.Normed.Operator.SylvesterBoundedInverse
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Alternative.All
 import DavisKahan.DoubleAngle.All
@@ -161,6 +162,25 @@ alias complex_directRotation_complementaryDiagonalBlock :=
   DavisKahan.Experimental.complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
 
 /-! ## Graph and Riccati theory -/
+/-! ### Theorem 5.1 at source generality
+
+The repository's other Sylvester lower bounds assume a Hilbert space, because
+they are proved through coercivity or through the spectral theorem.  Theorem 5.1
+is a **Banach**-space statement about *any compatible operator norm*, and needs
+neither: `A X = C + X B` plus a left inverse gives `X = A⁻¹C + A⁻¹XB`, and one
+multiplication by `ρ + δ` cancels `ρ‖X‖` from both sides.  The Neumann series
+is what produces a solution; it is not what bounds one.
+
+`banach_sylvester_lower_bound_uiNorm` carries the "any compatible operator norm"
+clause literally: it is stated for an arbitrary size function subject to exactly
+subadditivity and the two one-sided ideal bounds, which is also what a
+symmetric-norm-ideal gauge supplies. -/
+alias banach_sylvester_lower_bound :=
+  TauCeti.ContinuousLinearMap.norm_le_of_sylvester_of_leftInverse
+alias banach_sylvester_lower_bound_uiNorm :=
+  TauCeti.ContinuousLinearMap.opNorm_le_of_sylvester_of_leftInverse
+
+/-! ## Graph and Riccati theory (continued) -/
 alias bounded_coercive_isUnit :=
   TauCeti.ContinuousLinearMap.isUnit_of_coercive
 alias bounded_one_add_star_mul_self_isUnit :=

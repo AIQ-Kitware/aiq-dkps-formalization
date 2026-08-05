@@ -318,6 +318,8 @@ variable (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V
   (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
   (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
 
+/-- On the common part, the glued trivial equivalence is the common-part
+component `ec`. -/
 theorem coe_halmosTrivialEquiv_of_mem_common {x : H₁}
     (hx : x ∈ halmosCommonPart U₁ V₁) (hxT : x ∈ halmosTrivialPart U₁ V₁) :
     (halmosTrivialEquiv U₁ V₁ U₂ V₂ ec es et ee ⟨x, hxT⟩ : H₂) =
@@ -327,6 +329,8 @@ theorem coe_halmosTrivialEquiv_of_mem_common {x : H₁}
     TauCeti.coe_orthogonalSupGlue,
     TauCeti.supGlueAmbient_apply_of_mem_left (halmosCommon_le_sourceDefect_orthogonal U₁ V₁) _ _ hx]
 
+/-- On the source defect `U ⊓ Vᗮ`, the glued trivial equivalence is the
+source-defect component `es`. -/
 theorem coe_halmosTrivialEquiv_of_mem_source {x : H₁}
     (hx : x ∈ halmosSourceDefect U₁ V₁) (hxT : x ∈ halmosTrivialPart U₁ V₁) :
     (halmosTrivialEquiv U₁ V₁ U₂ V₂ ec es et ee ⟨x, hxT⟩ : H₂) =
@@ -336,6 +340,8 @@ theorem coe_halmosTrivialEquiv_of_mem_source {x : H₁}
     TauCeti.coe_orthogonalSupGlue,
     TauCeti.supGlueAmbient_apply_of_mem_right (halmosCommon_le_sourceDefect_orthogonal U₁ V₁) _ _ hx]
 
+/-- On the target defect `Uᗮ ⊓ V`, the glued trivial equivalence is the
+target-defect component `et`. -/
 theorem coe_halmosTrivialEquiv_of_mem_target {x : H₁}
     (hx : x ∈ halmosTargetDefect U₁ V₁) (hxT : x ∈ halmosTrivialPart U₁ V₁) :
     (halmosTrivialEquiv U₁ V₁ U₂ V₂ ec es et ee ⟨x, hxT⟩ : H₂) =
@@ -345,6 +351,8 @@ theorem coe_halmosTrivialEquiv_of_mem_target {x : H₁}
     TauCeti.coe_orthogonalSupGlue,
     TauCeti.supGlueAmbient_apply_of_mem_left (halmosTargetDefect_le_exterior_orthogonal U₁ V₁) _ _ hx]
 
+/-- On the exterior `Uᗮ ⊓ Vᗮ`, the glued trivial equivalence is the exterior
+component `ee`. -/
 theorem coe_halmosTrivialEquiv_of_mem_exterior {x : H₁}
     (hx : x ∈ halmosExteriorPart U₁ V₁) (hxT : x ∈ halmosTrivialPart U₁ V₁) :
     (halmosTrivialEquiv U₁ V₁ U₂ V₂ ec es et ee ⟨x, hxT⟩ : H₂) =

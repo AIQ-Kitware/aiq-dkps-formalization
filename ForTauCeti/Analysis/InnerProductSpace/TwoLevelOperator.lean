@@ -51,6 +51,8 @@ noncomputable def twoLevelOperator (a b : ℝ) (U : Submodule 𝕜 E)
 variable {a b : ℝ} {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 
+/-- Pointwise formula: the two-level operator is `a` off `U` and `b` on `U`,
+written as a scalar plus a multiple of the projection. -/
 theorem twoLevelOperator_apply (x : E) :
     twoLevelOperator a b U x =
       (a : 𝕜) • x + ((b : 𝕜) - (a : 𝕜)) • projection U x := by
@@ -72,6 +74,8 @@ theorem inner_projection_self (W : Submodule 𝕜 E) [W.HasOrthogonalProjection]
         rw [Submodule.inner_right_of_mem_orthogonal hmem hperp, add_zero,
           inner_self_eq_norm_sq_to_K]
 
+/-- A two-level operator is symmetric: its two levels are real and the
+projection is symmetric. -/
 theorem isSymmetric_twoLevelOperator : (twoLevelOperator a b U).IsSymmetric := by
   intro x y
   simp only [twoLevelOperator_apply, inner_add_left, inner_add_right,

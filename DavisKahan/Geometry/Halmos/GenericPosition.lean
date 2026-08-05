@@ -581,10 +581,14 @@ hence is onto `N`.  That unitary `M ≃ₗᵢ N` is the coordinatization: it pre
 the generic part as `K ⊕ K` with `P_U` the first coordinate projection.
 -/
 
+/-- The left half of the generic part is complete: it has an orthogonal
+projection, hence is closed in a complete ambient space. -/
 instance instCompleteSpaceGenericLeftHalf :
     CompleteSpace (genericLeftHalf U V) :=
   (genericLeftHalf U V).isComplete_coe_of_hasOrthogonalProjection.completeSpace_coe
 
+/-- The right half of the generic part is complete, for the same reason as the
+left half. -/
 instance instCompleteSpaceGenericRightHalf :
     CompleteSpace (genericRightHalf U V) :=
   (genericRightHalf U V).isComplete_coe_of_hasOrthogonalProjection.completeSpace_coe

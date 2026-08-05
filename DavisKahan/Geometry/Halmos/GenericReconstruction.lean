@@ -163,6 +163,8 @@ noncomputable def genericRightTransport :
     genericRightHalf U₁ V₁ ≃ₗᵢ[ℂ] genericRightHalf U₂ V₂ :=
   ((genericHalvesEquiv U₁ V₁).symm.trans W).trans (genericHalvesEquiv U₂ V₂)
 
+/-- The transported right half is `W` conjugated by the two polar factors `Φ`:
+unfold the composition. -/
 theorem genericRightTransport_apply (n : genericRightHalf U₁ V₁) :
     genericRightTransport U₁ V₁ U₂ V₂ W n =
       genericHalvesEquiv U₂ V₂ (W ((genericHalvesEquiv U₁ V₁).symm n)) :=
@@ -254,6 +256,8 @@ noncomputable def genericTransport :
           (genericRightTransport U₁ V₁ U₂ V₂ W)).trans
       (LinearIsometryEquiv.ofEq _ _ (halmosGenericPart_eq_sup_inf_left U₂ V₂).symm))
 
+/-- The generic transport is the restriction of the ambient glue of `W` and its
+right-half transport. -/
 theorem coe_genericTransport (y : halmosGenericPart U₁ V₁) :
     (genericTransport U₁ V₁ U₂ V₂ W y : H₂) =
       supGlueAmbient W (genericRightTransport U₁ V₁ U₂ V₂ W) (y : H₁) := by

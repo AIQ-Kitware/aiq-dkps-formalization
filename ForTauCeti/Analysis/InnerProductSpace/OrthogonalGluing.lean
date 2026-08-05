@@ -69,6 +69,8 @@ noncomputable def orthogonalGlueMap (f : A ≃ₗᵢ[𝕜] A') (g : Aᗮ ≃ₗ�
       (Aᗮ.orthogonalProjectionOnto : H →ₗ[𝕜] Aᗮ))
 
 omit [A'.HasOrthogonalProjection] [A'ᗮ.HasOrthogonalProjection] in
+/-- The glued map splits a vector along `A ⊕ Aᗮ` and applies the two pieces
+separately. -/
 theorem orthogonalGlueMap_apply (f : A ≃ₗᵢ[𝕜] A') (g : Aᗮ ≃ₗᵢ[𝕜] A'ᗮ) (x : H) :
     orthogonalGlueMap f g x =
       (f (A.orthogonalProjectionOnto x) : H') +
@@ -111,6 +113,8 @@ noncomputable def orthogonalGlueIsometry (f : A ≃ₗᵢ[𝕜] A') (g : Aᗮ �
   norm_map' := norm_orthogonalGlueMap f g
 
 omit [A'.HasOrthogonalProjection] [A'ᗮ.HasOrthogonalProjection] in
+/-- The glued isometry has the same values as the underlying glued map; only
+its bundling changes. -/
 theorem orthogonalGlueIsometry_apply (f : A ≃ₗᵢ[𝕜] A') (g : Aᗮ ≃ₗᵢ[𝕜] A'ᗮ)
     (x : H) :
     orthogonalGlueIsometry f g x =
@@ -171,14 +175,18 @@ noncomputable def orthogonalGlue (f : A ≃ₗᵢ[𝕜] A') (g : Aᗮ ≃ₗᵢ[
   LinearIsometryEquiv.ofSurjective (orthogonalGlueIsometry f g)
     (orthogonalGlueIsometry_surjective f g)
 
+/-- The glued equivalence has the same values as the glued isometry; only its
+bundling changes. -/
 @[simp] theorem orthogonalGlue_apply (f : A ≃ₗᵢ[𝕜] A') (g : Aᗮ ≃ₗᵢ[𝕜] A'ᗮ)
     (x : H) : orthogonalGlue f g x = orthogonalGlueIsometry f g x := by
   simp [orthogonalGlue]
 
+/-- On `A` the glued equivalence is `f`. -/
 theorem orthogonalGlue_apply_of_mem (f : A ≃ₗᵢ[𝕜] A') (g : Aᗮ ≃ₗᵢ[𝕜] A'ᗮ)
     {x : H} (hx : x ∈ A) : orthogonalGlue f g x = (f ⟨x, hx⟩ : H') :=
   orthogonalGlueIsometry_apply_of_mem f g hx
 
+/-- On `Aᗮ` the glued equivalence is `g`. -/
 theorem orthogonalGlue_apply_of_mem_orthogonal (f : A ≃ₗᵢ[𝕜] A')
     (g : Aᗮ ≃ₗᵢ[𝕜] A'ᗮ) {x : H} (hx : x ∈ Aᗮ) :
     orthogonalGlue f g x = (g ⟨x, hx⟩ : H') :=
@@ -241,6 +249,9 @@ noncomputable def supGlueAmbient (f : A ≃ₗᵢ[𝕜] A') (g : B ≃ₗᵢ[�
       (B.orthogonalProjectionOnto : H →ₗ[𝕜] B))
 
 omit [A'.HasOrthogonalProjection] [B'.HasOrthogonalProjection] in
+/-- The ambient glue of two isometries on orthogonal summands splits its
+argument along `A` and `B` and applies the two pieces separately.  Unlike
+`orthogonalGlueMap_apply` the two summands need not exhaust `H`. -/
 theorem supGlueAmbient_apply (f : A ≃ₗᵢ[𝕜] A') (g : B ≃ₗᵢ[𝕜] B') (x : H) :
     supGlueAmbient f g x =
       (f (A.orthogonalProjectionOnto x) : H') +
@@ -347,6 +358,8 @@ noncomputable def orthogonalSupGlue (hAB : A ≤ Bᗮ) (hAB' : A' ≤ B'ᗮ)
     exact ⟨⟨x, hx⟩, Subtype.ext hxy⟩
 
 omit [A'.HasOrthogonalProjection] [B'.HasOrthogonalProjection] in
+/-- The glue on `A ⊔ B` is the restriction of the ambient glue: its underlying
+vector is computed by `supGlueAmbient`. -/
 theorem coe_orthogonalSupGlue (hAB : A ≤ Bᗮ) (hAB' : A' ≤ B'ᗮ)
     (f : A ≃ₗᵢ[𝕜] A') (g : B ≃ₗᵢ[𝕜] B') (x : (A ⊔ B : Submodule 𝕜 H)) :
     (orthogonalSupGlue hAB hAB' f g x : H') = supGlueAmbient f g (x : H) := by
