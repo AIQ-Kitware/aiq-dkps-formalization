@@ -166,6 +166,41 @@ theorem nonneg_beta_pow_four_mul_integral_mode_sq
   intro x _
   positivity
 
+/-! ### Normalization
+
+Orthogonality is only half of an eigenbasis; the other half is that a nontrivial
+mode has positive norm, so it can be normalized.  That is not automatic from
+`FreeBoundary`, which the zero mode also satisfies. -/
+
+/-- **A mode that is nonzero somewhere inside `(0,1)` has positive `L²` norm.**
+
+Continuity makes `u² > 0` on a whole open neighbourhood of the witness, and an
+open nonempty subset of `(0,1)` has positive Lebesgue measure; the integral
+criterion then applies.  Positivity of `∫ u²` is what lets the Rayleigh identity
+be read as `β⁴ = ∫(u'')² / ∫u²`, and what makes an orthogonal family of modes
+normalizable. -/
+theorem integral_mode_sq_pos {beta a b c d x₀ : ℝ}
+    (hx₀ : x₀ ∈ Set.Ioo (0 : ℝ) 1) (hne : mode beta a b c d x₀ ≠ 0) :
+    0 < ∫ x in (0 : ℝ)..1, mode beta a b c d x ^ 2 := by
+  have hcont : Continuous fun x => mode beta a b c d x ^ 2 :=
+    (continuous_mode beta a b c d).pow 2
+  have hnonneg : ∀ x, 0 ≤ mode beta a b c d x ^ 2 := fun x => sq_nonneg _
+  have hfi : IntervalIntegrable (fun x => mode beta a b c d x ^ 2) MeasureTheory.volume 0 1 :=
+    hcont.intervalIntegrable 0 1
+  rw [intervalIntegral.integral_pos_iff_support_of_nonneg_ae
+    (Filter.Eventually.of_forall hnonneg) hfi]
+  refine ⟨by norm_num, ?_⟩
+  -- The open set where `u² > 0`, intersected with `(0,1)`, is a nonempty open subset.
+  set S : Set ℝ := {x | 0 < mode beta a b c d x ^ 2} ∩ Set.Ioo (0 : ℝ) 1 with hSdef
+  have hSopen : IsOpen S :=
+    (isOpen_lt continuous_const hcont).inter isOpen_Ioo
+  have hpos0 : 0 < mode beta a b c d x₀ ^ 2 := pow_two_pos_of_ne_zero hne
+  have hSmem : x₀ ∈ S := ⟨hpos0, hx₀⟩
+  have hSpos : 0 < MeasureTheory.volume S := hSopen.measure_pos _ ⟨x₀, hSmem⟩
+  refine lt_of_lt_of_le hSpos (MeasureTheory.measure_mono ?_)
+  rintro x ⟨hxpos, hxmem⟩
+  exact ⟨ne_of_gt hxpos, Set.Ioo_subset_Ioc_self hxmem⟩
+
 end
 
 end FreeBeam
