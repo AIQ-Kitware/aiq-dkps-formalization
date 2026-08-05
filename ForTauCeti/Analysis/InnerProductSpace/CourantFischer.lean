@@ -583,6 +583,13 @@ theorem abs_eigenvalues_sub_le_opNorm
   have hx := (LinearMap.toContinuousLinearMap (T - S)).le_opNorm x
   rwa [LinearMap.coe_toContinuousLinearMap'] at hx
 
+/-- Sorted eigenvalues are congruent along an operator equality (the eigenvalue
+enumeration depends only on the operator, not on the symmetry proof). -/
+theorem eigenvalues_congr {S₁ S₂ : E →ₗ[𝕜] E} (h : S₁ = S₂)
+    (hS₁ : S₁.IsSymmetric) (hS₂ : S₂.IsSymmetric) (hn : finrank 𝕜 E = n) :
+    hS₁.eigenvalues hn = hS₂.eigenvalues hn := by
+  subst h; rfl
+
 end TauCeti
 
 end

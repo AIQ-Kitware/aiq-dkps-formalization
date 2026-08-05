@@ -23,9 +23,10 @@ module
 
 public import Mathlib.Analysis.InnerProductSpace.SingularValues
 public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
-public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 public import ForTauCeti.Analysis.InnerProductSpace.Spectrum
 
 
@@ -66,17 +67,6 @@ variable {𝕜 E F F' : Type*} [RCLike 𝕜]
   [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [FiniteDimensional 𝕜 F']
 
 /-! ### Singular values under unitaries, scaling, and bounded factors (F0) -/
-
-/-- Singular values only depend on the Gram operator. -/
-theorem singularValues_eq_of_gram_eq {A : E →ₗ[𝕜] F} {B : E →ₗ[𝕜] F'}
-    (h : A.adjoint ∘ₗ A = B.adjoint ∘ₗ B) : A.singularValues = B.singularValues := by
-  ext i
-  rcases lt_or_ge i (finrank 𝕜 E) with hi | hi
-  · rw [A.singularValues_of_lt rfl hi, B.singularValues_of_lt rfl hi]
-    congr 1
-    exact congrFun (eigenvalues_congr h A.isSymmetric_adjoint_comp_self
-      B.isSymmetric_adjoint_comp_self rfl) _
-  · rw [A.singularValues_of_finrank_le hi, B.singularValues_of_finrank_le hi]
 
 /-- Post-composing with a unitary does not change the singular values. -/
 theorem singularValues_unitary_comp (U : F ≃ₗᵢ[𝕜] F) (A : E →ₗ[𝕜] F) :

@@ -15,7 +15,7 @@ Staged for Tau Ceti, roadmap topic T09.  These are the **acceptance examples** t
 roadmap makes a condition of acceptance: *the development is accepted only when its
 abstractions compute correctly on concrete operators*, and *these examples are
 theorem-level tests of the API, not merely `#eval` checks*
-(`TauCetiRoadmap/HilbertSpaceOperatorTheory/OperatorIdeals/README.md`, Part A).
+(`TauCetiRoadmap/OperatorTheory/OperatorIdeals/README.md`, Part A).
 
 Each is proved from the public API alone — the defining infimum is never unfolded:
 

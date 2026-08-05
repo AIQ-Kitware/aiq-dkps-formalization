@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 
-Staged for Tau Ceti, roadmap topic `HilbertSpaceOperatorFoundations`.  Mathlib is
+Staged for Tau Ceti, roadmap topic `PolarDecomposition`.  Mathlib is
 not the destination (`ForTauCeti/README.md`); on the closed Mathlib track this
 would have gone to `Mathlib/Analysis/InnerProductSpace/`, beside the polar
 decomposition.
@@ -50,7 +50,7 @@ exactly this predicate when `M` is rectangular, since `W` maps `E` to `F`.
 * Extraction class: **new**.  This is not a move or a generalization of existing
   material.  `ForTauCeti.Analysis.InnerProductSpace.PartialIsometry` carries the
   square theory and stays unchanged; the rectangular predicate is the roadmap's
-  `HilbertSpaceOperatorFoundations` target `isPartialIsometry_iff_starMul`, which
+  `PolarDecomposition` target `isPartialIsometry_iff_starMul`, which
   presupposes a `LinearMap.IsPartialIsometry` that did not exist.
 * Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.

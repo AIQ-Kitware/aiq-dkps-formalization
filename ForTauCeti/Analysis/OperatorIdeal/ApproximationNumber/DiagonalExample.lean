@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 # The diagonal acceptance example
 
 Staged for Tau Ceti, roadmap topic T09.  This is one entry of the **acceptance
-list** in `TauCetiRoadmap/HilbertSpaceOperatorTheory/OperatorIdeals/README.md` (Part A): the
+list** in `TauCetiRoadmap/OperatorTheory/OperatorIdeals/README.md` (Part A): the
 diagonal operator whose approximation numbers are its entries.  The rest of that list is
 in `ApproximationNumber/Examples.lean`, and this one is separated from it for a
 reason that is temporary and worth stating plainly.

@@ -341,8 +341,8 @@ actual product.
 The goal is to make `ForTauCeti` **an elegant, self-consistent package**, and
 then use that package to generate two things:
 
-1. **polished roadmaps** — drafted in [`../ForTauCetiRoadmap/`](../ForTauCetiRoadmap/README.md),
-   mirroring the sibling `TauCetiRoadmap` layout; and
+1. **polished roadmaps** — drafted in
+   [`../submodules/TauCetiRoadmap/`](../submodules/TauCetiRoadmap/README.md); and
 2. **mechanical ports** that satisfy those roadmaps.
 
 The `TauCeti/` copy is an **output**, produced on demand by
@@ -353,10 +353,9 @@ So: improvements go **into** `ForTauCeti`. A task that sounds like "move
 `ForTauCeti` into `TauCeti`" is asking for an *export*. Never empty or delete
 `ForTauCeti/` as a way of declaring the migration done.
 
-### This package and `ForTauCetiRoadmap` are rehearsals — treat them as real
+### This package is a rehearsal — treat it as real
 
-**jon, 2026-07-30.** `ForTauCeti` is a mock of the Tau Ceti PR contents;
-`ForTauCetiRoadmap` is a mock of `TauCetiProject/TauCetiRoadmap`. They exist so
+**jon, 2026-07-30.** `ForTauCeti` is a mock of the Tau Ceti PR contents. It exists so
 that **when we make the effort to do the real submission, it goes smoothly.**
 
 So work on them as though they were the real repositories — no hedging, no
@@ -432,7 +431,7 @@ pin change additionally needs a green bump-guard, so the port should not move
 topic, so the clusters go up individually, not as a single submission.
 
 **A note on `scope`, which cannot be satisfied from inside this repo.** The real
-reviewer reads `TauCetiProject/TauCetiRoadmap`, not our `ForTauCetiRoadmap/`.
+reviewer reads `TauCetiProject/TauCetiRoadmap`.
 That is a fact about the real run and is recorded in
 [`dev/audit/TAUCETI-RUBRIC-REVIEW.md`](../dev/audit/TAUCETI-RUBRIC-REVIEW.md).
 It is **not** a defect in present work: per jon (2026-07-30) we rehearse against

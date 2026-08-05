@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate the candidate Tau Ceti roadmap topic design against the import graph.
 
-`ForTauCetiRoadmap/CANDIDATE-TOPIC-DESIGN.md` partitions every `ForTauCeti`
+`dev/tauceti/internal/candidate-topic-design.md` partitions every `ForTauCeti`
 module into fine-grained topics (`T01`..`T22`, with the `T15a/b/c` split),
 ordered so that each is reviewable on its own against a base Tau Ceti has
 already accepted. Since 2026-07-30 the topics group into a handful of
@@ -53,9 +53,10 @@ TOPICS: list[tuple[str, str, list[str]]] = [
   A+"Polar.PartialIsometry",A+"NearIsometry",A+"IntertwiningUnitary"]),
 ("T03","Singular values and the singular system",
  [A+"Singular.Values",A+"RectangularSingularValues",A+"Singular.System",A+"MoorePenroseInverse"]),
-("T04","Gram matrices, orthogonal projections, and spectral subspaces",
- [A+x for x in ["Gram.Matrix","Projection.Geometry","Projection.Blocks","Projection.Gap",
-   "ReducingSubspace","Spectral.Subspace","Spectral.Gap","OrthogonalSeries"]]),
+("T26","Projection geometry, orthogonal series, reducing subspaces, and Gram rigidity",
+ [A+x for x in ["Gram.Matrix","OrthogonalSeries","Projection.Geometry","ReducingSubspace"]]),
+("T04","Projection blocks, the projection gap, and spectral subspaces",
+ [A+x for x in ["Projection.Blocks","Projection.Gap","Spectral.Gap","Spectral.Subspace"]]),
 ("T05","Majorization, Schur-Horn, and unitarily invariant norms",
  ["Analysis.Convex.Majorization",A+"SchurHorn",A+"Singular.Subspace",A+"KyFan",
   A+"UnitarilyInvariantSeminorm"]),
@@ -136,9 +137,8 @@ TOPICS: list[tuple[str, str, list[str]]] = [
   "Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection",
   "Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar"]),
 ("T16","Sylvester equations and the Rosenblum theorem",
- [A+x for x in ["Rosenblum","HilbertSchmidt.Block","CoerciveUnit"]]
- +[A+"Sylvester."+x for x in ["Basic","Interval","SpectralDistance",
-   "Bound","Operator","BlockIdentity","BlockEstimate","SpectralGap","Generator","Group"]]
+ [A+x for x in ["Rosenblum","CoerciveUnit"]]
+ +[A+"Sylvester."+x for x in ["Basic","Interval","SpectralDistance","Bound","Operator"]]
  +[A+"Sylvester.Internal.ReciprocalMultiplier"+x for x in
      ["",".OrbitAction",".Fourier",".DoubledPhase"]]
  +[A+"Sylvester.Internal.SpectralBounds"]),
@@ -156,7 +156,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # belongs with T09 by subject, but it is proved *by complexification* and so imports both of
  # them; filing it under T09 would make T09 unsubmittable.  Third time, same rule.
  +[A+"SpectralOrder.Real",A+"Complexification.Basic",A+"Complexification.FunctionalCalculus",
-   "Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal"]
+   ]
  +[A+"ReducedExtension"]),
 ("T18","The Yu-Wang-Samworth statistical variant",
  [A+"YuWangSamworth."+x for x in ["Residual","SingularSubspace","Statistics"]]),
@@ -170,6 +170,11 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  ["LinearAlgebra.Matrix.RankFactorization","LinearAlgebra.Matrix.PosDef"]),
 ("T22","Berge's maximum theorem and approximate minimizers",
  ["Topology.ApproxMinimizer","Topology.Berge"]),
+("T24","Real approximation numbers by complexification",
+ ["Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal"]),
+("T25","The Hilbert-Schmidt Sylvester flow",
+ [A+x for x in ["HilbertSchmidt.Block","Sylvester.BlockEstimate","Sylvester.BlockIdentity",
+                "Sylvester.Generator","Sylvester.Group","Sylvester.SpectralGap"]]),
 ]
 
 
@@ -179,6 +184,12 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 # (`UnboundedOperators/`) was absorbed into `SpectralTheory/`, whose Generality
 # bar now opens with the U1 decision it was kept for.
 INTENTIONAL_ORPHANS: dict[str, str] = {}
+
+
+#: Reserved row of the topic map: topics delivered in `ForTauCeti` that no roadmap
+#: proposes.  They stay out of the roadmap graph rather than being force-fitted into a
+#: roadmap whose mathematics does not cover them.
+UNROADMAPPED = "(delivered, not roadmapped)"
 
 
 def roadmap_coverage() -> tuple[list, list, list, list, dict]:
@@ -195,10 +206,11 @@ def roadmap_coverage() -> tuple[list, list, list, list, dict]:
 
     # The topic map covers this repository's family only; the submodule carries 24 other
     # families whose Suggested.lean files are not ours to deliver.
-    family = "HilbertSpaceOperatorTheory"
-    leaf_dirs = {d for d in ({p.parent.relative_to(root).as_posix()
-                              for p in root.rglob("Suggested.lean")} if root.exists() else set())
-                 if d.startswith(family + "/")}
+    family = "OperatorTheory"
+    all_leaves = ({p.parent.relative_to(root).as_posix()
+                   for p in root.rglob("Suggested.lean")} if root.exists() else set())
+    leaf_dirs = {d for d in all_leaves
+                 if d.startswith(family + "/") or d == "BergeMaximumTheorem"}
 
     rows: dict[str, list[str]] = {}
     if topic_map.exists():
@@ -208,17 +220,25 @@ def roadmap_coverage() -> tuple[list, list, list, list, dict]:
         for directory, raw_keys in row_re.findall(text):
             rows[directory] = re.findall(r"T\d+[a-c]?", raw_keys)
 
+    # A topic may be delivered in `ForTauCeti` and deliberately not proposed in any
+    # roadmap.  The map records those against this reserved row; they are neither
+    # unowned nor part of the roadmap dependency graph.
+    unroadmapped = set(rows.pop(UNROADMAPPED, []))
+
     declared: dict[str, list[str]] = defaultdict(list)   # topic key -> directories
     for directory, keys in rows.items():
         for key in dict.fromkeys(keys):
             declared[key].append(directory)
 
     known = {k for k, _, _ in TOPICS}
-    covered, missing, doubled = [], [], []
+    covered, missing, doubled, deliberate = [], [], [], []
     for key, title, _ in TOPICS:
         owners = declared.get(key, [])
         if len(owners) > 1:
             doubled.append(f"topic {key} declared by {', '.join(owners)}")
+        if key in unroadmapped:
+            deliberate.append(f"{key}  {title}")
+            continue
         (covered if owners else missing).append((key, title, owners[0] if owners else None))
 
     bogus_topics = sorted(
@@ -229,14 +249,16 @@ def roadmap_coverage() -> tuple[list, list, list, list, dict]:
     missing_leaves = sorted(
         f"{directory} (mapped directory has no Suggested.lean)"
         for directory in set(rows) - leaf_dirs)
-    orphans = unmapped_leaves + missing_leaves + bogus_topics + doubled
+    bogus_unroadmapped = sorted(f"{UNROADMAPPED} declares unknown topic {k}"
+                                for k in unroadmapped if k not in known)
+    orphans = unmapped_leaves + missing_leaves + bogus_topics + doubled + bogus_unroadmapped
 
     groups: dict[str, list[str]] = defaultdict(list)     # directory -> topics, design order
     for key, _, _ in TOPICS:
         owners = declared.get(key, [])
         if owners:
             groups[owners[0]].append(key)
-    return covered, missing, orphans, [], dict(groups)
+    return covered, missing, orphans, deliberate, dict(groups)
 
 
 def roadmap_dag(groups: dict[str, list[str]], topic_needs: dict[str, set[str]]
@@ -339,18 +361,17 @@ def main(argv: list[str] | None = None) -> int:
         for key, title, dd in missing:
             print(f"  MISSING  {key:<5} {title}")
         for dd in orphans:
-            print(f"  ORPHAN   ForTauCetiRoadmap/{dd} covers no topic in the design")
-        for dd in intentional:
-            print(f"  note: ForTauCetiRoadmap/{dd} covers no topic, intentionally "
-                  f"({INTENTIONAL_ORPHANS[dd]})")
+            print(f"  ORPHAN   {dd} covers no topic in the design")
+        for row in intentional:
+            print(f"  note: {row} — delivered, not proposed by any roadmap")
         for c in cycles:
             print(f"  CYCLE    {c}")
         bad = len(missing) + len(orphans) + len(cycles)
         if bad:
             print(f"\nroadmap coverage: {bad} violation(s)")
             return 1
-        print("\nroadmap coverage: OK — every topic covered by exactly one roadmap, "
-              "and the roadmap DAG is acyclic")
+        print("\nroadmap coverage: OK — every roadmapped topic covered by exactly one "
+              "roadmap, and the roadmap DAG is acyclic")
         return 0
 
     d = analyse()
@@ -393,7 +414,7 @@ def main(argv: list[str] | None = None) -> int:
     for key, title, _dd in missing:
         print(f"  NO ROADMAP  {key}  {title}")
     for dd in orphans:
-        print(f"  ORPHAN  ForTauCetiRoadmap/{dd} covers no topic in the design")
+        print(f"  ORPHAN  {dd} covers no topic in the design")
     for c in cycles:
         print(f"  CYCLE  {c}")
     bad += len(missing) + len(orphans) + len(cycles)

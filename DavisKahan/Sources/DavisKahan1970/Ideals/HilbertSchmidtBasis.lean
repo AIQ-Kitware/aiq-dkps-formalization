@@ -473,7 +473,7 @@ gauge agree with the paper ones, so the paper development may be reread through 
 API without reproving anything. -/
 
 /-- **The singular-value energy is the column energy.**  This is the obligation recorded
-against Milestone B3 of `TauCetiRoadmap/HilbertSpaceOperatorTheory/OperatorIdeals/README.md`. -/
+against Milestone B3 of `TauCetiRoadmap/OperatorTheory/OperatorIdeals/README.md`. -/
 theorem tsum_approximationSingularValue_sq_eq_hilbertSchmidtEnergy {ι : Type*}
     (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) :
     ∑' n : ℕ, ENNReal.ofReal (approximationSingularValue n A ^ 2) =

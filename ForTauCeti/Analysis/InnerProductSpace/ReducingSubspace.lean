@@ -90,16 +90,6 @@ theorem starProjection_apply_comm_of_reduces
     (starProjection_comp_comm_of_reduces A U hU)
   simpa only [ContinuousLinearMap.comp_apply] using h
 
-/-- Restricting a symmetric operator to an invariant subspace preserves
-symmetry. -/
-theorem IsSymmetric.restrict_of_invariant {A : E →L[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} (hU : ∀ x ∈ U, A x ∈ U) :
-    (A.restrict hU).IsSymmetric := by
-  intro x y
-  -- states the goal as the inner-product identity the structure lemma expects.
-  change ⟪A (x : E), (y : E)⟫_𝕜 = ⟪(x : E), A (y : E)⟫_𝕜
-  exact hA x y
-
 end ContinuousLinearMap
 
 namespace LinearMap
@@ -146,14 +136,6 @@ theorem norm_starProjection_apply_le_of_mem_orthogonal
 end LinearMap
 
 namespace Submodule
-
-/-- A subspace admitting an orthogonal projection is complete when the ambient
-space is complete. -/
-theorem isComplete_coe_of_hasOrthogonalProjection [CompleteSpace E]
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
-    IsComplete (U : Set E) := by
-  have hclosed : IsClosed ((Uᗮ)ᗮ : Set E) := Uᗮ.isClosed_orthogonal
-  simpa using hclosed.isComplete
 
 end Submodule
 

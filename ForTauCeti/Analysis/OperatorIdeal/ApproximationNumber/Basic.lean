@@ -45,7 +45,7 @@ statement is off-by-one free in it:
 
 The convention is stated in the first sentence of the definition's docstring
 and is recorded as decision 1 of
-`TauCetiRoadmap/HilbertSpaceOperatorTheory/OperatorIdeals/README.md` (Part A generality bar).
+`TauCetiRoadmap/OperatorTheory/OperatorIdeals/README.md` (Part A generality bar).
 
 ## Main declarations
 

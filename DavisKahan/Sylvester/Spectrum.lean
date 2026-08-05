@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
+import ForTauCeti.Analysis.InnerProductSpace.Basic
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.SpectralTheory.ClosedOperator.Complex

@@ -19,12 +19,39 @@ between `T15c` and `T16` in submission order.
 
 | roadmap directory | topics |
 |---|---|
-| `HilbertSpaceOperatorTheory/HilbertSpaceOperatorFoundations` | T01 T02 T03 T04 |
-| `HilbertSpaceOperatorTheory/MajorizationAndAngles` | T05 T06 T07 T08 |
-| `HilbertSpaceOperatorTheory/SelfAdjointSpectralTheory` | T13 T14 T15a T15b T15c |
-| `HilbertSpaceOperatorTheory/OperatorIdeals` | T09 T10 T11 T23 |
-| `HilbertSpaceOperatorTheory/SpectralSubspacePerturbation` | T12 T16 T17 T18 |
-| `HilbertSpaceOperatorTheory/MatrixSpectralStatistics` | T19 T20 T21 T22 |
+| `OperatorTheory/PolarDecomposition` | T01 T02 T03 T26 |
+| `OperatorTheory/Majorization` | T05 T07 |
+| `OperatorTheory/PrincipalAngles` | T04 T06 T08 |
+| `OperatorTheory/SelfAdjointSpectralTheory` | T13 T14 T15a T15b T15c |
+| `OperatorTheory/OperatorIdeals` | T09 T10 T11 |
+| `OperatorTheory/SpectralSubspacePerturbation` | T12 T16 T17 T18 |
+| `OperatorTheory/MatrixSpectralStatistics` | T19 T20 T21 |
+| `BergeMaximumTheorem` | T22 |
+| `(delivered, not roadmapped)` | T23 T24 T25 |
+
+## Delivered, not roadmapped
+
+`(delivered, not roadmapped)` is a reserved row, not a directory. Its topics are proved in
+`ForTauCeti` and no roadmap proposes them, so they stay out of the roadmap dependency graph
+rather than being attached to a roadmap whose mathematics does not cover them.
+
+| topic | modules | why it is not proposed |
+|---|---|---|
+| T23 | `Analysis.OperatorIdeal.ApproximationNumber.{GramSpectralRank, FinitePVMSelection, GramBandPolar}` | the ingredients of the unbounded spectral-band approximation-number theorem; the theorem itself is not proved, and the bounded cutoff bound it would generalize is already `ApproximationNumber.MinMax` |
+| T24 | `Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal` | the real min-max by complexification; its only consumers are `DavisKahan/**` |
+| T25 | `Analysis.InnerProductSpace.{HilbertSchmidt.Block, Sylvester.BlockEstimate, Sylvester.BlockIdentity, Sylvester.Generator, Sylvester.Group, Sylvester.SpectralGap}` | the Hilbert--Schmidt Sylvester flow, whose unbounded endpoint is not proved; the bounded `sin Θ` theory does not import it |
+
+## Why `T04` was split
+
+`T04` mixed two layers. `Gram.Matrix`, `OrthogonalSeries`, `Projection.Geometry` and
+`ReducingSubspace` import nothing above `T01`; `Projection.Blocks`, `Projection.Gap`,
+`Spectral.Gap` and `Spectral.Subspace` import `T04` itself and belong with the angle layer.
+Keeping them together forced `Majorization` to depend on `PrincipalAngles` — `KyFan` uses
+`Orthonormal.norm_sq_starProjection_span_image` and
+`RectangularUnitarilyInvariantSeminorm.Basic` uses
+`exists_linearIsometryEquiv_map_eq_of_inner_eq` — while `PrincipalAngles` depends on
+`Majorization` seven ways. `T26` carries the foundational half to `PolarDecomposition` and
+the cycle is gone.
 
 ## Why `T23` is owned by `OperatorIdeals`
 
@@ -37,4 +64,4 @@ edge ran the wrong way round for the mathematics.
 Measured: those three modules are the sole source of the `T15c → T09` and `T15c → T02`
 edges, and nothing outside the three imports any of them. Splitting them off as `T23` and
 giving them to `OperatorIdeals` leaves `SelfAdjointSpectralTheory` depending only on
-`HilbertSpaceOperatorFoundations`, which is what its mathematics says. No Lean module moved.
+`PolarDecomposition`, which is what its mathematics says. No Lean module moved.

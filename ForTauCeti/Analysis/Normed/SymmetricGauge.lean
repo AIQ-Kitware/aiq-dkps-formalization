@@ -61,7 +61,7 @@ from the axioms:
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Extraction class: **new**.  Written for this repository against the target
   signature recorded in
-  `TauCetiRoadmap/HilbertSpaceOperatorTheory/OperatorIdeals/Suggested.lean`, which states the
+  `TauCetiRoadmap/OperatorTheory/OperatorIdeals/Suggested.lean`, which states the
   structure and the two-sided bound; the field names and the shape of
   `SymmetricGauge` follow that file so the roadmap statement and the delivered
   one agree literally.
