@@ -330,8 +330,8 @@ componentwise via `ProbabilityTheory.variance` + independence. Paper-agnostic �
 - [x] Mathlib-candidate list extracted — see planning/mathlib-candidates.md
       (ranked candidates verified against Mathlib commit 0e4799ceff90;
       top tier: Gram rigidity into the brand-new GramMatrix.lean,
-      QoL bundle, Courant–Fischer+Weyl; local duplicate found:
-      sortedEigenvalues = eigenvalues₀)
+      QoL bundle, Courant–Fischer+Weyl; local duplicate found and since
+      retired: sortedEigenvalues = eigenvalues₀)
 
 ALL MILESTONES COMPLETE.
 
@@ -344,8 +344,6 @@ ALL MILESTONES COMPLETE.
    UniquePairProfile (e.g. embeddable Δ with affinely independent
    configuration); Helm per-ω-population capstone (currently an explicitly
    documented halign hypothesis).
-3. Local cleanup: migrate MatrixPerturbation.sortedEigenvalues to Mathlib's
-   eigenvalues₀.
 
 ## Progress ledger
 

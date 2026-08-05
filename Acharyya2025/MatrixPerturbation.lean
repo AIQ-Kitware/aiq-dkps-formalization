@@ -12,12 +12,13 @@ Given a population Gram matrix `B` that is positive semidefinite with
 `B.rank ≤ d` and an entrywise-close Hermitian sample `Bhat`, set
 `T := Matrix.toEuclideanLin B`, `S := Matrix.toEuclideanLin Bhat`.  We prove:
 
-* `sortedEigenvalues_nonneg`  — every sorted eigenvalue of `T` is `≥ 0`
-  (PSD ⇒ `IsPositive` ⇒ nonneg eigenvalues);
-* `sortedEigenvalues_tail_eq_zero` — the sorted eigenvalues of `T` from index
-  `d` on vanish (rank transport: the matrix rank equals the finrank of the
-  operator range, and a `>d`-block of nonzero eigenvalues would force the range
-  to have finrank `> d`);
+The sorted-eigenvalue hypotheses are stated against Mathlib's
+`Matrix.IsHermitian.eigenvalues₀`; nonnegativity and the vanishing rank-`d` tail are
+`TauCeti.Matrix.PosSemidef.eigenvalues₀_nonneg` and
+`TauCeti.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le`.  We prove:
+
+* `rank_eq_finrank_range_toEuclideanLin` — the matrix rank of `B` is the finrank of the
+  range of `toEuclideanLin B`, which is what carries the rank hypothesis across;
 * `gram_spectralConfig_eq` — the Gram matrix of the spectral configuration
   `spectralConfig T` equals `B` (operator spectral expansion evaluated at the
   standard basis vectors);
@@ -39,6 +40,8 @@ import Acharyya2025.ConfigPerturbation
 import Acharyya2025.OperatorBridge
 import Acharyya2025.GramRigidity
 import Acharyya2025.GramRealization
+import ForTauCeti.Analysis.Matrix.Spectrum
+import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix
 open Module (finrank)
@@ -47,33 +50,18 @@ namespace Acharyya2025.MatrixPerturbation
 
 open Acharyya2025.ConfigPerturbation
 open Acharyya2025.OperatorBridge
+open TauCeti.Matrix (opSym eigenvalues₀_eq_eigenvalues_toEuclideanLin
+  eigenvalues_toEuclideanLin_eq_eigenvalues₀)
 
 variable {n d : ℕ}
 
-/-- Internal helper.
-The canonical finrank witness for `EuclideanSpace ℝ (Fin n)`: the ambient space
-has dimension `n`.  (Finite-dimensionality is an extra implicit assumption beyond
-the paper, baked into working over `Fin n`.) -/
-private theorem hn_eq : finrank ℝ (EuclideanSpace ℝ (Fin n)) = n := finrank_euclideanSpace_fin
-
-/-- Internal helper (matrix → operator bridge).
-The symmetric-operator structure of `toEuclideanLin B` for Hermitian `B`: a
-Hermitian (here symmetric, real entries) matrix becomes a self-adjoint operator.
-This is the encoding that lets the matrix-world `B` invoke the operator-world
-Weyl / Davis–Kahan machinery. -/
--- `hB` : `B` is Hermitian — over ℝ this is symmetry; an implicit encoding of the
---        paper's "(doubly centered) symmetric dissimilarity matrix".
-theorem opSym {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian) :
-    (Matrix.toEuclideanLin B).IsSymmetric :=
-  isSymmetric_toEuclideanLin_of_isHermitian hB
-
-/-- The sorted (decreasing) eigenvalues `λ₀ ≥ λ₁ ≥ …` of the operator
-`toEuclideanLin B` attached to a Hermitian `B`.  Consumers state spectral floors
-(the paper's `α`, from Assumption 2) and the rank-`d` vanishing tail against this. -/
--- `hB` : `B` Hermitian (real-symmetric encoding); needed for real sorted eigenvalues.
-noncomputable def sortedEigenvalues {B : Matrix (Fin n) (Fin n) ℝ}
-    (hB : B.IsHermitian) : Fin n → ℝ :=
-  (opSym hB).eigenvalues hn_eq
+/-! The sorted (decreasing) eigenvalues `λ₀ ≥ λ₁ ≥ …` of a Hermitian `B` are Mathlib's
+`Matrix.IsHermitian.eigenvalues₀`, indexed by `Fin (Fintype.card (Fin n))`.  Consumers state
+spectral floors (the paper's `α`, from Assumption 2) and the rank-`d` vanishing tail against
+that.  The operator layer of this development enumerates the same eigenvalues at index
+`Fin n`, through `finrank_euclideanSpace_fin`; `TauCeti.Matrix` carries the transport
+between the two indexings, which is not definitional because `Fintype.card (Fin n) = n` is a
+theorem. -/
 
 /-! ### Deliverable (2a): nonnegativity of the sorted eigenvalues
 
@@ -107,16 +95,6 @@ theorem isPositive_toEuclideanLin {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.PosSe
   -- the inner product is real, so `re` is the identity
   simpa using hB.dotProduct_mulVec_nonneg (WithLp.ofLp x)
 
-/-- **Deliverable (2a).**  Every sorted eigenvalue of `toEuclideanLin B` is `≥ 0`
-for positive semidefinite `B`.  (PSD matrices have nonnegative eigenvalues — part
-of the rank-`d` / floor `α` spectral structure used in Theorem 2.) -/
-theorem sortedEigenvalues_nonneg {B : Matrix (Fin n) (Fin n) ℝ}
-    (hB : B.PosSemidef)             -- `B` positive semidefinite (PSD)
-    (i : Fin n) :
-    -- Conclusion: the i-th sorted eigenvalue is nonnegative.
-    0 ≤ sortedEigenvalues hB.isHermitian i :=
-  (isPositive_toEuclideanLin hB).nonneg_eigenvalues hn_eq i
-
 /-- The canonical spectral ceiling of a nonempty positive-semidefinite matrix:
 its largest sorted eigenvalue.
 
@@ -125,55 +103,28 @@ an independent assumption in finite dimension.  Antitonicity of the sorted
 eigenvalues makes the leading eigenvalue a canonical valid ceiling. -/
 noncomputable def topEigenvalue {B : Matrix (Fin n) (Fin n) ℝ}
     (hn : 0 < n) (hB : B.PosSemidef) : ℝ :=
-  sortedEigenvalues hB.isHermitian ⟨0, hn⟩
+  hB.isHermitian.eigenvalues₀ ⟨0, by simpa using hn⟩
 
 /-- The canonical spectral ceiling is nonnegative. -/
 theorem topEigenvalue_nonneg {B : Matrix (Fin n) (Fin n) ℝ}
     (hn : 0 < n) (hB : B.PosSemidef) :
     0 ≤ topEigenvalue hn hB :=
-  sortedEigenvalues_nonneg hB ⟨0, hn⟩
+  TauCeti.Matrix.PosSemidef.eigenvalues₀_nonneg hB _
 
 /-- Every sorted eigenvalue is bounded by the canonical leading-eigenvalue
 ceiling. -/
-theorem sortedEigenvalues_le_topEigenvalue {B : Matrix (Fin n) (Fin n) ℝ}
-    (hn : 0 < n) (hB : B.PosSemidef) (i : Fin n) :
-    sortedEigenvalues hB.isHermitian i ≤ topEigenvalue hn hB := by
-  letI : NeZero n := ⟨Nat.ne_of_gt hn⟩
-  exact (opSym hB.isHermitian).eigenvalues_antitone hn_eq (Fin.zero_le i)
-
-/-- A uniform entrywise bound on a Hermitian matrix gives an explicit bound on
-all of its sorted eigenvalues.  This form is useful when the population matrix
-varies with the sample: a single entrywise envelope yields a deterministic
-spectral ceiling even though the leading eigenvalue itself is sample-dependent. -/
-theorem abs_sortedEigenvalues_le_of_entry_le
-    {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian)
-    {β : ℝ} (hβ : ∀ i j, |B i j| ≤ β) (k : Fin n) :
-    |sortedEigenvalues hB k| ≤ (n : ℝ) * β := by
-  set u := (opSym hB).eigenvectorBasis hn_eq with hu
-  have hnorm1 : ‖u k‖ = 1 := u.orthonormal.1 k
-  have happly : Matrix.toEuclideanLin B (u k) = sortedEigenvalues hB k • u k := by
-    rw [hu]
-    exact (opSym hB).apply_eigenvectorBasis hn_eq k
-  have hle : ‖Matrix.toEuclideanLin B (u k)‖ ≤ (n : ℝ) * β * ‖u k‖ :=
-    TauCeti.norm_toEuclideanLin_le_of_entry_le hβ (u k)
-  rwa [happly, norm_smul, Real.norm_eq_abs, hnorm1, mul_one, mul_one] at hle
-
-/-- Non-absolute version of the entrywise spectral ceiling. -/
-theorem sortedEigenvalues_le_of_entry_le
-    {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian)
-    {β : ℝ} (hβ : ∀ i j, |B i j| ≤ β) (k : Fin n) :
-    sortedEigenvalues hB k ≤ (n : ℝ) * β :=
-  le_trans (le_abs_self _) (abs_sortedEigenvalues_le_of_entry_le hB hβ k)
+theorem eigenvalues₀_le_topEigenvalue {B : Matrix (Fin n) (Fin n) ℝ}
+    (hn : 0 < n) (hB : B.PosSemidef) (i : Fin (Fintype.card (Fin n))) :
+    hB.isHermitian.eigenvalues₀ i ≤ topEigenvalue hn hB :=
+  hB.isHermitian.eigenvalues₀_antitone (Fin.mk_le_of_le_val (Nat.zero_le _))
 
 /-! ### Deliverable (2b): tail eigenvalues vanish (rank transport)
 
-The matrix rank of `B` equals the finrank of the range of `toEuclideanLin B`
-(the matrix rank is the finrank of the range of `mulVecLin`, which corresponds
-to the range of `toEuclideanLin` under the canonical orthonormal basis).  If a
-sorted eigenvalue `λ_j ≠ 0` with `j ≥ d`, then by antitonicity and
-nonnegativity all `λ_i ≥ λ_j > 0` for `i ≤ j`, so the `≥ d+1` eigenvectors
-`u_i = λ_i⁻¹ • T u_i` lie in `range T` and are orthonormal hence linearly
-independent, forcing `finrank (range T) ≥ d+1 > rank B`, a contradiction. -/
+For positive semidefinite `B` with `B.rank ≤ d` the sorted eigenvalues vanish from index
+`d` on — the paper's rank-`d` structure (Assumption 1).  That is
+`TauCeti.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le`, which counts nonzero sorted
+eigenvalues against the rank; the transport below relates the matrix rank to the range of
+the induced operator and is what the configuration bound consumes. -/
 
 /-- Internal helper (rank transport).
 The matrix rank of `B` equals the dimension of the range of `toEuclideanLin B`.
@@ -186,77 +137,6 @@ theorem rank_eq_finrank_range_toEuclideanLin (B : Matrix (Fin n) (Fin n) ℝ) :
   exact Matrix.rank_eq_finrank_range_toLin B
     (EuclideanSpace.basisFun (Fin n) ℝ).toBasis
     (EuclideanSpace.basisFun (Fin n) ℝ).toBasis
-
-/-- Internal helper.
-An eigenvector with nonzero eigenvalue lies in the range of the operator:
-`u = λ⁻¹ • (T u)` when `T u = λ • u` and `λ ≠ 0`.  (Used to count nonzero
-eigenvalues against the rank.) -/
-private theorem eigenvector_mem_range {B : Matrix (Fin n) (Fin n) ℝ}
-    (hB : B.IsHermitian)                            -- `B` Hermitian
-    (i : Fin n) (hi : sortedEigenvalues hB i ≠ 0) : -- the i-th eigenvalue is nonzero
-    -- Conclusion: the i-th eigenvector lies in the operator's range.
-    (opSym hB).eigenvectorBasis hn_eq i ∈ LinearMap.range (Matrix.toEuclideanLin B) := by
-  refine ⟨(sortedEigenvalues hB i)⁻¹ • (opSym hB).eigenvectorBasis hn_eq i, ?_⟩
-  rw [map_smul, (opSym hB).apply_eigenvectorBasis]
-  show (sortedEigenvalues hB i)⁻¹ •
-      ((sortedEigenvalues hB i : ℝ) • (opSym hB).eigenvectorBasis hn_eq i) = _
-  rw [smul_smul, inv_mul_cancel₀ hi, one_smul]
-
-/-- **Deliverable (2b).**  For positive semidefinite `B` with `B.rank ≤ d`, the
-sorted eigenvalues of `toEuclideanLin B` vanish from index `d` on.  This is the
-operator form of the paper's rank-`d` structure (Assumption 1): only the first
-`d` eigenvalues can be nonzero, the trailing tail is exactly `0`. -/
-theorem sortedEigenvalues_tail_eq_zero {B : Matrix (Fin n) (Fin n) ℝ}
-    (hB : B.PosSemidef)                  -- `B` positive semidefinite (PSD)
-    {d : ℕ} (hrank : B.rank ≤ d) :       -- rank bound: rank(B) ≤ d (Assumption 1)
-    -- Conclusion: every sorted eigenvalue at index ≥ d is zero (the rank-d tail vanishes).
-    ∀ j : Fin n, d ≤ (j : ℕ) → sortedEigenvalues hB.isHermitian j = 0 := by
-  intro j hj
-  by_contra hne
-  -- the `j`-th eigenvalue is strictly positive.
-  have hjpos : 0 < sortedEigenvalues hB.isHermitian j :=
-    (sortedEigenvalues_nonneg hB j).lt_of_ne (Ne.symm hne)
-  set T := Matrix.toEuclideanLin B with hT
-  set hS := opSym hB.isHermitian with hSdef
-  set u := hS.eigenvectorBasis hn_eq with hu
-  -- The `(j+1)`-element family of leading eigenvectors, valued in `range T`.
-  -- index by `Fin (j.val + 1)`; the underlying `Fin n` index has value `≤ j`.
-  have hidx : ∀ m : Fin ((j : ℕ) + 1), ((m : ℕ)) < n := by
-    intro m; exact lt_of_le_of_lt (Nat.lt_succ_iff.mp m.2) j.2
-  set g : Fin ((j : ℕ) + 1) → Fin n := fun m => ⟨(m : ℕ), hidx m⟩ with hg
-  -- each eigenvalue in the family is positive (antitone, dominates the j-th).
-  have hpos : ∀ m : Fin ((j : ℕ) + 1), 0 < sortedEigenvalues hB.isHermitian (g m) := by
-    intro m
-    have hle : g m ≤ j := by
-      rw [Fin.le_def, hg]; exact Nat.lt_succ_iff.mp m.2
-    have hanti := hS.eigenvalues_antitone hn_eq hle
-    -- the eigenvalue at `g m` dominates the (positive) eigenvalue at `j`.
-    exact lt_of_lt_of_le hjpos hanti
-  have hne' : ∀ m : Fin ((j : ℕ) + 1), sortedEigenvalues hB.isHermitian (g m) ≠ 0 :=
-    fun m => ne_of_gt (hpos m)
-  -- the family valued in `range T`.
-  set f : Fin ((j : ℕ) + 1) → LinearMap.range T :=
-    fun m => ⟨u (g m), eigenvector_mem_range hB.isHermitian (g m) (hne' m)⟩ with hf
-  -- `f` is linearly independent: orthonormal eigenvectors, lifted to the submodule.
-  have hortho : Orthonormal ℝ (fun m : Fin ((j : ℕ) + 1) => u (g m)) := by
-    refine (hS.eigenvectorBasis hn_eq).orthonormal.comp g ?_
-    intro m₁ m₂ hgm
-    apply Fin.ext
-    have : ((g m₁ : Fin n) : ℕ) = ((g m₂ : Fin n) : ℕ) := by rw [hgm]
-    simpa [hg] using this
-  have hli : LinearIndependent ℝ f := by
-    refine LinearIndependent.of_comp (LinearMap.range T).subtype ?_
-    have : (LinearMap.range T).subtype ∘ f = fun m : Fin ((j : ℕ) + 1) => u (g m) := by
-      funext m; rfl
-    rw [this]
-    exact hortho.linearIndependent
-  -- finrank (range T) ≥ j + 1.
-  have hcard : Fintype.card (Fin ((j : ℕ) + 1)) ≤ finrank ℝ (LinearMap.range T) :=
-    hli.fintype_card_le_finrank
-  rw [Fintype.card_fin] at hcard
-  -- but finrank (range T) = rank B ≤ d ≤ j.
-  rw [← rank_eq_finrank_range_toEuclideanLin] at hcard
-  omega
 
 /-! ### Deliverable (3): the Gram identity
 
@@ -283,27 +163,27 @@ private theorem toEuclideanLin_apply_eq_sum {B : Matrix (Fin n) (Fin n) ℝ}
     (x : EuclideanSpace ℝ (Fin n)) (i : Fin n) :
     -- Conclusion: i-th coordinate of T x equals the eigen-expansion ∑ₖ λₖ ⟪uₖ,x⟫ uₖ(i).
     (Matrix.toEuclideanLin B x) i
-      = ∑ k : Fin n, sortedEigenvalues hB k
-          * ⟪(opSym hB).eigenvectorBasis hn_eq k, x⟫_ℝ
-          * ((opSym hB).eigenvectorBasis hn_eq k i) := by
+      = ∑ k : Fin n, (opSym hB).eigenvalues finrank_euclideanSpace_fin k
+          * ⟪(opSym hB).eigenvectorBasis finrank_euclideanSpace_fin k, x⟫_ℝ
+          * ((opSym hB).eigenvectorBasis finrank_euclideanSpace_fin k i) := by
   set hS := opSym hB with hSdef
-  set u := hS.eigenvectorBasis hn_eq with hu
+  set u := hS.eigenvectorBasis finrank_euclideanSpace_fin with hu
   -- expand `x` in the eigenbasis, apply `T`, use the diagonal action.
   have hTx : Matrix.toEuclideanLin B x
-      = ∑ k : Fin n, (sortedEigenvalues hB k * ⟪u k, x⟫_ℝ) • u k := by
+      = ∑ k : Fin n, ((opSym hB).eigenvalues finrank_euclideanSpace_fin k * ⟪u k, x⟫_ℝ) • u k := by
     conv_lhs => rw [← u.sum_repr' x]
     rw [map_sum]
     refine Finset.sum_congr rfl (fun k _ => ?_)
     rw [map_smul, hu, hS.apply_eigenvectorBasis]
     rw [smul_smul]
     congr 1
-    show ⟪hS.eigenvectorBasis hn_eq k, x⟫_ℝ * (sortedEigenvalues hB k : ℝ) = _
+    show ⟪hS.eigenvectorBasis finrank_euclideanSpace_fin k, x⟫_ℝ * ((opSym hB).eigenvalues finrank_euclideanSpace_fin k : ℝ) = _
     rw [mul_comm]
   rw [hTx]
   -- read off the `i`-th coordinate of the finite sum.
-  have hcoord : (∑ k : Fin n, (sortedEigenvalues hB k * ⟪u k, x⟫_ℝ) • u k) i
-      = ∑ k : Fin n, (sortedEigenvalues hB k * ⟪u k, x⟫_ℝ) * (u k) i := by
-    show (∑ k : Fin n, (sortedEigenvalues hB k * ⟪u k, x⟫_ℝ) • u k).ofLp i = _
+  have hcoord : (∑ k : Fin n, ((opSym hB).eigenvalues finrank_euclideanSpace_fin k * ⟪u k, x⟫_ℝ) • u k) i
+      = ∑ k : Fin n, ((opSym hB).eigenvalues finrank_euclideanSpace_fin k * ⟪u k, x⟫_ℝ) * (u k) i := by
+    show (∑ k : Fin n, ((opSym hB).eigenvalues finrank_euclideanSpace_fin k * ⟪u k, x⟫_ℝ) • u k).ofLp i = _
     rw [WithLp.ofLp_sum, Finset.sum_apply]
     refine Finset.sum_congr rfl (fun k _ => ?_)
     rw [WithLp.ofLp_smul]; rfl
@@ -312,18 +192,18 @@ private theorem toEuclideanLin_apply_eq_sum {B : Matrix (Fin n) (Fin n) ℝ}
 /-- Internal helper.
 The operator spectral expansion of a single matrix entry:
 `B i j = ∑_k λ_k u_k(i) u_k(j)` (spectral theorem, entrywise). -/
-private theorem entry_eq_sum_sorted_eigenvalues {B : Matrix (Fin n) (Fin n) ℝ}
+private theorem entry_eq_sum_eigenvalues {B : Matrix (Fin n) (Fin n) ℝ}
     (hB : B.IsHermitian)            -- `B` Hermitian (real symmetric)
     (i j : Fin n) :
     -- Conclusion: B i j = ∑ₖ λₖ uₖ(i) uₖ(j) (entrywise spectral decomposition).
-    B i j = ∑ k : Fin n, sortedEigenvalues hB k
-        * ((opSym hB).eigenvectorBasis hn_eq k i)
-        * ((opSym hB).eigenvectorBasis hn_eq k j) := by
+    B i j = ∑ k : Fin n, (opSym hB).eigenvalues finrank_euclideanSpace_fin k
+        * ((opSym hB).eigenvectorBasis finrank_euclideanSpace_fin k i)
+        * ((opSym hB).eigenvectorBasis finrank_euclideanSpace_fin k j) := by
   rw [← toEuclideanLin_single_apply B i j, toEuclideanLin_apply_eq_sum hB]
   refine Finset.sum_congr rfl (fun k _ => ?_)
   -- `⟪u_k, single j 1⟫ = u_k(j)` over ℝ.
-  have hinner : ⟪(opSym hB).eigenvectorBasis hn_eq k, EuclideanSpace.single j (1 : ℝ)⟫_ℝ
-      = (opSym hB).eigenvectorBasis hn_eq k j := by
+  have hinner : ⟪(opSym hB).eigenvectorBasis finrank_euclideanSpace_fin k, EuclideanSpace.single j (1 : ℝ)⟫_ℝ
+      = (opSym hB).eigenvectorBasis finrank_euclideanSpace_fin k j := by
     rw [EuclideanSpace.inner_single_right]
     simp
   rw [hinner]; ring
@@ -362,9 +242,12 @@ theorem gram_spectralConfig_eq {d : ℕ} (hd : d ≤ n)
         = B i j := by
   intro i j
   set hS := opSym hB.isHermitian with hSdef
-  set u := hS.eigenvectorBasis hn_eq with hu
-  set lam := sortedEigenvalues hB.isHermitian with hlam
-  have hlam_nonneg : ∀ k : Fin n, 0 ≤ lam k := fun k => sortedEigenvalues_nonneg hB k
+  set u := hS.eigenvectorBasis finrank_euclideanSpace_fin with hu
+  set lam := hS.eigenvalues finrank_euclideanSpace_fin with hlam
+  have hlam_nonneg : ∀ k : Fin n, 0 ≤ lam k := by
+    intro k
+    rw [hlam, eigenvalues_toEuclideanLin_eq_eigenvalues₀]
+    exact TauCeti.Matrix.PosSemidef.eigenvalues₀_nonneg hB _
   -- `√λ_{castLE k} · √λ_{castLE k} = λ_{castLE k}` since `λ ≥ 0`.
   have hsqsq : ∀ k : Fin d,
       spectralConfig (Matrix.toEuclideanLin B) hS hd i k
@@ -386,8 +269,10 @@ theorem gram_spectralConfig_eq {d : ℕ} (hd : d ≤ n)
   rw [Finset.sum_congr rfl (fun k _ => hsqsq k)]
   rw [sum_castLE_eq_filter hd (fun k : Fin n => lam k * (u k i) * (u k j))]
   -- extend the leading sum to all of `Fin n`: tail terms vanish (`λ = 0`).
-  have htail : ∀ k : Fin n, d ≤ (k : ℕ) → lam k = 0 :=
-    sortedEigenvalues_tail_eq_zero hB hrank
+  have htail : ∀ k : Fin n, d ≤ (k : ℕ) → lam k = 0 := by
+    intro k hk
+    rw [hlam, eigenvalues_toEuclideanLin_eq_eigenvalues₀]
+    exact TauCeti.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le hB hrank (by simpa using hk)
   have hext : ∑ k ∈ Finset.univ.filter (fun k : Fin n => (k : ℕ) < d),
         (lam k * (u k i) * (u k j))
       = ∑ k : Fin n, (lam k * (u k i) * (u k j)) := by
@@ -401,7 +286,7 @@ theorem gram_spectralConfig_eq {d : ℕ} (hd : d ≤ n)
     rw [hzero, add_zero]
   rw [hext]
   -- the full spectral sum is `B i j`.
-  rw [entry_eq_sum_sorted_eigenvalues hB.isHermitian i j]
+  rw [entry_eq_sum_eigenvalues hB.isHermitian i j]
 
 /-! ### Deliverable (4): the matrix-world assembly
 
@@ -438,8 +323,11 @@ theorem exists_isometry_configError_le_of_entrywise_close
     (hBhat : Bhat.IsHermitian)      -- sample `Bhat` Hermitian (real symmetric)
     (hrank : B.rank ≤ d)            -- rank bound: rank(B) ≤ d (Assumption 1)
     {α Λ η : ℝ} (hα_pos : 0 < α) (hη_nonneg : 0 ≤ η)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d → α ≤ sortedEigenvalues hB.isHermitian i) -- eigenvalue floor α (Assumption 2, lower)
-    (hΛ : ∀ l : Fin n, sortedEigenvalues hB.isHermitian l ≤ Λ)                    -- eigenvalue ceiling Λ (Assumption 2, upper)
+    -- eigenvalue floor α (Assumption 2, lower)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    -- eigenvalue ceiling Λ (Assumption 2, upper)
+    (hΛ : ∀ l : Fin (Fintype.card (Fin n)), hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)   -- entrywise closeness: |B̂ᵢⱼ − Bᵢⱼ| ≤ η
     (hsmall : (n : ℝ) * η ≤ α / 2)              -- smallness: perturbation ≤ half the floor (Weyl/gap)
     (hpolar : (d : ℝ) * (4 * (n : ℝ) * ((n : ℝ) * η)^2 / α^2) ≤ 1/2) -- polar-factor smallness (Davis–Kahan term ≤ 1/2)
@@ -470,10 +358,18 @@ theorem exists_isometry_configError_le_of_entrywise_close
     rw [hmapsub]
     exact hbridge x
   -- the eigenvalue hypotheses, restated against the operator's sorted eigenvalues.
-  have hα : ∀ i : Fin n, (i : ℕ) < d → α ≤ hT.eigenvalues hn_eq i := hfloor
-  have htail : ∀ j : Fin n, d ≤ (j : ℕ) → hT.eigenvalues hn_eq j = 0 :=
-    sortedEigenvalues_tail_eq_zero hB hrank
-  have hΛ' : ∀ l : Fin n, hT.eigenvalues hn_eq l ≤ Λ := hΛ
+  have hα : ∀ i : Fin n, (i : ℕ) < d → α ≤ hT.eigenvalues finrank_euclideanSpace_fin i := by
+    intro i hi
+    rw [hTsym, eigenvalues_toEuclideanLin_eq_eigenvalues₀]
+    exact hfloor _ (by simpa using hi)
+  have htail : ∀ j : Fin n, d ≤ (j : ℕ) → hT.eigenvalues finrank_euclideanSpace_fin j = 0 := by
+    intro j hj
+    rw [hTsym, eigenvalues_toEuclideanLin_eq_eigenvalues₀]
+    exact TauCeti.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le hB hrank (by simpa using hj)
+  have hΛ' : ∀ l : Fin n, hT.eigenvalues finrank_euclideanSpace_fin l ≤ Λ := by
+    intro l
+    rw [hTsym, eigenvalues_toEuclideanLin_eq_eigenvalues₀]
+    exact hΛ _
   -- operator-world configuration bound: alignment `W₀`.
   obtain ⟨W₀, hW₀_isom, hW₀_bound⟩ :=
     exists_isometry_configError_spectralConfig_le hd T S hT hSsym hα_pos hε_nonneg
@@ -518,7 +414,8 @@ theorem exists_isometry_configError_le_of_entrywise_close_topEigenvalue
     (hBhat : Bhat.IsHermitian)
     (hrank : B.rank ≤ d)
     {α η : ℝ} (hα_pos : 0 < α) (hη_nonneg : 0 ≤ η)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d → α ≤ sortedEigenvalues hB.isHermitian i)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
     (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)
     (hsmall : (n : ℝ) * η ≤ α / 2)
     (hpolar : (d : ℝ) * (4 * (n : ℝ) * ((n : ℝ) * η)^2 / α^2) ≤ 1/2)
@@ -530,7 +427,7 @@ theorem exists_isometry_configError_le_of_entrywise_close_topEigenvalue
         (fun i => W (spectralConfig (Matrix.toEuclideanLin Bhat) (opSym hBhat) hd i)) ψ
         ≤ configBound n d α (topEigenvalue hn hB) ((n : ℝ) * η) := by
   exact exists_isometry_configError_le_of_entrywise_close hd B Bhat hB hBhat hrank
-    hα_pos hη_nonneg hfloor (sortedEigenvalues_le_topEigenvalue hn hB)
+    hα_pos hη_nonneg hfloor (eigenvalues₀_le_topEigenvalue hn hB)
     hentry hsmall hpolar ψ hψ
 
 end Acharyya2025.MatrixPerturbation

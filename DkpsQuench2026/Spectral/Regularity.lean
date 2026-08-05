@@ -913,22 +913,21 @@ theorem reference_centered_quadratic_floor_of_event
 
 The normalized quadratic floor is scaled by `n` into an unnormalized floor
 `n(κ/2)‖x‖² ≤ ∑ᵢ ⟪x, zᵢ⟫²` and handed to the rectangular Gram bridge
-`sortedEigenvalues_configGram_lower_of_quadratic_floor`: the configuration Gram
+`eigenvalues₀_configGram_lower_of_quadratic_floor`: the configuration Gram
 matrix is the codomain Gram operator `TT†` of the analysis map `T` of `zref`,
 whose first `d` sorted eigenvalues dominate any quadratic floor of `T†T`.
 For `κ ≤ 0` the claim is positive semidefiniteness; for `κ > 0` the floor
 `κ/2 ≤ n·κ/2` uses `1 ≤ n`. -/
-theorem sortedEigenvalues_reference_centeredGram_lower
+theorem eigenvalues₀_reference_centeredGram_lower
     {d n : Nat} (hn : 0 < n)
     (zref : Config n d) {κ : Real}
     (hquad : ∀ x : Vec d,
       (κ / 2) * ‖x‖ ^ 2 ≤
         (n : Real)⁻¹ * ∑ i, ((∑ a : Fin d, x a * zref i a)) ^ 2)
-    (i : Fin n) (hi : (i : Nat) < d) :
-    κ / 2 ≤ sortedEigenvalues
-      (configGramPosSemidef zref).isHermitian i := by
+    (i : Fin (Fintype.card (Fin n))) (hi : (i : Nat) < d) :
+    κ / 2 ≤ (configGramPosSemidef zref).isHermitian.eigenvalues₀ i := by
   rcases le_or_gt κ 0 with hκ | hκ
-  · exact le_trans (by linarith) (sortedEigenvalues_nonneg (configGramPosSemidef zref) i)
+  · exact le_trans (by linarith) (TauCeti.Matrix.PosSemidef.eigenvalues₀_nonneg (configGramPosSemidef zref) i)
   · have hnpos : (0 : Real) < (n : Real) := by exact_mod_cast hn
     have hn1 : (1 : Real) ≤ (n : Real) := by exact_mod_cast hn
     have hquad' : ∀ x : Vec d,
@@ -942,7 +941,7 @@ theorem sortedEigenvalues_reference_centeredGram_lower
             mul_le_mul_of_nonneg_left (hquad x) hnpos.le
         _ = ∑ j : Fin n, (∑ a : Fin d, x a * zref j a) ^ 2 := by
             rw [← mul_assoc, mul_inv_cancel₀ hnpos.ne', one_mul]
-    have hfloor := sortedEigenvalues_configGram_lower_of_quadratic_floor hquad' i hi
+    have hfloor := eigenvalues₀_configGram_lower_of_quadratic_floor hquad' i hi
     have hgrow : κ / 2 ≤ (n : Real) * (κ / 2) := by nlinarith
     linarith
 
@@ -950,43 +949,41 @@ theorem sortedEigenvalues_reference_centeredGram_lower
 reference scatter in any perspective direction.
 
 The proof is the online-variance route through the rectangular Gram bridge:
-`quadratic_floor_of_sortedEigenvalues_configGram_lower` converts `href` (with
+`quadratic_floor_of_eigenvalues₀_configGram_lower` converts `href` (with
 `d ≤ n`) back into the quadratic floor of the centered reference cloud;
 `sum_sq_centered_le_augmented` — the exact add-one centered-scatter identity
 `TauCeti.centeredScatter_append` — shows the augmented centered
 squared-projection sum dominates it by the nonnegative rank-one correction
 `(n/(n+1)) ⟪x, target - centroid⟫²`; and
-`sortedEigenvalues_configGram_lower_of_quadratic_floor` transfers the floor to
+`eigenvalues₀_configGram_lower_of_quadratic_floor` transfers the floor to
 the first `d` sorted eigenvalues of the augmented centered Gram matrix.  The
 premise `d ≤ n` is essential: without it the augmented cloud can introduce a
 new index below `d` for which the reference cloud supplied no lower bound. -/
 theorem augmented_centeredGram_floor_of_reference_floor
     {d n : Nat} (hn : 0 < n) (hdn : d ≤ n)
     (ψref : Fin n → Vec d) (target : Vec d) {α : Real}
-    (href : ∀ i : Fin n, (i : Nat) < d →
-      α ≤ sortedEigenvalues
-        (configGramPosSemidef (centerConfig ψref)).isHermitian i)
-    (i : Fin (n + 1)) (hi : (i : Nat) < d) :
-    α ≤ sortedEigenvalues
-      (configGramPosSemidef (centerConfig (Fin.lastCases target ψref))).isHermitian i := by
-  have hquad_ref := quadratic_floor_of_sortedEigenvalues_configGram_lower hdn href
+    (href : ∀ i : Fin (Fintype.card (Fin n)), (i : Nat) < d →
+      α ≤ (configGramPosSemidef (centerConfig ψref)).isHermitian.eigenvalues₀ i)
+    (i : Fin (Fintype.card (Fin (n + 1)))) (hi : (i : Nat) < d) :
+    α ≤ (configGramPosSemidef
+      (centerConfig (Fin.lastCases target ψref))).isHermitian.eigenvalues₀ i := by
+  have hquad_ref := quadratic_floor_of_eigenvalues₀_configGram_lower hdn href
   have hquad_aug : ∀ x : Vec d,
       α * ‖x‖ ^ 2 ≤ ∑ j : Fin (n + 1),
         (∑ a : Fin d, x a * centerConfig (Fin.lastCases target ψref) j a) ^ 2 :=
     fun x => (hquad_ref x).trans (sum_sq_centered_le_augmented ψref target x)
-  exact sortedEigenvalues_configGram_lower_of_quadratic_floor hquad_aug i hi
+  exact eigenvalues₀_configGram_lower_of_quadratic_floor hquad_aug i hi
 
 /-- A uniform perspective norm bound gives a deterministic linear-in-`n`
 ceiling for every eigenvalue of the augmented centered Gram matrix.
 -/
-theorem sortedEigenvalues_augmented_centeredGram_upper
+theorem eigenvalues₀_augmented_centeredGram_upper
     {d n : Nat}
     (points : Config (n + 1) d) {B : Real}
     (hBnonneg : 0 ≤ B)
     (hB : ∀ i, ‖points i‖ ≤ B)
-    (i : Fin (n + 1)) :
-    sortedEigenvalues
-      (configGramPosSemidef (centerConfig points)).isHermitian i ≤
+    (i : Fin (Fintype.card (Fin (n + 1)))) :
+    (configGramPosSemidef (centerConfig points)).isHermitian.eigenvalues₀ i ≤
       4 * ((n + 1 : Nat) : Real) * B ^ 2 := by
   have hinner : ∀ x y : Vec d, @inner ℝ _ _ x y = ∑ k, x k * y k := by
     intro x y
@@ -1022,9 +1019,9 @@ theorem sortedEigenvalues_augmented_centeredGram_upper
         ≤ ‖centerConfig points a‖ * ‖centerConfig points b‖ := abs_real_inner_le_norm _ _
       _ ≤ 2 * B * (2 * B) := mul_le_mul (hcnorm a) (hcnorm b) (norm_nonneg _) (by positivity)
       _ = 4 * B ^ 2 := by ring
-  calc sortedEigenvalues (configGramPosSemidef (centerConfig points)).isHermitian i
+  calc (configGramPosSemidef (centerConfig points)).isHermitian.eigenvalues₀ i
       ≤ ((n + 1 : ℕ) : ℝ) * (4 * B ^ 2) :=
-        sortedEigenvalues_le_of_entry_le
+        TauCeti.Matrix.eigenvalues₀_le_of_entry_le
           (configGramPosSemidef (centerConfig points)).isHermitian hentry i
     _ = 4 * ((n + 1 : Nat) : ℝ) * B ^ 2 := by ring
 
@@ -1039,11 +1036,11 @@ event (tolerance `covarianceEntryTolerance d κ` about the population mean)
 intersected with the deterministic dimension gate `d ≤ n ∧ 0 < n`, which is
 eventually true and needed by the augmentation floor.  On the event, the
 `floor` field chains `reference_centered_quadratic_floor_of_event`,
-`sortedEigenvalues_reference_centeredGram_lower`, and
+`eigenvalues₀_reference_centeredGram_lower`, and
 `augmented_centeredGram_floor_of_reference_floor`, then rewrites the augmented
 centered Gram matrix to the population CMDS matrix via
 `centeredAugmentedPerspectiveConfig_gram_eq`.  The `ceiling_bound` field is
-`sortedEigenvalues_augmented_centeredGram_upper` with the compactness envelope
+`eigenvalues₀_augmented_centeredGram_upper` with the compactness envelope
 `B`, giving `ceiling n := 4(n+1)B²`. -/
 theorem exists_growingSpectralSubevents_of_compact_iid_nondegenerate
     {d m p : Nat}
@@ -1110,10 +1107,10 @@ theorem exists_growingSpectralSubevents_of_compact_iid_nondegenerate
   · -- Spectral floor on the first `d` eigenvalues of the augmented CMDS matrix.
     rintro n ωref ⟨hcov, hdn, hn0⟩ f i hi
     have hquadref := reference_centered_quadratic_floor_of_event Pf ψ f_ref Hnondeg ωref hcov
-    have href : ∀ j : Fin n, (j : Nat) < d →
-        κ / 2 ≤ sortedEigenvalues (configGramPosSemidef
-          (centerConfig (referencePerspectiveConfig ψ f_ref n ωref))).isHermitian j :=
-      fun j hj => sortedEigenvalues_reference_centeredGram_lower hn0
+    have href : ∀ j : Fin (Fintype.card (Fin n)), (j : Nat) < d →
+        κ / 2 ≤ (configGramPosSemidef
+          (centerConfig (referencePerspectiveConfig ψ f_ref n ωref))).isHermitian.eigenvalues₀ j :=
+      fun j hj => eigenvalues₀_reference_centeredGram_lower hn0
         (centerConfig (referencePerspectiveConfig ψ f_ref n ωref)) hquadref j hj
     have haug := augmented_centeredGram_floor_of_reference_floor hn0 hdn
       (referencePerspectiveConfig ψ f_ref n ωref) (ψ f) href i hi
@@ -1141,7 +1138,7 @@ theorem exists_growingSpectralSubevents_of_compact_iid_nondegenerate
     rintro n ωref - f i
     have hpoints : ∀ j, ‖augmentedPerspectiveConfig ψ f_ref n ωref f j‖ ≤ B :=
       fun j => hBbound _
-    have hupper := sortedEigenvalues_augmented_centeredGram_upper
+    have hupper := eigenvalues₀_augmented_centeredGram_upper
       (augmentedPerspectiveConfig ψ f_ref n ωref f) hB0 hpoints i
     convert hupper using 2
     exact hmat n ωref f

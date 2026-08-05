@@ -37,6 +37,7 @@ open Acharyya2025.MathlibBridge
 open Acharyya2025.ConfigPerturbation
 open Acharyya2025.GrowingPipeline
 open Acharyya2025.GrowingResponse
+open TauCeti.Matrix (opSym)
 
 universe u v w
 
@@ -152,7 +153,7 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSub
         spectralConfig
           (Matrix.toEuclideanLin
             (disMatToMatrix (classicalMDSMatrix (Dhat n ω f))))
-          (Acharyya2025.MatrixPerturbation.opSym (hsym n ω f)) hdim :=
+          (TauCeti.Matrix.opSym (hsym n ω f)) hdim :=
       rawAugmentedSpectralConfig_of_dimension Dhat hsym n ω f hdim
     change
       |‖rawAugmentedSpectralConfig (d := d) Dhat hsym n ω f i.castSucc -

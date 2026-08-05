@@ -51,6 +51,7 @@ open Acharyya2025.MathlibBridge
 open Acharyya2025.ConfigPerturbation
 open Acharyya2025.MatrixPerturbation
 open Acharyya2025.GramRealization
+open TauCeti.Matrix (opSym)
 
 /-! ### (1) Symmetry plumbing -/
 
@@ -410,9 +411,9 @@ theorem alignExists_of_entrywiseClose {Ω : Type}
     (hB : (disMatToMatrix (classicalMDSMatrix D)).PosSemidef)
     (hrank : (disMatToMatrix (classicalMDSMatrix D)).rank ≤ d)
     {α Λ : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
-    (hΛ : ∀ l, MatrixPerturbation.sortedEigenvalues hB.isHermitian l ≤ Λ)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (ψ : Config n d)
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k) = classicalMDSMatrix D i j)
     (rate : Nat → Real) (u : Nat)
@@ -467,9 +468,9 @@ theorem highProb_aligned_configError_of_entrywise_close
     (hB : (disMatToMatrix (classicalMDSMatrix D)).PosSemidef)   -- PSD
     (hrank : (disMatToMatrix (classicalMDSMatrix D)).rank ≤ d)  -- rank ≤ d
     {α Λ : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ MatrixPerturbation.sortedEigenvalues hB.isHermitian i)  -- eigenvalue floor α on top-d block
-    (hΛ : ∀ l, MatrixPerturbation.sortedEigenvalues hB.isHermitian l ≤ Λ)  -- eigenvalue cap Λ
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)  -- eigenvalue floor α on top-d block
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)  -- eigenvalue cap Λ
     (ψ : Config n d)
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k) = classicalMDSMatrix D i j)  -- ψ is a Gram factor of the population CMDS matrix
     -- Rate side-conditions.  The local spectral inequalities are derived
@@ -512,9 +513,9 @@ theorem highProb_aligned_configError_of_entrywise_close_canonical
     (hB : (disMatToMatrix (classicalMDSMatrix D)).PosSemidef)
     (hrank : (disMatToMatrix (classicalMDSMatrix D)).rank ≤ d)
     {α Λ : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
-    (hΛ : ∀ l, MatrixPerturbation.sortedEigenvalues hB.isHermitian l ≤ Λ)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
     (hrate_zero : Tendsto (fun u => (n : Real) * rate u) atTop (𝓝 0))
     (hcenter : HighProbAtTop P (fun u => {ω |
@@ -638,9 +639,9 @@ theorem highProb_aligned_configError_of_response_mean
     (hB : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).PosSemidef)      -- PSD
     (hrank : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).rank ≤ d)     -- rank ≤ d
     {α Λ : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ MatrixPerturbation.sortedEigenvalues hB.isHermitian i)  -- eigenvalue floor α on top-d block
-    (hΛ : ∀ l, MatrixPerturbation.sortedEigenvalues hB.isHermitian l ≤ Λ)  -- eigenvalue cap Λ
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)  -- eigenvalue floor α on top-d block
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)  -- eigenvalue cap Λ
     (ψ : Config n d)
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k)
       = classicalMDSMatrix (responseDist μ) i j)  -- ψ is a Gram factor of the population CMDS matrix
@@ -697,9 +698,9 @@ theorem highProb_aligned_configError_of_response_mean_canonical
     (hB : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).PosSemidef)
     (hrank : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).rank ≤ d)
     {α Λ : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
-    (hΛ : ∀ l, MatrixPerturbation.sortedEigenvalues hB.isHermitian l ≤ Λ)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (η R : Nat → Real)
     (hrate_nonneg : ∀ u, 0 ≤ Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
     (hrate_zero : Tendsto
@@ -742,8 +743,8 @@ theorem alignExists_of_entrywiseClose_topEigenvalue {Ω : Type}
     (hB : (disMatToMatrix (classicalMDSMatrix D)).PosSemidef)
     (hrank : (disMatToMatrix (classicalMDSMatrix D)).rank ≤ d)
     {α : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
     (ψ : Config n d)
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k) = classicalMDSMatrix D i j)
     (rate : Nat → Real) (u : Nat)
@@ -757,7 +758,7 @@ theorem alignExists_of_entrywiseClose_topEigenvalue {Ω : Type}
       (fun u => configBound n d α (MatrixPerturbation.topEigenvalue hn hB)
         ((n : Real) * rate u)) u ω := by
   exact alignExists_of_entrywiseClose hd Dhat D hsym hB hrank hα_pos hfloor
-    (MatrixPerturbation.sortedEigenvalues_le_topEigenvalue hn hB)
+    (MatrixPerturbation.eigenvalues₀_le_topEigenvalue hn hB)
     ψ hψ rate u hrate_nonneg hsmall hpolar ω hω
 
 /-- High-probability aligned configuration control with the upper spectral
@@ -771,8 +772,8 @@ theorem highProb_aligned_configError_of_entrywise_close_topEigenvalue
     (hB : (disMatToMatrix (classicalMDSMatrix D)).PosSemidef)
     (hrank : (disMatToMatrix (classicalMDSMatrix D)).rank ≤ d)
     {α : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
     (ψ : Config n d)
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k) = classicalMDSMatrix D i j)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
@@ -788,7 +789,7 @@ theorem highProb_aligned_configError_of_entrywise_close_topEigenvalue
         ≤ configBound n d α (MatrixPerturbation.topEigenvalue hn hB)
             ((n : Real) * rate u)}) := by
   exact highProb_aligned_configError_of_entrywise_close P hd Dhat D hsym hB hrank
-    hα_pos hfloor (MatrixPerturbation.sortedEigenvalues_le_topEigenvalue hn hB)
+    hα_pos hfloor (MatrixPerturbation.eigenvalues₀_le_topEigenvalue hn hB)
     ψ hψ rate hrate_nonneg hrate_zero hcenter
 
 /-- Canonical-population-configuration version with the upper spectral ceiling
@@ -802,8 +803,8 @@ theorem highProb_aligned_configError_of_entrywise_close_canonical_topEigenvalue
     (hB : (disMatToMatrix (classicalMDSMatrix D)).PosSemidef)
     (hrank : (disMatToMatrix (classicalMDSMatrix D)).rank ≤ d)
     {α : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
     (hrate_zero : Tendsto (fun u => (n : Real) * rate u) atTop (𝓝 0))
     (hcenter : HighProbAtTop P (fun u => {ω |
@@ -819,7 +820,7 @@ theorem highProb_aligned_configError_of_entrywise_close_canonical_topEigenvalue
             ((n : Real) * rate u)}) := by
   exact highProb_aligned_configError_of_entrywise_close_canonical P hd Dhat D hsym
     hB hrank hα_pos hfloor
-    (MatrixPerturbation.sortedEigenvalues_le_topEigenvalue hn hB)
+    (MatrixPerturbation.eigenvalues₀_le_topEigenvalue hn hB)
     rate hrate_nonneg hrate_zero hcenter
 
 /-- Response-mean concentration with the upper spectral ceiling selected as the
@@ -832,8 +833,8 @@ theorem highProb_aligned_configError_of_response_mean_topEigenvalue
     (hB : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).PosSemidef)
     (hrank : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).rank ≤ d)
     {α : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
     (ψ : Config n d)
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k)
       = classicalMDSMatrix (responseDist μ) i j)
@@ -856,7 +857,7 @@ theorem highProb_aligned_configError_of_response_mean_topEigenvalue
         ≤ configBound n d α (MatrixPerturbation.topEigenvalue hn hB)
             ((n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))}) := by
   exact highProb_aligned_configError_of_response_mean P hn hd Xbar μ hB hrank
-    hα_pos hfloor (MatrixPerturbation.sortedEigenvalues_le_topEigenvalue hn hB)
+    hα_pos hfloor (MatrixPerturbation.eigenvalues₀_le_topEigenvalue hn hB)
     ψ hψ η R hrate_nonneg hrate_zero hmean hsample_bound hpopulation_bound
 
 /-- Canonical response-mean pipeline with both the population configuration and
@@ -869,8 +870,8 @@ theorem highProb_aligned_configError_of_response_mean_canonical_topEigenvalue
     (hB : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).PosSemidef)
     (hrank : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).rank ≤ d)
     {α : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
     (η R : Nat → Real)
     (hrate_nonneg : ∀ u, 0 ≤ Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
     (hrate_zero : Tendsto
@@ -892,7 +893,7 @@ theorem highProb_aligned_configError_of_response_mean_canonical_topEigenvalue
         ≤ configBound n d α (MatrixPerturbation.topEigenvalue hn hB)
             ((n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))}) := by
   exact highProb_aligned_configError_of_response_mean_canonical P hn hd Xbar μ hB hrank
-    hα_pos hfloor (MatrixPerturbation.sortedEigenvalues_le_topEigenvalue hn hB)
+    hα_pos hfloor (MatrixPerturbation.eigenvalues₀_le_topEigenvalue hn hB)
     η R hrate_nonneg hrate_zero hmean hsample_bound hpopulation_bound
 
 end Acharyya2025.AlignedPipeline

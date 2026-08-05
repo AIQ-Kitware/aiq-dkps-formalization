@@ -98,10 +98,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_response_mean
         (classicalMDSMatrix (responseDist (μbar n ω f)))).rank ≤ d)
     {α : Real} (hα : 0 < α)
     (ceiling : Nat → Real)
-    (hfloor : ∀ n ω f (i : Fin (n + 1)), (i : Nat) < d →
-      α ≤ sortedEigenvalues (hB n ω f).isHermitian i)
-    (hceiling : ∀ n ω f (i : Fin (n + 1)),
-      sortedEigenvalues (hB n ω f).isHermitian i ≤ ceiling n)
+    (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
+      α ≤ (hB n ω f).isHermitian.eigenvalues₀ i)
+    (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
+      (hB n ω f).isHermitian.eigenvalues₀ i ≤ ceiling n)
     (z : ∀ n, Ω → Model Q X → Config (n + 1) d)
     (hzGram : ∀ n ω f i j,
       (∑ k, z n ω f i k * z n ω f j k) =
@@ -186,10 +186,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_response_mean_of
         (classicalMDSMatrix (responseDist (μbar n ω f)))).rank ≤ d)
     {α : Real} (hα : 0 < α)
     (ceiling : Nat → Real)
-    (hfloor : ∀ n ω f (i : Fin (n + 1)), (i : Nat) < d →
-      α ≤ sortedEigenvalues (hB n ω f).isHermitian i)
-    (hceiling : ∀ n ω f (i : Fin (n + 1)),
-      sortedEigenvalues (hB n ω f).isHermitian i ≤ ceiling n)
+    (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
+      α ≤ (hB n ω f).isHermitian.eigenvalues₀ i)
+    (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
+      (hB n ω f).isHermitian.eigenvalues₀ i ≤ ceiling n)
     (z : ∀ n, Ω → Model Q X → Config (n + 1) d)
     (hzGram : ∀ n ω f i j,
       (∑ k, z n ω f i k * z n ω f j k) =
@@ -285,10 +285,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_secondMoment
         (classicalMDSMatrix (responseDist (μbar n ω f)))).rank ≤ d)
     {α : Real} (hα : 0 < α)
     (ceiling : Nat → Real)
-    (hfloor : ∀ n ω f (i : Fin (n + 1)), (i : Nat) < d →
-      α ≤ sortedEigenvalues (hB n ω f).isHermitian i)
-    (hceiling : ∀ n ω f (i : Fin (n + 1)),
-      sortedEigenvalues (hB n ω f).isHermitian i ≤ ceiling n)
+    (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
+      α ≤ (hB n ω f).isHermitian.eigenvalues₀ i)
+    (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
+      (hB n ω f).isHermitian.eigenvalues₀ i ≤ ceiling n)
     (z : ∀ n, Ω → Model Q X → Config (n + 1) d)
     (hzGram : ∀ n ω f i j,
       (∑ k, z n ω f i k * z n ω f j k) =
@@ -402,12 +402,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_response_mean_of
         ‖ψ (f_ref n ω i) - ψ f‖)
     {α : Real} (hα : 0 < α)
     (ceiling : Nat → Real)
-    (hfloor : ∀ n ω f (i : Fin (n + 1)), (i : Nat) < d →
-      α ≤ sortedEigenvalues
-        (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian i)
-    (hceiling : ∀ n ω f (i : Fin (n + 1)),
-      sortedEigenvalues
-        (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian i ≤
+    (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
+      α ≤ (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i)
+    (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
+      (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i ≤
           ceiling n)
     (Hrate : GrowingConfigControl (fun n => n + 1) d α ceiling
       (fun n => cmdsEntrywiseRate (n + 1) m (R n) (η n)))
@@ -467,12 +465,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_response_mean_of
         ‖ψ (f_ref n ω i) - ψ f‖)
     {α : Real} (hα : 0 < α)
     (ceiling : Nat → Real)
-    (hfloor : ∀ n ω f (i : Fin (n + 1)), (i : Nat) < d →
-      α ≤ sortedEigenvalues
-        (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian i)
-    (hceiling : ∀ n ω f (i : Fin (n + 1)),
-      sortedEigenvalues
-        (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian i ≤
+    (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
+      α ≤ (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i)
+    (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
+      (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i ≤
           ceiling n)
     (Hrate : GrowingConfigControl (fun n => n + 1) d α ceiling
       (fun n => cmdsEntrywiseRate (n + 1) m
@@ -546,12 +542,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_secondMoment_of_
         ‖ψ (f_ref n ω i) - ψ f‖)
     {α : Real} (hα : 0 < α)
     (ceiling : Nat → Real)
-    (hfloor : ∀ n ω f (i : Fin (n + 1)), (i : Nat) < d →
-      α ≤ sortedEigenvalues
-        (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian i)
-    (hceiling : ∀ n ω f (i : Fin (n + 1)),
-      sortedEigenvalues
-        (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian i ≤
+    (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
+      α ≤ (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i)
+    (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
+      (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i ≤
           ceiling n)
     (Hrate : GrowingConfigControl (fun n => n + 1) d α ceiling
       (fun n => cmdsEntrywiseRate (n + 1) m (R n) (η n)))
@@ -636,12 +630,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_secondMoment_of_
         ‖ψ (f_ref n ω i) - ψ f‖)
     {α : Real} (hα : 0 < α)
     (ceiling : Nat → Real)
-    (hfloor : ∀ n ω f (i : Fin (n + 1)), (i : Nat) < d →
-      α ≤ sortedEigenvalues
-        (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian i)
-    (hceiling : ∀ n ω f (i : Fin (n + 1)),
-      sortedEigenvalues
-        (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian i ≤
+    (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
+      α ≤ (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i)
+    (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
+      (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i ≤
           ceiling n)
     (Hrate : GrowingConfigControl (fun n => n + 1) d α ceiling
       (fun n => cmdsEntrywiseRate (n + 1) m

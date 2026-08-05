@@ -590,6 +590,19 @@ theorem eigenvalues_congr {S₁ S₂ : E →ₗ[𝕜] E} (h : S₁ = S₂)
     hS₁.eigenvalues hn = hS₂.eigenvalues hn := by
   subst h; rfl
 
+/-- The eigenvalue enumeration does not depend on which witness of the dimension indexes
+it: two witnesses `finrank 𝕜 E = m` and `finrank 𝕜 E = n` enumerate the same eigenvalues,
+read across the induced `Fin m ≃ Fin n`.
+
+Both spellings occur in practice.  A matrix over `Fin n` has
+`Matrix.IsHermitian.eigenvalues₀` indexed by `Fin (Fintype.card (Fin n))`, while the
+operator theory it is transported to indexes by `Fin n`; `Fintype.card (Fin n) = n` is a
+theorem and not definitional, so the two index types are genuinely different. -/
+theorem eigenvalues_cast {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {m : ℕ}
+    (hm : finrank 𝕜 E = m) (hn : finrank 𝕜 E = n) (hmn : m = n) (i : Fin m) :
+    hT.eigenvalues hm i = hT.eigenvalues hn (Fin.cast hmn i) := by
+  subst hmn; rfl
+
 end TauCeti
 
 end
