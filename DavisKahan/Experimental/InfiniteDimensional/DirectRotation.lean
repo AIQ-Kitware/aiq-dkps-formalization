@@ -871,11 +871,24 @@ instance does **not** synthesize at this file's `RCLike` generality — a probe
 applying it to the statement below fails with exactly that goal.  This is the
 same `ℂ`-versus-`RCLike` gap that used to confine the polar partial isometry,
 except that here it sits in Mathlib's C⋆-algebra instance rather than in a keying
-choice, so it cannot be reformulated away.  The resolution is to assume it, as
-this file already assumes the continuous functional calculus: add
-`[NonUnitalCStarAlgebra (E →L[𝕜] E)]` alongside the existing
-`[ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]`.  Everything before
-this point in the chain is instance-free. -/
+choice, so it cannot be reformulated away.
+
+**And assuming the class does not fix it** — measured, after trying: adding
+`[NonUnitalCStarAlgebra (E →L[𝕜] E)]` as a section variable makes that instance
+resolve but then `StarOrderedRing (E →L[𝕜] E)` stops resolving, because the
+assumed class carries its own ring/star structure and the file's local
+`ContinuousLinearMap.instStarOrderedRingRCLike` no longer matches it.  That is a
+diamond, not a missing lemma.
+
+The underlying reason is mathematical rather than bureaucratic:
+`NonUnitalCStarAlgebra` is a **complex** C⋆-algebra, and for `𝕜 = ℝ` the space
+`E →L[ℝ] E` is not one.  So sqrt monotonicity in this form is genuinely
+unavailable at `RCLike` generality.  The two honest routes are to state the
+extremality theorem over `ℂ`, where Mathlib supplies the instance outright, or to
+push the real case through `DavisKahan/SpectralTheory/Complexification`.
+Everything before this point in the chain is instance-free and `RCLike`-general,
+which is exactly why it was worth locating where the complex structure first
+becomes necessary. -/
 theorem smul_one_le_adjoint_mul_canonicalIntertwiner (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     (RCLike.ofReal (1 - ‖(projection U - projection V : E →L[𝕜] E)‖ ^ 2) : 𝕜) •
