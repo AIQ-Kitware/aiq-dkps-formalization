@@ -8,6 +8,7 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.SpectralBridge
 import DavisKahan.SpectralTheory.Complexification.Spectrum
 import Mathlib.Analysis.InnerProductSpace.StarOrder
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
+import ForTauCeti.Analysis.InnerProductSpace.Polar.GramContraction
 
 /-!
 # Infinite-dimensional `sin Θ` theorems
@@ -906,23 +907,37 @@ theorem SymmetricNormIdeal.operatorAbsoluteValue_mem_and_gauge_eq_of_polar
           gcongr
       _ = I.gauge (operatorAbsoluteValue T) := by ring
 
-/-- **Leaf obligation.** Symmetric norm ideals contain absolute values with
-equal gauge.
+/-- **Symmetric norm ideals contain absolute values with equal gauge.**
 
-The mathematics is proved directly above, in
-`operatorAbsoluteValue_mem_and_gauge_eq_of_polar`; what is missing is only the
-polar partial isometry itself, over a general `RCLike` field in infinite
-dimensions.  That is the same empty quadrant the operator absolute value used to
-sit in: `ContinuousLinearMap.polarPartial` is `ℂ`-only, and the `RCLike`
-`polarFactor` is for plain linear maps.  Supplying `W` discharges this leaf by
-`exact I.operatorAbsoluteValue_mem_and_gauge_eq_of_polar hT hWT hWadj hWnorm
-hWadjnorm`. -/
+**Closed 2026-08-04.**  This was a leaf obligation, with the mathematics already
+proved directly above in `operatorAbsoluteValue_mem_and_gauge_eq_of_polar` and
+only the polar partial isometry missing, "over a general `RCLike` field in
+infinite dimensions" — `ContinuousLinearMap.polarPartial` being `ℂ`-only and the
+`RCLike` `polarFactor` being for plain linear maps.
+
+The field restriction turned out to be an artefact of how that isometry was
+*keyed*, not of the mathematics.  Both existing constructions build it from
+`|T|`, so both inherit `|T|`'s dependence on a continuous functional calculus,
+which Mathlib supplies only for `ℂ`.  But the construction never uses the
+calculus: it uses `‖|T| x‖ = ‖T x‖`, which is a consequence of the *Gram*
+identity `|T|² = T⋆T` and self-adjointness alone.  Keying on the Gram identity
+instead — `ForTauCeti/Analysis/InnerProductSpace/Polar/GramContraction.lean` —
+removes the restriction, and the calculus enters here only where it already did,
+in producing `|T|` itself. -/
 theorem SymmetricNormIdeal.operatorAbsoluteValue_mem_and_gauge_eq
     (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E)) {T : E →L[𝕜] E}
     (hT : I.mem T) :
     I.mem (operatorAbsoluteValue T) ∧
-      I.gauge (operatorAbsoluteValue T) = I.gauge T :=
-  sorry
+      I.gauge (operatorAbsoluteValue T) = I.gauge T := by
+  have hgram : operatorAbsoluteValue T ∘L operatorAbsoluteValue T =
+      ContinuousLinearMap.adjoint T ∘L T := by
+    rw [← ContinuousLinearMap.mul_def, ← ContinuousLinearMap.mul_def,
+      ← ContinuousLinearMap.star_eq_adjoint, operatorAbsoluteValue_eq]
+    exact CFC.abs_mul_abs T
+  obtain ⟨W, hWnorm, hWadjnorm, hWT, hWadj⟩ :=
+    ContinuousLinearMap.exists_contraction_of_gram_eq
+      (operatorAbsoluteValue_nonneg T).isSelfAdjoint hgram
+  exact I.operatorAbsoluteValue_mem_and_gauge_eq_of_polar hT hWT hWadj hWnorm hWadjnorm
 
 /-- **Leaf obligation.** The ideal-valued symmetric projector-difference
 estimate: both mixed interval/exterior gaps bound the ideal gauge of the
