@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootExclusion
 import Mathlib.Tactic
 
 /-!
@@ -145,6 +146,49 @@ theorem positive_root_pow_four_gt_five_hundred_of_certificate
     500 < beta ^ 4 :=
   MathAhead.HiddenFoundations.FreeBeam.positive_root_fourth_power_gt_five_hundred
     C.toPositiveRootLocalization hbeta hroot
+
+/-! ## The numerical estimate, unconditionally
+
+`FreeBeamRootExclusion` proves `cos beta * cosh beta < 1` on all of `(0, 4.73]`,
+so the characteristic function simply has no root there.  That makes the
+certificate machinery above unnecessary for the one thing the free-beam
+application actually needs: the two theorems below carry no hypothesis, and in
+particular do not assume that a first root exists.
+
+`positive_root_pow_four_gt_five_hundred_of_certificate` is retained because it
+records the reduction, but every consumer should prefer
+`five_hundred_lt_pow_four_of_characteristic_eq_zero`.
+-/
+
+/-- **Every positive root of the free-beam characteristic function exceeds
+`4.73`.**  There is nothing to localize: `cos beta * cosh beta < 1` throughout
+`(0, 4.73]`, so the characteristic function is negative there. -/
+theorem four_seventy_three_lt_of_characteristic_eq_zero {beta : ℝ}
+    (hbeta : 0 < beta)
+    (hroot : MathAhead.HiddenFoundations.FreeBeam.characteristic beta = 0) :
+    (473 : ℝ) / 100 < beta := by
+  by_contra hcon
+  exact absurd hroot (characteristic_ne_zero_of_product_lt_one
+    (DavisKahan1970.Section9.cos_mul_cosh_lt_one_of_le_four_seventy_three hbeta
+      (not_lt.mp hcon)))
+
+/-- **Davis--Kahan 1970 Section 9: the free-beam eigenvalue bound, with no
+certificate.**
+
+Every positive characteristic root has fourth power above `500`.  Since the
+free-beam eigenvalues are exactly the fourth powers of the positive roots, this
+is the paper's `alpha_3 > 500` -- and the margin is genuinely thin, the first
+root being `4.7300407...` with `4.7300407^4 = 500.56...`. -/
+theorem five_hundred_lt_pow_four_of_characteristic_eq_zero {beta : ℝ}
+    (hbeta : 0 < beta)
+    (hroot : MathAhead.HiddenFoundations.FreeBeam.characteristic beta = 0) :
+    500 < beta ^ 4 := by
+  have h473 := four_seventy_three_lt_of_characteristic_eq_zero hbeta hroot
+  have hpow : ((473 : ℝ) / 100) ^ 4 < beta ^ 4 :=
+    pow_lt_pow_left₀ h473 (by norm_num) (by norm_num)
+  have hnum :=
+    MathAhead.HiddenFoundations.FreeBeam.four_seventy_three_pow_four_gt_five_hundred
+  linarith
 
 end
 
