@@ -753,6 +753,48 @@ noncomputable def genericSineBlock :
     genericRightHalf U V →L[ℂ] genericRightHalf U V :=
   DavisKahanExt.compressOperator (genericRightHalf U V) V.starProjection
 
+/-- The lower-right block in ambient coordinates: `D n = P_N P_V n`, and on the
+generic part `P_N` is `1 - P_U`, because `P_U` there *is* the projection onto
+the `U`-half. -/
+theorem coe_genericSineBlock (n : genericRightHalf U V) :
+    ((genericSineBlock U V n : genericRightHalf U V) : H) =
+      V.starProjection (n : H) - U.starProjection (V.starProjection (n : H)) := by
+  have hcoe : ((genericSineBlock U V n : genericRightHalf U V) : H) =
+      (genericRightHalf U V).starProjection (V.starProjection (n : H)) := by
+    simp [genericSineBlock, DavisKahanExt.compressOperator]
+  have hgen : V.starProjection (n : H) ∈ halmosGenericPart U V :=
+    projection_mem_halmosGenericPart_right U V n.2.2
+  have hMmem : U.starProjection (V.starProjection (n : H)) ∈ genericLeftHalf U V :=
+    ⟨U.starProjection_apply_mem _, projection_mem_halmosGenericPart_left U V hgen⟩
+  have hzero : (genericRightHalf U V).starProjection
+      (U.starProjection (V.starProjection (n : H))) = 0 := by
+    rw [Submodule.starProjection_apply_eq_zero_iff]
+    exact genericLeftHalf_le_orthogonal_genericRightHalf U V hMmem
+  have hfix : (genericRightHalf U V).starProjection
+      (V.starProjection (n : H) - U.starProjection (V.starProjection (n : H))) =
+      V.starProjection (n : H) - U.starProjection (V.starProjection (n : H)) :=
+    Submodule.starProjection_eq_self_iff.mpr
+      (sub_starProjection_mem_genericRightHalf U V hgen)
+  have hsplit : V.starProjection (n : H) =
+      U.starProjection (V.starProjection (n : H)) +
+        (V.starProjection (n : H) -
+          U.starProjection (V.starProjection (n : H))) := by
+    abel
+  have hkey := congrArg (genericRightHalf U V).starProjection hsplit
+  rw [map_add, hzero, hfix, zero_add] at hkey
+  rw [hcoe, hkey]
+
+/-- **`P_V` splits into `B'` and `D` on the `Uᗮ`-half.**  Together with
+`starProjection_eq_cosineBlock_add_crossBlock` this is the complete `2 × 2`
+block matrix of `P_V` in the `M ⊕ N` coordinates: the two columns are
+`(A, B)` and `(B', D)`. -/
+theorem starProjection_eq_mirror_add_sineBlock (n : genericRightHalf U V) :
+    V.starProjection (n : H) =
+      ((genericCrossBlockMirror U V n : genericLeftHalf U V) : H) +
+        ((genericSineBlock U V n : genericRightHalf U V) : H) := by
+  rw [coe_genericSineBlock]
+  exact starProjection_eq_mirror_add_of_mem_right U V n
+
 /-- **`D B = B (1 - A)`.**  The `(2,1)` entry of `P_V² = P_V`. -/
 theorem genericSineBlock_comp_genericCrossBlock :
     genericSineBlock U V ∘L genericCrossBlock U V =
