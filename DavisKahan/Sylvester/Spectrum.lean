@@ -11,6 +11,8 @@ import DavisKahan.Sylvester.Gap
 import DavisKahan.Sylvester.Unbounded.Neumann
 import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+import DavisKahan.BoundedOperator.Compat
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # The genuine-spectrum Sylvester estimate and the general `sin Θ` theorem
@@ -64,6 +66,10 @@ is expected to follow by a norm-preserving complexification transfer.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 
@@ -211,7 +217,7 @@ theorem isSelfAdjoint_compressOperator {T : E →L[ℂ] E}
 
 omit [CompleteSpace E] in
 /-- The orthogonal complement of a reducing subspace is reducing. -/
-theorem Reduces.orthogonalComplement {T : E →L[ℂ] E} {V : Submodule ℂ E}
+theorem _root_.ContinuousLinearMap.Reduces.orthogonalComplement {T : E →L[ℂ] E} {V : Submodule ℂ E}
     [V.HasOrthogonalProjection] (hV : Reduces T V) : Reduces T Vᗮ := by
   refine ⟨hV.2, ?_⟩
   intro y hy
@@ -228,7 +234,7 @@ theorem compress_sylvester_of_reduces
     compressOperator Vᗮ B ∘L (Vᗮ.orthogonalProjectionOnto ∘L U.subtypeL) -
         (Vᗮ.orthogonalProjectionOnto ∘L U.subtypeL) ∘L compressOperator U A =
       Vᗮ.orthogonalProjectionOnto ∘L (B - A) ∘L U.subtypeL := by
-  have hVperp : Reduces B Vᗮ := Reduces.orthogonalComplement hV
+  have hVperp : Reduces B Vᗮ := hV.orthogonalComplement
   ext x
   simp only [ContinuousLinearMap.comp_apply, sub_apply,
     compressOperator, AddSubgroupClass.coe_sub, Submodule.subtypeL_apply,
@@ -343,7 +349,7 @@ theorem sinTheta_spectrum_symmetric
     sinTheta_spectrum hB hA hV hU hd hab' hVspec' hUspec'
   rw [show A - B = -(B - A) by abel, norm_neg] at h2
   have hmax : subspaceGap U V = max (directedGap U V) (directedGap V U) :=
-    TauCeti.DavisKahanExt.subspaceGap_eq_max_directedGap U V
+    U.projectionGap_eq_max_directedProjectionGap V
   rw [hmax, mul_max_of_nonneg _ _ hd.le]
   exact max_le h1 h2
 

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalHalfLine
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Ordered spectral sets and separating half-line centers
@@ -22,6 +23,8 @@ reverse orientation.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
 
 /-- A nonempty bounded-above ordered lower set admits a separating supremum
 center. -/
@@ -64,7 +67,7 @@ theorem OrderedSpectraSeparated.exists_halfLine_center
 /-- An ordered internal gap gives one of the two oriented spectral half-line
 configurations.  The hypotheses are stated for both restricted spectra so the
 result remains explicit about the degenerate-subspace cases. -/
-theorem OrderedInternalGap.exists_oriented_halfLine_center
+theorem _root_.TauCeti.DavisKahan.Experimental.Foundation.OrderedInternalGap.exists_oriented_halfLine_center
     {𝕜 E : Type*} [RCLike 𝕜]
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
     {A : E →L[𝕜] E} {U : Submodule 𝕜 E} {d : ℝ}

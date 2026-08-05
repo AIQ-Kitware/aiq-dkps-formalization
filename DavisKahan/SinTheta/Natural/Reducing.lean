@@ -37,6 +37,7 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 open TauCeti.DavisKahanExt
+open TauCeti.DavisKahan
 
 /-- An orthogonally complemented subspace is complete.  This repeats the
 instance carried by the reducing-restriction core, which declares it locally and

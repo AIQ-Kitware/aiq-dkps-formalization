@@ -107,10 +107,9 @@ private theorem ambientAngularOperator_eq_extendCoordinate
     have h := DFunLike.congr_fun hY.1 x
     -- `h : (Y ∘ P) x = Y x` is already the right way round -- the `.symm` was
     -- backwards -- and `IsAngularOperator` states its field with
-    -- `DavisKahanExt.projection`, so that abbreviation has to be unfolded for the
+    -- `DavisKahan.projection`, so that abbreviation has to be unfolded for the
     -- goal's `U.starProjection` to match.
-    simpa only [ContinuousLinearMap.comp_apply, DavisKahanExt.projection,
-      DavisKahan.projection] using h
+    simpa only [ContinuousLinearMap.comp_apply, DavisKahan.projection] using h
   -- Rewrite the ambient right-hand side instead of `change`-ing the goal.  The
   -- adjoint of `subtypeL` is the orthogonal projection *into* the subspace
   -- (`Submodule.adjoint_subtypeL`) and its coercion back to `E` is
@@ -403,7 +402,7 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     -- instance argument is proof-irrelevant and congruence goes through.
     have hV : graphSubspace U Y = V :=
       graphSubspace_quarterAcuteAngularOperator U V hquarter
-    have hgraph : DavisKahanExt.projection V = graphProjectionFormula U Y := by
+    have hgraph : TauCeti.DavisKahan.projection V = graphProjectionFormula U Y := by
       simpa only [hV] using projection_graphSubspace_formula U Y hY
     -- `graphProjectionFormula` produces every factor decorated with `P`:
     --   (P + Y P) · (1 + P Y⋆ (Y P))⁻¹ · (P + P Y⋆)
@@ -413,7 +412,7 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     have hcollapse :
         graphProjectionFormula U Y = (P + Y) ∘L R ∘L (P + Y.adjoint) := by
       -- A literal `show` cannot state the expansion: it mixes two spellings of
-      -- the same operator (`DavisKahanExt.projection U` in some factors,
+      -- the same operator (`DavisKahan.projection U` in some factors,
       -- `U.starProjection` in others), so no single hand-written pattern matches.
       -- Let `simp only` do the unfolding and the two collapses together.
       show (P + Y * P) *

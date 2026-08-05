@@ -28,6 +28,8 @@ the repository for real operator functional calculus.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open scoped InnerProductSpace
 
 noncomputable section

@@ -33,6 +33,8 @@ namespace MathAhead
 namespace HiddenFoundations
 
 open DavisKahanExt
+open TauCeti.DavisKahan
+open TauCeti.DavisKahan.Experimental.Foundation
 open ExactSinTheta
 open ExactSinTheta.ComplexificationApproximation
 open RealComplexification

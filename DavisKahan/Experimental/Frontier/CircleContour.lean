@@ -30,6 +30,8 @@ namespace Frontier
 namespace CircleContour
 
 open DavisKahanExt
+open TauCeti.DavisKahan
+open DavisKahan.Experimental.Foundation
 
 universe u
 

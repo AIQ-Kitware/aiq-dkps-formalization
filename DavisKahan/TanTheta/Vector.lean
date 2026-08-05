@@ -10,6 +10,7 @@ import Mathlib.Analysis.InnerProductSpace.Symmetric
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.Analysis.Normed.Operator.NNNorm
 import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
+import DavisKahan.BoundedOperator.Compat
 
 /-!
 # The Davis--Kahan `tan Θ` theorem on infinite-dimensional Hilbert spaces
@@ -43,6 +44,8 @@ namespace TauCeti
 
 open TauCeti
 namespace DavisKahanExt
+
+open DavisKahan
 
 open scoped InnerProductSpace
 

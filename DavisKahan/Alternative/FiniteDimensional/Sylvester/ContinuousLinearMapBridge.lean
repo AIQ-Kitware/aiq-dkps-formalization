@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
 import DavisKahan.BoundedOperator.Compat
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Compatibility bridges for the historical continuous-linear-map API
@@ -12,6 +13,8 @@ import DavisKahan.BoundedOperator.Compat
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
 
 open DavisKahan
 

@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Sharpness
 import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
+import DavisKahan.BoundedOperator.Compat
 
 /-!
 # Finite-multiplicity equality models for Davis--Kahan Theorem 6.1
@@ -26,6 +27,8 @@ membership as an extra assumption.
 
 namespace TauCeti
 namespace DavisKahan1970
+
+open DavisKahan
 
 open scoped InnerProductSpace BigOperators ENNReal
 open DavisKahan.Experimental.ExactSinTheta

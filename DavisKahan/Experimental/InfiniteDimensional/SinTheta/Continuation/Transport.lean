@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.ContinuationRieszIntegral
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.Core
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Quantitative Riesz continuation along affine operator paths
@@ -26,6 +27,10 @@ uniform contour separation along the path.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open Set
 open MeasureTheory

@@ -6,6 +6,7 @@ Authors: Jon Crall
 import DavisKahan.Riccati.UnboundedReduction
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.GraphCore
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester
+import DavisKahan.BoundedOperator.Compat
 
 /-!
 # The complementary graph of a reducing Riccati selection
@@ -37,6 +38,8 @@ the graph of `-X*` **taken in the other order**:
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan
 
 open scoped InnerProductSpace
 

@@ -9,6 +9,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Sylvester.FourierSemigroup
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.OrderedSemigroup
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Infinite-dimensional bounded Sylvester equations
@@ -28,6 +29,10 @@ namespace TauCeti
 
 open TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open MeasureTheory Set Filter
 open scoped InnerProductSpace BigOperators

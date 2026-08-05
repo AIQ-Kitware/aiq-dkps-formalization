@@ -7,6 +7,7 @@ import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.Geometry.Angle.OperatorAngleReal
 import DavisKahan.Geometry.Angle.PaperOperatorAngle
 import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
+import DavisKahan.BoundedOperator.Compat
 
 /-!
 # Canonical operator-angle compatibility surface
@@ -21,6 +22,8 @@ complex and real-complexified modules imported above.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan
 
 open scoped InnerProductSpace
 

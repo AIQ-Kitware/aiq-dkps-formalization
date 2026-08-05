@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.ContinuationWitnessEffectiveBlocks
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Oriented effective blocks of a continuation-selected branch
@@ -30,6 +31,10 @@ proved here.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open Set
 open scoped InnerProductSpace

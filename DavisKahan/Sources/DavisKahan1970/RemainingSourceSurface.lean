@@ -34,6 +34,7 @@ namespace RemainingSourceSurface
 
 open ExactSinTheta
 open DavisKahanExt
+open TauCeti.DavisKahan
 
 universe u v
 

@@ -38,6 +38,7 @@ variable {E F G : Type v}
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
 
 open TauCeti.DavisKahanExt
+open TauCeti.DavisKahan
 
 namespace ClosedOperator
 

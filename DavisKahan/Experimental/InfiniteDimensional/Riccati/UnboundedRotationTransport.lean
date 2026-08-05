@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-5.6 Thinking
 -/
 import DavisKahan.Riccati.UnboundedExistence
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedGraphAcute
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Canonical graph-rotation transport for unbounded block operators
@@ -18,6 +19,10 @@ block-diagonal direct sum.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 

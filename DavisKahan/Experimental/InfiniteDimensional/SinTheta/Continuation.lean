@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.Core
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.SpectralIdentification
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Spectral projection continuation and branch selection
@@ -18,6 +19,10 @@ hypotheses.  This replacement uses the repository's proof-carrying
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open Set
 open scoped InnerProductSpace Interval unitInterval

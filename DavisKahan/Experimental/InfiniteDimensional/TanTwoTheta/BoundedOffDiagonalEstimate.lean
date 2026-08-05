@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRiccati
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Sharp Riccati estimate in ambient off-diagonal coordinates
@@ -21,6 +22,10 @@ implemented double-angle operator.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 

@@ -8,6 +8,7 @@ import DavisKahan.SpectralTheory.BoundedFromSpectrum
 import DavisKahan.SpectralTheory.ClosedOperator.RealSpectrum
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Bounded Borel calculus for bounded self-adjoint operators
@@ -26,6 +27,10 @@ boundedness, even on a compact set.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open MeasureTheory Set Filter
 open scoped InnerProductSpace BigOperators

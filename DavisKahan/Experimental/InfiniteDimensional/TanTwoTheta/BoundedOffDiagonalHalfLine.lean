@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalEstimate
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Spectral half-line bridge for bounded off-diagonal tangent-two-theta
@@ -20,6 +21,10 @@ namespace TauCeti
 
 open TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 

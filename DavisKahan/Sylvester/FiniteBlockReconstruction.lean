@@ -21,6 +21,8 @@ restated; names and namespace are unchanged.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open MeasureTheory Set
 open scoped InnerProductSpace BigOperators
 

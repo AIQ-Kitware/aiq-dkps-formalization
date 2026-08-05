@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.BoundedOperator.Reflection
-import DavisKahan.SpectralTheory.Compatibility
 import DavisKahan.DoubleAngle.CompatibilitySinTwoTheta
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.General
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Infinite-dimensional `sin 2Θ` and generic double-angle bounds
@@ -17,6 +17,8 @@ spectral-separation form.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
 
 open DavisKahan
 
@@ -138,7 +140,7 @@ noncomputable instance reflectedSubspace_hasOrthogonalProjection
     ContinuousLinearMap.IsIdempotentElem.hasOrthogonalProjection_range hidem
 
 /-- Conjugation by the reflection preserves self-adjointness. -/
-theorem IsSelfAdjointOperator.reflection_conjugate
+theorem _root_.TauCeti.DavisKahan.IsSelfAdjointOperator.reflection_conjugate
     {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection] :
     IsSelfAdjointOperator

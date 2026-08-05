@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedGraphAcute
 import DavisKahan.Experimental.InfiniteDimensional.DoubleAngleSpectrum
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Spectrum transport for bounded Riccati diagonalization
@@ -26,6 +27,8 @@ two diagonal blocks.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
 
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
 

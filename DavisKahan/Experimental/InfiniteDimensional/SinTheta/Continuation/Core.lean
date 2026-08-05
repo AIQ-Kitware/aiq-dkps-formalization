@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationAPI
 import DavisKahan.SpectralTheory.ResolventOperator
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Spectral projection continuation and branch selection
@@ -39,6 +40,10 @@ argument.  This prevents a cycle between continuity and spectral selection.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 

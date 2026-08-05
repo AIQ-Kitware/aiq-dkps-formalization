@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.SpectralTheory.GraphSubspace
 import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Infinite-dimensional direct rotations
@@ -52,6 +53,10 @@ ideals without a separate majorization theorem.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 

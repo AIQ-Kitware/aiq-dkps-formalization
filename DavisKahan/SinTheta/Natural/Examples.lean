@@ -29,6 +29,7 @@ namespace NaturalExamples
 noncomputable section
 
 open TauCeti.DavisKahanExt
+open TauCeti.DavisKahan
 
 universe v
 

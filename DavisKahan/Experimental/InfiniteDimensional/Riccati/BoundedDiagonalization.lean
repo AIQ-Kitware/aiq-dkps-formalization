@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Riccati.BoundedReduction
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationAPI
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Bounded Riccati block diagonalization
@@ -26,6 +27,10 @@ last theorem so that its proof can be isolated from the block algebra.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 

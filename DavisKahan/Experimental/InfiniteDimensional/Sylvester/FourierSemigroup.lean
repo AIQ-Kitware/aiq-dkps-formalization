@@ -12,6 +12,7 @@ import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import Mathlib.MeasureTheory.Integral.ExpDecay
 import Mathlib.Topology.MetricSpace.ProperSpace.Real
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Fourier and semigroup formulas for bounded Sylvester equations
@@ -43,6 +44,10 @@ Bochner dominated convergence.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open TauCeti
 open MeasureTheory Set Filter

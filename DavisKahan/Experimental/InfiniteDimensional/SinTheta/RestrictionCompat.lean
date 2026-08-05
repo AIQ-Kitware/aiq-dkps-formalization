@@ -6,7 +6,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Basic
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.Rectangular
 import DavisKahan.SpectralTheory.AbstractSpectrum
-import DavisKahan.SpectralTheory.Compatibility
 import DavisKahan.SinTheta.SpectralBridge
 
 /-!
@@ -24,6 +23,10 @@ modules do not depend on stale convenience constructors.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
@@ -85,7 +88,7 @@ theorem restrictToReducingSubspace_apply
   rfl
 
 /-- Symmetry descends to the selected reducing restriction. -/
-theorem IsSelfAdjointOperator.restrictToReducingSubspace
+theorem _root_.TauCeti.DavisKahan.IsSelfAdjointOperator.restrictToReducingSubspace
     {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
     (U : Submodule 𝕜 E) (hU : Reduces A U) :
     IsSelfAdjointOperator (restrictToReducingSubspace A U hU) :=
@@ -119,7 +122,7 @@ theorem restrictToOrthogonal_apply
   rfl
 
 /-- Symmetry descends to the orthogonal reducing restriction. -/
-theorem IsSelfAdjointOperator.restrictToOrthogonal
+theorem _root_.TauCeti.DavisKahan.IsSelfAdjointOperator.restrictToOrthogonal
     {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
     (U : Submodule 𝕜 E) (hU : Reduces A U) :
     IsSelfAdjointOperator (restrictToOrthogonal A U hU) :=
@@ -308,12 +311,12 @@ theorem directedResidual_sylvesterEquation
     sylvesterOperator (restrictToOrthogonal A U hU) M
       (codRestrictTo (Uᗮ.starProjection ∘L X) Uᗮ
         (fun x => Uᗮ.starProjection_apply_mem _)) =
-      codRestrictTo (Uᗮ.starProjection ∘L residual A X M) Uᗮ
+      codRestrictTo (Uᗮ.starProjection ∘L DavisKahan.residual A X M) Uᗮ
         (fun x => Uᗮ.starProjection_apply_mem _) := by
   apply ContinuousLinearMap.ext
   intro x
   apply Subtype.ext
-  simp only [sylvesterOperator, residual, sub_apply,
+  simp only [sylvesterOperator, DavisKahan.residual, sub_apply,
     ContinuousLinearMap.comp_apply, restrictToOrthogonal_apply,
     coe_codRestrictTo_apply]
   have hUperp : Reduces A Uᗮ := reduces_orthogonalComplement hA hU.2

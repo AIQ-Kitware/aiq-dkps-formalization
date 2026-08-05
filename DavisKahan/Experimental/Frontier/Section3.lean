@@ -42,6 +42,7 @@ namespace Frontier
 namespace Section3
 
 open TauCeti.DavisKahanExt (reflectedSubspace starProjection_reflectedSubspace)
+open TauCeti.DavisKahan
 
 universe u v
 

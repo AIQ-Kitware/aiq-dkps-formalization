@@ -24,6 +24,8 @@ norm and spectral estimates direct rewrite lemmas.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open Set
 open scoped InnerProductSpace
 

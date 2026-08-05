@@ -24,6 +24,8 @@ here.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan
 namespace Real
 
 open scoped InnerProductSpace

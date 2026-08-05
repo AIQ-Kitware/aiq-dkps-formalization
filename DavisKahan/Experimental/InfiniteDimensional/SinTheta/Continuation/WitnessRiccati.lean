@@ -25,6 +25,8 @@ result onto the two orthogonal coordinates.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open scoped InnerProductSpace
 
 universe v

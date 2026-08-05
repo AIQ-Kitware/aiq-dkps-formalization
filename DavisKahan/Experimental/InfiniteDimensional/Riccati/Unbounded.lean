@@ -27,6 +27,8 @@ coordinate graph to the Riccati graph.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open scoped InnerProductSpace
 
 variable {𝕜 : Type*} [RCLike 𝕜]

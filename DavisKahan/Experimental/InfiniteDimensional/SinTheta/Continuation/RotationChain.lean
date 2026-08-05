@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.SpectralIdentification
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Finite composition of local direct rotations
@@ -22,6 +23,10 @@ that input from a common family of spectral-separation witnesses.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open Set
 open scoped InnerProductSpace unitInterval

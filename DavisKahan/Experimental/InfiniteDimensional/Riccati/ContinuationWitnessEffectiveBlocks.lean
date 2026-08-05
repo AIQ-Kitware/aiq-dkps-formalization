@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.TanTheta.ContinuationWitnessAPriori
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedSpectralEnclosure
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Effective blocks of a continuation-selected Riccati branch
@@ -26,6 +27,8 @@ input; exact diagonalization and spectrum union alone do not imply them.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
 
 open Set
 open scoped InnerProductSpace

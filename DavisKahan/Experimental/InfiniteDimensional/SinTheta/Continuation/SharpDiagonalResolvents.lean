@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.SharpSourceSpectrum
 import DavisKahan.SpectralTheory.ResolventOperator
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Diagonal resolvent data for sharp off-diagonal continuation
@@ -21,6 +22,10 @@ the subsequent Schur-complement leaf consumes the data proved here.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open Set
 open scoped InnerProductSpace
@@ -51,7 +56,7 @@ sharp inverse-distance bounds, and both pathwise cross-block norm estimates.
 The geometric assumptions `hsep0` and `hsep1` are deliberately stated on the
 interval and exterior sets themselves.  A later contour-geometry leaf can
 discharge them without reopening any operator theory. -/
-theorem FiniteGapConfiguration.exists_operatorPath_diagonalResolventData
+theorem _root_.TauCeti.DavisKahan.Experimental.Foundation.FiniteGapConfiguration.exists_operatorPath_diagonalResolventData
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     [CompleteSpace U] [CompleteSpace (Uᗮ : Submodule ℂ Hspace)]

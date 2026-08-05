@@ -27,6 +27,7 @@ namespace DavisKahan
 namespace Experimental
 
 open TauCeti.DavisKahanExt
+open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 universe v
@@ -47,7 +48,7 @@ theorem doubleCosineDenominator_pos
     (hquarter : IsQuarterAcute U V) :
     0 < 1 - 2 * directedGap U V ^ 2 := by
   have hglt : directedGap U V < Real.sqrt 2 / 2 :=
-    lt_of_le_of_lt (directedGap_le_subspaceGap U V) hquarter
+    lt_of_le_of_lt (directedProjectionGap_le_projectionGap U V) hquarter
   have hg0 : 0 ≤ directedGap U V := by
     rw [show directedGap U V =
       ‖Vᗮ.starProjection ∘L U.starProjection‖ from rfl]

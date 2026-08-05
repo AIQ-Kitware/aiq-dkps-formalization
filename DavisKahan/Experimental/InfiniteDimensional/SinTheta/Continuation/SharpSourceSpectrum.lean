@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.SharpBlockPath
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Source spectra for sharp off-diagonal continuation
@@ -21,6 +22,10 @@ perturbed operator is asserted here.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open Set
 open scoped InnerProductSpace
@@ -78,7 +83,7 @@ theorem realSpectrum_compressOperator_eq_restrictedSpectrum_of_reduces
 
 /-- A finite-gap configuration places the genuine spectra of the two diagonal
 compressions in the same interval and exterior sets. -/
-theorem FiniteGapConfiguration.exists_compressOperator_enclosures
+theorem _root_.TauCeti.DavisKahan.Experimental.Foundation.FiniteGapConfiguration.exists_compressOperator_enclosures
     (A : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     [CompleteSpace U] [CompleteSpace (Uᗮ : Submodule ℂ Hspace)]
@@ -106,7 +111,7 @@ variable {Hspace : Type v} [NormedAddCommGroup Hspace]
 /-- A finite-gap configuration, reduction of `A`, and off-diagonality of `K`
 provide all diagonal-spectrum placements and cross-block norm estimates needed
 for the sharp pathwise block-resolvent enclosure. -/
-theorem FiniteGapConfiguration.exists_operatorPath_block_enclosureData
+theorem _root_.TauCeti.DavisKahan.Experimental.Foundation.FiniteGapConfiguration.exists_operatorPath_block_enclosureData
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     [CompleteSpace U] [CompleteSpace (Uᗮ : Submodule ℂ Hspace)]

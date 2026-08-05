@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.ResolventOperator
 import Mathlib.MeasureTheory.Integral.CurveIntegral.Basic
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Proof-carrying contours for spectral continuation
@@ -32,6 +33,10 @@ so it was compiled by nothing but its own aggregate until now.  Nothing is resta
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open Set
 open scoped InnerProductSpace Interval unitInterval

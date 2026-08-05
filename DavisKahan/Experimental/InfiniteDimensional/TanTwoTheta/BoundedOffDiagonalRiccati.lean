@@ -24,6 +24,8 @@ integration is a later compatibility step.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open scoped InnerProductSpace
 
 universe v

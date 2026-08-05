@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.RotationChain
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.SpectralIdentification
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Selected spectral subspaces along a fixed contour
@@ -24,6 +25,10 @@ conclusion that still has to be proved in the spectral-identification branch.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open Set
 open scoped InnerProductSpace unitInterval

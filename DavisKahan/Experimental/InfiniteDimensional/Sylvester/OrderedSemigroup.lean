@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.FourierSemigroup
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 import Mathlib.MeasureTheory.Integral.ExpDecay
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Ordered-spectrum Sylvester reconstruction
@@ -26,6 +27,10 @@ namespace TauCeti
 
 open TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open MeasureTheory Set Filter
 open scoped InnerProductSpace Topology
