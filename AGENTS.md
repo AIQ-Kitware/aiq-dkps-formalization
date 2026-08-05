@@ -401,8 +401,7 @@ regression.
 ## Comparator challenge rule
 
 Files named `Challenge/**/Conformance.lean` intentionally contain open proof
-placeholders. They are immutable challenge statements, not unfinished project
-proofs. Never fill those placeholders. Put the implementation in the normal
+placeholders. Never fill those placeholders. Put the implementation in the normal
 library module; the paired `Leaderboard.lean` and Comparator configuration test
 that the implementation has the same statement and only the permitted trusted
 dependencies.
@@ -434,10 +433,11 @@ still broke a Leaderboard, and separately a `Conformance` file sat broken from t
 day it was written because the library had no root module and nothing ever built
 it as a whole.
 
-Adding an `import` to a `Conformance` file so its statement can elaborate is not
-a violation of the immutability rule above: the statement and its placeholders
-stay untouched. Filling a placeholder, or changing a statement to match an
-implementation, is.
+A challenge statement follows the API it validates. When a library signature
+changes, move the `Conformance` statement to match in the same commit, then run
+`python3 scripts/check_comparator_signatures.py --no-build <config>` and
+`lake build Challenge`. Adding an `import` so a statement can elaborate is
+likewise fine. The placeholders themselves stay open.
 
 Challenge admission has an intentionally high bar. Add a theorem only when it
 is a recognizable literature endpoint or a broadly reusable canonical result
