@@ -10,6 +10,9 @@ import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 -- and the Fan-dominant ideal bridge for Corollary 4.1.  This module depends only
 -- on source-facing analysis, never on this frontier file, so the edge is acyclic.
 import DavisKahan.Experimental.MathAhead.Section4.InfiniteProposition41
+-- infinite-dimensional Proposition 4.3 by pinching and orthogonal block sums.  Same
+-- acyclicity argument as the line above: it depends only on source-facing analysis.
+import DavisKahan.Experimental.MathAhead.Section4.InfiniteProposition43
 -- production Proposition 4.2 (`Sources/DavisKahan1970/Section4BasisAngleEnergy`),
 -- which this file's statement is grounded on by `:=`.  Production never imports
 -- the frontier, so the edge is acyclic.
@@ -229,11 +232,24 @@ of squares and sums behave differently, which is exactly why 4.3 survives while
 4.4 does not.
 
 The statement below is therefore at Ky Fan level, which is what a unitarily
-invariant norm sees.  It is open; the finite-dimensional proof
-(`directRotation_displacementSquare_uiNorm`) goes through Fan--Hoffman
-majorization of the pinched competitor, and the infinite-dimensional argument
-must reproduce that at approximation-number scope, as
-`InfiniteProposition41.lean` does for Proposition 4.1. -/
+invariant norm sees.  **It is proved**, in
+`MathAhead/Section4/InfiniteProposition43.lean`.  The finite-dimensional proof
+(`directRotation_displacementSquare_uiNorm`) diagonalizes and applies
+Fan--Hoffman to the pinched competitor; that route does not survive to infinite
+dimensions, where `2 − 2C` need not be compact and has no eigenvalue list.  The
+replacement chains
+
+```
+kyFan_k(2 − 2C) = kyFan_k(D's block sum) ≤ kyFan_k(W's block sum)
+                = kyFan_k(pinch((1−W)†(1−W))) ≤ kyFan_k((1−W)†(1−W)),
+```
+
+reading the pinch through the isometry `H ≃ₗᵢ WithLp 2 (U × Uᗮ)`, feeding the
+middle step with Proposition 4.1 on `U` and on `Uᗮ`, and closing with the
+Fan--Hoffman pinching contraction.  Two facts carry it: the complementary pair
+has the *same* direct rotation, and `aₙ(X†X) = aₙ(X)²` — which is also exactly
+why 4.3 survives while 4.4 does not, since sums of squares are dominated at
+every `k` and sums are not. -/
 theorem proposition4_3_squaredDisplacement_kyFan
     (hacute : IsAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
@@ -242,8 +258,9 @@ theorem proposition4_3_squaredDisplacement_kyFan
     kyFanApproximationGauge k
         ((1 - star (spectraDirectRotation U V hacute)) *
           (1 - spectraDirectRotation U V hacute)) ≤
-      kyFanApproximationGauge k ((1 - star W) * (1 - W)) := by
-  sorry
+      kyFanApproximationGauge k ((1 - star W) * (1 - W)) :=
+  MathAhead.Section4.proposition4_3_squaredDisplacement_kyFan_scratch U V hacute W
+    hWunitary hWmap k
 
 end Section4
 end Frontier

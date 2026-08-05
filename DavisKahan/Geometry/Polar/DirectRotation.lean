@@ -624,6 +624,66 @@ theorem spectraDirectRotation_maps_orthogonalComplement
       Vᗮ.starProjection_eq_self_iff.mpr hy] at h
     exact h
 
+/-! ## The complementary pair carries the same direct rotation
+
+Davis--Kahan Proposition 4.3 needs Proposition 4.1 for `(Uᗮ, Vᗮ)` as well as for `(U, V)`,
+because the pinched squared displacement has one block on each.  That is not a second
+theorem: the canonical intertwiner `P_V P_U + P_Vᗮ P_Uᗮ` is *symmetric under swapping a
+subspace for its complement*, so the whole polar construction returns literally the same
+operator.  Only the double-complement identity `Uᗮᗮ = U` is involved, and it is available
+here as `starProjection_orthogonal'` applied twice. -/
+
+omit [CompleteSpace H] in
+/-- The star projection of a double orthogonal complement is the original one. -/
+theorem starProjection_orthogonal_orthogonal (U : Submodule ℂ H)
+    [U.HasOrthogonalProjection] :
+    (Uᗮ)ᗮ.starProjection = U.starProjection := by
+  rw [Submodule.starProjection_orthogonal' Uᗮ, Submodule.starProjection_orthogonal' U]
+  abel
+
+omit [CompleteSpace H] in
+/-- **The canonical intertwiner of the complementary pair is the same operator.**
+
+`P_Vᗮ P_Uᗮ + P_Vᗮᗮ P_Uᗮᗮ = P_Vᗮ P_Uᗮ + P_V P_U`, which is the original sum with its two
+terms exchanged. -/
+theorem spectraCanonicalIntertwiner_orthogonal (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    spectraCanonicalIntertwiner Uᗮ Vᗮ = spectraCanonicalIntertwiner U V := by
+  simp only [spectraCanonicalIntertwiner, projection, complementaryProjection,
+    starProjection_orthogonal_orthogonal]
+  exact add_comm _ _
+
+omit [CompleteSpace H] in
+/-- The symmetric projection gap is unchanged by passing to complements, since
+`P_Uᗮ − P_Vᗮ = P_V − P_U`. -/
+theorem subspaceGap_orthogonal (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    subspaceGap Uᗮ Vᗮ = subspaceGap U V := by
+  show ‖Uᗮ.starProjection - Vᗮ.starProjection‖ = ‖U.starProjection - V.starProjection‖
+  rw [Submodule.starProjection_orthogonal' U, Submodule.starProjection_orthogonal' V,
+    show (1 - U.starProjection) - (1 - V.starProjection)
+      = V.starProjection - U.starProjection from by abel]
+  exact norm_sub_rev _ _
+
+omit [CompleteSpace H] in
+/-- Acuteness passes to the complementary pair: it is literally the same number. -/
+theorem isAcute_orthogonal {U V : Submodule ℂ H}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (h : IsAcute U V) :
+    IsAcute Uᗮ Vᗮ := by
+  unfold IsAcute at h ⊢
+  rwa [subspaceGap_orthogonal]
+
+/-- **The direct rotation of the complementary pair is the same operator.**
+
+The polar factor depends only on the canonical intertwiner, and the acute witness is a
+`Prop` the definition discards, so this is `spectraCanonicalIntertwiner_orthogonal`
+transported through `spectraPolarIsometry`. -/
+theorem spectraDirectRotation_orthogonal (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    spectraDirectRotation Uᗮ Vᗮ (isAcute_orthogonal hacute) =
+      spectraDirectRotation U V hacute := by
+  simp only [spectraDirectRotation, spectraCanonicalPolarFactor,
+    spectraCanonicalIntertwiner_orthogonal]
 
 /-! ## Elementary unitary, adjoint, and reflection consequences -/
 

@@ -521,8 +521,21 @@ COUNTEREXAMPLE, computed and checked.  In R^4 take `U = span(e1,e2)` and `V` at 
 
 **PROPOSITION 4.3 ITSELF IS UNTOUCHED.** Its Ky Fan sums of *squares* are `(0.586, 1.172, 1.757, 2.343)` for the direct rotation against `(2.518, 5.035, 5.103, 5.172)` for the competitor -- dominated at every `k`.  Sums of squares and sums behave differently, which is exactly why 4.3 survives while 4.4 does not.  The finite-dimensional theorems on this row are unaffected.
 
-The frontier statement is now `proposition4_3_squaredDisplacement_kyFan`, at Ky Fan level -- what a unitarily invariant norm actually sees -- and still `sorry`, with the refutation of the pointwise form written into its docstring so it is not attempted a second time.
-- **Next action:** Prove `proposition4_3_squaredDisplacement_kyFan` (Ky Fan level).  Do NOT attempt pointwise approximation-number domination: it is false (notes), and it would contradict this repository's own refutation of Proposition 4.4.  The finite-dimensional proof `directRotation_displacementSquare_uiNorm` goes through Fan--Hoffman majorization of the pinched competitor; the infinite-dimensional argument must reproduce that at approximation-number scope, as `InfiniteProposition41.lean` does for Proposition 4.1.  Then promote `directRotation_minimizes_displacementSquare_uiNorm` into the build and add a source wrapper.
+The frontier statement is now `proposition4_3_squaredDisplacement_kyFan`, at Ky Fan level -- what a unitarily invariant norm actually sees -- with the refutation of the pointwise form written into its docstring so it is not attempted a second time.
+
+**PROVED 2026-08-05**, in `Experimental/MathAhead/Section4/InfiniteProposition43.lean`.  The finite-dimensional route (diagonalize, then Fan--Hoffman on the pinched competitor) does NOT survive: in infinite dimensions `2 - 2C` need not be compact and has no eigenvalue list.  The replacement chains
+
+    kyFan_k(2 - 2C) = kyFan_k(D's block sum) <= kyFan_k(W's block sum)
+                    = kyFan_k(pinch((1-W)*(1-W))) <= kyFan_k((1-W)*(1-W)),
+
+reading the pinch through the isometry `H = U (+) U-perp`, feeding the middle step with Proposition 4.1 on `U` and on `U-perp`, and closing with the Fan--Hoffman pinching contraction `kyFanApproximationGauge_diagonalPart_le`.
+
+TWO THINGS THAT TURNED OUT NOT TO BE EXTRA WORK.  (i) **Proposition 4.1 for the complementary pair is the same theorem.**  The canonical intertwiner `P_V P_U + P_Vperp P_Uperp` is symmetric under exchanging each subspace for its complement, so `spectraDirectRotation Uperp Vperp = spectraDirectRotation U V` on the nose (`spectraDirectRotation_orthogonal`) and acuteness is literally the same number; only the competitor's admissibility has to be transported, and that is one subtraction.  (ii) **The direct rotation's squared displacement is already block diagonal**, since `(1-D*)(1-D) = 2 - 2C` and `C` commutes with `P_U` -- so the first step of the chain is an equality, not an estimate.
+
+ONE BRICK WAS MISSING AND IS NOW BUILT: `a_n(X*X) = a_n(X)^2`, in `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/GramSquare.lean`.  Proposition 4.1 dominates approximation numbers at the FIRST power, 4.3 is about the Gram operator of the displacement, and nothing else bridges them.  Its hard direction cannot be done by pointwise norm domination -- `norm(X*Xx) >= s norm(x)` on a subspace only gives `norm(Xx) >= (s/norm X) norm(x)`, the wrong power -- so the optimal subspace has to be spectral and the proof runs through the Gram spectral projections.  That lemma is also precisely why 4.3 survives while 4.4 does not: sums of SQUARES of the approximation numbers are dominated at every `k`, and the sums themselves are not.
+
+The infinite form lives under `DavisKahan/Experimental`, so `lake build` does not guard it.  Promoting it is the remaining work on this row, together with the exact source wrapper.
+- **Next action:** The mathematics is DONE -- the infinite-dimensional Ky Fan form is proved.  What remains is guarding and wrapping: promote `Experimental/MathAhead/Section4/InfiniteProposition43.lean` (and `InfiniteProposition41.lean`, which it consumes) plus `directRotation_minimizes_displacementSquare_uiNorm` into the default build -- MEASURE THE IMPORT CLOSURE FIRST, the Section 8 chain turned out to be 42 modules with a `sorry` in it -- then add `DavisKahan1970`-namespaced source wrappers for `directRotation_displacementSquare_kyFan` / `_uiNorm`.  Do NOT attempt pointwise approximation-number domination: it is false (notes), and it would contradict this repository's own refutation of Proposition 4.4.
 
 #### Proposition 4.4: Real-space full displacement minimality below pi/3
 
