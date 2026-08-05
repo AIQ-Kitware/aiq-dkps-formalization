@@ -13,11 +13,11 @@ authoritative; this Markdown file is generated from it.
 | --- | ---: |
 | `compiled_exact` | 9 |
 | `compiled_specialization` | 5 |
-| `compiled_general_infrastructure` | 17 |
+| `compiled_general_infrastructure` | 18 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
 | `partial_or_wrapper_missing` | 11 |
-| `not_represented` | 1 |
+| `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
 | `not_a_completion_obligation` | 3 |
@@ -48,12 +48,12 @@ no `sorry` and no `axiom`, so a declaration reachable from
 
 | Verification | Count |
 | --- | ---: |
-| `proved_in_build` | 36 |
+| `proved_in_build` | 37 |
 | `proved_conditional` | 5 |
 | `partially_in_build` | 0 |
 | `proved_outside_build` | 3 |
 | `not_compiling` | 0 |
-| `absent` | 1 |
+| `absent` | 0 |
 | `not_applicable` | 3 |
 
 ## Verification meanings
@@ -103,7 +103,7 @@ Section 3's classification results need the Halmos two-subspace canonical form t
 
 **WHAT STILL BLOCKS.** Only the *phrasing* of Theorem 3.1 in terms of spectral multiplicity functions, which needs Hahn--Hellinger (a translation of the invariant, absent from Mathlib), and the cardinal-valued dimension bookkeeping for the Section 4 infinite-dimensional existence statement. Corollary 3.1 needs neither -- it needs the compact-operator equivalence criterion instead. This blocker should be split along those three lines the next time it is touched.
 
-Gates: DK-3.2-prop (proved_outside_build), DK-3.1-thm (proved_in_build), DK-3.1-cor (absent)
+Gates: DK-3.2-prop (proved_outside_build), DK-3.1-thm (proved_in_build)
 
 ### `section9-certificate-discharge` -- mixed
 
@@ -350,19 +350,22 @@ HISTORY. The pre-existing frontier statement `TauCeti.DavisKahan.Experimental.Fr
 #### Corollary 3.1: Compact classification by angle eigenvalues
 
 - **Kind:** `corollary`
-- **Status:** `not_represented`
-- **Verification:** `absent`
+- **Status:** `compiled_general_infrastructure`
+- **Verification:** `proved_in_build`
 - **Mathematics:** When the cross projection is compact, the decreasing angle eigenvalue lists, including possible zero multiplicity, classify the pair.
-- **Blocked by:** `two-subspace-classification`
-- **Current Lean references:** none identified
-- **Assessment:** Depends on Theorem 3.1 plus compact spectral classification.
+- **Current Lean references:** `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.SameCompactAngleData`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.isCompactOperator_genericCosineBlock`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.eigenspace_genericCosineBlock_zero`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.finrank_eigenspace_eq_of_intertwiner`, `TauCeti.exists_linearIsometryEquiv_intertwining_of_finrank_eigenspace_eq`
+- **Assessment:** **PROVED 2026-08-04, both directions, admission-free.**
 
-FINDING 2026-08-04: a statement exists, `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_1_compact_angleList_classification`, with a `sorry` proof (verified by `#print axioms`). Unlike DK-3.1-thm its statement is *not* vacuous -- `compactAngleEigenvalueList` is a real definition (the approximation-number sequence) and is axiom-clean. What it needs is the converse of `twoProjection_operator_classification`, itself `sorry`, plus the compact positive spectral theorem.
+`pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData` (`DavisKahan/Geometry/Halmos/CompactClassification.lean`): when `P_U P_V P_U` is compact on both sides, two ordered pairs are unitarily equivalent as pairs **iff** their four elementary Halmos summands are isometric and every angle has the same multiplicity. `#print axioms` gives exactly [propext, Classical.choice, Quot.sound], and the module is reachable from `DavisKahan.All`.
 
-PROGRESS 2026-08-04: same brick (1)/(2) work as DK-3.1-thm applies -- see that row. This row additionally needs the compact positive spectral theorem (equal approximation-number lists imply unitary equivalence), which is independent of the multiplicity question.
+HOW THE PAPER'S 'DECREASING EIGENVALUE LIST' IS RECORDED. Coordinate-free, as the dimension function `mu |-> finrank (ker (cos^2 Theta - mu))`. That carries the same information as the decreasing list -- for a compact positive operator with trivial kernel the nonzero eigenvalues have finite multiplicity and accumulate only at 0, so the dimension function *is* the multiset of the list -- and it needs no ordering theory to state. The paper's 'including possible zero multiplicity' bookkeeping is not lost: a zero or right angle is an elementary summand (`U /\ V`, `U /\ Vperp`, `Uperp /\ V`, `Uperp /\ Vperp`), carried by the four `Nonempty` fields separately from the generic angle data.
 
-RE-SCOPED 2026-08-04. Theorem 3.1's classification is proved (see DK-3.1-thm), so the dependency that made this row 'defer' is discharged. Feeding it requires exhibiting the cosine block `genericCosineBlock U V` as a compact operator when `P_U P_V P_U` is compact, and then a compact-operator unitary-equivalence criterion. Note the paper's 'including possible zero multiplicity' bookkeeping lands on the four elementary summands, which the invariant already carries separately.
-- **Next action:** The general classification now exists in the U-side invariant (`pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`), so this row no longer waits on it. What is left is genuinely the compact bridge: for a compact positive contraction, unitary equivalence iff equal decreasing eigenvalue lists with multiplicity, plus the kernel dimension. That is elementary spectral theory of compact self-adjoint operators, not Hahn--Hellinger.
+THE NEW FOUNDATION. `ForTauCeti/Analysis/InnerProductSpace/CompactSelfAdjointClassification.lean`: two compact self-adjoint operators with trivial kernel and equal eigenspace dimensions are unitarily equivalent. Built on Mathlib's spectral theorem for compact self-adjoint operators (`ContinuousLinearMap.orthogonalComplement_iSup_eigenspaces_eq_bot` and `finite_dimensional_eigenspace`) plus `IsHilbertSum`. The construction routes both operators through a COMMON Euclidean model per eigenvalue, so the two `IsHilbertSum.linearIsometryEquiv`s land in one `lp` space and compose -- Mathlib has no congruence `lp G 2 ~= lp G' 2` from a family of isometries, and this sidesteps needing one.
+
+Feeding it needed two facts about the angle operator, both new: it is the compression of `P_U P_V P_U` to the U-half (`genericCosineBlock_eq_compress_halmos`), hence compact; and its kernel is trivial, which is generic position -- its quadratic form is `||P_V m||^2`.
+
+HISTORY. The pre-existing frontier statement `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_1_compact_angleList_classification` remains `sorry` and is not on this row's evidence path. Unlike the Theorem 3.1 frontier statement it was at least not vacuous.
+- **Next action:** Nothing for the mathematics. Optionally: state the eigenvalue list as a decreasing sequence (`compactAngleEigenvalueList`, already defined in Frontier/Section3 as the approximation-number sequence) and prove it equivalent to the dimension function, so the frontier statement can be grounded by `:=` rather than left as a parallel `sorry`.
 
 #### Proposition 3.5: Angle commutation and eigenspace geometry
 
