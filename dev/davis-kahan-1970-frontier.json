@@ -473,10 +473,10 @@
     },
     {
       "id": "s4-prop4-3",
-      "title": "Proposition 4.3 squared displacement",
+      "title": "Proposition 4.3 squared displacement (Ky Fan level)",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section4",
-      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section4.proposition4_3_squaredDisplacement_approximationNumbers",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section4.proposition4_3_squaredDisplacement_kyFan",
       "dependencies": [
         "base-acute-direct-rotation"
       ],
@@ -484,7 +484,7 @@
         "DK-4.3-prop"
       ],
       "priority": "medium",
-      "notes": "",
+      "notes": "RESTATED 2026-08-05.  The node used to point at `proposition4_3_squaredDisplacement_approximationNumbers`, pointwise domination of the individual approximation numbers.  That statement is FALSE: pointwise domination implies Ky Fan majorisation and hence Proposition 4.4, which this repository refutes (`shortRotation_fullDisplacement_refuted`, census row DK-4.4-prop).  Refuting configuration, computed: R^4, `U = span(e1,e2)`, `V` at principal angles pi/4 and pi/4 (acute), competitor carrying `U` onto `V` by a quarter turn in the V-frame and `U-perp` onto `V-perp` by the identity; then `a_2(1-D) = 0.765367 > 0.261052 = a_2(1-W)`.  Proposition 4.3 itself survives, because its Ky Fan sums are sums of SQUARES and those are dominated at every k.  The node now points at the Ky Fan form, which is what a unitarily invariant norm sees; it is still open.",
       "external": false
     },
     {
