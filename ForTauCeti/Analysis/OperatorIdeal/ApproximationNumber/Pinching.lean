@@ -96,6 +96,49 @@ theorem kyFanApproximationGauge_reflectionConjugate_le
       mul_le_mul h1 hJ (norm_nonneg _) (by linarith)
     _ = kyFanApproximationGauge k A := by ring
 
+omit [CompleteSpace E] in
+/-- **Conjugating by a contraction pair cannot increase a Ky Fan approximation gauge.**
+
+The two-sided ideal inequality with both norms at most one.  Stated for a bare pair of
+contractions rather than for an isometry equivalence, so that the equality below can apply
+it twice with the roles exchanged. -/
+theorem kyFanApproximationGauge_conj_le {F : Type v} [NormedAddCommGroup F]
+    [InnerProductSpace ℂ F] [CompleteSpace F] {L : E →L[ℂ] F} {R : F →L[ℂ] E}
+    (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) (A : E →L[ℂ] E) (k : ℕ) :
+    kyFanApproximationGauge k (L ∘L A ∘L R) ≤ kyFanApproximationGauge k A := by
+  refine (kyFanApproximationGauge_comp_le (𝕜 := ℂ) k L A R).trans ?_
+  have hnn : 0 ≤ kyFanApproximationGauge k A := kyFanApproximationGauge_nonneg k A
+  have h1 : ‖L‖ * kyFanApproximationGauge k A ≤ 1 * kyFanApproximationGauge k A :=
+    mul_le_mul_of_nonneg_right hL hnn
+  calc
+    ‖L‖ * kyFanApproximationGauge k A * ‖R‖ ≤ 1 * kyFanApproximationGauge k A * 1 :=
+      mul_le_mul h1 hR (norm_nonneg _) (by linarith)
+    _ = kyFanApproximationGauge k A := by ring
+
+/-- **Ky Fan approximation gauges are invariant under conjugation by an isometry
+equivalence**, in the form the block chart needs: a contraction pair with `R ∘L L = 1`.
+
+Only the one-sided hypothesis `R ∘L L = 1` is used.  The `≤` direction is
+`kyFanApproximationGauge_conj_le`; the `≥` direction is the *same* lemma with `L` and `R`
+exchanged, applied to `L ∘L A ∘L R`, since `R ∘L (L ∘L A ∘L R) ∘L L = A`.  Proving it once
+and applying it twice is what keeps this off a self-referential rewrite. -/
+theorem kyFanApproximationGauge_conj_eq {F : Type v} [NormedAddCommGroup F]
+    [InnerProductSpace ℂ F] [CompleteSpace F] {L : E →L[ℂ] F} {R : F →L[ℂ] E}
+    (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) (hRL : R ∘L L = ContinuousLinearMap.id ℂ E)
+    (A : E →L[ℂ] E) (k : ℕ) :
+    kyFanApproximationGauge k (L ∘L A ∘L R) = kyFanApproximationGauge k A := by
+  refine le_antisymm (kyFanApproximationGauge_conj_le hL hR A k) ?_
+  have hRLapp : ∀ y : E, R (L y) = y := by
+    intro y
+    have h := congrArg (fun T : E →L[ℂ] E => T y) hRL
+    simpa using h
+  have hcomp : R ∘L (L ∘L A ∘L R) ∘L L = A := by
+    ext x
+    simp only [ContinuousLinearMap.comp_apply]
+    rw [hRLapp x, hRLapp (A x)]
+  have h := kyFanApproximationGauge_conj_le hR hL (L ∘L A ∘L R) k
+  rwa [hcomp] at h
+
 /-- **Pinching contracts every Ky Fan approximation gauge.**
 
 `∑_{n<k} aₙ(P_U A P_U + P_Uᗮ A P_Uᗮ) ≤ ∑_{n<k} aₙ(A)`.
