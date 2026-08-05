@@ -1113,6 +1113,23 @@ and `Δ = P_U − P_V`.
    `‖P_V x‖² = 1 − ‖Δ x‖²`.  Dually for a unit `x ∈ Uᗮ`: `W x ∈ Vᗮ`, so
    `re ⟪W x, x⟫ ≤ ‖P_{Vᗮ} x‖`, and `Δ x = −P_V x` gives
    `‖P_{Vᗮ} x‖² = 1 − ‖Δ x‖²`.
+3b. **Where the near-minimizer can be taken, and why that matters.**
+   `canonicalAbsoluteValue_commutes_projection` says `C` commutes with `P_U`, so `C`
+   *reduces* `U`; hence `inf spec C = min (inf spec C|_U) (inf spec C|_Uᗮ)` and a
+   near-minimizer of `⟪C x, x⟫` may always be chosen **inside `U` or inside `Uᗮ`** —
+   which is exactly where step 3's competitor bound applies.  This also opens a
+   second route to step 2 that avoids the square root entirely: for a unit
+   `x ∈ U`, `‖C x‖ = ‖S x‖ = ‖P_V x‖`, so if `x` is additionally a *near
+   eigenvector* of `C` at the bottom of its spectrum then `⟪C x, x⟫ ≈ ‖C x‖` and
+   step 3 gives `re ⟪W x, x⟫ ≤ ‖P_V x‖ ≈ ⟪C x, x⟫` directly.  That trades
+   `CFC.sqrt_le_sqrt` — which is unavailable here, see
+   `smul_one_le_adjoint_mul_canonicalIntertwiner` — for the fact that the bottom of
+   a positive self-adjoint operator's spectrum lies in its approximate point
+   spectrum.  **Both routes need spectral input; neither needs the square root and
+   the complex structure at once.**  Note also that the naive shortcut fails: for a
+   unit `x ∈ U` both `re ⟪W x, x⟫` and `⟪C x, x⟫` are bounded by the *same* number
+   `‖P_V x‖`, so an arbitrary `x` gives no comparison — the near-eigenvector
+   property is doing real work.
 4. `Submodule.norm_starProjection_sub_eq_max` says
    `‖Δ‖ = max ‖P_{Vᗮ} P_U‖ ‖P_{Uᗮ} P_V‖`, and those two numbers are exactly
    `sup_{x ∈ U, ‖x‖=1} ‖Δ x‖` and `sup_{x ∈ Uᗮ, ‖x‖=1} ‖Δ x‖`.  Take near-maximizers
