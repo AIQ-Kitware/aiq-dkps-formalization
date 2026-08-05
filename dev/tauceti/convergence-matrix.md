@@ -98,9 +98,9 @@ NOT: `copy ForMathlib → ForTauCeti → submit`.
 - **Phase-0 decision RECORDED (2026-07-24, edward): the probability/statistics
   subsystem is its own convergence cluster.** Evidence gathered at the
   declaration level: the chain is *linear* —
-  `SampleCovariance → MatrixConcentration → EntrywiseEigenvalue →
+  `SampleSecondMoment → MatrixConcentration → EntrywiseEigenvalue →
   CourantFischer` — and the trio
-  `{SampleCovariance, MatrixConcentration, EntrywiseEigenvalue}` has **zero**
+  `{SampleSecondMoment, MatrixConcentration, EntrywiseEigenvalue}` has **zero**
   paper/DavisKahan consumers (only the `ForMathlib.lean` aggregate and
   `Challenge/MathlibPending/*` leaderboards). Its remaining ForMathlib deps
   (`EntrywiseOpNorm`, `SpectralFunctionMeasurable`, `CfcMeasurable`) have only
@@ -110,6 +110,8 @@ NOT: `copy ForMathlib → ForTauCeti → submit`.
   `ForTauCeti/Probability/Moments/**` + the matrix-measurability files under
   `ForTauCeti/Analysis/Matrix/**`), its own roadmap area and PR slice —
   *not* DavisKahan-bound (the material is reusable, Mathlib-candidate-grade).
+  (`SampleSecondMoment` was called `SampleCovariance` when this row was written;
+  renamed 2026-08-05 because the definition subtracts no sample mean.)
   Because the firewall forbids `ForMathlib → ForTauCeti` imports and the chain
   is linear with no external consumers, "severing
   `EntrywiseEigenvalue → CourantFischer`" is realized not by refactoring the

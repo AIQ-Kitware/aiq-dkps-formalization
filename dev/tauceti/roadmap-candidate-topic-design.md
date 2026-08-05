@@ -270,7 +270,7 @@ it is free. Proposed: `Probability/Moments/CenteredScatter.lean`.
 
 **DONE 2026-07-29** (lane PLACE-GRAM). The module is now
 `ForTauCeti/Probability/Moments/CenteredScatter.lean`, beside `SampleMean`,
-`SampleCovariance`, `Variance` and `MatrixConcentration`, and the T20 entry in
+`SampleSecondMoment`, `Variance` and `MatrixConcentration`, and the T20 entry in
 `scripts/check_tauceti_roadmap_topics.py` follows it.
 **Correction to "imported by nothing":** nothing in `ForTauCeti` imports it, but
 `DkpsQuench2026/Spectral/GramSpectrum.lean` does. One import line, repointed in

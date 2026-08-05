@@ -21,10 +21,11 @@ mistake before it was written down:
     declarations in one lane were anonymous.
 
 3.  **Exclusions are by rule, not by hand-list**, so they stay correct as the tree
-    moves.  In particular `SpectralTheory/Compatibility.lean` is deliberately
-    excluded: it is a migration shim of `abbrev` re-exports kept so literature
-    scaffolds keep compiling, and documenting its 45 declarations would entrench a
-    file that is scheduled for deletion.
+    moves.  The rule for `SpectralTheory/Compatibility.lean` -- a migration shim of
+    `abbrev` re-exports, excluded so that documenting its 45 declarations would not
+    entrench a file scheduled for deletion -- was removed on 2026-08-05 when that
+    deletion happened.  An exclusion whose target no longer exists is dead weight
+    that reads as a live policy, which is the failure the next paragraph describes.
 
     **A rule is only as good as its reason, and reasons expire.**  This file once
     excluded `DavisKahan/Interop/Spectra/` because "Spectra removal deletes this
@@ -64,9 +65,6 @@ ROOTS = ["ForTauCeti", "DavisKahan"]
 EXCLUDED = [
     # Outside `defaultTargets`; deliberately parked (see dev/LANES.md).
     (re.compile(r"^DavisKahan/Experimental/"), "outside defaultTargets, parked"),
-    # Migration shim: documenting it would entrench a file scheduled for deletion.
-    (re.compile(r"^DavisKahan/SpectralTheory/Compatibility\.lean$"),
-     "migration shim of abbrev re-exports; delete, do not document"),
 ]
 
 KEYWORDS = "theorem|lemma|def|abbrev|instance|structure|class|opaque|axiom"

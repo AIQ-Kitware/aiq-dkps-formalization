@@ -29,7 +29,7 @@ probability `≥ 1 − n² v / η²`, every entry is within `η`; whence (entryw
 eigenvalue perturbation) every sorted eigenvalue of `Shat(ω)` is within `n · η` of
 the corresponding eigenvalue of `A`.
 
-This is the elementary route to sample-covariance / empirical-Gram eigenvalue
+This is the elementary route to sample second-moment / empirical-Gram eigenvalue
 concentration — no matrix Bernstein/Hoeffding needed (at the cost of the loose
 `n`/`n²` constants).
 

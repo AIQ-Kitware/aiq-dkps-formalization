@@ -321,8 +321,8 @@ RUNGS: list[tuple[str, str, list[str]]] = [
     ("S", "Sample moments and matrix concentration (T20)", [
         "Probability.Moments.CenteredScatter",
         "Probability.Moments.MatrixConcentration",
-        "Probability.Moments.SampleCovariance",
         "Probability.Moments.SampleMean",
+        "Probability.Moments.SampleSecondMoment",
         "Probability.Moments.Variance",
     ]),
     ("T", "Matrix rank factorization and positive semidefiniteness (T21)", [

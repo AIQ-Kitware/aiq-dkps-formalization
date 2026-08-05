@@ -562,7 +562,9 @@ Renaming the `def` alone is 30 references in four files and takes ten minutes. B
 also embedded in **six theorem names** — `abs_sortedEig_sub_le_of_entry_le`,
 `abs_sortedEig_le_of_entry_le`, `measure_forall_sortedEig_ge_ge`,
 `measure_forall_abs_sortedEig_sub_le_ge`, `measure_forall_sampleCovariance_sortedEig_ge_ge` and the
-`Matrix.`-namespaced form — and one of those, `TauCeti.measure_forall_sortedEig_ge_ge`, is **pinned
+`Matrix.`-namespaced form (all six are quoted here as the **historical** names they bore on
+2026-07-27; `sortedEig` became `sortedEigenvalues` in `37df3c57`, and `sampleCovariance` became
+`sampleSecondMoment` on 2026-08-05) — and one of those, `TauCeti.measure_forall_sortedEig_ge_ge`, is **pinned
 by name in `comparator/pending-matrix-concentration.json`**. So the real change is a `def`, six
 theorems and a comparator config, and renaming the `def` alone leaves the library incoherent: a
 `sortedEigenvalues` definition with a `sortedEig` theorem family around it, which is worse than the

@@ -124,7 +124,7 @@ of the reducing-subspace theorem.
 | SampleMeanMSE | `integral_norm_sq_average_sub_of_iid`, `integral_norm_sq_average_sub_le_of_bound` | vector-valued (scalar variance exists); confirm not trivially derivable |
 | NearIsometry | `LinearMap.exists_linearIsometryEquiv_norm_sub_le`, `ContinuousLinearMap.exists_linearIsometryEquiv_norm_sub_le` | quantitative polar factor; niche |
 | CfcMeasurable | `measurable_cfc_comp`, `measurableSet_exists_mem_le` | involved proof; destination unsettled |
-| MatrixConcentration | `measure_forall_sortedEig_ge_ge` (+ entrywise→operator helpers) | elementary route gives **loose `n`/`n²` constants**; Mathlib would want a matrix-Bernstein sharpening |
+| MatrixConcentration | `measure_forall_sortedEigenvalues_ge_ge` (+ entrywise→operator helpers) | elementary route gives **loose `n`/`n²` constants**; Mathlib would want a matrix-Bernstein sharpening |
 | SpectralFunctionMeasurable | `Matrix.measurable_specTransform` | novel, but **deliberately unused** by the final discharge; no settled home. Its (matrix-valued measurability) statement is not cleanly Mathlib-only expressible, so it carries an **axiom-audit `Leaderboard` only** — no Mathlib-only `Conformance`/comparator config |
 | ProbabilityQoL | `one_sub_measure_compl_le`, `meas_gt_le_ofReal_integral_sq_div_sq` | **too small** to stand alone |
 | TendstoInMeasure | `tendstoInMeasure_of_tendsto_measure_dist_le_rate` | verify it is substantive vs. a thin wrapper |

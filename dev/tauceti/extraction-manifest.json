@@ -192,7 +192,7 @@
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
         "ForTauCeti.MeasureTheory.CfcMeasurable",
         "ForTauCeti.Probability.Moments.MatrixConcentration",
-        "ForTauCeti.Probability.Moments.SampleCovariance",
+        "ForTauCeti.Probability.Moments.SampleSecondMoment",
         "ForTauCeti.Probability.Moments.SampleMean",
         "ForTauCeti.Probability.Moments.Variance"
       ]
@@ -1689,8 +1689,8 @@
       "source_module": "ForMathlib.Probability.Moments.SampleCovariance",
       "source_declarations": [],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Probability.Moments.SampleCovariance",
-      "final_tauceti_module": "TauCeti.Probability.Moments.SampleCovariance",
+      "staging_module": "ForTauCeti.Probability.Moments.SampleSecondMoment",
+      "final_tauceti_module": "TauCeti.Probability.Moments.SampleSecondMoment",
       "ownership_class": "tauceti",
       "roadmap_target": "probability-concentration",
       "provenance_class": "moved; introduced at Davis--Kahan commit f9309f7; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
