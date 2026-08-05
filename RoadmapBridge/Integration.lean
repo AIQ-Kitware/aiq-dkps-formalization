@@ -26,11 +26,10 @@ The seams are not hypothetical.  All four are recorded regressions or review fin
    seminorm, the Schatten `S₂` norm and the Hilbert--Schmidt energy are four separate
    definitions in four modules.  Three theorems relate them; this file checks that the
    composite chain closes, which no one of the three does on its own.
-3. **A signature pinned as data by an immutable file.**  `TauCeti.Matrix.rank_le_iff_exists_eq_mul`
-   carries `[DecidableEq n]` because `Challenge/MathlibPending/RankFactorization/Conformance.lean`
-   restates it that way and is immutable under `AGENTS.md`.  The instance is never used.  The
-   examples below show the instance-free signature is *derivable*, so the roadmap can propose
-   it without waiting for the Challenge statement to move.
+3. **A signature that two files had to agree on.**  `TauCeti.Matrix.rank_le_iff_exists_eq_mul`
+   carried an unused `[DecidableEq n]` only because
+   `Challenge/MathlibPending/RankFactorization/Conformance.lean` restated it that way.  Both
+   have dropped it; the examples below hold the delivered signature to that shape.
 4. **A deleted compatibility layer.**  `DavisKahan/SpectralTheory/Compatibility.lean` held 46
    forwarding declarations and was removed.  This file imports canonical owner modules
    directly and names nothing from that layer.
@@ -141,14 +140,18 @@ end Frobenius
 
 /-! ## Seam 3 — rank factorization without `[DecidableEq n]`
 
-The delivered theorems carry `[DecidableEq n]` and never use it; the instance is pinned as
-*data* by an immutable `Conformance.lean`, so it cannot be dropped at the definition site
-(`ForTauCeti/LinearAlgebra/Matrix/RankFactorization.lean` records that decision in full).
+The three theorems no longer carry `[DecidableEq n]`.  It appeared in their type and was used
+only by the `Pi.single` witness inside one proof, where `classical` now supplies it; the
+conformance statement moved in the same commit.
 
-These examples restate all three at the signature the roadmap should propose — `[Field 𝕜]`,
-`[Fintype m]`, `[Fintype n]`, no `[DecidableEq n]` — and discharge each with `classical`.
-That is the whole content of the claim "the instance is a proof artifact": if it were load
-bearing, `classical` could not supply it. -/
+These examples restate all three at the signature the roadmap proposes — `[Field 𝕜]`,
+`[Fintype m]`, `[Fintype n]` — and discharge each by **direct application**, with no
+`classical` and no instance argument.  That is the check worth having: a `classical` here
+would hide a re-added instance, and applying the theorem term-for-term cannot.
+
+`[Fintype m]` is the roadmap's binder, not the library's — `Matrix.rank` needs only
+`[Fintype n]`, so the delivered theorems are strictly more general than these examples and
+elaborate with the extra instance simply unused. -/
 
 section RankFactorization
 
@@ -156,25 +159,22 @@ open Module (finrank)
 
 /-- The exact rank factorization, inner dimension `Fin M.rank`. -/
 example {𝕜 m n : Type*} [Field 𝕜] [Fintype m] [Fintype n] (M : Matrix m n 𝕜) :
-    ∃ (L : Matrix m (Fin M.rank) 𝕜) (R : Matrix (Fin M.rank) n 𝕜), M = L * R := by
-  classical
-  exact TauCeti.Matrix.exists_eq_mul_rank M
+    ∃ (L : Matrix m (Fin M.rank) 𝕜) (R : Matrix (Fin M.rank) n 𝕜), M = L * R :=
+  TauCeti.Matrix.exists_eq_mul_rank M
 
 /-- The zero-padded form, for any `r ≥ M.rank`. -/
 example {𝕜 m n : Type*} [Field 𝕜] [Fintype m] [Fintype n]
     (M : Matrix m n 𝕜) {r : ℕ} (h : M.rank ≤ r) :
-    ∃ (L : Matrix m (Fin r) 𝕜) (R : Matrix (Fin r) n 𝕜), M = L * R := by
-  classical
-  exact TauCeti.Matrix.exists_eq_mul_of_rank_le M h
+    ∃ (L : Matrix m (Fin r) 𝕜) (R : Matrix (Fin r) n 𝕜), M = L * R :=
+  TauCeti.Matrix.exists_eq_mul_of_rank_le M h
 
 /-- **The headline characterization**, and the declaration `Leaderboard.lean` names in its
 axiom audit: `M.rank ≤ r ↔ ∃ L R, M = L * R`.  This is the roadmap's actual
 rank-factorization result, not a weakened surrogate — the forward direction is the
 factorization and the reverse is the rank bound. -/
 example {𝕜 m n : Type*} [Field 𝕜] [Fintype m] [Fintype n] (M : Matrix m n 𝕜) (r : ℕ) :
-    M.rank ≤ r ↔ ∃ (L : Matrix m (Fin r) 𝕜) (R : Matrix (Fin r) n 𝕜), M = L * R := by
-  classical
-  exact TauCeti.Matrix.rank_le_iff_exists_eq_mul M r
+    M.rank ≤ r ↔ ∃ (L : Matrix m (Fin r) 𝕜) (R : Matrix (Fin r) n 𝕜), M = L * R :=
+  TauCeti.Matrix.rank_le_iff_exists_eq_mul M r
 
 end RankFactorization
 

@@ -43,27 +43,28 @@ additions to `Mathlib/LinearAlgebra/Matrix/Rank.lean`
 (rank factorization).
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 
-## Known linter warnings, and why they stay
+## `[DecidableEq n]`, and why it is gone
 
-Mathlib's `linter.unusedDecidableInType` flags `[DecidableEq n]` on the three theorems
-below: it is in their type and never used, and the linter's advice is to drop it and call
-`classical` in the proof.  That advice is right for Mathlib and wrong for us, because the
-same three signatures are pinned as **data**: `Challenge/MathlibPending/RankFactorization/`
-restates them in an immutable `Conformance.lean` — with the identical
-`variable {𝕜 m n : Type*} [Field 𝕜] [Fintype n] [DecidableEq n]` line — and
-`Leaderboard.lean` names `TauCeti.Matrix.rank_le_iff_exists_eq_mul` in `#print axioms`.
-Dropping the instance here would change the signature and desynchronise the two, and
-`AGENTS.md` makes a `Conformance.lean` statement immutable, so it cannot move to meet us.
+The three theorems below used to carry `[DecidableEq n]`.  It sat in their type and was
+never used there — Mathlib's `linter.unusedDecidableInType` said exactly that, and its
+advice is to drop the instance and call `classical` in the proof, which is what they now do.
+Only `exists_eq_mul_rank` needs it at all, for the `Pi.single j 1` witness that puts column
+`j` in the column space.
 
-The disagreement is therefore real and is not this file's to settle: the conformance
-statement and the eventual Mathlib statement cannot both be right, and the Mathlib one is
-the one without `[DecidableEq n]`.  What this file *can* do is stop the disagreement from
-costing the whole library its gate.  Each of the three carries a
-`set_option linter.unusedDecidableInType false in` naming this note, so the exception is
-exactly three declarations wide and visible at the point it applies — and
-`lean_lib ForMathlib` can then carry `warningAsError`, which it now does.  Before that,
-three known warnings kept the gate off and so let *every* new warning through as well; six
-had accumulated unnoticed in the modules the target was not even building.
+That advice was resisted for one reason.  The same three signatures were restated, with the
+identical `variable {𝕜 m n : Type*} [Field 𝕜] [Fintype n] [DecidableEq n]` line, in
+`Challenge/MathlibPending/RankFactorization/Conformance.lean`, and the two have to agree —
+`Leaderboard.lean` names `TauCeti.Matrix.rank_le_iff_exists_eq_mul` in its dependency audit
+and the comparator checks that challenge and solution export the same statement.  The
+resolution is that a challenge statement **follows** the API rather than pinning it:
+challenges validate an implementation through the comparator, they are not the target.  The
+conformance statement moved in the same commit, so the two still export identically.
+
+Three `set_option linter.unusedDecidableInType false in` lines went with the instance.  The
+one that remains is on `eq_of_mul_left_cancel`, where `[Fintype p]` and `[DecidableEq p]`
+really are used — by `*ᵥ` and `Pi.single` in the proof — and are quantified over `p`, not
+over the `n` of the public signature.  That is a different question from the one the review
+raised.
 
 ## Provenance
 
@@ -112,10 +113,8 @@ namespace TauCeti.Matrix
 open Module (finrank)
 open _root_.Matrix
 
-variable {𝕜 m n : Type*} [Field 𝕜] [Fintype n] [DecidableEq n]
+variable {𝕜 m n : Type*} [Field 𝕜] [Fintype n]
 
--- `[DecidableEq n]` is pinned by an immutable Challenge statement; see the module note.
-set_option linter.unusedDecidableInType false in
 /--
 **Rank factorization (exact).** Every matrix factors as `M = L * R` with inner
 dimension `Fin M.rank`: `L` lists a basis of the column space of `M` and `R` the
@@ -123,6 +122,8 @@ coordinates of each column of `M` in that basis.
 -/
 theorem exists_eq_mul_rank (M : Matrix m n 𝕜) :
     ∃ (L : Matrix m (Fin M.rank) 𝕜) (R : Matrix (Fin M.rank) n 𝕜), M = L * R := by
+  -- `Pi.single` below needs `DecidableEq n`, which the statement does not.
+  classical
   -- A basis of the column space, indexed by `Fin M.rank`.
   have hdim : finrank 𝕜 (LinearMap.range M.mulVecLin) = M.rank := rfl
   let b : Module.Basis (Fin M.rank) 𝕜 (LinearMap.range M.mulVecLin) :=
@@ -144,8 +145,6 @@ theorem exists_eq_mul_rank (M : Matrix m n 𝕜) :
   rw [Finset.sum_congr rfl fun k _ => mul_comm ((b k : m → 𝕜) i) (b.repr ⟨_, hcol j⟩ k)]
   exact this.symm
 
--- `[DecidableEq n]` is pinned by an immutable Challenge statement; see the module note.
-set_option linter.unusedDecidableInType false in
 /--
 **Rank factorization (padded).** A matrix `M` with `M.rank ≤ r` factors as
 `M = L * R` with `L : Matrix m (Fin r) 𝕜` and `R : Matrix (Fin r) n 𝕜`
@@ -179,8 +178,6 @@ theorem exists_eq_mul_of_rank_le (M : Matrix m n 𝕜) {r : ℕ} (h : M.rank ≤
       fun k _ hk => dif_neg (by simpa using hk)).symm
   rw [Matrix.mul_apply, hsum, ← Matrix.mul_apply, ← hM]
 
--- `[DecidableEq n]` is pinned by an immutable Challenge statement; see the module note.
-set_option linter.unusedDecidableInType false in
 /--
 **Rank-`r` factorization characterization.** A matrix has rank at most `r` if
 and only if it factors through `Fin r`: `M.rank ≤ r ↔ ∃ L R, M = L * R`.
@@ -213,7 +210,6 @@ theorem injective_mulVecLin_of_rank_eq {L : Matrix m (Fin r) 𝕜} (h : L.rank =
   have : finrank 𝕜 (LinearMap.ker L.mulVecLin) = 0 := by omega
   exact Submodule.finrank_eq_zero.mp this
 
-omit [DecidableEq n] in
 /-- A factorization at the exact rank forces the left factor to have that rank: it is at most
 `r` because it has `r` columns, and at least `r` because it dominates `M`. -/
 theorem rank_left_factor_eq {M : Matrix m n 𝕜} {L : Matrix m (Fin r) 𝕜}
@@ -223,7 +219,6 @@ theorem rank_left_factor_eq {M : Matrix m n 𝕜} {L : Matrix m (Fin r) 𝕜}
     _ = (L * R).rank := by rw [h]
     _ ≤ L.rank := Matrix.rank_mul_le_left L R
 
-omit [DecidableEq n] in
 /-- At the exact rank the left factor spans the same column space as `M`. -/
 theorem range_left_factor_eq {M : Matrix m n 𝕜} {L : Matrix m (Fin r) 𝕜}
     {R : Matrix (Fin r) n 𝕜} (hM : M.rank = r) (h : M = L * R) :
@@ -235,7 +230,7 @@ theorem range_left_factor_eq {M : Matrix m n 𝕜} {L : Matrix m (Fin r) 𝕜}
       show finrank 𝕜 (LinearMap.range L.mulVecLin) = L.rank from rfl, hM,
       rank_left_factor_eq hM h]
 
-omit [Fintype n] [DecidableEq n] in
+omit [Fintype n] in
 /-- **The lifting step.**  A matrix whose column space sits inside another's factors through
 it. `Fin r → 𝕜` is free, hence projective, so `Module.projective_lifting_property` supplies the
 factor directly. -/
@@ -255,7 +250,7 @@ theorem exists_mul_eq_of_range_le {L L' : Matrix m (Fin r) 𝕜}
   rwa [← Matrix.toLin'_apply' L, ← Matrix.toLin'_apply' L', LinearMap.toMatrix'_comp,
     LinearMap.toMatrix'_toLin', LinearMap.toMatrix'_toLin'] at this
 
-omit [Fintype n] [DecidableEq n] in
+omit [Fintype n] in
 -- `Fintype p` and `DecidableEq p` are used by `*ᵥ` and `Pi.single` in the proof but do not
 -- appear in the statement, which is exactly what these two linters flag.
 set_option linter.unusedFintypeInType false in
@@ -273,7 +268,6 @@ theorem eq_of_mul_left_cancel {p : Type*} [Fintype p] [DecidableEq p]
   have := congrFun (hmv (Pi.single j 1)) i
   simpa [Matrix.mulVec, dotProduct, Pi.single_apply] using this
 
-omit [DecidableEq n] in
 /-- **Milestone A2 — uniqueness of a rank factorization.**
 
 At the exact rank the two factors are determined up to the obvious `GL` action: `L' = L g`
