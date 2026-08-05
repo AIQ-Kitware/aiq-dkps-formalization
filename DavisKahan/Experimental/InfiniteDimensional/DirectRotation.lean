@@ -856,6 +856,56 @@ theorem norm_canonicalIntertwiner_apply_sq_ge (U V : Submodule 𝕜 E)
   nlinarith [norm_nonneg (D x), norm_nonneg x, norm_nonneg D, hbound,
     sq_nonneg (‖D‖ * ‖x‖ - ‖D x‖)]
 
+omit [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
+/-- **On the source subspace, `Δ` and the target projection are complementary**:
+for `x ∈ U`, `‖Δ x‖² = ‖x‖² − ‖P_V x‖²`, because `Δ x = x − P_V x` there and
+`x − P_V x ⊥ V`.
+
+This is what turns the competitor bound below into a statement about `‖Δ‖`. -/
+theorem norm_projection_sub_apply_sq_of_mem (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {x : E} (hx : x ∈ U) :
+    ‖(projection U - projection V : E →L[𝕜] E) x‖ ^ 2 =
+      ‖x‖ ^ 2 - ‖V.starProjection x‖ ^ 2 := by
+  have hPU : U.starProjection x = x := Submodule.starProjection_eq_self_iff.mpr hx
+  have happ : (projection U - projection V : E →L[𝕜] E) x = x - V.starProjection x := by
+    rw [ContinuousLinearMap.sub_apply, hPU]
+  rw [happ, norm_sub_sq (𝕜 := 𝕜)]
+  have hre : RCLike.re ⟪x, V.starProjection x⟫_𝕜 = ‖V.starProjection x‖ ^ 2 := by
+    rw [← Submodule.inner_starProjection_left_eq_right]
+    simpa using Submodule.re_inner_starProjection_eq_normSq (K := V) x
+  rw [hre]
+  ring
+
+omit [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
+/-- **The competitor bound.**  A unitary carrying `U` onto `V` cannot do better
+on a source vector than the target projection allows:
+`re ⟪W x, x⟫ ≤ ‖P_V x‖ ‖x‖` for `x ∈ U`.
+
+`W x` lies in `V`, so the inner product only sees `P_V x`, and Cauchy--Schwarz
+plus `‖W x‖ = ‖x‖` finishes.  Together with
+`norm_projection_sub_apply_sq_of_mem` this is step 3 of the route on
+`directRotation_minimal`; the dual statement on `Uᗮ` is the same argument with
+`Vᗮ`. -/
+theorem re_inner_apply_le_of_mapsTo
+    {W : E →L[𝕜] E} (hW : IsUnitaryOperator W) {U V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hmap : U.map W.toLinearMap = V) {x : E} (hx : x ∈ U) :
+    RCLike.re ⟪W x, x⟫_𝕜 ≤ ‖V.starProjection x‖ * ‖x‖ := by
+  have hWx : W x ∈ V := by
+    rw [← hmap]
+    exact Submodule.mem_map_of_mem hx
+  have hproj : V.starProjection (W x) = W x :=
+    Submodule.starProjection_eq_self_iff.mpr hWx
+  have hinner : ⟪W x, x⟫_𝕜 = ⟪W x, V.starProjection x⟫_𝕜 := by
+    rw [← hproj, Submodule.inner_starProjection_left_eq_right, hproj]
+  rw [hinner]
+  calc RCLike.re ⟪W x, V.starProjection x⟫_𝕜
+      ≤ ‖W x‖ * ‖V.starProjection x‖ := re_inner_le_norm _ _
+    _ = ‖V.starProjection x‖ * ‖x‖ := by rw [hW.1 x]; ring
+
 /-! ### Displacement of the direct rotation
 
 `directRotation_minimal` was filed as needing the Halmos two-projection
