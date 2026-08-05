@@ -204,7 +204,9 @@ Gates: DK-8.1-thm (proved_outside_build), DK-8.2-thm (proved_outside_build)
 - **Blocked by:** `exact-source-wrappers`
 - **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`, `TauCeti.DavisKahanExt.tanTheta_spectrum`
 - **Assessment:** Finite arbitrary-UI-norm and Hilbert-space operator-norm forms are compiled. The source Hilbert-space arbitrary-UI-norm residual and perturbation statements remain open.
-- **Next action:** Reuse the corrected directed Theorem 6.3 Ky-Fan core for the equal-rank source theorem and add the full perturbation companion.
+
+**2026-08-05: the Theorem 6.3 core this row is told to reuse is now unconditional.** It had been stated relative to a tangent representative that nothing constructed; `ExactTanTheta.theorem63DirectedTangent` is now that representative and `theorem6_3_all_kyFan_core_directedTangent` needs no hypothesis beyond the printed ones.  See DK-6.3-thm for the details.  What remains for this row is unchanged: the source Hilbert-space arbitrary-UI-norm residual and perturbation statements at EQUAL rank -- Theorem 6.3 assumes `rank Z < rank V`, and the strict inequality is genuinely used only to make the directed reading meaningful, so the equal-rank statement needs its own argument, not a specialisation.
+- **Next action:** Reuse `theorem6_3_all_kyFan_core_directedTangent` (now unconditional) for the equal-rank source theorem and add the full perturbation companion.  Do not re-derive a tangent representative; one exists.
 
 #### Section 2, sin 2 theta theorem: Double-angle sine theorem
 
@@ -603,9 +605,15 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 - **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
 - **Mathematics:** A strict inequality of source-coordinate Hilbert dimensions, the Rayleigh–Ritz residual condition, and a one-sided gap control a directed rectangular tangent representative defined from the singular values of E₀*F₁.
-- **Current Lean references:** `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_all_kyFan_core`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal`
+- **Current Lean references:** `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_all_kyFan_core`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem63DirectedTangent`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_all_kyFan_core_directedTangent`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal_directedTangent`
 - **Assessment:** Bounded finite-source Theorem 6.3 proved axiom-clean in DavisKahan.TanTheta.Theorem63FiniteSource (theorem6_3_all_kyFan_core, theorem6_3_generalizedTanTheta_source_ideal); promoted out of Scratch.
-- **Next action:** Compile the new production theorem. The equal-dimension Section 2 tangent theorem and the Appendix arbitrary-ideal unbounded passage remain separate obligations.
+
+**A HYPOTHESIS WITH NO PRODUCER, FOUND AND DISCHARGED 2026-08-05.** Every compiled form of Theorem 6.3 quantified over a `tanTheta0` satisfying `HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0`, and a grep for *producers* rather than consumers showed that nothing anywhere in the repository ever constructed one.  The compiled theorem was therefore a conditional whose antecedent had no witness -- strictly weaker than the printed theorem, which takes the tangent representative for granted.  The row said `proved_in_build`, which was true of the declarations and misleading about the mathematics.
+
+THE WITNESS.  `ExactTanTheta.theorem63DirectedTangent`: diagonal in the right singular basis of the directed sine block, with entries `tan (arcsin s_i)`.  `hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent` proves it has the required approximation numbers.  Two facts do the work: the singular values of a diagonal operator with antitone nonnegative diagonal are the diagonal itself, and `t |-> t / sqrt(1 - t^2)` is increasing on `[0,1)`, so the entries inherit the sine block's ordering.  Post-composition with the inclusion `Z -> H` does not move approximation singular values (`approximationSingularValue_subtypeL_comp`), and above `dim Z` both sides vanish (`approximationSingularValue_eq_zero_of_finrank_le`).
+
+**NO NEW HYPOTHESIS WAS NEEDED.** Finiteness of the entries requires `s_i < 1`, and `theorem63_singularValues_sine_lt_one` -- already in the file -- derives exactly that from the source gap, i.e. from the same `hCompressionUpper` and `hUnwantedLower` Theorem 6.3 assumes.  So `theorem6_3_all_kyFan_core_directedTangent` and `theorem6_3_generalizedTanTheta_source_ideal_directedTangent` carry precisely the printed hypotheses.  Both are in the default build and axiom-clean, and are wrapped in `RemainingSourceSurface` as `theorem6_3_all_kyFan_core_unconditional` and `theorem6_3_generalizedTanTheta_source_ideal_unconditional`.
+- **Next action:** The tangent-representative conditional is discharged.  Two obligations remain and they are unchanged in kind: the equal-dimension Section 2 tangent theorem (Theorem 6.3 assumes `rank Z < rank V`; Section 2 needs equality) and the Appendix arbitrary-ideal unbounded passage.
 
 ### Section 6 appendix
 
