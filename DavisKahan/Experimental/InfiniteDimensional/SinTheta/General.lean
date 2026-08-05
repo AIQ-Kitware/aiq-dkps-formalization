@@ -939,12 +939,173 @@ theorem SymmetricNormIdeal.operatorAbsoluteValue_mem_and_gauge_eq
       (operatorAbsoluteValue_nonneg T).isSelfAdjoint hgram
   exact I.operatorAbsoluteValue_mem_and_gauge_eq_of_polar hT hWT hWadj hWnorm hWadjnorm
 
+/-! ### Reduction of the ideal-valued projector-difference estimate
+
+The leaf below is stated with the sharp constant **one**, and its own earlier
+description — "requiring the ideal-valued Sylvester engine on both off-diagonal
+blocks" — understates it, because that engine already exists and is proved
+(`sylvester_mem_and_gauge_le_of_intervalExteriorGap`, general `RCLike`, constant
+one).  The two lemmas below carry out the reduction, so that what is left is one
+precisely identified gap rather than a vague campaign.
+
+Write `S = P_U − P_V` and `R = B − A`.  Then:
+
+* `S` satisfies a **Sylvester equation** on the nose,
+  `A S − S B = R P_V − P_U R` (`projectionDifference_sylvester`, proved below,
+  and needing only that `A` reduces `U` and `B` reduces `V`);
+* its right-hand side is a **reflection pinch** of `R`, hence gauge-contractive:
+  `R P_V − P_U R = (R J_V − J_U R)/2` with `J = 2P − 1` the reflections, so
+  `gauge (R P_V − P_U R) ≤ gauge R`
+  (`gauge_projectionCross_le`, proved below).
+
+**What is still missing, precisely.**  `S` is purely off-diagonal for the block
+structure `(U ⊕ Uᗮ, V ⊕ Vᗮ)`: its `(U,V)` and `(Uᗮ,Vᗮ)` blocks vanish.  The
+hypotheses separate exactly the two *surviving* corners — `spec(A|U)` from
+`spec(B|Vᗮ)`, and `spec(A|Uᗮ)` from `spec(B|V)` — and say nothing about the other
+two, which is correct because `S` is zero there.  But the Sylvester engine is a
+statement about the *global* spectra of `A` and `B`, and those are not separated.
+Shifting by `κ P_Uᗮ` and `κ P_V` leaves the equation invariant (precisely because
+`S`'s `(U,V)` block vanishes) and can align the two interval centres, but it
+cannot make all four corner pairs separated at once.
+
+Applying the engine to each corner separately and adding gives constant **2**,
+which is what `Sylvester/Spectrum.lean`'s `sinTheta_spectrum_gauge_symmetric`
+already proves.  Constant one needs the Schur-multiplier form of the estimate on
+the *union of two* interval/exterior rectangles — i.e. a kernel representation of
+`(a − b)⁻¹` of total mass `1/d` valid on that union — and that is the missing
+piece.  The statement itself is believed true and sharp: equality holds at
+`B − A = d (P_U − P_V)`.
+-/
+
+omit [CompleteSpace E] in
+/-- **The projector difference solves a Sylvester equation.**
+
+With `A` reducing `U` and `B` reducing `V`,
+`A (P_U − P_V) − (P_U − P_V) B = (B − A) P_V − P_U (B − A)`.
+
+Pure algebra: the two reducing hypotheses let `A` and `P_U` swap, and `B` and
+`P_V` swap, after which everything cancels. -/
+theorem projectionDifference_sylvester
+    {A B : E →L[𝕜] E} {U V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U) (hV : Reduces B V) :
+    A ∘L (projection U - projection V) - (projection U - projection V) ∘L B =
+      (B - A) ∘L projection V - projection U ∘L (B - A) := by
+  have hAU : A ∘L projection U = projection U ∘L A :=
+    (ContinuousLinearMap.starProjection_comp_comm_of_reduces A U hU).symm
+  have hBV : projection V ∘L B = B ∘L projection V :=
+    ContinuousLinearMap.starProjection_comp_comm_of_reduces B V hV
+  simp only [← ContinuousLinearMap.mul_def] at hAU hBV ⊢
+  rw [mul_sub, sub_mul, sub_mul, mul_sub, hAU, hBV]
+  abel
+
+omit [CompleteSpace E] in
+/-- **The cross term is a reflection pinch**: `R P_V − P_U R = (R J_V − J_U R)/2`.
+
+Immediate from `J = 2P − 1`, but worth naming: it is what makes the right-hand
+side of `projectionDifference_sylvester` gauge-contractive in `R`. -/
+theorem projectionCross_eq_reflectionPinch
+    (R : E →L[𝕜] E) (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    R ∘L projection V - projection U ∘L R =
+      ((2 : 𝕜)⁻¹) • (R ∘L V.reflectionOperator - U.reflectionOperator ∘L R) := by
+  have hU : (U.reflectionOperator : E →L[𝕜] E) =
+      (2 : 𝕜) • projection U - ContinuousLinearMap.id 𝕜 E :=
+    Submodule.reflectionOperator_eq_two_smul_sub_id U
+  have hV : (V.reflectionOperator : E →L[𝕜] E) =
+      (2 : 𝕜) • projection V - ContinuousLinearMap.id 𝕜 E :=
+    Submodule.reflectionOperator_eq_two_smul_sub_id V
+  rw [hU, hV]
+  ext x
+  simp only [ContinuousLinearMap.coe_comp', Function.comp_apply,
+    ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+    ContinuousLinearMap.coe_id', id_eq, map_sub, map_smul]
+  match_scalars <;> (try field_simp) <;> ring
+
+omit [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
+/-- **The cross term is gauge-contractive**: `gauge (R P_V − P_U R) ≤ gauge R`.
+
+The two-subspace analogue of `gauge_offDiagonalPart_le`, which pinches against a
+single reflection.  Both one-sided factors are reflections, so each has operator
+norm at most one and the ideal bound applies on either side; the triangle
+inequality and the factor `1/2` then give constant one. -/
+theorem SymmetricNormIdeal.gauge_projectionCross_le
+    (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E))
+    {R : E →L[𝕜] E} (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hR : I.mem R) :
+    I.mem (R ∘L projection V - projection U ∘L R) ∧
+      I.gauge (R ∘L projection V - projection U ∘L R) ≤ I.gauge R := by
+  have hJU : ‖(U.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 :=
+    Submodule.norm_reflectionOperator_le_one U
+  have hJV : ‖(V.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 :=
+    Submodule.norm_reflectionOperator_le_one V
+  -- `R J_V` and `J_U R` are ideal members with gauge at most `gauge R`.
+  have hrightMem : I.mem (R ∘L V.reflectionOperator) := by
+    have := I.ideal_mem (ContinuousLinearMap.id 𝕜 E) V.reflectionOperator hR
+    simpa using this
+  have hleftMem : I.mem (U.reflectionOperator ∘L R) := by
+    have := I.ideal_mem U.reflectionOperator (ContinuousLinearMap.id 𝕜 E) hR
+    simpa using this
+  have hrightGauge : I.gauge (R ∘L V.reflectionOperator) ≤ I.gauge R := by
+    have hb := I.ideal_bound (ContinuousLinearMap.id 𝕜 E) V.reflectionOperator hR
+    simp only [ContinuousLinearMap.id_comp] at hb
+    refine hb.trans ?_
+    have h0 : 0 ≤ I.gauge R := I.nonneg hR
+    have hid : ‖ContinuousLinearMap.id 𝕜 E‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+    calc ‖ContinuousLinearMap.id 𝕜 E‖ * I.gauge R *
+          ‖(V.reflectionOperator : E →L[𝕜] E)‖
+        ≤ 1 * I.gauge R * 1 := by gcongr
+      _ = I.gauge R := by ring
+  have hleftGauge : I.gauge (U.reflectionOperator ∘L R) ≤ I.gauge R := by
+    have hb := I.ideal_bound U.reflectionOperator (ContinuousLinearMap.id 𝕜 E) hR
+    simp only [ContinuousLinearMap.comp_id] at hb
+    refine hb.trans ?_
+    have h0 : 0 ≤ I.gauge R := I.nonneg hR
+    have hid : ‖ContinuousLinearMap.id 𝕜 E‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+    calc ‖(U.reflectionOperator : E →L[𝕜] E)‖ * I.gauge R *
+          ‖ContinuousLinearMap.id 𝕜 E‖
+        ≤ 1 * I.gauge R * 1 := by gcongr
+      _ = I.gauge R := by ring
+  have hnegMem : I.mem (-(U.reflectionOperator ∘L R)) := by
+    simpa using I.smul_mem (-1 : 𝕜) hleftMem
+  have hnegGauge : I.gauge (-(U.reflectionOperator ∘L R)) =
+      I.gauge (U.reflectionOperator ∘L R) := by
+    have h := I.gauge_smul (-1 : 𝕜) hleftMem
+    simpa using h
+  have hdiffMem : I.mem (R ∘L V.reflectionOperator - U.reflectionOperator ∘L R) := by
+    have := I.add_mem hrightMem hnegMem
+    simpa [sub_eq_add_neg] using this
+  have hdiffGauge :
+      I.gauge (R ∘L V.reflectionOperator - U.reflectionOperator ∘L R) ≤
+        I.gauge R + I.gauge R := by
+    have ht := I.triangle hrightMem hnegMem
+    rw [hnegGauge] at ht
+    have hrw : R ∘L V.reflectionOperator + -(U.reflectionOperator ∘L R) =
+        R ∘L V.reflectionOperator - U.reflectionOperator ∘L R := by
+      rw [sub_eq_add_neg]
+    rw [hrw] at ht
+    linarith
+  rw [projectionCross_eq_reflectionPinch R U V]
+  refine ⟨I.smul_mem _ hdiffMem, ?_⟩
+  rw [I.gauge_smul _ hdiffMem]
+  have hnorm : ‖((2 : 𝕜)⁻¹)‖ = 1 / 2 := by
+    rw [norm_inv, RCLike.norm_ofNat]
+    norm_num
+  rw [hnorm]
+  linarith
+
 /-- **Leaf obligation.** The ideal-valued symmetric projector-difference
 estimate: both mixed interval/exterior gaps bound the ideal gauge of the
 projector difference by the gauge of the perturbation, with the sharp
-constant-one dependence on the gap.  This is the ideal-valued analogue of
-`sinTheta_symmetric`, requiring the ideal-valued Sylvester engine on both
-off-diagonal blocks. -/
+constant-one dependence on the gap.
+
+**Reduced 2026-08-04** — see the section above.  `projectionDifference_sylvester`
+and `SymmetricNormIdeal.gauge_projectionCross_le` supply the equation and the
+contraction; what is missing is the constant-one Sylvester estimate on a *union
+of two* interval/exterior rectangles.  Do **not** reach for the triangle
+inequality on the two corners: that gives constant two, and it is already proved
+elsewhere. -/
 theorem projectionDifference_ideal_intervalExterior
     (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E))
     {A B : E →L[𝕜] E}
