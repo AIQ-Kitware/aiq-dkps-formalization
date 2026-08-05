@@ -11,8 +11,8 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 12 |
-| `compiled_specialization` | 5 |
+| `compiled_exact` | 13 |
+| `compiled_specialization` | 4 |
 | `compiled_general_infrastructure` | 18 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
@@ -475,10 +475,10 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 #### Proposition 4.2: Basis-angle square-sum extremality
 
 - **Kind:** `proposition`
-- **Status:** `compiled_specialization`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** For every orthonormal basis of P, the sum of squared displacement sines under V dominates the sum of squared principal sines.
-- **Current Lean references:** `TauCeti.DavisKahanTheory.directRotation_minimizes_sum_sq_basis_angles`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.sum_displacementAngleSineSq_ge`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.displacementAngleSineSq_directRotation_eq_of_smul`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.norm_absoluteValue_apply_eq_norm_projection`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.norm_inner_competitor_le`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.directRotation_minimizes_sum_sq_basis_angles`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.sum_displacementAngleSineSq_ge`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.displacementAngleSineSq_directRotation_eq_of_smul`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.norm_absoluteValue_apply_eq_norm_projection`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.norm_inner_competitor_le`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.sum_displacementAngleSineSq_ge_of_mem`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.tsum_displacementAngleSineSq_ge_of_mem`
 - **Assessment:** The finite orthonormal-basis displacement-energy extremality is compiled via the nuclear-norm specialization of the displacement-square majorization.
 
 VERIFIED 2026-08-04: the nuclear-norm specialization for a finite orthonormal basis is compiled, axiom-clean and in the default build. The **infinite-dimensional** form is stated in `DavisKahan/Experimental/Frontier/Section4.lean` and is `sorry` (`#print axioms` reaches `sorryAx`). Proposition 4.1's infinite form *is* proved, in `Experimental/MathAhead/Section4/InfiniteProposition41.lean`, by a spectral-cutoff min-max argument -- that is the pattern to follow.
@@ -498,7 +498,11 @@ REFUTATION, computed and checked numerically.  In R^4 take `U = span(e1,e2)` and
 THE PROOF NEEDS NO MAJORIZATION -- two Cauchy--Schwarz steps.  `W x` lies in `V` and `norm (W x) = norm x`, so `abs <x, W x> <= norm (P_V x)`; and `norm (P_V x) = norm (C x)` for `x` in `U`, because `C^2 = P_U P_V P_U + P_Uperp P_Vperp P_Uperp` and the second summand kills a source vector.  Squaring termwise and summing is the whole argument.  No acuteness hypothesis is needed for the inequality; only the attainment statement mentions the direct rotation.
 
 The frontier statement `proposition4_2_basisAngleSquareSum` is no longer `sorry`: it is grounded by `:=` on the production theorem, with the refutation of the previous form written into its docstring so it is not re-attempted a third time.
-- **Next action:** One obligation left, and it is the smaller one: settle the infinite-dimensional summability convention.  The finite-index statement is proved at arbitrary Hilbert-space generality; what an infinite orthonormal basis of `U` needs is a convention for `sum_i (1 - norm (C b_i)^2)` when `C|_U` is not Hilbert--Schmidt, at which point both sides diverge and the inequality is vacuous.  Do NOT attempt the arbitrary-Finset form (false, notes) and do NOT restate the right-hand side as `sum_i cost D b_i` (also false, notes).
+
+**OBLIGATION (2), THE SUMMABILITY CONVENTION, HAS NOTHING TO SETTLE -- 2026-08-05.** With the paper's basis-free right-hand side the estimate is **termwise**: `displacementAngleSineSq_ge` constrains one unit vector of `U` at a time.  So it uses neither completeness nor orthogonality, and survives passage to any subfamily -- which is exactly what fails for the wrong right-hand side `sum_i cost D b_i`, a genuine total statement.  Taking the sums in `ENNReal` then makes them unconditionally defined (divergence is a value, not a failure), and `ENNReal.tsum_le_tsum` lifts the termwise bound to an arbitrary index type with no hypothesis at all.
+
+`sum_displacementAngleSineSq_ge_of_mem` (arbitrary finite subfamily) and `tsum_displacementAngleSineSq_ge_of_mem` (arbitrary index type, `ENNReal` sums) are both in the default build and axiom-clean, and the frontier statement `proposition4_2_basisAngleSquareSum_infinite` is grounded on the second by `:=`.
+- **Next action:** Nothing outstanding.  Proposition 4.2 is proved at arbitrary Hilbert-space generality in three forms -- orthonormal basis, arbitrary finite subfamily, and arbitrary index type with `ENNReal` sums -- with the equality case on a principal vector showing the bound is attained by the direct rotation.  Do NOT restate the right-hand side as `sum_i cost D b_i`: that form is false (notes).
 
 #### Proposition 4.3: Squared displacement UI-norm minimality
 

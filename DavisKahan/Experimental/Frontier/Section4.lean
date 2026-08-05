@@ -164,6 +164,23 @@ theorem proposition4_2_basisAngleSquareSum
         ((b i : H))‖ ^ 2) :=
   MathAhead.Section4.sum_displacementAngleSineSq_ge U V b W hWunitary hWmap
 
+/-- **Proposition 4.2, infinite-dimensional form.**
+
+The summability convention `DK-4.2-prop` recorded as open turns out to have
+nothing to settle: with the paper's basis-free right-hand side the estimate is
+termwise, so it needs neither completeness nor orthogonality of the family, and
+taking the sums in `ℝ≥0∞` makes them unconditionally defined.  The index type is
+arbitrary. -/
+theorem proposition4_2_basisAngleSquareSum_infinite
+    {ι : Type*} (b : ι → H) (hb : ∀ i, b i ∈ U) (hbnorm : ∀ i, ‖b i‖ = 1)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * projection U = projection V * W) :
+    ∑' i, ENNReal.ofReal (1 - ‖spectraOperatorAbsoluteValue
+        (spectraCanonicalIntertwiner U V) (b i)‖ ^ 2) ≤
+      ∑' i, ENNReal.ofReal (basisAngleSquareCost W (b i)) :=
+  MathAhead.Section4.tsum_displacementAngleSineSq_ge_of_mem U V W hWunitary
+    hWmap b hb hbnorm
+
 /-- The bound of `proposition4_2_basisAngleSquareSum` is attained by the direct
 rotation at a principal vector, so it is the true minimum and the direct
 rotation is a minimiser. -/
