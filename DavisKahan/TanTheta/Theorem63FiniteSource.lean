@@ -1083,6 +1083,81 @@ theorem theorem6_3_generalizedTanTheta_source_ideal_directedTangent
         hCompressionUpper hUnwantedLower i)
     hResidual
 
+/-! ### Dropping the dimension comparison
+
+Davis and Kahan's `dim X(E₀) < dim X(F₀)` does exactly one job in the printed
+argument: under the paper's global separability convention it forces the trial
+coordinate space to be finite-dimensional, because every infinite-dimensional
+closed subspace of a separable space has the same Hilbert dimension.  Here
+finite-dimensionality of `Z` is an explicit instance, so the comparison carries
+no further content — and Lean has been saying so all along, since
+`theorem6_3_generalizedTanTheta_of_formBounds` binds it as `_hStrictDimension`
+and never uses it.
+
+Dropping it is exactly what **Section 2's** tangent theorem needs: that theorem
+is about a pair of subspaces of *equal* rank, which the strict inequality
+excludes, so it cannot be obtained by specialising a statement that assumes
+`rank Z < rank V`. -/
+
+/-- **Theorem 6.3 with no dimension comparison — the equal-rank form.**
+
+Every hypothesis is a form bound or a spectral separation; nothing compares the
+ranks of `Z` and `V`, so this applies to the equal-rank pairs of Section 2. -/
+theorem theorem6_3_generalizedTanTheta_of_formBounds_equalRank
+    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (T : H →L[ℂ] H) (hT : T.IsSymmetric)
+    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hCompressionUpper : ∀ z : Z,
+      RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hUnwantedLower : ∀ y ∈ Vᗮ,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
+    (hResidual : N.Mem (theorem63Residual T Z)) :
+    N.Mem (theorem63DirectedTangent Z V) ∧
+      delta * N.gauge (theorem63DirectedTangent Z V) ≤
+        N.gauge (theorem63Residual T Z) :=
+  ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hResidual
+    (theorem6_3_all_kyFan_core_directedTangent Z V T hT hV hdelta
+      hCompressionUpper hUnwantedLower)
+
+/-- **Theorem 6.3 at equal rank, in the source's spectral form.**
+
+The Ritz compression's spectrum lies in `[β, α]` and the unwanted restriction's
+in `[α + δ, ∞)`; the conclusion is the ideal-gauge tangent bound for the
+representative this file constructs.  No dimension comparison, no assumed
+tangent representative — this is the Section 2 tangent theorem's residual half
+at arbitrary unitarily invariant ideal-gauge scope. -/
+theorem theorem6_3_generalizedTanTheta_equalRank_spectral
+    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (T : H →L[ℂ] H) (hT : T.IsSymmetric) (hV : T.Reduces V)
+    {beta alpha delta : ℝ} (_hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
+    (hCompressionSpectrum :
+      spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
+    (hUnwantedSpectrum :
+      spectrum ℝ (T.restrict (DavisKahanExt.Reduces.orthogonalComplement hV).1) ⊆
+        Set.Ici (alpha + delta))
+    (hResidual : N.Mem (theorem63Residual T Z)) :
+    N.Mem (theorem63DirectedTangent Z V) ∧
+      delta * N.gauge (theorem63DirectedTangent Z V) ≤
+        N.gauge (theorem63Residual T Z) := by
+  have hTsa : IsSelfAdjoint T :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
+  have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by
+    simpa [theorem63Compression, DavisKahanExt.compressOperator] using
+      DavisKahanExt.isSelfAdjoint_compressOperator hTsa Z
+  have hCompressionUpper : ∀ z : Z,
+      RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2 := by
+    intro z
+    refine SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic
+      (theorem63Compression T Z) hMsa ?_ z
+    intro r hr
+    exact (hCompressionSpectrum hr).2
+  have hUnwantedLower : ∀ y ∈ Vᗮ,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
+    SpectralOrder.Complex.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
+      hT (DavisKahanExt.Reduces.orthogonalComplement hV).1 hUnwantedSpectrum hy
+  exact theorem6_3_generalizedTanTheta_of_formBounds_equalRank Z V N T hT hV
+    hdelta hCompressionUpper hUnwantedLower hResidual
+
 end DirectedTangentExistence
 
 end ExactTanTheta
