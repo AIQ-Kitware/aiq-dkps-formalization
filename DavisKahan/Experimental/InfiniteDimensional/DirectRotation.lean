@@ -668,6 +668,151 @@ theorem directRotation_sq
   rw [reflectionOperator_mul_reflectionOperator_eq]
   exact sq_mul_units_inv_eq hcomm hsq
 
+/-! ### The direct rotation is the *principal* square root
+
+`directRotation_sq` says `W² = J_V J_U`.  A unitary has many square roots, so on
+its own that does not characterise `W`; Davis–Kahan 1970 Proposition 3.3 says
+`W` is the **principal** one, i.e. the one whose Hermitian part is nonnegative.
+
+That falls out of the same symmetry algebra, from a third ring identity:
+
+`S + S⋆ = 2 S⋆S`.
+
+Since `S⋆S = |S|²` and `|S|` commutes with both `S` and `S⋆`, dividing by `|S|`
+gives `W + W⋆ = 2|S|`, which is nonnegative because `|S|` is, and invertible on
+an acute pair because `|S|` is.  So the Hermitian part of `W` is not merely
+nonnegative but bounded below: `W`'s spectrum misses the closed left half-plane
+entirely, which is exactly the principal branch. -/
+
+/-- **The Hermitian part of the intertwiner is its Gram operator**, doubled:
+`S + S⋆ = 2 S⋆S`.
+
+A ring identity modulo `P² = P` and `Q² = Q`: both sides normalise to
+`2QP + 2PQ − 2P − 2Q + 2`. -/
+theorem canonicalIntertwiner_add_adjoint_eq (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    canonicalIntertwiner U V + star (canonicalIntertwiner U V) =
+      star (canonicalIntertwiner U V) * canonicalIntertwiner U V +
+        star (canonicalIntertwiner U V) * canonicalIntertwiner U V := by
+  have hP : projection U * projection U = projection U :=
+    U.isIdempotentElem_starProjection
+  have hQ : projection V * projection V = projection V :=
+    V.isIdempotentElem_starProjection
+  have hPc : complementaryProjection U = 1 - projection U :=
+    U.starProjection_orthogonal'
+  have hQc : complementaryProjection V = 1 - projection V :=
+    V.starProjection_orthogonal'
+  rw [adjoint_mul_canonicalIntertwiner, canonicalIntertwiner, hPc, hQc]
+  simp only [← ContinuousLinearMap.mul_def, star_add, star_mul, star_sub, star_one,
+    (isSelfAdjoint_starProjection U).star_eq, (isSelfAdjoint_starProjection V).star_eq]
+  noncomm_ring [hP, hQ]
+
+/-- **The absolute value commutes with the adjoint intertwiner too.**
+
+Same argument as `canonicalAbsoluteValue_commutes_canonicalIntertwiner`, run on
+`S⋆`: normality makes `S⋆` commute with `S⋆S`. -/
+theorem canonicalAbsoluteValue_commutes_adjoint_canonicalIntertwiner (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Commute (operatorAbsoluteValue (canonicalIntertwiner U V))
+      (star (canonicalIntertwiner U V)) := by
+  set S : E →L[𝕜] E := canonicalIntertwiner U V with hSdef
+  have hcomm : Commute (star S * S) (star S) := by
+    show star S * S * star S = star S * (star S * S)
+    calc star S * S * star S = star S * (S * star S) := mul_assoc _ _ _
+      _ = star S * (star S * S) := by
+          rw [hSdef, adjoint_mul_canonicalIntertwiner, canonicalIntertwiner_mul_adjoint]
+  exact hcomm.cfcₙ_nnreal _
+
+/-- **The Hermitian part of the direct rotation is `2|S|`.**
+
+`W + W⋆ = |S|⁻¹(S + S⋆) = |S|⁻¹ · 2|S|² = 2|S|`.  This is Davis–Kahan 1970
+Proposition 3.3's "principal": `W` is the square root of `J_V J_U` whose
+Hermitian part is nonnegative. -/
+theorem directRotation_add_adjoint
+    (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    directRotation U V hacute + star (directRotation U V hacute) =
+      operatorAbsoluteValue (canonicalIntertwiner U V) +
+        operatorAbsoluteValue (canonicalIntertwiner U V) := by
+  set S : E →L[𝕜] E := canonicalIntertwiner U V with hSdef
+  set A : (E →L[𝕜] E)ˣ := canonicalAbsoluteValueUnit U V hacute with hAdef
+  have hAcoe : ((A : (E →L[𝕜] E)ˣ) : E →L[𝕜] E) = operatorAbsoluteValue S :=
+    coe_canonicalAbsoluteValueUnit U V hacute
+  have hAstar : star ((A : (E →L[𝕜] E)ˣ) : E →L[𝕜] E) = (A : E →L[𝕜] E) := by
+    rw [hAcoe]
+    exact (operatorAbsoluteValue_isSelfAdjoint S).star_eq
+  -- The inverse of a self-adjoint unit is self-adjoint.
+  have hAinvstar : star ((↑A⁻¹ : E →L[𝕜] E)) = (↑A⁻¹ : E →L[𝕜] E) := by
+    have h1 : (A : E →L[𝕜] E) * star ((↑A⁻¹ : E →L[𝕜] E)) = 1 := by
+      have h := congrArg star (A.inv_mul)
+      rwa [star_mul, hAstar, star_one] at h
+    calc star ((↑A⁻¹ : E →L[𝕜] E))
+        = 1 * star ((↑A⁻¹ : E →L[𝕜] E)) := (one_mul _).symm
+      _ = ((↑A⁻¹ : E →L[𝕜] E) * (A : E →L[𝕜] E)) * star ((↑A⁻¹ : E →L[𝕜] E)) := by
+          rw [A.inv_mul]
+      _ = (↑A⁻¹ : E →L[𝕜] E) * ((A : E →L[𝕜] E) * star ((↑A⁻¹ : E →L[𝕜] E))) :=
+          mul_assoc _ _ _
+      _ = (↑A⁻¹ : E →L[𝕜] E) := by rw [h1, mul_one]
+  -- `|S|⁻¹` commutes with `S` and with `S⋆`.
+  have hcommS : Commute ((↑A⁻¹ : E →L[𝕜] E)) S := by
+    refine Commute.units_inv_left ?_
+    rw [hAcoe, hSdef]
+    exact canonicalAbsoluteValue_commutes_canonicalIntertwiner U V
+  have hcommSstar : Commute ((↑A⁻¹ : E →L[𝕜] E)) (star S) := by
+    refine Commute.units_inv_left ?_
+    rw [hAcoe, hSdef]
+    exact canonicalAbsoluteValue_commutes_adjoint_canonicalIntertwiner U V
+  have hAA : (A : E →L[𝕜] E) * (A : E →L[𝕜] E) = star S * S := by
+    rw [hAcoe, ContinuousLinearMap.mul_def, operatorAbsoluteValue_sq,
+      ← ContinuousLinearMap.mul_def]
+  have hadd : S + star S = (A : E →L[𝕜] E) * (A : E →L[𝕜] E) +
+      (A : E →L[𝕜] E) * (A : E →L[𝕜] E) := by
+    rw [hAA, hSdef]
+    exact canonicalIntertwiner_add_adjoint_eq U V
+  have hW : star (S * (↑A⁻¹ : E →L[𝕜] E)) = (↑A⁻¹ : E →L[𝕜] E) * star S := by
+    rw [star_mul, hAinvstar]
+  rw [directRotation, ← ContinuousLinearMap.mul_def, ← hSdef, ← hAdef, hW, ← hAcoe]
+  calc S * (↑A⁻¹ : E →L[𝕜] E) + (↑A⁻¹ : E →L[𝕜] E) * star S
+      = (↑A⁻¹ : E →L[𝕜] E) * (S + star S) := by
+        rw [mul_add, ← hcommS.eq]
+    _ = (↑A⁻¹ : E →L[𝕜] E) *
+          ((A : E →L[𝕜] E) * (A : E →L[𝕜] E) +
+            (A : E →L[𝕜] E) * (A : E →L[𝕜] E)) := by rw [hadd]
+    _ = (A : E →L[𝕜] E) + (A : E →L[𝕜] E) := by
+        rw [mul_add, ← mul_assoc, A.inv_mul, one_mul]
+
+/-- **The direct rotation has nonnegative Hermitian part** — it is the
+*principal* square root of the reflection product, not merely a square root. -/
+theorem nonneg_directRotation_add_adjoint
+    (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    0 ≤ directRotation U V hacute + star (directRotation U V hacute) := by
+  rw [directRotation_add_adjoint]
+  exact add_nonneg (operatorAbsoluteValue_nonneg _) (operatorAbsoluteValue_nonneg _)
+
+/-- **On an acute pair the Hermitian part is invertible**, so the spectrum of the
+direct rotation misses the closed left half-plane: acuteness is what makes the
+principal branch unambiguous. -/
+theorem isUnit_directRotation_add_adjoint
+    (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    IsUnit (directRotation U V hacute + star (directRotation U V hacute)) := by
+  have hA : IsUnit (operatorAbsoluteValue (canonicalIntertwiner U V)) :=
+    isUnit_operatorAbsoluteValue_canonicalIntertwiner U V hacute
+  have htwo : IsUnit ((1 : E →L[𝕜] E) + 1) := by
+    refine ⟨⟨(1 : E →L[𝕜] E) + 1, (2 : 𝕜)⁻¹ • (1 : E →L[𝕜] E), ?_, ?_⟩, rfl⟩
+    · rw [mul_smul_comm, mul_one, ← two_smul 𝕜 (1 : E →L[𝕜] E), smul_smul,
+        inv_mul_cancel₀ (two_ne_zero' 𝕜), one_smul]
+    · rw [smul_mul_assoc, one_mul, ← two_smul 𝕜 (1 : E →L[𝕜] E), smul_smul,
+        inv_mul_cancel₀ (two_ne_zero' 𝕜), one_smul]
+  rw [directRotation_add_adjoint]
+  have hfac : operatorAbsoluteValue (canonicalIntertwiner U V) +
+      operatorAbsoluteValue (canonicalIntertwiner U V) =
+      operatorAbsoluteValue (canonicalIntertwiner U V) * ((1 : E →L[𝕜] E) + 1) := by
+    rw [mul_add, mul_one]
+  rw [hfac]
+  exact hA.mul htwo
+
 /-- Direct rotation minimizes maximal displacement from the identity.
 
 Proof strategy: reduce by the two-projection decomposition to scalar
