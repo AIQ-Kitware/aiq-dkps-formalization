@@ -260,6 +260,37 @@ alias theorem6_3_all_kyFan_core :=
 alias theorem6_3_generalizedTanTheta_source_ideal :=
   ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal
 
+/-! ### Theorem 6.3 without a tangent-representative hypothesis
+
+The two aliases above quantify over a `tanTheta0` satisfying
+`HasTheorem63DirectedTangentApproximationNumbers`, and until 2026-08-05 nothing
+in the repository constructed one — so the compiled Theorem 6.3 was a
+conditional whose antecedent had no witness, which is weaker than what Davis and
+Kahan assert.
+
+`theorem63DirectedTangent` is the witness: diagonal in the right singular basis
+of the sine block, with entries `tan (arcsin sᵢ)`.  Its finiteness needs
+`sᵢ < 1`, and that is not a new hypothesis — `theorem63_singularValues_sine_lt_one`
+derives it from the source gap the theorem already assumes.  The two aliases
+below therefore carry exactly the printed hypotheses and nothing else. -/
+
+/-- The directed tangent representative of Theorem 6.3, and the proof that it
+has the approximation numbers the theorem asks for. -/
+alias theorem6_3_directedTangent :=
+  ExactTanTheta.theorem63DirectedTangent
+
+alias theorem6_3_directedTangent_approximationNumbers :=
+  ExactTanTheta.hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent
+
+/-- Theorem 6.3's Ky Fan root with the representative supplied, not assumed. -/
+alias theorem6_3_all_kyFan_core_unconditional :=
+  ExactTanTheta.theorem6_3_all_kyFan_core_directedTangent
+
+/-- Theorem 6.3 at ideal-gauge scope with the representative supplied, not
+assumed. -/
+alias theorem6_3_generalizedTanTheta_source_ideal_unconditional :=
+  ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal_directedTangent
+
 end GeneralizedTangent
 
 section DoubleAngleSourceWrappers
