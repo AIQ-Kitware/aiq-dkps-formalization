@@ -38,10 +38,16 @@ Define the direct rotation as the unitary polar factor
 * the polar factor intertwines `P,Q`;
 * reversal of the pair takes adjoints.
 
-Prove mapping and square identities before any extremality theorem.  For the
-operator-norm minimizer, reduce to the Halmos generic two-projection block and
-prove the scalar fiber inequality.  Do not generalize that result to arbitrary
-symmetric ideals without a separate majorization theorem.
+Prove mapping and square identities before any extremality theorem.  **The
+advice this plan used to give for the operator-norm minimizer — "reduce to the
+Halmos generic two-projection block and prove the scalar fiber inequality" — is
+superseded**: `directRotation_add_adjoint` identifies the numerical range of the
+direct rotation with the Halmos cosine directly, and the extremality argument
+then compares two extrema, not two fibers.  See the route on
+`directRotation_minimal`.  A fiberwise comparison is not merely unnecessary, it
+is false; the pointwise inequality it would need is the one refuted in
+`Frontier/Section4.lean`.  Do not generalize the result to arbitrary symmetric
+ideals without a separate majorization theorem.
 -/
 
 namespace TauCeti
@@ -79,9 +85,11 @@ it.
 below — did not belong there.  Both Gram operators of `S` equal `1 - (P - Q)^2`,
 so `S` is **normal**; the square identity then reduces to two ring identities in
 `P` and `Q` and one cancellation of a unit.  See the section on it below.  The
-Halmos two-projection decomposition is now used by `directRotation_minimal`
-alone, and there it is genuinely needed: the statement is an inequality between
-operator norms, not an algebraic identity.
+Halmos two-projection *decomposition* is now used by nothing in this file.
+`directRotation_minimal` is still open, but its remaining content is two
+supremum/infimum manipulations over the numerical ranges, not a decomposition:
+`directRotation_add_adjoint` gives `re ⟪D x, x⟫ = ⟪|S| x, x⟫`, and the route is
+written out on the leaf itself.
 
 The commutation of the absolute value with the projection was on that list
 until 2026-07-30 and did not belong there: it needs no polar decomposition and
@@ -813,30 +821,95 @@ theorem isUnit_directRotation_add_adjoint
   rw [hfac]
   exact hA.mul htwo
 
+/-! ### Displacement of the direct rotation
+
+`directRotation_minimal` was filed as needing the Halmos two-projection
+decomposition.  It does not need the *decomposition*; what it needs is the
+Halmos **cosine**, and `directRotation_add_adjoint` above already supplies the
+link.  The two lemmas here are that link in the form the extremality argument
+consumes, and the route is written out on the leaf below. -/
+
+omit [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
+/-- **Displacement identity for a unitary**: `‖(T − 1)x‖² = 2‖x‖² − 2 re⟪Tx,x⟫`.
+
+The whole extremality question is about the real part of the numerical range,
+and this is why: for a unitary, displacement from the identity is a strictly
+decreasing function of `re ⟪Tx, x⟫` and of nothing else. -/
+theorem norm_sub_id_apply_sq_of_isUnitaryOperator
+    {T : E →L[𝕜] E} (hT : IsUnitaryOperator T) (x : E) :
+    ‖(T - ContinuousLinearMap.id 𝕜 E) x‖ ^ 2 =
+      2 * ‖x‖ ^ 2 - 2 * RCLike.re ⟪T x, x⟫_𝕜 := by
+  rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply,
+    norm_sub_sq (𝕜 := 𝕜), hT.1 x]
+  ring
+
+/-- **The direct rotation's numerical range is the Halmos cosine's.**
+
+`re ⟪D x, x⟫ = re ⟪|S| x, x⟫`, immediately from `D + D⋆ = 2|S|`.  Combined with
+`norm_sub_id_apply_sq_of_isUnitaryOperator` this computes the displacement of
+the direct rotation exactly:
+
+`‖(D − 1)x‖² = 2‖x‖² − 2 ⟪|S| x, x⟫`. -/
+theorem re_inner_directRotation_eq_operatorAbsoluteValue
+    (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] (hacute : IsAcute U V) (x : E) :
+    RCLike.re ⟪directRotation U V hacute x, x⟫_𝕜 =
+      RCLike.re ⟪operatorAbsoluteValue (canonicalIntertwiner U V) x, x⟫_𝕜 := by
+  have h := congrArg (fun T : E →L[𝕜] E => ⟪T x, x⟫_𝕜)
+    (directRotation_add_adjoint U V hacute)
+  simp only [ContinuousLinearMap.add_apply, inner_add_left] at h
+  have hstar : ⟪(star (directRotation U V hacute)) x, x⟫_𝕜 =
+      (starRingEnd 𝕜) ⟪directRotation U V hacute x, x⟫_𝕜 := by
+    rw [ContinuousLinearMap.star_eq_adjoint,
+      ContinuousLinearMap.adjoint_inner_left, inner_conj_symm]
+  rw [hstar] at h
+  have hre := congrArg RCLike.re h
+  simp only [map_add, RCLike.conj_re] at hre
+  linarith
+
 /-- Direct rotation minimizes maximal displacement from the identity.
 
-Proof strategy: reduce by the two-projection decomposition to scalar
-`2 x 2` angle fibers.  On each generic fiber, every unitary carrying the first
-line to the second has displacement at least that of the shorter rotation.
-Take the supremum over the angle spectrum.  State and prove any necessary
-angle restriction explicitly; do not infer an unrestricted extremal theorem
-for arbitrary symmetric ideal gauges from the operator-norm result. 
+**This was filed as needing the Halmos two-projection decomposition.  It does
+not.**  What it needs is the Halmos *cosine*, and `directRotation_add_adjoint`
+supplies the link; the two lemmas just above put it in the form used here.  The
+route below has no reducing summands, no angle fibers and no scalar rotation
+identity in it.
 
-Lean proof route for a weaker agent:
+Write `S` for the canonical intertwiner, `C = |S|`, `D` for the direct rotation
+and `Δ = P_U − P_V`.
 
-1. Reduce the pair of projections to the Halmos two-projection decomposition.
-2. On each generic two-dimensional angle fiber, prove the shorter rotation minimizes `‖W-I‖` among unitaries sending the first line to the second.
-3. Take the essential supremum over the angle spectrum and handle common/orthogonal summands separately.
-4. Check that the stated acuteness hypothesis excludes the ambiguous `π/2` branch.
+1. By `norm_sub_id_apply_sq_of_isUnitaryOperator` and
+   `re_inner_directRotation_eq_operatorAbsoluteValue`,
+   `‖(D − 1)x‖² = 2‖x‖² − 2 ⟪C x, x⟫`, and for any unitary competitor `W`,
+   `‖(W − 1)x‖² = 2‖x‖² − 2 re ⟪W x, x⟫`.  So
+   `‖D − 1‖² = 2 − 2 · inf_{‖x‖=1} ⟪C x, x⟫` and
+   `‖W − 1‖² = 2 − 2 · inf_{‖x‖=1} re ⟪W x, x⟫`, and **the whole theorem reduces
+   to `inf_{‖x‖=1} re ⟪W x, x⟫ ≤ inf_{‖x‖=1} ⟪C x, x⟫`.**
+2. `C` is self-adjoint and nonnegative, so its numerical range is `[inf spec C,
+   sup spec C]`; and `C² = S⋆S = 1 − Δ²`, so
+   `inf_{‖x‖=1} ⟪C x, x⟫ = √(1 − ‖Δ‖²)`.
+3. `hmap` makes `W` carry `U` onto `V`, hence — `W` being unitary — `Uᗮ` onto
+   `Vᗮ`.  For a unit `x ∈ U`: `W x ∈ V`, so
+   `re ⟪W x, x⟫ = re ⟪W x, P_V x⟫ ≤ ‖P_V x‖`, and `Δ x = P_{Vᗮ} x` gives
+   `‖P_V x‖² = 1 − ‖Δ x‖²`.  Dually for a unit `x ∈ Uᗮ`: `W x ∈ Vᗮ`, so
+   `re ⟪W x, x⟫ ≤ ‖P_{Vᗮ} x‖`, and `Δ x = −P_V x` gives
+   `‖P_{Vᗮ} x‖² = 1 − ‖Δ x‖²`.
+4. `Submodule.norm_starProjection_sub_eq_max` says
+   `‖Δ‖ = max ‖P_{Vᗮ} P_U‖ ‖P_{Uᗮ} P_V‖`, and those two numbers are exactly
+   `sup_{x ∈ U, ‖x‖=1} ‖Δ x‖` and `sup_{x ∈ Uᗮ, ‖x‖=1} ‖Δ x‖`.  Take near-maximizers
+   on whichever side attains the max: step 3 then gives unit vectors with
+   `re ⟪W x, x⟫ ≤ √(1 − ‖Δ‖²) + ε`, which is step 1's remaining inequality. ∎
 
+The two `sup`/`inf` manipulations are the only real work left; everything
+algebraic is proved above.  **Do not reach for a fiberwise comparison**: the
+pointwise claim `re ⟪W x, x⟫ ≤ ⟪C x, x⟫` is *false* — see the refutation of
+Proposition 4.2's transcription in `Frontier/Section4.lean`, which is exactly
+that claim.  Only the two extrema compare.
 
 Ext-agent signature audit (GPT 5.6 High): Correct as an operator-norm extremal statement
 for acute pairs. It must not be generalized automatically to every symmetric ideal
 gauge.
-
-Preferred dependency route: Construct the polar factor of `QP + QᗮPᗮ`; prove
-intertwining before extremality, and use the Halmos decomposition only for the final
-minimization theorem.
 -/
 theorem directRotation_minimal
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
