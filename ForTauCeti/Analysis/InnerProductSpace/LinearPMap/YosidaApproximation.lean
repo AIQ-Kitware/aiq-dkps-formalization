@@ -122,7 +122,14 @@ theorem norm_resolventAtNegIn_le (hA : IsSelfAdjoint A) (n : ℕ+) :
 
 /-! ### The Yosida approximants -/
 
-/-- The Yosida approximant `Aₙ = n² R(in) - in`. -/
+/-- The **raw** Yosida approximant `Aₙ = n² R(in) - in`.
+
+Raw because it is **not self-adjoint**: it is built from the resolvent at the single
+spectral point `in`, and the subtracted `in` is purely imaginary, so `Aₙ⋆ ≠ Aₙ`.  Nothing
+below exponentiates it, and nothing should — a unitary group needs a self-adjoint
+generator.  Use `yosidaApproximantSym`, which symmetrises over `±in`, is proved
+self-adjoint by `isSelfAdjoint_yosidaApproxSym`, and is what `expApprox` and the Stone
+uniqueness argument actually take exponentials of.  `yosidaApproxNeg` is its mirror. -/
 noncomputable def yosidaApproximant (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
   (n : ℂ) ^ 2 • resolventAtIn hA n - (I * (n : ℂ)) • ContinuousLinearMap.id ℂ H
 

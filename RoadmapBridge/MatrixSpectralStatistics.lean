@@ -108,7 +108,7 @@ variable {P X : Type*} [TopologicalSpace P] [TopologicalSpace X]
 variable {K : Set X} {g : P → X → ℝ}
 
 /-
-**`upperHemicontinuousAt_isMinOn` -- reported delivered, and it is not.**
+**`upperHemicontinuousAt_isMinOn` -- the gap recorded here has since been closed.**
 
 The roadmap asks for, with only `[TopologicalSpace P] [TopologicalSpace X]` in scope:
 
@@ -117,11 +117,28 @@ The roadmap asks for, with only `[TopologicalSpace P] [TopologicalSpace X]` in s
         (p₀ : P) [(𝓝 p₀).IsCountablyGenerated] :
         UpperHemicontinuousAt (fun p => {x ∈ K | IsMinOn (g p) K x}) p₀
 
-`ForTauCeti.Topology.Berge` proves a theorem of exactly this name that additionally assumes
-`[FirstCountableTopology X]`.  So `check_roadmap_delivered` counts it, and the count is
-wrong: the delivered theorem does not imply the proposed one.  Discharging this needs the
-first-countability removed from the proof -- Mathlib's `UpperHemicontinuousAt.of_sequences`
-is the sequential route that forces it, so the general proof cannot go through that lemma.
+This paragraph used to say that `ForTauCeti.Topology.Berge` proved a theorem of that name
+which *additionally* assumed `[FirstCountableTopology X]`, so the delivered statement did
+not imply the proposed one and the delivered count was wrong.  **That is no longer true**,
+and the fix went the direction the paragraph predicted it would have to: the sequential
+route through `UpperHemicontinuousAt.of_sequences` was abandoned for the classical
+open-cover argument, in `upperHemicontinuousAt_isMinOn_of_isCompact`.
+
+Measured 2026-08-05 by elaborating `#check @TauCeti.upperHemicontinuousAt_isMinOn`, the
+delivered binders are exactly
+
+    {P} [TopologicalSpace P] {X} [TopologicalSpace X] {K : Set X} (hK : IsCompact K)
+    {g : P → X → ℝ} (hg : Continuous (Function.uncurry g)) (p₀ : P)
+
+-- no `[T2Space X]`, no `[FirstCountableTopology X]`, no `[(𝓝 p₀).IsCountablyGenerated]`.
+So the delivered theorem is **strictly more general** than the proposed one, which it
+implies by discarding the two instances the roadmap offers it.  The countability-free
+statement is the one to advertise.
+
+The *value-function* half is a different matter and is still genuinely restricted:
+`continuous_iInf_of_isCompact` carries `[FirstCountableTopology X] [FirstCountableTopology P]`
+together with `K.Nonempty`.  Berge's theorem should therefore not be advertised as
+hypothesis-free across the board -- only its upper-hemicontinuity half is.
 
 **`continuous_iInf_of_hemicontinuous` and `upperHemicontinuousAt_isMinOn_of_hemicontinuous`
 -- reported outstanding, and genuinely so, but not for the reason the name suggests.**

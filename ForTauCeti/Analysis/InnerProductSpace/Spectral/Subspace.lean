@@ -324,5 +324,46 @@ theorem spectralSubspace_eq_span_eigenvectors (A : E →ₗ[𝕜] E)
       Submodule.span 𝕜 {x | ∃ lam ∈ Ω, Module.End.HasEigenvector A (lam : 𝕜) x} :=
   rfl
 
+omit [FiniteDimensional 𝕜 E] in
+/-- **The spectral subspace selected by `Ω` carries only spectrum in `Ω`.**
+
+`spectralSubspace A Ω` is *defined* as a span of eigenvectors whose eigenvalues lie in
+`Ω`, but that does not immediately say the span contains no *other* eigenvector: a sum of
+eigenvectors could a priori be an eigenvector for a fresh eigenvalue.  It cannot, and this
+is the theorem saying so.
+
+The proof is eigenspace independence, not symmetry or finite dimension: the span sits
+inside `⨆ μ ∈ Ω, eigenspace A μ`, and an eigenvector for `lam ∉ Ω` would lie in the
+intersection of `eigenspace A lam` with the supremum of the *others*, which
+`Module.End.eigenspaces_iSupIndep` makes trivial.  So `A` needs no hypotheses at all.
+
+**This was a hypothesis, not a theorem.**  Production perturbation statements carried it as
+`hAselected : SpectrumIn A (spectralSubspace A (Set.Icc a b)) (Set.Icc a b)`, which is
+exactly this conclusion at `Ω = Set.Icc a b`; a caller had to discharge, by hand, a fact
+that holds unconditionally. -/
+theorem spectrumIn_spectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
+    SpectrumIn A (spectralSubspace A Ω) Ω := by
+  intro lam hlam
+  obtain ⟨x, hxU, hx0, hxeq⟩ := mem_restrictedSpectrum_iff.mp hlam
+  by_contra hlamΩ
+  -- The span of the selected eigenvectors sits inside the supremum of their eigenspaces.
+  have hspan : spectralSubspace A Ω ≤
+      ⨆ μ ∈ ((↑) '' Ω : Set 𝕜), Module.End.eigenspace A μ := by
+    rw [spectralSubspace, Submodule.span_le]
+    rintro y ⟨lam', hlam'Ω, hy⟩
+    exact Submodule.mem_iSup_of_mem _
+      (Submodule.mem_iSup_of_mem ⟨lam', hlam'Ω, rfl⟩ hy.1)
+  -- Every eigenvalue that supremum ranges over is different from `lam`.
+  have hle : (⨆ μ ∈ ((↑) '' Ω : Set 𝕜), Module.End.eigenspace A μ) ≤
+      ⨆ μ, ⨆ _ : μ ≠ (lam : 𝕜), Module.End.eigenspace A μ := by
+    refine iSup_le fun μ => iSup_le fun hμ => ?_
+    obtain ⟨r, hrΩ, hr⟩ := hμ
+    refine le_iSup_of_le μ (le_iSup_of_le (fun hcon => hlamΩ ?_) le_rfl)
+    exact (RCLike.ofReal_inj.mp (hr.trans hcon)) ▸ hrΩ
+  -- Independence of eigenspaces then forces `x = 0`.
+  have hdisj := (iSupIndep_def.mp (Module.End.eigenspaces_iSupIndep A)) (lam : 𝕜)
+  exact hx0 (Submodule.mem_bot 𝕜 |>.mp
+    (hdisj.le_bot ⟨Module.End.mem_eigenspace_iff.mpr hxeq, hle (hspan hxU)⟩))
+
 
 end TauCeti

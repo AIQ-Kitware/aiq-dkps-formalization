@@ -590,7 +590,6 @@ theorem sinTheta_spectralSubspace_le
     (N : UnitarilyInvariantSeminorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hAselected : SpectrumIn A (spectralSubspace A (Set.Icc a b)) (Set.Icc a b))
     (hBoutside : SpectrumIn B (spectralSubspace B (Set.Icc a b))ᗮ
       {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * N (sinThetaMap (spectralSubspace A (Set.Icc a b))
@@ -598,7 +597,7 @@ theorem sinTheta_spectralSubspace_le
   exact sinTheta_perturbation_le N hA hB
     (isInvariant_spectralSubspace A (Set.Icc a b))
     (isInvariant_spectralSubspace B (Set.Icc a b)) hδ
-    ⟨hAselected, hBoutside⟩
+    ⟨spectrumIn_spectralSubspace A (Set.Icc a b), hBoutside⟩
 
 /-- **Sharp one-sided interval/exterior `sin Θ` bound in operator norm.**
 
@@ -756,7 +755,6 @@ theorem opNorm_spectralProjection_sub_spectralProjection_le
     {a b δ : ℝ} (hδ : 0 < δ)
     (hrank : finrank 𝕜 (spectralSubspace A (Set.Icc a b)) =
       finrank 𝕜 (spectralSubspace B (Set.Icc a b)))
-    (hAselected : SpectrumIn A (spectralSubspace A (Set.Icc a b)) (Set.Icc a b))
     (hBoutside : SpectrumIn B (spectralSubspace B (Set.Icc a b))ᗮ
       {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * ‖(spectralProjection A (Set.Icc a b) -
@@ -766,7 +764,7 @@ theorem opNorm_spectralProjection_sub_spectralProjection_le
     opNorm_projection_sub_projection_le hA hB
       (isInvariant_spectralSubspace A (Set.Icc a b))
       (isInvariant_spectralSubspace B (Set.Icc a b))
-      hrank hδ ⟨hAselected, hBoutside⟩
+      hrank hδ ⟨spectrumIn_spectralSubspace A (Set.Icc a b), hBoutside⟩
 
 /-- Frobenius form.
 -/
