@@ -1454,7 +1454,6 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `dev/topurge/dev/sin-theta-admission-elimination-prompt.md` — 363 lines · documentation
 - [x] `dev/topurge/docs/planning/opus-next-polar-extraction-campaign.md` — 360 lines · documentation
 - [x] `dev/davis-kahan-existing-work-survey.md` — 345 lines · documentation
-- [ ] `dev/tauceti/roadmap-candidate-topic-design.md` — 339 lines · documentation
 - [x] `dev/topurge/dev/full-unbounded-sin-theta/README.md` — 334 lines · documentation
 - [x] `dev/audit/TAUCETI-RUBRIC-REVIEW.md` — 331 lines · documentation
 - [x] `dev/spectra-integration-survey-2026-07-14.md` — 329 lines · documentation

@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """Validate the candidate Tau Ceti roadmap topic design against the import graph.
 
-`dev/tauceti/roadmap-candidate-topic-design.md` partitions every `ForTauCeti`
-module into fine-grained topics (`T01`..`T22`, with the `T15a/b/c` split),
-ordered so that each is reviewable on its own against a base Tau Ceti has
-already accepted. Since 2026-07-30 the topics group into a handful of
+The `TOPICS` table below partitions the maintained `ForTauCeti` modules into
+fine-grained topics, ordered so that each is reviewable on its own against a
+base Tau Ceti has already accepted. The topics group into a handful of
 **holistic roadmap directories** (one directory covers several topics as its
-Parts); the grouping is declared by the internal roadmap-to-topic map and validated
-here, including acyclicity of the roadmap-level DAG.
+Parts); that grouping is declared by `dev/tauceti/roadmap-topic-map.md` and
+validated here, including acyclicity of the roadmap-level DAG.
 
 This tool is what makes that proposal checkable rather than plausible. It
 enforces three properties, each of which the first hand-drawn draft violated:
@@ -93,7 +92,6 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # `--check` gates went red.  All three are the same subject as the line above:
  # `Normed.SymmetricGauge` is the sequence-space gauge, `Normed.SchattenGauge` the `ℓᵖ`
  # instance of it, and `Family.SymmetricGauge` the ideal family it induces.
- # **`CANDIDATE-TOPIC-DESIGN.md` still does not list them, and that file is `jon`'s.**
  +["Analysis.Normed.SymmetricGauge","Analysis.Normed.SchattenGauge",
    "Analysis.OperatorIdeal.Family.SymmetricGauge"]),
 ("T11","Hilbert-Schmidt operators",
@@ -114,8 +112,8 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 # nearly three times the median.  Lane T15-SPLIT cut it into the three chains the
 # T04-T20 audit found, which barely touch: closedness/graphs, resolvents, and the
 # spectral measure.  Keys are suffixed rather than renumbered on purpose: pushing
-# T16-T22 up would invalidate every `Txx` reference in the audit files, in
-# CANDIDATE-TOPIC-DESIGN.md and in the written roadmaps, for no gain.
+# T16-T22 up would invalidate every `Txx` reference in the audit files and in
+# the written roadmaps, for no gain.
 # The audit proposed the cut; the import graph moved three modules across it.
 # `RealLowerBound` imports `SelfAdjointResolvent`, `SelfAdjointMaximal` imports
 # `SpectralMeasure`, and `SpectralGapInverse` imports `SpectralSupport`, so each

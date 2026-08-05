@@ -3,11 +3,12 @@
 **Internal bookkeeping. Not part of the roadmap family, and not written for a Tau Ceti
 reviewer.**
 
-`roadmap-candidate-topic-design.md` partitions every `ForTauCeti` module into fine-grained
-topic keys. This file says which roadmap directory owns which keys, and
-`scripts/check_tauceti_roadmap_topics.py` reads it: the gate fails on a topic no roadmap
-claims, a topic two roadmaps claim, a roadmap directory that claims nothing, or a cycle in
-the resulting roadmap-level dependency graph.
+The `TOPICS` table in `scripts/check_tauceti_roadmap_topics.py` partitions the maintained
+`ForTauCeti` modules into fine-grained topic keys; it is the authority on which module
+belongs to which topic. This file maps those topics to roadmap directories, and the same
+script reads it: the gate fails on a topic no roadmap claims, a topic two roadmaps claim, a
+roadmap directory that claims nothing, or a cycle in the resulting roadmap-level dependency
+graph.
 
 The map lives here rather than in the roadmap READMEs so that the READMEs stay ordinary
 mathematical prose. Topic keys are internal identifiers; they carry no meaning for a reader
