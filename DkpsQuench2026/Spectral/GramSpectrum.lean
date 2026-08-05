@@ -2,15 +2,15 @@
 Rectangular Gram-spectrum bridge for raw-response Quench.
 
 This module connects the repository's matrix-level sorted-eigenvalue convention
-(`Acharyya2025.MatrixPerturbation.sortedEigenvalues` of `configGram`) to the intrinsic
+(`Matrix.IsHermitian.eigenvalues₀` of `configGram`) to the intrinsic
 rectangular spectral theory in `ForMathlib`:
 
 * the configuration Gram matrix acts as the Gram operator `A A†` of the analysis map of the
   configuration (`TauCeti.finiteAnalysis`);
 * a quadratic floor on the configuration therefore bounds the first `d` sorted eigenvalues
-  of the `n × n` Gram matrix below (`sortedEigenvalues_configGram_lower_of_quadratic_floor`);
+  of the `n × n` Gram matrix below (`eigenvalues₀_configGram_lower_of_quadratic_floor`);
 * conversely, with `d ≤ n`, a floor on those eigenvalues recovers the quadratic floor
-  (`quadratic_floor_of_sortedEigenvalues_configGram_lower`).
+  (`quadratic_floor_of_eigenvalues₀_configGram_lower`).
 
 The two directions are the deterministic engine behind the reference-Gram spectral floor and
 the target-augmentation floor in `SpectralRegularity.lean`.
@@ -36,6 +36,7 @@ namespace DkpsQuench2026
 open Acharyya2024
 open Acharyya2025.MathlibBridge
 open Acharyya2025.MatrixPerturbation
+open TauCeti.Matrix (opSym)
 
 /-- The real inner product on `Vec d` written as a coordinate sum. -/
 theorem inner_vec_eq_sum {d : Nat} (x y : Vec d) :
@@ -71,47 +72,47 @@ theorem toEuclideanLin_configGram_eq_finiteGramOperator {n d : Nat} (z : Config 
 
 /-- The repository's sorted eigenvalues of a configuration Gram matrix agree with the sorted
 eigenvalues of the finite-family Gram operator. -/
-theorem sortedEigenvalues_configGram_eq_eigenvalues_finiteGramOperator
-    {n d : Nat} (z : Config n d) (i : Fin n) :
-    sortedEigenvalues (configGramPosSemidef z).isHermitian i =
+theorem eigenvalues₀_configGram_eq_eigenvalues_finiteGramOperator
+    {n d : Nat} (z : Config n d) (i : Fin (Fintype.card (Fin n))) :
+    (configGramPosSemidef z).isHermitian.eigenvalues₀ i =
       (TauCeti.isSymmetric_finiteGramOperator ℝ z).eigenvalues
-        finrank_euclideanSpace_fin i := by
+        finrank_euclideanSpace i := by
   have hcongr := TauCeti.eigenvalues_congr'
     (toEuclideanLin_configGram_eq_finiteGramOperator z)
     (opSym (configGramPosSemidef z).isHermitian)
     (TauCeti.isSymmetric_finiteGramOperator ℝ z)
-    (finrank_euclideanSpace_fin (n := n))
+    (finrank_euclideanSpace (𝕜 := ℝ) (ι := Fin n))
   exact congrFun hcongr i
 
 /-- **Quadratic floor to Gram spectral floor.**  A quadratic floor
 `α‖x‖² ≤ ∑ᵢ ⟪x, zᵢ⟫²` for the configuration bounds the first `d` sorted eigenvalues of the
 `n × n` configuration Gram matrix below by `α`.  No relation between `d` and `n` is assumed:
 a positive floor forces `d ≤ n` through injectivity of the analysis map. -/
-theorem sortedEigenvalues_configGram_lower_of_quadratic_floor
+theorem eigenvalues₀_configGram_lower_of_quadratic_floor
     {n d : Nat} {z : Config n d} {α : Real}
     (hquad : ∀ x : Vec d, α * ‖x‖ ^ 2 ≤ ∑ i : Fin n, (∑ a, x a * z i a) ^ 2)
-    (i : Fin n) (hi : (i : Nat) < d) :
-    α ≤ sortedEigenvalues (configGramPosSemidef z).isHermitian i := by
-  rw [sortedEigenvalues_configGram_eq_eigenvalues_finiteGramOperator]
+    (i : Fin (Fintype.card (Fin n))) (hi : (i : Nat) < d) :
+    α ≤ (configGramPosSemidef z).isHermitian.eigenvalues₀ i := by
+  rw [eigenvalues₀_configGram_eq_eigenvalues_finiteGramOperator]
   refine TauCeti.le_eigenvalues_finiteGramOperator_of_forall_le_sum_sq ℝ
-    (fun x => ?_) finrank_euclideanSpace_fin i (by simpa [finrank_euclideanSpace_fin] using hi)
+    (fun x => ?_) finrank_euclideanSpace i (by simpa [finrank_euclideanSpace_fin] using hi)
   rw [← sum_sq_linearForm_eq_sum_norm_inner]
   exact hquad x
 
 /-- **Gram spectral floor to quadratic floor.**  With `d ≤ n`, a floor on the first `d`
 sorted eigenvalues of the configuration Gram matrix recovers the quadratic floor for the
 configuration. -/
-theorem quadratic_floor_of_sortedEigenvalues_configGram_lower
+theorem quadratic_floor_of_eigenvalues₀_configGram_lower
     {n d : Nat} (hdn : d ≤ n) {z : Config n d} {α : Real}
-    (hlow : ∀ i : Fin n, (i : Nat) < d →
-      α ≤ sortedEigenvalues (configGramPosSemidef z).isHermitian i)
+    (hlow : ∀ i : Fin (Fintype.card (Fin n)), (i : Nat) < d →
+      α ≤ (configGramPosSemidef z).isHermitian.eigenvalues₀ i)
     (x : Vec d) :
     α * ‖x‖ ^ 2 ≤ ∑ i : Fin n, (∑ a, x a * z i a) ^ 2 := by
   rw [sum_sq_linearForm_eq_sum_norm_inner]
   refine TauCeti.sum_sq_floor_of_le_eigenvalues_finiteGramOperator ℝ
-    finrank_euclideanSpace_fin (by simpa [finrank_euclideanSpace_fin] using hdn)
+    finrank_euclideanSpace (by simpa [finrank_euclideanSpace_fin] using hdn)
     (fun k hk => ?_) x
-  rw [← sortedEigenvalues_configGram_eq_eigenvalues_finiteGramOperator]
+  rw [← eigenvalues₀_configGram_eq_eigenvalues_finiteGramOperator]
   exact hlow k (by simpa [finrank_euclideanSpace_fin] using hk)
 
 /-- The repository centroid is the `ForMathlib` finite mean. -/
@@ -120,9 +121,9 @@ theorem configCentroid_eq_finiteMean {n d : Nat} (z : Config n d) :
   rfl
 
 /-- Sorted eigenvalues depend only on the matrix, not on the Hermitian certificate. -/
-theorem sortedEigenvalues_matrix_congr {n : Nat} {B₁ B₂ : SqMat n} (h : B₁ = B₂)
+theorem eigenvalues₀_matrix_congr {n : Nat} {B₁ B₂ : SqMat n} (h : B₁ = B₂)
     (h₁ : B₁.IsHermitian) (h₂ : B₂.IsHermitian) :
-    sortedEigenvalues h₁ = sortedEigenvalues h₂ := by
+    h₁.eigenvalues₀ = h₂.eigenvalues₀ := by
   subst h; rfl
 
 /-- The augmented centered squared-projection sum dominates the reference centered

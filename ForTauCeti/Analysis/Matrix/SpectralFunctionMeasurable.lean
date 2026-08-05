@@ -26,6 +26,7 @@ public import Mathlib.Topology.Algebra.Polynomial
 public import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
 public import Mathlib.MeasureTheory.Constructions.BorelSpace.Metric
 public import Mathlib.MeasureTheory.Constructions.BorelSpace.Metrizable
+public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
 public import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
 public import ForTauCeti.MeasureTheory.CfcMeasurable
 
@@ -84,6 +85,26 @@ theorem opSym {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian) :
     (Matrix.toEuclideanLin B).IsSymmetric :=
   Matrix.isSymmetric_toEuclideanLin_iff.mpr hB
 
+/-- The sorted eigenvalues of a Hermitian matrix over `Fin n` are the sorted eigenvalues of
+the operator it induces, read across `Fintype.card (Fin n) = n`.
+
+`Matrix.IsHermitian.eigenvalues₀` is *defined* as the operator enumeration, but indexed by
+`Fin (Fintype.card (Fin n))` rather than `Fin n`; the equality of those cardinals is a
+theorem, not a definitional unfolding, so the transport is this lemma and not `rfl`. -/
+theorem eigenvalues₀_eq_eigenvalues_toEuclideanLin {B : Matrix (Fin n) (Fin n) ℝ}
+    (hB : B.IsHermitian) (i : Fin (Fintype.card (Fin n))) :
+    hB.eigenvalues₀ i
+      = (opSym hB).eigenvalues finrank_euclideanSpace_fin (Fin.cast (Fintype.card_fin n) i) :=
+  TauCeti.eigenvalues_cast _ _ _ _ _
+
+/-- The operator enumeration read back as the matrix one. -/
+theorem eigenvalues_toEuclideanLin_eq_eigenvalues₀ {B : Matrix (Fin n) (Fin n) ℝ}
+    (hB : B.IsHermitian) (i : Fin n) :
+    (opSym hB).eigenvalues finrank_euclideanSpace_fin i
+      = hB.eigenvalues₀ (Fin.cast (Fintype.card_fin n).symm i) := by
+  rw [eigenvalues₀_eq_eigenvalues_toEuclideanLin]
+  congr 1
+
 /-- For continuous `h` and any radius/tolerance, there is a polynomial
 uniformly close to `h` on `[-R, R]`. -/
 theorem exists_polynomial_uniform_close (h : ℝ → ℝ) (hh : Continuous h)
@@ -136,6 +157,14 @@ theorem abs_eigenvalues₀_le_of_entry_le {B : Matrix (Fin n) (Fin n) ℝ}
   have hle : ‖Matrix.toEuclideanLin B (u k)‖ ≤ (n : ℝ) * β * ‖u k‖ :=
     TauCeti.norm_toEuclideanLin_le_of_entry_le hβ (u k)
   rwa [happly, norm_smul, Real.norm_eq_abs, hnorm1, mul_one, mul_one] at hle
+
+/-- One-sided form of the entrywise eigenvalue bound.  A consumer that only needs a
+spectral ceiling states it against this rather than discharging the absolute value. -/
+theorem eigenvalues₀_le_of_entry_le {B : Matrix (Fin n) (Fin n) ℝ}
+    (hB : B.IsHermitian) {β : ℝ} (hβ : ∀ i j, |B i j| ≤ β)
+    (k : Fin (Fintype.card (Fin n))) :
+    hB.eigenvalues₀ k ≤ (n : ℝ) * β :=
+  le_trans (le_abs_self _) (abs_eigenvalues₀_le_of_entry_le hB hβ k)
 
 /-! ### Polynomial spectral action -/
 

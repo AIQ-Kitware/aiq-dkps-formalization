@@ -101,9 +101,9 @@ theorem quench_uniform_embedding_error_of_aligned_spectral
     (hrank : (Acharyya2025.MathlibBridge.disMatToMatrix
         (Acharyya2025.Deterministic.classicalMDSMatrix D)).rank ≤ d)
     {α Λ : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ Acharyya2025.MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
-    (hΛ : ∀ l, Acharyya2025.MatrixPerturbation.sortedEigenvalues hB.isHermitian l ≤ Λ)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (ψFinite : Config n d)
     (hψFinite : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
       = Acharyya2025.Deterministic.classicalMDSMatrix D i j)
@@ -180,9 +180,9 @@ theorem quench_part2_from_aligned_configError_hp
     (hrank : (Acharyya2025.MathlibBridge.disMatToMatrix
         (Acharyya2025.Deterministic.classicalMDSMatrix D)).rank ≤ d)
     {α Λ : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ Acharyya2025.MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
-    (hΛ : ∀ l, Acharyya2025.MatrixPerturbation.sortedEigenvalues hB.isHermitian l ≤ Λ)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (hψFinite_gram : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
       = Acharyya2025.Deterministic.classicalMDSMatrix D i j)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
@@ -335,9 +335,9 @@ theorem queryEfficient_nn_of_aligned_spectral
     (hrank : (Acharyya2025.MathlibBridge.disMatToMatrix
         (Acharyya2025.Deterministic.classicalMDSMatrix D)).rank ≤ d)
     {α Λ : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ Acharyya2025.MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
-    (hΛ : ∀ l, Acharyya2025.MatrixPerturbation.sortedEigenvalues hB.isHermitian l ≤ Λ)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (ψFinite : Config n d)
     (hψFinite : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
       = Acharyya2025.Deterministic.classicalMDSMatrix D i j)
@@ -434,9 +434,9 @@ theorem queryEfficient_nn_of_response_mean
         (Acharyya2025.Deterministic.classicalMDSMatrix
           (Acharyya2024.responseDist μvec))).rank ≤ d)
     {α Λ : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ Acharyya2025.MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
-    (hΛ : ∀ l, Acharyya2025.MatrixPerturbation.sortedEigenvalues hB.isHermitian l ≤ Λ)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (ψFinite : Config n d)
     (hψFinite : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
       = Acharyya2025.Deterministic.classicalMDSMatrix (Acharyya2024.responseDist μvec) i j)
@@ -550,9 +550,9 @@ theorem queryEfficient_nn_of_second_moment
         (Acharyya2025.Deterministic.classicalMDSMatrix
           (Acharyya2024.responseDist μvec))).rank ≤ d)
     {α Λ : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ Acharyya2025.MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
-    (hΛ : ∀ l, Acharyya2025.MatrixPerturbation.sortedEigenvalues hB.isHermitian l ≤ Λ)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (ψFinite : Config n d)
     (hψFinite : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
       = Acharyya2025.Deterministic.classicalMDSMatrix (Acharyya2024.responseDist μvec) i j)
@@ -642,9 +642,9 @@ theorem queryEfficient_nn_of_second_moment_canonical
         (Acharyya2025.Deterministic.classicalMDSMatrix
           (Acharyya2024.responseDist μvec))).rank ≤ d)
     {α Λ : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ Acharyya2025.MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
-    (hΛ : ∀ l, Acharyya2025.MatrixPerturbation.sortedEigenvalues hB.isHermitian l ≤ Λ)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (η R : Nat → Real)
     (hrate_nonneg : ∀ u,
       0 ≤ Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
@@ -736,8 +736,8 @@ theorem queryEfficient_nn_of_second_moment_canonical_topEigenvalue
         (Acharyya2025.Deterministic.classicalMDSMatrix
           (Acharyya2024.responseDist μvec))).rank ≤ d)
     {α : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ Acharyya2025.MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
     (η R : Nat → Real)
     (hrate_nonneg : ∀ u,
       0 ≤ Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
@@ -800,7 +800,7 @@ theorem queryEfficient_nn_of_second_moment_canonical_topEigenvalue
               (yQ (Q := Q) (X := X) score Qsub)} ≥ 1 - δ := by
   exact queryEfficient_nn_of_second_moment_canonical Pf μ hμ hn hd Xbar μvec
     hB hrank hα_pos hfloor
-    (Acharyya2025.MatrixPerturbation.sortedEigenvalues_le_topEigenvalue hn hB)
+    (Acharyya2025.MatrixPerturbation.eigenvalues₀_le_topEigenvalue hn hB)
     η R hrate_nonneg hrate_zero σ2 hint hσ2 hη_pos hratio
     hsample_bound hpopulation_bound indexOf ψ ψHat hψ hψHat
     f_ref score Qstar Qsub γ h_lipQ h_gamma_pos hXmeas

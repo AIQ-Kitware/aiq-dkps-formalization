@@ -313,7 +313,7 @@ theorem alignmentConsistency_of_aligned_spectral
     (hrank : ∀ ω, (Acharyya2025.MathlibBridge.disMatToMatrix
         (Acharyya2025.Deterministic.classicalMDSMatrix (Dpop ω))).rank ≤ d)
     (hcap : ∀ ω l,
-        Acharyya2025.MatrixPerturbation.sortedEigenvalues (hpsd ω).isHermitian l ≤ Λ)
+        (hpsd ω).isHermitian.eigenvalues₀ l ≤ Λ)
     -- Gram realization (also encodes centring of the latents):
     (hgram : ∀ ω i j, (∑ k, (ω i).1 k * (ω j).1 k)
         = Acharyya2025.Deterministic.classicalMDSMatrix (Dpop ω) i j)
@@ -343,8 +343,8 @@ theorem alignmentConsistency_of_aligned_spectral
             Acharyya2025.Bridge.EntrywiseClose
                 (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat u ω))
                 (Acharyya2025.Deterministic.classicalMDSMatrix (Dpop ω)) (rate u)
-            ∧ (∀ i : Fin (n + 1), (i : ℕ) < d →
-                α ≤ Acharyya2025.MatrixPerturbation.sortedEigenvalues (hpsd ω).isHermitian i)})) :
+            ∧ (∀ i : Fin (Fintype.card (Fin (n + 1))), (i : ℕ) < d →
+                α ≤ (hpsd ω).isHermitian.eigenvalues₀ i)})) :
     -- Conclusion: Helm's alignment consistency (Eq. (3)) — now *derived*, with the
     -- eigenvalue-stability assumption explicit (see docstring).
     DKPSAlignmentConsistency n d d' P
@@ -422,8 +422,7 @@ theorem alignmentConsistency_of_aligned_spectral_of_gram
     (hgram : ∀ ω i j, (∑ k, (ω i).1 k * (ω j).1 k)
       = Acharyya2025.Deterministic.classicalMDSMatrix (Dpop ω) i j)
     (hcap : ∀ ω l,
-      Acharyya2025.MatrixPerturbation.sortedEigenvalues
-        (populationCMDS_posSemidef_of_gram Dpop hgram ω).isHermitian l ≤ Λ)
+      (populationCMDS_posSemidef_of_gram Dpop hgram ω).isHermitian.eigenvalues₀ l ≤ Λ)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
     (hrate_zero : Tendsto (fun u => ((n + 1 : ℕ) : ℝ) * rate u) atTop (𝓝 0))
     (hgood_meas :
@@ -445,9 +444,8 @@ theorem alignmentConsistency_of_aligned_spectral_of_gram
             Acharyya2025.Bridge.EntrywiseClose
                 (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat u ω))
                 (Acharyya2025.Deterministic.classicalMDSMatrix (Dpop ω)) (rate u)
-            ∧ (∀ i : Fin (n + 1), (i : ℕ) < d →
-                α ≤ Acharyya2025.MatrixPerturbation.sortedEigenvalues
-                  (populationCMDS_posSemidef_of_gram Dpop hgram ω).isHermitian i)})) :
+            ∧ (∀ i : Fin (Fintype.card (Fin (n + 1))), (i : ℕ) < d →
+                α ≤ (populationCMDS_posSemidef_of_gram Dpop hgram ω).isHermitian.eigenvalues₀ i)})) :
     DKPSAlignmentConsistency n d d' P
       (fun u ω => Acharyya2025.AlignedPipeline.alignedSpectralConfig hd Dhat hsym
         (fun i : Fin (n + 1) => (ω i).1)
@@ -504,9 +502,8 @@ theorem alignmentConsistency_of_aligned_spectral_of_gram_entrywiseBound
             Acharyya2025.Bridge.EntrywiseClose
                 (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat u ω))
                 (Acharyya2025.Deterministic.classicalMDSMatrix (Dpop ω)) (rate u)
-            ∧ (∀ i : Fin (n + 1), (i : ℕ) < d →
-                α ≤ Acharyya2025.MatrixPerturbation.sortedEigenvalues
-                  (populationCMDS_posSemidef_of_gram Dpop hgram ω).isHermitian i)})) :
+            ∧ (∀ i : Fin (Fintype.card (Fin (n + 1))), (i : ℕ) < d →
+                α ≤ (populationCMDS_posSemidef_of_gram Dpop hgram ω).isHermitian.eigenvalues₀ i)})) :
     DKPSAlignmentConsistency n d d' P
       (fun u ω => Acharyya2025.AlignedPipeline.alignedSpectralConfig hd Dhat hsym
         (fun i : Fin (n + 1) => (ω i).1)
@@ -514,11 +511,10 @@ theorem alignmentConsistency_of_aligned_spectral_of_gram_entrywiseBound
           (((n + 1 : ℕ) : ℝ) * β)
           (((n + 1 : ℕ) : ℝ) * rate u)) u ω) := by
   have hcap : ∀ ω l,
-      Acharyya2025.MatrixPerturbation.sortedEigenvalues
-        (populationCMDS_posSemidef_of_gram Dpop hgram ω).isHermitian l
+      (populationCMDS_posSemidef_of_gram Dpop hgram ω).isHermitian.eigenvalues₀ l
         ≤ (((n + 1 : ℕ) : ℝ) * β) := by
     intro ω l
-    apply Acharyya2025.MatrixPerturbation.sortedEigenvalues_le_of_entry_le
+    apply TauCeti.Matrix.eigenvalues₀_le_of_entry_le
     intro i j
     simpa [Acharyya2025.MathlibBridge.disMatToMatrix] using hentry ω i j
   exact alignmentConsistency_of_aligned_spectral_of_gram hd P Dhat hsym Dpop
