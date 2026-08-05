@@ -164,7 +164,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  ["Analysis.Matrix."+x for x in ["EntrywiseEigenvalue","EntrywiseOpNorm","SpectralFunctionMeasurable","Spectrum"]]
  +["MeasureTheory.Function.ConvergenceInMeasure","MeasureTheory.Measure.Typeclasses.Probability"]),
 ("T20","Sample moments and matrix concentration",
- ["Probability.Moments."+x for x in ["MatrixConcentration","SampleCovariance","SampleMean","Variance"]]
+ ["Probability.Moments."+x for x in ["MatrixConcentration","SampleSecondMoment","SampleMean","Variance"]]
  +["Probability.Moments.CenteredScatter"]),
 ("T21","Matrix rank factorization and positive semidefiniteness",
  ["LinearAlgebra.Matrix.RankFactorization","LinearAlgebra.Matrix.PosDef"]),

@@ -157,12 +157,15 @@ layers:
   `measure_forall_abs_sortedEig_sub_le_ge` (eigenvalue concentration),
   `measure_forall_sortedEig_ge_ge` (eigenvalue **lower bound**, take
   `η = c/(2n)`).  Takes per-entry second-moment bounds as hypotheses.
-- `ForMathlib/Probability/Moments/SampleCovariance.lean` — the iid → per-entry
-  specialization to the actual empirical covariance
-  `Σ̂_{kl} = n⁻¹ Σᵢ Vᵢ(k)Vᵢ(l)`: `sampleCovariance`,
-  `integral_sq_sampleCovariance_entry_le` (coordinate products fed through the
-  scalar `integral_norm_sq_average_sub_of_iid`), `isHermitian_sampleCovariance`,
-  and the capstone `measure_forall_sampleCovariance_sortedEig_ge_ge`.
+- `ForTauCeti/Probability/Moments/SampleSecondMoment.lean` — the iid → per-entry
+  specialization to the **uncentered** empirical second moment
+  `M̂_{kl} = n⁻¹ Σᵢ Vᵢ(k)Vᵢ(l)`: `sampleSecondMoment`,
+  `integral_sq_sampleSecondMoment_entry_le` (coordinate products fed through the
+  scalar `integral_norm_sq_average_sub_of_iid`), `isHermitian_sampleSecondMoment`,
+  and the capstone `measure_forall_sampleSecondMoment_sortedEigenvalues_ge_ge`.
+  This entry was compiled while the module was `ForMathlib/.../SampleCovariance.lean`
+  and named its declarations `sampleCovariance…`; both the "covariance" wording and
+  the `ForMathlib` home are gone (no mean is subtracted, and `ForMathlib` retired).
 
 This furnishes the eigengap Helm's `halign` needs (a population eigenvalue
 floored at `c` stays above `c/2` w.h.p.).  Loose `n`/`n²` constants (the price
