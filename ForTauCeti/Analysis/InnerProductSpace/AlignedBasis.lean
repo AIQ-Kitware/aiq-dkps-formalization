@@ -20,7 +20,7 @@ module
 
 public import Mathlib.LinearAlgebra.Basis.Defs
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
-public import ForTauCeti.Analysis.InnerProductSpace.Basic
+public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 
 
 /-! # The coordinate isometry of an orthonormal family
