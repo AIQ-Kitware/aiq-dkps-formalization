@@ -115,6 +115,26 @@ modulus is invertible:
 Read down the list: dropping finite dimension costs the unitary and leaves a
 partial isometry; adding invertibility of the modulus buys it back as an
 isometry. That is the whole hierarchy.
+
+**Correction, 2026-08-04.**  The list above presents "the field" as one of the
+three separating hypotheses.  For this module that reading was wrong: nothing in
+the construction below needs `ℂ`.  What needs `ℂ` is `modulus`, which is a
+continuous functional calculus, and Mathlib supplies
+`ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint` for `ℂ` only.  Keying
+the same construction on the *Gram identity* `A ∘L A = T⋆ ∘L T` with `A`
+self-adjoint, rather than on `A = |T|`, drops the field restriction entirely;
+that is `Polar/GramContraction.lean`, over any `RCLike` field.  So the honest
+fourth entry is:
+
+* `ContinuousLinearMap.gramContraction`, in `GramContraction.lean` — rectangular
+  `E →L[𝕜] F` over **any `RCLike` field**, the Gram square root supplied as a
+  hypothesis; a **partial isometry**, with `W A = T` and `W⋆ T = A`.
+
+This module keeps its own value: it *constructs* the modulus rather than
+assuming one, and it carries the full partial-isometry API (`W W⋆ W = W`, the
+initial and final spaces, uniqueness, `|M⋆| = W |M| W⋆`).  `GramContraction.lean`
+proves only the two factorisation identities and the contraction bound, which is
+what a symmetric-norm-ideal argument consumes.
 -/
 
 public section
