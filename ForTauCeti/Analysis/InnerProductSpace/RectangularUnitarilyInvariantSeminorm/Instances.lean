@@ -599,12 +599,37 @@ itself on square operators. -/
 
 There are two Frobenius constructions in this library — `UnitarilyInvariantSeminorm.frobenius`
 on square maps and `RectangularUnitarilyInvariantSeminorm.frobenius` on rectangular ones —
-and they were written independently, with byte-identical bodies, neither derived from the
-other.  This identifies them, so the rectangular construction is the computational owner and
-the square one is its restriction along `toSquare` rather than a second implementation.
+written independently, with byte-identical bodies, neither derived from the other.  This
+identifies them.  It is `rfl`: both evaluate `A ↦ √(∑ᵢ ‖A bᵢ‖²)` over the same
+`stdOrthonormalBasis`.  That it is `rfl` is the point — the duplication is real, not merely
+apparent.
 
-It is `rfl`: both evaluate `A ↦ √(∑ᵢ ‖A bᵢ‖²)` over the same `stdOrthonormalBasis`.  That it
-is `rfl` is the point — the duplication was real, not merely apparent. -/
+The rest of the finite-dimensional chain is proved elsewhere and hangs off the *rectangular*
+construction: `RectangularUnitarilyInvariantSeminorm.schattenNorm_two_apply` identifies the
+Schatten `S₂` norm with it, and `hilbertSchmidtEnergy_eq_ofReal_frobenius_sq` identifies the
+Hilbert--Schmidt energy with its square.  In that sense the rectangular one is the canonical
+reusable owner.
+
+**But it is not the literal implementation owner, and the difference is not cosmetic.** Two
+`def`s remain; this theorem relates them, it does not remove one.  Making the square norm
+*be* `.toSquare` of the rectangular one is blocked in both available directions:
+
+* In place, it is an import cycle.  The rectangular structure is introduced in
+  `RectangularUnitarilyInvariantSeminorm/Basic.lean`, which imports
+  `UnitarilyInvariantSeminorm.lean` — the module the square `frobenius` lives in — and this
+  file is three modules further down again:
+  `Instances → BlockSum → Majorization → Basic → UnitarilyInvariantSeminorm`.
+* Moving the square `frobenius` down here instead does compile, but it moves the canonical
+  example of a unitarily invariant norm out of the roadmap topic that introduces unitarily
+  invariant norms (T05, `UnitarilyInvariantSeminorm.lean`) and into the rectangular topic
+  (T07, this file).  Tau Ceti submits one topic per PR against an accepted base, so T05 would
+  then propose the abstraction with no instance of it, and every square-only consumer would
+  take the entire rectangular closure just to name the Frobenius norm.
+
+Removing the second `def` therefore requires the square seminorm *structure* to be split out
+of `UnitarilyInvariantSeminorm.lean` into a module upstream of `Rectangular.../Basic.lean`.
+That is a foundational restructure of a 630-line module, not a Frobenius question, and it is
+not attempted here. -/
 theorem frobenius_toSquare_eq :
     (RectangularUnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)).toSquare =
       UnitarilyInvariantSeminorm.frobenius 𝕜 E :=
