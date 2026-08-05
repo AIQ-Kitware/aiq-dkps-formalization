@@ -8,6 +8,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Ideals.Rectangular
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import ForTauCeti.Analysis.OperatorIdeal.Family.CompactOperator
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Symmetric norm ideals
@@ -68,6 +69,10 @@ symmetric-gauge representation theorem.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 -- `RectangularSymmetricIdealFamily` and its concrete instances live in the

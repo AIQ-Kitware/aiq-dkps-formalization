@@ -23,6 +23,7 @@ namespace SharedFoundations
 
 open scoped InnerProductSpace
 open DavisKahanExt
+open TauCeti.DavisKahan
 
 universe u
 

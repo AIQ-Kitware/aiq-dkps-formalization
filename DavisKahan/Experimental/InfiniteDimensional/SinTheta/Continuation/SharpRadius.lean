@@ -23,6 +23,8 @@ No spectral inclusion is asserted here.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open Set
 
 universe v

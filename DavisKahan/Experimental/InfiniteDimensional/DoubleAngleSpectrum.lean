@@ -95,7 +95,7 @@ theorem isSelfAdjoint_conjByIsometryEquiv (W : E ≃ₗᵢ[ℂ] E)
 
 omit [CompleteSpace E] in
 /-- Conjugation transports reducing subspaces to the image subspace. -/
-theorem Reduces.map_isometryEquiv {A : E →L[ℂ] E} {U : Submodule ℂ E}
+theorem _root_.ContinuousLinearMap.Reduces.map_isometryEquiv {A : E →L[ℂ] E} {U : Submodule ℂ E}
     (hU : Reduces A U) (W : E ≃ₗᵢ[ℂ] E) :
     Reduces (conjByIsometryEquiv W A)
       (U.map (W.toLinearEquiv : E →ₗ[ℂ] E)) := by

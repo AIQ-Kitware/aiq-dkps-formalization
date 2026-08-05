@@ -16,6 +16,8 @@ projections onto the selected bounded spectral subspaces.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open scoped InnerProductSpace
 
 universe v

@@ -116,7 +116,7 @@ theorem theorem63_sylvester_identity
   rw [map_sub]
   congr 1
   exact (ContinuousLinearMap.starProjection_apply_comm_of_reduces
-    T Vᗮ (DavisKahanExt.Reduces.orthogonalComplement hV) (z : H)).symm
+    T Vᗮ (hV.orthogonalComplement) (z : H)).symm
 
 omit [CompleteSpace H] in
 /-- The directed sine block is a contraction. -/
@@ -810,7 +810,7 @@ theorem theorem6_3_generalizedTanTheta_source_ideal
     (hCompressionSpectrum :
       spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
     (hUnwantedSpectrum :
-      spectrum ℝ (T.restrict (DavisKahanExt.Reduces.orthogonalComplement hV).1) ⊆
+      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
         Set.Ici (alpha + delta))
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
@@ -835,7 +835,7 @@ theorem theorem6_3_generalizedTanTheta_source_ideal
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := by
     intro y hy
     exact SpectralOrder.Complex.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
-      hT (DavisKahanExt.Reduces.orthogonalComplement hV).1 hUnwantedSpectrum hy
+      hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
   exact theorem6_3_generalizedTanTheta_of_formBounds N T hT V Z hV
     hStrictDimension hdelta hCompressionUpper hUnwantedLower tanTheta0 htan
     hResidual
@@ -1053,7 +1053,7 @@ theorem theorem6_3_generalizedTanTheta_source_ideal_directedTangent
     (hCompressionSpectrum :
       spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
     (hUnwantedSpectrum :
-      spectrum ℝ (T.restrict (DavisKahanExt.Reduces.orthogonalComplement hV).1) ⊆
+      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
         Set.Ici (alpha + delta))
     (hResidual : N.Mem (theorem63Residual T Z)) :
     N.Mem (theorem63DirectedTangent Z V) ∧
@@ -1074,7 +1074,7 @@ theorem theorem6_3_generalizedTanTheta_source_ideal_directedTangent
   have hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
     SpectralOrder.Complex.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
-      hT (DavisKahanExt.Reduces.orthogonalComplement hV).1 hUnwantedSpectrum hy
+      hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
   exact theorem6_3_generalizedTanTheta_source_ideal N T hT V Z hV
     hStrictDimension hbetaalpha hdelta hCompressionSpectrum hUnwantedSpectrum
     (theorem63DirectedTangent Z V)
@@ -1133,7 +1133,7 @@ theorem theorem6_3_generalizedTanTheta_equalRank_spectral
     (hCompressionSpectrum :
       spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
     (hUnwantedSpectrum :
-      spectrum ℝ (T.restrict (DavisKahanExt.Reduces.orthogonalComplement hV).1) ⊆
+      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
         Set.Ici (alpha + delta))
     (hResidual : N.Mem (theorem63Residual T Z)) :
     N.Mem (theorem63DirectedTangent Z V) ∧
@@ -1154,7 +1154,7 @@ theorem theorem6_3_generalizedTanTheta_equalRank_spectral
   have hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
     SpectralOrder.Complex.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
-      hT (DavisKahanExt.Reduces.orthogonalComplement hV).1 hUnwantedSpectrum hy
+      hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
   exact theorem6_3_generalizedTanTheta_of_formBounds_equalRank Z V N T hT hV
     hdelta hCompressionUpper hUnwantedLower hResidual
 

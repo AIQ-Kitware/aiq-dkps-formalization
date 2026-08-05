@@ -25,6 +25,7 @@ namespace SharedFoundations
 open scoped InnerProductSpace
 open ExactSinTheta
 open DavisKahanExt
+open TauCeti.DavisKahan
 
 universe u
 

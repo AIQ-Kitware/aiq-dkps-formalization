@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.SelectedGraph
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Reduction of the selected continuation graph
@@ -22,6 +23,10 @@ model before invoking the bounded Riccati reduction theorem.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open Set
 open scoped InnerProductSpace unitInterval

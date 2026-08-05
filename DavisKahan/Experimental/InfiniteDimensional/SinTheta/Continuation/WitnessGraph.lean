@@ -23,6 +23,8 @@ from the ambient source spectral subspace to the direct-sum block model.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open Set
 open scoped InnerProductSpace unitInterval
 
@@ -171,6 +173,8 @@ end DavisKahanExt
 end TauCeti
 namespace TauCeti
 namespace DavisKahanTheory
+
+open DavisKahan
 
 open scoped InnerProductSpace Topology
 

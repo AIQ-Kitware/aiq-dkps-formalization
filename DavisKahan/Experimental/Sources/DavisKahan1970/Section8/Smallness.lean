@@ -28,6 +28,7 @@ namespace Section8
 open Set
 open scoped InnerProductSpace
 open DavisKahanExt
+open TauCeti.DavisKahan
 
 universe v w
 

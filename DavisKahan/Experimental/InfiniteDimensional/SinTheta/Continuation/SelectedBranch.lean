@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.SelectedSubspace
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # The selected bounded spectral branch
@@ -21,6 +22,10 @@ the already green contour, subdivision, or rotation-chain proofs.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open Set
 open scoped InnerProductSpace unitInterval

@@ -47,6 +47,8 @@ namespace Section4
 
 open ExactSinTheta
 open DavisKahanExt
+open TauCeti.DavisKahan
+open Foundation
 open Module (finrank)
 
 noncomputable section

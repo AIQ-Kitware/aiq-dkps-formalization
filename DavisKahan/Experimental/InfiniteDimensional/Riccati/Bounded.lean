@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Riccati.BoundedCanonicalGraph
 import DavisKahan.Riccati.BoundedStability
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedSpectralEnclosure
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Public bounded Riccati theory
@@ -23,6 +24,10 @@ form proved by the bounded existence and sharp-estimate leaves.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 

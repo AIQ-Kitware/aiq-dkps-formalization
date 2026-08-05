@@ -22,6 +22,8 @@ argument.  No spectral inclusion is claimed in this leaf.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open Set
 open scoped InnerProductSpace
 

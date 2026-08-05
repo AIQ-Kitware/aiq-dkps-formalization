@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedCoordinateRestrictions
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Coordinate restrictions of a reduced unbounded direct-sum operator
@@ -21,6 +22,8 @@ inherited from the corresponding property of the ambient map.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
 
 open scoped InnerProductSpace
 open Filter Topology

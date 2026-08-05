@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.ClosedOperator.Basic
 import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+import DavisKahan.BoundedOperator.Compat
 
 /-!
 # Restrictions of closed operators to reducing subspaces
@@ -21,6 +22,8 @@ intertwining are then canonical.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan
 
 open scoped InnerProductSpace
 open Filter Topology

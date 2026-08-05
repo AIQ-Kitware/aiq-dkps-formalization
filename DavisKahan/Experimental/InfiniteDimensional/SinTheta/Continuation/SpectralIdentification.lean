@@ -29,6 +29,8 @@ reads the identification straight off
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open Set
 open MeasureTheory
 open scoped InnerProductSpace

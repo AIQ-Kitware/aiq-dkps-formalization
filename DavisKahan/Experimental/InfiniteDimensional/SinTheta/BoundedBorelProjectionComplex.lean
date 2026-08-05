@@ -48,6 +48,8 @@ additivity or about multiplicativity in `s`, both of which the PVM also has.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open DavisKahan.Experimental
 
 universe v

@@ -7,6 +7,7 @@ import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 import Mathlib.Topology.MetricSpace.Lipschitz
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Resolvents, Riesz projections, and spectral continuation
@@ -72,6 +73,10 @@ general PVM construction.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 open Filter

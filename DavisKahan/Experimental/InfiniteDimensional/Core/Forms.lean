@@ -55,6 +55,8 @@ would make domain-sensitive statements formally false.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open scoped InnerProductSpace
 
 variable {𝕜 : Type*} [RCLike 𝕜]

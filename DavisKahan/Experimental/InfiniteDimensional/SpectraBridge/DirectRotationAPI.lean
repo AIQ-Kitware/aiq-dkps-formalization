@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.DirectRotation
 import DavisKahan.Geometry.Polar.DirectRotationSquare
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Complex direct rotation backed by Spectra
@@ -20,6 +21,10 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]

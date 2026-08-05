@@ -30,6 +30,8 @@ scalar optimization.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open Set
 
 universe v

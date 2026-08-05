@@ -24,6 +24,8 @@ supply the witness from sharp branch preservation.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open Set
 open scoped InnerProductSpace
 

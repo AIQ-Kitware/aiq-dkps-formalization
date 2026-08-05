@@ -28,6 +28,8 @@ namespace MathAhead
 namespace HiddenFoundations
 
 open DavisKahanExt
+open TauCeti.DavisKahan
+open TauCeti.DavisKahan.Experimental.Foundation
 open Frontier
 open Frontier.Section8
 

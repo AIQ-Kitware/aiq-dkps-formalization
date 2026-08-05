@@ -42,6 +42,7 @@ namespace FinishTanTwoTheta
 
 open scoped InnerProductSpace
 open TauCeti.DavisKahanExt
+open TauCeti.DavisKahan
 
 noncomputable section
 

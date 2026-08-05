@@ -9,6 +9,7 @@ import DavisKahan.SpectralTheory.Complexification.Spectrum
 import Mathlib.Analysis.InnerProductSpace.StarOrder
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
 import ForTauCeti.Analysis.InnerProductSpace.Polar.GramContraction
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Infinite-dimensional `sin Θ` theorems
@@ -20,6 +21,10 @@ versions.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 open DavisKahan.Experimental

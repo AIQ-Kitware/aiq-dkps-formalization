@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalSpectrumNonempty
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Forward ordered-gap estimate for bounded off-diagonal perturbations
@@ -21,6 +22,10 @@ the final public theorem.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 

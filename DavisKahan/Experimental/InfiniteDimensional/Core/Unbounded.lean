@@ -18,6 +18,8 @@ confined here.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open scoped InnerProductSpace
 open Filter Topology
 

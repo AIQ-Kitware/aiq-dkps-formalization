@@ -44,6 +44,7 @@ namespace FinishTanTwoTheta
 
 open scoped InnerProductSpace
 open DavisKahanExt
+open TauCeti.DavisKahan
 open Experimental.ExactSinTheta
 
 noncomputable section

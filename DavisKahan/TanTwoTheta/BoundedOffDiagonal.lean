@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
+import DavisKahan.BoundedOperator.Compat
 
 /-!
 # Bounded double-angle tangent reduction
@@ -22,6 +23,8 @@ of this leaf until it is connected to the complex and real constructions.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open scoped InnerProductSpace
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
@@ -32,7 +35,7 @@ private theorem quarterAcute_doubleCosineConstant_pos
     (hquarter : IsQuarterAcute U V) :
     0 < 1 - 2 * directedGap U V ^ 2 := by
   have hglt : directedGap U V < Real.sqrt 2 / 2 :=
-    lt_of_le_of_lt (directedGap_le_subspaceGap U V) hquarter
+    lt_of_le_of_lt (directedProjectionGap_le_projectionGap U V) hquarter
   have hg0 : 0 ≤ directedGap U V := by
     rw [show directedGap U V =
       ‖Vᗮ.starProjection ∘L U.starProjection‖ from rfl]

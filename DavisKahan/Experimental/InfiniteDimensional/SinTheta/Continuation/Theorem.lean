@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.Endpoints
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.RotationChain
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Final bounded spectral-continuation theorem
@@ -17,6 +18,10 @@ contour integral or continuous-functional-calculus expression.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open Set
 open scoped InnerProductSpace unitInterval

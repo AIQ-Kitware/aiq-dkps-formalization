@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedBlockSpectrum
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Bounded Riccati spectral enclosures
@@ -27,6 +28,8 @@ follow from diagonalization of an arbitrary Riccati solution alone.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
 
 variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
   [CompleteSpace E0]

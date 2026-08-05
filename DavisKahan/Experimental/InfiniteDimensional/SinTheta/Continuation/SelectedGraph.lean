@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.QuarterAcute
 import DavisKahan.SpectralTheory.GraphSubspace
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Contractive graph representation of a selected continuation endpoint
@@ -21,6 +22,10 @@ block operator and comparison with the block-coordinate graph API.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open Set
 open scoped InnerProductSpace unitInterval

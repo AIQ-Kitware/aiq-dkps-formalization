@@ -33,6 +33,8 @@ namespace Frontier
 namespace Section8
 
 open DavisKahanExt
+open TauCeti.DavisKahan
+open TauCeti.DavisKahan.Experimental.Foundation
 open RieszCircle
 
 universe u v
