@@ -507,16 +507,16 @@
       "source_anchor": "Theorem 5.1",
       "title": "Banach-space Sylvester lower bound",
       "summary": "Under a norm bound on B and an inverse norm bound on A, AX-XB=C implies ||C|| >= delta ||X|| for any compatible operator norm.",
-      "status": "partial_or_wrapper_missing",
+      "status": "compiled_exact",
       "verification": "proved_in_build",
-      "blocked_by": [
-        "exact-source-wrappers"
-      ],
+      "blocked_by": [],
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.bounded_sylvester_neumann_solution"
+        "TauCeti.DavisKahan1970.bounded_sylvester_neumann_solution",
+        "TauCeti.DavisKahan1970.banach_sylvester_lower_bound",
+        "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm"
       ],
-      "notes": "The repository has Neumann and ordered-gap engines, but no explicit audited source wrapper for this Banach-space theorem.",
-      "next_action": "Add the exact Banach-space statement and derive it from the geometric-series proof."
+      "notes": "The repository has Neumann and ordered-gap engines, but no explicit audited source wrapper for this Banach-space theorem.\n\nCLOSED 2026-08-04: `partial_or_wrapper_missing` -> `compiled_exact`. The previous next_action -- \"Add the exact Banach-space statement and derive it from the geometric-series proof\" -- had the derivation backwards, and that is why the row stayed open. **The geometric series is what produces a solution; it is not what bounds one.** From `A X = C + X B` and a bounded left inverse, `X = A^{-1} C + A^{-1} X B`, so `||X|| <= ||A^{-1}||(||C|| + rho ||X||) <= (rho+delta)^{-1}(||C|| + rho ||X||)`, and one multiplication by `rho + delta` cancels `rho ||X||` from both sides. That is the whole proof.\n\nSo the source statement needs **no inner product, no completeness, no self-adjointness and no Neumann series** -- which is exactly why every other Sylvester lower bound in this repository, all of them proved through coercivity or the spectral theorem, was the wrong thing to try to specialise. New foundation: `ForTauCeti/Analysis/Normed/Operator/SylvesterBoundedInverse.lean`, over Banach spaces and a `NontriviallyNormedField`.\n\nThe source's \"for any compatible operator norm\" clause is carried literally by `banach_sylvester_lower_bound_uiNorm`: it is stated for an arbitrary size function subject to exactly subadditivity and the two one-sided ideal bounds, which is also what a symmetric-norm-ideal gauge supplies, so the unitarily-invariant-norm reading of Theorem 5.1 is the same theorem. `banach_sylvester_lower_bound` is its operator-norm specialisation. Both are admission-free and resolve against `DavisKahan.All`.",
+      "next_action": "None. If a future consumer wants the bound with `BoundedInverseData` rather than a bare left inverse, `hA.left_inv` is the argument to pass; do not restate the estimate."
     },
     {
       "id": "DK-5.2-thm",

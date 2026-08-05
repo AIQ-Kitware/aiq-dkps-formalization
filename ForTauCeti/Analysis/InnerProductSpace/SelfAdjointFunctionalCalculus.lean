@@ -307,6 +307,7 @@ noncomputable def extendSymbol {S : Set ℝ} (g : C(S, ℝ)) : ℝ → ℝ :=
   fun x => if h : x ∈ S then g ⟨x, h⟩ else 0
 
 open scoped Classical in
+/-- On `S` the extension by zero agrees with the symbol. -/
 @[simp] theorem extendSymbol_apply_of_mem {S : Set ℝ} (g : C(S, ℝ)) {x : ℝ} (hx : x ∈ S) :
     extendSymbol g x = g ⟨x, hx⟩ := dif_pos hx
 
@@ -326,24 +327,29 @@ theorem extendSymbol_eq_indicator {S : Set ℝ} (g : C(S, ℝ)) (f : ℝ → ℝ
   · rw [extendSymbol_apply_of_not_mem g hx, Set.indicator_of_notMem hx]
 
 open scoped Classical in
+/-- Extension by zero is multiplicative: both sides vanish off `S`. -/
 theorem extendSymbol_mul {S : Set ℝ} (g₁ g₂ : C(S, ℝ)) :
     extendSymbol (g₁ * g₂) = fun x => extendSymbol g₁ x * extendSymbol g₂ x := by
   funext x
   by_cases hx : x ∈ S <;> simp [extendSymbol, hx]
 
 open scoped Classical in
+/-- Extension by zero is additive. -/
 theorem extendSymbol_add {S : Set ℝ} (g₁ g₂ : C(S, ℝ)) :
     extendSymbol (g₁ + g₂) = extendSymbol g₁ + extendSymbol g₂ := by
   funext x
   by_cases hx : x ∈ S <;> simp [extendSymbol, Pi.add_apply, hx]
 
 open scoped Classical in
+/-- Extension by zero sends the zero symbol to the zero function. -/
 @[simp] theorem extendSymbol_zero {S : Set ℝ} :
     extendSymbol (0 : C(S, ℝ)) = fun _ => 0 := by
   funext x
   by_cases hx : x ∈ S <;> simp [extendSymbol, hx]
 
 open scoped Classical in
+/-- The extension of the constant symbol `1` is the indicator of `S` -- **not**
+the constant function `1`, which is why extension by zero is not unital. -/
 theorem extendSymbol_one_eq_indicator {S : Set ℝ} :
     extendSymbol (1 : C(S, ℝ)) = S.indicator (fun _ => 1) := by
   funext x

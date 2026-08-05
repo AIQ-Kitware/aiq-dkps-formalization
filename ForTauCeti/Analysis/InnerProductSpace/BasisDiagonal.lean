@@ -63,6 +63,8 @@ noncomputable def basisDiagonal (b : OrthonormalBasis ι 𝕜 E) (c : ι → ℝ
     E →ₗ[𝕜] E :=
   b.toBasis.constr 𝕜 fun i => (c i : 𝕜) • b i
 
+/-- The diagonal operator acts on the basis it is diagonal in by the
+corresponding scalar. -/
 @[simp]
 theorem basisDiagonal_apply_basis (b : OrthonormalBasis ι 𝕜 E) (c : ι → ℝ)
     (i : ι) : basisDiagonal b c (b i) = (c i : 𝕜) • b i := by

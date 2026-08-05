@@ -137,6 +137,7 @@ noncomputable def corestrictRangeClosure (A : E →L[𝕜] E) :
     A.apply_mem_rangeTopologicalClosure
 
 omit [CompleteSpace E] in
+/-- The corestriction has the same values as `A`; only its codomain changes. -/
 @[simp]
 theorem coe_corestrictRangeClosure_apply (A : E →L[𝕜] E) (x : E) :
     (A.corestrictRangeClosure x : E) = A x := (rfl)
