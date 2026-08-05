@@ -1007,6 +1007,44 @@ theorem re_inner_apply_le_of_mapsTo
 
 omit [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
   [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
+/-- **On `U`, `Δ` is the cross block**: `Δ x = (P_Vᗮ P_U) x` for `x ∈ U`.
+
+This is the bridge from step 3 to step 4 of the route on
+`directRotation_minimal`: it identifies `sup_{x ∈ U, ‖x‖ = 1} ‖Δ x‖` with
+`‖P_Vᗮ P_U‖`, which is one of the two terms in
+`Submodule.norm_starProjection_sub_eq_max`. -/
+theorem projection_sub_apply_eq_of_mem (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {x : E} (hx : x ∈ U) :
+    (projection U - projection V : E →L[𝕜] E) x =
+      (Vᗮ.starProjection ∘L U.starProjection) x := by
+  have hPU : U.starProjection x = x := Submodule.starProjection_eq_self_iff.mpr hx
+  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.comp_apply, hPU,
+    Submodule.starProjection_orthogonal_apply]
+
+omit [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
+/-- **On `Uᗮ`, `Δ` is minus the other cross block**: `Δ x = −(P_V P_Uᗮ) x` for
+`x ∈ Uᗮ`.
+
+The companion of `projection_sub_apply_eq_of_mem`, identifying
+`sup_{x ∈ Uᗮ, ‖x‖ = 1} ‖Δ x‖` with `‖P_V P_Uᗮ‖ = ‖P_Uᗮ P_V‖` — the second term in
+`Submodule.norm_starProjection_sub_eq_max`. -/
+theorem projection_sub_apply_eq_of_mem_orthogonal (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {x : E} (hx : x ∈ Uᗮ) :
+    (projection U - projection V : E →L[𝕜] E) x =
+      -((V.starProjection ∘L Uᗮ.starProjection) x) := by
+  have hPU : Uᗮ.starProjection x = x := Submodule.starProjection_eq_self_iff.mpr hx
+  have hzero : U.starProjection x = 0 := by
+    have h := Submodule.starProjection_orthogonal_apply U x
+    rw [hPU] at h
+    exact sub_eq_self.mp h.symm
+  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.comp_apply, hPU, hzero]
+  abel
+
+omit [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
 /-- The `Uᗮ` half of `norm_projection_sub_apply_sq_of_mem`.
 
 `P_Uᗮ − P_Vᗮ = −(P_U − P_V)`, so the complement case is the source case applied
