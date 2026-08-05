@@ -85,6 +85,15 @@ Section 9's numerical example needs the analytic model itself: the closed fourth
 
 It requires `H^4(0,1)`, boundary traces, and self-adjointness of a fourth-order ODE operator with free-end conditions. Mathlib has none of the three, so this is a foundation-building project on the scale of the rest of the paper combined, not a proof to be written. The ODE side is already done and sorry-free (`Section9/FreeBeamCharacteristic.lean` and siblings); what is missing is the passage from the classical mode functions to a self-adjoint operator on `L^2`.
 
+**FOUNDATION BUILD STARTED 2026-08-05.** The instruction is to build what Mathlib lacks, not to record that it lacks it, so the analytic model is now under construction rather than parked. Two bricks are laid, both admission-free and in the default build:
+
+1. `TauCeti.integral_fourthDeriv_mul_eq_mul_fourthDeriv` (`ForTauCeti/Analysis/Calculus/FourthOrderGreensIdentity.lean`) -- **Green's identity for `d^4/dx^4` under free-end boundary conditions**, `int u'''' v = int u v''''`. This is the symmetry at the heart of self-adjointness. Four integrations by parts, each boundary term killed by a different one of the eight conditions; all eight used, none redundant.
+2. `FreeBeam.integral_mode_mul_eq_zero_of_ne` (`Sources/DavisKahan1970/Section9/FreeBeamOrthogonality.lean`) -- **modes at frequencies with `beta^4 != gamma^4` are `L^2(0,1)`-orthogonal**, the first genuinely spectral fact about the operator, obtained by feeding the already-proved classical mode chain to Green's identity.
+
+**Design decision worth keeping:** the derivative chain is passed explicitly as ten functions related by `HasDerivAt`, not through `deriv` or a Sobolev space. That matches how `FreeBeamCharacteristic.lean` already presents the modes, so they feed the identity with no bridging, and it means **`H^4(0,1)` is not needed for the symmetry or the orthogonality** -- only for the domain of the operator. That is a real narrowing of this blocker: the Sobolev requirement applies to the last step, not the whole chain.
+
+Still open, in order: completeness of the mode family in `L^2(0,1)`; the passage from the classical modes to a densely defined self-adjoint operator; then `freeBeamClosedFourthDerivative` and `canonicalFreeBeamAnalyticModel` as the interface in `Frontier/Section9Analytic.lean` already lays them out.
+
 Gates: DK-9-model (proved_conditional)
 
 ### `two-subspace-classification` -- hard_math
