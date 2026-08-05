@@ -863,7 +863,19 @@ through `ContinuousLinearMap.nonneg_iff_isPositive`.  It is the exact input
 `CFC.sqrt_le_sqrt` needs to produce the sharp bound `|S| ≥ √(1 − ‖Δ‖²)` that
 step 2 of the route on `directRotation_minimal` asks for — the square root is
 unavoidable there, because the competitor bound is tight at `√(1 − ‖Δ‖²)` and
-the elementary routes only give `1 − ‖Δ‖²`. -/
+the elementary routes only give `1 − ‖Δ‖²`.
+
+**One concrete obstruction, measured 2026-08-05 so it is not rediscovered.**
+`CFC.sqrt_le_sqrt` requires `NonUnitalCStarAlgebra (E →L[𝕜] E)`, and that
+instance does **not** synthesize at this file's `RCLike` generality — a probe
+applying it to the statement below fails with exactly that goal.  This is the
+same `ℂ`-versus-`RCLike` gap that used to confine the polar partial isometry,
+except that here it sits in Mathlib's C⋆-algebra instance rather than in a keying
+choice, so it cannot be reformulated away.  The resolution is to assume it, as
+this file already assumes the continuous functional calculus: add
+`[NonUnitalCStarAlgebra (E →L[𝕜] E)]` alongside the existing
+`[ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]`.  Everything before
+this point in the chain is instance-free. -/
 theorem smul_one_le_adjoint_mul_canonicalIntertwiner (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     (RCLike.ofReal (1 - ‖(projection U - projection V : E →L[𝕜] E)‖ ^ 2) : 𝕜) •
