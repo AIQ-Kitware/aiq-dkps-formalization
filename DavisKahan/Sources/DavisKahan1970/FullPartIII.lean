@@ -161,6 +161,32 @@ alias complex_directRotation_diagonalBlock :=
 alias complex_directRotation_complementaryDiagonalBlock :=
   DavisKahan.Experimental.complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
 
+/-! ### Proposition 3.1, the characterisation clause
+
+The two aliases above *compute* the diagonal blocks of the direct rotation.
+Proposition 3.1 also asserts the converse — that positivity of those two blocks
+**characterises** it — and that direction is strictly stronger than
+`complex_directRotation_unique`, which assumes `0 ≤ re ⟪W x, x⟫` for every `x`.
+Nonnegativity of the two compressions constrains the numerical range on `U` and
+on `Uᗮ` separately and says nothing at all about a mixed vector.
+
+What closes the gap is the printed hypothesis that `W` carries the pair
+`(U, Uᗮ)` onto `(V, Vᗮ)`.  Combined with `W² = J_V J_U` that forces
+`J_U W J_U = W*`, so the Hermitian part of `W` commutes with `J_U` and its
+quadratic form splits over `U ⊕ Uᗮ` with **no cross term** — at which point two
+separate sign conditions do add up.
+
+* `complex_directRotation_reflectionConjugate` is that structural identity.
+* `complex_directRotation_of_diagonalBlocks` is the characterisation direction.
+* `complex_directRotation_iff_diagonalBlocks` is Proposition 3.1's
+  characterisation clause as a biconditional. -/
+alias complex_directRotation_reflectionConjugate :=
+  DavisKahan.Experimental.reflection_conjugate_eq_star_of_sq_of_intertwines
+alias complex_directRotation_of_diagonalBlocks :=
+  DavisKahan.Experimental.spectraDirectRotation_unique_of_diagonalBlocks
+alias complex_directRotation_iff_diagonalBlocks :=
+  DavisKahan.Experimental.eq_spectraDirectRotation_iff_diagonalBlocks_nonneg
+
 /-! ## Graph and Riccati theory -/
 /-! ### Theorem 5.1 at source generality
 

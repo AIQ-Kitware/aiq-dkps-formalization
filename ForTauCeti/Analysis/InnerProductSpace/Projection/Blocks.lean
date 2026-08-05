@@ -158,5 +158,63 @@ theorem two_smul_offDiagonalPart_eq_sub_reflectionConjugate
   rw [smul_sub, two_smul_diagonalPart_eq_add_reflectionConjugate]
   module
 
+/-! ### Numerical range of a block-diagonal operator
+
+An operator that commutes with the reflection is determined block by block, and
+so is its numerical range: the quadratic form splits as a *sum* over `U` and
+`Uᗮ` with no cross term.  Consequently a sign condition tested separately on the
+two summands propagates to the whole space.  This is the mechanism by which
+"the diagonal blocks are positive" upgrades to "the numerical range is
+nonnegative"; it is what the two-projection literature uses to characterise the
+direct rotation among unitary square roots of the reflection product, and it is
+about projections only. -/
+
+/-- **The quadratic form of the diagonal pinch splits along `U ⊕ Uᗮ`.**
+
+`⟪(P A P + P' A P') x, x⟫ = ⟪A (P x), P x⟫ + ⟪A (P' x), P' x⟫`, each pinch term
+read off on its own summand.  No hypothesis on `A`: the pinch is *defined* to
+discard the cross terms, and this identity says what survives. -/
+theorem inner_diagonalPart_apply_self (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] (A : E →L[𝕜] E) (x : E) :
+    ⟪U.diagonalPart A x, x⟫_𝕜 =
+      ⟪A (U.starProjection x), U.starProjection x⟫_𝕜 +
+        ⟪A (Uᗮ.starProjection x), Uᗮ.starProjection x⟫_𝕜 := by
+  simp only [diagonalPart, add_apply, ContinuousLinearMap.comp_apply,
+    inner_add_left, inner_starProjection_left_eq_right]
+
+/-- **Commuting with the reflection is the same as being block diagonal.**
+
+`J A J = A` forces `A` to equal its own diagonal pinch.  Immediate from
+`two_smul_diagonalPart_eq_add_reflectionConjugate`, which says
+`2 (P A P + P' A P') = A + J A J`. -/
+theorem diagonalPart_eq_self_of_reflectionConjugate (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] {A : E →L[𝕜] E}
+    (hA : U.reflectionOperator ∘L A ∘L U.reflectionOperator = A) :
+    U.diagonalPart A = A := by
+  have h := two_smul_diagonalPart_eq_add_reflectionConjugate U A
+  rw [hA, ← two_smul 𝕜 A] at h
+  have h2 := congrArg (fun T : E →L[𝕜] E => (2 : 𝕜)⁻¹ • T) h
+  simpa only [smul_smul, inv_mul_cancel₀ (two_ne_zero : (2 : 𝕜) ≠ 0),
+    one_smul] using h2
+
+/-- **A block-diagonal operator with nonnegative blocks has nonnegative
+numerical range.**
+
+The hypotheses only constrain `A` on `U` and on `Uᗮ` separately, which for a
+general operator says nothing about a mixed vector; commuting with the
+reflection is exactly what removes the cross term. -/
+theorem re_inner_apply_self_nonneg_of_reflectionConjugate (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] {A : E →L[𝕜] E}
+    (hA : U.reflectionOperator ∘L A ∘L U.reflectionOperator = A)
+    (hU : ∀ x ∈ U, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜)
+    (hUperp : ∀ x ∈ Uᗮ, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜) (x : E) :
+    0 ≤ RCLike.re ⟪A x, x⟫_𝕜 := by
+  have hdiag := diagonalPart_eq_self_of_reflectionConjugate U hA
+  have hsplit := inner_diagonalPart_apply_self U A x
+  rw [hdiag] at hsplit
+  rw [hsplit, map_add]
+  exact add_nonneg (hU _ (U.starProjection_apply_mem x))
+    (hUperp _ (Uᗮ.starProjection_apply_mem x))
+
 end Submodule
 

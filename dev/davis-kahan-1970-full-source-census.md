@@ -11,12 +11,12 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 10 |
+| `compiled_exact` | 11 |
 | `compiled_specialization` | 6 |
 | `compiled_general_infrastructure` | 18 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 9 |
+| `partial_or_wrapper_missing` | 8 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -131,7 +131,7 @@ Gates: DK-9-model (proved_conditional), DK-9.1-9.4 (proved_conditional), DK-9.5-
 
 The mathematics is in the build in a more general form; what is missing is a statement carrying the paper's numbering, scope and hypotheses, so the facade can cite it.
 
-Gates: S1-block-residual (proved_in_build), S2-tan-theta (proved_in_build), S2-sin-two-theta (proved_in_build), S2-tan-two-theta (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.1-prop (proved_in_build), DK-3.4-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-4.1-prop (proved_in_build), DK-5.2-thm (proved_in_build), DK-5.1-lem (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
+Gates: S1-block-residual (proved_in_build), S2-tan-theta (proved_in_build), S2-sin-two-theta (proved_in_build), S2-tan-two-theta (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.4-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-4.1-prop (proved_in_build), DK-5.2-thm (proved_in_build), DK-5.1-lem (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
 
 ### `frontier-tree-unguarded` -- mechanical
 
@@ -292,11 +292,10 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 #### Proposition 3.1: Acute direct rotation existence and uniqueness
 
 - **Kind:** `proposition`
-- **Status:** `partial_or_wrapper_missing`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** In the acute case the direct rotation exists, is unique, and positivity of its diagonal blocks characterizes it.
-- **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation`, `TauCeti.DavisKahan1970.complex_directRotation_unique`, `TauCeti.DavisKahan1970.complex_directRotation_diagonalBlock`, `TauCeti.DavisKahan1970.complex_directRotation_complementaryDiagonalBlock`
+- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation`, `TauCeti.DavisKahan1970.complex_directRotation_unique`, `TauCeti.DavisKahan1970.complex_directRotation_diagonalBlock`, `TauCeti.DavisKahan1970.complex_directRotation_complementaryDiagonalBlock`, `TauCeti.DavisKahan1970.complex_directRotation_reflectionConjugate`, `TauCeti.DavisKahan1970.complex_directRotation_of_diagonalBlocks`, `TauCeti.DavisKahan1970.complex_directRotation_iff_diagonalBlocks`
 - **Assessment:** The main acute construction and uniqueness are present; the exact characterization by positivity needs source-level verification.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `partial_or_wrapper_missing`. Existence and uniqueness in the acute case are compiled and axiom-clean; the positivity characterization that the printed Proposition 3.1 also asserts is neither proved nor wrapped, so the exact source theorem is not represented.
@@ -306,7 +305,13 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 PARTIALLY DISCHARGED 2026-08-04, and the residue is now exact. The positivity half is no longer unwrapped: both diagonal compressions of the direct rotation are the *positive* Halmos cosine -- `P_U W P_U = |S| P_U` and `P_Uperp W P_Uperp = |S| P_Uperp` -- and both are proved, in the default build, and axiom-clean. Source aliases added.
 
 **What is genuinely still missing is the characterisation direction, and it is not a wrapper.** The printed clause is that positivity of the diagonal blocks *characterises* the direct rotation. The compiled uniqueness theorem `complex_directRotation_unique` assumes `0 <= re <W x, x>` for **all** `x`, i.e. that the whole Hermitian part is nonnegative. That is strictly stronger than nonnegativity of the two diagonal compressions, which constrains the numerical range only on `U` and on `Uperp` separately and says nothing about mixed vectors. So the source characterisation does not follow from what is compiled; it needs the off-diagonal argument that recovers global numerical-range positivity from the two blocks.
-- **Next action:** Prove that nonnegativity of both diagonal compressions of a unitary square root of the reflection product forces `0 <= re <W x, x>` for all `x`, then chain into `complex_directRotation_unique`. The two block identities and the uniqueness theorem are both already proved and wrapped; only that implication is open.
+
+**DISCHARGED 2026-08-05. The characterisation direction is proved, and the row is now exact.** `complex_directRotation_iff_diagonalBlocks` states Proposition 3.1's characterisation clause as a biconditional: `W` is the direct rotation **iff** it is a unitary square root of `J_V J_U` that intertwines the two reflections and whose compressions to `U` and to `U-perp` have nonnegative numerical range.  No condition is imposed on mixed vectors, which is exactly what made the previous residue real.
+
+WHAT THE MISSING STEP TURNED OUT TO BE, and it was one line of algebra, not a wrapper.  The printed hypothesis that `W` carries the pair `(U, U-perp)` onto `(V, V-perp)` had been dropped in the earlier reading.  Restoring it closes everything: `W J_U = J_V W` together with `W^2 = J_V J_U` gives two expressions for `J_V`, and cancelling `W` yields `J_U W J_U = W*`.  So the Hermitian part `W + W*` **commutes with `J_U`**, its quadratic form splits over `U (+) U-perp` with no cross term, and two separate sign conditions add up to global numerical-range positivity -- which is what `complex_directRotation_unique` was already waiting for.  Without the intertwining hypothesis the implication is false: on `U = V` the Hermitian unitary `[[0,b],[b*,0]]` squares to `1 = J_V J_U` and has both diagonal blocks zero, hence nonnegative, yet is not the direct rotation `1`.
+
+THE REUSABLE HALF was extracted to `ForTauCeti`: `Submodule.re_inner_apply_self_nonneg_of_reflectionConjugate` (with `inner_diagonalPart_apply_self` and `diagonalPart_eq_self_of_reflectionConjugate`) says that an operator commuting with a reflection has nonnegative numerical range as soon as its two blocks do.  Nothing in it mentions direct rotations.  All new declarations are in the default build and axiom-clean [propext, Classical.choice, Quot.sound].
+- **Next action:** Nothing for the mathematics.  Proposition 3.1 is represented in full: existence (`complex_directRotation`), uniqueness (`complex_directRotation_unique`), the computed diagonal blocks, and the characterisation biconditional `complex_directRotation_iff_diagonalBlocks`.
 
 #### Proposition 3.2: Nonacute existence criterion
 
