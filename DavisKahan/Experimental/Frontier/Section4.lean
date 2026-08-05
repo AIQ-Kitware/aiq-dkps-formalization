@@ -194,16 +194,55 @@ theorem proposition4_2_attained_on_principal_vector
   MathAhead.Section4.displacementAngleSineSq_directRotation_eq_of_smul U V
     hacute hμ hxnorm hCx
 
-/-- Davis--Kahan 1970, Proposition 4.3: every approximation number of the
-squared full displacement is minimized by the direct rotation. -/
-theorem proposition4_3_squaredDisplacement_approximationNumbers
+/-! ### Proposition 4.3, and a third refuted transcription
+
+**This statement used to assert that every *individual* approximation number of
+the squared full displacement is minimised by the direct rotation, and in that
+form it is FALSE.**  Recorded here with the counterexample, because it is the
+obvious reading of the printed proposition and because the repository already
+contains the configuration that kills it.
+
+Proposition 4.3 is about a *unitarily invariant norm* of `(1−V*)(1−V)`.  For a
+Ky Fan norm that is a partial sum `∑_{n<k} aₙ`, so pointwise domination of the
+`aₙ` would imply it — and would also imply Proposition 4.4, which the repository
+**refutes** (`shortRotation_fullDisplacement_refuted`, census row DK-4.4-prop).
+So pointwise domination cannot hold, and the refuting configuration is the same
+equal-angle multiplicity mixing.
+
+Explicitly, in `ℝ⁴` take `U = span(e₁, e₂)` and `V` at principal angles
+`π/4, π/4` — acute, since `‖P_U − P_V‖ = sin(π/4) < 1`.  Let `W` carry `U` onto
+`V` by a quarter turn in the `V`-frame and `Uᗮ` onto `Vᗮ` by the identity; it is
+orthogonal and satisfies `W P_U = P_V W`.  Then
+
+* `aₙ(1 − D) = (0.765367, 0.765367, 0.765367, 0.765367)` — four equal values
+  `2 sin(π/8)`, one per principal direction;
+* `aₙ(1 − W) = (1.586707, 1.586707, 0.261052, 0.261052)`;
+
+so at `n = 2` the competitor is **strictly smaller**, and squaring preserves
+that: `aₙ((1−D)*(1−D))` is `0.585786` at `n = 2` against the competitor's
+`0.068148`.
+
+Proposition 4.3 itself is untouched: its Ky Fan sums of *squares* are
+`(0.586, 1.172, 1.757, 2.343)` for the direct rotation against
+`(2.518, 5.035, 5.103, 5.172)` for the competitor, dominated at every `k`.  Sums
+of squares and sums behave differently, which is exactly why 4.3 survives while
+4.4 does not.
+
+The statement below is therefore at Ky Fan level, which is what a unitarily
+invariant norm sees.  It is open; the finite-dimensional proof
+(`directRotation_displacementSquare_uiNorm`) goes through Fan--Hoffman
+majorization of the pinched competitor, and the infinite-dimensional argument
+must reproduce that at approximation-number scope, as
+`InfiniteProposition41.lean` does for Proposition 4.1. -/
+theorem proposition4_3_squaredDisplacement_kyFan
     (hacute : IsAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W)
-    (n : ℕ) :
-    ((1 - star (spectraDirectRotation U V hacute)) *
-        (1 - spectraDirectRotation U V hacute)).approximationNumber n ≤
-      ((1 - star W) * (1 - W)).approximationNumber n := by
+    (k : ℕ) :
+    kyFanApproximationGauge k
+        ((1 - star (spectraDirectRotation U V hacute)) *
+          (1 - spectraDirectRotation U V hacute)) ≤
+      kyFanApproximationGauge k ((1 - star W) * (1 - W)) := by
   sorry
 
 end Section4

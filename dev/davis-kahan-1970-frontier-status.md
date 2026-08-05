@@ -26,7 +26,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `DK-3.2-cor` — Corollary 3.2: Reversal symmetry | corollary | `s3-cor3-2` | 0 / 2 | 100% | yes |
 | `DK-4.1-prop` — Proposition 4.1: Pointwise and singular-value extremality of the direct rotation | proposition | `s4-prop4-1` | 0 / 2 | 100% | yes |
 | `DK-4.1-cor` — Corollary 4.1: UI-norm minimality of direct rotation displacement | corollary | `s4-cor4-1` | 0 / 3 | 100% | yes |
-| `DK-4.2-prop` — Proposition 4.2: Basis-angle square-sum extremality | proposition | `s4-prop4-2` | 1 / 2 | 50% | no |
+| `DK-4.2-prop` — Proposition 4.2: Basis-angle square-sum extremality | proposition | `s4-prop4-2` | 0 / 2 | 100% | yes |
 | `DK-4.3-prop` — Proposition 4.3: Squared displacement UI-norm minimality | proposition | `s4-prop4-3` | 1 / 2 | 50% | no |
 | `DK-5.1-thm` — Theorem 5.1: Banach-space Sylvester lower bound | theorem | `s5-theorem5-1` | 0 / 2 | 100% | yes |
 | `DK-5.2-thm` — Theorem 5.2: Semibounded self-adjoint Sylvester theorem | theorem | `base-theorem5-2` | 0 / 1 | 100% | yes |
@@ -48,14 +48,14 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 - Manifest nodes: **80**
 - Textually present: **80**
 - Paper result rows represented in the frontier: **32**
-- Census rows requiring frontier coverage: **15**
-- Census rows mapped: **15**
+- Census rows requiring frontier coverage: **12**
+- Census rows mapped: **12**
 - Declarations resolving in Lean: **80**
-- Declarations with admission-free Lean closure: **62**
-- Recursively grounded manifest nodes: **60**
-- Paper results recursively grounded: **21 / 32**
+- Declarations with admission-free Lean closure: **63**
+- Recursively grounded manifest nodes: **61**
+- Paper results recursively grounded: **22 / 32**
 - Source-role endpoints resolving: **29 / 29**
-- Source-role endpoints recursively grounded: **19 / 29**
+- Source-role endpoints recursively grounded: **20 / 29**
 
 ## Manifest nodes
 
@@ -92,7 +92,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s3-cor3-1` | source | yes | `DK-3.1-cor` | high | no | yes | yes | no | no |
 | `s4-prop4-1` | source | yes | `DK-4.1-prop` | medium | no | yes | yes | yes | yes |
 | `s4-cor4-1` | source | yes | `DK-4.1-cor` | medium | no | yes | yes | yes | yes |
-| `s4-prop4-2` | source | yes | `DK-4.2-prop` | medium | no | yes | yes | no | no |
+| `s4-prop4-2` | source | yes | `DK-4.2-prop` | medium | no | yes | yes | yes | yes |
 | `s4-prop4-3` | source | yes | `DK-4.3-prop` | medium | no | yes | yes | no | no |
 | `s6-approximation-energy` | foundation | no |  | high | no | yes | yes | yes | yes |
 | `s6-lemma6-3-approx` | source | yes | `DK-6.3-lem` | high | no | yes | yes | yes | yes |
