@@ -87,20 +87,6 @@ It requires `H^4(0,1)`, boundary traces, and self-adjointness of a fourth-order 
 
 Gates: DK-9-model (proved_conditional)
 
-### `free-beam-third-eigenvalue` -- hard_math
-
-**The spectral bound alpha_3 > 500**
-
-A concrete transcendental eigenvalue estimate for the free-beam model.
-
-**RE-SCOPED 2026-08-04, and it is much smaller than it looks.** Everything downstream of the numerics is already proved and sorry-free in `DavisKahan/Sources/DavisKahan1970/Section9/FreeBeam*.lean`: the mode functions and their four derivatives, the free-end boundary conditions, the characteristic function `characteristic beta = cos beta * cosh beta - 1`, the root-exclusion lemmas (`characteristic_ne_zero_of_cos_nonpos`, `..._of_product_lt_one`, `..._of_one_lt_product`), and `positive_root_fourth_power_gt_five_hundred`, which derives `500 < beta^4` for EVERY positive root from a `PositiveRootLocalization`.
-
-So the entire remaining numerical obligation is **one structure that is never constructed**: `FirstPositiveRootCertificate` (`Section9/FreeBeamRootLocalization.lean`), whose fields are `root`, `0 < root`, `characteristic root = 0`, `no_smaller_positive_root`, and `4.73 < root`. It converts to `PositiveRootLocalization` by an already-written `def`. Verified 2026-08-04: `FirstPositiveRootCertificate` has NO constructor anywhere in the repository.
-
-**This needs no operator theory at all** -- it is certified real-number analysis about `cos * cosh`, independent of `free-beam-closed-operator`. Sketch: `cos b cosh b < 1` on `(0, 3pi/2]` (concavity: `f(0)=1`, `f'(0)=0`, `f'' = -2 sin b sinh b < 0` on `(0,pi)`, then `cos b <= 0` on `[pi/2, 3pi/2]`), and on `(3pi/2, 4.73]` a direct numeric bound. The margin is THIN -- at `b = 4.73`, `cos b cosh b ~ 0.9975`, and the paper's `alpha_3 = beta_1^4 ~ 500.55` clears `500` by 0.1% -- so roughly four correct digits are needed. Mathlib supplies `Real.pi_gt_3141592` / `Real.pi_lt_3141593`, which pins `3pi/2` tightly enough that `cos 4.73 = sin(4.73 - 3pi/2) <= 4.73 - 3pi/2 < 0.0176121`; the remaining need is an upper bound `cosh 4.73 < 56.66`.
-
-Gates: DK-9-model (proved_conditional), DK-9.8 (proved_conditional)
-
 ### `two-subspace-classification` -- hard_math
 
 **Two-projection canonical decomposition and multiplicity theory**
@@ -665,13 +651,19 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 - **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_conditional`
 - **Mathematics:** The free-beam fourth derivative on L2(0,1), perturbed by multiplication by epsilon t, with the two-dimensional linear trial eigenspace.
-- **Blocked by:** `section9-certificate-discharge`, `free-beam-closed-operator`, `free-beam-third-eigenvalue`
+- **Blocked by:** `section9-certificate-discharge`, `free-beam-closed-operator`
 - **Current Lean references:** `TauCeti.DavisKahan1970.Section9.CenteredAffine`, `TauCeti.DavisKahan1970.Section9.ritz_matrix_from_affine_moments`, `TauCeti.DavisKahan1970.Section9.FreeBeamFiniteDataCertificate`
 - **Assessment:** A source-facing candidate now reconstructs the affine trial basis through exact unit-interval moments and packages the remaining free-beam analytic facts behind an explicit certificate. The closed fourth-derivative operator and the bound alpha_3 > 500 are not yet proved.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `partial_or_wrapper_missing`. The finite-moment layer is compiled and axiom-clean, but every source conclusion is stated relative to `FreeBeamFiniteDataCertificate`, for which no value is ever constructed. The analytic model -- the closed fourth-derivative operator with the source's boundary conditions -- does not exist.
 
 VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `DavisKahan.All`, `DavisKahan.Experimental.All` and `ForTauCeti` and running `#print axioms` on all 87 declarations named in this census elaborated cleanly -- every name resolves and **none reaches `sorryAx`**. A second probe importing only the default-build roots showed 78 of the 87 resolve there; the 9 that do not are exactly the `TauCeti.DavisKahan1970.Section8.*` names on rows DK-8.1-thm and DK-8.2-thm, whose `proved_outside_build` verification was already correct. `candidate_under_repair` -- "not compiler-certified on this base" -- was therefore false for every row that carried it. The scope question (does the compiled statement match the printed one?) is a separate judgement and is recorded in `next_action`; the status below is the weakest one consistent with that recorded evidence, so no row is overstated.
+
+BLOCKER CLEARED 2026-08-04: `free-beam-third-eigenvalue` is resolved. The paper's `alpha_3 > 500` is now the unconditional theorem `FreeBeam.Classical.five_hundred_lt_pow_four_of_characteristic_eq_zero`, proved from `cos beta * cosh beta < 1` on `(0, 4.73]` with no certificate and no existence hypothesis. What still blocks this row is only `free-beam-closed-operator` -- tying the characteristic roots to the spectrum of an actual self-adjoint operator on `L^2(0,1)`.
+
+WHERE THE alpha_3 BOUND CAME FROM (blocker `free-beam-third-eigenvalue`, deleted 2026-08-04 once resolved). The plan of record was to construct `FirstPositiveRootCertificate` -- localize the FIRST root, then apply `positive_root_fourth_power_gt_five_hundred`. That turned out to be unnecessary and strictly harder: localizing a first root requires proving one exists, which needs an intermediate-value argument and a second numerical bound at 4.74. It is enough that the characteristic function has NO root at or below 4.73, which makes every positive root exceed 4.73 whether or not a smallest one is exhibited. `FirstPositiveRootCertificate` and `PositiveRootLocalization` are now dead weight, retained only because they record the reduction; consumers should use `five_hundred_lt_pow_four_of_characteristic_eq_zero`.
+
+The new mathematics is `Section9/FreeBeamRootExclusion.lean`: `cos b * cosh b < 1` on all of `(0, 4.73]`, split three ways. On `(0, pi/2]` it is calculus -- `f = cos*cosh` has `f 0 = 1`, `f'` vanishing at 0, and `f'' = -2 sin*sinh < 0`, so `f'` is strictly decreasing from 0 and `f` from 1. On `[pi/2, 3pi/2]` the cosine is nonpositive. On the remaining `(3pi/2, 4.73]` -- a window of width 0.0177 -- it is numerical: `cos b = sin(b - 3pi/2) <= b - 3pi/2 < 0.017612` using `Real.pi_gt_d6`, and `cosh b <= cosh 4.73 < 56.66` via `exp 4.73 = (exp 1)^4 * exp 0.73` with `Real.exp_one_lt_d9` and six Taylor terms. Product `< 0.99790`; the true value is `0.99765`, so the margin is two parts in a thousand and every bound is needed to five digits.
 - **Next action:** The finite-moment layer compiles. Remaining is the analytic model itself: construct the free-beam closed fourth-derivative operator on L2(0,1) with the source's boundary conditions, discharge alpha_3 > 500, and build a FreeBeamFiniteDataCertificate. Until such a value exists the Section 9 conclusions are assumed, not derived.
 
 #### Equations (9.1)–(9.4): Initial sine and sine-double-angle bounds
@@ -710,13 +702,15 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 - **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_conditional`
 - **Mathematics:** Derive lower-eigenvalue estimates from a 3x3 comparison matrix and compare individual-vector angle bounds.
-- **Blocked by:** `section9-certificate-discharge`, `free-beam-third-eigenvalue`
+- **Blocked by:** `section9-certificate-discharge`
 - **Current Lean references:** `TauCeti.DavisKahan1970.Section9.ArrowheadThreeByThree`, `TauCeti.DavisKahan1970.Section9.tangent_sq_le_of_weinberger_sine_sq`, `TauCeti.DavisKahan1970.Section9.equation_9_8_lower`, `TauCeti.DavisKahan1970.Section9.equation_9_8_upper`
 - **Assessment:** The exact arrowhead characteristic polynomial and the algebraic conversion of Weinberger sine-square bounds to tangent bounds are represented. The historical lower-root theorem is deliberately an explicit certificate rather than an informal O(epsilon^4) assertion.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `partial_or_wrapper_missing`. The arrowhead algebra is compiled and axiom-clean; the root inequality needs the alpha_3 > 500 spectral bound, which does not exist.
 
 VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `DavisKahan.All`, `DavisKahan.Experimental.All` and `ForTauCeti` and running `#print axioms` on all 87 declarations named in this census elaborated cleanly -- every name resolves and **none reaches `sorryAx`**. A second probe importing only the default-build roots showed 78 of the 87 resolve there; the 9 that do not are exactly the `TauCeti.DavisKahan1970.Section8.*` names on rows DK-8.1-thm and DK-8.2-thm, whose `proved_outside_build` verification was already correct. `candidate_under_repair` -- "not compiler-certified on this base" -- was therefore false for every row that carried it. The scope question (does the compiled statement match the printed one?) is a separate judgement and is recorded in `next_action`; the status below is the weakest one consistent with that recorded evidence, so no row is overstated.
+
+BLOCKER CLEARED 2026-08-04: `free-beam-third-eigenvalue` is resolved. The paper's `alpha_3 > 500` is now the unconditional theorem `FreeBeam.Classical.five_hundred_lt_pow_four_of_characteristic_eq_zero`, proved from `cos beta * cosh beta < 1` on `(0, 4.73]` with no certificate and no existence hypothesis. What still blocks this row is only `free-beam-closed-operator` -- tying the characteristic roots to the spectrum of an actual self-adjoint operator on `L^2(0,1)`.
 - **Next action:** The arrowhead algebra compiles. Remaining is the root inequality, which needs the alpha_3 > 500 spectral bound.
 
 #### Section 9, l2 example after (9.8): Residual-infinite limitation example
