@@ -20,7 +20,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `DK-3.2-prop` — Proposition 3.2: Nonacute existence criterion | proposition | `s3-prop3-2-existence` | 0 / 6 | 100% | yes |
 | `DK-3.3-prop` — Proposition 3.3: Principal square-root characterization | proposition | `s3-prop3-3` | 0 / 5 | 100% | yes |
 | `DK-3.4-prop` — Proposition 3.4: Square as a direct rotation | proposition | `s3-prop3-4` | 0 / 2 | 100% | yes |
-| `DK-3.1-thm` — Theorem 3.1: Classification of pairs of subspaces | theorem | `s3-theorem3-1` | 2 / 7 | 71% | no |
+| `DK-3.1-thm` — Theorem 3.1: Classification of pairs of subspaces | theorem | `s3-theorem3-1` | 1 / 7 | 85% | no |
 | `DK-3.1-cor` — Corollary 3.1: Compact classification by angle eigenvalues | corollary | `s3-cor3-1` | 1 / 6 | 83% | no |
 | `DK-3.5-prop` — Proposition 3.5: Angle commutation and eigenspace geometry | proposition | `s3-prop3-5` | 0 / 5 | 100% | yes |
 | `DK-3.2-cor` — Corollary 3.2: Reversal symmetry | corollary | `s3-cor3-2` | 0 / 2 | 100% | yes |
@@ -51,8 +51,8 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 - Census rows requiring frontier coverage: **16**
 - Census rows mapped: **16**
 - Declarations resolving in Lean: **80**
-- Declarations with admission-free Lean closure: **61**
-- Recursively grounded manifest nodes: **59**
+- Declarations with admission-free Lean closure: **62**
+- Recursively grounded manifest nodes: **60**
 - Paper results recursively grounded: **21 / 32**
 - Source-role endpoints resolving: **29 / 29**
 - Source-role endpoints recursively grounded: **19 / 29**
@@ -86,7 +86,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s3-fixed-angle-subspace` | foundation | no |  | medium | no | yes | yes | yes | yes |
 | `s3-prop3-5` | source | yes | `DK-3.5-prop` | high | no | yes | yes | yes | yes |
 | `s3-cor3-2` | source | yes | `DK-3.2-cor` | medium | no | yes | yes | yes | yes |
-| `s3-operator-classification` | bridge | no |  | high | no | yes | yes | no | no |
+| `s3-operator-classification` | bridge | no |  | high | no | yes | yes | yes | yes |
 | `s3-theorem3-1` | source | yes | `DK-3.1-thm` | hard | no | yes | yes | no | no |
 | `s3-compact-angle-list` | foundation | no |  | medium | no | yes | yes | yes | yes |
 | `s3-cor3-1` | source | yes | `DK-3.1-cor` | high | no | yes | yes | no | no |

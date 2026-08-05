@@ -21,6 +21,7 @@ import DavisKahan.Geometry.Polar.Section3Nonacute
 -- (`sameHalmosInvariant_of_pairEquiv`).  This module imports only Frontier/Core,
 -- so the dependency is acyclic.
 import DavisKahan.Geometry.Halmos.Classification
+import DavisKahan.Geometry.Halmos.GenericReconstruction
 
 /-!
 # Section 3 frontier: separation and classification of two subspaces
@@ -993,12 +994,28 @@ structure SameHalmosTrivialDimensions : Prop where
     (halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
 
 /-- The modern operator-level complete invariant: trivial dimensions plus the
-unitary-equivalence class of the generic cosine square. -/
+unitary-equivalence class of the angle operator `cos²Θ`.
+
+**The angle operator is read on the `U`-side, as the compression of `P_V` to
+`U ⊓ generic`** — the `genericCosineBlock` of `Geometry/Halmos/GenericPosition`.
+That is the operator whose spectral multiplicity function Davis and Kahan's
+Theorem 3.1 uses.
+
+This field used to record `genericHalmosCosineSq`, the compression of the
+symmetrized `P_U P_V P_U + P_Uᗮ P_Vᗮ P_Uᗮ`.  On the generic part that operator is
+the cosine block on the `U`-half and `1 - D` on the `Uᗮ`-half, i.e. `A ⊕ A`
+(`coe_genericHalmosCosineSq_of_mem_left` proves the `M` half).  Recovering `A`
+from `A ⊕ A` up to unitary equivalence is multiplicity-halving — Hahn--Hellinger,
+which Mathlib does not have — whereas the pair `(U, V)` is determined by `A`
+alone by elementary means.  The symmetrized reading was a repository choice that
+doubled the multiplicity and put multiplicity theory on the critical path for no
+mathematical reason.  Changed 2026-08-04, which is what closes
+`twoProjection_operator_classification`. -/
 structure SameHalmosOperatorInvariant : Prop where
   trivial : SameHalmosTrivialDimensions U₁ V₁ U₂ V₂
   generic : BoundedOperatorsUnitaryEquivalent
-    (genericHalmosCosineSq U₁ V₁)
-    (genericHalmosCosineSq U₂ V₂)
+    (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁)
+    (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂)
 
 /-- Forward direction of the operator-level Halmos classification: a unitary
 equivalence of the ordered pairs induces the complete operator invariant.  The
@@ -1009,30 +1026,32 @@ cosine-square operator.  Proved axiom-clean in
 theorem sameHalmosOperatorInvariant_of_pairEquiv
     (h : PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂) :
     SameHalmosOperatorInvariant U₁ V₁ U₂ V₂ := by
-  obtain ⟨hc, hs, ht, he, hg⟩ :=
+  obtain ⟨hc, hs, ht, he, _⟩ :=
     MathAhead.HiddenFoundations.sameHalmosInvariant_of_pairEquiv U₁ V₁ U₂ V₂ h
-  exact ⟨⟨hc, hs, ht, he⟩, hg⟩
+  exact ⟨⟨hc, hs, ht, he⟩,
+    MathAhead.HiddenFoundations.exists_cosineBlockEquiv_of_pairEquiv U₁ V₁ U₂ V₂ h⟩
 
-/-- Operator-level Halmos classification.  This is the constructive spine of
-Davis--Kahan Theorem 3.1 and does not require a direct-integral presentation.
+/-- **Operator-level Halmos classification, both directions.**  This is the
+constructive spine of Davis--Kahan Theorem 3.1 and needs no direct-integral
+presentation, no compactness, no finite dimension and no separability.
 
-The forward direction is proved (`sameHalmosOperatorInvariant_of_pairEquiv`).
-The converse — reconstructing a pair-equivalence from the operator invariant —
-still needs two bricks, neither yet available: (1) the generic 2×2 Halmos model,
-which upgrades a bare unitary equivalence of the two generic cosine-square
-operators to a unitary of the generic subspaces intertwining *both* projections
-(equivalently, the reconstruction of the reducing angle pair from `cos²Θ`); and
-(2) the block-diagonal orthogonal assembly gluing the four elementary summand
-isometries and the generic-part unitary into a global `H₁ ≃ₗᵢ[ℂ] H₂` carrying
-`U₁, V₁` to `U₂, V₂`.  On the four elementary summands the assembled map
-automatically intertwines both projections, so brick (2) reduces to a
-Hilbert-sum gluing and brick (1) is the sole genuinely missing mathematics. -/
+Grounded by `:=` on
+`MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`,
+so there is a single source of truth.  The forward direction restricts a
+pair-equivalence to the `U`-half of the generic part; the converse is bricks (1)
+and (2) — brick (1) reconstructs the generic-part unitary from the cosine block
+alone (`Geometry/Halmos/GenericReconstruction`), brick (2) glues it to the four
+elementary summand isometries (`Geometry/Halmos/Assembly`). -/
 theorem twoProjection_operator_classification :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosOperatorInvariant U₁ V₁ U₂ V₂ := by
-  refine ⟨sameHalmosOperatorInvariant_of_pairEquiv U₁ V₁ U₂ V₂, ?_⟩
-  intro _hinv
-  sorry
+  rw [MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant
+    U₁ V₁ U₂ V₂]
+  constructor
+  · rintro ⟨hc, hs, ht, he, hg⟩
+    exact ⟨⟨hc, hs, ht, he⟩, hg⟩
+  · rintro ⟨⟨hc, hs, ht, he⟩, hg⟩
+    exact ⟨hc, hs, ht, he, hg⟩
 
 /-- Davis--Kahan 1970, Theorem 3.1: spectral multiplicity data of the two angle
 operators, together with the elementary multiplicities, form a complete
