@@ -821,6 +821,41 @@ theorem isUnit_directRotation_add_adjoint
   rw [hfac]
   exact hA.mul htwo
 
+/-- **The canonical intertwiner is bounded below on an acute pair**, with the
+sharp constant: `‖S x‖² = ‖x‖² − ‖Δ x‖² ≥ (1 − ‖Δ‖²)‖x‖²`, where
+`Δ = P_U − P_V`.
+
+The equality in the middle is the Gram identity `S⋆S = 1 − Δ²` read at a vector,
+so this needs no functional calculus.  It is the vector form of the coercivity
+that `directRotation_minimal` consumes: since `‖ |S| x ‖ = ‖S x‖`, the same bound
+holds for the Halmos cosine, and `1 − ‖Δ‖² > 0` is exactly acuteness. -/
+theorem norm_canonicalIntertwiner_apply_sq_ge (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (x : E) :
+    (1 - ‖(projection U - projection V : E →L[𝕜] E)‖ ^ 2) * ‖x‖ ^ 2 ≤
+      ‖canonicalIntertwiner U V x‖ ^ 2 := by
+  set S : E →L[𝕜] E := canonicalIntertwiner U V with hS
+  set D : E →L[𝕜] E := projection U - projection V with hD
+  have hDsa : star D = D := by
+    rw [hD, star_sub, (isSelfAdjoint_starProjection U).star_eq,
+      (isSelfAdjoint_starProjection V).star_eq]
+  -- `re ⟪(S⋆S) x, x⟫ = ‖S x‖²`.
+  have hleft : RCLike.re ⟪(star S * S) x, x⟫_𝕜 = ‖S x‖ ^ 2 := by
+    have h : ((star S * S) x) = ContinuousLinearMap.adjoint S (S x) := by
+      rw [← ContinuousLinearMap.mul_apply, ContinuousLinearMap.star_eq_adjoint]
+    rw [h, ContinuousLinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
+  -- `re ⟪(1 − Δ²) x, x⟫ = ‖x‖² − ‖Δ x‖²`.
+  have hright : RCLike.re ⟪((1 : E →L[𝕜] E) - D * D) x, x⟫_𝕜 =
+      ‖x‖ ^ 2 - ‖D x‖ ^ 2 := by
+    have hDD : ((D * D) x) = ContinuousLinearMap.adjoint D (D x) := by
+      rw [ContinuousLinearMap.mul_apply, ← ContinuousLinearMap.star_eq_adjoint, hDsa]
+    simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.one_apply,
+      inner_sub_left, map_sub, hDD, ContinuousLinearMap.adjoint_inner_left]
+    rw [inner_self_eq_norm_sq, inner_self_eq_norm_sq]
+  rw [← hleft, adjoint_mul_canonicalIntertwiner, ← hD, hright]
+  have hbound : ‖D x‖ ≤ ‖D‖ * ‖x‖ := D.le_opNorm x
+  nlinarith [norm_nonneg (D x), norm_nonneg x, norm_nonneg D, hbound,
+    sq_nonneg (‖D‖ * ‖x‖ - ‖D x‖)]
+
 /-! ### Displacement of the direct rotation
 
 `directRotation_minimal` was filed as needing the Halmos two-projection
