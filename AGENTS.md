@@ -136,10 +136,6 @@ Mathlib      TauCeti
 
 - `ForTauCeti` may import only `Mathlib` / `TauCeti` / `ForTauCeti`. Enforced by
   `scripts/check_dependency_layers.py`.
-  **`ForMathlib` is gone** — the retirement finished and the directory no longer
-  exists. This entry said "4 modules remain" until 2026-08-02, well after the
-  last one was migrated; if you are reading a migration instruction about it
-  anywhere, that document is stale.
 - `DavisKahan` remains its own package and the paper-facing home of the work; it
   may consume `ForTauCeti`.
 - **Spectra is retired.** No maintained module imports it, its source tree is no
