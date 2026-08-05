@@ -5,6 +5,10 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.SharpKyFan
 import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
+-- branch selection: the canonical contractive Riccati solution, and the
+-- spectrum-to-form-bound bridge that feeds it the paper's hypotheses
+import DavisKahan.Riccati.BoundedCanonicalSolution
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 
 /-!
 # Sharp standard-ideal `tan 2Theta`
@@ -162,6 +166,81 @@ theorem sharp_nuclear
         2 * paperNuclearNorm.gauge B.B01 :=
   sharp_paperUnitaryInvariantNorm paperNuclearNorm
     B hd hA0 hA1 hX hcontractive hB
+
+/-! ### Branch selection, so the caller supplies no branch
+
+The endpoints above take the contractive Riccati solution `X` as **data**.
+Davis and Kahan do not: their Section 8 *selects* it, from spectral separation
+plus smallness of the off-diagonal block.  That selection is already in the
+default build — `canonicalContractiveRiccatiSolution`, together with its
+existence-and-uniqueness theorem — so the two compose, and the composite is the
+paper's `tan 2Θ` theorem for an arbitrary unitarily invariant norm in an
+arbitrary complex Hilbert space with **no branch supplied by the caller**.
+
+The hypotheses are the printed ones: the wanted block's spectrum sits in
+`[left, 0]`, the unwanted block's in `[d, ∞)`, and the coupling is small
+relative to the gap.  The form bounds `sharp_paperUnitaryInvariantNorm` wants
+are read off from those spectral containments by
+`SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic` and its lower
+companion; the interval/exterior shape the Riccati selection wants is the same
+data reassociated.
+
+The selected `X` is *unique* among contractive solutions — see
+`existsUnique_contractive_riccati_solution_of_spectrum_gap` — so the existential
+below names one operator, not a class. -/
+
+/-- **Davis--Kahan 1970 `tan 2Θ` for an arbitrary unitarily invariant norm, with
+the acute branch selected rather than assumed.**
+
+Spectral separation (`spectrum A₀ ⊆ [left, 0]`, `spectrum A₁ ⊆ [d, ∞)`) together
+with smallness of the coupling (`2‖B₀₁‖ < d`) produces a contractive Riccati
+solution — unique among contractive solutions — and the bound
+`d · N(tan 2Θ) ≤ 2 · N(B₀₁)` for it, in an arbitrary complex Hilbert space and
+for every `PaperUnitaryInvariantNorm`.
+
+The caller supplies no branch: that is the difference from
+`sharp_paperUnitaryInvariantNorm`, which takes `X` as data. -/
+theorem sharp_paperUnitaryInvariantNorm_selectedBranch
+    (N : PaperUnitaryInvariantNorm)
+    (B : BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    {left d : ℝ} (hd : 0 < d) (hleft : left ≤ 0)
+    (hA0spec : spectrum ℝ B.A0 ⊆ Set.Icc left 0)
+    (hA1spec : spectrum ℝ B.A1 ⊆ Set.Ici d)
+    (hsmall : 2 * ‖B.B01‖ < d)
+    (hB : N.Mem B.B01) :
+    ∃ (X : E0 →L[ℂ] E1) (hXc : ‖X‖ < 1), SolvesRiccati B X ∧
+      N.Mem (TauCeti.DavisKahan.doubleAngleTangentOperator X hXc) ∧
+        d * N.gauge (TauCeti.DavisKahan.doubleAngleTangentOperator X hXc) ≤
+          2 * N.gauge B.B01 := by
+  have hA0sa : IsSelfAdjoint B.A0 :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr B.selfAdjoint0
+  have hA1sa : IsSelfAdjoint B.A1 :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr B.selfAdjoint1
+  -- the form bounds the sharp endpoint runs on
+  have hA0 : ∀ z : E0, RCLike.re ⟪B.A0 z, z⟫_ℂ ≤ 0 := by
+    intro z
+    have h := SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic B.A0
+      hA0sa (c := 0) (fun r hr => (hA0spec hr).2) z
+    simpa using h
+  have hA1 : ∀ z : E1, d * ‖z‖ ^ 2 ≤ RCLike.re ⟪B.A1 z, z⟫_ℂ :=
+    SpectralOrder.Complex.le_re_inner_of_spectrum_subset_Ici B.A1 hA1sa hA1spec
+  -- the interval/exterior shape the Riccati selection runs on
+  have hA1spec' : ∀ x ∈ spectrum ℝ B.A1, x ≤ left - d ∨ 0 + d ≤ x := by
+    intro x hx
+    exact Or.inr (by simpa using hA1spec hx)
+  refine ⟨canonicalContractiveRiccatiSolution B hd hleft hA0spec hA1spec' hsmall,
+    canonicalContractiveRiccatiSolution_norm_lt_one B hd hleft hA0spec hA1spec'
+      hsmall,
+    canonicalContractiveRiccatiSolution_solves B hd hleft hA0spec hA1spec'
+      hsmall, ?_, ?_⟩ <;>
+  · have h := sharp_paperUnitaryInvariantNorm N B hd hA0 hA1
+      (canonicalContractiveRiccatiSolution_solves B hd hleft hA0spec hA1spec'
+        hsmall)
+      (canonicalContractiveRiccatiSolution_norm_lt_one B hd hleft hA0spec
+        hA1spec' hsmall) hB
+    first
+      | exact h.1
+      | exact h.2
 
 end
 
