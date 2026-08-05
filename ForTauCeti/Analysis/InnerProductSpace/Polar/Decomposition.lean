@@ -83,9 +83,16 @@ They agree exactly where both are defined, and the library proves it:
 `operatorAbs_toContinuousLinearMap_eq_cfcAbs` below. Neither can be deleted in favour of
 the other — one is more general in the field, the other in the shape.
 
-The name is `operatorAbs`, not `operatorAbs`: a bare `operatorAbs` collides with the lattice
+The name is `operatorAbs`, not `abs`: a bare `abs` collides with the lattice
 absolute value that `|·|` denotes in Lean, and `modulus` already names the
 rectangular construction. This is the spelling the submitted roadmap states.
+
+A third spelling, `operatorAbsoluteValue`, exists in
+`DavisKahan/Experimental/InfiniteDimensional/SinTheta/General.lean`. It is the square
+dimension-free modulus carried over a hypothesised functional calculus, it has **no
+consumer outside `DavisKahan/Experimental/**`**, and it is not a third canonical modulus:
+where its calculus instance actually exists the scalars are `ℂ` and it is `CFC.abs`, which
+is what `modulus` computes. Promote `operatorAbs` or `modulus`, never that name.
 -/
 
 /-- The **modulus** `|A| = (A⋆A)^{1/2}` of an operator, via the spectral square root of the

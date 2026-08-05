@@ -595,5 +595,20 @@ itself on square operators. -/
     N.toRectangular A = N A :=
   (rfl)
 
+/-- **The square Frobenius norm is the square restriction of the rectangular one.**
+
+There are two Frobenius constructions in this library — `UnitarilyInvariantSeminorm.frobenius`
+on square maps and `RectangularUnitarilyInvariantSeminorm.frobenius` on rectangular ones —
+and they were written independently, with byte-identical bodies, neither derived from the
+other.  This identifies them, so the rectangular construction is the computational owner and
+the square one is its restriction along `toSquare` rather than a second implementation.
+
+It is `rfl`: both evaluate `A ↦ √(∑ᵢ ‖A bᵢ‖²)` over the same `stdOrthonormalBasis`.  That it
+is `rfl` is the point — the duplication was real, not merely apparent. -/
+theorem frobenius_toSquare_eq :
+    (RectangularUnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)).toSquare =
+      UnitarilyInvariantSeminorm.frobenius 𝕜 E :=
+  (rfl)
+
 end UnitarilyInvariantSeminorm
 end TauCeti
