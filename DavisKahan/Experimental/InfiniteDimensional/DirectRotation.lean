@@ -856,6 +856,43 @@ theorem norm_canonicalIntertwiner_apply_sq_ge (U V : Submodule 𝕜 E)
   nlinarith [norm_nonneg (D x), norm_nonneg x, norm_nonneg D, hbound,
     sq_nonneg (‖D‖ * ‖x‖ - ‖D x‖)]
 
+/-- **Operator form of the coercivity**: `S⋆S ≥ (1 − ‖Δ‖²)·1` on any pair.
+
+The vector form is `norm_canonicalIntertwiner_apply_sq_ge`; this is it read
+through `ContinuousLinearMap.nonneg_iff_isPositive`.  It is the exact input
+`CFC.sqrt_le_sqrt` needs to produce the sharp bound `|S| ≥ √(1 − ‖Δ‖²)` that
+step 2 of the route on `directRotation_minimal` asks for — the square root is
+unavoidable there, because the competitor bound is tight at `√(1 − ‖Δ‖²)` and
+the elementary routes only give `1 − ‖Δ‖²`. -/
+theorem smul_one_le_adjoint_mul_canonicalIntertwiner (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    (RCLike.ofReal (1 - ‖(projection U - projection V : E →L[𝕜] E)‖ ^ 2) : 𝕜) •
+        (1 : E →L[𝕜] E) ≤
+      star (canonicalIntertwiner U V) * canonicalIntertwiner U V := by
+  set c : ℝ := 1 - ‖(projection U - projection V : E →L[𝕜] E)‖ ^ 2 with hc
+  set S : E →L[𝕜] E := canonicalIntertwiner U V with hS
+  have hsa : IsSelfAdjoint (star S * S) := IsSelfAdjoint.star_mul_self S
+  have hscal : IsSelfAdjoint ((RCLike.ofReal c : 𝕜) • (1 : E →L[𝕜] E)) := by
+    rw [IsSelfAdjoint, star_smul, star_one, RCLike.star_def, RCLike.conj_ofReal]
+  have happ : ∀ x : E,
+      RCLike.re ⟪((RCLike.ofReal c : 𝕜) • (1 : E →L[𝕜] E)) x, x⟫_𝕜 = c * ‖x‖ ^ 2 := by
+    intro x
+    rw [ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply,
+      inner_smul_left, RCLike.conj_ofReal, RCLike.re_ofReal_mul,
+      inner_self_eq_norm_sq]
+  rw [← sub_nonneg, ContinuousLinearMap.nonneg_iff_isPositive]
+  refine ⟨(hsa.sub hscal).isSymmetric, fun x => ?_⟩
+  have hkey : c * ‖x‖ ^ 2 ≤ ‖S x‖ ^ 2 := by
+    rw [hc, hS]; exact norm_canonicalIntertwiner_apply_sq_ge U V x
+  have hleft : RCLike.re ⟪(star S * S) x, x⟫_𝕜 = ‖S x‖ ^ 2 := by
+    have h : ((star S * S) x) = ContinuousLinearMap.adjoint S (S x) := by
+      rw [← ContinuousLinearMap.mul_apply, ContinuousLinearMap.star_eq_adjoint]
+    rw [h, ContinuousLinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
+  show 0 ≤ ContinuousLinearMap.reApplyInnerSelf _ x
+  rw [ContinuousLinearMap.reApplyInnerSelf_apply, ContinuousLinearMap.sub_apply,
+    inner_sub_left, map_sub, hleft, happ]
+  linarith
+
 omit [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
   [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
 /-- A unitary operator, bundled as a linear isometry equivalence.
