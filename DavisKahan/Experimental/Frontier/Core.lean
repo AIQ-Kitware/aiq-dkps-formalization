@@ -49,7 +49,25 @@ variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂]
 
 /-- Abstract equality of spectral multiplicity data.  A concrete definition
 must encode the measure class and the cardinal-valued multiplicity function,
-not merely point-spectrum multiplicities. -/
+not merely point-spectrum multiplicities.
+
+**This is a `sorry`ed *definition*, and that is a stronger defect than an
+unproved theorem.**  An escaped `def` is an opaque term, so
+`sameSpectralMultiplicity_iff_unitarilyEquivalent` below is a statement *about*
+that opaque term: it is unprovable as written, not merely unproved, and it
+asserts nothing.  Anyone triaging this pair should supply the definition first;
+no amount of work on the theorem can move until then.
+
+**And nothing downstream is waiting on it.**  Theorem 3.1's mathematical content
+is proved without any multiplicity theory, in the default build and
+admission-free, as
+`MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`
+— both directions, arbitrary complex Hilbert spaces, no compactness,
+separability or direct-integral presentation.  Supplying this definition and
+proving the equivalence buys only the paper's *literal* phrasing of Theorem 3.1
+in terms of multiplicity functions, which is Hahn--Hellinger and which the pinned
+Mathlib does not have in any form.  That is why the census keeps this off
+Theorem 3.1's critical path. -/
 noncomputable def SameSpectralMultiplicity
     (A : H₁ →L[ℂ] H₁) (B : H₂ →L[ℂ] H₂) : Prop := by
   sorry
