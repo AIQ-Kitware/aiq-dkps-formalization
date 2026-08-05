@@ -6,11 +6,11 @@ Authors: Jon Crall, Claude Opus 4.8
 Staged for Tau Ceti, roadmap topic T20.  Mathlib is not the destination
 (`ForTauCeti/README.md`); what follows is where this material would have gone on
 the closed Mathlib track —
-sample-covariance eigenvalue concentration.
+uncentered sample second-moment eigenvalue concentration.
 
 Specializes the generic random-Hermitian eigenvalue-concentration engine
-(`MatrixConcentration.lean`) to the empirical covariance
-`Cov̂_{kl}(ω) = n⁻¹ Σᵢ Vᵢ(ω)ₖ Vᵢ(ω)ₗ` of iid random vectors, via the scalar
+(`MatrixConcentration.lean`) to the uncentered second moment
+`M̂_{kl}(ω) = n⁻¹ Σᵢ Vᵢ(ω)ₖ Vᵢ(ω)ₗ` of iid random vectors, via the scalar
 sample-mean second-moment identity applied to the coordinate products.
 
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
@@ -21,12 +21,12 @@ public import ForTauCeti.Probability.Moments.MatrixConcentration
 public import ForTauCeti.Probability.Moments.SampleMean
 
 /-!
-# SampleCovariance
+# The uncentered empirical second moment
 
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: `ForMathlib.Probability.Moments.SampleCovariance`, moved to
+* Original module: `ForMathlib.Probability.Moments.SampleSecondMoment`, moved to
   `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
   commit `f9309f7`.
 * Extraction class: **moved**.  The Wave-1 migration renamed the namespace
@@ -47,16 +47,21 @@ namespace TauCeti
 
 variable {Ω : Type*} [MeasurableSpace Ω]
 
-/-- The empirical covariance matrix of the vectors `V₀, …, V_{n-1}` at outcome
-`ω`: `Cov̂_{kl}(ω) = n⁻¹ Σᵢ Vᵢ(ω)ₖ Vᵢ(ω)ₗ`. -/
-noncomputable def sampleCovariance {n d : ℕ}
+/-- The **uncentered empirical second moment** of the vectors `V₀, …, V_{n-1}` at outcome
+`ω`: `M̂_{kl}(ω) = n⁻¹ Σᵢ Vᵢ(ω)ₖ Vᵢ(ω)ₗ`.
+
+No sample mean is subtracted, so this is a second-moment matrix and **not** a covariance:
+the two agree only when the coordinates are centered. The name records that. The centered
+object is `TauCeti.centeredScatter` in `ForTauCeti/Probability/Moments/CenteredScatter.lean`;
+reserve "covariance" for it, or for a statement carrying a zero-mean hypothesis. -/
+noncomputable def sampleSecondMoment {n d : ℕ}
     (V : Fin n → Ω → EuclideanSpace ℝ (Fin d)) (ω : Ω) : Matrix (Fin d) (Fin d) ℝ :=
   fun k l => (n : ℝ)⁻¹ * ∑ i, V i ω k * V i ω l
 
-/-- **Per-entry second-moment bound for the sample covariance.**  Applying the
+/-- **Per-entry second-moment bound for the sample second moment.**  Applying the
 scalar sample-mean second-moment identity to the coordinate products
 `Yᵢ = Vᵢ(·)ₖ Vᵢ(·)ₗ`, the `(k,l)` entry of `Cov̂ − Cov` has mean-square `≤ v / n`. -/
-theorem integral_sq_sampleCovariance_entry_le {n d : ℕ} (hn : 0 < n)
+theorem integral_sq_sampleSecondMoment_entry_le {n d : ℕ} (hn : 0 < n)
     (P : Measure Ω) [IsProbabilityMeasure P]
     (V : Fin n → Ω → EuclideanSpace ℝ (Fin d))
     (Cov : Matrix (Fin d) (Fin d) ℝ) (k l : Fin d)
@@ -67,54 +72,54 @@ theorem integral_sq_sampleCovariance_entry_le {n d : ℕ} (hn : 0 < n)
     (hident : ∀ i, ∫ ω, ‖V i ω k * V i ω l - Cov k l‖ ^ 2 ∂P
         = ∫ ω, ‖V ⟨0, hn⟩ ω k * V ⟨0, hn⟩ ω l - Cov k l‖ ^ 2 ∂P)
     {v : ℝ} (hv : ∫ ω, ‖V ⟨0, hn⟩ ω k * V ⟨0, hn⟩ ω l - Cov k l‖ ^ 2 ∂P ≤ v) :
-    ∫ ω, (sampleCovariance V ω k l - Cov k l) ^ 2 ∂P ≤ (n : ℝ)⁻¹ * v := by
+    ∫ ω, (sampleSecondMoment V ω k l - Cov k l) ^ 2 ∂P ≤ (n : ℝ)⁻¹ * v := by
   have key := integral_norm_sq_average_sub_of_iid P hn
     (fun i ω => V i ω k * V i ω l) (Cov k l) hL2 hmean hindep hident
-  have hrw : ∫ ω, (sampleCovariance V ω k l - Cov k l) ^ 2 ∂P
+  have hrw : ∫ ω, (sampleSecondMoment V ω k l - Cov k l) ^ 2 ∂P
       = ∫ ω, ‖(n : ℝ)⁻¹ • (∑ i, V i ω k * V i ω l) - Cov k l‖ ^ 2 ∂P := by
     refine integral_congr_ae (Filter.Eventually.of_forall fun ω => ?_)
-    simp only [sampleCovariance, smul_eq_mul, Real.norm_eq_abs, sq_abs]
+    simp only [sampleSecondMoment, smul_eq_mul, Real.norm_eq_abs, sq_abs]
   rw [hrw, key]
   have hv_nonneg : (0 : ℝ) ≤ (n : ℝ)⁻¹ := by positivity
   exact mul_le_mul_of_nonneg_left hv hv_nonneg
 
 omit [MeasurableSpace Ω] in
-/-- The empirical covariance matrix is symmetric (Hermitian over `ℝ`). -/
-theorem isHermitian_sampleCovariance {n d : ℕ}
+/-- The uncentered second-moment matrix is symmetric (Hermitian over `ℝ`). -/
+theorem isHermitian_sampleSecondMoment {n d : ℕ}
     (V : Fin n → Ω → EuclideanSpace ℝ (Fin d)) (ω : Ω) :
-    (sampleCovariance V ω).IsHermitian := by
+    (sampleSecondMoment V ω).IsHermitian := by
   ext k l
-  -- states the conjugate-symmetry goal against `sampleCovariance`'s own
+  -- states the conjugate-symmetry goal against `sampleSecondMoment`'s own
   -- entries, which is the form the `star` lemma below rewrites.
-  change star (sampleCovariance V ω l k) = sampleCovariance V ω k l
-  simp only [sampleCovariance, star_trivial]
+  change star (sampleSecondMoment V ω l k) = sampleSecondMoment V ω k l
+  simp only [sampleSecondMoment, star_trivial]
   refine congrArg _ (Finset.sum_congr rfl fun i _ => ?_)
   ring
 
-/-- **Sample-covariance eigenvalue lower bound (high probability).**  Given a
+/-- **Second-moment eigenvalue lower bound (high probability).**  Given a
 per-entry mean-square bound `v` for `Σ̂ − Σ` (e.g. `v = σ²/n` from
-`integral_sq_sampleCovariance_entry_le` under iid coordinates), with probability
-`≥ 1 − d² v / η²` every sorted eigenvalue of the empirical covariance `Σ̂(ω)`
+`integral_sq_sampleSecondMoment_entry_le` under iid coordinates), with probability
+`≥ 1 − d² v / η²` every sorted eigenvalue of the empirical second moment `M̂(ω)`
 exceeds the corresponding eigenvalue of the population covariance `Σ` minus
 `d · η`.  Taking `η = c / (2d)` keeps a population eigenvalue floored at `c`
 above `c / 2` with high probability — the eigengap the DKPS `halign` route needs. -/
-theorem measure_forall_sampleCovariance_sortedEigenvalues_ge_ge {n d : ℕ}
+theorem measure_forall_sampleSecondMoment_sortedEigenvalues_ge_ge {n d : ℕ}
     (P : Measure Ω) [IsProbabilityMeasure P]
     (V : Fin n → Ω → EuclideanSpace ℝ (Fin d))
     (Cov : Matrix (Fin d) (Fin d) ℝ) (hCovHerm : Cov.IsHermitian)
     (hVmeas : ∀ i (k : Fin d), Measurable fun ω => V i ω k)
-    (hint : ∀ k l, Integrable (fun ω => (sampleCovariance V ω k l - Cov k l) ^ 2) P)
+    (hint : ∀ k l, Integrable (fun ω => (sampleSecondMoment V ω k l - Cov k l) ^ 2) P)
     {v η : ℝ} (hη : 0 < η)
-    (hmoment : ∀ k l, ∫ ω, (sampleCovariance V ω k l - Cov k l) ^ 2 ∂P ≤ v) :
+    (hmoment : ∀ k l, ∫ ω, (sampleSecondMoment V ω k l - Cov k l) ^ 2 ∂P ≤ v) :
     P {ω | ∀ k : Fin d,
         Matrix.sortedEigenvalues hCovHerm k - (d : ℝ) * η ≤
-          Matrix.sortedEigenvalues (isHermitian_sampleCovariance V ω) k}
+          Matrix.sortedEigenvalues (isHermitian_sampleSecondMoment V ω) k}
       ≥ 1 - ENNReal.ofReal ((d : ℝ) ^ 2 * v / η ^ 2) := by
-  have hmeas : ∀ k l : Fin d, Measurable fun ω => sampleCovariance V ω k l := by
+  have hmeas : ∀ k l : Fin d, Measurable fun ω => sampleSecondMoment V ω k l := by
     intro k l
     refine Measurable.const_mul ?_ _
     exact Finset.measurable_sum _ fun i _ => (hVmeas i k).mul (hVmeas i l)
-  exact measure_forall_sortedEigenvalues_ge_ge P (sampleCovariance V) Cov
-    (isHermitian_sampleCovariance V) hCovHerm hmeas hint hη hmoment
+  exact measure_forall_sortedEigenvalues_ge_ge P (sampleSecondMoment V) Cov
+    (isHermitian_sampleSecondMoment V) hCovHerm hmeas hint hη hmoment
 
 end TauCeti
