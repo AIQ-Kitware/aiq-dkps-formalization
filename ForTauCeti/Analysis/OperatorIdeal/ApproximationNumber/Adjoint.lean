@@ -152,7 +152,7 @@ approximation numbers are adjoint-invariant (`approximationNumber_adjoint`).  So
 the two operators have the *same* sequence, not merely comparable ones, and the
 transfer is an equality rewrite rather than an estimate.
 
-Recorded in `DavisKahan/Experimental/InfiniteDimensional/Ideals/Rectangular.lean`
+Recorded in `DavisKahan/InfiniteDimensional/Ideals/Rectangular.lean`
 as an open obligation -- "Schauder's theorem for Hilbert-space adjoints, which the
 pinned Mathlib does not yet provide" -- blocking the adjoint-invariance field of
 the compact-operator ideal family. -/

@@ -4,10 +4,19 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.All
-import DavisKahan.Experimental.Sources.All
 import DavisKahan.Experimental.Frontier.All
 
 /-! # Experimental Davis--Kahan theory
+
+## Why there is no `Experimental.Sources.All`
+
+`DavisKahan/Experimental/Sources/**` held the Davis--Kahan 1970 Section 8
+package while its import closure still went through modules that did not
+compile.  That closure became admission-free and buildable, so the package
+moved to `DavisKahan/Sources/DavisKahan1970/Section8/` — exactly the promotion
+its own aggregate docstring asked for — and the two `Experimental` aggregates
+that existed only to reach it were deleted rather than left as empty shells.
+`DavisKahan.All`, imported above, reaches Section 8 now.
 
 **The canonical infinite-dimensional route is the production tree, not this one.**
 `Experimental/InfiniteDimensional/` still holds the older ambient facades, kept for

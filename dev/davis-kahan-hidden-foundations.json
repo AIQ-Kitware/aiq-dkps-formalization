@@ -423,8 +423,8 @@
     {
       "id": "realized-circle-data",
       "title": "Bridge circle separation into the production continuation layer",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.ContourReuseBridge",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/ContourReuseBridge.lean",
+      "module": "DavisKahan.MathAhead.HiddenFoundations.ContourReuseBridge",
+      "file": "DavisKahan/MathAhead/HiddenFoundations/ContourReuseBridge.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.RealizedCircleContinuationData",
       "kind": "interface",
       "dependencies": [],
@@ -437,8 +437,8 @@
     {
       "id": "circle-continuation-witness",
       "title": "Reuse the existing contour theory to obtain a continuation witness",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.ContourReuseBridge",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/ContourReuseBridge.lean",
+      "module": "DavisKahan.MathAhead.HiddenFoundations.ContourReuseBridge",
+      "file": "DavisKahan/MathAhead/HiddenFoundations/ContourReuseBridge.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.RealizedCircleContinuationData.toSpectralContinuationWitness",
       "kind": "bridge",
       "dependencies": [
@@ -453,8 +453,8 @@
     {
       "id": "circle-projection-continuity",
       "title": "Continuity of the selected projection path",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.ContourReuseBridge",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/ContourReuseBridge.lean",
+      "module": "DavisKahan.MathAhead.HiddenFoundations.ContourReuseBridge",
+      "file": "DavisKahan/MathAhead/HiddenFoundations/ContourReuseBridge.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.RealizedCircleContinuationData.continuous_selectedProjectionPath",
       "kind": "bridge",
       "dependencies": [
@@ -470,8 +470,8 @@
     {
       "id": "circle-projection-lipschitz",
       "title": "Norm bound for the selected projection path",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.ContourReuseBridge",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/ContourReuseBridge.lean",
+      "module": "DavisKahan.MathAhead.HiddenFoundations.ContourReuseBridge",
+      "file": "DavisKahan/MathAhead/HiddenFoundations/ContourReuseBridge.lean",
       "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.RealizedCircleContinuationData.norm_selectedProjectionPath_sub_le",
       "kind": "bridge",
       "dependencies": [

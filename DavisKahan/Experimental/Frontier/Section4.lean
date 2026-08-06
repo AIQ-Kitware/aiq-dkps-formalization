@@ -9,10 +9,10 @@ import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 -- promoted infinite-dimensional Proposition 4.1 approximation-number majorization
 -- and the Fan-dominant ideal bridge for Corollary 4.1.  This module depends only
 -- on source-facing analysis, never on this frontier file, so the edge is acyclic.
-import DavisKahan.Experimental.MathAhead.Section4.InfiniteProposition41
+import DavisKahan.MathAhead.Section4.InfiniteProposition41
 -- infinite-dimensional Proposition 4.3 by pinching and orthogonal block sums.  Same
 -- acyclicity argument as the line above: it depends only on source-facing analysis.
-import DavisKahan.Experimental.MathAhead.Section4.InfiniteProposition43
+import DavisKahan.MathAhead.Section4.InfiniteProposition43
 -- production Proposition 4.2 (`Sources/DavisKahan1970/Section4BasisAngleEnergy`),
 -- which this file's statement is grounded on by `:=`.  Production never imports
 -- the frontier, so the edge is acyclic.

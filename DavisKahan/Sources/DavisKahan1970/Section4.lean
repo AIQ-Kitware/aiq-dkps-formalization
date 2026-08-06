@@ -16,12 +16,13 @@ the paper's numbering, scope and hypotheses, so that the facade can cite them.
 
 These are the **finite-dimensional** forms, which is the scope Section 4 is written at.
 Infinite-dimensional forms of Propositions 4.1 and 4.3 are proved as well, in
-`DavisKahan/Experimental/MathAhead/Section4/InfiniteProposition41.lean` and
-`InfiniteProposition43.lean`, and are exposed through
-`DavisKahan/Experimental/Frontier/Section4.lean`.  They are **not** aliased here: no
-production module may import `Experimental`, and until that chain is promoted `lake build`
-does not guard it.  Proposition 4.2 is already stated at arbitrary Hilbert-space generality
-and lives in `Section4BasisAngleEnergy.lean`.
+`DavisKahan/MathAhead/Section4/InfiniteProposition41.lean` and
+`InfiniteProposition43.lean`.  Both were promoted out of `Experimental/` once their import
+closures became admission-free, so `lake build` guards them; they are still **not** aliased
+here, because the source facade is numbered at the paper's finite-dimensional scope.  The
+`Experimental` exposure through `DavisKahan/Experimental/Frontier/Section4.lean` remains,
+and that module still carries `sorry`s of its own.  Proposition 4.2 is already stated at
+arbitrary Hilbert-space generality and lives in `Section4BasisAngleEnergy.lean`.
 
 ## Proposition 4.4 is excluded, and deliberately
 
