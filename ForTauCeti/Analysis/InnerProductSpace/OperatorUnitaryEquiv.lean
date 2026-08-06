@@ -55,6 +55,13 @@ theorem operatorUnitaryEquiv_of_intertwines {A : H →L[ℂ] H} {B : K →L[ℂ]
     (he : ∀ x : H, e (A x) = B (e x)) : OperatorUnitaryEquiv A B :=
   ⟨e, he⟩
 
+/-- The elimination rule, dual to `operatorUnitaryEquiv_of_intertwines`.  It exists so that
+consumers outside this module can destructure the relation without the definition having to be
+exposed. -/
+theorem OperatorUnitaryEquiv.exists_intertwiner {A : H →L[ℂ] H} {B : K →L[ℂ] K}
+    (h : OperatorUnitaryEquiv A B) : ∃ e : H ≃ₗᵢ[ℂ] K, ∀ x : H, e (A x) = B (e x) :=
+  h
+
 /-- Unitary equivalence is reflexive, witnessed by the identity. -/
 @[refl]
 theorem OperatorUnitaryEquiv.refl (A : H →L[ℂ] H) : OperatorUnitaryEquiv A A :=

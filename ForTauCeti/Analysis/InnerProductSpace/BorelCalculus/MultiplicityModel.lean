@@ -133,6 +133,11 @@ attribute [instance] MultiplicityDatum.base_finite
 noncomputable def MultiplicityDatum.measure (D : MultiplicityDatum) : Measure (ℂ × ℕ) :=
   sliceSum fun k => D.base.restrict (D.level k)
 
+/-- The model measure, unfolded.  Stated so that consumers outside this module can rewrite with
+it without the definition having to be exposed. -/
+theorem MultiplicityDatum.measure_def (D : MultiplicityDatum) :
+    D.measure = sliceSum fun k => D.base.restrict (D.level k) := (rfl)
+
 /-- The model measure is σ-finite: its slices are spanning sets of finite measure, because the
 base measure is finite.  This is what lets the Radon--Nikodym unitary compare two models. -/
 instance MultiplicityDatum.sigmaFinite_measure (D : MultiplicityDatum) :
