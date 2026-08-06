@@ -1,0 +1,210 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 5
+-/
+module
+
+public import ForTauCeti.MeasureTheory.LpRestrict
+
+/-!
+# A countable family of measures, assembled into one
+
+For a sequence of measures `μ : ℕ → Measure X` the **slice sum**
+
+```text
+sliceSum μ := ∑ₙ (μ n).map (x ↦ (x, n))
+```
+
+is a single measure on `X × ℕ` whose `L²` space is the Hilbert sum of the `L²(μ n)`, with the
+multiplication operator by `g ∘ Prod.fst` matching multiplication by `g` on each summand.
+
+This is what converts a *direct sum of multiplication models* into a *single* multiplication
+model.  It is the step that makes the rest of multiplicity theory pure measure theory: once a
+normal operator is presented as multiplication by the spectral coordinate on one `L²` space, the
+remaining normalisation -- dominating the measures, passing to level sets, rearranging the
+fibres -- happens entirely inside `Measure (X × ℕ)` and is transported back by the
+Radon--Nikodym unitary and the relabelling unitary, never touching the Hilbert space again.
+
+## Main results
+
+* `TauCeti.sliceSum`: the measure.
+* `TauCeti.restrict_sliceSum`: its restriction to the `n`-th slice is the pushforward of `μ n`.
+* `TauCeti.sliceLp`: the `n`-th summand embedding.
+* `TauCeti.isHilbertSum_sliceLp`: **`L²(sliceSum μ)` is the Hilbert sum of the `L²(μ n)`.**
+* `TauCeti.sliceLp_mulLp`: the embeddings intertwine the multiplication operators.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Extraction class: **authored in place** for the Tau Ceti staging layer.
+* Spectra influence: **none** -- this module imports only Mathlib and `ForTauCeti`.
+-/
+
+public section
+
+open MeasureTheory
+
+open scoped ENNReal
+
+namespace TauCeti
+
+section CongrMeasure
+
+variable {α : Type*} [MeasurableSpace α]
+
+/-- Transporting `L²` along an equality of measures.  Needed because the slice decomposition
+produces `L²` of a *restriction* while the summand is `L²` of a *pushforward*, and the two
+measures are equal but not syntactically so. -/
+@[expose]
+noncomputable def lpCongrMeasure {μ ν : Measure α} (h : μ = ν) :
+    Lp ℂ 2 μ ≃ₗᵢ[ℂ] Lp ℂ 2 ν :=
+  h ▸ LinearIsometryEquiv.refl ℂ (Lp ℂ 2 μ)
+
+theorem lpCongrMeasure_mulLp {μ ν : Measure α} (h : μ = ν) {g : α → ℂ} (hg : Measurable g)
+    {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp ℂ 2 μ) :
+    lpCongrMeasure h (mulLp μ hg hgC F) = mulLp ν hg hgC (lpCongrMeasure h F) := by
+  subst h
+  rfl
+
+end CongrMeasure
+
+section HilbertSumTransport
+
+variable {ι : Type*} {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+variable [CompleteSpace E]
+variable {G G' : ι → Type*}
+variable [∀ i, NormedAddCommGroup (G i)] [∀ i, InnerProductSpace ℂ (G i)]
+variable [∀ i, NormedAddCommGroup (G' i)] [∀ i, InnerProductSpace ℂ (G' i)]
+
+/-- **A Hilbert sum decomposition transports along unitaries of the summands.**
+
+Precomposing each summand embedding with a unitary changes neither orthogonality nor the range,
+so the decomposition survives verbatim.  This is how a decomposition into `L²` spaces of
+restrictions becomes one into `L²` spaces of the original measures. -/
+theorem isHilbertSum_comp_linearIsometryEquiv [∀ i, CompleteSpace (G i)]
+    [∀ i, CompleteSpace (G' i)]
+    {V : ∀ i, G i →ₗᵢ[ℂ] E} (h : IsHilbertSum ℂ G V) (e : ∀ i, G' i ≃ₗᵢ[ℂ] G i) :
+    IsHilbertSum ℂ G' fun i => (V i).comp (e i).toLinearIsometry := by
+  have hrange : ∀ i, LinearMap.range ((V i).comp (e i).toLinearIsometry).toLinearMap
+      = LinearMap.range (V i).toLinearMap := by
+    intro i
+    apply le_antisymm
+    · rintro _ ⟨v, rfl⟩
+      exact ⟨e i v, rfl⟩
+    · rintro _ ⟨w, rfl⟩
+      exact ⟨(e i).symm w, by simp⟩
+  refine IsHilbertSum.mk (fun i j hij v w => ?_) ?_
+  · exact h.OrthogonalFamily hij (e i v) (e j w)
+  · have htop : LinearMap.range h.OrthogonalFamily.linearIsometry.toLinearMap = ⊤ :=
+      LinearMap.range_eq_top.mpr h.surjective_isometry
+    rw [h.OrthogonalFamily.range_linearIsometry] at htop
+    simp only [hrange]
+    exact htop.ge
+
+end HilbertSumTransport
+
+section SliceSum
+
+variable {X : Type*} [MeasurableSpace X]
+
+/-- The inclusion of `X` as the `n`-th slice of `X × ℕ`. -/
+def sliceMap (n : ℕ) : X → X × ℕ := fun x => (x, n)
+
+theorem measurable_sliceMap (n : ℕ) : Measurable (sliceMap (X := X) n) :=
+  measurable_id.prodMk measurable_const
+
+theorem measurableEmbedding_sliceMap (n : ℕ) : MeasurableEmbedding (sliceMap (X := X) n) :=
+  measurableEmbedding_prod_mk_right n
+
+/-- The `n`-th slice of `X × ℕ`. -/
+def slice (n : ℕ) : Set (X × ℕ) := {p | p.2 = n}
+
+theorem measurableSet_slice (n : ℕ) : MeasurableSet (slice (X := X) n) :=
+  measurable_snd (measurableSet_singleton n)
+
+omit [MeasurableSpace X] in
+theorem pairwise_disjoint_slice :
+    Pairwise fun m n => Disjoint (slice (X := X) m) (slice n) := by
+  intro m n hmn
+  refine Set.disjoint_left.mpr fun p hpm hpn => hmn ?_
+  rw [← hpm, ← hpn]
+
+omit [MeasurableSpace X] in
+theorem iUnion_slice : (⋃ n, slice (X := X) n) = Set.univ := by
+  refine Set.eq_univ_of_forall fun p => ?_
+  exact Set.mem_iUnion.mpr ⟨p.2, rfl⟩
+
+/-- **The slice sum** of a sequence of measures: a single measure on `X × ℕ` carrying the whole
+family, the `n`-th member sitting on the `n`-th slice. -/
+noncomputable def sliceSum (μ : ℕ → Measure X) : Measure (X × ℕ) :=
+  Measure.sum fun n => (μ n).map (sliceMap n)
+
+/-- **The slice sum restricted to a slice is the pushforward of that member.** -/
+theorem restrict_sliceSum (μ : ℕ → Measure X) (n : ℕ) :
+    (sliceSum μ).restrict (slice n) = (μ n).map (sliceMap n) := by
+  rw [sliceSum, Measure.restrict_sum _ (measurableSet_slice n)]
+  refine Measure.ext fun t ht => ?_
+  rw [Measure.sum_apply _ ht, tsum_eq_single n ?_]
+  · rw [Measure.restrict_apply ht,
+      Measure.map_apply (measurable_sliceMap n) (ht.inter (measurableSet_slice n)),
+      Measure.map_apply (measurable_sliceMap n) ht]
+    congr 1
+    refine Set.ext fun x => ?_
+    simp [sliceMap, slice]
+  · intro m hm
+    rw [Measure.restrict_apply ht,
+      Measure.map_apply (measurable_sliceMap m) (ht.inter (measurableSet_slice n))]
+    convert measure_empty (μ := μ m)
+    refine Set.ext fun x => ?_
+    simp [sliceMap, slice, hm]
+
+/-- The `n`-th summand, identified with `L²` of the slice restriction. -/
+@[expose]
+noncomputable def sliceLpEquiv (μ : ℕ → Measure X) (n : ℕ) :
+    Lp ℂ 2 (μ n) ≃ₗᵢ[ℂ] Lp ℂ 2 ((sliceSum μ).restrict (slice n)) :=
+  (embLpEquiv (measurableEmbedding_sliceMap n) (μ n)).symm.trans
+    (lpCongrMeasure (restrict_sliceSum μ n).symm)
+
+/-- **The `n`-th summand embedding** `L²(μ n) →ₗᵢ[ℂ] L²(sliceSum μ)`. -/
+@[expose]
+noncomputable def sliceLp (μ : ℕ → Measure X) (n : ℕ) :
+    Lp ℂ 2 (μ n) →ₗᵢ[ℂ] Lp ℂ 2 (sliceSum μ) :=
+  (extendLp (sliceSum μ) (measurableSet_slice n)).comp (sliceLpEquiv μ n).toLinearIsometry
+
+/-- **`L²` of the slice sum is the Hilbert sum of the `L²` spaces of the members.** -/
+theorem isHilbertSum_sliceLp (μ : ℕ → Measure X) :
+    IsHilbertSum ℂ (fun n => Lp ℂ 2 (μ n)) (sliceLp μ) :=
+  isHilbertSum_comp_linearIsometryEquiv (E := Lp ℂ 2 (sliceSum μ))
+    (isHilbertSum_extendLp (sliceSum μ) (fun n => measurableSet_slice (X := X) n)
+      pairwise_disjoint_slice (by rw [iUnion_slice, Set.compl_univ, measure_empty]))
+    (sliceLpEquiv μ)
+
+/-- **The summand embeddings intertwine the multiplication operators.**  Multiplication by `g`
+on `L²(μ n)` becomes multiplication by `g ∘ Prod.fst` on `L²(sliceSum μ)`: the assembled model
+multiplies by the *first* coordinate, so the slice index is a passive label. -/
+theorem sliceLp_mulLp (μ : ℕ → Measure X) (n : ℕ) {g : X → ℂ} (hg : Measurable g) {C : ℝ}
+    (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp ℂ 2 (μ n)) :
+    sliceLp μ n (mulLp (μ n) hg hgC F)
+      = mulLp (sliceSum μ) (hg.comp measurable_fst) (fun p => hgC p.1) (sliceLp μ n F) := by
+  have h1 : (embLpEquiv (measurableEmbedding_sliceMap (X := X) n) (μ n)).symm
+        (mulLp (μ n) hg hgC F)
+      = mulLp ((μ n).map (sliceMap n)) (hg.comp measurable_fst) (fun p => hgC p.1)
+        ((embLpEquiv (measurableEmbedding_sliceMap (X := X) n) (μ n)).symm F) :=
+    embLpEquiv_symm_mulLp (measurableEmbedding_sliceMap n) (μ n) (hg.comp measurable_fst)
+      (fun p => hgC p.1) F
+  have h2 := lpCongrMeasure_mulLp (restrict_sliceSum μ n).symm (hg.comp measurable_fst)
+    (fun p : X × ℕ => hgC p.1)
+    ((embLpEquiv (measurableEmbedding_sliceMap (X := X) n) (μ n)).symm F)
+  have hstep : sliceLpEquiv μ n (mulLp (μ n) hg hgC F)
+      = mulLp ((sliceSum μ).restrict (slice n)) (hg.comp measurable_fst) (fun p => hgC p.1)
+        (sliceLpEquiv μ n F) := by
+    simp only [sliceLpEquiv, LinearIsometryEquiv.trans_apply]
+    rw [h1, h2]
+  simp only [sliceLp, LinearIsometry.coe_comp, Function.comp_apply,
+    LinearIsometryEquiv.coe_toLinearIsometry]
+  rw [hstep, extendLp_mulLp]
+
+end SliceSum
+
+end TauCeti

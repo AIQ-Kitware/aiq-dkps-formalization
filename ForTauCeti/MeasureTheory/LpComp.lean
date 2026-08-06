@@ -131,6 +131,53 @@ theorem compLpEquiv_apply (f : α → β) (g : β → α) (hf : MeasurePreservin
     (hg : MeasurePreserving g ν μ) (hfg : ∀ᵐ x ∂μ, g (f x) = x) (hgf : ∀ᵐ y ∂ν, f (g y) = y)
     (F : Lp ℂ 2 ν) : compLpEquiv f g hf hg hfg hgf F = compLp f hf F := rfl
 
+/-- A measurable map is measure preserving onto its own pushforward.  Named so that the
+pushforward unitary below has a stable proof term to refer to. -/
+theorem measurePreserving_of_measurableEmbedding {e : α → β} (he : MeasurableEmbedding e)
+    (ρ : Measure α) : MeasurePreserving e ρ (Measure.map e ρ) :=
+  ⟨he.measurable, rfl⟩
+
+/-- Composition with a measurable embedding is surjective onto `L²` of the source: every
+square-integrable class extends measurably to the target. -/
+theorem surjective_compLp_of_measurableEmbedding {e : α → β} (he : MeasurableEmbedding e)
+    (ρ : Measure α) :
+    Function.Surjective (compLp e (measurePreserving_of_measurableEmbedding he ρ)) := by
+  have hpres : MeasurePreserving e ρ (Measure.map e ρ) :=
+    measurePreserving_of_measurableEmbedding he ρ
+  intro F
+  obtain ⟨f, hfmeas, hfae⟩ : ∃ f : α → ℂ, Measurable f ∧ (F : α → ℂ) =ᵐ[ρ] f :=
+    ⟨(Lp.aestronglyMeasurable F).mk (F : α → ℂ),
+      (Lp.aestronglyMeasurable F).stronglyMeasurable_mk.measurable,
+      (Lp.aestronglyMeasurable F).ae_eq_mk⟩
+  have hge : (Function.extend e f (0 : β → ℂ)) ∘ e = f :=
+    funext fun x => he.injective.extend_apply f 0 x
+  have hgmem : MemLp (Function.extend e f (0 : β → ℂ)) 2 (Measure.map e ρ) := by
+    rw [he.memLp_map_measure_iff, hge]
+    exact (Lp.memLp F).ae_eq hfae
+  refine ⟨hgmem.toLp (Function.extend e f (0 : β → ℂ)), Lp.ext ?_⟩
+  filter_upwards [coeFn_compLp hpres (hgmem.toLp (Function.extend e f (0 : β → ℂ))),
+    hpres.quasiMeasurePreserving.ae (MemLp.coeFn_toLp hgmem), hfae] with x h1 h2 h3
+  rw [h1, h2, h3]
+  simpa using congrFun hge x
+
+/-- **Transport along a measurable embedding.**  For a measurable embedding `e`, composition with
+`e` is a unitary `L²(map e ρ) ≃ₗᵢ[ℂ] L²(ρ)`.
+
+Injectivity is what makes it surjective: a square-integrable class on the source extends to the
+target by `Function.extend`, measurably, because a measurable embedding carries measurable sets
+to measurable sets.  This is the form used to move the scalar spectral measures off the
+`spectrum` subtype and onto `ℂ`, where the models of two different operators can be compared. -/
+@[expose]
+noncomputable def embLpEquiv {e : α → β} (he : MeasurableEmbedding e) (ρ : Measure α) :
+    Lp ℂ 2 (Measure.map e ρ) ≃ₗᵢ[ℂ] Lp ℂ 2 ρ :=
+  LinearIsometryEquiv.ofSurjective (compLp e (measurePreserving_of_measurableEmbedding he ρ))
+    (surjective_compLp_of_measurableEmbedding he ρ)
+
+@[simp]
+theorem embLpEquiv_apply {e : α → β} (he : MeasurableEmbedding e) (ρ : Measure α)
+    (F : Lp ℂ 2 (Measure.map e ρ)) :
+    embLpEquiv he ρ F = compLp e (measurePreserving_of_measurableEmbedding he ρ) F := rfl
+
 /-- **The intertwining law.**  Composition with `f` carries multiplication by `G` on `L²(ν)` to
 multiplication by `G ∘ f` on `L²(μ)`.
 
@@ -147,6 +194,24 @@ theorem compLp_mulLp (hf : MeasurePreserving f μ ν) {G : β → ℂ} (hG : Mea
     coeFn_compLp hf F] with x h1 h2 h3 h4
   simp only [Function.comp_apply] at h1 h2 h3 h4 ⊢
   rw [h1, h2, h3, h4]
+
+/-- **The pushforward unitary intertwines the multiplication operators.**  The symbol on the
+source is the symbol on the target composed with the embedding. -/
+theorem embLpEquiv_mulLp {e : α → β} (he : MeasurableEmbedding e) (ρ : Measure α) {G : β → ℂ}
+    (hG : Measurable G) {C : ℝ} (hGC : ∀ y, ‖G y‖ ≤ C) (F : Lp ℂ 2 (Measure.map e ρ)) :
+    embLpEquiv he ρ (mulLp (Measure.map e ρ) hG hGC F)
+      = mulLp ρ (hG.comp he.measurable) (fun x => hGC (e x)) (embLpEquiv he ρ F) :=
+  compLp_mulLp (measurePreserving_of_measurableEmbedding he ρ) hG hGC F
+
+/-- The inverse of the pushforward unitary intertwines the multiplication operators the other
+way. -/
+theorem embLpEquiv_symm_mulLp {e : α → β} (he : MeasurableEmbedding e) (ρ : Measure α)
+    {G : β → ℂ} (hG : Measurable G) {C : ℝ} (hGC : ∀ y, ‖G y‖ ≤ C) (F : Lp ℂ 2 ρ) :
+    (embLpEquiv he ρ).symm (mulLp ρ (hG.comp he.measurable) (fun x => hGC (e x)) F)
+      = mulLp (Measure.map e ρ) hG hGC ((embLpEquiv he ρ).symm F) := by
+  refine (embLpEquiv he ρ).injective ?_
+  rw [LinearIsometryEquiv.apply_symm_apply, embLpEquiv_mulLp,
+    LinearIsometryEquiv.apply_symm_apply]
 
 end Comp
 
