@@ -57,15 +57,27 @@ The plan, in the order the pieces should be built:
    2026-08-06 found `cfc_map_pi`, `cfc_map_prod`, `cfc_map_spectrum` and nothing for conjugation
    by a star-algebra isomorphism.**
 
-2. **A strictly positive `L²` vector realises the base measure class.**  `D.measure` is
-   σ-finite, so there is `f > 0` with `∫ f < ∞`; take `F₀ := √f`.  Then
-   `diagMeasure (F₀)` is the pushforward of `|F₀|² · D.measure` along the coordinate, whose class
-   is the class of the pushforward of `D.measure`, which is the class of
-   `∑ₖ base|_{level k}`, which is the class of `base|_{level 0}`, which is the class of `base`
-   -- the last step being exactly `base_supported_level_zero`, and the one before it
-   `antitone_level`.
+2. **A strictly positive `L²` vector realises the base measure class.**  Three pieces, and the
+   first is the only substantial one:
 
-3. Combine: `MeasureEquiv D.base E.base`.
+   * **(A)** `cfc f (mulLp ρ g) = mulLp ρ (f ∘ g)` -- the functional calculus of a multiplication
+     operator is multiplication by the composed symbol.  Needed to compute `diagMeasure` of the
+     model operator at all.  Route: `mulLp ρ` is a `⋆`-algebra map from bounded symbols to
+     operators, so this is another application of cfc uniqueness; it is *not* covered by
+     `map_cfc`, which transports along a map of the *algebras*, not along a symbol substitution.
+     Estimate 200--400 lines and it is where the remaining work of Half 1 sits.
+   * **(B)** a strictly positive `L²` function exists: `D.measure` is σ-finite, so there is
+     `f > 0` with `∫ f < ∞`; take `F₀ := √f`.
+   * **(C)** `diagMeasure(F)` is always `≪ base`, with *equivalence* when `F` is strictly
+     positive, because `diagMeasure(F₀)` is the pushforward of `|F₀|² · D.measure` along the
+     coordinate, whose class is that of the pushforward of `D.measure`, which is the class of
+     `∑ₖ base|_{level k}`, which is the class of `base|_{level 0}` -- and that is the class of
+     `base` by `base_supported_level_zero`, the step before it being `antitone_level`.
+
+3. Combine.  Note the two directions come out **without** needing `|U F₀|²` to be positive on the
+   far side: from `map_val_diagMeasure_eq_of_intertwines`, `D.base ∼ diagMeasure_D(F₀) =
+   diagMeasure_E(U F₀) ≪ E.base`, and the same argument run from the other side gives
+   `E.base ≪ D.base`.  Each direction uses a maximal vector on its *own* side only.
 
 ### Half 2: the level sets are determined.  **Hard, and it is the real Hahn--Hellinger.**
 
