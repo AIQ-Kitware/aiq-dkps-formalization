@@ -58,7 +58,7 @@ make the map invertible, its inverse being the same construction with `dν/dμ`.
 
 **No separability, and no second countability.**  Nothing here constrains the measurable space,
 so the result applies verbatim to the uniform-multiplicity decomposition of
-`dev/section3-multiplicity-plan-2026-08-06.md` §4, which is indexed by cardinals rather than by
+the uniform-multiplicity decomposition, were it indexed by cardinals rather than by
 `ℕ`.  The hypotheses are `SigmaFinite` on both measures, which is what
 `Measure.HaveLebesgueDecomposition` and `Measure.rnDeriv_lt_top` need; finite measures -- in
 particular the scalar spectral measures of the Borel calculus -- satisfy it by instance.

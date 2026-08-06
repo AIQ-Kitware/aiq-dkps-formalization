@@ -1070,7 +1070,9 @@ correction was applied to Corollary 3.1 on 2026-08-06.  Davis and Kahan state Th
 angle operator on the `U`-side, so this is the paper-faithful reading.
 
 **On separability.**  It is carried on `H₁` only, it is inherited by the generic left half, and
-it is the paper's own standing convention.  It is needed for `→` alone -- producing a
+it is one of the paper's **standing assumptions**, taken from the Introduction and Sections 1--2
+and so governing Section 3; see `prose/distilled_literature/DavisKahan1970_part_III.tex`,
+*Standing assumptions from the transcription*.  It is needed for `→` alone -- producing a
 multiplicity model requires the existence half of Hahn--Hellinger -- and the `←` direction is
 separability-free.  Crucially, nothing already proved is weakened: the operator-level form
 `twoProjection_operator_classification`, grounded on

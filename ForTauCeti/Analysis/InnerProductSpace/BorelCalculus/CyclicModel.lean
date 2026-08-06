@@ -54,7 +54,7 @@ The construction is the usual density/extension argument, assembled from three p
 
 Nothing about *several* cyclic subspaces: the orthogonal decomposition of `H` into countably
 many of them (layer 3), the ordering by measure class (layer 4) and the multiplicity function
-(layer 5) are all still open.  See `dev/section3-multiplicity-plan-2026-08-06.md` for the layer
+(layer 5) are all still open.  See the modules named above for the layer
 plan and the cost of each.
 
 ## Provenance

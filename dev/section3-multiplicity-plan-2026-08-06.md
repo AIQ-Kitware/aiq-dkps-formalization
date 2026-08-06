@@ -356,10 +356,16 @@ direction.
 Theorem 3.1's multiplicity phrasing carries `[TopologicalSpace.SeparableSpace H₁]`.  Three facts
 make that the right call rather than the retreat §4 refused:
 
-1. **It is the paper's own convention.**  Davis and Kahan work under a global separability
-   assumption; the source census records this twice, at the Section 6 rank hypothesis
-   (`dev/davis-kahan-1970-full-source-census.md`), where the printed
-   `dim X(E₀) < dim X(F₀)` does its only job *because* of that convention.
+1. **It is one of the paper's standing assumptions.**  Verified 2026-08-06 against the public
+   source surrogate rather than inferred: `prose/distilled_literature/DavisKahan1970_part_III.tex`,
+   *Standing assumptions from the transcription*, anchored to the Introduction, Section 1 and
+   Section 2, records "`H` is a separable Hilbert space, real or complex, with finite
+   dimensionality only a special case."  It therefore governs Section 3.  The same list records
+   that for noncompact operators the source expects singular-value lists to be replaced by
+   *spectral multiplicity language* -- the phrasing proved here.  (The earlier justification
+   offered here cited only the Section 6 rank hypothesis, where separability is used
+   *incidentally* to force the trial coordinate space to be finite-dimensional.  That is a
+   consequence of the convention, not a statement of it, and was the weaker witness.)
 2. **Nothing already proved is weakened.**  The operator-level classification
    `pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant` is untouched: arbitrary
    complex Hilbert spaces, no compactness, no finite dimension, no separability.  It is that

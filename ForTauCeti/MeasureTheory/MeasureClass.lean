@@ -41,8 +41,8 @@ so it is introduced here.
 
 `Equivalence` is proved here even though the immediate consumers only need the conjunction.  It
 costs three lines, and it is what lets the canonical (quotient-valued) form of the multiplicity
-datum be built later as a strict extension rather than a rewrite; see
-`dev/section3-multiplicity-plan-2026-08-06.md` §5.
+datum be built later as a strict extension rather than a rewrite: the existential form of the
+multiplicity invariant needs only the conjunction, but the canonical form needs the quotient.
 
 ## Provenance
 
