@@ -185,6 +185,18 @@ theorem sliceSum_slice (μ : ℕ → Measure X) (n : ℕ) :
     refine Set.ext fun x => ?_
     simp [slice, hm]
 
+/-- **The slice sum, pushed forward along the first coordinate, is the sum of its members.**
+
+Forgetting which slice a point came from collapses the whole family onto one measure.  This is
+what identifies the measure class of a multiplication model on `X × ℕ` with a measure class on
+`X`. -/
+theorem map_fst_sliceSum (μ : ℕ → Measure X) :
+    (sliceSum μ).map Prod.fst = Measure.sum μ := by
+  refine Measure.ext fun t ht => ?_
+  rw [Measure.map_apply measurable_fst ht, sliceSum_apply _ (measurable_fst ht),
+    Measure.sum_apply _ ht]
+  exact tsum_congr fun n => by congr 1
+
 /-- **The slice sum of finite measures is σ-finite**, the slices themselves being the spanning
 sets.  This is what lets the Radon--Nikodym unitary apply to slice sums. -/
 instance sigmaFinite_sliceSum (μ : ℕ → Measure X) [∀ n, IsFiniteMeasure (μ n)] :

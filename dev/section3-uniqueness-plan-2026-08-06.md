@@ -3,6 +3,12 @@
 Written 2026-08-06, immediately after Theorem 3.1 landed.  **Read this before starting; it
 records what is reachable, what is not, and one prerequisite defect that was fixed first.**
 
+## Status, 2026-08-06 (end of day)
+
+**Half 1 is done.**  The measure class of a multiplicity datum is a unitary invariant.  Half 2 --
+the level sets -- is untouched and is the real Hahn--Hellinger.  Read the Half 1 section for the
+module list and for three estimates in this document that turned out to be wrong.
+
 ## What is open, precisely
 
 `SameSpectralMultiplicity` is an **existential over presentations**.  Both directions of
@@ -16,7 +22,7 @@ OperatorUnitaryEquiv D.operator E.operator
   →  MeasureEquiv D.base E.base  ∧  ∀ k, D.base (D.level k ∆ E.level k) = 0.
 ```
 
-Until that lands, `SpectralMultiplicityFoundation` stays uninhabited: its `multiplicity` field is
+The measure half of that implication is now proved (`measureEquiv_base_of_operatorUnitaryEquiv`); the level-set half is not.  Until it lands, `SpectralMultiplicityFoundation` stays uninhabited: its `multiplicity` field is
 a *function*, which needs uniqueness as well as existence, plus a canonical `Datum`, which is
 `Cardinal → Quotient measureClassSetoid`.  `measureClassSetoid` already exists, so that half is a
 strict extension rather than a rewrite.
@@ -31,53 +37,50 @@ operator with different measure classes.  The field `base_supported_level_zero` 
 
 ## The two halves, and their difficulty
 
-### Half 1: the measure class is determined.  **Step 1 DONE, 2026-08-06.**
+### Half 1: the measure class is determined.  **DONE, 2026-08-06.**
 
-`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagMeasureNatural.lean` proves
-`cfc_apply_of_intertwines` and `map_val_diagMeasure_eq_of_intertwines`, both axiom-clean.  It was
-far cheaper than this plan assumed, because Mathlib already had both moving parts:
-`LinearIsometryEquiv.conjStarAlgEquiv` and `StarAlgHomClass.map_cfc`.  **The prediction below
-that a Stone--Weierstrass argument would be needed was wrong** -- `map_cfc` supplies the whole
-transport, and the only real side condition is continuity of the conjugation, discharged by
-rewriting it as `x ↦ e ∘L x ∘L e⁻¹`.  What is left of Half 1 is step 2 below.
+`TauCeti.BorelCalculus.measureEquiv_base_of_operatorUnitaryEquiv` in
+`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/MultiplicityUniqueness.lean`:
 
-The plan, in the order the pieces should be built:
+```text
+OperatorUnitaryEquiv D.operator E.operator  →  MeasureEquiv D.base E.base
+```
 
-1. ~~**`diagMeasure` is natural under a unitary intertwiner.**~~  **DONE.**  If `e : H ≃ₗᵢ[ℂ] K` satisfies
-   `e (A x) = B (e x)` then `diagMeasure hB (e ξ)` and `diagMeasure hA ξ` agree, after the
-   identification of the spectra (which are equal, `A` and `B` being unitarily equivalent).
+axiom-clean, in the default build.  The modules that carry it, in dependency order:
 
-   Route: `∫ f d(diagMeasure ha ξ) = re ⟪ξ, cfc f a ξ⟫` for continuous `f`, and both sides are
-   *algebraically* transported when `f` is a polynomial in the coordinate and its conjugate --
-   `⟪e ξ, B^n (e ξ)⟫ = ⟪ξ, A^n ξ⟫` needs nothing but the intertwining.  Polynomials are dense in
-   `C(K)` for compact `K ⊆ ℂ` (Stone--Weierstrass), and a finite measure on a compact metric
-   space is determined by integrals of bounded continuous functions
-   (`MeasureTheory.ext_of_forall_integral_eq_of_IsFiniteMeasure`).  Spectra are compact, so this
-   closes.  **Do not look for a `cfc`-naturality lemma in Mathlib first -- a search on
-   2026-08-06 found `cfc_map_pi`, `cfc_map_prod`, `cfc_map_spectrum` and nothing for conjugation
-   by a star-algebra isomorphism.**
+1. `ForTauCeti/MeasureTheory/MulLpAlgebra.lean` -- `mulLp` is a `⋆`-algebra map in its symbol,
+   and every multiplication operator is normal.
+2. `ForTauCeti/MeasureTheory/MulLpSpectrum.lean` -- the essential range of the symbol lies in the
+   spectrum.  **This was the load-bearing step and the plan did not anticipate it**: without it
+   `f ∘ g` cannot be written down at all for `f : C(spectrum ℂ (mulLp ρ g), ℂ)`, since `f` is
+   defined on the spectrum and `g` takes values in `ℂ`.  σ-finiteness is used here, to find a set
+   of positive *finite* measure carrying the indicator that contradicts the lower bound off the
+   spectrum.
+3. `ForTauCeti/MeasureTheory/MulLpCfc.lean` -- step 2(A), `cfc f (mulLp ρ g) = mulLp ρ (f ∘ g)`,
+   by uniqueness of the continuous functional calculus.  The empty-spectrum case is split off
+   rather than excluded: a complex Banach algebra with an empty-spectrum element is a
+   subsingleton.
+4. `ForTauCeti/MeasureTheory/LpNonvanishing.lean` -- step 2(B), a nowhere-vanishing `L²` function
+   on a σ-finite space.
+5. `.../BorelCalculus/DiagMeasureMulLp.lean` -- step 2(C), `map val (diagMeasure F) = g_* (|F|²·ρ)`
+   and the two absolute-continuity halves that follow from it, hence a maximal vector.
+6. `.../BorelCalculus/MultiplicityUniqueness.lean` -- step 3.
 
-2. **A strictly positive `L²` vector realises the base measure class.**  Three pieces, and the
-   first is the only substantial one:
+**Estimates that were wrong, recorded so they are not re-walked.**
 
-   * **(A)** `cfc f (mulLp ρ g) = mulLp ρ (f ∘ g)` -- the functional calculus of a multiplication
-     operator is multiplication by the composed symbol.  Needed to compute `diagMeasure` of the
-     model operator at all.  Route: `mulLp ρ` is a `⋆`-algebra map from bounded symbols to
-     operators, so this is another application of cfc uniqueness; it is *not* covered by
-     `map_cfc`, which transports along a map of the *algebras*, not along a symbol substitution.
-     Estimate 200--400 lines and it is where the remaining work of Half 1 sits.
-   * **(B)** a strictly positive `L²` function exists: `D.measure` is σ-finite, so there is
-     `f > 0` with `∫ f < ∞`; take `F₀ := √f`.
-   * **(C)** `diagMeasure(F)` is always `≪ base`, with *equivalence* when `F` is strictly
-     positive, because `diagMeasure(F₀)` is the pushforward of `|F₀|² · D.measure` along the
-     coordinate, whose class is that of the pushforward of `D.measure`, which is the class of
-     `∑ₖ base|_{level k}`, which is the class of `base|_{level 0}` -- and that is the class of
-     `base` by `base_supported_level_zero`, the step before it being `antitone_level`.
+* Step 1 predicted a Stone--Weierstrass argument.  It was not needed:
+  `LinearIsometryEquiv.conjStarAlgEquiv` and `StarAlgHomClass.map_cfc` supply the whole
+  transport, and the only real side condition is continuity of the conjugation.
+* Step 2(A) was estimated at 200--400 lines "where the remaining work of Half 1 sits".  The cfc
+  uniqueness argument itself was routine; the unanticipated corestriction of the symbol to the
+  spectrum (item 2 above) was the real cost.
+* Step 3 needed no positivity on the far side, as the plan already noted, and that is what makes
+  it short: each direction uses a maximal vector on its own side and the cheap domination on the
+  other.  `absolutelyContinuous_base_of_intertwines` is stated once and run twice.
 
-3. Combine.  Note the two directions come out **without** needing `|U F₀|²` to be positive on the
-   far side: from `map_val_diagMeasure_eq_of_intertwines`, `D.base ∼ diagMeasure_D(F₀) =
-   diagMeasure_E(U F₀) ≪ E.base`, and the same argument run from the other side gives
-   `E.base ≪ D.base`.  Each direction uses a maximal vector on its *own* side only.
+The one step that is **not** formal is the passage from `Prod.fst _* D.measure` to `D.base`:
+that is `measureEquiv_map_fst_measure`, and it holds only because of the datum field
+`base_supported_level_zero`.  Without it the theorem is false.  Do not remove that field.
 
 ### Half 2: the level sets are determined.  **Hard, and it is the real Hahn--Hellinger.**
 
