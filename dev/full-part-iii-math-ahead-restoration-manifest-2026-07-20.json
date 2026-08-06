@@ -10,8 +10,8 @@
     "DavisKahan/Experimental/InfiniteDimensional/Core/AbstractSpectrum.lean",
     "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
     "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
-    "DavisKahan/Experimental/InfiniteDimensional/SinTheta/Continuation/SpectralIdentification.lean",
-    "DavisKahan/Experimental/InfiniteDimensional/SinTheta/Continuation/WitnessGraph.lean",
+    "DavisKahan/InfiniteDimensional/SinTheta/Continuation/SpectralIdentification.lean",
+    "DavisKahan/InfiniteDimensional/SinTheta/Continuation/WitnessGraph.lean",
     "DavisKahan/Experimental/PartIII.lean",
     "DavisKahan/FiniteDimensional/DirectRotation/All.lean",
     "DavisKahan/FiniteDimensional/DirectRotation/Majorization.lean",
@@ -20,10 +20,10 @@
   "base_commit": "d5e54a708c014d97c4124036d332c6d7caa2a10e",
   "continuation_replacement_modules": [
     "DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationContour",
-    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.Transport",
-    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.SpectralIdentification",
-    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.RotationChain",
-    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation.Theorem"
+    "DavisKahan.InfiniteDimensional.SinTheta.Continuation.Transport",
+    "DavisKahan.InfiniteDimensional.SinTheta.Continuation.SpectralIdentification",
+    "DavisKahan.InfiniteDimensional.SinTheta.Continuation.RotationChain",
+    "DavisKahan.InfiniteDimensional.SinTheta.Continuation.Theorem"
   ],
   "obsolete_continuation_roadmap_api": [
     "IsPiecewiseC1ClosedContour",
@@ -142,12 +142,12 @@
     },
     {
       "name": "sinTwoTheta_acute_of_small_perturbation",
-      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/Continuation/WitnessGraph.lean",
+      "path": "DavisKahan/InfiniteDimensional/SinTheta/Continuation/WitnessGraph.lean",
       "signature_sha256": "15aeaac9eb043e24cf061d4a771fb60a28a8155c39e797466730f84b9be4c634"
     },
     {
       "name": "spectralSubspace_path_continuous",
-      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/Continuation/WitnessGraph.lean",
+      "path": "DavisKahan/InfiniteDimensional/SinTheta/Continuation/WitnessGraph.lean",
       "signature_sha256": "09c22ea6d585f79263fa2e737f86e2346e851f8ededcce16fe5259d6b292543d"
     },
     {
