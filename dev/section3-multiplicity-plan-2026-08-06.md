@@ -423,6 +423,12 @@ for measurability.
 `SameSpectralMultiplicity` is an **existential over presentations**.  Nothing proved here says
 the datum of an operator is unique, so:
 
+**Update 2026-08-06 (later the same day):** the *measure-class* half of uniqueness is now
+proved -- `TauCeti.BorelCalculus.measureEquiv_base_of_operatorUnitaryEquiv` -- so
+`MeasureEquiv D.base E.base` follows from `OperatorUnitaryEquiv D.operator E.operator`.  The
+level-set half is not, and the bullets below still stand: one half of an implication does not
+inhabit anything.  See `dev/section3-uniqueness-plan-2026-08-06.md`.
+
 * **`SpectralMultiplicityFoundation` is still uninhabited**, and this work does not inhabit it.
   Its `multiplicity` field is a *function*, which needs uniqueness as well as existence, plus a
   canonical `Datum` -- i.e. the quotient by `measureClassSetoid`.  §5's route B is still open.
