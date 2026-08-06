@@ -126,5 +126,21 @@ theorem isClosed_cyclicSubspace (ha : IsStarNormal a) (ξ : H) :
     IsClosed ((cyclicSubspace ha ξ : Submodule ℂ H) : Set H) :=
   (Submodule.span ℂ _).isClosed_topologicalClosure
 
+/-- **Minimality of the cyclic subspace.**  It is contained in every closed submodule that
+already contains the calculus orbit of `ξ`.
+
+This is the elimination principle for `cyclicSubspace`, and it is what a call site needs
+instead of the definition body: the definition is a `topologicalClosure` of a `span`, and
+`Submodule.topologicalClosure_minimal` plus `Submodule.span_le` is exactly this statement.
+Stated here so that consumers never unfold `cyclicSubspace`. -/
+theorem cyclicSubspace_le (ha : IsStarNormal a) {ξ : H} {S : Submodule ℂ H}
+    (hS : IsClosed (S : Set H))
+    (h : ∀ (f : spectrum ℂ a → ℂ) (hf : IsBddMeasurable f), borelCalculus ha hf ξ ∈ S) :
+    cyclicSubspace ha ξ ≤ S := by
+  refine Submodule.topologicalClosure_minimal _ ?_ hS
+  rw [Submodule.span_le]
+  rintro y ⟨f, hf, rfl⟩
+  exact h f hf
+
 end BorelCalculus
 end TauCeti
