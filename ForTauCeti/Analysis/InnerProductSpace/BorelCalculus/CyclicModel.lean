@@ -45,15 +45,17 @@ The construction is the usual density/extension argument, assembled from three p
 * `TauCeti.BorelCalculus.norm_symbolCalculus`: the isometry identity, in norm form.
 * `TauCeti.BorelCalculus.cyclicIsometry`: the linear isometry `L²(μ_ξ) →ₗᵢ[ℂ] H`.
 * `TauCeti.BorelCalculus.range_cyclicIsometry`: its range is `cyclicSubspace ha ξ`.
-* `TauCeti.BorelCalculus.cyclicIsometry_coord_mul`: **the intertwining law** — multiplying the
-  symbol by the coordinate is applying `a` to the image.
+* `TauCeti.BorelCalculus.coordMulLp`: multiplication by the coordinate, as a bounded operator
+  on `L²(μ_ξ)`.
+* `TauCeti.BorelCalculus.cyclicIsometry_coordMulLp`: **the intertwining law** — the isometry
+  carries multiplication by the coordinate to the action of `a`.
 
 ## What is not here
 
-Multiplication by the coordinate is not yet built as an operator on `L²(μ_ξ)`, so the
-intertwining law is stated on symbols and transported through the isometry.  That is what the
-next layer (orthogonal decomposition into cyclic subspaces) consumes; see
-`dev/section3-multiplicity-plan-2026-08-06.md` for the layer plan.
+Nothing about *several* cyclic subspaces: the orthogonal decomposition of `H` into countably
+many of them (layer 3), the ordering by measure class (layer 4) and the multiplicity function
+(layer 5) are all still open.  See `dev/section3-multiplicity-plan-2026-08-06.md` for the layer
+plan and the cost of each.
 
 ## Provenance
 
@@ -86,6 +88,13 @@ theorem norm_toLp_two_sq {α : Type*} [MeasurableSpace α] {μ : Measure α} {f 
     norm_cast
   rw [integral_congr_ae hae, integral_complex_ofReal] at hinner
   exact_mod_cast hinner
+
+/-- The squared `L²` norm of a class is the integral of the squared pointwise norm of any of
+its representatives -- in particular of the canonical one. -/
+theorem norm_Lp_two_sq {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    (F : MeasureTheory.Lp ℂ 2 μ) : ‖F‖ ^ 2 = ∫ x, ‖F x‖ ^ 2 ∂μ := by
+  conv_lhs => rw [← MeasureTheory.Lp.toLp_coeFn F (MeasureTheory.Lp.memLp F)]
+  exact norm_toLp_two_sq _
 
 namespace BorelCalculus
 
@@ -154,6 +163,12 @@ noncomputable def symbolToLp (ha : IsStarNormal a) (ξ : H) :
 theorem symbolToLp_apply (ha : IsStarNormal a) (ξ : H) (f : bddSymbols a) :
     symbolToLp ha ξ f = MemLp.toLp (f : spectrum ℂ a → ℂ)
       (memLp_two_of_isBddMeasurable ha ξ (isBddMeasurable_coe f)) := (rfl)
+
+/-- The `L²` class of a bounded measurable symbol is represented by that symbol. -/
+theorem coeFn_symbolToLp (ha : IsStarNormal a) (ξ : H) (f : bddSymbols a) :
+    (symbolToLp ha ξ f : spectrum ℂ a → ℂ) =ᵐ[diagMeasure ha ξ] (f : spectrum ℂ a → ℂ) := by
+  rw [symbolToLp_apply]
+  exact MemLp.coeFn_toLp _
 
 /-- The squared `L²` norm of a bounded measurable symbol. -/
 theorem norm_symbolToLp_sq (ha : IsStarNormal a) (ξ : H) (f : bddSymbols a) :
@@ -307,6 +322,127 @@ theorem cyclicIsometry_coord_mul (ha : IsStarNormal a) (ξ : H) (f : bddSymbols 
   exact symbolCalculus_coord_mul ha ξ f
 
 end Intertwining
+
+section Multiplication
+
+/-- The coordinate multiple of an `L²` class is again `L²`, because the spectrum is bounded. -/
+theorem memLp_coord_mul (ha : IsStarNormal a) (ξ : H) (F : Lp ℂ 2 (diagMeasure ha ξ)) :
+    MemLp (fun w : spectrum ℂ a => (w : ℂ) * F w) 2 (diagMeasure ha ξ) := by
+  refine MemLp.mono' ((Lp.memLp F).norm.const_mul
+    (isBddMeasurable_coord (a := a)).chooseBound) ?_ ?_
+  · exact (isBddMeasurable_coord (a := a)).measurable.aestronglyMeasurable.mul
+      (Lp.aestronglyMeasurable F)
+  · filter_upwards with w
+    rw [norm_mul]
+    exact mul_le_mul_of_nonneg_right ((isBddMeasurable_coord (a := a)).norm_le_chooseBound w)
+      (norm_nonneg _)
+
+/-- **The bound that makes coordinate multiplication a bounded operator.**  Squaring both
+sides turns it into `∫ ‖w f w‖² ≤ C² ∫ ‖f w‖²`, which is `integral_mono` against the uniform
+bound on the coordinate. -/
+theorem norm_toLp_coord_mul_le (ha : IsStarNormal a) (ξ : H) (F : Lp ℂ 2 (diagMeasure ha ξ)) :
+    ‖MemLp.toLp (fun w : spectrum ℂ a => (w : ℂ) * F w) (memLp_coord_mul ha ξ F)‖
+      ≤ (isBddMeasurable_coord (a := a)).chooseBound * ‖F‖ := by
+  set C := (isBddMeasurable_coord (a := a)).chooseBound with hCdef
+  have hC0 : 0 ≤ C := (isBddMeasurable_coord (a := a)).chooseBound_nonneg
+  have hmeas : AEStronglyMeasurable (fun w : spectrum ℂ a => (w : ℂ) * F w)
+      (diagMeasure ha ξ) :=
+    (isBddMeasurable_coord (a := a)).measurable.aestronglyMeasurable.mul
+      (Lp.aestronglyMeasurable F)
+  have hint1 : Integrable (fun w : spectrum ℂ a => ‖(w : ℂ) * F w‖ ^ 2) (diagMeasure ha ξ) :=
+    (memLp_two_iff_integrable_sq_norm hmeas).mp (memLp_coord_mul ha ξ F)
+  have hint2 : Integrable
+      (fun w : spectrum ℂ a => ‖(F : spectrum ℂ a → ℂ) w‖ ^ 2) (diagMeasure ha ξ) :=
+    (memLp_two_iff_integrable_sq_norm (Lp.aestronglyMeasurable F)).mp (Lp.memLp F)
+  have hsq : ‖MemLp.toLp (fun w : spectrum ℂ a => (w : ℂ) * F w) (memLp_coord_mul ha ξ F)‖ ^ 2
+      ≤ (C * ‖F‖) ^ 2 := by
+    rw [norm_toLp_two_sq]
+    calc ∫ w, ‖(w : ℂ) * F w‖ ^ 2 ∂(diagMeasure ha ξ)
+        ≤ ∫ w, C ^ 2 * ‖(F : spectrum ℂ a → ℂ) w‖ ^ 2 ∂(diagMeasure ha ξ) := by
+          refine integral_mono hint1 (hint2.const_mul _) fun w => ?_
+          rw [norm_mul, mul_pow]
+          have hw := (isBddMeasurable_coord (a := a)).norm_le_chooseBound w
+          have hsqw : ‖(w : ℂ)‖ ^ 2 ≤ C ^ 2 := by nlinarith [norm_nonneg ((w : ℂ))]
+          nlinarith [sq_nonneg ‖(F : spectrum ℂ a → ℂ) w‖]
+      _ = C ^ 2 * ∫ w, ‖(F : spectrum ℂ a → ℂ) w‖ ^ 2 ∂(diagMeasure ha ξ) :=
+          integral_const_mul _ _
+      _ = (C * ‖F‖) ^ 2 := by rw [← norm_Lp_two_sq]; ring
+  nlinarith [norm_nonneg (MemLp.toLp (fun w : spectrum ℂ a => (w : ℂ) * F w)
+    (memLp_coord_mul ha ξ F)), mul_nonneg hC0 (norm_nonneg F)]
+
+/-- **Multiplication by the coordinate**, as a bounded operator on `L²` of the scalar spectral
+measure of `ξ`.  This is the operator the multiplication model says `a` becomes. -/
+noncomputable def coordMulLp (ha : IsStarNormal a) (ξ : H) :
+    Lp ℂ 2 (diagMeasure ha ξ) →L[ℂ] Lp ℂ 2 (diagMeasure ha ξ) :=
+  LinearMap.mkContinuous
+    { toFun := fun F => MemLp.toLp (fun w : spectrum ℂ a => (w : ℂ) * F w)
+        (memLp_coord_mul ha ξ F)
+      map_add' := fun F G => by
+        rw [← MemLp.toLp_add (memLp_coord_mul ha ξ F) (memLp_coord_mul ha ξ G)]
+        refine (MemLp.toLp_eq_toLp_iff _ _).2 ?_
+        filter_upwards [Lp.coeFn_add F G] with w hw
+        simp only [Pi.add_apply, hw]
+        ring
+      map_smul' := fun c F => by
+        rw [RingHom.id_apply, ← MemLp.toLp_const_smul c (memLp_coord_mul ha ξ F)]
+        refine (MemLp.toLp_eq_toLp_iff _ _).2 ?_
+        filter_upwards [Lp.coeFn_smul c F] with w hw
+        simp only [Pi.smul_apply, hw, smul_eq_mul]
+        ring }
+    (isBddMeasurable_coord (a := a)).chooseBound (norm_toLp_coord_mul_le ha ξ)
+
+/-- Coordinate multiplication, unfolded. -/
+theorem coordMulLp_apply (ha : IsStarNormal a) (ξ : H) (F : Lp ℂ 2 (diagMeasure ha ξ)) :
+    coordMulLp ha ξ F = MemLp.toLp (fun w : spectrum ℂ a => (w : ℂ) * F w)
+      (memLp_coord_mul ha ξ F) := (rfl)
+
+/-- Coordinate multiplication really is pointwise multiplication by the coordinate. -/
+theorem coeFn_coordMulLp (ha : IsStarNormal a) (ξ : H) (F : Lp ℂ 2 (diagMeasure ha ξ)) :
+    (coordMulLp ha ξ F : spectrum ℂ a → ℂ)
+      =ᵐ[diagMeasure ha ξ] fun w => (w : ℂ) * F w := by
+  rw [coordMulLp_apply]
+  exact MemLp.coeFn_toLp _
+
+/-- On the class of a bounded measurable symbol, coordinate multiplication is multiplication
+of symbols. -/
+theorem coordMulLp_symbolToLp (ha : IsStarNormal a) (ξ : H) (f : bddSymbols a) :
+    coordMulLp ha ξ (symbolToLp ha ξ f)
+      = symbolToLp ha ξ ⟨fun w : spectrum ℂ a => (w : ℂ) * (f : spectrum ℂ a → ℂ) w,
+        coordMul_mem_bddSymbols f⟩ := by
+  rw [coordMulLp_apply, symbolToLp_apply ha ξ ⟨_, coordMul_mem_bddSymbols f⟩]
+  refine (MemLp.toLp_eq_toLp_iff _ _).2 ?_
+  filter_upwards [coeFn_symbolToLp ha ξ f] with w hw
+  simp only [hw]
+
+/-- **The multiplication model.**  The cyclic isometry intertwines multiplication by the
+coordinate on `L²(μ_ξ)` with the operator `a` on `H`:
+
+```text
+Φ (w · F) = a (Φ F)   for every F in L²(μ_ξ).
+```
+
+Both sides are continuous in `F` and agree on the dense set of bounded measurable symbols,
+where the identity is `symbolCalculus_coord_mul`.  With `range_cyclicIsometry` this is the
+statement that `a`, restricted to the cyclic subspace generated by `ξ`, *is* multiplication by
+the coordinate on `L²` of the scalar spectral measure of `ξ`. -/
+theorem cyclicIsometry_coordMulLp (ha : IsStarNormal a) (ξ : H)
+    (F : Lp ℂ 2 (diagMeasure ha ξ)) :
+    cyclicIsometry ha ξ (coordMulLp ha ξ F) = a (cyclicIsometry ha ξ F) := by
+  refine (denseRange_symbolToLp ha ξ).induction_on F
+    (isClosed_eq ((cyclicIsometry ha ξ).continuous.comp (coordMulLp ha ξ).continuous)
+      (a.continuous.comp (cyclicIsometry ha ξ).continuous)) fun f => ?_
+  rw [coordMulLp_symbolToLp]
+  exact cyclicIsometry_coord_mul ha ξ f
+
+/-- **The cyclic subspace is invariant under its operator.**  Immediate from the model: `a`
+becomes multiplication by the coordinate, which does not leave `L²(μ_ξ)`. -/
+theorem apply_mem_cyclicSubspace (ha : IsStarNormal a) (ξ : H) {y : H}
+    (hy : y ∈ cyclicSubspace ha ξ) : a y ∈ cyclicSubspace ha ξ := by
+  rw [← range_cyclicIsometry ha ξ] at hy ⊢
+  obtain ⟨F, rfl⟩ := hy
+  exact ⟨coordMulLp ha ξ F, cyclicIsometry_coordMulLp ha ξ F⟩
+
+end Multiplication
 
 end BorelCalculus
 end TauCeti
