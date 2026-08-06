@@ -196,7 +196,7 @@
    "id": "s3-spectral-multiplicity-definition",
    "title": "Spectral multiplicity equivalence definition",
    "kind": "foundation",
-   "module": "DavisKahan.Experimental.Frontier.Core",
+   "module": "DavisKahan.Frontier.Core",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.SameSpectralMultiplicity",
    "dependencies": [],
    "source_census_ids": [],
@@ -208,7 +208,7 @@
    "id": "s3-spectral-multiplicity-complete",
    "title": "Spectral multiplicity completeness theorem",
    "kind": "foundation",
-   "module": "DavisKahan.Experimental.Frontier.Core",
+   "module": "DavisKahan.Frontier.Core",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.sameSpectralMultiplicity_iff_unitarilyEquivalent",
    "dependencies": [
     "s3-spectral-multiplicity-definition"
@@ -222,7 +222,7 @@
    "id": "s3-prop3-1",
    "title": "Proposition 3.1 positivity characterization",
    "kind": "source",
-   "module": "DavisKahan.Experimental.Frontier.Section3",
+   "module": "DavisKahan.Frontier.Section3",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_1_positivity_characterization",
    "dependencies": [
     "s3-paper-direct-rotation-predicate",
@@ -239,7 +239,7 @@
    "id": "s3-crossed-identification",
    "title": "Paper crossed intersections equal Halmos defects",
    "kind": "bridge",
-   "module": "DavisKahan.Experimental.Frontier.Section3",
+   "module": "DavisKahan.Frontier.Section3",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.crossed_intersections_are_halmos_defects",
    "dependencies": [
     "base-halmos-decomposition"
@@ -253,7 +253,7 @@
    "id": "s3-prop3-2-existence",
    "title": "Proposition 3.2 existence criterion",
    "kind": "source",
-   "module": "DavisKahan.Experimental.Frontier.Section3",
+   "module": "DavisKahan.Frontier.Section3",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent",
    "dependencies": [
     "s3-paper-direct-rotation-predicate",
@@ -271,7 +271,7 @@
    "id": "s3-prop3-2-parameter",
    "title": "Proposition 3.2 nonuniqueness parameterization",
    "kind": "bridge",
-   "module": "DavisKahan.Experimental.Frontier.Section3",
+   "module": "DavisKahan.Frontier.Section3",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_2_parameterized_nonuniqueness",
    "dependencies": [
     "s3-prop3-2-existence"
@@ -285,7 +285,7 @@
    "id": "s3-prop3-3",
    "title": "Proposition 3.3 converse square-root characterization",
    "kind": "source",
-   "module": "DavisKahan.Experimental.Frontier.Section3",
+   "module": "DavisKahan.Frontier.Section3",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_3_principalSquareRoot_converse",
    "dependencies": [
     "s3-paper-direct-rotation-predicate",
@@ -302,7 +302,7 @@
    "id": "s3-prop3-4",
    "title": "Proposition 3.4 reflected square",
    "kind": "source",
-   "module": "DavisKahan.Experimental.Frontier.Section3",
+   "module": "DavisKahan.Frontier.Section3",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_4_square_is_reflected_directRotation",
    "dependencies": [
     "base-acute-direct-rotation"
@@ -318,7 +318,7 @@
    "id": "s3-fixed-angle-subspace",
    "title": "Fixed-angle spectral subspace construction",
    "kind": "foundation",
-   "module": "DavisKahan.Experimental.Frontier.Section3",
+   "module": "DavisKahan.Frontier.Section3",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.fixedCosineSubspace",
    "dependencies": [
     "s3-generic-cosine-restriction"
@@ -332,7 +332,7 @@
    "id": "s3-prop3-5",
    "title": "Proposition 3.5 maximal fixed-angle subspace",
    "kind": "source",
-   "module": "DavisKahan.Experimental.Frontier.Section3",
+   "module": "DavisKahan.Frontier.Section3",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_5_fixedAngle_maximal",
    "dependencies": [
     "s3-fixed-angle-subspace"
@@ -348,7 +348,7 @@
    "id": "s3-cor3-2",
    "title": "Corollary 3.2 reversal source form",
    "kind": "source",
-   "module": "DavisKahan.Experimental.Frontier.Section3",
+   "module": "DavisKahan.Frontier.Section3",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_2_reversal_source_form",
    "dependencies": [
     "base-acute-direct-rotation"
@@ -364,7 +364,7 @@
    "id": "s3-operator-classification",
    "title": "Operator-level two-projection classification",
    "kind": "bridge",
-   "module": "DavisKahan.Experimental.Frontier.Section3",
+   "module": "DavisKahan.Frontier.Section3",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.twoProjection_operator_classification",
    "dependencies": [
     "base-halmos-decomposition",
@@ -379,7 +379,7 @@
    "id": "s3-theorem3-1",
    "title": "Theorem 3.1 spectral multiplicity classification",
    "kind": "source",
-   "module": "DavisKahan.Experimental.Frontier.Section3",
+   "module": "DavisKahan.Frontier.Section3",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.theorem3_1_spectralMultiplicity_classification",
    "dependencies": [
     "s3-operator-classification",
@@ -396,7 +396,7 @@
    "id": "s3-compact-angle-list",
    "title": "Compact angle eigenvalue list",
    "kind": "foundation",
-   "module": "DavisKahan.Experimental.Frontier.Section3",
+   "module": "DavisKahan.Frontier.Section3",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.compactAngleEigenvalueList",
    "dependencies": [
     "s3-generic-cosine-restriction"
@@ -410,7 +410,7 @@
    "id": "s3-cor3-1",
    "title": "Corollary 3.1 compact classification",
    "kind": "source",
-   "module": "DavisKahan.Experimental.Frontier.Section3",
+   "module": "DavisKahan.Frontier.Section3",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_1_compact_angleList_classification",
    "dependencies": [
     "s3-operator-classification",
@@ -427,7 +427,7 @@
    "id": "s4-prop4-1",
    "title": "Proposition 4.1 infinite approximation-number form",
    "kind": "source",
-   "module": "DavisKahan.Experimental.Frontier.Section4",
+   "module": "DavisKahan.Frontier.Section4",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section4.proposition4_1_restrictedDisplacement_approximationNumbers",
    "dependencies": [
     "base-acute-direct-rotation"
@@ -443,7 +443,7 @@
    "id": "s4-cor4-1",
    "title": "Corollary 4.1 ideal-gauge form",
    "kind": "source",
-   "module": "DavisKahan.Experimental.Frontier.Section4",
+   "module": "DavisKahan.Frontier.Section4",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section4.corollary4_1_restrictedDisplacement_idealGauge",
    "dependencies": [
     "s4-prop4-1"
@@ -459,7 +459,7 @@
    "id": "s4-prop4-2",
    "title": "Proposition 4.2 orthonormal partial sums",
    "kind": "source",
-   "module": "DavisKahan.Experimental.Frontier.Section4",
+   "module": "DavisKahan.Frontier.Section4",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section4.proposition4_2_basisAngleSquareSum",
    "dependencies": [
     "base-acute-direct-rotation"
@@ -475,7 +475,7 @@
    "id": "s4-prop4-3",
    "title": "Proposition 4.3 squared displacement (Ky Fan level)",
    "kind": "source",
-   "module": "DavisKahan.Experimental.Frontier.Section4",
+   "module": "DavisKahan.Frontier.Section4",
    "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section4.proposition4_3_squaredDisplacement_kyFan",
    "dependencies": [
     "base-acute-direct-rotation"
