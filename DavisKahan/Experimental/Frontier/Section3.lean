@@ -22,6 +22,9 @@ import DavisKahan.Geometry.Polar.Section3Nonacute
 -- so the dependency is acyclic.
 import DavisKahan.Geometry.Halmos.Classification
 import DavisKahan.Geometry.Halmos.GenericReconstruction
+import ForTauCeti.Analysis.InnerProductSpace.CompactApproximationEigenvalues
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
+import DavisKahan.Geometry.Halmos.CompactClassification
 
 /-!
 # Section 3 frontier: separation and classification of two subspaces
@@ -1083,6 +1086,37 @@ noncomputable def compactAngleEigenvalueList
     [CompleteSpace K] (A : K →L[ℂ] K) : ℕ → ℝ :=
   fun n => A.approximationNumber n
 
+/-- **Approximation numbers are a unitary invariant.**  Conjugating by a linear isometric
+equivalence sandwiches the operator between two contractions in both directions, so no
+approximation number can move. -/
+theorem approximationNumber_eq_of_boundedOperatorsUnitaryEquivalent
+    {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    {A : E →L[ℂ] E} {B : F →L[ℂ] F}
+    (h : BoundedOperatorsUnitaryEquivalent A B) (n : ℕ) :
+    A.approximationNumber n = B.approximationNumber n := by
+  obtain ⟨U, hU⟩ := h
+  have hUapp : ∀ x, B (U x) = U (A x) := fun x => (hU x).symm
+  have hUnorm : ‖(U : E →L[ℂ] F)‖ ≤ 1 :=
+    U.toLinearIsometry.norm_toContinuousLinearMap_le
+  have hUsnorm : ‖(U.symm : F →L[ℂ] E)‖ ≤ 1 :=
+    U.symm.toLinearIsometry.norm_toContinuousLinearMap_le
+  have hBfact : B = (U : E →L[ℂ] F) ∘L A ∘L (U.symm : F →L[ℂ] E) := by
+    ext y
+    change B y = U (A (U.symm y))
+    rw [← hUapp (U.symm y), U.apply_symm_apply]
+  have hAfact : A = (U.symm : F →L[ℂ] E) ∘L B ∘L (U : E →L[ℂ] F) := by
+    ext x
+    change A x = U.symm (B (U x))
+    rw [hUapp x, U.symm_apply_apply]
+  refine le_antisymm ?_ ?_
+  · conv_lhs => rw [hAfact]
+    exact TauCeti.ApproximationNumber.approximationNumber_comp_contractions_le
+      (U.symm : F →L[ℂ] E) (U : E →L[ℂ] F) hUsnorm hUnorm n
+  · conv_lhs => rw [hBfact]
+    exact TauCeti.ApproximationNumber.approximationNumber_comp_contractions_le
+      (U : E →L[ℂ] F) (U.symm : F →L[ℂ] E) hUnorm hUsnorm n
+
 /-- Davis--Kahan 1970, Corollary 3.1: when the cross-projection is compact, the
 angle eigenvalue lists and elementary multiplicities classify the pair. -/
 theorem corollary3_1_compact_angleList_classification
@@ -1092,9 +1126,40 @@ theorem corollary3_1_compact_angleList_classification
       (projection U₂ ∘L projection V₂ ∘L projection U₂)) :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
-      compactAngleEigenvalueList (genericHalmosCosineSq U₁ V₁) =
-        compactAngleEigenvalueList (genericHalmosCosineSq U₂ V₂) := by
-  sorry
+      compactAngleEigenvalueList
+          (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁) =
+        compactAngleEigenvalueList
+          (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂) := by
+  have hpos₁ : ∀ x, 0 ≤ RCLike.re
+      ⟪MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁ x, x⟫_ℂ := by
+    intro x
+    rw [MathAhead.HiddenFoundations.re_inner_genericCosineBlock]
+    positivity
+  have hpos₂ : ∀ x, 0 ≤ RCLike.re
+      ⟪MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂ x, x⟫_ℂ := by
+    intro x
+    rw [MathAhead.HiddenFoundations.re_inner_genericCosineBlock]
+    positivity
+  rw [twoProjection_operator_classification U₁ V₁ U₂ V₂]
+  constructor
+  · rintro ⟨htriv, hgen⟩
+    refine ⟨htriv, ?_⟩
+    funext n
+    exact approximationNumber_eq_of_boundedOperatorsUnitaryEquivalent hgen n
+  · rintro ⟨htriv, hlist⟩
+    refine ⟨htriv, ?_⟩
+    obtain ⟨W, hW⟩ :=
+      TauCeti.exists_linearIsometryEquiv_intertwining_of_approximationNumber_eq
+        (MathAhead.HiddenFoundations.isCompactOperator_genericCosineBlock U₁ V₁ hcompact₁)
+        (MathAhead.HiddenFoundations.isSelfAdjoint_genericCosineBlock U₁ V₁)
+        hpos₁
+        (MathAhead.HiddenFoundations.eigenspace_genericCosineBlock_zero U₁ V₁)
+        (MathAhead.HiddenFoundations.isCompactOperator_genericCosineBlock U₂ V₂ hcompact₂)
+        (MathAhead.HiddenFoundations.isSelfAdjoint_genericCosineBlock U₂ V₂)
+        hpos₂
+        (MathAhead.HiddenFoundations.eigenspace_genericCosineBlock_zero U₂ V₂)
+        (fun n => congrFun hlist n)
+    exact ⟨W, hW⟩
 
 end Classification
 
