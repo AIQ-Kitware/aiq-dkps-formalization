@@ -333,6 +333,205 @@ theorem restrict_crossed_lower (data : Theorem63TrialData Z V)
   rw [restrict_action_apply]
   exact h
 
+
+/-! ### The Theorem 6.3 chain over trial-block data
+
+The *crossed action* the equation-(6.6) estimate needs is not extra data: it is
+`P_{Vᗮ} ∘ action`.  For a bounded operator reducing `V` that is `T (P_{Vᗮ} z)`, and for an
+unbounded self-adjoint operator whose domain contains the trial space and whose `V` is a
+spectral subspace it is `A (P_{Vᗮ} z)` — the spectral projection preserves the domain, so
+the crossed quadratic form is defined exactly at the vectors the singular-value argument
+evaluates it on, even though the operator is unbounded on `Vᗮ`.
+
+`sineSylvester` above is already the Sylvester identity for that choice, so the whole
+chain rests on the two printed form bounds and nothing else. -/
+
+section Chain
+
+variable {Z V : Submodule ℂ H} [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+
+omit [CompleteSpace H] in
+/-- On a trial vector that already lies in `Vᗮ`, the crossed form is the compression's
+quadratic form.  This is what turns the two printed form bounds into a contradiction at a
+sine value of one. -/
+theorem crossed_eq_compression_of_mem_orthogonal (data : Theorem63TrialData Z V)
+    (z : Z) (hz : ((z : Z) : H) ∈ Vᗮ) :
+    RCLike.re ⟪Vᗮ.starProjection ((z : Z) : H),
+        Vᗮ.starProjection (data.action z)⟫_ℂ =
+      RCLike.re ⟪data.compression z, z⟫_ℂ := by
+  have hfix : Vᗮ.starProjection ((z : Z) : H) = ((z : Z) : H) :=
+    Submodule.starProjection_eq_self_iff.mpr hz
+  have h1 : ⟪Vᗮ.starProjection ((z : Z) : H),
+      Vᗮ.starProjection (data.action z)⟫_ℂ =
+      ⟪((z : Z) : H), data.action z⟫_ℂ := by
+    rw [hfix, ← Vᗮ.inner_starProjection_left_eq_right, hfix]
+  rw [h1, data.inner_compression_eq z]
+  conv_lhs => rw [← inner_conj_symm]
+  rw [RCLike.conj_re]
+
+omit [CompleteSpace H] in
+/-- **Directed transversality over trial-block data.**  The printed form gap forces the
+coordinate projection from the trial space onto `V` to be injective. -/
+theorem transverse_of_formBounds (data : Theorem63TrialData Z V)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hMupper : ∀ z : Z, RCLike.re ⟪data.compression z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hcross : ∀ z : Z, (alpha + delta) * ‖Vᗮ.starProjection ((z : Z) : H)‖ ^ 2 ≤
+      RCLike.re ⟪Vᗮ.starProjection ((z : Z) : H),
+        Vᗮ.starProjection (data.action z)⟫_ℂ) :
+    Function.Injective (V.orthogonalProjectionOnto ∘L Z.subtypeL) := by
+  intro x y hxy
+  have hproj : V.starProjection (((x - y : Z) : H)) = 0 := by
+    have hp := congrArg Subtype.val hxy
+    change V.starProjection (x : H) = V.starProjection (y : H) at hp
+    simpa [map_sub] using sub_eq_zero.mpr hp
+  have hperp : ((x - y : Z) : H) ∈ Vᗮ :=
+    (Submodule.starProjection_apply_eq_zero_iff V).mp hproj
+  have hfix : Vᗮ.starProjection (((x - y : Z) : H)) = ((x - y : Z) : H) :=
+    Submodule.starProjection_eq_self_iff.mpr hperp
+  have hlower := hcross (x - y)
+  rw [crossed_eq_compression_of_mem_orthogonal data (x - y) hperp, hfix] at hlower
+  have hupper := hMupper (x - y)
+  have hnorm : ‖((x - y : Z) : H)‖ = ‖x - y‖ := rfl
+  rw [hnorm] at hlower
+  have hzero : x - y = 0 := by
+    by_contra hne
+    have hn : 0 < ‖x - y‖ := norm_pos_iff.mpr hne
+    nlinarith [sq_pos_of_pos hn]
+  exact sub_eq_zero.mp hzero
+
+/-- **No pole, over trial-block data.**  Under the printed form gap every directed sine
+singular value is strictly below one, so every tangent the theorem names is finite. -/
+theorem sine_lt_one_of_formBounds (data : Theorem63TrialData Z V)
+    [FiniteDimensional ℂ Z]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hMupper : ∀ z : Z, RCLike.re ⟪data.compression z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hcross : ∀ z : Z, (alpha + delta) * ‖Vᗮ.starProjection ((z : Z) : H)‖ ^ 2 ≤
+      RCLike.re ⟪Vᗮ.starProjection ((z : Z) : H),
+        Vᗮ.starProjection (data.action z)⟫_ℂ)
+    (i : Fin (finrank ℂ Z)) :
+    finiteSourceSingularValue (theorem63DirectedSineBlock Z V) i < 1 := by
+  let S := theorem63DirectedSineBlock Z V
+  let v := finiteSourceRightSingularBasis S i
+  have hle : finiteSourceSingularValue S i ≤ 1 :=
+    theorem63_singularValues_sine_le_one Z V i
+  by_contra hlt
+  have hsigma : finiteSourceSingularValue S i = 1 :=
+    le_antisymm hle (not_lt.mp hlt)
+  have hvnorm : ‖v‖ = 1 := (finiteSourceRightSingularBasis S).orthonormal.norm_eq_one i
+  have hSnorm : ‖S v‖ = 1 := by
+    rw [norm_apply_finiteSourceRightSingularBasis, hsigma]
+  have hperpnorm : ‖Vᗮ.starProjection (v : H)‖ = 1 := hSnorm
+  have hpyth := Submodule.norm_sq_eq_add_norm_sq_starProjection (v : H) V
+  have hvambient : ‖(v : H)‖ = 1 := hvnorm
+  have hprojnorm : ‖V.starProjection (v : H)‖ = 0 := by
+    rw [hvambient, hperpnorm] at hpyth
+    nlinarith [norm_nonneg (V.starProjection (v : H))]
+  have hprojzero : V.starProjection (v : H) = 0 := norm_eq_zero.mp hprojnorm
+  have hinj := transverse_of_formBounds data hdelta hMupper hcross
+  have hvzero : v = 0 := by
+    apply hinj
+    apply Subtype.ext
+    change V.starProjection (v : H) = V.starProjection (0 : H)
+    simpa using hprojzero
+  exact (finiteSourceRightSingularBasis S).orthonormal.ne_zero i hvzero
+
+/-- **The Ky Fan tangent inequalities over trial-block data**, for prefixes within the
+trial dimension. -/
+private theorem kyFan_core_of_le_finrank (data : Theorem63TrialData Z V)
+    [FiniteDimensional ℂ Z]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hMupper : ∀ z : Z, RCLike.re ⟪data.compression z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hcross : ∀ z : Z, (alpha + delta) * ‖Vᗮ.starProjection ((z : Z) : H)‖ ^ 2 ≤
+      RCLike.re ⟪Vᗮ.starProjection ((z : Z) : H),
+        Vᗮ.starProjection (data.action z)⟫_ℂ)
+    (tanTheta0 : Z →L[ℂ] H)
+    (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
+    {k : ℕ} (hk : k ≤ finrank ℂ Z) :
+    delta * kyFanApproximationGauge k tanTheta0 ≤
+      kyFanApproximationGauge k data.residual := by
+  have hlt := sine_lt_one_of_formBounds data hdelta hMupper hcross
+  let castIndex : Fin k → Fin (finrank ℂ Z) := fun i => Fin.castLE hk i
+  have huFull := orthonormal_theorem63ResidualWitness Z V hlt
+  have hu : Orthonormal ℂ
+      (fun i : Fin k => theorem63ResidualWitness Z V (castIndex i)) := by
+    rw [orthonormal_iff_ite]
+    intro i j
+    simpa [castIndex] using
+      (orthonormal_iff_ite.mp huFull (castIndex i) (castIndex j))
+  have hv : Orthonormal ℂ
+      (fun i : Fin k =>
+        (finiteSourceRightSingularBasis
+          (theorem63DirectedSineBlock Z V) (castIndex i) : Z)) := by
+    rw [orthonormal_iff_ite]
+    intro i j
+    simpa [castIndex] using
+      (orthonormal_iff_ite.mp
+        (finiteSourceRightSingularBasis
+          (theorem63DirectedSineBlock Z V)).orthonormal
+        (castIndex i) (castIndex j))
+  have hscalar : ∀ i : Fin k,
+      delta * approximationSingularValue (castIndex i) tanTheta0 ≤
+        RCLike.re ⟪theorem63ResidualWitness Z V (castIndex i),
+          data.residual (finiteSourceRightSingularBasis
+            (theorem63DirectedSineBlock Z V) (castIndex i))⟫_ℂ := by
+    intro i
+    refine theorem63ResidualWitness_scalar_of_data V Z
+      data.compression data.residual (Vᗮ.starProjection ∘L data.action)
+      hMupper hcross data.residual_orthogonal ?_ hlt tanTheta0 htan (castIndex i)
+    intro z
+    have h := data.sineSylvester z
+    change Vᗮ.starProjection (data.action z) -
+      theorem63DirectedSineBlock Z V (data.compression z) = _
+    rw [h]
+    abel
+  have hsum := sum_le_kyFanApproximationGauge_of_orthonormal
+    data.residual hu hv hscalar
+  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge at hsum ⊢
+  rw [Finset.mul_sum, ← Fin.sum_univ_eq_sum_range]
+  simpa [castIndex, approximationSingularValue] using hsum
+
+/-- **Theorem 6.3's Ky Fan root over trial-block data.**
+
+Only the two printed form bounds are assumed: the compression is bounded above by `α`,
+and the crossed form is bounded below by `α + δ`.  Nothing here mentions a bounded ambient
+operator, which is what lets the unbounded scope claim reuse the chain. -/
+theorem all_kyFan_core_of_formBounds (data : Theorem63TrialData Z V)
+    [FiniteDimensional ℂ Z]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hMupper : ∀ z : Z, RCLike.re ⟪data.compression z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hcross : ∀ z : Z, (alpha + delta) * ‖Vᗮ.starProjection ((z : Z) : H)‖ ^ 2 ≤
+      RCLike.re ⟪Vᗮ.starProjection ((z : Z) : H),
+        Vᗮ.starProjection (data.action z)⟫_ℂ)
+    (tanTheta0 : Z →L[ℂ] H)
+    (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0) :
+    ∀ k, delta * kyFanApproximationGauge k tanTheta0 ≤
+      kyFanApproximationGauge k data.residual := by
+  intro k
+  by_cases hk : k ≤ finrank ℂ Z
+  · exact kyFan_core_of_le_finrank data hdelta hMupper hcross tanTheta0 htan hk
+  · have hdk : finrank ℂ Z ≤ k := Nat.le_of_not_ge hk
+    rw [kyFanApproximationGauge_eq_finrank_of_finrank_le tanTheta0 hdk,
+      kyFanApproximationGauge_eq_finrank_of_finrank_le data.residual hdk]
+    exact kyFan_core_of_le_finrank data hdelta hMupper hcross tanTheta0 htan le_rfl
+
+/-- **Theorem 6.3 at ideal-gauge scope over trial-block data.** -/
+theorem ideal_of_formBounds (data : Theorem63TrialData Z V)
+    [FiniteDimensional ℂ Z]
+    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hMupper : ∀ z : Z, RCLike.re ⟪data.compression z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hcross : ∀ z : Z, (alpha + delta) * ‖Vᗮ.starProjection ((z : Z) : H)‖ ^ 2 ≤
+      RCLike.re ⟪Vᗮ.starProjection ((z : Z) : H),
+        Vᗮ.starProjection (data.action z)⟫_ℂ)
+    (tanTheta0 : Z →L[ℂ] H)
+    (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
+    (hResidual : N.Mem data.residual) :
+    N.Mem tanTheta0 ∧ delta * N.gauge tanTheta0 ≤ N.gauge data.residual :=
+  ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hResidual
+    (all_kyFan_core_of_formBounds data hdelta hMupper hcross tanTheta0 htan)
+
+end Chain
+
 end Theorem63TrialData
 
 end ExactTanTheta
