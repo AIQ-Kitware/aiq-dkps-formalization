@@ -45,7 +45,6 @@ variable {L : Type w} [NormedAddCommGroup L] [InnerProductSpace ℂ L]
 
 Exposed, because consumers outside this module need to see that it is the same existential as
 the Davis--Kahan development's own `BoundedOperatorsUnitaryEquivalent`. -/
-@[expose]
 def OperatorUnitaryEquiv (A : H →L[ℂ] H) (B : K →L[ℂ] K) : Prop :=
   ∃ e : H ≃ₗᵢ[ℂ] K, ∀ x : H, e (A x) = B (e x)
 

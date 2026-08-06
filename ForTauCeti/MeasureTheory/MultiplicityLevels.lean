@@ -141,6 +141,7 @@ variable {X : Type*}
 
 open scoped Classical in
 /-- The number of indices below `n` at which `x` lies in the family. -/
+-- Exposed: `rank_zero` and `rank_succ` are `rfl`, and every induction below runs on them.
 @[expose]
 noncomputable def rank (S : ℕ → Set X) (x : X) : ℕ → ℕ
   | 0 => 0
@@ -209,14 +210,12 @@ section Levels
 variable {X : Type*}
 
 /-- The part of `S n` at which exactly `k` earlier members of the family contain the point. -/
-@[expose]
 noncomputable def levelPiece (S : ℕ → Set X) (n k : ℕ) : Set X :=
   S n ∩ {x | rank S x n = k}
 
 /-- The `k`-th **level set**: the points contained in at least `k + 1` members of the family.
 
 Defined as the union of the level pieces, which is the form both partition statements need. -/
-@[expose]
 noncomputable def levelSet (S : ℕ → Set X) (k : ℕ) : Set X :=
   ⋃ n, levelPiece S n k
 
@@ -274,7 +273,6 @@ variable {X : Type*}
 
 /-- The index at which a point of the `k`-th level set sits: the unique `n` with
 `x ∈ levelPiece S n k`, and `0` when there is none. -/
-@[expose]
 noncomputable def invIdx (S : ℕ → Set X) (x : X) (k : ℕ) : ℕ :=
   sInf {n | x ∈ levelPiece S n k}
 
@@ -328,12 +326,13 @@ theorem measurable_invIdx [MeasurableSpace X] {S : ℕ → Set X} (hS : ∀ n, M
     exact MeasurableSet.empty
 
 /-- The fibrewise relabelling `(x, n) ↦ (x, rank S x n)`. -/
+-- Exposed: `fst_rankMap` is `rfl`, and it is the fact that makes the relabelling commute with
+-- multiplication by any symbol pulled back along `Prod.fst`.
 @[expose]
 noncomputable def rankMap (S : ℕ → Set X) : X × ℕ → X × ℕ :=
   fun p => (p.1, rank S p.1 p.2)
 
 /-- The inverse relabelling `(x, k) ↦ (x, invIdx S x k)`. -/
-@[expose]
 noncomputable def rankInv (S : ℕ → Set X) : X × ℕ → X × ℕ :=
   fun p => (p.1, invIdx S p.1 p.2)
 
