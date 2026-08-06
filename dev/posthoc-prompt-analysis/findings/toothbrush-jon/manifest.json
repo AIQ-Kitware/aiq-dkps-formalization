@@ -1,0 +1,19 @@
+{
+  "agent_id": "toothbrush-jon",
+  "scope": [
+    "/aiq-dkps-formalization",
+    "/TauCetiRoadmap",
+    "/TauCetiReview",
+    "/TauCeti"
+  ],
+  "n_prompts": 197,
+  "n_events": 300,
+  "n_sessions": 21,
+  "first_prompt": "2026-07-04T04:05:10.133Z",
+  "last_prompt": "2026-08-06T17:35:20.214Z",
+  "cwds": [
+    "/home/joncrall/code/aiq-dkps-formalization",
+    "/home/joncrall/code/aiq-dkps-formalization/dev"
+  ],
+  "transcript_files_scanned": 21
+}
