@@ -131,21 +131,7 @@ Gates: DK-9-model (proved_conditional), DK-9.1-9.4 (proved_conditional), DK-9.5-
 
 The mathematics is in the build in a more general form; what is missing is a statement carrying the paper's numbering, scope and hypotheses, so the facade can cite it.
 
-Gates: S1-block-residual (proved_in_build), S2-tan-two-theta (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.4-prop (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
-
-### `section8-promotion-out-of-experimental` -- mechanical
-
-**Promote the proved Section 8 theorems out of Experimental**
-
-Theorems 8.1 and 8.2 are PROVED. `DavisKahan/Experimental/Frontier/Section8.lean` is 857 lines and sorry-free, and `#print axioms` on `theorem8_1_selectedBranch_and_spectralRepulsion` and `theorem8_2_perturbationHalfGap_selectedBranch` gives exactly [propext, Classical.choice, Quot.sound]. What remains is guarding them: the module lives under `DavisKahan.Experimental.Frontier`, which is not a default target, so `lake build` never touches it. Promotion is not a one-line `defaultTargets` edit, but the gap has narrowed sharply. **Re-measured 2026-08-04 (was 2026-08-02): Section 8's transitive closure is 205 repository modules carrying 2 `sorry`s, down from 11.** They sit in two modules, not five: `Experimental.InfiniteDimensional.SinTheta.General` (1) and `.DirectRotation` (1). `Ideals.Symmetric` and `DoubleAngle` are now clean, and `DirectRotation` went 6 -> 1 (`directRotation_sq` closed 2026-08-04 -- it never needed the Halmos decomposition it was filed under; the intertwiner is normal, so the identity is ring algebra plus one unit cancellation).
-
-Of the 3 that remain, **only one is mathematics that has to be done here**: `projectionDifference_ideal_intervalExterior` (the ideal-valued Sylvester engine). `SymmetricNormIdeal.operatorAbsoluteValue_mem_and_gauge_eq` was the second, needing the polar partial isometry over a general `RCLike` field; **closed 2026-08-04**. The field restriction was an artefact of keying that isometry on `|T|`, which is a continuous functional calculus and so `C`-only in Mathlib. The construction never uses the calculus -- only `norm (|T| x) = norm (T x)`, a consequence of the Gram identity and self-adjointness -- so keying it on the Gram identity instead (`ForTauCeti/Analysis/InnerProductSpace/Polar/GramContraction.lean`) removes the restriction. `Ideals.Rectangular`'s `compactOperatorNorm` was the third; **deleted 2026-08-04**, not filled. Its docstring already said the Schauder obligation was discharged and what remained was a dozen fields of a record slated for deletion, with the instruction to build a canonical compact-operator family instead. That family now exists -- `TauCeti.compactOperatorFamily` in `ForTauCeti/Analysis/OperatorIdeal/Family/CompactOperator.lean`, complete and adjoint-invariant -- and its only consumer reads it through `ofCanonical`, so the slot had no users and could go. `directRotation_minimal` is the one genuinely Halmos-dependent leaf left in that tree, and it is an operator-norm inequality, not an identity.
-
-Five of Section8.lean's seven imports reach those modules, so the dependency cannot be trimmed; the sorried Experimental base has to be finished or the needed results rehomed. Only `Sources.DavisKahan1970.Section8RieszCircle` (50 modules) and `ForTauCeti...SpectralOrder.Complex` (3) are already clean.
-
-**Side effect worth knowing before the next promotion attempt.** Removing those admissions turned `scripts/check_library_structure.py` rule 3 from CLEAN to 6 findings. That rule asks the *upward* question -- does anything transitively importing this module still rest on an admission? -- and five real Experimental modules (`InfiniteDimensional.SinTheta.Bounded`, `MathAhead.HiddenFoundations.{KyFanBochner,RealSylvesterDescent}`, `Scratch.SharedFoundations.Ideal.{OperatorAbsoluteValueComplex,TwoWayFactorization}`) now have nothing admitted above them. **That is the checker working: they are finished scaffolding for finished work and belong in production.** They were not promoted in the same change because each imports other `Experimental` modules, so promoting them alone would violate rule 2 (no production module imports Experimental); the promotion is a closure-sized refactor and is tracked separately.
-
-Gates: DK-8.1-thm (proved_in_build), DK-8.2-thm (proved_in_build)
+Gates: S1-block-residual (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.4-prop (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
 
 
 ## Source ledger
@@ -240,7 +226,6 @@ VERIFIED 2026-08-05 by the elaborator: both names resolve from `DavisKahan.All` 
 - **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Fully off-diagonal perturbations across an ordered gap give residual and perturbation tan(2 Theta) bounds with factor two.
-- **Blocked by:** `exact-source-wrappers`
 - **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm`, `TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm_selectedBranch`
 - **Assessment:** The finite operator-norm theorem is compiled. The source arbitrary-UI-norm Hilbert-space endpoint and branch selection are not yet certified.
 
@@ -255,6 +240,8 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 (b) BRANCH SELECTION IS NOW COMPOSED IN.  What was genuinely true is that the endpoint took the contractive Riccati solution `X` as data, while Davis and Kahan's Section 8 *selects* it.  The selection also already existed in the default build (`canonicalContractiveRiccatiSolution`, with an existence-and-uniqueness theorem), so the two compose.  `sharp_paperUnitaryInvariantNorm_selectedBranch` is the composite: spectral separation (`spectrum A0 subset [left,0]`, `spectrum A1 subset [d,inf)`) plus smallness (`2 * norm B01 < d`) yields a contractive Riccati solution -- unique among contractive solutions -- and the arbitrary-UI-norm `tan 2Theta` bound for it, with **no branch supplied by the caller**.  Default build, axiom-clean.
 
 The form bounds the endpoint runs on are read off from the spectral containments by `SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic` and `le_re_inner_of_spectrum_subset_Ici`; the interval/exterior shape the Riccati selection wants is the same data reassociated.  No new mathematics was needed -- the two halves had never been put next to each other.
+
+**BLOCKER CLEARED 2026-08-06.**  This row carried `exact-source-wrappers`, but its own `next_action` records that nothing remains for the bounded arbitrary-UI-norm theorem with selected branch -- that is `sharp_paperUnitaryInvariantNorm_selectedBranch` -- and that the residue is tracked on S2-unbounded-scope and on the Section 8 rows.  Both are now discharged: S2-unbounded-scope is `compiled_exact` / `proved_in_build` with no blockers, and DK-8.1-thm and DK-8.2-thm are guarded by `lake build`.  So the wrapper blocker on this row pointed at work that has since been done elsewhere, and is removed.
 - **Next action:** Nothing for the bounded arbitrary-UI-norm theorem with selected branch: it is `sharp_paperUnitaryInvariantNorm_selectedBranch`.  What remains under this heading is the UNBOUNDED passage, tracked on S2-unbounded-scope and DK-6-appendix, and the Section 8 rows' own guarding (DK-8.1-thm, DK-8.2-thm are proved but outside the default build; their import closure is 42 Experimental modules, one of which still carries a `sorry`, so promotion is not a mechanical move).
 
 #### Section 2, paragraph after four theorems: Best constants and simultaneous equality
@@ -773,7 +760,6 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Under tan(2 Theta) hypotheses, the acute branch is equivalent to the selected spectral ordering; a canonical reducing subspace exists and satisfies operator, eigenvalue, and symmetric-gauge repulsion inequalities.
-- **Blocked by:** `section8-promotion-out-of-experimental`
 - **Current Lean references:** `TauCeti.DavisKahan1970.Section8.maximalAngle_selectedSpectralSubspaces_lt_pi_div_four`, `TauCeti.DavisKahan1970.Section8.orientedSpectralRepulsionConclusion`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_of_rotatedBlockData`, `TauCeti.DavisKahan1970.Section8.theorem8_1_selectedBranch_and_spectralRepulsion`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_of_rotatedBlockData`
 - **Assessment:** Theorems 8.1's conclusion is packaged as `Theorem81SourceConclusion` and proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` gives [propext, Classical.choice, Quot.sound]. The status stays `candidate_under_repair` because that axis is fidelity to the printed statement, which compiling does not establish -- not because anything fails to build.
 
@@ -786,6 +772,8 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 **GUARDED BY `lake build` 2026-08-06.** This row was `proved_outside_build` only because its modules sat under `Experimental/`, where no default target reaches them. The mathematics never changed. Two admissions were first removed from the import closures (one was orphaned; the other moved to `SinTheta/IdealIntervalExterior.lean`), after which `check_library_structure` rule 3 began enumerating the modules that had become admission-free -- i.e. the checker produced the promotion worklist. 84 modules then moved by `git mv` with **no namespace or declaration renamed**, the precedent being `Geometry/Polar/DirectRotationSquare.lean`, which lives in production while declaring into `DavisKahan.Experimental`. So the fully-qualified names in this row are unchanged.
 
 The move had to be the DOWNWARD CLOSURE of the flagged modules, not the flagged modules alone: they import admission-free modules held under `Experimental/` only because something *above* those carried a `sorry`, so moving the flagged set alone would have violated rule 2. Rule 3 went 49 -> 13 violations.
+
+**BLOCKER CLEARED 2026-08-06: the promotion happened.**  `section8-promotion-out-of-experimental` described the theorems as living under `DavisKahan.Experimental.Frontier`, untouched by `lake build`.  They no longer do: `DavisKahan/Frontier/Section8.lean` and `DavisKahan/Sources/DavisKahan1970/Section8/**` are production, reached from `DavisKahan.All`, and the Experimental copies are gone (their leftover build products were purged the same day).  Re-verified by the elaborator: both headline declarations resolve against `DavisKahan.All` and `#print axioms` gives exactly [propext, Classical.choice, Quot.sound].  The census declaration probe is at 156/156.  The blocker entry is removed because no row is blocked by it.
 - **Next action:** Nothing outstanding. Note the declarations still live in the `TauCeti.DavisKahan.Experimental.*` namespace by design -- namespace is independent of directory here; do not 'tidy' them into a production namespace without checking every consumer.
 
 #### Theorem 8.2: Smallness selects the acute branch
@@ -794,7 +782,6 @@ The move had to be the DOWNWARD CLOSURE of the flagged modules, not the flagged 
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** If the perturbation or residual norm is below half the gap, the sine double-angle estimate is accompanied by Theta < pi/4.
-- **Blocked by:** `section8-promotion-out-of-experimental`
 - **Current Lean references:** `TauCeti.DavisKahan1970.Section8.PerturbationHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.ResidualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem82_branch_of_residualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_selectedBranch`
 - **Assessment:** `theorem8_2_perturbationHalfGap_selectedBranch` and `theorem8_2_residualHalfGap_selectedBranch` are proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` on the perturbation form gives [propext, Classical.choice, Quot.sound]. The half-gap bridges (`perturbationHalfGapBridge_of_sourceHypotheses`, `residualHalfGapBridge_of_sourceHypotheses`) are proved too.
 
@@ -807,6 +794,8 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 **GUARDED BY `lake build` 2026-08-06.** This row was `proved_outside_build` only because its modules sat under `Experimental/`, where no default target reaches them. The mathematics never changed. Two admissions were first removed from the import closures (one was orphaned; the other moved to `SinTheta/IdealIntervalExterior.lean`), after which `check_library_structure` rule 3 began enumerating the modules that had become admission-free -- i.e. the checker produced the promotion worklist. 84 modules then moved by `git mv` with **no namespace or declaration renamed**, the precedent being `Geometry/Polar/DirectRotationSquare.lean`, which lives in production while declaring into `DavisKahan.Experimental`. So the fully-qualified names in this row are unchanged.
 
 The move had to be the DOWNWARD CLOSURE of the flagged modules, not the flagged modules alone: they import admission-free modules held under `Experimental/` only because something *above* those carried a `sorry`, so moving the flagged set alone would have violated rule 2. Rule 3 went 49 -> 13 violations.
+
+**BLOCKER CLEARED 2026-08-06: the promotion happened.**  `section8-promotion-out-of-experimental` described the theorems as living under `DavisKahan.Experimental.Frontier`, untouched by `lake build`.  They no longer do: `DavisKahan/Frontier/Section8.lean` and `DavisKahan/Sources/DavisKahan1970/Section8/**` are production, reached from `DavisKahan.All`, and the Experimental copies are gone (their leftover build products were purged the same day).  Re-verified by the elaborator: both headline declarations resolve against `DavisKahan.All` and `#print axioms` gives exactly [propext, Classical.choice, Quot.sound].  The census declaration probe is at 156/156.  The blocker entry is removed because no row is blocked by it.
 - **Next action:** Nothing outstanding. Note the declarations still live in the `TauCeti.DavisKahan.Experimental.*` namespace by design -- namespace is independent of directory here; do not 'tidy' them into a production namespace without checking every consumer.
 
 ### Section 9
