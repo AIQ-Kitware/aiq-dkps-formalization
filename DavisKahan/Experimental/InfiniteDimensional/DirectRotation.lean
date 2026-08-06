@@ -1196,10 +1196,20 @@ theorem directRotation_minimal
     (hmap : U.map W.toLinearMap = V) :
     ‖directRotation U V hacute - ContinuousLinearMap.id 𝕜 E‖ ≤
       ‖W - ContinuousLinearMap.id 𝕜 E‖ :=
-  -- **Leaf obligation.** Requires the Halmos two-projection decomposition
-  -- framework (fiber norms, unitary transport constraint, scalar shorter
-  -- rotation) — the parked polar-decomposition campaign; see the proof route
-  -- above.
+  -- **Leaf obligation, and an orphaned one.**  The comment this replaced said the
+  -- Halmos two-projection framework was required; the docstring immediately above
+  -- retracts that, and no consumer is waiting either way.  The complex statement is
+  -- already proved, at `Geometry/Polar/DirectRotationSquare.lean`'s
+  -- `spectraDirectRotation_minimal` (source-facing alias
+  -- `DavisKahan1970.complex_directRotation_minimal`), for the `spectraDirectRotation`
+  -- construction rather than this `RCLike`-generic `directRotation`.  As of
+  -- 2026-08-05 nothing outside this file mentions `directRotation_minimal`, and
+  -- `SpectraBridge/DirectRotationAPI.lean` no longer imports this module, so the
+  -- admission is confined here.
+  --
+  -- The signature audit's warning stands and must be preserved: this is an
+  -- operator-norm statement and must **not** be generalized to every symmetric
+  -- ideal gauge.
   sorry
 
 end DavisKahanExt
