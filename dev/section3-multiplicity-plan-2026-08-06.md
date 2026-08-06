@@ -300,3 +300,19 @@ any theorem.  But shape the API so route B is a strict extension rather than a r
 The corner to refuse is **not** the Setoid; it is silently treating route A's existential
 as though it delivered a canonical invariant.  It does not, and the census must not claim
 it does.
+
+---
+
+## 6. History note: commit `ddf151c3` is mislabelled
+
+`ddf151c3` ("Record where the measure-class Setoid is load-bearing…") also contains the
+first ~360 lines of `ForTauCeti/.../BorelCalculus/Restriction.lean` and the
+`IsCalculusInvariant.borelCalculus_mem` helper added to `CyclicDecomposition.lean`.  Those
+belong to the restricted-Borel-calculus deliverable completed in `5e445d10`, not to the
+Setoid note, and its message does not mention them.
+
+Cause: `git add -A` was run in the main tree while an agent was mid-file there.  Nothing
+was lost — the working tree was a strict superset and the build stayed green — but one
+deliverable is split across two commits and the first misdescribes its own contents.  The
+history is not being rewritten, since it is already pushed; **read `5e445d10`'s message for
+the mathematics of that file.**
