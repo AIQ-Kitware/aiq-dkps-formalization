@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
-import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRiccati
+import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRiccati
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.SpectralTheory.GraphSubspace
 import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus

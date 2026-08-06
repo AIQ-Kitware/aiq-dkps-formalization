@@ -7,7 +7,7 @@ import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 import FinishTanTwoTheta.DavisKahan.InfiniteQuarterAcute
 import FinishTanTwoTheta.DavisKahan.CanonicalTangentBridge
 import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
-import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalReverseGap
+import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalReverseGap
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
 

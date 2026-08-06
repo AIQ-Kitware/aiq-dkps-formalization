@@ -12,7 +12,7 @@ import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 The affine-shift interface that converts the paper's spectral hypotheses into
 the norm and inverse bounds Theorem 5.1 needs.  The four estimates themselves
 are still open and stay in
-`DavisKahan.Experimental.InfiniteDimensional.SinTheta.SpectralBridge`.
+`DavisKahan.InfiniteDimensional.SinTheta.SpectralBridge`.
 -/
 
 namespace TauCeti
