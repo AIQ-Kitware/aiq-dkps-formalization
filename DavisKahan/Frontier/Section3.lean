@@ -759,6 +759,40 @@ theorem proposition3_3_principalSquareRoot_forward
     · have h := congrArg (fun f : H →L[ℂ] H => f y) hTsT
       simpa [mul_apply_eq_comp] using h
 
+/-- **Davis--Kahan 1970, Proposition 3.3, forward direction, from the printed hypotheses.**
+
+The source says the direct rotation has **positive diagonal blocks**; this repository's
+`IsPaperDirectRotation` records them only through their numerical range, which is strictly
+weaker and is why `proposition3_3_principalSquareRoot_forward` has to ask for self-adjointness
+separately.  Stated with operator positivity, as printed, no side hypothesis is needed at all:
+a positive operator is self-adjoint and its numerical range is nonnegative, so both weaker
+conditions come for free. -/
+theorem proposition3_3_principalSquareRoot_forward_of_nonneg_blocks
+    (hunitary : T ∈ unitary (H →L[ℂ] H))
+    (hintertwines : T * projection U = projection V * T)
+    (hcrossed : complementaryProjection U * T * projection U =
+      -star (projection U * T * complementaryProjection U))
+    (hsource_pos : (0 : H →L[ℂ] H) ≤ projection U * T * projection U)
+    (hcomplement_pos :
+      (0 : H →L[ℂ] H) ≤ complementaryProjection U * T * complementaryProjection U) :
+    IsPaperDirectRotation U V T ∧
+      IsPrincipalUnitarySquareRoot (spectraReflectionProduct U V) T ∧
+      T '' (halmosSourceDefect U V : Set H) = (halmosTargetDefect U V : Set H) := by
+  have hsp := (ContinuousLinearMap.nonneg_iff_isPositive _).mp hsource_pos
+  have hcp := (ContinuousLinearMap.nonneg_iff_isPositive _).mp hcomplement_pos
+  have hT : IsPaperDirectRotation U V T :=
+    { unitary_mem := hunitary
+      intertwines := hintertwines
+      source_compression_nonnegative := fun x => by
+        rw [inner_re_symm (𝕜 := ℂ)]
+        exact hsp.re_inner_nonneg_left x
+      complement_compression_nonnegative := fun x => by
+        rw [inner_re_symm (𝕜 := ℂ)]
+        exact hcp.re_inner_nonneg_left x
+      crossed_blocks := hcrossed }
+  exact ⟨hT, proposition3_3_principalSquareRoot_forward U V T hT hsp.isSelfAdjoint
+    hcp.isSelfAdjoint⟩
+
 open scoped ComplexOrder in
 /-- **Davis--Kahan 1970, Proposition 3.3, as a characterisation**, for an arbitrary pair of
 subspaces.
