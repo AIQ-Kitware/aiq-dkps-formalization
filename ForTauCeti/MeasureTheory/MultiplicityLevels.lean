@@ -441,6 +441,7 @@ theorem exists_multiplicityLevels (μ : ℕ → Measure X) [∀ n, IsFiniteMeasu
     {g : X → ℂ} (hg : Measurable g) {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) :
     ∃ (ρ : Measure X) (D : ℕ → Set X), IsFiniteMeasure ρ ∧ (∀ k, MeasurableSet (D k)) ∧
       Antitone D ∧
+      (∀ N : Set X, MeasurableSet N → (∀ n, μ n N = 0) → ρ N = 0) ∧
       OperatorUnitaryEquiv
         (mulLp (sliceSum μ) (hg.comp measurable_fst) (fun p => hgC p.1))
         (mulLp (sliceSum fun k => ρ.restrict (D k)) (hg.comp measurable_fst)
@@ -448,7 +449,10 @@ theorem exists_multiplicityLevels (μ : ℕ → Measure X) [∀ n, IsFiniteMeasu
   classical
   obtain ⟨S, hSmeas, hSequiv⟩ := exists_supports_measureEquiv_restrict μ
   refine ⟨dominatingMeasure μ, levelSet S, inferInstance,
-    fun k => measurableSet_levelSet hSmeas k, antitone_levelSet S, ?_⟩
+    fun k => measurableSet_levelSet hSmeas k, antitone_levelSet S, ?_, ?_⟩
+  · intro N hN hzero
+    rw [dominatingMeasure_apply _ hN, ENNReal.tsum_eq_zero]
+    exact fun n => by rw [hzero n, mul_zero]
   have heq : MeasureEquiv (sliceSum μ)
       (sliceSum fun n => (dominatingMeasure μ).restrict (S n)) :=
     measureEquiv_sliceSum hSequiv
