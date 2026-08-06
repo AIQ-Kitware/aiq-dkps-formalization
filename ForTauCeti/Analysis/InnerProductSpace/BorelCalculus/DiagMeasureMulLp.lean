@@ -6,6 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
+public import ForTauCeti.MeasureTheory.LpNonvanishing
+public import ForTauCeti.MeasureTheory.MeasureClass
 public import ForTauCeti.MeasureTheory.MulLpCfc
 public import Mathlib.MeasureTheory.Measure.HasOuterApproxClosed
 public import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
@@ -45,6 +47,11 @@ sets: the measures do that work.
 * `TauCeti.BorelCalculus.lintegral_enorm_sq_lt_top`: an `L²` vector has finite squared mass.
 * `TauCeti.BorelCalculus.map_val_diagMeasure_mulLp`: **the scalar spectral measure of a
   multiplication operator.**
+* `TauCeti.BorelCalculus.map_val_diagMeasure_mulLp_absolutelyContinuous` and
+  `TauCeti.BorelCalculus.absolutelyContinuous_map_val_diagMeasure_mulLp`: the two halves of the
+  comparison with the pushforward of `ρ`.
+* `TauCeti.BorelCalculus.exists_measureEquiv_map_val_diagMeasure_mulLp`: **a maximal vector
+  exists**, and its spectral measure has exactly the measure class of the model.
 
 ## Provenance
 
@@ -163,6 +170,48 @@ theorem map_val_diagMeasure_mulLp (F : Lp ℂ 2 ρ) :
   simp only [smul_eq_mul]
   rw [mul_comm]
   congr 1
+
+include hg hgC in
+/-- **Every vector's spectral measure is dominated by the pushforward of `ρ`.** -/
+theorem map_val_diagMeasure_mulLp_absolutelyContinuous (F : Lp ℂ 2 ρ) :
+    Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
+        (diagMeasure (isStarNormal_mulLp ρ hg hgC) F)
+      ≪ Measure.map g ρ := by
+  rw [map_val_diagMeasure_mulLp ρ hg hgC F]
+  exact (withDensity_absolutelyContinuous ρ _).map hg
+
+include hg hgC in
+/-- **A nonvanishing vector's spectral measure dominates the pushforward of `ρ`.**
+
+The density `|F|²` is almost everywhere nonzero, so `withDensity` by it does not lose any null
+sets -- which is exactly `withDensity_absolutelyContinuous'`. -/
+theorem absolutelyContinuous_map_val_diagMeasure_mulLp (F : Lp ℂ 2 ρ)
+    (hF : ∀ᵐ x ∂ρ, (F : α → ℂ) x ≠ 0) :
+    Measure.map g ρ
+      ≪ Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
+        (diagMeasure (isStarNormal_mulLp ρ hg hgC) F) := by
+  rw [map_val_diagMeasure_mulLp ρ hg hgC F]
+  refine Measure.AbsolutelyContinuous.map ?_ hg
+  refine withDensity_absolutelyContinuous' (aemeasurable_enorm_sq ρ F) ?_
+  filter_upwards [hF] with x hx
+  simpa using hx
+
+include hg hgC in
+/-- **A multiplication operator over a σ-finite measure has a maximal vector.**
+
+Its scalar spectral measure has exactly the measure class of the pushforward of `ρ` along the
+symbol.  This is what makes the measure class of a multiplicity datum readable off a single
+vector, and hence a unitary invariant once combined with
+`map_val_diagMeasure_eq_of_intertwines`. -/
+theorem exists_measureEquiv_map_val_diagMeasure_mulLp :
+    ∃ F : Lp ℂ 2 ρ,
+      MeasureEquiv
+        (Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
+          (diagMeasure (isStarNormal_mulLp ρ hg hgC) F))
+        (Measure.map g ρ) := by
+  obtain ⟨F, hF⟩ := exists_ae_ne_zero_lp_two ρ
+  exact ⟨F, map_val_diagMeasure_mulLp_absolutelyContinuous ρ hg hgC F,
+    absolutelyContinuous_map_val_diagMeasure_mulLp ρ hg hgC F hF⟩
 
 end MulLp
 
