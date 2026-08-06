@@ -1,14 +1,11 @@
-# Davis--Kahan 1970 — what is actually left, handoff 2026-08-05 (evening)
+# Davis--Kahan 1970 — what is actually left, handoff 2026-08-05 (late evening)
 
-Written at `816d19e3`, on `main`, pushed.  `lake build` green; the extra targets
+Written at `9113fc5a`+ on `main`, pushed.  `lake build` green; the extra targets
 `DavisKahan.Experimental Challenge FinishTanTwoTheta` green; census checker
-**CLEAN, all 48 rows agree with the build**; every gate passes except
-`check_library_structure` rule 3, whose 6 violations are pre-existing and
-unchanged.
+**CLEAN, all 48 rows agree with the build**.
 
-**Supersedes `dev/davis-kahan-finish-todo-handoff-2026-08-05.md`, which is
-deleted.**  That document directed the day's work and its Section 4 program is
-now complete; the rest of it was wrong in a way worth stating plainly, see §2.
+**Supersedes the evening handoff of the same name**, which is replaced rather
+than amended: two of its three headline claims moved.
 
 ---
 
@@ -32,217 +29,261 @@ now complete; the rest of it was wrong in a way worth stating plainly, see §2.
   `sorry` there.
 * Before any mass refactor, grep for a docstring that already recorded the
   decision.
+* **A `local instance` does not cross a module boundary.**  Splitting a file
+  cost two build cycles over exactly this
+  (`ContinuousLinearMap.instStarOrderedRingRCLike`, and the three
+  functional-calculus `variable`s beside it).
 
 ---
 
-## 1. What landed today
-
-Section 4 is **finished**.  `DavisKahan/Experimental/Frontier/Section4.lean` has
-no `sorry`, and `proposition4_3_squaredDisplacement_kyFan` is axiom-clean.
+## 1. What landed today (second session)
 
 | Commit | Content |
 |---|---|
-| `cd3c2c18` | `kyFanApproximationGauge_conj_le` / `_conj_eq`; `orthogonalDecomposition_conj_diagonalPart` — the pinch charted as an orthogonal block sum |
-| `260f8542` | `aₙ(X†X) = aₙ(X)²`, new `ForTauCeti/.../ApproximationNumber/GramSquare.lean` |
-| `75d523e7` | Infinite-dimensional Proposition 4.3; complementary-pair geometry in `Geometry/Polar/DirectRotation.lean` |
-| `1779ac1f` | `Sources/DavisKahan1970/Section4.lean` — the Section 4 source facade |
-| `816d19e3` | `Sources/DavisKahan1970/Section5.lean` — `Lemma5_1`, `Theorem5_2` |
+| `590075db` | The Appendix finite-projector limiting passage: Theorem 6.3's Ky Fan core at **arbitrary trial dimension** |
+| `036581df` | The directed tangent representative **exists** at every trial dimension |
+| `d4505507` | `s2-tan-theta` grounded; manifest + census updated |
+| `721a26fd` | `Theorem63TrialData` — the trial-block data the chain actually consumes |
+| `9113fc5a` | Both promotion-blocking `sorry`s routed out of the Section 4/8 closures |
+
+**Frontier moved 62 → 63 of 80 grounded; paper results 23 → 24 of 32.**
+
+### 1a. Section 2's tangent theorem is finished
+
+`s2-tan-theta` is no longer an open obligation.  The equal-dimensional
+infinite/noncompact case is proved, axiom-clean, in the default build:
+
+* `ExactTanTheta.theorem6_3_all_kyFan_core_infiniteTrial` — the prefix Ky Fan
+  inequalities with **no dimension hypothesis** on the trial subspace;
+* `…_infiniteTrial_spectral_exists` / `…_of_formBounds_exists` — the ideal-gauge
+  endpoints, with the representative **exhibited, not assumed**;
+* `MathAhead.Section2.theorem6_3_perturbation_infiniteTrial` — the perturbation
+  companion, by the same one-line residual bridge as the finite case.
 
 Three findings worth carrying:
 
-* **The complementary pair carries the same direct rotation.**  The canonical
-  intertwiner `P_V P_U + P_Vᗮ P_Uᗮ` is symmetric under exchanging each subspace
-  for its complement, so `spectraDirectRotation Uᗮ Vᗮ = spectraDirectRotation
-  U V` on the nose and acuteness is literally the same number.  Proposition 4.1
-  for the complement is not a second theorem.
-* **`aₙ(X†X) = aₙ(X)²` did not exist** and is the only bridge between
-  Proposition 4.1 (approximation numbers at the first power) and Proposition 4.3
-  (a Ky Fan statement about the Gram operator).  Its hard direction cannot be
-  done by pointwise norm domination — `‖X†Xx‖ ≥ s‖x‖` on a subspace only gives
-  `‖Xx‖ ≥ (s/‖X‖)‖x‖`, the wrong power — so the optimal subspace has to be
-  spectral.
-* That same lemma is why 4.3 survives while 4.4 does not: sums of *squares* of
-  the approximation numbers are dominated at every `k`, and the sums are not.
+* **The limit needs no operator net.**  Min–max localization
+  (`lt_approximationNumber_iff_exists_finiteDimensional_lowerBound`) beats every
+  strict lower bound of each sine value on some *finite* subspace of the trial
+  space; the almost-invariant enlargement supplies one finite `F` that nearly
+  attains all `k` sine values at once while the compression leaks at most `ε`;
+  the finite core plus `kyFan_k(residual F) ≤ kyFan_k(residual Z) + k·ε`
+  squeezes.  Lemma 5.1 is *not* used — it is the engine for Theorem 5.2, not for
+  this passage.
+* **The pole at `sin = 1` never occurs, and that is a theorem, not a
+  hypothesis.**  A sine value at one would push the tangent bound past every
+  threshold, because `tan (arcsin ·)` is unbounded near one and the finite Ky
+  Fan bound is uniform.  `approximationSingularValue_sineBlock_lt_one_infiniteTrial`.
+  Beware: in Lean `tan (arcsin 1) = 0`, junk — always carry the `< 1` fact
+  explicitly rather than letting a `simp` decide.
+* **`ForTauCeti/.../BorelCalculus/AlmostInvariant.lean` needs no compactness.**
+  Spectral-band slicing of a spanning set through `boundedPVM` enlarges any
+  finite-dimensional subspace to a finite-dimensional almost-invariant one, for
+  *any* bounded self-adjoint operator.  That is what makes the passage work for
+  trial compressions with continuous spectrum.
+
+### 1b. Both promotion-blocking `sorry`s are out of the closures
+
+Neither was discharged by proof, because neither was load-bearing:
+
+* **`directRotation_minimal` is orphaned.**  Nothing outside its own file
+  mentions it; the complex statement is already proved in production as
+  `spectraDirectRotation_minimal`, which the source-facing alias already points
+  at.  `SpectraBridge/DirectRotationAPI.lean` imported the module only for
+  `IsAcute`, which lives in `BoundedOperator/Compat`.  Its inline comment
+  claimed the Halmos two-projection framework was needed; **its own docstring
+  retracts that**, and the previous handoff propagated the stale version.  The
+  comment is now corrected in place.
+* **`projectionDifference_ideal_intervalExterior`** and its only consumer
+  `ideal_sinTheta`, plus `ideal_sinTwoTheta`, moved into
+  `Experimental/InfiniteDimensional/SinTheta/IdealIntervalExterior.lean`.
+  `SinTheta/General.lean` and `InfiniteDimensional/DoubleAngle.lean` are now
+  sorry-free.
+
+**Measured after the move** (`closure.py`-style walk of the import graph):
+
+| Target | Modules | `Experimental` | tactic `sorry`s |
+|---|---:|---:|---:|
+| `Experimental/MathAhead/Section4/InfiniteProposition43` | 175 | 24 | **0** |
+| `Experimental/Sources/DavisKahan1970/Section8/SourceSurface` | 188 | 41 | **0** |
+| `Experimental/Frontier/Section8` | 199 | 50 | **0** |
 
 ---
 
 ## 2. READ THE INVENTORY, NOT THE PROSE
 
-**`dev/davis-kahan-1970-frontier-status.md` is the live inventory of what is
-missing.**  It is regenerated by
+**`dev/davis-kahan-1970-frontier-status.md` is the live inventory.**  Regenerate
+with `python3 scripts/check_davis_kahan_frontier.py --write-report`.  As of this
+commit: 80 manifest nodes, **63 recursively grounded, 17 not**.
 
-```bash
-python3 scripts/check_davis_kahan_frontier.py --write-report
-```
+The census `next_action` fields are prose and go stale silently — five were
+wrong in one earlier session, every one claiming work outstanding that was
+already done.  The row's own `verification` field is machine-checked and has
+been right every time.  **Re-run the report and trust it over any sentence in
+this file.**
 
-and it is *checked*: every node's declaration is resolved in Lean and its
-axiom closure inspected.  As of this commit: 80 manifest nodes, **62
-recursively grounded, 18 not**.  Those 18 are the whole of the remaining work
-and they are enumerated in §3.
-
-The census `next_action` fields are **prose, and they go stale silently**.  Five
-were wrong in one session, every one of them in the same direction — claiming
-work was outstanding when it was already done:
-
-| Row | The prose said | The truth |
-|---|---|---|
-| `S2-sin-two-theta` | "Certify source-general residual and perturbation forms" | Both existed since 2026-07-22 (`46d545a5`), already in `namespace TauCeti.DavisKahan1970` |
-| `DK-6.3-lem` | "State and prove the source lemma" | Stated and proved, source-faithfully, in `Sources/DavisKahan1970/Section6AppendixLeakage.lean` |
-| `DK-4.1-cor` | "compiles but only under `DavisKahan/Experimental`; promote it" | It is in `DavisKahan/FiniteDimensional/DirectRotation.lean`, production |
-| `S2-sharpness` | "compile under `DavisKahan/Experimental/FiniteDimensional/Sharpness.lean`; promote them" | That path does not exist; the witnesses are in `DavisKahan/FiniteDimensional/Sharpness.lean`, production |
-| `DK-4.3-prop` | (correctly open) | — the one that was right |
-
-The row's own `verification` field is machine-checked and was correct in every
-case; only the human sentence beside it drifted.  **Before starting anything
-below, re-run the frontier report and trust it over any sentence in this file.**
-
-The same caution applies to a plan's effort estimates.  The superseded handoff
-listed `aₙ(X†X) = aₙ(X)²` as one of two small "glue lemmas"; it did not exist
-and was the hardest piece of the day.  Meanwhile two steps it budgeted real work
-for were nearly free.  Grep for every lemma a plan treats as existing before
-costing it.
+The same caution applies to effort estimates, and it bit again today in both
+directions: the previous handoff called `directRotation_minimal` a hard Halmos
+obstruction when it was an orphan deletable in one line, and called the
+equal-dimensional tangent theorem the whole of Section 2 when the unbounded
+scope claim is a separate and larger piece.  **Grep for every lemma a plan
+treats as existing, and grep for every consumer a plan treats as waiting.**
 
 ---
 
-## 3. The 18 ungrounded nodes, grouped by what unblocks them
+## 3. The 17 ungrounded nodes
 
-### 3A. Section 2 — one piece of mathematics, and it is the last one
+### 3A. Section 2 — one node left, and it is the harder half
 
-Two nodes, both marked `open_obligation`, and they reduce to the **same**
-missing argument:
-
-* **`s2-tan-theta`** (priority `high`, census `S2-tan-theta`).
-  Manifest note: *"The finite equal-rank UI-norm theorem is compiled, but the
-  equal-dimensional infinite/noncompact Section 2 theorem requires the Appendix
-  finite-projector limiting argument."*
-* **`s2-unbounded-scope`** (priority `hard`, census `S2-unbounded-scope`).
-  Manifest note: *"The bounded Theorem 6.3 and an unbounded graph-angle
-  operator-norm companion are grounded, but the paper claims arbitrary-UI-norm
-  unbounded scope; the Appendix cutoff/Fan passage remains open."*
-  Its three dependencies — `base-theorem5-2`, `s6-theorem6-3`,
-  `s6-lemma6-3-approx` — are **all grounded now**, Theorem 5.2 as of `816d19e3`.
-
-So: **the Appendix finite-projector cutoff/Ky-Fan limiting passage is the only
-Section 2 mathematics left**, and closing it grounds both nodes at once.
-
-What exists to build on:
-
-* `DK-5.1-lem` / `TauCeti.DavisKahan1970.Lemma5_1` — each approximation
-  singular value of `K ∘ P i` converges to that of `K` when `P i → 1` strongly,
-  for an arbitrary filtered net.  This is the limiting engine.
-* `DK-5.2-thm` / `TauCeti.DavisKahan1970.Theorem5_2` — the ordered Sylvester
-  bound with sharp constant, at arbitrary Fan-dominant ideal gauge, for
-  unbounded closed self-adjoint operators.
-* `DK-6.3-lem` /
-  `Experimental.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage`
-  — the leakage estimate, with the **corrected** block hypothesis
-  `K ∘ P = Q ∘ K ∘ P` (the earlier scaffold's `K ∘ P = Q ∘ K` forces
-  `Q K (1 − P) = 0` and trivializes the conclusion; do not reintroduce it).
-* Theorem 6.1's common-domain and graph-core forms, `compiled_exact`.
+**`s2-unbounded-scope`** (priority `hard`, census `S2-unbounded-scope`).  The
+paper claims arbitrary-UI-norm scope for **unbounded** self-adjoint operators;
+what is grounded is the bounded theorem plus an operator-norm graph-angle
+companion.  Its three dependencies are all grounded.
 
 **Trap, on the census and repeated here: do not credit the operator-norm
-unbounded graph-angle companion as the full scope claim.**  The paper claims
-arbitrary UI norm.
+unbounded graph-angle companion as the full scope claim.**
 
-### 3B. Promotions — mechanical, and all three are blocked by the *same two* `sorry`s
+*The scaffolding for this is now built and is the recommended route.*
+`DavisKahan/TanTheta/Theorem63TrialData.lean` isolates exactly what the tangent
+chain consumes — `action`, `compression`, `residual`, the block identity, and
+residual orthogonality — with `ofBounded` recovering the bounded case and
+`restrict` transporting both form bounds to any subspace.  And
+`theorem63ResidualWitness_scalar_of_data` (in `Theorem63FiniteSource.lean`) is
+the equation-(6.6) estimate over that data, taking the **crossed action** `X`
+as a separate argument.
 
-This is the most useful measurement in this document.  The import closures of
-the three promotion targets are 25, 42 and 51 `Experimental` modules
-respectively, and in every case the modules carrying a real tactic `sorry` are
-exactly these two:
+Why the crossed action is the right abstraction, and the one thing to get
+right: for unbounded `A` the quadratic form `⟪A y, y⟫` on `Vᗮ` is only defined
+on the domain, but the argument only ever evaluates it at left singular vectors
+of the sine block, i.e. at vectors `P_Vᗮ z` with `z` in the trial space.  Those
+*are* in the domain when `Z ⊆ dom(A)` and `V` is a spectral subspace, because
+spectral projections preserve the domain
+(`selfAdjointSpectralProjection_mem_domain`).  So the faithful hypothesis is
 
-* `DavisKahan/Experimental/InfiniteDimensional/DirectRotation.lean:1203` —
-  `directRotation_minimal`, the operator-norm minimality of the direct rotation.
-  Its own comment names the obstruction: the Halmos two-projection framework
-  (fiber norms, unitary transport constraint, scalar shorter rotation).  Its
-  signature audit warns it **must not** be generalized to every symmetric ideal
-  gauge.
-* `DavisKahan/Experimental/InfiniteDimensional/SinTheta/General.lean:1128` —
-  `projectionDifference_ideal_intervalExterior`.  Reduced 2026-08-04: the
-  equation and the contraction are supplied by `projectionDifference_sylvester`
-  and `SymmetricNormIdeal.gauge_projectionCross_le`; what is missing is the
-  constant-one Sylvester estimate on a *union of two* interval/exterior
-  rectangles.  **Do not reach for the triangle inequality on the two corners** —
-  that gives constant two, and is already proved elsewhere.
+```text
+(α + δ) ‖P_Vᗮ z‖² ≤ re ⟪P_Vᗮ z, X z⟫   for all z : Z,   X z = A (P_Vᗮ z)
+```
 
-Discharge those two and the following all become straight promotions:
+and the Sylvester link is `X z − S (M z) = P_Vᗮ (R z)`.
 
-| Target | Closure | Census rows it guards |
-|---|---|---|
-| `Experimental/MathAhead/Section4/InfiniteProposition43.lean` (and `…41`) | 178 modules, 25 Experimental | `DK-4.1-prop`, `DK-4.1-cor`, `DK-4.3-prop` infinite forms |
-| `Experimental/Sources/DavisKahan1970/Section8/SourceSurface.lean` | 191 modules, 42 Experimental | `DK-8.1-thm`, `DK-8.2-thm` (both `proved_outside_build`) |
-| `Experimental/Frontier/Section8.lean` | 202 modules, 51 Experimental | as above, plus `DK-3.2-prop`, unguarded for the same structural reason |
+**Remaining for this node**, in order:
+1. Generic transversality and `sine < 1` over the data (the bounded proofs
+   use `T` only through the two form bounds; the generic statements need a
+   field or hypothesis `z ∈ Vᗮ → X z = action z`).
+2. Generic Ky Fan core over the data (mirrors
+   `theorem6_3_all_kyFan_core`; `orthonormal_theorem63ResidualWitness` is
+   already generic — it now takes the `sine < 1` hypothesis directly).
+3. `Theorem63TrialData` from an `UnboundedTrialBlock`
+   (`DavisKahan/TanTheta/UnboundedSpectrum.lean:39`), with the crossed form
+   bound from `ForTauCeti/.../LinearPMap/SpectralFormBounds.lean`.
+4. Fan-dominance endpoint + source wrapper; repoint the manifest node off
+   `unbounded_angle_theorems_source_scope_partial_marker`.
 
-The three rows the census reports as *"proved but unguarded by `lake build`"*
-are exactly `DK-3.2-prop`, `DK-8.1-thm`, `DK-8.2-thm`.
+### 3B. Section 3 — 4 nodes; one is reachable, three are not
 
-Alternatively, split the two `sorry`-bearing modules off the continuation stack
-rather than proving them — the cost there is namespace renames, not mathematics.
+`s3-cor3-1` (Corollary 3.1, compact case) is **not blocked by
+Hahn–Hellinger**.  Its manifest dependencies are `s3-operator-classification`
+and `s3-compact-angle-list`, both grounded; it is ungrounded only because of its
+own `sorry` at `Frontier/Section3.lean:1088`.  What it needs:
 
-### 3C. Section 3 — parked, explicitly off the critical path
+* `twoProjection_operator_classification` (same file, proved) reduces it to:
+  two compact positive **injective** operators are unitarily equivalent iff
+  their approximation-number lists agree.
+* The unitary half already exists:
+  `TauCeti.exists_linearIsometryEquiv_intertwining_of_finrank_eigenspace_eq`
+  in `ForTauCeti/Analysis/InnerProductSpace/CompactSelfAdjointClassification.lean`,
+  stated as `dim ker(A−μ) = dim ker(B−μ)` for all `μ`, with trivial kernel.
+* **The missing bridge** is `approximationNumber` list ⟺ eigenspace-dimension
+  function, for compact positive operators.  It does not exist in the repo.
+  Note the trivial-kernel hypothesis is not optional and is exactly what
+  genericity supplies: on the generic part the cosine-square block has no
+  eigenvalue `0` or `1`, so the list determines the dimension.  Without it the
+  statement is false (pad either side with kernel).
 
-Four nodes: `s3-spectral-multiplicity-definition`,
-`s3-spectral-multiplicity-complete`, `s3-theorem3-1`, `s3-cor3-1`.
-
-Blocked on `two-subspace-classification` (Hahn--Hellinger).  **The classification
-content of Theorem 3.1 is already proved in the paper's own invariant, both
-directions, admission-free**; Hahn--Hellinger is needed only for the literal
-spectral-multiplicity phrasing.
-
-**Trap:** `Experimental/Frontier/Core.lean:71` defines
-`SameSpectralMultiplicity : Prop := by sorry`.  It is a `sorry`-ed *definition*,
-so every frontier statement resting on it is **vacuous, not merely unproved**.
-Do not read those as near-complete.  The two `sorry`s in
-`Frontier/Section3.lean` (`theorem3_1_spectralMultiplicity_classification` at
-1060, `corollary3_1_compact_angleList_classification` at 1088) sit on top of it.
+`s3-theorem3-1`, `s3-spectral-multiplicity-definition`,
+`s3-spectral-multiplicity-complete` **are** Hahn–Hellinger and are not a
+session's work.  `Frontier/Core.lean:71` is a `sorry`-ed *definition*, so
+everything resting on it is vacuous rather than unproved, and its own docstring
+already records the decision: the mathematical content of Theorem 3.1 is proved
+admission-free as
+`MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`
+(both directions, arbitrary complex Hilbert spaces, no compactness or
+separability), and supplying the definition buys only the paper's *literal*
+multiplicity phrasing.  Mathlib has no multiplicity theory in any form.
+**Do not "define" `SameSpectralMultiplicity` as unitary equivalence of the
+PVMs** — that makes the companion theorem near-trivial and abandons the measure
+class plus cardinal-valued multiplicity function the docstring demands.
 
 Also parked here: `DK-3.5-prop` — the commutation identities are present, the
 maximal constant-angle eigenspace characterisation is not represented.
 
-### 3D. Section 9 — parked, lowest priority
+### 3C. Section 9 — 12 nodes, and it is a months-long project
 
-Eleven nodes, and 21 of the tree's 27 real `sorry`s, all in
-`Experimental/Frontier/Section9Analytic.lean`.
+`s9-semantic-model` is done.  The other 12 are open, and 9 of the 21 `sorry`s in
+`Frontier/Section9Analytic.lean` are not modelled by any frontier node at all
+(the eight `actual*` definitions and `canonicalFreeBeamAnalyticModel_representsSource`).
 
-Five bricks are laid and pushed: Green's identity for `d⁴/dx⁴`
-(`ForTauCeti/Analysis/Calculus/FourthOrderGreensIdentity.lean`), `L²`
-orthogonality of modes at distinct frequencies, the Rayleigh identity,
-nonnegativity, and normalisation positivity
-(`Sources/DavisKahan1970/Section9/FreeBeamOrthogonality.lean`).
+Corrections to the previous handoff's ordering, which was inverted:
 
-Remaining, in order: **completeness of the mode family in `L²(0,1)`** — the last
-step needing no Sobolev theory — then **the densely defined self-adjoint
-operator**, which is where `H⁴(0,1)` and traces actually enter, and *only* there.
-They are not needed for Green's identity, orthogonality, the quadratic form or
-positivity.
-
-**Trap:** do **not** "close" Section 9 by instantiating
-`TheoremOutputCertificate` or `FreeBeamFiniteDataCertificate`.  Both are
-trivially instantiable and certify nothing, and
-`Frontier/Section9Analytic.lean`'s eight `actual*` quantities are `sorry`-ed
-**definitions**.
+* **The operator comes first; completeness of the mode family is a by-product
+  you may not need.**  `SobolevTraceFoundation`'s spectral obligations are
+  `spectrum_nonnegative`, `positive_spectrum_characterization` and
+  `affineKernelEquiv` — none of them is "the modes span `L²`".
+* **`DavisKahan/SpectralTheory/FormMethod/` (11 files, all sorry-free) already
+  contains the self-adjointness machinery**, including
+  `ShiftedBeamRealization.lean:169` `beamOperator_isSelfAdjoint`.  Free-end
+  conditions are the *natural* boundary conditions of the bending-energy form on
+  `H²`, so **no trace theorem is needed** — which is why the repo chose the form
+  method.  H⁴ and traces enter only if you insist on the full
+  `SobolevTraceFoundation` interface; recommend not.
+* **What genuinely does not exist**: a concrete `L²(0,1)`.  `grep` for
+  `MeasureTheory.Lp` across `DavisKahan/` and `ForTauCeti/` returns nothing; the
+  whole development is abstract `H`.  The hardest single lemma is completeness
+  of the form space `V` with `⟪u,v⟫_V = ∫u''v̄'' + ∫uv̄`.
+* **Three structural traps**, beyond the certificate one already known:
+  `freeBeamClosedFourthDerivative` is stated for an *arbitrary* `H`, where no
+  free-beam operator exists; `freeBeam_exact_finite_data` as written is a
+  tautology closed by `⟨_, _, rfl, rfl⟩`; and `RepresentsFreeBeamProblem` /
+  `ThirdEigenvalueIsCorrect` are `def … : Prop := by sorry`, hence opaque —
+  every hypothesis mentioning them is both unusable and unfalsifiable.
+* **The largest hidden gap**: `TheoremOutputCertificate` has 14 scalar fields;
+  the two angle-bound nodes supply 8.  The six Weinberger/direct/ω outputs have
+  no `actual*` definition, no theorem, and no frontier node.
+* Highest-value cheap item: `freeBeam_thirdEigenvalue_gt_fiveHundred` is a
+  ~3-line re-export of `FreeBeamAnalyticFoundation.lean:173`, which is proved —
+  but only after the predicate is defined through the existing records.
 
 ---
 
 ## 4. Not in the frontier manifest, but still open
 
-* **`S2-sharpness` part (ii): the audit.**  Part (i), promotion, is a
-  non-problem — the witnesses are already in production (see §2).  What is
-  genuinely unfinished is checking each compiled equality model against the
-  printed *simultaneous*-equality claim.  That is exactly the kind of scope
-  question that produced three refuted transcriptions in Section 4, so it is
-  worth real care rather than a glance.
-* **`exact-source-wrappers` still open on**: `S1-block-residual`, `S2-tan-two-theta`,
-  `DK-3.1-def`, `DK-3.2-def`, `DK-3.4-prop`, `DK-3.5-prop`, `DK-7-sin2-proof`,
-  `DK-7-tan2-proof`, `S2-unbounded-scope`.  Every one of these is mechanical —
-  an `alias` in `namespace TauCeti.DavisKahan1970` with a docstring stating the
-  paper's numbering and, honestly, how the compiled statement is more general.
-  `Sources/DavisKahan1970/Section4.lean` and `Section5.lean` are the pattern.
-  **Check each one first**: two of the five stale rows in §2 were "missing
-  wrapper" rows whose wrapper already existed.
-* **`check_library_structure` rule 3** — 6 pre-existing violations (5 real
-  modules, 1 aggregate).  Exactly 14 modules must move, closed under imports;
-  the real cost is namespace renames.
+* **The promotion itself.**  The two admissions are out of the closures, but
+  `check_library_structure` rule 2 forbids a production module importing
+  `Experimental`, so promoting means **relocating** those closures out of
+  `Experimental/`.  That is a design decision, not a mechanical step, and it
+  should be taken deliberately.  Precedent exists for the namespace being
+  independent of the directory (`Geometry/Polar/DirectRotationSquare.lean`
+  declares into `DavisKahan.Experimental` while living in production).
+  The three rows this guards are `DK-3.2-prop`, `DK-8.1-thm`, `DK-8.2-thm`,
+  still reported as *"proved but unguarded by `lake build`"*.
+* **`check_library_structure` rule 3 is now 49 violations, up from 6** — 34 real
+  modules and 15 aggregates.  **This is a consequence of today's work, not a
+  regression to repair blindly.**  Rule 3 asks that every `Experimental` module
+  support admission-bearing work; removing the two admissions made 34 modules
+  admission-free, so the checker is now enumerating precisely the modules that
+  ought to move.  Rules 1, 2, 4 and 5 pass.
+* **`S2-sharpness` part (ii): the audit.**  Checking each compiled equality
+  model against the printed *simultaneous*-equality claim.  Exactly the kind of
+  scope question that produced three refuted transcriptions in Section 4.
+* **`exact-source-wrappers` still open on**: `S1-block-residual`,
+  `S2-tan-two-theta`, `DK-3.1-def`, `DK-3.2-def`, `DK-3.4-prop`, `DK-3.5-prop`,
+  `DK-7-sin2-proof`, `DK-7-tan2-proof`, `S2-unbounded-scope`.  Mechanical.
+  **Check each one first**: two of five stale rows in an earlier session were
+  "missing wrapper" rows whose wrapper already existed.
+* **`Experimental/InfiniteDimensional/Core/Unbounded.lean` does not compile**
+  (30 errors, `ClosedOperator` field mismatches).  It is in no built target, so
+  nothing catches it; `Core/Forms.lean` and `Ideals/CompactAndSingular.lean` sit
+  downstream and are equally unbuildable.  Pre-existing, unrelated to today.
 * **Consolidate the duplicated Halmos outer assembly.**
 
 ---
@@ -252,23 +293,24 @@ trivially instantiable and certify nothing, and
 1. **`DK-4.4-prop` is `refuted_as_transcribed`.**  A compiled ℝ⁴ counterexample
    beats the direct rotation in trace norm of the full displacement `1 − W`.
    Anything phrased on the **full** displacement must be checked against it.
-2. **Proposition 4.2's right-hand side.**  Do not restate it as `∑ᵢ cost D bᵢ`;
-   that form is false.  The correct right-hand side is
-   `∑ᵢ (1 − ‖C bᵢ‖²) = dim U − tr((C|_U)²)`.
+2. **Proposition 4.2's right-hand side.**  Not `∑ᵢ cost D bᵢ`; that form is
+   false.  The correct one is `∑ᵢ (1 − ‖C bᵢ‖²) = dim U − tr((C|_U)²)`.
 3. **Proposition 4.3 is Ky Fan level only.**  Pointwise domination of the
-   individual approximation numbers of the squared displacement is false, and
-   would contradict this repository's own refutation of 4.4.
+   individual approximation numbers of the squared displacement is false.
 4. **Frontier declarations must never go in a census row's
-   `lean_declarations`** — `DavisKahan.Experimental.Frontier` is built by no
-   default target, so listing one drops the row to `partially_in_build`.  Note
-   the converse is *not* true: a module under `Sources/` may declare into an
-   `Experimental.*` namespace and still be in the default build.  Judge by the
-   module path, not the namespace.
+   `lean_declarations`** — judge by the module path, not the namespace.
 5. **A `sorry`-ed definition makes its consumers vacuous, not unproved**
-   (`SameSpectralMultiplicity`).
-6. **Underscore binders mark fake scope gaps.**  Before working a "cannot
-   specialise, hypothesis too strong" obligation, read the binders — a `_h`-bound
-   hypothesis may never be used.
+   (`SameSpectralMultiplicity`, and the Section 9 `Prop := by sorry` pair).
+6. **Underscore binders mark fake scope gaps.**  Read the binders before
+   working a "hypothesis too strong" obligation.
+7. **`tan (arcsin 1) = 0` in Lean.**  Junk value; carry `sine < 1` explicitly.
+8. **The union-of-two-rectangles Sylvester estimate has a second obstruction**
+   the old note missed: the constant-one machinery is stated for
+   `SymmetricOperatorIdealFamily`, the open theorem quantifies over
+   `SymmetricNormIdeal`, and `ofRectangular` bridges the wrong way.  And the
+   constant-one claim is sharp at `B − A = d (P_U − P_V)`, so there is no cheap
+   route.  The triangle inequality on the two corners gives constant two and is
+   already proved as `sinTheta_spectrum_gauge_symmetric`.
 
 ---
 
@@ -297,8 +339,9 @@ EOF
 lake env lean /tmp/ax.lean
 ```
 
-Expect exactly `[propext, Classical.choice, Quot.sound]`.  `check_library_structure`
-is expected to report 6 rule-3 violations; everything else must be 0.
+Expect exactly `[propext, Classical.choice, Quot.sound]`.
+`check_library_structure` is expected to report **49** rule-3 violations (see
+§4); everything else must be 0.
 
-Importing `DavisKahan.All` alone is also the cheapest test of *"is this really in
-the default build?"* — it is what settled three of the five stale rows in §2.
+Importing `DavisKahan.All` alone is also the cheapest test of *"is this really
+in the default build?"*.
