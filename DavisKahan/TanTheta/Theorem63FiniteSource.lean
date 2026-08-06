@@ -757,7 +757,7 @@ private theorem theorem6_3_kyFan_core_of_le_finrank
 
 /-- A bounded operator with finite-dimensional domain has no approximation
 singular values beyond that domain dimension. -/
-private theorem kyFanApproximationGauge_eq_finrank_of_finrank_le
+theorem kyFanApproximationGauge_eq_finrank_of_finrank_le
     {E F : Type u}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
