@@ -103,6 +103,15 @@ step that makes a maximal orthogonal family of cyclic subspaces total. -/
 def IsCalculusInvariant (ha : IsStarNormal a) (K : Submodule ℂ H) : Prop :=
   ∀ (f : spectrum ℂ a → ℂ) (hf : IsBddMeasurable f), ∀ x ∈ K, borelCalculus ha hf x ∈ K
 
+/-- Elimination form of `IsCalculusInvariant`, so a call site need not unfold the definition.
+
+The definition body is not exposed outside this module, so this is what a downstream consumer
+uses; `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Restriction.lean` is the first. -/
+theorem IsCalculusInvariant.borelCalculus_mem {ha : IsStarNormal a} {K : Submodule ℂ H}
+    (hK : IsCalculusInvariant ha K) {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) {x : H}
+    (hx : x ∈ K) : borelCalculus ha hf x ∈ K :=
+  hK f hf x hx
+
 /-- **A cyclic subspace is calculus-invariant.**
 
 By minimality (`cyclicSubspace_le`) it suffices to check the calculus orbit of the generating
