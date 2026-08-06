@@ -11,6 +11,8 @@ import DavisKahan.TanTheta.Spectrum
 import DavisKahan.TanTheta.UnboundedGraphAngle
 import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 import DavisKahan.TanTheta.Theorem63FiniteSource
+import DavisKahan.TanTheta.Theorem63InfiniteTrial
+import DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
@@ -314,6 +316,36 @@ alias theorem6_3_equalRank_tanTheta_formBounds :=
 /-- The equal-rank tangent bound in the source's spectral-separation form. -/
 alias theorem6_3_equalRank_tanTheta_ideal :=
   ExactTanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral
+
+/-! ### The equal-dimensional infinite/noncompact tangent theorem
+
+The two aliases above still assume a finite-dimensional trial space.  The paper's
+Section 2 claims the theorem for arbitrary equal-dimensional pairs in an infinite
+Hilbert space, and its Appendix supplies the missing case by the finite-projector
+cutoff/Ky-Fan limiting argument.  That passage is formalized in
+`DavisKahan/TanTheta/Theorem63InfiniteTrial.lean`: the trial subspace carries **no**
+dimension hypothesis, the tangent representative is exhibited with the paper's
+approximation numbers (`tan (arcsin sᵢ)` over the directed sine block's approximation
+numbers), and the bound holds in every Fan-dominant unitarily invariant ideal gauge.
+
+The residual half is stated in the source's spectral-separation form and in form-bound
+form; the perturbation companion assumes invariance of the trial space under the
+perturbed operator, exactly as in the finite case. -/
+
+/-- Section 2 tangent theorem, residual half, at arbitrary trial dimension and
+ideal-gauge scope, spectral-separation form. -/
+alias theorem6_3_equalDimension_tanTheta_ideal_spectral :=
+  ExactTanTheta.theorem6_3_infiniteTrial_spectral_exists
+
+/-- Section 2 tangent theorem, residual half, at arbitrary trial dimension and
+ideal-gauge scope, form-bound form. -/
+alias theorem6_3_equalDimension_tanTheta_ideal_formBounds :=
+  ExactTanTheta.theorem6_3_infiniteTrial_of_formBounds_exists
+
+/-- Section 2 tangent theorem, perturbation half, at arbitrary trial dimension and
+ideal-gauge scope. -/
+alias theorem6_3_equalDimension_tanTheta_perturbation :=
+  MathAhead.Section2.theorem6_3_perturbation_infiniteTrial
 
 end GeneralizedTangent
 

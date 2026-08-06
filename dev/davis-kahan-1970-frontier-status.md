@@ -10,7 +10,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 
 | Paper item | Source kind | Frontier endpoint(s) | Missing pieces | Est. complete | Grounded |
 |---|---|---|---:|---:|:---:|
-| `S2-tan-theta` — Section 2, tan theta theorem: Single-angle tangent theorem | unnumbered_theorem | `s2-tan-theta` | 1 / 4 | 75% | no |
+| `S2-tan-theta` — Section 2, tan theta theorem: Single-angle tangent theorem | unnumbered_theorem | `s2-tan-theta` | 0 / 4 | 100% | yes |
 | `S2-sin-two-theta` — Section 2, sin 2 theta theorem: Double-angle sine theorem | unnumbered_theorem | `s7-sin2` | 0 / 2 | 100% | yes |
 | `S2-tan-two-theta` — Section 2, tan 2 theta theorem: Double-angle tangent theorem | unnumbered_theorem | `s7-tan2` | 0 / 3 | 100% | yes |
 | `S2-sharpness` — Section 2, paragraph after four theorems: Best constants and simultaneous equality | source_claim | `base-sharpness` | 0 / 1 | 100% | yes |
@@ -52,10 +52,10 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 - Census rows mapped: **12**
 - Declarations resolving in Lean: **80**
 - Declarations with admission-free Lean closure: **64**
-- Recursively grounded manifest nodes: **62**
-- Paper results recursively grounded: **23 / 32**
+- Recursively grounded manifest nodes: **63**
+- Paper results recursively grounded: **24 / 32**
 - Source-role endpoints resolving: **29 / 29**
-- Source-role endpoints recursively grounded: **21 / 29**
+- Source-role endpoints recursively grounded: **22 / 29**
 
 ## Manifest nodes
 
@@ -106,7 +106,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s6-theorem6-3-kyfan-core` | bridge | no |  | hard | no | yes | yes | yes | yes |
 | `s6-theorem6-3-finite-specialization` | bridge | no |  | high | no | yes | yes | yes | yes |
 | `s6-theorem6-3` | source | yes | `DK-6.3-thm` | hard | no | yes | yes | yes | yes |
-| `s2-tan-theta` | source | yes | `S2-tan-theta` | high | yes | yes | yes | yes | no |
+| `s2-tan-theta` | source | yes | `S2-tan-theta` | high | no | yes | yes | yes | yes |
 | `s6-theorem6-3-unbounded-opnorm-partial` | bridge | no |  | high | no | yes | yes | yes | yes |
 | `s2-unbounded-scope` | source | yes | `S2-unbounded-scope` | hard | yes | yes | yes | yes | no |
 | `s7-sin2` | source | yes | `DK-7-sin2-proof`, `S2-sin-two-theta` | high | no | yes | yes | yes | yes |

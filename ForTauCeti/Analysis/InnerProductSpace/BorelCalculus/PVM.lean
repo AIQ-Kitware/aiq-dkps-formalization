@@ -206,8 +206,9 @@ noncomputable def boundedPVM : TauCeti.ProjValMeasure H :=
 
 omit [CompleteSpace H] in
 /-- The real-part relabelling, unfolded.  Consumers outside this module cannot reduce
-`reCoord` by definition, so this is the rewrite form. -/
-@[simp] theorem reCoord_apply (w : spectrum ℂ T) : reCoord w = (w : ℂ).re := (rfl)
+`reCoord` by definition, so this is the rewrite form.  Deliberately not `@[simp]`:
+several existing proofs match on `reCoord` syntactically. -/
+theorem reCoord_apply (w : spectrum ℂ T) : reCoord w = (w : ℂ).re := (rfl)
 
 /-- The projections of `boundedPVM` are the Borel calculus of band indicators.  Rewrite
 form for consumers outside this module, where the definition bodies are not exposed. -/

@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 
 import DavisKahan.TanTheta.Theorem63FiniteSource
+import DavisKahan.TanTheta.Theorem63InfiniteTrial
 
 /-!
 # Davis--Kahan Section 2, tan Θ: the perturbation companion
@@ -162,6 +163,58 @@ theorem theorem6_3_perturbation_equalRank
   unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
   exact Finset.sum_le_sum fun n _ =>
     approximationSingularValue_theorem63Residual_le_of_invariant T E Z hinv n
+
+/-- **Davis--Kahan Section 2, tangent theorem, perturbation form, at arbitrary trial
+dimension.**
+
+The trial space `Z` carries no dimension hypothesis — only completeness.  If `Z` is
+invariant for the perturbed operator `T + E` and `T` reduces `V` with the source gap, then
+some tangent representative with the paper's approximation numbers satisfies
+`δ · N(tan Θ₀) ≤ N(E|_Z)` in every Fan-dominant unitarily invariant ideal gauge.  This is
+the perturbation companion of the equal-dimensional infinite/noncompact residual theorem
+`ExactTanTheta.theorem6_3_infiniteTrial_of_formBounds_exists`; the bridge is the same one
+line of algebra as in the finite case. -/
+theorem theorem6_3_perturbation_infiniteTrial
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (T E : H →L[ℂ] H) (hT : T.IsSymmetric)
+    (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
+    [Z.HasOrthogonalProjection] [CompleteSpace Z]
+    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hCompressionUpper : ∀ z : Z,
+      RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hUnwantedLower : ∀ y ∈ Vᗮ,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
+    (hinv : ∀ x ∈ Z, (T + E) x ∈ Z)
+    (hEmem : N.Mem (E ∘L Z.subtypeL)) :
+    ∃ tanTheta0 : Z →L[ℂ] H,
+      HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
+      N.Mem tanTheta0 ∧
+      delta * N.gauge tanTheta0 ≤ N.gauge (E ∘L Z.subtypeL) := by
+  obtain ⟨tanTheta0, htan⟩ :=
+    exists_hasTheorem63DirectedTangentApproximationNumbersInfinite Z V
+      (fun n => approximationSingularValue_sineBlock_lt_one_infiniteTrial T V Z hT hV
+        hdelta hCompressionUpper hUnwantedLower n)
+  refine ⟨tanTheta0, htan, ?_⟩
+  refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hEmem fun k => ?_
+  have hKyTan : kyFanApproximationGauge k tanTheta0 =
+      ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
+        (approximationSingularValue n (theorem63DirectedSineBlock Z V))) := by
+    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+    refine Finset.sum_congr rfl fun n _ => ?_
+    have h := htan n
+    unfold approximationSingularValue at h
+    exact h
+  have hcore := theorem6_3_all_kyFan_core_infiniteTrial T V Z hT hV hdelta
+    hCompressionUpper hUnwantedLower k
+  have hRE : kyFanApproximationGauge k (theorem63Residual T Z) ≤
+      kyFanApproximationGauge k (E ∘L Z.subtypeL) := by
+    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+    refine Finset.sum_le_sum fun n _ => ?_
+    have h := approximationSingularValue_theorem63Residual_le_of_invariant T E Z hinv n
+    unfold approximationSingularValue at h
+    exact h
+  rw [hKyTan]
+  exact hcore.trans hRE
 
 end Section2
 end MathAhead
