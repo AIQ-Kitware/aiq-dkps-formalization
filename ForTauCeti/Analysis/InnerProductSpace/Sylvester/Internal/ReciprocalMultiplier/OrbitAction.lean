@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
-import Mathlib.Analysis.SpecialFunctions.Complex.Arg
-import Mathlib.Analysis.Complex.Circle
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+public import Mathlib.Analysis.SpecialFunctions.Complex.Arg
+public import Mathlib.Analysis.Complex.Circle
 
 /-!
 # Unitary orbit actions on coordinate matrix units
@@ -46,6 +48,8 @@ before the sin-Θ closure moved into the staging layer.
 Literature bridge for the group as a whole:
 `prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex`.
 -/
+
+public section
 
 namespace TauCeti
 
@@ -100,6 +104,7 @@ theorem sum_basisMatrixUnit
 
 /-- The linear action on rectangular maps induced by left and right unitary
 composition. -/
+@[expose]
 noncomputable def unitaryOrbitAction
     (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) :
     (E →ₗ[𝕜] F) →ₗ[𝕜] (E →ₗ[𝕜] F) where
@@ -185,6 +190,7 @@ theorem unitaryOrbitAction_basisMatrixUnit
   · simp [hjq]
 
 /-- The complex unitary phase with angular frequency parameter `x`. -/
+@[expose]
 noncomputable def complexFourierPhase (x : ℝ) : unitary ℂ := by
   let z : ℂ := Circle.exp x
   have hz : ‖z‖ = 1 := Circle.norm_coe (Circle.exp x)
@@ -614,12 +620,12 @@ theorem doubledComplexScalarMapAction_ofReal
     (r : ℝ) (T : E' →ₗ[𝕜] F') :
     doubledComplexScalarMapAction (r : ℂ) T =
       ((r : ℝ) : 𝕜) •
-        RectangularUnitarilyInvariantNorm.orthogonalBlockSum T T := by
+        RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum T T := by
   ext x
   apply WithLp.ofLp_injective 2
   apply Prod.ext <;>
     simp [doubledComplexScalarMapAction_apply,
-      RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply]
+      RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum_apply]
 
 /-- A finite sum of complex-scalar block actions is the action of the scalar
 sum. -/
@@ -785,12 +791,12 @@ theorem doubledComplexScalarAction_ofReal
     [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
     (r : ℝ) (T : ER →ₗ[ℝ] FR) :
     doubledComplexScalarAction (r : ℂ) T =
-      r • RectangularUnitarilyInvariantNorm.orthogonalBlockSum T T := by
+      r • RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum T T := by
   ext x
   apply WithLp.ofLp_injective 2
   apply Prod.ext <;>
     simp [doubledComplexScalarAction_apply,
-      RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply]
+      RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum_apply]
 
 /-- A finite sum of complex-scalar block actions is the action of the scalar
 sum. -/
@@ -851,7 +857,7 @@ theorem basisDoubledRealRotation_comp_basisMatrixUnit
     (i : Fin (Module.finrank ℝ FR))
     (j : Fin (Module.finrank ℝ ER)) :
     (basisDoubledRealRotation eF thetaF).toLinearMap ∘ₗ
-        RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+        RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
           (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j) ∘ₗ
         (basisDoubledRealRotation eE thetaE).toLinearMap =
       doubledPhaseAction (thetaF i + thetaE j)
@@ -864,26 +870,26 @@ theorem basisDoubledRealRotation_comp_basisMatrixUnit
       apply WithLp.ofLp_injective 2
       apply Prod.ext <;>
         simp [basisDoubledRealRotation_apply,
-          RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
+          RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum_apply,
           doubledPhaseAction_apply, basisMatrixUnit_apply,
           Real.cos_add, Real.sin_add] <;> module
     · apply WithLp.ofLp_injective 2
       apply Prod.ext <;>
         simp [basisDoubledRealRotation_apply,
-          RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
+          RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum_apply,
           doubledPhaseAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite, hq]
   · by_cases hq : j = q
     · subst q
       apply WithLp.ofLp_injective 2
       apply Prod.ext <;>
         simp [basisDoubledRealRotation_apply,
-          RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
+          RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum_apply,
           doubledPhaseAction_apply, basisMatrixUnit_apply,
           real_inner_smul_right, Real.cos_add, Real.sin_add] <;> module
     · apply WithLp.ofLp_injective 2
       apply Prod.ext <;>
         simp [basisDoubledRealRotation_apply,
-          RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
+          RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum_apply,
           doubledPhaseAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite,
           real_inner_smul_right, hq]
 

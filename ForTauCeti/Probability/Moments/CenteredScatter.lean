@@ -64,7 +64,7 @@ See backlog §8.1.
 Moved from
 `ForTauCeti/Analysis/InnerProductSpace/CenteredScatter.lean` to
 `ForTauCeti/Probability/Moments/CenteredScatter.lean`, beside `SampleMean`,
-`SampleCovariance`, `Variance` and `MatrixConcentration`.  Finite means and
+`SampleSecondMoment`, `Variance` and `MatrixConcentration`.  Finite means and
 centered scatter operators are the content of roadmap topic T20, where this
 module was already assigned; only its path disagreed.  Path change and
 repointing of one import in `DkpsQuench2026/Spectral/GramSpectrum.lean` — no

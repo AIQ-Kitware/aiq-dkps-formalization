@@ -451,11 +451,12 @@ already cost a mistake:
 - **It reports anonymous `instance`s** as `<anonymous>`. A scan keyed on declaration
   names cannot see them; six of one lane's 91 were anonymous.
 - **Its exclusions are rules with reasons, not a hand-list**, so they survive tree
-  movement. `DavisKahan/Experimental/**` is outside `defaultTargets`;
-  `DavisKahan/Interop/Spectra/**` is being deleted; and
-  `DavisKahan/SpectralTheory/Compatibility.lean` is a migration shim of `abbrev`
-  re-exports — **documenting its 45 declarations would entrench a file scheduled for
-  deletion**, which is why "undocumented" is the wrong metric for it.
+  movement. `DavisKahan/Experimental/**` is outside `defaultTargets`. The other two
+  exclusions are gone, both because their reason was discharged rather than revised:
+  `DavisKahan/Interop/Spectra/**` and `DavisKahan/SpectralTheory/Compatibility.lean`
+  (the `abbrev` migration shim, excluded so documenting its 45 declarations would not
+  entrench a file scheduled for deletion) have both been deleted, and the rules with
+  them.
 
 **The baseline** (`dev/docstring-coverage-baseline.json`) tolerates findings that
 existed when the gate landed, so it could be adopted without a flag day. It currently

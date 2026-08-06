@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
 
 /-!
 # A self-adjoint operator has no proper self-adjoint extension
@@ -26,6 +28,8 @@ operator makes the condition easier to satisfy.
 *New.*  Mathlib 4.32 has `LinearPMap.adjoint` and `LinearPMap.IsSelfAdjoint`
 but neither of the two lemmas below.
 -/
+
+public section
 
 open scoped InnerProductSpace
 

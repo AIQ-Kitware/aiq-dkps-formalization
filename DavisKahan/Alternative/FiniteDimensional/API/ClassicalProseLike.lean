@@ -133,12 +133,12 @@ This is a thin wrapper around the canonical finite UI-norm sine theorem; its
 conclusion visibly has the paper shape `N (sin Θ) ≤ N (S - T) / gap`.
 -/
 theorem partIII_sinTheta_uiNorm_classical_prose_like
-    (N : UnitarilyInvariantNorm 𝕜 E) {T S : E →ₗ[𝕜] E}
+    (N : UnitarilyInvariantSeminorm 𝕜 E) {T S : E →ₗ[𝕜] E}
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {c g : ℝ} (hgap : SinThetaGapClassicalProseLike T S U V c g) :
     N ((directedSinThetaOperatorClassicalProseLike U V : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (S - T) / g := by
-  exact UnitarilyInvariantNorm.apply_starProjection_comp_starProjection_le N
+  exact UnitarilyInvariantSeminorm.apply_starProjection_comp_starProjection_le N
     hgap.T_symm hgap.S_symm hgap.U_inv hgap.V_inv hgap.gap_pos
     hgap.U_above hgap.V_below
 
@@ -167,13 +167,13 @@ Equivalently, after multiplying the left side by two, this is the classical
 source shape `‖sin 2Θ‖ ≤ 2 ‖S - T‖ / gap`.
 -/
 theorem partIII_half_sinTwoTheta_uiNorm_classical_prose_like
-    (N : UnitarilyInvariantNorm 𝕜 E) {T S : E →ₗ[𝕜] E}
+    (N : UnitarilyInvariantSeminorm 𝕜 E) {T S : E →ₗ[𝕜] E}
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {a b : ℝ} (hgap : SinTwoThetaGapClassicalProseLike T S U V a b) :
     N ((directedHalfSinTwoThetaOperatorClassicalProseLike U V : E →L[𝕜] E) :
         E →ₗ[𝕜] E)
       ≤ N (S - T) / (b - a) := by
-  exact UnitarilyInvariantNorm.sin_two_theta_starProjection_le N
+  exact UnitarilyInvariantSeminorm.sin_two_theta_starProjection_le N
     hgap.T_symm hgap.S_symm hgap.U_inv hgap.V_inv hgap.gap_pos
     hgap.U_above hgap.Uperp_below
 

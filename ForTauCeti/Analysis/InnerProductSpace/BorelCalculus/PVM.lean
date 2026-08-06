@@ -204,6 +204,26 @@ the real part of its spectrum. -/
 noncomputable def boundedPVM : TauCeti.ProjValMeasure H :=
   toProjValMeasure hT.isStarNormal measurable_reCoord
 
+omit [CompleteSpace H] in
+/-- The real-part relabelling, unfolded.  Consumers outside this module cannot reduce
+`reCoord` by definition, so this is the rewrite form.  Deliberately not `@[simp]`:
+several existing proofs match on `reCoord` syntactically. -/
+theorem reCoord_apply (w : spectrum ℂ T) : reCoord w = (w : ℂ).re := (rfl)
+
+/-- The projections of `boundedPVM` are the Borel calculus of band indicators.  Rewrite
+form for consumers outside this module, where the definition bodies are not exposed. -/
+theorem boundedPVM_proj (B : Set ℝ) (hB : MeasurableSet B) :
+    (boundedPVM hT).proj B hB =
+      borelCalculus hT.isStarNormal
+        (isBddMeasurable_indicator (a := T) (measurable_reCoord hB)) := by
+  rw [boundedPVM, toProjValMeasure_proj, specProj_def]
+
+/-- The diagonal measures of `boundedPVM` are the pushforwards of the diagonal measures
+along the real-part relabelling.  Rewrite form for consumers outside this module. -/
+theorem boundedPVM_diag (ξ : H) :
+    (boundedPVM hT).diag ξ = Measure.map reCoord (diagMeasure hT.isStarNormal ξ) := by
+  rw [boundedPVM, toProjValMeasure_diag, specDiag_def]
+
 /-- **The bridge to the continuous functional calculus.**  A spectral projection
 of a bounded self-adjoint operator is the continuous functional calculus of any
 continuous symbol agreeing with the indicator on the spectrum — which is all the

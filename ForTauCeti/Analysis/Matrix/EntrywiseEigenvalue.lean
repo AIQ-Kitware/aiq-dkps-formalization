@@ -12,10 +12,11 @@ addition to `Mathlib/Analysis/Matrix/Spectrum.lean`
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); golfed (collapse a
 `have … := by rw [map_sub]; rw [hsub]` to a single `rw [← map_sub]`).
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
-import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
+public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
+public import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
 
 
 /-! # Eigenvalue perturbation from entrywise closeness
@@ -29,7 +30,7 @@ matrices are entrywise `ε`-close, their sorted eigenvalues differ by at most
 
 ## Main result
 
-* `TauCeti.Matrix.abs_sortedEigenvalues_sub_le_of_entry_le`
+* `TauCeti.Matrix.abs_eigenvalues₀_sub_le_of_entry_le`
 
 ## Provenance
 
@@ -45,6 +46,8 @@ matrices are entrywise `ε`-close, their sorted eigenvalues differ by at most
   `ForTauCeti` staging modules.
 -/
 
+public section
+
 open scoped Matrix
 open Module
 
@@ -53,12 +56,13 @@ namespace TauCeti.Matrix
 variable {n : ℕ}
 
 /-- **Entrywise eigenvalue perturbation.**  If two real symmetric matrices `A`,
-`Ahat` are entrywise `ε`-close, their `k`-th sorted eigenvalues differ by at most
+`Ahat` are entrywise `ε`-close, their `k`-th eigenvalues differ by at most
 `n · ε` (Weyl's inequality through the entrywise → operator-norm comparison). -/
-theorem abs_sortedEigenvalues_sub_le_of_entry_le {A Ahat : Matrix (Fin n) (Fin n) ℝ}
+theorem abs_eigenvalues₀_sub_le_of_entry_le {A Ahat : Matrix (Fin n) (Fin n) ℝ}
     (hA : A.IsHermitian) (hAhat : Ahat.IsHermitian)
-    {ε : ℝ} (hentry : ∀ i j, |Ahat i j - A i j| ≤ ε) (k : Fin n) :
-    |sortedEigenvalues hAhat k - sortedEigenvalues hA k| ≤ (n : ℝ) * ε := by
+    {ε : ℝ} (hentry : ∀ i j, |Ahat i j - A i j| ≤ ε)
+    (k : Fin (Fintype.card (Fin n))) :
+    |hAhat.eigenvalues₀ k - hA.eigenvalues₀ k| ≤ (n : ℝ) * ε := by
   -- Operator-norm bound on the difference, from the entrywise bound.
   have hop : ∀ x : EuclideanSpace ℝ (Fin n),
       ‖(Matrix.toEuclideanLin Ahat - Matrix.toEuclideanLin A) x‖ ≤ ((n : ℝ) * ε) * ‖x‖ := by
@@ -68,6 +72,6 @@ theorem abs_sortedEigenvalues_sub_le_of_entry_le {A Ahat : Matrix (Fin n) (Fin n
       intro i j; simpa [Matrix.sub_apply] using hentry i j
     exact TauCeti.norm_toEuclideanLin_le_of_entry_le hentry' x
   -- Weyl on the symmetric operators.
-  exact abs_eigenvalue_sub_eigenvalue_le (opSym hAhat) (opSym hA) finrank_euclideanSpace_fin hop k
+  exact abs_eigenvalue_sub_eigenvalue_le (opSym hAhat) (opSym hA) finrank_euclideanSpace hop k
 
 end TauCeti.Matrix

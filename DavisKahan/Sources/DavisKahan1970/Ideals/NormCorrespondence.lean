@@ -116,7 +116,7 @@ end DiagonalSingularValues
 section UnitarilyInvariantGauge
 
 variable {n : ℕ}
-  (N : TauCeti.UnitarilyInvariantNorm ℂ (EuclideanSpace ℂ (Fin n)))
+  (N : TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n)))
   (b : OrthonormalBasis (Fin n) ℂ (EuclideanSpace ℂ (Fin n)))
 
 /-- The gauge of any unitarily invariant norm ignores the signs of the
@@ -140,7 +140,7 @@ end UnitarilyInvariantGauge
 theorem singularValues_smul_complex {n : ℕ} (a : ℂ)
     (A : EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n)) (i : ℕ) :
     (a • A).singularValues i = ‖a‖ * A.singularValues i :=
-  TauCeti.RectangularUnitarilyInvariantNorm.singularValues_smul_rect
+  TauCeti.RectangularUnitarilyInvariantSeminorm.singularValues_smul_rect
     a A i
 
 namespace PaperUnitaryInvariantNorm
@@ -281,7 +281,7 @@ def finiteOperatorValue (Φ : PaperSymmetricNormingFunction) (n : ℕ)
 /-- A source symmetric gauge induces the finite-dimensional unitarily
 invariant norm used by the implementation. -/
 noncomputable def finiteNorm (Φ : PaperSymmetricNormingFunction) (n : ℕ) :
-    TauCeti.UnitarilyInvariantNorm ℂ (EuclideanSpace ℂ (Fin n)) where
+    TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n)) where
   toFun := Φ.finiteOperatorValue n
   add_le' A B := by
     have hmaj : ∀ m : ℕ,
@@ -402,7 +402,7 @@ theorem toPaperNorm_ofPaperNorm_finite_apply
 
 /-- Two coherent finite operator families with the same gauge agree. -/
 private theorem uin_ext {n : ℕ}
-    {N M : TauCeti.UnitarilyInvariantNorm ℂ (EuclideanSpace ℂ (Fin n))}
+    {N M : TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))}
     (h : ∀ A, N A = M A) : N = M := by
   cases N
   cases M

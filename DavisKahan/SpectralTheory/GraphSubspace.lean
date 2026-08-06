@@ -77,6 +77,8 @@ namespace TauCeti
 open TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open scoped InnerProductSpace
 
 variable {𝕜 : Type*} [RCLike 𝕜]

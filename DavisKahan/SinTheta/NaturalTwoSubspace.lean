@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.Compatibility
+import DavisKahan.BoundedOperator.Compat
 
 /-!
 # Symmetric subspace gap from two directed sine estimates
@@ -37,7 +37,7 @@ theorem mul_subspaceGap_le_of_two_directedGap_le
     δ * subspaceGap U V ≤ r := by
   have hmax : subspaceGap U V =
       max (directedGap U V) (directedGap V U) :=
-    TauCeti.DavisKahanExt.subspaceGap_eq_max_directedGap U V
+    U.projectionGap_eq_max_directedProjectionGap V
   rw [hmax, mul_max_of_nonneg _ _ hδ]
   exact max_le hUV hVU
 

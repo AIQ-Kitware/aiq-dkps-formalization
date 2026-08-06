@@ -22,20 +22,6 @@ statements and use only the permitted kernel dependencies.
 
 open scoped Matrix
 
-namespace TauCeti.Matrix
-
-variable {n : ℕ}
-
-theorem opSym {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian) :
-    (Matrix.toEuclideanLin B).IsSymmetric :=
-  Matrix.isSymmetric_toEuclideanLin_iff.mpr hB
-
-noncomputable def sortedEigenvalues {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian) :
-    Fin n → ℝ :=
-  (opSym hB).eigenvalues finrank_euclideanSpace_fin
-
-end TauCeti.Matrix
-
 namespace TauCeti
 open scoped Matrix ENNReal
 open MeasureTheory
@@ -43,15 +29,15 @@ open MeasureTheory
 variable {Ω : Type*} [MeasurableSpace Ω] {n : ℕ}
 
 /-- **Empirical-Gram eigenvalue lower-bound concentration** (entrywise Chebyshev + Weyl). -/
-theorem measure_forall_sortedEigenvalues_ge_ge
+theorem measure_forall_eigenvalues₀_ge_ge
     (P : Measure Ω) [IsProbabilityMeasure P]
     (Shat : Ω → Matrix (Fin n) (Fin n) ℝ) (A : Matrix (Fin n) (Fin n) ℝ)
     (hSherm : ∀ ω, (Shat ω).IsHermitian) (hAherm : A.IsHermitian)
     (hmeas : ∀ k l, Measurable (fun ω => Shat ω k l))
     (hint : ∀ k l, Integrable (fun ω => (Shat ω k l - A k l) ^ 2) P)
     {v η : ℝ} (hη : 0 < η) (hmoment : ∀ k l, ∫ ω, (Shat ω k l - A k l) ^ 2 ∂P ≤ v) :
-    P {ω | ∀ k : Fin n,
-        Matrix.sortedEigenvalues hAherm k - (n : ℝ) * η ≤ Matrix.sortedEigenvalues (hSherm ω) k}
+    P {ω | ∀ k : Fin (Fintype.card (Fin n)),
+        hAherm.eigenvalues₀ k - (n : ℝ) * η ≤ (hSherm ω).eigenvalues₀ k}
       ≥ 1 - ENNReal.ofReal ((n : ℝ) ^ 2 * v / η ^ 2) := by
   sorry
 

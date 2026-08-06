@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.SpectralTheory.Compatibility
 import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+import DavisKahan.BoundedOperator.Compat
 
 /-!
 # The complex operator angle calculus: honest first rungs
@@ -27,6 +27,8 @@ with a real-scalar bridge by complexification expected later.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan
 
 open scoped InnerProductSpace
 
@@ -421,7 +423,7 @@ theorem cosAngleOperatorC_eq_zero_imp_of_acute (U V : Submodule ℂ E)
     (hacute : IsAcute U V) {x : E} (hx : x ∈ U)
     (h0 : cosAngleOperatorC U V x = 0) : x = 0 := by
   have hglt : directedGap U V < 1 :=
-    lt_of_le_of_lt (directedGap_le_subspaceGap U V) hacute
+    lt_of_le_of_lt (directedProjectionGap_le_projectionGap U V) hacute
   have hg0 : 0 ≤ directedGap U V := by
     rw [show directedGap U V =
       ‖Vᗮ.starProjection ∘L U.starProjection‖ from rfl]
@@ -563,7 +565,7 @@ theorem cosAngleExtendedC_ker_bot_range_top (U V : Submodule ℂ E)
     (cosAngleExtendedC U V).ker = ⊥ ∧
       (cosAngleExtendedC U V).range = ⊤ := by
   have hglt : directedGap U V < 1 :=
-    lt_of_le_of_lt (directedGap_le_subspaceGap U V) hacute
+    lt_of_le_of_lt (directedProjectionGap_le_projectionGap U V) hacute
   have hg0 : 0 ≤ directedGap U V := by
     rw [show directedGap U V =
       ‖Vᗮ.starProjection ∘L U.starProjection‖ from rfl]
@@ -953,7 +955,7 @@ theorem cosTwoAngleExtendedC_ker_bot_range_top (U V : Submodule ℂ E)
       ‖Vᗮ.starProjection ∘L U.starProjection‖ from rfl]
     exact norm_nonneg _
   have hglt : directedGap U V < Real.sqrt 2 / 2 :=
-    lt_of_le_of_lt (directedGap_le_subspaceGap U V) hquarter
+    lt_of_le_of_lt (directedProjectionGap_le_projectionGap U V) hquarter
   have h2 : (Real.sqrt 2) ^ 2 = 2 := Real.sq_sqrt (by norm_num)
   have hgsq : 2 * directedGap U V ^ 2 < 1 := by nlinarith
   set c : ℝ := min (1 - 2 * directedGap U V ^ 2) 1 with hc
@@ -1011,7 +1013,7 @@ theorem norm_cosAngleExtendedCEquiv_symm_apply_le (U V : Submodule ℂ E)
       (min (Real.sqrt (1 - directedGap U V ^ 2)) 1)⁻¹ * ‖y‖ := by
   set c : ℝ := min (Real.sqrt (1 - directedGap U V ^ 2)) 1 with hc
   have hglt : directedGap U V < 1 :=
-    lt_of_le_of_lt (directedGap_le_subspaceGap U V) hacute
+    lt_of_le_of_lt (directedProjectionGap_le_projectionGap U V) hacute
   have hg0 : 0 ≤ directedGap U V := by
     rw [show directedGap U V =
       ‖Vᗮ.starProjection ∘L U.starProjection‖ from rfl]
@@ -1040,7 +1042,7 @@ theorem norm_tanAngleOperatorC_le (U V : Submodule ℂ E)
         (min (Real.sqrt (1 - directedGap U V ^ 2)) 1)⁻¹ := by
   set c : ℝ := min (Real.sqrt (1 - directedGap U V ^ 2)) 1 with hc
   have hglt : directedGap U V < 1 :=
-    lt_of_le_of_lt (directedGap_le_subspaceGap U V) hacute
+    lt_of_le_of_lt (directedProjectionGap_le_projectionGap U V) hacute
   have hg0 : 0 ≤ directedGap U V := by
     rw [show directedGap U V =
       ‖Vᗮ.starProjection ∘L U.starProjection‖ from rfl]

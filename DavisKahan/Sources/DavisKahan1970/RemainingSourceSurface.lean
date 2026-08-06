@@ -11,6 +11,9 @@ import DavisKahan.TanTheta.Spectrum
 import DavisKahan.TanTheta.UnboundedGraphAngle
 import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 import DavisKahan.TanTheta.Theorem63FiniteSource
+import DavisKahan.TanTheta.Theorem63InfiniteTrial
+import DavisKahan.TanTheta.Theorem63Unbounded
+import DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
@@ -34,6 +37,7 @@ namespace RemainingSourceSurface
 
 open ExactSinTheta
 open DavisKahanExt
+open TauCeti.DavisKahan
 
 universe u v
 
@@ -246,10 +250,27 @@ unitarily-invariant-norm statement. -/
 alias theorem6_3_unbounded_graphAngle_opNorm_partial :=
   DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_trialBlock
 
-/-- Unique frontier marker for the still-open arbitrary-ideal unbounded scope.
-Its type deliberately records only the currently grounded operator-norm
-specialization; the manifest marks this declaration as an open obligation. -/
+/-- Unique frontier marker for the arbitrary-ideal unbounded scope.
+
+**Closed 2026-08-06.**  It used to alias the operator-norm graph-angle companion, and
+the manifest carried it as an open obligation, because the paper claims *arbitrary
+unitarily invariant norm* and only the operator norm was grounded.  It now aliases the
+ideal-gauge theorem.
+
+The ambient operator is closed, unbounded and self-adjoint; `V` is its spectral subspace
+for `Set.Iic α`; the spectral gap `Set.Ioo α (α + δ)` carries no spectrum; the Ritz
+compression is bounded above by `α`.  The tangent representative is constructed, not
+assumed. -/
 alias unbounded_angle_theorems_source_scope_partial_marker :=
+  ExactTanTheta.theorem6_3_unbounded_ideal_directedTangent
+
+/-- The unbounded tangent theorem with an arbitrary tangent representative supplied. -/
+alias theorem6_3_unbounded_tanTheta_ideal :=
+  ExactTanTheta.theorem6_3_unbounded_ideal
+
+/-- Retained: the operator-norm graph-angle companion.  Useful partial coverage, and
+**not** the arbitrary-unitarily-invariant-norm scope claim -- that is the alias above. -/
+alias theorem6_3_unbounded_graphAngle_opNorm_companion :=
   DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_trialBlock
 
 /-- Completed finite-trial/arbitrary-ambient Ky Fan root of Theorem 6.3. -/
@@ -259,6 +280,90 @@ alias theorem6_3_all_kyFan_core :=
 /-- Completed bounded source-faithful Davis--Kahan Theorem 6.3. -/
 alias theorem6_3_generalizedTanTheta_source_ideal :=
   ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal
+
+/-! ### Theorem 6.3 without a tangent-representative hypothesis
+
+The two aliases above quantify over a `tanTheta0` satisfying
+`HasTheorem63DirectedTangentApproximationNumbers`, and until 2026-08-05 nothing
+in the repository constructed one — so the compiled Theorem 6.3 was a
+conditional whose antecedent had no witness, which is weaker than what Davis and
+Kahan assert.
+
+`theorem63DirectedTangent` is the witness: diagonal in the right singular basis
+of the sine block, with entries `tan (arcsin sᵢ)`.  Its finiteness needs
+`sᵢ < 1`, and that is not a new hypothesis — `theorem63_singularValues_sine_lt_one`
+derives it from the source gap the theorem already assumes.  The two aliases
+below therefore carry exactly the printed hypotheses and nothing else. -/
+
+/-- The directed tangent representative of Theorem 6.3, and the proof that it
+has the approximation numbers the theorem asks for. -/
+alias theorem6_3_directedTangent :=
+  ExactTanTheta.theorem63DirectedTangent
+
+alias theorem6_3_directedTangent_approximationNumbers :=
+  ExactTanTheta.hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent
+
+/-- Theorem 6.3's Ky Fan root with the representative supplied, not assumed. -/
+alias theorem6_3_all_kyFan_core_unconditional :=
+  ExactTanTheta.theorem6_3_all_kyFan_core_directedTangent
+
+/-- Theorem 6.3 at ideal-gauge scope with the representative supplied, not
+assumed. -/
+alias theorem6_3_generalizedTanTheta_source_ideal_unconditional :=
+  ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal_directedTangent
+
+/-! ### The equal-rank tangent theorem
+
+Section 2's tangent theorem is about a pair of subspaces of **equal** rank, so
+it cannot be obtained by specialising a statement that assumes
+`rank Z < rank V`.  It does not have to be: the printed `dim X(E₀) < dim X(F₀)`
+does one job — under the paper's separability convention it forces the trial
+coordinate space to be finite-dimensional — and here that is an explicit
+instance hypothesis.  Lean had already recorded the redundancy, binding the
+comparison as `_hStrictDimension` and never using it.
+
+`theorem6_3_equalRank_tanTheta_ideal` is the residual half of the Section 2
+tangent theorem at arbitrary unitarily invariant ideal-gauge scope, in an
+arbitrary complete complex Hilbert space, with a finite-dimensional trial
+space and no dimension comparison. -/
+
+/-- The equal-rank tangent bound from form bounds. -/
+alias theorem6_3_equalRank_tanTheta_formBounds :=
+  ExactTanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank
+
+/-- The equal-rank tangent bound in the source's spectral-separation form. -/
+alias theorem6_3_equalRank_tanTheta_ideal :=
+  ExactTanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral
+
+/-! ### The equal-dimensional infinite/noncompact tangent theorem
+
+The two aliases above still assume a finite-dimensional trial space.  The paper's
+Section 2 claims the theorem for arbitrary equal-dimensional pairs in an infinite
+Hilbert space, and its Appendix supplies the missing case by the finite-projector
+cutoff/Ky-Fan limiting argument.  That passage is formalized in
+`DavisKahan/TanTheta/Theorem63InfiniteTrial.lean`: the trial subspace carries **no**
+dimension hypothesis, the tangent representative is exhibited with the paper's
+approximation numbers (`tan (arcsin sᵢ)` over the directed sine block's approximation
+numbers), and the bound holds in every Fan-dominant unitarily invariant ideal gauge.
+
+The residual half is stated in the source's spectral-separation form and in form-bound
+form; the perturbation companion assumes invariance of the trial space under the
+perturbed operator, exactly as in the finite case. -/
+
+/-- Section 2 tangent theorem, residual half, at arbitrary trial dimension and
+ideal-gauge scope, spectral-separation form. -/
+alias theorem6_3_equalDimension_tanTheta_ideal_spectral :=
+  ExactTanTheta.theorem6_3_infiniteTrial_spectral_exists
+
+/-- Section 2 tangent theorem, residual half, at arbitrary trial dimension and
+ideal-gauge scope, form-bound form. -/
+alias theorem6_3_equalDimension_tanTheta_ideal_formBounds :=
+  ExactTanTheta.theorem6_3_infiniteTrial_of_formBounds_exists
+
+/-- Section 2 tangent theorem, perturbation half, at arbitrary trial dimension and
+ideal-gauge scope. -/
+alias theorem6_3_equalDimension_tanTheta_perturbation :=
+  MathAhead.Section2.theorem6_3_perturbation_infiniteTrial
 
 end GeneralizedTangent
 

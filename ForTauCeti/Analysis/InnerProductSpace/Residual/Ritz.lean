@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 
 /-!
 # Ritz compression and residual
@@ -34,6 +36,8 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -51,6 +55,7 @@ noncomputable def compression (A : E →ₗ[𝕜] E) (X : F →ₗᵢ[𝕜] E) :
 
 /-- Residual of an approximate invariant pair represented by an isometric
 embedding. -/
+@[expose]
 noncomputable def residual (A : E →ₗ[𝕜] E) (X : F →ₗᵢ[𝕜] E)
     (M : F →ₗ[𝕜] F) : F →ₗ[𝕜] E :=
   A ∘ₗ X.toLinearMap - X.toLinearMap ∘ₗ M
@@ -62,6 +67,7 @@ noncomputable def ritzResidual (A : E →ₗ[𝕜] E) (X : F →ₗᵢ[𝕜] E) 
   residual A X (compression A X)
 
 /-- The represented approximate subspace. -/
+@[expose]
 def approximateSubspace (X : F →ₗᵢ[𝕜] E) : Submodule 𝕜 E :=
   LinearMap.range X.toLinearMap
 
@@ -167,10 +173,10 @@ that of the ambient perturbation.
 theorem opNorm_residual_le_perturbation
     {A B : E →ₗ[𝕜] E} (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F)
     (hBX : B ∘ₗ X.toLinearMap = X.toLinearMap ∘ₗ M) :
-    RectangularUnitarilyInvariantNorm.opNorm (residual A X M) ≤
+    RectangularUnitarilyInvariantSeminorm.opNorm (residual A X M) ≤
       ‖(A - B).toContinuousLinearMap‖ := by
   rw [residual_eq_perturbation_comp X M hBX,
-    RectangularUnitarilyInvariantNorm.opNorm_apply]
+    RectangularUnitarilyInvariantSeminorm.opNorm_apply]
   have hcomp :
       ((A - B) ∘ₗ X.toLinearMap).toContinuousLinearMap =
         (A - B).toContinuousLinearMap ∘L X.toLinearMap.toContinuousLinearMap := by
@@ -195,9 +201,9 @@ compression error.
 -/
 theorem residual_frobenius_pythagoras (A : E →ₗ[𝕜] E)
     (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F) :
-    RectangularUnitarilyInvariantNorm.frobenius (residual A X M) ^ 2 =
-      RectangularUnitarilyInvariantNorm.frobenius (ritzResidual A X) ^ 2 +
-      RectangularUnitarilyInvariantNorm.frobenius (compression A X - M) ^ 2 := by
+    RectangularUnitarilyInvariantSeminorm.frobenius (residual A X M) ^ 2 =
+      RectangularUnitarilyInvariantSeminorm.frobenius (ritzResidual A X) ^ 2 +
+      RectangularUnitarilyInvariantSeminorm.frobenius (compression A X - M) ^ 2 := by
   let b := stdOrthonormalBasis 𝕜 F
   have hdecomp : residual A X M =
       ritzResidual A X + X.toLinearMap ∘ₗ (compression A X - M) := by
@@ -246,9 +252,9 @@ theorem residual_frobenius_pythagoras (A : E →ₗ[𝕜] E)
           ‖X d‖ * ‖X d‖ := hpythCodomain
       _ = ‖ritzResidual A X (b i)‖ * ‖ritzResidual A X (b i)‖ +
           ‖d‖ * ‖d‖ := by rw [hnorm]
-  rw [RectangularUnitarilyInvariantNorm.frobenius_apply (residual A X M) b,
-    RectangularUnitarilyInvariantNorm.frobenius_apply (ritzResidual A X) b,
-    RectangularUnitarilyInvariantNorm.frobenius_apply (compression A X - M) b,
+  rw [RectangularUnitarilyInvariantSeminorm.frobenius_apply (residual A X M) b,
+    RectangularUnitarilyInvariantSeminorm.frobenius_apply (ritzResidual A X) b,
+    RectangularUnitarilyInvariantSeminorm.frobenius_apply (compression A X - M) b,
     Real.sq_sqrt (by positivity), Real.sq_sqrt (by positivity),
     Real.sq_sqrt (by positivity)]
   rw [← Finset.sum_add_distrib]
@@ -260,16 +266,16 @@ operators.
 -/
 theorem ritzResidual_frobenius_minimal (A : E →ₗ[𝕜] E)
     (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F) :
-    RectangularUnitarilyInvariantNorm.frobenius (ritzResidual A X) ≤
-      RectangularUnitarilyInvariantNorm.frobenius (residual A X M) := by
+    RectangularUnitarilyInvariantSeminorm.frobenius (ritzResidual A X) ≤
+      RectangularUnitarilyInvariantSeminorm.frobenius (residual A X M) := by
   have hpyth := residual_frobenius_pythagoras A X M
   have hsq :
-      RectangularUnitarilyInvariantNorm.frobenius (ritzResidual A X) ^ 2 ≤
-        RectangularUnitarilyInvariantNorm.frobenius (residual A X M) ^ 2 := by
+      RectangularUnitarilyInvariantSeminorm.frobenius (ritzResidual A X) ^ 2 ≤
+        RectangularUnitarilyInvariantSeminorm.frobenius (residual A X M) ^ 2 := by
     rw [hpyth]
     exact le_add_of_nonneg_right (sq_nonneg _)
   exact le_of_sq_le_sq hsq
-    (RectangularUnitarilyInvariantNorm.frobenius.nonneg _)
+    (RectangularUnitarilyInvariantSeminorm.frobenius.nonneg _)
 
 
 end TauCeti

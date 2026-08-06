@@ -53,9 +53,10 @@ Both #5 follow-ups are now resolved (Opus, 2026-06-12):
   current Mathlib *defines* `eigenvalues = eigenvalues₀ ∘ equiv`, so the
   sorted/unsorted bijection is definitional.  Staged
   `ForMathlib/Analysis/Matrix/Spectrum.lean`
-  `PosSemidef.eigenvalues₀_eq_zero_of_le` (`RCLike`).  The local operator-world
-  `Acharyya2025/MatrixPerturbation.lean` `sortedEigenvalues` is deliberately
-  left (retiring it is a large, zero-benefit refactor).
+  `PosSemidef.eigenvalues₀_eq_zero_of_le` (`RCLike`).  The local
+  `Acharyya2025/MatrixPerturbation.lean` `sortedEigenvalues` has since been
+  retired: the paper libraries state their spectral hypotheses against
+  `eigenvalues₀` directly.
 * **#5 proof shape — SUPERSEDED (Fable, 2026-06-12).** The R2b recon found the
   blocker was Mathlib's missing rank-factorization API; **candidate #14 below now
   supplies it**, and the PSD forward direction is reproved through the API: square
@@ -157,12 +158,15 @@ layers:
   `measure_forall_abs_sortedEig_sub_le_ge` (eigenvalue concentration),
   `measure_forall_sortedEig_ge_ge` (eigenvalue **lower bound**, take
   `η = c/(2n)`).  Takes per-entry second-moment bounds as hypotheses.
-- `ForMathlib/Probability/Moments/SampleCovariance.lean` — the iid → per-entry
-  specialization to the actual empirical covariance
-  `Σ̂_{kl} = n⁻¹ Σᵢ Vᵢ(k)Vᵢ(l)`: `sampleCovariance`,
-  `integral_sq_sampleCovariance_entry_le` (coordinate products fed through the
-  scalar `integral_norm_sq_average_sub_of_iid`), `isHermitian_sampleCovariance`,
-  and the capstone `measure_forall_sampleCovariance_sortedEig_ge_ge`.
+- `ForTauCeti/Probability/Moments/SampleSecondMoment.lean` — the iid → per-entry
+  specialization to the **uncentered** empirical second moment
+  `M̂_{kl} = n⁻¹ Σᵢ Vᵢ(k)Vᵢ(l)`: `sampleSecondMoment`,
+  `integral_sq_sampleSecondMoment_entry_le` (coordinate products fed through the
+  scalar `integral_norm_sq_average_sub_of_iid`), `isHermitian_sampleSecondMoment`,
+  and the capstone `measure_forall_sampleSecondMoment_eigenvalues₀_ge_ge`.
+  This entry was compiled while the module was `ForMathlib/.../SampleCovariance.lean`
+  and named its declarations `sampleCovariance…`; both the "covariance" wording and
+  the `ForMathlib` home are gone (no mean is subtracted, and `ForMathlib` retired).
 
 This furnishes the eigengap Helm's `halign` needs (a population eigenvalue
 floored at `c` stays above `c/2` w.h.p.).  Loose `n`/`n²` constants (the price
@@ -287,12 +291,7 @@ proof).
 `sqrt_sum_sq_le_sum_abs` (wrapper over `Finset.sum_sq_le_sq_sum_of_nonneg`);
 `abs_sqrt_rawStress_sub_le` (reverse triangle in ℓ² in disguise);
 `mds_nonempty` (pattern = `Continuous.exists_forall_le'`); `RankGap.lean` and
-`Overlap.lean` packaging (paper-specific composition glue);
-`MatrixPerturbation.sortedEigenvalues` (duplicate of Mathlib's
-`Matrix.IsHermitian.eigenvalues₀`).
-
-**Local cleanup opportunities** (not blocking, nice-to-have): migrate
-`sortedEigenvalues` to `eigenvalues₀`.
+`Overlap.lean` packaging (paper-specific composition glue).
 
 ---
 
@@ -376,12 +375,10 @@ control) and `posSemidef_iff_eq_sum_vecMulVec` (unconstrained count); the
 dimension-controlled version is missing and completes `Matrix.gram` as a
 characterization. State as an iff
 `B.PosSemidef ∧ B.rank ≤ d ↔ ∃ A : Matrix (Fin d) n 𝕜, B = Aᴴ * A`.
-Ride-along: restate `sortedEigenvalues_tail_eq_zero`
-(`MatrixPerturbation.lean:130`) against Mathlib's `eigenvalues₀` as
-`Matrix.PosSemidef.eigenvalues₀_eq_zero_of_le` — a pure counting proof via
-`rank_eq_card_non_zero_eigs` + `eigenvalues₀_antitone` is shorter than our
-operator-range detour. (`eigenvalues₀` currently has almost no API beyond
-antitonicity.)
+Ride-along, since done: the vanishing rank-`d` tail is
+`TauCeti.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le`, a counting proof via
+`rank_eq_card_non_zero_eigs` + `eigenvalues₀_antitone` rather than the operator-range
+detour it replaced.
 
 ### 6. Quantitative polar factor
 

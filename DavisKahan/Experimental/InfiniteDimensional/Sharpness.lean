@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.OperatorBlocks.OffDiagonal
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.Symmetric
+import DavisKahan.InfiniteDimensional.Ideals.Symmetric
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Sharp constants and planar extremal models
@@ -27,6 +28,10 @@ acute, ordered-gap, and rank hypotheses.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 open Filter

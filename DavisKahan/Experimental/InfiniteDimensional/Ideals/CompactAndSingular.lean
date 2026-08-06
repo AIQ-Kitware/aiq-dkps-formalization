@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.Forms
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.IdealIntervalExterior
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Compact operators, Schatten consequences, and singular subspaces
@@ -27,6 +29,10 @@ subspace perturbation through Hermitian dilation.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 

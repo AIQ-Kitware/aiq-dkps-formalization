@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.ContinuationContour
 import Mathlib.Analysis.Normed.Operator.NormedSpace
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Riesz integrals on proof-carrying continuation contours
@@ -27,6 +28,8 @@ restated; names and namespace are unchanged.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
 
 open Set
 open MeasureTheory

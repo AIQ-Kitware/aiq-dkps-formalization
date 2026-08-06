@@ -97,11 +97,11 @@ alias partIII_generalizedSinTheta_uiNorm :=
 invariant norm.
 
 This is an exact canonical alias of
-`UnitarilyInvariantNorm.apply_starProjection_comp_starProjection_le`.
+`UnitarilyInvariantSeminorm.apply_starProjection_comp_starProjection_le`.
 Its proof is the ordered Sylvester argument followed by the ideal property of
 the chosen unitarily invariant norm. -/
 alias partIII_sinTheta_uiNorm :=
-  UnitarilyInvariantNorm.apply_starProjection_comp_starProjection_le
+  UnitarilyInvariantSeminorm.apply_starProjection_comp_starProjection_le
 
 /-- The full-space canonical sine-angle-operator form.  It records explicitly
 the forward and reverse interval/exterior hypotheses needed for a
@@ -143,12 +143,12 @@ alias partIII_tanTheta_vector :=
 norm.
 
 This is an exact canonical alias of
-`UnitarilyInvariantNorm.sin_two_theta_starProjection_le`.  The proof reflects
+`UnitarilyInvariantSeminorm.sin_two_theta_starProjection_le`.  The proof reflects
 the reference operator through the perturbed reducing subspace, applies the
 single-angle theorem to the reflected pair, and identifies the cross block
 with one half of `sin 2 Theta`. -/
 alias partIII_sinTwoTheta_uiNorm :=
-  UnitarilyInvariantNorm.sin_two_theta_starProjection_le
+  UnitarilyInvariantSeminorm.sin_two_theta_starProjection_le
 
 /-- The same `sin 2 Theta` conclusion in the canonical full-space
 angle-operator representation. -/

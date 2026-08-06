@@ -29,6 +29,7 @@ namespace Frontier
 namespace RieszCircle
 
 open DavisKahanExt
+open TauCeti.DavisKahan
 
 universe u
 

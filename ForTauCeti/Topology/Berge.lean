@@ -3,12 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 -/
+module
 
-import ForTauCeti.Topology.ApproxMinimizer
-import Mathlib.Order.Filter.AtTopBot.CountablyGenerated
-import Mathlib.Topology.Constructions.SumProd
-import Mathlib.Analysis.SpecificLimits.Basic
-import Mathlib.Topology.Semicontinuity.Hemicontinuity
+public import ForTauCeti.Topology.ApproxMinimizer
+public import Mathlib.Order.Filter.AtTopBot.CountablyGenerated
+public import Mathlib.Topology.Constructions.SumProd
+public import Mathlib.Analysis.SpecificLimits.Basic
+public import Mathlib.Topology.Semicontinuity.Hemicontinuity
 
 /-! # Upper hemicontinuity of the argmin correspondence over a fixed compact set
 
@@ -83,6 +84,8 @@ Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); golfed a terminal
   Mathlib, `TauCeti` and `ForTauCeti` (rule 2 of
   `scripts/check_dependency_layers.py`); this module imports Mathlib only.
 -/
+
+public section
 
 /-!
 ### Provenance
@@ -181,6 +184,73 @@ theorem tendsto_subseq_isMinOn_of_isMinOn
     have hmin : g (p k) (x k) ≤ g (p k) y := (isMinOn_iff.mp (hxmin k)) y hy
     linarith
 
+/-- **Uniform closeness on a compact set, without first countability.**
+
+For every `ε > 0`, `g p` is uniformly within `ε` of `g p₀` on `K` once `p` is close enough to
+`p₀`.  Proved from the tube lemma `IsCompact.eventually_forall_of_forall_eventually` rather
+than from sequential compactness, which is what keeps `X` free of
+`[FirstCountableTopology]`. -/
+theorem eventually_forall_abs_sub_lt_of_isCompact {X : Type*} [TopologicalSpace X]
+    {K : Set X} (hK : IsCompact K)
+    {g : P → X → ℝ} (hg : Continuous (Function.uncurry g)) (p₀ : P) {ε : ℝ} (hε : 0 < ε) :
+    ∀ᶠ p in 𝓝 p₀, ∀ x ∈ K, |g p x - g p₀ x| < ε := by
+  refine hK.eventually_forall_of_forall_eventually fun x₀ _ => ?_
+  have hcont : ContinuousAt (fun z : P × X => |g z.1 z.2 - g p₀ z.2|) (p₀, x₀) :=
+    ((hg.continuousAt).sub
+      ((hg.comp (continuous_const.prodMk continuous_snd)).continuousAt)).abs
+  have hzero : |g p₀ x₀ - g p₀ x₀| = 0 := by simp
+  exact hcont (by simpa [hzero] using Iio_mem_nhds hε)
+
+/-- **Upper hemicontinuity of the argmin correspondence, with no countability hypothesis.**
+
+The same conclusion as `upperHemicontinuousAt_isMinOn` below, but free of
+`[FirstCountableTopology X]` and `[(𝓝 p₀).IsCountablyGenerated]`: those are artifacts of
+routing the proof through `UpperHemicontinuousAt.of_sequences`, not features of the
+mathematics.
+
+The argument is the classical one.  Let `V` be open around the `p₀`-argmin set.  If `K ⊆ V`
+there is nothing to do; otherwise `K \ V` is compact and nonempty, and no point of it
+minimises `g p₀`, so the minimum of `g p₀` over `K \ V` strictly exceeds its minimum over
+`K`.  Take `ε` a third of that gap and move `p` close enough that `g p` is uniformly within
+`ε` of `g p₀` on `K`: a minimiser of `g p` outside `V` would then be within `2ε` of the
+smaller value, contradicting the `3ε` gap. -/
+theorem upperHemicontinuousAt_isMinOn_of_isCompact {X : Type*} [TopologicalSpace X]
+    {K : Set X} (hK : IsCompact K)
+    {g : P → X → ℝ} (hg : Continuous (Function.uncurry g)) (p₀ : P) :
+    UpperHemicontinuousAt (fun p => {x ∈ K | IsMinOn (g p) K x}) p₀ := by
+  refine UpperHemicontinuousAt.of_forall_isOpen fun V hV hsub => ?_
+  have hcont : ∀ q : P, ContinuousOn (g q) K := fun q =>
+    (hg.comp (continuous_const.prodMk continuous_id)).continuousOn
+  rcases K.eq_empty_or_nonempty with rfl | hKne
+  · filter_upwards with p using fun x hx => absurd hx.1 (Set.notMem_empty x)
+  by_cases hKV : K ⊆ V
+  · filter_upwards with p using fun x hx => hKV hx.1
+  -- the part of `K` outside `V` is compact, nonempty, and misses every `p₀`-minimiser
+  have hKVc : IsCompact (K \ V) := hK.diff hV
+  have hKVne : (K \ V).Nonempty := by
+    obtain ⟨x, hxK, hxV⟩ := Set.not_subset.mp hKV
+    exact ⟨x, hxK, hxV⟩
+  obtain ⟨x₀, hx₀K, hx₀min⟩ := hK.exists_isMinOn hKne (hcont p₀)
+  obtain ⟨y₀, hy₀mem, hy₀min⟩ := hKVc.exists_isMinOn hKVne ((hcont p₀).mono Set.sdiff_subset)
+  have hgap : g p₀ x₀ < g p₀ y₀ := by
+    rcases lt_or_ge (g p₀ x₀) (g p₀ y₀) with h | h
+    · exact h
+    · exact absurd (hsub ⟨hy₀mem.1, fun z hz => le_trans h (hx₀min hz)⟩) hy₀mem.2
+  set ε := (g p₀ y₀ - g p₀ x₀) / 3 with hεdef
+  have hε : 0 < ε := by rw [hεdef]; linarith
+  filter_upwards [eventually_forall_abs_sub_lt_of_isCompact hK hg p₀ hε] with p hp x hx
+  by_contra hxV
+  have hxKV : x ∈ K \ V := ⟨hx.1, hxV⟩
+  have h1 : g p₀ y₀ ≤ g p₀ x := hy₀min hxKV
+  have h2 : |g p x - g p₀ x| < ε := hp x hx.1
+  have h3 : |g p x₀ - g p₀ x₀| < ε := hp x₀ hx₀K
+  have h4 : g p x ≤ g p x₀ := hx.2 hx₀K
+  have e2 := abs_lt.mp h2
+  have e3 := abs_lt.mp h3
+  have : g p₀ y₀ - g p₀ x₀ < 2 * ε := by linarith
+  rw [hεdef] at this
+  linarith
+
 /-- **Upper hemicontinuity of the argmin correspondence over a fixed compact set
 (the fixed-constraint case of Berge's maximum theorem), via Mathlib's
 `UpperHemicontinuousAt`.**
@@ -195,27 +265,10 @@ correspondence is `K`-valued (so the containment premise is trivial) and the
 closed-graph obligation is discharged by passing the minimization inequality
 `g (p n) (c n) ≤ g (p n) y` to the limit through joint continuity. -/
 theorem upperHemicontinuousAt_isMinOn {X : Type*} [TopologicalSpace X]
-    [FirstCountableTopology X] [T2Space X]
     {K : Set X} (hK : IsCompact K)
-    {g : P → X → ℝ} (hg : Continuous (Function.uncurry g))
-    (p₀ : P) [(𝓝 p₀).IsCountablyGenerated] :
-    UpperHemicontinuousAt (fun p => {x ∈ K | IsMinOn (g p) K x}) p₀ := by
-  refine UpperHemicontinuousAt.of_sequences hK.isSeqCompact
-    (Eventually.of_forall fun p => Set.sep_subset _ _) ?_
-  intro p hp c hc c₀ hc₀
-  -- `c n ∈ K` and `IsMinOn (g (p n)) K (c n)`; `p n → p₀`, `c n → c₀`.
-  have hcK : ∀ n, c n ∈ K := fun n => (hc n).1
-  refine ⟨hK.isClosed.mem_of_tendsto hc₀ (Eventually.of_forall hcK), ?_⟩
-  rw [isMinOn_iff]
-  intro y hy
-  -- pass `g (p n) (c n) ≤ g (p n) y` to the limit via joint continuity
-  have hL : Tendsto (fun n => g (p n) (c n)) atTop (𝓝 (g p₀ c₀)) :=
-    (hg.tendsto (p₀, c₀)).comp (hp.prodMk_nhds hc₀)
-  have hR : Tendsto (fun n => g (p n) y) atTop (𝓝 (g p₀ y)) :=
-    (hg.tendsto (p₀, y)).comp (hp.prodMk_nhds tendsto_const_nhds)
-  exact le_of_tendsto_of_tendsto hL hR
-    (Eventually.of_forall fun n => (isMinOn_iff.mp (hc n).2) y hy)
-
+    {g : P → X → ℝ} (hg : Continuous (Function.uncurry g)) (p₀ : P) :
+    UpperHemicontinuousAt (fun p => {x ∈ K | IsMinOn (g p) K x}) p₀ :=
+  upperHemicontinuousAt_isMinOn_of_isCompact hK hg p₀
 /-- **Value-function continuity over a fixed compact set (the value-function half
 of the fixed-constraint case of Berge's maximum theorem).**
 For jointly continuous `g`, a fixed nonempty compact `K`, and `P` first-countable,

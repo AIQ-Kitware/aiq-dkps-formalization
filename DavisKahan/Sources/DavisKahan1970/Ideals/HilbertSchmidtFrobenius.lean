@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
 /-!
 # Finite-dimensional Frobenius realization of the paper square norm
@@ -81,11 +81,11 @@ theorem paperHilbertSchmidtNorm_eq_rectangularFrobenius
     [FiniteDimensional 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) :
     paperHilbertSchmidtNorm A =
-      RectangularUnitarilyInvariantNorm.frobenius A.toLinearMap := by
+      RectangularUnitarilyInvariantSeminorm.frobenius A.toLinearMap := by
   unfold paperHilbertSchmidtNorm
   rw [paperHilbertSchmidtEnergy_eq_ofReal_sum_sq_singularValues,
     ENNReal.toReal_ofReal (Finset.sum_nonneg fun i _ => sq_nonneg _)]
-  exact (RectangularUnitarilyInvariantNorm.frobenius_eq_sqrt_sum_sq_singularValues
+  exact (RectangularUnitarilyInvariantSeminorm.frobenius_eq_sqrt_sum_sq_singularValues
     A.toLinearMap).symm
 
 /-- Square-operator spelling of the finite-dimensional Frobenius bridge. -/
@@ -96,7 +96,7 @@ theorem paperHilbertSchmidtNorm_eq_frobenius
     [FiniteDimensional 𝕜 E] [CompleteSpace E]
     (A : E →L[𝕜] E) :
     paperHilbertSchmidtNorm A =
-      TauCeti.UnitarilyInvariantNorm.frobenius 𝕜 E A.toLinearMap := by
+      TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E A.toLinearMap := by
   rw [paperHilbertSchmidtNorm_eq_rectangularFrobenius]
   rfl
 

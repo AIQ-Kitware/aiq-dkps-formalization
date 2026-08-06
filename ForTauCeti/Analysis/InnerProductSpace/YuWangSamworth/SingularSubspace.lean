@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics
-import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.Gram.Operator
-import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.Gram.Operator
+public import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
 
 /-!
 # Singular-subspace Davis--Kahan and Wedin-style corollaries
@@ -39,6 +41,8 @@ closure this file rests on out of `ForMathlib` and `DavisKahan` entirely, so the
 last edge to sever was this one.
 
 -/
+
+public section
 
 namespace TauCeti
 
@@ -130,7 +134,7 @@ theorem rightSingularSubspace_sinTheta_le
         (rightSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
       (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
         ‖(Â - A).toContinuousLinearMap‖ := by
-  have hdk := sinTheta_perturbation_le (UnitarilyInvariantNorm.opNorm 𝕜 E)
+  have hdk := sinTheta_perturbation_le (UnitarilyInvariantSeminorm.opNorm 𝕜 E)
     (isSymmetric_rightGram A) (isSymmetric_rightGram Â)
     (isInvariant_spectralSubspace (rightGram A) (Set.Icc a b))
     (isInvariant_spectralSubspace (rightGram Â) (Set.Icc a b)) hδ hgap
@@ -151,7 +155,7 @@ theorem leftSingularSubspace_sinTheta_le
         (leftSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
       (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
         ‖(Â - A).toContinuousLinearMap‖ := by
-  have hdk := sinTheta_perturbation_le (UnitarilyInvariantNorm.opNorm 𝕜 F)
+  have hdk := sinTheta_perturbation_le (UnitarilyInvariantSeminorm.opNorm 𝕜 F)
     (isSymmetric_leftGram A) (isSymmetric_leftGram Â)
     (isInvariant_spectralSubspace (leftGram A) (Set.Icc a b))
     (isInvariant_spectralSubspace (leftGram Â) (Set.Icc a b)) hδ hgap
@@ -177,7 +181,7 @@ theorem singularSubspace_dilation_sinTheta_le
       (Real.pi / 2) *
         ‖(hermitianDilation Â - hermitianDilation A).toContinuousLinearMap‖ := by
   exact sinTheta_perturbation_le_of_spectralDistance
-    (UnitarilyInvariantNorm.opNorm 𝕜 (WithLp 2 (E × F)))
+    (UnitarilyInvariantSeminorm.opNorm 𝕜 (WithLp 2 (E × F)))
     (isSymmetric_hermitianDilation A) (isSymmetric_hermitianDilation Â)
     (isInvariant_spectralSubspace (hermitianDilation A) Ω)
     (isInvariant_spectralSubspace (hermitianDilation Â) Ω) hδ hgap

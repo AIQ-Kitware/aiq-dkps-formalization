@@ -556,8 +556,8 @@ private theorem kyFan_tanTheta0_ritzResidual_le_of_le_finrank
     (htan : tanTheta0.singularValues =
       principalTangents (approximateSubspace X) U)
     {k : ℕ} (hk : k ≤ finrank 𝕜 F) :
-    δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k tanTheta0 ≤
-      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+    δ * RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k tanTheta0 ≤
+      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
         (ritzResidual A X) := by
   let S := sinThetaEmbedding U X
   let castIndex : Fin k → Fin (finrank 𝕜 F) := fun i => Fin.castLE hk i
@@ -576,10 +576,10 @@ private theorem kyFan_tanTheta0_ritzResidual_le_of_le_finrank
     simpa [castIndex] using
       (orthonormal_iff_ite.mp (rightSingularBasis S).orthonormal
         (castIndex i) (castIndex j))
-  have hsum := RectangularUnitarilyInvariantNorm.sum_le_rectangularKyFanSum_of_orthonormal
+  have hsum := RectangularUnitarilyInvariantSeminorm.sum_le_rectangularKyFanSum_of_orthonormal
     hk hu hv (fun i =>
       tanThetaResidualWitness_scalar hA hU X hδ hgap tanTheta0 htan (castIndex i))
-  unfold RectangularUnitarilyInvariantNorm.rectangularKyFanSum
+  unfold RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum
   rw [Finset.mul_sum]
   exact hsum
 
@@ -603,16 +603,16 @@ theorem kyFan_tanTheta0_ritzResidual_le
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
       principalTangents (approximateSubspace X) U) (k : ℕ) :
-    δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k tanTheta0 ≤
-      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+    δ * RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k tanTheta0 ≤
+      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
         (ritzResidual A X) := by
   by_cases hk : k ≤ finrank 𝕜 F
   · exact kyFan_tanTheta0_ritzResidual_le_of_le_finrank hA hU X hδ hgap
       tanTheta0 htan hk
   · have hk' : finrank 𝕜 F ≤ k := Nat.le_of_not_ge hk
-    rw [RectangularUnitarilyInvariantNorm.rectangularKyFanSum_eq_finrank_of_finrank_le
+    rw [RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum_eq_finrank_of_finrank_le
           tanTheta0 hk',
-      RectangularUnitarilyInvariantNorm.rectangularKyFanSum_eq_finrank_of_finrank_le
+      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum_eq_finrank_of_finrank_le
           (ritzResidual A X) hk']
     exact kyFan_tanTheta0_ritzResidual_le_of_le_finrank hA hU X hδ hgap
       tanTheta0 htan le_rfl
@@ -627,7 +627,7 @@ As in the paper, `tanTheta0` may be any rectangular operator whose singular
 values are the principal tangents.  The spectral assumptions themselves force
 transversality. -/
 theorem tanTheta0_ritzResidual_le
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
@@ -637,12 +637,12 @@ theorem tanTheta0_ritzResidual_le
       principalTangents (approximateSubspace X) U) :
     δ * N tanTheta0 ≤ N (ritzResidual A X) := by
   have hprefix : ∀ k,
-      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
           (((δ : ℝ) : 𝕜) • tanTheta0) ≤
-        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+        RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
           (ritzResidual A X) := by
     intro k
-    rw [RectangularUnitarilyInvariantNorm.rectangularKyFanSum_real_smul
+    rw [RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum_real_smul
       k tanTheta0 hδ.le]
     exact kyFan_tanTheta0_ritzResidual_le hA hU X hβα hδ hgap
       tanTheta0 htan k
@@ -658,7 +658,7 @@ setup of Sections 1--2 of Davis--Kahan.  The Ritz choice
 The tangent sequence is directed from the trial space `range X` toward the
 exact invariant subspace `U`. -/
 theorem davisKahan1970_tanTheta0_ritzResidual_le
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) (_hrank : finrank 𝕜 F = finrank 𝕜 U)
@@ -677,7 +677,7 @@ has smaller dimension than the exact invariant subspace being approximated.
 All other assumptions and the conclusion are identical to the source theorem
 in the finite-dimensional setting. -/
 theorem davisKahan1970_generalizedTanTheta0_ritzResidual_le
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) (_hrank : finrank 𝕜 F < finrank 𝕜 U)
@@ -692,7 +692,7 @@ theorem davisKahan1970_generalizedTanTheta0_ritzResidual_le
 /-- The exact theorem also records explicitly that no principal tangent has a
 pole. -/
 theorem tanTheta0_ritzResidual_le_and_isTransverse
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)

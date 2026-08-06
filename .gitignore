@@ -27,3 +27,10 @@ dev/reference-repos/
 *.toc
 *.tar.gz
 *.gz
+
+# leanq declaration indexes (regenerable)
+.leanq/
+
+# >>> llm_resource_tally local state (managed) >>>
+/.llm_resource_tally/local/
+# <<< llm_resource_tally local state (managed) <<<

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Basic
+import DavisKahan.InfiniteDimensional.Sylvester.Basic
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
@@ -27,6 +27,8 @@ namespace MathAhead
 namespace HiddenFoundations
 
 open DavisKahanExt
+open TauCeti.DavisKahan
+open TauCeti.DavisKahan.Experimental.Foundation
 open ExactSinTheta
 open MeasureTheory
 

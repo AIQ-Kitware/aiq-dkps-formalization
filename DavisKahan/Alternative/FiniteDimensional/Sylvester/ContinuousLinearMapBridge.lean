@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
 import DavisKahan.BoundedOperator.Compat
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Compatibility bridges for the historical continuous-linear-map API
@@ -12,6 +13,8 @@ import DavisKahan.BoundedOperator.Compat
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
 
 open DavisKahan
 
@@ -82,7 +85,7 @@ singular-value control, the orbit barycenter, and this
 continuous-linear-map bridge contain no further analytic argument.-/
 theorem ideal_sylvester_le
     [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
-    (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
     {A : F →L[𝕜] F} {B : E →L[𝕜] E} {X C : E →L[𝕜] F}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
@@ -114,7 +117,7 @@ theorem ideal_sylvester_le_complex
     {EC FC : Type*}
     [NormedAddCommGroup EC] [InnerProductSpace ℂ EC] [FiniteDimensional ℂ EC]
     [NormedAddCommGroup FC] [InnerProductSpace ℂ FC] [FiniteDimensional ℂ FC]
-    (N : RectangularUnitarilyInvariantNorm ℂ EC FC)
+    (N : RectangularUnitarilyInvariantSeminorm ℂ EC FC)
     {A : FC →L[ℂ] FC} {B : EC →L[ℂ] EC} {X C : EC →L[ℂ] FC}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
@@ -146,7 +149,7 @@ theorem ideal_sylvester_le_real
     {ER FR : Type*}
     [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [FiniteDimensional ℝ ER]
     [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [FiniteDimensional ℝ FR]
-    (N : RectangularUnitarilyInvariantNorm ℝ ER FR)
+    (N : RectangularUnitarilyInvariantSeminorm ℝ ER FR)
     {A : FR →L[ℝ] FR} {B : ER →L[ℝ] ER} {X C : ER →L[ℝ] FR}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)

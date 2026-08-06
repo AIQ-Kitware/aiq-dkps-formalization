@@ -199,13 +199,11 @@ structure GrowingSpectralSubevents
   event : Nat → Set Ωref
   measurable : ∀ n, MeasurableSet (event n)
   highProb : HighProbAtTop μref hμref event
-  floor : ∀ n ωref, ωref ∈ event n → ∀ f (i : Fin (n + 1)),
+  floor : ∀ n ωref, ωref ∈ event n → ∀ f (i : Fin (Fintype.card (Fin (n + 1)))),
     (i : Nat) < d →
-      α ≤ sortedEigenvalues
-        (populationPosSemidefOfGram D z hzGram n ωref f).isHermitian i
-  ceiling_bound : ∀ n ωref, ωref ∈ event n → ∀ f (i : Fin (n + 1)),
-    sortedEigenvalues
-        (populationPosSemidefOfGram D z hzGram n ωref f).isHermitian i ≤
+      α ≤ (populationPosSemidefOfGram D z hzGram n ωref f).isHermitian.eigenvalues₀ i
+  ceiling_bound : ∀ n ωref, ωref ∈ event n → ∀ f (i : Fin (Fintype.card (Fin (n + 1)))),
+    (populationPosSemidefOfGram D z hzGram n ωref f).isHermitian.eigenvalues₀ i ≤
       ceiling n
 
 /-- A stage-dependent finite perspective net used to upgrade pointwise response

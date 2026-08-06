@@ -309,6 +309,7 @@ theorem gauge_comp_le_of_norm_le_one {L : F →L[𝕜] G} {A : E →L[𝕜] F} {
 
 Closure under `0`, `+` and `•` is a consequence of the gauge laws, so the
 module structure of the ideal does not have to be assumed. -/
+@[expose]
 def carrier : Submodule 𝕜 (E →L[𝕜] F) where
   carrier := {A | N.gauge A ≠ ∞}
   zero_mem' := by simp

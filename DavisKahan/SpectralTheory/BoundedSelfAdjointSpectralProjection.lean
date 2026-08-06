@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
 import DavisKahan.SpectralTheory.Real.SpectralRestriction
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Canonical spectral projections
@@ -26,9 +27,12 @@ operator with `boundedSelfAdjointSpectralProjection` instead.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open Set
 open scoped InnerProductSpace
 open DavisKahan.Experimental
+open DavisKahan.Experimental.Foundation
 
 universe v
 

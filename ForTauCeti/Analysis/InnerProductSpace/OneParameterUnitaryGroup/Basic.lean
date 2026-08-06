@@ -111,6 +111,7 @@ lemma norm_one [Nontrivial H] (U : OneParameterUnitaryGroup (H := H)) (t : ℝ) 
 /-! ### The difference quotient -/
 
 /-- The difference quotient whose limit is the generator: `t ↦ (U t ψ - ψ)/(it)`. -/
+@[expose]
 noncomputable def genDiffQuot (U : OneParameterUnitaryGroup (H := H)) (ψ : H) : ℝ → H :=
   fun t => ((I * (t : ℂ))⁻¹) • (U.U t ψ - ψ)
 

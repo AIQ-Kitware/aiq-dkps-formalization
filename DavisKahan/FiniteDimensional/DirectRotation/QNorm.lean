@@ -47,8 +47,8 @@ variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
 unitarily invariant norm of the positive part `A⋆ A`.  Equivalently `N` is
 obtained from a symmetric gauge function applied to the *squares* of the
 singular values. -/
-def IsQNorm (N : UnitarilyInvariantNorm 𝕜 E) : Prop :=
-  ∃ M : UnitarilyInvariantNorm 𝕜 E,
+def IsQNorm (N : UnitarilyInvariantSeminorm 𝕜 E) : Prop :=
+  ∃ M : UnitarilyInvariantSeminorm 𝕜 E,
     ∀ A : E →ₗ[𝕜] E, N A ^ 2 = M (LinearMap.adjoint A ∘ₗ A)
 
 /-- The displacement square is the positive part of the displacement. -/
@@ -67,7 +67,7 @@ arbitrary-unitarily-invariant-norm version is false, and no angle threshold
 repairs it, but restricting the norm class to `Q`-norms both repairs it and
 lets the hypotheses `Θ ≤ π/3` and "real space" be dropped. -/
 theorem directRotation_fullDisplacement_qnorm
-    (N : UnitarilyInvariantNorm 𝕜 E) (hN : IsQNorm N)
+    (N : UnitarilyInvariantSeminorm 𝕜 E) (hN : IsQNorm N)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)

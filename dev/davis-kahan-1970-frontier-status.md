@@ -10,24 +10,24 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 
 | Paper item | Source kind | Frontier endpoint(s) | Missing pieces | Est. complete | Grounded |
 |---|---|---|---:|---:|:---:|
-| `S2-tan-theta` — Section 2, tan theta theorem: Single-angle tangent theorem | unnumbered_theorem | `s2-tan-theta` | 1 / 4 | 75% | no |
+| `S2-tan-theta` — Section 2, tan theta theorem: Single-angle tangent theorem | unnumbered_theorem | `s2-tan-theta` | 0 / 4 | 100% | yes |
 | `S2-sin-two-theta` — Section 2, sin 2 theta theorem: Double-angle sine theorem | unnumbered_theorem | `s7-sin2` | 0 / 2 | 100% | yes |
 | `S2-tan-two-theta` — Section 2, tan 2 theta theorem: Double-angle tangent theorem | unnumbered_theorem | `s7-tan2` | 0 / 3 | 100% | yes |
 | `S2-sharpness` — Section 2, paragraph after four theorems: Best constants and simultaneous equality | source_claim | `base-sharpness` | 0 / 1 | 100% | yes |
-| `S2-unbounded-scope` — Section 2, final paragraphs: Unbounded self-adjoint scope | scope_claim | `s2-unbounded-scope` | 1 / 10 | 90% | no |
+| `S2-unbounded-scope` — Section 2, final paragraphs: Unbounded self-adjoint scope | scope_claim | `s2-unbounded-scope` | 0 / 10 | 100% | yes |
 | `DK-3.1-def` — Definition 3.1: Direct rotation | definition | `base-acute-direct-rotation` | 0 / 1 | 100% | yes |
 | `DK-3.1-prop` — Proposition 3.1: Acute direct rotation existence and uniqueness | proposition | `s3-prop3-1` | 0 / 3 | 100% | yes |
 | `DK-3.2-prop` — Proposition 3.2: Nonacute existence criterion | proposition | `s3-prop3-2-existence` | 0 / 6 | 100% | yes |
 | `DK-3.3-prop` — Proposition 3.3: Principal square-root characterization | proposition | `s3-prop3-3` | 0 / 5 | 100% | yes |
 | `DK-3.4-prop` — Proposition 3.4: Square as a direct rotation | proposition | `s3-prop3-4` | 0 / 2 | 100% | yes |
-| `DK-3.1-thm` — Theorem 3.1: Classification of pairs of subspaces | theorem | `s3-theorem3-1` | 2 / 7 | 71% | no |
-| `DK-3.1-cor` — Corollary 3.1: Compact classification by angle eigenvalues | corollary | `s3-cor3-1` | 2 / 6 | 66% | no |
+| `DK-3.1-thm` — Theorem 3.1: Classification of pairs of subspaces | theorem | `s3-theorem3-1` | 0 / 7 | 100% | yes |
+| `DK-3.1-cor` — Corollary 3.1: Compact classification by angle eigenvalues | corollary | `s3-cor3-1` | 0 / 6 | 100% | yes |
 | `DK-3.5-prop` — Proposition 3.5: Angle commutation and eigenspace geometry | proposition | `s3-prop3-5` | 0 / 5 | 100% | yes |
 | `DK-3.2-cor` — Corollary 3.2: Reversal symmetry | corollary | `s3-cor3-2` | 0 / 2 | 100% | yes |
 | `DK-4.1-prop` — Proposition 4.1: Pointwise and singular-value extremality of the direct rotation | proposition | `s4-prop4-1` | 0 / 2 | 100% | yes |
 | `DK-4.1-cor` — Corollary 4.1: UI-norm minimality of direct rotation displacement | corollary | `s4-cor4-1` | 0 / 3 | 100% | yes |
-| `DK-4.2-prop` — Proposition 4.2: Basis-angle square-sum extremality | proposition | `s4-prop4-2` | 1 / 2 | 50% | no |
-| `DK-4.3-prop` — Proposition 4.3: Squared displacement UI-norm minimality | proposition | `s4-prop4-3` | 1 / 2 | 50% | no |
+| `DK-4.2-prop` — Proposition 4.2: Basis-angle square-sum extremality | proposition | `s4-prop4-2` | 0 / 2 | 100% | yes |
+| `DK-4.3-prop` — Proposition 4.3: Squared displacement UI-norm minimality | proposition | `s4-prop4-3` | 0 / 2 | 100% | yes |
 | `DK-5.1-thm` — Theorem 5.1: Banach-space Sylvester lower bound | theorem | `s5-theorem5-1` | 0 / 2 | 100% | yes |
 | `DK-5.2-thm` — Theorem 5.2: Semibounded self-adjoint Sylvester theorem | theorem | `base-theorem5-2` | 0 / 1 | 100% | yes |
 | `DK-6.3-thm` — Theorem 6.3: Generalized tangent theorem | theorem | `s6-theorem6-3` | 0 / 6 | 100% | yes |
@@ -48,14 +48,14 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 - Manifest nodes: **80**
 - Textually present: **80**
 - Paper result rows represented in the frontier: **32**
-- Census rows requiring frontier coverage: **29**
-- Census rows mapped: **29**
+- Census rows requiring frontier coverage: **11**
+- Census rows mapped: **11**
 - Declarations resolving in Lean: **80**
-- Declarations with admission-free Lean closure: **60**
-- Recursively grounded manifest nodes: **58**
-- Paper results recursively grounded: **21 / 32**
+- Declarations with admission-free Lean closure: **68**
+- Recursively grounded manifest nodes: **68**
+- Paper results recursively grounded: **27 / 32**
 - Source-role endpoints resolving: **29 / 29**
-- Source-role endpoints recursively grounded: **19 / 29**
+- Source-role endpoints recursively grounded: **25 / 29**
 
 ## Manifest nodes
 
@@ -75,8 +75,8 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s3-generic-cosine-restriction` | foundation | no |  | high | no | yes | yes | yes | yes |
 | `s3-generic-sine-restriction` | foundation | no |  | medium | no | yes | yes | yes | yes |
 | `s3-generic-pythagoras` | bridge | no |  | medium | no | yes | yes | yes | yes |
-| `s3-spectral-multiplicity-definition` | foundation | no |  | hard | no | yes | yes | no | no |
-| `s3-spectral-multiplicity-complete` | foundation | no |  | hard | no | yes | yes | no | no |
+| `s3-spectral-multiplicity-definition` | foundation | no |  | hard | no | yes | yes | yes | yes |
+| `s3-spectral-multiplicity-complete` | foundation | no |  | hard | no | yes | yes | yes | yes |
 | `s3-prop3-1` | source | yes | `DK-3.1-prop` | high | no | yes | yes | yes | yes |
 | `s3-crossed-identification` | bridge | no |  | high | no | yes | yes | yes | yes |
 | `s3-prop3-2-existence` | source | yes | `DK-3.2-prop` | high | no | yes | yes | yes | yes |
@@ -86,14 +86,14 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s3-fixed-angle-subspace` | foundation | no |  | medium | no | yes | yes | yes | yes |
 | `s3-prop3-5` | source | yes | `DK-3.5-prop` | high | no | yes | yes | yes | yes |
 | `s3-cor3-2` | source | yes | `DK-3.2-cor` | medium | no | yes | yes | yes | yes |
-| `s3-operator-classification` | bridge | no |  | high | no | yes | yes | no | no |
-| `s3-theorem3-1` | source | yes | `DK-3.1-thm` | hard | no | yes | yes | no | no |
-| `s3-compact-angle-list` | foundation | no |  | medium | no | yes | yes | no | no |
-| `s3-cor3-1` | source | yes | `DK-3.1-cor` | high | no | yes | yes | no | no |
+| `s3-operator-classification` | bridge | no |  | high | no | yes | yes | yes | yes |
+| `s3-theorem3-1` | source | yes | `DK-3.1-thm` | hard | no | yes | yes | yes | yes |
+| `s3-compact-angle-list` | foundation | no |  | medium | no | yes | yes | yes | yes |
+| `s3-cor3-1` | source | yes | `DK-3.1-cor` | high | no | yes | yes | yes | yes |
 | `s4-prop4-1` | source | yes | `DK-4.1-prop` | medium | no | yes | yes | yes | yes |
 | `s4-cor4-1` | source | yes | `DK-4.1-cor` | medium | no | yes | yes | yes | yes |
-| `s4-prop4-2` | source | yes | `DK-4.2-prop` | medium | no | yes | yes | no | no |
-| `s4-prop4-3` | source | yes | `DK-4.3-prop` | medium | no | yes | yes | no | no |
+| `s4-prop4-2` | source | yes | `DK-4.2-prop` | medium | no | yes | yes | yes | yes |
+| `s4-prop4-3` | source | yes | `DK-4.3-prop` | medium | no | yes | yes | yes | yes |
 | `s6-approximation-energy` | foundation | no |  | high | no | yes | yes | yes | yes |
 | `s6-lemma6-3-approx` | source | yes | `DK-6.3-lem` | high | no | yes | yes | yes | yes |
 | `s6-lemma6-3-finite` | bridge | no |  | medium | no | yes | yes | yes | yes |
@@ -106,9 +106,9 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s6-theorem6-3-kyfan-core` | bridge | no |  | hard | no | yes | yes | yes | yes |
 | `s6-theorem6-3-finite-specialization` | bridge | no |  | high | no | yes | yes | yes | yes |
 | `s6-theorem6-3` | source | yes | `DK-6.3-thm` | hard | no | yes | yes | yes | yes |
-| `s2-tan-theta` | source | yes | `S2-tan-theta` | high | yes | yes | yes | yes | no |
+| `s2-tan-theta` | source | yes | `S2-tan-theta` | high | no | yes | yes | yes | yes |
 | `s6-theorem6-3-unbounded-opnorm-partial` | bridge | no |  | high | no | yes | yes | yes | yes |
-| `s2-unbounded-scope` | source | yes | `S2-unbounded-scope` | hard | yes | yes | yes | yes | no |
+| `s2-unbounded-scope` | source | yes | `S2-unbounded-scope` | hard | no | yes | yes | yes | yes |
 | `s7-sin2` | source | yes | `DK-7-sin2-proof`, `S2-sin-two-theta` | high | no | yes | yes | yes | yes |
 | `s7-tan2` | source | yes | `DK-7-tan2-proof`, `S2-tan-two-theta` | high | no | yes | yes | yes | yes |
 | `s8-circle-integrand` | foundation | no |  | high | no | yes | yes | yes | yes |

@@ -42,16 +42,16 @@
         "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
         "ForTauCeti.Analysis.Convex.Majorization",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.InnerProductSpace.Basic",
         "ForTauCeti.Analysis.Normed.Operator.LinearIsometry",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Instances",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.BlockSum",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Instances",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan",
         "ForTauCeti.Topology.ENNRealLiminf",
@@ -108,18 +108,18 @@
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Instances",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.BlockSum",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Instances",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization",
         "ForTauCeti.Analysis.InnerProductSpace.SchattenNorm",
         "ForTauCeti.Analysis.InnerProductSpace.SchurHorn",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
         "ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.Convex.Majorization",
         "ForTauCeti.Analysis.Normed.FiniteLpGauge",
         "ForTauCeti.Analysis.Normed.Operator.LinearIsometry"
@@ -192,7 +192,7 @@
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
         "ForTauCeti.MeasureTheory.CfcMeasurable",
         "ForTauCeti.Probability.Moments.MatrixConcentration",
-        "ForTauCeti.Probability.Moments.SampleCovariance",
+        "ForTauCeti.Probability.Moments.SampleSecondMoment",
         "ForTauCeti.Probability.Moments.SampleMean",
         "ForTauCeti.Probability.Moments.Variance"
       ]
@@ -929,7 +929,7 @@
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm"
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1230,11 +1230,11 @@
       "upstream_pr": null
     },
     {
-      "source_module": "ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
       "source_declarations": [],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
       "provenance_class": "moved; introduced at Davis--Kahan commit 3942779; authors Jon Crall, GPT 5.6 High; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
@@ -1244,7 +1244,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm"
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1262,7 +1262,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit a8d4ea3; authors Jon Crall, GPT-5.6 Thinking; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.Normed.FiniteLpGauge"
       ],
       "blocked_dependencies": [],
@@ -1391,7 +1391,7 @@
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm"
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1399,11 +1399,11 @@
       "upstream_pr": null
     },
     {
-      "source_module": "ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm",
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
       "source_declarations": [],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
       "provenance_class": "moved; introduced at Davis--Kahan commit 7481732; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
@@ -1490,7 +1490,7 @@
       "upstream_pr": null
     },
     {
-      "source_module": "ForTauCeti.Analysis.Normed.FiniteLpGauge + ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm + ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization",
+      "source_module": "ForTauCeti.Analysis.Normed.FiniteLpGauge + ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm + ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization",
       "source_declarations": [],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.Convex.Majorization",
@@ -1504,8 +1504,8 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.Normed.FiniteLpGauge",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization"
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -1689,8 +1689,8 @@
       "source_module": "ForMathlib.Probability.Moments.SampleCovariance",
       "source_declarations": [],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Probability.Moments.SampleCovariance",
-      "final_tauceti_module": "TauCeti.Probability.Moments.SampleCovariance",
+      "staging_module": "ForTauCeti.Probability.Moments.SampleSecondMoment",
+      "final_tauceti_module": "TauCeti.Probability.Moments.SampleSecondMoment",
       "ownership_class": "tauceti",
       "roadmap_target": "probability-concentration",
       "provenance_class": "moved; introduced at Davis--Kahan commit f9309f7; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
@@ -1739,21 +1739,21 @@
       "upstream_pr": null
     },
     {
-      "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
       "source_declarations": [],
       "current_namespace": "TauCeti.DavisKahanTheory",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
-      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantNorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users",
+      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantSeminorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users",
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm"
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1761,17 +1761,17 @@
       "upstream_pr": null
     },
     {
-      "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
       "source_declarations": [],
       "current_namespace": "TauCeti.DavisKahanTheory",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
-      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantNorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users",
+      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantSeminorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic"
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1779,17 +1779,17 @@
       "upstream_pr": null
     },
     {
-      "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
       "source_declarations": [],
       "current_namespace": "TauCeti.DavisKahanTheory",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.BlockSum",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.BlockSum",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
-      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantNorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users",
+      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantSeminorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization"
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1797,17 +1797,17 @@
       "upstream_pr": null
     },
     {
-      "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
       "source_declarations": [],
       "current_namespace": "TauCeti.DavisKahanTheory",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Instances",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Instances",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Instances",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Instances",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
-      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantNorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users",
+      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantSeminorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum"
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.BlockSum"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1959,7 +1959,7 @@
       "provenance_class": "copied and renamespaced 2026-07-28 from DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean, once the min-max theorem behind the triangle inequality became Spectra-free; the Davis-Kahan names remain as one-line delegations",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction"
@@ -3432,7 +3432,7 @@
         "IsAcute",
         "IsAcute.symm",
         "IsTransverse",
-        "_root_.TauCeti.UnitarilyInvariantNorm.eq_of_singularValues_eq",
+        "_root_.TauCeti.UnitarilyInvariantSeminorm.eq_of_singularValues_eq",
         "cosAngleOperator",
         "cosThetaMap",
         "opNorm_projection_sub_eq_opNorm_sinThetaMap",
@@ -3466,7 +3466,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm"
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -3771,7 +3771,7 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace"
       ],
       "blocked_dependencies": [],
@@ -3881,7 +3881,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
         "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding",
         "ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm",
@@ -3905,7 +3905,7 @@
         "frobenius_starProjection_comp_starProjection_le",
         "opNorm"
       ],
-      "current_namespace": "TauCeti.UnitarilyInvariantNorm",
+      "current_namespace": "TauCeti.UnitarilyInvariantSeminorm",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant",
       "ownership_class": "tauceti",
@@ -3913,7 +3913,7 @@
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm"
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -4111,7 +4111,7 @@
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
         "ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
         "Mathlib"
       ],
       "blocked_dependencies": [],
@@ -4166,7 +4166,7 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound"
@@ -4457,7 +4457,7 @@
       ],
       "current_namespace": "ForMathlib.Matrix",
       "staging_module": "ForTauCeti.LinearAlgebra.Matrix.PosDef",
-      "final_tauceti_module": "TauCeti.LinearAlgebra.Matrix.PosDef",
+      "final_tauceti_module": "TauCeti.LinearAlgebra.Matrix.PosSemidefFactorization",
       "ownership_class": "tauceti",
       "roadmap_target": "Matrix rank factorization and PSD realization, Berge's maximum theorem and the approximate-minimizer lemma.",
       "provenance_class": "moved verbatim from the retired ForMathlib library; namespace deliberately unchanged (comparator pins)",

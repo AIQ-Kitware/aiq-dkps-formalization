@@ -22,10 +22,11 @@ Proof strategy read from and credited to rjwalters/lean-genius,
 declared upstream).  Independently re-derived here on this project's existing
 `LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq`.
 -/
+module
 
-import Mathlib.Analysis.Convex.Jensen
-import Mathlib.Analysis.Convex.Mul
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import Mathlib.Analysis.Convex.Jensen
+public import Mathlib.Analysis.Convex.Mul
+public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
 
 
 /-! # Schur–Horn majorization (forward direction, Karamata form)
@@ -84,6 +85,8 @@ forward direction in the self-contained convex-function form.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 

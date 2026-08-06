@@ -38,6 +38,7 @@ open Acharyya2025.MathlibBridge
 open Acharyya2025.ConfigPerturbation
 open Acharyya2025.MatrixPerturbation
 open Acharyya2025.GrowingPipeline
+open TauCeti.Matrix (opSym)
 
 universe u v w
 
@@ -172,10 +173,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds
       (disMatToMatrix (classicalMDSMatrix (D n ω f))).rank ≤ d)
     {α : Real} (hα : 0 < α)
     (ceiling entryRate : Nat → Real)
-    (hfloor : ∀ n ω f (i : Fin (n + 1)), (i : Nat) < d →
-      α ≤ sortedEigenvalues (hB n ω f).isHermitian i)
-    (hceiling : ∀ n ω f (i : Fin (n + 1)),
-      sortedEigenvalues (hB n ω f).isHermitian i ≤ ceiling n)
+    (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
+      α ≤ (hB n ω f).isHermitian.eigenvalues₀ i)
+    (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
+      (hB n ω f).isHermitian.eigenvalues₀ i ≤ ceiling n)
     (z : ∀ n, Ω → Model Q X → Config (n + 1) d)
     (hzGram : ∀ n ω f i j,
       (∑ k, z n ω f i k * z n ω f j k) =
@@ -299,12 +300,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_of_gram
         ‖ψ (f_ref n ω i) - ψ f‖)
     {α : Real} (hα : 0 < α)
     (ceiling entryRate : Nat → Real)
-    (hfloor : ∀ n ω f (i : Fin (n + 1)), (i : Nat) < d →
-      α ≤ sortedEigenvalues
-        (populationPosSemidefOfGram D z hzGram n ω f).isHermitian i)
-    (hceiling : ∀ n ω f (i : Fin (n + 1)),
-      sortedEigenvalues
-        (populationPosSemidefOfGram D z hzGram n ω f).isHermitian i ≤ ceiling n)
+    (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
+      α ≤ (populationPosSemidefOfGram D z hzGram n ω f).isHermitian.eigenvalues₀ i)
+    (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
+      (populationPosSemidefOfGram D z hzGram n ω f).isHermitian.eigenvalues₀ i ≤ ceiling n)
     (Hrate : GrowingConfigControl (fun n => n + 1) d α ceiling entryRate)
     (E : Nat → Set Ω)
     (hEmeas : ∀ n, MeasurableSet (E n))

@@ -11,6 +11,6 @@ import FinishYuWangSamworth.CitationSurface
 Citation-priority completion lane for Yi Yu, Tengyao Wang, and Richard
 Samworth's population-gap Davis--Kahan paper.
 
-The library is intentionally non-default. Build it explicitly from the
-repository root with `lake build FinishYuWangSamworth`.
+The library is a default build target (since 2026-08-02), so `lake build`
+compiles it; `lake build FinishYuWangSamworth` builds it alone.
 -/

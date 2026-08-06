@@ -9,7 +9,7 @@ Two advertising-level leaves of the completed generic theory:
   separated Sylvester solution.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 -- `SpectraSeparated` is the *hypothesis* predicate of the challenge, not part of what is to
 -- be proved; the challenged theorems live in `DavisKahan.FiniteDimensional.Sylvester.All`,
 -- which only the paired leaderboard imports.
@@ -37,7 +37,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 /-- Arbitrary-disjoint-spectrum Sylvester bound in every rectangular
 unitarily invariant norm, with constant pi/2. -/
 theorem uiNorm_sylvester_le_of_spectralDistance
-    (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric) {δ : ℝ} (hδ : 0 < δ)
     (hgap : SpectraSeparated A ⊤ B ⊤ δ)
@@ -52,7 +52,7 @@ theorem sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
-    RectangularUnitarilyInvariantNorm.HasFiniteUnitaryOrbitCertificate
+    RectangularUnitarilyInvariantSeminorm.HasFiniteUnitaryOrbitCertificate
       (Real.pi / 2) (((δ : 𝕜)) • X) C := by
   sorry
 

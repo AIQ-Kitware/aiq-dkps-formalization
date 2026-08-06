@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.Frontier.Section8
+import DavisKahan.Frontier.Section8
 import DavisKahan.Sources.DavisKahan1970.Section9.All
 import DavisKahan.SpectralTheory.SpectralRestriction
 

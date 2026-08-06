@@ -156,6 +156,7 @@ theorem eq_zero_of_orthogonal_shiftRange {A : E →ₗ.[ℂ] E}
   exact hz (Complex.conj_eq_iff_im.mp this)
 
 /-- `A - z` as a linear map out of the domain of `A`. -/
+@[expose]
 def shiftMap (A : E →ₗ.[ℂ] E) (z : ℂ) : A.domain →ₗ[ℂ] E :=
   A.toFun - z • A.domain.subtype
 
@@ -459,6 +460,7 @@ theorem I_mem_resolventSet {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
 
 /-- **The Cayley transform** `(A - i)(A + i)⁻¹`, in the manifestly bounded form
 `1 - 2i·R(-i)`. -/
+@[expose]
 noncomputable def cayley {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) : E →L[ℂ] E :=
   1 - (2 * Complex.I) • resolvent A (negI_mem_resolventSet hA)
 

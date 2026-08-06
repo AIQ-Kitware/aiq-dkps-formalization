@@ -9,7 +9,7 @@ import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
 import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
 import DavisKahan.FiniteDimensional.Core.AngleOperators
 import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 
 /-!
 # Sharpness and two-dimensional extremizers
@@ -596,7 +596,7 @@ private theorem sinAngleOperator_model_eq_smul_id
     simp only [LinearMap.comp_apply, LinearMap.smul_apply, LinearMap.id_apply]
     match_scalars
     ring
-  change TauCeti.abs A = _
+  change TauCeti.operatorAbs A = _
   exact (LinearMap.IsPositive.sqrt_unique A.isPositive_adjoint_comp_self hpos hsquare).symm
 
 private theorem singularValues_tanAngle_model
@@ -615,11 +615,11 @@ private theorem singularValues_tanAngle_model
   -- replaced through the congruence bridge
   -- `sinAngleOperator` is *defined* as this modulus, so the equation has to
   -- be restated in the form the goal actually carries
-  have hsinEq' : TauCeti.abs (projection (modelSubspace (𝕜 := 𝕜)) -
+  have hsinEq' : TauCeti.operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
       projection (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       (((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) := hsinEq
   have hinner : TauCeti.selfAdjointFunctionalCalculus
-      (TauCeti.isPositive_abs (projection (modelSubspace (𝕜 := 𝕜)) -
+      (TauCeti.isPositive_operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
         projection (rotatedModelSubspace (𝕜 := 𝕜) θ))).isSymmetric
       Real.arcsin = (((θ : ℝ) : 𝕜) • LinearMap.id) := by
     rw [TauCeti.selfAdjointFunctionalCalculus_congr_op _
@@ -673,7 +673,7 @@ private theorem singularValues_tanTwoAngle_model
     exact ne_of_gt (Real.cos_pos_of_mem_Ioo ⟨by linarith [Real.pi_pos], by linarith⟩)
   have htan : 0 ≤ Real.tan (2 * θ) :=
     Real.tan_nonneg_of_nonneg_of_le_pi_div_two (by linarith) (by linarith)
-  have hsinEq' : TauCeti.abs (projection (modelSubspace (𝕜 := 𝕜)) -
+  have hsinEq' : TauCeti.operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
       projection (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       (((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) := hsinEq
   have hsymSin : ((((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) :
@@ -687,7 +687,7 @@ private theorem singularValues_tanTwoAngle_model
     simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
       inner_smul_right, RCLike.conj_ofReal]
   have hinner : TauCeti.selfAdjointFunctionalCalculus
-      (TauCeti.isPositive_abs (projection (modelSubspace (𝕜 := 𝕜)) -
+      (TauCeti.isPositive_operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
         projection (rotatedModelSubspace (𝕜 := 𝕜) θ))).isSymmetric
       Real.arcsin = (((θ : ℝ) : 𝕜) • LinearMap.id) := by
     rw [TauCeti.selfAdjointFunctionalCalculus_congr_op _ hsymSin
@@ -780,7 +780,7 @@ Signature audit: The theorem now uses a dedicated `sin Θ` perturbation model; d
 for the tangent or double-angle families.
 -/
 theorem sinTheta_model_equality
-    (N : UnitarilyInvariantNorm 𝕜 (Plane 𝕜))
+    (N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜))
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 2) :
     (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
@@ -790,7 +790,7 @@ theorem sinTheta_model_equality
         ((b-a : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
           (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues := by
     rw [singularValues_modelSinThetaPerturbation hab hθ0 (le_of_lt hθ1),
-      RectangularUnitarilyInvariantNorm.singularValues_smul,
+      RectangularUnitarilyInvariantSeminorm.singularValues_smul,
       singularValues_sinAngle_model hθ0 (le_of_lt hθ1)]
     ext i
     simp [pairSingularValues, 
@@ -816,7 +816,7 @@ Signature audit: The dedicated tangent model must include the zero-compression/G
 hypothesis required by the theorem it saturates.
 -/
 theorem tanTheta_model_equality
-    (N : UnitarilyInvariantNorm 𝕜 (Plane 𝕜))
+    (N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜))
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 2) :
     (b - a) * N (tanAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
@@ -827,7 +827,7 @@ theorem tanTheta_model_equality
       (((b - a : ℝ) : 𝕜) • tanAngleOperator (modelSubspace (𝕜 := 𝕜))
         (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues =
         (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ).singularValues := by
-    rw [RectangularUnitarilyInvariantNorm.singularValues_smul,
+    rw [RectangularUnitarilyInvariantSeminorm.singularValues_smul,
       singularValues_tanAngle_model hθ0 hθ1,
       singularValues_modelTanThetaPerturbation hab htan]
     ext i
@@ -875,7 +875,7 @@ Lean proof route for a weaker agent:
 2. Then compute the two-by-two matrices, their singular values, the gap, and the relevant angle function explicitly; equality should reduce to a scalar trigonometric identity.
 -/
 theorem tanTwoTheta_model_equality
-    (N : UnitarilyInvariantNorm 𝕜 (Plane 𝕜))
+    (N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜))
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 4) :
     (b - a) * N (tanTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
@@ -888,8 +888,8 @@ theorem tanTwoTheta_model_equality
         (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues =
         (((2 : ℝ) : 𝕜) • modelTanTwoThetaPerturbation
           (𝕜 := 𝕜) a b θ).singularValues := by
-    rw [RectangularUnitarilyInvariantNorm.singularValues_smul,
-      RectangularUnitarilyInvariantNorm.singularValues_smul,
+    rw [RectangularUnitarilyInvariantSeminorm.singularValues_smul,
+      RectangularUnitarilyInvariantSeminorm.singularValues_smul,
       singularValues_tanTwoAngle_model hθ0 hθ1,
       singularValues_modelTanTwoThetaPerturbation hab htan]
     have h2 : ‖((2 : ℝ) : 𝕜)‖ = 2 := by
@@ -934,7 +934,7 @@ theorem sinTheta_constant_optimal :
   intro c hc
   refine ⟨0, 1, Real.pi / 6, by norm_num, by positivity, ?_⟩
   have heq := sinTheta_model_equality
-    (UnitarilyInvariantNorm.opNorm 𝕜 (Plane 𝕜))
+    (UnitarilyInvariantSeminorm.opNorm 𝕜 (Plane 𝕜))
     (𝕜 := 𝕜) (a := 0) (b := 1) (θ := Real.pi/6)
     (by norm_num) (by positivity) (by linarith [Real.pi_pos])
   -- read the norm off the singular values rather than off a component

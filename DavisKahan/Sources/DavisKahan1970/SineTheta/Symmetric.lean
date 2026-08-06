@@ -38,6 +38,7 @@ noncomputable section
 universe v
 
 open TauCeti.DavisKahanExt
+open TauCeti.DavisKahan
 
 variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]

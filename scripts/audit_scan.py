@@ -72,10 +72,21 @@ BLOCK_COMMENT = re.compile(r"/-.*?-/", re.S)
 LINE_COMMENT = re.compile(r"--.*?$", re.M)
 
 
+#: The roadmap lives in a submodule, so `git ls-files` in this repository does not reach
+#: it.  Its `Suggested.lean` files are collected separately, because the mirror filter
+#: below exists to keep them out of the duplicate report.
+ROADMAP_SUB = "submodules/TauCetiRoadmap"
+
+
 def lean_files(scope: str | None) -> list[pathlib.Path]:
     out = subprocess.run(["git", "ls-files", "*.lean"], cwd=ROOT,
                          capture_output=True, text=True, check=True).stdout
     paths = [p for p in out.splitlines() if p and not p.startswith(SKIP)]
+    sub = ROOT / ROADMAP_SUB
+    if sub.is_dir():
+        subout = subprocess.run(["git", "ls-files", "*Suggested.lean"], cwd=sub,
+                                capture_output=True, text=True, check=True).stdout
+        paths += [f"{ROADMAP_SUB}/{p}" for p in subout.splitlines() if p]
     if scope:
         paths = [p for p in paths if p.startswith(scope)]
     # `git ls-files` reports the *index*, which during a half-staged rename still
@@ -195,7 +206,7 @@ def cmd_dup(files, args) -> int:
     forwarders = [g for g in groups if is_forwarder(g)]
     groups = [g for g in groups if not is_forwarder(g)]
 
-    # A `ForTauCetiRoadmap/**/Suggested.lean` statement matching its `ForTauCeti`
+    # A roadmap `Suggested.lean` statement matching its `ForTauCeti`
     # implementation is the roadmap *working*, not drift: those files say so
     # themselves -- "Bodies are placeholders; the statements are the content",
     # written with "names that follow the staged ForTauCeti implementation".
@@ -207,7 +218,7 @@ def cmd_dup(files, args) -> int:
     # nobody finishes reading -- the real one had been sitting in it unnoticed.
     def is_mirror(g) -> bool:
         files = {f for f, _, _, _, _ in g}
-        road = {f for f in files if f.startswith("ForTauCetiRoadmap/")}
+        road = {f for f in files if f.startswith(ROADMAP_SUB + "/")}
         return bool(road) and bool(files - road)
 
     mirrors = [g for g in groups if is_mirror(g)]

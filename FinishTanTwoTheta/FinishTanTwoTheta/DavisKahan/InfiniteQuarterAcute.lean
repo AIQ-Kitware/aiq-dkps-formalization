@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 import DavisKahan.Geometry.Polar.DirectRotation
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedSpectralTransport
+import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralTransport
 import DavisKahan.SinTheta.FrameFactorization
 import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
@@ -42,6 +42,7 @@ namespace FinishTanTwoTheta
 
 open scoped InnerProductSpace
 open TauCeti.DavisKahanExt
+open TauCeti.DavisKahan
 
 noncomputable section
 

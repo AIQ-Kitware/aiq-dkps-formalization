@@ -53,9 +53,10 @@ than project proof closure; see candidate #15 in `mathlib-candidates.md`. The fo
 - **Formalization phase** — complete (see `acharyya-plan.md`; residual sorries are
   documented superseded scaffolds).
 - **Candidates #1–#13 staged** in `ForMathlib/` (see `mathlib-candidates.md`).
-- **B1** ✅ sample-covariance / empirical-Gram eigenvalue concentration
-  (`MatrixConcentration.lean`, `EntrywiseEigenvalue.lean`, `SampleCovariance.lean`;
-  candidate #12).
+- **B1** ✅ sample second-moment / empirical-Gram eigenvalue concentration
+  (`MatrixConcentration.lean`, `EntrywiseEigenvalue.lean`,
+  `SampleSecondMoment.lean`; candidate #12).  The empirical matrix here is
+  uncentered, which the module name has said since 2026-08-05.
 - **B2** ✅ Berge maximum theorem — both halves + finite-family modulus + engine
   sibling (`Topology/Berge.lean`, `ApproxMinimizer.lean`; candidate #13).
 - **R1/R1b** ✅ Gram rigidity refactor: reusable identity, two-ambient span-level

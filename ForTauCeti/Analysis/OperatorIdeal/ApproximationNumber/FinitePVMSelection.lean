@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
-import Mathlib.Analysis.InnerProductSpace.Projection.Basic
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
+public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 
 /-!
 # Finite selection from spectral projection ranges
@@ -24,6 +26,8 @@ second move to undo.  Statements and proofs are unchanged; the namespace moved f
 `TauCeti.FinishTanTwoTheta` to `TauCeti.ApproximationNumber`, matching the sibling it
 imports.
 -/
+
+public section
 
 namespace TauCeti
 namespace ApproximationNumber

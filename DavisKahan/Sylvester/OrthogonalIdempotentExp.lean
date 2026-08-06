@@ -22,6 +22,8 @@ restated; names and namespace (`TauCeti.DavisKahanExt`) are unchanged.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open scoped InnerProductSpace BigOperators
 
 noncomputable section

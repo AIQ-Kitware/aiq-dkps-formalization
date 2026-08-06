@@ -40,7 +40,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 map.  This is the complete rectangular UI-norm family obtained from the sharp
 single-angle residual theorem and `sin (2 t) <= 2 sin t`. -/
 theorem sinTwoTheta_residual_le
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
@@ -60,7 +60,7 @@ theorem sinTwoTheta_residual_le
 
 /-- Ordered half-line residual `sin 2 Theta` theorem. -/
 theorem sinTwoTheta_residual_le_of_orderedGap
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
@@ -80,7 +80,7 @@ theorem sinTwoTheta_residual_le_of_orderedGap
 Sylvester loss becomes the expected factor `pi` after the elementary
 `sin (2 t) <= 2 sin t` comparison. -/
 theorem sinTwoTheta_residual_le_of_spectralDistance
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)

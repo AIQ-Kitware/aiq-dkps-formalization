@@ -3,10 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.Positive
-import Mathlib.Analysis.InnerProductSpace.Spectrum
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import Mathlib.Analysis.InnerProductSpace.Positive
+public import Mathlib.Analysis.InnerProductSpace.Spectrum
+public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
 
 
 /-!
@@ -34,6 +35,8 @@ totalized tangent functions used by finite-dimensional operator-angle theory.
   `ForTauCeti` staging modules.
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -45,6 +48,7 @@ variable {𝕜 E : Type*} [RCLike 𝕜]
 
 /-- Apply a real function to the spectrum of a finite-dimensional symmetric
 endomorphism. -/
+@[expose]
 noncomputable def selfAdjointFunctionalCalculus
     {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (f : ℝ → ℝ) : E →ₗ[𝕜] E :=
   ∑ i : Fin (finrank 𝕜 E),
@@ -52,6 +56,23 @@ noncomputable def selfAdjointFunctionalCalculus
       (InnerProductSpace.rankOne 𝕜
         (hT.eigenvectorBasis rfl i)
         (hT.eigenvectorBasis rfl i)).toLinearMap
+
+/-- The calculus is additive in the symbol: a finite sum of rank-one terms, added
+coefficientwise. -/
+theorem selfAdjointFunctionalCalculus_add {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (f g : ℝ → ℝ) :
+    selfAdjointFunctionalCalculus hT (f + g)
+      = selfAdjointFunctionalCalculus hT f + selfAdjointFunctionalCalculus hT g := by
+  simp only [selfAdjointFunctionalCalculus, ← Finset.sum_add_distrib]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  simp [add_smul, RCLike.ofReal_add]
+
+/-- The calculus is real-homogeneous in the symbol. -/
+theorem selfAdjointFunctionalCalculus_smul {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (c : ℝ)
+    (f : ℝ → ℝ) :
+    selfAdjointFunctionalCalculus hT (c • f) = (c : 𝕜) • selfAdjointFunctionalCalculus hT f := by
+  simp only [selfAdjointFunctionalCalculus, Finset.smul_sum]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  simp [smul_smul, RCLike.ofReal_mul]
 
 /-- The functional calculus acts diagonally in the chosen eigenbasis. -/
 theorem selfAdjointFunctionalCalculus_apply_eigenvectorBasis
@@ -86,6 +107,32 @@ theorem selfAdjointFunctionalCalculus_isSymmetric
         ((InnerProductSpace.isSymmetric_rankOne_self
           (hT.eigenvectorBasis rfl i)).smul
             (RCLike.conj_ofReal (f (hT.eigenvalues rfl i)))).add hs
+
+/-- **The calculus is bounded by the sup of the symbol on the spectrum.**
+
+Parseval in the eigenbasis: the calculus multiplies the `i`-th coordinate of `x` by
+`f (λᵢ)`, so the squared norm is a weighted sum of the coordinate weights. This is the
+estimate continuity of `f ↦ calculus hT f` rests on. -/
+theorem norm_selfAdjointFunctionalCalculus_apply_le {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric)
+    (f : ℝ → ℝ) {M : ℝ} (hM0 : 0 ≤ M) (hM : ∀ i, |f (hT.eigenvalues rfl i)| ≤ M) (x : E) :
+    ‖selfAdjointFunctionalCalculus hT f x‖ ≤ M * ‖x‖ := by
+  classical
+  set b := hT.eigenvectorBasis rfl with hb
+  set S := selfAdjointFunctionalCalculus hT f with hS
+  have hSsym : S.IsSymmetric := selfAdjointFunctionalCalculus_isSymmetric hT f
+  have hcoord : ∀ i, ⟪b i, S x⟫_𝕜 = ((f (hT.eigenvalues rfl i) : ℝ) : 𝕜) * ⟪b i, x⟫_𝕜 := by
+    intro i
+    rw [← hSsym (b i) x, hS, selfAdjointFunctionalCalculus_apply_eigenvectorBasis,
+      inner_smul_left, RCLike.conj_ofReal]
+  have hsq : ‖S x‖ ^ 2 ≤ M ^ 2 * ‖x‖ ^ 2 := by
+    rw [← b.sum_sq_norm_inner_right (S x), ← b.sum_sq_norm_inner_right x, Finset.mul_sum]
+    refine Finset.sum_le_sum fun i _ => ?_
+    rw [hcoord i, norm_mul, mul_pow, RCLike.norm_ofReal]
+    have hsq2 : |f (hT.eigenvalues rfl i)| ^ 2 ≤ M ^ 2 := by
+      nlinarith [abs_nonneg (f (hT.eigenvalues rfl i)), hM i]
+    exact mul_le_mul_of_nonneg_right hsq2 (by positivity)
+  have h1 : (0 : ℝ) ≤ M * ‖x‖ := mul_nonneg hM0 (norm_nonneg x)
+  nlinarith [norm_nonneg (S x), hsq, h1]
 
 /-- The identity function recovers the original symmetric operator. -/
 theorem selfAdjointFunctionalCalculus_id
@@ -200,6 +247,114 @@ theorem selfAdjointFunctionalCalculus_apply_of_apply_eq_smul
     rw [hcoeff]
     simp
 
+/-- The constant function `1` gives the identity operator. -/
+theorem selfAdjointFunctionalCalculus_one {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) :
+    selfAdjointFunctionalCalculus hT (fun _ => (1 : ℝ)) = LinearMap.id := by
+  apply (hT.eigenvectorBasis rfl).toBasis.ext
+  intro i
+  rw [OrthonormalBasis.coe_toBasis, selfAdjointFunctionalCalculus_apply_eigenvectorBasis]
+  simp
+
+/-- **The calculus agrees with polynomial evaluation on monomials.**
+
+Induction on `n` from `..._one` and `..._comp`; the base is the identity operator and the
+step is multiplicativity of the symbol. This is what makes the calculus an algebra map
+extending `Polynomial.aeval`, the property any route to the Mathlib CFC goes through. -/
+theorem selfAdjointFunctionalCalculus_pow {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (n : ℕ) :
+    selfAdjointFunctionalCalculus hT (fun x => x ^ n) = T ^ n := by
+  induction n with
+  | zero =>
+      simpa [pow_zero, Module.End.one_eq_id] using selfAdjointFunctionalCalculus_one hT
+  | succ k ih =>
+      have hmul := selfAdjointFunctionalCalculus_comp hT (fun x => x ^ k) id
+      have : (fun x : ℝ => x ^ k * id x) = fun x : ℝ => x ^ (k + 1) := by
+        funext x; simp [pow_succ]
+      rw [this] at hmul
+      rw [← hmul, ih, selfAdjointFunctionalCalculus_id, pow_succ]
+      rfl
+
+/-- **Extending a symbol by zero off a set containing the spectrum changes nothing.**
+
+The calculus sees `f` only at the eigenvalues, so restricting a symbol to any set containing
+them and extending by zero leaves the operator alone. This is what lets a
+`g : C(spectrum ℝ a, ℝ)` be turned into an `ℝ → ℝ` for the finite calculus without the
+algebra operations drifting: `indicator` commutes with `+` and `*`, and the mismatch at `1`
+is invisible here. -/
+theorem selfAdjointFunctionalCalculus_indicator {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric)
+    {S : Set ℝ} (hS : ∀ i, hT.eigenvalues rfl i ∈ S) (g : ℝ → ℝ) :
+    selfAdjointFunctionalCalculus hT (S.indicator g)
+      = selfAdjointFunctionalCalculus hT g :=
+  selfAdjointFunctionalCalculus_congr hT fun i => Set.indicator_of_mem (hS i) g
+
+/-- Multiplicativity in pointwise-product form, the shape an algebra map needs.
+
+`selfAdjointFunctionalCalculus_comp` states this with an explicit lambda. `f * g` on `ℝ → ℝ`
+is that lambda definitionally, but `rw` matches syntactically and Lean normalises the lambda
+to `*`, so the algebra-map fields need this spelling. -/
+theorem selfAdjointFunctionalCalculus_mul {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (f g : ℝ → ℝ) :
+    selfAdjointFunctionalCalculus hT (f * g)
+      = selfAdjointFunctionalCalculus hT f ∘ₗ selfAdjointFunctionalCalculus hT g :=
+  (selfAdjointFunctionalCalculus_comp hT f g).symm
+
+open scoped Classical in
+/-- Extend a continuous function on a subset of `ℝ` to all of `ℝ` by zero.
+
+The finite calculus consumes `ℝ → ℝ`, while `cfcHom` is stated on `C(spectrum ℝ a, ℝ)`; this
+is the bridge between the two.  It is multiplicative and additive outright — both sides
+vanish off `S` — and `selfAdjointFunctionalCalculus_indicator` covers the unit, the one
+operation it does not respect. -/
+noncomputable def extendSymbol {S : Set ℝ} (g : C(S, ℝ)) : ℝ → ℝ :=
+  fun x => if h : x ∈ S then g ⟨x, h⟩ else 0
+
+open scoped Classical in
+/-- On `S` the extension by zero agrees with the symbol. -/
+@[simp] theorem extendSymbol_apply_of_mem {S : Set ℝ} (g : C(S, ℝ)) {x : ℝ} (hx : x ∈ S) :
+    extendSymbol g x = g ⟨x, hx⟩ := dif_pos hx
+
+open scoped Classical in
+/-- Off `S` the extension is zero.  With `extendSymbol_apply_of_mem` this determines
+`extendSymbol` pointwise, so a consumer never has to reduce through the body. -/
+@[simp] theorem extendSymbol_apply_of_not_mem {S : Set ℝ} (g : C(S, ℝ)) {x : ℝ} (hx : x ∉ S) :
+    extendSymbol g x = 0 := dif_neg hx
+
+/-- `extendSymbol` as a set indicator, the form the calculus bridge consumes. -/
+theorem extendSymbol_eq_indicator {S : Set ℝ} (g : C(S, ℝ)) (f : ℝ → ℝ)
+    (hf : ∀ (x : ℝ) (hx : x ∈ S), f x = g ⟨x, hx⟩) :
+    extendSymbol g = S.indicator f := by
+  funext x
+  by_cases hx : x ∈ S
+  · rw [extendSymbol_apply_of_mem g hx, Set.indicator_of_mem hx, hf x hx]
+  · rw [extendSymbol_apply_of_not_mem g hx, Set.indicator_of_notMem hx]
+
+open scoped Classical in
+/-- Extension by zero is multiplicative: both sides vanish off `S`. -/
+theorem extendSymbol_mul {S : Set ℝ} (g₁ g₂ : C(S, ℝ)) :
+    extendSymbol (g₁ * g₂) = fun x => extendSymbol g₁ x * extendSymbol g₂ x := by
+  funext x
+  by_cases hx : x ∈ S <;> simp [extendSymbol, hx]
+
+open scoped Classical in
+/-- Extension by zero is additive. -/
+theorem extendSymbol_add {S : Set ℝ} (g₁ g₂ : C(S, ℝ)) :
+    extendSymbol (g₁ + g₂) = extendSymbol g₁ + extendSymbol g₂ := by
+  funext x
+  by_cases hx : x ∈ S <;> simp [extendSymbol, Pi.add_apply, hx]
+
+open scoped Classical in
+/-- Extension by zero sends the zero symbol to the zero function. -/
+@[simp] theorem extendSymbol_zero {S : Set ℝ} :
+    extendSymbol (0 : C(S, ℝ)) = fun _ => 0 := by
+  funext x
+  by_cases hx : x ∈ S <;> simp [extendSymbol, hx]
+
+open scoped Classical in
+/-- The extension of the constant symbol `1` is the indicator of `S` -- **not**
+the constant function `1`, which is why extension by zero is not unital. -/
+theorem extendSymbol_one_eq_indicator {S : Set ℝ} :
+    extendSymbol (1 : C(S, ℝ)) = S.indicator (fun _ => 1) := by
+  funext x
+  by_cases hx : x ∈ S <;> simp [extendSymbol, Set.indicator, hx]
+
 /-- Every operator commuting with a symmetric map commutes with its finite
 real functional calculus.  This includes repeated eigenvalues: the proof uses
 that the commuting operator preserves each eigenspace. -/
@@ -229,6 +384,7 @@ duplicate has been collapsed; the uniqueness theory that only the square root
 has (`sqrt_unique`, `ker_sqrt`, `range_sqrt`, `sqrt_mul_self`) is unchanged and
 still lives in `ForTauCeti/Analysis/InnerProductSpace/PositiveSqrt.lean`, which now
 imports this module rather than the other way round. -/
+@[expose]
 noncomputable def _root_.LinearMap.IsPositive.sqrt
     {T : E →ₗ[𝕜] E} (hT : T.IsPositive) : E →ₗ[𝕜] E :=
   selfAdjointFunctionalCalculus hT.isSymmetric Real.sqrt

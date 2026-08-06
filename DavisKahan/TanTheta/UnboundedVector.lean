@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.TanTheta.Vector
 import DavisKahan.SpectralTheory.SpectralRestriction
 import DavisKahan.SpectralTheory.BoundedFromSpectrum
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 
 /-!
 # The unbounded Davis--Kahan tangent theorem, per-vector form
@@ -52,22 +53,6 @@ private theorem abs_le_max_of_mem_Icc {a b s : ℝ} (hs : s ∈ Set.Icc a b) :
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
-
-omit [CompleteSpace H] in
-private theorem norm_sq_starProjection_add_norm_sq_sub
-    (K : Submodule ℂ H) [K.HasOrthogonalProjection] (x : H) :
-    ‖K.starProjection x‖ ^ 2 + ‖x - K.starProjection x‖ ^ 2 = ‖x‖ ^ 2 := by
-  have horth : ⟪K.starProjection x, x - K.starProjection x⟫_ℂ = 0 :=
-    Submodule.inner_right_of_mem_orthogonal (K.starProjection_apply_mem x)
-      (K.sub_starProjection_mem_orthogonal x)
-  have hx : K.starProjection x + (x - K.starProjection x) = x := by
-    abel
-  calc
-    ‖K.starProjection x‖ ^ 2 + ‖x - K.starProjection x‖ ^ 2 =
-        ‖K.starProjection x + (x - K.starProjection x)‖ ^ 2 := by
-      rw [norm_add_sq (𝕜 := ℂ), horth, map_zero]
-      ring
-    _ = ‖x‖ ^ 2 := by rw [hx]
 
 omit [CompleteSpace H] in
 /-- A residual bound on a domain-contained test subspace transfers to the

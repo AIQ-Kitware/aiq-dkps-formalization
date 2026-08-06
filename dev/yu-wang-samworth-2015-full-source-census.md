@@ -12,9 +12,8 @@ Two independent axes. `status` is the mathematical judgement against the printed
 
 | verification | items |
 | --- | --- |
-| `absent` | 2 |
 | `not_applicable` | 1 |
-| `proved_in_build` | 19 |
+| `proved_in_build` | 21 |
 
 ## Items
 
@@ -29,8 +28,8 @@ Two independent axes. `status` is the mathematical judgement against the printed
 | `YWS-T2-alignedBasis` | 2 | Theorem 2, aligned-basis conclusion | Theorem 2, second conclusion -- existence of an aligned orthogonal frame | `compiled_exact` | `proved_in_build` |
 | `YWS-T2-residual` | 2 | Theorem 2, residual form | Theorem 2's sharper residual forms | `compiled_generalized` | `proved_in_build` |
 | `YWS-T2-opnorm-numerator` | 2 | Section 2, operator-norm numerator | The residual is bounded by 2 sqrt d ‖E‖_op | `compiled_exact` | `proved_in_build` |
-| `YWS-S2-sharpness-orthogonal` | 2 | Section 2, sharpness example with orthogonal target subspaces | Sharpness example: orthogonal top-d eigenspaces | `not_represented` | `absent` |
-| `YWS-S2-sharpness-planar` | 2 | Section 2, sharpness scale for nearby one-dimensional eigenspaces | Sharpness example: planar rotation, nearby one-dimensional eigenspaces | `not_represented` | `absent` |
+| `YWS-S2-sharpness-orthogonal` | 2 | Section 2, sharpness example with orthogonal target subspaces | Sharpness example: orthogonal top-d eigenspaces | `compiled_generalized` | `proved_in_build` |
+| `YWS-S2-sharpness-planar` | 2 | Section 2, sharpness scale for nearby one-dimensional eigenspaces | Sharpness example: planar rotation, nearby one-dimensional eigenspaces | `compiled_generalized` | `proved_in_build` |
 | `YWS-EQ4-double-angle` | 2 | Equation (4) | Equation (4) -- the double-angle identity, FALSE AS PRINTED | `compiled_corrected` | `proved_in_build` |
 | `YWS-C3-rankone` | 2 | Corollary 3 | Corollary 3 -- the rank-one (single eigenvector) form | `compiled_exact` | `proved_in_build` |
 | `YWS-S3-applications` | 3 | Section 3, audit of statistical applications | Section 3 -- audit of how statisticians actually apply Davis--Kahan | `not_proof_debt` | `not_applicable` |
@@ -48,14 +47,6 @@ Two independent axes. `status` is the mathematical judgement against the printed
 ### `numbering-conflict` (source_audit) — The repository carries two incompatible numberings for this paper
 
 `FinishYuWangSamworth` and every Lean declaration name use a flat sequence -- Theorem 1, Theorem 2, Corollary 3, Theorem 4, Lemma 5 -- and cite arXiv:1405.0680. `prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex` restarts the counter per environment type: its `\sourceanchor` lines name the same rank-one corollary as **Corollary 1**, the same rectangular theorem as **Theorem 3**, and the same appendix lemma as **Appendix Lemma 1**. The two agree only on Theorem 1 and Theorem 2. Neither artifact can settle it, because the transcription both were derived from is not in the tree and the published article is not either. This census keys on the flat sequence because the Lean names do, so that a reader can get from a row to a declaration without a translation table -- that is a tie-break, not a finding. **Resolving it requires one look at the published Biometrika article, and until someone does that, any statement of the form 'we have Theorem 3' is ambiguous in this repository.**
-
-### `unguarded-completion-lane` (mechanical) — FinishYuWangSamworth is not a default build target
-
-`lakefile.toml`'s `defaultTargets` are `ForMathlib`, `ForTauCeti`, `DavisKahan.All`, `Acharyya2024`, `Acharyya2025`, `DkpsQuench2026` and `Helm2025`. `FinishYuWangSamworth` is a `lean_lib` but not among them, so `lake build` does not compile it and CI does not guard it. Everything the completion lane proves -- Theorem 1's three norm forms, the whole of Theorem 4, Lemma 5, the rank-one singular-vector corollaries, and the corrected equation (4) -- is therefore proved but unprotected. This is the single largest lever on this paper's census: adding one target converts a majority of the `proved_outside_build` rows to `proved_in_build` without any new mathematics. The reason it is not simply done here is that it is a build-policy change affecting every agent's build time, and the lane's own README calls it a deliberately isolated non-default library.
-
-### `sharpness-examples` (mechanical) — Neither sharpness example is formalized
-
-The paper gives two explicit constructions showing its constants cannot be improved: a diagonal pair whose top-`d` eigenspaces are orthogonal, and a planar rotation model for nearby one-dimensional eigenspaces. Neither is formalized for this paper, and `FinishYuWangSamworth/PROOF_OBLIGATIONS.md` lists both as outstanding. They are mechanical rather than hard: `DavisKahan/FiniteDimensional/Sharpness.lean` already fixes an explicit planar model and computes its singular values by extensional matrix calculation, and `ForTauCeti/Analysis/InnerProductSpace/TwoDimensionalSingularValues.lean` exists precisely to serve planar sharpness models. Without them the census can say the bounds hold and cannot say they are sharp -- which is half of what the paper claims.
 
 ### `residual-numerator` (mechanical) — The sharper residual form of Theorem 2 has no source-facing wrapper
 
@@ -108,8 +99,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **summary**: With a mixed spectral separation delta > 0 between the perturbed and population blocks, ‖sin Theta(V-hat, V)‖_F <= ‖Sigma-hat - Sigma‖_F / delta; the paper notes both norms may be replaced by the operator norm or any orthogonally invariant norm.
 * **status**: `compiled_generalized` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_theorem1_uiNorm_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_theorem1_frobenius_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_theorem1_opNorm_le`
-* **gaps**: `unguarded-completion-lane`
-* **notes**: The paper's 'any orthogonally invariant norm' remark is the primary Lean statement, not an afterthought: `yuWangSamworth_theorem1_uiNorm_le` takes a `UnitarilyInvariantNorm` and the Frobenius and operator forms are its specializations. So the strongest advertised form is the one that is proved.
+* **notes**: The paper's 'any orthogonally invariant norm' remark is the primary Lean statement, not an afterthought: `yuWangSamworth_theorem1_uiNorm_le` takes a `UnitarilyInvariantSeminorm` and the Frobenius and operator forms are its specializations. So the strongest advertised form is the one that is proved.
 * **next action**: Wire FinishYuWangSamworth into a default target, or migrate these three into DavisKahan/Specialized.
 
 ### `YWS-T1-eq1` — Equation (1) -- the eigenvector specialization of the baseline
@@ -127,8 +117,10 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **source anchor**: Theorem 2 (theorem, section 2)
 * **summary**: With only the two exterior POPULATION gaps Delta = min(lambda_{r-1} - lambda_r, lambda_s - lambda_{s+1}) > 0, ‖sin Theta(V-hat, V)‖_F <= 2 min(sqrt d ‖E‖_op, ‖E‖_F) / Delta.
 * **status**: `compiled_exact` / **verification**: `proved_in_build`
-* **lean declarations**: `TauCeti.PopulationGap`, `TauCeti.CorrespondingEigenblock`, `TauCeti.yuWangSamworth_sinTheta_le`, `TauCeti.sqrt_sum_cross_le_of_population_gap`
+* **lean declarations**: `TauCeti.InternalGap`, `TauCeti.CorrespondingEigenblock`, `TauCeti.yuWangSamworth_sinTheta_le`, `TauCeti.sqrt_sum_cross_le_of_population_gap`
 * **notes**: This is the paper's headline and it is the best-guarded result in the census: it is in the default build AND pinned by comparator/pending-yu-wang-samworth.json, whose Leaderboard runs `#print axioms TauCeti.sqrt_sum_cross_le_of_population_gap`. The min over the dimension-scaled operator norm and the Frobenius norm is proved as printed, not as one branch.
+
+Corrected 2026-08-04: the row named `TauCeti.PopulationGap`, which does not exist in the tree. The gap hypothesis `yuWangSamworth_sinTheta_le` actually carries is `TauCeti.InternalGap` (`ForTauCeti/Analysis/InnerProductSpace/Spectral/Gap.lean`). The renderer's resolution check had been failing on this, which is why `dev/yu-wang-samworth-2015-full-source-census.md` was stale.
 * **next action**: None.
 
 ### `YWS-T2-alignedBasis` — Theorem 2, second conclusion -- existence of an aligned orthogonal frame
@@ -163,21 +155,25 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 
 * **source anchor**: Section 2, sharpness example with orthogonal target subspaces (example, section 2)
 * **summary**: Sigma = diag(3,...,3,1,...,1) and Sigma-hat = diag(2-eps,...,2-eps,2,...,2) have orthogonal top-d eigenspaces, forcing ‖V-hat O - V‖_F = sqrt(2d) for every O and matching the aligned-basis constant up to (1+eps).
-* **status**: `not_represented` / **verification**: `absent`
-* **planned declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_sharpness_orthogonalBlocks`
-* **gaps**: `sharpness-examples`
-* **notes**: Nothing in the repository formalizes this. Its absence is why the census can certify the paper's upper bounds but cannot certify that its constants and dimension dependence are unimprovable -- and the second claim is a substantial part of what makes the paper 'useful'.
-* **next action**: Formalize the diagonal pair and the orthogonality of the top-d eigenspaces; the bound then follows from the aligned-basis identity already proved.
+* **status**: `compiled_generalized` / **verification**: `proved_in_build`
+* **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_sharpness_orthogonalBlocks`, `TauCeti.DavisKahanTheory.dist_orthogonalSharpness_aligned`, `TauCeti.DavisKahanTheory.sinThetaFrobenius_orthogonalSharpness`, `TauCeti.DavisKahanTheory.orthogonal_orthogonalSharpness`, `TauCeti.DavisKahanTheory.correspondingEigenblock_orthogonalSharpness`, `TauCeti.DavisKahanTheory.internalGap_orthogonalSharpness`, `TauCeti.DavisKahanTheory.opNorm_orthogonalSharpness_perturbation`
+* **notes**: Formalized 2026-08-04 in `FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/OrthogonalSharpness.lean`. `compiled_generalized` rather than `compiled_exact`: the model is stated for an arbitrary orthonormal basis of an arbitrary finite-dimensional RCLike inner product space, which specializes to the paper's real `p x p` matrices at `EuclideanSpace R (Fin p)`. The example is checked against the theorem's own hypotheses -- `correspondingEigenblock_orthogonalSharpness` supplies the branch-selection datum and `internalGap_orthogonalSharpness` the population gap -- so it is an instance of `yuWangSamworth_alignedBasis_le`, not a numerical coincidence. Both printed equalities are proved: every aligned orthonormal pair is at distance exactly sqrt(2d), and ||sin Theta||_F = sqrt d. The bound's operator-norm branch equals sqrt(2d)(1+eps).
+
+This row is what forced the `CorrespondingEigenblock` constructor: the hypothesis had no instance anywhere in the repository until `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/TopEigenblock.lean`, so no concrete pair of covariance operators had ever been checked against it.
+* **next action**: None outstanding.
 
 ### `YWS-S2-sharpness-planar` — Sharpness example: planar rotation, nearby one-dimensional eigenspaces
 
 * **source anchor**: Section 2, sharpness scale for nearby one-dimensional eigenspaces (example, section 2)
 * **summary**: Sigma = diag(3,1) and Sigma-hat = R_eps Sigma R_eps^T give sin Theta = eps against a bound of 2 eps, so the sine bound is tight up to 2 and the vector bound up to 2^{3/2} even at small angles.
-* **status**: `not_represented` / **verification**: `absent`
-* **planned declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_sharpness_planarRotation`
-* **gaps**: `sharpness-examples`
-* **notes**: Mechanical rather than hard. `DavisKahan/FiniteDimensional/Sharpness.lean` already fixes a single explicit planar model for the Davis--Kahan sharpness results and computes its singular values extensionally, and `ForTauCeti/Analysis/InnerProductSpace/TwoDimensionalSingularValues.lean` exists to serve exactly this kind of model.
-* **next action**: Instantiate the existing planar sharpness model at Sigma = diag(3,1) and the rotation R_eps.
+* **status**: `compiled_generalized` / **verification**: `proved_in_build`
+* **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_sharpness_planarRotation`, `TauCeti.DavisKahanTheory.sinThetaFrobenius_planarSharpness`, `TauCeti.DavisKahanTheory.opNorm_planarSharpness_perturbation`, `TauCeti.DavisKahanTheory.norm_sub_sq_planarSharpness`, `TauCeti.DavisKahanTheory.correspondingEigenblock_planarSharpness`, `TauCeti.DavisKahanTheory.internalGap_planarSharpness`, `TauCeti.DavisKahanTheory.norm_projection_orthogonal_span_singleton`
+* **notes**: Formalized 2026-08-04 in `FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/PlanarSharpness.lean`. `compiled_generalized`, and the generalization is the interesting part: `Sigma = diag(3,1)` is the operator that is 3 on a line and 1 on its complement -- `TauCeti.twoLevelOperator 1 3 (k * v)` -- and conjugating by a rotation only moves the line. So the pair (Sigma, Sigma-hat) is two two-level models over the same levels, `twoLevelOperator_sub` gives Sigma-hat - Sigma = 2 (P_v-hat - P_v) with no matrix entries, and nothing forces the ambient space to be 2-dimensional: every conclusion holds for two lines in any finite-dimensional space, of which the paper's R^2 is the smallest case. The rotation parameter is replaced by the overlap c = <v, v-hat>, with the paper's eps = sqrt(1 - c^2) the sine.
+
+All three displayed quantities are proved: ||sin Theta||_F = eps, ||v-hat - v||^2 = 2 - 2c, and 2||E||_op/(3-1) = 2 eps -- so the sine bound is tight up to *exactly* the factor 2 the paper claims, at every angle. The example is checked against the theorem's own hypotheses (`correspondingEigenblock_planarSharpness`, `internalGap_planarSharpness`).
+
+Source note: the paper prints v-hat = (sqrt(1-eps^2), -eps)^T, which is the leading eigenvector of R_eps^T Sigma R_eps rather than of R_eps Sigma R_eps^T. The sign changes none of the displayed quantities -- all three depend on v-hat only through <v, v-hat> -- so the model fixes the overlap rather than a sign convention. Recorded rather than silently corrected.
+* **next action**: None outstanding.
 
 ### `YWS-EQ4-double-angle` — Equation (4) -- the double-angle identity, FALSE AS PRINTED
 
@@ -185,7 +181,6 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **summary**: The paper rewrites sin^2(2 theta) in terms of ‖v-hat - v‖^2. The printed right-hand side omits a square on the factor (2 - ‖v-hat - v‖^2).
 * **status**: `compiled_corrected` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_equation4`, `TauCeti.DavisKahanTheory.yuWangSamworth_equation4_printed_counterexample`
-* **gaps**: `unguarded-completion-lane`
 * **notes**: This is the census's one genuine source defect and it is machine-checked in both directions: the corrected identity is proved, and the printed polynomial is refuted by `norm_num` at inner product 3/5. Substituting t = ‖v-hat - v‖^2 = 2 - 2c gives sin^2(2 theta) = (1/4) t (2-t)^2 (4-t), and the printed form has (2-t) to the first power. The distilled tex reproduced the ERRONEOUS printed form at its equation (YWS-3) until 2026-07-29, so the repository asserted the false identity in one artifact while refuting it in another; the tex is now corrected, carries the derivation, and cross-references both Lean theorems.
 * **next action**: None. Both artifacts now agree and both directions are machine checked.
 
@@ -213,9 +208,11 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **source anchor**: Theorem 4 (theorem, section 4)
 * **summary**: For rectangular A, A-hat with D = A-hat - A and Delta_sv = min(sigma_{r-1}^2 - sigma_r^2, sigma_s^2 - sigma_{s+1}^2) > 0, ‖sin Theta(V-hat, V)‖_F <= 2 (2 sigma_1 + ‖D‖_op) min(sqrt d ‖D‖_op, ‖D‖_F) / Delta_sv.
 * **status**: `compiled_exact` / **verification**: `proved_in_build`
-* **lean declarations**: `TauCeti.rightSingularSubspace`, `TauCeti.rightSingularSubspace_sinTheta_le`, `TauCeti.DavisKahanTheory.CorrespondingRightSingularBlock`, `TauCeti.DavisKahanTheory.RightSingularPopulationGap`, `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_opNormCoefficient_le`
-* **gaps**: `unguarded-completion-lane`, `numbering-conflict`
+* **lean declarations**: `TauCeti.rightSingularSubspace`, `TauCeti.rightSingularSubspace_sinTheta_le`, `TauCeti.DavisKahanTheory.CorrespondingRightSingularBlock`, `TauCeti.DavisKahanTheory.RightSingularInternalGap`, `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_opNormCoefficient_le`
+* **gaps**: `numbering-conflict`
 * **notes**: Split across two homes, which is why this row is only partly guarded: the subspace definition and a sine bound are in the default build via ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/SingularSubspace.lean, but the exact paper coefficient (2 sigma_1 + ‖D‖_op) lives in the completion lane. The route is the paper's own: transport to squared Gram operators, then apply the symmetric theorem.
+
+Corrected 2026-08-04: the row named a `...PopulationGap` predicate that does not exist. The declaration is `...InternalGap` (`FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/Theorem4.lean`); the same `PopulationGap` -> `InternalGap` rename went unrecorded on `YWS-T2-sinTheta`.
 * **next action**: Guard the completion lane, or migrate the coefficient theorems into DavisKahan/Specialized.
 
 ### `YWS-T4-left` — Theorem 4 -- the identical statement for left singular subspaces
@@ -223,9 +220,10 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **source anchor**: Theorem 4, left singular blocks (theorem, section 4)
 * **summary**: The paper states that the identical bounds hold for the corresponding left singular-vector blocks U, U-hat.
 * **status**: `compiled_exact` / **verification**: `proved_in_build`
-* **lean declarations**: `TauCeti.leftSingularSubspace`, `TauCeti.leftSingularSubspace_sinTheta_le`, `TauCeti.DavisKahanTheory.CorrespondingLeftSingularBlock`, `TauCeti.DavisKahanTheory.LeftSingularPopulationGap`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_opNormCoefficient_le`
-* **gaps**: `unguarded-completion-lane`
+* **lean declarations**: `TauCeti.leftSingularSubspace`, `TauCeti.leftSingularSubspace_sinTheta_le`, `TauCeti.DavisKahanTheory.CorrespondingLeftSingularBlock`, `TauCeti.DavisKahanTheory.LeftSingularInternalGap`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_opNormCoefficient_le`
 * **notes**: Proved as its own statement rather than by an adjoint-symmetry argument from the right-hand case, so the two are independently checkable.
+
+Corrected 2026-08-04: the row named a `...PopulationGap` predicate that does not exist. The declaration is `...InternalGap` (`FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/Theorem4.lean`); the same `PopulationGap` -> `InternalGap` rename went unrecorded on `YWS-T2-sinTheta`.
 * **next action**: Same as YWS-T4-right.
 
 ### `YWS-T4-aligned` — Theorem 4 -- the aligned-frame conclusion, both sides
@@ -234,7 +232,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **summary**: Some O-hat in O(d) satisfies ‖V-hat O-hat - V‖_F <= 2^{3/2} (2 sigma_1 + ‖D‖_op) min(sqrt d ‖D‖_op, ‖D‖_F) / Delta_sv, and likewise on the left.
 * **status**: `compiled_exact` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularAlignedBasis_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularAlignedBasis_le`
-* **gaps**: `unguarded-completion-lane`, `private-helper-only`
+* **gaps**: `private-helper-only`
 * **notes**: Factored through a single generic Gram transport result so that no perturbation argument is duplicated between the symmetric and rectangular cases. That transport result (`yuWangSamworth_gram_alignedBasis_le`) is `private`, which is the right call for an internal factoring step and is why it is not listed here.
 * **next action**: Same as YWS-T4-right.
 
@@ -244,7 +242,6 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **summary**: Direct right and left single-singular-vector bounds, obtained by reusing the symmetric rank-one theorem on Gram operators.
 * **status**: `compiled_generalized` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularVector_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularVector_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularVector_opNormCoefficient_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_leftSingularVector_opNormCoefficient_le`
-* **gaps**: `unguarded-completion-lane`
 * **notes**: The paper does not print these; the lane adds them because the rectangular rank-one case is what applications actually use. Recorded so that the census is not read as claiming they are source items.
 * **next action**: Same as YWS-T4-right.
 
@@ -254,7 +251,6 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **summary**: The identities converting a rectangular perturbation bound into a symmetric one on A^T A and A A^T, producing the (2 sigma_1 + ‖D‖_op) coefficient.
 * **status**: `compiled_exact` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.frobenius_rightGram_sub_le`, `TauCeti.DavisKahanTheory.frobenius_leftGram_sub_le`, `TauCeti.DavisKahanTheory.opNorm_rightGram_sub_le_paperCoefficient`, `TauCeti.DavisKahanTheory.opNorm_leftGram_sub_le_paperCoefficient`, `TauCeti.DavisKahanTheory.frobenius_rightGram_sub_le_paperCoefficient`, `TauCeti.DavisKahanTheory.frobenius_leftGram_sub_le_paperCoefficient`, `TauCeti.DavisKahanTheory.sum_opNorm_le_paperCoefficient`
-* **gaps**: `unguarded-completion-lane`
 * **notes**: Proved for both the Frobenius and operator branches separately, which is what makes the min in Theorem 4's numerator legitimate rather than a bound on one branch quoted for both.
 * **next action**: Same as YWS-T4-right.
 
@@ -274,7 +270,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **summary**: If U and W have orthonormal columns then ‖U^T M W‖_F <= ‖M‖_F.
 * **status**: `compiled_generalized` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_lemma5_columns`, `TauCeti.DavisKahanTheory.yuWangSamworth_lemma5_isometricColumns`, `TauCeti.DavisKahanTheory.yuWangSamworth_lemma5_orthonormalColumns`
-* **gaps**: `unguarded-completion-lane`, `numbering-conflict`
+* **gaps**: `numbering-conflict`
 * **notes**: Restated as a two-sided ideal estimate for the rectangular Frobenius norm rather than copied as a matrix-only helper, with bundled linear-isometry wrappers exposing the paper's orthonormal-column hypothesis directly. The distilled tex calls this Appendix Lemma 1; see gap `numbering-conflict`.
 * **next action**: Same as YWS-T4-right.
 
@@ -284,7 +280,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **summary**: If instead U and W have orthonormal rows then ‖U^T M W‖_F = ‖M‖_F.
 * **status**: `compiled_generalized` / **verification**: `proved_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_lemma5_rows`, `TauCeti.DavisKahanTheory.yuWangSamworth_lemma5_orthonormalRows`
-* **gaps**: `unguarded-completion-lane`, `private-helper-only`
+* **gaps**: `private-helper-only`
 * **notes**: The equality half is the direction the appendix proof actually consumes; the inequality half is the one usually quoted. Both are proved. The row-side norm-preservation step `rectangularFrobenius_comp_adjoint_linearIsometry` is `private`; both public forms are listed.
 * **next action**: Same as YWS-T4-right.
 

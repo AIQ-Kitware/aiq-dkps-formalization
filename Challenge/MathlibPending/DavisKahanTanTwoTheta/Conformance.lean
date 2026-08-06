@@ -5,7 +5,7 @@ A focused comparator statement for the sharp operator-norm Part III
 tan-2Theta endpoint, including strict quarter-turn avoidance.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
 /-!
 ## Comparator maintenance rule

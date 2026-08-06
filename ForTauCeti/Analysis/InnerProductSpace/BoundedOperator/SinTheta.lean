@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.ReducedExtension
-import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
-import ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.ReducedExtension
+public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+public import ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator
 
 /-!
 # Dimension-free Davis--Kahan `sin Θ`
@@ -34,6 +36,8 @@ and the proof are unchanged apart from spelling the compatibility aliases
 to.  `DavisKahan/BoundedOperator/Compat.lean` keeps the old names for the paper
 library.
 -/
+
+public section
 
 namespace Submodule
 

@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
-import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
+public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone
 
 /-!
 # Strong continuity of a conjugation flow on the Hilbert–Schmidt space
@@ -42,6 +44,8 @@ of those moves, held back while another agent held a claim on
 this file read `in progress`.  Path change and repointing of imports only — no
 statement, signature, proof, attribute, declaration name or namespace changed.
 -/
+
+public section
 
 open scoped ENNReal NNReal
 open Filter Topology
@@ -193,6 +197,7 @@ theorem adjoint_U_neg (t : ℝ) : (V.U (-t)).adjoint = V.U t := by
   exact h.symm
 
 /-- The Sylvester flow on operators: `Z ↦ U t ∘ Z ∘ (V t)⋆`. -/
+@[expose]
 noncomputable def conjOp (t : ℝ) (f : lp (fun _ : ι => E) 2) : F →L[ℂ] E :=
   ((U.U t).comp (ofLp b f)).comp (V.U (-t))
 

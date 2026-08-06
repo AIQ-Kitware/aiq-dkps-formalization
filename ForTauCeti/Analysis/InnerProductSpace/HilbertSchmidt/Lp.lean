@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
-import Mathlib.Analysis.InnerProductSpace.l2Space
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
+public import Mathlib.Analysis.InnerProductSpace.l2Space
 
 /-!
 # Hilbert–Schmidt operators are an `ℓ²` space of columns
@@ -54,6 +56,8 @@ characterisation, are this library's own and are explained in the module docstri
 `HilbertSchmidtTensor.Space` is the object being replaced — and for nothing else,
 since the construction is a different one.
 -/
+
+public section
 
 open scoped ENNReal NNReal
 open ContinuousLinearMap

@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 # Reducing subspaces for bounded operators
@@ -26,6 +28,8 @@ Davis--Kahan theory.
   Mathlib, `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
 -/
 
+public section
+
 
 open scoped InnerProductSpace
 
@@ -36,6 +40,7 @@ namespace ContinuousLinearMap
 
 /-- A subspace reduces a bounded operator when it and its orthogonal complement
 are invariant. -/
+@[expose]
 def Reduces (A : E →L[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
   (∀ x ∈ U, A x ∈ U) ∧ (∀ x ∈ Uᗮ, A x ∈ Uᗮ)
 

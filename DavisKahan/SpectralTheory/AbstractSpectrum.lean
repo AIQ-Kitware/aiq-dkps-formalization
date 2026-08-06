@@ -55,6 +55,17 @@ downstream call sites named. -/
 abbrev IsUnitaryOperator (W : E →L[𝕜] E) : Prop :=
   TauCeti.LinearPMap.IsUnitaryOperator W
 
+/-- **The reflection in a subspace is unitary.**
+
+Both halves are already proved in `ForTauCeti` on `Submodule`; this pairs them against the
+`IsUnitaryOperator` spelling that the spectral development names.  It is stated here rather
+than beside `reflectionOperator` because `IsUnitaryOperator` is defined in the `LinearPMap`
+tower, which the projection-block module does not import; moving it upstream is a layering
+change, not a mathematical one. -/
+theorem reflectionOperator_isUnitary (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] : IsUnitaryOperator (DavisKahan.reflectionOperator U) :=
+  ⟨U.reflectionOperator_norm_map, U.reflectionOperator_surjective⟩
+
 /-- A bounded operator represented as an orthogonal projection. -/
 def IsOrthogonalProjection (P : E →L[𝕜] E) : Prop :=
   P ∘L P = P ∧ P.IsSymmetric
