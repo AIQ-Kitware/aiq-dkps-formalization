@@ -20,7 +20,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `DK-3.2-prop` — Proposition 3.2: Nonacute existence criterion | proposition | `s3-prop3-2-existence` | 0 / 6 | 100% | yes |
 | `DK-3.3-prop` — Proposition 3.3: Principal square-root characterization | proposition | `s3-prop3-3` | 0 / 5 | 100% | yes |
 | `DK-3.4-prop` — Proposition 3.4: Square as a direct rotation | proposition | `s3-prop3-4` | 0 / 2 | 100% | yes |
-| `DK-3.1-thm` — Theorem 3.1: Classification of pairs of subspaces | theorem | `s3-theorem3-1` | 1 / 7 | 85% | no |
+| `DK-3.1-thm` — Theorem 3.1: Classification of pairs of subspaces | theorem | `s3-theorem3-1` | 0 / 7 | 100% | yes |
 | `DK-3.1-cor` — Corollary 3.1: Compact classification by angle eigenvalues | corollary | `s3-cor3-1` | 0 / 6 | 100% | yes |
 | `DK-3.5-prop` — Proposition 3.5: Angle commutation and eigenspace geometry | proposition | `s3-prop3-5` | 0 / 5 | 100% | yes |
 | `DK-3.2-cor` — Corollary 3.2: Reversal symmetry | corollary | `s3-cor3-2` | 0 / 2 | 100% | yes |
@@ -51,11 +51,11 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 - Census rows requiring frontier coverage: **11**
 - Census rows mapped: **11**
 - Declarations resolving in Lean: **80**
-- Declarations with admission-free Lean closure: **65**
-- Recursively grounded manifest nodes: **65**
-- Paper results recursively grounded: **26 / 32**
+- Declarations with admission-free Lean closure: **68**
+- Recursively grounded manifest nodes: **68**
+- Paper results recursively grounded: **27 / 32**
 - Source-role endpoints resolving: **29 / 29**
-- Source-role endpoints recursively grounded: **24 / 29**
+- Source-role endpoints recursively grounded: **25 / 29**
 
 ## Manifest nodes
 
@@ -75,8 +75,8 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s3-generic-cosine-restriction` | foundation | no |  | high | no | yes | yes | yes | yes |
 | `s3-generic-sine-restriction` | foundation | no |  | medium | no | yes | yes | yes | yes |
 | `s3-generic-pythagoras` | bridge | no |  | medium | no | yes | yes | yes | yes |
-| `s3-spectral-multiplicity-definition` | foundation | no |  | hard | no | yes | yes | no | no |
-| `s3-spectral-multiplicity-complete` | foundation | no |  | hard | no | yes | yes | no | no |
+| `s3-spectral-multiplicity-definition` | foundation | no |  | hard | no | yes | yes | yes | yes |
+| `s3-spectral-multiplicity-complete` | foundation | no |  | hard | no | yes | yes | yes | yes |
 | `s3-prop3-1` | source | yes | `DK-3.1-prop` | high | no | yes | yes | yes | yes |
 | `s3-crossed-identification` | bridge | no |  | high | no | yes | yes | yes | yes |
 | `s3-prop3-2-existence` | source | yes | `DK-3.2-prop` | high | no | yes | yes | yes | yes |
@@ -87,7 +87,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s3-prop3-5` | source | yes | `DK-3.5-prop` | high | no | yes | yes | yes | yes |
 | `s3-cor3-2` | source | yes | `DK-3.2-cor` | medium | no | yes | yes | yes | yes |
 | `s3-operator-classification` | bridge | no |  | high | no | yes | yes | yes | yes |
-| `s3-theorem3-1` | source | yes | `DK-3.1-thm` | hard | no | yes | yes | no | no |
+| `s3-theorem3-1` | source | yes | `DK-3.1-thm` | hard | no | yes | yes | yes | yes |
 | `s3-compact-angle-list` | foundation | no |  | medium | no | yes | yes | yes | yes |
 | `s3-cor3-1` | source | yes | `DK-3.1-cor` | high | no | yes | yes | yes | yes |
 | `s4-prop4-1` | source | yes | `DK-4.1-prop` | medium | no | yes | yes | yes | yes |
