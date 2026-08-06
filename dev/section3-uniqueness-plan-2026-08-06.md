@@ -31,11 +31,19 @@ operator with different measure classes.  The field `base_supported_level_zero` 
 
 ## The two halves, and their difficulty
 
-### Half 1: the measure class is determined.  **Reachable.**
+### Half 1: the measure class is determined.  **Step 1 DONE, 2026-08-06.**
+
+`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagMeasureNatural.lean` proves
+`cfc_apply_of_intertwines` and `map_val_diagMeasure_eq_of_intertwines`, both axiom-clean.  It was
+far cheaper than this plan assumed, because Mathlib already had both moving parts:
+`LinearIsometryEquiv.conjStarAlgEquiv` and `StarAlgHomClass.map_cfc`.  **The prediction below
+that a Stone--Weierstrass argument would be needed was wrong** -- `map_cfc` supplies the whole
+transport, and the only real side condition is continuity of the conjugation, discharged by
+rewriting it as `x ↦ e ∘L x ∘L e⁻¹`.  What is left of Half 1 is step 2 below.
 
 The plan, in the order the pieces should be built:
 
-1. **`diagMeasure` is natural under a unitary intertwiner.**  If `e : H ≃ₗᵢ[ℂ] K` satisfies
+1. ~~**`diagMeasure` is natural under a unitary intertwiner.**~~  **DONE.**  If `e : H ≃ₗᵢ[ℂ] K` satisfies
    `e (A x) = B (e x)` then `diagMeasure hB (e ξ)` and `diagMeasure hA ξ` agree, after the
    identification of the spectra (which are equal, `A` and `B` being unitarily equivalent).
 
