@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.Frontier.Core
-import DavisKahan.Experimental.Frontier.Section3
-import DavisKahan.Experimental.Frontier.Section4
+import DavisKahan.Frontier.Core
+import DavisKahan.Frontier.Section3
+import DavisKahan.Frontier.Section4
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
 import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle
 import DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface

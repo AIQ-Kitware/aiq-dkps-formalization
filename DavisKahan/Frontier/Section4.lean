@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.Frontier.Section3
+import DavisKahan.Frontier.Section3
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 -- promoted infinite-dimensional Proposition 4.1 approximation-number majorization
 -- and the Fan-dominant ideal bridge for Corollary 4.1.  This module depends only

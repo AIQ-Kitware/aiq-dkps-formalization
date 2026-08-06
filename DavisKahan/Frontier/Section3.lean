@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.Frontier.Core
+import DavisKahan.Frontier.Core
 import DavisKahan.Geometry.Polar.DirectRotation
 -- supplies `spectraReflectionProduct` and `IsAcute.symm`
 import DavisKahan.Geometry.Polar.DirectRotationSquare

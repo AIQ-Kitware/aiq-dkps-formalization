@@ -48,10 +48,10 @@ no `sorry` and no `axiom`, so a declaration reachable from
 
 | Verification | Count |
 | --- | ---: |
-| `proved_in_build` | 39 |
+| `proved_in_build` | 40 |
 | `proved_conditional` | 5 |
 | `partially_in_build` | 0 |
-| `proved_outside_build` | 1 |
+| `proved_outside_build` | 0 |
 | `not_compiling` | 0 |
 | `absent` | 0 |
 | `not_applicable` | 3 |
@@ -108,7 +108,7 @@ Section 3's classification results need the Halmos two-subspace canonical form t
 
 **WHAT STILL BLOCKS.** Only the *phrasing* of Theorem 3.1 in terms of spectral multiplicity functions, which needs Hahn--Hellinger (a translation of the invariant, absent from Mathlib), and the cardinal-valued dimension bookkeeping for the Section 4 infinite-dimensional existence statement. Corollary 3.1 needs neither -- it needs the compact-operator equivalence criterion instead. This blocker should be split along those three lines the next time it is touched.
 
-Gates: DK-3.2-prop (proved_outside_build), DK-3.1-thm (proved_in_build)
+Gates: DK-3.2-prop (proved_in_build), DK-3.1-thm (proved_in_build)
 
 ### `section9-certificate-discharge` -- mixed
 
@@ -132,16 +132,6 @@ Gates: DK-9-model (proved_conditional), DK-9.1-9.4 (proved_conditional), DK-9.5-
 The mathematics is in the build in a more general form; what is missing is a statement carrying the paper's numbering, scope and hypotheses, so the facade can cite it.
 
 Gates: S1-block-residual (proved_in_build), S2-tan-two-theta (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.4-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
-
-### `frontier-tree-unguarded` -- mechanical
-
-**The Davis--Kahan 1970 frontier tree was built by nothing (fixed 2026-08-04)**
-
-`DavisKahan/Experimental/Frontier/**` holds the Section 3 classification spine, the infinite-dimensional Section 4 propositions and the Section 9 analytic model -- 80 manifest declarations, 19 of them `sorry` -- and **no module in the repository imported any of it**. `lake build` missed it, `lake build DavisKahan.Experimental` missed it, and so did `Challenge` and `FinishTanTwoTheta`. It compiled only when a module was named explicitly on the command line. This is the same defect the `RoadmapBridge` block in `lakefile.toml` records for the suggested-signature files, and it went unnoticed for longer because the frontier checker elaborates the tree through its own probe file rather than through a build target, so the status document kept reporting '80 declarations resolving' from a tree nothing built.
-
-Fixed by importing `DavisKahan.Experimental.Frontier.All` from `DavisKahan/Experimental/All.lean`, so `lake build DavisKahan.Experimental` now covers it. It cannot go in a default `warningAsError` target because carrying `sorry`s is the frontier's purpose.
-
-Gates: DK-3.2-prop (proved_outside_build)
 
 ### `section8-promotion-out-of-experimental` -- mechanical
 
@@ -353,17 +343,18 @@ THE REUSABLE HALF was extracted to `ForTauCeti`: `Submodule.re_inner_apply_self_
 
 - **Kind:** `proposition`
 - **Status:** `compiled_general_infrastructure`
-- **Verification:** `proved_outside_build`
+- **Verification:** `proved_in_build`
 - **Mathematics:** A direct rotation exists exactly when the two crossed intersections have equal dimension; it is then nonunique.
-- **Blocked by:** `frontier-tree-unguarded`, `two-subspace-classification`
+- **Blocked by:** `two-subspace-classification`
 - **Current Lean references:** `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_2_parameterized_nonuniqueness`
-- **Not reachable from `DavisKahan.All`:** `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_2_parameterized_nonuniqueness`
 - **Assessment:** No exact general Hilbert-space declaration was found.
 
 CORRECTED 2026-08-04: this row read `not_represented` / `absent` and listed no declarations, but the nonacute existence criterion is stated and **proved sorry-free** in `DavisKahan/Experimental/Frontier/Section3.lean` (verified by `#print axioms`; neither declaration reaches `sorryAx`). It is `proved_outside_build` because the whole `Frontier` tree sits outside the default targets -- see the `frontier-tree-unguarded` blocker.
 
 **2026-08-05 (second session): both promotion-blocking admissions are out of this row's closure.** `directRotation_minimal` was orphaned -- nothing outside its own file referenced it, and the complex statement is already proved in production as `spectraDirectRotation_minimal`; `SpectraBridge/DirectRotationAPI.lean` imported that module only for `IsAcute` and now takes it from `BoundedOperator/Compat`. `projectionDifference_ideal_intervalExterior`, `ideal_sinTheta` and `ideal_sinTwoTheta` moved into `Experimental/InfiniteDimensional/SinTheta/IdealIntervalExterior.lean`, leaving `SinTheta/General.lean` and `InfiniteDimensional/DoubleAngle.lean` sorry-free. Measured closures: 175/188/199 modules, 24/41/50 Experimental, 0 tactic sorries each. WHAT STILL BLOCKS THE ROW: `check_library_structure` rule 2 forbids a production module importing `Experimental`, so promotion means RELOCATING those closures out of `Experimental/`. That is a design decision, not a mechanical step -- take it deliberately. Rule 3 now reports 49 violations (was 6) precisely because 34 modules became admission-free; the checker is enumerating what ought to move.
-- **Next action:** Relocate the sorry-free Section 4/8 closures out of `Experimental/` so a default target guards them. The mathematics is done and the admissions are gone; what remains is the directory/namespace decision plus the namespace renames it implies.
+
+**IN THE BUILD 2026-08-06.**  `DavisKahan/Experimental/Frontier/{Core,Section3,Section4}.lean` became admission-free and were promoted to `DavisKahan/Frontier/`, reached from `DavisKahan.All` via `DavisKahan.Frontier.All`.  Nothing was renamed -- the `TauCeti.DavisKahan.Experimental.Frontier` namespaces are untouched, exactly as in the 84-module promotion earlier the same day, because the namespace has never been tied to the directory here.  The census declaration probe now resolves 145/145 against `DavisKahan.All`, up from 143/145, and these two declarations are the two that changed.  `check_library_structure` rule 3 drops from 16 violations to 13.
+- **Next action:** Nothing outstanding: the criterion and the parameterized nonuniqueness are both proved and both guarded by `lake build`.
 
 #### Proposition 3.3: Principal square-root characterization
 
@@ -405,7 +396,7 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 - **Verification:** `proved_in_build`
 - **Mathematics:** Spectral multiplicity functions of the two angle operators classify dimension-compatible subspace pairs up to isometric equivalence.
 - **Blocked by:** `two-subspace-classification`
-- **Current Lean references:** `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.SameHalmosCosineBlockInvariant`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.exists_cosineBlockEquiv_of_pairEquiv`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_of_cosineBlockEquiv`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.genericTransport`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_of_summandEquivs`
+- **Current Lean references:** `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.SameHalmosCosineBlockInvariant`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.exists_cosineBlockEquiv_of_pairEquiv`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_of_cosineBlockEquiv`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.genericTransport`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_of_summandEquivs`, `TauCeti.DavisKahan.Experimental.Frontier.SameSpectralMultiplicity`, `TauCeti.DavisKahan.Experimental.Frontier.sameSpectralMultiplicity_iff_unitarilyEquivalent`, `TauCeti.DavisKahan.Experimental.Frontier.unitarilyEquivalent_of_sameSpectralMultiplicity`, `TauCeti.DavisKahan.Experimental.Frontier.sameSpectralMultiplicity_of_unitarilyEquivalent`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.theorem3_1_spectralMultiplicity_classification`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.twoProjection_operator_classification`
 - **Assessment:** **PROVED 2026-08-04, in the paper's own invariant, both directions, admission-free.**
 
 `pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant` (`DavisKahan/Geometry/Halmos/GenericReconstruction.lean`): two ordered pairs of subspaces of two complex Hilbert spaces are unitarily equivalent as pairs **iff** their four elementary Halmos summands are linearly isometric and their angle operators `cos^2 Theta` -- the compression of `P_V` to `U /\ generic` -- are unitarily equivalent. No compactness, no finite dimension, no separability, no direct-integral presentation. `#print axioms` gives exactly [propext, Classical.choice, Quot.sound], and the module is reachable from `DavisKahan.All`, so CI guards it.
@@ -434,7 +425,11 @@ WHAT IS NOT CLAIMED.  `SameSpectralMultiplicity` is an EXISTENTIAL OVER PRESENTA
 
 THE ANGLE OPERATOR IS `genericCosineBlock`.  The frontier statement of Theorem 3.1 used to compare the symmetrized `genericHalmosCosineSq`, which on the generic part is `A (+) A`; recovering `A` from it is multiplicity-halving.  It now uses the U-side cosine block, matching the 2026-08-04 decision behind `SameHalmosOperatorInvariant` and the 2026-08-06 correction of Corollary 3.1.  Do not restore the symmetrized reading.
 
-EVIDENCE PATH UNCHANGED.  The frontier declarations live under `DavisKahan.Experimental.Frontier`, which no default target builds, so they are deliberately still absent from `lean_declarations` -- listing them would drop the row to `partially_in_build`.  The ForTauCeti stack that proves them is in the default build (`lake build` exit 0, 9438 jobs) but is not reachable from `DavisKahan.All`, so it is not listed either.  The frontier gate is the guard: `check_davis_kahan_frontier.py` now reports 68/80 nodes and 27/32 paper results recursively grounded, up from 65/80 and 26/32, and every remaining ungrounded node is Section 9.
+NOW GUARDED BY CI.  The multiplicity statements were briefly unguarded: they lived under `DavisKahan.Experimental.Frontier`, which no default target builds, so they could not be listed here without dropping the row to `partially_in_build`.  On 2026-08-06 `Frontier/{Core,Section3,Section4}.lean` were promoted to `DavisKahan/Frontier/`, reached from `DavisKahan.All`; nothing was renamed, exactly as in the 84-module promotion earlier the same day.  The declaration probe resolves 145/145 against `DavisKahan.All`, so both the operator-level and the multiplicity-level statements are now on this row's evidence path and `lake build` guards them.  The frontier gate agrees: 68/80 nodes and 27/32 paper results recursively grounded, up from 65/80 and 26/32, with every remaining ungrounded node in Section 9.
+
+The ForTauCeti stack that proves them is in the default build but is not reachable from `DavisKahan.All`, so it is still not listed; its guard is `lake build` over the `ForTauCeti` glob.
+
+RESOLVED 2026-08-06.  `DavisKahan/Experimental/Frontier/**` holds the Section 3 classification spine, the infinite-dimensional Section 4 propositions and the Section 9 analytic model -- 80 manifest declarations, 19 of them `sorry` -- and **no module in the repository imported any of it**. `lake build` missed it, `lake build DavisKahan.Experimental` missed it, and so did `Challenge` and `FinishTanTwoTheta`. It compiled only when a module was named explicitly on the command line. This is the same defect the `RoadmapBridge` block in `lakefile.toml` records for the suggested-signature files, and it went unnoticed for longer because the frontier checker elaborates the tree through its own probe file rather than through a build target, so the status document kept reporting '80 declarations resolving' from a tree nothing built.  `Frontier/{Core,Section3,Section4}.lean` became admission-free and were promoted to `DavisKahan/Frontier/`, reached from `DavisKahan.All`; the declaration probe went from 143/145 to 151/151.  This blocker entry is removed because no row is blocked by it any more.
 - **Next action:** Nothing for Theorem 3.1's statement: it is proved in both the operator phrasing and the paper's multiplicity phrasing.  Two follow-ups, neither blocking: (1) uniqueness of the multiplicity decomposition, which is what SpectralMultiplicityFoundation needs and what would turn the existential invariant into a canonical one -- see dev/section3-multiplicity-plan-2026-08-06.md section 5 route B; (2) relocating the Frontier Section-3 statements out of Experimental/ so a default target guards them.
 
 #### Corollary 3.1: Compact classification by angle eigenvalues
