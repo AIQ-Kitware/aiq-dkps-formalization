@@ -316,3 +316,109 @@ was lost — the working tree was a strict superset and the build stayed green �
 deliverable is split across two commits and the first misdescribes its own contents.  The
 history is not being rewritten, since it is already pushed; **read `5e445d10`'s message for
 the mathematics of that file.**
+
+---
+
+## 7. OUTCOME (2026-08-06, same day): Theorem 3.1 is proved
+
+`SameSpectralMultiplicity` is no longer a `sorry`ed `def`, and
+`sameSpectralMultiplicity_iff_unitarilyEquivalent` and
+`theorem3_1_spectralMultiplicity_classification` are proved.  `#print axioms` gives exactly
+`[propext, Classical.choice, Quot.sound]` on all of them.  The frontier's Section-3 nodes are
+grounded; every remaining ungrounded node in the manifest is Section 9.
+
+### What was built, and where §3--§4 were right and wrong
+
+Route A of §5 was taken, as planned.  Three of the four design calls in §3--§4 stood; the fourth
+was overturned by the same argument that overturned §3's separability call, run in the other
+direction.
+
+* **Level sets, not a function `ℂ → ℕ∞` (§3): stood.**  `MultiplicityDatum.level : ℕ → Set ℂ`
+  with `antitone_level`, so every hypothesis is a plain `MeasurableSet`.
+* **Radon--Nikodym unitary independent and parallelisable (§3): stood**, and it is the entire
+  content of the `⟸` direction, which carries **no separability hypothesis at all**.
+* **`MeasureEquiv` named and proved an `Equivalence` up front (§5): done**, together with
+  `measureClassSetoid`, so route B remains a strict extension.
+* **Re-indexing from `ℕ` to `Cardinal` (§4): NOT done, and it should not be.**  §4 rejected
+  separability because the `ℕ`-recursion that forced it was an artifact of the proof.  That was
+  right about the *decomposition*, and it is why
+  `exists_orthogonalFamily_cyclicSubspace` is still stated over an arbitrary index type with no
+  countability anywhere.  But §4 then inferred that the multiplicity datum must be
+  cardinal-indexed, and that inference is what fails: **the uniform-multiplicity normal form over
+  an arbitrary index type needs non-σ-finite measures** -- `H = ⊕_{t ∈ [0,1]} L²(δ_t)` has
+  uniform multiplicity one with counting measure on `[0,1]` as its base -- and every
+  Radon--Nikodym tool in Mathlib, and every one in
+  `ForTauCeti/MeasureTheory/RadonNikodymL2.lean`, is σ-finite.  A cardinal-indexed statement is
+  therefore not merely harder; it is not expressible with the measure theory available.
+
+### Separability, and why it is not a weakening
+
+Theorem 3.1's multiplicity phrasing carries `[TopologicalSpace.SeparableSpace H₁]`.  Three facts
+make that the right call rather than the retreat §4 refused:
+
+1. **It is the paper's own convention.**  Davis and Kahan work under a global separability
+   assumption; the source census records this twice, at the Section 6 rank hypothesis
+   (`dev/davis-kahan-1970-full-source-census.md`), where the printed
+   `dim X(E₀) < dim X(F₀)` does its only job *because* of that convention.
+2. **Nothing already proved is weakened.**  The operator-level classification
+   `pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant` is untouched: arbitrary
+   complex Hilbert spaces, no compactness, no finite dimension, no separability.  It is that
+   theorem, not this one, that grounds the frontier node and carries the classification content.
+3. **It is confined to one direction and one space.**  `⟸` is separability-free
+   (`unitarilyEquivalent_of_sameSpectralMultiplicity`).  `⟹` needs it on `H₁` only, because `B`
+   inherits `A`'s datum along the given unitary.
+
+The hypothesis is needed for exactly one reason: producing a model requires a **countable**
+cyclic decomposition, because `rank S x n` counts *earlier* indices and so the index type must
+be linearly ordered.
+
+### The chain that was built
+
+Measure theory (`ForTauCeti/MeasureTheory/`):
+
+* `MeasureClass.lean` -- `MeasureEquiv`, `Equivalence`, `measureClassSetoid`, and
+  `measureEquiv_withDensity_restrict`: a density and the restriction to its support have the same
+  null sets.
+* `LpComp.lean` -- `compLp`, `compLpEquiv` (two-sided a.e. inverse), `embLpEquiv` (transport
+  along a measurable embedding, surjectivity by `Function.extend`), and the intertwining law
+  `compLp_mulLp`; plus `mulLp_congr_ae`.
+* `LpRestrict.lean` -- extension by zero as an isometry `L²(μ|ₛ) →ₗᵢ L²(μ)`, and
+  `isHilbertSum_extendLp` over a countable measurable partition.  Denseness is proved in the
+  contrapositive, so no summability argument appears.
+* `LpSliceSum.lean` -- `sliceSum`, `isHilbertSum_sliceLp`, `sliceLp_mulLp`.  This is the step
+  that turns a *direct sum* of multiplication models into a *single* one, after which everything
+  is measure theory on `ℂ × ℕ`.
+* `MultiplicityLevels.lean` -- `dominatingMeasure`, `rank`, `levelPiece`, `levelSet`,
+  `antitone_levelSet`, `map_rankMap_sliceSum`, `exists_multiplicityLevels`.
+
+Hilbert space (`ForTauCeti/Analysis/InnerProductSpace/`):
+
+* `OperatorUnitaryEquiv.lean` -- the relation with `refl`/`symm`/`trans`, so the chain composes.
+* `HilbertSumIntertwine.lean` -- two Hilbert sums of one family carry unitarily equivalent
+  operators.  A density argument, not a computation.
+* `BorelCalculus/SeparableCyclic.lean` -- countability of a uniformly separated set, hence of an
+  orthogonal cyclic set, hence the `ℕ`-indexed decomposition, **padded with the zero vector**
+  (whose cyclic subspace is `⊥`).
+* `BorelCalculus/MultiplicityModel.lean` -- `MultiplicityDatum`,
+  `exists_hasMultiplicityModel` (existence half of Hahn--Hellinger), and
+  `operatorUnitaryEquiv_of_measureEquiv`.
+
+### One implementation note worth keeping
+
+`rank` is defined by **recursion on `n`**, not as `(Finset.range n |>.filter _).card`.  That one
+choice makes monotonicity, measurability (by induction on `n`), and the key lemma
+`exists_mem_rank_eq_of_rank_eq_succ` -- *if some index has rank `k+1` then some index has rank
+`k`*, which is what makes the level sets antitone -- each a three-line induction.  The `Finset`
+formulation needs a `max`-of-a-`Finset` argument for the same fact and a finite-union argument
+for measurability.
+
+### What remains open, and must not be overstated
+
+`SameSpectralMultiplicity` is an **existential over presentations**.  Nothing proved here says
+the datum of an operator is unique, so:
+
+* **`SpectralMultiplicityFoundation` is still uninhabited**, and this work does not inhabit it.
+  Its `multiplicity` field is a *function*, which needs uniqueness as well as existence, plus a
+  canonical `Datum` -- i.e. the quotient by `measureClassSetoid`.  §5's route B is still open.
+* The census must not claim a canonical invariant.  It claims what is proved: a complete
+  invariant *in the sense of the biconditional*, which is what the paper's sentence asserts.
