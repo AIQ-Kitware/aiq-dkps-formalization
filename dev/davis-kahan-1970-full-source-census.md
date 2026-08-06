@@ -11,9 +11,9 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 20 |
+| `compiled_exact` | 21 |
 | `compiled_specialization` | 4 |
-| `compiled_general_infrastructure` | 12 |
+| `compiled_general_infrastructure` | 11 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
 | `partial_or_wrapper_missing` | 7 |
@@ -48,10 +48,10 @@ no `sorry` and no `axiom`, so a declaration reachable from
 
 | Verification | Count |
 | --- | ---: |
-| `proved_in_build` | 37 |
+| `proved_in_build` | 39 |
 | `proved_conditional` | 5 |
 | `partially_in_build` | 0 |
-| `proved_outside_build` | 3 |
+| `proved_outside_build` | 1 |
 | `not_compiling` | 0 |
 | `absent` | 0 |
 | `not_applicable` | 3 |
@@ -155,7 +155,7 @@ Five of Section8.lean's seven imports reach those modules, so the dependency can
 
 **Side effect worth knowing before the next promotion attempt.** Removing those admissions turned `scripts/check_library_structure.py` rule 3 from CLEAN to 6 findings. That rule asks the *upward* question -- does anything transitively importing this module still rest on an admission? -- and five real Experimental modules (`InfiniteDimensional.SinTheta.Bounded`, `MathAhead.HiddenFoundations.{KyFanBochner,RealSylvesterDescent}`, `Scratch.SharedFoundations.Ideal.{OperatorAbsoluteValueComplex,TwoWayFactorization}`) now have nothing admitted above them. **That is the checker working: they are finished scaffolding for finished work and belong in production.** They were not promoted in the same change because each imports other `Experimental` modules, so promoting them alone would violate rule 2 (no production module imports Experimental); the promotion is a closure-sized refactor and is tracked separately.
 
-Gates: DK-8.1-thm (proved_outside_build), DK-8.2-thm (proved_outside_build)
+Gates: DK-8.1-thm (proved_in_build), DK-8.2-thm (proved_in_build)
 
 
 ## Source ledger
@@ -755,11 +755,10 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 
 - **Kind:** `theorem`
 - **Status:** `compiled_exact`
-- **Verification:** `proved_outside_build`
+- **Verification:** `proved_in_build`
 - **Mathematics:** Under tan(2 Theta) hypotheses, the acute branch is equivalent to the selected spectral ordering; a canonical reducing subspace exists and satisfies operator, eigenvalue, and symmetric-gauge repulsion inequalities.
 - **Blocked by:** `section8-promotion-out-of-experimental`
 - **Current Lean references:** `TauCeti.DavisKahan1970.Section8.maximalAngle_selectedSpectralSubspaces_lt_pi_div_four`, `TauCeti.DavisKahan1970.Section8.orientedSpectralRepulsionConclusion`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_of_rotatedBlockData`, `TauCeti.DavisKahan1970.Section8.theorem8_1_selectedBranch_and_spectralRepulsion`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_of_rotatedBlockData`
-- **Not reachable from `DavisKahan.All`:** `TauCeti.DavisKahan1970.Section8.maximalAngle_selectedSpectralSubspaces_lt_pi_div_four`, `TauCeti.DavisKahan1970.Section8.orientedSpectralRepulsionConclusion`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_of_rotatedBlockData`, `TauCeti.DavisKahan1970.Section8.theorem8_1_selectedBranch_and_spectralRepulsion`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_of_rotatedBlockData`
 - **Assessment:** Theorems 8.1's conclusion is packaged as `Theorem81SourceConclusion` and proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` gives [propext, Classical.choice, Quot.sound]. The status stays `candidate_under_repair` because that axis is fidelity to the printed statement, which compiling does not establish -- not because anything fails to build.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_exact`. All five declarations are compiled and axiom-clean. They resolve only outside the default build, which is what `proved_outside_build` records; the mathematics itself matches the printed theorem.
@@ -767,17 +766,20 @@ STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_exact`. All f
 VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `DavisKahan.All`, `DavisKahan.Experimental.All` and `ForTauCeti` and running `#print axioms` on all 87 declarations named in this census elaborated cleanly -- every name resolves and **none reaches `sorryAx`**. A second probe importing only the default-build roots showed 78 of the 87 resolve there; the 9 that do not are exactly the `TauCeti.DavisKahan1970.Section8.*` names on rows DK-8.1-thm and DK-8.2-thm, whose `proved_outside_build` verification was already correct. `candidate_under_repair` -- "not compiler-certified on this base" -- was therefore false for every row that carried it. The scope question (does the compiled statement match the printed one?) is a separate judgement and is recorded in `next_action`; the status below is the weakest one consistent with that recorded evidence, so no row is overstated.
 
 **2026-08-05 (second session): both promotion-blocking admissions are out of this row's closure.** `directRotation_minimal` was orphaned -- nothing outside its own file referenced it, and the complex statement is already proved in production as `spectraDirectRotation_minimal`; `SpectraBridge/DirectRotationAPI.lean` imported that module only for `IsAcute` and now takes it from `BoundedOperator/Compat`. `projectionDifference_ideal_intervalExterior`, `ideal_sinTheta` and `ideal_sinTwoTheta` moved into `Experimental/InfiniteDimensional/SinTheta/IdealIntervalExterior.lean`, leaving `SinTheta/General.lean` and `InfiniteDimensional/DoubleAngle.lean` sorry-free. Measured closures: 175/188/199 modules, 24/41/50 Experimental, 0 tactic sorries each. WHAT STILL BLOCKS THE ROW: `check_library_structure` rule 2 forbids a production module importing `Experimental`, so promotion means RELOCATING those closures out of `Experimental/`. That is a design decision, not a mechanical step -- take it deliberately. Rule 3 now reports 49 violations (was 6) precisely because 34 modules became admission-free; the checker is enumerating what ought to move.
-- **Next action:** Relocate the sorry-free Section 4/8 closures out of `Experimental/` so a default target guards them. The mathematics is done and the admissions are gone; what remains is the directory/namespace decision plus the namespace renames it implies.
+
+**GUARDED BY `lake build` 2026-08-06.** This row was `proved_outside_build` only because its modules sat under `Experimental/`, where no default target reaches them. The mathematics never changed. Two admissions were first removed from the import closures (one was orphaned; the other moved to `SinTheta/IdealIntervalExterior.lean`), after which `check_library_structure` rule 3 began enumerating the modules that had become admission-free -- i.e. the checker produced the promotion worklist. 84 modules then moved by `git mv` with **no namespace or declaration renamed**, the precedent being `Geometry/Polar/DirectRotationSquare.lean`, which lives in production while declaring into `DavisKahan.Experimental`. So the fully-qualified names in this row are unchanged.
+
+The move had to be the DOWNWARD CLOSURE of the flagged modules, not the flagged modules alone: they import admission-free modules held under `Experimental/` only because something *above* those carried a `sorry`, so moving the flagged set alone would have violated rule 2. Rule 3 went 49 -> 13 violations.
+- **Next action:** Nothing outstanding. Note the declarations still live in the `TauCeti.DavisKahan.Experimental.*` namespace by design -- namespace is independent of directory here; do not 'tidy' them into a production namespace without checking every consumer.
 
 #### Theorem 8.2: Smallness selects the acute branch
 
 - **Kind:** `theorem`
-- **Status:** `compiled_general_infrastructure`
-- **Verification:** `proved_outside_build`
+- **Status:** `compiled_exact`
+- **Verification:** `proved_in_build`
 - **Mathematics:** If the perturbation or residual norm is below half the gap, the sine double-angle estimate is accompanied by Theta < pi/4.
 - **Blocked by:** `section8-promotion-out-of-experimental`
 - **Current Lean references:** `TauCeti.DavisKahan1970.Section8.PerturbationHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.ResidualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem82_branch_of_residualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_selectedBranch`
-- **Not reachable from `DavisKahan.All`:** `TauCeti.DavisKahan1970.Section8.PerturbationHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.ResidualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem82_branch_of_residualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_selectedBranch`
 - **Assessment:** `theorem8_2_perturbationHalfGap_selectedBranch` and `theorem8_2_residualHalfGap_selectedBranch` are proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` on the perturbation form gives [propext, Classical.choice, Quot.sound]. The half-gap bridges (`perturbationHalfGapBridge_of_sourceHypotheses`, `residualHalfGapBridge_of_sourceHypotheses`) are proved too.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. All four declarations are compiled and axiom-clean, outside the default build. The audit of the two half-gap branches against the printed Theorem 8.2 has not been done, so this is not yet claimed as exact.
@@ -785,7 +787,11 @@ STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infra
 VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `DavisKahan.All`, `DavisKahan.Experimental.All` and `ForTauCeti` and running `#print axioms` on all 87 declarations named in this census elaborated cleanly -- every name resolves and **none reaches `sorryAx`**. A second probe importing only the default-build roots showed 78 of the 87 resolve there; the 9 that do not are exactly the `TauCeti.DavisKahan1970.Section8.*` names on rows DK-8.1-thm and DK-8.2-thm, whose `proved_outside_build` verification was already correct. `candidate_under_repair` -- "not compiler-certified on this base" -- was therefore false for every row that carried it. The scope question (does the compiled statement match the printed one?) is a separate judgement and is recorded in `next_action`; the status below is the weakest one consistent with that recorded evidence, so no row is overstated.
 
 **2026-08-05 (second session): both promotion-blocking admissions are out of this row's closure.** `directRotation_minimal` was orphaned -- nothing outside its own file referenced it, and the complex statement is already proved in production as `spectraDirectRotation_minimal`; `SpectraBridge/DirectRotationAPI.lean` imported that module only for `IsAcute` and now takes it from `BoundedOperator/Compat`. `projectionDifference_ideal_intervalExterior`, `ideal_sinTheta` and `ideal_sinTwoTheta` moved into `Experimental/InfiniteDimensional/SinTheta/IdealIntervalExterior.lean`, leaving `SinTheta/General.lean` and `InfiniteDimensional/DoubleAngle.lean` sorry-free. Measured closures: 175/188/199 modules, 24/41/50 Experimental, 0 tactic sorries each. WHAT STILL BLOCKS THE ROW: `check_library_structure` rule 2 forbids a production module importing `Experimental`, so promotion means RELOCATING those closures out of `Experimental/`. That is a design decision, not a mechanical step -- take it deliberately. Rule 3 now reports 49 violations (was 6) precisely because 34 modules became admission-free; the checker is enumerating what ought to move.
-- **Next action:** Relocate the sorry-free Section 4/8 closures out of `Experimental/` so a default target guards them. The mathematics is done and the admissions are gone; what remains is the directory/namespace decision plus the namespace renames it implies.
+
+**GUARDED BY `lake build` 2026-08-06.** This row was `proved_outside_build` only because its modules sat under `Experimental/`, where no default target reaches them. The mathematics never changed. Two admissions were first removed from the import closures (one was orphaned; the other moved to `SinTheta/IdealIntervalExterior.lean`), after which `check_library_structure` rule 3 began enumerating the modules that had become admission-free -- i.e. the checker produced the promotion worklist. 84 modules then moved by `git mv` with **no namespace or declaration renamed**, the precedent being `Geometry/Polar/DirectRotationSquare.lean`, which lives in production while declaring into `DavisKahan.Experimental`. So the fully-qualified names in this row are unchanged.
+
+The move had to be the DOWNWARD CLOSURE of the flagged modules, not the flagged modules alone: they import admission-free modules held under `Experimental/` only because something *above* those carried a `sorry`, so moving the flagged set alone would have violated rule 2. Rule 3 went 49 -> 13 violations.
+- **Next action:** Nothing outstanding. Note the declarations still live in the `TauCeti.DavisKahan.Experimental.*` namespace by design -- namespace is independent of directory here; do not 'tidy' them into a production namespace without checking every consumer.
 
 ### Section 9
 
