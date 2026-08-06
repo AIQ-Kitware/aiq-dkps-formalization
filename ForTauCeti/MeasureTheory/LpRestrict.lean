@@ -125,7 +125,6 @@ theorem norm_extendLpFun (μ : Measure α) (hs : MeasurableSet s)
   rw [extendLpFun, Lp.norm_toLp, eLpNorm_indicator_eq_eLpNorm_restrict hs, ← Lp.norm_def]
 
 /-- **Extension by zero**, as a linear isometry `L²(μ|_s) →ₗᵢ[ℂ] L²(μ)`. -/
-@[expose]
 noncomputable def extendLp (μ : Measure α) (hs : MeasurableSet s) :
     Lp ℂ 2 (μ.restrict s) →ₗᵢ[ℂ] Lp ℂ 2 μ where
   toFun := extendLpFun μ hs

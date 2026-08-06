@@ -114,6 +114,8 @@ two-sided inverse induces a unitary of the `L²` spaces.
 
 Neither map need be injective: what is required is only that the two composites agree with the
 identity almost everywhere, which is what an essentially bijective relabelling supplies. -/
+-- Exposed: `compLpEquiv_apply` below is `rfl`, and that lemma is what lets every intertwining
+-- law proved for the isometry transfer to the unitary without unfolding at the call site.
 @[expose]
 noncomputable def compLpEquiv (f : α → β) (g : β → α) (hf : MeasurePreserving f μ ν)
     (hg : MeasurePreserving g ν μ) (hfg : ∀ᵐ x ∂μ, g (f x) = x) (hgf : ∀ᵐ y ∂ν, f (g y) = y) :
@@ -169,6 +171,7 @@ Injectivity is what makes it surjective: a square-integrable class on the source
 target by `Function.extend`, measurably, because a measurable embedding carries measurable sets
 to measurable sets.  This is the form used to move the scalar spectral measures off the
 `spectrum` subtype and onto `ℂ`, where the models of two different operators can be compared. -/
+-- Exposed for the same reason as `compLpEquiv`: `embLpEquiv_apply` is `rfl`.
 @[expose]
 noncomputable def embLpEquiv {e : α → β} (he : MeasurableEmbedding e) (ρ : Measure α) :
     Lp ℂ 2 (Measure.map e ρ) ≃ₗᵢ[ℂ] Lp ℂ 2 ρ :=

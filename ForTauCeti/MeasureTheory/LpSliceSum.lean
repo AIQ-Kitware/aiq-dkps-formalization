@@ -57,7 +57,6 @@ variable {α : Type*} [MeasurableSpace α]
 /-- Transporting `L²` along an equality of measures.  Needed because the slice decomposition
 produces `L²` of a *restriction* while the summand is `L²` of a *pushforward*, and the two
 measures are equal but not syntactically so. -/
-@[expose]
 noncomputable def lpCongrMeasure {μ ν : Measure α} (h : μ = ν) :
     Lp ℂ 2 μ ≃ₗᵢ[ℂ] Lp ℂ 2 ν :=
   h ▸ LinearIsometryEquiv.refl ℂ (Lp ℂ 2 μ)
@@ -207,14 +206,12 @@ theorem measureEquiv_sliceSum {μ ν : ℕ → Measure X} (h : ∀ n, MeasureEqu
     exact fun n => (h n).2 (h0 n)
 
 /-- The `n`-th summand, identified with `L²` of the slice restriction. -/
-@[expose]
 noncomputable def sliceLpEquiv (μ : ℕ → Measure X) (n : ℕ) :
     Lp ℂ 2 (μ n) ≃ₗᵢ[ℂ] Lp ℂ 2 ((sliceSum μ).restrict (slice n)) :=
   (embLpEquiv (measurableEmbedding_sliceMap n) (μ n)).symm.trans
     (lpCongrMeasure (restrict_sliceSum μ n).symm)
 
 /-- **The `n`-th summand embedding** `L²(μ n) →ₗᵢ[ℂ] L²(sliceSum μ)`. -/
-@[expose]
 noncomputable def sliceLp (μ : ℕ → Measure X) (n : ℕ) :
     Lp ℂ 2 (μ n) →ₗᵢ[ℂ] Lp ℂ 2 (sliceSum μ) :=
   (extendLp (sliceSum μ) (measurableSet_slice n)).comp (sliceLpEquiv μ n).toLinearIsometry
