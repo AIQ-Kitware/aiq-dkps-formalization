@@ -34,7 +34,7 @@ Davis--Kahan Theorem 3.1, which carries no separability hypothesis either.
 
 A greedy `ℕ`-recursion against a dense sequence would have forced
 `[TopologicalSpace.SeparableSpace H]`; that route was considered in
-`dev/section3-multiplicity-plan-2026-08-06.md` §3 and rejected in §4 of the same document.
+a greedy `ℕ`-recursion, which would have needed it; Zorn over an arbitrary index type does not.
 Insisting on `ℕ` is what drags separability in, and nothing needs `ℕ`.
 
 ## The two mathematical steps
@@ -70,7 +70,7 @@ Insisting on `ℕ` is what drags separability in, and nothing needs `ℕ`.
 The decomposition is not yet organised by measure class: the vectors are unordered, the
 measures `diagMeasure ha (ξ i)` are unrelated to one another, and no multiplicity function
 appears.  Ordering them is layer 4 and the multiplicity function is layer 5; see
-`dev/section3-multiplicity-plan-2026-08-06.md` §4, which replaces the separable normal form
+the uniform-multiplicity form, which replaces the separable normal form
 `μ₁ ≫ μ₂ ≫ …` by the uniform-multiplicity decomposition indexed by cardinals.
 
 ## Provenance

@@ -58,7 +58,7 @@ and (3) follows because the Borel calculus is determined by its diagonal matrix 
 compactness of `spectrum ℂ a`, and the measure-uniqueness step needs only that the spectrum is
 a Borel subspace of `ℂ` (so pseudo-metrisable).  This matches layers 1--3 and the scope of the
 repository's Davis--Kahan Theorem 3.1, which carries no separability hypothesis either; see
-`dev/section3-multiplicity-plan-2026-08-06.md` §4.
+the uniform-multiplicity normal form.
 
 ## Main results
 

@@ -121,8 +121,13 @@ unitary equivalence.  This is the missing spectral-theorem bridge in the
 paper's formulation of Theorem 3.1.
 
 **On the separability hypothesis.**  It is carried on `H₁` only, and it is *paper-faithful*:
-Davis and Kahan work under a global separability convention (recorded in
-`dev/davis-kahan-1970-full-source-census.md` at the Section 6 rank hypothesis, twice).  Nothing
+separability is one of the paper's **standing assumptions**, taken from the Introduction and
+Sections 1--2 and therefore governing Section 3.  The public source surrogate records it
+verbatim -- "`H` is a separable Hilbert space, real or complex, with finite dimensionality only
+a special case" (`prose/distilled_literature/DavisKahan1970_part_III.tex`, *Standing assumptions
+from the transcription*).  The same list records that for noncompact operators the source itself
+expects singular-value lists to be replaced by *spectral multiplicity language*, which is
+precisely the phrasing proved here.  Nothing
 already proved is weakened by it either: the operator-level classification
 `pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant` remains stated and proved
 with no separability at all, and it is that theorem, not this one, that grounds the frontier
