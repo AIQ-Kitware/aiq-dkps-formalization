@@ -65,6 +65,12 @@ hypothesis is a plain `MeasurableSet`, and the antitonicity that makes them supe
 *some* function is a field of the datum, established by
 `TauCeti.antitone_levelSet` when a model is built.
 
+The encoding is not a proxy: `TauCeti.MultiplicityDatum.multiplicity` is the honest
+`ℂ → ℕ∞` multiplicity function, `TauCeti.MultiplicityDatum.mem_level_iff` proves
+`level k = {z | k < multiplicity z}`, and
+`TauCeti.MultiplicityDatum.measurable_multiplicity` proves it measurable.  Level sets are
+carried in the structure only because that makes every hypothesis a plain `MeasurableSet`.
+
 **What this is and is not.**  It is an existential over *presentations*, and it is what makes
 `sameSpectralMultiplicity_iff_unitarilyEquivalent` provable and paper-faithful.  It is **not** a
 canonical invariant: nothing here says the datum of an operator is unique, and uniqueness of the

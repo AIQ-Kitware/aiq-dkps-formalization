@@ -42,6 +42,9 @@ normalisation needs, since ranks count *earlier* indices.
 ## Main results
 
 * `TauCeti.MultiplicityDatum`: the datum.
+* `TauCeti.MultiplicityDatum.multiplicity` and `TauCeti.MultiplicityDatum.mem_level_iff`: the
+  **cardinal-valued multiplicity function**, and the fact that the datum's level sets are
+  exactly its super-level sets.  `measurable_multiplicity` proves it measurable.
 * `TauCeti.exists_hasMultiplicityModel`: **existence of a model.**
 * `TauCeti.operatorUnitaryEquiv_of_measureEquiv`: **data agreeing up to measure class and null
   sets present unitarily equivalent operators.**
@@ -127,6 +130,91 @@ instance MultiplicityDatum.sigmaFinite_measure (D : MultiplicityDatum) :
     SigmaFinite D.measure := by
   rw [MultiplicityDatum.measure]
   infer_instance
+
+/-- **The multiplicity function of a datum**: the number of level sets containing a point,
+as an element of `ℕ∞`.
+
+The datum records the *level sets* rather than this function, because that keeps every
+hypothesis a plain `MeasurableSet` instead of measurability of an `ℕ∞`-valued map.  But the
+function is what Davis and Kahan's Theorem 3.1 names, and `mem_level_iff` below says the two
+carry exactly the same information: `level k` **is** `{z | k < multiplicity z}`.  So the level
+sets are the super-level sets of a genuine cardinal-valued function, not a proxy for one --
+which is what `MultiplicityDatum.antitone_level` is there to guarantee. -/
+noncomputable def MultiplicityDatum.multiplicity (D : MultiplicityDatum) (z : ℂ) : ℕ∞ :=
+  ⨆ (k : ℕ) (_ : z ∈ D.level k), ((k : ℕ∞) + 1)
+
+/-- **The level sets are the super-level sets of the multiplicity function.**
+
+Forwards is the definition: membership in `level k` puts `k + 1` into the supremum.  Backwards
+is antitonicity: if the supremum exceeds `k` then some `level j` with `j ≥ k` contains the
+point, and `level j ⊆ level k`. -/
+theorem MultiplicityDatum.mem_level_iff (D : MultiplicityDatum) (k : ℕ) (z : ℂ) :
+    z ∈ D.level k ↔ (k : ℕ∞) < D.multiplicity z := by
+  constructor
+  · intro hz
+    refine lt_of_lt_of_le ?_
+      (le_iSup₂ (f := fun (j : ℕ) (_ : z ∈ D.level j) => ((j : ℕ∞) + 1)) k hz)
+    exact_mod_cast Nat.lt_succ_self k
+  · intro h
+    rw [MultiplicityDatum.multiplicity, lt_iSup_iff] at h
+    obtain ⟨j, hj⟩ := h
+    rw [lt_iSup_iff] at hj
+    obtain ⟨hzj, hlt⟩ := hj
+    have hkj : k ≤ j := by
+      have : (k : ℕ) < j + 1 := by exact_mod_cast hlt
+      omega
+    exact D.antitone_level hkj hzj
+
+/-- **The multiplicity function is measurable.**
+
+`ℕ∞` is countable and carries the discrete σ-algebra, so it is enough to identify each fibre,
+and `mem_level_iff` turns every fibre into a Boolean combination of level sets: the fibre over
+`⊤` is their intersection, the fibre over `0` is the complement of `level 0`, and the fibre over
+`n + 1` is `level n` minus `level (n + 1)`. -/
+theorem MultiplicityDatum.measurable_multiplicity (D : MultiplicityDatum) :
+    Measurable D.multiplicity := by
+  refine measurable_to_countable' fun c => ?_
+  induction c with
+  | top =>
+    have hset : D.multiplicity ⁻¹' {(⊤ : ℕ∞)} = ⋂ k : ℕ, D.level k := by
+      refine Set.ext fun z => ?_
+      simp only [Set.mem_preimage, Set.mem_singleton_iff, Set.mem_iInter]
+      constructor
+      · intro hz k
+        rw [D.mem_level_iff k z, hz]
+        exact lt_of_le_of_ne le_top (by simp)
+      · intro hz
+        by_contra hne
+        obtain ⟨n, hn⟩ := ENat.ne_top_iff_exists.mp hne
+        have hlt := (D.mem_level_iff n z).mp (hz n)
+        rw [← hn] at hlt
+        exact lt_irrefl _ hlt
+    rw [hset]
+    exact MeasurableSet.iInter fun k => D.measurableSet_level k
+  | coe n =>
+    match n with
+    | 0 =>
+      have hset : D.multiplicity ⁻¹' {((0 : ℕ) : ℕ∞)} = (D.level 0)ᶜ := by
+        refine Set.ext fun z => ?_
+        simp only [Set.mem_preimage, Set.mem_singleton_iff, Set.mem_compl_iff,
+          D.mem_level_iff 0 z, Nat.cast_zero, not_lt, le_zero_iff]
+      rw [hset]
+      exact (D.measurableSet_level 0).compl
+    | (n + 1) =>
+      have hset : D.multiplicity ⁻¹' {((n + 1 : ℕ) : ℕ∞)}
+          = D.level n \ D.level (n + 1) := by
+        refine Set.ext fun z => ?_
+        simp only [Set.mem_preimage, Set.mem_singleton_iff, Set.mem_sdiff,
+          D.mem_level_iff n z, D.mem_level_iff (n + 1) z, not_lt]
+        constructor
+        · intro hz
+          refine ⟨hz ▸ ?_, hz ▸ le_rfl⟩
+          exact_mod_cast Nat.lt_succ_self n
+        · rintro ⟨h1, h2⟩
+          refine le_antisymm h2 ?_
+          exact Order.add_one_le_of_lt (by exact_mod_cast h1)
+      rw [hset]
+      exact (D.measurableSet_level n).diff (D.measurableSet_level (n + 1))
 
 /-- **The model operator**: multiplication by the spectral coordinate. -/
 noncomputable def MultiplicityDatum.operator (D : MultiplicityDatum) :
