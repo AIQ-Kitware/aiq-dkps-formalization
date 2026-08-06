@@ -11,8 +11,8 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 22 |
-| `compiled_specialization` | 4 |
+| `compiled_exact` | 23 |
+| `compiled_specialization` | 3 |
 | `compiled_general_infrastructure` | 11 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
@@ -346,10 +346,10 @@ CORRECTED 2026-08-04: this row read `not_represented` / `absent` and listed no d
 #### Proposition 3.3: Principal square-root characterization
 
 - **Kind:** `proposition`
-- **Status:** `compiled_specialization`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Every direct rotation is a principal square root of the product of the two reflections; conversely a suitable principal square root is a direct rotation.
-- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation_sq`, `TauCeti.DavisKahan1970.complex_directRotation_hermitianPart`, `TauCeti.DavisKahan1970.complex_directRotation_principal_of_sq`
+- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation_sq`, `TauCeti.DavisKahan1970.complex_directRotation_hermitianPart`, `TauCeti.DavisKahan1970.complex_directRotation_principal_of_sq`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_3_principalSquareRoot_forward`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_3_principalSquareRoot_converse`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_3_principalSquareRoot_iff`
 - **Assessment:** The square identity and acute spectral branch exist; the source converse with the crossed-intersection mapping condition is not exposed.
 
 STATUS CORRECTED 2026-08-04 (second time): `partial_or_wrapper_missing` -> `compiled_specialization`, and **the previous note and next_action were stale**. They said "the source converse ... is not exposed" and asked to "add the converse". The converse was already proved, as `spectraDirectRotation_unique_of_sq` (`DavisKahan/Geometry/Polar/DirectRotationSquare.lean`), and it resolves against `DavisKahan.All` and is axiom-clean. What was missing was a source-facing alias, now added.
@@ -359,7 +359,15 @@ STATUS CORRECTED 2026-08-04 (second time): `partial_or_wrapper_missing` -> `comp
 **What keeps this a specialization rather than `compiled_exact`:** the printed proposition says *every* direct rotation, which includes the nonacute pairs of DK-3.2-prop, where direct rotations are non-unique and the principal branch is exactly what becomes ambiguous (`neg_one_not_mem_spectrum_spectraReflectionProduct`, the lemma the half-phase calculus rests on, needs acuteness). The nonacute half is the remaining scope, not a missing wrapper.
 
 The same 2026-08-04 pass proved the infinite-dimensional analogues of both halves over a general `RCLike` field in `Experimental/InfiniteDimensional/DirectRotation.lean` (`directRotation_sq`, `directRotation_add_adjoint`, `nonneg_directRotation_add_adjoint`, `isUnit_directRotation_add_adjoint`); they are not listed here because that tree is outside the default build.
-- **Next action:** Nonacute scope only. Decide what "principal" means when `-1` is in the spectrum of the reflection product, then extend both halves to the DK-3.2-prop existence regime. Do NOT re-add the converse -- it is proved.
+
+STATUS CORRECTED 2026-08-06 (third time): `compiled_specialization` -> `compiled_exact`.  **The recorded remaining scope was wrong in both halves.**  The note above said the converse was acute-only and that the nonacute case was open; in fact `proposition3_3_principalSquareRoot_converse` never had an acuteness hypothesis -- it takes an arbitrary principal unitary square root with the crossed-intersection mapping property and returns `IsPaperDirectRotation`, for any pair.  What was genuinely missing was the *forward* direction in that generality: the two compiled forward statements (`complex_directRotation_sq`, `complex_directRotation_hermitianPart`) speak only about the canonical acute `W`, not about an arbitrary direct rotation.
+
+That gap is now closed by `proposition3_3_principalSquareRoot_forward`, axiom-clean and in the default build (`DavisKahan.All` imports `DavisKahan.Frontier.All`).  Every direct rotation whose diagonal `U`-compressions are self-adjoint squares to `J_V J_U`, has spectrum in the closed right half-plane, **and** carries `U ∩ Vᗮ` onto `Uᗮ ∩ V`.  The third conclusion is the point of interest: the source imposes the crossed-intersection mapping condition as a hypothesis, and in the forward direction it is a *theorem*.  Both crossed intersections lie in the `-1` eigenspace of the reflection product, `T` and `star T` commute with that operator because `T * T` is it, and the intertwining moves `U` to `V`; those three facts pin the image down.  `proposition3_3_principalSquareRoot_iff` packages the two directions.
+
+The same pass removed the seventy-five-line duplication this created: the `T * T = J_V J_U` argument was inlined inside `proposition3_1_positivity_characterization` and is now the shared `sq_eq_spectraReflectionProduct` in a `BlockCalculus` section, together with `eq_sum_blocks`, `star_blocks_eq` and `add_star_eq_two_diagonal`.
+
+The self-adjointness hypotheses on the two diagonal compressions are *not* a specialization of the source: they are the same two Proposition 3.1 needs, and they are needed because this repository's `IsPaperDirectRotation` records the compressions only through their numerical range, which is strictly weaker than the printed "positive diagonal blocks".  The canonical direct rotation satisfies them, its diagonal blocks being the positive Halmos cosine.
+- **Next action:** None.  Both directions are compiled in full generality and the census row is exact.  If the predicate `IsPaperDirectRotation` is ever strengthened to genuine operator positivity of the diagonal compressions, the two self-adjointness hypotheses on `proposition3_3_principalSquareRoot_forward` become derivable and should be dropped.
 
 #### Proposition 3.4: Square as a direct rotation
 
