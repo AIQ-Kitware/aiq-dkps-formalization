@@ -40,6 +40,7 @@ response transcripts) and `mistake-evidence.md`.
 
 ```bash
 export POSTHOC_AGENT_ID=<hostname>-<who>     # e.g. toothbrush-jon
+export POSTHOC_NOTE="non-default --scope, missing sources, tool changes"  # optional
 python3 tools/extract_prompts.py             # raw-all/ -> findings/$POSTHOC_AGENT_ID/
 python3 tools/analyze.py                     # -> ANALYSIS.md, metrics.json, taxonomy.tsv
 python3 tools/mistakes.py                    # -> local/mistake-evidence.md
@@ -47,6 +48,15 @@ python3 tools/merge_findings.py              # -> JOINT-ANALYSIS.md (after colle
 ```
 
 Widen the scope beyond this repo with `--all-projects` or `--scope <substring>`.
+
+**Check the session list the extractor kept, do not trust the count it prints.**
+Scope is matched on session `cwd`, and `cwd` is a poor proxy for project
+membership. Both non-default checkouts so far needed a correction: on
+`aivm-2404-edward` the formalization is a subdirectory of a parent repo, so
+sessions open at the parent (fixed by scoping per session rather than per
+record); on `aiq-gpu-edward` the agent works out of `$HOME`, so only 4 of 8
+in-project sessions matched, and those 4 matched by accident. Record any
+non-default `--scope` in `$POSTHOC_NOTE`.
 
 ## Scope
 
@@ -76,3 +86,21 @@ Validated against `local/claude-meta/history.jsonl` (which independently logs
 typed CLI prompts) and by manual sampling of every residual bucket. Synthetic
 turns are not discarded — they go to `events.jsonl`, because interrupts,
 Stop-hook replays and compactions are friction signals in their own right.
+
+### Prompts typed while the agent was running
+
+Typing into the box mid-run does **not** create a `user` record. It creates
+`type == "queue-operation"` records: `enqueue` when typed, then `dequeue` if the
+turn is eventually delivered (a normal user record then appears) or `remove` if
+the queue is flushed by ESC, a queue edit, or a compaction. A removed one never
+becomes a user record, so a `user`-only scan loses it even though the human typed
+it and `history.jsonl` logged it. This undercounts every store in proportion to
+how often the human typed while the agent was busy — on `aiq-gpu-edward` that was
+119 of 355 typed prompts (34%), and one session held 201 enqueues against 44
+dequeues.
+
+They are emitted to `events.jsonl` as `event: "queued_prompt_dropped"`, **not** to
+`prompts.jsonl`, so prompt counts stay comparable with findings produced before
+this was added; a prompt typed and then dropped is friction, like an interrupt.
+An agent that has not re-run extraction since will report 0 of them, which is a
+missing measurement rather than a zero.
