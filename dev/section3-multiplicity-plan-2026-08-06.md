@@ -103,3 +103,103 @@ layers are genuinely reachable:
 5. The multiplicity function and its uniqueness.  **This is the hard layer.**
 
 Layers 1--2 are the reusable cornerstone and should be built first, in `ForTauCeti`.
+
+---
+
+## 3. Layer-by-layer design (investigated 2026-08-06, second pass)
+
+### Next increment, and why it is first
+
+**Replace the `sorry`-ed `def SameSpectralMultiplicity` (`Frontier/Core.lean:71`) with a
+concrete definition.**  It needs no new mathematics, and it converts
+`sameSpectralMultiplicity_iff_unitarilyEquivalent` from a statement about an opaque term —
+*unprovable*, asserting nothing — into a merely unproved one.  That is a categorical
+improvement and it unblocks everything else.
+
+Candidate, which visibly discharges both requirements the `Core.lean` docstring makes
+(measure class **and** cardinal-valued multiplicity function):
+
+```
+structure MultiplicityLevels (μ : Measure ℂ) where
+  level : ℕ → Set ℂ                     -- level k = {multiplicity > k}
+  measurable_level : ∀ k, MeasurableSet (level k)
+  antitone_level : Antitone level
+  level_zero : μ ((level 0)ᶜ) = 0
+
+multiplicityModel μ D := lp (fun k : ℕ => Lp ℂ 2 (μ.restrict (D.level k))) 2
+multiplicityOperator  := coordinatewise multiplication by the coordinate
+HasMultiplicityModel A μ D := BoundedOperatorsUnitaryEquivalent A (multiplicityOperator μ D)
+
+SameSpectralMultiplicity A B :=
+  ∃ μ ν D E, HasMultiplicityModel A μ D ∧ HasMultiplicityModel B ν E ∧
+    μ ≪ ν ∧ ν ≪ μ ∧ ∀ k, μ (symmDiff (D.level k) (E.level k)) = 0
+```
+
+Encode the multiplicity function by its **level sets**, not as `m : ℂ → ℕ∞`: no
+`MeasurableSpace ℕ∞` instance was verified, and level sets make every hypothesis a plain
+`MeasurableSet`.  Push both spectral measures forward along `Subtype.val` to `Measure ℂ`
+first — `spectrum ℂ A` and `spectrum ℂ B` are different subtypes and cannot be compared.
+
+**Naming hazard:** there are *two* `BoundedOperatorsUnitaryEquivalent` in the repo —
+`SpectralTheory/SpectralMultiplicityFoundation.lean:41` (one universe, `∘L` form) and
+`Geometry/Halmos/UnitaryEquivalence.lean:52` (two universes, pointwise).  The model lives
+in its own universe, so pick the two-universe one or the universe error surfaces late.
+
+### The direction asymmetry is the opposite of the intuition
+
+`SameSpectralMultiplicity → unitarilyEquivalent` is the **easy** direction: chain
+`A ≃ model(μ,D) ≃ model(ν,E) ≃ B`.  Its only real content is the **Radon--Nikodym
+unitary** `L²(μ) ≃ₗᵢ L²(ν)`, `f ↦ √(dμ/dν) · f`, for mutually absolutely continuous finite
+measures; it intertwines multiplication operators trivially once it exists.  **Not in
+Mathlib** (searched), but `Measure.rnDeriv`, `withDensity_rnDeriv_eq` and `rnDeriv_lt_top`
+are.  Estimated 250--400 lines, and it is **independent of layers 3--4**, so it can be
+built in parallel.  This is the second increment.
+
+The converse needs *both* halves of Hahn--Hellinger — existence of a model (all of layers
+3--4) and uniqueness.  You cannot produce a model without them.
+
+### Layer 3: use a greedy `ℕ`-recursion, not Zorn
+
+Zorn is the textbook route and is strictly worse here: it hands you a `Set H` of unknown
+cardinality, and "an orthogonal family of nonzero closed subspaces in a separable space is
+countable" is **not in Mathlib**.  With `[TopologicalSpace.SeparableSpace H]` and a dense
+sequence, define `ξ (n+1) := orthogonalProjection ((⨆ k ≤ n, cyclicSubspace ha (ξ k))ᗮ)
+(d (n+1))`; the index type is `ℕ` by construction.  Finish with
+`IsHilbertSum.mkInternal` (`Mathlib/Analysis/InnerProductSpace/l2Space.lean:282`), whose
+hypothesis is exactly `⊤ ≤ (⨆ i, F i).topologicalClosure`.
+
+**Do not reach for `DirectSum.IsInternal`** — its bridges are algebraic and one needs
+`[FiniteDimensional]`.  In infinite dimensions the decomposition is only a closed-span
+one; `IsHilbertSum` is the right notion.
+
+One genuinely new lemma: the orthogonal complement of a `borelCalculus`-invariant subspace
+is invariant (`⟪f(a)η, x⟫ = ⟪η, f̄(a)x⟫ = 0`), which is the two steps already used inside
+`norm_borelCalculus_apply_sq`.  Mechanical, ~60 lines.
+
+**Separability must become a hypothesis**, and that is a recorded-decision-level change:
+`theorem3_1_spectralMultiplicity_classification` currently carries none, while the proved
+`pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant` needs none.  Adding
+it weakens the frontier statement relative to what is already proved.  **Write it down;
+do not slip it in.**
+
+### Layer 4: the hard step is the Borel calculus on a reducing subspace
+
+The nesting `μ₁ ≫ μ₂ ≫ …` recurses on the orthogonal complement after splitting off a
+cyclic subspace, which needs the Borel calculus of `a|_K` and its compatibility with the
+ambient one — `IsStarNormal (a|_K)`, `spectrum ℂ (a|_K) ⊆ spectrum ℂ a`, and the
+restriction identity.  **This API does not exist** in
+`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/` (7 files) and is not in Mathlib.
+Estimate 300--500 lines of genuinely new material.  **It is the only step with no partial
+credit — do not start it before layer 3 and the additivity lemma below have landed.**
+
+Reachable first (~100 lines, highest leverage in layer 4): `diagMeasure` is additive over
+orthogonal cyclic subspaces, from `integral_diagMeasure` plus vanishing cross terms.  It
+is what lets one vector realize the maximal spectral type.
+
+Also absent and needing a definition: any notion of **measure class** — `grep` for
+`MutuallyAbsolutelyContinuous`, `MeasureClass`, `Measure.Equivalent` finds only
+`OuterMeasureClass`.  Define `μ ≪ ν ∧ ν ≪ μ` and its `Setoid`.  Trivial, but it must be
+written.
+
+Good news for both layers: `diagMeasure` is finite **and** regular already, so the
+`HaveLebesgueDecomposition` instances fire with no work.
