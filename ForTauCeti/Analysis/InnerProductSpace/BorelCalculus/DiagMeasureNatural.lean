@@ -29,21 +29,21 @@ Mathlib supplies both moving parts, which is what makes this short:
 
 ## Why it is here
 
-This is the first step of the open **uniqueness** half of the multiplicity classification: it is
-what will make the *measure class* of a multiplicity datum an invariant of the operator rather
-than of the presentation.  The remaining step of that argument -- that the scalar spectral
-measures therefore agree, i.e.
+This is the first half of the open **uniqueness** question for the multiplicity classification:
+it is what makes the *measure class* of a multiplicity datum an invariant of the operator rather
+than of the presentation.  The measure statement is
+`map_val_diagMeasure_eq_of_intertwines`; both sides are pushed forward to `ℂ` because the two
+measures live on the *spectrum subtypes* of `a` and of `b`, which are equal as sets but are
+different types.
 
-```text
-(diagMeasure hb (e ξ)).map (↑) = (diagMeasure ha ξ).map (↑)
-```
+It follows from the naturality theorem because `diagMeasure` is characterised by
+`∫ f d(diagMeasure ha ξ) = ⟪ξ, f(a) ξ⟫` on continuous symbols, a unitary preserves inner
+products, and a finite Borel measure on `ℂ` is determined by the integrals of bounded continuous
+real functions (`MeasureTheory.ext_of_forall_integral_eq_of_IsFiniteMeasure`).
 
-as measures on `ℂ`, both sides pushed forward because the two live on the *spectrum subtypes* of
-`a` and of `b`, which are equal as sets but different types -- is plumbing on top of this
-theorem: `diagMeasure` is characterised by `∫ f d(diagMeasure ha ξ) = ⟪ξ, f(a) ξ⟫` on continuous
-symbols, a unitary preserves inner products, and a finite Borel measure on `ℂ` is determined by
-the integrals of bounded continuous real functions
-(`MeasureTheory.ext_of_forall_integral_eq_of_IsFiniteMeasure`).
+What remains for uniqueness is the *level sets*, which needs naturality of the **Borel** calculus
+rather than the continuous one, and a dimension count over the measure algebra.  That is the real
+Hahn--Hellinger and it is not done here.
 
 ## Main results
 
@@ -51,6 +51,8 @@ the integrals of bounded continuous real functions
   between `⋆`-algebra images.
 * `TauCeti.BorelCalculus.isStarNormal_of_intertwines`: normality transports.
 * `TauCeti.BorelCalculus.cfc_apply_of_intertwines`: **the naturality theorem.**
+* `TauCeti.BorelCalculus.map_val_diagMeasure_eq_of_intertwines`: **the scalar spectral measure is
+  a unitary invariant.**
 
 ## Provenance
 
@@ -108,6 +110,54 @@ theorem cfc_apply_of_intertwines (ha : IsStarNormal a) (e : H ≃ₗᵢ[ℂ] K)
   simp only [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply,
     LinearIsometryEquiv.symm_apply_apply] at h2
   exact h2
+
+/-- **The scalar spectral measure is a unitary invariant.**
+
+A unitary intertwining two normal operators carries the scalar spectral measure of a vector to
+that of its image.  Both sides are pushed forward to `ℂ` because the two measures live on the
+*spectrum subtypes* of `a` and of `b`, which are equal as sets but are different types.
+
+This is what makes the **measure class** of a multiplicity datum an invariant of the operator
+rather than of the presentation. -/
+theorem map_val_diagMeasure_eq_of_intertwines (ha : IsStarNormal a) (e : H ≃ₗᵢ[ℂ] K)
+    (he : ∀ x, e (a x) = b (e x)) (ξ : H) :
+    Measure.map (Subtype.val : spectrum ℂ b → ℂ)
+        (diagMeasure (isStarNormal_of_intertwines ha e he) (e ξ))
+      = Measure.map (Subtype.val : spectrum ℂ a → ℂ) (diagMeasure ha ξ) := by
+  haveI hb : IsStarNormal b := isStarNormal_of_intertwines ha e he
+  haveI hfa : IsFiniteMeasure
+      (Measure.map (Subtype.val : spectrum ℂ a → ℂ) (diagMeasure ha ξ)) :=
+    Measure.isFiniteMeasure_map _ _
+  haveI hfb : IsFiniteMeasure
+      (Measure.map (Subtype.val : spectrum ℂ b → ℂ) (diagMeasure hb (e ξ))) :=
+    Measure.isFiniteMeasure_map _ _
+  refine MeasureTheory.ext_of_forall_integral_eq_of_IsFiniteMeasure fun g => ?_
+  have hgc : Continuous fun z : ℂ => ((g z : ℝ) : ℂ) :=
+    Complex.continuous_ofReal.comp g.continuous
+  rw [integral_map measurable_subtype_coe.aemeasurable
+      g.continuous.aestronglyMeasurable,
+    integral_map measurable_subtype_coe.aemeasurable
+      g.continuous.aestronglyMeasurable]
+  have hEa : ∫ w : spectrum ℂ a, g (w : ℂ) ∂(diagMeasure ha ξ)
+      = (⟪ξ, cfc (fun z : ℂ => ((g z : ℝ) : ℂ)) a ξ⟫_ℂ).re := by
+    have hG := integral_diagMeasure_ofReal ha ξ
+      (⟨fun w : spectrum ℂ a => g (w : ℂ), g.continuous.comp continuous_subtype_val⟩ :
+        C(spectrum ℂ a, ℝ))
+    simp only [ContinuousMap.coe_mk] at hG
+    rw [hG, cfc_apply (f := fun z : ℂ => ((g z : ℝ) : ℂ)) (a := a) ha hgc.continuousOn]
+    exact congrArg (fun T : H →L[ℂ] H => (⟪ξ, T ξ⟫_ℂ).re)
+      (congrArg (cfcHom ha) (ContinuousMap.ext fun _ => by simp))
+  have hEb : ∫ w : spectrum ℂ b, g (w : ℂ) ∂(diagMeasure hb (e ξ))
+      = (⟪e ξ, cfc (fun z : ℂ => ((g z : ℝ) : ℂ)) b (e ξ)⟫_ℂ).re := by
+    have hG := integral_diagMeasure_ofReal hb (e ξ)
+      (⟨fun w : spectrum ℂ b => g (w : ℂ), g.continuous.comp continuous_subtype_val⟩ :
+        C(spectrum ℂ b, ℝ))
+    simp only [ContinuousMap.coe_mk] at hG
+    rw [hG, cfc_apply (f := fun z : ℂ => ((g z : ℝ) : ℂ)) (a := b) hb hgc.continuousOn]
+    exact congrArg (fun T : K →L[ℂ] K => (⟪e ξ, T (e ξ)⟫_ℂ).re)
+      (congrArg (cfcHom hb) (ContinuousMap.ext fun _ => by simp))
+  rw [hEa, hEb, ← cfc_apply_of_intertwines ha e he hgc.continuousOn ξ,
+    LinearIsometryEquiv.inner_map_map]
 
 end BorelCalculus
 end TauCeti
