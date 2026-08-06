@@ -203,3 +203,47 @@ written.
 
 Good news for both layers: `diagMeasure` is finite **and** regular already, so the
 `HaveLebesgueDecomposition` instances fire with no work.
+
+---
+
+## 4. CORRECTION (2026-08-06, same day): separability is **not** required
+
+§3 recommended a greedy `ℕ`-recursion for layer 3 and concluded that
+`[TopologicalSpace.SeparableSpace H]` must become a hypothesis on Theorem 3.1.  **Reject
+that.**  Theorem 3.1 must not be weakened: `pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`
+is already proved with no separability, and the multiplicity-phrased version must match
+its scope, not fall short of it.
+
+**The separability was an artifact of the proposed proof, not of the theorem.**  The
+`ℕ`-recursion was chosen to dodge a missing lemma ("an orthogonal family of nonzero closed
+subspaces in a separable space is countable"), and it is exactly that choice — insisting
+the index type be `ℕ` — that drags separability in.  It is unnecessary:
+
+* `lp (E : α → Type*) (p)` is defined for an **arbitrary** index type `α`
+  (`Mathlib/Analysis/Normed/Lp/lpSpace.lean:368`); there is no countability constraint.
+* `OrthogonalFamily`, `IsHilbertSum`, `IsHilbertSum.mkInternal` and
+  `IsHilbertSum.linearIsometryEquiv` are likewise stated over an arbitrary index type
+  (`Mathlib/Analysis/InnerProductSpace/l2Space.lean:261-292`).
+
+So run **Zorn over an arbitrary index type** and never mention countability.  A maximal
+orthogonal family of cyclic subspaces exists by `zorn_subset_nonempty` (chains close under
+union: the orthogonality condition has finite character), maximality gives
+`(⨆ i, Z i)ᗮ = ⊥` — otherwise a nonzero vector in the complement generates one more
+cyclic subspace, orthogonal to all of them by the `Zᗮ`-invariance lemma, contradicting
+maximality — and `IsHilbertSum.mkInternal` closes it.  The missing countability lemma is
+simply not needed, because nothing claims countability.
+
+**Consequence for layer 4.**  The chain `μ₁ ≫ μ₂ ≫ …` is the *separable* normal form and
+must also be dropped.  The general statement, valid without separability, is the
+**uniform-multiplicity decomposition**: `H` splits as an orthogonal sum over cardinals `κ`
+of parts where `A` is `multiplication by x on L²(μ_κ) ⊗ ℓ²(κ)`, with the `μ_κ` mutually
+singular.  That is Halmos's formulation, and it is indexed by cardinals rather than by an
+initial segment of `ℕ`, so it needs no ordering of a sequence and no Radon--Nikodym chain.
+`MultiplicityLevels` in §3 should therefore be re-indexed from `ℕ` to `Cardinal` — which is
+also what makes it a genuinely *cardinal*-valued multiplicity function, as
+`Frontier/Core.lean:71`'s docstring asks for, rather than an `ℕ`-valued approximation to
+one.
+
+The rest of §3 stands: the definition is still the next increment, the Radon--Nikodym
+unitary is still independent and parallelizable, and the Borel calculus on a reducing
+subspace is still the one step with no partial credit.
