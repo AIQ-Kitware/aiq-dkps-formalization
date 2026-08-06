@@ -90,6 +90,12 @@ attribute [local instance] IsStarNormal.instContinuousFunctionalCalculus
 namespace TauCeti
 namespace BorelCalculus
 
+-- The continuous functional calculus of an operator on `↥K` is reached only after synthesising
+-- `CStarAlgebra (↥K →L[ℂ] ↥K)`, which itself needs `CompleteSpace ↥K`; that is one nesting level
+-- more than the default budget allows, and without this the instance is not found at all.  The
+-- same search succeeds unaided for `H →L[ℂ] H`, where no subtype intervenes.
+set_option maxSynthPendingDepth 3
+
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 variable {a : H →L[ℂ] H}
 
@@ -355,6 +361,211 @@ def specInclCM (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K) :
     (w : spectrum ℂ (compress K a)) : specInclCM ha hK w = specIncl ha hK w := (rfl)
 
 end Spectrum
+
+section ContinuousCalculus
+
+variable {K : Submodule ℂ H} [CompleteSpace K]
+
+/-- **The compressed continuous functional calculus**, as a star-algebra homomorphism.
+
+Every value of the continuous functional calculus of `a` leaves `K` invariant, and so does its
+adjoint; compression is therefore multiplicative and `⋆`-preserving on the whole range of
+`cfcHom ha`, which is what makes this a homomorphism rather than merely a linear map. -/
+noncomputable def compressCfc (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K) :
+    C(spectrum ℂ a, ℂ) →⋆ₐ[ℂ] (K →L[ℂ] K) where
+  toFun g := compress K (cfcHom ha g)
+  map_one' := by rw [map_one]; exact compress_one
+  map_mul' g₁ g₂ := by
+    rw [map_mul]
+    exact compress_mul (fun _ hx => hK.cfcHom_apply_mem g₁ hx)
+      (fun _ hx => hK.cfcHom_apply_mem g₂ hx)
+  map_zero' := by rw [map_zero]; exact compress_zero
+  map_add' g₁ g₂ := by rw [map_add]; exact compress_add _ _
+  commutes' r := by rw [AlgHomClass.commutes]; exact compress_algebraMap r
+  map_star' g := by
+    have hT : ∀ x ∈ K, cfcHom ha g x ∈ K := fun _ hx => hK.cfcHom_apply_mem g hx
+    have hadj : ContinuousLinearMap.adjoint (cfcHom ha g) = cfcHom ha (star g) := by
+      rw [map_star, ContinuousLinearMap.star_eq_adjoint]
+    have hT' : ∀ x ∈ K, ContinuousLinearMap.adjoint (cfcHom ha g) x ∈ K := by
+      intro x hx
+      rw [hadj]
+      exact hK.cfcHom_apply_mem (star g) hx
+    rw [ContinuousLinearMap.star_eq_adjoint, adjoint_compress hT hT', hadj]
+
+/-- The compressed continuous calculus, unfolded. -/
+@[simp] theorem compressCfc_apply (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K)
+    (g : C(spectrum ℂ a, ℂ)) : compressCfc ha hK g = compress K (cfcHom ha g) := (rfl)
+
+/-- The compressed continuous calculus is continuous, because compression is. -/
+theorem continuous_compressCfc (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K) :
+    Continuous (compressCfc ha hK) := by
+  change Continuous fun g : C(spectrum ℂ a, ℂ) => compress K (cfcHom ha g)
+  exact (continuous_compress K).comp (cfcHom_continuous ha)
+
+/-- **Pulling a symbol back along the spectral inclusion and applying the restricted calculus**,
+as a star-algebra homomorphism.  This is the other half of the Stone--Weierstrass comparison. -/
+noncomputable def restrictCfc (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K) :
+    C(spectrum ℂ a, ℂ) →⋆ₐ[ℂ] (K →L[ℂ] K) :=
+  (cfcHom (isStarNormal_compress ha hK)).comp
+    (ContinuousMap.compStarAlgHom' ℂ ℂ (specInclCM ha hK))
+
+/-- The restricted calculus of a pulled-back symbol, unfolded. -/
+@[simp] theorem restrictCfc_apply (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K)
+    (g : C(spectrum ℂ a, ℂ)) :
+    restrictCfc ha hK g
+      = cfcHom (isStarNormal_compress ha hK) (g.comp (specInclCM ha hK)) := (rfl)
+
+/-- The restricted calculus of a pulled-back symbol is continuous in the symbol. -/
+theorem continuous_restrictCfc (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K) :
+    Continuous (restrictCfc ha hK) := by
+  change Continuous fun g : C(spectrum ℂ a, ℂ) =>
+    cfcHom (isStarNormal_compress ha hK) (g.comp (specInclCM ha hK))
+  exact (cfcHom_continuous (isStarNormal_compress ha hK)).comp
+    (specInclCM ha hK).continuous_precomp
+
+/-- Pulling the coordinate symbol back along the spectral inclusion gives the coordinate symbol
+of the restriction -- both are `w ↦ (w : ℂ)`. -/
+theorem restrict_id_comp_specInclCM (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K) :
+    (ContinuousMap.restrict (spectrum ℂ a) (ContinuousMap.id ℂ)).comp (specInclCM ha hK)
+      = ContinuousMap.restrict (spectrum ℂ (compress K a)) (ContinuousMap.id ℂ) := by
+  ext w
+  rfl
+
+/-- **The two homomorphisms agree.**  They are continuous and take the same value at the
+coordinate symbol -- namely `compress K a` -- so Stone--Weierstrass, in the form of the
+uniqueness of the continuous functional calculus, identifies them. -/
+theorem compressCfc_eq_restrictCfc (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K) :
+    compressCfc ha hK = restrictCfc ha hK := by
+  refine ContinuousMap.UniqueHom.eq_of_continuous_of_map_id (spectrum ℂ a)
+    (compressCfc ha hK) (restrictCfc ha hK)
+    (continuous_compressCfc ha hK) (continuous_restrictCfc ha hK) ?_
+  rw [compressCfc_apply, restrictCfc_apply, cfcHom_id ha, restrict_id_comp_specInclCM ha hK,
+    cfcHom_id (isStarNormal_compress ha hK)]
+
+/-- **The compatibility law for the continuous functional calculus.**
+
+For a continuous symbol, restricting it along the spectral inclusion and applying the calculus
+of the restricted operator is the compression of the ambient calculus. -/
+theorem cfcHom_comp_specIncl (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K)
+    (g : C(spectrum ℂ a, ℂ)) :
+    cfcHom (isStarNormal_compress ha hK) (g.comp (specInclCM ha hK))
+      = compress K (cfcHom ha g) :=
+  (DFunLike.congr_fun (compressCfc_eq_restrictCfc ha hK) g).symm
+
+end ContinuousCalculus
+
+section DiagonalMeasure
+
+variable {K : Submodule ℂ H} [CompleteSpace K]
+
+omit [CompleteSpace H] in
+/-- The diagonal matrix elements of a compression are those of the operator, at vectors of the
+subspace. -/
+theorem inner_compress_self {T : H →L[ℂ] H} (hT : ∀ x ∈ K, T x ∈ K) (x : K) :
+    ⟪x, compress K T x⟫_ℂ = ⟪(x : H), T (x : H)⟫_ℂ := by
+  rw [Submodule.coe_inner, coe_compress_apply hT]
+
+/-- Complexifying a pulled-back real symbol is pulling back its complexification. -/
+theorem ofRealLM_comp_specInclCM (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K)
+    (g : C(spectrum ℂ a, ℝ)) :
+    ofRealLM (g.comp (specInclCM ha hK)) = (ofRealLM g).comp (specInclCM ha hK) := by
+  ext w
+  simp only [ofRealLM_apply, ContinuousMap.comp_apply]
+
+/-- **The scalar spectral measures transport along the spectral inclusion.**
+
+`diagMeasure` of the restriction at a vector of `K` pushes forward, along the inclusion of
+spectra, to `diagMeasure` of `a` at the same vector.  This is what the uniform-multiplicity
+decomposition consumes.
+
+Both measures are finite Borel measures on a metrisable space, so it is enough to compare their
+integrals of bounded continuous functions; there the statement is the compatibility law for the
+continuous calculus, read through `integral_diagMeasure_ofReal`. -/
+theorem map_specIncl_diagMeasure (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K) (x : K) :
+    Measure.map (specIncl ha hK) (diagMeasure (isStarNormal_compress ha hK) x)
+      = diagMeasure ha (x : H) := by
+  haveI : IsFiniteMeasure
+      (Measure.map (specIncl ha hK) (diagMeasure (isStarNormal_compress ha hK) x)) :=
+    (diagMeasure (isStarNormal_compress ha hK) x).isFiniteMeasure_map _
+  refine ext_of_forall_integral_eq_of_IsFiniteMeasure fun g => ?_
+  set G : C(spectrum ℂ a, ℝ) := ⟨⇑g, g.continuous⟩
+  have hmap : ∫ w, g w ∂(Measure.map (specIncl ha hK)
+        (diagMeasure (isStarNormal_compress ha hK) x))
+      = ∫ w, (G.comp (specInclCM ha hK)) w ∂(diagMeasure (isStarNormal_compress ha hK) x) :=
+    integral_map (measurable_specIncl ha hK).aemeasurable g.continuous.aestronglyMeasurable
+  have hT : ∀ y ∈ K, cfcHom ha (ofRealLM G) y ∈ K := fun _ hy =>
+    hK.cfcHom_apply_mem (ofRealLM G) hy
+  rw [hmap, integral_diagMeasure_ofReal, ofRealLM_comp_specInclCM ha hK G,
+    cfcHom_comp_specIncl ha hK (ofRealLM G), inner_compress_self hT,
+    ← integral_diagMeasure_ofReal ha (x : H) G]
+  rfl
+
+end DiagonalMeasure
+
+section BorelCompatibility
+
+variable {K : Submodule ℂ H} [CompleteSpace K]
+
+/-- Pulling a bounded measurable symbol back along the spectral inclusion keeps it admissible:
+measurability composes and the bound is unchanged. -/
+theorem IsBddMeasurable.comp_specIncl (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K)
+    {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) :
+    IsBddMeasurable (fun w : spectrum ℂ (compress K a) => f (specIncl ha hK w)) :=
+  ⟨hf.measurable.comp (measurable_specIncl ha hK), hf.chooseBound, hf.chooseBound_nonneg,
+    fun _ => hf.norm_le_chooseBound _⟩
+
+/-- **The compatibility law.**  For a bounded measurable symbol `f` on the spectrum of `a`, the
+Borel calculus of the restriction at the restricted symbol is the compression of the ambient
+Borel calculus at `f`.
+
+Both sides are bounded operators on `K`, and a bounded operator on a complex Hilbert space is
+determined by its diagonal matrix elements; those are integrals against the diagonal measures,
+which correspond under `map_specIncl_diagMeasure`. -/
+theorem borelCalculus_compress (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K)
+    {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) :
+    borelCalculus (isStarNormal_compress ha hK) (hf.comp_specIncl ha hK)
+      = compress K (borelCalculus ha hf) := by
+  refine op_ext_of_inner_self fun x => ?_
+  rw [inner_borelCalculus_self, inner_compress_self (fun _ hy => hK.borelCalculus_mem hf hy),
+    inner_borelCalculus_self, ← map_specIncl_diagMeasure ha hK x]
+  exact (integral_map (measurable_specIncl ha hK).aemeasurable
+    hf.measurable.aestronglyMeasurable).symm
+
+/-- **The compatibility law, at a vector.**  This is the form layer 4 uses: applying the
+restricted calculus to a vector of `K` and forgetting the subspace is applying the ambient
+calculus. -/
+theorem coe_borelCalculus_compress (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K)
+    {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) (x : K) :
+    (borelCalculus (isStarNormal_compress ha hK) (hf.comp_specIncl ha hK) x : H)
+      = borelCalculus ha hf (x : H) := by
+  rw [borelCalculus_compress ha hK hf,
+    coe_compress_apply (fun _ hy => hK.borelCalculus_mem hf hy)]
+
+/-- **The compatibility law, as an identity of operators `K →L[ℂ] H`.** -/
+theorem subtypeL_comp_borelCalculus_compress (ha : IsStarNormal a)
+    (hK : IsCalculusInvariant ha K) {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) :
+    K.subtypeL ∘L borelCalculus (isStarNormal_compress ha hK) (hf.comp_specIncl ha hK)
+      = borelCalculus ha hf ∘L K.subtypeL := by
+  refine ContinuousLinearMap.ext fun x => ?_
+  simp only [ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply]
+  exact coe_borelCalculus_compress ha hK hf x
+
+end BorelCompatibility
+
+section CyclicSubspace
+
+/-- **A cyclic subspace is complete**, being closed.
+
+This is the instance layer 4 supplies when it recurses: a cyclic subspace is calculus-invariant
+(`isCalculusInvariant_cyclicSubspace`) and complete, which is everything the restriction API of
+this file asks for.  It is a `theorem` rather than an `instance` because `cyclicSubspace`
+carries the normality proof as an explicit argument, so there is nothing for instance
+resolution to key on; a consumer writes `haveI := completeSpace_cyclicSubspace ha ξ`. -/
+theorem completeSpace_cyclicSubspace (ha : IsStarNormal a) (ξ : H) :
+    CompleteSpace (cyclicSubspace ha ξ) :=
+  (isClosed_cyclicSubspace ha ξ).completeSpace_coe
+
+end CyclicSubspace
 
 end BorelCalculus
 end TauCeti
