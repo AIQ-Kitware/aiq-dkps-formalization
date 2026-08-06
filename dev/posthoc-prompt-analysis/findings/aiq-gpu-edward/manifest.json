@@ -1,0 +1,23 @@
+{
+  "agent_id": "aiq-gpu-edward",
+  "scope": [
+    "/aiq-dkps-formalization",
+    "/TauCetiRoadmap",
+    "/TauCetiReview",
+    "/TauCeti",
+    "/home/joncrall-agent"
+  ],
+  "n_prompts": 236,
+  "n_events": 681,
+  "n_sessions": 11,
+  "first_prompt": "2026-07-28T15:55:00.371Z",
+  "last_prompt": "2026-08-06T19:40:10.527Z",
+  "cwds": [
+    "/home/joncrall-agent",
+    "/home/joncrall-agent/.claude/projects/-home-joncrall-agent/memory",
+    "/home/local/KHQ/jon.crall/code/aiq-dkps-formalization",
+    "/home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs"
+  ],
+  "transcript_files_scanned": 11,
+  "notes": "SCOPE WIDENED: ran with --scope /home/joncrall-agent added to the four defaults. This agent's sessions open at $HOME, which contains no default scope substring; all 8 -home-joncrall-agent sessions are DKPS/DavisKahan/TauCeti work (verified session by session, no unrelated project exists on this account) but only 4 matched the default, and those 4 matched by accident via a cd into ~/.lake-cache/aiq-dkps-formalization or ~/TauCeti. Default scope gave 195 prompts / 7 sessions; widened gives 236 / 11. TOOL CHANGE (extract_prompts.py): recover prompts typed while the agent was running. Those do not create type=='user' records, only type=='queue-operation' (enqueue -> dequeue if delivered, remove if flushed by ESC/queue-edit/compaction); a removed one never becomes a user record and was silently lost. Session c87e014d alone: 201 enqueues, 44 dequeues, 157 removes. Recovered 121 on this store, against 119 that ~/.claude/history.jsonl independently reported missing. Emitted to events.jsonl as event=queued_prompt_dropped, NOT to prompts.jsonl, so prompt counts stay comparable with findings produced before this change; other agents will read 0 until they re-run, which is a missing measurement rather than a zero. Also added $POSTHOC_NOTE support so this note survives regeneration. VALIDATION: 71132 raw records -> 54042 unique uuids (1.32x) with one genuine fork pair (15b9b069 <-> 3c42d3eb, 2722 shared records), but prompts alone dedupe only 239 -> 236 (1.01x) because this machine ran few long sessions compacted in place rather than resumed; no sidechain records in scope at all; no synthetic turns in prompts.jsonl; history.jsonl cross-check leaves 13 of 390 unreconciled, all '[Pasted text #N]' placeholders plus one pre-send typo fix."
+}

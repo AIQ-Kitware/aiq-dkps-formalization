@@ -23,7 +23,9 @@ sampling (see ANALYSIS.md "How a human prompt is identified"):
 
 Harness-synthetic turns are not discarded outright; they are emitted to
 ``events.jsonl`` because interrupts, Stop-hook replays and compactions are
-themselves friction signals.
+themselves friction signals. So are prompts the human typed *while the agent was
+running* and which were then flushed from the queue without ever becoming a user
+record -- see ``queued_prompt_dropped`` below.
 
 Outputs (all under this directory):
   prompts.jsonl             one record per human prompt, with its response
@@ -91,6 +93,11 @@ SYNTHETIC = [
     ("<bash-stdout>", "bash_output"),
     ("<bash-stderr>", "bash_output"),
 ]
+
+
+def _norm_q(s: str) -> str:
+    """Whitespace/case-insensitive key for matching a queued prompt to a delivered one."""
+    return " ".join((s or "").split()).lower()[:200]
 
 
 def text_of(content):
@@ -189,6 +196,7 @@ def scan_file(path: pathlib.Path):
     # Response span for a human prompt = everything up to the next human prompt.
     human_idx = [h[0] for h in hits if h[1] == "human"] + [len(recs)]
     out_prompts, out_events = [], []
+    kept_norm = set()   # normalised text of every human prompt kept below
     for i, kind, r, txt in hits:
         base = {"session_id": meta["session_id"], "project_dir": meta["project_dir"],
                 "cwd": r.get("cwd") or meta["cwd"], "git_branch": r.get("gitBranch"),
@@ -227,6 +235,7 @@ def scan_file(path: pathlib.Path):
                 elif b.get("type") == "tool_use":
                     tools.append(b.get("name"))
         span_end = recs[nxt - 1].get("timestamp") if nxt - 1 > i else r.get("timestamp")
+        kept_norm.add(_norm_q(body))
         out_prompts.append({**base, "prompt": body, "prompt_chars": len(body),
                             "notes": notes,
                             "response_first_text": first_text,
@@ -236,6 +245,59 @@ def scan_file(path: pathlib.Path):
                             "response_models": sorted(models),
                             "span_end": span_end,
                             "span_records": nxt - i - 1})
+    # Prompts typed while the agent was still running.
+    #
+    # Typing into the box mid-run does not create a `type=="user"` record. It
+    # creates `type=="queue-operation"` records: `enqueue` when typed, then
+    # `dequeue` if the turn is eventually delivered (at which point a normal
+    # user record appears) or `remove` if it is flushed -- ESC, a queue edit, a
+    # compaction. A removed one never becomes a user record, so scanning only
+    # `type=="user"` silently loses it, even though the human typed it and
+    # ~/.claude/history.jsonl logged it.
+    #
+    # This is not a per-machine quirk: it undercounts every store in proportion
+    # to how often the human typed while the agent was busy. On aiq-gpu-edward
+    # that was 119 of 355 typed prompts (34%); one session alone held 201
+    # enqueues against 44 dequeues.
+    #
+    # They are emitted as EVENTS, not prompts, so prompt counts stay comparable
+    # with findings produced before this change. events.jsonl is the right home:
+    # a prompt typed and then dropped is friction, like an interrupt. Queue
+    # records carry no uuid, so a synthetic stable one is minted for dedupe().
+    qops = defaultdict(list)          # content -> [operation, ...], in order
+    qfirst = {}                       # content -> timestamp of its enqueue
+    for r in recs:
+        if r.get("type") != "queue-operation":
+            continue
+        c = r.get("content")
+        if not c:
+            continue                  # a `dequeue` carries no content
+        qops[c].append(r.get("operation"))
+        qfirst.setdefault(c, r.get("timestamp"))
+
+    for content, ops in qops.items():
+        if "dequeue" in ops or "remove" not in ops:
+            continue                  # delivered, or still pending at session end
+        body = (content or "").strip()
+        if not body or body.startswith("/"):
+            continue                  # slash commands get their own event
+        # The queue carries machine traffic too -- task notifications, hook
+        # replays, coordinator messages. Same classifier as for user records.
+        if classify({}, body) != "human":
+            continue
+        body, _ = clean(body)
+        if not body or _norm_q(body) in kept_norm:
+            continue                  # re-typed later and delivered
+        out_events.append({
+            "session_id": meta["session_id"], "project_dir": meta["project_dir"],
+            "cwd": meta["cwd"], "git_branch": meta["git_branch"],
+            "timestamp": qfirst.get(content),
+            "uuid": f"queue:{meta['session_id']}:{qfirst.get(content)}",
+            "prompt_source": "queued", "origin_kind": None, "entrypoint": None,
+            "permission_mode": None, "version": meta["version"], "file": meta["file"],
+            "event": "queued_prompt_dropped", "slash_command": None,
+            "slash_args": None, "text": body[:4000]})
+
     meta["prompt_count"] = len(out_prompts)
     return meta, out_prompts, out_events
 
@@ -404,6 +466,12 @@ def main():
         "cwds": sorted({p.get("cwd") for p in prompts if p.get("cwd")}),
         "transcript_files_scanned": len(metas),
     }
+    # Free-text caveat for this machine (non-default --scope, missing sources,
+    # tool changes). Set $POSTHOC_NOTE so it survives a re-run; the manifest is
+    # regenerated every time and a hand-edit would be silently lost.
+    note = _os.environ.get("POSTHOC_NOTE")
+    if note:
+        manifest["notes"] = note
     (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2))
     print(f"[{aid}] human prompts: {len(prompts)}   events: {len(events)}   "
           f"sessions: {len(by_sess)}  -> {OUT}")
