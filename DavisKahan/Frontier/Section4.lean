@@ -157,6 +157,18 @@ is the minimiser.
 
 It is finite-index; the infinite-dimensional form additionally needs the
 summability convention that `DK-4.2-prop` records as open. -/
+/-- **Davis--Kahan 1970, Proposition 4.2**, in the paper's basis-free right-hand side: over an
+orthonormal basis of `U`, the total squared sine cost of any admissible unitary competitor is at
+least `dim U - tr((C|_U)²)`, where `C` is the positive Halmos cosine.
+
+The section discussion above records why the statement is written this way: the singleton form,
+`(re ⟪x, D x⟫)² ≥ (re ⟪x, W x⟫)²` for one unit `x ∈ U`, is a transcription defect and is refuted
+by any non-principal unit vector -- explicitly in `ℂ⁴` with principal angles `0` and `π/3`.  The
+sum is attained by the direct rotation on a principal basis, which is
+`proposition4_2_attained_on_principal_vector`, and that is the sense in which it minimises.
+
+Finite-index; the infinite-dimensional form additionally needs the summability convention that
+`DK-4.2-prop` records as open. -/
 theorem proposition4_2_basisAngleSquareSum
     {ι : Type*} [Fintype ι] (b : OrthonormalBasis ι ℂ U)
     (W : H →L[ℂ] H)
@@ -250,6 +262,14 @@ Fan--Hoffman pinching contraction.  Two facts carry it: the complementary pair
 has the *same* direct rotation, and `aₙ(X†X) = aₙ(X)²` — which is also exactly
 why 4.3 survives while 4.4 does not, since sums of squares are dominated at
 every `k` and sums are not. -/
+/-- **Davis--Kahan 1970, Proposition 4.3**: the direct rotation minimises every Ky Fan gauge of
+the squared displacement `(1 - W)⋆(1 - W)` among admissible unitary competitors.
+
+Proved by reading the pinch through the isometry `H ≃ₗᵢ WithLp 2 (U × Uᗮ)`, feeding the middle
+step with Proposition 4.1 on `U` and on `Uᗮ`, and closing with the Fan--Hoffman pinching
+contraction.  Two facts carry it: the complementary pair has the *same* direct rotation, and
+`aₙ(X⋆X) = aₙ(X)²`.  That second fact is also exactly why 4.3 survives while 4.4 does not --
+sums of squares are dominated at every `k`, and sums are not. -/
 theorem proposition4_3_squaredDisplacement_kyFan
     (hacute : IsAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
