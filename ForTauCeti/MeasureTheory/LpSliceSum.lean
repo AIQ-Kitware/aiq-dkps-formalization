@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.MeasureTheory.LpRestrict
+public import ForTauCeti.MeasureTheory.MeasureClass
 
 /-!
 # A countable family of measures, assembled into one
@@ -158,6 +159,44 @@ theorem restrict_sliceSum (μ : ℕ → Measure X) (n : ℕ) :
     convert measure_empty (μ := μ m)
     refine Set.ext fun x => ?_
     simp [sliceMap, slice, hm]
+
+/-- The slice sum, evaluated: a countable sum of the members' measures of the fibres. -/
+theorem sliceSum_apply (μ : ℕ → Measure X) {t : Set (X × ℕ)} (ht : MeasurableSet t) :
+    sliceSum μ t = ∑' n, μ n {x | (x, n) ∈ t} := by
+  rw [sliceSum, Measure.sum_apply _ ht]
+  exact tsum_congr fun n => Measure.map_apply (measurable_sliceMap n) ht
+
+/-- The slice sum gives each slice the total mass of the corresponding member. -/
+theorem sliceSum_slice (μ : ℕ → Measure X) (n : ℕ) :
+    sliceSum μ (slice n) = μ n Set.univ := by
+  rw [sliceSum_apply _ (measurableSet_slice n), tsum_eq_single n ?_]
+  · congr 1
+    refine Set.ext fun x => ?_
+    simp [slice]
+  · intro m hm
+    convert measure_empty (μ := μ m)
+    refine Set.ext fun x => ?_
+    simp [slice, hm]
+
+/-- **The slice sum of finite measures is σ-finite**, the slices themselves being the spanning
+sets.  This is what lets the Radon--Nikodym unitary apply to slice sums. -/
+instance sigmaFinite_sliceSum (μ : ℕ → Measure X) [∀ n, IsFiniteMeasure (μ n)] :
+    SigmaFinite (sliceSum μ) := by
+  refine ⟨⟨⟨fun n => slice n, fun _ => trivial, fun n => ?_, iUnion_slice⟩⟩⟩
+  rw [sliceSum_slice]
+  exact measure_lt_top _ _
+
+/-- **Slice sums of equivalent families are equivalent.**  Measure class is checked fibrewise,
+and a countable sum in `ℝ≥0∞` vanishes exactly when every term does. -/
+theorem measureEquiv_sliceSum {μ ν : ℕ → Measure X} (h : ∀ n, MeasureEquiv (μ n) (ν n)) :
+    MeasureEquiv (sliceSum μ) (sliceSum ν) := by
+  constructor
+  · refine Measure.AbsolutelyContinuous.mk fun t ht h0 => ?_
+    rw [sliceSum_apply _ ht, ENNReal.tsum_eq_zero] at h0 ⊢
+    exact fun n => (h n).1 (h0 n)
+  · refine Measure.AbsolutelyContinuous.mk fun t ht h0 => ?_
+    rw [sliceSum_apply _ ht, ENNReal.tsum_eq_zero] at h0 ⊢
+    exact fun n => (h n).2 (h0 n)
 
 /-- The `n`-th summand, identified with `L²` of the slice restriction. -/
 @[expose]
