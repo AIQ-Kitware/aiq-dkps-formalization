@@ -1057,16 +1057,41 @@ theorem twoProjection_operator_classification :
   · rintro ⟨⟨hc, hs, ht, he⟩, hg⟩
     exact ⟨hc, hs, ht, he, hg⟩
 
-/-- Davis--Kahan 1970, Theorem 3.1: spectral multiplicity data of the two angle
-operators, together with the elementary multiplicities, form a complete
-invariant. -/
-theorem theorem3_1_spectralMultiplicity_classification :
+/-- **Davis--Kahan 1970, Theorem 3.1**, in the paper's own phrasing: the spectral multiplicity
+data of the two angle operators, together with the elementary multiplicities, form a complete
+invariant for ordered pairs of subspaces.
+
+**The angle operator is `genericCosineBlock`, not `genericHalmosCosineSq`.**  The statement used
+to compare the symmetrized block, which on the generic part is `A ⊕ A` -- doubled multiplicity --
+and recovering `A` from `A ⊕ A` is multiplicity-halving, which this development does not have and
+does not need.  The docstring at `SameHalmosOperatorInvariant` records the 2026-08-04 decision
+that put the `U`-side cosine block into the operator invariant for exactly this reason; the same
+correction was applied to Corollary 3.1 on 2026-08-06.  Davis and Kahan state Theorem 3.1 for the
+angle operator on the `U`-side, so this is the paper-faithful reading.
+
+**On separability.**  It is carried on `H₁` only, it is inherited by the generic left half, and
+it is the paper's own standing convention.  It is needed for `→` alone -- producing a
+multiplicity model requires the existence half of Hahn--Hellinger -- and the `←` direction is
+separability-free.  Crucially, nothing already proved is weakened: the operator-level form
+`twoProjection_operator_classification`, grounded on
+`pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`, remains stated with no
+separability, no compactness and no finite dimension, and it is that theorem which carries the
+classification content of Theorem 3.1.  What this statement adds is the *translation* of its
+invariant into multiplicity data. -/
+theorem theorem3_1_spectralMultiplicity_classification
+    [TopologicalSpace.SeparableSpace H₁] :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
       SameSpectralMultiplicity
-        (genericHalmosCosineSq U₁ V₁)
-        (genericHalmosCosineSq U₂ V₂) := by
-  sorry
+        (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁)
+        (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂) := by
+  rw [twoProjection_operator_classification]
+  constructor
+  · rintro ⟨htriv, hgen⟩
+    refine ⟨htriv, sameSpectralMultiplicity_of_unitarilyEquivalent _ _ ?_ hgen⟩
+    exact MathAhead.HiddenFoundations.isSelfAdjoint_genericCosineBlock U₁ V₁
+  · rintro ⟨htriv, hmult⟩
+    exact ⟨htriv, unitarilyEquivalent_of_sameSpectralMultiplicity _ _ hmult⟩
 
 /-- Ordered eigenvalue data for a compact positive contraction: the
 approximation-number sequence of `A`.
