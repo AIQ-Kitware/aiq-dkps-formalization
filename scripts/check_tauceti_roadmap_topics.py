@@ -193,7 +193,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 ("T28","Cyclic subspaces, the multiplication model, and Hahn-Hellinger existence",
  [A+"BorelCalculus."+x for x in ["AlmostInvariant","CyclicIsometry","CyclicModel",
                                  "CyclicDecomposition","Restriction","SeparableCyclic",
-                                 "MultiplicityModel"]]
+                                 "MultiplicityModel","DiagMeasureNatural"]]
  +[A+"HilbertSumIntertwine"]),
 ("T25","The Hilbert-Schmidt Sylvester flow",
  [A+x for x in ["HilbertSchmidt.Block","Sylvester.BlockEstimate","Sylvester.BlockIdentity",
