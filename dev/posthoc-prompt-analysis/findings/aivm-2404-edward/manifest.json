@@ -1,0 +1,19 @@
+{
+  "agent_id": "aivm-2404-edward",
+  "scope": [
+    "/aiq-dkps-formalization",
+    "/TauCetiRoadmap",
+    "/TauCetiReview",
+    "/TauCeti"
+  ],
+  "n_prompts": 110,
+  "n_events": 385,
+  "n_sessions": 10,
+  "first_prompt": "2026-07-07T14:56:44.568Z",
+  "last_prompt": "2026-08-06T18:53:38.171Z",
+  "cwds": [
+    "/home/local/KHQ/edward.wang/code/aiq-eval-runner"
+  ],
+  "transcript_files_scanned": 10,
+  "notes": "TOOL CHANGE (extract_prompts.py): scope is now decided PER SESSION, not per record. A record's cwd is where that record's tool call ran, not the project. On this checkout the formalization is a subdirectory of a parent repo (aiq-eval-runner/formalizations/aiq-dkps-formalization) and sessions open at the parent, so every human prompt carried the parent cwd while only Bash records that cd'd in carried the in-scope one. Record-level filtering kept 6408 tool results and dropped 100% of human prompts: the first run printed 'human prompts: 0' on a store containing 110. Session-level scoping is strictly more inclusive, so agents whose sessions opened inside the formalization are unaffected. MISSING SOURCE: ~/.claude/history.jsonl does not exist on this machine (all work went through the VSCode extension; entrypoint=claude-vscode on 6117/6117 in-scope user records), so the independent typed-prompt cross-check was unavailable. VALIDATION: dedup 8521 raw user records -> 7134 unique uuids (1.19x); no sidechain leakage; no synthetic turns in the prompt field."
+}
