@@ -97,7 +97,19 @@ end SpectralMultiplicityFoundation
 
 /-- Compact positive-operator classification by the approximation-number list.
 For a compact positive operator these numbers are its eigenvalues in decreasing
-order, multiplicity counted. -/
+order, multiplicity counted.
+
+**The trivial-kernel hypotheses are not decoration.**  Without them the
+specification is *unsatisfiable*, not merely unproved: `A = 0` on `ℂ` and
+`B = 0` on `ℂ²` are both compact, positive and self-adjoint with identical
+approximation-number sequences (all zero), yet no linear isometric equivalence
+`ℂ ≃ₗᵢ ℂ²` exists.  A structure with an unsatisfiable field has no inhabitants,
+so every theorem taking it as a hypothesis is vacuous — the same trap class as
+a `sorry`-ed definition.  They were absent until 2026-08-06.
+
+The hypotheses are exactly what genericity supplies in Corollary 3.1: on the
+generic part of a subspace pair no vector sits at angle `π / 2`, so the angle
+operator has trivial kernel (`eigenspace_genericCosineBlock_zero`). -/
 structure CompactPositiveListFoundation where
   positive_compact_list_complete :
     ∀ {H K : Type v}
@@ -108,6 +120,8 @@ structure CompactPositiveListFoundation where
       (∀ x, 0 ≤ RCLike.re ⟪x, A x⟫_ℂ) →
       (∀ x, 0 ≤ RCLike.re ⟪x, B x⟫_ℂ) →
       IsCompactOperator A → IsCompactOperator B →
+      Module.End.eigenspace A.toLinearMap 0 = ⊥ →
+      Module.End.eigenspace B.toLinearMap 0 = ⊥ →
       (∀ n, approximationNumberSequence A n =
         approximationNumberSequence B n) →
       BoundedOperatorsUnitaryEquivalent A B
@@ -132,12 +146,14 @@ theorem list_eq_iff_unitarilyEquivalent
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     (hApos : ∀ x, 0 ≤ RCLike.re ⟪x, A x⟫_ℂ)
     (hBpos : ∀ x, 0 ≤ RCLike.re ⟪x, B x⟫_ℂ)
-    (hAc : IsCompactOperator A) (hBc : IsCompactOperator B) :
+    (hAc : IsCompactOperator A) (hBc : IsCompactOperator B)
+    (hA0 : Module.End.eigenspace A.toLinearMap 0 = ⊥)
+    (hB0 : Module.End.eigenspace B.toLinearMap 0 = ⊥) :
     (∀ n, approximationNumberSequence A n =
       approximationNumberSequence B n) ↔
       BoundedOperatorsUnitaryEquivalent A B := by
   constructor
-  · exact M.positive_compact_list_complete hA hB hApos hBpos hAc hBc
+  · exact M.positive_compact_list_complete hA hB hApos hBpos hAc hBc hA0 hB0
   · intro h
     exact M.positive_compact_list_invariant h
 
