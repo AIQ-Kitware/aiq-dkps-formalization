@@ -113,6 +113,15 @@ structure MultiplicityDatum where
   bound_nonneg : 0 ≤ bound
   /-- The base measure lives inside the ball of radius `bound`. -/
   base_supported : base {z | bound < ‖z‖} = 0
+  /-- **The base measure is carried by the zeroth level set**, i.e. by the set where the
+  multiplicity is nonzero.
+
+  Without this the base measure is not determined even in principle: mass outside `level 0`
+  contributes to no summand of `measure`, so two data differing only there present the *same*
+  operator while carrying different measure classes.  Any uniqueness statement about the datum
+  is false without it, and every model produced by `exists_hasMultiplicityModel` satisfies it,
+  because `level 0` is exactly the union of the supports the construction starts from. -/
+  base_supported_level_zero : base (level 0)ᶜ = 0
   /-- The level sets are measurable. -/
   measurableSet_level : ∀ k, MeasurableSet (level k)
   /-- The level sets decrease: this is what makes them super-level sets of a function. -/
@@ -347,11 +356,11 @@ theorem exists_hasMultiplicityModel [TopologicalSpace.SeparableSpace H] (ha : Is
       (diagMeasure ha (ξ m))) n (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖))
       (norm_coordTrunc_le hR0) F).symm
   have hstep1 := operatorUnitaryEquiv_of_isHilbertSum hsum' hsum2 hA hB
-  obtain ⟨ρ, D, hρfin, hDmeas, hDanti, hρsupp, hstep2⟩ :=
+  obtain ⟨ρ, D, hρfin, hDmeas, hDanti, hρsupp, hρzero, hstep2⟩ :=
     exists_multiplicityLevels (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ)
       (diagMeasure ha (ξ n))) (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖))
       (norm_coordTrunc_le hR0)
-  refine ⟨⟨ρ, ‖a‖ * ‖(1 : H →L[ℂ] H)‖, D, hρfin, hR0, ?_, hDmeas, hDanti⟩,
+  refine ⟨⟨ρ, ‖a‖ * ‖(1 : H →L[ℂ] H)‖, D, hρfin, hR0, ?_, hρzero, hDmeas, hDanti⟩,
     hstep1.trans hstep2⟩
   refine hρsupp _ (measurableSet_lt measurable_const measurable_norm) fun n => ?_
   rw [Measure.map_apply hemb.measurable (measurableSet_lt measurable_const measurable_norm)]

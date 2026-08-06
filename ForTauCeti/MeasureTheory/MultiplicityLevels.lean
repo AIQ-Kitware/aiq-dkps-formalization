@@ -265,6 +265,18 @@ theorem antitone_levelSet (S : ℕ → Set X) : Antitone (levelSet S) := by
   obtain ⟨m, hm, hrank⟩ := exists_mem_rank_eq_of_rank_eq_succ S hxn.2
   exact Set.mem_iUnion.mpr ⟨m, hm, hrank⟩
 
+/-- **Every member of the family sits inside the zeroth level set.**  A point of `S n` has some
+rank there, so it lies in the level piece of that rank, hence in that level set, hence -- by
+antitonicity -- in `levelSet S 0`.
+
+This is what makes `levelSet S 0` the support of the whole construction: outside it no member of
+the family lives, so a base measure carried by the family is carried by it. -/
+theorem subset_levelSet_zero (S : ℕ → Set X) (n : ℕ) : S n ⊆ levelSet S 0 := by
+  intro x hx
+  have hmem : x ∈ levelSet S (rank S x n) := Set.mem_iUnion.mpr ⟨n, hx, rfl⟩
+  exact antitone_levelSet S (Nat.zero_le _) hmem
+
+
 end Levels
 
 section Rearrangement
@@ -469,6 +481,7 @@ theorem exists_multiplicityLevels (μ : ℕ → Measure X) [∀ n, IsFiniteMeasu
     ∃ (ρ : Measure X) (D : ℕ → Set X), IsFiniteMeasure ρ ∧ (∀ k, MeasurableSet (D k)) ∧
       Antitone D ∧
       (∀ N : Set X, MeasurableSet N → (∀ n, μ n N = 0) → ρ N = 0) ∧
+      ρ (D 0)ᶜ = 0 ∧
       OperatorUnitaryEquiv
         (mulLp (sliceSum μ) (hg.comp measurable_fst) (fun p => hgC p.1))
         (mulLp (sliceSum fun k => ρ.restrict (D k)) (hg.comp measurable_fst)
@@ -476,10 +489,19 @@ theorem exists_multiplicityLevels (μ : ℕ → Measure X) [∀ n, IsFiniteMeasu
   classical
   obtain ⟨S, hSmeas, hSequiv⟩ := exists_supports_measureEquiv_restrict μ
   refine ⟨dominatingMeasure μ, levelSet S, inferInstance,
-    fun k => measurableSet_levelSet hSmeas k, antitone_levelSet S, ?_, ?_⟩
+    fun k => measurableSet_levelSet hSmeas k, antitone_levelSet S, ?_, ?_, ?_⟩
   · intro N hN hzero
     rw [dominatingMeasure_apply _ hN, ENNReal.tsum_eq_zero]
     exact fun n => by rw [hzero n, mul_zero]
+  · rw [dominatingMeasure_apply _ (measurableSet_levelSet hSmeas 0).compl,
+      ENNReal.tsum_eq_zero]
+    intro n
+    have hzero : μ n (levelSet S 0)ᶜ = 0 := by
+      refine (hSequiv n).1 ?_
+      rw [Measure.restrict_apply (measurableSet_levelSet hSmeas 0).compl]
+      refine measure_mono_null (fun x hx => ?_) measure_empty
+      exact absurd (subset_levelSet_zero S n hx.2) hx.1
+    rw [hzero, mul_zero]
   have heq : MeasureEquiv (sliceSum μ)
       (sliceSum fun n => (dominatingMeasure μ).restrict (S n)) :=
     measureEquiv_sliceSum hSequiv
