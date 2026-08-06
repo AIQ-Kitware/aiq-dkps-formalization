@@ -73,11 +73,12 @@ TOPICS: list[tuple[str, str, list[str]]] = [
   "Analysis.Normed.Operator.FiniteRankCompact",
   A+"Spectral.Cutoff"]+["Analysis.OperatorIdeal.ApproximationNumber."+x for x in
   ["Basic","Adjoint","Compact","CompactHilbert","Core","DiagonalExample","DiagonalSequence","Examples",
+   "PrescribedSequence","GramSquare","Pinching",
    "FiniteDimensional","FiniteRestriction","FiniteValueFibers","FiniteValueSeparation",
    "KyFan",
    "LeadingCutoff","MinMax","MinMaxUpper","SameSequence"]]),
 ("T10","Symmetric operator ideals and Schatten norms",
- ["Analysis.OperatorIdeal.Family."+x for x in ["Basic","HilbertSchmidt","KyFan","KyFanDominance","OperatorNorm","Schatten","TraceClass"]]
+ ["Analysis.OperatorIdeal.Family."+x for x in ["Basic","CompactOperator","HilbertSchmidt","KyFan","KyFanDominance","OperatorNorm","Schatten","TraceClass"]]
  # `ApproximationNumber.EnergyComparison` is approximation-number material by subject and
  # would sit in T09, but it imports `Family.HilbertSchmidt` (here), so filing it there makes
  # T09 unsubmittable.  Fourth module to hit this; file by dependency and let `--check` say so.
@@ -143,7 +144,10 @@ TOPICS: list[tuple[str, str, list[str]]] = [
      ["",".OrbitAction",".Fourier",".DoubledPhase"]]
  +[A+"Sylvester.Internal.SpectralBounds"]),
 ("T17","Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems",
- [A+"SinTheta."+x for x in ["OperatorNorm","Perturbation","DirectedBounds","UnitarilyInvariant"]]
+ # `SpecialFunctions.TanArcsin` imports nothing from ForTauCeti; it is filed here because it was
+ # written for the tangent-theta bounds and is used nowhere else.
+ ["Analysis.SpecialFunctions.TanArcsin"]
+ +[A+"SinTheta."+x for x in ["OperatorNorm","Perturbation","DirectedBounds","UnitarilyInvariant"]]
  +[A+"Residual."+x for x in ["AngleEmbedding","Ritz","TrialMap"]]
  +[A+"DoubleAngle.Vector"]+[A+"BoundedOperator."+x for x in ["Projector","SinTheta"]]
  # `SpectralOrder.Real` is form-bound material by subject and would sit with
@@ -172,6 +176,25 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  ["Topology.ApproxMinimizer","Topology.Berge"]),
 ("T24","Real approximation numbers by complexification",
  ["Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal"]),
+("T26a","Compact self-adjoint operators classified by eigenspace dimensions",
+ # `CompactSelfAdjointClassification` imports only Mathlib; `CompactApproximationEigenvalues`
+ # imports the approximation-number layer of T09, so this topic sits after it.  Together they
+ # are the Corollary 3.1 bridge: equal approximation-number sequences and equal eigenspace
+ # dimensions say the same thing for a compact positive operator with trivial kernel.
+ [A+"CompactSelfAdjointClassification",A+"CompactApproximationEigenvalues"]),
+("T27","Measure classes, L-two transport, and the multiplicity normal form",
+ ["MeasureTheory."+x for x in ["MeasureClass","RadonNikodymL2","LpComp","LpRestrict",
+                               "LpSliceSum","MultiplicityLevels"]]
+ # `OperatorUnitaryEquiv` is Hilbert-space material by subject and would sit in T28 -- but
+ # `MultiplicityLevels` states its conclusion as a unitary equivalence of multiplication
+ # operators and so imports it, and filing it downstream would make this topic unsubmittable.
+ # Same rule as `SpectralOrder.Real` in T17: file by dependency, and `--check` is what says so.
+ +[A+"OperatorUnitaryEquiv"]),
+("T28","Cyclic subspaces, the multiplication model, and Hahn-Hellinger existence",
+ [A+"BorelCalculus."+x for x in ["AlmostInvariant","CyclicIsometry","CyclicModel",
+                                 "CyclicDecomposition","Restriction","SeparableCyclic",
+                                 "MultiplicityModel"]]
+ +[A+"HilbertSumIntertwine"]),
 ("T25","The Hilbert-Schmidt Sylvester flow",
  [A+x for x in ["HilbertSchmidt.Block","Sylvester.BlockEstimate","Sylvester.BlockIdentity",
                 "Sylvester.Generator","Sylvester.Group","Sylvester.SpectralGap"]]),

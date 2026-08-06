@@ -56,10 +56,13 @@ theorem operatorUnitaryEquiv_of_intertwines {A : H →L[ℂ] H} {B : K →L[ℂ]
     (he : ∀ x : H, e (A x) = B (e x)) : OperatorUnitaryEquiv A B :=
   ⟨e, he⟩
 
+/-- Unitary equivalence is reflexive, witnessed by the identity. -/
 @[refl]
 theorem OperatorUnitaryEquiv.refl (A : H →L[ℂ] H) : OperatorUnitaryEquiv A A :=
   ⟨LinearIsometryEquiv.refl ℂ H, fun _ => rfl⟩
 
+/-- Unitary equivalence is symmetric: the inverse of the intertwining unitary intertwines the
+operators the other way. -/
 @[symm]
 theorem OperatorUnitaryEquiv.symm {A : H →L[ℂ] H} {B : K →L[ℂ] K}
     (h : OperatorUnitaryEquiv A B) : OperatorUnitaryEquiv B A := by
@@ -69,6 +72,8 @@ theorem OperatorUnitaryEquiv.symm {A : H →L[ℂ] H} {B : K →L[ℂ] K}
   rw [e.apply_symm_apply] at hy
   rw [← hy, e.symm_apply_apply]
 
+/-- Unitary equivalence is transitive.  This is what lets the chain of equivalences produced by
+the multiplicity construction be composed one step at a time. -/
 theorem OperatorUnitaryEquiv.trans {A : H →L[ℂ] H} {B : K →L[ℂ] K} {C : L →L[ℂ] L}
     (h : OperatorUnitaryEquiv A B) (h' : OperatorUnitaryEquiv B C) :
     OperatorUnitaryEquiv A C := by

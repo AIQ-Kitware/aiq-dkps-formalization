@@ -126,6 +126,8 @@ noncomputable def compLpEquiv (f : α → β) (g : β → α) (hf : MeasurePrese
   map_smul' := (compLp f hf).map_smul
   norm_map' := (compLp f hf).norm_map
 
+/-- The composition unitary is the composition isometry; stated so that the intertwining law
+proved for the isometry transfers to the unitary without unfolding. -/
 @[simp]
 theorem compLpEquiv_apply (f : α → β) (g : β → α) (hf : MeasurePreserving f μ ν)
     (hg : MeasurePreserving g ν μ) (hfg : ∀ᵐ x ∂μ, g (f x) = x) (hgf : ∀ᵐ y ∂ν, f (g y) = y)
@@ -173,6 +175,8 @@ noncomputable def embLpEquiv {e : α → β} (he : MeasurableEmbedding e) (ρ : 
   LinearIsometryEquiv.ofSurjective (compLp e (measurePreserving_of_measurableEmbedding he ρ))
     (surjective_compLp_of_measurableEmbedding he ρ)
 
+/-- The pushforward unitary is composition with the embedding; stated for the same reason as
+`compLpEquiv_apply`. -/
 @[simp]
 theorem embLpEquiv_apply {e : α → β} (he : MeasurableEmbedding e) (ρ : Measure α)
     (F : Lp ℂ 2 (Measure.map e ρ)) :

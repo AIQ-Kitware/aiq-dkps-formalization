@@ -68,16 +68,22 @@ section Coord
 contains the spectrum changes nothing where the spectral measure lives. -/
 noncomputable def coordTrunc (R : ℝ) : ℂ → ℂ := fun z => if ‖z‖ ≤ R then z else 0
 
+/-- The truncated coordinate is measurable: it is the identity on a closed sublevel set of the
+norm and zero off it. -/
 theorem measurable_coordTrunc (R : ℝ) : Measurable (coordTrunc R) :=
   Measurable.ite (measurableSet_le measurable_norm measurable_const) measurable_id
     measurable_const
 
+/-- The truncated coordinate is bounded by the truncation radius -- which is the whole point of
+truncating. -/
 theorem norm_coordTrunc_le {R : ℝ} (hR : 0 ≤ R) (z : ℂ) : ‖coordTrunc R z‖ ≤ R := by
   rw [coordTrunc]
   split_ifs with h
   · exact h
   · simpa using hR
 
+/-- Inside the ball the truncation does nothing, so a model whose measure lives there multiplies
+by the coordinate itself. -/
 theorem coordTrunc_eq_self {R : ℝ} {z : ℂ} (h : ‖z‖ ≤ R) : coordTrunc R z = z := if_pos h
 
 end Coord
@@ -115,6 +121,8 @@ attribute [instance] MultiplicityDatum.base_finite
 noncomputable def MultiplicityDatum.measure (D : MultiplicityDatum) : Measure (ℂ × ℕ) :=
   sliceSum fun k => D.base.restrict (D.level k)
 
+/-- The model measure is σ-finite: its slices are spanning sets of finite measure, because the
+base measure is finite.  This is what lets the Radon--Nikodym unitary compare two models. -/
 instance MultiplicityDatum.sigmaFinite_measure (D : MultiplicityDatum) :
     SigmaFinite D.measure := by
   rw [MultiplicityDatum.measure]

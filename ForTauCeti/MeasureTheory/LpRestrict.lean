@@ -86,10 +86,12 @@ noncomputable def extendLpFun (μ : Measure α) (hs : MeasurableSet s)
     (F : Lp ℂ 2 (μ.restrict s)) : Lp ℂ 2 μ :=
   ((memLp_indicator_iff_restrict hs).mpr (Lp.memLp F)).toLp (s.indicator (F : α → ℂ))
 
+/-- Extension by zero, on representatives: the class is represented by the indicator. -/
 theorem coeFn_extendLpFun (μ : Measure α) (hs : MeasurableSet s) (F : Lp ℂ 2 (μ.restrict s)) :
     (extendLpFun μ hs F : α → ℂ) =ᵐ[μ] s.indicator (F : α → ℂ) :=
   MemLp.coeFn_toLp _
 
+/-- Extension by zero is additive; the indicator of a sum is the sum of the indicators. -/
 theorem extendLpFun_add (μ : Measure α) (hs : MeasurableSet s)
     (F G : Lp ℂ 2 (μ.restrict s)) :
     extendLpFun μ hs (F + G) = extendLpFun μ hs F + extendLpFun μ hs G := by
@@ -103,6 +105,7 @@ theorem extendLpFun_add (μ : Measure α) (hs : MeasurableSet s)
   rw [h4, h5]
   by_cases hxs : x ∈ s <;> simp [hxs]
 
+/-- Extension by zero is homogeneous. -/
 theorem extendLpFun_smul (μ : Measure α) (hs : MeasurableSet s) (c : ℂ)
     (F : Lp ℂ 2 (μ.restrict s)) :
     extendLpFun μ hs (c • F) = c • extendLpFun μ hs F := by
@@ -115,6 +118,8 @@ theorem extendLpFun_smul (μ : Measure α) (hs : MeasurableSet s) (c : ℂ)
   rw [h4]
   by_cases hxs : x ∈ s <;> simp [hxs]
 
+/-- **Extension by zero preserves the norm.**  This is the whole analytic content of the file,
+and it is `eLpNorm_indicator_eq_eLpNorm_restrict` in `L²` clothing. -/
 theorem norm_extendLpFun (μ : Measure α) (hs : MeasurableSet s)
     (F : Lp ℂ 2 (μ.restrict s)) : ‖extendLpFun μ hs F‖ = ‖F‖ := by
   rw [extendLpFun, Lp.norm_toLp, eLpNorm_indicator_eq_eLpNorm_restrict hs, ← Lp.norm_def]
@@ -128,6 +133,7 @@ noncomputable def extendLp (μ : Measure α) (hs : MeasurableSet s) :
   map_smul' c F := extendLpFun_smul μ hs c F
   norm_map' := norm_extendLpFun μ hs
 
+/-- The bundled isometry, on representatives. -/
 theorem coeFn_extendLp (μ : Measure α) (hs : MeasurableSet s) (F : Lp ℂ 2 (μ.restrict s)) :
     (extendLp μ hs F : α → ℂ) =ᵐ[μ] s.indicator (F : α → ℂ) :=
   coeFn_extendLpFun μ hs F
@@ -140,6 +146,7 @@ noncomputable def restrictLp (μ : Measure α) (s : Set α) (g : Lp ℂ 2 μ) :
     Lp ℂ 2 (μ.restrict s) :=
   ((Lp.memLp g).restrict s).toLp (g : α → ℂ)
 
+/-- Restriction, on representatives: the restricted class is represented by the same function. -/
 theorem coeFn_restrictLp (μ : Measure α) (s : Set α) (g : Lp ℂ 2 μ) :
     (restrictLp μ s g : α → ℂ) =ᵐ[μ.restrict s] (g : α → ℂ) :=
   MemLp.coeFn_toLp _

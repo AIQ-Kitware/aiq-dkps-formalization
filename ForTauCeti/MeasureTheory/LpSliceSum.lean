@@ -62,6 +62,8 @@ noncomputable def lpCongrMeasure {μ ν : Measure α} (h : μ = ν) :
     Lp ℂ 2 μ ≃ₗᵢ[ℂ] Lp ℂ 2 ν :=
   h ▸ LinearIsometryEquiv.refl ℂ (Lp ℂ 2 μ)
 
+/-- Transporting along an equality of measures commutes with multiplication -- trivially, once
+the equality is substituted away, but the statement is what call sites need. -/
 theorem lpCongrMeasure_mulLp {μ ν : Measure α} (h : μ = ν) {g : α → ℂ} (hg : Measurable g)
     {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp ℂ 2 μ) :
     lpCongrMeasure h (mulLp μ hg hgC F) = mulLp ν hg hgC (lpCongrMeasure h F) := by
@@ -112,19 +114,23 @@ variable {X : Type*} [MeasurableSpace X]
 /-- The inclusion of `X` as the `n`-th slice of `X × ℕ`. -/
 def sliceMap (n : ℕ) : X → X × ℕ := fun x => (x, n)
 
+/-- The slice inclusion is measurable. -/
 theorem measurable_sliceMap (n : ℕ) : Measurable (sliceMap (X := X) n) :=
   measurable_id.prodMk measurable_const
 
+/-- The slice inclusion is a measurable embedding, so `L²` transports along it. -/
 theorem measurableEmbedding_sliceMap (n : ℕ) : MeasurableEmbedding (sliceMap (X := X) n) :=
   measurableEmbedding_prod_mk_right n
 
 /-- The `n`-th slice of `X × ℕ`. -/
 def slice (n : ℕ) : Set (X × ℕ) := {p | p.2 = n}
 
+/-- A slice is measurable, the index type being discrete. -/
 theorem measurableSet_slice (n : ℕ) : MeasurableSet (slice (X := X) n) :=
   measurable_snd (measurableSet_singleton n)
 
 omit [MeasurableSpace X] in
+/-- Distinct slices are disjoint. -/
 theorem pairwise_disjoint_slice :
     Pairwise fun m n => Disjoint (slice (X := X) m) (slice n) := by
   intro m n hmn
@@ -132,6 +138,8 @@ theorem pairwise_disjoint_slice :
   rw [← hpm, ← hpn]
 
 omit [MeasurableSpace X] in
+/-- The slices cover `X × ℕ`; together with disjointness they are a countable measurable
+partition, which is what the decomposition theorem consumes. -/
 theorem iUnion_slice : (⋃ n, slice (X := X) n) = Set.univ := by
   refine Set.eq_univ_of_forall fun p => ?_
   exact Set.mem_iUnion.mpr ⟨p.2, rfl⟩

@@ -71,6 +71,8 @@ that the total mass converges, and nonzero so that no member is lost. -/
 noncomputable def domWeight (μ : ℕ → Measure X) (n : ℕ) : ℝ≥0∞ :=
   ((2 : ℝ≥0∞)⁻¹) ^ n * (μ n Set.univ + 1)⁻¹
 
+/-- The weights are nonzero, which is what keeps the dominating measure from losing a member of
+the family. -/
 theorem domWeight_ne_zero (μ : ℕ → Measure X) [∀ n, IsFiniteMeasure (μ n)] (n : ℕ) :
     domWeight μ n ≠ 0 := by
   refine mul_ne_zero (pow_ne_zero _ ?_) ?_
@@ -78,6 +80,8 @@ theorem domWeight_ne_zero (μ : ℕ → Measure X) [∀ n, IsFiniteMeasure (μ n
   · rw [ne_eq, ENNReal.inv_eq_zero]
     exact (ENNReal.add_lt_top.mpr ⟨measure_lt_top _ _, ENNReal.one_lt_top⟩).ne
 
+/-- Each weighted member contributes at most `2⁻ⁿ` of total mass, which is what makes the
+dominating measure finite. -/
 theorem domWeight_mul_le (μ : ℕ → Measure X) [∀ n, IsFiniteMeasure (μ n)] (n : ℕ) :
     domWeight μ n * μ n Set.univ ≤ ((2 : ℝ≥0∞)⁻¹) ^ n := by
   have hcancel : (μ n Set.univ + 1)⁻¹ * (μ n Set.univ + 1) = 1 :=
@@ -95,11 +99,13 @@ theorem domWeight_mul_le (μ : ℕ → Measure X) [∀ n, IsFiniteMeasure (μ n)
 noncomputable def dominatingMeasure (μ : ℕ → Measure X) : Measure X :=
   Measure.sum fun n => domWeight μ n • μ n
 
+/-- The dominating measure, evaluated: a weighted countable sum of the members. -/
 theorem dominatingMeasure_apply (μ : ℕ → Measure X) {s : Set X} (hs : MeasurableSet s) :
     dominatingMeasure μ s = ∑' n, domWeight μ n * μ n s := by
   rw [dominatingMeasure, Measure.sum_apply _ hs]
   exact tsum_congr fun n => Measure.smul_apply _ _ _
 
+/-- **The dominating measure is finite**, by comparison with a geometric series. -/
 instance isFiniteMeasure_dominatingMeasure (μ : ℕ → Measure X) [∀ n, IsFiniteMeasure (μ n)] :
     IsFiniteMeasure (dominatingMeasure μ) := by
   refine ⟨?_⟩
@@ -108,6 +114,8 @@ instance isFiniteMeasure_dominatingMeasure (μ : ℕ → Measure X) [∀ n, IsFi
   rw [ENNReal.tsum_geometric_two]
   exact ENNReal.ofNat_lt_top
 
+/-- **Every member is absolutely continuous with respect to the dominating measure**, because its
+weight is nonzero and a countable sum in `ℝ≥0∞` vanishes only when every term does. -/
 theorem absolutelyContinuous_dominatingMeasure (μ : ℕ → Measure X) [∀ n, IsFiniteMeasure (μ n)]
     (n : ℕ) : μ n ≪ dominatingMeasure μ := by
   refine Measure.AbsolutelyContinuous.mk fun s hs h0 => ?_
@@ -138,12 +146,15 @@ noncomputable def rank (S : ℕ → Set X) (x : X) : ℕ → ℕ
   | 0 => 0
   | n + 1 => rank S x n + (if x ∈ S n then 1 else 0)
 
+/-- No index precedes `0`, so the rank there is zero. -/
 theorem rank_zero (S : ℕ → Set X) (x : X) : rank S x 0 = 0 := rfl
 
 open scoped Classical in
+/-- The rank increases by one exactly at the indices where the point lies in the family. -/
 theorem rank_succ (S : ℕ → Set X) (x : X) (n : ℕ) :
     rank S x (n + 1) = rank S x n + (if x ∈ S n then 1 else 0) := rfl
 
+/-- The rank is monotone in the index. -/
 theorem rank_le_rank (S : ℕ → Set X) (x : X) {m n : ℕ} (h : m ≤ n) :
     rank S x m ≤ rank S x n := by
   induction n with
@@ -180,6 +191,8 @@ theorem exists_mem_rank_eq_of_rank_eq_succ (S : ℕ → Set X) {x : X} {n k : �
     · rw [if_neg hx] at h
       exact ih (by omega)
 
+/-- The rank is measurable, by induction on the index: each step adds the indicator of a
+measurable set. -/
 theorem measurable_rank [MeasurableSpace X] (S : ℕ → Set X) (hS : ∀ n, MeasurableSet (S n))
     (n : ℕ) :
     Measurable fun x => rank S x n := by
@@ -207,10 +220,12 @@ Defined as the union of the level pieces, which is the form both partition state
 noncomputable def levelSet (S : ℕ → Set X) (k : ℕ) : Set X :=
   ⋃ n, levelPiece S n k
 
+/-- Level pieces are measurable. -/
 theorem measurableSet_levelPiece [MeasurableSpace X] {S : ℕ → Set X}
     (hS : ∀ n, MeasurableSet (S n)) (n k : ℕ) : MeasurableSet (levelPiece S n k) :=
   (hS n).inter (measurable_rank S hS n (measurableSet_singleton k))
 
+/-- Level sets are measurable, being countable unions of level pieces. -/
 theorem measurableSet_levelSet [MeasurableSpace X] {S : ℕ → Set X}
     (hS : ∀ n, MeasurableSet (S n)) (k : ℕ) : MeasurableSet (levelSet S k) :=
   MeasurableSet.iUnion fun n => measurableSet_levelPiece hS n k
@@ -220,6 +235,8 @@ theorem iUnion_levelPiece_eq (S : ℕ → Set X) (n : ℕ) : (⋃ k, levelPiece 
   refine Set.Subset.antisymm (Set.iUnion_subset fun k => Set.inter_subset_left) fun x hx => ?_
   exact Set.mem_iUnion.mpr ⟨rank S x n, hx, rfl⟩
 
+/-- For a fixed index the level pieces are pairwise disjoint in the level: the level *is* the
+rank there. -/
 theorem pairwise_disjoint_levelPiece_level (S : ℕ → Set X) (n : ℕ) :
     Pairwise fun k k' => Disjoint (levelPiece S n k) (levelPiece S n k') := by
   intro k k' hkk'
@@ -261,17 +278,22 @@ variable {X : Type*}
 noncomputable def invIdx (S : ℕ → Set X) (x : X) (k : ℕ) : ℕ :=
   sInf {n | x ∈ levelPiece S n k}
 
+/-- On a level piece the index is recovered from the level, because the pieces are disjoint in
+the index. -/
 theorem invIdx_eq_of_mem {S : ℕ → Set X} {x : X} {n k : ℕ} (h : x ∈ levelPiece S n k) :
     invIdx S x k = n := by
   have hmem : invIdx S x k ∈ {n | x ∈ levelPiece S n k} := Nat.sInf_mem ⟨n, h⟩
   by_contra hne
   exact (Set.disjoint_left.mp (pairwise_disjoint_levelPiece_index S k hne) hmem) h
 
+/-- Off the level set the inverse index is the junk value `0`. -/
 theorem invIdx_eq_zero_of_notMem {S : ℕ → Set X} {x : X} {k : ℕ}
     (h : ∀ n, x ∉ levelPiece S n k) : invIdx S x k = 0 := by
   refine Nat.sInf_eq_zero.mpr (Or.inr ?_)
   exact Set.eq_empty_iff_forall_notMem.mpr h
 
+/-- The inverse index is measurable: its fibre over a nonzero index is a level piece, and its
+fibre over `0` is a level piece together with the complement of the level set. -/
 theorem measurable_invIdx [MeasurableSpace X] {S : ℕ → Set X} (hS : ∀ n, MeasurableSet (S n))
     (k : ℕ) : Measurable fun x => invIdx S x k := by
   refine measurable_to_countable' fun n => ?_
@@ -315,24 +337,30 @@ noncomputable def rankMap (S : ℕ → Set X) : X × ℕ → X × ℕ :=
 noncomputable def rankInv (S : ℕ → Set X) : X × ℕ → X × ℕ :=
   fun p => (p.1, invIdx S p.1 p.2)
 
+/-- The relabelling is measurable. -/
 theorem measurable_rankMap [MeasurableSpace X] {S : ℕ → Set X}
     (hS : ∀ n, MeasurableSet (S n)) :
     Measurable (rankMap S) :=
   measurable_fst.prodMk (measurable_from_prod_countable_left fun n => measurable_rank S hS n)
 
+/-- The inverse relabelling is measurable. -/
 theorem measurable_rankInv [MeasurableSpace X] {S : ℕ → Set X}
     (hS : ∀ n, MeasurableSet (S n)) :
     Measurable (rankInv S) :=
   measurable_fst.prodMk (measurable_from_prod_countable_left fun k => measurable_invIdx hS k)
 
+/-- **The relabelling fixes the spectral coordinate.**  This is why it commutes with
+multiplication by any symbol pulled back along `Prod.fst`. -/
 theorem fst_rankMap (S : ℕ → Set X) (p : X × ℕ) : (rankMap S p).1 = p.1 := rfl
 
+/-- The relabelling is inverted on the support of the source measure. -/
 theorem rankInv_rankMap_of_mem {S : ℕ → Set X} {x : X} {n : ℕ} (h : x ∈ S n) :
     rankInv S (rankMap S (x, n)) = (x, n) := by
   have hpiece : x ∈ levelPiece S n (rank S x n) := ⟨h, rfl⟩
   simp only [rankMap, rankInv]
   rw [invIdx_eq_of_mem hpiece]
 
+/-- The relabelling is inverted on the support of the target measure. -/
 theorem rankMap_rankInv_of_mem {S : ℕ → Set X} {x : X} {k : ℕ} (h : x ∈ levelSet S k) :
     rankMap S (rankInv S (x, k)) = (x, k) := by
   obtain ⟨n, hxn⟩ := Set.mem_iUnion.mp h
