@@ -71,17 +71,21 @@ lemmas.  Exposed so that consumers can take `.1` and `.2` and build the conjunct
 def MeasureEquiv (μ ν : Measure α) : Prop :=
   μ ≪ ν ∧ ν ≪ μ
 
+/-- Measure equivalence is reflexive. -/
 @[refl]
 theorem MeasureEquiv.refl (μ : Measure α) : MeasureEquiv μ μ :=
   ⟨Measure.AbsolutelyContinuous.rfl, Measure.AbsolutelyContinuous.rfl⟩
 
+/-- Measure equivalence is reflexive, with the measure implicit. -/
 theorem MeasureEquiv.rfl : MeasureEquiv μ μ :=
   MeasureEquiv.refl μ
 
+/-- Measure equivalence is symmetric. -/
 @[symm]
 theorem MeasureEquiv.symm (h : MeasureEquiv μ ν) : MeasureEquiv ν μ :=
   ⟨h.2, h.1⟩
 
+/-- Measure equivalence is transitive. -/
 theorem MeasureEquiv.trans (h : MeasureEquiv μ ν) (h' : MeasureEquiv ν ρ) : MeasureEquiv μ ρ :=
   ⟨h.1.trans h'.1, h'.2.trans h.2⟩
 
