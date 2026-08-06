@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.SpectralTheory.GraphSubspace
-import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
+import DavisKahan.InfiniteDimensional.DoubleAngle
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!

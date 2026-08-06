@@ -1,4 +1,4 @@
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.ContourReuseBridge
+import DavisKahan.MathAhead.HiddenFoundations.ContourReuseBridge
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry
 
 /-!

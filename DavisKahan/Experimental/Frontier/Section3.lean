@@ -11,7 +11,7 @@ import DavisKahan.Geometry.Polar.DirectRotationSquare
 -- supplies `reflectedSubspace` and its projection/conjugation calculus used by
 -- Proposition 3.4.  This module imports only `SinTheta`/`SpectralTheory`
 -- material and never touches `Frontier`, so the dependency is acyclic.
-import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
+import DavisKahan.InfiniteDimensional.DoubleAngle
 -- supplies the completed nonacute construction and acute characterizations used
 -- to ground the Proposition 3.2 and Corollary 3.2 source statements below.  The
 -- construction depends on the polar and acute machinery under `MathAhead`, which

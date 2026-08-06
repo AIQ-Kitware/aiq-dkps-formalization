@@ -202,6 +202,25 @@ noncomputable def compressOperator (U : Submodule ℂ E)
     [U.HasOrthogonalProjection] (T : E →L[ℂ] E) : U →L[ℂ] U :=
   U.orthogonalProjectionOnto ∘L T ∘L U.subtypeL
 
+omit [CompleteSpace E] in
+/-- On an invariant orthogonally complemented subspace, orthogonal compression is
+exactly the continuous-linear restriction.
+
+Stated here, beside `compressOperator`, rather than in either of the two
+`InfiniteDimensional` modules that need it: both carried their own copy under the
+same fully-qualified name while they lived in `Experimental/`, where nothing
+imported both, and promoting them into `DavisKahan.All` made the collision
+reachable. -/
+theorem compressOperator_eq_restrict_of_invariant
+    (T : E →L[ℂ] E) (U : Submodule ℂ E) [U.HasOrthogonalProjection]
+    (hU : InvariantFor T U) :
+    compressOperator U T = T.restrict hU := by
+  apply ContinuousLinearMap.ext
+  intro u
+  apply Subtype.ext
+  change U.starProjection (T (u : E)) = T (u : E)
+  exact Submodule.starProjection_eq_self_iff.mpr (hU (u : E) u.property)
+
 /-- Compression preserves self-adjointness. -/
 theorem isSelfAdjoint_compressOperator {T : E →L[ℂ] E}
     (hT : IsSelfAdjoint T) (U : Submodule ℂ E) [U.HasOrthogonalProjection]

@@ -822,8 +822,8 @@
         "DavisKahan/Sources/DavisKahan1970/Section9/All.lean",
         "DavisKahan/Sources/DavisKahan1970/Section9/FullExample.lean",
         "prose/distilled_literature/DavisKahan1970_section9_numerical_example.tex",
-        "DavisKahan/Experimental/Sources/DavisKahan1970/Section8/All.lean",
-        "DavisKahan/Experimental/Sources/DavisKahan1970/Section8/SourceSurface.lean",
+        "DavisKahan/Sources/DavisKahan1970/Section8/All.lean",
+        "DavisKahan/Sources/DavisKahan1970/Section8/SourceSurface.lean",
         "prose/distilled_literature/DavisKahan1970_section8_branch_selection.tex",
         "DavisKahan/Sources/DavisKahan1970/Audits/Theorem63Distillation.lean",
         "DavisKahan/TanTheta/Theorem63FiniteSource.lean",
@@ -991,7 +991,7 @@
       "target_note": "KostrykinMakarovMotovilov2005_riccati_tan_theta.tex",
       "repo_evidence": [
         "DavisKahan/FiniteDimensional/TanTheta/Vector.lean",
-        "DavisKahan/Experimental/InfiniteDimensional/Riccati/Bounded.lean"
+        "DavisKahan/InfiniteDimensional/Riccati/Bounded.lean"
       ],
       "existing_assets": [],
       "scope": "Operator Riccati graph-subspace construction and tan Theta estimates.",
@@ -1140,7 +1140,7 @@
       "target_note": "Seelmann2014_sin_two_theta.tex",
       "repo_evidence": [
         "DavisKahan/FiniteDimensional/DoubleAngle/TanTheta.lean",
-        "DavisKahan/Experimental/InfiniteDimensional/DoubleAngle.lean"
+        "DavisKahan/InfiniteDimensional/DoubleAngle.lean"
       ],
       "existing_assets": [],
       "scope": "General spectral-separation sin 2 Theta theorem and operator-angle formalism.",
