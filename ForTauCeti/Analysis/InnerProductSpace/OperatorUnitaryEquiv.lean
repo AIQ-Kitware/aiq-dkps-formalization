@@ -41,7 +41,11 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 variable {K : Type v} [NormedAddCommGroup K] [InnerProductSpace ℂ K]
 variable {L : Type w} [NormedAddCommGroup L] [InnerProductSpace ℂ L]
 
-/-- **Unitary equivalence of bounded operators** on possibly different complex Hilbert spaces. -/
+/-- **Unitary equivalence of bounded operators** on possibly different complex Hilbert spaces.
+
+Exposed, because consumers outside this module need to see that it is the same existential as
+the Davis--Kahan development's own `BoundedOperatorsUnitaryEquivalent`. -/
+@[expose]
 def OperatorUnitaryEquiv (A : H →L[ℂ] H) (B : K →L[ℂ] K) : Prop :=
   ∃ e : H ≃ₗᵢ[ℂ] K, ∀ x : H, e (A x) = B (e x)
 
