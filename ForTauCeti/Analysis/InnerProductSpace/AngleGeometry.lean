@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
-import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
 /-!
 # Directed principal-angle geometry
@@ -29,6 +31,8 @@ inner-product-space component into `ForTauCeti`: before that this file's import
 closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -41,33 +45,35 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 Gram operators coincide, `|A|⋆|A| = |A|² = A⋆A`.  This is the finite-dimensional
 `σ(|A|) = σ(A)` used to identify difference-of-projector singular values with the
 `sin Θ` operator's. -/
-theorem singularValues_abs (A : E →ₗ[𝕜] E) :
-    (TauCeti.abs A).singularValues = A.singularValues := by
+theorem singularValues_operatorAbs (A : E →ₗ[𝕜] E) :
+    (TauCeti.operatorAbs A).singularValues = A.singularValues := by
   refine TauCeti.singularValues_eq_of_gram_eq ?_
-  rw [(TauCeti.isPositive_abs A).adjoint_eq, TauCeti.abs_mul_self]
+  rw [(TauCeti.isPositive_operatorAbs A).adjoint_eq, TauCeti.operatorAbs_mul_self]
 
 /-- The cosine cross-projection `P_V P_U`. -/
+@[expose]
 noncomputable def cosThetaMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   projection V ∘ₗ projection U
 
 /-- The sine cross-projection `P_{Vᗮ} P_U`. -/
+@[expose]
 noncomputable def sinThetaMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   complementaryProjection V ∘ₗ projection U
 
 /-- `cos Θ` on the full ambient space, `|P_V P_U|`.  Its singular values are the
-principal-angle cosines (`singularValues_abs` and `singularValues_cosThetaMap`). -/
+principal-angle cosines (`singularValues_operatorAbs` and `singularValues_cosThetaMap`). -/
 noncomputable def cosAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  TauCeti.abs (cosThetaMap U V)
+  TauCeti.operatorAbs (cosThetaMap U V)
 
 /-- `sin Θ` on the full ambient space, the modulus `|P_U - P_V|` of the projector
 difference.  This is the symmetric full-space sine operator; its singular values
 are those of `P_U - P_V` (`singularValues_projection_sub_projection`). -/
 noncomputable def sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  TauCeti.abs (projection U - projection V)
+  TauCeti.operatorAbs (projection U - projection V)
 
 /-- The one-sided finite-dimensional `sin (2 Θ)` map supported on `U`.
 
@@ -81,6 +87,7 @@ noncomputable def sinTwoAngleOperator (U V : Submodule 𝕜 E)
 /-- Principal-angle cosines: the singular values of the cross projection
 `P_V P_U`, sorted decreasingly and padded by zeros beyond the finite rank.  These
 are symmetric in `U, V` because `(P_V P_U)⋆ = P_U P_V` (`principalCosines_comm`). -/
+@[expose]
 noncomputable def principalCosines (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
   (cosThetaMap U V).singularValues
@@ -89,6 +96,7 @@ noncomputable def principalCosines (U V : Submodule 𝕜 E)
 `P_{Vᗮ} P_U`.  In equal-dimension configurations these are the sines of the
 principal angles; when `dim U ≠ dim V` the directed map also records the
 `π/2` "defect" directions, so this is not symmetric in `U, V` in general. -/
+@[expose]
 noncomputable def principalSines (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
   (sinThetaMap U V).singularValues
@@ -126,6 +134,7 @@ theorem principalAngles_self (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
   simp [principalAngles, h]
 
 /-- The pair has no angle `π/2`; equivalently, `P_V` is injective on `U`. -/
+@[expose]
 def IsTransverse (U V : Submodule 𝕜 E) [V.HasOrthogonalProjection] : Prop :=
   ∀ x ∈ U, V.starProjection x = 0 → x = 0
 
@@ -206,6 +215,7 @@ theorem isAcute_of_projectionGap_lt_one {U V : Submodule 𝕜 E}
 for `tan (2 Θ)` before the canonical branch is selected.  The arbitrary
 reducing subspace in the raw `tan 2Θ` theorem may have angles on either side
 of `π/4`; the theorem itself excludes equality. -/
+@[expose]
 def AvoidsQuarterTurn (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
   ∀ i, principalAngles U V i ≠ Real.pi / 4
@@ -321,29 +331,21 @@ theorem principalCosines_comm (U V : Submodule 𝕜 E)
   rw [principalCosines, principalCosines, ← hadj, TauCeti.singularValues_adjoint]
 
 /-- The singular values of `P_U-P_V` are the full-space `sin Θ` values: with
-`sinAngleOperator = |P_U - P_V|` and `σ(|T|) = σ(T)` (`singularValues_abs`). -/
+`sinAngleOperator = |P_U - P_V|` and `σ(|T|) = σ(T)` (`singularValues_operatorAbs`). -/
 theorem singularValues_projection_sub_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     (projection U - projection V).singularValues =
       (sinAngleOperator U V).singularValues := by
-  rw [sinAngleOperator, singularValues_abs]
-
-/-- **A unitarily invariant norm depends only on the singular-value sequence.**
-Via the gauge representation `apply_eq_gauge` of the operator SVD. -/
-theorem _root_.TauCeti.UnitarilyInvariantNorm.eq_of_singularValues_eq
-    (N : UnitarilyInvariantNorm 𝕜 E) {A B : E →ₗ[𝕜] E}
-    (h : A.singularValues = B.singularValues) : N A = N B := by
-  rw [N.apply_eq_gauge rfl (stdOrthonormalBasis 𝕜 E) A,
-    N.apply_eq_gauge rfl (stdOrthonormalBasis 𝕜 E) B, h]
+  rw [sinAngleOperator, singularValues_operatorAbs]
 
 /-- **The full projector-difference UI-norm bridge.**  Every unitarily invariant
 norm of `P_U - P_V` equals that of the full `sin Θ` operator `|P_U - P_V|`, since
 they share the singular-value sequence.  This is the only projection-geometry
 rewrite the final UI-norm projector theorem needs. -/
-theorem uiNorm_projection_sub_eq_sinAngleOperator (N : UnitarilyInvariantNorm 𝕜 E)
+theorem uiNorm_projection_sub_eq_sinAngleOperator (N : UnitarilyInvariantSeminorm 𝕜 E)
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     N (projection U - projection V) = N (sinAngleOperator U V) :=
-  N.eq_of_singularValues_eq (singularValues_projection_sub_projection U V)
+  N.eq_of_same_singularValues (singularValues_projection_sub_projection U V)
 
 omit [FiniteDimensional 𝕜 E] in
 /-- The one-sided double-angle map is exactly twice the cross block.

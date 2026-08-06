@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
 /-!
 # Sharp projector geometry for bounded Davis--Kahan theory
@@ -32,6 +34,8 @@ and `norm_starProjection_sub_eq_max` were one-line re-exports of
 collided with its own target once this file moved into `Submodule`.
 `DavisKahan/BoundedOperator/Compat.lean` keeps both names for the paper library.
 -/
+
+public section
 
 namespace Submodule
 

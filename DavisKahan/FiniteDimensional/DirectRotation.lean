@@ -38,7 +38,7 @@ orthogonal complement and therefore participates in the full-space formula
 `R = C + J S`. -/
 noncomputable def directRotationCosine (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  TauCeti.abs (canonicalIntertwiner U V)
+  TauCeti.operatorAbs (canonicalIntertwiner U V)
 
 /-- The partial complex structure on the nonzero-angle space.  Total
 Moore--Penrose inversion makes it zero on the zero-angle space. -/
@@ -58,7 +58,7 @@ theorem ker_sinAngleOperator_le_ker_directRotation_sub_cosine
       ((directRotation U V hacute).toLinearMap - directRotationCosine U V).ker := by
   intro x hx
   have hxD : x ∈ (projection U - projection V).ker := by
-    simpa [sinAngleOperator, ker_abs] using hx
+    simpa [sinAngleOperator, ker_operatorAbs] using hx
   have hproj : projection U x = projection V x :=
     sub_eq_zero.mp (by
       simpa [LinearMap.sub_apply] using LinearMap.mem_ker.mp hxD)
@@ -159,7 +159,7 @@ theorem directRotation_unique (U V : Submodule 𝕜 E)
 /-- Davis--Kahan Proposition 4.3: the direct rotation minimizes every UI norm
 of the positive displacement square. -/
 theorem directRotation_minimizes_displacementSquare_uiNorm
-    (N : UnitarilyInvariantNorm 𝕜 E) (U V : Submodule 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E) (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)
     (hmap : U.map W.toLinearMap = V) :
@@ -177,7 +177,7 @@ hypothesis under which `directRotation U V hacute` exists at all
 (`IsAcute` says no principal angle is a quarter turn, in either direction; see
 `DavisKahan.FiniteDimensional.IsAcute`). -/
 theorem directRotation_minimizes_restrictedDisplacement_uiNorm
-    (N : UnitarilyInvariantNorm 𝕜 E) (U V : Submodule 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E) (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)
     (hmap : U.map W.toLinearMap = V) :
@@ -195,9 +195,9 @@ theorem directRotation_minimizes_max_displacement
     ‖((directRotation U V hacute).toLinearMap - LinearMap.id).toContinuousLinearMap‖ ≤
       ‖(W.toLinearMap - LinearMap.id).toContinuousLinearMap‖ := by
   have h := directRotation_minimizes_displacementSquare_uiNorm
-    (UnitarilyInvariantNorm.opNorm 𝕜 E) U V hacute W hmap
+    (UnitarilyInvariantSeminorm.opNorm 𝕜 E) U V hacute W hmap
   have key : ∀ X : E →ₗ[𝕜] E,
-      UnitarilyInvariantNorm.opNorm 𝕜 E (displacementSquare X) =
+      UnitarilyInvariantSeminorm.opNorm 𝕜 E (displacementSquare X) =
         ‖(X - LinearMap.id).toContinuousLinearMap‖ ^ 2 := by
     intro X
     haveI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
@@ -236,8 +236,8 @@ theorem directRotation_minimizes_sum_sq_basis_angles
   let R := (directRotation U V hacute).toLinearMap
   let AR := LinearMap.id - R
   let AW := LinearMap.id - W.toLinearMap
-  let N : UnitarilyInvariantNorm 𝕜 E :=
-    (RectangularUnitarilyInvariantNorm.nuclear
+  let N : UnitarilyInvariantSeminorm 𝕜 E :=
+    (RectangularUnitarilyInvariantSeminorm.nuclear
       (𝕜 := 𝕜) (E := E) (F := E)).toSquare
   have h := directRotation_minimizes_displacementSquare_uiNorm
     N U V hacute W hmap
@@ -249,12 +249,12 @@ theorem directRotation_minimizes_sum_sq_basis_angles
     ext x
     simp [displacementSquare, AW, map_sub,
       LinearMap.comp_apply]
-  change RectangularUnitarilyInvariantNorm.nuclear (displacementSquare R) ≤
-    RectangularUnitarilyInvariantNorm.nuclear
+  change RectangularUnitarilyInvariantSeminorm.nuclear (displacementSquare R) ≤
+    RectangularUnitarilyInvariantSeminorm.nuclear
       (displacementSquare W.toLinearMap) at h
   rw [hdispR, hdispW,
-    RectangularUnitarilyInvariantNorm.nuclear_adjoint_comp_self_eq_sum_sq_norm AR b,
-    RectangularUnitarilyInvariantNorm.nuclear_adjoint_comp_self_eq_sum_sq_norm AW b] at h
+    RectangularUnitarilyInvariantSeminorm.nuclear_adjoint_comp_self_eq_sum_sq_norm AR b,
+    RectangularUnitarilyInvariantSeminorm.nuclear_adjoint_comp_self_eq_sum_sq_norm AW b] at h
   have h' : (∑ i, ‖b i - directRotation U V hacute (b i)‖ ^ 2)
       ≤ ∑ i, ‖b i - W (b i)‖ ^ 2 := h
   simpa [norm_sub_rev] using h'

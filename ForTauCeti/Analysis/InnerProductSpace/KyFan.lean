@@ -19,13 +19,15 @@ positive square root), and its consequence, the simultaneous triangle
 inequality for all Ky Fan norms — weak majorization
 `σ(A + B) ≺_w σ(A) + σ(B)`.
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.SingularValues
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
-import ForTauCeti.Analysis.InnerProductSpace.Spectrum
+public import Mathlib.Analysis.InnerProductSpace.SingularValues
+public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
+public import ForTauCeti.Analysis.InnerProductSpace.Spectrum
 
 
 /-! # Ky Fan sums of singular values
@@ -39,7 +41,7 @@ For operators on finite-dimensional inner product spaces over `𝕜 = ℝ, ℂ`:
   `re ∑ᵢ ⟪uᵢ, A vᵢ⟫` over orthonormal `k`-families `u, v`;
 * **weak majorization** `kyFanSum k (A + B) ≤ kyFanSum k A + kyFanSum k B` —
   the triangle inequality for every Ky Fan norm simultaneously, the engine of
-  the Fan dominance principle (`UnitarilyInvariantNorm.lean`);
+  the Fan dominance principle (`UnitarilyInvariantSeminorm.lean`);
 * unitary invariance, adjoint invariance, and nonnegative-real scaling of
   singular values and Ky Fan sums, plus the bounded-factor domination
   `σᵢ(C ∘ A) ≤ c σᵢ(A)` (Loewner monotonicity of the Gram eigenvalues).
@@ -50,6 +52,8 @@ For operators on finite-dimensional inner product spaces over `𝕜 = ℝ, ℂ`:
 * K. Fan, *On a theorem of Weyl concerning eigenvalues of linear
   transformations I*, Proc. Nat. Acad. Sci. USA 35 (1949), 652–655.
 -/
+
+public section
 
 namespace TauCeti
 
@@ -63,17 +67,6 @@ variable {𝕜 E F F' : Type*} [RCLike 𝕜]
   [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [FiniteDimensional 𝕜 F']
 
 /-! ### Singular values under unitaries, scaling, and bounded factors (F0) -/
-
-/-- Singular values only depend on the Gram operator. -/
-theorem singularValues_eq_of_gram_eq {A : E →ₗ[𝕜] F} {B : E →ₗ[𝕜] F'}
-    (h : A.adjoint ∘ₗ A = B.adjoint ∘ₗ B) : A.singularValues = B.singularValues := by
-  ext i
-  rcases lt_or_ge i (finrank 𝕜 E) with hi | hi
-  · rw [A.singularValues_of_lt rfl hi, B.singularValues_of_lt rfl hi]
-    congr 1
-    exact congrFun (eigenvalues_congr h A.isSymmetric_adjoint_comp_self
-      B.isSymmetric_adjoint_comp_self rfl) _
-  · rw [A.singularValues_of_finrank_le hi, B.singularValues_of_finrank_le hi]
 
 /-- Post-composing with a unitary does not change the singular values. -/
 theorem singularValues_unitary_comp (U : F ≃ₗᵢ[𝕜] F) (A : E →ₗ[𝕜] F) :
@@ -193,14 +186,14 @@ theorem singularValues_comp_le' {X C : E →ₗ[𝕜] E} {c : ℝ} (hc : 0 ≤ c
   exact singularValues_comp_le hc (fun y => norm_adjoint_apply_le hc hC y) X.adjoint i
 
 /-- The sorted eigenvalues of the modulus `|A|` are the singular values. -/
-theorem eigenvalues_abs (A : E →ₗ[𝕜] E) :
-    (isPositive_abs A).isSymmetric.eigenvalues rfl
+theorem eigenvalues_operatorAbs (A : E →ₗ[𝕜] E) :
+    (isPositive_operatorAbs A).isSymmetric.eigenvalues rfl
       = fun i : Fin (finrank 𝕜 E) => A.singularValues (i : ℕ) := by
   refine LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis _ rfl
     (A.isSymmetric_adjoint_comp_self.eigenvectorBasis rfl)
     (fun i j hij => A.singularValues_antitone (by exact_mod_cast hij))
     fun i => ?_
-  rw [show abs A = (LinearMap.isPositive_adjoint_comp_self A).sqrt from rfl,
+  rw [show operatorAbs A = (LinearMap.isPositive_adjoint_comp_self A).sqrt from rfl,
     (LinearMap.isPositive_adjoint_comp_self A).sqrt_apply_eigenvectorBasis i,
     A.singularValues_fin rfl i]
 
@@ -318,7 +311,7 @@ theorem sum_re_inner_le_sum_eigenvalues_top {S : E →ₗ[𝕜] E} (hS : S.IsSym
 /-! ### The Ky Fan variational principle (F1.c) -/
 
 /-- Index plumbing: a top-`k` filtered sum over `Fin n` is a sum over `Fin k`.
-(Not `private`: `UnitarilyInvariantNorm.lean` consumes it to convert `kyFanSum`
+(Not `private`: `UnitarilyInvariantSeminorm.lean` consumes it to convert `kyFanSum`
 domination into the prefix-sum hypothesis of the T-transform descent.) -/
 theorem sum_filter_lt_eq_sum_fin {n k : ℕ} (hk : k ≤ n) (f : ℕ → ℝ) :
     ∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), f (j : ℕ)
@@ -340,27 +333,27 @@ theorem re_sum_inner_map_le_sum_singularValues {A : E →ₗ[𝕜] E} {k : ℕ}
     (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) :
     RCLike.re (∑ i, ⟪u i, A (v i)⟫_𝕜) ≤ ∑ i : Fin k, A.singularValues (i : ℕ) := by
   set W := choosePolarUnitary A with hW
-  set R := (isPositive_abs A).sqrt with hR
-  have hRsymm : R.IsSymmetric := (isPositive_abs A).sqrt_isPositive.isSymmetric
-  have hRR : R ∘ₗ R = abs A := (isPositive_abs A).sqrt_mul_self
+  set R := (isPositive_operatorAbs A).sqrt with hR
+  have hRsymm : R.IsSymmetric := (isPositive_operatorAbs A).sqrt_isPositive.isSymmetric
+  have hRR : R ∘ₗ R = operatorAbs A := (isPositive_operatorAbs A).sqrt_mul_self
   -- Pull the polar unitary across and split `|A|` symmetrically.
   have hterm : ∀ i, ⟪u i, A (v i)⟫_𝕜 = ⟪R (W.symm (u i)), R (v i)⟫_𝕜 := by
     intro i
-    have h1 : A (v i) = W (abs A (v i)) := by
+    have h1 : A (v i) = W (operatorAbs A (v i)) := by
       have h := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary A) (v i)
       rw [LinearMap.comp_apply] at h
       exact h.trans rfl
-    calc ⟪u i, A (v i)⟫_𝕜 = ⟪W (W.symm (u i)), W (abs A (v i))⟫_𝕜 := by
+    calc ⟪u i, A (v i)⟫_𝕜 = ⟪W (W.symm (u i)), W (operatorAbs A (v i))⟫_𝕜 := by
           rw [W.apply_symm_apply, ← h1]
-      _ = ⟪W.symm (u i), abs A (v i)⟫_𝕜 := W.inner_map_map _ _
+      _ = ⟪W.symm (u i), operatorAbs A (v i)⟫_𝕜 := W.inner_map_map _ _
       _ = ⟪W.symm (u i), R (R (v i))⟫_𝕜 := by
           rw [← hRR]; rfl
       _ = ⟪R (W.symm (u i)), R (v i)⟫_𝕜 := (hRsymm (W.symm (u i)) (R (v i))).symm
-  have hquad : ∀ x : E, ‖R x‖ ^ 2 = RCLike.re ⟪abs A x, x⟫_𝕜 := fun x =>
-    (isPositive_abs A).sq_norm_sqrt_apply x
+  have hquad : ∀ x : E, ‖R x‖ ^ 2 = RCLike.re ⟪operatorAbs A x, x⟫_𝕜 := fun x =>
+    (isPositive_operatorAbs A).sq_norm_sqrt_apply x
   have hterm_le : ∀ i, RCLike.re ⟪u i, A (v i)⟫_𝕜
-      ≤ RCLike.re ⟪abs A (W.symm (u i)), W.symm (u i)⟫_𝕜 / 2
-        + RCLike.re ⟪abs A (v i), v i⟫_𝕜 / 2 := by
+      ≤ RCLike.re ⟪operatorAbs A (W.symm (u i)), W.symm (u i)⟫_𝕜 / 2
+        + RCLike.re ⟪operatorAbs A (v i), v i⟫_𝕜 / 2 := by
     intro i
     rw [hterm i, ← hquad, ← hquad]
     have h1 : RCLike.re ⟪R (W.symm (u i)), R (v i)⟫_𝕜 ≤ ‖R (W.symm (u i))‖ * ‖R (v i)‖ :=
@@ -371,23 +364,23 @@ theorem re_sum_inner_map_le_sum_singularValues {A : E →ₗ[𝕜] E} {k : ℕ}
     intro i j
     rw [W.symm.inner_map_map]
     exact hu i j
-  have htr1 := sum_re_inner_le_sum_eigenvalues_top (isPositive_abs A).isSymmetric rfl hk hu'
-  have htr2 := sum_re_inner_le_sum_eigenvalues_top (isPositive_abs A).isSymmetric rfl hk hv
-  rw [eigenvalues_abs A] at htr1 htr2
+  have htr1 := sum_re_inner_le_sum_eigenvalues_top (isPositive_operatorAbs A).isSymmetric rfl hk hu'
+  have htr2 := sum_re_inner_le_sum_eigenvalues_top (isPositive_operatorAbs A).isSymmetric rfl hk hv
+  rw [eigenvalues_operatorAbs A] at htr1 htr2
   rw [sum_filter_lt_eq_sum_fin hk (fun j => A.singularValues j)] at htr1 htr2
   calc RCLike.re (∑ i, ⟪u i, A (v i)⟫_𝕜)
       = ∑ i, RCLike.re ⟪u i, A (v i)⟫_𝕜 := map_sum _ _ _
-    _ ≤ ∑ i, (RCLike.re ⟪abs A (W.symm (u i)), W.symm (u i)⟫_𝕜 / 2
-          + RCLike.re ⟪abs A (v i), v i⟫_𝕜 / 2) :=
+    _ ≤ ∑ i, (RCLike.re ⟪operatorAbs A (W.symm (u i)), W.symm (u i)⟫_𝕜 / 2
+          + RCLike.re ⟪operatorAbs A (v i), v i⟫_𝕜 / 2) :=
         Finset.sum_le_sum fun i _ => hterm_le i
-    _ = (∑ i, RCLike.re ⟪abs A (W.symm (u i)), W.symm (u i)⟫_𝕜) / 2
-        + (∑ i, RCLike.re ⟪abs A (v i), v i⟫_𝕜) / 2 := by
+    _ = (∑ i, RCLike.re ⟪operatorAbs A (W.symm (u i)), W.symm (u i)⟫_𝕜) / 2
+        + (∑ i, RCLike.re ⟪operatorAbs A (v i), v i⟫_𝕜) / 2 := by
         rw [Finset.sum_add_distrib, Finset.sum_div, Finset.sum_div]
     _ ≤ (∑ i : Fin k, A.singularValues (i : ℕ)) / 2
         + (∑ i : Fin k, A.singularValues (i : ℕ)) / 2 := by
-        have h1 : ∑ i, RCLike.re ⟪abs A (W.symm (u i)), W.symm (u i)⟫_𝕜
+        have h1 : ∑ i, RCLike.re ⟪operatorAbs A (W.symm (u i)), W.symm (u i)⟫_𝕜
             ≤ ∑ i : Fin k, A.singularValues (i : ℕ) := htr1
-        have h2 : ∑ i, RCLike.re ⟪abs A (v i), v i⟫_𝕜
+        have h2 : ∑ i, RCLike.re ⟪operatorAbs A (v i), v i⟫_𝕜
             ≤ ∑ i : Fin k, A.singularValues (i : ℕ) := htr2
         linarith
     _ = ∑ i : Fin k, A.singularValues (i : ℕ) := by ring
@@ -412,14 +405,14 @@ theorem exists_orthonormal_re_sum_inner_map_eq (A : E →ₗ[𝕜] E) {k : ℕ}
   refine ⟨u, v, huon, hvon, ?_⟩
   have hterm : ∀ i, ⟪u i, A (v i)⟫_𝕜 = ((A.singularValues (i : ℕ) : ℝ) : 𝕜) := by
     intro i
-    have h1 : A (v i) = choosePolarUnitary A (abs A (v i)) := by
+    have h1 : A (v i) = choosePolarUnitary A (operatorAbs A (v i)) := by
       have h := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary A) (v i)
       rw [LinearMap.comp_apply] at h
       exact h.trans rfl
-    have h2 : abs A (v i) = ((A.singularValues (i : ℕ) : ℝ) : 𝕜) • v i := by
+    have h2 : operatorAbs A (v i) = ((A.singularValues (i : ℕ) : ℝ) : 𝕜) • v i := by
       rw [hv]
       simp only
-      rw [show abs A = (LinearMap.isPositive_adjoint_comp_self A).sqrt from rfl,
+      rw [show operatorAbs A = (LinearMap.isPositive_adjoint_comp_self A).sqrt from rfl,
         (LinearMap.isPositive_adjoint_comp_self A).sqrt_apply_eigenvectorBasis (Fin.castLE hk i),
         ← A.singularValues_fin rfl (Fin.castLE hk i)]
       rfl

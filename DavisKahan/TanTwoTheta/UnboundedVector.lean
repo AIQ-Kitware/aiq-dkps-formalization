@@ -24,6 +24,7 @@ namespace DavisKahan
 namespace Experimental
 
 open TauCeti.DavisKahanExt
+open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 universe v

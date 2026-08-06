@@ -23,6 +23,7 @@ open Acharyya2025.ConfigPerturbation
 open Acharyya2025.MatrixPerturbation
 open Acharyya2025.GramRealization
 open Acharyya2025.AlignedPipeline
+open TauCeti.Matrix (opSym)
 
 /-- Pairwise distances of two configurations differ by at most twice their
 `ConfigError`.  The first configuration may first be transported by an
@@ -65,9 +66,9 @@ theorem abs_pairwiseDistance_spectralConfig_sub_le_two_configBound
     (hB : B.PosSemidef) (hBhat : Bhat.IsHermitian)
     (hrank : B.rank ≤ d)
     {α Λ η : Real} (hα_pos : 0 < α) (hη_nonneg : 0 ≤ η)
-    (hfloor : ∀ i : Fin n, (i : Nat) < d →
-      α ≤ sortedEigenvalues hB.isHermitian i)
-    (hΛ : ∀ i : Fin n, sortedEigenvalues hB.isHermitian i ≤ Λ)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : Nat) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ i : Fin (Fintype.card (Fin n)), hB.isHermitian.eigenvalues₀ i ≤ Λ)
     (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)
     (hsmall : (n : Real) * η ≤ α / 2)
     (hpolar : (d : Real) * (4 * (n : Real) * ((n : Real) * η)^2 / α^2) ≤ 1 / 2)
@@ -92,8 +93,8 @@ theorem abs_pairwiseDistance_spectralConfig_sub_le_two_configBound_topEigenvalue
     (hB : B.PosSemidef) (hBhat : Bhat.IsHermitian)
     (hrank : B.rank ≤ d)
     {α η : Real} (hα_pos : 0 < α) (hη_nonneg : 0 ≤ η)
-    (hfloor : ∀ i : Fin n, (i : Nat) < d →
-      α ≤ sortedEigenvalues hB.isHermitian i)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : Nat) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
     (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)
     (hsmall : (n : Real) * η ≤ α / 2)
     (hpolar : (d : Real) * (4 * (n : Real) * ((n : Real) * η)^2 / α^2) ≤ 1 / 2)
@@ -106,7 +107,7 @@ theorem abs_pairwiseDistance_spectralConfig_sub_le_two_configBound_topEigenvalue
       2 * configBound n d α (topEigenvalue hn hB) ((n : Real) * η) := by
   exact abs_pairwiseDistance_spectralConfig_sub_le_two_configBound hd B Bhat
     hB hBhat hrank hα_pos hη_nonneg hfloor
-    (sortedEigenvalues_le_topEigenvalue hn hB) hentry hsmall hpolar z hz i j
+    (eigenvalues₀_le_topEigenvalue hn hB) hentry hsmall hpolar z hz i j
 
 /-- Canonical population-realization version. -/
 theorem abs_pairwiseDistance_spectralConfig_sub_le_two_configBound_canonical
@@ -116,8 +117,8 @@ theorem abs_pairwiseDistance_spectralConfig_sub_le_two_configBound_canonical
     (hB : (disMatToMatrix (classicalMDSMatrix D)).PosSemidef)
     (hrank : (disMatToMatrix (classicalMDSMatrix D)).rank ≤ d)
     {α η : Real} (hα_pos : 0 < α) (hη_nonneg : 0 ≤ η)
-    (hfloor : ∀ i : Fin n, (i : Nat) < d →
-      α ≤ sortedEigenvalues hB.isHermitian i)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : Nat) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
     (hentry : Acharyya2025.Bridge.EntrywiseClose
       (classicalMDSMatrix Dhat) (classicalMDSMatrix D) η)
     (hsmall : (n : Real) * η ≤ α / 2)

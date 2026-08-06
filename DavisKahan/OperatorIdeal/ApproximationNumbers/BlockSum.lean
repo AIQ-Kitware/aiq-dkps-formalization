@@ -6,7 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 import Mathlib.Analysis.InnerProductSpace.ProdL2
 
 /-!
@@ -723,6 +724,88 @@ theorem sameApproximationSingularSequence_continuousOrthogonalBlockSum
       (fun k => le_of_eq (hA.kyFanGauge_eq k).symm)
       (fun k => le_of_eq (hB.kyFanGauge_eq k).symm) _
 
+section PinchChart
+
+variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+
+/-- **The pinch of `A` relative to `U ⊕ Uᗮ`, charted as an orthogonal block sum.**
+
+`Submodule.diagonalPart` discards the off-diagonal blocks but keeps the operator on the
+ambient space `H`.  Read through Mathlib's isometric decomposition
+`H ≃ₗᵢ WithLp 2 (U × Uᗮ)` it becomes literally the block sum of the two compressions,
+which is the form the exact Ky Fan prefix formula
+`kyFanApproximationGauge_continuousOrthogonalBlockSum` consumes.  Together with
+`TauCeti.ApproximationNumber.kyFanApproximationGauge_conj_eq` — the gauge is unchanged by
+conjugation with a contraction pair — this is what turns a statement about the two
+*restricted* displacements into one about the full displacement, which is Davis--Kahan
+Proposition 4.3's route.
+
+The proof is pointwise and immediate: on `toLp (u, u')` the two star projections select
+`u` and `u'`, so the diagonal part returns `P_U A u + P_Uᗮ A u'`, whose chart is the pair
+`(Π_U A u, Π_Uᗮ A u')`. -/
+theorem orthogonalDecomposition_conj_diagonalPart
+    (U : Submodule 𝕜 H) [U.HasOrthogonalProjection]
+    [CompleteSpace (U : Type v)] [CompleteSpace ((Uᗮ : Submodule 𝕜 H) : Type v)]
+    (A : H →L[𝕜] H) :
+    (U.orthogonalDecomposition : H →L[𝕜] WithLp 2 (U × Uᗮ)) ∘L U.diagonalPart A ∘L
+        (U.orthogonalDecomposition.symm : WithLp 2 (U × Uᗮ) →L[𝕜] H) =
+      continuousOrthogonalBlockSum (U.orthogonalProjectionOnto ∘L A ∘L U.subtypeL)
+        (Uᗮ.orthogonalProjectionOnto ∘L A ∘L Uᗮ.subtypeL) := by
+  have hUU : ∀ z : H, U.orthogonalProjectionOnto (U.starProjection z) =
+      U.orthogonalProjectionOnto z := by
+    intro z
+    apply Subtype.ext
+    rw [Submodule.coe_orthogonalProjectionOnto_apply,
+      Submodule.coe_orthogonalProjectionOnto_apply,
+      Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem z)]
+  have hOO : ∀ z : H, Uᗮ.orthogonalProjectionOnto (Uᗮ.starProjection z) =
+      Uᗮ.orthogonalProjectionOnto z := by
+    intro z
+    apply Subtype.ext
+    rw [Submodule.coe_orthogonalProjectionOnto_apply,
+      Submodule.coe_orthogonalProjectionOnto_apply,
+      Submodule.starProjection_eq_self_iff.mpr (Uᗮ.starProjection_apply_mem z)]
+  have hUO : ∀ z : H, U.orthogonalProjectionOnto (Uᗮ.starProjection z) = 0 := fun z =>
+    Submodule.orthogonalProjectionOnto_eq_zero_iff.mpr (Uᗮ.starProjection_apply_mem z)
+  have hOU : ∀ z : H, Uᗮ.orthogonalProjectionOnto (U.starProjection z) = 0 := fun z =>
+    Submodule.orthogonalProjectionOnto_eq_zero_iff.mpr
+      (U.le_orthogonal_orthogonal (U.starProjection_apply_mem z))
+  ext w
+  have hsymmcoe : ((U.orthogonalDecomposition.symm : WithLp 2 (U × Uᗮ) →L[𝕜] H)) w =
+      (w.fst : H) + (w.snd : H) := Submodule.orthogonalDecomposition_symm_apply U w
+  have hcoe : ∀ z : H, ((U.orthogonalDecomposition : H →L[𝕜] WithLp 2 (U × Uᗮ))) z =
+      WithLp.toLp 2 (U.orthogonalProjectionOnto z, Uᗮ.orthogonalProjectionOnto z) :=
+    fun z => Submodule.orthogonalDecomposition_apply U z
+  have hfst : U.starProjection ((w.fst : H) + (w.snd : H)) = (w.fst : H) := by
+    rw [map_add, Submodule.starProjection_eq_self_iff.mpr w.fst.2]
+    have hz : U.starProjection ((w.snd : H)) = 0 := by
+      have h0 : U.orthogonalProjectionOnto ((w.snd : H)) = 0 :=
+        Submodule.orthogonalProjectionOnto_eq_zero_iff.mpr w.snd.2
+      rw [← Submodule.coe_orthogonalProjectionOnto_apply, h0]
+      rfl
+    rw [hz, add_zero]
+  have hsnd : Uᗮ.starProjection ((w.fst : H) + (w.snd : H)) = (w.snd : H) := by
+    rw [map_add, Submodule.starProjection_eq_self_iff.mpr w.snd.2]
+    have hz : Uᗮ.starProjection ((w.fst : H)) = 0 := by
+      have h0 : Uᗮ.orthogonalProjectionOnto ((w.fst : H)) = 0 :=
+        Submodule.orthogonalProjectionOnto_eq_zero_iff.mpr
+          (U.le_orthogonal_orthogonal w.fst.2)
+      rw [← Submodule.coe_orthogonalProjectionOnto_apply, h0]
+      rfl
+    rw [hz, zero_add]
+  have hdiag : U.diagonalPart A ((w.fst : H) + (w.snd : H)) =
+      U.starProjection (A (w.fst : H)) + Uᗮ.starProjection (A (w.snd : H)) := by
+    simp only [Submodule.diagonalPart, add_apply, ContinuousLinearMap.comp_apply]
+    rw [hfst, hsnd]
+  simp only [ContinuousLinearMap.comp_apply, hsymmcoe, hdiag, hcoe,
+    continuousOrthogonalBlockSum_apply]
+  refine congrArg (WithLp.toLp 2) (Prod.ext ?_ ?_)
+  · simp only [map_add, hUU, hUO, add_zero]
+    rfl
+  · simp only [map_add, hOO, hOU, zero_add]
+    rfl
+
+end PinchChart
 
 end
 

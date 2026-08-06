@@ -3,19 +3,21 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
-import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
-import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
-import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 
 /-!
 # Davis--Kahan `sin Θ`: residual, directed and projector-difference bounds
@@ -49,6 +51,8 @@ the point that 1110-line file was divided at its
 That file in turn was `DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean`
 before the sin-Θ closure moved into the staging layer.
 -/
+
+public section
 
 namespace TauCeti
 
@@ -98,7 +102,7 @@ The constant `c` is a parameter rather than `1` because the general
 disjoint-spectrum form carries `π / 2`; without it this lemma would serve two of
 the three theorems and look like the shape was wrong. -/
 private theorem sinTheta_residual_le_of_sylvester
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} {δ c : ℝ} (hc : 0 ≤ c)
@@ -113,7 +117,7 @@ private theorem sinTheta_residual_le_of_sylvester
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
   let C : F →ₗ[𝕜] Uᗮ :=
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ residual A X M
-  let NU : RectangularUnitarilyInvariantNorm 𝕜 F Uᗮ :=
+  let NU : RectangularUnitarilyInvariantSeminorm 𝕜 F Uᗮ :=
     N.codomainIsometryTransport Uᗮ.subtypeₗᵢ
   have hAU : AU.IsSymmetric := isSymmetric_restrict hA hUperp
   have hEq : AU ∘ₗ Y - Y ∘ₗ M = C :=
@@ -159,7 +163,7 @@ unwanted spectrum of `A` on `Uᗮ` lies outside `(a-δ,b+δ)`, and `R = AX-XM`.
 Then `δ ‖sin Θ‖ ≤ ‖R‖`.
 -/
 theorem sinTheta_residual_le
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
@@ -181,7 +185,7 @@ theorem sinTheta_residual_le
 /-- Ordered half-line residual form.
 -/
 theorem sinTheta_residual_le_of_orderedGap
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
@@ -209,7 +213,7 @@ The restriction and projection proof below is complete; the only open input is
 `kyFan_sylvester_le_of_spectralDistance` in the Sylvester layer.
 -/
 theorem sinTheta_residual_le_of_spectralDistance
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
@@ -310,7 +314,7 @@ spectrum `≥ c + g`, and `V` reduces `B` with `V`-carried spectrum `≤ c`, the
 `N (P_V ∘ P_U) ≤ N (B − A) / g` for every unitarily invariant norm `N`.
 The quadratic-form hypotheses of the invariant-subspace theorem are supplied
 by the spectral coercivity bridges. -/
-theorem uiNorm_directed_sinTheta_le (N : UnitarilyInvariantNorm 𝕜 E)
+theorem uiNorm_directed_sinTheta_le (N : UnitarilyInvariantSeminorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hU : IsInvariant A U) (hV : IsInvariant B V)
@@ -320,7 +324,7 @@ theorem uiNorm_directed_sinTheta_le (N : UnitarilyInvariantNorm 𝕜 E)
     N ((V.starProjection ∘L U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (B - A) / g := by
   haveI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-  exact UnitarilyInvariantNorm.apply_starProjection_comp_starProjection_le N
+  exact UnitarilyInvariantSeminorm.apply_starProjection_comp_starProjection_le N
     hA hB hU hV hg
     (fun x hx => le_re_inner_of_spectrumIn hA hU hUspec hx)
     (fun x hx => re_inner_le_of_spectrumIn hB hV hVspec hx)
@@ -331,7 +335,7 @@ their operators automatically, so the full unitarily-invariant-norm `sin Θ`
 bound holds for `N (P_{spec B t} ∘ P_{spec A s})` under the spectral-gap
 hypotheses alone. -/
 theorem uiNorm_spectralSubspace_directed_sinTheta_le
-    (N : UnitarilyInvariantNorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
     {c g : ℝ} (hg : 0 < g)
     (hUspec : SpectrumIn A (spectralSubspace A s) (Set.Ici (c + g)))

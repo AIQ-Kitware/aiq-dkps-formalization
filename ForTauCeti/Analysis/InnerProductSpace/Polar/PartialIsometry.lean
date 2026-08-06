@@ -3,10 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
-import ForTauCeti.Analysis.InnerProductSpace.PartialIsometry
-import Mathlib.Analysis.InnerProductSpace.Projection.Basic
-import Mathlib.Analysis.Normed.Operator.Extend
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+public import ForTauCeti.Analysis.InnerProductSpace.PartialIsometry
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularPartialIsometry
+public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
+public import Mathlib.Analysis.Normed.Operator.Extend
 
 /-!
 # The polar decomposition of a bounded operator
@@ -112,6 +115,26 @@ modulus is invertible:
 Read down the list: dropping finite dimension costs the unitary and leaves a
 partial isometry; adding invertibility of the modulus buys it back as an
 isometry. That is the whole hierarchy.
+
+**Correction, 2026-08-04.**  The list above presents "the field" as one of the
+three separating hypotheses.  For this module that reading was wrong: nothing in
+the construction below needs `ℂ`.  What needs `ℂ` is `modulus`, which is a
+continuous functional calculus, and Mathlib supplies
+`ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint` for `ℂ` only.  Keying
+the same construction on the *Gram identity* `A ∘L A = T⋆ ∘L T` with `A`
+self-adjoint, rather than on `A = |T|`, drops the field restriction entirely;
+that is `Polar/GramContraction.lean`, over any `RCLike` field.  So the honest
+fourth entry is:
+
+* `ContinuousLinearMap.gramContraction`, in `GramContraction.lean` — rectangular
+  `E →L[𝕜] F` over **any `RCLike` field**, the Gram square root supplied as a
+  hypothesis; a **partial isometry**, with `W A = T` and `W⋆ T = A`.
+
+This module keeps its own value: it *constructs* the modulus rather than
+assuming one, and it carries the full partial-isometry API (`W W⋆ W = W`, the
+initial and final spaces, uniqueness, `|M⋆| = W |M| W⋆`).  `GramContraction.lean`
+proves only the two factorisation identities and the contraction bound, which is
+what a symmetric-norm-ideal argument consumes.
 -/
 
 public section
@@ -376,6 +399,11 @@ invertibility or finite-dimensionality hypothesis.  This is the algebraic form o
 theorem polarPartial_comp_adjoint_comp_polarPartial (M : E →L[ℂ] F) :
     M.polarPartial ∘L M.polarPartial.adjoint ∘L M.polarPartial = M.polarPartial := by
   rw [M.adjoint_comp_polarPartial, M.polarPartial_comp_starProjection]
+
+/-- **The rectangular polar factor is a partial isometry** (Conway VI.3.9). -/
+theorem polarPartial_isPartialIsometry (M : E →L[ℂ] F) :
+    M.polarPartial.IsPartialIsometry :=
+  M.polarPartial_comp_adjoint_comp_polarPartial
 
 /-- The adjoint form of the partial-isometry identity, `W⋆ W W⋆ = W⋆`. -/
 theorem adjoint_comp_polarPartial_comp_adjoint (M : E →L[ℂ] F) :

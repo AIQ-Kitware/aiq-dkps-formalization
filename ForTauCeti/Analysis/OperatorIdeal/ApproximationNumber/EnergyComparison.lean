@@ -3,11 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
-import ForTauCeti.Analysis.InnerProductSpace.Singular.System
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
-import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
-import ForTauCeti.Topology.ENNRealLiminf
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact
+public import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+public import ForTauCeti.Topology.ENNRealLiminf
 
 /-!
 # Approximation numbers against the Hilbert--Schmidt energy
@@ -645,12 +648,66 @@ theorem hilbertSchmidtEnergy_le_tsum_approximationNumber_sq {ι : Type v}
 
 Both inequalities are proved above — the forward one by truncating the basis and reading the
 finite case exactly, the reverse by Fatou against the same truncations. -/
-theorem tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy_of_hilbertBasis {ι : Type v}
+theorem tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy {ι : Type v}
     (T : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) :
     ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) ^ 2 = T.hilbertSchmidtEnergy b :=
   le_antisymm (tsum_approximationNumber_sq_le_hilbertSchmidtEnergy T b)
     (hilbertSchmidtEnergy_le_tsum_approximationNumber_sq T b)
 
+
+omit [CompleteSpace G] [CompleteSpace H] in
+/-- The rank of a basis-truncated operator is bounded by the size of the slice: it factors
+through `EuclideanSpace 𝕜' (Fin s.card)`, whose rank is `s.card`. -/
+theorem rank_comp_basisTruncation_le {ι : Type v}
+    (T : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) (s : Finset ι) :
+    (T ∘L basisTruncation b s).rank ≤ (s.card : Cardinal) := by
+  classical
+  set e := s.equivFin with he
+  set f : Fin s.card → ι := fun j => (e.symm j : ι) with hfdef
+  have hf : Function.Injective f := by
+    intro j k hjk
+    have hsub : e.symm j = e.symm k := Subtype.ext hjk
+    simpa using congrArg e hsub
+  have himage : Finset.univ.image f = s := by
+    ext i
+    simp only [Finset.mem_image, Finset.mem_univ, true_and, hfdef]
+    exact ⟨by rintro ⟨j, rfl⟩; exact (e.symm j).2, fun hi => ⟨e ⟨i, hi⟩, by simp⟩⟩
+  have hfactor : T ∘L basisTruncation b s
+      = (T ∘L finiteBasisInclusion b f) ∘L finiteBasisCoords b f := by
+    rw [ContinuousLinearMap.comp_assoc, finiteBasisInclusion_comp_finiteBasisCoords b hf,
+      himage]
+  rw [hfactor]
+  refine ContinuousLinearMap.rank_comp_le_natCast_right _ _ ?_
+  refine le_trans (Submodule.rank_le _) ?_
+  rw [← Module.finrank_eq_rank, finrank_euclideanSpace_fin]
+
+/-- **Hilbert--Schmidt implies compact.**  Finite energy makes the basis truncations
+finite-rank operators approximating `T` in norm, so its approximation numbers tend to zero. -/
+theorem isCompactOperator_of_hilbertSchmidtEnergy_ne_top {ι : Type v} [ProperSpace 𝕜']
+    (T : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) (h : T.hilbertSchmidtEnergy b ≠ ⊤) :
+    IsCompactOperator T := by
+  refine isCompactOperator_of_tendsto_approximationNumber T ?_
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  have hpos : (0 : ℝ≥0∞) < ENNReal.ofReal ε ^ 2 := by
+    have : (0 : ℝ≥0∞) < ENNReal.ofReal ε := ENNReal.ofReal_pos.mpr hε
+    positivity
+  obtain ⟨s, hs⟩ :=
+    ((tendsto_enorm_comp_one_sub_basisTruncation T b h).eventually
+      (eventually_lt_nhds hpos)).exists
+  refine ⟨s.card, fun n hn => ?_⟩
+  have hsub : T - T ∘L basisTruncation b s = T ∘L (1 - basisTruncation b s) := by
+    simp [ContinuousLinearMap.comp_sub, ContinuousLinearMap.one_def]
+  have hle : T.approximationNumber s.card ≤ ‖T ∘L (1 - basisTruncation b s)‖ := by
+    rw [← hsub]
+    exact T.approximationNumber_le_norm_sub (rank_comp_basisTruncation_le T b s)
+  have hlt : ‖T ∘L (1 - basisTruncation b s)‖ < ε := by
+    rw [← ofReal_norm] at hs
+    refine (ENNReal.ofReal_lt_ofReal_iff hε).mp ?_
+    by_contra hcon
+    exact absurd hs (not_lt.mpr (pow_le_pow_left' (not_lt.mp hcon) 2))
+  rw [Real.dist_eq, sub_zero, abs_of_nonneg (T.approximationNumber_nonneg n)]
+  exact lt_of_le_of_lt (le_trans (T.approximationNumber_antitone hn) hle) hlt
 
 end Comparison
 

@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic
-import Mathlib.Analysis.InnerProductSpace.Projection.Basic
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic
+public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 
 /-!
 # The range of a projection-valued measure, as a subspace
@@ -37,6 +39,8 @@ they adapt rather than in a bridge that no longer bridges anything.
   `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
 -/
 
+public section
+
 open scoped InnerProductSpace
 
 namespace TauCeti
@@ -46,6 +50,7 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- The range of a measurable projection from a Spectra projection-valued
 measure, packaged as a submodule. -/
+@[expose]
 noncomputable def pvmRangeSubspace (P : TauCeti.ProjValMeasure H)
     (B : Set ℝ) (hB : MeasurableSet B) : Submodule ℂ H :=
   (P.proj B hB).range

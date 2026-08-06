@@ -16,9 +16,11 @@ the coordinate isometry `EuclideanSpace 𝕜 (Fin d) →ₗᵢ E` attached to an
 orthonormal family, used to build the `d × d` overlap operator whose singular
 values are the principal-angle cosines.
 -/
+module
 
-import Mathlib.LinearAlgebra.Basis.Defs
-import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+public import Mathlib.LinearAlgebra.Basis.Defs
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 
 
 /-! # The coordinate isometry of an orthonormal family
@@ -51,6 +53,8 @@ principal angles between `span u` and `span v`.
   `ForTauCeti` staging modules.
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -58,52 +62,6 @@ open Module (finrank)
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   {d : ℕ}
-
-/-- The linear map `EuclideanSpace 𝕜 (Fin d) →ₗ[𝕜] E` sending the `j`-th standard
-basis vector to `v j` (extended linearly): `x ↦ ∑ j, x j • v j`. -/
-noncomputable def familyMap (v : Fin d → E) : EuclideanSpace 𝕜 (Fin d) →ₗ[𝕜] E :=
-  (Fintype.linearCombination 𝕜 v).comp (WithLp.linearEquiv 2 𝕜 (Fin d → 𝕜)).toLinearMap
-
-/-- The family map, unfolded to its expansion in the family. -/
-@[simp] theorem familyMap_apply (v : Fin d → E) (x : EuclideanSpace 𝕜 (Fin d)) :
-    familyMap v x = ∑ i, x i • v i := by
-  rw [familyMap, LinearMap.comp_apply, Fintype.linearCombination_apply]
-  rfl
-
-/-- The coordinate map of an orthonormal family preserves inner products. -/
-theorem familyMap_inner_map_map {v : Fin d → E} (hv : Orthonormal 𝕜 v)
-    (x y : EuclideanSpace 𝕜 (Fin d)) :
-    ⟪familyMap v x, familyMap v y⟫_𝕜 = ⟪x, y⟫_𝕜 := by
-  rw [familyMap_apply, familyMap_apply, sum_inner, PiLp.inner_apply]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [inner_sum, Finset.sum_eq_single i]
-  · rw [inner_smul_left, inner_smul_right, orthonormal_iff_ite.mp hv i i, if_pos rfl, mul_one,
-      RCLike.inner_apply]
-    ring
-  · intro j _ hji
-    rw [inner_smul_left, inner_smul_right, orthonormal_iff_ite.mp hv i j, if_neg (Ne.symm hji),
-      mul_zero, mul_zero]
-  · intro hi; exact absurd (Finset.mem_univ i) hi
-
-/-- The bundled coordinate isometry `EuclideanSpace 𝕜 (Fin d) →ₗᵢ[𝕜] E` of an
-orthonormal family `v`, sending `eⱼ ↦ vⱼ`. -/
-noncomputable def familyIsometry {v : Fin d → E} (hv : Orthonormal 𝕜 v) :
-    EuclideanSpace 𝕜 (Fin d) →ₗᵢ[𝕜] E :=
-  (familyMap v).isometryOfInner (familyMap_inner_map_map hv)
-
-/-- The bundled isometry acts as the family map. -/
-@[simp] theorem familyIsometry_apply {v : Fin d → E} (hv : Orthonormal 𝕜 v)
-    (x : EuclideanSpace 𝕜 (Fin d)) : familyIsometry hv x = ∑ i, x i • v i := by
-  rw [familyIsometry, LinearMap.coe_isometryOfInner, familyMap_apply]
-
-/-- It sends the `k`-th standard basis vector to `v k`. -/
-@[simp] theorem familyIsometry_single {v : Fin d → E} (hv : Orthonormal 𝕜 v) (k : Fin d) :
-    familyIsometry hv (EuclideanSpace.single k 1) = v k := by
-  rw [familyIsometry_apply]
-  rw [Finset.sum_eq_single k]
-  · rw [PiLp.single_apply, if_pos rfl, one_smul]
-  · intro i _ hik; rw [PiLp.single_apply, if_neg hik, zero_smul]
-  · intro hk; exact absurd (Finset.mem_univ k) hk
 
 /-- **An orthonormal family of the right size, lying in `V`, spans `V`.**
 
@@ -136,6 +94,7 @@ variable [FiniteDimensional 𝕜 E]
 `(familyIsometry hu)⋆ ∘ (familyIsometry hv)` on `EuclideanSpace 𝕜 (Fin d)`, with
 matrix `⟪uᵢ, vⱼ⟫`.  Its singular values are the cosines of the principal angles
 between `span u` and `span v`. -/
+@[expose]
 noncomputable def overlapOp {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) :
     EuclideanSpace 𝕜 (Fin d) →ₗ[𝕜] EuclideanSpace 𝕜 (Fin d) :=
   (familyIsometry hu).toLinearMap.adjoint ∘ₗ (familyIsometry hv).toLinearMap
@@ -208,7 +167,7 @@ theorem inner_u_aligned_eq {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : O
     ⟪u j, familyIsometry hv ((choosePolarUnitary (overlapOp hu hv)).symm
           (EuclideanSpace.single j 1))⟫_𝕜
       = ⟪(choosePolarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1),
-          abs (overlapOp hu hv)
+          operatorAbs (overlapOp hu hv)
             ((choosePolarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))⟫_𝕜 := by
   set M := overlapOp hu hv with hM
   set O := choosePolarUnitary M with hO
@@ -220,7 +179,7 @@ theorem inner_u_aligned_eq {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : O
   rw [hstep]
   -- `M = O ∘ |M|`, then `O` unitary moves across the inner product.
   have hpolar : M (O.symm (EuclideanSpace.single j 1))
-      = O (abs M (O.symm (EuclideanSpace.single j 1))) := by
+      = O (operatorAbs M (O.symm (EuclideanSpace.single j 1))) := by
     have h1 := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary M)
       (O.symm (EuclideanSpace.single j 1))
     rw [LinearMap.comp_apply] at h1
@@ -240,7 +199,7 @@ theorem sum_re_inner_u_aligned {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv
     ((EuclideanSpace.basisFun (Fin d) 𝕜).map (choosePolarUnitary (overlapOp hu hv)).symm)]
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [inner_u_aligned_eq hu hv j, OrthonormalBasis.map_apply, EuclideanSpace.basisFun_apply,
-    (isPositive_abs (overlapOp hu hv)).isSymmetric
+    (isPositive_operatorAbs (overlapOp hu hv)).isSymmetric
       ((choosePolarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))
       ((choosePolarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))]
 

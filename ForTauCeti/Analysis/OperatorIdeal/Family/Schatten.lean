@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.Normed.FiniteLpGauge
-import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
-import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
-import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison
+module
+
+public import ForTauCeti.Analysis.Normed.FiniteLpGauge
+public import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
+public import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
+public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
+public import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison
 
 /-!
 # The Schatten-`p` operator ideals
@@ -57,7 +59,7 @@ layer is the tool here, not the obstacle.
 `hilbertSchmidtENorm` is built from the Hilbert--Schmidt energy through a Hilbert basis and
 never mentions approximation numbers, so unlike its `p = 1` twin the agreement with the
 Schatten gauge is a theorem rather than arithmetic.  It is proved here, as
-`tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy_of_hilbertBasis`.
+`tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy`.
 
 **Neither of the two routes one expects is the one taken.**  Not the singular-value
 decomposition of a compact operator: Mathlib's eigenvector basis is finite-dimensional only,
@@ -167,6 +169,7 @@ section Gauge
 
 /-- The **Schatten `p`-norm**, valued in `ℝ≥0∞` and therefore defined for every bounded
 operator: it is `∞` exactly when `T` is not Schatten-`p`. -/
+@[expose]
 noncomputable def schattenENorm (p : ℝ) (T : E →L[𝕜] F) : ℝ≥0∞ :=
   (∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) ^ p) ^ p⁻¹
 
@@ -378,7 +381,7 @@ theorem schattenENorm_two (T : E →L[𝕜] F) :
   classical
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 E
   rw [schattenENorm, T.hilbertSchmidtENorm_eq b,
-    ← tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy_of_hilbertBasis T b]
+    ← tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy T b]
   norm_num
 
 

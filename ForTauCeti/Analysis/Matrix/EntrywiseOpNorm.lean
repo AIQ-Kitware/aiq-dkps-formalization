@@ -12,9 +12,10 @@ entrywise → `ℓ²`-operator-norm bound).
 
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Algebra.Order.Chebyshev
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Algebra.Order.Chebyshev
 
 
 /-! # `ℓ¹`–`ℓ²` and entrywise–operator norm comparisons
@@ -61,6 +62,8 @@ affected.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 

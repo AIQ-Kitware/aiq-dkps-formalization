@@ -3,8 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.SpectralTheory.Compatibility
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+import DavisKahan.BoundedOperator.Compat
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Closed densely defined operators
@@ -23,6 +24,10 @@ layer reach `ClosedOperator` without inheriting an admission closure.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open scoped InnerProductSpace
 open Filter Topology

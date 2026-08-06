@@ -116,7 +116,7 @@ theorem theorem63_sylvester_identity
   rw [map_sub]
   congr 1
   exact (ContinuousLinearMap.starProjection_apply_comm_of_reduces
-    T Vᗮ (DavisKahanExt.Reduces.orthogonalComplement hV) (z : H)).symm
+    T Vᗮ (hV.orthogonalComplement) (z : H)).symm
 
 omit [CompleteSpace H] in
 /-- The directed sine block is a contraction. -/
@@ -316,14 +316,9 @@ theorem inner_apply_left_of_adjointL_eq_smul {K : Type*} [NormedAddCommGroup K]
 /-- The residual witnesses form an orthonormal family once the source gap has
 excluded the tangent pole. -/
 theorem orthonormal_theorem63ResidualWitness
-    (T : H →L[ℂ] H) (hT : T.IsSymmetric)
-    (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
+    (Z V : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hCompressionUpper : ∀ z : Z,
-      RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
-    (hUnwantedLower : ∀ y ∈ Vᗮ,
-      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ) :
+    (hlt : ∀ i, finiteSourceSingularValue (theorem63DirectedSineBlock Z V) i < 1) :
     Orthonormal ℂ (theorem63ResidualWitness Z V) := by
   classical
   let S := theorem63DirectedSineBlock Z V
@@ -369,9 +364,7 @@ theorem orthonormal_theorem63ResidualWitness
             rw [inner_smul_left, Complex.conj_ofReal]
             simp [v]
       have hsigma_nonneg : 0 ≤ sigma := finiteSourceSingularValue_nonneg S i
-      have hsigma_lt : sigma < 1 := by
-        simpa [S, sigma] using theorem63_singularValues_sine_lt_one
-          T hT V Z hV hdelta hCompressionUpper hUnwantedLower i
+      have hsigma_lt : sigma < 1 := hlt i
       have hraw :
           ⟪y - ((sigma : ℝ) : ℂ) • (v : H),
             y - ((sigma : ℝ) : ℂ) • (v : H)⟫_ℂ =
@@ -513,34 +506,42 @@ def HasTheorem63DirectedTangentApproximationNumbers
     Real.tan (Real.arcsin
       (approximationSingularValue n (theorem63DirectedSineBlock Z V)))
 
-/-- The scalar estimate corresponding to equation (6.6). -/
-theorem theorem63ResidualWitness_scalar
-    (T : H →L[ℂ] H) (hT : T.IsSymmetric)
+/-- **The scalar estimate corresponding to equation (6.6), over abstract trial-block
+data.**
+
+`M` is the compression, `R` the residual, and `X` the *crossed action* — the ambient
+operator applied to `P_{Vᗮ} z`.  Splitting `X` off from the ambient operator is what lets
+an unbounded self-adjoint operator use this estimate: `P_{Vᗮ} z` lies in the operator
+domain whenever the trial space does and `V` is a spectral subspace, so the crossed
+quadratic form is available even though the operator itself is unbounded on `Vᗮ`.
+
+The two form hypotheses are the paper's: the compression is bounded above by `α`, and
+the crossed form is bounded below by `α + δ`. -/
+theorem theorem63ResidualWitness_scalar_of_data
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hCompressionUpper : ∀ z : Z,
-      RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
-    (hUnwantedLower : ∀ y ∈ Vᗮ,
-      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
+    {alpha delta : ℝ}
+    (M : Z →L[ℂ] Z) (R : Z →L[ℂ] H) (X : Z →L[ℂ] H)
+    (hMupper : ∀ z : Z, RCLike.re ⟪M z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hcross : ∀ z : Z, (alpha + delta) * ‖Vᗮ.starProjection ((z : Z) : H)‖ ^ 2 ≤
+      RCLike.re ⟪Vᗮ.starProjection ((z : Z) : H), X z⟫_ℂ)
+    (hRorth : ∀ z z' : Z, ⟪R z, ((z' : Z) : H)⟫_ℂ = 0)
+    (hsyl : ∀ z : Z, X z - theorem63DirectedSineBlock Z V (M z) =
+      Vᗮ.starProjection (R z))
+    (hlt : ∀ i, finiteSourceSingularValue (theorem63DirectedSineBlock Z V) i < 1)
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
     (i : Fin (finrank ℂ Z)) :
     delta * approximationSingularValue i tanTheta0 ≤
       RCLike.re ⟪theorem63ResidualWitness Z V i,
-        theorem63Residual T Z
-          (finiteSourceRightSingularBasis
+        R (finiteSourceRightSingularBasis
             (theorem63DirectedSineBlock Z V) i)⟫_ℂ := by
   let S := theorem63DirectedSineBlock Z V
-  let M := theorem63Compression T Z
-  let R := theorem63Residual T Z
   let sigma := finiteSourceSingularValue S i
   let v := finiteSourceRightSingularBasis S i
   have hvnorm : ‖v‖ = 1 := (finiteSourceRightSingularBasis S).orthonormal.norm_eq_one i
   have hsigma_nonneg : 0 ≤ sigma := finiteSourceSingularValue_nonneg S i
-  have hsigma_lt : sigma < 1 := by
-    simpa [S, sigma] using theorem63_singularValues_sine_lt_one
-      T hT V Z hV hdelta hCompressionUpper hUnwantedLower i
+  have hsigma_lt : sigma < 1 := hlt i
   have hcpos : 0 < Real.sqrt (1 - sigma ^ 2) :=
     Real.sqrt_pos.2 (by nlinarith)
   have hSapprox : approximationSingularValue i
@@ -549,20 +550,21 @@ theorem theorem63ResidualWitness_scalar
   have htan_i : approximationSingularValue i tanTheta0 =
       sigma / Real.sqrt (1 - sigma ^ 2) := by
     rw [htan i, hSapprox, Real.tan_arcsin]
+  -- The residual is orthogonal to the trial space, in both slots.
+  have hZorth : ⟪(v : H), R v⟫_ℂ = 0 := by
+    have h := hRorth v v
+    rw [← inner_conj_symm, h, map_zero]
   by_cases hsigma_zero : sigma = 0
-  · have horth : ⟪(v : H), R v⟫_ℂ = 0 :=
-      Submodule.inner_right_of_mem_orthogonal v.2
-        (theorem63Residual_apply_mem_orthogonal T Z v)
-    have hwitness : theorem63ResidualWitness Z V i = (v : H) := by
+  · have hwitness : theorem63ResidualWitness Z V i = (v : H) := by
       simp [theorem63ResidualWitness, S, sigma, v, hsigma_zero]
-    rw [htan_i, hsigma_zero, zero_div, mul_zero, hwitness]
-    change 0 ≤ RCLike.re ⟪(v : H), R v⟫_ℂ
-    rw [horth]
+    rw [htan_i, hsigma_zero, zero_div, mul_zero, hwitness, hZorth]
     simp
-  · let y := finiteSourceLeftSingularVector S i
+  · have hsigma_pos : 0 < sigma := lt_of_le_of_ne hsigma_nonneg (Ne.symm hsigma_zero)
+    let y := finiteSourceLeftSingularVector S i
     have hynorm : ‖y‖ = 1 := by
       simpa [y] using
-        (orthonormal_finiteSourceLeftSingularVector_subtype S).norm_eq_one ⟨i, hsigma_zero⟩
+        (orthonormal_finiteSourceLeftSingularVector_subtype S).norm_eq_one
+          ⟨i, hsigma_zero⟩
     have hSv : S v = ((sigma : ℝ) : ℂ) • y := by
       simpa [S, sigma, v, y] using
         apply_finiteSourceRightSingularBasis_eq_smul_leftSingularVector S i
@@ -571,65 +573,57 @@ theorem theorem63ResidualWitness_scalar
         adjoint_apply_finiteSourceLeftSingularVector S hsigma_zero
     have hyVperp : y ∈ Vᗮ :=
       finiteSourceLeftSingularVector_mem_orthogonal Z V i
-    have hZadj : Z.subtypeL.adjoint y = ((sigma : ℝ) : ℂ) • v := by
-      simpa [S, sigma, v, y] using
-        theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector Z V hsigma_zero
-    have hMupper : RCLike.re ⟪M v, v⟫_ℂ ≤ alpha := by
-      have h := hCompressionUpper v
-      simpa [hvnorm] using h
-    have hTlower : alpha + delta ≤ RCLike.re ⟪T y, y⟫_ℂ := by
-      have h := hUnwantedLower y hyVperp
-      simpa [hynorm] using h
-    have hsyl := congrArg (fun L : Z →L[ℂ] H => L v)
-      (theorem63_sylvester_identity T V Z hV)
-    have hpair :
-        RCLike.re ⟪y, R v⟫_ℂ =
-          sigma * (RCLike.re ⟪T y, y⟫_ℂ -
-            RCLike.re ⟪M v, v⟫_ℂ) := by
-      have hright : ⟪y, Vᗮ.starProjection (R v)⟫_ℂ = ⟪y, R v⟫_ℂ := by
-        rw [← Vᗮ.inner_starProjection_left_eq_right,
-          Submodule.starProjection_eq_self_iff.mpr hyVperp]
-      have hsyl' : T (S v) - S (M v) = Vᗮ.starProjection (R v) := by
-        simpa [S, M, R] using hsyl
-      have hSM : ⟪y, S (M v)⟫_ℂ = ⟪S.adjoint y, M v⟫_ℂ := by
-        exact (ContinuousLinearMap.adjoint_inner_left S (M v) y).symm
-      have hcomplex :
-          ⟪y, R v⟫_ℂ =
-            ((sigma : ℂ) * (⟪y, T y⟫_ℂ - ⟪v, M v⟫_ℂ)) := by
-        calc
-          ⟪y, R v⟫_ℂ = ⟪y, Vᗮ.starProjection (R v)⟫_ℂ := hright.symm
-          _ = ⟪y, T (S v) - S (M v)⟫_ℂ := by rw [hsyl']
-          _ = ⟪y, T (S v)⟫_ℂ - ⟪y, S (M v)⟫_ℂ := inner_sub_right _ _ _
-          _ = (sigma : ℂ) * ⟪y, T y⟫_ℂ - ⟪y, S (M v)⟫_ℂ := by
-            rw [hSv, map_smul, inner_smul_right]
-          _ = (sigma : ℂ) * ⟪y, T y⟫_ℂ -
-              (sigma : ℂ) * ⟪v, M v⟫_ℂ := by
-            rw [hSM, hSadj, inner_smul_left, Complex.conj_ofReal]
-          _ = (sigma : ℂ) * (⟪y, T y⟫_ℂ - ⟪v, M v⟫_ℂ) := by ring
-      have hTy : RCLike.re ⟪y, T y⟫_ℂ = RCLike.re ⟪T y, y⟫_ℂ := by
-        rw [← inner_conj_symm, RCLike.conj_re]
-      have hMv : RCLike.re ⟪v, M v⟫_ℂ = RCLike.re ⟪M v, v⟫_ℂ := by
-        rw [← inner_conj_symm, RCLike.conj_re]
-      have hTy' : (⟪y, T y⟫_ℂ).re = (⟪T y, y⟫_ℂ).re := by
-        simpa only [RCLike.re_to_complex] using hTy
-      have hMv' : (⟪v, M v⟫_ℂ).re = (⟪M v, v⟫_ℂ).re := by
-        simpa only [RCLike.re_to_complex] using hMv
-      have hre := congrArg Complex.re hcomplex
-      simpa only [RCLike.re_to_complex, Complex.mul_re,
-        Complex.ofReal_re, Complex.ofReal_im, Complex.sub_re,
-        zero_mul, sub_zero, hTy', hMv'] using hre
+    -- `P_{Vᗮ} v` is the sine block applied to `v`, i.e. `sigma • y`.
+    have hproj_v : Vᗮ.starProjection ((v : Z) : H) = ((sigma : ℝ) : ℂ) • y := by
+      have h : Vᗮ.starProjection ((v : Z) : H) = S v := rfl
+      rw [h, hSv]
+    -- The crossed form bound, divided by `sigma`.
+    have hXlower : (alpha + delta) * sigma ≤ RCLike.re ⟪y, X v⟫_ℂ := by
+      have h := hcross v
+      rw [hproj_v] at h
+      have hnorm : ‖((sigma : ℝ) : ℂ) • y‖ = sigma := by
+        rw [norm_smul, Complex.norm_real, Real.norm_eq_abs,
+          abs_of_nonneg hsigma_nonneg, hynorm, mul_one]
+      have hinner : RCLike.re ⟪((sigma : ℝ) : ℂ) • y, X v⟫_ℂ =
+          sigma * RCLike.re ⟪y, X v⟫_ℂ := by
+        rw [inner_smul_left, Complex.conj_ofReal]
+        simp only [RCLike.re_to_complex, Complex.mul_re, Complex.ofReal_re,
+          Complex.ofReal_im, zero_mul, sub_zero]
+      rw [hnorm, hinner] at h
+      refine le_of_mul_le_mul_right ?_ hsigma_pos
+      nlinarith [h]
+    -- The compression form bound at the unit vector `v`.
+    have hMv : RCLike.re ⟪M v, v⟫_ℂ ≤ alpha := by
+      have h := hMupper v
+      rwa [hvnorm, one_pow, mul_one] at h
+    -- Pair the witness against the residual through the Sylvester identity.
+    have hright : ⟪y, Vᗮ.starProjection (R v)⟫_ℂ = ⟪y, R v⟫_ℂ := by
+      rw [← Vᗮ.inner_starProjection_left_eq_right,
+        Submodule.starProjection_eq_self_iff.mpr hyVperp]
+    have hSM : ⟪y, S (M v)⟫_ℂ = ((sigma : ℝ) : ℂ) * ⟪v, M v⟫_ℂ := by
+      rw [← ContinuousLinearMap.adjoint_inner_left S (M v) y, hSadj,
+        inner_smul_left, Complex.conj_ofReal]
+    have hsplit : ⟪y, R v⟫_ℂ = ⟪y, X v⟫_ℂ - ((sigma : ℝ) : ℂ) * ⟪v, M v⟫_ℂ := by
+      have h := congrArg (fun w : H => ⟪y, w⟫_ℂ) (hsyl v)
+      simp only [inner_sub_right] at h
+      rw [hright] at h
+      rw [← h, hSM]
+    have hMre : RCLike.re ⟪v, M v⟫_ℂ = RCLike.re ⟪M v, v⟫_ℂ := by
+      rw [← inner_conj_symm, RCLike.conj_re]
     have hpair_lower : delta * sigma ≤ RCLike.re ⟪y, R v⟫_ℂ := by
-      rw [hpair]
-      nlinarith
-    have hZorth : ⟪(v : H), R v⟫_ℂ = 0 :=
-      Submodule.inner_right_of_mem_orthogonal v.2
-        (theorem63Residual_apply_mem_orthogonal T Z v)
+      have hre : RCLike.re ⟪y, R v⟫_ℂ =
+          RCLike.re ⟪y, X v⟫_ℂ - sigma * RCLike.re ⟪v, M v⟫_ℂ := by
+        rw [hsplit]
+        simp only [RCLike.re_to_complex, Complex.sub_re, Complex.mul_re,
+          Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero]
+      rw [hre, hMre]
+      nlinarith [hXlower, hMv, hsigma_pos]
+    -- Rescale to the normalized witness.
     have hraw :
         RCLike.re ⟪y - ((sigma : ℝ) : ℂ) • (v : H), R v⟫_ℂ =
           RCLike.re ⟪y, R v⟫_ℂ := by
       have hc :
-          ⟪y - ((sigma : ℝ) : ℂ) • (v : H), R v⟫_ℂ =
-            ⟪y, R v⟫_ℂ := by
+          ⟪y - ((sigma : ℝ) : ℂ) • (v : H), R v⟫_ℂ = ⟪y, R v⟫_ℂ := by
         rw [inner_sub_left, inner_smul_left, Complex.conj_ofReal,
           hZorth, mul_zero, sub_zero]
       exact congrArg RCLike.re hc
@@ -666,6 +660,56 @@ theorem theorem63ResidualWitness_scalar
     simpa [div_eq_mul_inv, mul_assoc] using
       (div_le_div_iff_of_pos_right hcpos').2 hpair_lower
 
+/-- The scalar estimate corresponding to equation (6.6). -/
+theorem theorem63ResidualWitness_scalar
+    (T : H →L[ℂ] H) (hT : T.IsSymmetric)
+    (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
+    [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
+    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hCompressionUpper : ∀ z : Z,
+      RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hUnwantedLower : ∀ y ∈ Vᗮ,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
+    (tanTheta0 : Z →L[ℂ] H)
+    (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
+    (i : Fin (finrank ℂ Z)) :
+    delta * approximationSingularValue i tanTheta0 ≤
+      RCLike.re ⟪theorem63ResidualWitness Z V i,
+        theorem63Residual T Z
+          (finiteSourceRightSingularBasis
+            (theorem63DirectedSineBlock Z V) i)⟫_ℂ := by
+  refine theorem63ResidualWitness_scalar_of_data V Z
+    (theorem63Compression T Z) (theorem63Residual T Z)
+    (T ∘L Vᗮ.starProjection ∘L Z.subtypeL)
+    hCompressionUpper ?_ ?_ ?_
+    (fun i => theorem63_singularValues_sine_lt_one T hT V Z hV hdelta
+      hCompressionUpper hUnwantedLower i) tanTheta0 htan i
+  · -- the crossed form bound, from the lower bound on `Vᗮ`
+    intro z
+    have hmem : Vᗮ.starProjection ((z : Z) : H) ∈ Vᗮ :=
+      Vᗮ.starProjection_apply_mem _
+    have h := hUnwantedLower _ hmem
+    have hre : RCLike.re ⟪Vᗮ.starProjection ((z : Z) : H),
+        (T ∘L Vᗮ.starProjection ∘L Z.subtypeL) z⟫_ℂ =
+        RCLike.re ⟪T (Vᗮ.starProjection ((z : Z) : H)),
+          Vᗮ.starProjection ((z : Z) : H)⟫_ℂ := by
+      change RCLike.re ⟪Vᗮ.starProjection ((z : Z) : H),
+        T (Vᗮ.starProjection ((z : Z) : H))⟫_ℂ = _
+      rw [← inner_conj_symm, RCLike.conj_re]
+    rw [hre]
+    exact h
+  · -- residual orthogonality
+    intro z z'
+    exact Submodule.inner_left_of_mem_orthogonal z'.2
+      (theorem63Residual_apply_mem_orthogonal T Z z)
+  · -- the Sylvester identity, in data form
+    intro z
+    have h := congrArg (fun L : Z →L[ℂ] H => L z)
+      (theorem63_sylvester_identity T V Z hV)
+    simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.comp_apply] at h
+    exact h
+
+
 /-- Ky Fan domination up to the finite trial-space dimension. -/
 private theorem theorem6_3_kyFan_core_of_le_finrank
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
@@ -682,8 +726,9 @@ private theorem theorem6_3_kyFan_core_of_le_finrank
     delta * kyFanApproximationGauge k tanTheta0 ≤
       kyFanApproximationGauge k (theorem63Residual T Z) := by
   let castIndex : Fin k → Fin (finrank ℂ Z) := fun i => Fin.castLE hk i
-  have huFull := orthonormal_theorem63ResidualWitness
-    T hT V Z hV hdelta hCompressionUpper hUnwantedLower
+  have huFull := orthonormal_theorem63ResidualWitness Z V
+    (fun i => theorem63_singularValues_sine_lt_one T hT V Z hV hdelta
+      hCompressionUpper hUnwantedLower i)
   have hu : Orthonormal ℂ
       (fun i : Fin k => theorem63ResidualWitness Z V (castIndex i)) := by
     rw [orthonormal_iff_ite]
@@ -712,7 +757,7 @@ private theorem theorem6_3_kyFan_core_of_le_finrank
 
 /-- A bounded operator with finite-dimensional domain has no approximation
 singular values beyond that domain dimension. -/
-private theorem kyFanApproximationGauge_eq_finrank_of_finrank_le
+theorem kyFanApproximationGauge_eq_finrank_of_finrank_le
     {E F : Type u}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -810,7 +855,7 @@ theorem theorem6_3_generalizedTanTheta_source_ideal
     (hCompressionSpectrum :
       spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
     (hUnwantedSpectrum :
-      spectrum ℝ (T.restrict (DavisKahanExt.Reduces.orthogonalComplement hV).1) ⊆
+      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
         Set.Ici (alpha + delta))
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
@@ -835,7 +880,7 @@ theorem theorem6_3_generalizedTanTheta_source_ideal
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := by
     intro y hy
     exact SpectralOrder.Complex.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
-      hT (DavisKahanExt.Reduces.orthogonalComplement hV).1 hUnwantedSpectrum hy
+      hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
   exact theorem6_3_generalizedTanTheta_of_formBounds N T hT V Z hV
     hStrictDimension hdelta hCompressionUpper hUnwantedLower tanTheta0 htan
     hResidual
@@ -865,6 +910,300 @@ theorem theorem6_3_ideal_of_kyFan_core
         N.gauge residual :=
   ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hdelta hResidual hcore
+
+/-! ### A directed tangent representative exists
+
+`HasTheorem63DirectedTangentApproximationNumbers` is a hypothesis of every
+statement above, and until now nothing produced a value for it.  In that state
+Theorem 6.3 reads "*if* a tan-Θ representative exists then the bound holds",
+which is weaker than what Davis and Kahan assert — the printed theorem is about
+a representative they take for granted.
+
+This section supplies the producer, so the conditional is discharged.
+
+The representative is diagonal in the right singular basis of the sine block,
+with entries `tan (arcsin sᵢ)`.  Two facts make that work: the singular values
+of a diagonal operator with antitone nonnegative diagonal are the diagonal
+itself, and `t ↦ tan (arcsin t) = t / √(1 - t²)` is increasing on `[0, 1)`, so
+the entries inherit the sine block's ordering.
+
+Finiteness of the entries needs `sᵢ < 1`, and that is **not an extra
+hypothesis**: `theorem63_singularValues_sine_lt_one` already derives it from the
+source gap, i.e. from exactly the `hCompressionUpper` and `hUnwantedLower` that
+Theorem 6.3 assumes anyway.  So `theorem6_3_all_kyFan_core_directedTangent`
+below carries no hypothesis the printed theorem does not. -/
+
+section DirectedTangentExistence
+
+variable (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection]
+  [V.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
+
+/-- The diagonal entries of the directed tangent: tangents of the directed
+angles, read off from the sine block's singular values. -/
+noncomputable def theorem63DirectedTangentDiagonal
+    (i : Fin (finrank ℂ Z)) : ℝ :=
+  Real.tan (Real.arcsin
+    (finiteSourceSingularValue (theorem63DirectedSineBlock Z V) i))
+
+/-- **A directed tangent representative**, diagonal in the right singular basis
+of the sine block. -/
+noncomputable def theorem63DirectedTangent : Z →L[ℂ] H :=
+  Z.subtypeL ∘L
+    (diagOp (finiteSourceRightSingularBasis (theorem63DirectedSineBlock Z V))
+      (theorem63DirectedTangentDiagonal Z V)).toContinuousLinearMap
+
+/-- Composing with the inclusion of the trial space does not move approximation
+singular values: the inclusion is an isometry with a norm-one left inverse. -/
+theorem approximationSingularValue_subtypeL_comp
+    (A : Z →L[ℂ] Z) (k : ℕ) :
+    approximationSingularValue k (Z.subtypeL ∘L A) =
+      approximationSingularValue k A := by
+  have hmem : ∀ x : Z, (Z.subtypeL ∘L A) x ∈ Z := fun x => (A x).property
+  have hcomp : Z.orthogonalProjectionOnto ∘L (Z.subtypeL ∘L A) = A := by
+    ext x
+    change Z.starProjection ((A x : H)) = ((A x : H))
+    exact Submodule.starProjection_eq_self_iff.mpr (A x).property
+  calc
+    approximationSingularValue k (Z.subtypeL ∘L A) =
+        approximationSingularValue k
+          (Z.orthogonalProjectionOnto ∘L (Z.subtypeL ∘L A)) :=
+      (approximationSingularValue_orthogonalProjectionOnto_comp_eq Z
+        (Z.subtypeL ∘L A) hmem k).symm
+    _ = approximationSingularValue k A := by rw [hcomp]
+
+omit [Z.HasOrthogonalProjection] in
+/-- Above the dimension of the trial space every approximation singular value of
+a map out of it vanishes. -/
+theorem approximationSingularValue_eq_zero_of_finrank_le
+    (A : Z →L[ℂ] H) {k : ℕ} (hk : finrank ℂ Z ≤ k) :
+    approximationSingularValue k A = 0 := by
+  refine approximationSingularValue_eq_zero_of_rank_le_nat
+    (r := finrank ℂ Z) ?_ hk
+  calc (A : Z →ₗ[ℂ] H).rank ≤ Module.rank ℂ Z := LinearMap.rank_le_domain _
+    _ = ((finrank ℂ Z : ℕ) : Cardinal) := (Module.finrank_eq_rank ℂ Z).symm
+
+/-- **The directed tangent has the approximation numbers Theorem 6.3 asks
+for.**
+
+With this, `theorem6_3_all_kyFan_core` and its ideal-gauge consequences are
+unconditional: a representative is exhibited, not assumed. -/
+theorem hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent
+    (hlt : ∀ i, finiteSourceSingularValue
+      (theorem63DirectedSineBlock Z V) i < 1) :
+    HasTheorem63DirectedTangentApproximationNumbers Z V
+      (theorem63DirectedTangent Z V) := by
+  have hsB : ∀ i : Fin (finrank ℂ Z),
+      approximationSingularValue (i : ℕ) (theorem63DirectedSineBlock Z V) =
+        finiteSourceSingularValue (theorem63DirectedSineBlock Z V) i := fun i =>
+    approximationSingularValue_eq_finiteSourceSingularValue _ i
+  have hs0 : ∀ i, 0 ≤ finiteSourceSingularValue
+      (theorem63DirectedSineBlock Z V) i := fun i =>
+    finiteSourceSingularValue_nonneg _ i
+  have hs1 : ∀ i, finiteSourceSingularValue
+      (theorem63DirectedSineBlock Z V) i < 1 := hlt
+  have hteq : ∀ i, theorem63DirectedTangentDiagonal Z V i =
+      finiteSourceSingularValue (theorem63DirectedSineBlock Z V) i /
+        Real.sqrt (1 - finiteSourceSingularValue
+          (theorem63DirectedSineBlock Z V) i ^ 2) := fun i => by
+    rw [theorem63DirectedTangentDiagonal, Real.tan_arcsin]
+  have hsqrtpos : ∀ i, 0 < Real.sqrt (1 - finiteSourceSingularValue
+      (theorem63DirectedSineBlock Z V) i ^ 2) := fun i =>
+    Real.sqrt_pos.2 (by nlinarith [hs0 i, hs1 i])
+  have ht0 : ∀ i, 0 ≤ theorem63DirectedTangentDiagonal Z V i := fun i => by
+    rw [hteq i]
+    exact div_nonneg (hs0 i) (Real.sqrt_nonneg _)
+  have hsanti : Antitone (finiteSourceSingularValue
+      (theorem63DirectedSineBlock Z V)) := by
+    intro i j hij
+    rw [← hsB i, ← hsB j]
+    exact approximationSingularValue_antitone _ (by exact_mod_cast hij)
+  have htanti : Antitone (theorem63DirectedTangentDiagonal Z V) := by
+    intro i j hij
+    have hsji := hsanti hij
+    rw [hteq i, hteq j, div_le_div_iff₀ (hsqrtpos j) (hsqrtpos i)]
+    have hroot : Real.sqrt (1 - finiteSourceSingularValue
+          (theorem63DirectedSineBlock Z V) i ^ 2) ≤
+        Real.sqrt (1 - finiteSourceSingularValue
+          (theorem63DirectedSineBlock Z V) j ^ 2) :=
+      Real.sqrt_le_sqrt (by nlinarith [hs0 j, hs0 i])
+    exact mul_le_mul hsji hroot (Real.sqrt_nonneg _) (hs0 i)
+  intro k
+  by_cases hk : k < finrank ℂ Z
+  · have hkfin : ((⟨k, hk⟩ : Fin (finrank ℂ Z)) : ℕ) = k := rfl
+    have hrhs : Real.tan (Real.arcsin (approximationSingularValue k
+        (theorem63DirectedSineBlock Z V))) =
+        theorem63DirectedTangentDiagonal Z V ⟨k, hk⟩ := by
+      rw [show approximationSingularValue k (theorem63DirectedSineBlock Z V) =
+          finiteSourceSingularValue (theorem63DirectedSineBlock Z V) ⟨k, hk⟩
+        from hsB ⟨k, hk⟩, theorem63DirectedTangentDiagonal]
+    rw [hrhs]
+    calc
+      approximationSingularValue k (theorem63DirectedTangent Z V) =
+          approximationSingularValue k
+            (diagOp (finiteSourceRightSingularBasis
+              (theorem63DirectedSineBlock Z V))
+              (theorem63DirectedTangentDiagonal Z V)).toContinuousLinearMap :=
+        approximationSingularValue_subtypeL_comp Z _ k
+      _ = (diagOp (finiteSourceRightSingularBasis
+            (theorem63DirectedSineBlock Z V))
+            (theorem63DirectedTangentDiagonal Z V)).singularValues k :=
+        approximationSingularValue_eq_singularValues _ k
+      _ = theorem63DirectedTangentDiagonal Z V ⟨k, hk⟩ := by
+        simpa only [hkfin] using
+          singularValues_diagOp (𝕜 := ℂ) (E := Z) (n := finrank ℂ Z) rfl
+            (finiteSourceRightSingularBasis (theorem63DirectedSineBlock Z V))
+            htanti ht0 ⟨k, hk⟩
+  · have hkge : finrank ℂ Z ≤ k := Nat.le_of_not_lt hk
+    rw [approximationSingularValue_eq_zero_of_finrank_le Z
+      (theorem63DirectedTangent Z V) hkge,
+      approximationSingularValue_eq_zero_of_finrank_le Z
+        (theorem63DirectedSineBlock Z V) hkge]
+    simp
+
+/-- **Theorem 6.3, unconditionally.**
+
+The same Ky Fan inequality as `theorem6_3_all_kyFan_core`, with **no** hypothesis
+about a tangent representative and no hypothesis the printed theorem does not
+have: the representative this section constructs is used, and the `sᵢ < 1` it
+needs comes from the source gap through
+`theorem63_singularValues_sine_lt_one`.
+
+This is the form the Section 2 tangent theorem consumes. -/
+theorem theorem6_3_all_kyFan_core_directedTangent
+    (T : H →L[ℂ] H) (hT : T.IsSymmetric)
+    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hCompressionUpper : ∀ z : Z,
+      RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hUnwantedLower : ∀ y ∈ Vᗮ,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ) :
+    ∀ k, delta * kyFanApproximationGauge k (theorem63DirectedTangent Z V) ≤
+      kyFanApproximationGauge k (theorem63Residual T Z) :=
+  theorem6_3_all_kyFan_core T hT V Z hV hdelta hCompressionUpper hUnwantedLower
+    (theorem63DirectedTangent Z V)
+    (hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent
+      Z V fun i => theorem63_singularValues_sine_lt_one T hT V Z hV hdelta
+        hCompressionUpper hUnwantedLower i)
+
+/-- **Theorem 6.3 at ideal-gauge scope, unconditionally.**
+
+`theorem6_3_generalizedTanTheta_source_ideal` with the tangent representative
+supplied rather than assumed.  Every hypothesis here is one Davis and Kahan
+state. -/
+theorem theorem6_3_generalizedTanTheta_source_ideal_directedTangent
+    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (T : H →L[ℂ] H) (hT : T.IsSymmetric)
+    (hV : T.Reduces V)
+    (hStrictDimension : Module.rank ℂ Z < Module.rank ℂ V)
+    {beta alpha delta : ℝ} (hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
+    (hCompressionSpectrum :
+      spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
+    (hUnwantedSpectrum :
+      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
+        Set.Ici (alpha + delta))
+    (hResidual : N.Mem (theorem63Residual T Z)) :
+    N.Mem (theorem63DirectedTangent Z V) ∧
+      delta * N.gauge (theorem63DirectedTangent Z V) ≤
+        N.gauge (theorem63Residual T Z) := by
+  have hTsa : IsSelfAdjoint T :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
+  have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by
+    simpa [theorem63Compression, DavisKahanExt.compressOperator] using
+      DavisKahanExt.isSelfAdjoint_compressOperator hTsa Z
+  have hCompressionUpper : ∀ z : Z,
+      RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2 := by
+    intro z
+    refine SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic
+      (theorem63Compression T Z) hMsa ?_ z
+    intro r hr
+    exact (hCompressionSpectrum hr).2
+  have hUnwantedLower : ∀ y ∈ Vᗮ,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
+    SpectralOrder.Complex.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
+      hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
+  exact theorem6_3_generalizedTanTheta_source_ideal N T hT V Z hV
+    hStrictDimension hbetaalpha hdelta hCompressionSpectrum hUnwantedSpectrum
+    (theorem63DirectedTangent Z V)
+    (hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent
+      Z V fun i => theorem63_singularValues_sine_lt_one T hT V Z hV hdelta
+        hCompressionUpper hUnwantedLower i)
+    hResidual
+
+/-! ### Dropping the dimension comparison
+
+Davis and Kahan's `dim X(E₀) < dim X(F₀)` does exactly one job in the printed
+argument: under the paper's global separability convention it forces the trial
+coordinate space to be finite-dimensional, because every infinite-dimensional
+closed subspace of a separable space has the same Hilbert dimension.  Here
+finite-dimensionality of `Z` is an explicit instance, so the comparison carries
+no further content — and Lean has been saying so all along, since
+`theorem6_3_generalizedTanTheta_of_formBounds` binds it as `_hStrictDimension`
+and never uses it.
+
+Dropping it is exactly what **Section 2's** tangent theorem needs: that theorem
+is about a pair of subspaces of *equal* rank, which the strict inequality
+excludes, so it cannot be obtained by specialising a statement that assumes
+`rank Z < rank V`. -/
+
+/-- **Theorem 6.3 with no dimension comparison — the equal-rank form.**
+
+Every hypothesis is a form bound or a spectral separation; nothing compares the
+ranks of `Z` and `V`, so this applies to the equal-rank pairs of Section 2. -/
+theorem theorem6_3_generalizedTanTheta_of_formBounds_equalRank
+    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (T : H →L[ℂ] H) (hT : T.IsSymmetric)
+    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hCompressionUpper : ∀ z : Z,
+      RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hUnwantedLower : ∀ y ∈ Vᗮ,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
+    (hResidual : N.Mem (theorem63Residual T Z)) :
+    N.Mem (theorem63DirectedTangent Z V) ∧
+      delta * N.gauge (theorem63DirectedTangent Z V) ≤
+        N.gauge (theorem63Residual T Z) :=
+  ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hResidual
+    (theorem6_3_all_kyFan_core_directedTangent Z V T hT hV hdelta
+      hCompressionUpper hUnwantedLower)
+
+/-- **Theorem 6.3 at equal rank, in the source's spectral form.**
+
+The Ritz compression's spectrum lies in `[β, α]` and the unwanted restriction's
+in `[α + δ, ∞)`; the conclusion is the ideal-gauge tangent bound for the
+representative this file constructs.  No dimension comparison, no assumed
+tangent representative — this is the Section 2 tangent theorem's residual half
+at arbitrary unitarily invariant ideal-gauge scope. -/
+theorem theorem6_3_generalizedTanTheta_equalRank_spectral
+    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (T : H →L[ℂ] H) (hT : T.IsSymmetric) (hV : T.Reduces V)
+    {beta alpha delta : ℝ} (_hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
+    (hCompressionSpectrum :
+      spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
+    (hUnwantedSpectrum :
+      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
+        Set.Ici (alpha + delta))
+    (hResidual : N.Mem (theorem63Residual T Z)) :
+    N.Mem (theorem63DirectedTangent Z V) ∧
+      delta * N.gauge (theorem63DirectedTangent Z V) ≤
+        N.gauge (theorem63Residual T Z) := by
+  have hTsa : IsSelfAdjoint T :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
+  have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by
+    simpa [theorem63Compression, DavisKahanExt.compressOperator] using
+      DavisKahanExt.isSelfAdjoint_compressOperator hTsa Z
+  have hCompressionUpper : ∀ z : Z,
+      RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2 := by
+    intro z
+    refine SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic
+      (theorem63Compression T Z) hMsa ?_ z
+    intro r hr
+    exact (hCompressionSpectrum hr).2
+  have hUnwantedLower : ∀ y ∈ Vᗮ,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
+    SpectralOrder.Complex.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
+      hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
+  exact theorem6_3_generalizedTanTheta_of_formBounds_equalRank Z V N T hT hV
+    hdelta hCompressionUpper hUnwantedLower hResidual
+
+end DirectedTangentExistence
 
 end ExactTanTheta
 end Experimental

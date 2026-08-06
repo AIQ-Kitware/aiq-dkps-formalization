@@ -5,9 +5,12 @@ Authors: Jon Crall, Claude Fable 5
 -/
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 import Mathlib.Analysis.InnerProductSpace.Symmetric
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.Analysis.Normed.Operator.NNNorm
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
+import DavisKahan.BoundedOperator.Compat
 
 /-!
 # The Davis--Kahan `tan Θ` theorem on infinite-dimensional Hilbert spaces
@@ -42,36 +45,12 @@ namespace TauCeti
 open TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open scoped InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
   [InnerProductSpace 𝕜 E] [CompleteSpace E] {T : E →ₗ[𝕜] E}
-
-omit [CompleteSpace E] in
-/-- Pythagoras for the orthogonal projection:
-`‖P_K x‖² + ‖x − P_K x‖² = ‖x‖²`. -/
-private theorem norm_sq_starProjection_add_norm_sq_sub (K : Submodule 𝕜 E)
-    [K.HasOrthogonalProjection] (x : E) :
-    ‖K.starProjection x‖ ^ 2 + ‖x - K.starProjection x‖ ^ 2 = ‖x‖ ^ 2 := by
-  have horth : ⟪K.starProjection x, x - K.starProjection x⟫_𝕜 = 0 :=
-    Submodule.inner_right_of_mem_orthogonal (K.starProjection_apply_mem x)
-      (K.sub_starProjection_mem_orthogonal x)
-  have hx : K.starProjection x + (x - K.starProjection x) = x := by abel
-  calc ‖K.starProjection x‖ ^ 2 + ‖x - K.starProjection x‖ ^ 2
-      = ‖K.starProjection x + (x - K.starProjection x)‖ ^ 2 := by
-        rw [norm_add_sq (𝕜 := 𝕜), horth, map_zero]; ring
-    _ = ‖x‖ ^ 2 := by rw [hx]
-
-omit [CompleteSpace E] in
-/-- The orthogonal complement of an invariant subspace of a symmetric
-operator is invariant. -/
-private theorem map_mem_orthogonal_of_forall_map_mem' (hT : T.IsSymmetric)
-    {U : Submodule 𝕜 E} (hU : ∀ u ∈ U, T u ∈ U) {w : E} (hw : w ∈ Uᗮ) :
-    T w ∈ Uᗮ := by
-  rw [Submodule.mem_orthogonal]
-  intro u hu
-  rw [← hT u w]
-  exact Submodule.inner_right_of_mem_orthogonal (hU u hu) hw
 
 /-- **The strip bound on an invariant subspace.**  If the quadratic form of
 the symmetric operator `T` lies in `[α, β]` on a `T`-invariant subspace
@@ -287,7 +266,7 @@ theorem tan_theta_le' (hT : T.IsSymmetric)
   have he0 : (0 : ℝ) ≤ (β - α) / 2 := by linarith
   -- `Vᗮ` is `T`-invariant, and `T − c` contracts it to the strip half-width.
   have hVperp : ∀ u ∈ Vᗮ, T u ∈ Vᗮ := fun u hu =>
-    map_mem_orthogonal_of_forall_map_mem' hT hVinv hu
+    map_mem_orthogonal_of_forall_map_mem hT hVinv hu
   have hstrip : ∀ u ∈ Vᗮ,
       ‖T u - (((α + β) / 2 : ℝ) : 𝕜) • u‖ ≤ (β - α) / 2 * ‖u‖ :=
     fun u hu => norm_map_sub_midpoint_smul_le' hT hVperp hαβ hVa hVb hu

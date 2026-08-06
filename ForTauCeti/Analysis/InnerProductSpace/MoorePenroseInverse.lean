@@ -3,8 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.Singular.System
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
 
 
 /-!
@@ -36,8 +37,8 @@ Identity (3) needs no orthogonality at all — `A A⁺` is visibly a
 real-coefficient combination of rank-one projections onto the images of those
 directions.
 
-`eq_moorePenroseInverse_of_penrose` completes the characterization: any map
-satisfying all four identities equals `A⁺`.  So the name is earned — this is
+`eq_moorePenroseInverse_of_isMoorePenroseInverse` completes the characterization:
+anything satisfying `IsMoorePenroseInverse A` equals `A⁺`.  So the name is earned — this is
 *the* Moore--Penrose inverse, not merely a generalized inverse that happens to
 be constructed from the singular system.
 
@@ -55,6 +56,8 @@ be constructed from the singular system.
   `ForTauCeti` staging modules.
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -65,6 +68,22 @@ variable {𝕜 E F : Type*} [RCLike 𝕜]
   [FiniteDimensional 𝕜 E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
+
+/-- **Penrose's four conditions**, as a `Prop`-valued structure with named accessors rather
+than four anonymous hypotheses.
+
+The four conditions *are* Penrose's definition of a pseudoinverse, so packaging them is what
+lets the uniqueness theorem below read as *the Moore--Penrose inverse is unique*, and gives
+the relation somewhere to carry its own theory. -/
+structure IsMoorePenroseInverse (A : E →ₗ[𝕜] F) (B : F →ₗ[𝕜] E) : Prop where
+  /-- `B` is a generalized inverse of `A`. -/
+  comp_comp_self : A ∘ₗ B ∘ₗ A = A
+  /-- `A` is a generalized inverse of `B`. -/
+  comp_comp_self' : B ∘ₗ A ∘ₗ B = B
+  /-- The idempotent `A B` onto the range of `A` is self-adjoint. -/
+  isSymmetric_comp : (A ∘ₗ B).IsSymmetric
+  /-- The idempotent `B A` onto the range of `B` is self-adjoint. -/
+  isSymmetric_comp' : (B ∘ₗ A).IsSymmetric
 
 /-- The finite-dimensional Moore--Penrose inverse, reconstructed from the
 right singular basis and the Gram eigenvalues. -/
@@ -250,10 +269,9 @@ inverse, not merely some generalized inverse.
 The proof is the classical one.  Both `B` and `A⁺` are shown equal to the same
 composite `B ∘ₗ A ∘ₗ A⁺`, each by pushing an adjoint through the factorization
 of `A` supplied by the *other* map's first identity. -/
-theorem eq_moorePenroseInverse_of_penrose (A : E →ₗ[𝕜] F) (B : F →ₗ[𝕜] E)
-    (h1 : A ∘ₗ B ∘ₗ A = A) (h2 : B ∘ₗ A ∘ₗ B = B)
-    (h3 : (A ∘ₗ B).IsSymmetric) (h4 : (B ∘ₗ A).IsSymmetric) :
-    B = moorePenroseInverse A := by
+theorem eq_moorePenroseInverse_of_isMoorePenroseInverse {A : E →ₗ[𝕜] F} {B : F →ₗ[𝕜] E}
+    (h : IsMoorePenroseInverse A B) : B = moorePenroseInverse A := by
+  obtain ⟨h1, h2, h3, h4⟩ := h
   set G := moorePenroseInverse A with hGdef
   have hG1 : A ∘ₗ G ∘ₗ A = A := comp_moorePenroseInverse_comp A
   have hG2 : G ∘ₗ A ∘ₗ G = G := moorePenroseInverse_comp_comp A
@@ -294,6 +312,39 @@ theorem eq_moorePenroseInverse_of_penrose (A : E →ₗ[𝕜] F) (B : F →ₗ[�
       _ = (B ∘ₗ A) ∘ₗ ((G ∘ₗ A) ∘ₗ G) := by rw [hG4.adjoint_eq]
       _ = B ∘ₗ A ∘ₗ G := by simp only [LinearMap.comp_assoc, hG2]
   rw [hB, ← hG]
+
+/-- The construction satisfies the four conditions, so a Moore--Penrose inverse exists. -/
+theorem isMoorePenroseInverse_moorePenroseInverse (A : E →ₗ[𝕜] F) :
+    IsMoorePenroseInverse A (moorePenroseInverse A) where
+  comp_comp_self := comp_moorePenroseInverse_comp A
+  comp_comp_self' := moorePenroseInverse_comp_comp A
+  isSymmetric_comp := isSymmetric_comp_moorePenroseInverse A
+  isSymmetric_comp' := isSymmetric_moorePenroseInverse_comp A
+
+private theorem isMoorePenroseInverse_adjoint_of {A : E →ₗ[𝕜] F} {B : F →ₗ[𝕜] E}
+    (h : IsMoorePenroseInverse A B) :
+    IsMoorePenroseInverse (LinearMap.adjoint A) (LinearMap.adjoint B) where
+  comp_comp_self := by
+    have := congrArg LinearMap.adjoint h.comp_comp_self
+    simpa [LinearMap.adjoint_comp, LinearMap.comp_assoc] using this
+  comp_comp_self' := by
+    have := congrArg LinearMap.adjoint h.comp_comp_self'
+    simpa [LinearMap.adjoint_comp, LinearMap.comp_assoc] using this
+  isSymmetric_comp := by
+    have : LinearMap.adjoint A ∘ₗ LinearMap.adjoint B = B ∘ₗ A := by
+      rw [← LinearMap.adjoint_comp, h.isSymmetric_comp'.adjoint_eq]
+    rw [this]; exact h.isSymmetric_comp'
+  isSymmetric_comp' := by
+    have : LinearMap.adjoint B ∘ₗ LinearMap.adjoint A = A ∘ₗ B := by
+      rw [← LinearMap.adjoint_comp, h.isSymmetric_comp.adjoint_eq]
+    rw [this]; exact h.isSymmetric_comp
+
+/-- The relation is compatible with adjoints. -/
+theorem isMoorePenroseInverse_adjoint {A : E →ₗ[𝕜] F} {B : F →ₗ[𝕜] E} :
+    IsMoorePenroseInverse A B ↔
+      IsMoorePenroseInverse (LinearMap.adjoint A) (LinearMap.adjoint B) := by
+  refine ⟨isMoorePenroseInverse_adjoint_of, fun h => ?_⟩
+  simpa [LinearMap.adjoint_adjoint] using isMoorePenroseInverse_adjoint_of h
 
 /-- If `A` is injective, the pseudoinverse is a left inverse. -/
 theorem moorePenroseInverse_comp_eq_id_of_injective

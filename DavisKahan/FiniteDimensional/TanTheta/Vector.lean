@@ -48,6 +48,7 @@ import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 
 /-! # The Davis–Kahan tan Θ theorem (gated statement)
 
@@ -127,21 +128,6 @@ open Module (finrank)
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E] [CompleteSpace E] {T : E →ₗ[𝕜] E}
-
-omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
-/-- Pythagoras for the orthogonal projection: `‖P_K x‖² + ‖x − P_K x‖² = ‖x‖²`.
-Auxiliary. -/
-private theorem norm_sq_starProjection_add_norm_sq_sub (K : Submodule 𝕜 E)
-    [K.HasOrthogonalProjection] (x : E) :
-    ‖K.starProjection x‖ ^ 2 + ‖x - K.starProjection x‖ ^ 2 = ‖x‖ ^ 2 := by
-  have horth : ⟪K.starProjection x, x - K.starProjection x⟫_𝕜 = 0 :=
-    Submodule.inner_right_of_mem_orthogonal (K.starProjection_apply_mem x)
-      (K.sub_starProjection_mem_orthogonal x)
-  have hx : K.starProjection x + (x - K.starProjection x) = x := by abel
-  calc ‖K.starProjection x‖ ^ 2 + ‖x - K.starProjection x‖ ^ 2
-      = ‖K.starProjection x + (x - K.starProjection x)‖ ^ 2 := by
-        rw [norm_add_sq (𝕜 := 𝕜), horth, map_zero]; ring
-    _ = ‖x‖ ^ 2 := by rw [hx]
 
 omit [CompleteSpace E] in
 /-- **The strip bound on an invariant subspace.**  If the quadratic form of the

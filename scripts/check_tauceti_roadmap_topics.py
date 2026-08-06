@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """Validate the candidate Tau Ceti roadmap topic design against the import graph.
 
-`ForTauCetiRoadmap/CANDIDATE-TOPIC-DESIGN.md` partitions every `ForTauCeti`
-module into fine-grained topics (`T01`..`T22`, with the `T15a/b/c` split),
-ordered so that each is reviewable on its own against a base Tau Ceti has
-already accepted. Since 2026-07-30 the topics group into a handful of
+The `TOPICS` table below partitions the maintained `ForTauCeti` modules into
+fine-grained topics, ordered so that each is reviewable on its own against a
+base Tau Ceti has already accepted. The topics group into a handful of
 **holistic roadmap directories** (one directory covers several topics as its
-Parts); the grouping is declared by the internal roadmap-to-topic map and validated
-here, including acyclicity of the roadmap-level DAG.
+Parts); that grouping is declared by `dev/tauceti/roadmap-topic-map.md` and
+validated here, including acyclicity of the roadmap-level DAG.
 
 This tool is what makes that proposal checkable rather than plausible. It
 enforces three properties, each of which the first hand-drawn draft violated:
@@ -46,24 +45,27 @@ IMPORT_RE = re.compile(r"^\s*(?:public\s+)?import\s+(\S+)\s*$", re.M)
 # makes --check fail, which is the point: the design must stay total.
 TOPICS: list[tuple[str, str, list[str]]] = [
 ("T01","Positive square root, operator modulus, functional calculus",
- ["Analysis.SpecialFunctions.Sqrt","Analysis.Normed.Operator.LinearIsometry",A+"Basic",A+"BasisSpan",A+"CourantFischer",
+ ["Analysis.SpecialFunctions.Sqrt",A+"BasisSpan",A+"CourantFischer",
   A+"PositiveSqrt",A+"SelfAdjointFunctionalCalculus",A+"OperatorModulus",A+"Spectrum"]),
 ("T02","Polar decomposition and partial isometries",
  [A+"PartialIsometry",A+"RectangularPartialIsometry",A+"Polar.Decomposition",A+"Polar.Isometry",
   A+"Polar.PartialIsometry",A+"NearIsometry",A+"IntertwiningUnitary"]),
 ("T03","Singular values and the singular system",
  [A+"Singular.Values",A+"RectangularSingularValues",A+"Singular.System",A+"MoorePenroseInverse"]),
-("T04","Gram matrices, orthogonal projections, and spectral subspaces",
- [A+x for x in ["Gram.Matrix","Projection.Geometry","Projection.Blocks","Projection.Gap",
-   "ReducingSubspace","Spectral.Subspace","Spectral.Gap","OrthogonalSeries"]]),
+("T26","Inner-product identities, linear isometries, Gram rigidity, orthogonal series, "
+       "projection geometry, and reducing subspaces",
+ ["Analysis.Normed.Operator.LinearIsometry",A+"Basic"]
+ +[A+x for x in ["Gram.Matrix","OrthogonalSeries","Projection.Geometry","ReducingSubspace"]]),
+("T04","Projection blocks, the projection gap, and spectral subspaces",
+ [A+x for x in ["Projection.Blocks","Projection.Gap","Spectral.Gap","Spectral.Subspace"]]),
 ("T05","Majorization, Schur-Horn, and unitarily invariant norms",
  ["Analysis.Convex.Majorization",A+"SchurHorn",A+"Singular.Subspace",A+"KyFan",
-  A+"UnitarilyInvariantNorm"]),
+  A+"UnitarilyInvariantSeminorm"]),
 ("T06","Principal angles, aligned bases, and finite frames",
  [A+x for x in ["PrincipalAngles","AlignedBasis","FiniteFrame"]]),
 ("T07","Rectangular unitarily invariant norms",
- [A+"RectangularUnitarilyInvariantNorm",A+"TwoDimensionalSingularValues"]
- +[A+"RectangularUnitarilyInvariantNorm."+x for x in ["Basic","BlockSum","Instances","Majorization"]]),
+ [A+"RectangularUnitarilyInvariantSeminorm",A+"TwoDimensionalSingularValues"]
+ +[A+"RectangularUnitarilyInvariantSeminorm."+x for x in ["Basic","BlockSum","Instances","Majorization"]]),
 ("T08","Angle geometry and eigenvalue perturbation",
  [A+x for x in ["Gram.Operator","AngleGeometry","FrameFactorization","HoffmanWielandt","EigenvalueChange"]]),
 ("T09","Approximation numbers",
@@ -71,11 +73,12 @@ TOPICS: list[tuple[str, str, list[str]]] = [
   "Analysis.Normed.Operator.FiniteRankCompact",
   A+"Spectral.Cutoff"]+["Analysis.OperatorIdeal.ApproximationNumber."+x for x in
   ["Basic","Adjoint","Compact","CompactHilbert","Core","DiagonalExample","DiagonalSequence","Examples",
+   "PrescribedSequence","GramSquare","Pinching",
    "FiniteDimensional","FiniteRestriction","FiniteValueFibers","FiniteValueSeparation",
    "KyFan",
    "LeadingCutoff","MinMax","MinMaxUpper","SameSequence"]]),
 ("T10","Symmetric operator ideals and Schatten norms",
- ["Analysis.OperatorIdeal.Family."+x for x in ["Basic","HilbertSchmidt","KyFan","KyFanDominance","OperatorNorm","Schatten","TraceClass"]]
+ ["Analysis.OperatorIdeal.Family."+x for x in ["Basic","CompactOperator","HilbertSchmidt","KyFan","KyFanDominance","OperatorNorm","Schatten","TraceClass"]]
  # `ApproximationNumber.EnergyComparison` is approximation-number material by subject and
  # would sit in T09, but it imports `Family.HilbertSchmidt` (here), so filing it there makes
  # T09 unsubmittable.  Fourth module to hit this; file by dependency and let `--check` say so.
@@ -90,7 +93,6 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # `--check` gates went red.  All three are the same subject as the line above:
  # `Normed.SymmetricGauge` is the sequence-space gauge, `Normed.SchattenGauge` the `ℓᵖ`
  # instance of it, and `Family.SymmetricGauge` the ideal family it induces.
- # **`CANDIDATE-TOPIC-DESIGN.md` still does not list them, and that file is `jon`'s.**
  +["Analysis.Normed.SymmetricGauge","Analysis.Normed.SchattenGauge",
    "Analysis.OperatorIdeal.Family.SymmetricGauge"]),
 ("T11","Hilbert-Schmidt operators",
@@ -111,8 +113,8 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 # nearly three times the median.  Lane T15-SPLIT cut it into the three chains the
 # T04-T20 audit found, which barely touch: closedness/graphs, resolvents, and the
 # spectral measure.  Keys are suffixed rather than renumbered on purpose: pushing
-# T16-T22 up would invalidate every `Txx` reference in the audit files, in
-# CANDIDATE-TOPIC-DESIGN.md and in the written roadmaps, for no gain.
+# T16-T22 up would invalidate every `Txx` reference in the audit files and in
+# the written roadmaps, for no gain.
 # The audit proposed the cut; the import graph moved three modules across it.
 # `RealLowerBound` imports `SelfAdjointResolvent`, `SelfAdjointMaximal` imports
 # `SpectralMeasure`, and `SpectralGapInverse` imports `SpectralSupport`, so each
@@ -136,14 +138,16 @@ TOPICS: list[tuple[str, str, list[str]]] = [
   "Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection",
   "Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar"]),
 ("T16","Sylvester equations and the Rosenblum theorem",
- [A+x for x in ["Rosenblum","HilbertSchmidt.Block","CoerciveUnit"]]
- +[A+"Sylvester."+x for x in ["Basic","Interval","SpectralDistance",
-   "Bound","Operator","BlockIdentity","BlockEstimate","SpectralGap","Generator","Group"]]
+ [A+x for x in ["Rosenblum","CoerciveUnit"]]
+ +[A+"Sylvester."+x for x in ["Basic","Interval","SpectralDistance","Bound","Operator"]]
  +[A+"Sylvester.Internal.ReciprocalMultiplier"+x for x in
      ["",".OrbitAction",".Fourier",".DoubledPhase"]]
  +[A+"Sylvester.Internal.SpectralBounds"]),
 ("T17","Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems",
- [A+"SinTheta."+x for x in ["OperatorNorm","Perturbation","DirectedBounds","UnitarilyInvariant"]]
+ # `SpecialFunctions.TanArcsin` imports nothing from ForTauCeti; it is filed here because it was
+ # written for the tangent-theta bounds and is used nowhere else.
+ ["Analysis.SpecialFunctions.TanArcsin"]
+ +[A+"SinTheta."+x for x in ["OperatorNorm","Perturbation","DirectedBounds","UnitarilyInvariant"]]
  +[A+"Residual."+x for x in ["AngleEmbedding","Ritz","TrialMap"]]
  +[A+"DoubleAngle.Vector"]+[A+"BoundedOperator."+x for x in ["Projector","SinTheta"]]
  # `SpectralOrder.Real` is form-bound material by subject and would sit with
@@ -156,7 +160,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # belongs with T09 by subject, but it is proved *by complexification* and so imports both of
  # them; filing it under T09 would make T09 unsubmittable.  Third time, same rule.
  +[A+"SpectralOrder.Real",A+"Complexification.Basic",A+"Complexification.FunctionalCalculus",
-   "Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal"]
+   ]
  +[A+"ReducedExtension"]),
 ("T18","The Yu-Wang-Samworth statistical variant",
  [A+"YuWangSamworth."+x for x in ["Residual","SingularSubspace","Statistics"]]),
@@ -164,12 +168,36 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  ["Analysis.Matrix."+x for x in ["EntrywiseEigenvalue","EntrywiseOpNorm","SpectralFunctionMeasurable","Spectrum"]]
  +["MeasureTheory.Function.ConvergenceInMeasure","MeasureTheory.Measure.Typeclasses.Probability"]),
 ("T20","Sample moments and matrix concentration",
- ["Probability.Moments."+x for x in ["MatrixConcentration","SampleCovariance","SampleMean","Variance"]]
+ ["Probability.Moments."+x for x in ["MatrixConcentration","SampleSecondMoment","SampleMean","Variance"]]
  +["Probability.Moments.CenteredScatter"]),
 ("T21","Matrix rank factorization and positive semidefiniteness",
  ["LinearAlgebra.Matrix.RankFactorization","LinearAlgebra.Matrix.PosDef"]),
 ("T22","Berge's maximum theorem and approximate minimizers",
  ["Topology.ApproxMinimizer","Topology.Berge"]),
+("T24","Real approximation numbers by complexification",
+ ["Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal"]),
+("T26a","Compact self-adjoint operators classified by eigenspace dimensions",
+ # `CompactSelfAdjointClassification` imports only Mathlib; `CompactApproximationEigenvalues`
+ # imports the approximation-number layer of T09, so this topic sits after it.  Together they
+ # are the Corollary 3.1 bridge: equal approximation-number sequences and equal eigenspace
+ # dimensions say the same thing for a compact positive operator with trivial kernel.
+ [A+"CompactSelfAdjointClassification",A+"CompactApproximationEigenvalues"]),
+("T27","Measure classes, L-two transport, and the multiplicity normal form",
+ ["MeasureTheory."+x for x in ["MeasureClass","RadonNikodymL2","LpComp","LpRestrict",
+                               "LpSliceSum","MultiplicityLevels"]]
+ # `OperatorUnitaryEquiv` is Hilbert-space material by subject and would sit in T28 -- but
+ # `MultiplicityLevels` states its conclusion as a unitary equivalence of multiplication
+ # operators and so imports it, and filing it downstream would make this topic unsubmittable.
+ # Same rule as `SpectralOrder.Real` in T17: file by dependency, and `--check` is what says so.
+ +[A+"OperatorUnitaryEquiv"]),
+("T28","Cyclic subspaces, the multiplication model, and Hahn-Hellinger existence",
+ [A+"BorelCalculus."+x for x in ["AlmostInvariant","CyclicIsometry","CyclicModel",
+                                 "CyclicDecomposition","Restriction","SeparableCyclic",
+                                 "MultiplicityModel"]]
+ +[A+"HilbertSumIntertwine"]),
+("T25","The Hilbert-Schmidt Sylvester flow",
+ [A+x for x in ["HilbertSchmidt.Block","Sylvester.BlockEstimate","Sylvester.BlockIdentity",
+                "Sylvester.Generator","Sylvester.Group","Sylvester.SpectralGap"]]),
 ]
 
 
@@ -181,20 +209,31 @@ TOPICS: list[tuple[str, str, list[str]]] = [
 INTENTIONAL_ORPHANS: dict[str, str] = {}
 
 
+#: Reserved row of the topic map: topics delivered in `ForTauCeti` that no roadmap
+#: proposes.  They stay out of the roadmap graph rather than being force-fitted into a
+#: roadmap whose mathematics does not cover them.
+UNROADMAPPED = "(delivered, not roadmapped)"
+
+
 def roadmap_coverage() -> tuple[list, list, list, list, dict]:
     """(covered, missing, unexpected orphans, intentional orphans, dir->topics).
 
     Public roadmap prose deliberately contains no internal topic keys.  The mapping
-    therefore lives in `ForTauCetiRoadmap/internal/topic-map.md`, whose table assigns
+    therefore lives in `dev/tauceti/roadmap-topic-map.md`, whose table assigns
     each leaf roadmap directory the fine-grained topics it owns.  A leaf roadmap is a
     directory containing `Suggested.lean`; family indexes and `internal/` are not
     roadmaps and are ignored by construction.
     """
-    root = ROOT / "ForTauCetiRoadmap"
-    topic_map = root / "internal" / "topic-map.md"
+    root = ROOT / "submodules/TauCetiRoadmap/TauCetiRoadmap"
+    topic_map = ROOT / "dev" / "tauceti" / "roadmap-topic-map.md"
 
-    leaf_dirs = {p.parent.relative_to(root).as_posix()
-                 for p in root.rglob("Suggested.lean")} if root.exists() else set()
+    # The topic map covers this repository's family only; the submodule carries 24 other
+    # families whose Suggested.lean files are not ours to deliver.
+    family = "OperatorTheory"
+    all_leaves = ({p.parent.relative_to(root).as_posix()
+                   for p in root.rglob("Suggested.lean")} if root.exists() else set())
+    leaf_dirs = {d for d in all_leaves
+                 if d.startswith(family + "/") or d == "BergeMaximumTheorem"}
 
     rows: dict[str, list[str]] = {}
     if topic_map.exists():
@@ -204,17 +243,25 @@ def roadmap_coverage() -> tuple[list, list, list, list, dict]:
         for directory, raw_keys in row_re.findall(text):
             rows[directory] = re.findall(r"T\d+[a-c]?", raw_keys)
 
+    # A topic may be delivered in `ForTauCeti` and deliberately not proposed in any
+    # roadmap.  The map records those against this reserved row; they are neither
+    # unowned nor part of the roadmap dependency graph.
+    unroadmapped = set(rows.pop(UNROADMAPPED, []))
+
     declared: dict[str, list[str]] = defaultdict(list)   # topic key -> directories
     for directory, keys in rows.items():
         for key in dict.fromkeys(keys):
             declared[key].append(directory)
 
     known = {k for k, _, _ in TOPICS}
-    covered, missing, doubled = [], [], []
+    covered, missing, doubled, deliberate = [], [], [], []
     for key, title, _ in TOPICS:
         owners = declared.get(key, [])
         if len(owners) > 1:
             doubled.append(f"topic {key} declared by {', '.join(owners)}")
+        if key in unroadmapped:
+            deliberate.append(f"{key}  {title}")
+            continue
         (covered if owners else missing).append((key, title, owners[0] if owners else None))
 
     bogus_topics = sorted(
@@ -225,14 +272,16 @@ def roadmap_coverage() -> tuple[list, list, list, list, dict]:
     missing_leaves = sorted(
         f"{directory} (mapped directory has no Suggested.lean)"
         for directory in set(rows) - leaf_dirs)
-    orphans = unmapped_leaves + missing_leaves + bogus_topics + doubled
+    bogus_unroadmapped = sorted(f"{UNROADMAPPED} declares unknown topic {k}"
+                                for k in unroadmapped if k not in known)
+    orphans = unmapped_leaves + missing_leaves + bogus_topics + doubled + bogus_unroadmapped
 
     groups: dict[str, list[str]] = defaultdict(list)     # directory -> topics, design order
     for key, _, _ in TOPICS:
         owners = declared.get(key, [])
         if owners:
             groups[owners[0]].append(key)
-    return covered, missing, orphans, [], dict(groups)
+    return covered, missing, orphans, deliberate, dict(groups)
 
 
 def roadmap_dag(groups: dict[str, list[str]], topic_needs: dict[str, set[str]]
@@ -335,18 +384,17 @@ def main(argv: list[str] | None = None) -> int:
         for key, title, dd in missing:
             print(f"  MISSING  {key:<5} {title}")
         for dd in orphans:
-            print(f"  ORPHAN   ForTauCetiRoadmap/{dd} covers no topic in the design")
-        for dd in intentional:
-            print(f"  note: ForTauCetiRoadmap/{dd} covers no topic, intentionally "
-                  f"({INTENTIONAL_ORPHANS[dd]})")
+            print(f"  ORPHAN   {dd} covers no topic in the design")
+        for row in intentional:
+            print(f"  note: {row} — delivered, not proposed by any roadmap")
         for c in cycles:
             print(f"  CYCLE    {c}")
         bad = len(missing) + len(orphans) + len(cycles)
         if bad:
             print(f"\nroadmap coverage: {bad} violation(s)")
             return 1
-        print("\nroadmap coverage: OK — every topic covered by exactly one roadmap, "
-              "and the roadmap DAG is acyclic")
+        print("\nroadmap coverage: OK — every roadmapped topic covered by exactly one "
+              "roadmap, and the roadmap DAG is acyclic")
         return 0
 
     d = analyse()
@@ -389,7 +437,7 @@ def main(argv: list[str] | None = None) -> int:
     for key, title, _dd in missing:
         print(f"  NO ROADMAP  {key}  {title}")
     for dd in orphans:
-        print(f"  ORPHAN  ForTauCetiRoadmap/{dd} covers no topic in the design")
+        print(f"  ORPHAN  {dd} covers no topic in the design")
     for c in cycles:
         print(f"  CYCLE  {c}")
     bad += len(missing) + len(orphans) + len(cycles)

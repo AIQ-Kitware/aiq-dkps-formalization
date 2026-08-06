@@ -9,7 +9,7 @@ import ForTauCeti.Analysis.InnerProductSpace.Singular.Values
 /-!
 # Roadmap bridge: `MatrixSpectralStatistics`
 
-**What this file is for.** `ForTauCetiRoadmap/**/Suggested.lean` states the signatures the
+**What this file is for.** `submodules/TauCetiRoadmap/**/Suggested.lean` states the signatures the
 roadmap proposes, against `Mathlib` alone, with `sorry` bodies.  `ForTauCeti` proves the
 mathematics.  Nothing connected the two: `scripts/check_roadmap_delivered.py` compares
 *declaration names* between the two trees, and its own output says so --
@@ -28,13 +28,15 @@ instance of each is recorded below:
 * **It under-counts.** `singularValues_toLinearMap` is reported outstanding; the identical
   statement is delivered as `ContinuousLinearMap.toLinearMap_singularValues`, `rfl` on both
   sides, differing only in the order of the two words in the name.
-* **It over-counts, which is the dangerous direction.** `upperHemicontinuousAt_isMinOn` is
-  reported *delivered* because a declaration of that name exists -- but the delivered one
-  assumes `[FirstCountableTopology X]` and the roadmap's does not.  The roadmap is explicit
-  that this is unacceptable rather than incidental: the extra hypothesis is "a proof
-  artifact -- it goes through the sequential characterization -- so if both versions coexist
-  it is the *restricted* one that should be qualified (`..._of_firstCountable`) or kept
-  private, not this one."  A name-equality check cannot see that, and scores it as done.
+* **It over-counts, which is the dangerous direction.** `upperHemicontinuousAt_isMinOn` was
+  reported *delivered* while the delivered one assumed `[FirstCountableTopology X]` and the
+  roadmap's did not -- a gap a name-equality check cannot see, and scores as done.  The
+  roadmap was right that the hypothesis was a proof artifact of the sequential route:
+  `ForTauCeti.Topology.Berge` now proves it from the tube lemma
+  `IsCompact.eventually_forall_of_forall_eventually` instead, and the delivered signature
+  carries neither `[FirstCountableTopology X]`, `[T2Space X]`, nor
+  `[(𝓝 p₀).IsCountablyGenerated]`.  The example is kept because the *failure mode* is the
+  point, not this instance of it.
 
 So the bridge entries below are stated so that **failure to elaborate is the finding**.
 Where the roadmap's statement is genuinely stronger than what is proved, there is no entry
@@ -42,7 +44,7 @@ and the reason is recorded in `Gaps` at the bottom, not silently omitted.
 
 ## The part that makes name matching unfixable, rather than merely inaccurate
 
-`ForTauCetiRoadmap` introduces **81 definitions and structures of its own** across the six
+The submitted roadmap introduces **81 definitions and structures of its own** across the six
 topics, and states its theorems about those.  A theorem name shared between the two trees
 therefore certifies nothing until the *definitions underneath it* are known to agree, and
 they agree for two quite different reasons that look identical from outside:
@@ -80,7 +82,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
   {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
 
-/-- Roadmap `HilbertSpaceOperatorFoundations.singularValues_toLinearMap`, discharged by the
+/-- Roadmap `PolarDecomposition.singularValues_toLinearMap`, discharged by the
 delivered `ContinuousLinearMap.toLinearMap_singularValues`.
 
 The two statements are literally the same equation; the delivered name orders the words the
@@ -106,7 +108,7 @@ variable {P X : Type*} [TopologicalSpace P] [TopologicalSpace X]
 variable {K : Set X} {g : P → X → ℝ}
 
 /-
-**`upperHemicontinuousAt_isMinOn` -- reported delivered, and it is not.**
+**`upperHemicontinuousAt_isMinOn` -- the gap recorded here has since been closed.**
 
 The roadmap asks for, with only `[TopologicalSpace P] [TopologicalSpace X]` in scope:
 
@@ -115,11 +117,28 @@ The roadmap asks for, with only `[TopologicalSpace P] [TopologicalSpace X]` in s
         (p₀ : P) [(𝓝 p₀).IsCountablyGenerated] :
         UpperHemicontinuousAt (fun p => {x ∈ K | IsMinOn (g p) K x}) p₀
 
-`ForTauCeti.Topology.Berge` proves a theorem of exactly this name that additionally assumes
-`[FirstCountableTopology X]`.  So `check_roadmap_delivered` counts it, and the count is
-wrong: the delivered theorem does not imply the proposed one.  Discharging this needs the
-first-countability removed from the proof -- Mathlib's `UpperHemicontinuousAt.of_sequences`
-is the sequential route that forces it, so the general proof cannot go through that lemma.
+This paragraph used to say that `ForTauCeti.Topology.Berge` proved a theorem of that name
+which *additionally* assumed `[FirstCountableTopology X]`, so the delivered statement did
+not imply the proposed one and the delivered count was wrong.  **That is no longer true**,
+and the fix went the direction the paragraph predicted it would have to: the sequential
+route through `UpperHemicontinuousAt.of_sequences` was abandoned for the classical
+open-cover argument, in `upperHemicontinuousAt_isMinOn_of_isCompact`.
+
+Measured 2026-08-05 by elaborating `#check @TauCeti.upperHemicontinuousAt_isMinOn`, the
+delivered binders are exactly
+
+    {P} [TopologicalSpace P] {X} [TopologicalSpace X] {K : Set X} (hK : IsCompact K)
+    {g : P → X → ℝ} (hg : Continuous (Function.uncurry g)) (p₀ : P)
+
+-- no `[T2Space X]`, no `[FirstCountableTopology X]`, no `[(𝓝 p₀).IsCountablyGenerated]`.
+So the delivered theorem is **strictly more general** than the proposed one, which it
+implies by discarding the two instances the roadmap offers it.  The countability-free
+statement is the one to advertise.
+
+The *value-function* half is a different matter and is still genuinely restricted:
+`continuous_iInf_of_isCompact` carries `[FirstCountableTopology X] [FirstCountableTopology P]`
+together with `K.Nonempty`.  Berge's theorem should therefore not be advertised as
+hypothesis-free across the board -- only its upper-hemicontinuity half is.
 
 **`continuous_iInf_of_hemicontinuous` and `upperHemicontinuousAt_isMinOn_of_hemicontinuous`
 -- reported outstanding, and genuinely so, but not for the reason the name suggests.**

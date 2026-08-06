@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
-import ForTauCeti.Topology.ENNRealLiminf
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
+public import ForTauCeti.Topology.ENNRealLiminf
 
 /-!
 # The trace-class ideal
@@ -75,6 +77,7 @@ variable {E F : Type v}
 
 /-- The **nuclear norm**: the sum of all approximation numbers, valued in `ℝ≥0∞` and so
 defined for every bounded operator. -/
+@[expose]
 noncomputable def nuclearENorm (T : E →L[𝕜] F) : ℝ≥0∞ :=
   ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n)
 
@@ -224,6 +227,7 @@ open ContinuousLinearMap
 
 Its carrier is `ContinuousLinearMap.IsTraceClass` definitionally, which unlike the Ky Fan
 carriers is not provably `⊤`. -/
+@[expose]
 noncomputable def traceClassIdealFamily (𝕜 : Type u) [RCLike 𝕜]
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] :
     SymmetricOperatorIdealFamily.{u, v} 𝕜 where

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.SelfAdjointBorelCalculus
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Finite spectral-step calculus
@@ -31,6 +32,10 @@ they are until those clear.
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan.Experimental.Foundation
+
+open DavisKahan
 
 open MeasureTheory Set Filter
 open scoped InnerProductSpace BigOperators

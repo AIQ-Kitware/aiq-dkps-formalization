@@ -13,10 +13,11 @@ Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).  This file will build up to
 Hoffman–Wielandt eigenvalue-perturbation inequality; it currently supplies the
 sorted-rearrangement ingredient (W2.1).
 -/
+module
 
-import Mathlib.Algebra.Order.Rearrangement
-import Mathlib.Analysis.Convex.Birkhoff
-import ForTauCeti.Analysis.InnerProductSpace.SchurHorn
+public import Mathlib.Algebra.Order.Rearrangement
+public import Mathlib.Analysis.Convex.Birkhoff
+public import ForTauCeti.Analysis.InnerProductSpace.SchurHorn
 
 
 /-! # Hoffman–Wielandt building blocks
@@ -56,6 +57,8 @@ the rearrangement inequality recorded here.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 

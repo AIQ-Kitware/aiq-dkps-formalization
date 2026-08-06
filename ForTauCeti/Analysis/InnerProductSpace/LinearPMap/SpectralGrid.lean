@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
-import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
+public import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity
 
 /-!
 # The `ε`-grid on the line, and which of its cells carry spectrum
@@ -39,6 +41,8 @@ exactly the three facts (measurable, disjoint, covering) the decomposition uses.
 `pairwise_disjoint_Ico_intCast`); these are the `ε`-scaled versions, proved
 directly from `Int.floor` rather than transported.
 -/
+
+public section
 
 open Set
 
@@ -101,8 +105,9 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 reassembly lemmas take, instantiated at the `ε`-grid. -/
 theorem tsum_enorm_sq_specProjection_gridCell (hε : 0 < ε) (v : H) :
     ∑' k : ℤ, ‖specProjection hA (gridCell ε k) (measurableSet_gridCell ε k) v‖ₑ ^ 2
-      = ‖v‖ₑ ^ 2 :=
-  (spectralPVM hA).tsum_enorm_sq_proj (gridCell ε) (measurableSet_gridCell ε)
+      = ‖v‖ₑ ^ 2 := by
+  simp only [specProjection_def]
+  exact (spectralPVM hA).tsum_enorm_sq_proj (gridCell ε) (measurableSet_gridCell ε)
     (pairwise_disjoint_gridCell hε) (iUnion_gridCell hε) v
 
 /-- The same, for the adjoints — which is the form the *right*-hand reassembly
@@ -113,8 +118,9 @@ theorem tsum_enorm_sq_adjoint_specProjection_gridCell (hε : 0 < ε) (v : H) :
       = ‖v‖ₑ ^ 2 := by
   have hsa : ∀ k : ℤ,
       (specProjection hA (gridCell ε k) (measurableSet_gridCell ε k)).adjoint
-        = specProjection hA (gridCell ε k) (measurableSet_gridCell ε k) := fun k =>
-    ((spectralPVM hA).isSelfAdjoint_proj _ _).adjoint_eq
+        = specProjection hA (gridCell ε k) (measurableSet_gridCell ε k) := fun k => by
+    simp only [specProjection_def]
+    exact ((spectralPVM hA).isSelfAdjoint_proj _ _).adjoint_eq
   simp_rw [hsa]
   exact tsum_enorm_sq_specProjection_gridCell hA hε v
 
@@ -122,8 +128,9 @@ theorem tsum_enorm_sq_adjoint_specProjection_gridCell (hε : 0 < ε) (v : H) :
 lemmas take. -/
 theorem specProjection_comp_self (Bset : Set ℝ) (hBset : MeasurableSet Bset) :
     (specProjection hA Bset hBset).comp (specProjection hA Bset hBset)
-      = specProjection hA Bset hBset :=
-  (spectralPVM hA).proj_idem Bset hBset
+      = specProjection hA Bset hBset := by
+  simp only [specProjection_def]
+  exact (spectralPVM hA).proj_idem Bset hBset
 
 
 /-- **A cell carrying a nonzero projection meets the spectrum.**  Contrapositive

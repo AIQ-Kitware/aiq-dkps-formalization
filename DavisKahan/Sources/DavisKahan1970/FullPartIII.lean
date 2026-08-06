@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.PartIII
+import ForTauCeti.Analysis.Normed.Operator.SylvesterBoundedInverse
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Alternative.All
 import DavisKahan.DoubleAngle.All
@@ -134,7 +135,78 @@ alias complex_directRotation_unique :=
 alias complex_directRotation_minimal :=
   DavisKahan.Experimental.spectraDirectRotation_minimal
 
+/-! ### Proposition 3.3, both directions
+
+The square identity `W² = J_V J_U` alone does not characterise `W`: a unitary
+has many square roots.  Proposition 3.3 says `W` is the **principal** one, and
+these four aliases carry that word.
+
+* `complex_directRotation_hermitianPart` is the forward half — the Hermitian
+  part of `W` is `2|S|`, hence positive, so `W`'s spectrum avoids the closed
+  left half-plane.
+* `complex_directRotation_principal_of_sq` is the converse, and in the acute
+  case it is *stronger* than the printed statement: no crossed-intersection
+  mapping condition is needed, because on an acute pair a nonnegative-real-part
+  unitary square root of the reflection product is already forced to be `W`.
+
+The diagonal-block aliases belong to Proposition 3.1, whose characterisation
+clause is "positivity of its diagonal blocks": both compressions of `W` to `U`
+and to `Uᗮ` are the positive Halmos cosine `|S|`. -/
+alias complex_directRotation_hermitianPart :=
+  DavisKahan.Experimental.spectraDirectRotation_add_star_eq_two_smul_absoluteValue
+alias complex_directRotation_principal_of_sq :=
+  DavisKahan.Experimental.spectraDirectRotation_unique_of_sq
+alias complex_directRotation_diagonalBlock :=
+  DavisKahan.Experimental.projection_mul_spectraDirectRotation_mul_projection
+alias complex_directRotation_complementaryDiagonalBlock :=
+  DavisKahan.Experimental.complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
+
+/-! ### Proposition 3.1, the characterisation clause
+
+The two aliases above *compute* the diagonal blocks of the direct rotation.
+Proposition 3.1 also asserts the converse — that positivity of those two blocks
+**characterises** it — and that direction is strictly stronger than
+`complex_directRotation_unique`, which assumes `0 ≤ re ⟪W x, x⟫` for every `x`.
+Nonnegativity of the two compressions constrains the numerical range on `U` and
+on `Uᗮ` separately and says nothing at all about a mixed vector.
+
+What closes the gap is the printed hypothesis that `W` carries the pair
+`(U, Uᗮ)` onto `(V, Vᗮ)`.  Combined with `W² = J_V J_U` that forces
+`J_U W J_U = W*`, so the Hermitian part of `W` commutes with `J_U` and its
+quadratic form splits over `U ⊕ Uᗮ` with **no cross term** — at which point two
+separate sign conditions do add up.
+
+* `complex_directRotation_reflectionConjugate` is that structural identity.
+* `complex_directRotation_of_diagonalBlocks` is the characterisation direction.
+* `complex_directRotation_iff_diagonalBlocks` is Proposition 3.1's
+  characterisation clause as a biconditional. -/
+alias complex_directRotation_reflectionConjugate :=
+  DavisKahan.Experimental.reflection_conjugate_eq_star_of_sq_of_intertwines
+alias complex_directRotation_of_diagonalBlocks :=
+  DavisKahan.Experimental.spectraDirectRotation_unique_of_diagonalBlocks
+alias complex_directRotation_iff_diagonalBlocks :=
+  DavisKahan.Experimental.eq_spectraDirectRotation_iff_diagonalBlocks_nonneg
+
 /-! ## Graph and Riccati theory -/
+/-! ### Theorem 5.1 at source generality
+
+The repository's other Sylvester lower bounds assume a Hilbert space, because
+they are proved through coercivity or through the spectral theorem.  Theorem 5.1
+is a **Banach**-space statement about *any compatible operator norm*, and needs
+neither: `A X = C + X B` plus a left inverse gives `X = A⁻¹C + A⁻¹XB`, and one
+multiplication by `ρ + δ` cancels `ρ‖X‖` from both sides.  The Neumann series
+is what produces a solution; it is not what bounds one.
+
+`banach_sylvester_lower_bound_uiNorm` carries the "any compatible operator norm"
+clause literally: it is stated for an arbitrary size function subject to exactly
+subadditivity and the two one-sided ideal bounds, which is also what a
+symmetric-norm-ideal gauge supplies. -/
+alias banach_sylvester_lower_bound :=
+  TauCeti.ContinuousLinearMap.norm_le_of_sylvester_of_leftInverse
+alias banach_sylvester_lower_bound_uiNorm :=
+  TauCeti.ContinuousLinearMap.opNorm_le_of_sylvester_of_leftInverse
+
+/-! ## Graph and Riccati theory (continued) -/
 alias bounded_coercive_isUnit :=
   TauCeti.ContinuousLinearMap.isUnit_of_coercive
 alias bounded_one_add_star_mul_self_isUnit :=

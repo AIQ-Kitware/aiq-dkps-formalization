@@ -3,8 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
-import ForTauCeti.Analysis.Normed.FiniteLpGauge
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
+public import ForTauCeti.Analysis.Normed.FiniteLpGauge
 
 
 /-!
@@ -25,7 +28,7 @@ The triangle inequality is factored into the two canonical ingredients:
 2. finite `ℓᵖ` gauges are monotone under weak majorization and satisfy
    Minkowski's inequality.
 
-The resulting object is a `RectangularUnitarilyInvariantNorm`, so it inherits
+The resulting object is a `RectangularUnitarilyInvariantSeminorm`, so it inherits
 the existing two-sided unitary invariance, orbit-certificate bounds, Fan
 dominance bridges, and operator-ideal inequalities.
 
@@ -43,6 +46,8 @@ dominance bridges, and operator-ideal inequalities.
   `ForTauCeti` staging modules.
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -55,7 +60,7 @@ variable {E : Type uE} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 variable {F : Type uF} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
-namespace RectangularUnitarilyInvariantNorm
+namespace RectangularUnitarilyInvariantSeminorm
 
 /-- The canonical finite singular-value vector for a rectangular map. -/
 noncomputable def singularValueVector (A : E →ₗ[𝕜] F) :
@@ -183,7 +188,7 @@ theorem singularValueVector_comp_unitary
 
 /-- Rectangular Schatten `p` norm for a real exponent `p ≥ 1`. -/
 noncomputable def schattenNorm (p : ℝ) (hp : 1 ≤ p) :
-    RectangularUnitarilyInvariantNorm 𝕜 E F where
+    RectangularUnitarilyInvariantSeminorm 𝕜 E F where
   toFun A := FiniteVector.lpGauge p (singularValueVector A)
   add_le' A B :=
     calc
@@ -361,8 +366,38 @@ theorem schattenNorm_two_apply (A : E →ₗ[𝕜] F) :
   simp_rw [abs_of_nonneg (singularValueVector_nonneg A _), Real.rpow_two]
   rw [sum_sq_singularValueVector_eq_sum_domain, ← Real.sqrt_eq_rpow]
 
+/-- **The Hilbert--Schmidt energy is the squared rectangular Frobenius norm.**
+
+`ContinuousLinearMap.hilbertSchmidtEnergy` is the dimension-free `ℝ≥0∞`-valued object
+`∑' i, ‖T bᵢ‖ₑ²`; `frobenius` is the finite real-valued rectangular seminorm.  In finite
+dimensions they are the same number, and without this the two vocabularies for the
+Hilbert--Schmidt norm are only related through the paper-facing
+`paperHilbertSchmidtNorm_eq_rectangularFrobenius` in the Davis--Kahan package, which is the
+wrong direction of dependency for a reusable statement.
+
+This is the last link of the finite-dimensional identification chain: the square Frobenius
+norm is `frobenius` restricted (`UnitarilyInvariantSeminorm.frobenius_toSquare_eq`), the
+Schatten `S₂` norm is `frobenius` (`schattenNorm_two_apply`), and the Hilbert--Schmidt energy
+is its square.  `hilbertSchmidtEnergy_indep` then carries it to any Hilbert basis.
+
+`[CompleteSpace E]` is written out because `FiniteDimensional.complete` is deliberately not
+an instance in Mathlib; it costs the caller nothing, `CompleteSpace` being a `Prop` class. -/
+theorem hilbertSchmidtEnergy_eq_ofReal_frobenius_sq [CompleteSpace E] (A : E →L[𝕜] F) :
+    A.hilbertSchmidtEnergy (stdOrthonormalBasis 𝕜 E).toHilbertBasis
+      = ENNReal.ofReal (frobenius A.toLinearMap ^ 2) := by
+  have hsq : frobenius A.toLinearMap ^ 2
+      = ∑ i, ‖A.toLinearMap (stdOrthonormalBasis 𝕜 E i)‖ ^ 2 := by
+    rw [frobenius_apply A.toLinearMap (stdOrthonormalBasis 𝕜 E)]
+    exact Real.sq_sqrt (Finset.sum_nonneg fun i _ => sq_nonneg _)
+  rw [ContinuousLinearMap.hilbertSchmidtEnergy_def, tsum_fintype, hsq,
+    ENNReal.ofReal_sum_of_nonneg fun i _ => sq_nonneg _]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [OrthonormalBasis.coe_toHilbertBasis, ENNReal.ofReal_pow (norm_nonneg _),
+    ofReal_norm]
+  rfl
+
 /-- Schatten infinity norm is the existing rectangular operator norm. -/
-noncomputable def schattenNormInf : RectangularUnitarilyInvariantNorm 𝕜 E F :=
+noncomputable def schattenNormInf : RectangularUnitarilyInvariantSeminorm 𝕜 E F :=
   opNorm
 
 /-- The `S∞` norm evaluates to the ordinary operator norm, definitionally —
@@ -372,5 +407,5 @@ Schatten scale. -/
     schattenNormInf A = ‖A.toContinuousLinearMap‖ :=
   (rfl)
 
-end RectangularUnitarilyInvariantNorm
+end RectangularUnitarilyInvariantSeminorm
 end TauCeti

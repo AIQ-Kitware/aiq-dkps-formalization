@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventOpen
-import Mathlib.Topology.UrysohnsLemma
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventOpen
+public import Mathlib.Topology.UrysohnsLemma
 
 /-!
 # Rosenblum: an intertwiner of disjoint spectra vanishes
@@ -56,6 +58,8 @@ the continuous-symbol half is
 the Cayley singularity is new.
 -/
 
+public section
+
 open scoped InnerProductSpace
 open Filter Topology MeasureTheory
 
@@ -71,6 +75,7 @@ variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 section Separator
 
 /-- The scalar inverse Cayley map on all of `ℂ`, with junk value at `1`. -/
+@[expose]
 noncomputable def cayleyCoordFun (w : ℂ) : ℝ := (Complex.I * (1 + w) / (1 - w)).re
 
 /-- The inverse Cayley map is continuous away from `w = 1`.  Only `ContinuousOn` is available: the
@@ -240,7 +245,9 @@ theorem ae_cayleyInv_mem_spectrum (v : E) :
           (cayleyInv hA ⁻¹' (Complex.ofReal ⁻¹' resolventSet A)) := by
     rw [show (spectralPVM hA).diag v
         = Measure.map (cayleyInv hA) (BorelCalculus.diagMeasure (isStarNormal_cayley hA) v)
-      from rfl, Measure.map_apply (measurable_cayleyInv hA) hmeas]
+      from by
+        rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag, BorelCalculus.specDiag_def],
+      Measure.map_apply (measurable_cayleyInv hA) hmeas]
   rw [hmap] at hzero
   have := MeasureTheory.compl_mem_ae_iff.mpr hzero
   filter_upwards [this] with w hw

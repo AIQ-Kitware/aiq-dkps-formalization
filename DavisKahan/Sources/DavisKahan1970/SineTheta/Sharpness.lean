@@ -7,7 +7,7 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
 import DavisKahan.Geometry.Angle.OperatorAngleReal
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
 
 /-!
@@ -589,7 +589,7 @@ theorem paperCounterexample_sine_square_norm :
         paperCounterexampleExact paperCounterexampleTrial) = 1 := by
   rw [paperHilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference,
     paperHilbertSchmidtNorm_eq_frobenius,
-    TauCeti.UnitarilyInvariantNorm.frobenius_apply
+    TauCeti.UnitarilyInvariantSeminorm.frobenius_apply
     ℝ PaperRealPlane
     (paperCounterexampleExact.starProjection -
       paperCounterexampleTrial.starProjection).toLinearMap
@@ -610,7 +610,7 @@ theorem paperCounterexample_sine_square_norm :
 theorem paperCounterexample_perturbation_square_norm :
     paperHilbertSchmidtNorm paperCounterexampleH = Real.sqrt 3 := by
   rw [paperHilbertSchmidtNorm_eq_frobenius,
-    TauCeti.UnitarilyInvariantNorm.frobenius_apply
+    TauCeti.UnitarilyInvariantSeminorm.frobenius_apply
     ℝ PaperRealPlane paperCounterexampleH.toLinearMap
     paperRealPlane_finrank (EuclideanSpace.basisFun (Fin 2) ℝ)]
   rw [Fin.sum_univ_two]

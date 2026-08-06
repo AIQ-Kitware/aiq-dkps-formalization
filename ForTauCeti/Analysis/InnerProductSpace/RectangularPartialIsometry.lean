@@ -3,14 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 
-Staged for Tau Ceti, roadmap topic `HilbertSpaceOperatorFoundations`.  Mathlib is
+Staged for Tau Ceti, roadmap topic `PolarDecomposition`.  Mathlib is
 not the destination (`ForTauCeti/README.md`); on the closed Mathlib track this
 would have gone to `Mathlib/Analysis/InnerProductSpace/`, beside the polar
 decomposition.
 
 Formalized by Claude Opus 5 (claude-opus-5[1m]).
 -/
-import ForTauCeti.Analysis.InnerProductSpace.PartialIsometry
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.PartialIsometry
 
 /-!
 # Partial isometries between different spaces
@@ -48,13 +50,15 @@ exactly this predicate when `M` is rectangular, since `W` maps `E` to `F`.
 * Extraction class: **new**.  This is not a move or a generalization of existing
   material.  `ForTauCeti.Analysis.InnerProductSpace.PartialIsometry` carries the
   square theory and stays unchanged; the rectangular predicate is the roadmap's
-  `HilbertSpaceOperatorFoundations` target `isPartialIsometry_iff_starMul`, which
+  `PolarDecomposition` target `isPartialIsometry_iff_starMul`, which
   presupposes a `LinearMap.IsPartialIsometry` that did not exist.
 * Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none** — this module imports only a sibling `ForTauCeti`
   staging module.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -70,6 +74,7 @@ variable {E F : Type*}
 This is the Moore--Penrose-style identity that the algebraic `u * star u * u = u`
 becomes when source and target differ and no single carrier holds both `u` and its
 adjoint. -/
+@[expose]
 def IsPartialIsometry (u : E →ₗ[𝕜] F) : Prop :=
   u ∘ₗ u.adjoint ∘ₗ u = u
 
@@ -165,3 +170,31 @@ theorem IsPartialIsometry.adjoint {u : E →ₗ[𝕜] F} (hu : u.IsPartialIsomet
   simpa only [LinearMap.adjoint_comp, LinearMap.adjoint_adjoint, LinearMap.comp_assoc] using h
 
 end LinearMap
+
+namespace ContinuousLinearMap
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E F : Type*}
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+
+/-- **Partial isometry between possibly different spaces**, bounded form:
+`u ∘L u.adjoint ∘L u = u`.
+
+The same typed equation as `LinearMap.IsPartialIsometry`, stated on the bounded carrier so
+that consumers on complete spaces -- the rectangular polar decomposition in particular --
+never leave `→L`.  A rectangular map is not an element of one monoid, so the star-monoid
+predicate `u * star u * u = u` is unavailable here. -/
+@[expose]
+def IsPartialIsometry (u : E →L[𝕜] F) : Prop :=
+  u ∘L u.adjoint ∘L u = u
+
+/-- The adjoint of a partial isometry is a partial isometry. -/
+theorem IsPartialIsometry.adjoint {u : E →L[𝕜] F} (hu : u.IsPartialIsometry) :
+    u.adjoint.IsPartialIsometry := by
+  have h := congrArg ContinuousLinearMap.adjoint hu
+  unfold ContinuousLinearMap.IsPartialIsometry
+  simpa only [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_adjoint,
+    ← ContinuousLinearMap.comp_assoc] using h
+
+end ContinuousLinearMap

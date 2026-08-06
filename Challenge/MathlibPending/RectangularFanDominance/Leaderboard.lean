@@ -9,7 +9,7 @@ because their public vocabulary and implementations still cohabit
 future PR-shaping work.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 
-#print axioms TauCeti.RectangularUnitarilyInvariantNorm.mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
-#print axioms TauCeti.RectangularUnitarilyInvariantNorm.apply_le_of_kyFanSum_le
+#print axioms TauCeti.RectangularUnitarilyInvariantSeminorm.mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
+#print axioms TauCeti.RectangularUnitarilyInvariantSeminorm.apply_le_of_kyFanSum_le

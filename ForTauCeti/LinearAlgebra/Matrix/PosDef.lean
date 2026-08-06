@@ -3,14 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 -/
+module
 
-import Mathlib.LinearAlgebra.Matrix.PosDef
-import Mathlib.LinearAlgebra.Matrix.Rank
-import Mathlib.Analysis.Matrix.Spectrum
-import Mathlib.Analysis.Matrix.PosDef
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import ForTauCeti.LinearAlgebra.Matrix.RankFactorization
+public import Mathlib.LinearAlgebra.Matrix.PosDef
+public import Mathlib.LinearAlgebra.Matrix.Rank
+public import Mathlib.Analysis.Matrix.Spectrum
+public import Mathlib.Analysis.Matrix.PosDef
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import ForTauCeti.LinearAlgebra.Matrix.RankFactorization
 
 /-! # Rank-constrained positive-semidefinite factorization
 
@@ -85,6 +86,8 @@ and the list of pins updated to match is recorded once, in
 `ForTauCeti/Topology/Berge.lean`.
 
 -/
+
+public section
 
 /-!
 ### Provenance

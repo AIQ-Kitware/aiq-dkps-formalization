@@ -84,7 +84,7 @@ theorem finite_restrictedDisplacementDominance
 /-- Finite-dimensional Corollary 4.1 for every ordinary square
 unitarily-invariant norm. -/
 theorem finite_corollary4_1_uiNorm
-    (N : UnitarilyInvariantNorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : TauCeti.IsAcute U V)
@@ -98,7 +98,7 @@ theorem finite_corollary4_1_uiNorm
 /-- Finite-dimensional Proposition 4.3: the direct rotation minimizes every
 unitarily-invariant norm of the positive displacement square. -/
 theorem finite_proposition4_3_uiNorm
-    (N : UnitarilyInvariantNorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : TauCeti.IsAcute U V)

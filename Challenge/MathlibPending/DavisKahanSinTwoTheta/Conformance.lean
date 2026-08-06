@@ -5,7 +5,7 @@ A focused comparator statement for the source-faithful Part III sin-2Theta
 endpoint in every unitarily invariant norm.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
 /-!
 ## Comparator maintenance rule
@@ -26,7 +26,7 @@ variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
 
 /-- Davis--Kahan Part III sin-2Theta theorem in every unitarily invariant norm. -/
 theorem partIII_sinTwoTheta_uiNorm
-    (N : UnitarilyInvariantNorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E)
     (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]

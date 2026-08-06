@@ -614,7 +614,7 @@
       "target_note": "vonNeumann1937_trace_and_symmetric_norms.tex",
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/HoffmanWielandt.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean",
         "papers/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [],
@@ -639,7 +639,7 @@
       "target_note": "Fan1949_eigenvalue_sums.tex",
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/KyFan.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean"
       ],
       "existing_assets": [],
       "scope": "Extremal eigenvalue sums and the variational principles underlying Ky Fan norms and dominance.",
@@ -737,7 +737,7 @@
       "primary_url": "https://doi.org/10.1093/qmath/11.1.50",
       "target_note": "Mirsky1960_symmetric_gauge_ui_norms.tex",
       "repo_evidence": [
-        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean",
         "prose/core-arguments/Davis-Kahan-1970-part-III-core-arguments.tex"
       ],
       "existing_assets": [],
@@ -822,8 +822,8 @@
         "DavisKahan/Sources/DavisKahan1970/Section9/All.lean",
         "DavisKahan/Sources/DavisKahan1970/Section9/FullExample.lean",
         "prose/distilled_literature/DavisKahan1970_section9_numerical_example.tex",
-        "DavisKahan/Experimental/Sources/DavisKahan1970/Section8/All.lean",
-        "DavisKahan/Experimental/Sources/DavisKahan1970/Section8/SourceSurface.lean",
+        "DavisKahan/Sources/DavisKahan1970/Section8/All.lean",
+        "DavisKahan/Sources/DavisKahan1970/Section8/SourceSurface.lean",
         "prose/distilled_literature/DavisKahan1970_section8_branch_selection.tex",
         "DavisKahan/Sources/DavisKahan1970/Audits/Theorem63Distillation.lean",
         "DavisKahan/TanTheta/Theorem63FiniteSource.lean",
@@ -991,7 +991,7 @@
       "target_note": "KostrykinMakarovMotovilov2005_riccati_tan_theta.tex",
       "repo_evidence": [
         "DavisKahan/FiniteDimensional/TanTheta/Vector.lean",
-        "DavisKahan/Experimental/InfiniteDimensional/Riccati/Bounded.lean"
+        "DavisKahan/InfiniteDimensional/Riccati/Bounded.lean"
       ],
       "existing_assets": [],
       "scope": "Operator Riccati graph-subspace construction and tan Theta estimates.",
@@ -1140,7 +1140,7 @@
       "target_note": "Seelmann2014_sin_two_theta.tex",
       "repo_evidence": [
         "DavisKahan/FiniteDimensional/DoubleAngle/TanTheta.lean",
-        "DavisKahan/Experimental/InfiniteDimensional/DoubleAngle.lean"
+        "DavisKahan/InfiniteDimensional/DoubleAngle.lean"
       ],
       "existing_assets": [],
       "scope": "General spectral-separation sin 2 Theta theorem and operator-angle formalism.",
@@ -1245,7 +1245,7 @@
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/Sylvester/Bound.lean",
         "ForTauCeti/Analysis/InnerProductSpace/SinTheta/UnitarilyInvariant.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean"
       ],
       "existing_assets": [],
       "scope": "Selected Chapters III, IV, and VII theorem chains used by the formalization.",
@@ -1346,7 +1346,7 @@
       "target_note": "MarshallOlkinArnold2011_selected_majorization.tex",
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/SchurHorn.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean"
       ],
       "existing_assets": [],
       "scope": "Selected Schur majorization, Karamata, and weak-majorization results.",

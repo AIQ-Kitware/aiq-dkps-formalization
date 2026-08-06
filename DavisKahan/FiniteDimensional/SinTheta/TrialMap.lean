@@ -76,7 +76,7 @@ theorem complementaryTrialBlock_comp_trialGramSqrtEquiv_symm
 /-- Lower-frame transport from the raw complementary block to the canonical
 sine-angle map in every rectangular unitarily invariant norm. -/
 theorem lowerFrame_mul_uiNorm_sinTheta_le_complementaryTrialBlock
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
     {ε : ℝ} (hframe : LowerFrameBound X ε) (hε : 0 < ε) :
@@ -131,7 +131,7 @@ For an arbitrary trial map `X`, the complementary block `P_{Vᗮ} X` satisfies
 the sharp interval/exterior Sylvester estimate in either spectral orientation.
 No injectivity or lower frame bound is needed at this stage. -/
 theorem complementaryTrialBlock_residual_le_of_intervalGap
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
     (X : F →ₗ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
@@ -144,7 +144,7 @@ theorem complementaryTrialBlock_residual_le_of_intervalGap
     Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X
   let C : F →ₗ[𝕜] Vᗮ :=
     Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ generalResidual A X M
-  let NV : RectangularUnitarilyInvariantNorm 𝕜 F Vᗮ :=
+  let NV : RectangularUnitarilyInvariantSeminorm 𝕜 F Vᗮ :=
     N.codomainIsometryTransport Vᗮ.subtypeₗᵢ
   have hAV : AV.IsSymmetric := isSymmetric_restrict hA hVperp
   have hgap' : UnorderedIntervalSylvesterGap AV M a b δ := by
@@ -195,7 +195,7 @@ A positive lower frame bound supplies injectivity automatically.  The theorem
 allows either interval/exterior orientation and compares subspaces of unequal
 dimension through the directed sine block. -/
 theorem generalizedSinTheta_residual_le_of_intervalGap
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
     (X : F →ₗ[𝕜] E)
@@ -225,7 +225,7 @@ This source-facing wrapper accepts the operator inequality
 `X⋆ X ≥ ε² I` through `GramLowerBound`, rather than requiring callers to
 translate it into a pointwise norm bound. -/
 theorem generalizedSinTheta_residual_le_of_gramLowerBound
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
     (X : F →ₗ[𝕜] E)
@@ -246,7 +246,7 @@ singular-value sequence as the canonical directed sine block.  Since every
 rectangular unitarily invariant norm depends only on that sequence, the
 canonical Gram-bound theorem transfers without loss. -/
 theorem generalizedSinTheta0_residual_le_of_gramLowerBound
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
     (X : F →ₗ[𝕜] E)
@@ -274,7 +274,7 @@ The explicit injectivity argument is retained for callers of the earlier API;
 the source-complete theorem above derives it from the positive lower frame
 bound. -/
 theorem generalizedSinTheta_residual_le
-    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X)

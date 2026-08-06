@@ -11,7 +11,7 @@ import DavisKahan.Geometry.Polar.DirectRotationSquare
 -- supplies `reflectedSubspace` and its projection/conjugation calculus used by
 -- Proposition 3.4.  This module imports only `SinTheta`/`SpectralTheory`
 -- material and never touches `Frontier`, so the dependency is acyclic.
-import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
+import DavisKahan.InfiniteDimensional.DoubleAngle
 -- supplies the completed nonacute construction and acute characterizations used
 -- to ground the Proposition 3.2 and Corollary 3.2 source statements below.  The
 -- construction depends on the polar and acute machinery under `MathAhead`, which
@@ -21,6 +21,10 @@ import DavisKahan.Geometry.Polar.Section3Nonacute
 -- (`sameHalmosInvariant_of_pairEquiv`).  This module imports only Frontier/Core,
 -- so the dependency is acyclic.
 import DavisKahan.Geometry.Halmos.Classification
+import DavisKahan.Geometry.Halmos.GenericReconstruction
+import ForTauCeti.Analysis.InnerProductSpace.CompactApproximationEigenvalues
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
+import DavisKahan.Geometry.Halmos.CompactClassification
 
 /-!
 # Section 3 frontier: separation and classification of two subspaces
@@ -41,6 +45,7 @@ namespace Frontier
 namespace Section3
 
 open TauCeti.DavisKahanExt (reflectedSubspace starProjection_reflectedSubspace)
+open TauCeti.DavisKahan
 
 universe u v
 
@@ -993,12 +998,28 @@ structure SameHalmosTrivialDimensions : Prop where
     (halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
 
 /-- The modern operator-level complete invariant: trivial dimensions plus the
-unitary-equivalence class of the generic cosine square. -/
+unitary-equivalence class of the angle operator `cos²Θ`.
+
+**The angle operator is read on the `U`-side, as the compression of `P_V` to
+`U ⊓ generic`** — the `genericCosineBlock` of `Geometry/Halmos/GenericPosition`.
+That is the operator whose spectral multiplicity function Davis and Kahan's
+Theorem 3.1 uses.
+
+This field used to record `genericHalmosCosineSq`, the compression of the
+symmetrized `P_U P_V P_U + P_Uᗮ P_Vᗮ P_Uᗮ`.  On the generic part that operator is
+the cosine block on the `U`-half and `1 - D` on the `Uᗮ`-half, i.e. `A ⊕ A`
+(`coe_genericHalmosCosineSq_of_mem_left` proves the `M` half).  Recovering `A`
+from `A ⊕ A` up to unitary equivalence is multiplicity-halving — Hahn--Hellinger,
+which Mathlib does not have — whereas the pair `(U, V)` is determined by `A`
+alone by elementary means.  The symmetrized reading was a repository choice that
+doubled the multiplicity and put multiplicity theory on the critical path for no
+mathematical reason.  Changed 2026-08-04, which is what closes
+`twoProjection_operator_classification`. -/
 structure SameHalmosOperatorInvariant : Prop where
   trivial : SameHalmosTrivialDimensions U₁ V₁ U₂ V₂
   generic : BoundedOperatorsUnitaryEquivalent
-    (genericHalmosCosineSq U₁ V₁)
-    (genericHalmosCosineSq U₂ V₂)
+    (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁)
+    (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂)
 
 /-- Forward direction of the operator-level Halmos classification: a unitary
 equivalence of the ordered pairs induces the complete operator invariant.  The
@@ -1009,41 +1030,70 @@ cosine-square operator.  Proved axiom-clean in
 theorem sameHalmosOperatorInvariant_of_pairEquiv
     (h : PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂) :
     SameHalmosOperatorInvariant U₁ V₁ U₂ V₂ := by
-  obtain ⟨hc, hs, ht, he, hg⟩ :=
+  obtain ⟨hc, hs, ht, he, _⟩ :=
     MathAhead.HiddenFoundations.sameHalmosInvariant_of_pairEquiv U₁ V₁ U₂ V₂ h
-  exact ⟨⟨hc, hs, ht, he⟩, hg⟩
+  exact ⟨⟨hc, hs, ht, he⟩,
+    MathAhead.HiddenFoundations.exists_cosineBlockEquiv_of_pairEquiv U₁ V₁ U₂ V₂ h⟩
 
-/-- Operator-level Halmos classification.  This is the constructive spine of
-Davis--Kahan Theorem 3.1 and does not require a direct-integral presentation.
+/-- **Operator-level Halmos classification, both directions.**  This is the
+constructive spine of Davis--Kahan Theorem 3.1 and needs no direct-integral
+presentation, no compactness, no finite dimension and no separability.
 
-The forward direction is proved (`sameHalmosOperatorInvariant_of_pairEquiv`).
-The converse — reconstructing a pair-equivalence from the operator invariant —
-still needs two bricks, neither yet available: (1) the generic 2×2 Halmos model,
-which upgrades a bare unitary equivalence of the two generic cosine-square
-operators to a unitary of the generic subspaces intertwining *both* projections
-(equivalently, the reconstruction of the reducing angle pair from `cos²Θ`); and
-(2) the block-diagonal orthogonal assembly gluing the four elementary summand
-isometries and the generic-part unitary into a global `H₁ ≃ₗᵢ[ℂ] H₂` carrying
-`U₁, V₁` to `U₂, V₂`.  On the four elementary summands the assembled map
-automatically intertwines both projections, so brick (2) reduces to a
-Hilbert-sum gluing and brick (1) is the sole genuinely missing mathematics. -/
+Grounded by `:=` on
+`MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`,
+so there is a single source of truth.  The forward direction restricts a
+pair-equivalence to the `U`-half of the generic part; the converse is bricks (1)
+and (2) — brick (1) reconstructs the generic-part unitary from the cosine block
+alone (`Geometry/Halmos/GenericReconstruction`), brick (2) glues it to the four
+elementary summand isometries (`Geometry/Halmos/Assembly`). -/
 theorem twoProjection_operator_classification :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosOperatorInvariant U₁ V₁ U₂ V₂ := by
-  refine ⟨sameHalmosOperatorInvariant_of_pairEquiv U₁ V₁ U₂ V₂, ?_⟩
-  intro _hinv
-  sorry
+  rw [MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant
+    U₁ V₁ U₂ V₂]
+  constructor
+  · rintro ⟨hc, hs, ht, he, hg⟩
+    exact ⟨⟨hc, hs, ht, he⟩, hg⟩
+  · rintro ⟨⟨hc, hs, ht, he⟩, hg⟩
+    exact ⟨hc, hs, ht, he, hg⟩
 
-/-- Davis--Kahan 1970, Theorem 3.1: spectral multiplicity data of the two angle
-operators, together with the elementary multiplicities, form a complete
-invariant. -/
-theorem theorem3_1_spectralMultiplicity_classification :
+/-- **Davis--Kahan 1970, Theorem 3.1**, in the paper's own phrasing: the spectral multiplicity
+data of the two angle operators, together with the elementary multiplicities, form a complete
+invariant for ordered pairs of subspaces.
+
+**The angle operator is `genericCosineBlock`, not `genericHalmosCosineSq`.**  The statement used
+to compare the symmetrized block, which on the generic part is `A ⊕ A` -- doubled multiplicity --
+and recovering `A` from `A ⊕ A` is multiplicity-halving, which this development does not have and
+does not need.  The docstring at `SameHalmosOperatorInvariant` records the 2026-08-04 decision
+that put the `U`-side cosine block into the operator invariant for exactly this reason; the same
+correction was applied to Corollary 3.1 on 2026-08-06.  Davis and Kahan state Theorem 3.1 for the
+angle operator on the `U`-side, so this is the paper-faithful reading.
+
+**On separability.**  It is carried on `H₁` only, it is inherited by the generic left half, and
+it is one of the paper's **standing assumptions**, taken from the Introduction and Sections 1--2
+and so governing Section 3; see `prose/distilled_literature/DavisKahan1970_part_III.tex`,
+*Standing assumptions from the transcription*.  It is needed for `→` alone -- producing a
+multiplicity model requires the existence half of Hahn--Hellinger -- and the `←` direction is
+separability-free.  Crucially, nothing already proved is weakened: the operator-level form
+`twoProjection_operator_classification`, grounded on
+`pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`, remains stated with no
+separability, no compactness and no finite dimension, and it is that theorem which carries the
+classification content of Theorem 3.1.  What this statement adds is the *translation* of its
+invariant into multiplicity data. -/
+theorem theorem3_1_spectralMultiplicity_classification
+    [TopologicalSpace.SeparableSpace H₁] :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
       SameSpectralMultiplicity
-        (genericHalmosCosineSq U₁ V₁)
-        (genericHalmosCosineSq U₂ V₂) := by
-  sorry
+        (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁)
+        (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂) := by
+  rw [twoProjection_operator_classification]
+  constructor
+  · rintro ⟨htriv, hgen⟩
+    refine ⟨htriv, sameSpectralMultiplicity_of_unitarilyEquivalent _ _ ?_ hgen⟩
+    exact MathAhead.HiddenFoundations.isSelfAdjoint_genericCosineBlock U₁ V₁
+  · rintro ⟨htriv, hmult⟩
+    exact ⟨htriv, unitarilyEquivalent_of_sameSpectralMultiplicity _ _ hmult⟩
 
 /-- Ordered eigenvalue data for a compact positive contraction: the
 approximation-number sequence of `A`.
@@ -1063,6 +1113,37 @@ noncomputable def compactAngleEigenvalueList
     [CompleteSpace K] (A : K →L[ℂ] K) : ℕ → ℝ :=
   fun n => A.approximationNumber n
 
+/-- **Approximation numbers are a unitary invariant.**  Conjugating by a linear isometric
+equivalence sandwiches the operator between two contractions in both directions, so no
+approximation number can move. -/
+theorem approximationNumber_eq_of_boundedOperatorsUnitaryEquivalent
+    {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    {A : E →L[ℂ] E} {B : F →L[ℂ] F}
+    (h : BoundedOperatorsUnitaryEquivalent A B) (n : ℕ) :
+    A.approximationNumber n = B.approximationNumber n := by
+  obtain ⟨U, hU⟩ := h
+  have hUapp : ∀ x, B (U x) = U (A x) := fun x => (hU x).symm
+  have hUnorm : ‖(U : E →L[ℂ] F)‖ ≤ 1 :=
+    U.toLinearIsometry.norm_toContinuousLinearMap_le
+  have hUsnorm : ‖(U.symm : F →L[ℂ] E)‖ ≤ 1 :=
+    U.symm.toLinearIsometry.norm_toContinuousLinearMap_le
+  have hBfact : B = (U : E →L[ℂ] F) ∘L A ∘L (U.symm : F →L[ℂ] E) := by
+    ext y
+    change B y = U (A (U.symm y))
+    rw [← hUapp (U.symm y), U.apply_symm_apply]
+  have hAfact : A = (U.symm : F →L[ℂ] E) ∘L B ∘L (U : E →L[ℂ] F) := by
+    ext x
+    change A x = U.symm (B (U x))
+    rw [hUapp x, U.symm_apply_apply]
+  refine le_antisymm ?_ ?_
+  · conv_lhs => rw [hAfact]
+    exact TauCeti.ApproximationNumber.approximationNumber_comp_contractions_le
+      (U.symm : F →L[ℂ] E) (U : E →L[ℂ] F) hUsnorm hUnorm n
+  · conv_lhs => rw [hBfact]
+    exact TauCeti.ApproximationNumber.approximationNumber_comp_contractions_le
+      (U : E →L[ℂ] F) (U.symm : F →L[ℂ] E) hUnorm hUsnorm n
+
 /-- Davis--Kahan 1970, Corollary 3.1: when the cross-projection is compact, the
 angle eigenvalue lists and elementary multiplicities classify the pair. -/
 theorem corollary3_1_compact_angleList_classification
@@ -1072,9 +1153,40 @@ theorem corollary3_1_compact_angleList_classification
       (projection U₂ ∘L projection V₂ ∘L projection U₂)) :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
-      compactAngleEigenvalueList (genericHalmosCosineSq U₁ V₁) =
-        compactAngleEigenvalueList (genericHalmosCosineSq U₂ V₂) := by
-  sorry
+      compactAngleEigenvalueList
+          (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁) =
+        compactAngleEigenvalueList
+          (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂) := by
+  have hpos₁ : ∀ x, 0 ≤ RCLike.re
+      ⟪MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁ x, x⟫_ℂ := by
+    intro x
+    rw [MathAhead.HiddenFoundations.re_inner_genericCosineBlock]
+    positivity
+  have hpos₂ : ∀ x, 0 ≤ RCLike.re
+      ⟪MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂ x, x⟫_ℂ := by
+    intro x
+    rw [MathAhead.HiddenFoundations.re_inner_genericCosineBlock]
+    positivity
+  rw [twoProjection_operator_classification U₁ V₁ U₂ V₂]
+  constructor
+  · rintro ⟨htriv, hgen⟩
+    refine ⟨htriv, ?_⟩
+    funext n
+    exact approximationNumber_eq_of_boundedOperatorsUnitaryEquivalent hgen n
+  · rintro ⟨htriv, hlist⟩
+    refine ⟨htriv, ?_⟩
+    obtain ⟨W, hW⟩ :=
+      TauCeti.exists_linearIsometryEquiv_intertwining_of_approximationNumber_eq
+        (MathAhead.HiddenFoundations.isCompactOperator_genericCosineBlock U₁ V₁ hcompact₁)
+        (MathAhead.HiddenFoundations.isSelfAdjoint_genericCosineBlock U₁ V₁)
+        hpos₁
+        (MathAhead.HiddenFoundations.eigenspace_genericCosineBlock_zero U₁ V₁)
+        (MathAhead.HiddenFoundations.isCompactOperator_genericCosineBlock U₂ V₂ hcompact₂)
+        (MathAhead.HiddenFoundations.isSelfAdjoint_genericCosineBlock U₂ V₂)
+        hpos₂
+        (MathAhead.HiddenFoundations.eigenspace_genericCosineBlock_zero U₂ V₂)
+        (fun n => congrFun hlist n)
+    exact ⟨W, hW⟩
 
 end Classification
 

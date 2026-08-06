@@ -3,19 +3,22 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import Mathlib.Data.Finsupp.Order
-import Mathlib.Topology.Instances.ENNReal.Lemmas
-import Mathlib.Order.CompleteLattice.Finset
-import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
-import Mathlib.Analysis.MeanInequalities
-import ForTauCeti.Analysis.Convex.Majorization
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
-import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
-import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
-import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
+module
+
+public import Mathlib.Data.Finsupp.Order
+public import Mathlib.Topology.Instances.ENNReal.Lemmas
+public import Mathlib.Order.CompleteLattice.Finset
+public import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
+public import Mathlib.Analysis.MeanInequalities
+public import ForTauCeti.Analysis.Convex.Majorization
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
+public import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
+public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 
 /-!
 # Symmetric norming functions on sequences
@@ -88,13 +91,16 @@ names. It belongs to the second slice of `{lane:FTC-SYMGAUGE}`.
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForTauCeti`; it has had no prior home.
-  The signatures are `ForTauCetiRoadmap/OperatorIdeals/Suggested.lean`'s, which
-  recorded them as Milestone B1 targets; this is their first implementation.
+  The signatures are
+  `TauCetiRoadmap/OperatorTheory/OperatorIdeals/Suggested.lean`'s, which recorded
+  them as Milestone B1 targets; this is their first implementation.
 * Extraction class: **authored in place** for the Tau Ceti staging layer.
 * Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: none.
 -/
+
+public section
 
 open scoped ENNReal NNReal
 
@@ -190,6 +196,7 @@ Built with `Finsupp.onFinset` rather than as a sum of `Finsupp.single`s so that
 `truncate_apply` below is definitional: every fact about `extend` is a pointwise
 fact about this function, and a sum of singles would put `Finset.sum_apply'`
 between the two. -/
+@[expose]
 noncomputable def truncate (a : ℕ → ℝ≥0∞) (k : ℕ) (m : ℝ≥0) : ℕ →₀ ℝ≥0 :=
   Finsupp.onFinset (Finset.range k)
     (fun n => if n < k then (min (a n) (m : ℝ≥0∞)).toNNReal else 0)
@@ -441,6 +448,7 @@ theorem lpGaugeFinsupp_eq {p : ℝ} (hp : 0 < p) (a : ℕ →₀ ℝ≥0)
 Only `add_le'` has content — it is Minkowski, `NNReal.Lp_add_le`.  The other four
 fields are sum manipulations, and each one needs
 `sum_rpow_eq_of_support_subset` to put two different supports on one `Finset`. -/
+@[expose]
 noncomputable def schattenGauge (p : ℝ) (hp : 1 ≤ p) : TruncationGauge where
   toFun := lpGaugeFinsupp p
   add_le' a b := by
@@ -548,6 +556,7 @@ Taking `|·|` on the way in is what discharges both, and it is why `add_le'` nee
 
 /-- A real vector on `Fin n` as a finitely supported nonnegative sequence:
 absolute values, extended by zero. -/
+@[expose]
 noncomputable def ofFin {n : ℕ} (x : Fin n → ℝ) : ℕ →₀ ℝ≥0 :=
   Finsupp.onFinset (Finset.range n)
     (fun i => if h : i < n then Real.nnabs (x ⟨i, h⟩) else 0)
@@ -1013,6 +1022,7 @@ theorem symmetricGaugeENorm_comp_le (Φ : TruncationGauge)
 /-- **The operator ideal a symmetric norming function induces.**
 
 Milestone B1, and the five fields are the five laws above. -/
+@[expose]
 noncomputable def symmetricGaugeFamily (𝕜 : Type u) [RCLike 𝕜]
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (Φ : TruncationGauge) :
     TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜 where
@@ -1024,6 +1034,75 @@ noncomputable def symmetricGaugeFamily (𝕜 : Type u) [RCLike 𝕜]
   gauge_adjoint A := symmetricGaugeENorm_adjoint Φ A
 
 end Triangle
+
+/-! ### The `∞` endpoint gauge
+
+`Φ_∞ a = ⨆ n, a n`, the sup norm of a finitely supported nonnegative sequence.  It sits at
+the top of the Schatten scale and, unlike the finite exponents, needs no `ℓᵖ` machinery: four
+of the five axioms follow from the two characterising bounds below, and only homogeneity
+touches `Finset.sup` directly. -/
+
+/-- The sup norm of a finitely supported nonnegative sequence. -/
+noncomputable def supGaugeFinsupp (a : ℕ →₀ ℝ≥0) : ℝ≥0 := a.support.sup a
+
+/-- Every term is bounded by the sup. -/
+theorem le_supGaugeFinsupp (a : ℕ →₀ ℝ≥0) (n : ℕ) : a n ≤ supGaugeFinsupp a := by
+  by_cases hn : n ∈ a.support
+  · exact Finset.le_sup hn
+  · simp only [Finsupp.notMem_support_iff] at hn
+    simp [hn]
+
+/-- The sup is the least such bound. -/
+theorem supGaugeFinsupp_le {a : ℕ →₀ ℝ≥0} {c : ℝ≥0} (h : ∀ n, a n ≤ c) :
+    supGaugeFinsupp a ≤ c :=
+  Finset.sup_le fun n _ => h n
+
+/-- `Φ_∞`, the symmetric gauge at the top of the Schatten scale. -/
+noncomputable def supGauge : TruncationGauge where
+  toFun := supGaugeFinsupp
+  add_le' a b := supGaugeFinsupp_le fun n => by
+    simpa using add_le_add (le_supGaugeFinsupp a n) (le_supGaugeFinsupp b n)
+  smul' c a := by
+    classical
+    rcases eq_or_ne c 0 with rfl | hc
+    · simp [supGaugeFinsupp]
+    · have hsupp : (c • a).support = a.support := by
+        ext n
+        simp [Finsupp.mem_support_iff, hc]
+      simp only [supGaugeFinsupp, hsupp, NNReal.mul_finset_sup]
+      exact Finset.sup_congr rfl fun n _ => by simp
+  symm' σ a := by
+    refine le_antisymm (supGaugeFinsupp_le fun n => ?_) (supGaugeFinsupp_le fun n => ?_)
+    · simpa [Finsupp.equivMapDomain_apply] using le_supGaugeFinsupp a (σ.symm n)
+    · simpa [Finsupp.equivMapDomain_apply] using
+        le_supGaugeFinsupp (Finsupp.equivMapDomain σ a) (σ n)
+  mono' a b h := supGaugeFinsupp_le fun n => le_trans (h n) (le_supGaugeFinsupp b n)
+  normalized' := by
+    refine le_antisymm (supGaugeFinsupp_le fun n => ?_) ?_
+    · by_cases hn : n = 0 <;> simp [hn]
+    · simpa using le_supGaugeFinsupp (Finsupp.single (0 : ℕ) (1 : ℝ≥0)) 0
+
+/-- **The `∞` gauge collapses to the leading term on an antitone sequence.**
+
+Every capped truncation is bounded by `a 0`, and `le_extend` supplies the reverse, so the
+supremum over lengths and caps recovers the first entry.  For approximation numbers this says
+`Φ_∞ (a T) = a₀ T = ‖T‖`, which is the sense in which the `∞` endpoint of the Schatten scale
+is the operator-norm gauge. -/
+theorem supGauge_extend_of_antitone {a : ℕ → ℝ≥0∞} (ha : Antitone a) :
+    supGauge.extend a = a 0 := by
+  refine le_antisymm ?_ (supGauge.le_extend a 0)
+  rcases eq_or_ne (a 0) ⊤ with h0 | h0
+  · simp [h0]
+  refine iSup_le fun k => iSup_le fun m => ?_
+  have hle : supGaugeFinsupp (truncate a k m) ≤ (a 0).toNNReal := by
+    refine supGaugeFinsupp_le fun n => ?_
+    rw [truncate_apply]
+    split
+    · exact ENNReal.toNNReal_mono h0 (le_trans (min_le_left _ _) (ha (Nat.zero_le n)))
+    · exact zero_le
+  calc ((supGauge (truncate a k m) : ℝ≥0) : ℝ≥0∞) ≤ (((a 0).toNNReal : ℝ≥0) : ℝ≥0∞) := by
+        exact_mod_cast hle
+    _ = a 0 := ENNReal.coe_toNNReal h0
 
 section Calkin
 
@@ -1119,6 +1198,7 @@ This is **not** asserted to agree with `TauCeti.schattenIdealFamily` in
 `Family/Schatten.lean`, which is built from its own argument through the
 `tsum`-based `schattenENorm`.  The two should agree and proving it is Milestone
 B3's reconciliation obligation; nothing here claims it. -/
+@[expose]
 noncomputable def schattenFamily (p : ℝ) (hp : 1 ≤ p) :
     TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜 :=
   symmetricGaugeFamily.{u, u} 𝕜 (schattenGauge p hp)
@@ -1179,5 +1259,34 @@ end Calkin
 end Operators
 
 end TruncationGauge
+
+/-! ### The `∞` endpoint of the Schatten scale -/
+
+universe u₀ v₀ w₀
+
+/-- **`S_∞`**, the top of the Schatten scale, defined as the operator-norm family.
+
+The roadmap asks for a separately named endpoint whose gauge is `Φ_∞ = ‖·‖_∞`, and for the
+identification with the operator-norm family.  Taking the operator-norm family as the
+*definition* keeps this free of the `HasMinMaxLowerBoundEverywhere` hypothesis that
+`symmetricGaugeFamily` carries — the roadmap's signature has no such hypothesis — and puts
+the content in `gauge_schattenFamilyInf`, which is the `Φ_∞` description. -/
+noncomputable def schattenFamilyInf (𝕜 : Type u₀) [RCLike 𝕜] :
+    OperatorIdealFamily.{u₀, v₀, w₀} 𝕜 :=
+  operatorNormIdealFamily 𝕜
+
+/-- The `∞` endpoint's gauge is the sup gauge of the approximation-number sequence:
+`supGauge_extend_of_antitone` collapses the supremum to `a₀`, which is the operator norm. -/
+theorem gauge_schattenFamilyInf {𝕜 : Type u₀} [RCLike 𝕜] {E F : Type v₀}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [NormedAddCommGroup F]
+    [InnerProductSpace 𝕜 F] [CompleteSpace E] [CompleteSpace F] (T : E →L[𝕜] F) :
+    (schattenFamilyInf.{u₀, v₀, v₀} 𝕜).gauge T
+      = TruncationGauge.supGauge.extend
+          (fun n => ENNReal.ofReal (T.approximationNumber n)) := by
+  have hanti : Antitone (fun n => ENNReal.ofReal (T.approximationNumber n)) :=
+    fun m n hmn => ENNReal.ofReal_le_ofReal (T.approximationNumber_antitone hmn)
+  rw [TruncationGauge.supGauge_extend_of_antitone hanti,
+    ContinuousLinearMap.approximationNumber_index_zero]
+  simp [schattenFamilyInf, operatorNormIdealFamily]
 
 end TauCeti

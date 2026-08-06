@@ -15,8 +15,9 @@ moved here to `Basic.lean` — the lemma involves no `Orthonormal`, and `Basic`
 already hosts `Finsupp.sum_inner` / `Finsupp.inner_sum` (its dependencies) and
 `open`s `Finsupp` + `ComplexConjugate`, so no new import is needed.
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.Basic
+public import Mathlib.Analysis.InnerProductSpace.Basic
 
 
 /-! # Inner products of linear combinations
@@ -46,6 +47,8 @@ core behind the Gram-rigidity development in
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 

@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group
 
 /-!
 # The generator of the Sylvester flow is `Z ↦ A Z - Z B`
@@ -65,6 +67,8 @@ six siblings of the same family used a flat `Sylvester*` prefix in the directory
 one family now has one convention.  Path change and import repoint only — no statement,
 signature, proof, attribute, declaration name or namespace changed.
 -/
+
+public section
 
 open scoped ENNReal NNReal
 open Filter Topology Complex

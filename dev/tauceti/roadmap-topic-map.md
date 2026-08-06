@@ -1,0 +1,61 @@
+# Roadmap ↔ topic map
+
+**Internal bookkeeping. Not part of the roadmap family, and not written for a Tau Ceti
+reviewer.**
+
+The `TOPICS` table in `scripts/check_tauceti_roadmap_topics.py` partitions the maintained
+`ForTauCeti` modules into fine-grained topic keys; it is the authority on which module
+belongs to which topic. This file maps those topics to roadmap directories, and the same
+script reads it: the gate fails on a topic no roadmap claims, a topic two roadmaps claim, a
+roadmap directory that claims nothing, or a cycle in the resulting roadmap-level dependency
+graph.
+
+The map lives here rather than in the roadmap READMEs so that the READMEs stay ordinary
+mathematical prose. Topic keys are internal identifiers; they carry no meaning for a reader
+of the specification and appear nowhere in it.
+
+Keys are stable and are never renumbered — a key's *number* records when it was introduced,
+not its place in the ladder. `T23` is the clearest case: it was split out of `T15c` and sits
+between `T15c` and `T16` in submission order.
+
+| roadmap directory | topics |
+|---|---|
+| `OperatorTheory/PolarDecomposition` | T01 T02 T03 |
+| `OperatorTheory/OrthogonalGeometry` | T26 |
+| `OperatorTheory/Majorization` | T05 T07 |
+| `OperatorTheory/PrincipalAngles` | T04 T06 T08 |
+| `OperatorTheory/SelfAdjointSpectralTheory` | T13 T14 T15a T15b T15c |
+| `OperatorTheory/OperatorIdeals` | T09 T10 T11 |
+| `OperatorTheory/SpectralSubspacePerturbation` | T12 T16 T17 T18 |
+| `OperatorTheory/MatrixSpectralStatistics` | T19 T20 T21 |
+| `BergeMaximumTheorem` | T22 |
+| `(delivered, not roadmapped)` | T23 T24 T25 |
+
+## Delivered, not roadmapped
+
+`(delivered, not roadmapped)` is a reserved row, not a directory. Its topics are proved in
+`ForTauCeti` and no roadmap proposes them, so they stay out of the roadmap dependency graph
+rather than being attached to a roadmap whose mathematics does not cover them.
+
+| topic | modules | why it is not proposed |
+|---|---|---|
+| T23 | `Analysis.OperatorIdeal.ApproximationNumber.{GramSpectralRank, FinitePVMSelection, GramBandPolar}` | the ingredients of the unbounded spectral-band approximation-number theorem; the theorem itself is not proved, and the bounded cutoff bound it would generalize is already `ApproximationNumber.MinMax` |
+| T24 | `Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal` | the real min-max by complexification; its only consumers are `DavisKahan/**` |
+| T25 | `Analysis.InnerProductSpace.{HilbertSchmidt.Block, Sylvester.BlockEstimate, Sylvester.BlockIdentity, Sylvester.Generator, Sylvester.Group, Sylvester.SpectralGap}` | the Hilbert--Schmidt Sylvester flow, whose unbounded endpoint is not proved; the bounded `sin Θ` theory does not import it |
+
+## Why `T04` was split
+
+`T04` mixed two layers. `Gram.Matrix`, `OrthogonalSeries`, `Projection.Geometry` and
+`ReducingSubspace` import only Mathlib and each other; `Projection.Blocks`, `Projection.Gap`,
+`Spectral.Gap` and `Spectral.Subspace` import `T04` itself and belong with the angle layer.
+Keeping them together forced `Majorization` to depend on `PrincipalAngles` — `KyFan` uses
+`Orthonormal.norm_sq_starProjection_span_image` and
+`RectangularUnitarilyInvariantSeminorm.Basic` uses
+`exists_linearIsometryEquiv_map_eq_of_inner_eq` — while `PrincipalAngles` depends on
+`Majorization` seven ways. `T26` carries the foundational half to `OrthogonalGeometry` and
+the cycle is gone.
+
+`Analysis.InnerProductSpace.Basic` and `Analysis.Normed.Operator.LinearIsometry` moved from
+`T01` to `T26` for the same reason: they are the identities the Gram and orthogonality
+material is built from, no `T01`--`T03` module imports either, and both import only Mathlib.
+`PolarDecomposition` and `OrthogonalGeometry` are therefore independent of each other.

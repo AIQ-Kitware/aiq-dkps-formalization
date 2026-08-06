@@ -34,6 +34,8 @@ directly, and no Cayley transform is needed for a bounded operator.
 namespace TauCeti
 namespace DavisKahanExt
 
+open DavisKahan
+
 open Set
 open MeasureTheory
 open scoped InnerProductSpace

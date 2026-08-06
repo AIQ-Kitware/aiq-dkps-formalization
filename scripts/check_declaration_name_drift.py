@@ -94,7 +94,6 @@ SOURCE_ROOTS = [
     "DkpsQuench2026",
     "ForMathlib",
     "ForTauCeti",
-    "ForTauCetiRoadmap",
     "Helm2025",
 ]
 

@@ -291,9 +291,9 @@ theorem highProb_aligned_configError_endToEndRate
     (hB : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).PosSemidef)      -- PSD
     (hrank : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).rank ≤ d)     -- rank ≤ d
     {α Λ : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ MatrixPerturbation.sortedEigenvalues hB.isHermitian i)  -- eigenvalue floor α on top-d block
-    (hΛ : ∀ l, MatrixPerturbation.sortedEigenvalues hB.isHermitian l ≤ Λ)  -- eigenvalue cap Λ
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)  -- eigenvalue floor α on top-d block
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)  -- eigenvalue cap Λ
     (ψ : Config n d)
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k)
       = classicalMDSMatrix (responseDist μ) i j)  -- ψ is a Gram factor of the population CMDS matrix
@@ -345,9 +345,9 @@ theorem highProb_aligned_configError_endToEndRate_canonical
     (hB : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).PosSemidef)
     (hrank : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).rank ≤ d)
     {α Λ : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
-    (hΛ : ∀ l, MatrixPerturbation.sortedEigenvalues hB.isHermitian l ≤ Λ)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (t : Nat → Real) (R : Real) (σ2 : Nat → Real)
     (hint : ∀ u (i : Fin n), Integrable (fun ω => ‖Xbar u ω i - μ i‖ ^ 2) (P u))
     (hσ2 : ∀ u (i : Fin n), ∫ ω, ‖Xbar u ω i - μ i‖ ^ 2 ∂(P u) ≤ σ2 u)
@@ -433,8 +433,8 @@ theorem highProb_aligned_configError_endToEndRate_topEigenvalue
     (hB : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).PosSemidef)
     (hrank : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).rank ≤ d)
     {α : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
     (ψ : Config n d)
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k)
       = classicalMDSMatrix (responseDist μ) i j)
@@ -456,7 +456,7 @@ theorem highProb_aligned_configError_endToEndRate_topEigenvalue
           ψ (endToEndRateTopEigenvalue hn m d hB α R t) u ω) ψ
         ≤ endToEndRateTopEigenvalue hn m d hB α R t u}) := by
   exact highProb_aligned_configError_endToEndRate P hn hd Xbar μ hB hrank
-    hα_pos hfloor (MatrixPerturbation.sortedEigenvalues_le_topEigenvalue hn hB)
+    hα_pos hfloor (MatrixPerturbation.eigenvalues₀_le_topEigenvalue hn hB)
     ψ hψ t R σ2 hint hσ2 ht_pos hratio hrate_nonneg hrate_zero
     hsample_bound hpopulation_bound
 
@@ -470,8 +470,8 @@ theorem highProb_aligned_configError_endToEndRate_canonical_topEigenvalue
     (hB : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).PosSemidef)
     (hrank : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).rank ≤ d)
     {α : Real} (hα_pos : 0 < α)
-    (hfloor : ∀ i : Fin n, (i : ℕ) < d →
-      α ≤ MatrixPerturbation.sortedEigenvalues hB.isHermitian i)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
     (t : Nat → Real) (R : Real) (σ2 : Nat → Real)
     (hint : ∀ u (i : Fin n), Integrable (fun ω => ‖Xbar u ω i - μ i‖ ^ 2) (P u))
     (hσ2 : ∀ u (i : Fin n), ∫ ω, ‖Xbar u ω i - μ i‖ ^ 2 ∂(P u) ≤ σ2 u)
@@ -493,7 +493,7 @@ theorem highProb_aligned_configError_endToEndRate_canonical_topEigenvalue
         (canonicalCMDSConfig (responseDist μ) hB hrank)
         ≤ endToEndRateTopEigenvalue hn m d hB α R t u}) := by
   exact highProb_aligned_configError_endToEndRate_canonical P hn hd Xbar μ hB hrank
-    hα_pos hfloor (MatrixPerturbation.sortedEigenvalues_le_topEigenvalue hn hB)
+    hα_pos hfloor (MatrixPerturbation.eigenvalues₀_le_topEigenvalue hn hB)
     t R σ2 hint hσ2 ht_pos hratio hrate_nonneg hrate_zero
     hsample_bound hpopulation_bound
 

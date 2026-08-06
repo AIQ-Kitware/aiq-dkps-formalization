@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal
-import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal
+public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone
 
 /-!
 # Stone's theorem, the uniqueness half
@@ -65,6 +67,8 @@ second-order Duhamel estimate brings in `‖Aₙ² ψ‖`, which blows up with `
 * **Semantic differences from a donor:** not applicable.
 -/
 
+public section
+
 open scoped InnerProductSpace
 open Filter Topology Complex MeasureTheory intervalIntegral
 
@@ -76,20 +80,12 @@ variable {A : H →ₗ.[ℂ] H}
 
 /-! ### The bounded case: an exact integral identity -/
 
-/-- `s ↦ exp(s • B) ψ` differentiates to `exp(s • B) (B ψ)`. -/
-@[simp]
-theorem hasDerivAt_expTime_apply' (B : H →L[ℂ] H) (ψ : H) (s : ℝ) :
-    HasDerivAt (fun s : ℝ => expTime B s ψ) (expTime B s (B ψ)) s := by
-  have h := ((ContinuousLinearMap.apply ℂ H ψ).restrictScalars ℝ).hasFDerivAt.comp_hasDerivAt s
-    (hasDerivAt_expTime B s)
-  exact HasDerivAt.congr_deriv h rfl
-
 /-- `s ↦ exp(s • B) ψ` is continuous. -/
 @[simp]
 theorem continuous_expTime_apply (B : H →L[ℂ] H) (ψ : H) :
     Continuous fun s : ℝ => expTime B s ψ := by
   have hdiff : Differentiable ℝ fun s : ℝ => expTime B s ψ := fun s =>
-    (hasDerivAt_expTime_apply' B ψ s).differentiableAt
+    (hasDerivAt_expTime_apply B ψ s).differentiableAt
   exact hdiff.continuous
 
 /-- **The exact integral identity for a bounded generator.** -/
@@ -98,7 +94,7 @@ theorem integral_expTime_apply (B : H →L[ℂ] H) (ψ : H) (t : ℝ) :
     (∫ s in (0 : ℝ)..t, expTime B s (B ψ)) = expTime B t ψ - ψ := by
   have hderiv : ∀ s ∈ Set.uIcc (0 : ℝ) t,
       HasDerivAt (fun s : ℝ => expTime B s ψ) (expTime B s (B ψ)) s :=
-    fun s _ => hasDerivAt_expTime_apply' B ψ s
+    fun s _ => hasDerivAt_expTime_apply B ψ s
   have hint : IntervalIntegrable (fun s : ℝ => expTime B s (B ψ)) volume 0 t :=
     (continuous_expTime_apply B (B ψ)).intervalIntegrable 0 t
   rw [integral_eq_sub_of_hasDerivAt hderiv hint]
@@ -108,9 +104,9 @@ theorem integral_expTime_apply (B : H →L[ℂ] H) (ψ : H) (t : ℝ) :
 
 /-- The identity, for the Yosida approximants. -/
 theorem integral_expApprox (hA : IsSelfAdjoint A) (n : ℕ+) (ψ : H) (t : ℝ) :
-    (∫ s in (0 : ℝ)..t, (I : ℂ) • expApprox hA n s (yosidaApproxSym hA n ψ))
+    (∫ s in (0 : ℝ)..t, (I : ℂ) • expApprox hA n s (yosidaApproximantSym hA n ψ))
       = expApprox hA n t ψ - ψ := by
-  have h := integral_expTime_apply ((I : ℂ) • yosidaApproxSym hA n) ψ t
+  have h := integral_expTime_apply ((I : ℂ) • yosidaApproximantSym hA n) ψ t
   simp only [smul_apply, map_smul, ← expApprox_eq_expTime] at h
   exact h
 
@@ -128,34 +124,34 @@ theorem integral_expLimit (hA : IsSelfAdjoint A) {ψ : H} (hψ : ψ ∈ A.domain
     (∫ s in (0 : ℝ)..t, (I : ℂ) • expLimit hA s (A ⟨ψ, hψ⟩)) = expLimit hA t ψ - ψ := by
   have hconv := tendsto_yosidaApproxSym_of_mem_domain hA ψ hψ
   -- a uniform bound on the approximant images
-  have hnorm : Tendsto (fun n : ℕ+ => ‖yosidaApproxSym hA n ψ‖) atTop (𝓝 ‖A ⟨ψ, hψ⟩‖) :=
+  have hnorm : Tendsto (fun n : ℕ+ => ‖yosidaApproximantSym hA n ψ‖) atTop (𝓝 ‖A ⟨ψ, hψ⟩‖) :=
     hconv.norm
   set C : ℝ := ‖A ⟨ψ, hψ⟩‖ + 1 with hCdef
-  have hCle : ∀ᶠ n : ℕ+ in atTop, ‖yosidaApproxSym hA n ψ‖ ≤ C :=
+  have hCle : ∀ᶠ n : ℕ+ in atTop, ‖yosidaApproximantSym hA n ψ‖ ≤ C :=
     hnorm.eventually_le_const (by rw [hCdef]; linarith)
   -- the integrands converge pointwise
   have hlim : ∀ s : ℝ, Tendsto
-      (fun n : ℕ+ => (I : ℂ) • expApprox hA n s (yosidaApproxSym hA n ψ)) atTop
+      (fun n : ℕ+ => (I : ℂ) • expApprox hA n s (yosidaApproximantSym hA n ψ)) atTop
       (𝓝 ((I : ℂ) • expLimit hA s (A ⟨ψ, hψ⟩))) := by
     intro s
     refine Filter.Tendsto.const_smul ?_ (I : ℂ)
     rw [tendsto_iff_norm_sub_tendsto_zero]
     have hsplit : ∀ n : ℕ+,
-        ‖expApprox hA n s (yosidaApproxSym hA n ψ) - expLimit hA s (A ⟨ψ, hψ⟩)‖
-          ≤ ‖yosidaApproxSym hA n ψ - A ⟨ψ, hψ⟩‖
+        ‖expApprox hA n s (yosidaApproximantSym hA n ψ) - expLimit hA s (A ⟨ψ, hψ⟩)‖
+          ≤ ‖yosidaApproximantSym hA n ψ - A ⟨ψ, hψ⟩‖
             + ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := by
       intro n
-      calc ‖expApprox hA n s (yosidaApproxSym hA n ψ) - expLimit hA s (A ⟨ψ, hψ⟩)‖
-          = ‖expApprox hA n s (yosidaApproxSym hA n ψ - A ⟨ψ, hψ⟩)
+      calc ‖expApprox hA n s (yosidaApproximantSym hA n ψ) - expLimit hA s (A ⟨ψ, hψ⟩)‖
+          = ‖expApprox hA n s (yosidaApproximantSym hA n ψ - A ⟨ψ, hψ⟩)
               + (expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩))‖ := by
             rw [map_sub]; congr 1; abel
-        _ ≤ ‖expApprox hA n s (yosidaApproxSym hA n ψ - A ⟨ψ, hψ⟩)‖
+        _ ≤ ‖expApprox hA n s (yosidaApproximantSym hA n ψ - A ⟨ψ, hψ⟩)‖
               + ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := norm_add_le _ _
-        _ = ‖yosidaApproxSym hA n ψ - A ⟨ψ, hψ⟩‖
+        _ = ‖yosidaApproximantSym hA n ψ - A ⟨ψ, hψ⟩‖
               + ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := by
             rw [norm_expApprox]
     refine squeeze_zero (fun n => norm_nonneg _) hsplit ?_
-    have h1 : Tendsto (fun n : ℕ+ => ‖yosidaApproxSym hA n ψ - A ⟨ψ, hψ⟩‖) atTop (𝓝 0) :=
+    have h1 : Tendsto (fun n : ℕ+ => ‖yosidaApproximantSym hA n ψ - A ⟨ψ, hψ⟩‖) atTop (𝓝 0) :=
       tendsto_iff_norm_sub_tendsto_zero.mp hconv
     have h2 : Tendsto
         (fun n : ℕ+ => ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖)
@@ -164,12 +160,12 @@ theorem integral_expLimit (hA : IsSelfAdjoint A) {ψ : H} (hψ : ψ ∈ A.domain
     simpa using h1.add h2
   -- dominated convergence
   have hint : Tendsto
-      (fun n : ℕ+ => ∫ s in (0 : ℝ)..t, (I : ℂ) • expApprox hA n s (yosidaApproxSym hA n ψ))
+      (fun n : ℕ+ => ∫ s in (0 : ℝ)..t, (I : ℂ) • expApprox hA n s (yosidaApproximantSym hA n ψ))
       atTop (𝓝 (∫ s in (0 : ℝ)..t, (I : ℂ) • expLimit hA s (A ⟨ψ, hψ⟩))) := by
     refine intervalIntegral.tendsto_integral_filter_of_dominated_convergence
       (fun _ => C) ?_ ?_ ?_ ?_
     · exact Eventually.of_forall fun n =>
-        (((continuous_expApprox_apply hA n (yosidaApproxSym hA n ψ)).const_smul
+        (((continuous_expApprox_apply hA n (yosidaApproximantSym hA n ψ)).const_smul
           (I : ℂ)).aestronglyMeasurable)
     · filter_upwards [hCle] with n hn
       refine Eventually.of_forall fun s _ => ?_

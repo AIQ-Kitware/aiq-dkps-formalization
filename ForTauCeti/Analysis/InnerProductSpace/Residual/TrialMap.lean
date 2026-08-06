@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
 
 /-!
 # Residuals of arbitrary trial maps
@@ -33,6 +35,8 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -44,6 +48,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 /-- Residual of a general, not necessarily isometric, trial map. -/
+@[expose]
 noncomputable def generalResidual (A : E →ₗ[𝕜] E) (X : F →ₗ[𝕜] E)
     (M : F →ₗ[𝕜] F) : F →ₗ[𝕜] E :=
   A ∘ₗ X - X ∘ₗ M
@@ -51,6 +56,7 @@ noncomputable def generalResidual (A : E →ₗ[𝕜] E) (X : F →ₗ[𝕜] E)
 /-- The raw complementary block of an arbitrary trial map.  For an isometric
 embedding this specializes to `sinThetaEmbedding`; without normalization it is
 the algebraic block bounded first in the generalized sine and tangent proofs. -/
+@[expose]
 noncomputable def complementaryTrialBlock (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗ[𝕜] E) : F →ₗ[𝕜] E :=
   complementaryProjection U ∘ₗ X

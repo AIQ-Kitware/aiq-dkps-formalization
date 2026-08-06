@@ -12,9 +12,10 @@ Milestone 2 of the operator polar decomposition project — COMPLETE
 (proof-complete; reduction uses only:
 `propext, Classical.choice, Quot.sound`). Tickets PD-13..PD-17.
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
-import Mathlib.Analysis.InnerProductSpace.Spectrum
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
+public import Mathlib.Analysis.InnerProductSpace.Spectrum
 
 
 /-! # The canonical intertwining (matching) unitary (Milestone 2)
@@ -38,6 +39,8 @@ Source: **Davis (1963)**, "The Rotation of Eigenvectors by a Perturbation", §2,
 
 Deferred (source Davis 1958 §7 unavailable, off critical path): the minimality theorems 2.1/2.3.
 -/
+
+public section
 
 open scoped InnerProductSpace
 open LinearMap InnerProductSpace
@@ -68,6 +71,7 @@ onto.
 /-- Orthogonal projection onto the span of a subset `S` of an orthonormal basis; the building block
 for the spectral projections of a symmetric operator, which is what it was
 misleadingly named after. -/
+@[expose]
 noncomputable def spanIndicesProjection (b : OrthonormalBasis (Fin n) 𝕜 E) (S : Finset (Fin n)) :
     E →ₗ[𝕜] E :=
   ∑ i ∈ S, (InnerProductSpace.rankOne 𝕜 (b i) (b i)).toLinearMap
@@ -167,6 +171,7 @@ variable {m : ℕ}
 
 /-- The complete orthogonal family of rank-one spectral projections attached to an orthonormal
 basis: `proj i` is the orthogonal projection onto `span (b i)`. -/
+@[expose]
 noncomputable def OrthoProjFamily.ofOrthonormalBasis (b : OrthonormalBasis (Fin n) 𝕜 E) :
     OrthoProjFamily 𝕜 E n where
   proj i := OrthonormalBasis.spanIndicesProjection b {i}

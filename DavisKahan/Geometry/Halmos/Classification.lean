@@ -95,6 +95,82 @@ theorem intertwines_halmosCosineSq (e : H₁ ≃ₗᵢ[ℂ] H₂)
     mul_apply_eq_comp, map_add]
   rw [hpU, hpV, hpU, hpUc, hpVc, hpUc]
 
+/-! ### Where a pair-equivalence sends the Halmos summands
+
+Each summand is built from `U`, `Uᗮ`, `V`, `Vᗮ` by intersections, joins and one
+orthogonal complement, and an isometric equivalence commutes with all three.  So
+a pair-equivalence carries every summand onto its counterpart.  These are broken
+out because both directions of the classification need them: the forward
+direction to restrict the equivalence, and brick (1) to restrict it to the
+`U`-half of the generic part. -/
+
+omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
+  [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection]
+  [V₂.HasOrthogonalProjection] in
+/-- A pair-equivalence carries the common part onto the common part. -/
+theorem map_halmosCommonPart (e : H₁ ≃ₗᵢ[ℂ] H₂)
+    (hU : U₁.map e.toLinearMap = U₂) (hV : V₁.map e.toLinearMap = V₂) :
+    (halmosCommonPart U₁ V₁).map e.toLinearMap = halmosCommonPart U₂ V₂ := by
+  have hinj : Function.Injective (e.toLinearMap : H₁ → H₂) := by simpa using e.injective
+  rw [halmosCommonPart, Submodule.map_inf _ hinj, hU, hV]
+
+omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
+  [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection]
+  [V₂.HasOrthogonalProjection] in
+/-- A pair-equivalence carries the source defect onto the source defect. -/
+theorem map_halmosSourceDefect (e : H₁ ≃ₗᵢ[ℂ] H₂)
+    (hU : U₁.map e.toLinearMap = U₂) (hV : V₁.map e.toLinearMap = V₂) :
+    (halmosSourceDefect U₁ V₁).map e.toLinearMap = halmosSourceDefect U₂ V₂ := by
+  have hinj : Function.Injective (e.toLinearMap : H₁ → H₂) := by simpa using e.injective
+  have hVc : V₁ᗮ.map e.toLinearMap = V₂ᗮ := by rw [Submodule.map_orthogonal_equiv, hV]
+  rw [halmosSourceDefect, Submodule.map_inf _ hinj, hU, hVc]
+
+omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
+  [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection]
+  [V₂.HasOrthogonalProjection] in
+/-- A pair-equivalence carries the target defect onto the target defect. -/
+theorem map_halmosTargetDefect (e : H₁ ≃ₗᵢ[ℂ] H₂)
+    (hU : U₁.map e.toLinearMap = U₂) (hV : V₁.map e.toLinearMap = V₂) :
+    (halmosTargetDefect U₁ V₁).map e.toLinearMap = halmosTargetDefect U₂ V₂ := by
+  have hinj : Function.Injective (e.toLinearMap : H₁ → H₂) := by simpa using e.injective
+  have hUc : U₁ᗮ.map e.toLinearMap = U₂ᗮ := by rw [Submodule.map_orthogonal_equiv, hU]
+  rw [halmosTargetDefect, Submodule.map_inf _ hinj, hUc, hV]
+
+omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
+  [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection]
+  [V₂.HasOrthogonalProjection] in
+/-- A pair-equivalence carries the exterior part onto the exterior part. -/
+theorem map_halmosExteriorPart (e : H₁ ≃ₗᵢ[ℂ] H₂)
+    (hU : U₁.map e.toLinearMap = U₂) (hV : V₁.map e.toLinearMap = V₂) :
+    (halmosExteriorPart U₁ V₁).map e.toLinearMap = halmosExteriorPart U₂ V₂ := by
+  have hinj : Function.Injective (e.toLinearMap : H₁ → H₂) := by simpa using e.injective
+  have hUc : U₁ᗮ.map e.toLinearMap = U₂ᗮ := by rw [Submodule.map_orthogonal_equiv, hU]
+  have hVc : V₁ᗮ.map e.toLinearMap = V₂ᗮ := by rw [Submodule.map_orthogonal_equiv, hV]
+  rw [halmosExteriorPart, Submodule.map_inf _ hinj, hUc, hVc]
+
+omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
+  [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection]
+  [V₂.HasOrthogonalProjection] in
+/-- A pair-equivalence carries the trivial part onto the trivial part. -/
+theorem map_halmosTrivialPart (e : H₁ ≃ₗᵢ[ℂ] H₂)
+    (hU : U₁.map e.toLinearMap = U₂) (hV : V₁.map e.toLinearMap = V₂) :
+    (halmosTrivialPart U₁ V₁).map e.toLinearMap = halmosTrivialPart U₂ V₂ := by
+  simp only [halmosTrivialPart, Submodule.map_sup,
+    map_halmosCommonPart U₁ V₁ U₂ V₂ e hU hV,
+    map_halmosSourceDefect U₁ V₁ U₂ V₂ e hU hV,
+    map_halmosTargetDefect U₁ V₁ U₂ V₂ e hU hV,
+    map_halmosExteriorPart U₁ V₁ U₂ V₂ e hU hV]
+
+omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
+  [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection]
+  [V₂.HasOrthogonalProjection] in
+/-- A pair-equivalence carries the generic part onto the generic part. -/
+theorem map_halmosGenericPart (e : H₁ ≃ₗᵢ[ℂ] H₂)
+    (hU : U₁.map e.toLinearMap = U₂) (hV : V₁.map e.toLinearMap = V₂) :
+    (halmosGenericPart U₁ V₁).map e.toLinearMap = halmosGenericPart U₂ V₂ := by
+  rw [halmosGenericPart, Submodule.map_orthogonal_equiv,
+    map_halmosTrivialPart U₁ V₁ U₂ V₂ e hU hV]
+
 /-- **Forward direction of the operator-level Halmos classification.**  A
 unitary equivalence of the ordered pairs induces isometric equivalences of the
 four elementary Halmos summands together with a unitary intertwining of the
@@ -108,24 +184,11 @@ theorem sameHalmosInvariant_of_pairEquiv
     BoundedOperatorsUnitaryEquivalent
       (genericHalmosCosineSq U₁ V₁) (genericHalmosCosineSq U₂ V₂) := by
   obtain ⟨e, hU, hV⟩ := h
-  have hinj : Function.Injective (e.toLinearMap : H₁ → H₂) := by simpa using e.injective
-  have hUc : U₁ᗮ.map e.toLinearMap = U₂ᗮ := by rw [Submodule.map_orthogonal_equiv, hU]
-  have hVc : V₁ᗮ.map e.toLinearMap = V₂ᗮ := by rw [Submodule.map_orthogonal_equiv, hV]
-  -- the four elementary summands map correctly
-  have hCommon : (halmosCommonPart U₁ V₁).map e.toLinearMap = halmosCommonPart U₂ V₂ := by
-    rw [halmosCommonPart, Submodule.map_inf _ hinj, hU, hV]
-  have hSource : (halmosSourceDefect U₁ V₁).map e.toLinearMap = halmosSourceDefect U₂ V₂ := by
-    rw [halmosSourceDefect, Submodule.map_inf _ hinj, hU, hVc]
-  have hTarget : (halmosTargetDefect U₁ V₁).map e.toLinearMap = halmosTargetDefect U₂ V₂ := by
-    rw [halmosTargetDefect, Submodule.map_inf _ hinj, hUc, hV]
-  have hExterior : (halmosExteriorPart U₁ V₁).map e.toLinearMap = halmosExteriorPart U₂ V₂ := by
-    rw [halmosExteriorPart, Submodule.map_inf _ hinj, hUc, hVc]
-  -- the trivial and generic parts map correctly
-  have hTrivial : (halmosTrivialPart U₁ V₁).map e.toLinearMap = halmosTrivialPart U₂ V₂ := by
-    simp only [halmosTrivialPart, Submodule.map_sup, Submodule.map_sup, Submodule.map_sup,
-      hCommon, hSource, hTarget, hExterior]
-  have hGen : (halmosGenericPart U₁ V₁).map e.toLinearMap = halmosGenericPart U₂ V₂ := by
-    rw [halmosGenericPart, Submodule.map_orthogonal_equiv, hTrivial]
+  have hCommon := map_halmosCommonPart U₁ V₁ U₂ V₂ e hU hV
+  have hSource := map_halmosSourceDefect U₁ V₁ U₂ V₂ e hU hV
+  have hTarget := map_halmosTargetDefect U₁ V₁ U₂ V₂ e hU hV
+  have hExterior := map_halmosExteriorPart U₁ V₁ U₂ V₂ e hU hV
+  have hGen := map_halmosGenericPart U₁ V₁ U₂ V₂ e hU hV
   refine ⟨⟨summandEquiv e _ hCommon⟩, ⟨summandEquiv e _ hSource⟩,
     ⟨summandEquiv e _ hTarget⟩, ⟨summandEquiv e _ hExterior⟩, summandEquiv e _ hGen, ?_⟩
   intro x

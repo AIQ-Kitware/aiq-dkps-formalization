@@ -217,7 +217,7 @@ theorem abs_canonicalIntertwiner_apply_principalSourceVector
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
-    TauCeti.abs (canonicalIntertwiner U V) (principalSourceVector U V i) =
+    TauCeti.operatorAbs (canonicalIntertwiner U V) (principalSourceVector U V i) =
       (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i := by
   have hu := principalSourceVector_mem U V hacute i
   have heig := adjointCompSelf_apply_rightSingularBasis (sinThetaMap U V)
@@ -291,7 +291,7 @@ theorem exists_canonicalIntertwiner_singularValue_eq_principalPlaneCosine
   have hu1 : ‖principalSourceVector U V i‖ = 1 :=
     (orthonormal_principalSourceVector U V).norm_eq_one i
   have heigAbs := abs_canonicalIntertwiner_apply_principalSourceVector U V hacute i
-  have hev : Module.End.HasEigenvalue (TauCeti.abs (canonicalIntertwiner U V))
+  have hev : Module.End.HasEigenvalue (TauCeti.operatorAbs (canonicalIntertwiner U V))
       ((principalPlaneCosine U V i : ℝ) : 𝕜) := by
     apply Module.End.hasEigenvalue_of_hasEigenvector
       (x := principalSourceVector U V i)
@@ -299,11 +299,11 @@ theorem exists_canonicalIntertwiner_singularValue_eq_principalPlaneCosine
     · rw [Module.End.mem_eigenspace_iff]; exact heigAbs
     · exact fun h => by simp [h] at hu1
   obtain ⟨j, hj⟩ :=
-    (isPositive_abs (canonicalIntertwiner U V)).isSymmetric.exists_eigenvalues_eq rfl hev
+    (isPositive_operatorAbs (canonicalIntertwiner U V)).isSymmetric.exists_eigenvalues_eq rfl hev
   refine ⟨j, ?_⟩
-  have hj' : (isPositive_abs (canonicalIntertwiner U V)).isSymmetric.eigenvalues rfl j
+  have hj' : (isPositive_operatorAbs (canonicalIntertwiner U V)).isSymmetric.eigenvalues rfl j
       = principalPlaneCosine U V i := by exact_mod_cast hj
-  rw [← congrFun (eigenvalues_abs (canonicalIntertwiner U V)) j]
+  rw [← congrFun (eigenvalues_operatorAbs (canonicalIntertwiner U V)) j]
   exact hj'
 
 /-- The direct rotation has the canonical cosine-sine action on a source
@@ -356,12 +356,12 @@ theorem principalOrthogonalVector_mem
       -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the goal unsolved:
       -- at least one lemma here has to fire at one occurrence, in order, and simp's normal form
       -- loses the intermediate shape.
-      rw [← abs_mul_self, LinearMap.comp_apply, hC, map_smul, hC, smul_smul,
+      rw [← operatorAbs_mul_self, LinearMap.comp_apply, hC, map_smul, hC, smul_smul,
         ← RCLike.ofReal_mul, ← sq]
     rw [← h1, h2]
   have hpolar : canonicalIntertwiner U V =
       (directRotation U V hacute).toLinearMap ∘ₗ
-        TauCeti.abs (canonicalIntertwiner U V) := by
+        TauCeti.operatorAbs (canonicalIntertwiner U V) := by
     rw [directRotation_toLinearMap]; exact polar_decomposition (canonicalIntertwiner U V)
   have hWpsv : projection V (principalSourceVector U V i) =
       (principalPlaneCosine U V i : 𝕜) •
@@ -418,7 +418,7 @@ theorem projection_apply_principalSourceVector
       projection_apply_of_mem hu, hcompUu, map_zero, add_zero]
   have hpolar : canonicalIntertwiner U V =
       (directRotation U V hacute).toLinearMap ∘ₗ
-        TauCeti.abs (canonicalIntertwiner U V) := by
+        TauCeti.operatorAbs (canonicalIntertwiner U V) := by
     rw [directRotation_toLinearMap]; exact polar_decomposition (canonicalIntertwiner U V)
   have h := LinearMap.congr_fun hpolar (principalSourceVector U V i)
   simp only [LinearMap.comp_apply] at h
@@ -647,7 +647,7 @@ theorem abs_canonicalIntertwiner_apply_principalOrthogonalVector
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
-    TauCeti.abs (canonicalIntertwiner U V)
+    TauCeti.operatorAbs (canonicalIntertwiner U V)
         (principalOrthogonalVector U V hacute i) =
       (principalPlaneCosine U V i : 𝕜) •
         principalOrthogonalVector U V hacute i := by
@@ -657,7 +657,7 @@ theorem abs_canonicalIntertwiner_apply_principalOrthogonalVector
     LinearIsometryEquiv.coe_toLinearEquiv] at htwo
   rw [directRotation_apply_principalOrthogonalVector U V hacute i,
     directRotation_symm_apply_principalOrthogonalVector U V hacute i] at htwo
-  have h2 : (2 : 𝕜) • TauCeti.abs (canonicalIntertwiner U V)
+  have h2 : (2 : 𝕜) • TauCeti.operatorAbs (canonicalIntertwiner U V)
       (principalOrthogonalVector U V hacute i) =
       (2 : 𝕜) • ((principalPlaneCosine U V i : 𝕜) •
         principalOrthogonalVector U V hacute i) := by

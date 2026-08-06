@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Basic
+import DavisKahan.InfiniteDimensional.Sylvester.Basic
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.OrderedSemigroup
+import DavisKahan.InfiniteDimensional.Sylvester.OrderedSemigroup
 import DavisKahan.OperatorIdeal.ComplexificationApproximation
 import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
 
@@ -33,6 +33,8 @@ namespace MathAhead
 namespace HiddenFoundations
 
 open DavisKahanExt
+open TauCeti.DavisKahan
+open TauCeti.DavisKahan.Experimental.Foundation
 open ExactSinTheta
 open ExactSinTheta.ComplexificationApproximation
 open RealComplexification

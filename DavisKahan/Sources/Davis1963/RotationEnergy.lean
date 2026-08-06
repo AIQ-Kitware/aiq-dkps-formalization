@@ -6,7 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 import DavisKahan.Sources.Davis1963.RotationBound
 import DavisKahan.Sources.Davis1963.DoubleAngle
 import DavisKahan.FiniteDimensional.Core.OperatorBlocks
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
 /-!
 # Davis's 1963 finite-dimensional rotation theory
@@ -75,7 +75,7 @@ noncomputable def eigenbasisPinchEnergy
 noncomputable def eigenbasisOffDiagonalEnergy
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {n : ℕ}
     (hn : finrank 𝕜 E = n) (H : E →ₗ[𝕜] E) : ℝ :=
-  UnitarilyInvariantNorm.frobenius 𝕜 E H ^ 2 -
+  UnitarilyInvariantSeminorm.frobenius 𝕜 E H ^ 2 -
     eigenbasisPinchEnergy hA hn H
 
 /-- Davis 1963, Theorem 3.2: sharpened total-rotation bound with eigenvalue
@@ -98,10 +98,10 @@ theorem totalRotation_add_eigenvalueMotion_le
         (hA.eigenvalues hn i - hB.eigenvalues hn j) ^ 2) :
     γ ^ 2 * totalRotationEnergy hA hB hn hover +
         eigenvalueMotionEnergy (hA.eigenvalues hn) (hB.eigenvalues hn) ≤
-      UnitarilyInvariantNorm.frobenius 𝕜 E (B - A) ^ 2 := by
+      UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A) ^ 2 := by
   have h := rotation_add_displacement_le_hilbertSchmidt_intertwining
     hA hB hn hover hsep
-  rw [UnitarilyInvariantNorm.frobenius_sq 𝕜 E (B - A) hn
+  rw [UnitarilyInvariantSeminorm.frobenius_sq 𝕜 E (B - A) hn
     (hA.eigenvectorBasis hn)]
   simpa [totalRotationEnergy, eigenvalueMotionEnergy] using h
 
@@ -136,7 +136,7 @@ theorem diagonalPerturbation_sub_offDiagonal_le_eigenvalueMotion
   rw [hsymm] at hmotion
   rw [hoff] at hmotion
   unfold eigenbasisOffDiagonalEnergy eigenvalueMotionEnergy
-  rw [UnitarilyInvariantNorm.frobenius_sq 𝕜 E (B - A) hn
+  rw [UnitarilyInvariantSeminorm.frobenius_sq 𝕜 E (B - A) hn
     (hA.eigenvectorBasis hn)]
   simpa only [eigenbasisPinchEnergy] using hmotion
 
@@ -160,7 +160,7 @@ theorem totalRotation_le_two_mul_offDiagonal
   have h := rotation_le_two_mul_offDiag hA hB hn hγ hsepB hpinchSmall
     hover hsepMixed
   unfold totalRotationEnergy eigenbasisOffDiagonalEnergy eigenbasisPinchEnergy
-  rw [UnitarilyInvariantNorm.frobenius_sq 𝕜 E (B - A) hn
+  rw [UnitarilyInvariantSeminorm.frobenius_sq 𝕜 E (B - A) hn
     (hA.eigenvectorBasis hn)]
   exact h
 

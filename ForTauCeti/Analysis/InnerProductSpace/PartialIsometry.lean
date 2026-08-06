@@ -12,13 +12,14 @@ Sub-dev II of the operator polar decomposition project — COMPLETE
 (proof-complete; reduction uses only:
 `propext, Classical.choice, Quot.sound`). Tickets PD-05..PD-07.
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.Analysis.InnerProductSpace.Projection.Basic
-import Mathlib.Analysis.InnerProductSpace.Projection.Submodule
-import Mathlib.Analysis.InnerProductSpace.LinearMap
-import Mathlib.Analysis.InnerProductSpace.Subspace
-import Mathlib.Algebra.Star.StarProjection
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
+public import Mathlib.Analysis.InnerProductSpace.Projection.Submodule
+public import Mathlib.Analysis.InnerProductSpace.LinearMap
+public import Mathlib.Analysis.InnerProductSpace.Subspace
+public import Mathlib.Algebra.Star.StarProjection
 
 
 /-! # Partial isometries (Sub-dev II)
@@ -47,10 +48,13 @@ decomposition); Reed–Simon, *Methods of Modern Mathematical Physics I*, §VI (
   `ForTauCeti` staging modules.
 -/
 
+public section
+
 open scoped InnerProductSpace
 open LinearMap
 
 /-- **Partial isometry** (algebraic form): `u * star u * u = u`. -/
+@[expose]
 def IsPartialIsometry {R : Type*} [Monoid R] [StarMul R] (u : R) : Prop :=
   u * star u * u = u
 

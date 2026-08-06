@@ -22,18 +22,24 @@ statements and use only the permitted kernel dependencies.
 
 namespace TauCeti.Matrix
 
--- Binder names match the ForMathlib source (`{𝕜 m n}`); the comparator exports
+-- Binder names match the library source (`{𝕜 m n}`); the comparator exports
 -- de Bruijn terms so names do not affect matching, but keeping them identical
 -- avoids any ambiguity.
+--
+-- `[DecidableEq n]` was dropped here when it was dropped from the library
+-- signature: it appeared in the type and was used only by the `Pi.single`
+-- witness in the proof, which `classical` supplies.  A challenge statement
+-- follows the API it validates; it does not pin it.
 open Module (finrank)
 open _root_.Matrix
 
-variable {𝕜 m n : Type*} [Field 𝕜] [Fintype n] [DecidableEq n]
+variable {𝕜 m n : Type*} [Field 𝕜] [Fintype n]
 
 /-- Rank factorization (exact): every matrix factors as `M = L * R` with inner
 dimension `Fin M.rank`. -/
 theorem exists_eq_mul_rank (M : Matrix m n 𝕜) :
     ∃ (L : Matrix m (Fin M.rank) 𝕜) (R : Matrix (Fin M.rank) n 𝕜), M = L * R := by
+  classical
   have hdim : finrank 𝕜 (LinearMap.range M.mulVecLin) = M.rank := rfl
   let b : Module.Basis (Fin M.rank) 𝕜 (LinearMap.range M.mulVecLin) :=
     Module.finBasisOfFinrankEq 𝕜 _ hdim

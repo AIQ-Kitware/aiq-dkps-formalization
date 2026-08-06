@@ -1035,6 +1035,178 @@ theorem complementaryProjection_mul_spectraDirectRotation_mul_complementaryProje
     _ = (C * P) * ((B : H →L[ℂ] H) * Binv) := by rw [mul_assoc]
     _ = C * P := by rw [B.mul_inv, mul_one]
 
+/-! ### Proposition 3.1's characterisation clause
+
+Davis and Kahan state Proposition 3.1 as *existence, uniqueness, and* a
+characterisation: among the unitary square roots of `J_V J_U` that carry the
+pair `(U, Uᗮ)` onto `(V, Vᗮ)`, the direct rotation is singled out by positivity
+of its two **diagonal blocks**.
+
+That is strictly weaker information than the hypothesis
+`spectraDirectRotation_unique` runs on, which is positivity of the whole
+Hermitian part — nonnegativity of the two compressions constrains the numerical
+range on `U` and on `Uᗮ` separately and says nothing about a mixed vector.  The
+gap is closed by the intertwining relation and nothing else: `W J_U = J_V W`
+together with `W² = J_V J_U` forces `J_U W J_U = W*`, so the Hermitian part
+`W + W*` **commutes with `J_U`** and its quadratic form splits as a sum over
+`U ⊕ Uᗮ` with no cross term.  Two separate sign conditions then do add up.
+
+The two-projection content is `Submodule.re_inner_apply_self_nonneg_of_reflectionConjugate`
+in `ForTauCeti`; what is specific to the direct rotation is only the derivation
+of `J_U W J_U = W*`. -/
+
+/-- **A unitary square root of the reflection product that intertwines the two
+reflections has `J_U W J_U = W*`.**
+
+Both `W W J_U` and `W J_U W*` compute `J_V` — the first from the square
+identity, the second from the intertwining relation — so they agree, and
+cancelling `W` on the left gives `W J_U = J_U W*`.
+
+This is the exact sense in which such a `W` is "block-antidiagonal in its
+off-diagonal part": in `U ⊕ Uᗮ` coordinates the identity says the diagonal
+blocks of `W` are self-adjoint and the off-diagonal blocks are negatives of each
+other's adjoints. -/
+theorem reflection_conjugate_eq_star_of_sq_of_intertwines
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (W : H →L[ℂ] H)
+    (hWunit : W ∈ unitary (H →L[ℂ] H))
+    (hsq : W * W = spectraReflectionProduct U V)
+    (hint : W * reflectionOperator U = reflectionOperator V * W) :
+    reflectionOperator U * W * reflectionOperator U = star W := by
+  have hJJ : reflectionOperator U * reflectionOperator U = (1 : H →L[ℂ] H) :=
+    reflectionOperator_mul_self_complex U
+  have hWstarW : star W * W = 1 := Unitary.star_mul_self_of_mem hWunit
+  have hWWstar : W * star W = 1 := Unitary.mul_star_self_of_mem hWunit
+  -- Two expressions for `J_V`.
+  have h1 : W * W * reflectionOperator U = reflectionOperator V := by
+    calc
+      W * W * reflectionOperator U =
+          reflectionOperator V * reflectionOperator U *
+            reflectionOperator U := by rw [hsq]
+      _ = reflectionOperator V *
+          (reflectionOperator U * reflectionOperator U) := by rw [mul_assoc]
+      _ = reflectionOperator V := by rw [hJJ, mul_one]
+  have h2 : W * reflectionOperator U * star W = reflectionOperator V := by
+    rw [hint, mul_assoc, hWWstar, mul_one]
+  -- Cancel `W` on the left of `h1 = h2`.
+  have h3 : W * reflectionOperator U = reflectionOperator U * star W := by
+    have h := h1.trans h2.symm
+    have h' := congrArg (fun T : H →L[ℂ] H => star W * T) h
+    calc
+      W * reflectionOperator U =
+          star W * W * (W * reflectionOperator U) := by rw [hWstarW, one_mul]
+      _ = star W * (W * W * reflectionOperator U) := by
+            simp only [mul_assoc]
+      _ = star W * (W * reflectionOperator U * star W) := by rw [h']
+      _ = star W * W * reflectionOperator U * star W := by
+            simp only [mul_assoc]
+      _ = reflectionOperator U * star W := by rw [hWstarW, one_mul]
+  -- Multiply on the left by `J_U`.
+  calc
+    reflectionOperator U * W * reflectionOperator U =
+        reflectionOperator U * (W * reflectionOperator U) := by rw [mul_assoc]
+    _ = reflectionOperator U * (reflectionOperator U * star W) := by rw [h3]
+    _ = reflectionOperator U * reflectionOperator U * star W := by
+          rw [mul_assoc]
+    _ = star W := by rw [hJJ, one_mul]
+
+/-- **Positivity of the two diagonal blocks characterises the direct
+rotation.**
+
+This is the characterisation clause of Proposition 3.1.  The hypotheses are the
+printed ones: `W` is unitary, squares to the reflection product, carries the
+pair `(U, Uᗮ)` onto `(V, Vᗮ)`, and its compressions to `U` and to `Uᗮ` have
+nonnegative numerical range.  No condition is imposed on mixed vectors, which is
+what distinguishes this statement from `spectraDirectRotation_unique`. -/
+theorem spectraDirectRotation_unique_of_diagonalBlocks
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    (W : H →L[ℂ] H)
+    (hWunit : W ∈ unitary (H →L[ℂ] H))
+    (hsq : W * W = spectraReflectionProduct U V)
+    (hint : W * reflectionOperator U = reflectionOperator V * W)
+    (hblockU : ∀ x ∈ U, 0 ≤ Complex.re ⟪W x, x⟫_ℂ)
+    (hblockUperp : ∀ x ∈ Uᗮ, 0 ≤ Complex.re ⟪W x, x⟫_ℂ) :
+    W = spectraDirectRotation U V hacute := by
+  have hJJ : reflectionOperator U * reflectionOperator U = (1 : H →L[ℂ] H) :=
+    reflectionOperator_mul_self_complex U
+  have hconj : reflectionOperator U * W * reflectionOperator U = star W :=
+    reflection_conjugate_eq_star_of_sq_of_intertwines U V W hWunit hsq hint
+  -- The Hermitian part commutes with the reflection.
+  have hstarconj :
+      reflectionOperator U * star W * reflectionOperator U = W := by
+    calc
+      reflectionOperator U * star W * reflectionOperator U =
+          reflectionOperator U *
+            (reflectionOperator U * W * reflectionOperator U) *
+              reflectionOperator U := by rw [hconj]
+      _ = (reflectionOperator U * reflectionOperator U) * W *
+            (reflectionOperator U * reflectionOperator U) := by
+            simp only [mul_assoc]
+      _ = W := by rw [hJJ, one_mul, mul_one]
+  have hT : U.reflectionOperator ∘L (W + star W) ∘L U.reflectionOperator =
+      W + star W := by
+    show reflectionOperator U * ((W + star W) * reflectionOperator U) =
+      W + star W
+    rw [← mul_assoc, mul_add, add_mul, mul_assoc, mul_assoc, ← mul_assoc _ W,
+      ← mul_assoc _ (star W), hconj, hstarconj]
+    exact add_comm _ _
+  -- Its quadratic form is twice that of `W`.
+  have hform : ∀ x : H, RCLike.re ⟪(W + star W) x, x⟫_ℂ =
+      2 * RCLike.re ⟪W x, x⟫_ℂ := by
+    intro x
+    simp only [add_apply, inner_add_left, map_add, re_inner_star_apply]
+    ring
+  have hnonneg : ∀ x : H, 0 ≤ RCLike.re ⟪(W + star W) x, x⟫_ℂ := by
+    refine Submodule.re_inner_apply_self_nonneg_of_reflectionConjugate U hT
+      ?_ ?_
+    · intro x hx
+      rw [hform x]
+      have := hblockU x hx
+      change 0 ≤ RCLike.re ⟪W x, x⟫_ℂ at this
+      linarith
+    · intro x hx
+      rw [hform x]
+      have := hblockUperp x hx
+      change 0 ≤ RCLike.re ⟪W x, x⟫_ℂ at this
+      linarith
+  refine spectraDirectRotation_unique_of_sq U V hacute W hWunit hsq ?_
+  intro x
+  have h := hnonneg x
+  rw [hform x] at h
+  change 0 ≤ RCLike.re ⟪W x, x⟫_ℂ
+  linarith
+
+/-- **Proposition 3.1, characterisation form.**
+
+`W` *is* the direct rotation exactly when it is a unitary square root of the
+reflection product that intertwines the two reflections and has nonnegative
+diagonal blocks.  The forward direction collects facts already proved about the
+canonical branch; the reverse is
+`spectraDirectRotation_unique_of_diagonalBlocks`. -/
+theorem eq_spectraDirectRotation_iff_diagonalBlocks_nonneg
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) (W : H →L[ℂ] H) :
+    W = spectraDirectRotation U V hacute ↔
+      W ∈ unitary (H →L[ℂ] H) ∧
+        W * W = spectraReflectionProduct U V ∧
+        W * reflectionOperator U = reflectionOperator V * W ∧
+        (∀ x ∈ U, 0 ≤ Complex.re ⟪W x, x⟫_ℂ) ∧
+        (∀ x ∈ Uᗮ, 0 ≤ Complex.re ⟪W x, x⟫_ℂ) := by
+  constructor
+  · rintro rfl
+    exact ⟨spectraDirectRotation_mem_unitary U V hacute,
+      spectraDirectRotation_sq U V hacute,
+      spectraDirectRotation_intertwines_reflection U V hacute,
+      fun x _ => spectraDirectRotation_real_inner_nonneg U V hacute x,
+      fun x _ => spectraDirectRotation_real_inner_nonneg U V hacute x⟩
+  · rintro ⟨hWunit, hsq, hint, hblockU, hblockUperp⟩
+    exact spectraDirectRotation_unique_of_diagonalBlocks U V hacute W hWunit
+      hsq hint hblockU hblockUperp
+
 /-- **A positive operator whose inverse is small is coercive.**
 
 If `R C = 1` with `R` positive self-adjoint and `‖R‖ ≤ c⁻¹`, then

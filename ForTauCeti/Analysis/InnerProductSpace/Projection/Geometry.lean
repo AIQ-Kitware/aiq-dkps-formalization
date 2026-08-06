@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5, Claude Opus 4.8
 -/
-import Mathlib.Analysis.InnerProductSpace.Projection.Basic
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 
 /-!
@@ -14,6 +16,8 @@ Reusable projection and Parseval identities for spans of finite orthonormal
 subfamilies.  These results are independent of Davis--Kahan perturbation theory.
 -/
 
+public section
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -22,6 +26,23 @@ open Module (finrank)
 variable {𝕜 : Type*} [RCLike 𝕜]
 
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+
+/-- **Pythagoras across an orthogonal projection**:
+`‖P_K x‖² + ‖x − P_K x‖² = ‖x‖²`.
+
+`x` splits into its projection and the complementary component, which are orthogonal, so the
+norms add in square. Stated for any submodule carrying an orthogonal projection. -/
+theorem norm_sq_starProjection_add_norm_sq_sub (K : Submodule 𝕜 F)
+    [K.HasOrthogonalProjection] (x : F) :
+    ‖K.starProjection x‖ ^ 2 + ‖x - K.starProjection x‖ ^ 2 = ‖x‖ ^ 2 := by
+  have horth : ⟪K.starProjection x, x - K.starProjection x⟫_𝕜 = 0 :=
+    Submodule.inner_right_of_mem_orthogonal (K.starProjection_apply_mem x)
+      (K.sub_starProjection_mem_orthogonal x)
+  have hx : K.starProjection x + (x - K.starProjection x) = x := by abel
+  calc ‖K.starProjection x‖ ^ 2 + ‖x - K.starProjection x‖ ^ 2
+      = ‖K.starProjection x + (x - K.starProjection x)‖ ^ 2 := by
+        rw [norm_add_sq (𝕜 := 𝕜), horth, map_zero]; ring
+    _ = ‖x‖ ^ 2 := by rw [hx]
 
 /-! The three bridge lemmas hold for an orthonormal family in *any* inner product
 space: the span of a finite subfamily is finite-dimensional, so it always carries

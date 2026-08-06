@@ -3,9 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
+module
 
-import ForTauCeti.Analysis.InnerProductSpace.KyFan
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+public import ForTauCeti.Analysis.InnerProductSpace.KyFan
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
 
 /-!
@@ -15,6 +16,8 @@ Reusable finite-dimensional reductions for planar sharpness models.  The main
 lemma compares a Gram operator with a real diagonal operator; the matrix
 corollaries are the symmetric off-diagonal and one-sided rank-one blocks.
 -/
+
+public section
 
 namespace TauCeti
 

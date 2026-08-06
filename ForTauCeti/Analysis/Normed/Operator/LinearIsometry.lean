@@ -10,8 +10,9 @@ addition to `Mathlib/Analysis/Normed/Operator/LinearIsometry.lean`.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
+module
 
-import Mathlib.Analysis.Normed.Operator.LinearIsometry
+public import Mathlib.Analysis.Normed.Operator.LinearIsometry
 
 
 /-! # `LinearIsometryEquiv.ofEq` on subtype elements
@@ -37,6 +38,8 @@ ambient coercion is available for `coe_ofEq_apply` to rewrite under.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.
 -/
+
+public section
 
 namespace TauCeti
 

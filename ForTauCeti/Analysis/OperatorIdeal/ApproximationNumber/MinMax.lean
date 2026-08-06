@@ -500,8 +500,8 @@ most `P`'s.
 **`0 ≤ δ` is not defensive padding.**  Without it the statement is false: at
 `P = 1` the band hypothesis reads `0 ≤ 0` and holds for *any* `δ`, and taking
 `r ≥ finrank E` makes the conclusion `0 ≤ δ`, which fails at `δ = -1`.  The
-corresponding signature in `ForTauCetiRoadmap` omits the hypothesis and is false
-as written; see `{lane:FTC-SPECTRALBAND}`.
+submitted roadmap omitted the hypothesis; it was corrected against this
+counterexample, and the two signatures now agree.
 
 `hidem` and `hsa` are used in exactly one place: they make `1 - P` a star
 projection, hence a contraction, which is what turns the band bound

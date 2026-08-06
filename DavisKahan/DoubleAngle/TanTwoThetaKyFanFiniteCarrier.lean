@@ -346,7 +346,7 @@ theorem kyFan_doubleAngleTangent_offDiagonal_le_of_finiteDimensional_invariantSu
   have hH'id : H'.toLinearMap.toContinuousLinearMap = H' := by
     ext x; rfl
   have hHbridge :
-      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
         H'.toLinearMap = kyFanApproximationGauge k H' := by
     rw [rectangularKyFanSum_eq_kyFanApproximationGauge k H'.toLinearMap,
       hH'id]
@@ -368,7 +368,7 @@ theorem kyFan_doubleAngleTangent_offDiagonal_le_of_finiteDimensional_invariantSu
           doubleAngleTangent (T'.toLinearMap.singularValues n) := by
         congr 1
         exact Finset.sum_congr rfl fun n _ => by rw [hTsv n]
-    _ ≤ 2 * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+    _ ≤ 2 * RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
           H'.toLinearMap := hfin
     _ = 2 * kyFanApproximationGauge k H' := by rw [hHbridge]
     _ ≤ 2 * kyFanApproximationGauge k H := by linarith

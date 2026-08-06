@@ -144,9 +144,15 @@ content.  Reaching for `TauCeti.DavisKahan.reflectionOperator` and reaching for
 export _root_.ContinuousLinearMap (Reduces)
 
 export _root_.Submodule
-  (reflectionOperator diagonalPart offDiagonalPart reflectionOperator_comm_of_reduces
+  (reflectionOperator diagonalPart offDiagonalPart IsOffDiagonal
+   reflectionOperator_comm_of_reduces
    reflectionOperator_involutive norm_reflectionOperator_le_one
-   norm_starProjection_sub_eq_max sinTheta_directed_coercive
+   reflectionOperator_norm_map reflectionOperator_surjective reflectionOperator_apply
+   projectionGap_comm starProjection_orthogonal_apply
+   two_smul_diagonalPart_eq_add_reflectionConjugate
+   two_smul_offDiagonalPart_eq_sub_reflectionConjugate
+   norm_starProjection_sub_eq_max directedProjectionGap_le_projectionGap
+   projectionGap_eq_max_directedProjectionGap sinTheta_directed_coercive
    sinTheta_directed_of_formBounds opNorm_starProjection_sub_le_of_coercive
    opNorm_starProjection_sub_le_of_formBounds)
 

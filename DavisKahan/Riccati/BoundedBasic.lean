@@ -10,11 +10,13 @@ import DavisKahan.SpectralTheory.GraphSubspace
 
 This module contains the dependency-minimal definitions shared by the bounded
 Riccati leaf proofs.  The public facade is
-`DavisKahan.Experimental.InfiniteDimensional.Riccati.Bounded`.
+`DavisKahan.InfiniteDimensional.Riccati.Bounded`.
 -/
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open DavisKahan
 
 open scoped InnerProductSpace
 

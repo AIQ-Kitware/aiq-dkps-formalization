@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 
 /-!
 # Gap geometry for orthogonally complemented subspaces
 
 The symmetric and directed projection gaps over arbitrary `RCLike` scalars.
 -/
+
+public section
 
 
 open scoped InnerProductSpace
@@ -20,11 +24,13 @@ variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 namespace Submodule
 
 /-- Operator-norm gap between two orthogonal projections. -/
+@[expose]
 noncomputable def projectionGap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   ‖U.starProjection - V.starProjection‖
 
 /-- Directed gap from `U` to `V`. -/
+@[expose]
 noncomputable def directedProjectionGap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   ‖Vᗮ.starProjection ∘L U.starProjection‖
@@ -249,6 +255,25 @@ theorem norm_starProjection_sub_eq_max (U V : Submodule 𝕜 E)
       sq_nonneg (‖(P - Q : E →L[𝕜] E)‖ - max ‖X‖ ‖Y‖)]
   rw [hfin]
   rfl
+
+/-- **The projection gap is the larger of the two directed gaps.**
+
+The gap-level reading of `norm_starProjection_sub_eq_max`: `projectionGap` is symmetric in
+its arguments, so it cannot see which of the two subspaces carries the defect, and this
+identity says the symmetric quantity is exactly the worse of the two directed ones.
+
+Stated here rather than derived at each use site.  It had been unfolded inline three times
+-- twice in the Davis--Kahan sine theory and once in `AngleGeometry` -- at six lines each,
+which is what a missing lemma looks like. -/
+theorem projectionGap_eq_max_directedProjectionGap (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    U.projectionGap V = max (U.directedProjectionGap V) (V.directedProjectionGap U) := by
+  change ‖U.starProjection - V.starProjection‖ =
+    max ‖Vᗮ.starProjection ∘L U.starProjection‖
+      ‖Uᗮ.starProjection ∘L V.starProjection‖
+  rw [Submodule.norm_starProjection_sub_eq_max,
+    Submodule.starProjection_orthogonal' V,
+    Submodule.starProjection_orthogonal' U]
 
 
 end Submodule

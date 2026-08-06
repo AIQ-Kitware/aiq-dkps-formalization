@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.ContourReuseBridge
+import DavisKahan.MathAhead.HiddenFoundations.ContourReuseBridge
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner
 import DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates
