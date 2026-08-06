@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import json as _json
 import pathlib
 import re
 from collections import defaultdict
@@ -287,11 +288,39 @@ def main():
         cwd = rec.get("cwd") or ""
         return any(s in cwd for s in scope)
 
+    # Scope is decided PER SESSION, not per record.
+    #
+    # A record's `cwd` is where that record's tool call ran, not which project the
+    # session belongs to. On a checkout where the formalization is a subdirectory
+    # of a parent repo (`aiq-eval-runner/formalizations/aiq-dkps-formalization`),
+    # the session is opened at the parent, so every human prompt carries the
+    # parent cwd while only the `Bash` records that `cd` into the formalization
+    # carry the in-scope one. Filtering record-by-record therefore kept 6408 tool
+    # results and dropped 100% of the human prompts -- the extractor reported
+    # `human prompts: 0` on a store containing 110 of them.
+    #
+    # Session-level scoping is also the right semantics: a session is one unit of
+    # work, and a prompt typed in it counts toward that work regardless of which
+    # directory the shell happened to be in. This is strictly more inclusive than
+    # the record-level test, so it cannot drop anything the old code kept.
+    def session_in_scope(f) -> bool:
+        if scope is None:
+            return True
+        with f.open(errors="replace") as fh:
+            for line in fh:
+                try:
+                    r = _json.loads(line)
+                except Exception:
+                    continue
+                if in_scope(r):
+                    return True
+        return False
+
     all_p, all_e, metas = [], [], []
     for f in sorted(RAW.rglob("*.jsonl")):
+        if not session_in_scope(f):
+            continue
         meta, p, e = scan_file(f)
-        p = [x for x in p if in_scope(x)]
-        e = [x for x in e if in_scope(x)]
         if not (p or e):
             continue
         metas.append(meta)
