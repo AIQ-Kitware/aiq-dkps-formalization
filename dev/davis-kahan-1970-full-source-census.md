@@ -11,12 +11,12 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 19 |
+| `compiled_exact` | 20 |
 | `compiled_specialization` | 4 |
 | `compiled_general_infrastructure` | 12 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 8 |
+| `partial_or_wrapper_missing` | 7 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -131,7 +131,7 @@ Gates: DK-9-model (proved_conditional), DK-9.1-9.4 (proved_conditional), DK-9.5-
 
 The mathematics is in the build in a more general form; what is missing is a statement carrying the paper's numbering, scope and hypotheses, so the facade can cite it.
 
-Gates: S1-block-residual (proved_in_build), S2-tan-two-theta (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.4-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
+Gates: S1-block-residual (proved_in_build), S2-tan-two-theta (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.4-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
 
 ### `frontier-tree-unguarded` -- mechanical
 
@@ -284,13 +284,18 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 #### Section 2, final paragraphs: Unbounded self-adjoint scope
 
 - **Kind:** `scope_claim`
-- **Status:** `partial_or_wrapper_missing`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** The four theorem families extend to unbounded self-adjoint operators under bounded perturbation or residual assumptions, with analytic work concentrated in Theorem 5.2 and the Section 6 appendix.
-- **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `TauCeti.DavisKahan1970.canonical_generalizedSinTheta`, `TauCeti.DavisKahan1970.unbounded_sinTheta_opNorm`
+- **Current Lean references:** `TauCeti.DavisKahan1970.canonical_generalizedSinTheta`, `TauCeti.DavisKahan1970.unbounded_sinTheta_opNorm`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_ideal_directedTangent`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_ideal`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.Theorem63TrialData.all_kyFan_core_of_formBounds`
 - **Assessment:** The sine family is complete in source scope. Tangent has an operator-norm graph-coordinate companion, but the paper claims arbitrary-UI-norm unbounded scope and the cutoff/Ky-Fan passage is not yet formalized.
-- **Next action:** Complete Theorem 5.2 and the source-faithful Theorem 6.3 Ky-Fan/cutoff chain; do not credit the operator-norm companion as the full scope claim.
+
+**THE ARBITRARY-UI-NORM UNBOUNDED TANGENT THEOREM IS DONE, 2026-08-06.** The sine family was already complete in source scope; the tangent family had only an operator-norm graph-angle companion, and the census warned not to credit it as the scope claim. `theorem6_3_unbounded_ideal_directedTangent` (DavisKahan/TanTheta/Theorem63Unbounded.lean, default build, axiom-clean) is the scope claim: closed unbounded self-adjoint ambient operator, arbitrary Fan-dominant unitarily invariant ideal gauge, tangent representative constructed rather than assumed.
+
+HOW THE UNBOUNDED CASE REUSES THE BOUNDED CHAIN. `Theorem63TrialData` records what the tangent argument actually consumes -- a bounded action, compression and residual tied by the block identity -- and `all_kyFan_core_of_formBounds` proves the Ky Fan root from the two printed form bounds alone, with no bounded ambient operator in sight. The crossed action is not extra data: it is P_Vperp o action. For an unbounded operator that is A(P_Vperp z), which is DEFINED because spectral projections preserve the domain (selfAdjointSpectralProjection_mem_domain) and commute with the operator there (selfAdjoint_apply_spectralProjection). Those are the only vectors at which the argument ever evaluates the quadratic form.
+
+WHY THE ARGUMENT GOES THROUGH A THRESHOLD c < alpha+delta RATHER THAN APPLYING THE ENERGY BOUND ONCE: the gap is the OPEN interval, so the endpoint alpha+delta is allowed to carry spectrum and P_{Iic (alpha+delta)} y need not vanish. It does vanish on Iic c for every c < alpha+delta, and the constant follows by taking c up to the endpoint.
+- **Next action:** Nothing outstanding for the tangent family. The operator-norm graph-angle companion is retained as `theorem6_3_unbounded_graphAngle_opNorm_companion` and must still not be quoted as the scope claim.
 
 ### Section 3
 

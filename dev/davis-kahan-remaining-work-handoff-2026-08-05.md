@@ -46,7 +46,8 @@ than amended: two of its three headline claims moved.
 | `721a26fd` | `Theorem63TrialData` — the trial-block data the chain actually consumes |
 | `9113fc5a` | Both promotion-blocking `sorry`s routed out of the Section 4/8 closures |
 
-**Frontier moved 62 → 63 of 80 grounded; paper results 23 → 24 of 32.**
+**Frontier moved 62 → 64 of 80 grounded; paper results 23 → 25 of 32.  Section 2
+is complete; Sections 2 and 4 are both finished.**
 
 ### 1a. Section 2's tangent theorem is finished
 
@@ -114,7 +115,7 @@ Neither was discharged by proof, because neither was load-bearing:
 
 **`dev/davis-kahan-1970-frontier-status.md` is the live inventory.**  Regenerate
 with `python3 scripts/check_davis_kahan_frontier.py --write-report`.  As of this
-commit: 80 manifest nodes, **63 recursively grounded, 17 not**.
+commit: 80 manifest nodes, **64 recursively grounded, 16 not**.
 
 The census `next_action` fields are prose and go stale silently — five were
 wrong in one earlier session, every one claiming work outstanding that was
@@ -131,19 +132,35 @@ treats as existing, and grep for every consumer a plan treats as waiting.**
 
 ---
 
-## 3. The 17 ungrounded nodes
+## 3. The 16 ungrounded nodes
 
-### 3A. Section 2 — one node left, and it is the harder half
+### 3A. Section 2 — **finished**
 
-**`s2-unbounded-scope`** (priority `hard`, census `S2-unbounded-scope`).  The
-paper claims arbitrary-UI-norm scope for **unbounded** self-adjoint operators;
-what is grounded is the bounded theorem plus an operator-norm graph-angle
-companion.  Its three dependencies are all grounded.
+Both nodes are grounded.  `s2-tan-theta` closed with the Appendix limiting
+passage; `s2-unbounded-scope` closed on 2026-08-06 with
+`ExactTanTheta.theorem6_3_unbounded_ideal_directedTangent`
+(`DavisKahan/TanTheta/Theorem63Unbounded.lean`, default build, axiom-clean):
+closed unbounded self-adjoint ambient operator, arbitrary Fan-dominant
+unitarily invariant ideal gauge, representative constructed not assumed.
 
-**Trap, on the census and repeated here: do not credit the operator-norm
-unbounded graph-angle companion as the full scope claim.**
+**The trap still stands for anyone quoting the older result**: the operator-norm
+graph-angle companion is *not* the scope claim.  It is retained under the
+explicit name `theorem6_3_unbounded_graphAngle_opNorm_companion`, and the
+frontier marker alias now points at the ideal-gauge theorem instead.
 
-*The scaffolding for this is now built and is the recommended route.*
+Two things worth carrying from how it was done:
+
+* **The crossed action is not extra data — it is `P_{Vᗮ} ∘ action`.**  For an
+  unbounded operator that is `A (P_{Vᗮ} z)`, which is *defined* because spectral
+  projections preserve the domain and commute with the operator there.  Those
+  are the only vectors at which the tangent argument ever evaluates the
+  quadratic form, which is the whole reason the bounded chain transfers.
+* **The argument goes through a threshold `c < α + δ` rather than applying the
+  energy bound once**, because the gap is the *open* interval: the endpoint
+  `α + δ` may carry spectrum, so `P_{Iic (α+δ)} y` need not vanish.  It vanishes
+  on `Iic c` for every `c < α + δ`, and the constant follows by taking `c` up.
+
+*The scaffolding, for reference:*
 `DavisKahan/TanTheta/Theorem63TrialData.lean` isolates exactly what the tangent
 chain consumes — `action`, `compression`, `residual`, the block identity, and
 residual orthogonality — with `ofBounded` recovering the bounded case and
@@ -166,18 +183,11 @@ spectral projections preserve the domain
 
 and the Sylvester link is `X z − S (M z) = P_Vᗮ (R z)`.
 
-**Remaining for this node**, in order:
-1. Generic transversality and `sine < 1` over the data (the bounded proofs
-   use `T` only through the two form bounds; the generic statements need a
-   field or hypothesis `z ∈ Vᗮ → X z = action z`).
-2. Generic Ky Fan core over the data (mirrors
-   `theorem6_3_all_kyFan_core`; `orthonormal_theorem63ResidualWitness` is
-   already generic — it now takes the `sine < 1` hypothesis directly).
-3. `Theorem63TrialData` from an `UnboundedTrialBlock`
-   (`DavisKahan/TanTheta/UnboundedSpectrum.lean:39`), with the crossed form
-   bound from `ForTauCeti/.../LinearPMap/SpectralFormBounds.lean`.
-4. Fan-dominance endpoint + source wrapper; repoint the manifest node off
-   `unbounded_angle_theorems_source_scope_partial_marker`.
+All four planned steps landed: generic transversality and `sine < 1`
+(`transverse_of_formBounds`, `sine_lt_one_of_formBounds`), the generic Ky Fan
+core (`all_kyFan_core_of_formBounds`, `ideal_of_formBounds`), the unbounded
+instance (`Theorem63TrialData.ofUnbounded` + `crossed_lower_of_spectralGap`),
+and the endpoints plus source wrappers.
 
 ### 3B. Section 3 — 4 nodes; one is reachable, three are not
 
