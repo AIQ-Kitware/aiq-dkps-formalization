@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 
 import DavisKahan.TanTheta.Theorem63FiniteSource
 import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.AlmostInvariant
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
 import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
 
 /-!
@@ -668,6 +669,142 @@ theorem theorem6_3_infiniteTrial_of_formBounds
     exact h
   rw [hKyTan]
   exact hcore
+
+/-! ### The tangent representative exists at every trial dimension -/
+
+/-- Composing with the trial-space inclusion moves no approximation singular value; the
+finite-source file proves this under a finiteness instance, and this is the general form.
+-/
+theorem approximationSingularValue_subtypeL_comp_infinite
+    (Z : Submodule ℂ H) [Z.HasOrthogonalProjection] [CompleteSpace Z]
+    (A : Z →L[ℂ] Z) (k : ℕ) :
+    approximationSingularValue k (Z.subtypeL ∘L A) = approximationSingularValue k A := by
+  have hmem : ∀ x : Z, (Z.subtypeL ∘L A) x ∈ Z := fun x => (A x).property
+  have hcomp : Z.orthogonalProjectionOnto ∘L (Z.subtypeL ∘L A) = A := by
+    ext x
+    change Z.starProjection ((A x : H)) = ((A x : H))
+    exact Submodule.starProjection_eq_self_iff.mpr (A x).property
+  calc
+    approximationSingularValue k (Z.subtypeL ∘L A) =
+        approximationSingularValue k
+          (Z.orthogonalProjectionOnto ∘L (Z.subtypeL ∘L A)) :=
+      (approximationSingularValue_orthogonalProjectionOnto_comp_eq Z
+        (Z.subtypeL ∘L A) hmem k).symm
+    _ = approximationSingularValue k A := by rw [hcomp]
+
+/-- **The directed tangent representative exists at every trial dimension.**  Under the
+no-pole condition — every sine value strictly below one — some bounded operator from the
+trial space has exactly the tangent approximation numbers the paper prescribes.
+
+For a finite-dimensional trial space this is the diagonal representative of
+`DavisKahan/TanTheta/Theorem63FiniteSource.lean`; for an infinite-dimensional one, the
+prescribed antitone sequence is realised by
+`TauCeti.ApproximationNumber.exists_approximationNumber_eq_of_antitone` inside the trial
+space and included into the ambient space. -/
+theorem exists_hasTheorem63DirectedTangentApproximationNumbersInfinite
+    (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    [CompleteSpace Z]
+    (hlt : ∀ n, approximationSingularValue n (theorem63DirectedSineBlock Z V) < 1) :
+    ∃ tanTheta0 : Z →L[ℂ] H,
+      HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 := by
+  classical
+  by_cases hfin : FiniteDimensional ℂ Z
+  · refine ⟨theorem63DirectedTangent Z V, ?_⟩
+    have h := hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent
+      Z V (fun i => by
+        have hb := approximationSingularValue_eq_finiteSourceSingularValue
+          (theorem63DirectedSineBlock Z V) i
+        rw [← hb]
+        exact hlt i)
+    exact h
+  · set d : ℕ → ℝ := fun n => Real.tan (Real.arcsin
+      (approximationSingularValue n (theorem63DirectedSineBlock Z V))) with hd_def
+    have h0 : ∀ n, 0 ≤ d n := fun n =>
+      TanArcsin.tanArcsin_nonneg (approximationSingularValue_nonneg _ _)
+    have hanti : Antitone d := by
+      intro m n hmn
+      exact TanArcsin.tanArcsin_le_tanArcsin
+        (approximationSingularValue_nonneg _ _)
+        (approximationSingularValue_antitone (theorem63DirectedSineBlock Z V) hmn)
+        (hlt m)
+    obtain ⟨D₀, hD₀⟩ :=
+      TauCeti.ApproximationNumber.exists_approximationNumber_eq_of_antitone
+        (E := Z) hfin d h0 hanti
+    refine ⟨Z.subtypeL ∘L D₀, fun n => ?_⟩
+    rw [approximationSingularValue_subtypeL_comp_infinite Z D₀ n]
+    have h := hD₀ n
+    unfold approximationSingularValue
+    exact h
+
+/-! ### Unconditional Fan-dominance endpoints -/
+
+/-- **Theorem 6.3 at ideal-gauge scope and arbitrary trial dimension,
+unconditionally**: the tangent representative is exhibited, not assumed.  This is the
+equal-dimensional infinite/noncompact half of the Section 2 tangent theorem, in form-bound
+shape. -/
+theorem theorem6_3_infiniteTrial_of_formBounds_exists
+    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (T : H →L[ℂ] H) (hT : T.IsSymmetric)
+    (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
+    [CompleteSpace Z]
+    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hCompressionUpper : ∀ z : Z,
+      RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hUnwantedLower : ∀ y ∈ Vᗮ,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
+    (hResidual : N.Mem (theorem63Residual T Z)) :
+    ∃ tanTheta0 : Z →L[ℂ] H,
+      HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
+      N.Mem tanTheta0 ∧
+      delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) := by
+  obtain ⟨tanTheta0, htan⟩ :=
+    exists_hasTheorem63DirectedTangentApproximationNumbersInfinite Z V
+      (fun n => approximationSingularValue_sineBlock_lt_one_infiniteTrial T V Z hT hV
+        hdelta hCompressionUpper hUnwantedLower n)
+  obtain ⟨hmem, hbound⟩ := theorem6_3_infiniteTrial_of_formBounds N T hT V Z hV hdelta
+    hCompressionUpper hUnwantedLower tanTheta0 htan hResidual
+  exact ⟨tanTheta0, htan, hmem, hbound⟩
+
+/-- **Theorem 6.3 at ideal-gauge scope and arbitrary trial dimension, in the source's
+spectral form.**  The Ritz compression's spectrum lies in `[β, α]`, the unwanted
+restriction's spectrum in `[α + δ, ∞)`, and the conclusion is the ideal-gauge tangent
+bound for an exhibited representative — the Section 2 tangent theorem's residual half
+with **no** dimension hypothesis on the trial space. -/
+theorem theorem6_3_infiniteTrial_spectral_exists
+    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (T : H →L[ℂ] H) (hT : T.IsSymmetric)
+    (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
+    [CompleteSpace Z]
+    (hV : T.Reduces V)
+    {beta alpha delta : ℝ} (_hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
+    (hCompressionSpectrum :
+      spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
+    (hUnwantedSpectrum :
+      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
+        Set.Ici (alpha + delta))
+    (hResidual : N.Mem (theorem63Residual T Z)) :
+    ∃ tanTheta0 : Z →L[ℂ] H,
+      HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
+      N.Mem tanTheta0 ∧
+      delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) := by
+  have hTsa : IsSelfAdjoint T :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
+  have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by
+    simpa [theorem63Compression, DavisKahanExt.compressOperator] using
+      DavisKahanExt.isSelfAdjoint_compressOperator hTsa Z
+  have hCompressionUpper : ∀ z : Z,
+      RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2 := by
+    intro z
+    refine SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic
+      (theorem63Compression T Z) hMsa ?_ z
+    intro r hr
+    exact (hCompressionSpectrum hr).2
+  have hUnwantedLower : ∀ y ∈ Vᗮ,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
+    SpectralOrder.Complex.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
+      hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
+  exact theorem6_3_infiniteTrial_of_formBounds_exists N T hT V Z hV hdelta
+    hCompressionUpper hUnwantedLower hResidual
 
 end ExactTanTheta
 end Experimental
