@@ -247,3 +247,56 @@ one.
 The rest of §3 stands: the definition is still the next increment, the Radon--Nikodym
 unitary is still independent and parallelizable, and the Borel calculus on a reducing
 subspace is still the one step with no partial credit.
+
+---
+
+## 5. Where the measure-class Setoid is, and is not, load-bearing
+
+Recorded 2026-08-06 after the Radon--Nikodym unitary landed without defining a measure
+class.  The question is whether that is a corner-cut that will force a weakened theorem
+later.  It is not — but only because of a distinction worth writing down, since the two
+routes diverge exactly at the Setoid.
+
+**The Setoid is not needed to state "same measure class."**  `μ ≪ ν ∧ ν ≪ μ` written inline
+is the *same proposition* as a named `MeasureEquiv μ ν`; `Equivalence` is three one-line
+lemmas.  Nothing is weakened by omitting it, and no quotient is needed for any statement in
+route A below.
+
+**Two routes, and they need different foundations.**
+
+*Route A — the existential form.*
+`SameSpectralMultiplicity A B := ∃ presentations of A and of B whose data agree`
+(matching measures per cardinal, up to class).  Both directions of
+`sameSpectralMultiplicity_iff_unitarilyEquivalent` go through **without uniqueness**:
+`⟸` chains `A ≃ model ≃ model' ≃ B` using the Radon--Nikodym unitary, and `⟹` merely
+transports a presentation along the given unitary.  This suffices for **Theorem 3.1**, is
+paper-faithful, and needs neither a Setoid nor a canonical decomposition.
+
+*Route B — the canonical form.*  `SpectralMultiplicityFoundation`
+(`DavisKahan/SpectralTheory/SpectralMultiplicityFoundation.lean:58`) demands
+`multiplicity : (H →L[ℂ] H) → Datum`, a **function**, with `invariant` and `complete`
+phrased as `multiplicity A = multiplicity B`.  Inhabiting it needs:
+1. a canonical `Datum`, which — the data being measures *up to class* — must be a quotient,
+   i.e. **the Setoid**, and
+2. **uniqueness** of the uniform-multiplicity decomposition, so the assignment is a
+   function at all.
+
+**So: proving Theorem 3.1 does not inhabit `SpectralMultiplicityFoundation`.**  Do not
+conflate the two.  Landing route A leaves that structure uninhabited, exactly as it is
+today, and it is *already* the case (see §1) that it was uninhabitable-as-written for a
+different reason until repaired.
+
+**Decision.**  Take route A first — it is the paper-faithful goal and is not a weakening of
+any theorem.  But shape the API so route B is a strict extension rather than a rewrite:
+
+* Name the relation `MeasureEquiv` and prove `Equivalence` **when it first appears**, even
+  though route A only needs the conjunction.  It costs three lines and means the quotient
+  can be formed later without touching a single call site.
+* State the multiplicity data as a *family indexed by `Cardinal`* from the start (§4), not
+  by `ℕ` — re-indexing later would touch every statement.
+* Keep uniqueness as an explicitly recorded open obligation, not an assumption.  When it
+  lands, `Datum := Cardinal → Quotient measureClassSetoid` and route B follows.
+
+The corner to refuse is **not** the Setoid; it is silently treating route A's existential
+as though it delivered a canonical invariant.  It does not, and the census must not claim
+it does.
