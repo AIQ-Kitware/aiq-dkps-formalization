@@ -209,17 +209,18 @@
    "source_anchor": "Section 2, final paragraphs",
    "title": "Unbounded self-adjoint scope",
    "summary": "The four theorem families extend to unbounded self-adjoint operators under bounded perturbation or residual assumptions, with analytic work concentrated in Theorem 5.2 and the Section 6 appendix.",
-   "status": "partial_or_wrapper_missing",
+   "status": "compiled_exact",
    "verification": "proved_in_build",
-   "blocked_by": [
-    "exact-source-wrappers"
-   ],
+   "blocked_by": [],
    "lean_declarations": [
     "TauCeti.DavisKahan1970.canonical_generalizedSinTheta",
-    "TauCeti.DavisKahan1970.unbounded_sinTheta_opNorm"
+    "TauCeti.DavisKahan1970.unbounded_sinTheta_opNorm",
+    "TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_ideal_directedTangent",
+    "TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_ideal",
+    "TauCeti.DavisKahan.Experimental.ExactTanTheta.Theorem63TrialData.all_kyFan_core_of_formBounds"
    ],
-   "notes": "The sine family is complete in source scope. Tangent has an operator-norm graph-coordinate companion, but the paper claims arbitrary-UI-norm unbounded scope and the cutoff/Ky-Fan passage is not yet formalized.",
-   "next_action": "Complete Theorem 5.2 and the source-faithful Theorem 6.3 Ky-Fan/cutoff chain; do not credit the operator-norm companion as the full scope claim."
+   "notes": "The sine family is complete in source scope. Tangent has an operator-norm graph-coordinate companion, but the paper claims arbitrary-UI-norm unbounded scope and the cutoff/Ky-Fan passage is not yet formalized.\n\n**THE ARBITRARY-UI-NORM UNBOUNDED TANGENT THEOREM IS DONE, 2026-08-06.** The sine family was already complete in source scope; the tangent family had only an operator-norm graph-angle companion, and the census warned not to credit it as the scope claim. `theorem6_3_unbounded_ideal_directedTangent` (DavisKahan/TanTheta/Theorem63Unbounded.lean, default build, axiom-clean) is the scope claim: closed unbounded self-adjoint ambient operator, arbitrary Fan-dominant unitarily invariant ideal gauge, tangent representative constructed rather than assumed.\n\nHOW THE UNBOUNDED CASE REUSES THE BOUNDED CHAIN. `Theorem63TrialData` records what the tangent argument actually consumes -- a bounded action, compression and residual tied by the block identity -- and `all_kyFan_core_of_formBounds` proves the Ky Fan root from the two printed form bounds alone, with no bounded ambient operator in sight. The crossed action is not extra data: it is P_Vperp o action. For an unbounded operator that is A(P_Vperp z), which is DEFINED because spectral projections preserve the domain (selfAdjointSpectralProjection_mem_domain) and commute with the operator there (selfAdjoint_apply_spectralProjection). Those are the only vectors at which the argument ever evaluates the quadratic form.\n\nWHY THE ARGUMENT GOES THROUGH A THRESHOLD c < alpha+delta RATHER THAN APPLYING THE ENERGY BOUND ONCE: the gap is the OPEN interval, so the endpoint alpha+delta is allowed to carry spectrum and P_{Iic (alpha+delta)} y need not vanish. It does vanish on Iic c for every c < alpha+delta, and the constant follows by taking c up to the endpoint.",
+   "next_action": "Nothing outstanding for the tangent family. The operator-norm graph-angle companion is retained as `theorem6_3_unbounded_graphAngle_opNorm_companion` and must still not be quoted as the scope claim."
   },
   {
    "id": "DK-3.1-def",

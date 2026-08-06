@@ -12,6 +12,7 @@ import DavisKahan.TanTheta.UnboundedGraphAngle
 import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 import DavisKahan.TanTheta.Theorem63FiniteSource
 import DavisKahan.TanTheta.Theorem63InfiniteTrial
+import DavisKahan.TanTheta.Theorem63Unbounded
 import DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
@@ -249,10 +250,27 @@ unitarily-invariant-norm statement. -/
 alias theorem6_3_unbounded_graphAngle_opNorm_partial :=
   DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_trialBlock
 
-/-- Unique frontier marker for the still-open arbitrary-ideal unbounded scope.
-Its type deliberately records only the currently grounded operator-norm
-specialization; the manifest marks this declaration as an open obligation. -/
+/-- Unique frontier marker for the arbitrary-ideal unbounded scope.
+
+**Closed 2026-08-06.**  It used to alias the operator-norm graph-angle companion, and
+the manifest carried it as an open obligation, because the paper claims *arbitrary
+unitarily invariant norm* and only the operator norm was grounded.  It now aliases the
+ideal-gauge theorem.
+
+The ambient operator is closed, unbounded and self-adjoint; `V` is its spectral subspace
+for `Set.Iic α`; the spectral gap `Set.Ioo α (α + δ)` carries no spectrum; the Ritz
+compression is bounded above by `α`.  The tangent representative is constructed, not
+assumed. -/
 alias unbounded_angle_theorems_source_scope_partial_marker :=
+  ExactTanTheta.theorem6_3_unbounded_ideal_directedTangent
+
+/-- The unbounded tangent theorem with an arbitrary tangent representative supplied. -/
+alias theorem6_3_unbounded_tanTheta_ideal :=
+  ExactTanTheta.theorem6_3_unbounded_ideal
+
+/-- Retained: the operator-norm graph-angle companion.  Useful partial coverage, and
+**not** the arbitrary-unitarily-invariant-norm scope claim -- that is the alias above. -/
+alias theorem6_3_unbounded_graphAngle_opNorm_companion :=
   DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_trialBlock
 
 /-- Completed finite-trial/arbitrary-ambient Ky Fan root of Theorem 6.3. -/

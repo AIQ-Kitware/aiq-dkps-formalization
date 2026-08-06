@@ -14,7 +14,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `S2-sin-two-theta` — Section 2, sin 2 theta theorem: Double-angle sine theorem | unnumbered_theorem | `s7-sin2` | 0 / 2 | 100% | yes |
 | `S2-tan-two-theta` — Section 2, tan 2 theta theorem: Double-angle tangent theorem | unnumbered_theorem | `s7-tan2` | 0 / 3 | 100% | yes |
 | `S2-sharpness` — Section 2, paragraph after four theorems: Best constants and simultaneous equality | source_claim | `base-sharpness` | 0 / 1 | 100% | yes |
-| `S2-unbounded-scope` — Section 2, final paragraphs: Unbounded self-adjoint scope | scope_claim | `s2-unbounded-scope` | 1 / 10 | 90% | no |
+| `S2-unbounded-scope` — Section 2, final paragraphs: Unbounded self-adjoint scope | scope_claim | `s2-unbounded-scope` | 0 / 10 | 100% | yes |
 | `DK-3.1-def` — Definition 3.1: Direct rotation | definition | `base-acute-direct-rotation` | 0 / 1 | 100% | yes |
 | `DK-3.1-prop` — Proposition 3.1: Acute direct rotation existence and uniqueness | proposition | `s3-prop3-1` | 0 / 3 | 100% | yes |
 | `DK-3.2-prop` — Proposition 3.2: Nonacute existence criterion | proposition | `s3-prop3-2-existence` | 0 / 6 | 100% | yes |
@@ -48,14 +48,14 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 - Manifest nodes: **80**
 - Textually present: **80**
 - Paper result rows represented in the frontier: **32**
-- Census rows requiring frontier coverage: **12**
-- Census rows mapped: **12**
+- Census rows requiring frontier coverage: **11**
+- Census rows mapped: **11**
 - Declarations resolving in Lean: **80**
 - Declarations with admission-free Lean closure: **64**
-- Recursively grounded manifest nodes: **63**
-- Paper results recursively grounded: **24 / 32**
+- Recursively grounded manifest nodes: **64**
+- Paper results recursively grounded: **25 / 32**
 - Source-role endpoints resolving: **29 / 29**
-- Source-role endpoints recursively grounded: **22 / 29**
+- Source-role endpoints recursively grounded: **23 / 29**
 
 ## Manifest nodes
 
@@ -108,7 +108,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s6-theorem6-3` | source | yes | `DK-6.3-thm` | hard | no | yes | yes | yes | yes |
 | `s2-tan-theta` | source | yes | `S2-tan-theta` | high | no | yes | yes | yes | yes |
 | `s6-theorem6-3-unbounded-opnorm-partial` | bridge | no |  | high | no | yes | yes | yes | yes |
-| `s2-unbounded-scope` | source | yes | `S2-unbounded-scope` | hard | yes | yes | yes | yes | no |
+| `s2-unbounded-scope` | source | yes | `S2-unbounded-scope` | hard | no | yes | yes | yes | yes |
 | `s7-sin2` | source | yes | `DK-7-sin2-proof`, `S2-sin-two-theta` | high | no | yes | yes | yes | yes |
 | `s7-tan2` | source | yes | `DK-7-tan2-proof`, `S2-tan-two-theta` | high | no | yes | yes | yes | yes |
 | `s8-circle-integrand` | foundation | no |  | high | no | yes | yes | yes | yes |

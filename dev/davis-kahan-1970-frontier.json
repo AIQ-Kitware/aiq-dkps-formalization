@@ -696,9 +696,8 @@
     "S2-unbounded-scope"
    ],
    "priority": "hard",
-   "notes": "Open obligation. The bounded Theorem 6.3 and an unbounded graph-angle operator-norm companion are grounded, but the paper claims arbitrary-UI-norm unbounded scope; the Appendix cutoff/Fan passage remains open.",
-   "external": false,
-   "open_obligation": true
+   "notes": "Closed 2026-08-06: the arbitrary-unitarily-invariant-norm unbounded tangent theorem is proved (DavisKahan/TanTheta/Theorem63Unbounded.lean). The ambient operator is closed, unbounded and self-adjoint; V is its spectral subspace for Iic alpha; the gap Ioo alpha (alpha+delta) carries no spectrum; the Ritz compression is bounded above by alpha. The marker alias now points at the ideal-gauge theorem rather than the operator-norm graph-angle companion, which is retained separately as theorem6_3_unbounded_graphAngle_opNorm_companion.",
+   "external": false
   },
   {
    "id": "s7-sin2",
