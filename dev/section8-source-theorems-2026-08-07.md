@@ -198,3 +198,58 @@ Unchanged by this campaign; see
   added to it.
 
 Every new capstone is axiom-clean: `[propext, Classical.choice, Quot.sound]`.
+
+## Addendum 2026-08-07 (later): part (i) source-literal, and the verified route for (ii)
+
+### Landed
+
+`theorem8_1_upperCompressionRepulsion_source`
+(`DavisKahan/Frontier/Section8.lean`).  The pre-existing canonical-branch
+theorem is an *ambient* form inequality valid for every `x : H`.  The printed
+part (i) is a statement about the `Pᗮ` block, and the difference is not
+cosmetic: on `Pᗮ` off-diagonality of `K` kills its cross term, so the left side
+becomes the form of the **unperturbed** compression `A₁`.  Ambiently that
+identification is unavailable, so part (ii) stated against the ambient version
+would compare the wrong operator.  Axiom-clean.
+
+### Route for (ii), traced against the actual lemmas
+
+The step I had previously flagged as the risk -- comparing eigenvalues across
+two *different* subspaces -- turns out to be supported.  Chain:
+
+1. On `↥Pᗮ`, part (i) source gives form domination of `A₁ - α` by
+   `C₁⋆ (Λ₁ - α) C₁`.  Both act on `↥Pᗮ`, so
+   `LinearMap.IsSymmetric.eigenvalue_mono`
+   (`ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean:439`) applies
+   directly.  This is the Weyl step.
+
+2. `σ_k(C₁⋆ M C₁) ≤ ‖C₁‖² σ_k(M)` for `M := Λ₁ - α ≥ 0`, **cross-space**.
+   `singularValues_comp_le` (`KyFan.lean:151`) already allows different spaces
+   (`C : F →ₗ[𝕜] F'`, `A : E →ₗ[𝕜] F`).  `singularValues_comp_le'` is
+   square-only and is *not* needed: apply the left-factor lemma twice, routing
+   the right factor through `singularValues_adjoint`:
+     `σ_k(M ∘ C₁) = σ_k(C₁⋆ ∘ M⋆) ≤ ‖C₁‖ σ_k(M⋆) = ‖C₁‖ σ_k(M)`,
+   then `σ_k(C₁⋆ ∘ (M ∘ C₁)) ≤ ‖C₁‖ σ_k(M ∘ C₁)`.
+
+3. For positive operators, eigenvalues are the singular values:
+   `eigenvalues_operatorAbs` (`KyFan.lean:189`).
+
+### Ordering convention -- check before stating
+
+`eigenvalues_operatorAbs` proves its equality via `eigenvalues_eq_of_eigenbasis`
+with `A.singularValues_antitone`, so this repository's sorted `eigenvalues`
+appear to be **descending**, while the paper prints `λ₁ ≤ λ₂ ≤ ⋯` **ascending**.
+
+That is not a defect and must not be "fixed" by flipping one side.  Weyl
+monotonicity holds for either convention, and the printed family of inequalities
+`α_k - α ≤ ‖C₁‖²(λ_k - α)` is invariant under reversing *both* lists together,
+which is what a global reindex does.  So a descending-order Lean statement is
+exact.  It must say so explicitly rather than silently claim the printed
+indexing.
+
+### Remaining plumbing for (ii)
+
+The lemmas are `LinearMap`-based while the Section 8 development is
+`ContinuousLinearMap`-based, so `C₁ : ↥Pᗮ →ₗ[ℂ] ↥Qᗮ` has to be produced and
+part (i) converted into a form domination of `LinearMap`s on `↥Pᗮ`.  Finite
+dimension enters only here, which matches the printed "In finite dimensions".
