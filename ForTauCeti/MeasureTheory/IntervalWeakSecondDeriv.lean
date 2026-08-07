@@ -69,6 +69,15 @@ instance : IsFiniteMeasure unitIocMeasure := by
     Real.volume_Ioc]
   norm_num
 
+/-- The total mass of the unit-interval measure is `1`. -/
+theorem unitIocMeasure_univ : unitIocMeasure Set.univ = 1 := by
+  rw [unitIocMeasure, Measure.restrict_apply MeasurableSet.univ, Set.univ_inter,
+    Real.volume_Ioc]
+  norm_num
+
+/-- The unit-interval measure is a probability measure. -/
+instance : IsProbabilityMeasure unitIocMeasure := ⟨unitIocMeasure_univ⟩
+
 /-- Almost every point for `unitIocMeasure` lies in `(0,1]`. -/
 theorem ae_mem_unitIocMeasure : ∀ᵐ t ∂unitIocMeasure, t ∈ Set.Ioc (0 : ℝ) 1 := by
   rw [unitIocMeasure]
@@ -235,9 +244,15 @@ theorem abs_secondPrimitiveKernel_sub_le (t t' s : ℝ) :
     _ = |t - t'| := by congr 1; ring
 
 /-- Second primitive of an integrable function on the unit interval, normalized so that it
-and its first derivative vanish at `0`. -/
-def secondPrimitive (w : ℝ → ℂ) (t : ℝ) : ℂ :=
+and its first derivative vanish at `0`.  Exposed so downstream modules can unfold the
+integral form; the ratchet carve-out is deliberate api design. -/
+@[expose] def secondPrimitive (w : ℝ → ℂ) (t : ℝ) : ℂ :=
   ∫ s, (secondPrimitiveKernel t s : ℂ) * w s ∂unitIocMeasure
+
+/-- Unfolding equation for the second primitive, exported for downstream modules. -/
+theorem secondPrimitive_def (w : ℝ → ℂ) (t : ℝ) :
+    secondPrimitive w t
+      = ∫ s, (secondPrimitiveKernel t s : ℂ) * w s ∂unitIocMeasure := rfl
 
 /-- The kernel slice against an integrable density is integrable. -/
 theorem integrable_secondPrimitiveKernel_mul {w : ℝ → ℂ}
