@@ -34,3 +34,9 @@ dev/reference-repos/
 # >>> llm_resource_tally local state (managed) >>>
 /.llm_resource_tally/local/
 # <<< llm_resource_tally local state (managed) <<<
+
+# Local transcriptions / scans of the papers being formalized. These are
+# copyrighted third-party sources kept for comparison only; `*.pdf` below
+# already covers the scans, but the `.tex` transcriptions need their own rule.
+# The census records them as `private_comparison_source`.
+non-distributable/
