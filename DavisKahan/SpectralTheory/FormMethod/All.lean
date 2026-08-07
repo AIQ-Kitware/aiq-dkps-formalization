@@ -3,6 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
+import DavisKahan.SpectralTheory.FormMethod.BeamFormSpace
+import DavisKahan.SpectralTheory.FormMethod.BeamSection9
+import DavisKahan.SpectralTheory.FormMethod.BeamSpectrum
 import DavisKahan.SpectralTheory.FormMethod.BoundedGraphCompactness
 import DavisKahan.SpectralTheory.FormMethod.BoundedInverseRealization
 import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent
