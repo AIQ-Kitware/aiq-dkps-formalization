@@ -1,6 +1,6 @@
 # Davis--Kahan 1970 full source census
 
-Base commit: `None`.
+Base commit: `56541fb8`.
 
 This is the public, independently worded theorem-by-theorem ledger for the
 full paper. The maintained modernized transcription is used only as a local
@@ -11,12 +11,12 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 29 |
+| `compiled_exact` | 31 |
 | `compiled_specialization` | 3 |
-| `compiled_general_infrastructure` | 6 |
+| `compiled_general_infrastructure` | 5 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 5 |
+| `partial_or_wrapper_missing` | 4 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -48,8 +48,8 @@ no `sorry` and no `axiom`, so a declaration reachable from
 
 | Verification | Count |
 | --- | ---: |
-| `proved_in_build` | 40 |
-| `proved_conditional` | 5 |
+| `proved_in_build` | 41 |
+| `proved_conditional` | 4 |
 | `partially_in_build` | 0 |
 | `proved_outside_build` | 0 |
 | `not_compiling` | 0 |
@@ -74,27 +74,6 @@ in front of it. This includes rows that are already
 the source-numbered wrapper is still missing. Obstructions marked
 `mechanical` need only wiring or a restatement; `hard_math` needs new
 mathematics.
-
-### `free-beam-closed-operator` -- hard_math
-
-**Free-beam closed fourth-derivative operator on L2(0,1)**
-
-Section 9's numerical example needs the analytic model itself: the closed fourth-derivative operator with the source's boundary conditions, as an unbounded self-adjoint operator.
-
-**SCOPED 2026-08-04.** This is the one genuinely large piece of Davis--Kahan 1970 that remains, and it is the ONLY blocker on the five Section 9 rows once `free-beam-third-eigenvalue` is discharged (that one is independent -- see its entry). The target interface is fixed and already written down in `DavisKahan/Experimental/Frontier/Section9Analytic.lean`: `freeBeamClosedFourthDerivative : DKClosedOperator`, `freeBeamClosedFourthDerivative_isSelfAdjoint`, then `canonicalFreeBeamAnalyticModel` and `canonicalFreeBeamAnalyticModel_representsSource`.
-
-It requires `H^4(0,1)`, boundary traces, and self-adjointness of a fourth-order ODE operator with free-end conditions. Mathlib has none of the three, so this is a foundation-building project on the scale of the rest of the paper combined, not a proof to be written. The ODE side is already done and sorry-free (`Section9/FreeBeamCharacteristic.lean` and siblings); what is missing is the passage from the classical mode functions to a self-adjoint operator on `L^2`.
-
-**FOUNDATION BUILD STARTED 2026-08-05.** The instruction is to build what Mathlib lacks, not to record that it lacks it, so the analytic model is now under construction rather than parked. Two bricks are laid, both admission-free and in the default build:
-
-1. `TauCeti.integral_fourthDeriv_mul_eq_mul_fourthDeriv` (`ForTauCeti/Analysis/Calculus/FourthOrderGreensIdentity.lean`) -- **Green's identity for `d^4/dx^4` under free-end boundary conditions**, `int u'''' v = int u v''''`. This is the symmetry at the heart of self-adjointness. Four integrations by parts, each boundary term killed by a different one of the eight conditions; all eight used, none redundant.
-2. `FreeBeam.integral_mode_mul_eq_zero_of_ne` (`Sources/DavisKahan1970/Section9/FreeBeamOrthogonality.lean`) -- **modes at frequencies with `beta^4 != gamma^4` are `L^2(0,1)`-orthogonal**, the first genuinely spectral fact about the operator, obtained by feeding the already-proved classical mode chain to Green's identity.
-
-**Design decision worth keeping:** the derivative chain is passed explicitly as ten functions related by `HasDerivAt`, not through `deriv` or a Sobolev space. That matches how `FreeBeamCharacteristic.lean` already presents the modes, so they feed the identity with no bridging, and it means **`H^4(0,1)` is not needed for the symmetry or the orthogonality** -- only for the domain of the operator. That is a real narrowing of this blocker: the Sobolev requirement applies to the last step, not the whole chain.
-
-Still open, in order: completeness of the mode family in `L^2(0,1)`; the passage from the classical modes to a densely defined self-adjoint operator; then `freeBeamClosedFourthDerivative` and `canonicalFreeBeamAnalyticModel` as the interface in `Frontier/Section9Analytic.lean` already lays them out.
-
-Gates: DK-9-model (proved_conditional)
 
 ### `two-subspace-classification` -- hard_math
 
@@ -123,7 +102,17 @@ Section 9 compiles, but every source conclusion is stated relative to `FreeBeamF
 
 What honest discharge requires is the chain in `DavisKahan/Experimental/Frontier/Section9Analytic.lean`, which is laid out correctly and is entirely `sorry`: a `FreeBeamAnalyticModel` carrying the actual closed operator, `RepresentsFreeBeamProblem` tying it to the fourth-derivative problem, the *actual* angle quantities (`actualSinThetaOne` and its seven siblings are `sorry` DEFINITIONS, not just unproved theorems), and `theoremOutputCertificate_of_model`. That needs `free-beam-closed-operator`. Until then the correct status for these rows is exactly what they carry: `proved_conditional`.
 
-Gates: DK-9-model (proved_conditional), DK-9.1-9.4 (proved_conditional), DK-9.5-9.7 (proved_conditional), DK-9.8 (proved_conditional), DK-9.9-9.11 (proved_conditional)
+**PARTIALLY DISCHARGED 2026-08-07 (Opus 5), and the warning above was respected.**  The
+analytic model exists (`beamOperator`), the finite moments are proved to be genuine L^2
+integrals against it, and equations (9.1) and (9.2) are now *derived* from the source-facing
+sine and double-angle theorems rather than declared as `TheoremOutputCertificate` fields.
+`FreeBeamFiniteDataCertificate` is now inhabited, but -- exactly as this blocker warned --
+that inhabitation is not the evidence: the evidence is `beamRitz_matrix`,
+`beamResidualGram_matrix`, `beamTrial_orthonormal` and `realSpectrum_beamOperator_subset_gap`,
+which say what the record cannot.  What still blocks the four remaining Section 9 rows is
+(9.3), (9.4), and the tangent, Weinberger and individual-eigenvector conclusions.
+
+Gates: DK-9.1-9.4 (proved_conditional), DK-9.5-9.7 (proved_conditional), DK-9.8 (proved_conditional), DK-9.9-9.11 (proved_conditional)
 
 ### `exact-source-wrappers` -- mechanical
 
@@ -242,7 +231,7 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 The form bounds the endpoint runs on are read off from the spectral containments by `SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic` and `le_re_inner_of_spectrum_subset_Ici`; the interval/exterior shape the Riccati selection wants is the same data reassociated.  No new mathematics was needed -- the two halves had never been put next to each other.
 
 **BLOCKER CLEARED 2026-08-06.**  This row carried `exact-source-wrappers`, but its own `next_action` records that nothing remains for the bounded arbitrary-UI-norm theorem with selected branch -- that is `sharp_paperUnitaryInvariantNorm_selectedBranch` -- and that the residue is tracked on S2-unbounded-scope and on the Section 8 rows.  Both are now discharged: S2-unbounded-scope is `compiled_exact` / `proved_in_build` with no blockers, and DK-8.1-thm and DK-8.2-thm are guarded by `lake build`.  So the wrapper blocker on this row pointed at work that has since been done elsewhere, and is removed.
-- **Next action:** Nothing for the bounded arbitrary-UI-norm theorem with selected branch: it is `sharp_paperUnitaryInvariantNorm_selectedBranch`.  What remains under this heading is the UNBOUNDED passage, tracked on S2-unbounded-scope and DK-6-appendix, and the Section 8 rows' own guarding (DK-8.1-thm, DK-8.2-thm are proved but outside the default build; their import closure is 42 Experimental modules, one of which still carries a `sorry`, so promotion is not a mechanical move).
+- **Next action:** Nothing for the bounded arbitrary-UI-norm theorem with selected branch: it is `sharp_paperUnitaryInvariantNorm_selectedBranch`.  What remains under this heading is the UNBOUNDED passage, tracked on S2-unbounded-scope and DK-6-appendix.  (Corrected 2026-08-07: this action previously claimed DK-8.1-thm and DK-8.2-thm are outside the default build.  They are not -- both rows read `compiled_exact` / `proved_in_build`, and their promotion is long done.)
 
 #### Section 2, paragraph after four theorems: Best constants and simultaneous equality
 
@@ -482,16 +471,26 @@ The commutation identities this row already listed (`bounded_angle_commute`, `bo
 #### Corollary 3.2: Reversal symmetry
 
 - **Kind:** `corollary`
-- **Status:** `compiled_general_infrastructure`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Swapping P and Q leaves the angle operator unchanged and reverses the quarter-turn operator.
-- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation_reversal`, `TauCeti.DavisKahanTheory.directRotation_symm`
+- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation_reversal`, `TauCeti.DavisKahanTheory.directRotation_symm`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_2_reversal`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_2_reversal_source_form`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_2_sinAngleOperator_symm`
 - **Assessment:** Direct-rotation reversal is represented; the exact angle/J statement needs a source wrapper.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. The reversal theorem is compiled, axiom-clean, and resolves against the default build -- the earlier "promote it into DavisKahan/FiniteDimensional so CI guards it" instruction is discharged. The source-facing angle and quarter-turn wrapper is still absent.
 
 VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `DavisKahan.All`, `DavisKahan.Experimental.All` and `ForTauCeti` and running `#print axioms` on all 87 declarations named in this census elaborated cleanly -- every name resolves and **none reaches `sorryAx`**. A second probe importing only the default-build roots showed 78 of the 87 resolve there; the 9 that do not are exactly the `TauCeti.DavisKahan1970.Section8.*` names on rows DK-8.1-thm and DK-8.2-thm, whose `proved_outside_build` verification was already correct. `candidate_under_repair` -- "not compiler-certified on this base" -- was therefore false for every row that carried it. The scope question (does the compiled statement match the printed one?) is a separate judgement and is recorded in `next_action`; the status below is the weakest one consistent with that recorded evidence, so no row is overstated.
-- **Next action:** The reversal theorem compiles under DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean. Promote it into DavisKahan/FiniteDimensional so CI guards it, then add the source-facing angle and quarter-turn statement.
+
+**ROW WAS STALE ON BOTH COUNTS (2026-08-07, Opus 5).**  The recorded next_action asked to
+promote the reversal theorem out of the unguarded Experimental tree and then to add a
+source-facing statement.  `directRotation_symm` has been in the guarded tree
+(DavisKahan/FiniteDimensional/DirectRotation.lean) all along, and
+`corollary3_2_reversal_source_form` already stated the quarter-turn half in
+DavisKahan/Frontier/Section3.lean.  What was genuinely missing is what that theorem's own
+docstring claimed and did not prove: the *angle* half.  Corollary 3.2 asserts both, so the
+row now carries `corollary3_2_sinAngleOperator_symm` and the combined
+`corollary3_2_reversal`, and the older docstring was corrected to say which half it proves.
+- **Next action:** Nothing outstanding: both halves of Corollary 3.2 are proved and guarded by `lake build`.
 
 ### Section 4
 
@@ -827,11 +826,10 @@ The move had to be the DOWNWARD CLOSURE of the flagged modules, not the flagged 
 #### Section 9, problem setup: Fourth-derivative Rayleigh–Ritz model
 
 - **Kind:** `numerical_model`
-- **Status:** `partial_or_wrapper_missing`
-- **Verification:** `proved_conditional`
+- **Status:** `compiled_exact`
+- **Verification:** `proved_in_build`
 - **Mathematics:** The free-beam fourth derivative on L2(0,1), perturbed by multiplication by epsilon t, with the two-dimensional linear trial eigenspace.
-- **Blocked by:** `section9-certificate-discharge`, `free-beam-closed-operator`
-- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.CenteredAffine`, `TauCeti.DavisKahan1970.Section9.ritz_matrix_from_affine_moments`, `TauCeti.DavisKahan1970.Section9.FreeBeamFiniteDataCertificate`
+- **Current Lean references:** `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamOperator`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamOperator_isSelfAdjoint`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.realSpectrum_beamOperator_subset_gap`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.realSpectrum_beamOperator_subset_sharp`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTrial_orthonormal`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.inner_centeredAffineLp`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.inner_centeredAffineLp_mul`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.inner_mul_centeredAffineLp_mul`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamRitz_matrix`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamResidualGram_matrix`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamFiniteDataCertificate`, `TauCeti.DavisKahan1970.Section9.CenteredAffine`, `TauCeti.DavisKahan1970.Section9.ritz_matrix_from_affine_moments`, `TauCeti.DavisKahan1970.Section9.FreeBeamFiniteDataCertificate`
 - **Assessment:** A source-facing candidate now reconstructs the affine trial basis through exact unit-interval moments and packages the remaining free-beam analytic facts behind an explicit certificate. The closed fourth-derivative operator and the bound alpha_3 > 500 are not yet proved.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `partial_or_wrapper_missing`. The finite-moment layer is compiled and axiom-clean, but every source conclusion is stated relative to `FreeBeamFiniteDataCertificate`, for which no value is ever constructed. The analytic model -- the closed fourth-derivative operator with the source's boundary conditions -- does not exist.
@@ -845,7 +843,35 @@ WHERE THE alpha_3 BOUND CAME FROM (blocker `free-beam-third-eigenvalue`, deleted
 The new mathematics is `Section9/FreeBeamRootExclusion.lean`: `cos b * cosh b < 1` on all of `(0, 4.73]`, split three ways. On `(0, pi/2]` it is calculus -- `f = cos*cosh` has `f 0 = 1`, `f'` vanishing at 0, and `f'' = -2 sin*sinh < 0`, so `f'` is strictly decreasing from 0 and `f` from 1. On `[pi/2, 3pi/2]` the cosine is nonpositive. On the remaining `(3pi/2, 4.73]` -- a window of width 0.0177 -- it is numerical: `cos b = sin(b - 3pi/2) <= b - 3pi/2 < 0.017612` using `Real.pi_gt_d6`, and `cosh b <= cosh 4.73 < 56.66` via `exp 4.73 = (exp 1)^4 * exp 0.73` with `Real.exp_one_lt_d9` and six Taylor terms. Product `< 0.99790`; the true value is `0.99765`, so the margin is two parts in a thousand and every bound is needed to five digits.
 
 THE ANALYTIC MODEL EXISTS, 2026-08-07 (Fable 5).  The closed self-adjoint free-beam operator is now CONSTRUCTED, not assumed: `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamOperator` (DavisKahan/SpectralTheory/FormMethod/BeamFormSpace.lean, BeamSpectrum.lean), the form-method realization on the weak-second-derivative pair space over L2(0,1].  Proved, all axiom-clean and guarded by `lake build`: self-adjointness, nonnegativity, Rellich compactness of the form embedding (no weak topology: rank-two affine part plus the compact second-primitive operator from ForTauCeti/MeasureTheory/IntervalSecondPrimitive*), kernel = the affine plane (both inclusions), and `realSpectrum_beamOperator_subset_gap`: the real spectrum lies in {0} union (500, infinity).  The alpha_3 > 500 bound is `eigenvalue_gt_five_hundred` / the gap theorem -- about the genuine operator.  The chain: representation theorem for weak second derivatives (bump family t^(k+2)(1-t)^2), eigen-bootstrap to classical modes via the interval ODE classification (FreeBeamModeUniqueness.lean), natural boundary conditions from the vanishing boundary form against Hermite cubics, the characteristic equation, and the unconditional root exclusion.
-- **Next action:** The operator, kernel, and spectral gap are proved (see notes).  Remaining is bookkeeping: derive `FreeBeamFiniteDataCertificate` and the Section 9 certificate fields from `beamOperator` (moments-to-integrals identification for the trial subspace; the affine kernel elements beamOneLp/beamIdLp are the paper's zero modes), and retire or complete the sorried Experimental/Frontier/Section9Analytic.lean skeleton in favour of the Model namespace.
+
+**THE ANALYTIC MODEL NOW EXISTS (2026-08-07, Opus 5).**  The blocker
+`free-beam-closed-operator` is resolved and deleted.  `beamOperator`
+(DavisKahan/SpectralTheory/FormMethod/BeamFormSpace.lean) is the self-adjoint,
+nonnegative fourth-derivative realization on `L^2(0,1]`, built by inhabiting the
+abstract form method on the weak-second-derivative pair space; its form embedding is
+compact and dense, its kernel is exactly the affine plane in both directions, and
+`realSpectrum_beamOperator_subset_gap` proves
+`realSpectrum(beamOperator) subset {0} union (500, infinity)` -- the paper's alpha_3 > 500
+for the genuine operator, not for a certificate field.
+
+**THE MOMENTS ARE NOW INTEGRALS.**  `TrialSubspace.lean` declared its three bilinear
+forms on `CenteredAffine` as finite data, noting that "a later integration lemma may
+identify these forms with actual Lebesgue integrals on the unit interval".  Those lemmas
+are `inner_centeredAffineLp`, `inner_centeredAffineLp_mul` and
+`inner_mul_centeredAffineLp_mul` (BeamSection9.lean).  Consequently `beamTrial_orthonormal`
+shows the two trial functions are an orthonormal pair of *zero modes of the operator*,
+`beamRitz_matrix` shows the diagonal matrix of (9.5) is the genuine compression of
+multiplication by `eps t` to that kernel, and `beamResidualGram_matrix` shows
+`residualGram eps` is the genuine Gram matrix of the residual.
+
+**ON INSTANTIATING THE RECORD.**  The 2026-08-04 warning under
+`section9-certificate-discharge` stands and was respected: `FreeBeamFiniteDataCertificate`
+is trivially instantiable, so `beamFiniteDataCertificate` is NOT the evidence for this
+row.  The evidence is the four operator-level theorems above.  The constructed value is
+recorded because its `third_eigenvalue` field is supplied by an actual nonzero point of
+`beamOperator.realSpectrum` with `500 <` discharged from the proved gap -- which is the
+only reading under which that (otherwise dead) field says anything.
+- **Next action:** Nothing outstanding for the model itself: the operator, its kernel, its spectral gap, the orthonormal trial pair, and the identification of the finite moments with genuine L^2 integrals are all compiled and in the default build.  The sorried skeleton DavisKahan/Experimental/Frontier/Section9Analytic.lean is now superseded by the `FreeBeam.Model` namespace and should be retired; it is the only remaining Section 9 item on this row and it is deletion, not mathematics.
 
 #### Equations (9.1)–(9.4): Initial sine and sine-double-angle bounds
 
@@ -854,13 +880,43 @@ THE ANALYTIC MODEL EXISTS, 2026-08-07 (Fable 5).  The closed self-adjoint free-b
 - **Verification:** `proved_conditional`
 - **Mathematics:** Compute R*R and derive the operator- and two-singular-value bounds for sin Theta and sin(2 Theta).
 - **Blocked by:** `section9-certificate-discharge`
-- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.initial_residual_gram_from_affine_moments`, `TauCeti.DavisKahan1970.Section9.residualGram_eigenvalueHigh_charAt`, `TauCeti.DavisKahan1970.Section9.equation_9_1`, `TauCeti.DavisKahan1970.Section9.equation_9_4`
+- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.initial_residual_gram_from_affine_moments`, `TauCeti.DavisKahan1970.Section9.residualGram_eigenvalueHigh_charAt`, `TauCeti.DavisKahan1970.Section9.equation_9_1`, `TauCeti.DavisKahan1970.Section9.equation_9_4`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSinTheta_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSinTwoTheta_lt`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamPerturbation_comp_trialIncl_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSpecProjection_lowSet_eq_singleton`
 - **Assessment:** The residual Gram matrix, its two characteristic roots, exact radical bounds, and the printed rational relaxations are represented. The actual sine and double-angle theorem outputs are still bridge hypotheses pending integration with the maintained theorem APIs.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `partial_or_wrapper_missing`. The arithmetic is compiled and axiom-clean; the printed conclusions are certificate fields rather than applications of the source-facing sine and tangent theorems.
 
 VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `DavisKahan.All`, `DavisKahan.Experimental.All` and `ForTauCeti` and running `#print axioms` on all 87 declarations named in this census elaborated cleanly -- every name resolves and **none reaches `sorryAx`**. A second probe importing only the default-build roots showed 78 of the 87 resolve there; the 9 that do not are exactly the `TauCeti.DavisKahan1970.Section8.*` names on rows DK-8.1-thm and DK-8.2-thm, whose `proved_outside_build` verification was already correct. `candidate_under_repair` -- "not compiler-certified on this base" -- was therefore false for every row that carried it. The scope question (does the compiled statement match the printed one?) is a separate judgement and is recorded in `next_action`; the status below is the weakest one consistent with that recorded evidence, so no row is overstated.
-- **Next action:** The arithmetic compiles. Remaining is to replace the TheoremOutputCertificate fields by applications of the source-facing sine and tangent theorems, so the printed conclusions are derived rather than assumed.
+
+**(9.1) AND (9.2) ARE NOW DERIVED, NOT ASSUMED (2026-08-07, Opus 5).**
+
+* `beamSinTheta_le` is equation (9.1) for `beamOperator`: the sine of the angle between
+  the affine trial subspace and the exact low spectral subspace of `beamOperator + eps t`
+  is at most `residualTopSingularValue eps / 500`.  Every input is proved: the trial space
+  is the operator's kernel, the gap comes from the selecting set `Ici 500` (so the
+  spectrum-avoidance hypothesis is discharged by the set-localization lemma, not assumed),
+  and the residual bound `norm_beamPerturbation_comp_trialIncl_le` is the exact `t^2`-moment
+  inequality.  Its constant is sharp: the discriminant of the difference form vanishes
+  identically, which is why the proof needs the exact `(11 + sqrt 76)/30` and not a
+  convenient over-estimate.
+* `beamSinTwoTheta_lt` is equation (9.2).  The `sin 2Theta` theorem needs form bounds on the
+  free beam's low spectral block, and the set-based localization lemma provably cannot
+  supply them (`B subset Icc beta alpha` and `B^c cap Ioo (beta-delta) (alpha+delta) = empty`
+  are jointly unsatisfiable).  They come from the operator instead:
+  `realSpectrum_beamOperator_subset_sharp` sharpens the gap from the paper's rounded 500 to
+  500.5 by using `4.73 < beta` directly (`4.73^4 = 500.5466...`), every nonzero point below
+  500.5 is then a resolvent point, so the spectral measure of `Iic 500.5 \ {0}` vanishes and
+  `beamSpecProjection_lowSet_eq_singleton` collapses the whole low projection onto the
+  kernel eigenvalue `{0}`.  Both form bounds are then 0.  The sharpened gap is also exactly
+  what makes the printed *strict* inequality come out: `4 eps/1001 < 2 eps/500`.
+
+**WHAT IS LEFT ON THIS ROW.**  Equations (9.3) and (9.4) are the two-term Ky Fan sums.  Both
+need the ideal-gauge forms of the same two theorems (`sinTheta_unbounded_gauge_of_spectrum_gap`,
+`sinTwoTheta_addBounded_gauge_of_spectrum_gap`), which are already proved; what is missing is
+the gauge arithmetic.  (9.4) needs only `kyFan_2 gauge (eps t) <= 2 eps`.  (9.3) is the harder
+one: it needs the Ky Fan 2 gauge of the rank-two residual to be at most
+`residualKyFanTwo eps`, i.e. *both* singular values of the residual Gram matrix, where (9.1)
+needed only the top one.
+- **Next action:** Equations (9.1) and (9.2) are derived from `beamOperator` (see notes).  Remaining: the two Ky Fan sums.  (9.4) needs `sinTwoTheta_addBounded_gauge_of_spectrum_gap` with the already-proved form bounds plus `kyFan 2 gauge (eps t) <= 2 eps`.  (9.3) needs `sinTheta_unbounded_gauge_of_spectrum_gap` plus the Ky Fan 2 gauge of the rank-two residual, which requires both singular values of the residual Gram matrix rather than just the top one.
 
 #### Equations (9.5)–(9.7): Rayleigh–Ritz tangent refinements
 
