@@ -315,6 +315,183 @@ theorem beamEmbed_injective : Function.Injective beamEmbed := by
   have := sub_eq_zero.mp (by simpa using this)
   exact this
 
+/-! ## Density of the embedded domain -/
+
+/-- A continuous function as an `L²` element of the unit interval. -/
+def contToLp (g : ℝ → ℂ) (hg : Continuous g) : BeamL2 :=
+  (MemLp.of_bound hg.aestronglyMeasurable (pairingBound g hg) (by
+    filter_upwards [ae_mem_unitIocMeasure] with t ht
+    exact pairingBound_spec g hg t ⟨ht.1.le, ht.2⟩)).toLp g
+
+theorem coeFn_contToLp (g : ℝ → ℂ) (hg : Continuous g) :
+    (contToLp g hg : ℝ → ℂ) =ᵐ[unitIocMeasure] g :=
+  MemLp.coeFn_toLp _
+
+/-- Two integrations by parts against the bump family, for a twice-differentiable real
+function with no boundary conditions: every boundary term is killed by the bump's own
+second-order vanishing at both endpoints. -/
+theorem integral_mul_intervalBumpD2_eq_of_hasDerivAt {f f1 f2 : ℝ → ℝ}
+    (hf : Continuous f) (hf1 : Continuous f1) (hf2 : Continuous f2)
+    (hd : ∀ x, HasDerivAt f (f1 x) x) (hd1 : ∀ x, HasDerivAt f1 (f2 x) x) (k : ℕ) :
+    ∫ t in (0 : ℝ)..1, f t * intervalBumpD2 k t
+      = ∫ t in (0 : ℝ)..1, f2 t * intervalBump k t := by
+  have step1 : ∫ t in (0 : ℝ)..1, f t * intervalBumpD2 k t
+      = f 1 * intervalBumpD1 k 1 - f 0 * intervalBumpD1 k 0
+        - ∫ t in (0 : ℝ)..1, f1 t * intervalBumpD1 k t :=
+    intervalIntegral.integral_mul_deriv_eq_deriv_mul_of_hasDerivAt
+      hf.continuousOn (continuous_intervalBumpD1 k).continuousOn
+      (fun x _ => hd x) (fun x _ => hasDerivAt_intervalBumpD1 k x)
+      (hf1.intervalIntegrable 0 1)
+      ((continuous_intervalBumpD2 k).intervalIntegrable 0 1)
+  have step2 : ∫ t in (0 : ℝ)..1, f1 t * intervalBumpD1 k t
+      = f1 1 * intervalBump k 1 - f1 0 * intervalBump k 0
+        - ∫ t in (0 : ℝ)..1, f2 t * intervalBump k t :=
+    intervalIntegral.integral_mul_deriv_eq_deriv_mul_of_hasDerivAt
+      hf1.continuousOn (continuous_intervalBump k).continuousOn
+      (fun x _ => hd1 x) (fun x _ => hasDerivAt_intervalBump k x)
+      (hf2.intervalIntegrable 0 1)
+      ((continuous_intervalBumpD1 k).intervalIntegrable 0 1)
+  rw [step1, step2]
+  simp
+
+/-- The pair of a real `C²` function and its second derivative lies in the form
+subspace. -/
+theorem contPair_mem {f f1 f2 : ℝ → ℝ}
+    (hf : Continuous f) (hf1 : Continuous f1) (hf2 : Continuous f2)
+    (hd : ∀ x, HasDerivAt f (f1 x) x) (hd1 : ∀ x, HasDerivAt f1 (f2 x) x) :
+    ((WithLp.prodContinuousLinearEquiv 2 ℂ BeamL2 BeamL2).symm
+        (contToLp (fun t => (f t : ℂ)) (by fun_prop),
+          contToLp (fun t => (f2 t : ℂ)) (by fun_prop)))
+      ∈ beamFormSubmodule := by
+  rw [mem_beamFormSubmodule_iff]
+  intro k
+  have hfst : pairFst ((WithLp.prodContinuousLinearEquiv 2 ℂ BeamL2 BeamL2).symm
+      (contToLp (fun t => (f t : ℂ)) (by fun_prop),
+        contToLp (fun t => (f2 t : ℂ)) (by fun_prop)))
+      = contToLp (fun t => (f t : ℂ)) (by fun_prop) := by
+    rw [pairFst_apply]
+    simp
+  have hsnd : pairSnd ((WithLp.prodContinuousLinearEquiv 2 ℂ BeamL2 BeamL2).symm
+      (contToLp (fun t => (f t : ℂ)) (by fun_prop),
+        contToLp (fun t => (f2 t : ℂ)) (by fun_prop)))
+      = contToLp (fun t => (f2 t : ℂ)) (by fun_prop) := by
+    rw [pairSnd_apply]
+    simp
+  rw [hfst, hsnd]
+  have h1 : ∫ t, (contToLp (fun t => (f t : ℂ)) (by fun_prop) : ℝ → ℂ) t * bumpD2C k t
+      ∂unitIocMeasure = ((∫ t in (0 : ℝ)..1, f t * intervalBumpD2 k t : ℝ) : ℂ) := by
+    rw [← integral_unitIocMeasure_eq_intervalIntegral, ← integral_complex_ofReal]
+    refine integral_congr_ae ?_
+    filter_upwards [coeFn_contToLp (fun t => (f t : ℂ)) (by fun_prop)] with t ht
+    rw [ht, bumpD2C]
+    push_cast
+    ring
+  have h2 : ∫ t, (contToLp (fun t => (f2 t : ℂ)) (by fun_prop) : ℝ → ℂ) t * bumpC k t
+      ∂unitIocMeasure = ((∫ t in (0 : ℝ)..1, f2 t * intervalBump k t : ℝ) : ℂ) := by
+    rw [← integral_unitIocMeasure_eq_intervalIntegral, ← integral_complex_ofReal]
+    refine integral_congr_ae ?_
+    filter_upwards [coeFn_contToLp (fun t => (f2 t : ℂ)) (by fun_prop)] with t ht
+    rw [ht, bumpC]
+    push_cast
+    ring
+  rw [h1, h2, integral_mul_intervalBumpD2_eq_of_hasDerivAt hf hf1 hf2 hd hd1 k]
+
+/-- The `L²` element of a real polynomial lies in the range of the embedding. -/
+theorem contToLp_polynomial_mem_range (q : Polynomial ℝ) :
+    contToLp (fun t => ((q.eval t : ℝ) : ℂ)) (by fun_prop)
+      ∈ LinearMap.range (beamEmbed : BeamV →ₗ[ℂ] BeamL2) := by
+  refine ⟨⟨(WithLp.prodContinuousLinearEquiv 2 ℂ BeamL2 BeamL2).symm
+    (contToLp (fun t => ((q.eval t : ℝ) : ℂ)) (by fun_prop),
+      contToLp (fun t => (((q.derivative.derivative).eval t : ℝ) : ℂ)) (by fun_prop)),
+    contPair_mem (by fun_prop) (by fun_prop) (by fun_prop)
+      (fun x => q.hasDerivAt x) (fun x => q.derivative.hasDerivAt x)⟩, ?_⟩
+  rw [show (beamEmbed : BeamV →ₗ[ℂ] BeamL2) = beamEmbed.toLinearMap from rfl]
+  change beamEmbed _ = _
+  rw [beamEmbed_apply, pairFst_apply]
+  simp
+
+/-- **The embedded domain is dense.**  Real polynomial pairs lie in the range; Weierstrass
+approximation and the density of bounded continuous functions in `L²` finish. -/
+theorem denseRange_beamEmbed : DenseRange beamEmbed := by
+  have hrange : ∀ x ∈ (Lp.boundedContinuousFunction ℂ 2 unitIocMeasure :
+      Set BeamL2), x ∈ closure (Set.range beamEmbed) := by
+    intro G hG
+    obtain ⟨g, hg⟩ := Lp.mem_boundedContinuousFunction_iff.mp hG
+    have hGae : ⇑G =ᵐ[unitIocMeasure] ⇑g := by
+      have h1 := ContinuousMap.coeFn_toAEEqFun unitIocMeasure g.toContinuousMap
+      rw [hg] at h1
+      exact h1
+    rw [Metric.mem_closure_iff]
+    intro ε hε
+    have hδ : (0 : ℝ) < ε / 4 := by linarith
+    obtain ⟨pre, hpre⟩ := exists_polynomial_near_of_continuousOn 0 1
+      (fun t => (g t).re) (Complex.continuous_re.comp g.continuous).continuousOn _ hδ
+    obtain ⟨pim, hpim⟩ := exists_polynomial_near_of_continuousOn 0 1
+      (fun t => (g t).im) (Complex.continuous_im.comp g.continuous).continuousOn _ hδ
+    obtain ⟨vre, hvre⟩ := contToLp_polynomial_mem_range pre
+    obtain ⟨vim, hvim⟩ := contToLp_polynomial_mem_range pim
+    refine ⟨beamEmbed (vre + Complex.I • vim), ⟨_, rfl⟩, ?_⟩
+    have hy : beamEmbed (vre + Complex.I • vim)
+        = contToLp (fun t => ((pre.eval t : ℝ) : ℂ)) (by fun_prop)
+          + Complex.I • contToLp (fun t => ((pim.eval t : ℝ) : ℂ)) (by fun_prop) := by
+      rw [map_add, map_smul]
+      have h1 : beamEmbed vre = contToLp (fun t => ((pre.eval t : ℝ) : ℂ)) (by fun_prop) :=
+        hvre
+      have h2 : beamEmbed vim = contToLp (fun t => ((pim.eval t : ℝ) : ℂ)) (by fun_prop) :=
+        hvim
+      rw [h1, h2]
+    rw [hy, dist_eq_norm]
+    have hbound : ∀ᵐ t ∂unitIocMeasure,
+        ‖(⇑(G - (contToLp (fun t => ((pre.eval t : ℝ) : ℂ)) (by fun_prop)
+          + Complex.I • contToLp (fun t => ((pim.eval t : ℝ) : ℂ)) (by fun_prop)))) t‖
+          ≤ 2 * (ε / 4) := by
+      filter_upwards [ae_mem_unitIocMeasure, hGae,
+        Lp.coeFn_sub G (contToLp (fun t => ((pre.eval t : ℝ) : ℂ)) (by fun_prop)
+          + Complex.I • contToLp (fun t => ((pim.eval t : ℝ) : ℂ)) (by fun_prop)),
+        Lp.coeFn_add (contToLp (fun t => ((pre.eval t : ℝ) : ℂ)) (by fun_prop))
+          (Complex.I • contToLp (fun t => ((pim.eval t : ℝ) : ℂ)) (by fun_prop)),
+        Lp.coeFn_smul Complex.I
+          (contToLp (fun t => ((pim.eval t : ℝ) : ℂ)) (by fun_prop)),
+        coeFn_contToLp (fun t => ((pre.eval t : ℝ) : ℂ)) (by fun_prop),
+        coeFn_contToLp (fun t => ((pim.eval t : ℝ) : ℂ)) (by fun_prop)]
+        with t htI hGt hsub hadd hsmul hcre hcim
+      rw [hsub, Pi.sub_apply, hGt, hadd, Pi.add_apply, hsmul, Pi.smul_apply, hcre, hcim,
+        smul_eq_mul]
+      have hre := hpre t ⟨htI.1.le, htI.2⟩
+      have him := hpim t ⟨htI.1.le, htI.2⟩
+      calc ‖g t - (((pre.eval t : ℝ) : ℂ) + Complex.I * ((pim.eval t : ℝ) : ℂ))‖
+          ≤ |(g t - (((pre.eval t : ℝ) : ℂ)
+              + Complex.I * ((pim.eval t : ℝ) : ℂ))).re|
+            + |(g t - (((pre.eval t : ℝ) : ℂ)
+              + Complex.I * ((pim.eval t : ℝ) : ℂ))).im| :=
+            Complex.norm_le_abs_re_add_abs_im _
+        _ = |(g t).re - pre.eval t| + |(g t).im - pim.eval t| := by simp
+        _ ≤ ε / 4 + ε / 4 := by
+            refine add_le_add ?_ ?_
+            · rw [abs_sub_comm]
+              exact hre.le
+            · rw [abs_sub_comm]
+              exact him.le
+        _ = 2 * (ε / 4) := by ring
+    have hb := eLpNorm_le_of_ae_bound (p := 2) hbound
+    rw [measure_univ, ENNReal.one_rpow, one_mul] at hb
+    rw [Lp.norm_def]
+    calc (eLpNorm (⇑(G - _)) 2 unitIocMeasure).toReal
+        ≤ (ENNReal.ofReal (2 * (ε / 4))).toReal :=
+          ENNReal.toReal_mono ENNReal.ofReal_ne_top hb
+      _ = 2 * (ε / 4) := ENNReal.toReal_ofReal (by linarith)
+      _ < ε := by linarith
+  -- bounded continuous functions are dense, and their closure passes through the range
+  intro x
+  have hdense := Lp.boundedContinuousFunction_dense ℂ unitIocMeasure
+    (by norm_num : (2 : ℝ≥0∞) ≠ ∞)
+  have hx : x ∈ closure (Lp.boundedContinuousFunction ℂ 2 unitIocMeasure :
+      Set BeamL2) := hdense x
+  have hsubset : closure (Lp.boundedContinuousFunction ℂ 2 unitIocMeasure :
+      Set BeamL2) ⊆ closure (Set.range beamEmbed) :=
+    closure_minimal hrange isClosed_closure
+  exact hsubset hx
+
 end
 
 end Model
