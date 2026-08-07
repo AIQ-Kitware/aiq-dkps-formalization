@@ -8,6 +8,7 @@ Staged for Tau Ceti: the polar partial isometry over a general `RCLike` field.
 module
 
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.InnerProductSpace.Positive
 public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 public import Mathlib.Analysis.Normed.Operator.Extend
 
@@ -64,6 +65,23 @@ does — supplies it by `operatorAbsoluteValue_sq` and self-adjointness.
 * `ContinuousLinearMap.norm_gramContraction_le_one`: `‖W‖ ≤ 1`.
 * `ContinuousLinearMap.exists_contraction_of_gram_eq`: the packaged existence
   statement, which is the form consumers want.
+* `ContinuousLinearMap.norm_apply_le_of_gram_le`,
+  `ContinuousLinearMap.exists_contraction_of_gram_le`: the **one-sided** version,
+  where the Gram identity is weakened to the operator inequality
+  `T⋆T ≤ A²` and only `W ∘L A = T` survives.
+
+## The one-sided version
+
+Domination `T⋆T ≤ A²` gives `‖T x‖ ≤ ‖A x‖` instead of equality, and that is
+already enough for the whole construction: `A x ↦ T x` is still well defined
+(if `A x = A y` then `‖T x - T y‖ ≤ ‖A x - A y‖ = 0`) and still bounded by `1`,
+so it still extends by continuity.  What is lost is the reverse identity
+`W⋆ ∘L T = A`, which genuinely fails under domination alone — take `T = 0` and
+`A ≠ 0`.  So `exists_contraction_of_gram_le` is deliberately one-sided.
+
+The construction itself (`rangeTopologicalClosure`, `corestrictRangeClosure`,
+`gramContractionAux`, `gramContraction`) mentions no Gram hypothesis at all, so
+both versions share it; only the property proofs differ.
 
 ## Provenance
 
@@ -282,5 +300,101 @@ theorem exists_contraction_of_gram_eq :
     gramContraction_comp_right hA hgram, adjoint_gramContraction_comp_left hA hgram⟩
 
 end GramHyp
+
+/-! ### The one-sided version
+
+Only `T⋆T ≤ A²` is assumed.  Every declaration here is the corresponding one
+from the section above with the norm *equality* replaced by the norm
+*inequality*; the underlying construction is reused verbatim. -/
+
+section GramLeHyp
+
+variable {T : E →L[𝕜] F} {A : E →L[𝕜] E}
+  (hA : IsSelfAdjoint A) (hle : adjoint T ∘L T ≤ A ∘L A)
+
+include hA hle
+
+/-- **Gram domination bounds norms pointwise.**
+
+`‖T x‖² = re ⟪T⋆T x, x⟫ ≤ re ⟪A² x, x⟫ = ‖A x‖²`, the middle step being exactly
+positivity of `A² - T⋆T` applied at `x`.  This is the only consequence of the
+hypothesis that the construction uses, which is why weakening the Gram identity
+to an inequality costs nothing but the reverse factorisation. -/
+theorem norm_apply_le_of_gram_le (x : E) : ‖T x‖ ≤ ‖A x‖ := by
+  have hAadj : adjoint A = A := by
+    rw [← ContinuousLinearMap.star_eq_adjoint]; exact hA.star_eq
+  have hpos : (A ∘L A - adjoint T ∘L T).IsPositive :=
+    (ContinuousLinearMap.le_def _ _).mp hle
+  have hAA : ⟪x, A (A x)⟫_𝕜 = ⟪A x, A x⟫_𝕜 := by
+    have h := adjoint_inner_right A x (A x)
+    rwa [hAadj] at h
+  have hTT : ⟪x, adjoint T (T x)⟫_𝕜 = ⟪T x, T x⟫_𝕜 := adjoint_inner_right T x (T x)
+  have hsplit : ⟪x, (A ∘L A - adjoint T ∘L T) x⟫_𝕜 =
+      ⟪A x, A x⟫_𝕜 - ⟪T x, T x⟫_𝕜 := by
+    rw [_root_.sub_apply, inner_sub_right,
+      ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply, hAA, hTT]
+  have hnn := hpos.re_inner_nonneg_right x
+  rw [hsplit, map_sub, inner_self_eq_norm_mul_norm,
+    inner_self_eq_norm_mul_norm] at hnn
+  exact nonneg_le_nonneg_of_sq_le_sq (norm_nonneg _) (by linarith)
+
+/-- The bound that makes the extension possible, under domination only. -/
+theorem norm_apply_le_norm_corestrictRangeClosure_of_gram_le (x : E) :
+    ‖T.toLinearMap x‖ ≤ 1 * ‖A.corestrictRangeClosure x‖ := by
+  rw [one_mul]
+  exact norm_apply_le_of_gram_le hA hle x
+
+/-- The extension undoes `A` on its range: `W₀ (A x) = T x`. -/
+theorem gramContractionAux_corestrictRangeClosure_of_gram_le (x : E) :
+    T.gramContractionAux A (A.corestrictRangeClosure x) = T x :=
+  LinearMap.extendOfNorm_eq A.denseRange_corestrictRangeClosure
+    ⟨1, norm_apply_le_norm_corestrictRangeClosure_of_gram_le hA hle⟩ x
+
+/-- **The factorisation**: `W A = T`, pointwise. -/
+theorem gramContraction_apply_apply_of_gram_le (x : E) :
+    T.gramContraction A (A x) = T x := by
+  have hproj : A.rangeTopologicalClosure.orthogonalProjectionOnto (A x)
+      = A.corestrictRangeClosure x := by
+    apply Subtype.ext
+    simpa using
+      Submodule.starProjection_eq_self_iff.mpr (A.apply_mem_rangeTopologicalClosure x)
+  rw [gramContraction, ContinuousLinearMap.comp_apply, hproj,
+    gramContractionAux_corestrictRangeClosure_of_gram_le hA hle]
+
+/-- **The factorisation**: `W ∘L A = T`. -/
+theorem gramContraction_comp_right_of_gram_le : T.gramContraction A ∘L A = T := by
+  ext x
+  exact gramContraction_apply_apply_of_gram_le hA hle x
+
+/-- **The contraction bound**: `‖W‖ ≤ 1`. -/
+theorem norm_gramContraction_le_one_of_gram_le : ‖T.gramContraction A‖ ≤ 1 := by
+  have haux : ‖T.gramContractionAux A‖ ≤ 1 :=
+    LinearMap.opNorm_extendOfNorm_le A.denseRange_corestrictRangeClosure zero_le_one
+      (norm_apply_le_norm_corestrictRangeClosure_of_gram_le hA hle)
+  have hproj : ‖A.rangeTopologicalClosure.orthogonalProjectionOnto‖ ≤ 1 :=
+    Submodule.orthogonalProjectionOnto_norm_le _
+  calc ‖T.gramContraction A‖
+      ≤ ‖T.gramContractionAux A‖ *
+        ‖A.rangeTopologicalClosure.orthogonalProjectionOnto‖ :=
+        ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ 1 * 1 := mul_le_mul haux hproj (norm_nonneg _) zero_le_one
+    _ = 1 := one_mul 1
+
+/-- **Gram domination produces a contractive factorisation.**
+
+If `T⋆T ≤ A²` with `A` self-adjoint, then `T` factors through `A` by a
+contraction.  This is the specialised Douglas factorisation: no functional
+calculus, no square roots and no product space, because `A` is supplied as a
+hypothesis rather than constructed.
+
+It is deliberately **one-sided**.  The reverse identity `W⋆ ∘L T = A` of
+`exists_contraction_of_gram_eq` is false under domination alone — `T = 0` with
+`A ≠ 0` satisfies the hypothesis and forces `W⋆ T = 0 ≠ A`. -/
+theorem exists_contraction_of_gram_le :
+    ∃ W : E →L[𝕜] F, ‖W‖ ≤ 1 ∧ W ∘L A = T :=
+  ⟨T.gramContraction A, norm_gramContraction_le_one_of_gram_le hA hle,
+    gramContraction_comp_right_of_gram_le hA hle⟩
+
+end GramLeHyp
 
 end ContinuousLinearMap
