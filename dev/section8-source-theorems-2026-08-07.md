@@ -66,9 +66,17 @@ quarter-angle bound.  They are not separately formalized because the repository
 proves that bound by a *stronger* route: `theorem8_1_canonicalBranch` gives the
 **strict** bound `IsQuarterAcute P Q` in arbitrary dimension, whereas the printed
 argument is finite-dimensional with "the infinite-dimensional case follows by
-approximation".  The closing remark (line 2559 of the transcription) that the
-`sin 2θ` theorem extends to `dim 𝓧(E₀) < dim 𝓧(F₀)` while no extension of the
-`tan 2θ` theorem is known is an open research remark, not proof debt.
+approximation".
+
+The section's closing sentence — "the `sin 2θ` theorem can be extended to the
+case `dim 𝓧(E₀) < dim 𝓧(F₀)`, similarly to Theorems 6.1 and 6.3.  No
+corresponding extension of the `tan 2θ` theorem is known." — has two halves.
+The second is an open question, not proof debt.  The first is an
+unequal-dimension extension of the **`sin 2θ` theorem**, asserted without proof;
+it is a claim about a Section 2 / Section 7 theorem, not about Theorem 8.1 or
+8.2, and it is recorded on the census row `S2-sin-two-theta`, which is
+`compiled_specialization` for exactly this kind of reason.  It is not a
+Section 8 obligation and was deliberately left out of scope for this campaign.
 
 ## The two conventions, and one source finding
 
