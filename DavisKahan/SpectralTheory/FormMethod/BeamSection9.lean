@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.SpectralTheory.FormMethod.BeamSpectrum
 import DavisKahan.DoubleAngle.UnboundedIdeal
+import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.SinTheta.BoundedPerturbation
 import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
 import DavisKahan.Sources.DavisKahan1970.Section9.TrialSubspace
@@ -938,6 +939,70 @@ def beamFiniteDataCertificate (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100)
   ritz_high_eq := rfl
   recentered_residual_gram := orthogonalResidualGram ε
   recentered_residual_gram_eq := rfl
+
+/-! ## Equation (9.4): the two-term Ky Fan sum -/
+
+/-- The two-term Ky Fan ideal family over `ℂ`, the gauge equation (9.4) is stated in. -/
+def beamKyFanTwo : TauCeti.SymmetricOperatorIdealFamily.{0, 0} ℂ :=
+  kyFanSymmetricIdealFamily (𝕜 := ℂ) 2 (by norm_num)
+
+instance : beamKyFanTwo.toOperatorIdealFamily.IsComplete :=
+  isComplete_kyFanSymmetricIdealFamily (𝕜 := ℂ) 2 (by norm_num)
+
+/-- The two-term Ky Fan gauge of any bounded operator is at most twice its norm: both
+approximation numbers in the sum are bounded by the operator norm. -/
+theorem beamKyFanTwo_gaugeReal_le (T : BeamL2 →L[ℂ] BeamL2) :
+    beamKyFanTwo.gaugeReal T ≤ 2 * ‖T‖ := by
+  have hsum : ContinuousLinearMap.kyFanGauge T 2 ≤ 2 * ‖T‖ := by
+    rw [ContinuousLinearMap.kyFanGauge, Finset.sum_range_succ, Finset.sum_range_succ,
+      Finset.sum_range_zero, zero_add]
+    have h0 := T.approximationNumber_le_norm 0
+    have h1 := T.approximationNumber_le_norm 1
+    linarith
+  have hnonneg : 0 ≤ ContinuousLinearMap.kyFanGauge T 2 :=
+    le_trans (norm_nonneg T)
+      (opNorm_le_kyFanApproximationGauge (k := 2) (by norm_num) T)
+  have hval : beamKyFanTwo.gaugeReal T
+      = (ENNReal.ofReal (kyFanApproximationGauge 2 T)).toReal := rfl
+  rw [hval, kyFanApproximationGauge_eq_kyFanGauge, ENNReal.toReal_ofReal hnonneg]
+  exact hsum
+
+/-- Every bounded operator lies in the two-term Ky Fan ideal. -/
+theorem beamKyFanTwo_mem (T : BeamL2 →L[ℂ] BeamL2) : beamKyFanTwo.Mem T :=
+  gauge_kyFanSymmetricIdealFamily_ne_top (𝕜 := ℂ) 2 (by norm_num) T
+
+/-- **The two-term Ky Fan sum of the double-angle sines** between the free beam's
+zero-mode subspace and the perturbed operator's low subspace. -/
+def beamSinTwoThetaSum (ε : ℝ) : ℝ :=
+  beamKyFanTwo.gaugeReal (sinTwoThetaIdealBlock
+    (selfAdjointSpectralSubspace beamOperator beamOperator_isSelfAdjoint beamLowSet
+      measurableSet_beamLowSet)
+    (selfAdjointSpectralSubspace (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε)
+      beamLowSet measurableSet_beamLowSet))
+
+/-- **Davis--Kahan 1970, equation (9.4), for the genuine free-beam operator.**  The
+two-term Ky Fan sum of the double-angle sines is below `4 ε / 500`.  The double-angle
+theorem contributes the factor two, the two-term Ky Fan gauge of the perturbation
+contributes another, and the gap `500.5` again supplies the strict inequality. -/
+theorem beamSinTwoThetaSum_lt (ε : ℝ) (hε : 0 < ε) :
+    beamSinTwoThetaSum ε < 4 * ε / 500 := by
+  have hmain := sinTwoTheta_addBounded_gauge_of_spectrum_gap beamKyFanTwo beamOperator
+    beamOperator_isSelfAdjoint (beamPerturbation ε) (beamPerturbation_isSelfAdjoint ε)
+    beamLowSet beamLowSet measurableSet_beamLowSet measurableSet_beamLowSet
+    (β := 0) (α := 0) (δ := 1001 / 2) le_rfl (by norm_num)
+    beamLow_semiboundedBelow beamLow_semiboundedAbove beamHigh_spectrum_avoids
+    (beamKyFanTwo_mem _)
+  have hnorm : ‖beamPerturbation ε‖ ≤ ε := by
+    have := norm_beamPerturbation_le ε
+    rwa [abs_of_pos hε] at this
+  have hgauge : beamKyFanTwo.gaugeReal (beamPerturbation ε) ≤ 2 * ε :=
+    le_trans (beamKyFanTwo_gaugeReal_le _) (by linarith)
+  have hnn : 0 ≤ beamSinTwoThetaSum ε :=
+    ENNReal.toReal_nonneg
+  have hchain : (1001 / 2 : ℝ) * beamSinTwoThetaSum ε ≤ 4 * ε := by
+    refine le_trans hmain.2 ?_
+    linarith
+  nlinarith [hnn, hchain]
 
 end
 
