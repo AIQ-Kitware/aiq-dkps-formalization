@@ -11,8 +11,8 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 30 |
-| `compiled_specialization` | 3 |
+| `compiled_exact` | 23 |
+| `compiled_specialization` | 10 |
 | `compiled_general_infrastructure` | 4 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
@@ -97,6 +97,22 @@ Section 3's classification results need the Halmos two-subspace canonical form t
 
 Gates: DK-3.2-prop (proved_in_build), DK-3.1-thm (proved_in_build)
 
+### `real-scalar-infinite-dimensional-scope` -- mixed
+
+**Real Hilbert spaces at infinite dimension**
+
+AUDIT FINDING 2026-08-07 (Claude Opus 5), by dumping the elaborated signature of every declaration on every `compiled_exact` row and classifying it on two axes.
+
+The transcription's standing assumption 1 (prose/distilled_literature/DavisKahan1970_part_III.tex, 'Standing assumptions from the transcription') reads: 'H is a separable Hilbert space, REAL OR COMPLEX, with finite dimensionality only a special case.'  Assumption 4 adds that all four headline theorems are stated as applicable in infinite as well as finite dimensions.  The same section warns explicitly that a Lean theorem with a finite-dimensional assumption 'is not the unqualified paper theorem merely because its formula and constant match the displayed source inequality'.
+
+MEASURED: 17 of the 30 rows then marked `compiled_exact` had NO declaration covering a real Hilbert space of infinite dimension.  The coverage splits into two shapes.  (a) Infinite dimension but `InnerProductSpace ℂ` only -- Section 3's direct-rotation propositions, Theorem 5.2, all of Section 6, and the two headline sine rows.  (b) `RCLike` (so real and complex) but `[FiniteDimensional]` -- Section 4's propositions and corollary.  A row whose declarations are one of each is still not covering real-and-infinite.
+
+This is a SCOPE gap, not a correctness gap: nothing recorded is wrong, and the complex infinite-dimensional statements are the mathematically substantial ones.  But `compiled_exact` is defined as 'an exact source-facing theorem ... is compiled', and complex-only is not exact against a source that says real or complex.
+
+ROUTE: the repository already intends a 'qualified complexification/restriction route' (dev/targeted-mathematical-repair-2026-07-21.md) and carries `DavisKahan/SpectralTheory/Complexification/`.  A real wrapper should go through that rather than by reproving over `RCLike`, since several proofs use the complex continuous functional calculus essentially.  Section 4's finite-dimensional restriction is a separate question and may be defensible -- the source itself notes that singular-value lists may need spectral multiplicity language for noncompact operators -- so check the printed statement before treating it as a gap.
+
+Gates: S2-sin-theta (proved_in_build), S2-sin-two-theta (proved_in_build), DK-3.1-def (proved_in_build), DK-3.1-prop (proved_in_build), DK-3.3-prop (proved_in_build), DK-3.1-cor (proved_in_build), DK-3.5-prop (proved_in_build), DK-3.2-cor (proved_in_build), DK-4.1-prop (proved_in_build), DK-4.1-cor (proved_in_build), DK-4.2-prop (proved_in_build), DK-4.3-prop (proved_in_build), DK-5.2-thm (proved_in_build), DK-6.1-lem (proved_in_build), DK-6.1-prop (proved_in_build), DK-6.1-thm (proved_in_build), DK-6.2-thm (proved_in_build), DK-6-appendix (proved_in_build), DK-6.3-lem (proved_in_build)
+
 ### `section9-certificate-discharge` -- mixed
 
 **Construct the Section 9 certificates**
@@ -161,11 +177,14 @@ Gates: S1-block-residual (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2
 #### Section 2, sin theta theorem: Single-angle sine theorem
 
 - **Kind:** `unnumbered_theorem`
-- **Status:** `compiled_exact`
+- **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Interval/exterior spectral separation gives delta times the directed sine norm bounded by the residual norm for every source unitary-invariant norm.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan1970.sinTheta`, `TauCeti.DavisKahan1970.generalizedSinTheta`
 - **Assessment:** The definitive source form is Theorem 6.1; real, complex, bounded, unbounded, and arbitrary-representative forms are present.
+
+**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.
 - **Next action:** No mathematical gap. Keep the source audit synchronized.
 
 #### Section 2, tan theta theorem: Single-angle tangent theorem
@@ -197,9 +216,10 @@ WHY THE RIGHT-HAND SIDE IS `E` RESTRICTED TO `Z`, not `E`: the two live in diffe
 #### Section 2, sin 2 theta theorem: Double-angle sine theorem
 
 - **Kind:** `unnumbered_theorem`
-- **Status:** `compiled_exact`
+- **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
 - **Mathematics:** A spectral gap between the two exact blocks yields residual and perturbation bounds for sin(2 Theta), with sharp factor two.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm`, `TauCeti.DavisKahan.Experimental.sinTwoTheta_addBounded_of_spectrum_gap`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative`
 - **Assessment:** Finite arbitrary-UI-norm forms are compiled; general Hilbert-space source forms are under repair.
 
@@ -215,6 +235,8 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 Both are at the source-general scope this row was waiting for: arbitrary complete complex Hilbert space, unbounded closed self-adjoint `A`, arbitrary `KyFanDominantIdealFamily`, and an arbitrary `sin 2Theta_0` representative rather than a fixed codomain realization -- the paper does not fix one either.  The spectral-gap hypotheses (`hBlow`, `hBhigh`, `hBcomplSpec`) are the printed separation between the two exact blocks.
 
 VERIFIED 2026-08-05 by the elaborator: both names resolve from `DavisKahan.All` alone -- so they are in the DEFAULT build, not merely in `Experimental` -- and `#print axioms` on each gives exactly `[propext, Classical.choice, Quot.sound]`.  No new mathematics was needed to close this row; the declarations were simply never added to it.
+
+**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.
 - **Next action:** Nothing outstanding.  Both source-general forms are compiled, in the default build, axiom-clean, and listed above.
 
 #### Section 2, tan 2 theta theorem: Double-angle tangent theorem
@@ -279,7 +301,7 @@ WHY THE ARGUMENT GOES THROUGH A THRESHOLD c < alpha+delta RATHER THAN APPLYING T
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** A unitary intertwining the two projections whose diagonal cosine blocks are positive and whose off-diagonal sine blocks are adjoints.
-- **Blocked by:** `exact-source-wrappers`
+- **Blocked by:** `exact-source-wrappers`, `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation`, `TauCeti.DavisKahan.Experimental.spectraCanonicalIntertwiner`, `TauCeti.DavisKahan.Experimental.Frontier.IsPaperDirectRotation`
 - **Assessment:** Acute complex and finite constructions exist; exact nonacute source scope is not yet unified.
 
@@ -309,6 +331,7 @@ RESOLVED 2026-08-06.  `TauCeti.DavisKahan.IsAcute` IS the source definition -- t
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** In the acute case the direct rotation exists, is unique, and positivity of its diagonal blocks characterizes it.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation`, `TauCeti.DavisKahan1970.complex_directRotation_unique`, `TauCeti.DavisKahan1970.complex_directRotation_diagonalBlock`, `TauCeti.DavisKahan1970.complex_directRotation_complementaryDiagonalBlock`, `TauCeti.DavisKahan1970.complex_directRotation_reflectionConjugate`, `TauCeti.DavisKahan1970.complex_directRotation_of_diagonalBlocks`, `TauCeti.DavisKahan1970.complex_directRotation_iff_diagonalBlocks`
 - **Assessment:** The main acute construction and uniqueness are present; the exact characterization by positivity needs source-level verification.
 
@@ -350,6 +373,7 @@ CORRECTED 2026-08-04: this row read `not_represented` / `absent` and listed no d
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Every direct rotation is a principal square root of the product of the two reflections; conversely a suitable principal square root is a direct rotation.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation_sq`, `TauCeti.DavisKahan1970.complex_directRotation_hermitianPart`, `TauCeti.DavisKahan1970.complex_directRotation_principal_of_sq`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_3_principalSquareRoot_forward`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_3_principalSquareRoot_converse`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_3_principalSquareRoot_iff`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_3_principalSquareRoot_forward_of_nonneg_blocks`
 - **Assessment:** The square identity and acute spectral branch exist; the source converse with the crossed-intersection mapping condition is not exposed.
 
@@ -440,6 +464,7 @@ UNIQUENESS PROVED 2026-08-06, BOTH HALVES; THE DATUM IS A COMPLETE INVARIANT CAN
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** When the cross projection is compact, the decreasing angle eigenvalue lists, including possible zero multiplicity, classify the pair.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.SameCompactAngleData`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.isCompactOperator_genericCosineBlock`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.eigenspace_genericCosineBlock_zero`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.finrank_eigenspace_eq_of_intertwiner`, `TauCeti.exists_linearIsometryEquiv_intertwining_of_finrank_eigenspace_eq`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_1_compact_defectBlock_angleList_classification`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.pairOfSubspacesUnitaryEquivalent_orthogonal_right_iff`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.sameHalmosTrivialDimensions_orthogonal_right_iff`
 - **Assessment:** **PROVED 2026-08-04, both directions, admission-free.**
 
@@ -472,6 +497,7 @@ On the invariant's phrasing: the list is of `sin^2 theta_j` in decreasing order 
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** The full angle commutes with both projections, the quarter-turn and direct rotation; its eigenspaces are maximal reducing constant-angle subspaces in the acute case.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan1970.bounded_angle_commute`, `TauCeti.DavisKahan1970.bounded_sinAngleOperatorC_norm`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.IsFixedCosineReducingSubspace`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.fixedCosineSubspace`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.fixedCosineSubspace_isFixedCosineReducing`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.fixedCosineSubspace_maximal`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_5_fixedAngle_maximal`
 - **Assessment:** Commutation identities are present, but the maximal eigenspace characterization is not represented.
 
@@ -488,6 +514,7 @@ The commutation identities this row already listed (`bounded_angle_commute`, `bo
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Swapping P and Q leaves the angle operator unchanged and reverses the quarter-turn operator.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation_reversal`, `TauCeti.DavisKahanTheory.directRotation_symm`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_2_reversal`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_2_reversal_source_form`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_2_sinAngleOperator_symm`
 - **Assessment:** Direct-rotation reversal is represented; the exact angle/J statement needs a source wrapper.
 
@@ -514,6 +541,7 @@ row now carries `corollary3_2_sinAngleOperator_symm` and the combined
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** For any unitary carrying P to Q, an orthonormal sequence experiences angles at least the principal angles; equivalently the singular values of (1-V)|P are minimized by the direct rotation and equal 2 sin(theta_k/2).
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_le`, `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_directRotation`, `TauCeti.DavisKahan1970.Proposition4_1`, `TauCeti.DavisKahan1970.Proposition4_1_directRotationValues`
 - **Assessment:** The finite pointwise singular-value theorem is compiled: every singular value of the restricted displacement (1-V)P is minimized by the direct rotation, whose values are the doubled half-angle sines 2 sin(theta_k/2).  A source-numbered wrapper and the infinite-dimensional scope remain open.
 
@@ -526,6 +554,7 @@ row now carries `corollary3_2_sinAngleOperator_symm` and the combined
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** The direct rotation minimizes the norm of (1-V)P for every unitary-invariant norm.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahanTheory.uiNorm_restrictedDisplacement_le`, `TauCeti.DavisKahanTheory.directRotation_minimizes_restrictedDisplacement_uiNorm`, `TauCeti.DavisKahan1970.Corollary4_1`, `TauCeti.DavisKahan1970.Corollary4_1_minimizer`
 - **Assessment:** Compiled without any angle restriction, for every unitarily invariant norm, over every RCLike field (finite dimension).  The earlier note conflating this row with Proposition 4.4 is resolved: the corollary concerns the restricted displacement and needs no angle hypothesis.
 
@@ -538,6 +567,7 @@ row now carries `corollary3_2_sinAngleOperator_symm` and the combined
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** For every orthonormal basis of P, the sum of squared displacement sines under V dominates the sum of squared principal sines.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahanTheory.directRotation_minimizes_sum_sq_basis_angles`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.sum_displacementAngleSineSq_ge`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.displacementAngleSineSq_directRotation_eq_of_smul`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.norm_absoluteValue_apply_eq_norm_projection`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.norm_inner_competitor_le`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.sum_displacementAngleSineSq_ge_of_mem`, `TauCeti.DavisKahan.Experimental.MathAhead.Section4.tsum_displacementAngleSineSq_ge_of_mem`
 - **Assessment:** The finite orthonormal-basis displacement-energy extremality is compiled via the nuclear-norm specialization of the displacement-square majorization.
 
@@ -570,6 +600,7 @@ The frontier statement `proposition4_2_basisAngleSquareSum` is no longer `sorry`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** The direct rotation minimizes the UI norm of (1-V*) (1-V).
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahanTheory.directRotation_displacementSquare_kyFan`, `TauCeti.DavisKahanTheory.directRotation_displacementSquare_uiNorm`, `TauCeti.DavisKahanTheory.directRotation_minimizes_displacementSquare_uiNorm`, `TauCeti.DavisKahan1970.Proposition4_3`, `TauCeti.DavisKahan1970.Proposition4_3_kyFan`, `TauCeti.DavisKahan1970.Proposition4_3_minimizer`
 - **Assessment:** Compiled for every unitarily invariant norm over every RCLike field (finite dimension), via Fan-Hoffman majorization of the pinched competitor and two-block pinching contraction.
 
@@ -633,6 +664,7 @@ The source's "for any compatible operator norm" clause is carried literally by `
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** For A >= gamma+delta > gamma >= B, a bounded solution of AX=XB+C satisfies the sharp UI-norm inequality.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan.Experimental.ExactSinTheta.directOrderedSylvesterEngine_lowerUpper`, `TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum`, `TauCeti.DavisKahan1970.Theorem5_2`
 - **Assessment:** The completed Section 6 route contains the needed constant-one engines, while the exact source theorem alias is still in the full Part III repair campaign.
 
@@ -662,11 +694,14 @@ THE ORDERED BRANCH IS NOT THE INTERVAL/EXTERIOR BRANCH.  `unbounded_sylvester_in
 #### Lemma 6.1: Direct-sum UI-norm comparison and converse
 
 - **Kind:** `lemma`
-- **Status:** `compiled_exact`
+- **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Two diagonal block inequalities imply the direct-sum inequality; under equisingularity of paired blocks the converse holds.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan1970.lemma6_1`, `TauCeti.DavisKahan1970.lemma6_1_converse`
 - **Assessment:** Both directions are proved; the converse should be added to the exact audit manifest.
+
+**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.
 - **Next action:** Harden the audit, not the mathematics.
 
 #### Lemma 6.2: Reflection-pinch contraction
@@ -682,31 +717,40 @@ THE ORDERED BRANCH IS NOT THE INTERVAL/EXTERIOR BRANCH.  `unbounded_sylvester_in
 #### Proposition 6.1: Symmetric sine theorem
 
 - **Kind:** `proposition`
-- **Status:** `compiled_exact`
+- **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Two complementary source gap hypotheses give the full sine-angle inequality with perturbation H.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan1970.Proposition6_1`
 - **Assessment:** Complex and real source forms are compiled.
+
+**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.
 - **Next action:** No mathematical gap.
 
 #### Theorem 6.1: Generalized sine theorem
 
 - **Kind:** `theorem`
-- **Status:** `compiled_exact`
+- **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
 - **Mathematics:** A lower frame bound on the trial map and interval/exterior separation give delta epsilon times any equisingular sine representative bounded by the residual.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan1970.Theorem6_1`
 - **Assessment:** This is the canonical source-general sine theorem.
+
+**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.
 - **Next action:** No mathematical gap.
 
 #### Theorem 6.2: Pairwise-gap square-norm sine theorem
 
 - **Kind:** `theorem`
-- **Status:** `compiled_exact`
+- **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Arbitrary pairwise spectral distance gives the sharp Hilbert–Schmidt/square-norm residual bound.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan1970.Theorem6_2`
 - **Assessment:** The defect-first pairwise tensor proof is compiled.
+
+**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.
 - **Next action:** No mathematical gap.
 
 #### Theorem 6.3: Generalized tangent theorem
@@ -732,11 +776,14 @@ THE WITNESS.  `ExactTanTheta.theorem63DirectedTangent`: diagonal in the right si
 #### Appendix to Section 6, equations (6.7)–(6.11): Unbounded-operator passage
 
 - **Kind:** `appendix`
-- **Status:** `compiled_exact`
+- **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Domain invariance, bounded residual, spectral cutoffs, and limiting arguments extend the single-angle theorems to unbounded self-adjoint operators.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan1970.Theorem6_1_commonDomain`, `TauCeti.DavisKahan1970.Theorem6_1_commonCore`
 - **Assessment:** Common-domain and graph-core source forms are compiled. This does not by itself ground the Appendix's full arbitrary-unitarily-invariant tan-theta cutoff/Fan passage, which remains a separate frontier obligation.
+
+**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.
 - **Next action:** Audit every displayed appendix identity and complete the arbitrary-ideal tangent cutoff/Fan passage; do not infer it from the compiled common-domain wrappers alone.
 
 #### Lemma 6.3: Finite-rank near-maximizer leakage estimate
@@ -745,6 +792,7 @@ THE WITNESS.  `ExactTanTheta.theorem63DirectedTangent`: diagonal in the right si
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** A nearly Ky-Fan-optimal finite-rank compression has small off-block trace norm.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage`, `TauCeti.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_singularValue_leakage`
 - **Assessment:** The surrounding approximation-number infrastructure exists, but no exact source declaration was found.
 
