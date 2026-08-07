@@ -13,5 +13,7 @@ import DavisKahan.Frontier.Section8PartIII
 import DavisKahan.Frontier.Section8Perturbation
 import DavisKahan.Frontier.Section8Krein
 import DavisKahan.Frontier.Section8Residual
+import DavisKahan.Frontier.Section8SourceDictionary
+import DavisKahan.Frontier.Section8SourceTheorem82
 
 /-! # `DavisKahan/Frontier` -/
