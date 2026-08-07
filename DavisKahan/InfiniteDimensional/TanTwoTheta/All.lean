@@ -17,5 +17,6 @@ import DavisKahan.InfiniteDimensional.TanTwoTheta.CanonicalTangentBridge
 import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsion
 import DavisKahan.InfiniteDimensional.TanTwoTheta.PaperFaithfulUINorm
 import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
+import DavisKahan.InfiniteDimensional.TanTwoTheta.RealPaperFaithful
 
 /-! # `DavisKahan/InfiniteDimensional/TanTwoTheta` -/
