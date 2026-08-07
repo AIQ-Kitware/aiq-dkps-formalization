@@ -9,5 +9,6 @@ import DavisKahan.Frontier.Section3
 import DavisKahan.Frontier.Section4
 import DavisKahan.Frontier.Section8
 import DavisKahan.Frontier.Section8PartII
+import DavisKahan.Frontier.Section8Perturbation
 
 /-! # `DavisKahan/Frontier` -/
