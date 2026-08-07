@@ -1,51 +1,78 @@
 # Section 9 free-beam campaign (DK-9-model → DK-9.x): design and status
 
-## HANDOFF 2026-08-07 (Fable 5 → next session)
+## HANDOFF 2026-08-07 (Opus 5) — supersedes the Fable 5 handoff below
 
-**All hard analytic parts of the entire remaining Davis--Kahan program are DONE and
-pushed** (HEAD at or after c11154f7; census CLEAN 48/48; `lake build` and
-`lake build DavisKahan.Experimental Challenge FinishTanTwoTheta` both green).
-What Fable finished this session, beyond the four ForTauCeti bricks:
+**State: `lake build` 9459 jobs green, `lake build DavisKahan.Experimental Challenge
+FinishTanTwoTheta` 9386 jobs green, census CLEAN 48/48 with a 190/190 declaration probe,
+everything pushed.**  The whole free-beam chain is now in the DEFAULT build
+(`FormMethod/All.lean` imports `BeamFormSpace`, `BeamSpectrum`, `BeamSection9`); before
+this session it was reachable only by explicit module name and CI did not cover it.
 
-* `beamOperator` exists (BeamFormSpace.lean): self-adjoint, nonnegative, dense compact
-  form embedding.  Kernel = affine plane, both directions (BeamSpectrum.lean).
-* THE BOOTSTRAP `exists_characteristic_of_eigen` and the Fredholm bridge
-  `realSpectrum_beamOperator_subset(_gap)`: **realSpectrum(beamOperator) ⊆ {0} ∪ (500,∞)**.
-  `eigenvalue_gt_five_hundred` is the paper's α₃ > 500 for the genuine operator.
-* Census rows closed as stale after elaborator verification: DK-6.3-lem (both source
-  forms were already proved), DK-7-sin2-proof and DK-7-tan2-proof (the SinTwoTheta and
-  TanTwoTheta facades already carry the full proof packages; see their row notes).
+### What closed
 
-**What remains is mechanical-to-medium — no known hard analysis left:**
+* **DK-9-model → `compiled_exact`**, and the blocker `free-beam-closed-operator` is
+  deleted.  The operator exists, the trial subspace is proved to be its kernel, the finite
+  moments of `TrialSubspace.lean` are proved to be genuine `L²` integrals against it
+  (`inner_centeredAffineLp`, `inner_centeredAffineLp_mul`, `inner_mul_centeredAffineLp_mul`),
+  the Ritz matrix of (9.5) and the residual Gram matrix are genuine compressions, and
+  `FreeBeamFiniteDataCertificate` is inhabited.  The sorried
+  `Experimental/Frontier/Section9Analytic.lean` skeleton is deleted.
+* **DK-3.2-cor → `compiled_exact`.**  Its next_action was stale on both counts; the missing
+  content was the *angle* half of Corollary 3.2, now `corollary3_2_sinAngleOperator_symm`.
+* **Equations (9.1), (9.2), (9.4)** are derived from `beamOperator` rather than assumed:
+  `beamSinTheta_le`, `beamSinTwoTheta_lt`, `beamSinTwoThetaSum_lt`.
 
-1. (#51) Section 9 conclusions 9.1–9.11: build the certificates from `beamOperator`.
-   Perturbed operator Ā := beamOperator.addBounded (ε • M_t) with M_t = mulLp of the
-   clamped coordinate (BorelCalculus/MulLp machinery from Section 3 has everything);
-   trial space = span{beamOneLp, beamIdLp} = the PROVED kernel; residual data = the
-   moments already proved in TrialSubspace.lean once the moments↔integrals lemma is done
-   (∫₀¹ tⁿ arithmetic against coeFn of beamOneLp/beamIdLp combinations — routine).
-   Apply the unbounded sin/tan theorems (SinTwoTheta.lean / TanTwoTheta.lean facades)
-   with the spectral gap from `realSpectrum_beamOperator_subset_gap`.  The 9.9–9.11
-   rank-one resolvent step: SchurComplement.lean + RankOneCorrection.lean already
-   compile; what's left is connective algebra, medium at worst.
-2. (#50 residue) Retire or complete `Experimental/Frontier/Section9Analytic.lean`
-   (sorried skeleton) in favour of the `FreeBeam.Model` namespace; flip DK-9-model and
-   then the DK-9.x rows as certificates land.
-3. (#54) DK-3.2-cor: promote reversal symmetry out of the unguarded Experimental tree,
-   add the source-facing angle/quarter-turn statement.  Small.
-4. (#55) Audit tail: S2-tan-two-theta next_action still stale (claims DK-8.1/8.2 are
-   outside the default build; they are proved_in_build), DK-10.1 documentation note,
-   optional status normalizations.  Sorry sweep DONE: default-build trees are
-   sorry-free; remaining sorries are the deliberate Challenge conformance placeholders,
-   two old unguarded Experimental items, and the Section9Analytic skeleton (item 2).
+### The one non-obvious obstruction, and how it was beaten
 
-Working rules: serial; never pipe `lake build`; one build at a time; commit and push
-every milestone; author as the model actually running; verify census rows against the
-build before writing code (EIGHT rows were stale this week — always probe first).
+The `sin 2Θ` and tangent theorems all want form bounds on the *low spectral block* plus
+spectrum-avoidance on its complement.  The set-based localization lemmas cannot supply
+both: `B ⊆ Icc β α` together with `Bᶜ ∩ Ioo (β−δ) (α+δ) = ∅` forces `(β−δ, α+δ) ⊆ B ⊆ [β,α]`,
+which is unsatisfiable for `δ > 0`.  **One of the two hypotheses must come from the
+operator.**  The route that works, and that every remaining Section 9 conclusion should
+reuse:
 
+1. `realSpectrum_beamOperator_subset_sharp` sharpens the gap to `500.5` using `4.73 < β`
+   directly (`4.73⁴ = 500.5466…`) instead of the already-rounded `500`.  Do not skip this:
+   it is what makes the *strict* printed inequalities come out.
+2. Hence every nonzero point of `Iic 500.5` is a resolvent point, so
+   `specProjection (Iic 500.5 \ {0}) = 0` and `beamSpecProjection_lowSet_eq_singleton`
+   collapses the low projection onto `{0}`.
+3. `beamLow_semiboundedBelow` / `beamLow_semiboundedAbove` then give form bounds `0` and `0`
+   through `re_inner_apply_bounds_of_subset_Icc` at `B = {0} ⊆ Icc 0 0`, while the
+   complement `Ioi 500.5` discharges spectrum-avoidance from the *set* lemma.
 
-Written 2026-08-07 (Fable 5).  Edward's directive: hardest parts first; leave easy parts
-for a smaller model.  This file records the design so any session can continue.
+Equation (9.1) takes a different and simpler route (residual form, `A₀ = 0` on the kernel,
+selecting set `Ici 500` on the perturbed operator) and needs none of this.
+
+### What remains — all of it Section 9, in increasing order of size
+
+1. **(9.3)**, the last bound on DK-9.1-9.4.  `sinTheta_unbounded_gauge_of_spectrum_gap`
+   with exactly the (9.1) data reduces it to
+   `a₀ + a₁ ≤ residualTopSingularValue ε + residualBottomSingularValue ε`.  `a₀` is
+   `norm_beamPerturbation_comp_trialIncl_le`, done.  `a₁` needs one explicit rank-one
+   approximant: in the orthonormal trial basis the top eigendirection of the residual Gram
+   matrix is `φ₁ + c φ₂` with `c = −(√75 + √76)`, and the eigenvalue identity collapses to
+   `(√75+√76)(√75−√76) = −1`, so the radical arithmetic is clean — the Lean cost is the
+   rank-one operator plus `finrank beamTrial = 2` (needed to know `{φ₁, φ₂}` spans).
+   **There is no shortcut**: `a₁ ≤ a₀` gives `2·residualTop/500`, which exceeds the printed
+   `109/50000 · ε`.
+2. **(9.5)–(9.7)**, the tangent refinements.  Same spectral inputs as (9.2); the extra
+   ingredient is the Rayleigh–Ritz residual condition of the tangent theorems.
+3. **(9.8)**, Weinberger comparison.
+4. **(9.9)–(9.11)**, individual eigenvector identification inside the cluster.
+   `SchurComplement.lean` and `RankOneCorrection.lean` already compile; this is connective
+   algebra plus whichever of the above bounds it consumes.
+
+`TheoremOutputCertificate` still exists in `FullExample.lean` and is still trivially
+instantiable — the census blocker `section9-certificate-discharge` says so and it is
+correct.  Do **not** close the remaining rows by instantiating it.  The pattern that works
+is the one used for (9.1), (9.2) and (9.4): prove a named theorem about `beamOperator`
+whose statement is the printed bound, and cite that.
+
+Working rules unchanged: serial; never pipe `lake build` (it masks the exit code); one
+build at a time; commit and push every milestone; author as the model actually running;
+verify census rows against the build before writing code — TEN rows have proved stale this
+week, including DK-3.2-cor and S2-tan-two-theta this session.
 
 ## Verdict on the existing skeletons
 
