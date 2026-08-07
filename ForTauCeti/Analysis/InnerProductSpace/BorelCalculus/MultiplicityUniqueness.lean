@@ -75,6 +75,18 @@ section Datum
 noncomputable def datumSymbol (D : MultiplicityDatum) : ℂ × ℕ → ℂ :=
   fun p => coordTrunc D.bound p.1
 
+/-- The model symbol, unfolded.  Stated so that consumers outside this module can rewrite with
+it without the definition having to be exposed. -/
+theorem datumSymbol_def (D : MultiplicityDatum) :
+    datumSymbol D = fun p => coordTrunc D.bound p.1 := (rfl)
+
+/-- The model symbol agrees with the first coordinate wherever the model measure lives. -/
+theorem ae_datumSymbol_eq_fst (D : MultiplicityDatum) :
+    ∀ᵐ p ∂D.measure, datumSymbol D p = p.1 := by
+  filter_upwards [D.ae_norm_le_bound] with p hp
+  rw [datumSymbol_def]
+  exact coordTrunc_eq_self hp
+
 /-- The model symbol is measurable. -/
 theorem measurable_datumSymbol (D : MultiplicityDatum) : Measurable (datumSymbol D) :=
   (measurable_coordTrunc D.bound).comp measurable_fst
