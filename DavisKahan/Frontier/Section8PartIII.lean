@@ -7,7 +7,7 @@ import DavisKahan.Frontier.Section8PartII
 import ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization
 
 /-!
-# Davis--Kahan 1970, Theorem 8.1(iii), upper block
+# Davis--Kahan 1970, Theorem 8.1(iii), both blocks
 
 The printed clause is, for every symmetric gauge `Φ`,
 
@@ -70,10 +70,17 @@ of it.
 Finite dimension is an explicit hypothesis, matching the printed clause: a
 symmetric gauge is a function of a finite sequence.
 
+## Both blocks
+
+The paper's "with a similar relation for `Λ₀`" is
+`theorem8_1_lowerWeightedWeakMajorization_source` and its symmetric-gauge
+corollary, proved below by the same two-link chain against the mirrored objects
+`lowerBlockShift` and `lowerCosineBlock` of `Section8PartII.lean`.
+
 ## Not in this module
 
-The lower block (the paper's "a similar relation for `Λ₀`") is deliberately left
-to a mirrored development, and no eigenvalue/angle facade is assembled here.
+No eigenvalue/angle facade is assembled here; that dictionary is
+`Section8SourceDictionary.lean`.
 -/
 
 namespace TauCeti
@@ -190,6 +197,106 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_source [FiniteDimensional ℂ H]
               (hA.add hK)) alpha)).approximationNumber (i : ℕ) ^ 2) :=
   Phi.mono_weaklyMajorized
     (theorem8_1_upperWeightedWeakMajorization_source A K P hdelta hA hK hAP
+      hPlow hPhigh hKP hKPperp)
+
+/-! ### The lower block
+
+The printed "with a similar relation for `Λ₀`" is the same two-link chain, run
+through the mirrored objects of `Section8PartII.lean`.  Under the reflection
+`A ↦ -A`, `α ↦ -(α + δ)` the upper data becomes the lower data, so no new
+majorization theorem appears here: `theorem8_1_lowerSandwichApproximation_source`
+replaces its upper namesake and everything else is unchanged. -/
+
+/-- **Davis--Kahan 1970, Theorem 8.1(iii), lower block: the weak-majorization
+core.**
+
+  `a((α + δ) - A₀)  ≺w  (i ↦ aᵢ((α + δ) - Λ₀) · aᵢ(C₀)²)`,
+
+the printed lower companion of `theorem8_1_upperWeightedWeakMajorization_source`.
+Same two links: the pointwise lower Weyl step of part (i), packaged by
+`FiniteVector.WeaklyMajorized.of_pointwise`, then the generic positive-sandwich
+weak majorization with `theorem8_1_perturbedLowerBlockShift_nonneg` supplying
+positivity of the middle factor.  No `‖C₀‖²` relaxation is used: the whole cosine
+sequence is retained, weight by weight. -/
+theorem theorem8_1_lowerWeightedWeakMajorization_source [FiniteDimensional ℂ H]
+    (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
+    FiniteVector.WeaklyMajorized
+      (fun i : Fin (Module.finrank ℂ H) =>
+        (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+      (fun i : Fin (Module.finrank ℂ H) =>
+        (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha) alpha delta).approximationNumber (i : ℕ) *
+          (lowerCosineBlock P (canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha)).approximationNumber (i : ℕ) ^ 2) := by
+  set Q : Submodule ℂ H := canonicalLowBranch (A + K)
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha
+    with hQdef
+  haveI : Q.HasOrthogonalProjection := by rw [hQdef]; infer_instance
+  -- The perturbed lower block is the positive middle factor of the sandwich.
+  have hM : (0 : H →L[ℂ] H) ≤ lowerBlockShift (A + K) Q alpha delta :=
+    theorem8_1_perturbedLowerBlockShift_nonneg A K P hdelta hA hK hAP hPlow
+      hPhigh hKP hKPperp
+  -- Link one: the lower Weyl step of part (i), promoted from pointwise domination.
+  have hstep1 : FiniteVector.WeaklyMajorized
+      (fun i : Fin (Module.finrank ℂ H) =>
+        (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+      (fun i : Fin (Module.finrank ℂ H) =>
+        (ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
+          lowerBlockShift (A + K) Q alpha delta ∘L
+          lowerCosineBlock P Q).approximationNumber (i : ℕ)) :=
+    FiniteVector.WeaklyMajorized.of_pointwise
+      (fun i j hij =>
+        (lowerBlockShift A P alpha delta).approximationNumber_antitone
+          (Fin.le_def.mp hij))
+      (fun i j hij =>
+        (ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
+          lowerBlockShift (A + K) Q alpha delta ∘L
+          lowerCosineBlock P Q).approximationNumber_antitone (Fin.le_def.mp hij))
+      (fun i => (lowerBlockShift A P alpha delta).approximationNumber_nonneg _)
+      (fun i => (ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
+        lowerBlockShift (A + K) Q alpha delta ∘L
+        lowerCosineBlock P Q).approximationNumber_nonneg _)
+      (fun i => theorem8_1_lowerSandwichApproximation_source A K P hdelta hA hK
+        hAP hPlow hPhigh hKP hKPperp (i : ℕ))
+  -- Link two: the generic positive-sandwich weak majorization.
+  exact hstep1.trans
+    (approximationNumber_adjoint_sandwich_weaklyMajorized hM (lowerCosineBlock P Q))
+
+/-- **Davis--Kahan 1970, Theorem 8.1(iii), lower block: the printed
+every-symmetric-gauge form.**
+
+  `Φ((α + δ) - α₁, …) ≤ Φ(((α + δ) - λ₁) cos²θ₁, …)`   for every symmetric gauge.
+
+Immediate from the lower weak majorization and Fan dominance, exactly as in the
+upper block. -/
+theorem theorem8_1_lowerSymmetricGaugeRepulsion_source [FiniteDimensional ℂ H]
+    (Phi : FiniteSymmetricGauge (Module.finrank ℂ H))
+    (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
+    Phi (fun i : Fin (Module.finrank ℂ H) =>
+        (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+      ≤ Phi (fun i : Fin (Module.finrank ℂ H) =>
+        (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha) alpha delta).approximationNumber (i : ℕ) *
+          (lowerCosineBlock P (canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha)).approximationNumber (i : ℕ) ^ 2) :=
+  Phi.mono_weaklyMajorized
+    (theorem8_1_lowerWeightedWeakMajorization_source A K P hdelta hA hK hAP
       hPlow hPhigh hKP hKPperp)
 
 end Section8
