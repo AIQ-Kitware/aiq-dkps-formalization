@@ -307,7 +307,6 @@ theorem exists_affine_of_beamOperator_eq_zero {x : beamOperator.domain}
 second derivative, and conjugate away: the bending slot integrates against `f''` as `lam`
 times the eigenvector against `f`. -/
 theorem eigen_pairing_integral {lam : ℝ} {x : beamOperator.domain} {p : BeamV}
-    (hembed : beamEmbed p = (x : BeamL2))
     (hpair : ∀ v : BeamV, ⟪beamSnd p, beamSnd v⟫_ℂ
       = (lam : ℂ) * ⟪(x : BeamL2), beamEmbed v⟫_ℂ)
     {f f1 f2 : ℝ → ℝ}
@@ -360,6 +359,128 @@ theorem eigen_pairing_integral {lam : ℝ} {x : beamOperator.domain} {p : BeamV}
     rw [map_mul, Complex.conj_conj, Complex.conj_ofReal]
   rw [h1, h2] at hconj
   exact hconj
+
+/-! ## Cubic test functions -/
+
+/-- Cubic polynomial test function. -/
+def cubic (c0 c1 c2 c3 t : ℝ) : ℝ := c0 + c1 * t + c2 * t ^ 2 + c3 * t ^ 3
+
+/-- First derivative of the cubic. -/
+def cubicD1 (_c0 c1 c2 c3 t : ℝ) : ℝ := c1 + 2 * c2 * t + 3 * c3 * t ^ 2
+
+/-- Second derivative of the cubic. -/
+def cubicD2 (_c0 _c1 c2 c3 t : ℝ) : ℝ := 2 * c2 + 6 * c3 * t
+
+theorem continuous_cubic (c0 c1 c2 c3 : ℝ) : Continuous (cubic c0 c1 c2 c3) := by
+  unfold cubic
+  fun_prop
+
+theorem continuous_cubicD1 (c0 c1 c2 c3 : ℝ) : Continuous (cubicD1 c0 c1 c2 c3) := by
+  unfold cubicD1
+  fun_prop
+
+theorem continuous_cubicD2 (c0 c1 c2 c3 : ℝ) : Continuous (cubicD2 c0 c1 c2 c3) := by
+  unfold cubicD2
+  fun_prop
+
+theorem hasDerivAt_cubic (c0 c1 c2 c3 t : ℝ) :
+    HasDerivAt (cubic c0 c1 c2 c3) (cubicD1 c0 c1 c2 c3 t) t := by
+  have h := (((hasDerivAt_const t c0).add ((hasDerivAt_id t).const_mul c1)).add
+    (((hasDerivAt_pow 2 t)).const_mul c2)).add ((hasDerivAt_pow 3 t).const_mul c3)
+  refine h.congr_deriv ?_
+  unfold cubicD1
+  push_cast
+  ring
+
+theorem hasDerivAt_cubicD1 (c0 c1 c2 c3 t : ℝ) :
+    HasDerivAt (cubicD1 c0 c1 c2 c3) (cubicD2 c0 c1 c2 c3 t) t := by
+  have h := ((hasDerivAt_const t c1).add
+    (((hasDerivAt_id t).const_mul (2 * c2)))).add
+    (((hasDerivAt_pow 2 t)).const_mul (3 * c3))
+  refine (h.congr_deriv ?_).congr_of_eventuallyEq ?_
+  · unfold cubicD2
+    push_cast
+    ring
+  · refine Filter.Eventually.of_forall fun s => ?_
+    unfold cubicD1
+    simp only [Pi.add_apply, id_eq]
+
+/-! ## The boundary form of an eigenfunction vanishes -/
+
+/-- The classical boundary form of an eigenfunction's continuous representatives against any
+cubic test function vanishes: two integrations by parts against the distributional
+eigen-identity. -/
+theorem boundary_form_eq_zero {lam : ℝ} {x : beamOperator.domain} {p : BeamV}
+    (hpair : ∀ v : BeamV, ⟪beamSnd p, beamSnd v⟫_ℂ
+      = (lam : ℂ) * ⟪(x : BeamL2), beamEmbed v⟫_ℂ)
+    {ubar wbar u3 : ℝ → ℂ}
+    (hxu : ((x : BeamL2) : ℝ → ℂ) =ᵐ[unitIocMeasure] ubar)
+    (hwu : (beamSnd p : ℝ → ℂ) =ᵐ[unitIocMeasure] wbar)
+    (hucont : Continuous ubar) (hwcont : Continuous wbar)
+    (hw' : ∀ t, HasDerivAt wbar (u3 t) t)
+    (hu3cont : ContinuousOn u3 (Set.Icc 0 1))
+    (hu3' : ∀ t ∈ Set.Icc (0 : ℝ) 1,
+      HasDerivWithinAt u3 ((lam : ℂ) * ubar t) (Set.Icc 0 1) t)
+    (q q1 q2 : ℝ → ℝ)
+    (hq : Continuous q) (hq1 : Continuous q1) (hq2 : Continuous q2)
+    (hdq : ∀ t, HasDerivAt q (q1 t) t) (hdq1 : ∀ t, HasDerivAt q1 (q2 t) t) :
+    wbar 1 * (q1 1 : ℂ) - wbar 0 * (q1 0 : ℂ)
+      - (u3 1 * (q 1 : ℂ) - u3 0 * (q 0 : ℂ)) = 0 := by
+  have hbridgeC : ∀ f : ℝ → ℂ, ∫ t, f t ∂unitIocMeasure = ∫ t in (0 : ℝ)..1, f t := by
+    intro f
+    rw [intervalIntegral.integral_of_le (by norm_num : (0 : ℝ) ≤ 1), unitIocMeasure_def]
+  -- the distributional identity for the continuous representatives
+  have hInt := eigen_pairing_integral hpair hq hq1 hq2 hdq hdq1
+  have hIntBar : ∫ t in (0 : ℝ)..1, wbar t * (q2 t : ℂ)
+      = (lam : ℂ) * ∫ t in (0 : ℝ)..1, ubar t * (q t : ℂ) := by
+    rw [← hbridgeC, ← hbridgeC]
+    rw [show ∫ t, wbar t * (q2 t : ℂ) ∂unitIocMeasure
+        = ∫ t, (beamSnd p : ℝ → ℂ) t * (q2 t : ℂ) ∂unitIocMeasure from
+      integral_congr_ae (by
+        filter_upwards [hwu] with t ht
+        rw [ht])]
+    rw [show ∫ t, ubar t * (q t : ℂ) ∂unitIocMeasure
+        = ∫ t, ((x : BeamL2) : ℝ → ℂ) t * (q t : ℂ) ∂unitIocMeasure from
+      integral_congr_ae (by
+        filter_upwards [hxu] with t ht
+        rw [ht])]
+    exact hInt
+  -- first integration by parts: differentiate the cubic side down
+  have hIBP1 : ∫ t in (0 : ℝ)..1, wbar t * (q2 t : ℂ)
+      = wbar 1 * (q1 1 : ℂ) - wbar 0 * (q1 0 : ℂ)
+        - ∫ t in (0 : ℝ)..1, u3 t * (q1 t : ℂ) := by
+    refine intervalIntegral.integral_mul_deriv_eq_deriv_mul_of_hasDerivAt
+      hwcont.continuousOn (by fun_prop : Continuous fun t : ℝ => (q1 t : ℂ)).continuousOn
+      (fun t _ => hw' t) (fun t _ => (hdq1 t).ofReal_comp)
+      ?_ ((by fun_prop : Continuous fun t : ℝ => (q2 t : ℂ)).intervalIntegrable 0 1)
+    have : ContinuousOn u3 (Set.uIcc (0 : ℝ) 1) := by
+      rw [Set.uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1)]
+      exact hu3cont
+    exact this.intervalIntegrable
+  -- second integration by parts: interior two-sided derivatives of the third slot
+  have hIBP2 : ∫ t in (0 : ℝ)..1, u3 t * (q1 t : ℂ)
+      = u3 1 * (q 1 : ℂ) - u3 0 * (q 0 : ℂ)
+        - ∫ t in (0 : ℝ)..1, ((lam : ℂ) * ubar t) * (q t : ℂ) := by
+    refine intervalIntegral.integral_mul_deriv_eq_deriv_mul_of_hasDerivAt
+      ?_ (by fun_prop : Continuous fun t : ℝ => (q t : ℂ)).continuousOn
+      ?_ (fun t _ => (hdq t).ofReal_comp)
+      ((hucont.const_smul ((lam : ℂ))).intervalIntegrable 0 1)
+      ((by fun_prop : Continuous fun t : ℝ => (q1 t : ℂ)).intervalIntegrable 0 1)
+    · rw [Set.uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1)]
+      exact hu3cont
+    · intro t ht
+      have ht' : t ∈ Set.Ioo (0 : ℝ) 1 := by simpa using ht
+      exact (hu3' t (Set.Ioo_subset_Icc_self ht')).hasDerivAt
+        (Icc_mem_nhds ht'.1 ht'.2)
+  -- combine
+  have hlin : ∫ t in (0 : ℝ)..1, ((lam : ℂ) * ubar t) * (q t : ℂ)
+      = (lam : ℂ) * ∫ t in (0 : ℝ)..1, ubar t * (q t : ℂ) := by
+    rw [← intervalIntegral.integral_const_mul]
+    congr 1 with t
+    ring
+  rw [hIBP2, hlin] at hIBP1
+  rw [hIntBar] at hIBP1
+  linear_combination -hIBP1
 
 end
 
