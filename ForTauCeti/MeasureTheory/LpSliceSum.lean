@@ -1,7 +1,7 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, Claude Opus 5
+Authors: Jon Crall, Claude Opus 5, Claude Fable 5
 -/
 module
 
@@ -216,6 +216,32 @@ theorem measureEquiv_sliceSum {μ ν : ℕ → Measure X} (h : ∀ n, MeasureEqu
   · refine Measure.AbsolutelyContinuous.mk fun t ht h0 => ?_
     rw [sliceSum_apply _ ht, ENNReal.tsum_eq_zero] at h0 ⊢
     exact fun n => (h n).2 (h0 n)
+
+/-- **The Lebesgue integral against a slice sum** is the sum of the sliced integrals. -/
+theorem lintegral_sliceSum (μ : ℕ → Measure X) {f : X × ℕ → ℝ≥0∞} (hf : Measurable f) :
+    ∫⁻ p, f p ∂(sliceSum μ) = ∑' n, ∫⁻ x, f (x, n) ∂(μ n) := by
+  rw [sliceSum, lintegral_sum_measure]
+  exact tsum_congr fun n => lintegral_map hf (measurable_sliceMap n)
+
+/-- **The Bochner integral against a slice sum** is the sum of the sliced integrals. -/
+theorem integral_sliceSum {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (μ : ℕ → Measure X) {f : X × ℕ → E} (hf : Integrable f (sliceSum μ)) :
+    ∫ p, f p ∂(sliceSum μ) = ∑' n, ∫ x, f (x, n) ∂(μ n) := by
+  rw [sliceSum] at hf ⊢
+  rw [integral_sum_measure hf]
+  exact tsum_congr fun n => integral_map (measurable_sliceMap n).aemeasurable
+    (hf.mono_measure (Measure.le_sum _ n)).aestronglyMeasurable
+
+/-- An almost-everywhere property for a slice sum holds almost everywhere on every slice. -/
+theorem ae_sliceSum {μ : ℕ → Measure X} {p : X × ℕ → Prop}
+    (h : ∀ᵐ q ∂(sliceSum μ), p q) (n : ℕ) : ∀ᵐ x ∂(μ n), p (x, n) := by
+  rw [ae_iff] at h ⊢
+  set t := toMeasurable (sliceSum μ) {q | ¬ p q} with ht
+  have htm : MeasurableSet t := measurableSet_toMeasurable _ _
+  have ht0 : sliceSum μ t = 0 := by rw [ht, measure_toMeasurable, h]
+  rw [sliceSum_apply _ htm, ENNReal.tsum_eq_zero] at ht0
+  refine measure_mono_null (t := {x | (x, n) ∈ t}) (fun x hx => ?_) (ht0 n)
+  exact subset_toMeasurable _ _ hx
 
 /-- The `n`-th summand, identified with `L²` of the slice restriction. -/
 noncomputable def sliceLpEquiv (μ : ℕ → Measure X) (n : ℕ) :
