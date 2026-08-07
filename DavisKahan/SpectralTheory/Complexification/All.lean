@@ -7,6 +7,7 @@ import ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic
 import DavisKahan.SpectralTheory.Complexification.FormTransport
 import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
 import DavisKahan.SpectralTheory.Complexification.Spectrum
+import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 import DavisKahan.SpectralTheory.Complexification.Subspace
 
 /-! # `DavisKahan/SpectralTheory/Complexification` -/
