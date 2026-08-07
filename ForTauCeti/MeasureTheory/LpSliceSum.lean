@@ -148,6 +148,11 @@ family, the `n`-th member sitting on the `n`-th slice. -/
 noncomputable def sliceSum (μ : ℕ → Measure X) : Measure (X × ℕ) :=
   Measure.sum fun n => (μ n).map (sliceMap n)
 
+omit [MeasurableSpace X] in
+/-- Membership in a slice, unfolded.  Stated so that consumers outside this module can use it
+without the definition having to be exposed. -/
+theorem mem_slice {n : ℕ} {p : X × ℕ} : p ∈ slice (X := X) n ↔ p.2 = n := Iff.rfl
+
 /-- **The slice sum restricted to a slice is the pushforward of that member.** -/
 theorem restrict_sliceSum (μ : ℕ → Measure X) (n : ℕ) :
     (sliceSum μ).restrict (slice n) = (μ n).map (sliceMap n) := by
@@ -231,6 +236,31 @@ theorem integral_sliceSum {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   rw [integral_sum_measure hf]
   exact tsum_congr fun n => integral_map (measurable_sliceMap n).aemeasurable
     (hf.mono_measure (Measure.le_sum _ n)).aestronglyMeasurable
+
+/-- A property holding almost everywhere on every slice holds almost everywhere for the slice
+sum.  Converse of `ae_sliceSum`. -/
+theorem ae_sliceSum_of_forall {μ : ℕ → Measure X} {p : X × ℕ → Prop}
+    (h : ∀ n, ∀ᵐ x ∂(μ n), p (x, n)) : ∀ᵐ q ∂(sliceSum μ), p q := by
+  rw [ae_iff]
+  have hN : ∀ n, ∃ N : Set X, MeasurableSet N ∧ μ n N = 0 ∧ {x | ¬ p (x, n)} ⊆ N := by
+    intro n
+    refine ⟨toMeasurable (μ n) {x | ¬ p (x, n)}, measurableSet_toMeasurable _ _, ?_,
+      subset_toMeasurable _ _⟩
+    rw [measure_toMeasurable]
+    exact (ae_iff.mp (h n))
+  choose N hNm hN0 hNsub using hN
+  refine measure_mono_null (t := ⋃ n, N n ×ˢ ({n} : Set ℕ)) ?_ ?_
+  · rintro ⟨x, n⟩ hq
+    exact Set.mem_iUnion.mpr ⟨n, hNsub n hq, rfl⟩
+  · have hmeas : MeasurableSet (⋃ n, N n ×ˢ ({n} : Set ℕ)) :=
+      MeasurableSet.iUnion fun n => (hNm n).prod (measurableSet_singleton n)
+    rw [sliceSum_apply _ hmeas, ENNReal.tsum_eq_zero]
+    intro n
+    refine measure_mono_null (t := N n) (fun x hx => ?_) (hN0 n)
+    obtain ⟨m, hm⟩ := Set.mem_iUnion.mp hx
+    obtain ⟨hx1, hx2⟩ := hm
+    have : n = m := hx2
+    exact this ▸ hx1
 
 /-- An almost-everywhere property for a slice sum holds almost everywhere on every slice. -/
 theorem ae_sliceSum {μ : ℕ → Measure X} {p : X × ℕ → Prop}
