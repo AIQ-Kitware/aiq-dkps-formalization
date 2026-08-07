@@ -50,6 +50,16 @@ Because the Weyl step used here is dimension-free, the theorem below is *not*
 restricted to finite dimensions; the printed "In finite dimensions" rider is a
 statement about where eigenvalues are available, not a limitation of the
 estimate.
+
+## Both blocks
+
+The printed clause ends "with a similar relation for `Λ₀`".  That companion is
+proved here too, as `theorem8_1_lowerApproximationRepulsion_source`, against the
+mirrored objects `lowerBlockShift` and `lowerCosineBlock`.  The reflection
+carrying one to the other is `A ↦ -A`, `α ↦ -(α + δ)`, which exchanges the two
+sides of the printed gap; it turns `A₁ - α` into `(α + δ) - A₀` and `C₁` into
+`C₀`.  Nothing in the lower proof is a second strategy -- each step is its upper
+namesake with the reflected data.
 -/
 
 namespace TauCeti
@@ -75,6 +85,21 @@ noncomputable def upperBlockShift (A : H →L[ℂ] H) (P : Submodule ℂ H)
 noncomputable def cosineBlock (P Q : Submodule ℂ H)
     [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] : H →L[ℂ] H :=
   Qᗮ.starProjection ∘L Pᗮ.starProjection
+
+/-- The unperturbed lower compression `(α + δ) - A₀`, extended by zero off `P`.
+
+The shift constant is `α + δ`, not `α`: the lower clause is the image of the
+upper one under `A ↦ -A`, `α ↦ -(α + δ)`, which is the reflection exchanging the
+two sides of the printed gap. -/
+noncomputable def lowerBlockShift (A : H →L[ℂ] H) (P : Submodule ℂ H)
+    [P.HasOrthogonalProjection] (alpha delta : ℝ) : H →L[ℂ] H :=
+  P.starProjection ∘L
+    (((alpha + delta : ℝ) : ℂ) • ContinuousLinearMap.id ℂ H - A) ∘L P.starProjection
+
+/-- The lower cosine block `C₀`, as an ambient operator: `P_Q P_P`. -/
+noncomputable def lowerCosineBlock (P Q : Submodule ℂ H)
+    [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] : H →L[ℂ] H :=
+  Q.starProjection ∘L P.starProjection
 
 theorem upperBlockShift_apply (A : H →L[ℂ] H) (P : Submodule ℂ H)
     [P.HasOrthogonalProjection] (alpha : ℝ) (x : H) :
@@ -304,6 +329,210 @@ theorem theorem8_1_upperApproximationRepulsion_source
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha) alpha).approximationNumber n :=
   (theorem8_1_upperSandwichApproximation_source A K P hdelta hA hK hAP hPlow
+    hPhigh hKP hKPperp n).trans
+    (approximationNumber_adjoint_sandwich_le _ _ n)
+
+/-! ### The lower block
+
+Everything above is now mirrored.  The reflection carrying the upper clause to
+the lower one is `A ↦ -A`, `α ↦ -(α + δ)`; under it `Pᗮ ↦ P`, `Qᗮ ↦ Q`,
+`A₁ - α ↦ (α + δ) - A₀`, `Λ₁ - α ↦ (α + δ) - Λ₀`, and `C₁ ↦ C₀`.  So the printed
+"with a similar relation for `Λ₀`" is the same statement about
+`lowerBlockShift` and `lowerCosineBlock`, and no second proof strategy is
+needed. -/
+
+theorem lowerBlockShift_apply (A : H →L[ℂ] H) (P : Submodule ℂ H)
+    [P.HasOrthogonalProjection] (alpha delta : ℝ) (x : H) :
+    RCLike.re ⟪x, lowerBlockShift A P alpha delta x⟫_ℂ =
+      (alpha + delta) * ‖P.starProjection x‖ ^ 2 -
+        RCLike.re ⟪P.starProjection x, A (P.starProjection x)⟫_ℂ := by
+  have hself : ⟪x, lowerBlockShift A P alpha delta x⟫_ℂ =
+      ⟪P.starProjection x,
+        (((alpha + delta : ℝ) : ℂ) • ContinuousLinearMap.id ℂ H - A)
+          (P.starProjection x)⟫_ℂ := by
+    show ⟪x, P.starProjection ((((alpha + delta : ℝ) : ℂ) • ContinuousLinearMap.id ℂ H - A)
+      (P.starProjection x))⟫_ℂ = _
+    rw [← ContinuousLinearMap.adjoint_inner_right,
+      ContinuousLinearMap.isSelfAdjoint_iff'.mp (isSelfAdjoint_starProjection P)]
+  rw [hself]
+  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+    ContinuousLinearMap.id_apply, inner_sub_right, inner_smul_right, map_sub]
+  have hnorm : (⟪P.starProjection x, P.starProjection x⟫_ℂ).re =
+      ‖P.starProjection x‖ ^ 2 :=
+    inner_self_eq_norm_sq (𝕜 := ℂ) _
+  have hs : RCLike.re (((alpha + delta : ℝ) : ℂ) *
+      ⟪P.starProjection x, P.starProjection x⟫_ℂ) =
+      (alpha + delta) * ‖P.starProjection x‖ ^ 2 := by
+    rw [RCLike.re_to_complex, Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
+      hnorm]
+    ring
+  rw [hs]
+
+/-- `lowerBlockShift` is self-adjoint when `A` is: it is a projection sandwich of
+the self-adjoint shift `(α + δ) - A`. -/
+theorem lowerBlockShift_isSelfAdjoint (A : H →L[ℂ] H) (P : Submodule ℂ H)
+    [P.HasOrthogonalProjection] (alpha delta : ℝ) (hA : IsSelfAdjoint A) :
+    IsSelfAdjoint (lowerBlockShift A P alpha delta) := by
+  have hP : ContinuousLinearMap.adjoint (P : Submodule ℂ H).starProjection =
+      (P : Submodule ℂ H).starProjection :=
+    ContinuousLinearMap.isSelfAdjoint_iff'.mp (isSelfAdjoint_starProjection _)
+  have hB : ContinuousLinearMap.adjoint
+      (((alpha + delta : ℝ) : ℂ) • ContinuousLinearMap.id ℂ H - A) =
+      ((alpha + delta : ℝ) : ℂ) • ContinuousLinearMap.id ℂ H - A := by
+    rw [map_sub, adjoint_realShift, ContinuousLinearMap.isSelfAdjoint_iff'.mp hA]
+  rw [ContinuousLinearMap.isSelfAdjoint_iff']
+  show ContinuousLinearMap.adjoint (P.starProjection ∘L
+      (((alpha + delta : ℝ) : ℂ) • ContinuousLinearMap.id ℂ H - A) ∘L
+        P.starProjection) = _
+  rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp, hP, hB]
+  simp [lowerBlockShift, ContinuousLinearMap.comp_assoc]
+
+/-- The unperturbed lower block is positive: on `P` the form of `A` is at most
+`α`, so after subtracting it from `α + δ` at least `δ ≥ 0` is left. -/
+theorem lowerBlockShift_nonneg (A : H →L[ℂ] H) (P : Submodule ℂ H)
+    [P.HasOrthogonalProjection] {alpha delta : ℝ} (hdelta : 0 ≤ delta)
+    (hA : IsSelfAdjoint A)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2) :
+    (0 : H →L[ℂ] H) ≤ lowerBlockShift A P alpha delta := by
+  rw [ContinuousLinearMap.nonneg_iff_isPositive]
+  refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+    (lowerBlockShift_isSelfAdjoint A P alpha delta hA), fun x => ?_⟩
+  have hmem : P.starProjection x ∈ P := Submodule.starProjection_apply_mem _ x
+  have hlow := hPlow _ hmem
+  have hgoal : (lowerBlockShift A P alpha delta).reApplyInnerSelf x =
+      RCLike.re ⟪x, lowerBlockShift A P alpha delta x⟫_ℂ :=
+    inner_re_symm (𝕜 := ℂ) _ _
+  have hswap : RCLike.re ⟪P.starProjection x, A (P.starProjection x)⟫_ℂ =
+      RCLike.re ⟪A (P.starProjection x), P.starProjection x⟫_ℂ :=
+    inner_re_symm (𝕜 := ℂ) _ _
+  rw [hgoal, lowerBlockShift_apply, hswap]
+  nlinarith [sq_nonneg ‖P.starProjection x‖]
+
+omit [CompleteSpace H] in
+/-- The lower cosine block lands in `Q`, so `P_Q` fixes its image. -/
+theorem starProjection_lowerCosineBlock (P Q : Submodule ℂ H)
+    [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] (x : H) :
+    Q.starProjection (lowerCosineBlock P Q x) = lowerCosineBlock P Q x :=
+  Submodule.starProjection_eq_self_iff.mpr
+    (Submodule.starProjection_apply_mem _ _)
+
+/-- The perturbed lower block of the canonical branch is positive.
+
+The mirror of `theorem8_1_perturbedUpperBlockShift_nonneg`: Theorem 8.1's
+existence half puts the form of `A + K` on the branch `Q` at most `α`, so
+`(α + δ) - Λ₀` is positive.  Part (iii) needs this separately from the estimate,
+because the weak majorization of a sandwich is stated for a *positive* middle
+factor. -/
+theorem theorem8_1_perturbedLowerBlockShift_nonneg
+    (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
+    (0 : H →L[ℂ] H) ≤
+      lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+          (hA.add hK)) alpha) alpha delta := by
+  have hconc := theorem8_1_canonicalBranch A K P hdelta hA hK hAP hPlow hPhigh
+    hKP hKPperp
+  refine lowerBlockShift_nonneg (A + K) _ hdelta.le (hA.add hK) fun y hy => ?_
+  have h := hconc.branch_form_low y hy
+  have hswap : RCLike.re ⟪(A + K) y, y⟫_ℂ = RCLike.re ⟪y, (A + K) y⟫_ℂ :=
+    inner_re_symm (𝕜 := ℂ) _ _
+  linarith
+
+/-- **The Weyl step of Theorem 8.1, lower block.**
+
+  `aₙ((α + δ) - A₀) ≤ aₙ(C₀⋆ ((α + δ) - Λ₀) C₀)`.
+
+The exact mirror of `theorem8_1_upperSandwichApproximation_source`: part (i)'s
+printed lower companion supplies the form domination, and
+`approximationNumber_mono_of_form_le` turns the form order between two positive
+operators into domination of every approximation number, in any dimension.  As
+in the upper block this is the step that both (ii) and (iii) consume. -/
+theorem theorem8_1_lowerSandwichApproximation_source
+    (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    (n : ℕ) :
+    (lowerBlockShift A P alpha delta).approximationNumber n ≤
+      (ContinuousLinearMap.adjoint (lowerCosineBlock P (canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha)) ∘L
+        lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+            (hA.add hK)) alpha) alpha delta ∘L
+        lowerCosineBlock P (canonicalLowBranch (A + K)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+            (hA.add hK)) alpha)).approximationNumber n := by
+  set Q : Submodule ℂ H := canonicalLowBranch (A + K)
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha
+    with hQdef
+  haveI : Q.HasOrthogonalProjection := by rw [hQdef]; infer_instance
+  have hS : (0 : H →L[ℂ] H) ≤ lowerBlockShift A P alpha delta :=
+    lowerBlockShift_nonneg A P hdelta.le hA hPlow
+  have hM : (0 : H →L[ℂ] H) ≤ lowerBlockShift (A + K) Q alpha delta :=
+    theorem8_1_perturbedLowerBlockShift_nonneg A K P hdelta hA hK hAP hPlow
+      hPhigh hKP hKPperp
+  have hT := nonneg_adjoint_sandwich hM (lowerCosineBlock P Q)
+  have hform : ∀ x : H, RCLike.re ⟪x, lowerBlockShift A P alpha delta x⟫_ℂ ≤
+      RCLike.re ⟪x, (ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
+        lowerBlockShift (A + K) Q alpha delta ∘L lowerCosineBlock P Q) x⟫_ℂ := by
+    intro x
+    have hy : P.starProjection x ∈ P := Submodule.starProjection_apply_mem _ x
+    have hpart := theorem8_1_lowerCompressionRepulsion_source A K P hdelta hA hK
+      hAP hPlow hPhigh hKP hKPperp hy
+    have hleft : RCLike.re ⟪x, lowerBlockShift A P alpha delta x⟫_ℂ =
+        (alpha + delta) * ‖P.starProjection x‖ ^ 2 -
+          RCLike.re ⟪P.starProjection x, A (P.starProjection x)⟫_ℂ :=
+      lowerBlockShift_apply A P alpha delta x
+    have hadj : ⟪x, (ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
+        lowerBlockShift (A + K) Q alpha delta ∘L lowerCosineBlock P Q) x⟫_ℂ =
+        ⟪lowerCosineBlock P Q x,
+          lowerBlockShift (A + K) Q alpha delta (lowerCosineBlock P Q x)⟫_ℂ := by
+      show ⟪x, ContinuousLinearMap.adjoint (lowerCosineBlock P Q)
+        (lowerBlockShift (A + K) Q alpha delta (lowerCosineBlock P Q x))⟫_ℂ = _
+      rw [ContinuousLinearMap.adjoint_inner_right]
+    have hright := lowerBlockShift_apply (A + K) Q alpha delta
+      (lowerCosineBlock P Q x)
+    rw [starProjection_lowerCosineBlock] at hright
+    have hcb : lowerCosineBlock P Q x = Q.starProjection (P.starProjection x) := rfl
+    rw [hleft, hadj, hright, hcb]
+    exact hpart
+  exact approximationNumber_mono_of_form_le hS hT hform n
+
+/-- **Davis--Kahan 1970, Theorem 8.1(ii), lower block.**
+
+The printed "with a similar relation for `Λ₀`" reads
+
+  `(α + δ) - α_k ≤ ‖C₀‖₁² ((α + δ) - λ_k)`,
+
+and this is its dimension-free approximation-number form.  Proof: the lower Weyl
+step followed by the same coarse cosine-sandwich bound
+`aₙ(D⋆ M D) ≤ ‖D‖² aₙ(M)` used for the upper block. -/
+theorem theorem8_1_lowerApproximationRepulsion_source
+    (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    (n : ℕ) :
+    (lowerBlockShift A P alpha delta).approximationNumber n ≤
+      ‖lowerCosineBlock P (canonicalLowBranch (A + K)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+            (hA.add hK)) alpha)‖ ^ 2 *
+        (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+            (hA.add hK)) alpha) alpha delta).approximationNumber n :=
+  (theorem8_1_lowerSandwichApproximation_source A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp n).trans
     (approximationNumber_adjoint_sandwich_le _ _ n)
 
