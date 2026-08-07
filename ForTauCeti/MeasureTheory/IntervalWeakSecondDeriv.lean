@@ -59,8 +59,12 @@ open scoped ENNReal InnerProductSpace
 noncomputable section
 
 /-- The Lebesgue measure of the half-open unit interval, the ambient measure for the
-free-beam `L²` model. -/
-def unitIocMeasure : Measure ℝ := volume.restrict (Set.Ioc (0 : ℝ) 1)
+free-beam `L²` model.  Exposed so downstream modules can unfold to the restriction;
+the ratchet carve-out is deliberate api design. -/
+@[expose] def unitIocMeasure : Measure ℝ := volume.restrict (Set.Ioc (0 : ℝ) 1)
+
+/-- Unfolding equation for the ambient measure, exported for downstream modules. -/
+theorem unitIocMeasure_def : unitIocMeasure = volume.restrict (Set.Ioc (0 : ℝ) 1) := rfl
 
 /-- The unit-interval measure is a probability-sized finite measure. -/
 instance : IsFiniteMeasure unitIocMeasure := by
@@ -234,6 +238,23 @@ theorem secondPrimitiveKernel_le_abs {t s : ℝ} (hs : 0 ≤ s) :
   max_le (by
     have : t - s ≤ t := by linarith
     exact this.trans (le_abs_self t)) (abs_nonneg t)
+
+/-- Above the diagonal the kernel is the linear weight. -/
+theorem secondPrimitiveKernel_of_le {t s : ℝ} (h : s ≤ t) :
+    secondPrimitiveKernel t s = t - s :=
+  max_eq_left (by linarith)
+
+/-- Below the diagonal the kernel vanishes. -/
+theorem secondPrimitiveKernel_of_ge {t s : ℝ} (h : t ≤ s) :
+    secondPrimitiveKernel t s = 0 :=
+  max_eq_right (by linarith)
+
+/-- Singletons are null for the unit-interval measure. -/
+theorem unitIocMeasure_singleton (t : ℝ) : unitIocMeasure {t} = 0 := by
+  rw [unitIocMeasure]
+  exact le_antisymm
+    ((Measure.restrict_apply_le _ _).trans (le_of_eq Real.volume_singleton))
+    zero_le
 
 /-- The kernel is `1`-Lipschitz in its first argument, uniformly in the second. -/
 theorem abs_secondPrimitiveKernel_sub_le (t t' s : ℝ) :
