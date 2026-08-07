@@ -102,6 +102,56 @@ theorem upperBlockShift_apply (A : H →L[ℂ] H) (P : Submodule ℂ H)
     ring
   rw [hs]
 
+/-- The real scalar shift is self-adjoint. -/
+theorem adjoint_realShift (alpha : ℝ) :
+    ContinuousLinearMap.adjoint ((alpha : ℂ) • ContinuousLinearMap.id ℂ H) =
+      (alpha : ℂ) • ContinuousLinearMap.id ℂ H := by
+  refine ContinuousLinearMap.ext fun y => ?_
+  refine ext_inner_left ℂ fun z => ?_
+  rw [ContinuousLinearMap.adjoint_inner_right]
+  simp only [ContinuousLinearMap.smul_apply, ContinuousLinearMap.id_apply,
+    inner_smul_left, inner_smul_right, Complex.conj_ofReal]
+
+/-- `upperBlockShift` is self-adjoint when `A` is: it is a projection sandwich of
+the self-adjoint shift `A - α`. -/
+theorem upperBlockShift_isSelfAdjoint (A : H →L[ℂ] H) (P : Submodule ℂ H)
+    [P.HasOrthogonalProjection] (alpha : ℝ) (hA : IsSelfAdjoint A) :
+    IsSelfAdjoint (upperBlockShift A P alpha) := by
+  have hP : ContinuousLinearMap.adjoint (Pᗮ : Submodule ℂ H).starProjection =
+      (Pᗮ : Submodule ℂ H).starProjection :=
+    ContinuousLinearMap.isSelfAdjoint_iff'.mp (isSelfAdjoint_starProjection _)
+  have hB : ContinuousLinearMap.adjoint
+      (A - (alpha : ℂ) • ContinuousLinearMap.id ℂ H) =
+      A - (alpha : ℂ) • ContinuousLinearMap.id ℂ H := by
+    rw [map_sub, adjoint_realShift, ContinuousLinearMap.isSelfAdjoint_iff'.mp hA]
+  rw [ContinuousLinearMap.isSelfAdjoint_iff']
+  show ContinuousLinearMap.adjoint (Pᗮ.starProjection ∘L
+      (A - (alpha : ℂ) • ContinuousLinearMap.id ℂ H) ∘L Pᗮ.starProjection) = _
+  rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp, hP, hB]
+  simp [upperBlockShift, ContinuousLinearMap.comp_assoc]
+
+/-- The unperturbed upper block is positive: on `Pᗮ` the form of `A` is at least
+`α + δ`, so after subtracting `α` it is at least `δ ≥ 0`. -/
+theorem upperBlockShift_nonneg (A : H →L[ℂ] H) (P : Submodule ℂ H)
+    [P.HasOrthogonalProjection] {alpha delta : ℝ} (hdelta : 0 ≤ delta)
+    (hA : IsSelfAdjoint A)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ) :
+    (0 : H →L[ℂ] H) ≤ upperBlockShift A P alpha := by
+  rw [ContinuousLinearMap.nonneg_iff_isPositive]
+  refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+    (upperBlockShift_isSelfAdjoint A P alpha hA), fun x => ?_⟩
+  have hmem : Pᗮ.starProjection x ∈ (Pᗮ : Submodule ℂ H) :=
+    Submodule.starProjection_apply_mem _ x
+  have hhigh := hPhigh _ hmem
+  have hgoal : (upperBlockShift A P alpha).reApplyInnerSelf x =
+      RCLike.re ⟪x, upperBlockShift A P alpha x⟫_ℂ :=
+    inner_re_symm (𝕜 := ℂ) _ _
+  have hswap : RCLike.re ⟪Pᗮ.starProjection x, A (Pᗮ.starProjection x)⟫_ℂ =
+      RCLike.re ⟪A (Pᗮ.starProjection x), Pᗮ.starProjection x⟫_ℂ :=
+    inner_re_symm (𝕜 := ℂ) _ _
+  rw [hgoal, upperBlockShift_apply, hswap]
+  nlinarith [sq_nonneg ‖Pᗮ.starProjection x‖]
+
 end Section8
 end DavisKahan1970
 end TauCeti
