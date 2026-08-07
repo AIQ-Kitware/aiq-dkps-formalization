@@ -1537,6 +1537,112 @@ theorem corollary3_1_compact_angleList_classification
         (fun n => congrFun hlist n)
     exact ⟨W, hW⟩
 
+/-! ### Corollary 3.1 with the printed compactness hypothesis
+
+Davis and Kahan assume `P tilde(Q) P = P (I - Q) P` compact -- the *defect*
+(sine-square) block -- not `P Q P`.  In infinite dimension the two are
+incomparable: `P(I-Q)P` compact says the principal angles accumulate only at
+`0`, while `PQP` compact says they accumulate only at `pi/2`, and neither
+implies the other unless `P` itself is compact.
+
+The repair is exact rather than approximate, because `P (I - Q) P = P P_{Vᗮ} P`:
+the defect block of the pair `(U, V)` *is* the cosine block of the pair
+`(U, Vᗮ)`.  So the printed corollary is the compiled one applied to
+`(U, Vᗮ)`, once one knows that complementing the second subspace preserves
+pair-equivalence and merely permutes the four elementary Halmos summands.
+-/
+
+variable {U₁ V₁ U₂ V₂}
+
+/-- Complementing the second subspace of each pair preserves unitary
+equivalence of ordered pairs. -/
+theorem pairOfSubspacesUnitaryEquivalent_orthogonal_right
+    (h : PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂) :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ᗮ U₂ V₂ᗮ := by
+  obtain ⟨e, hU, hV⟩ := h
+  refine ⟨e, hU, ?_⟩
+  have hmap : V₁ᗮ.map (e.toLinearEquiv : H₁ →ₗ[ℂ] H₂) =
+      (V₁.map (e.toLinearEquiv : H₁ →ₗ[ℂ] H₂))ᗮ :=
+    Submodule.map_orthogonal_equiv V₁ e
+  have hcoe : (e.toLinearEquiv : H₁ →ₗ[ℂ] H₂) = e.toLinearMap := rfl
+  rw [hcoe] at hmap
+  rw [hmap, hV]
+
+variable (U₁ V₁ U₂ V₂)
+
+theorem pairOfSubspacesUnitaryEquivalent_orthogonal_right_iff :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ᗮ U₂ V₂ᗮ ↔
+      PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ := by
+  refine ⟨fun h => ?_, pairOfSubspacesUnitaryEquivalent_orthogonal_right⟩
+  have h' := pairOfSubspacesUnitaryEquivalent_orthogonal_right h
+  rwa [Submodule.orthogonal_orthogonal, Submodule.orthogonal_orthogonal] at h'
+
+/-- Transport a nonempty isometric equivalence of submodules along equalities
+of those submodules.  Needed because the two summand families below are equal
+as submodules but the `≃ₗᵢ` type former does not rewrite. -/
+private theorem nonempty_linearIsometryEquiv_congr
+    {X X' : Submodule ℂ H₁} {Y Y' : Submodule ℂ H₂}
+    (hX : X = X') (hY : Y = Y') (h : Nonempty (X ≃ₗᵢ[ℂ] Y)) :
+    Nonempty (X' ≃ₗᵢ[ℂ] Y') :=
+  h.map fun f =>
+    ((LinearIsometryEquiv.ofEq X' X hX.symm).trans f).trans
+      (LinearIsometryEquiv.ofEq Y Y' hY)
+
+/-- Complementing the second subspace permutes the four elementary Halmos
+summands: `U ⊓ V` swaps with `U ⊓ Vᗮ`, and `Uᗮ ⊓ V` with `Uᗮ ⊓ Vᗮ`. -/
+theorem sameHalmosTrivialDimensions_orthogonal_right_iff :
+    SameHalmosTrivialDimensions U₁ V₁ᗮ U₂ V₂ᗮ ↔
+      SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ := by
+  have hVV1 : V₁ᗮᗮ = V₁ := Submodule.orthogonal_orthogonal V₁
+  have hVV2 : V₂ᗮᗮ = V₂ := Submodule.orthogonal_orthogonal V₂
+  have e1 : U₁ ⊓ V₁ᗮᗮ = U₁ ⊓ V₁ := by rw [hVV1]
+  have e2 : U₂ ⊓ V₂ᗮᗮ = U₂ ⊓ V₂ := by rw [hVV2]
+  have e3 : U₁ᗮ ⊓ V₁ᗮᗮ = U₁ᗮ ⊓ V₁ := by rw [hVV1]
+  have e4 : U₂ᗮ ⊓ V₂ᗮᗮ = U₂ᗮ ⊓ V₂ := by rw [hVV2]
+  constructor
+  · rintro ⟨hc, hs, ht, he⟩
+    exact ⟨nonempty_linearIsometryEquiv_congr e1 e2 hs, hc,
+      nonempty_linearIsometryEquiv_congr e3 e4 he, ht⟩
+  · rintro ⟨hc, hs, ht, he⟩
+    exact ⟨hs, nonempty_linearIsometryEquiv_congr e1.symm e2.symm hc,
+      he, nonempty_linearIsometryEquiv_congr e3.symm e4.symm ht⟩
+
+/-- **Davis--Kahan 1970, Corollary 3.1, with the printed hypothesis.**
+
+The compactness assumption is on the *defect* block `P (I - Q) P`, as printed,
+and the classifying list is the eigenvalue list of the corresponding
+sine-square angle operator. -/
+theorem corollary3_1_compact_defectBlock_angleList_classification
+    (hcompact₁ : IsCompactOperator
+      (projection U₁ ∘L
+        (ContinuousLinearMap.id ℂ H₁ - projection V₁) ∘L projection U₁))
+    (hcompact₂ : IsCompactOperator
+      (projection U₂ ∘L
+        (ContinuousLinearMap.id ℂ H₂ - projection V₂) ∘L projection U₂)) :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
+      SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
+      compactAngleEigenvalueList
+          (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁ᗮ) =
+        compactAngleEigenvalueList
+          (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂ᗮ) := by
+  have hperp₁ : projection V₁ᗮ =
+      ContinuousLinearMap.id ℂ H₁ - projection V₁ := by
+    show V₁ᗮ.starProjection = ContinuousLinearMap.id ℂ H₁ - V₁.starProjection
+    rw [Submodule.starProjection_orthogonal' V₁]
+    rfl
+  have hperp₂ : projection V₂ᗮ =
+      ContinuousLinearMap.id ℂ H₂ - projection V₂ := by
+    show V₂ᗮ.starProjection = ContinuousLinearMap.id ℂ H₂ - V₂.starProjection
+    rw [Submodule.starProjection_orthogonal' V₂]
+    rfl
+  have h₁ : IsCompactOperator (projection U₁ ∘L projection V₁ᗮ ∘L projection U₁) := by
+    rwa [hperp₁]
+  have h₂ : IsCompactOperator (projection U₂ ∘L projection V₂ᗮ ∘L projection U₂) := by
+    rwa [hperp₂]
+  rw [← pairOfSubspacesUnitaryEquivalent_orthogonal_right_iff U₁ V₁ U₂ V₂,
+    ← sameHalmosTrivialDimensions_orthogonal_right_iff U₁ V₁ U₂ V₂]
+  exact corollary3_1_compact_angleList_classification U₁ V₁ᗮ U₂ V₂ᗮ h₁ h₂
+
 end Classification
 
 end Section3
