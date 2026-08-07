@@ -7,6 +7,7 @@ import DavisKahan.SpectralTheory.FormMethod.BeamSpectrum
 import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.SinTheta.BoundedPerturbation
 import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
+import DavisKahan.Sources.DavisKahan1970.Section9.TrialSubspace
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
 import ForTauCeti.MeasureTheory.MulLpAlgebra
 
@@ -735,6 +736,208 @@ theorem beamSinTwoTheta_lt (ε : ℝ) (hε : 0 < ε) :
     refine le_trans hmain ?_
     linarith
   nlinarith [beamSinTwoTheta_nonneg ε, hchain]
+
+/-! ## Moments to integrals: the finite layer is about the operator
+
+`Section9/TrialSubspace.lean` builds the Ritz and residual matrices out of three
+bilinear forms on `CenteredAffine`, declared there as exact finite data with the note
+that "a later integration lemma may identify these forms with actual Lebesgue integrals
+on the unit interval".  These are those lemmas. -/
+
+/-- The `L²` inner product of two affine elements. -/
+theorem inner_affineLp (a b c d : ℂ) :
+    ⟪affineLp a b, affineLp c d⟫_ℂ
+      = (starRingEnd ℂ) a * c
+        + ((starRingEnd ℂ) a * d + (starRingEnd ℂ) b * c) / 2
+        + (starRingEnd ℂ) b * d / 3 := by
+  rw [affineLp_eq_contToLp, affineLp_eq_contToLp, inner_contToLp]
+  have hpt : ∀ t : ℝ, (starRingEnd ℂ) (a + b * (t : ℂ)) * (c + d * (t : ℂ))
+      = (starRingEnd ℂ) a * c
+        + ((starRingEnd ℂ) a * d + (starRingEnd ℂ) b * c) * (t : ℂ)
+        + ((starRingEnd ℂ) b * d) * (t : ℂ) ^ 2 := by
+    intro t
+    simp only [map_add, map_mul, Complex.conj_ofReal]
+    ring
+  simp only [hpt]
+  rw [integral_unitIocMeasure_quadratic]
+
+/-- The `t`-weighted inner product of two affine elements. -/
+theorem inner_affineLp_beamPerturbation (ε : ℝ) (a b c d : ℂ) :
+    ⟪affineLp a b, beamPerturbation ε (affineLp c d)⟫_ℂ
+      = (ε : ℂ) * ((starRingEnd ℂ) a * c / 2
+        + ((starRingEnd ℂ) a * d + (starRingEnd ℂ) b * c) / 3
+        + (starRingEnd ℂ) b * d / 4) := by
+  rw [affineLp_eq_contToLp, beamPerturbation_affineLp, ← affineLp_eq_contToLp,
+    affineLp_eq_contToLp, inner_contToLp]
+  have hpt : ∀ t : ℝ,
+      (starRingEnd ℂ) (a + b * (t : ℂ)) * (((ε : ℂ) * (t : ℂ)) * (c + d * (t : ℂ)))
+      = 0 + ((ε : ℂ) * ((starRingEnd ℂ) a * c)) * (t : ℂ)
+        + ((ε : ℂ) * ((starRingEnd ℂ) a * d + (starRingEnd ℂ) b * c)) * (t : ℂ) ^ 2
+        + ((ε : ℂ) * ((starRingEnd ℂ) b * d)) * (t : ℂ) ^ 3
+        + 0 * (t : ℂ) ^ 4 := by
+    intro t
+    simp only [map_add, map_mul, Complex.conj_ofReal]
+    ring
+  simp only [hpt]
+  rw [integral_unitIocMeasure_quartic]
+  ring
+
+/-- The `t²`-weighted inner product of two affine elements. -/
+theorem inner_beamPerturbation_affineLp (ε : ℝ) (a b c d : ℂ) :
+    ⟪beamPerturbation ε (affineLp a b), beamPerturbation ε (affineLp c d)⟫_ℂ
+      = (ε : ℂ) ^ 2 * ((starRingEnd ℂ) a * c / 3
+        + ((starRingEnd ℂ) a * d + (starRingEnd ℂ) b * c) / 4
+        + (starRingEnd ℂ) b * d / 5) := by
+  rw [beamPerturbation_affineLp, beamPerturbation_affineLp, inner_contToLp]
+  have hpt : ∀ t : ℝ,
+      (starRingEnd ℂ) (((ε : ℂ) * (t : ℂ)) * (a + b * (t : ℂ)))
+          * (((ε : ℂ) * (t : ℂ)) * (c + d * (t : ℂ)))
+      = 0 + 0 * (t : ℂ)
+        + ((ε : ℂ) ^ 2 * ((starRingEnd ℂ) a * c)) * (t : ℂ) ^ 2
+        + ((ε : ℂ) ^ 2 * ((starRingEnd ℂ) a * d + (starRingEnd ℂ) b * c)) * (t : ℂ) ^ 3
+        + ((ε : ℂ) ^ 2 * ((starRingEnd ℂ) b * d)) * (t : ℂ) ^ 4 := by
+    intro t
+    simp only [map_add, map_mul, Complex.conj_ofReal]
+    ring
+  simp only [hpt]
+  rw [integral_unitIocMeasure_quartic]
+  ring
+
+/-- The `L²` realization of a centered-affine trial function `c + d (2t - 1)`. -/
+def centeredAffineLp (p : DavisKahan1970.Section9.CenteredAffine) : BeamL2 :=
+  affineLp ((p.constant - p.centered : ℝ) : ℂ) ((2 * p.centered : ℝ) : ℂ)
+
+theorem centeredAffineLp_mem_beamTrial (p : DavisKahan1970.Section9.CenteredAffine) :
+    centeredAffineLp p ∈ beamTrial :=
+  affineLp_mem_beamTrial _ _
+
+/-- **The affine inner product is the `L²` inner product.** -/
+theorem inner_centeredAffineLp (p q : DavisKahan1970.Section9.CenteredAffine) :
+    ⟪centeredAffineLp p, centeredAffineLp q⟫_ℂ
+      = ((DavisKahan1970.Section9.CenteredAffine.inner p q : ℝ) : ℂ) := by
+  rw [centeredAffineLp, centeredAffineLp, inner_affineLp,
+    DavisKahan1970.Section9.CenteredAffine.inner]
+  simp only [Complex.conj_ofReal]
+  push_cast
+  ring
+
+/-- **The `t`-weighted affine form is the `L²` pairing against multiplication by `t`.** -/
+theorem inner_centeredAffineLp_mul (ε : ℝ)
+    (p q : DavisKahan1970.Section9.CenteredAffine) :
+    ⟪centeredAffineLp p, beamPerturbation ε (centeredAffineLp q)⟫_ℂ
+      = ((ε * DavisKahan1970.Section9.CenteredAffine.tInner p q : ℝ) : ℂ) := by
+  rw [centeredAffineLp, centeredAffineLp, inner_affineLp_beamPerturbation,
+    DavisKahan1970.Section9.CenteredAffine.tInner]
+  simp only [Complex.conj_ofReal]
+  push_cast
+  ring
+
+/-- **The `t²`-weighted affine form is the `L²` norm of the multiplied pair.** -/
+theorem inner_mul_centeredAffineLp_mul (ε : ℝ)
+    (p q : DavisKahan1970.Section9.CenteredAffine) :
+    ⟪beamPerturbation ε (centeredAffineLp p), beamPerturbation ε (centeredAffineLp q)⟫_ℂ
+      = ((ε ^ 2 * DavisKahan1970.Section9.CenteredAffine.tSqInner p q : ℝ) : ℂ) := by
+  rw [centeredAffineLp, centeredAffineLp, inner_beamPerturbation_affineLp,
+    DavisKahan1970.Section9.CenteredAffine.tSqInner]
+  simp only [Complex.conj_ofReal]
+  push_cast
+  ring
+
+/-! ## The Ritz and residual matrices of the genuine operator -/
+
+open DavisKahan1970.Section9 in
+/-- The two trial functions are an orthonormal pair of zero modes. -/
+theorem beamTrial_orthonormal :
+    ‖centeredAffineLp trialOne‖ ^ 2 = 1 ∧ ‖centeredAffineLp trialTwo‖ ^ 2 = 1 ∧
+      ⟪centeredAffineLp trialOne, centeredAffineLp trialTwo⟫_ℂ = 0 := by
+  refine ⟨?_, ?_, ?_⟩
+  · have h := inner_centeredAffineLp trialOne trialOne
+    rw [trialOne_norm_sq] at h
+    rw [inner_self_eq_norm_sq_to_K] at h
+    refine Complex.ofReal_inj.mp ?_
+    push_cast
+    exact h
+  · have h := inner_centeredAffineLp trialTwo trialTwo
+    rw [trialTwo_norm_sq] at h
+    rw [inner_self_eq_norm_sq_to_K] at h
+    refine Complex.ofReal_inj.mp ?_
+    push_cast
+    exact h
+  · rw [inner_centeredAffineLp, trialOne_inner_trialTwo]
+    norm_num
+
+open DavisKahan1970.Section9 in
+/-- **The Ritz compression of `ε t` to the trial basis is the diagonal matrix of
+equation (9.5)** — no longer as a finite-moment reconstruction, but as the genuine
+`L²` compression of the genuine perturbation to the genuine kernel. -/
+theorem beamRitz_matrix (ε : ℝ) :
+    ⟪centeredAffineLp trialOne, beamPerturbation ε (centeredAffineLp trialOne)⟫_ℂ
+        = ((ritzLow ε : ℝ) : ℂ) ∧
+      ⟪centeredAffineLp trialOne, beamPerturbation ε (centeredAffineLp trialTwo)⟫_ℂ = 0 ∧
+      ⟪centeredAffineLp trialTwo, beamPerturbation ε (centeredAffineLp trialTwo)⟫_ℂ
+        = ((ritzHigh ε : ℝ) : ℂ) := by
+  refine ⟨?_, ?_, ?_⟩
+  · rw [inner_centeredAffineLp_mul, trialOne_tInner_trialOne]
+    rfl
+  · rw [inner_centeredAffineLp_mul, trialOne_tInner_trialTwo]
+    norm_num
+  · rw [inner_centeredAffineLp_mul, trialTwo_tInner_trialTwo]
+    rfl
+
+open DavisKahan1970.Section9 in
+/-- **The residual Gram matrix of equation (9.1) is the genuine Gram matrix** of the
+residual `ε t` restricted to the trial subspace. -/
+theorem beamResidualGram_matrix (ε : ℝ) :
+    ⟪beamPerturbation ε (centeredAffineLp trialOne),
+        beamPerturbation ε (centeredAffineLp trialOne)⟫_ℂ
+        = (((residualGram ε).a₀₀ : ℝ) : ℂ) ∧
+      ⟪beamPerturbation ε (centeredAffineLp trialOne),
+        beamPerturbation ε (centeredAffineLp trialTwo)⟫_ℂ
+        = (((residualGram ε).a₀₁ : ℝ) : ℂ) ∧
+      ⟪beamPerturbation ε (centeredAffineLp trialTwo),
+        beamPerturbation ε (centeredAffineLp trialTwo)⟫_ℂ
+        = (((residualGram ε).a₁₁ : ℝ) : ℂ) := by
+  have hgram := initial_residual_gram_from_affine_moments ε
+  refine ⟨?_, ?_, ?_⟩
+  · rw [inner_mul_centeredAffineLp_mul]
+    congr 1
+    exact congrArg SymmetricTwoByTwo.a₀₀ hgram
+  · rw [inner_mul_centeredAffineLp_mul]
+    congr 1
+    exact congrArg SymmetricTwoByTwo.a₀₁ hgram
+  · rw [inner_mul_centeredAffineLp_mul]
+    congr 1
+    exact congrArg SymmetricTwoByTwo.a₁₁ hgram
+
+/-! ## The finite-data certificate, constructed -/
+
+open DavisKahan1970.Section9 in
+/-- **The Section 9 finite-data certificate, constructed from the genuine operator.**
+
+Every field is now discharged rather than postulated: the two Gram matrices and the two
+Ritz values are the compressions computed in `beamRitz_matrix` and
+`beamResidualGram_matrix`, and the third eigenvalue is an actual nonzero point of
+`beamOperator.realSpectrum`, whose lower bound `500` is
+`realSpectrum_beamOperator_subset_sharp`. -/
+def beamFiniteDataCertificate (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100)
+    {alpha : ℝ} (halpha : alpha ∈ beamOperator.realSpectrum) (halpha0 : alpha ≠ 0) :
+    FreeBeamFiniteDataCertificate ε where
+  epsilon_pos := hε
+  epsilon_lt_hundred := hε100
+  third_eigenvalue := alpha
+  third_eigenvalue_gt_five_hundred := by
+    rcases realSpectrum_beamOperator_subset_sharp halpha with h0 | hgt
+    · exact absurd h0 halpha0
+    · have : (1001 : ℝ) / 2 < alpha := hgt
+      linarith
+  initial_residual_gram := residualGram ε
+  initial_residual_gram_eq := rfl
+  ritz_low := ritzLow ε
+  ritz_high := ritzHigh ε
+  ritz_low_eq := rfl
+  ritz_high_eq := rfl
+  recentered_residual_gram := orthogonalResidualGram ε
+  recentered_residual_gram_eq := rfl
 
 end
 
