@@ -301,6 +301,66 @@ theorem exists_affine_of_beamOperator_eq_zero {x : beamOperator.domain}
     smul_eq_mul, smul_eq_mul]
   ring
 
+/-! ## The eigen-pairing against smooth test functions -/
+
+/-- Test the variational eigen-identity against the pair of a real `C²` function and its
+second derivative, and conjugate away: the bending slot integrates against `f''` as `lam`
+times the eigenvector against `f`. -/
+theorem eigen_pairing_integral {lam : ℝ} {x : beamOperator.domain} {p : BeamV}
+    (hembed : beamEmbed p = (x : BeamL2))
+    (hpair : ∀ v : BeamV, ⟪beamSnd p, beamSnd v⟫_ℂ
+      = (lam : ℂ) * ⟪(x : BeamL2), beamEmbed v⟫_ℂ)
+    {f f1 f2 : ℝ → ℝ}
+    (hf : Continuous f) (hf1 : Continuous f1) (hf2 : Continuous f2)
+    (hd : ∀ t, HasDerivAt f (f1 t) t) (hd1 : ∀ t, HasDerivAt f1 (f2 t) t) :
+    ∫ t, (beamSnd p : ℝ → ℂ) t * (f2 t : ℂ) ∂unitIocMeasure
+      = (lam : ℂ) * ∫ t, ((x : BeamL2) : ℝ → ℂ) t * (f t : ℂ) ∂unitIocMeasure := by
+  set v : BeamV := ⟨(WithLp.prodContinuousLinearEquiv 2 ℂ BeamL2 BeamL2).symm
+    (contToLp (fun t => (f t : ℂ)) (by fun_prop),
+      contToLp (fun t => (f2 t : ℂ)) (by fun_prop)),
+    contPair_mem hf hf1 hf2 hd hd1⟩ with hvdef
+  have hvfst : beamEmbed v = contToLp (fun t => (f t : ℂ)) (by fun_prop) := by
+    rw [show beamEmbed v = pairFst ((v : BeamV) : BeamPairSpace) from rfl, hvdef,
+      pairFst_apply]
+    simp
+  have hvsnd : beamSnd v = contToLp (fun t => (f2 t : ℂ)) (by fun_prop) := by
+    rw [show beamSnd v = pairSnd ((v : BeamV) : BeamPairSpace) from rfl, hvdef,
+      pairSnd_apply]
+    simp
+  have hid := hpair v
+  rw [hvfst, hvsnd] at hid
+  -- expand the two inner products as integrals
+  have hL : ⟪beamSnd p, contToLp (fun t => (f2 t : ℂ)) (by fun_prop)⟫_ℂ
+      = ∫ t, (starRingEnd ℂ) ((beamSnd p : ℝ → ℂ) t) * (f2 t : ℂ) ∂unitIocMeasure := by
+    rw [MeasureTheory.L2.inner_def]
+    refine integral_congr_ae ?_
+    filter_upwards [coeFn_contToLp (fun t => (f2 t : ℂ)) (by fun_prop)] with t ht
+    rw [RCLike.inner_apply, ht]
+    ring
+  have hR : ⟪(x : BeamL2), contToLp (fun t => (f t : ℂ)) (by fun_prop)⟫_ℂ
+      = ∫ t, (starRingEnd ℂ) (((x : BeamL2) : ℝ → ℂ) t) * (f t : ℂ) ∂unitIocMeasure := by
+    rw [MeasureTheory.L2.inner_def]
+    refine integral_congr_ae ?_
+    filter_upwards [coeFn_contToLp (fun t => (f t : ℂ)) (by fun_prop)] with t ht
+    rw [RCLike.inner_apply, ht]
+    ring
+  rw [hL, hR] at hid
+  -- conjugate the identity
+  have hconj := congrArg (starRingEnd ℂ) hid
+  rw [map_mul, Complex.conj_ofReal, ← integral_conj, ← integral_conj] at hconj
+  have h1 : (fun t => (starRingEnd ℂ)
+        ((starRingEnd ℂ) ((beamSnd p : ℝ → ℂ) t) * (f2 t : ℂ)))
+      = fun t => (beamSnd p : ℝ → ℂ) t * (f2 t : ℂ) := by
+    funext t
+    rw [map_mul, Complex.conj_conj, Complex.conj_ofReal]
+  have h2 : (fun t => (starRingEnd ℂ)
+        ((starRingEnd ℂ) (((x : BeamL2) : ℝ → ℂ) t) * (f t : ℂ)))
+      = fun t => ((x : BeamL2) : ℝ → ℂ) t * (f t : ℂ) := by
+    funext t
+    rw [map_mul, Complex.conj_conj, Complex.conj_ofReal]
+  rw [h1, h2] at hconj
+  exact hconj
+
 end
 
 end Model
