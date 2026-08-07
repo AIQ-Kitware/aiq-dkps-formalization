@@ -1,6 +1,6 @@
 # Davis--Kahan 1970 full source census
 
-Base commit: `1d856e9c`.
+Base commit: `ee44c0d7`.
 
 This is the public, independently worded theorem-by-theorem ledger for the
 full paper. The maintained modernized transcription is used only as a local
@@ -11,12 +11,12 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 25 |
+| `compiled_exact` | 27 |
 | `compiled_specialization` | 8 |
 | `compiled_general_infrastructure` | 4 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 6 |
+| `partial_or_wrapper_missing` | 4 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -74,14 +74,6 @@ in front of it. This includes rows that are already
 the source-numbered wrapper is still missing. Obstructions marked
 `mechanical` need only wiring or a restatement; `hard_math` needs new
 mathematics.
-
-### `section8-source-hypotheses` -- hard_math
-
-**Theorem 8.1 and 8.2 from the printed hypotheses only**
-
-The compiled Section 8 wrappers require caller-supplied data that the paper derives: a `SpectralContinuationWitness` with a quantitative contour bound, the spectral orientation `h0`/`h1`, and for 8.2 the `contour_selects_quarter_branch` field of the half-gap bridges. A source-faithful Theorem 8.1 must construct the canonical branch itself from the ordered form gap and full off-diagonality, and must prove the closed quarter-angle converse. A source-faithful Theorem 8.2 must derive the branch from ||H|| < delta/2 (perturbation) or ||R|| < delta/2 (residual, via Krein's self-adjoint contractive completion) alone.
-
-Gates: DK-8.1-thm (proved_in_build), DK-8.2-thm (proved_in_build)
 
 ### `two-subspace-classification` -- hard_math
 
@@ -898,11 +890,10 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 #### Theorem 8.1: Branch selection and spectral repulsion
 
 - **Kind:** `theorem`
-- **Status:** `partial_or_wrapper_missing`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
-- **Mathematics:** Under tan(2 Theta) hypotheses, the acute branch is equivalent to the selected spectral ordering; a canonical reducing subspace exists and satisfies operator, eigenvalue, and symmetric-gauge repulsion inequalities.
-- **Blocked by:** `section8-source-hypotheses`
-- **Current Lean references:** `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch`, `TauCeti.DavisKahan1970.Section8.theorem8_1_eq_canonicalBranch_of_maximalAngle_le`, `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn`, `TauCeti.DavisKahan1970.Section8.Theorem81Conclusion`, `TauCeti.DavisKahan1970.Section8.canonicalLowBranch`, `TauCeti.DavisKahan.realSpectrum_add_offDiagonal_subset_exterior_of_form_gap`, `TauCeti.DavisKahanExt.re_inner_le_of_mem_boundedSelfAdjointSpectralSubspace_Iic`, `TauCeti.DavisKahanExt.le_re_inner_of_mem_boundedSelfAdjointSpectralSubspace_Iic_orthogonal`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_of_rotatedBlockData`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_of_rotatedBlockData`, `TauCeti.DavisKahan.Experimental.Frontier.Section8.theorem8_1_upperCompressionRepulsion_canonicalBranch`, `TauCeti.DavisKahan.Experimental.Frontier.Section8.theorem8_1_lowerCompressionRepulsion_canonicalBranch`
+- **Mathematics:** Under tan(2 Theta) hypotheses, the closed quarter-angle condition is equivalent to the selected spectral ordering; a canonical reducing subspace exists, is unique, and satisfies the operator, ordered-eigenvalue and every-symmetric-gauge repulsion inequalities on both blocks.
+- **Current Lean references:** `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch`, `TauCeti.DavisKahan1970.Section8.theorem8_1_eq_canonicalBranch_of_maximalAngle_le`, `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn`, `TauCeti.DavisKahan1970.Section8.Theorem81Conclusion`, `TauCeti.DavisKahan1970.Section8.canonicalLowBranch`, `TauCeti.DavisKahan.realSpectrum_add_offDiagonal_subset_exterior_of_form_gap`, `TauCeti.DavisKahanExt.re_inner_le_of_mem_boundedSelfAdjointSpectralSubspace_Iic`, `TauCeti.DavisKahanExt.le_re_inner_of_mem_boundedSelfAdjointSpectralSubspace_Iic_orthogonal`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source`, `TauCeti.DavisKahan.Experimental.Frontier.Section8.theorem8_1_upperCompressionRepulsion_canonicalBranch`, `TauCeti.DavisKahan.Experimental.Frontier.Section8.theorem8_1_lowerCompressionRepulsion_canonicalBranch`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSandwichApproximation_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSandwichApproximation_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_angle_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_angle_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperWeightedWeakMajorization_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerWeightedWeakMajorization_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source`, `TauCeti.singularValues_adjoint_sandwich_weaklyMajorized`, `TauCeti.approximationNumber_adjoint_sandwich_weaklyMajorized`, `TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive`, `TauCeti.DavisKahan1970.Section8.approximationNumber_upperBlockShift_eq_zero_of_le`, `TauCeti.DavisKahan1970.Section8.approximationNumber_lowerBlockShift_eq_zero_of_le`, `TauCeti.DavisKahan1970.Section8.approximationNumber_cosineBlock_eq_principalCosines`, `TauCeti.DavisKahan1970.Section8.approximationNumber_lowerCosineBlock_eq_principalCosines`, `TauCeti.DavisKahan1970.Section8.norm_cosineBlock_eq_principalCosines_zero`, `TauCeti.DavisKahan1970.Section8.norm_lowerCosineBlock_eq_principalCosines_zero`, `TauCeti.DavisKahan1970.Section8.cos_arccos_approximationNumber_cosineBlock`, `TauCeti.DavisKahan1970.Section8.maximalAngle_le_pi_div_six_iff`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_of_rotatedBlockData`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_of_rotatedBlockData`
 - **Assessment:** Theorems 8.1's conclusion is packaged as `Theorem81SourceConclusion` and proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` gives [propext, Classical.choice, Quot.sound]. The status stays `candidate_under_repair` because that axis is fidelity to the printed statement, which compiling does not establish -- not because anything fails to build.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_exact`. All five declarations are compiled and axiom-clean. They resolve only outside the default build, which is what `proved_outside_build` records; the mathematics itself matches the printed theorem.
@@ -925,21 +916,82 @@ Two supporting seams were new mathematics, not bookkeeping.  (1) The sharp form 
 
 PART (i) IS ALSO DONE.  `theorem8_1_upperCompressionRepulsion_canonicalBranch` and its lower companion instantiate the compression-repulsion cores at `canonicalLowBranch`, so no abstract data record and no continuation witness appears in their hypotheses either -- the caller supplies only the printed configuration.
 
-WHAT IS STILL MISSING, and why this row is not `compiled_exact`: parts (ii) and (iii).  (ii) is the finite-dimensional ordered eigenvalue inequalities, which should follow from the compression inequalities via `LinearMap.IsSymmetric.eigenvalue_mono` (ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean).  (iii) is the printed "every symmetric gauge" inequality, which must go through the finite symmetric-gauge / majorization / Ky Fan layer -- substituting the operator norm would be a weakening, not a proof.
+WHAT WAS STILL MISSING AT THAT POINT (superseded later the same day; see the `compiled_exact` note below): parts (ii) and (iii).  (ii) is the finite-dimensional ordered eigenvalue inequalities, which should follow from the compression inequalities via `LinearMap.IsSymmetric.eigenvalue_mono` (ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean).  (iii) is the printed "every symmetric gauge" inequality, which must go through the finite symmetric-gauge / majorization / Ky Fan layer -- substituting the operator norm would be a weakening, not a proof.
 
 **SOURCE-VERIFIED AGAINST THE FULL TRANSCRIPTION 2026-08-07 (Claude Opus 5).**  The printed proof of the quarter-angle bound is finite-dimensional plus "the infinite-dimensional case follows by approximation".  `theorem8_1_canonicalBranch` is dimension-free and gives the STRICT bound `IsQuarterAcute P Q`, so the Lean development is stronger than the printed argument here, not weaker.  The printed converse is exactly the direction formalized by `theorem8_1_eq_canonicalBranch_of_maximalAngle_le`.
-- **Next action:** Parts (ii) and (iii) only.  SCOPE ESTABLISHED FROM THE TRANSCRIPTION 2026-08-07: both are printed "In finite dimensions", part (ii) adding "and natural infinite-dimensional extensions" and part (iii) with no such rider.  A finite-dimensional Lean statement of (ii) and (iii) is therefore EXACT, not a specialization -- this is the one place in the paper where a finite-dimensional hypothesis is printed rather than inherited from standing assumption 1.  Also: `||C_1||_1` in (ii) is the BOUND norm (transcription line 545), so (ii) is an operator-norm statement.
-(ii) `alpha_k - alpha <= ||C_1||_1^2 * (lambda_k - alpha)` for the ASCENDING eigenvalue orders of `A_1` and `Lambda_1`.  Route, with every ingredient located: the quadratic-form content of (i) is already `theorem8_1_upperCompressionRepulsion_canonicalBranch` -- at `x` in `P`-perp its left side is the form of `A_1 - alpha` and its right side is the form of `C_1 (Lambda_1 - alpha) C_1`, because off-diagonality of `H` kills the cross term.  Feed that to `LinearMap.IsSymmetric.eigenvalue_mono` (ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean:439) for the Weyl step.  Then `lambda_k(C_1 M C_1) <= ||C_1||^2 * lambda_k(M)` for `M := Lambda_1 - alpha >= 0` comes from `singularValues_comp_le` and `singularValues_comp_le'` (ForTauCeti/Analysis/InnerProductSpace/KyFan.lean:151,182) applied twice.  NOT a one-liner: it needs `lambda_k(C_1 M C_1) <= ||C_1||^2 lambda_k(M)` rather than the operator inequality `C_1 M C_1 <= ||C_1||^2 M`, which is FALSE in general, so `eigenvalue_mono` alone does not close it.  Two bookkeeping obligations: identify eigenvalues of a PSD operator with its singular values (`eigenvalues_operatorAbs`, KyFan.lean:189) across the ASCENDING/DESCENDING index reversal, and prove `finrank (P-perp) = finrank (Q-perp)` from acuteness so the two eigenvalue lists are indexed by the same `Fin n`.  Estimated medium, not small.
-(iii) the printed inequality is for EVERY symmetric gauge function `Phi`, comparing `Phi(alpha_k - alpha)` with `Phi((lambda_k - alpha) cos^2 theta_k)`; route it through the existing FiniteSymmetricGauge / majorization / Ky Fan layer.  The printed proof chains Weyl, a generalization of von Neumann's theorem, and Ky Fan's theorem, and needs `M_1` unitarily equivalent to `Lambda_1` with eigenvalue `lambda_k` sharing the eigenvector of `theta_k`.  Replacing `Phi` by the operator norm would be a weakening, not a proof.
+
+**PARTS (ii) AND (iii) LANDED, BOTH BLOCKS, AND THE ROW IS NOW `compiled_exact` 2026-08-07 (Claude Opus 5).**
+
+Part (ii).  `theorem8_1_upperApproximationRepulsion_source` and
+`theorem8_1_lowerApproximationRepulsion_source`.  The route recorded in the previous
+`next_action` was not the one taken, and the difference matters: it proposed
+`LinearMap.IsSymmetric.eigenvalue_mono`, which is finite-dimensional and would have forced a
+subspace transfer of the whole development.  `approximationNumber_mono_of_form_le` does the
+same Weyl step for POSITIVE operators in ARBITRARY dimension, by factoring through square
+roots, so no transfer and no finite-dimensionality hypothesis is needed.  That is what
+delivers the printed clause's "and natural infinite-dimensional extensions" rather than only
+its finite reading.  The two blocks share the step
+`theorem8_1_{upper,lower}SandwichApproximation_source`, which is part (i) plus form
+monotonicity and nothing else; part (ii) then applies the coarse cosine-sandwich bound
+`a_n(D* M D) <= ||D||^2 a_n(M)`.
+
+Part (iii).  `theorem8_1_upperSymmetricGaugeRepulsion_source` and its lower companion,
+quantified over EVERY `FiniteSymmetricGauge` -- not the operator norm, not Frobenius, not
+Ky Fan k.  They are corollaries of the strictly stronger weak majorizations
+`theorem8_1_{upper,lower}WeightedWeakMajorization_source`,
+
+    a(A_1 - alpha)  <<w  (i |-> a_i(Lambda_1 - alpha) * a_i(C_1)^2),
+
+which chain the SAME Weyl step of part (i) into `approximationNumber_adjoint_sandwich_weaklyMajorized`.
+Part (iii) is therefore NOT derived from part (ii)'s conclusion, which has already discarded
+every cosine but the largest; the two clauses share only the earlier step.  The generalized
+von Neumann / rearrangement / Ky Fan content of the printed proof is absorbed into the generic
+sandwich majorization theorem, which is proved by the Ky Fan maximum principle plus Abel
+summation and needs no alignment unitary.
+
+The lower block is a MIRROR, not a second proof.  The reflection `A |-> -A`,
+`alpha |-> -(alpha + delta)` exchanges the two sides of the printed gap and carries
+`A_1 - alpha` to `(alpha + delta) - A_0` and `C_1` to `C_0`, which is why `lowerBlockShift`
+carries the shift constant `alpha + delta`.  Positivity of the perturbed lower block comes
+from `branch_form_low` of the canonical branch, so no branch bound is re-proved.
+
+THE SOURCE DICTIONARY IS COMPILED, NOT PROSE.  Three identifications, each its own theorem:
+(a) `approximationNumber_eq_eigenvalues_of_isPositive` -- for a positive operator the
+approximation numbers ARE the sorted eigenvalues, which is the printed `alpha_k` and
+`lambda_k`; every block here is positive because of the printed gap.
+(b) `approximationNumber_{upper,lower}BlockShift_eq_zero_of_le` -- extending a compression by
+zero only appends zeros, so the ambient sequence is the printed finite eigenvalue list
+followed by a zero tail, which changes neither a prefix sum nor a symmetric gauge.
+(c) `approximationNumber_cosineBlock_eq_principalCosines` and its lower companion -- the
+cosine block's singular values ARE `TauCeti.principalCosines`, the repository's principal-angle
+cosines, defined as the singular values of the cross projection.  No new theta was invented:
+this is the paper's own equation (1.16), `Theta_j = arccos (C_j C_j*)^{1/2}`, which DEFINES the
+angles as arccosines of exactly these numbers.  `cos_arccos_approximationNumber_cosineBlock`
+records the round trip with `theta_i` in `[0, pi/2]`, and
+`norm_cosineBlock_eq_principalCosines_zero` reads the printed bound norm `||C_1||_1` as the
+largest principal cosine, which is the printed meaning of replacing every `cos^2 theta_k` by
+the largest one in part (ii).
+
+ORDERING, HANDLED ON BOTH SIDES AT ONCE.  `approximationNumber` and `principalCosines` are
+indexed decreasingly; the paper prints `lambda_1 <= lambda_2 <= ...` increasing and (Section 1,
+after (1.16)) `theta_1 >= theta_2 >= ...` decreasing, so the printed `cos^2 theta_k` is
+INCREASING in k and the printed right-hand side pairs k-th smallest with k-th smallest.  That
+is the same multiset of products as pairing largest with largest.  The reindex is compiled,
+not asserted: `theorem8_1_{upper,lower}SymmetricGaugeRepulsion_angle_rev_source` apply `Fin.rev`
+to BOTH sides simultaneously and are the printed increasing reading; they follow from the
+decreasing statements by `FiniteSymmetricGauge.perm` alone.
+
+Audit: `DavisKahan/Frontier/Section8Audit.lean`, 42 targets, every one
+[propext, Classical.choice, Quot.sound].
+- **Next action:** Nothing outstanding.  Theorem 8.1 is complete: the characterization, existence and uniqueness of the branch, parts (i), (ii) and (iii) for BOTH blocks, part (iii) over every symmetric gauge, and a compiled -- not prose -- eigenvalue/angle dictionary with the index reversal proved rather than asserted.  The uniqueness half and the strict quarter-angle bound are stronger than the printed statement; the dimension-free approximation-number forms of (ii) deliver the printed "natural infinite-dimensional extensions".  The `..._of_rotatedBlockData` aliases remain listed as INTERNAL infrastructure: they take an abstract quadratic-data record and are not evidence about the printed theorem.
 
 #### Theorem 8.2: Smallness selects the acute branch
 
 - **Kind:** `theorem`
-- **Status:** `partial_or_wrapper_missing`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
-- **Mathematics:** If the perturbation or residual norm is below half the gap, the sine double-angle estimate is accompanied by Theta < pi/4.
-- **Blocked by:** `section8-source-hypotheses`
-- **Current Lean references:** `TauCeti.DavisKahan1970.Section8.PerturbationHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.ResidualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem82_branch_of_residualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_selectedBranch`
+- **Mathematics:** If the perturbation norm or the residual norm is below half the gap, and the unperturbed block's spectrum lies in the enlarged central interval, then the sine double-angle estimate is accompanied by Theta < pi/4.
+- **Current Lean references:** `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_source`, `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_source`, `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed`, `TauCeti.DavisKahan1970.Section8.theorem8_2_krein_completion_source`, `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source`, `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source`, `TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_finrank_eq`, `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_source_maximalAngle_lt`, `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_source_maximalAngle_lt`, `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt`, `TauCeti.DavisKahan1970.Section8.theorem8_2_source`, `TauCeti.DavisKahan.Experimental.Frontier.Section8.theorem8_2_perturbationHalfGap_source_angle_lt`, `TauCeti.DavisKahan.Experimental.Frontier.Section8.theorem8_2_residualHalfGap_source_angle_lt`, `TauCeti.DavisKahan.Experimental.Frontier.Section8.residual_eq_comp_subtypeL`, `TauCeti.DavisKahan.Experimental.Frontier.Krein.exists_selfAdjoint_completion_eq_norm_restriction`, `TauCeti.DavisKahan1970.Section8.PerturbationHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.ResidualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem82_branch_of_residualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_selectedBranch`
 - **Assessment:** `theorem8_2_perturbationHalfGap_selectedBranch` and `theorem8_2_residualHalfGap_selectedBranch` are proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` on the perturbation form gives [propext, Classical.choice, Quot.sound]. The half-gap bridges (`perturbationHalfGapBridge_of_sourceHypotheses`, `residualHalfGapBridge_of_sourceHypotheses`) are proved too.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. All four declarations are compiled and axiom-clean, outside the default build. The audit of the two half-gap branches against the printed Theorem 8.2 has not been done, so this is not yet claimed as exact.
@@ -957,14 +1009,64 @@ The move had to be the DOWNWARD CLOSURE of the flagged modules, not the flagged 
 **FIDELITY BUG FOUND AND THE ROW DOWNGRADED 2026-08-07 (Claude Opus 5).**  This row read `compiled_exact` / "Nothing outstanding" while the production source file it points at, `DavisKahan/Sources/DavisKahan1970/Section8/SourceSurface.lean`, says in its own module docstring that the complete historical Theorem 8.1 and Theorem 8.2 are NOT promoted.  Both statements cannot be true.  The source file is the one that is right: `theorem8_1_selectedBranch_and_spectralRepulsion` is an `alias` for `theorem81CoreConclusion`, which takes a `SpectralContinuationWitness` plus `hsmall`, `h0` and `h1` -- the branch selection, the contour smallness, and the spectral orientation are all supplied BY THE CALLER, and they are exactly what the paper proves.  Likewise `theorem8_2_perturbationHalfGap_selectedBranch` requires a `PerturbationHalfGapBridge`, whose field `contour_selects_quarter_branch` is the conclusion.  A declaration compiling says nothing about whether its hypotheses are the printed ones; that is the lesson this row records.
 
 **SOURCE-VERIFIED AGAINST THE FULL TRANSCRIPTION 2026-08-07 (Claude Opus 5).**  The printed Theorem 8.2 adds `||H||_1 < delta/2` OR `||R||_1 < delta/2` to the sin2theta hypotheses AND assumes the spectrum of `A_0` lies in `[beta - delta/2, alpha + delta/2]`.  That last hypothesis was missing from this row's summary: it is what makes `[beta - delta/2, alpha + delta/2]` the right interval for the spectral projector along the path.  The conclusion is `Theta < pi/4`, strict.
-- **Next action:** Prove the perturbation alternative from `||H||_1 < delta/2` alone, FOLLOWING THE PRINTED PROOF.  CORRECTION 2026-08-07: the recipe previously recorded here (fixed circle, contour invertibility by Neumann perturbation of the initial resolvent, and a `||sinTwoAngleOperatorC U V|| = 1` lemma at the quarter gap) was a RECONSTRUCTION, not the source argument, and it is strictly harder than what the paper does.  No contour and no such norm-one lemma are needed.  The printed proof is a connectedness bootstrap:
-  (1) set `gamma := ||H||_1 < delta/2` and `A(s) := A + H - s * H` for `s` in `[0,1]`, so `A(0) = A + H` and `A(1) = A` -- note the path runs from the PERTURBED operator to the unperturbed one, the opposite orientation to the reconstruction;
-  (2) the spectrum of `A(0)` misses `(beta - delta, beta)` and `(alpha, alpha + delta)`, so a bound-norm perturbation of size at most `gamma` leaves `A(s)` with spectrum missing `(beta - delta + gamma, beta - gamma)` and `(alpha + gamma, alpha + delta - gamma)`, both nonempty because `gamma < delta/2`;
-  (3) `Q(s)` := the spectral projector of `A(s)` for `[beta - delta/2, alpha + delta/2]`, norm-continuous in `s`, so `theta(s) := arcsin ||Q(s) - Q(0)||_1` is continuous with `theta(0) = 0`;
-  (4) `beta <= A_0 <= alpha` gives `P = P * Q(1)`, hence `theta(1) >= Theta`;
-  (5) call `s` CLOSE when `theta(s) <= pi/4`.  For a close `s`, comparing `Q(s)` with `Q(0)` by the sin2theta theorem gives `theta(s) <= (1/2) * arcsin(2*s*gamma/delta) <= (pi/2)*(s*gamma/delta) < (pi/2)*(gamma/delta) < pi/4`, the middle step being concavity of `arcsin` on `[0,1]`.  The bound is STRICT and UNIFORM in `s`, so the close set is open; it is closed because `theta` is continuous; it is nonempty because `0` is close; `[0,1]` is connected, so every `s` is close and `theta(1) < pi/4`.
-This needs no new geometry lemma -- only norm-continuity of the spectral projector along the path, the existing sin2theta theorem, and `Real.arcsin_le` concavity.  NOTE `||.||_1` is the BOUND (operator) norm throughout Theorem 8.2 (transcription line 545), so both extra hypotheses and the `theta` definition are operator-norm statements, not general unitarily-invariant ones.
-The residual alternative is unchanged and still needs Krein's self-adjoint contractive completion (`exists_selfAdjoint_completion_eq_norm_restriction`, via the Julia operator `L J_A L*` with `Gamma` from `ContinuousLinearMap.exists_contraction_of_gram_eq`): without changing `A_1 + H_1`, `R` or the `Lambda_j` one may change `H_1`, and Krein supplies a choice with `||H||_1 = ||R||_1`, reducing it to the perturbation case.  `PerturbationHalfGapBridge` and `ResidualHalfGapBridge` may survive as internal conveniences but MUST NOT appear in the source-facing statement: their field `contour_selects_quarter_branch` is the conclusion.
+
+**BOTH ALTERNATIVES LANDED FROM THE PRINTED HYPOTHESES, AND THE PRINTED `Theta < pi/4` IS NOW
+COMPILED UNDER THE PAPER'S OWN STANDING CONVENTION 2026-08-07 (Claude Opus 5).**
+
+Perturbation alternative: `theorem8_2_perturbationHalfGap_source`, by the printed connectedness
+bootstrap, from `||H|| < delta/2` plus the printed placement `spectrum(A_0)` in
+`[beta - delta/2, alpha + delta/2]` and the sin2theta configuration.  No contour, no
+`SpectralContinuationWitness`, no projection-Lipschitz constant, no half-gap bridge appears among
+the hypotheses.  Residual alternative: `theorem8_2_residualHalfGap_source`, by the printed
+one-sentence Krein reduction -- `Krein.exists_selfAdjoint_completion_eq_norm_restriction` replaces
+`H` by a self-adjoint `H'` with the same first block column and `||H'|| = ||R||`, so
+`A' := A + H - H'` leaves `A' + H' = A + H` and `A'|P = A|P` and every printed hypothesis
+transfers verbatim.  `R` is the source residual (1.8) exactly, and `residual_eq_comp_subtypeL`
+proves the Section 1 identity `R = H E_0` from invariance alone.  `theorem8_2_branch_source_directed`
+is the printed disjunction.  The two half-gap bridge records survive as internal conveniences and
+are listed as such; their field `contour_selects_quarter_branch` is the conclusion, so they must
+never appear in a source-facing statement.
+
+THE `Theta` CONVENTION, AND A SOURCE FINDING.  The four theorems above conclude
+`directedGap P Q < sqrt 2 / 2`.  That is what the printed argument actually delivers: the paper's
+step "beta <= A_0 <= alpha implies P = P Q(1), we have theta(1) >= Theta" controls only how `P H`
+sits inside the band subspace `Q(1) H`, which is a DIRECTED comparison.  The paper's `Theta` is
+the symmetric object -- Section 1's dictionary after (1.17) reads `||P - Q|| = ||sin Theta||` --
+and `Theta` is only defined at all when equation (1.5) holds,
+
+    dim P H = dim Q H     and     dim P-perp H = dim Q-perp H,
+
+because `Theta_j = arccos (C_j C_j*)^{1/2}` is built from the entries of a unitary satisfying
+(1.4), which forces (1.5).  So (1.5) is the printed standing convention that makes the printed
+conclusion meaningful, and it is what the formalization adds -- not `IsQuarterAcute P Q`, which
+would be assuming the conclusion.  In its finite form (1.5) is `finrank P = finrank Q`, its second
+half being automatic, and `subspaceGap_eq_directedGap_of_finrank_eq` then identifies the symmetric
+and directed gaps.  `theorem8_2_{perturbationHalfGap,residualHalfGap,branch}_source_maximalAngle_lt`
+are the printed `Theta < pi/4`, and `theorem8_2_source` is the whole printed theorem: both
+`sin 2Theta` estimates -- inherited from the maintained sin2theta development and restated at
+8.2's own hypotheses as `theorem8_2_sinTwoTheta_{perturbation,residual}_source` -- together with
+the strict quarter angle, under either printed smallness alternative.
+
+FINDING, RECORDED AND NOT PAPERED OVER: the printed conclusion read with the CARDINAL form of
+(1.5) is FALSE in infinite dimensions.  Counterexample, satisfying every printed hypothesis of
+Theorem 8.2.  Let `E` be a separable infinite-dimensional Hilbert space with orthonormal basis
+`e_0, e_1, ...`, put `H := E (+) E`, and let `A` be `0` on the first summand and `10` on the
+second; take `K = 0`, `beta = alpha = 0`, `delta = 1`.  Then `Q := E (+) 0` has
+`spectrum(Lambda_0) = {0}` in `[beta, alpha]` and `spectrum(Lambda_1) = {10}` outside
+`(beta - delta, alpha + delta)`; `P := span{e_1, e_2, ...} (+) 0` reduces `A` with
+`spectrum(A_0) = {0}` in `[beta - delta/2, alpha + delta/2]`; and `||K|| = 0 < delta/2`.  Both
+halves of (1.5) hold as cardinals: `dim P = dim Q = aleph_0` and
+`dim P-perp = dim Q-perp = aleph_0`.  Yet `e_0` lies in `Q` and is orthogonal to `P`, so
+`||P - Q|| = 1` and the symmetric `Theta` is `pi/2`, not below `pi/4`.  Equal (infinite)
+dimension does not force the two directed gaps to agree.  In finite dimensions `P <= Q` with
+equal rank gives `P = Q`, so the finite form of (1.5) is not a lazy restriction but the correct
+repair; the dimension-free statement is correspondingly kept in its directed form and is NOT
+superseded.  The earlier `P = bottom`, `Q = top` example recorded in
+`Section8Perturbation.lean` is the degenerate finite instance of the same phenomenon.
+
+Audit: `DavisKahan/Frontier/Section8Audit.lean`; every Theorem 8.2 target reports
+[propext, Classical.choice, Quot.sound].
+- **Next action:** Nothing outstanding.  Both printed alternatives are proved from the printed hypotheses with no caller-supplied certificate, the residual alternative through the printed Krein reduction with the exact (1.8) residual, and the printed `Theta < pi/4` is compiled under the Section 1 standing convention (1.5) in its finite form.  The distinction between the dimension-free directed theorem and the printed symmetric conclusion is deliberate and must not be collapsed: see the counterexample in the notes, which satisfies every printed hypothesis of Theorem 8.2 together with the cardinal form of (1.5) and has `||P - Q|| = 1`.  That counterexample is recorded in prose, in the module docstring and here; a machine-checked version would need an explicit two-eigenvalue operator on `E (+) E` and is the only piece of Section 8 that is documented rather than compiled.
 
 ### Section 9
 

@@ -58,15 +58,34 @@ the symmetric and directed gaps, and the printed conclusion follows from the
 directed theorem with nothing else added.
 
 The *cardinal* reading of (1.5) does not suffice, and this is worth recording so
-that a later agent does not "generalize" the hypothesis away.  In `ℓ²` with
-orthonormal basis `e₀, e₁, …` take `Q := span{e₀, e₂, e₄, …}` and
-`P := span{cos t · e_{2n} + sin t · e_{2n-1} : n ≥ 1}`.  Then
-`dim P = dim Q = ℵ₀` and `dim Pᗮ = dim Qᗮ = ℵ₀`, so both halves of (1.5) hold
-and a unitary satisfying (1.4) exists; yet `directedGap P Q = sin t` is as small
-as one likes while `e₀ ∈ Q` is orthogonal to `P`, so `subspaceGap P Q = 1`.
-Equal (infinite) dimension does not make the two directed gaps agree.  The
-dimension-free statement therefore stays directed, and the exact printed
-statement carries the finite rank convention.
+that a later agent does not "generalize" the hypothesis away.  Under the
+cardinal reading the printed conclusion is **false**, and the counterexample
+satisfies every printed hypothesis of Theorem 8.2:
+
+> Let `E` be a separable infinite-dimensional Hilbert space with orthonormal
+> basis `e₀, e₁, …`, put `H := E × E`, and let `A` be `0` on the first summand
+> and `10` on the second.  Take `K = 0`, `β = α = 0`, `δ = 1`.
+>
+> * `Q := E × 0` reduces `A + K = A`, with `spectrum(Λ₀) = {0} ⊆ [β, α]` and
+>   `spectrum(Λ₁) = {10}` outside `(β - δ, α + δ)` -- the `sin 2Θ` hypotheses.
+> * `P := span{e₁, e₂, …} × 0` reduces `A`, with
+>   `spectrum(A₀) = {0} ⊆ [β - δ/2, α + δ/2]` -- Theorem 8.2's extra placement.
+> * `‖K‖ = 0 < δ/2` -- the printed perturbation alternative.
+> * Both halves of (1.5) hold as cardinals: `dim P = dim Q = ℵ₀` and
+>   `dim Pᗮ = dim Qᗮ = ℵ₀`, so a unitary satisfying (1.4) exists and `Θ` is
+>   defined.
+>
+> Yet `e₀ ∈ Q` is orthogonal to `P`, so `‖P_P - P_Q‖ = 1` and the symmetric `Θ`
+> is `π/2`.  The directed conclusion `directedGap P Q = 0 < √2/2` is of course
+> true, which is exactly the point.
+
+Equal (infinite) dimension does not make the two directed gaps agree.  In finite
+dimensions the same configuration is impossible: `P ≤ Q` with equal rank forces
+`P = Q`.  So the finite form of (1.5) is not a lazy restriction but the correct
+reading; the dimension-free statement stays directed, and the exact printed
+statement carries the finite rank convention.  The degenerate `P = ⊥`, `Q = ⊤`
+example recorded in `Section8Perturbation.lean` is the finite instance of the
+same phenomenon, there excluded by (1.5) itself.
 
 ## What is exported
 
