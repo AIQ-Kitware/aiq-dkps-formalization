@@ -996,6 +996,49 @@ theorem theorem8_1_lowerCompressionRepulsion_canonicalBranch
   simp only [hidem] at hres
   exact hres
 
+/-- **Theorem 8.1(i), source-literal upper form.**
+
+Restricted to the original `Pᗮ` block, the ambient inequality of
+`theorem8_1_upperCompressionRepulsion_canonicalBranch` is exactly the printed
+
+  `A₁ - α ≤ C₁ (Λ₁ - α) C₁`
+
+read as a quadratic form.  The point of restricting is that off-diagonality of
+`K` kills its cross term on `Pᗮ`, so the left-hand side is the form of the
+*unperturbed* compression `A₁` and not of `A + K`.  The right-hand side is the
+form of `Λ₁ - α` evaluated at `C₁ x = P_{Qᗮ} x`, which is the printed
+cosine-sandwiched term. -/
+theorem theorem8_1_upperCompressionRepulsion_source
+    (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    {x : H} (hx : x ∈ Pᗮ) :
+    RCLike.re ⟪x, A x⟫_ℂ - alpha * ‖x‖ ^ 2 ≤
+      RCLike.re ⟪(DavisKahan1970.Section8.canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha)ᗮ.starProjection x,
+          (A + K) ((DavisKahan1970.Section8.canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha)ᗮ.starProjection x)⟫_ℂ -
+        alpha * ‖(DavisKahan1970.Section8.canonicalLowBranch (A + K)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+            (hA.add hK)) alpha)ᗮ.starProjection x‖ ^ 2 := by
+  have hamb := theorem8_1_upperCompressionRepulsion_canonicalBranch A K P hdelta
+    hA hK hAP hPlow hPhigh hKP hKPperp x
+  have h0 : ⟪K x, x⟫_ℂ = 0 :=
+    Submodule.inner_right_of_mem_orthogonal (hKPperp x hx) hx
+  have hcross : RCLike.re ⟪x, K x⟫_ℂ = 0 := by
+    rw [← inner_re_symm (𝕜 := ℂ) (K x) x, h0]
+    simp
+  have hsplit : RCLike.re ⟪x, (A + K) x⟫_ℂ = RCLike.re ⟪x, A x⟫_ℂ := by
+    rw [ContinuousLinearMap.add_apply, inner_add_right, map_add, hcross,
+      add_zero]
+  rwa [hsplit] at hamb
+
 end CanonicalBranchCompression
 
 end Section8
