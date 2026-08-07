@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.SpectralTheory.Complexification.Subspace
+import DavisKahan.SpectralTheory.Complexification.Spectrum
 
 /-!
 # Complexifying a real subspace commutes with taking the subspace
@@ -155,6 +156,68 @@ theorem orthogonalProjectionOnto_complexify_apply
         ((complexify A) (complexifySubmoduleEquiv Z w)) := rfl
   rw [hL, starProjection_complexifySubmodule]
   apply TauCeti.RealComplexification.ext <;> rfl
+
+section Conjugation
+
+variable {F G : Type*}
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+
+/-- Conjugation by an isometric equivalence *between different spaces*.  The
+existing `conjByIsometryEquiv` only covers the endomorphism case `E ≃ₗᵢ[ℂ] E`,
+which is not enough here: `complexifySubmoduleEquiv` relates two genuinely
+different types. -/
+noncomputable def conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) : G →L[ℂ] G :=
+  e.toContinuousLinearEquiv.toContinuousLinearMap ∘L T ∘L
+    e.symm.toContinuousLinearEquiv.toContinuousLinearMap
+
+@[simp] theorem conjEquiv_apply (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) (y : G) :
+    conjEquiv e T y = e (T (e.symm y)) := rfl
+
+@[simp] theorem conjEquiv_symm_conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) :
+    conjEquiv e.symm (conjEquiv e T) = T := by
+  ext x; simp
+
+@[simp] theorem conjEquiv_conjEquiv_symm (e : F ≃ₗᵢ[ℂ] G) (S : G →L[ℂ] G) :
+    conjEquiv e (conjEquiv e.symm S) = S := by
+  ext y; simp
+
+/-- Conjugation by an isometric equivalence is a monoid homomorphism, which is
+all that is needed to move `IsUnit` across it. -/
+noncomputable def conjEquivMonoidHom (e : F ≃ₗᵢ[ℂ] G) :
+    (F →L[ℂ] F) →* (G →L[ℂ] G) where
+  toFun := conjEquiv e
+  map_one' := by ext y; simp
+  map_mul' S T := by ext y; simp
+
+/-- Conjugation preserves invertibility in both directions. -/
+theorem isUnit_conjEquiv_iff (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) :
+    IsUnit (conjEquiv e T) ↔ IsUnit T := by
+  constructor
+  · intro h
+    have := h.map (conjEquivMonoidHom e.symm)
+    simpa [conjEquivMonoidHom] using this
+  · intro h
+    have := h.map (conjEquivMonoidHom e)
+    simpa [conjEquivMonoidHom] using this
+
+/-- Conjugation by an isometric equivalence commutes with the scalar shift. -/
+theorem algebraMap_sub_conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) (c : ℂ) :
+    algebraMap ℂ (G →L[ℂ] G) c - conjEquiv e T =
+      conjEquiv e (algebraMap ℂ (F →L[ℂ] F) c - T) := by
+  ext y
+  simp [Algebra.algebraMap_eq_smul_one]
+
+/-- **Conjugation by an isometric equivalence preserves the real spectrum.**
+This is what lets a compression on `↥Z` be compared with the corresponding
+compression on `↥(complexifySubmodule Z)`. -/
+theorem realSpectrum_conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) :
+    realSpectrum (conjEquiv e T) = realSpectrum T := by
+  ext r
+  simp only [realSpectrum, Set.mem_setOf_eq, spectrum.mem_iff,
+    algebraMap_sub_conjEquiv, isUnit_conjEquiv_iff]
+
+end Conjugation
 
 end RealComplexification
 end Foundation
