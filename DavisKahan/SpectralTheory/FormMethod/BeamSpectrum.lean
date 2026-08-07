@@ -482,6 +482,257 @@ theorem boundary_form_eq_zero {lam : ℝ} {x : beamOperator.domain} {p : BeamV}
   rw [hIntBar] at hIBP1
   linear_combination -hIBP1
 
+/-! ## The eigenvalue classification -/
+
+/-- **Every positive eigenvalue of the free-beam operator is the fourth power of a
+characteristic root.**  The bootstrap: the eigen-identity plus the representation theorem
+produce continuous representatives with a full fourth-order derivative chain within `[0,1]`;
+the interval ODE classification identifies them with classical modes; the vanishing boundary
+form forces the free boundary conditions; and a nontrivial mode with free ends satisfies
+`cos β cosh β = 1`. -/
+theorem exists_characteristic_of_eigen {lam : ℝ} (hlam : 0 < lam)
+    {x : beamOperator.domain} (hx0 : (x : BeamL2) ≠ 0)
+    (heig : beamOperator.toLinearMap x = (lam : ℂ) • (x : BeamL2)) :
+    ∃ beta : ℝ, 0 < beta ∧ characteristic beta = 0 ∧ lam = beta ^ 4 := by
+  classical
+  obtain ⟨p, hembed, hpair⟩ := exists_form_representative_of_eigen heig
+  set xfn : ℝ → ℂ := ((x : BeamL2) : ℝ → ℂ) with hxfn
+  set wfn : ℝ → ℂ := ((beamSnd p : BeamL2) : ℝ → ℂ) with hwfn
+  -- first representation: the eigenvector itself
+  obtain ⟨a, b, hab⟩ : ∃ a b : ℂ, xfn =ᵐ[unitIocMeasure]
+      fun t => a + b * (t : ℂ) + secondPrimitive wfn t := by
+    obtain ⟨a, b, h⟩ := beamV_repr p
+    rw [hembed] at h
+    exact ⟨a, b, h⟩
+  -- second representation: the bending slot against `lam` times the eigenvector
+  have hw2 : ∀ k : ℕ,
+      ∫ t, wfn t * (intervalBumpD2 k t : ℂ) ∂unitIocMeasure
+        = ∫ t, (fun s => (lam : ℂ) * xfn s) t * (intervalBump k t : ℂ)
+            ∂unitIocMeasure := by
+    intro k
+    have h := eigen_pairing_integral hpair (continuous_intervalBump k)
+      (continuous_intervalBumpD1 k) (continuous_intervalBumpD2 k)
+      (hasDerivAt_intervalBump k) (hasDerivAt_intervalBumpD1 k)
+    rw [h, ← MeasureTheory.integral_const_mul]
+    refine integral_congr_ae (Filter.Eventually.of_forall fun t => ?_)
+    ring
+  obtain ⟨c, d, hcd⟩ := eq_affine_add_secondPrimitive_of_forall_integral_bumpD2
+    (Lp.memLp _) ((Lp.memLp _).const_mul ((lam : ℂ))) hw2
+  -- continuous representatives
+  have hKsm : ∀ t, secondPrimitive (fun s => (lam : ℂ) * xfn s) t
+      = (lam : ℂ) * secondPrimitive xfn t := by
+    intro t
+    have h1 : (fun s => (lam : ℂ) * xfn s) = (lam : ℂ) • xfn := rfl
+    rw [h1, secondPrimitive_smul]
+    rfl
+  set ubar : ℝ → ℂ := fun t => a + b * (t : ℂ) + secondPrimitive wfn t with hubar
+  set wbar : ℝ → ℂ := fun t => c + d * (t : ℂ) + (lam : ℂ) * secondPrimitive xfn t
+    with hwbar
+  have hxubar : xfn =ᵐ[unitIocMeasure] ubar := hab
+  have hwwbar : wfn =ᵐ[unitIocMeasure] wbar := by
+    refine hcd.trans (Filter.Eventually.of_forall fun t => ?_)
+    simp only [hKsm, hwbar]
+  have hKw : secondPrimitive wfn = secondPrimitive wbar := secondPrimitive_congr_ae hwwbar
+  have hKx : secondPrimitive xfn = secondPrimitive ubar := secondPrimitive_congr_ae hxubar
+  have hwint : Integrable wfn unitIocMeasure := integrable_coeFn _
+  have hxint : Integrable xfn unitIocMeasure := integrable_coeFn _
+  have hKwcont : Continuous (secondPrimitive wfn) := continuous_secondPrimitive hwint
+  have hKxcont : Continuous (secondPrimitive xfn) := continuous_secondPrimitive hxint
+  have hucont : Continuous ubar := by
+    rw [hubar]
+    exact (continuous_const.add
+      (continuous_const.mul Complex.continuous_ofReal)).add hKwcont
+  have hwcont : Continuous wbar := by
+    rw [hwbar]
+    exact (continuous_const.add
+      (continuous_const.mul Complex.continuous_ofReal)).add
+      (continuous_const.mul hKxcont)
+  have hwbint : Integrable wbar unitIocMeasure :=
+    integrable_unitIocMeasure_of_continuous hwcont
+  have hubint : Integrable ubar unitIocMeasure :=
+    integrable_unitIocMeasure_of_continuous hucont
+  -- the derivative chain
+  set u1 : ℝ → ℂ := fun t => b + firstPrimitive wbar t with hu1
+  set u3 : ℝ → ℂ := fun t => d + (lam : ℂ) * firstPrimitive ubar t with hu3
+  have hueq : ubar = fun t : ℝ => a + b * (t : ℂ) + secondPrimitive wbar t := by
+    funext t
+    simp only [hubar]
+    rw [show secondPrimitive wfn t = secondPrimitive wbar t from congrFun hKw t]
+  have hweq : wbar = fun t : ℝ => c + d * (t : ℂ)
+      + (lam : ℂ) * secondPrimitive ubar t := by
+    funext t
+    simp only [hwbar]
+    rw [show secondPrimitive xfn t = secondPrimitive ubar t from congrFun hKx t]
+  have hd1 : ∀ t, HasDerivAt ubar (u1 t) t := by
+    intro t
+    rw [hueq]
+    have h := ((hasDerivAt_const t a).add
+      (((hasDerivAt_id t).ofReal_comp).const_mul b)).add
+      (hasDerivAt_secondPrimitive hwbint t)
+    refine h.congr_deriv ?_
+    simp only [hu1]
+    push_cast
+    ring
+  have hd2 : ∀ t ∈ Set.Icc (0 : ℝ) 1, HasDerivWithinAt u1 (wbar t) (Set.Icc 0 1) t := by
+    intro t ht
+    rw [hu1]
+    have h := (hasDerivWithinAt_firstPrimitive_of_continuous hwcont ht).const_add b
+    exact h
+  have hd3 : ∀ t, HasDerivAt wbar (u3 t) t := by
+    intro t
+    rw [hweq]
+    have h := ((hasDerivAt_const t c).add
+      (((hasDerivAt_id t).ofReal_comp).const_mul d)).add
+      ((hasDerivAt_secondPrimitive hubint t).const_mul ((lam : ℂ)))
+    refine h.congr_deriv ?_
+    simp only [hu3]
+    push_cast
+    ring
+  have hd4 : ∀ t ∈ Set.Icc (0 : ℝ) 1,
+      HasDerivWithinAt u3 ((lam : ℂ) * ubar t) (Set.Icc 0 1) t := by
+    intro t ht
+    rw [hu3]
+    have h := ((hasDerivWithinAt_firstPrimitive_of_continuous hucont ht).const_mul
+      ((lam : ℂ))).const_add d
+    exact h
+  have hu3cont : ContinuousOn u3 (Set.Icc 0 1) := fun t ht => (hd4 t ht).continuousWithinAt
+  -- boundary values via the four Hermite cubics
+  have hB := fun (c0 c1 c2 c3 : ℝ) => boundary_form_eq_zero hpair hxubar hwwbar
+    hucont hwcont hd3 hu3cont hd4 (cubic c0 c1 c2 c3) (cubicD1 c0 c1 c2 c3)
+    (cubicD2 c0 c1 c2 c3) (continuous_cubic _ _ _ _) (continuous_cubicD1 _ _ _ _)
+    (continuous_cubicD2 _ _ _ _) (hasDerivAt_cubic _ _ _ _) (hasDerivAt_cubicD1 _ _ _ _)
+  have hu30 : u3 0 = 0 := by
+    have h := hB 1 0 (-3) 2
+    simp only [cubic, cubicD1] at h
+    norm_num at h
+    linear_combination h
+  have hw0 : wbar 0 = 0 := by
+    have h := hB 0 1 (-2) 1
+    simp only [cubic, cubicD1] at h
+    norm_num at h
+    linear_combination h
+  have hu31 : u3 1 = 0 := by
+    have h := hB 0 0 3 (-2)
+    simp only [cubic, cubicD1] at h
+    norm_num at h
+    linear_combination h
+  have hw1 : wbar 1 = 0 := by
+    have h := hB 0 0 (-1) 1
+    simp only [cubic, cubicD1] at h
+    norm_num at h
+    linear_combination h
+  -- the fourth root of the eigenvalue
+  set beta : ℝ := lam ^ ((1 : ℝ) / 4) with hbeta
+  have hβpos : 0 < beta := Real.rpow_pos_of_pos hlam _
+  have hβ4 : beta ^ 4 = lam := by
+    rw [hbeta, ← Real.rpow_natCast (lam ^ ((1 : ℝ) / 4)) 4, ← Real.rpow_mul hlam.le]
+    norm_num
+  -- real and imaginary chains and their mode classifications
+  have hre_at : ∀ {f : ℝ → ℂ} {dv : ℂ} {t : ℝ}, HasDerivAt f dv t →
+      HasDerivAt (fun s => (f s).re) dv.re t := fun hf =>
+    Complex.reCLM.hasFDerivAt.comp_hasDerivAt _ hf
+  have him_at : ∀ {f : ℝ → ℂ} {dv : ℂ} {t : ℝ}, HasDerivAt f dv t →
+      HasDerivAt (fun s => (f s).im) dv.im t := fun hf =>
+    Complex.imCLM.hasFDerivAt.comp_hasDerivAt _ hf
+  have hre_within : ∀ {f : ℝ → ℂ} {dv : ℂ} {t : ℝ},
+      HasDerivWithinAt f dv (Set.Icc 0 1) t →
+      HasDerivWithinAt (fun s => (f s).re) dv.re (Set.Icc 0 1) t := fun hf =>
+    Complex.reCLM.hasFDerivAt.comp_hasDerivWithinAt _ hf
+  have him_within : ∀ {f : ℝ → ℂ} {dv : ℂ} {t : ℝ},
+      HasDerivWithinAt f dv (Set.Icc 0 1) t →
+      HasDerivWithinAt (fun s => (f s).im) dv.im (Set.Icc 0 1) t := fun hf =>
+    Complex.imCLM.hasFDerivAt.comp_hasDerivWithinAt _ hf
+  have hmulre : ∀ z : ℂ, ((lam : ℂ) * z).re = beta ^ 4 * z.re := by
+    intro z
+    rw [hβ4]
+    simp [Complex.mul_re]
+  have hmulim : ∀ z : ℂ, ((lam : ℂ) * z).im = beta ^ 4 * z.im := by
+    intro z
+    rw [hβ4]
+    simp [Complex.mul_im]
+  obtain ⟨aR, bR, cR, dR, hRe0, hRe1, hRe2, hRe3⟩ :=
+    exists_mode_eqOn_of_fourth_deriv_within beta hβpos.ne'
+      (u := fun s => (ubar s).re) (u1 := fun s => (u1 s).re)
+      (u2 := fun s => (wbar s).re) (u3 := fun s => (u3 s).re)
+      (fun t ht => hre_within (hd1 t).hasDerivWithinAt)
+      (fun t ht => hre_within (hd2 t ht))
+      (fun t ht => hre_within (hd3 t).hasDerivWithinAt)
+      (fun t ht => by
+        have h := hre_within (hd4 t ht)
+        rwa [hmulre] at h)
+  obtain ⟨aI, bI, cI, dI, hIm0, hIm1, hIm2, hIm3⟩ :=
+    exists_mode_eqOn_of_fourth_deriv_within beta hβpos.ne'
+      (u := fun s => (ubar s).im) (u1 := fun s => (u1 s).im)
+      (u2 := fun s => (wbar s).im) (u3 := fun s => (u3 s).im)
+      (fun t ht => him_within (hd1 t).hasDerivWithinAt)
+      (fun t ht => him_within (hd2 t ht))
+      (fun t ht => him_within (hd3 t).hasDerivWithinAt)
+      (fun t ht => by
+        have h := him_within (hd4 t ht)
+        rwa [hmulim] at h)
+  have h0mem : (0 : ℝ) ∈ Set.Icc (0 : ℝ) 1 := by norm_num
+  have h1mem : (1 : ℝ) ∈ Set.Icc (0 : ℝ) 1 := by norm_num
+  -- free boundary conditions for both modes
+  have hbdRe : FreeBoundary beta aR bR cR dR := by
+    refine ⟨?_, ?_, ?_, ?_⟩
+    · rw [← hRe2 h0mem]
+      simp only [hw0, Complex.zero_re]
+    · rw [← hRe3 h0mem]
+      simp only [hu30, Complex.zero_re]
+    · rw [← hRe2 h1mem]
+      simp only [hw1, Complex.zero_re]
+    · rw [← hRe3 h1mem]
+      simp only [hu31, Complex.zero_re]
+  have hbdIm : FreeBoundary beta aI bI cI dI := by
+    refine ⟨?_, ?_, ?_, ?_⟩
+    · rw [← hIm2 h0mem]
+      simp only [hw0, Complex.zero_im]
+    · rw [← hIm3 h0mem]
+      simp only [hu30, Complex.zero_im]
+    · rw [← hIm2 h1mem]
+      simp only [hw1, Complex.zero_im]
+    · rw [← hIm3 h1mem]
+      simp only [hu31, Complex.zero_im]
+  -- at least one of the two modes is nontrivial
+  by_cases hRtriv : aR = 0 ∧ bR = 0 ∧ cR = 0 ∧ dR = 0
+  · by_cases hItriv : aI = 0 ∧ bI = 0 ∧ cI = 0 ∧ dI = 0
+    · -- both trivial: the eigenvector vanishes, contradiction
+      exfalso
+      apply hx0
+      refine Lp.ext ?_
+      have hzero : ∀ t ∈ Set.Icc (0 : ℝ) 1, ubar t = 0 := by
+        intro t ht
+        have h1 : (ubar t).re = 0 := by
+          have hm : (ubar t).re = mode beta aR bR cR dR t := hRe0 ht
+          obtain ⟨e1, e2, e3, e4⟩ := hRtriv
+          rw [e1, e2, e3, e4] at hm
+          simpa [mode] using hm
+        have h2 : (ubar t).im = 0 := by
+          have hm : (ubar t).im = mode beta aI bI cI dI t := hIm0 ht
+          obtain ⟨e1, e2, e3, e4⟩ := hItriv
+          rw [e1, e2, e3, e4] at hm
+          simpa [mode] using hm
+        exact Complex.ext h1 h2
+      filter_upwards [hxubar, ae_mem_unitIocMeasure,
+        Lp.coeFn_zero ℂ 2 unitIocMeasure] with t h1 h2 h3
+      have hx1 : ((x : BeamL2) : ℝ → ℂ) t = ubar t := h1
+      rw [hx1, hzero t ⟨h2.1.le, h2.2⟩, h3]
+      rfl
+    · -- the imaginary mode is nontrivial
+      have hchar : characteristic beta = 0 := by
+        refine characteristic_eq_zero_of_freeBoundary hβpos.ne' hbdIm ?_
+        by_contra hcon
+        push Not at hcon
+        exact hItriv ⟨hcon.1, hcon.2.1, hcon.2.2.1, hcon.2.2.2⟩
+      exact ⟨beta, hβpos, hchar, hβ4.symm⟩
+  · -- the real mode is nontrivial
+    have hchar : characteristic beta = 0 := by
+      refine characteristic_eq_zero_of_freeBoundary hβpos.ne' hbdRe ?_
+      by_contra hcon
+      push Not at hcon
+      exact hRtriv ⟨hcon.1, hcon.2.1, hcon.2.2.1, hcon.2.2.2⟩
+    exact ⟨beta, hβpos, hchar, hβ4.symm⟩
+
 end
 
 end Model
