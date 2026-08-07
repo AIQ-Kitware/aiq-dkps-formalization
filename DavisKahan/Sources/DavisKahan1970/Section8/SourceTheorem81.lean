@@ -1,0 +1,569 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 5
+-/
+import DavisKahan.SpectralTheory.SpectralGapFormBounds
+import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsion
+import DavisKahan.Geometry.Polar.DirectRotation
+import DavisKahan.SpectralTheory.OperatorAngle
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
+
+/-!
+# Davis--Kahan 1970, Theorem 8.1, from the printed hypotheses
+
+The Section 8 configuration is the `tan 2Theta` one:
+
+* `A` is self-adjoint and the subspace `P` reduces it;
+* the `P` block is below `alpha` and the `Pᗮ` block is above `alpha + delta`;
+* `H` is self-adjoint and *fully* off-diagonal with respect to `P`.
+
+Nothing else.  In particular the caller supplies no contour, no continuation
+witness, no smallness constant, and no orientation: those are the paper's
+conclusions and are proved here.
+
+What the theorem delivers:
+
+* full spectral repulsion for `A + H` -- the open gap `(alpha, alpha+delta)`
+  meets no spectrum at all, continuous spectrum included;
+* the canonical branch `Q`, the genuine spectral subspace of `A + H` for
+  `Iic alpha`, which reduces `A + H` and carries the sharp ordered form bounds
+  and the corresponding restricted-spectrum containments;
+* `P` and `Q` are *strictly* within a quarter turn -- stronger than the
+  printed closed condition `Theta <= pi/4`;
+* uniqueness: any reducing subspace of `A + H` satisfying the printed closed
+  condition equals `Q`.  So the closed condition and the spectral orientation
+  characterize the same subspace, which is the paper's `iff`.
+
+The uniqueness argument is the paper's.  A reducing projection commutes with
+`A + H`, hence -- because the gap makes the spectral projection a *continuous*
+functional calculus (`boundedSelfAdjointSpectralProjection_Iic_eq_cfcHom`) --
+with the branch projection.  So a vector of `M` outside `Q` can be projected
+into `M ∩ Qᗮ`, where the strict quarter-angle bound for `Q` and the closed one
+for `M` contradict each other.  The companion direction is the same argument
+applied to the complements.
+-/
+
+namespace TauCeti
+namespace DavisKahan1970
+namespace Section8
+
+open Set
+open scoped InnerProductSpace
+open DavisKahanExt
+open TauCeti.DavisKahan
+open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.SpectralOrder.Complex
+
+noncomputable section
+
+universe v
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+  [CompleteSpace E]
+
+/-! ### Scalar bookkeeping: the quarter turn -/
+
+theorem arcsin_sqrt_two_div_two : Real.arcsin (Real.sqrt 2 / 2) = Real.pi / 4 :=
+  Real.arcsin_eq_of_sin_eq Real.sin_pi_div_four
+    ⟨by linarith [Real.pi_pos], by linarith [Real.pi_pos]⟩
+
+/-- The printed closed quarter-angle condition `Theta <= pi/4` is exactly the
+projection-gap condition `gap <= sqrt 2 / 2`. -/
+theorem maximalAngle_le_pi_div_four_iff (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    maximalAngle U V ≤ Real.pi / 4 ↔ subspaceGap U V ≤ Real.sqrt 2 / 2 := by
+  have hmem : Real.pi / 4 ∈ Set.Ico (-(Real.pi / 2)) (Real.pi / 2) :=
+    ⟨by linarith [Real.pi_pos], by linarith [Real.pi_pos]⟩
+  show Real.arcsin (subspaceGap U V) ≤ Real.pi / 4 ↔ _
+  rw [Real.arcsin_le_iff_le_sin' hmem, Real.sin_pi_div_four]
+
+/-- The strict quarter-angle condition, in the two equivalent phrasings. -/
+theorem maximalAngle_lt_pi_div_four_iff (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    maximalAngle U V < Real.pi / 4 ↔ IsQuarterAcute U V := by
+  have hmem : Real.pi / 4 ∈ Set.Ioc (-(Real.pi / 2)) (Real.pi / 2) :=
+    ⟨by linarith [Real.pi_pos], by linarith [Real.pi_pos]⟩
+  show Real.arcsin (subspaceGap U V) < Real.pi / 4 ↔ _
+  rw [Real.arcsin_lt_iff_lt_sin' hmem, Real.sin_pi_div_four]
+  rfl
+
+/-! ### Form bounds give restricted-spectrum containments -/
+
+/-- Over `ℂ` the real Banach-algebra spectrum and the pulled-back complex
+spectrum are the same set. -/
+theorem realSpectrum_eq_spectrum_real (T : E →L[ℂ] E) :
+    realSpectrum T = spectrum ℝ T := by
+  ext r
+  show ((r : ℂ) ∈ spectrum ℂ T) ↔ r ∈ spectrum ℝ T
+  rw [spectrum.mem_iff, spectrum.mem_iff, not_iff_not,
+    IsScalarTower.algebraMap_apply ℝ ℂ (E →L[ℂ] E) r]
+  rfl
+
+/-- **A global upper form bound bounds the real spectrum above.**
+
+No functional calculus: `r - T` is uniformly coercive for `r > c`, hence a unit
+by operator Lax--Milgram, hence `r` is a resolvent point. -/
+theorem realSpectrum_subset_Iic_of_re_inner_le
+    {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    {T : F →L[ℂ] F} {c : ℝ}
+    (hform : ∀ z : F, RCLike.re ⟪T z, z⟫_ℂ ≤ c * ‖z‖ ^ 2) :
+    realSpectrum T ⊆ Set.Iic c := by
+  intro r hr
+  by_contra hnot
+  have hlt : c < r := lt_of_not_ge hnot
+  have hsmul : ∀ z : F, RCLike.re ⟪((r : ℝ) : ℂ) • z, z⟫_ℂ = r * ‖z‖ ^ 2 := by
+    intro z
+    rw [inner_smul_left, Complex.conj_ofReal, RCLike.re_to_complex, Complex.mul_re,
+      Complex.ofReal_re, Complex.ofReal_im,
+      show (⟪z, z⟫_ℂ).re = ‖z‖ ^ 2 from inner_self_eq_norm_sq (𝕜 := ℂ) z]
+    ring
+  have hcoer : ∀ z : F, (r - c) * ‖z‖ ^ 2 ≤
+      RCLike.re ⟪(((r : ℝ) : ℂ) • (1 : F →L[ℂ] F) - T) z, z⟫_ℂ := by
+    intro z
+    have h1 := hform z
+    simp only [sub_apply, smul_apply, one_apply_eq_self, inner_sub_left, map_sub]
+    rw [hsmul z]
+    linarith
+  have hunit : IsUnit (((r : ℝ) : ℂ) • (1 : F →L[ℂ] F) - T) :=
+    TauCeti.ContinuousLinearMap.isUnit_of_coercive (by linarith) hcoer
+  have hspec : ((r : ℝ) : ℂ) ∈ spectrum ℂ T := hr
+  rw [spectrum.mem_iff] at hspec
+  apply hspec
+  rw [Algebra.algebraMap_eq_smul_one]
+  exact hunit
+
+/-- **A global lower form bound bounds the real spectrum below.** -/
+theorem realSpectrum_subset_Ici_of_le_re_inner
+    {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    {T : F →L[ℂ] F} {c : ℝ}
+    (hform : ∀ z : F, c * ‖z‖ ^ 2 ≤ RCLike.re ⟪T z, z⟫_ℂ) :
+    realSpectrum T ⊆ Set.Ici c := by
+  intro r hr
+  by_contra hnot
+  have hlt : r < c := lt_of_not_ge hnot
+  have hsmul : ∀ z : F, RCLike.re ⟪((r : ℝ) : ℂ) • z, z⟫_ℂ = r * ‖z‖ ^ 2 := by
+    intro z
+    rw [inner_smul_left, Complex.conj_ofReal, RCLike.re_to_complex, Complex.mul_re,
+      Complex.ofReal_re, Complex.ofReal_im,
+      show (⟪z, z⟫_ℂ).re = ‖z‖ ^ 2 from inner_self_eq_norm_sq (𝕜 := ℂ) z]
+    ring
+  have hcoer : ∀ z : F, (c - r) * ‖z‖ ^ 2 ≤
+      RCLike.re ⟪(T - ((r : ℝ) : ℂ) • (1 : F →L[ℂ] F)) z, z⟫_ℂ := by
+    intro z
+    have h1 := hform z
+    simp only [sub_apply, smul_apply, one_apply_eq_self, inner_sub_left, map_sub]
+    rw [hsmul z]
+    linarith
+  have hunit : IsUnit (T - ((r : ℝ) : ℂ) • (1 : F →L[ℂ] F)) :=
+    TauCeti.ContinuousLinearMap.isUnit_of_coercive (by linarith) hcoer
+  have hspec : ((r : ℝ) : ℂ) ∈ spectrum ℂ T := hr
+  rw [spectrum.mem_iff] at hspec
+  apply hspec
+  rw [Algebra.algebraMap_eq_smul_one]
+  have hneg : ((r : ℝ) : ℂ) • (1 : F →L[ℂ] F) - T =
+      -(T - ((r : ℝ) : ℂ) • (1 : F →L[ℂ] F)) := by module
+  rw [hneg]
+  exact hunit.neg
+
+/-- `SpectrumIn` from an upper form bound on a reducing subspace. -/
+theorem spectrumIn_Iic_of_re_inner_le
+    {T : E →L[ℂ] E} {U : Submodule ℂ E}
+    [U.HasOrthogonalProjection] (hU : ∀ x ∈ U, T x ∈ U) {c : ℝ}
+    (hform : ∀ x ∈ U, RCLike.re ⟪T x, x⟫_ℂ ≤ c * ‖x‖ ^ 2) :
+    SpectrumIn T U (Set.Iic c) := by
+  letI : CompleteSpace U :=
+    completeSpace_coe_iff_isComplete.mpr U.isComplete_coe_of_hasOrthogonalProjection
+  refine ⟨hU, ?_⟩
+  rw [restrictedSpectrum_eq_restrictionSpectrum T U hU]
+  intro r hr
+  refine realSpectrum_subset_Iic_of_re_inner_le (T := T.restrict hU) ?_ hr
+  intro z
+  exact hform (z : E) z.2
+
+/-- `SpectrumIn` from a lower form bound on a reducing subspace. -/
+theorem spectrumIn_Ici_of_le_re_inner
+    {T : E →L[ℂ] E} {U : Submodule ℂ E}
+    [U.HasOrthogonalProjection] (hU : ∀ x ∈ U, T x ∈ U) {c : ℝ}
+    (hform : ∀ x ∈ U, c * ‖x‖ ^ 2 ≤ RCLike.re ⟪T x, x⟫_ℂ) :
+    SpectrumIn T U (Set.Ici c) := by
+  letI : CompleteSpace U :=
+    completeSpace_coe_iff_isComplete.mpr U.isComplete_coe_of_hasOrthogonalProjection
+  refine ⟨hU, ?_⟩
+  rw [restrictedSpectrum_eq_restrictionSpectrum T U hU]
+  intro r hr
+  refine realSpectrum_subset_Ici_of_le_re_inner (T := T.restrict hU) ?_ hr
+  intro z
+  exact hform (z : E) z.2
+
+/-! ### The canonical branch -/
+
+/-- The canonical low branch of Theorem 8.1: the genuine spectral subspace of
+the perturbed operator for the closed half-line `Iic alpha`. -/
+def canonicalLowBranch (B : E →L[ℂ] E) (hB : IsSelfAdjointOperator B)
+    (alpha : ℝ) : Submodule ℂ E :=
+  boundedSelfAdjointSpectralSubspace B hB (Set.Iic alpha) measurableSet_Iic
+
+instance canonicalLowBranch_hasOrthogonalProjection (B : E →L[ℂ] E)
+    (hB : IsSelfAdjointOperator B) (alpha : ℝ) :
+    (canonicalLowBranch B hB alpha).HasOrthogonalProjection :=
+  boundedSelfAdjointSpectralSubspace_hasOrthogonalProjection B hB _ _
+
+/-- The conclusions of Davis--Kahan 1970 Theorem 8.1 about the canonical
+branch, stated for an arbitrary complex Hilbert space. -/
+structure Theorem81Conclusion (A H : E →L[ℂ] E) (P Q : Submodule ℂ E)
+    [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (alpha delta : ℝ) : Prop where
+  /-- The open gap contains no spectrum of the perturbed operator. -/
+  spectral_repulsion :
+    realSpectrum (A + H) ⊆ Set.Iic alpha ∪ Set.Ici (alpha + delta)
+  /-- The branch reduces the perturbed operator. -/
+  branch_reduces : Reduces (A + H) Q
+  /-- Sharp upper form bound on the branch. -/
+  branch_form_low : ∀ x ∈ Q, RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2
+  /-- Sharp lower form bound on its complement. -/
+  branch_form_high :
+    ∀ x ∈ Qᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪(A + H) x, x⟫_ℂ
+  /-- The printed spectral orientation `Lambda 0 <= alpha`. -/
+  branch_spectrum_low : SpectrumIn (A + H) Q (Set.Iic alpha)
+  /-- The printed spectral orientation `Lambda 1 >= alpha + delta`. -/
+  branch_spectrum_high : SpectrumIn (A + H) Qᗮ (Set.Ici (alpha + delta))
+  /-- The branch is strictly inside the quarter turn. -/
+  quarter_acute : IsQuarterAcute P Q
+  /-- Equivalently, in the printed scalar form. -/
+  maximal_angle_lt_pi_div_four : maximalAngle P Q < Real.pi / 4
+
+section Theorem81
+
+variable (A H : E →L[ℂ] E) (P : Submodule ℂ E) [P.HasOrthogonalProjection]
+variable {alpha delta : ℝ}
+
+/-- **Theorem 8.1, existence half.**  From the printed hypotheses alone. -/
+theorem theorem8_1_canonicalBranch
+    (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
+    (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P) :
+    Theorem81Conclusion A H P
+      (canonicalLowBranch (A + H)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hH)) alpha)
+      alpha delta := by
+  classical
+  have hAH : IsSelfAdjoint (A + H) := hA.add hH
+  have hAHop : IsSelfAdjointOperator (A + H) :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAH
+  have hAsym : A.IsSymmetric :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
+  have hPperpperp : (Pᗮ)ᗮ = P := Submodule.orthogonal_orthogonal P
+  -- `A` also leaves `Pᗮ` invariant.
+  have hAPperp : ∀ x ∈ Pᗮ, A x ∈ Pᗮ := by
+    intro x hx
+    exact map_mem_orthogonal_of_forall_map_mem hAsym hAP hx
+  -- Repulsion, with `Pᗮ` as the high side.
+  have hrep : realSpectrum (A + H) ⊆ Set.Iic alpha ∪ Set.Ici (alpha + delta) := by
+    refine realSpectrum_add_offDiagonal_subset_exterior_of_form_gap A H Pᗮ hA hH
+      hAPperp hPhigh ?_ ?_ ?_
+    · intro x hx
+      rw [hPperpperp] at hx
+      exact hPlow x hx
+    · intro x hx
+      rw [hPperpperp]
+      exact hHPperp x hx
+    · intro x hx
+      rw [hPperpperp] at hx
+      exact hHP x hx
+  set Q : Submodule ℂ E := canonicalLowBranch (A + H) hAHop alpha with hQdef
+  have hQreduces : Reduces (A + H) Q :=
+    boundedSelfAdjointSpectralSubspace_reduces (A + H) hAHop (Set.Iic alpha)
+      measurableSet_Iic
+  have hlow : ∀ x ∈ Q, RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2 := fun x hx =>
+    re_inner_le_of_mem_boundedSelfAdjointSpectralSubspace_Iic (A + H) hAHop
+      hdelta hrep hx
+  have hhigh : ∀ x ∈ Qᗮ,
+      (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪(A + H) x, x⟫_ℂ := fun x hx =>
+    le_re_inner_of_mem_boundedSelfAdjointSpectralSubspace_Iic_orthogonal (A + H)
+      hAHop hdelta hrep hx
+  have hQperpperp : (Qᗮ)ᗮ = Q := Submodule.orthogonal_orthogonal Q
+  -- The strict quarter-angle branch, via the complementary pair.
+  have hquarterPerp : IsQuarterAcute Pᗮ Qᗮ := by
+    refine isQuarterAcute_of_paper_form_gap_infinite A H Pᗮ Qᗮ hA hH hAPperp
+      ?_ (by linarith) hPhigh ?_ ?_ ?_ ?_ ?_
+    · intro x hx
+      exact hQreduces.2 x hx
+    · intro x hx
+      rw [hPperpperp] at hx
+      exact hPlow x hx
+    · exact hhigh
+    · intro x hx
+      rw [hQperpperp] at hx
+      exact hlow x hx
+    · intro x hx
+      rw [hPperpperp]
+      exact hHPperp x hx
+    · intro x hx
+      rw [hPperpperp] at hx
+      exact hHP x hx
+  have hquarter : IsQuarterAcute P Q := by
+    have h : subspaceGap Pᗮ Qᗮ = subspaceGap P Q :=
+      TauCeti.DavisKahan.Experimental.subspaceGap_orthogonal P Q
+    show subspaceGap P Q < Real.sqrt 2 / 2
+    rw [← h]
+    exact hquarterPerp
+  refine
+    { spectral_repulsion := hrep
+      branch_reduces := hQreduces
+      branch_form_low := hlow
+      branch_form_high := hhigh
+      branch_spectrum_low := spectrumIn_Iic_of_re_inner_le hQreduces.1 hlow
+      branch_spectrum_high := spectrumIn_Ici_of_le_re_inner hQreduces.2 hhigh
+      quarter_acute := hquarter
+      maximal_angle_lt_pi_div_four :=
+        (maximalAngle_lt_pi_div_four_iff P Q).2 hquarter }
+
+end Theorem81
+
+/-! ### The closed quarter-angle cone -/
+
+/-- A pair within the *closed* quarter turn puts every vector of the second
+subspace inside the closed quarter-angle cone around the first. -/
+theorem sqrt_two_div_two_mul_norm_le_norm_starProjection
+    {P M : Submodule ℂ E} [P.HasOrthogonalProjection] [M.HasOrthogonalProjection]
+    (hgap : subspaceGap P M ≤ Real.sqrt 2 / 2) {y : E} (hy : y ∈ M) :
+    Real.sqrt 2 / 2 * ‖y‖ ≤ ‖P.starProjection y‖ := by
+  have hMy : M.starProjection y = y := Submodule.starProjection_eq_self_iff.mpr hy
+  have heq : Pᗮ.starProjection y = (M.starProjection - P.starProjection) y := by
+    rw [Submodule.starProjection_orthogonal_apply]
+    simp only [ContinuousLinearMap.sub_apply, hMy]
+  have hbound : ‖Pᗮ.starProjection y‖ ≤ Real.sqrt 2 / 2 * ‖y‖ := by
+    rw [heq]
+    calc ‖(M.starProjection - P.starProjection) y‖
+        ≤ ‖M.starProjection - P.starProjection‖ * ‖y‖ :=
+          ContinuousLinearMap.le_opNorm _ _
+      _ = subspaceGap P M * ‖y‖ := by
+          rw [show ‖M.starProjection - P.starProjection‖ =
+            ‖P.starProjection - M.starProjection‖ from norm_sub_rev _ _]
+          rfl
+      _ ≤ Real.sqrt 2 / 2 * ‖y‖ :=
+          mul_le_mul_of_nonneg_right hgap (norm_nonneg y)
+  have hpyth : ‖y‖ ^ 2 = ‖P.starProjection y‖ ^ 2 + ‖Pᗮ.starProjection y‖ ^ 2 :=
+    Submodule.norm_sq_eq_add_norm_sq_starProjection y P
+  have hsq : (Real.sqrt 2 / 2) ^ 2 = (1 : ℝ) / 2 := by
+    rw [div_pow, Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
+    norm_num
+  nlinarith [norm_nonneg (P.starProjection y), norm_nonneg (Pᗮ.starProjection y),
+    norm_nonneg y, hbound, hpyth, hsq, Real.sqrt_nonneg 2]
+
+/-- A pair strictly inside the quarter turn puts every nonzero vector of the
+complement of the second subspace strictly outside the cone. -/
+theorem norm_starProjection_lt_of_mem_orthogonal
+    {P Q : Submodule ℂ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (hq : IsQuarterAcute P Q) {y : E} (hy : y ∈ Qᗮ) (hy0 : y ≠ 0) :
+    ‖P.starProjection y‖ < Real.sqrt 2 / 2 * ‖y‖ := by
+  have hQy : Q.starProjection y = 0 :=
+    (Submodule.starProjection_apply_eq_zero_iff Q).mpr hy
+  have heq : P.starProjection y = (P.starProjection - Q.starProjection) y := by
+    simp only [ContinuousLinearMap.sub_apply, hQy, sub_zero]
+  rw [heq]
+  calc ‖(P.starProjection - Q.starProjection) y‖
+      ≤ subspaceGap P Q * ‖y‖ := ContinuousLinearMap.le_opNorm _ _
+    _ < Real.sqrt 2 / 2 * ‖y‖ :=
+        mul_lt_mul_of_pos_right hq (norm_pos_iff.mpr hy0)
+
+/-! ### Uniqueness of the branch -/
+
+section Uniqueness
+
+variable (A H : E →L[ℂ] E) (P : Submodule ℂ E) [P.HasOrthogonalProjection]
+variable {alpha delta : ℝ}
+
+/-- **Theorem 8.1, uniqueness half.**  A reducing subspace of the perturbed
+operator satisfying the printed *closed* quarter-angle condition is the
+canonical branch.  Nothing beyond the printed hypotheses is assumed. -/
+theorem theorem8_1_eq_canonicalBranch_of_maximalAngle_le
+    (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
+    (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
+    (M : Submodule ℂ E) [M.HasOrthogonalProjection]
+    (hMreduces : Reduces (A + H) M)
+    (hMangle : maximalAngle P M ≤ Real.pi / 4) :
+    M = canonicalLowBranch (A + H)
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hH)) alpha := by
+  classical
+  have hAH : IsSelfAdjoint (A + H) := hA.add hH
+  have hAHop : IsSelfAdjointOperator (A + H) :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAH
+  have hconc := theorem8_1_canonicalBranch A H P hdelta hA hH hAP hPlow hPhigh hHP hHPperp
+  set Q : Submodule ℂ E := canonicalLowBranch (A + H) hAHop alpha with hQdef
+  have hquarter : IsQuarterAcute P Q := hconc.quarter_acute
+  have hquarterPerp : IsQuarterAcute Pᗮ Qᗮ := by
+    show subspaceGap Pᗮ Qᗮ < Real.sqrt 2 / 2
+    rw [TauCeti.DavisKahan.Experimental.subspaceGap_orthogonal P Q]
+    exact hquarter
+  have hgapM : subspaceGap P M ≤ Real.sqrt 2 / 2 :=
+    (maximalAngle_le_pi_div_four_iff P M).1 hMangle
+  have hgapMperp : subspaceGap Pᗮ Mᗮ ≤ Real.sqrt 2 / 2 := by
+    rw [TauCeti.DavisKahan.Experimental.subspaceGap_orthogonal P M]
+    exact hgapM
+  -- the branch projection
+  set F : E →L[ℂ] E :=
+    boundedSelfAdjointSpectralProjection (A + H) hAHop (Set.Iic alpha)
+      measurableSet_Iic with hFdef
+  have hFstar : F = Q.starProjection :=
+    boundedSelfAdjointSpectralProjection_eq_starProjection (A + H) hAHop
+      (Set.Iic alpha) measurableSet_Iic
+  -- a reducing projection commutes with the branch projection
+  have hcommT : Commute (A + H) M.starProjection := by
+    show (A + H) * M.starProjection = M.starProjection * (A + H)
+    refine ContinuousLinearMap.ext fun x => ?_
+    exact (ContinuousLinearMap.starProjection_apply_comm_of_reduces
+      (A + H) M hMreduces x).symm
+  have hcommF : Commute F M.starProjection := by
+    rw [hFdef, boundedSelfAdjointSpectralProjection_Iic_eq_cfcHom (A + H) hAHop
+      hdelta hconc.spectral_repulsion]
+    exact IsSelfAdjoint.commute_cfcHom hAH.isStarNormal hAH hcommT _
+  have hcommApply : ∀ x : E, F (M.starProjection x) = M.starProjection (F x) := by
+    intro x
+    exact congrArg (fun T : E →L[ℂ] E => T x) hcommF
+  refine le_antisymm ?_ ?_
+  · -- `M ≤ Q`
+    intro y hy
+    have hMy : M.starProjection y = y := Submodule.starProjection_eq_self_iff.mpr hy
+    set u : E := Qᗮ.starProjection y with hudef
+    have huQperp : u ∈ Qᗮ := Qᗮ.starProjection_apply_mem y
+    have huM : u ∈ M := by
+      have hu : u = y - F y := by
+        rw [hudef, hFstar, Submodule.starProjection_orthogonal_apply]
+      have : M.starProjection u = u := by
+        rw [hu, map_sub, hMy, ← hcommApply y, hMy]
+      exact this ▸ M.starProjection_apply_mem u
+    have hu0 : u = 0 := by
+      by_contra hne
+      have h1 := sqrt_two_div_two_mul_norm_le_norm_starProjection hgapM huM
+      have h2 := norm_starProjection_lt_of_mem_orthogonal hquarter huQperp hne
+      linarith
+    have hy' : y = Q.starProjection y := by
+      rw [hudef, Submodule.starProjection_orthogonal_apply] at hu0
+      exact sub_eq_zero.mp hu0
+    exact hy' ▸ Q.starProjection_apply_mem y
+  · -- `Q ≤ M`
+    intro w hw
+    have hFw : F w = w := by
+      rw [hFstar]
+      exact Submodule.starProjection_eq_self_iff.mpr hw
+    set v : E := Mᗮ.starProjection w with hvdef
+    have hvMperp : v ∈ Mᗮ := Mᗮ.starProjection_apply_mem w
+    have hvQ : v ∈ Q := by
+      have hv : v = w - M.starProjection w := by
+        rw [hvdef, Submodule.starProjection_orthogonal_apply]
+      have hFv : F v = v := by
+        rw [hv, map_sub, hFw, hcommApply w, hFw]
+      rw [hFstar] at hFv
+      exact hFv ▸ Q.starProjection_apply_mem v
+    have hv0 : v = 0 := by
+      by_contra hne
+      have h1 := sqrt_two_div_two_mul_norm_le_norm_starProjection hgapMperp hvMperp
+      have h2 := norm_starProjection_lt_of_mem_orthogonal hquarterPerp
+        (by rw [Submodule.orthogonal_orthogonal]; exact hvQ) hne
+      linarith
+    have hw' : w = M.starProjection w := by
+      rw [hvdef, Submodule.starProjection_orthogonal_apply] at hv0
+      exact sub_eq_zero.mp hv0
+    exact hw' ▸ M.starProjection_apply_mem w
+
+/-- **Theorem 8.1, the printed characterization.**  For a reducing subspace of
+the perturbed operator, the closed quarter-angle condition and the spectral
+orientation `Lambda 0 <= alpha`, `Lambda 1 >= alpha + delta` are equivalent.
+
+Both directions are proved from the printed hypotheses; neither is assumed. -/
+theorem theorem8_1_maximalAngle_le_iff_spectrumIn
+    (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
+    (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
+    (M : Submodule ℂ E) [M.HasOrthogonalProjection]
+    (hMreduces : Reduces (A + H) M) :
+    maximalAngle P M ≤ Real.pi / 4 ↔
+      (SpectrumIn (A + H) M (Set.Iic alpha) ∧
+        SpectrumIn (A + H) Mᗮ (Set.Ici (alpha + delta))) := by
+  classical
+  have hAH : IsSelfAdjoint (A + H) := hA.add hH
+  have hAHsym : (A + H).IsSymmetric :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAH
+  have hAHop : IsSelfAdjointOperator (A + H) := hAHsym
+  have hconc := theorem8_1_canonicalBranch A H P hdelta hA hH hAP hPlow hPhigh hHP hHPperp
+  have hPperpperp : (Pᗮ)ᗮ = P := Submodule.orthogonal_orthogonal P
+  have hAsym : A.IsSymmetric :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
+  have hAPperp : ∀ x ∈ Pᗮ, A x ∈ Pᗮ := fun x hx =>
+    map_mem_orthogonal_of_forall_map_mem hAsym hAP hx
+  constructor
+  · intro hangle
+    have hMQ : M = canonicalLowBranch (A + H) hAHop alpha :=
+      theorem8_1_eq_canonicalBranch_of_maximalAngle_le A H P hdelta hA hH hAP hPlow
+        hPhigh hHP hHPperp M hMreduces hangle
+    subst hMQ
+    exact ⟨hconc.branch_spectrum_low, hconc.branch_spectrum_high⟩
+  · rintro ⟨hMlow, hMhigh⟩
+    letI : CompleteSpace M :=
+      completeSpace_coe_iff_isComplete.mpr M.isComplete_coe_of_hasOrthogonalProjection
+    letI : CompleteSpace (Mᗮ : Submodule ℂ E) :=
+      completeSpace_coe_iff_isComplete.mpr
+        Mᗮ.isComplete_coe_of_hasOrthogonalProjection
+    -- restricted spectra give the ordered form bounds
+    have hformLow : ∀ x ∈ M, RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2 := by
+      intro x hx
+      refine re_inner_le_on_subspace_of_restriction_spectrum_subset_Iic
+        hAHsym hMreduces.1 ?_ hx
+      rw [← realSpectrum_eq_spectrum_real]
+      intro r hr
+      exact hMlow.2 ⟨hMreduces.1, hr⟩
+    have hformHigh : ∀ x ∈ Mᗮ,
+        (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪(A + H) x, x⟫_ℂ := by
+      intro x hx
+      refine le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
+        hAHsym hMreduces.2 ?_ hx
+      rw [← realSpectrum_eq_spectrum_real]
+      intro r hr
+      exact hMhigh.2 ⟨hMreduces.2, hr⟩
+    have hMperpperp : (Mᗮ)ᗮ = M := Submodule.orthogonal_orthogonal M
+    have hquarterPerp : IsQuarterAcute Pᗮ Mᗮ := by
+      refine isQuarterAcute_of_paper_form_gap_infinite A H Pᗮ Mᗮ hA hH hAPperp
+        ?_ (by linarith) hPhigh ?_ hformHigh ?_ ?_ ?_
+      · intro x hx
+        exact hMreduces.2 x hx
+      · intro x hx
+        rw [hPperpperp] at hx
+        exact hPlow x hx
+      · intro x hx
+        rw [hMperpperp] at hx
+        exact hformLow x hx
+      · intro x hx
+        rw [hPperpperp]
+        exact hHPperp x hx
+      · intro x hx
+        rw [hPperpperp] at hx
+        exact hHP x hx
+    have hquarter : IsQuarterAcute P M := by
+      show subspaceGap P M < Real.sqrt 2 / 2
+      rw [← TauCeti.DavisKahan.Experimental.subspaceGap_orthogonal P M]
+      exact hquarterPerp
+    exact le_of_lt ((maximalAngle_lt_pi_div_four_iff P M).2 hquarter)
+
+end Uniqueness
+
+
+end
+
+end Section8
+end DavisKahan1970
+end TauCeti

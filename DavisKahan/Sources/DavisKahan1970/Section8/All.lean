@@ -7,5 +7,6 @@ import DavisKahan.Sources.DavisKahan1970.Section8.CompressionRepulsion
 import DavisKahan.Sources.DavisKahan1970.Section8.SelectedBranch
 import DavisKahan.Sources.DavisKahan1970.Section8.Smallness
 import DavisKahan.Sources.DavisKahan1970.Section8.SourceSurface
+import DavisKahan.Sources.DavisKahan1970.Section8.SourceTheorem81
 
 /-! # `DavisKahan/Sources/DavisKahan1970/Section8` -/
