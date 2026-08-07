@@ -853,6 +853,151 @@ theorem theorem8_2_residualHalfGap_selectedBranch
 
 end SourceTheorems
 
+section CanonicalBranchCompression
+
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+/-- **Theorem 8.1(i) at the canonical branch, upper compression.**
+
+The abstract compression-repulsion core is instantiated at the branch that
+`theorem8_1_canonicalBranch` constructs, so no data record appears in the
+hypotheses: the caller supplies only the printed Section 8 configuration. -/
+theorem theorem8_1_upperCompressionRepulsion_canonicalBranch
+    (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    (x : H) :
+    RCLike.re ⟪x, (A + K) x⟫_ℂ - alpha * ‖x‖ ^ 2 ≤
+      RCLike.re ⟪(DavisKahan1970.Section8.canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha)ᗮ.starProjection x,
+          (A + K) ((DavisKahan1970.Section8.canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha)ᗮ.starProjection x)⟫_ℂ -
+        alpha * ‖(DavisKahan1970.Section8.canonicalLowBranch (A + K)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+            (hA.add hK)) alpha)ᗮ.starProjection x‖ ^ 2 := by
+  have hconc := DavisKahan1970.Section8.theorem8_1_canonicalBranch A K P hdelta
+    hA hK hAP hPlow hPhigh hKP hKPperp
+  have hdata := upperCompressionRepulsionData_of_targetSplitting
+    (T := A + K)
+    (W := DavisKahan1970.Section8.canonicalLowBranch (A + K)
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha)
+    hconc.branch_reduces.1 hconc.branch_reduces.2 alpha
+  have hL0 : ∀ y : H,
+      RCLike.re ⟪(DavisKahan1970.Section8.canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha).starProjection y,
+          (A + K) ((DavisKahan1970.Section8.canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha).starProjection y)⟫_ℂ +
+        (alpha * ‖y‖ ^ 2 -
+          alpha * ‖(DavisKahan1970.Section8.canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha).starProjection y‖ ^ 2) ≤
+      alpha * ‖y‖ ^ 2 := by
+    intro y
+    have hmem := (DavisKahan1970.Section8.canonicalLowBranch (A + K)
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK))
+      alpha).starProjection_apply_mem y
+    have hform := hconc.branch_form_low _ hmem
+    have hswap := inner_re_symm (𝕜 := ℂ)
+      ((DavisKahan1970.Section8.canonicalLowBranch (A + K)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK))
+        alpha).starProjection y)
+      ((A + K) ((DavisKahan1970.Section8.canonicalLowBranch (A + K)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK))
+        alpha).starProjection y))
+    linarith
+  have hres := DavisKahan1970.Section8.upperCompressionRepulsion_of_data hdata hL0 x
+  have hidem : (DavisKahan1970.Section8.canonicalLowBranch (A + K)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+          (hA.add hK)) alpha)ᗮ.starProjection
+      ((DavisKahan1970.Section8.canonicalLowBranch (A + K)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+          (hA.add hK)) alpha)ᗮ.starProjection x) =
+      (DavisKahan1970.Section8.canonicalLowBranch (A + K)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+          (hA.add hK)) alpha)ᗮ.starProjection x :=
+    Submodule.starProjection_eq_self_iff.mpr
+      (Submodule.starProjection_apply_mem _ x)
+  simp only [hidem] at hres
+  exact hres
+
+/-- **Theorem 8.1(i) at the canonical branch, lower compression companion.** -/
+theorem theorem8_1_lowerCompressionRepulsion_canonicalBranch
+    (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    (x : H) :
+    (alpha + delta) * ‖x‖ ^ 2 - RCLike.re ⟪x, (A + K) x⟫_ℂ ≤
+      (alpha + delta) * ‖(DavisKahan1970.Section8.canonicalLowBranch (A + K)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+            (hA.add hK)) alpha).starProjection x‖ ^ 2 -
+        RCLike.re ⟪(DavisKahan1970.Section8.canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha).starProjection x,
+          (A + K) ((DavisKahan1970.Section8.canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha).starProjection x)⟫_ℂ := by
+  have hconc := DavisKahan1970.Section8.theorem8_1_canonicalBranch A K P hdelta
+    hA hK hAP hPlow hPhigh hKP hKPperp
+  have hdata := lowerCompressionRepulsionData_of_targetSplitting
+    (T := A + K)
+    (W := DavisKahan1970.Section8.canonicalLowBranch (A + K)
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha)
+    hconc.branch_reduces.1 hconc.branch_reduces.2 (alpha + delta)
+  have hL1 : ∀ y : H,
+      (alpha + delta) * ‖y‖ ^ 2 ≤
+        RCLike.re ⟪(DavisKahan1970.Section8.canonicalLowBranch (A + K)
+              (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+                (hA.add hK)) alpha)ᗮ.starProjection y,
+            (A + K) ((DavisKahan1970.Section8.canonicalLowBranch (A + K)
+              (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+                (hA.add hK)) alpha)ᗮ.starProjection y)⟫_ℂ +
+          ((alpha + delta) * ‖y‖ ^ 2 -
+            (alpha + delta) * ‖(DavisKahan1970.Section8.canonicalLowBranch (A + K)
+              (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+                (hA.add hK)) alpha)ᗮ.starProjection y‖ ^ 2) := by
+    intro y
+    have hmem := (DavisKahan1970.Section8.canonicalLowBranch (A + K)
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK))
+      alpha)ᗮ.starProjection_apply_mem y
+    have hform := hconc.branch_form_high _ hmem
+    have hswap := inner_re_symm (𝕜 := ℂ)
+      ((DavisKahan1970.Section8.canonicalLowBranch (A + K)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK))
+        alpha)ᗮ.starProjection y)
+      ((A + K) ((DavisKahan1970.Section8.canonicalLowBranch (A + K)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK))
+        alpha)ᗮ.starProjection y))
+    linarith
+  have hres := DavisKahan1970.Section8.lowerCompressionRepulsion_of_data hdata hL1 x
+  have hidem : (DavisKahan1970.Section8.canonicalLowBranch (A + K)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+          (hA.add hK)) alpha).starProjection
+      ((DavisKahan1970.Section8.canonicalLowBranch (A + K)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+          (hA.add hK)) alpha).starProjection x) =
+      (DavisKahan1970.Section8.canonicalLowBranch (A + K)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+          (hA.add hK)) alpha).starProjection x :=
+    Submodule.starProjection_eq_self_iff.mpr
+      (Submodule.starProjection_apply_mem _ x)
+  simp only [hidem] at hres
+  exact hres
+
+end CanonicalBranchCompression
+
 end Section8
 end Frontier
 end Experimental
