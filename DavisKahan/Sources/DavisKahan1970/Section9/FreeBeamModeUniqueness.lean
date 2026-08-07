@@ -181,6 +181,75 @@ theorem exists_mode_eqOn_of_fourth_deriv (beta : ℝ) (hbeta : beta ≠ 0)
       (hasDerivAt_modeD2 beta a b c d) hm3
       hj0.symm hj1.symm hj2.symm hj3.symm⟩
 
+/-- Interval version of the uniqueness theorem: derivative chains within `[0,1]` suffice.
+This is the form the eigenfunction bootstrap produces — at the two endpoints only one-sided
+derivatives exist. -/
+theorem eqOn_of_fourth_deriv_eq_of_jet_eq_within (beta : ℝ)
+    {u u1 u2 u3 v v1 v2 v3 : ℝ → ℝ}
+    (hdu : ∀ x ∈ Icc (0 : ℝ) 1, HasDerivWithinAt u (u1 x) (Icc 0 1) x)
+    (hdu1 : ∀ x ∈ Icc (0 : ℝ) 1, HasDerivWithinAt u1 (u2 x) (Icc 0 1) x)
+    (hdu2 : ∀ x ∈ Icc (0 : ℝ) 1, HasDerivWithinAt u2 (u3 x) (Icc 0 1) x)
+    (hdu3 : ∀ x ∈ Icc (0 : ℝ) 1, HasDerivWithinAt u3 (beta ^ 4 * u x) (Icc 0 1) x)
+    (hdv : ∀ x ∈ Icc (0 : ℝ) 1, HasDerivWithinAt v (v1 x) (Icc 0 1) x)
+    (hdv1 : ∀ x ∈ Icc (0 : ℝ) 1, HasDerivWithinAt v1 (v2 x) (Icc 0 1) x)
+    (hdv2 : ∀ x ∈ Icc (0 : ℝ) 1, HasDerivWithinAt v2 (v3 x) (Icc 0 1) x)
+    (hdv3 : ∀ x ∈ Icc (0 : ℝ) 1, HasDerivWithinAt v3 (beta ^ 4 * v x) (Icc 0 1) x)
+    (h0 : u 0 = v 0) (h1 : u1 0 = v1 0) (h2 : u2 0 = v2 0) (h3 : u3 0 = v3 0) :
+    EqOn u v (Icc 0 1) ∧ EqOn u1 v1 (Icc 0 1) ∧
+      EqOn u2 v2 (Icc 0 1) ∧ EqOn u3 v3 (Icc 0 1) := by
+  set F : ℝ → ℝ × ℝ × ℝ × ℝ := fun x => (u x, u1 x, u2 x, u3 x) with hFdef
+  set G : ℝ → ℝ × ℝ × ℝ × ℝ := fun x => (v x, v1 x, v2 x, v3 x) with hGdef
+  have hF' : ∀ x ∈ Icc (0 : ℝ) 1,
+      HasDerivWithinAt F (modeVectorField beta (F x)) (Icc 0 1) x := fun x hx =>
+    ((hdu x hx).prodMk ((hdu1 x hx).prodMk ((hdu2 x hx).prodMk (hdu3 x hx))))
+  have hG' : ∀ x ∈ Icc (0 : ℝ) 1,
+      HasDerivWithinAt G (modeVectorField beta (G x)) (Icc 0 1) x := fun x hx =>
+    ((hdv x hx).prodMk ((hdv1 x hx).prodMk ((hdv2 x hx).prodMk (hdv3 x hx))))
+  have hFcont : ContinuousOn F (Icc 0 1) := fun x hx => (hF' x hx).continuousWithinAt
+  have hGcont : ContinuousOn G (Icc 0 1) := fun x hx => (hG' x hx).continuousWithinAt
+  have hFG : EqOn F G (Icc 0 1) := by
+    refine ODE_solution_unique (v := fun _ => modeVectorField beta)
+      (fun _ => lipschitzWith_modeVectorField beta) hFcont ?_ hGcont ?_ ?_
+    · intro t ht
+      exact (hF' t (Ico_subset_Icc_self ht)).mono_of_mem_nhdsWithin
+        (Icc_mem_nhdsGE_of_mem ht)
+    · intro t ht
+      exact (hG' t (Ico_subset_Icc_self ht)).mono_of_mem_nhdsWithin
+        (Icc_mem_nhdsGE_of_mem ht)
+    · simp only [hFdef, hGdef, h0, h1, h2, h3]
+  refine ⟨fun x hx => ?_, fun x hx => ?_, fun x hx => ?_, fun x hx => ?_⟩ <;>
+    have := hFG hx
+  · exact congrArg (fun p => p.1) this
+  · exact congrArg (fun p => p.2.1) this
+  · exact congrArg (fun p => p.2.2.1) this
+  · exact congrArg (fun p => p.2.2.2) this
+
+/-- **Interval classification**: a function with a fourth-order derivative chain within
+`[0,1]` solving `u'''' = β⁴ u` there is a mode on `[0,1]`, chain and all. -/
+theorem exists_mode_eqOn_of_fourth_deriv_within (beta : ℝ) (hbeta : beta ≠ 0)
+    {u u1 u2 u3 : ℝ → ℝ}
+    (hdu : ∀ x ∈ Icc (0 : ℝ) 1, HasDerivWithinAt u (u1 x) (Icc 0 1) x)
+    (hdu1 : ∀ x ∈ Icc (0 : ℝ) 1, HasDerivWithinAt u1 (u2 x) (Icc 0 1) x)
+    (hdu2 : ∀ x ∈ Icc (0 : ℝ) 1, HasDerivWithinAt u2 (u3 x) (Icc 0 1) x)
+    (hdu3 : ∀ x ∈ Icc (0 : ℝ) 1, HasDerivWithinAt u3 (beta ^ 4 * u x) (Icc 0 1) x) :
+    ∃ a b c d : ℝ,
+      EqOn u (mode beta a b c d) (Icc 0 1) ∧
+      EqOn u1 (modeD1 beta a b c d) (Icc 0 1) ∧
+      EqOn u2 (modeD2 beta a b c d) (Icc 0 1) ∧
+      EqOn u3 (modeD3 beta a b c d) (Icc 0 1) := by
+  obtain ⟨a, b, c, d, hj0, hj1, hj2, hj3⟩ :=
+    exists_mode_jet beta hbeta (u 0) (u1 0) (u2 0) (u3 0)
+  have hm3 : ∀ x ∈ Icc (0 : ℝ) 1,
+      HasDerivWithinAt (modeD3 beta a b c d) (beta ^ 4 * mode beta a b c d x)
+        (Icc 0 1) x :=
+    fun x _ => (hasDerivAt_modeD3 beta a b c d x).hasDerivWithinAt
+  exact ⟨a, b, c, d,
+    eqOn_of_fourth_deriv_eq_of_jet_eq_within beta hdu hdu1 hdu2 hdu3
+      (fun x _ => (hasDerivAt_mode beta a b c d x).hasDerivWithinAt)
+      (fun x _ => (hasDerivAt_modeD1 beta a b c d x).hasDerivWithinAt)
+      (fun x _ => (hasDerivAt_modeD2 beta a b c d x).hasDerivWithinAt)
+      hm3 hj0.symm hj1.symm hj2.symm hj3.symm⟩
+
 end FreeBeam
 end HiddenFoundations
 end MathAhead
