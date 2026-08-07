@@ -1039,6 +1039,54 @@ theorem theorem8_1_upperCompressionRepulsion_source
       add_zero]
   rwa [hsplit] at hamb
 
+/-- **Theorem 8.1(i), source-literal lower form.**
+
+Restricted to the original `P` block, the ambient inequality of
+`theorem8_1_lowerCompressionRepulsion_canonicalBranch` is exactly the printed
+companion
+
+  `(α + δ) - A₀ ≤ C₀ ((α + δ) - Λ₀) C₀`
+
+read as a quadratic form.  As in the upper case, restricting is what makes the
+statement source-literal: off-diagonality of `K` kills its cross term on `P`,
+so the left-hand side is the form of the *unperturbed* compression `A₀` and not
+of `A + K`.  The right-hand side is the form of `(α + δ) - Λ₀` evaluated at
+`C₀ x = P_Q x`, the printed cosine-sandwiched term.
+
+The orientation is the mirror of the upper theorem: there `x ∈ Pᗮ` and
+`K x ∈ P`, here `x ∈ P` and `K x ∈ Pᗮ`, so the vanishing inner product is read
+off in the other argument order. -/
+theorem theorem8_1_lowerCompressionRepulsion_source
+    (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    {x : H} (hx : x ∈ P) :
+    (alpha + delta) * ‖x‖ ^ 2 - RCLike.re ⟪x, A x⟫_ℂ ≤
+      (alpha + delta) * ‖(DavisKahan1970.Section8.canonicalLowBranch (A + K)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+            (hA.add hK)) alpha).starProjection x‖ ^ 2 -
+        RCLike.re ⟪(DavisKahan1970.Section8.canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha).starProjection x,
+          (A + K) ((DavisKahan1970.Section8.canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha).starProjection x)⟫_ℂ := by
+  have hamb := theorem8_1_lowerCompressionRepulsion_canonicalBranch A K P hdelta
+    hA hK hAP hPlow hPhigh hKP hKPperp x
+  have h0 : ⟪x, K x⟫_ℂ = 0 :=
+    Submodule.inner_right_of_mem_orthogonal hx (hKP x hx)
+  have hcross : RCLike.re ⟪x, K x⟫_ℂ = 0 := by
+    rw [h0]
+    simp
+  have hsplit : RCLike.re ⟪x, (A + K) x⟫_ℂ = RCLike.re ⟪x, A x⟫_ℂ := by
+    rw [ContinuousLinearMap.add_apply, inner_add_right, map_add, hcross,
+      add_zero]
+  rwa [hsplit] at hamb
+
 end CanonicalBranchCompression
 
 end Section8
