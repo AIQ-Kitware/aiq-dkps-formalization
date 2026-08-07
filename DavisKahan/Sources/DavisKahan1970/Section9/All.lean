@@ -11,6 +11,7 @@ import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicConverse
 import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamEigenmodeReduction
 import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamFoundationAssembler
 import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamModeData
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamModeUniqueness
 import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamOrthogonality
 import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootExclusion
 import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootLocalization
