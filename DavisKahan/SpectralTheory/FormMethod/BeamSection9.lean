@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.SpectralTheory.FormMethod.BeamSpectrum
+import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.SinTheta.BoundedPerturbation
 import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
 import ForTauCeti.MeasureTheory.MulLpAlgebra
 
 /-!
@@ -578,6 +580,161 @@ theorem beamSinTheta_le (ε : ℝ) :
   have hchain : 500 * beamSinTheta ε
       ≤ DavisKahan1970.Section9.residualTopSingularValue ε := le_trans hmain hres
   linarith
+
+/-! ## The spectral subspace below the gap -/
+
+/-- The spectral set below the free-beam gap.  The threshold `1001/2 = 500.5` is chosen
+below `4.73⁴ = 500.546…` and above the paper's rounded `500`, so it separates the zero
+modes from the whole positive spectrum with room to spare. -/
+def beamLowSet : Set ℝ := Set.Iic (1001 / 2)
+
+theorem measurableSet_beamLowSet : MeasurableSet beamLowSet := measurableSet_Iic
+
+/-- **The free-beam gap, sharpened past the paper's rounding.**  The positive spectrum
+clears `500.5`, not merely `500`: the characteristic roots exceed `4.73` and
+`4.73⁴ = 500.5466…`. -/
+theorem realSpectrum_beamOperator_subset_sharp :
+    beamOperator.realSpectrum ⊆ ({0} : Set ℝ) ∪ Set.Ioi (1001 / 2) := by
+  intro lam hlam
+  rcases realSpectrum_beamOperator_subset hlam with h0 | ⟨beta, hbeta, hchar, hlameq⟩
+  · exact Or.inl h0
+  · refine Or.inr ?_
+    rw [Set.mem_Ioi, hlameq]
+    have h473 := Classical.four_seventy_three_lt_of_characteristic_eq_zero hbeta hchar
+    have hpow : ((473 : ℝ) / 100) ^ 4 < beta ^ 4 :=
+      pow_lt_pow_left₀ h473 (by norm_num) (by norm_num)
+    have hnum : (1001 : ℝ) / 2 < ((473 : ℝ) / 100) ^ 4 := by norm_num
+    linarith
+
+/-- Every nonzero point below the gap is a resolvent point of the free beam. -/
+theorem beamOperator_mem_resolventSet_of_mem_lowSet_diff {lam : ℝ}
+    (hlam : lam ∈ beamLowSet \ ({0} : Set ℝ)) :
+    (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet beamOperator.toLinearPMap := by
+  by_contra hcon
+  have hmem : lam ∈ beamOperator.realSpectrum := fun hr => hcon hr
+  rcases realSpectrum_beamOperator_subset_sharp hmem with h0 | hgt
+  · exact hlam.2 h0
+  · have hle : lam ≤ (1001 : ℝ) / 2 := hlam.1
+    exact absurd hgt (by simp only [Set.mem_Ioi, not_lt]; exact hle)
+
+/-- The spectral measure of the punctured region below the gap vanishes. -/
+theorem beamSpecProjection_lowSet_diff_eq_zero :
+    TauCeti.LinearPMap.specProjection beamOperator_isSelfAdjoint
+        (beamLowSet \ ({0} : Set ℝ))
+        (measurableSet_beamLowSet.diff (measurableSet_singleton 0)) = 0 :=
+  TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet
+    beamOperator_isSelfAdjoint _ _
+    (fun _ hlam => beamOperator_mem_resolventSet_of_mem_lowSet_diff hlam)
+
+/-- **Everything below the gap is a zero mode**: the spectral projection of the whole
+region below `500.5` is the projection onto the kernel eigenvalue `{0}`. -/
+theorem beamSpecProjection_lowSet_eq_singleton :
+    TauCeti.LinearPMap.specProjection beamOperator_isSelfAdjoint beamLowSet
+        measurableSet_beamLowSet
+      = TauCeti.LinearPMap.specProjection beamOperator_isSelfAdjoint
+        ({0} : Set ℝ) (measurableSet_singleton 0) := by
+  have hsplit : ({0} : Set ℝ) ∪ (beamLowSet \ ({0} : Set ℝ)) = beamLowSet := by
+    refine Set.union_sdiff_cancel ?_
+    intro lam hlam
+    rw [Set.mem_singleton_iff] at hlam
+    rw [hlam]
+    exact Set.mem_Iic.2 (by norm_num)
+  have hdisj : Disjoint ({0} : Set ℝ) (beamLowSet \ ({0} : Set ℝ)) :=
+    Set.disjoint_sdiff_right
+  have hunion := (TauCeti.LinearPMap.spectralPVM beamOperator_isSelfAdjoint).proj_union
+    (measurableSet_singleton 0)
+    (measurableSet_beamLowSet.diff (measurableSet_singleton 0)) hdisj
+  rw [TauCeti.LinearPMap.specProjection_def, TauCeti.LinearPMap.specProjection_def]
+  rw [← (TauCeti.LinearPMap.spectralPVM beamOperator_isSelfAdjoint).proj_congr hsplit
+    ((measurableSet_singleton 0).union
+      (measurableSet_beamLowSet.diff (measurableSet_singleton 0)))
+    measurableSet_beamLowSet, hunion]
+  have hzero := beamSpecProjection_lowSet_diff_eq_zero
+  rw [TauCeti.LinearPMap.specProjection_def] at hzero
+  rw [hzero, add_zero]
+
+/-- A vector selected below the gap is selected by the kernel eigenvalue. -/
+theorem mem_specRange_singleton_of_mem_lowSet {y : BeamL2}
+    (hy : y ∈ TauCeti.LinearPMap.specRange beamOperator_isSelfAdjoint beamLowSet
+      measurableSet_beamLowSet) :
+    y ∈ TauCeti.LinearPMap.specRange beamOperator_isSelfAdjoint ({0} : Set ℝ)
+      (measurableSet_singleton 0) := by
+  rw [TauCeti.LinearPMap.mem_specRange_iff] at hy ⊢
+  rw [← beamSpecProjection_lowSet_eq_singleton]
+  exact hy
+
+/-- The compression of the free beam to the spectral subspace below the gap is zero:
+both form bounds are `0`. -/
+theorem beamLow_semiboundedBelow :
+    SemiboundedBelow (selfAdjointSpectralRestriction beamOperator
+      beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet) 0 := by
+  intro x
+  exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc
+    beamOperator_isSelfAdjoint ({0} : Set ℝ) (measurableSet_singleton 0)
+    (β := 0) (α := 0) (by simp) (mem_specRange_singleton_of_mem_lowSet x.1.2) x.2).1
+
+theorem beamLow_semiboundedAbove :
+    SemiboundedAbove (selfAdjointSpectralRestriction beamOperator
+      beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet) 0 := by
+  intro x
+  exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc
+    beamOperator_isSelfAdjoint ({0} : Set ℝ) (measurableSet_singleton 0)
+    (β := 0) (α := 0) (by simp) (mem_specRange_singleton_of_mem_lowSet x.1.2) x.2).2
+
+/-! ## Equation (9.2): the double-angle bound -/
+
+/-- **The largest sine of twice the angle** between the free beam's zero-mode spectral
+subspace and the low spectral subspace of the perturbed operator. -/
+def beamSinTwoTheta (ε : ℝ) : ℝ :=
+  ‖DavisKahanExt.sinTwoAngleOperatorC
+      (selfAdjointSpectralSubspace beamOperator beamOperator_isSelfAdjoint beamLowSet
+        measurableSet_beamLowSet)
+      (selfAdjointSpectralSubspace (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε)
+        beamLowSet measurableSet_beamLowSet)‖
+
+theorem beamSinTwoTheta_nonneg (ε : ℝ) : 0 ≤ beamSinTwoTheta ε :=
+  norm_nonneg (DavisKahanExt.sinTwoAngleOperatorC
+      (selfAdjointSpectralSubspace beamOperator beamOperator_isSelfAdjoint beamLowSet
+        measurableSet_beamLowSet)
+      (selfAdjointSpectralSubspace (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε)
+        beamLowSet measurableSet_beamLowSet))
+
+/-- The complement of the low set avoids the gap interval, so the free beam's
+complementary block has no spectrum there. -/
+theorem beamHigh_spectrum_avoids :
+    ∀ lam ∈ Set.Ioo ((0 : ℝ) - 1001 / 2) ((0 : ℝ) + 1001 / 2),
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+        (selfAdjointSpectralRestriction beamOperator beamOperator_isSelfAdjoint
+          beamLowSetᶜ measurableSet_beamLowSet.compl).toLinearPMap :=
+  selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
+    beamOperator beamOperator_isSelfAdjoint beamLowSetᶜ measurableSet_beamLowSet.compl
+    (by
+      refine Set.eq_empty_iff_forall_notMem.2 ?_
+      rintro lam ⟨hlam, -, h2⟩
+      have hgt : (1001 : ℝ) / 2 < lam := by
+        simpa only [beamLowSet, Set.mem_compl_iff, Set.mem_Iic, not_le] using hlam
+      have hlt : lam < (0 : ℝ) + 1001 / 2 := h2
+      linarith)
+
+/-- **Davis--Kahan 1970, equation (9.2), for the genuine free-beam operator.**  The
+double-angle sine between the zero-mode subspace and the perturbed low subspace is
+below `2 ε / 500`.  The `sin 2Θ` theorem contributes the factor two and the perturbation
+norm; the gap `500.5` comes from `realSpectrum_beamOperator_subset_sharp`, which is why
+the strict inequality of the printed bound survives. -/
+theorem beamSinTwoTheta_lt (ε : ℝ) (hε : 0 < ε) :
+    beamSinTwoTheta ε < 2 * ε / 500 := by
+  have hmain := sinTwoTheta_addBounded_of_spectrum_gap beamOperator
+    beamOperator_isSelfAdjoint (beamPerturbation ε) (beamPerturbation_isSelfAdjoint ε)
+    beamLowSet beamLowSet measurableSet_beamLowSet measurableSet_beamLowSet
+    (β := 0) (α := 0) (δ := 1001 / 2) le_rfl (by norm_num)
+    beamLow_semiboundedBelow beamLow_semiboundedAbove beamHigh_spectrum_avoids
+  have hnorm : ‖beamPerturbation ε‖ ≤ ε := by
+    have := norm_beamPerturbation_le ε
+    rwa [abs_of_pos hε] at this
+  have hchain : (1001 / 2 : ℝ) * beamSinTwoTheta ε ≤ 2 * ε := by
+    refine le_trans hmain ?_
+    linarith
+  nlinarith [beamSinTwoTheta_nonneg ε, hchain]
 
 end
 
