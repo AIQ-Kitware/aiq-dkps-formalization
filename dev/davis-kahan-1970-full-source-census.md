@@ -11,12 +11,12 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 26 |
+| `compiled_exact` | 27 |
 | `compiled_specialization` | 3 |
 | `compiled_general_infrastructure` | 8 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 6 |
+| `partial_or_wrapper_missing` | 5 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -729,14 +729,16 @@ THE WITNESS.  `ExactTanTheta.theorem63DirectedTangent`: diagonal in the right si
 #### Lemma 6.3: Finite-rank near-maximizer leakage estimate
 
 - **Kind:** `lemma`
-- **Status:** `partial_or_wrapper_missing`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** A nearly Ky-Fan-optimal finite-rank compression has small off-block trace norm.
-- **Current Lean references:** `TauCeti.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage`
+- **Current Lean references:** `TauCeti.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage`, `TauCeti.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_singularValue_leakage`
 - **Assessment:** The surrounding approximation-number infrastructure exists, but no exact source declaration was found.
 
 CORRECTED 2026-08-04: the row listed no declarations. The frontier manifest maps it to node `s6-lemma6-3-approx`, whose declaration lives in `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean` -- inside the default build despite the `Experimental.Frontier` namespace. It resolves and is axiom-clean (`#print axioms`).
-- **Next action:** State and prove the source lemma; it may be useful independently for cutoff passages.
+
+STATUS CORRECTED 2026-08-07 (Fable 5): `partial_or_wrapper_missing` -> `compiled_exact`.  The next_action ('state and prove the source lemma') predates the 2026-08-04 correction that located the declaration; the lemma IS stated and proved, in the default build, axiom-clean, in BOTH the source's forms: `lemma6_3_approximationNumber_leakage` (near-Ky-Fan-optimal prefix square energy forces off-block operator norm below eta, with the source-faithful block hypothesis K P = Q K P -- the module docstring documents why the earlier K P = Q K stating was wrong) and the finite-dimensional singular-value specialization `lemma6_3_singularValue_leakage`.  The compiled statement generalizes the source only by not assuming K compact (the rank hypotheses on the projections carry the finiteness), which is scope-widening, not scope-narrowing.
+- **Next action:** Nothing outstanding.  The lemma is reusable for cutoff passages exactly as the audit hoped.
 
 ### Section 7
 
