@@ -11,7 +11,7 @@
 \item[Source order] Introduction; Sections 1--3 on block notation and subspace geometry; Section 4 on the direct rotation; Section 5 on $AX-XB=C$; Section 6 on the single-angle theorems; the unbounded-operator appendix; Section 7 on the double-angle theorems; Section 8 on interpretation and spectral selection; Section 9 on the numerical example; Section 10 on open questions.
 \item[Current proved surface] The source-faithful Section 6 sine-theta package is complete in its intended Hilbert-space scope: real and complex scalars, closed possibly unbounded self-adjoint operators, the paper norm class, arbitrary equisingular representatives, common-domain and graph-core formulations, sharpness, the printed planar counterexample, and finite-multiplicity equality models. The finite \code{DavisKahanTheory.PartIII} package remains a separately useful specialization for all four headline families. Other sections are undergoing compiler repair and source-wrapper audit.
 \item[Formalization target] The repository target is the full source scope: separable Hilbert spaces; all four theorem families in infinite and finite dimensions; arbitrary unitary-invariant norms with correct domains of finiteness; and the unbounded self-adjoint extensions with their domain assumptions. For the single-angle family, the canonical Lean API is the generalized unbounded theorem. The bounded Hermitian statement is a full-domain specialization, not the terminal target.
-\item[Current boundary] Completion of Section 6 is not completion of the paper. The remaining source work includes the classification and nonacute geometry of Section 3, direct-rotation extremality in Section 4, exact source wrappers for Sections 5, 7, and 8, and the Section 9 numerical example. The structured status authority is \code{dev/davis-kahan-1970-full-source-census.json}.
+\item[Current boundary] Completion of Section 6 is not completion of the paper. Section 3 -- the classification, the nonacute geometry, and Hahn--Hellinger uniqueness of the multiplicity decomposition -- is complete. The remaining source work includes direct-rotation extremality in Section 4, exact source wrappers for Sections 5, 7, and 8, and the Section 9 numerical example. The structured status authority is \code{dev/davis-kahan-1970-full-source-census.json}.
 \item[Transcription audit] This committed note is an independent distillation. Its scope and source anchors have been checked against the maintained modernized local transcription, which is excluded from distributable source archives.
 \item[Terminology] The source writes $\sin\theta$, $\tan\theta$, $\sin 2\theta$, and $\tan 2\theta$. We use $\Theta$ for the principal-angle operator or its finite list of principal angles.
 \end{sourceguide}
@@ -428,10 +428,13 @@ inequalities alone.
   resting on a multiplicity normal form built for the purpose (measure class,
   antitone level sets, and the cardinal-valued multiplicity function they are the
   super-level sets of).  The compact eigenvalue-list corollary is likewise proved.
-  What remains in Section 3 is the maximal reducing-eigenspace characterization,
-  the nonacute scope of the principal square-root characterization, and
-  uniqueness of the multiplicity decomposition -- which is what would turn the
-  classification's complete invariant into a canonical one.
+  The three items formerly listed as remaining are now proved as well: the
+  maximal reducing-eigenspace characterization, the principal square-root
+  characterization in both directions for arbitrary pairs with no acuteness
+  hypothesis, and uniqueness of the multiplicity decomposition -- measure class
+  and level sets are both determined by the operator, so the classification's
+  complete invariant is canonical, not merely existential.  Nothing numbered in
+  Section 3 remains open; the structured authority is the census.
 \item Section 4 proves singular-value-by-singular-value extremality of the
   direct rotation before deriving its several UI-norm corollaries.  A source
   formalization should preserve the stronger singular-value statement rather

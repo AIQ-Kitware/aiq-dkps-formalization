@@ -11,9 +11,9 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 23 |
+| `compiled_exact` | 26 |
 | `compiled_specialization` | 3 |
-| `compiled_general_infrastructure` | 11 |
+| `compiled_general_infrastructure` | 8 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
 | `partial_or_wrapper_missing` | 6 |
@@ -279,28 +279,32 @@ WHY THE ARGUMENT GOES THROUGH A THRESHOLD c < alpha+delta RATHER THAN APPLYING T
 #### Definition 3.1: Direct rotation
 
 - **Kind:** `definition`
-- **Status:** `compiled_general_infrastructure`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** A unitary intertwining the two projections whose diagonal cosine blocks are positive and whose off-diagonal sine blocks are adjoints.
 - **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation`, `TauCeti.DavisKahan.Experimental.spectraCanonicalIntertwiner`
+- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation`, `TauCeti.DavisKahan.Experimental.spectraCanonicalIntertwiner`, `TauCeti.DavisKahan.Experimental.Frontier.IsPaperDirectRotation`
 - **Assessment:** Acute complex and finite constructions exist; exact nonacute source scope is not yet unified.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. The direct-rotation construction is compiled and axiom-clean; a source-facing definition covering the paper's existence regimes is still absent.
 
 VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `DavisKahan.All`, `DavisKahan.Experimental.All` and `ForTauCeti` and running `#print axioms` on all 87 declarations named in this census elaborated cleanly -- every name resolves and **none reaches `sorryAx`**. A second probe importing only the default-build roots showed 78 of the 87 resolve there; the 9 that do not are exactly the `TauCeti.DavisKahan1970.Section8.*` names on rows DK-8.1-thm and DK-8.2-thm, whose `proved_outside_build` verification was already correct. `candidate_under_repair` -- "not compiler-certified on this base" -- was therefore false for every row that carried it. The scope question (does the compiled statement match the printed one?) is a separate judgement and is recorded in `next_action`; the status below is the weakest one consistent with that recorded evidence, so no row is overstated.
-- **Next action:** Add a source-facing definition covering the source existence regimes.
+
+ROW WAS STALE; RESOLVED 2026-08-06.  The requested "source-facing definition" already exists and is guarded: `TauCeti.DavisKahan.Experimental.Frontier.IsPaperDirectRotation` (`DavisKahan/Geometry/Halmos/GenericRotationPredicates.lean`, reached from `DavisKahan.All`) is the paper's definition of a direct rotation for an ARBITRARY pair -- unitary, intertwines the projections, nonnegative diagonal compressions, skew-adjoint crossed blocks -- with no acuteness.  The "source existence regimes" the next action asked to cover are theorems on the numbered rows built on this definition: acute existence/uniqueness/characterisation on DK-3.1-prop (`complex_directRotation`, `complex_directRotation_iff_diagonalBlocks`), the nonacute existence criterion on DK-3.2-prop (`(∃ T, IsPaperDirectRotation U V T) ↔ ...`), and the principal-square-root characterisation on DK-3.3-prop, whose forward-of-nonneg-blocks form consumes exactly this predicate.  Axiom-clean [propext, Classical.choice, Quot.sound].
+- **Next action:** Nothing outstanding: the definition is compiled in source form and every Section 3 existence regime is a proved theorem on its own row (DK-3.1-prop, DK-3.2-prop, DK-3.3-prop).
 
 #### Definition 3.2: Acute case
 
 - **Kind:** `definition`
-- **Status:** `compiled_general_infrastructure`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Both crossed intersections P ∩ Q-perp and P-perp ∩ Q vanish.
 - **Blocked by:** `exact-source-wrappers`
 - **Current Lean references:** `TauCeti.DavisKahan.IsAcute`
 - **Assessment:** The predicate is broadly used but lacks a numbered source alias.
-- **Next action:** Add a source alias only if the facade benefits.
+
+RESOLVED 2026-08-06.  `TauCeti.DavisKahan.IsAcute` IS the source definition -- the projection gap is strictly below one -- compiled, guarded by the default build, axiom-clean, and consumed by every acute-case theorem in the tree.  The conditional next action ("add a source alias only if the facade benefits") is decided in the negative: a numbered alias would duplicate a two-token definition that call sites already read literally, and the api-design rubric asks for lemmas over aliases when nothing is gained.
+- **Next action:** Nothing outstanding: the predicate is the printed definition, and the decision against a redundant numbered alias is recorded in the notes.
 
 #### Proposition 3.1: Acute direct rotation existence and uniqueness
 
@@ -374,17 +378,19 @@ The self-adjointness hypotheses on the two diagonal compressions are *not* a spe
 #### Proposition 3.4: Square as a direct rotation
 
 - **Kind:** `proposition`
-- **Status:** `compiled_general_infrastructure`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** When the cosine block squared is at least one half, U squared is the direct rotation from the reflected subspace to the target subspace.
 - **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `TauCeti.DavisKahanTheory.directRotation_sq`, `TauCeti.DavisKahan1970.complex_directRotation_sq`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.directRotation_sq`, `TauCeti.DavisKahan1970.complex_directRotation_sq`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_4_square_is_reflected_directRotation`
 - **Assessment:** Square identities exist; exact source mapping between Q-minus and Q needs verification.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. The square-is-a-direct-rotation content is compiled and axiom-clean; an exact source wrapper is absent.
 
 VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `DavisKahan.All`, `DavisKahan.Experimental.All` and `ForTauCeti` and running `#print axioms` on all 87 declarations named in this census elaborated cleanly -- every name resolves and **none reaches `sorryAx`**. A second probe importing only the default-build roots showed 78 of the 87 resolve there; the 9 that do not are exactly the `TauCeti.DavisKahan1970.Section8.*` names on rows DK-8.1-thm and DK-8.2-thm, whose `proved_outside_build` verification was already correct. `candidate_under_repair` -- "not compiler-certified on this base" -- was therefore false for every row that carried it. The scope question (does the compiled statement match the printed one?) is a separate judgement and is recorded in `next_action`; the status below is the weakest one consistent with that recorded evidence, so no row is overstated.
-- **Next action:** Add an exact source wrapper after the direct-rotation repair lands.
+
+ROW WAS STALE; RESOLVED 2026-08-06.  The "absent" exact source wrapper exists and is guarded: `proposition3_4_square_is_reflected_directRotation` (`DavisKahan/Frontier/Section3.lean`, reached from `DavisKahan.All`, axiom-clean): the square of the direct rotation is the direct rotation between the reflected pair `(U, reflectedSubspace V U)` -- the direct-rotation repair this row's next action was waiting on landed with the Frontier promotion, and the wrapper landed with it.  The statement is exact in the FAITHFUL MINIMAL CORRECTION recorded in its docstring, which also records why each correction is forced: the half-angle threshold must be on the cosine SQUARE (`re ⟪x, halmosCosineSq x⟫ ≥ ‖x‖²/2`), not on `|S|` as a literal transcription would have it, and acuteness of the reflected pair is a genuinely independent hypothesis (boundary cosine-square `1/2` satisfies the bound while the reflected pair has gap one).  The two justifying counterexamples are prose in the docstring, not compiled Lean terms; that is hypothesis-shape hardening, not Davis--Kahan content, and is recorded below as optional.
+- **Next action:** Nothing that is proof debt.  Optional hardening: compile the two prose counterexamples in the docstring of `proposition3_4_square_is_reflected_directRotation` (concrete two-dimensional pairs), formally pinning the corrected hypothesis shape.
 
 #### Theorem 3.1: Classification of pairs of subspaces
 
