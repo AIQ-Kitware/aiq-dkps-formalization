@@ -169,6 +169,103 @@ theorem starProjection_cosineBlock (P Q : Submodule ℂ H)
   Submodule.starProjection_eq_self_iff.mpr
     (Submodule.starProjection_apply_mem _ _)
 
+/-- The perturbed upper block of the canonical branch is positive.
+
+Theorem 8.1's existence half puts the branch `Q` in the same relative position
+to `A + K` that `P` has to `A`: the form of `A + K` on `Qᗮ` is at least
+`α + δ`.  Subtracting `α` therefore leaves a positive operator.
+
+Part (iii) needs this separately from the estimate below, because the weak
+majorization of a sandwich is stated for a *positive* middle factor. -/
+theorem theorem8_1_perturbedUpperBlockShift_nonneg
+    (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
+    (0 : H →L[ℂ] H) ≤
+      upperBlockShift (A + K) (canonicalLowBranch (A + K)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+          (hA.add hK)) alpha) alpha := by
+  have hconc := theorem8_1_canonicalBranch A K P hdelta hA hK hAP hPlow hPhigh
+    hKP hKPperp
+  exact upperBlockShift_nonneg (A + K) _ hdelta.le (hA.add hK) hconc.branch_form_high
+
+/-- **The Weyl step of Theorem 8.1, upper block.**
+
+  `aₙ(A₁ - α) ≤ aₙ(C₁⋆ (Λ₁ - α) C₁)`.
+
+This is the part of the argument that both (ii) and (iii) consume, and it is
+everything the paper's proof supplies *before* any estimate on `C₁`: part (i)
+gives the form domination `A₁ - α ≤ C₁(Λ₁ - α)C₁`, and
+`approximationNumber_mono_of_form_le` turns the form order between two positive
+operators into domination of every approximation number, in any dimension.
+
+Part (ii) finishes by the coarse bound `aₙ(D⋆ M D) ≤ ‖D‖² aₙ(M)`, which discards
+all but the largest singular value of `C₁`.  Part (iii) instead feeds the *same*
+inequality into the weak-majorization sandwich theorem, which keeps the whole
+sequence.  Neither clause may be derived from the other's final statement. -/
+theorem theorem8_1_upperSandwichApproximation_source
+    (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    (n : ℕ) :
+    (upperBlockShift A P alpha).approximationNumber n ≤
+      (ContinuousLinearMap.adjoint (cosineBlock P (canonicalLowBranch (A + K)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+              (hA.add hK)) alpha)) ∘L
+        upperBlockShift (A + K) (canonicalLowBranch (A + K)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+            (hA.add hK)) alpha) alpha ∘L
+        cosineBlock P (canonicalLowBranch (A + K)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+            (hA.add hK)) alpha)).approximationNumber n := by
+  set Q : Submodule ℂ H := canonicalLowBranch (A + K)
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha
+    with hQdef
+  haveI : Q.HasOrthogonalProjection := by rw [hQdef]; infer_instance
+  -- Positivity of the two blocks: both forms exceed `alpha` on the relevant
+  -- complement, by hypothesis for `A` and by the branch for `A + K`.
+  have hS : (0 : H →L[ℂ] H) ≤ upperBlockShift A P alpha :=
+    upperBlockShift_nonneg A P hdelta.le hA hPhigh
+  have hM : (0 : H →L[ℂ] H) ≤ upperBlockShift (A + K) Q alpha :=
+    theorem8_1_perturbedUpperBlockShift_nonneg A K P hdelta hA hK hAP hPlow
+      hPhigh hKP hKPperp
+  have hT := nonneg_adjoint_sandwich hM (cosineBlock P Q)
+  -- The form domination `S ≤ D⋆ M D`, which is part (i) at `P_{Pᗮ} x`.
+  have hform : ∀ x : H, RCLike.re ⟪x, upperBlockShift A P alpha x⟫_ℂ ≤
+      RCLike.re ⟪x, (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
+        upperBlockShift (A + K) Q alpha ∘L cosineBlock P Q) x⟫_ℂ := by
+    intro x
+    have hy : Pᗮ.starProjection x ∈ Pᗮ := Submodule.starProjection_apply_mem _ x
+    have hpart := theorem8_1_upperCompressionRepulsion_source A K P hdelta hA hK
+      hAP hPlow hPhigh hKP hKPperp hy
+    -- Left side: the ambient form of `S` is the compression form at `P_{Pᗮ} x`.
+    have hleft : RCLike.re ⟪x, upperBlockShift A P alpha x⟫_ℂ =
+        RCLike.re ⟪Pᗮ.starProjection x, A (Pᗮ.starProjection x)⟫_ℂ -
+          alpha * ‖Pᗮ.starProjection x‖ ^ 2 :=
+      upperBlockShift_apply A P alpha x
+    -- Right side: strip the adjoint, then read the perturbed block at `D x`.
+    have hadj : ⟪x, (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
+        upperBlockShift (A + K) Q alpha ∘L cosineBlock P Q) x⟫_ℂ =
+        ⟪cosineBlock P Q x,
+          upperBlockShift (A + K) Q alpha (cosineBlock P Q x)⟫_ℂ := by
+      show ⟪x, ContinuousLinearMap.adjoint (cosineBlock P Q)
+        (upperBlockShift (A + K) Q alpha (cosineBlock P Q x))⟫_ℂ = _
+      rw [ContinuousLinearMap.adjoint_inner_right]
+    have hright := upperBlockShift_apply (A + K) Q alpha (cosineBlock P Q x)
+    rw [starProjection_cosineBlock] at hright
+    have hcb : cosineBlock P Q x = Qᗮ.starProjection (Pᗮ.starProjection x) := rfl
+    rw [hleft, hadj, hright, hcb]
+    exact hpart
+  exact approximationNumber_mono_of_form_le hS hT hform n
+
 /-- **Davis--Kahan 1970, Theorem 8.1(ii), upper block.**
 
 The printed clause is
@@ -205,50 +302,10 @@ theorem theorem8_1_upperApproximationRepulsion_source
             (hA.add hK)) alpha)‖ ^ 2 *
         (upperBlockShift (A + K) (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-            (hA.add hK)) alpha) alpha).approximationNumber n := by
-  have hconc := theorem8_1_canonicalBranch A K P hdelta hA hK hAP hPlow hPhigh
-    hKP hKPperp
-  set Q : Submodule ℂ H := canonicalLowBranch (A + K)
-    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha
-    with hQdef
-  haveI : Q.HasOrthogonalProjection := by rw [hQdef]; infer_instance
-  -- Positivity of the two blocks: both forms exceed `alpha` on the relevant
-  -- complement, by hypothesis for `A` and by the branch for `A + K`.
-  have hS : (0 : H →L[ℂ] H) ≤ upperBlockShift A P alpha :=
-    upperBlockShift_nonneg A P hdelta.le hA hPhigh
-  have hM : (0 : H →L[ℂ] H) ≤ upperBlockShift (A + K) Q alpha :=
-    upperBlockShift_nonneg (A + K) Q hdelta.le (hA.add hK) hconc.branch_form_high
-  have hT := nonneg_adjoint_sandwich hM (cosineBlock P Q)
-  -- The form domination `S ≤ D⋆ M D`, which is part (i) at `P_{Pᗮ} x`.
-  have hform : ∀ x : H, RCLike.re ⟪x, upperBlockShift A P alpha x⟫_ℂ ≤
-      RCLike.re ⟪x, (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
-        upperBlockShift (A + K) Q alpha ∘L cosineBlock P Q) x⟫_ℂ := by
-    intro x
-    have hy : Pᗮ.starProjection x ∈ Pᗮ := Submodule.starProjection_apply_mem _ x
-    have hpart := theorem8_1_upperCompressionRepulsion_source A K P hdelta hA hK
-      hAP hPlow hPhigh hKP hKPperp hy
-    -- Left side: the ambient form of `S` is the compression form at `P_{Pᗮ} x`.
-    have hleft : RCLike.re ⟪x, upperBlockShift A P alpha x⟫_ℂ =
-        RCLike.re ⟪Pᗮ.starProjection x, A (Pᗮ.starProjection x)⟫_ℂ -
-          alpha * ‖Pᗮ.starProjection x‖ ^ 2 :=
-      upperBlockShift_apply A P alpha x
-    -- Right side: strip the adjoint, then read the perturbed block at `D x`.
-    have hadj : ⟪x, (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
-        upperBlockShift (A + K) Q alpha ∘L cosineBlock P Q) x⟫_ℂ =
-        ⟪cosineBlock P Q x,
-          upperBlockShift (A + K) Q alpha (cosineBlock P Q x)⟫_ℂ := by
-      show ⟪x, ContinuousLinearMap.adjoint (cosineBlock P Q)
-        (upperBlockShift (A + K) Q alpha (cosineBlock P Q x))⟫_ℂ = _
-      rw [ContinuousLinearMap.adjoint_inner_right]
-    have hright := upperBlockShift_apply (A + K) Q alpha (cosineBlock P Q x)
-    rw [starProjection_cosineBlock] at hright
-    have hcb : cosineBlock P Q x = Qᗮ.starProjection (Pᗮ.starProjection x) := rfl
-    rw [hleft, hadj, hright, hcb]
-    exact hpart
-  -- The chain.
-  exact (approximationNumber_mono_of_form_le hS hT hform n).trans
-    (approximationNumber_adjoint_sandwich_le (upperBlockShift (A + K) Q alpha)
-      (cosineBlock P Q) n)
+            (hA.add hK)) alpha) alpha).approximationNumber n :=
+  (theorem8_1_upperSandwichApproximation_source A K P hdelta hA hK hAP hPlow
+    hPhigh hKP hKPperp n).trans
+    (approximationNumber_adjoint_sandwich_le _ _ n)
 
 end Section8
 end DavisKahan1970
