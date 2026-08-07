@@ -42,7 +42,7 @@ is left as prose.
    and singular values are identified.  No new `θ` is introduced: this is the
    paper's own equation (1.16), `Θ_j = arccos (C_j C_j⋆)^{1/2}`, which defines
    the angles as the arccosines of exactly these numbers.
-   `arccos_approximationNumber_cosineBlock` records the round trip
+   `cos_arccos_approximationNumber_cosineBlock` records the round trip
    `cos θ_i = a_i(C₁)` with `θ_i ∈ [0, π/2]`, and
    `norm_cosineBlock_eq_principalCosines_zero` identifies the printed bound norm
    `‖C₁‖₁` with the largest principal cosine.
@@ -473,6 +473,30 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source
     hAP hPlow hPhigh hKP hKPperp
 
 end Source
+
+/-! ### 7. The section's opening illustration
+
+Section 8 opens by reading a norm bound back as an angle: "if the hypotheses of
+the `sin θ` theorem hold with `‖R‖₁ = 1` and `δ = 2`, then `‖sin Θ₀‖₁ ≤ 1/2`,
+which is exactly `Θ ≤ π/6`".  The `sin θ` theorem itself is Section 6's; the only
+content added there is the scalar dictionary below, the exact analogue of
+`maximalAngle_le_pi_div_four_iff` at the sixth of a turn. -/
+
+/-- `arcsin (1/2) = π/6`. -/
+theorem arcsin_one_div_two : Real.arcsin (1 / 2) = Real.pi / 6 :=
+  Real.arcsin_eq_of_sin_eq (by rw [Real.sin_pi_div_six])
+    ⟨by linarith [Real.pi_pos], by linarith [Real.pi_pos]⟩
+
+/-- **The section's opening reading**: a sine bound of `1/2` is exactly
+`Θ ≤ π/6`. -/
+theorem maximalAngle_le_pi_div_six_iff (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    DavisKahanExt.maximalAngle U V ≤ Real.pi / 6 ↔
+      subspaceGap U V ≤ 1 / 2 := by
+  have hmem : Real.pi / 6 ∈ Set.Ico (-(Real.pi / 2)) (Real.pi / 2) :=
+    ⟨by linarith [Real.pi_pos], by linarith [Real.pi_pos]⟩
+  show Real.arcsin (subspaceGap U V) ≤ Real.pi / 6 ↔ _
+  rw [Real.arcsin_le_iff_le_sin' hmem, Real.sin_pi_div_six]
 
 end Section8
 end DavisKahan1970
