@@ -492,6 +492,165 @@ theorem denseRange_beamEmbed : DenseRange beamEmbed := by
     closure_minimal hrange isClosed_closure
   exact hsubset hx
 
+/-! ## The coercive form data and its compact embedding -/
+
+/-- Injectivity of the embedding's adjoint, from density of the range. -/
+theorem beamEmbed_adjoint_injective :
+    Function.Injective (ContinuousLinearMap.adjoint beamEmbed) := by
+  have hker : ∀ x : BeamL2, ContinuousLinearMap.adjoint beamEmbed x = 0 → x = 0 := by
+    intro x hx
+    have horth : ∀ v : BeamV, ⟪beamEmbed v, x⟫_ℂ = 0 := by
+      intro v
+      rw [← ContinuousLinearMap.adjoint_inner_right beamEmbed v x, hx, inner_zero_right]
+    have hclosed : IsClosed {y : BeamL2 | ⟪y, x⟫_ℂ = 0} :=
+      isClosed_eq (continuous_id.inner continuous_const) continuous_const
+    have hall : ∀ y : BeamL2, ⟪y, x⟫_ℂ = 0 := by
+      intro y
+      have hy : y ∈ closure (Set.range beamEmbed) := denseRange_beamEmbed y
+      have hsub : Set.range beamEmbed ⊆ {y : BeamL2 | ⟪y, x⟫_ℂ = 0} := by
+        rintro _ ⟨v, rfl⟩
+        exact horth v
+      exact (hclosed.closure_subset_iff.mpr hsub) hy
+    have := hall x
+    exact inner_self_eq_zero.mp this
+  intro x y hxy
+  have : ContinuousLinearMap.adjoint beamEmbed (x - y) = 0 := by
+    rw [map_sub, hxy, sub_self]
+  have := hker _ this
+  exact sub_eq_zero.mp this
+
+/-- The concrete coercive form data of the free beam: the form space carries the shifted
+bending form as its own inner product, so the represented operator is the identity. -/
+def beamCoerciveFormData : Abstract.CoerciveFormData (H := BeamL2) (V := BeamV) where
+  embed := beamEmbed
+  embed_injective := beamEmbed_injective
+  embed_dense := denseRange_beamEmbed
+  embed_adjoint_injective := beamEmbed_adjoint_injective
+  formOperator := 1
+  form_selfAdjoint := star_one _
+  coercivityConstant := 1
+  coercivity_pos := one_pos
+  coercive := fun u => le_of_eq (by
+    rw [show (1 : BeamV →L[ℂ] BeamV) u = u from rfl, one_mul,
+      ← inner_self_eq_norm_sq (𝕜 := ℂ)])
+
+/-- The pair coordinates of a form-space element decompose its squared norm. -/
+theorem beamV_re_inner_self (u : BeamV) :
+    RCLike.re ⟪u, u⟫_ℂ = ‖beamEmbed u‖ ^ 2 + ‖beamSnd u‖ ^ 2 := by
+  have hcoe : ⟪u, u⟫_ℂ = ⟪(u : BeamPairSpace), (u : BeamPairSpace)⟫_ℂ := rfl
+  rw [hcoe, WithLp.prod_inner_apply]
+  rw [map_add]
+  have h1 : RCLike.re ⟪(WithLp.ofLp (u : BeamPairSpace)).1,
+      (WithLp.ofLp (u : BeamPairSpace)).1⟫_ℂ = ‖beamEmbed u‖ ^ 2 := by
+    rw [inner_self_eq_norm_sq (𝕜 := ℂ)]
+    rfl
+  have h2 : RCLike.re ⟪(WithLp.ofLp (u : BeamPairSpace)).2,
+      (WithLp.ofLp (u : BeamPairSpace)).2⟫_ℂ = ‖beamSnd u‖ ^ 2 := by
+    rw [inner_self_eq_norm_sq (𝕜 := ℂ)]
+    rfl
+  rw [h1, h2]
+
+/-- The concrete shifted beam form data: bending energy is the squared norm of the second
+slot. -/
+def beamShiftedFormData :
+    Analytic.ShiftedBeamFormData (H := BeamL2) (V := BeamV) where
+  toCoerciveFormData := beamCoerciveFormData
+  bendingEnergy := fun u => ‖beamSnd u‖ ^ 2
+  bending_nonnegative := fun u => sq_nonneg _
+  form_energy_decomposition := fun u => by
+    have h1 : RCLike.re ⟪beamCoerciveFormData.formOperator u, u⟫_ℂ
+        = RCLike.re ⟪u, u⟫_ℂ := by
+      rw [show beamCoerciveFormData.formOperator u = u from rfl]
+    rw [h1, beamV_re_inner_self]
+    rfl
+
+/-- **The free-beam operator**: the self-adjoint nonnegative realization of the fourth
+derivative with free boundary conditions on `L²(0,1]`. -/
+def beamOperator : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := BeamL2) :=
+  beamShiftedFormData.beamOperator
+
+theorem beamOperator_isSelfAdjoint : beamOperator.IsSelfAdjoint :=
+  beamShiftedFormData.beamOperator_isSelfAdjoint
+
+theorem beamOperator_nonneg (x : beamOperator.domain) :
+    0 ≤ RCLike.re ⟪beamOperator.toLinearMap x, (x : BeamL2)⟫_ℂ :=
+  beamShiftedFormData.beam_nonnegative x
+
+/-! ## Compactness of the embedding -/
+
+/-- The constant-one element of the beam `L²` space. -/
+def beamOneLp : BeamL2 := contToLp (fun _ => (1 : ℂ)) continuous_const
+
+/-- The coordinate element of the beam `L²` space. -/
+def beamIdLp : BeamL2 := contToLp (fun t => (t : ℂ)) (by fun_prop)
+
+theorem coeFn_beamOneLp : (beamOneLp : ℝ → ℂ) =ᵐ[unitIocMeasure] fun _ => (1 : ℂ) :=
+  coeFn_contToLp _ _
+
+theorem coeFn_beamIdLp : (beamIdLp : ℝ → ℂ) =ᵐ[unitIocMeasure] fun t => (t : ℂ) :=
+  coeFn_contToLp _ _
+
+/-- The affine defect of the embedding is a rank-two map into the affine span. -/
+theorem exists_affine_of_beamEmbed_sub (p : BeamV) :
+    ∃ a b : ℂ, beamEmbed p - secondPrimitiveCLM (beamSnd p)
+      = a • beamOneLp + b • beamIdLp := by
+  obtain ⟨a, b, hab⟩ := beamV_repr p
+  refine ⟨a, b, ?_⟩
+  refine Lp.ext ?_
+  filter_upwards [Lp.coeFn_sub (beamEmbed p) (secondPrimitiveCLM (beamSnd p)), hab,
+    coeFn_secondPrimitiveCLM (beamSnd p), Lp.coeFn_add (a • beamOneLp) (b • beamIdLp),
+    Lp.coeFn_smul a beamOneLp, Lp.coeFn_smul b beamIdLp, coeFn_beamOneLp,
+    coeFn_beamIdLp] with t hsub habt hKt hadd hsa hsb h1 hT
+  rw [hsub, Pi.sub_apply, habt, hKt, hadd]
+  simp only [Pi.add_apply, hsa, hsb, Pi.smul_apply, smul_eq_mul, h1, hT]
+  ring
+
+/-- **Rellich compactness of the form-space embedding**, with no weak-topology argument:
+the embedding is a rank-two affine part plus the compact second-primitive operator. -/
+theorem isCompactOperator_beamEmbed : IsCompactOperator beamEmbed := by
+  classical
+  have hArange : ∀ p : BeamV,
+      ∃ a b : ℂ, (beamEmbed - secondPrimitiveCLM.comp beamSnd) p
+        = a • beamOneLp + b • beamIdLp := by
+    intro p
+    obtain ⟨a, b, hab⟩ := exists_affine_of_beamEmbed_sub p
+    exact ⟨a, b, hab⟩
+  have hAcompact : IsCompactOperator (beamEmbed - secondPrimitiveCLM.comp beamSnd) := by
+    have hle : LinearMap.range
+        ((beamEmbed - secondPrimitiveCLM.comp beamSnd : BeamV →L[ℂ] BeamL2)
+          : BeamV →ₗ[ℂ] BeamL2)
+        ≤ Submodule.span ℂ {beamOneLp, beamIdLp} := by
+      rintro _ ⟨p, rfl⟩
+      obtain ⟨a, b, hab⟩ := hArange p
+      rw [show ((beamEmbed - secondPrimitiveCLM.comp beamSnd : BeamV →L[ℂ] BeamL2)
+          : BeamV →ₗ[ℂ] BeamL2) p
+          = (beamEmbed - secondPrimitiveCLM.comp beamSnd) p from rfl, hab]
+      exact Submodule.add_mem _
+        (Submodule.smul_mem _ _ (Submodule.subset_span (by simp)))
+        (Submodule.smul_mem _ _ (Submodule.subset_span (by simp)))
+    haveI : FiniteDimensional ℂ
+        (Submodule.span ℂ ({beamOneLp, beamIdLp} : Set BeamL2)) := by
+      apply FiniteDimensional.span_of_finite
+      exact Set.toFinite _
+    haveI : FiniteDimensional ℂ (LinearMap.range
+        ((beamEmbed - secondPrimitiveCLM.comp beamSnd : BeamV →L[ℂ] BeamL2)
+          : BeamV →ₗ[ℂ] BeamL2)) :=
+      Submodule.finiteDimensional_of_le hle
+    exact ContinuousLinearMap.isCompactOperator_of_finiteDimensional_range _
+  have hKcompact : IsCompactOperator (secondPrimitiveCLM.comp beamSnd) :=
+    isCompactOperator_secondPrimitiveCLM.comp_clm beamSnd
+  have hsum := hAcompact.add hKcompact
+  have hfun : ⇑beamEmbed
+      = ⇑(beamEmbed - secondPrimitiveCLM.comp beamSnd)
+        + ⇑(secondPrimitiveCLM.comp beamSnd) := by
+    funext p
+    have hAp : (beamEmbed - secondPrimitiveCLM.comp beamSnd) p
+        = beamEmbed p - secondPrimitiveCLM.comp beamSnd p := rfl
+    simp only [Pi.add_apply, hAp]
+    abel
+  rw [show (⇑beamEmbed : BeamV → BeamL2) = _ from hfun]
+  exact hsum
+
 end
 
 end Model
