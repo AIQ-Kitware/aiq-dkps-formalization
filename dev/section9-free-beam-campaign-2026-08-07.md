@@ -91,7 +91,29 @@ DONE, pushed, axiom-clean:
   `hasDerivAt_secondPrimitive` = firstPrimitive, `hasDerivWithinAt_firstPrimitive_of_continuous`
   FTC within `[0,1]`, `firstPrimitive_congr_ae/_eq_intervalIntegral`).  56cb7a84.
 
-REMAINING (all in the DavisKahan tree; design fixed, see below):
+FURTHER DONE 2026-08-07 (later), all pushed, axiom-clean:
+- `DavisKahan/SpectralTheory/FormMethod/BeamFormSpace.lean`: V inhabited, coercive +
+  shifted form data, `beamOperator` self-adjoint nonneg, `isCompactOperator_beamEmbed`,
+  `denseRange_beamEmbed`, `beamOneLp/beamIdLp`, `contToLp`, `pairingCLM`, `contPair_mem`.
+- `DavisKahan/SpectralTheory/FormMethod/BeamSpectrum.lean`: variational eigen-identity,
+  affine kernel both directions (`beamOperator_affine_mem_and_zero`,
+  `exists_affine_of_beamOperator_eq_zero`), `eigen_pairing_integral`, cubic test family,
+  `boundary_form_eq_zero`, **`exists_characteristic_of_eigen`** (THE BOOTSTRAP) and
+  **`eigenvalue_gt_five_hundred`** (alpha_3 > 500 for the actual operator).
+
+REMAINING (design fixed in item 4 below; mechanical-to-medium):
+- Fredholm bridge: realSpectrum(beamOperator) ⊆ {0} ∪ {β⁴} ⊆ {0} ∪ (500,∞).  All
+  ingredients present: R := beamCoerciveFormData.resolvent = j∘j† compact
+  (isCompactOperator_beamEmbed + comp lemmas), Mathlib Fredholm alternative, the eigen
+  classification above, S := Ring.inverse (1 − (1+λ)R) commutation algebra, and the
+  realResolventSet two-sided-inverse witness RS.  Negative λ and λ ∈ (0,500] both
+  excluded because {β⁴} ⊆ (500,∞) and eigenvalues of R are {1} ∪ {(1+β⁴)⁻¹}.
+- Then wire DK-9-model: build `FreeBeamFiniteDataCertificate` etc. from this operator
+  (moments↔integrals identification; the `RepresentsFreeBeamProblem`-style Prop can now
+  be stated concretely against `beamOperator`), replace Section9Analytic sorries or
+  retire that skeleton in favour of the Model namespace, and update the census.
+
+OLD PLAN (kept for the detailed designs referenced above):
 1. BeamFormSpace: H := Lp ℂ 2 unitIocMeasure, P := WithLp 2 (H × H); constraint functionals
    pairingCLM (W ↦ ∫ ⇑W·g for continuous g, mkContinuous with sup-bound like
    `secondPrimitiveEval`); V := ⨅ k, ker(constraint k) closed ⇒ complete; embed := fst∘subtypeL.
