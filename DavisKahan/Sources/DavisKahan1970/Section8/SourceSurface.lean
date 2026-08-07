@@ -12,31 +12,43 @@ import DavisKahan.InfiniteDimensional.TanTheta.ContinuationWitnessAPriori
 /-!
 # Davis--Kahan 1970 Section 8 source surface
 
-This leaf gives stable source-facing names to the Section 8 results.
+This leaf is the **low-level** Section 8 facade: it gives stable source-facing
+names to the results that live upstream of the analytic Frontier layer.
+`DavisKahan/Frontier/Section8.lean` imports it, so it cannot itself import
+Frontier.
 
-**Theorem 8.1 is now promoted** (2026-08-07).  `SourceTheorem81.lean` proves it
-from the printed hypotheses alone -- self-adjoint `A` reduced by `P`, the
-ordered form gap, and a fully off-diagonal self-adjoint `H` -- with no contour,
-no continuation witness, no smallness constant, and no caller-supplied
-orientation.  It delivers full spectral repulsion (continuous spectrum
-included), the canonical branch as a genuine spectral subspace, the strict
-quarter-angle bound, uniqueness of the branch under the printed *closed*
-condition, and the printed `iff` between that condition and the spectral
-orientation.
+**The final production facade is
+`DavisKahan/Frontier/Section8SourceSurface.lean`,** downstream of
+`Section8PartII` / `Section8PartIII` / `Section8Perturbation` /
+`Section8Residual` and of the source dictionary.  Its declarations land in this
+same namespace, `TauCeti.DavisKahan1970.Section8`, and it is reachable from
+`DavisKahan.All` through `DavisKahan.Frontier.All`.  Read it, not this file, for
+the claim-by-claim map of the printed section.
 
-What is still *not* promoted:
+**Theorem 8.1 is promoted** (2026-08-07).  `SourceTheorem81.lean` proves it from
+the printed hypotheses alone -- self-adjoint `A` reduced by `P`, the ordered
+form gap, and a fully off-diagonal self-adjoint `H` -- with no contour, no
+continuation witness, no smallness constant, and no caller-supplied orientation.
+It delivers full spectral repulsion (continuous spectrum included), the
+canonical branch as a genuine spectral subspace, the strict quarter-angle bound,
+uniqueness of the branch under the printed *closed* condition, and the printed
+`iff` between that condition and the spectral orientation.
 
-* the Theorem 8.1 compression / ordered-eigenvalue / symmetric-gauge
-  refinements (i)--(iii) instantiated at the canonical branch: the algebraic
-  cores are proved (see the `..._of_rotatedBlockData` aliases below and
-  `DavisKahan/Frontier/Section8.lean`), but they are not yet fed the canonical
-  branch;
-* Theorem 8.2, which still needs proofs that either printed half-gap condition
-  builds the required common-contour witness; the residual alternative
-  additionally needs the Krein replacement theorem.
+**Parts (i)--(iii) and Theorem 8.2 are promoted too**, downstream.  Parts (i),
+(ii) and (iii) are proved for *both* blocks at the canonical branch, part (iii)
+for every symmetric gauge; Theorem 8.2's perturbation alternative is the printed
+connectedness bootstrap and its residual alternative the printed Krein
+reduction, both from the printed hypotheses with no half-gap bridge among them.
+The earlier status note here, that (i)--(iii) were not fed the canonical branch
+and that 8.2 still needed a common-contour witness and the Krein theorem, is
+obsolete and has been removed.
 
-The aliases below keep the older names working and make the remaining
-boundaries visible.
+The `..._of_rotatedBlockData` aliases below remain the *algebraic cores* -- they
+take an abstract quadratic-data record and are internal infrastructure, not
+evidence about the printed theorem.  `theorem8_1_selectedBranch_and_spectralRepulsion`
+and `theorem8_2_perturbationHalfGap_selectedBranch` are likewise conditional
+wrappers kept for Section 9's continuation layer; the source-facing statements
+are the ones named in the downstream facade.
 -/
 
 namespace TauCeti

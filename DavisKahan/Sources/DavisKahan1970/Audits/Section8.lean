@@ -7,11 +7,26 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Sources.DavisKahan1970.Section8.All
 
 /-!
-# Dependency audit for Davis--Kahan 1970 Section 8
+# Dependency audit for Davis--Kahan 1970 Section 8: internal infrastructure
 
-Compile this module after repairing any elaboration issues.  The printed axiom
-sets should contain only the standard classical/choice foundations inherited
-from the spectral calculus, and no project-local admissions.
+**This is not the audit of the printed theorems.**  The declarations below are
+the conditional bridges and abstract cores that Section 8's analytic layer and
+Section 9's continuation layer consume: they take caller-supplied data records
+-- a `SpectralContinuationWitness`, a half-gap bridge, an abstract quadratic
+block record -- which the paper *proves* rather than assumes.  They are useful
+and axiom-clean, and that is all this leaf certifies.
+
+The audit of the actual Section 8 capstones is
+`DavisKahan/Frontier/Section8Audit.lean`, which must live downstream of the
+Frontier layer because that is where Section 8's analytic content is.  It checks
+Theorem 8.1's branch, characterization and uniqueness; parts (i), (ii) and (iii)
+for both blocks including the every-symmetric-gauge forms; the eigenvalue/angle
+source dictionary; and both Theorem 8.2 alternatives together with the printed
+`Theta < pi/4`.
+
+The printed axiom sets here should contain only the standard classical/choice
+foundations inherited from the spectral calculus, and no project-local
+admissions.
 -/
 
 namespace TauCeti
