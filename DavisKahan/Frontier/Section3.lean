@@ -1292,14 +1292,34 @@ theorem proposition3_5_fixedAngle_maximal
   obtain ⟨hRU, hRV, hUcond, _hVcond, hUperp, _hVperp⟩ := hM
   exact fixedCosineSubspace_maximal U V c hRU hRV hUcond hUperp
 
-/-- Davis--Kahan 1970, Corollary 3.2: interchanging the subspaces preserves the
-angle data and reverses the canonical quarter-turn. -/
+/-- Davis--Kahan 1970, Corollary 3.2, quarter-turn half: interchanging the subspaces
+reverses the canonical quarter-turn. -/
 theorem corollary3_2_reversal_source_form
     (hacute : IsAcute U V) :
     spectraDirectRotation V U
         (_root_.TauCeti.DavisKahan.IsAcute.symm hacute) =
       star (spectraDirectRotation U V hacute) :=
   MathAhead.Section3.corollary3_2_reversal_completed U V hacute
+
+/-- Davis--Kahan 1970, Corollary 3.2, angle half: interchanging the subspaces leaves the
+angle operator unchanged.  The two projections enter the angle operator only through
+their difference, and the absolute value is insensitive to its sign. -/
+theorem corollary3_2_sinAngleOperator_symm :
+    DavisKahanExt.sinAngleOperator V U = DavisKahanExt.sinAngleOperator U V := by
+  rw [DavisKahanExt.sinAngleOperator, DavisKahanExt.sinAngleOperator,
+    ← DavisKahanExt.operatorAbsoluteValue_neg]
+  congr 1
+  abel
+
+/-- **Davis--Kahan 1970, Corollary 3.2**, both halves in one statement: swapping the pair
+leaves the angle operator unchanged and reverses the quarter-turn. -/
+theorem corollary3_2_reversal
+    (hacute : IsAcute U V) :
+    DavisKahanExt.sinAngleOperator V U = DavisKahanExt.sinAngleOperator U V ∧
+      spectraDirectRotation V U
+          (_root_.TauCeti.DavisKahan.IsAcute.symm hacute) =
+        star (spectraDirectRotation U V hacute) :=
+  ⟨corollary3_2_sinAngleOperator_symm U V, corollary3_2_reversal_source_form U V hacute⟩
 
 end OneSpace
 
