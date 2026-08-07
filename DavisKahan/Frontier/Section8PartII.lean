@@ -152,6 +152,104 @@ theorem upperBlockShift_nonneg (A : H →L[ℂ] H) (P : Submodule ℂ H)
   rw [hgoal, upperBlockShift_apply, hswap]
   nlinarith [sq_nonneg ‖Pᗮ.starProjection x‖]
 
+/-- Positivity is preserved by conjugation: `0 ≤ M` gives `0 ≤ D⋆ M D`. -/
+theorem nonneg_adjoint_sandwich {M : H →L[ℂ] H} (hM : (0 : H →L[ℂ] H) ≤ M)
+    (D : H →L[ℂ] H) :
+    (0 : H →L[ℂ] H) ≤ ContinuousLinearMap.adjoint D ∘L M ∘L D := by
+  rw [ContinuousLinearMap.nonneg_iff_isPositive]
+  have hp := ((ContinuousLinearMap.nonneg_iff_isPositive _).mp hM).conj_adjoint
+    (ContinuousLinearMap.adjoint D)
+  simpa only [ContinuousLinearMap.adjoint_adjoint] using hp
+
+omit [CompleteSpace H] in
+/-- The cosine block lands in `Qᗮ`, so `P_{Qᗮ}` fixes its image. -/
+theorem starProjection_cosineBlock (P Q : Submodule ℂ H)
+    [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] (x : H) :
+    Qᗮ.starProjection (cosineBlock P Q x) = cosineBlock P Q x :=
+  Submodule.starProjection_eq_self_iff.mpr
+    (Submodule.starProjection_apply_mem _ _)
+
+/-- **Davis--Kahan 1970, Theorem 8.1(ii), upper block.**
+
+The printed clause is
+
+  `α_k - α ≤ ‖C₁‖₁² (λ_k - α)`,
+
+and this is its dimension-free approximation-number form: the `k`-th
+approximation number of the unperturbed upper block `A₁ - α` is at most
+`‖C₁‖²` times that of the perturbed upper block `Λ₁ - α`, where the cosine
+block `C₁ = P_{Qᗮ} P_{Pᗮ}` and `Q` is the canonical low branch of `A + K`
+supplied by Theorem 8.1's existence half.
+
+The proof is exactly the chain
+
+  `aₙ(S) ≤ aₙ(D⋆ M D) ≤ ‖D‖² aₙ(M)`,
+
+whose two steps are `approximationNumber_mono_of_form_le` (Weyl monotonicity
+for positive operators, in arbitrary dimension) and
+`approximationNumber_adjoint_sandwich_le` (the cosine-sandwich bound).  The
+form hypothesis of the first step is part (i), i.e.
+`theorem8_1_upperCompressionRepulsion_source`, evaluated at `P_{Pᗮ} x`. -/
+theorem theorem8_1_upperApproximationRepulsion_source
+    (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    (n : ℕ) :
+    (upperBlockShift A P alpha).approximationNumber n ≤
+      ‖cosineBlock P (canonicalLowBranch (A + K)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+            (hA.add hK)) alpha)‖ ^ 2 *
+        (upperBlockShift (A + K) (canonicalLowBranch (A + K)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+            (hA.add hK)) alpha) alpha).approximationNumber n := by
+  have hconc := theorem8_1_canonicalBranch A K P hdelta hA hK hAP hPlow hPhigh
+    hKP hKPperp
+  set Q : Submodule ℂ H := canonicalLowBranch (A + K)
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha
+    with hQdef
+  haveI : Q.HasOrthogonalProjection := by rw [hQdef]; infer_instance
+  -- Positivity of the two blocks: both forms exceed `alpha` on the relevant
+  -- complement, by hypothesis for `A` and by the branch for `A + K`.
+  have hS : (0 : H →L[ℂ] H) ≤ upperBlockShift A P alpha :=
+    upperBlockShift_nonneg A P hdelta.le hA hPhigh
+  have hM : (0 : H →L[ℂ] H) ≤ upperBlockShift (A + K) Q alpha :=
+    upperBlockShift_nonneg (A + K) Q hdelta.le (hA.add hK) hconc.branch_form_high
+  have hT := nonneg_adjoint_sandwich hM (cosineBlock P Q)
+  -- The form domination `S ≤ D⋆ M D`, which is part (i) at `P_{Pᗮ} x`.
+  have hform : ∀ x : H, RCLike.re ⟪x, upperBlockShift A P alpha x⟫_ℂ ≤
+      RCLike.re ⟪x, (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
+        upperBlockShift (A + K) Q alpha ∘L cosineBlock P Q) x⟫_ℂ := by
+    intro x
+    have hy : Pᗮ.starProjection x ∈ Pᗮ := Submodule.starProjection_apply_mem _ x
+    have hpart := theorem8_1_upperCompressionRepulsion_source A K P hdelta hA hK
+      hAP hPlow hPhigh hKP hKPperp hy
+    -- Left side: the ambient form of `S` is the compression form at `P_{Pᗮ} x`.
+    have hleft : RCLike.re ⟪x, upperBlockShift A P alpha x⟫_ℂ =
+        RCLike.re ⟪Pᗮ.starProjection x, A (Pᗮ.starProjection x)⟫_ℂ -
+          alpha * ‖Pᗮ.starProjection x‖ ^ 2 :=
+      upperBlockShift_apply A P alpha x
+    -- Right side: strip the adjoint, then read the perturbed block at `D x`.
+    have hadj : ⟪x, (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
+        upperBlockShift (A + K) Q alpha ∘L cosineBlock P Q) x⟫_ℂ =
+        ⟪cosineBlock P Q x,
+          upperBlockShift (A + K) Q alpha (cosineBlock P Q x)⟫_ℂ := by
+      show ⟪x, ContinuousLinearMap.adjoint (cosineBlock P Q)
+        (upperBlockShift (A + K) Q alpha (cosineBlock P Q x))⟫_ℂ = _
+      rw [ContinuousLinearMap.adjoint_inner_right]
+    have hright := upperBlockShift_apply (A + K) Q alpha (cosineBlock P Q x)
+    rw [starProjection_cosineBlock] at hright
+    have hcb : cosineBlock P Q x = Qᗮ.starProjection (Pᗮ.starProjection x) := rfl
+    rw [hleft, hadj, hright, hcb]
+    exact hpart
+  -- The chain.
+  exact (approximationNumber_mono_of_form_le hS hT hform n).trans
+    (approximationNumber_adjoint_sandwich_le (upperBlockShift (A + K) Q alpha)
+      (cosineBlock P Q) n)
+
 end Section8
 end DavisKahan1970
 end TauCeti
