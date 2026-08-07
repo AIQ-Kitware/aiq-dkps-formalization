@@ -744,6 +744,126 @@ theorem eigenvalue_gt_five_hundred {lam : ℝ} (hlam : 0 < lam)
   rw [hlameq]
   exact Classical.five_hundred_lt_pow_four_of_characteristic_eq_zero hβ hchar
 
+/-! ## The Fredholm bridge: the full real spectrum -/
+
+/-- The variational resolvent is the embedding composed with its own adjoint. -/
+theorem beamResolvent_eq :
+    beamCoerciveFormData.resolvent
+      = beamEmbed.comp (ContinuousLinearMap.adjoint beamEmbed) := by
+  have h1 : beamCoerciveFormData.resolvent
+      = beamCoerciveFormData.embed ∘L beamCoerciveFormData.solutionOperator := rfl
+  have h2 : beamCoerciveFormData.solutionOperator
+      = beamCoerciveFormData.formInverse ∘L
+        ContinuousLinearMap.adjoint beamCoerciveFormData.embed := rfl
+  have h3 : beamCoerciveFormData.formInverse = 1 := by
+    rw [show beamCoerciveFormData.formInverse
+        = Ring.inverse beamCoerciveFormData.formOperator from rfl]
+    rw [show beamCoerciveFormData.formOperator = 1 from rfl]
+    exact Ring.inverse_one _
+  rw [h1, h2, h3]
+  rfl
+
+/-- The variational resolvent is a compact operator. -/
+theorem isCompactOperator_beamResolvent :
+    IsCompactOperator beamCoerciveFormData.resolvent := by
+  rw [beamResolvent_eq]
+  exact isCompactOperator_beamEmbed.comp_clm (ContinuousLinearMap.adjoint beamEmbed)
+
+/-- Classification of the nonzero eigenvalues of the variational resolvent: `1` (from the
+affine kernel side) or `(1+β⁴)⁻¹` for a characteristic root `β`. -/
+theorem beamResolvent_eigenvalue_classify {mu : ℂ} (hmu : mu ≠ 0)
+    {u : BeamL2} (hu0 : u ≠ 0)
+    (huv : beamCoerciveFormData.resolvent u = mu • u) :
+    mu = 1 ∨ ∃ beta : ℝ, 0 < beta ∧ characteristic beta = 0
+      ∧ mu = (((1 + beta ^ 4)⁻¹ : ℝ) : ℂ) := by
+  set R := beamCoerciveFormData.resolvent with hR
+  have hN : ((‖u‖ : ℂ)) ^ 2 ≠ 0 :=
+    pow_ne_zero _ (Complex.ofReal_ne_zero.mpr (norm_ne_zero_iff.mpr hu0))
+  -- the eigenvector is in the domain of the shifted operator
+  have humem : u ∈ beamOperator.domain := by
+    have hmem : u ∈ LinearMap.range ((R : BeamL2 →ₗ[ℂ] BeamL2)) := by
+      refine ⟨mu⁻¹ • u, ?_⟩
+      rw [show ((R : BeamL2 →ₗ[ℂ] BeamL2)) (mu⁻¹ • u) = R (mu⁻¹ • u) from rfl,
+        map_smul, huv, smul_smul, inv_mul_cancel₀ hmu, one_smul]
+    exact hmem
+  -- the shifted operator scales the eigenvector by `mu⁻¹`
+  have hRmu : R (mu⁻¹ • u) = u := by
+    rw [map_smul, huv, smul_smul, inv_mul_cancel₀ hmu, one_smul]
+  have hshift : beamShiftedFormData.shiftedOperator.toLinearMap ⟨u, humem⟩
+      = mu⁻¹ • u := by
+    have happ := Abstract.inverseClosedOperator_apply_R R
+      beamCoerciveFormData.resolvent_isSelfAdjoint
+      beamCoerciveFormData.resolvent_injective (mu⁻¹ • u)
+    have hsub : (⟨R (mu⁻¹ • u), LinearMap.mem_range_self _ _⟩ :
+        beamShiftedFormData.shiftedOperator.domain) = ⟨u, humem⟩ := Subtype.ext hRmu
+    exact (congrArg beamShiftedFormData.shiftedOperator.toLinearMap hsub).symm.trans happ
+  -- so the beam operator has eigenvalue `mu⁻¹ - 1`
+  have hbeam : beamOperator.toLinearMap ⟨u, humem⟩ = (mu⁻¹ - 1) • u := by
+    have h : beamOperator.toLinearMap ⟨u, humem⟩
+        = beamShiftedFormData.shiftedOperator.toLinearMap ⟨u, humem⟩ - u :=
+      beamShiftedFormData.beamOperator_apply _
+    rw [h, hshift, sub_smul, one_smul]
+  -- the eigenvalue is real
+  have hL : ⟪beamOperator.toLinearMap ⟨u, humem⟩, u⟫_ℂ
+      = (starRingEnd ℂ) (mu⁻¹ - 1) * ((‖u‖ : ℂ)) ^ 2 := by
+    rw [hbeam, inner_smul_left]
+    congr 1
+    exact inner_self_eq_norm_sq_to_K u
+  have hRt : ⟪u, beamOperator.toLinearMap ⟨u, humem⟩⟫_ℂ
+      = (mu⁻¹ - 1) * ((‖u‖ : ℂ)) ^ 2 := by
+    rw [hbeam, inner_smul_right]
+    congr 1
+    exact inner_self_eq_norm_sq_to_K u
+  have hsymm : ⟪beamOperator.toLinearMap ⟨u, humem⟩, u⟫_ℂ
+      = ⟪u, beamOperator.toLinearMap ⟨u, humem⟩⟫_ℂ :=
+    beamOperator_isSelfAdjoint.isSymmetric ⟨u, humem⟩ ⟨u, humem⟩
+  have hreal : (starRingEnd ℂ) (mu⁻¹ - 1) = mu⁻¹ - 1 := by
+    have hchain : (starRingEnd ℂ) (mu⁻¹ - 1) * ((‖u‖ : ℂ)) ^ 2
+        = (mu⁻¹ - 1) * ((‖u‖ : ℂ)) ^ 2 := hL.symm.trans (hsymm.trans hRt)
+    exact mul_right_cancel₀ hN hchain
+  set nu : ℝ := (mu⁻¹ - 1).re with hnu
+  have hmunu : mu⁻¹ - 1 = (nu : ℂ) := by
+    rw [hnu]
+    exact (Complex.conj_eq_iff_re.mp hreal).symm
+  have hnu_nonneg : 0 ≤ nu := by
+    have hpos := beamOperator_nonneg ⟨u, humem⟩
+    have hval : ⟪beamOperator.toLinearMap ⟨u, humem⟩, u⟫_ℂ
+        = ((nu * ‖u‖ ^ 2 : ℝ) : ℂ) := by
+      rw [hL, hmunu, Complex.conj_ofReal]
+      push_cast
+      ring
+    rw [hval] at hpos
+    have hre : RCLike.re (((nu * ‖u‖ ^ 2 : ℝ) : ℂ)) = nu * ‖u‖ ^ 2 :=
+      Complex.ofReal_re _
+    rw [hre] at hpos
+    have hn2 : (0 : ℝ) < ‖u‖ ^ 2 := by
+      have : (0 : ℝ) < ‖u‖ := norm_pos_iff.mpr hu0
+      positivity
+    nlinarith
+  rcases eq_or_lt_of_le hnu_nonneg with hzero | hposnu
+  · -- `nu = 0` gives `mu = 1`
+    left
+    have h1 : mu⁻¹ = 1 := by
+      have h := hmunu
+      rw [← hzero] at h
+      push_cast at h
+      linear_combination h
+    exact inv_eq_one.mp h1
+  · -- `nu > 0` is a genuine positive eigenvalue: classify it
+    right
+    have heig : beamOperator.toLinearMap ⟨u, humem⟩ = ((nu : ℝ) : ℂ) • u := by
+      rw [hbeam, hmunu]
+    obtain ⟨beta, hβ, hchar, hnueq⟩ :=
+      exists_characteristic_of_eigen hposnu (x := ⟨u, humem⟩) hu0 heig
+    refine ⟨beta, hβ, hchar, ?_⟩
+    have hmuinv : mu⁻¹ = ((1 + beta ^ 4 : ℝ) : ℂ) := by
+      have := hmunu
+      rw [hnueq] at this
+      push_cast at this ⊢
+      linear_combination this
+    rw [show ((((1 + beta ^ 4)⁻¹ : ℝ)) : ℂ) = (((1 + beta ^ 4 : ℝ) : ℂ))⁻¹ from by
+      push_cast; ring, ← hmuinv, inv_inv]
+
 end
 
 end Model
