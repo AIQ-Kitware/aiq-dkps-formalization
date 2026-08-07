@@ -1,5 +1,49 @@
 # Section 9 free-beam campaign (DK-9-model → DK-9.x): design and status
 
+## HANDOFF 2026-08-07 (Fable 5 → next session)
+
+**All hard analytic parts of the entire remaining Davis--Kahan program are DONE and
+pushed** (HEAD at or after c11154f7; census CLEAN 48/48; `lake build` and
+`lake build DavisKahan.Experimental Challenge FinishTanTwoTheta` both green).
+What Fable finished this session, beyond the four ForTauCeti bricks:
+
+* `beamOperator` exists (BeamFormSpace.lean): self-adjoint, nonnegative, dense compact
+  form embedding.  Kernel = affine plane, both directions (BeamSpectrum.lean).
+* THE BOOTSTRAP `exists_characteristic_of_eigen` and the Fredholm bridge
+  `realSpectrum_beamOperator_subset(_gap)`: **realSpectrum(beamOperator) ⊆ {0} ∪ (500,∞)**.
+  `eigenvalue_gt_five_hundred` is the paper's α₃ > 500 for the genuine operator.
+* Census rows closed as stale after elaborator verification: DK-6.3-lem (both source
+  forms were already proved), DK-7-sin2-proof and DK-7-tan2-proof (the SinTwoTheta and
+  TanTwoTheta facades already carry the full proof packages; see their row notes).
+
+**What remains is mechanical-to-medium — no known hard analysis left:**
+
+1. (#51) Section 9 conclusions 9.1–9.11: build the certificates from `beamOperator`.
+   Perturbed operator Ā := beamOperator.addBounded (ε • M_t) with M_t = mulLp of the
+   clamped coordinate (BorelCalculus/MulLp machinery from Section 3 has everything);
+   trial space = span{beamOneLp, beamIdLp} = the PROVED kernel; residual data = the
+   moments already proved in TrialSubspace.lean once the moments↔integrals lemma is done
+   (∫₀¹ tⁿ arithmetic against coeFn of beamOneLp/beamIdLp combinations — routine).
+   Apply the unbounded sin/tan theorems (SinTwoTheta.lean / TanTwoTheta.lean facades)
+   with the spectral gap from `realSpectrum_beamOperator_subset_gap`.  The 9.9–9.11
+   rank-one resolvent step: SchurComplement.lean + RankOneCorrection.lean already
+   compile; what's left is connective algebra, medium at worst.
+2. (#50 residue) Retire or complete `Experimental/Frontier/Section9Analytic.lean`
+   (sorried skeleton) in favour of the `FreeBeam.Model` namespace; flip DK-9-model and
+   then the DK-9.x rows as certificates land.
+3. (#54) DK-3.2-cor: promote reversal symmetry out of the unguarded Experimental tree,
+   add the source-facing angle/quarter-turn statement.  Small.
+4. (#55) Audit tail: S2-tan-two-theta next_action still stale (claims DK-8.1/8.2 are
+   outside the default build; they are proved_in_build), DK-10.1 documentation note,
+   optional status normalizations.  Sorry sweep DONE: default-build trees are
+   sorry-free; remaining sorries are the deliberate Challenge conformance placeholders,
+   two old unguarded Experimental items, and the Section9Analytic skeleton (item 2).
+
+Working rules: serial; never pipe `lake build`; one build at a time; commit and push
+every milestone; author as the model actually running; verify census rows against the
+build before writing code (EIGHT rows were stale this week — always probe first).
+
+
 Written 2026-08-07 (Fable 5).  Edward's directive: hardest parts first; leave easy parts
 for a smaller model.  This file records the design so any session can continue.
 
