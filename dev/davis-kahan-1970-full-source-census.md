@@ -11,12 +11,12 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 31 |
+| `compiled_exact` | 29 |
 | `compiled_specialization` | 3 |
 | `compiled_general_infrastructure` | 5 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 4 |
+| `partial_or_wrapper_missing` | 6 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -74,6 +74,14 @@ in front of it. This includes rows that are already
 the source-numbered wrapper is still missing. Obstructions marked
 `mechanical` need only wiring or a restatement; `hard_math` needs new
 mathematics.
+
+### `section8-source-hypotheses` -- hard_math
+
+**Theorem 8.1 and 8.2 from the printed hypotheses only**
+
+The compiled Section 8 wrappers require caller-supplied data that the paper derives: a `SpectralContinuationWitness` with a quantitative contour bound, the spectral orientation `h0`/`h1`, and for 8.2 the `contour_selects_quarter_branch` field of the half-gap bridges. A source-faithful Theorem 8.1 must construct the canonical branch itself from the ordered form gap and full off-diagonality, and must prove the closed quarter-angle converse. A source-faithful Theorem 8.2 must derive the branch from ||H|| < delta/2 (perturbation) or ||R|| < delta/2 (residual, via Krein's self-adjoint contractive completion) alone.
+
+Gates: DK-8.1-thm (proved_in_build), DK-8.2-thm (proved_in_build)
 
 ### `two-subspace-classification` -- hard_math
 
@@ -780,9 +788,10 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 #### Theorem 8.1: Branch selection and spectral repulsion
 
 - **Kind:** `theorem`
-- **Status:** `compiled_exact`
+- **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Under tan(2 Theta) hypotheses, the acute branch is equivalent to the selected spectral ordering; a canonical reducing subspace exists and satisfies operator, eigenvalue, and symmetric-gauge repulsion inequalities.
+- **Blocked by:** `section8-source-hypotheses`
 - **Current Lean references:** `TauCeti.DavisKahan1970.Section8.maximalAngle_selectedSpectralSubspaces_lt_pi_div_four`, `TauCeti.DavisKahan1970.Section8.orientedSpectralRepulsionConclusion`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_of_rotatedBlockData`, `TauCeti.DavisKahan1970.Section8.theorem8_1_selectedBranch_and_spectralRepulsion`, `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_of_rotatedBlockData`
 - **Assessment:** Theorems 8.1's conclusion is packaged as `Theorem81SourceConclusion` and proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` gives [propext, Classical.choice, Quot.sound]. The status stays `candidate_under_repair` because that axis is fidelity to the printed statement, which compiling does not establish -- not because anything fails to build.
 
@@ -797,14 +806,17 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 The move had to be the DOWNWARD CLOSURE of the flagged modules, not the flagged modules alone: they import admission-free modules held under `Experimental/` only because something *above* those carried a `sorry`, so moving the flagged set alone would have violated rule 2. Rule 3 went 49 -> 13 violations.
 
 **BLOCKER CLEARED 2026-08-06: the promotion happened.**  `section8-promotion-out-of-experimental` described the theorems as living under `DavisKahan.Experimental.Frontier`, untouched by `lake build`.  They no longer do: `DavisKahan/Frontier/Section8.lean` and `DavisKahan/Sources/DavisKahan1970/Section8/**` are production, reached from `DavisKahan.All`, and the Experimental copies are gone (their leftover build products were purged the same day).  Re-verified by the elaborator: both headline declarations resolve against `DavisKahan.All` and `#print axioms` gives exactly [propext, Classical.choice, Quot.sound].  The census declaration probe is at 156/156.  The blocker entry is removed because no row is blocked by it.
+
+**FIDELITY BUG FOUND AND THE ROW DOWNGRADED 2026-08-07 (Claude Opus 5).**  This row read `compiled_exact` / "Nothing outstanding" while the production source file it points at, `DavisKahan/Sources/DavisKahan1970/Section8/SourceSurface.lean`, says in its own module docstring that the complete historical Theorem 8.1 and Theorem 8.2 are NOT promoted.  Both statements cannot be true.  The source file is the one that is right: `theorem8_1_selectedBranch_and_spectralRepulsion` is an `alias` for `theorem81CoreConclusion`, which takes a `SpectralContinuationWitness` plus `hsmall`, `h0` and `h1` -- the branch selection, the contour smallness, and the spectral orientation are all supplied BY THE CALLER, and they are exactly what the paper proves.  Likewise `theorem8_2_perturbationHalfGap_selectedBranch` requires a `PerturbationHalfGapBridge`, whose field `contour_selects_quarter_branch` is the conclusion.  A declaration compiling says nothing about whether its hypotheses are the printed ones; that is the lesson this row records.
 - **Next action:** Nothing outstanding. Note the declarations still live in the `TauCeti.DavisKahan.Experimental.*` namespace by design -- namespace is independent of directory here; do not 'tidy' them into a production namespace without checking every consumer.
 
 #### Theorem 8.2: Smallness selects the acute branch
 
 - **Kind:** `theorem`
-- **Status:** `compiled_exact`
+- **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
 - **Mathematics:** If the perturbation or residual norm is below half the gap, the sine double-angle estimate is accompanied by Theta < pi/4.
+- **Blocked by:** `section8-source-hypotheses`
 - **Current Lean references:** `TauCeti.DavisKahan1970.Section8.PerturbationHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.ResidualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem82_branch_of_residualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_selectedBranch`
 - **Assessment:** `theorem8_2_perturbationHalfGap_selectedBranch` and `theorem8_2_residualHalfGap_selectedBranch` are proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` on the perturbation form gives [propext, Classical.choice, Quot.sound]. The half-gap bridges (`perturbationHalfGapBridge_of_sourceHypotheses`, `residualHalfGapBridge_of_sourceHypotheses`) are proved too.
 
@@ -819,6 +831,8 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 The move had to be the DOWNWARD CLOSURE of the flagged modules, not the flagged modules alone: they import admission-free modules held under `Experimental/` only because something *above* those carried a `sorry`, so moving the flagged set alone would have violated rule 2. Rule 3 went 49 -> 13 violations.
 
 **BLOCKER CLEARED 2026-08-06: the promotion happened.**  `section8-promotion-out-of-experimental` described the theorems as living under `DavisKahan.Experimental.Frontier`, untouched by `lake build`.  They no longer do: `DavisKahan/Frontier/Section8.lean` and `DavisKahan/Sources/DavisKahan1970/Section8/**` are production, reached from `DavisKahan.All`, and the Experimental copies are gone (their leftover build products were purged the same day).  Re-verified by the elaborator: both headline declarations resolve against `DavisKahan.All` and `#print axioms` gives exactly [propext, Classical.choice, Quot.sound].  The census declaration probe is at 156/156.  The blocker entry is removed because no row is blocked by it.
+
+**FIDELITY BUG FOUND AND THE ROW DOWNGRADED 2026-08-07 (Claude Opus 5).**  This row read `compiled_exact` / "Nothing outstanding" while the production source file it points at, `DavisKahan/Sources/DavisKahan1970/Section8/SourceSurface.lean`, says in its own module docstring that the complete historical Theorem 8.1 and Theorem 8.2 are NOT promoted.  Both statements cannot be true.  The source file is the one that is right: `theorem8_1_selectedBranch_and_spectralRepulsion` is an `alias` for `theorem81CoreConclusion`, which takes a `SpectralContinuationWitness` plus `hsmall`, `h0` and `h1` -- the branch selection, the contour smallness, and the spectral orientation are all supplied BY THE CALLER, and they are exactly what the paper proves.  Likewise `theorem8_2_perturbationHalfGap_selectedBranch` requires a `PerturbationHalfGapBridge`, whose field `contour_selects_quarter_branch` is the conclusion.  A declaration compiling says nothing about whether its hypotheses are the printed ones; that is the lesson this row records.
 - **Next action:** Nothing outstanding. Note the declarations still live in the `TauCeti.DavisKahan.Experimental.*` namespace by design -- namespace is independent of directory here; do not 'tidy' them into a production namespace without checking every consumer.
 
 ### Section 9

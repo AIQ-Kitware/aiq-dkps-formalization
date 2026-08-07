@@ -13,5 +13,8 @@ import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalReverseGap
 import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRiccati
 import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalSpectrumNonempty
 import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedRiccatiShift
+import DavisKahan.InfiniteDimensional.TanTwoTheta.CanonicalTangentBridge
+import DavisKahan.InfiniteDimensional.TanTwoTheta.PaperFaithfulUINorm
+import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
 
 /-! # `DavisKahan/InfiniteDimensional/TanTwoTheta` -/
