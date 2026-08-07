@@ -126,36 +126,57 @@ Replacing it with the operator norm would be a weakening, not a proof.
 
 ### Theorem 8.2 — both alternatives
 
-The census row `DK-8.2-thm` carries the full recipe verified against the
-available infrastructure.  In outline:
+**Superseded 2026-08-07 by the printed proof.**  The recipe first recorded here
+— fixed circle, contour invertibility by Neumann perturbation of the initial
+resolvent, and a missing `||sinTwoAngleOperatorC U V|| = 1` lemma at the quarter
+gap — was a *reconstruction* made without the source.  With the transcription in
+hand it is clear that it is strictly harder than what Davis and Kahan do, and
+that the "one genuinely missing lemma" is not needed at all.  Recorded here
+because a plausible reconstruction that survives an infrastructure check still
+is not the source argument.
 
-* path `B(t) = A + H - t H` on `[0,1]`, `t = 0` perturbed, `t = 1` unperturbed;
-* fixed circle centred at `(alpha+beta)/2` of radius `(alpha-beta+delta)/2`,
-  real intersections `beta - delta/2` and `alpha + delta/2`;
-* contour invertibility for every `t` by **Neumann perturbation of the initial
-  resolvent** — base distance `>= delta/2` gives resolvent norm `<= 2/delta`,
-  and `||tH|| <= ||H|| < delta/2`.  This is what replaces the non-source global
-  projection-Lipschitz hypothesis `hquant`;
-* `circleRieszProjection_eq_boundedSelfAdjointSpectralProjection` identifies
-  `Q(t)`, `continuous_circleRieszProjection_path` makes
-  `f(t) = subspaceGap (Q t) (Q 0)` continuous;
-* no crossing of `sqrt 2 / 2` from `sinTwoTheta_spectrum_operator`: at a
-  crossing, `delta <= d * ||sin 2Theta|| <= 2 t ||H|| < delta`.
+Two things the reconstruction also got wrong:
 
-**The one genuinely missing lemma** is
-`||sinTwoAngleOperatorC U V|| = 1` when `subspaceGap U V = sqrt 2 / 2`.  The
-graph-coordinate route is `gap = ||X|| / sqrt(1 + ||X||^2)`, so the quarter gap
-is exactly `||X|| = 1`.
+* the printed hypotheses include **`spectrum(A_0) ⊆ [beta - delta/2, alpha +
+  delta/2]`** in addition to `||H||_1 < delta/2` or `||R||_1 < delta/2`.  That
+  is what makes `[beta - delta/2, alpha + delta/2]` the right interval for the
+  projector along the path;
+* `||.||_1` is the **bound (operator) norm** throughout, not a general
+  unitarily-invariant norm.
 
-The residual alternative then needs Krein's self-adjoint contractive
-completion, `exists_selfAdjoint_completion_eq_norm_restriction`, via the Julia
-operator `L J_A L*` with `Gamma` obtained from the existing
+The printed proof is a connectedness bootstrap:
+
+1. `gamma := ||H||_1 < delta/2`, and `A(s) := A + H - s H` for `s ∈ [0,1]`, so
+   `A(0) = A + H` and `A(1) = A` — the path runs *from* the perturbed operator,
+   the opposite orientation to the reconstruction;
+2. `spectrum(A(0))` misses `(beta - delta, beta)` and `(alpha, alpha + delta)`,
+   so a bound-norm-`gamma` perturbation leaves `A(s)` missing
+   `(beta - delta + gamma, beta - gamma)` and `(alpha + gamma, alpha + delta -
+   gamma)`, both nonempty since `gamma < delta/2`;
+3. `Q(s)` := spectral projector of `A(s)` for `[beta - delta/2, alpha +
+   delta/2]`, norm-continuous, so `theta(s) := arcsin ||Q(s) - Q(0)||_1` is
+   continuous with `theta(0) = 0`;
+4. `beta <= A_0 <= alpha` gives `P = P Q(1)`, hence `theta(1) >= Theta`;
+5. call `s` *close* when `theta(s) <= pi/4`.  For close `s`, the sin2theta
+   theorem applied to `Q(s)` against `Q(0)` gives
+   `theta(s) <= (1/2) arcsin(2 s gamma/delta) <= (pi/2)(s gamma/delta) <
+   (pi/2)(gamma/delta) < pi/4`, the middle step by concavity of `arcsin`.
+
+The bound in (5) is **strict and uniform in `s`**, so the close set is open;
+continuity of `theta` makes it closed; `0` is close; `[0,1]` is connected.  So
+every `s` is close and `theta(1) < pi/4`.
+
+That needs no new geometry lemma — only norm-continuity of the spectral
+projector along the path, the existing sin2theta theorem, and concavity of
+`arcsin`.
+
+The residual alternative is unchanged: without altering `A_1 + H_1`, `R` or the
+`Lambda_j` one may change `H_1`, and a theorem of Krein supplies a choice with
+`||H||_1 = ||R||_1`, reducing it to the perturbation case.  In Lean that is
+`exists_selfAdjoint_completion_eq_norm_restriction` via the Julia operator
+`L J_A L*` with `Gamma` from the existing
 `ContinuousLinearMap.exists_contraction_of_gram_eq`
-(`ForTauCeti/Analysis/InnerProductSpace/Polar/GramContraction.lean`) applied to
-`D = sqrt(I - A^2)` and the column `(B, sqrt(D^2 - B*B))`.  After that,
-`A' := A + H - H'` leaves `A + H`, its spectral subspaces and the residual
-unchanged while making `||H'|| = ||R||`, reducing the residual alternative to
-the perturbation one.
+(`ForTauCeti/Analysis/InnerProductSpace/Polar/GramContraction.lean`).
 
 `PerturbationHalfGapBridge` and `ResidualHalfGapBridge` may survive as internal
 conveniences.  They must **not** appear in the source-facing statement.
