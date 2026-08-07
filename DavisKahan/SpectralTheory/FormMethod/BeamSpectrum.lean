@@ -733,6 +733,17 @@ theorem exists_characteristic_of_eigen {lam : ℝ} (hlam : 0 < lam)
       exact hRtriv ⟨hcon.1, hcon.2.1, hcon.2.2.1, hcon.2.2.2⟩
     exact ⟨beta, hβpos, hchar, hβ4.symm⟩
 
+/-- **The paper's `α₃ > 500`, for the actual operator**: every positive eigenvalue of the
+free-beam realization exceeds `500`.  The margin is thin — the first positive root is
+`4.7300407…`, whose fourth power is `500.56…`. -/
+theorem eigenvalue_gt_five_hundred {lam : ℝ} (hlam : 0 < lam)
+    {x : beamOperator.domain} (hx0 : (x : BeamL2) ≠ 0)
+    (heig : beamOperator.toLinearMap x = (lam : ℂ) • (x : BeamL2)) :
+    500 < lam := by
+  obtain ⟨beta, hβ, hchar, hlameq⟩ := exists_characteristic_of_eigen hlam hx0 heig
+  rw [hlameq]
+  exact Classical.five_hundred_lt_pow_four_of_characteristic_eq_zero hβ hchar
+
 end
 
 end Model
