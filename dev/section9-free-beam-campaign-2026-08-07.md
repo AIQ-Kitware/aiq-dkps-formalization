@@ -75,6 +75,65 @@ bendingEnergy (u,w) := ‖w‖².
    ⇒ u is a mode with FreeBoundary and nontrivial coefficients ⇒
    `characteristic_eq_zero_of_freeBoundary` ⇒ λ = β⁴ root ⇒ > 500.
 
+## STATUS 2026-08-07 (mid-campaign)
+
+DONE, pushed, axiom-clean:
+- `ForTauCeti/MeasureTheory/IntervalWeakSecondDeriv.lean` (brick 1: representation theorem
+  `eq_affine_add_secondPrimitive_of_forall_integral_bumpD2`, moment density, bump calculus,
+  `unitIocMeasure`+`secondPrimitive` exposed with `_def` lemmas, kernel eval lemmas,
+  probability instance).  cff73418.
+- `DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamModeUniqueness.lean` (brick 4c:
+  `exists_mode_eqOn_of_fourth_deriv` global + `_within` interval version).  a87426fc, a49005a7.
+- `ForTauCeti/MeasureTheory/IntervalSecondPrimitiveCompact.lean` (brick 2:
+  `secondPrimitiveCLM`, `isCompactOperator_secondPrimitiveCLM`; also `secondPrimitiveEval`
+  functionals, `integral_norm_coeFn_le` L¹≤L², `coeFn_lp_finsetSum`).  7ec36919.
+- `ForTauCeti/MeasureTheory/IntervalSecondPrimitiveDeriv.lean` (brick 4a:
+  `hasDerivAt_secondPrimitive` = firstPrimitive, `hasDerivWithinAt_firstPrimitive_of_continuous`
+  FTC within `[0,1]`, `firstPrimitive_congr_ae/_eq_intervalIntegral`).  56cb7a84.
+
+REMAINING (all in the DavisKahan tree; design fixed, see below):
+1. BeamFormSpace: H := Lp ℂ 2 unitIocMeasure, P := WithLp 2 (H × H); constraint functionals
+   pairingCLM (W ↦ ∫ ⇑W·g for continuous g, mkContinuous with sup-bound like
+   `secondPrimitiveEval`); V := ⨅ k, ker(constraint k) closed ⇒ complete; embed := fst∘subtypeL.
+   - embed_injective: u = 0 ⇒ ∫ w·bumpₖ = 0 ∀k ⇒ moments of w·t²(1−t)² all vanish ⇒
+     `ae_eq_zero_of_forall_integral_pow_eq_zero` ⇒ w =ᵐ 0 (t²(1−t)² ≠ 0 a.e.).
+   - dense range: pairs (real polynomial q, q'') ∈ V by two IBPs against the bump family
+     (bump+bumpD1 vanish at both endpoints; `Polynomial.hasDerivAt`); then bounded-continuous
+     density as in File 1's Weierstrass argument.  adjoint_injective from dense range.
+   - CoerciveFormData: formOperator := 1, coercivity 1, ShiftedBeamFormData with
+     bendingEnergy p := ‖p.2‖², decomposition via WithLp prod inner + Submodule.coe_inner.
+   - Compact embed: embed = (finite-rank part: range ⊆ span{toLp 1, toLp t} by brick 1)
+     + secondPrimitiveCLM ∘ sndCLM; resolvent R = j∘j† (formOperator=1 ⇒ Ring.inverse 1 = 1)
+     compact via comp lemmas.  ‖j‖ ≤ 1.
+2. Kernel identification: (affine,0) ∈ V (moments ∫ψₖ = ∫tψₖ = 0); j†(affine) = (affine,0) by
+   ext_inner; R(affine) = affine ⇒ affine ∈ dom, B(affine) = 0.  Conversely Bu = 0 ⇒
+   bendingEnergy = 0 (`beam_quadratic_eq_bendingEnergy`) ⇒ w = 0 ⇒ u affine (brick 1, w=0).
+   Kernel = span{toLp 1, toLp id}, dim 2 (1,t independent via moments).
+3. Bootstrap (eigen classification): B u = λu, λ > 0, u ≠ 0 ⇒ λ = β⁴, characteristic β = 0:
+   variational identity gives (†) ∀(v₁,v₂) ∈ V: ⟪p₂, v₂⟫ = λ⟪u, v₁⟫ (p = (u,p₂) ∈ V).
+   Test with (bumpₖ, ψₖ) + conjugate (λ real) ⇒ (p₂, λu) in bump relation ⇒ brick 1 twice ⇒
+   continuous reps ū = a+bt+K w̄₂, w̄₂ = c+dt+λK ū (exact equations); chains via brick 4a
+   (global K' = firstPrimitive; FTC within Icc); mode classification `_within` on Re/Im with
+   β := λ^(1/4) (rpow, β⁴ = λ).  Natural BCs: test (†) with Hermite cubic pairs
+   (q,q'') ∈ V, integrate by parts classically (interior two-sided derivatives via
+   `HasDerivWithinAt.hasDerivAt (Icc_mem_nhds)`) ⇒ boundary form [w̄₂q′ − ū₃q]₀¹ = 0 for the
+   four Hermite cubics q₁=(1−t)²(1+2t), q₂=t(1−t)², q₃=t²(3−2t), q₄=t²(t−1) ⇒
+   w̄₂(0)=w̄₂(1)=ū₃(0)=ū₃(1)=0 ⇒ FreeBoundary for the mode ⇒
+   `characteristic_eq_zero_of_freeBoundary` (u ≠ 0 gives a nontrivial Re or Im part).
+4. Spectrum: realSpectrum(B) ⊆ {0} ∪ {β⁴ : characteristic β = 0} ⊆ {0} ∪ (500,∞) (last step
+   `Classical.five_hundred_lt_pow_four_of_characteristic_eq_zero`).  For λ outside the set:
+   1+λ ≠ ... if 1+λ = 0 then I − (1+λ)R = I invertible; else (1+λ)⁻¹ ∉ spectrum(R): R compact
+   (⇒ Fredholm `IsCompactOperator.hasEigenvalue_or_mem_resolventSet`), eigenvalues μ ≠ 0 of R
+   satisfy B x = (μ⁻¹−1)x with μ⁻¹−1 ≥ 0 (B nonneg) ⇒ ∈ {0} ∪ β⁴-set (bootstrap) ⇒
+   μ ∈ {1} ∪ {(1+β⁴)⁻¹} ∌ (1+λ)⁻¹.  Then S := inverse(I − (1+λ)R) commutes with R and
+   RS is the two-sided inverse of B − λ demanded by `realResolventSet` ((B−λ)(RSf) = f via
+   (B+1)Ry = y; left leg via u = Rx and S(I−(1+λ)R)x = x).
+5. Wire into DK-9-model row: the operator + kernel + spectrum facts replace the
+   `thirdEigenvalue`/`RepresentsFreeBeamProblem` sorries' role; build
+   `FreeBeamFiniteDataCertificate` with third_eigenvalue := any spectral point... NO — take
+   third_eigenvalue := 500.5-free formulation: the certificate only *stores* a scalar; derive
+   it from the spectrum theorem applied to the model.  Then census updates.
+
 ## Files
 
 - ForTauCeti/MeasureTheory/IntervalWeakSecondDeriv.lean  (brick 1 + K def + brick 2 core)
