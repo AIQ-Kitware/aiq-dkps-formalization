@@ -6,25 +6,37 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.Sources.DavisKahan1970.Section8.Smallness
 import DavisKahan.Sources.DavisKahan1970.Section8.CompressionRepulsion
+import DavisKahan.Sources.DavisKahan1970.Section8.SourceTheorem81
 import DavisKahan.InfiniteDimensional.TanTheta.ContinuationWitnessAPriori
 
 /-!
 # Davis--Kahan 1970 Section 8 source surface
 
-This leaf gives stable source-facing names to the Section 8 results that are
-currently proved.  It intentionally does not promote the complete historical
-Theorem 8.1 or 8.2:
+This leaf gives stable source-facing names to the Section 8 results.
 
-* Theorem 8.1 still needs construction of the canonical branch directly from
-  the unrestricted off-diagonal hypotheses, the converse branch
-  characterization, and the compression/eigenvalue/symmetric-gauge repulsion
-  refinements.
-* Theorem 8.2 still needs proofs that either printed half-gap condition builds
-  the required common-contour witness; the residual alternative additionally
-  needs the Krein replacement theorem.
+**Theorem 8.1 is now promoted** (2026-08-07).  `SourceTheorem81.lean` proves it
+from the printed hypotheses alone -- self-adjoint `A` reduced by `P`, the
+ordered form gap, and a fully off-diagonal self-adjoint `H` -- with no contour,
+no continuation witness, no smallness constant, and no caller-supplied
+orientation.  It delivers full spectral repulsion (continuous spectrum
+included), the canonical branch as a genuine spectral subspace, the strict
+quarter-angle bound, uniqueness of the branch under the printed *closed*
+condition, and the printed `iff` between that condition and the spectral
+orientation.
 
-The declarations below make those boundaries visible while exposing all
-admission-free downstream conclusions to the Section 9 application layer.
+What is still *not* promoted:
+
+* the Theorem 8.1 compression / ordered-eigenvalue / symmetric-gauge
+  refinements (i)--(iii) instantiated at the canonical branch: the algebraic
+  cores are proved (see the `..._of_rotatedBlockData` aliases below and
+  `DavisKahan/Frontier/Section8.lean`), but they are not yet fed the canonical
+  branch;
+* Theorem 8.2, which still needs proofs that either printed half-gap condition
+  builds the required common-contour witness; the residual alternative
+  additionally needs the Krein replacement theorem.
+
+The aliases below keep the older names working and make the remaining
+boundaries visible.
 -/
 
 namespace TauCeti
@@ -43,7 +55,25 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 variable {A V : H →L[ℂ] H} {s : Set ℝ}
 
-/-- Source-facing Section 8.1 branch and spectral-exclusion wrapper. -/
+/-- **Source-facing Theorem 8.1: existence of the canonical branch.**
+
+Takes only the printed hypotheses.  Superseded name for
+`theorem8_1_canonicalBranch`. -/
+alias theorem8_1_source :=
+  theorem8_1_canonicalBranch
+
+/-- **Source-facing Theorem 8.1: the printed characterization.** -/
+alias theorem8_1_source_characterization :=
+  theorem8_1_maximalAngle_le_iff_spectrumIn
+
+/-- **Source-facing Theorem 8.1: uniqueness of the branch.** -/
+alias theorem8_1_source_uniqueness :=
+  theorem8_1_eq_canonicalBranch_of_maximalAngle_le
+
+/-- Continuation-witness core of Section 8.1.  This is *not* the source
+theorem: it takes the branch selection, the contour smallness and the spectral
+orientation as caller-supplied data.  Kept because Section 9's continuation
+layer consumes it. -/
 alias theorem8_1_selectedBranch_and_spectralRepulsion :=
   theorem81CoreConclusion
 

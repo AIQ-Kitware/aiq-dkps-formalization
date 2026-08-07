@@ -25,6 +25,7 @@ import DavisKahan.SpectralTheory.ReflectionRestriction
 import DavisKahan.SpectralTheory.ResolventOperator
 import DavisKahan.SpectralTheory.SelfAdjointBorelCalculus
 import DavisKahan.SpectralTheory.SpectralCutoff
+import DavisKahan.SpectralTheory.SpectralGapFormBounds
 import DavisKahan.SpectralTheory.SpectralMultiplicityFoundation
 import DavisKahan.SpectralTheory.SpectralRestriction
 import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
