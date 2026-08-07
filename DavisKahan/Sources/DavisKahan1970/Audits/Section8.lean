@@ -14,7 +14,8 @@ the conditional bridges and abstract cores that Section 8's analytic layer and
 Section 9's continuation layer consume: they take caller-supplied data records
 -- a `SpectralContinuationWitness`, a half-gap bridge, an abstract quadratic
 block record -- which the paper *proves* rather than assumes.  They are useful
-and axiom-clean, and that is all this leaf certifies.
+and their trusted-dependency reports are clean, and that is all this
+leaf certifies.
 
 The audit of the actual Section 8 capstones is
 `DavisKahan/Frontier/Section8Audit.lean`, which must live downstream of the
@@ -24,9 +25,9 @@ for both blocks including the every-symmetric-gauge forms; the eigenvalue/angle
 source dictionary; and both Theorem 8.2 alternatives together with the printed
 `Theta < pi/4`.
 
-The printed axiom sets here should contain only the standard classical/choice
-foundations inherited from the spectral calculus, and no project-local
-admissions.
+The trusted-dependency reports here should contain only the standard
+classical/choice foundations inherited from the spectral calculus, and nothing
+project-local.
 -/
 
 namespace TauCeti
