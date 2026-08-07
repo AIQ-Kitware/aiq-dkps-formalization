@@ -8,6 +8,7 @@ import DavisKahan.FiniteDimensional.Core.OperatorBlocks
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
 import ForTauCeti.Analysis.InnerProductSpace.KyFan
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+import ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization
 
 /-!
 # Fan dominance for the finite direct rotation
@@ -359,29 +360,6 @@ theorem LinearMap.IsPositive.of_hermitianPart_contraction
   rw [LinearMap.sub_apply, LinearMap.id_apply, inner_sub_left, map_sub,
     inner_self_eq_norm_sq]
   linarith
-
-/-- For a positive operator the singular values are exactly the sorted
-eigenvalues: the Gram operator is the square, so its eigenvalues are the
-squares and the square root undoes them. -/
-theorem singularValues_of_isPositive {A : E →ₗ[𝕜] E} (hA : A.IsPositive)
-    (j : Fin (finrank 𝕜 E)) :
-    A.singularValues (j : ℕ) = hA.isSymmetric.eigenvalues rfl j := by
-  have hgram : A.isSymmetric_adjoint_comp_self.eigenvalues rfl =
-      fun i => (hA.isSymmetric.eigenvalues rfl i) ^ 2 :=
-    LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis A.isSymmetric_adjoint_comp_self rfl
-      (hA.isSymmetric.eigenvectorBasis rfl)
-      (fun a b hab => pow_le_pow_left₀ (hA.nonneg_eigenvalues rfl b)
-        (hA.isSymmetric.eigenvalues_antitone rfl hab) 2)
-      (fun i => by
-        -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the goal
-        -- unsolved: at least one lemma here has to fire at one occurrence, in order, and simp's
-        -- normal form loses the intermediate shape.
-        rw [LinearMap.comp_apply, hA.isSymmetric.apply_eigenvectorBasis,
-          map_smul, hA.isSymmetric.adjoint_eq,
-          hA.isSymmetric.apply_eigenvectorBasis, smul_smul,
-          ← RCLike.ofReal_mul, ← sq])
-  rw [A.singularValues_of_lt rfl j.isLt, hgram]
-  simpa using Real.sqrt_sq (hA.nonneg_eigenvalues rfl j)
 
 /-- Ky Fan sums contract under two-block pinching. -/
 theorem kyFanSum_pinch_le
