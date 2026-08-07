@@ -41,9 +41,9 @@ It follows from the naturality theorem because `diagMeasure` is characterised by
 products, and a finite Borel measure on `ℂ` is determined by the integrals of bounded continuous
 real functions (`MeasureTheory.ext_of_forall_integral_eq_of_IsFiniteMeasure`).
 
-What remains for uniqueness is the *level sets*, which needs naturality of the **Borel** calculus
-rather than the continuous one, and a dimension count over the measure algebra.  That is the real
-Hahn--Hellinger and it is not done here.
+The *level sets* need naturality of the **Borel** calculus rather than the continuous one, and
+a dimension count over the measure algebra.  That is the real Hahn--Hellinger; it is not done
+here but in `BorelNatural.lean` and `MultiplicityLevelUniqueness.lean`, built on this module.
 
 ## Main results
 

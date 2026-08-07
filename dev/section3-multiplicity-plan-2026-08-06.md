@@ -425,12 +425,19 @@ the datum of an operator is unique, so:
 
 **Update 2026-08-06 (later the same day):** the *measure-class* half of uniqueness is now
 proved -- `TauCeti.BorelCalculus.measureEquiv_base_of_operatorUnitaryEquiv` -- so
-`MeasureEquiv D.base E.base` follows from `OperatorUnitaryEquiv D.operator E.operator`.  The
-level-set half is not, and the bullets below still stand: one half of an implication does not
-inhabit anything.  See `dev/section3-uniqueness-plan-2026-08-06.md`.
+`MeasureEquiv D.base E.base` follows from `OperatorUnitaryEquiv D.operator E.operator`.
 
-* **`SpectralMultiplicityFoundation` is still uninhabited**, and this work does not inhabit it.
-  Its `multiplicity` field is a *function*, which needs uniqueness as well as existence, plus a
-  canonical `Datum` -- i.e. the quotient by `measureClassSetoid`.  §5's route B is still open.
-* The census must not claim a canonical invariant.  It claims what is proved: a complete
-  invariant *in the sense of the biconditional*, which is what the paper's sentence asserts.
+**Update 2026-08-06 (end of day): uniqueness is closed, both halves.**  The level-set half is
+proved (`base_level_symmDiff_eq_zero_of_operatorUnitaryEquiv`) and combined with the
+measure-class half and with `operatorUnitaryEquiv_of_measureEquiv` into the biconditional
+`operatorUnitaryEquiv_iff_measureEquiv_and_level`
+(`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/MultiplicityLevelUniqueness.lean`).  The
+datum is a complete invariant **canonically**: measure class and level sets are both determined
+by the operator.  See `dev/section3-uniqueness-plan-2026-08-06.md` for the module list and for
+which of this plan's predictions failed.
+
+* **`SpectralMultiplicityFoundation` is still uninhabited**, but the obstruction is gone: with
+  uniqueness proved, what remains for §5's route B is bookkeeping -- a canonical `Datum` as the
+  quotient by `measureClassSetoid` and a function-valued multiplicity field -- not mathematics.
+  It is beyond the paper's sentence and is parked with the promotion work.
+* The census may now claim a canonical invariant, and does.

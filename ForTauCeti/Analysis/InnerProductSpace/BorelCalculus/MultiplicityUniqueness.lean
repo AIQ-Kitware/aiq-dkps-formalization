@@ -21,8 +21,10 @@ OperatorUnitaryEquiv D.operator E.operator  →  MeasureEquiv D.base E.base.
 This is the **measure-class half** of uniqueness for the multiplicity classification.  Together
 with `operatorUnitaryEquiv_of_measureEquiv`, which goes the other way, it says the measure class
 of a datum is exactly the part of the datum that the operator sees -- as far as measures go.
-What is *not* settled here is the level sets; that is the remaining half and it is the real
-Hahn--Hellinger.
+The level sets are the other half; they are settled in
+`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/MultiplicityLevelUniqueness.lean`, which
+combines both halves into the biconditional
+`operatorUnitaryEquiv_iff_measureEquiv_and_level`.
 
 ## The argument, and the asymmetry that makes it work
 
