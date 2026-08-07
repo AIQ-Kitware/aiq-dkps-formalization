@@ -253,3 +253,32 @@ The lemmas are `LinearMap`-based while the Section 8 development is
 `ContinuousLinearMap`-based, so `C₁ : ↥Pᗮ →ₗ[ℂ] ↥Qᗮ` has to be produced and
 part (i) converted into a form domination of `LinearMap`s on `↥Pᗮ`.  Finite
 dimension enters only here, which matches the printed "In finite dimensions".
+
+### Status of (ii) after the sandwich bound
+
+Two of the three inputs now exist and are committed:
+
+1. **Part (i), source-literal** -- `theorem8_1_upperCompressionRepulsion_source`,
+   the form inequality on the `Pᗮ` block with `A₁` (not `A + K`) on the left.
+2. **The cosine sandwich** -- `approximationNumber_adjoint_sandwich_le`,
+   `aₙ(C⋆ M C) ≤ ‖C‖² aₙ(M)`, cross-space, with the printed factor.
+
+3. **The Weyl step is what remains.**  Searched for a CLM-native version and
+   there is none: the approximation-number layer has
+   `approximationNumber_le_of_norm_apply_le` (pointwise *norm* domination) but
+   nothing deducing monotonicity from the *form* order `⟪Tx,x⟫ ≤ ⟪Sx,x⟫`, which
+   is what part (i) supplies and which does not imply norm domination.  So the
+   Weyl step must go through `LinearMap.IsSymmetric.eigenvalue_mono`, which is
+   `LinearMap`-based and finite-dimensional.  That is not a compromise -- the
+   printed part (ii) says "In finite dimensions" -- but it does mean the
+   remaining work is a transfer:
+
+   * build `C₁ : ↥Pᗮ →ₗ[ℂ] ↥Qᗮ` and the symmetric `LinearMap`s
+     `A₁ - α` and `C₁⋆(Λ₁ - α)C₁` on `↥Pᗮ`;
+   * feed part (i) to `eigenvalue_mono` for `λ_k(A₁ - α) ≤ λ_k(C₁⋆(Λ₁ - α)C₁)`;
+   * identify eigenvalues of a positive operator with its approximation numbers
+     in finite dimension, so the sandwich bound applies to the right-hand side.
+
+The last bullet is the one to scope before starting: `eigenvalues_operatorAbs`
+relates eigenvalues to `singularValues`, and `singularValues` to
+`approximationNumber` needs its own bridge.
