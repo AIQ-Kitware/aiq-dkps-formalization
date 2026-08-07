@@ -119,6 +119,43 @@ noncomputable def complexifySubmoduleEquiv (Z : Submodule ℝ E) :
     im ((complexifySubmoduleEquiv Z w : RealComplexification E)) =
       (im w).val := rfl
 
+/-- **The adapter is exactly the complexification of the inclusion.**  This is
+the compatibility that makes the equivalence useful rather than merely
+existent: transporting along it agrees with complexifying `Z.subtypeL`. -/
+theorem coe_complexifySubmoduleEquiv_eq_complexify_subtypeL (Z : Submodule ℝ E)
+    (w : RealComplexification Z) :
+    ((complexifySubmoduleEquiv Z w : RealComplexification E)) =
+      complexify Z.subtypeL w :=
+  rfl
+
+variable [CompleteSpace E]
+
+/-- **Compressing to a complexified subspace is the complexification of the
+compression.**  Stated pointwise through the adapter, so no subtype coercion has
+to be pushed through a composition.
+
+This is the transport identity the real Theorem 6.3 wrappers and the spectral
+form of the real `sin 2Θ` theorem both need: it says the complex theorem's
+`compressOperator (complexifySubmodule Z) (complexify A)` is unitarily conjugate,
+via `complexifySubmoduleEquiv`, to the complexification of the real compression
+`Z.orthogonalProjectionOnto ∘L A ∘L Z.subtypeL`.  Spectra and approximation
+singular values are therefore the same on both sides. -/
+theorem orthogonalProjectionOnto_complexify_apply
+    (Z : Submodule ℝ E) [Z.HasOrthogonalProjection] (A : E →L[ℝ] E)
+    (w : RealComplexification Z) :
+    (complexifySubmodule Z).orthogonalProjectionOnto
+        ((complexify A) (complexifySubmoduleEquiv Z w)) =
+      complexifySubmoduleEquiv Z
+        (complexify (Z.orthogonalProjectionOnto ∘L A ∘L Z.subtypeL) w) := by
+  apply Subtype.ext
+  have hL : ((complexifySubmodule Z).orthogonalProjectionOnto
+        ((complexify A) (complexifySubmoduleEquiv Z w)) :
+      RealComplexification E) =
+      (complexifySubmodule Z).starProjection
+        ((complexify A) (complexifySubmoduleEquiv Z w)) := rfl
+  rw [hL, starProjection_complexifySubmodule]
+  apply TauCeti.RealComplexification.ext <;> rfl
+
 end RealComplexification
 end Foundation
 end Experimental
