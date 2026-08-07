@@ -11,8 +11,8 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 25 |
-| `compiled_specialization` | 8 |
+| `compiled_exact` | 26 |
+| `compiled_specialization` | 7 |
 | `compiled_general_infrastructure` | 4 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
@@ -246,10 +246,10 @@ VERIFIED 2026-08-05 by the elaborator: both names resolve from `DavisKahan.All` 
 #### Section 2, tan 2 theta theorem: Double-angle tangent theorem
 
 - **Kind:** `unnumbered_theorem`
-- **Status:** `compiled_specialization`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Fully off-diagonal perturbations across an ordered gap give residual and perturbation tan(2 Theta) bounds with factor two.
-- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm`, `TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm_selectedBranch`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm`, `TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm_selectedBranch`, `TauCeti.DavisKahan.paperFaithful_tanTwoTheta_uiNorm_real`
 - **Assessment:** The finite operator-norm theorem is compiled. The source arbitrary-UI-norm Hilbert-space endpoint and branch selection are not yet certified.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_specialization`. The operator-norm double-angle tangent theorem is compiled and axiom-clean; the paper's general UI-norm scope and the selected acute branch are not.
@@ -265,6 +265,14 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 The form bounds the endpoint runs on are read off from the spectral containments by `SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic` and `le_re_inner_of_spectrum_subset_Ici`; the interval/exterior shape the Riccati selection wants is the same data reassociated.  No new mathematics was needed -- the two halves had never been put next to each other.
 
 **BLOCKER CLEARED 2026-08-06.**  This row carried `exact-source-wrappers`, but its own `next_action` records that nothing remains for the bounded arbitrary-UI-norm theorem with selected branch -- that is `sharp_paperUnitaryInvariantNorm_selectedBranch` -- and that the residue is tracked on S2-unbounded-scope and on the Section 8 rows.  Both are now discharged: S2-unbounded-scope is `compiled_exact` / `proved_in_build` with no blockers, and DK-8.1-thm and DK-8.2-thm are guarded by `lake build`.  So the wrapper blocker on this row pointed at work that has since been done elsewhere, and is removed.
+
+**REAL SCALAR SCOPE CLOSED 2026-08-07 (Claude Opus 5).**  `paperFaithful_tanTwoTheta_uiNorm_real` is the tan 2Theta theorem over a REAL Hilbert space of arbitrary dimension, for every source unitarily-invariant norm, with the sharp constant `b - a`.  Elaborated: `[InnerProductSpace ℝ E] [CompleteSpace E]`, operators `E →L[ℝ] E`, subspaces `Submodule ℝ E`, no `[FiniteDimensional]`.  Quarter-acuteness is CONCLUDED (`∃ hquarter : IsQuarterAcute U V`), not assumed.  Axiom-clean: [propext, Classical.choice, Quot.sound].
+
+No perturbation theory was repeated.  The proof complexifies the configuration, applies `paperFaithful_tanTwoTheta_uiNorm` verbatim, and transports back.  Two new reusable layers make that mechanical and are the reason the other real lifts should now be cheap:
+* `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/ComplexificationGauge.lean` -- `PaperUnitaryInvariantNorm.{approximationPrefix,prefixGauge,extendedGauge}_complexify`, `mem_complexify_iff` and `gauge_complexify`.  `N.gauge (complexify T) = N.gauge T` for EVERY source UI norm at once, because an operator only enters a `PaperUnitaryInvariantNorm` through its approximation singular values and `approximationSingularValue_complexify` preserves those exactly.
+* `DavisKahan/SpectralTheory/Complexification/FormTransport.lean` -- `re_inner_complexify` (which is `rfl`), `re_inner_le_of_mem_complexifySubmodule`, `le_re_inner_of_mem_complexifySubmodule`, `mapsTo_complexifySubmodule`, `mapsTo_orthogonal_complexifySubmodule`, `mapsTo_of_mem_orthogonal_complexifySubmodule`.  Form constants are preserved EXACTLY, which matters because these feed ordered-gap hypotheses where a lossy transport would not close the gap.
+
+The conclusion names `tanTwoAngleOperatorRC U V`, which is by definition `tanTwoAngleOperatorC` of the two complexified subspaces.  That is faithful rather than a workaround: the source bounds a unitarily-invariant norm, such a norm sees only approximation singular values, and those are preserved.  A literally `E →L[ℝ] E`-typed angle operator is extractable via `complexify_realPartOperator` and would have the same singular values, hence the same value under every `N`.
 - **Next action:** Nothing for the bounded arbitrary-UI-norm theorem with selected branch: it is `sharp_paperUnitaryInvariantNorm_selectedBranch`.  What remains under this heading is the UNBOUNDED passage, tracked on S2-unbounded-scope and DK-6-appendix.  (Corrected 2026-08-07: this action previously claimed DK-8.1-thm and DK-8.2-thm are outside the default build.  They are not -- both rows read `compiled_exact` / `proved_in_build`, and their promotion is long done.)
 
 #### Section 2, paragraph after four theorems: Best constants and simultaneous equality
