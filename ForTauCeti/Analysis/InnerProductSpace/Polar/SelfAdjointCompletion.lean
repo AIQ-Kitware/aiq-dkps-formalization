@@ -135,7 +135,79 @@ noncomputable def l2Column (a : E →L[𝕜] F) (b : E →L[𝕜] G) :
 theorem l2Column_apply (a : E →L[𝕜] F) (b : E →L[𝕜] G) (z : E) :
     l2Column a b z = WithLp.toLp 2 (a z, b z) := (rfl)
 
+/-- **Pointwise Pythagoras for a column.**  The `L²` norm of a column value is
+the quadratic sum of its two coordinates. -/
+theorem norm_l2Column_apply_sq (a : E →L[𝕜] F) (b : E →L[𝕜] G) (z : E) :
+    ‖l2Column a b z‖ ^ 2 = ‖a z‖ ^ 2 + ‖b z‖ ^ 2 := by
+  rw [l2Column_apply]
+  exact WithLp.prod_norm_sq_eq_of_L2 _
+
 end Column
+
+/-! ### The Gram inequality of a contractive column -/
+
+section ColumnGram
+
+variable {E : Type u} {F : Type v} {G : Type w}
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+
+/-- **A contractive column has a contractive Gram operator.**
+
+`‖[a; b]‖ ≤ 1` gives `a⋆a + b⋆b ≤ 1` in the Loewner order, because both sides
+have the same quadratic form: `⟪x, (a⋆a + b⋆b) x⟫ = ‖a x‖² + ‖b x‖²` is the
+squared `L²` norm of the column value.  This is the form in which the
+normalised Krein completion consumes a column bound. -/
+theorem l2Column_gram_le_id_of_norm_le_one (a : E →L[ℂ] F) (b : E →L[ℂ] G)
+    (h : ‖l2Column a b‖ ≤ 1) :
+    ContinuousLinearMap.adjoint a ∘L a + ContinuousLinearMap.adjoint b ∘L b ≤
+      ContinuousLinearMap.id ℂ E := by
+  have hida : IsSelfAdjoint (ContinuousLinearMap.adjoint a ∘L a) :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
+      (ContinuousLinearMap.isPositive_adjoint_comp_self a).1
+  have hidb : IsSelfAdjoint (ContinuousLinearMap.adjoint b ∘L b) :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
+      (ContinuousLinearMap.isPositive_adjoint_comp_self b).1
+  have hidid : IsSelfAdjoint (ContinuousLinearMap.id ℂ E) := by
+    rw [ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric]
+    intro x y
+    rfl
+  have hsa : IsSelfAdjoint (ContinuousLinearMap.id ℂ E -
+      (ContinuousLinearMap.adjoint a ∘L a + ContinuousLinearMap.adjoint b ∘L b)) :=
+    hidid.sub (hida.add hidb)
+  rw [← sub_nonneg, ContinuousLinearMap.nonneg_iff_isPositive]
+  refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hsa, fun x => ?_⟩
+  have hform : RCLike.re ⟪x, (ContinuousLinearMap.id ℂ E -
+      (ContinuousLinearMap.adjoint a ∘L a +
+        ContinuousLinearMap.adjoint b ∘L b)) x⟫_ℂ =
+      ‖x‖ ^ 2 - (‖a x‖ ^ 2 + ‖b x‖ ^ 2) := by
+    have ha : ⟪x, (ContinuousLinearMap.adjoint a) (a x)⟫_ℂ = ⟪a x, a x⟫_ℂ :=
+      ContinuousLinearMap.adjoint_inner_right a x (a x)
+    have hb : ⟪x, (ContinuousLinearMap.adjoint b) (b x)⟫_ℂ = ⟪b x, b x⟫_ℂ :=
+      ContinuousLinearMap.adjoint_inner_right b x (b x)
+    change RCLike.re ⟪x, x - ((ContinuousLinearMap.adjoint a) (a x) +
+      (ContinuousLinearMap.adjoint b) (b x))⟫_ℂ = _
+    rw [inner_sub_right, inner_add_right, ha, hb, map_sub, map_add,
+      inner_self_eq_norm_sq (𝕜 := ℂ) x, inner_self_eq_norm_sq (𝕜 := ℂ) (a x),
+      inner_self_eq_norm_sq (𝕜 := ℂ) (b x)]
+  have hcol : ‖a x‖ ^ 2 + ‖b x‖ ^ 2 ≤ ‖x‖ ^ 2 := by
+    rw [← norm_l2Column_apply_sq]
+    have hle : ‖l2Column a b x‖ ≤ ‖x‖ := by
+      calc ‖l2Column a b x‖ ≤ ‖l2Column a b‖ * ‖x‖ :=
+          ContinuousLinearMap.le_opNorm _ _
+        _ ≤ 1 * ‖x‖ := by
+            have := norm_nonneg x
+            nlinarith
+        _ = ‖x‖ := one_mul _
+    nlinarith [norm_nonneg (l2Column a b x), norm_nonneg x]
+  change 0 ≤ RCLike.re ⟪(ContinuousLinearMap.id ℂ E -
+    (ContinuousLinearMap.adjoint a ∘L a +
+      ContinuousLinearMap.adjoint b ∘L b)) x, x⟫_ℂ
+  rw [inner_re_symm, hform]
+  linarith
+
+end ColumnGram
 
 section Inl
 
