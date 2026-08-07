@@ -1,6 +1,6 @@
 # Davis--Kahan 1970 full source census
 
-Base commit: `56541fb8`.
+Base commit: `1d856e9c`.
 
 This is the public, independently worded theorem-by-theorem ledger for the
 full paper. The maintained modernized transcription is used only as a local
@@ -871,7 +871,15 @@ row.  The evidence is the four operator-level theorems above.  The constructed v
 recorded because its `third_eigenvalue` field is supplied by an actual nonzero point of
 `beamOperator.realSpectrum` with `500 <` discharged from the proved gap -- which is the
 only reading under which that (otherwise dead) field says anything.
-- **Next action:** Nothing outstanding for the model itself: the operator, its kernel, its spectral gap, the orthonormal trial pair, and the identification of the finite moments with genuine L^2 integrals are all compiled and in the default build.  The sorried skeleton DavisKahan/Experimental/Frontier/Section9Analytic.lean is now superseded by the `FreeBeam.Model` namespace and should be retired; it is the only remaining Section 9 item on this row and it is deletion, not mathematics.
+
+**SKELETON RETIRED 2026-08-07.**  `DavisKahan/Experimental/Frontier/Section9Analytic.lean`
+is deleted.  It was a sorried semantic-model skeleton (`FreeBeamAnalyticModel`,
+`freeBeamClosedFourthDerivative`, `RepresentsFreeBeamProblem`, `actualSinThetaOne`, ...)
+whose every declaration is superseded by the `FreeBeam.Model` namespace; no Lean file
+referenced it outside its own `Frontier/All.lean` import.  After the deletion the only
+`sorry`s left anywhere under `DavisKahan/` and `ForTauCeti/` are the two long-standing
+unguarded `Experimental/InfiniteDimensional` items.
+- **Next action:** Nothing outstanding.  The operator, its kernel, its spectral gap, the orthonormal trial pair, and the identification of the finite moments with genuine L^2 integrals are all compiled and in the default build, and the sorried Section9Analytic skeleton has been deleted.
 
 #### Equations (9.1)–(9.4): Initial sine and sine-double-angle bounds
 
@@ -880,7 +888,7 @@ only reading under which that (otherwise dead) field says anything.
 - **Verification:** `proved_conditional`
 - **Mathematics:** Compute R*R and derive the operator- and two-singular-value bounds for sin Theta and sin(2 Theta).
 - **Blocked by:** `section9-certificate-discharge`
-- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.initial_residual_gram_from_affine_moments`, `TauCeti.DavisKahan1970.Section9.residualGram_eigenvalueHigh_charAt`, `TauCeti.DavisKahan1970.Section9.equation_9_1`, `TauCeti.DavisKahan1970.Section9.equation_9_4`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSinTheta_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSinTwoTheta_lt`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamPerturbation_comp_trialIncl_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSpecProjection_lowSet_eq_singleton`
+- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.initial_residual_gram_from_affine_moments`, `TauCeti.DavisKahan1970.Section9.residualGram_eigenvalueHigh_charAt`, `TauCeti.DavisKahan1970.Section9.equation_9_1`, `TauCeti.DavisKahan1970.Section9.equation_9_4`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSinTheta_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSinTwoTheta_lt`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamPerturbation_comp_trialIncl_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSpecProjection_lowSet_eq_singleton`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSinTwoThetaSum_lt`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamKyFanTwo_gaugeReal_le`
 - **Assessment:** The residual Gram matrix, its two characteristic roots, exact radical bounds, and the printed rational relaxations are represented. The actual sine and double-angle theorem outputs are still bridge hypotheses pending integration with the maintained theorem APIs.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `partial_or_wrapper_missing`. The arithmetic is compiled and axiom-clean; the printed conclusions are certificate fields rather than applications of the source-facing sine and tangent theorems.
@@ -916,7 +924,26 @@ the gauge arithmetic.  (9.4) needs only `kyFan_2 gauge (eps t) <= 2 eps`.  (9.3)
 one: it needs the Ky Fan 2 gauge of the rank-two residual to be at most
 `residualKyFanTwo eps`, i.e. *both* singular values of the residual Gram matrix, where (9.1)
 needed only the top one.
-- **Next action:** Equations (9.1) and (9.2) are derived from `beamOperator` (see notes).  Remaining: the two Ky Fan sums.  (9.4) needs `sinTwoTheta_addBounded_gauge_of_spectrum_gap` with the already-proved form bounds plus `kyFan 2 gauge (eps t) <= 2 eps`.  (9.3) needs `sinTheta_unbounded_gauge_of_spectrum_gap` plus the Ky Fan 2 gauge of the rank-two residual, which requires both singular values of the residual Gram matrix rather than just the top one.
+
+**(9.4) ALSO DERIVED (2026-08-07, Opus 5).**  `beamSinTwoThetaSum_lt`.  The ideal-gauge
+form of the double-angle theorem was already proved; what was missing was the gauge
+arithmetic.  `beamKyFanTwo` is the two-term Ky Fan family over the beam space; every
+bounded operator is a member (the gauge is a finite sum of approximation numbers, so it
+never reaches infinity), and `beamKyFanTwo_gaugeReal_le` bounds it by twice the operator
+norm because both summands are.  Three of this row's four bounds are now derived.
+
+**WHAT (9.3) STILL NEEDS, precisely.**  `sinTheta_unbounded_gauge_of_spectrum_gap` with the
+same data as (9.1) reduces it to `kyFan_2 gauge (residual) <= residualKyFanTwo eps`, i.e.
+`a_0 + a_1 <= residualTopSingularValue eps + residualBottomSingularValue eps`.  `a_0` is
+`norm_beamPerturbation_comp_trialIncl_le`, already proved.  `a_1` needs an explicit rank-one
+approximant, which needs the top eigendirection of the residual Gram matrix: with
+`c = -(sqrt 75 + sqrt 76)` the eigenvector is `phi_1 + c phi_2` in the orthonormal trial
+basis, and the eigenvalue identity reduces to `(sqrt 75 + sqrt 76)(sqrt 75 - sqrt 76) = -1`,
+so the radical arithmetic is clean.  The Lean cost is the rank-one operator and the fact
+that `{phi_1, phi_2}` spans `beamTrial` (equivalently `finrank beamTrial = 2`).  Note that
+no shortcut through `a_1 <= a_0` works: `2 * residualTopSingularValue / 500` exceeds the
+printed `109/50000 * eps`.
+- **Next action:** Equations (9.1), (9.2) and (9.4) are derived from `beamOperator`.  Only (9.3) remains: `sinTheta_unbounded_gauge_of_spectrum_gap` with the (9.1) data, plus the second singular value of the residual via an explicit rank-one approximant along the top eigendirection of the residual Gram matrix (see notes for the eigenvector and the radical identity that makes it work).
 
 #### Equations (9.5)–(9.7): Rayleigh–Ritz tangent refinements
 
@@ -989,7 +1016,27 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 - **Mathematics:** Ask for the best UI-norm sine-angle estimate when the two relevant spectra are only known to be at distance delta.
 - **Current Lean references:** `TauCeti.DavisKahan1970.Theorem6_2`
 - **Assessment:** The paper resolves the square norm; the repository has the sharp pairwise Hilbert–Schmidt theorem. The all-UI-norm version remains a distinct question.
-- **Next action:** Record precisely which norm classes are resolved and which remain open.
+
+**NORM CLASSES RECORDED 2026-08-07 (Opus 5), closing this row's standing next_action.**
+
+* RESOLVED, under the weak hypothesis Question 10.1 actually asks about (the two spectra
+  only known to be at pairwise distance `delta`, with no interval/exterior separation):
+  the **Hilbert--Schmidt / Frobenius** class.  `DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem62.lean`
+  states Theorem 6.2 with exactly that weaker pairwise spectral-distance hypothesis and
+  concludes `frameLowerBound * paperHilbertSchmidtNorm (canonicalSinTheta) <= ...`, over
+  `paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct`; the real-scalar form is
+  `PaperRealTheorem62Data.result_across`.
+* RESOLVED, but under the *stronger* interval/exterior hypothesis, hence not an answer to
+  this question: **every** unitarily invariant norm, with constant one -- that is Theorem 6.1
+  and its ideal-gauge forms (rows DK-6.1-thm and S2-*).
+* OPEN, and this is precisely Question 10.1: any unitarily invariant norm other than the
+  Hilbert--Schmidt one under the pairwise-distance hypothesis alone.  The paper poses it and
+  the repository does not answer it; the Hilbert--Schmidt proof is a Sylvester/Frobenius
+  argument that does not transfer to a general gauge.
+
+This row stays `resolved_by_modern_development`: one norm class is answered, the general
+question is not, and it is the paper's own open question rather than proof debt.
+- **Next action:** Nothing outstanding: the resolved class (Hilbert--Schmidt under pairwise spectral distance) and the open class (all other unitarily invariant norms under the same hypothesis) are now recorded in the notes with their declarations.  This is the paper's own open question, not proof debt.
 
 #### Question 10.2: Three-way subspace decompositions
 
