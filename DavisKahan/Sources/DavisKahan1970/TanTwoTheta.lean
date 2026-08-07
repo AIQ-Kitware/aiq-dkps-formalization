@@ -18,12 +18,38 @@ conclusion of Theorem 8.1.
 
 ## Audited source scope
 
-The source assumes the perturbation is fully off-diagonal with respect to the
-unperturbed splitting (`P H P = 0` and `P^⊥ H P^⊥ = 0`) and that the two
-diagonal spectral blocks are separated by `δ`; the conclusion is
-`δ · ‖tan 2Θ‖ ≤ 2 ‖H‖` together with the strict quarter-turn branch
-`Θ < π/4`.  The source text develops the argument through paired singular
-vectors, claiming every unitary-invariant norm.
+**Corrected 2026-08-07.**  This section previously said the source conclusion is
+`δ · ‖tan 2Θ‖ ≤ 2 ‖H‖` "together with the strict quarter-turn branch
+`Θ < π/4`".  That conflates two different theorems and must not be repeated.
+
+The printed Section 2 `tan 2θ` theorem assumes **only**
+
+* `spectrum(A₀) ⊆ [β, α]` and `spectrum(A₁) ⊆ [α + δ, ∞)` — both conditions on
+  the blocks of the *unperturbed* `A`; and
+* `H₀ = 0` and `H₁ = 0`, i.e. `H` fully off-diagonal for the unperturbed
+  splitting;
+
+and concludes, for every unitarily invariant norm,
+`δ ‖tan 2Θ₀‖ ≤ 2 ‖R‖` and `δ ‖tan 2Θ‖ ≤ 2 ‖H‖`.
+
+It assumes **nothing** about the spectral placement of `Λ₀` and `Λ₁`, the blocks
+of `A + H` for the chosen reducing subspace `Q`, and it does **not** conclude
+`Θ < π/4`.  `Q` is an arbitrary reducing subspace of `A + H`.  The paper is
+explicit that this is deliberate, at the head of Section 8:
+
+> The double-angle conclusions also allow angles close to `π/2`. … The
+> explanation is that the double-angle theorems imposed no special choice of the
+> reducing subspace `QH` of `A + H`.
+
+`Θ < π/4` is the conclusion of **Theorem 8.1**, which earns it from the extra
+hypotheses that `P` is the spectral projector of `A` for `(-∞, α]` and `Q` the
+spectral projector of `A + H` for the same interval.  A theorem that assumes
+ordered form bounds on `A + H` restricted to `V` and `Vᗮ` is therefore a
+*selected-branch* theorem, not the unrestricted Section 2 statement, and must
+not be cited as the latter.
+
+The source text develops the argument through paired singular vectors, claiming
+every unitary-invariant norm.
 
 ## What is compiled, at which scope
 

@@ -9,13 +9,37 @@ import DavisKahan.SpectralTheory.Complexification.FormTransport
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 
 /-!
-# The `tan 2Θ` theorem over a real Hilbert space
+# The selected-branch `tan 2Θ` theorem over a real Hilbert space
 
 Standing assumption 1 of Davis--Kahan 1970 is that the Hilbert space is "real or
 complex", and the paper says explicitly that "all four theorems are applicable
-for infinite- as well as finite-dimensional spaces".  The complex, arbitrary
-dimensional, arbitrary unitarily-invariant-norm `tan 2Θ` theorem is
-`paperFaithful_tanTwoTheta_uiNorm`.  This module supplies the real half.
+for infinite- as well as finite-dimensional spaces".  This module supplies the
+real half of `paperFaithful_tanTwoTheta_uiNorm`.
+
+## Scope: this is the selected-branch form, NOT the Section 2 theorem
+
+Read this before citing the theorem below.
+
+The printed Section 2 `tan 2θ` theorem assumes only `spectrum(A₀) ⊆ [β, α]`,
+`spectrum(A₁) ⊆ [α + δ, ∞)` -- conditions on the blocks of the *unperturbed*
+operator -- together with `H₀ = H₁ = 0`.  The reducing subspace `Q` of `A + H`
+is **arbitrary**, and the conclusion is the norm inequality alone.
+
+The theorem below, like its complex donor, additionally assumes ordered form
+bounds on `A + H` restricted to `V` and `Vᗮ` (`hVlow`, `hVperpHigh`).  Those are
+spectral placements of `Λ₀` and `Λ₁`, which the source does not assume, and they
+are exactly what lets `IsQuarterAcute U V` be concluded.  So this is the
+*selected-branch* theorem -- the configuration of Theorem 8.1 -- and it must not
+be used to certify the unrestricted Section 2 row.
+
+The paper is explicit that the difference is real, at the head of Section 8:
+"The double-angle conclusions also allow angles close to `π/2`. … the
+double-angle theorems imposed no special choice of the reducing subspace `QH` of
+`A + H`."  A branch-free real `tan 2Θ` is still open; see the `S2-tan-two-theta`
+census row.
+
+The theorem is nonetheless the right real object for Section 8 and for
+applications, where the branch *is* selected.
 
 No perturbation theory is repeated.  The proof complexifies the entire real
 configuration, applies the complex theorem verbatim, and pulls the conclusion
@@ -59,8 +83,13 @@ open TauCeti.DavisKahanExt.Real
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
 
-/-- **The `tan 2Θ` theorem over a real Hilbert space, for every source
-unitarily-invariant norm, in arbitrary dimension.**
+/-- **The SELECTED-BRANCH `tan 2Θ` theorem over a real Hilbert space, for every
+source unitarily-invariant norm, in arbitrary dimension.**
+
+Not the unrestricted Section 2 theorem: `hVlow` and `hVperpHigh` place the
+spectrum of `Λ₀` and `Λ₁`, which the source does not assume, and which is what
+makes `IsQuarterAcute U V` available.  See the scope section of the module
+docstring.
 
 Real form of `paperFaithful_tanTwoTheta_uiNorm`.  `A` is self-adjoint with `U`
 invariant and the ordered form gap `b` on `U` against `a` on `Uᗮ`; `H` is

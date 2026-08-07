@@ -11,8 +11,8 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 26 |
-| `compiled_specialization` | 7 |
+| `compiled_exact` | 25 |
+| `compiled_specialization` | 8 |
 | `compiled_general_infrastructure` | 4 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
@@ -248,7 +248,7 @@ VERIFIED 2026-08-05 by the elaborator: both names resolve from `DavisKahan.All` 
 #### Section 2, tan 2 theta theorem: Double-angle tangent theorem
 
 - **Kind:** `unnumbered_theorem`
-- **Status:** `compiled_exact`
+- **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Fully off-diagonal perturbations across an ordered gap give residual and perturbation tan(2 Theta) bounds with factor two.
 - **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm`, `TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm_selectedBranch`, `TauCeti.DavisKahan.paperFaithful_tanTwoTheta_uiNorm_real`
@@ -275,6 +275,14 @@ No perturbation theory was repeated.  The proof complexifies the configuration, 
 * `DavisKahan/SpectralTheory/Complexification/FormTransport.lean` -- `re_inner_complexify` (which is `rfl`), `re_inner_le_of_mem_complexifySubmodule`, `le_re_inner_of_mem_complexifySubmodule`, `mapsTo_complexifySubmodule`, `mapsTo_orthogonal_complexifySubmodule`, `mapsTo_of_mem_orthogonal_complexifySubmodule`.  Form constants are preserved EXACTLY, which matters because these feed ordered-gap hypotheses where a lossy transport would not close the gap.
 
 The conclusion names `tanTwoAngleOperatorRC U V`, which is by definition `tanTwoAngleOperatorC` of the two complexified subspaces.  That is faithful rather than a workaround: the source bounds a unitarily-invariant norm, such a norm sees only approximation singular values, and those are preserved.  A literally `E →L[ℝ] E`-typed angle operator is extractable via `complexify_realPartOperator` and would have the same singular values, hence the same value under every `N`.
+
+**OVER-CLAIM CORRECTED 2026-08-07 (Claude Opus 5).**  Earlier the same day I upgraded this row to `compiled_exact` on the strength of `paperFaithful_tanTwoTheta_uiNorm_real`.  That was wrong, and the row is restored to `compiled_specialization`.  The real lift is genuine and is retained -- it closes the SCALAR axis -- but it inherits the branch restriction of its complex donor `paperFaithful_tanTwoTheta_uiNorm`, so closing the scalar axis did not close the row.
+
+The paper is explicit that the restriction is a real difference, at the head of Section 8: "The double-angle conclusions also allow angles close to pi/2. ... The explanation is that the double-angle theorems imposed no special choice of the reducing subspace QH of A+H."  `Theta < pi/4` is Theorem 8.1's conclusion, earned from the extra hypothesis that `P` and `Q` are the spectral projectors of `A` and `A + H` for the same interval.  A CLEAN census must not be read as evidence that branch-free tan 2Theta is done.
+
+WHERE THE BRANCH-FREE THEOREM STANDS: `DavisKahan/DoubleAngle/TanTwoThetaKyFan.lean` is close to the printed Section 7 argument, but its graph-coordinate theorem assumes `hT1 : T.singularValues 0 < 1`, i.e. the strict quarter-acute branch, which the printed theorem does not.  The printed proof instead chooses a sign according to `cos 2 theta_j` and derives `2 Re(y_j* B x_j) >= delta * |tan 2 theta_j|`, so the branch-free statement needs an `|tan 2Theta|` representation.  Follow printed equation (7.6); do NOT try to infer the unrestricted theorem from the quarter-acute Riccati API, and do not route it through Theorem 8.1, which selects one particular `Q`.
+
+`paperFaithful_tanTwoTheta_uiNorm_real` and its complex donor are now documented as selected-branch in their module docstrings and in `Sources/DavisKahan1970/TanTwoTheta.lean`, whose 'Audited source scope' section had itself asserted that the source conclusion includes `Theta < pi/4`.  It does not.
 - **Next action:** Nothing for the bounded arbitrary-UI-norm theorem with selected branch: it is `sharp_paperUnitaryInvariantNorm_selectedBranch`.  What remains under this heading is the UNBOUNDED passage, tracked on S2-unbounded-scope and DK-6-appendix.  (Corrected 2026-08-07: this action previously claimed DK-8.1-thm and DK-8.2-thm are outside the default build.  They are not -- both rows read `compiled_exact` / `proved_in_build`, and their promotion is long done.)
 
 #### Section 2, paragraph after four theorems: Best constants and simultaneous equality
