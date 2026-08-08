@@ -406,6 +406,51 @@ theorem sum_le_rectangularKyFanSum_of_orthonormal
     _ ≤ rectangularKyFanSum k A :=
       re_sum_inner_map_le_rectangularKyFanSum hk hu hv
 
+omit [FiniteDimensional 𝕜 F] in
+/-- Rescaling an orthonormal family by unimodular scalars leaves it
+orthonormal. -/
+theorem orthonormal_unimodular_smul {ι : Type*} {u : ι → F}
+    (hu : Orthonormal 𝕜 u) {c : ι → 𝕜} (hc : ∀ i, ‖c i‖ = 1) :
+    Orthonormal 𝕜 fun i => c i • u i := by
+  classical
+  rw [orthonormal_iff_ite] at hu ⊢
+  intro i j
+  rw [inner_smul_left, inner_smul_right, hu i j]
+  by_cases h : i = j
+  · subst h
+    rw [if_pos rfl, mul_one, RCLike.conj_mul, hc i]
+    norm_num
+  · rw [if_neg h, mul_zero, mul_zero]
+
+/-- **Absolute-value witness form of the rectangular Ky Fan upper bound.**
+Because the two orthonormal families may be rephased independently, the Ky Fan
+prefix dominates the sum of the *magnitudes* of the matched coefficients, not
+merely their signed real parts.  This is the form needed whenever the sign of
+each matched coefficient is dictated by the geometry rather than chosen. -/
+theorem sum_abs_le_rectangularKyFanSum_of_orthonormal
+    {A : E →ₗ[𝕜] F} {k : ℕ} (hk : k ≤ finrank 𝕜 E)
+    {u : Fin k → F} {v : Fin k → E} (hu : Orthonormal 𝕜 u)
+    (hv : Orthonormal 𝕜 v) {t : Fin k → ℝ}
+    (ht : ∀ i, t i ≤ |RCLike.re ⟪u i, A (v i)⟫_𝕜|) :
+    ∑ i, t i ≤ rectangularKyFanSum k A := by
+  classical
+  set ε : Fin k → 𝕜 := fun i =>
+    if 0 ≤ RCLike.re ⟪u i, A (v i)⟫_𝕜 then 1 else -1 with hε
+  have hεnorm : ∀ i, ‖ε i‖ = 1 := by
+    intro i
+    rw [hε]
+    by_cases h : 0 ≤ RCLike.re ⟪u i, A (v i)⟫_𝕜 <;> simp [h]
+  refine sum_le_rectangularKyFanSum_of_orthonormal hk
+    (orthonormal_unimodular_smul hu hεnorm) hv (t := t) fun i => ?_
+  have hval : RCLike.re ⟪ε i • u i, A (v i)⟫_𝕜 =
+      |RCLike.re ⟪u i, A (v i)⟫_𝕜| := by
+    rw [inner_smul_left, hε]
+    by_cases h : 0 ≤ RCLike.re ⟪u i, A (v i)⟫_𝕜
+    · simp [h, abs_of_nonneg h]
+    · simp [h, abs_of_neg (not_le.mp h)]
+  rw [hval]
+  exact ht i
+
 /-- **Rectangular Ky Fan subadditivity**: the `k`-th Ky Fan sum of a sum of
 operators is at most the sum of the two Ky Fan sums.
 
