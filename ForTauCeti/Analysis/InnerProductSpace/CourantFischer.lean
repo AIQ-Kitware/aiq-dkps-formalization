@@ -314,7 +314,7 @@ theorem eigenvalues_eq_iSup_iInf_re_inner
   -- The lower-direction witness subspace attains `λₖ` from below.
   obtain ⟨V₀, hV₀dim, hV₀low⟩ :=
     hT.exists_submodule_forall_unit_eigenvalue_le_re_inner hn k
-  haveI : Nonempty {V : Submodule 𝕜 E // finrank 𝕜 V = (k : ℕ) + 1} :=
+  have : Nonempty {V : Submodule 𝕜 E // finrank 𝕜 V = (k : ℕ) + 1} :=
     ⟨⟨V₀, hV₀dim⟩⟩
   obtain ⟨x₀, hx₀V, hx₀1, -⟩ :=
     hT.exists_unit_vector_re_inner_le_eigenvalue hn k V₀ hV₀dim
@@ -324,7 +324,7 @@ theorem eigenvalues_eq_iSup_iInf_re_inner
           {V : Submodule 𝕜 E // finrank 𝕜 V = (k : ℕ) + 1}) :
             Submodule 𝕜 E) ∧ ‖x‖ = 1},
         RCLike.re ⟪T (x : E), (x : E)⟫_𝕜 := by
-    haveI : Nonempty {x : E // x ∈ V₀ ∧ ‖x‖ = 1} := ⟨⟨x₀, hx₀V, hx₀1⟩⟩
+    have : Nonempty {x : E // x ∈ V₀ ∧ ‖x‖ = 1} := ⟨⟨x₀, hx₀V, hx₀1⟩⟩
     exact le_ciInf fun x => hV₀low _ x.2.1 x.2.2
   have hbddA : BddAbove (Set.range
       fun V : {V : Submodule 𝕜 E // finrank 𝕜 V = (k : ℕ) + 1} =>

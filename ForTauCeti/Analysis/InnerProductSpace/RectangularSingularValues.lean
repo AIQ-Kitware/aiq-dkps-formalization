@@ -185,7 +185,7 @@ noncomputable def nonzeroEigenspaceEquivAdjointCompSelfSelfCompAdjoint
     (A : E →ₗ[𝕜] F) (μ : 𝕜) (hμ : μ ≠ 0) :
     Module.End.eigenspace (A.adjoint.comp A) μ ≃ₗ[𝕜]
       Module.End.eigenspace (A.comp A.adjoint) μ := by
-  refine LinearEquiv.ofLinear
+  refine LinearEquiv.ofLinearMap
     (A.restrict fun x hx => apply_mem_eigenspace_selfCompAdjoint A hx)
     ((μ⁻¹ • A.adjoint).restrict fun y hy => Submodule.smul_mem _ _
       (adjoint_apply_mem_eigenspace_adjointCompSelf A hy)) ?_ ?_

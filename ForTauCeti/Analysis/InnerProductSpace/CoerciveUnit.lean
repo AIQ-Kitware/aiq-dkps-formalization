@@ -99,9 +99,9 @@ theorem isUnit_of_coercive {N : E →L[𝕜] E} {c : ℝ} (hc : 0 < c)
         IsClosed ((LinearMap.range (N : E →ₗ[𝕜] E) : Submodule 𝕜 E) : Set E) := by
       rw [LinearMap.coe_range]
       exact hanti.isClosed_range N.uniformContinuous
-    haveI : CompleteSpace (LinearMap.range (N : E →ₗ[𝕜] E)) :=
+    have : CompleteSpace (LinearMap.range (N : E →ₗ[𝕜] E)) :=
       hclosed.completeSpace_coe
-    haveI : (LinearMap.range (N : E →ₗ[𝕜] E)).HasOrthogonalProjection :=
+    have : (LinearMap.range (N : E →ₗ[𝕜] E)).HasOrthogonalProjection :=
       Submodule.HasOrthogonalProjection.ofCompleteSpace _
     have hrange : LinearMap.range (N : E →ₗ[𝕜] E) = ⊤ := by
       rw [← Submodule.orthogonal_eq_bot_iff, Submodule.eq_bot_iff]
@@ -227,7 +227,7 @@ private theorem div_one_add_le_of_forall_sub_sq_le {b K : ℝ} (hb : 0 < b)
     (h : ∀ ε ∈ Set.Ioo (0 : ℝ) b, (b - ε) ^ 2 / (b + (b - ε) ^ 2) ≤ K) :
     b / (1 + b) ≤ K := by
   have hcont := tendsto_sub_sq_div_add_sub_sq (b := b) hb
-  haveI : (nhdsWithin (0 : ℝ) (Set.Ioo 0 b)).NeBot := by
+  have : (nhdsWithin (0 : ℝ) (Set.Ioo 0 b)).NeBot := by
     apply mem_closure_iff_nhdsWithin_neBot.mp
     rw [closure_Ioo hb.ne]
     exact ⟨le_refl 0, hb.le⟩

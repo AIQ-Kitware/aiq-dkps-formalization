@@ -46,8 +46,8 @@ private theorem isPaperHilbertSchmidt_finite
 theorem rectangularFrobenius_adjoint (A : E →ₗ[𝕜] F) :
     RectangularUnitarilyInvariantSeminorm.frobenius A.adjoint =
       RectangularUnitarilyInvariantSeminorm.frobenius A := by
-  letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-  letI : CompleteSpace F := FiniteDimensional.complete 𝕜 F
+  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
   have h := paperHilbertSchmidtNorm_adjoint A.toContinuousLinearMap
   rw [← LinearMap.adjoint_toContinuousLinearMap,
     paperHilbertSchmidtNorm_eq_rectangularFrobenius,
@@ -65,8 +65,8 @@ theorem frobenius_comp_rectangular_le_opNorm_mul
     UnitarilyInvariantSeminorm.frobenius 𝕜 E (C ∘ₗ A) ≤
       ‖C.toContinuousLinearMap‖ *
         RectangularUnitarilyInvariantSeminorm.frobenius A := by
-  letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-  letI : CompleteSpace F := FiniteDimensional.complete 𝕜 F
+  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
   have hA : IsPaperHilbertSchmidt A.toContinuousLinearMap :=
     isPaperHilbertSchmidt_finite A.toContinuousLinearMap
   have h := paperHilbertSchmidtNorm_comp_le
@@ -102,10 +102,10 @@ theorem rectangularFrobenius_twoSided_comp_le
       ‖L.toContinuousLinearMap‖ *
         RectangularUnitarilyInvariantSeminorm.frobenius A *
           ‖R.toContinuousLinearMap‖ := by
-  letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-  letI : CompleteSpace F := FiniteDimensional.complete 𝕜 F
-  letI : CompleteSpace G := FiniteDimensional.complete 𝕜 G
-  letI : CompleteSpace H := FiniteDimensional.complete 𝕜 H
+  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
+  let : CompleteSpace G := FiniteDimensional.complete 𝕜 G
+  let : CompleteSpace H := FiniteDimensional.complete 𝕜 H
   have hA : IsPaperHilbertSchmidt A.toContinuousLinearMap :=
     isPaperHilbertSchmidt_finite A.toContinuousLinearMap
   have h := paperHilbertSchmidtNorm_comp_le

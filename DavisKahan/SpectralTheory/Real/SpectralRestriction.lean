@@ -287,9 +287,12 @@ theorem conjugateOperator_specProjection (A : RealClosedOperator) (hA : A.IsSelf
   -- Left as a `rw` chain on purpose: `simp only` with this same list fails to synthesize an
   -- instance that `rw` obtains from the rewritten form; simp normalises before the instance
   -- argument is determined.
+  -- The four unfolding steps that used to be spelled as bare definition names
+  -- (`specProjection`, `spectralPVM`, `toProjValMeasure_proj`, `specProj`) are now the single
+  -- `specProjection_eq_borelCalculus`: `rw` with a definition name needs that definition's
+  -- equation theorems, which are no longer generated for these module-system definitions.
   rw [conjugateOperator_apply, inner_conjugation_right, ← inner_conj_symm,
-    TauCeti.LinearPMap.specProjection, TauCeti.LinearPMap.spectralPVM,
-    TauCeti.BorelCalculus.toProjValMeasure_proj, TauCeti.BorelCalculus.specProj,
+    TauCeti.LinearPMap.specProjection_eq_borelCalculus hAℂ S hS,
     TauCeti.BorelCalculus.inner_borelCalculus, TauCeti.BorelCalculus.inner_borelCalculus]
   -- move the conjugation through the four diagonal measures
   have h1 : conjugation ξ + conjugation ψ = conjugation (ξ + ψ) := (map_add _ _ _).symm

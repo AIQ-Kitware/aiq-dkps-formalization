@@ -504,12 +504,15 @@ noncomputable def toRectangular (N : SymmetricOperatorIdealFamily.{u, v} 𝕜)
   gauge_complete := by
     intro E F _ _ _ _ _ _ A hmem hcauchy
     -- Read the sequence inside the ideal, where the gauge *is* the norm.
+    -- Canonical `∈ carrier` form, so that `Elem.val_mk` matches below; see the same step in
+    -- `DavisKahan/OperatorIdeal/CanonicalRealView.lean`.
     set a : ℕ → N.toOperatorIdealFamily.Elem E F :=
-      fun n => OperatorIdealFamily.Elem.mk (hmem n) with ha
+      fun n => OperatorIdealFamily.Elem.mk
+        ((N.toOperatorIdealFamily.mem_carrier_iff).mpr (hmem n)) with ha
     have hdist : ∀ m n, dist (a m) (a n) = (N.gauge (A m - A n)).toReal := by
       intro m n
       rw [dist_eq_norm, ha, OperatorIdealFamily.Elem.norm_def]
-      simp
+      simp [OperatorIdealFamily.Elem.val_mk]
     have hcs : CauchySeq a := by
       rw [Metric.cauchySeq_iff]
       intro ε hε

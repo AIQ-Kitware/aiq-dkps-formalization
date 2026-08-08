@@ -246,7 +246,7 @@ theorem MultiplicityDatum.ae_norm_le_bound (D : MultiplicityDatum) :
   intro k
   have hfib : {z : ℂ | (z, k) ∈ {p : ℂ × ℕ | ¬ ‖p.1‖ ≤ D.bound}} = {z : ℂ | D.bound < ‖z‖} := by
     refine Set.ext fun z => ?_
-    simp only [Set.mem_setOf_eq, not_le]
+    simp only [Set.mem_ofPred_eq, not_le]
   rw [hfib, Measure.restrict_apply (measurableSet_lt measurable_const measurable_norm)]
   exact measure_mono_null Set.inter_subset_left D.base_supported
 
@@ -321,7 +321,7 @@ theorem exists_hasMultiplicityModel [TopologicalSpace.SeparableSpace H] (ha : Is
   have hemb : MeasurableEmbedding ((↑) : spectrum ℂ a → ℂ) :=
     MeasurableEmbedding.subtype_coe hmeasSpec
   obtain ⟨ξ, hsum⟩ := exists_countable_isHilbertSum_lp_diagMeasure ha
-  haveI hfin : ∀ n, IsFiniteMeasure (Measure.map ((↑) : spectrum ℂ a → ℂ)
+  have hfin : ∀ n, IsFiniteMeasure (Measure.map ((↑) : spectrum ℂ a → ℂ)
       (diagMeasure ha (ξ n))) := fun n => Measure.isFiniteMeasure_map _ _
   have hsum' : IsHilbertSum ℂ
       (fun n => Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ n))))

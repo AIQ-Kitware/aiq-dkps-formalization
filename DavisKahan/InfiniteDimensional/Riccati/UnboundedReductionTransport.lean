@@ -116,14 +116,14 @@ theorem pullback_reducesSubspace_of_intertwines_projection
     rw [hintertwine]
     exact hVOrthDom (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)
   · intro x hx
-    change TauCeti.LinearPMap.pullbackLinearMap A e x ∈ U
-    rw [TauCeti.LinearPMap.pullbackLinearMap_apply]
+    -- Unfolded directly: `x : (pullback A e).domain` blocks a rewrite with
+    -- `pullbackLinearMap_apply`, but the `change` itself is definitional.
+    change e.symm (A (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)) ∈ U
     apply symm_map_mem_of_intertwines_projection e U V hproj
     apply hVinv (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)
     exact map_mem_of_intertwines_projection e U V hproj hx
   · intro x hx
-    change TauCeti.LinearPMap.pullbackLinearMap A e x ∈ Uᗮ
-    rw [TauCeti.LinearPMap.pullbackLinearMap_apply]
+    change e.symm (A (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)) ∈ Uᗮ
     apply symm_map_mem_of_intertwines_projection e Uᗮ Vᗮ hprojOrth
     apply hVOrthInv (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)
     exact map_mem_of_intertwines_projection e Uᗮ Vᗮ hprojOrth hx

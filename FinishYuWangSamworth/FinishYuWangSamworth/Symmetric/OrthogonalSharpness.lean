@@ -152,7 +152,7 @@ theorem eigenspace_orthogonalSharpnessPopulation :
   rw [orthogonalSharpnessPopulation, eigenspace_basisDiagonal]
   congr 1
   ext i
-  simp only [Set.mem_setOf_eq, orthogonalSharpnessPopulationData, RCLike.ofReal_inj]
+  simp only [Set.mem_ofPred_eq, orthogonalSharpnessPopulationData, RCLike.ofReal_inj]
   split_ifs with h
   · exact iff_of_true rfl h
   · exact iff_of_false (by norm_num) h
@@ -165,7 +165,7 @@ theorem eigenspace_orthogonalSharpnessSample (hε : 0 < ε) :
   rw [orthogonalSharpnessSample, eigenspace_basisDiagonal]
   congr 1
   ext i
-  simp only [Set.mem_setOf_eq, orthogonalSharpnessSampleData, RCLike.ofReal_inj]
+  simp only [Set.mem_ofPred_eq, orthogonalSharpnessSampleData, RCLike.ofReal_inj]
   split_ifs with h
   · exact iff_of_false (fun hc => absurd (by linarith : ε = 0) (ne_of_gt hε))
       (not_not_intro h)
@@ -201,8 +201,8 @@ theorem orthogonal_orthogonalSharpness (hε : 0 < ε) (hdp : 2 * d ≤ p) :
   rw [eigenspace_orthogonalSharpnessPopulation, eigenspace_orthogonalSharpnessSample b hε,
     OrthonormalBasis.orthogonal_spanIndices]
   refine OrthonormalBasis.spanIndices_mono b fun i hi => ?_
-  simp only [Set.mem_compl_iff, Set.mem_setOf_eq, not_not]
-  simp only [Set.mem_setOf_eq] at hi
+  simp only [Set.mem_compl_iff, Set.mem_ofPred_eq, not_not]
+  simp only [Set.mem_ofPred_eq] at hi
   omega
 
 omit [FiniteDimensional 𝕜 E] in
@@ -242,14 +242,14 @@ theorem internalGap_orthogonalSharpness :
   have h3 : lam = 3 := by
     obtain ⟨i, hi, rfl⟩ :=
       restrictedSpectrum_basisDiagonal_subset b _ _ hlam
-    simp only [Set.mem_setOf_eq] at hi
+    simp only [Set.mem_ofPred_eq] at hi
     simp [orthogonalSharpnessPopulationData, hi]
   -- Its complement carries only the value `1`.
   have h1 : μ = 1 := by
     rw [OrthonormalBasis.orthogonal_spanIndices] at hμ
     obtain ⟨i, hi, rfl⟩ :=
       restrictedSpectrum_basisDiagonal_subset b _ _ hμ
-    simp only [Set.mem_compl_iff, Set.mem_setOf_eq] at hi
+    simp only [Set.mem_compl_iff, Set.mem_ofPred_eq] at hi
     simp [orthogonalSharpnessPopulationData, hi]
   rw [h3, h1]
   norm_num

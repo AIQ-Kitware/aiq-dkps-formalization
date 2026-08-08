@@ -87,7 +87,7 @@ theorem measurableSet_exists_mem_le
       ext ω; simp [hSe]
     rw [hempty]; exact MeasurableSet.empty
   -- A countable dense subset `D ⊆ S`.
-  haveI : SeparableSpace ↥S := hS.isSeparable.separableSpace
+  have : SeparableSpace ↥S := hS.isSeparable.separableSpace
   obtain ⟨t, htc, htd⟩ := TopologicalSpace.exists_countable_dense ↥S
   set D : Set Y := (fun y : ↥S => (y : Y)) '' t with hD
   have hDS : D ⊆ S := by rintro _ ⟨⟨y, hy⟩, _, rfl⟩; exact hy
@@ -102,7 +102,7 @@ theorem measurableSet_exists_mem_le
   have hset : {ω | ∃ y ∈ S, F y ω ≤ c}
       = ⋂ k : ℕ, ⋃ y ∈ D, {ω | F y ω < c + 1 / ((k : ℝ) + 1)} := by
     ext ω
-    simp only [Set.mem_setOf_eq, Set.mem_iInter, Set.mem_iUnion, exists_prop]
+    simp only [Set.mem_ofPred_eq, Set.mem_iInter, Set.mem_iUnion, exists_prop]
     constructor
     · rintro ⟨y₀, hy₀S, hy₀⟩ k
       have hk : (0 : ℝ) < 1 / ((k : ℝ) + 1) := by positivity
@@ -191,7 +191,7 @@ theorem measurable_iInf_of_isCompact (hS : IsCompact S) (hSne : S.Nonempty)
   measurable_of_Iic fun c => by
     have h : (fun ω => ⨅ y : S, F y ω) ⁻¹' Set.Iic c = {ω | ∃ y ∈ S, F y ω ≤ c} := by
       ext ω
-      simpa only [Set.mem_preimage, Set.mem_Iic, Set.mem_setOf_eq] using
+      simpa only [Set.mem_preimage, Set.mem_Iic, Set.mem_ofPred_eq] using
         (exists_mem_le_iff_iInf_le hS hSne hFc c ω).symm
     rw [h]
     exact measurableSet_exists_mem_le hS hFc hFm c

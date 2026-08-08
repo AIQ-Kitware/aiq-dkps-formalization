@@ -206,7 +206,7 @@ private theorem approximationNumber_le_singularValues
     let k : Fin (finrank 𝕜 E) := ⟨n, hnlt⟩
     have hWdim : finrank 𝕜 W = n := by
       dsimp only [W]
-      rw [b.finrank_spanIndices_set, Set.toFinset_setOf, Finset.card_filter_lt hnlt.le]
+      rw [b.finrank_spanIndices_set, Set.toFinset_ofPred, Finset.card_filter_lt hnlt.le]
     have hPrank : W.starProjection.rank = (n : Cardinal) := by
       -- states the goal with the definition unfolded, in the shape the next step needs;
       -- there is no `_apply` lemma to rewrite with here.
@@ -232,7 +232,7 @@ private theorem approximationNumber_le_singularValues
         (s := {i : Fin (finrank 𝕜 E) | (i : ℕ) < n}ᶜ)
         (c := hGram.eigenvalues rfl k)
         (fun i hi => hGram.eigenvalues_antitone rfl (by
-          rw [Set.mem_compl_iff, Set.mem_setOf_eq] at hi
+          rw [Set.mem_compl_iff, Set.mem_ofPred_eq] at hi
           -- states the goal with the definition unfolded, in the shape the next step needs;
           -- there is no `_apply` lemma to rewrite with here.
           change n ≤ (i : ℕ)

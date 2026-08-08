@@ -76,9 +76,23 @@ def IsOffDiagonalRelativeToProjection (P H : E →L[𝕜] E) : Prop :=
     (ContinuousLinearMap.id 𝕜 E - P) ∘L H ∘L
       (ContinuousLinearMap.id 𝕜 E - P) = 0
 
+-- `@[reducible]` for the same reason as `ClosedOperator.IsSelfAdjoint`: this is the shape
+-- `ContinuousLinearMap.restrict` already asks for, and unifiers matching at `instances`
+-- transparency have to be able to see that.
 /-- A subspace is invariant under a bounded operator. -/
-def InvariantFor (A : E →L[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
+@[reducible] def InvariantFor (A : E →L[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
   ∀ x ∈ U, A x ∈ U
+
+/-- `ContinuousLinearMap.coe_restrict_apply`, restated for a hypothesis in `InvariantFor` form.
+
+Mathlib's lemma is stated for `ContinuousLinearMap.restrict`'s own hypothesis shape, and
+`InvariantFor A U` is only definitionally that shape.  `simp` and `rw` match at `instances`
+transparency and will not bridge the two, so the Mathlib lemma never fires on the `InvariantFor`
+restrictions this development actually builds.  Compare
+`TauCeti.coe_restrict_apply_of_isInvariant` for the `LinearMap` counterpart. -/
+@[simp] theorem coe_restrict_apply_of_invariantFor {A : E →L[𝕜] E} {U : Submodule 𝕜 E}
+    (hU : InvariantFor A U) (x : U) :
+    ((A.restrict hU x : U) : E) = A (x : E) := rfl
 
 /-- Real points in the Banach-algebra spectrum of an `RCLike` operator.
 

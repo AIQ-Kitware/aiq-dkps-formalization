@@ -372,7 +372,7 @@ theorem conjugateOperator_cfc_eq
   have heq : cfcHom hC = φ :=
     cfcHom_eq_of_continuous_of_map_id hC φ hφcont hφid
   rw [cfc_apply f C hC hf]
-  let g : C(spectrum ℝ C, ℝ) := ⟨fun x => f x.1, hf.restrict⟩
+  let g : C(spectrum ℝ C, ℝ) := ⟨fun x => f x.1, hf.domRestrict⟩
   change conjugateOperator (cfcHom hC g) = cfcHom hC g
   have happ := DFunLike.congr_fun heq g
   change cfcHom hC g = conjugateOperator (cfcHom hC g) at happ

@@ -481,10 +481,10 @@ theorem specProjection_Ioo_eq_zero_of_rayleighRitz
   have hfinrankQ : Module.finrank ℂ (K.map (Q : H →ₗ[ℂ] H)) = Module.finrank ℂ K := by
     rw [← hrangeQ]
     exact (LinearEquiv.finrank_eq (LinearEquiv.ofInjective _ hQinj)).symm
-  haveI : FiniteDimensional ℂ (K.map (Q : H →ₗ[ℂ] H)) := by
+  have : FiniteDimensional ℂ (K.map (Q : H →ₗ[ℂ] H)) := by
     rw [← hrangeQ]
     infer_instance
-  haveI : FiniteDimensional ℂ (Submodule.span ℂ ({x} : Set H)) :=
+  have : FiniteDimensional ℂ (Submodule.span ℂ ({x} : Set H)) :=
     FiniteDimensional.span_of_finite ℂ (Set.finite_singleton x)
   have hinf : (Submodule.span ℂ ({x} : Set H)) ⊓ (K.map (Q : H →ₗ[ℂ] H)) = ⊥ := by
     rw [Submodule.eq_bot_iff]
@@ -510,7 +510,7 @@ theorem specProjection_Ioo_eq_zero_of_rayleighRitz
           rintro ⟨h1, -⟩
           exact h1
     exact this
-  haveI : FiniteDimensional ℂ W := by
+  have : FiniteDimensional ℂ W := by
     rw [hW]
     infer_instance
   have hfinrankW : Module.finrank ℂ W = Module.finrank ℂ K + 1 := by

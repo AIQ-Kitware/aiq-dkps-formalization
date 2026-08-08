@@ -484,7 +484,7 @@ continuous calculus, read through `integral_diagMeasure_ofReal`. -/
 theorem map_specIncl_diagMeasure (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K) (x : K) :
     Measure.map (specIncl ha hK) (diagMeasure (isStarNormal_compress ha hK) x)
       = diagMeasure ha (x : H) := by
-  haveI : IsFiniteMeasure
+  have : IsFiniteMeasure
       (Measure.map (specIncl ha hK) (diagMeasure (isStarNormal_compress ha hK) x)) :=
     (diagMeasure (isStarNormal_compress ha hK) x).isFiniteMeasure_map _
   refine ext_of_forall_integral_eq_of_IsFiniteMeasure fun g => ?_

@@ -229,7 +229,7 @@ theorem upperFormBoundOn_of_restriction_spectrum_subset_Iic
     (hU : ∀ x ∈ U, A x ∈ U) {c : ℝ}
     (hσ : spectrum ℝ (A.restrict hU) ⊆ Set.Iic c) :
     A.UpperFormBoundOn U c := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     completeSpace_coe_iff_isComplete.mpr U.isComplete_coe_of_hasOrthogonalProjection
   have hres : (A.restrict hU).IsSymmetric :=
     ContinuousLinearMap.IsSymmetric.restrict_of_invariant (A := A) hA hU
@@ -249,7 +249,7 @@ theorem lowerFormBoundOn_of_restriction_spectrum_subset_Ici
     (hU : ∀ x ∈ U, A x ∈ U) {c : ℝ}
     (hσ : spectrum ℝ (A.restrict hU) ⊆ Set.Ici c) :
     A.LowerFormBoundOn U c := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     completeSpace_coe_iff_isComplete.mpr U.isComplete_coe_of_hasOrthogonalProjection
   have hres : (A.restrict hU).IsSymmetric :=
     ContinuousLinearMap.IsSymmetric.restrict_of_invariant (A := A) hA hU

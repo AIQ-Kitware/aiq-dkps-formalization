@@ -180,7 +180,8 @@ theorem polarIsometry_intertwines_of_projection_intertwining
         ((P ∘L (polarRange T).subtypeL).codRestrict (polarRange T)
             (fun z => hpres z z.property)) ⟨m, hm⟩ = (⟨P m, hPm⟩ : polarRange T) := by
       apply Subtype.ext
-      simp
+      -- `simp` no longer takes the `codRestrict` coercion step; it is definitional.
+      rfl
     have hkey := DFunLike.congr_fun hfg ⟨m, hm⟩
     simp only [f, g, ContinuousLinearMap.comp_apply, hcodeq] at hkey
     rw [hmproj, hPmproj]

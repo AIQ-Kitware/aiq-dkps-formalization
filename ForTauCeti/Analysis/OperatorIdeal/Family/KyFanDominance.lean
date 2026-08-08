@@ -63,7 +63,7 @@ namespace TauCeti
 
 universe u v
 
-open ContinuousLinearMap
+open _root_.ContinuousLinearMap
 
 /-- **Ky Fan dominance.**  Majorization of every finite Ky Fan gauge forces the ideal gauge
 to be dominated too. -/

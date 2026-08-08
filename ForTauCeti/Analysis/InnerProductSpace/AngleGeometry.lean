@@ -372,7 +372,7 @@ theorem opNorm_projection_sub_eq_opNorm_sinThetaMap (U V : Submodule 𝕜 E)
     ‖(projection U - projection V).toContinuousLinearMap‖ =
       ‖(sinThetaMap U V).toContinuousLinearMap‖ := by
   classical
-  letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
   -- names the application so the norm bound applies to it directly.
   change ‖U.starProjection - V.starProjection‖ =
     ‖Vᗮ.starProjection ∘L U.starProjection‖

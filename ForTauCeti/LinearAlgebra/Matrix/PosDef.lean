@@ -100,7 +100,7 @@ destination package; declaration names, statements and proofs are unchanged.
 
 namespace TauCeti.Matrix
 
-open scoped BigOperators Matrix ComplexConjugate ComplexOrder InnerProductSpace
+open scoped BigOperators _root_.Matrix ComplexConjugate ComplexOrder InnerProductSpace
 open _root_.Matrix
 
 variable {𝕜 : Type*} [RCLike 𝕜] {n : ℕ}
@@ -149,12 +149,15 @@ theorem PosSemidef.exists_eq_conjTranspose_mul_self
     {B : Matrix (Fin n) (Fin n) 𝕜} (hB : B.PosSemidef) :
     ∃ A : Matrix (Fin n) (Fin n) 𝕜, B = Aᴴ * A := by
   have hHerm : B.IsHermitian := hB.1
-  refine ⟨fun k i =>
+  -- `Matrix.of` rather than a bare lambda: a lambda is not recognised as a `Matrix`, and
+  -- `Matrix.mul_apply` then has no `*` to rewrite.
+  refine ⟨Matrix.of fun k i =>
     (Real.sqrt (hHerm.eigenvalues k) : 𝕜) * conj (hHerm.eigenvectorUnitary i k), ?_⟩
   ext i j
   rw [Matrix.mul_apply, isHermitian_entry_eq_sum_eigenvalues B hHerm i j]
   refine Finset.sum_congr rfl fun k _ => ?_
   rw [Matrix.conjTranspose_apply, RCLike.star_def]
+  simp only [Matrix.of_apply]
   have hnn : 0 ≤ hHerm.eigenvalues k := _root_.Matrix.PosSemidef.eigenvalues_nonneg hB k
   simp only [map_mul, RCLike.conj_ofReal, RCLike.conj_conj]
   rw [show RCLike.ofReal (Real.sqrt (hHerm.eigenvalues k)) * hHerm.eigenvectorUnitary i k *
@@ -264,16 +267,20 @@ theorem exists_unitary_mul_of_conjTranspose_mul_self_eq {m d : ℕ}
   -- the induced map on the range
   set L₀ : LinearMap.range f →ₗ[𝕜] EuclideanSpace 𝕜 (Fin d) :=
     (LinearMap.ker f).liftQ f' hker ∘ₗ (f.quotKerEquivRange.symm : _ →ₗ[𝕜] _) with hL₀
-  have hL₀_apply : ∀ x, L₀ ⟨f x, ⟨x, rfl⟩⟩ = f' x := by
-    intro x
+  -- The membership must stay universally quantified and in its canonical `∈ LinearMap.range f`
+  -- form: written as `⟨x, rfl⟩` it appears unfolded, and `simp only` will not match
+  -- `quotKerEquivRange_symm_apply_image` against it.
+  have hL₀_apply : ∀ (x : EuclideanSpace 𝕜 (Fin m)) (hx : f x ∈ LinearMap.range f),
+      L₀ ⟨f x, hx⟩ = f' x := by
+    intro x hx
     simp only [hL₀, LinearMap.comp_apply, LinearEquiv.coe_coe,
       LinearMap.quotKerEquivRange_symm_apply_image, Submodule.mkQ_apply,
       Submodule.liftQ_apply]
   -- `L₀` preserves inner products, so it is an isometry of the range into the ambient space
   have hL₀_inner : ∀ y z : LinearMap.range f, ⟪L₀ y, L₀ z⟫_𝕜 = ⟪y, z⟫_𝕜 := by
     rintro ⟨-, x, rfl⟩ ⟨-, w, rfl⟩
-    rw [hL₀_apply, hL₀_apply, ← hinner]
-    rfl
+    rw [Submodule.coe_inner]
+    exact (congrArg₂ (inner 𝕜) (hL₀_apply x _) (hL₀_apply w _)).trans (hinner x w).symm
   set L : LinearMap.range f →ₗᵢ[𝕜] EuclideanSpace 𝕜 (Fin d) :=
     { toLinearMap := L₀
       norm_map' := fun y => by
@@ -294,7 +301,7 @@ theorem exists_unitary_mul_of_conjTranspose_mul_self_eq {m d : ℕ}
     have : Le (f x) = f' x := by
       rw [hLe]; change Lx (f x) = f' x
       rw [hx, hL]
-      exact hL₀_apply x
+      exact hL₀_apply x _
     exact this
   -- transport to matrices through `toEuclideanLin`
   apply Matrix.toEuclideanLin.injective

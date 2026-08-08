@@ -245,7 +245,16 @@ lemma continuous_prob_convergence {Ω : Type*} [MeasurableSpace Ω]
         -- Let $\delta = \min_{x \in t} \frac{\delta_x}{2}$.
         obtain ⟨δ_min, hδ_min_pos, hδ_min⟩ : ∃ δ_min > 0, ∀ x ∈ t, δ_min ≤ δ x / 2 := by
           by_cases ht_empty : t.Nonempty;
-          · exact ⟨ Finset.min' ( t.image fun x => δ x / 2 ) ⟨ _, Finset.mem_image_of_mem _ ht_empty.choose_spec ⟩, by have := Finset.min'_mem ( t.image fun x => δ x / 2 ) ⟨ _, Finset.mem_image_of_mem _ ht_empty.choose_spec ⟩ ; aesop, fun x hx => Finset.min'_le _ _ ( Finset.mem_image_of_mem _ hx ) ⟩;
+          · refine ⟨ Finset.min' ( t.image fun x => δ x / 2 )
+                ⟨ _, Finset.mem_image_of_mem _ ht_empty.choose_spec ⟩, ?_,
+              fun x hx => Finset.min'_le _ _ ( Finset.mem_image_of_mem _ hx ) ⟩;
+            -- The minimum is attained at some `w ∈ t`, where `δ w / 2 > 0`.  `aesop` used to
+            -- get here on its own from `Finset.min'_mem` alone; it no longer does.
+            obtain ⟨ w, hw, hwe ⟩ := Finset.mem_image.mp
+              ( Finset.min'_mem ( t.image fun x => δ x / 2 )
+                ⟨ _, Finset.mem_image_of_mem _ ht_empty.choose_spec ⟩ );
+            rw [ ← hwe ];
+            exact half_pos ( hδ_pos w ( ht₁ w hw ) );
           · exact ⟨ 1, zero_lt_one, fun x hx => False.elim <| ht_empty ⟨ x, hx ⟩ ⟩;
         refine' ⟨ δ_min, hδ_min_pos, fun x y hy hxy => _ ⟩;
         obtain ⟨ z, hz₁, hz₂ ⟩ := Set.mem_iUnion₂.mp ( ht₂ hy );

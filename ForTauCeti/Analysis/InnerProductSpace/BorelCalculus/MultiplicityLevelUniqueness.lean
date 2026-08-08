@@ -285,7 +285,7 @@ theorem spectralGeneratedLE_mulLp_datumSymbol (E : MultiplicityDatum) {S : Set �
     · intro n hn
       convert measure_empty (μ := E.base.restrict (E.level n))
       refine Set.eq_empty_iff_forall_notMem.mpr fun z hz => ?_
-      simp only [Set.mem_setOf_eq, Set.mem_prod, Set.mem_singleton_iff] at hz
+      simp only [Set.mem_ofPred_eq, Set.mem_prod, Set.mem_singleton_iff] at hz
       exact hn hz.2
   refine spectralGeneratedLE_of_generators
     (fun j => indicatorConstLp 2 (hAm j) (hAfin j) (1 : ℂ)) fun x => ?_
@@ -349,7 +349,7 @@ theorem spectralGeneratedLE_mulLp_datumSymbol (E : MultiplicityDatum) {S : Set �
       have h0 := restrict_level_inter_eq_zero E hS hnk hnull
       have hnotS : ∀ᵐ z ∂(E.base.restrict (E.level n)), z ∉ S ∩ E.level n := by
         rw [ae_iff]
-        simp only [not_not, Set.setOf_mem_eq]
+        simp only [not_not, Set.ofPred_mem_eq]
         exact h0
       filter_upwards [hnotS, ae_restrict_mem (E.measurableSet_level n)] with z hz hzlvl hzS
       exact absurd ⟨hzS, hzlvl⟩ hz

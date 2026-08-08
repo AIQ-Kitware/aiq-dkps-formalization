@@ -317,7 +317,7 @@ def carrier : Submodule 𝕜 (E →L[𝕜] F) where
     refine ne_top_of_le_ne_top ?_ (N.gauge_add_le A B)
     exact ENNReal.add_ne_top.mpr ⟨hA, hB⟩
   smul_mem' c A hA := by
-    rw [Set.mem_setOf_eq, N.gauge_smul]
+    rw [Set.mem_ofPred_eq, N.gauge_smul]
     exact ENNReal.mul_ne_top (by simp) hA
 
 /-- Membership in the ideal is exactly finiteness of the gauge; the carrier is defined that way,

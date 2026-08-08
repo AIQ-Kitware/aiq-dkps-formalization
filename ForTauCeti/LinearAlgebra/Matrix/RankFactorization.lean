@@ -134,9 +134,10 @@ theorem exists_eq_mul_rank (M : Matrix m n 𝕜) :
     refine ⟨Pi.single j 1, ?_⟩
     ext i
     simp [Matrix.mulVec, dotProduct, Pi.single_apply]
-  refine ⟨fun i k => (b k : m → 𝕜) i, fun k j => b.repr ⟨_, hcol j⟩ k, ?_⟩
+  refine ⟨Matrix.of fun i k => (b k : m → 𝕜) i, Matrix.of fun k j => b.repr ⟨_, hcol j⟩ k, ?_⟩
   ext i j
   rw [Matrix.mul_apply]
+  simp only [Matrix.of_apply]
   -- Expand column `j` in the basis and evaluate the resulting identity at row `i`.
   have hrepr := congrArg Subtype.val (b.sum_repr ⟨_, hcol j⟩)
   rw [Submodule.coe_sum] at hrepr
@@ -153,8 +154,8 @@ theorem exists_eq_mul_rank (M : Matrix m n 𝕜) :
 theorem exists_eq_mul_of_rank_le (M : Matrix m n 𝕜) {r : ℕ} (h : M.rank ≤ r) :
     ∃ (L : Matrix m (Fin r) 𝕜) (R : Matrix (Fin r) n 𝕜), M = L * R := by
   obtain ⟨L₀, R₀, hM⟩ := exists_eq_mul_rank M
-  refine ⟨fun i k => if hk : (k : ℕ) < M.rank then L₀ i ⟨k, hk⟩ else 0,
-    fun k j => if hk : (k : ℕ) < M.rank then R₀ ⟨k, hk⟩ j else 0, ?_⟩
+  refine ⟨Matrix.of fun i k => if hk : (k : ℕ) < M.rank then L₀ i ⟨k, hk⟩ else 0,
+    Matrix.of fun k j => if hk : (k : ℕ) < M.rank then R₀ ⟨k, hk⟩ j else 0, ?_⟩
   ext i j
   -- Reduce the padded sum over `Fin r` to the exact sum over `Fin M.rank`.
   set f : ℕ → 𝕜 := fun k => if hk : k < M.rank then L₀ i ⟨k, hk⟩ * R₀ ⟨k, hk⟩ j else 0 with hf
@@ -176,7 +177,9 @@ theorem exists_eq_mul_of_rank_le (M : Matrix m n 𝕜) {r : ℕ} (h : M.rank ≤
     refine (Finset.sum_subset
       (fun x hx => Finset.mem_range.mpr ((Finset.mem_range.mp hx).trans_le h))
       fun k _ hk => dif_neg (by simpa using hk)).symm
-  rw [Matrix.mul_apply, hsum, ← Matrix.mul_apply, ← hM]
+  rw [Matrix.mul_apply]
+  simp only [Matrix.of_apply]
+  rw [hsum, ← Matrix.mul_apply, ← hM]
 
 /--
 **Rank-`r` factorization characterization.** A matrix has rank at most `r` if

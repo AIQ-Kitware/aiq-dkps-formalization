@@ -77,9 +77,9 @@ theorem measurable_of_iUnion_restrict {Ω A : Type*}
     [MeasurableSpace Ω] [MeasurableSpace A]
     {g : Ω → A} {s : ℕ → Set Ω}
     (hs : ∀ k, MeasurableSet (s k)) (hcov : (⋃ k, s k) = univ)
-    (hg : ∀ k, Measurable ((s k).restrict g)) : Measurable g := by
+    (hg : ∀ k, Measurable ((s k).domRestrict g)) : Measurable g := by
   intro t ht
-  have hpre : g ⁻¹' t = ⋃ k, ((↑) : s k → Ω) '' ((s k).restrict g ⁻¹' t) := by
+  have hpre : g ⁻¹' t = ⋃ k, ((↑) : s k → Ω) '' ((s k).domRestrict g ⁻¹' t) := by
     apply Set.eq_of_subset_of_subset
     · intro ω hω
       have hmem : ω ∈ (⋃ k, s k) := by rw [hcov]; trivial
@@ -116,7 +116,7 @@ theorem measurable_cfc_comp
   have hsmeas : ∀ k, MeasurableSet (s k) := fun k => hB.norm measurableSet_Iic
   have hcover : (⋃ k, s k) = univ := by
     ext ω
-    simp only [hsdef, Set.mem_iUnion, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+    simp only [hsdef, Set.mem_iUnion, Set.mem_ofPred_eq, Set.mem_univ, iff_true]
     obtain ⟨k, hk⟩ := exists_nat_ge ‖B ω‖
     exact ⟨k, hk⟩
   refine measurable_of_iUnion_restrict hsmeas hcover (fun k => ?_)
@@ -133,7 +133,7 @@ theorem measurable_cfc_comp
   -- Restrict `cfc f` to a continuous map and compose with the measurable corestriction.
   have hcont' : Continuous
       (fun x : {a : A | IsSelfAdjoint a ∧ spectrum ℝ a ⊆ Metric.closedBall 0 (k : ℝ)} =>
-        cfc f (x : A)) := continuousOn_iff_continuous_restrict.mp hcontOn
+        cfc f (x : A)) := continuousOn_iff_continuous_domRestrict.mp hcontOn
   have hcore : Measurable
       (fun ω : (s k) =>
         (⟨B ω, hmaps ω⟩ :

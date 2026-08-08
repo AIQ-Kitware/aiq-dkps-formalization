@@ -99,9 +99,9 @@ theorem exists_linearIsometryEquiv_intertwining_of_finrank_eigenspace_eq
       finrank ℂ (eigenspace B.toLinearMap μ)) :
     ∃ W : E ≃ₗᵢ[ℂ] F, ∀ x, W (A x) = B (W x) := by
   classical
-  haveI hfA : ∀ μ : ℂ, FiniteDimensional ℂ (eigenspace A.toLinearMap μ) :=
+  have hfA : ∀ μ : ℂ, FiniteDimensional ℂ (eigenspace A.toLinearMap μ) :=
     finiteDimensional_eigenspace_of_isCompactOperator hAc hA0
-  haveI hfB : ∀ μ : ℂ, FiniteDimensional ℂ (eigenspace B.toLinearMap μ) :=
+  have hfB : ∀ μ : ℂ, FiniteDimensional ℂ (eigenspace B.toLinearMap μ) :=
     finiteDimensional_eigenspace_of_isCompactOperator hBc hB0
   -- The common model family, indexed by `μ`.
   set G : ℂ → Type := fun μ =>

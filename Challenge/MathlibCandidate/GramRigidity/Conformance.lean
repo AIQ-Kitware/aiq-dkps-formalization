@@ -75,9 +75,20 @@ theorem ker_eq_ker_of_inner_eq : LinearMap.ker S = LinearMap.ker T := by
 noncomputable def rangeEquivOfInnerEq : LinearMap.range S ≃ₗᵢ[𝕜] LinearMap.range T :=
   (S.quotKerEquivRange.symm.trans <| (Submodule.quotEquivOfEq _ _
       (ker_eq_ker_of_inner_eq S T h)).trans T.quotKerEquivRange).isometryOfInner fun x y => by
+    -- See `ForTauCeti/Analysis/InnerProductSpace/Gram/Matrix.lean`: `simp` no longer takes the
+    -- `quotKerEquivRange` steps unprompted, and the destructuring leaves the range membership in
+    -- its unfolded form, which `simp only` will not match.  `key` states the step with the
+    -- membership canonical and universally quantified; `exact` then closes it up to defeq.
+    have key : ∀ (x : M) (hx : S x ∈ LinearMap.range S),
+        ((S.quotKerEquivRange.symm.trans <| (Submodule.quotEquivOfEq _ _
+          (ker_eq_ker_of_inner_eq S T h)).trans T.quotKerEquivRange) ⟨S x, hx⟩ : F) = T x := by
+      intro x hx
+      simp only [LinearEquiv.trans_apply, LinearMap.quotKerEquivRange_symm_apply_image,
+        Submodule.mkQ_apply, Submodule.quotEquivOfEq_mk, LinearMap.quotKerEquivRange_apply_mk]
     obtain ⟨-, x, rfl⟩ := x
     obtain ⟨-, y, rfl⟩ := y
-    simp [h x y]
+    rw [Submodule.coe_inner, Submodule.coe_inner]
+    exact (congrArg₂ (inner 𝕜) (key x _) (key y _)).trans (h x y).symm
 
 @[simp]
 theorem rangeEquivOfInnerEq_apply (x : M) (hx : S x ∈ LinearMap.range S) :

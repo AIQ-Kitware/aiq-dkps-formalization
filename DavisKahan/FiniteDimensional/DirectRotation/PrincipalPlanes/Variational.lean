@@ -215,7 +215,7 @@ theorem singularValues_restrictedDisplacement_directRotation
     if hk : (k : ℕ) < m then principalSourceVector U V ⟨(k : ℕ), hk⟩ else 0
     with hv
   set s : Set (Fin (finrank 𝕜 E)) := {k | (k : ℕ) < m} with hs
-  have hres : Orthonormal 𝕜 (s.restrict v) := by
+  have hres : Orthonormal 𝕜 (s.domRestrict v) := by
     rw [orthonormal_iff_ite]
     rintro ⟨a, ha⟩ ⟨b, hb⟩
     have ha' : (a : ℕ) < m := ha

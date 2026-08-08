@@ -86,9 +86,10 @@ theorem exists_eq_mul_rank (M : Matrix m n 𝕜) :
     refine ⟨Pi.single j 1, ?_⟩
     ext i
     simp [Matrix.mulVec, dotProduct, Pi.single_apply]
-  refine ⟨fun i k => (b k : m → 𝕜) i, fun k j => b.repr ⟨_, hcol j⟩ k, ?_⟩
+  refine ⟨Matrix.of fun i k => (b k : m → 𝕜) i, Matrix.of fun k j => b.repr ⟨_, hcol j⟩ k, ?_⟩
   ext i j
   rw [Matrix.mul_apply]
+  simp only [Matrix.of_apply]
   have hrepr := congrArg Subtype.val (b.sum_repr ⟨_, hcol j⟩)
   rw [Submodule.coe_sum] at hrepr
   have := congrFun hrepr i
@@ -100,8 +101,8 @@ theorem exists_eq_mul_rank (M : Matrix m n 𝕜) :
 theorem exists_eq_mul_of_rank_le (M : Matrix m n 𝕜) {r : ℕ} (h : M.rank ≤ r) :
     ∃ (L : Matrix m (Fin r) 𝕜) (R : Matrix (Fin r) n 𝕜), M = L * R := by
   obtain ⟨L₀, R₀, hM⟩ := exists_eq_mul_rank M
-  refine ⟨fun i k => if hk : (k : ℕ) < M.rank then L₀ i ⟨k, hk⟩ else 0,
-    fun k j => if hk : (k : ℕ) < M.rank then R₀ ⟨k, hk⟩ j else 0, ?_⟩
+  refine ⟨Matrix.of fun i k => if hk : (k : ℕ) < M.rank then L₀ i ⟨k, hk⟩ else 0,
+    Matrix.of fun k j => if hk : (k : ℕ) < M.rank then R₀ ⟨k, hk⟩ j else 0, ?_⟩
   ext i j
   set f : ℕ → 𝕜 := fun k => if hk : k < M.rank then L₀ i ⟨k, hk⟩ * R₀ ⟨k, hk⟩ j else 0 with hf
   have hpad : ∀ k : Fin r,
@@ -121,7 +122,9 @@ theorem exists_eq_mul_of_rank_le (M : Matrix m n 𝕜) {r : ℕ} (h : M.rank ≤
     refine (Finset.sum_subset
       (fun x hx => Finset.mem_range.mpr ((Finset.mem_range.mp hx).trans_le h))
       fun k _ hk => dif_neg (by simpa using hk)).symm
-  rw [Matrix.mul_apply, hsum, ← Matrix.mul_apply, ← hM]
+  rw [Matrix.mul_apply]
+  simp only [Matrix.of_apply]
+  rw [hsum, ← Matrix.mul_apply, ← hM]
 
 end TauCeti.Matrix.RankFactorizationAux
 
@@ -166,12 +169,13 @@ theorem PosSemidef.exists_eq_conjTranspose_mul_self
     {B : Matrix (Fin n) (Fin n) 𝕜} (hB : B.PosSemidef) :
     ∃ A : Matrix (Fin n) (Fin n) 𝕜, B = Aᴴ * A := by
   have hHerm : B.IsHermitian := hB.1
-  refine ⟨fun k i =>
+  refine ⟨Matrix.of fun k i =>
     (Real.sqrt (hHerm.eigenvalues k) : 𝕜) * conj (hHerm.eigenvectorUnitary i k), ?_⟩
   ext i j
   rw [Matrix.mul_apply, isHermitian_entry_eq_sum_eigenvalues B hHerm i j]
   refine Finset.sum_congr rfl fun k _ => ?_
   rw [Matrix.conjTranspose_apply, RCLike.star_def]
+  simp only [Matrix.of_apply]
   have hnn : 0 ≤ hHerm.eigenvalues k := _root_.Matrix.PosSemidef.eigenvalues_nonneg hB k
   simp only [map_mul, RCLike.conj_ofReal, RCLike.conj_conj]
   rw [show RCLike.ofReal (Real.sqrt (hHerm.eigenvalues k)) * hHerm.eigenvectorUnitary i k *

@@ -338,7 +338,7 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_of_minMax
       have hc0 : 0 ≤ c := hr0.trans hrc.le
       let V : Submodule 𝕜 E₀ := Submodule.span 𝕜 (Set.range v)
       let b : Module.Basis (Fin (n + 1)) 𝕜 V := Module.Basis.span hv
-      letI : FiniteDimensional 𝕜 V := b.finiteDimensional_of_finite
+      let : FiniteDimensional 𝕜 V := b.finiteDimensional_of_finite
       let D : ι → V →L[𝕜] F₀ := fun i =>
         (K ∘L P i ∘L V.subtypeL) - (K ∘L V.subtypeL)
       have hDpoint : ∀ x : V, Tendsto (fun i => D i x) l (𝓝 0) := by

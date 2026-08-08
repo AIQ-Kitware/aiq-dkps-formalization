@@ -121,8 +121,13 @@ theorem mem_resolventSet_of_lower_bound (hA : IsSelfAdjoint A)
   -- the algebraic inverse, made bounded by the same estimate
   set e : A.domain ≃ₗ[ℂ] E := LinearEquiv.ofBijective (shiftMap A z) ⟨hinj, hsurj⟩ with he
   have heapp : ∀ x : A.domain, e x = A x - z • (x : E) := fun x => rfl
-  have hinvbd : ∀ φ : E, ‖((e.symm φ : A.domain) : E)‖ ≤ c⁻¹ * ‖φ‖ := by
+  -- Stated in exactly the shape `LinearMap.mkContinuous` expects below.  The `Subtype.val`
+  -- form is only definitionally that shape, and the resulting `mkContinuous` term is then
+  -- not type-correct at `implicit` transparency, which stops `simp` from firing on it.
+  have hinvbd : ∀ φ : E,
+      ‖(A.domain.subtype.comp (e.symm : E →ₗ[ℂ] A.domain)) φ‖ ≤ c⁻¹ * ‖φ‖ := by
     intro φ
+    change ‖((e.symm φ : A.domain) : E)‖ ≤ c⁻¹ * ‖φ‖
     have h := hbd (e.symm φ)
     rw [show A (e.symm φ) - z • ((e.symm φ : A.domain) : E) = e (e.symm φ) from
       (heapp _).symm, e.apply_symm_apply] at h

@@ -81,7 +81,7 @@ the inclusion preserves that. -/
 theorem isCompactOperator_of_finiteDimensional_range (R : E →L[𝕜] F)
     [FiniteDimensional 𝕜 (LinearMap.range (R : E →ₗ[𝕜] F))] :
     IsCompactOperator R := by
-  haveI : ProperSpace (LinearMap.range (R : E →ₗ[𝕜] F)) :=
+  have : ProperSpace (LinearMap.range (R : E →ₗ[𝕜] F)) :=
     FiniteDimensional.proper 𝕜 _
   have hmem : ∀ x, R x ∈ LinearMap.range (R : E →ₗ[𝕜] F) := fun x => ⟨x, rfl⟩
   have hcod : IsCompactOperator (R.codRestrict _ hmem) :=
@@ -93,7 +93,7 @@ of `isCompactOperator_of_finiteDimensional_range`, which is the shape the
 approximation-number API produces: `aₙ` bounds are stated as `R.rank ≤ n`. -/
 theorem isCompactOperator_of_rank_lt_aleph0 (R : E →L[𝕜] F)
     (hR : R.rank < Cardinal.aleph0) : IsCompactOperator R := by
-  haveI : FiniteDimensional 𝕜 (LinearMap.range (R : E →ₗ[𝕜] F)) :=
+  have : FiniteDimensional 𝕜 (LinearMap.range (R : E →ₗ[𝕜] F)) :=
     Module.rank_lt_aleph0_iff.mp hR
   exact R.isCompactOperator_of_finiteDimensional_range
 

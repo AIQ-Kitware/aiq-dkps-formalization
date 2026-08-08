@@ -89,10 +89,10 @@ theorem exists_continuous_pair_close {ι : Type*} [Finite ι] (P : ι → H × H
     ∃ g : C(spectrum ℂ a, ℂ), ∀ i,
       ‖pair ha f (P i).1 (P i).2 - ⟪(P i).1, cfcHom ha g (P i).2⟫_ℂ‖ ≤ ε := by
   classical
-  haveI : Fintype ι := Fintype.ofFinite ι
+  have : Fintype ι := Fintype.ofFinite ι
   set v : ι × Fin 4 → H := fun p => pairVectors (P p.1).1 (P p.1).2 p.2 with hv
   set ν : Measure (spectrum ℂ a) := ∑ j, diagMeasure ha (v j) with hν
-  haveI : IsFiniteMeasure ν := isFiniteMeasure_sum_diagMeasure ha v
+  have : IsFiniteMeasure ν := isFiniteMeasure_sum_diagMeasure ha v
   have hfi : Integrable f ν := integrable_of_bounded hfm hfb ν
   obtain ⟨g, hgi, hgle⟩ := exists_continuous_integral_norm_sub_le ν hfi hε
   refine ⟨g, fun i => ?_⟩

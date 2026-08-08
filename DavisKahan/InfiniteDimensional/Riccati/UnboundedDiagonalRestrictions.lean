@@ -63,11 +63,32 @@ noncomputable def coordinateRestriction1
     (u : (coordinateRestriction0 D).domain) :
     coordinateRestriction0 D u = coordinateRestrictionMap0 D u := rfl
 
+/-- `coordinateRestriction0_apply` composed with `coordinateRestrictionMap0_apply`, in one step.
+
+Both steps individually are `rfl`, but chaining them under `simp` does not work: the first
+lemma's argument is typed `(coordinateRestriction0 D).domain` and the second's
+`coordinateRestrictionDomain0 D`, and those are equal only definitionally -- `simp` matches at
+`instances` transparency and will not cross the gap.  This states the composite directly so
+one rewrite does the whole job. -/
+@[simp] theorem coordinateRestriction0_apply'
+    (D : DirectSumPMap (E0 := E0) (E1 := E1))
+    (u : (coordinateRestriction0 D).domain) :
+    coordinateRestriction0 D u =
+      WithLp.fst (D (coordinateRestrictionDomain0ToOriginal D u)) := rfl
+
 /-- The second coordinate restriction acts by `coordinateRestrictionMap1`. -/
 @[simp] theorem coordinateRestriction1_apply
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
     (v : (coordinateRestriction1 D).domain) :
     coordinateRestriction1 D v = coordinateRestrictionMap1 D v := rfl
+
+/-- The composite of `coordinateRestriction1_apply` and `coordinateRestrictionMap1_apply`; see
+`coordinateRestriction0_apply'` for why the one-step form is needed. -/
+@[simp] theorem coordinateRestriction1_apply'
+    (D : DirectSumPMap (E0 := E0) (E1 := E1))
+    (v : (coordinateRestriction1 D).domain) :
+    coordinateRestriction1 D v =
+      WithLp.snd (D (coordinateRestrictionDomain1ToOriginal D v)) := rfl
 
 /-- A reducing dense domain restricts to a dense first-coordinate domain. -/
 theorem coordinateRestriction0_dense
@@ -187,7 +208,9 @@ theorem coordinateRestriction0_closedGraph
       have hact := coordinateRestriction0_action_eq D hred u
       rw [hux, hsnd] at hact
       have hcoord := congrArg WithLp.fst hact
-      simpa using hcoord.symm]
+      -- `simp` cannot bridge the two spellings of the restriction domain; `exact` checks the
+      -- (definitional) equality directly.
+      exact hcoord.symm]
   exact hclosed.preimage hcoords
 
 /-- A reducing closed graph restricts to a closed second-coordinate graph. -/
@@ -238,7 +261,9 @@ theorem coordinateRestriction1_closedGraph
       have hact := coordinateRestriction1_action_eq D hred v
       rw [hvx, hsnd] at hact
       have hcoord := congrArg WithLp.snd hact
-      simpa using hcoord.symm]
+      -- `simp` cannot bridge the two spellings of the restriction domain; `exact` checks the
+      -- (definitional) equality directly.
+      exact hcoord.symm]
   exact hclosed.preimage hcoords
 
 /-- The explicit direct sum of the two coordinate restrictions. -/

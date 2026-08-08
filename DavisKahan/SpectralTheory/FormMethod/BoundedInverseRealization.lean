@@ -209,13 +209,17 @@ theorem inverseClosedOperator_isSymmetric
     ⟪(inverseClosedOperator R hR hinj).toLinearMap x, (y : H)⟫_ℂ =
         ⟪(inverseClosedOperator R hR hinj).toLinearMap x,
           R ((inverseClosedOperator R hR hinj).toLinearMap y)⟫_ℂ := by
-            rw [R_inverseClosedOperator_apply]
+            -- `IsSymmetric` presents the domain as `.toLinearPMap.domain`, which is only
+            -- definitionally the `.domain` the rewrite lemma is stated for; `rw` will not
+            -- match across that, so close the step by a congruence `exact` instead.
+            exact congrArg₂ (inner ℂ) rfl
+              (R_inverseClosedOperator_apply R hR hinj y).symm
     _ = ⟪R ((inverseClosedOperator R hR hinj).toLinearMap x),
           (inverseClosedOperator R hR hinj).toLinearMap y⟫_ℂ := by
             exact (hR.isSymmetric _ _).symm
     _ = ⟪(x : H),
           (inverseClosedOperator R hR hinj).toLinearMap y⟫_ℂ := by
-            rw [R_inverseClosedOperator_apply]
+            exact congrArg₂ (inner ℂ) (R_inverseClosedOperator_apply R hR hinj x) rfl
 
 /-- Positivity passes from `R` to its unbounded inverse. -/
 theorem inverseClosedOperator_nonnegative

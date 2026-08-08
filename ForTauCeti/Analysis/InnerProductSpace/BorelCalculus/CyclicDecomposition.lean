@@ -289,7 +289,7 @@ theorem exists_isHilbertSum_cyclicSubspace (ha : IsStarNormal a) :
   refine ⟨ι, ξ, ?_⟩
   have hcomplete : ∀ i, CompleteSpace (cyclicSubspace ha (ξ i)) := by
     intro i
-    haveI : IsClosed ((cyclicSubspace ha (ξ i) : Submodule ℂ H) : Set H) :=
+    have : IsClosed ((cyclicSubspace ha (ξ i) : Submodule ℂ H) : Set H) :=
       isClosed_cyclicSubspace ha (ξ i)
     infer_instance
   exact IsHilbertSum.mkInternal (𝕜 := ℂ) (F := fun i => cyclicSubspace ha (ξ i)) hortho htotal

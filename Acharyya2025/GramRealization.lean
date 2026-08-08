@@ -145,11 +145,13 @@ theorem posSemidef_and_rank_le_of_config_gram_eq
     (hψ : ∀ i j : Fin n, (∑ k : Fin d, ψ i k * ψ j k) = B i j) :
     B.PosSemidef ∧ B.rank ≤ d := by
   apply (TauCeti.Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self B).2
-  let A : Matrix (Fin d) (Fin n) Real := fun k i => ψ i k
+  -- `Matrix.of`, not a bare lambda: a lambda is not recognised as a `Matrix`, so `ᴴ` and `*`
+  -- do not reduce against it.
+  let A : Matrix (Fin d) (Fin n) Real := Matrix.of fun k i => ψ i k
   refine ⟨A, ?_⟩
   ext i j
   rw [Matrix.mul_apply]
-  simpa [A, Matrix.conjTranspose_apply, star_trivial] using (hψ i j).symm
+  simpa [A, Matrix.of_apply, Matrix.conjTranspose_apply, star_trivial] using (hψ i j).symm
 
 /-- PSD with rank at most `d` is equivalent to realization as the Gram matrix
 of a configuration in `ℝ^d`. -/

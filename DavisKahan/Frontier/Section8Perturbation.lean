@@ -443,7 +443,13 @@ theorem re_inner_le_of_mem_centralBandSubspace
             TauCeti.BorelCalculus.ofRealLM (bandSymbol B l r d) := by
     ext w
     have hre := coe_reCoord B hB w
-    simp only [TauCeti.BorelCalculus.ofRealLM_apply, hgdef, ContinuousMap.coe_mk,
+    -- Rewrite `g` through its value equation, not `hgdef`: rewriting to the bundled
+    -- structure literal leaves a `ContinuousMap.mk` that `ContinuousMap.coe_mk` no longer
+    -- reduces, and `push_cast` then cannot reach the real arithmetic inside it.
+    have hgapp : ∀ v : spectrum ℂ B, g v =
+        (r - TauCeti.BorelCalculus.reCoord v) *
+          bandCutoff l r d (TauCeti.BorelCalculus.reCoord v) := fun _ => rfl
+    simp only [TauCeti.BorelCalculus.ofRealLM_apply, hgapp,
       ContinuousMap.sub_apply, ContinuousMap.smul_apply, ContinuousMap.mul_apply,
       ContinuousMap.restrict_apply, ContinuousMap.id_apply, smul_eq_mul,
       bandSymbol_apply]
@@ -504,7 +510,13 @@ theorem le_re_inner_of_mem_centralBandSubspace
           ((l : ℝ) : ℂ) • TauCeti.BorelCalculus.ofRealLM (bandSymbol B l r d) := by
     ext w
     have hre := coe_reCoord B hB w
-    simp only [TauCeti.BorelCalculus.ofRealLM_apply, hgdef, ContinuousMap.coe_mk,
+    -- Rewrite `g` through its value equation, not `hgdef`: rewriting to the bundled
+    -- structure literal leaves a `ContinuousMap.mk` that `ContinuousMap.coe_mk` no longer
+    -- reduces, and `push_cast` then cannot reach the real arithmetic inside it.
+    have hgapp : ∀ v : spectrum ℂ B, g v =
+        (TauCeti.BorelCalculus.reCoord v - l) *
+          bandCutoff l r d (TauCeti.BorelCalculus.reCoord v) := fun _ => rfl
+    simp only [TauCeti.BorelCalculus.ofRealLM_apply, hgapp,
       ContinuousMap.sub_apply, ContinuousMap.smul_apply, ContinuousMap.mul_apply,
       ContinuousMap.restrict_apply, ContinuousMap.id_apply, smul_eq_mul,
       bandSymbol_apply]
@@ -598,7 +610,13 @@ theorem norm_shiftedOperator_ge_of_mem_centralBandSubspace_orthogonal
           (1 - TauCeti.BorelCalculus.ofRealLM (bandSymbol B l r d)) := by
     ext w
     have hre := coe_reCoord B hB w
-    simp only [TauCeti.BorelCalculus.ofRealLM_apply, hgdef, ContinuousMap.coe_mk,
+    -- Rewrite `g` through its value equation, not `hgdef`: rewriting to the bundled
+    -- structure literal leaves a `ContinuousMap.mk` that `ContinuousMap.coe_mk` no longer
+    -- reduces, and `push_cast` then cannot reach the real arithmetic inside it.
+    have hgapp : ∀ v : spectrum ℂ B, g v =
+        ((TauCeti.BorelCalculus.reCoord v - c) ^ 2 - K ^ 2) *
+          (1 - bandCutoff l r d (TauCeti.BorelCalculus.reCoord v)) := fun _ => rfl
+    simp only [TauCeti.BorelCalculus.ofRealLM_apply, hgapp,
       ContinuousMap.sub_apply, ContinuousMap.smul_apply, ContinuousMap.mul_apply,
       ContinuousMap.one_apply, ContinuousMap.restrict_apply,
       ContinuousMap.id_apply, smul_eq_mul, bandSymbol_apply]

@@ -690,7 +690,7 @@ theorem ae_eq_zero_of_forall_integral_pow_eq_zero {h : ℝ → ℂ}
             field_simp
           nlinarith [hδ.le, hL1]
   -- Transfer to the `L²` element and use density of bounded continuous functions.
-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨one_le_two⟩
+  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨one_le_two⟩
   set H : Lp ℂ 2 unitIocMeasure := hh.toLp h with hHdef
   suffices hzero : H = 0 by
     have h1 : h =ᵐ[unitIocMeasure] ⇑H := (MemLp.coeFn_toLp hh).symm

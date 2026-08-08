@@ -83,7 +83,7 @@ theorem measure_exists_entry_gt_le
   -- the bad event is the finite union over entries
   have hsub : {ω | ∃ k l, η < |Shat ω k l - A k l|}
       = ⋃ k : Fin n, ⋃ l : Fin n, {ω | η < |Shat ω k l - A k l|} := by
-    ext ω; simp only [Set.mem_setOf_eq, Set.mem_iUnion]
+    ext ω; simp only [Set.mem_ofPred_eq, Set.mem_iUnion]
   rw [hsub]
   calc P (⋃ k : Fin n, ⋃ l : Fin n, {ω | η < |Shat ω k l - A k l|})
       ≤ ∑ k : Fin n, P (⋃ l : Fin n, {ω | η < |Shat ω k l - A k l|}) :=
@@ -109,7 +109,7 @@ theorem measurableSet_exists_entry_gt {Shat : Ω → Matrix (Fin n) (Fin n) ℝ}
     MeasurableSet {ω | ∃ k l, η < |Shat ω k l - A k l|} := by
   have hunion : {ω | ∃ k l, η < |Shat ω k l - A k l|}
       = ⋃ k : Fin n, ⋃ l : Fin n, {ω | η < |Shat ω k l - A k l|} := by
-    ext ω; simp only [Set.mem_setOf_eq, Set.mem_iUnion]
+    ext ω; simp only [Set.mem_ofPred_eq, Set.mem_iUnion]
   rw [hunion]
   refine MeasurableSet.iUnion fun k => MeasurableSet.iUnion fun l => ?_
   exact measurableSet_lt measurable_const
@@ -144,7 +144,7 @@ theorem measure_forall_abs_eigenvalues₀_sub_le_ge
   have hbad_meas : MeasurableSet {ω | ∃ k l, η < |Shat ω k l - A k l|} := by
     have : {ω | ∃ k l, η < |Shat ω k l - A k l|}
         = ⋃ k : Fin n, ⋃ l : Fin n, {ω | η < |Shat ω k l - A k l|} := by
-      ext ω; simp only [Set.mem_setOf_eq, Set.mem_iUnion]
+      ext ω; simp only [Set.mem_ofPred_eq, Set.mem_iUnion]
     rw [this]
     refine MeasurableSet.iUnion fun k => MeasurableSet.iUnion fun l => ?_
     exact measurableSet_lt measurable_const
@@ -152,7 +152,7 @@ theorem measure_forall_abs_eigenvalues₀_sub_le_ge
   have hcompl : {ω | ∀ k l : Fin n, |Shat ω k l - A k l| ≤ η}
       = {ω | ∃ k l, η < |Shat ω k l - A k l|}ᶜ := by
     ext ω
-    simp only [Set.mem_setOf_eq, Set.mem_compl_iff, not_exists, not_lt]
+    simp only [Set.mem_ofPred_eq, Set.mem_compl_iff, not_exists, not_lt]
   have hgood : 1 - ENNReal.ofReal ((n : ℝ) ^ 2 * v / η ^ 2)
       ≤ P {ω | ∀ k l : Fin n, |Shat ω k l - A k l| ≤ η} := by
     rw [hcompl, prob_compl_eq_one_sub hbad_meas]
@@ -224,7 +224,7 @@ theorem measure_forall_norm_toEuclideanLin_sub_le_ge
   have hcompl : {ω | ∀ k l : Fin n, |Shat ω k l - A k l| ≤ η}
       = {ω | ∃ k l, η < |Shat ω k l - A k l|}ᶜ := by
     ext ω
-    simp only [Set.mem_setOf_eq, Set.mem_compl_iff, not_exists, not_lt]
+    simp only [Set.mem_ofPred_eq, Set.mem_compl_iff, not_exists, not_lt]
   have hgood : 1 - ENNReal.ofReal ((n : ℝ) ^ 2 * v / η ^ 2)
       ≤ P {ω | ∀ k l : Fin n, |Shat ω k l - A k l| ≤ η} := by
     rw [hcompl, prob_compl_eq_one_sub hbad_meas]

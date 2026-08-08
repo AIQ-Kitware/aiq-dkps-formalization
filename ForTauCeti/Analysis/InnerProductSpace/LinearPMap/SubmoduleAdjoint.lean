@@ -103,8 +103,8 @@ theorem adjoint_adjoint_le [CompleteSpace E] [CompleteSpace F] (g : Submodule �
   set G : Submodule 𝕜 (WithLp 2 (E × F)) :=
     g.comap (L : WithLp 2 (E × F) →L[𝕜] E × F).toLinearMap with hG
   have hGclosed : IsClosed (G : Set (WithLp 2 (E × F))) := hg.preimage L.continuous
-  haveI : CompleteSpace G := hGclosed.completeSpace_coe
-  haveI : G.HasOrthogonalProjection := Submodule.HasOrthogonalProjection.ofCompleteSpace G
+  have : CompleteSpace G := hGclosed.completeSpace_coe
+  have : G.HasOrthogonalProjection := Submodule.HasOrthogonalProjection.ofCompleteSpace G
   intro x hx
   have hmem : (L.symm x) ∈ Gᗮᗮ := by
     rw [Submodule.mem_orthogonal]

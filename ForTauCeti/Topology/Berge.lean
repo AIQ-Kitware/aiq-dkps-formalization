@@ -285,7 +285,7 @@ theorem continuous_iInf_of_isCompact [FirstCountableTopology P]
     {K : Set X} (hK : IsCompact K) (hKne : K.Nonempty)
     {g : P → X → ℝ} (hg : Continuous (Function.uncurry g)) :
     Continuous (fun p => ⨅ x : ↥K, g p ↑x) := by
-  haveI : Nonempty ↥K := hKne.to_subtype
+  have : Nonempty ↥K := hKne.to_subtype
   -- `g q` is continuous for each parameter, and bounded below on the compact `K`.
   have hgcont : ∀ q : P, Continuous (g q) :=
     fun q => hg.comp (continuous_const.prodMk continuous_id)
@@ -606,7 +606,7 @@ theorem eventually_iInf_lt_of_lt_iInf
     (hbdd : ∀ p, BddBelow (Set.range fun x : ↥(K p) => g p ↑x))
     {b : ℝ} (hb : (⨅ x : ↥(K p₀), g p₀ ↑x) < b) :
     ∀ᶠ p in 𝓝 p₀, (⨅ x : ↥(K p), g p ↑x) < b := by
-  haveI : Nonempty ↥(K p₀) := hK₀ne.to_subtype
+  have : Nonempty ↥(K p₀) := hK₀ne.to_subtype
   have hgcont : Continuous (g p₀) := hg.comp (continuous_const.prodMk continuous_id)
   -- A genuine minimizer at `p₀`, so the bound can be stated against `V p₀`.
   obtain ⟨y, hyK, hymin⟩ := hK₀.exists_isMinOn hK₀ne hgcont.continuousOn
@@ -648,7 +648,7 @@ theorem eventually_lt_iInf_of_iInf_lt
     (hKcompact (q k)).exists_isMinOn (hKne (q k)) (hgcont (q k)).continuousOn
   have hxval : ∀ k, g (q k) (x k) = ⨅ y : ↥(K (q k)), g (q k) ↑y := by
     intro k
-    haveI : Nonempty ↥(K (q k)) := (hKne (q k)).to_subtype
+    have : Nonempty ↥(K (q k)) := (hKne (q k)).to_subtype
     exact le_antisymm (le_ciInf fun y => (isMinOn_iff.mp (hxmin k)) ↑y y.2)
       (ciInf_le (hbdd (q k)) ⟨x k, hxK k⟩)
   -- Extract a convergent subsequence with feasible limit.
@@ -726,7 +726,7 @@ theorem upperHemicontinuousAt_isMinOn_of_hemicontinuousAt
   -- Along minimizers the objective value *is* the value function.
   have hval : ∀ n, g (p n) (c n) = ⨅ y : ↥(K (p n)), g (p n) ↑y := by
     intro n
-    haveI : Nonempty ↥(K (p n)) := (hKne (p n)).to_subtype
+    have : Nonempty ↥(K (p n)) := (hKne (p n)).to_subtype
     exact le_antisymm (le_ciInf fun y => (isMinOn_iff.mp (hc n).2) ↑y y.2)
       (ciInf_le (hbdd (p n)) ⟨c n, hcK n⟩)
   -- Two limits of the same sequence: joint continuity, and the value theorem.

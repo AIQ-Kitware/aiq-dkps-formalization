@@ -182,7 +182,7 @@ noncomputable def PiecewiseC1ClosedContour.contourResolventSymbol
     (Γ : PiecewiseC1ClosedContour) (A : H →L[ℂ] H) (t : ℝ) :
     C(spectrum ℂ A, ℂ) :=
   ContinuousMap.mkD
-    ((spectrum ℂ A).restrict
+    ((spectrum ℂ A).domRestrict
       (fun w : ℂ =>
         derivWithin Γ.param (Set.Icc (0 : ℝ) 1) t *
           (w - Γ.param t)⁻¹)) 0
@@ -390,7 +390,7 @@ theorem SpectralSeparatingContour.integratedContourResolventSymbol_apply
   unfold PiecewiseC1ClosedContour.contourResolventSymbol
   change
     (ContinuousMap.mkD
-      ((spectrum ℂ A).restrict fun w : ℂ =>
+      ((spectrum ℂ A).domRestrict fun w : ℂ =>
         derivWithin Γ.geometric.param (Set.Icc (0 : ℝ) 1) t *
           (w - Γ.geometric.param t)⁻¹) 0) x =
       ((lam : ℂ) - Γ.geometric.param t)⁻¹ *

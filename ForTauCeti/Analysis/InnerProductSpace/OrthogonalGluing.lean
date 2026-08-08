@@ -363,7 +363,7 @@ vector is computed by `supGlueAmbient`. -/
 theorem coe_orthogonalSupGlue (hAB : A ≤ Bᗮ) (hAB' : A' ≤ B'ᗮ)
     (f : A ≃ₗᵢ[𝕜] A') (g : B ≃ₗᵢ[𝕜] B') (x : (A ⊔ B : Submodule 𝕜 H)) :
     (orthogonalSupGlue hAB hAB' f g x : H') = supGlueAmbient f g (x : H) := by
-  simp [orthogonalSupGlue]
+  rfl
 
 end Sup
 

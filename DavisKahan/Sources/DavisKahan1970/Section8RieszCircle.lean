@@ -164,7 +164,7 @@ takes the intended value. -/
 private noncomputable def circleSpectrumSymbol
     (A : H →L[ℂ] H) (center radius θ : ℝ) : C(spectrum ℂ A, ℂ) :=
   ContinuousMap.mkD
-    ((spectrum ℂ A).restrict (fun w : ℂ =>
+    ((spectrum ℂ A).domRestrict (fun w : ℂ =>
       deriv (circleMap (center : ℂ) radius) θ *
         (circleMap (center : ℂ) radius θ - w)⁻¹)) 0
 

@@ -138,9 +138,14 @@ theorem beam_quadratic_eq_bendingEnergy
       D.bendingEnergy (D.formRepresentative x) := by
   rw [D.beamOperator_apply]
   rw [inner_sub_left, map_sub, inner_self_eq_norm_sq]
-  rw [D.shifted_quadratic_eq_form_energy]
+  -- Spelled as a closed equation: `x : D.beamOperator.domain` is only definitionally
+  -- `D.shiftedOperator.domain`, so `rw` cannot instantiate the lemma's argument itself.
+  rw [show RCLike.re ⟪D.shiftedOperator.toLinearMap x, (x : H)⟫_ℂ =
+      RCLike.re ⟪D.formOperator (D.formRepresentative x), D.formRepresentative x⟫_ℂ from
+    D.shifted_quadratic_eq_form_energy x]
   rw [D.form_energy_decomposition]
-  rw [D.embed_formRepresentative]
+  -- Closed equation again, for the same reason as the rewrite above.
+  rw [show D.embed (D.formRepresentative x) = (x : H) from D.embed_formRepresentative x]
   ring
 
 /-- The free-beam realization is nonnegative. -/

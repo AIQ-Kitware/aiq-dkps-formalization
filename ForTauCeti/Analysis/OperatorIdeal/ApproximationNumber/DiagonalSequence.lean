@@ -147,7 +147,7 @@ theorem rank_truncDiagOpLp_le (c : ℕ → 𝕜) (N : ℕ) {K : ℝ} (hK : 0 ≤
     rw [ContinuousLinearMap.coe_coe, truncDiagOpLp_eq_sum]
     refine Submodule.sum_mem _ fun i hi => Submodule.smul_mem _ _ ?_
     exact Submodule.subset_span (Finset.mem_coe.mpr (Finset.mem_image_of_mem _ hi))
-  haveI : FiniteDimensional 𝕜 (Submodule.span 𝕜 (s : Set (lp (fun _ : ℕ => 𝕜) 2))) :=
+  have : FiniteDimensional 𝕜 (Submodule.span 𝕜 (s : Set (lp (fun _ : ℕ => 𝕜) 2))) :=
     FiniteDimensional.span_of_finite 𝕜 s.finite_toSet
   have hcard : s.card ≤ N := (Finset.card_image_le).trans (by simp)
   have hfin : Module.finrank 𝕜 (Submodule.span 𝕜 (s : Set (lp (fun _ : ℕ => 𝕜) 2))) ≤ N :=
