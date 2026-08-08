@@ -200,7 +200,7 @@ theorem crossed_lower_of_spectralGap
   have hstep : ∀ c : ℝ, c < α + δ →
       c * ‖(Q ((z : Z) : H))‖ ^ 2 ≤ (⟪A.toLinearMap ⟨(Q ((z : Z) : H)), hydom⟩, (Q ((z : Z) : H))⟫_ℂ).re := by
     intro c hc
-    refine TauCeti.ApproximationNumber.LinearPMap.le_re_inner_of_specProjection_Iic_apply_eq_zero
+    refine TauCeti.LinearPMap.le_re_inner_of_specProjection_Iic_apply_eq_zero
       hA (c := c) ⟨(Q ((z : Z) : H)), hydom⟩ ?_
     exact specProjection_Iic_apply_eq_zero_of_gap A hA hgap hc ((z : Z) : H)
   -- Take `c` up to `α + δ`.

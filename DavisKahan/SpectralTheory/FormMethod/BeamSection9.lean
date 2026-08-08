@@ -10,6 +10,7 @@ import DavisKahan.SinTheta.BoundedPerturbation
 import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
 import DavisKahan.Sources.DavisKahan1970.Section9.TrialSubspace
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz
 import ForTauCeti.MeasureTheory.MulLpAlgebra
 
 /-!
@@ -1746,6 +1747,153 @@ theorem beamRitz_form_le (ε : ℝ) (hε : 0 ≤ ε) (x : beamTrial) :
     have : 0 ≤ ε * (Real.sqrt 3 / 3) := by positivity
     linarith
   nlinarith [sq_nonneg ‖α‖, sq_nonneg ‖β‖, norm_nonneg α, norm_nonneg β]
+
+/-! ## Equations (9.5)--(9.7), part (b): the perturbed spectral gap
+
+The tangent theorems need a gap for the *perturbed* operator: no spectrum between the
+upper Ritz value and `500`.  Equations (9.1), (9.2) and (9.4) never needed one --
+they are stated against a spectral set, so the restriction's spectrum is inside it by
+construction.  A tangent bound needs both spectra separated.
+
+The gap is Rayleigh--Ritz, and the general theorem is
+`TauCeti.LinearPMap.specProjection_Ioo_eq_zero_of_rayleighRitz`: a trial subspace on
+which the form is at most `α`, whose orthogonal complement carries a form bound of at
+least `β`, forces the spectrum to avoid `(α, β)`.  Here the trial subspace is the
+kernel `beamTrial`, the Ritz bound is `beamRitz_form_le`, and coercivity off the trial
+subspace comes from the *sharp* free-beam gap `500.5` together with positivity of the
+perturbation. -/
+
+/-- The perturbation is positive: its symbol `ε t` is nonnegative on `(0, 1]`. -/
+theorem re_inner_beamPerturbation_nonneg (ε : ℝ) (hε : 0 ≤ ε) (x : BeamL2) :
+    0 ≤ (⟪beamPerturbation ε x, x⟫_ℂ).re := by
+  have hconv : ⟪beamPerturbation ε x, x⟫_ℂ
+      = (((∫ t, ε * t * ‖(x : ℝ → ℂ) t‖ ^ 2 ∂unitIocMeasure : ℝ)) : ℂ) := by
+    rw [MeasureTheory.L2.inner_def, ← _root_.integral_complex_ofReal]
+    refine integral_congr_ae ?_
+    filter_upwards [coeFn_beamPerturbation ε x] with t ht
+    have hz : (x : ℝ → ℂ) t * (starRingEnd ℂ) ((x : ℝ → ℂ) t)
+        = ((‖(x : ℝ → ℂ) t‖ ^ 2 : ℝ) : ℂ) := by
+      rw [mul_comm, ← Complex.normSq_eq_conj_mul_self, Complex.normSq_eq_norm_sq]
+    rw [RCLike.inner_apply, ht, map_mul, Complex.conj_ofReal]
+    push_cast at hz ⊢
+    linear_combination ((ε : ℂ) * (t : ℂ)) * hz
+  rw [hconv, Complex.ofReal_re]
+  refine integral_nonneg_of_ae ?_
+  filter_upwards [ae_mem_unitIocMeasure] with t ht
+  have h0 : (0 : ℝ) ≤ t := le_of_lt ht.1
+  positivity
+
+/-- **The kernel spectral range is inside the trial subspace.**  A vector selected by
+the eigenvalue `{0}` lies in the domain, is annihilated by the free beam, and is
+therefore affine. -/
+theorem mem_beamTrial_of_mem_specRange_singleton {y : BeamL2}
+    (hy : y ∈ TauCeti.LinearPMap.specRange beamOperator_isSelfAdjoint ({0} : Set ℝ)
+      (measurableSet_singleton 0)) :
+    y ∈ beamTrial := by
+  have hbnd : ∀ s ∈ ({0} : Set ℝ), |s| ≤ 0 := by
+    intro s hs
+    rw [Set.mem_singleton_iff] at hs
+    simp [hs]
+  have hdom : y ∈ beamOperator.domain :=
+    TauCeti.LinearPMap.mem_domain_of_mem_specRange_of_bounded beamOperator_isSelfAdjoint
+      _ _ hbnd hy
+  have hzero : beamOperator.toLinearMap ⟨y, hdom⟩ = 0 := by
+    have hle := TauCeti.LinearPMap.norm_sub_smul_le_of_mem_specRange
+      beamOperator_isSelfAdjoint ({0} : Set ℝ) (measurableSet_singleton 0)
+      (M := 0) (c := 0) (r := 0) hbnd le_rfl
+      (fun s hs => by rw [Set.mem_singleton_iff] at hs; simp [hs]) hy hdom
+    rw [Complex.ofReal_zero, zero_smul, sub_zero, zero_mul] at hle
+    exact norm_le_zero_iff.mp hle
+  obtain ⟨a, b, hab⟩ := exists_affine_of_beamOperator_eq_zero hzero
+  rw [show y = affineLp a b from hab]
+  exact affineLp_mem_beamTrial a b
+
+/-- A vector orthogonal to the trial subspace carries no kernel spectral mass. -/
+theorem beamSpecProjection_singleton_apply_eq_zero_of_mem_orthogonal {x : BeamL2}
+    (hx : x ∈ beamTrialᗮ) :
+    TauCeti.LinearPMap.specProjection beamOperator_isSelfAdjoint ({0} : Set ℝ)
+      (measurableSet_singleton 0) x = 0 := by
+  set P := TauCeti.LinearPMap.specProjection beamOperator_isSelfAdjoint ({0} : Set ℝ)
+    (measurableSet_singleton 0) with hP
+  have hmem : P x ∈ beamTrial :=
+    mem_beamTrial_of_mem_specRange_singleton
+      (TauCeti.LinearPMap.specProjection_mem_specRange beamOperator_isSelfAdjoint _ _ x)
+  have hfix : P (P x) = P x :=
+    TauCeti.LinearPMap.specProjection_apply_self beamOperator_isSelfAdjoint _ _ x
+  have hadj : (P : BeamL2 →L[ℂ] BeamL2).adjoint = P :=
+    (TauCeti.LinearPMap.isSelfAdjoint_specProjection beamOperator_isSelfAdjoint _ _).adjoint_eq
+  have hzero : ⟪P x, P x⟫_ℂ = 0 := by
+    nth_rewrite 1 [← hadj]
+    rw [ContinuousLinearMap.adjoint_inner_left, hfix, ← inner_conj_symm, hx _ hmem, map_zero]
+  simpa using inner_self_eq_zero.mp hzero
+
+/-- **Coercivity of the free beam off its kernel.**  The sharp gap `500.5` is a form
+bound on the orthogonal complement of the trial subspace. -/
+theorem beamOperator_form_ge_of_mem_orthogonal (x : beamOperator.domain)
+    (hx : (x : BeamL2) ∈ beamTrialᗮ) :
+    (1001 / 2 : ℝ) * ‖(x : BeamL2)‖ ^ 2
+      ≤ (⟪beamOperator.toLinearMap x, (x : BeamL2)⟫_ℂ).re := by
+  refine TauCeti.LinearPMap.le_re_inner_of_specProjection_Iic_apply_eq_zero
+    beamOperator_isSelfAdjoint (c := 1001 / 2) x ?_
+  have hlow : TauCeti.LinearPMap.specProjection beamOperator_isSelfAdjoint beamLowSet
+      measurableSet_beamLowSet (x : BeamL2) = 0 := by
+    rw [beamSpecProjection_lowSet_eq_singleton]
+    exact beamSpecProjection_singleton_apply_eq_zero_of_mem_orthogonal hx
+  exact hlow
+
+/-- **Coercivity of the perturbed beam off the trial subspace.**  The perturbation is
+positive, so it only helps. -/
+theorem beamPerturbed_form_ge_of_mem_orthogonal (ε : ℝ) (hε : 0 ≤ ε)
+    (x : (beamPerturbed ε).toLinearPMap.domain) (hx : (x : BeamL2) ∈ beamTrialᗮ) :
+    (1001 / 2 : ℝ) * ‖(x : BeamL2)‖ ^ 2
+      ≤ (⟪(beamPerturbed ε).toLinearPMap x, (x : BeamL2)⟫_ℂ).re := by
+  have hxdom : (x : BeamL2) ∈ beamOperator.domain := x.2
+  have hsplit : (beamPerturbed ε).toLinearPMap x
+      = beamOperator.toLinearMap ⟨(x : BeamL2), hxdom⟩ + beamPerturbation ε (x : BeamL2) :=
+    rfl
+  rw [hsplit, inner_add_left, Complex.add_re]
+  have h1 := beamOperator_form_ge_of_mem_orthogonal ⟨(x : BeamL2), hxdom⟩ hx
+  have h2 := re_inner_beamPerturbation_nonneg ε hε (x : BeamL2)
+  linarith
+
+/-- **The Ritz bound on the trial subspace.**  On the kernel the free beam contributes
+nothing, so the form is exactly the perturbation's, bounded by the upper Ritz value. -/
+theorem beamPerturbed_form_le_of_mem_beamTrial (ε : ℝ) (hε : 0 ≤ ε)
+    (x : (beamPerturbed ε).toLinearPMap.domain) (hx : (x : BeamL2) ∈ beamTrial) :
+    (⟪(beamPerturbed ε).toLinearPMap x, (x : BeamL2)⟫_ℂ).re
+      ≤ DavisKahan1970.Section9.ritzHigh ε * ‖(x : BeamL2)‖ ^ 2 := by
+  have hxdom : (x : BeamL2) ∈ beamOperator.domain := x.2
+  have hsplit : (beamPerturbed ε).toLinearPMap x
+      = beamOperator.toLinearMap ⟨(x : BeamL2), hxdom⟩ + beamPerturbation ε (x : BeamL2) :=
+    rfl
+  have hker : beamOperator.toLinearMap ⟨(x : BeamL2), hxdom⟩ = 0 :=
+    beamOperator_apply_trial hx hxdom
+  have hres : beamPerturbation ε (x : BeamL2)
+      = beamResidual ε (⟨(x : BeamL2), hx⟩ : beamTrial) := rfl
+  rw [hsplit, hker, zero_add, hres]
+  have h := beamRitz_form_le ε hε (⟨(x : BeamL2), hx⟩ : beamTrial)
+  exact h
+
+open DavisKahan1970.Section9 in
+/-- **The perturbed spectral gap, equations (9.5)--(9.7) part (b).**
+`A + ε t` has no spectrum between the upper Ritz value and `500`.
+
+Nothing is assumed beyond `0 ≤ ε`.  The two Rayleigh--Ritz inputs are proved for the
+genuine operator: the compression to the affine trial subspace has form at most
+`ritzHigh ε`, and the complement of that subspace carries the sharp free-beam gap
+`500.5`, which the positive perturbation cannot lower. -/
+theorem beamPerturbed_specProjection_Ioo_eq_zero (ε : ℝ) (hε : 0 ≤ ε) :
+    TauCeti.LinearPMap.specProjection (beamPerturbed_isSelfAdjoint ε)
+      (Set.Ioo (ritzHigh ε) 500) measurableSet_Ioo = 0 := by
+  refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset
+    (beamPerturbed_isSelfAdjoint ε) (C := Set.Ioo (ritzHigh ε) (1001 / 2))
+    measurableSet_Ioo measurableSet_Ioo
+    (Set.Ioo_subset_Ioo le_rfl (by norm_num)) ?_
+  exact TauCeti.LinearPMap.specProjection_Ioo_eq_zero_of_rayleighRitz
+    (beamPerturbed_isSelfAdjoint ε) (K := beamTrial)
+    (fun _ hy => beamTrial_le_domain hy)
+    (fun y hy => beamPerturbed_form_le_of_mem_beamTrial ε hε y hy)
+    (fun y hy => beamPerturbed_form_ge_of_mem_orthogonal ε hε y hy)
 
 end
 
