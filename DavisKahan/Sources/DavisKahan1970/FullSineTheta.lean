@@ -115,6 +115,26 @@ alias SymmetricSinThetaProblem := PaperSymmetricSinThetaProblem
 alias Proposition6_1 :=
   PaperSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm
 
+-- The real-scalar form.  A unitarily invariant norm sees only the complete
+-- singular-value sequence, so the real conclusion is carried by
+-- `paperCrossSineSum U V` rather than by a functional-calculus sine: no real
+-- continuous functional calculus is needed, and none is assumed.
+-- `Proposition6_1_real_sinTheta_singularValues` is the compiled certificate that
+-- this operator carries exactly the paper's whole-space `sin Theta` sequence,
+-- and `Proposition6_1_real_representative` states the estimate for an arbitrary
+-- operator with that sequence.
+alias RealSymmetricSinThetaProblem := PaperRealSymmetricSinThetaProblem
+alias Proposition6_1_real :=
+  PaperRealSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm_real
+alias Proposition6_1_real_kyFan :=
+  PaperRealSymmetricSinThetaProblem.symmetric_all_kyFan_real
+alias Proposition6_1_real_sinTheta_singularValues :=
+  PaperRealSymmetricSinThetaProblem.crossSineSum_paperMem_iff_and_gauge_eq
+alias Proposition6_1_real_sinTheta_eq_literalFullSinAngle :=
+  approximationNumber_paperSourceFullSinR_eq_paperCrossSineSum
+alias Proposition6_1_real_representative :=
+  PaperRealSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm_representative_real
+
 /-! ## Theorem 6.2 and its printed finite-rank consequence -/
 
 alias PairwiseSpectrumGap := PairwiseSpectrumGap
