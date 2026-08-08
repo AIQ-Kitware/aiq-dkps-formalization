@@ -1545,6 +1545,208 @@ theorem beamSinThetaSum_le (ε : ℝ) :
     le_trans hmain.2 hres
   linarith
 
+/-! ## Towards equations (9.5)--(9.7): the Rayleigh--Ritz residual
+
+The tangent envelopes of Section 9 are `(eps * sqrt 15 / 15) / (500 - ritzHigh eps)`,
+so the data an unbounded tangent theorem needs is: the Ritz compression, whose form is
+bounded above by `ritzHigh eps`, and the Rayleigh--Ritz residual, whose norm is exactly
+`orthogonalResidualSingularValue eps = |eps| * sqrt 15 / 15`.  Both are proved here.
+
+The residual norm is obtained without computing the orthogonal projection: the
+projection is the nearest point of the trial subspace, so testing against the explicit
+competitor `ritzLow eps * alpha * phi_1 + ritzHigh eps * beta * phi_2` suffices, and the
+resulting Gram form is exactly the recentered `orthogonalResidualGram eps`. -/
+
+open DavisKahan1970.Section9 in
+/-- The Ritz matrix of the perturbation against the orthonormal trial basis, in the
+four-inner-product form the residual computation consumes. -/
+theorem beamResidual_inner_trial (ε : ℝ) :
+    ⟪centeredAffineLp trialOne, beamResidual ε beamTrialVecOne⟫_ℂ
+        = ((ritzLow ε : ℝ) : ℂ) ∧
+      ⟪centeredAffineLp trialOne, beamResidual ε beamTrialVecTwo⟫_ℂ = 0 ∧
+        ⟪centeredAffineLp trialTwo, beamResidual ε beamTrialVecOne⟫_ℂ = 0 ∧
+          ⟪centeredAffineLp trialTwo, beamResidual ε beamTrialVecTwo⟫_ℂ
+            = ((ritzHigh ε : ℝ) : ℂ) := by
+  obtain ⟨r00, r01, r11⟩ := beamRitz_matrix ε
+  simp only [beamResidual_apply_vecOne, beamResidual_apply_vecTwo]
+  refine ⟨r00, r01, ?_, r11⟩
+  rw [← inner_conj_symm (𝕜 := ℂ) (centeredAffineLp trialTwo)
+    (beamPerturbation ε (centeredAffineLp trialOne))]
+  have hsa : ⟪beamPerturbation ε (centeredAffineLp trialOne),
+      centeredAffineLp trialTwo⟫_ℂ
+      = ⟪centeredAffineLp trialOne,
+          beamPerturbation ε (centeredAffineLp trialTwo)⟫_ℂ :=
+    beamPerturbation_isSelfAdjoint ε _ _
+  rw [hsa, r01, map_zero]
+
+open DavisKahan1970.Section9 in
+/-- **The Rayleigh--Ritz residual bound.**  The part of `ε t x` orthogonal to the trial
+subspace has norm at most `orthogonalResidualSingularValue ε = |ε| √15/15`.  This is the
+exact operator-norm content of the *recentered* residual Gram matrix
+`orthogonalResidualGram ε = (ε²/30) [[1, -1], [-1, 1]]`, whose nonzero eigenvalue is
+`ε²/15`. -/
+theorem norm_beamRitzResidual_le (ε : ℝ) (x : beamTrial) :
+    ‖beamResidual ε x - beamTrial.starProjection (beamResidual ε x)‖
+      ≤ orthogonalResidualSingularValue ε * ‖x‖ := by
+  classical
+  obtain ⟨α, β, hx⟩ := exists_beamTrialVec_repr x
+  subst hx
+  obtain ⟨g00, g01, g11⟩ := beamResidual_gram ε
+  obtain ⟨q1, q2, q12, q21⟩ := inner_beamTrialLp
+  obtain ⟨m00, m01, m10, m11⟩ := beamResidual_inner_trial ε
+  have hg10 : ⟪beamResidual ε beamTrialVecTwo, beamResidual ε beamTrialVecOne⟫_ℂ
+      = (((residualGram ε).a₀₁ : ℝ) : ℂ) := by
+    rw [← inner_conj_symm (𝕜 := ℂ) (beamResidual ε beamTrialVecTwo)
+      (beamResidual ε beamTrialVecOne), g01, Complex.conj_ofReal]
+  have m10' : ⟪beamResidual ε beamTrialVecOne, centeredAffineLp trialOne⟫_ℂ
+      = ((ritzLow ε : ℝ) : ℂ) := by
+    rw [← inner_conj_symm (𝕜 := ℂ) (beamResidual ε beamTrialVecOne)
+      (centeredAffineLp trialOne), m00, Complex.conj_ofReal]
+  have m01' : ⟪beamResidual ε beamTrialVecTwo, centeredAffineLp trialOne⟫_ℂ = 0 := by
+    rw [← inner_conj_symm (𝕜 := ℂ) (beamResidual ε beamTrialVecTwo)
+      (centeredAffineLp trialOne), m01, map_zero]
+  have m11' : ⟪beamResidual ε beamTrialVecOne, centeredAffineLp trialTwo⟫_ℂ = 0 := by
+    rw [← inner_conj_symm (𝕜 := ℂ) (beamResidual ε beamTrialVecOne)
+      (centeredAffineLp trialTwo), m10, map_zero]
+  have m22' : ⟪beamResidual ε beamTrialVecTwo, centeredAffineLp trialTwo⟫_ℂ
+      = ((ritzHigh ε : ℝ) : ℂ) := by
+    rw [← inner_conj_symm (𝕜 := ℂ) (beamResidual ε beamTrialVecTwo)
+      (centeredAffineLp trialTwo), m11, Complex.conj_ofReal]
+  -- the explicit competitor in the trial subspace
+  set u : BeamL2 := beamResidual ε (α • beamTrialVecOne + β • beamTrialVecTwo) with hu
+  set w : BeamL2 := (((ritzLow ε : ℝ) : ℂ) * α) • centeredAffineLp trialOne
+    + (((ritzHigh ε : ℝ) : ℂ) * β) • centeredAffineLp trialTwo with hw
+  have hwmem : w ∈ beamTrial := by
+    rw [hw]
+    exact beamTrial.add_mem
+      (beamTrial.smul_mem _ (centeredAffineLp_mem_beamTrial _))
+      (beamTrial.smul_mem _ (centeredAffineLp_mem_beamTrial _))
+  have hmin : ‖u - beamTrial.starProjection u‖ ≤ ‖u - w‖ := by
+    rw [beamTrial.starProjection_minimal u]
+    exact ciInf_le ⟨0, by rintro _ ⟨y, rfl⟩; exact norm_nonneg _⟩ (⟨w, hwmem⟩ : beamTrial)
+  refine le_trans hmin ?_
+  -- expand `‖u - w‖²` against the two Gram matrices
+  have hu' : u = α • beamResidual ε beamTrialVecOne
+      + β • beamResidual ε beamTrialVecTwo := by
+    rw [hu, map_add, map_smul, map_smul]
+  have hinner : ⟪u - w, u - w⟫_ℂ
+      = (((ε ^ 2 / 30 * ‖α - β‖ ^ 2 : ℝ)) : ℂ) := by
+    have hα : α * (starRingEnd ℂ) α = ((‖α‖ ^ 2 : ℝ) : ℂ) := by
+      rw [mul_comm, ← Complex.normSq_eq_conj_mul_self, Complex.normSq_eq_norm_sq]
+    have hβ : β * (starRingEnd ℂ) β = ((‖β‖ ^ 2 : ℝ) : ℂ) := by
+      rw [mul_comm, ← Complex.normSq_eq_conj_mul_self, Complex.normSq_eq_norm_sq]
+    have hab : (α - β) * (starRingEnd ℂ) (α - β) = ((‖α - β‖ ^ 2 : ℝ) : ℂ) := by
+      rw [mul_comm, ← Complex.normSq_eq_conj_mul_self, Complex.normSq_eq_norm_sq]
+    have h3 : ((Real.sqrt 3 : ℝ) : ℂ) ^ 2 = 3 := by
+      norm_cast
+      exact Real.sq_sqrt (by norm_num)
+    have h75 : ((Real.sqrt 75 : ℝ) : ℂ) = 5 * ((Real.sqrt 3 : ℝ) : ℂ) := by
+      norm_cast
+      rw [show (75 : ℝ) = 5 ^ 2 * 3 by norm_num, Real.sqrt_mul (by positivity),
+        Real.sqrt_sq (by norm_num)]
+    have hrhs : (((ε ^ 2 / 30 * ‖α - β‖ ^ 2 : ℝ)) : ℂ)
+        = ((ε : ℂ) ^ 2 / 30) *
+          ((α - β) * ((starRingEnd ℂ) α - (starRingEnd ℂ) β)) := by
+      rw [show ((α - β) * ((starRingEnd ℂ) α - (starRingEnd ℂ) β))
+          = (α - β) * (starRingEnd ℂ) (α - β) from by rw [map_sub], hab]
+      push_cast
+      ring
+    rw [hu', hw]
+    simp only [inner_sub_left, inner_sub_right, inner_add_left, inner_add_right,
+      inner_smul_left, inner_smul_right, g00, g01, g11, hg10, q1, q2, q12, q21,
+      m00, m01, m10, m11, m10', m01', m11', m22', map_mul, Complex.conj_ofReal]
+    rw [hrhs]
+    unfold residualGram ritzLow ritzHigh ritzLowCoefficient ritzHighCoefficient
+    dsimp only
+    push_cast
+    rw [h75]
+    linear_combination (-((ε : ℂ) ^ 2) / 36 *
+      (α * (starRingEnd ℂ) α + β * (starRingEnd ℂ) β)) * h3
+  have hnormsq : ‖u - w‖ ^ 2 = ε ^ 2 / 30 * ‖α - β‖ ^ 2 := by
+    rw [inner_self_eq_norm_sq_to_K (𝕜 := ℂ) (x := u - w)] at hinner
+    have h2' : (((‖u - w‖ ^ 2 : ℝ)) : ℂ) = (((ε ^ 2 / 30 * ‖α - β‖ ^ 2 : ℝ)) : ℂ) := by
+      push_cast
+      push_cast at hinner
+      exact hinner
+    exact Complex.ofReal_inj.mp h2'
+  have hxnorm : ‖α • beamTrialVecOne + β • beamTrialVecTwo‖ ^ 2 = ‖α‖ ^ 2 + ‖β‖ ^ 2 :=
+    norm_sq_beamTrialVec_comb α β
+  have hσ : orthogonalResidualSingularValue ε ^ 2 = ε ^ 2 / 15 := by
+    unfold orthogonalResidualSingularValue
+    have h15 : Real.sqrt 15 ^ 2 = 15 := Real.sq_sqrt (by norm_num)
+    have : |ε| ^ 2 = ε ^ 2 := sq_abs ε
+    nlinarith [Real.sqrt_nonneg (15 : ℝ), abs_nonneg ε]
+  have hsub : ‖α - β‖ ^ 2 ≤ 2 * (‖α‖ ^ 2 + ‖β‖ ^ 2) := by
+    have htri : ‖α - β‖ ≤ ‖α‖ + ‖β‖ := norm_sub_le α β
+    nlinarith [norm_nonneg α, norm_nonneg β, norm_nonneg (α - β),
+      sq_nonneg (‖α‖ - ‖β‖)]
+  refine le_of_sq_le_sq' (norm_nonneg _)
+    (mul_nonneg (by unfold orthogonalResidualSingularValue; positivity)
+      (norm_nonneg _)) ?_
+  rw [hnormsq, mul_pow, hσ, hxnorm]
+  nlinarith [hsub, sq_nonneg ε]
+
+open DavisKahan1970.Section9 in
+/-- **The Ritz compression form bound.**  The Rayleigh--Ritz compression of `ε t` to the
+affine trial subspace has quadratic form bounded above by the upper Ritz value
+`ritzHigh ε`.  This is the `hCompression` hypothesis of the unbounded tangent theorem,
+read off from `beamRitz_matrix`: the compression is diagonal with entries `ritzLow ε` and
+`ritzHigh ε`. -/
+theorem beamRitz_form_le (ε : ℝ) (hε : 0 ≤ ε) (x : beamTrial) :
+    RCLike.re ⟪beamResidual ε x, (x : BeamL2)⟫_ℂ ≤ ritzHigh ε * ‖x‖ ^ 2 := by
+  classical
+  obtain ⟨α, β, hx⟩ := exists_beamTrialVec_repr x
+  subst hx
+  obtain ⟨q1, q2, q12, q21⟩ := inner_beamTrialLp
+  obtain ⟨m00, m01, m10, m11⟩ := beamResidual_inner_trial ε
+  have m10' : ⟪beamResidual ε beamTrialVecOne, centeredAffineLp trialOne⟫_ℂ
+      = ((ritzLow ε : ℝ) : ℂ) := by
+    rw [← inner_conj_symm (𝕜 := ℂ) (beamResidual ε beamTrialVecOne)
+      (centeredAffineLp trialOne), m00, Complex.conj_ofReal]
+  have m01' : ⟪beamResidual ε beamTrialVecTwo, centeredAffineLp trialOne⟫_ℂ = 0 := by
+    rw [← inner_conj_symm (𝕜 := ℂ) (beamResidual ε beamTrialVecTwo)
+      (centeredAffineLp trialOne), m01, map_zero]
+  have m11' : ⟪beamResidual ε beamTrialVecOne, centeredAffineLp trialTwo⟫_ℂ = 0 := by
+    rw [← inner_conj_symm (𝕜 := ℂ) (beamResidual ε beamTrialVecOne)
+      (centeredAffineLp trialTwo), m10, map_zero]
+  have m22' : ⟪beamResidual ε beamTrialVecTwo, centeredAffineLp trialTwo⟫_ℂ
+      = ((ritzHigh ε : ℝ) : ℂ) := by
+    rw [← inner_conj_symm (𝕜 := ℂ) (beamResidual ε beamTrialVecTwo)
+      (centeredAffineLp trialTwo), m11, Complex.conj_ofReal]
+  have hu' : beamResidual ε (α • beamTrialVecOne + β • beamTrialVecTwo)
+      = α • beamResidual ε beamTrialVecOne
+        + β • beamResidual ε beamTrialVecTwo := by
+    rw [map_add, map_smul, map_smul]
+  have hxc : ((α • beamTrialVecOne + β • beamTrialVecTwo : beamTrial) : BeamL2)
+      = α • centeredAffineLp trialOne + β • centeredAffineLp trialTwo := rfl
+  have hα : α * (starRingEnd ℂ) α = ((‖α‖ ^ 2 : ℝ) : ℂ) := by
+    rw [mul_comm, ← Complex.normSq_eq_conj_mul_self, Complex.normSq_eq_norm_sq]
+  have hβ : β * (starRingEnd ℂ) β = ((‖β‖ ^ 2 : ℝ) : ℂ) := by
+    rw [mul_comm, ← Complex.normSq_eq_conj_mul_self, Complex.normSq_eq_norm_sq]
+  have hinner : ⟪beamResidual ε (α • beamTrialVecOne + β • beamTrialVecTwo),
+        ((α • beamTrialVecOne + β • beamTrialVecTwo : beamTrial) : BeamL2)⟫_ℂ
+      = (((‖α‖ ^ 2 * ritzLow ε + ‖β‖ ^ 2 * ritzHigh ε : ℝ)) : ℂ) := by
+    rw [hu', hxc]
+    simp only [inner_add_left, inner_add_right, inner_smul_left, inner_smul_right,
+      m10', m01', m11', m22', map_mul]
+    rw [show α * ((starRingEnd ℂ) α * ((ritzLow ε : ℝ) : ℂ) + (starRingEnd ℂ) β * 0)
+          + β * ((starRingEnd ℂ) α * 0
+            + (starRingEnd ℂ) β * ((ritzHigh ε : ℝ) : ℂ))
+        = (α * (starRingEnd ℂ) α) * ((ritzLow ε : ℝ) : ℂ)
+          + (β * (starRingEnd ℂ) β) * ((ritzHigh ε : ℝ) : ℂ) from by ring,
+      hα, hβ]
+    push_cast
+    ring
+  rw [hinner]
+  have hre : RCLike.re ((((‖α‖ ^ 2 * ritzLow ε + ‖β‖ ^ 2 * ritzHigh ε : ℝ)) : ℂ))
+      = ‖α‖ ^ 2 * ritzLow ε + ‖β‖ ^ 2 * ritzHigh ε := rfl
+  rw [hre, norm_sq_beamTrialVec_comb]
+  have hgap : ritzLow ε ≤ ritzHigh ε := by
+    have h := ritzHigh_sub_ritzLow ε
+    have : 0 ≤ ε * (Real.sqrt 3 / 3) := by positivity
+    linarith
+  nlinarith [sq_nonneg ‖α‖, sq_nonneg ‖β‖, norm_nonneg α, norm_nonneg β]
+
 end
 
 end Model
