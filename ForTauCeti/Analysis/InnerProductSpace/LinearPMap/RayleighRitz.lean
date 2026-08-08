@@ -539,5 +539,78 @@ theorem specProjection_Ioo_eq_zero_of_rayleighRitz
   have hhigh := hCoercive ⟨((w : W) : H), hwdom⟩ hwperp
   exact absurd hlow (not_lt.2 hhigh)
 
+/-! ## The dimension count
+
+The gap theorem above discards the dimension bookkeeping once the contradiction
+is reached.  Stated on its own, that bookkeeping says: coercivity off a
+finite-dimensional trial subspace caps the dimension of every low spectral
+range, and the Ritz bound realises the cap.  This is the min--max eigenvalue
+count in the form a spectral-subspace argument uses. -/
+
+/-- **Rayleigh--Ritz dimension count, upper half.**  If the form is at least
+`β‖·‖²` on `Kᗮ`, no finite-dimensional subspace of a spectral range below `c < β`
+has more dimensions than `K`. -/
+theorem finrank_le_of_le_specRange_Iic
+    {K : Submodule ℂ H} [K.HasOrthogonalProjection] [FiniteDimensional ℂ K]
+    {β c : ℝ} (hcβ : c < β)
+    (hCoercive : ∀ x : A.domain, (x : H) ∈ Kᗮ →
+      β * ‖(x : H)‖ ^ 2 ≤ (⟪A x, (x : H)⟫_ℂ).re)
+    (hdom : ∀ x ∈ specRange hA (Set.Iic c) measurableSet_Iic, x ∈ A.domain)
+    {W : Submodule ℂ H} [FiniteDimensional ℂ W]
+    (hW : W ≤ specRange hA (Set.Iic c) measurableSet_Iic) :
+    Module.finrank ℂ W ≤ Module.finrank ℂ K := by
+  classical
+  set g : W →ₗ[ℂ] K :=
+    (K.orthogonalProjectionOnto : H →L[ℂ] K).toLinearMap ∘ₗ W.subtype with hg
+  have hinj : Function.Injective g := by
+    rw [← LinearMap.ker_eq_bot, Submodule.eq_bot_iff]
+    intro w hw
+    by_contra hne
+    have hwH : ((w : W) : H) ≠ 0 := fun h0 => hne (Subtype.ext h0)
+    have hwdom : ((w : W) : H) ∈ A.domain := hdom _ (hW w.property)
+    have hwperp : ((w : W) : H) ∈ Kᗮ := by
+      rw [← Submodule.orthogonalProjectionOnto_eq_zero_iff]
+      exact hw
+    -- the spectral range below `c` has form at most `c‖·‖²`
+    have hIci : specProjection hA (Set.Ici β) measurableSet_Ici ((w : W) : H) = 0 := by
+      have hfix : specProjection hA (Set.Iic c) measurableSet_Iic ((w : W) : H)
+          = ((w : W) : H) := (mem_specRange_iff hA _ _ _).1 (hW w.property)
+      rw [← hfix, specProjection_apply_specProjection]
+      refine specProjection_apply_eq_zero_of_eq_empty hA _ ?_ _
+      ext t
+      simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Iic, Set.mem_empty_iff_false,
+        iff_false]
+      rintro ⟨h1, h2⟩
+      linarith
+    have hlow := re_inner_lt_of_specProjection_Ici_apply_eq_zero hA
+      (⟨((w : W) : H), hwdom⟩ : A.domain) hIci hwH
+    have hhigh := hCoercive ⟨((w : W) : H), hwdom⟩ hwperp
+    exact absurd hlow (not_lt.2 hhigh)
+  simpa using LinearMap.finrank_le_finrank_of_injective (f := g) hinj
+
+/-- **Rayleigh--Ritz dimension count, lower half.**  The Ritz bound embeds the
+trial subspace into the low spectral range. -/
+theorem finrank_le_finrank_of_le_specRange_Iic
+    {K : Submodule ℂ H} [K.HasOrthogonalProjection] [FiniteDimensional ℂ K]
+    {α : ℝ} (hKdom : K ≤ A.domain)
+    (hRitz : ∀ x : A.domain, (x : H) ∈ K → (⟪A x, (x : H)⟫_ℂ).re ≤ α * ‖(x : H)‖ ^ 2)
+    {W : Submodule ℂ H} [FiniteDimensional ℂ W]
+    (hW : specRange hA (Set.Iic α) measurableSet_Iic ≤ W) :
+    Module.finrank ℂ K ≤ Module.finrank ℂ W := by
+  classical
+  set Q : H →L[ℂ] H := specProjection hA (Set.Iic α) measurableSet_Iic with hQ
+  set f : K →ₗ[ℂ] W :=
+    { toFun := fun u => ⟨Q (u : H), hW (specProjection_mem_specRange hA _ _ _)⟩
+      map_add' := fun u v => by apply Subtype.ext; simp
+      map_smul' := fun a u => by apply Subtype.ext; simp } with hf
+  have hinj : Function.Injective f := by
+    rw [← LinearMap.ker_eq_bot, Submodule.eq_bot_iff]
+    rintro ⟨u, hu⟩ hker
+    have h0 : Q u = 0 := congrArg Subtype.val hker
+    exact Subtype.ext
+      (eq_zero_of_specProjection_Iic_apply_eq_zero_of_form_le hA hKdom hRitz hu h0)
+  simpa using LinearMap.finrank_le_finrank_of_injective (f := f) hinj
+
 end LinearPMap
 end TauCeti
+
