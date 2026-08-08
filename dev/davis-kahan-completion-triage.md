@@ -263,14 +263,47 @@ Row `S2-sin-two-theta`. Three distinct sub-problems; do not conflate.
   (`dim X(E_0) < dim X(F_0)`), which is proof debt for the **sin** theorem, not for
   Section 8. Reuse the lower-rank tangent / trial-map machinery of Theorem 6.3.
 
-### T6 `TODO` -- real-scalar / Appendix cluster
+### T6 `TODO` -- real-scalar / Appendix cluster  **[SCOPED, with a measured finding]**
 
 Rows `S2-tan-theta`, `DK-6.1-lem`, `DK-6.1-prop`, `DK-6.3-thm`, `DK-6-appendix`.
-Fresh whole-repo audit **before** proving anything: much is already done. Expect exact
-real-scalar wrappers via `complexifySubmoduleEquiv` on `theorem63Compression` /
-`theorem63Residual`, returning through
-`PaperUnitaryInvariantNorm.mul_gauge_le_of_all_mul_kyFan_le` and `gauge_complexify`.
-If mathematics is present and only the row is stale, fix the row.
+
+The audit already in the census is CORRECT and was re-verified: the gap on these rows is
+**real scalars at infinite dimension**, and it is genuine, not a stale label. Every
+declaration on them is `InnerProductSpace ℂ` only; the one scalar-generic declaration on
+`S2-tan-theta` (`partIII_tanTheta_ritzResidual_uiNorm`) carries `[FiniteDimensional]`.
+`DK-6.3-thm` has `scope_gap: None` and no blocker -- its residue is
+`S2-unbounded-scope`'s, not its own. `DK-6-appendix` is half closed already: the SINE
+portion has real endpoints (`Theorem6_1_real_commonDomain` etc.), only the tangent
+cutoff / Fan passage is still complex-only.
+
+**MEASURED FINDING 2026-08-07 (Opus 5).** The complexification transport the campaign
+brief recommends is probably the wrong route for `DK-6.1-lem`/`DK-6.1-prop`. Lemma 6.1
+is complex-only *by habit, not by mathematics*: all three of its imports
+(`OperatorIdeal/ApproximationNumbers/BlockSum`,
+`SineTheta/Norms/SubspaceSingularTransport`, `SineTheta/ProjectionBlocks`) are already
+`{𝕜 : Type u} [RCLike 𝕜]`-generic, and its own content -- `paperProjectionBlock`,
+`paperBlockCompression`, Ky Fan gauges, `PaperUnitaryInvariantNorm.extendedGauge` -- is
+projection algebra with nothing complex-specific in it.
+
+A direct `ℂ → RCLike 𝕜` generalization of
+`DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean` was ATTEMPTED and REVERTED.
+It got most of the way: only three failure sites, none of them mathematical.
+
+1. `Lemma61.lean:158` -- `(deterministic) timeout at whnf`, 200000 heartbeats. This is
+   the instance-diamond trap the file's own docstring warns about; the file installs
+   `local instance instCompleteSpaceCoeOfHasOrthogonalProjectionLemma61` precisely
+   because of it, and that instance has to be generalized in step with the variable
+   block or elaboration falls back on unfolding `Submodule` algebra structures.
+2/3. `Lemma61.lean:317` and `:327` -- a rewrite with the
+   `kyFanApproximationGauge _ (continuousOrthogonalBlockSum _ _)` lemma stops matching,
+   almost certainly an instance/implicit-`𝕜` mismatch needing an explicit `(𝕜 := 𝕜)`.
+
+So the next attempt should generalize the local instance first, supply `(𝕜 := 𝕜)` at the
+two block-sum rewrites, and raise `maxHeartbeats` locally if the timeout survives. If
+that lands, `DK-6.1-lem` and `DK-6.1-prop` close **without any complexification
+transport at all**, which is strictly better than the brief's route. Do the same
+genericity check on the appendix tangent passage before reaching for
+`complexifySubmoduleEquiv`.
 
 ### T7 `TODO` -- `tan 2Theta`: infinite-dimensional trial subspace, branch-free
 
