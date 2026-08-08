@@ -1,0 +1,141 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 5
+-/
+import DavisKahan.Geometry.Angle.PaperOperatorAngle
+
+/-!
+# The literal ambient `tan Θ` of Davis--Kahan
+
+`DavisKahan/Geometry/Angle/PaperOperatorAngle.lean` builds the paper's literal
+Hermitian angle `Θ = arcsin |P_U - P_V|` between two closed subspaces and its
+sine and cosine.  This module adds the tangent, which is the object the second
+conclusion of the Section 2 `tan θ` theorem is about.
+
+The tangent is only an honest `tan` where the angle stays away from `π / 2`.
+Mathlib's `Real.tan` is total, with `Real.tan (π / 2) = 0`, so `cfc Real.tan Θ`
+is always defined; but the identity `cos Θ · tan Θ = sin Θ` — which is what
+makes it *the tangent* — needs uniform transversality of the two subspaces, in
+the form `‖sin Θ‖ < 1`.  That hypothesis is exactly what the tangent theorem's
+right-hand side supplies when it is finite, so it is not a restriction of the
+theory but a statement of where the theory lives.
+
+## Main results
+
+* `TauCeti.DavisKahanExt.paperTanAngleOperatorC`: the literal `tan Θ`.
+* `TauCeti.DavisKahanExt.paperTanAngleOperatorC_nonneg`.
+* `TauCeti.DavisKahanExt.paperCos_mul_paperTan`: `cos Θ · tan Θ = sin Θ` under
+  uniform transversality.
+
+## Open obligation
+
+The whole-space `tan Θ` estimate `δ ‖tan Θ‖ ≤ ‖H‖` (Section 2, second
+conclusion of the `tan θ` theorem; derived at Section 7 lines around equation
+(7.6)) is **not** proved here.  Its directed companion `δ ‖tan Θ₀‖ ≤ ‖R‖` is in
+the build through Theorem 6.3, and the two block lemmas the derivation needs —
+Lemma 6.1 with its converse, and the Lemma 6.2 reflection pinch — are available
+as `paperLemma61_all_kyFan`, `paperLemma61_converse` and
+`paperDiagonalPair_all_kyFan_le`.  What is missing is the equisingularity of the
+two directed tangent blocks in a form that matches the diagonal representative
+`theorem63DirectedTangent`, which is currently a finite-rank singular-basis
+construction rather than a functional calculus of this operator.
+
+## References
+
+* C. Davis and W. M. Kahan, *The rotation of eigenvectors by a perturbation.
+  III*, SIAM J. Numer. Anal. 7 (1970), 1--46: the `tan θ` theorem of Section 2
+  and Theorem 6.3.
+-/
+
+namespace TauCeti
+namespace DavisKahanExt
+
+open DavisKahan
+
+open scoped InnerProductSpace
+
+noncomputable section
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+  [CompleteSpace E]
+
+/-- The paper's literal ambient `tan Θ`, obtained by applying `tan` to the
+Hermitian operator angle. -/
+noncomputable def paperTanAngleOperatorC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
+  cfc Real.tan (paperAngleOperatorC U V)
+
+/-- `tan Θ` is self-adjoint. -/
+theorem isSelfAdjoint_paperTanAngleOperatorC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    IsSelfAdjoint (paperTanAngleOperatorC U V) :=
+  cfc_predicate _ (paperAngleOperatorC U V)
+
+/-- `tan Θ` is nonnegative: the angle has spectrum in `[0, π/2]`, where the
+tangent is nonnegative (and, at the endpoint, is `0` by Mathlib's totalisation
+of `Real.tan`). -/
+theorem paperTanAngleOperatorC_nonneg (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    0 ≤ paperTanAngleOperatorC U V := by
+  refine cfc_nonneg fun t ht => ?_
+  have h := spectrum_paperAngleOperatorC_subset_Icc U V ht
+  exact Real.tan_nonneg_of_nonneg_of_le_pi_div_two h.1 h.2
+
+/-- Under uniform transversality the angle stays strictly below `π / 2`. -/
+theorem spectrum_paperAngleOperatorC_lt_pi_div_two
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hlt : ‖sinAngleOperatorC U V‖ < 1)
+    {t : ℝ} (ht : t ∈ spectrum ℝ (paperAngleOperatorC U V)) :
+    0 ≤ t ∧ t < Real.pi / 2 := by
+  rw [paperAngleOperatorC,
+    cfc_map_spectrum (R := ℝ) (f := Real.arcsin)
+      (a := sinAngleOperatorC U V) (isSelfAdjoint_sinAngleOperatorC U V)
+      Real.continuous_arcsin.continuousOn] at ht
+  obtain ⟨s, hs, rfl⟩ := ht
+  have hsi := spectrum_sinAngleOperatorC_subset_Icc U V hs
+  have hnorm : |s| ≤ ‖sinAngleOperatorC U V‖ * ‖(1 : E →L[ℂ] E)‖ :=
+    spectrum.norm_le_norm_mul_of_mem hs
+  have hone : ‖(1 : E →L[ℂ] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+  have hslt : s < 1 := by
+    have : |s| ≤ ‖sinAngleOperatorC U V‖ := by
+      refine hnorm.trans ?_
+      calc ‖sinAngleOperatorC U V‖ * ‖(1 : E →L[ℂ] E)‖
+          ≤ ‖sinAngleOperatorC U V‖ * 1 :=
+            mul_le_mul_of_nonneg_left hone (norm_nonneg _)
+        _ = ‖sinAngleOperatorC U V‖ := mul_one _
+    have hle : s ≤ ‖sinAngleOperatorC U V‖ := (le_abs_self s).trans this
+    linarith
+  exact ⟨Real.arcsin_nonneg.mpr hsi.1, Real.arcsin_lt_pi_div_two.mpr hslt⟩
+
+/-- **`cos Θ · tan Θ = sin Θ`**, under uniform transversality of the two
+subspaces.  This is what makes `paperTanAngleOperatorC` the tangent rather than
+an arbitrary functional calculus: it is the operator identity the paper uses
+whenever it divides a sine block by a cosine block. -/
+theorem paperCos_mul_paperTan (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hlt : ‖sinAngleOperatorC U V‖ < 1) :
+    paperCosAngleOperatorC U V * paperTanAngleOperatorC U V =
+      paperSinAngleOperatorC U V := by
+  rw [paperCosAngleOperatorC, paperTanAngleOperatorC, paperSinAngleOperatorC,
+    ← cfc_mul Real.cos Real.tan (paperAngleOperatorC U V)
+      Real.continuous_cos.continuousOn
+      (Real.continuousOn_tan.mono (by
+        intro t ht
+        have h := spectrum_paperAngleOperatorC_lt_pi_div_two U V hlt ht
+        exact ne_of_gt (Real.cos_pos_of_mem_Ioo
+          ⟨by linarith [Real.pi_pos, h.1], h.2⟩)))]
+  refine cfc_congr fun t ht => ?_
+  have h := spectrum_paperAngleOperatorC_lt_pi_div_two U V hlt ht
+  have hcos : Real.cos t ≠ 0 := by
+    have : 0 < Real.cos t := Real.cos_pos_of_mem_Ioo
+      ⟨by linarith [Real.pi_pos, h.1], h.2⟩
+    exact ne_of_gt this
+  rw [Real.tan_eq_sin_div_cos]
+  field_simp
+
+end
+
+end DavisKahanExt
+end TauCeti
