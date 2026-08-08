@@ -31,31 +31,32 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `DK-5.1-thm` — Theorem 5.1: Banach-space Sylvester lower bound | theorem | `s5-theorem5-1` | 0 / 2 | 100% | yes |
 | `DK-5.2-thm` — Theorem 5.2: Semibounded self-adjoint Sylvester theorem | theorem | `base-theorem5-2` | 0 / 1 | 100% | yes |
 | `DK-6.3-thm` — Theorem 6.3: Generalized tangent theorem | theorem | `s6-theorem6-3` | 0 / 6 | 100% | yes |
+| `DK-6-appendix` — Appendix to Section 6, equations (6.7)–(6.11): Unbounded-operator passage | appendix | `s6-appendix-unbounded` | 1 / 1 | 0% | no |
 | `DK-6.3-lem` — Lemma 6.3: Finite-rank near-maximizer leakage estimate | lemma | `s6-lemma6-3-approx` | 0 / 2 | 100% | yes |
 | `DK-7-sin2-proof` — Section 7, equations (7.1)–(7.5): Reflection proof of the sine double-angle theorem | proof_package | `s7-sin2` | 0 / 2 | 100% | yes |
 | `DK-7-tan2-proof` — Section 7, equation (7.6) and following argument: Singular-vector proof of the tangent double-angle theorem | proof_package | `s7-tan2` | 0 / 3 | 100% | yes |
 | `DK-8.1-thm` — Theorem 8.1: Branch selection and spectral repulsion | theorem | `s8-theorem8-1` | 0 / 18 | 100% | yes |
 | `DK-8.2-thm` — Theorem 8.2: Smallness selects the acute branch | theorem | `s8-theorem8-2-perturbation`, `s8-theorem8-2-residual` | 0 / 14 | 100% | yes |
-| `DK-9-model` — Section 9, problem setup: Fourth-derivative Rayleigh–Ritz model | numerical_model | `s9-finite-certificate`, `s9-final-certificate` | 3 / 23 | 86% | no |
-| `DK-9.1-9.4` — Equations (9.1)–(9.4): Initial sine and sine-double-angle bounds | numerical_claims | `s9-initial-angle-bounds`, `s9-final-certificate` | 3 / 23 | 86% | no |
-| `DK-9.5-9.7` — Equations (9.5)–(9.7): Rayleigh–Ritz tangent refinements | numerical_claims | `s9-tangent-angle-bounds`, `s9-final-certificate` | 3 / 23 | 86% | no |
-| `DK-9.8` — Equation (9.8): Comparison with Weinberger bounds | comparison_claim | `s9-output-certificate`, `s9-final-certificate` | 3 / 23 | 86% | no |
+| `DK-9-model` — Section 9, problem setup: Fourth-derivative Rayleigh–Ritz model | numerical_model | `s9-finite-certificate`, `s9-final-certificate` | 1 / 23 | 95% | no |
+| `DK-9.1-9.4` — Equations (9.1)–(9.4): Initial sine and sine-double-angle bounds | numerical_claims | `s9-initial-angle-bounds`, `s9-final-certificate` | 1 / 23 | 95% | no |
+| `DK-9.5-9.7` — Equations (9.5)–(9.7): Rayleigh–Ritz tangent refinements | numerical_claims | `s9-tangent-angle-bounds`, `s9-final-certificate` | 1 / 23 | 95% | no |
+| `DK-9.8` — Equation (9.8): Comparison with Weinberger bounds | comparison_claim | `s9-output-certificate`, `s9-final-certificate` | 1 / 23 | 95% | no |
 | `DK-9-infinite-residual-counterexample` — Section 9, l2 example after (9.8): Residual-infinite limitation example | example | `base-section9-infinite-residual-example` | 0 / 1 | 100% | yes |
-| `DK-9.9-9.11` — Equations (9.9)–(9.11) and final bounds: Individual eigenvector identification inside a cluster | numerical_claims | `s9-output-certificate`, `s9-final-certificate` | 3 / 23 | 86% | no |
+| `DK-9.9-9.11` — Equations (9.9)–(9.11) and final bounds: Individual eigenvector identification inside a cluster | numerical_claims | `s9-output-certificate`, `s9-final-certificate` | 1 / 23 | 95% | no |
 
 ## Summary
 
-- Manifest nodes: **80**
-- Textually present: **80**
-- Paper result rows represented in the frontier: **32**
-- Census rows requiring frontier coverage: **11**
-- Census rows mapped: **11**
-- Declarations resolving in Lean: **80**
-- Declarations with admission-free Lean closure: **68**
-- Recursively grounded manifest nodes: **68**
-- Paper results recursively grounded: **27 / 32**
-- Source-role endpoints resolving: **29 / 29**
-- Source-role endpoints recursively grounded: **25 / 29**
+- Manifest nodes: **81**
+- Textually present: **81**
+- Paper result rows represented in the frontier: **33**
+- Census rows requiring frontier coverage: **8**
+- Census rows mapped: **8**
+- Declarations resolving in Lean: **81**
+- Declarations with admission-free Lean closure: **81**
+- Recursively grounded manifest nodes: **77**
+- Paper results recursively grounded: **27 / 33**
+- Source-role endpoints resolving: **30 / 30**
+- Source-role endpoints recursively grounded: **27 / 30**
 
 ## Manifest nodes
 
@@ -97,6 +98,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s6-approximation-energy` | foundation | no |  | high | no | yes | yes | yes | yes |
 | `s6-lemma6-3-approx` | source | yes | `DK-6.3-lem` | high | no | yes | yes | yes | yes |
 | `s6-lemma6-3-finite` | bridge | no |  | medium | no | yes | yes | yes | yes |
+| `s6-appendix-unbounded` | source | yes | `DK-6-appendix` | high | yes | yes | yes | yes | no |
 | `s5-compatible-cross-norm` | foundation | no |  | medium | no | yes | yes | yes | yes |
 | `s5-theorem5-1` | source | yes | `DK-5.1-thm` | medium | no | yes | yes | yes | yes |
 | `s6-trial-residual` | foundation | no |  | high | no | yes | yes | yes | yes |
@@ -129,18 +131,18 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s8-theorem8-2-perturbation` | source | yes | `DK-8.2-thm` | high | no | yes | yes | yes | yes |
 | `s8-theorem8-2-residual` | source | yes | `DK-8.2-thm` | hard | no | yes | yes | yes | yes |
 | `s9-semantic-model` | foundation | no |  | high | no | yes | yes | yes | yes |
-| `s9-represents-free-beam` | foundation | no |  | hard | no | yes | yes | no | no |
-| `s9-third-eigenvalue-correct` | foundation | no |  | hard | no | yes | yes | no | no |
-| `s9-free-beam-operator` | foundation | no |  | hard | no | yes | yes | no | no |
-| `s9-free-beam-selfadjoint` | foundation | no |  | hard | no | yes | yes | no | no |
-| `s9-canonical-model` | bridge | no |  | hard | no | yes | yes | no | no |
-| `s9-third-eigenvalue-bound` | source | no |  | hard | no | yes | yes | no | no |
-| `s9-exact-finite-data` | bridge | no |  | high | no | yes | yes | no | no |
-| `s9-finite-certificate` | bridge | yes | `DK-9-model` | high | no | yes | yes | no | no |
-| `s9-initial-angle-bounds` | source | yes | `DK-9.1-9.4` | high | no | yes | yes | no | no |
-| `s9-tangent-angle-bounds` | source | yes | `DK-9.5-9.7` | high | no | yes | yes | no | no |
-| `s9-output-certificate` | bridge | yes | `DK-9.8`, `DK-9.9-9.11` | hard | no | yes | yes | no | no |
-| `s9-final-certificate` | source | yes | `DK-9-model`, `DK-9.1-9.4`, `DK-9.5-9.7`, `DK-9.8`, `DK-9.9-9.11` | hard | no | yes | yes | no | no |
+| `s9-represents-free-beam` | foundation | no |  | hard | no | yes | yes | yes | yes |
+| `s9-third-eigenvalue-correct` | foundation | no |  | hard | no | yes | yes | yes | yes |
+| `s9-free-beam-operator` | foundation | no |  | hard | no | yes | yes | yes | yes |
+| `s9-free-beam-selfadjoint` | foundation | no |  | hard | no | yes | yes | yes | yes |
+| `s9-canonical-model` | bridge | no |  | hard | no | yes | yes | yes | yes |
+| `s9-third-eigenvalue-bound` | source | no |  | hard | no | yes | yes | yes | yes |
+| `s9-exact-finite-data` | bridge | no |  | high | no | yes | yes | yes | yes |
+| `s9-finite-certificate` | bridge | yes | `DK-9-model` | high | no | yes | yes | yes | yes |
+| `s9-initial-angle-bounds` | source | yes | `DK-9.1-9.4` | high | no | yes | yes | yes | yes |
+| `s9-tangent-angle-bounds` | source | yes | `DK-9.5-9.7` | high | yes | yes | yes | yes | no |
+| `s9-output-certificate` | bridge | yes | `DK-9.8`, `DK-9.9-9.11` | hard | yes | yes | yes | yes | no |
+| `s9-final-certificate` | source | yes | `DK-9-model`, `DK-9.1-9.4`, `DK-9.5-9.7`, `DK-9.8`, `DK-9.9-9.11` | hard | yes | yes | yes | yes | no |
 
 ## Dependency edges
 
