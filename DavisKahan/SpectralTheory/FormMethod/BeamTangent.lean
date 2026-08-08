@@ -404,6 +404,337 @@ theorem finrank_beamTrial : Module.finrank ℂ beamTrial = 2 := by
   rw [Module.finrank_eq_card_basis hbasis]
   simp
 
+/-! ## The direct one-vector bounds following equation (9.8)
+
+Section 9 estimates the angle `φ_k` made by the *single* Ritz vector `e_k` by applying
+Theorem 6.3 with the one-dimensional trial space `E₀ = e_k`: then
+`A₀ = α̂_k = e_k* (A + ε t) e_k` is the Ritz value itself, the residual is the single column
+`r̂_k = (A + ε t) e_k − e_k α̂_k` of norm `ε/√30`, and the gap is `500 − α̂_k`, giving
+`tan φ_k < (ε/√30)/(500 − α̂_k)`.  These are sharper than the `sin`-theorem bounds (9.8).
+
+This needs Theorem 6.3 with a **chosen** reducing subspace, not with a spectrum-free
+interval: for `k = 1` the interval `(α̂₁, 500)` contains the second Ritz level, so the
+operator does have spectrum there.  The chosen subspace is the exact spectral subspace of
+`Iic 500`, whose complement carries form at least `500` with no gap hypothesis at all.
+
+The two Ritz vectors are `centeredAffineLp trialOne` and `centeredAffineLp trialTwo`;
+`beamRitz_matrix` gives their Ritz values and `beamResidualGram_matrix` their residual
+column norms. -/
+
+noncomputable section
+
+open DavisKahan1970.Section9
+
+/-- The exact spectral subspace of the perturbed beam at or below `500`: the reducing
+subspace the printed Theorem 6.3 is applied at. -/
+abbrev beamLowFiveHundred (ε : ℝ) : Submodule ℂ BeamL2 :=
+  selfAdjointSpectralSubspace (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε)
+    (Set.Iic 500) measurableSet_Iic
+
+/-- The line spanned by a trial vector sits inside the trial subspace. -/
+theorem span_singleton_le_beamTrial {v : BeamL2} (hv : v ∈ beamTrial) :
+    (ℂ ∙ v) ≤ beamTrial :=
+  (Submodule.span_singleton_le_iff_mem _ _).mpr hv
+
+/-- On the trial subspace the perturbed beam acts by the perturbation alone: the free beam
+annihilates its kernel. -/
+theorem beamPerturbed_apply_of_mem_beamTrial (ε : ℝ) {x : BeamL2} (hx : x ∈ beamTrial)
+    (h : x ∈ beamOperator.domain) :
+    (beamPerturbed ε).toLinearMap ⟨x, h⟩ = beamPerturbation ε x := by
+  rw [show (beamPerturbed ε).toLinearMap ⟨x, h⟩
+      = beamOperator.toLinearMap ⟨x, h⟩ + beamPerturbation ε x from rfl,
+    beamOperator_apply_trial hx h, zero_add]
+
+/-- **The one-dimensional Rayleigh--Ritz trial block at a unit Ritz vector.**  The
+compression is the scalar `a = ⟪v, ε t v⟫` and the residual is the single Ritz column. -/
+def beamColumnBlock (ε : ℝ) (v : BeamL2) (hv : v ∈ beamTrial) (hvnorm : ‖v‖ = 1)
+    (a : ℝ) (hform : ⟪v, beamPerturbation ε v⟫_ℂ = ((a : ℝ) : ℂ)) :
+    UnboundedTrialBlock (beamPerturbed ε) (ℂ ∙ v) where
+  domain_le := fun _ hx => beamTrial_le_domain (span_singleton_le_beamTrial hv hx)
+  operator := ((a : ℝ) : ℂ) • ContinuousLinearMap.id ℂ (ℂ ∙ v)
+  operator_selfAdjoint := by
+    have h1 : IsSelfAdjoint (((a : ℝ) : ℂ)) := by
+      show star ((a : ℝ) : ℂ) = ((a : ℝ) : ℂ)
+      rw [Complex.star_def, Complex.conj_ofReal]
+    have h2 : IsSelfAdjoint (ContinuousLinearMap.id ℂ (ℂ ∙ v)) := by
+      rw [ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric]
+      intro x y
+      rfl
+    exact h1.smul h2
+  operator_apply := fun x => by
+    obtain ⟨c, hc⟩ := Submodule.mem_span_singleton.1 x.2
+    have hxv : (x : BeamL2) = c • v := hc.symm
+    have hmem : (x : BeamL2) ∈ beamTrial := span_singleton_le_beamTrial hv x.2
+    show ((a : ℝ) : ℂ) • (x : BeamL2) = _
+    rw [beamPerturbed_apply_of_mem_beamTrial ε hmem,
+      Submodule.starProjection_unit_singleton ℂ hvnorm, hxv, map_smul,
+      inner_smul_right, hform]
+    module
+  residual := beamPerturbation ε ∘L (ℂ ∙ v).subtypeL - ((a : ℝ) : ℂ) • (ℂ ∙ v).subtypeL
+  residual_apply := fun x => by
+    have hmem : (x : BeamL2) ∈ beamTrial := span_singleton_le_beamTrial hv x.2
+    show beamPerturbation ε (x : BeamL2) - ((a : ℝ) : ℂ) • (x : BeamL2) = _
+    rw [beamPerturbed_apply_of_mem_beamTrial ε hmem]
+    rfl
+
+/-- The compression form bound for the one-vector block; it is in fact an equality. -/
+theorem beamColumnBlock_compression_form (ε : ℝ) (v : BeamL2) (hv : v ∈ beamTrial)
+    (hvnorm : ‖v‖ = 1) (a : ℝ) (hform : ⟪v, beamPerturbation ε v⟫_ℂ = ((a : ℝ) : ℂ))
+    (z : (ℂ ∙ v)) :
+    RCLike.re ⟪(beamColumnBlock ε v hv hvnorm a hform).operator z, z⟫_ℂ
+      ≤ a * ‖z‖ ^ 2 := by
+  have hop : (beamColumnBlock ε v hv hvnorm a hform).operator z = ((a : ℝ) : ℂ) • z := rfl
+  rw [hop, inner_smul_left, Complex.conj_ofReal, inner_self_eq_norm_sq_to_K]
+  simp [← Complex.ofReal_pow]
+
+/-- **The one-vector residual is the single Ritz column.** -/
+theorem norm_beamColumnBlock_residual_le (ε : ℝ) (v : BeamL2) (hv : v ∈ beamTrial)
+    (hvnorm : ‖v‖ = 1) (a : ℝ) (hform : ⟪v, beamPerturbation ε v⟫_ℂ = ((a : ℝ) : ℂ))
+    (hcol : ‖beamPerturbation ε v - ((a : ℝ) : ℂ) • v‖
+      ≤ orthogonalResidualColumnNorm ε) :
+    ‖(beamColumnBlock ε v hv hvnorm a hform).residual‖
+      ≤ orthogonalResidualColumnNorm ε := by
+  refine ContinuousLinearMap.opNorm_le_bound _ ?_ ?_
+  · unfold orthogonalResidualColumnNorm
+    positivity
+  · intro x
+    obtain ⟨c, hc⟩ := Submodule.mem_span_singleton.1 x.2
+    have hxv : (x : BeamL2) = c • v := hc.symm
+    have hres : (beamColumnBlock ε v hv hvnorm a hform).residual x
+        = c • (beamPerturbation ε v - ((a : ℝ) : ℂ) • v) := by
+      show beamPerturbation ε (x : BeamL2) - ((a : ℝ) : ℂ) • (x : BeamL2) = _
+      rw [hxv, map_smul]
+      module
+    have hnormx : ‖x‖ = ‖c‖ := by
+      have : ‖x‖ = ‖(x : BeamL2)‖ := rfl
+      rw [this, hxv, norm_smul, hvnorm, mul_one]
+    rw [hres, norm_smul, hnormx, mul_comm]
+    exact mul_le_mul_of_nonneg_right hcol (norm_nonneg c)
+
+/-- **Theorem 6.3 at a single Ritz vector.**  The printed one-vector estimate: the largest
+tangent between the line `ℂ ∙ v` and the exact low spectral subspace of `A + ε t` is at
+most the single residual column norm divided by the gap `500 − a`. -/
+theorem beamColumn_tangent_le (ε : ℝ) (v : BeamL2) (hv : v ∈ beamTrial)
+    (hvnorm : ‖v‖ = 1) (a : ℝ) (hform : ⟪v, beamPerturbation ε v⟫_ℂ = ((a : ℝ) : ℂ))
+    (ha : a < 500)
+    (hcol : ‖beamPerturbation ε v - ((a : ℝ) : ℂ) • v‖
+      ≤ orthogonalResidualColumnNorm ε) :
+    (500 - a) * ‖theorem63DirectedTangent (ℂ ∙ v) (beamLowFiveHundred ε)‖
+      ≤ orthogonalResidualColumnNorm ε := by
+  have hδ : (0 : ℝ) < 500 - a := by linarith
+  have hUnwanted : ∀ y ∈ (beamLowFiveHundred ε)ᗮ,
+      ∀ hy : y ∈ (beamPerturbed ε).domain,
+      (a + (500 - a)) * ‖y‖ ^ 2
+        ≤ RCLike.re ⟪(beamPerturbed ε).toLinearMap ⟨y, hy⟩, y⟫_ℂ := by
+    intro y hy hydom
+    rw [show a + (500 - a) = (500 : ℝ) from by ring]
+    exact le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_Iic
+      (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε) y hy hydom
+  have hmain := theorem6_3_unbounded_ideal_directedTangent_of_reducing
+    (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) 1 one_pos)
+    (beamPerturbed ε) (beamColumnBlock ε v hv hvnorm a hform) (beamLowFiveHundred ε) hδ
+    (orthogonal_selfAdjointSpectralSubspace_starProjection_mem_domain (beamPerturbed ε)
+      (beamPerturbed_isSelfAdjoint ε) (Set.Iic 500) measurableSet_Iic)
+    (selfAdjoint_apply_orthogonal_selfAdjointSpectralSubspace_starProjection
+      (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε) (Set.Iic 500) measurableSet_Iic)
+    (beamColumnBlock_compression_form ε v hv hvnorm a hform) hUnwanted
+    (KyFanDominantIdealFamily.kyFan_mem 1 one_pos _)
+  have hgauge := hmain.2
+  rw [KyFanDominantIdealFamily.kyFan_gauge, KyFanDominantIdealFamily.kyFan_gauge,
+    kyFanApproximationGauge_one, kyFanApproximationGauge_one] at hgauge
+  exact hgauge.trans (norm_beamColumnBlock_residual_le ε v hv hvnorm a hform hcol)
+
+/-- The tangent of the angle between a single Ritz vector and the exact low spectral
+subspace of `A + ε t`. -/
+def beamTanPhi (ε : ℝ) (v : BeamL2) : ℝ :=
+  ‖theorem63DirectedTangent (ℂ ∙ v) (beamLowFiveHundred ε)‖
+
+/-! ### The two residual columns
+
+Each Ritz column `r̂_k = ε t e_k − e_k α̂_k` has norm exactly `ε/√30`, half the recentered
+singular value squared.  The computation is `‖r̂_k‖² = ⟪ε t e_k, ε t e_k⟫ − α̂_k²`, i.e. the
+diagonal entry of the initial residual Gram matrix recentered by the Ritz value; the
+radical content is `√75 = 5√3`. -/
+
+/-- `√75 = 5√3`, the one radical identity the column norms need. -/
+theorem sqrt_seventyFive : Real.sqrt 75 = 5 * Real.sqrt 3 := by
+  rw [show (75 : ℝ) = 5 ^ 2 * 3 from by norm_num, Real.sqrt_mul (by positivity),
+    Real.sqrt_sq (by norm_num)]
+
+/-- The residual column at a unit Ritz vector, squared: the Gram diagonal entry
+recentered by the Ritz value. -/
+theorem norm_beamColumnResidual_sq (ε : ℝ) (v : BeamL2) (hvnorm : ‖v‖ = 1) (a g : ℝ)
+    (hform : ⟪v, beamPerturbation ε v⟫_ℂ = ((a : ℝ) : ℂ))
+    (hgram : ⟪beamPerturbation ε v, beamPerturbation ε v⟫_ℂ = ((g : ℝ) : ℂ)) :
+    ‖beamPerturbation ε v - ((a : ℝ) : ℂ) • v‖ ^ 2 = g - a ^ 2 := by
+  have hP : ‖beamPerturbation ε v‖ ^ 2 = g := by
+    have h := hgram
+    rw [inner_self_eq_norm_sq_to_K] at h
+    have h2 : ((‖beamPerturbation ε v‖ ^ 2 : ℝ) : ℂ) = ((g : ℝ) : ℂ) := by
+      push_cast
+      exact h
+    exact Complex.ofReal_inj.mp h2
+  have hcross : RCLike.re ⟪beamPerturbation ε v, ((a : ℝ) : ℂ) • v⟫_ℂ = a ^ 2 := by
+    rw [inner_smul_right, ← inner_conj_symm, hform]
+    simp [Complex.conj_ofReal]
+    ring
+  rw [norm_sub_sq (𝕜 := ℂ), hP, hcross, norm_smul, hvnorm]
+  simp
+  ring
+
+/-- The lower Ritz column has the printed norm `ε/√30`. -/
+theorem norm_beamColumnResidual_low (ε : ℝ) :
+    ‖beamPerturbation ε (centeredAffineLp trialOne)
+        - ((ritzLow ε : ℝ) : ℂ) • centeredAffineLp trialOne‖
+      = orthogonalResidualColumnNorm ε := by
+  obtain ⟨r00, -, -⟩ := beamRitz_matrix ε
+  obtain ⟨g00, -, -⟩ := beamResidualGram_matrix ε
+  obtain ⟨n1, -, -⟩ := beamTrial_orthonormal
+  have hvnorm : ‖centeredAffineLp trialOne‖ = 1 := by
+    nlinarith [norm_nonneg (centeredAffineLp trialOne), n1]
+  have hsq := norm_beamColumnResidual_sq ε (centeredAffineLp trialOne) hvnorm
+    (ritzLow ε) ((residualGram ε).a₀₀) r00 g00
+  have hs3 : Real.sqrt 3 ^ 2 = 3 := Real.sq_sqrt (by norm_num)
+  have hval : (residualGram ε).a₀₀ - ritzLow ε ^ 2 = ε ^ 2 / 30 := by
+    unfold residualGram ritzLow ritzLowCoefficient
+    dsimp only
+    rw [sqrt_seventyFive]
+    nlinarith [hs3]
+  rw [hval] at hsq
+  have hcol := orthogonalResidualColumnNorm_sq ε
+  have hnn : (0 : ℝ) ≤ orthogonalResidualColumnNorm ε := by
+    unfold orthogonalResidualColumnNorm
+    positivity
+  rw [← Real.sqrt_sq (norm_nonneg _), hsq, ← hcol, Real.sqrt_sq hnn]
+
+/-- The upper Ritz column has the same printed norm `ε/√30`. -/
+theorem norm_beamColumnResidual_high (ε : ℝ) :
+    ‖beamPerturbation ε (centeredAffineLp trialTwo)
+        - ((ritzHigh ε : ℝ) : ℂ) • centeredAffineLp trialTwo‖
+      = orthogonalResidualColumnNorm ε := by
+  obtain ⟨-, -, r11⟩ := beamRitz_matrix ε
+  obtain ⟨-, -, g11⟩ := beamResidualGram_matrix ε
+  obtain ⟨-, n2, -⟩ := beamTrial_orthonormal
+  have hvnorm : ‖centeredAffineLp trialTwo‖ = 1 := by
+    nlinarith [norm_nonneg (centeredAffineLp trialTwo), n2]
+  have hsq := norm_beamColumnResidual_sq ε (centeredAffineLp trialTwo) hvnorm
+    (ritzHigh ε) ((residualGram ε).a₁₁) r11 g11
+  have hs3 : Real.sqrt 3 ^ 2 = 3 := Real.sq_sqrt (by norm_num)
+  have hval : (residualGram ε).a₁₁ - ritzHigh ε ^ 2 = ε ^ 2 / 30 := by
+    unfold residualGram ritzHigh ritzHighCoefficient
+    dsimp only
+    rw [sqrt_seventyFive]
+    nlinarith [hs3]
+  rw [hval] at hsq
+  have hcol := orthogonalResidualColumnNorm_sq ε
+  have hnn : (0 : ℝ) ≤ orthogonalResidualColumnNorm ε := by
+    unfold orthogonalResidualColumnNorm
+    positivity
+  rw [← Real.sqrt_sq (norm_nonneg _), hsq, ← hcol, Real.sqrt_sq hnn]
+
+/-! ### The two direct bounds
+
+`tan φ_k ≤ (ε/√30)/(500 − α̂_k)`, for the genuine perturbed beam, its exact low spectral
+subspace, and each of the two Ritz vectors.  Feeding these to
+`direct_lower_individual_vector_bound` / `direct_upper_individual_vector_bound` produces the
+printed decimals. -/
+
+/-- The lower Ritz value stays below `500` on the paper's parameter range. -/
+theorem ritzLow_lt_five_hundred {ε : ℝ} (hε : 0 < ε) (hε100 : ε < 100) :
+    ritzLow ε < 500 := by
+  have h3 : Real.sqrt 3 ≤ 2 := by
+    rw [show (2 : ℝ) = Real.sqrt 4 from by
+      rw [show (4 : ℝ) = 2 ^ 2 from by norm_num, Real.sqrt_sq (by norm_num)]]
+    exact Real.sqrt_le_sqrt (by norm_num)
+  have h3' : (0 : ℝ) ≤ Real.sqrt 3 := Real.sqrt_nonneg 3
+  have hc : ritzLowCoefficient ≤ 1 := by
+    unfold ritzLowCoefficient
+    linarith
+  have hcpos : (0 : ℝ) ≤ ritzLowCoefficient := by
+    unfold ritzLowCoefficient
+    linarith
+  unfold ritzLow
+  nlinarith
+
+/-- **The direct one-vector bound at the lower Ritz vector, for the genuine beam.**  This
+is the paper's `tan φ₁ < (ε/√30)/(500 − α̂₁)`, with `α̂₁ = ritzLow ε`. -/
+theorem beamTanPhi_low_le (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
+    beamTanPhi ε (centeredAffineLp trialOne) ≤ lowerIndividualTangentExactBound ε := by
+  have hritz : ritzLow ε < 500 := ritzLow_lt_five_hundred hε hε100
+  have hδ : (0 : ℝ) < 500 - ritzLow ε := by linarith
+  obtain ⟨r00, -, -⟩ := beamRitz_matrix ε
+  obtain ⟨n1, -, -⟩ := beamTrial_orthonormal
+  have hvnorm : ‖centeredAffineLp trialOne‖ = 1 := by
+    nlinarith [norm_nonneg (centeredAffineLp trialOne), n1]
+  have hchain := beamColumn_tangent_le ε (centeredAffineLp trialOne)
+    (centeredAffineLp_mem_beamTrial _) hvnorm (ritzLow ε) r00 hritz
+    (le_of_eq (norm_beamColumnResidual_low ε))
+  have hden : (1 : ℝ) - ritzLowCoefficient / 500 * ε ≠ 0 := by
+    have h : ritzLow ε = ε * ritzLowCoefficient := rfl
+    rw [h] at hritz
+    intro hzero
+    apply absurd hritz
+    push Not
+    nlinarith [hzero]
+  have hbound : lowerIndividualTangentExactBound ε
+      = orthogonalResidualColumnNorm ε / (500 - ritzLow ε) := by
+    unfold lowerIndividualTangentExactBound orthogonalResidualColumnNorm
+    rw [abs_of_pos hε, show ritzLow ε = ε * ritzLowCoefficient from rfl,
+      div_eq_div_iff hden (by
+        rw [show ritzLow ε = ε * ritzLowCoefficient from rfl] at hδ
+        exact ne_of_gt hδ)]
+    ring
+  unfold beamTanPhi
+  rw [hbound, le_div_iff₀ hδ]
+  linarith [hchain]
+
+/-- **The direct one-vector bound at the upper Ritz vector, for the genuine beam.** -/
+theorem beamTanPhi_high_le (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
+    beamTanPhi ε (centeredAffineLp trialTwo) ≤ upperIndividualTangentExactBound ε := by
+  have hritz : ritzHigh ε < 500 := ritzHigh_lt_five_hundred hε100
+  have hδ : (0 : ℝ) < 500 - ritzHigh ε := by linarith
+  obtain ⟨-, -, r11⟩ := beamRitz_matrix ε
+  obtain ⟨-, n2, -⟩ := beamTrial_orthonormal
+  have hvnorm : ‖centeredAffineLp trialTwo‖ = 1 := by
+    nlinarith [norm_nonneg (centeredAffineLp trialTwo), n2]
+  have hchain := beamColumn_tangent_le ε (centeredAffineLp trialTwo)
+    (centeredAffineLp_mem_beamTrial _) hvnorm (ritzHigh ε) r11 hritz
+    (le_of_eq (norm_beamColumnResidual_high ε))
+  have hden : (1 : ℝ) - ritzHighCoefficient / 500 * ε ≠ 0 := by
+    have h : ritzHigh ε = ε * ritzHighCoefficient := rfl
+    rw [h] at hritz
+    intro hzero
+    apply absurd hritz
+    push Not
+    nlinarith [hzero]
+  have hbound : upperIndividualTangentExactBound ε
+      = orthogonalResidualColumnNorm ε / (500 - ritzHigh ε) := by
+    unfold upperIndividualTangentExactBound orthogonalResidualColumnNorm
+    rw [abs_of_pos hε, show ritzHigh ε = ε * ritzHighCoefficient from rfl,
+      div_eq_div_iff hden (by
+        rw [show ritzHigh ε = ε * ritzHighCoefficient from rfl] at hδ
+        exact ne_of_gt hδ)]
+    ring
+  unfold beamTanPhi
+  rw [hbound, le_div_iff₀ hδ]
+  linarith [hchain]
+
+/-- **The printed sharper lower-Ritz-vector bound**, about the genuine beam rather than a
+free real. -/
+theorem beamTanPhi_low_lt_printed (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
+    beamTanPhi ε (centeredAffineLp trialOne)
+      < ((913 : ℝ) / 2500000 * ε) / (1 - (4227 : ℝ) / 10000000 * ε) :=
+  direct_lower_individual_vector_bound ε _ hε hε100 (beamTanPhi_low_le ε hε hε100)
+
+/-- **The printed sharper upper-Ritz-vector bound**, about the genuine beam rather than a
+free real. -/
+theorem beamTanPhi_high_lt_printed (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
+    beamTanPhi ε (centeredAffineLp trialTwo)
+      < ((913 : ℝ) / 2500000 * ε) / (1 - (7887 : ℝ) / 5000000 * ε) :=
+  direct_upper_individual_vector_bound ε _ hε hε100 (beamTanPhi_high_le ε hε hε100)
+
+end
+
 end Model
 end FreeBeam
 end HiddenFoundations
