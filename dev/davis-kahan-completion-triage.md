@@ -169,11 +169,42 @@ the explicit competitor `ritzLow eps * a * phi_1 + ritzHigh eps * b * phi_2`, wh
 form collapses to `(eps^2/30)|a-b|^2`. The one non-ring input is `sqrt 3 ^ 2 = 3`, given
 to `linear_combination` with coefficient `-(eps^2/36)(|a|^2+|b|^2)`.
 
-**Part (b) is all that remains**: assemble `UnboundedTrialBlock (beamPerturbed eps)
-beamTrial` from those (its `operator_apply`/`residual_apply` fields are the projection
-identities, with `A.toLinearMap` on the trial reducing to `beamPerturbation eps` by
+**Part (b) is all that remains**, and it is the single fact gating every remaining
+Section 9 row: assemble `UnboundedTrialBlock (beamPerturbed eps) beamTrial` from part
+(a) (its `operator_apply`/`residual_apply` fields are the projection identities, with
+`A.toLinearMap` on the trial reducing to `beamPerturbation eps` by
 `beamOperator_apply_trial`), then prove
-`specProjection (beamPerturbed eps) (Ioo (ritzHigh eps) 500) = 0`.
+
+    specProjection (beamPerturbed eps) (Ioo (ritzHigh eps) 500) = 0.
+
+**Proof plan, and why it is not short.** Write `P_c` for `specProjection (Iic c)` of
+`beamPerturbed eps`. The statement is `rank P_500 <= 2` and `rank P_{ritzHigh} >= 2`,
+since then `P_(Ioo alpha 500) = P_500 - P_alpha` has rank 0.
+
+* `rank P_500 <= 2`: for `y` orthogonal to `beamTrial` in the domain,
+  `re<(A + eps t)y, y> >= re<A y, y> >= 500.5 ||y||^2` (the perturbation is positive and
+  `beamSpecProjection_lowSet_eq_singleton` collapses the low projection of `beamOperator`
+  onto the kernel). A 3-dimensional subspace with form `<= 500` would meet
+  `beamTrial^perp` nontrivially. Contradiction.
+* `rank P_{ritzHigh} >= 2`: from `beamRitz_form_le`, but the naive argument only yields
+  equality rather than a contradiction, so it needs the STRICT form: a vector whose
+  spectral mass lies entirely in `(ritzHigh, inf)` cannot have mean exactly `ritzHigh`
+  unless it is zero.
+
+The two vector-local energy bounds this needs already exist:
+`TauCeti.ApproximationNumber.le_re_inner_of_specProjection_Iic_apply_eq_zero` and
+`re_inner_le_of_specProjection_Ici_apply_eq_zero`
+(`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/GramSpectralRank.lean`). What is
+missing is the **rank/dimension counting** that converts a form bound on a
+finite-dimensional subspace into a lower bound on the rank of a spectral projection of an
+*unbounded* operator, plus monotonicity of that rank under a positive bounded
+perturbation. `GramSpectralRank.lean` has exactly this pattern
+(`natCast_succ_le_rank_gramProjection_Ici_of_lt_approximationNumber`,
+`rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt`) but only for the Gram
+operator of a bounded map; it is the template to generalize.
+
+**Owner: `SelfAdjointSpectralTheory` (`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/`).**
+This is a genuine new development, not a wrapper -- budget accordingly.
 
 Original part (a) description, for reference:
 build `UnboundedTrialBlock (beamPerturbed eps) beamTrial` with the Ritz compression
