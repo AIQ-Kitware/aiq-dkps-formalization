@@ -134,6 +134,58 @@ theorem sum_le_kyFanApproximationGauge_of_orthonormal
   rw [map_sum]
   exact Finset.sum_le_sum fun i _ => ht i
 
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Flipping the sign of individual members of an orthonormal family keeps it
+orthonormal. -/
+theorem orthonormal_signFlip {k : ℕ} {u : Fin k → F} (hu : Orthonormal 𝕜 u)
+    (σ : Fin k → Bool) :
+    Orthonormal 𝕜 (fun i => if σ i then u i else -u i) := by
+  rw [orthonormal_iff_ite] at hu ⊢
+  intro i j
+  have key :
+      ⟪(if σ i then u i else -u i), (if σ j then u j else -u j)⟫_𝕜 =
+        (if σ i then (1 : 𝕜) else -1) *
+          ((if σ j then (1 : 𝕜) else -1) * ⟪u i, u j⟫_𝕜) := by
+    rcases hi : σ i with _ | _ <;> rcases hj : σ j with _ | _ <;>
+      simp [inner_neg_left, inner_neg_right]
+  rw [key, hu i j]
+  rcases eq_or_ne i j with rfl | hne
+  · rcases σ i with _ | _ <;> simp
+  · simp [hne]
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- **Magnitude form of the approximation-number Ky Fan variational bound.**
+The paired coefficients may be replaced by their absolute values, because
+rephasing each member of the left orthonormal family by the sign of its
+coefficient keeps the family orthonormal.
+
+This is the approximation-number counterpart of
+`TauCeti.RectangularUnitarilyInvariantSeminorm.sum_abs_le_rectangularKyFanSum_of_orthonormal`,
+and it is what a *branch-free* estimate consumes: the sign of the matched
+coefficient is dictated by the configuration, not chosen in advance. -/
+theorem sum_abs_le_kyFanApproximationGauge_of_orthonormal
+    (K : E →L[𝕜] F) {k : ℕ} {u : Fin k → F} {v : Fin k → E}
+    (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) {t : Fin k → ℝ}
+    (ht : ∀ i, t i ≤ |RCLike.re ⟪u i, K (v i)⟫_𝕜|) :
+    ∑ i, t i ≤ kyFanApproximationGauge k K := by
+  classical
+  set σ : Fin k → Bool :=
+    fun i => decide (0 ≤ RCLike.re ⟪u i, K (v i)⟫_𝕜) with hσ
+  set u' : Fin k → F := fun i => if σ i then u i else -u i with hu'
+  have habs : ∀ i, |RCLike.re ⟪u i, K (v i)⟫_𝕜| =
+      RCLike.re ⟪u' i, K (v i)⟫_𝕜 := by
+    intro i
+    by_cases h : 0 ≤ RCLike.re ⟪u i, K (v i)⟫_𝕜
+    · simp only [hu', hσ, decide_eq_true_eq, if_pos h]
+      exact abs_of_nonneg h
+    · have hneg : σ i = false := by simp [hσ, h]
+      rw [abs_of_neg (not_le.mp h)]
+      simp [hu', hneg, inner_neg_left]
+  refine sum_le_kyFanApproximationGauge_of_orthonormal K
+    (orthonormal_signFlip hu σ) hv (t := t) ?_
+  intro i
+  exact (ht i).trans_eq (habs i)
+
 end ExactSinTheta
 end Experimental
 end DavisKahan
