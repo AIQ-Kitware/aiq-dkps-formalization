@@ -35,6 +35,45 @@ except T0 (manifest repair), T9 (exactness sweep) and T10 (final audit).
   example: `diagonalOperator` on `lp (fun _ : N => R) 2`, with the geometric
   trial vector proved *outside* the operator domain and *inside* the form
   domain.  Commit `961598be`.
+* **T4 ADVANCED, not closed.**  The operator-theoretic foundation of
+  (9.9)--(9.11) is in: `finrank_le_of_le_specRange_Iic` /
+  `finrank_le_finrank_of_le_specRange_Iic` in `RayleighRitz.lean` are the
+  min--max dimension count, and the beam instance
+  (`beamPerturbed_finrank_le`, `beamTrial_finrank_le`, `finrank_beamTrial = 2`)
+  says the perturbed beam has exactly two spectral dimensions below 500 -- which
+  is what makes the Schur reduction a statement about the actual eigenvectors.
+  Getting the low spectral range inside the domain needed positivity of the
+  perturbed beam and hence `beamPerturbed_mem_resolventSet_of_neg`; that is
+  proved.  **What remains is the operator-order resolvent sandwich** identifying
+  the two-by-two Schur reduction with those two eigenvectors, and then the
+  individual angles `psi`, `eta` that `individual_angle_le_exact_envelope`
+  consumes.  Commits `fa6d44e7`, `aa64fa5b`.
+* **T5 ADVANCED, not closed.**  Sub-problem B's recorded blocker was refuted, in
+  Lean: see the correction above and commit `03dd8f44`.  Sub-problems A (real
+  scalars + every source UI norm) and C (unequal dimensions) are untouched, and A
+  is *not* a habit sweep -- the whole angle-operator layer
+  (`sinAngleOperatorC`, `cosAngleOperatorC`, `modulus`) is complex because
+  `ContinuousLinearMap.modulus` is defined only for `C`, so it really is the
+  complexification transport.
+* **T7 NOT STARTED, but scoped.**  `[FiniteDimensional k U]` enters the
+  branch-free chain at `DavisKahan/DoubleAngle/TanTwoThetaBranchFree.lean:75`,
+  where the *whole ambient space* is assumed finite-dimensional for the
+  singular-system layer (`absDoubleAngleTangent_scalar`,
+  `sum_absDoubleAngleTangent_le`), and is exported through
+  `tanTwoTheta_branchFree_paperUINorm`'s `{U : Submodule k E}
+  [FiniteDimensional k U]`.  Removing it is not a sweep: the argument runs over a
+  singular basis of `T`, which exists only in finite dimensions or for compact
+  operators.  The recorded route -- rebuild the tangent as `2X |I - X*X|^{-1}`
+  with the modulus, invertibility from the quantitative `singularValue_ne_one`,
+  then Ky Fan limiting -- still looks right and is the largest single remaining
+  piece in the campaign.
+* **T6's second half NOT closed.**  `Proposition6_1` needs a real
+  `PaperSymmetricSinThetaProblem`, and its conclusion names
+  `paperSinAngleOperatorC = cfc Real.sin (paperAngleOperatorC ...)`.  The real
+  Theorem 6.1 (`PaperRealTheorem61Data`) states its conclusion against
+  `directedSinThetaOperatorReal` instead, so the real Proposition 6.1 wants the
+  same treatment -- a mirrored development, not a generalization of the complex
+  one.
 
 **A correction worth keeping.**  I claimed no `KyFanDominantIdealFamily` instance
 existed.  Wrong: `KyFanDominantIdealFamily.kyFan k hk` (ScalarGeneric.lean:461)
