@@ -19,6 +19,7 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
 import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Sharpness
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
+import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem62
