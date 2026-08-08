@@ -135,33 +135,72 @@ for `linear_combination` with explicit coefficients, not `nlinarith`.
 If an Eckart--Young / rank-one approximation fact falls out generically, its owner
 is `OperatorIdeals` (`ForTauCeti/Analysis/OperatorIdeal/`), not Section 9.
 
-### T2 `TODO` -- Section 9 equation (9.8), Weinberger comparison
+### T2 `TODO` -- Section 9 (9.5)--(9.7): the perturbed spectral gap  **[RE-RANKED UP]**
 
-Row `DK-9.8`. Its recorded blocker (`alpha_3 > 500` missing; then
-`free-beam-closed-operator`) is **stale**: `realSpectrum_beamOperator_subset_sharp`
-and `beamFiniteDataCertificate` exist. Determine what is actually absent, connect
-the compiled arrowhead/Weinberger algebra to the genuine beam spectral theorem, and
-derive printed (9.8). Do not prove another root bound; do not instantiate a dead
-`third_eigenvalue` field.
+Row `DK-9.5-9.7`. **The brief's claim that this is "theorem instantiation, not new
+analysis" is WRONG, and it is now the gate on all three remaining Section 9 rows.**
 
-### T3 `TODO` -- Section 9 equations (9.5)--(9.7)
+The consuming endpoint exists and is strong enough:
+`TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_ideal_directedTangent`
+gives `delta * N.gauge tanTheta <= N.gauge D.residual` for every Fan-dominant
+unitary-invariant ideal, tangent representative exhibited. Instantiating it at
+`delta = 500 - ritzHigh eps`, `alpha = ritzHigh eps`, residual norm
+`orthogonalResidualSingularValue eps = |eps| sqrt 15/15` reproduces
+`tangentThetaExactBound eps` exactly.
 
-Row `DK-9.5-9.7`. Exact radical arithmetic already compiles; this is theorem
-instantiation against `beamRitz_matrix` / `beamResidualGram_matrix` /
-`beamOperator`, replacing certificate-field uses. Use the *correct* tan 2Theta
-surface -- the branch-free one where applicable, not an obsolete selected-branch
-wrapper.
+Its blocking hypothesis is `specProjection hA (Ioo alpha (alpha+delta)) = 0`: a genuine
+spectral gap **for the perturbed operator**. (9.1)/(9.2)/(9.4) never needed one -- they
+are stated against a spectral *set*, so the restriction's spectrum is inside it by
+construction and `beamHigh_spectrum_avoids` is free. A tangent bound cannot use that
+trick: it needs both spectra separated.
 
-### T4 `TODO` -- Section 9 equations (9.9)--(9.11), rank-one resolvent order
+The gap is true, by Rayleigh--Ritz: `beamPerturbation eps` is positive
+(`0 <= eps t <= eps`), so eigenvalues only increase and the third stays above 500 by
+`realSpectrum_beamOperator_subset_sharp`, while the two low ones are at most the Ritz
+values. Formalizing it needs a min--max/Rayleigh--Ritz upper bound for the second
+eigenvalue of an unbounded self-adjoint operator plus spectral monotonicity under a
+positive bounded perturbation. **Owner: `SelfAdjointSpectralTheory`
+(`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/`), not Section 9.**
 
-Row `DK-9.9-9.11`. Hardest remaining Section 9 mathematics. `Section9/SchurComplement.lean`
-and `Section9/RankOneCorrection.lean` already carry (9.9) as a block map, (9.10)--(9.11)
-as the Schur reduction, the shifted diagonal/off-diagonal rank-one correction, the
-`sqrt 3 / 30` coefficient and the final radical combination. What is missing is the
-**operator-order resolvent sandwich** and the identification with the actual individual
-eigenvector/angle quantities. Do not manufacture another certificate record. If a
-generic "resolvent order comparison under a positive rank-one perturbation" emerges,
-its owner is `SelfAdjointSpectralTheory`.
+Do part (a) first, it is self-contained and is the direct analogue of the (9.3) work:
+build `UnboundedTrialBlock (beamPerturbed eps) beamTrial` with the Ritz compression
+(`beamRitz_matrix` gives `hCompression` at `alpha = ritzHigh eps` immediately) and the
+Rayleigh--Ritz residual `(1 - P_Z) . H|_Z`, whose Gram is
+`orthogonalResidualGram eps = (eps^2/30) [[1,-1],[-1,1]]` and whose norm is exactly
+`orthogonalResidualSingularValue eps` (for `x = a phi_1 + b phi_2`,
+`||Rx||^2 = k|a-b|^2 <= 2k||x||^2`, `sqrt(2k) = |eps|/sqrt 15`). Needs the orthonormal
+expansion `starProjection x = <phi_1,x> phi_1 + <phi_2,x> phi_2`, which follows from
+`beamTrialVec_span_eq_top`.
+
+### T3 `BLOCKED` -- Section 9 equation (9.8), Weinberger comparison
+
+Row `DK-9.8`. `equation_9_8_lower` / `equation_9_8_upper` are proved but CONDITIONAL on
+`tanPhi <= weinbergerLower/UpperTangentExactBound eps`.
+`weinbergerUpperTangentExactBound` is *definitionally* `tangentThetaExactBound`, so the
+upper line is downstream of T2 and inherits its blocker exactly. The lower line
+additionally needs certified low roots of `weinbergerComparisonMatrix eps`, fed through
+the already-proved `tangent_sq_le_of_weinberger_sine_sq`.
+
+The recorded `alpha_3 > 500` blocker IS stale -- `realSpectrum_beamOperator_subset_sharp`
+supplies it -- but the row is not mechanical. Do not attempt before T2.
+
+### T4 `BLOCKED` -- Section 9 equations (9.9)--(9.11)
+
+Row `DK-9.9-9.11`. The scalar geometry is complete: `SchurComplement.lean` has (9.9) as a
+block map and (9.10)-(9.11) as the Schur reduction over arbitrary modules,
+`RankOneCorrection.lean` has the `sqrt 3 / 30` coefficient, and
+`combined_individual_coefficient` proves the Euclidean combination is exactly
+`sqrt 7 / 10`. But `individual_angle_le_exact_envelope` is conditional on the same
+tangent quantities T2 must supply, so this row is downstream of T2 as well.
+
+Its own hard content is the operator-order resolvent sandwich identifying the Schur
+reduction with the actual eigenvectors of `beamPerturbed eps`. If a generic resolvent
+order comparison under a positive rank-one perturbation emerges, its owner is
+`SelfAdjointSpectralTheory`. Do not manufacture another certificate record.
+
+**Re-ranking note.** The brief ranked (9.9)-(9.11) as the hardest Section 9 item and
+(9.5)-(9.7) as near-trivial. The dependency runs the other way: all three remaining
+Section 9 rows are gated on the single perturbed-spectral-gap fact in T2.
 
 ### T5 `TODO` -- full `sin 2Theta` source scope
 
