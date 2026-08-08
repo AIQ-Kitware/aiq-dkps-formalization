@@ -1066,5 +1066,58 @@ end TangentNormBounds
 
 end DoubleAngleTangent
 
+/-! ### Where the double-angle operator lives
+
+**A recorded audit claim, refuted here.**  The source census carried a reasoned
+-- not compiled -- counterexample asserting that in the two-dimensional
+one-angle model `sinTwoAngleOperatorC U V` carries `sin 2θ` with multiplicity
+two, "one from the `U` side and one from `Uᗮ`", while the directed ideal block
+`sinTwoThetaIdealBlock U V` carries it once; and concluded from that that the
+two objects are the paper's `Θ` and `Θ₀` and that any bridge between them pairs
+the wrong two objects.
+
+The multiplicity claim is false, and the reason is definitional.
+`sinTwoAngleOperatorC` is built from `sinAngleOperatorDirectedC`, the modulus of
+the *cross* product `P_{Vᗮ} P_U` -- not from the symmetric
+`sinAngleOperatorC = |P_U - P_V|`.  The symmetric sine does have full rank in
+that model, where it is `sin θ · 1`; the directed one annihilates `Uᗮ`
+(`sinAngleOperatorDirectedC_apply_eq_zero_of_mem_orthogonal`, already in this
+file), and so does every product with it on the left.
+
+The two theorems below record the consequence in general, with no dimension
+hypothesis: both the directed sine and the ambient double-angle operator have
+range inside `U`, so the rank of either is at most `dim U` and no multiplicity
+count separates them.  Whether the `Θ₀`/`Θ` bridge holds is therefore still
+open; what is settled is that this argument does not refute it. -/
+
+/-- **The directed sine operator is supported on `U`.** -/
+theorem range_sinAngleOperatorDirectedC_le (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    LinearMap.range (sinAngleOperatorDirectedC U V : E →ₗ[ℂ] E) ≤ U := by
+  rintro y ⟨x, rfl⟩
+  have hmem : (sinAngleOperatorDirectedC U V : E →ₗ[ℂ] E) x ∈ Uᗮᗮ := by
+    intro z hz
+    simp only [ContinuousLinearMap.coe_coe]
+    have hadj : ⟪z, sinAngleOperatorDirectedC U V x⟫_ℂ
+        = ⟪sinAngleOperatorDirectedC U V z, x⟫_ℂ :=
+      ((ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+        (isSelfAdjoint_sinAngleOperatorDirectedC U V)) z x).symm
+    rw [hadj, sinAngleOperatorDirectedC_apply_eq_zero_of_mem_orthogonal U V hz,
+      inner_zero_left]
+  rwa [Submodule.orthogonal_orthogonal] at hmem
+
+/-- **The ambient double-angle sine operator is supported on `U` too.**  In
+particular its rank never exceeds `dim U`, so it cannot carry a singular value
+with a multiplicity the directed block misses. -/
+theorem range_sinTwoAngleOperatorC_le (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    LinearMap.range (sinTwoAngleOperatorC U V : E →ₗ[ℂ] E) ≤ U := by
+  rintro y ⟨x, rfl⟩
+  have hval : (sinTwoAngleOperatorC U V : E →ₗ[ℂ] E) x
+      = (2 : ℝ) • sinAngleOperatorDirectedC U V (cosAngleOperatorC U V x) := rfl
+  rw [hval]
+  exact U.smul_mem _
+    (range_sinAngleOperatorDirectedC_le U V ⟨cosAngleOperatorC U V x, rfl⟩)
+
 end DavisKahanExt
 end TauCeti
