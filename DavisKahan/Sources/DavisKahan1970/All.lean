@@ -33,5 +33,6 @@ import DavisKahan.Sources.DavisKahan1970.TanTheta
 import DavisKahan.Sources.DavisKahan1970.TanTwoTheta
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFreeInfinite
+import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFreeInfiniteReal
 
 /-! # `DavisKahan/Sources/DavisKahan1970` -/
