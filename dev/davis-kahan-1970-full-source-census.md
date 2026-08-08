@@ -11,12 +11,12 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 27 |
+| `compiled_exact` | 28 |
 | `compiled_specialization` | 8 |
 | `compiled_general_infrastructure` | 4 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 4 |
+| `partial_or_wrapper_missing` | 3 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -48,8 +48,8 @@ no `sorry` and no `axiom`, so a declaration reachable from
 
 | Verification | Count |
 | --- | ---: |
-| `proved_in_build` | 41 |
-| `proved_conditional` | 4 |
+| `proved_in_build` | 42 |
+| `proved_conditional` | 3 |
 | `partially_in_build` | 0 |
 | `proved_outside_build` | 0 |
 | `not_compiling` | 0 |
@@ -128,7 +128,9 @@ that inhabitation is not the evidence: the evidence is `beamRitz_matrix`,
 which say what the record cannot.  What still blocks the four remaining Section 9 rows is
 (9.3), (9.4), and the tangent, Weinberger and individual-eigenvector conclusions.
 
-Gates: DK-9.1-9.4 (proved_conditional), DK-9.5-9.7 (proved_conditional), DK-9.8 (proved_conditional), DK-9.9-9.11 (proved_conditional)
+**DK-9.1-9.4 IS FULLY OFF THIS BLOCKER 2026-08-07 (Opus 5).**  (9.3) was the last of its four equations still stated relative to a certificate field; `beamSinThetaSum_le` derives it from `beamOperator` through the second approximation number of the residual, realised by an explicit rank-one approximant.  The blocker now constrains only DK-9.5-9.7, DK-9.8 and DK-9.9-9.11.
+
+Gates: DK-9.5-9.7 (proved_conditional), DK-9.8 (proved_conditional), DK-9.9-9.11 (proved_conditional)
 
 ### `exact-source-wrappers` -- mechanical
 
@@ -1153,11 +1155,10 @@ unguarded `Experimental/InfiniteDimensional` items.
 #### Equations (9.1)–(9.4): Initial sine and sine-double-angle bounds
 
 - **Kind:** `numerical_claims`
-- **Status:** `partial_or_wrapper_missing`
-- **Verification:** `proved_conditional`
+- **Status:** `compiled_exact`
+- **Verification:** `proved_in_build`
 - **Mathematics:** Compute R*R and derive the operator- and two-singular-value bounds for sin Theta and sin(2 Theta).
-- **Blocked by:** `section9-certificate-discharge`
-- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.initial_residual_gram_from_affine_moments`, `TauCeti.DavisKahan1970.Section9.residualGram_eigenvalueHigh_charAt`, `TauCeti.DavisKahan1970.Section9.equation_9_1`, `TauCeti.DavisKahan1970.Section9.equation_9_4`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSinTheta_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSinTwoTheta_lt`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamPerturbation_comp_trialIncl_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSpecProjection_lowSet_eq_singleton`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSinTwoThetaSum_lt`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamKyFanTwo_gaugeReal_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTrialVec_span_eq_top`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.exists_beamTrialVec_repr`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamResidual_gram`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamGram_orthogonal_direction`
+- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.initial_residual_gram_from_affine_moments`, `TauCeti.DavisKahan1970.Section9.residualGram_eigenvalueHigh_charAt`, `TauCeti.DavisKahan1970.Section9.equation_9_1`, `TauCeti.DavisKahan1970.Section9.equation_9_4`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSinTheta_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSinTwoTheta_lt`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamPerturbation_comp_trialIncl_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSpecProjection_lowSet_eq_singleton`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSinTwoThetaSum_lt`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamKyFanTwo_gaugeReal_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTrialVec_span_eq_top`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.exists_beamTrialVec_repr`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamResidual_gram`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamGram_orthogonal_direction`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamResidualRankOne_rank_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamResidual_sub_rankOne_apply`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamResidual_orthogonal_norm_sq`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamResidual_sub_rankOne_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.approximationSingularValue_one_beamResidual_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.kyFanTwo_beamResidual_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamSinThetaSum_le`
 - **Assessment:** The residual Gram matrix, its two characteristic roots, exact radical bounds, and the printed rational relaxations are represented. The actual sine and double-angle theorem outputs are still bridge hypotheses pending integration with the maintained theorem APIs.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `partial_or_wrapper_missing`. The arithmetic is compiled and axiom-clean; the printed conclusions are certificate fields rather than applications of the source-facing sine and tangent theorems.
@@ -1220,7 +1221,26 @@ printed `109/50000 * eps`.
 * `beamResidual` and `beamResidual_gram` restate the Gram matrix of (9.1) as inner products of the residual viewed as an operator `beamTrial -> BeamL2`, which is the form the approximation-number argument consumes.
 
 WHAT REMAINS, and it is now purely mechanical assembly: define the rank-one approximant `K x = <w, x> (1 + c^2)^-1 R w` with `w = phi_1 + c phi_2`, show `rank K <= 1`, show `(R - K)(alpha phi_1 + beta phi_2) = ((c alpha - beta)/(1 + c^2)) R (c phi_1 - phi_2)`, and combine with `beamGram_orthogonal_direction` and Cauchy--Schwarz `|c alpha - beta|^2 <= (1 + c^2)(|alpha|^2 + |beta|^2)` to get `||R - K|| <= residualBottomSingularValue eps`, hence `a_1(R) <= residualBottomSingularValue eps` by `ContinuousLinearMap.approximationNumber_le_norm_sub`.  Then `a_0 + a_1 <= residualKyFanTwo eps` with `a_0` from `norm_beamPerturbation_comp_trialIncl_le`, and `sinTheta_unbounded_gauge_of_spectrum_gap` at `beamKyFanTwo` with the (9.1) data gives (9.3).  An attempt at this assembly was made in the same session and NOT completed: the obstacles were purely tactic-level (`simp` normalising `<x,x>` to `||x||^2` before the sesquilinear expansion, and `match_scalars`/`field_simp` on the complex coefficient identity), not mathematical.
-- **Next action:** Equations (9.1), (9.2) and (9.4) are derived from `beamOperator`.  Only (9.3) remains: `sinTheta_unbounded_gauge_of_spectrum_gap` with the (9.1) data, plus the second singular value of the residual via an explicit rank-one approximant along the top eigendirection of the residual Gram matrix (see notes for the eigenvector and the radical identity that makes it work).
+
+**(9.3) IS PROVED 2026-08-07 (Claude Opus 5).  ALL FOUR OF (9.1)--(9.4) ARE NOW DERIVED FROM THE GENUINE FREE-BEAM OPERATOR, AND THIS ROW IS UPGRADED TO `compiled_exact` / `proved_in_build` WITH NO BLOCKER.**
+
+`beamSinThetaSum_le` : `beamSinThetaSum eps <= residualKyFanTwo eps / 500`, where `beamSinThetaSum` is the two-term Ky Fan gauge of `beamTrialIncl* . F_1`, the same object (9.1) bounds in operator norm.  Axiom-clean: [propext, Classical.choice, Quot.sound].  Nothing is stated relative to `FreeBeamFiniteDataCertificate` or `TheoremOutputCertificate`; the warning recorded on the `section9-certificate-discharge` blocker is respected.
+
+The route was the one this row's own notes specified, and it worked as specified.
+
+* `beamResidual eps := beamPerturbation eps . beamTrialIncl`, viewed as an operator `beamTrial -> BeamL2`; `beamResidual_gram` restates the (9.1) Gram matrix as its inner products.
+* `beamTrialVec_span_eq_top` / `exists_beamTrialVec_repr`: `finrank beamTrial = 2` and every trial vector is `alpha phi_1 + beta phi_2`.
+* `beamGramTopVector := phi_1 + c phi_2` with `c = -(sqrt 75 + sqrt 76)`, and `beamResidualRankOne` the residual composed with the orthogonal projection onto it; `beamResidualRankOne_rank_le` gives rank at most one from `range <= span {v}` and `rank_span_le`.
+* `beamResidual_sub_rankOne_apply`: the error is EXACTLY `((c alpha - beta)/(1 + c^2))` times the residual of the orthogonal direction `c phi_1 - phi_2`.  This is an identity, not an estimate.
+* `beamResidual_orthogonal_norm_sq` + `beamGram_orthogonal_direction`: that direction carries `(1 + c^2)` times the LOWER Gram eigenvalue.  The radical content is `(sqrt 75 + sqrt 76)(sqrt 75 - sqrt 76) = -1`; `nlinarith` does not find it and `linear_combination` with explicit coefficients on `sqrt 75 ^ 2 = 75` and `sqrt 76 ^ 2 = 76` does.
+* `norm_beamResidual_sub_rankOne_le`: Cauchy--Schwarz `|c alpha - beta|^2 <= (1 + c^2)(|alpha|^2 + |beta|^2)` turns the identity into `||R - K|| <= residualBottomSingularValue eps`.  This is the sharp Eckart--Young step for this residual.
+* `approximationSingularValue_one_beamResidual_le` then follows from `ContinuousLinearMap.approximationNumber_le_norm_sub`, and `kyFanTwo_beamResidual_le` adds it to `norm_beamPerturbation_comp_trialIncl_le` for `a_0`.
+* `beamSinThetaSum_le` finishes by `sinTheta_unbounded_gauge_of_spectrum_gap` at `beamKyFanTwo` with the same data (9.1) uses, transporting the residual gauge across the isometric spectral inclusion by `kyFanApproximationGauge_comp_le` and `kyFanApproximationGauge_adjoint`.
+
+The printed decimal is NOT restated here: `initial_kyFanTwo_exact_lt_printed` already proves `residualKyFanTwo eps / 500 < 109/50000 * eps`, and (9.1), (9.2) and (9.4) likewise stop at the exact bound.  Combining the two is a one-line `lt_of_le_of_lt` at any consumer; it is not done inside `BeamSection9.lean` because that would require importing `Section9/NumericalBounds.lean` and add a new `GENERIC_IMPORTS_SOURCE` finding to a module already carrying baseline ones.
+
+A LEAN-LEVEL NOTE THAT COST TIME AND SHOULD BE REUSED: on a `Submodule`'s induced inner-product space, `rw`/`simp` with `inner_smul_left` / `inner_smul_right` / `inner_self_eq_norm_sq_to_K` silently fail to match, while `inner_add_left` / `inner_add_right` succeed.  Push the computation to the ambient space with `Submodule.coe_inner` (whose orientation is submodule-inner = ambient-inner-of-coercions, so the FORWARD direction is the one that fires) and everything works.  Plain `simp` is also wrong here: it rewrites `<x,x>` to `||x||^2` before the sesquilinear expansion.
+- **Next action:** Nothing.  (9.1), (9.2), (9.3) and (9.4) are all derived from `beamOperator` with no certificate field in any statement, and all are in the default build.
 
 #### Equations (9.5)–(9.7): Rayleigh–Ritz tangent refinements
 
