@@ -641,18 +641,16 @@
       "source_anchor": "Lemma 6.1",
       "title": "Direct-sum UI-norm comparison and converse",
       "summary": "Two diagonal block inequalities imply the direct-sum inequality; under equisingularity of paired blocks the converse holds.",
-      "status": "compiled_specialization",
+      "status": "compiled_exact",
       "verification": "proved_in_build",
-      "blocked_by": [
-        "real-scalar-infinite-dimensional-scope"
-      ],
+      "blocked_by": [],
       "lean_declarations": [
         "TauCeti.DavisKahan1970.lemma6_1",
         "TauCeti.DavisKahan1970.lemma6_1_converse"
       ],
-      "notes": "Both directions are proved; the converse should be added to the exact audit manifest.\n\n**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.",
+      "notes": "Both directions are proved; the converse should be added to the exact audit manifest.\n\n**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.\n\n**STATUS RESTORED 2026-08-08 (Claude Opus 5): `compiled_specialization` -> `compiled_exact`; blocker `real-scalar-infinite-dimensional-scope` removed from this row.**  The 2026-08-07 scope_gap claim that 'every declaration is `InnerProductSpace ℂ` only' is FALSE at this HEAD: the mathematics was generalized to `RCLike` in commit 83e1b854, and both declarations on this row elaborate to\n\n    {𝕜 : Type u} [RCLike 𝕜] {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]\n      [CompleteSpace E] [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜]\n\nwith no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has instances for both `ℝ` (`TauCeti.ApproximationNumber.hasMinMaxLowerBoundEverywhere_real`) and `ℂ`, so real infinite-dimensional Hilbert spaces are covered.  VERIFIED BY ELABORATION 2026-08-08 (`#check @TauCeti.DavisKahan1970.lemma6_1`, `lemma6_1_converse`) rather than by reading the file, per the method the blocker itself prescribes.  No code change was needed on this row -- only the audit record was stale.",
       "next_action": "Harden the audit, not the mathematics.",
-      "scope_gap": "real-scalar/infinite-dimensional: every declaration is `InnerProductSpace ℂ` only, so no declaration on this row covers a real Hilbert space of infinite dimension, which standing assumption 1 of the transcription includes.  See blocker `real-scalar-infinite-dimensional-scope`.  CONFIRMED BY ELABORATION 2026-08-07 under the corrected repo-wide method: still `InnerProductSpace ℂ` only, with no real endpoint anywhere in the repo.  This gap is real, not an artefact of the row's declaration list."
+      "scope_gap": null
     },
     {
       "id": "DK-6.2-lem",
@@ -677,17 +675,21 @@
       "source_anchor": "Proposition 6.1",
       "title": "Symmetric sine theorem",
       "summary": "Two complementary source gap hypotheses give the full sine-angle inequality with perturbation H.",
-      "status": "compiled_specialization",
+      "status": "compiled_exact",
       "verification": "proved_in_build",
-      "blocked_by": [
-        "real-scalar-infinite-dimensional-scope"
-      ],
+      "blocked_by": [],
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Proposition6_1"
+        "TauCeti.DavisKahan1970.Proposition6_1",
+        "TauCeti.DavisKahan1970.RealSymmetricSinThetaProblem",
+        "TauCeti.DavisKahan1970.Proposition6_1_real",
+        "TauCeti.DavisKahan1970.Proposition6_1_real_kyFan",
+        "TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues",
+        "TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_eq_literalFullSinAngle",
+        "TauCeti.DavisKahan1970.Proposition6_1_real_representative"
       ],
-      "notes": "Complex and real source forms are compiled.\n\n**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.",
-      "next_action": "No mathematical gap.",
-      "scope_gap": "real-scalar/infinite-dimensional: every declaration is `InnerProductSpace ℂ` only, so no declaration on this row covers a real Hilbert space of infinite dimension, which standing assumption 1 of the transcription includes.  See blocker `real-scalar-infinite-dimensional-scope`.  CONFIRMED BY ELABORATION 2026-08-07 under the corrected repo-wide method: still `InnerProductSpace ℂ` only, with no real endpoint anywhere in the repo.  This gap is real, not an artefact of the row's declaration list."
+      "notes": "Complex and real source forms are compiled.\n\n**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.\n\n**STATUS RESTORED 2026-08-08 (Claude Opus 5): `compiled_specialization` -> `compiled_exact`; blocker `real-scalar-infinite-dimensional-scope` removed from this row.**  The real-scalar form is now compiled, for an arbitrary real Hilbert space with no finite-dimensionality hypothesis: `DavisKahan/Sources/DavisKahan1970/SineTheta/SymmetricReal.lean`, surfaced as `TauCeti.DavisKahan1970.Proposition6_1_real`.  The proof MIRRORS the complex one step for step -- same two directed applications of the one-sided sine theorem, same Lemma 6.1 coupling on the scaled identity, same Lemma 6.2 contraction -- with exactly one substitution: `davisKahan1970_sylvester_complex` becomes `real_unbounded_sylvester_kyFan`.  No new mathematics was needed; `paperLemma61_all_kyFan`, `paperDiagonalPair_all_kyFan_le`, the ambient/subspace singular-value transport, and `PaperUnitaryInvariantNorm` were already `RCLike`-generic.\n\n**How the conclusion avoids a real functional calculus.**  The complex row's conclusion is phrased through `paperSinAngleOperatorC`, i.e. `cfc Real.sin` of the operator angle, which is why the complex file cannot be generalized as written.  The real theorem is instead stated on `paperCrossSineSum U V`, and that this is the paper's whole-space `sin Theta` is COMPILED, not asserted:\n* `Proposition6_1_real_sinTheta_singularValues` (from the `RCLike` `paperCrossSineSum_same_projectionDiff`) gives every source norm the same membership and value on `paperCrossSineSum U V` as on the projector difference `P_V - P_U`;\n* `Proposition6_1_real_sinTheta_eq_literalFullSinAngle` matches its complete approximation-singular-value sequence to that of the repository's LITERAL real full sine angle `paperSourceFullSinR`;\n* `Proposition6_1_real_representative` states the estimate for an ARBITRARY operator carrying that sequence, which is the precise sense in which only the source singular sequence matters.\n\nThe theorem's own statement mentions no complexification, no functional calculus, and no caller-supplied inequality.  Axiom audit on all five real declarations plus the structure: exactly `propext`, `Classical.choice`, `Quot.sound`.  Full `lake build` green (9487 jobs), plus the non-default `FinishTanTwoTheta` and `Challenge` libraries.",
+      "next_action": "No mathematical gap and no scope gap.",
+      "scope_gap": null
     },
     {
       "id": "DK-6.1-thm",
