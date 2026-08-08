@@ -163,7 +163,7 @@ theorem cfcHom_intertwines
     (huK : _root_.spectrum ℂ u ⊆ K) (hvK : _root_.spectrum ℂ v ⊆ K) (g : C(K, ℂ)) :
     X ∘L cfcHom hv (symbolRestrict hvK g)
       = cfcHom hu (symbolRestrict huK g) ∘L X := by
-  haveI : CompactSpace K := isCompact_iff_compactSpace.mp hK
+  have : CompactSpace K := isCompact_iff_compactSpace.mp hK
   induction g using ContinuousMap.induction_on_of_compact with
   | const r =>
       have h1 : symbolRestrict hvK (ContinuousMap.const K r)
@@ -205,7 +205,7 @@ theorem cfcHom_intertwines
           (fun g : C(K, ℂ) => cfcHom hu (symbolRestrict huK g) ∘L X) :=
         ((ContinuousLinearMap.compL ℂ F E E).flip X).continuous.comp
           ((cfcHom_continuous hu).comp (continuous_symbolRestrict huK))
-      rw [← Set.mem_setOf (p := fun g : C(K, ℂ) =>
+      rw [← Set.mem_ofPred (p := fun g : C(K, ℂ) =>
           X ∘L cfcHom hv (symbolRestrict hvK g)
             = cfcHom hu (symbolRestrict huK g) ∘L X),
         ← (isClosed_eq hc1 hc2).closure_eq]

@@ -495,7 +495,10 @@ theorem pullback_closedGraph
       · rfl
       · change A (pullbackDomainToOriginal A e x) =
           e (pullbackLinearMap A e x)
-        rw [pullbackLinearMap_apply, e.apply_symm_apply]
+        -- `rw [pullbackLinearMap_apply]` cannot fire: `x : (pullback A e).domain` is only
+        -- definitionally `pullbackDomain A e`, and `rw`'s pattern match is syntactic.
+        -- `exact` checks up to defeq, so it goes through where the rewrite does not.
+        exact (e.apply_symm_apply _).symm
     · rintro ⟨x, hx⟩
       have hfst : (x : E) = e p.1 := congrArg Prod.fst hx
       have hsnd : A x = e p.2 := congrArg Prod.snd hx
@@ -516,8 +519,9 @@ theorem pullback_closedGraph
       -- `pullbackDomain A e` unless the body is exposed. Tried; it fails to elaborate.
       -- `change` names the unfolded form instead.
       change e (pullbackLinearMap A e z) = e p.2
-      rw [pullbackLinearMap_apply, e.apply_symm_apply, hz]
-      exact hsnd]
+      -- See the `exact` above: `z : (pullback A e).domain` blocks the syntactic rewrite.
+      refine (e.apply_symm_apply _).trans ?_
+      exact (congrArg (fun y : A.domain => A y) hz).trans hsnd]
   exact hA.preimage hcoords
 
 /-- A bounded operator is unitary when it is norm preserving and surjective. -/
@@ -583,8 +587,9 @@ theorem pullback_unitaryEquivalent
     -- `pullbackDomain A e` unless the body is exposed. Tried; it fails to elaborate.
     -- `change` names the unfolded form instead.
     change A ⟨e (x : E), hWdom x⟩ = e (pullbackLinearMap A e x)
-    rw [pullbackLinearMap_apply, e.apply_symm_apply]
-    rfl
+    -- See the `exact` in `isClosed_pullback`: `x : (pullback A e).domain` blocks the
+    -- syntactic rewrite, but the two sides are still definitionally equal.
+    exact (e.apply_symm_apply _).symm
   · intro y
     -- `pullback` has a `_domain` lemma but no `_apply` one, and an `_apply` cannot be
     -- stated without a cast: `x : (pullback A e).domain` does not reduce to

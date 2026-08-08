@@ -72,6 +72,26 @@ omit [CompleteSpace E] in
     A.toLinearPMap x = A.toLinearMap x := rfl
 
 omit [CompleteSpace E] in
+/-- `toLinearPMap_apply`, restated with the argument carrying the *partial map's* own domain
+type rather than `A.domain`.
+
+Both spellings are needed.  `A.toLinearPMap.domain` and `A.domain` are definitionally equal,
+but only definitionally: a Mathlib `LinearPMap` API (`IsSymmetric`, `IsClosed`, the form
+lemmas) hands back `x : A.toLinearPMap.domain`, and `simp`/`rw` match patterns at `instances`
+transparency, which will not bridge the two.  Without this companion the lemma above is
+unusable at exactly the call sites that need it. -/
+@[simp] theorem toLinearPMap_apply'
+    (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (x : A.toLinearPMap.domain) :
+    A.toLinearPMap x = A.toLinearMap x := rfl
+
+omit [CompleteSpace E] in
+/-- Membership in the partial map's domain is membership in the closed operator's domain.
+The `@[simp]` companion of `toLinearPMap_domain` at the level of elements. -/
+@[simp] theorem mem_toLinearPMap_domain
+    (A : ClosedOperator (𝕜 := 𝕜) (E := E)) {x : E} :
+    x ∈ A.toLinearPMap.domain ↔ x ∈ A.domain := Iff.rfl
+
+omit [CompleteSpace E] in
 /-- The partial-linear-map view retains the closed graph. -/
 theorem toLinearPMap_isClosed
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
@@ -271,7 +291,11 @@ operator equals its Hilbert-space adjoint.
 This definition uses the genuine domain-aware adjoint relation already provided
 by `LinearPMap`; it does not depend on the provisional bundled-adjoint
 constructor above.  Maximal symmetry alone is intentionally insufficient. -/
-def IsSelfAdjoint (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
+-- `@[reducible]`: this is a spelling of the `LinearPMap` predicate, not a new notion, and
+-- unifiers have to see that.  `rw`/`simp` match at `instances` transparency, so with an opaque
+-- `def` here a lemma stated for `IsSelfAdjoint A.toLinearPMap` cannot be applied to an
+-- `A.IsSelfAdjoint` hypothesis at all -- the pattern's operator metavariable never gets solved.
+@[reducible] def IsSelfAdjoint (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
   _root_.IsSelfAdjoint A.toLinearPMap
 
 /-- Unfold self-adjointness into equality with the Mathlib partial-map adjoint. -/

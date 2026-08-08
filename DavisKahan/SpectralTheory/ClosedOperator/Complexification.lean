@@ -317,7 +317,8 @@ in its complexification rather than merely mapping to it. -/
 def ofRealDomainPMap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (x : A.toLinearPMap.domain) : (complexify A).toLinearPMap.domain :=
-  ⟨ofReal (x : E), by simp⟩
+  -- `x.2` lands in `A.toLinearPMap.domain`, which is only definitionally `A.domain`.
+  ⟨ofReal (x : E), by simpa using x.2⟩
 
 omit [CompleteSpace E] in
 /-- The real-vector agreement, through the underlying partial map. -/
@@ -635,7 +636,11 @@ theorem isSelfAdjoint_complexify
           ⟪zAdj, x⟫_ℂ = ⟪z, (complexify A).toLinearPMap xDom⟫_ℂ := by
             simpa [zAdj, xDom] using hformal xDom
           _ = ⟪zAct, x⟫_ℂ := by
-            simpa [zAct, xDom] using
+            -- `toLinearPMap_apply'` is excluded deliberately: it would rewrite the goal's
+            -- `zAct` to the `toLinearMap` spelling while `hsymm` keeps the `toLinearPMap` one,
+            -- leaving the two sides syntactically apart.
+            simpa [zAct, xDom,
+              -TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply'] using
               (hsymm ⟨z, hzA⟩ xDom).symm
     have hzero : ⟪zAdj - zAct, zAdj - zAct⟫_ℂ = 0 := by
       rw [inner_sub_left, congrFun hinner (zAdj - zAct), sub_self]

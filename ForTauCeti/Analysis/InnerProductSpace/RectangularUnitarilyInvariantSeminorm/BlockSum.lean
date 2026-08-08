@@ -315,8 +315,8 @@ theorem orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
     ⟨ι, instι, w, z, hw, hwsum, hz, hzsum⟩
   rcases mem_convexHull_iff_exists_fintype.mp hB with
     ⟨κ, instκ, v, t, hv, hvsum, ht, htsum⟩
-  letI : Fintype ι := instι
-  letI : Fintype κ := instκ
+  let : Fintype ι := instι
+  let : Fintype κ := instκ
   refine mem_convexHull_iff_exists_fintype.mpr
     ⟨ι × κ, inferInstance, (fun p => w p.1 * v p.2),
       (fun p => orthogonalBlockSum (z p.1) (t p.2)), ?_, ?_, ?_, ?_⟩

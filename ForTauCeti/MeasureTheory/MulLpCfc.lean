@@ -137,14 +137,14 @@ theorem cfc_mulLp {f : ℂ → ℂ} (hf : ContinuousOn f (spectrum ℂ (mulLp ρ
     (heq : ∀ᵐ x ∂ρ, h x = f (g x)) :
     cfc f (mulLp ρ hg hgC) = mulLp ρ hh hhC := by
   classical
-  haveI hna : IsStarNormal (mulLp ρ hg hgC) := isStarNormal_mulLp ρ hg hgC
+  have hna : IsStarNormal (mulLp ρ hg hgC) := isStarNormal_mulLp ρ hg hgC
   have hae : ∀ᵐ x ∂ρ, g x ∈ spectrum ℂ (mulLp ρ hg hgC) := ae_mem_spectrum_mulLp ρ hg hgC
   set a : Lp ℂ 2 ρ →L[ℂ] Lp ℂ 2 ρ := mulLp ρ hg hgC with ha
   rcases Set.eq_empty_or_nonempty (spectrum ℂ a) with hemp | ⟨z₀, hz₀⟩
   · -- An element with empty spectrum forces the algebra to be a subsingleton.
     have hsub : Subsingleton (Lp ℂ 2 ρ →L[ℂ] Lp ℂ 2 ρ) := by
       by_contra hcon
-      haveI : Nontrivial (Lp ℂ 2 ρ →L[ℂ] Lp ℂ 2 ρ) := not_subsingleton_iff_nontrivial.mp hcon
+      have : Nontrivial (Lp ℂ 2 ρ →L[ℂ] Lp ℂ 2 ρ) := not_subsingleton_iff_nontrivial.mp hcon
       obtain ⟨z, hz⟩ := spectrum.nonempty a
       rw [hemp] at hz
       exact hz

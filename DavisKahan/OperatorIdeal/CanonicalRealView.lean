@@ -173,12 +173,15 @@ theorem gaugeReal_complete [N.toOperatorIdealFamily.IsComplete]
     ∃ L, N.Mem L ∧ ∀ ε : ℝ, 0 < ε → ∃ M, ∀ n, M ≤ n →
       N.gaugeReal (A n - L) < ε := by
   -- Read the sequence inside the ideal, where the gauge *is* the norm.
+  -- Hand `Elem.mk` the membership in its canonical `∈ carrier` form.  Passing `hmem n`
+  -- directly leaves the `Mem` spelling in the term, and `Elem.val_mk` then will not match
+  -- against it -- the two are only definitionally the same predicate.
   set a : ℕ → N.toOperatorIdealFamily.Elem E F :=
-    fun n => OperatorIdealFamily.Elem.mk (hmem n) with ha
+    fun n => OperatorIdealFamily.Elem.mk ((N.mem_iff_mem_carrier (A n)).mp (hmem n)) with ha
   have hdist : ∀ m n, dist (a m) (a n) = N.gaugeReal (A m - A n) := by
     intro m n
     rw [dist_eq_norm, ha, OperatorIdealFamily.Elem.norm_def]
-    simp [gaugeReal]
+    simp [gaugeReal, OperatorIdealFamily.Elem.val_mk]
   have hcs : CauchySeq a := by
     rw [Metric.cauchySeq_iff]
     intro ε hε

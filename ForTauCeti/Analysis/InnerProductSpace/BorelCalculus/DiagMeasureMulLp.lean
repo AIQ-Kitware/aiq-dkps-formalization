@@ -114,12 +114,12 @@ theorem map_val_diagMeasure_mulLp (F : Lp ℂ 2 ρ) :
     Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
         (diagMeasure (isStarNormal_mulLp ρ hg hgC) F)
       = Measure.map g (ρ.withDensity fun x => ‖(F : α → ℂ) x‖ₑ ^ 2) := by
-  haveI ha : IsStarNormal (mulLp ρ hg hgC) := isStarNormal_mulLp ρ hg hgC
-  haveI hwd : IsFiniteMeasure (ρ.withDensity fun x => ‖(F : α → ℂ) x‖ₑ ^ 2) :=
+  have ha : IsStarNormal (mulLp ρ hg hgC) := isStarNormal_mulLp ρ hg hgC
+  have hwd : IsFiniteMeasure (ρ.withDensity fun x => ‖(F : α → ℂ) x‖ₑ ^ 2) :=
     isFiniteMeasure_withDensity_enorm_sq ρ F
-  haveI hL : IsFiniteMeasure (Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
+  have hL : IsFiniteMeasure (Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
       (diagMeasure ha F)) := Measure.isFiniteMeasure_map _ _
-  haveI hR : IsFiniteMeasure
+  have hR : IsFiniteMeasure
       (Measure.map g (ρ.withDensity fun x => ‖(F : α → ℂ) x‖ₑ ^ 2)) :=
     Measure.isFiniteMeasure_map _ _
   refine MeasureTheory.ext_of_forall_integral_eq_of_IsFiniteMeasure fun φ => ?_

@@ -107,7 +107,7 @@ theorem re_inner_le_on_subspace_of_restriction_spectrum_subset_Iic
     (hσ : spectrum ℝ (A.restrict hU) ⊆ Set.Iic c)
     {x : H} (hx : x ∈ U) :
     RCLike.re ⟪A x, x⟫_ℂ ≤ c * ‖x‖ ^ 2 := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     completeSpace_coe_iff_isComplete.mpr U.isComplete_coe_of_hasOrthogonalProjection
   have hres : IsSelfAdjoint (A.restrict hU) :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
@@ -128,7 +128,7 @@ theorem le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
     (hσ : spectrum ℝ (A.restrict hU) ⊆ Set.Ici c)
     {x : H} (hx : x ∈ U) :
     c * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     completeSpace_coe_iff_isComplete.mpr U.isComplete_coe_of_hasOrthogonalProjection
   have hres : IsSelfAdjoint (A.restrict hU) :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr

@@ -197,7 +197,7 @@ theorem measurableSet_gapSet (δ : ℝ) : MeasurableSet (gapSet δ) :=
 /-- The complement of the gap set is the open interval `(-δ, δ)`. -/
 theorem compl_gapSet (δ : ℝ) : (gapSet δ)ᶜ = Set.Ioo (-δ) δ := by
   ext s
-  simp only [gapSet, Set.mem_compl_iff, Set.mem_setOf_eq, not_le, Set.mem_Ioo,
+  simp only [gapSet, Set.mem_compl_iff, Set.mem_ofPred_eq, not_le, Set.mem_Ioo,
     abs_lt]
 
 /-- **A vector spectral gap**: the diagonal measure of `ξ` gives no mass to

@@ -96,7 +96,7 @@ theorem isStarNormal_of_intertwines (ha : IsStarNormal a) (e : H ≃ₗᵢ[ℂ] 
 theorem cfc_apply_of_intertwines (ha : IsStarNormal a) (e : H ≃ₗᵢ[ℂ] K)
     (he : ∀ x, e (a x) = b (e x)) {f : ℂ → ℂ} (hf : ContinuousOn f (spectrum ℂ a)) (x : H) :
     e (cfc f a x) = cfc f b (e x) := by
-  haveI hb : IsStarNormal b := isStarNormal_of_intertwines ha e he
+  have hb : IsStarNormal b := isStarNormal_of_intertwines ha e he
   have hrw : (e.conjStarAlgEquiv : (H →L[ℂ] H) → (K →L[ℂ] K))
       = fun x => ((e : H →L[ℂ] K) ∘L x) ∘L (e.symm : K →L[ℂ] H) :=
     funext fun x => LinearIsometryEquiv.conjStarAlgEquiv_apply e x
@@ -124,11 +124,11 @@ theorem map_val_diagMeasure_eq_of_intertwines (ha : IsStarNormal a) (e : H ≃�
     Measure.map (Subtype.val : spectrum ℂ b → ℂ)
         (diagMeasure (isStarNormal_of_intertwines ha e he) (e ξ))
       = Measure.map (Subtype.val : spectrum ℂ a → ℂ) (diagMeasure ha ξ) := by
-  haveI hb : IsStarNormal b := isStarNormal_of_intertwines ha e he
-  haveI hfa : IsFiniteMeasure
+  have hb : IsStarNormal b := isStarNormal_of_intertwines ha e he
+  have hfa : IsFiniteMeasure
       (Measure.map (Subtype.val : spectrum ℂ a → ℂ) (diagMeasure ha ξ)) :=
     Measure.isFiniteMeasure_map _ _
-  haveI hfb : IsFiniteMeasure
+  have hfb : IsFiniteMeasure
       (Measure.map (Subtype.val : spectrum ℂ b → ℂ) (diagMeasure hb (e ξ))) :=
     Measure.isFiniteMeasure_map _ _
   refine MeasureTheory.ext_of_forall_integral_eq_of_IsFiniteMeasure fun g => ?_

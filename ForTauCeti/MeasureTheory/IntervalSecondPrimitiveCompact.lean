@@ -237,7 +237,7 @@ theorem isCompactOperator_smulRight {E F : Type*}
       ≤ Submodule.span ℂ {v} := by
     rintro y ⟨x, rfl⟩
     exact Submodule.smul_mem _ _ (Submodule.mem_span_singleton_self v)
-  haveI : FiniteDimensional ℂ
+  have : FiniteDimensional ℂ
       (LinearMap.range ((φ.smulRight v : E →L[ℂ] F) : E →ₗ[ℂ] F)) :=
     Submodule.finiteDimensional_of_le hle
   exact ContinuousLinearMap.isCompactOperator_of_finiteDimensional_range _

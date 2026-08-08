@@ -158,7 +158,7 @@ theorem absolutelyContinuous_base_of_intertwines {D E : MultiplicityDatum}
     (he : ∀ x, e (mulLp D.measure (measurable_datumSymbol D) (norm_datumSymbol_le D) x)
       = mulLp E.measure (measurable_datumSymbol E) (norm_datumSymbol_le E) (e x)) :
     D.base ≪ E.base := by
-  haveI haD : IsStarNormal
+  have haD : IsStarNormal
       (mulLp D.measure (measurable_datumSymbol D) (norm_datumSymbol_le D)) :=
     isStarNormal_mulLp D.measure (measurable_datumSymbol D) (norm_datumSymbol_le D)
   obtain ⟨F₀, hF₀⟩ := exists_measureEquiv_map_val_diagMeasure_mulLp D.measure

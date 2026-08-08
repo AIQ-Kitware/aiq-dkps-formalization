@@ -141,7 +141,7 @@ of the complementary subfamily. -/
 theorem orthogonal_spanIndices (b : OrthonormalBasis ι 𝕜 E) (s : Set ι) :
     (b.spanIndices s)ᗮ = b.spanIndices sᶜ := by
   classical
-  haveI : FiniteDimensional 𝕜 E := Module.Finite.of_basis b.toBasis
+  have : FiniteDimensional 𝕜 E := Module.Finite.of_basis b.toBasis
   have hEcard : finrank 𝕜 E = Fintype.card ι := by
     rw [Module.finrank_eq_card_basis b.toBasis]
   refine (Submodule.eq_of_le_of_finrank_le ?_ ?_).symm

@@ -273,7 +273,7 @@ which the approximation number has already dropped below `t`. -/
 theorem finrank_eigenSpan_le (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     {S : Set ℝ} {t : ℝ} (ht : 0 < t) (hS : ∀ s ∈ S, t ≤ s) {n : ℕ}
     (hn : A.approximationNumber n < t) : finrank ℂ (eigenSpan A S) ≤ n := by
-  haveI := finiteDimensional_eigenSpan hAc hAs ht hS
+  have := finiteDimensional_eigenSpan hAc hAs ht hS
   by_contra hcon
   refine absurd (le_approximationNumber_of_lt_rank_eigenSpan hAs ht.le hS ?_)
     (not_le.mpr hn)
@@ -307,7 +307,7 @@ theorem norm_comp_subtypeL_orthogonal_le (hAc : IsCompactOperator A)
     (hbd : ∀ (ν : ℂ) (v : E), v ∈ Wᗮ → v ≠ 0 → A v = ν • v → ‖ν‖ ≤ c) :
     ‖A ∘L (Wᗮ).subtypeL‖ ≤ c := by
   obtain ⟨cn, rfl⟩ : ∃ cn : ℝ≥0, c = (cn : ℝ) := ⟨⟨c, hc⟩, rfl⟩
-  haveI : CompleteSpace (Wᗮ : Submodule ℂ E) :=
+  have : CompleteSpace (Wᗮ : Submodule ℂ E) :=
     (Submodule.isClosed_orthogonal W).completeSpace_coe
   have hinvL : ∀ v ∈ (Wᗮ : Submodule ℂ E), A.toLinearMap v ∈ Wᗮ :=
     orthogonal_invariant_of_invariant hAs hW
@@ -359,7 +359,7 @@ theorem approximationNumber_le_of_eigenSpan_cover (hAc : IsCompactOperator A)
     A.approximationNumber n ≤ c := by
   set W : Submodule ℂ E := eigenSpan A S with hWdef
   have hinv : ∀ v ∈ W, A v ∈ W := eigenSpan_invariant A S
-  haveI : CompleteSpace (W : Submodule ℂ E) := FiniteDimensional.complete ℂ W
+  have : CompleteSpace (W : Submodule ℂ E) := FiniteDimensional.complete ℂ W
   have hbd : ∀ (ν : ℂ) (v : E), v ∈ Wᗮ → v ≠ 0 → A v = ν • v → ‖ν‖ ≤ c := by
     intro ν v hvmem hv0 hveq
     have hvE : v ∈ eigenspace A.toLinearMap ν := Module.End.mem_eigenspace_iff.mpr hveq
@@ -396,11 +396,11 @@ theorem finite_eigenvalues_ge (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A
     {t : ℝ} (ht : 0 < t) :
     {s : ℝ | t ≤ s ∧ eigenspace A.toLinearMap (s : ℂ) ≠ ⊥}.Finite := by
   set W : Submodule ℂ E := eigenSpan A (Set.Ici t) with hWdef
-  haveI : FiniteDimensional ℂ W :=
+  have : FiniteDimensional ℂ W :=
     finiteDimensional_eigenSpan hAc hAs ht fun s hs => hs
   have hinv : ∀ v ∈ W, A v ∈ W := eigenSpan_invariant A _
   set B : Module.End ℂ W := A.toLinearMap.restrict hinv with hBdef
-  have hfin : Set.Finite (setOf B.HasEigenvalue) := Module.End.finite_hasEigenvalue B
+  have hfin : Set.Finite (Set.ofPred B.HasEigenvalue) := Module.End.finite_hasEigenvalue B
   refine Set.Finite.subset (hfin.preimage (f := fun s : ℝ => (s : ℂ))
     Complex.ofReal_injective.injOn) ?_
   rintro s ⟨hts, hne⟩
@@ -485,13 +485,13 @@ theorem le_approximationNumber_iff_lt_finrank_eigenSpan_Ici (hAc : IsCompactOper
     (hAs : IsSelfAdjoint A) (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_ℂ) {μ : ℝ} (hμ : 0 < μ)
     (n : ℕ) :
     μ ≤ A.approximationNumber n ↔ n < finrank ℂ (eigenSpan A (Set.Ici μ)) := by
-  haveI hfd : FiniteDimensional ℂ (eigenSpan A (Set.Ici μ)) :=
+  have hfd : FiniteDimensional ℂ (eigenSpan A (Set.Ici μ)) :=
     finiteDimensional_eigenSpan hAc hAs hμ fun s hs => hs
   constructor
   · intro hle
     by_contra hcon
     obtain ⟨ρ, hρ0, hρμ, hρeq⟩ := exists_eigenSpan_Ioi_eq_Ici hAc hAs hμ
-    haveI : FiniteDimensional ℂ (eigenSpan A (Set.Ioi ρ)) := by rw [hρeq]; infer_instance
+    have : FiniteDimensional ℂ (eigenSpan A (Set.Ioi ρ)) := by rw [hρeq]; infer_instance
     have hdim : finrank ℂ (eigenSpan A (Set.Ioi ρ)) ≤ n := by
       rw [hρeq]; exact Nat.le_of_not_lt hcon
     have hbound := approximationNumber_le_of_eigenSpan_cover hAc hAs hApos hρ0.le
@@ -510,7 +510,7 @@ theorem lt_approximationNumber_iff_lt_finrank_eigenSpan_Ioi (hAc : IsCompactOper
     μ < A.approximationNumber n ↔ n < finrank ℂ (eigenSpan A (Set.Ioi μ)) := by
   obtain ⟨ν, hν, hνeq⟩ := exists_eigenSpan_Ici_eq_Ioi hAc hAs hμ
   have hν0 : 0 < ν := lt_trans hμ hν
-  haveI : FiniteDimensional ℂ (eigenSpan A (Set.Ioi μ)) := by
+  have : FiniteDimensional ℂ (eigenSpan A (Set.Ioi μ)) := by
     rw [← hνeq]
     exact finiteDimensional_eigenSpan hAc hAs hν0 fun s hs => hs
   constructor
@@ -534,11 +534,11 @@ theorem finrank_eigenSpan_Ici (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A
     finrank ℂ (eigenSpan A (Set.Ici μ)) =
       finrank ℂ (eigenSpan A (Set.Ioi μ)) +
         finrank ℂ (eigenspace A.toLinearMap (μ : ℂ)) := by
-  haveI hfIci : FiniteDimensional ℂ (eigenSpan A (Set.Ici μ)) :=
+  have hfIci : FiniteDimensional ℂ (eigenSpan A (Set.Ici μ)) :=
     finiteDimensional_eigenSpan hAc hAs hμ fun s hs => hs
-  haveI hfIoi : FiniteDimensional ℂ (eigenSpan A (Set.Ioi μ)) :=
+  have hfIoi : FiniteDimensional ℂ (eigenSpan A (Set.Ioi μ)) :=
     finiteDimensional_eigenSpan hAc hAs hμ fun s hs => le_of_lt hs
-  haveI hfe : FiniteDimensional ℂ (eigenspace A.toLinearMap (μ : ℂ)) :=
+  have hfe : FiniteDimensional ℂ (eigenspace A.toLinearMap (μ : ℂ)) :=
     Submodule.finiteDimensional_of_le
       (eigenspace_le_eigenSpan A (Set.mem_Ici.mpr (le_refl μ)))
   have hsplit : eigenSpan A (Set.Ici μ) =
@@ -570,7 +570,7 @@ theorem finrank_eigenspace_eq_card_approximationNumber_eq (hAc : IsCompactOperat
   set M : ℕ := finrank ℂ (eigenSpan A (Set.Ioi μ)) with hM
   have hset : {n : ℕ | A.approximationNumber n = μ} = Set.Ico M N := by
     ext n
-    simp only [Set.mem_setOf_eq, Set.mem_Ico]
+    simp only [Set.mem_ofPred_eq, Set.mem_Ico]
     constructor
     · intro h
       refine ⟨?_, ?_⟩

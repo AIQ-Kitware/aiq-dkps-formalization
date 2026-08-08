@@ -17,7 +17,7 @@ ideal family: the smallest interesting one, sitting inside
 
 Everything the ideal laws need is in Mathlib already — `IsCompactOperator.add`,
 `.smul`, `.comp_clm`, `.clm_comp`, `isCompactOperator_zero` and
-`isClosed_setOf_isCompactOperator` — except adjoint-invariance, which is
+`isClosed_setOfPred_isCompactOperator` — except adjoint-invariance, which is
 Schauder's theorem; that is
 `TauCeti.ContinuousLinearMap.isCompactOperator_adjoint`, whose own docstring
 records that it was written to unblock exactly this family.
@@ -105,7 +105,10 @@ noncomputable def compactOperatorIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
           refine hA ?_
           have h' : IsCompactOperator (c⁻¹ • (c • A)) := h.smul c⁻¹
           rwa [smul_smul, inv_mul_cancel₀ hc, one_smul] at h'
-        simp [if_neg hA, if_neg hcA, ENNReal.mul_top, hc]
+        -- The `if` condition normalises to the bare-function form `c • ⇑A`, which `if_neg hcA`
+        -- no longer matches.
+        have hcA' : ¬ IsCompactOperator (c • ⇑A) := by simpa using hcA
+        simp [if_neg hA, if_neg hcA', ENNReal.mul_top, hc]
   enorm_le_gauge A := by
     classical
     by_cases hA : IsCompactOperator A
@@ -212,8 +215,8 @@ instance instIsCompleteCompactOperatorIdealFamily :
     intro E F _ _ _ _ _ _
     have hclosed : IsClosed
         (_root_.compactOperator (RingHom.id 𝕜) E F : Set (E →L[𝕜] F)) :=
-      isClosed_setOf_isCompactOperator
-    haveI : CompleteSpace
+      isClosed_setOfPred_isCompactOperator
+    have : CompleteSpace
         ↥(_root_.compactOperator (RingHom.id 𝕜) E F) :=
       hclosed.completeSpace_coe
     exact (compactOperatorIdealFamilyElemEquiv

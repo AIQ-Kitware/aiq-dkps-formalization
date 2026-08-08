@@ -57,7 +57,7 @@ theorem exists_orthonormal_mem_pvmRange_of_natCast_le_rank
   obtain ⟨g, hg⟩ := (Module.le_rank_iff).1 hmW
   let V : Submodule ℂ W := Submodule.span ℂ (Set.range g)
   let b : Module.Basis (Fin m) ℂ V := Module.Basis.span hg
-  letI : FiniteDimensional ℂ V := b.finiteDimensional_of_finite
+  let : FiniteDimensional ℂ V := b.finiteDimensional_of_finite
   have hfinrank : Module.finrank ℂ V = m := by
     rw [Module.finrank_eq_card_basis b, Fintype.card_fin]
   let bV := stdOrthonormalBasis ℂ V

@@ -381,7 +381,7 @@ theorem singularValues_directRotation_displacement
   set s : Set (Fin (finrank 𝕜 E)) := {k | (k : ℕ) < 2 * m} with hs
   -- The family restricted to `s` is orthonormal.
   have hfam := orthonormal_principalPlaneFamily U V hacute
-  have hres : Orthonormal 𝕜 (s.restrict v) := by
+  have hres : Orthonormal 𝕜 (s.domRestrict v) := by
     rw [orthonormal_iff_ite]
     rintro ⟨a, ha⟩ ⟨b, hb⟩
     have ha' : (a : ℕ) < 2 * m := ha
@@ -411,7 +411,7 @@ theorem singularValues_directRotation_displacement
     have hij := orthonormal_iff_ite.mp hfam
       ⟨⟨(a : ℕ) / 2, by omega⟩, ⟨(a : ℕ) % 2, by omega⟩⟩
       ⟨⟨(b : ℕ) / 2, by omega⟩, ⟨(b : ℕ) % 2, by omega⟩⟩
-    simp only [Set.restrict_apply]
+    simp only [Set.domRestrict_apply]
     rw [hva, hvb, hij]
     congr 1
     simp only [Prod.mk.injEq, Fin.mk.injEq, Subtype.mk.injEq, eq_iff_iff]

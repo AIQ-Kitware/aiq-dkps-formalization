@@ -65,7 +65,7 @@ namespace TauCeti
 
 universe u v
 
-open ContinuousLinearMap
+open _root_.ContinuousLinearMap
 
 variable (Φ : SymmetricGauge)
 

@@ -588,7 +588,7 @@ theorem selfAdjointFunctionalCalculus_toContinuousLinearMap_eq_cfc {T : H →ₗ
     cfcHom_eq_of_continuous_of_map_id ha _ hcont (calculusStarAlgHom_id hT)
   rw [cfc_apply f T.toContinuousLinearMap ha hf.continuousOn, hhom]
   have key : (selfAdjointFunctionalCalculus hT
-      (extendSymbol (⟨_, hf.continuousOn.restrict⟩ :
+      (extendSymbol (⟨_, hf.continuousOn.domRestrict⟩ :
         C(spectrum ℝ T.toContinuousLinearMap, ℝ)))).toContinuousLinearMap
       = (selfAdjointFunctionalCalculus hT f).toContinuousLinearMap := by
     congr 1

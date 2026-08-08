@@ -149,7 +149,7 @@ theorem norm_shift_lower_of_spectrumOutside
       r + δ ≤ |hT.eigenvalues rfl i - m| := by
     intro i
     have hi := hsp (eigenvalue_mem_restrictedSpectrum_top hT i)
-    simp only [Set.mem_setOf_eq, Set.mem_Ioo, not_and_or, not_lt] at hi
+    simp only [Set.mem_ofPred_eq, Set.mem_Ioo, not_and_or, not_lt] at hi
     rcases hi with hi | hi
     · rw [abs_of_nonpos]
       · simp only [m, r]

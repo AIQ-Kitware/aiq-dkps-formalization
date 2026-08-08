@@ -92,11 +92,11 @@ measure. -/
 theorem pair_self_eq_integral (hfm : Measurable f) {M : ℝ} (hfb : ∀ x, ‖f x‖ ≤ M)
     (ξ : H) : pair ha f ξ ξ = ∫ x, f x ∂(diagMeasure ha ξ) := by
   refine eq_of_forall_norm_sub_le (C := 2) (by norm_num) fun ε hε => ?_
-  haveI : IsFiniteMeasure (∑ k : Fin 4, diagMeasure ha (pairVectors ξ ξ k)) :=
+  have : IsFiniteMeasure (∑ k : Fin 4, diagMeasure ha (pairVectors ξ ξ k)) :=
     isFiniteMeasure_sum_diagMeasure ha _
   set ν : Measure (spectrum ℂ a) :=
     (∑ k : Fin 4, diagMeasure ha (pairVectors ξ ξ k)) + diagMeasure ha ξ with hν
-  haveI : IsFiniteMeasure ν := by rw [hν]; infer_instance
+  have : IsFiniteMeasure ν := by rw [hν]; infer_instance
   have hfi : Integrable f ν := integrable_of_bounded hfm hfb ν
   obtain ⟨g, hgi, hgle⟩ := exists_continuous_integral_norm_sub_le ν hfi hε
   have hdom : ∀ k : Fin 4, diagMeasure ha (pairVectors ξ ξ k) ≤ ν := fun k =>
@@ -250,14 +250,14 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
   refine eq_of_forall_norm_sub_le (C := 3 + hg.chooseBound)
     (by have := hg.chooseBound_nonneg; linarith) fun ε hε => ?_
   -- the measure attached to the target pair `(ψ, ξ)`, common to all steps
-  haveI : IsFiniteMeasure (∑ k : Fin 4, diagMeasure ha (pairVectors ψ ξ k)) :=
+  have : IsFiniteMeasure (∑ k : Fin 4, diagMeasure ha (pairVectors ψ ξ k)) :=
     isFiniteMeasure_sum_diagMeasure ha _
   set νP : Measure (spectrum ℂ a) := ∑ k : Fin 4, diagMeasure ha (pairVectors ψ ξ k) with hνP
-  haveI : IsFiniteMeasure (∑ k : Fin 4, diagMeasure ha (pairVectors ψ η k)) :=
+  have : IsFiniteMeasure (∑ k : Fin 4, diagMeasure ha (pairVectors ψ η k)) :=
     isFiniteMeasure_sum_diagMeasure ha _
   set ν₁ : Measure (spectrum ℂ a) :=
     νP + ∑ k : Fin 4, diagMeasure ha (pairVectors ψ η k) with hν₁
-  haveI : IsFiniteMeasure ν₁ := by rw [hν₁]; infer_instance
+  have : IsFiniteMeasure ν₁ := by rw [hν₁]; infer_instance
   -- choose the approximant of `f` first
   obtain ⟨p, hpi, hple⟩ :=
     exists_continuous_integral_norm_sub_le ν₁ (hf.integrable ν₁) hε
@@ -269,11 +269,11 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
     exact div_le_self hε.le (le_add_of_nonneg_right (norm_nonneg p))
   -- the vector against which `g` will be tested
   set ζ := (cfcHom ha (star p)) ψ with hζ
-  haveI : IsFiniteMeasure (∑ k : Fin 4, diagMeasure ha (pairVectors ζ ξ k)) :=
+  have : IsFiniteMeasure (∑ k : Fin 4, diagMeasure ha (pairVectors ζ ξ k)) :=
     isFiniteMeasure_sum_diagMeasure ha _
   set ν₂ : Measure (spectrum ℂ a) :=
     νP + ∑ k : Fin 4, diagMeasure ha (pairVectors ζ ξ k) with hν₂
-  haveI : IsFiniteMeasure ν₂ := by rw [hν₂]; infer_instance
+  have : IsFiniteMeasure ν₂ := by rw [hν₂]; infer_instance
   obtain ⟨q, hqi, hqle⟩ :=
     exists_continuous_integral_norm_sub_le ν₂ (hg.integrable ν₂) hε'pos
   -- step 1: replace `f` by `p` at the pair `(ψ, η)`
@@ -304,7 +304,7 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
   have hdomP₂ : νP ≤ ν₂ := Measure.le_add_right le_rfl
   have hdomP : ∀ k : Fin 4, diagMeasure ha (pairVectors ψ ξ k) ≤ νP := fun k =>
     diagMeasure_le_sum ha (pairVectors ψ ξ) k
-  haveI : IsFiniteMeasure νP := by rw [hνP]; infer_instance
+  have : IsFiniteMeasure νP := by rw [hνP]; infer_instance
   have hpq : IsBddMeasurable (fun x => p x * q x) :=
     (IsBddMeasurable.of_continuous p).mul (IsBddMeasurable.of_continuous q)
   have hfg : IsBddMeasurable (fun x => f x * g x) := hf.mul hg
@@ -424,7 +424,7 @@ theorem pair_conj (hfm : Measurable f) {M : ℝ} (hfb : ∀ x, ‖f x‖ ≤ M) 
   classical
   set v : Fin 4 ⊕ Fin 4 → H := Sum.elim (pairVectors ψ ξ) (pairVectors ξ ψ) with hv
   set ν : Measure (spectrum ℂ a) := ∑ j, diagMeasure ha (v j) with hν
-  haveI : IsFiniteMeasure ν := isFiniteMeasure_sum_diagMeasure ha v
+  have : IsFiniteMeasure ν := isFiniteMeasure_sum_diagMeasure ha v
   have hfi : Integrable f ν := integrable_of_bounded hfm hfb ν
   obtain ⟨g, hgi, hgle⟩ := exists_continuous_integral_norm_sub_le ν hfi hε
   have hcfi : Integrable (fun x => (starRingEnd ℂ) (f x)) ν :=

@@ -123,7 +123,9 @@ theorem le_finiteValueLast {n : ℕ} (a : Fin n → ℝ)
 noncomputable def finiteValueFiberIndex {n : ℕ} (a : Fin n → ℝ) (i : Fin n) :
     Fin (finiteValueFiber a (finiteValueLabel a i)).card :=
   (finiteValueFiber a (finiteValueLabel a i)).equivFin
-    ⟨i, by simp [finiteValueFiber, finiteValueLabel]⟩
+    -- Unfolding `finiteValueFiber` here beats `mem_finiteValueFiber` to the goal and leaves
+    -- a raw `setOf` membership that no longer discharges itself; let the `simp` lemma fire.
+    ⟨i, by simp [finiteValueLabel]⟩
 
 /-- The fiber cardinality is bounded by the length of the interval between its
 first and last indices. -/

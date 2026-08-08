@@ -174,7 +174,13 @@ theorem re_inner_le_of_mem_boundedSelfAdjointSpectralSubspace_Iic
             TauCeti.BorelCalculus.ofRealLM (spectralGapSymbol B alpha delta) := by
     ext w
     have hre := coe_reCoord B hB w
-    simp only [TauCeti.BorelCalculus.ofRealLM_apply, hgdef, ContinuousMap.coe_mk,
+    -- Rewrite `g` through its *value* equation rather than through `hgdef`: rewriting to the
+    -- bundled structure literal leaves a `ContinuousMap.mk` that `ContinuousMap.coe_mk` no
+    -- longer reduces, and `push_cast` then cannot reach the real-valued arithmetic inside.
+    have hgapp : ∀ v : spectrum ℂ B, g v =
+        (alpha - TauCeti.BorelCalculus.reCoord v) *
+          spectralGapCutoff alpha delta (TauCeti.BorelCalculus.reCoord v) := fun _ => rfl
+    simp only [TauCeti.BorelCalculus.ofRealLM_apply, hgapp,
       ContinuousMap.sub_apply, ContinuousMap.smul_apply, ContinuousMap.mul_apply,
       ContinuousMap.restrict_apply, ContinuousMap.id_apply, smul_eq_mul,
       spectralGapSymbol_apply]
@@ -241,7 +247,11 @@ theorem le_re_inner_of_mem_boundedSelfAdjointSpectralSubspace_Iic_orthogonal
             (spectralGapSymbol B alpha delta)) := by
     ext w
     have hre := coe_reCoord B hB w
-    simp only [TauCeti.BorelCalculus.ofRealLM_apply, hgdef, ContinuousMap.coe_mk,
+    -- Value equation rather than `hgdef`; see the same step in `re_inner_le_...` above.
+    have hgapp : ∀ v : spectrum ℂ B, g v =
+        (TauCeti.BorelCalculus.reCoord v - (alpha + delta)) *
+          (1 - spectralGapCutoff alpha delta (TauCeti.BorelCalculus.reCoord v)) := fun _ => rfl
+    simp only [TauCeti.BorelCalculus.ofRealLM_apply, hgapp,
       ContinuousMap.sub_apply, ContinuousMap.smul_apply, ContinuousMap.mul_apply,
       ContinuousMap.one_apply, ContinuousMap.restrict_apply,
       ContinuousMap.id_apply, smul_eq_mul, spectralGapSymbol_apply]

@@ -499,10 +499,10 @@ theorem sylvester_mem_and_gauge_le_of_bound_inverse_swapped
     { inv := hB.inv.adjoint
       left_inv := by
         rw [← ContinuousLinearMap.adjoint_comp, hB.right_inv]
-        simp
+        exact ContinuousLinearMap.adjoint_id
       right_inv := by
         rw [← ContinuousLinearMap.adjoint_comp, hB.left_inv]
-        simp }
+        exact ContinuousLinearMap.adjoint_id }
   have hBadjInv : ‖hBadj.inv‖ ≤ (ρ + δ)⁻¹ := by
     change ‖hB.inv.adjoint‖ ≤ (ρ + δ)⁻¹
     rw [ContinuousLinearMap.adjoint.norm_map]

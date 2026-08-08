@@ -414,7 +414,8 @@ noncomputable def blockPolar (hnd : P.NonDegenerate P') (j : Fin m) :
         (p := range (P.proj j)) (q := range (P'.proj j))
         fun x hx => intertwiningUnitary_mapsTo hnd j hx) := fun y z hyz => by
     have h0 := congrArg Subtype.val hyz
-    simp only [LinearMap.restrict_apply, coe_toLinearMap_intertwiningUnitary_apply] at h0
+    -- `LinearMap.restrict_apply` no longer rewrites here (the `restrict` hypothesis is only
+    -- definitionally the expected one), but `h0` is still definitionally what `injective` wants.
     exact Subtype.ext ((intertwiningUnitary hnd).injective h0)
   have hsurj : Function.Surjective
       (((intertwiningUnitary hnd : E →ₗ[𝕜] E)).restrict

@@ -205,7 +205,7 @@ theorem hasFiniteUnitaryOrbitCertificate_of_smul_mem_convexHull
   classical
   rcases (mem_convexHull_iff_exists_fintype.mp hY) with
     ⟨ι, instι, w, z, hw, hwsum, hz, hzsum⟩
-  letI : Fintype ι := instι
+  let : Fintype ι := instι
   have hz' : ∀ i, ∃ (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E),
       z i = U.toLinearMap ∘ₗ C ∘ₗ V.toLinearMap := by
     intro i

@@ -68,7 +68,7 @@ public section
 namespace TauCeti.Matrix
 
 open scoped BigOperators ComplexOrder
-open Matrix
+open _root_.Matrix
 
 variable {𝕜 n : Type*} [RCLike 𝕜] [Fintype n] [DecidableEq n] {A : Matrix n n 𝕜}
 

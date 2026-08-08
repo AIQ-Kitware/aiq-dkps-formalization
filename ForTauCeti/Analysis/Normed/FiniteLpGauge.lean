@@ -257,7 +257,7 @@ theorem linftyGauge_zeroPadRight (x : Fin n → ℝ) :
       simp [zeroPadRight]
     rw [hz]
     simp [linftyGauge]
-  haveI : Nonempty (Fin (n + 1 + m)) := ⟨⟨0, by omega⟩⟩
+  have : Nonempty (Fin (n + 1 + m)) := ⟨⟨0, by omega⟩⟩
   apply le_antisymm
   · unfold linftyGauge
     refine ciSup_le fun i => ?_

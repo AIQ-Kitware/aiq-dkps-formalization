@@ -119,13 +119,13 @@ theorem exists_rank_le_natCast_norm_sub_le_of_isCompactOperator (T : E →L[𝕜
     (hT.isCompact_closure_image_closedBall 1).totallyBounded.subset subset_closure
   obtain ⟨s, hsfin, hs⟩ := Metric.totallyBounded_iff.mp htb ε hε
   set U : Submodule 𝕜 F := Submodule.span 𝕜 s with hU
-  haveI : FiniteDimensional 𝕜 U := FiniteDimensional.span_of_finite 𝕜 hsfin
+  have : FiniteDimensional 𝕜 U := FiniteDimensional.span_of_finite 𝕜 hsfin
   set R : E →L[𝕜] F := U.starProjection ∘L T with hR
   -- `R` lands in `U`, which is finite-dimensional, so its rank is some natural number
   have hrange : LinearMap.range (R : E →ₗ[𝕜] F) ≤ U := by
     rintro _ ⟨x, rfl⟩
     exact U.starProjection_apply_mem _
-  haveI : FiniteDimensional 𝕜 (LinearMap.range (R : E →ₗ[𝕜] F)) :=
+  have : FiniteDimensional 𝕜 (LinearMap.range (R : E →ₗ[𝕜] F)) :=
     Submodule.finiteDimensional_of_le hrange
   obtain ⟨n, hn⟩ :=
     Cardinal.lt_aleph0.mp (Module.rank_lt_aleph0 𝕜 (LinearMap.range (R : E →ₗ[𝕜] F)))

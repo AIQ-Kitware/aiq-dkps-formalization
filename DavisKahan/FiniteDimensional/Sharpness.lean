@@ -489,6 +489,9 @@ private theorem modelSinThetaPerturbation_sq (a b θ : ℝ) :
       | linear_combination ((((b : 𝕜) - (a : 𝕜)) ^ 2 *
           ((Real.sin θ : 𝕜)) ^ 2 * x.ofLp 1) * hpy)
 
+-- Elaboration got slower across the Mathlib bump and this proof no longer fits the default
+-- budget.  Raised to the same level the three declarations lower in this file already use.
+set_option maxHeartbeats 800000 in
 private theorem singularValues_sinThetaMap_model
     {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 2) :
     (sinThetaMap (modelSubspace (𝕜 := 𝕜))

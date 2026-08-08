@@ -397,7 +397,7 @@ theorem ae_mem_sliceSum_restrict (ρ : Measure X) {A : ℕ → Set X}
     · intro hp
       obtain ⟨n, hn⟩ := Set.mem_iUnion.mp hp
       have hp2 : p.2 = n := hn.2
-      rw [Set.mem_setOf_eq, hp2]
+      rw [Set.mem_ofPred_eq, hp2]
       exact hn.1
   have hNmeas : MeasurableSet {p : X × ℕ | ¬ p.1 ∈ A p.2} := by
     rw [hN]
@@ -439,7 +439,7 @@ theorem map_rankMap_sliceSum (ρ : Measure X) {S : ℕ → Set X} (hS : ∀ n, M
         obtain ⟨k, hxk⟩ := Set.mem_iUnion.mp hx
         refine ⟨?_, hxk.1.1⟩
         have hrk : rank S x n = k := hxk.1.2
-        rw [Set.mem_setOf_eq, hrk]
+        rw [Set.mem_ofPred_eq, hrk]
         exact hxk.2
     have hdisj : Pairwise (Function.onFun Disjoint
         fun k => levelPiece S n k ∩ {x : X | (x, k) ∈ t}) := fun k k' hkk' =>

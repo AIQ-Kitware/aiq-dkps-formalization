@@ -84,7 +84,7 @@ lemma helly_selection
     ⟨0, by rintro _ ⟨q, _, rfl⟩; exact (hg_bnd q).1⟩
   set G : ℝ → ℝ := fun x => sInf (S x) with _hG
   have hG_rat : ∀ q : ℚ, G (q : ℝ) = g q := fun q =>
-  le_antisymm (csInf_le (hS_bdd _) ⟨q, Set.mem_setOf.mpr le_rfl, rfl⟩)
+  le_antisymm (csInf_le (hS_bdd _) ⟨q, Set.mem_ofPred.mpr le_rfl, rfl⟩)
     (le_csInf (hS_ne _) (by rintro _ ⟨r, hr, rfl⟩; exact hg_mono (by exact_mod_cast hr)))
   have hG_mono : Monotone G := fun x y hxy =>
     le_csInf (hS_ne _) (by

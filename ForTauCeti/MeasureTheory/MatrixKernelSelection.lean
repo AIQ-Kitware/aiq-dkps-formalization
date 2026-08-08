@@ -327,8 +327,7 @@ theorem exists_measurable_unit_nullVector {m n : ℕ} (hmn : m < n)
     intro j
     have : Z j = ⋂ i, (fun x => QL x i j) ⁻¹' {0} := by
       refine Set.ext fun x => ?_
-      simp [hZdef, Set.mem_iInter, Set.mem_preimage, Set.mem_singleton_iff,
-        Set.mem_setOf_eq]
+      simp [hZdef, Set.mem_iInter, Set.mem_preimage, Set.mem_singleton_iff]
     rw [this]
     exact MeasurableSet.iInter fun i => (hQLm i j) (measurableSet_singleton 0)
   set Asel : Fin n → Set α := fun j =>
@@ -342,7 +341,7 @@ theorem exists_measurable_unit_nullVector {m n : ℕ} (hmn : m < n)
     have hexj : ∃ j, x ∉ Z j := by
       by_contra hall
       push Not at hall
-      simp only [hZdef, Set.mem_setOf_eq] at hall
+      simp only [hZdef, Set.mem_ofPred_eq] at hall
       refine hQLne x ?_
       refine Matrix.ext fun i j => ?_
       rw [Matrix.zero_apply]
@@ -393,7 +392,7 @@ theorem exists_measurable_unit_nullVector {m n : ℕ} (hmn : m < n)
   have hw₀ne : ∀ x, ∃ i, w₀ x i ≠ 0 := by
     intro x
     obtain ⟨j₀, hj₀, hcol⟩ := hw₀col x
-    simp only [hZdef, Set.mem_setOf_eq, not_forall] at hj₀
+    simp only [hZdef, Set.mem_ofPred_eq, not_forall] at hj₀
     obtain ⟨i, hi⟩ := hj₀
     exact ⟨i, by rw [hcol i]; exact hi⟩
   -- The selected column is annihilated by the Gram matrix, hence by `A` itself.

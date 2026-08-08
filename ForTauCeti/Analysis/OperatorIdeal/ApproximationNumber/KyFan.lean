@@ -301,17 +301,17 @@ Hilbert codomain.  The codomain is compressed onto the range of `A ⊕ B`, which
 finite-dimensional and changes no approximation number. -/
 theorem kyFanGauge_add_le_of_finiteDimensional_source (k : ℕ) (A B : V →L[𝕜] G) :
     (A + B).kyFanGauge k ≤ A.kyFanGauge k + B.kyFanGauge k := by
-  letI : CompleteSpace V := FiniteDimensional.complete 𝕜 V
+  let : CompleteSpace V := FiniteDimensional.complete 𝕜 V
   let C : V × V →L[𝕜] G :=
     A ∘L ContinuousLinearMap.fst 𝕜 V V + B ∘L ContinuousLinearMap.snd 𝕜 V V
   let W : Submodule 𝕜 G := C.range
-  letI : FiniteDimensional 𝕜 W := by
+  let : FiniteDimensional 𝕜 W := by
     apply FiniteDimensional.of_surjective C.rangeRestrict.toLinearMap
     intro y
     rcases y.property with ⟨x, hx⟩
     exact ⟨x, Subtype.ext hx⟩
-  letI : CompleteSpace W := FiniteDimensional.complete 𝕜 W
-  letI : W.HasOrthogonalProjection := Submodule.HasOrthogonalProjection.ofCompleteSpace W
+  let : CompleteSpace W := FiniteDimensional.complete 𝕜 W
+  let : W.HasOrthogonalProjection := Submodule.HasOrthogonalProjection.ofCompleteSpace W
   have hA : ∀ x, A x ∈ W := fun x => ⟨(x, 0), by simp [C]⟩
   have hB : ∀ x, B x ∈ W := fun x => ⟨(0, x), by simp [C]⟩
   have hAB : ∀ x, (A + B) x ∈ W := fun x => W.add_mem (hA x) (hB x)
@@ -376,8 +376,8 @@ theorem kyFanGauge_add_le_of_exists_finiteRestriction {S T : E →L[𝕜] F}
   let β : Type := Σ n : Fin k, Fin (n.1 + 1)
   let w : β → E := fun p => v p.1.1 p.2
   let V : Submodule 𝕜 E := Submodule.span 𝕜 (Set.range w)
-  letI : FiniteDimensional 𝕜 V := Module.Finite.span_of_finite 𝕜 (Set.finite_range w)
-  letI : CompleteSpace V := FiniteDimensional.complete 𝕜 V
+  let : FiniteDimensional 𝕜 V := Module.Finite.span_of_finite 𝕜 (Set.finite_range w)
+  let : CompleteSpace V := FiniteDimensional.complete 𝕜 V
   let SV : V →L[𝕜] F := S ∘L V.subtypeL
   let TV : V →L[𝕜] F := T ∘L V.subtypeL
   have hsumRestrict : (S + T) ∘L V.subtypeL = SV + TV := by

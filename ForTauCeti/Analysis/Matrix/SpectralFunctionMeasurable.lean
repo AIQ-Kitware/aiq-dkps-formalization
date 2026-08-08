@@ -111,7 +111,7 @@ theorem exists_polynomial_uniform_close (h : ℝ → ℝ) (hh : Continuous h)
     (R : ℝ) {ε : ℝ} (hε : 0 < ε) :
     ∃ p : Polynomial ℝ, ∀ x ∈ Set.Icc (-R) R, |h x - p.eval x| ≤ ε := by
   set s : Set ℝ := Set.Icc (-R) R with hs
-  haveI : CompactSpace s := isCompact_iff_compactSpace.mp isCompact_Icc
+  have : CompactSpace s := isCompact_iff_compactSpace.mp isCompact_Icc
   set f : C(s, ℝ) := ContinuousMap.restrict s ⟨h, hh⟩ with hf
   have hmem : f ∈ (polynomialFunctions s).topologicalClosure := by
     rw [polynomialFunctions.topologicalClosure s]
@@ -349,7 +349,7 @@ theorem measurable_specTransform {Ω : Type*} [MeasurableSpace Ω]
     exact (hentry a b) ((isClosed_le continuous_abs continuous_const).measurableSet)
   have hcover : (⋃ R, s R) = Set.univ := by
     ext ω
-    simp only [Set.mem_iUnion, Set.mem_univ, iff_true, hs, Set.mem_setOf_eq]
+    simp only [Set.mem_iUnion, Set.mem_univ, iff_true, hs, Set.mem_ofPred_eq]
     obtain ⟨R, hR⟩ := exists_nat_ge (∑ a : Fin n, ∑ b : Fin n, |Bm ω a b|)
     refine ⟨R, fun a b => ?_⟩
     have h1 : |Bm ω a b| ≤ ∑ b' : Fin n, |Bm ω a b'| :=

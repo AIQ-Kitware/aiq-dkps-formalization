@@ -52,6 +52,18 @@ is exactly why the names had to be separated. -/
 def IsInvariant (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
   ∀ x ∈ U, A x ∈ U
 
+omit [FiniteDimensional 𝕜 E] in
+/-- `LinearMap.coe_restrict_apply`, restated for a hypothesis in `IsInvariant` form.
+
+Mathlib's lemma is stated for `LinearMap.restrict`'s own hypothesis shape, and `IsInvariant A U`
+is only *definitionally* that shape.  `simp` and `rw` match at `instances` transparency, so
+neither will bridge the gap and the Mathlib lemma silently never fires on an `IsInvariant`
+restriction.  Every `A.restrict hU` in this development carries an `IsInvariant`, so this is
+the spelling that actually gets used. -/
+@[simp] theorem coe_restrict_apply_of_isInvariant {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E}
+    (hU : IsInvariant A U) (x : U) :
+    ((A.restrict hU x : U) : E) = A (x : E) := rfl
+
 /-- The finite-dimensional point spectrum of `A` carried by `U`.
 
 For symmetric operators this is the spectrum of the restriction to `U` once
@@ -187,14 +199,15 @@ theorem restrictedSpectrum_restrict (A : E →ₗ[𝕜] E)
   · intro hlam
     obtain ⟨x, -, hx0, hxEig⟩ := mem_restrictedSpectrum_iff.mp hlam
     refine mem_restrictedSpectrum x.2 (fun hx => hx0 (Subtype.ext hx)) ?_
-    have h := congrArg (Subtype.val) hxEig
-    rwa [LinearMap.coe_restrict_apply, Submodule.coe_smul] at h
+    -- `LinearMap.coe_restrict_apply` and `Submodule.coe_smul` are both `rfl`, but `rw`
+    -- cannot match them here: `hU : IsInvariant A U` is only definitionally the hypothesis
+    -- `LinearMap.restrict` is stated with.  `exact` checks up to defeq.
+    exact congrArg (Subtype.val) hxEig
   · intro hlam
     obtain ⟨x, hxU, hx0, hxEig⟩ := mem_restrictedSpectrum_iff.mp hlam
     refine mem_restrictedSpectrum (x := ⟨x, hxU⟩) Submodule.mem_top
       (fun hxu => hx0 (congrArg Subtype.val hxu)) ?_
     apply Subtype.ext
-    rw [LinearMap.coe_restrict_apply, Submodule.coe_smul]
     exact hxEig
 
 omit [FiniteDimensional 𝕜 E] in
@@ -287,7 +300,6 @@ theorem re_inner_le_of_spectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     rw [restrictedSpectrum_restrict] at hmem
     exact hspec hmem
   have hquad := re_inner_le_of_forall_eigenvalue_le hA'sym rfl hev ⟨x, hx⟩
-  rw [Submodule.coe_inner, LinearMap.coe_restrict_apply] at hquad
   exact hquad
 
 /-- **The spectral-gap coercivity bridge (lower).**  If `A` is symmetric, `U`
@@ -306,7 +318,6 @@ theorem le_re_inner_of_spectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     rw [restrictedSpectrum_restrict] at hmem
     exact hspec hmem
   have hquad := le_re_inner_of_forall_le_eigenvalue hA'sym rfl hev ⟨x, hx⟩
-  rw [Submodule.coe_inner, LinearMap.coe_restrict_apply] at hquad
   exact hquad
 
 /-- The canonical projector has the expected range.

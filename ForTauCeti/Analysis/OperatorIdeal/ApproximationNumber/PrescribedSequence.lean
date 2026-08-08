@@ -75,7 +75,7 @@ theorem exists_approximationNumber_eq_of_antitone
   classical
   -- A countable orthonormal family.
   obtain ⟨w, b, -⟩ := exists_hilbertBasis ℂ E
-  haveI hwinf : Infinite w := by
+  have hwinf : Infinite w := by
     rw [← not_finite_iff_infinite]
     intro hfin
     cases nonempty_fintype w
@@ -86,7 +86,7 @@ theorem exists_approximationNumber_eq_of_antitone
   -- The closed span of the family, with its Hilbert basis.
   set W : Submodule ℂ E := (span ℂ (Set.range e)).topologicalClosure with hW_def
   have hWclosed : IsClosed (W : Set E) := (span ℂ (Set.range e)).isClosed_topologicalClosure
-  haveI : CompleteSpace W := hWclosed.completeSpace_coe
+  have : CompleteSpace W := hWclosed.completeSpace_coe
   have hmem : ∀ n, e n ∈ W := fun n =>
     (span ℂ (Set.range e)).le_topologicalClosure (subset_span (Set.mem_range_self n))
   set e' : ℕ → W := fun n => ⟨e n, hmem n⟩ with he'_def

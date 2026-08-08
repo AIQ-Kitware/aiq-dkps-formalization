@@ -296,7 +296,7 @@ private theorem exists_orthonormalBasis_image_eq_range {d n : ℕ}
   classical
   let wExt : Fin n → E := Function.extend e w (fun _ => 0)
   let S : Set (Fin n) := Set.range e
-  have hwS : Orthonormal 𝕜 (S.restrict wExt) := by
+  have hwS : Orthonormal 𝕜 (S.domRestrict wExt) := by
     rw [orthonormal_iff_ite]
     intro i j
     rcases i with ⟨i, hi⟩
@@ -306,8 +306,11 @@ private theorem exists_orthonormalBasis_image_eq_range {d n : ℕ}
     -- After `orthonormal_iff_ite` the goal is phrased through the subtype (or
     -- `Fin.cast`) coercion; `orthonormal_iff_ite.mp` is stated for the underlying
     -- vectors, so the coercion has to be discharged before it can apply.
+    -- The membership witnesses must be spelled as `Set.mem_range_self`, not `⟨i', rfl⟩`: the
+    -- latter records the *unfolded* `∃ y, e y = e i'`, which leaves the subtype term
+    -- type-incorrect at `implicit` transparency and stops `simp` from touching it.
     change ⟪wExt (e i'), wExt (e j')⟫_𝕜 =
-      if (⟨e i', ⟨i', rfl⟩⟩ : S) = ⟨e j', ⟨j', rfl⟩⟩ then 1 else 0
+      if (⟨e i', Set.mem_range_self i'⟩ : S) = ⟨e j', Set.mem_range_self j'⟩ then 1 else 0
     have hwi : wExt (e i') = w i' := e.injective.extend_apply w (fun _ => 0) i'
     have hwj : wExt (e j') = w j' := e.injective.extend_apply w (fun _ => 0) j'
     rw [hwi, hwj, orthonormal_iff_ite.mp hw i' j']

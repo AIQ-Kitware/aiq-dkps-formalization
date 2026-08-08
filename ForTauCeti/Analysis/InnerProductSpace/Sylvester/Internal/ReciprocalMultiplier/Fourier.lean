@@ -90,7 +90,7 @@ theorem exists_finite_average_approximation
   obtain ⟨y, hy, hdist⟩ := Metric.mem_closure_iff.mp havg ε hε
   rcases mem_convexHull_iff_exists_fintype.mp hy with
     ⟨ι, hι, w, v, hw₀, hw₁, hv, hvsum⟩
-  letI : Fintype ι := hι
+  let : Fintype ι := hι
   let z : ι → Ω := fun i => Classical.choose (hv i)
   have hz (i : ι) : g (z i) = v i := Classical.choose_spec (hv i)
   let e : ι ≃ Fin (Fintype.card ι) := Fintype.equivFin ι
@@ -465,21 +465,21 @@ theorem hasApproximateFiniteReciprocalFourierInterpolation_of_integrableKernel
     (MeasureTheory.integral_nonneg fun _ => norm_nonneg _).trans hmass
   cases isEmpty_or_nonempty (Fin m) with
   | inl hm =>
-      letI := hm
+      let := hm
       exact ⟨0, Fin.elim0, Fin.elim0, (fun i => isEmptyElim i), by simpa⟩
   | inr hm =>
-    letI := hm
+    let := hm
     cases isEmpty_or_nonempty (Fin n) with
     | inl hn =>
-        letI := hn
+        let := hn
         exact ⟨0, Fin.elim0, Fin.elim0,
           (fun _i j => isEmptyElim j), by simpa⟩
     | inr hn =>
-      letI := hn
+      let := hn
       let M : ℝ := ∫ t, ‖f t‖
       let density : ℝ → ENNReal := fun t => ENNReal.ofReal ‖f t‖
       let μ : MeasureTheory.Measure ℝ := MeasureTheory.volume.withDensity density
-      haveI : MeasureTheory.IsFiniteMeasure μ := by
+      have : MeasureTheory.IsFiniteMeasure μ := by
         dsimp only [μ, density]
         exact MeasureTheory.isFiniteMeasure_withDensity_ofReal hfint.norm.2
       let i₀ : Fin m := Classical.choice inferInstance
@@ -502,7 +502,7 @@ theorem hasApproximateFiniteReciprocalFourierInterpolation_of_integrableKernel
         have : μ.real Set.univ = 0 := by simp [hzero]
         rw [hμreal] at this
         linarith
-      letI : NeZero μ := ⟨hμne⟩
+      let : NeZero μ := ⟨hμne⟩
       let phase : ℝ → ℂ := phaseOf f
       have hphase_meas : Measurable phase := measurable_phaseOf hfmeas
       have hphase_norm (t : ℝ) : ‖phase t‖ ≤ 1 := norm_phaseOf_le_one f t

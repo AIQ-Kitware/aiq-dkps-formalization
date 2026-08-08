@@ -197,7 +197,7 @@ theorem le_approximationNumber_of_linearIndependent
     c ≤ T.approximationNumber n := by
   let V : Submodule 𝕜 E₁ := Submodule.span 𝕜 (Set.range v)
   let b : Module.Basis (Fin (n + 1)) 𝕜 V := Module.Basis.span hv
-  letI : FiniteDimensional 𝕜 V := b.finiteDimensional_of_finite
+  let : FiniteDimensional 𝕜 V := b.finiteDimensional_of_finite
   have hVdim : n < finrank 𝕜 V := by
     rw [Module.finrank_eq_card_basis b, Fintype.card_fin]
     exact Nat.lt_succ_self n
@@ -233,7 +233,7 @@ theorem approximationNumber_le_norm_comp_starProjection_orthogonal
     change LinearMap.range ((T : E₁ →ₗ[𝕜] F₁).comp
         ((V.starProjection : E₁ →ₗ[𝕜] E₁))) = _
     rw [LinearMap.range_comp, Submodule.range_starProjection]
-  haveI : FiniteDimensional 𝕜 (Submodule.map (T : E₁ →ₗ[𝕜] F₁) V) := inferInstance
+  have : FiniteDimensional 𝕜 (Submodule.map (T : E₁ →ₗ[𝕜] F₁) V) := inferInstance
   have hrank : (T ∘L V.starProjection).rank ≤ (n : Cardinal) := by
     rw [LinearMap.rank, hrangeeq,
       ← Module.finrank_eq_rank' 𝕜 (Submodule.map (T : E₁ →ₗ[𝕜] F₁) V)]
@@ -275,7 +275,7 @@ an orthogonal projection.  Registered as an instance because every statement
 below mentions `(ker R).starProjection`. -/
 instance hasOrthogonalProjection_ker (R : E₁ →L[𝕜] F₁) :
     (LinearMap.ker (R : E₁ →ₗ[𝕜] F₁)).HasOrthogonalProjection := by
-  haveI : CompleteSpace (LinearMap.ker (R : E₁ →ₗ[𝕜] F₁)) :=
+  have : CompleteSpace (LinearMap.ker (R : E₁ →ₗ[𝕜] F₁)) :=
     R.isClosed_ker.completeSpace_coe
   infer_instance
 
@@ -344,7 +344,7 @@ theorem exists_finrank_le_norm_comp_starProjection_orthogonal_le
         finrank 𝕜 V ≤ n ∧ ‖T ∘L Vᗮ.starProjection‖ ≤ ‖T - R‖ := by
   set K := LinearMap.ker (R : E₁ →ₗ[𝕜] F₁) with hK
   have hrank : Module.rank 𝕜 Kᗮ ≤ (n : Cardinal) := rank_orthogonal_ker_le_of_rank_le R hR
-  haveI : FiniteDimensional 𝕜 Kᗮ := by
+  have : FiniteDimensional 𝕜 Kᗮ := by
     refine Module.rank_lt_aleph0_iff.mp ?_
     exact lt_of_le_of_lt hrank (Cardinal.natCast_lt_aleph0)
   have hfinrank : finrank 𝕜 Kᗮ ≤ n := by
@@ -420,7 +420,7 @@ theorem approximationNumber_eq_sInf_norm_comp_starProjection_orthogonal
     simp
   refine le_antisymm (le_csInf hne ?_) ?_
   · rintro r ⟨V, _, _, hVdim, rfl⟩
-    haveI : CompleteSpace V := FiniteDimensional.complete 𝕜 V
+    have : CompleteSpace V := FiniteDimensional.complete 𝕜 V
     exact T.approximationNumber_le_norm_comp_starProjection_orthogonal n V hVdim
   · refine le_of_forall_pos_le_add fun ε hε => ?_
     obtain ⟨R, hR, hRlt⟩ :=

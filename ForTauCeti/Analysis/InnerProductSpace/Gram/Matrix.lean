@@ -105,9 +105,24 @@ statement that the two inner products induced on the coimage agree. -/
 noncomputable def rangeEquivOfInnerEq : LinearMap.range S ≃ₗᵢ[𝕜] LinearMap.range T :=
   (S.quotKerEquivRange.symm.trans <| (Submodule.quotEquivOfEq _ _
       (ker_eq_ker_of_inner_eq S T h)).trans T.quotKerEquivRange).isometryOfInner fun x y => by
+    -- Walk the coimage identification explicitly: `S x ↦ mkQ x ↦ mkQ x ↦ T x`.  `simp` used to
+    -- close this on its own but no longer takes the `quotKerEquivRange` steps unprompted, and
+    -- the destructuring below leaves the range membership in its unfolded `∃ y, S y = S x`
+    -- form, which `simp only` will not match against `S x ∈ LinearMap.range S`.  Stating the
+    -- step as `key`, with the membership canonical and universally quantified, sidesteps that:
+    -- `rw` closes the gap up to proof irrelevance where `simp only` cannot.
+    have key : ∀ (x : M) (hx : S x ∈ LinearMap.range S),
+        ((S.quotKerEquivRange.symm.trans <| (Submodule.quotEquivOfEq _ _
+          (ker_eq_ker_of_inner_eq S T h)).trans T.quotKerEquivRange) ⟨S x, hx⟩ : F) = T x := by
+      intro x hx
+      simp only [LinearEquiv.trans_apply, LinearMap.quotKerEquivRange_symm_apply_image,
+        Submodule.mkQ_apply, Submodule.quotEquivOfEq_mk, LinearMap.quotKerEquivRange_apply_mk]
     obtain ⟨-, x, rfl⟩ := x
     obtain ⟨-, y, rfl⟩ := y
-    simp [h x y]
+    rw [Submodule.coe_inner, Submodule.coe_inner]
+    -- `rw [key x]` still cannot fire: assigning its membership argument would have to see
+    -- through `∈ LinearMap.range S`, which `rw` does not do.  `exact` checks up to defeq.
+    exact (congrArg₂ (inner 𝕜) (key x _) (key y _)).trans (h x y).symm
 
 /-- The equivalence built from equal Gram data sends `φ i` to `ψ i`; this is the property that
 characterises it, the construction itself going through linear combinations. -/

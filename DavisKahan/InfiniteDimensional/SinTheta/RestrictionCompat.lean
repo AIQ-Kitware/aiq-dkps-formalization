@@ -256,7 +256,10 @@ theorem restricted_projection_sandwich_norm_le
     ‖codRestrictTo
         (Vᗮ.starProjection ∘L T ∘L U.subtypeL) Vᗮ
         (fun x => Vᗮ.starProjection_apply_mem _)‖ ≤ ‖T‖ := by
-  rw [norm_codRestrictTo_eq]
+  -- Explicit arguments: with the operator left as a metavariable, `rw` cannot solve it from
+  -- the membership proof, whose type is only definitionally the expected one.
+  rw [norm_codRestrictTo_eq (Vᗮ.starProjection ∘L T ∘L U.subtypeL) Vᗮ
+    (fun x => Vᗮ.starProjection_apply_mem _)]
   calc
     ‖Vᗮ.starProjection ∘L T ∘L U.subtypeL‖
         ≤ ‖Vᗮ.starProjection‖ * ‖T‖ * ‖U.subtypeL‖ := by
@@ -289,7 +292,15 @@ theorem directedGap_eq_restrictedBlock_norm
     have hPx : U.starProjection (x : E) = (x : E) :=
       Submodule.starProjection_eq_self_iff.mpr x.property
     have h := (Vᗮ.starProjection ∘L U.starProjection).le_opNorm (x : E)
-    simpa [T, codRestrictTo, ContinuousLinearMap.comp_apply, hPx] using h
+    -- `codRestrictTo` is deliberately *not* unfolded: unfolded, the `codRestrict` coercion no
+    -- longer reduces, whereas this file's own `coe_codRestrictTo_apply` still fires.
+    -- `coe_codRestrictTo_apply` is unavailable here (it carries a `CompleteSpace` hypothesis on
+    -- the domain, and the domain is the bare subspace `U`), and unfolding `codRestrictTo` leaves
+    -- a `codRestrict` coercion `simp` no longer reduces.  The step is definitional, so `change`
+    -- states it and the estimate then matches `h`.
+    change ‖Vᗮ.starProjection (x : E)‖ ≤
+      ‖Vᗮ.starProjection ∘L U.starProjection‖ * ‖(x : E)‖
+    simpa [hPx] using h
   have hle2 : ‖Vᗮ.starProjection ∘L U.starProjection‖ ≤ ‖T‖ := by
     refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg T) ?_
     intro x

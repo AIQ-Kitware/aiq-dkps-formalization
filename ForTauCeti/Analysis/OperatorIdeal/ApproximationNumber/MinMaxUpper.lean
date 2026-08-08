@@ -121,7 +121,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber
   set K : Submodule ℂ E := LinearMap.ker (A.spectralCutoff s : E →ₗ[ℂ] E) with hKdef
   have hKclosed : IsClosed (K : Set E) := by
     simpa [hKdef] using (A.spectralCutoff s).isClosed_ker
-  haveI : CompleteSpace (K : Type _) := hKclosed.completeSpace_coe
+  have : CompleteSpace (K : Type _) := hKclosed.completeSpace_coe
   have hlow : ∀ y ∈ Kᗮ, s * ‖y‖ ≤ ‖T y‖ := by
     intro y hy
     rw [← T.norm_modulus_apply]
@@ -136,7 +136,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber
     rintro _ ⟨i, rfl⟩
     exact (v i).2
   · exfalso
-    haveI : FiniteDimensional ℂ (Kᗮ : Submodule ℂ E) :=
+    have : FiniteDimensional ℂ (Kᗮ : Submodule ℂ E) :=
       Module.rank_lt_aleph0_iff.mp (hsmall.trans_lt (Cardinal.natCast_lt_aleph0 (n := n)))
     have hfr : Module.finrank ℂ (Kᗮ : Submodule ℂ E) ≤ n := by
       have hrk := Module.finrank_eq_rank' ℂ (Kᗮ : Submodule ℂ E)
@@ -150,7 +150,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber
       change LinearMap.range ((T : E →ₗ[ℂ] F).comp
           (((Kᗮ : Submodule ℂ E).starProjection : E →ₗ[ℂ] E))) = _
       rw [LinearMap.range_comp, Submodule.range_starProjection]
-    haveI : FiniteDimensional ℂ (Submodule.map (T : E →ₗ[ℂ] F) (Kᗮ)) := inferInstance
+    have : FiniteDimensional ℂ (Submodule.map (T : E →ₗ[ℂ] F) (Kᗮ)) := inferInstance
     have hrank : (T ∘L (Kᗮ : Submodule ℂ E).starProjection).rank ≤ (n : Cardinal) := by
       rw [LinearMap.rank, hrangeeq,
         ← Module.finrank_eq_rank' ℂ (Submodule.map (T : E →ₗ[ℂ] F) (Kᗮ))]

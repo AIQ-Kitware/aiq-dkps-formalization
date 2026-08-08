@@ -254,7 +254,9 @@ theorem exists_gramSpectralBandModel
     have htoIndex_surj : Function.Surjective toIndex := by
       intro i
       refine ⟨⟨finiteValueLabel a i,
-        ⟨i, by simp [finiteValueFiber, finiteValueLabel]⟩⟩, rfl⟩
+        -- Unfolding `finiteValueFiber` beats `mem_finiteValueFiber` to the goal and leaves a
+        -- raw `setOf` membership that no longer discharges itself.
+        ⟨i, by simp [finiteValueLabel]⟩⟩, rfl⟩
     let indexEquiv : Index ≃ Fin count :=
       Equiv.ofBijective toIndex ⟨htoIndex_inj, htoIndex_surj⟩
     let allVec : Index → E0 := fun z =>

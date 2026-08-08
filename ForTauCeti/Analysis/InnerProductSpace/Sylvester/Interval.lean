@@ -248,8 +248,8 @@ theorem uiNorm_sylvester_le_of_orderedGap
       ext x
       exact Subsingleton.elim _ _
     simp [hX0, hC0, N.apply_zero]
-  letI : NeZero (Module.finrank 𝕜 E) := ⟨Nat.ne_of_gt Module.finrank_pos⟩
-  letI : NeZero (Module.finrank 𝕜 F) := ⟨Nat.ne_of_gt Module.finrank_pos⟩
+  let : NeZero (Module.finrank 𝕜 E) := ⟨Nat.ne_of_gt Module.finrank_pos⟩
+  let : NeZero (Module.finrank 𝕜 F) := ⟨Nat.ne_of_gt Module.finrank_pos⟩
   rcases hgap with hBA | hAB
   · let j₀ : Fin (Module.finrank 𝕜 E) := ⟨0, Module.finrank_pos⟩
     let c : ℝ := hB.eigenvalues rfl j₀
@@ -313,9 +313,9 @@ theorem uiNorm_sylvester_le_of_intervalGap
       exact Subsingleton.elim _ _
     rw [hX0, N.apply_zero, mul_zero]
     exact N.nonneg C
-  letI : NeZero (Module.finrank 𝕜 E) :=
+  let : NeZero (Module.finrank 𝕜 E) :=
     ⟨Nat.ne_of_gt Module.finrank_pos⟩
-  letI : NeZero (Module.finrank 𝕜 F) :=
+  let : NeZero (Module.finrank 𝕜 F) :=
     ⟨Nat.ne_of_gt Module.finrank_pos⟩
   let j₀ : Fin (Module.finrank 𝕜 E) := ⟨0, Module.finrank_pos⟩
   have hj₀ := hgap.1 (eigenvalue_mem_restrictedSpectrum_top hB j₀)
