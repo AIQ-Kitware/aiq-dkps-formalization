@@ -11,8 +11,8 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 30 |
-| `compiled_specialization` | 6 |
+| `compiled_exact` | 31 |
+| `compiled_specialization` | 5 |
 | `compiled_general_infrastructure` | 4 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
@@ -266,10 +266,10 @@ CONSEQUENCE: the `Theta_0`/`Theta` bridge is NOT refuted; it is simply unproved.
 #### Section 2, tan 2 theta theorem: Double-angle tangent theorem
 
 - **Kind:** `unnumbered_theorem`
-- **Status:** `compiled_specialization`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Fully off-diagonal perturbations across an ordered gap give residual and perturbation tan(2 Theta) bounds with factor two.
-- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm`, `TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm_selectedBranch`, `TauCeti.DavisKahan.paperFaithful_tanTwoTheta_uiNorm_real`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm`, `TauCeti.DavisKahanTheory.paired_singularVector_gap_inequality`, `TauCeti.DavisKahanTheory.singularValue_ne_one`, `TauCeti.DavisKahanTheory.absDoubleAngleTangent_scalar`, `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le`, `TauCeti.DavisKahanTheory.absTanTwoTheta0_offDiagonal_le`, `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahanTheory.kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahanTheory.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm`, `TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm_selectedBranch`, `TauCeti.DavisKahan.paperFaithful_tanTwoTheta_uiNorm_real`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm`, `TauCeti.DavisKahanTheory.paired_singularVector_gap_inequality`, `TauCeti.DavisKahanTheory.singularValue_ne_one`, `TauCeti.DavisKahanTheory.absDoubleAngleTangent_scalar`, `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le`, `TauCeti.DavisKahanTheory.absTanTwoTheta0_offDiagonal_le`, `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahanTheory.kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahanTheory.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_real`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_kyFan_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_prefix_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_uiIdeal_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_equation_7_6_approximate`, `TauCeti.DavisKahan1970.tanTwoTheta_cos_ne_zero_approximate`, `TauCeti.DavisKahan1970.tanTwoTheta_pole_separation`
 - **Assessment:** The finite operator-norm theorem is compiled. The source arbitrary-UI-norm Hilbert-space endpoint and branch selection are not yet certified.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_specialization`. The operator-norm double-angle tangent theorem is compiled and axiom-clean; the paper's general UI-norm scope and the selected acute branch are not.
@@ -321,7 +321,33 @@ WHY THE CONCLUSION IS UP TO A REARRANGEMENT, and why that is not a weakening.  `
 REAL SCALARS CAME FREE.  The whole chain is `[RCLike k]`-generic, so unlike `paperFaithful_tanTwoTheta_uiNorm_real` no complexification transport was needed at this scope.
 
 ONE COMPRESSION, NOT TWO.  `kyFan_doubleAngleTangent_offDiagonal_le_of_finiteDimensional_invariantSubspace` is now DERIVED from the branch-free carrier theorem (`absDoubleAngleTangent = doubleAngleTangent` on the acute quarter, plus a trivial no-gap case), so the finite-carrier compression proof exists once.
-- **Next action:** The branch axis is closed at every source UI norm for real and complex scalars: `tanTwoTheta_branchFree_paperUINorm`.  What remains for `compiled_exact` is ONE axis, `[FiniteDimensional k U]`: the branch-free chain reaches an arbitrary Hilbert space through the finite-carrier compression `M = U + T''U`, which needs a finite-dimensional trial subspace to reach the intrinsic singular-system layer.  The selected-branch endpoints `sharp_paperUnitaryInvariantNorm` and `paperFaithful_tanTwoTheta_uiNorm` remove that restriction via the Riccati/approximation-number route (`sharp_transformed_prefix`, uniform stable pairs), so the honest remaining work is a branch-free analogue of THAT passage: an operator `2 X |I - X*X|^-1` built from the modulus of `I - X*X` rather than from `I - X*X` itself, with invertibility supplied by the quantitative form of `singularValue_ne_one`.  Do NOT try to recover it from the contractive Riccati API and do NOT route it through Theorem 8.1.
+
+**THE FINITE-DIMENSIONAL TRIAL SUBSPACE IS REMOVED 2026-08-08 (Claude Opus 5).  `compiled_specialization` -> `compiled_exact`.**  The one recorded axis is closed, for real and complex scalars alike:
+
+* `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace` -- ℂ;
+* `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_real` -- ℝ.
+
+Both elaborate with `[U.HasOrthogonalProjection]` (the formal encoding of the paper's *closed* subspace) and NO `[FiniteDimensional]` on `U` or on `E`.  Checked at the elaborator, not by grep.  Axiom-clean throughout: [propext, Classical.choice, Quot.sound].
+
+**WHERE THE FINITE DIMENSION ACTUALLY WAS.**  Not in the carrier compression.  Tracing back from the capstone, the restriction entered exactly once, at `sum_absDoubleAngleTangent_le` (DoubleAngle/TanTwoThetaBranchFree.lean), which diagonalizes the graph coordinate and consumes `T.singularValues` / `leftSingularVector` / `rightSingularBasis`.  The carrier `M := U ⊔ T''U` inherited the restriction only because it had to land there.  Shrinking `U` cannot rescue the compression: for any split `M = M0 ⊕ M1` with `M0 ≤ U` and `M1 ≤ Uᗮ`, all three off-diagonality conditions and both form bounds compress automatically, but `hinv` breaks, because it needs `M0` to be `(A+H)`-graph-invariant.  So the singular-basis argument is what had to go.
+
+**WHAT REPLACED IT.**  Approximate singular pairs, not finite carriers.  The input is a unit `u ∈ U`, a unit `v ∈ Uᗮ` and `t ≥ 0` with `‖T u - t v‖ ≤ ε` and `‖T* v - t u‖ ≤ ε` -- the per-index content of `ApproximateLeadingSingularFamily`, which exists for EVERY bounded operator with no compactness assumption.  The family is taken for the graph coordinate read BETWEEN THE BLOCKS, `blockGraphCoordinate T U : U →L Uᗮ`, so the right vectors lie in `U` and the left vectors in `Uᗮ` by typing rather than approximately; its approximation numbers are the ambient ones by the existing `sameApproximationSingularValues_ambientSubspaceBlock`.  New layers:
+* `DavisKahan/DoubleAngle/TanTwoThetaApproximatePair.lean` -- `RCLike`-generic, dimension-free: `paired_approximate_gap_inequality` (equation (7.6) cleared, with explicit error `(‖A‖+‖H‖)(2+‖T‖+t)ε`), `absDoubleAngleTangent_approximate_scalar`, `sum_absDoubleAngleTangent_le_of_approximatePairs`;
+* `DavisKahan/Sources/DavisKahan1970/TanTwoThetaBranchFreeInfinite.lean` -- the family, the split at its cutoff, and the `ε → 0` passage;
+* `DavisKahan/Sources/DavisKahan1970/TanTwoThetaBranchFreeInfiniteReal.lean` -- the real case by complexification.
+
+This is the LIMITING ARCHITECTURE of `sharp_transformed_prefix`, reused; only the per-pair estimate differs.  Nothing divides by `I - X*X`, asks for a contraction, or routes through Theorem 8.1, so the branch-free meaning is preserved: there is still no `approximationSingularValue 0 T < 1`, no `IsQuarterAcute`, and no spectral placement on the blocks of `A + H`.
+
+**THE pi/4 POLE, WITHOUT ASSUMING UNIFORM SEPARATION.**  This was the real mathematical risk and it is handled, not sidestepped.  Pointwise `cos 2θⱼ ≠ 0` does NOT give a uniform bound in infinite dimension.  What does is equation (7.6) itself: it forces `d t - err ≤ |1 - t²| |Re⟪v, H u⟫| ≤ |1 - t²| ‖H‖`, so for `t > 1/2` and `err ≤ d/4` the left side is at least `d/4 > 0`, which forces `‖H‖ > 0` and `|1 - t²| ≥ d/(4‖H‖)`; for `t ≤ 1/2` the pole is simply far away.  See `penalty_le_of_paired_approximate` (quantitative, `O(ε)` penalty) and `abs_one_sub_sq_pos_of_paired_approximate` (the qualitative `cos 2θ ≠ 0`, proved division-free so it holds even when `H = 0`).  The tail indices of the family, where the approximation number is at most `ε`, are far from the pole for trivial reasons.  Both contributions are `O(ε)` and both vanish in the limit.
+
+**ARBITRARY INDEX SET, NOT A PREFIX.**  `t ↦ 2t/|1 - t²|` is not monotone across the quarter turn, so a `tan 2Θ` representative carries the branch-free tangents as a multiset.  The core theorem therefore quantifies over an arbitrary `S : Finset ℕ`, with the family taken at `k = S.sup id + 1`.  The representative hypothesis is unchanged from the finite-dimensional row: `approximationSingularValue (π n) tanTwoTheta = absDoubleAngleTangent (approximationSingularValue n T)` for a rearrangement `π`.
+
+**REUSABLE API ADDED** (roadmap owner `OperatorTheory.Majorization`): `sum_abs_le_kyFanApproximationGauge_of_orthonormal` and `orthonormal_signFlip` in DoubleAngle/KyFanOrthonormal.lean -- the approximation-number counterpart of the finite `sum_abs_le_rectangularKyFanSum_of_orthonormal`.  The rephasing it performs IS the paper's "choose the sign according to `cos 2θⱼ`".  Stated generically, no paper-facing names.
+
+**ONE THING A LATER AUDITOR SHOULD KNOW, NOT A NEW GAP.**  Like every declaration already on this row, the new endpoints are the PERTURBATION form `2 · N(H)`, not the residual form `2 · N(R)` of the printed (DK-tan2).  That was already true of `tanTwoTheta_branchFree_paperUINorm`, and the 2026-08-07 audit recorded the finite-dimensional trial subspace as the row's ONLY remaining axis, so closing it closes the row on the recorded evidence.  If a future audit wants the residual form as a separate axis, it should be opened as its own scope note rather than folded in here.
+
+Validation: full `lake build` green (9490 jobs); `lake build FinishTanTwoTheta Challenge` green (9038 jobs); census checker, `probe_census_declarations.py --verify`, `check_declaration_name_drift.py` and `export_for_tauceti.py --check` all clean.
+- **Next action:** No mathematical gap and no recorded scope gap.  The branch axis and the finite-dimensional trial-subspace axis are both closed, for real and complex scalars, at every source unitarily invariant norm, with the sharp factor two.
 
 #### Section 2, paragraph after four theorems: Best constants and simultaneous equality
 
