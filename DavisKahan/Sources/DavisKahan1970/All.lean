@@ -32,5 +32,6 @@ import DavisKahan.Sources.DavisKahan1970.StableRiccatiPair
 import DavisKahan.Sources.DavisKahan1970.TanTheta
 import DavisKahan.Sources.DavisKahan1970.TanTwoTheta
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
+import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFreeInfinite
 
 /-! # `DavisKahan/Sources/DavisKahan1970` -/
