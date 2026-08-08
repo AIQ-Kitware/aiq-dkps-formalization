@@ -325,19 +325,20 @@ theorem approximationNumber_continuousOrthogonalBlockSum_le_max
   · exact le_trans hRdist.le (add_le_add (le_max_left _ _) le_rfl)
   · exact le_trans hQdist.le (add_le_add (le_max_right _ _) le_rfl)
 
-section ComplexMinMax
+section ScalarMinMax
 
 variable {E₀ E₁ F₀ F₁ : Type v}
-  [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
-  [NormedAddCommGroup E₁] [InnerProductSpace ℂ E₁] [CompleteSpace E₁]
-  [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
-  [NormedAddCommGroup F₁] [InnerProductSpace ℂ F₁] [CompleteSpace F₁]
+  [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
+  [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
+  [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
+  [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
 
 /-- Sharp interleaving lower bound: two independent lower witnesses of sizes
 `i + 1` and `j + 1` combine into an `(i + j + 2)`-dimensional witness for the
 block sum. -/
 theorem min_le_approximationNumber_continuousOrthogonalBlockSum
-    (A : E₀ →L[ℂ] F₀) (B : E₁ →L[ℂ] F₁) (i j : ℕ) :
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+    (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) (i j : ℕ) :
     min (A.approximationNumber i) (B.approximationNumber j) ≤
       (continuousOrthogonalBlockSum A B).approximationNumber (i + j + 1) := by
   classical
@@ -353,61 +354,59 @@ theorem min_le_approximationNumber_continuousOrthogonalBlockSum
     have := lt_of_lt_of_le hcon (min_le_right _ _)
     exact_mod_cast this
   obtain ⟨s, hms, v, hv, hV⟩ :=
-    ContinuousLinearMap.exists_linearIndependent_lowerBound_of_lt_approximationNumber
-      A i hm0 hmA
+    ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.out A i hm0 hmA
   obtain ⟨t, hmt, w, hw, hW⟩ :=
-    ContinuousLinearMap.exists_linearIndependent_lowerBound_of_lt_approximationNumber
-      B j hm0 hmB
+    ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.out B j hm0 hmB
   -- the combined witness family
   set f : Fin (i + 1) → WithLp 2 (E₀ × E₁) := fun k => WithLp.toLp 2 (v k, 0) with hf
   set g : Fin (j + 1) → WithLp 2 (E₀ × E₁) := fun l => WithLp.toLp 2 (0, w l) with hg
   set e : Fin (i + j + 1 + 1) ≃ (Fin (i + 1) ⊕ Fin (j + 1)) :=
     (finCongr (by omega)).trans finSumFinEquiv.symm with he
-  set V : Submodule ℂ E₀ := Submodule.span ℂ (Set.range v) with hVdef
-  set W : Submodule ℂ E₁ := Submodule.span ℂ (Set.range w) with hWdef
-  set P : Submodule ℂ (WithLp 2 (E₀ × E₁)) :=
-    (V.comap (WithLp.fstL 2 ℂ E₀ E₁).toLinearMap) ⊓
-      (W.comap (WithLp.sndL 2 ℂ E₀ E₁).toLinearMap) with hP
+  set V : Submodule 𝕜 E₀ := Submodule.span 𝕜 (Set.range v) with hVdef
+  set W : Submodule 𝕜 E₁ := Submodule.span 𝕜 (Set.range w) with hWdef
+  set P : Submodule 𝕜 (WithLp 2 (E₀ × E₁)) :=
+    (V.comap (WithLp.fstL 2 𝕜 E₀ E₁).toLinearMap) ⊓
+      (W.comap (WithLp.sndL 2 𝕜 E₀ E₁).toLinearMap) with hP
   -- linear independence of the two embedded families
-  have hfindep : LinearIndependent ℂ f :=
-    hv.map' (blockInl : E₀ →L[ℂ] WithLp 2 (E₀ × E₁)).toLinearMap
+  have hfindep : LinearIndependent 𝕜 f :=
+    hv.map' (blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁)).toLinearMap
       (by
         rw [LinearMap.ker_eq_bot]
         intro a b hab
         have : WithLp.toLp 2 (a, (0 : E₁)) = WithLp.toLp 2 (b, (0 : E₁)) := hab
         simpa using congrArg (fun z => (WithLp.ofLp z).1) this)
-  have hgindep : LinearIndependent ℂ g :=
-    hw.map' (blockInr : E₁ →L[ℂ] WithLp 2 (E₀ × E₁)).toLinearMap
+  have hgindep : LinearIndependent 𝕜 g :=
+    hw.map' (blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁)).toLinearMap
       (by
         rw [LinearMap.ker_eq_bot]
         intro a b hab
         have : WithLp.toLp 2 ((0 : E₀), a) = WithLp.toLp 2 ((0 : E₀), b) := hab
         simpa using congrArg (fun z => (WithLp.ofLp z).2) this)
-  have hfker : Submodule.span ℂ (Set.range f) ≤
-      LinearMap.ker (WithLp.sndL 2 ℂ E₀ E₁).toLinearMap := by
+  have hfker : Submodule.span 𝕜 (Set.range f) ≤
+      LinearMap.ker (WithLp.sndL 2 𝕜 E₀ E₁).toLinearMap := by
     rw [Submodule.span_le]
     rintro _ ⟨k, rfl⟩
     simp [hf, LinearMap.mem_ker]
-  have hgker : Submodule.span ℂ (Set.range g) ≤
-      LinearMap.ker (WithLp.fstL 2 ℂ E₀ E₁).toLinearMap := by
+  have hgker : Submodule.span 𝕜 (Set.range g) ≤
+      LinearMap.ker (WithLp.fstL 2 𝕜 E₀ E₁).toLinearMap := by
     rw [Submodule.span_le]
     rintro _ ⟨l, rfl⟩
     simp [hg, LinearMap.mem_ker]
-  have hdisj : Disjoint (Submodule.span ℂ (Set.range f))
-      (Submodule.span ℂ (Set.range g)) := by
+  have hdisj : Disjoint (Submodule.span 𝕜 (Set.range f))
+      (Submodule.span 𝕜 (Set.range g)) := by
     rw [Submodule.disjoint_def]
     intro x hx1 hx2
     have h1 : (WithLp.ofLp x).2 = 0 := hfker hx1
     have h2 : (WithLp.ofLp x).1 = 0 := hgker hx2
     apply WithLp.ofLp_injective 2
     exact Prod.ext (by simpa using h2) (by simpa using h1)
-  have hsum : LinearIndependent ℂ (Sum.elim f g) := hfindep.sum_type hgindep hdisj
-  have hu : LinearIndependent ℂ (fun k => Sum.elim f g (e k)) :=
+  have hsum : LinearIndependent 𝕜 (Sum.elim f g) := hfindep.sum_type hgindep hdisj
+  have hu : LinearIndependent 𝕜 (fun k => Sum.elim f g (e k)) :=
     hsum.comp e e.injective
   -- the span of the combined family lies in the product subspace
   have hrange : Set.range (fun k => Sum.elim f g (e k)) = Set.range (Sum.elim f g) :=
     e.surjective.range_comp _
-  have hspan : Submodule.span ℂ (Set.range (fun k => Sum.elim f g (e k))) ≤ P := by
+  have hspan : Submodule.span 𝕜 (Set.range (fun k => Sum.elim f g (e k))) ≤ P := by
     rw [hrange, Set.Sum.elim_range, Submodule.span_union]
     refine sup_le ?_ ?_
     · rw [Submodule.span_le]
@@ -424,7 +423,7 @@ theorem min_le_approximationNumber_continuousOrthogonalBlockSum
   set μ : ℝ := min s t with hμ
   have hmμ : m < μ := lt_min hms hmt
   have hμ0 : 0 ≤ μ := hm0.trans hmμ.le
-  have hlower : ∀ x ∈ Submodule.span ℂ (Set.range (fun k => Sum.elim f g (e k))),
+  have hlower : ∀ x ∈ Submodule.span 𝕜 (Set.range (fun k => Sum.elim f g (e k))),
       μ * ‖x‖ ≤ ‖T x‖ := by
     intro x hx
     obtain ⟨hx1, hx2⟩ := hspan hx
@@ -455,11 +454,12 @@ theorem min_le_approximationNumber_continuousOrthogonalBlockSum
         mul_pow μ ‖(WithLp.ofLp x).2‖ 2]
     exact le_of_sq_le_sq hsq (norm_nonneg _)
   have hfinal : m < (T.approximationNumber (i + j + 1) : ℝ) :=
-    (ContinuousLinearMap.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+    (ContinuousLinearMap.HasMinMaxLowerBound.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+      ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.out
       T (i + j + 1) hm0).mpr ⟨μ, hmμ, _, hu, hlower⟩
   exact absurd hfinal (by rw [← hm]; exact lt_irrefl m)
 
-end ComplexMinMax
+end ScalarMinMax
 
 section MergeCombinatorics
 
@@ -576,12 +576,13 @@ singular-value lists.  In arbitrary Hilbert spaces, finite Ky Fan prefixes are
 localized to finite-dimensional compressions by the exact approximation-number
 min--max theorem, and the finite result is passed to the limit. -/
 theorem kyFanApproximationGauge_continuousOrthogonalBlockSum
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     {E₀ E₁ F₀ F₁ : Type v}
-    [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
-    [NormedAddCommGroup E₁] [InnerProductSpace ℂ E₁] [CompleteSpace E₁]
-    [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
-    [NormedAddCommGroup F₁] [InnerProductSpace ℂ F₁] [CompleteSpace F₁]
-    (k : ℕ) (A : E₀ →L[ℂ] F₀) (B : E₁ →L[ℂ] F₁) :
+    [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
+    [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
+    (k : ℕ) (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) :
     kyFanApproximationGauge k (continuousOrthogonalBlockSum A B) =
       splitKyFanGauge k A B := by
   classical
@@ -621,12 +622,13 @@ theorem kyFanApproximationGauge_continuousOrthogonalBlockSum
 /-- Weak majorization is stable under orthogonal block sum.  This is the
 infinite-dimensional singular-value content of Davis--Kahan Lemma 6.1. -/
 theorem kyFanApproximationGauge_blockSum_le
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     {E₀ E₁ F₀ F₁ : Type v}
-    [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
-    [NormedAddCommGroup E₁] [InnerProductSpace ℂ E₁] [CompleteSpace E₁]
-    [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
-    [NormedAddCommGroup F₁] [InnerProductSpace ℂ F₁] [CompleteSpace F₁]
-    {A C : E₀ →L[ℂ] F₀} {B D : E₁ →L[ℂ] F₁}
+    [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
+    [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
+    {A C : E₀ →L[𝕜] F₀} {B D : E₁ →L[𝕜] F₁}
     (hA : ∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k C)
     (hB : ∀ k, kyFanApproximationGauge k B ≤ kyFanApproximationGauge k D) :
     ∀ k, kyFanApproximationGauge k (continuousOrthogonalBlockSum A B) ≤
@@ -640,9 +642,9 @@ theorem kyFanApproximationGauge_blockSum_le
 prefixes. -/
 theorem approximationSingularValue_eq_kyFan_succ_sub
     {E F : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    (n : ℕ) (A : E →L[ℂ] F) :
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (n : ℕ) (A : E →L[𝕜] F) :
     A.approximationNumber n =
       kyFanApproximationGauge (n + 1) A - kyFanApproximationGauge n A := by
   unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
@@ -652,12 +654,13 @@ theorem approximationSingularValue_eq_kyFan_succ_sub
 /-- Orthogonal block sums preserve complete singular-value equality component
 by component. -/
 theorem hasSameApproximationNumbers_continuousOrthogonalBlockSum
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     {E₀ E₁ F₀ F₁ : Type v}
-    [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
-    [NormedAddCommGroup E₁] [InnerProductSpace ℂ E₁] [CompleteSpace E₁]
-    [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
-    [NormedAddCommGroup F₁] [InnerProductSpace ℂ F₁] [CompleteSpace F₁]
-    {A C : E₀ →L[ℂ] F₀} {B D : E₁ →L[ℂ] F₁}
+    [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
+    [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
+    {A C : E₀ →L[𝕜] F₀} {B D : E₁ →L[𝕜] F₁}
     (hA : ContinuousLinearMap.HasSameApproximationNumbers A C)
     (hB : ContinuousLinearMap.HasSameApproximationNumbers B D) :
     ContinuousLinearMap.HasSameApproximationNumbers
@@ -687,17 +690,18 @@ theorem hasSameApproximationNumbers_continuousOrthogonalBlockSum
 /-- Heterogeneous version: orthogonal block sums preserve complete singular
 sequences even when the source and target coordinate spaces differ. -/
 theorem sameApproximationSingularSequence_continuousOrthogonalBlockSum
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     {E₀ E₁ F₀ F₁ E₀' E₁' F₀' F₁' : Type v}
-    [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
-    [NormedAddCommGroup E₁] [InnerProductSpace ℂ E₁] [CompleteSpace E₁]
-    [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
-    [NormedAddCommGroup F₁] [InnerProductSpace ℂ F₁] [CompleteSpace F₁]
-    [NormedAddCommGroup E₀'] [InnerProductSpace ℂ E₀'] [CompleteSpace E₀']
-    [NormedAddCommGroup E₁'] [InnerProductSpace ℂ E₁'] [CompleteSpace E₁']
-    [NormedAddCommGroup F₀'] [InnerProductSpace ℂ F₀'] [CompleteSpace F₀']
-    [NormedAddCommGroup F₁'] [InnerProductSpace ℂ F₁'] [CompleteSpace F₁']
-    {A : E₀ →L[ℂ] F₀} {B : E₁ →L[ℂ] F₁}
-    {C : E₀' →L[ℂ] F₀'} {D : E₁' →L[ℂ] F₁'}
+    [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
+    [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
+    [NormedAddCommGroup E₀'] [InnerProductSpace 𝕜 E₀'] [CompleteSpace E₀']
+    [NormedAddCommGroup E₁'] [InnerProductSpace 𝕜 E₁'] [CompleteSpace E₁']
+    [NormedAddCommGroup F₀'] [InnerProductSpace 𝕜 F₀'] [CompleteSpace F₀']
+    [NormedAddCommGroup F₁'] [InnerProductSpace 𝕜 F₁'] [CompleteSpace F₁']
+    {A : E₀ →L[𝕜] F₀} {B : E₁ →L[𝕜] F₁}
+    {C : E₀' →L[𝕜] F₀'} {D : E₁' →L[𝕜] F₁'}
     (hA : ContinuousLinearMap.HasSameApproximationNumbers A C)
     (hB : ContinuousLinearMap.HasSameApproximationNumbers B D) :
     ContinuousLinearMap.HasSameApproximationNumbers

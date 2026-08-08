@@ -31,39 +31,40 @@ open scoped InnerProductSpace
 
 noncomputable section
 
-universe v
+universe u v
 
+variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type v}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 
 /-- A subspace admitting an orthogonal projection inside a complete ambient
 space is itself complete.  `local instance` does not propagate through imports,
 so it is reinstalled here. -/
 local instance instCompleteSpaceCoeOfHasOrthogonalProjectionLemma61
-    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
+    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] : CompleteSpace U :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
 /-- A bounded operator occupying one prescribed projection block. -/
 def paperProjectionBlock
-    (Ω Γ : Submodule ℂ E)
+    (Ω Γ : Submodule 𝕜 E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
-    (K : E →L[ℂ] E) : E →L[ℂ] E :=
+    (K : E →L[𝕜] E) : E →L[𝕜] E :=
   Ω.starProjection ∘L K ∘L Γ.starProjection
 
 /-- The compression of `K` to the block coordinates `Γ → Ω`. -/
 def paperBlockCompression
-    (Ω Γ : Submodule ℂ E)
+    (Ω Γ : Submodule 𝕜 E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
-    (K : E →L[ℂ] E) : Γ →L[ℂ] Ω :=
+    (K : E →L[𝕜] E) : Γ →L[𝕜] Ω :=
   Ω.subtypeL.adjoint ∘L K ∘L Γ.subtypeL
 
 /-- The ambient projection block is the compression conjugated by the canonical
 inclusion and its adjoint. -/
 theorem paperProjectionBlock_eq_subtypeL_comp
-    (Ω Γ : Submodule ℂ E)
+    (Ω Γ : Submodule 𝕜 E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
-    (K : E →L[ℂ] E) :
+    (K : E →L[𝕜] E) :
     paperProjectionBlock Ω Γ K =
       Ω.subtypeL ∘L paperBlockCompression Ω Γ K ∘L Γ.subtypeL.adjoint := by
   rw [paperProjectionBlock, paperBlockCompression, Submodule.adjoint_subtypeL,
@@ -73,9 +74,9 @@ theorem paperProjectionBlock_eq_subtypeL_comp
 /-- The ambient projection block and its compression have the same complete
 approximation singular sequence. -/
 theorem paperProjectionBlock_same_compression
-    (Ω Γ : Submodule ℂ E)
+    (Ω Γ : Submodule 𝕜 E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
-    (K : E →L[ℂ] E) :
+    (K : E →L[𝕜] E) :
     SameApproximationSingularSequence
       (paperProjectionBlock Ω Γ K) (paperBlockCompression Ω Γ K) := by
   rw [paperProjectionBlock_eq_subtypeL_comp]
@@ -84,9 +85,9 @@ theorem paperProjectionBlock_same_compression
 /-- The two complementary blocks are unitarily equivalent to the Hilbert
 orthogonal block sum of their compressions. -/
 theorem paperProjectionBlockPair_same_blockSum
-    (Ω Γ : Submodule ℂ E)
+    (Ω Γ : Submodule 𝕜 E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
-    (K L : E →L[ℂ] E) :
+    (K L : E →L[𝕜] E) :
     SameApproximationSingularSequence
       (paperProjectionBlock Ω Γ K + paperProjectionBlock Ωᗮ Γᗮ L)
       (continuousOrthogonalBlockSum
@@ -135,9 +136,10 @@ theorem paperProjectionBlockPair_same_blockSum
 
 /-- **Davis--Kahan 1970, Lemma 6.1, forward direction.** -/
 theorem paperLemma61_all_kyFan
-    (Ω Γ : Submodule ℂ E)
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+    (Ω Γ : Submodule 𝕜 E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
-    (K Ktilde L Ltilde : E →L[ℂ] E)
+    (K Ktilde L Ltilde : E →L[𝕜] E)
     (h₀ : ∀ k,
       kyFanApproximationGauge k (paperProjectionBlock Ω Γ K) ≤
         kyFanApproximationGauge k (paperProjectionBlock Ω Γ L))
@@ -164,10 +166,11 @@ theorem paperLemma61_all_kyFan
 
 /-- Lemma 6.1 for every source-defined unitarily invariant norm. -/
 theorem paperLemma61_every_unitarilyInvariantNorm
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (N : PaperUnitaryInvariantNorm)
-    (Ω Γ : Submodule ℂ E)
+    (Ω Γ : Submodule 𝕜 E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
-    (K Ktilde L Ltilde : E →L[ℂ] E)
+    (K Ktilde L Ltilde : E →L[𝕜] E)
     (h₀ : ∀ k,
       kyFanApproximationGauge k (paperProjectionBlock Ω Γ K) ≤
         kyFanApproximationGauge k (paperProjectionBlock Ω Γ L))
@@ -232,14 +235,14 @@ private theorem sum_range_add_sum_range_le_two_mul
     linarith
 
 variable {E₀ E₁ F₀ F₁ : Type v}
-  [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
-  [NormedAddCommGroup E₁] [InnerProductSpace ℂ E₁] [CompleteSpace E₁]
-  [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
-  [NormedAddCommGroup F₁] [InnerProductSpace ℂ F₁] [CompleteSpace F₁]
+  [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
+  [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
+  [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
+  [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
 
 omit [CompleteSpace E₀] [CompleteSpace F₀] in
 /-- Approximation singular values decrease with the index. -/
-private theorem antitone_approximationSingularValue (A : E₀ →L[ℂ] F₀) :
+private theorem antitone_approximationSingularValue (A : E₀ →L[𝕜] F₀) :
     Antitone fun n => approximationSingularValue n A := by
   intro m n hmn
   exact_mod_cast A.approximationNumber_antitone hmn
@@ -247,7 +250,7 @@ private theorem antitone_approximationSingularValue (A : E₀ →L[ℂ] F₀) :
 /-- When the two blocks have identical singular sequences, the even Ky Fan
 prefixes of their orthogonal block sum double the prefixes of one block. -/
 theorem splitKyFanGauge_two_mul_of_same
-    {A : E₀ →L[ℂ] F₀} {B : E₁ →L[ℂ] F₁}
+    {A : E₀ →L[𝕜] F₀} {B : E₁ →L[𝕜] F₁}
     (h : SameApproximationSingularSequence A B) (k : ℕ) :
     splitKyFanGauge (2 * k) A B = 2 * kyFanApproximationGauge k A := by
   have hgauge : ∀ m, kyFanApproximationGauge m B = kyFanApproximationGauge m A :=
@@ -276,9 +279,10 @@ end MergeEven
 /-- The converse in Lemma 6.1 under the source paper's matching-singular-value
 hypotheses. -/
 theorem paperLemma61_converse
-    (Ω Γ : Submodule ℂ E)
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+    (Ω Γ : Submodule 𝕜 E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
-    (K Ktilde L Ltilde : E →L[ℂ] E)
+    (K Ktilde L Ltilde : E →L[𝕜] E)
     (hK : SameApproximationSingularValues
       (paperProjectionBlock Ω Γ K)
       (paperProjectionBlock Ωᗮ Γᗮ Ktilde))
