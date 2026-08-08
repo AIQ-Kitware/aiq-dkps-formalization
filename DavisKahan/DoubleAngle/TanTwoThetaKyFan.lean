@@ -130,11 +130,20 @@ section Scalar
 variable {A H T : E →ₗ[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
   {a b : ℝ}
 
-/-- **The paired-singular-vector scalar inequality of equation (7.6).**
-For each singular pair of the graph coordinate with nonzero singular value,
-the double-angle tangent is controlled by the matched diagonal coefficient of
-the perturbation. -/
-theorem doubleAngleTangent_scalar
+/-- **The paired-singular-vector inequality of equation (7.6), branch-free.**
+
+This is the exact scalar consequence Davis and Kahan extract from sandwiching
+the invariance relation between a matched singular pair of the graph
+coordinate.  Written in this cleared form -- multiplied through by
+`1 - tan² θⱼ` rather than divided by it -- it carries **no** hypothesis on
+which side of the quarter turn the angle lies, because `1 - t²` is only ever
+multiplied, never inverted.
+
+The printed proof's two subsequent moves, namely that `cos 2θⱼ ≠ 0` follows
+from the gap and that the sign of the matched coefficient is dictated by the
+sign of `cos 2θⱼ`, are both read off from this single inequality; see
+`DavisKahan/DoubleAngle/TanTwoThetaBranchFree.lean`. -/
+theorem paired_singularVector_gap_inequality
     (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     (hAU : ∀ x ∈ U, A x ∈ U)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
@@ -142,17 +151,14 @@ theorem doubleAngleTangent_scalar
     (hUb : ∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
     (hUa : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_𝕜 ≤ a * ‖x‖ ^ 2)
     (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
-    (hT1 : T.singularValues 0 < 1)
     {i : Fin (finrank 𝕜 E)} (hi : T.singularValues (i : ℕ) ≠ 0) :
-    (b - a) * doubleAngleTangent (T.singularValues (i : ℕ)) ≤
-      2 * RCLike.re ⟪leftSingularVector T i, H (rightSingularBasis T i)⟫_𝕜 := by
+    (b - a) * T.singularValues (i : ℕ) ≤
+      (1 - T.singularValues (i : ℕ) ^ 2) *
+        RCLike.re ⟪leftSingularVector T i, H (rightSingularBasis T i)⟫_𝕜 := by
   set t : ℝ := T.singularValues (i : ℕ) with hts
   set u : E := rightSingularBasis T i with hus
   set v : E := leftSingularVector T i with hvs
   have ht0 : 0 < t := lt_of_le_of_ne (T.singularValues_nonneg _) (Ne.symm hi)
-  have ht1 : t < 1 :=
-    lt_of_le_of_lt (T.singularValues_antitone (Nat.zero_le (i : ℕ))) hT1
-  have h1t : (0 : ℝ) < 1 - t ^ 2 := by nlinarith
   have humem : u ∈ U := rightSingularBasis_mem_of_singularValue_ne_zero hTzero hi
   have hvmem : v ∈ Uᗮ := leftSingularVector_mem_orthogonal hTmem i
   have hunorm : ‖u‖ = 1 := (rightSingularBasis T).orthonormal.norm_eq_one i
@@ -210,9 +216,39 @@ theorem doubleAngleTangent_scalar
     simpa using h
   rw [hHc] at hre
   set c : ℝ := RCLike.re ⟪v, H u⟫_𝕜 with hcs
-  have hkey : (b - a) * t ≤ (1 - t ^ 2) * c := by
-    nlinarith [mul_le_mul_of_nonneg_left hAvv ht0.le,
-      mul_le_mul_of_nonneg_left hAuu ht0.le]
+  nlinarith [mul_le_mul_of_nonneg_left hAvv ht0.le,
+    mul_le_mul_of_nonneg_left hAuu ht0.le]
+
+/-- **The paired-singular-vector scalar inequality of equation (7.6).**
+For each singular pair of the graph coordinate with nonzero singular value,
+the double-angle tangent is controlled by the matched diagonal coefficient of
+the perturbation.
+
+This is the *selected-branch* reading: the hypothesis `hT1` places every angle
+strictly inside the acute quarter, so `1 - t²` is positive and the cleared
+inequality `paired_singularVector_gap_inequality` may be divided through.  The
+unrestricted printed theorem is in
+`DavisKahan/DoubleAngle/TanTwoThetaBranchFree.lean`. -/
+theorem doubleAngleTangent_scalar
+    (hA : A.IsSymmetric) (hH : H.IsSymmetric)
+    (hAU : ∀ x ∈ U, A x ∈ U)
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    (hTmem : ∀ x, T x ∈ Uᗮ) (hTzero : ∀ x ∈ Uᗮ, T x = 0)
+    (hUb : ∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
+    (hUa : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_𝕜 ≤ a * ‖x‖ ^ 2)
+    (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
+    (hT1 : T.singularValues 0 < 1)
+    {i : Fin (finrank 𝕜 E)} (hi : T.singularValues (i : ℕ) ≠ 0) :
+    (b - a) * doubleAngleTangent (T.singularValues (i : ℕ)) ≤
+      2 * RCLike.re ⟪leftSingularVector T i, H (rightSingularBasis T i)⟫_𝕜 := by
+  set t : ℝ := T.singularValues (i : ℕ) with hts
+  have ht0 : 0 < t := lt_of_le_of_ne (T.singularValues_nonneg _) (Ne.symm hi)
+  have ht1 : t < 1 :=
+    lt_of_le_of_lt (T.singularValues_antitone (Nat.zero_le (i : ℕ))) hT1
+  have h1t : (0 : ℝ) < 1 - t ^ 2 := by nlinarith
+  have hkey := paired_singularVector_gap_inequality hA hH hAU hHU hHUperp
+    hTmem hTzero hUb hUa hinv hi
+  rw [← hts] at hkey
   unfold doubleAngleTangent
   rw [show (b - a) * (2 * t / (1 - t ^ 2)) =
     ((b - a) * (2 * t)) / (1 - t ^ 2) from by ring, div_le_iff₀ h1t]

@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.DoubleAngle.TanTwoThetaKyFan
+import DavisKahan.DoubleAngle.TanTwoThetaBranchFree
 import DavisKahan.DoubleAngle.KyFanOrthonormal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
@@ -135,12 +135,26 @@ section Main
 variable {A H T : E →L[𝕜] E} {U : Submodule 𝕜 E} [FiniteDimensional 𝕜 U]
   {a b : ℝ}
 
-/-- **The Ky Fan root of the `tan 2Θ` theorem on an arbitrary Hilbert
-space** (finite-dimensional invariant configuration).  Every prefix sum of
-the double-angle tangents of the graph-coordinate approximation numbers is
-controlled by the corresponding approximation-number prefix of the
-off-diagonal perturbation, with the sharp constant two. -/
-theorem kyFan_doubleAngleTangent_offDiagonal_le_of_finiteDimensional_invariantSubspace
+/-- **The branch-free Ky Fan root of the `tan 2Θ` theorem on an arbitrary
+Hilbert space** (finite-dimensional invariant configuration).
+
+For *any* finite set of indices, the total branch-free double-angle tangent
+of the graph-coordinate approximation numbers is controlled by the
+corresponding approximation-number prefix of the off-diagonal perturbation,
+with the sharp constant two.  **No branch is selected or assumed**: the
+perturbed invariant subspace may make angles arbitrarily close to `π/2` with
+the trial subspace, exactly as Davis and Kahan's Section 2 statement permits.
+
+The index set is arbitrary rather than an initial segment because
+`t ↦ 2t/|1 - t²|` is not monotone across the quarter turn, so a `tan 2Θ`
+representative carries those numbers as a multiset; see
+`DavisKahan/DoubleAngle/TanTwoThetaBranchFree.lean`.
+
+The selected-branch prefix form
+`kyFan_doubleAngleTangent_offDiagonal_le_of_finiteDimensional_invariantSubspace`
+is derived from this one below, so the compression to the finite carrier is
+carried out exactly once. -/
+theorem sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
     (hAU : ∀ x ∈ U, A x ∈ U)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
@@ -148,11 +162,11 @@ theorem kyFan_doubleAngleTangent_offDiagonal_le_of_finiteDimensional_invariantSu
     (hUb : ∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
     (hUa : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_𝕜 ≤ a * ‖x‖ ^ 2)
     (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
-    (hT1 : approximationSingularValue 0 T < 1)
-    (k : ℕ) :
-    (b - a) * ∑ n ∈ Finset.range k,
-        doubleAngleTangent (approximationSingularValue n T) ≤
-      2 * kyFanApproximationGauge k H := by
+    (hab : a < b)
+    (S : Finset ℕ) :
+    (b - a) * ∑ n ∈ S,
+        absDoubleAngleTangent (approximationSingularValue n T) ≤
+      2 * kyFanApproximationGauge S.card H := by
   classical
   -- the finite-dimensional carrier of the whole configuration
   set W : Submodule 𝕜 E := U.map (T : E →ₗ[𝕜] E) with hWdef
@@ -339,39 +353,129 @@ theorem kyFan_doubleAngleTangent_offDiagonal_le_of_finiteDimensional_invariantSu
     have h := approximationSingularValue_eq_singularValues T'.toLinearMap n
     rw [hT'id] at h
     rw [← h, hTa n]
-  have hT1' : T'.toLinearMap.singularValues 0 < 1 := by
-    rw [hTsv 0]
-    exact hT1
+  -- the participating indices inside the finite carrier
+  set S' : Finset (Fin (finrank 𝕜 ↥M)) :=
+    Finset.univ.filter (fun j : Fin (finrank 𝕜 ↥M) => (j : ℕ) ∈ S) with hS'def
+  have hS'inj : ∀ x ∈ S', ∀ y ∈ S', (x : ℕ) = (y : ℕ) → x = y :=
+    fun x _ y _ h => Fin.val_injective h
+  have himg : S'.image (fun x : Fin (finrank 𝕜 ↥M) => (x : ℕ)) =
+      S.filter (fun n => n < finrank 𝕜 ↥M) := by
+    ext n
+    simp only [hS'def, Finset.mem_image, Finset.mem_filter, Finset.mem_univ,
+      true_and]
+    constructor
+    · rintro ⟨x, hx, rfl⟩
+      exact ⟨hx, x.2⟩
+    · rintro ⟨hnS, hlt⟩
+      exact ⟨⟨n, hlt⟩, hnS, rfl⟩
+  have hS'card : S'.card ≤ S.card := by
+    calc S'.card = (S'.image (fun x : Fin (finrank 𝕜 ↥M) => (x : ℕ))).card :=
+        (Finset.card_image_of_injOn hS'inj).symm
+      _ = (S.filter (fun n => n < finrank 𝕜 ↥M)).card := by rw [himg]
+      _ ≤ S.card := Finset.card_le_card (Finset.filter_subset _ _)
+  have hLHS : ∑ n ∈ S, absDoubleAngleTangent (approximationSingularValue n T) =
+      ∑ x ∈ S',
+        absDoubleAngleTangent (T'.toLinearMap.singularValues (x : ℕ)) := by
+    have hsplit : ∑ n ∈ S,
+          absDoubleAngleTangent (approximationSingularValue n T) =
+        ∑ n ∈ S.filter (fun n => n < finrank 𝕜 ↥M),
+          absDoubleAngleTangent (approximationSingularValue n T) := by
+      refine (Finset.sum_filter_of_ne ?_).symm
+      intro n _ hne
+      by_contra hlt
+      exact hne (by
+        rw [← hTsv n,
+          T'.toLinearMap.singularValues_of_finrank_le (Nat.le_of_not_lt hlt),
+          absDoubleAngleTangent_zero])
+    rw [hsplit, ← himg, Finset.sum_image hS'inj]
+    exact Finset.sum_congr rfl fun x _ => by rw [hTsv (x : ℕ)]
   -- one-sided transport of the perturbation prefix
   have hH'id : H'.toLinearMap.toContinuousLinearMap = H' := by
     ext x; rfl
-  have hHbridge :
-      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
-        H'.toLinearMap = kyFanApproximationGauge k H' := by
-    rw [rectangularKyFanSum_eq_kyFanApproximationGauge k H'.toLinearMap,
+  have hHbridge : ∀ j : ℕ,
+      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum j
+        H'.toLinearMap = kyFanApproximationGauge j H' := by
+    intro j
+    rw [rectangularKyFanSum_eq_kyFanApproximationGauge j H'.toLinearMap,
       hH'id]
-  have hHgauge : kyFanApproximationGauge k H' ≤
-      kyFanApproximationGauge k H := by
+  have hHgauge : ∀ j : ℕ, kyFanApproximationGauge j H' ≤
+      kyFanApproximationGauge j H := by
+    intro j
     unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
     refine Finset.sum_le_sum fun n _ => ?_
     rw [hH'def]
     exact approximationSingularValue_comp_contractions_le n
       M.orthogonalProjectionOnto H M.subtypeL
       M.orthogonalProjectionOnto_norm_le M.norm_subtypeL_le
-  -- apply the finite theorem on the carrier
-  have hfin := kyFan_doubleAngleTangent_offDiagonal_le
+  have hHmono : kyFanApproximationGauge S'.card H ≤
+      kyFanApproximationGauge S.card H := by
+    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+    exact Finset.sum_le_sum_of_subset_of_nonneg
+      (fun x hx => Finset.mem_range.mpr
+        (lt_of_lt_of_le (Finset.mem_range.mp hx) hS'card))
+      fun n _ _ => approximationSingularValue_nonneg n H
+  -- apply the branch-free finite theorem on the carrier
+  have hfin := sum_absDoubleAngleTangent_le
     (hsym A hA) (hsym H hH) hAU' hHU' hHUperp' hTmem' hTzero'
-    hUb' hUa' hinv' hT1' k
-  calc (b - a) * ∑ n ∈ Finset.range k,
-        doubleAngleTangent (approximationSingularValue n T)
-      = (b - a) * ∑ n ∈ Finset.range k,
-          doubleAngleTangent (T'.toLinearMap.singularValues n) := by
-        congr 1
-        exact Finset.sum_congr rfl fun n _ => by rw [hTsv n]
-    _ ≤ 2 * RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k
+    hUb' hUa' hinv' hab S'
+  rw [hLHS]
+  calc (b - a) * ∑ x ∈ S',
+        absDoubleAngleTangent (T'.toLinearMap.singularValues (x : ℕ))
+      ≤ 2 * RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum S'.card
           H'.toLinearMap := hfin
-    _ = 2 * kyFanApproximationGauge k H' := by rw [hHbridge]
-    _ ≤ 2 * kyFanApproximationGauge k H := by linarith
+    _ = 2 * kyFanApproximationGauge S'.card H' := by rw [hHbridge S'.card]
+    _ ≤ 2 * kyFanApproximationGauge S'.card H := by linarith [hHgauge S'.card]
+    _ ≤ 2 * kyFanApproximationGauge S.card H := by linarith
+
+/-- **The Ky Fan root of the `tan 2Θ` theorem on an arbitrary Hilbert
+space** (finite-dimensional invariant configuration).  Every prefix sum of
+the double-angle tangents of the graph-coordinate approximation numbers is
+controlled by the corresponding approximation-number prefix of the
+off-diagonal perturbation, with the sharp constant two.
+
+This is the selected-branch reading, recovered from the branch-free theorem
+above: under `hT1` every principal angle is strictly acute, so the two
+double-angle tangents agree termwise. -/
+theorem kyFan_doubleAngleTangent_offDiagonal_le_of_finiteDimensional_invariantSubspace
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U)
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    (hTmem : ∀ x, T x ∈ Uᗮ) (hTzero : ∀ x ∈ Uᗮ, T x = 0)
+    (hUb : ∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
+    (hUa : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_𝕜 ≤ a * ‖x‖ ^ 2)
+    (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
+    (hT1 : approximationSingularValue 0 T < 1)
+    (k : ℕ) :
+    (b - a) * ∑ n ∈ Finset.range k,
+        doubleAngleTangent (approximationSingularValue n T) ≤
+      2 * kyFanApproximationGauge k H := by
+  classical
+  have hlt : ∀ n, approximationSingularValue n T < 1 := fun n =>
+    lt_of_le_of_lt (approximationSingularValue_antitone T (Nat.zero_le n)) hT1
+  have hnn : ∀ n, 0 ≤ approximationSingularValue n T := fun n =>
+    approximationSingularValue_nonneg n T
+  have hsame : ∀ n, doubleAngleTangent (approximationSingularValue n T) =
+      absDoubleAngleTangent (approximationSingularValue n T) := fun n =>
+    (absDoubleAngleTangent_eq_doubleAngleTangent (hlt n) (hnn n)).symm
+  have hsum : ∑ n ∈ Finset.range k,
+      doubleAngleTangent (approximationSingularValue n T) =
+        ∑ n ∈ Finset.range k,
+          absDoubleAngleTangent (approximationSingularValue n T) :=
+    Finset.sum_congr rfl fun n _ => hsame n
+  rcases lt_or_ge a b with hab | hab
+  · have h := sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace
+      hA hH hAU hHU hHUperp hTmem hTzero hUb hUa hinv hab (Finset.range k)
+    rw [Finset.card_range] at h
+    rw [hsum]
+    exact h
+  · -- with no gap the left side is nonpositive and the estimate is trivial
+    have hnonneg : 0 ≤ ∑ n ∈ Finset.range k,
+        doubleAngleTangent (approximationSingularValue n T) :=
+      Finset.sum_nonneg fun n _ => doubleAngleTangent_nonneg (hnn n) (hlt n)
+    have hRHS : 0 ≤ kyFanApproximationGauge k H := by
+      unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+      exact Finset.sum_nonneg fun n _ => approximationSingularValue_nonneg n H
+    nlinarith
 
 /-- Representative packaging of the infinite-dimensional Ky Fan root: any
 operator between Hilbert spaces whose approximation numbers are the
@@ -434,6 +538,91 @@ theorem tanTwoTheta0_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariant
     intro k
     have h := kyFan_tanTwoTheta0_offDiagonal_le_of_finiteDimensional_invariantSubspace hA hH hAU hHU
       hHUperp hTmem hTzero hUb hUa hinv hT1 tanTwoTheta0 htan k
+    linarith
+  obtain ⟨hmem, hgauge⟩ :=
+    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hHmem hscaled
+  exact ⟨hmem, by linarith⟩
+
+/-- Representative packaging of the branch-free Ky Fan root: any operator
+between Hilbert spaces whose approximation numbers are a **rearrangement**
+of the branch-free double-angle tangents of the graph-coordinate
+approximation numbers obeys every prefix bound.
+
+The rearrangement `π` is what makes this the honest statement: the
+approximation numbers of an operator are antitone, while `t ↦ 2t/|1 - t²|`
+is not monotone across the quarter turn.  A unitarily invariant norm sees
+only the multiset of singular values, so nothing is lost. -/
+theorem kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace
+    {E₂ F₂ : Type*}
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
+    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U)
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    (hTmem : ∀ x, T x ∈ Uᗮ) (hTzero : ∀ x ∈ Uᗮ, T x = 0)
+    (hUb : ∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
+    (hUa : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_𝕜 ≤ a * ‖x‖ ^ 2)
+    (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
+    (hab : a < b)
+    (tanTwoTheta : E₂ →L[𝕜] F₂) (π : ℕ ≃ ℕ)
+    (htan : ∀ n, approximationSingularValue (π n) tanTwoTheta =
+      absDoubleAngleTangent (approximationSingularValue n T))
+    (k : ℕ) :
+    (b - a) * kyFanApproximationGauge k tanTwoTheta ≤
+      2 * kyFanApproximationGauge k H := by
+  classical
+  set S : Finset ℕ := (Finset.range k).image π.symm with hSdef
+  have hScard : S.card = k := by
+    rw [hSdef, Finset.card_image_of_injective _ π.symm.injective,
+      Finset.card_range]
+  have hgauge : kyFanApproximationGauge k tanTwoTheta =
+      ∑ n ∈ S, absDoubleAngleTangent (approximationSingularValue n T) := by
+    rw [hSdef, Finset.sum_image (fun x _ y _ h => π.symm.injective h)]
+    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+    refine Finset.sum_congr rfl fun j _ => ?_
+    rw [← htan (π.symm j), Equiv.apply_symm_apply]
+    rfl
+  have h := sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace
+    hA hH hAU hHU hHUperp hTmem hTzero hUb hUa hinv hab S
+  rw [hScard] at h
+  rw [hgauge]
+  exact h
+
+/-- **Davis--Kahan 1970, the unrestricted `tan 2Θ` theorem, every
+Fan-dominant unitary-invariant ideal, arbitrary Hilbert space**
+(finite-dimensional invariant configuration).
+
+If the fully off-diagonal perturbation `H` belongs to the ideal, then so does
+every branch-free `tan 2Θ` representative, and
+`(b - a) · N(tan 2Θ) ≤ 2 · N(H)`.
+
+**No branch is selected and none is assumed.**  In particular there is no
+hypothesis `approximationSingularValue 0 T < 1`; the perturbed invariant
+subspace may make angles arbitrarily close to `π/2` with the trial
+subspace. -/
+theorem absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U)
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    (hTmem : ∀ x, T x ∈ Uᗮ) (hTzero : ∀ x ∈ Uᗮ, T x = 0)
+    (hab : a < b)
+    (hUb : ∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
+    (hUa : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_𝕜 ≤ a * ‖x‖ ^ 2)
+    (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
+    (tanTwoTheta : E →L[𝕜] E) (π : ℕ ≃ ℕ)
+    (htan : ∀ n, approximationSingularValue (π n) tanTwoTheta =
+      absDoubleAngleTangent (approximationSingularValue n T))
+    (hHmem : N.Mem H) :
+    N.Mem tanTwoTheta ∧
+      (b - a) * N.gauge tanTwoTheta ≤ 2 * N.gauge H := by
+  have hδ : (0 : ℝ) < (b - a) / 2 := by linarith
+  have hscaled : ∀ k,
+      (b - a) / 2 * kyFanApproximationGauge k tanTwoTheta ≤
+        kyFanApproximationGauge k H := by
+    intro k
+    have h := kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace
+      hA hH hAU hHU hHUperp hTmem hTzero hUb hUa hinv hab tanTwoTheta π htan k
     linarith
   obtain ⟨hmem, hgauge⟩ :=
     mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hHmem hscaled
