@@ -1152,6 +1152,399 @@ theorem beamGram_orthogonal_direction (ε : ℝ) :
   dsimp only
   linear_combination (ε ^ 2 / 30 * (-Real.sqrt 75 - Real.sqrt 76)) * hs
     + (ε ^ 2 / 30 * (Real.sqrt 75 + Real.sqrt 76)) * hr
+open DavisKahan1970.Section9 in
+/-- The residual Gram form along the direction `c φ₁ - φ₂` orthogonal to the top
+eigenvector: it carries exactly the *lower* Gram eigenvalue, scaled by `1 + c²`. -/
+theorem beamResidual_orthogonal_inner (ε : ℝ) :
+    ⟪beamResidual ε (((beamGramTopCoefficient : ℝ) : ℂ) • beamTrialVecOne -
+        beamTrialVecTwo),
+      beamResidual ε (((beamGramTopCoefficient : ℝ) : ℂ) • beamTrialVecOne -
+        beamTrialVecTwo)⟫_ℂ
+      = ((((1 + beamGramTopCoefficient ^ 2) * residualGramEigenvalueLow ε : ℝ)) : ℂ) := by
+  obtain ⟨g00, g01, g11⟩ := beamResidual_gram ε
+  have hg10 : ⟪beamResidual ε beamTrialVecTwo, beamResidual ε beamTrialVecOne⟫_ℂ
+      = (((residualGram ε).a₀₁ : ℝ) : ℂ) := by
+    rw [← inner_conj_symm (𝕜 := ℂ) (beamResidual ε beamTrialVecTwo)
+      (beamResidual ε beamTrialVecOne), g01, Complex.conj_ofReal]
+  rw [← beamGram_orthogonal_direction ε, map_sub, map_smul]
+  simp only [inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right,
+    g00, g01, g11, hg10, Complex.conj_ofReal]
+  push_cast
+  ring
+
+open DavisKahan1970.Section9 in
+theorem beamResidual_orthogonal_norm_sq (ε : ℝ) :
+    ‖beamResidual ε (((beamGramTopCoefficient : ℝ) : ℂ) • beamTrialVecOne -
+        beamTrialVecTwo)‖ ^ 2
+      = (1 + beamGramTopCoefficient ^ 2) * residualGramEigenvalueLow ε := by
+  have h := beamResidual_orthogonal_inner ε
+  rw [inner_self_eq_norm_sq_to_K] at h
+  have h2 : (((‖beamResidual ε (((beamGramTopCoefficient : ℝ) : ℂ) • beamTrialVecOne -
+        beamTrialVecTwo)‖ ^ 2 : ℝ)) : ℂ)
+      = ((((1 + beamGramTopCoefficient ^ 2) * residualGramEigenvalueLow ε : ℝ)) : ℂ) := by
+    push_cast
+    push_cast at h
+    exact h
+  exact Complex.ofReal_inj.mp h2
+
+/-- The normalising constant `1 + c²` of the top eigendirection is positive. -/
+theorem beamGramTopDenom_pos : (0 : ℝ) < 1 + beamGramTopCoefficient ^ 2 := by
+  positivity
+
+open DavisKahan1970.Section9 in
+/-- The top eigenvector of the residual Gram matrix, unnormalised:
+`φ₁ + c φ₂` with `c = -(√75 + √76)`. -/
+def beamGramTopVector : beamTrial :=
+  beamTrialVecOne + ((beamGramTopCoefficient : ℝ) : ℂ) • beamTrialVecTwo
+
+open DavisKahan1970.Section9 in
+/-- **The explicit rank-one approximant of the Section 9 residual**: the residual
+composed with the orthogonal projection onto the top eigendirection of the
+residual Gram matrix. -/
+def beamResidualRankOne (ε : ℝ) : beamTrial →L[ℂ] BeamL2 :=
+  (innerSL ℂ beamGramTopVector).smulRight
+    ((((1 + beamGramTopCoefficient ^ 2 : ℝ) : ℂ)⁻¹) •
+      beamResidual ε beamGramTopVector)
+
+theorem beamResidualRankOne_apply (ε : ℝ) (x : beamTrial) :
+    beamResidualRankOne ε x = ⟪beamGramTopVector, x⟫_ℂ •
+      ((((1 + beamGramTopCoefficient ^ 2 : ℝ) : ℂ)⁻¹) •
+        beamResidual ε beamGramTopVector) := rfl
+
+theorem beamResidualRankOne_rank_le (ε : ℝ) :
+    (beamResidualRankOne ε).rank ≤ (1 : Cardinal) := by
+  classical
+  set v : BeamL2 := (((1 + beamGramTopCoefficient ^ 2 : ℝ) : ℂ)⁻¹) •
+    beamResidual ε beamGramTopVector with hv
+  have hle : LinearMap.range
+      ((beamResidualRankOne ε : beamTrial →L[ℂ] BeamL2) : beamTrial →ₗ[ℂ] BeamL2)
+      ≤ Submodule.span ℂ ({v} : Set BeamL2) := by
+    rintro y ⟨x, rfl⟩
+    exact Submodule.mem_span_singleton.2 ⟨⟪beamGramTopVector, x⟫_ℂ, rfl⟩
+  calc (beamResidualRankOne ε).rank
+      ≤ Module.rank ℂ (Submodule.span ℂ ({v} : Set BeamL2)) := Submodule.rank_mono hle
+    _ ≤ 1 := by simpa using rank_span_le ({v} : Set BeamL2)
+
+open DavisKahan1970.Section9 in
+/-- The four ambient inner products of the orthonormal trial pair. -/
+theorem inner_beamTrialLp :
+    ⟪centeredAffineLp trialOne, centeredAffineLp trialOne⟫_ℂ = 1 ∧
+      ⟪centeredAffineLp trialTwo, centeredAffineLp trialTwo⟫_ℂ = 1 ∧
+        ⟪centeredAffineLp trialOne, centeredAffineLp trialTwo⟫_ℂ = 0 ∧
+          ⟪centeredAffineLp trialTwo, centeredAffineLp trialOne⟫_ℂ = 0 := by
+  obtain ⟨h1, h2, h12⟩ := beamTrial_orthonormal
+  have q1 : ⟪centeredAffineLp trialOne, centeredAffineLp trialOne⟫_ℂ = 1 := by
+    have hn : ‖centeredAffineLp trialOne‖ = 1 := by
+      nlinarith [norm_nonneg (centeredAffineLp trialOne), h1]
+    rw [inner_self_eq_norm_sq_to_K, hn]
+    norm_num
+  have q2 : ⟪centeredAffineLp trialTwo, centeredAffineLp trialTwo⟫_ℂ = 1 := by
+    have hn : ‖centeredAffineLp trialTwo‖ = 1 := by
+      nlinarith [norm_nonneg (centeredAffineLp trialTwo), h2]
+    rw [inner_self_eq_norm_sq_to_K, hn]
+    norm_num
+  refine ⟨q1, q2, h12, ?_⟩
+  rw [← inner_conj_symm (𝕜 := ℂ) (centeredAffineLp trialTwo) (centeredAffineLp trialOne),
+    h12, map_zero]
+
+/-- The pairing of the top eigenvector against a trial vector in the orthonormal
+coordinates. -/
+theorem inner_beamGramTopVector (α β : ℂ) :
+    ⟪beamGramTopVector, α • beamTrialVecOne + β • beamTrialVecTwo⟫_ℂ
+      = α + ((beamGramTopCoefficient : ℝ) : ℂ) * β := by
+  obtain ⟨q1, q2, q12, q21⟩ := inner_beamTrialLp
+  have hw : ((beamGramTopVector : beamTrial) : BeamL2)
+      = centeredAffineLp DavisKahan1970.Section9.trialOne
+        + ((beamGramTopCoefficient : ℝ) : ℂ) •
+          centeredAffineLp DavisKahan1970.Section9.trialTwo := rfl
+  have hxc : ((α • beamTrialVecOne + β • beamTrialVecTwo : beamTrial) : BeamL2)
+      = α • centeredAffineLp DavisKahan1970.Section9.trialOne
+        + β • centeredAffineLp DavisKahan1970.Section9.trialTwo := rfl
+  rw [Submodule.coe_inner, hw, hxc]
+  simp only [inner_add_left, inner_add_right, inner_smul_left, inner_smul_right,
+    q1, q2, q12, q21, Complex.conj_ofReal]
+  ring
+
+/-- The norm of a trial vector in the orthonormal coordinates. -/
+theorem norm_sq_beamTrialVec_comb (α β : ℂ) :
+    ‖α • beamTrialVecOne + β • beamTrialVecTwo‖ ^ 2 = ‖α‖ ^ 2 + ‖β‖ ^ 2 := by
+  obtain ⟨q1, q2, q12, q21⟩ := inner_beamTrialLp
+  have hxc : ((α • beamTrialVecOne + β • beamTrialVecTwo : beamTrial) : BeamL2)
+      = α • centeredAffineLp DavisKahan1970.Section9.trialOne
+        + β • centeredAffineLp DavisKahan1970.Section9.trialTwo := rfl
+  have hnorm : ‖α • beamTrialVecOne + β • beamTrialVecTwo‖
+      = ‖α • centeredAffineLp DavisKahan1970.Section9.trialOne
+          + β • centeredAffineLp DavisKahan1970.Section9.trialTwo‖ := by
+    rw [← hxc]
+    rfl
+  have hinner : ⟪α • centeredAffineLp DavisKahan1970.Section9.trialOne
+        + β • centeredAffineLp DavisKahan1970.Section9.trialTwo,
+      α • centeredAffineLp DavisKahan1970.Section9.trialOne
+        + β • centeredAffineLp DavisKahan1970.Section9.trialTwo⟫_ℂ
+      = (((‖α‖ ^ 2 + ‖β‖ ^ 2 : ℝ)) : ℂ) := by
+    have hα : α * (starRingEnd ℂ) α = ((‖α‖ ^ 2 : ℝ) : ℂ) := by
+      rw [mul_comm, ← Complex.normSq_eq_conj_mul_self, Complex.normSq_eq_norm_sq]
+    have hβ : β * (starRingEnd ℂ) β = ((‖β‖ ^ 2 : ℝ) : ℂ) := by
+      rw [mul_comm, ← Complex.normSq_eq_conj_mul_self, Complex.normSq_eq_norm_sq]
+    simp only [inner_add_left, inner_add_right, inner_smul_left, inner_smul_right,
+      q1, q2, q12, q21]
+    rw [show α * ((starRingEnd ℂ) α * 1 + (starRingEnd ℂ) β * 0)
+        + β * ((starRingEnd ℂ) α * 0 + (starRingEnd ℂ) β * 1)
+        = α * (starRingEnd ℂ) α + β * (starRingEnd ℂ) β from by ring, hα, hβ]
+    push_cast
+    ring
+  rw [hnorm]
+  rw [inner_self_eq_norm_sq_to_K] at hinner
+  have h2' : (((‖α • centeredAffineLp DavisKahan1970.Section9.trialOne
+        + β • centeredAffineLp DavisKahan1970.Section9.trialTwo‖ ^ 2 : ℝ)) : ℂ)
+      = (((‖α‖ ^ 2 + ‖β‖ ^ 2 : ℝ)) : ℂ) := by
+    push_cast
+    push_cast at hinner
+    exact hinner
+  exact Complex.ofReal_inj.mp h2'
+
+open DavisKahan1970.Section9 in
+/-- **The rank-one approximant leaves exactly the orthogonal direction.**  For
+`x = α φ₁ + β φ₂` the error is `(c α − β)/(1 + c²)` times the residual of the
+direction `c φ₁ − φ₂` orthogonal to the top eigenvector. -/
+theorem beamResidual_sub_rankOne_apply (ε : ℝ) (α β : ℂ) :
+    (beamResidual ε - beamResidualRankOne ε)
+        (α • beamTrialVecOne + β • beamTrialVecTwo)
+      = ((((1 + beamGramTopCoefficient ^ 2 : ℝ) : ℂ)⁻¹) *
+            (((beamGramTopCoefficient : ℝ) : ℂ) * α - β)) •
+          beamResidual ε (((beamGramTopCoefficient : ℝ) : ℂ) • beamTrialVecOne -
+            beamTrialVecTwo) := by
+  have hD : (((1 + beamGramTopCoefficient ^ 2 : ℝ) : ℂ)) ≠ 0 := by
+    exact_mod_cast ne_of_gt beamGramTopDenom_pos
+  have hD' : (1 : ℂ) + ((beamGramTopCoefficient : ℝ) : ℂ) ^ 2 ≠ 0 := by
+    have h := hD
+    push_cast at h
+    exact h
+  have hx : beamResidual ε (α • beamTrialVecOne + β • beamTrialVecTwo)
+      = α • beamResidual ε beamTrialVecOne + β • beamResidual ε beamTrialVecTwo := by
+    rw [map_add, map_smul, map_smul]
+  have hw : beamResidual ε beamGramTopVector
+      = beamResidual ε beamTrialVecOne
+        + ((beamGramTopCoefficient : ℝ) : ℂ) • beamResidual ε beamTrialVecTwo := by
+    rw [beamGramTopVector, map_add, map_smul]
+  have hz : beamResidual ε (((beamGramTopCoefficient : ℝ) : ℂ) • beamTrialVecOne -
+        beamTrialVecTwo)
+      = ((beamGramTopCoefficient : ℝ) : ℂ) • beamResidual ε beamTrialVecOne
+        - beamResidual ε beamTrialVecTwo := by
+    rw [map_sub, map_smul]
+  rw [ContinuousLinearMap.sub_apply, beamResidualRankOne_apply,
+    inner_beamGramTopVector, hx, hw, hz]
+  match_scalars <;> field_simp <;> ring
+
+private theorem le_of_sq_le_sq' {A B : ℝ} (hA : 0 ≤ A) (hB : 0 ≤ B)
+    (h : A ^ 2 ≤ B ^ 2) : A ≤ B := by nlinarith
+
+open DavisKahan1970.Section9 in
+/-- **The rank-one approximation error of the Section 9 residual is exactly the
+second singular value.**  This is the sharp Eckart--Young step: the approximant
+along the top Gram eigendirection leaves the orthogonal direction, whose norm is
+`residualBottomSingularValue ε`. -/
+theorem norm_beamResidual_sub_rankOne_le (ε : ℝ) :
+    ‖beamResidual ε - beamResidualRankOne ε‖ ≤ residualBottomSingularValue ε := by
+  have hσ0 : 0 ≤ residualBottomSingularValue ε := by
+    rw [residualBottomSingularValue]
+    positivity
+  have hDpos : (0 : ℝ) < 1 + beamGramTopCoefficient ^ 2 := beamGramTopDenom_pos
+  have hzsq : ‖beamResidual ε (((beamGramTopCoefficient : ℝ) : ℂ) • beamTrialVecOne
+        - beamTrialVecTwo)‖ ^ 2
+      = (1 + beamGramTopCoefficient ^ 2) * residualBottomSingularValue ε ^ 2 := by
+    rw [beamResidual_orthogonal_norm_sq, residualBottomSingularValue_sq]
+  refine ContinuousLinearMap.opNorm_le_bound _ hσ0 fun x => ?_
+  obtain ⟨α, β, hx⟩ := exists_beamTrialVec_repr x
+  subst hx
+  rw [beamResidual_sub_rankOne_apply, norm_smul]
+  have hγ : ‖(((1 + beamGramTopCoefficient ^ 2 : ℝ) : ℂ))⁻¹ *
+        (((beamGramTopCoefficient : ℝ) : ℂ) * α - β)‖
+      = (1 + beamGramTopCoefficient ^ 2)⁻¹ *
+        ‖((beamGramTopCoefficient : ℝ) : ℂ) * α - β‖ := by
+    rw [norm_mul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hDpos]
+  rw [hγ]
+  have hcs : ‖((beamGramTopCoefficient : ℝ) : ℂ) * α - β‖ ^ 2
+      ≤ (1 + beamGramTopCoefficient ^ 2) *
+        ‖α • beamTrialVecOne + β • beamTrialVecTwo‖ ^ 2 := by
+    rw [norm_sq_beamTrialVec_comb]
+    have htri : ‖((beamGramTopCoefficient : ℝ) : ℂ) * α - β‖
+        ≤ |beamGramTopCoefficient| * ‖α‖ + ‖β‖ := by
+      refine le_trans (norm_sub_le _ _) ?_
+      rw [norm_mul, Complex.norm_real, Real.norm_eq_abs]
+    nlinarith [norm_nonneg α, norm_nonneg β, abs_nonneg beamGramTopCoefficient,
+      sq_abs beamGramTopCoefficient,
+      sq_nonneg (|beamGramTopCoefficient| * ‖β‖ - ‖α‖),
+      norm_nonneg (((beamGramTopCoefficient : ℝ) : ℂ) * α - β), htri]
+  rw [show (1 + beamGramTopCoefficient ^ 2)⁻¹ *
+        ‖((beamGramTopCoefficient : ℝ) : ℂ) * α - β‖ *
+        ‖beamResidual ε (((beamGramTopCoefficient : ℝ) : ℂ) • beamTrialVecOne
+          - beamTrialVecTwo)‖
+      = (‖((beamGramTopCoefficient : ℝ) : ℂ) * α - β‖ *
+          ‖beamResidual ε (((beamGramTopCoefficient : ℝ) : ℂ) • beamTrialVecOne
+            - beamTrialVecTwo)‖) / (1 + beamGramTopCoefficient ^ 2) from by ring,
+    div_le_iff₀ hDpos]
+  refine le_of_sq_le_sq' (by positivity)
+    (by positivity) ?_
+  rw [mul_pow, hzsq]
+  nlinarith [hcs, sq_nonneg (residualBottomSingularValue ε),
+    norm_nonneg (α • beamTrialVecOne + β • beamTrialVecTwo),
+    sq_nonneg (‖α • beamTrialVecOne + β • beamTrialVecTwo‖),
+    hDpos]
+
+open DavisKahan1970.Section9 in
+/-- **The second approximation number of the Section 9 residual.**  The rank-one
+approximant along the top Gram eigendirection realises it. -/
+theorem approximationSingularValue_one_beamResidual_le (ε : ℝ) :
+    approximationSingularValue 1 (beamResidual ε) ≤ residualBottomSingularValue ε := by
+  have hrank : (beamResidualRankOne ε).rank ≤ ((1 : ℕ) : Cardinal) := by
+    simpa using beamResidualRankOne_rank_le ε
+  exact le_trans ((beamResidual ε).approximationNumber_le_norm_sub hrank)
+    (norm_beamResidual_sub_rankOne_le ε)
+
+open DavisKahan1970.Section9 in
+/-- **Both singular values of the Section 9 residual at once**: the two-term Ky Fan
+gauge of the residual is at most `residualKyFanTwo ε`.  This is what equation (9.3)
+needs and equation (9.1) did not: (9.1) used only the top singular value. -/
+theorem kyFanTwo_beamResidual_le (ε : ℝ) :
+    kyFanApproximationGauge 2 (beamResidual ε) ≤ residualKyFanTwo ε := by
+  have h0 : approximationSingularValue 0 (beamResidual ε)
+      ≤ residualTopSingularValue ε := by
+    have hz : approximationSingularValue 0 (beamResidual ε) = ‖beamResidual ε‖ :=
+      (beamResidual ε).approximationNumber_index_zero
+    rw [hz]
+    exact norm_beamPerturbation_comp_trialIncl_le ε
+  have h1 := approximationSingularValue_one_beamResidual_le ε
+  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+  rw [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_zero,
+    zero_add, residualKyFanTwo]
+  exact add_le_add h0 h1
+
+open DavisKahan1970.Section9 in
+/-- **The two-term Ky Fan sum of the sines** of the angles between the affine trial
+subspace and the exact low spectral subspace of the perturbed beam. -/
+def beamSinThetaSum (ε : ℝ) : ℝ :=
+  beamKyFanTwo.gaugeReal (ContinuousLinearMap.adjoint beamTrialIncl ∘L
+    selfAdjointSpectralSubspaceInclusion (beamPerturbed ε)
+      (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet)
+
+open DavisKahan1970.Section9 in
+/-- **Davis--Kahan 1970, equation (9.3), for the genuine free-beam operator.**
+
+The two-term Ky Fan sum of the sines of the angles between the affine trial
+subspace and the exact low spectral subspace of `A + ε t` is at most
+`residualKyFanTwo ε / 500`.
+
+Nothing is assumed: the gap comes from `realSpectrum_beamOperator_subset_gap`
+through the set-localization lemma, the trial space is the proved kernel, and the
+residual's *two* singular values are `kyFanTwo_beamResidual_le`, whose second one is
+realised by an explicit rank-one approximant along the top eigendirection of the
+residual Gram matrix. -/
+theorem beamSinThetaSum_le (ε : ℝ) :
+    beamSinThetaSum ε ≤ residualKyFanTwo ε / 500 := by
+  classical
+  have hXdom : ∀ x : beamTrialZero.domain,
+      beamTrialIncl (x : beamTrial) ∈ beamOperator.domain := fun x =>
+    beamTrial_le_domain (x : beamTrial).2
+  have hXint : ∀ x : beamTrialZero.domain,
+      beamOperator.toLinearMap ⟨beamTrialIncl (x : beamTrial), hXdom x⟩
+        = beamTrialIncl (beamTrialZero.toLinearMap x) := by
+    intro x
+    have hz : beamTrialZero.toLinearMap x = 0 := rfl
+    rw [hz, map_zero]
+    exact beamOperator_apply_trial (x : beamTrial).2 _
+  have hlow : SemiboundedBelow beamTrialZero 0 := by
+    intro x
+    have hz : beamTrialZero.toLinearPMap x = 0 := rfl
+    rw [hz, inner_zero_left]
+    simp
+  have hhigh : SemiboundedAbove beamTrialZero 0 := by
+    intro x
+    have hz : beamTrialZero.toLinearPMap x = 0 := rfl
+    rw [hz, inner_zero_left]
+    simp
+  have hspec := selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
+      (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε) beamHighSet
+      measurableSet_beamHighSet (a := (0 : ℝ) - 500) (b := (0 : ℝ) + 500) (by
+        refine Set.eq_empty_iff_forall_notMem.2 ?_
+        rintro lam ⟨hlam, -, h2⟩
+        have hge : (500 : ℝ) ≤ lam := hlam
+        have hlt : lam < (0 : ℝ) + 500 := h2
+        linarith)
+  have hmain := sinTheta_unbounded_gauge_of_spectrum_gap beamKyFanTwo
+    (boundedPerturbationSinThetaData beamOperator (beamPerturbation ε) beamTrialZero
+      (selfAdjointSpectralRestriction (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε)
+        beamHighSet measurableSet_beamHighSet)
+      beamTrialIncl
+      (selfAdjointSpectralSubspaceInclusion (beamPerturbed ε)
+        (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet)
+      hXdom hXint
+      (selfAdjointSpectralRestriction_inclusion_mem_domain (beamPerturbed ε)
+        (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet)
+      (selfAdjointSpectralRestriction_inclusion_intertwines (beamPerturbed ε)
+        (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet))
+    (beamPerturbed_isSelfAdjoint ε) beamTrialZero_isSelfAdjoint
+    (selfAdjointSpectralRestriction_isSelfAdjoint (beamPerturbed ε)
+      (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet)
+    (β := 0) (α := 0) (δ := 500) le_rfl (by norm_num) hlow hhigh hspec
+    (gauge_kyFanSymmetricIdealFamily_ne_top (𝕜 := ℂ) 2 (by norm_num) _)
+  have hF₁norm : ‖selfAdjointSpectralSubspaceInclusion (beamPerturbed ε)
+      (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet‖ ≤ 1 :=
+    opNorm_le_one_of_isometry
+      (selfAdjointSpectralSubspaceInclusion_isometric (beamPerturbed ε)
+        (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet)
+  -- the residual side: both singular values, transported across the isometric inclusion
+  have hres : beamKyFanTwo.gaugeReal
+        (ContinuousLinearMap.adjoint (beamPerturbation ε ∘L beamTrialIncl) ∘L
+          selfAdjointSpectralSubspaceInclusion (beamPerturbed ε)
+            (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet)
+      ≤ residualKyFanTwo ε := by
+    have hgauge : ∀ {G : Type} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
+        [CompleteSpace G] (T : G →L[ℂ] beamTrial),
+        beamKyFanTwo.gaugeReal T = kyFanApproximationGauge 2 T := by
+      intro G _ _ _ T
+      have hval : beamKyFanTwo.gaugeReal T
+          = (ENNReal.ofReal (kyFanApproximationGauge 2 T)).toReal := rfl
+      rw [hval, ENNReal.toReal_ofReal (kyFanApproximationGauge_nonneg 2 T)]
+    rw [hgauge]
+    calc kyFanApproximationGauge 2
+          (ContinuousLinearMap.adjoint (beamPerturbation ε ∘L beamTrialIncl) ∘L
+            selfAdjointSpectralSubspaceInclusion (beamPerturbed ε)
+              (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet)
+        = kyFanApproximationGauge 2
+            (ContinuousLinearMap.id ℂ beamTrial ∘L
+              ContinuousLinearMap.adjoint (beamPerturbation ε ∘L beamTrialIncl) ∘L
+              selfAdjointSpectralSubspaceInclusion (beamPerturbed ε)
+                (beamPerturbed_isSelfAdjoint ε) beamHighSet
+                measurableSet_beamHighSet) := by
+          congr 1
+      _ ≤ ‖ContinuousLinearMap.id ℂ beamTrial‖ *
+            kyFanApproximationGauge 2
+              (ContinuousLinearMap.adjoint (beamPerturbation ε ∘L beamTrialIncl)) *
+            ‖selfAdjointSpectralSubspaceInclusion (beamPerturbed ε)
+              (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet‖ :=
+          kyFanApproximationGauge_comp_le _ _ _ _
+      _ ≤ 1 * kyFanApproximationGauge 2 (beamResidual ε) * 1 := by
+          rw [kyFanApproximationGauge_adjoint,
+            show (beamPerturbation ε ∘L beamTrialIncl) = beamResidual ε from rfl]
+          have hid : ‖ContinuousLinearMap.id ℂ beamTrial‖ ≤ 1 :=
+            ContinuousLinearMap.norm_id_le
+          have hnn : 0 ≤ kyFanApproximationGauge 2 (beamResidual ε) :=
+            kyFanApproximationGauge_nonneg 2 _
+          have h1 : ‖ContinuousLinearMap.id ℂ beamTrial‖ *
+              kyFanApproximationGauge 2 (beamResidual ε) ≤
+                1 * kyFanApproximationGauge 2 (beamResidual ε) :=
+            mul_le_mul_of_nonneg_right hid hnn
+          nlinarith [hF₁norm, norm_nonneg (selfAdjointSpectralSubspaceInclusion
+            (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε) beamHighSet
+            measurableSet_beamHighSet), hnn, h1,
+            mul_nonneg (norm_nonneg (ContinuousLinearMap.id ℂ beamTrial)) hnn]
+      _ = kyFanApproximationGauge 2 (beamResidual ε) := by ring
+      _ ≤ residualKyFanTwo ε := kyFanTwo_beamResidual_le ε
+  have hchain : 500 * beamSinThetaSum ε ≤ residualKyFanTwo ε :=
+    le_trans hmain.2 hres
+  linarith
+
 end
 
 end Model

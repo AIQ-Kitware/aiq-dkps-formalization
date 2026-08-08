@@ -100,7 +100,7 @@ prerequisite unblocks auditing.
 unmapped rows `DK-6-appendix`, `DK-6.1-lem`, `DK-6.1-prop`. Then
 `--write-report` becomes safe and the whole frontier is scoreable again.
 
-### T1 `WIP` -- Section 9 equation (9.3): second residual approximation number
+### T1 `DONE` -- Section 9 equation (9.3): second residual approximation number
 
 Row `DK-9.1-9.4` (`partial_or_wrapper_missing` / `proved_conditional`).
 (9.1), (9.2), (9.4) are already genuine operator theorems. Only (9.3) remains.
@@ -110,33 +110,27 @@ Row `DK-9.1-9.4` (`partial_or_wrapper_missing` / `proved_conditional`).
 `beamTrialVec_span_eq_top`, `exists_beamTrialVec_repr`, `beamResidual_gram`,
 `beamGramTopCoefficient`, `beamGram_orthogonal_direction`.
 
-**Remaining, purely mechanical:**
-1. `beamGramTopVector := phi1 + c . phi2`, `c = -(sqrt 75 + sqrt 76)`.
-2. `beamResidualRankOne eps := (innerSL C w).smulRight ((1+c^2)^-1 . R w)`;
-   `rank <= 1` via `range <= span {v}` and `rank_span_le`.
-3. `(R - K)(a.phi1 + b.phi2) = ((c a - b)/(1+c^2)) . R (c.phi1 - phi2)`.
-4. `||R z0||^2 = (1+c^2) * residualGramEigenvalueLow eps` from
-   `beamGram_orthogonal_direction`.
-5. Cauchy--Schwarz `|c a - b|^2 <= (1+c^2)(|a|^2+|b|^2)`, giving
-   `||R - K|| <= residualBottomSingularValue eps`, hence
-   `a_1(R) <= residualBottomSingularValue eps` by
-   `ContinuousLinearMap.approximationNumber_le_norm_sub`.
-6. `a_0 + a_1 <= residualKyFanTwo eps` (`a_0` is
-   `norm_beamPerturbation_comp_trialIncl_le`), then
-   `sinTheta_unbounded_gauge_of_spectrum_gap` at `beamKyFanTwo` with the (9.1)
-   data gives (9.3).
+**DONE.** `beamSinThetaSum_le : beamSinThetaSum eps <= residualKyFanTwo eps / 500`,
+axiom-clean, in the default build. All four of (9.1)--(9.4) are now derived from
+`beamOperator` with no certificate field in any statement, so row `DK-9.1-9.4` is
+`compiled_exact` / `proved_in_build` with no blocker.
 
-**Tactic obstacles hit on the first attempt (not mathematical):**
-* plain `simp` rewrites `<x,x>` to `||x||^2` via `inner_self_eq_norm_sq_to_K`
-  *before* the sesquilinear expansion -- use `simp only` with an explicit list, or
-  expand with `norm_sub_sq`;
-* `exact_mod_cast` on `(r : C)^2 = (s : C)` needs
-  `rw [inner_self_eq_norm_sq_to_K (K := C), <- Complex.ofReal_pow]` then
-  `Complex.ofReal_inj.mp`;
-* `inner_smul_left/right` need `simp only`, and `inner_conj_symm` needs its
-  arguments given explicitly or the `K` metavariable blocks the rewrite;
-* `innerSL_apply` is not a lemma name here; `beamResidualRankOne_apply` by `rfl`
-  works instead.
+Chain: `beamResidualRankOne` (rank <= 1 via `range <= span {v}` + `rank_span_le`)
+-> `beamResidual_sub_rankOne_apply` (the error is *exactly* `((c a - b)/(1+c^2))`
+times the residual of `c phi_1 - phi_2`) -> `beamResidual_orthogonal_norm_sq`
+-> `norm_beamResidual_sub_rankOne_le` (Cauchy--Schwarz; sharp Eckart--Young step)
+-> `approximationSingularValue_one_beamResidual_le` -> `kyFanTwo_beamResidual_le`
+-> `beamSinThetaSum_le` via `sinTheta_unbounded_gauge_of_spectrum_gap` at
+`beamKyFanTwo`.
+
+**Lean lesson worth keeping.** On a `Submodule`'s induced inner-product space,
+`rw`/`simp` with `inner_smul_left`, `inner_smul_right` and
+`inner_self_eq_norm_sq_to_K` silently fail to match, while `inner_add_left` /
+`inner_add_right` succeed. Push the computation to the ambient space with
+`Submodule.coe_inner` (FORWARD direction: submodule-inner = ambient-inner of the
+coercions) and it all works. Plain `simp` is also wrong: it rewrites `<x,x>` to
+`||x||^2` before the sesquilinear expansion. Radical identities of this shape are
+for `linear_combination` with explicit coefficients, not `nlinarith`.
 
 If an Eckart--Young / rank-one approximation fact falls out generically, its owner
 is `OperatorIdeals` (`ForTauCeti/Analysis/OperatorIdeal/`), not Section 9.
