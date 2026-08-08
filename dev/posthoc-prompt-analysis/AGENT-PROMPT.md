@@ -76,6 +76,26 @@ checkout lives at a different path, the default substrings
 (`/aiq-dkps-formalization`, `/TauCeti…`) should still match; if they do not, pass
 `--scope` and record that in your manifest note.
 
+### Re-running later
+
+This is worth doing periodically — the store keeps moving and old sessions age
+out. When you refresh an existing slice:
+
+- **Keep the same agent id and the same `--scope`.** A slice that changes scope
+  between runs is not comparable with its own history.
+- **Preserve `$POSTHOC_NOTE`.** It is baked into `manifest.json` at extraction
+  time and is overwritten on every run. Read the old note out of the manifest
+  first, prepend your re-run findings, and re-export it — otherwise the record of
+  why your slice differs from everyone else's is silently lost.
+- **Re-verify scope for the sessions the re-run added**, by hand, one at a time.
+  Do not assume the judgement you made last time still covers them.
+- **Re-run the counterfactual** (`extract_prompts.py` with default scope, into a
+  throwaway agent id you then delete) if you widened scope. The gap between
+  default and widened moves over time and is itself a finding.
+- **Say what changed and what did not.** If you changed no tool code, say so
+  explicitly, so any difference in the numbers is attributable to data alone.
+- Your re-run session is itself in the corpus. Note it.
+
 ## 4. Validate before you interpret
 
 The extraction has three failure modes that silently corrupt the numbers.
@@ -86,10 +106,14 @@ Check all three and report what you found:
    count is meaningfully higher than your deduped count (here: 1280 raw -> 389
    unique for this repo). If they are equal, dedup may not be working.
 2. **Sub-agent prompts leaking in.** Task-tool prompts are stored as `user`
-   records. They are excluded via `isSidechain`. Spot-check
-   `findings/$POSTHOC_AGENT_ID/prompts.jsonl` for second-person specifications
-   like *"You are auditing part of the repo at…"* — those are agent-authored and
-   should not be present.
+   records. They are excluded via `isSidechain`; confirm that count is zero.
+   **Do not use the prose as your test.** Second-person specifications like
+   *"You are auditing part of the repo at…"* used to be a reliable tell for
+   agent-authored contamination, and from 2026-08-07 they are not: the human
+   relays long GPT-authored campaign briefs verbatim, and the largest single
+   prompt on `aiq-gpu-edward` (31,469 chars) opens *"You are continuing the
+   Davis–Kahan 1970 formalization…"* while being a perfectly real human turn.
+   Judge by `isSidechain`, not by register.
 3. **Synthetic turns.** Slash-command stdout, `Stop hook feedback:` replays,
    compact continuations and task notifications are not human prompts; they are
    routed to `events.jsonl` instead. Confirm `prompts.jsonl` has none.
@@ -97,6 +121,17 @@ Check all three and report what you found:
 Cross-check against `local/claude-meta/history.jsonl`, which independently logs
 typed CLI prompts. Expect partial overlap only — it does not record VSCode-entry
 prompts.
+
+A fourth thing to look at, which is not a failure mode but will distort your
+interpretation if you miss it: **check the character distribution, not just the
+prompt count.** On `aiq-gpu-edward`, 24 prompts of 275 (9%) carry 90% of all
+human-authored characters, and 17 of those are relayed GPT-authored briefs from a
+36-hour window. Prompt-count and character-count tell opposite stories about how
+much the human was steering in that window. Say which unit your claims are in.
+The regex taxonomy is tuned on short prompts and mis-bins anything over a few
+thousand characters — first rule wins, and a 15k-character brief matches
+everything — so audit the long tail of `taxonomy.tsv` by hand before quoting a
+category share.
 
 ## 5. Write your interpretation
 
