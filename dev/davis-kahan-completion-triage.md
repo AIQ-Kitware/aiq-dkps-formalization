@@ -308,12 +308,35 @@ occurrences across roughly eleven declarations, including `splitKyFanGauge`,
 `sameApproximationSingularSequence_continuousOrthogonalBlockSum`, all of which Lemma 6.1
 consumes.
 
-So the order of work is: **generalize the second half of `BlockSum.lean` to `RCLike`
-first**, then Lemma61 follows, then re-check `Proposition6_1`. Nothing in that half looks
-complex-specific either -- it is prefix sums, `splitKyFanGauge`, and approximation-number
-bookkeeping -- but it is ~480 lines of file to move, so budget it as a real task rather
-than a wrapper. `BlockSum.lean`'s owner is `OperatorIdeals`
-(`ForTauCeti/Analysis/OperatorIdeal/`), so this doubles as roadmap-aligned cleanup.
+**TRUE ROOT FOUND, one level deeper (same session).** `BlockSum.lean` was generalized to
+`RCLike` as an experiment -- a mechanical `ℂ -> 𝕜` sweep from line 328 (its
+`variable {𝕜 : Type u} [RCLike 𝕜]` at line 52 is already in scope throughout) -- and the
+whole 480-line second half went through with **exactly one** failure:
+
+    BlockSum.lean:357
+    ContinuousLinearMap.exists_linearIndependent_lowerBound_of_lt_approximationNumber
+    expects approximationNumber.{0, _, _}
+
+That lemma lives in
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxUpper.lean:103`, which fixes
+`[InnerProductSpace ℂ E]`, **and it genuinely needs `ℂ`**: its module docstring says the
+functional calculus it runs on "is available for bounded operators on complex Hilbert
+spaces but not directly for real ones".
+
+The real analogue **already exists**:
+`TauCeti.ApproximationNumber.exists_linearIndependent_lowerBound_of_lt_approximationNumber_real`
+in `MinMaxReal.lean`, proved exactly the way the campaign brief recommends -- transport to
+the complexification and descend.
+
+So the missing piece is small and precisely located: an **`RCLike`-generic min--max
+witness lemma** that dispatches to the complex lemma or to the already-proved real one.
+With that in place the `BlockSum` sweep lands unchanged, then Lemma61's sweep lands
+(modulo its local-instance heartbeat trap), then `DK-6.1-lem` and `DK-6.1-prop` close.
+Owner: `OperatorIdeals` (`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/`).
+
+This is a much better-shaped task than the row-by-row complexification transport the
+brief describes: one generic lemma unblocks a whole file, which unblocks two rows.
+The experiment was reverted; nothing of it is committed.
 
 If that lands, `DK-6.1-lem` and `DK-6.1-prop` close **without any complexification
 transport at all**, which is strictly better than the brief's recommended route. Do the
