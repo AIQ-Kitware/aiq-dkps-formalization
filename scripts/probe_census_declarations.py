@@ -34,7 +34,11 @@ PROBE = ROOT / "dev/.census-probe.lean"
 
 # The probe must see exactly what the default build target sees, so that
 # "resolved" means "reachable from the build", not "exists somewhere on disk".
-PREAMBLE = "import DavisKahan.All\nimport ForMathlib\n"
+# `ForMathlib` was retired 2026-07-29 and must not be imported here: a stale
+# `.lake` artifact kept the import working until the toolchain bump, after which
+# it aborted the whole file at line 1 and no `#check` ran at all -- which the
+# canary correctly reported as a broken parser.
+PREAMBLE = "import DavisKahan.All\n"
 
 
 def census_declarations() -> list[tuple[str, str]]:
@@ -50,7 +54,7 @@ def census_declarations() -> list[tuple[str, str]]:
 # A name that must never resolve.  If the parser stops recognizing Lean's
 # diagnostics, every probe silently reports success -- so the run asserts that
 # this one still fails, and refuses to report at all if it does not.
-CANARY = "ForMathlib.DavisKahan1970.CensusProbeCanaryMustNotResolve"
+CANARY = "TauCeti.DavisKahan1970.CensusProbeCanaryMustNotResolve"
 
 
 def write_probe(pairs: list[tuple[str, str]]) -> None:
@@ -78,15 +82,23 @@ def run_probe() -> str:
 UNKNOWN = re.compile(r"^dev/\.census-probe\.lean:(\d+):\d+: error", re.I)
 
 
-def parse(output: str, pairs: list[tuple[str, str]]) -> dict[str, str]:
-    """Map declaration -> "resolved" or the compiler's reason for failing."""
+def parse(output: str, pairs: list[tuple[str, str]]) -> tuple[dict[str, str], list[str]]:
+    """Map declaration -> "resolved"/"unresolved", plus unattributable errors.
+
+    The second return value holds diagnostics that landed on a line carrying no
+    `#check` -- an import failure, a parse error in the preamble.  Those abort
+    the file before any `#check` elaborates, so every declaration would look
+    resolved; the canary catches that, but only the raw diagnostic says *why*.
+    """
     # Every probe occupies two lines after the preamble, so the reported line
     # number identifies which declaration failed.
     failures: dict[int, str] = {}
+    raw: dict[int, str] = {}
     for line in output.splitlines():
         match = UNKNOWN.match(line.strip())
         if match:
             failures[int(match.group(1))] = "unresolved"
+            raw[int(match.group(1))] = line.strip()
     # Recover the probe index from the emitted file rather than recomputing the
     # offset arithmetic, which silently rots if the preamble changes.
     text = PROBE.read_text(encoding="utf8").splitlines()
@@ -99,11 +111,14 @@ def parse(output: str, pairs: list[tuple[str, str]]) -> dict[str, str]:
         elif line.startswith("#check") and current is not None:
             line_to_index[number] = current
     status = {decl: "resolved" for _, decl in pairs}
+    unattributed: list[str] = []
     for line_number in failures:
         index = line_to_index.get(line_number)
         if index is not None:
             status[pairs[index][1]] = "unresolved"
-    return status
+        else:
+            unattributed.append(raw[line_number])
+    return status, unattributed
 
 
 def main() -> int:
@@ -125,7 +140,7 @@ def main() -> int:
     write_probe(pairs)
     try:
         output = run_probe()
-        status = parse(output, probed)
+        status, unattributed = parse(output, probed)
     finally:
         if not args.keep and PROBE.exists():
             PROBE.unlink()
@@ -135,6 +150,9 @@ def main() -> int:
               "parser is no longer recognizing Lean's diagnostics and every "
               "result below would be a false pass. Fix the parser.",
               file=sys.stderr)
+        for line in unattributed:
+            print(f"  Lean diagnostic on a non-#check line: {line}",
+                  file=sys.stderr)
         return 2
     status.pop(CANARY, None)
 

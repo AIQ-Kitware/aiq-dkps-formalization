@@ -237,7 +237,7 @@ def write_probe(manifest: dict[str, Any]) -> None:
     # Canary ensures an output parser change cannot silently classify all names as resolved.
     lines.extend([
         '#eval IO.eprintln "FRONTIER_BEGIN:__canary__"\n',
-        "#check @ForMathlib.DavisKahan.Experimental.Frontier.ThisNameMustNeverResolve\n",
+        "#check @TauCeti.DavisKahan.Experimental.Frontier.ThisNameMustNeverResolve\n",
         '#eval IO.eprintln "FRONTIER_END:__canary__"\n',
     ])
     PROBE.write_text("".join(lines), encoding="utf8")
