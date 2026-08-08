@@ -135,7 +135,7 @@ for `linear_combination` with explicit coefficients, not `nlinarith`.
 If an Eckart--Young / rank-one approximation fact falls out generically, its owner
 is `OperatorIdeals` (`ForTauCeti/Analysis/OperatorIdeal/`), not Section 9.
 
-### T2 `TODO` -- Section 9 (9.5)--(9.7): the perturbed spectral gap  **[RE-RANKED UP]**
+### T2 `WIP` -- Section 9 (9.5)--(9.7): the perturbed spectral gap  **[RE-RANKED UP]**
 
 Row `DK-9.5-9.7`. **The brief's claim that this is "theorem instantiation, not new
 analysis" is WRONG, and it is now the gate on all three remaining Section 9 rows.**
@@ -162,7 +162,20 @@ eigenvalue of an unbounded self-adjoint operator plus spectral monotonicity unde
 positive bounded perturbation. **Owner: `SelfAdjointSpectralTheory`
 (`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/`), not Section 9.**
 
-Do part (a) first, it is self-contained and is the direct analogue of the (9.3) work:
+**Part (a) is DONE** (`norm_beamRitzResidual_le`, `beamRitz_form_le`,
+`beamResidual_inner_trial`; axiom-clean, default build). The residual norm was obtained
+without computing the projection: `Submodule.starProjection_minimal` + `ciInf_le` against
+the explicit competitor `ritzLow eps * a * phi_1 + ritzHigh eps * b * phi_2`, whose Gram
+form collapses to `(eps^2/30)|a-b|^2`. The one non-ring input is `sqrt 3 ^ 2 = 3`, given
+to `linear_combination` with coefficient `-(eps^2/36)(|a|^2+|b|^2)`.
+
+**Part (b) is all that remains**: assemble `UnboundedTrialBlock (beamPerturbed eps)
+beamTrial` from those (its `operator_apply`/`residual_apply` fields are the projection
+identities, with `A.toLinearMap` on the trial reducing to `beamPerturbation eps` by
+`beamOperator_apply_trial`), then prove
+`specProjection (beamPerturbed eps) (Ioo (ritzHigh eps) 500) = 0`.
+
+Original part (a) description, for reference:
 build `UnboundedTrialBlock (beamPerturbed eps) beamTrial` with the Ritz compression
 (`beamRitz_matrix` gives `hCompression` at `alpha = ritzHigh eps` immediately) and the
 Rayleigh--Ritz residual `(1 - P_Z) . H|_Z`, whose Gram is
