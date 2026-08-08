@@ -7,6 +7,41 @@ but verify its claims against the build before acting on them.
 
 Baseline for this campaign: `65724ef9`.
 
+## SESSION LOG 2026-08-08 (Claude Opus 5) -- what closed
+
+Goal set by jon: *finish the hardest 7 of the 10 ranked items* -- i.e. everything
+except T0 (manifest repair), T9 (exactness sweep) and T10 (final audit).
+
+* **T2 DONE.**  `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/RayleighRitz.lean`
+  is the new reusable theory: strict vector-local form bounds and
+  `specProjection_Ioo_eq_zero_of_rayleighRitz`.  The beam consequence is
+  `beamPerturbed_specProjection_Ioo_eq_zero`, and equation (9.6) on the genuine
+  operator is `beamTanTheta_le` (`FormMethod/BeamTangent.lean`).  Commits
+  `028207b9`, `b5442743`, `5d82e768`.
+* **T3 DONE.**  `exists_weinbergerLowerRootCertificate` constructs the certified
+  low roots by IVT, both within `eps^2/7500` of their Ritz values, and
+  `equation_9_8_lower/upper_of_weinberger` reach the printed decimals.  Commit
+  `b0efe3b5`.
+* **T6 HALF DONE.**  `BlockSum.lean` and `Lemma61.lean` are `RCLike`-generic, so
+  `lemma6_1`/`lemma6_1_converse` cover real scalars and **DK-6.1-lem closes**.
+  The predicted "missing generic min--max witness" already existed as the class
+  `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` (instances at
+  `FiniteRestriction.lean:272` and `MinMaxReal.lean:302`); the fix was to route
+  through it instead of the `C`-only theorem.  `DK-6.1-prop` is NOT closed:
+  `Proposition6_1` rests on `PaperSymmetricSinThetaProblem` and
+  `paperSinAngleOperatorC = cfc Real.sin ...`, a separate complexification
+  cascade.  Commit `83e1b854`.
+* **T8 DONE.**  The Section 9 domain-limitation example is now an operator
+  example: `diagonalOperator` on `lp (fun _ : N => R) 2`, with the geometric
+  trial vector proved *outside* the operator domain and *inside* the form
+  domain.  Commit `961598be`.
+
+**A correction worth keeping.**  I claimed no `KyFanDominantIdealFamily` instance
+existed.  Wrong: `KyFanDominantIdealFamily.kyFan k hk` (ScalarGeneric.lean:461)
+has been there all along.  The duplicate I added was deleted in `5d82e768`.
+Before claiming a class has no producer, grep for the type on a *later* line than
+the `def`.
+
 ## Authorities
 
 * `AGENTS.md`, `ForTauCeti/README.md`, `docs/planning/davis-kahan-full-paper-goal.md`
