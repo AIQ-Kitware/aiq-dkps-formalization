@@ -1,10 +1,10 @@
 # Prompt extraction index
 
-- sessions with >=1 human prompt: **11**
-- human prompts (deduped): **236**
-- harness events (interrupts/hooks/slash/compaction): **681**
+- sessions with >=1 human prompt: **19**
+- human prompts (deduped): **275**
+- harness events (interrupts/hooks/slash/compaction): **754**
 
-## `-home-joncrall-agent` - 201 prompts / 8 sessions
+## `-home-joncrall-agent` - 240 prompts / 16 sessions
 
 | start | session | prompts | file |
 |---|---|---|---|
@@ -15,7 +15,15 @@
 | 2026-08-04 21:21 | `f5c285c6` | 12 | `sessions/2026-08-04-f5c285c6.md` |
 | 2026-08-05 14:59 | `b4bf1c43` | 21 | `sessions/2026-08-05-b4bf1c43.md` |
 | 2026-08-05 22:21 | `23e9a5c3` | 2 | `sessions/2026-08-05-23e9a5c3.md` |
-| 2026-08-05 23:39 | `3f1c4a7e` | 19 | `sessions/2026-08-05-3f1c4a7e.md` |
+| 2026-08-05 23:39 | `3f1c4a7e` | 42 | `sessions/2026-08-05-3f1c4a7e.md` |
+| 2026-08-07 20:16 | `b48edba0` | 1 | `sessions/2026-08-07-b48edba0.md` |
+| 2026-08-07 20:38 | `72c0297b` | 2 | `sessions/2026-08-07-72c0297b.md` |
+| 2026-08-07 22:13 | `c1f035fd` | 2 | `sessions/2026-08-07-c1f035fd.md` |
+| 2026-08-07 22:27 | `5722fc2f` | 1 | `sessions/2026-08-07-5722fc2f.md` |
+| 2026-08-07 23:03 | `a70f15c8` | 4 | `sessions/2026-08-07-a70f15c8.md` |
+| 2026-08-08 00:54 | `ab378ca0` | 3 | `sessions/2026-08-08-ab378ca0.md` |
+| 2026-08-08 04:19 | `124c0f7b` | 1 | `sessions/2026-08-08-124c0f7b.md` |
+| 2026-08-08 12:55 | `4e5e9e96` | 2 | `sessions/2026-08-08-4e5e9e96.md` |
 
 ## `-home-local-KHQ-jon-crall-code-aiq-dkps-formalization--claude-worktrees-aiq-gpu-docs` - 25 prompts / 1 sessions
 
