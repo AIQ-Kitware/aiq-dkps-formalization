@@ -255,6 +255,14 @@ CONSEQUENCE FOR THE PLAN: no new bridge is needed for the `Theta_0` half.  Every
 
 The ambient `Theta` half at UI-norm scope is a separate question and should not be assumed to follow.
 
+**CORRECTION 2026-08-08 (Claude Opus 5), COMPILED.**  The reasoned counterexample above is FALSE, and the plan that rests on it must be re-derived.
+
+`sinTwoAngleOperatorC` is `2 . sinAngleOperatorDirectedC * cosAngleOperatorC`, built from the *directed* sine -- the modulus of the cross product `P_{Vperp} P_U` -- and NOT from the symmetric `sinAngleOperatorC = |P_U - P_V|`.  The symmetric sine is the one with full rank in the two-dimensional model (`sin theta . 1`); the directed one annihilates `U-perp`.  So the ambient double-angle operator has NO `U-perp` contribution and carries `sin 2theta` exactly once there, as does the directed ideal block.
+
+Compiled in `DavisKahan/Geometry/Angle/OperatorAngleComplex.lean`: `range_sinAngleOperatorDirectedC_le` and `range_sinTwoAngleOperatorC_le` -- both operators have range inside `U`, in general and with no dimension hypothesis, so `rank <= dim U` for both and no multiplicity count separates them.
+
+CONSEQUENCE: the `Theta_0`/`Theta` bridge is NOT refuted; it is simply unproved. Sub-problem B is therefore still open, but the recorded reason for closing it off was wrong. Sub-problems A (real scalars + every UI norm, by complexification transport) and C (unequal dimensions, last sentence of Section 8) are unaffected.
+
 #### Section 2, tan 2 theta theorem: Double-angle tangent theorem
 
 - **Kind:** `unnumbered_theorem`
