@@ -298,11 +298,26 @@ It got most of the way: only three failure sites, none of them mathematical.
    `kyFanApproximationGauge _ (continuousOrthogonalBlockSum _ _)` lemma stops matching,
    almost certainly an instance/implicit-`𝕜` mismatch needing an explicit `(𝕜 := 𝕜)`.
 
-So the next attempt should generalize the local instance first, supply `(𝕜 := 𝕜)` at the
-two block-sum rewrites, and raise `maxHeartbeats` locally if the timeout survives. If
-that lands, `DK-6.1-lem` and `DK-6.1-prop` close **without any complexification
-transport at all**, which is strictly better than the brief's route. Do the same
-genericity check on the appendix tangent passage before reaching for
+**CASCADE ROOT LOCATED (same session).** The two block-sum rewrite failures are not an
+implicit-argument slip: `kyFanApproximationGauge_continuousOrthogonalBlockSum` in
+`DavisKahan/OperatorIdeal/ApproximationNumbers/BlockSum.lean:578` is itself **ℂ-only**.
+That file has a generic `variable {𝕜 : Type u} [RCLike 𝕜]` at line 52, but its second
+half (from line 330) re-fixes `[InnerProductSpace ℂ _]` on each declaration -- 26
+occurrences across roughly eleven declarations, including `splitKyFanGauge`,
+`splitKyFanGauge_mono`, `kyFanApproximationGauge_blockSum_le` and
+`sameApproximationSingularSequence_continuousOrthogonalBlockSum`, all of which Lemma 6.1
+consumes.
+
+So the order of work is: **generalize the second half of `BlockSum.lean` to `RCLike`
+first**, then Lemma61 follows, then re-check `Proposition6_1`. Nothing in that half looks
+complex-specific either -- it is prefix sums, `splitKyFanGauge`, and approximation-number
+bookkeeping -- but it is ~480 lines of file to move, so budget it as a real task rather
+than a wrapper. `BlockSum.lean`'s owner is `OperatorIdeals`
+(`ForTauCeti/Analysis/OperatorIdeal/`), so this doubles as roadmap-aligned cleanup.
+
+If that lands, `DK-6.1-lem` and `DK-6.1-prop` close **without any complexification
+transport at all**, which is strictly better than the brief's recommended route. Do the
+same genericity check on the appendix tangent passage before reaching for
 `complexifySubmoduleEquiv`.
 
 ### T7 `TODO` -- `tan 2Theta`: infinite-dimensional trial subspace, branch-free
