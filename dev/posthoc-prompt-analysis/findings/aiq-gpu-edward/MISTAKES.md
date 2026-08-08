@@ -7,12 +7,17 @@ every instance here fits one of the five. Where this slice adds something, it is
 **new instances of existing classes** and one sharpening of C that is argued in
 C1′ below.
 
+**Re-run 2026-08-08.** Extended through 2026-08-08. Two new instances (C7′, E8),
+both from the 2026-08-07 GPT-brief sessions, and one genuinely new **catch
+mechanism** — an external LLM with no repository access, which is neither of the
+two catchers this study had recorded. See "What actually caught each class".
+
 ## Sources
 
-1. **`local/mistake-evidence.md`** — 109 windows (79 corrections, 30 interrupts)
-   over 2026-07-29 → 08-06.
+1. **`local/mistake-evidence.md`** — 123 windows (87 corrections, 36 interrupts)
+   over 2026-07-29 → 08-08.
 2. **The agent memory store**, `~/.claude/projects/-home-joncrall-agent/memory/`
-   — 23 records. This is the densest source on this machine: nearly every record
+   — 31 records. This is the densest source on this machine: nearly every record
    opens by naming the mistake that caused it, with dates and declaration names.
    Cited below as `[[slug]]`.
 3. **`AGENTS.md`**, `dev/lean-proof-engineering-lessons.md`.
@@ -190,6 +195,31 @@ needed. Three `<;>` chains were dead from the middle onward. The lane claim was
 also sized from a stale log — "23 warnings in one class across 8 theorems"; it was
 31 in four classes. ([[dkps-measure-before-suppressing-linters]])
 
+### C7′. "Proved in the build" recorded as "proved as the source states it" *(new, 2026-08-07)*
+
+The census carries a per-row status, and `compiled_exact` is supposed to mean the
+declaration matches the printed statement, not merely that something with that
+name compiles. On 2026-08-07 the agent upgraded the S2 tan-2Θ row to
+`compiled_exact` on the strength of a genuine real-scalar lift it had just
+proved — but the lift did not close the whole printed statement, and the row had
+previously been downgraded for exactly that reason. The agent restored the
+downgrade itself the same hour, in a commit whose message names it as a scope
+correction (window 116, `Correct census over-claim and rebuild`).
+
+The reason this is worth a separate entry rather than another C1′ instance is
+**how the class was caught in general**. The following day the human relayed a
+GPT message that opens:
+
+> We're much closer than "42/48 proved" makes it sound, but **proved-in-build is
+> not the same as source-exact**. The latest census has **28/48 rows at
+> `compiled_exact`**.
+
+An LLM with no repository access, no compiler and no ability to run anything read
+the committed census prose and correctly identified that the headline number was
+measuring the wrong thing. That is the same failure C1′ describes — a tracker
+being a claim about the past — caught by a reader whose *only* input was the
+claim itself. The build was green throughout, on both sides of the correction.
+
 ---
 
 ## Class D — Lean/environment mechanics
@@ -283,7 +313,7 @@ flagging there is `def _ : Prop := sorry`, because it asserts nothing.
 
 ### E7′. Register and provenance in human-facing prose
 
-Not present in toothbrush-jon's slice at this weight; 8% of this machine's prompts
+Not present in toothbrush-jon's slice at this weight; 9% of this machine's prompts
 are the human excising LLM register from a roadmap that was going to real
 reviewers:
 
@@ -301,6 +331,41 @@ content it had just been told to cut; (ii) `Revert all of this work` /
 `MAKE THE MINIMAL EDIT ONLY` — an editorial instruction was read as licence for a
 broad rewrite. Both are scope failures on an editorial instruction, and both cost
 tight-loop human turns rather than correctness.
+
+### E8. Inferring a cleanup mandate from an aesthetic judgement *(new, 2026-08-07)*
+
+Asked whether the fully-proved items could be promoted out of `Experimental` and
+`MathAhead`, the agent noticed that production declarations carried two
+"unpolished" namespace segments, surveyed **269 sites across 61 files**, and
+began designing a repo-wide rename — reaching for `AskUserQuestion` to pick the
+destination namespace. Two interrupts inside six minutes stopped it, and the
+correction is the most exasperated turn in the corpus:
+
+> Fuck. Ok, I'm frustrated. MathAhead was a place where a smart agent without a
+> compiler was supposed to drop close-to-good proofs for an agent with a compiler
+> like yourself to take, fix, and use. It was supposed to make your life easier,
+> but now it's making both of our lives harder. […] Don't delete the bad proofs,
+> especially if they have shapes that might be helpful in the future. […] But I
+> care more about getting 100% correct proofs right now than this polish.
+
+Three separable failures, only the first of which is about scope:
+
+1. **A question about promotion was read as a mandate for a rename.** The unit of
+   work grew by two orders of magnitude with no instruction to grow it.
+2. **The agent had checked the right gate and then overrode its own finding.**
+   It read `scripts/check_experimental_coverage.py`, correctly noted the rule-3
+   violators were recorded as *broken* rather than proved, said "let me verify
+   against the compiler rather than trust the prose" — and then proceeded to the
+   rename survey anyway. The recorded-decision check ([[dkps-check-for-recorded-decisions]])
+   fired and did not change the behaviour.
+3. **A convention's *intent* existed nowhere in the repository.** `MathAhead` is
+   a donor lane: a non-compiling model drops proof shapes there for a
+   compiler-equipped agent to harvest. Nothing in the tree said so, so the
+   directory read as debt. This is the failure the memory record
+   [[dkps-mathahead-is-a-donor-lane]] exists to prevent, and it was written
+   because of this incident.
+
+The compiler could not have caught any of it: the rename would have compiled.
 
 ---
 
@@ -324,6 +389,16 @@ Same column as toothbrush-jon's, restricted to instances documented here.
 | E4 lane collision | another agent's committed row | no |
 | E4 `git add -A` sweep | **the other agent**, not this one | no — build stayed green |
 | E6′ stopping early | human, six times | no |
+| C7′ census over-claim | the agent itself, same hour; **and the class, by an LLM with no repo access** | no — green on both sides of the correction |
+| E8 MathAhead rename | human, two interrupts in six minutes | no — the rename would have compiled |
+
+The C7′ row is the one worth arguing about. Every other catch in this table is
+either a human, a second *agent* with a checkout, or the compiler. C7′ was caught
+by a chat model reading committed prose — no repository, no build, no tools. It
+did not verify anything; it noticed that a headline number and a status field
+could not both mean what they appeared to mean. That is a cheap check this study
+had not recorded as available, and it is the only one here that scales without
+giving the reviewer write access to anything.
 
 ## What this slice adds to the joint picture
 
@@ -347,6 +422,21 @@ Same column as toothbrush-jon's, restricted to instances documented here.
 4. **The most repeated correction was about the agent's stopping policy, not its
    mathematics** (E6′, six turns). Cheap to fix, and it recurred until it was
    written to a memory file by explicit human order.
+5. **A third catcher exists, and it is the cheapest one.** *(added 2026-08-08)*
+   A model with no repository access caught a measurement failure by reading the
+   committed status prose (C7′). Separately, the GPT-authored campaign briefs of
+   2026-08-07 were checked against the tree afterwards and their *repository
+   state claims* held up, their *proof recipes* worked first try, and the one
+   place a literal execution would have produced a false statement was a prose
+   ordering convention — `principalAngles` is `arcsin` of the sine-block singular
+   values while `principalCosines` is the cosine block, both sorted decreasingly,
+   so the two are index-reversed and a bridge stated at a shared index would have
+   compiled and been wrong. Written up the same day in
+   `dev/journals/gpt-authored-campaign-briefs-2026-08-07.md` and distilled to
+   [[dkps-briefs-are-gpt-authored]]. The rule that came out of it: probe a
+   brief's state claims, trust its proof recipes, and look hardest at any
+   convention it states in prose, because prose is where an authored plan cannot
+   have checked itself.
 
 ## Caveats
 
@@ -357,7 +447,12 @@ Same column as toothbrush-jon's, restricted to instances documented here.
   have caught — I cannot estimate how many more of those there are.
 - Transcripts survive ~30 days; the oldest record on this machine is 2026-07-28.
   Anything earlier is represented only where it left a memory or policy trace.
-- 121 typed prompts on this machine were never delivered as turns
+- 136 typed prompts on this machine were never delivered as turns
   (`FINDINGS.md` §1). Corrections that were typed, dropped, and then not retyped
   are invisible to `mistakes.py`, which reads `prompts.jsonl` only.
 - Frequencies are documented instances, not incidence rates.
+- The two 2026-08-07 instances (C7′, E8) come from a 36-hour window in which the
+  driving prompts were GPT-authored rather than human-authored (`FINDINGS.md` §6).
+  Whether that regime produces a different *mix* of mistakes cannot be judged
+  from two instances; it is flagged so the joint analysis does not pool them
+  blindly with the rest.
