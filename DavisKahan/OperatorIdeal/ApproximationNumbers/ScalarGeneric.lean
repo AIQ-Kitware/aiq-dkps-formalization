@@ -8,7 +8,6 @@ import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
-import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 
 /-!
 # Scalar-generic approximation-number endpoints and ideal families
@@ -554,60 +553,6 @@ theorem kyFanApproximationGauge_proj_comp_eq_adjoint_comp
   rw [← kyFanApproximationGauge_adjoint k (P ∘L K)]
   simp only [ContinuousLinearMap.adjoint_comp]
   rw [hP.2.clm_adjoint_eq]
-
-/-! ## A Fan-dominant family that actually exists
-
-Every unbounded Davis--Kahan estimate in this development is stated for an
-arbitrary `KyFanDominantIdealFamily`, and until now the repository contained no
-*instance* of one: the hypothesis was universally quantified and never
-discharged, so none of those theorems had ever been applied to a concrete norm.
-
-The operator norm is one, and it is the one the paper's numbered estimates use.
-Fan dominance is immediate at `k = 1`, where the Ky Fan gauge *is* the operator
-norm. -/
-
-/-- **The operator norm as a Fan-dominant ideal family.**  The gauge is `‖·‖`,
-completeness is the operator-norm family's, and Fan dominance is
-`kyFanApproximationGauge 1 = ‖·‖`. -/
-noncomputable def operatorNormKyFanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
-    KyFanDominantIdealFamily.{u, v} 𝕜 where
-  toSymmetricOperatorIdealFamily := TauCeti.operatorNormFamily.{u, v} 𝕜
-  isComplete := inferInstance
-  gauge_le_of_forall_kyFanApproximationGauge_le h := by
-    have h1 := h 1
-    rw [kyFanApproximationGauge_one, kyFanApproximationGauge_one] at h1
-    simp only [TauCeti.gauge_operatorNormFamily, ← ofReal_norm]
-    exact ENNReal.ofReal_le_ofReal h1
-
-/-- The Fan-dominant operator-norm family carries the operator-norm symmetric
-family, definitionally. -/
-@[simp]
-theorem toSymmetricOperatorIdealFamily_operatorNormKyFanDominantIdealFamily
-    (𝕜 : Type u) [RCLike 𝕜] :
-    (operatorNormKyFanDominantIdealFamily.{u, v} 𝕜).toSymmetricOperatorIdealFamily
-      = TauCeti.operatorNormFamily.{u, v} 𝕜 := rfl
-
-@[simp]
-theorem gauge_operatorNormKyFanDominantIdealFamily {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (A : E →L[𝕜] F) :
-    (operatorNormKyFanDominantIdealFamily.{u, v} 𝕜).gauge A = ‖A‖ := by
-  rw [KyFanDominantIdealFamily.gauge_eq_toReal,
-    toSymmetricOperatorIdealFamily_operatorNormKyFanDominantIdealFamily,
-    TauCeti.gauge_operatorNormFamily, ← ofReal_norm,
-    ENNReal.toReal_ofReal (norm_nonneg A)]
-
-@[simp]
-theorem mem_operatorNormKyFanDominantIdealFamily {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (A : E →L[𝕜] F) :
-    (operatorNormKyFanDominantIdealFamily.{u, v} 𝕜).Mem A := by
-  rw [KyFanDominantIdealFamily.mem_iff,
-    toSymmetricOperatorIdealFamily_operatorNormKyFanDominantIdealFamily,
-    TauCeti.gauge_operatorNormFamily]
-  exact enorm_ne_top
 
 end ExactSinTheta
 end Experimental

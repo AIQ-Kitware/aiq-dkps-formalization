@@ -181,14 +181,15 @@ theorem beamTanTheta_le (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
       (Set.Ioo (ritzHigh ε) (ritzHigh ε + (500 - ritzHigh ε))) measurableSet_Ioo = 0 := by
     rw [show ritzHigh ε + (500 - ritzHigh ε) = 500 from by ring]
     exact beamPerturbed_specProjection_Ioo_eq_zero ε hε.le
+  -- the operator norm, read as the first Ky Fan gauge
   have hmain := theorem6_3_unbounded_ideal_directedTangent
-    (operatorNormKyFanDominantIdealFamily.{0, 0} ℂ)
+    (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) 1 one_pos)
     (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε) (beamTrialBlock ε) hδ hgap
     (beamTrialBlock_compression_form_le ε hε.le)
-    (mem_operatorNormKyFanDominantIdealFamily _)
+    (KyFanDominantIdealFamily.kyFan_mem 1 one_pos _)
   have hgauge := hmain.2
-  rw [gauge_operatorNormKyFanDominantIdealFamily,
-    gauge_operatorNormKyFanDominantIdealFamily] at hgauge
+  rw [KyFanDominantIdealFamily.kyFan_gauge, KyFanDominantIdealFamily.kyFan_gauge,
+    kyFanApproximationGauge_one, kyFanApproximationGauge_one] at hgauge
   have hchain : (500 - ritzHigh ε) * beamTanTheta ε
       ≤ orthogonalResidualSingularValue ε :=
     le_trans hgauge (norm_beamTrialBlock_residual_le ε)
