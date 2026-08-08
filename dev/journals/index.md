@@ -46,6 +46,9 @@ in doubt; this file is a routing aid, not a complete replacement for grep (see
 | Symptom | Read |
 |---|---|
 | Over-built a framework / ran a too-broad sweep / mis-scoped after reading reviewer feedback that was an **LLM rephrasing** with invented meta-structure | [`lessons_learned.md`](lessons_learned.md) (2026-06-14, "Over-relying on a ChatGPT rephrasing") |
+| Who wrote this long structured campaign brief, and how much of it should I trust? | [`gpt-authored-campaign-briefs-2026-08-07.md`](gpt-authored-campaign-briefs-2026-08-07.md) |
+| A brief and the census `next_action` prescribe different proof routes | same |
+| A brief says "with the source's ordering convention" and the obvious Lean object has the opposite order | same |
 
 ## How to extend
 
