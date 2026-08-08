@@ -1004,6 +1004,154 @@ theorem beamSinTwoThetaSum_lt (ε : ℝ) (hε : 0 < ε) :
     linarith
   nlinarith [hnn, hchain]
 
+
+/-! ## Equation (9.3): the second approximation number of the residual
+
+The Ky Fan-2 form of the sine theorem needs *both* singular values of the
+residual, where (9.1) needed only the top one.  The residual has a
+two-dimensional domain, so its second approximation number is computed by a
+single explicit rank-one approximant along the top eigendirection of the
+residual Gram matrix.
+
+In the orthonormal trial basis the Gram matrix of equation (9.1) is
+`(ε²/30) · [[11 - √75, -1], [-1, 11 + √75]]`, whose eigenvalues are
+`(ε²/30)(11 ± √76)`.  Its top eigenvector is `φ₁ + c φ₂` with
+`c = -(√75 + √76)`, and the whole computation reduces to the radical identity
+
+`c²(11 - √75) + 2c + (11 + √75) = (1 + c²)(11 - √76)`,
+
+which is `(√75 + √76)(√75 - √76) = -1` in disguise.  No shortcut through
+`a₁ ≤ a₀` works: `2 · residualTopSingularValue / 500` exceeds the printed
+`109/50000 · ε`. -/
+
+open DavisKahan1970.Section9 in
+/-- The Section 9 residual as an operator: multiplication by `ε t` restricted to
+the affine trial subspace. -/
+def beamResidual (ε : ℝ) : beamTrial →L[ℂ] BeamL2 :=
+  beamPerturbation ε ∘L beamTrialIncl
+
+open DavisKahan1970.Section9 in
+/-- The first trial vector, as an element of the trial subspace. -/
+def beamTrialVecOne : beamTrial :=
+  ⟨centeredAffineLp trialOne, centeredAffineLp_mem_beamTrial _⟩
+
+open DavisKahan1970.Section9 in
+/-- The second trial vector, as an element of the trial subspace. -/
+def beamTrialVecTwo : beamTrial :=
+  ⟨centeredAffineLp trialTwo, centeredAffineLp_mem_beamTrial _⟩
+
+open DavisKahan1970.Section9 in
+theorem beamResidual_apply_vecOne (ε : ℝ) :
+    beamResidual ε beamTrialVecOne = beamPerturbation ε (centeredAffineLp trialOne) :=
+  rfl
+
+open DavisKahan1970.Section9 in
+theorem beamResidual_apply_vecTwo (ε : ℝ) :
+    beamResidual ε beamTrialVecTwo = beamPerturbation ε (centeredAffineLp trialTwo) :=
+  rfl
+
+/-- The two trial vectors are orthonormal inside the trial subspace. -/
+theorem beamTrialVec_orthonormal :
+    ⟪beamTrialVecOne, beamTrialVecOne⟫_ℂ = 1 ∧
+      ⟪beamTrialVecTwo, beamTrialVecTwo⟫_ℂ = 1 ∧
+        ⟪beamTrialVecOne, beamTrialVecTwo⟫_ℂ = 0 := by
+  obtain ⟨h1, h2, h12⟩ := beamTrial_orthonormal
+  refine ⟨?_, ?_, ?_⟩
+  · show ⟪(beamTrialVecOne : BeamL2), (beamTrialVecOne : BeamL2)⟫_ℂ = 1
+    rw [inner_self_eq_norm_sq_to_K]
+    show ((‖centeredAffineLp DavisKahan1970.Section9.trialOne‖ : ℂ)) ^ 2 = 1
+    rw [← Complex.ofReal_pow, h1]
+    norm_num
+  · show ⟪(beamTrialVecTwo : BeamL2), (beamTrialVecTwo : BeamL2)⟫_ℂ = 1
+    rw [inner_self_eq_norm_sq_to_K]
+    show ((‖centeredAffineLp DavisKahan1970.Section9.trialTwo‖ : ℂ)) ^ 2 = 1
+    rw [← Complex.ofReal_pow, h2]
+    norm_num
+  · exact h12
+
+/-- The two trial vectors span the trial subspace: it is two-dimensional and they
+are an orthonormal pair. -/
+theorem beamTrialVec_span_eq_top :
+    Submodule.span ℂ ({beamTrialVecOne, beamTrialVecTwo} : Set beamTrial) = ⊤ := by
+  classical
+  obtain ⟨h1, h2, h12⟩ := beamTrialVec_orthonormal
+  have h21 : ⟪beamTrialVecTwo, beamTrialVecOne⟫_ℂ = 0 := by
+    rw [← inner_conj_symm (𝕜 := ℂ) beamTrialVecTwo beamTrialVecOne, h12, map_zero]
+  have hli : LinearIndependent ℂ ![beamTrialVecOne, beamTrialVecTwo] := by
+    rw [LinearIndependent.pair_iff]
+    intro α β hαβ
+    have hA : α = 0 := by
+      have := congrArg (fun z => ⟪beamTrialVecOne, z⟫_ℂ) hαβ
+      simpa [inner_add_right, inner_smul_right, h1, h12] using this
+    have hB : β = 0 := by
+      have := congrArg (fun z => ⟪beamTrialVecTwo, z⟫_ℂ) hαβ
+      simpa [inner_add_right, inner_smul_right, h2, h21] using this
+    exact ⟨hA, hB⟩
+  have hrange : Set.range ![beamTrialVecOne, beamTrialVecTwo] =
+      ({beamTrialVecOne, beamTrialVecTwo} : Set beamTrial) := by
+    simp [Matrix.range_cons, Matrix.range_empty, Set.pair_comm]
+  have hspan : Module.finrank ℂ
+      (Submodule.span ℂ ({beamTrialVecOne, beamTrialVecTwo} : Set beamTrial)) = 2 := by
+    rw [← hrange, finrank_span_eq_card hli]
+    simp
+  have hle : Module.finrank ℂ (beamTrial : Submodule ℂ BeamL2) ≤ 2 := by
+    have hcard : (Cardinal.mk ({beamOneLp, beamIdLp} : Set BeamL2)) ≤ 2 := by
+      refine le_trans Cardinal.mk_insert_le ?_
+      rw [Cardinal.mk_singleton]
+      exact le_of_eq one_add_one_eq_two
+    have hrk : Module.rank ℂ (beamTrial : Submodule ℂ BeamL2) ≤ 2 :=
+      le_trans (by rw [beamTrial]; exact rank_span_le _) hcard
+    exact_mod_cast Module.finrank_le_of_rank_le hrk
+  have hge : 2 ≤ Module.finrank ℂ (beamTrial : Submodule ℂ BeamL2) := by
+    rw [← hspan]
+    exact Submodule.finrank_le _
+  have heq : Module.finrank ℂ
+      (Submodule.span ℂ ({beamTrialVecOne, beamTrialVecTwo} : Set beamTrial)) =
+      Module.finrank ℂ (beamTrial : Submodule ℂ BeamL2) := by
+    omega
+  exact Submodule.eq_top_of_finrank_eq heq
+
+/-- Every trial vector is a combination of the two orthonormal trial vectors. -/
+theorem exists_beamTrialVec_repr (x : beamTrial) :
+    ∃ α β : ℂ, x = α • beamTrialVecOne + β • beamTrialVecTwo := by
+  have hx : x ∈ Submodule.span ℂ ({beamTrialVecOne, beamTrialVecTwo} : Set beamTrial) := by
+    rw [beamTrialVec_span_eq_top]; trivial
+  obtain ⟨α, β, hαβ⟩ := Submodule.mem_span_pair.1 hx
+  exact ⟨α, β, hαβ.symm⟩
+
+open DavisKahan1970.Section9 in
+/-- The exact Gram values of the residual on the orthonormal trial basis: this is
+the residual Gram matrix of equation (9.1), read as inner products of the genuine
+`L²` residual. -/
+theorem beamResidual_gram (ε : ℝ) :
+    ⟪beamResidual ε beamTrialVecOne, beamResidual ε beamTrialVecOne⟫_ℂ
+        = (((residualGram ε).a₀₀ : ℝ) : ℂ) ∧
+      ⟪beamResidual ε beamTrialVecOne, beamResidual ε beamTrialVecTwo⟫_ℂ
+        = (((residualGram ε).a₀₁ : ℝ) : ℂ) ∧
+      ⟪beamResidual ε beamTrialVecTwo, beamResidual ε beamTrialVecTwo⟫_ℂ
+        = (((residualGram ε).a₁₁ : ℝ) : ℂ) :=
+  beamResidualGram_matrix ε
+
+/-- The top eigendirection coefficient of the residual Gram matrix:
+`c = -(√75 + √76)`, so that `φ₁ + c φ₂` is a top eigenvector. -/
+def beamGramTopCoefficient : ℝ := -(Real.sqrt 75 + Real.sqrt 76)
+
+open DavisKahan1970.Section9 in
+/-- **The radical identity behind equation (9.3).**  Along the direction
+`c φ₁ - φ₂` orthogonal to the top eigenvector, the residual Gram form equals
+`(1 + c²)` times the *lower* eigenvalue.  Equivalently
+`(√75 + √76)(√75 - √76) = -1`. -/
+theorem beamGram_orthogonal_direction (ε : ℝ) :
+    beamGramTopCoefficient ^ 2 * (residualGram ε).a₀₀
+        - 2 * beamGramTopCoefficient * (residualGram ε).a₀₁
+        + (residualGram ε).a₁₁
+      = (1 + beamGramTopCoefficient ^ 2) * residualGramEigenvalueLow ε := by
+  have hs : Real.sqrt 75 ^ 2 = 75 := Real.sq_sqrt (by norm_num)
+  have hr : Real.sqrt 76 ^ 2 = 76 := Real.sq_sqrt (by norm_num)
+  unfold beamGramTopCoefficient residualGram residualGramEigenvalueLow
+  dsimp only
+  linear_combination (ε ^ 2 / 30 * (-Real.sqrt 75 - Real.sqrt 76)) * hs
+    + (ε ^ 2 / 30 * (Real.sqrt 75 + Real.sqrt 76)) * hr
 end
 
 end Model
