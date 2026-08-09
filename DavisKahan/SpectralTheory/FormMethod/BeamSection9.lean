@@ -1581,17 +1581,23 @@ theorem beamResidual_inner_trial (ε : ℝ) :
   rw [hsa, r01, map_zero]
 
 open DavisKahan1970.Section9 in
-/-- **The Rayleigh--Ritz residual bound.**  The part of `ε t x` orthogonal to the trial
-subspace has norm at most `orthogonalResidualSingularValue ε = |ε| √15/15`.  This is the
-exact operator-norm content of the *recentered* residual Gram matrix
-`orthogonalResidualGram ε = (ε²/30) [[1, -1], [-1, 1]]`, whose nonzero eigenvalue is
-`ε²/15`. -/
-theorem norm_beamRitzResidual_le (ε : ℝ) (x : beamTrial) :
-    ‖beamResidual ε x - beamTrial.starProjection (beamResidual ε x)‖
-      ≤ orthogonalResidualSingularValue ε * ‖x‖ := by
+/-- **The recentered residual Gram form, in the orthonormal Ritz coordinates.**
+
+For `x = α φ₁ + β φ₂` the part of `ε t x` orthogonal to the trial subspace has squared
+norm at most `(ε²/30) |α − β|²`.  This is the *recentered* residual Gram matrix
+`orthogonalResidualGram ε = (ε²/30) [[1, -1], [-1, 1]]` read as a quadratic form: it is
+exactly rank one, and its kernel is the direction `α = β`.
+
+The bound is obtained without computing the orthogonal projection: the projection is the
+nearest point of the trial subspace, so testing against the explicit competitor
+`ritzLow ε · α · φ₁ + ritzHigh ε · β · φ₂` suffices, and the resulting form collapses to
+`(ε²/30) |α − β|²`. -/
+theorem norm_beamRitzResidual_sq_le (ε : ℝ) (α β : ℂ) :
+    ‖beamResidual ε (α • beamTrialVecOne + β • beamTrialVecTwo)
+        - beamTrial.starProjection
+            (beamResidual ε (α • beamTrialVecOne + β • beamTrialVecTwo))‖ ^ 2
+      ≤ ε ^ 2 / 30 * ‖α - β‖ ^ 2 := by
   classical
-  obtain ⟨α, β, hx⟩ := exists_beamTrialVec_repr x
-  subst hx
   obtain ⟨g00, g01, g11⟩ := beamResidual_gram ε
   obtain ⟨q1, q2, q12, q21⟩ := inner_beamTrialLp
   obtain ⟨m00, m01, m10, m11⟩ := beamResidual_inner_trial ε
@@ -1625,7 +1631,6 @@ theorem norm_beamRitzResidual_le (ε : ℝ) (x : beamTrial) :
   have hmin : ‖u - beamTrial.starProjection u‖ ≤ ‖u - w‖ := by
     rw [beamTrial.starProjection_minimal u]
     exact ciInf_le ⟨0, by rintro _ ⟨y, rfl⟩; exact norm_nonneg _⟩ (⟨w, hwmem⟩ : beamTrial)
-  refine le_trans hmin ?_
   -- expand `‖u - w‖²` against the two Gram matrices
   have hu' : u = α • beamResidual ε beamTrialVecOne
       + β • beamResidual ε beamTrialVecTwo := by
@@ -1670,6 +1675,22 @@ theorem norm_beamRitzResidual_le (ε : ℝ) (x : beamTrial) :
       push_cast at hinner
       exact hinner
     exact Complex.ofReal_inj.mp h2'
+  rw [← hnormsq]
+  nlinarith [hmin, norm_nonneg (u - beamTrial.starProjection u), norm_nonneg (u - w)]
+
+open DavisKahan1970.Section9 in
+/-- **The Rayleigh--Ritz residual bound.**  The part of `ε t x` orthogonal to the trial
+subspace has norm at most `orthogonalResidualSingularValue ε = |ε| √15/15`.  This is the
+exact operator-norm content of the *recentered* residual Gram matrix
+`orthogonalResidualGram ε = (ε²/30) [[1, -1], [-1, 1]]`, whose nonzero eigenvalue is
+`ε²/15`. -/
+theorem norm_beamRitzResidual_le (ε : ℝ) (x : beamTrial) :
+    ‖beamResidual ε x - beamTrial.starProjection (beamResidual ε x)‖
+      ≤ orthogonalResidualSingularValue ε * ‖x‖ := by
+  classical
+  obtain ⟨α, β, hx⟩ := exists_beamTrialVec_repr x
+  subst hx
+  have hsq := norm_beamRitzResidual_sq_le ε α β
   have hxnorm : ‖α • beamTrialVecOne + β • beamTrialVecTwo‖ ^ 2 = ‖α‖ ^ 2 + ‖β‖ ^ 2 :=
     norm_sq_beamTrialVec_comb α β
   have hσ : orthogonalResidualSingularValue ε ^ 2 = ε ^ 2 / 15 := by
@@ -1684,8 +1705,25 @@ theorem norm_beamRitzResidual_le (ε : ℝ) (x : beamTrial) :
   refine le_of_sq_le_sq' (norm_nonneg _)
     (mul_nonneg (by unfold orthogonalResidualSingularValue; positivity)
       (norm_nonneg _)) ?_
-  rw [hnormsq, mul_pow, hσ, hxnorm]
-  nlinarith [hsub, sq_nonneg ε]
+  rw [mul_pow, hσ, hxnorm]
+  nlinarith [hsq, hsub, sq_nonneg ε]
+
+open DavisKahan1970.Section9 in
+/-- **The recentered residual annihilates the constant direction.**
+
+`orthogonalResidualGram ε = (ε²/30) [[1, -1], [-1, 1]]` is exactly rank one, and
+`φ₁ + φ₂` spans its kernel.  Concretely, `φ₁ + φ₂` is a multiple of the constant
+function, and `ε t · 1 = ε t` is itself affine, so the Rayleigh--Ritz residual there
+vanishes identically rather than merely being small. -/
+theorem beamRitzResidual_vecOne_add_vecTwo_eq_zero (ε : ℝ) :
+    beamResidual ε (beamTrialVecOne + beamTrialVecTwo)
+        - beamTrial.starProjection
+            (beamResidual ε (beamTrialVecOne + beamTrialVecTwo)) = 0 := by
+  have h := norm_beamRitzResidual_sq_le ε 1 1
+  rw [one_smul, one_smul, sub_self, norm_zero] at h
+  refine norm_eq_zero.mp (le_antisymm ?_ (norm_nonneg _))
+  nlinarith [h, norm_nonneg (beamResidual ε (beamTrialVecOne + beamTrialVecTwo)
+    - beamTrial.starProjection (beamResidual ε (beamTrialVecOne + beamTrialVecTwo)))]
 
 open DavisKahan1970.Section9 in
 /-- **The Ritz compression form bound.**  The Rayleigh--Ritz compression of `ε t` to the
