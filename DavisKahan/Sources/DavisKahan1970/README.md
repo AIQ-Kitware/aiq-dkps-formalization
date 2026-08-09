@@ -1,137 +1,40 @@
 # Davis--Kahan 1970 source coverage
 
-This directory is the publication-facing layer for Chandler Davis and
-W. M. Kahan, *The Rotation of Eigenvectors by a Perturbation. III*, SIAM
-Journal on Numerical Analysis 7 (1970), 1--46.
+This directory is the publication-facing layer for Chandler Davis and W. M. Kahan,
+*The Rotation of Eigenvectors by a Perturbation. III*, SIAM Journal on Numerical
+Analysis 7 (1970), 1--46.
 
-## Source scope and completion warning
+## What is authoritative
 
-The modernized local transcription states that the ambient space is a
-separable Hilbert space, that all four headline theorems apply in infinite and
-finite dimensions and for arbitrary unitary-invariant norms, and that the
-single-angle theory extends to unbounded self-adjoint operators through
-explicit domain and bounded-residual conditions. The final source facade must
-therefore treat bounded statements as specializations rather than the
-unqualified target.
+Do not infer completion from this README or from the presence of one facade file.
+The maintained theorem-by-theorem authority is
+`dev/davis-kahan-1970-full-source-census.json`, with the generated readable view in
+`dev/davis-kahan-1970-full-source-census.md` and the dependency frontier in
+`dev/davis-kahan-1970-frontier-status.md`.
 
-Therefore this directory is not complete merely because `PartIII.lean` builds.
-The present facade is a proof-complete **finite specialization** of a substantial
-portion of the paper. It must be described with that qualifier.
+Run the checker for the current source-obligation summary:
 
-`PartIII.lean` exposes only proof-complete finite results. It is deliberately a
-thin scoped facade; proof machinery stays under `DavisKahan/FiniteDimensional`.
-`GeneralSinTheta.lean` exposes the experimental maximally general theorem shape
-and must not be described as proof-complete until its dependency audit is clean.
+```bash
+python3 scripts/check_davis_kahan_1970_source_census.py
+```
 
-## Proof-complete finite source-facing specializations
+When Lean is available, use the compile-backed census/probe tooling for declaration
+reachability rather than copying a current count into this document.
 
-| Source role | Canonical declaration |
-|---|---|
-| Ordered Sylvester estimate | `partIII_sylvester_ordered_uiNorm` |
-| Interval/exterior Sylvester estimate | `partIII_sylvester_interval_uiNorm` |
-| Residual `sin Theta` | `partIII_sinTheta_residual_uiNorm` |
-| Generalized trial-map `sin Theta` | `partIII_generalizedSinTheta_uiNorm` |
-| Perturbation `sin Theta` | `partIII_sinTheta_uiNorm`, `partIII_sinTheta_angleOperator_uiNorm` |
-| Equal-rank Ritz-residual `tan Theta` | `partIII_tanTheta_ritzResidual_uiNorm` |
-| Strict-lower-rank Ritz-residual `tan Theta` | `partIII_generalizedTanTheta_ritzResidual_uiNorm` |
-| Pole-free tangent plus transversality | `partIII_tanTheta_ritzResidual_uiNorm_and_isTransverse` |
-| Perturbation `sin 2 Theta` | `partIII_sinTwoTheta_uiNorm`, `partIII_sinTwoTheta_angleOperator_uiNorm` |
-| Sharp operator-norm `tan 2 Theta` and acute branch | `partIII_tanTwoTheta_opNorm` |
-| Projector-difference companions | `projector_difference_opNorm`, `spectralProjector_difference_opNorm` |
-| Canonical direct rotation construction and projection intertwining | `directRotation`, `partIII_directRotation_map_eq`, `partIII_directRotation_intertwines_projection` |
-| Unbounded Hilbert-space `sin 2 Theta`, perturbation and reflection-residual, every source UI ideal family | `unbounded_sinTwoTheta_uiNorm`, `unbounded_sinTwoTheta_uiNorm_representative`, `unbounded_sinTwoTheta_residual_uiNorm_representative`, `unbounded_sinTwoTheta_opNorm` |
-| Theorem 6.3 finite form (strict-lower-rank, every rectangular UI norm) and Hilbert-space graph-angle form | `Theorem6_3`, `Theorem6_3_kyFan`, `Theorem6_3_unbounded_graphAngle_opNorm` |
-| `tan 2 Theta` in every rectangular UI norm (finite graph-coordinate form); sharp ambient-Hilbert operator-norm form with acute branch; unbounded quarter-acute companions | `tanTwoTheta_uiNorm`, `tanTwoTheta_kyFan`, `tanTwoTheta_sharp_opNorm`, `tanTwoTheta_spectral_repulsion`, `unbounded_tanTwoTheta_uiNorm` |
+## Production source aggregate
 
-The tangent direction is from the Ritz or trial subspace toward the exact
-invariant subspace. The public tangent statements do not assume
-transversality.
+`DavisKahan/Sources/DavisKahan1970/All.lean` is the stable aggregate for the
+production source development. It includes the maintained Section 8 and Section 9
+packages as well as the sine-theta, Sylvester, double-angle, tangent, direct-
+rotation, and Part III source surfaces.
 
-## Where the frontier is
-
-The machine-readable ledger is `dev/davis-kahan-1970-full-source-census.json`,
-rendered to `dev/davis-kahan-1970-full-source-census.md`. Since schema 4 it
-carries two independent axes, and reading only the first is what previously
-made this directory look both better and worse than it is:
-
-- `status` -- the mathematical judgement against the printed source;
-- `verification` -- what the Lean build actually certifies.
-
-Read the census's **Frontier** section to see every outstanding row grouped
-under the obstruction that gates it, each marked `hard_math` or `mechanical`.
-A `mechanical` blocker means the result is already proved and only needs wiring
-into the default build target.
-
-`verification` is checkable rather than asserted:
-
-    python3 scripts/probe_census_declarations.py --verify
-
-resolves every recorded declaration against `DavisKahan.All` by compiling a
-generated `#check` file, so a name in the wrong namespace cannot pass. Because
-the default build contains no `sorry` and no `axiom`, a declaration reachable
-from `DavisKahan.All` is genuinely proved.
-
-Note that a zero `sorry` count does **not** mean the paper is done. Unfinished
-work cannot appear as a `sorry` in a sorry-free, axiom-free tree; it appears as
-a package that does not compile, a conclusion stated relative to a hypothesis
-record nobody constructs, or a statement nobody wrote.
-
-## Work still required for complete paper coverage
-
-A modernized transcription is maintained locally outside the distributable
-source archive. The committed TeX notes are independent mathematical
-distillations audited against that transcription. Before a result is
-advertised with an exact theorem or proposition number, its ambient Hilbert
-space, bounded or unbounded status, domain assumptions, hypotheses, direction,
-norm scope, and conclusion must be checked against the transcription.
-
-The `Section8/` package is a math-ahead source surface for spectral
-continuation and branch selection.  It lives under
-`DavisKahan/Experimental/Sources/DavisKahan1970/Section8`, not here, because it
-imports `DavisKahan.Experimental.InfiniteDimensional`; four modules on that
-import path have never compiled, so the package does not build and is kept out
-of the default build target.  Promote it back into this directory once its
-dependencies compile.  It assembles the continuation-selected
-reducing endpoint, unitary transport, strict quarter-acuteness, genuine gap
-exclusion, and restricted-spectrum separation.  The exact Theorem 8.1
-construction from unrestricted off-diagonal hypotheses, the concrete
-direct-rotation instantiation of the now-proved compression algebra, the
-eigenvalue and symmetric-gauge refinements, and the two Theorem 8.2 half-gap
-constructors are still explicit obligations.
-
-The new `Section9/` package is a math-ahead candidate for the numerical
-example.  It proves the affine-moment calculations, exact radical arithmetic,
-Schur-complement reduction, explicit truncation repair for the domain example,
-and all decimal corollaries behind a certificate boundary.  It does not yet
-construct the free-beam closed operator or prove the `alpha_3 > 500` spectral
-fact, and it must pass a fresh Lean build before its census status is promoted.
-
-The following paper components are not yet represented by a proof-complete
-source module:
-
-- the remaining two-subspace geometry and the direct-rotation symmetry,
-  trigonometric, uniqueness, and extremal results of Sections 3--4;
-- the exact 1970 non-ordered Sylvester theorem, kept distinct from the later
-  Bhatia--Davis--McIntosh `pi / 2` theorem;
-- any source tangent or double-angle variants not implied by the stable aliases
-  above;
-- the unbounded-operator appendix;
-- the unrestricted source constructors and the compression/eigenvalue/
-  symmetric-gauge refinements needed to complete the Section 8 candidate;
-- the analytic free-beam realization and spectral-gap discharge for the Section 9 candidate package;
-- the planar equality/optimality statements;
-- any auxiliary numbered lemmas or propositions not subsumed by the source
-  aliases above.
-
-Experimental declarations are not evidence that these items are complete.
-They must first be source-checked, proved, moved to the stable tree, documented,
-and subjected to a fresh Lean build and trusted-dependency audit.
-
+The census is deliberately more precise than a blanket "paper complete" claim. It
+records proved, conditional, refuted, scope-qualified, and non-proof-debt source
+items separately. Consult it for the exact frontier and declaration names instead
+of maintaining a second hand-written status table here.
 
 ## Completion standard
 
-A complete source package requires more than finite analogues of the four
-headline inequalities. It requires source-checked Hilbert-space theorem
-surfaces, the unitary-invariant norm scope with correct domains of finiteness,
-the direct-rotation theory, the Section 8 continuation/selection package, the
-unbounded passages, and the remaining numbered and sharpness results. See [`docs/planning/davis-kahan-full-paper-goal.md`](../../../docs/planning/davis-kahan-full-paper-goal.md).
+The durable scope/completion rules are summarized in
+[`docs/planning/davis-kahan-full-paper-goal.md`](../../../docs/planning/davis-kahan-full-paper-goal.md).
+Current repository policy is in [`AGENTS.md`](../../../AGENTS.md).

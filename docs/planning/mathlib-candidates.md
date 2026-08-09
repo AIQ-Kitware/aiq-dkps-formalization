@@ -1,5 +1,10 @@
 # Mathlib-contribution candidates from the DKPS formalization
 
+> **Historical candidate inventory.** The direct Mathlib submission track is closed.
+> Paths and namespaces below document the state when this inventory was assembled;
+> current reusable-library work targets `ForTauCeti`/Tau Ceti. Use `Challenge/README.md`
+> for the retained comparator surfaces.
+
 Compiled 2026-06-11 from two systematic surveys (spectral/linear-algebra and
 probability/analysis) of the proved, zero-sorry content in `Acharyya2024/` and
 `Acharyya2025/`. Every "Mathlib has/lacks" claim below was verified by grep
