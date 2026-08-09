@@ -29,6 +29,7 @@ dev/
   mathlib-proof-polishing.md        # Reference: "folding" proofs to Mathlib style
   mathlib-quality-adapter.md        # Reference: adapting local API to reviewer standard
   external-lean-references.md       # Registry of external Lean repos consulted
+  external-literature-references.md # External *mathematics* we cite or must import; source errata
 
   tauceti/                    # Tau Ceti engineering records and generated status
   journals/                   # Postmortems of bugs that took real effort to diagnose
