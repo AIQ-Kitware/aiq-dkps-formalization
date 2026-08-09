@@ -80,7 +80,7 @@ theorem stableSingularPair_doubleAngleTangent_le
       _ = ‖B.A1‖ * ε := by rw [hynorm, mul_one]
   have re_ofReal_mul_complex (r : ℝ) (z : ℂ) :
       RCLike.re ((r : ℂ) * z) = r * RCLike.re z := by
-    simp [RCLike.re_to_complex, Complex.mul_re]
+    simp [RCLike.re_to_complex]
   have re_ofReal_sq_mul_complex (r : ℝ) (z : ℂ) :
       RCLike.re ((r : ℂ) ^ 2 * z) = r ^ 2 * RCLike.re z := by
     rw [pow_two, mul_assoc, re_ofReal_mul_complex,
@@ -210,8 +210,7 @@ theorem stableSingularPair_doubleAngleTangent_le
                 inner_add_right, inner_smul_left, inner_smul_right,
                 inner_smul_left, inner_smul_right,
                 Complex.conj_ofReal]
-              simp only [map_add, re_ofReal_mul_complex,
-                re_ofReal_sq_mul_complex]
+              simp only [map_add, re_ofReal_mul_complex]
               ring
     rw [inner_sub_left, map_sub, hXterm, hB10real]
     ring
@@ -255,7 +254,7 @@ theorem stableSingularPair_doubleAngleTangent_le
           2 * (((‖B.A0‖ + ‖B.A1‖) * ε) +
             2 * s * ‖B.B01‖ * ε + ‖B.B01‖ * ε ^ 2) /
               (1 - s ^ 2)) * (1 - s ^ 2) := by
-      field_simp [hden.ne'] <;> ring
+      field_simp [hden.ne']
 
 end
 

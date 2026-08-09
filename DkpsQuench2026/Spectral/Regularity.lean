@@ -146,7 +146,7 @@ theorem map_referenceCoordinate_eq
   have hset : {ωref | ∀ j, f_ref n ωref j ∈ if j = i then A else Set.univ}
       = (fun ωref => f_ref n ωref i) ⁻¹' A := by
     ext ωref
-    simp only [Set.mem_setOf_eq, Set.mem_preimage]
+    simp only [Set.mem_ofPred_eq, Set.mem_preimage]
     exact ⟨fun h => by have := h i; simpa using this,
       fun h j => by by_cases hji : j = i <;> simp [hji, h]⟩
   rw [hset] at hj
@@ -230,7 +230,7 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
         = ((fun ωref => ψ (f_ref n ωref i) a) ⁻¹' s)
           ∩ ((fun ωref => ψ (f_ref n ωref j) a) ⁻¹' t) := by
       ext ωref
-      simp only [Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_preimage, hA', hB']
+      simp only [Set.mem_ofPred_eq, Set.mem_inter_iff, Set.mem_preimage, hA', hB']
       constructor
       · intro h
         exact ⟨by have := h i; simpa using this,
@@ -327,7 +327,7 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
         ⊆ {ωref | ε < referenceCoordinateMean ψ f_ref n ωref a - c}
           ∪ {ωref | ε < -(referenceCoordinateMean ψ f_ref n ωref a - c)} := by
       intro ωref hω
-      simp only [Set.mem_compl_iff, Set.mem_setOf_eq, not_le] at hω
+      simp only [Set.mem_compl_iff, Set.mem_ofPred_eq, not_le] at hω
       rcases lt_abs.mp hω with h | h
       · exact Or.inl h
       · exact Or.inr h
@@ -443,7 +443,7 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
         = ((fun ωref => ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b) ⁻¹' s)
           ∩ ((fun ωref => ψ (f_ref n ωref j) a * ψ (f_ref n ωref j) b) ⁻¹' t) := by
       ext ωref
-      simp only [Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_preimage, hA', hB']
+      simp only [Set.mem_ofPred_eq, Set.mem_inter_iff, Set.mem_preimage, hA', hB']
       constructor
       · intro h
         exact ⟨by have := h i; simpa using this,
@@ -548,7 +548,7 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
         ⊆ {ωref | ε < referenceCoordinateProductMean ψ f_ref n ωref a b - c}
           ∪ {ωref | ε < -(referenceCoordinateProductMean ψ f_ref n ωref a b - c)} := by
       intro ωref hω
-      simp only [Set.mem_compl_iff, Set.mem_setOf_eq, not_le] at hω
+      simp only [Set.mem_compl_iff, Set.mem_ofPred_eq, not_le] at hω
       rcases lt_abs.mp hω with h | h
       · exact Or.inl h
       · exact Or.inr h
@@ -660,7 +660,7 @@ theorem measurableSet_referenceCovarianceEvent
         {ωref | |referenceEmpiricalCovariance ψ f_ref n ωref a b -
           perspectiveCovarianceMatrix Pf ψ center a b| ≤ ε} := by
     ext ωref
-    simp only [referenceCovarianceEvent, EntrywiseClose, Set.mem_setOf_eq, Set.mem_iInter]
+    simp only [referenceCovarianceEvent, EntrywiseClose, Set.mem_ofPred_eq, Set.mem_iInter]
   rw [hev]
   exact MeasurableSet.iInter fun a => MeasurableSet.iInter fun b =>
     measurableSet_referenceCovarianceEntryEvent Pf ψ hψ f_ref href center ε n a b
@@ -772,7 +772,7 @@ theorem highProb_referenceCovarianceEntry_of_compact_iid
     (fun n => (hmeasProd n).inter (hmeasA n)) hmeasB
   refine HighProbAtTop.mono hinter (fun n ωref hω => ?_)
   obtain ⟨⟨hωprod, hωa⟩, hωb⟩ := hω
-  simp only [Set.mem_setOf_eq] at hωprod hωa hωb ⊢
+  simp only [Set.mem_ofPred_eq] at hωprod hωa hωb ⊢
   rw [referenceEmpiricalCovariance_entry_eq_product_sub_mean_mul_mean, hpop]
   set P := referenceCoordinateProductMean ψ f_ref n ωref a b
   set Ma := referenceCoordinateMean ψ f_ref n ωref a
@@ -848,7 +848,7 @@ theorem highProb_referenceCovarianceEvent_of_entries
       = referenceCovarianceEvent Pf ψ f_ref center ε := by
     funext n
     ext ωref
-    simp only [referenceCovarianceEvent, EntrywiseClose, Set.mem_setOf_eq, Finset.mem_univ,
+    simp only [referenceCovarianceEvent, EntrywiseClose, Set.mem_ofPred_eq, Finset.mem_univ,
       forall_true_left, Prod.forall]
   rw [← heq]
   exact key

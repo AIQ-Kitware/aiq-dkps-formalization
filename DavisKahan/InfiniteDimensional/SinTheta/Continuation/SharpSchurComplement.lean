@@ -177,7 +177,7 @@ theorem schurLower_apply
         (WithLp.fst x, c (r0 (WithLp.fst x)) + WithLp.snd x) := by
   simp only [schurLower, rectangularBlockMap_apply,
     one_apply_eq_self, zero_apply,
-    ContinuousLinearMap.comp_apply, add_zero, zero_add]
+    ContinuousLinearMap.comp_apply, add_zero]
 
 /-- The inverse lower Schur factor subtracts `c (r0 ·)` of the first coordinate from the second. -/
 @[simp]
@@ -190,7 +190,7 @@ theorem schurLowerInv_apply
   simp only [schurLowerInv, rectangularBlockMap_apply,
     one_apply_eq_self, zero_apply,
     neg_apply, ContinuousLinearMap.comp_apply,
-    add_zero, zero_add]
+    add_zero]
 
 /-- The upper Schur factor adds `r0 (b ·)` of the second coordinate into the first. -/
 @[simp]
@@ -202,7 +202,7 @@ theorem schurUpper_apply
         (WithLp.fst x + r0 (b (WithLp.snd x)), WithLp.snd x) := by
   simp only [schurUpper, rectangularBlockMap_apply,
     one_apply_eq_self, zero_apply,
-    ContinuousLinearMap.comp_apply, add_zero, zero_add]
+    ContinuousLinearMap.comp_apply, zero_add]
 
 /-- The inverse upper Schur factor subtracts `r0 (b ·)` of the second coordinate from the first. -/
 @[simp]
@@ -215,7 +215,7 @@ theorem schurUpperInv_apply
   simp only [schurUpperInv, rectangularBlockMap_apply,
     one_apply_eq_self, zero_apply,
     neg_apply, ContinuousLinearMap.comp_apply,
-    add_zero, zero_add, sub_eq_add_neg]
+    zero_add, sub_eq_add_neg]
 
 /-- Reconstruct a direct-sum vector from its two coordinates. -/
 theorem rectangularDirectSum_eta (x : WithLp 2 (E0 × E1)) :
@@ -397,7 +397,7 @@ theorem schurBlockInverse_mul_rectangularBlockMap
             rectangularBlockMap l0 0 0 (secondSchurComplement l1 c r0 b)) *
           schurUpper r0 b := by
       rw [schurLowerInv_mul_schurLower]
-      simp only [mul_one, one_mul]
+      simp only [mul_one]
     _ = schurUpperInv r0 b * 1 * schurUpper r0 b := by rw [hdiag]
     _ = 1 := by simp only [mul_one, schurUpperInv_mul_schurUpper]
 
@@ -433,7 +433,7 @@ theorem rectangularBlockMap_mul_schurBlockInverse
           rectangularBlockMap r0 0 0 q) *
         schurLowerInv c r0 := by
       rw [schurUpper_mul_schurUpperInv]
-      simp only [mul_one, one_mul]
+      simp only [mul_one]
     _ = schurLower c r0 * 1 * schurLowerInv c r0 := by rw [hdiag]
     _ = 1 := by simp only [mul_one, schurLower_mul_schurLowerInv]
 

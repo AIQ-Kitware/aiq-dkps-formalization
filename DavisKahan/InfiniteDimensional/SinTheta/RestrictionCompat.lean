@@ -340,7 +340,7 @@ theorem directedResidual_sylvesterEquation
   intro x
   apply Subtype.ext
   simp only [sylvesterOperator, DavisKahan.residual, sub_apply,
-    ContinuousLinearMap.comp_apply, restrictToOrthogonal_apply,
+    ContinuousLinearMap.comp_apply,
     coe_codRestrictTo_apply]
   have hUperp : Reduces A Uᗮ := reduces_orthogonalComplement hA hU.2
   have hcomm := projection_apply_comm_of_isInvariant A Uᗮ hUperp (X x)
@@ -367,9 +367,7 @@ theorem directedPerturbation_sylvesterEquation
   apply ContinuousLinearMap.ext
   intro x
   apply Subtype.ext
-  simp only [sylvesterOperator, sub_apply, ContinuousLinearMap.comp_apply,
-    restrictToOrthogonal_apply, restrictToReducingSubspace_apply,
-    coe_codRestrictTo_apply]
+  simp only [sylvesterOperator, sub_apply, ContinuousLinearMap.comp_apply]
   have hVperp : Reduces B Vᗮ := reduces_orthogonalComplement hB hV.2
   have hcomm := projection_apply_comm_of_isInvariant B Vᗮ hVperp (x : E)
   change B (Vᗮ.starProjection (x : E)) - Vᗮ.starProjection (A (x : E)) =

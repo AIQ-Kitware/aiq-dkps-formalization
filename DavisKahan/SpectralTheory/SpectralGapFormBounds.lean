@@ -193,7 +193,7 @@ theorem re_inner_le_of_mem_boundedSelfAdjointSpectralSubspace_Iic
   have happly : (((alpha : ℝ) : ℂ) • E - B * E) x =
       ((alpha : ℝ) : ℂ) • x - B x := by
     simp only [sub_apply, smul_apply, mul_apply_eq_comp,
-      ContinuousLinearMap.comp_apply, hEx]
+      hEx]
   rw [happly, inner_sub_right, map_sub, inner_smul_right] at hpos
   have hxx : RCLike.re (((alpha : ℝ) : ℂ) * ⟪x, x⟫_ℂ) = alpha * ‖x‖ ^ 2 := by
     have hre : (⟪x, x⟫_ℂ).re = ‖x‖ ^ 2 := inner_self_eq_norm_sq (𝕜 := ℂ) x
@@ -264,7 +264,7 @@ theorem le_re_inner_of_mem_boundedSelfAdjointSpectralSubspace_Iic_orthogonal
     ⟪x, ((B - ((alpha + delta : ℝ) : ℂ) • 1) * (1 - E)) x⟫_ℂ at hpos
   have happly : ((B - ((alpha + delta : ℝ) : ℂ) • 1) * (1 - E)) x =
       B x - ((alpha + delta : ℝ) : ℂ) • x := by
-    simp only [mul_apply_eq_comp, ContinuousLinearMap.comp_apply, sub_apply,
+    simp only [mul_apply_eq_comp, sub_apply,
       smul_apply, one_apply_eq_self, hEx, sub_zero]
   rw [happly, inner_sub_right, map_sub, inner_smul_right] at hpos
   have hxx : RCLike.re (((alpha + delta : ℝ) : ℂ) * ⟪x, x⟫_ℂ) =

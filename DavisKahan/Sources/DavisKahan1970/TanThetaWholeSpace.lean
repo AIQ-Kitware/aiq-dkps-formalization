@@ -805,7 +805,7 @@ theorem gramOperator_paperDirectedSineAmbient :
       U.starProjection * x := fun x => by rw [← mul_assoc, hp]
   have hqq : ∀ x : E →L[ℂ] E, V.starProjection * (V.starProjection * x) =
       V.starProjection * x := fun x => by rw [← mul_assoc, hq]
-  simp only [mul_assoc, sub_mul, mul_sub, mul_one, one_mul, hpp, hqq, hp, hq]
+  simp only [mul_assoc, sub_mul, mul_sub, mul_one, one_mul, hqq, hp]
   abel
 
 variable (htr : ‖sinAngleOperatorC U V‖ < 1)

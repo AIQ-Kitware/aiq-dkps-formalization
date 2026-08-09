@@ -329,7 +329,7 @@ theorem measurableSet_setOf_alignExists {n d : Nat} (hd : d ≤ n)
     have hrw : S = ⋂ (x : EuclideanSpace ℝ (Fin d)) (y : EuclideanSpace ℝ (Fin d)),
         {W : EuclideanSpace ℝ (Fin d) →L[ℝ] EuclideanSpace ℝ (Fin d) |
           ⟪W x, W y⟫_ℝ = ⟪x, y⟫_ℝ} := by
-      ext W; simp only [hSdef, Set.mem_setOf_eq, Set.mem_iInter]
+      ext W; simp only [hSdef, Set.mem_ofPred_eq, Set.mem_iInter]
     rw [hrw]
     refine isClosed_iInter fun x => isClosed_iInter fun y =>
       isClosed_eq (Continuous.inner ?_ ?_) continuous_const

@@ -111,7 +111,7 @@ theorem dissimilarity_convergesInProbability_of_secondMoment
         = {ω | ε < frobSub (responseDist (Xbar r ω)) (responseDist μ)} := by
     intro r
     ext ω
-    simp only [Set.mem_setOf_eq, dist_zero_right, Real.norm_eq_abs, gt_iff_lt,
+    simp only [Set.mem_ofPred_eq, dist_zero_right, Real.norm_eq_abs, gt_iff_lt,
       abs_of_nonneg (hfrob_nonneg r ω)]
   -- Degenerate case n = 0: frobSub is sqrt of an empty sum = 0 < ε, bad set empty.
   rcases Nat.eq_zero_or_pos n with hn0 | hnpos
@@ -122,7 +122,7 @@ theorem dissimilarity_convergesInProbability_of_secondMoment
     have : ∀ r,
         {ω | ε < frobSub (responseDist (Xbar r ω)) (responseDist μ)} = (∅ : Set Ω) := by
       intro r; ext ω
-      simp only [hzero r ω, Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false, not_lt]
+      simp only [hzero r ω, Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false, not_lt]
       exact hε.le
     simp only [hset_eq, this]
     simp only [measure_empty]
@@ -136,7 +136,7 @@ theorem dissimilarity_convergesInProbability_of_secondMoment
     have : ∀ r,
         {ω | ε < frobSub (responseDist (Xbar r ω)) (responseDist μ)} = (∅ : Set Ω) := by
       intro r; ext ω
-      simp only [hzero r ω, Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false, not_lt]
+      simp only [hzero r ω, Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false, not_lt]
       exact hε.le
     simp only [hset_eq, this]
     simp only [measure_empty]
@@ -171,7 +171,7 @@ theorem dissimilarity_convergesInProbability_of_secondMoment
         ⊆ ⋃ i : Fin n, {ω | η < ‖Xbar r ω i - μ i‖} := by
     intro r ω hω
     by_contra hnot
-    simp only [Set.mem_iUnion, Set.mem_setOf_eq, not_exists, not_lt] at hnot
+    simp only [Set.mem_iUnion, Set.mem_ofPred_eq, not_exists, not_lt] at hnot
     exact absurd (hdet r ω hnot) (not_le.mpr hω)
   -- Union bound.
   have hbad : ∀ r : Nat,

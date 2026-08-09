@@ -1029,7 +1029,7 @@ theorem projectionCross_eq_reflectionPinch
   simp only [ContinuousLinearMap.coe_comp, Function.comp_apply,
     sub_apply, smul_apply,
     ContinuousLinearMap.coe_id', id_eq, map_sub, map_smul]
-  match_scalars <;> (try field_simp) <;> ring
+  match_scalars <;> (try field_simp) ; ring
 
 omit [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
 /-- **The cross term is gauge-contractive**: `gauge (R P_V − P_U R) ≤ gauge R`.

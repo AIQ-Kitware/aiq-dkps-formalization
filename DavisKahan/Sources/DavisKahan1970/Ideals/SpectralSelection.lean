@@ -377,7 +377,7 @@ def GramSpectralBandModel.toApproximateLeadingSingularFamily
     have hgram :
         ‖gramOperator X (M.right i) - (value : ℂ) ^ 2 • M.right i‖ ≤
           (ε / 4) * value := by
-      convert M.gram_residual i using 1 <;> dsimp only [value] <;> ring
+      convert M.gram_residual i using 1 ; dsimp only [value] ; ring
     have hgramReal :
         ‖gramOperator X (M.right i) - ((value ^ 2 : ℝ) : ℂ) • M.right i‖ ≤
           (ε / 4) * value := by
@@ -401,7 +401,7 @@ def GramSpectralBandModel.toApproximateLeadingSingularFamily
     have hgram :
         ‖gramOperator X (M.right i) - (value : ℂ) ^ 2 • M.right i‖ ≤
           (ε / 4) * value := by
-      convert M.gram_residual i using 1 <;> dsimp only [value] <;> ring
+      convert M.gram_residual i using 1 ; dsimp only [value] ; ring
     have hgramReal :
         ‖gramOperator X (M.right i) - ((value ^ 2 : ℝ) : ℂ) • M.right i‖ ≤
           (ε / 4) * value := by
