@@ -284,9 +284,15 @@ the pair `(Θ, J)`: the skew-part reading of `J sin Θ`, the operator Pythagoras
 identity, Proposition 3.5's commutation statements, and Corollary 3.2 in its
 printed `J ↦ -J` form.
 
-Left open: `Θ` commutes with `J`, and the exponential form `U = exp (J Θ)`.
-Both are downstream of a commutation lemma for the Moore--Penrose inverse that
-the staging library does not yet have. -/
+`Θ` commutes with `J` (`angleOperator_comm_angleComplexStructure`) and `J` is a
+complex structure on the nonzero-angle space
+(`angleComplexStructure_comp_self`); both rest on
+`TauCeti.moorePenroseInverse_comm_of_isSymmetric`, the staging library's
+commutation lemma for the pseudoinverse of a self-adjoint map.
+
+The exponential form `U = exp (J Θ)` is proved downstream, in
+`DavisKahan/FiniteDimensional/DirectRotation/Exponential.lean`, on top of these
+two results. -/
 
 /-- **The positive cosine is the Hermitian part of the direct rotation.**
 
@@ -540,5 +546,238 @@ theorem angleOperator_comm_projection_right (U V : Submodule 𝕜 E)
     projection V ∘ₗ angleOperator U V = angleOperator U V ∘ₗ projection V :=
   TauCeti.selfAdjointFunctionalCalculus_comm _ Real.arcsin
     (projection_right_comm_sinAngleOperator U V)
+
+/-- **`cos Θ` commutes with `sin Θ`.**
+
+The Gram operator of the canonical intertwiner is `cos²Θ`, and by operator
+Pythagoras it is also `1 - sin²Θ`; the positive cosine commutes with that, hence
+with its positive square root `sin Θ`.  No acuteness is needed. -/
+theorem directRotationCosine_comm_sinAngleOperator (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    directRotationCosine U V ∘ₗ sinAngleOperator U V =
+      sinAngleOperator U V ∘ₗ directRotationCosine U V := by
+  have hgram : directRotationCosine U V ∘ₗ
+      ((projection U - projection V : E →ₗ[𝕜] E).adjoint ∘ₗ
+        (projection U - projection V)) =
+      ((projection U - projection V : E →ₗ[𝕜] E).adjoint ∘ₗ
+        (projection U - projection V)) ∘ₗ directRotationCosine U V := by
+    have hDadj : (projection U - projection V : E →ₗ[𝕜] E).adjoint
+        = projection U - projection V := by
+      rw [map_sub, (projection_isSymmetric U).adjoint_eq,
+        (projection_isSymmetric V).adjoint_eq]
+    have hsin : sinAngleOperator U V ∘ₗ sinAngleOperator U V
+        = (projection U - projection V) ∘ₗ (projection U - projection V) := by
+      rw [sinAngleOperator, TauCeti.operatorAbs_mul_self, hDadj]
+    have hsq : (projection U - projection V : E →ₗ[𝕜] E).adjoint ∘ₗ
+        (projection U - projection V)
+        = LinearMap.id - directRotationCosine U V ∘ₗ directRotationCosine U V := by
+      rw [hDadj, ← hsin]
+      exact eq_sub_of_add_eq (sq_sinAngleOperator_add_sq_directRotationCosine U V)
+    rw [hsq]
+    have hmul : ∀ f g : E →ₗ[𝕜] E, f ∘ₗ g = f * g := fun _ _ => rfl
+    have hone : (LinearMap.id : E →ₗ[𝕜] E) = 1 := rfl
+    simp only [hmul, hone]
+    noncomm_ring
+  exact TauCeti.sqrt_comm
+    (LinearMap.isPositive_adjoint_comp_self (projection U - projection V)) hgram
+
+/-- **`Θ` commutes with `cos Θ`** — Davis--Kahan Proposition 3.5, on the angle
+operator. -/
+theorem angleOperator_comm_directRotationCosine (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    directRotationCosine U V ∘ₗ angleOperator U V =
+      angleOperator U V ∘ₗ directRotationCosine U V :=
+  TauCeti.selfAdjointFunctionalCalculus_comm _ Real.arcsin
+    (directRotationCosine_comm_sinAngleOperator U V)
+
+/-- `sin Θ` commutes with itself, restated as commutation with `Θ`. -/
+theorem angleOperator_comm_sinAngleOperator (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    sinAngleOperator U V ∘ₗ angleOperator U V =
+      angleOperator U V ∘ₗ sinAngleOperator U V :=
+  TauCeti.selfAdjointFunctionalCalculus_comm _ Real.arcsin rfl
+
+/-- **`Θ` commutes with the Moore--Penrose inverse of `sin Θ`.**
+
+`sin Θ` is self-adjoint, so `TauCeti.moorePenroseInverse_comm_of_isSymmetric`
+carries the commutation of `Θ` with `sin Θ` across the pseudoinverse. -/
+theorem angleOperator_comm_moorePenroseInverse_sinAngleOperator (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    angleOperator U V ∘ₗ TauCeti.moorePenroseInverse (sinAngleOperator U V) =
+      TauCeti.moorePenroseInverse (sinAngleOperator U V) ∘ₗ angleOperator U V :=
+  TauCeti.moorePenroseInverse_comm_of_isSymmetric
+    (TauCeti.isPositive_operatorAbs (projection U - projection V)).isSymmetric
+    (angleOperator_comm_sinAngleOperator U V).symm
+
+/-- **`Θ` commutes with `J`** — the remaining commutation statement of
+Davis--Kahan Proposition 3.5.
+
+`J = (U - cos Θ) (sin Θ)⁺`, and `Θ` commutes with each of the three factors:
+with `U` (`angleOperator_comm_directRotation`), with `cos Θ`
+(`angleOperator_comm_directRotationCosine`), and with `(sin Θ)⁺`
+(`angleOperator_comm_moorePenroseInverse_sinAngleOperator`). -/
+theorem angleOperator_comm_angleComplexStructure (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    angleComplexStructure U V hacute ∘ₗ angleOperator U V =
+      angleOperator U V ∘ₗ angleComplexStructure U V hacute := by
+  have hmul : ∀ f g : E →ₗ[𝕜] E, f ∘ₗ g = f * g := fun _ _ => rfl
+  have hR : (directRotation U V hacute).toLinearMap * angleOperator U V =
+      angleOperator U V * (directRotation U V hacute).toLinearMap := by
+    simpa [hmul] using angleOperator_comm_directRotation U V hacute
+  have hC : directRotationCosine U V * angleOperator U V =
+      angleOperator U V * directRotationCosine U V := by
+    simpa [hmul] using angleOperator_comm_directRotationCosine U V
+  have hG : angleOperator U V * TauCeti.moorePenroseInverse (sinAngleOperator U V) =
+      TauCeti.moorePenroseInverse (sinAngleOperator U V) * angleOperator U V := by
+    simpa [hmul] using angleOperator_comm_moorePenroseInverse_sinAngleOperator U V
+  have hdiff : ((directRotation U V hacute).toLinearMap - directRotationCosine U V) *
+      angleOperator U V =
+      angleOperator U V *
+        ((directRotation U V hacute).toLinearMap - directRotationCosine U V) := by
+    rw [sub_mul, mul_sub, hR, hC]
+  show (((directRotation U V hacute).toLinearMap - directRotationCosine U V) ∘ₗ
+      TauCeti.moorePenroseInverse (sinAngleOperator U V)) ∘ₗ angleOperator U V = _
+  simp only [hmul, angleComplexStructure]
+  calc ((directRotation U V hacute).toLinearMap - directRotationCosine U V) *
+        TauCeti.moorePenroseInverse (sinAngleOperator U V) * angleOperator U V
+      = ((directRotation U V hacute).toLinearMap - directRotationCosine U V) *
+        (TauCeti.moorePenroseInverse (sinAngleOperator U V) * angleOperator U V) := by
+        noncomm_ring
+    _ = ((directRotation U V hacute).toLinearMap - directRotationCosine U V) *
+        (angleOperator U V * TauCeti.moorePenroseInverse (sinAngleOperator U V)) := by
+        rw [hG]
+    _ = (((directRotation U V hacute).toLinearMap - directRotationCosine U V) *
+        angleOperator U V) * TauCeti.moorePenroseInverse (sinAngleOperator U V) := by
+        noncomm_ring
+    _ = (angleOperator U V *
+        ((directRotation U V hacute).toLinearMap - directRotationCosine U V)) *
+        TauCeti.moorePenroseInverse (sinAngleOperator U V) := by rw [hdiff]
+    _ = angleOperator U V *
+        (((directRotation U V hacute).toLinearMap - directRotationCosine U V) *
+          TauCeti.moorePenroseInverse (sinAngleOperator U V)) := by noncomm_ring
+
+/-- The inverse rotation also commutes with the positive cosine.
+
+`U(V,U) = U(U,V)⁻¹` and `cos Θ` is symmetric in the pair, so this is
+`directRotation_comm_cosine` read at the swapped pair. -/
+theorem directRotation_symm_comm_cosine (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    (directRotation U V hacute).symm.toLinearMap ∘ₗ directRotationCosine U V =
+      directRotationCosine U V ∘ₗ (directRotation U V hacute).symm.toLinearMap := by
+  have h := directRotation_comm_cosine V U hacute.symm
+  rwa [directRotation_symm U V hacute, directRotationCosine_comm U V hacute] at h
+
+/-- **The skew part of the direct rotation squares to `-sin²Θ`.**
+
+`U - cos Θ = -(U⁻¹ - cos Θ)` because `U + U⁻¹ = 2 cos Θ`, and
+`(U⁻¹ - cos Θ)(U - cos Θ) = 1 - cos²Θ = sin²Θ` because `cos Θ` commutes with
+both `U` and `U⁻¹`.  This is the operator identity behind the paper's assertion
+that `J` is a complex structure. -/
+theorem directRotation_sub_cosine_comp_self (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    ((directRotation U V hacute).toLinearMap - directRotationCosine U V) ∘ₗ
+        ((directRotation U V hacute).toLinearMap - directRotationCosine U V) =
+      -(sinAngleOperator U V ∘ₗ sinAngleOperator U V) := by
+  have hmul : ∀ f g : E →ₗ[𝕜] E, f ∘ₗ g = f * g := fun _ _ => rfl
+  have hone : (LinearMap.id : E →ₗ[𝕜] E) = 1 := rfl
+  set R := (directRotation U V hacute).toLinearMap with hRdef
+  set S := (directRotation U V hacute).symm.toLinearMap with hSdef
+  set C := directRotationCosine U V with hCdef
+  have hSR : S * R = 1 := by
+    have happ : ∀ x : E, S (R x) = x := fun x =>
+      (directRotation U V hacute).symm_apply_apply x
+    ext x
+    exact happ x
+  have hCR : C * R = R * C := (directRotation_comm_cosine U V hacute).symm
+  have hCS : C * S = S * C := (directRotation_symm_comm_cosine U V hacute).symm
+  have hsum : R + S = (2 : 𝕜) • C := by
+    have h := directRotationCosine_eq_half_smul_add U V hacute
+    rw [← hCdef, ← hRdef, ← hSdef] at h
+    rw [h, smul_smul, mul_inv_cancel₀ (two_ne_zero : (2 : 𝕜) ≠ 0), one_smul]
+  have hpyth : sinAngleOperator U V * sinAngleOperator U V = 1 - C * C := by
+    have h := sq_sinAngleOperator_add_sq_directRotationCosine U V
+    rw [← hCdef] at h
+    simp only [hmul, hone] at h
+    exact eq_sub_of_add_eq h
+  have hprod : (S - C) * (R - C) = 1 - C * C := by
+    have expand : (S - C) * (R - C) = S * R - S * C - C * R + C * C := by noncomm_ring
+    rw [expand, hSR, ← hCS]
+    have hgroup : (1 : E →ₗ[𝕜] E) - C * S - C * R + C * C
+        = 1 - C * (R + S) + C * C := by noncomm_ring
+    rw [hgroup, hsum, mul_smul_comm, two_smul]
+    noncomm_ring
+  have hneg : R - C = -(S - C) := by
+    rw [neg_sub]
+    refine eq_sub_of_add_eq ?_
+    have hcc : C + C = R + S := by
+      rw [← two_smul 𝕜 C]
+      exact hsum.symm
+    rw [sub_add_eq_add_sub, ← hcc]
+    abel
+  simp only [hmul]
+  calc (R - C) * (R - C) = (-(S - C)) * (R - C) := by rw [← hneg]
+    _ = -((S - C) * (R - C)) := by rw [neg_mul]
+    _ = -(1 - C * C) := by rw [hprod]
+    _ = -(sinAngleOperator U V * sinAngleOperator U V) := by rw [hpyth]
+
+/-- **`J` is a complex structure on the nonzero-angle space**: `J² = -(sin Θ)(sin Θ)⁺`,
+the negative of the orthogonal projection onto the range of `sin Θ`.
+
+This is the precise form of Davis--Kahan's `J² = -1`: the paper sets `J = 0` on
+`Null Θ`, so the identity can only hold on the orthogonal complement of that
+space, which is exactly the Penrose projection `(sin Θ)(sin Θ)⁺`.
+
+`(sin Θ)⁺` commutes with `U - cos Θ` because `sin Θ` does and `sin Θ` is
+self-adjoint, so `J² = (U - cos Θ)² ((sin Θ)⁺)² = -(sin Θ)²((sin Θ)⁺)²`, and the
+Penrose identities collapse the right-hand factor to the projection. -/
+theorem angleComplexStructure_comp_self (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    angleComplexStructure U V hacute ∘ₗ angleComplexStructure U V hacute =
+      -(sinAngleOperator U V ∘ₗ
+        TauCeti.moorePenroseInverse (sinAngleOperator U V)) := by
+  have hmul : ∀ f g : E →ₗ[𝕜] E, f ∘ₗ g = f * g := fun _ _ => rfl
+  have hsym : (sinAngleOperator U V).IsSymmetric :=
+    (TauCeti.isPositive_operatorAbs (projection U - projection V)).isSymmetric
+  set D := (directRotation U V hacute).toLinearMap - directRotationCosine U V with hDdef
+  set A := sinAngleOperator U V with hAdef
+  set G := TauCeti.moorePenroseInverse (sinAngleOperator U V) with hGdef
+  -- `sin Θ` commutes with the skew part, hence so does its pseudoinverse.
+  have hAD : A * D = D * A := by
+    have hR : A * (directRotation U V hacute).toLinearMap =
+        (directRotation U V hacute).toLinearMap * A := by
+      simpa [hmul, hAdef] using (directRotation_comm_sinAngleOperator U V hacute).symm
+    have hC : A * directRotationCosine U V = directRotationCosine U V * A := by
+      simpa [hmul, hAdef] using (directRotationCosine_comm_sinAngleOperator U V).symm
+    rw [hDdef, mul_sub, sub_mul, hR, hC]
+  have hGD : G * D = D * G := by
+    have h := TauCeti.moorePenroseInverse_comm_of_isSymmetric hsym
+      (show D ∘ₗ sinAngleOperator U V = sinAngleOperator U V ∘ₗ D by
+        simpa [hmul, hAdef] using hAD.symm)
+    simpa [hmul, hGdef, hAdef] using h.symm
+  have hD2 : D * D = -(A * A) := by
+    simpa [hmul, hDdef, hAdef] using directRotation_sub_cosine_comp_self U V hacute
+  have hAG : A * G = G * A := by
+    simpa [hmul, hAdef, hGdef] using
+      TauCeti.comp_moorePenroseInverse_comm_of_isSymmetric hsym
+  have hGAG : G * A * G = G := by
+    simpa [hmul, hAdef, hGdef, mul_assoc] using
+      TauCeti.moorePenroseInverse_comp_comp (sinAngleOperator U V)
+  have hproj : A * A * (G * G) = A * G := by
+    calc A * A * (G * G) = A * (A * G) * G := by noncomm_ring
+      _ = A * (G * A) * G := by rw [hAG]
+      _ = A * (G * A * G) := by noncomm_ring
+      _ = A * G := by rw [hGAG]
+  show (D ∘ₗ G) ∘ₗ (D ∘ₗ G) = _
+  simp only [hmul]
+  calc D * G * (D * G) = D * (G * D) * G := by noncomm_ring
+    _ = D * (D * G) * G := by rw [hGD]
+    _ = D * D * (G * G) := by noncomm_ring
+    _ = -(A * A) * (G * G) := by rw [hD2]
+    _ = -(A * A * (G * G)) := by noncomm_ring
+    _ = -(A * G) := by rw [hproj]
 end DavisKahanTheory
 end TauCeti
