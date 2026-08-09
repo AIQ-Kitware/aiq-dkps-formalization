@@ -296,19 +296,125 @@ theorem exists_hasTheorem63DirectedTangentApproximationNumbersInfiniteReal
   rw [approximationSingularValue_subtypeL_comp_real Z D0 n]
   exact hD0 n
 
-/-- Real directed half of the Section 2 tan-theta theorem at every source
-unitarily invariant norm, for an arbitrary infinite-dimensional trial space.
+/-! ## The finite-dimensional real trial space
+
+`exists_approximationNumber_eq_of_antitone` builds a representative only on an
+infinite-dimensional space.  On a finite-dimensional real trial space the
+representative is instead written down: it is diagonal, with the prescribed
+tangents on the diagonal, in an arbitrary orthonormal basis.  A diagonal
+operator with antitone nonnegative diagonal has that diagonal as its singular
+values, and beyond `finrank Z` both sequences vanish for rank reasons, so the
+two cases together cover every real trial subspace. -/
+
+/-- Diagonal entries of the real directed tangent on a finite-dimensional trial
+space: tangents of the directed angles, read off the sine block. -/
+noncomputable def theorem63DirectedTangentDiagonalReal
+    (Z V : Submodule ℝ E) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (i : Fin (Module.finrank ℝ Z)) : ℝ :=
+  Real.tan (Real.arcsin
+    (approximationSingularValue (i : Nat) (theorem63DirectedSineBlockReal Z V)))
+
+/-- A real directed tangent representative on a finite-dimensional trial space,
+diagonal in an arbitrary orthonormal basis of that space. -/
+noncomputable def theorem63DirectedTangentReal
+    (Z V : Submodule ℝ E) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    [FiniteDimensional ℝ Z] : Z →L[ℝ] E :=
+  Z.subtypeL ∘L
+    (TauCeti.diagOp (stdOrthonormalBasis ℝ Z)
+      (theorem63DirectedTangentDiagonalReal Z V)).toContinuousLinearMap
+
+/-- Above the dimension of a finite-dimensional real trial space every
+approximation singular value of a map out of it vanishes. -/
+theorem approximationSingularValue_eq_zero_of_finrank_le_real
+    (Z : Submodule ℝ E) [FiniteDimensional ℝ Z]
+    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℝ G] [CompleteSpace G]
+    [CompleteSpace Z] (A : Z →L[ℝ] G) {k : Nat} (hk : Module.finrank ℝ Z ≤ k) :
+    approximationSingularValue k A = 0 := by
+  refine approximationSingularValue_eq_zero_of_rank_le_nat
+    (r := Module.finrank ℝ Z) ?_ hk
+  calc (A : Z →ₗ[ℝ] G).rank ≤ Module.rank ℝ Z := LinearMap.rank_le_domain _
+    _ = ((Module.finrank ℝ Z : Nat) : Cardinal) := (Module.finrank_eq_rank ℝ Z).symm
+
+/-- The finite-dimensional real representative has exactly the approximation
+numbers the paper's directed tangent prescribes. -/
+theorem hasTheorem63DirectedTangentApproximationNumbersInfiniteReal_theorem63DirectedTangentReal
+    (Z V : Submodule ℝ E) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    [FiniteDimensional ℝ Z]
+    (hlt : ∀ n,
+      approximationSingularValue n (theorem63DirectedSineBlockReal Z V) < 1) :
+    HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V
+      (theorem63DirectedTangentReal Z V) := by
+  have ht0 : ∀ i, 0 ≤ theorem63DirectedTangentDiagonalReal Z V i := fun i =>
+    TanArcsin.tanArcsin_nonneg (approximationSingularValue_nonneg _ _)
+  have htanti : Antitone (theorem63DirectedTangentDiagonalReal Z V) := by
+    intro i j hij
+    exact TanArcsin.tanArcsin_le_tanArcsin
+      (approximationSingularValue_nonneg _ _)
+      (approximationSingularValue_antitone (theorem63DirectedSineBlockReal Z V)
+        (by exact_mod_cast hij))
+      (hlt (i : Nat))
+  intro k
+  by_cases hk : k < Module.finrank ℝ Z
+  · have hkfin : ((⟨k, hk⟩ : Fin (Module.finrank ℝ Z)) : Nat) = k := rfl
+    calc
+      approximationSingularValue k (theorem63DirectedTangentReal Z V)
+        = approximationSingularValue k
+            (TauCeti.diagOp (stdOrthonormalBasis ℝ Z)
+              (theorem63DirectedTangentDiagonalReal Z V)).toContinuousLinearMap :=
+          approximationSingularValue_subtypeL_comp_real Z _ k
+      _ = (TauCeti.diagOp (stdOrthonormalBasis ℝ Z)
+            (theorem63DirectedTangentDiagonalReal Z V)).singularValues k :=
+          approximationSingularValue_eq_singularValues _ k
+      _ = theorem63DirectedTangentDiagonalReal Z V ⟨k, hk⟩ := by
+          simpa only [hkfin] using
+            TauCeti.singularValues_diagOp (𝕜 := ℝ) (E := Z)
+              (n := Module.finrank ℝ Z) rfl (stdOrthonormalBasis ℝ Z)
+              htanti ht0 ⟨k, hk⟩
+      _ = Real.tan (Real.arcsin (approximationSingularValue k
+            (theorem63DirectedSineBlockReal Z V))) := rfl
+  · have hkge : Module.finrank ℝ Z ≤ k := Nat.le_of_not_lt hk
+    rw [approximationSingularValue_eq_zero_of_finrank_le_real Z
+        (theorem63DirectedTangentReal Z V) hkge,
+      approximationSingularValue_eq_zero_of_finrank_le_real Z
+        (theorem63DirectedSineBlockReal Z V) hkge]
+    simp
+
+/-- **The real directed tangent representative exists on every real trial
+subspace**, of finite or infinite dimension. -/
+theorem exists_hasTheorem63DirectedTangentApproximationNumbersReal
+    (Z V : Submodule ℝ E) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hlt : ∀ n,
+      approximationSingularValue n (theorem63DirectedSineBlockReal Z V) < 1) :
+    Exists (fun tanTheta0 : Z →L[ℝ] E =>
+      HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0) := by
+  classical
+  by_cases hfin : FiniteDimensional ℝ Z
+  · exact ⟨theorem63DirectedTangentReal Z V,
+      hasTheorem63DirectedTangentApproximationNumbersInfiniteReal_theorem63DirectedTangentReal
+        Z V hlt⟩
+  · exact exists_hasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V hfin hlt
+
+/-- **Real directed Theorem 6.3 at every source unitarily invariant norm, on a
+real Hilbert space of arbitrary dimension and an arbitrary closed real trial
+subspace.**
+
+The paper's hypotheses, unweakened: `T` self-adjoint, `V` reducing, the
+Rayleigh--Ritz upper bound `alpha` on the compression, the one-sided lower
+bound `alpha + delta` on the unwanted part, and membership of the Ritz residual
+in the chosen source norm.  The conclusion exhibits a directed tangent
+representative with the paper's complete singular-value sequence, concludes its
+membership, and gives `delta * N(tan Theta_0) <= N(R)`.
 
 The complex Theorem 6.3 proof supplies the Ky Fan inequalities; exact
-complexification transport reads them back over the reals; the tangent
-representative is then constructed over the real trial space and Fan dominance
-supplies the source norm. Finite-dimensional real trial spaces are already
-covered by the scalar-generic finite Theorem 6.3. -/
-theorem tanTheta_directed_paperUINorm_real_infinite
+complexification transport reads them back over the reals -- at the finite Ky
+Fan level, where approximation numbers are preserved on the nose, so no
+scalar-fixed ideal family is compared across fields; the tangent representative
+is then constructed over the real trial space itself, in either dimension; and
+Fan dominance supplies the source norm. -/
+theorem tanTheta_directed_paperUINorm_real
     (N : PaperUnitaryInvariantNorm)
     (T : E →L[ℝ] E) (hT : IsSelfAdjoint T)
     (V Z : Submodule ℝ E) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
-    (hinf : Not (FiniteDimensional ℝ Z))
     (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z, ⟪compressOperatorReal Z T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
@@ -318,7 +424,7 @@ theorem tanTheta_directed_paperUINorm_real_infinite
         (And (N.Mem tanTheta0)
           (delta * N.gauge tanTheta0 <= N.gauge (theorem63ResidualReal T Z)))) := by
   obtain ⟨tanTheta0, htan⟩ :=
-    exists_hasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V hinf
+    exists_hasTheorem63DirectedTangentApproximationNumbersReal Z V
       (fun n => approximationSingularValue_sineBlock_lt_one_infiniteTrial_real
         T hT V Z hV hdelta hCompressionUpper hUnwantedLower n)
   have hky : ∀ k : Nat,
@@ -337,6 +443,28 @@ theorem tanTheta_directed_paperUINorm_real_infinite
     exact hcore
   obtain ⟨hmem, hbound⟩ := N.mul_gauge_le_of_all_mul_kyFan_le hdelta hResidual hky
   exact ⟨tanTheta0, htan, hmem, hbound⟩
+
+/-- Real directed half of the Section 2 tan-theta theorem at every source
+unitarily invariant norm, for an arbitrary infinite-dimensional trial space.
+
+The infinite-dimensional trial restriction is no longer needed; this is the
+recorded specialization of `tanTheta_directed_paperUINorm_real`, kept because it
+is the form the census cites. -/
+theorem tanTheta_directed_paperUINorm_real_infinite
+    (N : PaperUnitaryInvariantNorm)
+    (T : E →L[ℝ] E) (hT : IsSelfAdjoint T)
+    (V Z : Submodule ℝ E) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
+    (_hinf : Not (FiniteDimensional ℝ Z))
+    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hCompressionUpper : ∀ z : Z, ⟪compressOperatorReal Z T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
+    (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
+    (hResidual : N.Mem (theorem63ResidualReal T Z)) :
+    Exists (fun tanTheta0 : Z →L[ℝ] E =>
+      And (HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0)
+        (And (N.Mem tanTheta0)
+          (delta * N.gauge tanTheta0 <= N.gauge (theorem63ResidualReal T Z)))) :=
+  tanTheta_directed_paperUINorm_real N T hT V Z hV hdelta hCompressionUpper
+    hUnwantedLower hResidual
 
 end
 end DavisKahan1970
