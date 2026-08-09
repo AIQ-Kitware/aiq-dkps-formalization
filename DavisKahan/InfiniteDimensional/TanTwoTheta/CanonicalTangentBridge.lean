@@ -188,7 +188,7 @@ theorem ambient_doubleAngleTangent_eq_extendCoordinate
   have hPsum : U.starProjection + Uᗮ.starProjection
       = ContinuousLinearMap.id ℂ E := by
     ext x
-    rw [ContinuousLinearMap.add_apply, ContinuousLinearMap.id_apply]
+    rw [add_apply, ContinuousLinearMap.id_apply]
     exact U.starProjection_add_starProjection_orthogonal x
   -- Now the block identity is pure algebra: `J DX J⋆ = J J⋆ - J X⋆X J⋆ = P - G`,
   -- so `D = 1 - G = (P - G) + P⊥` reduces to `P + P⊥ = 1`.  No coercions.
@@ -253,8 +253,8 @@ theorem ambient_doubleAngleTangent_eq_extendCoordinate
           Uᗮ.starProjection) = ContinuousLinearMap.id ℂ E := by
       ext x
       rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply,
-        ContinuousLinearMap.add_apply, hDblock]
-      simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.comp_apply,
+        add_apply, hDblock]
+      simp only [add_apply, ContinuousLinearMap.comp_apply,
         map_add, hJU, hJadjPerpApp, hPerpJApp, hDXinv, hPerpIdem, hJJadjApp,
         map_zero, add_zero, zero_add]
       exact U.starProjection_add_starProjection_orthogonal x
@@ -364,7 +364,7 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
       have hN : N x = x + Y.adjoint (Y x) := by
         show (ContinuousLinearMap.id ℂ E + Y.adjoint ∘L Y) x
             = x + Y.adjoint (Y x)
-        rw [ContinuousLinearMap.add_apply, ContinuousLinearMap.id_apply,
+        rw [add_apply, ContinuousLinearMap.id_apply,
           ContinuousLinearMap.comp_apply]
       rw [hN]
       -- `← ofReal_pow` pulls `(↑‖x‖) ^ 2` back to `↑(‖x‖ ^ 2)` so that
@@ -562,7 +562,7 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
       have hval : RCLike.re ⟪D x, x⟫_ℂ = ‖x‖ ^ 2 - ‖Y x‖ ^ 2 := by
         have hD : D x = x - Y.adjoint (Y x) := by
           show (ContinuousLinearMap.id ℂ E - G) x = x - Y.adjoint (Y x)
-          rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply,
+          rw [sub_apply, ContinuousLinearMap.id_apply,
             ContinuousLinearMap.comp_apply]
         rw [hD]
         simp [inner_sub_left, ContinuousLinearMap.adjoint_inner_left,
@@ -729,7 +729,7 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
       intro x
       -- `zero_apply` is needed: after `comp_apply` the right-hand side is still
       -- `(0 : E →L[ℂ] E) x`, so `modulus_apply_eq_zero_iff` has nothing to match.
-      rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.zero_apply,
+      rw [ContinuousLinearMap.comp_apply, zero_apply,
         ContinuousLinearMap.modulus_apply_eq_zero_iff]
       have hzero : Y (Uᗮ.starProjection x) = 0 := by
         have h := DFunLike.congr_fun hYP (Uᗮ.starProjection x)
@@ -744,7 +744,7 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     -- a subterm.
     have hPsumOp : P + Uᗮ.starProjection = ContinuousLinearMap.id ℂ E := by
       ext z
-      rw [ContinuousLinearMap.add_apply, ContinuousLinearMap.id_apply]
+      rw [add_apply, ContinuousLinearMap.id_apply]
       exact U.starProjection_add_starProjection_orthogonal z
     have hGPerp : G ∘L Uᗮ.starProjection = 0 := by
       have h : G ∘L P + G ∘L Uᗮ.starProjection = G := by

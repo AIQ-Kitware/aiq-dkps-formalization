@@ -873,7 +873,7 @@ theorem realSpectrum_beamOperator_subset :
           0 < beta ∧ characteristic beta = 0 ∧ lam = beta ^ 4} := by
   intro lam hlam
   by_contra hcon
-  rw [Set.mem_union, Set.mem_singleton_iff, Set.mem_setOf_eq] at hcon
+  rw [Set.mem_union, Set.mem_singleton_iff, Set.mem_ofPred_eq] at hcon
   push Not at hcon
   obtain ⟨hlam0, hlamchar⟩ := hcon
   set R := beamCoerciveFormData.resolvent with hRdef

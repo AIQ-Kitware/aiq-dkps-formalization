@@ -1035,7 +1035,7 @@ theorem theorem8_1_upperCompressionRepulsion_source
     rw [← inner_re_symm (𝕜 := ℂ) (K x) x, h0]
     simp
   have hsplit : RCLike.re ⟪x, (A + K) x⟫_ℂ = RCLike.re ⟪x, A x⟫_ℂ := by
-    rw [ContinuousLinearMap.add_apply, inner_add_right, map_add, hcross,
+    rw [add_apply, inner_add_right, map_add, hcross,
       add_zero]
   rwa [hsplit] at hamb
 
@@ -1083,7 +1083,7 @@ theorem theorem8_1_lowerCompressionRepulsion_source
     rw [h0]
     simp
   have hsplit : RCLike.re ⟪x, (A + K) x⟫_ℂ = RCLike.re ⟪x, A x⟫_ℂ := by
-    rw [ContinuousLinearMap.add_apply, inner_add_right, map_add, hcross,
+    rw [add_apply, inner_add_right, map_add, hcross,
       add_zero]
   rwa [hsplit] at hamb
 

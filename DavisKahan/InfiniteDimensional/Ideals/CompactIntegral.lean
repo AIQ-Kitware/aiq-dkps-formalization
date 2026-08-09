@@ -36,10 +36,11 @@ def compactOperatorSubmodule : Submodule ℂ (E →L[ℂ] F) where
   add_mem' := fun hS hT => hS.add hT
   smul_mem' := fun c T hT => hT.smul c
 
+omit [CompleteSpace E] in
 /-- The compact-operator submodule is operator-norm closed. -/
 theorem isClosed_compactOperatorSubmodule :
     IsClosed (compactOperatorSubmodule (E := E) (F := F) : Set (E →L[ℂ] F)) := by
-  exact isClosed_setOf_isCompactOperator
+  exact isClosed_setOfPred_isCompactOperator
 
 /-- Bochner integration preserves compactness. -/
 theorem isCompactOperator_integral

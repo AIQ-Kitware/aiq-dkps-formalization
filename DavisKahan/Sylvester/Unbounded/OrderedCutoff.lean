@@ -240,6 +240,9 @@ theorem all_kyFanApproximationGauge_le_of_cutoff_le
   exact kyFanApproximationGauge_le_of_cutoff_le hB PCB k
     (fun τ hτ => hcut τ hτ k)
 
+omit [CompleteSpace E] [CompleteSpace F]
+  [HasApproximationNumberStrongCutoff 𝕜]
+  [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜] in
 /-- **Shifting both blocks of a Sylvester equation by the same scalar leaves it
 unchanged.**
 

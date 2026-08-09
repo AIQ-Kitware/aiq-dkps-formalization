@@ -46,6 +46,7 @@ theorem sinTheta_unbounded_opNorm
     hA₀.isSymmetric D.A₀.toLinearPMap_dense hβα hδ hA₀low hA₀high hΛres hEq
   simpa [norm_neg] using h
 
+omit [CompleteSpace E] [CompleteSpace G] in
 /-- **A self-adjoint `A₀` is symmetric**, in the form the unbounded sin-Theta
 bounds use.  Derived identically here and in `Gauge.lean`. -/
 theorem isSymmetric_A₀_of_isSelfAdjoint
