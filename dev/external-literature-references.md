@@ -97,22 +97,65 @@ Under the gitignored `non-distributable/`:
 ## Known source errata
 
 Recorded here so they are not silently propagated. Both were identified during the 2026-08-08
-completion campaign and should be checked against `non-distributable/DavisKahan-1970-original.pdf`
-before being described as errors in the *original* rather than in our transcription.
+completion campaign as *candidates*, and both were checked page-by-page against
+`non-distributable/DavisKahan-1970-original.pdf` on 2026-08-09. **One was confirmed in the
+published original; the other was withdrawn — it never existed.** Do not reintroduce the
+withdrawn one: the reasoning that produced it is plausible and will recur.
 
-1. **Section 7, after `H - XHX`.** With `H = [[H_0, B*],[B, H_1]]` and `X = 2P - I`, one has
-   `H - XHX = [[0, 2B*],[2B, 0]]`. The printed residual inequality that follows is written with
-   `B, B*` rather than `2B, 2B*`, yielding a factor-one estimate. The Section 2 theorem statement
-   carries the mathematically consistent `delta * ||sin 2Theta_0|| <= 2 ||R||`, which is the
-   constant to keep. Our transcription reproduces the defect at lines 2331--2339 and 2342,
-   inconsistently with its own line 758.
-2. **Section 3, the Theorem 3.1 realization matrix.** The printed `Q` shows a minus sign in the
-   upper-right entry against a positive lower-left entry, which is not self-adjoint. With the
-   direct rotation `U` printed immediately above and `Q = U P U*`, the sign must be positive:
-   `Q = [[C_0^2, C_0 S_0 J_0*], [J_0 S_0 C_0, S_1^2]]`. The minus belongs to the second column of
-   `U`, not to the outer product defining `Q`.
-   **Confirmed by the compiler 2026-08-09.**
-   `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.HalmosAngleDatum.starProjection_targetSubspace_apply`
-   (`DavisKahan/Geometry/Halmos/Realization.lean`) computes the block matrix of the realized `Q`
-   as a genuine `Submodule.starProjection`, so self-adjointness is structural rather than assumed,
-   and both off-diagonal entries come out positive exactly as above.
+### 1. Section 7, the residual form of the sin 2theta proof — CONFIRMED, in the published original
+
+**Original, page 34** (SIAM J. Numer. Anal. 7(1), 1970). Immediately after (7.5), the paper writes
+"To get the other conclusion, we rewrite the first inequality in (7.5) in the form"
+
+```
+delta * || [[0, -sin 2Theta_0 J_0*], [J_0 sin 2Theta_0, 0]] ||  <=  || [[0, B*], [B, 0]] ||
+```
+
+"and invoke Lemma 6.1; `delta ||sin 2Theta_0|| <= ||B|| <= ||R||`. This completes the proof."
+
+The factor of 2 is missing on the right. Section 7 sets `A + H ~= [[A_0+H_0, B*],[B, A_1+H_1]]`
+at (6.3) and `A + XHX ~= [[A_0+H_0, -B*],[-B, A_1+H_1]]` at (7.1), so
+
+```
+H - XHX = [[0, 2B*], [2B, 0]],   hence  ||H - XHX|| = 2 || [[0, B*],[B, 0]] ||
+```
+
+and the rewrite must carry `2B, 2B*`. The correct conclusion is
+`delta ||sin 2Theta_0|| <= 2||B|| <= 2||R||`.
+
+**The paper contradicts itself two lines later**, which is the decisive evidence that the printed
+chain is a slip rather than a sharper result: the very next paragraph reads "the inference
+`delta ||sin 2Theta_0|| <= 2||R||` is valid only when `delta` pertains to gaps in the spectrum of
+`Lambda`", and its counterexample computes "then surely `2||R|| = 2`". The paper treats `2||R||`
+as what it just proved. The Section 2 theorem statement also carries
+`delta ||sin 2Theta_0|| <= 2||R||`.
+
+**`2` is the constant to keep.** Our transcription reproduces the original faithfully here
+(lines 2331--2342), so this is *not* a transcription defect — the inconsistency is the paper's own,
+between its Section 2 statement and its Section 7 proof line.
+
+### 2. Section 3, the Theorem 3.1 realization matrix — WITHDRAWN, no such error
+
+A 2026-08-08 campaign note claimed the printed `Q` carried a minus sign in the upper-right entry
+against a positive lower-left entry, and was therefore not self-adjoint. **That claim is false.**
+
+**Original, page 14.** Equation (3.6) prints the direct rotation
+`U ~= [[C_0, -S_0*], [S_0, C_1]]`, `C_j >= 0`, and (3.7) prints
+
+```
+Q = U P U^{-1} ~= (C_0; S_0)(C_0  S_0*) = [[C_0^2, C_0 S_0*], [S_0 C_0, S_0 S_0*]]
+```
+
+Both off-diagonal entries are positive; the matrix is self-adjoint as printed. The minus sign
+occurs only in the second column of `U` at (3.6), which is correct there. Our transcription
+reproduces both displays faithfully.
+
+The independently derived block matrix in
+`TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.HalmosAngleDatum.starProjection_targetSubspace_apply`
+(`DavisKahan/Geometry/Halmos/Realization.lean`) computes `Q` as a genuine `Submodule.starProjection`
+and likewise yields both off-diagonal entries positive — agreeing with the source, not correcting it.
+
+**Why this false positive is worth recording.** The `Q_- = XQX` display appearing shortly after
+(3.7) *does* carry two minus signs, `[[C_0^2, -C_0 S_0*], [-S_0 C_0, S_0 S_0*]]`, and is also
+self-adjoint. Reading a mixed-sign matrix out of that neighbourhood is an easy slip. Check
+page 14 of the scan before asserting a sign defect in Section 3 again.

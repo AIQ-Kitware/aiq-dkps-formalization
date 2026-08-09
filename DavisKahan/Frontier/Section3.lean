@@ -1690,9 +1690,8 @@ genuinely unconstrained is witnessed by
 
 Grounded by `:=` on `Geometry/Halmos/Realization.lean`, so there is a single
 source of truth.  The block matrix behind item 1 and item 2 is
-`starProjection_targetSubspace_apply`, which corrects a sign error in the
-printed source; see `dev/external-literature-references.md`, "Known source
-errata", item 2. -/
+`starProjection_targetSubspace_apply`, which reproduces equation (3.7) of the
+source, both off-diagonal entries positive. -/
 theorem theorem3_1_realization (d : HalmosAngleDatum E F) :
     (∀ x : E, (sourceSubspace E F).starProjection
         (d.targetSubspace.starProjection (modelInl E F x)) =

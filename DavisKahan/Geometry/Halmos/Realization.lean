@@ -33,7 +33,7 @@ where `C₀ = cos Θ₀` and `S₀ = sin Θ₀` are the prescribed angle data on
 `W₀` is isometric because `J` is isometric on the range of `S₀`, so
 `V := range W₀` is a closed subspace and `P_V = W₀ W₀⋆`.
 
-## The block matrix, and the source's sign error
+## The block matrix
 
 Writing `C₁ = cos Θ₁`, `S₁ = sin Θ₁` on the `Pᗮ`-side, the resulting projection is
 
@@ -42,13 +42,17 @@ P_V = [[ C₀ C₀   , C₀ S₀ J⋆ ],
        [ J S₀ C₀ , S₁ S₁    ]]
 ```
 
-which is `starProjection_targetSubspace_apply` below.  **The printed matrix in
-the source has a minus sign in the upper-right entry against a positive
-lower-left entry, which is not self-adjoint.**  The minus belongs to the second
-column of the direct rotation, not to the outer product that defines `Q`.  The
-erratum is recorded in `dev/external-literature-references.md`, "Known source
-errata", item 2; the sign above is the correct one, and it is the one the
-compiler has checked, since `starProjection` is self-adjoint by construction.
+which is `starProjection_targetSubspace_apply` below.  Both off-diagonal entries
+are positive, as they must be for a self-adjoint operator; here that is
+structural rather than checked, since `starProjection` is self-adjoint by
+construction.
+
+This agrees with the source.  Equation (3.7) of the original prints
+`Q = U P U⁻¹ ≃ [[C₀², C₀S₀⋆], [S₀C₀, S₀S₀⋆]]`, with both off-diagonal entries
+positive; the minus sign appears only in the second column of the direct
+rotation `U` at (3.6).  An earlier campaign note claiming a sign defect here was
+withdrawn after checking the original scan; see
+`dev/external-literature-references.md`, "Known source errata".
 
 ## Why the angle `0` is exceptional and the angle `π/2` is not
 
@@ -88,7 +92,7 @@ its proof.
 ## Main results
 
 * `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.HalmosAngleDatum`
-* `..._starProjection_targetSubspace_apply` — the erratum-corrected block matrix
+* `..._starProjection_targetSubspace_apply` — the block matrix of (3.7)
 * `..._compress_source_eq` and `..._compress_sourceOrthogonal_eq` — the realized
   pair has the prescribed `cos² Θ₀` and `cos² Θ₁`
 * `..._halmosCommonPart_eq`, `..._halmosSourceDefect_eq`,
