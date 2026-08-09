@@ -187,6 +187,40 @@ alias complex_directRotation_of_diagonalBlocks :=
 alias complex_directRotation_iff_diagonalBlocks :=
   DavisKahan.Experimental.eq_spectraDirectRotation_iff_diagonalBlocks_nonneg
 
+/-! ### Section 3 over a **real** Hilbert space of arbitrary dimension
+
+Standing assumption 1 of the paper is "real or complex", and the `complex_*`
+names above are all `InnerProductSpace ℂ`.  These are the same clauses over `ℝ`,
+in arbitrary dimension, proved in `DavisKahan/Geometry/Polar/DirectRotationReal.lean`
+by descent from the complexification: the complexified intertwiner is
+conjugation-fixed, so its modulus is, so the polar factor is, so the direct
+rotation of a complexified pair **is** the complexification of a bounded real
+operator. -/
+alias real_directRotation := DavisKahan.Experimental.directRotationR
+alias real_directRotation_orthogonal :=
+  DavisKahan.Experimental.directRotationR_mem_unitary
+alias real_directRotation_intertwines :=
+  DavisKahan.Experimental.directRotationR_intertwines
+alias real_directRotation_maps_subspace :=
+  DavisKahan.Experimental.directRotationR_maps_subspace
+alias real_directRotation_maps_orthogonalComplement :=
+  DavisKahan.Experimental.directRotationR_maps_orthogonalComplement
+alias real_directRotation_sq := DavisKahan.Experimental.directRotationR_sq
+alias real_directRotation_hermitianPart :=
+  DavisKahan.Experimental.directRotationR_add_star
+alias real_directRotation_diagonalBlock :=
+  DavisKahan.Experimental.projection_mul_directRotationR_mul_projection
+alias real_directRotation_complementaryDiagonalBlock :=
+  DavisKahan.Experimental.complementaryProjection_mul_directRotationR_mul_complementaryProjection
+alias real_directRotation_principal_of_sq :=
+  DavisKahan.Experimental.directRotationR_unique_of_sq
+alias real_directRotation_of_diagonalBlocks :=
+  DavisKahan.Experimental.directRotationR_unique_of_diagonalBlocks
+alias real_directRotation_iff_diagonalBlocks :=
+  DavisKahan.Experimental.eq_directRotationR_iff_diagonalBlocks_nonneg
+alias real_directRotation_reversal :=
+  DavisKahan.Experimental.directRotationR_reversal
+
 /-! ## Graph and Riccati theory -/
 /-! ### Theorem 5.1 at source generality
 
