@@ -10,7 +10,7 @@ Include a work when at least one of the following holds:
 
 1. a paper-facing Lean namespace formalizes one of its named definitions or results;
 2. a direct DKPS paper inherits a definition or theorem family from it;
-3. a `ForMathlib` module implements or actively scaffolds its theorem family;
+3. a `ForTauCeti` or paper-facing module implements a substantive theorem family from it;
 4. it is the primary historical source displaced in the current repository by a modern textbook citation;
 5. it is a modern comparison source needed to audit constants, hypotheses, finite-versus-infinite-dimensional scope, or theorem naming.
 

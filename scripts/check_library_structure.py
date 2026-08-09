@@ -1,26 +1,19 @@
 #!/usr/bin/env python3
-"""Structural checks for the Davis--Kahan library layout.
+"""Structural checks for the Davis--Kahan production/Experimental boundary.
 
-These are the five checks required by
-`dev/flawless-sine-theta-reorganization-overnight-plan-2026-07-20.md`:
+The checker enforces durable repository invariants that originated in the July
+2026 sine-theta reorganization and are now part of the maintained architecture:
 
-1. every production module is reachable from `DavisKahan.All` or the
-   curated `DavisKahan` root;
-2. no production module imports an Experimental module;
-3. every Experimental module has an admission in its dependency closure;
-4. every source facade is reachable from the curated `DavisKahan` root;
-5. the full-paper audit still points at existing paths and has not silently
-   dropped audited targets.
+1. production modules are reachable from `DavisKahan.All` or the curated root;
+2. production modules do not import Experimental modules;
+3. Experimental modules remain visibly admission-dependent rather than being
+   mistaken for production proofs;
+4. source facades are reachable from the curated root; and
+5. the full-paper sine-theta audit still points at existing endpoints.
 
-All five checks pass as of the direct-Spectra production closure. Check 2 in
-particular is now green: the production interval/exterior estimate comes from
-the vendored Spectra calculus, so no production module needs the admitted
-generic truncation API. See
-`dev/davis-kahan-1970-source-correspondence-matrix.md` for what the audited
-surface does and does not claim.
-
-Reporting violations precisely is the point of this script, so it exits nonzero
-whenever any check fails.
+Historical migration details live in
+`dev/flawless-sine-theta-reorganization-overnight-plan-2026-07-20.md`; current
+behavior is defined by this script and the present module graph.
 """
 from __future__ import annotations
 
@@ -29,11 +22,7 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-# `ForMathlib` was retired on 2026-07-29 (lane FM-RETIRE): its modules moved into
-# `ForTauCeti` and the library no longer exists.  `ForTauCeti` is deliberately NOT
-# added here: like `ForMathlib` before it, it is glob-built by lake
-# (`globs = ["ForTauCeti.*"]`), so every module is compiled regardless of
-# reachability and rule 1 would add nothing.
+# Only DavisKahan uses this reachability policy; ForTauCeti is glob-built.
 LIB_DIRS = ("DavisKahan",)
 EXPERIMENTAL = ".Experimental."
 EXPERIMENTAL_ROOT = "DavisKahan.Experimental"
@@ -48,11 +37,7 @@ AUDITED_TARGET_FLOOR = 43
 
 # Modules deliberately kept out of every root, with the reason. These are not
 # claimed proofs: each one documents its own exclusion in its file header.
-DELIBERATELY_UNBUILT = {
-    "ForMathlib.Analysis.InnerProductSpace.RectangularSingularValuesDkVariant":
-        "preserved comparison variant; its header records that it does not "
-        "elaborate on the pinned toolchain and must not be imported",
-}
+DELIBERATELY_UNBUILT = {}
 
 IMPORT = re.compile(r"^\s*import\s+([A-Za-z0-9_.]+)", re.M)
 BLOCK_COMMENT = re.compile(r"/-.*?-/", re.S)
