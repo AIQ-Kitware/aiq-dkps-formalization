@@ -196,7 +196,7 @@ branch point `-1`.  Acuteness provides that exclusion. -/
 theorem neg_one_not_mem_spectrum_spectraReflectionProduct
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     (-1 : ℂ) ∉ spectrum ℂ (spectraReflectionProduct U V) := by
   intro hneg
   have hzero : (0 : ℂ) ∈ spectrum ℂ
@@ -235,14 +235,14 @@ theorem spectrum_spectraReflectionProduct_abs_eq_one
 noncomputable def spectraReflectionProductHalfPhase
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (_hacute : IsAcute U V) : H →L[ℂ] H :=
+    (_hacute : IsUniformlyAcute U V) : H →L[ℂ] H :=
   cfc (principalHalfPhase : ℂ → ℂ) (spectraReflectionProduct U V)
 
 /-- The half-phase is unitary. -/
 theorem spectraReflectionProductHalfPhase_mem_unitary
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraReflectionProductHalfPhase U V hacute ∈ unitary (H →L[ℂ] H) := by
   have hneg := neg_one_not_mem_spectrum_spectraReflectionProduct U V hacute
   have hnormal : IsStarNormal (spectraReflectionProduct U V) :=
@@ -265,7 +265,7 @@ theorem spectraReflectionProductHalfPhase_mem_unitary
 theorem spectraReflectionProductHalfPhase_sq
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraReflectionProductHalfPhase U V hacute *
         spectraReflectionProductHalfPhase U V hacute =
       spectraReflectionProduct U V := by
@@ -289,10 +289,10 @@ theorem spectraReflectionProductHalfPhase_sq
 
 omit [CompleteSpace H] in
 /-- Acuteness is symmetric in the two subspaces. -/
-theorem _root_.TauCeti.DavisKahan.IsAcute.symm
+theorem _root_.TauCeti.DavisKahan.IsUniformlyAcute.symm
     {U V : Submodule ℂ H}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (h : IsAcute U V) : IsAcute V U := by
+    (h : IsUniformlyAcute U V) : IsUniformlyAcute V U := by
   show subspaceGap V U < 1
   rw [subspaceGap, Submodule.projectionGap_comm]
   exact h
@@ -404,7 +404,7 @@ modulus is invertible, so the factor is unique. -/
 theorem spectraDirectRotation_eq_reflectionProductHalfPhase
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute =
       spectraReflectionProductHalfPhase U V hacute := by
   have hneg : (-1 : ℂ) ∉ spectrum ℂ (spectraReflectionProduct U V) :=
@@ -436,7 +436,7 @@ theorem spectraDirectRotation_eq_reflectionProductHalfPhase
 theorem spectraDirectRotation_sq
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute * spectraDirectRotation U V hacute =
       reflectionOperator V * reflectionOperator U := by
   rw [spectraDirectRotation_eq_reflectionProductHalfPhase U V hacute]
@@ -453,7 +453,7 @@ theorem star_spectraReflectionProduct
 theorem spectraDirectRotation_reversal
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation V U hacute.symm =
       star (spectraDirectRotation U V hacute) := by
   have hnegUV : (-1 : ℂ) ∉ spectrum ℂ (spectraReflectionProduct U V) :=
@@ -497,7 +497,7 @@ nonnegative on the unit circle because `re (1 + z) ≥ 0` there; expanding
 theorem spectraDirectRotation_real_inner_nonneg
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (x : H) :
+    (hacute : IsUniformlyAcute U V) (x : H) :
     0 ≤ Complex.re ⟪spectraDirectRotation U V hacute x, x⟫_ℂ := by
   rw [spectraDirectRotation_eq_reflectionProductHalfPhase U V hacute]
   have hneg : (-1 : ℂ) ∉ spectrum ℂ (spectraReflectionProduct U V) :=
@@ -560,7 +560,7 @@ positive modulus of the canonical midpoint. -/
 theorem spectraDirectRotation_add_star_eq_two_smul_absoluteValue
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute +
         star (spectraDirectRotation U V hacute) =
       (2 : ℂ) • spectraOperatorAbsoluteValue
@@ -628,7 +628,7 @@ nonzero vectors in the acute regime. -/
 theorem spectraCanonicalAbsoluteValue_inner_pos
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) {x : H} (hx : x ≠ 0) :
+    (hacute : IsUniformlyAcute U V) {x : H} (hx : x ≠ 0) :
     0 < Complex.re ⟪spectraOperatorAbsoluteValue
       (spectraCanonicalIntertwiner U V) x, x⟫_ℂ := by
   let B := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
@@ -664,7 +664,7 @@ nonzero vectors. -/
 theorem spectraDirectRotation_real_inner_pos
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) {x : H} (hx : x ≠ 0) :
+    (hacute : IsUniformlyAcute U V) {x : H} (hx : x ≠ 0) :
     0 < Complex.re ⟪spectraDirectRotation U V hacute x, x⟫_ℂ := by
   let D := spectraDirectRotation U V hacute
   let B := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
@@ -700,7 +700,7 @@ factorization then forces the two square roots to agree. -/
 theorem spectraDirectRotation_unique
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : IsUniformlyAcute U V)
     (W : H →L[ℂ] H)
     (hWunit : W ∈ unitary (H →L[ℂ] H))
     (hsq : W * W = spectraReflectionProduct U V)
@@ -803,7 +803,7 @@ formally from the square identity. -/
 theorem spectraDirectRotation_unique_of_sq
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : IsUniformlyAcute U V)
     (W : H →L[ℂ] H)
     (hWunit : W ∈ unitary (H →L[ℂ] H))
     (hsq : W * W = spectraReflectionProduct U V)
@@ -870,7 +870,7 @@ theorem norm_sub_one_apply_sq_of_mem_unitary
 theorem norm_spectraDirectRotation_sub_one_le_sqrt_two
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     ‖spectraDirectRotation U V hacute - 1‖ ≤ Real.sqrt 2 := by
   let D : H →L[ℂ] H := spectraDirectRotation U V hacute
   have hDunit : D ∈ unitary (H →L[ℂ] H) :=
@@ -895,7 +895,7 @@ the positive canonical modulus. -/
 theorem re_inner_spectraDirectRotation_eq_absoluteValue
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (x : H) :
+    (hacute : IsUniformlyAcute U V) (x : H) :
     RCLike.re ⟪spectraDirectRotation U V hacute x, x⟫_ℂ =
       RCLike.re ⟪spectraOperatorAbsoluteValue
         (spectraCanonicalIntertwiner U V) x, x⟫_ℂ := by
@@ -920,7 +920,7 @@ theorem re_inner_spectraDirectRotation_eq_absoluteValue
 Halmos cosine. -/
 theorem projection_mul_spectraDirectRotation_mul_projection
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     projection U * spectraDirectRotation U V hacute * projection U =
       spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) *
         projection U := by
@@ -976,7 +976,7 @@ theorem projection_mul_spectraDirectRotation_mul_projection
 positive Halmos cosine. -/
 theorem complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     complementaryProjection U * spectraDirectRotation U V hacute *
         complementaryProjection U =
       spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) *
@@ -1122,7 +1122,7 @@ what distinguishes this statement from `spectraDirectRotation_unique`. -/
 theorem spectraDirectRotation_unique_of_diagonalBlocks
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : IsUniformlyAcute U V)
     (W : H →L[ℂ] H)
     (hWunit : W ∈ unitary (H →L[ℂ] H))
     (hsq : W * W = spectraReflectionProduct U V)
@@ -1189,7 +1189,7 @@ canonical branch; the reverse is
 theorem eq_spectraDirectRotation_iff_diagonalBlocks_nonneg
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : H →L[ℂ] H) :
+    (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H) :
     W = spectraDirectRotation U V hacute ↔
       W ∈ unitary (H →L[ℂ] H) ∧
         W * W = spectraReflectionProduct U V ∧
@@ -1339,7 +1339,7 @@ form uniformly coercive.  The Hermitian-part identity
 theorem spectraDirectRotation_minimal
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : IsUniformlyAcute U V)
     (W : H →L[ℂ] H) (hWunit : W ∈ unitary (H →L[ℂ] H))
     (hintertwine : W * projection U = projection V * W) :
     ‖spectraDirectRotation U V hacute - 1‖ ≤ ‖W - 1‖ := by

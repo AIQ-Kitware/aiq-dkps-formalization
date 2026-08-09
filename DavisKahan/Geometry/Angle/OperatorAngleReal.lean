@@ -68,10 +68,10 @@ noncomputable def sinTwoAngleOperatorRC (U V : Submodule ℝ E)
 /-- Tangent-angle operator for acute real subspaces, in the complexification. -/
 noncomputable def tanAngleOperatorRC (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : TauCeti.DavisKahan.IsAcute U V) :
+    (hacute : TauCeti.DavisKahan.IsUniformlyAcute U V) :
     RealComplexification E →L[ℂ] RealComplexification E :=
   tanAngleOperatorC (complexifySubmodule U) (complexifySubmodule V)
-    ((isAcute_complexifySubmodule_iff U V).2 hacute)
+    ((isUniformlyAcute_complexifySubmodule_iff U V).2 hacute)
 
 /-- Tangent of twice the angle for quarter-acute real subspaces. -/
 noncomputable def tanTwoAngleOperatorRC (U V : Submodule ℝ E)
@@ -171,13 +171,13 @@ theorem norm_sinTwoAngleOperatorRC_le (U V : Submodule ℝ E)
 theorem tanAngleOperatorRC_comp_cosAngleExtended
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
-    (hacute : TauCeti.DavisKahan.IsAcute U V) :
+    (hacute : TauCeti.DavisKahan.IsUniformlyAcute U V) :
     tanAngleOperatorRC U V hacute ∘L
         cosAngleExtendedC (complexifySubmodule U) (complexifySubmodule V) =
       sinAngleOperatorDirectedRC U V := by
   exact tanAngleOperatorC_comp_cosAngleExtendedC
     (complexifySubmodule U) (complexifySubmodule V)
-    ((isAcute_complexifySubmodule_iff U V).2 hacute)
+    ((isUniformlyAcute_complexifySubmodule_iff U V).2 hacute)
 
 /-- Defining double-tangent identity below the real quarter-angle threshold. -/
 theorem tanTwoAngleOperatorRC_comp_cosTwoAngleExtended

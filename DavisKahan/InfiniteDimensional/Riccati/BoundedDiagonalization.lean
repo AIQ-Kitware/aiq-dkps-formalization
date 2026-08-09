@@ -250,7 +250,7 @@ assuming the zero graph and the Riccati graph are acute. -/
 theorem complex_blockDiagonalization_of_riccati_of_acute
     (H : BlockOperatorData (𝕜 := ℂ) (E0 := E0c) (E1 := E1c))
     {X : E0c →L[ℂ] E1c} (hX : SolvesRiccati H X)
-    (hacute : IsAcute
+    (hacute : IsUniformlyAcute
       (blockGraph (0 : E0c →L[ℂ] E1c)) (blockGraph X)) :
     ∃ W Winv : WithLp 2 (E0c × E1c) →L[ℂ] WithLp 2 (E0c × E1c),
       ∃ D0 : E0c →L[ℂ] E0c, ∃ D1 : E1c →L[ℂ] E1c,
