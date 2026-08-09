@@ -1078,15 +1078,23 @@ theorem beamTrialVec_span_eq_top :
   obtain ⟨h1, h2, h12⟩ := beamTrialVec_orthonormal
   have h21 : ⟪beamTrialVecTwo, beamTrialVecOne⟫_ℂ = 0 := by
     rw [← inner_conj_symm (𝕜 := ℂ) beamTrialVecTwo beamTrialVecOne, h12, map_zero]
+  have hne1 : beamTrialVecOne ≠ 0 := by
+    intro hzero
+    have : (0 : ℂ) = 1 := by simpa [hzero] using h1
+    exact zero_ne_one this
+  have hne2 : beamTrialVecTwo ≠ 0 := by
+    intro hzero
+    have : (0 : ℂ) = 1 := by simpa [hzero] using h2
+    exact zero_ne_one this
   have hli : LinearIndependent ℂ ![beamTrialVecOne, beamTrialVecTwo] := by
     rw [LinearIndependent.pair_iff]
     intro α β hαβ
     have hA : α = 0 := by
       have := congrArg (fun z => ⟪beamTrialVecOne, z⟫_ℂ) hαβ
-      simpa [inner_add_right, inner_smul_right, h1, h12] using this
+      simpa [inner_add_right, inner_smul_right, h1, h12, hne1] using this
     have hB : β = 0 := by
       have := congrArg (fun z => ⟪beamTrialVecTwo, z⟫_ℂ) hαβ
-      simpa [inner_add_right, inner_smul_right, h2, h21] using this
+      simpa [inner_add_right, inner_smul_right, h2, h21, hne2] using this
     exact ⟨hA, hB⟩
   have hrange : Set.range ![beamTrialVecOne, beamTrialVecTwo] =
       ({beamTrialVecOne, beamTrialVecTwo} : Set beamTrial) := by
@@ -1333,11 +1341,11 @@ theorem beamResidual_sub_rankOne_apply (ε : ℝ) (α β : ℂ) :
       = ((beamGramTopCoefficient : ℝ) : ℂ) • beamResidual ε beamTrialVecOne
         - beamResidual ε beamTrialVecTwo := by
     rw [map_sub, map_smul]
-  rw [ContinuousLinearMap.sub_apply, beamResidualRankOne_apply,
+  rw [sub_apply, beamResidualRankOne_apply,
     inner_beamGramTopVector, hx, hw, hz]
   match_scalars <;> field_simp <;> ring
 
-private theorem le_of_sq_le_sq' {A B : ℝ} (hA : 0 ≤ A) (hB : 0 ≤ B)
+private theorem le_of_sq_le_sq' {A B : ℝ} (hB : 0 ≤ B)
     (h : A ^ 2 ≤ B ^ 2) : A ≤ B := by nlinarith
 
 open DavisKahan1970.Section9 in
@@ -1385,8 +1393,7 @@ theorem norm_beamResidual_sub_rankOne_le (ε : ℝ) :
           ‖beamResidual ε (((beamGramTopCoefficient : ℝ) : ℂ) • beamTrialVecOne
             - beamTrialVecTwo)‖) / (1 + beamGramTopCoefficient ^ 2) from by ring,
     div_le_iff₀ hDpos]
-  refine le_of_sq_le_sq' (by positivity)
-    (by positivity) ?_
+  refine le_of_sq_le_sq' (by positivity) ?_
   rw [mul_pow, hzsq]
   nlinarith [hcs, sq_nonneg (residualBottomSingularValue ε),
     norm_nonneg (α • beamTrialVecOne + β • beamTrialVecTwo),
@@ -1702,7 +1709,7 @@ theorem norm_beamRitzResidual_le (ε : ℝ) (x : beamTrial) :
     have htri : ‖α - β‖ ≤ ‖α‖ + ‖β‖ := norm_sub_le α β
     nlinarith [norm_nonneg α, norm_nonneg β, norm_nonneg (α - β),
       sq_nonneg (‖α‖ - ‖β‖)]
-  refine le_of_sq_le_sq' (norm_nonneg _)
+  refine le_of_sq_le_sq'
     (mul_nonneg (by unfold orthogonalResidualSingularValue; positivity)
       (norm_nonneg _)) ?_
   rw [mul_pow, hσ, hxnorm]
@@ -1767,7 +1774,7 @@ theorem beamRitz_form_le (ε : ℝ) (hε : 0 ≤ ε) (x : beamTrial) :
       = (((‖α‖ ^ 2 * ritzLow ε + ‖β‖ ^ 2 * ritzHigh ε : ℝ)) : ℂ) := by
     rw [hu', hxc]
     simp only [inner_add_left, inner_add_right, inner_smul_left, inner_smul_right,
-      m10', m01', m11', m22', map_mul]
+      m10', m01', m11', m22']
     rw [show α * ((starRingEnd ℂ) α * ((ritzLow ε : ℝ) : ℂ) + (starRingEnd ℂ) β * 0)
           + β * ((starRingEnd ℂ) α * 0
             + (starRingEnd ℂ) β * ((ritzHigh ε : ℝ) : ℂ))

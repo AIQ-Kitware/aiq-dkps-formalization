@@ -25,7 +25,8 @@ using the same `collectAxioms` that backs `#print axioms`.
 pip install -e tools/leanq        # or: uv pip install -e tools/leanq
 ```
 
-No runtime dependencies. It shells out to `lake`, so it needs a project that has been built.
+No required runtime dependencies. It shells out to `lake`, so it needs a project that has been built.
+Optional Python line profiling is available through the `profile` extra.
 
 ## Use
 
@@ -88,6 +89,39 @@ crossings.
 `leanq` indexes public environment constants.  Private implementation helpers are therefore
 not counted as separate promotion declarations; when moving a module, move or rewrite the
 private proof support with its public endpoint.
+
+### Promotion-query performance
+
+`promotions` now uses a separate **dependency-only** root-scoped index. The full index used by
+`stubs`, `stats`, and `axioms` computes transitive axiom closure, proposition classification,
+and declaration source ranges for every declaration. None of those fields participate in a
+promotion boundary, so the structural index emits them as `null` and only computes the direct
+dependency graph. The two cache formats have different filenames and cannot accidentally replace
+each other.
+
+The first `--refresh` still has to import the chosen Lean root. If build/import optimization has
+made `DavisKahan` cheaper to load, that improvement directly helps leanq as well. To distinguish
+Lean import time from leanq's declaration walk, enable coarse Lean-side timings:
+
+```bash
+LEANQ_TIMINGS=1 leanq --lib DavisKahan promotions --root DavisKahan --refresh
+```
+
+The command prints `import_ns=...` and `emit_ns=...` on stderr. A large `import_ns` points at the
+module/build graph; a large `emit_ns` points at leanq's environment walk.
+
+For Python line-level profiling, install the optional extra and set `LINE_PROFILE=1`:
+
+```bash
+python3 -m pip install -e 'tools/leanq[profile]'
+LINE_PROFILE=1 LEANQ_TIMINGS=1 \
+  leanq --lib DavisKahan promotions --root DavisKahan --refresh
+```
+
+When `LINE_PROFILE=1` is absent, leanq uses an internal no-op `@profile` decorator and does not
+import `line_profiler`, so ordinary installs remain dependency-free. The decorated Python hot
+paths include project/module discovery, index construction/loading, and promotion-closure
+classification.
 
 ## What a record contains
 
