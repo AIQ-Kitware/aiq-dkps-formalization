@@ -11,12 +11,12 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 32 |
+| `compiled_exact` | 33 |
 | `compiled_specialization` | 7 |
 | `compiled_general_infrastructure` | 2 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 2 |
+| `partial_or_wrapper_missing` | 1 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -48,8 +48,8 @@ no `sorry` and no `axiom`, so a declaration reachable from
 
 | Verification | Count |
 | --- | ---: |
-| `proved_in_build` | 42 |
-| `proved_conditional` | 3 |
+| `proved_in_build` | 43 |
+| `proved_conditional` | 2 |
 | `partially_in_build` | 0 |
 | `proved_outside_build` | 0 |
 | `not_compiling` | 0 |
@@ -116,7 +116,7 @@ which say what the record cannot.  What still blocks the four remaining Section 
 
 **DK-9.1-9.4 IS FULLY OFF THIS BLOCKER 2026-08-07 (Opus 5).**  (9.3) was the last of its four equations still stated relative to a certificate field; `beamSinThetaSum_le` derives it from `beamOperator` through the second approximation number of the residual, realised by an explicit rank-one approximant.  The blocker now constrains only DK-9.5-9.7, DK-9.8 and DK-9.9-9.11.
 
-Gates: DK-9.5-9.7 (proved_conditional), DK-9.8 (proved_conditional), DK-9.9-9.11 (proved_conditional)
+Gates: DK-9.5-9.7 (proved_conditional), DK-9.9-9.11 (proved_conditional)
 
 ### `exact-source-wrappers` -- mechanical
 
@@ -1573,11 +1573,10 @@ The row therefore keeps `proved_conditional`: two of its three equations are now
 #### Equation (9.8): Comparison with Weinberger bounds
 
 - **Kind:** `comparison_claim`
-- **Status:** `partial_or_wrapper_missing`
-- **Verification:** `proved_conditional`
+- **Status:** `compiled_exact`
+- **Verification:** `proved_in_build`
 - **Mathematics:** Derive lower-eigenvalue estimates from a 3x3 comparison matrix and compare individual-vector angle bounds.
-- **Blocked by:** `section9-certificate-discharge`
-- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.ArrowheadThreeByThree`, `TauCeti.DavisKahan1970.Section9.tangent_sq_le_of_weinberger_sine_sq`, `TauCeti.DavisKahan1970.Section9.equation_9_8_lower`, `TauCeti.DavisKahan1970.Section9.equation_9_8_upper`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanPhi_low_lt_printed`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanPhi_high_lt_printed`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanPhi_low_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanPhi_high_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamColumn_tangent_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamColumnResidual_low`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamColumnResidual_high`
+- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.ArrowheadThreeByThree`, `TauCeti.DavisKahan1970.Section9.tangent_sq_le_of_weinberger_sine_sq`, `TauCeti.DavisKahan1970.Section9.equation_9_8_lower`, `TauCeti.DavisKahan1970.Section9.equation_9_8_upper`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanPhi_low_lt_printed`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanPhi_high_lt_printed`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanPhi_low_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanPhi_high_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamColumn_tangent_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamColumnResidual_low`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamColumnResidual_high`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beam_equation_9_8_lower`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beam_equation_9_8_upper`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beam_equation_9_8`, `TauCeti.DavisKahan1970.Section9.weinberger_sine_sq_le_of_coupled_energy`, `TauCeti.DavisKahan1970.Section9.naive_second_scalar_lower_bound_tripwire`
 - **Assessment:** The exact arrowhead characteristic polynomial and the algebraic conversion of Weinberger sine-square bounds to tangent bounds are represented. The historical lower-root theorem is deliberately an explicit certificate rather than an informal O(epsilon^4) assertion.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `partial_or_wrapper_missing`. The arrowhead algebra is compiled and axiom-clean; the root inequality needs the alpha_3 > 500 spectral bound, which does not exist.
@@ -1605,7 +1604,23 @@ WHAT REMAINS ON THIS ROW is the Weinberger comparison proper: `equation_9_8_lowe
 **ORDERING CONSTRAINT LIFTED 2026-08-09 (Claude Opus 5).**  The instruction above, "Do not attempt it before DK-9.5-9.7", was written when that row's perturbed spectral gap was missing.  It is now proved (`beamPerturbed_specProjection_Ioo_eq_zero`) and the tangent envelope it gates is proved (`beamTanTheta_le`), so the dependency is discharged.
 
 The upper line of (9.8) still needs one connection that the envelope does not supply by itself: `weinbergerUpperTangentExactBound` is definitionally `tangentThetaExactBound`, but `equation_9_8_upper` consumes a bound on Weinberger's `tan phi_k` -- the angle between the individual Ritz vector `e_k` and `Range(F_0)` -- and `beamTanTheta_le` bounds the SUBSPACE tangent.  What this repository has for the individual angles is sharper and is Davis--Kahan's, not Weinberger's: `beamTanPhi_low_lt_printed` / `_high_lt_printed`.  So the remaining work on this row is entirely on the Weinberger side, as recorded: certified low roots of `weinbergerComparisonMatrix eps` for the lower line, and a `tan phi` bound at Weinberger's own (weaker) envelope for the upper one.
-- **Next action:** The direct one-vector estimates are done; what is left is the Weinberger side.  `weinbergerUpperTangentExactBound` IS `tangentThetaExactBound`, so the upper line rides on DK-9.5-9.7's envelope.  The lower line additionally needs certified low roots of `weinbergerComparisonMatrix eps` fed through the proved `tangent_sq_le_of_weinberger_sine_sq`.  The `alpha_3 > 500` sentence is stale and is superseded by `realSpectrum_beamOperator_subset_sharp`.
+
+**EQUATION (9.8) ITSELF IS PROVED UNCONDITIONALLY 2026-08-09 (OpenAI GPT-5.6 Sol; reviewed and verified against the source by Claude Opus 5).**  `beam_equation_9_8_lower`, `beam_equation_9_8_upper` and `beam_equation_9_8` (`DavisKahan/SpectralTheory/FormMethod/BeamWeinberger.lean`) give both printed decimals for the genuine perturbed beam, for every `0 < eps < 100`, with no hypothesis and no certificate field.
+
+ROUTE -- AND IT IS THE PAPER'S OWN.  Immediately after (9.8) Davis--Kahan write "To estimate phi_k directly by our method, apply Theorem 6.3 with E_0 = e_k", obtain `0.0003652 eps / (1 - ...)`, and conclude "which are sharper than (9.8)".  Those sharper estimates are `beamTanPhi_low_lt_printed` and `_high_lt_printed`: numerator `913/2500000` against (9.8)'s `1291/2500000`, with the denominators `1 - 4227/10^7 eps` and `1 - 7887/(5*10^6) eps` IDENTICAL on both sides.  Deriving (9.8) from them is therefore not a workaround for the Weinberger route -- it is the implication Davis--Kahan themselves assert in the sentence following the equation.
+
+WHAT IS DELIBERATELY NOT CLAIMED, AND WHY IT IS NOT A DAVIS--KAHAN OBLIGATION.  Two results in this passage are attributed to other authors:
+
+(a) Weinberger's angle inequality `sin^2 phi_k <= (alphahat_k - alphacheck_k)/(500 - alphacheck_k)`.  This is an UNNUMBERED intermediate display preceding (9.8), not (9.8) itself.  `weinberger_sine_sq_le_of_coupled_energy` (`Section9/WeinbergerAngle.lean`) formalizes its algebraic core, taking the coupled energy split as a HYPOTHESIS rather than deriving it.
+
+(b) the Lehmann optimality sentence, that the two lower eigenvalues of the 3x3 arrowhead are the best lower bounds deducible from `Ahat_0`, `Rhat* Rhat` and `Ahat_1 > 500`.  The arrowhead algebra is in `WeinbergerComparison.lean`; the optimality claim is Lehmann's.
+
+Davis--Kahan themselves mark this boundary: "Weinberger's use both Rayleigh--Ritz upper and lower bounds, and can exploit independent lower-bound information that our results do not use."  Reproducing (a) and (b) means importing Weinberger 1960 and Lehmann, which is external mathematics -- see `dev/external-literature-references.md`.
+
+TRIPWIRE AGAINST THE TEMPTING FALSE SHORTCUT.  `naive_second_scalar_lower_bound_tripwire` compiles a rational counterexample showing that (a) does NOT follow from "alphacheck_k is some scalar lower bound for lambda_k" plus the exterior threshold.  For `T = diag(0, 10, 100)` with threshold `99`, the orthogonal Ritz vectors `w_1 = (18/35, -6/7, 1/35)` and `w_2 = (3/7, 2/7, 6/7)` are also `T`-orthogonal, with Ritz values `52/7` and `520/7`; the valid bound `alphacheck_2 = 10 = lambda_2` gives `(520/7 - 10)/(99 - 10) = 450/623`, while the actual squared defect of `w_2` is `36/49 > 450/623`.  It holds for `k = 1` and fails for `k = 2` because `P_F w_2` carries a component below `alphacheck_2`.  Do not replace Weinberger's coupled hypotheses by the scalar statement merely because the latter has the right type shape.
+- **Next action:** Nothing outstanding for the printed equation: both lines of (9.8) are unconditional theorems about the genuine beam, by the paper's own Theorem 6.3 route.
+
+Two OPTIONAL items remain, neither a Davis--Kahan obligation.  (1) Import Weinberger 1960's coupled variational argument to discharge the hypothesis of `weinberger_sine_sq_le_of_coupled_energy`, which would reconstruct the paper's historical derivation rather than its conclusion.  (2) Certify the two low roots of `weinbergerComparisonMatrix eps` and prove Lehmann's optimality claim for them.  The older conditional wrappers `equation_9_8_lower` / `equation_9_8_upper` are retained as the interface those would feed; they are superseded as the route to (9.8).
 
 #### Section 9, l2 example after (9.8): Residual-infinite limitation example
 
