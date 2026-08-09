@@ -22,5 +22,6 @@ import DavisKahan.Sources.DavisKahan1970.Section9.RankOneCorrection
 import DavisKahan.Sources.DavisKahan1970.Section9.SchurComplement
 import DavisKahan.Sources.DavisKahan1970.Section9.TrialSubspace
 import DavisKahan.Sources.DavisKahan1970.Section9.WeinbergerComparison
+import DavisKahan.Sources.DavisKahan1970.Section9.WeinbergerAngle
 
 /-! # `DavisKahan/Sources/DavisKahan1970/Section9` -/
