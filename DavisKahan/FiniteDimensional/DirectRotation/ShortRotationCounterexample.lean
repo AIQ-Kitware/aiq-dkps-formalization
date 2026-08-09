@@ -103,7 +103,7 @@ private theorem inner_Wlin_Wlin (x y : E4) : ⟪Wlin x, Wlin y⟫_ℝ = ⟪x, y�
 
 /-- The competitor as a linear isometry equivalence. -/
 def Wequiv : E4 ≃ₗᵢ[ℝ] E4 :=
-  (LinearEquiv.ofLinear Wlin Wlin' Wlin_comp_Wlin' Wlin'_comp_Wlin).isometryOfInner
+  (LinearEquiv.ofLinearMap Wlin Wlin' Wlin_comp_Wlin' Wlin'_comp_Wlin).isometryOfInner
     fun x y => inner_Wlin_Wlin x y
 
 private theorem Wequiv_apply (x : E4) : Wequiv x = Wlin x := rfl

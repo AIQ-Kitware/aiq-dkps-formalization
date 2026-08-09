@@ -4,7 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import Mathlib
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Tactic.Abel
+import Mathlib.Tactic.Ext
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Ring
 
 /-!
 # Davis--Kahan 1970, Section 9: Schur-complement reduction

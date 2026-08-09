@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, Iterator, Sequence
 
+from ._profile import profile
 from .project import LeanProject, ProjectError
 
 LEAN_SCRIPT = Path(__file__).with_name("lean") / "decl_index.lean"
@@ -23,11 +24,11 @@ class Decl:
     name: str
     module: str
     kind: str
-    is_prop: bool
-    prop_valued: bool
-    sorried: bool
-    line: int
-    axioms: tuple[str, ...]
+    is_prop: bool | None
+    prop_valued: bool | None
+    sorried: bool | None
+    line: int | None
+    axioms: tuple[str, ...] | None
     deps: tuple[str, ...]
 
     @classmethod
@@ -36,11 +37,13 @@ class Decl:
             name=obj["name"],
             module=obj["module"],
             kind=obj["kind"],
-            is_prop=obj["isProp"],
-            prop_valued=obj["propValued"],
-            sorried=obj["sorried"],
-            line=obj.get("line", 0),
-            axioms=tuple(obj.get("axioms", ())),
+            is_prop=obj.get("isProp"),
+            prop_valued=obj.get("propValued"),
+            sorried=obj.get("sorried"),
+            line=obj.get("line"),
+            axioms=(
+                None if obj.get("axioms") is None else tuple(obj.get("axioms", ()))
+            ),
             deps=tuple(obj.get("deps", ())),
         )
 
@@ -53,7 +56,7 @@ class Decl:
             "propValued": self.prop_valued,
             "sorried": self.sorried,
             "line": self.line,
-            "axioms": list(self.axioms),
+            "axioms": None if self.axioms is None else list(self.axioms),
             "deps": list(self.deps),
         }
 
@@ -80,6 +83,7 @@ def index_path(project: LeanProject, library: str) -> Path:
     return project.root / ".leanq" / f"{library}.jsonl"
 
 
+@profile
 def build_index(
     project: LeanProject,
     library: str,
@@ -88,6 +92,7 @@ def build_index(
     modules: Sequence[str] | None = None,
     timeout: int = 3600,
     verbose: bool = True,
+    detail: str = "full",
 ) -> Path:
     """Run the Lean metaprogram and write a JSONL index.
 
@@ -96,6 +101,8 @@ def build_index(
     is a worse answer than an obvious error.  ``modules`` intentionally overrides that behavior
     for root-scoped questions such as the production promotion boundary.
     """
+    if detail not in {"full", "deps"}:
+        raise ProjectError(f"unknown index detail {detail!r}; expected full or deps")
     scoped = modules is not None
     modules = list(modules) if scoped else project.modules(library)
     if project.stale_modules and verbose and not scoped:
@@ -111,11 +118,13 @@ def build_index(
         handle.write("\n".join(modules))
         modules_file = handle.name
 
-    cmd = ["lake", "env", "lean", "--run", str(LEAN_SCRIPT), library, modules_file]
+    cmd = [
+        "lake", "env", "lean", "--run", str(LEAN_SCRIPT), library, modules_file, detail
+    ]
     if verbose:
         print(
             f"leanq: indexing {len(modules)} module(s) of {library} "
-            f"in {project.root}",
+            f"in {project.root} [{detail}]",
             file=sys.stderr,
         )
     try:
@@ -130,9 +139,17 @@ def build_index(
     finally:
         os.unlink(modules_file)
 
+    if os.environ.get("LEANQ_TIMINGS") == "1" and proc.stderr:
+        print(proc.stderr.rstrip(), file=sys.stderr)
+
     stdout = proc.stdout or ""
-    records = [line for line in stdout.splitlines() if line.startswith("{")]
-    junk = [line for line in stdout.splitlines() if line and not line.startswith("{")]
+    records: list[str] = []
+    junk: list[str] = []
+    for line in stdout.splitlines():
+        if line.startswith("{"):
+            records.append(line)
+        elif line:
+            junk.append(line)
     if proc.returncode != 0 and not records:
         detail = (proc.stderr or "").strip() or "\n".join(junk[:20]) or "(no output)"
         raise ProjectError(f"lean exited {proc.returncode}:\n{detail}")
@@ -146,6 +163,7 @@ def build_index(
     return out
 
 
+@profile
 def load_index(path: Path) -> list[Decl]:
     if not path.exists():
         raise ProjectError(f"no index at {path}; run `leanq index` first")
@@ -158,6 +176,7 @@ def load_index(path: Path) -> list[Decl]:
     return decls
 
 
+@profile
 def ensure_index(
     project: LeanProject, library: str, *, refresh: bool = False, verbose: bool = True
 ) -> list[Decl]:
@@ -167,7 +186,9 @@ def ensure_index(
     return load_index(path)
 
 
-def scoped_index_path(project: LeanProject, library: str, roots: Sequence[str]) -> Path:
+def scoped_index_path(
+    project: LeanProject, library: str, roots: Sequence[str], *, detail: str = "deps"
+) -> Path:
     """Cache path for an index produced by importing only ``roots``.
 
     Root-scoped indexes answer public-surface questions.  The ordinary library
@@ -181,9 +202,10 @@ def scoped_index_path(project: LeanProject, library: str, roots: Sequence[str]) 
         import hashlib
         label = hashlib.sha256("\0".join(roots).encode()).hexdigest()[:16]
     base = index_path(project, library)
-    return base.with_name(f"{library}.roots-{label}.jsonl")
+    return base.with_name(f"{library}.roots-{label}.{detail}.jsonl")
 
 
+@profile
 def ensure_scoped_index(
     project: LeanProject,
     library: str,
@@ -191,12 +213,20 @@ def ensure_scoped_index(
     *,
     refresh: bool = False,
     verbose: bool = True,
+    detail: str = "deps",
 ) -> list[Decl]:
-    """Load an index for exactly the environment obtained by importing ``roots``."""
+    """Load an index for exactly the environment obtained by importing ``roots``.
+
+    Promotion-boundary queries default to ``detail="deps"`` because they only need
+    declaration identity and dependency edges.  The dependency-only Lean pass skips
+    axiom closure, proposition normalization, and source-range lookup.
+    """
     roots = tuple(dict.fromkeys(roots))
-    path = scoped_index_path(project, library, roots)
+    path = scoped_index_path(project, library, roots, detail=detail)
     if refresh or not path.exists():
-        build_index(project, library, out=path, modules=roots, verbose=verbose)
+        build_index(
+            project, library, out=path, modules=roots, verbose=verbose, detail=detail
+        )
     return load_index(path)
 
 
@@ -226,7 +256,9 @@ def filter_decls(
             continue
         if name is not None and name not in decl.name:
             continue
-        if axiom is not None and not any(axiom in a for a in decl.axioms):
+        if axiom is not None and (
+            decl.axioms is None or not any(axiom in a for a in decl.axioms)
+        ):
             continue
         if uses is not None and not any(
             d == uses or d.rsplit(".", 1)[-1] == uses for d in decl.deps
@@ -235,6 +267,7 @@ def filter_decls(
         yield decl
 
 
+@profile
 def by_name(decls: Iterable[Decl]) -> dict[str, Decl]:
     """Index by full name, with short names as a fallback key."""
     table: dict[str, Decl] = {}
@@ -244,6 +277,7 @@ def by_name(decls: Iterable[Decl]) -> dict[str, Decl]:
     return table
 
 
+@profile
 def closure(
     decls: Iterable[Decl], root: str, *, library: str | None = None, depth: int = 0
 ) -> list[Decl]:

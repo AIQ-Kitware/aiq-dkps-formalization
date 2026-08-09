@@ -215,7 +215,7 @@ theorem directRotation_minimizes_max_displacement
       UnitarilyInvariantSeminorm.opNorm 𝕜 E (displacementSquare X) =
         ‖(X - LinearMap.id).toContinuousLinearMap‖ ^ 2 := by
     intro X
-    haveI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+    have : CompleteSpace E := FiniteDimensional.complete 𝕜 E
     have hD : displacementSquare X =
         LinearMap.adjoint (LinearMap.id - X) ∘ₗ (LinearMap.id - X) := by
       simp only [displacementSquare, map_sub, LinearMap.adjoint_id]

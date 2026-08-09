@@ -11,6 +11,8 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
+from ._profile import profile
+
 LAKEFILES = ("lakefile.toml", "lakefile.lean")
 
 
@@ -51,6 +53,7 @@ class LeanProject:
         ordered = [n for n in seen if n in built] or sorted(built)
         return sorted(set(ordered))
 
+    @profile
     def built_roots(self) -> list[str]:
         """Top-level module names with compiled artifacts."""
         lib = self.build_lib
@@ -64,6 +67,7 @@ class LeanProject:
                 roots.add(child.name)
         return sorted(roots)
 
+    @profile
     def modules(self, library: str) -> list[str]:
         """Every built module under ``library``, as dotted module names.
 
@@ -118,6 +122,7 @@ class LeanProject:
         return list(getattr(self, "_stale", []))
 
 
+@profile
 def find_project(start: Path | None = None) -> LeanProject:
     """Walk up from ``start`` until a lakefile appears."""
     here = (start or Path.cwd()).resolve()
