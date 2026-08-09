@@ -11,12 +11,12 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 31 |
-| `compiled_specialization` | 5 |
-| `compiled_general_infrastructure` | 4 |
+| `compiled_exact` | 32 |
+| `compiled_specialization` | 7 |
+| `compiled_general_infrastructure` | 2 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 3 |
+| `partial_or_wrapper_missing` | 2 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -75,20 +75,6 @@ the source-numbered wrapper is still missing. Obstructions marked
 `mechanical` need only wiring or a restatement; `hard_math` needs new
 mathematics.
 
-### `two-subspace-classification` -- hard_math
-
-**Two-projection canonical decomposition and multiplicity theory**
-
-Section 3's classification results need the Halmos two-subspace canonical form together with spectral multiplicity functions, and the infinite-dimensional existence statement needs cardinal-valued dimension bookkeeping rather than a finite-rank stand-in.
-
-**RE-SCOPED 2026-08-04 (first time).** The multiplicity requirement is an artefact of how the invariant is recorded, not of the mathematics: `genericHalmosCosineSq` is `A (+) A` rather than `A`, so the classification as stated needs multiplicity-halving. The constructive spine through the cosine block on the U-half needs none of it.
-
-**RESOLVED FOR THE CLASSIFICATION 2026-08-04 (second time).** That spine is complete and in the default build: `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`, both directions, admission-free, for arbitrary complex Hilbert spaces. The Halmos canonical form is no longer a blocker for anything.
-
-**WHAT STILL BLOCKS.** Only the *phrasing* of Theorem 3.1 in terms of spectral multiplicity functions, which needs Hahn--Hellinger (a translation of the invariant, absent from Mathlib), and the cardinal-valued dimension bookkeeping for the Section 4 infinite-dimensional existence statement. Corollary 3.1 needs neither -- it needs the compact-operator equivalence criterion instead. This blocker should be split along those three lines the next time it is touched.
-
-Gates: DK-3.2-prop (proved_in_build), DK-3.1-thm (proved_in_build)
-
 ### `real-scalar-infinite-dimensional-scope` -- mixed
 
 **Real Hilbert spaces at infinite dimension**
@@ -103,7 +89,7 @@ This is a SCOPE gap, not a correctness gap: nothing recorded is wrong, and the c
 
 ROUTE: the repository already intends a 'qualified complexification/restriction route' (dev/targeted-mathematical-repair-2026-07-21.md) and carries `DavisKahan/SpectralTheory/Complexification/`.  A real wrapper should go through that rather than by reproving over `RCLike`, since several proofs use the complex continuous functional calculus essentially.  Section 4's finite-dimensional restriction is a separate question and may be defensible -- the source itself notes that singular-value lists may need spectral multiplicity language for noncompact operators -- so check the printed statement before treating it as a gap.
 
-Gates: S2-sin-theta (proved_in_build), S2-sin-two-theta (proved_in_build), DK-3.1-def (proved_in_build), DK-3.1-prop (proved_in_build), DK-3.3-prop (proved_in_build), DK-3.1-cor (proved_in_build), DK-3.5-prop (proved_in_build), DK-3.2-cor (proved_in_build), DK-4.1-prop (proved_in_build), DK-4.1-cor (proved_in_build), DK-4.2-prop (proved_in_build), DK-4.3-prop (proved_in_build), DK-5.2-thm (proved_in_build), DK-6.1-thm (proved_in_build), DK-6.2-thm (proved_in_build), DK-6-appendix (proved_in_build), DK-6.3-lem (proved_in_build)
+Gates: S2-sin-theta (proved_in_build), S2-sin-two-theta (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-3.1-prop (proved_in_build), DK-3.2-prop (proved_in_build), DK-3.3-prop (proved_in_build), DK-3.1-thm (proved_in_build), DK-3.1-cor (proved_in_build), DK-3.5-prop (proved_in_build), DK-3.2-cor (proved_in_build), DK-4.1-prop (proved_in_build), DK-4.1-cor (proved_in_build), DK-4.2-prop (proved_in_build), DK-4.3-prop (proved_in_build), DK-5.2-thm (proved_in_build), DK-6.1-thm (proved_in_build), DK-6.2-thm (proved_in_build), DK-6.3-thm (proved_in_build), DK-6-appendix (proved_in_build), DK-6.3-lem (proved_in_build)
 
 ### `section9-certificate-discharge` -- mixed
 
@@ -162,9 +148,29 @@ Gates: S1-block-residual (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2
 - **Status:** `compiled_general_infrastructure`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Norms determined by singular values, contraction laws, Ky Fan prefix norms, and dominance by all prefixes.
-- **Current Lean references:** `TauCeti.DavisKahan.Experimental.ExactSinTheta.PaperUnitaryInvariantNorm`, `TauCeti.DavisKahan.Experimental.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge_le_of_all_kyFan_le_hetero`
+- **Current Lean references:** `TauCeti.DavisKahan.Experimental.ExactSinTheta.PaperUnitaryInvariantNorm`, `TauCeti.DavisKahan.Experimental.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge_le_of_all_kyFan_le_hetero`, `TauCeti.DavisKahan.Experimental.ExactSinTheta.paperKyFanNorm`, `TauCeti.DavisKahan.Experimental.ExactSinTheta.paperKyFanNorm_gauge`, `TauCeti.DavisKahan.Experimental.ExactSinTheta.paperKyFanNorm_extendedGauge`, `TauCeti.DavisKahan.Experimental.ExactSinTheta.all_kyFan_le_of_every_paperNorm_extendedGauge_le`, `TauCeti.DavisKahan.Experimental.ExactSinTheta.all_mul_kyFan_le_of_every_paperNorm_gauge_le`, `TauCeti.DavisKahan.Experimental.ExactSinTheta.re_sum_inner_map_le_kyFanApproximationGauge`
 - **Assessment:** The source norm correspondence is part of the clean Section 6 surface.
-- **Next action:** Retain as shared prerequisite; no new mathematics required.
+
+**THE KY FAN BICONDITIONAL IS NOW COMPLETE IN BOTH DIRECTIONS, 2026-08-09 (Claude Opus 5).  THE ROW DELIBERATELY DOES NOT MOVE.**
+
+The recorded gap was the CONVERSE half of the theorem of Ky Fan.  The transcription states it as a biconditional (L567): "the inequality `||K|| <= ||L||` holds for arbitrary unitary-invariant norms IF AND ONLY IF it holds for all the norms `||.||_nu`".  Only the forward half existed -- `PaperUnitaryInvariantNorm.prefixGauge_le_of_all_kyFan_le_hetero` and its ideal-gauge companions -- for want of an inhabitant of `PaperUnitaryInvariantNorm` realizing `||.||_nu` itself.
+
+That inhabitant landed with commit `5c72221b` (external contribution, no census update at the time; verified here by elaboration, not by name):
+
+* `paperKyFanNorm (k : Nat) (hk : 0 < k) : PaperUnitaryInvariantNorm` -- the nu-norm as a coherent normalized symmetric norm in every finite dimension;
+* `paperKyFanNorm_gauge (k) (hk) (A : E ->L[K] F) : (paperKyFanNorm k hk).gauge A = kyFanApproximationGauge k A` and its `ENNReal` companion `paperKyFanNorm_extendedGauge`, both `RCLike`-generic in `K` and free of any finite-dimensionality instance -- which is what makes the inhabitant a *realization* rather than a lookalike;
+* `all_kyFan_le_of_every_paperNorm_extendedGauge_le : (forall N, N.extendedGauge A <= N.extendedGauge B) -> forall k, kyFanApproximationGauge k A <= kyFanApproximationGauge k B`;
+* `all_mul_kyFan_le_of_every_paperNorm_gauge_le`, the same converse in the scaled form `c * N.gauge A <= N.gauge B` that the source estimates are actually stated in.
+
+All four are axiom-clean (`[propext, Classical.choice, Quot.sound]`) and resolve from `DavisKahan.All`.
+
+WHY THE ROW STILL DOES NOT REACH `compiled_exact`.  Its source anchor is equations (1.9)--(1.13), and two of those five are not formalized at all:
+
+* **(1.12)**, `||K||_nu = sup_Omega ||K Omega||_nu` over projectors `Omega` onto nu-dimensional subspaces.  The repository has only the trivial inequality direction implicit in `approximationSingularValue_comp_le` / `kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq`; no statement asserts the supremum is attained or equal.
+* **The equality half of (1.13)**, `||K||_nu = sup_{Omega,Upsilon} ||Upsilon K Omega||_nu = sup Re sum_k y_k* K x_k`, AT THE ROW'S OWN SCOPE.  The `<=` half is general: `re_sum_inner_map_le_kyFanApproximationGauge` (arbitrary Hilbert spaces, `RCLike`-generic, no dimension hypothesis), and it is the direction every proof in this repository consumes.  The attaining half exists only in FINITE dimensions and only for a square operator: `TauCeti.exists_orthonormal_re_sum_inner_map_eq (A : E ->l[K] E) (hk : k <= finrank K E)` (`ForTauCeti/Analysis/InnerProductSpace/KyFan.lean:390`), whose whole section carries `[FiniteDimensional K E]` and whose proof reads the pairs off an eigenvector basis of `A* A`.  For a noncompact operator the supremum need not be attained at all, so the infinite-dimensional statement is the approximate one, and it is the version the Appendix to Section 6 needs.  Nothing states the FIRST form of (1.13), the supremum over pairs of nu-projectors.
+
+Both are load-bearing in the source, not decoration: the Appendix to Section 6 opens its tan-theta passage by invoking (1.13) to produce the nu-projector `Pi` (transcription L2150), and the Proposition 4.4 defect is localized at a step deriving (4.3) from (1.12).  So they are completion obligations for this row, and `compiled_general_infrastructure` -- "the mathematics exists in a general reusable form" -- remains the honest label.
+- **Next action:** Two source equalities remain.  (1.12): `||K||_nu = sup_Omega ||K Omega||_nu` over nu-dimensional projectors -- nothing states it in either direction as an equality.  (1.13), equality half, at infinite dimension: the finite-dimensional square case is `exists_orthonormal_re_sum_inner_map_eq`, the `<=` half at full generality is `re_sum_inner_map_le_kyFanApproximationGauge`, and what is missing is the approximate attaining family for a noncompact operator between different spaces -- which is exactly what the Appendix to Section 6 invokes (transcription L2150) to produce its nu-projector.  `exists_approximateLeadingSingularFamily` in `Sources/DavisKahan1970/Ideals/SpectralSelection.lean` is the existing tool for that shape.  The Ky Fan biconditional itself needs nothing further: both directions are compiled and axiom-clean.
 
 ### Section 2
 
@@ -219,6 +225,12 @@ What landed towards it this session: the ambient object itself, `TauCeti.DavisKa
 Also landed, as the foundation the ambient half needs: `TauCeti.modulus_comp_left_cfc` and its polar instance `TauCeti.modulus_polarPartial_comp_cfc_modulus` (`ForTauCeti/Analysis/InnerProductSpace/PrincipalAngles/Equisingular.lean`), the identity `|J f(Theta)| = |f(Theta)|` for `f` vanishing at the origin.  This is the step that lets the paper's off-diagonal representative `[[0, -J_0* f(Theta_1)],[J_0 f(Theta_0), 0]]` be substituted for the block-diagonal `f(Theta)` inside ANY unitarily invariant norm, not merely with the same singular-value list.  It is an operator identity (equal Gram operators), so it survives noncompactness.
 
 WHAT IS ACTUALLY MISSING.  The paper derives the ambient half (Section 7, around equation (7.6)) by pairing the two equisingular directed tangent blocks through Lemma 6.1, then applying the Lemma 6.2 reflection pinch with the left and right decompositions CROSSED so the selected corners are exactly `B*` and `B`.  All three ingredients exist -- `paperLemma61_all_kyFan`, `paperLemma61_converse`, `paperDiagonalPair_all_kyFan_le` -- but the directed tangent in this repository is `theorem63DirectedTangent`, a finite-rank diagonal construction in a singular basis of the trial space, NOT a functional calculus of `paperAngleOperatorC`.  Until those two are identified, the equisingularity identity above cannot be applied to it and the coupling step has nothing to couple.  That identification, not a new estimate, is the next piece of work.
+
+**RE-VERIFIED 2026-08-09 (Claude Opus 5): THE AMBIENT-HALF BLOCKER RECORDED ABOVE IS STILL EXACTLY TRUE.**
+
+Elaborated rather than inferred: `theorem63DirectedTangent : {H} -> [NormedAddCommGroup H] -> [InnerProductSpace C H] -> (Z V : Submodule C H) -> [Z.HasOrthogonalProjection] -> [V.HasOrthogonalProjection] -> **[FiniteDimensional C Z]** -> Z ->L[C] H`.  It is a map out of the trial space, built diagonally in a singular basis of the directed sine block, and it does not even typecheck against `paperTanAngleOperatorC U V : E ->L[C] E`, which is `cfc Real.tan (paperAngleOperatorC U V)`.  The identification the ambient half needs is therefore still absent, and no new estimate has been attempted for it.
+
+WHAT DID CHANGE, ON THE DIRECTED SIDE ONLY.  The directed half now also holds over an UNBOUNDED ambient operator at arbitrary trial dimension (`theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing`, external commit `fd91e376`, verified axiom-clean).  That is recorded on S2-unbounded-scope and DK-6-appendix and does not bear on the ambient `Theta` half, which is open in every scalar field, every dimension, and both the bounded and unbounded settings.
 - **Next action:** The DIRECTED half is complete at source scope (equal-rank pairs, arbitrary trial dimension, arbitrary complete complex Hilbert space, arbitrary Fan-dominant unitarily invariant ideal gauge, tangent representative constructed rather than assumed).  The AMBIENT half `delta ||tan Theta|| <= ||H||` is open; see the note immediately above for exactly what blocks it.  The unbounded scope is S2-unbounded-scope's, not this row's.
 
 #### Section 2, sin 2 theta theorem: Double-angle sine theorem
@@ -294,6 +306,14 @@ THE CONSTANT IS THE PAPER'S 2, NOT 4.  The reflected pair is fed to a NEW sharp 
 CONVENTION, recorded so the statement is not misread: like the rest of the repository's `sin 2Theta` development, the internal spectral gap is carried by `A` at its reducing subspace `U` and `V` reduces `B`; the printed theorem carries the gap on `A + H` at `QH`.  The two readings exchange the roles of the two operators, under which `||H||` is unchanged.
 
 WHAT REMAINS ON THIS ROW: sub-problem A (real scalars for every UI norm, blocker `real-scalar-infinite-dimensional-scope`) and sub-problem C (the unequal-dimension extension announced at the end of Section 8).  C was recorded as downstream of B; with B closed at complex scalars, C is now unblocked in the equal-scalar case, but it needs its own statement -- the identity above is stated for a pair of subspaces of one space, and the Section 8 sentence is about `dim X(E_0) < dim X(F_0)`.
+
+**A DECOY THAT LOOKS LIKE THIS ROW'S MISSING REAL-SCALAR ENDPOINT IS NOT PROVED -- RECORDED 2026-08-09 (Claude Opus 5) SO NOBODY COUNTS IT.**
+
+`TauCeti.DavisKahanExt.ideal_sinTwoTheta` (`DavisKahan/Experimental/InfiniteDimensional/SinTheta/IdealIntervalExterior.lean:146`) reads exactly like sub-problem A of this row: `{K} [RCLike K]` -- so real AND complex -- arbitrary `SymmetricNormIdeal`, arbitrary complete inner product space, no dimension hypothesis, and the conclusion `d * I.gauge (sinTwoAngleOperator U V) <= 2 * I.gauge (B - A)` with the paper's constant.  It is NOT coverage.  `#print axioms` gives `[propext, sorryAx, Classical.choice, Quot.sound]` -- it is an unfinished proof.  The same is true of its two siblings in that module, `ideal_sinTheta` and `projectionDifference_ideal_intervalExterior`.  The module is outside every default target, so `lake build` never touches it and the axiom audit is the only way to see this.
+
+A second reason it is not the endpoint even if it were finished: it carries `[Algebra R (E ->L[K] E)]`, `[IsScalarTower R K (E ->L[K] E)]` and `[ContinuousFunctionalCalculus R (E ->L[K] E) IsSelfAdjoint]` as HYPOTHESES (twice over -- the binders are duplicated between the section variables and the statement), so instantiating it at real scalars requires supplying a real continuous functional calculus instance rather than finding one.  The complexification route recorded in this row's `next_action` remains the plan.
+
+**THE TWO DECOY `unequalFinrank` NAMES ARE CONFIRMED, BY ELABORATION, 2026-08-09 (Claude Opus 5).**  Both signatures were dumped and compared against the theorems they forward to, and they are character-for-character identical apart from the name: `sinTwoTheta_perturbation_le_unequalFinrank` versus `sinTwoTheta_perturbation_le` (`{K} [RCLike K] {E} ... [FiniteDimensional K E] (N : UnitarilyInvariantSeminorm K E) {A B : E ->l[K] E} ... (b - a) * N.toFun (sinTwoAngleOperator U V) <= 2 * N.toFun (B - A)`), and `generalizedSinTwoTheta_unequalFinrank` versus `sinTwoTheta_residual_le_of_orderedGap`.  Neither contains `finrank` or `Module.rank` anywhere, and both carry `[FiniteDimensional]` on every space.  The recommendation above stands: delete rather than rename, as a separate reviewed change.
 - **Next action:** Real Hilbert space + arbitrary dimension + EVERY source UI norm.  The operator-norm real case is already covered (`sinTwoTheta_perturbation`, `sinTwoTheta_generalSeparation`, both RCLike and dimension-free).
 
 MEASURED 2026-08-07, and it changes the plan: a proposed bridge
@@ -417,10 +437,11 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 #### Section 2, final paragraphs: Unbounded self-adjoint scope
 
 - **Kind:** `scope_claim`
-- **Status:** `compiled_exact`
+- **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
 - **Mathematics:** The four theorem families extend to unbounded self-adjoint operators under bounded perturbation or residual assumptions, with analytic work concentrated in Theorem 5.2 and the Section 6 appendix.
-- **Current Lean references:** `TauCeti.DavisKahan1970.canonical_generalizedSinTheta`, `TauCeti.DavisKahan1970.unbounded_sinTheta_opNorm`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_ideal_directedTangent_of_reducing`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_ideal_of_reducing`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.crossed_lower_of_reducing`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_ideal_directedTangent`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_ideal`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.Theorem63TrialData.all_kyFan_core_of_formBounds`
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
+- **Current Lean references:** `TauCeti.DavisKahan1970.canonical_generalizedSinTheta`, `TauCeti.DavisKahan1970.unbounded_sinTheta_opNorm`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_ideal_directedTangent_of_reducing`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_ideal_of_reducing`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.crossed_lower_of_reducing`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_ideal_directedTangent`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_ideal`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.Theorem63TrialData.all_kyFan_core_of_formBounds`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_of_reducing`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative`, `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_residual_opNorm`
 - **Assessment:** The sine family is complete in source scope. Tangent has an operator-norm graph-coordinate companion, but the paper claims arbitrary-UI-norm unbounded scope and the cutoff/Ky-Fan passage is not yet formalized.
 
 **THE ARBITRARY-UI-NORM UNBOUNDED TANGENT THEOREM IS DONE, 2026-08-06.** The sine family was already complete in source scope; the tangent family had only an operator-norm graph-angle companion, and the census warned not to credit it as the scope claim. `theorem6_3_unbounded_ideal_directedTangent` (DavisKahan/TanTheta/Theorem63Unbounded.lean, default build, axiom-clean) is the scope claim: closed unbounded self-adjoint ambient operator, arbitrary Fan-dominant unitarily invariant ideal gauge, tangent representative constructed rather than assumed.
@@ -436,7 +457,24 @@ That is strictly stronger.  Counterexample: `spec A = {0,5,10}`, `alpha = 1`, `d
 The printed statements are now `theorem6_3_unbounded_ideal_of_reducing` and `theorem6_3_unbounded_ideal_directedTangent_of_reducing` (same module, default build, axiom-clean): `V` is a variable; its reducing property is `hVdom` (the projection onto `V perp` preserves the domain) and `hVcomm` (it commutes with the operator there); and the printed `alpha + delta <= Lambda_1` is the form lower bound `hUnwanted` on `V perp`.  The decoupling is `crossed_lower_of_reducing`, and the spectral-gap statements `crossed_lower_of_spectralGap` / `theorem6_3_unbounded_ideal(_directedTangent)` are now derived from it at `V = specSubspace (Iic alpha)`, unchanged for their consumers (`beamTanTheta_le` among them).
 
 THE NARROWING WAS NOT COSMETIC: Section 9's direct one-vector estimates (the paragraph after (9.8)) are unreachable from the spectral-gap form, because at `alpha = ritzLow eps` the required interval `(ritzLow eps, 500)` contains the upper Ritz level's spectrum.  They are now proved -- see DK-9.8.
-- **Next action:** Nothing outstanding for the tangent family, at the printed hypothesis as well as the spectral-gap specialization. The operator-norm graph-angle companion is retained as `theorem6_3_unbounded_graphAngle_opNorm_companion` and must still not be quoted as the scope claim.
+
+**THE FINITE-DIMENSIONAL TRIAL SPACE IS GONE, 2026-08-09 (Claude Opus 5, auditing external commit `fd91e376`).**
+
+Every unbounded tangent endpoint recorded above carries `[FiniteDimensional C Z]` -- verified by elaborating `theorem6_3_unbounded_ideal_directedTangent_of_reducing`, which has it.  The Appendix removes exactly that hypothesis ("allow for noncompact `Theta`"), so the scope claim was not fully delivered.  It is now: `theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing` proves the printed reducing-subspace form for an ARBITRARY complete trial subspace, at every Fan-dominant unitarily invariant ideal gauge, with the tangent representative exhibited.  Axiom-clean, in the default build.
+
+**STATUS LOWERED 2026-08-09 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`.  THIS IS A CORRECTION OF AN OVERSTATEMENT, NOT A REGRESSION.**
+
+The printed scope claim (transcription L782--786) is about ALL FOUR theorems: "The theorems above contain references to a finite interval `[beta,alpha]`; they remain valid after this interval is extended to `]-inf,alpha]` ... As long as the spectra of `A_i` and `Lambda_i` satisfy their respective hypotheses concerning the gap `delta`, they may be otherwise unbounded without invalidating the theorems."  "The theorems above" are the `sin Theta`, `sin 2Theta`, `tan Theta` and `tan 2Theta` theorems of Section 2, each stated for arbitrary unitary-invariant norms.  Measured against that:
+
+* `sin Theta` -- DONE at unbounded x arbitrary Fan-dominant ideal gauge (`canonical_generalizedSinTheta`).
+* `sin 2Theta` -- DONE at unbounded x arbitrary Fan-dominant ideal gauge (`unbounded_sinTwoTheta_uiNorm_representative`, closed self-adjoint `A`, arbitrary representative).
+* `tan Theta` -- DONE, and since this session also at arbitrary trial dimension.
+* `tan 2Theta` -- **NOT done.**  The only unbounded declaration is `tanTwoTheta_unbounded_residual_opNorm` (with `_div`), which is the OPERATOR NORM (Ky Fan prefix `nu = 1`) and the RESIDUAL form only (`B` fully off-diagonal, i.e. `H_0 = H_1 = 0`).  The Ky Fan `nu >= 2` case is open and the perturbation form `delta N(tan 2Theta) <= 2 N(H)` is open; the obstruction -- the bounded argument's error coefficient is proportional to `||A||`, and the cutoff device that controls the `A_0` side has no counterpart on the `A_1` side -- is written out in full on DK-6-appendix.
+
+Three of the four families at full source scope and the fourth at one norm is precisely `compiled_specialization`: "a useful compiled specialization exists, but not the full source scope".  The earlier `compiled_exact` was set when the tangent family landed and reasoned only about the sine and tangent families; the double-angle tangent was never checked against this row.
+
+SCALAR SCOPE, measured the same day by elaborating each listed declaration: `canonical_generalizedSinTheta`, `unbounded_sinTwoTheta_uiNorm_representative`, all five unbounded tangent endpoints and `tanTwoTheta_unbounded_residual_opNorm` are `InnerProductSpace C` without exception.  So this row also carries the standing real-scalar gap, now recorded in `blocked_by` and `scope_gap`.
+- **Next action:** One theorem family is missing at this row's own scope: the unbounded `tan 2Theta` theorem beyond the operator norm.  `tanTwoTheta_unbounded_residual_opNorm` is the `nu = 1` residual case; the Ky Fan `nu >= 2` case, the arbitrary-unitarily-invariant-norm endpoint, and the perturbation form `delta N(tan 2Theta) <= 2 N(H)` are all open, and the obstruction and its proposed repair are recorded on DK-6-appendix.  Nothing is outstanding for the sine, double-angle sine or tangent families at complex scalars, at the printed hypothesis, and now at arbitrary trial dimension.  The real-scalar lift of all four is the separate standing gap.  The operator-norm graph-angle companion `theorem6_3_unbounded_graphAngle_opNorm_companion` is retained and must still not be quoted as the scope claim.
 
 ### Section 3
 
@@ -498,10 +536,10 @@ THE REUSABLE HALF was extracted to `ForTauCeti`: `Submodule.re_inner_apply_self_
 #### Proposition 3.2: Nonacute existence criterion
 
 - **Kind:** `proposition`
-- **Status:** `compiled_general_infrastructure`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** A direct rotation exists exactly when the two crossed intersections have equal dimension; it is then nonunique.
-- **Blocked by:** `two-subspace-classification`
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_2_parameterized_nonuniqueness`
 - **Assessment:** No exact general Hilbert-space declaration was found.
 
@@ -510,7 +548,16 @@ CORRECTED 2026-08-04: this row read `not_represented` / `absent` and listed no d
 **2026-08-05 (second session): both promotion-blocking admissions are out of this row's closure.** `directRotation_minimal` was orphaned -- nothing outside its own file referenced it, and the complex statement is already proved in production as `spectraDirectRotation_minimal`; `SpectraBridge/DirectRotationAPI.lean` imported that module only for `IsAcute` and now takes it from `BoundedOperator/Compat`. `projectionDifference_ideal_intervalExterior`, `ideal_sinTheta` and `ideal_sinTwoTheta` moved into `Experimental/InfiniteDimensional/SinTheta/IdealIntervalExterior.lean`, leaving `SinTheta/General.lean` and `InfiniteDimensional/DoubleAngle.lean` sorry-free. Measured closures: 175/188/199 modules, 24/41/50 Experimental, 0 tactic sorries each. WHAT STILL BLOCKS THE ROW: `check_library_structure` rule 2 forbids a production module importing `Experimental`, so promotion means RELOCATING those closures out of `Experimental/`. That is a design decision, not a mechanical step -- take it deliberately. Rule 3 now reports 49 violations (was 6) precisely because 34 modules became admission-free; the checker is enumerating what ought to move.
 
 **IN THE BUILD 2026-08-06.**  `DavisKahan/Experimental/Frontier/{Core,Section3,Section4}.lean` became admission-free and were promoted to `DavisKahan/Frontier/`, reached from `DavisKahan.All` via `DavisKahan.Frontier.All`.  Nothing was renamed -- the `TauCeti.DavisKahan.Experimental.Frontier` namespaces are untouched, exactly as in the 84-module promotion earlier the same day, because the namespace has never been tied to the directory here.  The census declaration probe now resolves 145/145 against `DavisKahan.All`, up from 143/145, and these two declarations are the two that changed.  `check_library_structure` rule 3 drops from 16 violations to 13.
-- **Next action:** Nothing outstanding: the criterion and the parameterized nonuniqueness are both proved and both guarded by `lake build`.
+
+**ROW WAS STALE IN THREE PLACES; CORRECTED 2026-08-09 (Claude Opus 5).  `compiled_general_infrastructure` -> `compiled_exact`.**
+
+The row's summary line read "No exact general Hilbert-space declaration was found", and it was `blocked_by two-subspace-classification`.  Both were false, and had been since 2026-08-06 when the two declarations were promoted into the default build.  Elaborated here rather than inferred:
+
+* `proposition3_2_exists_iff_crossedDefectsEquivalent (U V : Submodule C H) : (exists T, IsPaperDirectRotation U V T) <-> CrossedDefectsEquivalent U V` -- the printed existence criterion, for arbitrary complete complex Hilbert spaces, with NO finite-dimensionality, NO separability and NO compactness hypothesis.  `CrossedDefectsEquivalent` is a linear isometry equivalence between the two crossed defect subspaces, which is the cardinal-free way to say "equal dimension", so the dimension bookkeeping the old blocker demanded is not needed and was never on the path.
+* `proposition3_2_parameterized_nonuniqueness ... : CrossedDefectsEquivalent U V -> exists build, (forall J, IsPaperDirectRotation U V (build J)) and Function.Injective build` -- the printed nonuniqueness, as an injective parameterization by the isometries between the defects, which is stronger than merely exhibiting two.
+
+Both give `#print axioms ... [propext, Classical.choice, Quot.sound]` and both resolve from `DavisKahan.All`.  The two printed sentences of Proposition 3.2 are therefore proved at general Hilbert-space scope, and the only recorded gap left is scalar: complex only.
+- **Next action:** Nothing mathematical outstanding at complex scalars: the existence criterion and the parameterized nonuniqueness are both proved, both axiom-clean, and both guarded by `lake build`.  The real-scalar form is the standing repository-wide gap and should go through the complexification route rather than a reproof.
 
 #### Proposition 3.3: Principal square-root characterization
 
@@ -561,10 +608,10 @@ ROW WAS STALE; RESOLVED 2026-08-06.  The "absent" exact source wrapper exists an
 #### Theorem 3.1: Classification of pairs of subspaces
 
 - **Kind:** `theorem`
-- **Status:** `compiled_general_infrastructure`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Spectral multiplicity functions of the two angle operators classify dimension-compatible subspace pairs up to isometric equivalence.
-- **Blocked by:** `two-subspace-classification`
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.SameHalmosCosineBlockInvariant`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.exists_cosineBlockEquiv_of_pairEquiv`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_of_cosineBlockEquiv`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.genericTransport`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_of_summandEquivs`, `TauCeti.DavisKahan.Experimental.Frontier.SameSpectralMultiplicity`, `TauCeti.DavisKahan.Experimental.Frontier.sameSpectralMultiplicity_iff_unitarilyEquivalent`, `TauCeti.DavisKahan.Experimental.Frontier.unitarilyEquivalent_of_sameSpectralMultiplicity`, `TauCeti.DavisKahan.Experimental.Frontier.sameSpectralMultiplicity_of_unitarilyEquivalent`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.theorem3_1_spectralMultiplicity_classification`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.twoProjection_operator_classification`
 - **Assessment:** **PROVED 2026-08-04, in the paper's own invariant, both directions, admission-free.**
 
@@ -601,6 +648,14 @@ The ForTauCeti stack that proves them is in the default build but is not reachab
 RESOLVED 2026-08-06.  `DavisKahan/Experimental/Frontier/**` holds the Section 3 classification spine, the infinite-dimensional Section 4 propositions and the Section 9 analytic model -- 80 manifest declarations, 19 of them `sorry` -- and **no module in the repository imported any of it**. `lake build` missed it, `lake build DavisKahan.Experimental` missed it, and so did `Challenge` and `FinishTanTwoTheta`. It compiled only when a module was named explicitly on the command line. This is the same defect the `RoadmapBridge` block in `lakefile.toml` records for the suggested-signature files, and it went unnoticed for longer because the frontier checker elaborates the tree through its own probe file rather than through a build target, so the status document kept reporting '80 declarations resolving' from a tree nothing built.  `Frontier/{Core,Section3,Section4}.lean` became admission-free and were promoted to `DavisKahan/Frontier/`, reached from `DavisKahan.All`; the declaration probe went from 143/145 to 151/151.  This blocker entry is removed because no row is blocked by it any more.
 
 UNIQUENESS PROVED 2026-08-06, BOTH HALVES; THE DATUM IS A COMPLETE INVARIANT CANONICALLY, NOT ONLY EXISTENTIALLY.  The open obligation recorded above -- "Nothing proved says the datum of an operator is unique" -- is discharged.  `TauCeti.BorelCalculus.operatorUnitaryEquiv_iff_measureEquiv_and_level` (`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/MultiplicityLevelUniqueness.lean`): two multiplicity data present unitarily equivalent operators IFF their base measures are in the same measure class AND every level set agrees up to a base-null set.  The forward direction is Hahn--Hellinger uniqueness: the measure-class half is `measureEquiv_base_of_operatorUnitaryEquiv` (maximal vectors and the scalar spectral measure of a multiplication operator), and the level-set half is `base_level_symmDiff_eq_zero_of_operatorUnitaryEquiv`, proved by comparing the generator-count invariant `SpectralGeneratedLE` -- the range of the spectral projection of a Borel set lies in the closed Borel-calculus span of m vectors -- which transfers along unitaries by naturality of the bounded Borel calculus (no monotone-class argument: the calculus is defined by polarised diagonal integrals, which transport) and is computed on the model by counting slices.  The dimension count (k generators cannot cover k+1 slices) is done measurably: `TauCeti.exists_measurable_unit_nullVector` selects, with no continuity in the spectral parameter, a unit kernel vector for a measurable family of strictly wide matrices, via the resolvent limit t(B+t)^-1 -> proj ker B of det-adjugate rational functions.  All axiom-clean [propext, Classical.choice, Quot.sound]; guarded by `lake build` over the ForTauCeti glob.  Inhabiting `SpectralMultiplicityFoundation` (a canonical `Datum` as a quotient by `measureClassSetoid` plus a function-valued multiplicity field) is now unobstructed but is repository bookkeeping beyond the paper's sentence, and remains parked with the other promotion work.
+
+**STATUS AND BLOCKER TRUED UP 2026-08-09 (Claude Opus 5).  `compiled_general_infrastructure` -> `compiled_exact`; `two-subspace-classification` removed.**
+
+The row's own notes had already recorded that the printed multiplicity phrasing and the uniqueness of the datum are proved, but the status still described a missing source-numbered wrapper and the blocker still described the multiplicity phrasing as the obstacle.  Both are stale.  Elaborated here:
+
+`theorem3_1_spectralMultiplicity_classification (U1 V1 : Submodule C H1) (U2 V2 : Submodule C H2) [SeparableSpace H1] : PairOfSubspacesUnitaryEquivalent U1 V1 U2 V2 <-> SameHalmosTrivialDimensions U1 V1 U2 V2 and SameSpectralMultiplicity (genericCosineBlock U1 V1) (genericCosineBlock U2 V2)`, axiom-clean and resolving from `DavisKahan.All`; and its engine `sameSpectralMultiplicity_iff_unitarilyEquivalent`, likewise.  That is the paper's sentence: the spectral multiplicity data of the angle operators classify the pairs.  The separability hypothesis is one of the transcription's standing assumptions, not an added restriction, and it is confined to one direction and one space.
+
+The blocker `two-subspace-classification` is deleted from the census.  Its three recorded residues are all resolved: the Halmos canonical form (resolved 2026-08-04), the multiplicity phrasing (resolved 2026-08-06, and uniqueness with it), and the "cardinal-valued dimension bookkeeping for the infinite-dimensional existence statement", which turned out not to be needed at all -- Proposition 3.2's existence criterion is stated through a linear isometry equivalence of the crossed defects rather than through a cardinal (see DK-3.2-prop).  What remains beyond the printed sentence is the `SpectralMultiplicityFoundation` inhabitation, which is repository bookkeeping and is recorded in `next_action`, not a blocker.
 - **Next action:** Nothing for Theorem 3.1's statement or for uniqueness: the biconditional is proved in the operator phrasing, the paper's multiplicity phrasing, and -- since 2026-08-06 -- the datum is unique (measure class and level sets both determined by the operator, `operatorUnitaryEquiv_iff_measureEquiv_and_level`).  One follow-up, not blocking and beyond the printed sentence: inhabit `SpectralMultiplicityFoundation` from the now-proved uniqueness (canonical Datum as a quotient by `measureClassSetoid`); parked with the promotion bookkeeping.
 
 #### Corollary 3.1: Compact classification by angle eigenvalues
@@ -934,6 +989,7 @@ The theorem's own statement mentions no complexification, no functional calculus
 - **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
 - **Mathematics:** A strict inequality of source-coordinate Hilbert dimensions, the Rayleigh–Ritz residual condition, and a one-sided gap control a directed rectangular tangent representative defined from the singular values of E₀*F₁.
+- **Blocked by:** `real-scalar-infinite-dimensional-scope`
 - **Current Lean references:** `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_all_kyFan_core`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem63DirectedTangent`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_all_kyFan_core_directedTangent`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal_directedTangent`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral`
 - **Assessment:** Bounded finite-source Theorem 6.3 proved axiom-clean in DavisKahan.TanTheta.Theorem63FiniteSource (theorem6_3_all_kyFan_core, theorem6_3_generalizedTanTheta_source_ideal); promoted out of Scratch.
 
@@ -944,6 +1000,17 @@ THE WITNESS.  `ExactTanTheta.theorem63DirectedTangent`: diagonal in the right si
 **NO NEW HYPOTHESIS WAS NEEDED.** Finiteness of the entries requires `s_i < 1`, and `theorem63_singularValues_sine_lt_one` -- already in the file -- derives exactly that from the source gap, i.e. from the same `hCompressionUpper` and `hUnwantedLower` Theorem 6.3 assumes.  So `theorem6_3_all_kyFan_core_directedTangent` and `theorem6_3_generalizedTanTheta_source_ideal_directedTangent` carry precisely the printed hypotheses.  Both are in the default build and axiom-clean, and are wrapped in `RemainingSourceSurface` as `theorem6_3_all_kyFan_core_unconditional` and `theorem6_3_generalizedTanTheta_source_ideal_unconditional`.
 
 **THE DIMENSION HYPOTHESIS WAS REDUNDANT, 2026-08-05.** `theorem6_3_generalizedTanTheta_of_formBounds` binds `_hStrictDimension : Module.rank Z < Module.rank V` and never uses it, and the Ky Fan core never took it at all.  The printed inequality does one job -- under the paper's separability convention it forces the trial coordinate space to be finite-dimensional -- and here that is an explicit instance.  `theorem6_3_generalizedTanTheta_of_formBounds_equalRank` and `theorem6_3_generalizedTanTheta_equalRank_spectral` state the theorem without it, which is what the equal-rank Section 2 tangent theorem needs; see S2-tan-theta.
+
+**RE-ASSESSED 2026-08-09 (Claude Opus 5).  THE ROW DOES NOT MOVE, AND HERE IS THE MEASUREMENT BEHIND THAT.**
+
+`theorem6_3_generalizedTanTheta_source_ideal_directedTangent` was elaborated in full.  It is the printed theorem: `Module.rank C Z < Module.rank C V` (the paper's strict source-coordinate dimension inequality, present rather than dropped), `spectrum R (theorem63Compression T Z) subset Icc beta alpha`, `spectrum R (T.restrict ...) subset Ici (alpha + delta)`, arbitrary `KyFanDominantIdealFamily`, conclusion `delta * N.gauge (theorem63DirectedTangent Z V) <= N.gauge (theorem63Residual T Z)` with the representative constructed.  Axiom-clean, in the default build.
+
+Two things keep it from `compiled_exact`.
+
+1. It carries `[FiniteDimensional C Z]` as an INSTANCE, in addition to the printed rank inequality.  Under the paper's standing separability convention the two are equivalent (every infinite-dimensional closed subspace of a separable space has the same Hilbert dimension, so `rank Z < rank V` forces `Z` finite-dimensional), but that convention is not a hypothesis of the Lean statement, so the compiled theorem is neither implied by nor implies the printed one without it.  The honest reading is a specialization.  This is not idle: the directed tangent representative `theorem63DirectedTangent` itself requires the instance, so it cannot simply be dropped -- at arbitrary trial dimension the representative is only exhibited existentially (`theorem6_3_infiniteTrial_*`, `theorem6_3_unbounded_infiniteTrial_*`).
+2. Complex scalars only, now recorded in `blocked_by` and `scope_gap` like its Section 6 siblings.
+
+The Appendix obligation this row's `next_action` deferred to S2-unbounded-scope IS now discharged for the single-angle tangent, at unbounded ambient and arbitrary trial dimension; see DK-6-appendix.
 - **Next action:** Both obligations previously recorded here are discharged: the tangent representative exists, and the equal-dimension form is proved (the dimension comparison was redundant, not an obstacle).  What remains is the Appendix arbitrary-ideal **unbounded** passage, which is S2-unbounded-scope's.
 
 ### Section 6 appendix
@@ -955,7 +1022,7 @@ THE WITNESS.  `ExactTanTheta.theorem63DirectedTangent`: diagonal in the right si
 - **Verification:** `proved_in_build`
 - **Mathematics:** Domain invariance, bounded residual, spectral cutoffs, and limiting arguments extend the single-angle theorems to unbounded self-adjoint operators.
 - **Blocked by:** `real-scalar-infinite-dimensional-scope`
-- **Current Lean references:** `TauCeti.DavisKahan1970.Theorem6_1_commonDomain`, `TauCeti.DavisKahan1970.Theorem6_1_commonCore`, `TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain`, `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore`, `TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain`, `TauCeti.DavisKahan1970.Theorem6_2_real_commonCore`
+- **Current Lean references:** `TauCeti.DavisKahan1970.Theorem6_1_commonDomain`, `TauCeti.DavisKahan1970.Theorem6_1_commonCore`, `TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain`, `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore`, `TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain`, `TauCeti.DavisKahan1970.Theorem6_2_real_commonCore`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_of_reducing`, `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
 - **Assessment:** Common-domain and graph-core source forms are compiled. This does not by itself ground the Appendix's full arbitrary-unitarily-invariant tan-theta cutoff/Fan passage, which remains a separate frontier obligation.
 
 **STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.
@@ -1027,7 +1094,26 @@ Two consequences the plan for steps 6--8 did not account for, both real:
 * That error is `O(eps) / (q_j q_k)`.  The structure field `selected_large` gives only `q_k > eps`, so the naive bound is `O(1/eps)` -- it does NOT tend to zero.  Splitting the indices at `q_k >= sqrt(eps)` is also insufficient (error `O(1)`).  The split must be at `q_k >= eps^(1/3)`: retained indices then carry Gram error `O(eps^(1/3))`, and dropped indices contribute at most `f(q_k) <= eps^(1/3)/kappa` to the left-hand side, so both halves vanish together.
 
 After that the remaining chain is: the finite-dimensional Gram/polar correction on the `D_1` side (uniform because `d_k >= kappa`), two applications of `sum_abs_le_kyFanApproximationGauge_of_orthonormal`, then `eps -> 0` at frozen `tau`, then `tau -> infinity` via DK-5.1-lem.
-- **Next action:** Audit every displayed appendix identity and complete the arbitrary-ideal tangent cutoff/Fan passage; do not infer it from the compiled common-domain wrappers alone.
+
+**THE APPENDIX TANGENT CUTOFF / FAN PASSAGE IS PROVED, 2026-08-09 (Claude Opus 5, auditing external commit `fd91e376`).  THE ROW STATUS STILL DOES NOT MOVE, AND THE REASONS ARE ENUMERATED BELOW.**
+
+The standing `next_action` on this row -- "complete the arbitrary-ideal tangent cutoff/Fan passage" -- is discharged for the single-angle tangent.  `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean` (in `DavisKahan.TanTheta.All`, hence the default build) proves, all three axiom-clean and all elaborated here rather than inferred from their names:
+
+* `theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing` -- closed unbounded self-adjoint ambient operator (`DKClosedOperator`), **arbitrary complete trial subspace `Z` with no finite-dimensionality and no compactness hypothesis**, arbitrary `KyFanDominantIdealFamily`, the printed reducing-subspace hypotheses (`hVdom`, `hVcomm`, the form lower bound `hUnwanted` on `V-perp`), and the tangent representative EXHIBITED rather than assumed;
+* `theorem6_3_unbounded_infiniteTrial_ideal_of_reducing` -- the same with a supplied representative;
+* `theorem6_3_unbounded_infiniteTrial_ideal_exists` -- the spectral-gap specialization at `V = specSubspace (Iic alpha)`.
+
+This is the exact combination the Appendix advertises ("The tan theta theorem requires more care because we must both use the technique of Theorem 5.2 and allow for noncompact Theta"): unbounded ambient AND noncompact angle.  The previously compiled endpoints `theorem6_3_unbounded_ideal(_directedTangent)(_of_reducing)` all carry `[FiniteDimensional C Z]`, so they covered only the compact half.
+
+IT PARALLELS THE BOUNDED FAMILY RATHER THAN SUBSUMING IT.  The new module re-proves the finite-projector passage one level up, over `Theorem63TrialData` (its own `exists_finiteDimensional_superset_compression_leak`, `approximationSingularValue_sineBlock_lt_one_infiniteData`, `all_kyFan_core_of_formBounds_infinite`), and instantiates that at `UnboundedTrialBlock`.  The bounded-ambient endpoints in `Theorem63InfiniteTrial.lean` (`theorem6_3_all_kyFan_core_infiniteTrial`, `theorem6_3_infiniteTrial_spectral_exists`, `_of_formBounds_exists`) are NOT re-derived from it and remain separate proofs over `T : H ->L[C] H`.  Mathematically the abstract core covers both; as source code the two coexist, and unifying them is a cleanup, not mathematics.
+
+**WHAT IS STILL MISSING IN THIS APPENDIX, MEASURED 2026-08-09.**
+
+1. **Equations (6.7)--(6.11) are not formalized as displayed identities.**  The compiled endpoint is proved by a DIFFERENT route: min--max localization plus almost-invariant spectral-band enlargement (`ForTauCeti BorelCalculus/AlmostInvariant`), with the leakage comparison `kyFan_k(residual F) <= kyFan_k(residual Z) + k*eps`.  The paper's own route is the nu-projector `Pi` from (1.13), the spectral cutoff `Omega(tau)`, the enlarged projector `Upsilon_tau`, the two selection inequalities (6.7) and (6.8), the truncated Sylvester display (6.10) and the Gram estimate (6.11).  Nothing in the repository carries those numbers, and (1.13)'s equality half -- which the paper uses to PRODUCE `Pi` -- is itself unproved (see S1-ui-norms).  The theorem is proved; the paper's displayed chain is not.
+2. **Proposition 6.1 has no common-domain or unbounded form.**  The Appendix says explicitly that "the hypotheses of Proposition 6.1 and Theorem 6.1 may be relaxed similarly".  Theorem 6.1 has been relaxed (`Theorem6_1_commonDomain`, `Theorem6_1_commonCore`, and their real companions).  Proposition 6.1 has not: its only source-facing input record is `PaperSymmetricSinThetaProblem` (`Sources/DavisKahan1970/SineTheta/Symmetric.lean`), whose fields are `A B : E ->L[C] E` -- bounded operators -- with both gap hypotheses phrased through `ClosedOperator.ofBounded`.  There is no `PaperCommonDomainSymmetric...` analogue.
+3. **The tangent passage is complex-scalar only**, which is the row's recorded `scope_gap` and is unchanged: the three new endpoints are `InnerProductSpace C`.  The SINE portion of the appendix does have real forms, so the row is not uniformly complex-only, which is why the gap is recorded here rather than by flipping the status.
+4. **The unbounded double-angle endpoint remains at nu = 1.**  See the entries above: `tanTwoTheta_unbounded_residual_opNorm` is the operator norm, residual form; the Ky Fan `nu >= 2` and arbitrary-unitarily-invariant-norm cases are open, with the obstruction (the `A_1`-side cutoff that does not exist) recorded above.
+- **Next action:** Four items, in the order they should be attacked.  (a) The unbounded `tan 2Theta` Ky Fan `nu >= 2` endpoint, whose plan and its two corrections are written out above; it belongs in `DavisKahan`, not `ForTauCeti`, because `ApproximateLeadingSingularFamily` is on the `DavisKahan` side of the import firewall.  (b) A common-domain / unbounded form of PROPOSITION 6.1, which the Appendix explicitly licenses and which no declaration provides -- `PaperSymmetricSinThetaProblem` is bounded-only.  (c) The real-scalar lift of the tangent passage, through the complexification route and `complexifySubmoduleEquiv`; do not rewrite the cutoff argument.  (d) OPTIONAL and last: the paper's own displayed chain (6.7)--(6.11), which is not needed for the theorem (a different route proves it) but is needed if the census is to claim the appendix's identities rather than its conclusion.  The single-angle tangent cutoff/Fan passage itself is DONE, at unbounded ambient and arbitrary trial dimension.
 
 #### Lemma 6.3: Finite-rank near-maximizer leakage estimate
 
@@ -1420,11 +1506,11 @@ A LEAN-LEVEL NOTE THAT COST TIME AND SHOULD BE REUSED: on a `Submodule`'s induce
 #### Equations (9.5)–(9.7): Rayleigh–Ritz tangent refinements
 
 - **Kind:** `numerical_claims`
-- **Status:** `partial_or_wrapper_missing`
+- **Status:** `compiled_specialization`
 - **Verification:** `proved_conditional`
 - **Mathematics:** Use the compressed trial operator and orthogonal residual to obtain sharper tan Theta and tan(2 Theta) bounds.
 - **Blocked by:** `section9-certificate-discharge`
-- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.recentered_residual_gram_from_affine_moments`, `TauCeti.DavisKahan1970.Section9.equation_9_5_low`, `TauCeti.DavisKahan1970.Section9.equation_9_6`, `TauCeti.DavisKahan1970.Section9.equation_9_7`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamResidual_inner_trial`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamRitzResidual_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamRitz_form_le`
+- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.recentered_residual_gram_from_affine_moments`, `TauCeti.DavisKahan1970.Section9.equation_9_5_low`, `TauCeti.DavisKahan1970.Section9.equation_9_6`, `TauCeti.DavisKahan1970.Section9.equation_9_7`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamResidual_inner_trial`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamRitzResidual_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamRitz_form_le`, `TauCeti.DavisKahan1970.Section9.equation_9_5_high`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamPerturbed_specProjection_Ioo_eq_zero`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanTheta_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanTheta_lt_printed`
 - **Assessment:** The Ritz compression, rank-one recentered residual, singular-value scalars, exact tangent envelopes, and decimal corollaries are present as a candidate. The unbounded tan-theta and tan-two-theta instantiations remain to be connected.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `partial_or_wrapper_missing`. The exact radical arithmetic is compiled and axiom-clean; the tangent and double-angle theorems are not yet instantiated in place of the certificate fields.
@@ -1454,7 +1540,23 @@ The beam-specific half is separately available and is the recommended next step:
 * `beamResidual_inner_trial` packages the Ritz matrix as the four inner products both computations consume, including the transposed vanishing entry obtained from `beamPerturbation_isSelfAdjoint`.
 
 WHAT REMAINS IS EXACTLY PART (b), and nothing else: assemble `UnboundedTrialBlock (beamPerturbed eps) beamTrial` from these (its `operator` is the compression and its `operator_apply`/`residual_apply` fields are the projection identities, with `A.toLinearMap` on the trial reducing to `beamPerturbation eps` by `beamOperator_apply_trial`), and prove `specProjection (beamPerturbed eps) (Ioo (ritzHigh eps) 500) = 0`.
-- **Next action:** NOT instantiation, contrary to the earlier note.  Two pieces, in order.  (a) The beam half: `UnboundedTrialBlock (beamPerturbed eps) beamTrial` with the Ritz compression (`beamRitz_matrix` gives `hCompression` at `alpha = ritzHigh eps`) and the Rayleigh--Ritz residual, whose Gram is `orthogonalResidualGram eps` and whose norm is exactly `orthogonalResidualSingularValue eps`.  (b) The genuinely new piece: the perturbed spectral gap `specProjection (beamPerturbed eps) (Ioo (ritzHigh eps) 500) = 0`, which needs a Rayleigh--Ritz upper bound for the second eigenvalue of an unbounded self-adjoint operator together with spectral monotonicity under a positive bounded perturbation.  Owner of (b) is SelfAdjointSpectralTheory, not Section 9.  Then `theorem6_3_unbounded_ideal_directedTangent` closes (9.6) and (9.7) directly.
+
+**PART (b) IS DISCHARGED AND (9.6) IS DERIVED ON THE GENUINE OPERATOR.  ROW WAS STALE; CORRECTED 2026-08-09 (Claude Opus 5).  STATUS `partial_or_wrapper_missing` -> `compiled_specialization`.**
+
+The `next_action` above says part (b), the perturbed spectral gap, "is untouched" and is "the genuinely new piece".  It was proved at commit `b5442743` and the census was never updated:
+
+* `beamPerturbed_specProjection_Ioo_eq_zero (eps) (0 <= eps) : specProjection (beamPerturbed_isSelfAdjoint eps) (Ioo (ritzHigh eps) 500) = 0` (`SpectralTheory/FormMethod/BeamSection9.lean`), proved through `specProjection_Ioo_eq_zero_of_rayleighRitz` at the trial subspace -- which is exactly the Rayleigh--Ritz second-eigenvalue bound the row asked for, and it landed in `SelfAdjointSpectralTheory`, the owner the row named.
+* `beamTanTheta_le (eps) (0 < eps) (eps < 100) : beamTanTheta eps <= tangentThetaExactBound eps` and `beamTanTheta_lt_printed`, giving the printed decimal `tan theta_1 < 0.0005164 eps / (1 - 0.0015774 eps)` (`SpectralTheory/FormMethod/BeamTangent.lean`).  `beamTanTheta eps` is `||theorem63DirectedTangent beamTrial (specSubspace (beamPerturbed eps) (Iic (ritzHigh eps)))||` -- the tangent between the affine trial subspace and the EXACT low spectral subspace of `A + eps t`.  No certificate field occurs in the statement and the only hypotheses are the paper's `0 < eps < 100`.  Both axiom-clean and in the default build.
+
+(9.5) is likewise on the genuine operator: `equation_9_5_low` / `equation_9_5_high` give the two Ritz values in the paper's closed form, and `beamRitz_matrix` proves the compression really is `diag (ritzLow eps) (ritzHigh eps)`.
+
+**WHAT IS LEFT, PRECISELY -- AND IT IS WHY THE ROW IS NOT `compiled_exact`.**
+
+* **(9.7) entirely.**  There is no `beamTanTwoTheta` anywhere in the repository.  `equation_9_7` is still the conditional scalar wrapper `(h : tanTwoTheta_1 <= tangentTwoThetaExactBound eps) -> ...`, and its only supplier is the never-constructed `TheoremOutputCertificate`.  Producing it needs the double-angle tangent theorem applied to `beamPerturbed eps` with `A_1` replaced by the compression `E_1^* (A+H) E_1`, which is the paper's own extra step at (9.7) and has no operator-level analogue here yet.
+* **The second sentence of (9.6) and of (9.7)**: "the same bound applies to `tan theta_1 + tan theta_2` in the 2-norm".  `beamTanTheta_le` instantiates the unbounded Theorem 6.3 at `KyFanDominantIdealFamily.kyFan 1`; the two-term sum needs the same call at `kyFan 2` and a Ky Fan 2 bound on the recentered residual, both of which exist in kind (`kyFanTwo_beamResidual_le` is the analogue already proved for (9.3)) but neither of which is written for the Rayleigh--Ritz residual.
+
+The row therefore keeps `proved_conditional`: two of its three equations are now derived from the operator with no certificate anywhere in the statement, and the third is still stated relative to a record nobody inhabits.
+- **Next action:** Two items, both concrete.  (a) The 2-norm halves of (9.6): re-run `beamTanTheta_le` at `KyFanDominantIdealFamily.kyFan 2` and bound `kyFanApproximationGauge 2` of the RECENTERED Rayleigh--Ritz residual, whose Gram `orthogonalResidualGram eps = (eps^2/30)[[1,-1],[-1,1]]` is rank one, so the second approximation number vanishes and the prefix equals the first -- the same shape as `kyFanTwo_beamResidual_le` on DK-9.1-9.4.  (b) (9.7): a `beamTanTwoTheta` on the genuine operator, replacing `A_1` by `E_1^* (A+H) E_1` as the paper does, then `equation_9_7`.  Part (b) of the previous plan -- the perturbed spectral gap -- is DONE (`beamPerturbed_specProjection_Ioo_eq_zero`); do not re-attempt it.
 
 #### Equation (9.8): Comparison with Weinberger bounds
 
@@ -1487,6 +1589,10 @@ Route.  `beamColumnBlock` is the one-dimensional trial block at a unit Ritz vect
 WHY IT WAS UNREACHABLE BEFORE: not beam analysis, but the narrowed unbounded Theorem 6.3.  At `alpha = ritzLow eps` the interval `(ritzLow eps, 500)` contains the upper Ritz level, so the spectrum-free-interval hypothesis is FALSE while the printed hypothesis holds.  The decoupled `theorem6_3_unbounded_ideal_directedTangent_of_reducing` (see S2-unbounded-scope) is what makes the printed derivation available.
 
 WHAT REMAINS ON THIS ROW is the Weinberger comparison proper: `equation_9_8_lower` and `equation_9_8_upper` are still conditional on `tanPhi <= weinbergerLower/UpperTangentExactBound eps`, needing certified low roots of `weinbergerComparisonMatrix eps` (lower line) and DK-9.5-9.7's envelope (upper line).  The paper's own comparison -- that the direct estimates are SHARPER than (9.8) -- is now formalized on the Davis--Kahan side only.
+
+**ORDERING CONSTRAINT LIFTED 2026-08-09 (Claude Opus 5).**  The instruction above, "Do not attempt it before DK-9.5-9.7", was written when that row's perturbed spectral gap was missing.  It is now proved (`beamPerturbed_specProjection_Ioo_eq_zero`) and the tangent envelope it gates is proved (`beamTanTheta_le`), so the dependency is discharged.
+
+The upper line of (9.8) still needs one connection that the envelope does not supply by itself: `weinbergerUpperTangentExactBound` is definitionally `tangentThetaExactBound`, but `equation_9_8_upper` consumes a bound on Weinberger's `tan phi_k` -- the angle between the individual Ritz vector `e_k` and `Range(F_0)` -- and `beamTanTheta_le` bounds the SUBSPACE tangent.  What this repository has for the individual angles is sharper and is Davis--Kahan's, not Weinberger's: `beamTanPhi_low_lt_printed` / `_high_lt_printed`.  So the remaining work on this row is entirely on the Weinberger side, as recorded: certified low roots of `weinbergerComparisonMatrix eps` for the lower line, and a `tan phi` bound at Weinberger's own (weaker) envelope for the upper one.
 - **Next action:** The direct one-vector estimates are done; what is left is the Weinberger side.  `weinbergerUpperTangentExactBound` IS `tangentThetaExactBound`, so the upper line rides on DK-9.5-9.7's envelope.  The lower line additionally needs certified low roots of `weinbergerComparisonMatrix eps` fed through the proved `tangent_sq_le_of_weinberger_sine_sq`.  The `alpha_3 > 500` sentence is stale and is superseded by `realSpectrum_beamOperator_subset_sharp`.
 
 #### Section 9, l2 example after (9.8): Residual-infinite limitation example
@@ -1495,13 +1601,29 @@ WHAT REMAINS ON THIS ROW is the Weinberger comparison proper: `equation_9_8_lowe
 - **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
 - **Mathematics:** An l2 trial vector has a useful Rayleigh quotient but lies outside the perturbed operator domain, so residual-based theorems do not apply while lower-bound methods still do.
-- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.rawDiagonalImage_eq_one`, `TauCeti.DavisKahan1970.Section9.rawDiagonalImage_partial_energy`, `TauCeti.DavisKahan1970.Section9.truncatedDiagonalImage_energy`
+- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.rawDiagonalImage_eq_one`, `TauCeti.DavisKahan1970.Section9.rawDiagonalImage_partial_energy`, `TauCeti.DavisKahan1970.Section9.truncatedDiagonalImage_energy`, `TauCeti.DavisKahan1970.Section9.diagonalOperator`, `TauCeti.DavisKahan1970.Section9.geometricTrial_notMem_diagonalDomain`, `TauCeti.DavisKahan1970.Section9.geometricTrial_form_summable`, `TauCeti.DavisKahan1970.Section9.truncatedTrial_mem_diagonalDomain`
 - **Assessment:** The pointwise constant image and divergent finite partial energies are formalized algebraically, together with an explicit finite-support truncation repair that agrees on arbitrary prescribed prefixes.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_specialization`. The sequence lemmas are compiled, axiom-clean and unconditional, but stated for coordinate sequences rather than in the abstract operator setting the source example describes.
 
 VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `DavisKahan.All`, `DavisKahan.Experimental.All` and `ForTauCeti` and running `#print axioms` on all 87 declarations named in this census elaborated cleanly -- every name resolves and **none reaches `sorryAx`**. A second probe importing only the default-build roots showed 78 of the 87 resolve there; the 9 that do not are exactly the `TauCeti.DavisKahan1970.Section8.*` names on rows DK-8.1-thm and DK-8.2-thm, whose `proved_outside_build` verification was already correct. `candidate_under_repair` -- "not compiler-certified on this base" -- was therefore false for every row that carried it. The scope question (does the compiled statement match the printed one?) is a separate judgement and is recorded in `next_action`; the status below is the weakest one consistent with that recorded evidence, so no row is overstated.
-- **Next action:** The sequence lemmas compile and are unconditional. Optionally lift them from coordinate sequences to the abstract operator setting.
+
+**ROW WAS STALE; CORRECTED 2026-08-09 (Claude Opus 5).  THE OPERATOR LIFT ASKED FOR IN `next_action` IS DONE.**
+
+The row listed only the three coordinate-sequence lemmas and asked, optionally, to "lift them from coordinate sequences to the abstract operator setting".  The lift exists, in the same module (`Sources/DavisKahan1970/Section9/DomainLimitation.lean`, reached from `DavisKahan.All` through `Section9/All.lean`), and every piece is axiom-clean:
+
+* `DomainLimitationSpace := lp (fun _ : Nat => R) 2` and `diagonalDomain d`, the MAXIMAL domain `{x : (d n * x n) in l^2}` as a genuine `Submodule`;
+* `diagonalOperator (d : Nat -> R) : DomainLimitationSpace ->l. [R] DomainLimitationSpace`, the unbounded diagonal operator as a Mathlib `LinearPMap` -- the canonical carrier this repository has settled on;
+* `geometricTrial hmu0 hmu1 : DomainLimitationSpace`, the source's `e = (1, mu, mu^2, ...)`, together with `geometricTrial_notMem_diagonalDomain`: the trial VECTOR is genuinely outside the operator's domain, because its image is the constant sequence.  That is the source's actual claim, and it is now about an operator and a vector rather than about two sequences;
+* `geometricTrial_form_summable`: the quadratic form `sum d_n |x_n|^2` converges on the same vector -- the asymmetry the paragraph exists to exhibit;
+* `truncatedTrial_mem_diagonalDomain` and `truncatedTrial_eq_geometricTrial_of_lt`: the "arbitrarily small change remedies this" repair, in the domain and agreeing on every prescribed prefix.
+
+**WHAT IS GENUINELY ABSENT, AND WHY THE ROW STAYS `compiled_specialization`.**  The second half of the same paragraph is not formalized at all:
+
+* the Rayleigh quotient `alphaHat = e^*(A+H)e / e^*e = 1 + mu`.  `geometricTrial_form_summable` shows the numerator converges but never evaluates it; the arithmetic is `(1/(1-mu)) / (1/(1-mu^2)) = 1 + mu`;
+* self-adjointness of `diagonalOperator` on its maximal domain, which is what makes "the Rayleigh quotient is useful" mean anything and is a prerequisite for any spectral statement about it;
+* Weinberger's conclusion `sin^2 theta <= (1 + mu - alphaCheck_1)/(alphaCheck_2 - alphaCheck_1)` and its best-lower-bound consequence `sin theta <= mu / sqrt(1 - mu)`, which is the point of the paragraph -- the residual-based theorems do not apply while a lower-bound method still does.
+- **Next action:** The operator lift is done and this row should stop asking for it.  What remains is the second half of the source paragraph: evaluate the Rayleigh quotient of `geometricTrial` at `diagonalOperator (diagonalMultiplier mu)` and prove it equals `1 + mu`; prove `diagonalOperator d` is self-adjoint on its maximal domain for real `d`; and state Weinberger's lower-bound estimate `sin theta <= mu / sqrt(1 - mu)` for the angle between `e` and the first eigenvector, which is the contrast the example is written to make.
 
 #### Equations (9.9)–(9.11) and final bounds: Individual eigenvector identification inside a cluster
 
