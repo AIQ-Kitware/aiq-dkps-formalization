@@ -108,6 +108,20 @@ theorem selfAdjointFunctionalCalculus_isSymmetric
           (hT.eigenvectorBasis rfl i)).smul
             (RCLike.conj_ofReal (f (hT.eigenvalues rfl i)))).add hs
 
+/-- **A symbol nonnegative on the spectrum gives a positive operator.**
+
+Each rank-one summand is positive, and the coefficient `f (λᵢ)` scales it by a
+nonnegative real.  Only the values at the eigenvalues matter, so the hypothesis
+is stated there rather than on all of `ℝ`. -/
+theorem selfAdjointFunctionalCalculus_isPositive
+    {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {f : ℝ → ℝ}
+    (hf : ∀ i : Fin (finrank 𝕜 E), 0 ≤ f (hT.eigenvalues rfl i)) :
+    (selfAdjointFunctionalCalculus hT f).IsPositive := by
+  unfold selfAdjointFunctionalCalculus
+  refine LinearMap.isPositive_sum _ fun i _ => ?_
+  refine LinearMap.IsPositive.smul_of_nonneg ?_ (RCLike.ofReal_nonneg.mpr (hf i))
+  exact (InnerProductSpace.isPositive_rankOne_self _).toLinearMap
+
 /-- **The calculus is bounded by the sup of the symbol on the spectrum.**
 
 Parseval in the eigenbasis: the calculus multiplies the `i`-th coordinate of `x` by
