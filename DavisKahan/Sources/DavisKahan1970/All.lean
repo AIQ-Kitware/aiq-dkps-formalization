@@ -25,6 +25,7 @@ import DavisKahan.Sources.DavisKahan1970.Section4Dominance
 import DavisKahan.Sources.DavisKahan1970.Section4FiniteSurface
 import DavisKahan.Sources.DavisKahan1970.Section5
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
+import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakageReal
 import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle
 import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 import DavisKahan.Sources.DavisKahan1970.SharpKyFan
