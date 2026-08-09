@@ -984,93 +984,48 @@ restricted or squared one.  A reviewer should nevertheless repeat that check;
 it is the step on which the whole interpretation rests, and it is the one step
 we cannot delegate.
 
-\section{A second defect, of a different kind: the Section 7 residual chain}
+\section{An additional error surfaced by the formalization}
 \label{sec:section7}
 
-While auditing the rest of the paper against the original article we located a
-second printed defect.  We record it here because it is easy to propagate and
-because, unlike Proposition 4.4, it is invisible to anyone reading only the
-theorem statements.  We stress at the outset that it is a defect of a different
-and much milder kind: \emph{no theorem of the paper is false on account of it}.
-Proposition 4.4 is a false proposition; what follows is a dropped factor of $2$
-in a proof line, in a paper whose statement of the same result carries the
-factor correctly.
-
-\subsection{What is printed}
+Auditing the rest of the paper against the original article turned up a second
+printed error, of a much milder kind: a dropped factor of $2$ in a proof line.
+No theorem of the paper is false on account of it.  We record it because it is
+easy to propagate, and because it is invisible to a reader who checks only the
+theorem statements --- it surfaced here only because the surrounding argument
+had to be reproduced formally.
 
 On page 34, immediately after equation (7.5), the article completes the proof of
-the $\sin2\theta$ theorem as follows.  ``To get the other conclusion, we rewrite
-the first inequality in (7.5) in the form''
+the $\sin2\theta$ theorem by rewriting the first inequality of (7.5) as
 \[
  \delta\left\lVert
  \begin{pmatrix} 0 & -\sin2\Theta_0 J_0^{*}\\ J_0\sin2\Theta_0 & 0\end{pmatrix}
  \right\rVert
  \;\leq\;
- \left\lVert \begin{pmatrix} 0 & B^{*}\\ B & 0\end{pmatrix} \right\rVert
+ \left\lVert \begin{pmatrix} 0 & B^{*}\\ B & 0\end{pmatrix} \right\rVert ,
 \]
-``and invoke Lemma 6.1; $\delta\lVert\sin2\Theta_0\rVert\leq\lVert
-B\rVert\leq\lVert R\rVert$.  This completes the proof.''
-
-\subsection{Why the right-hand side is short by a factor of two}
-
-Section 7 fixes the two block representations it is comparing.  Equation (6.3)
-represents the perturbed operator as
+concluding ``$\delta\lVert\sin2\Theta_0\rVert\leq\lVert B\rVert\leq\lVert
+R\rVert$''.  But (6.3) represents $A+H$ with off-diagonal blocks $B^{*},B$ and
+(7.1) represents $A+XHX$ with $-B^{*},-B$, so
 \[
- A+H\;\simeq\;\begin{pmatrix} A_0+H_0 & B^{*}\\ B & A_1+H_1\end{pmatrix},
+ H-XHX=\begin{pmatrix} 0 & 2B^{*}\\ 2B & 0\end{pmatrix},
+ \qquad
+ \lVert H-XHX\rVert=2\left\lVert\begin{pmatrix}0&B^{*}\\B&0\end{pmatrix}\right\rVert ,
 \]
-and equation (7.1) represents the symmetrically perturbed operator as
-\[
- A+XHX\;\simeq\;\begin{pmatrix} A_0+H_0 & -B^{*}\\ -B & A_1+H_1\end{pmatrix},
-\]
-$X=P-\tilde P$ being the reflection in $P\Hh$.  Subtracting,
-\[
- H-XHX \;=\; \begin{pmatrix} 0 & 2B^{*}\\ 2B & 0\end{pmatrix},
- \qquad\text{so}\qquad
- \lVert H-XHX\rVert \;=\; 2\left\lVert\begin{pmatrix}0&B^{*}\\B&0\end{pmatrix}\right\rVert .
-\]
-The first inequality of (7.5) is $\delta\lVert\sin2\Theta\rVert\leq\lVert
-H-XHX\rVert$.  Rewriting it therefore produces $2B,2B^{*}$ in the right-hand
-matrix, not $B,B^{*}$, and the conclusion that follows is
-\[
- \delta\lVert\sin2\Theta_0\rVert\;\leq\;2\lVert B\rVert\;\leq\;2\lVert R\rVert .
-\]
+and the rewrite must carry $2B,2B^{*}$, giving
+$\delta\lVert\sin2\Theta_0\rVert\leq2\lVert R\rVert$.
 
-\subsection{The paper contradicts itself two lines later}
+That the omission is a slip rather than an intended sharper claim is settled by
+the page itself: the next paragraph reads ``the inference
+$\delta\lVert\sin2\Theta_0\rVert\leq2\lVert R\rVert$ is valid only when $\delta$
+pertains to gaps in the spectrum of $\Lambda$'', and its counterexample computes
+``surely $2\lVert R\rVert=2$''.  The Section 2 statement of the theorem also
+carries the $2$.  We checked the original article, not a transcription; $2$ is
+the constant our Lean development states and proves.
 
-The decisive evidence that this is a slip, and not a sharper result the authors
-intended to record, is internal.  The very next paragraph on the same page reads
-``the inference $\delta\lVert\sin2\Theta_0\rVert\leq2\lVert R\rVert$ is valid
-only when $\delta$ pertains to gaps in the spectrum of $\Lambda$'', and its
-accompanying counterexample computes ``then surely $2\lVert R\rVert=2$''.  The
-authors thus treat $2\lVert R\rVert$ as the bound just established.  The
-statement of the $\sin2\theta$ theorem in Section 2 likewise carries
-$\delta\lVert\sin2\Theta_0\rVert\leq2\lVert R\rVert$.  The factor of $2$ is what
-the paper means throughout; only the single displayed rewrite on page 34 omits
-it.
-
-\subsection{Status, and one question we leave open}
-
-We verified this against the original article rather than against a
-transcription: the omission is present in the published text on page 34.  Our
-own modernized transcription reproduces the page faithfully, so this is not a
-transcription artifact.
-
-We are careful about what this does and does not establish.  It shows that the
-displayed derivation does not prove the factor-one bound it asserts, and that
-the paper's own usage everywhere else is the factor-two bound.  It does
-\emph{not} show that the factor-one bound
-$\delta\lVert\sin2\Theta_0\rVert\leq\lVert R\rVert$ is false under the
-hypotheses of the $\sin2\theta$ theorem; we neither prove nor refute it here.
-The counterexample the paper gives immediately afterwards does not settle the
-question either, since it concerns a different hypothesis --- a gap in the
-spectrum of $A$ rather than of $\Lambda$.  Whether the sharper constant holds
-appears to be open, and we flag it as such.
-
-For a formalizer the practical consequence is unambiguous: $2$ is the constant
-to carry.  A development that follows the page-34 line literally would be
-attempting a strictly stronger statement than the paper establishes, and would
-find the supporting inequality unavailable at the point of use.  Our Lean
-development states and proves the factor-two form.
+We do not claim the factor-one bound is false, only that the printed derivation
+does not establish it; the counterexample given just afterwards concerns a gap
+in the spectrum of $A$ rather than $\Lambda$ and does not settle the question,
+which we leave open.
 
 \section{Related work}
 \label{sec:related}
