@@ -11,12 +11,12 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 33 |
+| `compiled_exact` | 32 |
 | `compiled_specialization` | 7 |
 | `compiled_general_infrastructure` | 2 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 1 |
+| `partial_or_wrapper_missing` | 2 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -347,7 +347,7 @@ CONSEQUENCE: the `Theta_0`/`Theta` bridge is NOT refuted; it is simply unproved.
 #### Section 2, tan 2 theta theorem: Double-angle tangent theorem
 
 - **Kind:** `unnumbered_theorem`
-- **Status:** `compiled_exact`
+- **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Fully off-diagonal perturbations across an ordered gap give residual and perturbation tan(2 Theta) bounds with factor two.
 - **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm`, `TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm_selectedBranch`, `TauCeti.DavisKahan.paperFaithful_tanTwoTheta_uiNorm_real`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm`, `TauCeti.DavisKahanTheory.paired_singularVector_gap_inequality`, `TauCeti.DavisKahanTheory.singularValue_ne_one`, `TauCeti.DavisKahanTheory.absDoubleAngleTangent_scalar`, `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le`, `TauCeti.DavisKahanTheory.absTanTwoTheta0_offDiagonal_le`, `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahanTheory.kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahanTheory.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_real`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_kyFan_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_prefix_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_uiIdeal_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_equation_7_6_approximate`, `TauCeti.DavisKahan1970.tanTwoTheta_cos_ne_zero_approximate`, `TauCeti.DavisKahan1970.tanTwoTheta_pole_separation`
@@ -428,7 +428,46 @@ This is the LIMITING ARCHITECTURE of `sharp_transformed_prefix`, reused; only th
 **ONE THING A LATER AUDITOR SHOULD KNOW, NOT A NEW GAP.**  Like every declaration already on this row, the new endpoints are the PERTURBATION form `2 · N(H)`, not the residual form `2 · N(R)` of the printed (DK-tan2).  That was already true of `tanTwoTheta_branchFree_paperUINorm`, and the 2026-08-07 audit recorded the finite-dimensional trial subspace as the row's ONLY remaining axis, so closing it closes the row on the recorded evidence.  If a future audit wants the residual form as a separate axis, it should be opened as its own scope note rather than folded in here.
 
 Validation: full `lake build` green (9490 jobs); `lake build FinishTanTwoTheta Challenge` green (9038 jobs); census checker, `probe_census_declarations.py --verify`, `check_declaration_name_drift.py` and `export_for_tauceti.py --check` all clean.
-- **Next action:** No mathematical gap and no recorded scope gap.  The branch axis and the finite-dimensional trial-subspace axis are both closed, for real and complex scalars, at every source unitarily invariant norm, with the sharp factor two.
+
+**STATUS CORRECTED 2026-08-09 (Claude Opus 5), FROM `compiled_exact`.  THE ROW WAS OVER-CLAIMED: THE PRINTED THEOREM HAS TWO CONCLUSIONS AND THE AMBIENT ONE IS ABSENT ENTIRELY.**
+
+The printed tan 2theta theorem (transcription L765-773) asserts BOTH
+
+    delta ||tan 2Theta_0|| <= 2||R||        (directed, residual)
+    delta ||tan 2Theta||   <= 2||H||        (ambient)
+
+Verified by elaboration, not by grep.  `tanTwoTheta_uiNorm` concludes
+`(b - a) * N tanTwoTheta0 <= 2 * N H` under `[FiniteDimensional k E]`, and
+`tanTwoTheta_uiIdeal_infinite` concludes the same gauge inequality under
+`[FiniteDimensional k U]`.  Both bound the DIRECTED `tan 2Theta_0` by `2||H||`,
+which is weaker than the printed directed conclusion (`2||R||`, and
+`||R|| = ||B|| <= ||H||`) and is not the ambient conclusion at all.
+
+THERE IS NO AMBIENT `tan 2Theta` OBJECT IN THE REPOSITORY.  Searched: no
+`paperTanTwoAngle*`, no `cfc (tan . 2*)` on the whole-space angle operator.
+`tanTwoAngleOperatorC` is built on `sinTwoAngleOperatorC := 2 . (|P_Vperp P_U| . |P_V P_U|)`,
+whose range lies in `U`, so it is a directed object by construction.  The ambient
+object carries each `tan 2theta_k` twice, so it is not a relabelling of the
+directed one.
+
+The previous `next_action` -- "No mathematical gap and no recorded scope gap.
+The branch axis and the finite-dimensional trial-subspace axis are both closed"
+-- was wrong on all three counts: there is a mathematical gap (the ambient half),
+there is a scope gap (both endpoints still require finite-dimensionality), and
+the printed residual half exists only in selected-branch form.
+
+THIS IS THE THIRD OCCURRENCE OF THE SAME FAILURE MODE in this campaign.  The
+Section 2 `sin 2theta` and `tan theta` theorems each assert two conclusions, and
+each row read as complete while only the directed half existed; both were closed
+during this campaign (`sinTwoTheta_wholeSpace_paperUINorm` 2026-08-08,
+`tanTheta_wholeSpace_paperUINorm` 2026-08-09).  When a census row covers a
+theorem with more than one printed conclusion, check EACH conclusion separately
+before recording any status.
+- **Next action:** AMBIENT HALF, the real obligation: construct the ambient `tan 2Theta` object and prove `delta ||tan 2Theta|| <= 2||H||`.  The route that closed the two sibling rows should transfer: build the off-diagonal representative explicitly from `D = P_V - P_U` as in `TanThetaWholeSpace.lean` (which avoids the direct-rotation factor `J_0` entirely and never needs `Theta_1`), pair with the Lemma 6.1 / 6.2 block machinery, and take the modulus.  See `sinTwoTheta_wholeSpace_paperUINorm` and `tanTheta_wholeSpace_paperUINorm` for the two worked precedents.
+
+RESIDUAL HALF: strengthen the directed conclusion from `2||H||` to the printed `2||R||` branch-free, rather than only in the `sharp_paperUnitaryInvariantNorm` / `_selectedBranch` forms.
+
+SCOPE: both compiled endpoints still carry finite-dimensionality (`FiniteDimensional k E` and `FiniteDimensional k U` respectively); the arbitrary-trial-subspace axis is NOT closed here, unlike on S2-tan-theta.
 
 #### Section 2, paragraph after four theorems: Best constants and simultaneous equality
 
