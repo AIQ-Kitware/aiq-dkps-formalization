@@ -44,6 +44,7 @@ noncomputable def rectangularBlockMap
     ((a ∘L WithLp.fstL 2 ℂ E0 E1 + b ∘L WithLp.sndL 2 ℂ E0 E1).prod
       (c ∘L WithLp.fstL 2 ℂ E0 E1 + d ∘L WithLp.sndL 2 ℂ E0 E1))
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The block operator `!![a, b; c, d]` acts on a pair by the usual matrix product. -/
 @[simp]
 theorem rectangularBlockMap_apply
@@ -56,6 +57,7 @@ theorem rectangularBlockMap_apply
           c (WithLp.fst x) + d (WithLp.snd x)) :=
   rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Composition of rectangular block maps is matrix multiplication, with
 rectangular entries composed using `∘L`. -/
 theorem rectangularBlockMap_mul
@@ -75,6 +77,7 @@ theorem rectangularBlockMap_mul
   rw [Prod.mk.injEq]
   exact ⟨by abel, by abel⟩
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Addition of rectangular block maps is entrywise. -/
 theorem rectangularBlockMap_add
     (a : E0 →L[ℂ] E0) (b : E1 →L[ℂ] E0)
@@ -90,6 +93,7 @@ theorem rectangularBlockMap_add
   rw [Prod.mk.injEq]
   exact ⟨by abel, by abel⟩
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Scalar multiplication of rectangular block maps is entrywise. -/
 theorem rectangularBlockMap_smul
     (z : ℂ)
@@ -101,6 +105,7 @@ theorem rectangularBlockMap_smul
   simp only [smul_apply, rectangularBlockMap_apply,
     ← WithLp.toLp_smul, Prod.smul_mk, smul_add]
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Subtraction of rectangular block maps is entrywise. -/
 theorem rectangularBlockMap_sub
     (a : E0 →L[ℂ] E0) (b : E1 →L[ℂ] E0)
@@ -116,6 +121,7 @@ theorem rectangularBlockMap_sub
   rw [Prod.mk.injEq]
   exact ⟨by abel, by abel⟩
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The identity block operator is the identity. -/
 @[simp]
 theorem rectangularBlockMap_one :
@@ -167,6 +173,7 @@ noncomputable def schurUpperInv
     WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1) :=
   rectangularBlockMap 1 (-(r0 ∘L b)) 0 1
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The lower Schur factor adds `c (r0 ·)` of the first coordinate into the second. -/
 @[simp]
 theorem schurLower_apply
@@ -179,6 +186,7 @@ theorem schurLower_apply
     one_apply_eq_self, zero_apply,
     ContinuousLinearMap.comp_apply, add_zero]
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The inverse lower Schur factor subtracts `c (r0 ·)` of the first coordinate from the second. -/
 @[simp]
 theorem schurLowerInv_apply
@@ -192,6 +200,7 @@ theorem schurLowerInv_apply
     neg_apply, ContinuousLinearMap.comp_apply,
     add_zero]
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The upper Schur factor adds `r0 (b ·)` of the second coordinate into the first. -/
 @[simp]
 theorem schurUpper_apply
@@ -204,6 +213,7 @@ theorem schurUpper_apply
     one_apply_eq_self, zero_apply,
     ContinuousLinearMap.comp_apply, zero_add]
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The inverse upper Schur factor subtracts `r0 (b ·)` of the second coordinate from the first. -/
 @[simp]
 theorem schurUpperInv_apply
@@ -217,6 +227,7 @@ theorem schurUpperInv_apply
     neg_apply, ContinuousLinearMap.comp_apply,
     zero_add, sub_eq_add_neg]
 
+omit [NormedAddCommGroup E0] [InnerProductSpace ℂ E0] [CompleteSpace E0] [NormedAddCommGroup E1] [InnerProductSpace ℂ E1] [CompleteSpace E1] in
 /-- Reconstruct a direct-sum vector from its two coordinates. -/
 theorem rectangularDirectSum_eta (x : WithLp 2 (E0 × E1)) :
     WithLp.toLp 2 (WithLp.fst x, WithLp.snd x) = x := by
@@ -446,6 +457,7 @@ variable {E0 : Type u} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
 variable {E1 : Type v} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
   [CompleteSpace E1]
 
+omit [CompleteSpace E0] in
 /-- Neumann inversion of the second Schur complement. -/
 theorem secondSchurComplement_has_inverse_of_norm_lt_one
     (l1 : E1 →L[ℂ] E1) (c : E0 →L[ℂ] E1)

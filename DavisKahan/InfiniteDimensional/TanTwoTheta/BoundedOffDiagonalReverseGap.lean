@@ -54,6 +54,7 @@ noncomputable def negBlockOperatorData
     intro x y
     simpa using congrArg Neg.neg (B.offDiagonalAdjoint x y)
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Negating all block entries negates the Riccati defect. -/
 theorem riccatiDefect_negBlockOperatorData
     (B : BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
@@ -127,9 +128,9 @@ theorem quarterAcuteAngularCoordinate_sharp_bound_of_reverse_spectral_halfLines
     (hquarter : IsQuarterAcute U V) :
     d * ‖quarterAcuteAngularCoordinate U V hquarter‖ ≤
       ‖H‖ * (1 - ‖quarterAcuteAngularCoordinate U V hquarter‖ ^ 2) := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ E) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ E) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hAH : IsSelfAdjointOperator (A + H) := by
     have h := hA.add hH

@@ -106,9 +106,6 @@ theorem restrictedSpectrum_eq_realSpectrum_restrictToReducingSubspace
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) (hU : Reduces A U) :
     restrictedSpectrum A U =
       realSpectrum (restrictToReducingSubspace A U hU) := by
-  change TauCeti.DavisKahan.Experimental.Foundation.restrictedSpectrum A U =
-    TauCeti.DavisKahan.Experimental.Foundation.realSpectrum
-      (restrictToReducingSubspace A U hU)
   rw [TauCeti.DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
     A U hU.1]
   rfl
@@ -143,9 +140,6 @@ real spectrum of the explicit restriction. -/
 theorem restrictedSpectrum_orthogonal_eq
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) (hU : Reduces A U) :
     restrictedSpectrum A Uᗮ = realSpectrum (restrictToOrthogonal A U hU) := by
-  change TauCeti.DavisKahan.Experimental.Foundation.restrictedSpectrum A Uᗮ =
-    TauCeti.DavisKahan.Experimental.Foundation.realSpectrum
-      (restrictToOrthogonal A U hU)
   rw [TauCeti.DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
     A Uᗮ hU.2]
   rfl
@@ -374,6 +368,7 @@ theorem directedPerturbation_sylvesterEquation
     Vᗮ.starProjection (B (x : E) - A (x : E))
   rw [map_sub, hcomm]
 
+omit [CompleteSpace E] in
 /-- Hybrid separation transports to the two actual restricted operators. -/
 theorem hybridGap_restrictions
     {A B : E →L[𝕜] E}
@@ -396,6 +391,7 @@ theorem hybridGap_restrictions
     exact ha
   simpa [abs_sub_comm] using hgap.2.2 a ha' b hb'
 
+omit [CompleteSpace E] in
 /-- Interval/exterior data transports to the restriction-level gap used by the
 rectangular ideal theorem. -/
 theorem intervalExteriorSeparated_restrictions

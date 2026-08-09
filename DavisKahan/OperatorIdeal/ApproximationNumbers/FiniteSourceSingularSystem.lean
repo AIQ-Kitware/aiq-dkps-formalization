@@ -74,13 +74,13 @@ theorem approximationSingularValue_eq_finiteSourceSingularValue
     (A : E →L[ℂ] F) (i : Fin (finrank ℂ E)) :
     approximationSingularValue i A = finiteSourceSingularValue A i := by
   let W : Submodule ℂ F := A.range
-  letI : FiniteDimensional ℂ W := by
+  let : FiniteDimensional ℂ W := by
     apply FiniteDimensional.of_surjective A.rangeRestrict.toLinearMap
     intro y
     rcases y.property with ⟨x, hx⟩
     exact ⟨x, Subtype.ext hx⟩
-  letI : CompleteSpace W := FiniteDimensional.complete ℂ W
-  letI : W.HasOrthogonalProjection :=
+  let : CompleteSpace W := FiniteDimensional.complete ℂ W
+  let : W.HasOrthogonalProjection :=
     Submodule.HasOrthogonalProjection.ofCompleteSpace W
   let AW : E →L[ℂ] W := W.orthogonalProjectionOnto ∘L A
   have hA : ∀ x, A x ∈ W := by

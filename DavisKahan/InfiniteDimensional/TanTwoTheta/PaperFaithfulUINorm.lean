@@ -81,6 +81,7 @@ noncomputable def paperTanTwoThetaRepresentative
     (TauCeti.DavisKahanExt.quarterAcuteAngularCoordinate U V hquarter)
     (TauCeti.DavisKahanExt.norm_quarterAcuteAngularCoordinate_lt_one U V hquarter)
 
+omit [CompleteSpace E] in
 /-- Mapping the two summands into one another is exactly the ambient
 off-diagonal condition consumed by the Riccati block API. -/
 private theorem isOffDiagonal_of_maps_orthogonal
@@ -222,9 +223,9 @@ private theorem graphCoordinate_paper_bound_of_quarterAcute
     N.Mem (paperTanTwoThetaRepresentative U V hquarter) ∧
       (b - a) * N.gauge (paperTanTwoThetaRepresentative U V hquarter) ≤
         2 * N.gauge H := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ E) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ E) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hAsym : IsSelfAdjointOperator A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA

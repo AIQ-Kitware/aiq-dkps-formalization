@@ -40,7 +40,7 @@ theorem norm_reflectionDefect_isometricRange_le_two_mul_residual
     letI := rangeHasOrthogonalProjection X hX
     let V : Submodule ℂ H := LinearMap.range X.toLinearMap
     ‖reflectionDefect V A‖ ≤ 2 * ‖residual A X M‖ := by
-  letI := rangeHasOrthogonalProjection X hX
+  let := rangeHasOrthogonalProjection X hX
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   calc
     ‖reflectionDefect V A‖

@@ -98,6 +98,7 @@ theorem realSpectrum_blockDiagonal_subset_exterior
   · exact Or.inl (h0 hr0)
   · exact Or.inr (h1 hr1)
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Oriented half-line enclosures give the corresponding pointwise spectral
 separation of the two effective blocks. -/
 theorem realSpectra_blocks_separated_of_halfLines
@@ -116,6 +117,7 @@ theorem realSpectra_blocks_separated_of_halfLines
     _ = -(x - y) := by ring
     _ ≤ |x - y| := neg_le_abs (x - y)
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- A complex spectrum decomposition transports directly to the corresponding
 real-spectrum decomposition. -/
 theorem realSpectrum_eq_union_of_spectrum_eq_union

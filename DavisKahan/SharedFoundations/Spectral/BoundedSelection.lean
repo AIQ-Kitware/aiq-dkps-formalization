@@ -59,6 +59,7 @@ noncomputable def BoundedSpectralSelection.canonical
 
 namespace BoundedSpectralSelection
 
+omit [CompleteSpace H] in
 /-- Every member of an equal pair of projected subspaces has the same pointwise
 star projection.  This avoids dependent rewriting through the projection
 instance. -/

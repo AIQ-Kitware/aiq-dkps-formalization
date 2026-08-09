@@ -37,6 +37,7 @@ variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace 𝕜 E0]
 variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace 𝕜 E1]
   [CompleteSpace E1]
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- A bounded angular graph reduces the self-adjoint block operator exactly
 when the angular operator solves the bounded Riccati equation. -/
 theorem graph_reduces_iff_solvesRiccati

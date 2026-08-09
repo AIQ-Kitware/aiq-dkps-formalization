@@ -1247,6 +1247,7 @@ private theorem re_inner_ge_of_inverse_norm_le
     _ = RCLike.re ⟪C z, z⟫_ℂ := by
       rw [← mul_assoc, hci, one_mul]
 
+omit [CompleteSpace H] in
 /-- **A lower bound on two orthogonal pieces is a lower bound overall.**
 
 If `C` maps `U` into `U` and `Uᗮ` into `Uᗮ`, and is bounded below by `c` on
@@ -1301,6 +1302,7 @@ private theorem norm_apply_ge_of_orthogonal_pieces
   exact (sq_le_sq₀ (mul_nonneg hc.le (norm_nonneg z))
     (norm_nonneg (C z))).mp hsq
 
+omit [CompleteSpace H] in
 /-- **A diagonal block identity transfers to the inner product on that block.**
 
 If `K.starProjection ∘ D ∘ K.starProjection = C ∘ K.starProjection` as

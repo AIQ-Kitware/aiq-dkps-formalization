@@ -74,7 +74,7 @@ theorem exists_polynomial_perspective_covers_of_isCompact_range
       refine ⟨f0, by simp, ?_⟩
       have hψ : ψ f0 = ψ f := Subsingleton.elim _ _
       simp [hψ, hρ]
-    · letI : IsEmpty (Model Q X) := ⟨fun f => hmodel ⟨f⟩⟩
+    · let : IsEmpty (Model Q X) := ⟨fun f => hmodel ⟨f⟩⟩
       refine ⟨∅, ?_, by simp⟩
       intro f
       exact isEmptyElim f

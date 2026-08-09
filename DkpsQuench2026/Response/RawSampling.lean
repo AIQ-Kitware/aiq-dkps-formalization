@@ -92,8 +92,8 @@ theorem jointStageMeasure_probability
     (μresp : Nat → Measure Ωresp) (hμresp : ∀ n, IsProbabilityMeasure (μresp n)) :
     ∀ n, IsProbabilityMeasure (jointStageMeasure μref μresp n) := by
   intro n
-  letI := hμref n
-  letI := hμresp n
+  let := hμref n
+  let := hμresp n
   unfold jointStageMeasure
   infer_instance
 
@@ -115,7 +115,7 @@ theorem iidReferenceSampler_lifted_prod
       ext ω; simp [liftedReferenceSampler]
     show ((μref n).prod (μresp n))
         {ω | ∀ i, liftedReferenceSampler f_ref n ω i ∈ s i} = ∏ i, Pf (s i)
-    haveI := hμresp n
+    have := hμresp n
     rw [hcyl, Measure.prod_prod, measure_univ, mul_one]
     exact hiid.joint_law n s hs
 
@@ -161,7 +161,7 @@ theorem integral_norm_sq_modelReplicateMean_sub_mean_le
     ∫ ωresp,
       ‖modelReplicateMean replicates Y n ωresp f - μmodel f‖ ^ 2
         ∂(μresp n) ≤ variance n / replicates n := by
-  haveI := Hraw.probability n
+  have := Hraw.probability n
   -- Upgrade the coordinate means to a Bochner (vector-valued) mean.
   have hmean : ∀ k, ∫ ω, Y n f k ω ∂(μresp n) = μmodel f := by
     intro k
@@ -204,8 +204,8 @@ theorem integral_norm_sq_augmentedRawSampleMean_sub_population_le
         augmentedRawPopulationMean f_ref μmodel n ω f i‖ ^ 2
         ∂(jointStageMeasure μref μresp n) ≤
       variance n / replicates n := by
-  haveI := hμref n
-  haveI := Hraw.probability n
+  have := hμref n
+  have := Hraw.probability n
   have hC0 : (0 : Real) ≤ variance n / replicates n := by
     apply div_nonneg _ (Nat.cast_nonneg _)
     have hk : (0 : Real) ≤
@@ -272,8 +272,8 @@ theorem integrable_sq_augmentedRawSampleMean_sub_population
       ‖augmentedRawSampleMean f_ref replicates Y n ω f i -
         augmentedRawPopulationMean f_ref μmodel n ω f i‖ ^ 2)
       (jointStageMeasure μref μresp n) := by
-  haveI := hμref n
-  haveI := Hraw.probability n
+  have := hμref n
+  have := Hraw.probability n
   have hsel : Measurable (fun ωref => augmentedModelAt f_ref n ωref f i) := by
     induction i using Fin.lastCases with
     | last => simp [augmentedModelAt]
@@ -404,7 +404,7 @@ theorem highProb_augmentedRawResponseMean_finite
       (augmentedUniformResponseMeanEvent
         (augmentedRawSampleMean f_ref replicates Y)
         (augmentedRawPopulationMean f_ref μmodel) η) := by
-  haveI : ∀ u, IsProbabilityMeasure (jointStageMeasure μref μresp u) :=
+  have : ∀ u, IsProbabilityMeasure (jointStageMeasure μref μresp u) :=
     jointStageMeasure_probability μref hμref μresp Hraw.probability
   exact highProb_uniformTargetResponseMeanClose_of_secondMoment
     (jointStageMeasure μref μresp) (fun n => n + 1)

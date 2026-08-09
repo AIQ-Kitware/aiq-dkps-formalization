@@ -178,7 +178,7 @@ theorem highProb_randomEmpiricalMean_deviation_of_secondMoment
     (fun k => ENNReal.ofReal
       (((gamma k) / (replicates k)) / ε ^ 2))
   · intro k
-    letI : IsProbabilityMeasure (μ k) := hμ k
+    let : IsProbabilityMeasure (μ k) := hμ k
     have htail := measure_randomEmpiricalMean_deviation_gt_le
       (μ k) (hreplicates k) (Z k) (center k) (gamma k) ε hε
       (hL2 k) (hmean k) (hindep k) (hsecond k)

@@ -88,6 +88,7 @@ section OperatorPath
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /-- Along `A + t H`, the endpoint residual margin is a common lower bound for
 all `t ∈ [0,1]`. -/
 theorem offDiagonalContinuationMargin_norm_le_path

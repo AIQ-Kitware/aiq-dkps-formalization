@@ -87,6 +87,7 @@ def SameSpectralMultiplicity
     TauCeti.MeasureEquiv D.base E.base ∧
     ∀ k, D.base (symmDiff (D.level k) (E.level k)) = 0
 
+omit [CompleteSpace H₁] [CompleteSpace H₂] in
 /-- **Same multiplicity data implies unitary equivalence**, with no separability hypothesis on
 either space.
 
@@ -100,6 +101,7 @@ theorem unitarilyEquivalent_of_sameSpectralMultiplicity
   exact hAD.trans
     ((TauCeti.operatorUnitaryEquiv_of_measureEquiv hbase hlevel).trans hBE.symm)
 
+omit [CompleteSpace H₂] in
 /-- **Unitary equivalence implies the same multiplicity data.**
 
 This is the direction that needs the existence half of Hahn--Hellinger, and therefore the

@@ -80,6 +80,7 @@ section OperatorPath
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /-- The endpoint enclosure radius controls every point of the affine path. -/
 theorem offDiagonalEnclosureRadius_path_le_norm
     (Hpert : H →L[ℂ] H) {d t : ℝ}

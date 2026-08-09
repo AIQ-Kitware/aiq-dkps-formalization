@@ -73,6 +73,7 @@ theorem restrict_residual_apply_eq
   simp only [add_zero]
   abel
 
+omit [CompleteSpace ↥Z] in
 /-- Restricting trial-block data to `F ≤ Z` costs at most `k * ε` in the `k`-th Ky Fan
 approximation gauge when the Ritz compression leaks from `F` by at most `ε`. -/
 theorem kyFanApproximationGauge_restrict_residual_le_add
@@ -138,6 +139,7 @@ theorem kyFanApproximationGauge_restrict_residual_le_add
         exact mul_le_mul_of_nonneg_left hGnorm (Nat.cast_nonneg k)
       linarith
 
+omit [CompleteSpace H] in
 /-- A finite-dimensional enlargement inside `Z` that is almost invariant for the bounded
 self-adjoint Ritz compression carried by the trial data. -/
 theorem exists_finiteDimensional_superset_compression_leak
@@ -152,12 +154,12 @@ theorem exists_finiteDimensional_superset_compression_leak
   classical
   have hMsa : IsSelfAdjoint data.compression :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr data.compression_isSymmetric
-  haveI : FiniteDimensional ℂ (F₀.comap Z.subtype) :=
+  have : FiniteDimensional ℂ (F₀.comap Z.subtype) :=
     LinearEquiv.finiteDimensional (Submodule.comapSubtypeEquivOfLe hF₀Z).symm
   obtain ⟨F', hF'fin, hF₀'F', hleak'⟩ :=
     TauCeti.BorelCalculus.exists_finiteDimensional_le_almostInvariant hMsa
       (F₀.comap Z.subtype) hε
-  haveI := hF'fin
+  have := hF'fin
   let F : Submodule ℂ H := F'.map Z.subtype
   have hFZ : F ≤ Z := Submodule.map_subtype_le Z F'
   refine ⟨F, inferInstance, ?_, hFZ, ?_⟩
@@ -188,6 +190,7 @@ theorem exists_finiteDimensional_superset_compression_leak
       _ ≤ ε * ‖x‖ := hy
       _ = ε * ‖(f : H)‖ := by rw [hxnorm]
 
+omit [CompleteSpace ↥Z] in
 /-- The finite-dimensional no-pole fact over abstract trial-block data, stated with
 approximation numbers rather than finite-source indices. -/
 theorem approximationSingularValue_sineBlock_lt_one_of_finiteData
@@ -294,12 +297,12 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteData
   obtain ⟨F₁, hF₁fin, hF₁Z, hF₁⟩ :=
     exists_finiteDimensional_le_lt_approximationSingularValue
       (Vᗮ.starProjection) Z n hc0 hclt
-  haveI := hF₁fin
+  have := hF₁fin
   have hεp : (0 : ℝ) < delta / (2 * ((n : ℝ) + 1)) := by positivity
   obtain ⟨F, hFfin, hF₁F, hFZ, hleak₀⟩ :=
     data.exists_finiteDimensional_superset_compression_leak F₁ hF₁Z hεp
-  letI : FiniteDimensional ℂ F := hFfin
-  haveI : F.HasOrthogonalProjection := inferInstance
+  let : FiniteDimensional ℂ F := hFfin
+  have : F.HasOrthogonalProjection := inferInstance
   have hleak : ∀ f : F,
       ‖((data.compression (inclCLM hFZ f) : Z) : H) -
           F.starProjection ((data.compression (inclCLM hFZ f) : Z) : H)‖ ≤
@@ -431,7 +434,7 @@ theorem all_kyFan_core_of_formBounds_infinite
           (Vᗮ.starProjection) Z n hcn0 hcnlt
       refine ⟨Fn, hFnfin, hFnZ, ?_⟩
       intro F hFnF hFZ _ _
-      haveI := hFnfin
+      have := hFnfin
       have hmono : approximationSingularValue n (theorem63DirectedSineBlock Fn V) ≤
           approximationSingularValue n (theorem63DirectedSineBlock F V) :=
         approximationSingularValue_restrict_mono (Vᗮ.starProjection) n hFnF
@@ -450,16 +453,16 @@ theorem all_kyFan_core_of_formBounds_infinite
   choose Fn hFnfin hFnZ hFnbound using hkey
   set F₀ : Submodule ℂ H :=
     (Finset.range k).attach.sup (fun p => Fn p.1 p.2) with hF₀_def
-  haveI : ∀ p : { x // x ∈ Finset.range k }, FiniteDimensional ℂ (Fn p.1 p.2) :=
+  have : ∀ p : { x // x ∈ Finset.range k }, FiniteDimensional ℂ (Fn p.1 p.2) :=
     fun p => hFnfin p.1 p.2
-  haveI hF₀fin : FiniteDimensional ℂ F₀ :=
+  have hF₀fin : FiniteDimensional ℂ F₀ :=
     Submodule.finiteDimensional_finset_sup _ _
   have hF₀Z : F₀ ≤ Z := Finset.sup_le fun p _ => hFnZ p.1 p.2
   have hεp : (0 : ℝ) < κ / (2 * (k : ℝ)) := by positivity
   obtain ⟨F, hFfin, hF₀F, hFZ, hleak₀⟩ :=
     data.exists_finiteDimensional_superset_compression_leak F₀ hF₀Z hεp
-  letI : FiniteDimensional ℂ F := hFfin
-  haveI : F.HasOrthogonalProjection := inferInstance
+  let : FiniteDimensional ℂ F := hFfin
+  have : F.HasOrthogonalProjection := inferInstance
   have hleak : ∀ f : F,
       ‖((data.compression (inclCLM hFZ f) : Z) : H) -
           F.starProjection ((data.compression (inclCLM hFZ f) : Z) : H)‖ ≤

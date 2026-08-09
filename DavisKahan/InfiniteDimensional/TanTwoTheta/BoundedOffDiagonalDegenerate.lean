@@ -46,7 +46,7 @@ theorem quarterAcuteAngularCoordinate_sharp_bound_of_orderedInternalGap
       ‖H‖ * (1 - ‖quarterAcuteAngularCoordinate U V hquarter‖ ^ 2) := by
   classical
   rcases subsingleton_or_nontrivial U with hUsub | hUnt
-  · letI : Subsingleton U := hUsub
+  · let : Subsingleton U := hUsub
     have hXzero : quarterAcuteAngularCoordinate U V hquarter = 0 := by
       ext u
       have hu : u = 0 := Subsingleton.elim _ _
@@ -57,9 +57,9 @@ theorem quarterAcuteAngularCoordinate_sharp_bound_of_orderedInternalGap
       simp
     rw [hXnorm]
     nlinarith [norm_nonneg H]
-  · letI : Nontrivial U := hUnt
+  · let : Nontrivial U := hUnt
     rcases subsingleton_or_nontrivial Uᗮ with hUcsub | hUcnt
-    · letI : Subsingleton Uᗮ := hUcsub
+    · let : Subsingleton Uᗮ := hUcsub
       have hXzero : quarterAcuteAngularCoordinate U V hquarter = 0 := by
         apply ContinuousLinearMap.ext
         intro u
@@ -69,7 +69,7 @@ theorem quarterAcuteAngularCoordinate_sharp_bound_of_orderedInternalGap
         exact ContinuousLinearMap.opNorm_zero
       rw [hXnorm]
       nlinarith [norm_nonneg H]
-    · letI : Nontrivial Uᗮ := hUcnt
+    · let : Nontrivial Uᗮ := hUcnt
       exact
         quarterAcuteAngularCoordinate_sharp_bound_of_orderedInternalGap_nontrivial
           A H hA hH U V hU hV hoff hd hgap hquarter

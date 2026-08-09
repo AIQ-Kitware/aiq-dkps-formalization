@@ -120,7 +120,7 @@ theorem populationMean_lipschitz_of_raw
     (Hlip : RawResponseLipschitz ψ replicates Y L)
     (n : Nat) (f g : Model Q X) :
     ‖μmodel f - μmodel g‖ ≤ L * ‖ψ f - ψ g‖ := by
-  letI := Hraw.probability n
+  let := Hraw.probability n
   let k : Fin (replicates n) := ⟨0, Hraw.replicates_pos n⟩
   have hintf : Integrable (Y n f k) (μresp n) :=
     (Hraw.memLp_two n f k).integrable one_le_two

@@ -27,11 +27,13 @@ section AffineEndpoints
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /-- The affine perturbation path starts at the unperturbed operator. -/
 @[simp] theorem operatorPath_zero (A V : H →L[ℂ] H) :
     operatorPath A V 0 = A := by
   simp [operatorPath]
 
+omit [CompleteSpace H] in
 /-- The affine perturbation path ends at the perturbed operator. -/
 @[simp] theorem operatorPath_one (A V : H →L[ℂ] H) :
     operatorPath A V 1 = A + V := by

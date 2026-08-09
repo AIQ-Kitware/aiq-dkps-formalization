@@ -83,6 +83,7 @@ is the `K ⊕ K` coordinatization the Halmos model is written in, before the two
 halves are identified with each other.
 -/
 
+omit [CompleteSpace H] in
 /-- **The generic part splits along `U`.**  Its `U`-part and its `Uᗮ`-part are
 the two halves of the Halmos model. -/
 theorem halmosGenericPart_eq_sup_inf_left :
@@ -98,6 +99,7 @@ theorem halmosGenericPart_eq_sup_inf_left :
   exact (halmosGenericPart U V).sub_mem hx
     (projection_mem_halmosGenericPart_left U V hx)
 
+omit [CompleteSpace H] in
 /-- **The generic part splits along `V`** as well. -/
 theorem halmosGenericPart_eq_sup_inf_right :
     halmosGenericPart U V =
@@ -154,6 +156,7 @@ noncomputable abbrev genericLeftHalf : Submodule ℂ H := U ⊓ halmosGenericPar
 noncomputable abbrev genericRightHalf : Submodule ℂ H :=
   Uᗮ ⊓ halmosGenericPart U V
 
+omit [CompleteSpace H] in
 /-- The quadratic form of an orthogonal projector is the squared norm of the
 projection. -/
 theorem inner_starProjection_self (W : Submodule ℂ H)
@@ -172,6 +175,7 @@ theorem inner_starProjection_self (W : Submodule ℂ H)
           inner_self_eq_norm_sq_to_K]
         norm_cast
 
+omit [CompleteSpace H] in
 /-- Pythagoras across a projector. -/
 theorem norm_sq_eq_starProjection_add_orthogonal (W : Submodule ℂ H)
     [W.HasOrthogonalProjection] (x : H) :
@@ -265,6 +269,7 @@ theorem starProjection_genericLeftHalf_of_mem_generic {g : H}
   exact inner_eq_zero_symm.mp ((Submodule.mem_orthogonal _ _).mp
     (U.sub_starProjection_mem_orthogonal g) w hw.1)
 
+omit [CompleteSpace H] in
 /-- The complementary component of a generic vector lands in the `Uᗮ`-half. -/
 theorem sub_starProjection_mem_genericRightHalf {g : H}
     (hg : g ∈ halmosGenericPart U V) :
@@ -493,7 +498,7 @@ that `B` has dense range.  Trivial kernel and dense range together are what make
 the polar factor of `B` a unitary `M ≃ₗᵢ N`.
 -/
 
-omit [CompleteSpace H] in
+omit [CompleteSpace H] [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] in
 /-- The two halves of the generic part are orthogonal. -/
 theorem genericLeftHalf_le_orthogonal_genericRightHalf :
     genericLeftHalf U V ≤ (genericRightHalf U V)ᗮ := by
@@ -631,9 +636,9 @@ noncomputable def genericHalvesEquiv :
           genericLeftHalf U V →ₗ[ℂ] genericRightHalf U V) :
           Set (genericRightHalf U V))) :=
       ContinuousLinearMap.isClosed_range_polarPartial _
-    haveI : (LinearMap.range ((genericCrossBlock U V).polarPartial :
+    have : (LinearMap.range ((genericCrossBlock U V).polarPartial :
         genericLeftHalf U V →ₗ[ℂ] genericRightHalf U V)).HasOrthogonalProjection := by
-      haveI : CompleteSpace (LinearMap.range ((genericCrossBlock U V).polarPartial :
+      have : CompleteSpace (LinearMap.range ((genericCrossBlock U V).polarPartial :
           genericLeftHalf U V →ₗ[ℂ] genericRightHalf U V)) :=
         hclosed.completeSpace_coe
       exact Submodule.HasOrthogonalProjection.ofCompleteSpace _

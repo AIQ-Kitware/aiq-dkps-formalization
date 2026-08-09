@@ -127,6 +127,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-! ### 1. Equation (1.5), and what it buys -/
 
+omit [CompleteSpace H] in
 /-- **Davis--Kahan equation (1.5), finite form.**  For subspaces of equal rank
 the symmetric projector gap and the directed gap coincide, so `‖sin Θ‖` may be
 computed from either.
@@ -197,7 +198,7 @@ theorem theorem8_2_sinTwoTheta_residual_source
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
       2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ := by
   classical
-  letI : CompleteSpace P :=
+  let : CompleteSpace P :=
     (P.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hA0 : IsSelfAdjointOperator (A + K) := hA.add hK
   have hQred : Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
@@ -205,7 +206,7 @@ theorem theorem8_2_sinTwoTheta_residual_source
   have hrange : LinearMap.range (P.subtypeL : P →L[ℂ] H).toLinearMap = P := by
     ext x
     simp
-  haveI : (LinearMap.range (P.subtypeL : P →L[ℂ] H).toLinearMap).HasOrthogonalProjection := by
+  have : (LinearMap.range (P.subtypeL : P →L[ℂ] H).toLinearMap).HasOrthogonalProjection := by
     rw [hrange]; infer_instance
   have hX : IsometricEmbedding (P.subtypeL : P →L[ℂ] H) := fun x => rfl
   have hM : IsSelfAdjointOperator (compressOperator P A) := by

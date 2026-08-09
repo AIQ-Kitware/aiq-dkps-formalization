@@ -73,7 +73,7 @@ theorem restrictedSpectrum_nonempty_of_invariant
     (U : Submodule ℂ E) [U.HasOrthogonalProjection] [Nontrivial U]
     (hU : InvariantFor A U) :
     (restrictedSpectrum A U).Nonempty := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA

@@ -82,6 +82,7 @@ noncomputable def subspaceAngularCoordinate
     (X : H →L[ℂ] H) : U →L[ℂ] Uᗮ :=
   Uᗮ.orthogonalProjectionOnto ∘L X ∘L U.subtypeL
 
+omit [CompleteSpace H] in
 /-- The angular coordinate of an angular operator agrees with `X` on underlying vectors. -/
 @[simp]
 theorem coe_subspaceAngularCoordinate_apply
@@ -96,6 +97,7 @@ theorem coe_subspaceAngularCoordinate_apply
   change Uᗮ.starProjection (X (u : H)) = X (u : H)
   exact Submodule.starProjection_eq_self_iff.mpr hmem
 
+omit [CompleteSpace H] in
 /-- Membership in an angular graph is equivalent to the complementary
 coordinate being the angular operator applied to the base coordinate. -/
 theorem starProjection_orthogonal_eq_of_mem_graphSubspace
@@ -128,9 +130,9 @@ theorem subspaceAngularCoordinate_solvesRiccati_of_graph_reduces
     (hred : Reduces T (graphSubspace U X)) :
     SolvesRiccati (subspaceBlockOperatorData T U hT)
       (subspaceAngularCoordinate U X) := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ H) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ H) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   refine (solvesRiccati_iff_pointwise
     (subspaceBlockOperatorData T U hT)
@@ -176,9 +178,9 @@ theorem selectedEndpointAngularCoordinate_solvesRiccati
         C.targetSeparatingContour.selfAdjoint)
       (subspaceAngularCoordinate C.sourceSelectedSpectralSubspace
         (C.selectedEndpointAngularOperator hsmall)) := by
-  letI : CompleteSpace C.sourceSelectedSpectralSubspace :=
+  let : CompleteSpace C.sourceSelectedSpectralSubspace :=
     (C.sourceSelectedSpectralSubspace.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace
+  let : CompleteSpace
       (C.sourceSelectedSpectralSubspaceᗮ : Submodule ℂ H) :=
     (C.sourceSelectedSpectralSubspaceᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   exact subspaceAngularCoordinate_solvesRiccati_of_graph_reduces

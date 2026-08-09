@@ -37,7 +37,7 @@ variable {Ω : Type w} [MeasurableSpace Ω]
 noncomputable def radialIndex {n : Nat} (hn : n > 0)
     (rhat : Fin n → Real) : Fin n :=
   have h_exists : ∃ i, IsArgmin rhat i := by
-    haveI : Nonempty (Fin n) := Fin.pos_iff_nonempty.mp hn
+    have : Nonempty (Fin n) := Fin.pos_iff_nonempty.mp hn
     obtain ⟨i, _, hi⟩ := Finset.exists_min_image
       (Finset.univ : Finset (Fin n)) rhat Finset.univ_nonempty
     exact ⟨i, fun j => hi j (Finset.mem_univ j)⟩

@@ -37,6 +37,7 @@ section QuarterAcuteGraph
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /-- Quarter-acuteness implies ordinary acuteness. -/
 theorem isUniformlyAcute_of_isQuarterAcute
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]

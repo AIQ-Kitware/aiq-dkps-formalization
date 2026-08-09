@@ -185,7 +185,7 @@ theorem mul_le_mul_sqrt_one_sub_sq_of_chain
         (continuous_const.mul (Real.continuous_sqrt.comp
           (continuous_const.sub
             ((continuous_const.sub continuous_id).pow 2))))
-    haveI hne : (nhdsWithin (0 : ℝ) (Set.Ioo 0 κ)).NeBot := by
+    have hne : (nhdsWithin (0 : ℝ) (Set.Ioo 0 κ)).NeBot := by
       rw [← mem_closure_iff_nhdsWithin_neBot, closure_Ioo hκpos.ne]
       exact ⟨le_refl 0, hκpos.le⟩
     have hlim := ge_of_tendsto hcont
