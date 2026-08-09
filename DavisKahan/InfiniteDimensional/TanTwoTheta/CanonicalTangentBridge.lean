@@ -123,7 +123,12 @@ private theorem ambientAngularOperator_eq_extendCoordinate
     coe_subspaceAngularCoordinate_apply U Y hY (U.subtypeL.adjoint x),
     Submodule.adjoint_subtypeL, ← Submodule.starProjection_apply, hYP]
 
-private theorem ambient_doubleAngleTangent_eq_extendCoordinate
+/-- The ambient graph tangent `2 Y (1 − Y⋆Y)⁻¹` is the zero-extension of the
+rectangular coordinate tangent `2 X (1 − X⋆X)⁻¹`.  Made public because the
+whole-space `tan 2Θ` theorem identifies the *off-diagonal corner* of its block
+representative with the ambient graph tangent and then transports the sharp
+Ky Fan estimate, which is stated for the coordinate operator. -/
+theorem ambient_doubleAngleTangent_eq_extendCoordinate
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
     (Y : E →L[ℂ] E) (hY : IsAngularOperator U Y)
     (hcontractive : ‖Y‖ < 1) :
