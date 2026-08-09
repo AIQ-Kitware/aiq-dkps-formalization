@@ -30,23 +30,29 @@ namespace Experimental
 namespace TanTheta
 
 
-variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-  [CompleteSpace H]
+section ScalarGeneric
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
 
 /-- A bounded Ritz block and residual for a trial subspace contained in the
 operator domain.  The Ritz block is exactly the compression of the unbounded
-operator to the trial subspace, and the residual is the complementary column. -/
+operator to the trial subspace, and the residual is the complementary column.
+
+The bundle is *bounded data*: nothing in it mentions the ambient operator except
+through the two identities `operator_apply` and `residual_apply`.  It is
+therefore scalar-generic, over a real or a complex Hilbert space alike. -/
 structure UnboundedTrialBlock
-    (A : DKClosedOperator (H := H)) (Z : Submodule ℂ H)
+    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H)) (Z : Submodule 𝕜 H)
     [Z.HasOrthogonalProjection] [CompleteSpace Z] where
   domain_le : Z ≤ A.domain
-  operator : Z →L[ℂ] Z
+  operator : Z →L[𝕜] Z
   operator_selfAdjoint : IsSelfAdjoint operator
   operator_apply (x : Z) :
     (operator x : H) =
       Z.starProjection
         (A.toLinearMap ⟨(x : H), domain_le x.property⟩)
-  residual : Z →L[ℂ] H
+  residual : Z →L[𝕜] H
   residual_apply (x : Z) :
     residual x =
       A.toLinearMap ⟨(x : H), domain_le x.property⟩ -
@@ -54,10 +60,9 @@ structure UnboundedTrialBlock
 
 namespace UnboundedTrialBlock
 
-variable {A : DKClosedOperator (H := H)}
-  {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
+variable {A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H)}
+  {Z : Submodule 𝕜 H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
 
-omit [CompleteSpace H] in
 /-- The bundled residual is the part of the unbounded action orthogonal to the
 trial subspace. -/
 theorem residual_eq_sub_starProjection
@@ -68,7 +73,6 @@ theorem residual_eq_sub_starProjection
           (A.toLinearMap ⟨(x : H), D.domain_le x.property⟩) := by
   rw [D.residual_apply, D.operator_apply]
 
-omit [CompleteSpace H] in
 /-- The bundled trial residual is orthogonal to the trial subspace. -/
 theorem residual_mem_orthogonal
     (D : UnboundedTrialBlock A Z) (x : Z) :
@@ -76,7 +80,6 @@ theorem residual_mem_orthogonal
   rw [D.residual_eq_sub_starProjection]
   exact Z.sub_starProjection_mem_orthogonal _
 
-omit [CompleteSpace H] in
 /-- The operator norm of the bundled residual supplies the columnwise bound
 used by the vector tangent theorem. -/
 theorem norm_sub_starProjection_le
@@ -89,6 +92,11 @@ theorem norm_sub_starProjection_le
   exact D.residual.le_opNorm x
 
 end UnboundedTrialBlock
+
+end ScalarGeneric
+
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
 
 set_option maxHeartbeats 1600000 in
 /-- A bounded self-adjoint operator whose real spectrum avoids the enlarged
