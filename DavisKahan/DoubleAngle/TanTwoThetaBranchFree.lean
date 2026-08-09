@@ -68,7 +68,7 @@ than a prefix statement and is what a rearranged representative needs.
 namespace TauCeti
 namespace DavisKahanTheory
 
-open Module LinearMap
+open Module _root_.TauCeti.LinearMap
 open scoped InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜]

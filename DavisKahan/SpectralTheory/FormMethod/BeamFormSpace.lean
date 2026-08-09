@@ -160,7 +160,7 @@ theorem mem_beamFormSubmodule_iff (p : BeamPairSpace) :
   rw [beamFormSubmodule, Submodule.mem_iInf]
   refine forall_congr' fun k => ?_
   rw [LinearMap.mem_ker]
-  simp only [ContinuousLinearMap.coe_coe, constraintCLM, ContinuousLinearMap.sub_apply,
+  simp only [ContinuousLinearMap.coe_coe, constraintCLM, sub_apply,
     ContinuousLinearMap.comp_apply, pairingCLM_apply]
   rw [sub_eq_zero]
 

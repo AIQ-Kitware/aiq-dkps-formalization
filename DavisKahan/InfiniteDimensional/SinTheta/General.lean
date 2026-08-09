@@ -666,6 +666,7 @@ noncomputable def spectralSubspace (A : E →L[𝕜] E) (hA : IsSelfAdjointOpera
     Submodule 𝕜 E :=
   (BoundedBorelProjection.proj A hA s hs).range
 
+omit [CompleteSpace E] in
 /-- Unfolding lemma: the spectral subspace *is* the range of the spectral
 projection.  Stated so that downstream rewrites do not have to unfold a `def`. -/
 theorem spectralSubspace_eq_range (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
@@ -691,6 +692,7 @@ noncomputable def spectralProjection (A : E →L[𝕜] E) (hA : IsSelfAdjointOpe
     E →L[𝕜] E :=
   (spectralSubspace A hA s hs).starProjection
 
+omit [CompleteSpace E] in
 /-- Spectral subspaces of a self-adjoint operator reduce it.
 
 Only invariance has to be checked: `IsSymmetric.reduces_of_invariant` supplies
@@ -982,7 +984,8 @@ piece.  The statement itself is believed true and sharp: equality holds at
 `B − A = d (P_U − P_V)`.
 -/
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [Algebra ℝ (E →L[𝕜] E)]
+  [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)] in
 /-- **The projector difference solves a Sylvester equation.**
 
 With `A` reducing `U` and `B` reducing `V`,
@@ -1004,7 +1007,8 @@ theorem projectionDifference_sylvester
   rw [mul_sub, sub_mul, sub_mul, mul_sub, hAU, hBV]
   abel
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [Algebra ℝ (E →L[𝕜] E)]
+  [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)] in
 /-- **The cross term is a reflection pinch**: `R P_V − P_U R = (R J_V − J_U R)/2`.
 
 Immediate from `J = 2P − 1`, but worth naming: it is what makes the right-hand
@@ -1022,8 +1026,8 @@ theorem projectionCross_eq_reflectionPinch
     Submodule.reflectionOperator_eq_two_smul_sub_id V
   rw [hU, hV]
   ext x
-  simp only [ContinuousLinearMap.coe_comp', Function.comp_apply,
-    ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+  simp only [ContinuousLinearMap.coe_comp, Function.comp_apply,
+    sub_apply, smul_apply,
     ContinuousLinearMap.coe_id', id_eq, map_sub, map_smul]
   match_scalars <;> (try field_simp) <;> ring
 

@@ -22,7 +22,7 @@ finite-dimensional singular-value files.
 -/
 
 namespace TauCeti
-open Module LinearMap
+open Module _root_.TauCeti.LinearMap
 open DavisKahan.Experimental.ExactSinTheta
 open scoped InnerProductSpace
 

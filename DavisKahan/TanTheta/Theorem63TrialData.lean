@@ -187,6 +187,7 @@ theorem ofBounded_compression (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     (ofBounded T hT Z V).compression = theorem63Compression T Z := rfl
 
+omit [CompleteSpace H] in
 /-- The crossed form hypothesis holds for a bounded symmetric operator that reduces `V`
 and is bounded below on `Vᗮ`. -/
 theorem ofBounded_crossed_lower (T : H →L[ℂ] H) (hT : T.IsSymmetric)
@@ -280,7 +281,7 @@ noncomputable def restrict (data : Theorem63TrialData Z V)
       _ = ⟪x, ((F.orthogonalProjectionOnto ∘L data.action ∘L inclCLM hFZ) y : F)⟫_ℂ :=
         hy.symm
   action_eq := fun z => by
-    simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.sub_apply]
+    simp only [ContinuousLinearMap.comp_apply, sub_apply]
     have hc : ((F.orthogonalProjectionOnto (data.action (inclCLM hFZ z)) : F) : H) =
         F.starProjection (data.action (inclCLM hFZ z)) := rfl
     change data.action (inclCLM hFZ z) =
@@ -289,7 +290,7 @@ noncomputable def restrict (data : Theorem63TrialData Z V)
           F.starProjection (data.action (inclCLM hFZ z)))
     abel
   residual_orthogonal := fun z z' => by
-    simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.sub_apply]
+    simp only [ContinuousLinearMap.comp_apply, sub_apply]
     change ⟪data.action (inclCLM hFZ z) -
         F.starProjection (data.action (inclCLM hFZ z)), ((z' : F) : H)⟫_ℂ = 0
     have hmem : data.action (inclCLM hFZ z) -
@@ -411,6 +412,7 @@ theorem transverse_of_formBounds (data : Theorem63TrialData Z V)
     nlinarith [sq_pos_of_pos hn]
   exact sub_eq_zero.mp hzero
 
+omit [CompleteSpace H] in
 /-- **No pole, over trial-block data.**  Under the printed form gap every directed sine
 singular value is strictly below one, so every tangent the theorem names is finite. -/
 theorem sine_lt_one_of_formBounds (data : Theorem63TrialData Z V)

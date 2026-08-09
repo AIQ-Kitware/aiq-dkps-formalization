@@ -272,7 +272,7 @@ theorem margin_le_norm_sub_of_inverse_bound
     (hbound : ‖Ring.inverse (z • (1 : H →L[ℂ] H) - T)‖ ≤ m⁻¹)
     {w : ℂ} (hw : w ∈ spectrum ℂ T) : m ≤ ‖z - w‖ := by
   by_contra hlt
-  push_neg at hlt
+  push Not at hlt
   have hu : IsUnit (z • (1 : H →L[ℂ] H) - T) := by
     have h := spectrum.notMem_iff.mp hz
     rwa [Algebra.algebraMap_eq_smul_one] at h

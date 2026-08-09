@@ -165,7 +165,7 @@ theorem cfc_intervalIntegral_of_le'
       ContinuousOn (f t) (spectrum ℂ A))
     (hf_int : IntegrableOn
       (fun t : ℝ =>
-        ContinuousMap.mkD ((spectrum ℂ A).restrict (f t)) 0)
+        ContinuousMap.mkD ((spectrum ℂ A).domRestrict (f t)) 0)
       (Set.Ioc a b) volume) :
     cfc (fun z => ∫ t in a..b, f t z) A =
       ∫ t in a..b, cfc (f t) A := by

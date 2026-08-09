@@ -54,6 +54,7 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Recentering a Sylvester equation by a real scalar leaves the right-hand side
 unchanged: `(A - c)X - X(B - c) = AX - XB`. -/
 theorem centered_sylvester_equation
@@ -73,6 +74,7 @@ noncomputable def boundedInverseDataOfIsUnit {T : E →L[𝕜] E} (hunit : IsUni
   left_inv := by have h := hunit.unit.inv_mul; rw [hunit.unit_spec] at h; exact h
   right_inv := by have h := hunit.unit.mul_inv; rw [hunit.unit_spec] at h; exact h
 
+omit [CompleteSpace E] in
 /-- A real scalar multiple of the identity is a symmetric operator. -/
 theorem isSymmetric_real_smul_id (c : ℝ) :
     (((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E).IsSymmetric := fun x y => by
@@ -80,6 +82,7 @@ theorem isSymmetric_real_smul_id (c : ℝ) :
 
 namespace RCLikeSpectralBridge
 
+omit [CompleteSpace E] in
 /-- The numerical range of a symmetric operator is real. -/
 theorem im_inner_map_self_eq_zero
     {A : E →L[𝕜] E} (hA : A.IsSymmetric) (x : E) :
@@ -191,7 +194,7 @@ theorem isUnit_sub_smul_one_of_im_ne_zero
     rw [hstary, norm_zero] at h
     have : ‖y‖ ≤ 0 := by
       by_contra hpos
-      push_neg at hpos
+      push Not at hpos
       nlinarith
     exact norm_le_zero_iff.mp this
   have hrange : LinearMap.range (T : E →ₗ[𝕜] E) = ⊤ := by
@@ -264,6 +267,7 @@ theorem exists_mem_boundedRealSpectrum_of_mem_spectrum_sub_real_scalar
     push_cast
     ring
 
+omit [CompleteSpace E] in
 /-- The converse inclusion, which holds for **any** bounded operator: shifting a
 real spectral point by `c` lands in the spectrum of the shifted pencil.
 
@@ -319,6 +323,7 @@ theorem norm_le_of_selfAdjoint_spectrum_subset_closedBall
     _ ≤ (ρ.toNNReal : ℝ) := by exact_mod_cast hnn
     _ = ρ := Real.coe_toNNReal ρ hρ
 
+omit [CompleteSpace E] in
 /-- The spectral-mapping identity `σ(T⁻¹) = σ(T)⁻¹` for a bounded unit,
 from `spectrum.map_inv` (any scalar field). -/
 theorem spectrum_inverse_of_isUnit {T : E →L[𝕜] E} (hunit : IsUnit T) :

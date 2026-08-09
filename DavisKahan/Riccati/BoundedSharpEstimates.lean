@@ -307,6 +307,7 @@ theorem sharp_riccati_bound_of_epsilon
 /- Promoted from `Experimental/InfiniteDimensional/TanTwoTheta/BoundedRiccatiNorm.lean`
    under lane `EXP-PROMOTE-T2T` slice 2, 2026-07-30.  Verbatim. -/
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- A continuous linear map has a unit vector whose image norm is within every
 positive amount below its operator norm. -/
 theorem exists_unit_norm_apply_gt_sub
@@ -314,7 +315,7 @@ theorem exists_unit_norm_apply_gt_sub
     (hε0 : 0 < ε) (hεt : ε < ‖X‖) :
     ∃ x : E0, ‖x‖ = 1 ∧ ‖X x‖ > ‖X‖ - ε := by
   by_contra h
-  push_neg at h
+  push Not at h
   have hop : ‖X‖ ≤ ‖X‖ - ε :=
     ContinuousLinearMap.opNorm_le_of_unit_norm
       (sub_nonneg.mpr hεt.le) (fun x hx => h x hx)
