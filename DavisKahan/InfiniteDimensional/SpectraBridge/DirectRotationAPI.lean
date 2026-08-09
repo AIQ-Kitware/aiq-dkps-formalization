@@ -34,14 +34,14 @@ factor of the canonical intertwiner. -/
 noncomputable abbrev complexDirectRotation
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : H →L[ℂ] H :=
+    (hacute : IsUniformlyAcute U V) : H →L[ℂ] H :=
   _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation U V hacute
 
 /-- The complex direct rotation is norm-preserving and onto. -/
 theorem complexDirectRotation_unitary
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     IsUnitaryOperator (complexDirectRotation U V hacute) :=
   ⟨_root_.TauCeti.DavisKahan.Experimental.norm_spectraDirectRotation_apply
       U V hacute,
@@ -55,7 +55,7 @@ identity. -/
 theorem complexDirectRotation_unique
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : IsUniformlyAcute U V)
     (W : H →L[ℂ] H)
     (hWunit : W ∈ unitary (H →L[ℂ] H))
     (hsq : W * W = reflectionOperator V * reflectionOperator U)
@@ -69,7 +69,7 @@ projections. -/
 theorem complexDirectRotation_intertwines
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     complexDirectRotation U V hacute ∘L projection U =
       projection V ∘L complexDirectRotation U V hacute := by
   simpa only [ContinuousLinearMap.mul_def] using
@@ -81,7 +81,7 @@ subspace. -/
 theorem complexDirectRotation_maps_subspace
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     U.map (complexDirectRotation U V hacute).toLinearMap = V :=
   _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_maps_subspace
     U V hacute
@@ -91,7 +91,7 @@ complements. -/
 theorem complexDirectRotation_maps_orthogonalComplement
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     Uᗮ.map (complexDirectRotation U V hacute).toLinearMap = Vᗮ :=
   _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_maps_orthogonalComplement
     U V hacute
@@ -101,7 +101,7 @@ in the complex acute case. -/
 theorem exists_complexDirectRotation
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     ∃ W : H →L[ℂ] H,
       IsUnitaryOperator W ∧
       W ∘L projection U = projection V ∘L W ∧
@@ -117,7 +117,7 @@ orthogonal complements. -/
 theorem exists_complexDirectRotation_with_complements
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     ∃ W : H →L[ℂ] H,
       IsUnitaryOperator W ∧
       W ∘L projection U = projection V ∘L W ∧
@@ -137,7 +137,7 @@ algebra. -/
 theorem complexDirectRotation_mem_unitary
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     complexDirectRotation U V hacute ∈ unitary (H →L[ℂ] H) :=
   _root_.TauCeti.DavisKahan.Experimental.spectraDirectRotation_mem_unitary
     U V hacute
@@ -146,7 +146,7 @@ theorem complexDirectRotation_mem_unitary
 theorem star_complexDirectRotation_comp_self
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     star (complexDirectRotation U V hacute) ∘L
         complexDirectRotation U V hacute = 1 := by
   simpa only [ContinuousLinearMap.mul_def] using
@@ -157,7 +157,7 @@ theorem star_complexDirectRotation_comp_self
 theorem complexDirectRotation_comp_star_self
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     complexDirectRotation U V hacute ∘L
         star (complexDirectRotation U V hacute) = 1 := by
   simpa only [ContinuousLinearMap.mul_def] using
@@ -169,7 +169,7 @@ projection. -/
 theorem star_complexDirectRotation_intertwines
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     star (complexDirectRotation U V hacute) ∘L projection V =
       projection U ∘L star (complexDirectRotation U V hacute) := by
   simpa only [ContinuousLinearMap.mul_def] using
@@ -180,7 +180,7 @@ theorem star_complexDirectRotation_intertwines
 theorem star_complexDirectRotation_intertwines_complementary
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     star (complexDirectRotation U V hacute) ∘L complementaryProjection V =
       complementaryProjection U ∘L star (complexDirectRotation U V hacute) := by
   simpa only [ContinuousLinearMap.mul_def] using
@@ -192,7 +192,7 @@ to the target projection. -/
 theorem complexDirectRotation_conjugates_projection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     (complexDirectRotation U V hacute ∘L projection U) ∘L
         star (complexDirectRotation U V hacute) = projection V := by
   simpa only [ContinuousLinearMap.mul_def] using
@@ -203,7 +203,7 @@ theorem complexDirectRotation_conjugates_projection
 theorem star_complexDirectRotation_conjugates_projection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     (star (complexDirectRotation U V hacute) ∘L projection V) ∘L
         complexDirectRotation U V hacute = projection U := by
   simpa only [ContinuousLinearMap.mul_def] using
@@ -215,7 +215,7 @@ complementary target projection. -/
 theorem complexDirectRotation_conjugates_complementaryProjection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     (complexDirectRotation U V hacute ∘L complementaryProjection U) ∘L
         star (complexDirectRotation U V hacute) = complementaryProjection V := by
   simpa only [ContinuousLinearMap.mul_def] using
@@ -227,7 +227,7 @@ reflections. -/
 theorem complexDirectRotation_intertwines_reflection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     complexDirectRotation U V hacute ∘L reflectionOperator U =
       reflectionOperator V ∘L complexDirectRotation U V hacute := by
   simpa only [ContinuousLinearMap.mul_def] using
@@ -238,7 +238,7 @@ theorem complexDirectRotation_intertwines_reflection
 theorem star_complexDirectRotation_intertwines_reflection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     star (complexDirectRotation U V hacute) ∘L reflectionOperator V =
       reflectionOperator U ∘L star (complexDirectRotation U V hacute) := by
   simpa only [ContinuousLinearMap.mul_def] using
@@ -250,7 +250,7 @@ to the target reflection. -/
 theorem complexDirectRotation_conjugates_reflection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     (complexDirectRotation U V hacute ∘L reflectionOperator U) ∘L
         star (complexDirectRotation U V hacute) = reflectionOperator V := by
   simpa only [ContinuousLinearMap.mul_def] using
@@ -262,7 +262,7 @@ onto the source subspace. -/
 theorem star_complexDirectRotation_maps_subspace
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     V.map ((star (complexDirectRotation U V hacute) :
       H →L[ℂ] H).toLinearMap) = U :=
   _root_.TauCeti.DavisKahan.Experimental.star_spectraDirectRotation_maps_subspace
@@ -273,7 +273,7 @@ complement back onto the source orthogonal complement. -/
 theorem star_complexDirectRotation_maps_orthogonalComplement
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     Vᗮ.map ((star (complexDirectRotation U V hacute) :
       H →L[ℂ] H).toLinearMap) = Uᗮ :=
   _root_.TauCeti.DavisKahan.Experimental.star_spectraDirectRotation_maps_orthogonalComplement
@@ -285,7 +285,7 @@ identity among unitary projection intertwiners. -/
 theorem complexDirectRotation_minimal
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : IsUniformlyAcute U V)
     (W : H →L[ℂ] H) (hWunit : W ∈ unitary (H →L[ℂ] H))
     (hintertwine : W ∘L projection U = projection V ∘L W) :
     ‖complexDirectRotation U V hacute - 1‖ ≤ ‖W - 1‖ := by

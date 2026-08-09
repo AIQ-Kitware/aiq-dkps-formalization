@@ -145,7 +145,7 @@ theorem theorem63_singularValues_sine_le_one
 omit [CompleteSpace H] in
 /-- The source spectral placement forces the directed cosine projection to be
 injective.  This is the unequal-dimensional, directed replacement for the
-false symmetric `IsAcute Z V` claim. -/
+false symmetric `IsUniformlyAcute Z V` claim. -/
 theorem theorem63_directed_transverse_of_form_gap
     (T : H →L[ℂ] H) (_hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]

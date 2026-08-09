@@ -82,8 +82,20 @@ noncomputable abbrev directedGap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   U.directedProjectionGap V
 
-/-- The two subspaces are in the acute case. -/
-def IsAcute (U V : Submodule 𝕜 E)
+/-- **The quantitative acute case: the projection gap is strictly below one.**
+
+This is *not* Davis--Kahan's printed Definition 3.2, and it used to be called
+`IsAcute`, which said it was.  The printed definition — both crossed
+intersections `U ⊓ Vᗮ` and `Uᗮ ⊓ V` vanish — is `TauCeti.IsAcute`, in
+`ForTauCeti/Analysis/InnerProductSpace/AngleGeometry.lean`.
+
+The two agree in finite dimension (`TauCeti.isAcute_iff_projectionGap_lt_one`)
+and only there: `‖P_U - P_V‖ < 1` is uniform, so it also excludes principal
+angles that merely accumulate at `π/2`, and `TauCeti.isAcute_of_projectionGap_lt_one`
+is the one implication that survives in general.  Hence the qualifier: a
+statement carrying this hypothesis is narrower than the printed one whenever the
+ambient space is infinite dimensional. -/
+def IsUniformlyAcute (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
   subspaceGap U V < 1
 

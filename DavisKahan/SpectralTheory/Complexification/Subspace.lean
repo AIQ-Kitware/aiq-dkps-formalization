@@ -258,13 +258,13 @@ theorem directedGap_complexifySubmodule
 
 omit [CompleteSpace E] in
 /-- Acuteness is preserved and reflected by complexification. -/
-theorem isAcute_complexifySubmodule_iff
+theorem isUniformlyAcute_complexifySubmodule_iff
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    TauCeti.DavisKahan.IsAcute (complexifySubmodule U)
+    TauCeti.DavisKahan.IsUniformlyAcute (complexifySubmodule U)
         (complexifySubmodule V) ↔
-      TauCeti.DavisKahan.IsAcute U V := by
-  simp only [TauCeti.DavisKahan.IsAcute,
+      TauCeti.DavisKahan.IsUniformlyAcute U V := by
+  simp only [TauCeti.DavisKahan.IsUniformlyAcute,
     subspaceGap_complexifySubmodule]
 
 omit [CompleteSpace E] in

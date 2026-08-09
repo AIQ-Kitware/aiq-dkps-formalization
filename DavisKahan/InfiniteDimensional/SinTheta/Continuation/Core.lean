@@ -235,7 +235,7 @@ theorem range_equiv_of_projection_norm_lt_one
     simpa only [U] using projection_fixedSpace_eq P hP
   have hQV : projection V = Q := by
     simpa only [V] using projection_fixedSpace_eq Q hQ
-  have hacute : IsAcute U V := by
+  have hacute : IsUniformlyAcute U V := by
     change ‖projection U - projection V‖ < 1
     rw [hPU, hQV]
     exact hclose

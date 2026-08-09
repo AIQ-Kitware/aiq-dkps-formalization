@@ -709,7 +709,7 @@ SCALAR SCOPE, measured the same day by elaborating each listed declaration: `can
 - **Verification:** `proved_in_build`
 - **Mathematics:** A unitary intertwining the two projections whose diagonal cosine blocks are positive and whose off-diagonal sine blocks are adjoints.
 - **Blocked by:** `exact-source-wrappers`, `real-scalar-infinite-dimensional-scope`
-- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation`, `TauCeti.DavisKahan.Experimental.spectraCanonicalIntertwiner`, `TauCeti.DavisKahan.Experimental.Frontier.IsPaperDirectRotation`
+- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation`, `TauCeti.DavisKahan.Experimental.spectraCanonicalIntertwiner`, `TauCeti.DavisKahan.Experimental.Frontier.IsPaperDirectRotation`, `TauCeti.DavisKahanTheory.angleComplexStructure`, `TauCeti.DavisKahanTheory.directRotation_eq_cos_add_J_sin`, `TauCeti.DavisKahanTheory.directRotationCosine_eq_half_smul_add`, `TauCeti.DavisKahanTheory.directRotation_sub_cosine_eq_half_smul_sub`
 - **Assessment:** Acute complex and finite constructions exist; exact nonacute source scope is not yet unified.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. The direct-rotation construction is compiled and axiom-clean; a source-facing definition covering the paper's existence regimes is still absent.
@@ -717,7 +717,11 @@ STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infra
 VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `DavisKahan.All`, `DavisKahan.Experimental.All` and `ForTauCeti` and running `#print axioms` on all 87 declarations named in this census elaborated cleanly -- every name resolves and **none reaches `sorryAx`**. A second probe importing only the default-build roots showed 78 of the 87 resolve there; the 9 that do not are exactly the `TauCeti.DavisKahan1970.Section8.*` names on rows DK-8.1-thm and DK-8.2-thm, whose `proved_outside_build` verification was already correct. `candidate_under_repair` -- "not compiler-certified on this base" -- was therefore false for every row that carried it. The scope question (does the compiled statement match the printed one?) is a separate judgement and is recorded in `next_action`; the status below is the weakest one consistent with that recorded evidence, so no row is overstated.
 
 ROW WAS STALE; RESOLVED 2026-08-06.  The requested "source-facing definition" already exists and is guarded: `TauCeti.DavisKahan.Experimental.Frontier.IsPaperDirectRotation` (`DavisKahan/Geometry/Halmos/GenericRotationPredicates.lean`, reached from `DavisKahan.All`) is the paper's definition of a direct rotation for an ARBITRARY pair -- unitary, intertwines the projections, nonnegative diagonal compressions, skew-adjoint crossed blocks -- with no acuteness.  The "source existence regimes" the next action asked to cover are theorems on the numbered rows built on this definition: acute existence/uniqueness/characterisation on DK-3.1-prop (`complex_directRotation`, `complex_directRotation_iff_diagonalBlocks`), the nonacute existence criterion on DK-3.2-prop (`(∃ T, IsPaperDirectRotation U V T) ↔ ...`), and the principal-square-root characterisation on DK-3.3-prop, whose forward-of-nonneg-blocks form consumes exactly this predicate.  Axiom-clean [propext, Classical.choice, Quot.sound].
-- **Next action:** Nothing outstanding: the definition is compiled in source form and every Section 3 existence regime is a proved theorem on its own row (DK-3.1-prop, DK-3.2-prop, DK-3.3-prop).
+
+**M19, 2026-08-09 (Claude Opus 5).**  The Section 3 narrative between Proposition 3.4 and Theorem 3.1 introduces the intertwiner `J` from the polar resolution `S_0 = J_0 sin Theta_0` and writes the direct rotation as `U = cos Theta + J sin Theta = exp(J Theta)` (transcription L1060--1081).  Everything except the exponential form is represented, in finite dimension over any `RCLike` field: `angleComplexStructure` is `J`, `directRotation_eq_cos_add_J_sin` is the first equation, and `directRotation_sub_cosine_eq_half_smul_sub` identifies `J sin Theta` with the skew-Hermitian part `(U - U^{-1})/2` of the direct rotation, which is what the paper's off-diagonal block is.  `directRotationCosine_eq_half_smul_add` is the companion `cos Theta = (U + U^{-1})/2`.
+
+NOT REPRESENTED: `U = exp(J Theta)`.  That needs the operator exponential and the power-series split into `cos` and `sin` on the range of `Theta`, using `J^2 = -1` there; none of it exists in the repository.
+- **Next action:** Nothing outstanding: the definition is compiled in source form and every Section 3 existence regime is a proved theorem on its own row (DK-3.1-prop, DK-3.2-prop, DK-3.3-prop).  Additionally: state and prove `U = exp(J Theta)` (the exponential form of equation (1.18)), which requires `J^2 = -(support projection)` and `J Theta = Theta J`, neither of which is proved -- see DK-3.5-prop's `next_action` for the missing Moore--Penrose commutation brick.
 
 #### Definition 3.2: Acute case
 
@@ -726,7 +730,7 @@ ROW WAS STALE; RESOLVED 2026-08-06.  The requested "source-facing definition" al
 - **Verification:** `proved_in_build`
 - **Mathematics:** Both crossed intersections P ∩ Q-perp and P-perp ∩ Q vanish.
 - **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `TauCeti.DavisKahan.IsAcute`, `TauCeti.IsAcute`, `TauCeti.isAcute_of_projectionGap_lt_one`
+- **Current Lean references:** `TauCeti.IsAcute`, `TauCeti.isAcute_iff_inf_orthogonal_eq_bot`, `TauCeti.DavisKahan.IsUniformlyAcute`, `TauCeti.isAcute_of_projectionGap_lt_one`, `TauCeti.directedProjectionGap_lt_one_of_transverse`, `TauCeti.projectionGap_lt_one_of_isAcute`, `TauCeti.isAcute_iff_projectionGap_lt_one`, `TauCeti.one_le_projectionGap_of_forall_exists_unit_lt`
 - **Assessment:** The predicate is broadly used but lacks a numbered source alias.
 
 RESOLVED 2026-08-06.  `TauCeti.DavisKahan.IsAcute` IS the source definition -- the projection gap is strictly below one -- compiled, guarded by the default build, axiom-clean, and consumed by every acute-case theorem in the tree.  The conditional next action ("add a source alias only if the facade benefits") is decided in the negative: a numbered alias would duplicate a two-token definition that call sites already read literally, and the api-design rubric asks for lemmas over aliases when nothing is gained.
@@ -743,7 +747,39 @@ it is visible from this row.
 A stale docstring at `AngleGeometry.lean:202` promised a converse `projectionGap_lt_one_of_isAcute`
 "below"; no such declaration exists (verified by `#check` and by grep).  The docstring is corrected
 in the same change as this note.
-- **Next action:** Two items.  (1) The converse `printed Definition 3.2 => subspaceGap < 1` under whatever hypothesis makes it true (finite dimension suffices; in general it is false), so the two predicates in this development stop being related in only one direction.  (2) Re-scope Propositions 3.1, 3.4, 3.5 and Corollary 3.2 onto the printed predicate.  That is not a rename: the current proofs invert `|S|` globally, whereas under the printed definition `|S|` is injective with dense range but not invertible, so the polar factor has to be built as a unitary extension of a densely defined isometry.  A numbered alias for the definition is still not wanted; the decision recorded in the notes stands.
+
+**M19, 2026-08-09 (Claude Opus 5).**  The two predicates are now RELATED IN BOTH DIRECTIONS where that is true, and NAMED HONESTLY.
+
+(1) `projectionGap_lt_one_of_isAcute` is proved, in `FiniteDimensional`.  It is the declaration the
+docstring of `isAcute_of_projectionGap_lt_one` promised for months and never delivered; it now
+exists under exactly that name.  The engine is `directedProjectionGap_lt_one_of_transverse`: on the
+unit sphere of `U`, which is compact, `x |-> ||P_V x||` attains a minimum `m`, transversality makes
+`m > 0`, and Pythagoras gives `||P_{Vperp} x|| <= sqrt(1 - m^2) ||x||` with `sqrt(1 - m^2) < 1`.
+`isAcute_iff_projectionGap_lt_one` packages the two directions.
+
+(2) The predicate formerly named `TauCeti.DavisKahan.IsAcute` is renamed
+`TauCeti.DavisKahan.IsUniformlyAcute` (24 files, 192 occurrences).  Two different predicates were
+both called `IsAcute`, and the paper's unqualified name was on the strictly stronger one.  The
+paper's name now denotes only the printed Definition 3.2.
+
+(3) `isAcute_iff_inf_orthogonal_eq_bot` states Definition 3.2 in the paper's own words --
+`U inf Vperp = bot` and `Uperp inf V = bot` -- so the pointwise predicate can be checked against
+the printed sentence.
+
+(4) A PRIOR BRIEF'S CLAIM ABOUT THIS ROW IS FALSE and is recorded so it is not retried.  It is not
+the case that every Section 3 and Section 4 result is stated on the gap predicate.  MEASURED
+2026-08-09 by enumerating the whole `DavisKahan.All` environment and inspecting the type of every
+declaration: 78 declarations are stated on the PRINTED predicate `TauCeti.IsAcute` and 160 on the
+gap predicate.  The split is by namespace, because an unqualified `IsAcute` resolves differently in
+different namespaces: the finite-dimensional tree (`TauCeti.DavisKahanTheory.*`, including
+`directRotation`, `directRotation_sq`, `directRotation_symm` and the whole Section 4 extremal
+package) is on the printed predicate, and `TauCeti.DavisKahan.Experimental.*` /
+`TauCeti.DavisKahanExt.*` are on the gap predicate.  Since the finite-dimensional tree is where the
+printed predicate is used, and the two agree there by (1), the finite-dimensional Section 3/4
+results are at the printed hypothesis exactly.
+
+(5) `one_le_projectionGap_of_forall_exists_unit_lt` isolates exactly what fails in infinite dimension, with no dimension hypothesis: if unit vectors of `U` are almost annihilated by `P_V` without any being annihilated exactly, the gap is forced to `1`.  That is the complement of `directedProjectionGap_lt_one_of_transverse`, where compactness turns the infimum into a positive minimum, and it supplies half of the missing counterexample.
+- **Next action:** One item.  Compile a counterexample showing the finite-dimensionality of `projectionGap_lt_one_of_isAcute` is not removable -- two closed subspaces of an infinite-dimensional Hilbert space with both crossed intersections zero and `||P_U - P_V|| = 1`, e.g. `U` and `V` spanned by orthonormal families at principal angles `theta_n` increasing to `pi/2`.  Until that is compiled the infinite-dimensional failure is asserted in prose only (it is classical, and the docstrings say so rather than naming a declaration).  Re-scoping Propositions 3.1, 3.4, 3.5 and Corollary 3.2 onto the printed predicate remains the separate infinite-dimensional design question recorded on those rows; it is NOT a rename, because under the printed definition `|S|` is injective with dense range but not invertible.
 
 #### Proposition 3.1: Acute direct rotation existence and uniqueness
 
@@ -1005,7 +1041,7 @@ constructs a pair from a prescribed decreasing null sequence.
 - **Verification:** `proved_in_build`
 - **Mathematics:** The full angle commutes with both projections, the quarter-turn and direct rotation; its eigenspaces are maximal reducing constant-angle subspaces in the acute case.
 - **Blocked by:** `real-scalar-infinite-dimensional-scope`
-- **Current Lean references:** `TauCeti.DavisKahan1970.bounded_angle_commute`, `TauCeti.DavisKahan1970.bounded_sinAngleOperatorC_norm`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.IsFixedCosineReducingSubspace`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.fixedCosineSubspace`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.fixedCosineSubspace_isFixedCosineReducing`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.fixedCosineSubspace_maximal`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_5_fixedAngle_maximal`, `TauCeti.DavisKahan.Experimental.halmosCosineSq_commute_projection`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.halmosCosineSq_commute_projection_right`
+- **Current Lean references:** `TauCeti.DavisKahan1970.bounded_angle_commute`, `TauCeti.DavisKahan1970.bounded_sinAngleOperatorC_norm`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.IsFixedCosineReducingSubspace`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.fixedCosineSubspace`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.fixedCosineSubspace_isFixedCosineReducing`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.fixedCosineSubspace_maximal`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_5_fixedAngle_maximal`, `TauCeti.DavisKahan.Experimental.halmosCosineSq_commute_projection`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.halmosCosineSq_commute_projection_right`, `TauCeti.DavisKahanTheory.sq_sinAngleOperator_add_sq_directRotationCosine`, `TauCeti.DavisKahanTheory.projection_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.projection_right_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.directRotation_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.angleOperator_comm_projection`, `TauCeti.DavisKahanTheory.angleOperator_comm_projection_right`, `TauCeti.DavisKahanTheory.angleOperator_comm_directRotation`, `TauCeti.complementaryProjection_eq_id_sub`
 - **Assessment:** Commutation identities are present, but the maximal eigenspace characterization is not represented.
 
 **ROW WAS STALE.  CORRECTED 2026-08-06: the maximal eigenspace characterisation IS represented, and is proved.**  The note above -- "the maximal eigenspace characterization is not represented" -- was written when the Section 3 frontier was unbuilt and was never revisited.  `proposition3_5_fixedAngle_maximal` states both halves: the fixed-cosine eigenspace `ker (cos^2 Theta - c^2)` is itself a fixed-cosine reducing subspace, and every such subspace is contained in it.  `#print axioms` gives exactly [propext, Classical.choice, Quot.sound] on it and on both halves, and since the Frontier promotion the same day it resolves against `DavisKahan.All`, so `lake build` guards it.  The frontier gate had been reporting `s3-prop3-5` as recursively grounded throughout; the census and the manifest disagreed and the manifest was right.
@@ -1029,7 +1065,15 @@ IS proved of the commutations is at the `cos^2 Theta` level, and was not listed:
 is genuinely proved (`fixedCosineSubspace_maximal`).  Absent: the commutations at the `Theta` level
 rather than `cos^2 Theta`, `Theta <-> J` and `Theta <-> U` (there is no `J` operator anywhere in the
 repository -- see `next_action`), and the eigenvector-angle clause.
-- **Next action:** Four of the six printed assertions are outstanding.  (1) Lift `halmosCosineSq_commute_projection` from `cos^2 Theta` to the ambient `Theta` itself -- `paperAngleOperatorC U V = arcsin |P_U - P_V|` exists, so this is a continuous-functional-calculus step, not new analysis.  (2)(3) `Theta <-> J` and `Theta <-> U`.  These need the `J` of the source (`S_0 = J_0 sin Theta_0`, `J` the off-diagonal quarter turn, `U = cos Theta + J sin Theta = exp(J Theta)`, equation (1.18), transcription L1202--1222), which does not exist in the repository in any form; it is the same missing object that blocks Corollary 3.2's printed phrasing.  (4) The eigenvector clause `angle(x, Ux) = theta`; `InnerProductGeometry` is used nowhere in `DavisKahan/` or `ForTauCeti/`, so the angle itself has to be brought in.  The maximal-subspace clause is done and its recorded correction stands -- do not 'restore' the source form of the predicate, which is refuted for c < 1 by an exterior vector.
+
+**M19, 2026-08-09 (Claude Opus 5).**  THE PREVIOUS NOTE'S PARENTHESIS -- "there is no `J` operator anywhere in the repository" -- IS FALSE, and was false when written.  `TauCeti.DavisKahanTheory.angleComplexStructure` (`DavisKahan/FiniteDimensional/DirectRotation.lean`) is the paper's `J`, and `directRotation_eq_cos_add_J_sin` is the paper's `U = cos Theta + J sin Theta`.  Both predate this work; what was missing were the properties.
+
+THREE OF THE FOUR PRINTED COMMUTATIONS ARE NOW PROVED, at the level of `Theta` itself and not `cos^2 Theta`, over any `RCLike` field in finite dimension: `angleOperator_comm_projection` (`Theta` with `P`), `angleOperator_comm_projection_right` (`Theta` with `Q`) and `angleOperator_comm_directRotation` (`Theta` with `U`).  Each is the corresponding `sin Theta` statement pushed through `selfAdjointFunctionalCalculus_comm`, since `angleOperator U V = arcsin |P_U - P_V|`.
+
+The linchpin is `sq_sinAngleOperator_add_sq_directRotationCosine`, the operator Pythagoras identity `sin^2 Theta + cos^2 Theta = 1` in the finite `RCLike` `LinearMap` setting.  It needs no acuteness hypothesis: it reduces to `(P-Q)^2 + PQP + (1-P)(1-Q)(1-P) = 1`, an identity for any two idempotents.  With it, commutation with `cos Theta` transfers to `sin^2 Theta` and then to `sin Theta` by `sqrt_comm`.
+
+STILL ABSENT: `Theta` commutes with `J`, and the eigenvector clause `angle(x, Ux) = theta`.  The first needs a Moore--Penrose commutation lemma (`B A = A B` implies `B A+ = A+ B` for self-adjoint `A`), which the repository does not have; `J` is `(U - cos Theta) . (sin Theta)+`, so everything else is already in place.  The second still needs `InnerProductGeometry`.
+- **Next action:** Two of the six printed assertions are outstanding, down from four.  (1) `Theta <-> J`.  `J` exists (`TauCeti.DavisKahanTheory.angleComplexStructure`) and `Theta` already commutes with `U` and with `cos Theta`, so the only missing brick is a Moore--Penrose commutation lemma -- if `B` commutes with a self-adjoint `A` then `B` commutes with `A+` -- which belongs in `ForTauCeti/Analysis/InnerProductSpace/MoorePenroseInverse.lean`.  (2) The eigenvector clause `angle(x, Ux) = theta`; `InnerProductGeometry` is used nowhere in `DavisKahan/` or `ForTauCeti/`, so the angle itself has to be brought in.  The maximal-subspace clause is done and its recorded correction stands -- do not 'restore' the source form of the predicate, which is refuted for c < 1 by an exterior vector.  The three commutations proved in M19 are finite-dimensional; lifting them to the bounded complex tree (where `paperAngleOperatorC` lives) is the remaining scope work.
 
 #### Corollary 3.2: Reversal symmetry
 
@@ -1038,7 +1082,7 @@ repository -- see `next_action`), and the eigenvector-angle clause.
 - **Verification:** `proved_in_build`
 - **Mathematics:** Swapping P and Q leaves the angle operator unchanged and reverses the quarter-turn operator.
 - **Blocked by:** `real-scalar-infinite-dimensional-scope`
-- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation_reversal`, `TauCeti.DavisKahanTheory.directRotation_symm`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_2_reversal`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_2_reversal_source_form`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_2_sinAngleOperator_symm`
+- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation_reversal`, `TauCeti.DavisKahanTheory.directRotation_symm`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_2_reversal`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_2_reversal_source_form`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_2_sinAngleOperator_symm`, `TauCeti.DavisKahanTheory.angleComplexStructure_symm`, `TauCeti.DavisKahanTheory.angleOperator_comm`, `TauCeti.DavisKahanTheory.sinAngleOperator_comm`, `TauCeti.DavisKahanTheory.directRotationCosine_comm`
 - **Assessment:** Direct-rotation reversal is represented; the exact angle/J statement needs a source wrapper.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. The reversal theorem is compiled, axiom-clean, and resolves against the default build -- the earlier "promote it into DavisKahan/FiniteDimensional so CI guards it" instruction is discharged. The source-facing angle and quarter-turn wrapper is still absent.
@@ -1054,7 +1098,11 @@ DavisKahan/Frontier/Section3.lean.  What was genuinely missing is what that theo
 docstring claimed and did not prove: the *angle* half.  Corollary 3.2 asserts both, so the
 row now carries `corollary3_2_sinAngleOperator_symm` and the combined
 `corollary3_2_reversal`, and the older docstring was corrected to say which half it proves.
-- **Next action:** Nothing outstanding: both halves of Corollary 3.2 are proved and guarded by `lake build`.
+
+**M19, 2026-08-09 (Claude Opus 5).**  THE PRINTED FORM IS NOW PROVED, and the recorded narrowing `J |-> -J` rendered as `U |-> U*` is discharged.  `angleComplexStructure_symm` states exactly the corollary's second clause -- `J(V,U) = -J(U,V)` for the repository's `J`, `TauCeti.DavisKahanTheory.angleComplexStructure` -- and `angleOperator_comm` states the first, `Theta(V,U) = Theta(U,V)`, on the angle operator itself.  `sinAngleOperator_comm` and `directRotationCosine_comm` are the `sin Theta` and `cos Theta` halves of the latter.
+
+The `U |-> U*` form is now the INPUT rather than the conclusion: from `U(V,U) = U(U,V)^{-1}` (`directRotation_symm`) and `2 cos Theta = U + U^{-1}` (`two_smul_abs_canonicalIntertwiner`) one gets `U(V,U) - cos Theta = -(U(U,V) - cos Theta)`, and the Moore--Penrose factor is common to both sides because `Theta` is symmetric.  Scope: finite dimension, any `RCLike` field.  The bounded complex declarations already on this row are unchanged.
+- **Next action:** Nothing outstanding for the printed statement: both clauses of Corollary 3.2 are proved in the paper's own vocabulary (`Theta` unchanged, `J |-> -J`) and guarded by `lake build`.  Remaining scope work is the same as elsewhere in Section 3: the `J` clause is finite-dimensional, and the bounded complex tree has no `J` to state it on.
 
 ### Section 4
 
