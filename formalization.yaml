@@ -1,5 +1,8 @@
 # formalization.yaml (v0.3): repo-root metadata for an AI-authored formalization project.
 # Schema reference: https://github.com/mathlib-initiative/formalization.yaml
+#
+# Keep commit-sensitive status out of this file. Generated/checkable ledgers and
+# repository gates own current counts and completion state.
 
 version: "v0.3"
 
@@ -9,7 +12,9 @@ project:
     - "Jon Crall"
   license: "Apache-2.0"
   repository: "https://github.com/AIQ-Kitware/aiq-dkps-formalization"
-  validation_note: "Commit-specific validation metadata is not duplicated here; see git history and the reported build/comparator checks under status.repository_build."
+  validation_note: >
+    Do not copy commit-specific proof counts or green-build claims into this file.
+    Use the source censuses, comparator configs, and scripts/run_gates.py instead.
 
 sources:
   - title: "Consistent Estimation of Generative Model Representations in the Data Kernel Perspective Space"
@@ -17,319 +22,197 @@ sources:
     id: "Acharyya et al. 2024"
     type: "research paper"
     author_contacted: "yes; ongoing subject-matter discussion"
-    prior_work: "Downstream theorem layer in Acharyya2024/; reusable infrastructure staged in ForMathlib/."
+    prior_work: "Paper-facing theorem layer in Acharyya2024/; reusable mathematics in ForTauCeti/."
   - title: "Concentration Bounds on Response-Based Vector Embeddings of Black-Box Generative Models"
     authors: ["Acharyya", "Agterberg", "Park", "Priebe"]
     id: "Acharyya et al. 2025"
     type: "research paper"
     author_contacted: "yes; ongoing subject-matter discussion"
-    prior_work: "Downstream theorem layer in Acharyya2025/; reusable infrastructure staged in ForMathlib/."
+    prior_work: "Paper-facing theorem layer in Acharyya2025/; reusable mathematics in ForTauCeti/."
   - title: "Statistical Inference on Black-Box Generative Models in the Data Kernel Perspective Space"
     authors: ["Helm", "Acharyya", "Park", "Duderstadt", "Priebe"]
     id: "Helm et al. 2025"
     type: "research paper"
     author_contacted: "yes; ongoing subject-matter discussion"
-    prior_work: "Downstream theorem layer in Helm2025/."
+    prior_work: "Paper-facing theorem layer in Helm2025/."
   - title: "Query-efficient model evaluation using cached responses"
     authors: ["Helm", "Johnson", "Priebe"]
     id: "Helm et al. 2026"
     type: "research paper"
     author_contacted: "yes; ongoing subject-matter discussion"
-    prior_work: "Subject-oriented theorem library in DkpsQuench2026/; its raw-response capstones derive the Quench conclusion from Acharyya2025 concentration, covariance, coverage, and rate interfaces."
+    prior_work: "Subject-oriented theorem library in DkpsQuench2026/."
+  - title: "The rotation of eigenvectors by a perturbation. III"
+    authors: ["Davis", "Kahan"]
+    id: "Davis and Kahan 1970"
+    type: "research paper"
+    prior_work: "Source-facing formalization and maintained census in DavisKahan/Sources/DavisKahan1970/."
+  - title: "A useful variant of the Davis-Kahan theorem for statisticians"
+    authors: ["Yu", "Wang", "Samworth"]
+    id: "Yu, Wang, and Samworth 2015"
+    type: "research paper"
+    prior_work: "Source-facing completion package and maintained census in FinishYuWangSamworth/."
 
 status:
   repository_build:
-    last_user_reported_build: "The source repository was last user-reported green before this challenge expansion. The challenge layer now contains MathlibCandidate (3), MathlibPending (14 comparator configs), and 2 leaderboard-only audits; the newly added Davis--Kahan flagship configs still require local Lean/signature/comparator validation."
-    last_user_reported_challenge_summary: "candidate-01 (Gram) confirmed PASS under the real-landrun comparator (2026-06-14); conformances were corrected to mirror their ForMathlib source's universe/instance export signature. The previously listed configs build green and are dependency-clean. The sharp/full Part III, Davis 1963 rotation, and Yu--Wang--Samworth configs are newly packaged and require local signature pre-flight plus their first external Comparator sweep."
-    challenge_commands:
-      - "lake env lean Challenge/MathlibCandidate/GramRigidity/Conformance.lean"
-      - "lake env lean Challenge/MathlibCandidate/GramRigidity/Leaderboard.lean"
-      - "bash scripts/run_challenge_comparator.sh"
+    validation_commands:
+      - "python3 scripts/check_davis_kahan_1970_source_census.py"
+      - "python3 scripts/check_yu_wang_samworth_source_census.py"
+      - "python3 scripts/run_gates.py --fast"
+      - "lake build"
     comparator_configs:
       - "comparator/candidate-01-gram-rigidity.json"
       - "comparator/candidate-02-courant-fischer-weyl.json"
       - "comparator/candidate-03-davis-kahan.json"
-      - "comparator/pending-davis-kahan-sharp.json"
-      - "comparator/pending-davis-kahan-part-iii.json"
-      - "comparator/pending-davis-1963-rotation.json"
-      - "comparator/pending-yu-wang-samworth.json"
       - "comparator/pending-berge.json"
+      - "comparator/pending-cfc-measurable.json"
+      - "comparator/pending-davis-1963-rotation.json"
+      - "comparator/pending-davis-kahan-projector-difference.json"
+      - "comparator/pending-davis-kahan-sharp.json"
+      - "comparator/pending-davis-kahan-sin-theta.json"
+      - "comparator/pending-davis-kahan-sin-two-theta.json"
+      - "comparator/pending-davis-kahan-sylvester-pi-over-two.json"
+      - "comparator/pending-davis-kahan-tan-theta.json"
+      - "comparator/pending-davis-kahan-tan-two-theta.json"
+      - "comparator/pending-matrix-concentration.json"
+      - "comparator/pending-near-isometry.json"
+      - "comparator/pending-probability-qol.json"
       - "comparator/pending-rank-factorization.json"
       - "comparator/pending-rank-psd-realization.json"
       - "comparator/pending-restrict-cover-measurable.json"
       - "comparator/pending-sample-mean-mse.json"
-      - "comparator/pending-near-isometry.json"
-      - "comparator/pending-cfc-measurable.json"
-      - "comparator/pending-matrix-concentration.json"
-      - "comparator/pending-probability-qol.json"
       - "comparator/pending-tendsto-in-measure.json"
+      - "comparator/pending-yu-wang-samworth.json"
   scope: >
-    The repository fully formalizes four DKPS-family papers (the end states) and
-    stages the reusable, paper-agnostic results it required in ForMathlib for
-    upstreaming. Challenges are split into two families (see Challenge/README.md):
-    MathlibCandidate, a small focused set of drop-ready PRs, and MathlibPending,
-    proven results held back pending further work. Each challenge lists only the
-    leaf (top-level) theorems; #print axioms on a leaf transitively certifies its
-    whole proof tree. The four papers are documented but are not comparator
-    challenges (their statements are inherently in each paper's own vocabulary).
+    ForTauCeti is the reusable mathematics package and Tau Ceti is the current
+    integration target. DavisKahan and the paper libraries provide source-facing
+    theorem surfaces. ForMathlib and the maintained Spectra dependency are retired.
+    Challenge/ retains comparator and regression surfaces; its MathlibCandidate and
+    MathlibPending directory names are historical and do not describe a live Mathlib
+    submission queue.
   main_results:
-    - declaration: "ForMathlib.Matrix.gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq"
-      file: "ForMathlib/Analysis/InnerProductSpace/GramMatrix.lean"
-      sorry_count: 0
-      axioms: ["propext", "Classical.choice", "Quot.sound"]
+    - declaration: "TauCeti.Matrix.gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq"
+      file: "ForTauCeti/Analysis/InnerProductSpace/Gram/Matrix.lean"
       challenge_file: "Challenge/MathlibCandidate/GramRigidity/Conformance.lean"
       solution_file: "Challenge/MathlibCandidate/GramRigidity/Leaderboard.lean"
-      category: "Gram-matrix rigidity"
-      reference: "Horn & Johnson, Matrix Analysis (2nd ed.); Chien & Waldron, arXiv:1312.5393 (2016) -- frame-theoretic form."
       comparator_config: "comparator/candidate-01-gram-rigidity.json"
-    - declaration: "ForMathlib.abs_eigenvalues_sub_le_opNorm"
-      file: "ForMathlib/Analysis/InnerProductSpace/CourantFischer.lean"
-      sorry_count: 0
-      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      category: "Gram-matrix rigidity"
+    - declaration: "TauCeti.abs_eigenvalues_sub_le_opNorm"
+      file: "ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean"
       challenge_file: "Challenge/MathlibCandidate/CourantFischerWeyl/Conformance.lean"
       solution_file: "Challenge/MathlibCandidate/CourantFischerWeyl/Leaderboard.lean"
-      category: "Courant-Fischer min-max + Weyl perturbation"
-      reference: "Horn & Johnson, Matrix Analysis (2nd ed.), Thm 4.2.6 (Courant-Fischer) & 4.3.1 (Weyl); Bhatia, Matrix Analysis, Cor III.2.6 (Weyl)."
       comparator_config: "comparator/candidate-02-courant-fischer-weyl.json"
-    - declaration: "ForMathlib.sum_norm_sub_starProjection_span_sq_le"
+      category: "Courant-Fischer min-max and Weyl perturbation"
+    - declaration: "TauCeti.sum_norm_sub_starProjection_span_sq_le"
       file: "DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean"
-      sorry_count: 0
-      axioms: ["propext", "Classical.choice", "Quot.sound"]
       challenge_file: "Challenge/MathlibCandidate/DavisKahan/Conformance.lean"
       solution_file: "Challenge/MathlibCandidate/DavisKahan/Leaderboard.lean"
-      category: "Davis-Kahan cross-block / sin-Theta"
-      reference: "Davis & Kahan, SIAM J. Numer. Anal. 7 (1970), 1-46 (sin-Theta theorem III); Yu, Wang & Samworth, Biometrika 102 (2015), 315-323 (variant)."
       comparator_config: "comparator/candidate-03-davis-kahan.json"
+      category: "Davis-Kahan cross-block / sin-Theta"
   pending_challenges:
-    note: "Proven (sorry-free, axiom-clean) but held back from the upstream push; see Challenge/README.md for why each is not yet PR-ready."
-    advertising_level_davis_kahan:
-      - declaration: "ForMathlib.DavisKahanTheory.sinAngleOperator_perturbation_le"
-        category: "sharp full-space all-UI sin-Theta"
-        comparator_config: "comparator/pending-davis-kahan-sharp.json"
-      - declarations:
-          - "ForMathlib.DavisKahanTheory.partIII_sinTheta_uiNorm"
-          - "ForMathlib.DavisKahanTheory.partIII_sinTwoTheta_uiNorm"
-          - "ForMathlib.DavisKahanTheory.partIII_tanTheta_vector"
-          - "ForMathlib.DavisKahanTheory.partIII_tanTwoTheta_opNorm"
-        category: "classical Davis--Kahan Part III quartet"
-        comparator_config: "comparator/pending-davis-kahan-part-iii.json"
-      - declaration: "ForMathlib.rotation_add_displacement_le_hilbertSchmidt"
-        category: "Davis 1963 sharpened total rotation"
-        comparator_config: "comparator/pending-davis-1963-rotation.json"
-      - declaration: "ForMathlib.sqrt_sum_cross_le_of_population_gap"
-        category: "Yu--Wang--Samworth population-gap sin-Theta"
-        comparator_config: "comparator/pending-yu-wang-samworth.json"
+    note: >
+      Historical label retained by directory/config names. These are comparator and
+      regression surfaces, not an active Mathlib promotion queue.
     configs:
-      - "comparator/pending-davis-kahan-sharp.json"
-      - "comparator/pending-davis-kahan-part-iii.json"
-      - "comparator/pending-davis-1963-rotation.json"
-      - "comparator/pending-yu-wang-samworth.json"
       - "comparator/pending-berge.json"
+      - "comparator/pending-cfc-measurable.json"
+      - "comparator/pending-davis-1963-rotation.json"
+      - "comparator/pending-davis-kahan-projector-difference.json"
+      - "comparator/pending-davis-kahan-sharp.json"
+      - "comparator/pending-davis-kahan-sin-theta.json"
+      - "comparator/pending-davis-kahan-sin-two-theta.json"
+      - "comparator/pending-davis-kahan-sylvester-pi-over-two.json"
+      - "comparator/pending-davis-kahan-tan-theta.json"
+      - "comparator/pending-davis-kahan-tan-two-theta.json"
+      - "comparator/pending-matrix-concentration.json"
+      - "comparator/pending-near-isometry.json"
+      - "comparator/pending-probability-qol.json"
       - "comparator/pending-rank-factorization.json"
       - "comparator/pending-rank-psd-realization.json"
       - "comparator/pending-restrict-cover-measurable.json"
       - "comparator/pending-sample-mean-mse.json"
-      - "comparator/pending-near-isometry.json"
-      - "comparator/pending-cfc-measurable.json"
-      - "comparator/pending-matrix-concentration.json"
-      - "comparator/pending-probability-qol.json"
       - "comparator/pending-tendsto-in-measure.json"
-    leaderboard_only:
-      - declaration: "ForMathlib.Matrix.measurable_specTransform"
-        solution_file: "Challenge/MathlibPending/SpectralFunctionMeasurable/Leaderboard.lean"
-        reason: "Matrix-valued measurability statement is not cleanly Mathlib-only expressible; axiom-audit leaderboard only, no comparator conformance."
-      - declarations:
-          - "ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le"
-          - "ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.apply_le_of_kyFanSum_le"
-        solution_file: "Challenge/MathlibPending/RectangularFanDominance/Leaderboard.lean"
-        reason: "Flagship rectangular majorization results; vocabulary and implementation currently cohabit one staging module, so a separate conformance surface would not yet be independent."
-  dkps_papers:
-    note: "Fully formalized end-state papers; documented here and in each library's README, NOT comparator challenges. All capstones verified #print axioms = {propext, Classical.choice, Quot.sound} (2026-06-14)."
-    papers:
-      - id: "Acharyya2024"
-        capstones:
-          - "Acharyya2024.Consistency.fixed_models_fixed_queries_consistency_of_uniqueProfile"
-          - "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile"
-      - id: "Acharyya2025"
-        capstones:
-          - "Acharyya2025.RateChain.tendsto_endToEndRate_zero"
-      - id: "DkpsQuench2026"
-        capstones:
-          - "DkpsQuench2026.QueryEfficiency.finiteAllQueries"
-          - "DkpsQuench2026.QueryEfficiency.infiniteAllQueries"
-          - "DkpsQuench2026.Paper.OLS.highProb_queryEfficient_crossBudget_of_affineRiskGap"
-          - "DkpsQuench2026.Paper.OLS.highProb_queryEfficient_crossBudget_of_affineRealizable"
-          - "DkpsQuench2026.Paper.OLS.lipschitz_not_sufficient_for_affineRealizability"
-      - id: "Helm2025"
-        capstones:
-          - "Helm2025.DKPS.Theorem1"
-          - "Helm2025.DKPS.Theorem2_bayes"
+      - "comparator/pending-yu-wang-samworth.json"
 
 fidelity:
   summary: >
-    The challenge files intentionally isolate reusable, paper-agnostic theorems
-    from the downstream DKPS formalization. They are not intended to state the
-    DKPS paper theorems themselves. The theorem statements are high-level
-    Mathlib candidates extracted from ForMathlib staging files.
+    Comparator challenges isolate reusable theorem statements and dependency checks;
+    they do not certify fidelity of paper-specific definitions or source transcription.
+    Paper fidelity is tracked by source-facing modules, correspondence records, and
+    maintained censuses.
   known_limitations:
-    - "The challenge package has not yet been reviewed for Mathlib style, naming, minimal imports, or ideal statement shape."
-    - "The Lean code was AI-authored; the human coordinator is still learning Lean and requests expert review before PR submission."
-    - "Assistant-generated overlays are not Lean-built in the assistant sandbox because Lean/Lake are not installed there; rely on local lake/comparator runs for validation."
+    - "Comparator success does not substitute for human review of paper-specific definitions and theorem transcription."
+    - "Generated/checkable status artifacts should be preferred over prose snapshots when they disagree."
 
 review:
   status: "self-assessed"
   reviewers:
     - "Jon Crall"
   notes: >
-    Self-assessed metadata and challenge package. The previously existing
-    MathlibCandidate and MathlibPending configs were reported build-green with
-    dependency-clean leaves. candidate-01 (Gram rigidity) is confirmed passing
-    under the real-landrun comparator (2026-06-14). The newly added Davis--Kahan
-    flagship configs still require local Lean signature pre-flight and their first
-    external Comparator sweep. The candidates have not yet undergone independent
-    Mathlib reviewer approval or source-author verification.
+    The repository contains comparator, axiom, census, grounding, dependency-layer,
+    and other mechanical checks. Independent mathematical and external-library review
+    remain distinct from those checks. Current integration policy targets Tau Ceti.
 
 alignment:
   statements:
     - informal: "Two vector families with equal pairwise inner products have isometrically equivalent generated spans."
-      lean: "ForMathlib.linearIsometryEquivSpanOfInnerEq"
-      status: "proved by the downstream ForMathlib staging library"
+      lean: "TauCeti.linearIsometryEquivSpanOfInnerEq"
+      status: "proved in ForTauCeti"
     - informal: "Finite configurations with equal pairwise inner products are equivalent up to a linear isometry."
-      lean: "ForMathlib.exists_linearIsometryEquiv_map_eq_of_inner_eq"
-      status: "proved by the downstream ForMathlib staging library"
+      lean: "TauCeti.exists_linearIsometryEquiv_map_eq_of_inner_eq"
+      status: "proved in ForTauCeti"
     - informal: "Equal Gram matrices characterize equality up to linear isometry."
-      lean: "ForMathlib.Matrix.gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq"
-      status: "proved by the downstream ForMathlib staging library"
+      lean: "TauCeti.Matrix.gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq"
+      status: "proved in ForTauCeti"
     - informal: "A PSD matrix of rank at most d is a Gram matrix of d-dimensional vectors."
-      lean: "ForMathlib.Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self"
-      status: "proved by the downstream ForMathlib staging library"
-    - informal: "Weyl's eigenvalue perturbation inequality for symmetric finite-dimensional operators."
-      lean: "ForMathlib.abs_eigenvalues_sub_le"
-      status: "proved by the downstream ForMathlib staging library"
-    - informal: "A fitted OLS predictor is cross-budget query-efficient when it asymptotically reaches an affine witness whose population MSE is strictly below the selected sample-score baseline."
-      lean: "DkpsQuench2026.Paper.OLS.highProb_queryEfficient_crossBudget_of_affineRiskGap"
-      status: "theory--practice bridge; explicit extra assumptions beyond the nearest-neighbor theorem"
-    - informal: "Lipschitz score regularity does not by itself imply affine realizability in perspective coordinates."
-      lean: "DkpsQuench2026.Paper.OLS.lipschitz_not_sufficient_for_affineRealizability"
-      status: "proved finite counterexample delimiting the OLS extension"
+      lean: "TauCeti.Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self"
+      status: "proved in ForTauCeti"
+    - informal: "Weyl eigenvalue perturbation for finite-dimensional self-adjoint operators."
+      lean: "TauCeti.abs_eigenvalues_sub_le_opNorm"
+      status: "proved in ForTauCeti"
+    - informal: "Source-facing Davis-Kahan Part III sine-theta theorem for unitarily invariant norms."
+      lean: "TauCeti.DavisKahanTheory.partIII_sinTheta_uiNorm"
+      status: "production source surface"
+    - informal: "Source-facing sharp operator-norm tan-two-theta theorem."
+      lean: "TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm"
+      status: "production source surface"
+
+challenge_packages:
+  note: >
+    Folder names preserve the former Mathlib-readiness taxonomy. Treat the package as
+    comparator/regression infrastructure under the current Tau Ceti integration policy.
+  candidate_configs:
+    - "comparator/candidate-01-gram-rigidity.json"
+    - "comparator/candidate-02-courant-fischer-weyl.json"
+    - "comparator/candidate-03-davis-kahan.json"
+  pending_configs:
+    - "comparator/pending-berge.json"
+    - "comparator/pending-cfc-measurable.json"
+    - "comparator/pending-davis-1963-rotation.json"
+    - "comparator/pending-davis-kahan-projector-difference.json"
+    - "comparator/pending-davis-kahan-sharp.json"
+    - "comparator/pending-davis-kahan-sin-theta.json"
+    - "comparator/pending-davis-kahan-sin-two-theta.json"
+    - "comparator/pending-davis-kahan-sylvester-pi-over-two.json"
+    - "comparator/pending-davis-kahan-tan-theta.json"
+    - "comparator/pending-davis-kahan-tan-two-theta.json"
+    - "comparator/pending-matrix-concentration.json"
+    - "comparator/pending-near-isometry.json"
+    - "comparator/pending-probability-qol.json"
+    - "comparator/pending-rank-factorization.json"
+    - "comparator/pending-rank-psd-realization.json"
+    - "comparator/pending-restrict-cover-measurable.json"
+    - "comparator/pending-sample-mean-mse.json"
+    - "comparator/pending-tendsto-in-measure.json"
+    - "comparator/pending-yu-wang-samworth.json"
 
 automation:
   methods:
     - method: "agent"
-      description: "AI-authored Lean formalization with human coordination"
-      models:
-        - "GPT-5.2 / ChatGPT 5.2 (reported by human coordinator; GPT commits are often not marked in git metadata)"
-        - "Harmonic Aristotle (repo comments identify Aristotle-generated Helm scaffolding)"
-        - "Codex 5.5 High / GPT-5.5 family labels in repository comments"
-        - "GPT-5.5 Thinking (post-proof critic for Mathlib PR preparation and presentation; not claimed as primary proof author)"
-        - "Claude Opus 4.8 (repo comments and git history mark staging/plumbing/generalization work; Opus 4.7/5.7 mentions were typos)"
-        - "Claude Fable 5 (repo comments identify many difficult Acharyya and ForMathlib proofs)"
-      framework: >
-        Multiple interactive and agentic LLM sessions coordinated by Jon Crall,
-        with repeated local lake build checks, git-history inspection, and
-        progressive removal of downstream theorem assumptions.
+      description: "AI-authored Lean formalization with human coordination and review"
       human_role: >
-        The human coordinator is an experienced software engineer and computer
-        vision researcher who directed the project, ran builds, inspected
-        theorem interfaces, coordinated with subject-matter experts, and is
-        learning Lean. The human coordinator does not claim to have personally
-        authored the Lean proofs.
-      review_status: >
-        The code builds in the source repository per user-observed reports and
-        repository history, but the proposed Mathlib candidates have not yet
-        undergone independent mathematical review, Mathlib-style review, or PR
-        minimization.
-      prompting_notes: >
-        Early GPT-5.2, Aristotle, GPT-5.5, and Opus 4.8 sessions established
-        much of the downstream DKPS theorem scaffold and reductions, often with
-        heavy assumptions. Claude Fable 5 removed several difficult assumptions
-        by proving formalization-resistant spectral, MDS, measurability, and
-        alignment infrastructure. Later Opus 4.8 sessions performed additional
-        plumbing, staging, and moderate generalization into the ForMathlib
-        library. This summary combines repository comments/history with
-        human-supplied provenance and should be refined as session logs are
-        audited.
-      review_and_presentation_assistance: >
-        GPT-5.5 Thinking was used after proof-generation work as a critic and
-        planning assistant for Mathlib PR preparation and presentation. This
-        included theorem-surface triage, readiness audits, comparator/challenge
-        packaging feedback, formalization.yaml refinement, and Zulip/PR-message
-        drafting or editing. This role is distinct from primary Lean proof
-        authorship; suggestions from this review pass are intended to be applied
-        only through human review plus local Lean, lint, build, and comparator
-        validation.
+        The human coordinator directs scope, runs builds and audits, inspects theorem
+        interfaces, coordinates subject-matter review, and decides repository policy.
       soundness_gate: >
-        Claimed theorem closes are trusted only insofar as they are accepted by
-        Lean's kernel and use only allowed axioms. The challenge package exposes
-        the MathlibCandidate (focused upstream push) and MathlibPending (held-back)
-        leaf theorems for comparator-style validation; see Challenge/README.md.
-      cost:
-        wall_time: "multi-session effort from early 2026 through 2026-06-14"
-        spend_usd: "not fully reconstructed"
-        hardware: "local development machine plus hosted model access"
-        measured_lower_bound:
-          note: >
-            LOWER BOUND ONLY. Figures below are measured verbatim from retained
-            agent session transcripts by the llm_resource_tally tool (see
-            .llm_resource_tally/; rolled up in lifetime-totals.json,
-            schema llm-resource-tally/v3, generated 2026-07-04). They
-            under-count true project cost for several reasons, so every number
-            is a strict lower bound: (1) only Claude sessions with transcripts
-            still within the agent's retention window (Claude Code defaults to
-            ~30 days) were backfilled; earlier or expired sessions are absent;
-            (2) GPT-5.2/5.5, Codex, and Harmonic Aristotle work listed under
-            automation.methods.models has no token/time capture here at all;
-            (3) non-committing planning/chat/review turns are only included
-            where a reconcile sweep captured them. Tokens are exact for the
-            captured sessions; wall time is cumulative model-session active
-            seconds (concurrent sessions are summed, so it bounds compute-time,
-            not calendar elapsed time).
-          basis: "measured from retained Claude session transcripts only"
-          captured_turns: 3453
-          cumulative_session_wall_time_seconds: 831381
-          cumulative_session_wall_time_hours: 231
-          per_model:
-            - model: "claude-opus-4-8"
-              output_tokens: 5523524
-              billable_input_tokens: 1356014278
-              total_tokens: 1361537802
-            - model: "claude-fable-5"
-              output_tokens: 955200
-              billable_input_tokens: 175838936
-              total_tokens: 176794136
-          totals:
-            output_tokens: 6478724
-            billable_input_tokens: 1531853214
-            total_tokens: 1538331938
-          uncaptured_models:
-            - "GPT-5.2 / ChatGPT 5.2"
-            - "GPT-5.5 family (Codex 5.5 High, GPT-5.5 Thinking)"
-            - "Harmonic Aristotle"
-
-
-challenge_packages:
-  candidate_configs:
-    - comparator/candidate-01-gram-rigidity.json
-    - comparator/candidate-02-courant-fischer-weyl.json
-    - comparator/candidate-03-davis-kahan.json
-  pending_configs:
-    - comparator/pending-davis-kahan-sharp.json
-    - comparator/pending-davis-kahan-part-iii.json
-    - comparator/pending-davis-1963-rotation.json
-    - comparator/pending-yu-wang-samworth.json
-    - comparator/pending-berge.json
-    - comparator/pending-rank-factorization.json
-    - comparator/pending-rank-psd-realization.json
-    - comparator/pending-restrict-cover-measurable.json
-    - comparator/pending-sample-mean-mse.json
-    - comparator/pending-near-isometry.json
-    - comparator/pending-cfc-measurable.json
-    - comparator/pending-matrix-concentration.json
-    - comparator/pending-probability-qol.json
-    - comparator/pending-tendsto-in-measure.json
-  note: >-
-    One comparator config per planned PR. MathlibCandidate is the focused upstream
-    push (Gram rigidity, Courant-Fischer/Weyl, Davis-Kahan); MathlibPending holds
-    proven results that need further work before upstreaming. Each lists only leaf
-    theorems. See Challenge/README.md for the full manifest and the four
-    documented (non-comparator) DKPS papers.
+        The Lean kernel is the proof checker. Repository gates additionally audit
+        selected dependency, axiom, census, grounding, and comparator properties.
+        Those mechanical checks do not replace mathematical or source-fidelity review.

@@ -29,7 +29,7 @@ report "proved in the default build" rather than "proved".
 | Library | Why it is not guarded |
 | --- | --- |
 | `DavisKahan.Experimental` | The working frontier. Carries `sorry`s by design, and the material graduates into `DavisKahan` or `ForTauCeti` when finished. |
-| `FinishTanTwoTheta` | The tan-2-theta completion lane; three `sorry`s remain. |
+| `FinishTanTwoTheta` | Compatibility/regression surface for the completed bounded tan-2-theta result. The production theorem now lives under `DavisKahan`; the separate unbounded research target remains outside the aggregate. |
 | `Challenge` | Comparator challenges, which are posed problems rather than results. |
 
 The libraries formalize more than paper-facing wrappers. They include supporting
@@ -69,8 +69,8 @@ automatically is what previously produced status that looked healthy and was not
 ├── DavisKahan.lean          # root module for the paper-facing Davis--Kahan library
 ├── DavisKahan/              # Sources/ (source-faithful 1970), FiniteDimensional/, SinTheta/,
 │                            #   Sylvester/, SpectralTheory/, Experimental/ (the frontier)
-├── FinishYuWangSamworth/    # Yu--Wang--Samworth completion lane (sorry-free)
-├── FinishTanTwoTheta/       # tan-2-theta completion lane (3 `sorry`s, not in the default build)
+├── FinishYuWangSamworth/    # Yu--Wang--Samworth completion package (sorry-free)
+├── FinishTanTwoTheta/       # compatibility/regression surface; bounded result promoted to DavisKahan
 ├── Acharyya2024{.lean,/}    # raw-stress MDS, probability, second moments, consistency
 ├── Acharyya2025{.lean,/}    # CMDS, Weyl/Davis--Kahan, Gram rigidity, finite-sample rates
 ├── DkpsQuench2026{.lean,/}  # geometry, response, spectral, rate, query-efficiency modules
@@ -83,7 +83,7 @@ automatically is what previously produced status that looked healthy and was not
 ├── submodules/              # read-only mirrors of TauCetiRoadmap and TauCetiReview
 ├── retired/                 # provenance for the closed Spectra collaboration
 ├── scripts/                 # the census tools and the build gates (`scripts/run_gates.py`)
-├── lakefile.toml            # Lake workspace: 8 default targets, 4 deliberately outside
+├── lakefile.toml            # Lake workspace: default targets and explicit opt-in libraries
 ├── lake-manifest.json       # pinned dependency manifest
 └── lean-toolchain           # Lean toolchain pin
 ```
@@ -132,9 +132,9 @@ lake exe cache get
 lake build
 ```
 
-`lake build` builds every default target. The four libraries deliberately left
-outside it are built by name, and a change to any of them is invisible to a plain
-`lake build` — which is how they rot:
+`lake build` builds every default target. `FinishTanTwoTheta` and `Challenge` are
+explicit opt-in libraries, and the experimental Davis--Kahan frontier is also
+checked explicitly when it is touched:
 
 ```bash
 lake build FinishTanTwoTheta Challenge DavisKahan.Experimental
@@ -168,11 +168,12 @@ roadmaps and mechanical ports are generated **from** it. See
 Canonical spectral-subspace perturbation theory. The project target is the full Hilbert-space
 scope of Davis--Kahan (1970), including the bounded main body, arbitrary
 unitary-invariant norm scope, and unbounded self-adjoint passages. `import
-DavisKahan` currently exposes supported bounded-operator results, the strong
-finite-dimensional specialization, and a finite Part III facade; this import
-must not be interpreted as a full-paper completion claim. Other source
-surfaces, specialized endpoints, alternative proofs, and mirrored experiments
-require explicit imports; `DavisKahan.All` collects all proof-finished branches.
+DavisKahan` exposes the supported bounded-operator and finite-dimensional
+theory together with the production source aggregate in `DavisKahan.Sources.All`.
+That stable import is broader than the old finite Part III facade, but it must
+still not be interpreted as a blanket full-paper completion claim. Specialized
+endpoints, alternative proofs, and experiments require explicit imports;
+`DavisKahan.All` collects all proof-finished branches.
 General-purpose linear-algebra infrastructure lives in `ForTauCeti`. See
 `DavisKahan/README.md` and
 `docs/planning/davis-kahan-full-paper-goal.md`.

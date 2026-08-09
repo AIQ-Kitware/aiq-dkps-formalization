@@ -112,8 +112,8 @@ statements that were false as written in the original scaffold have been
 repaired with honest hypotheses (`hsample`/`hlimit`/`huniq`) before being
 proved. The diagonal argument the paper uses for Theorems 4/5 is unnecessary
 here because the repaired layer-1 stability converges along the full sequence.
-See [`../planning/acharyya-plan.md`](../planning/acharyya-plan.md) for the
-work-package history and `../planning/acharyya-graveyard.md` for dead ends.
+See [`../docs/planning/acharyya-plan.md`](../docs/planning/acharyya-plan.md) for the
+work-package history and `../docs/planning/acharyya-graveyard.md` for dead ends.
 
 *Provenance:* the original scaffold session's model label is recorded as
 `Codex 5.5 High`; the proofs were formalized by Claude Fable 5

@@ -1,24 +1,21 @@
-# DKPS formalization — challenge manifest
+# DKPS formalization - challenge manifest
 
-This repository fully formalizes four DKPS-family papers (the **end states**) and,
-in the course of proving them, produced a number of reusable, Mathlib-quality
-results (the **hard upstream proofs**). The challenges are organized into three
-families that separate *role* and *upstream readiness*:
+`Challenge/` is a comparator and regression surface for reusable results that
+were isolated during the formalization. The directory names `MathlibCandidate`
+and `MathlibPending` are historical: the direct Mathlib submission track is
+closed, and reusable mathematics is now packaged in `ForTauCeti` for Tau Ceti.
+The challenge files remain useful because they freeze theorem statements,
+exercise dependency boundaries, and support comparator/axiom checks.
 
 ```
 Challenge/
-  MathlibCandidate/  — drop-ready upstream PRs, one folder per PR (leaf theorems only)
-  MathlibPending/     — proven, but not yet PR-shaped (needs generality / destination / sharpening)
+  MathlibCandidate/  - historical candidate statement/conformance surfaces
+  MathlibPending/    - additional statement/conformance and leaderboard surfaces
 ```
 
-The four DKPS papers — the repo's actual **end states** — are documented in §"DKPS
-papers" below and in each library's author-facing `README.md`, but they are
-deliberately **not** comparator challenges: their statements are inherently in each
-paper's own vocabulary (`bayesRisk`, `ConfigError`, `MDS`, …), and the comparator
-can only certify a proof is axiom-clean — it cannot certify those definitions
-faithfully model the paper. That faithfulness is a human reading task, so a
-comparator artifact there would add no trust. The comparators stay purely
-Mathlib-candidate-focused.
+The DKPS paper libraries are not comparator challenges. Their paper-specific
+vocabulary and source fidelity must be reviewed through their source maps,
+censuses, and ordinary Lean builds rather than inferred from comparator success.
 
 Principles:
 
@@ -35,35 +32,29 @@ Principles:
   reviewer asked for.
 - **Axiom gate.** Every listed theorem is verified to depend only on
   `propext, Classical.choice, Quot.sound` — no `sorryAx`, no custom axioms.
-- **No false dependency arrows.** The Mathlib contributions are *independent*,
-  reusable results. They were *motivated* by the DKPS work but are not owned by any
+- **No false dependency arrows.** The reusable contributions are *independent*
+  results. They were *motivated* by the DKPS work but are not owned by any
   paper, so this manifest does not link candidates to papers as dependencies.
 
-Gap claims below were checked against a local Mathlib checkout (date 2026-06-14).
+Any Mathlib gap/readiness claims below are historical observations from the 2026-06-14 audit, not a current submission queue.
 
 ---
 
-## Family 1 — `MathlibCandidate/` (the focused upstream push)
+## Family 1 - `MathlibCandidate/` (historical candidate surfaces)
 
-**Strategy: a small, strong opening hand.** Three canonical results, each a verified
-gap in Mathlib, are enough to establish credibility and earn maintainer engagement
-for the rest. Keeping this set minimal is deliberate — fewer, higher-value PRs for
-reviewers to look at first.
+These three theorem surfaces were the small opening set used by the historical Mathlib-readiness audit. Keep them for comparator/regression value; current reusable-library work targets Tau Ceti.
 
 | # | Challenge | Leaf theorem(s) | Destination | Why it clears the bar |
 |---|---|---|---|---|
-| 01 | GramRigidity | `Matrix.gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq` | `Analysis/InnerProductSpace/GramMatrix.lean` | **in review**; canonical (Gram rigidity) |
+| 01 | GramRigidity | `Matrix.gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq` | `Analysis/InnerProductSpace/GramMatrix.lean` | canonical Gram-rigidity surface |
 | 02 | CourantFischerWeyl | `abs_eigenvalues_sub_le_opNorm` (k-th eigenvalue min–max + Weyl perturbation) | new `Analysis/InnerProductSpace/CourantFischer.lean` | Mathlib has only Rayleigh + the extremal eigenvalue; **Weyl & k-th min–max absent**. Canonical |
 | 03 | DavisKahan | `sum_norm_sub_starProjection_span_sq_le`, `sum_cross_norm_inner_eigenvectorBasis_sq_le_of_rank_floor` | new `Analysis/InnerProductSpace/DavisKahan.lean` | sin-Θ theorem **absent**. Canonical |
 
 ---
 
-## Family 2 — `MathlibPending/` (proven, but held back)
+## Family 2 - `MathlibPending/` (historical pending surfaces)
 
-All sorry-free and axiom-clean, but **not** part of the opening push — each either
-needs work to clear the maintainer bar, or is being deliberately held until the
-headline three land and reviewers can help triage. Each may graduate to a Candidate
-later.
+These surfaces record results that were not in the historical opening set. Their old `pending` label is provenance only; it does not describe an active Mathlib promotion workflow.
 
 ### Advertising-level Davis--Kahan results
 
@@ -87,19 +78,17 @@ transport lemmas are deliberately excluded.
 
 `RectangularFanDominance/Leaderboard.lean` separately audits the rectangular
 Ky Fan/orbit-majorization machinery. It is advertising-level mathematics, but
-currently leaderboard-only because its vocabulary and implementation still
-cohabit one large staging module; a clean conformance surface should be created
-only when that code is split for an upstream PR.
+leaderboard-only because its vocabulary and implementation still cohabit one
+large staging module. It is retained as a regression surface rather than as an
+active promotion task.
 
 `ApproximationNumbers/Leaderboard.lean` audits the infinite-dimensional
 approximation-number localization, strong-cutoff convergence, and finite Ky Fan
-triangle endpoints over both real and complex Hilbert spaces. It is currently
-leaderboard-only because the underlying approximation-number vocabulary is
-project-staged rather than available in Mathlib; a conformance surface should be
-added after the foundational definitions are split into an upstream-shaped file.
+triangle endpoints over both real and complex Hilbert spaces. It is leaderboard-only because the underlying approximation-number vocabulary
+remains project-staged. It is retained as a regression surface rather than as
+an active promotion task.
 
-The legacy `DavisKahanPartIII` aggregate was **removed on 2026-07-30** (lane
-CH-DEDUP): it pinned exactly the four theorems the four dedicated Davis--Kahan
+The legacy `DavisKahanPartIII` aggregate was **removed on 2026-07-30**: it pinned exactly the four theorems the four dedicated Davis--Kahan
 challenges pin and nothing else, so five directories and five comparator
 configurations were maintained for four theorems, and the comparator ran each of
 those proofs twice.  The focused configurations above are now the only

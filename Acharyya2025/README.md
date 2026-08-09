@@ -137,7 +137,7 @@ nearest-neighbor consumers by proving pairwise-distance control directly and
 packages the extra rate obligations that appear when the matrix dimension grows.
 Four legacy scaffold statements that were false as written were retired (kept
 as prose records pointing at their proved replacements; originals in git history). See
-[`../planning/acharyya-plan.md`](../planning/acharyya-plan.md) for the
+[`../docs/planning/acharyya-plan.md`](../docs/planning/acharyya-plan.md) for the
 work-package history.
 
 *Provenance:* the original scaffold session's model label is recorded as

@@ -1,5 +1,10 @@
 # PR-readiness decisions awaiting sign-off (R6)
 
+> **Historical decision record.** The sign-off queue described below is no longer an
+> active workflow. The direct Mathlib track and lane system were retired; old
+> `ForMathlib` paths are retained here only as provenance. See `AGENTS.md` for current
+> operating policy.
+
 These are the decisions that block "mechanically droppable into a Mathlib PR" but
 are NOT auto-resolvable by Opus — they are naming/shape/destination choices a
 human (or Zulip) should bless. Each has a recommendation; once chosen, applying

@@ -40,3 +40,6 @@ dev/reference-repos/
 # already covers the scans, but the `.tex` transcriptions need their own rule.
 # The census records them as `private_comparison_source`.
 non-distributable/
+git-of-theseus/
+gitstats-report/
+
