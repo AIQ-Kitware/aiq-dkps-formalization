@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.FormMethod.BeamDoubleTangent
+import DavisKahan.SpectralTheory.FormMethod.BeamEigenbasis
 import DavisKahan.SpectralTheory.FormMethod.BeamFormSpace
 import DavisKahan.SpectralTheory.FormMethod.BeamSection9
 import DavisKahan.SpectralTheory.FormMethod.BeamSpectrum
