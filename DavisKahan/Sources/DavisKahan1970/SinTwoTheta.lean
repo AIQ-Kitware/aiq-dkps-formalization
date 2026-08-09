@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.BoundedOperator.Reflection
 import DavisKahan.DoubleAngle.UnboundedIdeal
+import DavisKahan.DoubleAngle.RealAngleIdentification
 import DavisKahan.DoubleAngle.RealUnboundedIdeal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
@@ -104,6 +105,11 @@ alias sinTwoThetaBlock :=
 /-- The canonical block has operator norm exactly `‖sin 2Θ‖`. -/
 alias norm_sinTwoThetaBlock :=
   DavisKahan.Experimental.norm_sinTwoThetaIdealBlock
+
+/-- Equations (7.4)--(7.5) over a **real** Hilbert space: the canonical block
+has operator norm exactly `‖sin 2Θ‖` of the real pair. -/
+alias norm_sinTwoThetaBlock_real :=
+  DavisKahan.Experimental.norm_sinTwoThetaIdealBlock_real
 
 /-! ## Unbounded forms
 
@@ -399,6 +405,23 @@ theorem sinTwoTheta_addBounded_paperUINorm_real
       rw [KyFanDominantIdealFamily.kyFan_gauge,
         KyFanDominantIdealFamily.kyFan_gauge] at h
       linarith [h.2]
+
+/-! ### The real directed forms at the operator norm, naming the real angle
+
+The two theorems above conclude about the canonical reflected overlap block.
+Reading the real Ky-Fan-dominant statements at the first Ky Fan family and
+renaming the block through `norm_sinTwoThetaBlock_real` gives the printed
+operator-norm conclusions with `sin 2Θ` itself, over a real Hilbert space. -/
+
+/-- **Davis--Kahan 1970, `sin 2Θ` theorem over a REAL Hilbert space, unbounded
+bounded-perturbation form at the operator norm**: `δ ‖sin 2Θ‖ ≤ 2‖E‖`. -/
+alias unbounded_sinTwoTheta_opNorm_real :=
+  DavisKahan.Experimental.sinTwoTheta_addBounded_opNorm_real
+
+/-- **Davis--Kahan 1970, `sin 2Θ` theorem over a REAL Hilbert space, unbounded
+reflection-residual form at the operator norm**: `δ ‖sin 2Θ‖ ≤ ‖R‖`. -/
+alias unbounded_sinTwoTheta_reflectionResidual_opNorm_real :=
+  DavisKahan.Experimental.sinTwoTheta_reflectionResidual_opNorm_real
 
 end DavisKahan1970
 end TauCeti
