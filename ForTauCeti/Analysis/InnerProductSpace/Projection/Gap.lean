@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 /-!
 # Gap geometry for orthogonally complemented subspaces
@@ -154,8 +155,12 @@ theorem norm_add_eq_max_of_block {P A B : E →L[𝕜] E}
         rw [mul_pow, ← hpyth x]; ring
       rw [hnormsq, e]
       gcongr
-      · nlinarith [hAxle, norm_nonneg (A x), norm_nonneg (P x), hM]
-      · nlinarith [hBxle, norm_nonneg (B x), norm_nonneg ((1 - P) x), hM]
+      · simpa only [mul_pow] using
+          (sq_le_sq₀ (norm_nonneg (A x))
+            (mul_nonneg hM (norm_nonneg (P x)))).2 hAxle
+      · simpa only [mul_pow] using
+          (sq_le_sq₀ (norm_nonneg (B x))
+            (mul_nonneg hM (norm_nonneg ((1 - P) x)))).2 hBxle
     have hnn : (0:ℝ) ≤ max ‖A‖ ‖B‖ * ‖x‖ := mul_nonneg hM (norm_nonneg x)
     calc ‖(A + B) x‖ = Real.sqrt (‖(A + B) x‖ ^ 2) := (Real.sqrt_sq (norm_nonneg _)).symm
       _ ≤ Real.sqrt ((max ‖A‖ ‖B‖ * ‖x‖) ^ 2) := Real.sqrt_le_sqrt hkey
@@ -250,9 +255,8 @@ theorem norm_starProjection_sub_eq_max (U V : Submodule 𝕜 E)
     · rw [max_eq_right h, max_eq_right (by gcongr)]
     · rw [max_eq_left h, max_eq_left (by gcongr)]
   have hfin : ‖(P - Q : E →L[𝕜] E)‖ = max ‖X‖ ‖Y‖ := by
-    have h2 : (0:ℝ) ≤ max ‖X‖ ‖Y‖ := le_max_of_le_left (norm_nonneg _)
-    nlinarith [hsq, norm_nonneg (P - Q : E →L[𝕜] E), h2,
-      sq_nonneg (‖(P - Q : E →L[𝕜] E)‖ - max ‖X‖ ‖Y‖)]
+    have h2 : (0 : ℝ) ≤ max ‖X‖ ‖Y‖ := le_max_of_le_left (norm_nonneg _)
+    exact (sq_eq_sq₀ (norm_nonneg (P - Q : E →L[𝕜] E)) h2).mp hsq
   rw [hfin]
   rfl
 

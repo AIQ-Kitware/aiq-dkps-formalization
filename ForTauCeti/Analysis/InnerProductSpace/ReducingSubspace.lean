@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
-public import Mathlib
+public import Mathlib.Analysis.InnerProductSpace.Projection.Submodule
 
 /-!
 # Reducing subspaces for bounded operators
@@ -73,9 +73,11 @@ theorem starProjection_comp_comm_of_reduces
   have hApx : A (U.starProjection x) ∈ U := hU.1 _ hpx
   have hArest : A (x - U.starProjection x) ∈ Uᗮ := hU.2 _ hrest
   have hsplit : A x = A (U.starProjection x) + A (x - U.starProjection x) := by
-    rw [← map_add]
-    congr 1
-    abel
+    calc
+      A x = A (U.starProjection x + (x - U.starProjection x)) := by
+        congr 1
+        rw [add_comm, sub_add_cancel]
+      _ = A (U.starProjection x) + A (x - U.starProjection x) := map_add A _ _
   rw [hsplit, map_add,
     Submodule.starProjection_eq_self_iff.mpr hApx,
     (Submodule.starProjection_apply_eq_zero_iff U).mpr hArest,
@@ -133,15 +135,14 @@ theorem norm_starProjection_apply_le_of_mem_orthogonal
       _ = RCLike.re ⟪w, T z - Z.starProjection (T z)⟫_𝕜 := by rw [h0, h1]
       _ ≤ ‖⟪w, T z - Z.starProjection (T z)⟫_𝕜‖ := RCLike.re_le_norm _
       _ ≤ ‖w‖ * ‖T z - Z.starProjection (T z)‖ := norm_inner_le_norm _ _
-      _ ≤ ‖w‖ * (rho * ‖z‖) := by
-          have := hrho z hzZ
-          gcongr
-      _ = rho * ‖w‖ * ‖z‖ := by ring
+      _ ≤ ‖w‖ * (rho * ‖z‖) :=
+        mul_le_mul_of_nonneg_left (hrho z hzZ) (norm_nonneg w)
+      _ = rho * ‖w‖ * ‖z‖ := by ac_rfl
   rcases eq_or_ne ‖z‖ 0 with h0 | h0
   · rw [h0]
-    positivity
+    exact mul_nonneg hrho0 (norm_nonneg w)
   · have hzpos : 0 < ‖z‖ := lt_of_le_of_ne (norm_nonneg _) (Ne.symm h0)
-    nlinarith [hsq, hzpos]
+    exact le_of_mul_le_mul_right (by simpa only [pow_two] using hsq) hzpos
 
 end LinearMap
 
@@ -153,7 +154,8 @@ theorem isComplete_coe_of_hasOrthogonalProjection [CompleteSpace E]
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
     IsComplete (U : Set E) := by
   have hclosed : IsClosed ((Uᗮ)ᗮ : Set E) := Uᗮ.isClosed_orthogonal
-  simpa using hclosed.isComplete
+  rw [Submodule.orthogonal_orthogonal] at hclosed
+  exact hclosed.isComplete
 
 end Submodule
 

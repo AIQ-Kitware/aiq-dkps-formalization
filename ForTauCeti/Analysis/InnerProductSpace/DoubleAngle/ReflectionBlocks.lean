@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 /-!
 # The two blocks of a self-adjoint involution

@@ -7,6 +7,7 @@ import DavisKahan.InfiniteDimensional.Sylvester.FourierSemigroup
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 import Mathlib.MeasureTheory.Integral.ExpDecay
 import DavisKahan.SpectralTheory.AbstractSpectrum
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
 
 /-!
 # Ordered-spectrum Sylvester reconstruction

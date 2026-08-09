@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+public import Mathlib.Analysis.InnerProductSpace.Projection.Reflection
 
 /-!
 # Projection blocks and reflections
