@@ -747,10 +747,10 @@
   },
   {
    "id": "s7-tan2",
-   "title": "Section 7 tangent double-angle source ideal theorem",
+   "title": "Section 7 branch-free tangent double-angle ambient theorem",
    "kind": "source",
-   "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-   "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RemainingSourceSurface.section7_tanTwoTheta_source_ideal",
+   "module": "DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient",
+   "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_branchFree",
    "dependencies": [
     "s7-sin2"
    ],
@@ -759,7 +759,7 @@
     "S2-tan-two-theta"
    ],
    "priority": "high",
-   "notes": "",
+   "notes": "M30 closes the branch-free ambient Section 7 path.  The reflection proof uses the actual tangent corner, signed-cosine polar isometries and magnitude Ky Fan control; lower-to-upper corner transport is by adjoint invariance and does not add another factor two.",
    "external": false
   },
   {
