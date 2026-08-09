@@ -61,7 +61,7 @@ theorem re_inner_reflection_comp_offDiagonal_eq_zero
     have h := DFunLike.congr_fun
       (reflection_anticommutes_of_maps_orthogonal H U hHU hHUperp) x
     simpa only [ContinuousLinearMap.comp_apply,
-      ContinuousLinearMap.neg_apply] using h
+      neg_apply] using h
   have hw1 : ⟪U.reflectionOperator (H x), x⟫_ℂ
       = ⟪H x, U.reflectionOperator x⟫_ℂ := hJsym _ _
   have hw2 : ⟪U.reflectionOperator (H x), x⟫_ℂ
@@ -142,8 +142,8 @@ theorem realSpectrum_add_offDiagonal_subset_exterior_of_form_gap
           (U.reflectionOperator ∘L
             (A - ((lam : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E)) x +
             (U.reflectionOperator ∘L H) x := by
-      simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.sub_apply,
-        ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+      simp only [ContinuousLinearMap.comp_apply, sub_apply,
+        add_apply, smul_apply,
         ContinuousLinearMap.id_apply, ← map_add]
       congr 1
       abel

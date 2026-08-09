@@ -221,6 +221,7 @@ theorem theorem63_singularValues_sine_lt_one
     simpa using hprojzero
   exact (finiteSourceRightSingularBasis S).orthonormal.ne_zero i hvzero
 
+omit [CompleteSpace H] in
 /-- **A left singular vector of the directed sine block lies in `Vᗮ`.**
 
 Its range is contained there.  Derived twice below, the copies differing only in
@@ -706,7 +707,7 @@ theorem theorem63ResidualWitness_scalar
     intro z
     have h := congrArg (fun L : Z →L[ℂ] H => L z)
       (theorem63_sylvester_identity T V Z hV)
-    simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.comp_apply] at h
+    simp only [sub_apply, ContinuousLinearMap.comp_apply] at h
     exact h
 
 

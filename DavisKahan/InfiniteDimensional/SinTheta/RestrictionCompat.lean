@@ -48,6 +48,7 @@ noncomputable def codRestrictTo
     (hT : ∀ x, T x ∈ M) : E →L[𝕜] M :=
   T.codRestrict M hT
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Corestricting the codomain leaves the value unchanged on underlying vectors. -/
 @[simp]
 theorem coe_codRestrictTo_apply
@@ -81,6 +82,7 @@ noncomputable def restrictToReducingSubspace
     (hU : Reduces A U) : U →L[𝕜] U :=
   A.restrict hU.1
 
+omit [CompleteSpace E] in
 /-- The restriction to a reducing subspace agrees with `A` on underlying vectors. -/
 @[simp]
 theorem restrictToReducingSubspace_apply
@@ -89,6 +91,7 @@ theorem restrictToReducingSubspace_apply
     ((restrictToReducingSubspace A U hU x : U) : E) = A (x : E) :=
   rfl
 
+omit [CompleteSpace E] in
 /-- Symmetry descends to the selected reducing restriction. -/
 theorem _root_.TauCeti.DavisKahan.IsSelfAdjointOperator.restrictToReducingSubspace
     {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
@@ -96,6 +99,7 @@ theorem _root_.TauCeti.DavisKahan.IsSelfAdjointOperator.restrictToReducingSubspa
     IsSelfAdjointOperator (restrictToReducingSubspace A U hU) :=
   LinearMap.IsSymmetric.restrict_invariant hA hU.1
 
+omit [CompleteSpace E] in
 /-- The theorem-facing restricted spectrum of the selected summand is the real
 spectrum of the explicit restriction. -/
 theorem restrictedSpectrum_eq_realSpectrum_restrictToReducingSubspace
@@ -116,6 +120,7 @@ noncomputable def restrictToOrthogonal
     (hU : Reduces A U) : Uᗮ →L[𝕜] Uᗮ :=
   A.restrict hU.2
 
+omit [CompleteSpace E] in
 /-- The restriction to the orthogonal complement agrees with `A` on underlying vectors. -/
 @[simp]
 theorem restrictToOrthogonal_apply
@@ -124,6 +129,7 @@ theorem restrictToOrthogonal_apply
     ((restrictToOrthogonal A U hU x : Uᗮ) : E) = A (x : E) :=
   rfl
 
+omit [CompleteSpace E] in
 /-- Symmetry descends to the orthogonal reducing restriction. -/
 theorem _root_.TauCeti.DavisKahan.IsSelfAdjointOperator.restrictToOrthogonal
     {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
@@ -131,6 +137,7 @@ theorem _root_.TauCeti.DavisKahan.IsSelfAdjointOperator.restrictToOrthogonal
     IsSelfAdjointOperator (restrictToOrthogonal A U hU) :=
   LinearMap.IsSymmetric.restrict_invariant hA hU.2
 
+omit [CompleteSpace E] in
 /-- The theorem-facing restricted spectrum of the orthogonal summand is the
 real spectrum of the explicit restriction. -/
 theorem restrictedSpectrum_orthogonal_eq
@@ -178,7 +185,7 @@ theorem restrictedSpectrum_top_eq_realSpectrum_general (A : E →L[𝕜] E) :
   rw [hbridge]
   ext r
   simp only [TauCeti.DavisKahan.Experimental.Foundation.realSpectrum,
-    Set.mem_setOf_eq, hspec]
+    Set.mem_ofPred_eq, hspec]
 
 omit [CompleteSpace E] in
 /-- The closed-operator real resolvent set of a bounded operator's full-domain
@@ -235,6 +242,7 @@ theorem boundedRealSpectrum_eq_realSpectrum (X : E →L[𝕜] E) :
   rw [Set.mem_compl_iff, mem_realResolventSet_ofBounded_iff, spectrum.mem_iff,
     Algebra.algebraMap_eq_smul_one, ← IsUnit.neg_iff, neg_sub]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Orthogonal projection on the left is contractive in operator norm. -/
 theorem projection_comp_opNorm_le
     (U : Submodule 𝕜 F) [U.HasOrthogonalProjection]
@@ -248,6 +256,7 @@ theorem projection_comp_opNorm_le
       exact U.starProjection_norm_le
     _ = ‖T‖ := one_mul _
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The rectangular projection--operator--inclusion block is contractive. -/
 theorem restricted_projection_sandwich_norm_le
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
@@ -275,6 +284,7 @@ theorem restricted_projection_sandwich_norm_le
         simp
     _ = ‖T‖ := by ring
 
+omit [CompleteSpace E] in
 /-- The directed projection gap is the norm of the rectangular cross block. -/
 theorem directedGap_eq_restrictedBlock_norm
     (U V : Submodule 𝕜 E)
@@ -294,10 +304,8 @@ theorem directedGap_eq_restrictedBlock_norm
     have h := (Vᗮ.starProjection ∘L U.starProjection).le_opNorm (x : E)
     -- `codRestrictTo` is deliberately *not* unfolded: unfolded, the `codRestrict` coercion no
     -- longer reduces, whereas this file's own `coe_codRestrictTo_apply` still fires.
-    -- `coe_codRestrictTo_apply` is unavailable here (it carries a `CompleteSpace` hypothesis on
-    -- the domain, and the domain is the bare subspace `U`), and unfolding `codRestrictTo` leaves
-    -- a `codRestrict` coercion `simp` no longer reduces.  The step is definitional, so `change`
-    -- states it and the estimate then matches `h`.
+    -- Keeping `codRestrictTo` bundled avoids exposing the `codRestrict` coercion.  The step is
+    -- definitional, so `change` states it directly and the estimate then matches `h`.
     change ‖Vᗮ.starProjection (x : E)‖ ≤
       ‖Vᗮ.starProjection ∘L U.starProjection‖ * ‖(x : E)‖
     simpa [hPx] using h
@@ -316,6 +324,7 @@ theorem directedGap_eq_restrictedBlock_norm
   change ‖T‖ = ‖Vᗮ.starProjection ∘L U.starProjection‖
   exact le_antisymm hle1 hle2
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The directed residual block satisfies the restricted Sylvester equation. -/
 theorem directedResidual_sylvesterEquation
     {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
@@ -339,6 +348,7 @@ theorem directedResidual_sylvesterEquation
     Uᗮ.starProjection (A (X x) - X (M x))
   rw [map_sub, hcomm]
 
+omit [CompleteSpace E] in
 /-- The directed perturbation block satisfies its restricted Sylvester
 equation. -/
 theorem directedPerturbation_sylvesterEquation

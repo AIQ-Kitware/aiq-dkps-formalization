@@ -56,6 +56,7 @@ noncomputable def reflectedSubspace (V U : Submodule 𝕜 E)
     [V.HasOrthogonalProjection] : Submodule 𝕜 E :=
   U.map (reflectionOperator V : E →L[𝕜] E).toLinearMap
 
+omit [CompleteSpace E] in
 /-- The reflection is an involution, applied pointwise. -/
 theorem reflectionOperator_apply_apply
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection] (x : E) :
@@ -422,6 +423,7 @@ theorem starProjection_orthogonal_reflectedSubspace
       U.starProjection (reflectionOperator V x))
   rw [map_sub, reflectionOperator_apply_apply]
 
+omit [CompleteSpace E] in
 /-- **Cross-block identity.**  The complementary block of the reflection
 between the two projections is exactly the one-sided double-angle
 operator. -/
@@ -441,6 +443,7 @@ theorem complementary_comp_reflection_comp_projection
       sub_self]
   rw [h0, sub_zero]
 
+omit [CompleteSpace E] in
 /-- Left composition with the reflection preserves the operator norm. -/
 theorem norm_reflection_comp (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
     (T : E →L[𝕜] E) : ‖reflectionOperator V ∘L T‖ = ‖T‖ := by
@@ -562,7 +565,7 @@ theorem reflection_comp_projectionDifference_comp_projection
         rw [h1]
     _ = Uᗮ.starProjection ∘L reflectionOperator V ∘L U.starProjection := by
         ext x
-        simp only [ContinuousLinearMap.coe_comp', Function.comp_apply,
+        simp only [ContinuousLinearMap.coe_comp, Function.comp_apply,
           reflectionOperator_apply_apply]
     _ = sinTwoAngleOperator U V :=
         complementary_comp_reflection_comp_projection U V
@@ -880,6 +883,7 @@ theorem sinTwoTheta_reflectionDefect
     _ ≤ ‖A' - A‖ := hsin
     _ = ‖reflectionDefect V A‖ := rfl
 
+omit [CompleteSpace F] in
 /-- Approximate-invariant-pair residual form of `sin 2Θ`.
 
 This is the genuine residual theorem missing from the earlier scaffold.  The

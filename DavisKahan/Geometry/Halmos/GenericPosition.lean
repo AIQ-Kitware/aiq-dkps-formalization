@@ -721,7 +721,7 @@ theorem adjoint_comp_genericCrossBlock :
       norm_cast
     have hnorms := norm_sq_genericCrossBlock U V m
     rw [re_inner_genericCosineBlock] at hnorms
-    simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.comp_apply,
+    simp only [sub_apply, ContinuousLinearMap.comp_apply,
       inner_sub_left]
     rw [hBB, hAA, inner_genericCosineBlock_self]
     have : (‖genericCrossBlock U V m‖ : ℝ) ^ 2 =
@@ -848,7 +848,7 @@ theorem genericSineBlock_comp_genericCrossBlock :
   have hkey := congrArg (genericRightHalf U V).starProjection hexp
   rw [map_add, map_add, hAzero, hBfix, zero_add] at hkey
   rw [← hB (genericCosineBlock U V m)] at hkey
-  simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.sub_apply,
+  simp only [ContinuousLinearMap.comp_apply, sub_apply,
     Submodule.coe_sub]
   rw [hD]
   linear_combination (norm := module) hkey

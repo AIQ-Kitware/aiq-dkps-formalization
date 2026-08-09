@@ -114,7 +114,7 @@ theorem upperBlockShift_apply (A : H →L[ℂ] H) (P : Submodule ℂ H)
     rw [← ContinuousLinearMap.adjoint_inner_right,
       ContinuousLinearMap.isSelfAdjoint_iff'.mp (isSelfAdjoint_starProjection Pᗮ)]
   rw [hself]
-  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+  simp only [sub_apply, smul_apply,
     ContinuousLinearMap.id_apply, inner_sub_right, inner_smul_right, map_sub]
   have hnorm : (⟪Pᗮ.starProjection x, Pᗮ.starProjection x⟫_ℂ).re =
       ‖Pᗮ.starProjection x‖ ^ 2 :=
@@ -134,7 +134,7 @@ theorem adjoint_realShift (alpha : ℝ) :
   refine ContinuousLinearMap.ext fun y => ?_
   refine ext_inner_left ℂ fun z => ?_
   rw [ContinuousLinearMap.adjoint_inner_right]
-  simp only [ContinuousLinearMap.smul_apply, ContinuousLinearMap.id_apply,
+  simp only [smul_apply, ContinuousLinearMap.id_apply,
     inner_smul_left, inner_smul_right, Complex.conj_ofReal]
 
 /-- `upperBlockShift` is self-adjoint when `A` is: it is a projection sandwich of
@@ -355,7 +355,7 @@ theorem lowerBlockShift_apply (A : H →L[ℂ] H) (P : Submodule ℂ H)
     rw [← ContinuousLinearMap.adjoint_inner_right,
       ContinuousLinearMap.isSelfAdjoint_iff'.mp (isSelfAdjoint_starProjection P)]
   rw [hself]
-  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+  simp only [sub_apply, smul_apply,
     ContinuousLinearMap.id_apply, inner_sub_right, inner_smul_right, map_sub]
   have hnorm : (⟪P.starProjection x, P.starProjection x⟫_ℂ).re =
       ‖P.starProjection x‖ ^ 2 :=

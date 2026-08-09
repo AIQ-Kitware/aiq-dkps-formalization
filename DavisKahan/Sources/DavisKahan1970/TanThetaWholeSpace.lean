@@ -928,7 +928,7 @@ theorem gramOperator_lowerCorner_moebius (y : E) :
     (secant_comm_starProjection htr) (secant_mul_cancel htr)
   have h := congrArg (fun S : E →L[ℂ] E => S y) halg
   simpa only [gramOperator_lowerCorner htr, gramOperator_paperDirectedSineAmbient,
-    add_apply, ContinuousLinearMap.mul_apply] using h
+    add_apply, mul_apply_eq_comp] using h
 
 end Corner
 
