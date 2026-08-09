@@ -134,6 +134,17 @@ as what it just proved. The Section 2 theorem statement also carries
 (lines 2331--2342), so this is *not* a transcription defect — the inconsistency is the paper's own,
 between its Section 2 statement and its Section 7 proof line.
 
+**Open, and deliberately left open.** None of the above shows that the factor-one bound
+`delta ||sin 2Theta_0|| <= ||R||` is *false* under the sin 2theta theorem's hypotheses — only that
+the printed derivation does not establish it. The counterexample the paper gives immediately
+afterwards does not settle it either, since it concerns a gap in the spectrum of `A` rather than of
+`Lambda`. Whether the sharper constant holds appears to be open. Do not record it as refuted.
+
+**Written up** in `papers/davis_kahan_prop_4_4_counterexample.tex`, section "A second defect, of a
+different kind: the Section 7 residual chain", alongside the Proposition 4.4 refutation. Note the
+two findings are of very different weight: Proposition 4.4 is a false proposition, this is a
+dropped factor in a proof line that leaves every theorem statement intact.
+
 ### 2. Section 3, the Theorem 3.1 realization matrix — WITHDRAWN, no such error
 
 A 2026-08-08 campaign note claimed the printed `Q` carried a minus sign in the upper-right entry
