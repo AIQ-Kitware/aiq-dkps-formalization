@@ -33,6 +33,11 @@ theory but a statement of where the theory lives.
 * `TauCeti.DavisKahanExt.spectrum_paperAngleOperatorC_lt_pi_div_four` and
   `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorC_nonneg`: under uniform
   *quarter* transversality the doubled angle stays inside the principal branch.
+* `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC`: the **branch-free**
+  ambient `|tan 2Θ|`, which is nonnegative with no hypothesis at all and agrees
+  with `paperTanTwoAngleOperatorC` on the quarter-acute branch.  A unitarily
+  invariant norm sees a self-adjoint operator through its singular values, so
+  the two carry the same source conclusion.
 
 ## Where the estimates about these objects live
 
@@ -169,6 +174,46 @@ theorem paperTanTwoAngleOperatorC_nonneg (U V : Submodule ℂ E)
   have h := spectrum_paperAngleOperatorC_lt_pi_div_four U V hlt ht
   exact Real.tan_nonneg_of_nonneg_of_le_pi_div_two (by linarith [h.1])
     (by linarith [h.2])
+
+/-- The paper's ambient `|tan 2Θ|`, obtained by applying `t ↦ |tan (2 t)|` to
+the Hermitian operator angle.
+
+This is the *branch-free* ambient double-angle tangent.  A unitarily invariant
+norm sees an operator only through its singular values, so for the self-adjoint
+`tan 2Θ` it sees `|tan 2Θ|`; the two objects therefore carry the same source
+conclusion.  They differ exactly when some principal angle exceeds `π/4`, where
+`tan 2θ` turns negative — which is precisely the situation the quarter-acute
+branch excludes and the printed theorem does not. -/
+noncomputable def paperAbsTanTwoAngleOperatorC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
+  cfc (fun t : ℝ => |Real.tan (2 * t)|) (paperAngleOperatorC U V)
+
+/-- `|tan 2Θ|` is self-adjoint. -/
+theorem isSelfAdjoint_paperAbsTanTwoAngleOperatorC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    IsSelfAdjoint (paperAbsTanTwoAngleOperatorC U V) :=
+  cfc_predicate _ (paperAngleOperatorC U V)
+
+/-- `|tan 2Θ|` is nonnegative, with **no** branch hypothesis: unlike
+`paperTanTwoAngleOperatorC_nonneg`, this holds however far the principal angles
+run past `π/4`. -/
+theorem paperAbsTanTwoAngleOperatorC_nonneg (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    0 ≤ paperAbsTanTwoAngleOperatorC U V :=
+  cfc_nonneg fun _ _ => abs_nonneg _
+
+/-- In the quarter-acute branch the branch-free ambient tangent is the literal
+one: every principal angle is below `π/4`, so `tan 2θ ≥ 0` throughout the
+spectrum. -/
+theorem paperAbsTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hlt : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2) :
+    paperAbsTanTwoAngleOperatorC U V = paperTanTwoAngleOperatorC U V := by
+  refine cfc_congr fun t ht => ?_
+  have h := spectrum_paperAngleOperatorC_lt_pi_div_four U V hlt ht
+  exact abs_of_nonneg (Real.tan_nonneg_of_nonneg_of_le_pi_div_two
+    (by linarith [h.1]) (by linarith [h.2]))
 
 /-- **`cos Θ · tan Θ = sin Θ`**, under uniform transversality of the two
 subspaces.  This is what makes `paperTanAngleOperatorC` the tangent rather than

@@ -407,7 +407,7 @@ REMAINING ON THIS ROW, in the order a next agent should take them:
 - **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Fully off-diagonal perturbations across an ordered gap give residual and perturbation tan(2 Theta) bounds with factor two.
-- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm`, `TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm_selectedBranch`, `TauCeti.DavisKahan.paperFaithful_tanTwoTheta_uiNorm_real`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm`, `TauCeti.DavisKahanTheory.paired_singularVector_gap_inequality`, `TauCeti.DavisKahanTheory.singularValue_ne_one`, `TauCeti.DavisKahanTheory.absDoubleAngleTangent_scalar`, `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le`, `TauCeti.DavisKahanTheory.absTanTwoTheta0_offDiagonal_le`, `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahanTheory.kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahanTheory.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_real`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_kyFan_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_prefix_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_uiIdeal_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_equation_7_6_approximate`, `TauCeti.DavisKahan1970.tanTwoTheta_cos_ne_zero_approximate`, `TauCeti.DavisKahan1970.tanTwoTheta_pole_separation`, `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorC`, `TauCeti.DavisKahanExt.spectrum_paperAngleOperatorC_lt_pi_div_four`, `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorC_nonneg`, `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahan1970.paperTanTwoBlockRepresentative`, `TauCeti.DavisKahan1970.paperTanTwoAngleOperatorC_eq_modulus_blockRepresentative`, `TauCeti.DavisKahan1970.paperTanTwoBlockRepresentative_lowerBlock`, `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_all_kyFan`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_all_kyFan`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm`, `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorR`, `TauCeti.DavisKahanExt.complexify_paperTanTwoAngleOperatorR`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm`, `TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm_selectedBranch`, `TauCeti.DavisKahan.paperFaithful_tanTwoTheta_uiNorm_real`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm`, `TauCeti.DavisKahanTheory.paired_singularVector_gap_inequality`, `TauCeti.DavisKahanTheory.singularValue_ne_one`, `TauCeti.DavisKahanTheory.absDoubleAngleTangent_scalar`, `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le`, `TauCeti.DavisKahanTheory.absTanTwoTheta0_offDiagonal_le`, `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahanTheory.kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahanTheory.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_real`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_kyFan_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_prefix_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_uiIdeal_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_equation_7_6_approximate`, `TauCeti.DavisKahan1970.tanTwoTheta_cos_ne_zero_approximate`, `TauCeti.DavisKahan1970.tanTwoTheta_pole_separation`, `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorC`, `TauCeti.DavisKahanExt.spectrum_paperAngleOperatorC_lt_pi_div_four`, `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorC_nonneg`, `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahan1970.paperTanTwoBlockRepresentative`, `TauCeti.DavisKahan1970.paperTanTwoAngleOperatorC_eq_modulus_blockRepresentative`, `TauCeti.DavisKahan1970.paperTanTwoBlockRepresentative_lowerBlock`, `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_all_kyFan`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_all_kyFan`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm`, `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorR`, `TauCeti.DavisKahanExt.complexify_paperTanTwoAngleOperatorR`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real`, `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC`, `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC_nonneg`, `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC`, `TauCeti.DavisKahan1970.isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero`, `TauCeti.DavisKahan1970.paperAbsTanTwo_sq_mul_cos_two_sq`, `TauCeti.DavisKahan1970.paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_all_kyFan_of_corner`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_of_corner`
 - **Assessment:** The finite operator-norm theorem is compiled. The source arbitrary-UI-norm Hilbert-space endpoint and branch selection are not yet certified.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_specialization`. The operator-norm double-angle tangent theorem is compiled and axiom-clean; the paper's general UI-norm scope and the selected acute branch are not.
@@ -625,16 +625,114 @@ elaboration: `tanTwoTheta_wholeSpace_paperUINorm` concludes
 `[propext, Classical.choice, Quot.sound]`.  The recorded remaining axes -- branch-free ambient,
 and the residual constant on the directed half -- are the two the audit asked for, and they are
 already in `scope_gap` and `next_action`.  No change to this row.
-- **Next action:** BRANCH-FREE AMBIENT HALF, the remaining obligation: prove
-`delta ||tan 2Theta|| <= 2||H||` without `IsQuarterAcute`, i.e. allowing
-principal angles past `pi/4`.  Do NOT attempt it by discharging the existing
-branch-free representative hypothesis for the corner of
-`paperTanTwoBlockRepresentative` -- the notes record an explicit
-infinite-dimensional counterexample to the multiset relation that hypothesis
-asks for.  The architecture that should work is the approximate-singular-pair
-limit of `TanTwoThetaBranchFreeInfinite.lean` applied to the CORNER, which needs
-a per-pair estimate for approximate singular pairs of `2 X (1 - X*X)^{-1}`
-rather than of `X`.
+
+**THE GEOMETRY OF THE AMBIENT HALF IS BRANCH-FREE 2026-08-09 (Claude Opus 5).
+THE BRANCH NOW SITS IN EXACTLY ONE HYPOTHESIS, AND IT IS NAMED.**  The row stays
+`compiled_specialization`: the branch-free ambient ESTIMATE is still open.
+
+The question asked was where `IsQuarterAcute` actually enters the ambient proof, and
+whether the operator identities need it.  The answer is now certified rather than
+asserted: the identities do NOT need it, and neither does anything else between the
+directed corner estimate and the ambient conclusion.
+
+WHAT THE BRANCH WAS DOING, in three places, only one of them real:
+(1) invertibility of `1 - 2 sin^2 Theta` (which is `cos 2Theta`), obtained from
+    `||sin Theta|| < sqrt 2 / 2` by a Neumann series;
+(2) continuity of `t -> tan (2t)` on the spectrum of `Theta`, and the pointwise scalar
+    identity behind `tan^2 2Theta * cos^2 2Theta = sin^2 2Theta`;
+(3) NONNEGATIVITY of `tan 2Theta`, which the modulus identity `|Xi| = tan 2Theta` needs.
+(1) and (2) follow from the PAPER'S OWN `cos 2theta != 0` -- pointwise nonvanishing on the
+angle spectrum, which is compact, so the pointwise condition is automatically the uniform
+separation invertibility wants.  (3) does not: past `pi/4` the tangent is negative.  (3)
+disappears once the ambient object is `|tan 2Theta|`, which no unitarily invariant norm
+can tell from `tan 2Theta`.
+
+NEW DECLARATIONS, all axiom-clean -- [propext, Classical.choice, Quot.sound], checked at
+the elaborator, not by grep:
+* `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC` (`Geometry/Angle/PaperTanAngle.lean`)
+  -- `cfc (fun t => |tan (2t)|) Theta`.  Nonnegative with NO hypothesis at all, and equal
+  to `paperTanTwoAngleOperatorC` on the quarter-acute branch.
+* `TauCeti.DavisKahan1970.isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero`
+  -- `cos 2Theta` is invertible from `cos 2theta != 0` alone.
+* `TauCeti.DavisKahan1970.paperAbsTanTwo_sq_mul_cos_two_sq` and
+  `TauCeti.DavisKahan1970.paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative` --
+  `|Xi| = |tan 2Theta|` as an OPERATOR identity, branch-free.
+* `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_all_kyFan_of_corner` and
+  `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_of_corner` -- THE REDUCTION.
+  Given only `cos 2theta != 0` and the printed residual estimate on the directed corner,
+  `delta * N (|tan 2Theta|) <= 2 * N H` for every `PaperUnitaryInvariantNorm`, on an
+  arbitrary complete complex Hilbert space with `[U.HasOrthogonalProjection]`, membership
+  CONCLUDED.  There is no `IsQuarterAcute`, no contraction bound on the graph coordinate,
+  and no spectral placement on the blocks of `A + H`.
+
+No statement already on this row changed.  `tanTwoTheta_wholeSpace_all_kyFan` and
+`tanTwoTheta_wholeSpace_paperUINorm` are now DERIVED from the reduction, and the private
+`Modulus` lemmas were re-parameterised from `||sin Theta|| < sqrt 2 / 2` to
+`IsUnit (1 - 2 D^2)`, which is all they ever used.
+
+**THE REMAINING OBLIGATION IS NOW EXACTLY ONE INEQUALITY**, the `hcorner` hypothesis of
+the reduction:
+`(b - a) * kyFan_k (P_Uperp . 2 D (1 - 2 D^2)^{-1} . P_U) <= 2 * kyFan_k (P_Uperp H P_U)`,
+allowing principal angles past `pi/4`.
+
+**THE RECORDED MULTISET COUNTEREXAMPLE IS CORRECT, AND IT DOES NOT DEPEND ON THE POLE.**
+Re-derived here.  With `G = X*X` positive, essential spectrum `{100}` and an isolated
+eigenvalue at `4`: `a_n(G) = 100` for every `n`, so every
+`absDoubleAngleTangent (sqrt (a_n G))` is `20/99`, while the corner has the isolated
+singular value `2*2/|1-4| = 4/3`.  No bijection matches those multisets.  Note this
+version stays FAR from `x = 1` and keeps every `|tan 2theta|` under `2||H||/delta`, so it
+is not excluded by the pole separation the gap supplies -- the earlier note's `1 + eta`
+version was, since its `|tan 2theta| ~ 2/eta` violates the very bound being proved.  The
+real content is that `t -> 2t/|1 - t^2|` is NOT MONOTONE, so a singular value of `X` lying
+BELOW its essential norm can be sent ABOVE it; approximation numbers are blind to the
+first and see the second.
+
+**THE FAILURE IS NOT ONLY IN THE SORTING: IT IS ALREADY AT THE LEVEL OF SINGLE PAIRS.**
+This is new, and it closes off the route the previous `next_action` proposed.  Take
+principal angles `theta' = pi/8` and `theta'' = 3pi/8`, so `tan 2theta' = 1 = -tan 2theta''`,
+with unit principal vectors `u', u''` in `U` and `v', v''` in `Uperp`.  Then
+`u = (u' + u'')/sqrt 2`, `v = (v' - v'')/sqrt 2` is an EXACT singular pair of the corner
+with singular value `1` -- and the sign flip in `v` is precisely the paper's "choose the
+sign according to `cos 2theta_j`".  But it is not even an approximate singular pair of the
+graph coordinate `X`, whose two components carry the UNEQUAL positive values
+`tan(pi/8) = 0.414` and `tan(3pi/8) = 2.414`; the best `t >= 0` leaves an error of about
+`1.73`.  So a per-pair estimate for the corner cannot be transported from a per-pair
+estimate for `X`, however the family is chosen.
+
+**WHAT A BRANCH-FREE CORNER ESTIMATE WILL HAVE TO USE**, worked out on paper and NOT yet
+formalised.  Write `p = P_U`, `q = P_V`, `G = (1-p) q p`, `sigma = D^2 = sin^2 Theta`,
+`R = (1-p) H p`.  Then `sigma` commutes with `p` and with `q`, hence with `(1 - 2 sigma)^{-1}`
+and with the corner, and the corner is `2 G (1 - 2 sigma)^{-1}`.  Invariance of `V` under
+`A + H` plus off-diagonality of `H` give the branch-free, dimension-free SYLVESTER EQUATION
+`A_1 G - G A_0 = sigma R + R sigma - R`.
+Pairing it against an approximate singular pair `(u, v, s)` of the corner reproduces the
+`b` and `a` form bounds correctly but leaves the term
+`s * (Re <sigma u, A u> - Re <A v, sigma v>)`,
+which the ordered form bounds do NOT control, because `sigma` and `A` do not commute.
+Closing that term -- or finding a pairing that avoids it -- is the open point.
+- **Next action:** BRANCH-FREE AMBIENT HALF, the remaining obligation, now reduced to a SINGLE
+inequality: supply the `hcorner` hypothesis of
+`tanTwoTheta_wholeSpace_paperUINorm_of_corner`
+(`Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean`) without a branch, i.e. prove
+`(b - a) * kyFan_k (P_Uperp . 2 D (1 - 2 D^2)^{-1} . P_U) <= 2 * kyFan_k (P_Uperp H P_U)`
+with principal angles allowed past `pi/4`.  Everything else in the ambient half -- the
+representative, the modulus identity, the corner/graph-tangent identification, Lemma 6.1,
+the Lemma 6.2 pinch and the passage to every source unitarily invariant norm -- is already
+branch-free and compiled, and the reduction theorem is what certifies that.
+
+TWO ROUTES ARE CLOSED, both recorded with explicit counterexamples in the notes.  Do NOT
+try to discharge the branch-free representative hypothesis for that corner (the multiset
+relation fails, and the failure survives the pole separation the gap supplies).  Do NOT try
+to transport a per-pair estimate from approximate singular pairs of the graph coordinate
+`X` (an exact singular pair of the corner need not be even approximately one for `X`).
+
+The estimate has to come from the invariance of `V` directly.  The identity that does
+transfer is the branch-free, dimension-free Sylvester equation
+`A_1 G - G A_0 = sigma R + R sigma - R`, `G = P_Uperp P_V P_U`, `sigma = sin^2 Theta`,
+`R = P_Uperp H P_U`; it is worked out in the notes but is NOT yet formalised, and
+formalising it is the natural first step.  Pairing it against an approximate singular pair
+of the corner leaves `Re <sigma u, A u> - Re <A v, sigma v>` uncontrolled, since `sigma`
+and `A` do not commute.  That term is the open point.
 
 BRANCH-FREE RESIDUAL FORM OF THE DIRECTED HALF: `tanTwoTheta_directedCorner_residual_all_kyFan`
 gives the printed `2||R||` only in the quarter-acute branch; the branch-free

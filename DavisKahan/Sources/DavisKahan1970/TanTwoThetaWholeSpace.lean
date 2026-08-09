@@ -73,19 +73,41 @@ Arbitrary complete complex Hilbert space, no dimension and no compactness
 hypothesis, every Ky Fan gauge and hence every unitarily invariant norm in the
 paper's sense.
 
-The branch is the *quarter-acute* one: `‖sin Θ‖ < √2/2`, equivalently every
-principal angle below `π/4`.  It is **concluded, not assumed**, from the
-paper's four ordered form bounds — the same configuration under which the
-directed `paperFaithful_tanTwoTheta_uiNorm` is proved, and the one Theorem 8.1
-supplies.  The genuinely branch-free ambient statement is *not* proved here;
-see the module note below.
+**Where the branch enters, and where it does not.**  The geometry — the
+representative `Ξ`, its self-adjointness, `Ξ⋆Ξ = tan²2Θ`, the modulus identity,
+the identification of the lower corner with the graph tangent, Lemma 6.1 and
+the Lemma 6.2 pinch — is *branch-free*.  It needs only the paper's own
+`cos 2θ ≠ 0`, which is what makes `tan 2Θ` a bounded operator at all; principal
+angles may exceed `π/4`, and where they do, `tan 2θ` turns negative and the
+object every unitarily invariant norm sees is `|tan 2Θ|`.  This is recorded as
+`tanTwoTheta_wholeSpace_paperUINorm_of_corner`, which derives the whole ambient
+conclusion from the directed corner estimate with no branch anywhere.
+
+The branch enters at exactly **one** place: the directed corner estimate
+itself, `tanTwoTheta_directedCorner_residual_all_kyFan`, which routes through
+the contractive Riccati coordinate and therefore needs `IsQuarterAcute U V`
+(`‖sin Θ‖ < √2/2`, every principal angle below `π/4`).  Quarter-acuteness is
+**concluded, not assumed**, from the paper's four ordered form bounds — the
+same configuration under which the directed `paperFaithful_tanTwoTheta_uiNorm`
+is proved, and the one Theorem 8.1 supplies.  The genuinely branch-free ambient
+statement is *not* proved here; see the module note below.
 
 ## Main results
 
 * `TauCeti.DavisKahan1970.paperTanTwoBlockRepresentative`: the explicit
   off-diagonal representative `Ξ`.
+* `TauCeti.DavisKahan1970.isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero`:
+  `cos 2Θ` is invertible as soon as no principal angle is `π/4` — the
+  branch-free replacement for the quarter-acute norm bound.
+* `TauCeti.DavisKahan1970.paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative`:
+  `|Ξ| = |tan 2Θ|`, branch-free.
 * `TauCeti.DavisKahan1970.paperTanTwoAngleOperatorC_eq_modulus_blockRepresentative`:
-  `|Ξ| = tan 2Θ`.
+  its quarter-acute specialisation, `|Ξ| = tan 2Θ`.
+* `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_all_kyFan_of_corner` and
+  `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_of_corner`: the
+  **branch-free reduction** of the ambient conclusion to the directed corner
+  estimate, `δ N(|tan 2Θ|) ≤ 2 N(H)` given `δ · kyFan_k (corner) ≤ 2 ·
+  kyFan_k R`.
 * `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_all_kyFan`: the Ky Fan form,
   `δ · kyFan_k (tan 2Θ) ≤ 2 · kyFan_k H` for every `k`.
 * `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm`: the source form,
@@ -98,14 +120,36 @@ see the module note below.
 ## What is not proved here
 
 The branch-free ambient statement, in which principal angles may exceed `π/4`.
-The obstruction is recorded in the census: the corner of the ambient
-representative then has Gram operator `4 G (1 − G)⁻²` with `G = X⋆X`, and
-`x ↦ 4x/(1−x)²` is *not* monotone across `x = 1`, so the corner's
-approximation numbers need not be any rearrangement of the branch-free
-double-angle tangents of the approximation numbers of `X`.  A positive
-operator whose essential norm sits far above an isolated eigenvalue just past
-the pole is already a counterexample to that rearrangement, so the existing
-branch-free representative hypothesis cannot be discharged for this corner.
+By the reduction above, the whole of it is one missing input: the directed
+corner estimate `δ · kyFan_k (corner of Ξ) ≤ 2 · kyFan_k R` without a branch.
+
+Two routes are already closed off.
+
+*Through the approximation numbers of the graph coordinate.*  The corner of the
+ambient representative has Gram operator `4 G (1 − G)⁻²` with `G = X⋆X`, and
+`x ↦ 4x/(1−x)²` is *not* monotone across `x = 1`, so the corner's approximation
+numbers need not be any rearrangement of the branch-free double-angle tangents
+of the approximation numbers of `X`.  A positive `G` with essential spectrum
+`{100}` and an isolated eigenvalue at `4` already refutes it: `aₙ(G) = 100` for
+every `n`, so every `2√(aₙ)/|1 − aₙ|` is `20/99`, while the corner has an
+isolated singular value `4/3`.  Approximation numbers are blind to a singular
+value of `X` *below* its essential norm that the non-monotone map sends *above*
+it.  So the existing branch-free representative hypothesis cannot be discharged
+for this corner.
+
+*Through singular pairs of the graph coordinate.*  The failure is not only in
+the sorting.  Take principal angles `θ′ < π/4 < θ″` with
+`tan 2θ′ = −tan 2θ″`, and unit principal vectors `u′, u″ ∈ U`, `v′, v″ ∈ U^⊥`.
+Then `u = (u′ + u″)/√2`, `v = (v′ − v″)/√2` is an *exact* singular pair of the
+corner — the sign flip is the paper's "choose the sign according to `cos 2θⱼ`"
+— but it is not even an approximate singular pair of `X`, whose two components
+carry the *unequal* positive values `tan θ′ ≠ tan θ″`.  A per-pair estimate for
+the corner therefore cannot be transported from one for `X`; it has to be
+derived from the invariance of `V` directly.  Doing that with the Sylvester
+identity `A₁ G − G A₀ = σR + Rσ − R` (`G = P_{U^⊥} P_V P_U`, `σ = sin²Θ`, `R`
+the residual) produces a term `Re⟪σu, Au⟫ − Re⟪Av, σv⟫` that the ordered form
+bounds on `A` do not control, because `σ` and `A` do not commute.  That is the
+open point.
 
 ## References
 
@@ -291,11 +335,88 @@ section Identification
 variable {U V : Submodule ℂ E}
   [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
-/-- **`tan²2Θ · cos²2Θ = sin²2Θ`**, the scalar Pythagoras of the doubled
-tangent, as an operator identity of functional calculi. -/
-theorem paperTanTwo_sq_mul_cos_two_sq
-    (htr : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2) :
-    paperTanTwoAngleOperatorC U V * paperTanTwoAngleOperatorC U V *
+/-- **The paper's `cos 2θ ≠ 0`, read on the spectrum of `sin Θ`.**
+
+Davis and Kahan's Section 7 argument never assumes a *side* of the quarter
+turn; what it does need, and derives from the gap, is that no principal angle
+is exactly `π/4`.  Since `cos (2 arcsin s) = 1 − 2s²`, the condition on the
+angle spectrum is this condition on the sine spectrum. -/
+theorem one_sub_two_sq_ne_zero_of_cos_two_ne_zero
+    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0)
+    {s : ℝ} (hs : s ∈ spectrum ℝ (sinAngleOperatorC U V)) :
+    (1 : ℝ) - 2 * (s * s) ≠ 0 := by
+  have hsi := spectrum_sinAngleOperatorC_subset_Icc U V hs
+  have hmem : Real.arcsin s ∈ spectrum ℝ (paperAngleOperatorC U V) := by
+    rw [paperAngleOperatorC,
+      cfc_map_spectrum (R := ℝ) (f := Real.arcsin) (a := sinAngleOperatorC U V)
+        (isSelfAdjoint_sinAngleOperatorC U V)
+        Real.continuous_arcsin.continuousOn]
+    exact ⟨s, hs, rfl⟩
+  have h := hcos _ hmem
+  have hroot : Real.sqrt (1 - s ^ 2) * Real.sqrt (1 - s ^ 2) = 1 - s ^ 2 :=
+    Real.mul_self_sqrt (by nlinarith [hsi.1, hsi.2])
+  have hcos2 : Real.cos (2 * Real.arcsin s) = 1 - 2 * (s * s) := by
+    rw [Real.cos_two_mul', Real.sin_arcsin (by linarith [hsi.1]) hsi.2,
+      Real.cos_arcsin, sq, hroot]
+    ring
+  rwa [hcos2] at h
+
+/-- Quarter-acuteness implies the paper's `cos 2θ ≠ 0`: every angle is below
+`π/4`, so the doubled angle is below `π/2`. -/
+theorem cos_two_ne_zero_of_norm_sinAngleOperatorC_lt
+    (htr : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2)
+    {t : ℝ} (ht : t ∈ spectrum ℝ (paperAngleOperatorC U V)) :
+    Real.cos (2 * t) ≠ 0 := by
+  have h := spectrum_paperAngleOperatorC_lt_pi_div_four U V htr ht
+  exact ne_of_gt (Real.cos_pos_of_mem_Ioo
+    ⟨by linarith [Real.pi_pos, h.1], by linarith [h.2]⟩)
+
+/-- `1 − 2 sin²Θ` is the functional calculus of `t ↦ 1 − 2t²` at `sin Θ`. -/
+private theorem cfc_one_sub_two_sq' :
+    (1 : E →L[ℂ] E) - 2 * (sinAngleOperatorC U V * sinAngleOperatorC U V) =
+      cfc (fun t : ℝ => 1 - 2 * (t * t)) (sinAngleOperatorC U V) := by
+  set S := sinAngleOperatorC U V with hS
+  have hSsa : IsSelfAdjoint S := isSelfAdjoint_sinAngleOperatorC U V
+  have hid : ContinuousOn (fun t : ℝ => t) (spectrum ℝ S) := continuousOn_id
+  have hsq : ContinuousOn (fun t : ℝ => t * t) (spectrum ℝ S) := hid.mul hid
+  have hSS : S * S = cfc (fun t : ℝ => t * t) S := by
+    rw [cfc_mul (fun t : ℝ => t) (fun t : ℝ => t) S hid hid, cfc_id' ℝ S]
+  have hone : ContinuousOn (fun _ : ℝ => (1 : ℝ)) (spectrum ℝ S) :=
+    continuousOn_const
+  have htwo : ContinuousOn (fun t : ℝ => 2 * (t * t)) (spectrum ℝ S) := by
+    fun_prop
+  have h2 : (2 : E →L[ℂ] E) * (S * S) = cfc (fun t : ℝ => 2 * (t * t)) S := by
+    have hrewrite : cfc (fun t : ℝ => 2 * (t * t)) S =
+        cfc (fun t : ℝ => t * t + t * t) S :=
+      cfc_congr fun t _ => by ring
+    rw [hrewrite, cfc_add (a := S) (fun t : ℝ => t * t) (fun t : ℝ => t * t) hsq hsq,
+      ← hSS, two_mul]
+  rw [cfc_sub (fun _ : ℝ => (1 : ℝ)) (fun t : ℝ => 2 * (t * t)) S hone htwo,
+    cfc_const_one ℝ S, ← h2]
+
+/-- **`cos 2Θ` is invertible as soon as no principal angle is `π/4`.**
+
+This is the branch-free replacement for
+`isUnit_one_sub_two_mul_paperProjectorDifference_sq`: it asks only that the
+angles avoid the pole of the doubled tangent, not that they lie on one
+particular side of it.  Compactness of the spectrum turns the pointwise
+condition into the uniform separation invertibility needs. -/
+theorem isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero
+    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0) :
+    IsUnit (1 - 2 * (paperProjectorDifference U V *
+      paperProjectorDifference U V)) := by
+  rw [paperProjectorDifference_sq, cfc_one_sub_two_sq']
+  exact (isUnit_cfc_iff (fun t : ℝ => 1 - 2 * (t * t)) (sinAngleOperatorC U V)
+      (by fun_prop) (isSelfAdjoint_sinAngleOperatorC U V)).mpr
+    fun t ht => one_sub_two_sq_ne_zero_of_cos_two_ne_zero hcos ht
+
+/-- **`|tan 2Θ|² · cos²2Θ = sin²2Θ`**, the scalar Pythagoras of the doubled
+tangent, as an operator identity of functional calculi — and **branch-free**:
+the hypothesis is only the paper's `cos 2θ ≠ 0`, so principal angles past
+`π/4` are allowed. -/
+theorem paperAbsTanTwo_sq_mul_cos_two_sq
+    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0) :
+    paperAbsTanTwoAngleOperatorC U V * paperAbsTanTwoAngleOperatorC U V *
         ((1 - 2 * (sinAngleOperatorC U V * sinAngleOperatorC U V)) *
           (1 - 2 * (sinAngleOperatorC U V * sinAngleOperatorC U V))) =
       4 * (sinAngleOperatorC U V * sinAngleOperatorC U V -
@@ -303,13 +424,11 @@ theorem paperTanTwo_sq_mul_cos_two_sq
           (sinAngleOperatorC U V * sinAngleOperatorC U V)) := by
   set S := sinAngleOperatorC U V with hS
   have hSsa : IsSelfAdjoint S := isSelfAdjoint_sinAngleOperatorC U V
-  have hcontTan : ContinuousOn (fun t : ℝ => Real.tan (2 * t))
+  have hcontTan : ContinuousOn (fun t : ℝ => |Real.tan (2 * t)|)
       (spectrum ℝ (paperAngleOperatorC U V)) := by
-    refine Real.continuousOn_tan.comp (by fun_prop) ?_
+    refine ContinuousOn.abs (Real.continuousOn_tan.comp (by fun_prop) ?_)
     intro t ht
-    have h := spectrum_paperAngleOperatorC_lt_pi_div_four U V htr ht
-    exact ne_of_gt (Real.cos_pos_of_mem_Ioo
-      ⟨by linarith [Real.pi_pos, h.1], by linarith [h.2]⟩)
+    exact hcos t ht
   have harcsin : ContinuousOn Real.arcsin (spectrum ℝ S) :=
     Real.continuous_arcsin.continuousOn
   have hid : ContinuousOn (fun t : ℝ => t) (spectrum ℝ S) := continuousOn_id
@@ -318,21 +437,24 @@ theorem paperTanTwo_sq_mul_cos_two_sq
     rw [cfc_mul (fun t : ℝ => t) (fun t : ℝ => t) S hid hid, cfc_id' ℝ S]
   -- the tangent square as one functional calculus of the sine
   have hcompSq : ContinuousOn
-      (fun t : ℝ => Real.tan (2 * t) * Real.tan (2 * t))
+      (fun t : ℝ => |Real.tan (2 * t)| * |Real.tan (2 * t)|)
       (Real.arcsin '' spectrum ℝ S) := by
     have : (Real.arcsin '' spectrum ℝ S) ⊆ spectrum ℝ (paperAngleOperatorC U V) := by
       rw [paperAngleOperatorC,
         cfc_map_spectrum (R := ℝ) (f := Real.arcsin) (a := S) hSsa harcsin]
     exact (hcontTan.mul hcontTan).mono this
-  have htanSq : paperTanTwoAngleOperatorC U V * paperTanTwoAngleOperatorC U V =
-      cfc ((fun t : ℝ => Real.tan (2 * t) * Real.tan (2 * t)) ∘ Real.arcsin) S := by
-    rw [paperTanTwoAngleOperatorC,
-      ← cfc_mul (fun t : ℝ => Real.tan (2 * t)) (fun t : ℝ => Real.tan (2 * t))
+  have htanSq :
+      paperAbsTanTwoAngleOperatorC U V * paperAbsTanTwoAngleOperatorC U V =
+      cfc ((fun t : ℝ => |Real.tan (2 * t)| * |Real.tan (2 * t)|) ∘ Real.arcsin)
+        S := by
+    rw [paperAbsTanTwoAngleOperatorC,
+      ← cfc_mul (fun t : ℝ => |Real.tan (2 * t)|)
+        (fun t : ℝ => |Real.tan (2 * t)|)
         (paperAngleOperatorC U V) hcontTan hcontTan,
       paperAngleOperatorC, ← hS,
-      ← cfc_comp (fun t : ℝ => Real.tan (2 * t) * Real.tan (2 * t))
+      ← cfc_comp (fun t : ℝ => |Real.tan (2 * t)| * |Real.tan (2 * t)|)
         Real.arcsin S hSsa hcompSq harcsin]
-  have hcos : (1 : E →L[ℂ] E) - 2 * (S * S) =
+  have hcosop : (1 : E →L[ℂ] E) - 2 * (S * S) =
       cfc (fun t : ℝ => 1 - 2 * (t * t)) S := by
     have hone : ContinuousOn (fun _ : ℝ => (1 : ℝ)) (spectrum ℝ S) :=
       continuousOn_const
@@ -368,10 +490,11 @@ theorem paperTanTwo_sq_mul_cos_two_sq
       cfc_add (a := S) (fun t : ℝ => t * t - t * t * (t * t))
         (fun t : ℝ => t * t - t * t * (t * t)) hcont hcont, hbase]
     noncomm_ring
-  rw [htanSq, hcos, hfour,
+  rw [htanSq, hcosop, hfour,
     ← cfc_mul (fun t : ℝ => 1 - 2 * (t * t)) (fun t : ℝ => 1 - 2 * (t * t)) S
       (by fun_prop) (by fun_prop),
-    ← cfc_mul ((fun t : ℝ => Real.tan (2 * t) * Real.tan (2 * t)) ∘ Real.arcsin)
+    ← cfc_mul
+      ((fun t : ℝ => |Real.tan (2 * t)| * |Real.tan (2 * t)|) ∘ Real.arcsin)
       (fun t : ℝ => (1 - 2 * (t * t)) * (1 - 2 * (t * t))) S
       (by
         refine ContinuousOn.comp ?_ harcsin (Set.mapsTo_image _ _)
@@ -379,37 +502,42 @@ theorem paperTanTwo_sq_mul_cos_two_sq
       (by fun_prop)]
   refine cfc_congr fun t ht => ?_
   have hti := spectrum_sinAngleOperatorC_subset_Icc U V ht
-  have hnorm : |t| ≤ ‖S‖ * ‖(1 : E →L[ℂ] E)‖ := spectrum.norm_le_norm_mul_of_mem ht
-  have hone : ‖(1 : E →L[ℂ] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have htlt : t < Real.sqrt 2 / 2 := by
-    have habs : |t| ≤ ‖S‖ := by
-      refine hnorm.trans ?_
-      nlinarith [norm_nonneg S, norm_nonneg (1 : E →L[ℂ] E)]
-    have := (le_abs_self t).trans habs
-    rw [hS] at this
-    linarith
-  have hsqrt2 : Real.sqrt 2 * Real.sqrt 2 = 2 := Real.mul_self_sqrt (by norm_num)
-  have ht2 : t * t < 1 / 2 := by nlinarith [hti.1, Real.sqrt_nonneg 2]
-  have hcosne : (1 : ℝ) - 2 * (t * t) ≠ 0 := by nlinarith
+  have hcosne : (1 : ℝ) - 2 * (t * t) ≠ 0 :=
+    one_sub_two_sq_ne_zero_of_cos_two_ne_zero hcos (by rw [hS] at ht; exact ht)
   have hsin2 : Real.sin (2 * Real.arcsin t) =
       2 * t * Real.sqrt (1 - t ^ 2) := by
-    rw [Real.sin_two_mul, Real.sin_arcsin (by linarith [hti.1]) (by nlinarith),
+    rw [Real.sin_two_mul, Real.sin_arcsin (by linarith [hti.1]) hti.2,
       Real.cos_arcsin]
   have hroot : Real.sqrt (1 - t ^ 2) * Real.sqrt (1 - t ^ 2) = 1 - t ^ 2 :=
-    Real.mul_self_sqrt (by nlinarith)
+    Real.mul_self_sqrt (by nlinarith [hti.1, hti.2])
   have hcos2 : Real.cos (2 * Real.arcsin t) = 1 - 2 * (t * t) := by
-    rw [Real.cos_two_mul', Real.sin_arcsin (by linarith [hti.1]) (by nlinarith),
+    rw [Real.cos_two_mul', Real.sin_arcsin (by linarith [hti.1]) hti.2,
       Real.cos_arcsin, sq, hroot]
     ring
   have hcc : ((1 : ℝ) - 2 * (t * t)) * (1 - 2 * (t * t)) ≠ 0 :=
     mul_ne_zero hcosne hcosne
   simp only [Function.comp_apply]
-  rw [Real.tan_eq_sin_div_cos, hsin2, hcos2, div_mul_div_comm,
+  rw [abs_mul_abs_self, Real.tan_eq_sin_div_cos, hsin2, hcos2, div_mul_div_comm,
     div_mul_cancel₀ _ hcc]
   have hexpand : 2 * t * Real.sqrt (1 - t ^ 2) * (2 * t * Real.sqrt (1 - t ^ 2)) =
       4 * (t * t) * (Real.sqrt (1 - t ^ 2) * Real.sqrt (1 - t ^ 2)) := by ring
   rw [hexpand, hroot]
   ring
+
+/-- **`tan²2Θ · cos²2Θ = sin²2Θ`** in the quarter-acute branch, where the
+ambient double-angle tangent is nonnegative and therefore equal to its
+branch-free counterpart. -/
+theorem paperTanTwo_sq_mul_cos_two_sq
+    (htr : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2) :
+    paperTanTwoAngleOperatorC U V * paperTanTwoAngleOperatorC U V *
+        ((1 - 2 * (sinAngleOperatorC U V * sinAngleOperatorC U V)) *
+          (1 - 2 * (sinAngleOperatorC U V * sinAngleOperatorC U V))) =
+      4 * (sinAngleOperatorC U V * sinAngleOperatorC U V -
+        sinAngleOperatorC U V * sinAngleOperatorC U V *
+          (sinAngleOperatorC U V * sinAngleOperatorC U V)) := by
+  have h := paperAbsTanTwo_sq_mul_cos_two_sq
+    (fun _ ht => cos_two_ne_zero_of_norm_sinAngleOperatorC_lt htr ht)
+  rwa [paperAbsTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC U V htr] at h
 
 end Identification
 
@@ -420,32 +548,36 @@ section Modulus
 
 variable {U V : Submodule ℂ E}
   [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-  (htr : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2)
+  (hinv : IsUnit (1 - 2 * (paperProjectorDifference U V *
+    paperProjectorDifference U V)))
 
-include htr
+include hinv
 
+omit [CompleteSpace E] in
 private theorem doubleSecant_mul_cancel :
     (1 - 2 * (paperProjectorDifference U V * paperProjectorDifference U V)) *
       paperDoubleSecant U V = 1 :=
   Ring.mul_inverse_cancel _
-    (isUnit_one_sub_two_mul_paperProjectorDifference_sq htr)
+    (hinv)
 
+omit [CompleteSpace E] in
 private theorem doubleSecant_mul_cancel' :
     paperDoubleSecant U V *
       (1 - 2 * (paperProjectorDifference U V * paperProjectorDifference U V)) = 1 :=
   Ring.inverse_mul_cancel _
-    (isUnit_one_sub_two_mul_paperProjectorDifference_sq htr)
+    (hinv)
 
+omit [CompleteSpace E] in
 private theorem doubleSecant_comm_projectorDifference :
     paperProjectorDifference U V * paperDoubleSecant U V =
       paperDoubleSecant U V * paperProjectorDifference U V :=
-  inverse_comm' (isUnit_one_sub_two_mul_paperProjectorDifference_sq htr)
+  inverse_comm' (hinv)
     (by noncomm_ring)
 
 private theorem doubleSecant_comm_starProjection :
     paperDoubleSecant U V * U.starProjection =
       U.starProjection * paperDoubleSecant U V :=
-  (inverse_comm' (isUnit_one_sub_two_mul_paperProjectorDifference_sq htr)
+  (inverse_comm' (hinv)
     (by
       have h := proj_comm_sq' (starProjection_idem' U)
         (paperProjectorDifference_anticommutator (U := U) (V := V))
@@ -470,13 +602,13 @@ private theorem doubleSecant_comm_starProjection_compl :
   have h : paperDoubleSecant U V * (1 - U.starProjection) =
       paperDoubleSecant U V - paperDoubleSecant U V * U.starProjection := by
     noncomm_ring
-  rw [h, doubleSecant_comm_starProjection htr]
+  rw [h, doubleSecant_comm_starProjection hinv]
   noncomm_ring
 
 private theorem doubleSecant_selfAdjoint :
     star (paperDoubleSecant U V) = paperDoubleSecant U V := by
   rw [paperDoubleSecant,
-    star_inverse' (isUnit_one_sub_two_mul_paperProjectorDifference_sq htr)]
+    star_inverse' (hinv)]
   congr 1
   rw [star_sub, star_one, star_mul, two_star', star_mul,
     isSelfAdjoint_paperProjectorDifference.star_eq, two_comm']
@@ -487,9 +619,9 @@ private theorem doubleSecant_comm_lower :
       paperDoubleSecant U V *
         ((1 - U.starProjection) * paperProjectorDifference U V *
           U.starProjection) := by
-  have hRp := doubleSecant_comm_starProjection htr
-  have hRD := doubleSecant_comm_projectorDifference htr
-  have hRc := doubleSecant_comm_starProjection_compl htr
+  have hRp := doubleSecant_comm_starProjection hinv
+  have hRD := doubleSecant_comm_projectorDifference hinv
+  have hRc := doubleSecant_comm_starProjection_compl hinv
   calc ((1 - U.starProjection) * paperProjectorDifference U V * U.starProjection) *
         paperDoubleSecant U V
       = (1 - U.starProjection) * paperProjectorDifference U V *
@@ -516,9 +648,9 @@ private theorem doubleSecant_comm_upper :
       paperDoubleSecant U V *
         (U.starProjection * paperProjectorDifference U V *
           (1 - U.starProjection)) := by
-  have hRp := doubleSecant_comm_starProjection htr
-  have hRD := doubleSecant_comm_projectorDifference htr
-  have hRc := doubleSecant_comm_starProjection_compl htr
+  have hRp := doubleSecant_comm_starProjection hinv
+  have hRD := doubleSecant_comm_projectorDifference hinv
+  have hRc := doubleSecant_comm_starProjection_compl hinv
   calc (U.starProjection * paperProjectorDifference U V *
         (1 - U.starProjection)) * paperDoubleSecant U V
       = U.starProjection * paperProjectorDifference U V *
@@ -547,8 +679,8 @@ theorem paperTanTwoBlockRepresentative_eq :
           U.starProjection * paperProjectorDifference U V *
             (1 - U.starProjection)) * paperDoubleSecant U V) := by
   have hUperp : Uᗮᗮ = U := Submodule.orthogonal_orthogonal U
-  have hRp := doubleSecant_comm_starProjection htr
-  have hRc := doubleSecant_comm_starProjection_compl htr
+  have hRp := doubleSecant_comm_starProjection hinv
+  have hRc := doubleSecant_comm_starProjection_compl hinv
   rw [paperTanTwoBlockRepresentative, paperDiagonalPair]
   simp only [hUperp, Submodule.starProjection_orthogonal', comp_eq_mul']
   have h1 : (1 - U.starProjection) *
@@ -598,9 +730,9 @@ theorem isSelfAdjoint_paperTanTwoBlockRepresentative :
         paperProjectorDifference U V * U.starProjection := by
     rw [star_mul, star_mul, star_sub, star_one, hp.star_eq, hD.star_eq]
     noncomm_ring
-  rw [IsSelfAdjoint, paperTanTwoBlockRepresentative_eq htr, star_mul, two_star',
-    star_mul, doubleSecant_selfAdjoint htr, star_add, hcross, hcross', add_comm,
-    add_mul, mul_add, ← doubleSecant_comm_lower htr, ← doubleSecant_comm_upper htr,
+  rw [IsSelfAdjoint, paperTanTwoBlockRepresentative_eq hinv, star_mul, two_star',
+    star_mul, doubleSecant_selfAdjoint hinv, star_add, hcross, hcross', add_comm,
+    add_mul, mul_add, ← doubleSecant_comm_lower hinv, ← doubleSecant_comm_upper hinv,
     two_comm']
 
 /-- **`Ξ⋆Ξ = tan²2Θ`.**  The block representative squares to
@@ -620,8 +752,8 @@ theorem paperTanTwoBlockRepresentative_mul_self :
         paperProjectorDifference U V * U.starProjection +
         U.starProjection * paperProjectorDifference U V *
         (1 - U.starProjection)) := by
-    rw [add_mul, mul_add, doubleSecant_comm_lower htr, doubleSecant_comm_upper htr]
-  rw [paperTanTwoBlockRepresentative_eq htr]
+    rw [add_mul, mul_add, doubleSecant_comm_lower hinv, doubleSecant_comm_upper hinv]
+  rw [paperTanTwoBlockRepresentative_eq hinv]
   set X : E →L[ℂ] E := (1 - U.starProjection) * paperProjectorDifference U V *
     U.starProjection + U.starProjection * paperProjectorDifference U V *
     (1 - U.starProjection) with hXdef
@@ -636,28 +768,54 @@ theorem paperTanTwoBlockRepresentative_mul_self :
         (paperDoubleSecant U V * paperDoubleSecant U V)) := by
         rw [hXdef, hsq, paperProjectorDifference_sq]
 
-/-- **The ambient double-angle tangent is the modulus of the block
+end Modulus
+
+/-! ### The modulus identity, branch-free
+
+Everything above depends on the branch only through `IsUnit (1 − 2 sin²Θ)`,
+i.e. through invertibility of `cos 2Θ`.  The identification of the modulus with
+the ambient double-angle tangent needs one thing more — that the tangent be the
+*nonnegative* square root — and that is the single place where the quarter turn
+genuinely matters.  Replacing `tan 2Θ` by `|tan 2Θ|`, which every unitarily
+invariant norm cannot tell apart from it, removes even that. -/
+
+section ModulusBranchFree
+
+variable {U V : Submodule ℂ E}
+  [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+  (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0)
+
+include hcos
+
+/-- **The branch-free ambient double-angle tangent is the modulus of the block
 representative.**
 
 This is the operator form of the paper's off-diagonal `2 × 2` presentation of
 `tan 2Θ`: not merely equality of norms, and not merely of singular-value lists,
 but equality of the two moduli, so the substitution is legitimate inside every
-unitarily invariant norm. -/
-theorem paperTanTwoAngleOperatorC_eq_modulus_blockRepresentative :
-    paperTanTwoAngleOperatorC U V =
+unitarily invariant norm.
+
+**No branch is chosen.**  The hypothesis is the paper's own `cos 2θ ≠ 0`, which
+is what makes `tan 2Θ` a bounded operator at all; principal angles are free to
+exceed `π/4`, and where they do, `tan 2θ` is negative and `|tan 2Θ|` is the
+object the norm sees. -/
+theorem paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative :
+    paperAbsTanTwoAngleOperatorC U V =
       (paperTanTwoBlockRepresentative U V).modulus := by
+  have hinv := isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero
+    hcos
   refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
-    (paperTanTwoAngleOperatorC_nonneg U V htr) ?_
-  have hself := isSelfAdjoint_paperTanTwoBlockRepresentative htr
+    (paperAbsTanTwoAngleOperatorC_nonneg U V) ?_
+  have hself := isSelfAdjoint_paperTanTwoBlockRepresentative hinv
   have hadj : (paperTanTwoBlockRepresentative U V).adjoint ∘L
       paperTanTwoBlockRepresentative U V =
       paperTanTwoBlockRepresentative U V * paperTanTwoBlockRepresentative U V := by
     rw [comp_eq_mul', hself.adjoint_eq]
-  rw [hadj, paperTanTwoBlockRepresentative_mul_self htr]
-  have hcancel := doubleSecant_mul_cancel htr
-  have hcancel' := doubleSecant_mul_cancel' htr
+  rw [hadj, paperTanTwoBlockRepresentative_mul_self hinv]
+  have hcancel := doubleSecant_mul_cancel hinv
+  have hcancel' := doubleSecant_mul_cancel' hinv
   rw [paperProjectorDifference_sq] at hcancel hcancel'
-  set T := paperTanTwoAngleOperatorC U V with hT
+  set T := paperAbsTanTwoAngleOperatorC U V with hT
   set N2 : E →L[ℂ] E :=
     1 - 2 * (sinAngleOperatorC U V * sinAngleOperatorC U V) with hN2
   set S2 : E →L[ℂ] E := paperDoubleSecant U V with hS2
@@ -672,13 +830,31 @@ theorem paperTanTwoAngleOperatorC_eq_modulus_blockRepresentative :
     _ = 4 * ((sinAngleOperatorC U V * sinAngleOperatorC U V -
           sinAngleOperatorC U V * sinAngleOperatorC U V *
             (sinAngleOperatorC U V * sinAngleOperatorC U V))) * (S2 * S2) := by
-        rw [hT, hN2, paperTanTwo_sq_mul_cos_two_sq htr]
+        rw [hT, hN2, paperAbsTanTwo_sq_mul_cos_two_sq hcos]
     _ = 4 * ((sinAngleOperatorC U V * sinAngleOperatorC U V -
           sinAngleOperatorC U V * sinAngleOperatorC U V *
             (sinAngleOperatorC U V * sinAngleOperatorC U V)) *
         (S2 * S2)) := by noncomm_ring
 
-end Modulus
+end ModulusBranchFree
+
+section ModulusQuarterAcute
+
+variable {U V : Submodule ℂ E}
+  [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+
+/-- The quarter-acute specialisation of
+`paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative`, in which the
+ambient tangent is nonnegative and the modulus is the literal `tan 2Θ`. -/
+theorem paperTanTwoAngleOperatorC_eq_modulus_blockRepresentative
+    (htr : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2) :
+    paperTanTwoAngleOperatorC U V =
+      (paperTanTwoBlockRepresentative U V).modulus := by
+  have h := paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative
+    (fun _ ht => cos_two_ne_zero_of_norm_sinAngleOperatorC_lt htr ht)
+  rwa [paperAbsTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC U V htr] at h
+
+end ModulusQuarterAcute
 
 /-! ### The directed corner is the graph tangent
 
@@ -873,6 +1049,7 @@ theorem paperTanTwoBlockRepresentative_lowerBlock (hq : IsQuarterAcute U V) :
       doubleAngleTangentOperator (quarterAcuteAngularOperator U V hq)
         (norm_quarterAcuteAngularOperator_lt_one U V hq) := by
   have htr := norm_sinAngleOperatorC_lt_of_isQuarterAcute hq
+  have hinv := isUnit_one_sub_two_mul_paperProjectorDifference_sq htr
   have hang : IsAngularOperator U (quarterAcuteAngularOperator U V hq) :=
     quarterAcuteAngularOperator_isAngularOperator U V hq
   have hYc : ‖quarterAcuteAngularOperator U V hq‖ < 1 :=
@@ -967,7 +1144,7 @@ theorem paperTanTwoBlockRepresentative_lowerBlock (hq : IsQuarterAcute U V) :
     (D := paperProjectorDifference U V)
     hpp hQQ hYp hpY hsYp hRp hQ rfl
     (Ring.inverse_mul_cancel _ hNunit) (Ring.mul_inverse_cancel _ hMunit)
-    hGp hpG hMip (doubleSecant_mul_cancel' htr)
+    hGp hpG hMip (doubleSecant_mul_cancel' hinv)
   rw [projectionBlock_lower', hcorner, doubleAngleTangentOperator,
     doubleAngleDenominator]
   show 2 * (quarterAcuteAngularOperator U V hq *
@@ -1156,44 +1333,44 @@ theorem tanTwoTheta_directedCorner_residual_all_kyFan
   rw [hleft, ← hright]
   exact hraw
 
-/-- **The whole-space `tan 2Θ` theorem, Ky Fan form.**  The second conclusion of
-the Section 2 double-angle tangent theorem, at every finite Ky Fan gauge, for
-the *ambient* tangent `tan 2Θ`.
+/-- **The whole-space `tan 2Θ` theorem reduced to its directed corner, with no
+branch anywhere.**
 
-The strict quarter-angle branch is concluded, not assumed. -/
-theorem tanTwoTheta_wholeSpace_all_kyFan
-    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
-    (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
-    (hab : a < b)
-    (hUhigh : ∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
-    (hUperpLow : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
-    (hVhigh : ∀ x ∈ V, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪(A + H) x, x⟫_ℂ)
-    (hVperpLow : ∀ x ∈ Vᗮ, RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
-    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U) :
+The passage from the printed *directed* conclusion to the printed *ambient*
+conclusion — the two corner estimates, Lemma 6.1 and the Lemma 6.2 pinch, and
+the identification of the ambient tangent with the modulus of the off-diagonal
+representative — uses **no** hypothesis about where the principal angles lie
+beyond the paper's own `cos 2θ ≠ 0`, which is exactly what makes `tan 2Θ` a
+bounded operator.
+
+So the whole branch dependence of the ambient half sits in the single remaining
+hypothesis `hcorner`, the printed residual estimate on the directed corner.
+`tanTwoTheta_directedCorner_residual_all_kyFan` supplies it in the quarter-acute
+branch, through the contractive Riccati coordinate; a branch-free supply of the
+same estimate is the one thing the branch-free ambient theorem still needs. -/
+theorem tanTwoTheta_wholeSpace_all_kyFan_of_corner
+    (hH : IsSelfAdjoint H) (hab : a < b)
+    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0)
+    (hcorner : ∀ j : ℕ,
+      (b - a) * kyFanApproximationGauge j
+          (paperProjectionBlock Uᗮ U
+            (2 * (paperProjectorDifference U V * paperDoubleSecant U V))) ≤
+        2 * kyFanApproximationGauge j (paperProjectionBlock Uᗮᗮ Uᗮ H)) :
     ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (paperTanTwoAngleOperatorC U V) ≤
+      (b - a) * kyFanApproximationGauge k (paperAbsTanTwoAngleOperatorC U V) ≤
         2 * kyFanApproximationGauge k H := by
   intro k
-  have hq : IsQuarterAcute U V :=
-    isQuarterAcute_of_paper_form_gap_infinite A H U V hA hH hAU hAplusH_V hab
-      hUhigh hUperpLow hVhigh hVperpLow hHU hHUperp
-  have htr := norm_sinAngleOperatorC_lt_of_isQuarterAcute hq
+  have hinv := isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero
+    hcos
   have hd : (0 : ℝ) < (b - a) / 2 := by linarith
   have hcnorm : ‖((((b - a) / 2 : ℝ)) : ℂ)‖ = (b - a) / 2 := by
     rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos hd]
   have hKsa : IsSelfAdjoint
       (2 * (paperProjectorDifference U V * paperDoubleSecant U V)) := by
     rw [IsSelfAdjoint, star_mul, star_mul, two_star',
-      doubleSecant_selfAdjoint htr,
+      doubleSecant_selfAdjoint hinv,
       isSelfAdjoint_paperProjectorDifference.star_eq,
-      ← doubleSecant_comm_projectorDifference htr, two_comm']
-  have hcorner : ∀ j : ℕ,
-      (b - a) * kyFanApproximationGauge j
-          (paperProjectionBlock Uᗮ U
-            (2 * (paperProjectorDifference U V * paperDoubleSecant U V))) ≤
-        2 * kyFanApproximationGauge j (paperProjectionBlock Uᗮᗮ Uᗮ H) :=
-    fun j => tanTwoTheta_directedCorner_residual_all_kyFan hA hH hAU hAplusH_V
-      hab hUhigh hUperpLow hHU hHUperp hq j
+      ← doubleSecant_comm_projectorDifference hinv, two_comm']
   have h₀ : ∀ j : ℕ,
       kyFanApproximationGauge j (paperProjectionBlock Uᗮ U
           (((((b - a) / 2 : ℝ)) : ℂ) •
@@ -1232,13 +1409,81 @@ theorem tanTwoTheta_wholeSpace_all_kyFan
       paperDiagonalPair Uᗮ U H := rfl
   rw [hsum, hsumH, kyFanApproximationGauge_smul, hcnorm] at hcombine
   have hpinch := paperDiagonalPair_all_kyFan_le Uᗮ U H k
-  have hmodulus : kyFanApproximationGauge k (paperTanTwoAngleOperatorC U V) =
+  have hmodulus : kyFanApproximationGauge k (paperAbsTanTwoAngleOperatorC U V) =
       kyFanApproximationGauge k (paperTanTwoBlockRepresentative U V) := by
-    rw [paperTanTwoAngleOperatorC_eq_modulus_blockRepresentative htr]
+    rw [paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative hcos]
     exact (ContinuousLinearMap.modulus_hasSameApproximationNumbers
       (paperTanTwoBlockRepresentative U V)).kyFanGauge_eq k
   rw [hmodulus]
   linarith [hcombine.trans hpinch]
+
+/-- **The whole-space `tan 2Θ` theorem, Ky Fan form.**  The second conclusion of
+the Section 2 double-angle tangent theorem, at every finite Ky Fan gauge, for
+the *ambient* tangent `tan 2Θ`.
+
+The strict quarter-angle branch is concluded, not assumed. -/
+theorem tanTwoTheta_wholeSpace_all_kyFan
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
+    (hab : a < b)
+    (hUhigh : ∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hUperpLow : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
+    (hVhigh : ∀ x ∈ V, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪(A + H) x, x⟫_ℂ)
+    (hVperpLow : ∀ x ∈ Vᗮ, RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U) :
+    ∀ k : ℕ,
+      (b - a) * kyFanApproximationGauge k (paperTanTwoAngleOperatorC U V) ≤
+        2 * kyFanApproximationGauge k H := by
+  intro k
+  have hq : IsQuarterAcute U V :=
+    isQuarterAcute_of_paper_form_gap_infinite A H U V hA hH hAU hAplusH_V hab
+      hUhigh hUperpLow hVhigh hVperpLow hHU hHUperp
+  have htr := norm_sinAngleOperatorC_lt_of_isQuarterAcute hq
+  have h := tanTwoTheta_wholeSpace_all_kyFan_of_corner hH hab
+    (fun _ ht => cos_two_ne_zero_of_norm_sinAngleOperatorC_lt htr ht)
+    (fun j => tanTwoTheta_directedCorner_residual_all_kyFan hA hH hAU hAplusH_V
+      hab hUhigh hUperpLow hHU hHUperp hq j) k
+  rwa [paperAbsTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC U V htr] at h
+
+/-- **The source-norm ambient conclusion, reduced to the directed corner with no
+branch anywhere.**
+
+`δ N(|tan 2Θ|) ≤ 2 N(H)` for every unitarily invariant norm in the paper's
+sense, given only the printed residual estimate on the directed corner and the
+paper's `cos 2θ ≠ 0`.  Membership of the ambient tangent in the norm's ideal is
+*concluded*, not hypothesised.
+
+This is the exact statement of what is left to do for the branch-free ambient
+half: supply `hcorner` without a branch. -/
+theorem tanTwoTheta_wholeSpace_paperUINorm_of_corner
+    (N : PaperUnitaryInvariantNorm)
+    (hH : IsSelfAdjoint H) (hab : a < b)
+    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0)
+    (hcorner : ∀ j : ℕ,
+      (b - a) * kyFanApproximationGauge j
+          (paperProjectionBlock Uᗮ U
+            (2 * (paperProjectorDifference U V * paperDoubleSecant U V))) ≤
+        2 * kyFanApproximationGauge j (paperProjectionBlock Uᗮᗮ Uᗮ H))
+    (hHmem : N.Mem H) :
+    N.Mem (paperAbsTanTwoAngleOperatorC U V) ∧
+      (b - a) * N.gauge (paperAbsTanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
+  have htwo : ‖((2 : ℝ) : ℂ)‖ = 2 := by norm_num
+  have hd : (0 : ℝ) < b - a := by linarith
+  have hscaled : ∀ k : ℕ,
+      (b - a) * kyFanApproximationGauge k (paperAbsTanTwoAngleOperatorC U V) ≤
+        kyFanApproximationGauge k (((2 : ℝ) : ℂ) • H) := by
+    intro k
+    rw [kyFanApproximationGauge_smul, htwo]
+    exact tanTwoTheta_wholeSpace_all_kyFan_of_corner hH hab hcos hcorner k
+  have hMem2 : N.Mem (((2 : ℝ) : ℂ) • H) := by
+    intro htop
+    rw [N.extendedGauge_smul, htwo] at htop
+    rcases ENNReal.mul_eq_top.mp htop with ⟨_, h⟩ | ⟨h, _⟩
+    · exact hHmem h
+    · exact absurd h (by simp)
+  obtain ⟨hmem, hle⟩ := N.mul_gauge_le_of_all_mul_kyFan_le hd hMem2 hscaled
+  refine ⟨hmem, ?_⟩
+  rwa [N.gauge_smul _ hHmem, htwo] at hle
 
 /-- **The whole-space `tan 2Θ` theorem for every source unitarily invariant
 norm**: `δ ‖tan 2Θ‖ ≤ 2‖H‖`, the second conclusion of the Section 2 double-angle
