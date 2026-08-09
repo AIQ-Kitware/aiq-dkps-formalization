@@ -50,41 +50,44 @@ open Module (finrank)
 
 universe u
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-  [CompleteSpace H]
+section ScalarGeneric
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
 
 /-- The bounded data of a trial block for the Theorem 6.3 chain: the ambient action of
 the trial subspace, its compression back into the trial subspace, and the residual,
 tied by the block identity.  For a bounded symmetric ambient operator these are
 `T ∘L Z.subtypeL`, `theorem63Compression T Z`, and `theorem63Residual T Z`; for an
 unbounded self-adjoint operator whose domain contains the trial subspace they are the
-bundled data of an `UnboundedTrialBlock`. -/
-structure Theorem63TrialData (Z V : Submodule ℂ H)
+bundled data of an `UnboundedTrialBlock`.
+
+Every field is a bounded map, so the bundle is scalar-generic: it makes sense over a
+real Hilbert space exactly as it does over a complex one. -/
+structure Theorem63TrialData (Z V : Submodule 𝕜 H)
     [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] where
   /-- The ambient action of the trial subspace. -/
-  action : Z →L[ℂ] H
+  action : Z →L[𝕜] H
   /-- The compression of the action back into the trial subspace. -/
-  compression : Z →L[ℂ] Z
+  compression : Z →L[𝕜] Z
   /-- The Ritz residual of the trial subspace. -/
-  residual : Z →L[ℂ] H
+  residual : Z →L[𝕜] H
   /-- The compression is symmetric. -/
   compression_isSymmetric : compression.IsSymmetric
   /-- The block identity: action = compression + residual. -/
   action_eq : ∀ z : Z, action z = ((compression z : Z) : H) + residual z
   /-- The residual is orthogonal to the trial subspace. -/
-  residual_orthogonal : ∀ (z z' : Z), ⟪residual z, ((z' : Z) : H)⟫_ℂ = 0
+  residual_orthogonal : ∀ (z z' : Z), ⟪residual z, ((z' : Z) : H)⟫_𝕜 = 0
 
 namespace Theorem63TrialData
 
-variable {Z V : Submodule ℂ H} [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+variable {Z V : Submodule 𝕜 H} [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
-omit [CompleteSpace H] in
 /-- The residual is orthogonal to the trial subspace, inner product on the left. -/
 theorem inner_residual_left (data : Theorem63TrialData Z V) (z z' : Z) :
-    ⟪((z' : Z) : H), data.residual z⟫_ℂ = 0 := by
+    ⟪((z' : Z) : H), data.residual z⟫_𝕜 = 0 := by
   rw [← inner_conj_symm, data.residual_orthogonal z z', map_zero]
 
-omit [CompleteSpace H] in
 /-- The residual lands in the orthogonal complement of the trial subspace. -/
 theorem residual_mem_orthogonal (data : Theorem63TrialData Z V) (z : Z) :
     data.residual z ∈ Zᗮ := by
@@ -92,7 +95,6 @@ theorem residual_mem_orthogonal (data : Theorem63TrialData Z V) (z : Z) :
   intro u hu
   exact data.inner_residual_left z ⟨u, hu⟩
 
-omit [CompleteSpace H] in
 /-- The compression is the trial projection of the action. -/
 theorem starProjection_action (data : Theorem63TrialData Z V) (z : Z) :
     Z.starProjection (data.action z) = ((data.compression z : Z) : H) := by
@@ -101,12 +103,22 @@ theorem starProjection_action (data : Theorem63TrialData Z V) (z : Z) :
     (Submodule.starProjection_apply_eq_zero_iff Z).mpr
       (data.residual_mem_orthogonal z), add_zero]
 
-omit [CompleteSpace H] in
 /-- The compression's quadratic form is the ambient pairing of the action. -/
 theorem inner_compression_eq (data : Theorem63TrialData Z V) (z : Z) :
-    ⟪data.compression z, z⟫_ℂ = ⟪data.action z, ((z : Z) : H)⟫_ℂ := by
+    ⟪data.compression z, z⟫_𝕜 = ⟪data.action z, ((z : Z) : H)⟫_𝕜 := by
   rw [Submodule.coe_inner, data.action_eq z, inner_add_left,
     data.residual_orthogonal z z, add_zero]
+
+end Theorem63TrialData
+
+end ScalarGeneric
+
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+namespace Theorem63TrialData
+
+variable {Z V : Submodule ℂ H} [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
 omit [CompleteSpace H] in
 /-- The sine-side Sylvester identity, in pure block algebra: projecting the action onto
