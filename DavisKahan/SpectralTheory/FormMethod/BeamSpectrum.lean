@@ -900,7 +900,6 @@ theorem realSpectrum_beamOperator_subset :
             rw [← inv_inv c, h1, inv_one]
           rw [hcdef] at this
           have := sub_eq_zero.mpr this.symm
-          push_cast at this
           have : (lam : ℂ) = 0 := by linear_combination -this
           exact_mod_cast this
         · -- `c⁻¹ = (1+β⁴)⁻¹` forces `lam = β⁴`
@@ -960,7 +959,6 @@ theorem realSpectrum_beamOperator_subset :
         rw [show ((1 : BeamL2 →L[ℂ] BeamL2)) z = z from rfl,
           show (c • R) z = c • (R z) from rfl, hRz]
       rw [h1, hU, hUz, hcdef]
-      push_cast
       rw [add_smul, one_smul]
       abel
     calc (R * S) (beamOperator.toLinearPMap x - ((lam : ℝ) : ℂ) • (x : BeamL2))
@@ -996,7 +994,6 @@ theorem realSpectrum_beamOperator_subset :
         rw [sub_mul, one_mul]
         rfl]
       rw [show ((R * S) y : BeamL2) = R (S y) from rfl, hcdef]
-      push_cast
       rw [add_smul, one_smul]
       abel
     calc beamOperator.toLinearPMap ⟨(R * S) y, hmem⟩

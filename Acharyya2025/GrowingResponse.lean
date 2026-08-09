@@ -118,7 +118,7 @@ theorem highProb_uniformResponseMeanClose_of_growing_secondMoment
             {ω | η u < ‖Xbar u ω i - μ u ω i‖} := by
       intro ω hω
       by_contra hnot
-      simp only [Set.mem_iUnion, Set.mem_setOf_eq, not_exists, not_lt] at hnot
+      simp only [Set.mem_iUnion, Set.mem_ofPred_eq, not_exists, not_lt] at hnot
       exact hω (fun i => hnot i)
     have hcheb : ∀ i : Fin (count u),
         P u {ω | η u < ‖Xbar u ω i - μ u ω i‖}
@@ -362,7 +362,7 @@ theorem highProb_uniformTargetResponseMeanClose_of_secondMoment
             {ω | η u < ‖Xbar u ω t i - μ u ω t i‖} := by
       intro ω hω
       by_contra hnot
-      simp only [Set.mem_iUnion, Set.mem_setOf_eq, not_exists, not_lt] at hnot
+      simp only [Set.mem_iUnion, Set.mem_ofPred_eq, not_exists, not_lt] at hnot
       exact hω (fun t i => hnot t i)
     have hcheb : ∀ t (i : Fin (count u)),
         P u {ω | η u < ‖Xbar u ω t i - μ u ω t i‖}

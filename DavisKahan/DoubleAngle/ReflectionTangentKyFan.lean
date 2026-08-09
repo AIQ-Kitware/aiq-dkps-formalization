@@ -91,7 +91,6 @@ private theorem orthonormal_polar_comp
   rw [J.inner_map_map]
   exact hf i j
 
-omit [CompleteSpace E0] [CompleteSpace E1] in
 private theorem approximationNumber_le_norm_local (T : E0 →L[ℂ] E1) (n : ℕ) :
     T.approximationNumber n ≤ ‖T‖ :=
   T.approximationNumber_le_norm n
@@ -108,7 +107,6 @@ def reflectionTangentErrorCoefficient
   q * (‖A0‖ * (‖T‖ * M1 + 1) +
     ‖A1‖ * (‖C1‖ + ‖T‖ * M1) + ‖B‖ * (M0 + M1))
 
-omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The reflection error coefficient is nonnegative. -/
 theorem reflectionTangentErrorCoefficient_nonneg
     (A0 : E0 →L[ℂ] E0) (A1 : E1 →L[ℂ] E1) (B T : E0 →L[ℂ] E1)
@@ -265,14 +263,12 @@ private theorem gram_residual_of_tangent_pair_right
     hc0 (by positivity) hgramForMod
   exact hmod
 
-omit [CompleteSpace E0] in
 private theorem abs_re_inner_error_left
     {x y z : E0} :
     |RCLike.re ⟪x, z⟫_ℂ - RCLike.re ⟪y, z⟫_ℂ| ≤ ‖x - y‖ * ‖z‖ := by
   rw [← map_sub, ← inner_sub_left]
   exact (RCLike.abs_re_le_norm _).trans (norm_inner_le_norm _ _)
 
-omit [CompleteSpace E0] in
 private theorem abs_re_inner_error_right
     {x y z : E0} :
     |RCLike.re ⟪z, x⟫_ℂ - RCLike.re ⟪z, y⟫_ℂ| ≤ ‖z‖ * ‖x - y‖ := by
@@ -285,10 +281,10 @@ signed cosine blocks are where the two angle branches are absorbed. -/
 theorem reflectionTangent_approximate_pair
     (A0 : E0 →L[ℂ] E0) (A1 : E1 →L[ℂ] E1) (B T : E0 →L[ℂ] E1)
     (C0 : E0 →L[ℂ] E0) (C1 : E1 →L[ℂ] E1)
-    (_hA0 : IsSelfAdjoint A0) (_hA1 : IsSelfAdjoint A1)
+    (hA0 : IsSelfAdjoint A0) (hA1 : IsSelfAdjoint A1)
     (hC0 : IsSelfAdjoint C0) (hC1 : IsSelfAdjoint C1)
     (hC0unit : IsUnit C0) (hC1unit : IsUnit C1)
-    {a b : ℝ} (_hab : a < b)
+    {a b : ℝ} (hab : a < b)
     (hA0high : ∀ x : E0, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A0 x, x⟫_ℂ)
     (hA1low : ∀ y : E1, RCLike.re ⟪A1 y, y⟫_ℂ ≤ a * ‖y‖ ^ 2)
     (hgram0 : C0.adjoint ∘L C0 ∘L (1 + T.adjoint ∘L T) = 1)
@@ -538,7 +534,7 @@ theorem reflectionTangent_approximate_pair
       exact hbound
     calc
       |RCLike.re ⟪J1 v, B (C0 u)⟫_ℂ| = |x0| := by rfl
-      _ = |(x0 - c * y0) + c * y0| := by congr 1; ring
+      _ = |(x0 - c * y0) + c * y0| := by congr 1 ; ring
       _ ≤ |x0 - c * y0| + |c * y0| := abs_add_le _ _
       _ ≤ e0 + c * |y0| := by
         gcongr
@@ -581,7 +577,7 @@ theorem reflectionTangent_approximate_pair
       simpa [mul_comm] using hbound
     calc
       |RCLike.re ⟪C1.modulus v, B u⟫_ℂ| = |x1| := by rfl
-      _ = |(x1 - c * y1) + c * y1| := by congr 1; ring
+      _ = |(x1 - c * y1) + c * y1| := by congr 1 ; ring
       _ ≤ |x1 - c * y1| + |c * y1| := abs_add_le _ _
       _ ≤ e1 + c * |y1| := by
         gcongr

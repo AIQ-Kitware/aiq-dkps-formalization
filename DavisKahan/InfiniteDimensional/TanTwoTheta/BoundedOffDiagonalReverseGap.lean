@@ -62,7 +62,7 @@ theorem riccatiDefect_negBlockOperatorData
   apply ContinuousLinearMap.ext
   intro x
   simp only [riccatiDefect, negBlockOperatorData, ContinuousLinearMap.comp_apply,
-    sub_apply, add_apply, neg_apply, neg_one_smul, map_neg, neg_neg]
+    sub_apply, add_apply, neg_apply, map_neg]
   abel
 
 /-- The Riccati equation is invariant under simultaneous negation of every

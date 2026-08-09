@@ -74,7 +74,7 @@ theorem modelNetResponseEventFor_subset_uniform
     modelNetResponseEventFor ψ Xbar μmodel net τ n ⊆
       modelUniformResponseEvent Xbar μmodel η n := by
   intro ω hω
-  simp only [modelNetResponseEventFor, modelUniformResponseEvent, Set.mem_setOf_eq] at hω ⊢
+  simp only [modelNetResponseEventFor, modelUniformResponseEvent, Set.mem_ofPred_eq] at hω ⊢
   intro g
   obtain ⟨c, hc, hcov⟩ := net.covers n g
   have h1 : ‖Xbar n ω g - Xbar n ω c‖ ≤ Lsample n * ‖ψ g - ψ c‖ :=
@@ -151,7 +151,7 @@ theorem highProb_modelNetResponseEventFor_of_secondMoment
     have hincl : (modelNetResponseEventFor ψ Xbar μmodel net τ n)ᶜ
         ⊆ ⋃ f ∈ net.centers n, {ω | τ n < ‖Xbar n ω f - μmodel f‖} := by
       intro ω hω
-      simp only [modelNetResponseEventFor, Set.mem_compl_iff, Set.mem_setOf_eq, not_forall,
+      simp only [modelNetResponseEventFor, Set.mem_compl_iff, Set.mem_ofPred_eq, not_forall,
         not_le] at hω
       obtain ⟨f, hfc, hfgt⟩ := hω
       exact Set.mem_biUnion hfc hfgt
