@@ -754,6 +754,16 @@ theorem directSum_closedGraph
 def IsSymmetric (A : E →ₗ.[𝕜] E) : Prop :=
   ∀ x y : A.domain, ⟪A x, (y : E)⟫_𝕜 = ⟪(x : E), A y⟫_𝕜
 
+/-- Characteristic form of symmetry for a partial linear map.
+
+This theorem is the public unfolding interface for `IsSymmetric`.  Keep downstream
+modules on this theorem rather than depending on definitional transparency across
+module boundaries. -/
+theorem isSymmetric_iff (A : E →ₗ.[𝕜] E) :
+    IsSymmetric A ↔
+      ∀ x y : A.domain, ⟪A x, (y : E)⟫_𝕜 = ⟪(x : E), A y⟫_𝕜 := by
+  rfl
+
 /-- A self-adjoint partial map restricts to a self-adjoint partial map on every
 reducing subspace. -/
 theorem reducingRestriction_isSelfAdjoint
