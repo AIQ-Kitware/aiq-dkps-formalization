@@ -1013,18 +1013,19 @@ theorem tan_two_theta_norm_sub_le (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     have ht2' : ‖X‖ ^ 2 < 1 / 2 := by
       rcases lt_or_eq_of_le ht2 with h | h
       · linarith
-      · nlinarith [ht2, hμpos]
+      · linarith only [h, hμpos]
     refine ⟨ht2', ?_⟩
-    have h1t : (0 : ℝ) ≤ 1 - ‖X‖ ^ 2 := by nlinarith [ht2']
-    have hμ1 : 1 - 2 * ν ≤ 1 := by nlinarith [hν0]
+    have h1t : (0 : ℝ) ≤ 1 - ‖X‖ ^ 2 := by linarith only [ht2']
+    have hμ1 : 1 - 2 * ν ≤ 1 := by linarith only [hν0]
     -- `2t√(1−t²) ≤ √(1−μ₀²)`
     have hstep1 : 2 * ‖X‖ * Real.sqrt (1 - ‖X‖ ^ 2) ≤ Real.sqrt (1 - (1 - 2 * ν) ^ 2) := by
       have h4 : (2 * ‖X‖ * Real.sqrt (1 - ‖X‖ ^ 2)) ^ 2 = 4 * ‖X‖ ^ 2 * (1 - ‖X‖ ^ 2) := by
         rw [mul_pow, mul_pow, Real.sq_sqrt h1t]
         ring
       have h5 : 4 * ‖X‖ ^ 2 * (1 - ‖X‖ ^ 2) ≤ 1 - (1 - 2 * ν) ^ 2 := by
-        nlinarith [mul_nonneg (show (0:ℝ) ≤ ν - ‖X‖ ^ 2 by linarith)
-          (show (0:ℝ) ≤ 1 - ν - ‖X‖ ^ 2 by nlinarith [ht2', hν12])]
+        have hleft : (0 : ℝ) ≤ ν - ‖X‖ ^ 2 := by linarith only [ht2]
+        have hright : (0 : ℝ) ≤ 1 - ν - ‖X‖ ^ 2 := by linarith only [ht2', hν12]
+        nlinarith only [mul_nonneg hleft hright]
       calc 2 * ‖X‖ * Real.sqrt (1 - ‖X‖ ^ 2)
           = Real.sqrt ((2 * ‖X‖ * Real.sqrt (1 - ‖X‖ ^ 2)) ^ 2) :=
             (Real.sqrt_sq (by positivity)).symm
@@ -1034,8 +1035,9 @@ theorem tan_two_theta_norm_sub_le (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     have hstep2 : (b - a) / 2 * Real.sqrt (1 - (1 - 2 * ν) ^ 2) ≤ ε * (1 - 2 * ν) := by
       have h6 : ((b - a) / 2 * Real.sqrt (1 - (1 - 2 * ν) ^ 2)) ^ 2
           ≤ (ε * (1 - 2 * ν)) ^ 2 := by
-        rw [mul_pow, Real.sq_sqrt (by nlinarith [hμ1, hμpos] : (0:ℝ) ≤ 1 - (1 - 2 * ν) ^ 2)]
-        nlinarith [hkey]
+        rw [mul_pow, Real.sq_sqrt (by
+          nlinarith only [hμ1, hμpos] : (0 : ℝ) ≤ 1 - (1 - 2 * ν) ^ 2)]
+        simpa [mul_pow] using hkey
       have h7 := Real.sqrt_le_sqrt h6
       rwa [Real.sqrt_sq (by positivity), Real.sqrt_sq (mul_nonneg hε0 hμpos.le)] at h7
     have hstep3 : 1 - 2 * ν ≤ 1 - 2 * ‖X‖ ^ 2 := by linarith
