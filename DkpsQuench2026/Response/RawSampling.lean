@@ -368,7 +368,7 @@ theorem measurableSet_augmentedRawResponseMeanEvent_finite
             augmentedRawPopulationMean f_ref μmodel n ω f i‖ ≤ η n} := by
     ext ω
     simp only [augmentedUniformResponseMeanEvent, Acharyya2025.Bridge.UniformResponseMeanClose,
-      Set.mem_setOf_eq, Set.mem_iInter]
+      Set.mem_ofPred_eq, Set.mem_iInter]
   rw [hev]
   exact MeasurableSet.iInter fun f => MeasurableSet.iInter fun i =>
     measurableSet_le (hmeas f i) measurable_const

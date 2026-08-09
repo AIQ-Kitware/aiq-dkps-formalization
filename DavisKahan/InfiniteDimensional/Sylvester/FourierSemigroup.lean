@@ -184,7 +184,7 @@ theorem unitaryGroup_add (A : H →L[ℂ] H) (s t : ℝ) :
 theorem semigroup_add (A : H →L[ℂ] H) (s t : ℝ) :
     semigroup A (s + t) = semigroup A s ∘L semigroup A t := by
   have hcomm : Commute (((s : ℂ)) • A) (((t : ℂ)) • A) := by
-    simp [Commute, SemiconjBy, smul_smul, mul_comm, mul_left_comm]
+    simp [Commute, SemiconjBy, smul_smul, mul_comm]
   rw [semigroup, semigroup, semigroup, ← ContinuousLinearMap.mul_def,
     ← NormedSpace.exp_add_of_commute_of_mem_ball (𝕂 := ℂ) hcomm
       ((NormedSpace.expSeries_radius_eq_top ℂ (H →L[ℂ] H)).symm ▸ edist_lt_top _ _)

@@ -74,7 +74,7 @@ noncomputable def complexifySubmoduleLinearEquiv (Z : Submodule ℝ E) :
   map_smul' c w := by
     apply Subtype.ext
     apply TauCeti.RealComplexification.ext <;>
-      simp [Submodule.coe_sub, Submodule.coe_smul, Submodule.coe_add]
+      simp [Submodule.coe_add]
   left_inv w := by
     apply TauCeti.RealComplexification.ext <;> apply Subtype.ext <;> simp
   right_inv z := by
