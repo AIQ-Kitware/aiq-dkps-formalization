@@ -320,6 +320,26 @@ theorem diagonalBlockBound_mul_le_norm_diagonalPart_apply_specRange {x : H}
     (fun n => spectralCutoffSeq hA c n) (fun n => by positivity) hab hx
     (tendsto_spectralCutoff hA c hx)
 
+/-- **The branch-free `tan 2Θ₀` inequality at the operator norm, for a
+self-adjoint operator, with no cutoff hypothesis.**
+
+`δ ‖sin 2Θ₀ x‖ ≤ 2 ‖B‖ ‖cos 2Θ₀ x‖` on the spectral subspace, `δ = b - a`.
+Together with `diagonalBlockBound_mul_le_norm_diagonalPart_apply_specRange`,
+whose right-hand side is bounded below by `κ ‖x‖ > 0`, this is
+`δ |tan 2θ| ≤ 2 ‖B‖` with the **residual** `B` on the right and the sharp
+constant `2`. -/
+theorem gap_mul_norm_offDiagonalPart_apply_le_specRange {x : H}
+    (hx : x ∈ LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) :
+    (b - a) *
+        ‖(LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).offDiagonalPart Z x‖ ≤
+      2 * ‖B‖ *
+        ‖(LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagonalPart Z x‖ :=
+  gap_mul_norm_offDiagonalPart_apply_le_of_tendsto
+    (LinearPMap.reducesSubspace_specRange hA (Set.Iic c) measurableSet_Iic) hB
+    hZsa hZ2 hZdom hZcomm hUa hUb (fun n : ℕ => |c| + n)
+    (fun n => spectralCutoffSeq hA c n) (fun n => by positivity) hab hx
+    (tendsto_spectralCutoff hA c hx)
+
 end Unconditional
 
 end TauCeti

@@ -218,6 +218,37 @@ private theorem diagonalBlockBound_le_of_cross {δ nB s nx nC : ℝ} (hδ : 0 < 
     _ ≤ √(nC ^ 2) := Real.sqrt_le_sqrt hkey
     _ = nC := Real.sqrt_sq hnC
 
+/-- **The tangent form of the cross-block bound.**  `c² + s² = n²` together with
+`s ≤ (2β/D) n`, `D² = δ² + 4β²`, is *equivalent* to `δ s ≤ 2 β c`: the
+pole-exclusion bound and the branch-free double-angle tangent inequality are the
+same statement, rearranged.  This is why excluding the pole already proves the
+operator-norm case of the `tan 2Θ` theorem. -/
+private theorem gap_mul_le_of_cross {δ nB s nx nC : ℝ} (hnB : 0 ≤ nB)
+    (hs : s ≤ crossBlockBound δ nB * nx) (hs0 : 0 ≤ s)
+    (hnC : 0 ≤ nC) (hpy : nC ^ 2 + s ^ 2 = nx ^ 2) (hδ : 0 < δ) :
+    δ * s ≤ 2 * nB * nC := by
+  set D : ℝ := √(δ ^ 2 + 4 * nB ^ 2) with hDdef
+  have hDpos : 0 < D := Real.sqrt_pos.mpr (by positivity)
+  have hD2 : D ^ 2 = δ ^ 2 + 4 * nB ^ 2 := Real.sq_sqrt (by positivity)
+  rw [crossBlockBound_eq, ← hDdef] at hs
+  have hssq : s ^ 2 ≤ 4 * nB ^ 2 / D ^ 2 * nx ^ 2 := by
+    have h1 : s ^ 2 ≤ (2 * nB / D * nx) ^ 2 := by gcongr
+    have h2 : (2 * nB / D * nx) ^ 2 = 4 * nB ^ 2 / D ^ 2 * nx ^ 2 := by
+      rw [mul_pow, div_pow]
+      ring
+    rw [← h2]
+    exact h1
+  have hmul : s ^ 2 * D ^ 2 ≤ 4 * nB ^ 2 * nx ^ 2 := by
+    have := mul_le_mul_of_nonneg_right hssq (le_of_lt (by positivity : (0:ℝ) < D ^ 2))
+    calc s ^ 2 * D ^ 2 ≤ 4 * nB ^ 2 / D ^ 2 * nx ^ 2 * D ^ 2 := this
+      _ = 4 * nB ^ 2 * nx ^ 2 := by field_simp
+  have hsq : (δ * s) ^ 2 ≤ (2 * nB * nC) ^ 2 := by
+    rw [hD2] at hmul
+    nlinarith [hmul, hpy]
+  calc δ * s = √((δ * s) ^ 2) := (Real.sqrt_sq (by positivity)).symm
+    _ ≤ √((2 * nB * nC) ^ 2) := Real.sqrt_le_sqrt hsq
+    _ = 2 * nB * nC := Real.sqrt_sq (by positivity)
+
 section Leak
 
 variable {U : Submodule ℂ H} [U.HasOrthogonalProjection] {A : H →ₗ.[ℂ] H}
@@ -733,6 +764,30 @@ theorem diagonalBlockBound_mul_le_norm_diagonalPart_apply_of_tendsto
   exact diagonalBlockBound_le_of_cross hδ (norm_nonneg x)
     (norm_offDiagonalPart_apply_le_of_tendsto hred hB hZsa hZ2 hZdom hZcomm hUa
       hUb τf Ωf hτ hab hx) (norm_nonneg _) (norm_nonneg _) hpyth
+
+/-- **The branch-free `tan 2Θ₀` inequality at the operator norm, unbounded.**
+
+`δ ‖sin 2Θ₀ x‖ ≤ 2 ‖B‖ ‖cos 2Θ₀ x‖` for every `x` in the trial subspace, with
+`δ = b - a`.  Dividing by `‖cos 2Θ₀ x‖`, which
+`diagonalBlockBound_mul_le_norm_diagonalPart_apply_of_tendsto` bounds below by
+`κ ‖x‖ > 0`, this is `δ |tan 2θ| ≤ 2 ‖B‖`.
+
+The constant is the sharp `2` and the right-hand side is the **residual** `B`,
+not a perturbation norm.  **Branch-freeness is structural**: the sign of
+`cos 2θ` has vanished into `C x` and only its magnitude survives, so no acute or
+obtuse branch is selected anywhere. -/
+theorem gap_mul_norm_offDiagonalPart_apply_le_of_tendsto {ι : Type*}
+    {l : Filter ι} [l.NeBot] (τf : ι → ℝ) (Ωf : ∀ i, BoundedCutoff A U (τf i))
+    (hτ : ∀ i, 0 ≤ τf i) (hab : a < b) {x : H} (hxU : x ∈ U)
+    (hx : Filter.Tendsto (fun i => (Ωf i).toProj x) l (nhds x)) :
+    (b - a) * ‖U.offDiagonalPart Z x‖ ≤ 2 * ‖B‖ * ‖U.diagonalPart Z x‖ := by
+  have hδ : 0 < b - a := by linarith
+  have hZnorm := norm_apply_of_isSelfAdjoint_of_mul_self hZsa hZ2
+  have hpyth := norm_sq_diagonalPart_add_norm_sq_offDiagonalPart_of_mem
+    (U := U) hZnorm hxU
+  exact gap_mul_le_of_cross (norm_nonneg B)
+    (norm_offDiagonalPart_apply_le_of_tendsto hred hB hZsa hZ2 hZdom hZcomm hUa
+      hUb τf Ωf hτ hab hx) (norm_nonneg _) (norm_nonneg _) hpyth hδ
 
 end Estimate
 

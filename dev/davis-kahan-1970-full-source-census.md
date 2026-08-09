@@ -1002,6 +1002,31 @@ for every `x` in `U`, `delta = b - a`.  All axiom-clean.
 **PIECE 2 (THE KY FAN AND UI-NORM ENDPOINT) IS STILL OPEN, AND IT CANNOT LIVE IN `ForTauCeti`.**  Its two ingredients are on the wrong side of the import firewall: `ApproximateLeadingSingularFamily` and `exists_approximateLeadingSingularFamily` are in `DavisKahan/Sources/DavisKahan1970/Ideals/SpectralSelection.lean`, and the paired-inner-product-to-Ky-Fan step used by the bounded proof is likewise in `DavisKahan`.  A `ForTauCeti` module may not import either.  The unbounded endpoint therefore belongs in `DavisKahan`, consuming the `ForTauCeti` engine -- the same shape as the bounded `TanTwoThetaBranchFreeInfinite.lean`.
 
 One structural fact found while scoping it, which removes the approximation lemma the plan expected to need: the adjoint of the compressed cross block `X = S . Omega` is `Omega . S`, so the family's `adjoint_residual` field, `||X* y_k - q_k x_k|| <= eps`, IS the leakage bound `||Omega r_k|| <= eps` with `r_k = S y_k - q_k x_k` (using `Omega x_k = x_k`).  No simultaneous near-maximiser lemma has to be built: one `eps` drives both the geometric error and the error beside `A_0`, and freezing `tau` first and then sending `eps -> 0` is the whole device.
+
+**THE OPERATOR-NORM CASE OF THE UNBOUNDED RESIDUAL `tan 2Theta` THEOREM IS PROVED, 2026-08-09 (Claude Opus 5).  THE ARBITRARY-UI-NORM CASE IS NOT.  ROW STATUS UNCHANGED.**
+
+`DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedResidual.lean` (in `DavisKahan.Sources.DavisKahan1970.All`, hence in the default build) proves, for `A` self-adjoint and possibly unbounded, `X_0 = 1_{(-inf, c]}(A)`, form bounds `A <= a` on `X_0` and `A >= b` on `X_1`, `delta = b - a > 0`, and `B` bounded and FULLY OFF-DIAGONAL (the source's `H_0 = H_1 = 0`, so `B` is the residual `R`):
+
+    delta * ||sin 2Theta_0 x|| <= 2 ||B|| * ||cos 2Theta_0 x||    and    kappa ||x|| <= ||cos 2Theta_0 x||,   kappa = delta / sqrt(delta^2 + 4 ||B||^2),
+
+for every `x` in `X_0`; equivalently `delta |tan 2 theta| <= 2 ||B||`.  Sharp constant `2`, residual on the right (not the perturbation form `2 N(E)`), and branch-free STRUCTURALLY -- the sign of `cos 2 theta` is inside the diagonal block and only its magnitude survives, so no acute/obtuse selection occurs anywhere.  This is the Ky Fan prefix at `nu = 1`.  Axiom-clean.
+
+The tangent inequality is the pole-exclusion bound rearranged: `c^2 + s^2 = n^2` with `s <= (2 beta / D) n`, `D^2 = delta^2 + 4 beta^2`, is EQUIVALENT to `delta s <= 2 beta c`.  So the pole exclusion already contained the operator-norm theorem.
+
+**WHY `nu >= 2` DID NOT LAND, PRECISELY.**  The bounded infinite-dimensional argument (`DoubleAngle/TanTwoThetaApproximatePair.lean` + `Sources/DavisKahan1970/TanTwoThetaBranchFreeInfinite.lean`) cannot be transferred, and the reason is visible in its own error constant:
+
+    approximatePairErrorCoefficient A H T = (||A|| + ||H||) * (3 + 2 ||T||)
+
+-- proportional to `||A||`.  With `A` unbounded that coefficient is infinite.  Tracing where `||A||` enters: the per-pair estimate pairs equation (7.6) at the family's right vector `x_k` against the family's LEFT vector `y_k`, and the left residual `e_k = S x_k - q_k y_k` produces the term `<A (S x_k), e_k>`.  Now `S x_k` lies in `X_1`, where `A` is bounded BELOW by `b` and not above, and no cutoff of `A_0` controls it.  The cutoff device that works on the `A_0` side has no counterpart on the `A_1` side.
+
+The repair, which I believe is correct but did not build: never use the family's left vectors.  Take `y_k := S x_k / ||S x_k||` EXACTLY, as the Appendix's own construction does, so that `<A (S x_k), y_k> = ||S x_k|| <A y_k, y_k>` with no residual at all and the `A_1` side is reached only through the form bound.  The family is then used for three things only: orthonormality of the right vectors, the composite `X* X x_k approx q_k^2 x_k` from its two residual fields, and the value `q_k = a_k(X)`.
+
+Two consequences the plan for steps 6--8 did not account for, both real:
+
+* The plan's `<D_0 x_j, D_0 x_k> = d_k^2 delta_{jk}` holds EXACTLY only for exact singular vectors, which need not exist.  With an approximate family the `D_0` Gram carries an error too, since `<D_0 x_j, D_0 x_k> = delta_{jk} - <G x_j, G x_k>`, and the `y_k` Gram error is the same quantity.
+* That error is `O(eps) / (q_j q_k)`.  The structure field `selected_large` gives only `q_k > eps`, so the naive bound is `O(1/eps)` -- it does NOT tend to zero.  Splitting the indices at `q_k >= sqrt(eps)` is also insufficient (error `O(1)`).  The split must be at `q_k >= eps^(1/3)`: retained indices then carry Gram error `O(eps^(1/3))`, and dropped indices contribute at most `f(q_k) <= eps^(1/3)/kappa` to the left-hand side, so both halves vanish together.
+
+After that the remaining chain is: the finite-dimensional Gram/polar correction on the `D_1` side (uniform because `d_k >= kappa`), two applications of `sum_abs_le_kyFanApproximationGauge_of_orthonormal`, then `eps -> 0` at frozen `tau`, then `tau -> infinity` via DK-5.1-lem.
 - **Next action:** Audit every displayed appendix identity and complete the arbitrary-ideal tangent cutoff/Fan passage; do not infer it from the compiled common-domain wrappers alone.
 
 #### Lemma 6.3: Finite-rank near-maximizer leakage estimate
@@ -1045,7 +1070,7 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'source wrapper pr
 - **Verification:** `proved_in_build`
 - **Mathematics:** The off-diagonal block equation and paired singular vectors yield Ky Fan and UI-norm bounds for tan(2 Theta).
 - **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `TauCeti.DavisKahan1970.tanTwoTheta_uiNorm`, `TauCeti.DavisKahan1970.tanTwoTheta_kyFan`, `TauCeti.DavisKahan1970.tanTwoTheta_uiIdeal_infinite`, `TauCeti.DavisKahan1970.tanTwoTheta_kyFan_infinite`, `TauCeti.DavisKahan1970.tanTwoTheta_sharp_opNorm`, `TauCeti.DavisKahan1970.tanTwoTheta_spectral_repulsion`
+- **Current Lean references:** `TauCeti.DavisKahan1970.tanTwoTheta_uiNorm`, `TauCeti.DavisKahan1970.tanTwoTheta_kyFan`, `TauCeti.DavisKahan1970.tanTwoTheta_uiIdeal_infinite`, `TauCeti.DavisKahan1970.tanTwoTheta_kyFan_infinite`, `TauCeti.DavisKahan1970.tanTwoTheta_sharp_opNorm`, `TauCeti.DavisKahan1970.tanTwoTheta_spectral_repulsion`, `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_residual_opNorm`, `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_residual_div`
 - **Assessment:** The operator-norm theorem is compiled in finite dimensions; the arbitrary UI-norm singular-vector argument remains uncertified.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. The off-diagonal weighted-sine tangent bound is compiled and axiom-clean; the exact source norm scope and the infinite-dimensional approximation passage are absent.
@@ -1055,6 +1080,8 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm scope and infinite-dimensional approximation passage' have existed since the TanTwoTheta facade landed (DavisKahan/Sources/DavisKahan1970/TanTwoTheta.lean): `tanTwoTheta_uiNorm` is equation (7.6) at the source norm scope -- every rectangular unitarily invariant norm, proved by the paper's paired-singular-vector argument -- and `tanTwoTheta_uiIdeal_infinite` / `tanTwoTheta_kyFan_infinite` are the infinite-dimensional sharp ideal forms via compression to the finite carrier (the paper's own passage), with `tanTwoTheta_sharp_opNorm` the pole-free sharp subspace theorem carrying the Section 8 acute branch and `tanTwoTheta_spectral_repulsion` the branch-keeping mechanism.  The facade's docstring records the audited boundary: the sharp infinite-dimensional ideal form requires a finite-dimensional invariant subspace (principal angles attained), the unbounded companions cover genuine spectral subspaces at the extended-cosine denominator, and the UNRESTRICTED sharp infinite-dimensional statement is excluded as refuted (the genuine unbounded Sylvester equation has a nonzero commutator defect; `doubleAngleTangent_sylvesterEquation` carries it explicitly).  Excluding an unsupported statement is completing the surface, not a gap.  All declarations resolve from `DavisKahan.All` and are axiom-clean (elaborator probe 2026-08-07).
 
 **UNBOUNDED COMPANION, 2026-08-08 (Claude Opus 5).**  The branch-free unbounded form of equation (7.6) -- `A (S x) - S (A x) = C (B x) - B (C x)` on `D(A)`, for `S` and `C` the odd and even blocks of the reducing reflection -- and an explicit pole-exclusion bound `|cos 2 Theta_0| >= delta / sqrt(delta^2 + 4 ||B||^2)` now exist in `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/{ReflectionBlocks,UnboundedReflection,UnboundedPole}.lean`.  They are the unbounded, residual-form analogue of this row's argument and are recorded on `DK-6-appendix`; the Ky Fan and unitarily-invariant-norm endpoint for the unbounded case is still open, so nothing on this row changes.
+
+**OPERATOR-NORM UNBOUNDED RESIDUAL COMPANION, 2026-08-09 (Claude Opus 5).**  `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_residual_opNorm` and `..._div` (`Sources/DavisKahan1970/TanTwoThetaUnboundedResidual.lean`) give the operator-norm case of this row's theorem for UNBOUNDED self-adjoint `A`, in residual form with the sharp constant `2` and structural branch-freeness, together with the explicit pole exclusion `|cos 2 Theta_0| >= delta / sqrt(delta^2 + 4 ||B||^2)`.  The arbitrary-UI-norm (Ky Fan `nu >= 2`) case in the unbounded setting is still open; the obstruction is recorded on `DK-6-appendix`.  Nothing on this row changes: the bounded results here are unaffected.
 - **Next action:** Nothing outstanding at the source's own scope.  The facade docstring records the deliberate exclusions (finite-carrier condition for the sharp ideal form; refuted unrestricted statement).
 
 ### Section 8
