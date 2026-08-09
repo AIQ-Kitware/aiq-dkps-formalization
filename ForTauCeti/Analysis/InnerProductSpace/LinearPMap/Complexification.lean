@@ -297,6 +297,43 @@ section Square
 
 variable {A : E →ₗ.[ℝ] E}
 
+/-- The embedded real-domain map is continuous. -/
+private theorem continuous_complexifyRealOfRealDomain
+    (A : E →ₗ.[ℝ] E) :
+    Continuous (complexifyRealOfRealDomain A) :=
+  ((ofReal (E := E)).continuous.comp continuous_subtype_val).subtype_mk _
+
+/-- The embedded imaginary-domain map is continuous. -/
+private theorem continuous_complexifyRealOfImaginaryDomain
+    (A : E →ₗ.[ℝ] E) :
+    Continuous (complexifyRealOfImaginaryDomain A) := by
+  have h : Continuous fun x : A.domain => Complex.I • (ofReal (x : E) : Eℂ) :=
+    (continuous_const_smul (Complex.I : ℂ)).comp
+      ((ofReal (E := E)).continuous.comp continuous_subtype_val)
+  exact h.subtype_mk _
+
+/-- The real coordinate of the complexified domain is continuous. -/
+private theorem continuous_complexificationDomainRe
+    (A : E →ₗ.[ℝ] E) :
+    Continuous (complexificationDomainRe A) :=
+  (continuous_re_source.comp continuous_subtype_val).subtype_mk _
+
+/-- The imaginary coordinate of the complexified domain is continuous. -/
+private theorem continuous_complexificationDomainIm
+    (A : E →ₗ.[ℝ] E) :
+    Continuous (complexificationDomainIm A) :=
+  (continuous_im_source.comp continuous_subtype_val).subtype_mk _
+
+/-- Real part of a complex inner product against a real-copy vector. -/
+private theorem inner_ofReal_right_re (z : Eℂ) (v : E) :
+    (⟪z, ofReal v⟫_ℂ).re = ⟪re z, v⟫_ℝ := by
+  simp [inner_apply]
+
+/-- Real part of a complex inner product against an imaginary-copy vector. -/
+private theorem inner_I_ofReal_right_re (z : Eℂ) (v : E) :
+    (⟪z, Complex.I • ofReal v⟫_ℂ).re = ⟪im z, v⟫_ℝ := by
+  simp [inner_apply]
+
 /-- Symmetry is preserved by raw partial-map complexification. -/
 theorem IsSymmetric.complexifyReal (hA : IsSymmetric A) :
     IsSymmetric (TauCeti.LinearPMap.complexifyReal A) := by
@@ -317,6 +354,100 @@ theorem IsSymmetric.complexifyReal (hA : IsSymmetric A) :
         ⟪(complexificationDomainIm A z : E), A (complexificationDomainRe A w)⟫_ℝ
     rw [hA (complexificationDomainRe A z) (complexificationDomainIm A w),
       hA (complexificationDomainIm A z) (complexificationDomainRe A w)]
+
+variable [CompleteSpace E]
+
+/-- Membership in the adjoint domain of a raw complexified real partial map is exactly
+coordinatewise membership in the real adjoint domain.
+
+This is the maximality theorem needed to transport real self-adjointness to the canonical
+complexification without introducing a bundled closed-operator bridge. -/
+theorem mem_complexifyReal_adjoint_domain_iff
+    (A : E →ₗ.[ℝ] E) (z : Eℂ) :
+    z ∈ (complexifyReal A).adjoint.domain ↔
+      re z ∈ A.adjoint.domain ∧ im z ∈ A.adjoint.domain := by
+  rw [_root_.LinearPMap.mem_adjoint_domain_iff]
+  constructor
+  · intro hz
+    have hofReal : Continuous (complexifyRealOfRealDomain A) :=
+      continuous_complexifyRealOfRealDomain A
+    have hofImaginary : Continuous (complexifyRealOfImaginaryDomain A) :=
+      continuous_complexifyRealOfImaginaryDomain A
+    constructor
+    · rw [_root_.LinearPMap.mem_adjoint_domain_iff]
+      change Continuous fun x : A.domain => ⟪re z, A x⟫_ℝ
+      have hrestrict : Continuous fun x : A.domain =>
+          ⟪z, complexifyReal A (complexifyRealOfRealDomain A x)⟫_ℂ :=
+        hz.comp hofReal
+      have hre := Complex.continuous_re.comp hrestrict
+      simp only [Function.comp_def, complexifyReal_apply_ofReal,
+        inner_ofReal_right_re] at hre
+      exact hre
+    · rw [_root_.LinearPMap.mem_adjoint_domain_iff]
+      change Continuous fun x : A.domain => ⟪im z, A x⟫_ℝ
+      have hrestrict : Continuous fun x : A.domain =>
+          ⟪z, complexifyReal A (complexifyRealOfImaginaryDomain A x)⟫_ℂ :=
+        hz.comp hofImaginary
+      have hre := Complex.continuous_re.comp hrestrict
+      simp only [Function.comp_def, complexifyReal_apply_ofImaginary,
+        inner_I_ofReal_right_re] at hre
+      exact hre
+  · rintro ⟨hr, hi⟩
+    rw [_root_.LinearPMap.mem_adjoint_domain_iff] at hr hi
+    replace hr : Continuous fun x : A.domain => ⟪re z, A x⟫_ℝ := hr
+    replace hi : Continuous fun x : A.domain => ⟪im z, A x⟫_ℝ := hi
+    have hdomainRe : Continuous (complexificationDomainRe A) :=
+      continuous_complexificationDomainRe A
+    have hdomainIm : Continuous (complexificationDomainIm A) :=
+      continuous_complexificationDomainIm A
+    change Continuous fun w : (complexifyReal A).domain =>
+      ⟪z, complexifyReal A w⟫_ℂ
+    have hre : Continuous fun w : (complexifyReal A).domain =>
+        (⟪z, complexifyReal A w⟫_ℂ).re :=
+      (hr.comp hdomainRe).add (hi.comp hdomainIm)
+    have him : Continuous fun w : (complexifyReal A).domain =>
+        (⟪z, complexifyReal A w⟫_ℂ).im :=
+      (hr.comp hdomainIm).sub (hi.comp hdomainRe)
+    have hsplit : (fun w : (complexifyReal A).domain =>
+        ⟪z, complexifyReal A w⟫_ℂ) =
+        fun w : (complexifyReal A).domain =>
+          (((⟪z, complexifyReal A w⟫_ℂ).re : ℂ) +
+            ((⟪z, complexifyReal A w⟫_ℂ).im : ℂ) * Complex.I) := by
+      funext w
+      exact (Complex.re_add_im _).symm
+    rw [hsplit]
+    exact (Complex.continuous_ofReal.comp hre).add
+      ((Complex.continuous_ofReal.comp him).mul continuous_const)
+
+/-- Self-adjointness of a real raw `LinearPMap` is preserved by canonical
+complexification.
+
+The proof uses the adjoint-domain characterization above and symmetry.  In particular,
+it does not reconstruct adjoint values through the historical bundled closed-operator
+representation. -/
+theorem isSelfAdjoint_complexifyReal
+    {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A) :
+    _root_.IsSelfAdjoint (complexifyReal A) := by
+  have hAeq : A.adjoint = A := _root_.LinearPMap.isSelfAdjoint_def.mp hA
+  have hdense : Dense (((complexifyReal A).domain : Submodule ℂ Eℂ) : Set Eℂ) :=
+    dense_domain_complexifyReal A hA.dense_domain
+  have hAformal := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
+  rw [hAeq] at hAformal
+  have hAsymm : IsSymmetric A := by
+    rw [isSymmetric_iff]
+    exact hAformal
+  have hsymm := hAsymm.complexifyReal
+  rw [isSymmetric_iff] at hsymm
+  have hformal : (complexifyReal A).IsFormalAdjoint (complexifyReal A) := by
+    exact hsymm
+  have hle : complexifyReal A ≤ (complexifyReal A).adjoint :=
+    _root_.LinearPMap.IsFormalAdjoint.le_adjoint
+      (T := complexifyReal A) (S := complexifyReal A) hdense hformal
+  have hdomeq : (complexifyReal A).domain = (complexifyReal A).adjoint.domain := by
+    ext z
+    rw [mem_complexifyReal_domain_iff, mem_complexifyReal_adjoint_domain_iff, hAeq]
+  rw [_root_.LinearPMap.isSelfAdjoint_def]
+  exact (_root_.LinearPMap.eq_of_le_of_domain_eq hle hdomeq).symm
 
 end Square
 
