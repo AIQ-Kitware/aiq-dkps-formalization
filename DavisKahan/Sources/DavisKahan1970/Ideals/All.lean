@@ -18,5 +18,6 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
 import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormDefinite
 import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
+import DavisKahan.Sources.DavisKahan1970.Ideals.KyFanNorm
 
 /-! # `DavisKahan/Sources/DavisKahan1970/Ideals` -/

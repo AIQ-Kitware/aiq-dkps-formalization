@@ -8,6 +8,7 @@ import DavisKahan.TanTheta.Theorem63FiniteSource
 import DavisKahan.TanTheta.Theorem63InfiniteTrial
 import DavisKahan.TanTheta.Theorem63TrialData
 import DavisKahan.TanTheta.Theorem63Unbounded
+import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
 import DavisKahan.TanTheta.UnboundedGraphAngle
 import DavisKahan.TanTheta.UnboundedSpectrum
 import DavisKahan.TanTheta.UnboundedVector
