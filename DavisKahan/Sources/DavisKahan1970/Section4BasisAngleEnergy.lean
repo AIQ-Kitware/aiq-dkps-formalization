@@ -284,7 +284,7 @@ equality, so the right-hand side really is the minimum and the direct rotation
 really is a minimiser. -/
 theorem displacementAngleSineSq_directRotation_eq_of_smul
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) {x : H} {μ : ℝ}
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) {x : H} {μ : ℝ}
     (hμ : 0 ≤ μ) (hxnorm : ‖x‖ = 1)
     (hCx : spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x =
       (μ : ℂ) • x) :

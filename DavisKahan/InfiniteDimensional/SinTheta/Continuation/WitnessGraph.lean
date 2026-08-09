@@ -204,8 +204,8 @@ theorem sinTwoTheta_acute_of_small_perturbation
     (C : SpectralContinuationWitness A V s)
     (hsmall : selectedBranchProjectionLipschitzConstant
       C.contour V C.margin < Real.sqrt 2 / 2) :
-    IsAcute C.sourceSelectedSpectralSubspace C.targetSelectedSpectralSubspace :=
-  isAcute_of_isQuarterAcute _ _
+    IsUniformlyAcute C.sourceSelectedSpectralSubspace C.targetSelectedSpectralSubspace :=
+  isUniformlyAcute_of_isQuarterAcute _ _
     (C.selectedSpectralSubspaces_isQuarterAcute_of_contour_bound hsmall)
 
 end ComplexContinuation

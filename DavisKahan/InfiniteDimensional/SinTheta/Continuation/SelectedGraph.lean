@@ -38,10 +38,10 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
 /-- Quarter-acuteness implies ordinary acuteness. -/
-theorem isAcute_of_isQuarterAcute
+theorem isUniformlyAcute_of_isQuarterAcute
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hquarter : IsQuarterAcute U V) :
-    IsAcute U V := by
+    IsUniformlyAcute U V := by
   change subspaceGap U V < Real.sqrt 2 / 2 at hquarter
   change subspaceGap U V < 1
   have hsqrt_sq : Real.sqrt 2 ^ 2 = (2 : ℝ) :=
@@ -92,7 +92,7 @@ theorem existsUnique_contractiveAngularOperator_of_isQuarterAcute
       IsAngularOperator U X ∧ graphSubspace U X = V ∧ ‖X‖ < 1 := by
   obtain ⟨X, hX, hunique⟩ :=
     existsUnique_angularOperator U V
-      (isAcute_of_isQuarterAcute U V hquarter)
+      (isUniformlyAcute_of_isQuarterAcute U V hquarter)
   have hquarterGraph : IsQuarterAcute U (graphSubspace U X) := by
     simpa only [hX.2] using hquarter
   have hcontractive : ‖X‖ < 1 :=

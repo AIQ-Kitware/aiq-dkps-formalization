@@ -34,13 +34,13 @@ variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
 /-- The zero graph and every bounded unbounded-block graph form an acute pair.
 The adjective `unbounded` refers to the operator acting on the graph, not to
 its bounded angular parametrization. -/
-theorem zeroUnboundedGraph_isAcute_unboundedBlockGraph
+theorem zeroUnboundedGraph_isUniformlyAcute_unboundedBlockGraph
     (X : E0 →L[ℂ] E1) :
-    IsAcute
+    IsUniformlyAcute
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1))
       (unboundedBlockGraph X) := by
   simpa [unboundedBlockGraph, blockGraph] using
-    (zeroGraph_isAcute_blockGraph X)
+    (zeroGraph_isUniformlyAcute_blockGraph X)
 
 /-- Canonical complex rotation from the first coordinate graph to the graph of
 `X`. -/
@@ -49,7 +49,7 @@ noncomputable def unboundedGraphRotation (X : E0 →L[ℂ] E1) :
   complexDirectRotation
     (unboundedBlockGraph (0 : E0 →L[ℂ] E1))
     (unboundedBlockGraph X)
-    (zeroUnboundedGraph_isAcute_unboundedBlockGraph X)
+    (zeroUnboundedGraph_isUniformlyAcute_unboundedBlockGraph X)
 
 /-- The canonical graph rotation is norm preserving and onto. -/
 theorem unboundedGraphRotation_unitary (X : E0 →L[ℂ] E1) :
@@ -57,7 +57,7 @@ theorem unboundedGraphRotation_unitary (X : E0 →L[ℂ] E1) :
   exact complexDirectRotation_unitary
     (unboundedBlockGraph (0 : E0 →L[ℂ] E1))
     (unboundedBlockGraph X)
-    (zeroUnboundedGraph_isAcute_unboundedBlockGraph X)
+    (zeroUnboundedGraph_isUniformlyAcute_unboundedBlockGraph X)
 
 /-- Kernel and range form of bijectivity, suitable for constructing a
 continuous linear equivalence from the canonical graph rotation. -/
@@ -118,7 +118,7 @@ theorem unboundedGraphRotationEquiv_intertwines_projection
   exact complexDirectRotation_intertwines
     (unboundedBlockGraph (0 : E0 →L[ℂ] E1))
     (unboundedBlockGraph X)
-    (zeroUnboundedGraph_isAcute_unboundedBlockGraph X)
+    (zeroUnboundedGraph_isUniformlyAcute_unboundedBlockGraph X)
 
 /-- The graph-rotated block core in its canonical partial-map form. -/
 noncomputable abbrev unboundedGraphRotationPullback

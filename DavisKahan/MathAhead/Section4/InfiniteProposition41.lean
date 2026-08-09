@@ -461,7 +461,7 @@ theorem norm_sourceCosine_eq_norm_targetProjection (x : U) :
 /-- The direct restricted displacement is modeled by the positive source
 cosine. -/
 theorem sourceRestrictedDisplacement_direct_norm_sq
-    (hacute : IsAcute U V) (x : U) :
+    (hacute : IsUniformlyAcute U V) (x : U) :
     ‖sourceRestrictedDisplacement U (spectraDirectRotation U V hacute) x‖ ^ 2 =
       2 * ‖x‖ ^ 2 - 2 * RCLike.re ⟪sourceCosine U V x, x⟫_ℂ := by
   let D : H →L[ℂ] H := spectraDirectRotation U V hacute
@@ -531,7 +531,7 @@ theorem sourceRestrictedDisplacement_competitor_norm_sq_lower
 
 /-- Assemble the geometric input for the infinite-dimensional min--max proof. -/
 noncomputable def proposition4_1_cosineDisplacementData
-    (hacute : IsAcute U V) (W : H →L[ℂ] H)
+    (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W) :
     CosineDisplacementData
@@ -557,7 +557,7 @@ noncomputable def proposition4_1_cosineDisplacementData
 
 /-- Infinite-dimensional Proposition 4.1 in source coordinates. -/
 theorem proposition4_1_source_approximationNumbers
-    (hacute : IsAcute U V) (W : H →L[ℂ] H)
+    (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W) (n : ℕ) :
     (sourceRestrictedDisplacement U
@@ -589,7 +589,7 @@ theorem sourceRestrictedDisplacement_sameApproximationSingularSequence
 /-- Infinite-dimensional Davis--Kahan Proposition 4.1 in the ambient form used
 by the frontier. -/
 theorem proposition4_1_restrictedDisplacement_approximationNumbers_scratch
-    (hacute : IsAcute U V) (W : H →L[ℂ] H)
+    (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W) (n : ℕ) :
     ContinuousLinearMap.approximationNumber
@@ -617,7 +617,7 @@ theorem proposition4_1_restrictedDisplacement_approximationNumbers_scratch
 
 /-- Package the hard theorem for the existing infinite ideal-dominance bridge. -/
 noncomputable def infinite_restrictedDisplacementDominance
-    (hacute : IsAcute U V) (W : H →L[ℂ] H)
+    (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W) :
     RestrictedDisplacementApproximationDominance

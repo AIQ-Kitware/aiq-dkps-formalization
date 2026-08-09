@@ -49,7 +49,7 @@ variable (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
 /-- Davis--Kahan 1970, Proposition 4.1: every approximation number of the
 restricted displacement is minimized by the direct rotation. -/
 theorem proposition4_1_restrictedDisplacement_approximationNumbers
-    (hacute : IsAcute U V) (W : H →L[ℂ] H)
+    (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W)
     (n : ℕ) :
@@ -71,7 +71,7 @@ statement genuinely needs; the honest hypothesis is a `KyFanDominantIdealFamily`
 whose membership and gauge are read off through `toRectangularSymmetricIdealFamily`. -/
 theorem corollary4_1_restrictedDisplacement_idealGauge
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (hacute : IsAcute U V) (W : H →L[ℂ] H)
+    (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W)
     (hWmem : N.Mem ((1 - W) ∘L projection U)) :
@@ -200,7 +200,7 @@ theorem proposition4_2_basisAngleSquareSum_infinite
 rotation at a principal vector, so it is the true minimum and the direct
 rotation is a minimiser. -/
 theorem proposition4_2_attained_on_principal_vector
-    (hacute : IsAcute U V) {x : H} {μ : ℝ} (hμ : 0 ≤ μ) (hxnorm : ‖x‖ = 1)
+    (hacute : IsUniformlyAcute U V) {x : H} {μ : ℝ} (hμ : 0 ≤ μ) (hxnorm : ‖x‖ = 1)
     (hCx : spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x =
       (μ : ℂ) • x) :
     basisAngleSquareCost (spectraDirectRotation U V hacute) x =
@@ -271,7 +271,7 @@ contraction.  Two facts carry it: the complementary pair has the *same* direct r
 `aₙ(X⋆X) = aₙ(X)²`.  That second fact is also exactly why 4.3 survives while 4.4 does not --
 sums of squares are dominated at every `k`, and sums are not. -/
 theorem proposition4_3_squaredDisplacement_kyFan
-    (hacute : IsAcute U V) (W : H →L[ℂ] H)
+    (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W)
     (k : ℕ) :

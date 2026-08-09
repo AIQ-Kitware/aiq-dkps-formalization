@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.Frontier.Core
 import DavisKahan.Geometry.Polar.DirectRotation
--- supplies `spectraReflectionProduct` and `IsAcute.symm`
+-- supplies `spectraReflectionProduct` and `IsUniformlyAcute.symm`
 import DavisKahan.Geometry.Polar.DirectRotationSquare
 -- supplies `reflectedSubspace` and its projection/conjugation calculus used by
 -- Proposition 3.4.  This module imports only `SinTheta`/`SpectralTheory`
@@ -207,7 +207,7 @@ diagonal blocks are the positive Halmos cosine).  These two self-adjointness
 hypotheses are the minimal strengthening; with them the operator squares to the
 reflection product and the square-root branch is fixed by accretivity. -/
 theorem proposition3_1_positivity_characterization
-    (hacute : IsAcute U V) (T : H →L[ℂ] H)
+    (hacute : IsUniformlyAcute U V) (T : H →L[ℂ] H)
     (hunitary : T ∈ unitary (H →L[ℂ] H))
     (hintertwines : T * projection U = projection V * T)
     (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
@@ -912,7 +912,7 @@ cosine-square bound is exactly accretivity of `R_V R_U`
 (`re_inner_reflectionProduct_nonneg`), which is the branch condition needed to
 identify the square root with the direct rotation.
 
-Second, acuteness of the reflected pair `IsAcute U (reflectedSubspace V U)` is
+Second, acuteness of the reflected pair `IsUniformlyAcute U (reflectedSubspace V U)` is
 carried as an *independent* hypothesis.  It is genuinely not derivable from the
 cosine-square bound and is not implied by it: a boundary cosine square of `1/2`
 makes the double angle exactly `π / 2`, so the reflected pair has gap `1` and is
@@ -925,8 +925,8 @@ fails without the cosine-square bound.  Both conditions are therefore necessary;
 a single uniform spectral-gap field on `R_V R_U` would subsume them, but the
 present two-hypothesis form is the faithful minimal correction. -/
 theorem proposition3_4_square_is_reflected_directRotation
-    (hacute : IsAcute U V)
-    (hacuteReflected : IsAcute U (reflectedSubspace V U))
+    (hacute : IsUniformlyAcute U V)
+    (hacuteReflected : IsUniformlyAcute U (reflectedSubspace V U))
     (hhalf : ∀ x : H,
       0 ≤ RCLike.re
         ⟪x, halmosCosineSq U V x⟫_ℂ - ‖x‖ ^ 2 / 2) :
@@ -937,7 +937,7 @@ theorem proposition3_4_square_is_reflected_directRotation
         (iV : Vref.HasOrthogonalProjection),
       haveI : Uref.HasOrthogonalProjection := iU
       haveI : Vref.HasOrthogonalProjection := iV
-      ∃ hacuteRef : IsAcute Uref Vref,
+      ∃ hacuteRef : IsUniformlyAcute Uref Vref,
         spectraDirectRotation U V hacute *
             spectraDirectRotation U V hacute =
           spectraDirectRotation Uref Vref hacuteRef := by
@@ -1287,7 +1287,7 @@ complement conditions restore the paper's *all nonzero vectors make the fixed
 angle* clause.  The acuteness and `c ≤ 1` hypotheses are retained for source
 correspondence; the proof needs only `0 < c`. -/
 theorem proposition3_5_fixedAngle_maximal
-    (hacute : IsAcute U V) (c : ℝ) (hc0 : 0 < c) (hc1 : c ≤ 1) :
+    (hacute : IsUniformlyAcute U V) (c : ℝ) (hc0 : 0 < c) (hc1 : c ≤ 1) :
     IsFixedCosineReducingSubspace U V (fixedCosineSubspace U V c) c ∧
       ∀ M : Submodule ℂ H,
         IsFixedCosineReducingSubspace U V M c →
@@ -1300,9 +1300,9 @@ theorem proposition3_5_fixedAngle_maximal
 /-- Davis--Kahan 1970, Corollary 3.2, quarter-turn half: interchanging the subspaces
 reverses the canonical quarter-turn. -/
 theorem corollary3_2_reversal_source_form
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation V U
-        (_root_.TauCeti.DavisKahan.IsAcute.symm hacute) =
+        (_root_.TauCeti.DavisKahan.IsUniformlyAcute.symm hacute) =
       star (spectraDirectRotation U V hacute) :=
   MathAhead.Section3.corollary3_2_reversal_completed U V hacute
 
@@ -1319,10 +1319,10 @@ theorem corollary3_2_sinAngleOperator_symm :
 /-- **Davis--Kahan 1970, Corollary 3.2**, both halves in one statement: swapping the pair
 leaves the angle operator unchanged and reverses the quarter-turn. -/
 theorem corollary3_2_reversal
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     DavisKahanExt.sinAngleOperator V U = DavisKahanExt.sinAngleOperator U V ∧
       spectraDirectRotation V U
-          (_root_.TauCeti.DavisKahan.IsAcute.symm hacute) =
+          (_root_.TauCeti.DavisKahan.IsUniformlyAcute.symm hacute) =
         star (spectraDirectRotation U V hacute) :=
   ⟨corollary3_2_sinAngleOperator_symm U V, corollary3_2_reversal_source_form U V hacute⟩
 

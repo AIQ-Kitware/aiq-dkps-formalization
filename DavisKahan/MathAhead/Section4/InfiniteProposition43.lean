@@ -116,7 +116,7 @@ theorem competitor_admissible_orthogonal (U V : Submodule ℂ H)
 
 `(1 − D†)(1 − D) = 1 + D†D − (D + D†)`, and `D` is unitary with Hermitian part `C`. -/
 theorem directRotation_displacementSquare_eq (U V : Submodule ℂ H)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     (1 - star (spectraDirectRotation U V hacute)) *
         (1 - spectraDirectRotation U V hacute) =
       2 - (2 : ℂ) • spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) := by
@@ -142,7 +142,7 @@ theorem directRotation_displacementSquare_eq (U V : Submodule ℂ H)
 `2 − 2C` commutes with `P_U` because `C` does, so it equals its own pinch and the first
 step of Proposition 4.3's chain is an equality. -/
 theorem diagonalPart_directRotation_displacementSquare (U V : Submodule ℂ H)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     U.diagonalPart ((1 - star (spectraDirectRotation U V hacute)) *
         (1 - spectraDirectRotation U V hacute)) =
       (1 - star (spectraDirectRotation U V hacute)) *
@@ -179,7 +179,7 @@ individual approximation numbers are *not* dominated, and the repository carries
 configuration that refutes that reading. -/
 theorem proposition4_3_squaredDisplacement_kyFan_scratch (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : H →L[ℂ] H)
+    (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W) (k : ℕ) :
     kyFanApproximationGauge k
@@ -226,7 +226,7 @@ theorem proposition4_3_squaredDisplacement_kyFan_scratch (U V : Submodule ℂ H)
         ((1 - W) ∘L Uᗮ.subtypeL).approximationNumber n := by
     intro n
     have h := proposition4_1_source_approximationNumbers Uᗮ Vᗮ
-      (isAcute_orthogonal hacute) W hWunitary
+      (isUniformlyAcute_orthogonal hacute) W hWunitary
       (competitor_admissible_orthogonal U V W hWmap) n
     rwa [spectraDirectRotation_orthogonal U V hacute] at h
   have hblock := kyFanApproximationGauge_blockSum_le

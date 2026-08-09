@@ -1,0 +1,32 @@
+import DavisKahan.All
+
+example : True := trivial
+
+#print axioms TauCeti.operatorAbs_neg
+#print axioms TauCeti.operatorAbs_adjoint_of_normal
+#print axioms TauCeti.complementaryProjection_eq_id_sub
+#print axioms TauCeti.isAcute_iff_inf_orthogonal_eq_bot
+#print axioms TauCeti.directedProjectionGap_lt_one_of_transverse
+#print axioms TauCeti.projectionGap_lt_one_of_isAcute
+#print axioms TauCeti.one_le_projectionGap_of_forall_exists_unit_lt
+#print axioms TauCeti.isAcute_iff_projectionGap_lt_one
+
+#print axioms TauCeti.DavisKahanTheory.directRotationCosine_eq_half_smul_add
+#print axioms TauCeti.DavisKahanTheory.directRotation_sub_cosine_eq_half_smul_sub
+#print axioms TauCeti.DavisKahanTheory.sinAngleOperator_comm
+#print axioms TauCeti.DavisKahanTheory.directRotationCosine_comm
+#print axioms TauCeti.DavisKahanTheory.angleComplexStructure_symm
+#print axioms TauCeti.DavisKahanTheory.sq_sinAngleOperator_add_sq_directRotationCosine
+#print axioms TauCeti.DavisKahanTheory.directRotation_comm_sinAngleOperator
+#print axioms TauCeti.DavisKahanTheory.projection_comm_sinAngleOperator
+#print axioms TauCeti.DavisKahanTheory.projection_right_comm_sinAngleOperator
+#print axioms TauCeti.DavisKahanTheory.angleOperator_comm
+#print axioms TauCeti.DavisKahanTheory.angleOperator_comm_directRotation
+#print axioms TauCeti.DavisKahanTheory.angleOperator_comm_projection
+#print axioms TauCeti.DavisKahanTheory.angleOperator_comm_projection_right
+
+#print axioms TauCeti.DavisKahanTheory.angleComplexStructure
+#print axioms TauCeti.DavisKahanTheory.directRotation_eq_cos_add_J_sin
+#print axioms TauCeti.DavisKahan.IsUniformlyAcute
+
+example : True := trivial

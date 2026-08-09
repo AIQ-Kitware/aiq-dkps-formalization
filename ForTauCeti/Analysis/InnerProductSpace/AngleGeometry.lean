@@ -194,22 +194,41 @@ theorem eq_zero_of_directedProjectionGap_lt_one {U V : Submodule 𝕜 E}
   nlinarith [hle, hxpos, h]
 
 omit [FiniteDimensional 𝕜 E] in
+/-- **The printed Davis–Kahan acute case, as a pair of vanishing intersections.**
+
+Definition 3.2 of the paper reads "`PH ∩ Q̃H` and `P̃H ∩ QH` are zero"; `IsAcute`
+is stated pointwise, through the projectors, because that is the form its
+consumers use.  This lemma is the literal restatement, and it is what makes
+`IsAcute` checkable against the printed sentence. -/
+theorem isAcute_iff_inf_orthogonal_eq_bot {U V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    IsAcute U V ↔ U ⊓ Vᗮ = ⊥ ∧ Uᗮ ⊓ V = ⊥ := by
+  simp only [IsAcute, Submodule.eq_bot_iff, Submodule.mem_inf,
+    ← Submodule.starProjection_apply_eq_zero_iff, and_imp]
+  constructor
+  · rintro ⟨h₁, h₂⟩
+    exact ⟨fun x hx1 hx2 => h₁ x hx1 hx2, fun y hy1 hy2 => h₂ y hy2 hy1⟩
+  · rintro ⟨h₁, h₂⟩
+    exact ⟨fun x hx1 hx2 => h₁ x hx1 hx2, fun y hy1 hy2 => h₂ y hy2 hy1⟩
+
+omit [FiniteDimensional 𝕜 E] in
 /-- **A small projection gap implies the acute (transversality) condition, in
 any dimension.**
 
-`DavisKahan.IsAcute U V` unfolds to `U.projectionGap V < 1`, so this is one
-half of the relation between the two same-named predicates in this development.
+`TauCeti.DavisKahan.IsUniformlyAcute U V` unfolds to `U.projectionGap V < 1`, so
+this is one half of the relation between the two acuteness predicates in this
+development, and it is the half that needs no dimension hypothesis.
 
-**The converse is not proved anywhere, and this docstring used to promise it.**
-It claimed a `projectionGap_lt_one_of_isAcute` "below"; no such declaration has
-ever existed, as `#check` and a repository-wide grep both confirm (checked
-2026-08-09). It is also genuinely false in this generality — principal angles
-accumulating at `π/2` with none equal to it satisfy `IsAcute` while the gap is
-`1` — so the two same-named predicates really are related in only one
-direction, and `IsAcute` is the strictly weaker one. Anything stated on
-`DavisKahan.IsAcute` is therefore narrower than the printed Davis–Kahan
-Definition 3.2, which is `IsAcute` here; census row `DK-3.2-def` records which
-results that affects. -/
+The converse is `projectionGap_lt_one_of_isAcute`, and it needs
+`FiniteDimensional`; `isAcute_iff_projectionGap_lt_one` packages the two.  In
+infinite dimension the converse fails, classically, for a pair whose principal
+angles accumulate at `π/2` with none equal to it: such a pair is acute in the
+printed sense while the gap is `1`.  The gap half of that is machine-checked
+here, as `one_le_projectionGap_of_forall_exists_unit_lt`; a compiled witness
+pair exhibiting both halves at once is recorded as outstanding on census row
+`DK-3.2-def`.  This asymmetry is why the quantitative predicate carries the
+qualifier `Uniformly` and the paper's unqualified name stays on this, the
+printed Definition 3.2. -/
 theorem isAcute_of_projectionGap_lt_one {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (h : U.projectionGap V < 1) : IsAcute U V :=
@@ -217,6 +236,160 @@ theorem isAcute_of_projectionGap_lt_one {U V : Submodule 𝕜 E}
    fun _y hyV hyU =>
      eq_zero_of_projectionGap_lt_one
        ((Submodule.projectionGap_comm U V) ▸ h) hyV hyU⟩
+
+/-- **Transversality of `U` into `V` bounds the directed gap strictly below one,
+in finite dimension.**
+
+The compactness step of the finite-dimensional converse.  If `P_V` is injective
+on `U` then `x ↦ ‖P_V x‖` has a strictly positive minimum `m` on the unit sphere
+of `U`, which is compact; Pythagoras turns that into
+`‖P_{Vᗮ} x‖ ≤ √(1 - m²) ‖x‖` for every `x ∈ U`, and `√(1 - m²) < 1`.
+
+Finite dimensionality is used exactly once, for the compactness that makes the
+minimum positive rather than merely nonnegative, and that is where the
+infinite-dimensional statement fails. -/
+theorem directedProjectionGap_lt_one_of_transverse {U V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : ∀ x ∈ U, V.starProjection x = 0 → x = 0) :
+    U.directedProjectionGap V < 1 := by
+  classical
+  have : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  have : ProperSpace E := FiniteDimensional.proper 𝕜 E
+  by_cases hU : U = ⊥
+  · subst hU
+    have h0 : (Vᗮ.starProjection ∘L (⊥ : Submodule 𝕜 E).starProjection) = 0 := by
+      ext x; simp
+    change ‖Vᗮ.starProjection ∘L (⊥ : Submodule 𝕜 E).starProjection‖ < 1
+    rw [h0]
+    simp
+  set K : Set E := (U : Set E) ∩ Metric.sphere (0 : E) 1 with hKdef
+  have hKcompact : IsCompact K :=
+    (isCompact_sphere (0 : E) 1).inter_left U.closed_of_finiteDimensional
+  have hKne : K.Nonempty := by
+    obtain ⟨u, huU, hu0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hU
+    have hnu : ‖u‖ ≠ 0 := norm_ne_zero_iff.mpr hu0
+    refine ⟨(‖u‖ : 𝕜)⁻¹ • u, U.smul_mem _ huU, ?_⟩
+    simp [norm_smul, hnu]
+  have hcont : ContinuousOn (fun x : E => ‖V.starProjection x‖) K :=
+    (continuous_norm.comp V.starProjection.continuous).continuousOn
+  obtain ⟨x₀, hx₀K, hx₀min⟩ := hKcompact.exists_isMinOn hKne hcont
+  set m : ℝ := ‖V.starProjection x₀‖ with hm
+  have hx₀norm : ‖x₀‖ = 1 := by simpa [Metric.mem_sphere] using hx₀K.2
+  have hmpos : 0 < m := by
+    rcases (norm_nonneg (V.starProjection x₀)).lt_or_eq with hlt | heq
+    · exact hlt
+    · exfalso
+      have hz : V.starProjection x₀ = 0 := norm_eq_zero.mp heq.symm
+      rw [h x₀ hx₀K.1 hz] at hx₀norm
+      simp at hx₀norm
+  have hmle : m ≤ 1 := by
+    rw [hm, ← hx₀norm]; exact V.norm_starProjection_apply_le x₀
+  set c : ℝ := Real.sqrt (1 - m ^ 2) with hc
+  have hcnonneg : 0 ≤ c := Real.sqrt_nonneg _
+  have hclt : c < 1 := by
+    have h2 : (0:ℝ) ≤ 1 - m ^ 2 := by nlinarith
+    have h1 : 1 - m ^ 2 < 1 := by nlinarith
+    calc c < Real.sqrt 1 := Real.sqrt_lt_sqrt h2 h1
+      _ = 1 := Real.sqrt_one
+  have hbound : ∀ x ∈ U, ‖Vᗮ.starProjection x‖ ≤ c * ‖x‖ := by
+    intro x hxU
+    rcases eq_or_ne x 0 with rfl | hx0
+    · simp
+    have hxnorm : 0 < ‖x‖ := norm_pos_iff.mpr hx0
+    set u : E := (‖x‖ : 𝕜)⁻¹ • x with hu
+    have huK : u ∈ K :=
+      ⟨U.smul_mem _ hxU, by simp [hu, norm_smul, hxnorm.ne']⟩
+    have hunorm : ‖u‖ = 1 := by simpa [Metric.mem_sphere] using huK.2
+    have hmin : m ≤ ‖V.starProjection u‖ := hx₀min huK
+    have hpyth : ‖u‖ ^ 2 = ‖V.starProjection u‖ ^ 2 + ‖Vᗮ.starProjection u‖ ^ 2 :=
+      Submodule.norm_sq_eq_add_norm_sq_starProjection u V
+    have hsq : ‖Vᗮ.starProjection u‖ ^ 2 ≤ 1 - m ^ 2 := by
+      rw [hunorm] at hpyth
+      nlinarith [hmin, norm_nonneg (V.starProjection u), hmpos]
+    have hleu : ‖Vᗮ.starProjection u‖ ≤ c := by
+      have := Real.sqrt_le_sqrt hsq
+      rwa [Real.sqrt_sq (norm_nonneg _)] at this
+    have hxu : x = (‖x‖ : 𝕜) • u := by
+      rw [hu, smul_smul, mul_inv_cancel₀ (by exact_mod_cast hxnorm.ne'), one_smul]
+    have hnormcoe : ‖((‖x‖ : ℝ) : 𝕜)‖ = ‖x‖ := by
+      simp
+    have hkey : ‖Vᗮ.starProjection x‖ = ‖x‖ * ‖Vᗮ.starProjection u‖ := by
+      conv_lhs => rw [hxu]
+      rw [map_smul, norm_smul, hnormcoe]
+    rw [hkey, mul_comm c]
+    exact mul_le_mul_of_nonneg_left hleu (norm_nonneg x)
+  have hop : ‖Vᗮ.starProjection ∘L U.starProjection‖ ≤ c := by
+    refine ContinuousLinearMap.opNorm_le_bound _ hcnonneg fun z => ?_
+    calc ‖(Vᗮ.starProjection ∘L U.starProjection) z‖
+        = ‖Vᗮ.starProjection (U.starProjection z)‖ := rfl
+      _ ≤ c * ‖U.starProjection z‖ := hbound _ (U.starProjection_apply_mem z)
+      _ ≤ c * ‖z‖ :=
+          mul_le_mul_of_nonneg_left (U.norm_starProjection_apply_le z) hcnonneg
+  exact lt_of_le_of_lt hop hclt
+
+/-- **The converse the acute case needs: in finite dimension the printed acute
+condition forces the projection gap below one.**
+
+This is the declaration an earlier docstring here promised and never delivered.
+It is stated with `FiniteDimensional` because that hypothesis is not removable:
+in infinite dimension a pair whose principal angles accumulate at `π/2` without
+attaining it is acute in the printed sense while `‖P_U - P_V‖ = 1`. -/
+theorem projectionGap_lt_one_of_isAcute {U V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : IsAcute U V) : U.projectionGap V < 1 := by
+  have : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  rw [Submodule.projectionGap_eq_max_directedProjectionGap]
+  exact max_lt (directedProjectionGap_lt_one_of_transverse h.1)
+    (directedProjectionGap_lt_one_of_transverse h.2)
+
+omit [FiniteDimensional 𝕜 E] in
+/-- **What has to fail in infinite dimension: unit vectors of `U` almost
+annihilated by `P_V` force the gap up to one.**
+
+This is the exact complement of `directedProjectionGap_lt_one_of_transverse`.
+There, compactness makes `inf { ‖P_V x‖ : x ∈ U, ‖x‖ = 1 }` a *minimum* and
+transversality makes it positive.  Here the infimum is zero without being
+attained — the configuration of principal angles accumulating at `π/2` with none
+equal to it — and then `‖(P_U - P_V) x‖ ≥ ‖x‖ - ‖P_V x‖ > 1 - ε` for every `ε`.
+
+Such a pair can still satisfy `IsAcute`, since no unit vector of `U` is
+annihilated exactly; that is precisely why `projectionGap_lt_one_of_isAcute`
+cannot drop `FiniteDimensional`.  No dimension hypothesis is used here. -/
+theorem one_le_projectionGap_of_forall_exists_unit_lt {U V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : ∀ ε : ℝ, 0 < ε → ∃ x ∈ U, ‖x‖ = 1 ∧ ‖V.starProjection x‖ < ε) :
+    1 ≤ U.projectionGap V := by
+  refine le_of_forall_lt_imp_le_of_dense fun c hc => ?_
+  obtain ⟨x, hxU, hxnorm, hxlt⟩ := h (1 - c) (by linarith)
+  have hval : (U.starProjection - V.starProjection : E →L[𝕜] E) x
+      = x - V.starProjection x := by
+    simp [Submodule.starProjection_eq_self_iff.mpr hxU]
+  have hle : ‖x‖ - ‖V.starProjection x‖ ≤ ‖U.starProjection - V.starProjection‖ := by
+    calc ‖x‖ - ‖V.starProjection x‖
+        ≤ ‖x - V.starProjection x‖ := norm_sub_norm_le _ _
+      _ = ‖(U.starProjection - V.starProjection : E →L[𝕜] E) x‖ := by rw [hval]
+      _ ≤ ‖U.starProjection - V.starProjection‖ * ‖x‖ :=
+          ContinuousLinearMap.le_opNorm _ _
+      _ = ‖U.starProjection - V.starProjection‖ := by rw [hxnorm, mul_one]
+  have : c ≤ U.projectionGap V := by
+    have hgap : U.projectionGap V = ‖U.starProjection - V.starProjection‖ := rfl
+    rw [hgap]
+    rw [hxnorm] at hle
+    linarith
+  exact this
+
+/-- **In finite dimension the printed acute case and the uniform (gap) acute
+case are the same condition.**
+
+The two predicates this development calls acute — the paper's vanishing crossed
+intersections and `‖P_U - P_V‖ < 1` — coincide exactly when the ambient space is
+finite dimensional.  Every finite-dimensional theorem stated on one of them may
+therefore be read on the other; in infinite dimension they must be kept
+apart. -/
+theorem isAcute_iff_projectionGap_lt_one {U V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    IsAcute U V ↔ U.projectionGap V < 1 :=
+  ⟨projectionGap_lt_one_of_isAcute, isAcute_of_projectionGap_lt_one⟩
 
 /-- No principal angle is a quarter turn.  This is the natural domain condition
 for `tan (2 Θ)` before the canonical branch is selected.  The arbitrary
