@@ -10,6 +10,6 @@ here.
   records how. Referenced from `Acharyya2025/SpectralMeasurability.lean`.
 - **`opus-handoff.md`** — Fable→Opus handoff plan for finishing the ForMathlib
   staging effort. Staging is complete; the handoff is closed.
-- **`for-fable.md`** — the F1–F6 Fable task list. **All items done** (F1/F2/F4/F6
-  Opus; F3 = Berge/B2; F5 = `hmeas_spec`, Fable+Opus). Future Fable-leaning work,
-  if any, is tracked in `../remaining-work.md` (the R-track), not here.
+- **`for-fable.md`** - the F1-F6 Fable task list. **All items done**. The old
+  R-track is also retired; current operating policy and live status pointers are
+  in `AGENTS.md` and `../README.md`.

@@ -1,5 +1,10 @@
 # Acharyya DKPS formalization plan
 
+> **Historical work-package record.** The implementation described below has landed.
+> Old `ForMathlib`, campaign, and lane references are preserved only to explain the
+> work sequence. Current repository policy lives in `AGENTS.md`; current paper status
+> comes from the source libraries and their maintained audits/censuses.
+
 > **STATUS (2026-06-12): formalization phase COMPLETE.** All milestone work
 > packages below are checked off; remaining sorries are documented SUPERSEDED
 > scaffold records, not live work. Kept in place (not archived) because ~8

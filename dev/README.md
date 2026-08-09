@@ -1,6 +1,6 @@
 # Developer notes — `dev/`
 
-Long-running engineering memory and live coordination for the AIQ DKPS Lean
+Long-running engineering memory and status instrumentation for the AIQ DKPS Lean
 formalization. Anything that **isn't** the formalization itself, the comparator
 challenge package (`Challenge/`, `comparator/`), or paper-facing planning
 (`docs/`) lives here. The contents are deliberately agent-readable: an agent
@@ -11,8 +11,8 @@ pattern of past mistakes, and take fewer of them.
 
 | File | What it answers |
 |---|---|
-| [`LANES.md`](LANES.md) | Who holds what. **Claim your row, commit it, and push it before your first edit** — unpushed is invisible to the other agents. Unlisted means unclaimed. Its `Branch and sync protocol` covers fetching, merging and conflict resolution across agent branches. |
-| [`tauceti/README.md`](tauceti/README.md) | The active migration: polishing foundations into `ForTauCeti` and converging the operator-theory stacks. The Spectra dependency is **retired** as of 2026-07-29 — see *Retired tooling* below. |
+| [`LANES.md`](LANES.md) | Retirement notice for the former multi-agent lane system. Do not claim rows; current work happens on the shared main branch. |
+| [`tauceti/README.md`](tauceti/README.md) | Tau Ceti engineering records, generated status artifacts, and provenance for completed migrations. Current package policy lives in `../ForTauCeti/README.md`. |
 | [`SEARCH.md`](SEARCH.md) | How to *search* this memory instead of reading it all. Grep patterns and routing rules by symptom. |
 
 The governing policy is in [`../AGENTS.md`](../AGENTS.md), not here. It defines
@@ -23,15 +23,14 @@ maintenance), the dependency firewall, and the completion-claim discipline.
 
 ```text
 dev/
-  LANES.md                          # Live lane claims — read and claim before editing
+  LANES.md                          # Retirement notice for the former lane system
   SEARCH.md                         # How to search engineering memory
   lean-proof-engineering-lessons.md # Recurring Lean elaboration/API/parser traps
   mathlib-proof-polishing.md        # Reference: "folding" proofs to Mathlib style
   mathlib-quality-adapter.md        # Reference: adapting local API to reviewer standard
   external-lean-references.md       # Registry of external Lean repos consulted
-  external-literature-references.md # External *mathematics* we cite or must import; source errata
 
-  tauceti/                    # The Tau Ceti migration working set (start at its README)
+  tauceti/                    # Tau Ceti engineering records and generated status
   journals/                   # Postmortems of bugs that took real effort to diagnose
   benchmark-candidates/       # Hard questions distilled from real formalization mistakes
   overlays/                   # Promotion manifests for the surviving Scratch/** sketches
@@ -48,11 +47,10 @@ its checker.
 
 ### Where a new note goes
 
-- A *lane claim or status* → a row in `LANES.md`, not a new file.
+- A *current status claim* belongs in the source-owning README or a generated/checkable status artifact, not in `LANES.md`.
 - A *postmortem* of a bug that took effort → `journals/`.
 - A *transferable trap* another model would also fall into → `benchmark-candidates/`.
-- *Migration planning* → `tauceti/`, and record the decision in
-  `tauceti/convergence-matrix.md` where it belongs to a declaration.
+- *Tau Ceti engineering history or generated status* -> `tauceti/`; current package policy -> `../ForTauCeti/README.md`.
 - *Paper-facing scope and roadmap* → `../docs/planning/`.
 - Anything that is only useful with the user in the loop → agent auto-memory,
   not a file here.
@@ -241,26 +239,12 @@ period when **none of its 87 declarations resolved**. The probe compiles a
 `#check` of every fully-qualified name against `DavisKahan.All` and is the only
 one of the three that answers that question.
 
-It currently reports **78/87**. The nine that do not resolve are the
-`DavisKahan1970.Section8.*` names backing `DK-8.1-thm` and `DK-8.2-thm`, which
-live under `Experimental/**`, outside the `DavisKahan.All` closure; their rows
-are marked `candidate_under_repair` / `not_compiling`, so that is the expected
-answer, not a defect.
-
-**Use `--verify`, not `--check`, as the gate.** `--check` exits non-zero on any
-unresolved name and so fails permanently on those nine. `--verify` is the mode
-that understands them: it *derives* each row's verification from what the build
-actually resolves and compares it with the recorded value, treating
-`not_compiling` as a standing judgement — while refusing to let that judgement
-survive its declarations becoming reachable, so a package that gets fixed cannot
-stay under-reported. It currently exits 0 with `all 48 rows agree with the
-build`.
-
-`--sync` writes the derived values back, which is how `verification` and
-`declarations_outside_build` should be maintained: deriving beats
-hand-maintaining, because a recorded status drifts the moment someone moves a
-module and nobody notices. Run it after any namespace move, then re-render the
-markdown view.
+The fast checker prints the current source-obligation summary and explicitly says
+when Lean/Lake declaration resolution was unavailable. When Lean is available,
+`probe_census_declarations.py --verify` checks the recorded verification state
+against declarations reachable from the production aggregate. Use `--sync` only
+when intentionally refreshing those verification fields, then re-render the
+markdown view. Do not copy the resulting counts into prose here.
 
 ## Yu--Wang--Samworth 2015 full source census
 
@@ -282,13 +266,10 @@ proves has a row whether or not anything formalizes it. A census assembled from
 the Lean side enumerates what someone happened to write and cannot report an
 absence; this one can, and does.
 
-It currently reports **22 items; 18 formalized, of which 9 are guarded by the
-default build; 3 unformalized and still proof debt.** The gap between 18 and 9
-is the finding: `FinishYuWangSamworth` is a `lean_lib` but **not a default
-target**, so Theorem 1's three norm forms, most of Theorem 4, Lemma 5 and the
-corrected equation (4) are proved and unprotected — a refactor can break them
-while CI stays green. Adding one target closes most of that gap with no new
-mathematics.
+The checker prints the current source-obligation summary. `FinishYuWangSamworth`
+is now a default target, so old notes describing its proved theorems as unguarded
+are historical. Use `--probe` when Lean is available to verify declaration
+resolution, and do not duplicate the current counts in this README.
 
 Three things this gate does that a name-grep cannot, each of which changed a
 row when it was first run:
@@ -322,8 +303,8 @@ worth knowing before quoting this paper:
 
 ## The `@[expose]` ratchet
 
-`scripts/check_expose_ratchet.py` holds the line while the `FTC-EXPOSE-*` lanes
-convert `ForTauCeti` off file-wide body exposure.
+`scripts/check_expose_ratchet.py` enforces the completed conversion away from
+file-wide body exposure in `ForTauCeti`.
 
 ```sh
 python3 scripts/check_expose_ratchet.py           # report
@@ -331,19 +312,17 @@ python3 scripts/check_expose_ratchet.py --check   # gate; exit 1 above the basel
 python3 scripts/check_expose_ratchet.py --list    # name the modules
 ```
 
-**The conversion is COMPLETE as of 2026-07-30.** `BASELINE = 0`: not one module
-in `ForTauCeti` opens `@[expose] public section`, and the ratchet is now a flat
-prohibition rather than a declining count. Lanes `FTC-EXPOSE-g1`..`g5` did the
-work; `FTC-EXPOSE-ENFORCE` closed it.
+**The conversion is complete.** `BASELINE = 0`, so file-wide `@[expose] public
+section` is prohibited rather than managed as a declining migration count.
 
-**The second count is the live one.** `PER_DECL_BASELINE = 23` bounds
-per-declaration `@[expose]`, and those 23 are three different things that must
-not be confused:
+**Per-declaration exposure has its own ratchet.** `PER_DECL_BASELINE` in the
+script is the source of truth; do not mirror its numeric value here. Findings fall
+into three categories:
 
 | kind | what to do |
 |---|---|
 | **clean carve-out** — a consumer genuinely must unfold | leave it; the rubric permits this |
-| **recorded debt** — avoidable with a `_def` lemma plus rewiring | lane `FTC-EXPOSE-SPECMEAS` lowers it |
+| **recorded debt** - avoidable with a `_def` lemma plus rewiring | lower the ratchet in the same commit as the cleanup |
 | **compiler limitation** — `Elem`, `Elem.val`, `Elem.mk` | no fix at this toolchain; revisit on a bump |
 
 The third kind is not a defect and must not be filed as debt. Those three failed
@@ -352,77 +331,29 @@ inferred compilation type differs from type that would be inferred in other
 modules … This is a current compiler limitation for `module`s that may be lifted
 in the future."*
 
-**Why a ratchet rather than a fix.** Jon adopted Tau Ceti's `api-design` rubric
-over this repository's own house rule on 2026-07-30: bodies stay hidden, and
-`@[expose]` goes on the individual declarations a consumer must unfold, with a
-docstring saying why. Converting 70 modules is five lanes' work; the count rising
-while that happens is not hypothetical — it went from **68 to 70 between two audit
-passes**, because the old rule was telling every new file to add one.
+**Why a ratchet rather than a snapshot.** The Tau Ceti API rule is that bodies
+stay hidden and `@[expose]` is attached only to declarations a consumer must
+unfold, with a docstring explaining why. The gate makes regressions visible
+without requiring this README to track a moving count.
 
-**Lowering the baseline is the point.** Each conversion slice edits `BASELINE`
-down to what it leaves behind, in the same commit as the conversion.
-`FTC-EXPOSE-ENFORCE` sets it to 0 and the gate becomes an invariant.
+**Lowering the baseline is the point.** When avoidable exposure is removed,
+lower the corresponding baseline in the same commit.
 
 ## Paper-library grounding audits
 
-Two completion libraries ship a `verify_grounding.py` that checks their grounding
-claim against the tree — that every repository result their write-up leans on is
-still where it says, under the name it says.
-
-```sh
-python3 FinishTanTwoTheta/scripts/verify_grounding.py      # gate; exit 1 on a stale pin
-python3 FinishYuWangSamworth/scripts/verify_grounding.py   # gate; exit 1 on a stale pin
-```
-
-**They are listed here because until 2026-07-30 nothing ran them** (lane
-CLAIM-DOC). They live inside their libraries rather than in top-level `scripts/`,
-were wired into no gate list, and so a reader met a completeness claim with no
-live evidence behind it. That is worse than a weak proof: it is what a reader
-trusts *instead of* checking.
-
-When they were finally run, the two libraries were **not** in the same state.
-`FinishYuWangSamworth` passed. `FinishTanTwoTheta` failed with four stale pins,
-all of them left by *other* lanes' migrations and none of them missing
-mathematics — a promoted Riccati module, two deliberately-deleted dead wrappers
-whose canonical twins live in `ForTauCeti`, and the `vendor/` → `retired/` move of
-the Spectra snapshot. All four were repointed, and the outcome is recorded in
-`FinishTanTwoTheta/GROUNDING.md`. Both now exit 0.
-
-**A grounding audit is a gate, not a document.** If one of these starts failing,
-the fix is to repoint it or to say in the library's `GROUNDING.md` that it fails —
-not to delete the pin, which removes the evidence rather than the problem.
+`FinishYuWangSamworth/scripts/verify_grounding.py` checks that package's recorded
+repository pins. The similarly named `FinishTanTwoTheta` script is legacy: it
+recursively scans the deliberately separate unbounded research file and therefore
+its exit status is not a bounded-target completion gate. The promoted bounded
+tan-two-theta theorem is guarded through the production Davis--Kahan build/gates.
 
 ## Namespace policy
 
-`scripts/check_namespace_policy.py` gates `ForTauCeti/README.md` §2: a staging
-module may declare into `TauCeti.*`, or into the **canonical Mathlib namespace of
-the object it extends**, and nothing else.
-
-```sh
-python3 scripts/check_namespace_policy.py           # report
-python3 scripts/check_namespace_policy.py --check   # gate; exit 1 on a violation
-```
-
-**Why a gate.** §2 was written down and never checked, and by 2026-07-29 two
-modules had drifted into `FiniteDimensional` — a spectral functional calculus and
-a Moore–Penrose inverse, neither of them a fact about finite-dimensionality. The
-audit that found them (lane NS-SPREAD) also *cleared* two files the same audit
-had suspected, `ENNReal.tsum_sq_add_rpow_le` (Minkowski at `p = 2` for `tsum`,
-stated for arbitrary `ℝ≥0∞`-valued functions) and
-`HilbertBasis.{hasSum_norm_inner_sq, tsum_enorm_inner_sq}` (Parseval, proved from
-Mathlib's own `HilbertBasis.hasSum_inner_mul_inner`). Both really are facts about
-the object they name.
-
-**The allowlist is the review.** Every permitted Mathlib root in the script
-carries a one-line reason naming the object being extended; adding a root means
-writing that sentence. The test is the audit's: *would the declaration read
-naturally as a fact about that object?*
-
-**One parser subtlety worth not rediscovering.** The check is on the
-*fully-qualified* namespace, so `namespace TauCeti` / `namespace HilbertSchmidt`
-is `TauCeti.HilbertSchmidt` and fine. A naive scan of `namespace` lines reports
-106 of the 164 modules; the stack, and popping only on a matching `end`, is what
-makes the number 0.
+`scripts/check_namespace_policy.py` is an older tripwire that still permits a
+small allowlist of root Mathlib namespaces. It is not the policy authority. The
+current package direction is owned by `AGENTS.md` and `ForTauCeti/README.md`: new
+reusable declarations should carry their intended `TauCeti.*` names. Do not
+expand the legacy allowlist merely because this checker permits that mechanism.
 
 ## Docstring coverage
 
@@ -459,9 +390,9 @@ already cost a mistake:
   entrench a file scheduled for deletion) have both been deleted, and the rules with
   them.
 
-**The baseline** (`dev/docstring-coverage-baseline.json`) tolerates findings that
-existed when the gate landed, so it could be adopted without a flag day. It currently
-holds 7, all in a file with a live lane row. Shrink it; do not grow it.
+**The baseline** (`dev/docstring-coverage-baseline.json`) exists only to make the
+gate adoptable without a flag day. Treat any tolerated finding as debt: shrink
+the baseline when a finding is fixed, and do not mirror its current count here.
 
 **Verified to fail, not merely to pass:** injecting an undocumented theorem *and* an
 anonymous instance makes it exit 1 and name both, while prose beginning with a keyword
@@ -485,8 +416,9 @@ Rungs are defined by **seed** modules in the script's `RUNGS` table; everything
 else — the `new` count, the cumulative closed slice, what is off the ladder — is
 computed. Add a rung by adding seeds, not by writing a number.
 
-It currently reports **41 of 156 modules on the ladder**; the other 115 have no
-submission path, which is the measurement behind lane `LADDER-EXT`.
+The script output is the source of truth for current ladder coverage. Do not
+copy module counts or off-ladder counts into prose; they change as the package
+grows and rungs are added.
 
 ---
 
@@ -505,15 +437,11 @@ python3 scripts/check_tauceti_readiness.py --json
 ```
 
 Topic assignment is imported from `check_tauceti_roadmap_topics.py`, so the two
-cannot drift apart. **Per-topic is the point**: a library-wide average hides
-where the debt is. Measured 2026-07-29, **19 of 22 topics are clean on all four
-criteria**, and every gap falls in T15/T16/T17 — the unbounded stack, Sylvester,
-and the Davis–Kahan sin-Θ theorems, which are the deepest topics on the
-submission path.
-
-`--check` fails on a missing provenance section or a proof escape, both absolute
-blockers. Oversize files are **reported, not failed**: three exist, splitting
-them is a real refactor with a build, and it is tracked as lane `SPLIT-1K`.
+tools share one classification. **Per-topic is the point**: a library-wide
+average hides where the debt is. The readiness script output owns the current
+provenance, oversize-file, proof-escape, and unplaced-module counts; do not
+duplicate them here. `--check` remains the gate for criteria the script treats as
+blockers.
 
 ---
 
@@ -542,11 +470,7 @@ works on a tree that does not compile — but for the same reason a pass is a
 tripwire, not a proof. `scripts/check_comparator_signatures.py` (which does
 invoke Lean) remains ground truth.
 
-Note the precise question each tool answers, because a green tripwire reads as a
-stronger claim than it is. The drift check asks **"does a declaration with this
-name exist anywhere in the tree"**. It does *not* ask whether the declaration is
-reachable from `DavisKahan.All`. For the census those differ: the nine
-`DavisKahan1970.Section8.*` names exist under `Experimental/**` and so pass the
-drift check, while `scripts/probe_census_declarations.py` correctly reports them
-unresolved against the default build target. Renames are the tripwire's job;
-reachability is the probe's.
+Note the precise question each tool answers: the drift check asks only whether a
+declaration with the recorded name exists somewhere in the tree. It does not
+prove that the declaration is reachable from the intended aggregate or default
+build. Use the Lean-backed signature/probe tools for reachability.
