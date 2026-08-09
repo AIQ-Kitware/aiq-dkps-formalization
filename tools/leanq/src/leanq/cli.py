@@ -18,10 +18,12 @@ from .index import (
     by_name,
     closure,
     ensure_index,
+    ensure_scoped_index,
     filter_decls,
     index_path,
 )
 from .project import ProjectError, find_project
+from .promotion import DEFAULT_TAGS, promotion_report
 
 
 def _tristate(args, flag: str) -> bool | None:
@@ -174,6 +176,80 @@ def cmd_rdeps(args) -> int:
     return cmd_query(args)
 
 
+def cmd_promotions(args) -> int:
+    """Tagged declarations that a chosen production root actually depends on."""
+    project, library = _resolve(args)
+    roots = args.root or [library]
+    decls = ensure_scoped_index(
+        project, library, roots, refresh=args.refresh, verbose=not args.json
+    )
+    tags = args.tag or list(DEFAULT_TAGS)
+    report = promotion_report(
+        decls, tags=tags, consumer_prefixes=args.consumer_prefix or ()
+    )
+    entries = list(report.entries)
+    if args.boundary_only:
+        entries = [entry for entry in entries if entry.role == "boundary"]
+    if args.kind:
+        entries = [entry for entry in entries if entry.decl.kind == args.kind]
+
+    if args.json:
+        payload = {
+            "library": library,
+            "roots": roots,
+            "tags": list(report.tags),
+            "consumerPrefixes": args.consumer_prefix or [],
+            "scopeDeclarations": report.scope_declarations,
+            "taggedReachableDeclarations": len(report.tagged_reachable),
+            "taggedReachableTheorems": sum(
+                decl.kind == "theorem" for decl in report.tagged_reachable
+            ),
+            "neededDeclarations": len(report.entries),
+            "neededTheorems": report.count_kind("theorem"),
+            "boundaryDeclarations": sum(e.role == "boundary" for e in report.entries),
+            "boundaryTheorems": report.count_kind("theorem", role="boundary"),
+            "rows": [entry.to_json() for entry in entries],
+        }
+        json.dump(payload, sys.stdout, indent=2)
+        sys.stdout.write("\n")
+        return 0
+
+    print(f"roots: {', '.join(roots)}")
+    print(f"tags: {', '.join(report.tags)}")
+    print(f"root-scope declarations: {report.scope_declarations}")
+    print(
+        "tagged but reachable: "
+        f"{len(report.tagged_reachable)} declaration(s), "
+        f"{sum(d.kind == 'theorem' for d in report.tagged_reachable)} theorem(s)"
+    )
+    print(
+        "actually needed across the boundary: "
+        f"{len(report.entries)} declaration(s), "
+        f"{report.count_kind('theorem')} theorem(s)"
+    )
+    print(
+        "direct boundary: "
+        f"{sum(e.role == 'boundary' for e in report.entries)} declaration(s), "
+        f"{report.count_kind('theorem', role='boundary')} theorem(s)"
+    )
+    print()
+    width = max((len(entry.decl.short_name) for entry in entries), default=0)
+    for entry in entries:
+        if args.names:
+            print(entry.decl.name)
+            continue
+        consumers = ""
+        if entry.direct_consumers:
+            shown = ", ".join(entry.direct_consumers[:3])
+            extra = len(entry.direct_consumers) - 3
+            consumers = f"  <- {shown}" + (f" (+{extra})" if extra else "")
+        print(
+            f"{entry.role:8s} {entry.decl.kind:8s} "
+            f"{entry.decl.short_name:{width}s}  {entry.decl.location()}{consumers}"
+        )
+    return 0
+
+
 def cmd_axioms(args) -> int:
     project, library = _resolve(args)
     decls = ensure_index(project, library, refresh=args.refresh, verbose=not args.json)
@@ -303,6 +379,35 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--module")
     p.add_argument("--kind", choices=["def", "theorem", "axiom", "inductive", "ctor"])
     p.set_defaults(func=cmd_rdeps, sorried=None, prop_valued=None, is_prop=None)
+
+    p = sub.add_parser(
+        "promotions",
+        help="tagged declarations actually required by declarations under a production root",
+    )
+    add_common(p)
+    p.add_argument(
+        "--root", action="append",
+        help="root module to import (repeatable; default: the library root)",
+    )
+    p.add_argument(
+        "--tag", action="append",
+        help="exact module-name component treated as experimental (default: Experimental, MathAhead)",
+    )
+    p.add_argument(
+        "--consumer-prefix", action="append",
+        help="only count boundary users in modules with this prefix (repeatable)",
+    )
+    p.add_argument(
+        "--kind", choices=["def", "theorem", "axiom", "inductive", "ctor"],
+        help="filter displayed rows by declaration kind; summary remains unfiltered",
+    )
+    p.add_argument(
+        "--boundary-only", action="store_true",
+        help="show only declarations referenced directly from an untagged module",
+    )
+    p.add_argument("--refresh", action="store_true", help="rebuild the root-scoped index")
+    p.add_argument("--names", action="store_true", help="print bare declaration names")
+    p.set_defaults(func=cmd_promotions)
 
     p = sub.add_parser("axioms", help="axiom closure of one declaration")
     add_common(p)

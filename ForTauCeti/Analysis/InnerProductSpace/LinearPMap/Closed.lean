@@ -968,9 +968,26 @@ def realResolventSet (A : E →ₗ.[𝕜] E) : Set ℝ :=
       (∀ y : E, ∃ h : R y ∈ A.domain,
         A ⟨R y, h⟩ - (lam : 𝕜) • R y = y)}
 
+/-- Unfolds real resolvent membership through a stable public API.
+
+`realResolventSet` is intentionally kept abstract across module boundaries; downstream
+proofs should use this theorem instead of depending on definitional transparency. -/
+theorem mem_realResolventSet_iff {A : E →ₗ.[𝕜] E} {lam : ℝ} :
+    lam ∈ realResolventSet A ↔
+      ∃ R : E →L[𝕜] E,
+        (∀ x : A.domain, R (A x - (lam : 𝕜) • (x : E)) = (x : E)) ∧
+        (∀ y : E, ∃ h : R y ∈ A.domain,
+          A ⟨R y, h⟩ - (lam : 𝕜) • R y = y) :=
+  Iff.rfl
+
 /-- Real spectrum defined as the complement of `realResolventSet`. -/
 def realSpectrum (A : E →ₗ.[𝕜] E) : Set ℝ :=
   (realResolventSet A)ᶜ
+
+/-- A real scalar is spectral exactly when it is not a real resolvent point. -/
+@[simp] theorem mem_realSpectrum_iff {A : E →ₗ.[𝕜] E} {lam : ℝ} :
+    lam ∈ realSpectrum A ↔ lam ∉ realResolventSet A :=
+  Iff.rfl
 
 /-- Spectral-set separation for two partial maps, possibly on different Hilbert
 spaces. -/

@@ -54,6 +54,41 @@ in scaffolding", was first answered with a regex over source text, and was wrong
 other than the working directory. Every subcommand takes `--json`, and `query`/`stubs` take
 `--names` for a bare list, so output drops straight into a pipeline.
 
+## Promotion-boundary queries
+
+`promotions` is for repositories that use path components such as `Experimental` or
+`MathAhead` as staging labels.  It imports only the requested production root, then uses
+the elaborated declaration dependency graph to separate three different questions that
+source grep tends to conflate:
+
+- **tagged but reachable** -- declarations present because the production root imports a
+  tagged module somewhere in its import closure;
+- **boundary** -- tagged declarations referenced directly by an untagged declaration;
+- **support** -- tagged declarations transitively required by a boundary declaration.
+
+The boundary plus support rows are the declarations that actually have to move (or be
+reproved/replaced) before the production declaration graph can stop depending on tagged
+modules.  Merely reachable declarations are not automatically promotion work.
+
+For this repository:
+
+```bash
+pip install -e tools/leanq
+lake build DavisKahan
+leanq --lib DavisKahan promotions --root DavisKahan --refresh
+leanq --lib DavisKahan promotions --root DavisKahan --kind theorem --json > /tmp/dk-promotions.json
+```
+
+The default tags are exact dotted-name components `Experimental` and `MathAhead`; add or
+replace them with repeated `--tag`.  `--consumer-prefix DavisKahan.Sources` is useful when
+you specifically want source-facing consumers rather than every untagged declaration under
+the chosen root.  `--boundary-only` omits tagged helper closure and shows only direct
+crossings.
+
+`leanq` indexes public environment constants.  Private implementation helpers are therefore
+not counted as separate promotion declarations; when moving a module, move or rewrite the
+private proof support with its public endpoint.
+
 ## What a record contains
 
 ```json

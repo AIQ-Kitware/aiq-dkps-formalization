@@ -180,12 +180,20 @@ def complexifyReal (A : E →ₗ.[ℝ] F) : Eℂ →ₗ.[ℂ] Fℂ where
     im (complexifyReal A z) = A (complexificationDomainIm A z) := rfl
 
 /-- The embedded real copy of a domain vector belongs to the complexified domain. -/
+@[expose]
 def complexifyRealOfRealDomain
     (A : E →ₗ.[ℝ] F) (x : A.domain) : (complexifyReal A).domain :=
   ⟨ofReal (x : E), by
     rw [mem_complexifyReal_domain_iff]
     simp only [re_ofReal, im_ofReal]
     exact ⟨x.property, A.domain.zero_mem⟩⟩
+
+/-- Coercing the embedded real domain vector back to the ambient complexification
+is exactly the canonical real embedding. -/
+@[simp] theorem complexifyRealOfRealDomain_coe
+    (A : E →ₗ.[ℝ] F) (x : A.domain) :
+    ((complexifyRealOfRealDomain A x : (complexifyReal A).domain) : Eℂ) =
+      ofReal (x : E) := rfl
 
 /-- Complexification agrees exactly with the original partial map on the real copy. -/
 @[simp] theorem complexifyReal_apply_ofReal
@@ -296,6 +304,79 @@ theorem closedGraph_complexifyReal
 section Square
 
 variable {A : E →ₗ.[ℝ] E}
+
+/-! ## Real resolvent and spectrum transport -/
+
+/-- A bounded inverse of a real shift complexifies coordinatewise to a bounded inverse
+of the same real shift of the raw complexified partial map. -/
+theorem realResolvent_mem_complexifyReal
+    (A : E →ₗ.[ℝ] E) {lam : ℝ}
+    (hlam : lam ∈ realResolventSet A) :
+    lam ∈ realResolventSet (complexifyReal A) := by
+  rw [mem_realResolventSet_iff] at hlam ⊢
+  rcases hlam with ⟨R, hleft, hright⟩
+  refine ⟨RealComplexification.complexify R, ?_, ?_⟩
+  · intro z
+    apply RealComplexification.ext
+    · rw [RealComplexification.re_complexify, re_sub, complexifyReal_apply_re,
+        RealComplexification.re_complex_smul]
+      simpa [complexificationDomainRe] using hleft (complexificationDomainRe A z)
+    · rw [RealComplexification.im_complexify, im_sub, complexifyReal_apply_im,
+        RealComplexification.im_complex_smul]
+      simpa [complexificationDomainIm] using hleft (complexificationDomainIm A z)
+  · intro w
+    obtain ⟨hrdom, hr⟩ := hright (re w)
+    obtain ⟨hidom, hi⟩ := hright (im w)
+    have hdom : RealComplexification.complexify R w ∈ (complexifyReal A).domain := by
+      rw [mem_complexifyReal_domain_iff, RealComplexification.re_complexify,
+        RealComplexification.im_complexify]
+      exact ⟨hrdom, hidom⟩
+    refine ⟨hdom, ?_⟩
+    apply RealComplexification.ext
+    · rw [re_sub, complexifyReal_apply_re, RealComplexification.re_complex_smul]
+      simpa [complexificationDomainRe] using hr
+    · rw [im_sub, complexifyReal_apply_im, RealComplexification.im_complex_smul]
+      simpa [complexificationDomainIm] using hi
+
+/-- A bounded inverse of a real shift of the complexification descends by restricting
+the inverse to the real copy and taking its real coordinate. -/
+theorem complexifyReal_realResolvent_mem
+    (A : E →ₗ.[ℝ] E) {lam : ℝ}
+    (hlam : lam ∈ realResolventSet (complexifyReal A)) :
+    lam ∈ realResolventSet A := by
+  rw [mem_realResolventSet_iff] at hlam ⊢
+  rcases hlam with ⟨R, hleft, hright⟩
+  let Rr : E →L[ℝ] E := RealComplexification.realPartOperator R
+  refine ⟨Rr, ?_, ?_⟩
+  · intro x
+    have hx := hleft (complexifyRealOfRealDomain A x)
+    rw [complexifyReal_apply_ofReal] at hx
+    have hre := congrArg re hx
+    simpa [Rr, RealComplexification.realPartOperator_apply] using hre
+  · intro y
+    obtain ⟨hdom, hy⟩ := hright (ofReal y)
+    have hcoords := (mem_complexifyReal_domain_iff A (R (ofReal y))).mp hdom
+    have hRrdom : Rr y ∈ A.domain := by
+      simpa [Rr, RealComplexification.realPartOperator_apply] using hcoords.1
+    refine ⟨hRrdom, ?_⟩
+    have hre := congrArg re hy
+    rw [re_sub, complexifyReal_apply_re, RealComplexification.re_complex_smul] at hre
+    simpa [Rr, RealComplexification.realPartOperator_apply, complexificationDomainRe] using hre
+
+/-- Real resolvent membership is exactly preserved by raw `LinearPMap`
+complexification. -/
+theorem mem_realResolventSet_complexifyReal_iff
+    (A : E →ₗ.[ℝ] E) (lam : ℝ) :
+    lam ∈ realResolventSet (complexifyReal A) ↔
+      lam ∈ realResolventSet A :=
+  ⟨complexifyReal_realResolvent_mem A, realResolvent_mem_complexifyReal A⟩
+
+/-- The real spectrum is exactly preserved by raw `LinearPMap` complexification. -/
+theorem realSpectrum_complexifyReal (A : E →ₗ.[ℝ] E) :
+    realSpectrum (complexifyReal A) = realSpectrum A := by
+  ext lam
+  simp only [mem_realSpectrum_iff]
+  rw [mem_realResolventSet_complexifyReal_iff A lam]
 
 /-- The embedded real-domain map is continuous. -/
 private theorem continuous_complexifyRealOfRealDomain

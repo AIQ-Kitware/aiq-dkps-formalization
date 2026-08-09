@@ -9,7 +9,7 @@ import sys
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Iterable, Iterator, Sequence
 
 from .project import LeanProject, ProjectError
 
@@ -85,17 +85,20 @@ def build_index(
     library: str,
     *,
     out: Path | None = None,
+    modules: Sequence[str] | None = None,
     timeout: int = 3600,
     verbose: bool = True,
 ) -> Path:
     """Run the Lean metaprogram and write a JSONL index.
 
-    Every built module of the library is imported explicitly.  Importing only the root would
-    quietly index nothing for modules the root does not import, and a confident zero is a worse
-    answer than an obvious error.
+    By default every built module of the library is imported explicitly.  Importing only the
+    root would quietly index nothing for modules the root does not import, and a confident zero
+    is a worse answer than an obvious error.  ``modules`` intentionally overrides that behavior
+    for root-scoped questions such as the production promotion boundary.
     """
-    modules = project.modules(library)
-    if project.stale_modules and verbose:
+    scoped = modules is not None
+    modules = list(modules) if scoped else project.modules(library)
+    if project.stale_modules and verbose and not scoped:
         print(
             f"leanq: skipping {len(project.stale_modules)} stale artifact(s) with no source, "
             f"e.g. {project.stale_modules[0]}",
@@ -161,6 +164,39 @@ def ensure_index(
     path = index_path(project, library)
     if refresh or not path.exists():
         build_index(project, library, out=path, verbose=verbose)
+    return load_index(path)
+
+
+def scoped_index_path(project: LeanProject, library: str, roots: Sequence[str]) -> Path:
+    """Cache path for an index produced by importing only ``roots``.
+
+    Root-scoped indexes answer public-surface questions.  The ordinary library
+    index deliberately imports every built module, which is the right behavior
+    for inventory queries but would make an unused experimental module look public.
+    """
+    if not roots:
+        raise ProjectError("a scoped index needs at least one root module")
+    label = "__".join(root.replace(".", "-") for root in roots)
+    if len(label) > 96:
+        import hashlib
+        label = hashlib.sha256("\0".join(roots).encode()).hexdigest()[:16]
+    base = index_path(project, library)
+    return base.with_name(f"{library}.roots-{label}.jsonl")
+
+
+def ensure_scoped_index(
+    project: LeanProject,
+    library: str,
+    roots: Sequence[str],
+    *,
+    refresh: bool = False,
+    verbose: bool = True,
+) -> list[Decl]:
+    """Load an index for exactly the environment obtained by importing ``roots``."""
+    roots = tuple(dict.fromkeys(roots))
+    path = scoped_index_path(project, library, roots)
+    if refresh or not path.exists():
+        build_index(project, library, out=path, modules=roots, verbose=verbose)
     return load_index(path)
 
 
