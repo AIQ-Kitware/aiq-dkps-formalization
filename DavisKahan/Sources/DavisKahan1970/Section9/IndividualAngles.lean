@@ -118,6 +118,57 @@ theorem angle_le_half_tan_two_angle {psi : ℝ} (h0 : 0 ≤ psi)
 theorem angle_le_tan {eta : ℝ} (h0 : 0 ≤ eta) (h2 : eta < Real.pi / 2) :
     eta ≤ Real.tan eta := Real.le_tan h0 h2
 
+/-! ### The in-plane angle read off from two orthonormal coordinates
+
+The Schur-complement rotation is presented by the pair of coordinates of a unit
+vector against an orthonormal pair: if the vector has coordinates `p` and `q`
+then the angle it makes with the first basis vector has cosine
+`p / sqrt (p ^ 2 + q ^ 2)`.  The two facts the reduction needs are that the
+angle stays below `pi / 4` exactly when `q < p`, and that half the tangent of
+its double is the elementary expression `p q / (p ^ 2 - q ^ 2)`. -/
+
+/-- The angle whose cosine is `p / sqrt (p ^ 2 + q ^ 2)` is below `pi / 4`
+precisely because the first coordinate dominates. -/
+theorem arccos_ratio_lt_pi_div_four {p q : ℝ} (hq : 0 ≤ q) (hqp : q < p) :
+    Real.arccos (p / Real.sqrt (p ^ 2 + q ^ 2)) < Real.pi / 4 := by
+  have hp : 0 < p := lt_of_le_of_lt hq hqp
+  have hs : 0 < Real.sqrt (p ^ 2 + q ^ 2) := Real.sqrt_pos.2 (by positivity)
+  have hsq : Real.sqrt (p ^ 2 + q ^ 2) ^ 2 = p ^ 2 + q ^ 2 :=
+    Real.sq_sqrt (by positivity)
+  have hkey : Real.sqrt 2 / 2 < p / Real.sqrt (p ^ 2 + q ^ 2) := by
+    rw [div_lt_div_iff₀ (by norm_num) hs]
+    have h2 : Real.sqrt 2 ^ 2 = 2 := Real.sq_sqrt (by norm_num)
+    nlinarith [Real.sqrt_nonneg 2, hs.le, hsq,
+      sq_nonneg (Real.sqrt 2 * Real.sqrt (p ^ 2 + q ^ 2) - 2 * p)]
+  have hle : p / Real.sqrt (p ^ 2 + q ^ 2) ≤ 1 := by
+    rw [div_le_one hs]
+    nlinarith [hsq, Real.sqrt_nonneg (p ^ 2 + q ^ 2)]
+  have h4 : Real.arccos (Real.sqrt 2 / 2) = Real.pi / 4 := by
+    rw [← Real.cos_pi_div_four, Real.arccos_cos (by positivity) (by linarith [Real.pi_pos])]
+  rw [← h4]
+  exact Real.arccos_lt_arccos (by nlinarith [Real.sqrt_nonneg 2]) hkey hle
+
+/-- Half the tangent of the doubled angle, in the two coordinates.  This is the
+exact `tan (2 psi) / 2` the Schur-complement reduction has to bound. -/
+theorem half_tan_two_arccos_ratio {p q : ℝ} (hq : 0 ≤ q) (hqp : q < p) :
+    Real.tan (2 * Real.arccos (p / Real.sqrt (p ^ 2 + q ^ 2))) / 2
+      = p * q / (p ^ 2 - q ^ 2) := by
+  have hp : 0 < p := lt_of_le_of_lt hq hqp
+  have hs : 0 < Real.sqrt (p ^ 2 + q ^ 2) := Real.sqrt_pos.2 (by positivity)
+  have hsq : Real.sqrt (p ^ 2 + q ^ 2) ^ 2 = p ^ 2 + q ^ 2 :=
+    Real.sq_sqrt (by positivity)
+  have htan : Real.tan (Real.arccos (p / Real.sqrt (p ^ 2 + q ^ 2))) = q / p := by
+    rw [Real.tan_arccos]
+    have h1 : 1 - (p / Real.sqrt (p ^ 2 + q ^ 2)) ^ 2
+        = (q / Real.sqrt (p ^ 2 + q ^ 2)) ^ 2 := by
+      field_simp
+      nlinarith [hsq]
+    rw [h1, Real.sqrt_sq (by positivity)]
+    field_simp
+  rw [Real.tan_two_mul, htan]
+  have hne : p ^ 2 - q ^ 2 ≠ 0 := by nlinarith
+  field_simp
+
 /-- **The individual-eigenvector envelope, from the spherical identity and the
 two tangent estimates.**
 
