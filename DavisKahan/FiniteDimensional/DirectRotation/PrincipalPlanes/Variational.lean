@@ -220,7 +220,7 @@ theorem singularValues_restrictedDisplacement_directRotation
     rintro ⟨a, ha⟩ ⟨b, hb⟩
     have ha' : (a : ℕ) < m := ha
     have hb' : (b : ℕ) < m := hb
-    simp only [Set.restrict_apply, hv, dif_pos ha', dif_pos hb']
+    simp only [Set.domRestrict_apply, hv, dif_pos ha', dif_pos hb']
     rw [orthonormal_iff_ite.mp (orthonormal_principalSourceVector U V)
       ⟨(a : ℕ), ha'⟩ ⟨(b : ℕ), hb'⟩]
     congr 1
