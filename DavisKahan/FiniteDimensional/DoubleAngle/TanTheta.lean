@@ -872,9 +872,24 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
     have hG1sq := pow_le_pow_left₀
       (by positivity : (0 : ℝ) ≤ 2 * ((b - a) / 2) * ‖w₂‖ ^ 2) hG1 2
     rw [hdecomp] at hG2
-    nlinarith only [hG2, hG1sq, hApos, sq_nonneg ε, sq_nonneg (1 - 2 * ν), hd, hs2pos,
-      mul_le_mul_of_nonneg_left hG2 (sq_nonneg ((b - a) / 2)),
-      mul_le_mul_of_nonneg_left hG1sq (sq_nonneg ε), mul_pos hApos hApos]
+    have hG2scaled := mul_le_mul_of_nonneg_left hG2 (sq_nonneg ((b - a) / 2))
+    have hG1sqScaled := mul_le_mul_of_nonneg_left hG1sq (sq_nonneg ε)
+    have hA2pos : (0 : ℝ) < (r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2 := pow_pos hApos 2
+    have hscaled :
+        (r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2
+            * (((b - a) / 2) ^ 2 * (1 - (1 - 2 * ν) ^ 2))
+          ≤ (r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2
+            * (ε ^ 2 * (1 - 2 * ν) ^ 2) := by
+      calc
+        (r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2
+              * (((b - a) / 2) ^ 2 * (1 - (1 - 2 * ν) ^ 2))
+            = ((b - a) / 2) ^ 2
+              * ((r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2 * (1 - (1 - 2 * ν) ^ 2)) := by ring
+        _ ≤ ((b - a) / 2) ^ 2 * (4 * (ε ^ 2 * (‖w₂‖ ^ 2) ^ 2)) := hG2scaled
+        _ = ε ^ 2 * (2 * ((b - a) / 2) * ‖w₂‖ ^ 2) ^ 2 := by ring
+        _ ≤ ε ^ 2 * ((1 - 2 * ν) * (r₁ * ‖w₂‖ ^ 2 + r₂)) ^ 2 := hG1sqScaled
+        _ = (r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2 * (ε ^ 2 * (1 - 2 * ν) ^ 2) := by ring
+    exact le_of_mul_le_mul_left hscaled hA2pos
 
 omit [CompleteSpace E] in
 /-- **The subspace Davis–Kahan tan 2Θ theorem (plan step G2.2b).**  `T, S`
