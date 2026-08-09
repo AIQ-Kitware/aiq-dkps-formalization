@@ -9,6 +9,7 @@ import DavisKahan.Sources.DavisKahan1970.Section8.All
 import DavisKahan.Sources.DavisKahan1970.Section9.All
 import DavisKahan.Sources.DavisKahan1970.SineTheta.All
 import DavisKahan.Sources.DavisKahan1970.Sylvester.All
+import DavisKahan.Sources.DavisKahan1970.DirectedReal
 import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
 import DavisKahan.Sources.DavisKahan1970.FullPartIII
 import DavisKahan.Sources.DavisKahan1970.FullPartIIIExtensions
