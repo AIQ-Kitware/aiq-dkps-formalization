@@ -33,12 +33,15 @@ namespace Experimental
 
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
-universe v
+universe u v
 
+section ScalarGeneric
+
+variable {𝕜 : Type u} [RCLike 𝕜]
 variable {H F G : Type v}
-  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+  [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
 
 omit [CompleteSpace H] in
 /-- The DK bounded sum is exactly the canonical partial-map perturbation.
@@ -47,7 +50,7 @@ Was stated over `Spectra.Operator.perturbedOp` until 2026-07-28; the canonical
 object is now `TauCeti.LinearPMap.perturb`
 (`dev/tauceti/spectra-removal-plan.md`). -/
 theorem toLinearPMap_addBounded_eq_perturbedOp
-    (A : DKClosedOperator (H := H)) (V : H →L[ℂ] H) :
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H)) (V : H →L[𝕜] H) :
     (A.addBounded V).toLinearPMap =
       TauCeti.LinearPMap.perturb A.toLinearPMap
         (TauCeti.LinearPMap.boundedPerturbation A.toLinearPMap V) := by
@@ -58,8 +61,9 @@ theorem toLinearPMap_addBounded_eq_perturbedOp
 /-- Bounded Kato--Rellich for the DK closed-operator wrapper, proved through
 its canonical `LinearPMap` representation. -/
 theorem addBounded_isSelfAdjoint
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
-    (V : H →L[ℂ] H) (hV : IsSelfAdjointOperator V) :
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (hA : A.IsSelfAdjoint)
+    (V : H →L[𝕜] H) (hV : IsSelfAdjointOperator V) :
     (A.addBounded V).IsSelfAdjoint := by
   have hV' : _root_.IsSelfAdjoint V :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hV
@@ -71,9 +75,10 @@ theorem addBounded_isSelfAdjoint
 paper-shaped unbounded residual data.  The residual identity is automatic and
 has residual `V ∘ X`. -/
 noncomputable def boundedPerturbationSinThetaData
-    (A : DKClosedOperator (H := H)) (V : H →L[ℂ] H)
-    (A₀ : DKClosedOperator (H := F)) (Λ₁ : DKClosedOperator (H := G))
-    (X : F →L[ℂ] H) (F₁ : G →L[ℂ] H)
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H)) (V : H →L[𝕜] H)
+    (A₀ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F))
+    (Λ₁ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := G))
+    (X : F →L[𝕜] H) (F₁ : G →L[𝕜] H)
     (hXdom : ∀ x : A₀.domain, X (x : F) ∈ A.domain)
     (hXintertwines : ∀ x : A₀.domain,
       A.toLinearMap ⟨X (x : F), hXdom x⟩ = X (A₀.toLinearMap x))
@@ -81,7 +86,7 @@ noncomputable def boundedPerturbationSinThetaData
     (hF₁intertwines : ∀ y : Λ₁.domain,
       (A.addBounded V).toLinearMap ⟨F₁ (y : G), hF₁dom y⟩ =
         F₁ (Λ₁.toLinearMap y)) :
-    UnboundedSinThetaData (𝕜 := ℂ) (E := H) (F := F) (G := G) where
+    UnboundedSinThetaData (𝕜 := 𝕜) (E := H) (F := F) (G := G) where
   A := A.addBounded V
   A₀ := A₀
   Λ₁ := Λ₁
@@ -99,6 +104,13 @@ noncomputable def boundedPerturbationSinThetaData
     rw [hXintertwines x]
     abel
   intertwines := hF₁intertwines
+
+end ScalarGeneric
+
+variable {H F G : Type v}
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
 
 omit [CompleteSpace G] in
 /-- The projected adjoint residual of a bounded perturbation is no larger than

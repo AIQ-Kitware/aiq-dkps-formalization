@@ -5,7 +5,9 @@ Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.BoundedOperator.Reflection
 import DavisKahan.DoubleAngle.UnboundedIdeal
+import DavisKahan.DoubleAngle.RealUnboundedIdeal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
@@ -224,6 +226,179 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative
   refine ⟨hmem, ?_⟩
   rw [hgauge]
   exact hcanonical.2
+
+/-! ## Real-scalar forms
+
+Standing assumption 1 of the source says the Hilbert space is "real or
+complex".  The two theorems below are the real-scalar counterparts of the two
+directed statements above, at the same unbounded scope and with the same
+`sin 2Θ₀` representative freedom.  The gap is carried by the scalar-generic
+form-bounded Sylvester predicate between the two real spectral restrictions,
+which is the weaker of this tree's two spellings of spectral separation; the
+`ℂ`-only resolvent-set spelling used above has no real counterpart, since
+`TauCeti.LinearPMap.spectrum` is defined over `ℂ`.
+
+The ambient (whole-space) half `δ ‖sin 2Θ‖ ≤ 2‖H‖` over the reals is
+`TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real`. -/
+
+variable {Er : Type v}
+  [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+
+open DavisKahan.Experimental DavisKahan.Experimental.RealSpectralRestriction in
+/-- **Davis--Kahan 1970, `sin 2Θ` theorem, literal unbounded perturbation form
+over a REAL Hilbert space.**  The chosen `sin 2Θ₀` may be any operator with the
+complete singular-value sequence of the canonical reflected overlap block. -/
+theorem unbounded_sinTwoTheta_uiNorm_representative_real
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := Er))
+    (hA : A.IsSelfAdjoint)
+    (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+    (hEmem : N.Mem Eop)
+    (sinTwoTheta₀ : PaperSinThetaRepresentative
+      (sinTwoThetaIdealBlock
+        (realSelfAdjointSpectralSubspace A hA B hB)
+        (realSelfAdjointSpectralSubspace (A.addBounded Eop)
+          (addBounded_isSelfAdjoint A hA Eop hEop) S hS))) :
+    N.Mem sinTwoTheta₀.operator ∧
+      δ * N.gauge sinTwoTheta₀.operator ≤ 2 * N.gauge Eop := by
+  have hcanonical := sinTwoTheta_addBounded_gauge_real
+    A hA Eop hEop N B S hB hS hδ hgap hEmem
+  obtain ⟨hmem, hgauge⟩ := sinTwoTheta₀.mem_and_gauge_eq N hcanonical.1
+  refine ⟨hmem, ?_⟩
+  rw [hgauge]
+  exact hcanonical.2
+
+open DavisKahan.Experimental DavisKahan.Experimental.RealSpectralRestriction in
+/-- **Davis--Kahan 1970, `sin 2Θ` theorem, literal reflection-residual form
+over a REAL Hilbert space.**  The bounded operator `R` implements the mirrored
+system on the full domain; the chosen `sin 2Θ₀` may be any operator with the
+complete singular-value sequence of the canonical reflected overlap block, and
+it is controlled by the residual with constant one. -/
+theorem unbounded_sinTwoTheta_residual_uiNorm_representative_real
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := Er))
+    (hA : A.IsSelfAdjoint)
+    (R : Er →L[ℝ] Er) (hR : DavisKahan.IsSelfAdjointOperator R)
+    (B : Set ℝ) (hB : MeasurableSet B)
+    (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : Er) ∈ A.domain)
+    (hJintertwines : ∀ x : A.domain,
+      (A.addBounded R).toLinearMap
+          ⟨V.reflectionOperator (x : Er), hJdom x⟩ =
+        V.reflectionOperator (A.toLinearMap x))
+    (hRmem : N.Mem R)
+    (sinTwoTheta₀ : PaperSinThetaRepresentative
+      (sinTwoThetaIdealBlock
+        (realSelfAdjointSpectralSubspace A hA B hB) V)) :
+    N.Mem sinTwoTheta₀.operator ∧
+      δ * N.gauge sinTwoTheta₀.operator ≤ N.gauge R := by
+  have hcanonical := sinTwoTheta_reflectionResidual_gauge_real
+    A hA B hB N R hR V hδ hgap hJdom hJintertwines hRmem
+  obtain ⟨hmem, hgauge⟩ := sinTwoTheta₀.mem_and_gauge_eq N hcanonical.1
+  refine ⟨hmem, ?_⟩
+  rw [hgauge]
+  exact hcanonical.2
+
+/-! ### The real directed forms at the paper's own unitarily invariant norm
+
+`PaperUnitaryInvariantNorm` is the source's symmetric-gauge presentation, and it
+is the class the real ambient half `sinTwoTheta_wholeSpace_paperUINorm_real` is
+stated over.  Reading the real Ky-Fan-dominant theorems at each finite Ky Fan
+family and closing with Fan dominance puts the real directed half at the same
+class, so both printed conclusions of the Section 2 `sin 2Θ` theorem are now
+available over `ℝ` for the same notion of "every unitarily invariant norm". -/
+
+omit [CompleteSpace Er] in
+private theorem kyFanApproximationGauge_zero_real {Fr : Type v}
+    [NormedAddCommGroup Fr] [InnerProductSpace ℝ Fr]
+    (T : Er →L[ℝ] Fr) : kyFanApproximationGauge 0 T = 0 := by
+  simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+
+open DavisKahan.Experimental DavisKahan.Experimental.RealSpectralRestriction in
+/-- **Davis--Kahan 1970, directed `sin 2Θ` theorem over a REAL Hilbert space,
+reflection-residual form, for every source unitarily invariant norm**:
+`δ ‖sin 2Θ₀‖ ≤ ‖R‖`. -/
+theorem sinTwoTheta_reflectionResidual_paperUINorm_real
+    (N : PaperUnitaryInvariantNorm)
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := Er))
+    (hA : A.IsSelfAdjoint)
+    (R : Er →L[ℝ] Er) (hR : DavisKahan.IsSelfAdjointOperator R)
+    (B : Set ℝ) (hB : MeasurableSet B)
+    (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : Er) ∈ A.domain)
+    (hJintertwines : ∀ x : A.domain,
+      (A.addBounded R).toLinearMap
+          ⟨V.reflectionOperator (x : Er), hJdom x⟩ =
+        V.reflectionOperator (A.toLinearMap x))
+    (hRmem : N.Mem R) :
+    N.Mem (sinTwoThetaIdealBlock
+        (realSelfAdjointSpectralSubspace A hA B hB) V) ∧
+      δ * N.gauge (sinTwoThetaIdealBlock
+        (realSelfAdjointSpectralSubspace A hA B hB) V) ≤ N.gauge R := by
+  refine N.mul_gauge_le_of_all_mul_kyFan_le hδ hRmem fun k => ?_
+  rcases Nat.eq_zero_or_pos k with rfl | hk
+  · rw [kyFanApproximationGauge_zero_real, kyFanApproximationGauge_zero_real,
+      mul_zero]
+  · have h := sinTwoTheta_reflectionResidual_gauge_real A hA B hB
+      (KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk) R hR V hδ hgap
+      hJdom hJintertwines (KyFanDominantIdealFamily.kyFan_mem k hk R)
+    rw [KyFanDominantIdealFamily.kyFan_gauge,
+      KyFanDominantIdealFamily.kyFan_gauge] at h
+    exact h.2
+
+open DavisKahan.Experimental DavisKahan.Experimental.RealSpectralRestriction in
+/-- **Davis--Kahan 1970, directed `sin 2Θ` theorem over a REAL Hilbert space,
+bounded-perturbation form, for every source unitarily invariant norm**:
+`δ ‖sin 2Θ₀‖ ≤ 2‖E‖`, with the paper's sharp factor two. -/
+theorem sinTwoTheta_addBounded_paperUINorm_real
+    (N : PaperUnitaryInvariantNorm)
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := Er))
+    (hA : A.IsSelfAdjoint)
+    (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+    (hEmem : N.Mem Eop) :
+    N.Mem (sinTwoThetaIdealBlock
+        (realSelfAdjointSpectralSubspace A hA B hB)
+        (realSelfAdjointSpectralSubspace (A.addBounded Eop)
+          (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
+      δ * N.gauge (sinTwoThetaIdealBlock
+        (realSelfAdjointSpectralSubspace A hA B hB)
+        (realSelfAdjointSpectralSubspace (A.addBounded Eop)
+          (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
+        2 * N.gauge Eop := by
+  have hhalf : 0 < δ / 2 := by linarith
+  have hmain := N.mul_gauge_le_of_all_mul_kyFan_le hhalf hEmem
+    (A := sinTwoThetaIdealBlock
+        (realSelfAdjointSpectralSubspace A hA B hB)
+        (realSelfAdjointSpectralSubspace (A.addBounded Eop)
+          (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) (fun k => ?_)
+  · exact ⟨hmain.1, by linarith [hmain.2]⟩
+  · rcases Nat.eq_zero_or_pos k with rfl | hk
+    · rw [kyFanApproximationGauge_zero_real, kyFanApproximationGauge_zero_real,
+        mul_zero]
+    · have h := sinTwoTheta_addBounded_gauge_real A hA Eop hEop
+        (KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk) B S hB hS hδ hgap
+        (KyFanDominantIdealFamily.kyFan_mem k hk Eop)
+      rw [KyFanDominantIdealFamily.kyFan_gauge,
+        KyFanDominantIdealFamily.kyFan_gauge] at h
+      linarith [h.2]
 
 end DavisKahan1970
 end TauCeti

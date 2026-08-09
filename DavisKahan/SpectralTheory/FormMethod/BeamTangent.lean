@@ -136,6 +136,80 @@ theorem beamTrialBlock_compression_form_le (ε : ℝ) (hε : 0 ≤ ε) (z : beam
       Submodule.starProjection_eq_self_iff.2 z.2]
   rw [hz]
   exact beamRitz_form_le ε hε z
+
+/-! ### The trial block's residual is exactly rank one
+
+`orthogonalResidualGram ε = (ε²/30) [[1, -1], [-1, 1]]` has rank one, so the second
+approximation number of the Rayleigh--Ritz residual vanishes and its two-term Ky Fan
+gauge equals its operator norm.  This is what the 2-norm half of equation (9.6) needs
+and what the operator-norm half did not: `‖R̂‖₁ = ‖R̂‖₂ = ε/√15` in the paper's
+notation. -/
+
+/-- The recentered residual kills the direction `φ₁ + φ₂`. -/
+theorem beamTrialBlock_residual_vecOne_add_vecTwo (ε : ℝ) :
+    (beamTrialBlock ε).residual (beamTrialVecOne + beamTrialVecTwo) = 0 := by
+  rw [beamTrialBlock_residual_apply]
+  exact beamRitzResidual_vecOne_add_vecTwo_eq_zero ε
+
+/-- Hence the two residual columns are opposite: the residual has a one-dimensional
+range. -/
+theorem beamTrialBlock_residual_vecTwo (ε : ℝ) :
+    (beamTrialBlock ε).residual beamTrialVecTwo
+      = -(beamTrialBlock ε).residual beamTrialVecOne := by
+  have h := beamTrialBlock_residual_vecOne_add_vecTwo ε
+  rw [map_add] at h
+  exact eq_neg_of_add_eq_zero_right h
+
+/-- **The Rayleigh--Ritz residual has rank at most one.** -/
+theorem beamTrialBlock_residual_rank_le (ε : ℝ) :
+    ((beamTrialBlock ε).residual).rank ≤ (1 : Cardinal) := by
+  classical
+  have hle : LinearMap.range
+      (((beamTrialBlock ε).residual : beamTrial →L[ℂ] BeamL2) : beamTrial →ₗ[ℂ] BeamL2)
+      ≤ Submodule.span ℂ
+        ({(beamTrialBlock ε).residual beamTrialVecOne} : Set BeamL2) := by
+    rintro y ⟨x, rfl⟩
+    obtain ⟨α, β, hx⟩ := exists_beamTrialVec_repr x
+    refine Submodule.mem_span_singleton.2 ⟨α - β, ?_⟩
+    show (α - β) • (beamTrialBlock ε).residual beamTrialVecOne
+      = (beamTrialBlock ε).residual x
+    rw [hx, map_add, map_smul, map_smul, beamTrialBlock_residual_vecTwo]
+    module
+  calc ((beamTrialBlock ε).residual).rank
+      ≤ Module.rank ℂ (Submodule.span ℂ
+          ({(beamTrialBlock ε).residual beamTrialVecOne} : Set BeamL2)) :=
+        Submodule.rank_mono hle
+    _ ≤ 1 := by
+        simpa using rank_span_le ({(beamTrialBlock ε).residual beamTrialVecOne} : Set BeamL2)
+
+/-- **The second approximation number of the Rayleigh--Ritz residual vanishes.**  The
+residual is its own rank-one approximant. -/
+theorem approximationSingularValue_one_beamTrialBlock_residual_le (ε : ℝ) :
+    approximationSingularValue 1 ((beamTrialBlock ε).residual) ≤ 0 := by
+  have hrank : ((beamTrialBlock ε).residual).rank ≤ ((1 : ℕ) : Cardinal) := by
+    simpa using beamTrialBlock_residual_rank_le ε
+  have h := ((beamTrialBlock ε).residual).approximationNumber_le_norm_sub hrank
+  rwa [sub_self, norm_zero] at h
+
+/-- **The two-term Ky Fan gauge of the Rayleigh--Ritz residual equals its operator
+norm bound.**  This is the paper's `‖R̂‖₁ = ‖R̂‖₂ = ε/√15`. -/
+theorem kyFanTwo_beamTrialBlock_residual_le (ε : ℝ) :
+    kyFanApproximationGauge 2 ((beamTrialBlock ε).residual)
+      ≤ orthogonalResidualSingularValue ε := by
+  have h0 : approximationSingularValue 0 ((beamTrialBlock ε).residual)
+      ≤ orthogonalResidualSingularValue ε := by
+    have hz : approximationSingularValue 0 ((beamTrialBlock ε).residual)
+        = ‖(beamTrialBlock ε).residual‖ :=
+      ((beamTrialBlock ε).residual).approximationNumber_index_zero
+    rw [hz]
+    exact norm_beamTrialBlock_residual_le ε
+  have h1 := approximationSingularValue_one_beamTrialBlock_residual_le ε
+  have hsum : approximationSingularValue 0 ((beamTrialBlock ε).residual)
+      + approximationSingularValue 1 ((beamTrialBlock ε).residual)
+      ≤ orthogonalResidualSingularValue ε := by linarith
+  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+  rw [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_zero, zero_add]
+  exact hsum
 end
 
 /-! ## Equation (9.6): the tangent envelope for the genuine operator -/
@@ -218,6 +292,70 @@ theorem beamTanTheta_lt_printed (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
     beamTanTheta ε
       < ((1291 : ℝ) / 2500000 * ε) / (1 - (7887 : ℝ) / 5000000 * ε) :=
   equation_9_6 ε (beamTanTheta ε) hε hε100 (beamTanTheta_le ε hε hε100)
+
+/-! ## Equation (9.6), second sentence: the same bound in the 2-norm
+
+"The same bound applies to `tan θ₁ + tan θ₂` in the 2-norm."  Nothing changes on the
+left of Theorem 6.3 except the ideal gauge, and nothing changes on the right because
+the recentered residual is rank one: its second approximation number is zero, so its
+two-term Ky Fan gauge is again `ε/√15`. -/
+
+/-- **The two-term Ky Fan sum of the tangents** of the angles between the affine trial
+subspace and the exact low spectral subspace of `A + ε t`. -/
+noncomputable def beamTanThetaSum (ε : ℝ) : ℝ :=
+  kyFanApproximationGauge 2 (theorem63DirectedTangent beamTrial
+    (selfAdjointSpectralSubspace (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε)
+      (Set.Iic (ritzHigh ε)) measurableSet_Iic))
+
+/-- **Davis--Kahan 1970, equation (9.6) in the 2-norm, for the genuine free-beam
+operator.**
+
+`tan θ₁ + tan θ₂` obeys the *same* exact envelope as `tan θ₁` alone.  The only two
+changes from `beamTanTheta_le` are the ideal gauge — `KyFanDominantIdealFamily.kyFan 2`
+instead of `kyFan 1` — and the residual bound, which is `kyFanTwo_beamTrialBlock_residual_le`
+instead of the operator norm; the latter is available precisely because the recentered
+residual Gram matrix is rank one. -/
+theorem beamTanThetaSum_le (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
+    beamTanThetaSum ε ≤ tangentThetaExactBound ε := by
+  have hritz : ritzHigh ε < 500 := ritzHigh_lt_five_hundred hε100
+  have hδ : (0 : ℝ) < 500 - ritzHigh ε := by linarith
+  have hgap : TauCeti.LinearPMap.specProjection (beamPerturbed_isSelfAdjoint ε)
+      (Set.Ioo (ritzHigh ε) (ritzHigh ε + (500 - ritzHigh ε))) measurableSet_Ioo = 0 := by
+    rw [show ritzHigh ε + (500 - ritzHigh ε) = 500 from by ring]
+    exact beamPerturbed_specProjection_Ioo_eq_zero ε hε.le
+  have hmain := theorem6_3_unbounded_ideal_directedTangent
+    (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) 2 (by norm_num))
+    (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε) (beamTrialBlock ε) hδ hgap
+    (beamTrialBlock_compression_form_le ε hε.le)
+    (KyFanDominantIdealFamily.kyFan_mem 2 (by norm_num) _)
+  have hgauge := hmain.2
+  rw [KyFanDominantIdealFamily.kyFan_gauge, KyFanDominantIdealFamily.kyFan_gauge] at hgauge
+  have hchain : (500 - ritzHigh ε) * beamTanThetaSum ε
+      ≤ orthogonalResidualSingularValue ε :=
+    le_trans hgauge (kyFanTwo_beamTrialBlock_residual_le ε)
+  have hden : (1 : ℝ) - ritzHighCoefficient / 500 * ε ≠ 0 := by
+    have h : ritzHigh ε = ε * ritzHighCoefficient := rfl
+    rw [h] at hritz
+    intro hzero
+    apply absurd hritz
+    push Not
+    nlinarith [hzero]
+  have hbound : tangentThetaExactBound ε
+      = orthogonalResidualSingularValue ε / (500 - ritzHigh ε) := by
+    unfold tangentThetaExactBound orthogonalResidualSingularValue
+    rw [abs_of_pos hε, show ritzHigh ε = ε * ritzHighCoefficient from rfl,
+      div_eq_div_iff hden (by
+        rw [show ritzHigh ε = ε * ritzHighCoefficient from rfl] at hδ
+        exact ne_of_gt hδ)]
+    ring
+  rw [hbound, le_div_iff₀ hδ]
+  linarith [hchain]
+
+/-- **Equation (9.6) in the 2-norm, as printed.** -/
+theorem beamTanThetaSum_lt_printed (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
+    beamTanThetaSum ε
+      < ((1291 : ℝ) / 2500000 * ε) / (1 - (7887 : ℝ) / 5000000 * ε) :=
+  equation_9_6 ε (beamTanThetaSum ε) hε hε100 (beamTanThetaSum_le ε hε hε100)
 
 /-! ## The low spectral subspace is exactly two-dimensional
 

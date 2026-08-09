@@ -26,41 +26,99 @@ namespace Experimental
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 
-universe v
+universe u v
 
+section ScalarGeneric
+
+variable {𝕜 : Type u} [RCLike 𝕜]
 variable {H : Type v}
-  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+  [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
 /-- Conjugation of a bounded operator by a linear isometry equivalence. -/
 noncomputable def boundedUnitaryConjugate
-    (W : H ≃ₗᵢ[ℂ] H) (A : H →L[ℂ] H) : H →L[ℂ] H :=
+    (W : H ≃ₗᵢ[𝕜] H) (A : H →L[𝕜] H) : H →L[𝕜] H :=
   W.toLinearIsometry.toContinuousLinearMap ∘L A ∘L
     W.symm.toLinearIsometry.toContinuousLinearMap
 
 omit [CompleteSpace H] in
 /-- The bounded unitary conjugate, unfolded. -/
 @[simp] theorem boundedUnitaryConjugate_apply
-    (W : H ≃ₗᵢ[ℂ] H) (A : H →L[ℂ] H) (x : H) :
+    (W : H ≃ₗᵢ[𝕜] H) (A : H →L[𝕜] H) (x : H) :
     boundedUnitaryConjugate W A x = W (A (W.symm x)) := rfl
 
 /-- Bounded unitary conjugation preserves self-adjointness. -/
 theorem isSelfAdjoint_boundedUnitaryConjugate
-    (W : H ≃ₗᵢ[ℂ] H) {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) :
+    (W : H ≃ₗᵢ[𝕜] H) {A : H →L[𝕜] H} (hA : IsSelfAdjoint A) :
     IsSelfAdjoint (boundedUnitaryConjugate W A) := by
   rw [ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric] at hA ⊢
   intro x y
   calc
-    ⟪boundedUnitaryConjugate W A x, y⟫_ℂ =
-        ⟪W (A (W.symm x)), W (W.symm y)⟫_ℂ := by
+    ⟪boundedUnitaryConjugate W A x, y⟫_𝕜 =
+        ⟪W (A (W.symm x)), W (W.symm y)⟫_𝕜 := by
           rw [W.apply_symm_apply]
           rfl
-    _ = ⟪A (W.symm x), W.symm y⟫_ℂ := W.inner_map_map _ _
-    _ = ⟪W.symm x, A (W.symm y)⟫_ℂ := hA _ _
-    _ = ⟪W (W.symm x), W (A (W.symm y))⟫_ℂ :=
+    _ = ⟪A (W.symm x), W.symm y⟫_𝕜 := W.inner_map_map _ _
+    _ = ⟪W.symm x, A (W.symm y)⟫_𝕜 := hA _ _
+    _ = ⟪W (W.symm x), W (A (W.symm y))⟫_𝕜 :=
       (W.inner_map_map _ _).symm
-    _ = ⟪x, boundedUnitaryConjugate W A y⟫_ℂ := by
+    _ = ⟪x, boundedUnitaryConjugate W A y⟫_𝕜 := by
       rw [W.apply_symm_apply]
       rfl
+
+omit [CompleteSpace H] in
+/-- Orthogonal projection onto a unitary image is the conjugated original
+projection. -/
+theorem starProjection_map_unitary
+    (U : Submodule 𝕜 H) [U.HasOrthogonalProjection]
+    (W : H ≃ₗᵢ[𝕜] H) :
+    (U.map (W.toLinearEquiv : H →ₗ[𝕜] H)).starProjection =
+      boundedUnitaryConjugate W U.starProjection := by
+  ext x
+  rw [Submodule.starProjection_map_apply]
+  rfl
+
+/-- The bounded residual produced by reflecting a perturbation. -/
+noncomputable def reflectionPerturbation
+    (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
+    (E : H →L[𝕜] H) : H →L[𝕜] H :=
+  E - boundedUnitaryConjugate V.reflection E
+
+/-- The reflected perturbation is self-adjoint when the original perturbation
+is self-adjoint. -/
+theorem reflectionPerturbation_isSelfAdjoint
+    (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
+    (E : H →L[𝕜] H) (hE : IsSelfAdjointOperator E) :
+    IsSelfAdjointOperator (reflectionPerturbation V E) := by
+  apply hE.sub
+  exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+    (isSelfAdjoint_boundedUnitaryConjugate V.reflection
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hE))
+
+omit [CompleteSpace H] in
+/-- The reflected perturbation costs at most twice the original operator
+norm. -/
+theorem norm_reflectionPerturbation_le
+    (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
+    (E : H →L[𝕜] H) : ‖reflectionPerturbation V E‖ ≤ 2 * ‖E‖ := by
+  have hconj : ‖boundedUnitaryConjugate V.reflection E‖ ≤ ‖E‖ := by
+    refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg E) fun x => ?_
+    change ‖V.reflection (E (V.reflection.symm x))‖ ≤ ‖E‖ * ‖x‖
+    rw [V.reflection.norm_map]
+    calc
+      ‖E (V.reflection.symm x)‖ ≤ ‖E‖ * ‖V.reflection.symm x‖ :=
+        E.le_opNorm _
+      _ = ‖E‖ * ‖x‖ := by rw [V.reflection.symm.norm_map]
+  unfold reflectionPerturbation
+  calc
+    ‖E - boundedUnitaryConjugate V.reflection E‖ ≤
+        ‖E‖ + ‖boundedUnitaryConjugate V.reflection E‖ := norm_sub_le _ _
+    _ ≤ ‖E‖ + ‖E‖ := add_le_add (le_refl ‖E‖) hconj
+    _ = 2 * ‖E‖ := by ring
+
+end ScalarGeneric
+
+variable {H : Type v}
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
 /-- Reflection defect of a bounded operator. -/
 noncomputable def boundedReflectionDefect
@@ -276,18 +334,6 @@ theorem norm_boundedUnitaryConjugate
   exact le_antisymm hle hback
 
 omit [CompleteSpace H] in
-/-- Orthogonal projection onto a unitary image is the conjugated original
-projection. -/
-theorem starProjection_map_unitary
-    (U : Submodule ℂ H) [U.HasOrthogonalProjection]
-    (W : H ≃ₗᵢ[ℂ] H) :
-    (U.map (W.toLinearEquiv : H →ₗ[ℂ] H)).starProjection =
-      boundedUnitaryConjugate W U.starProjection := by
-  ext x
-  rw [Submodule.starProjection_map_apply]
-  rfl
-
-omit [CompleteSpace H] in
 /-- Directed projection gaps are invariant under simultaneous unitary
 transport. -/
 theorem directedGap_map_unitary
@@ -414,44 +460,6 @@ theorem subspaceGap_map_reflection_eq_norm_sinTwoAngle
     norm_reflectedOffdiag_add_eq V (isSelfAdjoint_starProjection U),
     norm_sinTwoAngleOperatorC]
   norm_num
-
-/-- The bounded residual produced by reflecting a perturbation. -/
-noncomputable def reflectionPerturbation
-    (V : Submodule ℂ H) [V.HasOrthogonalProjection]
-    (E : H →L[ℂ] H) : H →L[ℂ] H :=
-  E - boundedUnitaryConjugate V.reflection E
-
-/-- The reflected perturbation is self-adjoint when the original perturbation
-is self-adjoint. -/
-theorem reflectionPerturbation_isSelfAdjoint
-    (V : Submodule ℂ H) [V.HasOrthogonalProjection]
-    (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E) :
-    IsSelfAdjointOperator (reflectionPerturbation V E) := by
-  apply hE.sub
-  exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-    (isSelfAdjoint_boundedUnitaryConjugate V.reflection
-      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hE))
-
-omit [CompleteSpace H] in
-/-- The reflected perturbation costs at most twice the original operator
-norm. -/
-theorem norm_reflectionPerturbation_le
-    (V : Submodule ℂ H) [V.HasOrthogonalProjection]
-    (E : H →L[ℂ] H) : ‖reflectionPerturbation V E‖ ≤ 2 * ‖E‖ := by
-  have hconj : ‖boundedUnitaryConjugate V.reflection E‖ ≤ ‖E‖ := by
-    refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg E) fun x => ?_
-    change ‖V.reflection (E (V.reflection.symm x))‖ ≤ ‖E‖ * ‖x‖
-    rw [V.reflection.norm_map]
-    calc
-      ‖E (V.reflection.symm x)‖ ≤ ‖E‖ * ‖V.reflection.symm x‖ :=
-        E.le_opNorm _
-      _ = ‖E‖ * ‖x‖ := by rw [V.reflection.symm.norm_map]
-  unfold reflectionPerturbation
-  calc
-    ‖E - boundedUnitaryConjugate V.reflection E‖ ≤
-        ‖E‖ + ‖boundedUnitaryConjugate V.reflection E‖ := norm_sub_le _ _
-    _ ≤ ‖E‖ + ‖E‖ := add_le_add (le_refl ‖E‖) hconj
-    _ = 2 * ‖E‖ := by ring
 
 /-- The spectral range of a measurable complement is the orthogonal
 complement of the original spectral range. -/

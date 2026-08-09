@@ -48,8 +48,8 @@ no `sorry` and no `axiom`, so a declaration reachable from
 
 | Verification | Count |
 | --- | ---: |
-| `proved_in_build` | 44 |
-| `proved_conditional` | 2 |
+| `proved_in_build` | 45 |
+| `proved_conditional` | 1 |
 | `partially_in_build` | 0 |
 | `proved_outside_build` | 0 |
 | `not_compiling` | 0 |
@@ -128,7 +128,9 @@ which say what the record cannot.  What still blocks the four remaining Section 
 
 (2) THIS BLOCKER NO LONGER CONSTRAINS `DK-9.8`.  The sentence above says it constrains "DK-9.5-9.7, DK-9.8 and DK-9.9-9.11".  `DK-9.8` correctly carries `blocked_by: []`: `beam_equation_9_8` was elaborated 2026-08-09 and is unconditional in `0 < eps < 100`, mentions no certificate field, and reports `[propext, Classical.choice, Quot.sound]`.  The blocker now constrains exactly `DK-9.5-9.7` and `DK-9.9-9.11`, and what it constrains there is (9.7), the 2-norm tangent sums, and the individual `omega_1, omega_2` bounds -- not (9.1)--(9.6) or (9.8).
 
-Gates: DK-9.5-9.7 (proved_conditional), DK-9.9-9.11 (proved_conditional)
+**M26, 2026-08-09 (Claude Opus 5): `DK-9.5-9.7` IS NOW OFF THIS BLOCKER TOO.**  (9.7) is derived for the genuine operator by `beamTanTwoTheta_le` / `beamTanTwoTheta_lt_printed` and the 2-norm sentence of (9.6) by `beamTanThetaSum_le`, so no statement on that row is relative to `TheoremOutputCertificate`.  The warning at the head of this blocker was respected: no certificate record was constructed, and the evidence is the operator-level construction `beamComparison` / `beamRitzOffDiagonal` and the norm, form and gap theorems about it.  What is missing on `DK-9.5-9.7` is the 2-norm sentence of (9.7), which is a genuine ABSENCE (the ideal-gauge unbounded residual tan(2 Theta) theorem is unproved, see `DK-6-appendix`) rather than a conditional statement, so it is recorded as a scope gap and not here.  The blocker now constrains exactly `DK-9.9-9.11`.
+
+Gates: DK-9.9-9.11 (proved_conditional)
 
 ### `exact-source-wrappers` -- mechanical
 
@@ -273,9 +275,9 @@ one.
 - **Kind:** `unnumbered_theorem`
 - **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
-- **Mathematics:** Off-diagonal or fully separated perturbations give residual and perturbation sin(2 Theta) bounds with factor two.  TWO PRINTED CONCLUSIONS ARE OUTSTANDING ON THIS ROW: the directed half over real scalars at every source UI norm, and the unequal-dimension extension dim X(E0) < dim X(F0) asserted in the closing sentence of Section 8, which is stated nowhere.
+- **Mathematics:** Off-diagonal or fully separated perturbations give residual and perturbation sin(2 Theta) bounds with factor two.  ONE PRINTED CLAIM IS OUTSTANDING ON THIS ROW: the unequal-dimension extension dim X(E0) < dim X(F0) asserted in the closing sentence of Section 8, which is stated nowhere.  The directed half over real scalars at every source UI norm was DELIVERED 2026-08-09 and is no longer outstanding.
 - **Blocked by:** `real-scalar-infinite-dimensional-scope`
-- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm`, `TauCeti.DavisKahan.Experimental.sinTwoTheta_addBounded_of_spectrum_gap`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative`, `TauCeti.DavisKahanExt.sinTwoTheta_perturbation`, `TauCeti.DavisKahanExt.sinTwoTheta_generalSeparation`, `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm`, `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real`, `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR`, `TauCeti.DavisKahanExt.complexify_paperSinTwoAngleOperatorR`, `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_all_kyFan`, `TauCeti.DavisKahan1970.symmetric_sinTheta_spectrum_all_kyFan`, `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm`, `TauCeti.DavisKahan.Experimental.sinTwoTheta_addBounded_of_spectrum_gap`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_real`, `TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm_real`, `TauCeti.DavisKahan1970.sinTwoTheta_reflectionResidual_paperUINorm_real`, `TauCeti.DavisKahan.Experimental.sinTwoTheta_addBounded_gauge_real`, `TauCeti.DavisKahan.Experimental.sinTwoTheta_reflectionResidual_gauge_real`, `TauCeti.DavisKahanExt.sinTwoTheta_perturbation`, `TauCeti.DavisKahanExt.sinTwoTheta_generalSeparation`, `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm`, `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real`, `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR`, `TauCeti.DavisKahanExt.complexify_paperSinTwoAngleOperatorR`, `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_all_kyFan`, `TauCeti.DavisKahan1970.symmetric_sinTheta_spectrum_all_kyFan`, `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub`
 - **Assessment:** Finite arbitrary-UI-norm forms are compiled; general Hilbert-space source forms are under repair.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. The UI-norm Part III double-angle theorem is compiled and axiom-clean; the source-general residual and perturbation forms are not yet certified (see next_action).
@@ -349,6 +351,26 @@ WHAT REMAINS ON THIS ROW: sub-problem A (real scalars for every UI norm, blocker
 A second reason it is not the endpoint even if it were finished: it carries `[Algebra R (E ->L[K] E)]`, `[IsScalarTower R K (E ->L[K] E)]` and `[ContinuousFunctionalCalculus R (E ->L[K] E) IsSelfAdjoint]` as HYPOTHESES (twice over -- the binders are duplicated between the section variables and the statement), so instantiating it at real scalars requires supplying a real continuous functional calculus instance rather than finding one.  The complexification route recorded in this row's `next_action` remains the plan.
 
 **THE TWO DECOY `unequalFinrank` NAMES ARE CONFIRMED, BY ELABORATION, 2026-08-09 (Claude Opus 5).**  Both signatures were dumped and compared against the theorems they forward to, and they are character-for-character identical apart from the name: `sinTwoTheta_perturbation_le_unequalFinrank` versus `sinTwoTheta_perturbation_le` (`{K} [RCLike K] {E} ... [FiniteDimensional K E] (N : UnitarilyInvariantSeminorm K E) {A B : E ->l[K] E} ... (b - a) * N.toFun (sinTwoAngleOperator U V) <= 2 * N.toFun (B - A)`), and `generalizedSinTwoTheta_unequalFinrank` versus `sinTwoTheta_residual_le_of_orderedGap`.  Neither contains `finrank` or `Module.rank` anywhere, and both carry `[FiniteDimensional]` on every space.  The recommendation above stands: delete rather than rename, as a separate reviewed change.
+
+**SUB-PROBLEM A IS CLOSED, 2026-08-09 (Claude Opus 5).  BOTH printed conclusions of the Section 2 `sin 2theta` theorem now exist over a REAL Hilbert space, for every source unitarily invariant norm.  STATUS DELIBERATELY UNCHANGED: sub-problem C is what now holds this row at `compiled_specialization`.**
+
+The DIRECTED half `delta ||sin 2Theta_0|| <= 2||R||` (perturbation form) and `delta ||sin 2Theta_0|| <= ||R||` (reflection-residual form) are proved for an UNBOUNDED self-adjoint closed operator on an arbitrary complete REAL Hilbert space and its genuine real spectral subspaces, with no dimension and no compactness hypothesis, and with ideal membership CONCLUDED:
+
+* `TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm_real` and `TauCeti.DavisKahan1970.sinTwoTheta_reflectionResidual_paperUINorm_real` -- at `PaperUnitaryInvariantNorm`, the SAME norm class as the real ambient half `sinTwoTheta_wholeSpace_paperUINorm_real`;
+* `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real` and `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_real` -- the literal-source forms with the paper's `sin 2Theta_0` REPRESENTATIVE freedom, at `KyFanDominantIdealFamily (R)`, the exact scalar mirror of the two complex literal-source theorems listed above;
+* `TauCeti.DavisKahan.Experimental.sinTwoTheta_addBounded_gauge_real` and `TauCeti.DavisKahan.Experimental.sinTwoTheta_reflectionResidual_gauge_real` (`DavisKahan/DoubleAngle/RealUnboundedIdeal.lean`) -- the cores.
+
+All six are in the DEFAULT build (`DavisKahan.All`) and all give exactly `[propext, Classical.choice, Quot.sound]`.
+
+THE ROUTE WAS NOT THE ONE THIS ROW'S `next_action` PRESCRIBED, and the reason is recorded because the prescribed route is genuinely blocked.  `next_action` said: complexify the configuration, instantiate the complex theorem at each finite Ky Fan family, finish with `PaperUnitaryInvariantNorm.mul_gauge_le_of_all_mul_kyFan_le`.  That works for a BOUNDED configuration (it is how `S2-tan-two-theta` closed), but the directed `sin 2theta` endpoints take an UNBOUNDED `DKClosedOperator` and its spectral subspaces, and transporting THOSE needs, on top of the subspace adapter, (i) an identification of `selfAdjointSpectralRestriction (complexify A)` with a unitary conjugate of `complexify (realSelfAdjointSpectralRestriction A)` as CLOSED operators, and (ii) a transport of the spectral-separation hypotheses, which are stated over `TauCeti.LinearPMap.spectrum` and hence exist only over `C`.  Neither is available.
+
+WHAT WAS DONE INSTEAD: the Section 7 argument was run natively over `R`.  Everything it needs is scalar-generic or already real, once three modules are generalised from `C` to `RCLike` (`boundedUnitaryConjugate`, `starProjection_map_unitary`, `reflectionPerturbation` and its two estimates in `SpectralTheory/ReflectionRestriction.lean`; `sinTwoThetaIdealBlock`, the overlap-block ideal lemma and `reflectionPerturbation_mem_and_gauge_le` in `DoubleAngle/UnboundedIdeal.lean`; `addBounded_isSelfAdjoint` and `boundedPerturbationSinThetaData` in `SinTheta/BoundedPerturbation.lean` -- all three generalisations are verbatim, no proof changed).  The real unbounded `sin Theta` theorem `sinTheta_unbounded_real` and the real spectral descent `DavisKahan/SpectralTheory/Real/SpectralRestriction.lean` already existed and supply the analysis.
+
+ONE STEP OF THE COMPLEX PROOF WAS REMOVED RATHER THAN MIRRORED, and this is an improvement worth reusing.  The complex proof conjugates the complementary spectral restriction onto the reflected subspace `J_V(U-perp)` with `unitaryConjugate`, purely so that the block map is a submodule inclusion; that conjugation is what drags in `unitaryConjugate_spectrum_eq` and hence `C`.  It is unnecessary: feed the isometric embedding `J_V . (U-perp).subtypeL` directly.  The ambient-projection step was generalised to accept any isometric `Y` with `Y Y* = P_W` (`projectionProduct_mem_and_gauge_le_isometric`), and `projectionProduct_mem_and_gauge_le_overlap` is now a two-line corollary of it.
+
+HOW THE SEPARATION IS SPELLED, stated plainly because it is NOT a translation of the complex hypotheses.  The real theorems take `FormBoundedSylvesterGap` between the two real spectral restrictions.  That predicate covers the source's interval/exterior configuration (over `realSpectrum`) and both ordered half-line configurations (as operator-form bounds), and `DavisKahan/Sylvester/Gap.lean` records it as the weaker of this tree's two spellings.  The complex statements instead take `SemiboundedBelow`/`SemiboundedAbove` on the exact block together with resolvent-set avoidance for the complementary block, and that pair simply cannot be written over `R`.
+
+THE ONE REAL-SCALAR SPELLING STILL ABSENT, recorded so it is not counted as present: there is no real unbounded OPERATOR-NORM directed statement in the shape of `sinTwoTheta_addBounded_of_spectrum_gap`, i.e. one whose conclusion names a real `sin 2Theta` angle operator rather than the block `sinTwoThetaIdealBlock`.  The estimate itself is available -- read `sinTwoTheta_addBounded_gauge_real` at `KyFanDominantIdealFamily.kyFan 1` -- but converting the block to an angle operator needs the real counterpart of `norm_sinTwoThetaIdealBlock`, which rests on `sinTwoAngleOperatorC`.  This is a naming/geometry step, not analysis.
 - **Next action:** Real Hilbert space + arbitrary dimension + EVERY source UI norm, FOR THE DIRECTED HALF ONLY (updated 2026-08-09; the ambient half is done, see `sinTwoTheta_wholeSpace_paperUINorm_real`).  The operator-norm real case is already covered (`sinTwoTheta_perturbation`, `sinTwoTheta_generalSeparation`, both RCLike and dimension-free).
 
 FOR THE DIRECTED HALF the complexification route is NOT a drop-in.  Its complex endpoints take an unbounded `DKClosedOperator` and its spectral subspaces, so the transport needs the real unbounded spectral descent (`DavisKahan/SpectralTheory/Real/SpectralRestriction.lean`, or its `LinearPMap` port `ForTauCeti/.../LinearPMap/Complexification/SpectralDescent.lean`), and they are stated for `KyFanDominantIdealFamily (C)`, which has no gauge transport across complexification -- so the conclusion has to be re-derived at `PaperUnitaryInvariantNorm` scope, as the ambient half is.
@@ -371,13 +393,21 @@ Compiled in `DavisKahan/Geometry/Angle/OperatorAngleComplex.lean`: `range_sinAng
 
 CONSEQUENCE: the `Theta_0`/`Theta` bridge is NOT refuted; it is simply unproved. Sub-problem B is therefore still open, but the recorded reason for closing it off was wrong. Sub-problems A (real scalars + every UI norm, by complexification transport) and C (unequal dimensions, last sentence of Section 8) are unaffected.
 
+**SUB-PROBLEM A IS DONE 2026-08-09 (Claude Opus 5); THE ROUTE PRESCRIBED ABOVE IS SUPERSEDED AND SHOULD NOT BE ATTEMPTED.**  The complexification-plus-Ky-Fan route above is correct for BOUNDED configurations but does not reach these endpoints, which take an unbounded `DKClosedOperator`: transporting them additionally needs an unbounded conjugation identity for `selfAdjointSpectralRestriction (complexify A)` and a transport of hypotheses that are stated over `TauCeti.LinearPMap.spectrum` and therefore exist only over `C`.  The Section 7 argument was instead run natively over `R`; see the notes for the six delivered declarations, the three verbatim `RCLike` generalisations it needed, and the one step of the complex proof (`unitaryConjugate` onto the reflected subspace) that turned out to be removable rather than transportable.
+
+REMAINING ON THIS ROW, in the order a next agent should take them:
+
+1. Sub-problem C -- the unequal-dimension extension announced at the end of Section 8.  It is downstream of sub-problem B; the rectangular Gram identities it needs are already compiled in `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/Gram.lean`.
+2. Sub-problem B -- the `Theta_0`/`Theta` bridge, open at complex scalars too.  The 2026-08-07 counterexample sketch against it was refuted 2026-08-08; it is unproved, not false.
+3. Cosmetic, and the only thing left on the scalar axis: a real unbounded operator-norm directed statement naming a real `sin 2Theta` angle operator, which needs a real counterpart of `norm_sinTwoThetaIdealBlock`.
+
 #### Section 2, tan 2 theta theorem: Double-angle tangent theorem
 
 - **Kind:** `unnumbered_theorem`
 - **Status:** `compiled_specialization`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Fully off-diagonal perturbations across an ordered gap give residual and perturbation tan(2 Theta) bounds with factor two.
-- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm`, `TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm_selectedBranch`, `TauCeti.DavisKahan.paperFaithful_tanTwoTheta_uiNorm_real`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm`, `TauCeti.DavisKahanTheory.paired_singularVector_gap_inequality`, `TauCeti.DavisKahanTheory.singularValue_ne_one`, `TauCeti.DavisKahanTheory.absDoubleAngleTangent_scalar`, `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le`, `TauCeti.DavisKahanTheory.absTanTwoTheta0_offDiagonal_le`, `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahanTheory.kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahanTheory.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_real`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_kyFan_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_prefix_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_uiIdeal_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_equation_7_6_approximate`, `TauCeti.DavisKahan1970.tanTwoTheta_cos_ne_zero_approximate`, `TauCeti.DavisKahan1970.tanTwoTheta_pole_separation`, `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorC`, `TauCeti.DavisKahanExt.spectrum_paperAngleOperatorC_lt_pi_div_four`, `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorC_nonneg`, `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahan1970.paperTanTwoBlockRepresentative`, `TauCeti.DavisKahan1970.paperTanTwoAngleOperatorC_eq_modulus_blockRepresentative`, `TauCeti.DavisKahan1970.paperTanTwoBlockRepresentative_lowerBlock`, `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_all_kyFan`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_all_kyFan`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm`, `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorR`, `TauCeti.DavisKahanExt.complexify_paperTanTwoAngleOperatorR`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm`, `TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm`, `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm_selectedBranch`, `TauCeti.DavisKahan.paperFaithful_tanTwoTheta_uiNorm_real`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm`, `TauCeti.DavisKahanTheory.paired_singularVector_gap_inequality`, `TauCeti.DavisKahanTheory.singularValue_ne_one`, `TauCeti.DavisKahanTheory.absDoubleAngleTangent_scalar`, `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le`, `TauCeti.DavisKahanTheory.absTanTwoTheta0_offDiagonal_le`, `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahanTheory.kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahanTheory.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_real`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_kyFan_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_prefix_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_uiIdeal_arbitrarySubspace`, `TauCeti.DavisKahan1970.tanTwoTheta_equation_7_6_approximate`, `TauCeti.DavisKahan1970.tanTwoTheta_cos_ne_zero_approximate`, `TauCeti.DavisKahan1970.tanTwoTheta_pole_separation`, `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorC`, `TauCeti.DavisKahanExt.spectrum_paperAngleOperatorC_lt_pi_div_four`, `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorC_nonneg`, `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahan1970.paperTanTwoBlockRepresentative`, `TauCeti.DavisKahan1970.paperTanTwoAngleOperatorC_eq_modulus_blockRepresentative`, `TauCeti.DavisKahan1970.paperTanTwoBlockRepresentative_lowerBlock`, `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_all_kyFan`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_all_kyFan`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm`, `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorR`, `TauCeti.DavisKahanExt.complexify_paperTanTwoAngleOperatorR`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real`, `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC`, `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC_nonneg`, `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC`, `TauCeti.DavisKahan1970.isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero`, `TauCeti.DavisKahan1970.paperAbsTanTwo_sq_mul_cos_two_sq`, `TauCeti.DavisKahan1970.paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_all_kyFan_of_corner`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_of_corner`
 - **Assessment:** The finite operator-norm theorem is compiled. The source arbitrary-UI-norm Hilbert-space endpoint and branch selection are not yet certified.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_specialization`. The operator-norm double-angle tangent theorem is compiled and axiom-clean; the paper's general UI-norm scope and the selected acute branch are not.
@@ -595,16 +625,114 @@ elaboration: `tanTwoTheta_wholeSpace_paperUINorm` concludes
 `[propext, Classical.choice, Quot.sound]`.  The recorded remaining axes -- branch-free ambient,
 and the residual constant on the directed half -- are the two the audit asked for, and they are
 already in `scope_gap` and `next_action`.  No change to this row.
-- **Next action:** BRANCH-FREE AMBIENT HALF, the remaining obligation: prove
-`delta ||tan 2Theta|| <= 2||H||` without `IsQuarterAcute`, i.e. allowing
-principal angles past `pi/4`.  Do NOT attempt it by discharging the existing
-branch-free representative hypothesis for the corner of
-`paperTanTwoBlockRepresentative` -- the notes record an explicit
-infinite-dimensional counterexample to the multiset relation that hypothesis
-asks for.  The architecture that should work is the approximate-singular-pair
-limit of `TanTwoThetaBranchFreeInfinite.lean` applied to the CORNER, which needs
-a per-pair estimate for approximate singular pairs of `2 X (1 - X*X)^{-1}`
-rather than of `X`.
+
+**THE GEOMETRY OF THE AMBIENT HALF IS BRANCH-FREE 2026-08-09 (Claude Opus 5).
+THE BRANCH NOW SITS IN EXACTLY ONE HYPOTHESIS, AND IT IS NAMED.**  The row stays
+`compiled_specialization`: the branch-free ambient ESTIMATE is still open.
+
+The question asked was where `IsQuarterAcute` actually enters the ambient proof, and
+whether the operator identities need it.  The answer is now certified rather than
+asserted: the identities do NOT need it, and neither does anything else between the
+directed corner estimate and the ambient conclusion.
+
+WHAT THE BRANCH WAS DOING, in three places, only one of them real:
+(1) invertibility of `1 - 2 sin^2 Theta` (which is `cos 2Theta`), obtained from
+    `||sin Theta|| < sqrt 2 / 2` by a Neumann series;
+(2) continuity of `t -> tan (2t)` on the spectrum of `Theta`, and the pointwise scalar
+    identity behind `tan^2 2Theta * cos^2 2Theta = sin^2 2Theta`;
+(3) NONNEGATIVITY of `tan 2Theta`, which the modulus identity `|Xi| = tan 2Theta` needs.
+(1) and (2) follow from the PAPER'S OWN `cos 2theta != 0` -- pointwise nonvanishing on the
+angle spectrum, which is compact, so the pointwise condition is automatically the uniform
+separation invertibility wants.  (3) does not: past `pi/4` the tangent is negative.  (3)
+disappears once the ambient object is `|tan 2Theta|`, which no unitarily invariant norm
+can tell from `tan 2Theta`.
+
+NEW DECLARATIONS, all axiom-clean -- [propext, Classical.choice, Quot.sound], checked at
+the elaborator, not by grep:
+* `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC` (`Geometry/Angle/PaperTanAngle.lean`)
+  -- `cfc (fun t => |tan (2t)|) Theta`.  Nonnegative with NO hypothesis at all, and equal
+  to `paperTanTwoAngleOperatorC` on the quarter-acute branch.
+* `TauCeti.DavisKahan1970.isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero`
+  -- `cos 2Theta` is invertible from `cos 2theta != 0` alone.
+* `TauCeti.DavisKahan1970.paperAbsTanTwo_sq_mul_cos_two_sq` and
+  `TauCeti.DavisKahan1970.paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative` --
+  `|Xi| = |tan 2Theta|` as an OPERATOR identity, branch-free.
+* `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_all_kyFan_of_corner` and
+  `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_of_corner` -- THE REDUCTION.
+  Given only `cos 2theta != 0` and the printed residual estimate on the directed corner,
+  `delta * N (|tan 2Theta|) <= 2 * N H` for every `PaperUnitaryInvariantNorm`, on an
+  arbitrary complete complex Hilbert space with `[U.HasOrthogonalProjection]`, membership
+  CONCLUDED.  There is no `IsQuarterAcute`, no contraction bound on the graph coordinate,
+  and no spectral placement on the blocks of `A + H`.
+
+No statement already on this row changed.  `tanTwoTheta_wholeSpace_all_kyFan` and
+`tanTwoTheta_wholeSpace_paperUINorm` are now DERIVED from the reduction, and the private
+`Modulus` lemmas were re-parameterised from `||sin Theta|| < sqrt 2 / 2` to
+`IsUnit (1 - 2 D^2)`, which is all they ever used.
+
+**THE REMAINING OBLIGATION IS NOW EXACTLY ONE INEQUALITY**, the `hcorner` hypothesis of
+the reduction:
+`(b - a) * kyFan_k (P_Uperp . 2 D (1 - 2 D^2)^{-1} . P_U) <= 2 * kyFan_k (P_Uperp H P_U)`,
+allowing principal angles past `pi/4`.
+
+**THE RECORDED MULTISET COUNTEREXAMPLE IS CORRECT, AND IT DOES NOT DEPEND ON THE POLE.**
+Re-derived here.  With `G = X*X` positive, essential spectrum `{100}` and an isolated
+eigenvalue at `4`: `a_n(G) = 100` for every `n`, so every
+`absDoubleAngleTangent (sqrt (a_n G))` is `20/99`, while the corner has the isolated
+singular value `2*2/|1-4| = 4/3`.  No bijection matches those multisets.  Note this
+version stays FAR from `x = 1` and keeps every `|tan 2theta|` under `2||H||/delta`, so it
+is not excluded by the pole separation the gap supplies -- the earlier note's `1 + eta`
+version was, since its `|tan 2theta| ~ 2/eta` violates the very bound being proved.  The
+real content is that `t -> 2t/|1 - t^2|` is NOT MONOTONE, so a singular value of `X` lying
+BELOW its essential norm can be sent ABOVE it; approximation numbers are blind to the
+first and see the second.
+
+**THE FAILURE IS NOT ONLY IN THE SORTING: IT IS ALREADY AT THE LEVEL OF SINGLE PAIRS.**
+This is new, and it closes off the route the previous `next_action` proposed.  Take
+principal angles `theta' = pi/8` and `theta'' = 3pi/8`, so `tan 2theta' = 1 = -tan 2theta''`,
+with unit principal vectors `u', u''` in `U` and `v', v''` in `Uperp`.  Then
+`u = (u' + u'')/sqrt 2`, `v = (v' - v'')/sqrt 2` is an EXACT singular pair of the corner
+with singular value `1` -- and the sign flip in `v` is precisely the paper's "choose the
+sign according to `cos 2theta_j`".  But it is not even an approximate singular pair of the
+graph coordinate `X`, whose two components carry the UNEQUAL positive values
+`tan(pi/8) = 0.414` and `tan(3pi/8) = 2.414`; the best `t >= 0` leaves an error of about
+`1.73`.  So a per-pair estimate for the corner cannot be transported from a per-pair
+estimate for `X`, however the family is chosen.
+
+**WHAT A BRANCH-FREE CORNER ESTIMATE WILL HAVE TO USE**, worked out on paper and NOT yet
+formalised.  Write `p = P_U`, `q = P_V`, `G = (1-p) q p`, `sigma = D^2 = sin^2 Theta`,
+`R = (1-p) H p`.  Then `sigma` commutes with `p` and with `q`, hence with `(1 - 2 sigma)^{-1}`
+and with the corner, and the corner is `2 G (1 - 2 sigma)^{-1}`.  Invariance of `V` under
+`A + H` plus off-diagonality of `H` give the branch-free, dimension-free SYLVESTER EQUATION
+`A_1 G - G A_0 = sigma R + R sigma - R`.
+Pairing it against an approximate singular pair `(u, v, s)` of the corner reproduces the
+`b` and `a` form bounds correctly but leaves the term
+`s * (Re <sigma u, A u> - Re <A v, sigma v>)`,
+which the ordered form bounds do NOT control, because `sigma` and `A` do not commute.
+Closing that term -- or finding a pairing that avoids it -- is the open point.
+- **Next action:** BRANCH-FREE AMBIENT HALF, the remaining obligation, now reduced to a SINGLE
+inequality: supply the `hcorner` hypothesis of
+`tanTwoTheta_wholeSpace_paperUINorm_of_corner`
+(`Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean`) without a branch, i.e. prove
+`(b - a) * kyFan_k (P_Uperp . 2 D (1 - 2 D^2)^{-1} . P_U) <= 2 * kyFan_k (P_Uperp H P_U)`
+with principal angles allowed past `pi/4`.  Everything else in the ambient half -- the
+representative, the modulus identity, the corner/graph-tangent identification, Lemma 6.1,
+the Lemma 6.2 pinch and the passage to every source unitarily invariant norm -- is already
+branch-free and compiled, and the reduction theorem is what certifies that.
+
+TWO ROUTES ARE CLOSED, both recorded with explicit counterexamples in the notes.  Do NOT
+try to discharge the branch-free representative hypothesis for that corner (the multiset
+relation fails, and the failure survives the pole separation the gap supplies).  Do NOT try
+to transport a per-pair estimate from approximate singular pairs of the graph coordinate
+`X` (an exact singular pair of the corner need not be even approximately one for `X`).
+
+The estimate has to come from the invariance of `V` directly.  The identity that does
+transfer is the branch-free, dimension-free Sylvester equation
+`A_1 G - G A_0 = sigma R + R sigma - R`, `G = P_Uperp P_V P_U`, `sigma = sin^2 Theta`,
+`R = P_Uperp H P_U`; it is worked out in the notes but is NOT yet formalised, and
+formalising it is the natural first step.  Pairing it against an approximate singular pair
+of the corner leaves `Re <sigma u, A u> - Re <A v, sigma v>` uncontrolled, since `sigma`
+and `A` do not commute.  That term is the open point.
 
 BRANCH-FREE RESIDUAL FORM OF THE DIRECTED HALF: `tanTwoTheta_directedCorner_residual_all_kyFan`
 gives the printed `2||R||` only in the quarter-acute branch; the branch-free
@@ -2081,10 +2209,9 @@ and the row's judgement was already correct.
 
 - **Kind:** `numerical_claims`
 - **Status:** `compiled_specialization`
-- **Verification:** `proved_conditional`
-- **Mathematics:** Use the compressed trial operator and orthogonal residual to obtain sharper tan Theta and tan(2 Theta) bounds.  (9.5) and (9.6) are unconditional theorems about beamOperator; only (9.7) and the two-norm tangent sums of (9.6)/(9.7) are stated relative to the never-constructed TheoremOutputCertificate, and they are the sole reason this row is proved_conditional.
-- **Blocked by:** `section9-certificate-discharge`
-- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.recentered_residual_gram_from_affine_moments`, `TauCeti.DavisKahan1970.Section9.equation_9_5_low`, `TauCeti.DavisKahan1970.Section9.equation_9_6`, `TauCeti.DavisKahan1970.Section9.equation_9_7`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamResidual_inner_trial`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamRitzResidual_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamRitz_form_le`, `TauCeti.DavisKahan1970.Section9.equation_9_5_high`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamPerturbed_specProjection_Ioo_eq_zero`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanTheta_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanTheta_lt_printed`
+- **Verification:** `proved_in_build`
+- **Mathematics:** Use the compressed trial operator and orthogonal residual to obtain sharper tan Theta and tan(2 Theta) bounds.  (9.5), both sentences of (9.6), and the bound-norm sentence of (9.7) are now unconditional theorems about the genuine perturbed beam, with no certificate record in any statement.  What is absent is the 2-norm sentence of (9.7) -- `tan 2theta_1 + tan 2theta_2` -- which needs the arbitrary-unitarily-invariant-ideal form of the unbounded residual tan(2 Theta) theorem; that endpoint is not proved anywhere in the repository (see DK-6-appendix).  The row is therefore a specialization, not conditional.
+- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.recentered_residual_gram_from_affine_moments`, `TauCeti.DavisKahan1970.Section9.equation_9_5_low`, `TauCeti.DavisKahan1970.Section9.equation_9_6`, `TauCeti.DavisKahan1970.Section9.equation_9_7`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamResidual_inner_trial`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamRitzResidual_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamRitz_form_le`, `TauCeti.DavisKahan1970.Section9.equation_9_5_high`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamPerturbed_specProjection_Ioo_eq_zero`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanTheta_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanTheta_lt_printed`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamRitzResidual_sq_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamRitzResidual_vecOne_add_vecTwo_eq_zero`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTrialBlock_residual_vecOne_add_vecTwo`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTrialBlock_residual_vecTwo`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTrialBlock_residual_rank_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.approximationSingularValue_one_beamTrialBlock_residual_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.kyFanTwo_beamTrialBlock_residual_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanThetaSum_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanThetaSum_lt_printed`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamComparison_reduces`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamRitzOffDiagonal_isOddFor`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.norm_beamRitzOffDiagonal_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamComparison_form_le_of_mem_beamTrial`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamComparison_form_ge_of_mem_orthogonal`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamLowReflection_comm`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanTwoTheta_le`, `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamTanTwoTheta_lt_printed`
 - **Assessment:** The Ritz compression, rank-one recentered residual, singular-value scalars, exact tangent envelopes, and decimal corollaries are present as a candidate. The unbounded tan-theta and tan-two-theta instantiations remain to be connected.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `partial_or_wrapper_missing`. The exact radical arithmetic is compiled and axiom-clean; the tangent and double-angle theorems are not yet instantiated in place of the certificate fields.
@@ -2139,9 +2266,22 @@ were re-checked against the build on 2026-08-09 and found correct: `equation_9_5
 give (9.6)'s first sentence unconditionally in `0 < eps < 100`, and `equation_9_7` is still the
 conditional scalar wrapper whose only supplier is `TheoremOutputCertificate`.  What was wrong is that
 none of this was legible from the row's own header fields, which is what a per-row status read sees.
-The `summary` now carries it.  Status and verification are unchanged and are correct: part of this
-row's source claim genuinely is conditional.
-- **Next action:** Two items, both concrete.  (a) The 2-norm halves of (9.6): re-run `beamTanTheta_le` at `KyFanDominantIdealFamily.kyFan 2` and bound `kyFanApproximationGauge 2` of the RECENTERED Rayleigh--Ritz residual, whose Gram `orthogonalResidualGram eps = (eps^2/30)[[1,-1],[-1,1]]` is rank one, so the second approximation number vanishes and the prefix equals the first -- the same shape as `kyFanTwo_beamResidual_le` on DK-9.1-9.4.  (b) (9.7): a `beamTanTwoTheta` on the genuine operator, replacing `A_1` by `E_1^* (A+H) E_1` as the paper does, then `equation_9_7`.  Part (b) of the previous plan -- the perturbed spectral gap -- is DONE (`beamPerturbed_specProjection_Ioo_eq_zero`); do not re-attempt it.
+The `summary` now carries it.  Status and verification were correct on that date and have since
+been superseded; see the M26 entry below.
+
+**M26, 2026-08-09 (Claude Opus 5).  THE ROW IS OFF `proved_conditional`: NO STATEMENT ON IT IS RELATIVE TO A CERTIFICATE ANY MORE.**
+
+Both items the previous `next_action` listed are now proved for the genuine operator, and neither manufactures a certificate record.
+
+* **(a) The 2-norm sentence of (9.6).**  `beamTanThetaSum_le` / `beamTanThetaSum_lt_printed` (`SpectralTheory/FormMethod/BeamTangent.lean`) run the same unbounded Theorem 6.3 at `KyFanDominantIdealFamily.kyFan 2` and land on the *same* envelope `tangentThetaExactBound eps`, which is exactly what the paper asserts ("the same bound applies to tan theta_1 + tan theta_2 in the 2-norm").  The reason nothing is lost is `kyFanTwo_beamTrialBlock_residual_le`: the recentered residual is *exactly rank one*, so its second approximation number is zero.  Rank one is proved rather than asserted -- `norm_beamRitzResidual_sq_le` (a refactor of the existing `norm_beamRitzResidual_le`, which is now a corollary of it) gives `||(1 - P_Z) R x||^2 <= (eps^2/30) |alpha - beta|^2` in the orthonormal Ritz coordinates, whose value at `alpha = beta = 1` forces `beamRitzResidual_vecOne_add_vecTwo_eq_zero`; the residual therefore kills `phi_1 + phi_2` (a multiple of the constant function, whose image `eps t` is already affine) and its range is the line through the single column.
+* **(b) (9.7), bound norm.**  `beamTanTwoTheta_le` / `beamTanTwoTheta_lt_printed` (`SpectralTheory/FormMethod/BeamDoubleTangent.lean`, new) give `tan 2theta_1 < 0.0010328 eps / (1 - 0.0015774 eps)` with hypotheses `0 < eps < 100` only.  The construction follows the paper literally: `beamComparison eps` is `Ahat = E_0 Ahat_0 E_0* + E_1 Ahat_1 E_1*` -- the free beam plus the block-DIAGONAL part of `eps t`, hence a bounded perturbation and self-adjoint -- and `beamRitzOffDiagonal eps` is the off-diagonal defect `Rhat + Rhat*`.  `norm_beamRitzOffDiagonal_le` proves `||B|| <= eps sqrt15/15` by noting that an off-diagonal operator's norm is the larger of its two blocks, that the lower block IS the Rayleigh--Ritz residual (`norm_beamRitzResidual_le`) and that the upper block is its adjoint (proved by a two-line inner-product argument, not by forming an adjoint).  `beamComparison_form_le_of_mem_beamTrial` and `beamComparison_form_ge_of_mem_orthogonal` are the paper's `Ahat_0 < 0.7887 eps` and `Ahat_1 > 500` -- the latter is the sharp free-beam gap `500.5`, which the positive `E_1* H E_1` cannot lower, exactly the paper's argument.  The reflection is `Z = 2 Q - 1` at `Q = specProjection(A + eps t)(Iic 500)`, and `beamLowReflection_comm` proves it reduces the perturbed operator.
+
+The endpoint consumed is `TauCeti.gap_mul_norm_offDiagonalPart_apply_le_of_tendsto` together with `diagonalBlockBound_mul_le_norm_diagonalPart_apply_of_tendsto` (ForTauCeti `DoubleAngle/UnboundedPole.lean`).  Their `BoundedCutoff` family is *constant* here: the trial subspace is finite-dimensional and inside the domain, so `beamTrial.starProjection` is itself a cutoff and the limiting argument degenerates.  `beamTanTwoTheta eps` is the supremum over the trial subspace of `||sin 2Theta_0 x|| / ||cos 2Theta_0 x||`, the two blocks of `Z`; the pole is excluded before the quotient is formed, by the `diagonalBlockBound` lower bound.
+
+All new results report exactly `[propext, Classical.choice, Quot.sound]` and are in the default build.
+
+**WHY THE ROW IS STILL `compiled_specialization` AND NOT `compiled_exact`.**  The paper's sentence after (9.7), "with the same right side bounding tan 2theta_1 + tan 2theta_2 in the 2-norm", is NOT proved and cannot be with what exists.  `TanTwoThetaUnboundedResidual.lean` states the residual-form unbounded tan(2 Theta) theorem at the OPERATOR NORM only, and its own module docstring records that the arbitrary Fan-dominant ideal endpoint `delta * N(tan 2Theta_0) <= 2 N(R)` is open, blocked by `DK-6-appendix`.  The bounded branch-free ideal theorem does exist but requires `A` bounded, and `Ahat` here is the free beam, which is not.  This is an absence, not a conditional statement: nothing on this row is proved relative to an uninhabited record.
+- **Next action:** One item, and it is NOT beam work.  The 2-norm sentence of (9.7) needs the arbitrary Fan-dominant unitarily-invariant-ideal form of the *unbounded, residual-form* tan(2 Theta) theorem, `delta * N(tan 2Theta_0) <= 2 * N(R)`.  Prove that in `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedResidual.lean` (its docstring already scopes the gap and points at `DK-6-appendix`), and the beam instance is then the same three lines as `beamTanTwoTheta_le` at `kyFan 2`, since `norm_beamRitzOffDiagonal_le` already bounds the off-diagonal perturbation and the rank-one recentered Gram already kills the second approximation number.  Do NOT re-attempt the perturbed spectral gap, the Rayleigh--Ritz residual norm, or the comparison operator; all three are proved.
 
 #### Equation (9.8): Comparison with Weinberger bounds
 
@@ -2261,6 +2401,8 @@ RE-RANKED: this row is NOT independently attackable ahead of DK-9.5-9.7.  Its ow
 * `SchurComplement.lean` gained the quantitative half of (9.9)-(9.11) in a form that never inverts anything: testing the lower block equation against the complementary coordinate and using a form lower bound `beta > lam` on the lower block gives `(beta - lam)*‖y‖ <= ‖B x‖`, the nonnegativity and the upper bound `(beta - lam)*(-re <B x, y>) <= ‖B x‖^2` for the Schur coefficient, and the nondegeneracy `B x = 0 -> y = 0` behind `x_k != 0`.  These are exactly the conjugated-resolvent-sandwich consequences the earlier note asked for, obtained WITHOUT constructing `(A_1 - lam)^{-1}` and without needing `A_1` as a self-adjoint partially defined operator on the orthogonal complement.  The generic sandwich in `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/ResolventSandwich.lean` is therefore not on the critical path for this row.
 
 STILL MISSING, and the reason the status does not move: nothing here is yet attached to `beamPerturbed eps`.  The remaining work is the beam block realization -- the two isolated eigenpairs below 500 (the low spectral subspace is known to be two-dimensional, but its eigenbasis is not constructed), the block decomposition over `beamTrial + beamTrialᗮ`, and the identification of the in-plane rotation `psi_k` with the exact 2x2 Jacobi angle of the reduced matrix, whose tangent is `tan(2 psi_k) = 2 q_k / (alphaHat_2 - alphaHat_1)` exactly (the Section 7 tan(2 Theta) machinery is not needed for a 2x2).
+
+**M26, 2026-08-09 (Claude Opus 5).  NOT ATTEMPTED; ONE UPSTREAM FACT CORRECTED.**  The 2026-08-07 note says this row 'is NOT independently attackable ahead of DK-9.5-9.7' because its inputs 'sit on top of tangent bounds that do not yet exist for the beam'.  Those tangent bounds now DO exist: `beamTanTheta_le`, `beamTanThetaSum_le`, `beamTanPhi_low_le`, `beamTanPhi_high_le` and `beamTanTwoTheta_le` are all proved for `beamPerturbed eps`, and `DK-9.5-9.7` is off the certificate blocker.  So the sequencing objection is gone; what remains is this row's own beam realization, untouched.  Concretely still absent: (i) an orthonormal eigenbasis `f_1, f_2` of `beamPerturbed eps` restricted to `beamLowFiveHundred eps` -- the subspace is known to be two-dimensional, but no eigenvectors are constructed, and constructing them needs the restriction to be exhibited as a self-adjoint operator on a two-dimensional space and diagonalised; (ii) the block equations (9.9) against `beamTrial + beamTrialᗮ` for each `f_k`, i.e. the concrete `b`, `w`, `y`, `lam` that `norm_lower_coordinate_le` and `schurCoefficient_le` consume; (iii) the identification of the in-plane angle `psi_k` with the exact 2x2 Jacobi angle of the reduced matrix and the bound `tan(2 psi_k) <= eps^2/(15 (500 - lam_k))`, which in the paper also needs Theorem 8.1 to place `psi_k < pi/4` and the Weinberger--Lehmann lower bounds `alphaCheck_k <= lam_k`; (iv) the out-of-plane bound `tan eta_k <= ||B||/(500 - lam_k)`.  Only after (i)--(iv) does `individual_angle_le_exact_envelope_of_subspace` apply.  No part of this was written, and nothing on this row was changed.
 - **Next action:** Beam realization only.  Construct the orthonormal eigenbasis of `beamPerturbed eps` restricted to `beamLowFiveHundred eps` (finrank 2 is already proved), read off the block equations against `beamTrial + beamTrialᗮ`, and feed `norm_lower_coordinate_le` / `schurCoefficient_le` with the proved form bound `re <T y, y> >= (1001/2) ‖y‖^2` on `beamTrialᗮ` and the proved recentered Gram `orthogonalResidualGram eps = (eps^2/30)[[1,-1],[-1,1]]`, which is exactly rank one.  Then `individual_angle_le_exact_envelope_of_subspace` closes the row.  Do not build a resolvent operator and do not manufacture another certificate record.
 
 ### Section 10
