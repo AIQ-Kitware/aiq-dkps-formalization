@@ -27,6 +27,12 @@ theory but a statement of where the theory lives.
 * `TauCeti.DavisKahanExt.paperTanAngleOperatorC_nonneg`.
 * `TauCeti.DavisKahanExt.paperCos_mul_paperTan`: `cos Θ · tan Θ = sin Θ` under
   uniform transversality.
+* `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorC`: the literal ambient
+  `tan 2Θ`, the object of the second conclusion of the Section 2 `tan 2θ`
+  theorem.
+* `TauCeti.DavisKahanExt.spectrum_paperAngleOperatorC_lt_pi_div_four` and
+  `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorC_nonneg`: under uniform
+  *quarter* transversality the doubled angle stays inside the principal branch.
 
 ## Open obligation
 
@@ -108,6 +114,62 @@ theorem spectrum_paperAngleOperatorC_lt_pi_div_two
     have hle : s ≤ ‖sinAngleOperatorC U V‖ := (le_abs_self s).trans this
     linarith
   exact ⟨Real.arcsin_nonneg.mpr hsi.1, Real.arcsin_lt_pi_div_two.mpr hslt⟩
+
+/-- The paper's literal ambient `tan 2Θ`, obtained by applying `t ↦ tan (2 t)`
+to the Hermitian operator angle.  This is the object the second conclusion of
+the Section 2 `tan 2θ` theorem is about; it carries every principal angle
+*twice*, so it is not a relabelling of the directed `tan 2Θ₀`. -/
+noncomputable def paperTanTwoAngleOperatorC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
+  cfc (fun t : ℝ => Real.tan (2 * t)) (paperAngleOperatorC U V)
+
+/-- `tan 2Θ` is self-adjoint. -/
+theorem isSelfAdjoint_paperTanTwoAngleOperatorC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    IsSelfAdjoint (paperTanTwoAngleOperatorC U V) :=
+  cfc_predicate _ (paperAngleOperatorC U V)
+
+/-- Under uniform *quarter* transversality the angle stays strictly below
+`π / 4`, so the doubled angle stays inside the principal branch of the
+tangent.  The threshold `√2 / 2 = sin (π / 4)` is the repository's
+`IsQuarterAcute`. -/
+theorem spectrum_paperAngleOperatorC_lt_pi_div_four
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hlt : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2)
+    {t : ℝ} (ht : t ∈ spectrum ℝ (paperAngleOperatorC U V)) :
+    0 ≤ t ∧ t < Real.pi / 4 := by
+  rw [paperAngleOperatorC,
+    cfc_map_spectrum (R := ℝ) (f := Real.arcsin)
+      (a := sinAngleOperatorC U V) (isSelfAdjoint_sinAngleOperatorC U V)
+      Real.continuous_arcsin.continuousOn] at ht
+  obtain ⟨s, hs, rfl⟩ := ht
+  have hsi := spectrum_sinAngleOperatorC_subset_Icc U V hs
+  have hnorm : |s| ≤ ‖sinAngleOperatorC U V‖ * ‖(1 : E →L[ℂ] E)‖ :=
+    spectrum.norm_le_norm_mul_of_mem hs
+  have hone : ‖(1 : E →L[ℂ] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+  have hs' : s < Real.sqrt 2 / 2 := by
+    have habs : |s| ≤ ‖sinAngleOperatorC U V‖ := by
+      refine hnorm.trans ?_
+      nlinarith [norm_nonneg (sinAngleOperatorC U V), norm_nonneg (1 : E →L[ℂ] E)]
+    have := (le_abs_self s).trans habs
+    linarith
+  refine ⟨Real.arcsin_nonneg.mpr hsi.1, ?_⟩
+  have hmem : Real.pi / 4 ∈ Set.Ioc (-(Real.pi / 2)) (Real.pi / 2) := by
+    constructor <;> [linarith [Real.pi_pos]; linarith [Real.pi_pos]]
+  rw [Real.arcsin_lt_iff_lt_sin' hmem, Real.sin_pi_div_four]
+  exact hs'
+
+/-- `tan 2Θ` is nonnegative under uniform quarter transversality: every angle
+lies in `[0, π/4)`, so the doubled angle lies in `[0, π/2)`. -/
+theorem paperTanTwoAngleOperatorC_nonneg (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hlt : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2) :
+    0 ≤ paperTanTwoAngleOperatorC U V := by
+  refine cfc_nonneg fun t ht => ?_
+  have h := spectrum_paperAngleOperatorC_lt_pi_div_four U V hlt ht
+  exact Real.tan_nonneg_of_nonneg_of_le_pi_div_two (by linarith [h.1])
+    (by linarith [h.2])
 
 /-- **`cos Θ · tan Θ = sin Θ`**, under uniform transversality of the two
 subspaces.  This is what makes `paperTanAngleOperatorC` the tangent rather than
