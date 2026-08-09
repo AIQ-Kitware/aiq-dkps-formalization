@@ -1,102 +1,26 @@
-# What stands between `ForTauCeti` and Mathlib-quality mergeworthiness
+# Historical merge-readiness snapshot
 
-**Every defect below has a lane.** That is the point of this file: jon's rule is
-that an issue without a lane does not get worked on, so this is the checklist
-that maps *defect → lane*, and anything not here is either fixed or not a
-defect. Last measured **2026-07-30, pass 7** over 165 files.
+This file is preserved as evidence from the July 2026 hostile-review campaign.
+It is **not an operative merge checklist** and it does not describe the current
+repository state.
 
-## Green — measured, not assumed
+The original document mixed measured green checks with lane assignments and a
+hand-maintained list of blockers.  The lane system has since been retired and
+many of those blockers were completed, superseded, or converted into automated
+gates.  Keeping the old verdict table current would create a second status
+system that can disagree with the code.
 
-| gate | result |
-|---|---|
-| proof escapes | **0** |
-| provenance on every module | **164/164** |
-| docstring coverage | **0 undocumented** — presence only; see defect 13 for *usefulness* |
-| namespace policy | **OK** (164 modules, 10 allowlisted Mathlib namespaces) |
-| dependency firewall | **OK** |
-| header destination | **0** files name Mathlib (was 39) |
-| files > 1,000 lines | **0** (was 3) |
-| roadmap topics written | **24 of 24** — complete, derived from each README's own topic declaration |
+Use the current authorities instead:
 
-## Reviewed against the actual Tau Ceti rubrics
+```bash
+python3 scripts/run_gates.py
+python3 scripts/audit_checklist.py --progress   # historical review coverage only
+```
 
-[`TAUCETI-RUBRIC-REVIEW.md`](TAUCETI-RUBRIC-REVIEW.md) runs the ten rubrics from
-`TauCetiReview/rubrics/` over both libraries. It found three objections this
-checklist had missed — one rated **`block`** — and all are in the table below
-(`FTC-UNEXERCISED`, `FTC-EXPOSE`, `FTC-PROSE`). The third came from taking the
-rubric's own division of labour seriously: *"Linters may check presence; you
-judge usefulness and honesty."* Our green "0 undocumented" row is the linter
-half. It says nothing about whether the prose helps a reader of the repo we are
-submitting **to** — and in 69 files it does not.
+For Tau Ceti submission work, also follow `AGENTS.md`, `ForTauCeti/README.md`,
+`dev/tauceti/README.md`, and the current upstream review instructions in the
+checked-out Tau Ceti repositories.
 
-## Open defects, each with its lane
-
-| # | defect | measure | lane | build? |
-|---|---|---|---|---|
-| ~~1~~ | ~~topics with no roadmap~~ | **0 — `ROADMAP-WRITE` DONE, 24 of 24** | — | — |
-| 2 | **53 flat files beside 12 directories** | 22 files, 7 missing directories | `FTC-ORG` | yes |
-| 3 | **4 public definitions with no consumer** | 4 (was mis-measured as 31) | `FTC-DEAD` | yes |
-| ~~4~~ | ~~10 linter suppressions~~ | **5 left, each stating why — `FTC-SETOPT` DONE** | — | — |
-| 5 | **6 proofs over 145 lines**, one 231 | 6 | `FTC-LONGPROOF` | yes |
-| ~~6~~ | ~~files over the 1,000-line limit~~ | **0 — `SPLIT-1K` DONE** | — | — |
-| ~~7~~ | ~~flat `Sylvester*` files~~ | **0 — `PLACE-SYLV` DONE** | — | — |
-| 8 | **`GramMatrix` is misnamed** and overlaps `GramOperator` | 1 decision | `PLACE-GRAM` | yes |
-| 9 | **Two square roots**, one definitionally the other | `rfl`-equal | `T01-SQRT` | yes |
-| ~~10~~ | ~~T19–T22 assert a Mathlib target~~ | **0 — headers fixed, and jon ratified Tau Ceti as the destination 2026-07-30** | — | — |
-| ~~11~~ | ~~unexercised `Prop` definition (`block`)~~ | **0 — `FTC-UNEXERCISED` DONE; characterization + witness both added** | — | — |
-| ~~12~~ | ~~70 files expose bodies~~ | **0 of 166 — the whole `FTC-EXPOSE-*` chain is DONE.** 23 per-declaration exposures remain, in three kinds; `FTC-EXPOSE-SPECMEAS` lowers the avoidable ones | — | — |
-| ~~13~~ | ~~files documenting our workflow, not the math~~ | **0 of 168 — the whole `FTC-PROSE-*` chain is DONE**, gate at a zero baseline | — | — |
-
-## Ordering, and why
-
-1. ~~`ROADMAP-WRITE`~~ — **done, 24 of 24.** Every topic is now proposable.
-2. **`FTC-ORG`** — now unblocked: `PLACE-SYLV` finished, so nothing collides in
-   `Sylvester/`. This is the defect a reviewer meets before reading a theorem.
-3. **`FTC-LONGPROOF`** — `SPLIT-1K` closed without it (the oversize files were
-   split on other seams), so this stands on its own: 6 proofs over 145 lines,
-   one at 231, all with 5–11-line statements.
-4. **`FTC-SETOPT`** and **`FTC-DEAD`** — both sliceable, both mechanical once
-   the underlying warning or the keep/delete call is made.
-5. **`T01-SQRT`** and **`PLACE-GRAM`** — each needs one design decision first.
-6. ~~`FTC-EXPOSE-*`~~ — **the whole chain is DONE, 2026-07-30.** 70 → 0
-   blanket-exposed modules. The decisive step was `FTC-EXPOSE-RFL`: the earlier
-   measurement concluded 31 modules needed `@[expose]`, but never tried the
-   alternative the rubric names in the same sentence — `:= (rfl)` over
-   `:= rfl` — which works, and removed the need almost entirely. What the
-   conversion actually found is in `dev/audit/measure-expose-rfl.md`: most of
-   the work was **routing consumers back through characteristic lemmas the
-   library already had**, not writing new ones.
-7. **`FTC-PROSE`** — no build, four disjoint parallel slices, and it is the
-   cheapest large win here: it removes 31 pointers to a tree that does not
-   exist. Take `FTC-PROSE-GATE` first; the slices are worthless without it
-   because the convention that generates the prose is still in force.
-8. ~~`HDR-DEST`'s remainder~~ — **ratified by jon 2026-07-30: T19–T22 are Tau
-   Ceti-bound.** All 24 topics now have roadmaps, so nothing is left open here.
-
-## Not defects — recorded so they are not re-raised
-
-- **78 of 79 bare `simp` calls are terminal**, which is idiomatic Mathlib. Only
-  one is non-terminal. This is not a lane.
-- **An aggregator file with no declarations beside its own directory is correct**
-  (`RectangularUnitarilyInvariantNorm.lean`). `PLACE-SYLV` and `FTC-ORG` must
-  not sweep these up.
-- **`Submodule`, `ContinuousLinearMap`, `LinearMap`, `Cardinal` and the other
-  allowlisted namespaces are legitimate extensions** — the namespace gate
-  encodes which, so the question is settled rather than re-litigated per file.
-- **176 `@[simp]` lemmas** were not audited for simp-normal-form or looping.
-  That needs elaboration, which needs a build, which this seat does not have.
-  **Recorded as a known gap in this audit**, not as a clean result.
-
-## The honest limit of this file
-
-It lists what a *static* review can see. Three Mathlib-quality properties are
-not measured here and would need a build:
-
-- **simp-set hygiene** — whether the 176 `@[simp]` lemmas are confluent and
-  terminating.
-- **defeq and instance-diamond behaviour** at the API boundary.
-- **whether a shorter proof exists** — `FTC-LONGPROOF` measures length, which is
-  a proxy for reviewability, not for optimality.
-
-A reviewer with a compiler would add those. This file should not be read as
-"everything is fine once these ten lanes close."
+The detailed `review-*.md` files in this directory remain useful for rationale
+and provenance.  Their `{lane:...}` tags and dated verdicts are historical
+identifiers, not tasks to reclaim.

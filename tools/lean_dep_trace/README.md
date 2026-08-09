@@ -1,109 +1,49 @@
 # Lean dependency tracing tools
 
-These tools generate dependency graphs for the AIQ DKPS formalization, with a
-focus on the path into:
+These tools were built to generate presentation-oriented dependency graphs for
+the DKPS formalization, especially the path into
+`DkpsQuench2026.QueryEfficiency.infiniteFixedSubset`.
 
-```lean
-DkpsQuench2026.QueryEfficiency.infiniteFixedSubset
-```
+## Current status
 
-The intended workflow is to generate an auditable dependency map, then edit
-`milestones.toml` until the milestone diagram matches the story you want to put
-on a slide.
-
-## Quick start: Python-only lexical graph
-
-From the repository root:
+The **Python lexical tracer is usable**, but pass the current project roots
+explicitly.  Its historical defaults still include the retired `ForMathlib`
+name, so relying on defaults would omit current reusable-library declarations.
 
 ```bash
 python -m pip install networkx
 python tools/lean_dep_trace/trace_deps.py . \
-    --outdir build/lean-dep-trace \
-    --target DkpsQuench2026.QueryEfficiency.infiniteFixedSubset
+  --include ForTauCeti DavisKahan FinishYuWangSamworth \
+            Acharyya2024 Acharyya2025 DkpsQuench2026 Helm2025 \
+  --outdir build/lean-dep-trace \
+  --target DkpsQuench2026.QueryEfficiency.infiniteFixedSubset
 ```
 
-Outputs:
+The generated DOT/GraphML and milestone files are exploratory visualization
+artifacts, not proof-closure evidence.  For theorem/source status use the
+repository censuses and gates.
 
-- `build/lean-dep-trace/summary.json`
-- `build/lean-dep-trace/lean_user_decl_deps.graphml`
-- `build/lean-dep-trace/lean_user_decl_deps.dot`
-- `build/lean-dep-trace/focused_ancestors.graphml`
-- `build/lean-dep-trace/focused_ancestors.{dot,svg,png}` if Graphviz is installed
-- `build/lean-dep-trace/module_backbone.{dot,svg,png}` if Graphviz is installed
-- `build/lean-dep-trace/milestone_backbone.{dot,svg,png}` if Graphviz is installed
-- `build/lean-dep-trace/milestone_evidence.md`
-- `build/lean-dep-trace/milestone_matches.json`
+## Elaborated exporter is historical until refreshed
 
-By default, the full declaration graph is written as DOT/GraphML but only the focused, module, and milestone graphs are rendered. Add `--render-full` if you also want `lean_user_decl_deps.svg/png`; it can be slow.
+`ExportDeclDeps.lean` predates the `ForMathlib` retirement and still imports that
+removed root.  Therefore the old command
 
-The Python-only mode is intentionally lightweight. It strips Lean comments,
-extracts top-level declarations, and scans each declaration span for explicit
-references to other user declarations. It is good for recovering the
-human-readable formalization pipeline, but it is not Lean's kernel/elaborator
-view of dependencies.
-
-## More exact mode: elaborated dependency export
-
-For a closer-to-real theorem dependency graph, first export elaborated
-constant dependencies from Lean:
-
-```bash
-lake build
-mkdir -p build/lean-dep-trace
-lake env lean --run tools/lean_dep_trace/ExportDeclDeps.lean \
-    > build/lean-dep-trace/elab_deps.jsonl
+```text
+lake env lean --run tools/lean_dep_trace/ExportDeclDeps.lean
 ```
 
-Then render graphs from that JSONL:
-
-```bash
-python tools/lean_dep_trace/trace_deps.py . \
-    --lean-jsonl build/lean-dep-trace/elab_deps.jsonl \
-    --outdir build/lean-dep-trace-elab \
-    --target DkpsQuench2026.QueryEfficiency.infiniteFixedSubset
-```
-
-`ExportDeclDeps.lean` uses Lean's compiled environment and `Expr.getUsedConstants`
-on theorem types and proof terms. This sees elaborated constants that are not
-visible as plain text. It still filters to project roots (`ForMathlib`,
-`Acharyya2024`, `Acharyya2025`, `DkpsQuench2026`) so the output is useful for slide
-planning instead of being dominated by Mathlib internals.
-
-If the Lean helper breaks after a Lean version bump, the most likely API points
-are `env.constants.toList`, `ConstantInfo.value?`, or `Expr.getUsedConstants`.
-The Python lexical tracer is independent of those APIs.
+is **not a current workflow**.  Update the helper's import/root list and validate
+it on the pinned Lean toolchain before re-enabling elaborated dependency export.
+Do not present its historical README instructions as a supported exact mode.
 
 ## Editing the slide-level dependency story
 
-Edit:
+`tools/lean_dep_trace/milestones.toml` controls the coarse presentation map.
+Each `[[milestone]]` supplies an id, label, subtitle, display color, and matching
+patterns; each `[[edge]]` declares a slide-level relation.  The generated
+`milestone_evidence.md` records whether matched declarations have a path in the
+focused lexical graph.
 
-```text
-tools/lean_dep_trace/milestones.toml
-```
-
-Each `[[milestone]]` has:
-
-- `id`: stable identifier used by edges.
-- `label`: diagram label.
-- `subtitle`: second line in the diagram.
-- `color`: Graphviz fill color.
-- `patterns`: substrings matched against declaration names, module names, and docstrings.
-
-Each `[[edge]]` declares a slide-level edge between milestones. The generated
-`milestone_evidence.md` records whether the matched declarations have a path in
-the focused dependency graph and gives a shortest matched path when found.
-
-This makes it easy to tune the map around questions like:
-
-- Should `GramRealization` be shown as load-bearing or as related background?
-- Should `Helm2025` be included or intentionally omitted?
-- Should the slide collapse `Courant-Fischer`, `Weyl`, and `Davis-Kahan` into one
-  spectral perturbation box?
-
-## Tree-sitter note
-
-Tree-sitter can be useful for syntax-aware source segmentation, but it is not the
-right authority for theorem dependencies in Lean. The Lean elaborator resolves
-names, typeclasses, notations, tactics, and implicit terms. For real theorem
-links, prefer the Lean JSONL export plus the Python renderer. Use the lexical
-mode when you want a fast, editable, high-recall draft.
+This layer is intentionally editorial: it helps decide what belongs on a slide.
+It should not be used to infer whether a theorem is built, admission-free, or a
+source-faithful endpoint.

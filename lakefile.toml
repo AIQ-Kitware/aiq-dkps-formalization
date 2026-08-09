@@ -17,90 +17,45 @@ autoImplicit = false
 
 
 
-
-# ForMathlib is RETIRED (lane FM-RETIRE, 2026-07-29).  Its four surviving modules moved
-# into ForTauCeti and the library, its root module and its directory are deleted.
-# See ForTauCeti/README.md.
-
-# Spectra: RETIRED and REMOVED 2026-07-30 (lane SPECTRA-FORK).  Nothing in this
-# repository imports Spectra.  The vendored source is gone; everything this project
-# did on top of it is `retired/patches-Spectra/0002-dkps-complete-fork.patch`, which
-# was verified to reconstruct the deleted tree byte-for-byte from upstream commit
-# 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63.  See that directory's README to rebuild.
-
-
-# BEGIN Tau Ceti local dependency (Milestone 2 extraction target)
-# Tau Ceti is the permanent generic-mathematics library the reusable Davis--Kahan
-# foundations are migrating into: the target architecture is
-# `Mathlib -> TauCeti -> DavisKahan`, staged through the temporary `ForTauCeti`
-# library.  This is a local path dependency onto the checked-in submodule so the
-# post-merge dependency switch can be simulated locally.  Like Spectra, TauCeti's
-# own `mathlib` requirement is overridden by the authoritative root pin below
-# (the root pin is newer; see dev/tauceti/migration-baseline-2026-07-24.md).
+# BEGIN Tau Ceti local dependency
+# `external/TauCeti` is the checked-in upstream target used for compatibility
+# checks and extraction work. `ForTauCeti` is the maintained reusable-math
+# package in this repository; its declarations already live in final `TauCeti.*`
+# namespaces.
 [[require]]
 name = "TauCeti"
 path = "external/TauCeti"
 # END Tau Ceti local dependency
 
 # BEGIN authoritative root Mathlib dependency
-# Keep this requirement last among all [[require]] blocks. Spectra currently
-# pins an older Mathlib dependency graph; the root DKPS pins must win.
+# Keep this requirement last among all [[require]] blocks so this workspace owns
+# the Mathlib pin used by every local library and the Tau Ceti checkout.
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
 # END authoritative root Mathlib dependency
 
-# ForTauCeti: the reusable-mathematics package.  Declarations live in their final
-# `TauCeti.*` namespaces.  A ForTauCeti module may import only `Mathlib.*`,
+# ForTauCeti: the reusable-mathematics package. Declarations live in their final
+# `TauCeti.*` namespaces. A ForTauCeti module may import only `Mathlib.*`,
 # `TauCeti.*`, and `ForTauCeti.*` (enforced by scripts/check_dependency_layers.py).
-# The glob builds every file even when no aggregate imports it, mirroring Tau
-# Ceti's own source-tree glob.
-#
-# EXECUTIVE DECISION -- JON, 2026-07-29.  Two rulings, both his, both binding:
-#   (a) ForTauCeti is THE PRODUCT: an elegant package that polished roadmaps are
-#       generated from, and that mechanical ports are then built to satisfy.
-#   (b) It is NOT a holding pen and it is NOT deleted at the end.  There is no
-#       terminal state in which it is empty.
-# This SUPERSEDES the previous comment here, which read "the successful terminal
-# state of the campaign is an empty/deleted ForTauCeti".  Kept struck rather than
-# erased so the reversal is legible: ~~empty/deleted ForTauCeti~~.
-#
-# THIS MISTAKE HAS NOW BEEN MADE TWICE BY AGENTS (jon, 2026-07-29).  If you are
-# about to write a lane, a task, or a doc that ends in deleting ForTauCeti or in
-# draining it into external/TauCeti -- stop.  Read ForTauCeti/README.md and
-# AGENTS.md first.
-# See ForTauCeti/README.md.
+# The glob builds every file even when no aggregate imports it. Current package
+# policy and provenance requirements live in ForTauCeti/README.md.
 [[lean_lib]]
 name = "ForTauCeti"
 globs = ["ForTauCeti.*"]
-# Mirror the options Tau Ceti's own `lean_lib` applies (see
-# `external/TauCeti/lakefile.toml`), so that the staging library is measured against the
-# rules that will actually gate the PR rather than against this repository's laxer default.
-# Without these, "`lake build ForTauCeti` is warning-free" is true here and says nothing
-# about upstream: the census under these options was 78 when the default set reported 0.
-# It is now 0, and `warningAsError` is on so it cannot silently regress -- a warning here
-# is a warning Tau Ceti's CI would reject.
+# Mirror the options Tau Ceti's own `lean_lib` applies so local validation uses
+# the same warning/style policy as the upstream target. `warningAsError` prevents
+# local warning regressions from being hidden by this workspace's defaults.
 leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, weak.linter.style.longFile = 1500, weak.linter.style.longFileDefValue = 1500, weak.linter.style.header = false }
 
-# The roadmap's suggested-signature files.  A library rather than a gate script, for the
-# reason the defect record gives: they were broken for an unknown length of time -- ten
-# elaboration errors across three of the six -- because nothing built them, and a library
-# is the mechanism that makes `lake build` the signal instead of a separate command
-# nobody remembers to run.
-#
-# `warningAsError` is deliberately OFF, unlike the `ForTauCeti` block above.  Every
-# declaration in these files is a `sorry`: that is what a suggested signature *is*, and
-# turning "declaration uses `sorry`" into an error would make the library unbuildable by
-# construction.  The linters stay on, so a genuine style regression still shows up.
-#
-# The roadmap bridge.  The submitted roadmap
+# The roadmap bridge. The submitted roadmap
 # (`submodules/TauCetiRoadmap/**/Suggested.lean`) states the proposed signatures against
 # Mathlib alone with `sorry` bodies; `ForTauCeti` proves the mathematics.  Each module here
 # restates a roadmap signature verbatim and discharges it with the delivered declaration, so
 # the correspondence is checked by the compiler rather than by comparing declaration names.
 #
-# In `defaultTargets` deliberately: the whole point is that the claim is re-verified on every
-# build.  A bridge outside the default build would rot the way the staging tree did.
+# In `defaultTargets` deliberately so the roadmap-to-delivery correspondence is
+# re-verified by every ordinary build.
 [[lean_lib]]
 name = "RoadmapBridge"
 globs = ["RoadmapBridge.*"]
@@ -129,14 +84,12 @@ name = "FinishTanTwoTheta"
 srcDir = "FinishTanTwoTheta"
 
 
-# Citation-priority completion lane for Yu--Wang--Samworth (2015).  The source
+# Paper-facing Yu--Wang--Samworth (2015) formalization package. The source
 # is isolated organizationally but shares the root dependency graph and .lake.
 #
-# In `defaultTargets` since 2026-08-02.  It is sorry-free across all 12 files and
-# it carries the paper's headline results -- Theorem 1, both halves of Theorem 4,
-# Lemma 5, and the appendix Gram identities.  Outside the default build those were
-# proved but unguarded: nine census rows read `proved_outside_build`, meaning the
-# mathematics is done and nothing would notice if it broke.
+# Kept in `defaultTargets` so the paper's headline results and grounding ledger
+# remain guarded by the ordinary build. See FinishYuWangSamworth/README.md and the
+# maintained source census for current coverage.
 [[lean_lib]]
 name = "FinishYuWangSamworth"
 srcDir = "FinishYuWangSamworth"
