@@ -25,6 +25,11 @@ import DavisKahan.Geometry.Halmos.GenericReconstruction
 import ForTauCeti.Analysis.InnerProductSpace.CompactApproximationEigenvalues
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
 import DavisKahan.Geometry.Halmos.CompactClassification
+import DavisKahan.Geometry.Halmos.Realization
+-- supplies the realization half of Theorem 3.1: the explicit direct-rotation
+-- construction attaining a prescribed admissible angle datum.  That module
+-- imports only `Geometry/Halmos/TwoProjections` and Mathlib, so the dependency
+-- is acyclic.
 
 /-!
 # Section 3 frontier: separation and classification of two subspaces
@@ -1644,6 +1649,95 @@ theorem corollary3_1_compact_defectBlock_angleList_classification
   exact corollary3_1_compact_angleList_classification U₁ V₁ᗮ U₂ V₂ᗮ h₁ h₂
 
 end Classification
+
+/-! ## Theorem 3.1, the realization half -/
+
+section Realization
+
+open MathAhead.HiddenFoundations
+
+variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+
+/-- **Davis--Kahan 1970, Theorem 3.1, the realization half — the paper's sentence
+(ii).**
+
+The classification half (`twoProjection_operator_classification`,
+`theorem3_1_spectralMultiplicity_classification`) says that the angle datum
+determines the pair.  This says the converse of the *existence* kind: every
+admissible angle datum is *attained*.  Given `cos Θ₀, sin Θ₀` on `E`,
+`cos Θ₁, sin Θ₁` on `F` and the intertwiner `J₀` that matches their spectral
+multiplicities away from the angle `0`, the two subspaces
+
+`U = E`-factor,  `V = W₀ E` with `W₀ x = (cos Θ₀ x, J₀ sin Θ₀ x)`
+
+of `E ⊕₂ F` satisfy, in order:
+
+1. the compression of `P_V` to `U` is `cos² Θ₀`;
+2. the compression of `P_Vᗮ` to `Uᗮ` is `cos² Θ₁`;
+3. `U ⊓ V` is the angle-`0` eigenspace on the `P`-side;
+4. `Uᗮ ⊓ Vᗮ` is the angle-`0` eigenspace on the `Pᗮ`-side;
+5. `U ⊓ Vᗮ` is the angle-`π/2` eigenspace on the `P`-side;
+6. `Uᗮ ⊓ V` is the angle-`π/2` eigenspace on the `Pᗮ`-side;
+7. the two crossed defects are isometric.
+
+Items 3--7 are the mathematical content of the theorem's hypothesis: the
+`π/2` multiplicities are *forced* to agree, because `J₀` restricts to a linear
+isometric equivalence between them, while the `0` multiplicities are the two
+kernels of `sin Θ₀` and `sin Θ₁`, which `J₀` never sees.  That the latter are
+genuinely unconstrained is witnessed by
+`theorem3_1_realization_zeroAngle_unconstrained`.
+
+Grounded by `:=` on `Geometry/Halmos/Realization.lean`, so there is a single
+source of truth.  The block matrix behind item 1 and item 2 is
+`starProjection_targetSubspace_apply`, which corrects a sign error in the
+printed source; see `dev/external-literature-references.md`, "Known source
+errata", item 2. -/
+theorem theorem3_1_realization (d : HalmosAngleDatum E F) :
+    (∀ x : E, (sourceSubspace E F).starProjection
+        (d.targetSubspace.starProjection (modelInl E F x)) =
+          modelInl E F (d.cos₀ (d.cos₀ x))) ∧
+      (∀ y : F, (sourceSubspace E F)ᗮ.starProjection
+        ((d.targetSubspace)ᗮ.starProjection (modelInr E F y)) =
+          modelInr E F (d.cos₁ (d.cos₁ y))) ∧
+      halmosCommonPart (sourceSubspace E F) d.targetSubspace =
+        Submodule.map (modelInl E F : E →ₗ[ℂ] WithLp 2 (E × F))
+          (LinearMap.ker (d.sin₀ : E →ₗ[ℂ] E)) ∧
+      halmosExteriorPart (sourceSubspace E F) d.targetSubspace =
+        Submodule.map (modelInr E F : F →ₗ[ℂ] WithLp 2 (E × F))
+          (LinearMap.ker (d.sin₁ : F →ₗ[ℂ] F)) ∧
+      halmosSourceDefect (sourceSubspace E F) d.targetSubspace =
+        Submodule.map (modelInl E F : E →ₗ[ℂ] WithLp 2 (E × F))
+          (LinearMap.ker (d.cos₀ : E →ₗ[ℂ] E)) ∧
+      halmosTargetDefect (sourceSubspace E F) d.targetSubspace =
+        Submodule.map (modelInr E F : F →ₗ[ℂ] WithLp 2 (E × F))
+          (LinearMap.ker (d.cos₁ : F →ₗ[ℂ] F)) ∧
+      Nonempty (↥(halmosSourceDefect (sourceSubspace E F) d.targetSubspace) ≃ₗᵢ[ℂ]
+        ↥(halmosTargetDefect (sourceSubspace E F) d.targetSubspace)) :=
+  ⟨d.compress_source_eq, d.compress_sourceOrthogonal_eq, d.halmosCommonPart_eq,
+    d.halmosExteriorPart_eq, d.halmosSourceDefect_eq, d.halmosTargetDefect_eq,
+    d.nonempty_halmosSourceDefect_equiv_targetDefect⟩
+
+/-- **The multiplicity at angle `0` is genuinely unconstrained.**
+
+The all-`0` datum over an arbitrary pair `(E, F)` of complex Hilbert spaces
+realizes `U = V`, whose angle-`0` spaces are the whole of `E` on the `P`-side and
+the whole of `F` on the `Pᗮ`-side.  `E` and `F` are unrelated, so no admissibility
+condition at angle `0` can be imposed — in contrast to the angle `π/2`, where
+item 7 of `theorem3_1_realization` forces the two multiplicities to agree.
+Together the two statements are why Davis and Kahan's hypothesis is asymmetric
+between `0` and `π/2`. -/
+theorem theorem3_1_realization_zeroAngle_unconstrained
+    (E : Type u) [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    (F : Type v) [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F] :
+    halmosCommonPart (sourceSubspace E F) (trivialHalmosAngleDatum E F).targetSubspace =
+        sourceSubspace E F ∧
+      halmosExteriorPart (sourceSubspace E F)
+          (trivialHalmosAngleDatum E F).targetSubspace =
+        Submodule.map (modelInr E F : F →ₗ[ℂ] WithLp 2 (E × F)) ⊤ :=
+  ⟨trivial_halmosCommonPart_eq E F, trivial_halmosExteriorPart_eq E F⟩
+
+end Realization
 
 end Section3
 end Frontier

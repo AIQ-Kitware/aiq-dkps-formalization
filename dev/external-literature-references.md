@@ -111,3 +111,8 @@ before being described as errors in the *original* rather than in our transcript
    direct rotation `U` printed immediately above and `Q = U P U*`, the sign must be positive:
    `Q = [[C_0^2, C_0 S_0 J_0*], [J_0 S_0 C_0, S_1^2]]`. The minus belongs to the second column of
    `U`, not to the outer product defining `Q`.
+   **Confirmed by the compiler 2026-08-09.**
+   `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.HalmosAngleDatum.starProjection_targetSubspace_apply`
+   (`DavisKahan/Geometry/Halmos/Realization.lean`) computes the block matrix of the realized `Q`
+   as a genuine `Submodule.starProjection`, so self-adjointness is structural rather than assumed,
+   and both off-diagonal entries come out positive exactly as above.

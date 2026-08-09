@@ -9,6 +9,7 @@ import DavisKahan.Geometry.Halmos.CompactClassification
 import DavisKahan.Geometry.Halmos.GenericPosition
 import DavisKahan.Geometry.Halmos.GenericReconstruction
 import DavisKahan.Geometry.Halmos.GenericRotationPredicates
+import DavisKahan.Geometry.Halmos.Realization
 import DavisKahan.Geometry.Halmos.TwoProjections
 import DavisKahan.Geometry.Halmos.UnitaryEquivalence
 
