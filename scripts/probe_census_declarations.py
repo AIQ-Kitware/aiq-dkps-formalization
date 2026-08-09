@@ -271,8 +271,30 @@ def verify(status: dict[str, str], sync: bool = False) -> int:
         for problem in problems:
             print(f"  - {problem}")
         return 1
-    print(f"Census verification: CLEAN -- all {len(data['items'])} rows agree "
-          f"with the build")
+    # Say what was actually checked.  This line used to read "all N rows agree
+    # with the build", which reads as a coverage statement and is not one.  What
+    # is compared is each row's `verification` field against the build's view of
+    # THE DECLARATIONS THAT ROW NAMES.  Three things it cannot see:
+    #
+    #   * whether those declarations state what the paper states (scope).  A row
+    #     naming a theorem with an extra `FiniteDimensional` hypothesis agrees.
+    #   * whether `status` is accurate.  Nothing here reads `status`.
+    #   * whether the row's declaration list is COMPLETE.  A printed theorem with
+    #     two conclusions whose row names only the first has nothing to disagree
+    #     with, and reports clean.
+    #
+    # That third case is not hypothetical: `S2-tan-two-theta` read
+    # `compiled_exact` with "no mathematical gap" while the ambient half of the
+    # tan 2theta theorem did not exist in any form, and this line printed CLEAN
+    # above it.  The same pattern had already occurred twice, on the sin 2theta
+    # and tan theta rows.  Scope and completeness are judgements that require
+    # reading the paper; they are not gate output.
+    print(f"Census declaration check: CLEAN -- {len(data['items'])} rows' "
+          f"`verification` fields match the build's view of the declarations "
+          f"they name")
+    print("  NOT checked here: whether those statements match the paper's "
+          "scope, whether `status` is accurate, or whether any row omits a "
+          "declaration for a conclusion the paper asserts")
     return 0
 
 
