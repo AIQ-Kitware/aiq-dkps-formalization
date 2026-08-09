@@ -66,6 +66,7 @@ theorem riccatiDefect_negBlockOperatorData
     sub_apply, add_apply, neg_apply, map_neg]
   abel
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The Riccati equation is invariant under simultaneous negation of every
 block entry. -/
 theorem solvesRiccati_negBlockOperatorData_iff

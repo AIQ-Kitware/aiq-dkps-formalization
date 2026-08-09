@@ -129,6 +129,7 @@ theorem realSpectrum_compressOperator_complexifySubmodule
     RealComplexification.realSpectrum_conjEquiv,
     RealComplexification.realSpectrum_complexify]
 
+omit [CompleteSpace E] in
 /-- A real upper form bound on a compression transports to the complexified
 compression with the same constant. -/
 theorem re_inner_compressOperator_le (A : E →L[ℝ] E) {alpha : ℝ}

@@ -104,6 +104,7 @@ theorem offDiagonalContinuationMargin_norm_le_path
     nlinarith
   exact offDiagonalContinuationMargin_anti htNorm hle
 
+omit [CompleteSpace H] in
 /-- The sharp endpoint hypothesis gives a positive residual margin at every
 point of the affine perturbation path. -/
 theorem offDiagonalContinuationMargin_path_pos

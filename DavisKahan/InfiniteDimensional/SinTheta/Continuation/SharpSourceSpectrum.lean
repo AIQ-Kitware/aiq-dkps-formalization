@@ -83,6 +83,7 @@ theorem realSpectrum_compressOperator_eq_restrictedSpectrum_of_reduces
   · rintro ⟨hInv', hr⟩
     simpa using hr
 
+omit [CompleteSpace Hspace] in
 /-- A finite-gap configuration places the genuine spectra of the two diagonal
 compressions in the same interval and exterior sets. -/
 theorem _root_.TauCeti.DavisKahan.Experimental.Foundation.FiniteGapConfiguration.exists_compressOperator_enclosures

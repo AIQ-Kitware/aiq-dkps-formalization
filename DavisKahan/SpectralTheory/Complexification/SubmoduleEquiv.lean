@@ -214,6 +214,7 @@ theorem algebraMap_sub_conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) (c
   ext y
   simp [Algebra.algebraMap_eq_smul_one]
 
+omit [CompleteSpace F] [CompleteSpace G] in
 /-- **Conjugation by an isometric equivalence preserves the real spectrum.**
 This is what lets a compression on `↥Z` be compared with the corresponding
 compression on `↥(complexifySubmodule Z)`. -/

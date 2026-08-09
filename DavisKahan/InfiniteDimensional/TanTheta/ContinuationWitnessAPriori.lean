@@ -36,6 +36,7 @@ section CoordinateNorm
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /-- Compressing an ambient angular operator to `U → Uᗮ` preserves its operator
 norm. -/
 theorem norm_subspaceAngularCoordinate_eq

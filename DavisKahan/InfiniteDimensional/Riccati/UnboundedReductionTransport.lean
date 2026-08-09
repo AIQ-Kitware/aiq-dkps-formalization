@@ -88,6 +88,7 @@ theorem symm_map_mem_of_intertwines_projection
   simpa using hintertwine
 
 
+omit [CompleteSpace E] in
 /-- Reduction transports through a canonical partial-map pullback when the
 equivalence intertwines the corresponding orthogonal projections. -/
 theorem pullback_reducesSubspace_of_intertwines_projection

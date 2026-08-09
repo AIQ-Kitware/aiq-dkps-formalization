@@ -110,12 +110,14 @@ theorem mem_blockGraph_zero_iff_snd_eq_zero
     (toLp_mem_blockGraph_iff (0 : E0 →L[𝕜] E1)
       (WithLp.fst z) (WithLp.snd z))
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The first coordinate inclusion lands in the zero graph. -/
 theorem blockCoordinate0_mem_zeroGraph (u : E0) :
     blockCoordinate0 (𝕜 := 𝕜) (E0 := E0) (E1 := E1) u ∈ blockGraph (0 : E0 →L[𝕜] E1) := by
   rw [mem_blockGraph_zero_iff_snd_eq_zero]
   rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The second coordinate inclusion is orthogonal to the zero graph. -/
 theorem blockCoordinate1_mem_zeroGraph_orthogonal (v : E1) :
     blockCoordinate1 (𝕜 := 𝕜) (E0 := E0) (E1 := E1) v ∈
@@ -163,6 +165,7 @@ noncomputable def blockCompression1
     (T : WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1)) : E1 →L[𝕜] E1 :=
   WithLp.sndL 2 𝕜 E0 E1 ∘L T ∘L blockCoordinate1 (𝕜 := 𝕜) (E0 := E0) (E1 := E1)
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- A bounded direct-sum operator which preserves both coordinate summands is
 exactly the corresponding block-diagonal operator. -/
 theorem eq_blockDiagonalOperator_of_preserves_coordinates

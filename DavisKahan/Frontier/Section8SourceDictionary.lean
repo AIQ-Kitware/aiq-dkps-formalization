@@ -207,6 +207,7 @@ theorem cos_arccos_approximationNumber_cosineBlock [FiniteDimensional ℂ H]
     ((ContinuousLinearMap.approximationNumber_le_norm _ i).trans
       (norm_cosineBlock_le_one P Q))
 
+omit [CompleteSpace H] in
 /-- **The printed bound norm `‖C₁‖₁` is the largest principal cosine.**
 
 The approximation-number sequence starts at the operator norm, so part (ii)'s
@@ -218,6 +219,7 @@ theorem norm_cosineBlock_eq_principalCosines_zero [FiniteDimensional ℂ H]
   rw [← approximationNumber_cosineBlock_eq_principalCosines,
     ContinuousLinearMap.approximationNumber_index_zero]
 
+omit [CompleteSpace H] in
 /-- The lower companion: `‖C₀‖₁` is the largest principal cosine of `(P, Q)`. -/
 theorem norm_lowerCosineBlock_eq_principalCosines_zero [FiniteDimensional ℂ H]
     (P Q : Submodule ℂ H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] :

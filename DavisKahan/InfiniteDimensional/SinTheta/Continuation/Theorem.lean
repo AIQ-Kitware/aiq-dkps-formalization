@@ -155,12 +155,14 @@ noncomputable instance targetSelectedSpectralSubspace_hasOrthogonalProjection
   unfold targetSelectedSpectralSubspace
   infer_instance
 
+omit [CompleteSpace H] in
 /-- The source endpoint witness retains the common geometric contour. -/
 theorem sourceSeparatingContour_geometric
     (C : SpectralContinuationWitness A V s) :
     C.sourceSeparatingContour.geometric = C.contour := by
   rfl
 
+omit [CompleteSpace H] in
 /-- The target endpoint witness retains the common geometric contour. -/
 theorem targetSeparatingContour_geometric
     (C : SpectralContinuationWitness A V s) :

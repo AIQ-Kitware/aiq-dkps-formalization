@@ -181,7 +181,7 @@ theorem finiteDiagonal_orbit_expansion
   push_cast
   ring
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The separated finite diagonal Sylvester equation has an explicit
 blockwise solution. -/
 theorem finiteDiagonal_sylvester_solution

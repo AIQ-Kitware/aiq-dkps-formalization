@@ -990,6 +990,7 @@ theorem real_smul_eq_complex_smul (t : ℝ) (E : H →L[ℂ] H) :
   ext x
   simp [Complex.coe_smul]
 
+omit [CompleteSpace H] in
 theorem isSelfAdjointOperator_path {A E : H →L[ℂ] H}
     (hA : IsSelfAdjointOperator A) (hE : IsSelfAdjointOperator E) (t : ℝ) :
     IsSelfAdjointOperator (A + t • E) := by

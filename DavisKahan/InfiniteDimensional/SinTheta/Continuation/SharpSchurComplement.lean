@@ -132,6 +132,7 @@ theorem rectangularBlockMap_one :
     zero_apply, add_zero, zero_add, WithLp.fst,
     WithLp.snd, Prod.mk.eta, WithLp.toLp_ofLp]
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The shifted bounded block operator is the rectangular block map of the two
 shifted diagonal blocks and the unchanged cross blocks. -/
 theorem blockOperator_sub_scalar_eq_rectangularBlockMap
@@ -233,6 +234,7 @@ theorem rectangularDirectSum_eta (x : WithLp 2 (E0 × E1)) :
     WithLp.toLp 2 (WithLp.fst x, WithLp.snd x) = x := by
   simp only [WithLp.fst, WithLp.snd, Prod.mk.eta, WithLp.toLp_ofLp]
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- `schurLowerInv` is a left inverse of `schurLower`. -/
 @[simp]
 theorem schurLowerInv_mul_schurLower
@@ -254,6 +256,7 @@ theorem schurLowerInv_mul_schurLower
     _ = (1 : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1)) x := by
       simpa only [one_apply_eq_self] using rectangularDirectSum_eta x
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- `schurLowerInv` is a right inverse of `schurLower`. -/
 @[simp]
 theorem schurLower_mul_schurLowerInv
@@ -275,6 +278,7 @@ theorem schurLower_mul_schurLowerInv
     _ = (1 : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1)) x := by
       simpa only [one_apply_eq_self] using rectangularDirectSum_eta x
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- `schurUpperInv` is a left inverse of `schurUpper`. -/
 @[simp]
 theorem schurUpperInv_mul_schurUpper
@@ -295,6 +299,7 @@ theorem schurUpperInv_mul_schurUpper
     _ = (1 : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1)) x := by
       simpa only [one_apply_eq_self] using rectangularDirectSum_eta x
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- `schurUpperInv` is a right inverse of `schurUpper`. -/
 @[simp]
 theorem schurUpper_mul_schurUpperInv
@@ -329,6 +334,7 @@ def secondSchurComplement
     (r0 : E0 →L[ℂ] E0) (b : E1 →L[ℂ] E0) : E1 →L[ℂ] E1 :=
   l1 - c ∘L r0 ∘L b
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Exact lower-diagonal-upper factorization of a rectangular block map. -/
 theorem rectangularBlockMap_eq_schur_factorization
     (l0 : E0 →L[ℂ] E0) (b : E1 →L[ℂ] E0)
@@ -361,6 +367,7 @@ noncomputable def schurBlockInverse
     WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1) :=
   schurUpperInv r0 b * rectangularBlockMap r0 0 0 q * schurLowerInv c r0
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- A block-diagonal map and its coordinatewise inverse multiply to one. -/
 theorem rectangularBlockMap_diagonal_mul
     (r0 l0 : E0 →L[ℂ] E0) (q s : E1 →L[ℂ] E1)

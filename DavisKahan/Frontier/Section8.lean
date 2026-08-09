@@ -73,6 +73,7 @@ structure CircleContinuationData
     ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius →
       ‖Ring.inverse (z • (1 : H →L[ℂ] H) - operatorPath A E t)‖ ≤ margin⁻¹
 
+omit [CompleteSpace H] in
 /-- Every circle point lies on the sphere of the circle contour. -/
 theorem circleContour_path_norm_sub_center
     (D : CircleContinuationData A E s) (x : unitInterval) :
@@ -598,6 +599,7 @@ theorem re_inner_splitting_of_invariant
     ring
   rw [hinner, map_add]
 
+omit [CompleteSpace H] in
 /-- The orthogonal splitting through the new spectral branch supplies the
 upper compression certificate of Theorem 8.1(i).  The kernel-side form is
 shifted by the cut so that its global bound is exactly the branch form
@@ -626,6 +628,7 @@ theorem upperCompressionRepulsionData_of_targetSplitting
   · intro x
     exact (W.norm_sq_eq_add_norm_sq_starProjection x).symm
 
+omit [CompleteSpace H] in
 /-- The orthogonal splitting through the new spectral branch supplies the
 lower compression certificate of Theorem 8.1(i). -/
 theorem lowerCompressionRepulsionData_of_targetSplitting

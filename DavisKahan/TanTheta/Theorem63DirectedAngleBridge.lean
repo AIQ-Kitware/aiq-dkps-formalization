@@ -163,6 +163,7 @@ private theorem subtype_adjoint_comp_subtype_comp_coordinateSine :
   rw [← ContinuousLinearMap.comp_assoc,
     adjoint_subtypeL_comp_subtypeL, ContinuousLinearMap.id_comp]
 
+omit [FiniteDimensional ℂ ↥Z] in
 /-- Hence the ambient directed sine and the coordinate sine have exactly the
 same Gram operator on `Z`. -/
 private theorem directedSine_gram_eq_coordinateSine_gram :
@@ -240,6 +241,7 @@ private theorem sourceDirectedAngle_apply_rightSingularBasis
   exact cfc_apply_of_apply_eq_smul_finite hMsa Real.arcsin
     Real.continuous_arcsin.continuousOn hMeig
 
+omit [FiniteDimensional ℂ ↥Z] in
 /-- The ambient-coordinate and subspace-coordinate sine blocks have the same
 operator norm. -/
 private theorem norm_directedSine_eq_norm_coordinateSine :
