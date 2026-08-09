@@ -95,6 +95,7 @@ theorem offDiagonalEnclosureRadius_path_le_norm
     nlinarith
   exact offDiagonalEnclosureRadius_mono htNorm hle
 
+omit [CompleteSpace H] in
 /-- Under the endpoint sharp threshold, every pathwise enclosure displacement
 is strictly below the original gap. -/
 theorem offDiagonalEnclosureRadius_path_lt_gap

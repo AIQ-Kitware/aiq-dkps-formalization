@@ -384,6 +384,7 @@ private theorem starProjection_idem (W : Submodule ℂ E)
     [W.HasOrthogonalProjection] : W.starProjection * W.starProjection =
       W.starProjection := W.isIdempotentElem_starProjection
 
+omit [CompleteSpace E] in
 /-- The two-projection relation for a pair of closed subspaces. -/
 theorem paperProjectorDifference_anticommutator :
     paperProjectorDifference U V * U.starProjection +
@@ -769,6 +770,7 @@ def paperDirectedSineAmbient : E →L[ℂ] E :=
 
 variable {U V}
 
+omit [CompleteSpace E] in
 private theorem projectionBlock_lower (K : E →L[ℂ] E) :
     paperProjectionBlock Uᗮ U K =
       (1 - U.starProjection) * K * U.starProjection := by

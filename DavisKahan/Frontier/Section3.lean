@@ -1051,6 +1051,7 @@ theorem inner_starProjection_self_eq (K : Submodule ℂ H)
     _ = ⟪K.starProjection y, K.starProjection y⟫_ℂ := K.starProjection_isSymmetric _ _
     _ = (‖K.starProjection y‖ : ℂ) ^ 2 := inner_self_eq_norm_sq_to_K _
 
+omit [CompleteSpace H] in
 /-- On the source subspace, the cosine-square quadratic form is `‖P_V x‖ ^ 2`. -/
 theorem inner_halmosCosineSq_source (x : H) (hx : x ∈ U) :
     ⟪halmosCosineSq U V x, x⟫_ℂ = (‖projection V x‖ : ℂ) ^ 2 := by
@@ -1071,6 +1072,7 @@ theorem inner_halmosCosineSq_source (x : H) (hx : x ∈ U) :
     _ = ⟪projection V x, x⟫_ℂ := by rw [hPU]
     _ = (‖projection V x‖ : ℂ) ^ 2 := inner_starProjection_self_eq V x
 
+omit [CompleteSpace H] in
 /-- On the source complement, the cosine-square quadratic form is
 `‖Pᗮ_V x‖ ^ 2`. -/
 theorem inner_halmosCosineSq_source_compl (x : H) (hx : x ∈ Uᗮ) :
@@ -1114,6 +1116,7 @@ theorem mem_fixedCosineSubspace (c : ℝ) (w : H) :
     smul_apply, one_apply_eq_self]
   rw [sub_eq_zero]
 
+omit [CompleteSpace H] in
 /-- A projection commuting with the cosine square reduces the eigenspace. -/
 theorem reduces_projection_of_commute (c : ℝ) (W : Submodule ℂ H)
     [W.HasOrthogonalProjection]
@@ -1138,6 +1141,7 @@ theorem norm_eq_from_ofReal_sq {p q c : ℝ} (hp : 0 ≤ p) (hq : 0 ≤ q) (hc :
     _ = Real.sqrt ((c * q) ^ 2) := by rw [hr]
     _ = c * q := Real.sqrt_sq hcq
 
+omit [CompleteSpace H] in
 /-- The cosine square commutes with the target projection too. -/
 theorem halmosCosineSq_commute_projection_right :
     Commute (halmosCosineSq U V) (projection V) := by
@@ -1188,6 +1192,7 @@ theorem complementaryProjection_mem_of_reduces {W M : Submodule ℂ H}
   rw [hcompl]
   exact M.sub_mem hw (hR.1 w hw)
 
+omit [CompleteSpace H] in
 /-- The cosine square preserves a subspace reducing both projections. -/
 theorem halmosCosineSq_mem_of_reduces {M : Submodule ℂ H}
     (hRU : (projection U).Reduces M) (hRV : (projection V).Reduces M)
@@ -1465,6 +1470,7 @@ theorem norm_projection_apply_le_of_forall_mem_source
   rw [hval, hisom, norm_neg]
   exact le_trans (L.le_opNorm w) (mul_le_mul_of_nonneg_right hLnorm (norm_nonneg w))
 
+omit [CompleteSpace H] in
 /-- The cosine-square quadratic form, block by block: `⟪x, cos²Θ x⟫` is
 `‖P_V P_U x‖² + ‖P_{Vᗮ} P_{Uᗮ} x‖²`. -/
 theorem re_inner_halmosCosineSq_self (x : H) :
@@ -1936,6 +1942,7 @@ theorem pairOfSubspacesUnitaryEquivalent_orthogonal_right
 
 variable (U₁ V₁ U₂ V₂)
 
+omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection] in
 theorem pairOfSubspacesUnitaryEquivalent_orthogonal_right_iff :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ᗮ U₂ V₂ᗮ ↔
       PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ := by
@@ -1955,7 +1962,7 @@ private theorem nonempty_linearIsometryEquiv_congr
     ((LinearIsometryEquiv.ofEq X' X hX.symm).trans f).trans
       (LinearIsometryEquiv.ofEq Y Y' hY)
 
-omit [U₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection] in
+omit [U₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection] [CompleteSpace H₁] [CompleteSpace H₂] in
 /-- Complementing the second subspace permutes the four elementary Halmos
 summands: `U ⊓ V` swaps with `U ⊓ Vᗮ`, and `Uᗮ ⊓ V` with `Uᗮ ⊓ Vᗮ`. -/
 theorem sameHalmosTrivialDimensions_orthogonal_right_iff :

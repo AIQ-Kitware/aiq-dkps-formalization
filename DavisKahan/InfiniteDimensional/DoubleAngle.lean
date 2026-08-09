@@ -218,6 +218,7 @@ theorem invariantFor_reflection_conjugate
   rw [reflectionOperator_apply_apply]
   exact Submodule.mem_map.mpr ⟨A u, hU u hu, rfl⟩
 
+omit [CompleteSpace E] in
 /-- Invariance of the mirror image forces invariance of the original. -/
 theorem invariantFor_of_reflection_conjugate
     {A : E →L[𝕜] E} {U : Submodule 𝕜 E} (V : Submodule 𝕜 E)

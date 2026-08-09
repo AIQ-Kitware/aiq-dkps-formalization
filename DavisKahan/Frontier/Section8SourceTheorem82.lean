@@ -141,6 +141,7 @@ theorem subspaceGap_eq_directedGap_of_finrank_eq [FiniteDimensional ℂ H]
     subspaceGap P Q = directedGap P Q :=
   TauCeti.opNorm_projection_sub_eq_opNorm_sinThetaMap P Q hrank
 
+omit [CompleteSpace H] in
 /-- Under equation (1.5), a directed quarter-angle bound is the printed
 `Θ < π/4`. -/
 theorem maximalAngle_lt_pi_div_four_of_directedGap_lt [FiniteDimensional ℂ H]

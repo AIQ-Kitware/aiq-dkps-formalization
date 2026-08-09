@@ -218,6 +218,7 @@ section InfiniteCore
 
 variable (data : Theorem63TrialData Z V)
 
+omit [CompleteSpace ↥Z] in
 /-- The finite Appendix step over abstract trial-block data. -/
 private theorem finite_leak_step
     {alpha delta : ℝ} (hdelta : 0 < delta)

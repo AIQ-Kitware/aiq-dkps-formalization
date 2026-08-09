@@ -107,6 +107,7 @@ theorem norm_resolventOperator_operatorPath_sub_le
       rw [norm_sub_rev]
       ring
 
+omit [CompleteSpace E] in
 /-- Set-uniform version of the fixed-parameter resolvent estimate. -/
 theorem norm_resolventOperator_operatorPath_sub_le_of_uniform_bound
     (A H : E →L[𝕜] E) (z : 𝕜) (M : ℝ) (I : Set ℝ)

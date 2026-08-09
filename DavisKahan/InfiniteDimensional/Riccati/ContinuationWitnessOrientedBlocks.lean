@@ -269,6 +269,7 @@ theorem realSpectrum_compressOperator_eq_restrictedSpectrum
     (DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
       T U hU).symm
 
+omit [CompleteSpace H] in
 /-- A branchwise `SpectrumIn` statement becomes an actual half-line enclosure
 of the corresponding effective compression. -/
 theorem realSpectrum_compressOperator_subset_of_spectrumIn

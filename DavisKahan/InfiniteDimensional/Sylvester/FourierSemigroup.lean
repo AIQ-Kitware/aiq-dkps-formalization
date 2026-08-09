@@ -358,6 +358,7 @@ omit [CompleteSpace H] in
   ext x
   rfl
 
+omit [CompleteSpace H] in
 /-- The actual restriction to the top submodule has the original
 Banach-algebra spectrum. -/
 theorem spectrum_restrict_top (T : H →L[ℂ] H) (hU : InvariantFor T ⊤) :
