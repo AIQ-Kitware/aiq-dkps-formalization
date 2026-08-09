@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic
+public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
@@ -28,6 +29,8 @@ infinite-dimensional polar factorization.
   operators, together with its ring, norm and adjoint laws;
 * `TauCeti.RealComplexification.conjugateOperator_cfc_eq`: continuous functional calculus
   commutes with the conjugation, so the fixed-point subalgebra is preserved;
+  `conjugateOperator_cfc` is the same statement with the continuity side condition
+  removed, and `conjugateOperator_modulus` extends it to the operator modulus;
 * `TauCeti.RealComplexification.fixed_operator_maps_real_to_real`: a conjugation-fixed operator
   descends to the real subspace;
 * `TauCeti.RealComplexification.complexify_adjoint` and `complexify_gram`: complexification
@@ -451,6 +454,66 @@ theorem complexify_gram (T : E →L[ℝ] F) :
       (complexify T).adjoint ∘L complexify T := by
   rw [complexify_comp, complexify_adjoint]
 
+/-! ## The fixed-point subalgebra is closed under the whole spectral calculus
+
+`conjugateOperator_cfc_eq` above needs the symbol to be continuous on the
+spectrum.  The two results below remove that side condition and extend the
+statement from the continuous functional calculus to the operator modulus, so
+that *every* operator this repository builds out of `P_U - P_V` — sine, angle,
+sine of twice the angle, tangent, tangent of twice the angle — is visibly
+conjugation-fixed and therefore descends to a real operator by
+`complexify_realPartOperator`. -/
+
+/-- The continuous functional calculus of a conjugation-fixed self-adjoint
+operator is conjugation-fixed, with **no continuity hypothesis** on the symbol:
+off the continuous symbols the calculus is zero, which is fixed as well. -/
+theorem conjugateOperator_cfc
+    (C : RealComplexification E →L[ℂ] RealComplexification E) (hC : IsSelfAdjoint C)
+    (hfix : conjugateOperator C = C) (f : ℝ → ℝ) :
+    conjugateOperator (cfc f C) = cfc f C := by
+  by_cases hf : ContinuousOn f (spectrum ℝ C)
+  · exact conjugateOperator_cfc_eq C hC hfix f hf
+  · rw [cfc_apply_of_not_continuousOn C hf, conjugateOperator_zero]
+
+/-- Canonical conjugation preserves positivity of an operator.  It is an
+`ℝ`-linear `⋆`-algebra automorphism, so it preserves both halves of the
+definition; the quadratic form is transported by conjugating the argument. -/
+theorem conjugateOperator_nonneg
+    {A : RealComplexification E →L[ℂ] RealComplexification E} (hA : 0 ≤ A) :
+    0 ≤ conjugateOperator A := by
+  rw [ContinuousLinearMap.nonneg_iff_isPositive] at hA ⊢
+  refine ⟨?_, fun z => ?_⟩
+  · rw [← ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric,
+      ContinuousLinearMap.isSelfAdjoint_iff', ← conjugateOperator_adjoint]
+    have : ContinuousLinearMap.adjoint A = A := by
+      rw [← ContinuousLinearMap.isSelfAdjoint_iff']
+      exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.2 hA.1
+    rw [this]
+  · have hval : ⟪conjugateOperator A z, z⟫_ℂ =
+        (starRingEnd ℂ) ⟪A (conjugation z), conjugation z⟫_ℂ := by
+      rw [conjugateOperator_apply, inner_conjugation_left, ← inner_conj_symm]
+    have h := hA.2 (conjugation z)
+    simp only [ContinuousLinearMap.reApplyInnerSelf_apply] at h ⊢
+    rw [hval, RCLike.re_eq_complex_re, Complex.conj_re, ← RCLike.re_eq_complex_re]
+    exact h
+
+/-- **Canonical conjugation commutes with the operator modulus.**  Both sides are
+nonnegative square roots of the same Gram operator, so they agree by uniqueness. -/
+theorem conjugateOperator_modulus
+    (A : RealComplexification E →L[ℂ] RealComplexification E) :
+    conjugateOperator A.modulus = (conjugateOperator A).modulus := by
+  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
+    (conjugateOperator_nonneg A.modulus_nonneg) ?_
+  rw [← conjugateOperator_mul, A.modulus_mul_self]
+  rw [← ContinuousLinearMap.mul_def, ← ContinuousLinearMap.mul_def,
+    conjugateOperator_mul, conjugateOperator_adjoint]
+
+/-- The modulus of a conjugation-fixed operator is conjugation-fixed. -/
+theorem conjugateOperator_modulus_of_fixed
+    {A : RealComplexification E →L[ℂ] RealComplexification E}
+    (hfix : conjugateOperator A = A) :
+    conjugateOperator A.modulus = A.modulus := by
+  rw [conjugateOperator_modulus, hfix]
 
 end
 
