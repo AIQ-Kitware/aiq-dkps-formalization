@@ -102,6 +102,16 @@ def ReducesSubspace
   (∀ x : A.domain, Uᗮ.starProjection (x : E) ∈ A.domain) ∧
   InvariantSubspace A U ∧ InvariantSubspace A Uᗮ
 
+/-- Build a `ReducesSubspace` from its four components.  The definition is a
+conjunction whose body is not exposed across module boundaries, so this is the
+supported way for a consumer to construct one. -/
+theorem ReducesSubspace.of_components
+    {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+    (h₁ : ∀ x : A.domain, U.starProjection (x : E) ∈ A.domain)
+    (h₂ : ∀ x : A.domain, Uᗮ.starProjection (x : E) ∈ A.domain)
+    (h₃ : InvariantSubspace A U) (h₄ : InvariantSubspace A Uᗮ) :
+    ReducesSubspace A U := ⟨h₁, h₂, h₃, h₄⟩
+
 namespace ReducesSubspace
 
 /-- The projection onto a reducing subspace preserves the partial-map domain. -/
