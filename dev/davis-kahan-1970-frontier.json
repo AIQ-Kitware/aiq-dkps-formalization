@@ -573,6 +573,20 @@
    "external": false
   },
   {
+   "id": "s5-inequality-5-1",
+   "title": "Inequality (5.1), square-norm Sylvester bound at pairwise spectral distance",
+   "kind": "source",
+   "module": "DavisKahan.Sources.DavisKahan1970.Sylvester.PaperHilbertSchmidt",
+   "declaration": "TauCeti.DavisKahan.Experimental.ExactSinTheta.paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap",
+   "dependencies": [],
+   "source_census_ids": [
+    "DK-5-hermitian-inequalities"
+   ],
+   "priority": "medium",
+   "notes": "Printed (5.1) for self-adjoint closed operators on arbitrary complete complex inner product spaces, with Hilbert-Schmidt membership of X concluded; the real twin is paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap. Inequality (5.2) and the source's 2x2 constant-1 counterexample are still absent -- see the census row.",
+   "external": false
+  },
+  {
    "id": "s6-trial-residual",
    "title": "Trial residual operator",
    "kind": "foundation",
