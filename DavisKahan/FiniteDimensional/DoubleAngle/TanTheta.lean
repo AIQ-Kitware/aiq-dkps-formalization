@@ -800,7 +800,16 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
       exact hV2norm
     have hbound2 := pow_le_pow_left₀ (norm_nonneg _) hbound 2
     rw [hnormsq] at hbound2
-    nlinarith only [hbound2]
+    have hscaled :
+        (4 : ℝ) * ((r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2 * (‖w₂‖ ^ 2 + ν' ^ 2))
+          ≤ 4 * (4 * (ε ^ 2 * (‖w₂‖ ^ 2) ^ 2)) := by
+      calc
+        (4 : ℝ) * ((r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2 * (‖w₂‖ ^ 2 + ν' ^ 2))
+            = ((r₁ * ‖w₂‖ ^ 2 + r₂) * (2 * ‖w₂‖)) ^ 2
+              + ((r₁ * ‖w₂‖ ^ 2 + r₂) * (2 * ν')) ^ 2 := by ring
+        _ ≤ (2 * (ε * (2 * ‖w₂‖ ^ 2))) ^ 2 := hbound2
+        _ = 4 * (4 * (ε ^ 2 * (‖w₂‖ ^ 2) ^ 2)) := by ring
+    exact le_of_mul_le_mul_left hscaled (by norm_num : (0 : ℝ) < 4)
   -- the coercivity inequality on the tilted pair
   have hG1 : 2 * ((b - a) / 2) * ‖w₂‖ ^ 2 ≤ (1 - 2 * ν) * (r₁ * ‖w₂‖ ^ 2 + r₂) := by
     have h10 := mul_le_mul_of_nonneg_right hI1 (sq_nonneg ‖w₂‖)
@@ -819,7 +828,7 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
     have hγ1 : ‖γ‖ ^ 2 = 1 := by
       have h11 := hs2
       rw [hw₂0, norm_zero] at h11
-      nlinarith [h11]
+      linarith only [h11]
     have hI1' : (b - a) / 2 ≤ (1 - 2 * ν) * r₁ := by
       have := hI1
       rw [hG0, map_zero] at this
