@@ -28,93 +28,116 @@ open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
-universe v
+universe u v
 
-variable {H : Type v}
-  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+section ScalarGeneric
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {H G : Type v}
+  [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+  [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
 
 /-- The ambient sine-two-theta ideal block obtained by overlapping the exact
 spectral subspace with the reflected exact complementary subspace. -/
 noncomputable def sinTwoThetaIdealBlock
-    (U V : Submodule ℂ H)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[ℂ] H :=
+    (U V : Submodule 𝕜 H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[𝕜] H :=
   U.starProjection ∘L
-    (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection
+    (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection
 
-/-- The operator norm of the ambient ideal block is exactly the norm of sine
-of twice the complex operator angle. -/
-theorem norm_sinTwoThetaIdealBlock
-    (U V : Submodule ℂ H)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    ‖sinTwoThetaIdealBlock U V‖ = ‖sinTwoAngleOperatorC U V‖ := by
-  exact norm_starProjection_reflectedComplementary_eq_sinTwoAngle U V
+/-- A rectangular overlap block controls the corresponding ambient projection
+product in every rectangular symmetric ideal family.
+
+The right-hand coordinate space is presented by an arbitrary isometric
+embedding `Y` whose associated projection is the one being overlapped, rather
+than by the inclusion of a submodule.  That is what lets the reflected
+complementary block be read either through `Uᗮ.map J_V` or through
+`J_V ∘ Uᗮ.subtypeL`, which are the same operator but not the same coordinate
+presentation. -/
+theorem projectionProduct_mem_and_gauge_le_isometric
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [N.toOperatorIdealFamily.IsComplete]
+    (U W : Submodule 𝕜 H)
+    [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
+    [CompleteSpace U]
+    (Y : G →L[𝕜] H) (hYiso : IsometricEmbedding Y)
+    (hYproj : Y ∘L Y.adjoint = W.starProjection)
+    (hT : N.Mem (U.subtypeL.adjoint ∘L Y)) :
+    N.Mem (U.starProjection ∘L W.starProjection) ∧
+      N.gaugeReal (U.starProjection ∘L W.starProjection) ≤
+        N.gaugeReal (U.subtypeL.adjoint ∘L Y) := by
+  let T : G →L[𝕜] U := U.subtypeL.adjoint ∘L Y
+  have hfactor :
+      U.starProjection ∘L W.starProjection =
+        U.subtypeL ∘L T ∘L Y.adjoint := by
+    have hUU : U.subtypeL ∘L U.subtypeL.adjoint = U.starProjection := by
+      ext x
+      rw [Submodule.adjoint_subtypeL]
+      rfl
+    calc
+      U.starProjection ∘L W.starProjection
+          = (U.subtypeL ∘L U.subtypeL.adjoint) ∘L (Y ∘L Y.adjoint) := by
+            rw [hUU, hYproj]
+      _ = U.subtypeL ∘L T ∘L Y.adjoint := rfl
+  have hmemFactor : N.Mem (U.subtypeL ∘L T ∘L Y.adjoint) :=
+    N.comp_mem U.subtypeL Y.adjoint hT
+  have hUiso : IsometricEmbedding U.subtypeL := by
+    intro x
+    rfl
+  have hUnorm : ‖U.subtypeL‖ ≤ 1 := opNorm_le_one_of_isometry hUiso
+  have hYadjNorm : ‖Y.adjoint‖ ≤ 1 := by
+    rw [ContinuousLinearMap.adjoint.norm_map]
+    exact opNorm_le_one_of_isometry hYiso
+  refine ⟨?_, ?_⟩
+  · rw [hfactor]
+    exact hmemFactor
+  · rw [hfactor]
+    have hgauge := N.gaugeReal_comp_le U.subtypeL Y.adjoint hT
+    have hnonneg := N.gaugeReal_nonneg hT
+    calc
+      N.gaugeReal (U.subtypeL ∘L T ∘L Y.adjoint) ≤
+          ‖U.subtypeL‖ * N.gaugeReal T * ‖Y.adjoint‖ := hgauge
+      _ ≤ 1 * N.gaugeReal T * ‖Y.adjoint‖ := by
+        exact mul_le_mul_of_nonneg_right
+          (mul_le_mul_of_nonneg_right hUnorm hnonneg)
+          (norm_nonneg Y.adjoint)
+      _ ≤ 1 * N.gaugeReal T * 1 := by
+        exact mul_le_mul_of_nonneg_left hYadjNorm
+          (mul_nonneg zero_le_one hnonneg)
+      _ = N.gaugeReal (U.subtypeL.adjoint ∘L Y) := by
+        dsimp [T]
+        ring
 
 /-- A rectangular overlap block controls the corresponding ambient projection
 product in every rectangular symmetric ideal family. -/
 theorem projectionProduct_mem_and_gauge_le_overlap
-    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
-    (U W : Submodule ℂ H)
+    (U W : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
     [CompleteSpace U] [CompleteSpace W]
     (hT : N.Mem (U.subtypeL.adjoint ∘L W.subtypeL)) :
     N.Mem (U.starProjection ∘L W.starProjection) ∧
       N.gaugeReal (U.starProjection ∘L W.starProjection) ≤
         N.gaugeReal (U.subtypeL.adjoint ∘L W.subtypeL) := by
-  let T : W →L[ℂ] U := U.subtypeL.adjoint ∘L W.subtypeL
-  have hfactor :
-      U.starProjection ∘L W.starProjection =
-        U.subtypeL ∘L T ∘L W.subtypeL.adjoint := by
-    ext x
-    dsimp [T]
-    rw [Submodule.adjoint_subtypeL, Submodule.adjoint_subtypeL]
-    change U.starProjection (W.starProjection x) =
-      U.starProjection (W.starProjection x)
-    rfl
-  have hmemFactor : N.Mem (U.subtypeL ∘L T ∘L W.subtypeL.adjoint) :=
-    N.comp_mem U.subtypeL W.subtypeL.adjoint hT
-  have hUiso : IsometricEmbedding U.subtypeL := by
-    intro x
-    rfl
-  have hWiso : IsometricEmbedding W.subtypeL := by
-    intro x
-    rfl
-  have hUnorm : ‖U.subtypeL‖ ≤ 1 := opNorm_le_one_of_isometry hUiso
-  have hWadjNorm : ‖W.subtypeL.adjoint‖ ≤ 1 := by
-    rw [ContinuousLinearMap.adjoint.norm_map]
-    exact opNorm_le_one_of_isometry hWiso
-  refine ⟨?_, ?_⟩
-  · rw [hfactor]
-    exact hmemFactor
-  · rw [hfactor]
-    have hgauge := N.gaugeReal_comp_le U.subtypeL W.subtypeL.adjoint hT
-    have hnonneg := N.gaugeReal_nonneg hT
-    calc
-      N.gaugeReal (U.subtypeL ∘L T ∘L W.subtypeL.adjoint) ≤
-          ‖U.subtypeL‖ * N.gaugeReal T * ‖W.subtypeL.adjoint‖ := hgauge
-      _ ≤ 1 * N.gaugeReal T * ‖W.subtypeL.adjoint‖ := by
-        exact mul_le_mul_of_nonneg_right
-          (mul_le_mul_of_nonneg_right hUnorm hnonneg)
-          (norm_nonneg W.subtypeL.adjoint)
-      _ ≤ 1 * N.gaugeReal T * 1 := by
-        exact mul_le_mul_of_nonneg_left hWadjNorm
-          (mul_nonneg zero_le_one hnonneg)
-      _ = N.gaugeReal (U.subtypeL.adjoint ∘L W.subtypeL) := by
-        dsimp [T]
-        ring
+  refine projectionProduct_mem_and_gauge_le_isometric N U W W.subtypeL
+    (fun _ => rfl) ?_ hT
+  ext x
+  rw [Submodule.adjoint_subtypeL]
+  rfl
 
 /-- The bounded reflection residual remains in every rectangular symmetric
 ideal containing the perturbation, with gauge cost at most two. -/
 theorem reflectionPerturbation_mem_and_gauge_le
-    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
-    (V : Submodule ℂ H) [V.HasOrthogonalProjection]
-    (E : H →L[ℂ] H) (hEmem : N.Mem E) :
+    (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
+    (E : H →L[𝕜] H) (hEmem : N.Mem E) :
     N.Mem (reflectionPerturbation V E) ∧
       N.gaugeReal (reflectionPerturbation V E) ≤ 2 * N.gaugeReal E := by
-  let W : H →L[ℂ] H :=
+  let W : H →L[𝕜] H :=
     V.reflection.toLinearIsometry.toContinuousLinearMap
-  let W' : H →L[ℂ] H :=
+  let W' : H →L[𝕜] H :=
     V.reflection.symm.toLinearIsometry.toContinuousLinearMap
   have hWiso : IsometricEmbedding W := by
     intro x
@@ -142,6 +165,19 @@ theorem reflectionPerturbation_mem_and_gauge_le
       _ ≤ N.gaugeReal E + N.gaugeReal E :=
         add_le_add le_rfl hconjGauge
       _ = 2 * N.gaugeReal E := by ring
+
+end ScalarGeneric
+
+variable {H : Type v}
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+
+/-- The operator norm of the ambient ideal block is exactly the norm of sine
+of twice the complex operator angle. -/
+theorem norm_sinTwoThetaIdealBlock
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    ‖sinTwoThetaIdealBlock U V‖ = ‖sinTwoAngleOperatorC U V‖ := by
+  exact norm_starProjection_reflectedComplementary_eq_sinTwoAngle U V
 
 /-- Residual reflection form of unbounded sine two theta at rectangular
 ideal-gauge scope. -/
