@@ -752,7 +752,14 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
         = 2 * ‖w₂‖ ^ 2 := by
       have hnn : (0 : ℝ) ≤ ‖((‖w₂‖ : ℝ) : 𝕜) • x - w₂‖ * ‖((‖w₂‖ : ℝ) : 𝕜) • x + w₂‖ :=
         mul_nonneg (norm_nonneg _) (norm_nonneg _)
-      nlinarith [hn1, hn2, hnn]
+      apply (sq_eq_sq₀ hnn
+        (mul_nonneg (by norm_num : (0 : ℝ) ≤ 2) (sq_nonneg ‖w₂‖))).mp
+      calc
+        (‖((‖w₂‖ : ℝ) : 𝕜) • x - w₂‖ * ‖((‖w₂‖ : ℝ) : 𝕜) • x + w₂‖) ^ 2
+            = ‖((‖w₂‖ : ℝ) : 𝕜) • x - w₂‖ ^ 2
+                * ‖((‖w₂‖ : ℝ) : 𝕜) • x + w₂‖ ^ 2 := by ring
+        _ = (2 * ‖w₂‖ ^ 2) * (2 * ‖w₂‖ ^ 2) := by rw [hn1, hn2]
+        _ = (2 * ‖w₂‖ ^ 2) ^ 2 := by ring
     calc ‖2 * ⟪((‖w₂‖ : ℝ) : 𝕜) • x - w₂,
             U.reflection ((S - T) (((‖w₂‖ : ℝ) : 𝕜) • x + w₂))⟫_𝕜‖
         = 2 * ‖⟪((‖w₂‖ : ℝ) : 𝕜) • x - w₂,
@@ -797,7 +804,12 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
   -- the coercivity inequality on the tilted pair
   have hG1 : 2 * ((b - a) / 2) * ‖w₂‖ ^ 2 ≤ (1 - 2 * ν) * (r₁ * ‖w₂‖ ^ 2 + r₂) := by
     have h10 := mul_le_mul_of_nonneg_right hI1 (sq_nonneg ‖w₂‖)
-    nlinarith only [h10, hI2]
+    calc
+      2 * ((b - a) / 2) * ‖w₂‖ ^ 2
+          = ((b - a) / 2) * ‖w₂‖ ^ 2 + ((b - a) / 2) * ‖w₂‖ ^ 2 := by ring
+      _ ≤ ((1 - 2 * ν) * r₁ - RCLike.re G) * ‖w₂‖ ^ 2
+          + ((1 - 2 * ν) * r₂ + ‖w₂‖ ^ 2 * RCLike.re G) := add_le_add h10 hI2
+      _ = (1 - 2 * ν) * (r₁ * ‖w₂‖ ^ 2 + r₂) := by ring
   -- split on the degenerate plane
   rcases eq_or_ne w₂ 0 with hw₂0 | hw₂0
   · -- `y = γ x`: one-dimensional case, `1 − μ₀² = ν'²`
