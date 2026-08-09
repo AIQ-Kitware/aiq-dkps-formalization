@@ -752,7 +752,14 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
         = 2 * ‖w₂‖ ^ 2 := by
       have hnn : (0 : ℝ) ≤ ‖((‖w₂‖ : ℝ) : 𝕜) • x - w₂‖ * ‖((‖w₂‖ : ℝ) : 𝕜) • x + w₂‖ :=
         mul_nonneg (norm_nonneg _) (norm_nonneg _)
-      nlinarith [hn1, hn2, hnn]
+      apply (sq_eq_sq₀ hnn
+        (mul_nonneg (by norm_num : (0 : ℝ) ≤ 2) (sq_nonneg ‖w₂‖))).mp
+      calc
+        (‖((‖w₂‖ : ℝ) : 𝕜) • x - w₂‖ * ‖((‖w₂‖ : ℝ) : 𝕜) • x + w₂‖) ^ 2
+            = ‖((‖w₂‖ : ℝ) : 𝕜) • x - w₂‖ ^ 2
+                * ‖((‖w₂‖ : ℝ) : 𝕜) • x + w₂‖ ^ 2 := by ring
+        _ = (2 * ‖w₂‖ ^ 2) * (2 * ‖w₂‖ ^ 2) := by rw [hn1, hn2]
+        _ = (2 * ‖w₂‖ ^ 2) ^ 2 := by ring
     calc ‖2 * ⟪((‖w₂‖ : ℝ) : 𝕜) • x - w₂,
             U.reflection ((S - T) (((‖w₂‖ : ℝ) : 𝕜) • x + w₂))⟫_𝕜‖
         = 2 * ‖⟪((‖w₂‖ : ℝ) : 𝕜) • x - w₂,
@@ -793,11 +800,25 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
       exact hV2norm
     have hbound2 := pow_le_pow_left₀ (norm_nonneg _) hbound 2
     rw [hnormsq] at hbound2
-    nlinarith only [hbound2]
+    have hscaled :
+        (4 : ℝ) * ((r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2 * (‖w₂‖ ^ 2 + ν' ^ 2))
+          ≤ 4 * (4 * (ε ^ 2 * (‖w₂‖ ^ 2) ^ 2)) := by
+      calc
+        (4 : ℝ) * ((r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2 * (‖w₂‖ ^ 2 + ν' ^ 2))
+            = ((r₁ * ‖w₂‖ ^ 2 + r₂) * (2 * ‖w₂‖)) ^ 2
+              + ((r₁ * ‖w₂‖ ^ 2 + r₂) * (2 * ν')) ^ 2 := by ring
+        _ ≤ (2 * (ε * (2 * ‖w₂‖ ^ 2))) ^ 2 := hbound2
+        _ = 4 * (4 * (ε ^ 2 * (‖w₂‖ ^ 2) ^ 2)) := by ring
+    exact le_of_mul_le_mul_left hscaled (by norm_num : (0 : ℝ) < 4)
   -- the coercivity inequality on the tilted pair
   have hG1 : 2 * ((b - a) / 2) * ‖w₂‖ ^ 2 ≤ (1 - 2 * ν) * (r₁ * ‖w₂‖ ^ 2 + r₂) := by
     have h10 := mul_le_mul_of_nonneg_right hI1 (sq_nonneg ‖w₂‖)
-    nlinarith only [h10, hI2]
+    calc
+      2 * ((b - a) / 2) * ‖w₂‖ ^ 2
+          = ((b - a) / 2) * ‖w₂‖ ^ 2 + ((b - a) / 2) * ‖w₂‖ ^ 2 := by ring
+      _ ≤ ((1 - 2 * ν) * r₁ - RCLike.re G) * ‖w₂‖ ^ 2
+          + ((1 - 2 * ν) * r₂ + ‖w₂‖ ^ 2 * RCLike.re G) := add_le_add h10 hI2
+      _ = (1 - 2 * ν) * (r₁ * ‖w₂‖ ^ 2 + r₂) := by ring
   -- split on the degenerate plane
   rcases eq_or_ne w₂ 0 with hw₂0 | hw₂0
   · -- `y = γ x`: one-dimensional case, `1 − μ₀² = ν'²`
@@ -807,7 +828,7 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
     have hγ1 : ‖γ‖ ^ 2 = 1 := by
       have h11 := hs2
       rw [hw₂0, norm_zero] at h11
-      nlinarith [h11]
+      linarith only [h11]
     have hI1' : (b - a) / 2 ≤ (1 - 2 * ν) * r₁ := by
       have := hI1
       rw [hG0, map_zero] at this
@@ -860,9 +881,24 @@ private theorem eigen_cos_two_theta_bound (hT : T.IsSymmetric) (hS : S.IsSymmetr
     have hG1sq := pow_le_pow_left₀
       (by positivity : (0 : ℝ) ≤ 2 * ((b - a) / 2) * ‖w₂‖ ^ 2) hG1 2
     rw [hdecomp] at hG2
-    nlinarith only [hG2, hG1sq, hApos, sq_nonneg ε, sq_nonneg (1 - 2 * ν), hd, hs2pos,
-      mul_le_mul_of_nonneg_left hG2 (sq_nonneg ((b - a) / 2)),
-      mul_le_mul_of_nonneg_left hG1sq (sq_nonneg ε), mul_pos hApos hApos]
+    have hG2scaled := mul_le_mul_of_nonneg_left hG2 (sq_nonneg ((b - a) / 2))
+    have hG1sqScaled := mul_le_mul_of_nonneg_left hG1sq (sq_nonneg ε)
+    have hA2pos : (0 : ℝ) < (r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2 := pow_pos hApos 2
+    have hscaled :
+        (r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2
+            * (((b - a) / 2) ^ 2 * (1 - (1 - 2 * ν) ^ 2))
+          ≤ (r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2
+            * (ε ^ 2 * (1 - 2 * ν) ^ 2) := by
+      calc
+        (r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2
+              * (((b - a) / 2) ^ 2 * (1 - (1 - 2 * ν) ^ 2))
+            = ((b - a) / 2) ^ 2
+              * ((r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2 * (1 - (1 - 2 * ν) ^ 2)) := by ring
+        _ ≤ ((b - a) / 2) ^ 2 * (4 * (ε ^ 2 * (‖w₂‖ ^ 2) ^ 2)) := hG2scaled
+        _ = ε ^ 2 * (2 * ((b - a) / 2) * ‖w₂‖ ^ 2) ^ 2 := by ring
+        _ ≤ ε ^ 2 * ((1 - 2 * ν) * (r₁ * ‖w₂‖ ^ 2 + r₂)) ^ 2 := hG1sqScaled
+        _ = (r₁ * ‖w₂‖ ^ 2 + r₂) ^ 2 * (ε ^ 2 * (1 - 2 * ν) ^ 2) := by ring
+    exact le_of_mul_le_mul_left hscaled hA2pos
 
 omit [CompleteSpace E] in
 /-- **The subspace Davis–Kahan tan 2Θ theorem (plan step G2.2b).**  `T, S`
