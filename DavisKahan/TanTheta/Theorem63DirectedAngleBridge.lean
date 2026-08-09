@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 
 import DavisKahan.TanTheta.Theorem63FiniteSource
 import DavisKahan.Sources.DavisKahan1970.SineTheta.AngleIdentity
-import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
+import ForTauCeti.Analysis.InnerProductSpace.Polar.CFCBridge
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles.Equisingular
 
 /-!
