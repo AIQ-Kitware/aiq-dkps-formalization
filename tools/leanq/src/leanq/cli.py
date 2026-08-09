@@ -12,6 +12,7 @@ import json
 import sys
 from pathlib import Path
 
+from ._profile import profile
 from .index import (
     Decl,
     build_index,
@@ -31,6 +32,7 @@ def _tristate(args, flag: str) -> bool | None:
     return value
 
 
+@profile
 def _resolve(args):
     project = find_project(Path(args.project) if args.project else None)
     library = args.lib
@@ -58,8 +60,8 @@ def _emit(decls: list[Decl], args) -> None:
     for decl in decls:
         marks = "".join(
             [
-                "S" if decl.sorried else "-",
-                "P" if decl.prop_valued else "-",
+                "S" if decl.sorried is True else ("?" if decl.sorried is None else "-"),
+                "P" if decl.prop_valued is True else ("?" if decl.prop_valued is None else "-"),
             ]
         )
         print(f"{marks}  {decl.kind:8s} {decl.short_name:{width}s}  {decl.location()}")
@@ -176,12 +178,13 @@ def cmd_rdeps(args) -> int:
     return cmd_query(args)
 
 
+@profile
 def cmd_promotions(args) -> int:
     """Tagged declarations that a chosen production root actually depends on."""
     project, library = _resolve(args)
     roots = args.root or [library]
     decls = ensure_scoped_index(
-        project, library, roots, refresh=args.refresh, verbose=not args.json
+        project, library, roots, refresh=args.refresh, verbose=not args.json, detail="deps"
     )
     tags = args.tag or list(DEFAULT_TAGS)
     report = promotion_report(
@@ -263,7 +266,8 @@ def cmd_axioms(args) -> int:
         return 0
     for decl in matches:
         print(f"{decl.name}  ({decl.kind}, {decl.module})")
-        for axiom in decl.axioms or ("(none)",):
+        axioms = decl.axioms if decl.axioms is not None else ("(not indexed)",)
+        for axiom in axioms or ("(none)",):
             print(f"    {axiom}")
     return 0
 
@@ -418,6 +422,7 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+@profile
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:

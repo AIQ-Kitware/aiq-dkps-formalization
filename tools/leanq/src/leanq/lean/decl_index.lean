@@ -8,31 +8,25 @@ import Lean
 /-!
 # Declaration index
 
-Dumps one JSON object per declaration of a built Lean library, so questions like "which
-definitions are stubbed with `sorry`" are answered by the elaborator instead of by a regex over
-source text.
+Dumps one JSON object per declaration of a built Lean library, so semantic questions are answered
+from the elaborated environment instead of by regexes over source text.
 
-Regexes get this wrong in both directions, and did: one attributed a following declaration's
-`sorry` to the preceding `def`, another mis-parsed multi-line signatures. The environment knows
-the declaration kind, the elaborated type and the axiom closure exactly.
+Run it against whichever project owns the modules:
 
-Run it against whichever project owns the modules, since it needs that project's `LEAN_PATH`:
+    lake env lean --run decl_index.lean <LibraryRoot> [<modulesFile>] [full|deps]
 
-    lake env lean --run decl_index.lean <LibraryRoot> [<modulesFile>] > index.jsonl
+`full` is the ordinary leanq index. It records proposition classification, source ranges and the
+transitive axiom closure used for honest `sorryAx` reporting.
 
-`<LibraryRoot>` is the library's root module name (`Mathlib`, `TauCetiRoadmap`, `ForTauCeti`);
-every declaration in a module under that prefix is indexed and nothing else.
+`deps` is a structural fast path for dependency-boundary queries such as `leanq promotions`. It
+records only declaration identity, kind and direct constant dependencies. Expensive metadata is
+emitted as JSON `null` rather than fabricated. This matters on large libraries because promotion
+queries do not use axiom closure, WHNF-based proposition classification or source-range lookup.
 
-`<modulesFile>` holds one module name per line, and all of them are imported. Pass it: a root
-module is not required to import its own library. `TauCetiRoadmap.lean` imports 23 modules and
-omits `OperatorTheory` and `BergeMaximumTheorem` entirely, because the lakefile globs the
-library in rather than aggregating it — so importing only the root silently indexes nothing
-for those roadmaps.
-Reporting zero for an unimported module is worse than a wrong regex, and this is the guard.
+`<modulesFile>` holds one module name per line, and all of them are imported. Pass it for complete
+whole-library inventory: a root module is not required to import every module Lake built.
 
-Fields: `name`, `module`, `kind`, `isProp` (the declaration is itself a proof), `propValued`
-(it *returns* `Prop` after its arguments — a predicate), `sorried` (its axiom closure contains
-`sorryAx`) and `axioms`.
+Set `LEANQ_TIMINGS=1` for coarse Lean-side import-versus-index timings on stderr.
 -/
 
 open Lean Meta
@@ -54,8 +48,7 @@ def esc (s : String) : String :=
     acc ++ (match c with
       | '"' => "\\\"" | '\\' => "\\\\" | '\n' => "\\n" | '\t' => "\\t" | c => c.toString)
 
-/-- Drop ASCII whitespace.  Written out rather than using `String.trim`, whose name has moved
-between toolchains; module names contain no spaces, so removing all of them is equivalent. -/
+/-- Drop ASCII whitespace. Written out rather than relying on toolchain-sensitive trim names. -/
 def stripWs (s : String) : String :=
   s.foldl (init := "") fun acc c =>
     if c == ' ' || c == '\t' || c == '\r' then acc else acc.push c
@@ -66,46 +59,63 @@ def propValued (type : Expr) : MetaM Bool :=
     let body ← whnfR body
     return body.isProp || (body.isSort && body.sortLevel!.isZero)
 
-def emit (root : Name) : MetaM Unit := do
+def dependencyJson (ci : ConstantInfo) (self : Name) : String :=
+  let used := ci.type.getUsedConstants ++ (ci.value?.map Expr.getUsedConstants).getD #[]
+  let deps := used.toList.filter (fun d => !d.isInternal && d != self) |>.eraseDups
+  String.intercalate "," (deps.map fun d => "\"" ++ esc d.toString ++ "\"")
+
+def emit (root : Name) (depsOnly : Bool) : MetaM Unit := do
   let env ← getEnv
   for h : i in [0 : env.header.moduleNames.size] do
     let modName := env.header.moduleNames[i]
-    -- only the library under test; its dependencies are not our business
     unless root.isPrefixOf modName do continue
     for n in env.header.moduleData[i]!.constNames do
       if n.isInternal then continue
       let some ci := env.find? n | continue
-      -- one pathological declaration must not abort the whole index
-      let ax ← try collectAxioms n catch _ => pure #[]
-      let isP ← try isProp ci.type catch _ => pure false
-      let pv ← try propValued ci.type catch _ => pure false
-      -- source position, so a caller can jump straight to the declaration
-      let line ← try
-          match ← findDeclarationRanges? n with
-          | some r => pure r.range.pos.line
-          | none => pure 0
-        catch _ => pure 0
-      -- constants named by the type and the value: what this declaration would drag along
-      let used := (ci.type.getUsedConstants ++ (ci.value?.map Expr.getUsedConstants).getD #[])
-      let deps := used.toList.filter (fun d => !d.isInternal && d != n) |>.eraseDups
-      let axStr := String.intercalate "," (ax.toList.map fun a => "\"" ++ esc a.toString ++ "\"")
-      let depStr := String.intercalate "," (deps.map fun d => "\"" ++ esc d.toString ++ "\"")
-      IO.println <| "{"
-        ++ "\"name\":\"" ++ esc n.toString ++ "\","
-        ++ "\"module\":\"" ++ esc modName.toString ++ "\","
-        ++ "\"kind\":\"" ++ kindOf ci ++ "\","
-        ++ "\"isProp\":" ++ (if isP then "true" else "false") ++ ","
-        ++ "\"propValued\":" ++ (if pv then "true" else "false") ++ ","
-        ++ "\"sorried\":" ++ (if ax.contains ``sorryAx then "true" else "false") ++ ","
-        ++ "\"line\":" ++ toString line ++ ","
-        ++ "\"axioms\":[" ++ axStr ++ "],"
-        ++ "\"deps\":[" ++ depStr ++ "]"
-        ++ "}"
+      let depStr := dependencyJson ci n
+      if depsOnly then
+        IO.println <| "{"
+          ++ "\"name\":\"" ++ esc n.toString ++ "\","
+          ++ "\"module\":\"" ++ esc modName.toString ++ "\","
+          ++ "\"kind\":\"" ++ kindOf ci ++ "\","
+          ++ "\"isProp\":null,"
+          ++ "\"propValued\":null,"
+          ++ "\"sorried\":null,"
+          ++ "\"line\":null,"
+          ++ "\"axioms\":null,"
+          ++ "\"deps\":[" ++ depStr ++ "]"
+          ++ "}"
+      else
+        -- One pathological declaration must not abort the whole index.
+        let ax ← try collectAxioms n catch _ => pure #[]
+        let isP ← try isProp ci.type catch _ => pure false
+        let pv ← try propValued ci.type catch _ => pure false
+        let line ← try
+            match ← findDeclarationRanges? n with
+            | some r => pure r.range.pos.line
+            | none => pure 0
+          catch _ => pure 0
+        let axStr := String.intercalate "," (ax.toList.map fun a => "\"" ++ esc a.toString ++ "\"")
+        IO.println <| "{"
+          ++ "\"name\":\"" ++ esc n.toString ++ "\","
+          ++ "\"module\":\"" ++ esc modName.toString ++ "\","
+          ++ "\"kind\":\"" ++ kindOf ci ++ "\","
+          ++ "\"isProp\":" ++ (if isP then "true" else "false") ++ ","
+          ++ "\"propValued\":" ++ (if pv then "true" else "false") ++ ","
+          ++ "\"sorried\":" ++ (if ax.contains ``sorryAx then "true" else "false") ++ ","
+          ++ "\"line\":" ++ toString line ++ ","
+          ++ "\"axioms\":[" ++ axStr ++ "],"
+          ++ "\"deps\":[" ++ depStr ++ "]"
+          ++ "}"
 
 end DeclIndex
 
 unsafe def main (args : List String) : IO Unit := do
   let root := (args.head?.getD "Mathlib").toName
+  let detail := args.drop 2 |>.head?.getD "full"
+  unless detail == "full" || detail == "deps" do
+    throw <| IO.userError s!"unknown leanq index detail {detail}; expected full or deps"
+  let timings := (← IO.getEnv "LEANQ_TIMINGS") == some "1"
   initSearchPath (← findSysroot)
   let mods ← match args.drop 1 |>.head? with
     | none => pure #[root]
@@ -113,9 +123,19 @@ unsafe def main (args : List String) : IO Unit := do
         let txt ← IO.FS.readFile (System.FilePath.mk f)
         pure <| txt.splitOn "\n" |>.map DeclIndex.stripWs
           |>.filter (fun s => !s.isEmpty) |>.map String.toName |>.toArray
+
+  let importStart ← IO.monoNanosNow
   let env ← importModules (mods.map fun m => { module := m }) {} (trustLevel := 1024)
+  let importStop ← IO.monoNanosNow
+  if timings then
+    IO.eprintln s!"leanq timing: import_ns={importStop - importStart} modules={mods.size}"
+
   -- unbounded: `whnf` on a few Mathlib-heavy types exceeds the default budget
   let ctx : Core.Context :=
     { fileName := "<decl-index>", fileMap := default, maxHeartbeats := 0 }
   let st : Core.State := { env := env }
-  discard <| ((DeclIndex.emit root).run' {} {} |>.toIO ctx st)
+  let emitStart ← IO.monoNanosNow
+  discard <| ((DeclIndex.emit root (detail == "deps")).run' {} {} |>.toIO ctx st)
+  let emitStop ← IO.monoNanosNow
+  if timings then
+    IO.eprintln s!"leanq timing: emit_ns={emitStop - emitStart} detail={detail}"

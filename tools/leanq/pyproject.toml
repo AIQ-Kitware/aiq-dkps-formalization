@@ -12,12 +12,13 @@ license = { text = "Apache-2.0" }
 authors = [{ name = "Jon Crall" }]
 keywords = ["lean4", "lean", "static-analysis", "sorry"]
 
-# Deliberately dependency-free: the tool shells out to `lake` and emits JSON, so it drops into
-# any environment without a resolve step.  Add dependencies here if a query needs them.
+# The default runtime is deliberately dependency-free: the tool shells out to `lake` and emits
+# JSON, so it drops into any environment without a resolve step. Optional profiling stays opt-in.
 dependencies = []
 
 [project.optional-dependencies]
 dev = ["pytest>=7"]
+profile = ["line_profiler>=4.1"]
 
 [project.scripts]
 leanq = "leanq.cli:main"
