@@ -144,7 +144,7 @@ theorem selectedBranchProjectionLipschitzConstant_of_circle
   have hnorm : ‖rieszNormalization‖ = (2 * Real.pi)⁻¹ := by
     rw [norm_rieszNormalization, norm_inv]
     have h2pi : ‖((2 : ℂ) * Real.pi * Complex.I)‖ = 2 * Real.pi := by
-      simp [norm_mul, Complex.norm_real, Real.norm_eq_abs,
+      simp [Complex.norm_real, Real.norm_eq_abs,
         abs_of_pos Real.pi_pos]
     rw [h2pi]
   rw [hlen, hnorm]
@@ -338,7 +338,7 @@ theorem canonicalGapCircle_margin_le_realSpectrum
         ‖z - (lam : ℂ)‖ + ‖(lam : ℂ) - (mu : ℂ)‖ := by
       calc
         ‖z - (mu : ℂ)‖ =
-            ‖(z - (lam : ℂ)) + ((lam : ℂ) - (mu : ℂ))‖ := by congr 1 <;> ring
+            ‖(z - (lam : ℂ)) + ((lam : ℂ) - (mu : ℂ))‖ := by congr 1 ; ring
         _ ≤ _ := norm_add_le _ _
     dsimp only [delta, margin]
     linarith
@@ -350,7 +350,7 @@ theorem canonicalGapCircle_margin_le_realSpectrum
         ‖z - (lam : ℂ)‖ + ‖(lam : ℂ) - (mu : ℂ)‖ := by
       calc
         ‖z - (mu : ℂ)‖ =
-            ‖(z - (lam : ℂ)) + ((lam : ℂ) - (mu : ℂ))‖ := by congr 1 <;> ring
+            ‖(z - (lam : ℂ)) + ((lam : ℂ) - (mu : ℂ))‖ := by congr 1 ; ring
         _ ≤ _ := norm_add_le _ _
     dsimp only [delta, margin]
     linarith

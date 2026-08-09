@@ -870,7 +870,7 @@ theorem mds_stability_inProbability_set
         ∀ i j : Fin n, pairDistErr (ψhat r ω) ψ i j ≤ ε}
       ⊆ {ω | dist (frobSub (Dseq r ω) DeltaInf) 0 > δ} := by
     intro r ω hω
-    simp only [Set.mem_setOf_eq] at hω ⊢
+    simp only [Set.mem_ofPred_eq] at hω ⊢
     by_contra hle
     push Not at hle
     have hfrob_nonneg : 0 ≤ frobSub (Dseq r ω) DeltaInf := by
@@ -961,7 +961,7 @@ theorem mds_stability_inProbability_of_uniqueProfile
       ⊆ {ω | ¬ ∃ ψ' ∈ MDS n d DeltaInf,
           ∀ i' j' : Fin n, pairDistErr (ψhat r ω) ψ' i' j' ≤ ε} := by
     intro r ω hω
-    simp only [Set.mem_setOf_eq] at hω ⊢
+    simp only [Set.mem_ofPred_eq] at hω ⊢
     rintro ⟨ψ', hψ', hclose⟩
     -- `ψ'` and `ψ` share the same distance profile, so the bound transfers.
     have heq : pairDist ψ' i j = pairDist ψ i j := huniq ψ' hψ' ψ hψ i j

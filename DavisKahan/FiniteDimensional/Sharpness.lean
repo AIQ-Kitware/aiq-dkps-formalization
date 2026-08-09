@@ -796,9 +796,7 @@ theorem sinTheta_model_equality
       RectangularUnitarilyInvariantSeminorm.singularValues_smul,
       singularValues_sinAngle_model hθ0 (le_of_lt hθ1)]
     ext i
-    simp [pairSingularValues, 
-      norm_ofReal_sub_of_lt hab,
-      mul_comm]
+    simp [pairSingularValues, norm_ofReal_sub_of_lt hab]
   calc
     (b-a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) θ))
@@ -834,9 +832,7 @@ theorem tanTheta_model_equality
       singularValues_tanAngle_model hθ0 hθ1,
       singularValues_modelTanThetaPerturbation hab htan]
     ext i
-    simp [pairSingularValues, 
-      norm_ofReal_sub_of_lt hab,
-      mul_comm]
+    simp [pairSingularValues, norm_ofReal_sub_of_lt hab]
   calc
     (b - a) * N (tanAngleOperator (modelSubspace (𝕜 := 𝕜))
         (rotatedModelSubspace (𝕜 := 𝕜) θ)) =

@@ -143,7 +143,7 @@ theorem highProb_uniformResponseMeanClose_of_secondMoment
           ⊆ ⋃ i : Fin n, {ω | t u < ‖Xbar u ω i - μ i‖} := by
       intro ω hω
       by_contra hnot
-      simp only [Set.mem_iUnion, Set.mem_setOf_eq, not_exists, not_lt] at hnot
+      simp only [Set.mem_iUnion, Set.mem_ofPred_eq, not_exists, not_lt] at hnot
       exact hω (fun i => hnot i)
     have hcheb : ∀ i : Fin n,
         P u {ω | t u < ‖Xbar u ω i - μ i‖}

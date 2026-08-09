@@ -74,7 +74,7 @@ private theorem norm_sq_projection_add_norm_sq_complement
 private theorem re_conj_real_mul (r : ℝ) (z : ℂ) :
     RCLike.re ((starRingEnd ℂ) (r : ℂ) * z) = r * RCLike.re z := by
   rw [Complex.conj_ofReal]
-  simp [Complex.mul_re]
+  simp
 
 private theorem re_conj_real_mul_inner_self (r : ℝ) (x : E) :
     RCLike.re ((starRingEnd ℂ) (r : ℂ) * ⟪x, x⟫_ℂ) = r * ‖x‖ ^ 2 := by
@@ -83,7 +83,7 @@ private theorem re_conj_real_mul_inner_self (r : ℝ) (x : E) :
 private theorem re_inner_smul_self (z : ℂ) (x : E) :
     RCLike.re ⟪z • x, x⟫_ℂ = z.re * ‖x‖ ^ 2 := by
   rw [inner_smul_left, inner_self_eq_norm_sq_to_K]
-  simp [RCLike.re_to_complex, Complex.mul_re, pow_two]
+  simp [RCLike.re_to_complex, pow_two]
 
 /-- Reflection through a subspace with doubling written as a complex scalar. -/
 private theorem reflection_apply_ofNat_smul
@@ -176,9 +176,7 @@ theorem reflected_centered_form_lower
     ContinuousLinearMap.id_apply, smul_apply]
   rw [hreflect, hxpm, inner_sub_left, inner_add_right,
     inner_add_right, hAp_m, hAm_p]
-  simp only [add_zero, zero_add, sub_zero, zero_sub, inner_sub_left,
-    inner_smul_left, RCLike.conj_ofReal, map_sub, RCLike.re_ofReal_mul,
-    inner_self_eq_norm_sq]
+  simp only [add_zero, zero_add, inner_sub_left, inner_smul_left, map_sub]
   have hpBound := hUhigh p hp
   have hmBound := hUperpLow m hm
   have hswapP : RCLike.re ⟪p, A p⟫_ℂ = RCLike.re ⟪A p, p⟫_ℂ :=
@@ -635,10 +633,8 @@ theorem isQuarterAcute_of_paper_form_gap_infinite
     intro x
     have hpositive := hshiftForm x
     rw [hreflectionAlgebra] at hpositive
-    simp only [sub_apply, add_apply, smul_apply, one_apply_eq_self,
-      inner_sub_left, inner_add_left, inner_smul_left,
-      inner_self_eq_norm_sq, mul_apply_eq_comp,
-      ContinuousLinearMap.comp_apply, re_conj_real_mul] at hpositive
+    simp only [sub_apply, smul_apply, one_apply_eq_self, inner_sub_left,
+      inner_smul_left, mul_apply_eq_comp] at hpositive
     have hDstar : IsSelfAdjoint D := by
       dsimp [D]
       exact (isSelfAdjoint_starProjection U).sub (isSelfAdjoint_starProjection V)
