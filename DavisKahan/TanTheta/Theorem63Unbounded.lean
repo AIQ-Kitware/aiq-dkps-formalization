@@ -59,16 +59,21 @@ open Module (finrank)
 
 universe u
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-  [CompleteSpace H]
+section ScalarGeneric
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
 
 /-- **Trial-block data from an unbounded trial block.**  The action is reassembled from
 the bundled compression and residual, so every field is a bounded map even though the
-ambient operator is not. -/
+ambient operator is not.
+
+Both the source bundle and the target bundle are bounded data, so this construction is
+scalar-generic. -/
 noncomputable def Theorem63TrialData.ofUnbounded
-    {A : DKClosedOperator (H := H)} {Z : Submodule ℂ H}
+    {A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H)} {Z : Submodule 𝕜 H}
     [Z.HasOrthogonalProjection] [CompleteSpace Z]
-    (D : UnboundedTrialBlock A Z) (V : Submodule ℂ H) [V.HasOrthogonalProjection] :
+    (D : UnboundedTrialBlock A Z) (V : Submodule 𝕜 H) [V.HasOrthogonalProjection] :
     Theorem63TrialData Z V where
   action := Z.subtypeL ∘L D.operator + D.residual
   compression := D.operator
@@ -82,12 +87,11 @@ noncomputable def Theorem63TrialData.ofUnbounded
   residual_orthogonal := fun z z' =>
     Submodule.inner_left_of_mem_orthogonal z'.2 (D.residual_mem_orthogonal z)
 
-omit [CompleteSpace H] in
 /-- The action of the unbounded trial data is the operator's own action. -/
 theorem Theorem63TrialData.ofUnbounded_action
-    {A : DKClosedOperator (H := H)} {Z : Submodule ℂ H}
+    {A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H)} {Z : Submodule 𝕜 H}
     [Z.HasOrthogonalProjection] [CompleteSpace Z]
-    (D : UnboundedTrialBlock A Z) (V : Submodule ℂ H) [V.HasOrthogonalProjection]
+    (D : UnboundedTrialBlock A Z) (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
     (z : Z) :
     (Theorem63TrialData.ofUnbounded D V).action z =
       A.toLinearMap ⟨(z : H), D.domain_le z.property⟩ := by
@@ -95,6 +99,58 @@ theorem Theorem63TrialData.ofUnbounded_action
   change ((D.operator z : Z) : H) + D.residual z = _
   rw [h]
   abel
+
+/-- **The crossed form bound for an arbitrary reducing subspace.**
+
+This is the printed hypothesis of Davis--Kahan's generalized `tan Θ` theorem, and nothing
+more.  `V` is a *chosen* subspace reducing the ambient operator — its orthogonal projection
+preserves the domain (`hVdom`) and commutes with the operator there (`hVcomm`) — and the
+operator's quadratic form on `Vᗮ` is bounded below by `α + δ` (`hlower`).  In the paper's
+notation `V` is the range of `F₀`, `Vᗮ` is the range of `F₁`, and `hlower` is
+`α + δ ≤ Λ₁ = F₁* (A + H) F₁`.
+
+Nothing whatever is assumed about the operator on `V` itself — the paper's `Λ₀` is
+unconstrained — and in particular no interval of the ambient spectrum is required to be
+empty.  `crossed_lower_of_spectralGap` below is the special case `V = specSubspace(Iic α)`,
+where the reducing hypotheses come from spectral commutation and the form bound comes from
+a spectral gap.
+
+The argument is pure block algebra on the domain, so it is scalar-generic: the only
+property of the scalars used is that the real part of an inner product is symmetric. -/
+theorem crossed_lower_of_reducing
+    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    {Z : Submodule 𝕜 H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
+    (D : UnboundedTrialBlock A Z)
+    (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
+    {α δ : ℝ}
+    (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : H)) ∈ A.domain)
+    (hVcomm : ∀ x : A.domain,
+      Vᗮ.starProjection (A.toLinearMap x) =
+        A.toLinearMap ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
+    (hlower : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_𝕜)
+    (z : Z) :
+    (α + δ) * ‖Vᗮ.starProjection ((z : Z) : H)‖ ^ 2 ≤
+      RCLike.re ⟪Vᗮ.starProjection ((z : Z) : H),
+        Vᗮ.starProjection ((Theorem63TrialData.ofUnbounded D V).action z)⟫_𝕜 := by
+  have hzdom : ((z : Z) : H) ∈ A.domain := D.domain_le z.property
+  have hswap : ∀ a b : H, RCLike.re ⟪a, b⟫_𝕜 = RCLike.re ⟪b, a⟫_𝕜 := by
+    intro a b
+    conv_lhs => rw [← inner_conj_symm]
+    rw [RCLike.conj_re]
+  have haction : Vᗮ.starProjection ((Theorem63TrialData.ofUnbounded D V).action z) =
+      A.toLinearMap ⟨Vᗮ.starProjection ((z : Z) : H),
+        hVdom ⟨((z : Z) : H), hzdom⟩⟩ := by
+    rw [Theorem63TrialData.ofUnbounded_action D V z]
+    exact hVcomm ⟨((z : Z) : H), hzdom⟩
+  rw [haction]
+  exact (hlower (Vᗮ.starProjection ((z : Z) : H)) (Vᗮ.starProjection_apply_mem _)
+    (hVdom ⟨((z : Z) : H), hzdom⟩)).trans_eq (hswap _ _)
+
+end ScalarGeneric
+
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
 
 section SpectralGap
 
@@ -209,52 +265,64 @@ theorem le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_Iic
     measurableSet_Iic] at h0
   exact h0
 
-end SpectralGap
+/-- **The printed spectral gap supplies the form lower bound on the unwanted subspace.**
 
-omit [CompleteSpace H] in
-/-- **The crossed form bound for an arbitrary reducing subspace.**
+`V` is the spectral subspace of `Set.Iic α` and the operator has no spectrum in
+`Set.Ioo α (α + δ)`.  Then at every domain vector orthogonal to `V` the quadratic form is
+at least `α + δ` — the paper's `α + δ ≤ Λ₁`.
 
-This is the printed hypothesis of Davis--Kahan's generalized `tan Θ` theorem, and nothing
-more.  `V` is a *chosen* subspace reducing the ambient operator — its orthogonal projection
-preserves the domain (`hVdom`) and commutes with the operator there (`hVcomm`) — and the
-operator's quadratic form on `Vᗮ` is bounded below by `α + δ` (`hlower`).  In the paper's
-notation `V` is the range of `F₀`, `Vᗮ` is the range of `F₁`, and `hlower` is
-`α + δ ≤ Λ₁ = F₁* (A + H) F₁`.
-
-Nothing whatever is assumed about the operator on `V` itself — the paper's `Λ₀` is
-unconstrained — and in particular no interval of the ambient spectrum is required to be
-empty.  `crossed_lower_of_spectralGap` below is the special case `V = specSubspace(Iic α)`,
-where the reducing hypotheses come from spectral commutation and the form bound comes from
-a spectral gap. -/
-theorem crossed_lower_of_reducing
-    (A : DKClosedOperator (H := H))
-    {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
-    (D : UnboundedTrialBlock A Z)
-    (V : Submodule ℂ H) [V.HasOrthogonalProjection]
+The argument goes through a threshold `c < α + δ` rather than applying the energy bound
+once, because the gap is the *open* interval: the endpoint `α + δ` is allowed to carry
+spectrum, so `P_{Iic (α+δ)} y` need not vanish, while `P_{Iic c} y` does for every
+`c < α + δ`. -/
+theorem le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_of_gap
     {α δ : ℝ}
-    (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : H)) ∈ A.domain)
-    (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
-    (hlower : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ)
-    (z : Z) :
-    (α + δ) * ‖Vᗮ.starProjection ((z : Z) : H)‖ ^ 2 ≤
-      RCLike.re ⟪Vᗮ.starProjection ((z : Z) : H),
-        Vᗮ.starProjection ((Theorem63TrialData.ofUnbounded D V).action z)⟫_ℂ := by
-  have hzdom : ((z : Z) : H) ∈ A.domain := D.domain_le z.property
-  have hswap : ∀ a b : H, RCLike.re ⟪a, b⟫_ℂ = RCLike.re ⟪b, a⟫_ℂ := by
-    intro a b
-    conv_lhs => rw [← inner_conj_symm]
-    rw [RCLike.conj_re]
-  have haction : Vᗮ.starProjection ((Theorem63TrialData.ofUnbounded D V).action z) =
-      A.toLinearMap ⟨Vᗮ.starProjection ((z : Z) : H),
-        hVdom ⟨((z : Z) : H), hzdom⟩⟩ := by
-    rw [Theorem63TrialData.ofUnbounded_action D V z]
-    exact hVcomm ⟨((z : Z) : H), hzdom⟩
-  rw [haction]
-  exact (hlower (Vᗮ.starProjection ((z : Z) : H)) (Vᗮ.starProjection_apply_mem _)
-    (hVdom ⟨((z : Z) : H), hzdom⟩)).trans_eq (hswap _ _)
+    (hgap : TauCeti.LinearPMap.specProjection hA (Set.Ioo α (α + δ))
+      measurableSet_Ioo = 0)
+    (y : H)
+    (hyV : y ∈ (selfAdjointSpectralSubspace A hA (Set.Iic α) measurableSet_Iic)ᗮ)
+    (hy : y ∈ A.domain) :
+    (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ := by
+  classical
+  have hprojV' : (selfAdjointSpectralSubspace A hA (Set.Iic α)
+      measurableSet_Iic)ᗮ.starProjection =
+      TauCeti.LinearPMap.specProjection hA (Set.Iic α)ᶜ measurableSet_Iic.compl :=
+    starProjection_orthogonal_selfAdjointSpectralSubspace A hA (Set.Iic α)
+      measurableSet_Iic
+  have hfix : TauCeti.LinearPMap.specProjection hA (Set.Iic α)ᶜ
+      measurableSet_Iic.compl y = y := by
+    rw [← hprojV']
+    exact Submodule.starProjection_eq_self_iff.mpr hyV
+  -- The energy bound, at every threshold strictly below the gap.
+  have hstep : ∀ c : ℝ, c < α + δ →
+      c * ‖y‖ ^ 2 ≤ (⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ).re := by
+    intro c hc
+    refine TauCeti.LinearPMap.le_re_inner_of_specProjection_Iic_apply_eq_zero
+      hA (c := c) ⟨y, hy⟩ ?_
+    have h0 := specProjection_Iic_apply_eq_zero_of_gap A hA hgap hc y
+    rwa [hfix] at h0
+  -- Take `c` up to `α + δ`.
+  have hfinal : (α + δ) * ‖y‖ ^ 2 ≤ (⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ).re := by
+    by_contra hcon
+    push Not at hcon
+    rcases eq_or_lt_of_le (sq_nonneg ‖y‖) with hzero | hpos
+    · rw [← hzero, mul_zero] at hcon
+      have hy0 : y = 0 := by
+        have hsq : ‖y‖ ^ 2 = 0 := hzero.symm
+        simpa using pow_eq_zero_iff (n := 2) (by norm_num) |>.mp hsq
+      simp only [hy0, inner_zero_right, Complex.zero_re] at hcon
+      exact absurd hcon (lt_irrefl 0)
+    · obtain ⟨c, hc1, hc2⟩ := exists_between
+        (show (⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ).re / ‖y‖ ^ 2 < α + δ by
+          rw [div_lt_iff₀ hpos]
+          exact hcon)
+      have h := hstep c hc2
+      rw [div_lt_iff₀ hpos] at hc1
+      linarith
+  rw [RCLike.re_to_complex]
+  exact hfinal
+
+end SpectralGap
 
 /-- **The crossed form bound for an unbounded self-adjoint operator.**
 
@@ -282,59 +350,14 @@ theorem crossed_lower_of_spectralGap
           measurableSet_Iic)ᗮ.starProjection
             ((Theorem63TrialData.ofUnbounded D
               (selfAdjointSpectralSubspace A hA (Set.Iic α)
-                measurableSet_Iic)).action z)⟫_ℂ := by
-  classical
-  -- The complement of the spectral subspace of `Iic α` projects with the spectral
-  -- projection of the complementary set.
-  have hprojV' : (selfAdjointSpectralSubspace A hA (Set.Iic α)
-      measurableSet_Iic)ᗮ.starProjection =
-      TauCeti.LinearPMap.specProjection hA (Set.Iic α)ᶜ measurableSet_Iic.compl :=
-    starProjection_orthogonal_selfAdjointSpectralSubspace A hA (Set.Iic α)
-      measurableSet_Iic
-  -- The gap gives the form lower bound at every domain vector of `Vᗮ`.
-  have hlower : ∀ y ∈ (selfAdjointSpectralSubspace A hA (Set.Iic α)
-        measurableSet_Iic)ᗮ, ∀ hy : y ∈ A.domain,
-      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ := by
-    intro y hyV hy
-    have hfix : TauCeti.LinearPMap.specProjection hA (Set.Iic α)ᶜ
-        measurableSet_Iic.compl y = y := by
-      rw [← hprojV']
-      exact Submodule.starProjection_eq_self_iff.mpr hyV
-    -- The energy bound, at every threshold strictly below the gap.
-    have hstep : ∀ c : ℝ, c < α + δ →
-        c * ‖y‖ ^ 2 ≤ (⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ).re := by
-      intro c hc
-      refine TauCeti.LinearPMap.le_re_inner_of_specProjection_Iic_apply_eq_zero
-        hA (c := c) ⟨y, hy⟩ ?_
-      have h0 := specProjection_Iic_apply_eq_zero_of_gap A hA hgap hc y
-      rwa [hfix] at h0
-    -- Take `c` up to `α + δ`.
-    have hfinal : (α + δ) * ‖y‖ ^ 2 ≤ (⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ).re := by
-      by_contra hcon
-      push Not at hcon
-      rcases eq_or_lt_of_le (sq_nonneg ‖y‖) with hzero | hpos
-      · rw [← hzero, mul_zero] at hcon
-        have hy0 : y = 0 := by
-          have hsq : ‖y‖ ^ 2 = 0 := hzero.symm
-          simpa using pow_eq_zero_iff (n := 2) (by norm_num) |>.mp hsq
-        simp only [hy0, inner_zero_right, Complex.zero_re] at hcon
-        exact absurd hcon (lt_irrefl 0)
-      · obtain ⟨c, hc1, hc2⟩ := exists_between
-          (show (⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ).re / ‖y‖ ^ 2 < α + δ by
-            rw [div_lt_iff₀ hpos]
-            exact hcon)
-        have h := hstep c hc2
-        rw [div_lt_iff₀ hpos] at hc1
-        linarith
-    rw [RCLike.re_to_complex]
-    exact hfinal
-  exact crossed_lower_of_reducing A D
+                measurableSet_Iic)).action z)⟫_ℂ :=
+  crossed_lower_of_reducing A D
     (selfAdjointSpectralSubspace A hA (Set.Iic α) measurableSet_Iic)
     (orthogonal_selfAdjointSpectralSubspace_starProjection_mem_domain A hA
       (Set.Iic α) measurableSet_Iic)
     (selfAdjoint_apply_orthogonal_selfAdjointSpectralSubspace_starProjection A hA
       (Set.Iic α) measurableSet_Iic)
-    hlower z
+    (le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_of_gap A hA hgap) z
 
 
 /-! ### The unbounded Section 2 tangent theorem -/
