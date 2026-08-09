@@ -695,26 +695,23 @@ theorem mem_halmosTargetDefect_of_reflectionProduct_apply_eq_neg {z : H} (hzV : 
   have hPz : projection U z = 0 := (smul_eq_zero.mp h0).resolve_left two_ne_zero
   exact Submodule.mem_inf.mpr ⟨(Submodule.starProjection_apply_eq_zero_iff U).mp hPz, hzV⟩
 
-/-- **Davis--Kahan 1970, Proposition 3.3, forward direction, with no acuteness hypothesis.**
+/-- **The crossed-intersection mapping condition is free.**
 
-Every direct rotation is a principal unitary square root of the reflection product, *and* it
-carries the source crossed intersection onto the target one.  The second conclusion is the
-mapping condition that the converse takes as a hypothesis; here it comes out rather than
-going in. -/
-theorem proposition3_3_principalSquareRoot_forward
-    (hT : IsPaperDirectRotation U V T)
-    (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
-    (hcomplement_sa :
-      IsSelfAdjoint (complementaryProjection U * T * complementaryProjection U)) :
-    IsPrincipalUnitarySquareRoot (spectraReflectionProduct U V) T ∧
-      T '' (halmosSourceDefect U V : Set H) = (halmosTargetDefect U V : Set H) := by
-  have hsq := sq_eq_spectraReflectionProduct U V T hT.unitary_mem hT.intertwines
-    hsource_sa hcomplement_sa hT.crossed_blocks
-  have hpos := nonneg_add_star_of_isPaperDirectRotation U V T hT hsource_sa hcomplement_sa
-  have hspec := spectrum_re_nonneg_of_nonneg_add_star T hT.unitary_mem hpos
-  refine ⟨⟨hT.unitary_mem, hsq, hspec⟩, ?_⟩
-  have hTsT : T * star T = 1 := Unitary.mul_star_self_of_mem hT.unitary_mem
-  have hsTT : star T * T = 1 := Unitary.star_mul_self_of_mem hT.unitary_mem
+For *any* unitary that squares to the reflection product and intertwines the two
+projections, the source crossed intersection is carried onto the target one.  Neither
+positivity of the diagonal blocks nor acuteness enters: both crossed intersections sit
+inside the `-1` eigenspace of the reflection product, `T` and `star T` commute with that
+operator because `T * T` *is* it, and the intertwining moves `U` to `V`, which pins the
+image down to the other crossed intersection.
+
+Proposition 3.3's forward direction and printed Proposition 3.4 both consume this. -/
+theorem crossedDefect_image_of_unitary_sq
+    (hunitary : T ∈ unitary (H →L[ℂ] H))
+    (hsq : T * T = spectraReflectionProduct U V)
+    (hintertwines : T * projection U = projection V * T) :
+    T '' (halmosSourceDefect U V : Set H) = (halmosTargetDefect U V : Set H) := by
+  have hTsT : T * star T = 1 := Unitary.mul_star_self_of_mem hunitary
+  have hsTT : star T * T = 1 := Unitary.star_mul_self_of_mem hunitary
   -- `T` and `star T` both commute with the reflection product, because it *is* `T * T`.
   have hRT : ∀ x : H,
       spectraReflectionProduct U V (T x) = T (spectraReflectionProduct U V x) := by
@@ -736,12 +733,12 @@ theorem proposition3_3_principalSquareRoot_forward
   -- The intertwining moves `U` to `V`, and its adjoint moves `V` back to `U`.
   have hTU : ∀ x ∈ U, T x ∈ V := by
     intro x hx
-    have h := congrArg (fun f : H →L[ℂ] H => f x) hT.intertwines
+    have h := congrArg (fun f : H →L[ℂ] H => f x) hintertwines
     simp only [mul_apply_eq_comp] at h
     rw [U.starProjection_eq_self_iff.mpr hx] at h
     exact V.starProjection_eq_self_iff.mp h.symm
   have hstarInt : projection U * star T = star T * projection V := by
-    have h := congrArg star hT.intertwines
+    have h := congrArg star hintertwines
     rw [star_mul, star_mul, (isSelfAdjoint_starProjection U).star_eq,
       (isSelfAdjoint_starProjection V).star_eq] at h
     exact h
@@ -763,6 +760,26 @@ theorem proposition3_3_principalSquareRoot_forward
       rw [hRsT y, reflectionProduct_apply_eq_neg_of_mem_target U V hy, map_neg]
     · have h := congrArg (fun f : H →L[ℂ] H => f y) hTsT
       simpa [mul_apply_eq_comp] using h
+
+/-- **Davis--Kahan 1970, Proposition 3.3, forward direction, with no acuteness hypothesis.**
+
+Every direct rotation is a principal unitary square root of the reflection product, *and* it
+carries the source crossed intersection onto the target one.  The second conclusion is the
+mapping condition that the converse takes as a hypothesis; here it comes out rather than
+going in (`crossedDefect_image_of_unitary_sq`). -/
+theorem proposition3_3_principalSquareRoot_forward
+    (hT : IsPaperDirectRotation U V T)
+    (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
+    (hcomplement_sa :
+      IsSelfAdjoint (complementaryProjection U * T * complementaryProjection U)) :
+    IsPrincipalUnitarySquareRoot (spectraReflectionProduct U V) T ∧
+      T '' (halmosSourceDefect U V : Set H) = (halmosTargetDefect U V : Set H) := by
+  have hsq := sq_eq_spectraReflectionProduct U V T hT.unitary_mem hT.intertwines
+    hsource_sa hcomplement_sa hT.crossed_blocks
+  have hpos := nonneg_add_star_of_isPaperDirectRotation U V T hT hsource_sa hcomplement_sa
+  have hspec := spectrum_re_nonneg_of_nonneg_add_star T hT.unitary_mem hpos
+  exact ⟨⟨hT.unitary_mem, hsq, hspec⟩,
+    crossedDefect_image_of_unitary_sq U V T hT.unitary_mem hsq hT.intertwines⟩
 
 /-- **Davis--Kahan 1970, Proposition 3.3, forward direction, from the printed hypotheses.**
 
@@ -1333,6 +1350,341 @@ theorem corollary3_2_reversal
           (_root_.TauCeti.DavisKahan.IsUniformlyAcute.symm hacute) =
         star (spectraDirectRotation U V hacute) :=
   ⟨corollary3_2_sinAngleOperator_symm U V, corollary3_2_reversal_source_form U V hacute⟩
+
+/-! ### Proposition 3.4 at the printed scope
+
+`proposition3_4_square_is_reflected_directRotation` above is true and axiom-clean, but it is
+not the printed statement: it exhibits *an* unnamed acute pair, from a whole-space form bound,
+under an extra acuteness hypothesis.  The printed statement names the pair `(Q₋ℋ, Qℋ)`, its
+hypothesis is `C₀² ≥ ½` on `Pℋ` alone, and it assumes nothing about the reflected pair.  The
+three declarations below close each of those gaps, and `proposition3_4_source` is the printed
+sentence.
+-/
+
+/-- The source diagonal block of the canonical direct rotation is self-adjoint.
+
+`IsPaperDirectRotation` records the diagonal compressions only through their numerical range,
+so their self-adjointness -- which the `star`-block calculus needs -- has to be read off the
+canonical construction, where the block *is* the positive Halmos cosine. -/
+theorem isSelfAdjoint_source_block_spectraDirectRotation
+    (hacute : IsUniformlyAcute U V) :
+    IsSelfAdjoint (projection U * spectraDirectRotation U V hacute * projection U) := by
+  have hC : IsSelfAdjoint
+      (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)) :=
+    ((ContinuousLinearMap.nonneg_iff_isPositive _).mp
+      (spectraOperatorAbsoluteValue_nonneg _)).isSelfAdjoint
+  have hcomm : Commute
+      (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)) (projection U) :=
+    spectraCanonicalAbsoluteValue_commute_projection U V
+  rw [projection_mul_spectraDirectRotation_mul_projection U V hacute]
+  rw [IsSelfAdjoint, star_mul, (isSelfAdjoint_starProjection U).star_eq, hC.star_eq]
+  exact hcomm.eq.symm
+
+/-- The complementary diagonal block of the canonical direct rotation is self-adjoint. -/
+theorem isSelfAdjoint_complement_block_spectraDirectRotation
+    (hacute : IsUniformlyAcute U V) :
+    IsSelfAdjoint (complementaryProjection U * spectraDirectRotation U V hacute *
+      complementaryProjection U) := by
+  have hC : IsSelfAdjoint
+      (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)) :=
+    ((ContinuousLinearMap.nonneg_iff_isPositive _).mp
+      (spectraOperatorAbsoluteValue_nonneg _)).isSelfAdjoint
+  have hcomm : Commute
+      (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V))
+      (complementaryProjection U) := by
+    have hcomp : complementaryProjection U = 1 - projection U :=
+      Submodule.starProjection_orthogonal' U
+    rw [commute_iff_eq, hcomp, mul_sub, mul_one, sub_mul, one_mul,
+      (spectraCanonicalAbsoluteValue_commute_projection U V).eq]
+  rw [complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
+    U V hacute]
+  rw [IsSelfAdjoint, star_mul, (isSelfAdjoint_starProjection Uᗮ).star_eq, hC.star_eq]
+  exact hcomm.eq.symm
+
+/-- **In the acute case a bound on one directed gap transfers to the other.**
+
+The paper's `S₀` and `S₁` are the two crossed blocks of the direct rotation, and Definition
+3.1(ii) says `S₁ = S₀⋆`; so they have the same norm, and each of the two directed gaps
+`‖P_{Vᗮ} P_U‖`, `‖P_V P_{Uᗮ}‖` equals it.  This is what makes the printed hypothesis
+`C₀² ≥ ½`, which constrains only the `Pℋ` block, force the companion bound `C₁² ≥ ½` on
+`P̃ℋ` -- an implication that is **false** without a unitary intertwiner: `U ⊆ V` with
+`dim V > dim U` has `C₀² = 1` and `C₁²` with `0` in its numerical range.  Equality of the two
+directed gaps needs acuteness (`Submodule.projectionGap_eq_max_directedProjectionGap` gives
+only the maximum), and this is the acute half of it. -/
+theorem norm_projection_apply_le_of_forall_mem_source
+    (hacute : IsUniformlyAcute U V) {r : ℝ} (hr : 0 ≤ r)
+    (hsrc : ∀ x ∈ U, ‖complementaryProjection V x‖ ≤ r * ‖x‖)
+    (w : H) (hw : w ∈ Uᗮ) : ‖projection V w‖ ≤ r * ‖w‖ := by
+  set W := spectraDirectRotation U V hacute with hWdef
+  have hcross : complementaryProjection U * W * projection U =
+      -star (projection U * W * complementaryProjection U) :=
+    MathAhead.Section3.spectraDirectRotation_crossed_blocks U V hacute
+  obtain ⟨-, -, h12, h21⟩ :=
+    star_blocks_eq U W (isSelfAdjoint_source_block_spectraDirectRotation U V hacute)
+      (isSelfAdjoint_complement_block_spectraDirectRotation U V hacute) hcross
+  set L : H →L[ℂ] H := projection U * W * complementaryProjection U with hLdef
+  -- the crossed block of the adjoint is the adjoint of the crossed block
+  have hstarL : complementaryProjection U * star W * projection U = star L := by
+    rw [h21, hcross, neg_neg]
+  have hisom : ∀ z : H, ‖W z‖ = ‖z‖ := norm_spectraDirectRotation_apply U V hacute
+  have hconjc : ∀ z : H,
+      complementaryProjection V z = W (complementaryProjection U (star W z)) := by
+    intro z
+    have h := congrArg (fun T : H →L[ℂ] H => T z)
+      (spectraDirectRotation_conjugates_complementaryProjection U V hacute)
+    simpa only [mul_apply_eq_comp] using h.symm
+  have hconj : ∀ z : H, projection V z = W (projection U (star W z)) := by
+    intro z
+    have h := congrArg (fun T : H →L[ℂ] H => T z)
+      (spectraDirectRotation_conjugates_projection U V hacute)
+    simpa only [mul_apply_eq_comp] using h.symm
+  -- the hypothesis bounds the adjoint crossed block
+  have hstarLbound : ∀ y : H, ‖star L y‖ ≤ r * ‖y‖ := by
+    intro y
+    have hy : star L y = complementaryProjection U (star W (projection U y)) := by
+      rw [← hstarL]
+      simp only [mul_apply_eq_comp]
+    have hval : ‖star L y‖ = ‖complementaryProjection V (projection U y)‖ := by
+      rw [hy, hconjc (projection U y), hisom]
+    rw [hval]
+    refine le_trans (hsrc _ (U.starProjection_apply_mem y)) ?_
+    exact mul_le_mul_of_nonneg_left (U.norm_starProjection_apply_le y) hr
+  have hLnorm : ‖L‖ ≤ r := by
+    rw [← norm_star L]
+    exact ContinuousLinearMap.opNorm_le_bound _ hr hstarLbound
+  -- and the other directed gap is read off the same block
+  have hwc : complementaryProjection U w = w :=
+    Submodule.starProjection_eq_self_iff.mpr hw
+  have hval : projection V w = W (-(L w)) := by
+    rw [hconj w]
+    have hy : projection U (star W w) =
+        (projection U * star W * complementaryProjection U) w := by
+      simp only [mul_apply_eq_comp, hwc]
+    rw [hy, h12]
+    simp only [neg_apply]
+  rw [hval, hisom, norm_neg]
+  exact le_trans (L.le_opNorm w) (mul_le_mul_of_nonneg_right hLnorm (norm_nonneg w))
+
+/-- The cosine-square quadratic form, block by block: `⟪x, cos²Θ x⟫` is
+`‖P_V P_U x‖² + ‖P_{Vᗮ} P_{Uᗮ} x‖²`. -/
+theorem re_inner_halmosCosineSq_self (x : H) :
+    RCLike.re ⟪x, halmosCosineSq U V x⟫_ℂ =
+      ‖projection V (projection U x)‖ ^ 2 +
+        ‖complementaryProjection V (complementaryProjection U x)‖ ^ 2 := by
+  have hval : halmosCosineSq U V x =
+      projection U (projection V (projection U x)) +
+        complementaryProjection U
+          (complementaryProjection V (complementaryProjection U x)) := by
+    show (projection U * projection V * projection U +
+      complementaryProjection U * complementaryProjection V *
+        complementaryProjection U) x = _
+    simp only [add_apply, mul_apply_eq_comp]
+  have hblock : ∀ (K : Submodule ℂ H) [K.HasOrthogonalProjection]
+      (M : Submodule ℂ H) [M.HasOrthogonalProjection],
+      RCLike.re ⟪x, projection K (projection M (projection K x))⟫_ℂ =
+        ‖projection M (projection K x)‖ ^ 2 := by
+    intro K _ M _
+    have hsym : ⟪x, projection K (projection M (projection K x))⟫_ℂ =
+        ⟪projection K x, projection M (projection K x)⟫_ℂ :=
+      (K.starProjection_isSymmetric x (projection M (projection K x))).symm
+    have hself : ⟪projection M (projection K x), projection K x⟫_ℂ =
+        ((‖projection M (projection K x)‖ : ℝ) : ℂ) ^ 2 :=
+      inner_starProjection_self_eq M (projection K x)
+    rw [hsym, inner_re_symm, hself]
+    norm_cast
+  rw [hval, inner_add_right, map_add, hblock U V, hblock Uᗮ Vᗮ]
+
+/-- **The printed half-angle hypothesis implies the whole-space form bound.**
+
+Davis and Kahan write `C₀² ≥ ½`, an inequality between operators on `X(E₀) = Pℋ` -- by
+equation (3.7), `C₀² = E₀⋆ Q E₀`, so its quadratic form at `x ∈ Pℋ` is `‖Qx‖²`, and the
+printed inequality is exactly `hcos`.  What the accretivity argument needs is the same bound
+for `cos²Θ` on all of `ℋ`, which adds the companion `C₁² ≥ ½` on `P̃ℋ`; that companion is
+*not* a consequence of `hcos` for an arbitrary pair, and is one here because the acute case
+supplies a unitary intertwiner whose two crossed blocks are adjoint
+(`norm_projection_apply_le_of_forall_mem_source`). -/
+theorem re_inner_halmosCosineSq_sub_half_nonneg_of_source
+    (hacute : IsUniformlyAcute U V)
+    (hcos : ∀ x ∈ U, ‖x‖ ^ 2 / 2 ≤ ‖projection V x‖ ^ 2) (x : H) :
+    0 ≤ RCLike.re ⟪x, halmosCosineSq U V x⟫_ℂ - ‖x‖ ^ 2 / 2 := by
+  have hroot : (0 : ℝ) ≤ Real.sqrt 2 / 2 := by positivity
+  have hrootsq : (Real.sqrt 2 / 2) ^ 2 = 1 / 2 := by
+    have h2 : Real.sqrt 2 ^ 2 = 2 := Real.sq_sqrt (by norm_num)
+    rw [div_pow, h2]
+    norm_num
+  have hsrc : ∀ y ∈ U, ‖complementaryProjection V y‖ ≤ (Real.sqrt 2 / 2) * ‖y‖ := by
+    intro y hy
+    have hpy : ‖y‖ ^ 2 =
+        ‖projection V y‖ ^ 2 + ‖complementaryProjection V y‖ ^ 2 :=
+      Submodule.norm_sq_eq_add_norm_sq_starProjection y V
+    have h1 := hcos y hy
+    have hsq : ‖complementaryProjection V y‖ ^ 2 ≤ ((Real.sqrt 2 / 2) * ‖y‖) ^ 2 := by
+      rw [mul_pow, hrootsq]
+      linarith
+    have hle := Real.sqrt_le_sqrt hsq
+    rwa [Real.sqrt_sq (norm_nonneg _),
+      Real.sqrt_sq (by positivity : (0 : ℝ) ≤ (Real.sqrt 2 / 2) * ‖y‖)] at hle
+  have htgt : ∀ w ∈ Uᗮ, ‖projection V w‖ ≤ (Real.sqrt 2 / 2) * ‖w‖ := fun w hw =>
+    norm_projection_apply_le_of_forall_mem_source U V hacute hroot hsrc w hw
+  have hx : ‖x‖ ^ 2 =
+      ‖projection U x‖ ^ 2 + ‖complementaryProjection U x‖ ^ 2 :=
+    Submodule.norm_sq_eq_add_norm_sq_starProjection x U
+  have hU : ‖projection U x‖ ^ 2 / 2 ≤ ‖projection V (projection U x)‖ ^ 2 :=
+    hcos _ (U.starProjection_apply_mem x)
+  have hUc : ‖complementaryProjection U x‖ ^ 2 / 2 ≤
+      ‖complementaryProjection V (complementaryProjection U x)‖ ^ 2 := by
+    have hw := htgt _ (Uᗮ.starProjection_apply_mem x)
+    have hpy : ‖complementaryProjection U x‖ ^ 2 =
+        ‖projection V (complementaryProjection U x)‖ ^ 2 +
+          ‖complementaryProjection V (complementaryProjection U x)‖ ^ 2 :=
+      Submodule.norm_sq_eq_add_norm_sq_starProjection _ V
+    have hsq : ‖projection V (complementaryProjection U x)‖ ^ 2 ≤
+        1 / 2 * ‖complementaryProjection U x‖ ^ 2 := by
+      have h := mul_self_le_mul_self (norm_nonneg
+        (projection V (complementaryProjection U x))) hw
+      rw [← pow_two, ← pow_two, mul_pow, hrootsq] at h
+      exact h
+    linarith
+  rw [re_inner_halmosCosineSq_self U V x]
+  linarith
+
+omit [CompleteSpace H] in
+/-- The reflection through a subspace fixes its own projection, on the left. -/
+theorem reflectionOperator_mul_projection_self :
+    reflectionOperator V * projection V = projection V := by
+  rw [reflectionOperator_eq_projection_add_projection_sub_one V]
+  have hPV2 := projection_sq V
+  noncomm_ring [hPV2]
+
+omit [CompleteSpace H] in
+/-- The reflection through a subspace fixes its own projection, on the right. -/
+theorem projection_mul_reflectionOperator_self :
+    projection V * reflectionOperator V = projection V := by
+  rw [reflectionOperator_eq_projection_add_projection_sub_one V]
+  have hPV2 := projection_sq V
+  noncomm_ring [hPV2]
+
+/-- An operator whose numerical range is nonnegative has positive Hermitian part. -/
+theorem nonneg_add_star_of_re_inner_nonneg (T : H →L[ℂ] H)
+    (hre : ∀ x : H, 0 ≤ RCLike.re ⟪T x, x⟫_ℂ) :
+    (0 : H →L[ℂ] H) ≤ T + star T := by
+  refine (ContinuousLinearMap.nonneg_iff_isPositive _).mpr ?_
+  refine ContinuousLinearMap.isPositive_def'.mpr ⟨?_, fun x => ?_⟩
+  · rw [IsSelfAdjoint, star_add, star_star, add_comm]
+  · rw [ContinuousLinearMap.reApplyInnerSelf_apply]
+    have hstar : RCLike.re ⟪star T x, x⟫_ℂ = RCLike.re ⟪T x, x⟫_ℂ := by
+      rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
+      exact inner_re_symm x (T x)
+    have hsplit : RCLike.re ⟪(T + star T) x, x⟫_ℂ =
+        RCLike.re ⟪T x, x⟫_ℂ + RCLike.re ⟪star T x, x⟫_ℂ := by
+      rw [add_apply, inner_add_left, map_add]
+    rw [hsplit, hstar]
+    have := hre x
+    linarith
+
+/-- **Davis--Kahan 1970, Proposition 3.4, as printed.**
+
+> If `C₀² ≥ ½`, then `U²` is the direct rotation of `Q₋ℋ` to `Qℋ`.
+
+Every clause is the printed one.  `Q₋ = XQX` is the mirror image of the target in the source
+(`reflectedSubspace U V`, whose projection is `R_U P_V R_U`); the conclusion is Definition 3.1
+for the ordered pair `(Q₋ℋ, Qℋ)` -- the paper's own proof verifies exactly its clauses (i) and
+(ii) plus the intertwining `U²Q₋ = QU²`; and `hcos` is `C₀² ≥ ½` read through equation (3.7),
+`C₀² = E₀⋆ Q E₀`, so its quadratic form at `x ∈ Pℋ` is `‖Qx‖²`.
+
+Three narrowings of `proposition3_4_square_is_reflected_directRotation` are removed.  That
+statement exhibits an existential pair rather than the printed `(Q₋ℋ, Qℋ)`; assumes the
+symmetrized whole-space form bound rather than the printed `Pℋ` one; and carries an extra
+`IsUniformlyAcute U (reflectedSubspace V U)`.  The extra acuteness is genuinely not available
+here -- at the boundary `C₀² = ½` the reflected pair has gap one -- and is not needed: the
+crossed-intersection mapping condition of Proposition 3.3 holds for every unitary square root
+of the reflection product that intertwines the projections
+(`crossedDefect_image_of_unitary_sq`), so the nonacute converse applies unchanged.  Acuteness
+of the *original* pair is retained because it is what `spectraDirectRotation U V` is indexed
+by, and because the companion bound `C₁² ≥ ½` is false without an intertwiner.
+
+Grounded by `:=` on `proposition3_3_principalSquareRoot_converse`, so no square-root branch
+argument is duplicated. -/
+theorem proposition3_4_source (hacute : IsUniformlyAcute U V)
+    (hcos : ∀ x ∈ U, ‖x‖ ^ 2 / 2 ≤ ‖projection V x‖ ^ 2) :
+    IsPaperDirectRotation (reflectedSubspace U V) V
+      (spectraDirectRotation U V hacute * spectraDirectRotation U V hacute) := by
+  set W := spectraDirectRotation U V hacute with hWdef
+  have hWunit : W ∈ unitary (H →L[ℂ] H) := spectraDirectRotation_mem_unitary U V hacute
+  have hTunit : W * W ∈ unitary (H →L[ℂ] H) := mul_mem hWunit hWunit
+  have hWsq : W * W = reflectionOperator V * reflectionOperator U :=
+    spectraDirectRotation_sq U V hacute
+  have hrefl : reflectionOperator (reflectedSubspace U V)
+      = reflectionOperator U * reflectionOperator V * reflectionOperator U :=
+    reflectionOperator_reflectedSubspace V U
+  have hRU : reflectionOperator U * reflectionOperator U = 1 :=
+    reflectionOperator_mul_self_complex U
+  have hsq : (W * W) * (W * W) = spectraReflectionProduct (reflectedSubspace U V) V := by
+    show (W * W) * (W * W)
+      = reflectionOperator V * reflectionOperator (reflectedSubspace U V)
+    rw [hrefl, hWsq]
+    noncomm_ring
+  -- the printed `U²Q₋ = QU²`
+  have hint : (W * W) * projection (reflectedSubspace U V)
+      = projection V * (W * W) := by
+    have hPref : projection (reflectedSubspace U V)
+        = reflectionOperator U * projection V * reflectionOperator U :=
+      starProjection_reflectedSubspace U V
+    rw [hPref, hWsq]
+    calc reflectionOperator V * reflectionOperator U *
+          (reflectionOperator U * projection V * reflectionOperator U)
+        = reflectionOperator V * (reflectionOperator U * reflectionOperator U) *
+            (projection V * reflectionOperator U) := by noncomm_ring
+      _ = reflectionOperator V * projection V * reflectionOperator U := by
+            rw [hRU, mul_one, mul_assoc]
+      _ = projection V * reflectionOperator U := by
+            rw [reflectionOperator_mul_projection_self V]
+      _ = (projection V * reflectionOperator V) * reflectionOperator U := by
+            rw [projection_mul_reflectionOperator_self V]
+      _ = projection V * (reflectionOperator V * reflectionOperator U) := by
+            rw [mul_assoc]
+  have hre : ∀ x : H, 0 ≤ RCLike.re ⟪(W * W) x, x⟫_ℂ := by
+    intro x
+    rw [hWsq]
+    exact re_inner_reflectionProduct_nonneg U V
+      (re_inner_halmosCosineSq_sub_half_nonneg_of_source U V hacute hcos) x
+  have hspec := spectrum_re_nonneg_of_nonneg_add_star (W * W) hTunit
+    (nonneg_add_star_of_re_inner_nonneg (W * W) hre)
+  exact proposition3_3_principalSquareRoot_converse (reflectedSubspace U V) V (W * W)
+    ⟨hTunit, hsq, hspec⟩
+    (crossedDefect_image_of_unitary_sq (reflectedSubspace U V) V (W * W) hTunit hsq hint)
+
+/-- **Proposition 3.4 with the printed definite article.**
+
+"*the* direct rotation" presupposes uniqueness, which Proposition 3.1 supplies exactly when
+the reflected pair is acute.  Under that additional hypothesis the square is the canonical
+direct rotation of `(Q₋ℋ, Qℋ)` on the nose.  Without it `proposition3_4_source` still holds:
+the square satisfies Definition 3.1, and by Proposition 3.2 it is then one of possibly
+several direct rotations. -/
+theorem proposition3_4_source_eq_directRotation (hacute : IsUniformlyAcute U V)
+    (hcos : ∀ x ∈ U, ‖x‖ ^ 2 / 2 ≤ ‖projection V x‖ ^ 2)
+    (hacuteRef : IsUniformlyAcute (reflectedSubspace U V) V) :
+    spectraDirectRotation U V hacute * spectraDirectRotation U V hacute
+      = spectraDirectRotation (reflectedSubspace U V) V hacuteRef := by
+  set W := spectraDirectRotation U V hacute with hWdef
+  have hWunit : W ∈ unitary (H →L[ℂ] H) := spectraDirectRotation_mem_unitary U V hacute
+  have hTunit : W * W ∈ unitary (H →L[ℂ] H) := mul_mem hWunit hWunit
+  have hWsq : W * W = reflectionOperator V * reflectionOperator U :=
+    spectraDirectRotation_sq U V hacute
+  have hrefl : reflectionOperator (reflectedSubspace U V)
+      = reflectionOperator U * reflectionOperator V * reflectionOperator U :=
+    reflectionOperator_reflectedSubspace V U
+  have hsq : (W * W) * (W * W) = spectraReflectionProduct (reflectedSubspace U V) V := by
+    show (W * W) * (W * W)
+      = reflectionOperator V * reflectionOperator (reflectedSubspace U V)
+    rw [hrefl, hWsq]
+    noncomm_ring
+  refine spectraDirectRotation_unique_of_sq (reflectedSubspace U V) V hacuteRef
+    (W * W) hTunit hsq ?_
+  intro x
+  rw [hWsq]
+  exact re_inner_reflectionProduct_nonneg U V
+    (re_inner_halmosCosineSq_sub_half_nonneg_of_source U V hacute hcos) x
 
 end OneSpace
 
