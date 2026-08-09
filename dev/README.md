@@ -7,13 +7,17 @@ challenge package (`Challenge/`, `comparator/`), or paper-facing planning
 arriving cold should be able to read this folder, understand the project's
 pattern of past mistakes, and take fewer of them.
 
-## If you are starting work right now, read these three
+## If you are starting work right now
+
+Read `../AGENTS.md` first, then route by task instead of reading `dev/` linearly:
 
 | File | What it answers |
 |---|---|
-| [`LANES.md`](LANES.md) | Retirement notice for the former multi-agent lane system. Do not claim rows; current work happens on the shared main branch. |
-| [`tauceti/README.md`](tauceti/README.md) | Tau Ceti engineering records, generated status artifacts, and provenance for completed migrations. Current package policy lives in `../ForTauCeti/README.md`. |
-| [`SEARCH.md`](SEARCH.md) | How to *search* this memory instead of reading it all. Grep patterns and routing rules by symptom. |
+| [`SEARCH.md`](SEARCH.md) | How to search engineering memory by symptom or subsystem. |
+| [`tauceti/README.md`](tauceti/README.md) | Current Tau Ceti engineering authorities and the boundary between maintained status and migration history. |
+| [`davis-kahan-1970-full-source-census.md`](davis-kahan-1970-full-source-census.md) and [`davis-kahan-1970-frontier-status.md`](davis-kahan-1970-frontier-status.md) | Current Davis--Kahan source coverage and the remaining proof frontier. |
+
+`LANES.md` is only a retirement notice for the former multi-agent lane system.
 
 The governing policy is in [`../AGENTS.md`](../AGENTS.md), not here. It defines
 the dual-track split (Tau Ceti extraction primary, Davis--Kahan source fidelity
@@ -40,11 +44,11 @@ dev/
   retired-full-part-iii-ambient-route-2026-07-21/   # Compressed archive of a retired route
 ```
 
-Alongside those, `dev/` holds the Davis--Kahan source-fidelity ledgers
-(census, correspondence matrix, frontier status, gap-closure and completion
-plans) and their paired `.json` data files. Several of the `.json` files are
-read or written by `scripts/check_*.py` — do not hand-edit one without running
-its checker.
+Alongside those, `dev/` holds the Davis--Kahan source-fidelity ledgers:
+the maintained census/frontier data and generated views, plus historical design
+records that explain how difficult gaps were closed.  Dated completion plans are
+not current queues. Several `.json` files are read or written by
+`scripts/check_*.py` — do not hand-edit one without running its checker.
 
 ### Where a new note goes
 
@@ -218,12 +222,16 @@ says `ext4`, there is nothing to do.
 
 The full-paper theorem-by-theorem source ledger:
 
-- `davis-kahan-1970-full-source-census.json` — authoritative structured data;
+- `davis-kahan-1970-full-source-census.json` — authoritative structured source ledger;
 - `davis-kahan-1970-full-source-census.md` — generated human-readable view;
-- `davis-kahan-1970-missing-statements-math-ahead-2026-07-20.md` — the exact
-  missing-statement and Section 9 work plan;
+- `davis-kahan-1970-frontier.json` / `davis-kahan-1970-frontier-status.md` —
+  maintained proof-frontier graph and generated status;
 - `davis-kahan-1970-private-source-workflow.md` — rules for using the local
   transcription without redistributing it.
+
+Do not revive dated `*-completion-plan*`, `*-handoff*`, or
+`missing-statements-*` files as current work queues.  Their useful history is in
+Git; the census and frontier own present-tense status.
 
 Validate with:
 

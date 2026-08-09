@@ -1,6 +1,6 @@
 # FinishYuWangSamworth
 
-An independent completion lane for:
+A paper-facing formalization package for:
 
 > Yi Yu, Tengyao Wang, and Richard J. Samworth, *A useful variant of the
 > Davis--Kahan theorem for statisticians*, Biometrika 102 (2015), 315--323,
@@ -8,7 +8,7 @@ An independent completion lane for:
 
 ## Theorem coverage
 
-The lane now represents every numbered mathematical result in the paper:
+The package represents every numbered mathematical result in the paper:
 
 1. Theorem 1 in general unitarily invariant, Frobenius, and operator norm form;
 2. Theorem 2 and the aligned-basis conclusion;
@@ -36,7 +36,7 @@ No perturbation argument is duplicated.
 See `ELEGANCE_AUDIT.md` for the in-place API and factoring review.
 
 The paper's printed equation (4) is missing a square on
-`2 - ‖v̂ - v‖²`; the lane records the corrected identity and documents this
+`2 - ‖v̂ - v‖²`; the package records the corrected identity and documents this
 source defect rather than asserting the false printed formula.
 
 ## Sharpness
@@ -59,7 +59,7 @@ example cannot do.
 
 Building it required the first-ever *constructor* for `CorrespondingEigenblock`
 (`ForTauCeti/.../YuWangSamworth/TopEigenblock.lean`): that hypothesis is
-consumed by every theorem in the lane and had no instance anywhere in the
+consumed by every theorem in the package and had no instance anywhere in the
 repository, so no concrete pair of covariance operators had ever been checked
 against it.
 
