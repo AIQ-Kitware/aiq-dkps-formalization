@@ -44,22 +44,29 @@ not a hypothesis.
   spectrum below `α₀`, unwanted compression spectrum in `[α₀ + δ, ∞)`,
   with the interval cap recovered from boundedness of the compression.
 
-## What remains open (recorded, not claimed)
+## The ideal-gauge Hilbert-space form (closed)
 
-The exact general-Hilbert-space **unitary-invariant-ideal** conclusion of
-Theorem 6.3 is not yet compiled.  Two precise obligations remain:
+This section previously recorded the exact general-Hilbert-space
+**unitary-invariant-ideal** conclusion of Theorem 6.3 as uncompiled, with two
+obligations: a Ky Fan transport of the finite root
+`kyFan_tanTheta0_ritzResidual_le`, and construction of the transverse
+coordinate datum from the spectral placement alone. Both were discharged and
+the note went stale; it is corrected here, 2026-08-09, after re-elaborating the
+endpoints.
 
-1. an approximation-number Ky Fan transport of the finite root
-   `kyFan_tanTheta0_ritzResidual_le`: for every `k`, the `k`-th Ky Fan
-   approximation gauge of the graph angular map is bounded by `1/δ` times
-   that of the residual;
-2. construction of the transverse coordinate datum
-   (`TanThetaTransverseCoordinates`) from the spectral placement alone,
-   which is the Section 8 continuation result and is deliberately out of
-   scope for this surface.
+* `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal`
+  — arbitrary complete complex Hilbert space, arbitrary `KyFanDominantIdealFamily`,
+  the source's one-sided spectral placement, with ideal membership of the tangent
+  *concluded* rather than assumed.
+* `…ExactTanTheta.theorem6_3_infiniteTrial_of_formBounds` and
+  `…theorem6_3_infiniteTrial_spectral_exists` — the same conclusion at arbitrary
+  trial dimension, needing only `[CompleteSpace ↥Z]`, and dropping the printed
+  rank comparison entirely.
 
-Until these are closed, the ideal-gauge Hilbert-space form must not be
-advertised.
+What genuinely remains on the Section 6 tangent side is the *unbounded Ritz
+compression* of the Appendix: the trial-block records carry the compression as a
+bounded field, so the source's `Ω(τ) A₀ Ω(τ)` truncation is not reproduced. That
+obligation is tracked on census row `DK-6-appendix`, not here.
 -/
 
 namespace TauCeti

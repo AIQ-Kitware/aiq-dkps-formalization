@@ -29,6 +29,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `DK-4.2-prop` — Proposition 4.2: Basis-angle square-sum extremality | proposition | `s4-prop4-2` | 0 / 2 | 100% | yes |
 | `DK-4.3-prop` — Proposition 4.3: Squared displacement UI-norm minimality | proposition | `s4-prop4-3` | 0 / 2 | 100% | yes |
 | `DK-5.1-thm` — Theorem 5.1: Banach-space Sylvester lower bound | theorem | `s5-theorem5-1` | 0 / 2 | 100% | yes |
+| `DK-5-hermitian-inequalities` — Section 5, inequalities (5.1) and (5.2): Square-norm and rank-corrected Sylvester inequalities | equation | `s5-inequality-5-1` | 0 / 1 | 100% | yes |
 | `DK-5.2-thm` — Theorem 5.2: Semibounded self-adjoint Sylvester theorem | theorem | `base-theorem5-2` | 0 / 1 | 100% | yes |
 | `DK-6.3-thm` — Theorem 6.3: Generalized tangent theorem | theorem | `s6-theorem6-3` | 0 / 6 | 100% | yes |
 | `DK-6-appendix` — Appendix to Section 6, equations (6.7)–(6.11): Unbounded-operator passage | appendix | `s6-appendix-unbounded` | 1 / 1 | 0% | no |
@@ -46,17 +47,17 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 
 ## Summary
 
-- Manifest nodes: **81**
-- Textually present: **81**
-- Paper result rows represented in the frontier: **33**
-- Census rows requiring frontier coverage: **9**
-- Census rows mapped: **9**
-- Declarations resolving in Lean: **81**
-- Declarations with admission-free Lean closure: **81**
-- Recursively grounded manifest nodes: **77**
-- Paper results recursively grounded: **27 / 33**
-- Source-role endpoints resolving: **30 / 30**
-- Source-role endpoints recursively grounded: **27 / 30**
+- Manifest nodes: **82**
+- Textually present: **82**
+- Paper result rows represented in the frontier: **34**
+- Census rows requiring frontier coverage: **20**
+- Census rows mapped: **20**
+- Declarations resolving in Lean: **82**
+- Declarations with admission-free Lean closure: **82**
+- Recursively grounded manifest nodes: **78**
+- Paper results recursively grounded: **28 / 34**
+- Source-role endpoints resolving: **31 / 31**
+- Source-role endpoints recursively grounded: **28 / 31**
 
 ## Manifest nodes
 
@@ -101,6 +102,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s6-appendix-unbounded` | source | yes | `DK-6-appendix` | high | yes | yes | yes | yes | no |
 | `s5-compatible-cross-norm` | foundation | no |  | medium | no | yes | yes | yes | yes |
 | `s5-theorem5-1` | source | yes | `DK-5.1-thm` | medium | no | yes | yes | yes | yes |
+| `s5-inequality-5-1` | source | yes | `DK-5-hermitian-inequalities` | medium | no | yes | yes | yes | yes |
 | `s6-trial-residual` | foundation | no |  | high | no | yes | yes | yes | yes |
 | `s6-theorem6-3-directed-sine` | foundation | no |  | high | no | yes | yes | yes | yes |
 | `s6-theorem6-3-directed-tangent-data` | foundation | no |  | high | no | yes | yes | yes | yes |

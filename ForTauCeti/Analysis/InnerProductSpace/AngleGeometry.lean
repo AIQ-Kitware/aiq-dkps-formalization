@@ -199,10 +199,17 @@ any dimension.**
 
 `DavisKahan.IsAcute U V` unfolds to `U.projectionGap V < 1`, so this is one
 half of the relation between the two same-named predicates in this development.
-The converse is `projectionGap_lt_one_of_isAcute` below and is **not** true in
-this generality — it needs `FiniteDimensional`. Two predicates called `IsAcute`
-that are related in only one direction without it is a correctness hazard, so
-both directions are stated here with their hypotheses made explicit. -/
+
+**The converse is not proved anywhere, and this docstring used to promise it.**
+It claimed a `projectionGap_lt_one_of_isAcute` "below"; no such declaration has
+ever existed, as `#check` and a repository-wide grep both confirm (checked
+2026-08-09). It is also genuinely false in this generality — principal angles
+accumulating at `π/2` with none equal to it satisfy `IsAcute` while the gap is
+`1` — so the two same-named predicates really are related in only one
+direction, and `IsAcute` is the strictly weaker one. Anything stated on
+`DavisKahan.IsAcute` is therefore narrower than the printed Davis–Kahan
+Definition 3.2, which is `IsAcute` here; census row `DK-3.2-def` records which
+results that affects. -/
 theorem isAcute_of_projectionGap_lt_one {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (h : U.projectionGap V < 1) : IsAcute U V :=
