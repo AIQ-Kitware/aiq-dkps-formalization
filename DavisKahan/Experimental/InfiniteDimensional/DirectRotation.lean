@@ -211,7 +211,7 @@ theorem canonicalIntertwiner_mul_adjoint (U V : Submodule 𝕜 E)
 `‖(P − Q)²‖ ≤ ‖P − Q‖² < 1`. -/
 theorem isUnit_one_sub_projection_sub_sq (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     IsUnit (1 - (projection U - projection V) * (projection U - projection V) :
       E →L[𝕜] E) := by
   have hgap : ‖(projection U - projection V : E →L[𝕜] E)‖ < 1 := hacute
@@ -225,7 +225,7 @@ theorem isUnit_one_sub_projection_sub_sq (U V : Submodule 𝕜 E)
 /-- **On an acute pair the canonical intertwiner is a unit.** -/
 theorem isUnit_canonicalIntertwiner (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : IsUnit (canonicalIntertwiner U V) :=
+    (hacute : IsUniformlyAcute U V) : IsUnit (canonicalIntertwiner U V) :=
   isUnit_of_isUnit_mul_both
     ((adjoint_mul_canonicalIntertwiner U V) ▸
       isUnit_one_sub_projection_sub_sq U V hacute)
@@ -236,7 +236,7 @@ theorem isUnit_canonicalIntertwiner (U V : Submodule 𝕜 E)
 unit**, since `|S|² = S⋆S`. -/
 theorem isUnit_operatorAbsoluteValue_canonicalIntertwiner (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     IsUnit (operatorAbsoluteValue (canonicalIntertwiner U V)) := by
   have hsq : operatorAbsoluteValue (canonicalIntertwiner U V) *
       operatorAbsoluteValue (canonicalIntertwiner U V) =
@@ -250,13 +250,13 @@ theorem isUnit_operatorAbsoluteValue_canonicalIntertwiner (U V : Submodule 𝕜 
 `S⋆S = 1 − (P − Q)²` is within distance `‖P − Q‖² < 1` of the identity. -/
 noncomputable def canonicalIntertwinerUnit (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : (E →L[𝕜] E)ˣ :=
+    (hacute : IsUniformlyAcute U V) : (E →L[𝕜] E)ˣ :=
   (isUnit_canonicalIntertwiner U V hacute).unit
 
 /-- The intertwiner unit carries the canonical intertwiner. -/
 theorem coe_canonicalIntertwinerUnit (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     ((canonicalIntertwinerUnit U V hacute : (E →L[𝕜] E)ˣ) : E →L[𝕜] E) =
       canonicalIntertwiner U V :=
   (isUnit_canonicalIntertwiner U V hacute).unit_spec
@@ -265,14 +265,14 @@ theorem coe_canonicalIntertwinerUnit (U V : Submodule 𝕜 E)
 unit. -/
 noncomputable def canonicalAbsoluteValueUnit (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : (E →L[𝕜] E)ˣ :=
+    (hacute : IsUniformlyAcute U V) : (E →L[𝕜] E)ˣ :=
   (isUnit_operatorAbsoluteValue_canonicalIntertwiner U V hacute).unit
 
 /-- The absolute-value unit carries the absolute value of the canonical
 intertwiner. -/
 theorem coe_canonicalAbsoluteValueUnit (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     ((canonicalAbsoluteValueUnit U V hacute : (E →L[𝕜] E)ˣ) : E →L[𝕜] E) =
       operatorAbsoluteValue (canonicalIntertwiner U V) :=
   (isUnit_operatorAbsoluteValue_canonicalIntertwiner U V hacute).unit_spec
@@ -355,7 +355,7 @@ functional calculus.  This construction automatically yields a unitary that
 intertwines the two projections and is stable under finite specialization. -/
 noncomputable def directRotation (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : E →L[𝕜] E :=
+    (hacute : IsUniformlyAcute U V) : E →L[𝕜] E :=
   canonicalIntertwiner U V ∘L
     (↑(canonicalAbsoluteValueUnit U V hacute)⁻¹ : E →L[𝕜] E)
 
@@ -407,7 +407,7 @@ minimization theorem.
 -/
 theorem directRotation_unitary
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     IsUnitaryOperator (directRotation U V hacute) := by
   classical
   set S : E →L[𝕜] E := canonicalIntertwiner U V with hS
@@ -489,7 +489,7 @@ minimization theorem.
 -/
 theorem directRotation_intertwines
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     directRotation U V hacute ∘L projection U =
       projection V ∘L directRotation U V hacute := by
   have hS := canonicalIntertwiner_intertwines U V
@@ -655,7 +655,7 @@ planar model before general assembly.
 -/
 theorem directRotation_sq
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     directRotation U V hacute ∘L directRotation U V hacute =
       reflectionOperator V ∘L reflectionOperator U := by
   -- `|S|` commutes with `S`, hence so does its inverse.
@@ -743,7 +743,7 @@ Proposition 3.3's "principal": `W` is the square root of `J_V J_U` whose
 Hermitian part is nonnegative. -/
 theorem directRotation_add_adjoint
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     directRotation U V hacute + star (directRotation U V hacute) =
       operatorAbsoluteValue (canonicalIntertwiner U V) +
         operatorAbsoluteValue (canonicalIntertwiner U V) := by
@@ -798,7 +798,7 @@ theorem directRotation_add_adjoint
 *principal* square root of the reflection product, not merely a square root. -/
 theorem nonneg_directRotation_add_adjoint
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     0 ≤ directRotation U V hacute + star (directRotation U V hacute) := by
   rw [directRotation_add_adjoint]
   exact add_nonneg (operatorAbsoluteValue_nonneg _) (operatorAbsoluteValue_nonneg _)
@@ -808,7 +808,7 @@ direct rotation misses the closed left half-plane: acuteness is what makes the
 principal branch unambiguous. -/
 theorem isUnit_directRotation_add_adjoint
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     IsUnit (directRotation U V hacute + star (directRotation U V hacute)) := by
   have hA : IsUnit (operatorAbsoluteValue (canonicalIntertwiner U V)) :=
     isUnit_operatorAbsoluteValue_canonicalIntertwiner U V hacute
@@ -1114,7 +1114,7 @@ the direct rotation exactly:
 `‖(D − 1)x‖² = 2‖x‖² − 2 ⟪|S| x, x⟫`. -/
 theorem re_inner_directRotation_eq_operatorAbsoluteValue
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) (x : E) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) (x : E) :
     RCLike.re ⟪directRotation U V hacute x, x⟫_𝕜 =
       RCLike.re ⟪operatorAbsoluteValue (canonicalIntertwiner U V) x, x⟫_𝕜 := by
   have h := congrArg (fun T : E →L[𝕜] E => ⟪T x, x⟫_𝕜)
@@ -1191,7 +1191,7 @@ gauge.
 -/
 theorem directRotation_minimal
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V)
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V)
     (W : E →L[𝕜] E) (hW : IsUnitaryOperator W)
     (hmap : U.map W.toLinearMap = V) :
     ‖directRotation U V hacute - ContinuousLinearMap.id 𝕜 E‖ ≤

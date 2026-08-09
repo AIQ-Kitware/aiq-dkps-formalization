@@ -98,7 +98,7 @@ theorem gap_preserved_of_offDiagonal
     (hfinite : FiniteGapConfiguration A U d)
     (hsmall : ‖H‖ < Real.sqrt 2 * d) :
     let V := continuedSpectralSubspace A H (restrictedSpectrum A U)
-    Reduces (A + H) V ∧ IsAcute U V ∧
+    Reduces (A + H) V ∧ IsUniformlyAcute U V ∧
       0 < spectralDistance (restrictedSpectrum (A + H) V)
         (restrictedSpectrum (A + H) Vᗮ) := by
   classical
@@ -122,7 +122,7 @@ theorem gap_preserved_of_offDiagonal
     A H (D.component 0) D.contour (by
       intro t ht
       simpa [D.component_zero] using D.separates t ht)
-  have hacute : IsAcute U V := by
+  have hacute : IsUniformlyAcute U V := by
     have hP0 : continuedProjection A H D.contour 0 = projection U := by
       have h0 : (0 : ℝ) ∈ Set.Icc (0 : ℝ) 1 := by constructor <;> norm_num
       rw [continuedProjection_eq_spectralProjection
@@ -133,7 +133,7 @@ theorem gap_preserved_of_offDiagonal
       rw [hVrange]
       exact orthogonalProjection_range_eq_self
         (continuedProjection_isOrthogonalProjection D)
-    rw [IsAcute, subspaceGap, ← hP0, ← hP1]
+    rw [IsUniformlyAcute, subspaceGap, ← hP0, ← hP1]
     exact offDiagonal_continued_projection_gap_lt_one
       hA hH hU hoff hd hfinite hsmall D hcont
   have hdist : 0 < spectralDistance
@@ -174,7 +174,7 @@ theorem tanTwoTheta_offDiagonal
     ‖tanTwoAngleOperator U V hquarter‖ ≤ 2 * ‖H‖ / d := by
   classical
   obtain ⟨X, hVgraph, hXunique⟩ :=
-    existsUnique_angularOperator U V hquarter.isAcute
+    existsUnique_angularOperator U V hquarter.isUniformlyAcute
   have hric : RiccatiEquation
       (diagonalBlock U A) (diagonalBlock Uᗮ A)
       (offDiagonalBlock U Uᗮ H) X := by

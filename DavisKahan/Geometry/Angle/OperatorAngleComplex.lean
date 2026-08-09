@@ -420,7 +420,7 @@ theorem norm_cosAngleOperatorC_apply_ge (U V : Submodule ℂ E)
 subspace. -/
 theorem cosAngleOperatorC_eq_zero_imp_of_acute (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) {x : E} (hx : x ∈ U)
+    (hacute : IsUniformlyAcute U V) {x : E} (hx : x ∈ U)
     (h0 : cosAngleOperatorC U V x = 0) : x = 0 := by
   have hglt : directedGap U V < 1 :=
     lt_of_le_of_lt (directedProjectionGap_le_projectionGap U V) hacute
@@ -561,7 +561,7 @@ theorem norm_cosAngleExtendedC_apply_ge (U V : Submodule ℂ E)
 /-- **The extended cosine is invertible in the acute regime.** -/
 theorem cosAngleExtendedC_ker_bot_range_top (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     (cosAngleExtendedC U V).ker = ⊥ ∧
       (cosAngleExtendedC U V).range = ⊤ := by
   have hglt : directedGap U V < 1 :=
@@ -635,7 +635,7 @@ theorem cosAngleExtendedC_ker_bot_range_top (U V : Submodule ℂ E)
 regime. -/
 noncomputable def cosAngleExtendedCEquiv (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : E ≃L[ℂ] E :=
+    (hacute : IsUniformlyAcute U V) : E ≃L[ℂ] E :=
   ContinuousLinearEquiv.ofBijective (cosAngleExtendedC U V)
     (cosAngleExtendedC_ker_bot_range_top U V hacute).1
     (cosAngleExtendedC_ker_bot_range_top U V hacute).2
@@ -644,7 +644,7 @@ noncomputable def cosAngleExtendedCEquiv (U V : Submodule ℂ E)
 `tan Θ = sin Θ · (cos Θ + P_{Uᗮ})⁻¹`. -/
 noncomputable def tanAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : E →L[ℂ] E :=
+    (hacute : IsUniformlyAcute U V) : E →L[ℂ] E :=
   sinAngleOperatorDirectedC U V ∘L
     (cosAngleExtendedCEquiv U V hacute).symm.toContinuousLinearMap
 
@@ -652,7 +652,7 @@ noncomputable def tanAngleOperatorC (U V : Submodule ℂ E)
 the directed sine. -/
 theorem tanAngleOperatorC_comp_cosAngleExtendedC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     tanAngleOperatorC U V hacute ∘L cosAngleExtendedC U V =
       sinAngleOperatorDirectedC U V := by
   ext x
@@ -1008,7 +1008,7 @@ section TangentNormBounds
 to `‖(cos Θ + P_{Uᗮ})⁻¹ y‖ ≤ c⁻¹ ‖y‖`. -/
 theorem norm_cosAngleExtendedCEquiv_symm_apply_le (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (y : E) :
+    (hacute : IsUniformlyAcute U V) (y : E) :
     ‖(cosAngleExtendedCEquiv U V hacute).symm y‖ ≤
       (min (Real.sqrt (1 - directedGap U V ^ 2)) 1)⁻¹ * ‖y‖ := by
   set c : ℝ := min (Real.sqrt (1 - directedGap U V ^ 2)) 1 with hc
@@ -1036,7 +1036,7 @@ directed gap over the acute coercivity constant —
 `tan θ_max = sin θ_max / cos θ_max` as an inequality. -/
 theorem norm_tanAngleOperatorC_le (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     ‖tanAngleOperatorC U V hacute‖ ≤
       directedGap U V *
         (min (Real.sqrt (1 - directedGap U V ^ 2)) 1)⁻¹ := by

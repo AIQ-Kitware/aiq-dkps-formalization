@@ -129,6 +129,18 @@ noncomputable def complementaryProjection (U : Submodule 𝕜 E)
   projection Uᗮ
 
 omit [FiniteDimensional 𝕜 E] in
+/-- **The complementary projector is `1 - P`.**  The linear-map form of
+`Submodule.starProjection_add_starProjection_orthogonal`, which is what turns a
+two-projection identity into ordinary algebra in the endomorphism ring. -/
+theorem complementaryProjection_eq_id_sub (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] :
+    complementaryProjection U = LinearMap.id - projection U := by
+  ext x
+  have h := U.starProjection_add_starProjection_orthogonal x
+  simp only [LinearMap.sub_apply, LinearMap.id_apply]
+  exact eq_sub_of_add_eq' h
+
+omit [FiniteDimensional 𝕜 E] in
 /-- An orthogonal projector is symmetric. -/
 theorem projection_isSymmetric (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] : (projection U).IsSymmetric :=

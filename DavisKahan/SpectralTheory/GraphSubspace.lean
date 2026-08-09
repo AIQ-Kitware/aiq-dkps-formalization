@@ -583,7 +583,7 @@ injective.  The estimate is the elementary gap argument
 `norm v <= norm(P_U-P_V) * norm v`. -/
 private theorem acute_coordinate_injective
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     ∀ v, v ∈ V → projection U v = 0 → v = 0 := by
   intro v hv hPv
   have hQv : projection V v = v :=
@@ -603,7 +603,7 @@ private theorem acute_coordinate_injective
 near-identity compression `P_U P_V P_U + P_{U^perp}`. -/
 private noncomputable def acuteAngularOperator
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (_hacute : IsAcute U V) : E →L[𝕜] E :=
+    [V.HasOrthogonalProjection] (_hacute : IsUniformlyAcute U V) : E →L[𝕜] E :=
   (1 - projection U) * projection V *
     Ring.inverse (projection U * projection V * projection U + (1 - projection U)) *
     projection U
@@ -611,7 +611,7 @@ private noncomputable def acuteAngularOperator
 /-- Algebraic properties of the acute angular operator. -/
 private theorem acuteAngularOperator_spec
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     IsAngularOperator U (acuteAngularOperator U V hacute) ∧
       V = LinearMap.range
         (projection U + acuteAngularOperator U V hacute ∘L projection U).toLinearMap := by
@@ -722,7 +722,7 @@ private theorem acuteAngularOperator_spec
 /-- A pair is acute exactly when it is the graph of a bounded angular operator. -/
 theorem acute_iff_exists_bounded_angularOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    IsAcute U V ↔
+    IsUniformlyAcute U V ↔
       ∃ X : E →L[𝕜] E, IsAngularOperator U X ∧
         V = LinearMap.range (projection U + X ∘L projection U).toLinearMap := by
   constructor
@@ -749,7 +749,7 @@ theorem acute_iff_exists_bounded_angularOperator (U V : Submodule 𝕜 E)
 /-- Every acute subspace is the graph of a unique bounded angular operator. -/
 theorem existsUnique_angularOperator
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     ∃! X : E →L[𝕜] E,
       IsAngularOperator U X ∧ graphSubspace U X = V := by
   obtain ⟨X, hXang, hXrange⟩ :=

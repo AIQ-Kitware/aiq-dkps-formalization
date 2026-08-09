@@ -135,6 +135,25 @@ theorem operatorAbs_apply_mem_orthogonal_ker (A : E →ₗ[𝕜] E) (x : E) :
   rw [← range_operatorAbs A]
   exact LinearMap.mem_range_self (operatorAbs A) x
 
+/-- **The modulus does not see a sign.**  `|-A| = |A|`, because the two Gram operators
+`(-A)⋆(-A)` and `A⋆A` are literally the same operator and the positive square root of a
+positive operator is unique. -/
+theorem operatorAbs_neg (A : E →ₗ[𝕜] E) : operatorAbs (-A) = operatorAbs A := by
+  refine (LinearMap.IsPositive.sqrt_unique (LinearMap.isPositive_adjoint_comp_self (-A))
+    (isPositive_operatorAbs A) ?_).symm
+  rw [operatorAbs_mul_self, map_neg, LinearMap.neg_comp, LinearMap.comp_neg, neg_neg]
+
+/-- **A normal operator and its adjoint have the same modulus.**  Normality says the two Gram
+operators `A⋆A` and `AA⋆` agree, and `|A⋆|` is by definition the positive square root of the
+second. -/
+theorem operatorAbs_adjoint_of_normal {A : E →ₗ[𝕜] E}
+    (hnormal : A.adjoint ∘ₗ A = A ∘ₗ A.adjoint) :
+    operatorAbs (LinearMap.adjoint A) = operatorAbs A := by
+  refine (LinearMap.IsPositive.sqrt_unique
+    (LinearMap.isPositive_adjoint_comp_self (LinearMap.adjoint A))
+    (isPositive_operatorAbs A) ?_).symm
+  rw [operatorAbs_mul_self, LinearMap.adjoint_adjoint, hnormal]
+
 /-! ### The polar factor `U` and the decomposition -/
 
 /-- The restriction of the modulus `|A|` to `(ker A)ᗮ = range |A|`, as a linear automorphism of

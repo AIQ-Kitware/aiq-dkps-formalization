@@ -158,7 +158,7 @@ around the identity. -/
 theorem norm_one_sub_spectraCanonicalIntertwiner_lt_one
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     ‖1 - spectraCanonicalIntertwiner U V‖ < 1 :=
   (norm_one_sub_spectraCanonicalIntertwiner_le_gap U V).trans_lt hacute
 
@@ -166,7 +166,7 @@ theorem norm_one_sub_spectraCanonicalIntertwiner_lt_one
 noncomputable def spectraCanonicalIntertwinerUnit
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : (H →L[ℂ] H)ˣ :=
+    (hacute : IsUniformlyAcute U V) : (H →L[ℂ] H)ˣ :=
   Units.oneSub (1 - spectraCanonicalIntertwiner U V)
     (norm_one_sub_spectraCanonicalIntertwiner_lt_one U V hacute)
 
@@ -175,7 +175,7 @@ noncomputable def spectraCanonicalIntertwinerUnit
 theorem coe_spectraCanonicalIntertwinerUnit
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     (spectraCanonicalIntertwinerUnit U V hacute : H →L[ℂ] H) =
       spectraCanonicalIntertwiner U V := by
   simp [spectraCanonicalIntertwinerUnit]
@@ -192,7 +192,7 @@ for every pair. -/
 noncomputable def spectraDirectRotation
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (_hacute : IsAcute U V) : H →L[ℂ] H :=
+    (_hacute : IsUniformlyAcute U V) : H →L[ℂ] H :=
   spectraCanonicalPolarFactor U V
 
 /-- Polar decomposition of the canonical intertwiner. -/
@@ -208,7 +208,7 @@ theorem spectraCanonicalPolarFactor_decomposition
 theorem spectraDirectRotation_decomposition
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute ∘L
         spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) =
       spectraCanonicalIntertwiner U V :=
@@ -228,7 +228,7 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 theorem isUnit_spectraCanonicalAbsoluteValue
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     IsUnit (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)) := by
   rw [← isUnit_mul_self_iff]
   rw [spectraOperatorAbsoluteValue_mul_self]
@@ -241,7 +241,7 @@ theorem isUnit_spectraCanonicalAbsoluteValue
 noncomputable def spectraCanonicalAbsoluteValueUnit
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : (H →L[ℂ] H)ˣ :=
+    (hacute : IsUniformlyAcute U V) : (H →L[ℂ] H)ˣ :=
   Classical.choose (isUnit_spectraCanonicalAbsoluteValue U V hacute)
 
 /-- The absolute-value unit has the expected underlying operator. -/
@@ -249,7 +249,7 @@ noncomputable def spectraCanonicalAbsoluteValueUnit
 theorem coe_spectraCanonicalAbsoluteValueUnit
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     (spectraCanonicalAbsoluteValueUnit U V hacute : H →L[ℂ] H) =
       spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) :=
   Classical.choose_spec (isUnit_spectraCanonicalAbsoluteValue U V hacute)
@@ -258,7 +258,7 @@ theorem coe_spectraCanonicalAbsoluteValueUnit
 theorem star_spectraCanonicalAbsoluteValueUnit
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     star (spectraCanonicalAbsoluteValueUnit U V hacute) =
       spectraCanonicalAbsoluteValueUnit U V hacute := by
   apply Units.ext
@@ -271,7 +271,7 @@ theorem star_spectraCanonicalAbsoluteValueUnit
 theorem star_intertwinerUnit_mul_self_eq_absoluteValueUnit_mul_self
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     star (spectraCanonicalIntertwinerUnit U V hacute) *
         spectraCanonicalIntertwinerUnit U V hacute =
       spectraCanonicalAbsoluteValueUnit U V hacute *
@@ -288,7 +288,7 @@ formula `S |S|⁻¹`. -/
 noncomputable def spectraCanonicalPolarFactorUnit
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : (H →L[ℂ] H)ˣ :=
+    (hacute : IsUniformlyAcute U V) : (H →L[ℂ] H)ˣ :=
   spectraCanonicalIntertwinerUnit U V hacute *
     (spectraCanonicalAbsoluteValueUnit U V hacute)⁻¹
 
@@ -297,7 +297,7 @@ noncomputable def spectraCanonicalPolarFactorUnit
 theorem coe_spectraCanonicalPolarFactorUnit
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     (spectraCanonicalPolarFactorUnit U V hacute : H →L[ℂ] H) =
       spectraCanonicalPolarFactor U V := by
   let AUnit := spectraCanonicalAbsoluteValueUnit U V hacute
@@ -330,7 +330,7 @@ operator algebra. -/
 noncomputable def spectraCanonicalPolarFactorUnitary
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : unitary (H →L[ℂ] H) := by
+    (hacute : IsUniformlyAcute U V) : unitary (H →L[ℂ] H) := by
   let SUnit := spectraCanonicalIntertwinerUnit U V hacute
   let AUnit := spectraCanonicalAbsoluteValueUnit U V hacute
   have hGram : star SUnit * SUnit = star AUnit * AUnit := by
@@ -348,7 +348,7 @@ noncomputable def spectraCanonicalPolarFactorUnitary
 theorem coe_spectraCanonicalPolarFactorUnitary
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     ((spectraCanonicalPolarFactorUnitary U V hacute :
         unitary (H →L[ℂ] H)) : H →L[ℂ] H) =
       spectraCanonicalPolarFactor U V := rfl
@@ -357,7 +357,7 @@ theorem coe_spectraCanonicalPolarFactorUnitary
 theorem norm_spectraCanonicalPolarFactor_apply
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (x : H) :
+    (hacute : IsUniformlyAcute U V) (x : H) :
     ‖spectraCanonicalPolarFactor U V x‖ = ‖x‖ := by
   rw [← coe_spectraCanonicalPolarFactorUnitary U V hacute]
   exact Unitary.norm_map
@@ -367,7 +367,7 @@ theorem norm_spectraCanonicalPolarFactor_apply
 theorem spectraCanonicalPolarFactor_surjective
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     Function.Surjective (spectraCanonicalPolarFactor U V) := by
   let u := spectraCanonicalPolarFactorUnitary U V hacute
   let e := Unitary.linearIsometryEquiv u
@@ -383,7 +383,7 @@ theorem spectraCanonicalPolarFactor_surjective
 theorem spectraCanonicalPolarFactor_injective
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     Function.Injective (spectraCanonicalPolarFactor U V) := by
   let u := spectraCanonicalPolarFactorUnitary U V hacute
   let e := Unitary.linearIsometryEquiv u
@@ -464,7 +464,7 @@ theorem spectraCanonicalAbsoluteValue_commute_projection
 theorem spectraCanonicalAbsoluteValueUnit_inv_commute_projection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     Commute
       (↑((spectraCanonicalAbsoluteValueUnit U V hacute)⁻¹) : H →L[ℂ] H)
       (projection U) := by
@@ -477,7 +477,7 @@ its absolute value. -/
 theorem spectraCanonicalPolarFactor_eq_intertwiner_mul_absoluteValueUnit_inv
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraCanonicalPolarFactor U V =
       spectraCanonicalIntertwiner U V *
         (↑((spectraCanonicalAbsoluteValueUnit U V hacute)⁻¹) : H →L[ℂ] H) := by
@@ -493,7 +493,7 @@ theorem spectraCanonicalPolarFactor_eq_intertwiner_mul_absoluteValueUnit_inv
 theorem spectraCanonicalPolarFactor_intertwines
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraCanonicalPolarFactor U V * projection U =
       projection V * spectraCanonicalPolarFactor U V := by
   rw [spectraCanonicalPolarFactor_eq_intertwiner_mul_absoluteValueUnit_inv
@@ -526,7 +526,7 @@ theorem spectraCanonicalPolarFactor_intertwines
 theorem norm_spectraDirectRotation_apply
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (x : H) :
+    (hacute : IsUniformlyAcute U V) (x : H) :
     ‖spectraDirectRotation U V hacute x‖ = ‖x‖ :=
   norm_spectraCanonicalPolarFactor_apply U V hacute x
 
@@ -534,7 +534,7 @@ theorem norm_spectraDirectRotation_apply
 theorem spectraDirectRotation_surjective
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     Function.Surjective (spectraDirectRotation U V hacute) :=
   spectraCanonicalPolarFactor_surjective U V hacute
 
@@ -542,7 +542,7 @@ theorem spectraDirectRotation_surjective
 theorem spectraDirectRotation_injective
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     Function.Injective (spectraDirectRotation U V hacute) :=
   spectraCanonicalPolarFactor_injective U V hacute
 
@@ -551,7 +551,7 @@ projections. -/
 theorem spectraDirectRotation_intertwines
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute * projection U =
       projection V * spectraDirectRotation U V hacute :=
   spectraCanonicalPolarFactor_intertwines U V hacute
@@ -561,7 +561,7 @@ orthogonal projections. -/
 theorem spectraDirectRotation_intertwines_complementary
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute * complementaryProjection U =
       complementaryProjection V * spectraDirectRotation U V hacute := by
   change
@@ -577,7 +577,7 @@ target subspace. -/
 theorem spectraDirectRotation_maps_subspace
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     U.map (spectraDirectRotation U V hacute).toLinearMap = V := by
   apply le_antisymm
   · rintro y ⟨x, hx, rfl⟩
@@ -603,7 +603,7 @@ of the source subspace onto the orthogonal complement of the target. -/
 theorem spectraDirectRotation_maps_orthogonalComplement
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     Uᗮ.map (spectraDirectRotation U V hacute).toLinearMap = Vᗮ := by
   apply le_antisymm
   · rintro y ⟨x, hx, rfl⟩
@@ -667,10 +667,10 @@ theorem subspaceGap_orthogonal (U V : Submodule ℂ H)
 
 omit [CompleteSpace H] in
 /-- Acuteness passes to the complementary pair: it is literally the same number. -/
-theorem isAcute_orthogonal {U V : Submodule ℂ H}
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (h : IsAcute U V) :
-    IsAcute Uᗮ Vᗮ := by
-  unfold IsAcute at h ⊢
+theorem isUniformlyAcute_orthogonal {U V : Submodule ℂ H}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (h : IsUniformlyAcute U V) :
+    IsUniformlyAcute Uᗮ Vᗮ := by
+  unfold IsUniformlyAcute at h ⊢
   rwa [subspaceGap_orthogonal]
 
 /-- **The direct rotation of the complementary pair is the same operator.**
@@ -679,8 +679,8 @@ The polar factor depends only on the canonical intertwiner, and the acute witnes
 `Prop` the definition discards, so this is `spectraCanonicalIntertwiner_orthogonal`
 transported through `spectraPolarIsometry`. -/
 theorem spectraDirectRotation_orthogonal (U V : Submodule ℂ H)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
-    spectraDirectRotation Uᗮ Vᗮ (isAcute_orthogonal hacute) =
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
+    spectraDirectRotation Uᗮ Vᗮ (isUniformlyAcute_orthogonal hacute) =
       spectraDirectRotation U V hacute := by
   simp only [spectraDirectRotation, spectraCanonicalPolarFactor,
     spectraCanonicalIntertwiner_orthogonal]
@@ -692,7 +692,7 @@ operator algebra. -/
 theorem spectraDirectRotation_mem_unitary
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute ∈ unitary (H →L[ℂ] H) := by
   change spectraCanonicalPolarFactor U V ∈ unitary (H →L[ℂ] H)
   exact (spectraCanonicalPolarFactorUnitary U V hacute).property
@@ -701,7 +701,7 @@ theorem spectraDirectRotation_mem_unitary
 theorem star_spectraDirectRotation_mul_self
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     star (spectraDirectRotation U V hacute) *
         spectraDirectRotation U V hacute = 1 :=
   Unitary.star_mul_self_of_mem
@@ -711,7 +711,7 @@ theorem star_spectraDirectRotation_mul_self
 theorem spectraDirectRotation_mul_star_self
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute *
         star (spectraDirectRotation U V hacute) = 1 :=
   Unitary.mul_star_self_of_mem
@@ -722,7 +722,7 @@ projection back to the source projection. -/
 theorem star_spectraDirectRotation_intertwines
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     star (spectraDirectRotation U V hacute) * projection V =
       projection U * star (spectraDirectRotation U V hacute) := by
   have h := congrArg star (spectraDirectRotation_intertwines U V hacute)
@@ -735,7 +735,7 @@ the complementary source projection. -/
 theorem star_spectraDirectRotation_intertwines_complementary
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     star (spectraDirectRotation U V hacute) * complementaryProjection V =
       complementaryProjection U * star (spectraDirectRotation U V hacute) := by
   change
@@ -751,7 +751,7 @@ projection to the target projection. -/
 theorem spectraDirectRotation_conjugates_projection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute * projection U *
         star (spectraDirectRotation U V hacute) = projection V := by
   calc
@@ -771,7 +771,7 @@ source projection. -/
 theorem star_spectraDirectRotation_conjugates_projection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     star (spectraDirectRotation U V hacute) * projection V *
         spectraDirectRotation U V hacute = projection U := by
   calc
@@ -791,7 +791,7 @@ source projection to the complementary target projection. -/
 theorem spectraDirectRotation_conjugates_complementaryProjection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute * complementaryProjection U *
         star (spectraDirectRotation U V hacute) = complementaryProjection V := by
   calc
@@ -811,7 +811,7 @@ operators. -/
 theorem spectraDirectRotation_intertwines_reflection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute * reflectionOperator U =
       reflectionOperator V * spectraDirectRotation U V hacute := by
   simp only [reflectionOperator_eq_projection_add_projection_sub_one,
@@ -823,7 +823,7 @@ reflection. -/
 theorem star_spectraDirectRotation_intertwines_reflection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     star (spectraDirectRotation U V hacute) * reflectionOperator V =
       reflectionOperator U * star (spectraDirectRotation U V hacute) := by
   simp only [reflectionOperator_eq_projection_add_projection_sub_one,
@@ -835,7 +835,7 @@ reflection to the target reflection. -/
 theorem spectraDirectRotation_conjugates_reflection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute * reflectionOperator U *
         star (spectraDirectRotation U V hacute) = reflectionOperator V := by
   calc
@@ -854,7 +854,7 @@ theorem spectraDirectRotation_conjugates_reflection
 theorem star_spectraDirectRotation_surjective
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     Function.Surjective
       (star (spectraDirectRotation U V hacute) : H →L[ℂ] H) := by
   intro y
@@ -867,7 +867,7 @@ theorem star_spectraDirectRotation_surjective
 theorem star_spectraDirectRotation_injective
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     Function.Injective
       (star (spectraDirectRotation U V hacute) : H →L[ℂ] H) := by
   intro x y hxy
@@ -883,7 +883,7 @@ theorem star_spectraDirectRotation_injective
 theorem star_spectraDirectRotation_maps_subspace
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     V.map ((star (spectraDirectRotation U V hacute) :
       H →L[ℂ] H).toLinearMap) = U := by
   apply le_antisymm
@@ -910,7 +910,7 @@ orthogonal complement. -/
 theorem star_spectraDirectRotation_maps_orthogonalComplement
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     Vᗮ.map ((star (spectraDirectRotation U V hacute) :
       H →L[ℂ] H).toLinearMap) = Uᗮ := by
   apply le_antisymm
@@ -1200,7 +1200,7 @@ product in the acute case. -/
 theorem spectraCanonicalAbsoluteValueUnit_inv_commute_reflectionProduct
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     Commute
       (↑((spectraCanonicalAbsoluteValueUnit U V hacute)⁻¹) : H →L[ℂ] H)
       (spectraReflectionProduct U V) := by
@@ -1213,7 +1213,7 @@ product. -/
 theorem spectraCanonicalPolarFactor_commute_reflectionProduct
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     Commute (spectraCanonicalPolarFactor U V)
       (spectraReflectionProduct U V) := by
   rw [spectraCanonicalPolarFactor_eq_intertwiner_mul_absoluteValueUnit_inv
@@ -1228,7 +1228,7 @@ product whose preferred square root it is intended to realize. -/
 theorem spectraDirectRotation_commute_reflectionProduct
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : IsUniformlyAcute U V) :
     Commute (spectraDirectRotation U V hacute)
       (spectraReflectionProduct U V) :=
   spectraCanonicalPolarFactor_commute_reflectionProduct U V hacute

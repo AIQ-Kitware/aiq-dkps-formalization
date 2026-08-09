@@ -470,9 +470,9 @@ theorem projection_right_reduces_halmosGenericPart
 
 omit [CompleteSpace H] in
 /-- The source defect vanishes for an acute pair. -/
-theorem halmosSourceDefect_eq_bot_of_isAcute
+theorem halmosSourceDefect_eq_bot_of_isUniformlyAcute
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     halmosSourceDefect U V = ⊥ := by
   rw [Submodule.eq_bot_iff]
   intro x hx
@@ -490,9 +490,9 @@ theorem halmosSourceDefect_eq_bot_of_isAcute
 
 omit [CompleteSpace H] in
 /-- The target defect vanishes for an acute pair. -/
-theorem halmosTargetDefect_eq_bot_of_isAcute
+theorem halmosTargetDefect_eq_bot_of_isUniformlyAcute
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     halmosTargetDefect U V = ⊥ := by
   rw [Submodule.eq_bot_iff]
   intro x hx
@@ -511,16 +511,16 @@ theorem halmosTargetDefect_eq_bot_of_isAcute
 omit [CompleteSpace H] in
 /-- For an acute pair the elementary part consists only of the common and
 exterior summands. -/
-theorem halmosTrivialPart_eq_common_sup_exterior_of_isAcute
+theorem halmosTrivialPart_eq_common_sup_exterior_of_isUniformlyAcute
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     halmosTrivialPart U V = halmosCommonPart U V ⊔ halmosExteriorPart U V := by
   change
     (halmosCommonPart U V ⊔ halmosSourceDefect U V) ⊔
         (halmosTargetDefect U V ⊔ halmosExteriorPart U V) =
       halmosCommonPart U V ⊔ halmosExteriorPart U V
-  rw [halmosSourceDefect_eq_bot_of_isAcute U V hacute,
-    halmosTargetDefect_eq_bot_of_isAcute U V hacute]
+  rw [halmosSourceDefect_eq_bot_of_isUniformlyAcute U V hacute,
+    halmosTargetDefect_eq_bot_of_isUniformlyAcute U V hacute]
   simp
 
 /-! ## Projection algebra -/

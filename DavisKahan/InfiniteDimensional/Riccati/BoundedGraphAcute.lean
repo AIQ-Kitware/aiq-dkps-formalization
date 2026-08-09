@@ -142,8 +142,8 @@ theorem blockGraph_eq_range_zeroGraph_angularParam (X : E0 →L[𝕜] E1) :
       (X (WithLp.fst w))).mpr rfl
 
 /-- Every bounded block graph is acute to the zero graph. -/
-theorem zeroGraph_isAcute_blockGraph (X : E0 →L[𝕜] E1) :
-    IsAcute (blockGraph (0 : E0 →L[𝕜] E1)) (blockGraph X) := by
+theorem zeroGraph_isUniformlyAcute_blockGraph (X : E0 →L[𝕜] E1) :
+    IsUniformlyAcute (blockGraph (0 : E0 →L[𝕜] E1)) (blockGraph X) := by
   apply (acute_iff_exists_bounded_angularOperator
     (blockGraph (0 : E0 →L[𝕜] E1)) (blockGraph X)).2
   exact ⟨blockAngularOperator X,
@@ -169,7 +169,7 @@ theorem complex_blockDiagonalization_of_riccati
       W ∘L Winv = ContinuousLinearMap.id ℂ _ ∧
       Winv ∘L blockOperator H ∘L W = blockDiagonalOperator D0 D1 := by
   exact complex_blockDiagonalization_of_riccati_of_acute H hX
-    (zeroGraph_isAcute_blockGraph X)
+    (zeroGraph_isUniformlyAcute_blockGraph X)
 
 end Complex
 

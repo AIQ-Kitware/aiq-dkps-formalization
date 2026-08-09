@@ -182,7 +182,7 @@ theorem re_inner_projection_compression
 /-- The acute canonical direct rotation has nonnegative source compression. -/
 theorem spectraDirectRotation_sourceCompression_nonnegative
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) (x : H) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) (x : H) :
     0 ≤ RCLike.re
       ⟪x, (projection U * spectraDirectRotation U V hacute *
         projection U) x⟫_ℂ := by
@@ -230,7 +230,7 @@ theorem spectraDirectRotation_sourceCompression_nonnegative
 compression. -/
 theorem spectraDirectRotation_complementCompression_nonnegative
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) (x : H) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) (x : H) :
     0 ≤ RCLike.re
       ⟪x, (complementaryProjection U *
         spectraDirectRotation U V hacute *
@@ -300,7 +300,7 @@ theorem spectraDirectRotation_complementCompression_nonnegative
 skew-adjoint. -/
 theorem spectraDirectRotation_crossed_blocks
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     complementaryProjection U * spectraDirectRotation U V hacute *
         projection U =
       -star (projection U * spectraDirectRotation U V hacute *
@@ -334,7 +334,7 @@ theorem spectraDirectRotation_crossed_blocks
 /-- The acute Spectra direct rotation satisfies the paper's block definition. -/
 theorem spectraDirectRotation_isPaperDirectRotation
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     IsPaperDirectRotation U V (spectraDirectRotation U V hacute) where
   unitary_mem := spectraDirectRotation_mem_unitary U V hacute
   intertwines := spectraDirectRotation_intertwines U V hacute
@@ -348,7 +348,7 @@ theorem spectraDirectRotation_isPaperDirectRotation
 adjoint of the canonical direct rotation. -/
 theorem corollary3_2_reversal_completed
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation V U hacute.symm =
       star (spectraDirectRotation U V hacute) :=
   spectraDirectRotation_reversal U V hacute
