@@ -34,18 +34,17 @@ theory but a statement of where the theory lives.
   `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorC_nonneg`: under uniform
   *quarter* transversality the doubled angle stays inside the principal branch.
 
-## Open obligation
+## Where the estimates about these objects live
 
 The whole-space `tan Θ` estimate `δ ‖tan Θ‖ ≤ ‖H‖` (Section 2, second
 conclusion of the `tan θ` theorem; derived at Section 7 lines around equation
-(7.6)) is **not** proved here.  Its directed companion `δ ‖tan Θ₀‖ ≤ ‖R‖` is in
-the build through Theorem 6.3, and the two block lemmas the derivation needs —
-Lemma 6.1 with its converse, and the Lemma 6.2 reflection pinch — are available
-as `paperLemma61_all_kyFan`, `paperLemma61_converse` and
-`paperDiagonalPair_all_kyFan_le`.  What is missing is the equisingularity of the
-two directed tangent blocks in a form that matches the diagonal representative
-`theorem63DirectedTangent`, which is currently a finite-rank singular-basis
-construction rather than a functional calculus of this operator.
+(7.6)) is proved in
+`DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean`, and the ambient
+`tan 2Θ` estimate in
+`DavisKahan/Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean`.  The real-scalar
+forms of both, and the real counterparts of the operators defined here, are in
+`DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean` and
+`DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean`.
 
 ## References
 
