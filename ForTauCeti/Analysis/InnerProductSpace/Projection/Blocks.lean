@@ -57,6 +57,36 @@ noncomputable def offDiagonalPart (U : Submodule 𝕜 E)
 def IsOffDiagonal (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →L[𝕜] E) : Prop := U.diagonalPart A = 0
 
+/-- The diagonal part as a sum of two pinches.  The definition is not exposed
+across module boundaries, so consumers rewrite with this. -/
+theorem diagonalPart_eq (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (A : E →L[𝕜] E) :
+    U.diagonalPart A =
+      U.starProjection ∘L A ∘L U.starProjection +
+        Uᗮ.starProjection ∘L A ∘L Uᗮ.starProjection := by
+  simp only [diagonalPart]
+
+/-- The off-diagonal part as the diagonal-part defect. -/
+theorem offDiagonalPart_eq (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (A : E →L[𝕜] E) : U.offDiagonalPart A = A - U.diagonalPart A := by
+  simp only [offDiagonalPart]
+
+/-- Pointwise form of the diagonal part. -/
+theorem diagonalPart_apply (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (A : E →L[𝕜] E) (x : E) :
+    U.diagonalPart A x =
+      U.starProjection (A (U.starProjection x)) +
+        Uᗮ.starProjection (A (Uᗮ.starProjection x)) := by
+  rw [diagonalPart_eq]
+  simp only [add_apply, ContinuousLinearMap.comp_apply]
+
+/-- Pointwise form of the off-diagonal part. -/
+theorem offDiagonalPart_apply (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (A : E →L[𝕜] E) (x : E) :
+    U.offDiagonalPart A x = A x - U.diagonalPart A x := by
+  rw [offDiagonalPart_eq]
+  simp only [sub_apply]
+
 /-- Pointwise formula for reflection. -/
 @[simp]
 theorem reflectionOperator_apply (U : Submodule 𝕜 E)
