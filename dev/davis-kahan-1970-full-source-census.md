@@ -11,9 +11,9 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 23 |
-| `compiled_specialization` | 19 |
-| `compiled_general_infrastructure` | 2 |
+| `compiled_exact` | 25 |
+| `compiled_specialization` | 18 |
+| `compiled_general_infrastructure` | 1 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
 | `partial_or_wrapper_missing` | 0 |
@@ -136,14 +136,6 @@ THE ROUTE NOTE AT THE TOP OF THIS BLOCKER IS VINDICATED HERE, AND SO IS THE M32 
 
 Gates: S2-unbounded-scope (proved_in_build), DK-3.2-prop (proved_in_build), DK-3.1-thm (proved_in_build), DK-3.1-cor (proved_in_build), DK-3.5-prop (proved_in_build), DK-8.1-thm (proved_in_build), DK-8.2-thm (proved_in_build), DK-9-model (proved_in_build)
 
-### `exact-source-wrappers` -- mechanical
-
-**Source-numbered wrappers over already-proved general theorems**
-
-The mathematics is in the build in a more general form; what is missing is a statement carrying the paper's numbering, scope and hypotheses, so the facade can cite it.
-
-Gates: S1-block-residual (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.4-prop (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
-
 
 ## Source ledger
 
@@ -152,13 +144,24 @@ Gates: S1-block-residual (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2
 #### Section 1, equations (1.1)–(1.8): Two reducing decompositions and the residual
 
 - **Kind:** `construction`
-- **Status:** `compiled_general_infrastructure`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Block decompositions for A and A+H, trial and exact coordinate maps, and R = (A+H)E0 - E0 A0.
-- **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `TauCeti.DavisKahan.Experimental.ExactSinTheta.PaperTheorem61Data`, `TauCeti.DavisKahan.Experimental.ExactSinTheta.UnboundedSinThetaData`
+- **Current Lean references:** `TauCeti.DavisKahan.residual`, `TauCeti.DavisKahan1970.Equation1_8`, `TauCeti.DavisKahan1970.equation1_8_eq_perturbation_comp`, `TauCeti.DavisKahan.Experimental.Frontier.Section8.residual_eq_comp_subtypeL`, `TauCeti.DavisKahan1970.equation1_8_norm_sq_eq_diagonal_add_offDiagonal`, `TauCeti.DavisKahan1970.equation1_8_norm_offDiagonal_le`, `TauCeti.DavisKahan.Experimental.ExactSinTheta.PaperTheorem61Data`, `TauCeti.DavisKahan.Experimental.ExactSinTheta.UnboundedSinThetaData`
 - **Assessment:** The exact notation is distributed across the Section 6 source data records rather than exposed as a Section 1 facade.
-- **Next action:** Add source-facing construction aliases only if useful for the full-paper facade.
+
+**M37, 2026-08-09 (Claude Opus 5).  THE `exact-source-wrappers` BLOCKER IS RETIRED, AND THIS ROW IS WHERE ITS TEXT IS PRESERVED.**
+
+Verbatim, as it stood in the `blockers` table, because the standing observation it makes is still worth reading:
+
+> **Source-numbered wrappers over already-proved general theorems** (kind: mechanical).  The mathematics is in the build in a more general form; what is missing is a statement carrying the paper's numbering, scope and hypotheses, so the facade can cite it.
+
+MEASURED 2026-08-09 by elaborating every declaration on all six of its rows against `DavisKahan.All`: FOUR OF THE SIX HAD NOTHING OUTSTANDING.  `DK-3.1-def`, `DK-3.2-def`, `DK-7-sin2-proof` and `DK-7-tan2-proof` were already `compiled_exact`, and their own notes had recorded -- on 2026-08-06 and 2026-08-07 -- that the requested wrapper existed; only the `blocked_by` reference was left behind.  The blocker's count therefore overstated itself by four, exactly the failure already recorded for `DK-6.1-thm` and `DK-6.2-thm` on the other blocker.  Only `DK-3.4-prop` carried real work, and that work was not mechanical; see its note.
+
+THIS ROW'S OWN PREMISE WAS ALSO PARTLY FALSE.  The `notes` said the Section 1 notation is 'distributed across the Section 6 source data records rather than exposed as a Section 1 facade', and the row listed only those two records.  It missed that equation (1.8) itself is a compiled definition -- `TauCeti.DavisKahan.residual`, `R = (A + H)E₀ - E₀A₀` -- and that the Section 1 remark `R = HE₀` is a compiled theorem, `residual_eq_comp_subtypeL` in `DavisKahan/Frontier/Section8Residual.lean`, where Theorem 8.2's residual branch consumes it.  Both are now listed.
+
+WHAT M37 ADDED: `DavisKahan/Sources/DavisKahan1970/Section1.lean`, the source-numbered facade, in the established `Section5.lean` style -- the two existing results are cited by `:=` (`alias`), not restated, so there is a single source of truth.  The one Section 1 claim that was genuinely not compiled is now proved: `R⋆R = H₀² + B⋆B`, stated as the quadratic form `‖Ru‖² = ‖H₀u‖² + ‖Bu‖²` (over ℂ a self-adjoint operator is determined by its quadratic form, and this spelling needs neither of the paper's coordinate isometries), together with the consequence the paper draws from it -- the residual is smallest exactly when `H₀ = 0`, which is what makes the Rayleigh-quotient choice `A₀ = E₀⋆(A + H)E₀` a good one.  Both axiom-clean.
+- **Next action:** Nothing outstanding for equation (1.8) or for either Section 1 claim about it.  The block representations (1.2)--(1.3) are notation, and the way this repository spells them differs from the print; that difference is recorded in `scope_gap` rather than left as proof debt.  One residual clause is compiled in a weaker shape than printed, and is recorded here rather than left implicit: the remark that `‖R‖` is minimized by taking `H₀ = 0` quantifies over choices of the trial operator `A₀`, whereas `equation1_8_norm_offDiagonal_le` fixes `A₀` at the unperturbed compression and compares pointwise, with equality at `u` exactly when the diagonal block kills `u`.  That is the mechanism of the printed remark, not the optimization statement; ranging over `A₀` would make the trial operator a variable of the statement, which `DavisKahan.residual`'s signature does not.
 
 #### Section 1, equations (1.9)–(1.13): Unitary-invariant norms and Fan dominance
 
@@ -862,7 +865,6 @@ CORRECTION TO THE MEASUREMENT THIS ROW RECORDED IN `scope_gap`.  The claim that 
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** A unitary intertwining the two projections whose diagonal cosine blocks are positive and whose off-diagonal sine blocks are adjoints.
-- **Blocked by:** `exact-source-wrappers`
 - **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation`, `TauCeti.DavisKahan.Experimental.spectraCanonicalIntertwiner`, `TauCeti.DavisKahan.Experimental.Frontier.IsPaperDirectRotation`, `TauCeti.DavisKahanTheory.angleComplexStructure`, `TauCeti.DavisKahanTheory.directRotation_eq_cos_add_J_sin`, `TauCeti.DavisKahanTheory.directRotationCosine_eq_half_smul_add`, `TauCeti.DavisKahanTheory.directRotation_sub_cosine_eq_half_smul_sub`, `TauCeti.DavisKahanTheory.directRotation_sub_cosine_comp_self`, `TauCeti.DavisKahanTheory.angleComplexStructure_comp_self`, `TauCeti.DavisKahanTheory.angleComplexStructure_comp_angleOperator_comp_self`, `TauCeti.DavisKahanTheory.directRotationCosine_eq_calculus`, `TauCeti.DavisKahanTheory.sinAngleOperator_eigenvalues_mem_Icc`, `TauCeti.DavisKahanTheory.directRotation_eq_exp_angleComplexStructure_comp_angleOperator`, `TauCeti.DavisKahan1970.real_directRotation`, `TauCeti.DavisKahan1970.real_directRotation_orthogonal`, `TauCeti.DavisKahan1970.real_directRotation_intertwines`, `TauCeti.DavisKahan1970.real_directRotation_diagonalBlock`, `TauCeti.DavisKahan1970.real_directRotation_complementaryDiagonalBlock`, `TauCeti.DavisKahan.Experimental.canonicalAbsoluteValueR`, `TauCeti.DavisKahan.Experimental.complexify_directRotationR`
 - **Assessment:** Acute complex and finite constructions exist; exact nonacute source scope is not yet unified.
 
@@ -887,6 +889,8 @@ The exponential series is then evaluated on the eigenbasis of `sin Theta`, where
 THE DESCENT.  `spectraDirectRotation` is the polar factor of `S = P_V P_U + P_Vperp P_Uperp`.  For a complexified pair `S` is the complexification of a real operator, hence conjugation-fixed; `RealComplexification.conjugateOperator_modulus` (added by M31) makes `|S|` conjugation-fixed; in the acute case `|S|` is a unit, so cancelling it in `W |S| = S` makes `W` conjugation-fixed, and `complexify_realPartOperator` returns the real operator.  Nothing else was needed -- no re-proof of the polar decomposition over `R`.
 
 What is left on this row is the DIMENSION axis on `J`, which is a different blocker's business, plus the standing `exact-source-wrappers` entry.
+
+**M37, 2026-08-09 (Claude Opus 5).  STALE BLOCKER ENTRY REMOVED.**  `exact-source-wrappers` asked for 'a statement carrying the paper's numbering, scope and hypotheses'.  This row's 2026-08-06 note had already recorded that `IsPaperDirectRotation` IS printed Definition 3.1, for an arbitrary pair and with no acuteness, and its `next_action` opens 'Nothing outstanding for the printed narrative'.  Re-measured 2026-08-09 by elaborating `IsPaperDirectRotation`, `complex_directRotation`, `real_directRotation` and `directRotation_eq_exp_angleComplexStructure_comp_angleOperator` against `DavisKahan.All`: every one resolves and every one is axiom-clean.  The gap this row still carries is the DIMENSION axis on the quarter turn `J`, recorded in `scope_gap`; no blocker in the table covers it, and it is not a wrapper question.  The blocker is retired; its text is preserved on `S1-block-residual`.
 - **Next action:** Nothing outstanding for the printed narrative: the definition is compiled in source form, every Section 3 existence regime is a proved theorem on its own row (DK-3.1-prop, DK-3.2-prop, DK-3.3-prop), and both `U = cos Theta + J sin Theta` and `U = exp(J Theta)` are proved.  Remaining scope work is the standing one: every `J` declaration is finite-dimensional, and lifting `J`, `J^2 = -(support projection)` and the exponential form to the bounded complex tree requires a `J` to exist there first.
 
 #### Definition 3.2: Acute case
@@ -895,7 +899,6 @@ What is left on this row is the DIMENSION axis on `J`, which is a different bloc
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Both crossed intersections P ∩ Q-perp and P-perp ∩ Q vanish.
-- **Blocked by:** `exact-source-wrappers`
 - **Current Lean references:** `TauCeti.IsAcute`, `TauCeti.isAcute_iff_inf_orthogonal_eq_bot`, `TauCeti.DavisKahan.IsUniformlyAcute`, `TauCeti.isAcute_of_projectionGap_lt_one`, `TauCeti.directedProjectionGap_lt_one_of_transverse`, `TauCeti.projectionGap_lt_one_of_isAcute`, `TauCeti.isAcute_iff_projectionGap_lt_one`, `TauCeti.one_le_projectionGap_of_forall_exists_unit_lt`
 - **Assessment:** The predicate is broadly used but lacks a numbered source alias.
 
@@ -945,6 +948,8 @@ printed predicate is used, and the two agree there by (1), the finite-dimensiona
 results are at the printed hypothesis exactly.
 
 (5) `one_le_projectionGap_of_forall_exists_unit_lt` isolates exactly what fails in infinite dimension, with no dimension hypothesis: if unit vectors of `U` are almost annihilated by `P_V` without any being annihilated exactly, the gap is forced to `1`.  That is the complement of `directedProjectionGap_lt_one_of_transverse`, where compactness turns the infimum into a positive minimum, and it supplies half of the missing counterexample.
+
+**M37, 2026-08-09 (Claude Opus 5).  STALE BLOCKER ENTRY REMOVED.**  The wrapper this blocker asked for is `TauCeti.IsAcute` together with `isAcute_iff_inf_orthogonal_eq_bot`, which states Definition 3.2 in the paper's own words (`U ⊓ Vᗮ = ⊥` and `Uᗮ ⊓ V = ⊥`); both were already listed here and both re-elaborate clean.  The row's single open `next_action` -- a compiled infinite-dimensional pair separating the printed predicate from the quantitative one -- is a counterexample, not a wrapper, and is not what this blocker described.  The blocker is retired; its text is preserved on `S1-block-residual`.
 - **Next action:** One item.  Compile a counterexample showing the finite-dimensionality of `projectionGap_lt_one_of_isAcute` is not removable -- two closed subspaces of an infinite-dimensional Hilbert space with both crossed intersections zero and `||P_U - P_V|| = 1`, e.g. `U` and `V` spanned by orthonormal families at principal angles `theta_n` increasing to `pi/2`.  Until that is compiled the infinite-dimensional failure is asserted in prose only (it is classical, and the docstrings say so rather than naming a declaration).  Re-scoping Propositions 3.1, 3.4, 3.5 and Corollary 3.2 onto the printed predicate remains the separate infinite-dimensional design question recorded on those rows; it is NOT a rename, because under the printed definition `|S|` is injective with dense range but not invertible.
 
 #### Proposition 3.1: Acute direct rotation existence and uniqueness
@@ -1063,11 +1068,10 @@ The self-adjointness hypotheses on the two diagonal compressions are *not* a spe
 #### Proposition 3.4: Square as a direct rotation
 
 - **Kind:** `proposition`
-- **Status:** `compiled_specialization`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** When the cosine block squared is at least one half, U squared is the direct rotation from the reflected subspace to the target subspace.
-- **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `TauCeti.DavisKahanTheory.directRotation_sq`, `TauCeti.DavisKahan1970.complex_directRotation_sq`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_4_square_is_reflected_directRotation`
+- **Current Lean references:** `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_4_source`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_4_source_eq_directRotation`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.crossedDefect_image_of_unitary_sq`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.norm_projection_apply_le_of_forall_mem_source`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.re_inner_halmosCosineSq_sub_half_nonneg_of_source`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.re_inner_halmosCosineSq_self`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.isSelfAdjoint_source_block_spectraDirectRotation`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.isSelfAdjoint_complement_block_spectraDirectRotation`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.nonneg_add_star_of_re_inner_nonneg`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.reflectionOperator_mul_projection_self`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.projection_mul_reflectionOperator_self`, `TauCeti.DavisKahanTheory.directRotation_sq`, `TauCeti.DavisKahan1970.complex_directRotation_sq`, `TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_4_square_is_reflected_directRotation`
 - **Assessment:** Square identities exist; exact source mapping between Q-minus and Q needs verification.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. The square-is-a-direct-rotation content is compiled and axiom-clean; an exact source wrapper is absent.
@@ -1083,7 +1087,21 @@ extra acuteness hypothesis, rather than the printed statement about `(Q_- H, Q H
 `C_0^2 >= 1/2`.  See `scope_gap` for the three measured differences.  Nothing recorded here was wrong
 about the mathematics -- the compiled theorem is true and axiom-clean; the row's judgement against the
 printed statement was too strong.
-- **Next action:** Restate Proposition 3.4 as printed: exhibit the witness as the reflected pair `(Q_- H, Q H)` rather than existentially, from the printed hypothesis `C_0^2 >= 1/2` rather than the symmetrized form bound, and derive the reflected-pair acuteness instead of assuming it.  Optional hardening, unchanged: compile the two prose counterexamples in the docstring of `proposition3_4_square_is_reflected_directRotation`, which pin the corrected hypothesis shape.
+
+**M37, 2026-08-09 (Claude Opus 5).  PRINTED PROPOSITION 3.4 IS COMPILED.  STATUS RAISED `compiled_specialization` -> `compiled_exact`, AND THE BLOCKER IS DISCHARGED BY PROOF.**  This was the only one of the six `exact-source-wrappers` rows with real work on it, and the work was not mechanical: each of the three narrowings recorded in `scope_gap` on 2026-08-09 needed mathematics, not a restatement.
+
+`proposition3_4_source` (`DavisKahan/Frontier/Section3.lean`) is the printed sentence -- if `C₀² ≥ ½` then `U²` is the direct rotation of `Q₋ℋ` to `Qℋ` -- as `IsPaperDirectRotation (reflectedSubspace U V) V (W * W)`, with `W` the direct rotation of the pair.  The paper's own proof verifies exactly clauses (i) and (ii) of Definition 3.1 plus the intertwining `U²Q₋ = QU²`, which is what that predicate records.
+
+(1) THE PAIR WAS THE WRONG ONE, AND BOTH ARE TRUE.  `reflectedSubspace A B` is the mirror of `B` in `A`, so the paper's `Q₋ = XQX` is `reflectedSubspace U V`.  The compiled theorem exhibited `(U, reflectedSubspace V U)` -- the source and its own mirror in the target.  Each statement says `W²` is the direct rotation from some subspace onto its `W²`-image, and they are different subspaces; only the second is printed.
+
+(2) THE HYPOTHESIS IS ON `Pℋ` ALONE, AND EXTENDING IT IS A THEOREM.  By (3.7), `C₀² = E₀⋆QE₀`, so the printed `C₀² ≥ ½` is `∀ x ∈ U, ‖x‖²/2 ≤ ‖P_V x‖²`.  What the accretivity of `R_V R_U` needs is the same bound for `cos²Θ` on all of ℋ, i.e. also `C₁² ≥ ½` on `P̃ℋ`.  THAT IMPLICATION IS FALSE FOR AN ARBITRARY PAIR: take `U ⊆ V` with `dim V > dim U`, where `C₀² = 1` while `C₁²` has `0` in its numerical range.  It holds here because the acute case supplies a unitary intertwiner whose two crossed blocks are adjoint -- Definition 3.1(ii), `S₁ = S₀⋆` -- so the two directed gaps `‖P_{Vᗮ}P_U‖` and `‖P_V P_{Uᗮ}‖` are EQUAL.  `norm_projection_apply_le_of_forall_mem_source` is that acute directed-gap transfer, proved through the `star`-block calculus of the canonical direct rotation.  `Submodule.projectionGap_eq_max_directedProjectionGap` does not give it: it only says the symmetric gap is the larger of the two.
+
+(3) THE EXTRA ACUTENESS HYPOTHESIS IS GONE, AND THE ARGUMENT THAT IT WAS NECESSARY WAS ABOUT THE ROUTE, NOT THE CLAIM.  The docstring of `proposition3_4_square_is_reflected_directRotation` argues that `IsUniformlyAcute U (reflectedSubspace V U)` is 'genuinely not derivable' -- correctly, since at the boundary `C₀² = ½` the reflected pair has gap one.  But that hypothesis is needed only to index `spectraDirectRotation` for the reflected pair.  Routing through Proposition 3.3's NONACUTE converse removes it: the crossed-intersection mapping condition that the converse takes as a hypothesis is free for every unitary square root of the reflection product that intertwines the two projections.  That is `crossedDefect_image_of_unitary_sq`, factored out of `proposition3_3_principalSquareRoot_forward` -- which had contained it inline and now cites it, so the twenty-five lines exist once.  Acuteness of the ORIGINAL pair is retained: `spectraDirectRotation U V` is indexed by it, and (2) needs the intertwiner it provides.
+
+`proposition3_4_source_eq_directRotation` supplies the printed definite article: with the reflected pair acute as well, `W²` is the canonical direct rotation of `(Q₋ℋ, Qℋ)` on the nose, by Proposition 3.1 uniqueness.  Without it, `proposition3_4_source` still holds and Proposition 3.2 says the direct rotation need not be unique.
+
+`proposition3_4_square_is_reflected_directRotation` is KEPT, not replaced: it is true, axiom-clean, and it is the statement about the other reflected pair.  All eleven new declarations are axiom-clean `[propext, Classical.choice, Quot.sound]`.
+- **Next action:** Nothing outstanding for printed Proposition 3.4.  Optional hardening, unchanged and still optional: compile the two prose counterexamples in the docstring of `proposition3_4_square_is_reflected_directRotation`, which pin the corrected hypothesis shape of THAT statement (they are about its symmetrized form bound and its reflected-pair acuteness, neither of which printed Proposition 3.4 now carries).
 
 #### Theorem 3.1: Classification of pairs of subspaces
 
@@ -1831,7 +1849,6 @@ So `Section6AppendixLeakage.lean` was generalized to `RCLike 𝕜` (`approximati
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** Reflect the perturbation by 2P-1, identify U squared and sin(2 Theta), and reduce the result to the symmetric sine theorem.
-- **Blocked by:** `exact-source-wrappers`
 - **Current Lean references:** `TauCeti.DavisKahan1970.sinTwoTheta_mirrorDefect_eq_perturbationDefect`, `TauCeti.DavisKahan1970.sinTwoTheta_mirrorDefect_le_two_mul`, `TauCeti.DavisKahan1970.sinTwoTheta_reflectedOverlap_norm`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative`
 - **Assessment:** The reflection identities and finite theorem exist; the exact full proof package is under repair.
 
@@ -1840,6 +1857,8 @@ STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infra
 VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `DavisKahan.All`, `DavisKahan.Experimental.All` and `ForTauCeti` and running `#print axioms` on all 87 declarations named in this census elaborated cleanly -- every name resolves and **none reaches `sorryAx`**. A second probe importing only the default-build roots showed 78 of the 87 resolve there; the 9 that do not are exactly the `TauCeti.DavisKahan1970.Section8.*` names on rows DK-8.1-thm and DK-8.2-thm, whose `proved_outside_build` verification was already correct. `candidate_under_repair` -- "not compiler-certified on this base" -- was therefore false for every row that carried it. The scope question (does the compiled statement match the printed one?) is a separate judgement and is recorded in `next_action`; the status below is the weakest one consistent with that recorded evidence, so no row is overstated.
 
 ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'source wrapper preserving both residual and perturbation conclusions' has existed since the SinTwoTheta facade landed (DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean, `namespace TauCeti.DavisKahan1970`): the mirror-defect identities of the reflection proof (equations (7.1)-(7.3): `sinTwoTheta_mirrorDefect_eq_perturbationDefect`, `_le_two_mul`, and the gauge form), the double-angle identification (7.4)-(7.5) (`sinTwoTheta_reflectedOverlap_norm`), and BOTH conclusions at source-general scope -- arbitrary complete Hilbert space, unbounded closed self-adjoint operator, arbitrary Ky-Fan-dominant ideal family, representative freedom: `unbounded_sinTwoTheta_uiNorm_representative` (perturbation form, sharp factor two) and `unbounded_sinTwoTheta_residual_uiNorm_representative` (residual form, constant one).  All resolve from `DavisKahan.All` and are axiom-clean (verified by elaborator probe 2026-08-07).
+
+**M37, 2026-08-09 (Claude Opus 5).  STALE BLOCKER ENTRY REMOVED.**  The 2026-08-07 correction on this row already recorded that the requested source wrapper exists and that the row's `next_action` is 'Nothing outstanding for the reflection proof package'; the `blocked_by` reference to `exact-source-wrappers` was simply not removed with it.  Re-measured 2026-08-09 by elaborating all five declarations against `DavisKahan.All`: every one resolves, including both conclusions at source-general scope (`unbounded_sinTwoTheta_uiNorm_representative`, sharp factor two, and `unbounded_sinTwoTheta_residual_uiNorm_representative`, constant one).  The blocker is retired; its text is preserved on `S1-block-residual`.
 - **Next action:** Nothing outstanding for the reflection proof package.
 
 #### Section 7, equation (7.6) and following argument: Singular-vector proof of the tangent double-angle theorem
@@ -1848,7 +1867,6 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'source wrapper pr
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** The off-diagonal block equation and paired singular vectors yield Ky Fan and UI-norm bounds for tan(2 Theta).
-- **Blocked by:** `exact-source-wrappers`
 - **Current Lean references:** `TauCeti.DavisKahan1970.tanTwoTheta_uiNorm`, `TauCeti.DavisKahan1970.tanTwoTheta_kyFan`, `TauCeti.DavisKahan1970.tanTwoTheta_uiIdeal_infinite`, `TauCeti.DavisKahan1970.tanTwoTheta_kyFan_infinite`, `TauCeti.DavisKahan1970.tanTwoTheta_sharp_opNorm`, `TauCeti.DavisKahan1970.tanTwoTheta_spectral_repulsion`, `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_residual_opNorm`, `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_residual_div`
 - **Assessment:** The operator-norm theorem is compiled in finite dimensions; the arbitrary UI-norm singular-vector argument remains uncertified.
 
@@ -1861,6 +1879,8 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 **UNBOUNDED COMPANION, 2026-08-08 (Claude Opus 5).**  The branch-free unbounded form of equation (7.6) -- `A (S x) - S (A x) = C (B x) - B (C x)` on `D(A)`, for `S` and `C` the odd and even blocks of the reducing reflection -- and an explicit pole-exclusion bound `|cos 2 Theta_0| >= delta / sqrt(delta^2 + 4 ||B||^2)` now exist in `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/{ReflectionBlocks,UnboundedReflection,UnboundedPole}.lean`.  They are the unbounded, residual-form analogue of this row's argument and are recorded on `DK-6-appendix`; the Ky Fan and unitarily-invariant-norm endpoint for the unbounded case is still open, so nothing on this row changes.
 
 **OPERATOR-NORM UNBOUNDED RESIDUAL COMPANION, 2026-08-09 (Claude Opus 5).**  `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_residual_opNorm` and `..._div` (`Sources/DavisKahan1970/TanTwoThetaUnboundedResidual.lean`) give the operator-norm case of this row's theorem for UNBOUNDED self-adjoint `A`, in residual form with the sharp constant `2` and structural branch-freeness, together with the explicit pole exclusion `|cos 2 Theta_0| >= delta / sqrt(delta^2 + 4 ||B||^2)`.  The arbitrary-UI-norm (Ky Fan `nu >= 2`) case in the unbounded setting is still open; the obstruction is recorded on `DK-6-appendix`.  Nothing on this row changes: the bounded results here are unaffected.
+
+**M37, 2026-08-09 (Claude Opus 5).  STALE BLOCKER ENTRY REMOVED.**  As on `DK-7-sin2-proof`, the 2026-08-07 correction had already recorded that equation (7.6) is compiled at the source norm scope (`tanTwoTheta_uiNorm`, by the paper's paired-singular-vector argument) with the infinite-dimensional sharp ideal forms beside it, and had set `next_action` to 'Nothing outstanding at the source's own scope'; only the `blocked_by` entry was left behind.  Re-measured 2026-08-09 by elaboration against `DavisKahan.All`: all eight declarations resolve.  The blocker is retired; its text is preserved on `S1-block-residual`.
 - **Next action:** Nothing outstanding at the source's own scope.  The facade docstring records the deliberate exclusions (finite-carrier condition for the sharp ideal form; refuted unrestricted statement).
 
 ### Section 8
