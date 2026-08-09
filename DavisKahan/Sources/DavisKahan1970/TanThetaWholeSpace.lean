@@ -8,6 +8,7 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 import DavisKahan.TanTheta.Theorem63InfiniteTrial
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramResolvent
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
 /-!
 # The whole-space half of the `tan Θ` theorem
