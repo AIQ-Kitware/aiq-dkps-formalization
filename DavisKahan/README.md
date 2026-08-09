@@ -58,7 +58,7 @@ the failure, and the corrected endpoints all live in the production library
 rather than in a footnote.
 
 That is the opposite of an approach *we* tried and abandoned. Those are
-sequestered into `FailedAttempts` (lane `DK-FAILED`) precisely because they
+sequestered into `FailedAttempts` precisely because they
 teach a reader nothing about the mathematics — only about our route to it.
 
 **This material is deliberately not `ForTauCeti`-bound.** It is paper-specific
@@ -85,9 +85,6 @@ qualified as finite-dimensional.
 - `BoundedOperator/` contains supported arbitrary-Hilbert-space bounded
   specializations and reusable geometric foundations. It is not the owner of
   the unqualified source-facing theorem names.
-- `Experimental/InfiniteDimensional/SinTheta/Canonical.lean` records the
-  maximally general source target while the closed-operator, ideal, and
-  spectral-cutoff dependencies are still incomplete.
 - `FiniteDimensional/Core/` contains finite spectral-subspace, gap, angle, and
   block-operator vocabulary.
 - `FiniteDimensional/Residual/` contains Ritz, trial-map, and angle-embedding
@@ -99,24 +96,24 @@ qualified as finite-dimensional.
 - `FiniteDimensional/DirectRotation/` contains the proved canonical rotation
   construction and its basic intertwining surface.
 - `Sources/` contains publication-facing theorem surfaces and source-specific
-  wrappers. `Sources/DavisKahan1970/README.md` records the exact boundary
-  between the proof-complete Part III package and the remaining paper audit.
+  wrappers. `Sources/DavisKahan1970/README.md` and the generated source census
+  record the current proved/conditional boundary across the 1970 paper.
 - `Specialized/` contains distinct useful secondary endpoints.
 - `Alternative/` contains proof-complete duplicate or lower-dependency proofs
   and noncanonical wrapper APIs retained for explicit reuse and cherry-picking.
-- `Experimental/` contains incomplete or unstable finite- and
-  infinite-dimensional work, including scaffolding toward the missing
-  bounded, operator-ideal, and unbounded source layers.
+- `Experimental/` contains incomplete or unstable frontier work that is kept
+  out of the production aggregate until its statements and dependencies are
+  ready to graduate.
 
 The dependency direction is deliberate: canonical bounded and finite modules
 must not import `Sources`, `Specialized`, `Alternative`, or `Experimental`.
 Those branches are leaves built on the canonical library.
 
 `import DavisKahan` exposes the supported bounded-operator and
-finite-dimensional theory together with the current finite Davis--Kahan Part
-III facade. That import surface is a convenience and stability boundary, not a
-claim that the full paper has been formalized. Other source surfaces,
-specialized endpoints, alternative proofs, and experiments require explicit
+finite-dimensional theory together with the production source aggregate in
+`DavisKahan.Sources.All`. That import surface is a convenience and stability
+boundary, not a blanket claim that every source obligation is discharged.
+Specialized endpoints, alternative proofs, and experiments require explicit
 imports.
 
 `import DavisKahan.All` exposes every proof-finished source, specialized, and
@@ -124,5 +121,5 @@ alternative module, while still excluding `Experimental`.
 
 The maintained completion standard is documented in
 [`docs/planning/davis-kahan-full-paper-goal.md`](../docs/planning/davis-kahan-full-paper-goal.md).
-The controlling single-angle dependency plan is
+The completed single-angle source map is
 [`docs/planning/davis-kahan-general-sin-theta-roadmap.md`](../docs/planning/davis-kahan-general-sin-theta-roadmap.md).

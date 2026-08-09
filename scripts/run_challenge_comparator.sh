@@ -11,10 +11,9 @@
 #   bash scripts/run_challenge_comparator.sh --config comparator/pending-rank-factorization.json
 #   bash scripts/run_challenge_comparator.sh --only-comparator
 #
-# By default the script runs the MathlibCandidate configs (the focused upstream
-# push) followed by the MathlibPending configs (proven, held back). See
-# Challenge/README.md for the manifest. The four DKPS papers are documented, not
-# comparator challenges.
+# By default the script runs the retained comparator configs under the historical
+# MathlibCandidate / MathlibPending directory taxonomy. Those names no longer
+# describe a live Mathlib submission queue; see Challenge/README.md.
 #
 # The script runs all requested configs, prints a final summary table, and exits
 # nonzero if any config fails.

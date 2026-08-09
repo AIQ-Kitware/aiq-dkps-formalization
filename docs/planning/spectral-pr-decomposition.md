@@ -1,5 +1,9 @@
 # Spectral perturbation stack — PR decomposition plan (R3)
 
+> **Historical PR decomposition.** This plan predates retirement of `ForMathlib` and
+> the direct Mathlib submission track. File paths, sequencing, and readiness claims in
+> the body describe that earlier state and are not current work instructions.
+
 Readiness-track artifact (see `remaining-work.md` §R). The staged spectral stack
 is currently three files; this plan breaks it into PR-sized, dependency-ordered
 pieces a Mathlib reviewer can take one at a time. **No files are split yet** —

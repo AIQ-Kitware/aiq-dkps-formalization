@@ -28,9 +28,8 @@ The completed source surface includes:
 10. sharpness, the one-gap counterexample, and arbitrary finite-multiplicity
     equality models.
 
-The production theorem uses the direct Spectra-backed interval/exterior and
-pairwise-gap engines.  It does not depend on the unresolved generic legacy
-cutoff API.
+The production theorem uses the maintained interval/exterior and pairwise-gap
+engines. It does not depend on the unresolved generic legacy cutoff API.
 
 ## Exact source mapping
 

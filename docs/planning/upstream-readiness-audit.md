@@ -1,5 +1,10 @@
 # Upstream review and readiness audit for headline candidates
 
+> **Historical readiness audit.** This document records the 2026 Mathlib-oriented
+> review that preceded the Tau Ceti packaging decision. `ForMathlib`, Spectra, and
+> lane instructions in the body are historical. Current policy lives in `AGENTS.md`
+> and `ForTauCeti/README.md`.
+
 > **Read the destination correction first (2026-07-29).** This audit was written
 > against **Mathlib**, and the Mathlib track is **closed — it is not resuming**.
 > The audit survives because **Tau Ceti holds a comparable bar**: new
