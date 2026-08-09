@@ -4,7 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import Mathlib
+import Mathlib.Analysis.Normed.Lp.lpSpace
+import Mathlib.Analysis.SpecificLimits.Basic
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Topology.Algebra.Module.LinearPMap
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Positivity
+import Mathlib.Tactic.Ring
 
 /-!
 # Davis--Kahan 1970, Section 9: domain limitation example
@@ -142,14 +150,14 @@ def diagonalDomain (d : ℕ → ℝ) : Submodule ℝ DomainLimitationSpace where
       funext n
       show d n * ((x : ℕ → ℝ) n + (y : ℕ → ℝ) n) = _
       ring
-    rw [Set.mem_setOf_eq, h]
+    rw [Set.mem_ofPred_eq, h]
     exact hx.add hy
   zero_mem' := by
     have h : (fun n => d n * ((0 : DomainLimitationSpace) : ℕ → ℝ) n) = fun _ => 0 := by
       funext n
       show d n * (0 : ℝ) = 0
       ring
-    rw [Set.mem_setOf_eq, h]
+    rw [Set.mem_ofPred_eq, h]
     exact zero_memℓp
   smul_mem' c {x} hx := by
     have h : (fun n => d n * ((c • x : DomainLimitationSpace) : ℕ → ℝ) n)
@@ -157,7 +165,7 @@ def diagonalDomain (d : ℕ → ℝ) : Submodule ℝ DomainLimitationSpace where
       funext n
       show d n * (c * (x : ℕ → ℝ) n) = c * (d n * (x : ℕ → ℝ) n)
       ring
-    rw [Set.mem_setOf_eq, h]
+    rw [Set.mem_ofPred_eq, h]
     exact hx.const_smul c
 
 theorem mem_diagonalDomain_iff (d : ℕ → ℝ) (x : DomainLimitationSpace) :
