@@ -131,6 +131,7 @@ theorem coe_complexifySubmoduleEquiv_eq_complexify_subtypeL (Z : Submodule ℝ E
 
 variable [CompleteSpace E]
 
+omit [CompleteSpace E] in
 /-- **Compressing to a complexified subspace is the complexification of the
 compression.**  Stated pointwise through the adapter, so no subtype coercion has
 to be pushed through a composition.
@@ -171,13 +172,16 @@ noncomputable def conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) : G →
   e.toContinuousLinearEquiv.toContinuousLinearMap ∘L T ∘L
     e.symm.toContinuousLinearEquiv.toContinuousLinearMap
 
+omit [CompleteSpace F] [CompleteSpace G] in
 @[simp] theorem conjEquiv_apply (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) (y : G) :
     conjEquiv e T y = e (T (e.symm y)) := rfl
 
+omit [CompleteSpace F] [CompleteSpace G] in
 @[simp] theorem conjEquiv_symm_conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) :
     conjEquiv e.symm (conjEquiv e T) = T := by
   ext x; simp
 
+omit [CompleteSpace F] [CompleteSpace G] in
 @[simp] theorem conjEquiv_conjEquiv_symm (e : F ≃ₗᵢ[ℂ] G) (S : G →L[ℂ] G) :
     conjEquiv e (conjEquiv e.symm S) = S := by
   ext y; simp
@@ -201,6 +205,7 @@ theorem isUnit_conjEquiv_iff (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) :
     have := h.map (conjEquivMonoidHom e)
     simpa [conjEquivMonoidHom] using this
 
+omit [CompleteSpace F] [CompleteSpace G] in
 /-- Conjugation by an isometric equivalence commutes with the scalar shift. -/
 theorem algebraMap_sub_conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) (c : ℂ) :
     algebraMap ℂ (G →L[ℂ] G) c - conjEquiv e T =
@@ -214,7 +219,7 @@ compression on `↥(complexifySubmodule Z)`. -/
 theorem realSpectrum_conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) :
     realSpectrum (conjEquiv e T) = realSpectrum T := by
   ext r
-  simp only [realSpectrum, Set.mem_setOf_eq, spectrum.mem_iff,
+  simp only [realSpectrum, Set.mem_ofPred_eq, spectrum.mem_iff,
     algebraMap_sub_conjEquiv, isUnit_conjEquiv_iff]
 
 end Conjugation

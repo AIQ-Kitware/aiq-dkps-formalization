@@ -336,7 +336,7 @@ theorem sqrt_two_div_two_mul_norm_le_norm_starProjection
   have hMy : M.starProjection y = y := Submodule.starProjection_eq_self_iff.mpr hy
   have heq : Pᗮ.starProjection y = (M.starProjection - P.starProjection) y := by
     rw [Submodule.starProjection_orthogonal_apply]
-    simp only [ContinuousLinearMap.sub_apply, hMy]
+    simp only [sub_apply, hMy]
   have hbound : ‖Pᗮ.starProjection y‖ ≤ Real.sqrt 2 / 2 * ‖y‖ := by
     rw [heq]
     calc ‖(M.starProjection - P.starProjection) y‖
@@ -365,7 +365,7 @@ theorem norm_starProjection_lt_of_mem_orthogonal
   have hQy : Q.starProjection y = 0 :=
     (Submodule.starProjection_apply_eq_zero_iff Q).mpr hy
   have heq : P.starProjection y = (P.starProjection - Q.starProjection) y := by
-    simp only [ContinuousLinearMap.sub_apply, hQy, sub_zero]
+    simp only [sub_apply, hQy, sub_zero]
   rw [heq]
   calc ‖(P.starProjection - Q.starProjection) y‖
       ≤ subspaceGap P Q * ‖y‖ := ContinuousLinearMap.le_opNorm _ _

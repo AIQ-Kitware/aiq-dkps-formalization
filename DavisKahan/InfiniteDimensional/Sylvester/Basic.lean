@@ -43,9 +43,7 @@ universe u v
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-  [CompleteSpace E]
 variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
-  [CompleteSpace F]
 
 /-- Sylvester operator `X |-> A X - X B`. -/
 def sylvesterOperator (A : F →L[𝕜] F) (B : E →L[𝕜] E)

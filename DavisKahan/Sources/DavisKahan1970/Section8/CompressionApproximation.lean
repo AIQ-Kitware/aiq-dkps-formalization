@@ -120,7 +120,7 @@ theorem approximationNumber_mono_of_form_le
     have hRR : CFC.sqrt R * CFC.sqrt R = R := CFC.sqrt_mul_sqrt_self R hR
     have happ : CFC.sqrt R (CFC.sqrt R x) = R x := by
       have := congrArg (fun T : E →L[ℂ] E => T x) hRR
-      simpa [ContinuousLinearMap.mul_apply] using this
+      simpa [mul_apply_eq_comp] using this
     have hadjeq : ContinuousLinearMap.adjoint (CFC.sqrt R) = CFC.sqrt R :=
       ContinuousLinearMap.isSelfAdjoint_iff'.mp (hsa hR)
     have hkey : ⟪CFC.sqrt R x, CFC.sqrt R x⟫_ℂ = ⟪x, R x⟫_ℂ := by

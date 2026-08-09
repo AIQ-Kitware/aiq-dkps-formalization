@@ -61,7 +61,7 @@ finite-dimensional because it consumes the intrinsic singular-system layer.
 namespace TauCeti
 namespace DavisKahanTheory
 
-open Module LinearMap
+open Module _root_.TauCeti.LinearMap
 open scoped InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜]

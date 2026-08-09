@@ -507,7 +507,7 @@ theorem continuous_circleRieszProjection_path
     ContinuousOn
       (fun t : ℝ => Frontier.circleRieszProjection (A + t • E) center radius)
       (Set.Icc 0 1) := by
-  rw [continuousOn_iff_continuous_restrict]
+  rw [continuousOn_iff_continuous_domRestrict]
   set F : Set.Icc (0 : ℝ) 1 → ℝ → (H →L[ℂ] H) := fun t θ =>
     deriv (circleMap (center : ℂ) radius) θ •
       Ring.inverse (circleMap (center : ℂ) radius θ • (1 : H →L[ℂ] H) -
