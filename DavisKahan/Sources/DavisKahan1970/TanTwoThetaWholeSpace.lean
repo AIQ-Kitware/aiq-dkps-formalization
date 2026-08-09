@@ -9,6 +9,7 @@ import DavisKahan.InfiniteDimensional.TanTwoTheta.PaperFaithfulUINorm
 import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
 import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 import DavisKahan.Sources.DavisKahan1970.TanThetaWholeSpace
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
 /-!
 # The whole-space half of the `tan 2Θ` theorem

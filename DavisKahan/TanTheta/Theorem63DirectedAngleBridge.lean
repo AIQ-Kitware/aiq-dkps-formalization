@@ -8,6 +8,7 @@ import DavisKahan.TanTheta.Theorem63FiniteSource
 import DavisKahan.Sources.DavisKahan1970.SineTheta.AngleIdentity
 import ForTauCeti.Analysis.InnerProductSpace.Polar.CFCBridge
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles.Equisingular
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
 /-!
 # Identifying the Theorem 6.3 tangent with the paper's directed angle
