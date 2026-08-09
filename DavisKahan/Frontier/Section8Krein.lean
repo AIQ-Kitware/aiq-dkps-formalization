@@ -171,9 +171,9 @@ theorem exists_selfAdjoint_completion_eq_norm_restriction
       T' ∘L P.starProjection = T ∘L P.starProjection ∧
       ‖T'‖ = ‖T ∘L P.starProjection‖ := by
   classical
-  letI : CompleteSpace P :=
+  let : CompleteSpace P :=
     (P.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Pᗮ : Submodule ℂ X) :=
+  let : CompleteSpace (Pᗮ : Submodule ℂ X) :=
     (Pᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   set r : ℝ := ‖T ∘L P.starProjection‖ with hrdef
   by_cases hr : r = 0

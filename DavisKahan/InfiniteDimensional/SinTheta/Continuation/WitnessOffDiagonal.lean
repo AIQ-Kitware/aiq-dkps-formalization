@@ -36,6 +36,7 @@ section OffDiagonalCompression
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /-- The selected diagonal projection of an off-diagonal operator vanishes on
 vectors in the selected subspace. -/
 theorem starProjection_map_eq_zero_of_isOffDiagonal
@@ -52,6 +53,7 @@ theorem starProjection_map_eq_zero_of_isOffDiagonal
     add_apply, zero_apply, Submodule.starProjection_eq_self_iff.mpr hu,
     hQu, map_zero, add_zero] using hdiag
 
+omit [CompleteSpace H] in
 /-- The complementary diagonal projection of an off-diagonal operator
 vanishes on vectors in the orthogonal complement. -/
 theorem starProjection_orthogonal_map_eq_zero_of_isOffDiagonal
@@ -240,9 +242,9 @@ theorem selectedEndpointAngularCoordinate_offDiagonal_riccati
               C.sourceSelectedSpectralSubspaceᗮ.subtypeL)
               ((subspaceAngularCoordinate C.sourceSelectedSpectralSubspace
                 (C.selectedEndpointAngularOperator hsmall)) u)) := by
-  letI : CompleteSpace C.sourceSelectedSpectralSubspace :=
+  let : CompleteSpace C.sourceSelectedSpectralSubspace :=
     (C.sourceSelectedSpectralSubspace.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace
+  let : CompleteSpace
       (C.sourceSelectedSpectralSubspaceᗮ : Submodule ℂ H) :=
     (C.sourceSelectedSpectralSubspaceᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   intro u

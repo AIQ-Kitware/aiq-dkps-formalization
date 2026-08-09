@@ -326,6 +326,7 @@ theorem gauge_unitary_conjugation
       I.gauge (U ∘L A ∘L Uinv) = I.gauge A :=
   ⟨I.ideal_mem U Uinv hA, I.unitary_invariant U Uinv A hU hUinv hleft hright hA⟩
 
+omit [CompleteSpace E] in
 /-- A unitary operator has operator norm at most `1`.
 
 Stated as `≤ 1` rather than `= 1` on purpose: that is all the two-sided

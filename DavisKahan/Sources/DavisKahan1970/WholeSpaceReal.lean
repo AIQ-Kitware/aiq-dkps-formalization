@@ -103,6 +103,7 @@ which Mathlib's functional calculus forces to be stated over `ℂ`. -/
 def compressOperatorReal (A : E →L[ℝ] E) : Z →L[ℝ] Z :=
   Z.orthogonalProjectionOnto ∘L A ∘L Z.subtypeL
 
+omit [CompleteSpace E] in
 /-- **Compressing to a complexified subspace is a unitary conjugate of the
 complexified real compression.** -/
 theorem compressOperator_complexifySubmodule (A : E →L[ℝ] E) :

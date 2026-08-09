@@ -90,6 +90,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-! ### 1. Positive blocks: approximation numbers are ordered eigenvalues -/
 
+omit [CompleteSpace H] in
 /-- **A positive operator's approximation numbers are its sorted eigenvalues.**
 
 In finite dimensions the approximation numbers are the singular values, and for
@@ -104,6 +105,7 @@ theorem approximationNumber_eq_eigenvalues_of_isPositive [FiniteDimensional ℂ 
     ← ContinuousLinearMap.toLinearMap_singularValues]
   exact TauCeti.singularValues_of_isPositive hpos i
 
+omit [CompleteSpace H] in
 /-- The positivity of an ambient block in the form `approximationNumber_eq_eigenvalues_of_isPositive`
 consumes. -/
 theorem isPositive_toLinearMap_of_nonneg {S : H →L[ℂ] H}
@@ -128,6 +130,7 @@ theorem range_lowerBlockShift_le (A : H →L[ℂ] H) (P : Submodule ℂ H)
   rintro y ⟨x, rfl⟩
   exact Submodule.starProjection_apply_mem _ _
 
+omit [CompleteSpace H] in
 /-- **Extending the upper compression by zero only appends zeros.**  Beyond the
 rank of `Pᗮ` every approximation number of the ambient block vanishes, so the
 ambient decreasing sequence is the printed eigenvalue list of `A₁ - α` followed
@@ -139,6 +142,7 @@ theorem approximationNumber_upperBlockShift_eq_zero_of_le [FiniteDimensional ℂ
   ContinuousLinearMap.approximationNumber_eq_zero_of_finrank_range_le _
     ((Submodule.finrank_mono (range_upperBlockShift_le A P alpha)).trans hn)
 
+omit [CompleteSpace H] in
 /-- **Extending the lower compression by zero only appends zeros.** -/
 theorem approximationNumber_lowerBlockShift_eq_zero_of_le [FiniteDimensional ℂ H]
     (A : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
@@ -149,6 +153,7 @@ theorem approximationNumber_lowerBlockShift_eq_zero_of_le [FiniteDimensional ℂ
 
 /-! ### 3. Cosine blocks and principal angles -/
 
+omit [CompleteSpace H] in
 /-- **The upper cosine block's singular values are the principal cosines of the
 pair `(Pᗮ, Qᗮ)`.**
 
@@ -164,6 +169,7 @@ theorem approximationNumber_cosineBlock_eq_principalCosines [FiniteDimensional �
     ← ContinuousLinearMap.toLinearMap_singularValues]
   rfl
 
+omit [CompleteSpace H] in
 /-- **The lower cosine block's singular values are the principal cosines of the
 pair `(P, Q)`.** -/
 theorem approximationNumber_lowerCosineBlock_eq_principalCosines
@@ -187,6 +193,7 @@ theorem norm_cosineBlock_le_one (P Q : Submodule ℂ H)
     _ ≤ ‖x‖ := Submodule.norm_starProjection_apply_le _ _
     _ = 1 * ‖x‖ := (one_mul _).symm
 
+omit [CompleteSpace H] in
 /-- Every principal cosine of the upper pair lies in `[0, 1]`, so the printed
 angle `θ_i = arccos (a_i C₁)` of equation (1.16) is a genuine angle in
 `[0, π/2]` and satisfies `cos θ_i = a_i(C₁)`. -/
@@ -487,6 +494,7 @@ theorem arcsin_one_div_two : Real.arcsin (1 / 2) = Real.pi / 6 :=
   Real.arcsin_eq_of_sin_eq (by rw [Real.sin_pi_div_six])
     ⟨by linarith [Real.pi_pos], by linarith [Real.pi_pos]⟩
 
+omit [CompleteSpace H] in
 /-- **The section's opening reading**: a sine bound of `1/2` is exactly
 `Θ ≤ π/6`. -/
 theorem maximalAngle_le_pi_div_six_iff (U V : Submodule ℂ H)

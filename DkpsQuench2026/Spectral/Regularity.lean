@@ -196,7 +196,7 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
     rw [hc]; exact hmap'.symm
   have hL2 : ∀ n (i : Fin n), MemLp (fun ωref => ψ (f_ref n ωref i) a) 2 (μref n) := by
     intro n i
-    haveI := hμref n
+    have := hμref n
     exact MemLp.of_bound (hZmeas n i).aestronglyMeasurable B
       (Eventually.of_forall fun ωref => by rw [Real.norm_eq_abs]; exact hcoord_bound _)
   have hc_bound : |c| ≤ B := by
@@ -268,7 +268,7 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
       ∫ ωref, (referenceCoordinateMean ψ f_ref n ωref a - c) ^ 2 ∂(μref n)
         ≤ 4 * B ^ 2 / n := by
     intro n hn
-    haveI := hμref n
+    have := hμref n
     have hbound_i : ∀ i : Fin n,
         ∫ ωref, (ψ (f_ref n ωref i) a - c) ^ 2 ∂(μref n) ≤ 4 * B ^ 2 := by
       intro i
@@ -308,7 +308,7 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
       μref n ({ωref | |referenceCoordinateMean ψ f_ref n ωref a - c| ≤ ε}ᶜ)
         ≤ ENNReal.ofReal (2 * (4 * B ^ 2 / n) / ε ^ 2) := by
     intro n hn
-    haveI := hμref n
+    have := hμref n
     have hInt : Integrable
         (fun ωref => (referenceCoordinateMean ψ f_ref n ωref a - c) ^ 2) (μref n) := by
       have hM : MemLp (fun ωref => referenceCoordinateMean ψ f_ref n ωref a) 2 (μref n) := by
@@ -409,7 +409,7 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
   have hL2 : ∀ n (i : Fin n),
       MemLp (fun ωref => ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b) 2 (μref n) := by
     intro n i
-    haveI := hμref n
+    have := hμref n
     exact MemLp.of_bound (hZmeas n i).aestronglyMeasurable Bg
       (Eventually.of_forall fun ωref => by rw [Real.norm_eq_abs]; exact hcoord_bound _)
   have hc_bound : |c| ≤ Bg := by
@@ -483,7 +483,7 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
       ∫ ωref, (referenceCoordinateProductMean ψ f_ref n ωref a b - c) ^ 2 ∂(μref n)
         ≤ 4 * Bg ^ 2 / n := by
     intro n hn
-    haveI := hμref n
+    have := hμref n
     have hbound_i : ∀ i : Fin n,
         ∫ ωref, (ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b - c) ^ 2 ∂(μref n)
           ≤ 4 * Bg ^ 2 := by
@@ -528,7 +528,7 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
       μref n ({ωref | |referenceCoordinateProductMean ψ f_ref n ωref a b - c| ≤ ε}ᶜ)
         ≤ ENNReal.ofReal (2 * (4 * Bg ^ 2 / n) / ε ^ 2) := by
     intro n hn
-    haveI := hμref n
+    have := hμref n
     have hInt : Integrable
         (fun ωref => (referenceCoordinateProductMean ψ f_ref n ωref a b - c) ^ 2) (μref n) := by
       have hM : MemLp
@@ -1085,7 +1085,7 @@ theorem exists_growingSpectralSubevents_of_compact_iid_nondegenerate
       (fun n => ({_ωref | d ≤ n ∧ 0 < n} : Set Ωref)) := by
     intro δ hδ
     refine ⟨d + 1, fun n hn => ?_⟩
-    haveI := hμref n
+    have := hμref n
     have hset : ({_ωref | d ≤ n ∧ 0 < n} : Set Ωref) = Set.univ := by
       have h1 : d ≤ n := by omega
       have h2 : 0 < n := by omega

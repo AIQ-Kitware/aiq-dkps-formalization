@@ -273,7 +273,7 @@ noncomputable def nnIndex {n : ℕ} (hn : n > 0)
     (ψHat_target : Vec d) : Fin n :=
   let f := fun i => ‖ψHat_ref i - ψHat_target‖
   have h_exists : ∃ i, IsArgmin f i := by
-    haveI : Nonempty (Fin n) := Fin.pos_iff_nonempty.mp hn
+    have : Nonempty (Fin n) := Fin.pos_iff_nonempty.mp hn
     have h_nonempty : (Finset.univ : Finset (Fin n)).Nonempty := Finset.univ_nonempty
     obtain ⟨i, _, hi⟩ := Finset.exists_min_image (Finset.univ : Finset (Fin n)) f h_nonempty
     exact ⟨i, fun j => hi j (Finset.mem_univ j)⟩

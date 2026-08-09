@@ -72,6 +72,7 @@ private theorem sylvesterOperator_toLinearMap {𝕜' : Type*} [RCLike 𝕜']
   change A (X x) - X (B x) = C x at hpoint
   simpa using hpoint
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Finite-dimensional rectangular unitarily invariant Sylvester estimate.
 
 For self-adjoint `A` and `B` with spectra separated by `d > 0`, every

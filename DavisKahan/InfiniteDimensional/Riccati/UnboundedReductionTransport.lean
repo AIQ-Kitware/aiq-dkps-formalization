@@ -36,6 +36,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
+omit [CompleteSpace E] in
 /-- Intertwining the orthogonal projections onto `U` and `V` also intertwines
 those onto their orthogonal complements. -/
 theorem intertwines_orthogonal_projection_of_intertwines_projection
@@ -54,6 +55,7 @@ theorem intertwines_orthogonal_projection_of_intertwines_projection
   change e (U.starProjection x) = V.starProjection (e x) at hx
   rw [hx]
 
+omit [CompleteSpace E] in
 /-- A projection-intertwining equivalence maps membership in the source
 subspace to membership in the target subspace. -/
 theorem map_mem_of_intertwines_projection
@@ -68,6 +70,7 @@ theorem map_mem_of_intertwines_projection
   rw [Submodule.starProjection_eq_self_iff.mpr hx] at hintertwine
   exact hintertwine.symm
 
+omit [CompleteSpace E] in
 /-- The inverse of a projection-intertwining equivalence maps membership in the
 target subspace back to membership in the source subspace. -/
 theorem symm_map_mem_of_intertwines_projection

@@ -254,7 +254,7 @@ theorem theorem8_1_upperSandwichApproximation_source
   set Q : Submodule ℂ H := canonicalLowBranch (A + K)
     (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha
     with hQdef
-  haveI : Q.HasOrthogonalProjection := by rw [hQdef]; infer_instance
+  have : Q.HasOrthogonalProjection := by rw [hQdef]; infer_instance
   -- Positivity of the two blocks: both forms exceed `alpha` on the relevant
   -- complement, by hypothesis for `A` and by the branch for `A + K`.
   have hS : (0 : H →L[ℂ] H) ≤ upperBlockShift A P alpha :=
@@ -474,7 +474,7 @@ theorem theorem8_1_lowerSandwichApproximation_source
   set Q : Submodule ℂ H := canonicalLowBranch (A + K)
     (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha
     with hQdef
-  haveI : Q.HasOrthogonalProjection := by rw [hQdef]; infer_instance
+  have : Q.HasOrthogonalProjection := by rw [hQdef]; infer_instance
   have hS : (0 : H →L[ℂ] H) ≤ lowerBlockShift A P alpha delta :=
     lowerBlockShift_nonneg A P hdelta.le hA hPlow
   have hM : (0 : H →L[ℂ] H) ≤ lowerBlockShift (A + K) Q alpha delta :=

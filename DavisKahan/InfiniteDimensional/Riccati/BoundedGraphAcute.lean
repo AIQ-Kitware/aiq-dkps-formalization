@@ -41,6 +41,7 @@ noncomputable def blockAngularOperator (X : E0 →L[𝕜] E1) :
   blockCoordinate1 (𝕜 := 𝕜) (E0 := E0) (E1 := E1) ∘L X ∘L
     WithLp.fstL 2 𝕜 E0 E1
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The block angular operator sends `z` to `X` of its first coordinate, in the second summand. -/
 @[simp]
 theorem blockAngularOperator_apply (X : E0 →L[𝕜] E1)

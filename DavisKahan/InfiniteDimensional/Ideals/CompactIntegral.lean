@@ -42,6 +42,7 @@ theorem isClosed_compactOperatorSubmodule :
     IsClosed (compactOperatorSubmodule (E := E) (F := F) : Set (E →L[ℂ] F)) := by
   exact isClosed_setOfPred_isCompactOperator
 
+omit [CompleteSpace E] in
 /-- Bochner integration preserves compactness. -/
 theorem isCompactOperator_integral
     {α : Type*} [MeasurableSpace α] {μ : Measure α}
@@ -49,7 +50,7 @@ theorem isCompactOperator_integral
     (hf : Integrable f μ)
     (hcompact : ∀ᵐ a ∂μ, IsCompactOperator (f a)) :
     IsCompactOperator (∫ a, f a ∂μ : E →L[ℂ] F) := by
-  haveI hKcl : IsClosed
+  have hKcl : IsClosed
       ((compactOperatorSubmodule (E := E) (F := F)) : Set (E →L[ℂ] F)) :=
     isClosed_compactOperatorSubmodule
   let π := (compactOperatorSubmodule (E := E) (F := F)).mkQL

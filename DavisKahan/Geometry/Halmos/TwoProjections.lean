@@ -53,7 +53,7 @@ noncomputable instance instHasOrthogonalProjectionInf
   have hclosed : IsClosed (((K ⊓ L : Submodule ℂ H) : Set H)) := by
     change IsClosed ((K : Set H) ∩ (L : Set H))
     exact hKclosed.inter hLclosed
-  letI : CompleteSpace ↥(K ⊓ L) := hclosed.completeSpace_coe
+  let : CompleteSpace ↥(K ⊓ L) := hclosed.completeSpace_coe
   exact Submodule.HasOrthogonalProjection.ofCompleteSpace (K ⊓ L)
 
 omit [CompleteSpace H] in
@@ -267,8 +267,8 @@ noncomputable instance instHasOrthogonalProjectionHalmosTrivialPart
     hasOrthogonalProjection_sup_of_le_orthogonal
       (halmosTargetDefect U V) (halmosExteriorPart U V)
       (halmosTargetDefect_le_exterior_orthogonal U V)
-  letI : A.HasOrthogonalProjection := hA
-  letI : B.HasOrthogonalProjection := hB
+  let : A.HasOrthogonalProjection := hA
+  let : B.HasOrthogonalProjection := hB
   apply hasOrthogonalProjection_sup_of_le_orthogonal A B
   intro x hx y hy
   rcases Submodule.mem_sup.mp hx with ⟨x₁, hx₁, x₂, hx₂, rfl⟩

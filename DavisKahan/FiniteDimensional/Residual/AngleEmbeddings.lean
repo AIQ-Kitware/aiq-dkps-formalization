@@ -318,7 +318,7 @@ private theorem exists_intervalGap_of_orderedGap
     {δ : ℝ} (hgap : OrderedGap M ⊤ A Uᗮ δ) :
     ∃ β α, β ≤ α ∧ SpectrumIn M ⊤ (Set.Icc β α) ∧
       SpectrumIn A Uᗮ (Set.Ici (α + δ)) := by
-  letI : NeZero (finrank 𝕜 F) := ⟨Nat.ne_of_gt Module.finrank_pos⟩
+  let : NeZero (finrank 𝕜 F) := ⟨Nat.ne_of_gt Module.finrank_pos⟩
   let iTop : Fin (finrank 𝕜 F) := ⟨0, Module.finrank_pos⟩
   let α : ℝ := hM.eigenvalues rfl iTop
   let β : ℝ := -‖M.toContinuousLinearMap‖

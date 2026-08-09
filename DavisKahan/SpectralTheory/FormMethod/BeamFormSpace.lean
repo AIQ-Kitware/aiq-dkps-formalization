@@ -628,11 +628,11 @@ theorem isCompactOperator_beamEmbed : IsCompactOperator beamEmbed := by
       exact Submodule.add_mem _
         (Submodule.smul_mem _ _ (Submodule.subset_span (by simp)))
         (Submodule.smul_mem _ _ (Submodule.subset_span (by simp)))
-    haveI : FiniteDimensional ℂ
+    have : FiniteDimensional ℂ
         (Submodule.span ℂ ({beamOneLp, beamIdLp} : Set BeamL2)) := by
       apply FiniteDimensional.span_of_finite
       exact Set.toFinite _
-    haveI : FiniteDimensional ℂ (LinearMap.range
+    have : FiniteDimensional ℂ (LinearMap.range
         ((beamEmbed - secondPrimitiveCLM.comp beamSnd : BeamV →L[ℂ] BeamL2)
           : BeamV →ₗ[ℂ] BeamL2)) :=
       Submodule.finiteDimensional_of_le hle

@@ -376,8 +376,10 @@ def paperTanBlockRepresentative : E →L[ℂ] E :=
 
 variable {U V}
 
+omit [CompleteSpace E] in
 private theorem comp_eq_mul (f g : E →L[ℂ] E) : f ∘L g = f * g := rfl
 
+omit [CompleteSpace E] in
 private theorem starProjection_idem (W : Submodule ℂ E)
     [W.HasOrthogonalProjection] : W.starProjection * W.starProjection =
       W.starProjection := W.isIdempotentElem_starProjection
@@ -773,6 +775,7 @@ private theorem projectionBlock_lower (K : E →L[ℂ] E) :
   rw [paperProjectionBlock, Submodule.starProjection_orthogonal', comp_eq_mul,
     comp_eq_mul, mul_assoc]
 
+omit [CompleteSpace E] in
 private theorem projectionBlock_upper (K : E →L[ℂ] E) :
     paperProjectionBlock Uᗮᗮ Uᗮ K =
       U.starProjection * K * (1 - U.starProjection) := by
@@ -781,6 +784,7 @@ private theorem projectionBlock_upper (K : E →L[ℂ] E) :
   simp only [hUperp, Submodule.starProjection_orthogonal', comp_eq_mul]
   rw [mul_assoc]
 
+omit [CompleteSpace E] in
 private theorem projectionBlock_smul (Ω Γ : Submodule ℂ E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (c : ℂ) (K : E →L[ℂ] E) :
@@ -962,6 +966,7 @@ theorem norm_paperDirectedSineAmbient_lt_one
   nlinarith [norm_nonneg (paperDirectedSineAmbient U V),
     norm_nonneg (sinAngleOperatorC U V)]
 
+omit [CompleteSpace E] in
 /-- The ambient directed sine block factors through the trial subspace's own
 sine block, so it has no larger approximation numbers. -/
 theorem approximationNumber_paperDirectedSineAmbient_le (n : ℕ) :

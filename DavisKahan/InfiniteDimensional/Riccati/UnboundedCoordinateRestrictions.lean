@@ -53,6 +53,7 @@ noncomputable def coordinateRestrictionDomain1
   D.domain.comap
     (blockCoordinate1 (𝕜 := ℂ) (E0 := E0) (E1 := E1)).toLinearMap
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- `u` lies in the first coordinate domain exactly when its block embedding lies in `D.domain`. -/
 @[simp] theorem mem_coordinateRestrictionDomain0_iff
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
@@ -61,6 +62,7 @@ noncomputable def coordinateRestrictionDomain1
       blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1) u ∈ D.domain :=
   Iff.rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- `v` lies in the second coordinate domain exactly when its block embedding lies in `D.domain`. -/
 @[simp] theorem mem_coordinateRestrictionDomain1_iff
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
@@ -111,6 +113,7 @@ noncomputable def coordinateRestrictionDomain1ToOriginal
       c • blockCoordinate1 (𝕜 := ℂ) (E0 := E0) (E1 := E1) (x : E1)
     exact (blockCoordinate1 (𝕜 := ℂ) (E0 := E0) (E1 := E1)).map_smul c (x : E1)
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The inclusion into `D.domain` is the first block embedding on underlying vectors. -/
 @[simp] theorem coordinateRestrictionDomain0ToOriginal_coe
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
@@ -120,6 +123,7 @@ noncomputable def coordinateRestrictionDomain1ToOriginal
       blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1) (u : E0) :=
   rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The inclusion into `D.domain` is the second block embedding on underlying vectors. -/
 @[simp] theorem coordinateRestrictionDomain1ToOriginal_coe
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
@@ -199,6 +203,7 @@ noncomputable def coordinateRestrictionMap1
   (WithLp.sndL 2 ℂ E0 E1).toLinearMap.comp
     (D.toFun.comp (coordinateRestrictionDomain1ToOriginal D))
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The first coordinate restriction reads off the first component of `D` on the embedding. -/
 @[simp] theorem coordinateRestrictionMap0_apply
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
@@ -207,6 +212,7 @@ noncomputable def coordinateRestrictionMap1
       WithLp.fst (D (coordinateRestrictionDomain0ToOriginal D u)) :=
   rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The second coordinate restriction reads off the second component of `D` on the embedding. -/
 @[simp] theorem coordinateRestrictionMap1_apply
     (D : DirectSumPMap (E0 := E0) (E1 := E1))

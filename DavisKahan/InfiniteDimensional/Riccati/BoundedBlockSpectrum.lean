@@ -33,6 +33,7 @@ variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
 variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
   [CompleteSpace E1]
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Pointwise action of the bounded block-diagonal operator. -/
 @[simp]
 theorem blockDiagonalOperator_apply
@@ -42,6 +43,7 @@ theorem blockDiagonalOperator_apply
       WithLp.toLp 2 (D0 (WithLp.fst z), D1 (WithLp.snd z)) :=
   rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- A block-diagonal operator is bijective exactly when both diagonal blocks
 are bijective. -/
 theorem blockDiagonalOperator_bijective_iff
@@ -119,6 +121,7 @@ theorem blockDiagonalOperator_isUnit_iff
     ContinuousLinearMap.isUnit_iff_bijective]
   exact blockDiagonalOperator_bijective_iff D0 D1
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Scalar subtraction commutes with forming a block-diagonal operator. -/
 theorem algebraMap_sub_blockDiagonalOperator
     (r : ℂ) (D0 : E0 →L[ℂ] E0) (D1 : E1 →L[ℂ] E1) :

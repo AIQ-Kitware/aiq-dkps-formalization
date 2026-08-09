@@ -152,7 +152,7 @@ private theorem eq_zero_of_mem_of_mem_orthogonal {K : Submodule ℂ H} {x : H}
     (h₁ : x ∈ K) (h₂ : x ∈ Kᗮ) : x = 0 :=
   inner_self_eq_zero.mp ((Submodule.mem_orthogonal _ _).mp h₂ x h₁)
 
-omit [CompleteSpace H] in
+omit [CompleteSpace H] [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] in
 /-- **The part of `U` inside the trivial summand is `common ⊔ source`.**  The
 other two elementary summands lie in `Uᗮ`, so they contribute nothing. -/
 theorem inf_halmosTrivialPart_left :
@@ -177,7 +177,7 @@ theorem inf_halmosTrivialPart_left :
   · exact sup_le (le_inf inf_le_left (halmosCommonPart_le_trivial U V))
       (le_inf inf_le_left (halmosSourceDefect_le_trivial U V))
 
-omit [CompleteSpace H] in
+omit [CompleteSpace H] [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] in
 /-- **The part of `V` inside the trivial summand is `common ⊔ target`.** -/
 theorem inf_halmosTrivialPart_right :
     V ⊓ halmosTrivialPart U V =
@@ -247,6 +247,7 @@ noncomputable instance instHasOrthogonalProjectionTargetSupExterior :
   hasOrthogonalProjection_sup_of_le_orthogonal _ _
     (halmosTargetDefect_le_exterior_orthogonal U₁ V₁)
 
+omit [CompleteSpace H₁] [U₁.HasOrthogonalProjection] [V₁.HasOrthogonalProjection] in
 /-- The two halves of the trivial part are orthogonal. -/
 theorem commonSupSource_le_orthogonal_targetSupExterior :
     halmosCommonPart U₁ V₁ ⊔ halmosSourceDefect U₁ V₁ ≤

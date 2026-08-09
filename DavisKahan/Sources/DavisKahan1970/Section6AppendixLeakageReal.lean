@@ -64,6 +64,7 @@ theorem complexify_one_eq :
       (1 : RealComplexification E →L[ℂ] RealComplexification E) :=
   complexify_id
 
+omit [CompleteSpace E] in
 /-- Complexification carries a complementary orthogonal projection to the
 complementary orthogonal projection of the complexified subspace. -/
 theorem complexify_one_sub_starProjection

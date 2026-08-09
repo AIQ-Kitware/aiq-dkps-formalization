@@ -251,7 +251,7 @@ theorem tan_theta_le (hT : T.IsSymmetric)
     rcases eq_or_ne u 0 with rfl | hu0
     · simp
     -- a maximizer of the sine on the unit sphere of `Vᗮ`
-    haveI : ProperSpace E := FiniteDimensional.proper_rclike 𝕜 E
+    have : ProperSpace E := FiniteDimensional.proper_rclike 𝕜 E
     have hKc : IsCompact (Metric.sphere (0 : E) 1 ∩ (Vᗮ : Set E)) :=
       (isCompact_sphere 0 1).inter_right Vᗮ.closed_of_finiteDimensional
     have hKne : (Metric.sphere (0 : E) 1 ∩ (Vᗮ : Set E)).Nonempty := by

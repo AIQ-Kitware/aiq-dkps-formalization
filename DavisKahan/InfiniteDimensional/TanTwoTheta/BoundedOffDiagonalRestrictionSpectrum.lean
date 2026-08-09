@@ -33,14 +33,13 @@ universe v
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 
+omit [CompleteSpace E] in
 /-- The theorem-facing restricted spectrum equals the native real spectrum of
 the orthogonal compression. -/
 theorem restrictedSpectrum_eq_realSpectrum_compressOperator
     (A : E →L[ℂ] E) (U : Submodule ℂ E) [U.HasOrthogonalProjection]
     (hU : InvariantFor A U) :
     restrictedSpectrum A U = realSpectrum (compressOperator U A) := by
-  change DavisKahan.Experimental.Foundation.restrictedSpectrum A U =
-    DavisKahan.Experimental.Foundation.realSpectrum (compressOperator U A)
   calc
     DavisKahan.Experimental.Foundation.restrictedSpectrum A U =
         {r : ℝ | (r : ℂ) ∈ spectrum ℂ (A.restrict hU)} :=
@@ -81,7 +80,7 @@ theorem restrictedSpectrum_bddAbove_of_invariant
     [Nontrivial U]
     (hU : InvariantFor A U) :
     BddAbove (restrictedSpectrum A U) := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   rw [restrictedSpectrum_eq_realSpectrum_compressOperator A U hU]
   exact realSpectrum_bddAbove (compressOperator U A)
@@ -93,7 +92,7 @@ theorem restrictedSpectrum_bddBelow_of_invariant
     [Nontrivial U]
     (hU : InvariantFor A U) :
     BddBelow (restrictedSpectrum A U) := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   rw [restrictedSpectrum_eq_realSpectrum_compressOperator A U hU]
   exact realSpectrum_bddBelow (compressOperator U A)

@@ -180,6 +180,7 @@ theorem reduces_reflectedSubspace
     rw [reflectionOperator_apply_apply]
     exact Submodule.mem_map.mpr ⟨A w, hU.2 w hw, rfl⟩
 
+omit [CompleteSpace E] in
 /-- Double reflection conjugation is the identity on operators. -/
 theorem reflection_conjugate_conjugate (A : E →L[𝕜] E) (V : Submodule 𝕜 E)
     [V.HasOrthogonalProjection] :
@@ -190,6 +191,7 @@ theorem reflection_conjugate_conjugate (A : E →L[𝕜] E) (V : Submodule 𝕜 
     (reflectionOperator V x)))) = A x
   rw [reflectionOperator_apply_apply, reflectionOperator_apply_apply]
 
+omit [CompleteSpace E] in
 /-- Double reflection is the identity on subspaces. -/
 theorem reflectedSubspace_reflectedSubspace (V U : Submodule 𝕜 E)
     [V.HasOrthogonalProjection] :
@@ -202,6 +204,7 @@ theorem reflectedSubspace_reflectedSubspace (V U : Submodule 𝕜 E)
   unfold reflectedSubspace
   rw [← Submodule.map_comp, hcomp, Submodule.map_id]
 
+omit [CompleteSpace E] in
 /-- Conjugation by the reflection carries invariance to the mirror image. -/
 theorem invariantFor_reflection_conjugate
     {A : E →L[𝕜] E} {U : Submodule 𝕜 E} (V : Submodule 𝕜 E)
@@ -264,6 +267,7 @@ private theorem isUnit_conj_iff {G H : Type*}
     rwa [he] at h2
   · exact isUnit_conj_of_isUnit Φ Ψ hΨΦ hΦΨ
 
+omit [CompleteSpace E] in
 /-- Restricting the conjugated operator to the mirror image gives the same
 spectrum as restricting the original operator to the original subspace. -/
 private theorem spectrum_restrict_reflection_conjugate
@@ -459,6 +463,7 @@ theorem norm_reflection_comp (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
       _ ≤ ‖reflectionOperator V ∘L T‖ * ‖x‖ :=
         ContinuousLinearMap.le_opNorm _ x
 
+omit [CompleteSpace E] in
 /-- Right composition with the reflection preserves the operator norm. -/
 theorem norm_comp_reflection (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
     (T : E →L[𝕜] E) : ‖T ∘L reflectionOperator V‖ = ‖T‖ := by

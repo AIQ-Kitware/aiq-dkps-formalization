@@ -78,6 +78,7 @@ variable (U V : Submodule ℝ E)
 
 /-! ### Transport of the two displacement shapes -/
 
+omit [CompleteSpace E] in
 /-- The restricted displacement of a complexified operator is the
 complexification of the real restricted displacement. -/
 theorem complexify_restrictedDisplacement (W : E →L[ℝ] E) :
@@ -94,6 +95,7 @@ theorem complexify_displacementSquare (W : E →L[ℝ] E) :
   rw [Experimental.complexify_mul, complexify_sub, complexify_sub, Experimental.complexify_one,
     Experimental.complexify_star]
 
+omit [CompleteSpace E] in
 /-- A real intertwining relation complexifies. -/
 theorem complexify_intertwines {W : E →L[ℝ] E}
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :

@@ -139,6 +139,7 @@ private theorem subtypeL_comp_adjoint_subtypeL
   rw [Submodule.adjoint_subtypeL]
   rfl
 
+omit [FiniteDimensional ℂ ↥Z] in
 private theorem directedSine_eq_subtype_comp_coordinateSine :
     directedSine Z V = Vᗮ.subtypeL ∘L coordinateSine Z V := by
   rw [directedSine, coordinateSine, theorem63DirectedSineBlock, paperSineBlockC,
@@ -155,6 +156,7 @@ private theorem adjoint_subtypeL_comp_subtypeL
   exact congrArg (fun z : W => (z : H))
     (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self x)
 
+omit [FiniteDimensional ℂ ↥Z] in
 private theorem subtype_adjoint_comp_subtype_comp_coordinateSine :
     Vᗮ.subtypeL.adjoint ∘L Vᗮ.subtypeL ∘L coordinateSine Z V =
       coordinateSine Z V := by

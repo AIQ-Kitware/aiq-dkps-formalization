@@ -38,6 +38,7 @@ section UnitaryComposition
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /-- The identity bounded operator is unitary in the continuation predicate. -/
 theorem isUnitaryOperator_id :
     IsUnitaryOperator (ContinuousLinearMap.id ℂ H) := by
@@ -47,6 +48,7 @@ theorem isUnitaryOperator_id :
   · intro y
     exact ⟨y, rfl⟩
 
+omit [CompleteSpace H] in
 /-- Composition preserves the continuation-facing unitary predicate. -/
 theorem isUnitaryOperator_comp
     (U V : H →L[ℂ] H)

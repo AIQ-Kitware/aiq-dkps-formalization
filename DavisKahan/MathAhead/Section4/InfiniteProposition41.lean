@@ -73,6 +73,7 @@ structure CosineDisplacementData
 
 namespace CosineDisplacementData
 
+omit [CompleteSpace F] in
 /-- The cosine commutes with each of its spectral projections. -/
 private theorem cosine_commutes_spectralProjection
     {C : E →L[ℂ] E} {A B : E →L[ℂ] F}

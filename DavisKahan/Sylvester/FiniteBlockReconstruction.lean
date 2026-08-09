@@ -103,7 +103,7 @@ theorem finiteDiagonal_select_right
     change (a j : ℂ) • (P j * P i) = 0
     rw [horth j i hji, smul_zero]
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The Sylvester defect restricted to one spectral rectangle is scalar. -/
 theorem finiteDiagonal_sylvester_block
     {m n : ℕ}
@@ -127,7 +127,7 @@ theorem finiteDiagonal_sylvester_block
     map_sub, smul_apply] at hL hR ⊢
   rw [hL, hR, map_smul, map_smul, Complex.ofReal_sub, sub_smul]
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The full operator is the sum of all rectangular blocks. -/
 theorem eq_sum_rectangular_blocks
     {m n : ℕ}
@@ -252,7 +252,7 @@ theorem finiteDiagonal_sylvester_solution
       rw [hone, one_smul]
     _ = C := (eq_sum_rectangular_blocks P Q hPsum hQsum C).symm
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Integrability of one scalar oscillatory block against an `L1` kernel. -/
 theorem integrable_scalar_oscillatory_block
     (μ : ℝ → ℂ) (hμ : Integrable μ)

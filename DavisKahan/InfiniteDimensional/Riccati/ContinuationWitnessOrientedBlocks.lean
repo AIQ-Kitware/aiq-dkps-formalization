@@ -62,6 +62,7 @@ noncomputable def subspaceCoordinateAnalysis
       (U × Uᗮ) →L[ℂ] WithLp 2 (U × Uᗮ)) ∘L
     U.orthogonalProjectionOnto.prod Uᗮ.orthogonalProjectionOnto
 
+omit [CompleteSpace H] in
 /-- Synthesis reassembles a pair of components into their sum in the ambient space. -/
 @[simp]
 theorem subspaceCoordinateSynthesis_apply
@@ -71,6 +72,7 @@ theorem subspaceCoordinateSynthesis_apply
       ((WithLp.fst z : U) : H) + ((WithLp.snd z : Uᗮ) : H) := by
   rfl
 
+omit [CompleteSpace H] in
 /-- Analysis splits a vector into its orthogonal projections onto `U` and `Uᗮ`. -/
 @[simp]
 theorem subspaceCoordinateAnalysis_apply
@@ -81,6 +83,7 @@ theorem subspaceCoordinateAnalysis_apply
           Uᗮ.orthogonalProjectionOnto x) := by
   rfl
 
+omit [CompleteSpace H] in
 /-- Analysis followed by synthesis is the identity on the ambient space. -/
 theorem subspaceCoordinateSynthesis_comp_analysis
     (U : Submodule ℂ H) [U.HasOrthogonalProjection] :
@@ -91,6 +94,7 @@ theorem subspaceCoordinateSynthesis_comp_analysis
   change U.starProjection x + Uᗮ.starProjection x = x
   exact U.starProjection_add_starProjection_orthogonal x
 
+omit [CompleteSpace H] in
 /-- Synthesis followed by analysis is the identity on the orthogonal direct
 sum. -/
 theorem subspaceCoordinateAnalysis_comp_synthesis
@@ -126,9 +130,9 @@ theorem subspaceCoordinate_conjugation_eq_blockOperator
     (hT : IsSelfAdjointOperator T) :
     subspaceCoordinateAnalysis U ∘L T ∘L subspaceCoordinateSynthesis U =
       blockOperator (subspaceBlockOperatorData T U hT) := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ H) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ H) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   apply ContinuousLinearMap.ext
   intro z
@@ -151,9 +155,9 @@ theorem spectrum_subspaceBlockOperatorData
     (T : H →L[ℂ] H) (U : Submodule ℂ H) [U.HasOrthogonalProjection]
     (hT : IsSelfAdjointOperator T) :
     spectrum ℂ T = spectrum ℂ (blockOperator (subspaceBlockOperatorData T U hT)) := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ H) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ H) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   let e : H ≃L[ℂ] WithLp 2 (U × Uᗮ) :=
     ContinuousLinearEquiv.equivOfInverse'
@@ -208,9 +212,9 @@ theorem blockOperator_subspaceBlockOperatorData_eq_blockDiagonal_of_reduces
     (hT : IsSelfAdjointOperator T) (hred : Reduces T U) :
     blockOperator (subspaceBlockOperatorData T U hT) =
       blockDiagonalOperator (compressOperator U T) (compressOperator Uᗮ T) := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ H) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ H) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have h01 := subspaceBlockOperatorData_B01_eq_zero_of_reduces T U hT hred
   have h10 := subspaceBlockOperatorData_B10_eq_zero_of_reduces T U hT hred
@@ -228,9 +232,9 @@ theorem realSpectrum_eq_union_compressions_of_reduces
     realSpectrum T =
       realSpectrum (compressOperator U T) ∪
         realSpectrum (compressOperator Uᗮ T) := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ H) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ H) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hspec : spectrum ℂ T =
       spectrum ℂ (blockDiagonalOperator
@@ -250,6 +254,7 @@ theorem realSpectrum_eq_union_compressions_of_reduces
       (spectrum_blockDiagonalOperator
         (compressOperator U T) (compressOperator Uᗮ T)))
 
+omit [CompleteSpace H] in
 /-- The real spectrum of the compression is exactly the actual restricted
 spectrum. -/
 theorem realSpectrum_compressOperator_eq_restrictedSpectrum
@@ -390,9 +395,9 @@ theorem targetEffectiveBlocks_realSpectra_separated_of_branch
     (h1 : SpectrumIn (A + V) C.targetSelectedSpectralSubspaceᗮ (Set.Ici b)) :
     ∀ x ∈ realSpectrum C.targetEffectiveBlock0,
       ∀ y ∈ realSpectrum C.targetEffectiveBlock1, d ≤ |x - y| := by
-  letI : CompleteSpace C.targetSelectedSpectralSubspace :=
+  let : CompleteSpace C.targetSelectedSpectralSubspace :=
     (C.targetSelectedSpectralSubspace.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace
+  let : CompleteSpace
       (C.targetSelectedSpectralSubspaceᗮ : Submodule ℂ H) :=
     (C.targetSelectedSpectralSubspaceᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   exact realSpectra_blocks_separated_of_halfLines
