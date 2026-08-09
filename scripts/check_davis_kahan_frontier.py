@@ -111,11 +111,29 @@ def textual_presence(node: dict[str, Any]) -> bool:
     return bool(pattern.search(text))
 
 
+def census_row_is_explicitly_absent(item: dict[str, Any]) -> bool:
+    """Whether the census intentionally records a printed conclusion with no Lean declaration."""
+    return item.get("verification") == "absent"
+
+
 def required_census_ids(manifest: dict[str, Any], census: dict[str, Any]) -> set[str]:
+    """Rows that must map to a real frontier declaration in the maintenance gate.
+
+    A census row whose compile-backed verification is explicitly ``absent`` is
+    different from an accidentally unmapped row: its whole point is to record a
+    printed conclusion for which no declaration exists yet.  Requiring such a
+    row to name a frontier declaration made honest absence impossible to encode;
+    mapping it to a compiled ingredient instead made the paper-result summary
+    falsely report 100% grounding.
+
+    Explicitly absent rows therefore do not require a manifest mapping.  They
+    remain completion debt and are represented as ungrounded paper results by
+    ``paper_result_rows`` below.
+    """
     terminal = set(manifest.get("coverage_policy", {}).get("census_terminal_statuses", []))
     required: set[str] = set()
     for item in census.get("items", []):
-        if item.get("status") not in terminal:
+        if item.get("status") not in terminal and not census_row_is_explicitly_absent(item):
             required.add(item["id"])
     return required
 
@@ -177,33 +195,48 @@ def paper_result_rows(
     for item in census.get("items", []):
         census_id = item["id"]
         endpoints = mapped.get(census_id, [])
-        if not endpoints:
+        explicitly_absent = census_row_is_explicitly_absent(item)
+        if not endpoints and not explicitly_absent:
             continue
-        closure = dependency_closure(manifest, endpoints)
-        if lean_used:
-            by_id = {node["id"]: node for node in manifest.get("nodes", [])}
-            missing = [
-                node_id for node_id in closure
-                if not bool(status[node_id]["recursive_grounded"])
-                and all(
-                    bool(status[dependency]["recursive_grounded"])
-                    for dependency in by_id[node_id].get("dependencies", [])
-                )
-            ]
-            endpoints_grounded = all(
-                bool(status[node_id]["recursive_grounded"])
-                for node_id in endpoints
-            )
-            complete_pieces = len(closure) - len(missing)
-            estimate = 100 if endpoints_grounded else (
-                (100 * complete_pieces) // len(closure) if closure else 0
-            )
-            if not endpoints_grounded:
-                estimate = min(99, estimate)
+
+        if explicitly_absent and not endpoints:
+            # There is deliberately no node to put in a dependency closure.
+            # Count the absent declaration itself as one missing piece so the
+            # result is visible as 0%, rather than disappearing from the paper
+            # denominator or being forced onto an unrelated compiled endpoint.
+            closure: list[str] = []
+            missing = None if not lean_used else ["<absent declaration>"]
+            endpoints_grounded = None if not lean_used else False
+            estimate = None if not lean_used else 0
+            pieces_total = 1
         else:
-            missing = None
-            endpoints_grounded = None
-            estimate = None
+            closure = dependency_closure(manifest, endpoints)
+            pieces_total = len(closure)
+            if lean_used:
+                by_id = {node["id"]: node for node in manifest.get("nodes", [])}
+                missing = [
+                    node_id for node_id in closure
+                    if not bool(status[node_id]["recursive_grounded"])
+                    and all(
+                        bool(status[dependency]["recursive_grounded"])
+                        for dependency in by_id[node_id].get("dependencies", [])
+                    )
+                ]
+                endpoints_grounded = all(
+                    bool(status[node_id]["recursive_grounded"])
+                    for node_id in endpoints
+                )
+                complete_pieces = len(closure) - len(missing)
+                estimate = 100 if endpoints_grounded else (
+                    (100 * complete_pieces) // len(closure) if closure else 0
+                )
+                if not endpoints_grounded:
+                    estimate = min(99, estimate)
+            else:
+                missing = None
+                endpoints_grounded = None
+                estimate = None
+
         rows.append({
             "id": census_id,
             "source_anchor": item.get("source_anchor", ""),
@@ -211,9 +244,10 @@ def paper_result_rows(
             "title": item.get("title", ""),
             "census_status": item.get("status", ""),
             "verification": item.get("verification", ""),
+            "explicitly_absent": explicitly_absent,
             "endpoint_nodes": endpoints,
             "closure_nodes": closure,
-            "pieces_total": len(closure),
+            "pieces_total": pieces_total,
             "missing_piece_nodes": missing,
             "estimated_missing_pieces": None if missing is None else len(missing),
             "estimated_complete_percent": estimate,
@@ -395,6 +429,10 @@ def summary(
 ) -> dict[str, Any]:
     required = required_census_ids(manifest, census)
     mapped = mapped_census_ids(manifest)
+    explicitly_absent = {
+        item["id"] for item in census.get("items", [])
+        if census_row_is_explicitly_absent(item)
+    }
     source_nodes = [n for n in manifest["nodes"] if n["kind"] == "source"]
     paper_rows = paper_result_rows(manifest, census, status, lean_used)
     all_nodes = manifest["nodes"]
@@ -429,6 +467,8 @@ def summary(
         "census_rows_requiring_frontier": len(required),
         "census_rows_mapped": len(required & mapped),
         "census_rows_unmapped": sorted(required - mapped),
+        "census_rows_explicitly_absent": len(explicitly_absent),
+        "census_rows_absent_but_mapped": sorted(explicitly_absent & mapped),
         "manifest_census_ids_unknown": sorted(mapped - {i["id"] for i in census.get("items", [])}),
     }
 
@@ -457,7 +497,8 @@ def render_report(
         "",
         "## Davis--Kahan 1970 paper results",
         "",
-        "This table is based on explicit `source_census_ids` mappings. "
+        "This table is based on explicit `source_census_ids` mappings plus "
+        "census rows whose compile-backed verification is explicitly `absent`. "
         "`kind = source` means a frontier endpoint; it does **not** by itself "
         "mean that the declaration appeared in the paper.",
         "",
@@ -475,6 +516,8 @@ def render_report(
     for row in paper_rows:
         label = f"`{row['id']}` — {row['source_anchor']}: {row['title']}"
         endpoints = ", ".join(f"`{node_id}`" for node_id in row["endpoint_nodes"])
+        if row.get("explicitly_absent") and not endpoints:
+            endpoints = "**absent — no Lean declaration**"
         missing = (
             "?" if row["estimated_missing_pieces"] is None
             else f"{row['estimated_missing_pieces']} / {row['pieces_total']}"
@@ -495,9 +538,10 @@ def render_report(
         "",
         f"- Manifest nodes: **{totals['nodes_total']}**",
         f"- Textually present: **{totals['nodes_textually_present']}**",
-        f"- Paper result rows represented in the frontier: **{totals['paper_results_total']}**",
-        f"- Census rows requiring frontier coverage: **{totals['census_rows_requiring_frontier']}**",
-        f"- Census rows mapped: **{totals['census_rows_mapped']}**",
+        f"- Paper result rows tracked by the frontier audit: **{totals['paper_results_total']}**",
+        f"- Census rows requiring declaration mappings: **{totals['census_rows_requiring_frontier']}**",
+        f"- Required census rows mapped: **{totals['census_rows_mapped']}**",
+        f"- Census rows explicitly recording an absent declaration: **{totals['census_rows_explicitly_absent']}**",
     ])
     if totals["lean_used"]:
         lines.extend([
@@ -570,6 +614,10 @@ def main() -> int:
     if totals["census_rows_unmapped"]:
         problems.append(
             "unmapped source-census rows: " + ", ".join(totals["census_rows_unmapped"]))
+    if totals["census_rows_absent_but_mapped"]:
+        problems.append(
+            "census rows marked verification=absent must not map to frontier declarations: " +
+            ", ".join(totals["census_rows_absent_but_mapped"]))
     if totals["manifest_census_ids_unknown"]:
         problems.append(
             "manifest references unknown census rows: " +
@@ -598,7 +646,8 @@ def main() -> int:
     else:
         print(
             f"Frontier: {totals['nodes_textually_present']}/{totals['nodes_total']} declarations textually present; "
-            f"{totals['census_rows_mapped']}/{totals['census_rows_requiring_frontier']} required census rows mapped")
+            f"{totals['census_rows_mapped']}/{totals['census_rows_requiring_frontier']} required census rows mapped; "
+            f"{totals['census_rows_explicitly_absent']} census rows explicitly absent")
         if lean_status is not None:
             print(
                 f"Lean: {totals['nodes_resolved']}/{totals['nodes_total']} resolve; "
@@ -620,11 +669,13 @@ def main() -> int:
         if lean_status is None:
             print("--check requires a Lean probe unless --no-lean is used only for diagnostics", file=sys.stderr)
             return 2
-        ungrounded_sources = [
-            n["id"] for n in manifest["nodes"]
-            if n["kind"] == "source" and not status[n["id"]]["recursive_grounded"]
+        ungrounded_paper_results = [
+            row["id"] for row in paper_result_rows(
+                manifest, census, status, lean_status is not None
+            )
+            if not row["recursively_grounded"]
         ]
-        return 1 if ungrounded_sources else 0
+        return 1 if ungrounded_paper_results else 0
     return 1 if problems else 0
 
 
