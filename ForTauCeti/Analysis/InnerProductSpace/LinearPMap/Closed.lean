@@ -86,7 +86,10 @@ theorem MapsDomainTo.comp
   intro z
   exact hX ⟨Y (z : G), hY z⟩
 
+-- `@[expose]` for the same reason as `MapsDomainTo` above: consumers *apply* the
+-- statement (`h x hx : A x ∈ U`), which is unfolding by definition.
 /-- A subspace is invariant under a partial linear map on its domain. -/
+@[expose]
 def InvariantSubspace
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
   ∀ x : A.domain, (x : E) ∈ U → A x ∈ U
