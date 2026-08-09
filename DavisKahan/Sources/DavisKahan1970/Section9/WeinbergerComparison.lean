@@ -9,12 +9,16 @@ import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
 /-!
 # Davis--Kahan 1970, Section 9: Weinberger comparison
 
-The historical comparison uses independent lower eigenvalue bounds.  This file
-formalizes the algebraic conversion from a sine-square estimate to a tangent-
-square estimate and records the exact arrowhead comparison polynomial.  The
-asymptotic expansion mentioned in the paper is intentionally not encoded;
-constructing certified roots of the comparison polynomial is the correct
-future interface.
+This file formalizes the Lehmann/arrowhead lower-root half of the historical
+comparison, together with the algebraic conversion from a *supplied*
+Weinberger sine-square estimate to the tangent-square bounds printed in (9.8).
+It does not derive the Weinberger angle estimate from independent scalar
+eigenvalue lower bounds: for the second vector in a cluster that implication is
+false without the coupled variational information retained by Weinberger's
+argument.  See `WeinbergerAngle.lean` for the executable boundary and tripwire.
+
+The asymptotic expansion mentioned in Davis--Kahan is intentionally not
+encoded; the exact comparison roots are certified directly below.
 -/
 
 namespace TauCeti

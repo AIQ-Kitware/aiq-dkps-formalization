@@ -7,6 +7,7 @@ import DavisKahan.SpectralTheory.FormMethod.BeamFormSpace
 import DavisKahan.SpectralTheory.FormMethod.BeamSection9
 import DavisKahan.SpectralTheory.FormMethod.BeamSpectrum
 import DavisKahan.SpectralTheory.FormMethod.BeamTangent
+import DavisKahan.SpectralTheory.FormMethod.BeamWeinberger
 import DavisKahan.SpectralTheory.FormMethod.BoundedGraphCompactness
 import DavisKahan.SpectralTheory.FormMethod.BoundedInverseRealization
 import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent
