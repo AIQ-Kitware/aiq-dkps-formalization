@@ -17,9 +17,9 @@ datum is actually attained by a concrete pair of subspaces.
 
 ## The construction
 
-Fix two complex Hilbert spaces `E` and `F`, to be read as `P H` and `Pᗮ H`, and
-work in their `L²` direct sum `WithLp 2 (E × F)`.  The first subspace is the
-`E`-factor,
+Fix two Hilbert spaces `E` and `F` over an `RCLike` field `𝕜`, to be read as
+`P H` and `Pᗮ H`, and work in their `L²` direct sum `WithLp 2 (E × F)`.  The
+first subspace is the `E`-factor,
 
 `U := range modelInl = {(x, 0)}`,
 
@@ -80,12 +80,14 @@ For an angle operator with spectrum in `[0, π/2]`, `ker S₀` is the eigenspace
 
 ## Generality
 
-Arbitrary complex Hilbert spaces `E`, `F`: no compactness, no finite dimension,
-no separability, and — as it turns out — no positivity.  The angle datum is
-recorded by the *pair* `(cos Θ, sin Θ)` through the algebraic relations it
-satisfies (self-adjoint, commuting, `C² + S² = 1`), which is all the
-construction consumes.  Positivity of `C` and `S`, i.e. the restriction of the
-angle to `[0, π/2]`, is what makes `ker S` the angle-`0` space and `ker C` the
+Arbitrary Hilbert spaces `E`, `F` over an arbitrary `RCLike` field: no
+compactness, no finite dimension, no separability, and — as it turns out — no
+positivity.  In particular the real case is covered; nothing in the
+construction is complex-specific.  The angle datum is recorded by the *pair*
+`(cos Θ, sin Θ)` through the algebraic relations it satisfies (self-adjoint,
+commuting, `C² + S² = 1`), which is all the construction consumes.  Positivity
+of `C` and `S`, i.e. the restriction of the angle to `[0, π/2]`, is what makes
+`ker S` the angle-`0` space and `ker C` the
 angle-`π/2` space, and so belongs to the *reading* of the theorem rather than to
 its proof.
 
@@ -117,16 +119,17 @@ universe u v
 
 section Preliminaries
 
-variable {A : Type*} [NormedAddCommGroup A] [InnerProductSpace ℂ A]
-variable {B : Type*} [NormedAddCommGroup B] [InnerProductSpace ℂ B]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {A : Type*} [NormedAddCommGroup A] [InnerProductSpace 𝕜 A]
+variable {B : Type*} [NormedAddCommGroup B] [InnerProductSpace 𝕜 B]
 
 /-- Two vectors of two inner product spaces with the same self-inner product have
 the same norm.  Used repeatedly to promote an operator identity to an isometry
 statement without leaving the inner product. -/
 theorem norm_eq_norm_of_inner_self_eq {a : A} {b : B}
-    (h : ⟪a, a⟫_ℂ = ⟪b, b⟫_ℂ) : ‖a‖ = ‖b‖ := by
+    (h : ⟪a, a⟫_𝕜 = ⟪b, b⟫_𝕜) : ‖a‖ = ‖b‖ := by
   have h2 : ‖a‖ ^ 2 = ‖b‖ ^ 2 := by
-    rw [norm_sq_eq_re_inner (𝕜 := ℂ), norm_sq_eq_re_inner (𝕜 := ℂ), h]
+    rw [norm_sq_eq_re_inner (𝕜 := 𝕜), norm_sq_eq_re_inner (𝕜 := 𝕜), h]
   exact (sq_eq_sq₀ (norm_nonneg a) (norm_nonneg b)).mp h2
 
 end Preliminaries
@@ -135,81 +138,82 @@ end Preliminaries
 
 section Model
 
-variable (E : Type u) [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-variable (F : Type v) [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+variable (𝕜 : Type*) [RCLike 𝕜]
+variable (E : Type u) [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable (F : Type v) [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- The inclusion of the first factor into the `L²` direct sum. -/
-noncomputable def modelInl : E →L[ℂ] WithLp 2 (E × F) :=
-  (WithLp.prodContinuousLinearEquiv 2 ℂ E F).symm.toContinuousLinearMap ∘L
-    ContinuousLinearMap.inl ℂ E F
+noncomputable def modelInl : E →L[𝕜] WithLp 2 (E × F) :=
+  (WithLp.prodContinuousLinearEquiv 2 𝕜 E F).symm.toContinuousLinearMap ∘L
+    ContinuousLinearMap.inl 𝕜 E F
 
 /-- The inclusion of the second factor into the `L²` direct sum. -/
-noncomputable def modelInr : F →L[ℂ] WithLp 2 (E × F) :=
-  (WithLp.prodContinuousLinearEquiv 2 ℂ E F).symm.toContinuousLinearMap ∘L
-    ContinuousLinearMap.inr ℂ E F
+noncomputable def modelInr : F →L[𝕜] WithLp 2 (E × F) :=
+  (WithLp.prodContinuousLinearEquiv 2 𝕜 E F).symm.toContinuousLinearMap ∘L
+    ContinuousLinearMap.inr 𝕜 E F
 
-variable {E F}
+variable {𝕜 E F}
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The first inclusion in coordinates. -/
 @[simp]
-theorem modelInl_apply (x : E) : modelInl E F x = WithLp.toLp 2 (x, (0 : F)) := rfl
+theorem modelInl_apply (x : E) : modelInl 𝕜 E F x = WithLp.toLp 2 (x, (0 : F)) := rfl
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The second inclusion in coordinates. -/
 @[simp]
-theorem modelInr_apply (y : F) : modelInr E F y = WithLp.toLp 2 ((0 : E), y) := rfl
+theorem modelInr_apply (y : F) : modelInr 𝕜 E F y = WithLp.toLp 2 ((0 : E), y) := rfl
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The first inclusion is isometric. -/
-theorem norm_modelInl (x : E) : ‖modelInl E F x‖ = ‖x‖ :=
-  norm_eq_norm_of_inner_self_eq (by simp)
+theorem norm_modelInl (x : E) : ‖modelInl 𝕜 E F x‖ = ‖x‖ :=
+  norm_eq_norm_of_inner_self_eq (𝕜 := 𝕜) (by simp)
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The second inclusion is isometric. -/
-theorem norm_modelInr (y : F) : ‖modelInr E F y‖ = ‖y‖ :=
-  norm_eq_norm_of_inner_self_eq (by simp)
+theorem norm_modelInr (y : F) : ‖modelInr 𝕜 E F y‖ = ‖y‖ :=
+  norm_eq_norm_of_inner_self_eq (𝕜 := 𝕜) (by simp)
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- A vector with vanishing second component is in the first factor. -/
 theorem eq_modelInl_of_snd_eq_zero {z : WithLp 2 (E × F)} (h : (WithLp.ofLp z).2 = 0) :
-    z = modelInl E F (WithLp.ofLp z).1 := by
+    z = modelInl 𝕜 E F (WithLp.ofLp z).1 := by
   rw [modelInl_apply, ← h]
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- A vector with vanishing first component is in the second factor. -/
 theorem eq_modelInr_of_fst_eq_zero {z : WithLp 2 (E × F)} (h : (WithLp.ofLp z).1 = 0) :
-    z = modelInr E F (WithLp.ofLp z).2 := by
+    z = modelInr 𝕜 E F (WithLp.ofLp z).2 := by
   rw [modelInr_apply, ← h]
 
 /-- The adjoint of the first inclusion is the first projection. -/
 theorem adjoint_modelInl :
-    ContinuousLinearMap.adjoint (modelInl E F) = WithLp.fstL 2 ℂ E F :=
-  ((ContinuousLinearMap.eq_adjoint_iff (WithLp.fstL 2 ℂ E F) (modelInl E F)).mpr
+    ContinuousLinearMap.adjoint (modelInl 𝕜 E F) = WithLp.fstL 2 𝕜 E F :=
+  ((ContinuousLinearMap.eq_adjoint_iff (WithLp.fstL 2 𝕜 E F) (modelInl 𝕜 E F)).mpr
     (by intro z x; simp)).symm
 
 /-- The adjoint of the second inclusion is the second projection. -/
 theorem adjoint_modelInr :
-    ContinuousLinearMap.adjoint (modelInr E F) = WithLp.sndL 2 ℂ E F :=
-  ((ContinuousLinearMap.eq_adjoint_iff (WithLp.sndL 2 ℂ E F) (modelInr E F)).mpr
+    ContinuousLinearMap.adjoint (modelInr 𝕜 E F) = WithLp.sndL 2 𝕜 E F :=
+  ((ContinuousLinearMap.eq_adjoint_iff (WithLp.sndL 2 𝕜 E F) (modelInr 𝕜 E F)).mpr
     (by intro z y; simp)).symm
 
 /-- A norm-preserving continuous linear map out of a complete space has closed,
 hence complete, range. -/
 theorem completeSpace_range_of_norm_map {G : Type*} [NormedAddCommGroup G]
-    [InnerProductSpace ℂ G] [CompleteSpace G] (f : E →L[ℂ] G) (hf : ∀ x, ‖f x‖ = ‖x‖) :
-    CompleteSpace (LinearMap.range (f : E →ₗ[ℂ] G)) := by
+    [InnerProductSpace 𝕜 G] [CompleteSpace G] (f : E →L[𝕜] G) (hf : ∀ x, ‖f x‖ = ‖x‖) :
+    CompleteSpace (LinearMap.range (f : E →ₗ[𝕜] G)) := by
   have hiso : Isometry (f : E → G) := AddMonoidHomClass.isometry_of_norm f hf
   have hclosed : IsClosed (Set.range (f : E → G)) := hiso.isClosedEmbedding.isClosed_range
-  have hcl : IsClosed ((LinearMap.range (f : E →ₗ[ℂ] G) : Submodule ℂ G) : Set G) := by
+  have hcl : IsClosed ((LinearMap.range (f : E →ₗ[𝕜] G) : Submodule 𝕜 G) : Set G) := by
     simpa [LinearMap.coe_range] using hclosed
   exact hcl.completeSpace_coe
 
 omit [CompleteSpace E] in
 /-- A norm-preserving continuous linear map is injective. -/
 theorem injective_of_norm_map {G : Type*} [NormedAddCommGroup G]
-    [InnerProductSpace ℂ G] (f : E →L[ℂ] G) (hf : ∀ x, ‖f x‖ = ‖x‖) :
-    Function.Injective (f : E →ₗ[ℂ] G) := by
+    [InnerProductSpace 𝕜 G] (f : E →L[𝕜] G) (hf : ∀ x, ‖f x‖ = ‖x‖) :
+    Function.Injective (f : E →ₗ[𝕜] G) := by
   intro a b hab
   have hz : ‖a - b‖ = 0 := by
     rw [← hf, map_sub]
@@ -220,36 +224,36 @@ theorem injective_of_norm_map {G : Type*} [NormedAddCommGroup G]
 /-- A norm-preserving continuous linear map carries a submodule isometrically onto
 its image. -/
 noncomputable def submoduleMapIsometry {G : Type*} [NormedAddCommGroup G]
-    [InnerProductSpace ℂ G] (f : E →L[ℂ] G) (hf : ∀ x, ‖f x‖ = ‖x‖) (K : Submodule ℂ E) :
-    K ≃ₗᵢ[ℂ] Submodule.map (f : E →ₗ[ℂ] G) K :=
-  { Submodule.equivMapOfInjective (f : E →ₗ[ℂ] G) (injective_of_norm_map f hf) K with
+    [InnerProductSpace 𝕜 G] (f : E →L[𝕜] G) (hf : ∀ x, ‖f x‖ = ‖x‖) (K : Submodule 𝕜 E) :
+    K ≃ₗᵢ[𝕜] Submodule.map (f : E →ₗ[𝕜] G) K :=
+  { Submodule.equivMapOfInjective (f : E →ₗ[𝕜] G) (injective_of_norm_map f hf) K with
     norm_map' := fun x => by
-      have h := Submodule.coe_equivMapOfInjective_apply (f : E →ₗ[ℂ] G)
+      have h := Submodule.coe_equivMapOfInjective_apply (f : E →ₗ[𝕜] G)
         (injective_of_norm_map f hf) K x
-      calc ‖(Submodule.equivMapOfInjective (f : E →ₗ[ℂ] G)
+      calc ‖(Submodule.equivMapOfInjective (f : E →ₗ[𝕜] G)
               (injective_of_norm_map f hf) K) x‖
-          = ‖(((Submodule.equivMapOfInjective (f : E →ₗ[ℂ] G)
-              (injective_of_norm_map f hf) K) x : Submodule.map (f : E →ₗ[ℂ] G) K) : G)‖ := rfl
+          = ‖(((Submodule.equivMapOfInjective (f : E →ₗ[𝕜] G)
+              (injective_of_norm_map f hf) K) x : Submodule.map (f : E →ₗ[𝕜] G) K) : G)‖ := rfl
         _ = ‖f (x : E)‖ := by rw [h]; simp
         _ = ‖(x : E)‖ := hf _
         _ = ‖x‖ := rfl }
 
-variable (E F)
+variable (𝕜 E F)
 
 /-- **The first subspace of the realized pair**: the `E`-factor, i.e. `P H`. -/
-noncomputable def sourceSubspace : Submodule ℂ (WithLp 2 (E × F)) :=
-  LinearMap.range (modelInl E F : E →ₗ[ℂ] WithLp 2 (E × F))
+noncomputable def sourceSubspace : Submodule 𝕜 (WithLp 2 (E × F)) :=
+  LinearMap.range (modelInl 𝕜 E F : E →ₗ[𝕜] WithLp 2 (E × F))
 
 /-- The `E`-factor is complete, being the isometric image of a complete space. -/
-noncomputable instance : CompleteSpace (sourceSubspace E F) :=
+noncomputable instance : CompleteSpace (sourceSubspace 𝕜 E F) :=
   completeSpace_range_of_norm_map _ norm_modelInl
 
-variable {E F}
+variable {𝕜 E F}
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Membership in the `E`-factor is the vanishing of the second component. -/
 theorem mem_sourceSubspace_iff (z : WithLp 2 (E × F)) :
-    z ∈ sourceSubspace E F ↔ (WithLp.ofLp z).2 = 0 := by
+    z ∈ sourceSubspace 𝕜 E F ↔ (WithLp.ofLp z).2 = 0 := by
   constructor
   · rintro ⟨x, rfl⟩
     simp [modelInl]
@@ -258,25 +262,25 @@ theorem mem_sourceSubspace_iff (z : WithLp 2 (E × F)) :
 
 /-- The orthogonal complement of the `E`-factor is the kernel of the first projection. -/
 theorem sourceSubspace_orthogonal :
-    (sourceSubspace E F)ᗮ = LinearMap.ker (WithLp.fstL 2 ℂ E F : _ →ₗ[ℂ] E) := by
+    (sourceSubspace 𝕜 E F)ᗮ = LinearMap.ker (WithLp.fstL 2 𝕜 E F : _ →ₗ[𝕜] E) := by
   rw [sourceSubspace, ContinuousLinearMap.orthogonal_range, adjoint_modelInl]
 
 /-- Membership in the `F`-factor is the vanishing of the first component. -/
 theorem mem_sourceSubspace_orthogonal_iff (z : WithLp 2 (E × F)) :
-    z ∈ (sourceSubspace E F)ᗮ ↔ (WithLp.ofLp z).1 = 0 := by
+    z ∈ (sourceSubspace 𝕜 E F)ᗮ ↔ (WithLp.ofLp z).1 = 0 := by
   rw [sourceSubspace_orthogonal]
   simp [LinearMap.mem_ker]
 
 /-- The orthogonal projection onto the `E`-factor discards the second component. -/
 theorem starProjection_sourceSubspace (z : WithLp 2 (E × F)) :
-    (sourceSubspace E F).starProjection z = modelInl E F (WithLp.ofLp z).1 := by
+    (sourceSubspace 𝕜 E F).starProjection z = modelInl 𝕜 E F (WithLp.ofLp z).1 := by
   refine Submodule.eq_starProjection_of_mem_orthogonal ⟨(WithLp.ofLp z).1, rfl⟩ ?_
   rw [mem_sourceSubspace_orthogonal_iff]
   simp [modelInl]
 
 /-- The orthogonal projection onto the `F`-factor discards the first component. -/
 theorem starProjection_sourceSubspace_orthogonal (z : WithLp 2 (E × F)) :
-    (sourceSubspace E F)ᗮ.starProjection z = modelInr E F (WithLp.ofLp z).2 := by
+    (sourceSubspace 𝕜 E F)ᗮ.starProjection z = modelInr 𝕜 E F (WithLp.ofLp z).2 := by
   refine Submodule.eq_starProjection_of_mem_orthogonal ?_ ?_
   · rw [mem_sourceSubspace_orthogonal_iff]
     simp [modelInr]
@@ -301,19 +305,19 @@ the range of `sin₁`.  Together with the two intertwining fields they say that
 `J₀` matches the spectral multiplicities of `Θ₀` and `Θ₁` at every angle *except*
 `0`.  Angle `0` lies outside `J₀`'s initial and final spaces, which is exactly
 why Theorem 3.1 permits the multiplicity at `0` to differ. -/
-structure HalmosAngleDatum (E : Type u) (F : Type v)
-    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F] where
+structure HalmosAngleDatum (𝕜 : Type*) [RCLike 𝕜] (E : Type u) (F : Type v)
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] where
   /-- `cos Θ₀`, the cosine of the angle operator on the `P`-side. -/
-  cos₀ : E →L[ℂ] E
+  cos₀ : E →L[𝕜] E
   /-- `sin Θ₀`, the sine of the angle operator on the `P`-side. -/
-  sin₀ : E →L[ℂ] E
+  sin₀ : E →L[𝕜] E
   /-- `cos Θ₁`, the cosine of the angle operator on the `Pᗮ`-side. -/
-  cos₁ : F →L[ℂ] F
+  cos₁ : F →L[𝕜] F
   /-- `sin Θ₁`, the sine of the angle operator on the `Pᗮ`-side. -/
-  sin₁ : F →L[ℂ] F
+  sin₁ : F →L[𝕜] F
   /-- `J₀`, the intertwiner supplied by the spectral classification. -/
-  intertwiner : E →L[ℂ] F
+  intertwiner : E →L[𝕜] F
   /-- `cos Θ₀` is self-adjoint. -/
   isSelfAdjoint_cos₀ : IsSelfAdjoint cos₀
   /-- `sin Θ₀` is self-adjoint. -/
@@ -343,65 +347,66 @@ structure HalmosAngleDatum (E : Type u) (F : Type v)
 
 namespace HalmosAngleDatum
 
-variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-variable (d : HalmosAngleDatum E F)
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+variable (d : HalmosAngleDatum 𝕜 E F)
 
 /-! ### Pointwise forms of the datum's relations -/
 
 /-- `cos Θ₀` moves across the inner product. -/
-theorem inner_cos₀ (x y : E) : ⟪d.cos₀ x, y⟫_ℂ = ⟪x, d.cos₀ y⟫_ℂ := by
+theorem inner_cos₀ (x y : E) : ⟪d.cos₀ x, y⟫_𝕜 = ⟪x, d.cos₀ y⟫_𝕜 := by
   conv_lhs => rw [← ContinuousLinearMap.isSelfAdjoint_iff'.mp d.isSelfAdjoint_cos₀]
   exact ContinuousLinearMap.adjoint_inner_left _ _ _
 
 /-- `sin Θ₀` moves across the inner product. -/
-theorem inner_sin₀ (x y : E) : ⟪d.sin₀ x, y⟫_ℂ = ⟪x, d.sin₀ y⟫_ℂ := by
+theorem inner_sin₀ (x y : E) : ⟪d.sin₀ x, y⟫_𝕜 = ⟪x, d.sin₀ y⟫_𝕜 := by
   conv_lhs => rw [← ContinuousLinearMap.isSelfAdjoint_iff'.mp d.isSelfAdjoint_sin₀]
   exact ContinuousLinearMap.adjoint_inner_left _ _ _
 
 /-- `cos Θ₁` moves across the inner product. -/
-theorem inner_cos₁ (x y : F) : ⟪d.cos₁ x, y⟫_ℂ = ⟪x, d.cos₁ y⟫_ℂ := by
+theorem inner_cos₁ (x y : F) : ⟪d.cos₁ x, y⟫_𝕜 = ⟪x, d.cos₁ y⟫_𝕜 := by
   conv_lhs => rw [← ContinuousLinearMap.isSelfAdjoint_iff'.mp d.isSelfAdjoint_cos₁]
   exact ContinuousLinearMap.adjoint_inner_left _ _ _
 
 /-- `sin Θ₁` moves across the inner product. -/
-theorem inner_sin₁ (x y : F) : ⟪d.sin₁ x, y⟫_ℂ = ⟪x, d.sin₁ y⟫_ℂ := by
+theorem inner_sin₁ (x y : F) : ⟪d.sin₁ x, y⟫_𝕜 = ⟪x, d.sin₁ y⟫_𝕜 := by
   conv_lhs => rw [← ContinuousLinearMap.isSelfAdjoint_iff'.mp d.isSelfAdjoint_sin₁]
   exact ContinuousLinearMap.adjoint_inner_left _ _ _
 
 /-- The `P`-side commutation, at a vector. -/
 theorem commute₀_apply (x : E) : d.cos₀ (d.sin₀ x) = d.sin₀ (d.cos₀ x) :=
-  congrArg (fun f : E →L[ℂ] E => f x) d.commute₀
+  congrArg (fun f : E →L[𝕜] E => f x) d.commute₀
 
 /-- The `Pᗮ`-side commutation, at a vector. -/
 theorem commute₁_apply (y : F) : d.cos₁ (d.sin₁ y) = d.sin₁ (d.cos₁ y) :=
-  congrArg (fun f : F →L[ℂ] F => f y) d.commute₁
+  congrArg (fun f : F →L[𝕜] F => f y) d.commute₁
 
 /-- The `P`-side Pythagorean identity, at a vector. -/
 theorem pythagoras₀_apply (x : E) : d.cos₀ (d.cos₀ x) + d.sin₀ (d.sin₀ x) = x :=
-  congrArg (fun f : E →L[ℂ] E => f x) d.pythagoras₀
+  congrArg (fun f : E →L[𝕜] E => f x) d.pythagoras₀
 
 /-- The `Pᗮ`-side Pythagorean identity, at a vector. -/
 theorem pythagoras₁_apply (y : F) : d.cos₁ (d.cos₁ y) + d.sin₁ (d.sin₁ y) = y :=
-  congrArg (fun f : F →L[ℂ] F => f y) d.pythagoras₁
+  congrArg (fun f : F →L[𝕜] F => f y) d.pythagoras₁
 
 /-- The cosine intertwining, at a vector. -/
 theorem map_cos_apply (x : E) : d.intertwiner (d.cos₀ x) = d.cos₁ (d.intertwiner x) :=
-  congrArg (fun f : E →L[ℂ] F => f x) d.map_cos
+  congrArg (fun f : E →L[𝕜] F => f x) d.map_cos
 
 /-- The sine intertwining, at a vector. -/
 theorem map_sin_apply (x : E) : d.intertwiner (d.sin₀ x) = d.sin₁ (d.intertwiner x) :=
-  congrArg (fun f : E →L[ℂ] F => f x) d.map_sin
+  congrArg (fun f : E →L[𝕜] F => f x) d.map_sin
 
 /-- `J₀⋆ J₀` is the identity on the range of `sin Θ₀`, at a vector. -/
 theorem isometry_on_sin₀_apply (x : E) :
     ContinuousLinearMap.adjoint d.intertwiner (d.intertwiner (d.sin₀ x)) = d.sin₀ x :=
-  congrArg (fun f : E →L[ℂ] E => f x) d.isometry_on_sin₀
+  congrArg (fun f : E →L[𝕜] E => f x) d.isometry_on_sin₀
 
 /-- `J₀ J₀⋆` is the identity on the range of `sin Θ₁`, at a vector. -/
 theorem coisometry_on_sin₁_apply (y : F) :
     d.intertwiner (ContinuousLinearMap.adjoint d.intertwiner (d.sin₁ y)) = d.sin₁ y :=
-  congrArg (fun f : F →L[ℂ] F => f y) d.coisometry_on_sin₁
+  congrArg (fun f : F →L[𝕜] F => f y) d.coisometry_on_sin₁
 
 /-- The angle-`π/2` eigenspace lies in the range of `sin Θ₀`. -/
 theorem sin₀_sin₀_of_cos₀_eq_zero {x : E} (hx : d.cos₀ x = 0) :
@@ -420,7 +425,7 @@ theorem sin₁_sin₁_of_cos₁_eq_zero {y : F} (hy : d.cos₁ y = 0) :
 /-- `J₀` preserves the norm on the range of `sin Θ₀`. -/
 theorem norm_intertwiner_sin₀ (x : E) :
     ‖d.intertwiner (d.sin₀ x)‖ = ‖d.sin₀ x‖ := by
-  refine norm_eq_norm_of_inner_self_eq (A := F) (B := E) ?_
+  refine norm_eq_norm_of_inner_self_eq (𝕜 := 𝕜) (A := F) (B := E) ?_
   rw [← ContinuousLinearMap.adjoint_inner_right, d.isometry_on_sin₀_apply]
 
 /-! ### Adjoint transport
@@ -432,50 +437,50 @@ identities that make the `Pᗮ`-side of the construction close. -/
 theorem cos₀_adjoint_intertwiner (y : F) :
     d.cos₀ (ContinuousLinearMap.adjoint d.intertwiner y) =
       ContinuousLinearMap.adjoint d.intertwiner (d.cos₁ y) := by
-  refine ext_inner_right ℂ fun x => ?_
-  calc ⟪d.cos₀ (ContinuousLinearMap.adjoint d.intertwiner y), x⟫_ℂ
-      = ⟪ContinuousLinearMap.adjoint d.intertwiner y, d.cos₀ x⟫_ℂ := d.inner_cos₀ _ _
-    _ = ⟪y, d.intertwiner (d.cos₀ x)⟫_ℂ :=
+  refine ext_inner_right 𝕜 fun x => ?_
+  calc ⟪d.cos₀ (ContinuousLinearMap.adjoint d.intertwiner y), x⟫_𝕜
+      = ⟪ContinuousLinearMap.adjoint d.intertwiner y, d.cos₀ x⟫_𝕜 := d.inner_cos₀ _ _
+    _ = ⟪y, d.intertwiner (d.cos₀ x)⟫_𝕜 :=
         ContinuousLinearMap.adjoint_inner_left _ _ _
-    _ = ⟪y, d.cos₁ (d.intertwiner x)⟫_ℂ := by rw [d.map_cos_apply]
-    _ = ⟪d.cos₁ y, d.intertwiner x⟫_ℂ := (d.inner_cos₁ _ _).symm
-    _ = ⟪ContinuousLinearMap.adjoint d.intertwiner (d.cos₁ y), x⟫_ℂ :=
+    _ = ⟪y, d.cos₁ (d.intertwiner x)⟫_𝕜 := by rw [d.map_cos_apply]
+    _ = ⟪d.cos₁ y, d.intertwiner x⟫_𝕜 := (d.inner_cos₁ _ _).symm
+    _ = ⟪ContinuousLinearMap.adjoint d.intertwiner (d.cos₁ y), x⟫_𝕜 :=
         (ContinuousLinearMap.adjoint_inner_left _ _ _).symm
 
 /-- `sin Θ₀ J₀⋆ = J₀⋆ sin Θ₁`. -/
 theorem sin₀_adjoint_intertwiner (y : F) :
     d.sin₀ (ContinuousLinearMap.adjoint d.intertwiner y) =
       ContinuousLinearMap.adjoint d.intertwiner (d.sin₁ y) := by
-  refine ext_inner_right ℂ fun x => ?_
-  calc ⟪d.sin₀ (ContinuousLinearMap.adjoint d.intertwiner y), x⟫_ℂ
-      = ⟪ContinuousLinearMap.adjoint d.intertwiner y, d.sin₀ x⟫_ℂ := d.inner_sin₀ _ _
-    _ = ⟪y, d.intertwiner (d.sin₀ x)⟫_ℂ :=
+  refine ext_inner_right 𝕜 fun x => ?_
+  calc ⟪d.sin₀ (ContinuousLinearMap.adjoint d.intertwiner y), x⟫_𝕜
+      = ⟪ContinuousLinearMap.adjoint d.intertwiner y, d.sin₀ x⟫_𝕜 := d.inner_sin₀ _ _
+    _ = ⟪y, d.intertwiner (d.sin₀ x)⟫_𝕜 :=
         ContinuousLinearMap.adjoint_inner_left _ _ _
-    _ = ⟪y, d.sin₁ (d.intertwiner x)⟫_ℂ := by rw [d.map_sin_apply]
-    _ = ⟪d.sin₁ y, d.intertwiner x⟫_ℂ := (d.inner_sin₁ _ _).symm
-    _ = ⟪ContinuousLinearMap.adjoint d.intertwiner (d.sin₁ y), x⟫_ℂ :=
+    _ = ⟪y, d.sin₁ (d.intertwiner x)⟫_𝕜 := by rw [d.map_sin_apply]
+    _ = ⟪d.sin₁ y, d.intertwiner x⟫_𝕜 := (d.inner_sin₁ _ _).symm
+    _ = ⟪ContinuousLinearMap.adjoint d.intertwiner (d.sin₁ y), x⟫_𝕜 :=
         (ContinuousLinearMap.adjoint_inner_left _ _ _).symm
 
 /-- The adjoint form of the co-isometry field: `sin Θ₁ J₀ J₀⋆ = sin Θ₁`. -/
 theorem sin₁_intertwiner_adjoint (y : F) :
     d.sin₁ (d.intertwiner (ContinuousLinearMap.adjoint d.intertwiner y)) = d.sin₁ y := by
-  refine ext_inner_right ℂ fun w => ?_
-  calc ⟪d.sin₁ (d.intertwiner (ContinuousLinearMap.adjoint d.intertwiner y)), w⟫_ℂ
-      = ⟪d.intertwiner (ContinuousLinearMap.adjoint d.intertwiner y), d.sin₁ w⟫_ℂ :=
+  refine ext_inner_right 𝕜 fun w => ?_
+  calc ⟪d.sin₁ (d.intertwiner (ContinuousLinearMap.adjoint d.intertwiner y)), w⟫_𝕜
+      = ⟪d.intertwiner (ContinuousLinearMap.adjoint d.intertwiner y), d.sin₁ w⟫_𝕜 :=
         d.inner_sin₁ _ _
     _ = ⟪ContinuousLinearMap.adjoint d.intertwiner y,
-          ContinuousLinearMap.adjoint d.intertwiner (d.sin₁ w)⟫_ℂ := by
+          ContinuousLinearMap.adjoint d.intertwiner (d.sin₁ w)⟫_𝕜 := by
         rw [← ContinuousLinearMap.adjoint_inner_right]
-    _ = ⟪y, d.intertwiner (ContinuousLinearMap.adjoint d.intertwiner (d.sin₁ w))⟫_ℂ :=
+    _ = ⟪y, d.intertwiner (ContinuousLinearMap.adjoint d.intertwiner (d.sin₁ w))⟫_𝕜 :=
         ContinuousLinearMap.adjoint_inner_left _ _ _
-    _ = ⟪y, d.sin₁ w⟫_ℂ := by rw [d.coisometry_on_sin₁_apply]
-    _ = ⟪d.sin₁ y, w⟫_ℂ := (d.inner_sin₁ _ _).symm
+    _ = ⟪y, d.sin₁ w⟫_𝕜 := by rw [d.coisometry_on_sin₁_apply]
+    _ = ⟪d.sin₁ y, w⟫_𝕜 := (d.inner_sin₁ _ _).symm
 
 /-! ### The realizing isometry and the second subspace -/
 
 /-- **The direct rotation, applied to the first factor.**  `W₀ x = (C₀ x, J S₀ x)`. -/
-noncomputable def realizingIsometry : E →L[ℂ] WithLp 2 (E × F) :=
-  (WithLp.prodContinuousLinearEquiv 2 ℂ E F).symm.toContinuousLinearMap ∘L
+noncomputable def realizingIsometry : E →L[𝕜] WithLp 2 (E × F) :=
+  (WithLp.prodContinuousLinearEquiv 2 𝕜 E F).symm.toContinuousLinearMap ∘L
     (d.cos₀.prod (d.intertwiner ∘L d.sin₀))
 
 /-- The realizing isometry in coordinates. -/
@@ -484,9 +489,9 @@ theorem realizingIsometry_apply (x : E) :
     d.realizingIsometry x = WithLp.toLp 2 (d.cos₀ x, d.intertwiner (d.sin₀ x)) := rfl
 
 /-- The adjoint of the realizing isometry: `W₀⋆ (x, y) = C₀ x + S₀ J⋆ y`. -/
-noncomputable def realizingCoisometry : WithLp 2 (E × F) →L[ℂ] E :=
-  d.cos₀ ∘L WithLp.fstL 2 ℂ E F +
-    d.sin₀ ∘L ContinuousLinearMap.adjoint d.intertwiner ∘L WithLp.sndL 2 ℂ E F
+noncomputable def realizingCoisometry : WithLp 2 (E × F) →L[𝕜] E :=
+  d.cos₀ ∘L WithLp.fstL 2 𝕜 E F +
+    d.sin₀ ∘L ContinuousLinearMap.adjoint d.intertwiner ∘L WithLp.sndL 2 𝕜 E F
 
 /-- The realizing coisometry in coordinates. -/
 @[simp]
@@ -515,14 +520,14 @@ theorem realizingCoisometry_realizingIsometry (x : E) :
 
 /-- `W₀` preserves norms. -/
 theorem norm_realizingIsometry (x : E) : ‖d.realizingIsometry x‖ = ‖x‖ := by
-  refine norm_eq_norm_of_inner_self_eq ?_
+  refine norm_eq_norm_of_inner_self_eq (𝕜 := 𝕜) ?_
   rw [← ContinuousLinearMap.adjoint_inner_right, d.adjoint_realizingIsometry,
     d.realizingCoisometry_realizingIsometry]
 
 /-- **The second subspace of the realized pair**: the image of the first under the
 direct rotation, i.e. `Q H`. -/
-noncomputable def targetSubspace : Submodule ℂ (WithLp 2 (E × F)) :=
-  LinearMap.range (d.realizingIsometry : E →ₗ[ℂ] WithLp 2 (E × F))
+noncomputable def targetSubspace : Submodule 𝕜 (WithLp 2 (E × F)) :=
+  LinearMap.range (d.realizingIsometry : E →ₗ[𝕜] WithLp 2 (E × F))
 
 /-- The realized subspace is complete, being the isometric image of a complete space. -/
 noncomputable instance : CompleteSpace d.targetSubspace :=
@@ -583,29 +588,29 @@ theorem starProjection_targetSubspace_apply (x : E) (y : F) :
 /-- **The `P`-side angle of the realized pair is the prescribed one**: the
 compression of `P_V` to `U` is `cos² Θ₀`. -/
 theorem compress_source_eq (x : E) :
-    (sourceSubspace E F).starProjection
-        (d.targetSubspace.starProjection (modelInl E F x)) =
-      modelInl E F (d.cos₀ (d.cos₀ x)) := by
+    (sourceSubspace 𝕜 E F).starProjection
+        (d.targetSubspace.starProjection (modelInl 𝕜 E F x)) =
+      modelInl 𝕜 E F (d.cos₀ (d.cos₀ x)) := by
   rw [modelInl_apply, d.starProjection_targetSubspace_apply, starProjection_sourceSubspace]
   simp
 
 /-- **The `Pᗮ`-side angle of the realized pair is the prescribed one**: the
 compression of `P_Vᗮ` to `Uᗮ` is `cos² Θ₁`. -/
 theorem compress_sourceOrthogonal_eq (y : F) :
-    (sourceSubspace E F)ᗮ.starProjection
-        ((d.targetSubspace)ᗮ.starProjection (modelInr E F y)) =
-      modelInr E F (d.cos₁ (d.cos₁ y)) := by
-  have hQ : d.targetSubspace.starProjection (modelInr E F y) =
+    (sourceSubspace 𝕜 E F)ᗮ.starProjection
+        ((d.targetSubspace)ᗮ.starProjection (modelInr 𝕜 E F y)) =
+      modelInr 𝕜 E F (d.cos₁ (d.cos₁ y)) := by
+  have hQ : d.targetSubspace.starProjection (modelInr 𝕜 E F y) =
       WithLp.toLp 2 (d.cos₀ (d.sin₀ (ContinuousLinearMap.adjoint d.intertwiner y)),
         d.sin₁ (d.sin₁ y)) := by
     rw [modelInr_apply, d.starProjection_targetSubspace_apply]
     simp
-  have hperp : (d.targetSubspace)ᗮ.starProjection (modelInr E F y) =
-      modelInr E F y - d.targetSubspace.starProjection (modelInr E F y) :=
+  have hperp : (d.targetSubspace)ᗮ.starProjection (modelInr 𝕜 E F y) =
+      modelInr 𝕜 E F y - d.targetSubspace.starProjection (modelInr 𝕜 E F y) :=
     eq_sub_of_add_eq' (d.targetSubspace.starProjection_add_starProjection_orthogonal _)
   rw [hperp, hQ, starProjection_sourceSubspace_orthogonal]
   congr 1
-  have hsnd : (WithLp.ofLp (modelInr E F y -
+  have hsnd : (WithLp.ofLp (modelInr 𝕜 E F y -
       WithLp.toLp 2 (d.cos₀ (d.sin₀ (ContinuousLinearMap.adjoint d.intertwiner y)),
         d.sin₁ (d.sin₁ y)))).2 = y - d.sin₁ (d.sin₁ y) := by
     simp
@@ -616,9 +621,9 @@ theorem compress_sourceOrthogonal_eq (y : F) :
 
 /-- **`U ⊓ V` is the angle-`0` eigenspace on the `P`-side.** -/
 theorem halmosCommonPart_eq :
-    sourceSubspace E F ⊓ d.targetSubspace =
-      Submodule.map (modelInl E F : E →ₗ[ℂ] WithLp 2 (E × F))
-        (LinearMap.ker (d.sin₀ : E →ₗ[ℂ] E)) := by
+    sourceSubspace 𝕜 E F ⊓ d.targetSubspace =
+      Submodule.map (modelInl 𝕜 E F : E →ₗ[𝕜] WithLp 2 (E × F))
+        (LinearMap.ker (d.sin₀ : E →ₗ[𝕜] E)) := by
   refine Submodule.ext fun z => ?_
   constructor
   · intro hz
@@ -650,9 +655,9 @@ theorem halmosCommonPart_eq :
 
 /-- **`U ⊓ Vᗮ` is the angle-`π/2` eigenspace on the `P`-side.** -/
 theorem halmosSourceDefect_eq :
-    sourceSubspace E F ⊓ (d.targetSubspace)ᗮ =
-      Submodule.map (modelInl E F : E →ₗ[ℂ] WithLp 2 (E × F))
-        (LinearMap.ker (d.cos₀ : E →ₗ[ℂ] E)) := by
+    sourceSubspace 𝕜 E F ⊓ (d.targetSubspace)ᗮ =
+      Submodule.map (modelInl 𝕜 E F : E →ₗ[𝕜] WithLp 2 (E × F))
+        (LinearMap.ker (d.cos₀ : E →ₗ[𝕜] E)) := by
   refine Submodule.ext fun z => ?_
   constructor
   · intro hz
@@ -671,9 +676,9 @@ theorem halmosSourceDefect_eq :
 
 /-- **`Uᗮ ⊓ Vᗮ` is the angle-`0` eigenspace on the `Pᗮ`-side.** -/
 theorem halmosExteriorPart_eq :
-    (sourceSubspace E F)ᗮ ⊓ (d.targetSubspace)ᗮ =
-      Submodule.map (modelInr E F : F →ₗ[ℂ] WithLp 2 (E × F))
-        (LinearMap.ker (d.sin₁ : F →ₗ[ℂ] F)) := by
+    (sourceSubspace 𝕜 E F)ᗮ ⊓ (d.targetSubspace)ᗮ =
+      Submodule.map (modelInr 𝕜 E F : F →ₗ[𝕜] WithLp 2 (E × F))
+        (LinearMap.ker (d.sin₁ : F →ₗ[𝕜] F)) := by
   refine Submodule.ext fun z => ?_
   constructor
   · intro hz
@@ -699,9 +704,9 @@ theorem halmosExteriorPart_eq :
 
 /-- **`Uᗮ ⊓ V` is the angle-`π/2` eigenspace on the `Pᗮ`-side.** -/
 theorem halmosTargetDefect_eq :
-    (sourceSubspace E F)ᗮ ⊓ d.targetSubspace =
-      Submodule.map (modelInr E F : F →ₗ[ℂ] WithLp 2 (E × F))
-        (LinearMap.ker (d.cos₁ : F →ₗ[ℂ] F)) := by
+    (sourceSubspace 𝕜 E F)ᗮ ⊓ d.targetSubspace =
+      Submodule.map (modelInr 𝕜 E F : F →ₗ[𝕜] WithLp 2 (E × F))
+        (LinearMap.ker (d.cos₁ : F →ₗ[𝕜] F)) := by
   refine Submodule.ext fun z => ?_
   constructor
   · intro hz
@@ -740,7 +745,7 @@ isometric, and symmetrically on the other side — so the multiplicity at `π/2`
 *must* agree.  Contrast `ker sin₀` and `ker sin₁`, which `J₀` annihilates,
 respectively misses entirely. -/
 noncomputable def crossedDefectEquiv :
-    LinearMap.ker (d.cos₀ : E →ₗ[ℂ] E) ≃ₗᵢ[ℂ] LinearMap.ker (d.cos₁ : F →ₗ[ℂ] F) where
+    LinearMap.ker (d.cos₀ : E →ₗ[𝕜] E) ≃ₗᵢ[𝕜] LinearMap.ker (d.cos₁ : F →ₗ[𝕜] F) where
   toFun x := ⟨d.intertwiner (x : E), by
     have hx : d.cos₀ (x : E) = 0 := x.2
     simp only [LinearMap.mem_ker, ContinuousLinearMap.coe_coe]
@@ -775,13 +780,13 @@ noncomputable def crossedDefectEquiv :
 hypothesis on the datum, it is a *consequence* of the construction.  It is also
 exactly the condition for a unitary of the ambient space to carry `U` onto `V`. -/
 theorem nonempty_halmosSourceDefect_equiv_targetDefect :
-    Nonempty (↥(sourceSubspace E F ⊓ (d.targetSubspace)ᗮ) ≃ₗᵢ[ℂ]
-      ↥((sourceSubspace E F)ᗮ ⊓ d.targetSubspace)) := by
+    Nonempty (↥(sourceSubspace 𝕜 E F ⊓ (d.targetSubspace)ᗮ) ≃ₗᵢ[𝕜]
+      ↥((sourceSubspace 𝕜 E F)ᗮ ⊓ d.targetSubspace)) := by
   refine ⟨(LinearIsometryEquiv.ofEq _ _ d.halmosSourceDefect_eq).trans
-    (((submoduleMapIsometry (modelInl E F) norm_modelInl
-        (LinearMap.ker (d.cos₀ : E →ₗ[ℂ] E))).symm.trans d.crossedDefectEquiv).trans
-      ((submoduleMapIsometry (modelInr E F) norm_modelInr
-        (LinearMap.ker (d.cos₁ : F →ₗ[ℂ] F))).trans
+    (((submoduleMapIsometry (modelInl 𝕜 E F) norm_modelInl
+        (LinearMap.ker (d.cos₀ : E →ₗ[𝕜] E))).symm.trans d.crossedDefectEquiv).trans
+      ((submoduleMapIsometry (modelInr 𝕜 E F) norm_modelInr
+        (LinearMap.ker (d.cos₁ : F →ₗ[𝕜] F))).trans
         (LinearIsometryEquiv.ofEq _ _ d.halmosTargetDefect_eq.symm)))⟩
 
 end HalmosAngleDatum
@@ -790,14 +795,15 @@ end HalmosAngleDatum
 
 section Trivial
 
-variable (E : Type u) [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-variable (F : Type v) [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+variable (𝕜 : Type*) [RCLike 𝕜]
+variable (E : Type u) [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable (F : Type v) [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- The datum with every angle equal to `0`: `cos Θ = 1`, `sin Θ = 0`, and no
 intertwiner at all.  Its two `0`-eigenspaces are all of `E` and all of `F`, which
 are arbitrary and unrelated — the machine-checked witness that the multiplicity
 at angle `0` may differ between the two sides. -/
-noncomputable def trivialHalmosAngleDatum : HalmosAngleDatum E F where
+noncomputable def trivialHalmosAngleDatum : HalmosAngleDatum 𝕜 E F where
   cos₀ := 1
   sin₀ := 0
   cos₁ := 1
@@ -819,20 +825,20 @@ noncomputable def trivialHalmosAngleDatum : HalmosAngleDatum E F where
 /-- The all-`0` datum has vanishing `sin Θ₀`. -/
 @[simp]
 theorem trivialHalmosAngleDatum_sin₀ :
-    (trivialHalmosAngleDatum E F).sin₀ = 0 := rfl
+    (trivialHalmosAngleDatum 𝕜 E F).sin₀ = 0 := rfl
 
 /-- The all-`0` datum has vanishing `sin Θ₁`. -/
 @[simp]
 theorem trivialHalmosAngleDatum_sin₁ :
-    (trivialHalmosAngleDatum E F).sin₁ = 0 := rfl
+    (trivialHalmosAngleDatum 𝕜 E F).sin₁ = 0 := rfl
 
 /-- For the all-`0` datum the two subspaces coincide, so `U ⊓ V` is the whole
 `E`-factor: the multiplicity at angle `0` on the `P`-side is `dim E`. -/
 theorem trivial_halmosCommonPart_eq :
-    sourceSubspace E F ⊓ (trivialHalmosAngleDatum E F).targetSubspace =
-      sourceSubspace E F := by
-  rw [(trivialHalmosAngleDatum E F).halmosCommonPart_eq, trivialHalmosAngleDatum_sin₀,
-    show LinearMap.ker ((0 : E →L[ℂ] E) : E →ₗ[ℂ] E) = ⊤ by ext x; simp,
+    sourceSubspace 𝕜 E F ⊓ (trivialHalmosAngleDatum 𝕜 E F).targetSubspace =
+      sourceSubspace 𝕜 E F := by
+  rw [(trivialHalmosAngleDatum 𝕜 E F).halmosCommonPart_eq, trivialHalmosAngleDatum_sin₀,
+    show LinearMap.ker ((0 : E →L[𝕜] E) : E →ₗ[𝕜] E) = ⊤ by ext x; simp,
     Submodule.map_top]
   rfl
 
@@ -840,10 +846,10 @@ theorem trivial_halmosCommonPart_eq :
 `0` on the `Pᗮ`-side is `dim F`.  `E` and `F` are arbitrary, so the two
 multiplicities are unrelated. -/
 theorem trivial_halmosExteriorPart_eq :
-    (sourceSubspace E F)ᗮ ⊓ ((trivialHalmosAngleDatum E F).targetSubspace)ᗮ =
-      Submodule.map (modelInr E F : F →ₗ[ℂ] WithLp 2 (E × F)) ⊤ := by
-  rw [(trivialHalmosAngleDatum E F).halmosExteriorPart_eq, trivialHalmosAngleDatum_sin₁,
-    show LinearMap.ker ((0 : F →L[ℂ] F) : F →ₗ[ℂ] F) = ⊤ by ext y; simp]
+    (sourceSubspace 𝕜 E F)ᗮ ⊓ ((trivialHalmosAngleDatum 𝕜 E F).targetSubspace)ᗮ =
+      Submodule.map (modelInr 𝕜 E F : F →ₗ[𝕜] WithLp 2 (E × F)) ⊤ := by
+  rw [(trivialHalmosAngleDatum 𝕜 E F).halmosExteriorPart_eq, trivialHalmosAngleDatum_sin₁,
+    show LinearMap.ker ((0 : F →L[𝕜] F) : F →ₗ[𝕜] F) = ⊤ by ext y; simp]
 
 end Trivial
 

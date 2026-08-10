@@ -25,6 +25,12 @@ import DavisKahan.Geometry.Halmos.GenericReconstruction
 import ForTauCeti.Analysis.InnerProductSpace.CompactApproximationEigenvalues
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
 import DavisKahan.Geometry.Halmos.CompactClassification
+import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+-- supplies the continuous functional calculus over `ℝ` for bounded self-adjoint
+-- operators on a real Hilbert space, in unrestricted dimension.  It is what
+-- discharges the functional-calculus hypotheses of the Halmos spine at
+-- `𝕜 = ℝ`, and so what makes the real-scalar section at the end of this file
+-- inhabited rather than vacuous.
 import DavisKahan.Geometry.Halmos.Realization
 -- supplies the realization half of Theorem 3.1: the explicit direct-rotation
 -- construction attaining a prescribed admissible angle datum.  That module
@@ -1694,28 +1700,36 @@ theorem proposition3_4_source_eq_directRotation (hacute : IsUniformlyAcute U V)
 
 end OneSpace
 
-section Classification
+/-! ## Theorem 3.1, the operator-level classification
 
-variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁]
+Stated over an arbitrary `RCLike` field.  Nothing in the Halmos spine is
+complex-specific; the only field-dependent ingredient is the continuous
+functional calculus used by the polar decomposition of the cross block, and it
+is carried as a hypothesis exactly as `ForTauCeti`'s modulus API carries it. -/
+
+section OperatorClassification
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace 𝕜 H₁]
   [CompleteSpace H₁]
-variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂]
   [CompleteSpace H₂]
-variable (U₁ V₁ : Submodule ℂ H₁) [U₁.HasOrthogonalProjection]
+variable (U₁ V₁ : Submodule 𝕜 H₁) [U₁.HasOrthogonalProjection]
   [V₁.HasOrthogonalProjection]
-variable (U₂ V₂ : Submodule ℂ H₂) [U₂.HasOrthogonalProjection]
+variable (U₂ V₂ : Submodule 𝕜 H₂) [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection]
 
 /-- Equality of the four elementary Halmos summands, expressed without a
 finite-rank substitute. -/
 structure SameHalmosTrivialDimensions : Prop where
   common : Nonempty
-    (halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
+    (halmosCommonPart U₁ V₁ ≃ₗᵢ[𝕜] halmosCommonPart U₂ V₂)
   sourceDefect : Nonempty
-    (halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)
+    (halmosSourceDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosSourceDefect U₂ V₂)
   targetDefect : Nonempty
-    (halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
+    (halmosTargetDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosTargetDefect U₂ V₂)
   exterior : Nonempty
-    (halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
+    (halmosExteriorPart U₁ V₁ ≃ₗᵢ[𝕜] halmosExteriorPart U₂ V₂)
 
 /-- The modern operator-level complete invariant: trivial dimensions plus the
 unitary-equivalence class of the angle operator `cos²Θ`.
@@ -1755,6 +1769,26 @@ theorem sameHalmosOperatorInvariant_of_pairEquiv
   exact ⟨⟨hc, hs, ht, he⟩,
     MathAhead.HiddenFoundations.exists_cosineBlockEquiv_of_pairEquiv U₁ V₁ U₂ V₂ h⟩
 
+/-! The converse direction reconstructs the pair from the cosine block through the
+polar decomposition of the Halmos cross block, so it carries the functional-calculus
+hypotheses of `Geometry/Halmos/GenericReconstruction.lean`.  They are found by typeclass
+inference at `𝕜 = ℂ` and at `𝕜 = ℝ` alike. -/
+
+variable [Algebra ℝ (MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ →L[𝕜]
+    MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁)]
+  [IsScalarTower ℝ 𝕜 (MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ →L[𝕜]
+    MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁)]
+  [ContinuousFunctionalCalculus ℝ
+    (MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ →L[𝕜]
+      MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁) IsSelfAdjoint]
+variable [Algebra ℝ (MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ →L[𝕜]
+    MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂)]
+  [IsScalarTower ℝ 𝕜 (MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ →L[𝕜]
+    MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂)]
+  [ContinuousFunctionalCalculus ℝ
+    (MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ →L[𝕜]
+      MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂) IsSelfAdjoint]
+
 /-- **Operator-level Halmos classification, both directions.**  This is the
 constructive spine of Davis--Kahan Theorem 3.1 and needs no direct-integral
 presentation, no compactness, no finite dimension and no separability.
@@ -1776,6 +1810,26 @@ theorem twoProjection_operator_classification :
     exact ⟨⟨hc, hs, ht, he⟩, hg⟩
   · rintro ⟨⟨hc, hs, ht, he⟩, hg⟩
     exact ⟨hc, hs, ht, he, hg⟩
+
+end OperatorClassification
+
+section Classification
+
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁]
+  [CompleteSpace H₁]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂]
+  [CompleteSpace H₂]
+variable (U₁ V₁ : Submodule ℂ H₁) [U₁.HasOrthogonalProjection]
+  [V₁.HasOrthogonalProjection]
+variable (U₂ V₂ : Submodule ℂ H₂) [U₂.HasOrthogonalProjection]
+  [V₂.HasOrthogonalProjection]
+
+/-! Instantiating the field-generic Halmos classification at `𝕜 = ℂ` asks typeclass
+inference for `ContinuousFunctionalCalculus ℝ (M →L[ℂ] M) IsSelfAdjoint` with `M` the
+`U`-half of the generic part.  Mathlib supplies it through the C⋆-algebra structure on
+bounded operators, but reaching it from a subspace coercion needs one more level of
+pending synthesis than the default allows; the instance is found at depth `3`. -/
+set_option maxSynthPendingDepth 3
 
 /-- **Davis--Kahan 1970, Theorem 3.1**, in the paper's own phrasing: the spectral multiplicity
 data of the two angle operators, together with the elementary multiplicities, form a complete
@@ -2026,8 +2080,9 @@ section Realization
 
 open MathAhead.HiddenFoundations
 
-variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- **Davis--Kahan 1970, Theorem 3.1, the realization half — the paper's sentence
 (ii).**
@@ -2062,34 +2117,34 @@ Grounded by `:=` on `Geometry/Halmos/Realization.lean`, so there is a single
 source of truth.  The block matrix behind item 1 and item 2 is
 `starProjection_targetSubspace_apply`, which reproduces equation (3.7) of the
 source, both off-diagonal entries positive. -/
-theorem theorem3_1_realization (d : HalmosAngleDatum E F) :
-    (∀ x : E, (sourceSubspace E F).starProjection
-        (d.targetSubspace.starProjection (modelInl E F x)) =
-          modelInl E F (d.cos₀ (d.cos₀ x))) ∧
-      (∀ y : F, (sourceSubspace E F)ᗮ.starProjection
-        ((d.targetSubspace)ᗮ.starProjection (modelInr E F y)) =
-          modelInr E F (d.cos₁ (d.cos₁ y))) ∧
-      halmosCommonPart (sourceSubspace E F) d.targetSubspace =
-        Submodule.map (modelInl E F : E →ₗ[ℂ] WithLp 2 (E × F))
-          (LinearMap.ker (d.sin₀ : E →ₗ[ℂ] E)) ∧
-      halmosExteriorPart (sourceSubspace E F) d.targetSubspace =
-        Submodule.map (modelInr E F : F →ₗ[ℂ] WithLp 2 (E × F))
-          (LinearMap.ker (d.sin₁ : F →ₗ[ℂ] F)) ∧
-      halmosSourceDefect (sourceSubspace E F) d.targetSubspace =
-        Submodule.map (modelInl E F : E →ₗ[ℂ] WithLp 2 (E × F))
-          (LinearMap.ker (d.cos₀ : E →ₗ[ℂ] E)) ∧
-      halmosTargetDefect (sourceSubspace E F) d.targetSubspace =
-        Submodule.map (modelInr E F : F →ₗ[ℂ] WithLp 2 (E × F))
-          (LinearMap.ker (d.cos₁ : F →ₗ[ℂ] F)) ∧
-      Nonempty (↥(halmosSourceDefect (sourceSubspace E F) d.targetSubspace) ≃ₗᵢ[ℂ]
-        ↥(halmosTargetDefect (sourceSubspace E F) d.targetSubspace)) :=
+theorem theorem3_1_realization (d : HalmosAngleDatum 𝕜 E F) :
+    (∀ x : E, (sourceSubspace 𝕜 E F).starProjection
+        (d.targetSubspace.starProjection (modelInl 𝕜 E F x)) =
+          modelInl 𝕜 E F (d.cos₀ (d.cos₀ x))) ∧
+      (∀ y : F, (sourceSubspace 𝕜 E F)ᗮ.starProjection
+        ((d.targetSubspace)ᗮ.starProjection (modelInr 𝕜 E F y)) =
+          modelInr 𝕜 E F (d.cos₁ (d.cos₁ y))) ∧
+      halmosCommonPart (sourceSubspace 𝕜 E F) d.targetSubspace =
+        Submodule.map (modelInl 𝕜 E F : E →ₗ[𝕜] WithLp 2 (E × F))
+          (LinearMap.ker (d.sin₀ : E →ₗ[𝕜] E)) ∧
+      halmosExteriorPart (sourceSubspace 𝕜 E F) d.targetSubspace =
+        Submodule.map (modelInr 𝕜 E F : F →ₗ[𝕜] WithLp 2 (E × F))
+          (LinearMap.ker (d.sin₁ : F →ₗ[𝕜] F)) ∧
+      halmosSourceDefect (sourceSubspace 𝕜 E F) d.targetSubspace =
+        Submodule.map (modelInl 𝕜 E F : E →ₗ[𝕜] WithLp 2 (E × F))
+          (LinearMap.ker (d.cos₀ : E →ₗ[𝕜] E)) ∧
+      halmosTargetDefect (sourceSubspace 𝕜 E F) d.targetSubspace =
+        Submodule.map (modelInr 𝕜 E F : F →ₗ[𝕜] WithLp 2 (E × F))
+          (LinearMap.ker (d.cos₁ : F →ₗ[𝕜] F)) ∧
+      Nonempty (↥(halmosSourceDefect (sourceSubspace 𝕜 E F) d.targetSubspace) ≃ₗᵢ[𝕜]
+        ↥(halmosTargetDefect (sourceSubspace 𝕜 E F) d.targetSubspace)) :=
   ⟨d.compress_source_eq, d.compress_sourceOrthogonal_eq, d.halmosCommonPart_eq,
     d.halmosExteriorPart_eq, d.halmosSourceDefect_eq, d.halmosTargetDefect_eq,
     d.nonempty_halmosSourceDefect_equiv_targetDefect⟩
 
 /-- **The multiplicity at angle `0` is genuinely unconstrained.**
 
-The all-`0` datum over an arbitrary pair `(E, F)` of complex Hilbert spaces
+The all-`0` datum over an arbitrary pair `(E, F)` of Hilbert spaces
 realizes `U = V`, whose angle-`0` spaces are the whole of `E` on the `P`-side and
 the whole of `F` on the `Pᗮ`-side.  `E` and `F` are unrelated, so no admissibility
 condition at angle `0` can be imposed — in contrast to the angle `π/2`, where
@@ -2097,16 +2152,67 @@ item 7 of `theorem3_1_realization` forces the two multiplicities to agree.
 Together the two statements are why Davis and Kahan's hypothesis is asymmetric
 between `0` and `π/2`. -/
 theorem theorem3_1_realization_zeroAngle_unconstrained
-    (E : Type u) [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-    (F : Type v) [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F] :
-    halmosCommonPart (sourceSubspace E F) (trivialHalmosAngleDatum E F).targetSubspace =
-        sourceSubspace E F ∧
-      halmosExteriorPart (sourceSubspace E F)
-          (trivialHalmosAngleDatum E F).targetSubspace =
-        Submodule.map (modelInr E F : F →ₗ[ℂ] WithLp 2 (E × F)) ⊤ :=
-  ⟨trivial_halmosCommonPart_eq E F, trivial_halmosExteriorPart_eq E F⟩
+    (𝕜 : Type*) [RCLike 𝕜]
+    (E : Type u) [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    (F : Type v) [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] :
+    halmosCommonPart (sourceSubspace 𝕜 E F) (trivialHalmosAngleDatum 𝕜 E F).targetSubspace =
+        sourceSubspace 𝕜 E F ∧
+      halmosExteriorPart (sourceSubspace 𝕜 E F)
+          (trivialHalmosAngleDatum 𝕜 E F).targetSubspace =
+        Submodule.map (modelInr 𝕜 E F : F →ₗ[𝕜] WithLp 2 (E × F)) ⊤ :=
+  ⟨trivial_halmosCommonPart_eq 𝕜 E F, trivial_halmosExteriorPart_eq 𝕜 E F⟩
 
 end Realization
+
+/-! ## Section 3 over a real Hilbert space
+
+The statements above are field-generic, so the real forms are instantiations
+rather than new theorems.  They are recorded by name because the census tracks
+the paper's results at the paper's scope, and because they are the machine
+check that the `𝕜 = ℝ` instantiation really is inhabited: each one forces
+typeclass inference to find
+`ContinuousLinearMap.instContinuousFunctionalCalculusRealIsSelfAdjoint`.
+
+Davis and Kahan work on a Hilbert space over `ℝ` or `ℂ` throughout, so the real
+scope is the source scope, not an extension of it. -/
+
+section RealScalars
+
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁]
+  [CompleteSpace H₁]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℝ H₂]
+  [CompleteSpace H₂]
+variable (U₁ V₁ : Submodule ℝ H₁) [U₁.HasOrthogonalProjection]
+  [V₁.HasOrthogonalProjection]
+variable (U₂ V₂ : Submodule ℝ H₂) [U₂.HasOrthogonalProjection]
+  [V₂.HasOrthogonalProjection]
+
+/-- **Davis--Kahan 1970, Theorem 3.1, the operator-level classification, over a
+real Hilbert space.**
+
+The `𝕜 = ℝ` instance of `twoProjection_operator_classification`.  No
+compactness, no finite dimension, no separability. -/
+theorem twoProjection_operator_classification_real :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
+      SameHalmosOperatorInvariant U₁ V₁ U₂ V₂ :=
+  twoProjection_operator_classification U₁ V₁ U₂ V₂
+
+/-- **Davis--Kahan 1970, Corollary 3.1, over a real Hilbert space.**
+
+The `𝕜 = ℝ` instance of
+`MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData`:
+with `P_U P_V P_U` compact on both sides, the four elementary Halmos
+multiplicities together with the multiplicity of every angle are a complete
+invariant. -/
+theorem corollary3_1_compact_classification_real
+    (hc₁ : IsCompactOperator (projection U₁ ∘L projection V₁ ∘L projection U₁))
+    (hc₂ : IsCompactOperator (projection U₂ ∘L projection V₂ ∘L projection U₂)) :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
+      MathAhead.HiddenFoundations.SameCompactAngleData U₁ V₁ U₂ V₂ :=
+  MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData
+    U₁ V₁ U₂ V₂ hc₁ hc₂
+
+end RealScalars
 
 end Section3
 end Frontier

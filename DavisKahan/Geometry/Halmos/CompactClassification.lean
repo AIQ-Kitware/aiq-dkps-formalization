@@ -47,13 +47,15 @@ open Module.End (eigenspace)
 
 universe u v
 
+variable {𝕜 : Type*} [RCLike 𝕜]
+
 /-! ## The angle operator is compact with trivial kernel -/
 
 section OneSpace
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
-variable (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 
 /-- The cosine block is the compression of `P_U P_V P_U` to the `U`-half.
@@ -114,37 +116,37 @@ end OneSpace
 
 section TwoSpaces
 
-variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁]
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace 𝕜 H₁]
   [CompleteSpace H₁]
-variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂]
   [CompleteSpace H₂]
-variable (U₁ V₁ : Submodule ℂ H₁) [U₁.HasOrthogonalProjection]
+variable (U₁ V₁ : Submodule 𝕜 H₁) [U₁.HasOrthogonalProjection]
   [V₁.HasOrthogonalProjection]
-variable (U₂ V₂ : Submodule ℂ H₂) [U₂.HasOrthogonalProjection]
+variable (U₂ V₂ : Submodule 𝕜 H₂) [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection]
 
 /-- **Davis--Kahan 1970 Corollary 3.1's invariant.**  The four elementary Halmos
 multiplicities, together with the multiplicity of every angle: the paper's
 decreasing eigenvalue list, written as a dimension function. -/
 structure SameCompactAngleData : Prop where
-  common : Nonempty (halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
+  common : Nonempty (halmosCommonPart U₁ V₁ ≃ₗᵢ[𝕜] halmosCommonPart U₂ V₂)
   sourceDefect : Nonempty
-    (halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)
+    (halmosSourceDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosSourceDefect U₂ V₂)
   targetDefect : Nonempty
-    (halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
-  exterior : Nonempty (halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
-  angleMultiplicity : ∀ μ : ℂ,
-    finrank ℂ (eigenspace (genericCosineBlock U₁ V₁).toLinearMap μ) =
-      finrank ℂ (eigenspace (genericCosineBlock U₂ V₂).toLinearMap μ)
+    (halmosTargetDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosTargetDefect U₂ V₂)
+  exterior : Nonempty (halmosExteriorPart U₁ V₁ ≃ₗᵢ[𝕜] halmosExteriorPart U₂ V₂)
+  angleMultiplicity : ∀ μ : 𝕜,
+    finrank 𝕜 (eigenspace (genericCosineBlock U₁ V₁).toLinearMap μ) =
+      finrank 𝕜 (eigenspace (genericCosineBlock U₂ V₂).toLinearMap μ)
 
 /-- A unitary intertwining two operators carries eigenspaces onto eigenspaces,
 hence preserves their dimensions. -/
 theorem finrank_eigenspace_eq_of_intertwiner
-    {W : genericLeftHalf U₁ V₁ ≃ₗᵢ[ℂ] genericLeftHalf U₂ V₂}
+    {W : genericLeftHalf U₁ V₁ ≃ₗᵢ[𝕜] genericLeftHalf U₂ V₂}
     (hW : ∀ m, W (genericCosineBlock U₁ V₁ m) = genericCosineBlock U₂ V₂ (W m))
-    (μ : ℂ) :
-    finrank ℂ (eigenspace (genericCosineBlock U₁ V₁).toLinearMap μ) =
-      finrank ℂ (eigenspace (genericCosineBlock U₂ V₂).toLinearMap μ) := by
+    (μ : 𝕜) :
+    finrank 𝕜 (eigenspace (genericCosineBlock U₁ V₁).toLinearMap μ) =
+      finrank 𝕜 (eigenspace (genericCosineBlock U₂ V₂).toLinearMap μ) := by
   have hsymm : ∀ y, W.symm (genericCosineBlock U₂ V₂ y) =
       genericCosineBlock U₁ V₁ (W.symm y) := by
     intro y
@@ -167,7 +169,7 @@ theorem finrank_eigenspace_eq_of_intertwiner
     show genericCosineBlock U₁ V₁ (W.symm y) = μ • W.symm y
     rw [← hsymm y, hy', map_smul]
   have hmap : (eigenspace (genericCosineBlock U₁ V₁).toLinearMap μ).map
-      (W.toLinearEquiv : genericLeftHalf U₁ V₁ →ₗ[ℂ] genericLeftHalf U₂ V₂) =
+      (W.toLinearEquiv : genericLeftHalf U₁ V₁ →ₗ[𝕜] genericLeftHalf U₂ V₂) =
       eigenspace (genericCosineBlock U₂ V₂).toLinearMap μ := by
     refine le_antisymm ?_ ?_
     · rintro _ ⟨m, hm, rfl⟩
@@ -175,13 +177,22 @@ theorem finrank_eigenspace_eq_of_intertwiner
     · intro y hy
       exact ⟨W.symm y, hbwd y hy, by simp⟩
   have hinj : Function.Injective
-      (W.toLinearEquiv : genericLeftHalf U₁ V₁ →ₗ[ℂ] genericLeftHalf U₂ V₂) :=
+      (W.toLinearEquiv : genericLeftHalf U₁ V₁ →ₗ[𝕜] genericLeftHalf U₂ V₂) :=
     W.injective
   have hequiv := Submodule.equivMapOfInjective
-    (W.toLinearEquiv : genericLeftHalf U₁ V₁ →ₗ[ℂ] genericLeftHalf U₂ V₂) hinj
+    (W.toLinearEquiv : genericLeftHalf U₁ V₁ →ₗ[𝕜] genericLeftHalf U₂ V₂) hinj
     (eigenspace (genericCosineBlock U₁ V₁).toLinearMap μ)
   rw [← hmap]
   exact hequiv.finrank_eq
+
+variable [Algebra ℝ (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)]
+  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)]
+  [ContinuousFunctionalCalculus ℝ (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)
+    IsSelfAdjoint]
+variable [Algebra ℝ (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)]
+  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)]
+  [ContinuousFunctionalCalculus ℝ (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)
+    IsSelfAdjoint]
 
 /-- **Davis--Kahan 1970, Corollary 3.1.**
 
