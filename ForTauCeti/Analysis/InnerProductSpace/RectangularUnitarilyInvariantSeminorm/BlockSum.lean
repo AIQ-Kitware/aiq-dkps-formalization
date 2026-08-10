@@ -155,6 +155,71 @@ noncomputable def orthogonalBlockSumDiagonal
   apply WithLp.ofLp_injective 2
   simp [orthogonalBlockSum, LinearMap.comp_apply]
 
+/-- The orthogonal block sum of two unitaries is the `L²` product unitary.  This is what makes
+the block sum compatible with the two-sided unitary invariance the singular-value calculus
+rests on. -/
+theorem orthogonalBlockSum_linearIsometryEquiv
+    {E₁ E₂ F₁ F₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁]
+    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂]
+    (U : E₁ ≃ₗᵢ[𝕜] F₁) (V : E₂ ≃ₗᵢ[𝕜] F₂) :
+    orthogonalBlockSum U.toLinearMap V.toLinearMap =
+      (LinearIsometryEquiv.withLpProdCongr 2 U V).toLinearMap := by
+  ext x
+  apply WithLp.ofLp_injective 2
+  simp [orthogonalBlockSum]
+
+/-- **Blockwise singular-value data determines the singular-value data of the block sum.**
+
+No merge formula for the two sorted lists is needed: equal singular values in a block mean the
+two blocks differ by unitaries on each side
+(`exists_unitary_factorization_of_singularValues_eq`), and the block sums of those unitaries are
+again unitaries, which the singular values do not see.  This is the concatenation fact the
+finite direct-sum extremal constructions use, in the only form they need. -/
+theorem singularValues_orthogonalBlockSum_congr
+    {E₁ E₂ F₁ F₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [FiniteDimensional 𝕜 F₁]
+    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [FiniteDimensional 𝕜 F₂]
+    {A₁ A₂ : E₁ →ₗ[𝕜] F₁} {B₁ B₂ : E₂ →ₗ[𝕜] F₂}
+    (hA : A₁.singularValues = A₂.singularValues)
+    (hB : B₁.singularValues = B₂.singularValues) :
+    (orthogonalBlockSum A₁ B₁).singularValues =
+      (orthogonalBlockSum A₂ B₂).singularValues := by
+  obtain ⟨UA, VA, hA'⟩ := exists_unitary_factorization_of_singularValues_eq hA
+  obtain ⟨UB, VB, hB'⟩ := exists_unitary_factorization_of_singularValues_eq hB
+  rw [hA', hB', ← orthogonalBlockSum_comp, ← orthogonalBlockSum_comp,
+    orthogonalBlockSum_linearIsometryEquiv, orthogonalBlockSum_linearIsometryEquiv,
+    singularValues_unitary_comp, singularValues_comp_unitary]
+
+/-- **A blockwise scalar singular-value identity transfers to every unitarily invariant
+seminorm on the block sum.**
+
+If the singular values of `c • Sⱼ` are those of `Pⱼ` in each block, then `c • (S₁ ⊕ S₂)` and
+`P₁ ⊕ P₂` have the same singular values, so every unitarily invariant seminorm sees the same
+proportionality.  This is the mechanism by which finite orthogonal direct sums of planar
+extremizers keep attaining equality at every unitarily invariant seminorm at once. -/
+theorem apply_orthogonalBlockSum_eq_of_singularValues_smul_eq
+    {E₁ E₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
+    (N : UnitarilyInvariantSeminorm 𝕜 (WithLp 2 (E₁ × E₂)))
+    {c : ℝ} (hc : 0 ≤ c)
+    {S₁ P₁ : E₁ →ₗ[𝕜] E₁} {S₂ P₂ : E₂ →ₗ[𝕜] E₂}
+    (h₁ : ((c : 𝕜) • S₁).singularValues = P₁.singularValues)
+    (h₂ : ((c : 𝕜) • S₂).singularValues = P₂.singularValues) :
+    c * N (orthogonalBlockSum S₁ S₂) = N (orthogonalBlockSum P₁ P₂) := by
+  have hblock := singularValues_orthogonalBlockSum_congr h₁ h₂
+  rw [orthogonalBlockSum_smul] at hblock
+  calc
+    c * N (orthogonalBlockSum S₁ S₂)
+        = N ((c : 𝕜) • orthogonalBlockSum S₁ S₂) := by
+          rw [N.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hc]
+    _ = N (orthogonalBlockSum P₁ P₂) := N.eq_of_same_singularValues hblock
+
 /-- Doubling a rectangular map in an orthogonal block sum repeats every
 singular value twice.  The quotient `i / 2` expresses the interleaved sorted
 order of the two identical copies. -/

@@ -866,6 +866,116 @@ theorem sinTwoTheta_model_operatorNorm_equality
   simp only [pairSingularValues_zero]
   ring
 
+/-- **The one-sided `sin 2Θ` model equality does not extend past the operator norm.**
+
+`sinTwoAngleOperator U V = 2 P_{Uᗮ} P_V P_U` is supported on `U`, so in a plane with a
+one-dimensional `U` it has the single nonzero singular value `sin 2θ`, whereas the extremal
+perturbation is a full-rank symmetric off-diagonal block with the two singular values
+`((b-a)/2) sin 2θ`.  The two lists are therefore not proportional, and the equality recorded in
+`sinTwoTheta_model_operatorNorm_equality` is genuinely restricted to a gauge that reads only the
+leading singular value.  The Ky Fan `2` gauge separates the two sides by exactly the factor two
+carried by the rank mismatch.
+
+This refutes, for the model of this file, any statement of the form
+`(b - a) * N (sinTwoAngleOperator …) = 2 * N (modelSinTwoThetaPerturbation …)` quantified over
+all unitarily invariant seminorms `N`.  The correct all-seminorm statement replaces the
+one-sided map by the symmetric sine of the doubled angle: see `sinTwoTheta_model_equality`. -/
+theorem sinTwoTheta_model_equality_fails_beyond_operatorNorm
+    {a b θ : ℝ} (hab : a < b) (hθ0 : 0 < θ) (hθ1 : θ ≤ Real.pi / 4) :
+    ∃ N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜),
+      (b - a) * N (sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
+          (rotatedModelSubspace (𝕜 := 𝕜) θ)) ≠
+        2 * N (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
+  refine ⟨(RectangularUnitarilyInvariantSeminorm.kyFan
+    (𝕜 := 𝕜) (E := Plane 𝕜) (F := Plane 𝕜) 2).toSquare, ?_⟩
+  have hsin : 0 < Real.sin (2 * θ) :=
+    Real.sin_pos_of_pos_of_lt_pi (by linarith) (by linarith [Real.pi_pos])
+  have hgap : 0 < b - a := sub_pos.mpr hab
+  have hL : (RectangularUnitarilyInvariantSeminorm.kyFan
+        (𝕜 := 𝕜) (E := Plane 𝕜) (F := Plane 𝕜) 2).toSquare
+      (sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
+        (rotatedModelSubspace (𝕜 := 𝕜) θ)) = Real.sin (2 * θ) := by
+    change RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum 2 _ = _
+    rw [RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum,
+      singularValues_sinTwoAngle_model hθ0.le hθ1]
+    simp [Fin.sum_univ_two]
+  have hR : (RectangularUnitarilyInvariantSeminorm.kyFan
+        (𝕜 := 𝕜) (E := Plane 𝕜) (F := Plane 𝕜) 2).toSquare
+      (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) = (b - a) * Real.sin (2 * θ) := by
+    change RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum 2 _ = _
+    rw [RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum,
+      singularValues_modelSinTwoThetaPerturbation hab hθ0.le hθ1]
+    simp only [Fin.sum_univ_two, Fin.isValue, Fin.val_zero, Fin.val_one,
+      pairSingularValues_zero, pairSingularValues_one]
+    ring
+  rw [hL, hR]
+  nlinarith [mul_pos hgap hsin]
+
+/-- **Equality case for the `sin 2Θ` theorem, at every unitarily invariant seminorm.**
+
+The reflection through the rotated line carries `modelSubspace` to
+`rotatedModelSubspace (2θ)`, so the symmetric sine of the doubled angle is the
+gauge-faithful double-angle operator of this model: it has the *two* singular values
+`sin 2θ`, matching the rank of the extremal perturbation.  Both sides are then the same
+symmetric gauge applied to the same singular-value list, which is exactly the paper's reason
+for stating equality at arbitrary unitarily invariant norms.
+
+`norm_sinTwoAngle_model_eq_norm_sinAngle_doubled` identifies the left-hand operator with the
+one-sided `sinTwoAngleOperator` at the operator norm, recovering
+`sinTwoTheta_model_operatorNorm_equality`; beyond the operator norm the one-sided map cannot
+attain equality, by `sinTwoTheta_model_equality_fails_beyond_operatorNorm`. -/
+theorem sinTwoTheta_model_equality
+    (N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜))
+    {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 4) :
+    (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))) =
+      2 * N (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
+  have hsing :
+      (((b - a : ℝ) : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+        (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))).singularValues =
+        (((2 : ℝ) : 𝕜) • modelSinTwoThetaPerturbation
+          (𝕜 := 𝕜) a b θ).singularValues := by
+    rw [RectangularUnitarilyInvariantSeminorm.singularValues_smul,
+      RectangularUnitarilyInvariantSeminorm.singularValues_smul,
+      singularValues_sinAngle_model (𝕜 := 𝕜) (by linarith) (by linarith),
+      singularValues_modelSinTwoThetaPerturbation hab hθ0 hθ1]
+    have h2 : ‖((2 : ℝ) : 𝕜)‖ = 2 := by
+      rw [RCLike.norm_ofReal]; norm_num
+    have hba : ‖((b - a : ℝ) : 𝕜)‖ = b - a := by
+      rw [RCLike.norm_ofReal, abs_of_pos (sub_pos.mpr hab)]
+    ext i
+    simp only [pairSingularValues, h2, hba, Finsupp.smul_apply,
+      Finsupp.add_apply, Finsupp.single_apply, smul_eq_mul]
+    split_ifs <;> ring
+  calc
+    (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+        (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))) =
+        N (((b - a : ℝ) : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+          (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))) := by
+      rw [N.smul_eq, RCLike.norm_ofReal, abs_of_pos (sub_pos.mpr hab)]
+    _ = N (((2 : ℝ) : 𝕜) • modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) :=
+      N.eq_of_same_singularValues hsing
+    _ = 2 * N (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
+      rw [N.smul_eq]
+      norm_num
+
+set_option maxHeartbeats 800000 in
+/-- The one-sided double-angle map and the symmetric sine of the doubled angle have the same
+operator norm in the planar model: both read off the leading singular value `sin 2θ`.  This is
+the planar instance of the general identity between the one-sided `sin 2Θ` map and the sine of
+the angle to the reflected subspace. -/
+theorem norm_sinTwoAngle_model_eq_norm_sinAngle_doubled
+    {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 4) :
+    ‖(sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
+        (rotatedModelSubspace (𝕜 := 𝕜) θ)).toContinuousLinearMap‖ =
+      ‖(sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+        (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))).toContinuousLinearMap‖ := by
+  rw [opNorm_eq_singularValues_zero _ finrank_euclideanSpace_fin (by norm_num),
+    opNorm_eq_singularValues_zero _ finrank_euclideanSpace_fin (by norm_num),
+    singularValues_sinTwoAngle_model hθ0 hθ1,
+    singularValues_sinAngle_model (𝕜 := 𝕜) (by linarith) (by linarith)]
+  simp only [pairSingularValues_zero]
+
 /-- Equality case for the `tan 2Θ` theorem.
 
 Lean proof route for a weaker agent:
@@ -988,10 +1098,209 @@ theorem sinTwoTheta_constant_optimal :
 The former `directSum_models_simultaneous_equality` declaration was false: the
 one-sided `sinTwoAngleOperator` contributes one nonzero singular value per
 principal plane, whereas the symmetric off-diagonal perturbation contributes
-two.  A future simultaneous-gauge theorem must use rank-matched one-sided
-residual models.  The operator-norm sharpness result above is the correct
-endpoint for the present symmetric planar perturbation.
+two.  That rank mismatch is now a theorem rather than a remark --
+`sinTwoTheta_model_equality_fails_beyond_operatorNorm` exhibits a gauge separating the two
+sides -- and the rank-matched replacement is `sinTwoTheta_model_equality`, which measures the
+double angle by the symmetric sine of the doubled angle, the sine of the angle to the subspace
+reflected through the rotated line.  The operator-norm sharpness result above remains the
+correct endpoint for the one-sided map, by
+`norm_sinTwoAngle_model_eq_norm_sinAngle_doubled`.
 -/
+
+/-! ## Simultaneous equality and finite orthogonal direct sums -/
+
+/-- **All four theorem conclusions attain equality at one planar configuration, for every
+unitarily invariant seminorm at once.**
+
+The configuration is the single pair of lines `modelSubspace`, `rotatedModelSubspace θ`; each
+family is saturated by its own extremal residual, which is what the source's four *independent*
+inequalities require.  Note that the four residuals are genuinely different operators: no
+single perturbation saturates all four, since the extremal residual norms
+`(b-a) sin θ`, `(b-a) tan θ`, `((b-a)/2) sin 2θ` and `((b-a)/2) tan 2θ` differ off `θ = 0`. -/
+theorem model_all_four_equalities
+    (N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜))
+    {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 4) :
+    (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+        (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
+        N (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ) ∧
+      (b - a) * N (tanAngleOperator (modelSubspace (𝕜 := 𝕜))
+        (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
+        N (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ) ∧
+      (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+        (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))) =
+        2 * N (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) ∧
+      (b - a) * N (tanTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
+        (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
+        2 * N (modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ) :=
+  ⟨sinTheta_model_equality N hab hθ0 (by linarith [Real.pi_pos]),
+   tanTheta_model_equality N hab hθ0 (by linarith [Real.pi_pos]),
+   sinTwoTheta_model_equality N hab hθ0 hθ1.le,
+   tanTwoTheta_model_equality N hab hθ0 hθ1⟩
+
+/-- A scalar multiple of an operator with a constant planar singular pair has the singular
+values of the correspondingly scaled pair.  This is the one computation the four direct-sum
+transfers below share. -/
+private theorem singularValues_smul_of_pair_eq
+    {E' F' : Type*}
+    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [FiniteDimensional 𝕜 E']
+    [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [FiniteDimensional 𝕜 F']
+    {S P : E' →ₗ[𝕜] F'} {c s : ℝ} (hc : 0 ≤ c)
+    (hS : S.singularValues = pairSingularValues s s)
+    (hP : P.singularValues = pairSingularValues (c * s) (c * s)) :
+    (((c : ℝ) : 𝕜) • S).singularValues = P.singularValues := by
+  rw [RectangularUnitarilyInvariantSeminorm.singularValues_smul, hS, hP,
+    RCLike.norm_ofReal, abs_of_nonneg hc]
+  ext i
+  simp only [pairSingularValues, Finsupp.smul_apply, Finsupp.add_apply,
+    Finsupp.single_apply, smul_eq_mul]
+  split_ifs <;> ring
+
+/-- **The `sin Θ` equality survives an orthogonal direct sum of two planes with independent
+angles, at every unitarily invariant seminorm.**
+
+The two blocks may carry different angles, so the common singular-value list of the two sides
+is an arbitrary four-term list; that is the source's "direct sums realize any finite
+singular-value list".  No merge formula for the two sorted lists is needed --
+`singularValues_orthogonalBlockSum_congr` transfers the blockwise proportionality directly. -/
+theorem sinTheta_directSum_model_equality
+    (N : UnitarilyInvariantSeminorm 𝕜 (WithLp 2 (Plane 𝕜 × Plane 𝕜)))
+    {a b θ₁ θ₂ : ℝ} (hab : a < b) (h₁0 : 0 ≤ θ₁) (h₁1 : θ₁ ≤ Real.pi / 2)
+    (h₂0 : 0 ≤ θ₂) (h₂1 : θ₂ ≤ Real.pi / 2) :
+    (b - a) * N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+        (sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₁))
+        (sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₂))) =
+      N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+        (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ₁)
+        (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ₂)) :=
+  RectangularUnitarilyInvariantSeminorm.apply_orthogonalBlockSum_eq_of_singularValues_smul_eq
+    N (sub_pos.mpr hab).le
+    (singularValues_smul_of_pair_eq (sub_pos.mpr hab).le
+      (singularValues_sinAngle_model h₁0 h₁1)
+      (singularValues_modelSinThetaPerturbation hab h₁0 h₁1))
+    (singularValues_smul_of_pair_eq (sub_pos.mpr hab).le
+      (singularValues_sinAngle_model h₂0 h₂1)
+      (singularValues_modelSinThetaPerturbation hab h₂0 h₂1))
+
+/-- The `tan Θ` equality on an orthogonal direct sum of two planes with independent angles, at
+every unitarily invariant seminorm. -/
+theorem tanTheta_directSum_model_equality
+    (N : UnitarilyInvariantSeminorm 𝕜 (WithLp 2 (Plane 𝕜 × Plane 𝕜)))
+    {a b θ₁ θ₂ : ℝ} (hab : a < b) (h₁0 : 0 ≤ θ₁) (h₁1 : θ₁ < Real.pi / 2)
+    (h₂0 : 0 ≤ θ₂) (h₂1 : θ₂ < Real.pi / 2) :
+    (b - a) * N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+        (tanAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₁))
+        (tanAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₂))) =
+      N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+        (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ₁)
+        (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ₂)) :=
+  RectangularUnitarilyInvariantSeminorm.apply_orthogonalBlockSum_eq_of_singularValues_smul_eq
+    N (sub_pos.mpr hab).le
+    (singularValues_smul_of_pair_eq (sub_pos.mpr hab).le
+      (singularValues_tanAngle_model h₁0 h₁1)
+      (singularValues_modelTanThetaPerturbation hab
+        (Real.tan_nonneg_of_nonneg_of_le_pi_div_two h₁0 h₁1.le)))
+    (singularValues_smul_of_pair_eq (sub_pos.mpr hab).le
+      (singularValues_tanAngle_model h₂0 h₂1)
+      (singularValues_modelTanThetaPerturbation hab
+        (Real.tan_nonneg_of_nonneg_of_le_pi_div_two h₂0 h₂1.le)))
+
+/-- The `sin 2Θ` equality on an orthogonal direct sum of two planes with independent angles, at
+every unitarily invariant seminorm.  As in the plane, the double angle is measured by the
+symmetric sine of the doubled angle. -/
+theorem sinTwoTheta_directSum_model_equality
+    (N : UnitarilyInvariantSeminorm 𝕜 (WithLp 2 (Plane 𝕜 × Plane 𝕜)))
+    {a b θ₁ θ₂ : ℝ} (hab : a < b) (h₁0 : 0 ≤ θ₁) (h₁1 : θ₁ ≤ Real.pi / 4)
+    (h₂0 : 0 ≤ θ₂) (h₂1 : θ₂ ≤ Real.pi / 4) :
+    (b - a) * N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+        (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+          (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ₁)))
+        (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+          (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ₂)))) =
+      2 * N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+        (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ₁)
+        (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ₂)) := by
+  have hc : (0 : ℝ) ≤ (b - a) / 2 := by linarith [sub_pos.mpr hab]
+  have h :=
+    RectangularUnitarilyInvariantSeminorm.apply_orthogonalBlockSum_eq_of_singularValues_smul_eq
+      N hc
+      (singularValues_smul_of_pair_eq hc
+        (singularValues_sinAngle_model (𝕜 := 𝕜) (by linarith) (by linarith))
+        (singularValues_modelSinTwoThetaPerturbation hab h₁0 h₁1))
+      (singularValues_smul_of_pair_eq hc
+        (singularValues_sinAngle_model (𝕜 := 𝕜) (by linarith) (by linarith))
+        (singularValues_modelSinTwoThetaPerturbation hab h₂0 h₂1))
+  linarith
+
+/-- The `tan 2Θ` equality on an orthogonal direct sum of two planes with independent angles, at
+every unitarily invariant seminorm. -/
+theorem tanTwoTheta_directSum_model_equality
+    (N : UnitarilyInvariantSeminorm 𝕜 (WithLp 2 (Plane 𝕜 × Plane 𝕜)))
+    {a b θ₁ θ₂ : ℝ} (hab : a < b) (h₁0 : 0 ≤ θ₁) (h₁1 : θ₁ < Real.pi / 4)
+    (h₂0 : 0 ≤ θ₂) (h₂1 : θ₂ < Real.pi / 4) :
+    (b - a) * N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+        (tanTwoAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₁))
+        (tanTwoAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₂))) =
+      2 * N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+        (modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ₁)
+        (modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ₂)) := by
+  have hc : (0 : ℝ) ≤ (b - a) / 2 := by linarith [sub_pos.mpr hab]
+  have h :=
+    RectangularUnitarilyInvariantSeminorm.apply_orthogonalBlockSum_eq_of_singularValues_smul_eq
+      N hc
+      (singularValues_smul_of_pair_eq hc
+        (singularValues_tanTwoAngle_model h₁0 h₁1)
+        (singularValues_modelTanTwoThetaPerturbation hab
+          (Real.tan_nonneg_of_nonneg_of_le_pi_div_two (by linarith) (by linarith))))
+      (singularValues_smul_of_pair_eq hc
+        (singularValues_tanTwoAngle_model h₂0 h₂1)
+        (singularValues_modelTanTwoThetaPerturbation hab
+          (Real.tan_nonneg_of_nonneg_of_le_pi_div_two (by linarith) (by linarith))))
+  linarith
+
+/-- **All four conclusions attain equality simultaneously on one finite orthogonal direct sum,
+for every unitarily invariant seminorm.**
+
+The two planes carry independent angles `θ₁, θ₂`, so the realized singular-value lists are not
+proportional to a single plane's; iterating the construction realizes any finite list.  This is
+the printed Section 2 assertion, with the double-angle family measured by the symmetric sine of
+the doubled angle, the normalization forced by
+`sinTwoTheta_model_equality_fails_beyond_operatorNorm`. -/
+theorem directSum_model_all_four_equalities
+    (N : UnitarilyInvariantSeminorm 𝕜 (WithLp 2 (Plane 𝕜 × Plane 𝕜)))
+    {a b θ₁ θ₂ : ℝ} (hab : a < b) (h₁0 : 0 ≤ θ₁) (h₁1 : θ₁ < Real.pi / 4)
+    (h₂0 : 0 ≤ θ₂) (h₂1 : θ₂ < Real.pi / 4) :
+    ((b - a) * N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+        (sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₁))
+        (sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₂))) =
+        N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+          (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ₁)
+          (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ₂))) ∧
+      ((b - a) * N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+        (tanAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₁))
+        (tanAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₂))) =
+        N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+          (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ₁)
+          (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ₂))) ∧
+      ((b - a) * N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+        (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+          (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ₁)))
+        (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+          (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ₂)))) =
+        2 * N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+          (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ₁)
+          (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ₂))) ∧
+      ((b - a) * N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+        (tanTwoAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₁))
+        (tanTwoAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₂))) =
+        2 * N (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+          (modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ₁)
+          (modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ₂))) :=
+  ⟨sinTheta_directSum_model_equality N hab h₁0 (by linarith [Real.pi_pos])
+      h₂0 (by linarith [Real.pi_pos]),
+   tanTheta_directSum_model_equality N hab h₁0 (by linarith [Real.pi_pos])
+      h₂0 (by linarith [Real.pi_pos]),
+   sinTwoTheta_directSum_model_equality N hab h₁0 h₁1.le h₂0 h₂1.le,
+   tanTwoTheta_directSum_model_equality N hab h₁0 h₁1 h₂0 h₂1⟩
 
 
 /-- To first order in a linear perturbation parameter, all four theorem
