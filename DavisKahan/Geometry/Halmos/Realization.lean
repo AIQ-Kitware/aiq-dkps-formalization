@@ -289,6 +289,103 @@ theorem starProjection_sourceSubspace_orthogonal (z : WithLp 2 (E × F)) :
 
 end Model
 
+/-! ## Block operators between two model spaces
+
+A pair of operators on the two factors gives one operator on the `L²` direct
+sums.  This is the calculus behind `HalmosAngleDatum.prod`: the direct sum of two
+admissible angle data is admissible, with every block the direct sum of the
+corresponding blocks. -/
+
+section Block
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {A : Type*} [NormedAddCommGroup A] [InnerProductSpace 𝕜 A] [CompleteSpace A]
+variable {B : Type*} [NormedAddCommGroup B] [InnerProductSpace 𝕜 B] [CompleteSpace B]
+variable {C : Type*} [NormedAddCommGroup C] [InnerProductSpace 𝕜 C] [CompleteSpace C]
+variable {D : Type*} [NormedAddCommGroup D] [InnerProductSpace 𝕜 D] [CompleteSpace D]
+
+omit [CompleteSpace C] [CompleteSpace D] in
+/-- Addition in the `L²` direct sum is coordinatewise. -/
+@[simp]
+theorem toLp_prod_add (a c : C) (b d : D) :
+    WithLp.toLp 2 (a, b) + WithLp.toLp 2 (c, d) = WithLp.toLp 2 (a + c, b + d) := rfl
+
+/-- **The block-diagonal operator `f ⊕ g`** from `A ⊕₂ B` to `C ⊕₂ D`. -/
+noncomputable def blockMap (f : A →L[𝕜] C) (g : B →L[𝕜] D) :
+    WithLp 2 (A × B) →L[𝕜] WithLp 2 (C × D) :=
+  modelInl 𝕜 C D ∘L f ∘L WithLp.fstL 2 𝕜 A B +
+    modelInr 𝕜 C D ∘L g ∘L WithLp.sndL 2 𝕜 A B
+
+omit [CompleteSpace A] [CompleteSpace B] [CompleteSpace C] [CompleteSpace D] in
+/-- A block operator acts blockwise. -/
+@[simp]
+theorem blockMap_apply (f : A →L[𝕜] C) (g : B →L[𝕜] D) (z : WithLp 2 (A × B)) :
+    blockMap f g z =
+      WithLp.toLp 2 (f (WithLp.ofLp z).1, g (WithLp.ofLp z).2) := by
+  rw [blockMap]
+  simp
+
+omit [CompleteSpace A] [CompleteSpace B] [CompleteSpace C] [CompleteSpace D] in
+/-- Block operators compose blockwise. -/
+theorem blockMap_comp {A' : Type*} [NormedAddCommGroup A'] [InnerProductSpace 𝕜 A']
+    [CompleteSpace A'] {B' : Type*} [NormedAddCommGroup B'] [InnerProductSpace 𝕜 B']
+    [CompleteSpace B'] (f : A →L[𝕜] C) (g : B →L[𝕜] D) (f' : A' →L[𝕜] A)
+    (g' : B' →L[𝕜] B) :
+    blockMap f g ∘L blockMap f' g' = blockMap (f ∘L f') (g ∘L g') :=
+  ContinuousLinearMap.ext fun z => by simp
+
+omit [CompleteSpace A] [CompleteSpace B] [CompleteSpace C] [CompleteSpace D] in
+/-- Block operators add blockwise. -/
+theorem blockMap_add (f f' : A →L[𝕜] C) (g g' : B →L[𝕜] D) :
+    blockMap f g + blockMap f' g' = blockMap (f + f') (g + g') :=
+  ContinuousLinearMap.ext fun z => by simp
+
+omit [CompleteSpace A] [CompleteSpace B] in
+/-- The block-diagonal identity is the identity. -/
+theorem blockMap_one : blockMap (1 : A →L[𝕜] A) (1 : B →L[𝕜] B) = 1 :=
+  ContinuousLinearMap.ext fun z => by
+    rw [blockMap_apply]
+    simp only [one_apply_eq_self]
+
+/-- Adjoints of block operators are taken blockwise. -/
+theorem adjoint_blockMap (f : A →L[𝕜] C) (g : B →L[𝕜] D) :
+    ContinuousLinearMap.adjoint (blockMap f g) =
+      blockMap (ContinuousLinearMap.adjoint f) (ContinuousLinearMap.adjoint g) :=
+  ((ContinuousLinearMap.eq_adjoint_iff
+    (blockMap (ContinuousLinearMap.adjoint f) (ContinuousLinearMap.adjoint g))
+    (blockMap f g)).mpr fun w z => by
+      rw [blockMap_apply, blockMap_apply, WithLp.prod_inner_apply,
+        WithLp.prod_inner_apply]
+      rw [ContinuousLinearMap.adjoint_inner_left, ContinuousLinearMap.adjoint_inner_left]).symm
+
+/-- A block-diagonal operator with self-adjoint blocks is self-adjoint. -/
+theorem isSelfAdjoint_blockMap {f : A →L[𝕜] A} {g : B →L[𝕜] B}
+    (hf : IsSelfAdjoint f) (hg : IsSelfAdjoint g) : IsSelfAdjoint (blockMap f g) := by
+  rw [ContinuousLinearMap.isSelfAdjoint_iff', adjoint_blockMap,
+    ContinuousLinearMap.isSelfAdjoint_iff'.mp hf,
+    ContinuousLinearMap.isSelfAdjoint_iff'.mp hg]
+
+omit [CompleteSpace A] [CompleteSpace B] [CompleteSpace C] [CompleteSpace D] in
+/-- A block operator that kills the second factor factors through the first. -/
+theorem blockMap_zero_right (f : A →L[𝕜] C) :
+    blockMap f (0 : B →L[𝕜] D) = modelInl 𝕜 C D ∘L f ∘L WithLp.fstL 2 𝕜 A B :=
+  ContinuousLinearMap.ext fun z => by simp
+
+omit [CompleteSpace A] [CompleteSpace B] in
+/-- The inclusion of the first factor is a contraction. -/
+theorem norm_modelInl_le_one : ‖modelInl 𝕜 A B‖ ≤ 1 :=
+  ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
+    rw [one_mul, norm_modelInl]
+
+omit [CompleteSpace A] [CompleteSpace B] in
+/-- The projection onto the first factor is a contraction. -/
+theorem norm_fstL_le_one : ‖WithLp.fstL 2 𝕜 A B‖ ≤ 1 :=
+  ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun z => by
+    rw [one_mul]
+    exact WithLp.norm_fst_le _ z
+
+end Block
+
 /-! ## Admissible angle data -/
 
 /-- **A prescribed admissible angle datum for Davis--Kahan Theorem 3.1.**
@@ -617,6 +714,49 @@ theorem compress_sourceOrthogonal_eq (y : F) :
   rw [hsnd]
   exact (eq_sub_of_add_eq (d.pythagoras₁_apply y)).symm
 
+/-! ### The two angle blocks as operators on the whole space
+
+`compress_source_eq` reads the `P`-side angle off one vector at a time.  The two
+statements below package the same fact as an operator identity on all of
+`WithLp 2 (E × F)`, which is the form the compactness hypotheses of Corollary 3.1
+are stated in: both blocks annihilate the `F`-factor, so each factors as
+`modelInl ∘ (angle operator) ∘ fstL`. -/
+
+/-- **The cosine block `P_U P_V P_U` of the realized pair is `cos² Θ₀`** on the
+`E`-factor and zero on the `F`-factor. -/
+theorem cosineBlock_eq :
+    (sourceSubspace 𝕜 E F).starProjection ∘L d.targetSubspace.starProjection ∘L
+        (sourceSubspace 𝕜 E F).starProjection =
+      modelInl 𝕜 E F ∘L (d.cos₀ ∘L d.cos₀) ∘L WithLp.fstL 2 𝕜 E F := by
+  refine ContinuousLinearMap.ext fun z => ?_
+  simp only [ContinuousLinearMap.comp_apply, starProjection_sourceSubspace z]
+  exact d.compress_source_eq _
+
+/-- **The defect block `P_U (1 - P_V) P_U` of the realized pair is `sin² Θ₀`** on
+the `E`-factor and zero on the `F`-factor.
+
+This is the block whose compactness Davis and Kahan assume in Corollary 3.1, and
+the identity is what turns a prescribed angle sequence tending to `0` into that
+hypothesis: `sin² Θ₀` inherits the decay. -/
+theorem defectBlock_eq :
+    (sourceSubspace 𝕜 E F).starProjection ∘L
+        (ContinuousLinearMap.id 𝕜 (WithLp 2 (E × F)) -
+          d.targetSubspace.starProjection) ∘L
+        (sourceSubspace 𝕜 E F).starProjection =
+      modelInl 𝕜 E F ∘L (d.sin₀ ∘L d.sin₀) ∘L WithLp.fstL 2 𝕜 E F := by
+  refine ContinuousLinearMap.ext fun z => ?_
+  have hfix : (sourceSubspace 𝕜 E F).starProjection
+      (modelInl 𝕜 E F (WithLp.ofLp z).1) = modelInl 𝕜 E F (WithLp.ofLp z).1 := by
+    rw [starProjection_sourceSubspace]
+    rfl
+  have hsin : (WithLp.ofLp z).1 - d.cos₀ (d.cos₀ (WithLp.ofLp z).1) =
+      d.sin₀ (d.sin₀ (WithLp.ofLp z).1) :=
+    (eq_sub_of_add_eq' (d.pythagoras₀_apply _)).symm
+  simp only [ContinuousLinearMap.comp_apply, starProjection_sourceSubspace z,
+    sub_apply, ContinuousLinearMap.id_apply, map_sub, hfix, d.compress_source_eq]
+  rw [← map_sub, hsin]
+  rfl
+
 /-! ### The four elementary Halmos summands of the realized pair -/
 
 /-- **`U ⊓ V` is the angle-`0` eigenspace on the `P`-side.** -/
@@ -852,6 +992,73 @@ theorem trivial_halmosExteriorPart_eq :
     show LinearMap.ker ((0 : F →L[𝕜] F) : F →ₗ[𝕜] F) = ⊤ by ext y; simp]
 
 end Trivial
+
+/-! ## The direct sum of two angle data
+
+Admissibility is a conjunction of operator identities, every one of which is
+blockwise, so two admissible data can be added.  This is what lets a prescribed
+angle *sequence* be combined with a prescribed angle-`0` multiplicity: the
+sequence lives on one summand, the all-`0` datum on the other, and
+`trivialHalmosAngleDatum` puts an arbitrary and independent Hilbert space on each
+side of the second summand. -/
+
+section Product
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+variable {E' : Type*} [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
+variable {F' : Type*} [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
+
+/-- **The direct sum of two admissible angle data.**
+
+Every block is the block-diagonal sum of the corresponding blocks, and every
+axiom of `HalmosAngleDatum` is verified blockwise by `blockMap_comp`,
+`blockMap_add` and `blockMap_one`.  In particular the intertwiner of the sum is
+the sum of the intertwiners, so the `π/2` multiplicities of the two summands are
+matched independently. -/
+noncomputable def HalmosAngleDatum.prod (d : HalmosAngleDatum 𝕜 E F)
+    (d' : HalmosAngleDatum 𝕜 E' F') :
+    HalmosAngleDatum 𝕜 (WithLp 2 (E × E')) (WithLp 2 (F × F')) where
+  cos₀ := blockMap d.cos₀ d'.cos₀
+  sin₀ := blockMap d.sin₀ d'.sin₀
+  cos₁ := blockMap d.cos₁ d'.cos₁
+  sin₁ := blockMap d.sin₁ d'.sin₁
+  intertwiner := blockMap d.intertwiner d'.intertwiner
+  isSelfAdjoint_cos₀ := isSelfAdjoint_blockMap d.isSelfAdjoint_cos₀ d'.isSelfAdjoint_cos₀
+  isSelfAdjoint_sin₀ := isSelfAdjoint_blockMap d.isSelfAdjoint_sin₀ d'.isSelfAdjoint_sin₀
+  isSelfAdjoint_cos₁ := isSelfAdjoint_blockMap d.isSelfAdjoint_cos₁ d'.isSelfAdjoint_cos₁
+  isSelfAdjoint_sin₁ := isSelfAdjoint_blockMap d.isSelfAdjoint_sin₁ d'.isSelfAdjoint_sin₁
+  commute₀ := by rw [blockMap_comp, blockMap_comp, d.commute₀, d'.commute₀]
+  commute₁ := by rw [blockMap_comp, blockMap_comp, d.commute₁, d'.commute₁]
+  pythagoras₀ := by
+    rw [blockMap_comp, blockMap_comp, blockMap_add, d.pythagoras₀, d'.pythagoras₀,
+      blockMap_one]
+  pythagoras₁ := by
+    rw [blockMap_comp, blockMap_comp, blockMap_add, d.pythagoras₁, d'.pythagoras₁,
+      blockMap_one]
+  map_cos := by rw [blockMap_comp, blockMap_comp, d.map_cos, d'.map_cos]
+  map_sin := by rw [blockMap_comp, blockMap_comp, d.map_sin, d'.map_sin]
+  isometry_on_sin₀ := by
+    rw [adjoint_blockMap, blockMap_comp, blockMap_comp, d.isometry_on_sin₀,
+      d'.isometry_on_sin₀]
+  coisometry_on_sin₁ := by
+    rw [adjoint_blockMap, blockMap_comp, blockMap_comp, d.coisometry_on_sin₁,
+      d'.coisometry_on_sin₁]
+
+/-- The `P`-side sine of a direct sum is the direct sum of the sines. -/
+@[simp]
+theorem HalmosAngleDatum.prod_sin₀ (d : HalmosAngleDatum 𝕜 E F)
+    (d' : HalmosAngleDatum 𝕜 E' F') :
+    (d.prod d').sin₀ = blockMap d.sin₀ d'.sin₀ := rfl
+
+/-- The `Pᗮ`-side sine of a direct sum is the direct sum of the sines. -/
+@[simp]
+theorem HalmosAngleDatum.prod_sin₁ (d : HalmosAngleDatum 𝕜 E F)
+    (d' : HalmosAngleDatum 𝕜 E' F') :
+    (d.prod d').sin₁ = blockMap d.sin₁ d'.sin₁ := rfl
+
+end Product
 
 end HiddenFoundations
 end MathAhead

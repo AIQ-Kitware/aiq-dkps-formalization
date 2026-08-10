@@ -36,6 +36,10 @@ import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 -- `TauCeti.isAcute_iff_inf_orthogonal_eq_bot`, the literal restatement of the
 -- paper's Definition 3.2 as the vanishing of the two crossed intersections.
 -- Proposition 3.2's nonuniqueness sentence is stated against that definition.
+import DavisKahan.Geometry.Halmos.AngleSequenceRealization
+-- supplies the diagonal angle datum of a prescribed decreasing sequence, which
+-- is what Corollary 3.1's realization sentence asks for.  That module imports
+-- only `Geometry/Halmos/Realization` and `ForTauCeti`, so it is acyclic.
 import DavisKahan.Geometry.Halmos.Realization
 -- supplies the realization half of Theorem 3.1: the explicit direct-rotation
 -- construction attaining a prescribed admissible angle datum.  That module
@@ -2282,6 +2286,150 @@ theorem theorem3_1_realization_zeroAngle_unconstrained
           (trivialHalmosAngleDatum 𝕜 E F).targetSubspace =
         Submodule.map (modelInr 𝕜 E F : F →ₗ[𝕜] WithLp 2 (E × F)) ⊤ :=
   ⟨trivial_halmosCommonPart_eq 𝕜 E F, trivial_halmosExteriorPart_eq 𝕜 E F⟩
+
+/-- **Davis--Kahan 1970, Corollary 3.1, the realization sentence.**
+
+The classification half says that the compactness hypothesis plus the angle
+eigenvalue list determines the pair.  This is the sentence that says the list is
+otherwise *arbitrary*: given any
+
+`π/2 ≥ θ₁ ≥ θ₂ ≥ ⋯ → 0`,
+
+the pair
+
+`U = ` the `E`-factor of `ℓ²(ℕ, 𝕜) ⊕₂ ℓ²(ℕ, 𝕜)`,  `V = (angleSequenceDatum 𝕜 θ).targetSubspace`
+
+realizes it.  The witness is exhibited rather than asserted to exist: `V` is the
+image of `U` under the direct rotation built from the diagonal operators
+`cos Θ = diag (cos θₙ)` and `sin Θ = diag (sin θₙ)`, so the whole construction is
+`theorem3_1_realization` applied to a datum, not a new geometric argument.
+
+The four conclusions are, in order:
+
+1. **the printed compactness hypothesis holds** — what is proved compact is the
+   *defect* block `P (1 - Q) P`, which is `sin² Θ` on the `E`-factor, and
+   `θₙ → 0` makes its coefficients vanish.  Corollary 3.1 as printed assumes
+   exactly this block, and the census records that it is incomparable with
+   `P Q P` in infinite dimension, so the choice is stated rather than left
+   implicit.  (`P Q P` is `cos² Θ` here, with coefficients tending to `1`; that
+   this makes it non-compact is not asserted as proved.);
+2. **the angle list is the prescribed one**: the classifying list of the defect
+   block, in the sense of `compactAngleEigenvalueList`, is `n ↦ sin² θₙ`.  The
+   map `θ ↦ sin² θ` is strictly monotone on `[0, π/2]`, so this carries exactly
+   the information of the printed decreasing sequence `θ`;
+3. and 4. **the angle-`0` multiplicities**, on the two sides, are the kernels of
+   `sin Θ` — here equal, because the datum puts the same diagonal on both sides.
+
+This witness realizes the two sides' angle-`0` multiplicities *equal*, and
+realizes only the multiplicities the sequence `θ` itself produces.  An arbitrary
+and independently prescribed pair of angle-`0` multiplicities is
+`corollary3_1_realization_zeroMultiplicity`, which adds
+`trivialHalmosAngleDatum` on two further spaces by `HalmosAngleDatum.prod`. -/
+theorem corollary3_1_realization (𝕜 : Type*) [RCLike 𝕜] (θ : ℕ → ℝ)
+    (hθ0 : ∀ n, 0 ≤ θ n) (hθ2 : ∀ n, θ n ≤ Real.pi / 2) (hanti : Antitone θ)
+    (hlim : Filter.Tendsto θ Filter.atTop (nhds 0)) :
+    IsCompactOperator
+        ((sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜)).starProjection ∘L
+          (ContinuousLinearMap.id 𝕜 (AngleSequenceAmbient 𝕜) -
+            (angleSequenceDatum 𝕜 θ).targetSubspace.starProjection) ∘L
+          (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜)).starProjection) ∧
+      compactAngleEigenvalueList
+          ((sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜)).starProjection ∘L
+            (ContinuousLinearMap.id 𝕜 (AngleSequenceAmbient 𝕜) -
+              (angleSequenceDatum 𝕜 θ).targetSubspace.starProjection) ∘L
+            (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜)).starProjection) =
+        (fun n => Real.sin (θ n) ^ 2) ∧
+      halmosCommonPart (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+          (angleSequenceDatum 𝕜 θ).targetSubspace =
+        Submodule.map
+          (modelInl 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜) :
+            AngleSequenceSpace 𝕜 →ₗ[𝕜] AngleSequenceAmbient 𝕜)
+          (LinearMap.ker (angleSinOp 𝕜 θ : AngleSequenceSpace 𝕜 →ₗ[𝕜] AngleSequenceSpace 𝕜)) ∧
+      halmosExteriorPart (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+          (angleSequenceDatum 𝕜 θ).targetSubspace =
+        Submodule.map
+          (modelInr 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜) :
+            AngleSequenceSpace 𝕜 →ₗ[𝕜] AngleSequenceAmbient 𝕜)
+          (LinearMap.ker (angleSinOp 𝕜 θ : AngleSequenceSpace 𝕜 →ₗ[𝕜] AngleSequenceSpace 𝕜)) :=
+  ⟨isCompactOperator_angleSequenceDefectBlock hlim,
+    funext fun n => approximationNumber_angleSequenceDefectBlock hθ0 hθ2 hanti n,
+    (angleSequenceDatum 𝕜 θ).halmosCommonPart_eq,
+    (angleSequenceDatum 𝕜 θ).halmosExteriorPart_eq⟩
+
+/-- **Davis--Kahan 1970, Corollary 3.1, the realization sentence with prescribed
+angle-`0` multiplicities.**
+
+The paper's sentence is: the eigenvalues of `Θ₀` are an arbitrary sequence
+`π/2 ≥ θ₁ ≥ θ₂ ≥ ⋯ → 0` *together with a possible eigenvalue `0`*, and those of
+`Θ₁` are the same except perhaps for the multiplicity of `0`.  Here `Z₀` and `Z₁`
+are that eigenvalue's two multiplicities: arbitrary Hilbert spaces, chosen
+independently of each other and of `θ`.
+
+The pair is again exhibited rather than asserted to exist.  It is
+`theorem3_1_realization` applied to
+`(angleSequenceDatum 𝕜 θ).prod (trivialHalmosAngleDatum 𝕜 Z₀ Z₁)`: the sequence
+on one summand and the all-`0` datum on the other.  The four conclusions are the
+printed compactness hypothesis on the *defect* block `P (1 - Q) P` (not on
+`P Q P` — see `corollary3_1_realization`), the prescribed angle list, and the two
+angle-`0` eigenspaces, which come out as the prescribed `Z₀` and `Z₁`.
+
+`hne` — no prescribed angle is itself `0` — is used only by the last two
+conclusions, and is the paper's own reading: the angle `0` is carried by `Z₀` and
+`Z₁`, separately from the sequence.  The first two conclusions hold without it. -/
+theorem corollary3_1_realization_zeroMultiplicity (𝕜 : Type*) [RCLike 𝕜] (θ : ℕ → ℝ)
+    (Z₀ : Type*) [NormedAddCommGroup Z₀] [InnerProductSpace 𝕜 Z₀] [CompleteSpace Z₀]
+    (Z₁ : Type*) [NormedAddCommGroup Z₁] [InnerProductSpace 𝕜 Z₁] [CompleteSpace Z₁]
+    (hθ0 : ∀ n, 0 ≤ θ n) (hθ2 : ∀ n, θ n ≤ Real.pi / 2) (hanti : Antitone θ)
+    (hlim : Filter.Tendsto θ Filter.atTop (nhds 0)) (hne : ∀ n, θ n ≠ 0) :
+    IsCompactOperator
+        ((sourceSubspace 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+              (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))).starProjection ∘L
+          (ContinuousLinearMap.id 𝕜
+              (WithLp 2 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀) ×
+                WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))) -
+            (angleSequenceZeroDatum 𝕜 θ Z₀ Z₁).targetSubspace.starProjection) ∘L
+          (sourceSubspace 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+              (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))).starProjection) ∧
+      compactAngleEigenvalueList
+          ((sourceSubspace 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+                (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))).starProjection ∘L
+            (ContinuousLinearMap.id 𝕜
+                (WithLp 2 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀) ×
+                  WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))) -
+              (angleSequenceZeroDatum 𝕜 θ Z₀ Z₁).targetSubspace.starProjection) ∘L
+            (sourceSubspace 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+                (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))).starProjection) =
+        (fun n => Real.sin (θ n) ^ 2) ∧
+      halmosCommonPart
+          (sourceSubspace 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+            (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁)))
+          (angleSequenceZeroDatum 𝕜 θ Z₀ Z₁).targetSubspace =
+        Submodule.map
+          (modelInl 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+              (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁)) :
+            WithLp 2 (AngleSequenceSpace 𝕜 × Z₀) →ₗ[𝕜] _)
+          (Submodule.map
+            (modelInr 𝕜 (AngleSequenceSpace 𝕜) Z₀ :
+              Z₀ →ₗ[𝕜] WithLp 2 (AngleSequenceSpace 𝕜 × Z₀)) ⊤) ∧
+      halmosExteriorPart
+          (sourceSubspace 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+            (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁)))
+          (angleSequenceZeroDatum 𝕜 θ Z₀ Z₁).targetSubspace =
+        Submodule.map
+          (modelInr 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+              (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁)) :
+            WithLp 2 (AngleSequenceSpace 𝕜 × Z₁) →ₗ[𝕜] _)
+          (Submodule.map
+            (modelInr 𝕜 (AngleSequenceSpace 𝕜) Z₁ :
+              Z₁ →ₗ[𝕜] WithLp 2 (AngleSequenceSpace 𝕜 × Z₁)) ⊤) := by
+  refine ⟨isCompactOperator_angleSequenceZeroDefectBlock 𝕜 θ Z₀ Z₁ hlim,
+    funext fun n =>
+      approximationNumber_angleSequenceZeroDefectBlock 𝕜 θ Z₀ Z₁ hθ0 hθ2 hanti n,
+    ?_, ?_⟩
+  · refine (angleSequenceZeroDatum 𝕜 θ Z₀ Z₁).halmosCommonPart_eq.trans ?_
+    rw [angleSequenceZeroDatum_sin₀, ker_blockMap_angleSinOp 𝕜 θ hθ0 hθ2 hne Z₀]
+  · refine (angleSequenceZeroDatum 𝕜 θ Z₀ Z₁).halmosExteriorPart_eq.trans ?_
+    rw [angleSequenceZeroDatum_sin₁, ker_blockMap_angleSinOp 𝕜 θ hθ0 hθ2 hne Z₁]
 
 end Realization
 
