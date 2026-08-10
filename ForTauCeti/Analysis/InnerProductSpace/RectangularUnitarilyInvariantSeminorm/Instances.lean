@@ -451,6 +451,115 @@ theorem sum_abs_le_rectangularKyFanSum_of_orthonormal
   rw [hval]
   exact ht i
 
+/-- **Rectangular Ky Fan variational principle, achievability.**
+
+For `A : E →ₗ[𝕜] F` between finite-dimensional inner product spaces and any `k` no larger
+than either dimension, the upper bound `re_sum_inner_map_le_rectangularKyFanSum` is attained:
+there are orthonormal `k`-families `v` in the domain and `u` in the codomain with
+`re ∑ᵢ ⟪uᵢ, A vᵢ⟫ = ∑_{i<k} σᵢ(A)`.
+
+Both dimension hypotheses are needed, and neither is an artefact of the proof: the statement
+asserts the existence of orthonormal `k`-tuples in `E` and in `F`, so it is false as soon as
+`k` exceeds either dimension.
+
+The domain family is read off the eigenbasis of `A⋆A`, exactly as in the square case
+`exists_orthonormal_re_sum_inner_map_eq`.  The codomain family cannot be obtained from a
+unitary the way the square case obtains it from the polar factor, because `A` need not have
+one; instead the normalized images `σᵢ⁻¹ • A vᵢ` of the directions with `σᵢ ≠ 0` are an
+orthonormal family in `F`, and `Orthonormal.exists_orthonormalBasis_extension_of_card_eq`
+completes it.  The directions with `σᵢ = 0` contribute nothing to either side, since
+`‖A vᵢ‖ = σᵢ`. -/
+theorem exists_orthonormal_re_sum_inner_map_eq_rectangularKyFanSum
+    (A : E →ₗ[𝕜] F) {k : ℕ} (hkE : k ≤ finrank 𝕜 E) (hkF : k ≤ finrank 𝕜 F) :
+    ∃ (u : Fin k → F) (v : Fin k → E), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
+      RCLike.re (∑ i, ⟪u i, A (v i)⟫_𝕜) = rectangularKyFanSum k A := by
+  classical
+  set hS := A.isSymmetric_adjoint_comp_self with hSdef
+  set b := hS.eigenvectorBasis (rfl : finrank 𝕜 E = finrank 𝕜 E) with hbdef
+  set v : Fin k → E := fun i => b (Fin.castLE hkE i) with hvdef
+  have hv : Orthonormal 𝕜 v := b.orthonormal.comp _ (Fin.castLE_injective hkE)
+  -- the Gram relation of the singular directions
+  have hgram : ∀ i j : Fin k, ⟪A (v i), A (v j)⟫_𝕜
+      = ((A.singularValues (i : ℕ) ^ 2 : ℝ) : 𝕜) * (if i = j then (1 : 𝕜) else 0) := by
+    intro i j
+    have h1 : ⟪A (v i), A (v j)⟫_𝕜 = ⟪(A.adjoint ∘ₗ A) (v i), v j⟫_𝕜 := by
+      rw [LinearMap.comp_apply, LinearMap.adjoint_inner_left]
+    have h2 : (A.adjoint ∘ₗ A) (v i)
+        = ((hS.eigenvalues rfl (Fin.castLE hkE i) : ℝ) : 𝕜) • v i :=
+      hS.apply_eigenvectorBasis (rfl : finrank 𝕜 E = finrank 𝕜 E) (Fin.castLE hkE i)
+    have h3 : (A.singularValues (i : ℕ) ^ 2 : ℝ)
+        = hS.eigenvalues rfl (Fin.castLE hkE i) :=
+      A.sq_singularValues_fin (rfl : finrank 𝕜 E = finrank 𝕜 E) (Fin.castLE hkE i)
+    rw [h1, h2, inner_smul_left, RCLike.conj_ofReal, h3]
+    rw [orthonormal_iff_ite.mp hv i j]
+  -- norms of the images
+  have hnorm : ∀ i : Fin k, ‖A (v i)‖ = A.singularValues (i : ℕ) := by
+    intro i
+    have h := hgram i i
+    rw [if_pos rfl, mul_one] at h
+    have h2 : ‖A (v i)‖ ^ 2 = A.singularValues (i : ℕ) ^ 2 := by
+      have := congrArg (RCLike.re (K := 𝕜)) h
+      rw [inner_self_eq_norm_sq_to_K] at this
+      simpa using this
+    have := A.singularValues_nonneg (i : ℕ)
+    nlinarith [norm_nonneg (A (v i))]
+  -- the codomain family, defined on the indices with a nonzero singular value
+  set w : Fin (finrank 𝕜 F) → F := fun j =>
+    if h : (j : ℕ) < k then ((A.singularValues (j : ℕ) : ℝ) : 𝕜)⁻¹ • A (v ⟨j, h⟩) else 0
+    with hwdef
+  set s : Set (Fin (finrank 𝕜 F)) :=
+    {j | (j : ℕ) < k ∧ A.singularValues (j : ℕ) ≠ 0} with hsdef
+  have hws : Orthonormal 𝕜 (s.domRestrict w) := by
+    rw [orthonormal_iff_ite]
+    rintro ⟨j, hj⟩ ⟨j', hj'⟩
+    obtain ⟨hjk, hjne⟩ := hj
+    obtain ⟨hj'k, hj'ne⟩ := hj'
+    have hwj : w j = ((A.singularValues (j : ℕ) : ℝ) : 𝕜)⁻¹ • A (v ⟨j, hjk⟩) := by
+      simp [hwdef, hjk]
+    have hwj' : w j' = ((A.singularValues (j' : ℕ) : ℝ) : 𝕜)⁻¹ • A (v ⟨j', hj'k⟩) := by
+      simp [hwdef, hj'k]
+    change ⟪w j, w j'⟫_𝕜 = _
+    rw [hwj, hwj', inner_smul_left, inner_smul_right, hgram ⟨j, hjk⟩ ⟨j', hj'k⟩]
+    have hj0 : ((A.singularValues (j : ℕ) : ℝ) : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr hjne
+    rcases eq_or_ne j j' with hjj | hjj
+    · subst hjj
+      simp only [map_inv₀, RCLike.conj_ofReal]
+      push_cast
+      field_simp
+    · have h1 : (⟨(j : ℕ), hjk⟩ : Fin k) ≠ ⟨(j' : ℕ), hj'k⟩ := by
+        simp only [ne_eq, Fin.mk.injEq]
+        exact fun hh => hjj (Fin.ext hh)
+      simp [h1, hjj, Subtype.ext_iff]
+  obtain ⟨c, hc⟩ := hws.exists_orthonormalBasis_extension_of_card_eq
+    (Fintype.card_fin _).symm
+  set u : Fin k → F := fun i => c (Fin.castLE hkF i) with hudef
+  have hu : Orthonormal 𝕜 u := c.orthonormal.comp _ (Fin.castLE_injective hkF)
+  refine ⟨u, v, hu, hv, ?_⟩
+  have hterm : ∀ i : Fin k, ⟪u i, A (v i)⟫_𝕜 = ((A.singularValues (i : ℕ) : ℝ) : 𝕜) := by
+    intro i
+    by_cases hz : A.singularValues (i : ℕ) = 0
+    · have hA0 : A (v i) = 0 := by
+        have h := hnorm i
+        rw [hz] at h
+        exact norm_eq_zero.mp h
+      rw [hA0, inner_zero_right, hz, RCLike.ofReal_zero]
+    · have hlt : ((Fin.castLE hkF i : Fin (finrank 𝕜 F)) : ℕ) < k := i.isLt
+      have hmem : (Fin.castLE hkF i) ∈ s := ⟨hlt, hz⟩
+      have hwv : w (Fin.castLE hkF i) = ((A.singularValues (i : ℕ) : ℝ) : 𝕜)⁻¹ • A (v i) := by
+        simp only [hwdef, dif_pos hlt]
+        rfl
+      have h0 : ((A.singularValues (i : ℕ) : ℝ) : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr hz
+      change ⟪c (Fin.castLE hkF i), A (v i)⟫_𝕜 = _
+      rw [hc _ hmem, hwv, inner_smul_left, hgram i i]
+      simp only [map_inv₀, RCLike.conj_ofReal]
+      push_cast
+      field_simp
+  rw [Finset.sum_congr rfl fun (i : Fin k) (_ : i ∈ Finset.univ) => hterm i]
+  rw [show (∑ i : Fin k, ((A.singularValues (i : ℕ) : ℝ) : 𝕜))
+      = ((∑ i : Fin k, A.singularValues (i : ℕ) : ℝ) : 𝕜) by push_cast; rfl,
+    RCLike.ofReal_re]
+  rfl
+
 /-- **Rectangular Ky Fan subadditivity**: the `k`-th Ky Fan sum of a sum of
 operators is at most the sum of the two Ky Fan sums.
 
