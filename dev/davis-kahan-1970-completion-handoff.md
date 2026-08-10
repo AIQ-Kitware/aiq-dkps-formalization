@@ -54,7 +54,7 @@ the mission did not think of. **Three of the four false-premise findings in rece
 | place | what is there |
 |---|---|
 | `ForTauCeti/` | the general, reusable analysis: operator ideals, approximation numbers, Ky Fan gauges, polar decomposition, functional calculus, complexification, `LinearPMap` unbounded theory, Borel calculus |
-| `external/TauCeti/` | the upstream Tau Ceti library this repository feeds; check it before writing general mathematics, and prefer contributing there over duplicating here |
+| `external/TauCeti/` | the Tau Ceti library, checked out for **reading**. Search it before writing general mathematics --- for the statement if it exists, and for the proof strategy if it does not. **We do not modify it from this repository.** What you need goes in `ForTauCeti/` |
 | `DavisKahan/` | paper-specific development; `Sources/DavisKahan1970/` is the source-numbered facade layer |
 | `dev/tauceti/` | migration ledgers, extraction manifests, the promotable inventory |
 | `dev/hilbert-space-operator-roadmap/` | the submitted operator-theory roadmap and its conformance status |
@@ -71,13 +71,33 @@ python3 scripts/probe_census_declarations.py --keep     # then read dev/.census-
 # what does this file's section actually assume?  read the `variable` block, not the docstring.
 ```
 
-### The roadmap: satisfy an obligation while you are in there
+### The operator-theory roadmap: a source of general shapes, not a goal
 
-`submodules/TauCetiRoadmap/**/Suggested.lean` records submitted API signatures whose bodies are
-deliberately `sorry`. `scripts/check_roadmap_delivered.py` reports which names the donor
-libraries already carry. **A name match is a planning aid, not semantic verification** --- a
-delivered declaration can carry hypotheses the roadmap does not, and the script says so itself.
-Do not copy its output into public roadmap prose.
+**Read this framing before the table.** The goal of this campaign is 100% Davis--Kahan, not
+roadmap delivery. The operator-theory roadmap is **still an unaccepted pull request**; it is not
+a specification anyone here is obliged to meet, and its contents may change. Two hard rules:
+
+* **We do not modify the roadmap or the Tau Ceti library from this repository.** Both are read-only
+  here. If a roadmap signature looks wrong, record that in the census or a `dev/` note --- do not
+  edit it.
+* **Do not frame anything you write as "to be upstreamed."** Tau Ceti policy (`TauCetiRoadmap`
+  PRs #165 and #169, both merged) is *never push work*: whether other projects absorb this
+  material is their decision, not a property of the code. Write `ForTauCeti/` results as
+  self-standing general mathematics and say what they are independent of, not where they are
+  going.
+
+What the roadmap is genuinely useful for here: it is a curated list of the **general shapes** that
+operator-theoretic results tend to take. When a Davis--Kahan mission needs a lemma, checking
+whether the roadmap names a general form of it is a cheap way to pick the right generality --- and
+a generic `RCLike` statement in `ForTauCeti/` is worth more to the campaign after this one than
+the paper-specific special case would be. That is the whole of the connection: better generality
+now, cheaper next goal. It is never a reason to enlarge a mission's scope.
+
+`submodules/TauCetiRoadmap/**/Suggested.lean` records signatures whose bodies are deliberately
+`sorry`. `scripts/check_roadmap_delivered.py` reports which names the donor libraries already
+carry. **A name match is a planning aid, not semantic verification** --- a delivered declaration
+can carry hypotheses the roadmap does not, and the script says so itself. Do not copy its output
+into public roadmap prose.
 
 Current OperatorTheory topics:
 
@@ -96,18 +116,23 @@ Current OperatorTheory topics:
 python3 scripts/check_roadmap_delivered.py --topic OperatorIdeals --missing
 ```
 
-**Why this matters to a Davis--Kahan mission.** Several of the outstanding roadmap signatures are
-exactly the general form of something a mission here would otherwise prove in a paper-specific
-shape --- the `singularValue` family and `singularValue_eq_linearMap_singularValues` in
-`OperatorIdeals`, the modulus/`operatorAbs` cluster in `PolarDecomposition`,
-`restrictedPointSpectrum` in `PrincipalAngles`, the spectral-projection measurability group in
-`MatrixSpectralStatistics`. If your mission needs one of these, **state it in the general
-`RCLike` form under `ForTauCeti/` and use it from the paper facade**, rather than proving the
-special case inline. You get the roadmap obligation for free and the next mission gets the tool.
+**How to use this list.** Several outstanding signatures are the general form of something a
+mission here would otherwise prove in a paper-specific shape --- the `singularValue` family and
+`singularValue_eq_linearMap_singularValues` in `OperatorIdeals`, the modulus/`operatorAbs` cluster
+in `PolarDecomposition`, `restrictedPointSpectrum` in `PrincipalAngles`, the spectral-projection
+measurability group in `MatrixSpectralStatistics`. If your mission needs one of these, **state it
+in the general `RCLike` form under `ForTauCeti/` and use it from the paper facade**, rather than
+proving the special case inline --- the cost is usually the same, and the campaign after this one
+inherits a tool instead of a specialization.
 
-The conformance write-up's own conclusion is worth carrying: of the items ever recorded as
-blocked in that roadmap, *every one* turned out to be blocked by a description rather than by
-mathematics. Attempt before believing.
+Two limits on that. Do not generalize a statement you cannot prove in the general form: a
+paper-specific lemma that works beats a generic one that stalls the mission, and the Davis--Kahan
+row is what you are accountable for. And do not add scope --- if the roadmap names a neighbouring
+result your mission does not need, leave it.
+
+The conformance write-up's own conclusion is worth carrying, and it applies to this repository's
+notes as much as to the roadmap: of the items ever recorded there as blocked, *every one* turned
+out to be blocked by a description rather than by the mathematics. Attempt before believing.
 
 ---
 
