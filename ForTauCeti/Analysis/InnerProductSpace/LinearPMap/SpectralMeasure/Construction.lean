@@ -8,6 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
 public import Mathlib.MeasureTheory.Integral.DominatedConvergence
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic
 
 /-!
@@ -613,6 +614,28 @@ noncomputable instance instHasOrthogonalProjection_specRange :
   exact ContinuousLinearMap.IsIdempotentElem.hasOrthogonalProjection_range
     (isIdempotentElem_specProjection hA B hB)
 
+/-- **The spectral projection is the orthogonal projection onto its range.**
+This is intrinsic spectral-range structure, not double-angle machinery: it is
+the bridge from the PVM projection to the submodule API used by every reducing
+subspace consumer. -/
+theorem specProjection_eq_starProjection_specRange :
+    specProjection hA B hB = (specRange hA B hB).starProjection := by
+  apply ContinuousLinearMap.ext
+  intro x
+  symm
+  apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero
+  · exact specProjection_mem_specRange hA B hB x
+  · intro y hy
+    have hyfix : specProjection hA B hB y = y := (mem_specRange_iff hA B hB y).mp hy
+    rw [← hyfix]
+    have hadj := ContinuousLinearMap.adjoint_inner_right
+      (specProjection hA B hB) (x - specProjection hA B hB x) y
+    rw [← ContinuousLinearMap.star_eq_adjoint,
+      (isSelfAdjoint_specProjection hA B hB).star_eq] at hadj
+    rw [hadj, map_sub,
+      (mem_specRange_iff hA B hB _).mp (specProjection_mem_specRange hA B hB x),
+      sub_self, inner_zero_left]
+
 /-- The image of a domain vector of the spectral range stays in the spectral
 range. -/
 theorem apply_mem_specRange {x : A.domain} (hx : (x : H) ∈ specRange hA B hB) :
@@ -623,6 +646,45 @@ theorem apply_mem_specRange {x : A.domain} (hx : (x : H) ∈ specRange hA B hB) 
       specProjection_mem_domain hA B hB x⟩ : A.domain) = x := Subtype.ext hfix
   rw [hsub] at h
   exact (mem_specRange_iff hA B hB _).mpr h.symm
+
+/-- Spectral projection on a complement set is the complementary orthogonal
+projection. -/
+theorem specProjection_compl :
+    specProjection hA Bᶜ hB.compl =
+      ContinuousLinearMap.id ℂ H - specProjection hA B hB := by
+  simpa only [specProjection_def] using (spectralPVM hA).proj_compl B hB
+
+/-- The spectral range of a complement set is the orthogonal complement of the
+original spectral range. -/
+theorem specRange_compl :
+    specRange hA Bᶜ hB.compl = (specRange hA B hB)ᗮ := by
+  apply Submodule.ext
+  intro x
+  rw [← Submodule.starProjection_eq_self_iff,
+    ← Submodule.starProjection_eq_self_iff]
+  rw [← specProjection_eq_starProjection_specRange,
+    specProjection_compl,
+    Submodule.starProjection_orthogonal,
+    ← specProjection_eq_starProjection_specRange]
+
+/-- **A spectral range reduces the operator.**  Both orthogonal components
+preserve the domain and are invariant under the self-adjoint partial map. -/
+theorem reducesSubspace_specRange : ReducesSubspace A (specRange hA B hB) := by
+  have hstar := specProjection_eq_starProjection_specRange hA B hB
+  refine ReducesSubspace.of_components ?_ ?_ ?_ ?_
+  · intro x
+    rw [← hstar]
+    exact specProjection_mem_domain hA B hB x
+  · intro x
+    rw [Submodule.starProjection_orthogonal]
+    change (x : H) - (specRange hA B hB).starProjection (x : H) ∈ A.domain
+    rw [← hstar]
+    exact A.domain.sub_mem x.property (specProjection_mem_domain hA B hB x)
+  · intro x hx
+    exact apply_mem_specRange hA B hB hx
+  · intro x hx
+    rw [← specRange_compl hA B hB] at hx ⊢
+    exact apply_mem_specRange hA Bᶜ hB.compl hx
 
 /-- **The restriction of a self-adjoint operator to one of its spectral
 ranges.** -/
