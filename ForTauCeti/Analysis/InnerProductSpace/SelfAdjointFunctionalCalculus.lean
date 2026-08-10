@@ -261,6 +261,88 @@ theorem selfAdjointFunctionalCalculus_apply_of_apply_eq_smul
     rw [hcoeff]
     simp
 
+/-- **An eigenvector of `f(T)` is blind to the eigenvalues `f` does not send to
+its eigenvalue.**
+
+If `f(T) x = lam • x`, then `x` has no component along an eigenvector of `T`
+whose eigenvalue `f` moves away from `lam`.  This is the one computation behind
+both transfer lemmas below, and it is `selfAdjointFunctionalCalculus_isSymmetric`
+applied to the pair `(f(T) (b i), f(T) x)`. -/
+theorem repr_eq_zero_of_calculus_apply_eq_smul
+    {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (f : ℝ → ℝ)
+    {x : E} {lam : ℝ}
+    (hx : selfAdjointFunctionalCalculus hT f x = ((lam : ℝ) : 𝕜) • x)
+    {i : Fin (finrank 𝕜 E)} (hi : f (hT.eigenvalues rfl i) ≠ lam) :
+    (hT.eigenvectorBasis rfl).repr x i = 0 := by
+  set b := hT.eigenvectorBasis rfl with hb
+  have hS := selfAdjointFunctionalCalculus_isSymmetric hT f
+  rw [b.repr_apply_apply]
+  have heig : selfAdjointFunctionalCalculus hT f (b i) =
+      ((f (hT.eigenvalues rfl i) : ℝ) : 𝕜) • b i :=
+    selfAdjointFunctionalCalculus_apply_eigenvectorBasis hT f i
+  have hinner :
+      ((f (hT.eigenvalues rfl i) : ℝ) : 𝕜) * ⟪b i, x⟫_𝕜 =
+        ((lam : ℝ) : 𝕜) * ⟪b i, x⟫_𝕜 := by
+    calc
+      ((f (hT.eigenvalues rfl i) : ℝ) : 𝕜) * ⟪b i, x⟫_𝕜
+          = ⟪selfAdjointFunctionalCalculus hT f (b i), x⟫_𝕜 := by
+              rw [heig, inner_smul_left, RCLike.conj_ofReal]
+      _ = ⟪b i, selfAdjointFunctionalCalculus hT f x⟫_𝕜 := hS _ _
+      _ = ((lam : ℝ) : 𝕜) * ⟪b i, x⟫_𝕜 := by
+              rw [hx, inner_smul_right]
+  have hscalar : (((f (hT.eigenvalues rfl i) - lam : ℝ) : 𝕜)) ≠ 0 :=
+    RCLike.ofReal_ne_zero.mpr (sub_ne_zero.mpr hi)
+  apply (mul_eq_zero.mp ?_).resolve_left hscalar
+  simpa [RCLike.ofReal_sub, sub_mul] using sub_eq_zero.mpr hinner
+
+/-- **Transfer of an eigenvector between two symbols of the same operator.**
+
+If `f(T)` scales `x` by `lam`, and a second symbol `g` takes the constant value
+`mu` at every eigenvalue that `f` sends to `lam`, then `g(T)` scales `x` by `mu`.
+Taking `f = id` recovers `selfAdjointFunctionalCalculus_apply_of_apply_eq_smul`.
+
+This is what lets an eigenvector of an operator that is *defined* as a functional
+calculus — an operator angle `Θ = arcsin (sin Θ)`, say — be pushed through a
+different symbol without ever naming the eigenbasis. -/
+theorem selfAdjointFunctionalCalculus_apply_of_calculus_apply_eq_smul
+    {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (f g : ℝ → ℝ)
+    {x : E} {lam mu : ℝ}
+    (hx : selfAdjointFunctionalCalculus hT f x = ((lam : ℝ) : 𝕜) • x)
+    (hfg : ∀ i : Fin (finrank 𝕜 E),
+      f (hT.eigenvalues rfl i) = lam → g (hT.eigenvalues rfl i) = mu) :
+    selfAdjointFunctionalCalculus hT g x = ((mu : ℝ) : 𝕜) • x := by
+  classical
+  let b := hT.eigenvectorBasis rfl
+  rw [← b.sum_repr x, map_sum, Finset.smul_sum]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [map_smul, selfAdjointFunctionalCalculus_apply_eigenvectorBasis]
+  by_cases hi : f (hT.eigenvalues rfl i) = lam
+  · rw [hfg i hi]; exact smul_comm _ _ _
+  · rw [repr_eq_zero_of_calculus_apply_eq_smul hT f hx hi]
+    simp
+
+/-- **A nonzero eigenvector of `f(T)` exhibits its eigenvalue as a value of `f`.**
+
+Contrapositive of `repr_eq_zero_of_calculus_apply_eq_smul`: if `f` missed `lam`
+at every eigenvalue of `T`, then every coordinate of `x` in the eigenbasis would
+vanish.  This is what pins the *range* of an operator angle: an eigenvalue of
+`arcsin (sin Θ)` is an actual arcsine, hence lies in `[-π/2, π/2]`. -/
+theorem exists_eigenvalue_of_calculus_apply_eq_smul
+    {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (f : ℝ → ℝ)
+    {x : E} {lam : ℝ} (hx0 : x ≠ 0)
+    (hx : selfAdjointFunctionalCalculus hT f x = ((lam : ℝ) : 𝕜) • x) :
+    ∃ i : Fin (finrank 𝕜 E), f (hT.eigenvalues rfl i) = lam := by
+  classical
+  by_contra hcon
+  have hmiss : ∀ i : Fin (finrank 𝕜 E), f (hT.eigenvalues rfl i) ≠ lam :=
+    fun i hi => hcon ⟨i, hi⟩
+  refine hx0 ?_
+  set b := hT.eigenvectorBasis rfl with hb
+  calc x = ∑ i, b.repr x i • b i := (b.sum_repr x).symm
+    _ = 0 := by
+        refine Finset.sum_eq_zero fun i _ => ?_
+        rw [repr_eq_zero_of_calculus_apply_eq_smul hT f hx (hmiss i), zero_smul]
+
 /-- The constant function `1` gives the identity operator. -/
 theorem selfAdjointFunctionalCalculus_one {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) :
     selfAdjointFunctionalCalculus hT (fun _ => (1 : ℝ)) = LinearMap.id := by

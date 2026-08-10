@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.All
 import DavisKahan.FiniteDimensional.DirectRotation.Basic
+import DavisKahan.FiniteDimensional.DirectRotation.EigenvectorAngle
 import DavisKahan.FiniteDimensional.DirectRotation.Exponential
 import DavisKahan.FiniteDimensional.DirectRotation.Majorization
 import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes
