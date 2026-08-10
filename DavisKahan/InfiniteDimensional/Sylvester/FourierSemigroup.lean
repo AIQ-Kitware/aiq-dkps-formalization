@@ -212,7 +212,7 @@ theorem unitaryGroup_mem_unitary (A : H →L[ℂ] H)
 
 /-- The inverse of `exp(i t A)` is `exp(-i t A)`. -/
 theorem unitaryGroup_neg_mul (A : H →L[ℂ] H)
-    (hA : IsSelfAdjointOperator A) (t : ℝ) :
+    (_hA : IsSelfAdjointOperator A) (t : ℝ) :
     unitaryGroup A (-t) ∘L unitaryGroup A t = 1 ∧
       unitaryGroup A t ∘L unitaryGroup A (-t) = 1 := by
   have hsum1 := unitaryGroup_add A (-t) t
@@ -366,6 +366,7 @@ theorem spectrum_restrict_top (T : H →L[ℂ] H) (hU : InvariantFor T ⊤) :
   conv_rhs => rw [← topConjAlgEquiv_restrict T hU]
   exact (AlgEquiv.spectrum_eq topConjAlgEquiv (T.restrict hU)).symm
 
+omit [CompleteSpace H] in
 /-- The restricted spectrum at the top submodule is the real spectrum. -/
 theorem restrictedSpectrum_top_eq (T : H →L[ℂ] H) :
     restrictedSpectrum T ⊤ = realSpectrum T := by
@@ -546,6 +547,7 @@ theorem exists_finiteSpectralStep
     rw [Real.dist_eq] at this
     exact this.le
 
+omit [CompleteSpace H] in
 /-- Two finite steps whose representatives come from separated original
 spectra inherit exactly the same separation. -/
 theorem finiteSpectralStep_representatives_separated

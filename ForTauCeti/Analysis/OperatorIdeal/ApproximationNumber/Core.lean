@@ -371,7 +371,7 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_of_minMax
         have htri : ‖K x‖ ≤ ‖K (P i x)‖ + ‖D i ⟨x, hxV⟩‖ := by
           rw [hDapply]
           have h := norm_sub_le (K (P i x)) (K (P i x) - K x)
-          (convert h using 1; abel)
+          (convert h using 1; abel_nf)
         have hsx : s ≤ ‖K x‖ := by
           have := hV x hxV
           simpa only [hxNorm, mul_one] using this

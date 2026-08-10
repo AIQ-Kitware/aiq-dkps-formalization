@@ -115,6 +115,16 @@ theorem ofReal_mem_complexifySubmodule_iff (U : Submodule ℝ E) (x : E) :
   simp
 
 omit [CompleteSpace E] in
+/-- Complexification reflects equality of real subspaces. -/
+theorem complexifySubmodule_injective :
+    Function.Injective (complexifySubmodule :
+      Submodule ℝ E → Submodule ℂ (RealComplexification E)) := by
+  intro U V hUV
+  ext x
+  rw [← ofReal_mem_complexifySubmodule_iff U x, hUV,
+    ofReal_mem_complexifySubmodule_iff V x]
+
+omit [CompleteSpace E] in
 /-- Complexified subspaces are invariant under the canonical conjugation. -/
 theorem conjugation_mem_complexifySubmodule_iff (U : Submodule ℝ E)
     (z : RealComplexification E) :

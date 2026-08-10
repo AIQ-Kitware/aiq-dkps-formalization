@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-5.6 Sol
 import DavisKahan.Sources.DavisKahan1970.Section8.SourceTheorem81
 import DavisKahan.SpectralTheory.Complexification.BoundedGapProjection
 import DavisKahan.SpectralTheory.Complexification.FormTransport
+import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 import DavisKahan.SpectralTheory.FormSpectrumBounds
 
 /-!
@@ -163,6 +164,142 @@ theorem theorem8_1_canonicalBranch_real
         spectrumIn_Ici_of_le_re_inner_generic hreduces.2 hhigh
       quarter_acute := hquarter
       maximal_angle_lt_pi_div_four := hangle }
+
+
+/-- **Davis--Kahan 1970, Theorem 8.1, uniqueness over a REAL Hilbert space.**
+
+Any two reducing real subspaces satisfying the printed closed quarter-angle
+condition are equal.  The proof complexifies both candidates, applies the
+already-proved complex uniqueness theorem to identify both with the same
+canonical spectral branch, and reflects subspace equality back to `ℝ`. -/
+theorem theorem8_1_eq_of_maximalAngle_le_real
+    (A H : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ}
+    (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
+    (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
+    (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
+    (M N : Submodule ℝ E) [M.HasOrthogonalProjection] [N.HasOrthogonalProjection]
+    (hMreduces : (A + H).Reduces M) (hNreduces : (A + H).Reduces N)
+    (hMangle : maximalAngle P M ≤ Real.pi / 4)
+    (hNangle : maximalAngle P N ≤ Real.pi / 4) :
+    M = N := by
+  classical
+  have hAc : IsSelfAdjoint (complexify A) := (complexify_isSelfAdjoint_iff A).2 hA
+  have hHc : IsSelfAdjoint (complexify H) := (complexify_isSelfAdjoint_iff H).2 hH
+  have hsum : complexify A + complexify H = complexify (A + H) :=
+    (complexify_add A H).symm
+  have hMreducesC : (complexify A + complexify H).Reduces (complexifySubmodule M) := by
+    rw [hsum]
+    exact (complexify_reduces_iff (A + H) M).2 hMreduces
+  have hNreducesC : (complexify A + complexify H).Reduces (complexifySubmodule N) := by
+    rw [hsum]
+    exact (complexify_reduces_iff (A + H) N).2 hNreduces
+  have hMangleC :
+      maximalAngle (complexifySubmodule P) (complexifySubmodule M) ≤ Real.pi / 4 := by
+    simpa only [maximalAngle, subspaceGap_complexifySubmodule] using hMangle
+  have hNangleC :
+      maximalAngle (complexifySubmodule P) (complexifySubmodule N) ≤ Real.pi / 4 := by
+    simpa only [maximalAngle, subspaceGap_complexifySubmodule] using hNangle
+  have hMcanon := theorem8_1_eq_canonicalBranch_of_maximalAngle_le
+    (E := RealComplexification E)
+    (complexify A) (complexify H) (complexifySubmodule P)
+    hdelta hAc hHc
+    (fun z hz => mapsTo_complexifySubmodule hAP hz)
+    (fun z hz => re_inner_le_of_mem_complexifySubmodule hPlow hz)
+    (fun z hz => by
+      rw [← complexifySubmodule_orthogonal P] at hz
+      exact le_re_inner_of_mem_complexifySubmodule hPhigh hz)
+    (fun z hz => mapsTo_orthogonal_complexifySubmodule P hHP hz)
+    (fun z hz => mapsTo_of_mem_orthogonal_complexifySubmodule P hHPperp hz)
+    (complexifySubmodule M) hMreducesC hMangleC
+  have hNcanon := theorem8_1_eq_canonicalBranch_of_maximalAngle_le
+    (E := RealComplexification E)
+    (complexify A) (complexify H) (complexifySubmodule P)
+    hdelta hAc hHc
+    (fun z hz => mapsTo_complexifySubmodule hAP hz)
+    (fun z hz => re_inner_le_of_mem_complexifySubmodule hPlow hz)
+    (fun z hz => by
+      rw [← complexifySubmodule_orthogonal P] at hz
+      exact le_re_inner_of_mem_complexifySubmodule hPhigh hz)
+    (fun z hz => mapsTo_orthogonal_complexifySubmodule P hHP hz)
+    (fun z hz => mapsTo_of_mem_orthogonal_complexifySubmodule P hHPperp hz)
+    (complexifySubmodule N) hNreducesC hNangleC
+  exact complexifySubmodule_injective (hMcanon.trans hNcanon.symm)
+
+/-- **Davis--Kahan 1970, Theorem 8.1, printed characterization over `ℝ`.**
+
+For a reducing real subspace of the perturbed operator, the closed quarter-angle
+condition is equivalent to the two printed restricted-spectrum orientations.
+Both directions are inherited exactly from the complex theorem through
+restriction-spectrum complexification; no finite-dimensionality assumption is
+introduced. -/
+theorem theorem8_1_maximalAngle_le_iff_spectrumIn_real
+    (A H : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ}
+    (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
+    (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
+    (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
+    (M : Submodule ℝ E) [M.HasOrthogonalProjection]
+    (hMreduces : (A + H).Reduces M) :
+    maximalAngle P M ≤ Real.pi / 4 ↔
+      (SpectrumIn (A + H) M (Set.Iic alpha) ∧
+        SpectrumIn (A + H) Mᗮ (Set.Ici (alpha + delta))) := by
+  classical
+  have hAc : IsSelfAdjoint (complexify A) := (complexify_isSelfAdjoint_iff A).2 hA
+  have hHc : IsSelfAdjoint (complexify H) := (complexify_isSelfAdjoint_iff H).2 hH
+  have hsum : complexify A + complexify H = complexify (A + H) :=
+    (complexify_add A H).symm
+  have hMreducesC : (complexify A + complexify H).Reduces (complexifySubmodule M) := by
+    rw [hsum]
+    exact (complexify_reduces_iff (A + H) M).2 hMreduces
+  have hcharC := theorem8_1_maximalAngle_le_iff_spectrumIn
+    (E := RealComplexification E)
+    (complexify A) (complexify H) (complexifySubmodule P)
+    hdelta hAc hHc
+    (fun z hz => mapsTo_complexifySubmodule hAP hz)
+    (fun z hz => re_inner_le_of_mem_complexifySubmodule hPlow hz)
+    (fun z hz => by
+      rw [← complexifySubmodule_orthogonal P] at hz
+      exact le_re_inner_of_mem_complexifySubmodule hPhigh hz)
+    (fun z hz => mapsTo_orthogonal_complexifySubmodule P hHP hz)
+    (fun z hz => mapsTo_of_mem_orthogonal_complexifySubmodule P hHPperp hz)
+    (complexifySubmodule M) hMreducesC
+  have hangle_iff :
+      maximalAngle (complexifySubmodule P) (complexifySubmodule M) ≤ Real.pi / 4 ↔
+        maximalAngle P M ≤ Real.pi / 4 := by
+    simp only [maximalAngle, subspaceGap_complexifySubmodule]
+  constructor
+  · intro hangle
+    rcases hcharC.1 (hangle_iff.2 hangle) with ⟨hlowC, hhighC⟩
+    have hlowC' : SpectrumIn (complexify (A + H)) (complexifySubmodule M)
+        (Set.Iic alpha) := by
+      simpa only [hsum] using hlowC
+    have hhighC' : SpectrumIn (complexify (A + H)) (complexifySubmodule (Mᗮ))
+        (Set.Ici (alpha + delta)) := by
+      simpa only [hsum, complexifySubmodule_orthogonal M] using hhighC
+    exact
+      ⟨(spectrumIn_complexifySubmodule_iff M (A + H) (Set.Iic alpha)).1 hlowC',
+        (spectrumIn_complexifySubmodule_iff (Mᗮ) (A + H)
+          (Set.Ici (alpha + delta))).1 hhighC'⟩
+  · rintro ⟨hlow, hhigh⟩
+    have hlowC0 := spectrumIn_complexifySubmodule M (A + H) (Set.Iic alpha) hlow
+    have hhighC0 := spectrumIn_complexifySubmodule (Mᗮ) (A + H)
+      (Set.Ici (alpha + delta)) hhigh
+    have hlowC : SpectrumIn (complexify A + complexify H) (complexifySubmodule M)
+        (Set.Iic alpha) := by
+      simpa only [hsum] using hlowC0
+    have hhighC : SpectrumIn (complexify A + complexify H) (complexifySubmodule M)ᗮ
+        (Set.Ici (alpha + delta)) := by
+      simpa only [hsum, complexifySubmodule_orthogonal M] using hhighC0
+    exact hangle_iff.1 (hcharC.2 ⟨hlowC, hhighC⟩)
 
 end
 

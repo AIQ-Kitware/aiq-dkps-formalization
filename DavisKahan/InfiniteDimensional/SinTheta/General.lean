@@ -242,7 +242,7 @@ theorem sinTheta_residual
     {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (hU : Reduces A U)
-    {X : F →L[𝕜] E} (hX : IsometricEmbedding X)
+    {X : F →L[𝕜] E} (_hX : IsometricEmbedding X)
     {M : F →L[𝕜] F} (hM : IsSelfAdjointOperator M)
     {d : ℝ} (hd : 0 < d)
     (hsep : OrderedSpectraSeparated M ⊤ A Uᗮ d) :
