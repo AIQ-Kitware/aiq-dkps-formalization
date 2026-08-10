@@ -194,6 +194,44 @@ theorem unbounded_sinTwoTheta_uiNorm_representative
   exact hcanonical.2
 
 open DavisKahan.Experimental in
+/-- **Davis--Kahan 1970, Section 8 closing unequal-dimension extension of the
+`sin 2Θ` theorem, perturbation form.**
+
+The source explicitly announces the extension when
+`dim X(E₀) < dim X(F₀)`.  The maintained Section 7 theorem is actually stronger:
+it has no dimension comparison at all.  This corollary records the printed
+strict-dimension case explicitly at the literal representative / arbitrary
+unitarily-invariant-ideal scope, so the source sentence has a declaration whose
+signature contains the hypothesis it states. -/
+theorem unbounded_sinTwoTheta_uiNorm_representative_unequalDimension
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (E : H →L[ℂ] H) (hE : DavisKahan.IsSelfAdjointOperator E)
+    (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
+    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hBlow : SemiboundedBelow
+      (selfAdjointSpectralRestriction A hA B hB) β)
+    (hBhigh : SemiboundedAbove
+      (selfAdjointSpectralRestriction A hA B hB) α)
+    (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
+    (hEmem : N.Mem E)
+    (_hStrictDimension :
+      Module.rank ℂ (selfAdjointSpectralSubspace A hA B hB) <
+        Module.rank ℂ (selfAdjointSpectralSubspace (A.addBounded E)
+          (addBounded_isSelfAdjoint A hA E hE) S hS))
+    (sinTwoTheta₀ : PaperSinThetaRepresentative
+      (sinTwoThetaIdealBlock
+        (selfAdjointSpectralSubspace A hA B hB)
+        (selfAdjointSpectralSubspace (A.addBounded E)
+          (addBounded_isSelfAdjoint A hA E hE) S hS))) :
+    N.Mem sinTwoTheta₀.operator ∧
+      δ * N.gauge sinTwoTheta₀.operator ≤ 2 * N.gauge E := by
+  exact unbounded_sinTwoTheta_uiNorm_representative N A hA E hE B S hB hS
+    hβα hδ hBlow hBhigh hBcomplSpec hEmem sinTwoTheta₀
+
+open DavisKahan.Experimental in
 /-- **Davis--Kahan 1970, `sin 2Θ` theorem, literal reflection-residual
 form.**  The bounded operator `R` implements the mirrored system on the full
 domain; the chosen `sin 2Θ₀` may be any operator with the complete
@@ -232,6 +270,40 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative
   refine ⟨hmem, ?_⟩
   rw [hgauge]
   exact hcanonical.2
+
+open DavisKahan.Experimental in
+/-- **Section 8 closing unequal-dimension extension, reflection-residual form.**
+The strict dimension comparison is recorded exactly as printed; the proof is a
+direct specialization of the stronger dimension-free Section 7 theorem. -/
+theorem unbounded_sinTwoTheta_residual_uiNorm_representative_unequalDimension
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (R : H →L[ℂ] H) (hR : DavisKahan.IsSelfAdjointOperator R)
+    (B : Set ℝ) (hB : MeasurableSet B)
+    (V : Submodule ℂ H) [V.HasOrthogonalProjection]
+    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hBlow : SemiboundedBelow
+      (selfAdjointSpectralRestriction A hA B hB) β)
+    (hBhigh : SemiboundedAbove
+      (selfAdjointSpectralRestriction A hA B hB) α)
+    (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
+    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hJintertwines : ∀ x : A.domain,
+      (A.addBounded R).toLinearMap
+          ⟨V.reflectionOperator (x : H), hJdom x⟩ =
+        V.reflectionOperator (A.toLinearMap x))
+    (hRmem : N.Mem R)
+    (_hStrictDimension :
+      Module.rank ℂ (selfAdjointSpectralSubspace A hA B hB) < Module.rank ℂ V)
+    (sinTwoTheta₀ : PaperSinThetaRepresentative
+      (sinTwoThetaIdealBlock
+        (selfAdjointSpectralSubspace A hA B hB) V)) :
+    N.Mem sinTwoTheta₀.operator ∧
+      δ * N.gauge sinTwoTheta₀.operator ≤ N.gauge R := by
+  exact unbounded_sinTwoTheta_residual_uiNorm_representative N A hA R hR B hB V
+    hβα hδ hBlow hBhigh hBcomplSpec hJdom hJintertwines hRmem sinTwoTheta₀
 
 /-! ## Real-scalar forms
 
@@ -280,6 +352,35 @@ theorem unbounded_sinTwoTheta_uiNorm_representative_real
   exact hcanonical.2
 
 open DavisKahan.Experimental DavisKahan.Experimental.RealSpectralRestriction in
+/-- **Real-scalar Section 8 closing unequal-dimension extension of the
+`sin 2Θ` theorem, perturbation form.**  As over `ℂ`, the underlying theorem is
+dimension-free; this declaration records the printed strict-dimension case. -/
+theorem unbounded_sinTwoTheta_uiNorm_representative_real_unequalDimension
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := Er))
+    (hA : A.IsSelfAdjoint)
+    (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+    (hEmem : N.Mem Eop)
+    (_hStrictDimension :
+      Module.rank ℝ (realSelfAdjointSpectralSubspace A hA B hB) <
+        Module.rank ℝ (realSelfAdjointSpectralSubspace (A.addBounded Eop)
+          (addBounded_isSelfAdjoint A hA Eop hEop) S hS))
+    (sinTwoTheta₀ : PaperSinThetaRepresentative
+      (sinTwoThetaIdealBlock
+        (realSelfAdjointSpectralSubspace A hA B hB)
+        (realSelfAdjointSpectralSubspace (A.addBounded Eop)
+          (addBounded_isSelfAdjoint A hA Eop hEop) S hS))) :
+    N.Mem sinTwoTheta₀.operator ∧
+      δ * N.gauge sinTwoTheta₀.operator ≤ 2 * N.gauge Eop := by
+  exact unbounded_sinTwoTheta_uiNorm_representative_real N A hA Eop hEop B S hB hS
+    hδ hgap hEmem sinTwoTheta₀
+
+open DavisKahan.Experimental DavisKahan.Experimental.RealSpectralRestriction in
 /-- **Davis--Kahan 1970, `sin 2Θ` theorem, literal reflection-residual form
 over a REAL Hilbert space.**  The bounded operator `R` implements the mirrored
 system on the full domain; the chosen `sin 2Θ₀` may be any operator with the
@@ -313,6 +414,36 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative_real
   refine ⟨hmem, ?_⟩
   rw [hgauge]
   exact hcanonical.2
+
+open DavisKahan.Experimental DavisKahan.Experimental.RealSpectralRestriction in
+/-- **Real-scalar Section 8 closing unequal-dimension extension,
+reflection-residual form.** -/
+theorem unbounded_sinTwoTheta_residual_uiNorm_representative_real_unequalDimension
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := Er))
+    (hA : A.IsSelfAdjoint)
+    (R : Er →L[ℝ] Er) (hR : DavisKahan.IsSelfAdjointOperator R)
+    (B : Set ℝ) (hB : MeasurableSet B)
+    (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : Er) ∈ A.domain)
+    (hJintertwines : ∀ x : A.domain,
+      (A.addBounded R).toLinearMap
+          ⟨V.reflectionOperator (x : Er), hJdom x⟩ =
+        V.reflectionOperator (A.toLinearMap x))
+    (hRmem : N.Mem R)
+    (_hStrictDimension :
+      Module.rank ℝ (realSelfAdjointSpectralSubspace A hA B hB) < Module.rank ℝ V)
+    (sinTwoTheta₀ : PaperSinThetaRepresentative
+      (sinTwoThetaIdealBlock
+        (realSelfAdjointSpectralSubspace A hA B hB) V)) :
+    N.Mem sinTwoTheta₀.operator ∧
+      δ * N.gauge sinTwoTheta₀.operator ≤ N.gauge R := by
+  exact unbounded_sinTwoTheta_residual_uiNorm_representative_real
+    N A hA R hR B hB V hδ hgap hJdom hJintertwines hRmem sinTwoTheta₀
 
 /-! ### The real directed forms at the paper's own unitarily invariant norm
 
