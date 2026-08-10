@@ -1879,6 +1879,83 @@ theorem sameHalmosOperatorInvariant_of_pairEquiv
   exact ⟨⟨hc, hs, ht, he⟩,
     MathAhead.HiddenFoundations.exists_cosineBlockEquiv_of_pairEquiv U₁ V₁ U₂ V₂ h⟩
 
+/-! ### Corollary 3.1 with the printed compactness hypothesis
+
+Davis and Kahan assume `P tilde(Q) P = P (I - Q) P` compact -- the *defect*
+(sine-square) block -- not `P Q P`.  In infinite dimension the two are
+incomparable: `P(I-Q)P` compact says the principal angles accumulate only at
+`0`, while `PQP` compact says they accumulate only at `pi/2`, and neither
+implies the other unless `P` itself is compact.
+
+The repair is exact rather than approximate, because `P (I - Q) P = P P_{Vᗮ} P`:
+the defect block of the pair `(U, V)` *is* the cosine block of the pair
+`(U, Vᗮ)`.  So the printed corollary is the compiled one applied to
+`(U, Vᗮ)`, once one knows that complementing the second subspace preserves
+pair-equivalence and merely permutes the four elementary Halmos summands.
+-/
+
+variable {U₁ V₁ U₂ V₂}
+
+omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
+  [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection] [V₂.HasOrthogonalProjection] in
+/-- Complementing the second subspace of each pair preserves unitary
+equivalence of ordered pairs. -/
+theorem pairOfSubspacesUnitaryEquivalent_orthogonal_right
+    (h : PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂) :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ᗮ U₂ V₂ᗮ := by
+  obtain ⟨e, hU, hV⟩ := h
+  refine ⟨e, hU, ?_⟩
+  have hmap : V₁ᗮ.map (e.toLinearEquiv : H₁ →ₗ[𝕜] H₂) =
+      (V₁.map (e.toLinearEquiv : H₁ →ₗ[𝕜] H₂))ᗮ :=
+    Submodule.map_orthogonal_equiv V₁ e
+  have hcoe : (e.toLinearEquiv : H₁ →ₗ[𝕜] H₂) = e.toLinearMap := rfl
+  rw [hcoe] at hmap
+  rw [hmap, hV]
+
+variable (U₁ V₁ U₂ V₂)
+
+omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
+  [U₂.HasOrthogonalProjection] in
+theorem pairOfSubspacesUnitaryEquivalent_orthogonal_right_iff :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ᗮ U₂ V₂ᗮ ↔
+      PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ := by
+  refine ⟨fun h => ?_, pairOfSubspacesUnitaryEquivalent_orthogonal_right⟩
+  have h' := pairOfSubspacesUnitaryEquivalent_orthogonal_right h
+  rwa [Submodule.orthogonal_orthogonal, Submodule.orthogonal_orthogonal] at h'
+
+omit [CompleteSpace H₁] [CompleteSpace H₂] in
+/-- Transport a nonempty isometric equivalence of submodules along equalities
+of those submodules.  Needed because the two summand families below are equal
+as submodules but the `≃ₗᵢ` type former does not rewrite. -/
+private theorem nonempty_linearIsometryEquiv_congr
+    {X X' : Submodule 𝕜 H₁} {Y Y' : Submodule 𝕜 H₂}
+    (hX : X = X') (hY : Y = Y') (h : Nonempty (X ≃ₗᵢ[𝕜] Y)) :
+    Nonempty (X' ≃ₗᵢ[𝕜] Y') :=
+  h.map fun f =>
+    ((LinearIsometryEquiv.ofEq X' X hX.symm).trans f).trans
+      (LinearIsometryEquiv.ofEq Y Y' hY)
+
+omit [U₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection] [CompleteSpace H₁]
+  [CompleteSpace H₂] in
+/-- Complementing the second subspace permutes the four elementary Halmos
+summands: `U ⊓ V` swaps with `U ⊓ Vᗮ`, and `Uᗮ ⊓ V` with `Uᗮ ⊓ Vᗮ`. -/
+theorem sameHalmosTrivialDimensions_orthogonal_right_iff :
+    SameHalmosTrivialDimensions U₁ V₁ᗮ U₂ V₂ᗮ ↔
+      SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ := by
+  have hVV1 : V₁ᗮᗮ = V₁ := Submodule.orthogonal_orthogonal V₁
+  have hVV2 : V₂ᗮᗮ = V₂ := Submodule.orthogonal_orthogonal V₂
+  have e1 : U₁ ⊓ V₁ᗮᗮ = U₁ ⊓ V₁ := by rw [hVV1]
+  have e2 : U₂ ⊓ V₂ᗮᗮ = U₂ ⊓ V₂ := by rw [hVV2]
+  have e3 : U₁ᗮ ⊓ V₁ᗮᗮ = U₁ᗮ ⊓ V₁ := by rw [hVV1]
+  have e4 : U₂ᗮ ⊓ V₂ᗮᗮ = U₂ᗮ ⊓ V₂ := by rw [hVV2]
+  constructor
+  · rintro ⟨hc, hs, ht, he⟩
+    exact ⟨nonempty_linearIsometryEquiv_congr e1 e2 hs, hc,
+      nonempty_linearIsometryEquiv_congr e3 e4 he, ht⟩
+  · rintro ⟨hc, hs, ht, he⟩
+    exact ⟨hs, nonempty_linearIsometryEquiv_congr e1.symm e2.symm hc,
+      he, nonempty_linearIsometryEquiv_congr e3.symm e4.symm ht⟩
+
 /-! The converse direction reconstructs the pair from the cosine block through the
 polar decomposition of the Halmos cross block, so it carries the functional-calculus
 hypotheses of `Geometry/Halmos/GenericReconstruction.lean`.  They are found by typeclass
@@ -2027,6 +2104,81 @@ theorem corollary3_1_compact_angleList_classification
     exact ⟨W, hW⟩
 
 end OperatorClassification
+
+/-! ## Corollary 3.1 with the printed compactness hypothesis, over an arbitrary field
+
+The defect-block form of Corollary 3.1 is the cosine-block form applied to `(U, Vᗮ)`, so it
+is field-generic exactly as that form is.  It is separated from `section
+OperatorClassification` only because the reconstruction functional calculus it needs is the
+one on the generic left half of `(U, Vᗮ)`, while that section's calculus variables are
+pinned to `(U, V)`; carrying both would attach four hypotheses that this statement never
+uses. -/
+
+section DefectBlockClassification
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace 𝕜 H₁]
+  [CompleteSpace H₁]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂]
+  [CompleteSpace H₂]
+variable (U₁ V₁ : Submodule 𝕜 H₁) [U₁.HasOrthogonalProjection]
+  [V₁.HasOrthogonalProjection]
+variable (U₂ V₂ : Submodule 𝕜 H₂) [U₂.HasOrthogonalProjection]
+  [V₂.HasOrthogonalProjection]
+
+variable [Algebra ℝ (MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ᗮ →L[𝕜]
+    MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ᗮ)]
+  [IsScalarTower ℝ 𝕜 (MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ᗮ →L[𝕜]
+    MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ᗮ)]
+  [ContinuousFunctionalCalculus ℝ
+    (MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ᗮ →L[𝕜]
+      MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ᗮ) IsSelfAdjoint]
+variable [Algebra ℝ (MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ᗮ →L[𝕜]
+    MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ᗮ)]
+  [IsScalarTower ℝ 𝕜 (MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ᗮ →L[𝕜]
+    MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ᗮ)]
+  [ContinuousFunctionalCalculus ℝ
+    (MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ᗮ →L[𝕜]
+      MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ᗮ) IsSelfAdjoint]
+
+/-- **Davis--Kahan 1970, Corollary 3.1, with the printed hypothesis.**
+
+The compactness assumption is on the *defect* block `P (I - Q) P`, as printed,
+and the classifying list is the eigenvalue list of the corresponding
+sine-square angle operator. -/
+theorem corollary3_1_compact_defectBlock_angleList_classification
+    (hcompact₁ : IsCompactOperator
+      (projection U₁ ∘L
+        (ContinuousLinearMap.id 𝕜 H₁ - projection V₁) ∘L projection U₁))
+    (hcompact₂ : IsCompactOperator
+      (projection U₂ ∘L
+        (ContinuousLinearMap.id 𝕜 H₂ - projection V₂) ∘L projection U₂)) :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
+      SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
+      compactAngleEigenvalueList
+          (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁ᗮ) =
+        compactAngleEigenvalueList
+          (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂ᗮ) := by
+  have hperp₁ : projection V₁ᗮ =
+      ContinuousLinearMap.id 𝕜 H₁ - projection V₁ := by
+    show V₁ᗮ.starProjection = ContinuousLinearMap.id 𝕜 H₁ - V₁.starProjection
+    rw [Submodule.starProjection_orthogonal' V₁]
+    rfl
+  have hperp₂ : projection V₂ᗮ =
+      ContinuousLinearMap.id 𝕜 H₂ - projection V₂ := by
+    show V₂ᗮ.starProjection = ContinuousLinearMap.id 𝕜 H₂ - V₂.starProjection
+    rw [Submodule.starProjection_orthogonal' V₂]
+    rfl
+  have h₁ : IsCompactOperator (projection U₁ ∘L projection V₁ᗮ ∘L projection U₁) := by
+    rwa [hperp₁]
+  have h₂ : IsCompactOperator (projection U₂ ∘L projection V₂ᗮ ∘L projection U₂) := by
+    rwa [hperp₂]
+  rw [← pairOfSubspacesUnitaryEquivalent_orthogonal_right_iff U₁ V₁ U₂ V₂,
+    ← sameHalmosTrivialDimensions_orthogonal_right_iff U₁ V₁ U₂ V₂]
+  exact corollary3_1_compact_angleList_classification U₁ V₁ᗮ U₂ V₂ᗮ h₁ h₂
+
+end DefectBlockClassification
+
 
 /-! ## From the generic cosine block to the ambient block
 
@@ -2182,89 +2334,18 @@ theorem theorem3_1_spectralMultiplicity_classification
   · rintro ⟨htriv, hmult⟩
     exact ⟨htriv, unitarilyEquivalent_of_sameSpectralMultiplicity _ _ hmult⟩
 
-/-! ### Corollary 3.1 with the printed compactness hypothesis
+/-- **Davis--Kahan 1970, Corollary 3.1 with the printed hypothesis, over a complex Hilbert
+space.**
 
-Davis and Kahan assume `P tilde(Q) P = P (I - Q) P` compact -- the *defect*
-(sine-square) block -- not `P Q P`.  In infinite dimension the two are
-incomparable: `P(I-Q)P` compact says the principal angles accumulate only at
-`0`, while `PQP` compact says they accumulate only at `pi/2`, and neither
-implies the other unless `P` itself is compact.
+The `𝕜 = ℂ` instance of `corollary3_1_compact_defectBlock_angleList_classification`,
+grounded on it by `:=`, with no added hypothesis.
 
-The repair is exact rather than approximate, because `P (I - Q) P = P P_{Vᗮ} P`:
-the defect block of the pair `(U, V)` *is* the cosine block of the pair
-`(U, Vᗮ)`.  So the printed corollary is the compiled one applied to
-`(U, Vᗮ)`, once one knows that complementing the second subspace preserves
-pair-equivalence and merely permutes the four elementary Halmos summands.
--/
-
-variable {U₁ V₁ U₂ V₂}
-
-omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
-  [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection] [V₂.HasOrthogonalProjection] in
-/-- Complementing the second subspace of each pair preserves unitary
-equivalence of ordered pairs. -/
-theorem pairOfSubspacesUnitaryEquivalent_orthogonal_right
-    (h : PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂) :
-    PairOfSubspacesUnitaryEquivalent U₁ V₁ᗮ U₂ V₂ᗮ := by
-  obtain ⟨e, hU, hV⟩ := h
-  refine ⟨e, hU, ?_⟩
-  have hmap : V₁ᗮ.map (e.toLinearEquiv : H₁ →ₗ[ℂ] H₂) =
-      (V₁.map (e.toLinearEquiv : H₁ →ₗ[ℂ] H₂))ᗮ :=
-    Submodule.map_orthogonal_equiv V₁ e
-  have hcoe : (e.toLinearEquiv : H₁ →ₗ[ℂ] H₂) = e.toLinearMap := rfl
-  rw [hcoe] at hmap
-  rw [hmap, hV]
-
-variable (U₁ V₁ U₂ V₂)
-
-omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
-  [U₂.HasOrthogonalProjection] in
-theorem pairOfSubspacesUnitaryEquivalent_orthogonal_right_iff :
-    PairOfSubspacesUnitaryEquivalent U₁ V₁ᗮ U₂ V₂ᗮ ↔
-      PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ := by
-  refine ⟨fun h => ?_, pairOfSubspacesUnitaryEquivalent_orthogonal_right⟩
-  have h' := pairOfSubspacesUnitaryEquivalent_orthogonal_right h
-  rwa [Submodule.orthogonal_orthogonal, Submodule.orthogonal_orthogonal] at h'
-
-omit [CompleteSpace H₁] [CompleteSpace H₂] in
-/-- Transport a nonempty isometric equivalence of submodules along equalities
-of those submodules.  Needed because the two summand families below are equal
-as submodules but the `≃ₗᵢ` type former does not rewrite. -/
-private theorem nonempty_linearIsometryEquiv_congr
-    {X X' : Submodule ℂ H₁} {Y Y' : Submodule ℂ H₂}
-    (hX : X = X') (hY : Y = Y') (h : Nonempty (X ≃ₗᵢ[ℂ] Y)) :
-    Nonempty (X' ≃ₗᵢ[ℂ] Y') :=
-  h.map fun f =>
-    ((LinearIsometryEquiv.ofEq X' X hX.symm).trans f).trans
-      (LinearIsometryEquiv.ofEq Y Y' hY)
-
-omit [U₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection] [CompleteSpace H₁]
-  [CompleteSpace H₂] in
-/-- Complementing the second subspace permutes the four elementary Halmos
-summands: `U ⊓ V` swaps with `U ⊓ Vᗮ`, and `Uᗮ ⊓ V` with `Uᗮ ⊓ Vᗮ`. -/
-theorem sameHalmosTrivialDimensions_orthogonal_right_iff :
-    SameHalmosTrivialDimensions U₁ V₁ᗮ U₂ V₂ᗮ ↔
-      SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ := by
-  have hVV1 : V₁ᗮᗮ = V₁ := Submodule.orthogonal_orthogonal V₁
-  have hVV2 : V₂ᗮᗮ = V₂ := Submodule.orthogonal_orthogonal V₂
-  have e1 : U₁ ⊓ V₁ᗮᗮ = U₁ ⊓ V₁ := by rw [hVV1]
-  have e2 : U₂ ⊓ V₂ᗮᗮ = U₂ ⊓ V₂ := by rw [hVV2]
-  have e3 : U₁ᗮ ⊓ V₁ᗮᗮ = U₁ᗮ ⊓ V₁ := by rw [hVV1]
-  have e4 : U₂ᗮ ⊓ V₂ᗮᗮ = U₂ᗮ ⊓ V₂ := by rw [hVV2]
-  constructor
-  · rintro ⟨hc, hs, ht, he⟩
-    exact ⟨nonempty_linearIsometryEquiv_congr e1 e2 hs, hc,
-      nonempty_linearIsometryEquiv_congr e3 e4 he, ht⟩
-  · rintro ⟨hc, hs, ht, he⟩
-    exact ⟨hs, nonempty_linearIsometryEquiv_congr e1.symm e2.symm hc,
-      he, nonempty_linearIsometryEquiv_congr e3.symm e4.symm ht⟩
-
-/-- **Davis--Kahan 1970, Corollary 3.1, with the printed hypothesis.**
-
-The compactness assumption is on the *defect* block `P (I - Q) P`, as printed,
-and the classifying list is the eigenvalue list of the corresponding
-sine-square angle operator. -/
-theorem corollary3_1_compact_defectBlock_angleList_classification
+It is recorded separately because the generic form *carries* the reconstruction functional
+calculus on `↥(genericLeftHalf U Vᗮ)` as a hypothesis, and typeclass inference finds that
+instance for an arbitrary pair but not at every concrete one.  A consumer that instantiates
+the corollary at a specific pair therefore goes through this form, where the instance was
+already discharged. -/
+theorem corollary3_1_compact_defectBlock_angleList_classification_complex
     (hcompact₁ : IsCompactOperator
       (projection U₁ ∘L
         (ContinuousLinearMap.id ℂ H₁ - projection V₁) ∘L projection U₁))
@@ -2276,24 +2357,9 @@ theorem corollary3_1_compact_defectBlock_angleList_classification
       compactAngleEigenvalueList
           (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁ᗮ) =
         compactAngleEigenvalueList
-          (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂ᗮ) := by
-  have hperp₁ : projection V₁ᗮ =
-      ContinuousLinearMap.id ℂ H₁ - projection V₁ := by
-    show V₁ᗮ.starProjection = ContinuousLinearMap.id ℂ H₁ - V₁.starProjection
-    rw [Submodule.starProjection_orthogonal' V₁]
-    rfl
-  have hperp₂ : projection V₂ᗮ =
-      ContinuousLinearMap.id ℂ H₂ - projection V₂ := by
-    show V₂ᗮ.starProjection = ContinuousLinearMap.id ℂ H₂ - V₂.starProjection
-    rw [Submodule.starProjection_orthogonal' V₂]
-    rfl
-  have h₁ : IsCompactOperator (projection U₁ ∘L projection V₁ᗮ ∘L projection U₁) := by
-    rwa [hperp₁]
-  have h₂ : IsCompactOperator (projection U₂ ∘L projection V₂ᗮ ∘L projection U₂) := by
-    rwa [hperp₂]
-  rw [← pairOfSubspacesUnitaryEquivalent_orthogonal_right_iff U₁ V₁ U₂ V₂,
-    ← sameHalmosTrivialDimensions_orthogonal_right_iff U₁ V₁ U₂ V₂]
-  exact corollary3_1_compact_angleList_classification U₁ V₁ᗮ U₂ V₂ᗮ h₁ h₂
+          (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂ᗮ) :=
+  corollary3_1_compact_defectBlock_angleList_classification U₁ V₁ U₂ V₂ hcompact₁ hcompact₂
+
 
 end Classification
 
@@ -2658,7 +2724,7 @@ theorem corollary3_1_prescribedAngleSequence_classification (θ : ℕ → ℝ)
         (angleSequenceDatum ℂ θ).targetSubspace U₂ V₂ ∧
       compactAngleEigenvalueList (genericCosineBlock U₂ V₂ᗮ) =
         fun n => Real.sin (θ n) ^ 2 := by
-  rw [corollary3_1_compact_defectBlock_angleList_classification _ _ U₂ V₂
+  rw [corollary3_1_compact_defectBlock_angleList_classification_complex _ _ U₂ V₂
       (isCompactOperator_angleSequenceDefectBlock hlim) hcompact₂,
     compactAngleEigenvalueList_genericCosineBlock_angleSequenceDatum ℂ θ hθ0 hθ2 hanti]
   exact and_congr_right fun _ => eq_comm
@@ -2742,6 +2808,67 @@ theorem corollary3_1_compact_angleList_classification_real
         compactAngleEigenvalueList
           (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂) :=
   corollary3_1_compact_angleList_classification U₁ V₁ U₂ V₂ hcompact₁ hcompact₂
+
+/-- **Davis--Kahan 1970, Corollary 3.1 with the printed hypothesis, over a real Hilbert
+space.**
+
+The `𝕜 = ℝ` instance of `corollary3_1_compact_defectBlock_angleList_classification`,
+grounded on it by `:=`, with no added hypothesis: the compactness is of the *defect* block
+`P (I - Q) P`, as printed, and the classifying list is the eigenvalue list of the
+corresponding sine-square angle operator.
+
+The reconstruction functional calculus that the generic form carries is synthesized here at
+`ℝ`, not assumed.  As over `ℂ`, the `PQP` versus `P (I - Q) P` question recorded on this
+source row is untouched: this is the printed object on both sides. -/
+theorem corollary3_1_compact_defectBlock_angleList_classification_real
+    (hcompact₁ : IsCompactOperator
+      (projection U₁ ∘L
+        (ContinuousLinearMap.id ℝ H₁ - projection V₁) ∘L projection U₁))
+    (hcompact₂ : IsCompactOperator
+      (projection U₂ ∘L
+        (ContinuousLinearMap.id ℝ H₂ - projection V₂) ∘L projection U₂)) :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
+      SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
+      compactAngleEigenvalueList
+          (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁ᗮ) =
+        compactAngleEigenvalueList
+          (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂ᗮ) :=
+  corollary3_1_compact_defectBlock_angleList_classification U₁ V₁ U₂ V₂ hcompact₁ hcompact₂
+
+open MathAhead.HiddenFoundations in
+/-- **Davis--Kahan 1970, Corollary 3.1: the realization sentence composed with the
+classification sentence, over a real Hilbert space.**
+
+The `𝕜 = ℝ` instance of `corollary3_1_prescribedAngleSequence_classification`, assembled
+from the same two halves: the realization `corollary3_1_realization` is already
+`RCLike`-generic, and the classification half is now
+`corollary3_1_compact_defectBlock_angleList_classification_real`.
+
+Both hypotheses and both conclusions are on the *defect* block `P (1 - Q) P`, as printed.
+The strict inequalities `0 < θₙ < π/2` are the same **recorded narrowing** of the printed
+sequence bound `π/2 ≥ θ₁ ≥ θ₂ ≥ ⋯ → 0` that the complex form carries, and for the same
+reason: strictness is exactly what makes the four elementary Halmos summands vanish, so
+that the generic invariant and the ambient list coincide.  The angle-`0` and angle-`π/2`
+data are not lost — they are the elementary summands, carried by
+`SameHalmosTrivialDimensions`. -/
+theorem corollary3_1_prescribedAngleSequence_classification_real (θ : ℕ → ℝ)
+    (hθ0 : ∀ n, 0 < θ n) (hθ2 : ∀ n, θ n < Real.pi / 2) (hanti : Antitone θ)
+    (hlim : Filter.Tendsto θ Filter.atTop (nhds 0))
+    (hcompact₂ : IsCompactOperator
+      (U₂.starProjection ∘L
+        (ContinuousLinearMap.id ℝ H₂ - V₂.starProjection) ∘L U₂.starProjection)) :
+    PairOfSubspacesUnitaryEquivalent
+        (sourceSubspace ℝ (AngleSequenceSpace ℝ) (AngleSequenceSpace ℝ))
+        (angleSequenceDatum ℝ θ).targetSubspace U₂ V₂ ↔
+      SameHalmosTrivialDimensions
+        (sourceSubspace ℝ (AngleSequenceSpace ℝ) (AngleSequenceSpace ℝ))
+        (angleSequenceDatum ℝ θ).targetSubspace U₂ V₂ ∧
+      compactAngleEigenvalueList (genericCosineBlock U₂ V₂ᗮ) =
+        fun n => Real.sin (θ n) ^ 2 := by
+  rw [corollary3_1_compact_defectBlock_angleList_classification_real _ _ U₂ V₂
+      (isCompactOperator_angleSequenceDefectBlock hlim) hcompact₂,
+    compactAngleEigenvalueList_genericCosineBlock_angleSequenceDatum ℝ θ hθ0 hθ2 hanti]
+  exact and_congr_right fun _ => eq_comm
 
 /-! ### Proposition 3.2 over a real Hilbert space
 

@@ -209,6 +209,8 @@ alias complex_directRotation_iff_positiveDiagonalBlocks :=
   DavisKahan.Experimental.eq_spectraDirectRotation_iff_diagonalBlocks_pos
 alias real_directRotation_of_positiveDiagonalBlocks :=
   DavisKahan.Experimental.directRotationR_unique_of_diagonalBlocks_pos
+alias real_directRotation_iff_positiveDiagonalBlocks :=
+  DavisKahan.Experimental.eq_directRotationR_iff_diagonalBlocks_pos
 
 /-! ### Section 3 over a **real** Hilbert space of arbitrary dimension
 
