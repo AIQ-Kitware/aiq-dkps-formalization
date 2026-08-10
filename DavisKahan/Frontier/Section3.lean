@@ -2431,6 +2431,96 @@ theorem theorem3_1_realization (d : HalmosAngleDatum 𝕜 E F) :
     d.halmosExteriorPart_eq, d.halmosSourceDefect_eq, d.halmosTargetDefect_eq,
     d.nonempty_halmosSourceDefect_equiv_targetDefect⟩
 
+section OfAngles
+
+variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
+  [Algebra ℝ (F →L[𝕜] F)] [IsScalarTower ℝ 𝕜 (F →L[𝕜] F)]
+  [ContinuousFunctionalCalculus ℝ (F →L[𝕜] F) IsSelfAdjoint]
+
+/-- **Davis--Kahan 1970, Theorem 3.1, sentence (ii), in the printed shape: stated
+from the angle operators rather than from a packaged datum.**
+
+`theorem3_1_realization` consumes a `HalmosAngleDatum`, which carries
+`cos Θ₀, sin Θ₀, cos Θ₁, sin Θ₁` and the intertwiner as five independent fields.
+The paper does not.  It says "given such `Θⱼ` acting on spaces `Hⱼ`", where
+"such" refers to the theorem's own sentence "these are arbitrary Hermitian
+operators satisfying the following conditions: `0 ≤ Θⱼ ≤ π/2`; ... and the
+spectral multiplicity functions of the `Θⱼ` are the same except for a possible
+difference in the multiplicity of `{0}`", and then extracts from that last
+condition "some isometry `J₀` of `closure (ran Θ₀)` onto `closure (ran Θ₁)` such
+that `J₀ Θ₀ J₀⁻¹` agrees on its domain with `Θ₁`".  So the printed data are two
+Hermitian operators and one intertwining partial isometry — and that is this
+statement's hypothesis list.  The datum is built inside the proof by
+`MathAhead.HiddenFoundations.HalmosAngleDatum.ofIntertwinedAngles`, and each
+`cos Θⱼ`, `sin Θⱼ` in the conclusion is the continuous functional calculus of
+`Θⱼ` rather than an opaque field, so the seven conjuncts of
+`theorem3_1_realization` are read here directly off `Θ₀`, `Θ₁` and `J`.
+
+**The two partial-isometry hypotheses are the paper's, not an artifact.**
+`hisom` and `hcoisom` say that `J` is isometric on `ran sin Θ₀` and co-isometric
+onto `ran sin Θ₁`; that is the content of the printed `J₀`, and it is a
+multiplicity statement, invisible to a functional calculus of one operator at a
+time.  Everything else the datum needs is derived.
+
+**On the spectral confinement.**  `_hspec₀` and `_hspec₁` are the printed
+`0 ≤ Θⱼ ≤ π/2`.  They are taken as hypotheses here and are deliberately unused in
+the proof, hence the underscores.  They belong here rather than on the
+constructor: `HalmosAngleDatum` records no nonnegativity, and none of the ten
+fields `ofIntertwinedAngles` derives needs one — `cos² + sin² = 1` and
+`J f(Θ₀) = f(Θ₁) J` hold over all of `ℝ` — so assuming confinement there would
+narrow the constructor for nothing.  What confinement buys is that the statement
+*reads* as the printed sentence: on `[0, π/2]` one has `sin t = 0 ↔ t = 0` and
+`cos t = 0 ↔ t = π/2`, so conjuncts 3--4 exhibit the two angle-`0` spaces and
+conjuncts 5--6 the two angle-`π/2` spaces, which is what Davis and Kahan mean by
+calling the `Θⱼ` angle operators.  Dropping the two hypotheses would leave the
+same theorem with the same proof and a weaker reading; keeping them costs
+nothing, so they are kept.
+
+`RCLike`-generic.  The real case is therefore an instantiation and not a second
+theorem: `theorem3_1_realization_ofAngles_real`. -/
+theorem theorem3_1_realization_ofAngles
+    {Θ₀ : E →L[𝕜] E} {Θ₁ : F →L[𝕜] F}
+    (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)
+    (_hspec₀ : spectrum ℝ Θ₀ ⊆ Set.Icc 0 (Real.pi / 2))
+    (_hspec₁ : spectrum ℝ Θ₁ ⊆ Set.Icc 0 (Real.pi / 2))
+    (J : E →L[𝕜] F) (hJ : J ∘L Θ₀ = Θ₁ ∘L J)
+    (hisom : ContinuousLinearMap.adjoint J ∘L J ∘L cfc Real.sin Θ₀ = cfc Real.sin Θ₀)
+    (hcoisom : J ∘L ContinuousLinearMap.adjoint J ∘L cfc Real.sin Θ₁ = cfc Real.sin Θ₁) :
+    (∀ x : E, (sourceSubspace 𝕜 E F).starProjection
+        ((HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom
+            hcoisom).targetSubspace.starProjection (modelInl 𝕜 E F x)) =
+          modelInl 𝕜 E F (cfc Real.cos Θ₀ (cfc Real.cos Θ₀ x))) ∧
+      (∀ y : F, (sourceSubspace 𝕜 E F)ᗮ.starProjection
+        (((HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom
+            hcoisom).targetSubspace)ᗮ.starProjection (modelInr 𝕜 E F y)) =
+          modelInr 𝕜 E F (cfc Real.cos Θ₁ (cfc Real.cos Θ₁ y))) ∧
+      halmosCommonPart (sourceSubspace 𝕜 E F)
+          (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+        Submodule.map (modelInl 𝕜 E F : E →ₗ[𝕜] WithLp 2 (E × F))
+          (LinearMap.ker ((cfc Real.sin Θ₀ : E →L[𝕜] E) : E →ₗ[𝕜] E)) ∧
+      halmosExteriorPart (sourceSubspace 𝕜 E F)
+          (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+        Submodule.map (modelInr 𝕜 E F : F →ₗ[𝕜] WithLp 2 (E × F))
+          (LinearMap.ker ((cfc Real.sin Θ₁ : F →L[𝕜] F) : F →ₗ[𝕜] F)) ∧
+      halmosSourceDefect (sourceSubspace 𝕜 E F)
+          (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+        Submodule.map (modelInl 𝕜 E F : E →ₗ[𝕜] WithLp 2 (E × F))
+          (LinearMap.ker ((cfc Real.cos Θ₀ : E →L[𝕜] E) : E →ₗ[𝕜] E)) ∧
+      halmosTargetDefect (sourceSubspace 𝕜 E F)
+          (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+        Submodule.map (modelInr 𝕜 E F : F →ₗ[𝕜] WithLp 2 (E × F))
+          (LinearMap.ker ((cfc Real.cos Θ₁ : F →L[𝕜] F) : F →ₗ[𝕜] F)) ∧
+      Nonempty (↥(halmosSourceDefect (sourceSubspace 𝕜 E F)
+          (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom
+            hcoisom).targetSubspace) ≃ₗᵢ[𝕜]
+        ↥(halmosTargetDefect (sourceSubspace 𝕜 E F)
+          (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom
+            hcoisom).targetSubspace)) :=
+  theorem3_1_realization (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom)
+
+end OfAngles
+
 /-- **The multiplicity at angle `0` is genuinely unconstrained.**
 
 The all-`0` datum over an arbitrary pair `(E, F)` of Hilbert spaces
@@ -2763,6 +2853,41 @@ theorem twoProjection_operator_classification_real :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosOperatorInvariant U₁ V₁ U₂ V₂ :=
   twoProjection_operator_classification U₁ V₁ U₂ V₂
+
+/-! ### Theorem 3.1, sentence (ii), over a real Hilbert space
+
+`theorem3_1_realization_ofAngles` is `RCLike`-generic, so its real form is an
+instantiation and not a theorem.  It is recorded as an `example` rather than by
+name deliberately: it adds no declaration, and it fails loudly if the `𝕜 = ℝ`
+hypothesis block ever stops being inhabited.  That block is the only thing that
+could have made the real case cost something — the wrapper needs
+`ContinuousFunctionalCalculus ℝ (Hⱼ →L[ℝ] Hⱼ) IsSelfAdjoint` on *both* spaces to
+form `cos Θⱼ` and `sin Θⱼ`, and instance search supplies it from
+`ContinuousLinearMap.instContinuousFunctionalCalculusRealIsSelfAdjoint`, in
+unrestricted dimension.  Two of the seven conjuncts are read off below: the
+angle-`π/2` space on the `P`-side, and the isometry between the two crossed
+defects that forces the two `π/2` multiplicities to agree. -/
+
+open MathAhead.HiddenFoundations in
+example {Θ₀ : H₁ →L[ℝ] H₁} {Θ₁ : H₂ →L[ℝ] H₂}
+    (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)
+    (hspec₀ : spectrum ℝ Θ₀ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hspec₁ : spectrum ℝ Θ₁ ⊆ Set.Icc 0 (Real.pi / 2))
+    (J : H₁ →L[ℝ] H₂) (hJ : J ∘L Θ₀ = Θ₁ ∘L J)
+    (hisom : ContinuousLinearMap.adjoint J ∘L J ∘L cfc Real.sin Θ₀ = cfc Real.sin Θ₀)
+    (hcoisom : J ∘L ContinuousLinearMap.adjoint J ∘L cfc Real.sin Θ₁ = cfc Real.sin Θ₁) :
+    halmosSourceDefect (sourceSubspace ℝ H₁ H₂)
+        (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+      Submodule.map (modelInl ℝ H₁ H₂ : H₁ →ₗ[ℝ] WithLp 2 (H₁ × H₂))
+        (LinearMap.ker ((cfc Real.cos Θ₀ : H₁ →L[ℝ] H₁) : H₁ →ₗ[ℝ] H₁)) ∧
+    Nonempty (↥(halmosSourceDefect (sourceSubspace ℝ H₁ H₂)
+        (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom
+          hcoisom).targetSubspace) ≃ₗᵢ[ℝ]
+      ↥(halmosTargetDefect (sourceSubspace ℝ H₁ H₂)
+        (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom
+          hcoisom).targetSubspace)) :=
+  ⟨(theorem3_1_realization_ofAngles hΘ₀ hΘ₁ hspec₀ hspec₁ J hJ hisom hcoisom).2.2.2.2.1,
+    (theorem3_1_realization_ofAngles hΘ₀ hΘ₁ hspec₀ hspec₁ J hJ hisom hcoisom).2.2.2.2.2.2⟩
 
 /-- **Davis--Kahan 1970, Corollary 3.1, over a real Hilbert space.**
 

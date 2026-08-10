@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.FormMethod.BeamDoubleTangent
 import DavisKahan.SpectralTheory.FormMethod.BeamEigenbasis
+import DavisKahan.SpectralTheory.FormMethod.BeamEigenvalueSequence
 import DavisKahan.SpectralTheory.FormMethod.BeamFormSpace
 import DavisKahan.SpectralTheory.FormMethod.BeamInPlaneAngle
 import DavisKahan.SpectralTheory.FormMethod.BeamSection9
