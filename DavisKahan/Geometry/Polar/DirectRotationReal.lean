@@ -634,6 +634,125 @@ theorem directRotationR_unique_of_diagonalBlocks_pos (hacute : IsUniformlyAcute 
   · refine fun z hz => inner_complexify_nonneg_of_isPositive_compression hblockUperp ?_
     rwa [complexifySubmodule_orthogonal U]
 
+/-! #### The converse: the real direct rotation *has* positive diagonal blocks
+
+The complex converse `eq_spectraDirectRotation_iff_diagonalBlocks_pos` reads the sign of the
+blocks off `spectraOperatorAbsoluteValue_nonneg`.  Over `ℝ` the block condition is
+`IsPositive` of the compression, which carries symmetry as well, so the descent is of
+*operator positivity* and not of a pointwise sign: `isPositive_of_complexify` below reflects
+both halves, and the compression step is then elementary. -/
+
+/-- **Operator positivity descends through the complexification.**
+
+Complexification reflects both halves of `IsPositive` separately: self-adjointness by
+`complexify_isSelfAdjoint_iff`, and the sign by evaluating the complexified quadratic form
+on the real copy.  This is the exact converse of
+`inner_complexify_nonneg_of_isPositive_compression`, which pushes a *compressed* form the
+other way. -/
+theorem isPositive_of_complexify {A : E →L[ℝ] E}
+    (h : (complexify A).IsPositive) : A.IsPositive := by
+  refine (ContinuousLinearMap.isPositive_iff' A).mpr ⟨?_, fun x => ?_⟩
+  · exact (complexify_isSelfAdjoint_iff A).mp h.isSelfAdjoint
+  · rw [← re_inner_complexify_ofReal A x]
+    simpa only [RCLike.re_eq_complex_re] using h.re_inner_nonneg_left (ofReal x)
+
+omit [CompleteSpace E] in
+/-- **The compression of a positive operator to a closed subspace is positive.**
+
+Symmetry survives because the projection is symmetric, and the sign because the compressed
+quadratic form is the original one evaluated at the projected vector. -/
+private theorem isPositive_starProjection_compression {A : E →L[ℝ] E}
+    (hA : A.IsPositive) (W : Submodule ℝ E) [W.HasOrthogonalProjection] :
+    (W.starProjection * A * W.starProjection).IsPositive := by
+  refine (ContinuousLinearMap.isPositive_iff _).mpr ⟨fun x y => ?_, fun x => ?_⟩
+  · show ⟪W.starProjection (A (W.starProjection x)), y⟫_ℝ =
+      ⟪x, W.starProjection (A (W.starProjection y))⟫_ℝ
+    calc ⟪W.starProjection (A (W.starProjection x)), y⟫_ℝ
+        = ⟪A (W.starProjection x), W.starProjection y⟫_ℝ :=
+          Submodule.inner_starProjection_left_eq_right W _ _
+      _ = ⟪W.starProjection x, A (W.starProjection y)⟫_ℝ :=
+          hA.inner_left_eq_inner_right _ _
+      _ = ⟪x, W.starProjection (A (W.starProjection y))⟫_ℝ :=
+          Submodule.inner_starProjection_left_eq_right W _ _
+  · show 0 ≤ ⟪W.starProjection (A (W.starProjection x)), x⟫_ℝ
+    rw [Submodule.inner_starProjection_left_eq_right W]
+    exact hA.inner_nonneg_left _
+
+/-- **The real Halmos cosine `|S|` is a positive operator.**
+
+Descended from `spectraOperatorAbsoluteValue_nonneg` on the complexification. -/
+theorem isPositive_canonicalAbsoluteValueR :
+    (canonicalAbsoluteValueR U V).IsPositive := by
+  refine isPositive_of_complexify ?_
+  rw [complexify_canonicalAbsoluteValueR]
+  exact (ContinuousLinearMap.nonneg_iff_isPositive _).mp
+    (spectraOperatorAbsoluteValue_nonneg _)
+
+/-- Rewriting a diagonal block of the real direct rotation as a compression of the Halmos
+cosine.  Multiplying `P A P = |S| P` on the left by the idempotent `P` replaces the loose
+right factor by a two-sided compression. -/
+private theorem starProjection_compression_eq_of_block {A : E →L[ℝ] E} {W : Submodule ℝ E}
+    [W.HasOrthogonalProjection] (h : W.starProjection * A * W.starProjection =
+      canonicalAbsoluteValueR U V * W.starProjection) :
+    W.starProjection * A * W.starProjection =
+      W.starProjection * canonicalAbsoluteValueR U V * W.starProjection := by
+  have hPP : (W.starProjection : E →L[ℝ] E) * W.starProjection = W.starProjection :=
+    W.isIdempotentElem_starProjection
+  calc W.starProjection * A * W.starProjection
+      = W.starProjection * (W.starProjection * A * W.starProjection) := by
+        rw [← mul_assoc, ← mul_assoc, hPP]
+    _ = W.starProjection * (canonicalAbsoluteValueR U V * W.starProjection) := by rw [h]
+    _ = W.starProjection * canonicalAbsoluteValueR U V * W.starProjection := by
+        rw [mul_assoc]
+
+/-- **The source diagonal block of the real direct rotation is a positive operator.**
+
+Property (i) of Definition 3.1 for the source block, over `ℝ`, in the `IsPositive` form the
+printed third clause needs. -/
+theorem isPositive_projection_mul_directRotationR_mul_projection
+    (hacute : IsUniformlyAcute U V) :
+    (U.starProjection * directRotationR U V hacute * U.starProjection).IsPositive := by
+  rw [starProjection_compression_eq_of_block U V
+    (projection_mul_directRotationR_mul_projection U V hacute)]
+  exact isPositive_starProjection_compression (isPositive_canonicalAbsoluteValueR U V) U
+
+/-- **The complementary diagonal block of the real direct rotation is a positive
+operator.** -/
+theorem isPositive_complementaryProjection_mul_directRotationR_mul_complementaryProjection
+    (hacute : IsUniformlyAcute U V) :
+    (Uᗮ.starProjection * directRotationR U V hacute * Uᗮ.starProjection).IsPositive := by
+  rw [starProjection_compression_eq_of_block U V
+    (complementaryProjection_mul_directRotationR_mul_complementaryProjection U V hacute)]
+  exact isPositive_starProjection_compression (isPositive_canonicalAbsoluteValueR U V) Uᗮ
+
+/-- **Davis--Kahan 1970, Proposition 3.1, third clause as a biconditional, over `ℝ`.**
+
+`W` is the real direct rotation exactly when it is orthogonal, intertwines the two
+orthogonal projections, and has positive diagonal blocks.  The square identity (3.8) is
+neither assumed nor listed: it is a consequence.  Contrast
+`eq_directRotationR_iff_diagonalBlocks_nonneg`, which lists (3.8) among the conditions and
+weakens the blocks to a pointwise sign; that is also correct, but it is not the printed
+clause, which is by "property (i)" alone.
+
+Over `ℝ` the block condition must be `IsPositive` of the compression rather than a
+pointwise sign: see the section note above for the `ℝ⁴` rotation that separates them. -/
+theorem eq_directRotationR_iff_diagonalBlocks_pos (hacute : IsUniformlyAcute U V)
+    (W : E →L[ℝ] E) :
+    W = directRotationR U V hacute ↔
+      W ∈ unitary (E →L[ℝ] E) ∧
+        W * U.starProjection = V.starProjection * W ∧
+        (U.starProjection * W * U.starProjection).IsPositive ∧
+        (Uᗮ.starProjection * W * Uᗮ.starProjection).IsPositive := by
+  constructor
+  · rintro rfl
+    exact ⟨directRotationR_mem_unitary U V hacute, directRotationR_intertwines U V hacute,
+      isPositive_projection_mul_directRotationR_mul_projection U V hacute,
+      isPositive_complementaryProjection_mul_directRotationR_mul_complementaryProjection
+        U V hacute⟩
+  · rintro ⟨hWunit, hint, hblockU, hblockUperp⟩
+    exact directRotationR_unique_of_diagonalBlocks_pos U V hacute W hWunit hint
+      hblockU hblockUperp
+
 end PrintedThirdClause
 
 /-! ### Corollary 3.2: reversal symmetry -/
