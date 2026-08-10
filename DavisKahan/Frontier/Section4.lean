@@ -209,6 +209,29 @@ theorem proposition4_2_attained_on_principal_vector
   MathAhead.Section4.displacementAngleSineSq_directRotation_eq_of_smul U V
     hacute hμ hxnorm hCx
 
+/-- **Proposition 4.2 with the printed right-hand side `∑ₖ sin² θₖ`.**
+
+`proposition4_2_basisAngleSquareSum` writes the bound as `∑ᵢ (1 - ‖C bᵢ‖²)`.
+That quantity *is* the sum of squared principal sines, and the identification is
+compiled: `sum_one_sub_sq_norm_absoluteValue_eq_sum_sq_principalSines` proves
+`∑ᵢ (1 - ‖C bᵢ‖²) = ∑ₖ sin² θₖ` for every orthonormal basis of `U`, where
+`TauCeti.principalSines U V` is the singular-value sequence of `P_{Vᗮ} P_U`.
+Writing the bound in the printed variables is **a narrowing** to a finite
+dimensional ambient space, since the principal-angle sequence is defined only
+there; the basis-free inequality itself keeps its full generality in
+`proposition4_2_basisAngleSquareSum` and its infinite-index companion. -/
+theorem proposition4_2_basisAngleSquareSum_principalSines
+    [FiniteDimensional ℂ H]
+    (b : OrthonormalBasis (Fin (Module.finrank ℂ U)) ℂ U)
+    (W : H →L[ℂ] H)
+    (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * projection U = projection V * W) :
+    ∑ i, basisAngleSquareCost W ((b i : H)) ≥
+      ∑ i : Fin (Module.finrank ℂ U),
+        TauCeti.principalSines U V (i : ℕ) ^ 2 :=
+  MathAhead.Section4.sum_displacementAngleSineSq_ge_sum_sq_principalSines U V b W
+    hWunitary hWmap
+
 /-! ### Proposition 4.3, and a third refuted transcription
 
 **This statement used to assert that every *individual* approximation number of

@@ -5,6 +5,9 @@ Authors: Jon Crall, Claude Opus 5
 -/
 
 import DavisKahan.Geometry.Polar.DirectRotationSquare
+-- the principal-angle sequence and its basis-sum dictionary, used below to
+-- identify the right-hand side with the printed `∑ₖ sin² θₖ`
+import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 
 /-!
 # Davis--Kahan 1970, Proposition 4.2: displacement-angle energy over a basis
@@ -307,6 +310,75 @@ theorem displacementAngleSineSq_directRotation_eq_of_smul
     rw [← hCform, ← hform]
     exact inner_re_symm (𝕜 := ℂ) x (spectraDirectRotation U V hacute x)
   simp only [displacementAngleSineSq, hDre, hnorm]
+
+/-! ### The printed right-hand side is the sum of squared principal sines
+
+`sum_displacementAngleSineSq_ge` bounds the competitor's energy below by
+`∑ᵢ (1 - ‖C bᵢ‖²)`.  The paper prints `∑ₖ sin² θₖ`.  The two agree, and the
+identification needs no new eigenvalue machinery: for `x ∈ U` the canonical
+modulus already has the length of the `V`-projection
+(`norm_absoluteValue_apply_eq_norm_projection`), and
+`TauCeti.sum_sq_principalSines_eq_sum_one_sub_sq_norm_projection` reads the
+principal-sine sequence off any orthonormal basis of `U`.  That lemma is the
+Frobenius identity `∑ᵢ σᵢ² = ∑ₖ ‖A bₖ‖²` applied to the cross projections
+`P_V P_U` and `P_{Vᗮ} P_U` restricted to `U`, which is legitimate because both
+vanish on `Uᗮ`. -/
+
+/-- **The right-hand side of Proposition 4.2 is `∑ₖ sin² θₖ`.**
+
+For every orthonormal basis `b` of `U`,
+
+  `∑ᵢ (1 - ‖C bᵢ‖²) = ∑ₖ sin² θₖ`,
+
+with `C` the positive Halmos cosine and `sin θₖ` the principal sines of the
+pair `(U, V)` — the singular values of `P_{Vᗮ} P_U`.  In particular the left
+side does not depend on the basis, which is what the paper's basis-free
+statement asserts.
+
+This is **a narrowing** of `sum_displacementAngleSineSq_ge`, which needs no
+finite dimensionality and accepts any finite index type: the principal-angle
+*sequence* is a finite-dimensional object here, so the printed right-hand side
+can only be written once `H` is finite dimensional and the basis is indexed by
+`Fin (finrank ℂ U)`.  The inequality itself is unchanged and remains available
+in the general form. -/
+theorem sum_one_sub_sq_norm_absoluteValue_eq_sum_sq_principalSines
+    [FiniteDimensional ℂ H]
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection]
+    (b : OrthonormalBasis (Fin (Module.finrank ℂ U)) ℂ U) :
+    ∑ i, (1 - ‖spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+        ((b i : U) : H)‖ ^ 2) =
+      ∑ i : Fin (Module.finrank ℂ U),
+        TauCeti.principalSines U V (i : ℕ) ^ 2 := by
+  rw [TauCeti.sum_sq_principalSines_eq_sum_one_sub_sq_norm_projection U V b]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [norm_absoluteValue_apply_eq_norm_projection U V (b i).2]
+  -- the two spellings of the orthogonal projector: the bounded-operator
+  -- `projection` of this package and the linear-map `TauCeti.projection`
+  rfl
+
+/-- **Davis--Kahan 1970, Proposition 4.2, with the printed right-hand side.**
+
+For every orthonormal basis of `U` and every unitary `W` carrying `U` onto `V`,
+
+  `∑ᵢ sin²(bᵢ, W bᵢ)  ≥  ∑ₖ sin² θₖ`.
+
+This is `sum_displacementAngleSineSq_ge` composed with the identification
+`sum_one_sub_sq_norm_absoluteValue_eq_sum_sq_principalSines`; none of the
+refuted transcriptions recorded in the module docstring is reintroduced.
+Writing the right-hand side in the printed variables is **a narrowing** to
+finite dimensions, for the reason given on the identification lemma. -/
+theorem sum_displacementAngleSineSq_ge_sum_sq_principalSines
+    [FiniteDimensional ℂ H]
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection]
+    (b : OrthonormalBasis (Fin (Module.finrank ℂ U)) ℂ U) (W : H →L[ℂ] H)
+    (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * projection U = projection V * W) :
+    ∑ i : Fin (Module.finrank ℂ U), TauCeti.principalSines U V (i : ℕ) ^ 2 ≤
+      ∑ i, displacementAngleSineSq W ((b i : U) : H) := by
+  rw [← sum_one_sub_sq_norm_absoluteValue_eq_sum_sq_principalSines U V b]
+  exact sum_displacementAngleSineSq_ge U V b W hWunitary hWmap
 
 end Section4
 end MathAhead
