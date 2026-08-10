@@ -79,9 +79,13 @@ theorem maximalAngle_le_pi_div_four_iff (U V : Submodule ℂ E)
   show Real.arcsin (subspaceGap U V) ≤ Real.pi / 4 ↔ _
   rw [Real.arcsin_le_iff_le_sin' hmem, Real.sin_pi_div_four]
 
-omit [CompleteSpace E] in
-/-- The strict quarter-angle condition, in the two equivalent phrasings. -/
-theorem maximalAngle_lt_pi_div_four_iff (U V : Submodule ℂ E)
+/-- The strict quarter-angle condition, in the two equivalent phrasings.
+
+Stated over an arbitrary `RCLike` field, with its own binders: the real
+Section 8 descent needs it over `ℝ`, and the identity is pure scalar
+bookkeeping about `arcsin`. -/
+theorem maximalAngle_lt_pi_div_four_iff {𝕜 : Type*} [RCLike 𝕜] {E : Type*}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     maximalAngle U V < Real.pi / 4 ↔ IsQuarterAcute U V := by
   have hmem : Real.pi / 4 ∈ Set.Ioc (-(Real.pi / 2)) (Real.pi / 2) :=

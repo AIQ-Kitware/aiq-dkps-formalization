@@ -50,12 +50,17 @@ section Ambient
 variable {X : Type u} [NormedAddCommGroup X] [InnerProductSpace ℂ X]
   [CompleteSpace X]
 
-omit [CompleteSpace X] in
 /-- **The restriction norm does not care whether the source is the subspace or
 the projection.**  `‖T ∘ ι_P‖ = ‖T P_P‖`: the projection fixes `P`, giving one
-inequality, and it is a contraction, giving the other. -/
+inequality, and it is a contraction, giving the other.
+
+Stated over an arbitrary `RCLike` field, with its own binders: the real
+Section 8 descent needs it over `ℝ`, and nothing in the argument sees the
+scalars. -/
 theorem norm_comp_subtypeL_eq_norm_comp_starProjection
-    (T : X →L[ℂ] X) (P : Submodule ℂ X) [P.HasOrthogonalProjection]
+    {𝕜 : Type*} [RCLike 𝕜] {X : Type*} [NormedAddCommGroup X]
+    [InnerProductSpace 𝕜 X]
+    (T : X →L[𝕜] X) (P : Submodule 𝕜 X) [P.HasOrthogonalProjection]
     [CompleteSpace P] :
     ‖T ∘L P.subtypeL‖ = ‖T ∘L P.starProjection‖ := by
   refine le_antisymm ?_ ?_

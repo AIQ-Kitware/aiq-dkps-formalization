@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Frontier.Section8SourceDictionary
 import DavisKahan.Frontier.Section8SourceTheorem82
+import DavisKahan.Frontier.Section8SourceTheorem82Real
 
 /-!
 # Davis--Kahan 1970 Section 8: the production source surface
@@ -167,6 +168,48 @@ alias theorem8_2_source :=
 external theorem the printed proof of the residual alternative cites. -/
 alias theorem8_2_krein_completion_source :=
   DavisKahan.Experimental.Frontier.Krein.exists_selfAdjoint_completion_eq_norm_restriction
+
+/-! ### Theorem 8.2 at the printed norm scope
+
+The printed `sin 2Theta` theorem concludes for *every* unitarily invariant norm,
+so that is the scope at which Theorem 8.2 inherits it.  The operator-norm forms
+above are the `N = operator norm` reading. -/
+
+/-- The `sin 2Theta` estimate Theorem 8.2 inherits, perturbation form
+`delta * N(sin 2Theta) <= 2 * N(H)`, for **every** norm in the paper's own class
+of unitarily invariant norms, at Theorem 8.2's own hypotheses. -/
+alias theorem8_2_sinTwoTheta_perturbation_source_paperUINorm :=
+  DavisKahan.Experimental.Frontier.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm
+
+/-! ### Theorem 8.2 over a real Hilbert space
+
+Standing assumption 1 of the source admits a real or complex Hilbert space.
+Theorem 8.2 supplies both subspaces as data, so its real form is an exact
+complexification transport and adds no hypothesis; see
+`DavisKahan/Frontier/Section8SourceTheorem82Real.lean`. -/
+
+/-- **Theorem 8.2, perturbation alternative, over a REAL Hilbert space.** -/
+alias theorem8_2_perturbationHalfGap_source_real :=
+  DavisKahan.Experimental.Frontier.Section8.theorem8_2_perturbationHalfGap_source_real
+
+/-- **Theorem 8.2, residual alternative, over a REAL Hilbert space.** -/
+alias theorem8_2_residualHalfGap_source_real :=
+  DavisKahan.Experimental.Frontier.Section8.theorem8_2_residualHalfGap_source_real
+
+/-- **Theorem 8.2's printed disjunction over a REAL Hilbert space**, with the
+dimension-free directed conclusion. -/
+alias theorem8_2_branch_source_directed_real :=
+  DavisKahan.Experimental.Frontier.Section8.theorem8_2_branch_source_directed_real
+
+/-- **Theorem 8.2's printed `Theta < pi/4` over a REAL Hilbert space**, under the
+finite form of the standing convention (1.5). -/
+alias theorem8_2_perturbationHalfGap_source_real_maximalAngle_lt :=
+  DavisKahan.Experimental.Frontier.Section8.theorem8_2_perturbationHalfGap_source_real_maximalAngle_lt
+
+/-- **Theorem 8.2's printed `Theta < pi/4` over a REAL Hilbert space, in any
+dimension**, under Section 3's standing assumption (3.5). -/
+alias theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects :=
+  DavisKahan.Experimental.Frontier.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects
 
 end Section8
 end DavisKahan1970
