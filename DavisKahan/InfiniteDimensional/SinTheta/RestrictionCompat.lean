@@ -258,7 +258,7 @@ theorem restricted_projection_sandwich_norm_le
     (T : E →L[𝕜] F) :
     ‖codRestrictTo
         (Vᗮ.starProjection ∘L T ∘L U.subtypeL) Vᗮ
-        (fun x => Vᗮ.starProjection_apply_mem _)‖ ≤ ‖T‖ := by
+        (fun _x => Vᗮ.starProjection_apply_mem _)‖ ≤ ‖T‖ := by
   -- Explicit arguments: with the operator left as a metavariable, `rw` cannot solve it from
   -- the membership proof, whose type is only definitionally the expected one.
   rw [norm_codRestrictTo_eq (Vᗮ.starProjection ∘L T ∘L U.subtypeL) Vᗮ
@@ -285,7 +285,7 @@ theorem directedGap_eq_restrictedBlock_norm
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖codRestrictTo
         (Vᗮ.starProjection ∘L U.subtypeL) Vᗮ
-        (fun x => Vᗮ.starProjection_apply_mem _)‖ = directedGap U V := by
+        (fun _x => Vᗮ.starProjection_apply_mem _)‖ = directedGap U V := by
   let T : U →L[𝕜] Vᗮ :=
     codRestrictTo (Vᗮ.starProjection ∘L U.subtypeL) Vᗮ
       (fun x => Vᗮ.starProjection_apply_mem _)
@@ -327,9 +327,9 @@ theorem directedResidual_sylvesterEquation
     {X : F →L[𝕜] E} {M : F →L[𝕜] F} :
     sylvesterOperator (restrictToOrthogonal A U hU) M
       (codRestrictTo (Uᗮ.starProjection ∘L X) Uᗮ
-        (fun x => Uᗮ.starProjection_apply_mem _)) =
+        (fun _x => Uᗮ.starProjection_apply_mem _)) =
       codRestrictTo (Uᗮ.starProjection ∘L DavisKahan.residual A X M) Uᗮ
-        (fun x => Uᗮ.starProjection_apply_mem _) := by
+        (fun _x => Uᗮ.starProjection_apply_mem _) := by
   apply ContinuousLinearMap.ext
   intro x
   apply Subtype.ext
@@ -347,17 +347,17 @@ omit [CompleteSpace E] in
 equation. -/
 theorem directedPerturbation_sylvesterEquation
     {A B : E →L[𝕜] E}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    (_hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hU : Reduces A U) (hV : Reduces B V) :
     sylvesterOperator (restrictToOrthogonal B V hV)
       (restrictToReducingSubspace A U hU)
       (codRestrictTo (Vᗮ.starProjection ∘L U.subtypeL) Vᗮ
-        (fun x => Vᗮ.starProjection_apply_mem _)) =
+        (fun _x => Vᗮ.starProjection_apply_mem _)) =
       codRestrictTo
         (Vᗮ.starProjection ∘L (B - A) ∘L U.subtypeL) Vᗮ
-        (fun x => Vᗮ.starProjection_apply_mem _) := by
+        (fun _x => Vᗮ.starProjection_apply_mem _) := by
   apply ContinuousLinearMap.ext
   intro x
   apply Subtype.ext
@@ -374,7 +374,7 @@ theorem hybridGap_restrictions
     {A B : E →L[𝕜] E}
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    (_hA : IsSelfAdjointOperator A) (_hB : IsSelfAdjointOperator B)
     (hU : Reduces A U) (hV : Reduces B V)
     {d : ℝ} (hgap : HybridGap A B U V d) :
     SpectraSeparated (restrictToOrthogonal B V hV) ⊤
@@ -398,7 +398,7 @@ theorem intervalExteriorSeparated_restrictions
     {A B : E →L[𝕜] E}
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    (_hA : IsSelfAdjointOperator A) (_hB : IsSelfAdjointOperator B)
     (hU : Reduces A U) (hV : Reduces B V)
     {left right d : ℝ}
     (hgap : IntervalExteriorSeparated A U B Vᗮ left right d) :
