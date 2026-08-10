@@ -256,9 +256,16 @@ theorem theorem8_2_sinTwoTheta_perturbation_source
 
 /-- **The `sin 2Θ` estimate at Theorem 8.2's hypotheses, residual form.**
 
-`δ ‖sin 2Θ₀‖ ≤ 2 ‖R‖` with `R` the printed residual (1.8),
+`δ ‖sin 2Θ‖ ≤ 2 ‖R‖` with `R` the printed residual (1.8),
 `R = (A + H) E₀ - E₀ A₀`.  Inherited from `sinTwoTheta_residual`; the trial
-embedding is the inclusion `E₀ = P.subtypeL`, whose range is `P`. -/
+embedding is the inclusion `E₀ = P.subtypeL`, whose range is `P`.
+
+The printed inequality is written at the *directed* `Θ₀`; the conclusion below is
+at the **ambient** `sinTwoAngleOperator Q P`.  At the operator norm that is
+legitimate and is the stronger reading, because `norm_offdiag_add_eq` makes the
+two off-diagonal blocks of the reflection defect equal there.  It is not
+legitimate at a general unitarily invariant norm, and that is the remaining open
+axis recorded at the head of section 2b below. -/
 theorem theorem8_2_sinTwoTheta_residual_source
     {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
