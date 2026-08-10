@@ -532,6 +532,7 @@ theorem exists_characteristic_of_eigen {lam : ℝ} (hlam : 0 < lam)
   have hwwbar : wfn =ᵐ[unitIocMeasure] wbar := by
     refine hcd.trans (Filter.Eventually.of_forall fun t => ?_)
     simp only [hKsm, hwbar]
+    rfl
   have hKw : secondPrimitive wfn = secondPrimitive wbar := secondPrimitive_congr_ae hwwbar
   have hKx : secondPrimitive xfn = secondPrimitive ubar := secondPrimitive_congr_ae hxubar
   have hwint : Integrable wfn unitIocMeasure := integrable_coeFn _

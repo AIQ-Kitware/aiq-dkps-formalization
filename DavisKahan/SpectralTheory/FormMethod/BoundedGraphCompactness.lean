@@ -30,14 +30,15 @@ noncomputable section
 
 universe u
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
 
 omit [CompleteSpace H] in
 /-- A graph-bounded sequence for `A + V` is graph-bounded for `A`. -/
 theorem graph_bound_original_of_addBounded
-    (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
-    (V : H →L[ℂ] H)
+    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (V : H →L[𝕜] H)
     (x : ℕ → (A.addBounded V).domain)
     {C : ℝ}
     (hC : ∀ n,
@@ -82,8 +83,8 @@ theorem graph_bound_original_of_addBounded
 omit [CompleteSpace H] in
 /-- A graph-bounded sequence for `A` is graph-bounded for `A + V`. -/
 theorem graph_bound_addBounded_of_original
-    (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
-    (V : H →L[ℂ] H)
+    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (V : H →L[𝕜] H)
     (x : ℕ → A.domain)
     {C : ℝ}
     (hC : ∀ n,
@@ -124,8 +125,8 @@ theorem graph_bound_addBounded_of_original
 omit [CompleteSpace H] in
 /-- Sequential graph compactness is preserved by a bounded perturbation. -/
 theorem graphCompact_addBounded
-    (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
-    (V : H →L[ℂ] H)
+    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (V : H →L[𝕜] H)
     (hA : SequentiallyCompactGraphEmbedding A) :
     SequentiallyCompactGraphEmbedding (A.addBounded V) := by
   intro x hx
@@ -137,8 +138,8 @@ omit [CompleteSpace H] in
 /-- Sequential graph compactness of a bounded perturbation implies graph
 compactness of the original operator. -/
 theorem graphCompact_of_addBounded
-    (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
-    (V : H →L[ℂ] H)
+    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (V : H →L[𝕜] H)
     (hAV : SequentiallyCompactGraphEmbedding (A.addBounded V)) :
     SequentiallyCompactGraphEmbedding A := by
   intro x hx
@@ -149,8 +150,8 @@ theorem graphCompact_of_addBounded
 omit [CompleteSpace H] in
 /-- Bounded perturbations preserve sequential graph compactness exactly. -/
 theorem graphCompact_addBounded_iff
-    (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
-    (V : H →L[ℂ] H) :
+    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (V : H →L[𝕜] H) :
     SequentiallyCompactGraphEmbedding (A.addBounded V) ↔
       SequentiallyCompactGraphEmbedding A := by
   constructor

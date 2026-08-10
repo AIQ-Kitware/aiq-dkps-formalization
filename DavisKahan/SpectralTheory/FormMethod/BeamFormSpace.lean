@@ -521,7 +521,7 @@ theorem beamEmbed_adjoint_injective :
 
 /-- The concrete coercive form data of the free beam: the form space carries the shifted
 bending form as its own inner product, so the represented operator is the identity. -/
-def beamCoerciveFormData : Abstract.CoerciveFormData (H := BeamL2) (V := BeamV) where
+def beamCoerciveFormData : Abstract.CoerciveFormData (𝕜 := ℂ) (H := BeamL2) (V := BeamV) where
   embed := beamEmbed
   embed_injective := beamEmbed_injective
   embed_dense := denseRange_beamEmbed
@@ -553,7 +553,7 @@ theorem beamV_re_inner_self (u : BeamV) :
 /-- The concrete shifted beam form data: bending energy is the squared norm of the second
 slot. -/
 def beamShiftedFormData :
-    Analytic.ShiftedBeamFormData (H := BeamL2) (V := BeamV) where
+    Analytic.ShiftedBeamFormData (𝕜 := ℂ) (H := BeamL2) (V := BeamV) where
   toCoerciveFormData := beamCoerciveFormData
   bendingEnergy := fun u => ‖beamSnd u‖ ^ 2
   bending_nonnegative := fun u => sq_nonneg _
