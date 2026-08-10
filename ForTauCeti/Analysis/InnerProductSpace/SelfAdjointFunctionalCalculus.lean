@@ -261,6 +261,46 @@ theorem selfAdjointFunctionalCalculus_apply_of_apply_eq_smul
     rw [hcoeff]
     simp
 
+/-- **Finite self-adjoint functional calculus preserves intertwiners.**
+
+If `J A = B J` for symmetric finite-dimensional operators, then applying the
+same real scalar function to both spectra preserves that relation.  The proof
+uses an eigenbasis of `A`: intertwining sends each basis vector either to zero
+or to a `B`-eigenvector with the same eigenvalue, and the functional calculus
+therefore acts by the same scalar on both sides.
+
+This is the finite `RCLike` counterpart of the continuous-functional-calculus
+intertwiner used by the infinite-dimensional theory. -/
+theorem selfAdjointFunctionalCalculus_intertwines
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    [FiniteDimensional 𝕜 F]
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
+    {B : F →ₗ[𝕜] F} (hB : B.IsSymmetric)
+    (J : E →ₗ[𝕜] F) (hJ : J ∘ₗ A = B ∘ₗ J) (f : ℝ → ℝ) :
+    J ∘ₗ selfAdjointFunctionalCalculus hA f =
+      selfAdjointFunctionalCalculus hB f ∘ₗ J := by
+  apply (hA.eigenvectorBasis rfl).toBasis.ext
+  intro i
+  rw [OrthonormalBasis.coe_toBasis]
+  have hx :
+      B (J (hA.eigenvectorBasis rfl i)) =
+        ((hA.eigenvalues rfl i : ℝ) : 𝕜) • J (hA.eigenvectorBasis rfl i) := by
+    calc
+      B (J (hA.eigenvectorBasis rfl i))
+          = (B ∘ₗ J) (hA.eigenvectorBasis rfl i) := rfl
+      _ = (J ∘ₗ A) (hA.eigenvectorBasis rfl i) :=
+        (LinearMap.congr_fun hJ (hA.eigenvectorBasis rfl i)).symm
+      _ = J (A (hA.eigenvectorBasis rfl i)) := rfl
+      _ = J (((hA.eigenvalues rfl i : ℝ) : 𝕜) • hA.eigenvectorBasis rfl i) := by
+          rw [hA.apply_eigenvectorBasis rfl i]
+      _ = ((hA.eigenvalues rfl i : ℝ) : 𝕜) • J (hA.eigenvectorBasis rfl i) :=
+          map_smul J _ _
+  change
+    J (selfAdjointFunctionalCalculus hA f (hA.eigenvectorBasis rfl i)) =
+      selfAdjointFunctionalCalculus hB f (J (hA.eigenvectorBasis rfl i))
+  rw [selfAdjointFunctionalCalculus_apply_eigenvectorBasis, map_smul,
+    selfAdjointFunctionalCalculus_apply_of_apply_eq_smul hB f hx]
+
 /-- The constant function `1` gives the identity operator. -/
 theorem selfAdjointFunctionalCalculus_one {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) :
     selfAdjointFunctionalCalculus hT (fun _ => (1 : ℝ)) = LinearMap.id := by
