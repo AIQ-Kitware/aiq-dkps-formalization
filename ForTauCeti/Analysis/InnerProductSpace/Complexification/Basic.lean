@@ -453,6 +453,18 @@ theorem norm_complexify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   · refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
     simpa using (complexify T).le_opNorm (ofReal x)
 
+/-- **Complexification is an isometry of operator spaces**, not merely norm-preserving on
+each operator: it is additive, so `norm_complexify` upgrades to a statement about distances.
+This is the form needed to transport a topological property *back* from the complexification,
+where `norm_complexify` alone only transports one forward. -/
+theorem isometry_complexify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F] :
+    Isometry (complexify : (E →L[ℝ] F) → RealComplexification E →L[ℂ] RealComplexification F) :=
+  AddMonoidHomClass.isometry_of_norm
+    ({ toFun := complexify, map_zero' := complexify_zero,
+        map_add' := complexify_add } : (E →L[ℝ] F) →+ _)
+    norm_complexify
+
 /-- Complexification reflects equality of bounded real operators. -/
 theorem complexify_injective [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] :
