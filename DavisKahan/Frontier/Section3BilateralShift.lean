@@ -24,8 +24,9 @@ so it satisfies (1.4), and (1.5) follows -- while `P H ∩ Q̃ H` is the line of
 sequences supported at `n = 0` and `P̃ H ∩ Q H` is zero, so (3.5) fails.  By
 Proposition 3.2 the pair therefore admits no direct rotation at all.
 
-The Hilbert space is presented as an arbitrary complex Hilbert space carrying a
-Hilbert basis indexed by `ℤ`; that is the same object as the sequence space of
+The Hilbert space is presented as an arbitrary Hilbert space over an `RCLike`
+field carrying a Hilbert basis indexed by `ℤ`; that is the same object as the
+sequence space of
 the Remark, and it is how the paper's coordinates `aₙ = ⟪bₙ, x⟫` are named
 here.  The half-spaces are cut at an arbitrary integer `k` so that the shift
 carries one to the next; the Remark is the pair `k = 0`, `k = 1`.
@@ -47,14 +48,21 @@ universe u
 
 section BilateralShift
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
 
-omit [CompleteSpace H] in
+/-! The functional-calculus hypotheses of the nonacute existence criterion,
+needed only by the final theorem, which invokes Proposition 3.2.  Typeclass
+inference discharges them at `𝕜 = ℂ` and at `𝕜 = ℝ`. -/
+variable [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
+  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint]
+
+omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- Membership in the orthogonal complement of a span is tested on the spanning
 set alone. -/
 theorem mem_orthogonal_span {S : Set H} {x : H} :
-    x ∈ (Submodule.span ℂ S)ᗮ ↔ ∀ y ∈ S, ⟪y, x⟫_ℂ = 0 := by
+    x ∈ (Submodule.span 𝕜 S)ᗮ ↔ ∀ y ∈ S, ⟪y, x⟫_𝕜 = 0 := by
   rw [Submodule.mem_orthogonal]
   constructor
   · intro h y hy
@@ -66,11 +74,11 @@ theorem mem_orthogonal_span {S : Set H} {x : H} :
     | add a c _ _ ha hc => rw [inner_add_left, ha, hc, add_zero]
     | smul c a _ ha => rw [inner_smul_left, ha, mul_zero]
 
-omit [CompleteSpace H] in
+omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- **Transport of an orthogonal projection along a surjective isometry.** -/
-theorem starProjection_of_map_eq {K L : Submodule ℂ H} [K.HasOrthogonalProjection]
-    [L.HasOrthogonalProjection] (e : H ≃ₗᵢ[ℂ] H)
-    (h : K.map (e.toLinearEquiv : H →ₗ[ℂ] H) = L) (y : H) :
+theorem starProjection_of_map_eq {K L : Submodule 𝕜 H} [K.HasOrthogonalProjection]
+    [L.HasOrthogonalProjection] (e : H ≃ₗᵢ[𝕜] H)
+    (h : K.map (e.toLinearEquiv : H →ₗ[𝕜] H) = L) (y : H) :
     L.starProjection (e y) = e (K.starProjection y) := by
   refine Submodule.eq_starProjection_of_mem_of_inner_eq_zero ?_ ?_
   · rw [← h]
@@ -78,7 +86,7 @@ theorem starProjection_of_map_eq {K L : Submodule ℂ H} [K.HasOrthogonalProject
   · intro w hw
     rw [← h] at hw
     obtain ⟨u, hu, rfl⟩ := hw
-    show ⟪e y - e (K.starProjection y), e u⟫_ℂ = 0
+    show ⟪e y - e (K.starProjection y), e u⟫_𝕜 = 0
     rw [← map_sub, e.inner_map_map]
     exact K.starProjection_inner_eq_zero y u hu
 
@@ -87,14 +95,14 @@ theorem starProjection_of_map_eq {K L : Submodule ℂ H} [K.HasOrthogonalProject
 For a Hilbert basis of `H` indexed by `ℤ` this is the closed subspace of
 vectors whose coordinates `aₙ = ⟪bₙ, x⟫` vanish for every `n < k`.  The
 Remark's `P H` is the cut at `0` and its `Q H` is the cut at `1`. -/
-noncomputable abbrev coordinateHalfSpace (b : HilbertBasis ℤ ℂ H) (k : ℤ) :
-    Submodule ℂ H :=
-  (Submodule.span ℂ (b '' {n : ℤ | n < k}))ᗮ
+noncomputable abbrev coordinateHalfSpace (b : HilbertBasis ℤ 𝕜 H) (k : ℤ) :
+    Submodule 𝕜 H :=
+  (Submodule.span 𝕜 (b '' {n : ℤ | n < k}))ᗮ
 
-omit [CompleteSpace H] in
+omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- Coordinate description of a coordinate half-space. -/
-theorem mem_coordinateHalfSpace {b : HilbertBasis ℤ ℂ H} {k : ℤ} {x : H} :
-    x ∈ coordinateHalfSpace b k ↔ ∀ n : ℤ, n < k → ⟪b n, x⟫_ℂ = 0 := by
+theorem mem_coordinateHalfSpace {b : HilbertBasis ℤ 𝕜 H} {k : ℤ} {x : H} :
+    x ∈ coordinateHalfSpace b k ↔ ∀ n : ℤ, n < k → ⟪b n, x⟫_𝕜 = 0 := by
   rw [mem_orthogonal_span]
   constructor
   · intro h n hn
@@ -102,15 +110,15 @@ theorem mem_coordinateHalfSpace {b : HilbertBasis ℤ ℂ H} {k : ℤ} {x : H} :
   · rintro h _ ⟨n, hn, rfl⟩
     exact h n hn
 
-omit [CompleteSpace H] in
+omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- The orthogonal complement of a coordinate half-space kills every coordinate
 at or above the cut. -/
 theorem inner_eq_zero_of_mem_orthogonal_coordinateHalfSpace
-    {b : HilbertBasis ℤ ℂ H} {k : ℤ} {x : H}
+    {b : HilbertBasis ℤ 𝕜 H} {k : ℤ} {x : H}
     (hx : x ∈ (coordinateHalfSpace b k)ᗮ) {n : ℤ} (hn : k ≤ n) :
-    ⟪b n, x⟫_ℂ = 0 := by
-  have hle : Submodule.span ℂ (b '' {m : ℤ | m < k}) ≤
-      (Submodule.span ℂ (b '' {m : ℤ | k ≤ m}))ᗮ := by
+    ⟪b n, x⟫_𝕜 = 0 := by
+  have hle : Submodule.span 𝕜 (b '' {m : ℤ | m < k}) ≤
+      (Submodule.span 𝕜 (b '' {m : ℤ | k ≤ m}))ᗮ := by
     rw [Submodule.span_le]
     rintro _ ⟨m, hm, rfl⟩
     refine mem_orthogonal_span.mpr ?_
@@ -123,10 +131,10 @@ theorem inner_eq_zero_of_mem_orthogonal_coordinateHalfSpace
 
 /-! ### The shift -/
 
-omit [CompleteSpace H] in
+omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- Shifting the index by one permutes a Hilbert basis, so the shifted family
 has the same range. -/
-theorem range_comp_add_one (b : HilbertBasis ℤ ℂ H) :
+theorem range_comp_add_one (b : HilbertBasis ℤ 𝕜 H) :
     Set.range (fun n : ℤ => b (n + 1)) = Set.range b := by
   ext x
   constructor
@@ -136,15 +144,17 @@ theorem range_comp_add_one (b : HilbertBasis ℤ ℂ H) :
     exact ⟨n - 1, by simp⟩
 
 /-- The Hilbert basis obtained from `b` by shifting the index by one. -/
-noncomputable def shiftedBasis (b : HilbertBasis ℤ ℂ H) : HilbertBasis ℤ ℂ H :=
+noncomputable def shiftedBasis (b : HilbertBasis ℤ 𝕜 H) : HilbertBasis ℤ 𝕜 H :=
   HilbertBasis.mk (v := fun n : ℤ => b (n + 1))
     (b.orthonormal.comp (fun n : ℤ => n + 1) fun m n h => by simpa using h)
     (by
       rw [range_comp_add_one b]
       exact b.dense_span.ge)
 
+omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
+  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- The shifted basis is the shift of the basis. -/
-theorem shiftedBasis_apply (b : HilbertBasis ℤ ℂ H) (n : ℤ) :
+theorem shiftedBasis_apply (b : HilbertBasis ℤ 𝕜 H) (n : ℤ) :
     shiftedBasis b n = b (n + 1) :=
   congrFun (HilbertBasis.coe_mk _ _) n
 
@@ -152,11 +162,13 @@ theorem shiftedBasis_apply (b : HilbertBasis ℤ ℂ H) (n : ℤ) :
 
 The unitary carrying the `n`-th basis vector to the `(n+1)`-st; in the sequence
 coordinates of the Remark this is `V (aₙ) = (bₙ)` with `bₙ = aₙ₋₁`. -/
-noncomputable def bilateralShift (b : HilbertBasis ℤ ℂ H) : H ≃ₗᵢ[ℂ] H :=
+noncomputable def bilateralShift (b : HilbertBasis ℤ 𝕜 H) : H ≃ₗᵢ[𝕜] H :=
   b.repr.trans (shiftedBasis b).repr.symm
 
+omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
+  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- The bilateral shift moves each basis vector one step up. -/
-theorem bilateralShift_apply_basis (b : HilbertBasis ℤ ℂ H) (n : ℤ) :
+theorem bilateralShift_apply_basis (b : HilbertBasis ℤ 𝕜 H) (n : ℤ) :
     bilateralShift b (b n) = b (n + 1) := by
   classical
   have h : (shiftedBasis b).repr.symm (b.repr (b n)) = shiftedBasis b n := by
@@ -165,18 +177,22 @@ theorem bilateralShift_apply_basis (b : HilbertBasis ℤ ℂ H) (n : ℤ) :
   rw [bilateralShift, LinearIsometryEquiv.trans_apply, h, shiftedBasis_apply]
 
 /-- The bilateral shift as a bounded operator. -/
-noncomputable def bilateralShiftL (b : HilbertBasis ℤ ℂ H) : H →L[ℂ] H :=
-  (bilateralShift b : H →L[ℂ] H)
+noncomputable def bilateralShiftL (b : HilbertBasis ℤ 𝕜 H) : H →L[𝕜] H :=
+  (bilateralShift b : H →L[𝕜] H)
 
+omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
+  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- The bilateral shift is unitary. -/
-theorem bilateralShiftL_mem_unitary (b : HilbertBasis ℤ ℂ H) :
-    bilateralShiftL b ∈ unitary (H →L[ℂ] H) :=
+theorem bilateralShiftL_mem_unitary (b : HilbertBasis ℤ 𝕜 H) :
+    bilateralShiftL b ∈ unitary (H →L[𝕜] H) :=
   (Unitary.linearIsometryEquiv.symm (bilateralShift b)).property
 
+omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
+  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- **The bilateral shift carries each coordinate half-space onto the next.** -/
-theorem map_coordinateHalfSpace (b : HilbertBasis ℤ ℂ H) (k : ℤ) :
+theorem map_coordinateHalfSpace (b : HilbertBasis ℤ 𝕜 H) (k : ℤ) :
     (coordinateHalfSpace b k).map
-        ((bilateralShift b).toLinearEquiv : H →ₗ[ℂ] H) =
+        ((bilateralShift b).toLinearEquiv : H →ₗ[𝕜] H) =
       coordinateHalfSpace b (k + 1) := by
   rw [Submodule.map_orthogonal_equiv, Submodule.map_span]
   congr 2
@@ -194,11 +210,13 @@ theorem map_coordinateHalfSpace (b : HilbertBasis ℤ ℂ H) (k : ℤ) :
     · show (bilateralShift b) (b (n - 1)) = b n
       rw [bilateralShift_apply_basis, sub_add_cancel]
 
+omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
+  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- **The bilateral shift satisfies (1.4) for the shift pair.**
 
 `V P = Q V`, with `P` the projector onto the cut at `k` and `Q` the projector
 onto the cut at `k+1`. -/
-theorem bilateralShiftL_intertwines (b : HilbertBasis ℤ ℂ H) (k : ℤ) :
+theorem bilateralShiftL_intertwines (b : HilbertBasis ℤ 𝕜 H) (k : ℤ) :
     bilateralShiftL b * projection (coordinateHalfSpace b k) =
       projection (coordinateHalfSpace b (k + 1)) * bilateralShiftL b := by
   ext y
@@ -206,12 +224,14 @@ theorem bilateralShiftL_intertwines (b : HilbertBasis ℤ ℂ H) (k : ℤ) :
   exact (starProjection_of_map_eq (bilateralShift b)
     (map_coordinateHalfSpace b k) y).symm
 
+omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
+  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- **(1.5) for the shift pair**, in the cardinal-free form used throughout this
 development: the two subspaces are isometrically equivalent, and so are their
 orthogonal complements. -/
-theorem coordinateHalfSpace_dimensions_agree (b : HilbertBasis ℤ ℂ H) (k : ℤ) :
-    Nonempty (coordinateHalfSpace b k ≃ₗᵢ[ℂ] coordinateHalfSpace b (k + 1)) ∧
-      Nonempty ((coordinateHalfSpace b k)ᗮ ≃ₗᵢ[ℂ]
+theorem coordinateHalfSpace_dimensions_agree (b : HilbertBasis ℤ 𝕜 H) (k : ℤ) :
+    Nonempty (coordinateHalfSpace b k ≃ₗᵢ[𝕜] coordinateHalfSpace b (k + 1)) ∧
+      Nonempty ((coordinateHalfSpace b k)ᗮ ≃ₗᵢ[𝕜]
         (coordinateHalfSpace b (k + 1))ᗮ) := by
   constructor
   · exact ⟨((bilateralShift b).submoduleMap (coordinateHalfSpace b k)).trans
@@ -225,14 +245,14 @@ theorem coordinateHalfSpace_dimensions_agree (b : HilbertBasis ℤ ℂ H) (k : �
 
 /-! ### The two crossed defects of the shift pair -/
 
-omit [CompleteSpace H] in
+omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- **The source crossed intersection of the shift pair is a line.**
 
 `P H ∩ Q̃ H` is exactly the set of sequences supported at `n = 0`, which is the
 Remark's computation that `P Q̃` is the projector onto that line. -/
-theorem halmosSourceDefect_coordinateHalfSpace (b : HilbertBasis ℤ ℂ H) :
+theorem halmosSourceDefect_coordinateHalfSpace (b : HilbertBasis ℤ 𝕜 H) :
     halmosSourceDefect (coordinateHalfSpace b 0) (coordinateHalfSpace b 1) =
-      Submodule.span ℂ {b 0} := by
+      Submodule.span 𝕜 {b 0} := by
   apply le_antisymm
   · rintro x ⟨hxU, hxV⟩
     have hsupp : ∀ n : ℤ, n ≠ 0 → b.repr x n • b n = 0 := by
@@ -252,11 +272,11 @@ theorem halmosSourceDefect_coordinateHalfSpace (b : HilbertBasis ℤ ℂ H) :
     exact Submodule.le_orthogonal_orthogonal _
       (Submodule.subset_span ⟨0, by norm_num, rfl⟩)
 
-omit [CompleteSpace H] in
+omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- **The target crossed intersection of the shift pair is zero.**
 
 `P̃ H ∩ Q H` is zero, which is the Remark's computation that `P̃ Q = 0`. -/
-theorem halmosTargetDefect_coordinateHalfSpace (b : HilbertBasis ℤ ℂ H) :
+theorem halmosTargetDefect_coordinateHalfSpace (b : HilbertBasis ℤ 𝕜 H) :
     halmosTargetDefect (coordinateHalfSpace b 0) (coordinateHalfSpace b 1) =
       ⊥ := by
   refine (Submodule.eq_bot_iff _).mpr ?_
@@ -272,12 +292,14 @@ theorem halmosTargetDefect_coordinateHalfSpace (b : HilbertBasis ℤ ℂ H) :
     simpa using hall n
   exact b.repr.injective (hrepr.trans (map_zero b.repr).symm)
 
+omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
+  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- **(3.5) fails for the shift pair.**
 
 The two crossed intersections cannot be isometrically identified: one is a line
 and the other is zero. -/
 theorem not_crossedDefectsEquivalent_coordinateHalfSpace
-    (b : HilbertBasis ℤ ℂ H) :
+    (b : HilbertBasis ℤ 𝕜 H) :
     ¬ CrossedDefectsEquivalent (coordinateHalfSpace b 0)
         (coordinateHalfSpace b 1) := by
   rintro ⟨J⟩
@@ -304,18 +326,18 @@ pair admits no direct rotation whatever.
 
 This is the source's own separation of (1.5) from (3.5). -/
 theorem remark3_2_bilateralShift_separates_dimensionHypotheses
-    (b : HilbertBasis ℤ ℂ H) :
-    (bilateralShiftL b ∈ unitary (H →L[ℂ] H) ∧
+    (b : HilbertBasis ℤ 𝕜 H) :
+    (bilateralShiftL b ∈ unitary (H →L[𝕜] H) ∧
         bilateralShiftL b * projection (coordinateHalfSpace b 0) =
           projection (coordinateHalfSpace b 1) * bilateralShiftL b) ∧
-      (Nonempty (coordinateHalfSpace b 0 ≃ₗᵢ[ℂ] coordinateHalfSpace b 1) ∧
-        Nonempty ((coordinateHalfSpace b 0)ᗮ ≃ₗᵢ[ℂ]
+      (Nonempty (coordinateHalfSpace b 0 ≃ₗᵢ[𝕜] coordinateHalfSpace b 1) ∧
+        Nonempty ((coordinateHalfSpace b 0)ᗮ ≃ₗᵢ[𝕜]
           (coordinateHalfSpace b 1)ᗮ)) ∧
       halmosSourceDefect (coordinateHalfSpace b 0)
           (coordinateHalfSpace b 1) ≠ ⊥ ∧
       halmosTargetDefect (coordinateHalfSpace b 0)
           (coordinateHalfSpace b 1) = ⊥ ∧
-      ¬ ∃ T : H →L[ℂ] H,
+      ¬ ∃ T : H →L[𝕜] H,
         IsPaperDirectRotation (coordinateHalfSpace b 0)
           (coordinateHalfSpace b 1) T := by
   refine ⟨⟨bilateralShiftL_mem_unitary b, ?_⟩, ?_, ?_,
@@ -336,6 +358,49 @@ theorem remark3_2_bilateralShift_separates_dimensionHypotheses
       ((proposition3_2_exists_iff_crossedDefectsEquivalent _ _).mp h)
 
 end BilateralShift
+
+/-! ## The Remark over a real Hilbert space
+
+Standing assumption 1 of Davis--Kahan 1970 admits real Hilbert spaces, and the
+Remark is a statement about `ℓ²(ℤ)` in that scope too: nothing above uses the
+complex structure, so the whole module is stated over an arbitrary `RCLike`
+field and the real form is the `𝕜 = ℝ` instance, grounded on the generic
+theorem by `:=` and carrying exactly its hypotheses.
+
+Over `ℝ` the ambient space is the two-sided real square-summable sequences,
+presented, as over `ℂ`, as any real Hilbert space carrying a `HilbertBasis ℤ ℝ`.
+-/
+
+section RealScalars
+
+variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [CompleteSpace E]
+
+/-- **Davis--Kahan 1970, the Remark after Proposition 3.2, over a real Hilbert
+space.**
+
+The `𝕜 = ℝ` instance of
+`remark3_2_bilateralShift_separates_dimensionHypotheses`: the bilateral shift
+witnesses (1.4), hence (1.5), while the crossed intersections are a line and
+zero, so (3.5) fails and the pair admits no direct rotation. -/
+theorem remark3_2_bilateralShift_separates_dimensionHypotheses_real
+    (b : HilbertBasis ℤ ℝ E) :
+    (bilateralShiftL b ∈ unitary (E →L[ℝ] E) ∧
+        bilateralShiftL b * projection (coordinateHalfSpace b 0) =
+          projection (coordinateHalfSpace b 1) * bilateralShiftL b) ∧
+      (Nonempty (coordinateHalfSpace b 0 ≃ₗᵢ[ℝ] coordinateHalfSpace b 1) ∧
+        Nonempty ((coordinateHalfSpace b 0)ᗮ ≃ₗᵢ[ℝ]
+          (coordinateHalfSpace b 1)ᗮ)) ∧
+      halmosSourceDefect (coordinateHalfSpace b 0)
+          (coordinateHalfSpace b 1) ≠ ⊥ ∧
+      halmosTargetDefect (coordinateHalfSpace b 0)
+          (coordinateHalfSpace b 1) = ⊥ ∧
+      ¬ ∃ T : E →L[ℝ] E,
+        IsPaperDirectRotation (coordinateHalfSpace b 0)
+          (coordinateHalfSpace b 1) T :=
+  remark3_2_bilateralShift_separates_dimensionHypotheses b
+
+end RealScalars
 
 end Section3
 end Frontier
