@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
 /-!
 # Conjugating the modulus by a unitary
 
-A unitary `e : E ≃ₗᵢ[ℂ] F` conjugates endomorphisms of `E` to endomorphisms of
+A unitary `e : E ≃ₗᵢ[𝕜] F` conjugates endomorphisms of `E` to endomorphisms of
 `F` by `x ↦ e x e⁻¹`, and Mathlib packages that as the `⋆`-algebra equivalence
 `LinearIsometryEquiv.conjStarAlgEquiv`.  Since `|T|` is characterized as the
 *unique nonnegative square root* of the Gram operator `T⋆ T`, and a `⋆`-algebra
@@ -41,17 +41,29 @@ namespace ContinuousLinearMap
 
 open scoped InnerProductSpace
 
+variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E F G K : Type*}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-  [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+  [NormedAddCommGroup K] [InnerProductSpace 𝕜 K] [CompleteSpace K]
+
+/-! Both results below compare a modulus on `E` with a modulus on `F`, so both
+source algebras need the continuous functional calculus.  As everywhere in this
+layer, typeclass inference discharges all six at `𝕜 = ℂ`. -/
+
+variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
+  [Algebra ℝ (F →L[𝕜] F)] [IsScalarTower ℝ 𝕜 (F →L[𝕜] F)]
+  [ContinuousFunctionalCalculus ℝ (F →L[𝕜] F) IsSelfAdjoint]
+
+attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-- **A unitary that conjugates the Gram operators conjugates the moduli.**
 
 `T` and `S` may have unrelated targets: only their source spaces are related,
 by `e`, and only through `T⋆ T` and `S⋆ S`. -/
-theorem conjStarAlgEquiv_modulus (e : E ≃ₗᵢ[ℂ] F) {T : E →L[ℂ] G} {S : F →L[ℂ] K}
+theorem conjStarAlgEquiv_modulus (e : E ≃ₗᵢ[𝕜] F) {T : E →L[𝕜] G} {S : F →L[𝕜] K}
     (h : e.conjStarAlgEquiv (T.adjoint ∘L T) = S.adjoint ∘L S) :
     e.conjStarAlgEquiv T.modulus = S.modulus := by
   refine eq_modulus_of_nonneg_of_mul_self_eq ?_ ?_
@@ -63,14 +75,14 @@ theorem conjStarAlgEquiv_modulus (e : E ≃ₗᵢ[ℂ] F) {T : E →L[ℂ] G} {S
     rw [← map_mul, modulus_mul_self, h]
 
 /-- The pointwise form of `ContinuousLinearMap.conjStarAlgEquiv_modulus`. -/
-theorem modulus_conj_apply (e : E ≃ₗᵢ[ℂ] F) {T : E →L[ℂ] G} {S : F →L[ℂ] K}
+theorem modulus_conj_apply (e : E ≃ₗᵢ[𝕜] F) {T : E →L[𝕜] G} {S : F →L[𝕜] K}
     (h : ∀ x, e ((T.adjoint ∘L T) x) = (S.adjoint ∘L S) (e x)) (x : E) :
     e (T.modulus x) = S.modulus (e x) := by
   have hconj : e.conjStarAlgEquiv (T.adjoint ∘L T) = S.adjoint ∘L S := by
     refine ContinuousLinearMap.ext fun y => ?_
     rw [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply]
     rw [h (e.symm y), LinearIsometryEquiv.apply_symm_apply]
-  have := congrArg (fun f : F →L[ℂ] F => f (e x)) (conjStarAlgEquiv_modulus e hconj)
+  have := congrArg (fun f : F →L[𝕜] F => f (e x)) (conjStarAlgEquiv_modulus e hconj)
   simpa [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply] using this
 
 end ContinuousLinearMap

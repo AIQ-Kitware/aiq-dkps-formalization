@@ -15,15 +15,7 @@ public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpo
 /-!
 # The modulus of a Hilbert-space operator
 
-**Its `RCLike` counterpart.** `TauCeti.abs` in
-`ForTauCeti/Analysis/InnerProductSpace/PolarDecomposition.lean` is the square,
-`RCLike`-generic, finite-dimensional modulus, built from the spectral square root
-rather than from the continuous functional calculus — which Mathlib registers only
-over `ℂ`. The two agree wherever both apply, by
-`TauCeti.abs_toContinuousLinearMap_eq_cfcAbs`. Neither subsumes the other: this
-one is rectangular, that one is field-generic.
-
-For a bounded operator `T : E →L[ℂ] F` between complex Hilbert spaces, its
+For a bounded operator `T : E →L[𝕜] F` between Hilbert spaces over `𝕜 : RCLike`, its
 **modulus** `|T| = (T⋆ T)^(1/2)` is the positive square root, through the
 continuous functional calculus, of the Gram operator `T⋆ T` acting on the
 *source* space `E`.
@@ -33,9 +25,34 @@ alone determines the construction, and the endomorphism case `F = E` is a
 specialization rather than a separate definition (`modulus_eq_sqrt_star_mul_self`,
 `modulus_mul_self_eq_star_mul_self`).
 
-Complex scalars are required because Mathlib registers the continuous
-functional calculus on Hilbert-space operators only over `ℂ`; the real case is
-expected to follow by complexification transfer.
+## The scalar field, and why there are typeclass hypotheses
+
+`CFC.sqrt` is a statement about the *algebra* `E →L[𝕜] E`, not about the scalar
+field of the Hilbert space, so nothing in this file is intrinsically complex.
+What *is* complex-only is the supply of instances: Mathlib derives
+`ContinuousFunctionalCalculus ℝ A IsSelfAdjoint` from
+`ContinuousFunctionalCalculus ℂ A IsStarNormal` by spectrum restriction
+(`IsSelfAdjoint.instContinuousFunctionalCalculus`), and registers
+`CStarAlgebra (E →L[ℂ] E)` only over `ℂ`. Mathlib says so itself: its
+`ContinuousLinearMap.instStarOrderedRingRCLike` is deliberately a lemma and not
+an instance, "because this takes `ContinuousFunctionalCalculus ℝ (H →L[𝕜] H)
+IsSelfAdjoint` as an argument, and for the moment we only have this for
+`𝕜 := ℂ`".
+
+This module therefore carries that instance — together with the `ℝ`-algebra
+structure on `E →L[𝕜] E`, which Mathlib's
+`Mathlib/Analysis/InnerProductSpace/StarOrder.lean` also assumes rather than
+derives — as a hypothesis. Every hypothesis is discharged automatically at
+`𝕜 = ℂ`, so the complex API is unchanged and no consumer has to supply
+anything.
+
+**Its finite-dimensional counterpart.** `TauCeti.abs` in
+`ForTauCeti/Analysis/InnerProductSpace/PolarDecomposition.lean` is the square,
+`RCLike`-generic, finite-dimensional modulus, built from the spectral square root
+rather than from the continuous functional calculus. The two agree wherever both
+apply, by `TauCeti.abs_toContinuousLinearMap_eq_cfcAbs`. Neither subsumes the
+other: this one is rectangular and infinite-dimensional, that one needs no
+functional-calculus instance.
 
 ## Main results
 
@@ -79,15 +96,50 @@ open scoped InnerProductSpace
 
 universe u v w
 
+variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type u} {F : Type v} {G : Type w}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
 
-/-- The modulus `|T| = (T⋆ T)^(1/2)` of a bounded operator between complex
-Hilbert spaces: the positive square root, through the continuous functional
+/-- The Gram operator `T⋆ T` is nonnegative.  This is the `0 ≤ ·` form of
+`ContinuousLinearMap.isPositive_adjoint_comp_self`. -/
+theorem adjoint_comp_self_nonneg (T : E →L[𝕜] F) : 0 ≤ T.adjoint ∘L T :=
+  (nonneg_iff_isPositive _).mpr (isPositive_adjoint_comp_self T)
+
+omit [CompleteSpace E] [CompleteSpace F] [CompleteSpace G] in
+/-- Two operators out of the same space with pointwise equal norms have equal
+operator norms.  Local scaffolding for the modulus norm laws. -/
+private theorem opNorm_eq_of_forall_norm_apply_eq {f : E →L[𝕜] F} {g : E →L[𝕜] G}
+    (h : ∀ x, ‖f x‖ = ‖g x‖) : ‖f‖ = ‖g‖ :=
+  le_antisymm
+    (f.opNorm_le_bound (norm_nonneg g) fun x => (h x).trans_le (g.le_opNorm x))
+    (g.opNorm_le_bound (norm_nonneg f) fun x => (h x).symm.trans_le (f.le_opNorm x))
+
+/-! ### The functional-calculus hypotheses
+
+The first two below are the scalar-action assumptions Mathlib itself makes when
+relating the Loewner order on `E →L[𝕜] E` to the continuous functional calculus
+(`Mathlib/Analysis/InnerProductSpace/StarOrder.lean`); they are found by
+typeclass inference at `𝕜 = ℝ` and at `𝕜 = ℂ` alike.  The third is the one
+genuinely field-dependent ingredient.  `StarOrderedRing` is *not* assumed: it
+follows from the three by `ContinuousLinearMap.instStarOrderedRingRCLike`, which
+Mathlib states for a general `RCLike` field and declines to register as an
+instance only because its hypothesis is unavailable outside `ℂ`.
+
+This is the same variable block `DavisKahan/InfiniteDimensional/SinTheta/General.lean`
+already uses for the square operator absolute value; keeping the two in step is
+deliberate. -/
+
+variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
+
+attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
+
+/-- The modulus `|T| = (T⋆ T)^(1/2)` of a bounded operator between Hilbert
+spaces: the positive square root, through the continuous functional
 calculus, of the Gram operator `T⋆ T` on the source space. -/
-noncomputable def modulus (T : E →L[ℂ] F) : E →L[ℂ] E :=
+noncomputable def modulus (T : E →L[𝕜] F) : E →L[𝕜] E :=
   CFC.sqrt (T.adjoint ∘L T)
 
 /-- **The modulus unfolded.**  The characteristic lemma: `|T|` is the functional
@@ -97,35 +149,30 @@ needs to rewrite through the definition should use this rather than `rw
 
 `modulus_eq_sqrt_star_mul_self` is the endomorphism specialization, in
 C⋆-algebra notation. -/
-theorem modulus_def (T : E →L[ℂ] F) : T.modulus = CFC.sqrt (T.adjoint ∘L T) := (rfl)
-
-/-- The Gram operator `T⋆ T` is nonnegative.  This is the `0 ≤ ·` form of
-`ContinuousLinearMap.isPositive_adjoint_comp_self`. -/
-theorem adjoint_comp_self_nonneg (T : E →L[ℂ] F) : 0 ≤ T.adjoint ∘L T :=
-  (nonneg_iff_isPositive _).mpr (isPositive_adjoint_comp_self T)
+theorem modulus_def (T : E →L[𝕜] F) : T.modulus = CFC.sqrt (T.adjoint ∘L T) := (rfl)
 
 /-- The modulus is nonnegative in the C⋆-order. -/
-theorem modulus_nonneg (T : E →L[ℂ] F) : 0 ≤ T.modulus :=
+theorem modulus_nonneg (T : E →L[𝕜] F) : 0 ≤ T.modulus :=
   CFC.sqrt_nonneg _
 
 /-- The modulus is self-adjoint. -/
-theorem modulus_isSelfAdjoint (T : E →L[ℂ] F) : IsSelfAdjoint T.modulus :=
+theorem modulus_isSelfAdjoint (T : E →L[𝕜] F) : IsSelfAdjoint T.modulus :=
   .of_nonneg T.modulus_nonneg
 
 /-- The modulus is self-adjoint, being a positive square root. -/
 @[simp]
-theorem adjoint_modulus (T : E →L[ℂ] F) : T.modulus.adjoint = T.modulus := by
+theorem adjoint_modulus (T : E →L[𝕜] F) : T.modulus.adjoint = T.modulus := by
   rw [← star_eq_adjoint]
   exact T.modulus_isSelfAdjoint.star_eq
 
 /-- The defining identity `|T| * |T| = T⋆ T`. -/
-theorem modulus_mul_self (T : E →L[ℂ] F) :
+theorem modulus_mul_self (T : E →L[𝕜] F) :
     T.modulus * T.modulus = T.adjoint ∘L T :=
   CFC.sqrt_mul_sqrt_self _ T.adjoint_comp_self_nonneg
 
 /-- The modulus is the *unique* nonnegative square root of the Gram
 operator. -/
-theorem eq_modulus_of_nonneg_of_mul_self_eq {T : E →L[ℂ] F} {b : E →L[ℂ] E}
+theorem eq_modulus_of_nonneg_of_mul_self_eq {T : E →L[𝕜] F} {b : E →L[𝕜] E}
     (hb : 0 ≤ b) (h : b * b = T.adjoint ∘L T) : b = T.modulus :=
   (CFC.sqrt_unique h hb).symm
 
@@ -133,14 +180,14 @@ theorem eq_modulus_of_nonneg_of_mul_self_eq {T : E →L[ℂ] F} {b : E →L[ℂ]
 `‖|T| x‖ = ‖T x‖`.  This is the computational heart of the modulus API — the
 operator-norm and composition laws below all reduce to it. -/
 @[simp]
-theorem norm_modulus_apply (T : E →L[ℂ] F) (x : E) : ‖T.modulus x‖ = ‖T x‖ := by
-  have hinner : (⟪T.modulus x, T.modulus x⟫_ℂ : ℂ) = ⟪T x, T x⟫_ℂ := by
-    calc (⟪T.modulus x, T.modulus x⟫_ℂ : ℂ)
-        = ⟪T.modulus.adjoint x, T.modulus x⟫_ℂ := by rw [adjoint_modulus]
-      _ = ⟪x, T.modulus (T.modulus x)⟫_ℂ := adjoint_inner_left _ _ _
-      _ = ⟪x, (T.modulus * T.modulus) x⟫_ℂ := (rfl)
-      _ = ⟪x, (T.adjoint ∘L T) x⟫_ℂ := by rw [modulus_mul_self]
-      _ = ⟪T x, T x⟫_ℂ := adjoint_inner_right T x (T x)
+theorem norm_modulus_apply (T : E →L[𝕜] F) (x : E) : ‖T.modulus x‖ = ‖T x‖ := by
+  have hinner : (⟪T.modulus x, T.modulus x⟫_𝕜 : 𝕜) = ⟪T x, T x⟫_𝕜 := by
+    calc (⟪T.modulus x, T.modulus x⟫_𝕜 : 𝕜)
+        = ⟪T.modulus.adjoint x, T.modulus x⟫_𝕜 := by rw [adjoint_modulus]
+      _ = ⟪x, T.modulus (T.modulus x)⟫_𝕜 := adjoint_inner_left _ _ _
+      _ = ⟪x, (T.modulus * T.modulus) x⟫_𝕜 := (rfl)
+      _ = ⟪x, (T.adjoint ∘L T) x⟫_𝕜 := by rw [modulus_mul_self]
+      _ = ⟪T x, T x⟫_𝕜 := adjoint_inner_right T x (T x)
   have hsq : ‖T.modulus x‖ ^ 2 = ‖T x‖ ^ 2 := by
     rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at hinner
     exact_mod_cast hinner
@@ -152,28 +199,19 @@ theorem norm_modulus_apply (T : E →L[ℂ] F) (x : E) : ‖T.modulus x‖ = ‖
 Immediate from `norm_modulus_apply`, but worth its own name: it is how the
 directed angle operators are shown to vanish off the source subspace. -/
 @[simp]
-theorem modulus_apply_eq_zero_iff (T : E →L[ℂ] F) (x : E) :
+theorem modulus_apply_eq_zero_iff (T : E →L[𝕜] F) (x : E) :
     T.modulus x = 0 ↔ T x = 0 := by
   rw [← norm_eq_zero, ← norm_eq_zero (a := T x), norm_modulus_apply]
 
-omit [CompleteSpace E] [CompleteSpace F] [CompleteSpace G] in
-/-- Two operators out of the same space with pointwise equal norms have equal
-operator norms.  Local scaffolding for the modulus norm laws. -/
-private theorem opNorm_eq_of_forall_norm_apply_eq {f : E →L[ℂ] F} {g : E →L[ℂ] G}
-    (h : ∀ x, ‖f x‖ = ‖g x‖) : ‖f‖ = ‖g‖ :=
-  le_antisymm
-    (f.opNorm_le_bound (norm_nonneg g) fun x => (h x).trans_le (g.le_opNorm x))
-    (g.opNorm_le_bound (norm_nonneg f) fun x => (h x).symm.trans_le (f.le_opNorm x))
-
 /-- The modulus has the same operator norm as the original map. -/
 @[simp]
-theorem norm_modulus (T : E →L[ℂ] F) : ‖T.modulus‖ = ‖T‖ :=
+theorem norm_modulus (T : E →L[𝕜] F) : ‖T.modulus‖ = ‖T‖ :=
   opNorm_eq_of_forall_norm_apply_eq T.norm_modulus_apply
 
 omit [CompleteSpace G] in
 /-- Precomposition sees only the modulus: `‖|T| ∘L D‖ = ‖T ∘L D‖`, since the
 two composites agree pointwise in norm. -/
-theorem norm_modulus_comp (T : E →L[ℂ] F) (D : G →L[ℂ] E) :
+theorem norm_modulus_comp (T : E →L[𝕜] F) (D : G →L[𝕜] E) :
     ‖T.modulus ∘L D‖ = ‖T ∘L D‖ :=
   opNorm_eq_of_forall_norm_apply_eq fun x => T.norm_modulus_apply (D x)
 
@@ -182,7 +220,7 @@ theorem norm_modulus_comp (T : E →L[ℂ] F) (D : G →L[ℂ] E) :
 The two sides act on different spaces (`|T|` lives on the source of `T`, `T⋆`
 on its target); the identity is between their operator norms, obtained by
 conjugating `norm_modulus_comp` with the isometric adjoint. -/
-theorem norm_comp_modulus (D : E →L[ℂ] G) (T : E →L[ℂ] F) :
+theorem norm_comp_modulus (D : E →L[𝕜] G) (T : E →L[𝕜] F) :
     ‖D ∘L T.modulus‖ = ‖D ∘L T.adjoint‖ := by
   calc ‖D ∘L T.modulus‖
       = ‖(D ∘L T.modulus).adjoint‖ := (LinearIsometryEquiv.norm_map adjoint _).symm
@@ -194,7 +232,7 @@ theorem norm_comp_modulus (D : E →L[ℂ] G) (T : E →L[ℂ] F) :
 /-- Moduli of operators whose Gram operators commute themselves commute.  The
 two operators may have different targets: both moduli act on the common source
 space. -/
-theorem modulus_commute_modulus {S : E →L[ℂ] F} {T : E →L[ℂ] G}
+theorem modulus_commute_modulus {S : E →L[𝕜] F} {T : E →L[𝕜] G}
     (h : Commute (S.adjoint ∘L S) (T.adjoint ∘L T)) :
     Commute S.modulus T.modulus := by
   have h1 : Commute (CFC.sqrt (S.adjoint ∘L S)) (T.adjoint ∘L T) :=
@@ -205,15 +243,15 @@ theorem modulus_commute_modulus {S : E →L[ℂ] F} {T : E →L[ℂ] G}
 
 /-! ### The endomorphism case
 
-For `T : E →L[ℂ] E` the Gram operator is the C⋆-algebra element `star T * T`,
-so the modulus is the absolute value of `T` in the C⋆-algebra `E →L[ℂ] E`.
+For `T : E →L[𝕜] E` the Gram operator is the C⋆-algebra element `star T * T`,
+so the modulus is the absolute value of `T` in the C⋆-algebra `E →L[𝕜] E`.
 These are specializations of the definition above, not a second construction. -/
 
 /-- On an endomorphism the modulus is the C⋆-algebra absolute value. -/
-theorem modulus_eq_sqrt_star_mul_self (T : E →L[ℂ] E) :
+theorem modulus_eq_sqrt_star_mul_self (T : E →L[𝕜] E) :
     T.modulus = CFC.sqrt (star T * T) := (rfl)
 /-- The defining identity in C⋆-algebra form. -/
-theorem modulus_mul_self_eq_star_mul_self (T : E →L[ℂ] E) :
+theorem modulus_mul_self_eq_star_mul_self (T : E →L[𝕜] E) :
     T.modulus * T.modulus = star T * T :=
   T.modulus_mul_self
 

@@ -14,7 +14,7 @@ public import Mathlib.Analysis.Normed.Operator.Extend
 /-!
 # The polar decomposition of a bounded operator
 
-Every bounded operator `M : E →L[ℂ] F` between complex Hilbert spaces factors as
+Every bounded operator `M : E →L[𝕜] F` between Hilbert spaces factors as
 
 ```
 M = M.polarPartial ∘L |M|
@@ -107,9 +107,9 @@ modulus is invertible:
 * `TauCeti.polarFactor`, in `PolarDecomposition.lean` — square `E →ₗ[𝕜] E`,
   `RCLike`, finite dimension; a genuine **unitary** factor.
 * `TauCeti.polarPartial`, in `PolarPartialIsometry.lean` — rectangular
-  `E →L[ℂ] F` over `ℂ`, no invertibility assumed; a **partial isometry**.
+  `E →L[𝕜] F`, no invertibility assumed; a **partial isometry**.
 * `TauCeti.polarIsometryOfIsUnitModulus`, in `PolarIsometry.lean` — rectangular
-  `E →L[ℂ] F` over `ℂ` **and** the modulus a unit; then the factor is an
+  `E →L[𝕜] F` over `ℂ` **and** the modulus a unit; then the factor is an
   **isometry**.
 
 Read down the list: dropping finite dimension costs the unitary and leaves a
@@ -118,11 +118,11 @@ isometry. That is the whole hierarchy.
 
 **Correction, 2026-08-04.**  The list above presents "the field" as one of the
 three separating hypotheses.  For this module that reading was wrong: nothing in
-the construction below needs `ℂ`.  What needs `ℂ` is `modulus`, which is a
-continuous functional calculus, and Mathlib supplies
+the construction below needs `ℂ`.  What needs a hypothesis is `modulus`, which is
+a continuous functional calculus, and Mathlib supplies
 `ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint` for `ℂ` only.  Keying
 the same construction on the *Gram identity* `A ∘L A = T⋆ ∘L T` with `A`
-self-adjoint, rather than on `A = |T|`, drops the field restriction entirely;
+self-adjoint, rather than on `A = |T|`, drops even that hypothesis;
 that is `Polar/GramContraction.lean`, over any `RCLike` field.  So the honest
 fourth entry is:
 
@@ -135,6 +135,15 @@ assuming one, and it carries the full partial-isometry API (`W W⋆ W = W`, the
 initial and final spaces, uniqueness, `|M⋆| = W |M| W⋆`).  `GramContraction.lean`
 proves only the two factorisation identities and the contraction bound, which is
 what a symmetric-norm-ideal argument consumes.
+
+**Update, 2026-08-09.**  `ContinuousLinearMap.modulus` is now `RCLike`-generic
+(`ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean`), carrying the
+continuous functional calculus on `E →L[𝕜] E` as a typeclass hypothesis rather
+than fixing `𝕜 = ℂ`.  This module follows it: everything below is stated over a
+general `RCLike` field under that same hypothesis, which typeclass inference
+discharges at `𝕜 = ℂ`.  The three results about `|M⋆|` and `W(M⋆)` additionally
+need the calculus on `F →L[𝕜] F`, since the modulus of the adjoint lives on the
+target space; those carry it in their own binders.
 -/
 
 public section
@@ -145,41 +154,46 @@ open scoped InnerProductSpace
 
 universe u v
 
+variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type u} {F : Type v}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
+
+attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-- The **initial space** of the polar decomposition of `M`: the closure of the range of
 the modulus.  `M.polarPartial` is isometric on it and zero on its orthogonal complement,
 and it is exactly `(ker M)ᗮ` (`polarInitial_orthogonal_eq_ker`). -/
-noncomputable def polarInitial (M : E →L[ℂ] F) : Submodule ℂ E :=
+noncomputable def polarInitial (M : E →L[𝕜] F) : Submodule 𝕜 E :=
   (LinearMap.range M.modulus.toLinearMap).topologicalClosure
 
 /-- Every value of the modulus lies in the initial space, which is the closure
 of its range. -/
-theorem modulus_apply_mem_polarInitial (M : E →L[ℂ] F) (x : E) :
+theorem modulus_apply_mem_polarInitial (M : E →L[𝕜] F) (x : E) :
     M.modulus x ∈ M.polarInitial :=
   Submodule.le_topologicalClosure _ ⟨x, rfl⟩
 
 /-- The initial space is complete, being a topological closure.  This is what
 lets `polarPartialAux` be built by continuous extension. -/
-instance (M : E →L[ℂ] F) : CompleteSpace M.polarInitial :=
+instance (M : E →L[𝕜] F) : CompleteSpace M.polarInitial :=
   Submodule.topologicalClosure.completeSpace _
 
 /-- The modulus, corestricted to the initial space, where it has dense range. -/
-noncomputable def modulusCorestrict (M : E →L[ℂ] F) : E →ₗ[ℂ] M.polarInitial :=
+noncomputable def modulusCorestrict (M : E →L[𝕜] F) : E →ₗ[𝕜] M.polarInitial :=
   LinearMap.codRestrict M.polarInitial M.modulus.toLinearMap M.modulus_apply_mem_polarInitial
 
 /-- The corestriction has the same values as the modulus; only its codomain
 changes. -/
 @[simp]
-theorem coe_modulusCorestrict_apply (M : E →L[ℂ] F) (x : E) :
+theorem coe_modulusCorestrict_apply (M : E →L[𝕜] F) (x : E) :
     (M.modulusCorestrict x : E) = M.modulus x := (rfl)
 /-- The corestricted modulus has **dense** range in the initial space — the
 initial space is defined as that closure.  This density is the hypothesis
 `extendOfNorm` needs, and is why `polarPartial` is determined on all of
 `polarInitial` by its values on `range |M|`. -/
-theorem denseRange_modulusCorestrict (M : E →L[ℂ] F) :
+theorem denseRange_modulusCorestrict (M : E →L[𝕜] F) :
     DenseRange M.modulusCorestrict := by
   rw [DenseRange, Subtype.dense_iff]
   have hsub : (LinearMap.range M.modulus.toLinearMap : Set E)
@@ -193,20 +207,20 @@ theorem denseRange_modulusCorestrict (M : E →L[ℂ] F) :
 
 /-- The isometry bound that makes the extension possible: `‖M x‖ ≤ 1 * ‖ |M| x ‖`, which is
 an equality, by `ContinuousLinearMap.norm_modulus_apply`. -/
-theorem norm_apply_le_norm_modulusCorestrict (M : E →L[ℂ] F) (x : E) :
+theorem norm_apply_le_norm_modulusCorestrict (M : E →L[𝕜] F) (x : E) :
     ‖M.toLinearMap x‖ ≤ 1 * ‖M.modulusCorestrict x‖ := by
   rw [one_mul]
   exact le_of_eq (M.norm_modulus_apply x).symm
 
 /-- The isometry `|M| x ↦ M x`, extended from the dense range of the modulus to the whole
 initial space. -/
-noncomputable def polarPartialAux (M : E →L[ℂ] F) : M.polarInitial →L[ℂ] F :=
+noncomputable def polarPartialAux (M : E →L[𝕜] F) : M.polarInitial →L[𝕜] F :=
   M.toLinearMap.extendOfNorm M.modulusCorestrict
 
 /-- The extension undoes the modulus on the dense range: `W₀ (|M| x) = M x`.
 This is the defining property carried across by continuity. -/
 @[simp]
-theorem polarPartialAux_modulusCorestrict (M : E →L[ℂ] F) (x : E) :
+theorem polarPartialAux_modulusCorestrict (M : E →L[𝕜] F) (x : E) :
     M.polarPartialAux (M.modulusCorestrict x) = M x :=
   LinearMap.extendOfNorm_eq M.denseRange_modulusCorestrict
     ⟨1, M.norm_apply_le_norm_modulusCorestrict⟩ x
@@ -215,18 +229,18 @@ theorem polarPartialAux_modulusCorestrict (M : E →L[ℂ] F) (x : E) :
 
 Isometric on `M.polarInitial` and zero on its orthogonal complement, with
 `M.polarPartial ∘L |M| = M` unconditionally. -/
-noncomputable def polarPartial (M : E →L[ℂ] F) : E →L[ℂ] F :=
+noncomputable def polarPartial (M : E →L[𝕜] F) : E →L[𝕜] F :=
   M.polarPartialAux ∘L M.polarInitial.orthogonalProjectionOnto
 
 /-- `polarPartial` unfolded: project onto the initial space, then apply the
 continuous extension.  The projection is what makes `W` vanish off the initial
 space, i.e. on `ker M`. -/
-theorem polarPartial_apply (M : E →L[ℂ] F) (x : E) :
+theorem polarPartial_apply (M : E →L[𝕜] F) (x : E) :
     M.polarPartial x = M.polarPartialAux (M.polarInitial.orthogonalProjectionOnto x) := (rfl)
 /-- **The polar identity.**  `M = W |M|` with `W` the polar partial isometry, for every
 bounded `M` and with no invertibility hypothesis. -/
 @[simp]
-theorem polarPartial_apply_modulus (M : E →L[ℂ] F) (x : E) :
+theorem polarPartial_apply_modulus (M : E →L[𝕜] F) (x : E) :
     M.polarPartial (M.modulus x) = M x := by
   rw [polarPartial_apply]
   have hmem : M.modulus x ∈ M.polarInitial := M.modulus_apply_mem_polarInitial x
@@ -239,21 +253,21 @@ theorem polarPartial_apply_modulus (M : E →L[ℂ] F) (x : E) :
 /-- **The polar identity in composed form**: `W ∘L |M| = M`, unconditionally.
 The pointwise version is `polarPartial_apply_modulus`; this is the form that
 composes, and the one `eq_polarPartial_of_comp_modulus` characterises `W` by. -/
-theorem polarPartial_comp_modulus (M : E →L[ℂ] F) :
+theorem polarPartial_comp_modulus (M : E →L[𝕜] F) :
     M.polarPartial ∘L M.modulus = M := by
   ext x
   simp
 
 
 /-- The modulus is self-adjoint, so it moves across the inner product. -/
-theorem inner_modulus_left (M : E →L[ℂ] F) (x z : E) :
-    ⟪M.modulus x, z⟫_ℂ = ⟪x, M.modulus z⟫_ℂ :=
-  calc ⟪M.modulus x, z⟫_ℂ = ⟪M.modulus.adjoint x, z⟫_ℂ := by rw [M.adjoint_modulus]
-    _ = ⟪x, M.modulus z⟫_ℂ := ContinuousLinearMap.adjoint_inner_left _ _ _
+theorem inner_modulus_left (M : E →L[𝕜] F) (x z : E) :
+    ⟪M.modulus x, z⟫_𝕜 = ⟪x, M.modulus z⟫_𝕜 :=
+  calc ⟪M.modulus x, z⟫_𝕜 = ⟪M.modulus.adjoint x, z⟫_𝕜 := by rw [M.adjoint_modulus]
+    _ = ⟪x, M.modulus z⟫_𝕜 := ContinuousLinearMap.adjoint_inner_left _ _ _
 
 /-- The extension is an isometry on the whole initial space: it is one on the dense range
 of the modulus, and both sides are continuous. -/
-theorem norm_polarPartialAux_apply (M : E →L[ℂ] F) (y : M.polarInitial) :
+theorem norm_polarPartialAux_apply (M : E →L[𝕜] F) (y : M.polarInitial) :
     ‖M.polarPartialAux y‖ = ‖y‖ := by
   have heq : Set.EqOn (fun z : M.polarInitial => ‖M.polarPartialAux z‖)
       (fun z : M.polarInitial => ‖z‖) (Set.range M.modulusCorestrict) := by
@@ -264,7 +278,7 @@ theorem norm_polarPartialAux_apply (M : E →L[ℂ] F) (y : M.polarInitial) :
     (by fun_prop) (by fun_prop) heq) y
 
 /-- The polar partial isometry is an isometry on the initial space. -/
-theorem norm_polarPartial_apply_of_mem (M : E →L[ℂ] F) {y : E} (hy : y ∈ M.polarInitial) :
+theorem norm_polarPartial_apply_of_mem (M : E →L[𝕜] F) {y : E} (hy : y ∈ M.polarInitial) :
     ‖M.polarPartial y‖ = ‖y‖ := by
   rw [polarPartial_apply]
   have hproj : M.polarInitial.orthogonalProjectionOnto y = ⟨y, hy⟩ := by
@@ -274,18 +288,18 @@ theorem norm_polarPartial_apply_of_mem (M : E →L[ℂ] F) {y : E} (hy : y ∈ M
   rfl
 
 /-- The polar partial isometry vanishes off the initial space. -/
-theorem polarPartial_eq_zero_of_mem_orthogonal (M : E →L[ℂ] F) {y : E}
+theorem polarPartial_eq_zero_of_mem_orthogonal (M : E →L[𝕜] F) {y : E}
     (hy : y ∈ M.polarInitialᗮ) : M.polarPartial y = 0 := by
   rw [polarPartial_apply, Submodule.orthogonalProjectionOnto_eq_zero_iff.mpr hy, map_zero]
 
 /-- **The initial space is the orthogonal complement of the kernel.**  Equivalently
 `M.polarInitial = (ker M)ᗮ`: the partial isometry is supported exactly where `M` is. -/
-theorem polarInitial_orthogonal_eq_ker (M : E →L[ℂ] F) :
+theorem polarInitial_orthogonal_eq_ker (M : E →L[𝕜] F) :
     M.polarInitialᗮ = LinearMap.ker M.toLinearMap := by
   ext y
   constructor
   · intro hy
-    have hall : ∀ x : E, ⟪x, M.modulus y⟫_ℂ = 0 := by
+    have hall : ∀ x : E, ⟪x, M.modulus y⟫_𝕜 = 0 := by
       intro x
       have h := hy (M.modulus x) (M.modulus_apply_mem_polarInitial x)
       rwa [M.inner_modulus_left] at h
@@ -294,7 +308,7 @@ theorem polarInitial_orthogonal_eq_ker (M : E →L[ℂ] F) :
   · intro hy
     have hMy : M y = 0 := hy
     have hmod : M.modulus y = 0 := (M.modulus_apply_eq_zero_iff y).mpr hMy
-    have hle : M.polarInitial ≤ (ℂ ∙ y)ᗮ := by
+    have hle : M.polarInitial ≤ (𝕜 ∙ y)ᗮ := by
       refine Submodule.topologicalClosure_minimal _ ?_ (Submodule.isClosed_orthogonal _)
       rintro _ ⟨x, rfl⟩
       rw [Submodule.mem_orthogonal_singleton_iff_inner_right]
@@ -307,7 +321,7 @@ theorem polarInitial_orthogonal_eq_ker (M : E →L[ℂ] F) :
 
 /-- The kernel of the polar partial isometry is exactly the orthogonal complement of the
 initial space — it kills nothing else. -/
-theorem ker_polarPartial (M : E →L[ℂ] F) :
+theorem ker_polarPartial (M : E →L[𝕜] F) :
     LinearMap.ker M.polarPartial.toLinearMap = M.polarInitialᗮ := by
   apply le_antisymm
   · intro y hy
@@ -330,14 +344,14 @@ theorem ker_polarPartial (M : E →L[ℂ] F) :
 
 /-- The initial space is the orthogonal complement of the kernel of the partial isometry,
 which is the shape the abstract partial-isometry API expects. -/
-theorem orthogonal_ker_polarPartial (M : E →L[ℂ] F) :
+theorem orthogonal_ker_polarPartial (M : E →L[𝕜] F) :
     (LinearMap.ker M.polarPartial.toLinearMap)ᗮ = M.polarInitial := by
   rw [M.ker_polarPartial, Submodule.orthogonal_orthogonal]
 
 /-- On the initial space the partial isometry preserves inner products, not just norms. -/
-theorem inner_polarPartial_apply_of_mem (M : E →L[ℂ] F) {p q : E}
+theorem inner_polarPartial_apply_of_mem (M : E →L[𝕜] F) {p q : E}
     (hp : p ∈ M.polarInitial) (hq : q ∈ M.polarInitial) :
-    ⟪M.polarPartial p, M.polarPartial q⟫_ℂ = ⟪p, q⟫_ℂ := by
+    ⟪M.polarPartial p, M.polarPartial q⟫_𝕜 = ⟪p, q⟫_𝕜 := by
   have hnorm : ∀ w : M.polarInitial,
       ‖(M.polarPartial.toLinearMap ∘ₗ M.polarInitial.subtype) w‖ = ‖w‖ := by
     intro w
@@ -347,17 +361,17 @@ theorem inner_polarPartial_apply_of_mem (M : E →L[ℂ] F) {p q : E}
   simpa using hmap ⟨p, hp⟩ ⟨q, hq⟩
 
 /-- `W⋆ W` fixes the initial space pointwise. -/
-theorem adjoint_polarPartial_polarPartial_apply_of_mem (M : E →L[ℂ] F) {p : E}
+theorem adjoint_polarPartial_polarPartial_apply_of_mem (M : E →L[𝕜] F) {p : E}
     (hp : p ∈ M.polarInitial) :
     M.polarPartial.adjoint (M.polarPartial p) = p := by
-  have hall : ∀ z : E, ⟪M.polarPartial.adjoint (M.polarPartial p) - p, z⟫_ℂ = 0 := by
+  have hall : ∀ z : E, ⟪M.polarPartial.adjoint (M.polarPartial p) - p, z⟫_𝕜 = 0 := by
     intro z
     obtain ⟨z₁, hz₁, z₂, hz₂, rfl⟩ :=
       Submodule.exists_add_mem_mem_orthogonal (K := M.polarInitial) z
-    have h₁ : ⟪M.polarPartial.adjoint (M.polarPartial p) - p, z₁⟫_ℂ = 0 := by
+    have h₁ : ⟪M.polarPartial.adjoint (M.polarPartial p) - p, z₁⟫_𝕜 = 0 := by
       rw [inner_sub_left, ContinuousLinearMap.adjoint_inner_left,
         M.inner_polarPartial_apply_of_mem hp hz₁, sub_self]
-    have h₂ : ⟪M.polarPartial.adjoint (M.polarPartial p) - p, z₂⟫_ℂ = 0 := by
+    have h₂ : ⟪M.polarPartial.adjoint (M.polarPartial p) - p, z₂⟫_𝕜 = 0 := by
       rw [inner_sub_left, ContinuousLinearMap.adjoint_inner_left,
         M.polarPartial_eq_zero_of_mem_orthogonal hz₂, inner_zero_right,
         (Submodule.mem_orthogonal _ _).mp hz₂ p hp, sub_zero]
@@ -365,7 +379,7 @@ theorem adjoint_polarPartial_polarPartial_apply_of_mem (M : E →L[ℂ] F) {p : 
   exact sub_eq_zero.mp (inner_self_eq_zero.mp (hall _))
 
 /-- `W⋆ W` is the orthogonal projection onto the initial space. -/
-theorem adjoint_comp_polarPartial (M : E →L[ℂ] F) :
+theorem adjoint_comp_polarPartial (M : E →L[𝕜] F) :
     M.polarPartial.adjoint ∘L M.polarPartial = M.polarInitial.starProjection := by
   ext x
   obtain ⟨p, hp, q, hq, rfl⟩ := Submodule.exists_add_mem_mem_orthogonal (K := M.polarInitial) x
@@ -379,7 +393,7 @@ theorem adjoint_comp_polarPartial (M : E →L[ℂ] F) :
     Submodule.starProjection_eq_self_iff.mpr hp]
 
 /-- The partial isometry is unchanged by first projecting onto its initial space. -/
-theorem polarPartial_comp_starProjection (M : E →L[ℂ] F) :
+theorem polarPartial_comp_starProjection (M : E →L[𝕜] F) :
     M.polarPartial ∘L M.polarInitial.starProjection = M.polarPartial := by
   ext x
   obtain ⟨p, hp, q, hq, rfl⟩ := Submodule.exists_add_mem_mem_orthogonal (K := M.polarInitial) x
@@ -396,17 +410,17 @@ invertibility or finite-dimensionality hypothesis.  This is the algebraic form o
 "`W` is a partial isometry"; the analytic form is
 `norm_polarPartial_apply_of_mem` together with
 `polarPartial_eq_zero_of_mem_orthogonal`. -/
-theorem polarPartial_comp_adjoint_comp_polarPartial (M : E →L[ℂ] F) :
+theorem polarPartial_comp_adjoint_comp_polarPartial (M : E →L[𝕜] F) :
     M.polarPartial ∘L M.polarPartial.adjoint ∘L M.polarPartial = M.polarPartial := by
   rw [M.adjoint_comp_polarPartial, M.polarPartial_comp_starProjection]
 
 /-- **The rectangular polar factor is a partial isometry** (Conway VI.3.9). -/
-theorem polarPartial_isPartialIsometry (M : E →L[ℂ] F) :
+theorem polarPartial_isPartialIsometry (M : E →L[𝕜] F) :
     M.polarPartial.IsPartialIsometry :=
   M.polarPartial_comp_adjoint_comp_polarPartial
 
 /-- The adjoint form of the partial-isometry identity, `W⋆ W W⋆ = W⋆`. -/
-theorem adjoint_comp_polarPartial_comp_adjoint (M : E →L[ℂ] F) :
+theorem adjoint_comp_polarPartial_comp_adjoint (M : E →L[𝕜] F) :
     M.polarPartial.adjoint ∘L M.polarPartial ∘L M.polarPartial.adjoint =
       M.polarPartial.adjoint := by
   have h := congrArg ContinuousLinearMap.adjoint M.polarPartial_comp_adjoint_comp_polarPartial
@@ -414,7 +428,7 @@ theorem adjoint_comp_polarPartial_comp_adjoint (M : E →L[ℂ] F) :
 
 /-- `W W⋆` is an orthogonal projection: idempotent and self-adjoint.  It is the projection
 onto the *final* space of the polar decomposition. -/
-theorem isSelfAdjoint_polarPartial_comp_adjoint (M : E →L[ℂ] F) :
+theorem isSelfAdjoint_polarPartial_comp_adjoint (M : E →L[𝕜] F) :
     IsSelfAdjoint (M.polarPartial ∘L M.polarPartial.adjoint) := by
   rw [IsSelfAdjoint, ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_comp,
     ContinuousLinearMap.adjoint_adjoint]
@@ -422,7 +436,7 @@ theorem isSelfAdjoint_polarPartial_comp_adjoint (M : E →L[ℂ] F) :
 /-- `W W⋆` is idempotent.  With `isSelfAdjoint_polarPartial_comp_adjoint` this
 makes it the orthogonal projection onto the final space — the second half of
 `W` being a partial isometry. -/
-theorem isIdempotentElem_polarPartial_comp_adjoint (M : E →L[ℂ] F) :
+theorem isIdempotentElem_polarPartial_comp_adjoint (M : E →L[𝕜] F) :
     IsIdempotentElem (M.polarPartial ∘L M.polarPartial.adjoint) := by
   have h := M.adjoint_comp_polarPartial_comp_adjoint
   -- states the goal with the definition unfolded, in the shape the next step needs;
@@ -437,13 +451,13 @@ theorem isIdempotentElem_polarPartial_comp_adjoint (M : E →L[ℂ] F) :
     _ = M.polarPartial ∘L M.polarPartial.adjoint := by rw [h]
 
 /-- The partial isometry, bundled as a `LinearIsometry` on the initial space. -/
-noncomputable def polarLinearIsometryAux (M : E →L[ℂ] F) : M.polarInitial →ₗᵢ[ℂ] F where
+noncomputable def polarLinearIsometryAux (M : E →L[𝕜] F) : M.polarInitial →ₗᵢ[𝕜] F where
   toLinearMap := M.polarPartialAux.toLinearMap
   norm_map' := M.norm_polarPartialAux_apply
 
 /-- Every vector in the range of the partial isometry already comes from the initial
 space, because the projection is the identity there. -/
-theorem range_polarPartial_eq_range_aux (M : E →L[ℂ] F) :
+theorem range_polarPartial_eq_range_aux (M : E →L[𝕜] F) :
     Set.range M.polarPartial = Set.range M.polarPartialAux := by
   apply Set.Subset.antisymm
   · rintro _ ⟨x, rfl⟩
@@ -457,7 +471,7 @@ theorem range_polarPartial_eq_range_aux (M : E →L[ℂ] F) :
 
 /-- **The range of the partial isometry is closed.**  It is the isometric image of the
 initial space, and that space is complete. -/
-theorem isClosed_range_polarPartial (M : E →L[ℂ] F) :
+theorem isClosed_range_polarPartial (M : E →L[𝕜] F) :
     IsClosed (Set.range M.polarPartial) := by
   rw [M.range_polarPartial_eq_range_aux]
   have hrange : Set.range M.polarPartialAux = Set.range M.polarLinearIsometryAux := (rfl)
@@ -467,7 +481,7 @@ theorem isClosed_range_polarPartial (M : E →L[ℂ] F) :
 
 /-- **The range of the partial isometry is the closure of the range of `M`** — the *final*
 space of the polar decomposition. -/
-theorem range_polarPartial (M : E →L[ℂ] F) :
+theorem range_polarPartial (M : E →L[𝕜] F) :
     LinearMap.range M.polarPartial.toLinearMap =
       (LinearMap.range M.toLinearMap).topologicalClosure := by
   apply le_antisymm
@@ -500,7 +514,7 @@ theorem range_polarPartial (M : E →L[ℂ] F) :
 `W⋆ M = W⋆ W |M| = P |M| = |M|`, because the range of `|M|` already lies in the initial
 space, where `W⋆ W` is the identity.  This is the identity behind the trace-norm duality
 `tr (W⋆ M) = tr |M|`. -/
-theorem adjoint_polarPartial_comp_self (M : E →L[ℂ] F) :
+theorem adjoint_polarPartial_comp_self (M : E →L[𝕜] F) :
     M.polarPartial.adjoint ∘L M = M.modulus := by
   ext x
   have hstep : M.polarPartial.adjoint (M x)
@@ -510,7 +524,7 @@ theorem adjoint_polarPartial_comp_self (M : E →L[ℂ] F) :
     M.adjoint_polarPartial_polarPartial_apply_of_mem (M.modulus_apply_mem_polarInitial x)
 
 /-- `|M|` vanishes off the initial space, so projecting first changes nothing. -/
-theorem modulus_comp_starProjection (M : E →L[ℂ] F) :
+theorem modulus_comp_starProjection (M : E →L[𝕜] F) :
     M.modulus ∘L M.polarInitial.starProjection = M.modulus := by
   ext x
   obtain ⟨p, hp, q, hq, rfl⟩ := Submodule.exists_add_mem_mem_orthogonal (K := M.polarInitial) x
@@ -526,7 +540,7 @@ theorem modulus_comp_starProjection (M : E →L[ℂ] F) :
     Submodule.starProjection_eq_self_iff.mpr hp, hqker, map_zero]
 
 /-- The adjoint form of the polar identity: `M⋆ = |M| W⋆`. -/
-theorem adjoint_eq_modulus_comp_adjoint_polarPartial (M : E →L[ℂ] F) :
+theorem adjoint_eq_modulus_comp_adjoint_polarPartial (M : E →L[𝕜] F) :
     M.adjoint = M.modulus ∘L M.polarPartial.adjoint := by
   have h := congrArg ContinuousLinearMap.adjoint M.polarPartial_comp_modulus
   rw [ContinuousLinearMap.adjoint_comp, M.modulus_isSelfAdjoint.adjoint_eq] at h
@@ -538,7 +552,8 @@ This is the other half of the polar decomposition — alongside `M = W |M|` it g
 `M = |M⋆| W` — and it identifies the final space as the initial space of `M⋆`.  The proof
 is uniqueness of the positive square root: `W |M| W⋆` is positive, and both it squared and
 `M M⋆` reduce to `W (M⋆ M) W⋆`. -/
-theorem modulus_adjoint (M : E →L[ℂ] F) :
+theorem modulus_adjoint [Algebra ℝ (F →L[𝕜] F)] [IsScalarTower ℝ 𝕜 (F →L[𝕜] F)]
+    [ContinuousFunctionalCalculus ℝ (F →L[𝕜] F) IsSelfAdjoint] (M : E →L[𝕜] F) :
     M.adjoint.modulus = M.polarPartial ∘L M.modulus ∘L M.polarPartial.adjoint := by
   refine (eq_modulus_of_nonneg_of_mul_self_eq ?_ ?_).symm
   · rw [ContinuousLinearMap.nonneg_iff_isPositive]
@@ -567,7 +582,9 @@ theorem modulus_adjoint (M : E →L[ℂ] F) :
     rw [hP, hS, hMadj, hM]
 
 /-- The second polar identity, `M = |M⋆| W`. -/
-theorem modulus_adjoint_comp_polarPartial (M : E →L[ℂ] F) :
+theorem modulus_adjoint_comp_polarPartial [Algebra ℝ (F →L[𝕜] F)]
+    [IsScalarTower ℝ 𝕜 (F →L[𝕜] F)]
+    [ContinuousFunctionalCalculus ℝ (F →L[𝕜] F) IsSelfAdjoint] (M : E →L[𝕜] F) :
     M.adjoint.modulus ∘L M.polarPartial = M := by
   rw [M.modulus_adjoint]
   calc (M.polarPartial ∘L M.modulus ∘L M.polarPartial.adjoint) ∘L M.polarPartial
@@ -582,7 +599,7 @@ vanishes off the initial space *is* `W`.
 
 Together with `polarPartial_comp_modulus` this characterises the decomposition: `W` is the
 unique partial isometry with initial space `(ker M)ᗮ` factoring `M` through `|M|`. -/
-theorem eq_polarPartial_of_comp_modulus (M : E →L[ℂ] F) (V : E →L[ℂ] F)
+theorem eq_polarPartial_of_comp_modulus (M : E →L[𝕜] F) (V : E →L[𝕜] F)
     (hV : V ∘L M.modulus = M)
     (hker : ∀ y ∈ M.polarInitialᗮ, V y = 0) :
     V = M.polarPartial := by
@@ -603,13 +620,13 @@ theorem eq_polarPartial_of_comp_modulus (M : E →L[ℂ] F) (V : E →L[ℂ] F)
     M.polarPartial_eq_zero_of_mem_orthogonal hq]
 
 /-- The projection onto the initial space fixes the range of `|M|`. -/
-theorem starProjection_comp_modulus (M : E →L[ℂ] F) :
+theorem starProjection_comp_modulus (M : E →L[𝕜] F) :
     M.polarInitial.starProjection ∘L M.modulus = M.modulus := by
   ext x
   exact Submodule.starProjection_eq_self_iff.mpr (M.modulus_apply_mem_polarInitial x)
 
 /-- `W⋆` lands in the initial space. -/
-theorem starProjection_comp_adjoint_polarPartial (M : E →L[ℂ] F) :
+theorem starProjection_comp_adjoint_polarPartial (M : E →L[𝕜] F) :
     M.polarInitial.starProjection ∘L M.polarPartial.adjoint = M.polarPartial.adjoint := by
   have h := congrArg ContinuousLinearMap.adjoint M.polarPartial_comp_starProjection
   rwa [ContinuousLinearMap.adjoint_comp,
@@ -617,7 +634,8 @@ theorem starProjection_comp_adjoint_polarPartial (M : E →L[ℂ] F) :
 
 /-- **`W(M⋆) = W(M)⋆`**: the partial isometry of the adjoint is the adjoint of the partial
 isometry.  By uniqueness, since `W⋆ |M⋆| = M⋆` and `W⋆` vanishes on `ker M⋆`. -/
-theorem polarPartial_adjoint (M : E →L[ℂ] F) :
+theorem polarPartial_adjoint [Algebra ℝ (F →L[𝕜] F)] [IsScalarTower ℝ 𝕜 (F →L[𝕜] F)]
+    [ContinuousFunctionalCalculus ℝ (F →L[𝕜] F) IsSelfAdjoint] (M : E →L[𝕜] F) :
     M.adjoint.polarPartial = M.polarPartial.adjoint := by
   refine (M.adjoint.eq_polarPartial_of_comp_modulus M.polarPartial.adjoint ?_ ?_).symm
   · -- W⋆ |M⋆| = W⋆ W |M| W⋆ = P |M| W⋆ = |M| W⋆ = M⋆
@@ -653,24 +671,24 @@ theorem polarPartial_adjoint (M : E →L[ℂ] F) :
 
 /-- The **final space** of the polar decomposition: the closure of the range of `M`,
 equivalently the range of `W` (`range_polarPartial`). -/
-noncomputable def polarFinal (M : E →L[ℂ] F) : Submodule ℂ F :=
+noncomputable def polarFinal (M : E →L[𝕜] F) : Submodule 𝕜 F :=
   (LinearMap.range M.toLinearMap).topologicalClosure
 
 /-- The final space is complete, being a topological closure. -/
-instance (M : E →L[ℂ] F) : CompleteSpace M.polarFinal :=
+instance (M : E →L[𝕜] F) : CompleteSpace M.polarFinal :=
   Submodule.topologicalClosure.completeSpace _
 
 /-- The final space is exactly the range of `W`: closing the range of `M` and
 taking the range of the partial isometry give the same subspace.  This is the
 counterpart of `polarInitial` being the closed range of `|M|`. -/
-theorem polarFinal_eq_range_polarPartial (M : E →L[ℂ] F) :
+theorem polarFinal_eq_range_polarPartial (M : E →L[𝕜] F) :
     M.polarFinal = LinearMap.range M.polarPartial.toLinearMap :=
   M.range_polarPartial.symm
 
 /-- `W⋆` vanishes off the final space. -/
-theorem adjoint_polarPartial_eq_zero_of_mem_orthogonal (M : E →L[ℂ] F) {y : F}
+theorem adjoint_polarPartial_eq_zero_of_mem_orthogonal (M : E →L[𝕜] F) {y : F}
     (hy : y ∈ M.polarFinalᗮ) : M.polarPartial.adjoint y = 0 := by
-  have hall : ∀ z : E, ⟪z, M.polarPartial.adjoint y⟫_ℂ = 0 := by
+  have hall : ∀ z : E, ⟪z, M.polarPartial.adjoint y⟫_𝕜 = 0 := by
     intro z
     rw [ContinuousLinearMap.adjoint_inner_right]
     refine hy _ ?_
@@ -679,7 +697,7 @@ theorem adjoint_polarPartial_eq_zero_of_mem_orthogonal (M : E →L[ℂ] F) {y : 
   exact inner_self_eq_zero.mp (hall _)
 
 /-- **`W W⋆` is the orthogonal projection onto the final space.** -/
-theorem polarPartial_comp_adjoint (M : E →L[ℂ] F) :
+theorem polarPartial_comp_adjoint (M : E →L[𝕜] F) :
     M.polarPartial ∘L M.polarPartial.adjoint = M.polarFinal.starProjection := by
   ext y
   obtain ⟨p, hp, q, hq, rfl⟩ := Submodule.exists_add_mem_mem_orthogonal (K := M.polarFinal) y
@@ -715,7 +733,7 @@ then `W = M |M|⁻¹`.
 Proved from uniqueness: `M |M|⁻¹` composes with `|M|` to give `M`, and it
 vanishes off the initial space vacuously, because invertibility of `|M|` forces
 `ker M = ⊥` and hence `polarInitialᗮ = ⊥`. -/
-theorem polarPartial_eq_comp_ringInverse_modulus (M : E →L[ℂ] F)
+theorem polarPartial_eq_comp_ringInverse_modulus (M : E →L[𝕜] F)
     (hM : IsUnit M.modulus) :
     M.polarPartial = M ∘L Ring.inverse M.modulus := by
   refine (M.eq_polarPartial_of_comp_modulus _ ?_ ?_).symm
