@@ -139,12 +139,12 @@ theorem exists_unitary_transport_selectedSpectralProjections_endpoints_of_identi
       boundedSelfAdjointSpectralProjection (operatorPath A V 0)
           (hself 0 (by exact ⟨le_rfl, zero_le_one⟩)) s hs =
         boundedSelfAdjointSpectralProjection A hA s hs := by
-    simpa only [hpath0]
+    simp only [hpath0]
   have hP1 :
       boundedSelfAdjointSpectralProjection (operatorPath A V 1)
           (hself 1 (by exact ⟨zero_le_one, le_rfl⟩)) s hs =
         boundedSelfAdjointSpectralProjection (A + V) hAV s hs := by
-    simpa only [hpath1]
+    simp only [hpath1]
   rw [hP0, hP1] at hWintertwines
   exact ⟨W, hWunitary, hWintertwines⟩
 
