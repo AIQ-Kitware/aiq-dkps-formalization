@@ -119,6 +119,10 @@ RUNGS: list[tuple[str, str, list[str]]] = [
     # a rung cannot silently drift from its roadmap; `--check` reports any seed
     # that no longer names a module.  Lane LADDER-EXT, `jon (yardrat)`, 2026-07-29.
     ("G", "Foundations completion — the rest of topics T01-T10", [
+        # Added 2026-08-10 with the module.  Topic T01: the continuous functional calculus
+        # of a self-adjoint element transported to its real spectrum, complex symbols and
+        # complex scalars retained.  Imports Mathlib only, so it has no forward reference.
+        "Analysis.CStarAlgebra.RealSpectrumFunctionalCalculus",
         "Analysis.Convex.Majorization",
         "Analysis.OperatorIdeal.ApproximationNumber.CompactHilbert",
         "Analysis.OperatorIdeal.ApproximationNumber.Core",
