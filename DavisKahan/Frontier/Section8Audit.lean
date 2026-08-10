@@ -142,6 +142,11 @@ estimates, the Krein completion, equation (1.5), and the printed `Θ < π/4`. -/
 #check theorem8_2_branch_source_directed_real
 #check theorem8_2_perturbationHalfGap_source_real_maximalAngle_lt
 #check theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects
+#check theorem8_2_branch_source_real_maximalAngle_lt
+#check theorem8_2_sinTwoTheta_perturbation_source_real
+#check theorem8_2_sinTwoTheta_residual_source_real
+#check theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm
+#check theorem8_2_source_real
 
 #print axioms theorem8_2_perturbationHalfGap_source
 #print axioms theorem8_2_residualHalfGap_source
@@ -160,6 +165,11 @@ estimates, the Krein completion, equation (1.5), and the printed `Θ < π/4`. -/
 #print axioms theorem8_2_branch_source_directed_real
 #print axioms theorem8_2_perturbationHalfGap_source_real_maximalAngle_lt
 #print axioms theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects
+#print axioms theorem8_2_branch_source_real_maximalAngle_lt
+#print axioms theorem8_2_sinTwoTheta_perturbation_source_real
+#print axioms theorem8_2_sinTwoTheta_residual_source_real
+#print axioms theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm
+#print axioms theorem8_2_source_real
 
 end Section8
 end DavisKahan1970

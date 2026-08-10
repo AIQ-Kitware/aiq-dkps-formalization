@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Frontier.Section8SourceTheorem82
+import DavisKahan.Sources.DavisKahan1970.WholeSpaceReal
 import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 
 /-!
@@ -42,18 +43,45 @@ equation (1.8) with `H E₀` from invariance of `P` alone, and that argument
 never sees the scalars; it is now stated over any `RCLike` field.  With
 `norm_comp_subtypeL_eq_norm_comp_starProjection`, also scalar-generic, the
 printed residual norm becomes `‖H P_P‖`, which complexifies term by term.  That
-is `norm_residual_complexify` below, the module's only computation.
+is `norm_residual_complexify` below.
+
+## The two `sin 2Θ` estimates Theorem 8.2 inherits, over `ℝ`
+
+Theorem 8.2's printed statement carries the `sin 2Θ` theorem's own conclusions
+alongside `Θ < π/4`, so the real surface has to carry them too.  Two further
+ingredients do that, and no perturbation theory is re-run for either:
+
+* `complexify_sinTwoAngleOperator` -- the ambient one-sided `sin 2Θ` operator
+  `2 P_{Qᗮ} P_P P_Q` is a real scalar times a product of three orthogonal
+  projections, each of which complexifies, so the operator-norm estimates
+  transport;
+* the paper's own unitarily invariant norm scope needs no new transport at all:
+  `sinTwoTheta_wholeSpace_paperUINorm_real` is already stated over `ℝ`, and the
+  only missing piece was the real spectral dictionary
+  `spectrum_compressOperatorReal_subset_of_spectrumIn`, the real counterpart of
+  `spectrum_compressOperator_subset_of_spectrumIn`.
+
+The residual alternative is available at the operator norm only, over `ℝ`
+exactly as over `ℂ`; the obstruction is recorded at the head of section 2b of
+`Section8SourceTheorem82.lean` and is mathematical, not a matter of scalars.
 
 ## Main results
 
 * `theorem8_2_perturbationHalfGap_source_real`;
 * `theorem8_2_residualHalfGap_source_real`;
 * `theorem8_2_branch_source_directed_real` -- the printed disjunction;
-* `theorem8_2_perturbationHalfGap_source_real_maximalAngle_lt` and
+* `theorem8_2_perturbationHalfGap_source_real_maximalAngle_lt`,
+  `theorem8_2_branch_source_real_maximalAngle_lt` and
   `theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects` -- the
   printed `Θ < π/4`, under the finite form of (1.5) and under Section 3's
-  standing assumption (3.5) respectively; the second carries no dimension
-  hypothesis of any kind.
+  standing assumption (3.5) respectively; the last carries no dimension
+  hypothesis of any kind;
+* `theorem8_2_sinTwoTheta_perturbation_source_real` and
+  `theorem8_2_sinTwoTheta_residual_source_real` -- the inherited `sin 2Θ`
+  estimates at the operator norm;
+* `theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm` -- the first of
+  those at every source unitarily invariant norm;
+* `theorem8_2_source_real` -- the whole printed theorem over `ℝ`.
 
 ## References
 
@@ -112,6 +140,42 @@ theorem norm_residual_complexify
     Krein.norm_comp_subtypeL_eq_norm_comp_starProjection,
     starProjection_complexifySubmodule, ← complexify_comp, norm_complexify]
 
+/-! ### 1b. The three hypothesis transports, once
+
+Every theorem below complexifies the same configuration, so the three
+hypothesis transports are named here instead of being repeated in each proof.
+They are `private`: each is a one-line composition of an existing preservation
+lemma with a rewrite, and none is a statement about Theorem 8.2. -/
+
+/-- Self-adjointness in the `IsSelfAdjointOperator` spelling survives
+complexification. -/
+private theorem complexify_isSelfAdjointOperator {T : E →L[ℝ] E}
+    (hT : IsSelfAdjointOperator T) : IsSelfAdjointOperator (complexify T) :=
+  ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+    ((complexify_isSelfAdjoint_iff T).2
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT))
+
+/-- A spectral placement for the perturbed operator on a real subspace becomes
+the same placement for the complexified pair on the complexified subspace. -/
+private theorem spectrumIn_complexify_add {A K : E →L[ℝ] E} {U : Submodule ℝ E}
+    [U.HasOrthogonalProjection] {s : Set ℝ}
+    (h : Foundation.SpectrumIn (A + K) U s) :
+    Foundation.SpectrumIn (complexify A + complexify K) (complexifySubmodule U) s := by
+  rw [show complexify A + complexify K = complexify (A + K) from
+    (complexify_add A K).symm]
+  exact spectrumIn_complexifySubmodule U (A + K) _ h
+
+/-- The same transport on the orthogonal complement, where complexification and
+orthogonal complementation have to be exchanged. -/
+private theorem spectrumIn_orthogonal_complexify_add {A K : E →L[ℝ] E}
+    {U : Submodule ℝ E} [U.HasOrthogonalProjection] {s : Set ℝ}
+    (h : Foundation.SpectrumIn (A + K) Uᗮ s) :
+    Foundation.SpectrumIn (complexify A + complexify K) (complexifySubmodule U)ᗮ s := by
+  rw [show complexify A + complexify K = complexify (A + K) from
+      (complexify_add A K).symm,
+    ← complexifySubmodule_orthogonal U]
+  exact spectrumIn_complexifySubmodule Uᗮ (A + K) _ h
+
 /-! ### 2. The two printed alternatives over `ℝ` -/
 
 /-- **Davis--Kahan 1970, Theorem 8.2, perturbation alternative, over a REAL
@@ -132,33 +196,14 @@ theorem theorem8_2_perturbationHalfGap_source_real
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hsmall : ‖K‖ < delta / 2) :
     directedGap P Q < Real.sqrt 2 / 2 := by
-  have hsum : complexify A + complexify K = complexify (A + K) :=
-    (complexify_add A K).symm
-  have hAc : IsSelfAdjointOperator (complexify A) :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-      ((complexify_isSelfAdjoint_iff A).2
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
-  have hKc : IsSelfAdjointOperator (complexify K) :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-      ((complexify_isSelfAdjoint_iff K).2
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK))
-  have hQc : Foundation.SpectrumIn (complexify A + complexify K) (complexifySubmodule Q)
-      (Set.Icc beta alpha) := by
-    rw [hsum]
-    exact spectrumIn_complexifySubmodule Q (A + K) _ hQ
-  have hQperpc : Foundation.SpectrumIn (complexify A + complexify K) (complexifySubmodule Q)ᗮ
-      (gapExterior beta alpha delta) := by
-    rw [hsum, ← complexifySubmodule_orthogonal Q]
-    exact spectrumIn_complexifySubmodule Qᗮ (A + K) _ hQperp
-  have hPredc : (complexify A).Reduces (complexifySubmodule P) :=
-    (complexify_reduces_iff A P).2 hPred
-  have hPc : Foundation.SpectrumIn (complexify A) (complexifySubmodule P)
-      (Set.Icc (beta - delta / 2) (alpha + delta / 2)) :=
-    spectrumIn_complexifySubmodule P A _ hP
   have hsmallc : ‖complexify K‖ < delta / 2 := by
     rw [norm_complexify]; exact hsmall
-  have hmain := theorem8_2_perturbationHalfGap_source hAc hKc hdelta hab hQc
-    hQperpc hPredc hPc hsmallc
+  have hmain := theorem8_2_perturbationHalfGap_source
+    (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
+    hdelta hab (spectrumIn_complexify_add hQ)
+    (spectrumIn_orthogonal_complexify_add hQperp)
+    ((complexify_reduces_iff A P).2 hPred)
+    (spectrumIn_complexifySubmodule P A _ hP) hsmallc
   rwa [directedGap_complexifySubmodule] at hmain
 
 /-- **Davis--Kahan 1970, Theorem 8.2, residual alternative, over a REAL Hilbert
@@ -178,36 +223,17 @@ theorem theorem8_2_residualHalfGap_source_real
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hRsmall : ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
     directedGap P Q < Real.sqrt 2 / 2 := by
-  have hsum : complexify A + complexify K = complexify (A + K) :=
-    (complexify_add A K).symm
-  have hAc : IsSelfAdjointOperator (complexify A) :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-      ((complexify_isSelfAdjoint_iff A).2
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
-  have hKc : IsSelfAdjointOperator (complexify K) :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-      ((complexify_isSelfAdjoint_iff K).2
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK))
-  have hQc : Foundation.SpectrumIn (complexify A + complexify K) (complexifySubmodule Q)
-      (Set.Icc beta alpha) := by
-    rw [hsum]
-    exact spectrumIn_complexifySubmodule Q (A + K) _ hQ
-  have hQperpc : Foundation.SpectrumIn (complexify A + complexify K) (complexifySubmodule Q)ᗮ
-      (gapExterior beta alpha delta) := by
-    rw [hsum, ← complexifySubmodule_orthogonal Q]
-    exact spectrumIn_complexifySubmodule Qᗮ (A + K) _ hQperp
-  have hPredc : (complexify A).Reduces (complexifySubmodule P) :=
-    (complexify_reduces_iff A P).2 hPred
-  have hPc : Foundation.SpectrumIn (complexify A) (complexifySubmodule P)
-      (Set.Icc (beta - delta / 2) (alpha + delta / 2)) :=
-    spectrumIn_complexifySubmodule P A _ hP
   have hRsmallc : ‖residual (complexify A + complexify K)
       (complexifySubmodule P).subtypeL
       (compressOperator (complexifySubmodule P) (complexify A))‖ < delta / 2 := by
     rw [norm_residual_complexify A K P hPred.1]
     exact hRsmall
-  have hmain := theorem8_2_residualHalfGap_source hAc hKc hdelta hab hQc
-    hQperpc hPredc hPc hRsmallc
+  have hmain := theorem8_2_residualHalfGap_source
+    (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
+    hdelta hab (spectrumIn_complexify_add hQ)
+    (spectrumIn_orthogonal_complexify_add hQperp)
+    ((complexify_reduces_iff A P).2 hPred)
+    (spectrumIn_complexifySubmodule P A _ hP) hRsmallc
   rwa [directedGap_complexifySubmodule] at hmain
 
 /-- **Theorem 8.2's printed disjunction over a REAL Hilbert space.**  Either
@@ -287,6 +313,241 @@ theorem theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects
     maximalAngle P Q < Real.pi / 4 :=
   maximalAngle_lt_pi_div_four_of_crossedDefects hcross
     (theorem8_2_branch_source_directed_real hA hK hdelta hab hQ hQperp hPred hP halt)
+
+/-- **Theorem 8.2's printed disjunction, printed conclusion `Θ < π/4`, over a
+REAL Hilbert space, under the finite form of the standing convention (1.5).**
+
+The real counterpart of `theorem8_2_branch_source_maximalAngle_lt`, and the form
+`theorem8_2_source_real` packages. -/
+theorem theorem8_2_branch_source_real_maximalAngle_lt [FiniteDimensional ℝ E]
+    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : A.Reduces P)
+    (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
+    (hrank : Module.finrank ℝ P = Module.finrank ℝ Q)
+    (halt : ‖K‖ < delta / 2 ∨
+      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+    maximalAngle P Q < Real.pi / 4 :=
+  maximalAngle_lt_pi_div_four_of_directedGap_lt hrank
+    (theorem8_2_branch_source_directed_real hA hK hdelta hab hQ hQperp hPred hP halt)
+
+/-! ### 4. The `sin 2Θ` estimates Theorem 8.2 inherits, over `ℝ`
+
+The printed statement is "in addition to `δ‖sin 2Θ‖ ≤ 2‖H‖` or
+`δ‖sin 2Θ₀‖ ≤ 2‖R‖`, we have `Θ < π/4`", so the real surface carries the two
+displayed estimates as well as the quarter angle.  They are the real readings of
+`theorem8_2_sinTwoTheta_{perturbation,residual}_source`. -/
+
+omit [CompleteSpace E] in
+/-- **The ambient one-sided `sin 2Θ` operator complexifies to its complex
+counterpart.**
+
+`sinTwoAngleOperator U V` is `2 P_{Uᗮ} P_V P_U`: the real scalar `2` times a
+composition of three orthogonal projections.  `complexify` is real-homogeneous
+and functorial, and each projection complexifies to the projection onto the
+complexified subspace, so the product does.  Written as two `show`s rather than
+`simp` because the two `2`s live in different fields and only the last step is a
+cast. -/
+theorem complexify_sinTwoAngleOperator (U V : Submodule ℝ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    complexify (DavisKahanExt.sinTwoAngleOperator U V) =
+      DavisKahanExt.sinTwoAngleOperator (complexifySubmodule U)
+        (complexifySubmodule V) := by
+  show complexify ((2 : ℝ) •
+    (Uᗮ.starProjection ∘L V.starProjection ∘L U.starProjection)) = _
+  show _ = (2 : ℂ) • ((complexifySubmodule U)ᗮ.starProjection ∘L
+    (complexifySubmodule V).starProjection ∘L
+      (complexifySubmodule U).starProjection)
+  rw [complexify_real_smul, complexify_comp, complexify_comp,
+    starProjection_complexifySubmodule_orthogonal,
+    starProjection_complexifySubmodule, starProjection_complexifySubmodule,
+    show ((2 : ℝ) : ℂ) = (2 : ℂ) from by norm_num]
+
+omit [CompleteSpace E] in
+/-- The ambient `sin 2Θ` of a real pair has the operator norm of the complex
+`sin 2Θ` of the complexified pair. -/
+theorem norm_sinTwoAngleOperator_complexifySubmodule (U V : Submodule ℝ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    ‖DavisKahanExt.sinTwoAngleOperator (complexifySubmodule U)
+        (complexifySubmodule V)‖ =
+      ‖DavisKahanExt.sinTwoAngleOperator U V‖ := by
+  rw [← complexify_sinTwoAngleOperator U V, norm_complexify]
+
+/-- **The `sin 2Θ` estimate at Theorem 8.2's hypotheses, perturbation form, over
+a REAL Hilbert space**: `δ ‖sin 2Θ‖ ≤ 2 ‖H‖`.
+
+The real reading of `theorem8_2_sinTwoTheta_perturbation_source`.  Nothing is
+re-proved: the configuration is complexified, the complex estimate applied, and
+both sides read back by `norm_sinTwoAngleOperator_complexifySubmodule` and
+`norm_complexify`. -/
+theorem theorem8_2_sinTwoTheta_perturbation_source_real
+    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : A.Reduces P) :
+    delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤ 2 * ‖K‖ := by
+  have hmain := theorem8_2_sinTwoTheta_perturbation_source
+    (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
+    hdelta hab (spectrumIn_complexify_add hQ)
+    (spectrumIn_orthogonal_complexify_add hQperp)
+    ((complexify_reduces_iff A P).2 hPred)
+  rwa [norm_sinTwoAngleOperator_complexifySubmodule, norm_complexify] at hmain
+
+/-- **The `sin 2Θ` estimate at Theorem 8.2's hypotheses, residual form, over a
+REAL Hilbert space**: `δ ‖sin 2Θ‖ ≤ 2 ‖R‖` with `R` the printed residual (1.8).
+
+The real reading of `theorem8_2_sinTwoTheta_residual_source`, transported the
+same way, with the residual norm carried by `norm_residual_complexify`.
+
+As over `ℂ`, the conclusion names the **ambient** `sin 2Θ` of the pair, not the
+directed `sin 2Θ₀` of the printed residual inequality; at the operator norm that
+is the stronger reading. -/
+theorem theorem8_2_sinTwoTheta_residual_source_real
+    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : A.Reduces P) :
+    delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
+      2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ := by
+  have hmain := theorem8_2_sinTwoTheta_residual_source
+    (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
+    hdelta hab (spectrumIn_complexify_add hQ)
+    (spectrumIn_orthogonal_complexify_add hQperp)
+    ((complexify_reduces_iff A P).2 hPred)
+  rwa [norm_sinTwoAngleOperator_complexifySubmodule,
+    norm_residual_complexify A K P hPred.1] at hmain
+
+/-! ### 5. The same estimate at every source unitarily invariant norm, over `ℝ`
+
+`sinTwoTheta_wholeSpace_paperUINorm_real` is equation (7.5) over a real Hilbert
+space, for every norm in the paper's own class.  Reading it at Theorem 8.2's
+configuration needs exactly one thing the complex descent also needed: the
+dictionary between `Foundation.SpectrumIn` and `spectrum ℝ` of the compression.
+-/
+
+omit [CompleteSpace E] in
+/-- **The spectral dictionary between Section 8 and the `sin 2Θ` development,
+over `ℝ`.**
+
+The real counterpart of `spectrum_compressOperator_subset_of_spectrumIn`.  It is
+**not** obtained by generalizing that theorem's scalars: over a general `RCLike`
+field the statement does not even elaborate, because `spectrum ℝ` of an operator
+needs an `Algebra ℝ` structure on the `𝕜`-operator algebra and there is none.
+The complex proof crosses that gap with `realSpectrum T = spectrum ℝ T`; over
+`ℝ` the same crossing is a coercion identity.  `compressOperatorReal U T` is by
+definition the `compressOperator U T` of the scalar-generic compression, hence
+the honest restriction on an invariant subspace. -/
+theorem spectrum_compressOperatorReal_subset_of_spectrumIn
+    {T : E →L[ℝ] E} {U : Submodule ℝ E} [U.HasOrthogonalProjection]
+    {s : Set ℝ} (h : Foundation.SpectrumIn T U s) :
+    spectrum ℝ (DavisKahan1970.compressOperatorReal U T) ⊆ s := by
+  intro r hr
+  refine h.subset ⟨h.invariant, ?_⟩
+  rw [show DavisKahan1970.compressOperatorReal U T = T.restrict h.invariant from
+    compressOperator_eq_restrict_of_invariant T U h.invariant] at hr
+  simpa using hr
+
+/-- **The `sin 2Θ` estimate at Theorem 8.2's hypotheses, perturbation form, over
+a REAL Hilbert space, for every source unitarily invariant norm.**
+
+`δ N(sin 2Θ) ≤ 2 N(H)`, at the paper's own class of unitarily invariant norms
+and at Theorem 8.2's own hypotheses.
+`theorem8_2_sinTwoTheta_perturbation_source_real` is the operator-norm reading of
+the same inheritance, and `theorem8_2_sinTwoTheta_perturbation_source_paperUINorm`
+is the complex one.
+
+Nothing is re-proved.  This is equation (7.5) over a real Hilbert space,
+`DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real`, read with `A + K`
+carrying the printed gap on `Q` and with `A` — which `P` reduces by hypothesis —
+as the comparison operator, so that the displacement is `-K`.
+
+The conclusion names the paper's literal `sin 2Θ`, the real positive operator
+`paperSinTwoAngleOperatorR Q P`, rather than the modulus-free
+`sinTwoAngleOperator` of the operator-norm statement: only the former carries the
+whole singular-value list that a general unitarily invariant norm reads. -/
+theorem theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm
+    (N : ExactSinTheta.PaperUnitaryInvariantNorm)
+    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : A.Reduces P)
+    (hKmem : N.Mem K) :
+    N.Mem (paperSinTwoAngleOperatorR Q P) ∧
+      delta * N.gauge (paperSinTwoAngleOperatorR Q P) ≤ 2 * N.gauge K := by
+  have hAsa : IsSelfAdjoint A :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
+  have hKsa : IsSelfAdjoint K :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK
+  have hAKsa : IsSelfAdjoint (A + K) := hAsa.add hKsa
+  have hQred : (A + K).Reduces Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hUspec : spectrum ℝ (DavisKahan1970.compressOperatorReal Q (A + K)) ⊆
+      Set.Icc beta alpha :=
+    spectrum_compressOperatorReal_subset_of_spectrumIn hQ
+  have hUspec' : ∀ x ∈ spectrum ℝ (DavisKahan1970.compressOperatorReal Qᗮ (A + K)),
+      x ≤ beta - delta ∨ alpha + delta ≤ x :=
+    fun _ hx => spectrum_compressOperatorReal_subset_of_spectrumIn hQperp hx
+  have hneg : A - (A + K) = (-1 : ℝ) • K := by
+    rw [neg_one_smul]
+    abel
+  have hone : ‖(-1 : ℝ)‖ = 1 := by norm_num
+  have hMemNeg : N.Mem (A - (A + K)) := by
+    rw [hneg]
+    intro htop
+    rw [N.extendedGauge_smul, hone] at htop
+    rcases ENNReal.mul_eq_top.mp htop with ⟨_, h⟩ | ⟨h, _⟩
+    · exact hKmem h
+    · exact absurd h (by simp)
+  have hgaugeNeg : N.gauge (A - (A + K)) = N.gauge K := by
+    rw [hneg, N.gauge_smul _ hKmem, hone, one_mul]
+  obtain ⟨hmem, hle⟩ := DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real N
+    hAKsa hAsa hQred hPred hdelta hab hUspec hUspec' hMemNeg
+  exact ⟨hmem, by rwa [hgaugeNeg] at hle⟩
+
+/-! ### 6. The whole printed theorem over `ℝ` -/
+
+/-- **Davis--Kahan 1970, Theorem 8.2, over a REAL Hilbert space.**
+
+> Add to the hypotheses of the `sin 2θ` theorem either `‖H‖₁ < δ/2` or
+> `‖R‖₁ < δ/2`, and assume the spectrum of `A₀` lies in
+> `[β - δ/2, α + δ/2]`.  Then, in addition to `δ‖sin 2Θ‖ ≤ 2‖H‖` or
+> `δ‖sin 2Θ₀‖ ≤ 2‖R‖`, we have `Θ < π/4`.
+
+The real reading of `theorem8_2_source`, hypothesis for hypothesis and
+conclusion for conclusion: standing assumption 1 of the source admits a real or
+complex Hilbert space, and Theorem 8.2 supplies both subspaces as data, so the
+descent introduces no hypothesis of its own.
+
+`‖·‖₁` is the bound norm throughout Theorem 8.2, which is what the operator
+norms here are; `theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm`
+carries the perturbation estimate at the printed norm scope. -/
+theorem theorem8_2_source_real [FiniteDimensional ℝ E]
+    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : A.Reduces P)
+    (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
+    (hrank : Module.finrank ℝ P = Module.finrank ℝ Q)
+    (hsmall : ‖K‖ < delta / 2 ∨
+      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+    delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤ 2 * ‖K‖ ∧
+      delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
+        2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ ∧
+      maximalAngle P Q < Real.pi / 4 :=
+  ⟨theorem8_2_sinTwoTheta_perturbation_source_real hA hK hdelta hab hQ hQperp hPred,
+    theorem8_2_sinTwoTheta_residual_source_real hA hK hdelta hab hQ hQperp hPred,
+    theorem8_2_branch_source_real_maximalAngle_lt hA hK hdelta hab hQ hQperp hPred
+      hP hrank hsmall⟩
 
 end
 
