@@ -598,6 +598,7 @@ private theorem doubleSecant_comm_starProjection :
                 U.starProjection := by noncomm_ring
       rw [mul_sub, sub_mul, mul_one, one_mul, hp2])).symm
 
+omit [CompleteSpace E] in
 private theorem doubleSecant_comm_starProjection_compl :
     paperDoubleSecant U V * (1 - U.starProjection) =
       (1 - U.starProjection) * paperDoubleSecant U V := by
