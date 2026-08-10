@@ -181,15 +181,27 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  ["Topology.ApproxMinimizer","Topology.Berge"]),
 ("T24","Real approximation numbers by complexification",
  ["Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal"]),
-("T26a","Compact self-adjoint operators classified by eigenspace dimensions",
+("T26a","Discrete spectra: compact self-adjoint operators classified by eigenspace dimensions, "
+ "and the enumeration of an unbounded locally finite set",
  # `CompactSelfAdjointClassification` imports only Mathlib; `CompactApproximationEigenvalues`
  # imports the approximation-number layer of T09, so this topic sits after it.  Together they
  # are the Corollary 3.1 bridge: equal approximation-number sequences and equal eigenspace
  # dimensions say the same thing for a compact positive operator with trivial kernel.
- [A+"CompactSelfAdjointClassification",A+"CompactApproximationEigenvalues"]),
+ # Added 2026-08-10 with the module: `Order.DiscreteEnumeration` is the order-theoretic half
+ # of the same story -- a set that is unbounded above and finite below every bound IS a
+ # strictly increasing sequence.  It imports only Mathlib and nothing in `ForTauCeti` imports
+ # it, so it constrains no topic ordering; it is filed here because its consumers are the
+ # discrete-spectrum statements this topic collects.
+ [A+"CompactSelfAdjointClassification",A+"CompactApproximationEigenvalues",
+  "Order.DiscreteEnumeration"]),
 ("T27","Measure classes, L-two transport, and the multiplicity normal form",
  ["MeasureTheory."+x for x in ["MeasureClass","RadonNikodymL2","LpComp","LpRestrict",
-                               "LpSliceSum","MultiplicityLevels"]]
+                               "LpSliceSum","MultiplicityLevels",
+                               # Added 2026-08-10 with the module: `L^2` of a measure with
+                               # infinitely many disjoint positive-finite sets is infinite
+                               # dimensional, and the unit-interval instance.  Same `Lp`
+                               # structure family as `LpComp`/`LpRestrict`.
+                               "LpInfiniteDimensional"]]
  # `OperatorUnitaryEquiv` is Hilbert-space material by subject and would sit in T28 -- but
  # `MultiplicityLevels` states its conclusion as a unitary equivalence of multiplication
  # operators and so imports it, and filing it downstream would make this topic unsubmittable.
@@ -208,7 +220,19 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # Added 2026-08-10 with the module: the diagonal spectral measure pushed forward to the
  # REAL spectrum, its `MeasurePreserving` statement, and the `Lp C 2` transport across it.
  # Imports `RealSpectrumBorelSymbols`, already in this topic, so no forward reference.
- +[A+"RealSpectrumDiagonalMeasure"]),
+ +[A+"RealSpectrumDiagonalMeasure"]
+ # Added 2026-08-10 with the module: the cyclic model over the REAL spectrum and its range
+ # theorem.  Imports `RealSpectrumDiagonalMeasure`, already in this topic, so no forward
+ # reference.
+ +[A+"RealSpectrumCyclicModel"]
+ # Added 2026-08-10 with the module: multiplication by the REAL coordinate and the
+ # intertwining law transporting `cyclicIsometry_coordMulLp` to the real spectrum.
+ # Imports `RealSpectrumCyclicModel`, already in this topic, so no forward reference.
+ +[A+"RealSpectrumIntertwining"]
+ # Added 2026-08-10 with the module: the cyclic decomposition and countable Hilbert-sum
+ # statements transported to the real spectrum, plus the push-forward identity that
+ # measures the `Measure C` boundary.  Imports `RealSpectrumIntertwining`, already here.
+ +[A+"RealSpectrumCyclicDecomposition"]),
 ("T25","The Hilbert-Schmidt Sylvester flow",
  [A+x for x in ["HilbertSchmidt.Block","Sylvester.BlockEstimate","Sylvester.BlockIdentity",
                 "Sylvester.Generator","Sylvester.Group","Sylvester.SpectralGap"]]),
