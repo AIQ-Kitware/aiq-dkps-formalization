@@ -171,6 +171,62 @@ theorem orthogonalBlockSum_linearIsometryEquiv
   apply WithLp.ofLp_injective 2
   simp [orthogonalBlockSum]
 
+/-- **The orthogonal block sum of two subspaces**, as a submodule of the Hilbert `L²` product.
+
+This is the subspace-level partner of `orthogonalBlockSum`.  Without it a direct-sum statement
+is a statement about a block matrix; with it -- through
+`starProjection_orthogonalBlockSumSubmodule` -- it becomes a statement about an actual pair of
+subspaces of `WithLp 2 (E₁ × E₂)`. -/
+noncomputable def orthogonalBlockSumSubmodule
+    {E₁ E₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
+    (U₁ : Submodule 𝕜 E₁) (U₂ : Submodule 𝕜 E₂) :
+    Submodule 𝕜 (WithLp 2 (E₁ × E₂)) :=
+  (U₁.prod U₂).comap (WithLp.linearEquiv 2 𝕜 (E₁ × E₂)).toLinearMap
+
+/-- Membership in the block sum of two subspaces is blockwise. -/
+@[simp] theorem mem_orthogonalBlockSumSubmodule
+    {E₁ E₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
+    {U₁ : Submodule 𝕜 E₁} {U₂ : Submodule 𝕜 E₂} {x : WithLp 2 (E₁ × E₂)} :
+    x ∈ orthogonalBlockSumSubmodule U₁ U₂ ↔ x.fst ∈ U₁ ∧ x.snd ∈ U₂ := Iff.rfl
+
+/-- **The orthogonal projector onto a block sum of subspaces is the block sum of the
+projectors.**
+
+This is the bookkeeping that turns the direct-sum equality theorems -- which are stated on
+`orthogonalBlockSum` of two plane angle operators -- into statements about the pair of
+subspaces `U₁ ⊞ U₂` and `V₁ ⊞ V₂`.  Iteration to `m` blocks composes this lemma and is left to
+the consumer. -/
+theorem starProjection_orthogonalBlockSumSubmodule
+    {E₁ E₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
+    (U₁ : Submodule 𝕜 E₁) (U₂ : Submodule 𝕜 E₂) :
+    (((orthogonalBlockSumSubmodule U₁ U₂).starProjection :
+        WithLp 2 (E₁ × E₂) →L[𝕜] WithLp 2 (E₁ × E₂)) :
+        WithLp 2 (E₁ × E₂) →ₗ[𝕜] WithLp 2 (E₁ × E₂)) =
+      orthogonalBlockSum ((U₁.starProjection : E₁ →L[𝕜] E₁) : E₁ →ₗ[𝕜] E₁)
+        ((U₂.starProjection : E₂ →L[𝕜] E₂) : E₂ →ₗ[𝕜] E₂) := by
+  refine LinearMap.ext fun x => ?_
+  refine Submodule.eq_starProjection_of_mem_of_inner_eq_zero ?_ ?_
+  · rw [mem_orthogonalBlockSumSubmodule]
+    exact ⟨U₁.starProjection_apply_mem _, U₂.starProjection_apply_mem _⟩
+  · intro y hy
+    rw [mem_orthogonalBlockSumSubmodule] at hy
+    rw [WithLp.prod_inner_apply]
+    have h₁ := Submodule.starProjection_inner_eq_zero (K := U₁)
+      (WithLp.ofLp x).1 (WithLp.ofLp y).1 hy.1
+    have h₂ := Submodule.starProjection_inner_eq_zero (K := U₂)
+      (WithLp.ofLp x).2 (WithLp.ofLp y).2 hy.2
+    change ⟪(WithLp.ofLp x).1 - U₁.starProjection (WithLp.ofLp x).1,
+        (WithLp.ofLp y).1⟫_𝕜 +
+      ⟪(WithLp.ofLp x).2 - U₂.starProjection (WithLp.ofLp x).2,
+        (WithLp.ofLp y).2⟫_𝕜 = 0
+    rw [h₁, h₂, add_zero]
+
 /-- **Blockwise singular-value data determines the singular-value data of the block sum.**
 
 No merge formula for the two sorted lists is needed: equal singular values in a block mean the
