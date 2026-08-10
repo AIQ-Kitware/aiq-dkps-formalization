@@ -46,7 +46,12 @@ IMPORT_RE = re.compile(r"^\s*(?:public\s+)?import\s+(\S+)\s*$", re.M)
 TOPICS: list[tuple[str, str, list[str]]] = [
 ("T01","Positive square root, operator modulus, functional calculus",
  ["Analysis.SpecialFunctions.Sqrt",A+"BasisSpan",A+"CourantFischer",
-  A+"PositiveSqrt",A+"SelfAdjointFunctionalCalculus",A+"OperatorModulus",A+"Spectrum"]),
+  A+"PositiveSqrt",A+"SelfAdjointFunctionalCalculus",A+"OperatorModulus",A+"Spectrum"]
+ # Added 2026-08-10 with the module: the continuous functional calculus of a self-adjoint
+ # element transported to its real spectrum, keeping complex symbols and complex scalars.
+ # It imports Mathlib only, so it sorts to the front of this topic and creates no forward
+ # reference.
+ +["Analysis.CStarAlgebra.RealSpectrumFunctionalCalculus"]),
 ("T02","Polar decomposition and partial isometries",
  [A+"PartialIsometry",A+"RectangularPartialIsometry",A+"Polar.Decomposition",A+"Polar.Isometry",
   A+"Polar.PartialIsometry",A+"NearIsometry",A+"IntertwiningUnitary"]),
