@@ -73,7 +73,7 @@ Current public source declarations include:
 
 The approximate-attaining engine is now available and is exactly the form needed by the Appendix to Section 6. Do not reintroduce an `∃ Ω, ... = ...` maximizer statement.
 
-One small narrowing remains on `(1.12)` only: `equation1_12` assumes a codomain orthonormal `ν`-tuple (`hF`), while the printed supremum ranges only over domain projectors. See mission A below for the worked removal route.
+The codomain-room narrowing that `(1.12)` used to carry has been removed: `equation1_12` now assumes only `hE`, an orthonormal `ν`-tuple in the *domain*, which is exactly the nonemptiness of the family the printed supremum ranges over. `(1.13)`'s two room hypotheses stay, because the printed `(1.13)` quantifies over projectors on both sides. See mission A below for what was actually done.
 
 ### 1.2 M36 foundation landed: real spectral ranges and real bounded gap branches
 
@@ -324,38 +324,30 @@ A well-shaped rectangular/self-adjoint intertwining lemma may unlock both the Pr
 
 ## 5. Detailed remaining missions and proof strategies
 
-### A. `S1-ui-norms`: remove the codomain-room hypothesis from equation (1.12)
+### A. `S1-ui-norms`: remove the codomain-room hypothesis from equation (1.12) -- DONE
 
-**Status:** one small source narrowing. `(1.13)` is already correct.
+**Status:** closed. `equation1_12` now reads
 
-Current theorem:
+`equation1_12 (K : E →L[ℂ] F) {ν : ℕ} (hE : ∃ x : Fin ν → E, Orthonormal ℂ x)`
 
-`equation1_12 K hE hF`
+with the same `IsLUB` conclusion, the same indexing set, and the same right-hand side. There is no `hF` and no replacement hypothesis: no `[FiniteDimensional]`, no compactness, no rank bound. `equation1_13_compressions` and `equation1_13_reSum` are untouched and keep both room hypotheses, which for printed `(1.13)` are the printed claim rather than an addition to it.
 
-uses `hF : ∃ y : Fin ν → F, Orthonormal ℂ y`, but printed `(1.12)` only ranges over `ν`-projectors in the domain. The domain room hypothesis `hE` is legitimate: otherwise the indexing family is empty. The codomain room hypothesis is not printed.
+**The route that worked was not the one recorded here before.** The previous entry proposed running the attaining argument at `ν' = min ν (finrank W')`, citing `rectangularKyFanSum_eq_minFinrank_of_minFinrank_le`. That lemma is in the *finite-dimensional* singular-value layer: it is about `rectangularKyFanSum` of an `A : E →ₗ[𝕜] F` with `[FiniteDimensional 𝕜 E]` and `[FiniteDimensional 𝕜 F]` as section instances (`ForTauCeti/Analysis/InnerProductSpace/SchattenNorm.lean`). `(1.12)` is about `kyFanApproximationGauge` of a bounded `K : E →L[ℂ] F` on possibly infinite-dimensional spaces, so that lemma does not apply, and the route also needed an orthonormal-extension step that was never proved.
 
-Why `hF` currently appears: the approximate rectangular Ky Fan attaining theorem asks for `ν` orthonormal vectors in both domain and codomain.
+**What was done instead: pad the codomain.** `hF` is an artifact of the attaining engine `exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner_complex`, which returns an orthonormal `ν`-tuple in *each* space and therefore cannot run when `dim F < ν`. But the conclusion of `(1.12)` never mentions the codomain. So replace `F` by the `L²` sum `WithLp 2 (F × EuclideanSpace ℂ (Fin ν))`, which has room for `ν` orthonormal vectors no matter what `F` is, along the inclusion `ι` of `F` as the first summand; the projection back onto that summand is a left inverse, and both maps are contractions. Every Ky Fan gauge is blind to that substitution, so the ε-bound proved in the padded space is a bound in `F`. No case split on the dimension of `F` is needed, and the argument is uniform.
 
-**Worked repair.** Let the relevant finite-dimensional compressed codomain be `W'` and set
+The general fact this rests on is proved once in `ForTauCeti`, at the lowest layer where it is expressible, and consumed by `:=`:
 
-`ν' = min ν (finrank W')`.
+* `ContinuousLinearMap.approximationNumber_comp_eq_of_leftInverse` (`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean`) -- over an arbitrary nontrivially normed field, with no inner product, completeness, or dimension hypothesis: if `‖ι‖ ≤ 1`, `‖π‖ ≤ 1` and `π ∘ ι = id`, then `(ι ∘L T).approximationNumber n = T.approximationNumber n`. Both ideal inequalities apply and the left inverse closes the loop.
+* `ContinuousLinearMap.kyFanGauge_comp_eq_of_leftInverse` (`.../ApproximationNumber/KyFan.lean`) -- the same statement summed over the prefix.
+* `TauCeti.ApproximationNumber.kyFanApproximationGauge_comp_eq_of_leftInverse` (`.../ApproximationNumber/Core.lean`) -- the mirror in the `kyFanApproximationGauge` spelling the source facade uses.
 
-The Ky Fan prefix has already saturated at `ν'`; use
-
-`rectangularKyFanSum_eq_minFinrank_of_minFinrank_le`.
-
-Run the approximate attaining theorem at `ν'`, where the codomain has enough room by construction. The resulting domain `ν'`-tuple lies in a finite-dimensional subspace `W` with at least `ν` dimensions because `hE` supplies the necessary domain room. Extend it to an orthonormal `ν`-tuple using
-
-`Orthonormal.exists_orthonormalBasis_extension_of_card_eq`.
-
-The extra extension directions should contribute zero after the relevant finite-rank compression because the approximation-number prefix has saturated. Package the same `IsLUB` lower-bound argument as the current proof.
-
-Do **not** replace `IsLUB` by an attained maximum.
-
-Likely files:
+Files touched:
 
 * `DavisKahan/Sources/DavisKahan1970/Section1UnitaryInvariantNorms.lean`;
-* rectangular Ky Fan infrastructure in `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantSeminorm/Instances.lean` and `SchattenNorm.lean`.
+* the three `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/` modules named above.
+
+Do **not** replace `IsLUB` by an attained maximum; that statement remains false in infinite dimensions for the reason recorded in the module docstring.
 
 ---
 

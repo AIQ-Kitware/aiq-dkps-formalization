@@ -68,6 +68,8 @@ and is recorded as decision 1 of
   `approximationNumber_comp_le_norm_mul`, `approximationNumber_comp_le_mul_norm`,
   `approximationNumber_comp_comp_le`: the additive and two-sided ideal
   inequalities.
+* `ContinuousLinearMap.approximationNumber_comp_eq_of_leftInverse`: enlarging the
+  codomain along a contraction with a contractive left inverse changes nothing.
 * `ContinuousLinearMap.approximationNumber_smul`: absolute homogeneity.
 
 ## Namespace note
@@ -475,6 +477,39 @@ theorem approximationNumber_comp_comp_le
     _ ≤ (‖L‖ * T.approximationNumber n) * ‖R‖ := by
       gcongr
       exact approximationNumber_comp_le_norm_mul L T n
+
+/-- **Approximation numbers do not see an enlargement of the codomain.**
+
+`ι` embeds `F` into `G` with `‖ι‖ ≤ 1`, and `π` is a left inverse with `‖π‖ ≤ 1`; the
+model is the inclusion of `F` as one summand of an `ℓ²` direct sum together with the
+projection back onto it.  Postcomposing with `ι` then leaves every approximation number
+where it was, because both ideal inequalities apply and `π ∘ ι = id` closes the loop.
+(The two hypotheses force `ι` to be isometric: `‖y‖ = ‖π (ι y)‖ ≤ ‖ι y‖ ≤ ‖y‖`.)
+
+Nothing here needs an inner product, completeness, or a bound on any dimension.  Its use
+is to move an operator into a codomain with room for as many orthonormal vectors as an
+argument needs, without changing the quantity being computed. -/
+theorem approximationNumber_comp_eq_of_leftInverse
+    {G : Type x} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
+    {ι : F →L[𝕜] G} {π : G →L[𝕜] F} (hπι : Function.LeftInverse π ι)
+    (hι : ‖ι‖ ≤ 1) (hπ : ‖π‖ ≤ 1) (T : E →L[𝕜] F) (n : ℕ) :
+    (ι ∘L T).approximationNumber n = T.approximationNumber n := by
+  have hcomp : π ∘L (ι ∘L T) = T := by
+    ext x
+    exact hπι (T x)
+  refine le_antisymm ?_ ?_
+  · calc (ι ∘L T).approximationNumber n
+        ≤ ‖ι‖ * T.approximationNumber n := approximationNumber_comp_le_norm_mul ι T n
+      _ ≤ 1 * T.approximationNumber n :=
+        mul_le_mul_of_nonneg_right hι (T.approximationNumber_nonneg n)
+      _ = T.approximationNumber n := one_mul _
+  · calc T.approximationNumber n
+        = (π ∘L (ι ∘L T)).approximationNumber n := by rw [hcomp]
+      _ ≤ ‖π‖ * (ι ∘L T).approximationNumber n :=
+        approximationNumber_comp_le_norm_mul π (ι ∘L T) n
+      _ ≤ 1 * (ι ∘L T).approximationNumber n :=
+        mul_le_mul_of_nonneg_right hπ ((ι ∘L T).approximationNumber_nonneg n)
+      _ = (ι ∘L T).approximationNumber n := one_mul _
 
 /-- Rank of scalar multiples is no larger than the original rank. -/
 private theorem rank_smul_le_rank (c : 𝕜) (R : E →L[𝕜] F) :
