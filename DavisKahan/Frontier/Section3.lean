@@ -31,6 +31,11 @@ import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 -- discharges the functional-calculus hypotheses of the Halmos spine at
 -- `𝕜 = ℝ`, and so what makes the real-scalar section at the end of this file
 -- inhabited rather than vacuous.
+import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+-- supplies `TauCeti.IsAcute` together with
+-- `TauCeti.isAcute_iff_inf_orthogonal_eq_bot`, the literal restatement of the
+-- paper's Definition 3.2 as the vanishing of the two crossed intersections.
+-- Proposition 3.2's nonuniqueness sentence is stated against that definition.
 import DavisKahan.Geometry.Halmos.Realization
 -- supplies the realization half of Theorem 3.1: the explicit direct-rotation
 -- construction attaining a prescribed admissible angle datum.  That module
@@ -263,6 +268,78 @@ theorem proposition3_2_parameterized_nonuniqueness
       (∀ J, IsPaperDirectRotation U V (build J)) ∧
       Function.Injective build :=
   MathAhead.HiddenFoundations.proposition3_2_parameterization_completed U V hdefect
+
+omit [CompleteSpace H] in
+/-- **In the nonacute case the crossed defect spaces are nonzero.**
+
+The paper's Definition 3.2 declares the pair acute exactly when both crossed
+intersections `U ⊓ Vᗮ` and `Uᗮ ⊓ V` vanish, so failing to be acute makes at
+least one of them nonzero; the isometry supplied by (3.5) then transports that
+to the source defect. -/
+theorem halmosSourceDefect_ne_bot_of_not_isAcute
+    (hdefect : CrossedDefectsEquivalent U V) (hnonacute : ¬ TauCeti.IsAcute U V) :
+    halmosSourceDefect U V ≠ ⊥ := by
+  obtain ⟨J⟩ := hdefect
+  intro hbot
+  refine hnonacute (TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mpr ⟨hbot, ?_⟩)
+  refine (Submodule.eq_bot_iff _).mpr fun y hy => ?_
+  have hzero : ((J.symm ⟨y, hy⟩ : halmosSourceDefect U V) : H) = 0 :=
+    (Submodule.eq_bot_iff _).mp hbot _ (J.symm ⟨y, hy⟩).2
+  have hsymm : (J.symm ⟨y, hy⟩ : halmosSourceDefect U V) = 0 := Subtype.ext hzero
+  have htarget : (⟨y, hy⟩ : halmosTargetDefect U V) = 0 := by
+    have h := congrArg J hsymm
+    rwa [J.apply_symm_apply, map_zero] at h
+  exact congrArg Subtype.val htarget
+
+/-- **Davis--Kahan 1970, Proposition 3.2, second printed sentence: "It is not
+unique."**
+
+In the nonacute case a direct rotation, once it exists, is never unique.  The
+witnesses are produced by feeding an isometry `J` of the crossed defect spaces
+and its negation `-J` through the injective parameterization
+`proposition3_2_parameterized_nonuniqueness`.  Over a field of characteristic
+zero `J ≠ -J` requires a nonzero defect space, and that is supplied by the
+nonacute hypothesis rather than assumed separately: the paper's acute case is
+precisely the vanishing of both crossed intersections.
+
+This is the paper's own reason for the nonuniqueness -- "This extension is not
+unique (even if `dim Null(C₀) = 1`), and the nonuniqueness will survive" -- with
+the arbitrary unitary extension replaced by the single sign change, which is
+enough to refute uniqueness. -/
+theorem proposition3_2_not_unique
+    (hdefect : CrossedDefectsEquivalent U V) (hnonacute : ¬ TauCeti.IsAcute U V) :
+    ∃ T₁ T₂ : H →L[ℂ] H,
+      IsPaperDirectRotation U V T₁ ∧ IsPaperDirectRotation U V T₂ ∧ T₁ ≠ T₂ := by
+  obtain ⟨build, hbuild, hinj⟩ :=
+    proposition3_2_parameterized_nonuniqueness U V hdefect
+  obtain ⟨J⟩ := hdefect
+  obtain ⟨x, hxmem, hxne⟩ :=
+    Submodule.ne_bot_iff _ |>.mp
+      (halmosSourceDefect_ne_bot_of_not_isAcute U V ⟨J⟩ hnonacute)
+  refine ⟨build J, build (J.trans (LinearIsometryEquiv.neg ℂ)), hbuild _, hbuild _, ?_⟩
+  intro hEq
+  have hJJ : J = J.trans (LinearIsometryEquiv.neg ℂ) := hinj hEq
+  have hval : J ⟨x, hxmem⟩ = -J ⟨x, hxmem⟩ :=
+    congrArg (fun e : halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V =>
+      e ⟨x, hxmem⟩) hJJ
+  have hsrc : (⟨x, hxmem⟩ : halmosSourceDefect U V) = -⟨x, hxmem⟩ := by
+    refine J.injective ?_
+    rw [map_neg]
+    exact hval
+  have htwo : (2 : ℂ) • (⟨x, hxmem⟩ : halmosSourceDefect U V) = 0 := by
+    rw [two_smul]
+    exact add_eq_zero_iff_eq_neg.mpr hsrc
+  rcases smul_eq_zero.mp htwo with h2 | hx0
+  · exact absurd h2 two_ne_zero
+  · exact hxne (congrArg Subtype.val hx0)
+
+/-- **Proposition 3.2's nonuniqueness in literal `∃!` form.** -/
+theorem proposition3_2_not_existsUnique
+    (hdefect : CrossedDefectsEquivalent U V) (hnonacute : ¬ TauCeti.IsAcute U V) :
+    ¬ ∃! T : H →L[ℂ] H, IsPaperDirectRotation U V T := by
+  rintro ⟨T, _, huniq⟩
+  obtain ⟨T₁, T₂, h₁, h₂, hne⟩ := proposition3_2_not_unique U V hdefect hnonacute
+  exact hne ((huniq T₁ h₁).trans (huniq T₂ h₂).symm)
 
 /-- A unitary principal square root of the reflection product. -/
 structure IsPrincipalUnitarySquareRoot
