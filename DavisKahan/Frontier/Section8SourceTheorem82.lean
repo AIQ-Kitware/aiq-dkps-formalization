@@ -142,11 +142,20 @@ namespace Section8
 open DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.ApproximationNumber
 
 universe u
 
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
+
+/-- A subspace with an orthogonal projection in a complete Hilbert space is
+itself complete.  The source-facing residual theorems use `P` as the domain of
+a rectangular operator, so the source norm API needs this local instance. -/
+local instance instCompleteSpaceCoeOfHasOrthogonalProjectionSection8Source
+    {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
 /-! ### 1. Equation (1.5), and what it buys -/
 
@@ -272,12 +281,10 @@ theorem theorem8_2_sinTwoTheta_residual_source
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P) :
+    (_hPred : Reduces A P) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
       2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ := by
   classical
-  let : CompleteSpace P :=
-    (P.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hA0 : IsSelfAdjointOperator (A + K) := hA.add hK
   have hQred : Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
   have hfinite : Foundation.FiniteGapConfiguration (A + K) Q delta := ⟨beta, alpha, hab, hQ, hQperp⟩
@@ -412,6 +419,70 @@ theorem theorem8_2_sinTwoTheta_perturbation_source_paperUINorm
   obtain ⟨hmem, hle⟩ := DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm N
     hAKsa hAsa hQred hPred hdelta hab hUspec hUspec' hMemNeg
   exact ⟨hmem, by rwa [hgaugeNeg] at hle⟩
+
+/-- **Theorem 8.2's residual `sin 2Θ₀` inequality at every Ky Fan
+level.**  This is the directed norm content the printed residual alternative
+inherits from the Section 2 `sin 2Θ` theorem. -/
+theorem theorem8_2_sinTwoTheta_residual_source_all_kyFan
+    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (_hPred : Reduces A P) :
+    ∀ k : ℕ,
+      delta * kyFanApproximationGauge k
+          (TauCeti.DavisKahan.Experimental.sinTwoThetaIdealBlock Q P) ≤
+        2 * kyFanApproximationGauge k
+          (residual (A + K) P.subtypeL (compressOperator P A)) := by
+  have hAsa : IsSelfAdjoint A :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
+  have hKsa : IsSelfAdjoint K :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK
+  have hAKsa : IsSelfAdjoint (A + K) := hAsa.add hKsa
+  have hQred : Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hUspec : spectrum ℝ (compressOperator Q (A + K)) ⊆ Set.Icc beta alpha :=
+    spectrum_compressOperator_subset_of_spectrumIn hQ
+  have hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Qᗮ (A + K)),
+      x ≤ beta - delta ∨ alpha + delta ≤ x :=
+    fun _ hx => spectrum_compressOperator_subset_of_spectrumIn hQperp hx
+  exact DavisKahan1970.sinTwoTheta_directedResidual_all_kyFan
+    (A := A + K) (U := Q) (V := P)
+    hAKsa hQred hdelta hab hUspec hUspec' (compressOperator P A)
+
+/-- **Theorem 8.2's printed residual alternative for every source unitarily
+invariant norm.**
+
+The conclusion is the directed canonical `sin 2Θ₀` block, not the ambient
+`sin 2Θ`: at general symmetric gauges the latter carries the same nonzero
+singular data twice.  The source-level residual theorem performs the paper's
+matching-multiplicity argument and therefore retains the printed factor `2`. -/
+theorem theorem8_2_sinTwoTheta_residual_source_paperUINorm
+    (N : ExactSinTheta.PaperUnitaryInvariantNorm)
+    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (_hPred : Reduces A P)
+    (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
+    N.Mem (TauCeti.DavisKahan.Experimental.sinTwoThetaIdealBlock Q P) ∧
+      delta * N.gauge (TauCeti.DavisKahan.Experimental.sinTwoThetaIdealBlock Q P) ≤
+        2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) := by
+  have hAsa : IsSelfAdjoint A :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
+  have hKsa : IsSelfAdjoint K :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK
+  have hAKsa : IsSelfAdjoint (A + K) := hAsa.add hKsa
+  have hQred : Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hUspec : spectrum ℝ (compressOperator Q (A + K)) ⊆ Set.Icc beta alpha :=
+    spectrum_compressOperator_subset_of_spectrumIn hQ
+  have hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Qᗮ (A + K)),
+      x ≤ beta - delta ∨ alpha + delta ≤ x :=
+    fun _ hx => spectrum_compressOperator_subset_of_spectrumIn hQperp hx
+  exact DavisKahan1970.sinTwoTheta_directedResidual_paperUINorm
+    (A := A + K) (U := Q) (V := P) N hAKsa hQred hdelta hab
+    hUspec hUspec' (compressOperator P A) hRmem
 
 /-! ### 3. The printed conclusion `Θ < π/4` -/
 

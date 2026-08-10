@@ -21,6 +21,24 @@ noncomputable def reflectionDefect (U : Submodule 𝕜 E)
   reflectionOperator U ∘L A ∘L reflectionOperator U - A
 
 omit [CompleteSpace E] in
+/-- The reflection defect anti-commutes with the reflection that defines it:
+`J (J A J - A) = -(J A J - A) J`. -/
+theorem reflectionOperator_comp_reflectionDefect
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] (A : E →L[𝕜] E) :
+    reflectionOperator U ∘L reflectionDefect U A =
+      -(reflectionDefect U A ∘L reflectionOperator U) := by
+  ext x
+  have hinvol (y : E) :
+      reflectionOperator U (reflectionOperator U y) = y := by
+    have h := congrArg (fun T : E →L[𝕜] E => T y)
+      (reflectionOperator_involutive U)
+    simpa only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply] using h
+  simp only [reflectionDefect, ContinuousLinearMap.comp_apply, sub_apply,
+    neg_apply, map_sub]
+  rw [hinvol (A (reflectionOperator U x)), hinvol x]
+  rw [neg_sub]
+
+omit [CompleteSpace E] in
 /-- The mirror defect vanishes when the subspace reduces the operator.
 -/
 theorem reflectionDefect_eq_zero_of_reduces
