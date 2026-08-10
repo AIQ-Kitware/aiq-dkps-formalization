@@ -309,4 +309,22 @@ theorem approximationNumber_diagOpLp (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤ K)
   le_antisymm (approximationNumber_diagOpLp_le c hK hc hanti n)
     (le_approximationNumber_diagOpLp c hK hc hanti n)
 
+/-- **A diagonal operator with real coefficients is self-adjoint.**
+
+The inner product on `lp (fun _ : ℕ => 𝕜) 2` is the coordinatewise sum, and on each
+coordinate the operator is multiplication by `c i`, which moves across `⟪·, ·⟫` exactly
+when `c i` is fixed by the star operation.  No summability argument is needed beyond the
+one already inside `lp.inner_eq_tsum`, because the two sums are compared term by term. -/
+theorem isSelfAdjoint_diagOpLp (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤ K) (hc : ∀ i, ‖c i‖ ≤ K)
+    (hreal : ∀ i, (starRingEnd 𝕜) (c i) = c i) :
+    IsSelfAdjoint (diagOpLp c hK hc) := by
+  have hsymm : (diagOpLp c hK hc).IsSymmetric := by
+    intro x y
+    rw [lp.inner_eq_tsum, lp.inner_eq_tsum]
+    refine tsum_congr fun i => ?_
+    simp only [ContinuousLinearMap.coe_coe, diagOpLp_apply, RCLike.inner_apply, map_mul,
+      hreal i]
+    ring
+  exact ContinuousLinearMap.isSelfAdjoint_iff'.mpr hsymm.clm_adjoint_eq
+
 end TauCeti
