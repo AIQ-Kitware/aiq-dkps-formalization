@@ -9,6 +9,7 @@ import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.SinTheta.BoundedPerturbation
 import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
 import DavisKahan.Sources.DavisKahan1970.Section9.TrialSubspace
+import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz
 import ForTauCeti.MeasureTheory.MulLpAlgebra
@@ -30,10 +31,19 @@ data of the paper's numerical example around that operator:
 * the residual norm bound `‖(ε t)|_trial‖ ≤ residualTopSingularValue ε`, whose
   constant is the square root of the top eigenvalue of the residual Gram matrix.
 
+It also closes the existence half of the paper's spectral picture: the containment
+proved in `BeamSpectrum` has no lower bound on the spectrum and is vacuously compatible
+with there being no nonzero spectral point at all.  The centred quadratic mode
+`t² - t + 1/6` is a nonzero vector orthogonal to the affine plane, so the compact
+variational resolvent must have an eigenvalue other than `0` and `1`, and inverting that
+relation exhibits a genuine eigenvalue of `beamOperator` above `500`.
+
 ## Main results
 
-* `TauCeti.…FreeBeam.Model.beamTrial_eq_ker`: the trial space is the kernel.
+* `TauCeti.…FreeBeam.Model.beamOperator_apply_trial`: the trial space is annihilated.
 * `TauCeti.…FreeBeam.Model.norm_beamPerturbation_comp_trialIncl_le`: the residual bound.
+* `TauCeti.…FreeBeam.Model.exists_five_hundred_lt_mem_realSpectrum_beamOperator`:
+  the positive real spectrum is nonempty.
 -/
 
 open MeasureTheory
@@ -302,6 +312,140 @@ theorem integral_unitIocMeasure_quartic (c0 c1 c2 c3 c4 : ℂ) :
     simp
   rw [huniv, one_smul]
   ring
+
+/-! ## The positive spectrum is nonempty
+
+`realSpectrum_beamOperator_subset_gap` is an upper-bound-free containment, so on its own it
+does not exhibit the paper's `α₃`.  What is missing is one nonzero vector orthogonal to the
+kernel: the compact self-adjoint variational resolvent then has an eigenvalue outside
+`{0, 1}`, and `exists_beamOperator_apply_of_beamResolvent_smul` inverts that relation into a
+positive eigenvalue of the operator itself. -/
+
+/-- The centred quadratic mode `t² - t + 1/6` — the degree-two Legendre polynomial of the
+unit interval, whose zeroth and first moments both vanish. -/
+def beamQuadLp : BeamL2 :=
+  contToLp (fun t => (t : ℂ) ^ 2 - (t : ℂ) + 1 / 6) (by fun_prop)
+
+/-- The centred quadratic mode is orthogonal to every affine element: its first two exact
+unit-interval moments are `1/3 - 1/2 + 1/6` and `1/4 - 1/3 + 1/12`, both zero. -/
+theorem inner_affineLp_beamQuadLp (a b : ℂ) : ⟪affineLp a b, beamQuadLp⟫_ℂ = 0 := by
+  rw [affineLp_eq_contToLp, beamQuadLp, inner_contToLp]
+  have hpt : ∀ t : ℝ,
+      (starRingEnd ℂ) (a + b * (t : ℂ)) * ((t : ℂ) ^ 2 - (t : ℂ) + 1 / 6)
+      = (starRingEnd ℂ) a / 6
+        + ((starRingEnd ℂ) b / 6 - (starRingEnd ℂ) a) * (t : ℂ)
+        + ((starRingEnd ℂ) a - (starRingEnd ℂ) b) * (t : ℂ) ^ 2
+        + (starRingEnd ℂ) b * (t : ℂ) ^ 3
+        + 0 * (t : ℂ) ^ 4 := by
+    intro t
+    simp only [map_add, map_mul, Complex.conj_ofReal]
+    ring
+  simp only [hpt]
+  rw [integral_unitIocMeasure_quartic]
+  ring
+
+/-- The centred quadratic mode lies in the orthogonal complement of the trial plane. -/
+theorem beamQuadLp_mem_beamTrial_orthogonal : beamQuadLp ∈ beamTrialᗮ := by
+  rw [Submodule.mem_orthogonal]
+  intro u hu
+  obtain ⟨a, b, rfl⟩ := mem_beamTrial_iff.1 hu
+  exact inner_affineLp_beamQuadLp a b
+
+/-- The exact squared `L²` norm of the centred quadratic mode. -/
+theorem norm_beamQuadLp_sq : ‖beamQuadLp‖ ^ 2 = 1 / 180 := by
+  rw [beamQuadLp]
+  refine norm_sq_contToLp _ _ ?_
+  have hconj : ∀ t : ℝ, (starRingEnd ℂ) ((t : ℂ) ^ 2 - (t : ℂ) + 1 / 6)
+      = (t : ℂ) ^ 2 - (t : ℂ) + 1 / 6 := by
+    intro t
+    have hre : ((t : ℂ) ^ 2 - (t : ℂ) + 1 / 6) = (((t ^ 2 - t + 1 / 6 : ℝ)) : ℂ) := by
+      push_cast
+      ring
+    rw [hre, Complex.conj_ofReal]
+  have hpt : ∀ t : ℝ,
+      (starRingEnd ℂ) ((t : ℂ) ^ 2 - (t : ℂ) + 1 / 6)
+        * ((t : ℂ) ^ 2 - (t : ℂ) + 1 / 6)
+      = (1 / 36 : ℂ) + (-(1 / 3) : ℂ) * (t : ℂ) + (4 / 3 : ℂ) * (t : ℂ) ^ 2
+        + (-2 : ℂ) * (t : ℂ) ^ 3 + (1 : ℂ) * (t : ℂ) ^ 4 := by
+    intro t
+    rw [hconj t]
+    ring
+  simp only [hpt]
+  rw [integral_unitIocMeasure_quartic]
+  push_cast
+  ring
+
+/-- The centred quadratic mode is nonzero, so the trial plane is not the whole space. -/
+theorem beamQuadLp_ne_zero : beamQuadLp ≠ 0 := by
+  intro h
+  have hn := norm_beamQuadLp_sq
+  rw [h, norm_zero] at hn
+  norm_num at hn
+
+/-- The resolvent eigenvalue `1` sees only the affine plane, because it inverts to the
+operator eigenvalue `0` and the kernel is exactly the trial subspace. -/
+theorem eigenspace_beamResolvent_one_le_beamTrial :
+    Module.End.eigenspace beamCoerciveFormData.resolvent.toLinearMap 1 ≤ beamTrial := by
+  intro u hu
+  have huv : beamCoerciveFormData.resolvent u = u := by
+    have hmem := Module.End.mem_eigenspace_iff.mp hu
+    rwa [one_smul] at hmem
+  obtain ⟨a, b, rfl⟩ := exists_affine_of_beamResolvent_eq_self huv
+  exact affineLp_mem_beamTrial a b
+
+/-- **The free beam has a positive eigenvalue.**  The variational resolvent is compact,
+self-adjoint and injective, and its eigenvector for the eigenvalue `1` spans no more than
+the affine plane; since the centred quadratic mode is a nonzero vector orthogonal to that
+plane, the spectral theorem for compact self-adjoint operators forces a further eigenvalue,
+which inverts to a genuine positive eigenpair of the operator. -/
+theorem exists_pos_eigenpair_beamOperator :
+    ∃ (lam : ℝ) (x : beamOperator.domain), 0 < lam ∧ (x : BeamL2) ≠ 0 ∧
+      beamOperator.toLinearMap x = (lam : ℂ) • (x : BeamL2) := by
+  obtain ⟨mu, -, hnotle⟩ :=
+    TauCeti.exists_hasEigenvalue_eigenspace_not_le isCompactOperator_beamResolvent
+      beamCoerciveFormData.resolvent_isSelfAdjoint
+      beamQuadLp_mem_beamTrial_orthogonal beamQuadLp_ne_zero
+  obtain ⟨u, hu, hunot⟩ := SetLike.not_le_iff_exists.mp hnotle
+  have hRu : beamCoerciveFormData.resolvent u = mu • u := Module.End.mem_eigenspace_iff.mp hu
+  have hu0 : u ≠ 0 := fun h => hunot (h ▸ Submodule.zero_mem beamTrial)
+  have hmu0 : mu ≠ 0 := by
+    intro h
+    apply hu0
+    apply beamCoerciveFormData.resolvent_injective
+    rw [hRu, h, zero_smul, map_zero]
+  have hmu1 : mu ≠ 1 := by
+    intro h
+    exact hunot (eigenspace_beamResolvent_one_le_beamTrial (h ▸ hu))
+  obtain ⟨beta, hbeta, hchar, hmueq⟩ :=
+    (beamResolvent_eigenvalue_classify hmu0 hu0 hRu).resolve_left hmu1
+  obtain ⟨humem, hbeam⟩ := exists_beamOperator_apply_of_beamResolvent_smul hmu0 hRu
+  have hbeta4 : (0 : ℝ) < beta ^ 4 := by positivity
+  have hinv : mu⁻¹ - 1 = ((beta ^ 4 : ℝ) : ℂ) := by
+    have hpos : ((1 + beta ^ 4 : ℝ) : ℂ) ≠ 0 := by
+      have : (0 : ℝ) < 1 + beta ^ 4 := by linarith
+      exact_mod_cast this.ne'
+    rw [hmueq, show ((((1 + beta ^ 4)⁻¹ : ℝ)) : ℂ) = (((1 + beta ^ 4 : ℝ) : ℂ))⁻¹ from by
+      push_cast; ring, inv_inv]
+    push_cast
+    ring
+  refine ⟨beta ^ 4, ⟨u, humem⟩, hbeta4, hu0, ?_⟩
+  rw [hbeam, hinv]
+
+/-- **The positive real spectrum of the free beam is nonempty**, with every witness above
+the paper's `500`.  This is Davis--Kahan Section 9's `α₃`, exhibited rather than assumed. -/
+theorem exists_five_hundred_lt_mem_realSpectrum_beamOperator :
+    ∃ alpha : ℝ, 500 < alpha ∧ alpha ∈ beamOperator.realSpectrum := by
+  obtain ⟨lam, x, hlam, hx0, heig⟩ := exists_pos_eigenpair_beamOperator
+  exact ⟨lam, eigenvalue_gt_five_hundred hlam hx0 heig,
+    TauCeti.LinearPMap.mem_realSpectrum_of_eigenvector (A := beamOperator.toLinearPMap)
+      (x := x) hx0 heig⟩
+
+/-- The real spectrum of the free beam contains a nonzero point.  This is the form in which
+the Section 9 finite-data certificate consumes the existence of `α₃`. -/
+theorem exists_mem_realSpectrum_beamOperator_ne_zero :
+    ∃ alpha : ℝ, alpha ∈ beamOperator.realSpectrum ∧ alpha ≠ 0 := by
+  obtain ⟨alpha, halpha, hmem⟩ := exists_five_hundred_lt_mem_realSpectrum_beamOperator
+  exact ⟨alpha, hmem, by linarith⟩
 
 /-! ## The exact affine norms -/
 
@@ -918,20 +1062,18 @@ open DavisKahan1970.Section9 in
 
 Every field is now discharged rather than postulated: the two Gram matrices and the two
 Ritz values are the compressions computed in `beamRitz_matrix` and
-`beamResidualGram_matrix`, and the third eigenvalue is an actual nonzero point of
-`beamOperator.realSpectrum`, whose lower bound `500` is
-`realSpectrum_beamOperator_subset_sharp`. -/
-def beamFiniteDataCertificate (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100)
-    {alpha : ℝ} (halpha : alpha ∈ beamOperator.realSpectrum) (halpha0 : alpha ≠ 0) :
+`beamResidualGram_matrix`, and the third eigenvalue is a point of
+`beamOperator.realSpectrum` supplied by
+`exists_five_hundred_lt_mem_realSpectrum_beamOperator`, whose lower bound `500` comes with
+it.  The record no longer takes a spectral point as a hypothesis; the only inputs are the
+paper's two numerical constraints on `ε`. -/
+def beamFiniteDataCertificate (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
     FreeBeamFiniteDataCertificate ε where
   epsilon_pos := hε
   epsilon_lt_hundred := hε100
-  third_eigenvalue := alpha
-  third_eigenvalue_gt_five_hundred := by
-    rcases realSpectrum_beamOperator_subset_sharp halpha with h0 | hgt
-    · exact absurd h0 halpha0
-    · have : (1001 : ℝ) / 2 < alpha := hgt
-      linarith
+  third_eigenvalue := exists_five_hundred_lt_mem_realSpectrum_beamOperator.choose
+  third_eigenvalue_gt_five_hundred :=
+    exists_five_hundred_lt_mem_realSpectrum_beamOperator.choose_spec.1
   initial_residual_gram := residualGram ε
   initial_residual_gram_eq := rfl
   ritz_low := ritzLow ε
