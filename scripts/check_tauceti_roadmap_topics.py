@@ -212,7 +212,11 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # Added 2026-08-10 with the module: the cyclic model over the REAL spectrum and its range
  # theorem.  Imports `RealSpectrumDiagonalMeasure`, already in this topic, so no forward
  # reference.
- +[A+"RealSpectrumCyclicModel"]),
+ +[A+"RealSpectrumCyclicModel"]
+ # Added 2026-08-10 with the module: multiplication by the REAL coordinate and the
+ # intertwining law transporting `cyclicIsometry_coordMulLp` to the real spectrum.
+ # Imports `RealSpectrumCyclicModel`, already in this topic, so no forward reference.
+ +[A+"RealSpectrumIntertwining"]),
 ("T25","The Hilbert-Schmidt Sylvester flow",
  [A+x for x in ["HilbertSchmidt.Block","Sylvester.BlockEstimate","Sylvester.BlockIdentity",
                 "Sylvester.Generator","Sylvester.Group","Sylvester.SpectralGap"]]),
