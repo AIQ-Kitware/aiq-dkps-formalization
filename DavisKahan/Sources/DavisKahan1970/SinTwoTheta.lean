@@ -193,9 +193,23 @@ theorem unbounded_sinTwoTheta_uiNorm_representative
   rw [hgauge]
   exact hcanonical.2
 
+/-! ### The Section 8 unequal-dimension extension
+
+The closing sentence of Section 8 says that the `sin 2Θ` theorem extends to
+`dim X(E₀) < dim X(F₀)`, similarly to Theorems 6.1 and 6.3.  In that strict
+inequality regime the paper's ambient Hermitian angle `Θ`, whose construction
+uses the matched-dimension condition (1.5), is not available.  Thus the
+extension is necessarily the directed `Θ₀` conclusion, exactly as in Theorems
+6.1 and 6.3; it does not ask for an ambient `Θ₀`-to-`Θ` conversion.
+
+The maintained directed theorem above is stronger than the announced
+extension: it has no dimension comparison at all.  The corollaries below keep
+the strict rank hypothesis explicitly so the final Section 8 sentence has a
+literal source-facing declaration over both scalar fields. -/
+
 open DavisKahan.Experimental in
 /-- **Davis--Kahan 1970, Section 8 closing unequal-dimension extension of the
-`sin 2Θ` theorem, perturbation form.**
+directed `sin 2Θ₀` theorem, perturbation form.**
 
 The source explicitly announces the extension when
 `dim X(E₀) < dim X(F₀)`.  The maintained Section 7 theorem is actually stronger:
@@ -272,8 +286,9 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative
   exact hcanonical.2
 
 open DavisKahan.Experimental in
-/-- **Section 8 closing unequal-dimension extension, reflection-residual form.**
-The strict dimension comparison is recorded exactly as printed; the proof is a
+/-- **Section 8 closing unequal-dimension extension of the directed
+`sin 2Θ₀` theorem, reflection-residual form.**  The strict dimension comparison
+is recorded exactly as printed; the proof is a
 direct specialization of the stronger dimension-free Section 7 theorem. -/
 theorem unbounded_sinTwoTheta_residual_uiNorm_representative_unequalDimension
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
@@ -353,7 +368,7 @@ theorem unbounded_sinTwoTheta_uiNorm_representative_real
 
 open DavisKahan.Experimental DavisKahan.Experimental.RealSpectralRestriction in
 /-- **Real-scalar Section 8 closing unequal-dimension extension of the
-`sin 2Θ` theorem, perturbation form.**  As over `ℂ`, the underlying theorem is
+directed `sin 2Θ₀` theorem, perturbation form.**  As over `ℂ`, the underlying theorem is
 dimension-free; this declaration records the printed strict-dimension case. -/
 theorem unbounded_sinTwoTheta_uiNorm_representative_real_unequalDimension
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
@@ -416,8 +431,8 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative_real
   exact hcanonical.2
 
 open DavisKahan.Experimental DavisKahan.Experimental.RealSpectralRestriction in
-/-- **Real-scalar Section 8 closing unequal-dimension extension,
-reflection-residual form.** -/
+/-- **Real-scalar Section 8 closing unequal-dimension extension of the
+directed `sin 2Θ₀` theorem, reflection-residual form.** -/
 theorem unbounded_sinTwoTheta_residual_uiNorm_representative_real_unequalDimension
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := Er))

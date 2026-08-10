@@ -666,47 +666,32 @@ so `J` acts as a complex structure only on the nonzero-angle part.
 
 ---
 
-### E. Section 2 remaining source-fidelity work
+### E. Section 2 source-fidelity tranche — closed 2026-08-10
 
-#### E.1 `S2-sin-two-theta`: unequal-dimension extension from the end of Section 8
+The two remaining Section 2 items from this handoff are now compiled and census-exact.
 
-The scalar axis is closed. The remaining printed assertion is the final Section 8 sentence that the `sin 2θ` theorem extends to
+#### E.1 `S2-sin-two-theta`
 
-`dim X(E₀) < dim X(F₀)`,
+The final Section 8 sentence extending the `sin 2θ` theorem to
+`dim X(E₀) < dim X(F₀)` is covered by the four compiled strict-rank declarations
+`unbounded_sinTwoTheta_{,residual_}uiNorm_representative_unequalDimension`
+and their real twins.  The underlying directed theorem is stronger: it has no
+dimension comparison at all.
 
-analogously to Theorems 6.1/6.3. The paper explicitly says no analogous extension of `tan 2θ` is known.
+A later audit incorrectly reopened this item by requiring a `Θ₀`-to-ambient-`Θ`
+bridge.  That reading is incompatible with the source convention: the ambient
+Hermitian `Θ` uses the matched-dimension condition (1.5), so it is not available
+in the strict-dimension regime named by the closing sentence.  The comparison
+with Theorems 6.1 and 6.3 identifies the extension as the directed `Θ₀`
+conclusion.  The source facade now records this explicitly.
 
-No source declaration currently states this extension.
+#### E.2 `S2-sharpness`
 
-Two subproblems are recorded:
-
-1. make precise the bridge between directed `Θ₀` data and ambient `Θ` data needed by the source sentence;
-2. prove the dimension-unequal `sin 2Θ` estimate.
-
-Important correction: an earlier proposed counterexample based on "duplicated ambient multiplicity" was wrong. `sinTwoAngleOperatorC` is built from the directed sine geometry and its range lies in the relevant source subspace. Do not revive that argument.
-
-The Section 7 rectangular block algebra is already dimension-blind. Prefer a proof through the actual rectangular crossed block / Gram identities rather than artificially padding dimensions merely to call an equal-rank theorem. Also inspect any theorem whose name contains `unequalFinrank`: two names discovered during audit were decoys whose signatures were still equal-dimensional.
-
-If the only missing bridge is equality of approximation-number sequences between the directed block and the ambient double-angle operator, state that precise equisingularity theorem and derive every UI norm from it.
-
-#### E.2 `S2-sharpness`: full four-family simultaneous equality
-
-Current plane models:
-
-* `sinTheta_model_equality` — every UI seminorm;
-* `tanTheta_model_equality` — every UI seminorm;
-* `tanTwoTheta_model_equality` — every UI seminorm;
-* `sinTwoTheta_model_operatorNorm_equality` — operator norm only.
-
-Two obligations remain.
-
-**First:** upgrade the `sin 2Θ` plane model to every `UnitarilyInvariantSeminorm`.
-
-Do not prove each norm separately. Compute the singular/approximation-number data of the relevant 2D model. In rank one or a scalar-multiple model, equality of the whole singular sequence should make every UI seminorm equality immediate from the generic gauge API.
-
-**Second:** formalize the paper's direct-sum construction that attains all four constants simultaneously for every UI norm.
-
-The right architecture is to show the four model operators in each plane have the prescribed scalar-multiple singular-value lists and that finite orthogonal direct sums concatenate those lists. Then symmetric-gauge invariance gives simultaneous equality in one shot. If generic direct-sum singular-value/approximation-number machinery is missing, that is reusable `ForTauCeti` operator-ideal mathematics.
+All four source constants have compiled admissible equality configurations.
+The direct-sum construction is connected to the canonical subspace `sin Θ`,
+`Θ`, `tan Θ`, and `tan 2Θ` operators through reusable orthogonal block-sum
+functional-calculus geometry.  `S2-sharpness` is `compiled_exact /
+proved_in_build` with no remaining scope gap.
 
 ---
 
