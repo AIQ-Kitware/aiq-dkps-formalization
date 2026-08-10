@@ -88,6 +88,7 @@ section OperatorPath
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /-- Along `A + t H`, the endpoint residual margin is a common lower bound for
 all `t ∈ [0,1]`. -/
 theorem offDiagonalContinuationMargin_norm_le_path
@@ -103,6 +104,7 @@ theorem offDiagonalContinuationMargin_norm_le_path
     nlinarith
   exact offDiagonalContinuationMargin_anti htNorm hle
 
+omit [CompleteSpace H] in
 /-- The sharp endpoint hypothesis gives a positive residual margin at every
 point of the affine perturbation path. -/
 theorem offDiagonalContinuationMargin_path_pos

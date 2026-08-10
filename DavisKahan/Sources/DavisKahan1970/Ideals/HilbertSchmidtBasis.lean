@@ -165,7 +165,7 @@ theorem paperHilbertSchmidtEnergy_comp_starProjection
   -- the compression of `A` to `K`, together with its finite-dimensional range
   let T₀ : K →L[ℂ] E := A ∘L K.subtypeL
   let L : Submodule ℂ E := LinearMap.range T₀.toLinearMap
-  haveI hLfd : FiniteDimensional ℂ L := inferInstance
+  have hLfd : FiniteDimensional ℂ L := inferInstance
   let T : K →L[ℂ] L :=
     T₀.codRestrict L fun x => LinearMap.mem_range_self T₀.toLinearMap x
   -- the three factorisations relating the cutoff and the compression

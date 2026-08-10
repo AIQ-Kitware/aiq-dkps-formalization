@@ -87,7 +87,7 @@ theorem isometricRangeProjection_eq_comp_adjoint
     (X : F →L[ℂ] H) (hX : IsometricEmbedding X) :
     isometricRangeProjection X hX = X ∘L X.adjoint := by
   unfold isometricRangeProjection
-  letI := rangeHasOrthogonalProjection X hX
+  let := rangeHasOrthogonalProjection X hX
   exact starProjection_range_eq_comp_adjoint X hX
 
 /-- The cross block factors exactly through any residual `A X - X M`.
@@ -101,7 +101,7 @@ theorem isometricRangeCrossBlock_eq_projectedResidual_comp_adjoint
         letI := rangeHasOrthogonalProjection X hX
         let V : Submodule ℂ H := LinearMap.range X.toLinearMap
         exact Vᗮ.starProjection ∘L residual A X M) : F →L[ℂ] H) ∘L X.adjoint := by
-  letI := rangeHasOrthogonalProjection X hX
+  let := rangeHasOrthogonalProjection X hX
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   have hP : V.starProjection = X ∘L X.adjoint :=
     starProjection_range_eq_comp_adjoint X hX
@@ -123,7 +123,7 @@ theorem norm_isometricRangeCrossBlock_le_residual
     (A : H →L[ℂ] H) (X : F →L[ℂ] H) (M : F →L[ℂ] F)
     (hX : IsometricEmbedding X) :
     ‖isometricRangeCrossBlock A X hX‖ ≤ ‖residual A X M‖ := by
-  letI := rangeHasOrthogonalProjection X hX
+  let := rangeHasOrthogonalProjection X hX
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   rw [isometricRangeCrossBlock_eq_projectedResidual_comp_adjoint A X M hX]
   calc
@@ -150,7 +150,7 @@ theorem isometricRangeCrossBlock_mem
     (A : H →L[ℂ] H) (X : F →L[ℂ] H) (M : F →L[ℂ] F)
     (hX : IsometricEmbedding X) (hR : N.Mem (residual A X M)) :
     N.Mem (isometricRangeCrossBlock A X hX) := by
-  letI := rangeHasOrthogonalProjection X hX
+  let := rangeHasOrthogonalProjection X hX
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   rw [isometricRangeCrossBlock_eq_projectedResidual_comp_adjoint A X M hX]
   exact N.comp_mem Vᗮ.starProjection X.adjoint hR
@@ -171,7 +171,7 @@ theorem gauge_isometricRangeCrossBlock_le
     (hX : IsometricEmbedding X) (hR : N.Mem (residual A X M)) :
     N.gaugeReal (isometricRangeCrossBlock A X hX) ≤
       N.gaugeReal (residual A X M) := by
-  letI := rangeHasOrthogonalProjection X hX
+  let := rangeHasOrthogonalProjection X hX
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   rw [isometricRangeCrossBlock_eq_projectedResidual_comp_adjoint A X M hX]
   refine N.gaugeReal_comp_le_of_contractions (E := F) (F := H) (G := H) (H := H)

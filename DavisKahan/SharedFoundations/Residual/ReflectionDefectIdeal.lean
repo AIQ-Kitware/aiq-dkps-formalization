@@ -45,7 +45,7 @@ theorem RectangularSymmetricIdealFamily.reflectionDefect_isometricRange_mem
     letI := rangeHasOrthogonalProjection X hX
     let V : Submodule ℂ H := LinearMap.range X.toLinearMap
     N.Mem (reflectionDefect V A) := by
-  letI := rangeHasOrthogonalProjection X hX
+  let := rangeHasOrthogonalProjection X hX
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   change N.Mem (reflectionDefect V A)
   let T : H →L[ℂ] H := Vᗮ.starProjection ∘L A ∘L V.starProjection
@@ -72,7 +72,7 @@ theorem RectangularSymmetricIdealFamily.gauge_reflectionDefect_isometricRange_le
     letI := rangeHasOrthogonalProjection X hX
     let V : Submodule ℂ H := LinearMap.range X.toLinearMap
     N.gaugeReal (reflectionDefect V A) ≤ 4 * N.gaugeReal (residual A X M) := by
-  letI := rangeHasOrthogonalProjection X hX
+  let := rangeHasOrthogonalProjection X hX
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   change N.gaugeReal (reflectionDefect V A) ≤
     4 * N.gaugeReal (residual A X M)

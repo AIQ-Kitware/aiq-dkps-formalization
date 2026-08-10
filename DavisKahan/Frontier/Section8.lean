@@ -45,6 +45,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 variable {A E : H →L[ℂ] H} {s : Set ℝ}
 
+omit [CompleteSpace H] in
 /-- Every point of the affine self-adjoint path is self-adjoint: the real
 parameter is conjugation-fixed. -/
 theorem operatorPath_isSelfAdjointOperator
@@ -72,6 +73,7 @@ structure CircleContinuationData
     ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius →
       ‖Ring.inverse (z • (1 : H →L[ℂ] H) - operatorPath A E t)‖ ≤ margin⁻¹
 
+omit [CompleteSpace H] in
 /-- Every circle point lies on the sphere of the circle contour. -/
 theorem circleContour_path_norm_sub_center
     (D : CircleContinuationData A E s) (x : unitInterval) :
@@ -311,9 +313,9 @@ theorem canonicalGapCircle_margin_le_realSpectrum
       (right - left + d) / 2)
     {lam : ℝ} (hlam : lam ∈ realSpectrum (operatorPath A E t)) :
     (d / 2 - ‖E‖) / 2 ≤ ‖z - (lam : ℂ)‖ := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ H) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ H) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   let margin : ℝ := (d / 2 - ‖E‖) / 2
   let delta : ℝ := d / 2 - margin
@@ -441,9 +443,9 @@ theorem exists_circleContinuationData_of_offDiagonal_halfGap
     ∃ left right : ℝ, left ≤ right ∧
       Nonempty (CircleContinuationData A E
         (Set.Ioo (left - d / 2) (right + d / 2))) := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ H) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ H) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   obtain ⟨left, right, hlr, hdiag⟩ :=
     hfinite.exists_operatorPath_diagonalResolventData A E U hU hoff
@@ -572,6 +574,7 @@ theorem le_re_inner_of_spectrumIn_Ici
   calc b * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := hb
     _ = RCLike.re ⟪y, T y⟫_ℂ := congrArg RCLike.re (hT y y)
 
+omit [CompleteSpace H] in
 /-- The quadratic form of an operator splits exactly through a reducing
 subspace: the cross terms vanish. -/
 theorem re_inner_splitting_of_invariant
@@ -596,6 +599,7 @@ theorem re_inner_splitting_of_invariant
     ring
   rw [hinner, map_add]
 
+omit [CompleteSpace H] in
 /-- The orthogonal splitting through the new spectral branch supplies the
 upper compression certificate of Theorem 8.1(i).  The kernel-side form is
 shifted by the cut so that its global bound is exactly the branch form
@@ -624,6 +628,7 @@ theorem upperCompressionRepulsionData_of_targetSplitting
   · intro x
     exact (W.norm_sq_eq_add_norm_sq_starProjection x).symm
 
+omit [CompleteSpace H] in
 /-- The orthogonal splitting through the new spectral branch supplies the
 lower compression certificate of Theorem 8.1(i). -/
 theorem lowerCompressionRepulsionData_of_targetSplitting

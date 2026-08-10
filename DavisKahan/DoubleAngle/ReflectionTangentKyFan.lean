@@ -91,6 +91,7 @@ private theorem orthonormal_polar_comp
   rw [J.inner_map_map]
   exact hf i j
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 private theorem approximationNumber_le_norm_local (T : E0 →L[ℂ] E1) (n : ℕ) :
     T.approximationNumber n ≤ ‖T‖ :=
   T.approximationNumber_le_norm n
@@ -107,6 +108,7 @@ def reflectionTangentErrorCoefficient
   q * (‖A0‖ * (‖T‖ * M1 + 1) +
     ‖A1‖ * (‖C1‖ + ‖T‖ * M1) + ‖B‖ * (M0 + M1))
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The reflection error coefficient is nonnegative. -/
 theorem reflectionTangentErrorCoefficient_nonneg
     (A0 : E0 →L[ℂ] E0) (A1 : E1 →L[ℂ] E1) (B T : E0 →L[ℂ] E1)
@@ -263,12 +265,14 @@ private theorem gram_residual_of_tangent_pair_right
     hc0 (by positivity) hgramForMod
   exact hmod
 
+omit [CompleteSpace E0] in
 private theorem abs_re_inner_error_left
     {x y z : E0} :
     |RCLike.re ⟪x, z⟫_ℂ - RCLike.re ⟪y, z⟫_ℂ| ≤ ‖x - y‖ * ‖z‖ := by
   rw [← map_sub, ← inner_sub_left]
   exact (RCLike.abs_re_le_norm _).trans (norm_inner_le_norm _ _)
 
+omit [CompleteSpace E0] in
 private theorem abs_re_inner_error_right
     {x y z : E0} :
     |RCLike.re ⟪z, x⟫_ℂ - RCLike.re ⟪z, y⟫_ℂ| ≤ ‖z‖ * ‖x - y‖ := by

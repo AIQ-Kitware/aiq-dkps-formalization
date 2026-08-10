@@ -755,7 +755,7 @@ theorem norm_shiftedOperator_ge_of_spectrumIn_gapExterior
     (hspec : SpectrumIn B U (gapExterior l r d))
     {x : H} (hx : x ∈ U) :
     ((r - l) / 2 + d) * ‖x‖ ≤ ‖shiftedOperator B l r x‖ := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   set c : ℝ := gapCenter l r with hc
   set K : ℝ := (r - l) / 2 + d with hK
@@ -973,9 +973,9 @@ theorem realSpectrum_subset_union_of_reduces
     [U.HasOrthogonalProjection] (hU : Reduces T U) {p q : Set ℝ}
     (h0 : SpectrumIn T U p) (h1 : SpectrumIn T Uᗮ q) :
     realSpectrum T ⊆ p ∪ q := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ H) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ H) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   rw [realSpectrum_eq_union_compressions_of_reduces T U hT hU]
   rintro x (hx | hx)
@@ -990,6 +990,7 @@ theorem real_smul_eq_complex_smul (t : ℝ) (E : H →L[ℂ] H) :
   ext x
   simp [Complex.coe_smul]
 
+omit [CompleteSpace H] in
 theorem isSelfAdjointOperator_path {A E : H →L[ℂ] H}
     (hA : IsSelfAdjointOperator A) (hE : IsSelfAdjointOperator E) (t : ℝ) :
     IsSelfAdjointOperator (A + t • E) := by

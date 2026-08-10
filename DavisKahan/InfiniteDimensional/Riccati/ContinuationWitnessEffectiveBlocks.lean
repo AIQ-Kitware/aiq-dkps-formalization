@@ -81,9 +81,9 @@ theorem exists_selectedEffectiveBlocks_with_realSpectrum
     subspaceAngularCoordinate U (C.selectedEndpointAngularOperator hsmall)
   let B := subspaceBlockOperatorData (A + V) U
     C.targetSeparatingContour.selfAdjoint
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ H) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ H) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hX : SolvesRiccati B X := by
     simpa only [U, X, B] using
@@ -126,9 +126,9 @@ theorem selectedBlockOperator_realSpectrum_subset_exterior_of_effectiveBlocks
             C.targetSeparatingContour.selfAdjoint)) ⊆
       Set.Iic a ∪ Set.Ici b := by
   let U := C.sourceSelectedSpectralSubspace
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ H) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ H) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   exact realSpectrum_blockOperator_subset_exterior_of_diagonalization
     (subspaceBlockOperatorData (A + V) U
@@ -149,9 +149,9 @@ theorem selectedEffectiveBlocks_realSpectra_separated
     ∀ x ∈ realSpectrum D0, ∀ y ∈ realSpectrum D1,
       d ≤ |x - y| := by
   let U := C.sourceSelectedSpectralSubspace
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ H) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ H) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   exact realSpectra_blocks_separated_of_halfLines D0 D1 hgap h0 h1
 

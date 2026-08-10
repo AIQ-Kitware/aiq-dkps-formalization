@@ -319,9 +319,9 @@ theorem sinTheta_spectrum
     (hVspec : ∀ x ∈ spectrum ℝ (compressOperator Vᗮ B),
       x ≤ a - d ∨ b + d ≤ x) :
     d * directedGap U V ≤ ‖B - A‖ := by
-  haveI : CompleteSpace U :=
+  have : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  haveI : CompleteSpace (Vᗮ : Submodule ℂ E) :=
+  have : CompleteSpace (Vᗮ : Submodule ℂ E) :=
     (Vᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hsyl := compress_sylvester_of_reduces hU hV
   have hest := norm_sylvester_le_of_spectrum_intervalExterior
@@ -476,9 +476,9 @@ theorem sinTheta_spectrum_gauge
     N.Mem (Vᗮ.starProjection ∘L U.starProjection) ∧
       d * N.gaugeReal (Vᗮ.starProjection ∘L U.starProjection) ≤
         N.gaugeReal (B - A) := by
-  haveI : CompleteSpace U :=
+  have : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  haveI : CompleteSpace (Vᗮ : Submodule ℂ E) :=
+  have : CompleteSpace (Vᗮ : Submodule ℂ E) :=
     (Vᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hsyl := compress_sylvester_of_reduces hU hV
   have hCmem : N.Mem (Vᗮ.orthogonalProjectionOnto ∘L (B - A) ∘L U.subtypeL) :=

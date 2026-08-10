@@ -281,7 +281,7 @@ theorem proposition3_3_principalSquareRoot_converse
   have hunit := hroot.unitary_mem
   have hTsT : T * star T = 1 := Unitary.mul_star_self_of_mem hunit
   have hsTT : star T * T = 1 := Unitary.star_mul_self_of_mem hunit
-  haveI hTnorm : IsStarNormal T := isStarNormal_of_mem_unitary hunit
+  have hTnorm : IsStarNormal T := isStarNormal_of_mem_unitary hunit
   -- (1) accretive: 0 ≤ T + star T
   have hTpos : (0 : H →L[ℂ] H) ≤ T + star T := by
     have e2 : cfc (fun z : ℂ => star z) T = star T := by
@@ -468,8 +468,8 @@ theorem proposition3_3_principalSquareRoot_converse
       hTx, map_add, hQTPx, hQTPcx, add_zero, sub_self]
   -- final intertwining: X = 0
   have hXeq : T * projection U = projection V * T := by
-    haveI : CompleteSpace A.ker := A.isClosed_ker.completeSpace_coe
-    haveI : A.ker.HasOrthogonalProjection := inferInstance
+    have : CompleteSpace A.ker := A.isClosed_ker.completeSpace_coe
+    have : A.ker.HasOrthogonalProjection := inferInstance
     have hrangeLe : A.range ≤ (T * projection U - projection V * T).ker := by
       rintro y ⟨z, rfl⟩
       rw [LinearMap.mem_ker]
@@ -615,7 +615,7 @@ theorem spectrum_re_nonneg_of_nonneg_add_star
     (hunitary : T ∈ unitary (H →L[ℂ] H))
     (hpos : (0 : H →L[ℂ] H) ≤ T + star T) :
     ∀ z ∈ spectrum ℂ T, 0 ≤ z.re := by
-  haveI hTnorm : IsStarNormal T := isStarNormal_of_mem_unitary hunitary
+  have hTnorm : IsStarNormal T := isStarNormal_of_mem_unitary hunitary
   have e2 : cfc (fun z : ℂ => star z) T = star T := by
     rw [cfc_star (R := ℂ) (fun z : ℂ => z) T, cfc_id' ℂ T]
   have e3 : T + star T = cfc (fun z : ℂ => z + star z) T := by
@@ -1002,6 +1002,7 @@ def IsFixedCosineReducingSubspace
   (∀ x : H, x ∈ M → x ∈ Uᗮ → ‖complementaryProjection V x‖ = c * ‖x‖) ∧
   (∀ x : H, x ∈ M → x ∈ Vᗮ → ‖complementaryProjection U x‖ = c * ‖x‖)
 
+omit [CompleteSpace H] in
 /-- Polarization on a reducing subspace: a bounded operator that preserves a
 subspace and has vanishing quadratic form there vanishes on it. -/
 theorem eigen_of_reducing_quadratic {T : H →L[ℂ] H} {W : Submodule ℂ H}
@@ -1023,6 +1024,7 @@ theorem eigen_of_reducing_quadratic {T : H →L[ℂ] H} {W : Submodule ℂ H}
     exact (mul_eq_zero.mp h2a).resolve_left (by norm_num)
   exact inner_self_eq_zero.mp (key (T w) (hTW w hw))
 
+omit [CompleteSpace H] in
 /-- The Halmos cosine square is symmetric in the ordered pair: it is
 `1 - (P_U - P_V) ^ 2`, invariant under swapping the projections. -/
 theorem halmosCosineSq_symm :
@@ -1031,11 +1033,13 @@ theorem halmosCosineSq_symm :
     halmosCosineSq_eq_one_sub_projection_sub_sq V U]
   noncomm_ring
 
+omit [CompleteSpace H] in
 /-- Squared-norm quadratic form, with the real-to-complex coercion pinned to
 `Complex.ofReal`. -/
 theorem inner_self_ofReal (x : H) : ⟪x, x⟫_ℂ = (‖x‖ : ℂ) ^ 2 :=
   inner_self_eq_norm_sq_to_K x
 
+omit [CompleteSpace H] in
 /-- The quadratic form of an orthogonal projection is its squared norm. -/
 theorem inner_starProjection_self_eq (K : Submodule ℂ H)
     [K.HasOrthogonalProjection] (y : H) :
@@ -1047,6 +1051,7 @@ theorem inner_starProjection_self_eq (K : Submodule ℂ H)
     _ = ⟪K.starProjection y, K.starProjection y⟫_ℂ := K.starProjection_isSymmetric _ _
     _ = (‖K.starProjection y‖ : ℂ) ^ 2 := inner_self_eq_norm_sq_to_K _
 
+omit [CompleteSpace H] in
 /-- On the source subspace, the cosine-square quadratic form is `‖P_V x‖ ^ 2`. -/
 theorem inner_halmosCosineSq_source (x : H) (hx : x ∈ U) :
     ⟪halmosCosineSq U V x, x⟫_ℂ = (‖projection V x‖ : ℂ) ^ 2 := by
@@ -1067,6 +1072,7 @@ theorem inner_halmosCosineSq_source (x : H) (hx : x ∈ U) :
     _ = ⟪projection V x, x⟫_ℂ := by rw [hPU]
     _ = (‖projection V x‖ : ℂ) ^ 2 := inner_starProjection_self_eq V x
 
+omit [CompleteSpace H] in
 /-- On the source complement, the cosine-square quadratic form is
 `‖Pᗮ_V x‖ ^ 2`. -/
 theorem inner_halmosCosineSq_source_compl (x : H) (hx : x ∈ Uᗮ) :
@@ -1101,6 +1107,7 @@ projection-valued-measure eigenvalue extraction is needed downstream. -/
 noncomputable def fixedCosineSubspace (c : ℝ) : Submodule ℂ H :=
   (halmosCosineSq U V - (c : ℂ) ^ 2 • (1 : H →L[ℂ] H)).ker
 
+omit [CompleteSpace H] in
 /-- Membership in the fixed-cosine subspace is the eigenvalue equation. -/
 theorem mem_fixedCosineSubspace (c : ℝ) (w : H) :
     w ∈ fixedCosineSubspace U V c ↔ halmosCosineSq U V w = (c : ℂ) ^ 2 • w := by
@@ -1109,6 +1116,7 @@ theorem mem_fixedCosineSubspace (c : ℝ) (w : H) :
     smul_apply, one_apply_eq_self]
   rw [sub_eq_zero]
 
+omit [CompleteSpace H] in
 /-- A projection commuting with the cosine square reduces the eigenspace. -/
 theorem reduces_projection_of_commute (c : ℝ) (W : Submodule ℂ H)
     [W.HasOrthogonalProjection]
@@ -1133,12 +1141,14 @@ theorem norm_eq_from_ofReal_sq {p q c : ℝ} (hp : 0 ≤ p) (hq : 0 ≤ q) (hc :
     _ = Real.sqrt ((c * q) ^ 2) := by rw [hr]
     _ = c * q := Real.sqrt_sq hcq
 
+omit [CompleteSpace H] in
 /-- The cosine square commutes with the target projection too. -/
 theorem halmosCosineSq_commute_projection_right :
     Commute (halmosCosineSq U V) (projection V) := by
   rw [halmosCosineSq_symm U V]
   exact halmosCosineSq_commute_projection V U
 
+omit [CompleteSpace H] in
 /-- Vector form of the cosine square on the source subspace. -/
 theorem halmosCosineSq_source_apply (x : H) (hx : x ∈ U) :
     halmosCosineSq U V x = projection U (projection V x) := by
@@ -1153,6 +1163,7 @@ theorem halmosCosineSq_source_apply (x : H) (hx : x ∈ U) :
   simp only [add_apply, mul_apply_eq_comp, hPU,
     hPUc, map_zero, add_zero]
 
+omit [CompleteSpace H] in
 /-- Vector form of the cosine square on the source complement. -/
 theorem halmosCosineSq_source_compl_apply (x : H) (hx : x ∈ Uᗮ) :
     halmosCosineSq U V x
@@ -1171,6 +1182,7 @@ theorem halmosCosineSq_source_compl_apply (x : H) (hx : x ∈ Uᗮ) :
   simp only [add_apply, mul_apply_eq_comp, hPU,
     hPUc, map_zero, zero_add]
 
+omit [CompleteSpace H] in
 /-- Complementary projections preserve a subspace reducing the projection. -/
 theorem complementaryProjection_mem_of_reduces {W M : Submodule ℂ H}
     [W.HasOrthogonalProjection] (hR : (projection W).Reduces M) {w : H}
@@ -1180,6 +1192,7 @@ theorem complementaryProjection_mem_of_reduces {W M : Submodule ℂ H}
   rw [hcompl]
   exact M.sub_mem hw (hR.1 w hw)
 
+omit [CompleteSpace H] in
 /-- The cosine square preserves a subspace reducing both projections. -/
 theorem halmosCosineSq_mem_of_reduces {M : Submodule ℂ H}
     (hRU : (projection U).Reduces M) (hRV : (projection V).Reduces M)
@@ -1457,6 +1470,7 @@ theorem norm_projection_apply_le_of_forall_mem_source
   rw [hval, hisom, norm_neg]
   exact le_trans (L.le_opNorm w) (mul_le_mul_of_nonneg_right hLnorm (norm_nonneg w))
 
+omit [CompleteSpace H] in
 /-- The cosine-square quadratic form, block by block: `⟪x, cos²Θ x⟫` is
 `‖P_V P_U x‖² + ‖P_{Vᗮ} P_{Uᗮ} x‖²`. -/
 theorem re_inner_halmosCosineSq_self (x : H) :
@@ -1911,6 +1925,7 @@ pair-equivalence and merely permutes the four elementary Halmos summands.
 
 variable {U₁ V₁ U₂ V₂}
 
+omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection] [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection] [V₂.HasOrthogonalProjection] in
 /-- Complementing the second subspace of each pair preserves unitary
 equivalence of ordered pairs. -/
 theorem pairOfSubspacesUnitaryEquivalent_orthogonal_right
@@ -1927,6 +1942,7 @@ theorem pairOfSubspacesUnitaryEquivalent_orthogonal_right
 
 variable (U₁ V₁ U₂ V₂)
 
+omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection] in
 theorem pairOfSubspacesUnitaryEquivalent_orthogonal_right_iff :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ᗮ U₂ V₂ᗮ ↔
       PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ := by
@@ -1934,6 +1950,7 @@ theorem pairOfSubspacesUnitaryEquivalent_orthogonal_right_iff :
   have h' := pairOfSubspacesUnitaryEquivalent_orthogonal_right h
   rwa [Submodule.orthogonal_orthogonal, Submodule.orthogonal_orthogonal] at h'
 
+omit [CompleteSpace H₁] [CompleteSpace H₂] in
 /-- Transport a nonempty isometric equivalence of submodules along equalities
 of those submodules.  Needed because the two summand families below are equal
 as submodules but the `≃ₗᵢ` type former does not rewrite. -/
@@ -1945,6 +1962,7 @@ private theorem nonempty_linearIsometryEquiv_congr
     ((LinearIsometryEquiv.ofEq X' X hX.symm).trans f).trans
       (LinearIsometryEquiv.ofEq Y Y' hY)
 
+omit [U₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection] [CompleteSpace H₁] [CompleteSpace H₂] in
 /-- Complementing the second subspace permutes the four elementary Halmos
 summands: `U ⊓ V` swaps with `U ⊓ Vᗮ`, and `Uᗮ ⊓ V` with `Uᗮ ⊓ Vᗮ`. -/
 theorem sameHalmosTrivialDimensions_orthogonal_right_iff :

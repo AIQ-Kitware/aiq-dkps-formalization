@@ -62,6 +62,7 @@ noncomputable def theorem63ResidualReal
     [Z.HasOrthogonalProjection] : Z →L[ℝ] E :=
   (Z.orthogonal.starProjection.comp T).comp Z.subtypeL
 
+omit [CompleteSpace E] in
 /-- The real residual is the usual action-minus-compression residual. -/
 theorem theorem63ResidualReal_eq_action_sub_compression
     (T : E →L[ℝ] E) (Z : Submodule ℝ E)
@@ -75,6 +76,7 @@ theorem theorem63ResidualReal_eq_action_sub_compression
   rw [Submodule.starProjection_orthogonal_apply]
   rfl
 
+omit [CompleteSpace E] in
 /-- Through the canonical subspace adapter, the complex directed sine block is
 exactly the complexification of the real directed sine block. -/
 theorem theorem63DirectedSineBlock_complexify_equiv
@@ -93,6 +95,7 @@ theorem theorem63DirectedSineBlock_complexify_equiv
     RealComplexification.complexify_comp]
   rfl
 
+omit [CompleteSpace E] in
 /-- Through the same adapter, the complex Ritz residual is the complexification
 of the real Ritz residual. -/
 theorem theorem63Residual_complexify_equiv
@@ -323,6 +326,7 @@ noncomputable def theorem63DirectedTangentReal
     (TauCeti.diagOp (stdOrthonormalBasis ℝ Z)
       (theorem63DirectedTangentDiagonalReal Z V)).toContinuousLinearMap
 
+omit [CompleteSpace E] in
 /-- Above the dimension of a finite-dimensional real trial space every
 approximation singular value of a map out of it vanishes. -/
 theorem approximationSingularValue_eq_zero_of_finrank_le_real

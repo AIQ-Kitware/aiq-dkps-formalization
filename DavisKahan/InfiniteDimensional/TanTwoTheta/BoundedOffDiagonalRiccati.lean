@@ -73,6 +73,7 @@ noncomputable def quarterAcuteAngularCoordinate
     U →L[ℂ] Uᗮ :=
   subspaceAngularCoordinate U (quarterAcuteAngularOperator U V hquarter)
 
+omit [CompleteSpace E] in
 /-- Compression of an ambient angular operator to `U → Uᗮ` cannot increase its
 operator norm. -/
 theorem norm_subspaceAngularCoordinate_le
@@ -120,9 +121,9 @@ theorem quarterAcuteAngularCoordinate_solvesRiccati
         have h := hA.add hH
         rwa [← ContinuousLinearMap.toLinearMap_add] at h))
       (quarterAcuteAngularCoordinate U V hquarter) := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ E) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ E) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hAH : IsSelfAdjointOperator (A + H) := by
     have h := hA.add hH
@@ -137,6 +138,7 @@ theorem quarterAcuteAngularCoordinate_solvesRiccati
     (quarterAcuteAngularOperator_isAngularOperator U V hquarter)
     hgraphReduces
 
+omit [CompleteSpace E] in
 /-- The upper-right coordinate compression of an ambient operator has norm at
 most the ambient operator norm. -/
 theorem norm_upperRightSubspaceCompression_le

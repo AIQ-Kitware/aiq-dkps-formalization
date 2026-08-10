@@ -103,6 +103,7 @@ which Mathlib's functional calculus forces to be stated over `ℂ`. -/
 def compressOperatorReal (A : E →L[ℝ] E) : Z →L[ℝ] Z :=
   Z.orthogonalProjectionOnto ∘L A ∘L Z.subtypeL
 
+omit [CompleteSpace E] in
 /-- **Compressing to a complexified subspace is a unitary conjugate of the
 complexified real compression.** -/
 theorem compressOperator_complexifySubmodule (A : E →L[ℝ] E) :
@@ -128,6 +129,7 @@ theorem realSpectrum_compressOperator_complexifySubmodule
     RealComplexification.realSpectrum_conjEquiv,
     RealComplexification.realSpectrum_complexify]
 
+omit [CompleteSpace E] in
 /-- A real upper form bound on a compression transports to the complexified
 compression with the same constant. -/
 theorem re_inner_compressOperator_le (A : E →L[ℝ] E) {alpha : ℝ}

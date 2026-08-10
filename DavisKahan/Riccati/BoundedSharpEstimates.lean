@@ -297,7 +297,7 @@ theorem sharp_riccati_bound_of_epsilon
           (continuous_const.mul
             (Real.continuous_sqrt.comp
               ((continuous_const.mul continuous_const).mul continuous_id))))
-    haveI hne : (nhdsWithin (0 : ℝ) (Set.Ioo 0 t)).NeBot := by
+    have hne : (nhdsWithin (0 : ℝ) (Set.Ioo 0 t)).NeBot := by
       rw [← mem_closure_iff_nhdsWithin_neBot, closure_Ioo htpos.ne]
       exact ⟨le_refl 0, htpos.le⟩
     have hlim := ge_of_tendsto hcont

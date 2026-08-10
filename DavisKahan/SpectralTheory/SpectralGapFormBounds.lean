@@ -83,6 +83,7 @@ def spectralGapSymbol (alpha delta : ℝ) : C(spectrum ℂ B, ℝ) :=
     (continuous_spectralGapCutoff alpha delta).comp
       (Complex.continuous_re.comp continuous_subtype_val)⟩
 
+omit [CompleteSpace H] in
 @[simp] theorem spectralGapSymbol_apply (alpha delta : ℝ) (w : spectrum ℂ B) :
     spectralGapSymbol B alpha delta w =
       spectralGapCutoff alpha delta (TauCeti.BorelCalculus.reCoord w) := rfl

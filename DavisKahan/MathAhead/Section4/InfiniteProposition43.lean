@@ -186,9 +186,9 @@ theorem proposition4_3_squaredDisplacement_kyFan_scratch (U V : Submodule ℂ H)
         ((1 - star (spectraDirectRotation U V hacute)) *
           (1 - spectraDirectRotation U V hacute)) ≤
       kyFanApproximationGauge k ((1 - star W) * (1 - W)) := by
-  letI : CompleteSpace (U : Type u) :=
+  let : CompleteSpace (U : Type u) :=
     (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
-  letI : CompleteSpace ((Uᗮ : Submodule ℂ H) : Type u) :=
+  let : CompleteSpace ((Uᗮ : Submodule ℂ H) : Type u) :=
     (Submodule.isComplete_coe_of_hasOrthogonalProjection Uᗮ).completeSpace_coe
   have hL : ‖(U.orthogonalDecomposition : H →L[ℂ] WithLp 2 (U × Uᗮ))‖ ≤ 1 := by
     refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_

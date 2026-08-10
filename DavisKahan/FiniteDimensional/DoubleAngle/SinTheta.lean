@@ -510,7 +510,7 @@ theorem sinTwoTheta_perturbation_le
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b : ℝ} (hab : a < b) (hgap : TwoBlockFormGap A U a b) :
     (b - a) * N (sinTwoAngleOperator U V) ≤ 2 * N (B - A) := by
-  letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
   have hcross :
       N (complementaryProjection U ∘ₗ projection V ∘ₗ projection U) ≤
         N (B - A) / (b - a) := by
@@ -543,7 +543,7 @@ theorem sinTwoTheta_cross_perturbation_le
     (b - a) *
         N (complementaryProjection U ∘ₗ projection V ∘ₗ projection U) ≤
       N (B - A) := by
-  letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
   have h := N.sin_two_theta_starProjection_le
     hA hB hU hV hab hgap.1 hgap.2
   rw [le_div_iff₀ (sub_pos.mpr hab)] at h
@@ -558,7 +558,7 @@ theorem sinTwoTheta_reflectionDefect_le
     (hU : IsInvariant A U) {a b : ℝ} (hab : a < b)
     (hgap : TwoBlockFormGap A U a b) :
     (b - a) * N (sinTwoAngleOperator U V) ≤ N (reflectionDefect V A) := by
-  letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
   have hmirror :
       2 * N (complementaryProjection U ∘ₗ projection V ∘ₗ projection U) ≤
         N (reflectionDefect V A) / (b - a) := by

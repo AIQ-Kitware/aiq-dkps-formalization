@@ -115,6 +115,7 @@ theorem scalarRieszTransform_eq_normalizedWinding
 
 end PiecewiseC1ClosedContour
 
+omit [CompleteSpace H] in
 /-- On the real spectrum, the scalar Riesz transform is the indicator of the
 selected component. -/
 theorem SpectralSeparatingContour.scalarRieszTransform_eq_spectralSelector

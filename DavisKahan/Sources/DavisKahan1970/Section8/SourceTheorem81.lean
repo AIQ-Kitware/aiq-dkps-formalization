@@ -68,6 +68,7 @@ theorem arcsin_sqrt_two_div_two : Real.arcsin (Real.sqrt 2 / 2) = Real.pi / 4 :=
   Real.arcsin_eq_of_sin_eq Real.sin_pi_div_four
     ⟨by linarith [Real.pi_pos], by linarith [Real.pi_pos]⟩
 
+omit [CompleteSpace E] in
 /-- The printed closed quarter-angle condition `Theta <= pi/4` is exactly the
 projection-gap condition `gap <= sqrt 2 / 2`. -/
 theorem maximalAngle_le_pi_div_four_iff (U V : Submodule ℂ E)
@@ -78,6 +79,7 @@ theorem maximalAngle_le_pi_div_four_iff (U V : Submodule ℂ E)
   show Real.arcsin (subspaceGap U V) ≤ Real.pi / 4 ↔ _
   rw [Real.arcsin_le_iff_le_sin' hmem, Real.sin_pi_div_four]
 
+omit [CompleteSpace E] in
 /-- The strict quarter-angle condition, in the two equivalent phrasings. -/
 theorem maximalAngle_lt_pi_div_four_iff (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
@@ -90,6 +92,7 @@ theorem maximalAngle_lt_pi_div_four_iff (U V : Submodule ℂ E)
 
 /-! ### Form bounds give restricted-spectrum containments -/
 
+omit [CompleteSpace E] in
 /-- Over `ℂ` the real Banach-algebra spectrum and the pulled-back complex
 spectrum are the same set. -/
 theorem realSpectrum_eq_spectrum_real (T : E →L[ℂ] E) :
@@ -172,7 +175,7 @@ theorem spectrumIn_Iic_of_re_inner_le
     [U.HasOrthogonalProjection] (hU : ∀ x ∈ U, T x ∈ U) {c : ℝ}
     (hform : ∀ x ∈ U, RCLike.re ⟪T x, x⟫_ℂ ≤ c * ‖x‖ ^ 2) :
     SpectrumIn T U (Set.Iic c) := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     completeSpace_coe_iff_isComplete.mpr U.isComplete_coe_of_hasOrthogonalProjection
   refine ⟨hU, ?_⟩
   rw [restrictedSpectrum_eq_restrictionSpectrum T U hU]
@@ -187,7 +190,7 @@ theorem spectrumIn_Ici_of_le_re_inner
     [U.HasOrthogonalProjection] (hU : ∀ x ∈ U, T x ∈ U) {c : ℝ}
     (hform : ∀ x ∈ U, c * ‖x‖ ^ 2 ≤ RCLike.re ⟪T x, x⟫_ℂ) :
     SpectrumIn T U (Set.Ici c) := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     completeSpace_coe_iff_isComplete.mpr U.isComplete_coe_of_hasOrthogonalProjection
   refine ⟨hU, ?_⟩
   rw [restrictedSpectrum_eq_restrictionSpectrum T U hU]
@@ -327,6 +330,7 @@ end Theorem81
 
 /-! ### The closed quarter-angle cone -/
 
+omit [CompleteSpace E] in
 /-- A pair within the *closed* quarter turn puts every vector of the second
 subspace inside the closed quarter-angle cone around the first. -/
 theorem sqrt_two_div_two_mul_norm_le_norm_starProjection
@@ -356,6 +360,7 @@ theorem sqrt_two_div_two_mul_norm_le_norm_starProjection
   nlinarith [norm_nonneg (P.starProjection y), norm_nonneg (Pᗮ.starProjection y),
     norm_nonneg y, hbound, hpyth, hsq, Real.sqrt_nonneg 2]
 
+omit [CompleteSpace E] in
 /-- A pair strictly inside the quarter turn puts every nonzero vector of the
 complement of the second subspace strictly outside the cone. -/
 theorem norm_starProjection_lt_of_mem_orthogonal
@@ -514,9 +519,9 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn
     subst hMQ
     exact ⟨hconc.branch_spectrum_low, hconc.branch_spectrum_high⟩
   · rintro ⟨hMlow, hMhigh⟩
-    letI : CompleteSpace M :=
+    let : CompleteSpace M :=
       completeSpace_coe_iff_isComplete.mpr M.isComplete_coe_of_hasOrthogonalProjection
-    letI : CompleteSpace (Mᗮ : Submodule ℂ E) :=
+    let : CompleteSpace (Mᗮ : Submodule ℂ E) :=
       completeSpace_coe_iff_isComplete.mpr
         Mᗮ.isComplete_coe_of_hasOrthogonalProjection
     -- restricted spectra give the ordered form bounds

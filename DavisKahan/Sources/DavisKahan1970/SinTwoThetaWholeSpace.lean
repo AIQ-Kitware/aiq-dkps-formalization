@@ -277,7 +277,7 @@ section WholeSpace
 variable {A B : E →L[ℂ] E} {U V : Submodule ℂ E}
   [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
-omit [U.HasOrthogonalProjection] in
+omit [U.HasOrthogonalProjection] [CompleteSpace E] in
 /-- The reflected configuration has the transported compression spectrum. -/
 private theorem reflected_spectra (A : E →L[ℂ] E) (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
@@ -287,7 +287,7 @@ private theorem reflected_spectra (A : E →L[ℂ] E) (U V : Submodule ℂ E)
       spectrum ℝ (compressOperator U A) :=
   spectrum_compressOperator_map U A V.reflection
 
-omit [U.HasOrthogonalProjection] in
+omit [U.HasOrthogonalProjection] [CompleteSpace E] in
 /-- The reflected configuration on the orthogonal complement. -/
 private theorem reflected_spectra_orthogonal (A : E →L[ℂ] E)
     (U V : Submodule ℂ E)

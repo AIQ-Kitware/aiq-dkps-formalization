@@ -232,9 +232,9 @@ theorem tanTheta_spectrum
       x ≤ α - δ ∨ β + δ ≤ x)
     (hρ : ∀ x ∈ Z, ‖T x - Z.starProjection (T x)‖ ≤ ρ * ‖x‖) :
     ∀ x ∈ Z, δ * ‖x - V.starProjection x‖ ≤ ρ * ‖V.starProjection x‖ := by
-  haveI : CompleteSpace Z :=
+  have : CompleteSpace Z :=
     (Z.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  haveI : CompleteSpace (Vᗮ : Submodule ℂ E) :=
+  have : CompleteSpace (Vᗮ : Submodule ℂ E) :=
     (Vᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   obtain ⟨hVa, hVb⟩ :=
     formBounds_of_compress_spectrum_subset_Icc hT hαβ hVspec

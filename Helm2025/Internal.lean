@@ -112,9 +112,9 @@ lemma exists_isCompact_measure_notMem_lt_of_measurable {Ω : Type*} [MeasurableS
 
   -- pushforward
   let μ : Measure S := Measure.map Y P
-  haveI : OpensMeasurableSpace S := by infer_instance
-  haveI : IsFiniteMeasure μ := by infer_instance
-  haveI : μ.InnerRegular := by infer_instance
+  have : OpensMeasurableSpace S := by infer_instance
+  have : IsFiniteMeasure μ := by infer_instance
+  have : μ.InnerRegular := by infer_instance
 
   -- handle ε = ⊤ separately (then goal is trivial)
   by_cases htop : ε = ⊤

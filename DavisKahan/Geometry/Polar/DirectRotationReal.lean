@@ -158,6 +158,7 @@ theorem complexify_canonicalAbsoluteValueR :
 
 variable {U V}
 
+omit [CompleteSpace E] in
 /-- Cancelling an invertible conjugation-fixed right factor.  If `W C = S` with
 `C` invertible and both `C` and `S` conjugation-fixed, then so is `W`. -/
 private theorem conjugateOperator_of_mul_unit

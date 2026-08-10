@@ -78,6 +78,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 variable (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 
+omit [CompleteSpace H] in
 /-- Every generic vector splits across the two halves. -/
 theorem exists_halves_decomposition {y : H} (hy : y ∈ halmosGenericPart U V) :
     ∃ (m : genericLeftHalf U V) (n : genericRightHalf U V),
@@ -87,7 +88,7 @@ theorem exists_halves_decomposition {y : H} (hy : y ∈ halmosGenericPart U V) :
     ⟨y - U.starProjection y, sub_starProjection_mem_genericRightHalf U V hy⟩, ?_⟩
   simp
 
-omit [CompleteSpace H] in
+omit [CompleteSpace H] [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] in
 /-- A vector of the `U`-half plus a vector of the `Uᗮ`-half lies in the `U`-half
 only when the second is zero. -/
 theorem add_mem_genericLeftHalf_iff (m : genericLeftHalf U V)

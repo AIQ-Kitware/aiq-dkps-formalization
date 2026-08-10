@@ -138,7 +138,7 @@ theorem theorem8_1_upperWeightedWeakMajorization_source [FiniteDimensional ℂ H
   set Q : Submodule ℂ H := canonicalLowBranch (A + K)
     (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha
     with hQdef
-  haveI : Q.HasOrthogonalProjection := by rw [hQdef]; infer_instance
+  have : Q.HasOrthogonalProjection := by rw [hQdef]; infer_instance
   -- The perturbed upper block is the positive middle factor of the sandwich.
   have hM : (0 : H →L[ℂ] H) ≤ upperBlockShift (A + K) Q alpha :=
     theorem8_1_perturbedUpperBlockShift_nonneg A K P hdelta hA hK hAP hPlow
@@ -239,7 +239,7 @@ theorem theorem8_1_lowerWeightedWeakMajorization_source [FiniteDimensional ℂ H
   set Q : Submodule ℂ H := canonicalLowBranch (A + K)
     (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha
     with hQdef
-  haveI : Q.HasOrthogonalProjection := by rw [hQdef]; infer_instance
+  have : Q.HasOrthogonalProjection := by rw [hQdef]; infer_instance
   -- The perturbed lower block is the positive middle factor of the sandwich.
   have hM : (0 : H →L[ℂ] H) ≤ lowerBlockShift (A + K) Q alpha delta :=
     theorem8_1_perturbedLowerBlockShift_nonneg A K P hdelta hA hK hAP hPlow

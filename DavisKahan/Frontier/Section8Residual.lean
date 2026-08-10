@@ -163,7 +163,7 @@ theorem theorem8_2_residualHalfGap_source
     (hRsmall : ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
     directedGap P Q < Real.sqrt 2 / 2 := by
   classical
-  letI : CompleteSpace P :=
+  let : CompleteSpace P :=
     (P.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   -- the printed residual is the first block column of the perturbation
   have hRcol : residual (A + K) P.subtypeL (compressOperator P A) = K ∘L P.subtypeL :=
