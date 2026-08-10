@@ -198,7 +198,7 @@ theorem tanTheta_unbounded_vector_of_centered_bounds
                 (A.toLinearMap ⟨u₀ - Z.starProjection u₀, hwDom⟩) := by
           simp only [map_sub, map_add, map_smul]
           rw [Submodule.starProjection_eq_self_iff.mpr hpZ]
-          abel
+          abel_nf
         _ = Z.starProjection
               (A.toLinearMap ⟨u₀, huDom⟩ - (center : ℂ) • u₀) -
             Z.starProjection
