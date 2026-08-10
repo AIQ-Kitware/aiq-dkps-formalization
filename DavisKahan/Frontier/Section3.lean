@@ -2028,6 +2028,104 @@ theorem corollary3_1_compact_angleList_classification
 
 end OperatorClassification
 
+/-! ## From the generic cosine block to the ambient block
+
+Corollary 3.1's classifying invariant is the eigenvalue list of the *generic* cosine
+block `genericCosineBlock U V`, an operator on the `U`-half of the generic part, while a
+realization is naturally computed for the *ambient* block `P_U P_V P_U` on the whole
+space.  When the four elementary Halmos summands are trivial the two carry the same
+eigenvalue list, because the generic part is then everything and the ambient block is the
+extension of the generic block by zero off `U`. -/
+
+section GenericAmbientBridge
+
+open MathAhead.HiddenFoundations
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+  [CompleteSpace H]
+variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
+  [V.HasOrthogonalProjection]
+
+omit [CompleteSpace H] [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] in
+/-- With the four elementary Halmos summands trivial, the generic part is everything and
+the `U`-half of it is `U` itself. -/
+theorem genericLeftHalf_eq_of_halmosTrivialPart_eq_bot
+    (h : halmosTrivialPart U V = ⊥) : genericLeftHalf U V = U := by
+  have hgen : halmosGenericPart U V = ⊤ := by
+    show (halmosTrivialPart U V)ᗮ = ⊤
+    rw [h]
+    exact Submodule.bot_orthogonal_eq_top
+  show U ⊓ halmosGenericPart U V = U
+  rw [hgen, inf_top_eq]
+
+/-- The orthogonal projection onto the `U`-half of the generic part is the projection onto
+`U` when the four elementary Halmos summands are trivial. -/
+theorem starProjection_genericLeftHalf_eq_of_halmosTrivialPart_eq_bot
+    (h : halmosTrivialPart U V = ⊥) (x : H) :
+    (genericLeftHalf U V).starProjection x = U.starProjection x :=
+  Submodule.eq_starProjection_of_mem_of_inner_eq_zero
+    ((genericLeftHalf_eq_of_halmosTrivialPart_eq_bot U V h).ge (U.starProjection_apply_mem x))
+    fun w hw =>
+      Submodule.starProjection_inner_eq_zero x w
+        ((genericLeftHalf_eq_of_halmosTrivialPart_eq_bot U V h).le hw)
+
+/-- **The ambient block is the generic cosine block extended by zero.**
+
+`genericCosineBlock U V` is the compression of `P_V` to the `U`-half of the generic part;
+when the four elementary Halmos summands are trivial that half is `U`, and transporting the
+block back to the ambient space by the inclusion and the orthogonal projection reproduces
+`P_U P_V P_U` exactly. -/
+theorem subtypeL_comp_genericCosineBlock_comp_orthogonalProjectionOnto
+    (h : halmosTrivialPart U V = ⊥) :
+    (genericLeftHalf U V).subtypeL ∘L genericCosineBlock U V ∘L
+        (genericLeftHalf U V).orthogonalProjectionOnto =
+      U.starProjection ∘L V.starProjection ∘L U.starProjection := by
+  have hproj := starProjection_genericLeftHalf_eq_of_halmosTrivialPart_eq_bot U V h
+  refine ContinuousLinearMap.ext fun x => ?_
+  have hcoe : ∀ m : genericLeftHalf U V,
+      ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
+        (genericLeftHalf U V).starProjection (V.starProjection (m : H)) := fun m => by
+    simp [genericCosineBlock, DavisKahanExt.compressOperator]
+  calc ((genericLeftHalf U V).subtypeL ∘L genericCosineBlock U V ∘L
+          (genericLeftHalf U V).orthogonalProjectionOnto) x
+      = (genericLeftHalf U V).starProjection
+          (V.starProjection ((genericLeftHalf U V).starProjection x)) :=
+        hcoe ((genericLeftHalf U V).orthogonalProjectionOnto x)
+    _ = U.starProjection (V.starProjection (U.starProjection x)) := by
+        rw [hproj, hproj]
+    _ = (U.starProjection ∘L V.starProjection ∘L U.starProjection) x := rfl
+
+/-- **The bridge between Corollary 3.1's two cosine blocks.**
+
+The generic cosine block and the ambient block `P_U P_V P_U` have the same
+approximation-number sequence — hence the same `compactAngleEigenvalueList` — whenever the
+four elementary Halmos summands are trivial.
+
+Mathematically this is "extension by zero preserves approximation numbers": off the generic
+part the ambient block vanishes, so the two operators carry the same nonzero singular data.
+The general fact is
+`TauCeti.ApproximationNumber.approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto`;
+nothing about angles is reproved here. -/
+theorem approximationNumber_genericCosineBlock_eq_ambient
+    (h : halmosTrivialPart U V = ⊥) (n : ℕ) :
+    (genericCosineBlock U V).approximationNumber n =
+      (U.starProjection ∘L V.starProjection ∘L U.starProjection).approximationNumber n := by
+  rw [← subtypeL_comp_genericCosineBlock_comp_orthogonalProjectionOnto U V h,
+    TauCeti.ApproximationNumber.approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto
+      (genericLeftHalf U V) (genericCosineBlock U V) n]
+
+/-- The `compactAngleEigenvalueList` form of
+`approximationNumber_genericCosineBlock_eq_ambient`. -/
+theorem compactAngleEigenvalueList_genericCosineBlock_eq_ambient
+    (h : halmosTrivialPart U V = ⊥) :
+    compactAngleEigenvalueList (genericCosineBlock U V) =
+      compactAngleEigenvalueList
+        (U.starProjection ∘L V.starProjection ∘L U.starProjection) :=
+  funext fun n => approximationNumber_genericCosineBlock_eq_ambient U V h n
+
+end GenericAmbientBridge
+
 section Classification
 
 variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁]
@@ -2432,6 +2530,140 @@ theorem corollary3_1_realization_zeroMultiplicity (𝕜 : Type*) [RCLike 𝕜] (
     rw [angleSequenceZeroDatum_sin₁, ker_blockMap_angleSinOp 𝕜 θ hθ0 hθ2 hne Z₁]
 
 end Realization
+
+/-! ## Corollary 3.1: realization composed with classification
+
+The realization sentence computes the angle list of the *ambient* defect block
+`P (1 - Q) P`, while the classification sentence's invariant is the eigenvalue list of the
+*generic* cosine block of the pair `(U, Vᗮ)`.  The realized pair puts no mass on any of the
+four elementary Halmos summands once no prescribed angle is `0` or `π/2`, so
+`approximationNumber_genericCosineBlock_eq_ambient` identifies the two lists and the two
+halves compose.
+
+**Which compact object.**  Both halves here are on the *defect* block `P (1 - Q) P`, as
+printed.  Nothing below compares `P (1 - Q) P` with `P Q P`; the census's record that the
+two compactness hypotheses are incomparable in infinite dimension is untouched.
+
+**Recorded narrowing.**  The printed sentence allows `π/2 ≥ θ₁ ≥ θ₂ ≥ ⋯ → 0`, that is,
+angles equal to `π/2` and a possible eigenvalue `0`.  The statements below assume
+`0 < θₙ < π/2` strictly.  This is a *narrowing* of the source hypothesis, and it is the
+exact hypothesis that makes the four elementary summands vanish, so that the generic
+invariant and the ambient list coincide.  The angle-`0` multiplicities are realized
+separately and unconstrained by `corollary3_1_realization_zeroMultiplicity`, and the angle
+`π/2` is the elementary summand `U ⊓ Vᗮ`, so neither is lost from the paper's picture —
+they are carried by `SameHalmosTrivialDimensions` rather than by the list. -/
+
+section RealizationClassification
+
+open MathAhead.HiddenFoundations
+
+/-- **The realized pair's generic invariant is the prescribed angle list.**
+
+The classifying invariant of Corollary 3.1's defect-block form, evaluated on the pair
+realized by `angleSequenceDatum`, is `n ↦ sin² θₙ`.  Grounded by `:=` on the realization
+sentence's approximation-number computation and on
+`approximationNumber_genericCosineBlock_eq_ambient`; no angle mathematics is redone. -/
+theorem compactAngleEigenvalueList_genericCosineBlock_angleSequenceDatum
+    (𝕜 : Type*) [RCLike 𝕜] (θ : ℕ → ℝ)
+    (hθ0 : ∀ n, 0 < θ n) (hθ2 : ∀ n, θ n < Real.pi / 2) (hanti : Antitone θ) :
+    compactAngleEigenvalueList
+        (genericCosineBlock
+          (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+          ((angleSequenceDatum 𝕜 θ).targetSubspace)ᗮ) =
+      fun n => Real.sin (θ n) ^ 2 := by
+  have hθ0' : ∀ n, 0 ≤ θ n := fun n => (hθ0 n).le
+  have hθ2' : ∀ n, θ n ≤ Real.pi / 2 := fun n => (hθ2 n).le
+  have hne : ∀ n, θ n ≠ 0 := fun n => (hθ0 n).ne'
+  have hsin : LinearMap.ker
+      ((angleSinOp 𝕜 θ : AngleSequenceSpace 𝕜 →L[𝕜] AngleSequenceSpace 𝕜) :
+        AngleSequenceSpace 𝕜 →ₗ[𝕜] AngleSequenceSpace 𝕜) = ⊥ :=
+    ker_angleSinOp_eq_bot 𝕜 θ hθ0' hθ2' hne
+  have hcos : LinearMap.ker
+      ((angleCosOp 𝕜 θ : AngleSequenceSpace 𝕜 →L[𝕜] AngleSequenceSpace 𝕜) :
+        AngleSequenceSpace 𝕜 →ₗ[𝕜] AngleSequenceSpace 𝕜) = ⊥ :=
+    ker_angleCosOp_eq_bot 𝕜 θ hθ0' hθ2
+  -- The four elementary Halmos summands of the realized pair are trivial.
+  have hcommon : halmosCommonPart
+      (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+      (angleSequenceDatum 𝕜 θ).targetSubspace = ⊥ := by
+    rw [show halmosCommonPart
+        (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+        (angleSequenceDatum 𝕜 θ).targetSubspace = _ from
+      (angleSequenceDatum 𝕜 θ).halmosCommonPart_eq,
+      angleSequenceDatum_sin₀, hsin, Submodule.map_bot]
+  have hsource : halmosSourceDefect
+      (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+      (angleSequenceDatum 𝕜 θ).targetSubspace = ⊥ := by
+    rw [show halmosSourceDefect
+        (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+        (angleSequenceDatum 𝕜 θ).targetSubspace = _ from
+      (angleSequenceDatum 𝕜 θ).halmosSourceDefect_eq,
+      angleSequenceDatum_cos₀, hcos, Submodule.map_bot]
+  have htarget : halmosTargetDefect
+      (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+      (angleSequenceDatum 𝕜 θ).targetSubspace = ⊥ := by
+    rw [show halmosTargetDefect
+        (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+        (angleSequenceDatum 𝕜 θ).targetSubspace = _ from
+      (angleSequenceDatum 𝕜 θ).halmosTargetDefect_eq,
+      angleSequenceDatum_cos₁, hcos, Submodule.map_bot]
+  have hexterior : halmosExteriorPart
+      (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+      (angleSequenceDatum 𝕜 θ).targetSubspace = ⊥ := by
+    rw [show halmosExteriorPart
+        (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+        (angleSequenceDatum 𝕜 θ).targetSubspace = _ from
+      (angleSequenceDatum 𝕜 θ).halmosExteriorPart_eq,
+      angleSequenceDatum_sin₁, hsin, Submodule.map_bot]
+  have htriv : halmosTrivialPart
+      (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+      ((angleSequenceDatum 𝕜 θ).targetSubspace)ᗮ = ⊥ := by
+    rw [halmosTrivialPart_orthogonal_right, show halmosTrivialPart
+        (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+        (angleSequenceDatum 𝕜 θ).targetSubspace =
+      (halmosCommonPart _ _ ⊔ halmosSourceDefect _ _) ⊔
+        (halmosTargetDefect _ _ ⊔ halmosExteriorPart _ _) from rfl,
+      hcommon, hsource, htarget, hexterior, bot_sup_eq, bot_sup_eq]
+  -- The bridge, then the realization's own computation of the ambient list.
+  rw [compactAngleEigenvalueList_genericCosineBlock_eq_ambient _ _ htriv,
+    Submodule.starProjection_orthogonal (angleSequenceDatum 𝕜 θ).targetSubspace]
+  exact funext fun n =>
+    approximationNumber_angleSequenceDefectBlock hθ0' hθ2' hanti n
+
+/-- **Davis--Kahan 1970, Corollary 3.1: the realization sentence composed with the
+classification sentence.**
+
+Given a prescribed angle sequence `π/2 > θ₁ ≥ θ₂ ≥ ⋯ → 0` with every `θₙ` strictly between
+`0` and `π/2`, an arbitrary pair `(U₂, V₂)` with the printed compact defect block is
+unitarily equivalent to the realized pair exactly when its four elementary Halmos
+multiplicities are trivial and its angle list is `n ↦ sin² θₙ`.
+
+This is the statement the two halves of Corollary 3.1 were built to meet.  Both hypotheses
+and both conclusions are on the *defect* block `P (1 - Q) P`, as printed.  The strict
+inequalities `0 < θₙ < π/2` are a recorded narrowing of the printed sequence bound; see the
+section note above. -/
+theorem corollary3_1_prescribedAngleSequence_classification (θ : ℕ → ℝ)
+    (hθ0 : ∀ n, 0 < θ n) (hθ2 : ∀ n, θ n < Real.pi / 2) (hanti : Antitone θ)
+    (hlim : Filter.Tendsto θ Filter.atTop (nhds 0))
+    {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂]
+    (U₂ V₂ : Submodule ℂ H₂) [U₂.HasOrthogonalProjection] [V₂.HasOrthogonalProjection]
+    (hcompact₂ : IsCompactOperator
+      (U₂.starProjection ∘L
+        (ContinuousLinearMap.id ℂ H₂ - V₂.starProjection) ∘L U₂.starProjection)) :
+    PairOfSubspacesUnitaryEquivalent
+        (sourceSubspace ℂ (AngleSequenceSpace ℂ) (AngleSequenceSpace ℂ))
+        (angleSequenceDatum ℂ θ).targetSubspace U₂ V₂ ↔
+      SameHalmosTrivialDimensions
+        (sourceSubspace ℂ (AngleSequenceSpace ℂ) (AngleSequenceSpace ℂ))
+        (angleSequenceDatum ℂ θ).targetSubspace U₂ V₂ ∧
+      compactAngleEigenvalueList (genericCosineBlock U₂ V₂ᗮ) =
+        fun n => Real.sin (θ n) ^ 2 := by
+  rw [corollary3_1_compact_defectBlock_angleList_classification _ _ U₂ V₂
+      (isCompactOperator_angleSequenceDefectBlock hlim) hcompact₂,
+    compactAngleEigenvalueList_genericCosineBlock_angleSequenceDatum ℂ θ hθ0 hθ2 hanti]
+  exact and_congr_right fun _ => eq_comm
+
+end RealizationClassification
 
 /-! ## Section 3 over a real Hilbert space
 

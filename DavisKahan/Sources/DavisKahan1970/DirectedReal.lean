@@ -470,6 +470,69 @@ theorem tanTheta_directed_paperUINorm_real_infinite
   tanTheta_directed_paperUINorm_real N T hT V Z hV hdelta hCompressionUpper
     hUnwantedLower hResidual
 
+/-! ### Uniform transversality over a real Hilbert space is derived, not assumed
+
+The real twin of `norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent`.  The
+quantitative half is the real directed estimate above; the printed standing assumption
+(3.5) upgrades the directed gap to the symmetric one that `sin Θ` measures. -/
+
+/-- **Davis--Kahan 1970, Section 2 over a REAL Hilbert space: uniform transversality is a
+consequence.**
+
+`‖sin Θ‖ < 1` follows from the tangent theorem's own form bounds together with the printed
+standing assumption (3.5).  The ambient directed block `P_{V^⊥} P_U` factors through the
+trial block `P_{V^⊥} P_U|_U`, whose approximation singular values are already known to be
+strictly below one, and (3.5) identifies the symmetric gap with the directed one. -/
+theorem norm_paperSinAngleOperatorR_lt_one_of_crossedDefectsEquivalent
+    (T : E →L[ℝ] E) (hT : IsSelfAdjoint T)
+    (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hCompressionUpper : ∀ z : U, ⟪compressOperatorReal U T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
+    (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
+    (h35 : DavisKahan.Experimental.Frontier.CrossedDefectsEquivalent U V) :
+    ‖paperSinAngleOperatorR U V‖ < 1 := by
+  have hdirected := approximationSingularValue_sineBlock_lt_one_infiniteTrial_real
+    T hT V U hV hdelta hCompressionUpper hUnwantedLower 0
+  rw [approximationSingularValue_zero] at hdirected
+  have hfactor : Vᗮ.starProjection ∘L U.starProjection =
+      theorem63DirectedSineBlockReal U V ∘L U.orthogonalProjectionOnto := rfl
+  have hnorm : ‖Vᗮ.starProjection ∘L U.starProjection‖ < 1 := by
+    rw [hfactor]
+    calc ‖theorem63DirectedSineBlockReal U V ∘L U.orthogonalProjectionOnto‖
+        ≤ ‖theorem63DirectedSineBlockReal U V‖ * ‖U.orthogonalProjectionOnto‖ :=
+          ContinuousLinearMap.opNorm_comp_le _ _
+      _ ≤ ‖theorem63DirectedSineBlockReal U V‖ * 1 :=
+          mul_le_mul_of_nonneg_left U.orthogonalProjectionOnto_norm_le
+            (ContinuousLinearMap.opNorm_nonneg (theorem63DirectedSineBlockReal U V))
+      _ < 1 := by rwa [mul_one]
+  rw [norm_paperSinAngleOperatorR,
+    DavisKahan.Experimental.Frontier.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
+      U V h35]
+  exact hnorm
+
+/-- **The whole-space `tan Θ` theorem over a REAL Hilbert space, for every source unitarily
+invariant norm, under the printed standing assumptions only.**
+
+Identical to `tanTheta_wholeSpace_paperUINorm_real` except that uniform transversality is no
+longer a hypothesis: it is derived from the form bounds and the printed (3.5). -/
+theorem tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent
+    (N : PaperUnitaryInvariantNorm)
+    {A T : E →L[ℝ] E} {U V : Submodule ℝ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hT : IsSelfAdjoint T) (hA : IsSelfAdjoint A)
+    (hV : T.Reduces V) (hAU : ∀ x ∈ U, A x ∈ U)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hCompressionUpper : ∀ z : U, ⟪compressOperatorReal U T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
+    (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
+    (h35 : DavisKahan.Experimental.Frontier.CrossedDefectsEquivalent U V)
+    (hMem : N.Mem (T - A)) :
+    N.Mem (paperTanAngleOperatorR U V) ∧
+      delta * N.gauge (paperTanAngleOperatorR U V) ≤ N.gauge (T - A) :=
+  tanTheta_wholeSpace_paperUINorm_real N hT hA hV hAU hdelta hCompressionUpper
+    hUnwantedLower
+    (norm_paperSinAngleOperatorR_lt_one_of_crossedDefectsEquivalent T hT U V hV hdelta
+      hCompressionUpper hUnwantedLower h35) hMem
+
 end
 end DavisKahan1970
 end TauCeti

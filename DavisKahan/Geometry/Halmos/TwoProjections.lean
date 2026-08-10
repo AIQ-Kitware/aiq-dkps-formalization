@@ -109,6 +109,29 @@ noncomputable abbrev halmosTrivialPart (U V : Submodule 𝕜 H) : Submodule 𝕜
 noncomputable abbrev halmosGenericPart (U V : Submodule 𝕜 H) : Submodule 𝕜 H :=
   (halmosTrivialPart U V)ᗮ
 
+omit [CompleteSpace H] in
+/-- **Complementing the second subspace permutes the four elementary summands**, so it
+leaves their sum — and hence the generic remainder — unchanged.  `U ⊓ V` swaps with
+`U ⊓ Vᗮ`, and `Uᗮ ⊓ V` with `Uᗮ ⊓ Vᗮ`.
+
+This is the subspace-level counterpart of the multiplicity-level statement used by
+Corollary 3.1's defect-block form. -/
+theorem halmosTrivialPart_orthogonal_right (U V : Submodule 𝕜 H)
+    [V.HasOrthogonalProjection] :
+    halmosTrivialPart U Vᗮ = halmosTrivialPart U V := by
+  show (U ⊓ Vᗮ ⊔ U ⊓ Vᗮᗮ) ⊔ (Uᗮ ⊓ Vᗮ ⊔ Uᗮ ⊓ Vᗮᗮ) =
+    (U ⊓ V ⊔ U ⊓ Vᗮ) ⊔ (Uᗮ ⊓ V ⊔ Uᗮ ⊓ Vᗮ)
+  rw [Submodule.orthogonal_orthogonal V, sup_comm (U ⊓ Vᗮ) (U ⊓ V),
+    sup_comm (Uᗮ ⊓ Vᗮ) (Uᗮ ⊓ V)]
+
+omit [CompleteSpace H] in
+/-- The generic Halmos remainder is unchanged by complementing the second subspace. -/
+theorem halmosGenericPart_orthogonal_right (U V : Submodule 𝕜 H)
+    [V.HasOrthogonalProjection] :
+    halmosGenericPart U Vᗮ = halmosGenericPart U V := by
+  show (halmosTrivialPart U Vᗮ)ᗮ = (halmosTrivialPart U V)ᗮ
+  rw [halmosTrivialPart_orthogonal_right U V]
+
 /-- The common part `U ⊓ V` is orthogonally complemented. -/
 noncomputable instance instHasOrthogonalProjectionHalmosCommonPart
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
