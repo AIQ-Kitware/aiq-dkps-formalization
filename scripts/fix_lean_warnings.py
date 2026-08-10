@@ -7,14 +7,15 @@ By default it only prints a diff. Pass --write to modify files.
 Supported mechanical warning classes:
 - proposition-style haveI/letI -> have/let;
 - deprecated constant replacement when Lean gives an exact replacement;
+- direct unnecessary `simpa` -> `simp` suggestions;
 - unused simp arguments;
 - unnecessary <;> sequencing -> ;;
 - tactics explicitly reported as doing nothing;
 - unused section variables via `omit ... in`, placed before declaration docstrings.
 
 Everything else is reported as skipped. In particular, proof-search/tactic suggestions
-such as ring_nf, abel_nf, simp-vs-simpa, and declaration-kind suggestions are not
-applied automatically.
+such as ring_nf and abel_nf, `simpa using ...` rewrites, and declaration-kind
+suggestions are not applied automatically.
 """
 
 from __future__ import annotations
@@ -36,6 +37,7 @@ DEPRECATED_RE = re.compile(r"`(?P<old>[^`]+)` has been deprecated: Use `(?P<new>
 UNUSED_SECTION_PREFIX = "automatically included section variable(s) unused in theorem"
 UNUSED_SIMP_PREFIX = "This simp argument is unused:"
 SEQ_FOCUS_PREFIX = "Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice"
+UNNECESSARY_SIMPA_PREFIX = "try 'simp' instead of 'simpa'"
 
 
 @dataclasses.dataclass(frozen=True)
@@ -270,6 +272,24 @@ def edit_seq_focus(plan: FilePlan, d: Diagnostic) -> Edit | None:
     return Edit(start + p, start + p + 3, ";", "seq-focus", "<;> -> ;")
 
 
+
+def edit_unnecessary_simpa(plan: FilePlan, d: Diagnostic) -> Edit | None:
+    if not d.message.startswith(UNNECESSARY_SIMPA_PREFIX):
+        return None
+    span = line_span(plan.original, d.line)
+    if span is None:
+        return None
+    start, _, line = span
+    # The linter emits this diagnostic only when the same tactic arguments can be
+    # used with `simp`. Keep this editor deliberately narrow: `simpa using ...`
+    # has a different shape and is left for a human.
+    if " using " in line:
+        return None
+    p = find_near(line, "simpa", d.col)
+    if p is None:
+        return None
+    return Edit(start + p, start + p + len("simpa"), "simp", "unnecessary-simpa", "simpa -> simp")
+
 def edit_unused_simp(plan: FilePlan, d: Diagnostic) -> Edit | None:
     arg = parse_unused_simp_arg(d)
     if arg is None:
@@ -377,6 +397,7 @@ def edit_unused_section(plan: FilePlan, d: Diagnostic) -> Edit | None:
 EDITORS = (
     edit_style_instance,
     edit_deprecated,
+    edit_unnecessary_simpa,
     edit_unused_simp,
     edit_seq_focus,
     edit_noop_tactic,
