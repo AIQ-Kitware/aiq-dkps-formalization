@@ -209,7 +209,7 @@ theorem norm_ringInverse_pencil_eq_norm_resolventOperator
 /-- Every point on the canonical finite-gap circle is at distance at least
 `d / 2` from the selected interval. -/
 theorem canonicalGapCircle_distance_interval
-    {left right d : ℝ} (hlr : left ≤ right) {z : ℂ}
+    {left right d : ℝ} (_hlr : left ≤ right) {z : ℂ}
     (hz : ‖z - (((left + right) / 2 : ℝ) : ℂ)‖ =
       (right - left + d) / 2)
     {lam : ℝ} (hlam : lam ∈ Set.Icc left right) :
@@ -289,7 +289,7 @@ chosen margin to the canonical finite-gap circle. -/
 theorem canonicalGapCircle_margin_le_realSpectrum
     (hA : IsSelfAdjointOperator A) (hE : IsSelfAdjointOperator E)
     {U : Submodule ℂ H} [U.HasOrthogonalProjection]
-    (hU : Reduces A U) (hoff : IsOffDiagonal U E)
+    (_hU : Reduces A U) (_hoff : IsOffDiagonal U E)
     {d left right : ℝ} (hd : 0 < d) (hlr : left ≤ right)
     (hdiag : ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
       ∀ hpath : IsSelfAdjointOperator (operatorPath A E t),

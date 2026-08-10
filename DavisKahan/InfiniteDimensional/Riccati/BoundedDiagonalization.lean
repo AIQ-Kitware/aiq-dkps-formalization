@@ -205,6 +205,7 @@ theorem eq_blockDiagonalOperator_of_preserves_coordinates
         simp [blockCompression1, z1]
     _ = blockDiagonalOperator (blockCompression0 T) (blockCompression1 T) z := rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Algebraic block diagonalization from a unitary transport of the coordinate
 summands to a reducing graph and its orthogonal complement. -/
 theorem blockDiagonalization_of_graph_transport

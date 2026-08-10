@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Frontier.Section8SourceTheorem82
+import DavisKahan.DoubleAngle.RealAngleIdentification
 import DavisKahan.Sources.DavisKahan1970.WholeSpaceReal
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 
 /-!
@@ -61,9 +63,11 @@ ingredients do that, and no perturbation theory is re-run for either:
   `spectrum_compressOperatorReal_subset_of_spectrumIn`, the real counterpart of
   `spectrum_compressOperator_subset_of_spectrumIn`.
 
-The residual alternative is available at the operator norm only, over `ℝ`
-exactly as over `ℂ`; the obstruction is recorded at the head of section 2b of
-`Section8SourceTheorem82.lean` and is mathematical, not a matter of scalars.
+The residual alternative is also available at every source unitarily invariant
+norm.  The sharp factor-two estimate is proved once over `ℂ`; the real endpoint
+uses `complexifySubmoduleEquiv` to identify the printed rectangular residual with
+its complex counterpart and transports its complete approximation-singular
+sequence back without loss.
 
 ## Main results
 
@@ -79,8 +83,9 @@ exactly as over `ℂ`; the obstruction is recorded at the head of section 2b of
 * `theorem8_2_sinTwoTheta_perturbation_source_real` and
   `theorem8_2_sinTwoTheta_residual_source_real` -- the inherited `sin 2Θ`
   estimates at the operator norm;
-* `theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm` -- the first of
-  those at every source unitarily invariant norm;
+* `theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm` and
+  `theorem8_2_sinTwoTheta_residual_source_real_paperUINorm` -- both inherited
+  `sin 2Θ` estimates at every source unitarily invariant norm;
 * `theorem8_2_source_real` -- the whole printed theorem over `ℝ`.
 
 ## References
@@ -111,6 +116,15 @@ universe v
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E]
 
+/-- A projected subspace of a complete Hilbert space is complete.  The real
+Theorem 8.2 residual is rectangular, so the source norm API needs this both for
+the real trial space and for its complexified image. -/
+local instance instCompleteSpaceCoeOfHasOrthogonalProjectionSection8SourceReal
+    {𝕜 : Type*} [RCLike 𝕜] {G : Type*} [NormedAddCommGroup G]
+    [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] : CompleteSpace U :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+
 /-! ### 1. The printed residual complexifies -/
 
 /-- **The printed residual (1.8) has the same norm before and after
@@ -139,6 +153,69 @@ theorem norm_residual_complexify
     Krein.norm_comp_subtypeL_eq_norm_comp_starProjection,
     Krein.norm_comp_subtypeL_eq_norm_comp_starProjection,
     starProjection_complexifySubmodule, ← complexify_comp, norm_complexify]
+
+omit [CompleteSpace E] in
+/-- **The printed residual complexifies exactly through the canonical trial-space
+coordinate equivalence.**
+
+The complex Theorem 8.2 residual acts on `complexifySubmodule P`, whereas the
+literal complexification of the real residual acts on `RealComplexification P`.
+`complexifySubmoduleEquiv P` identifies those domains, and after that coordinate
+change the two residuals are equal as bounded operators. -/
+theorem residual_complexify_equiv
+    (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
+    (hPinv : ∀ x ∈ P, A x ∈ P) :
+    (residual (complexify A + complexify K) (complexifySubmodule P).subtypeL
+        (compressOperator (complexifySubmodule P) (complexify A))) ∘L
+          (complexifySubmoduleEquiv P).toContinuousLinearEquiv.toContinuousLinearMap =
+      complexify (residual (A + K) P.subtypeL (compressOperator P A)) := by
+  have hPinvC : ∀ z ∈ complexifySubmodule P,
+      complexify A z ∈ complexifySubmodule P :=
+    fun _ hz => mapsTo_complexifySubmodule hPinv hz
+  rw [residual_eq_comp_subtypeL (complexify A) (complexify K)
+      (complexifySubmodule P) hPinvC,
+    residual_eq_comp_subtypeL A K P hPinv]
+  apply ContinuousLinearMap.ext
+  intro w
+  change (complexify K)
+      (((complexifySubmoduleEquiv P w : complexifySubmodule P) :
+        RealComplexification E)) =
+    complexify (K ∘L P.subtypeL) w
+  rw [coe_complexifySubmoduleEquiv_eq_complexify_subtypeL,
+    RealComplexification.complexify_comp]
+  rfl
+
+/-- **The complex and real Theorem 8.2 residuals have the same complete
+approximation-singular sequence.**
+
+The only mismatch is the canonical isometric coordinate change between the
+complexification of the real trial space and the complexified trial subspace.
+This is the rectangular transport needed by every source unitarily invariant
+norm; unlike `norm_residual_complexify`, it preserves the entire singular data,
+not merely the operator norm. -/
+theorem sameApproximationSingularSequence_residual_complexify
+    (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
+    (hPinv : ∀ x ∈ P, A x ∈ P) :
+    ExactSinTheta.SameApproximationSingularSequence
+      (complexify (residual (A + K) P.subtypeL (compressOperator P A)))
+      (residual (complexify A + complexify K) (complexifySubmodule P).subtypeL
+        (compressOperator (complexifySubmodule P) (complexify A))) := by
+  let U := LinearIsometryEquiv.refl Complex (RealComplexification E)
+  let W := complexifySubmoduleEquiv P
+  have hcoord :
+      U.toContinuousLinearEquiv.toContinuousLinearMap ∘L
+          complexify (residual (A + K) P.subtypeL (compressOperator P A)) ∘L
+          W.symm.toContinuousLinearEquiv.toContinuousLinearMap =
+        residual (complexify A + complexify K) (complexifySubmodule P).subtypeL
+          (compressOperator (complexifySubmodule P) (complexify A)) := by
+    apply ContinuousLinearMap.ext
+    intro z
+    let w := W.symm z
+    have hw : W w = z := W.apply_symm_apply z
+    have h := congrArg (fun L => L w) (residual_complexify_equiv A K P hPinv)
+    simpa [U, W, w, hw] using h.symm
+  exact ExactSinTheta.SameApproximationSingularValues.of_isometricEquiv_comp
+    U W hcoord
 
 /-! ### 1b. The three hypothesis transports, once
 
@@ -511,6 +588,73 @@ theorem theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm
   obtain ⟨hmem, hle⟩ := DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real N
     hAKsa hAsa hQred hPred hdelta hab hUspec hUspec' hMemNeg
   exact ⟨hmem, by rwa [hgaugeNeg] at hle⟩
+
+/-- **The `sin 2Θ₀` estimate at Theorem 8.2's hypotheses, residual form, over
+a REAL Hilbert space, for every source unitarily invariant norm.**
+
+This is the real source-fidelity counterpart of
+`theorem8_2_sinTwoTheta_residual_source_paperUINorm`:
+
+`δ N(sin 2Θ₀) ≤ 2 N(R)`.
+
+The analytic estimate is not reproved over `ℝ`.  Complexification carries the
+directed doubled-angle block exactly, while `residual_complexify_equiv` carries
+the printed rectangular residual through the canonical trial-space isometry.
+Those identities preserve the complete approximation-singular sequences, so
+`PaperUnitaryInvariantNorm.mem_complexify_iff`, `gauge_complexify`, and the
+heterogeneous singular-sequence transport return both membership and the norm
+inequality to the real spaces with no loss in the constant. -/
+theorem theorem8_2_sinTwoTheta_residual_source_real_paperUINorm
+    (N : ExactSinTheta.PaperUnitaryInvariantNorm)
+    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : A.Reduces P)
+    (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
+    N.Mem (TauCeti.DavisKahan.Experimental.sinTwoThetaIdealBlock Q P) ∧
+      delta * N.gauge (TauCeti.DavisKahan.Experimental.sinTwoThetaIdealBlock Q P) ≤
+        2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) := by
+  have hseq := sameApproximationSingularSequence_residual_complexify A K P hPred.1
+  have htransport := hseq.paperMem_iff_and_gauge_eq N
+  have hRmemComplexified :
+      N.Mem (complexify (residual (A + K) P.subtypeL (compressOperator P A))) :=
+    (ExactSinTheta.PaperUnitaryInvariantNorm.mem_complexify_iff N _).2 hRmem
+  have hRmemC :
+      N.Mem
+        (residual (complexify A + complexify K) (complexifySubmodule P).subtypeL
+          (compressOperator (complexifySubmodule P) (complexify A))) :=
+    htransport.1.mp hRmemComplexified
+  obtain ⟨hBlockMemC, hboundC⟩ :=
+    theorem8_2_sinTwoTheta_residual_source_paperUINorm N
+      (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
+      hdelta hab (spectrumIn_complexify_add hQ)
+      (spectrumIn_orthogonal_complexify_add hQperp)
+      ((complexify_reduces_iff A P).2 hPred) hRmemC
+  have hBlockEq :=
+    TauCeti.DavisKahan.Experimental.complexify_sinTwoThetaIdealBlock Q P
+  rw [← hBlockEq] at hBlockMemC hboundC
+  have hBlockMem :
+      N.Mem (TauCeti.DavisKahan.Experimental.sinTwoThetaIdealBlock Q P) :=
+    (ExactSinTheta.PaperUnitaryInvariantNorm.mem_complexify_iff N _).1 hBlockMemC
+  refine ⟨hBlockMem, ?_⟩
+  have hResidualGauge :
+      N.gauge
+          (residual (complexify A + complexify K) (complexifySubmodule P).subtypeL
+            (compressOperator (complexifySubmodule P) (complexify A))) =
+        N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) := by
+    calc
+      N.gauge
+          (residual (complexify A + complexify K) (complexifySubmodule P).subtypeL
+            (compressOperator (complexifySubmodule P) (complexify A))) =
+          N.gauge
+            (complexify (residual (A + K) P.subtypeL (compressOperator P A))) :=
+        htransport.2.symm
+      _ = N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) :=
+        ExactSinTheta.PaperUnitaryInvariantNorm.gauge_complexify N _
+  rw [ExactSinTheta.PaperUnitaryInvariantNorm.gauge_complexify, hResidualGauge] at hboundC
+  exact hboundC
 
 /-! ### 6. The whole printed theorem over `ℝ` -/
 

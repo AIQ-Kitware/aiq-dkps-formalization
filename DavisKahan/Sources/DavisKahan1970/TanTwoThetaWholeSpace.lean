@@ -575,6 +575,7 @@ private theorem doubleSecant_comm_projectorDifference :
   inverse_comm' (hinv)
     (by noncomm_ring)
 
+omit [CompleteSpace E] in
 private theorem doubleSecant_comm_starProjection :
     paperDoubleSecant U V * U.starProjection =
       U.starProjection * paperDoubleSecant U V :=

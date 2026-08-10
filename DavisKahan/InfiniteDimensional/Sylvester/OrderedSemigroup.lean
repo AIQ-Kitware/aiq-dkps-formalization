@@ -45,6 +45,7 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
   [CompleteSpace F]
 
+omit [CompleteSpace E] in
 /-- The restriction to the full space has the original real spectrum. -/
 theorem restrictedSpectrum_top_eq_realSpectrum
     (T : E →L[ℂ] E) : restrictedSpectrum T ⊤ = realSpectrum T :=

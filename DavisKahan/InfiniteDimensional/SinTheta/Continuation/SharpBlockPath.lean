@@ -78,7 +78,7 @@ variable {Hspace : Type v} [NormedAddCommGroup Hspace]
 theorem operatorPath_subspaceBlockOperatorData_A0_eq
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
-    (hU : Reduces A U) (hK : IsOffDiagonal U K)
+    (_hU : Reduces A U) (hK : IsOffDiagonal U K)
     (t : ℝ) (hpath : IsSelfAdjointOperator (operatorPath A K t)) :
     (subspaceBlockOperatorData (operatorPath A K t) U hpath).A0 =
       compressOperator U A := by
@@ -92,7 +92,7 @@ theorem operatorPath_subspaceBlockOperatorData_A0_eq
 theorem operatorPath_subspaceBlockOperatorData_A1_eq
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
-    (hU : Reduces A U) (hK : IsOffDiagonal U K)
+    (_hU : Reduces A U) (hK : IsOffDiagonal U K)
     (t : ℝ) (hpath : IsSelfAdjointOperator (operatorPath A K t)) :
     (subspaceBlockOperatorData (operatorPath A K t) U hpath).A1 =
       compressOperator Uᗮ A := by

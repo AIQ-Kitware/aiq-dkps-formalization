@@ -122,6 +122,7 @@ theorem compressOperator_complexifySubmodule (A : E →L[ℝ] E) :
   rw [LinearIsometryEquiv.apply_symm_apply] at h
   exact h
 
+omit [CompleteSpace E] in
 /-- **The real spectrum of a compression survives complexification.**  Stated
 with the subspace as a hypothesis so that it applies to `(complexifySubmodule Z)ᗮ`
 as written, without a dependent rewrite under the projection instance. -/

@@ -44,7 +44,7 @@ For `ε = 0` this reduces to the existing exact singular-pair theorem.
 -/
 theorem stableSingularPair_doubleAngleTangent_le
     (B : BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    {d s ε : ℝ} (hd0 : 0 ≤ d) (hs0 : 0 ≤ s) (hs1 : s < 1)
+    {d s ε : ℝ} (_hd0 : 0 ≤ d) (hs0 : 0 ≤ s) (hs1 : s < 1)
     (hε0 : 0 ≤ ε)
     (hA0 : ∀ z : E0, RCLike.re ⟪B.A0 z, z⟫_ℂ ≤ 0)
     (hA1 : ∀ z : E1, d * ‖z‖ ^ 2 ≤ RCLike.re ⟪B.A1 z, z⟫_ℂ)
