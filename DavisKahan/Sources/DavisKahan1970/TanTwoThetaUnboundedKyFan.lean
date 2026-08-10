@@ -1504,6 +1504,773 @@ theorem mem_and_gauge_le_of_compressedDoubleAngleEigenbasis
     hred hB hZsa hZ2 hZdom hZcomm hUa hUb hab hT k
   linarith
 
+/-!
+## Discharging the compressed hypothesis on an `A`-invariant trial space
+
+Everything above is conditional on a family with two compression properties.
+This section removes the *spectral* content of that hypothesis entirely.
+
+The observation is that both compression conditions are properties of the
+**compression** `P_W S² P_W` of `S² = sin² 2Θ` to a finite-dimensional subspace
+`W ⊆ 𝔛₀ ∩ D(A)`, not of `S²` itself.  That compression is a self-adjoint
+operator on a finite-dimensional space, so it *always* has an orthonormal
+eigenbasis — Mathlib's `LinearMap.IsSymmetric.eigenvectorBasis` — and its
+eigenvalues are automatically nonnegative, being `‖S yᵢ‖²`.  The Gram condition
+is then the eigen-relation of that compression, and the leakage condition is
+supplied for free by `re_inner_compressedResidual_eq_zero_of_apply_eq_sum` as
+soon as `W` is `A`-invariant.
+
+**Nothing about the point spectrum of `S²` is used, and no cutoff, limit or
+error term appears.**  The hypothesis has moved off the unknown rotation `Θ` and
+onto the given operator `A`: what must be supplied is a finite-dimensional
+`A`-invariant subspace of `𝔛₀ ∩ D(A)`, and that is a statement about `A` alone.
+
+Two honest limits of the passage, both visible in the statements below.
+
+* A zero eigenvalue of the compression is *not* excluded, and the family
+  endpoint requires `qᵢ > 0`.  It costs nothing: the vanishing eigenvalues
+  contribute `0` to `∑ qᵢ / √(1 - qᵢ²)`, so the sum is unchanged by dropping
+  them, and the Ky Fan gauge of the residual only grows with the prefix length.
+  `gap_mul_sum_tangent_le_kyFan_of_invariantSubspace` therefore carries **no**
+  positivity hypothesis at all.
+* The last clause of `IsCompressedDoubleAngleEigenbasis` — that the prefix
+  `kyFanApproximationGauge k T` is realised from below by the tangent sum — is
+  the *only* place the candidate tangent `T` is linked to the geometry, and it
+  is not produced by any subspace construction: `T` is an arbitrary operator in
+  these statements.  It survives as `HasInvariantDoubleAngleFiltration`, whose
+  every other clause is about `A`, `W` and `Z` only.
+-/
+
+/-- The compression of `S² = sin² 2Θ` to a subspace `W`, as a linear map of `W`:
+`w ↦ P_W (S (S w))` for the odd block `S = U.offDiagonalPart Z`. -/
+def offDiagonalSqCompression (U : Submodule ℂ H) [U.HasOrthogonalProjection]
+    (Z : H →L[ℂ] H) (W : Submodule ℂ H) [W.HasOrthogonalProjection] :
+    W →ₗ[ℂ] W :=
+  (W.orthogonalProjectionOnto.comp
+    ((U.offDiagonalPart Z).comp
+      ((U.offDiagonalPart Z).comp W.subtypeL))).toLinearMap
+
+omit [CompleteSpace H] in
+/-- Pointwise form of the compression. -/
+theorem offDiagonalSqCompression_apply (W : Submodule ℂ H)
+    [W.HasOrthogonalProjection] (w : W) :
+    offDiagonalSqCompression U Z W w =
+      W.orthogonalProjectionOnto
+        (U.offDiagonalPart Z (U.offDiagonalPart Z (w : H))) := rfl
+
+/-- **The compression of `S²` is symmetric.**  `S` is self-adjoint because `Z`
+is, and an orthogonal projection is self-adjoint, so the compression of a
+self-adjoint operator to any subspace is self-adjoint on that subspace.  This is
+the whole reason the finite-dimensional spectral theorem applies. -/
+theorem isSymmetric_offDiagonalSqCompression (hZsa : IsSelfAdjoint Z)
+    (W : Submodule ℂ H) [W.HasOrthogonalProjection] :
+    (offDiagonalSqCompression U Z W).IsSymmetric := by
+  have hSsym := TauCeti.inner_swap_of_isSelfAdjoint
+    (TauCeti.isSelfAdjoint_offDiagonalPart (U := U) hZsa)
+  intro w w'
+  rw [offDiagonalSqCompression_apply, offDiagonalSqCompression_apply,
+    Submodule.inner_orthogonalProjectionOnto_eq_of_mem_right,
+    Submodule.inner_orthogonalProjectionOnto_eq_of_mem_left]
+  rw [hSsym (U.offDiagonalPart Z (w : H)) (w' : H),
+    hSsym (w : H) (U.offDiagonalPart Z (w' : H))]
+
+/-- **The construction term: a compressed double-angle eigenfamily on any
+finite-dimensional `A`-invariant trial subspace.**
+
+Let `W ⊆ 𝔛₀ ∩ D(A)` be a finite-dimensional subspace mapped into itself by `A`.
+Then an orthonormal basis of `W` diagonalising the compression `P_W S² P_W`
+satisfies *both* compression conditions of `IsCompressedDoubleAngleEigenbasis`,
+with `qᵢ² ` the eigenvalues of that compression:
+
+* the Gram clause is the eigen-relation of the compression, read through
+  `Submodule.inner_orthogonalProjectionOnto_eq_of_mem_left`;
+* the leakage clause holds with **equality**, by
+  `re_inner_compressedResidual_eq_zero_of_apply_eq_sum`, because `A yᵢ` lies in
+  the span of the family.
+
+The eigenvalues are nonnegative for free, `qᵢ² = ‖S yᵢ‖²`; they are *not* shown
+to be positive, and need not be.  Nothing here is approximate and nothing about
+the point spectrum of `S²` is assumed. -/
+theorem exists_compressedDoubleAngleEigenfamily_of_invariantSubspace
+    (hZsa : IsSelfAdjoint Z)
+    {W : Submodule ℂ H} [FiniteDimensional ℂ W]
+    (hWdom : W ≤ A.domain) (hWU : W ≤ U)
+    (hWinv : ∀ w : A.domain, (w : H) ∈ W → A w ∈ W)
+    {k : ℕ} (hk : Module.finrank ℂ W = k) :
+    ∃ (y : Fin k → A.domain) (q : Fin k → ℝ),
+      (∀ i, ((y i : A.domain) : H) ∈ W) ∧
+        (∀ i, ((y i : A.domain) : H) ∈ U) ∧
+        (Orthonormal ℂ fun i => ((y i : A.domain) : H)) ∧
+        (∀ i, 0 ≤ q i) ∧
+        (∀ i j, ⟪((y j : A.domain) : H), U.offDiagonalPart Z
+            (U.offDiagonalPart Z ((y i : A.domain) : H))⟫_ℂ =
+          (((q i) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0)) ∧
+        (∀ i, RCLike.re ⟪A (y i), U.offDiagonalPart Z
+            (U.offDiagonalPart Z ((y i : A.domain) : H)) -
+              (((q i) ^ 2 : ℝ) : ℂ) • ((y i : A.domain) : H)⟫_ℂ = 0) := by
+  classical
+  have hsym := isSymmetric_offDiagonalSqCompression (U := U) (Z := Z) hZsa W
+  set e := hsym.eigenvectorBasis hk with he
+  set μ := hsym.eigenvalues hk with hμ
+  have hSsym := TauCeti.inner_swap_of_isSelfAdjoint
+    (TauCeti.isSelfAdjoint_offDiagonalPart (U := U) hZsa)
+  have hgram0 : ∀ i j, ⟪((e j : W) : H), U.offDiagonalPart Z
+      (U.offDiagonalPart Z ((e i : W) : H))⟫_ℂ =
+      ((μ i : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0) := by
+    intro i j
+    have h1 : ⟪((e j : W) : H), U.offDiagonalPart Z
+        (U.offDiagonalPart Z ((e i : W) : H))⟫_ℂ =
+        ⟪e j, offDiagonalSqCompression U Z W (e i)⟫_ℂ := by
+      rw [offDiagonalSqCompression_apply,
+        Submodule.inner_orthogonalProjectionOnto_eq_of_mem_left]
+    rw [h1, he, hμ, LinearMap.IsSymmetric.apply_eigenvectorBasis,
+      inner_smul_right, (orthonormal_iff_ite.mp (e.orthonormal)) j i]
+    norm_cast
+  have hμnn : ∀ i, 0 ≤ μ i := by
+    intro i
+    have h := hgram0 i i
+    rw [if_pos rfl, mul_one] at h
+    rw [← hSsym ((e i : W) : H) (U.offDiagonalPart Z ((e i : W) : H))] at h
+    have h2 : ((‖U.offDiagonalPart Z ((e i : W) : H)‖ ^ 2 : ℝ) : ℂ) =
+        ((μ i : ℝ) : ℂ) := by
+      rw [← h, inner_self_eq_norm_sq_to_K]
+      norm_cast
+    have h3 : ‖U.offDiagonalPart Z ((e i : W) : H)‖ ^ 2 = μ i := by
+      exact_mod_cast h2
+    rw [← h3]
+    positivity
+  have hsq : ∀ i, (√(μ i)) ^ 2 = μ i := fun i => Real.sq_sqrt (hμnn i)
+  have hyon : Orthonormal ℂ fun i => ((e i : W) : H) := by
+    have h := (e.orthonormal).comp_linearIsometry W.subtypeₗᵢ
+    simpa [Function.comp_def] using h
+  have hgramq : ∀ i j, ⟪((e j : W) : H), U.offDiagonalPart Z
+      (U.offDiagonalPart Z ((e i : W) : H))⟫_ℂ =
+      (((√(μ i)) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0) := by
+    intro i j
+    rw [hsq i]
+    exact hgram0 i j
+  refine ⟨fun i => ⟨((e i : W) : H), hWdom (e i).2⟩, fun i => √(μ i),
+    fun i => (e i).2, fun i => hWU (e i).2, hyon,
+    fun i => Real.sqrt_nonneg _, hgramq, ?_⟩
+  intro i
+  have hAmem : (A ⟨((e i : W) : H), hWdom (e i).2⟩) ∈ W :=
+    hWinv ⟨((e i : W) : H), hWdom (e i).2⟩ (e i).2
+  have hsum : A ⟨((e i : W) : H), hWdom (e i).2⟩ =
+      ∑ j, (e.repr ⟨A ⟨((e i : W) : H), hWdom (e i).2⟩, hAmem⟩ j) •
+        ((e j : W) : H) := by
+    have h := e.sum_repr ⟨A ⟨((e i : W) : H), hWdom (e i).2⟩, hAmem⟩
+    have h2 := congrArg (fun w : W => (w : H)) h
+    simpa using h2.symm
+  exact re_inner_compressedResidual_eq_zero_of_apply_eq_sum
+    (U := U) (Z := Z) (fun i => ⟨((e i : W) : H), hWdom (e i).2⟩) hyon hgramq
+    hsum
+
+/-- **The unbounded, residual-form `tan 2Θ` estimate on an `A`-invariant trial
+subspace, with no hypothesis on `Θ` whatsoever.**
+
+`W` ranges over finite-dimensional `A`-invariant subspaces of `𝔛₀ ∩ D(A)`; the
+`qᵢ` are the sines of the principal angles the compression of `sin² 2Θ` to `W`
+sees, pinned by `‖S yᵢ‖² = qᵢ²`, and the conclusion is
+
+`δ ∑ᵢ qᵢ / √(1 - qᵢ²) ≤ 2 · kyFanApproximationGauge k B`
+
+with **the sharp constant `2`**.  There is no eigenfamily hypothesis, no
+positivity hypothesis, no cutoff and no error term: the only input beyond the
+standing block data is a finite-dimensional `A`-invariant subspace, which is a
+statement about `A`.
+
+The pole is still excluded for free, `qᵢ < 1`, and the vanishing `qᵢ` are
+allowed: they are dropped from the family before
+`gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily` is applied,
+which shortens the Ky Fan prefix from `k` to the number of positive eigenvalues
+and is absorbed by monotonicity of the gauge in the prefix length. -/
+theorem gap_mul_sum_tangent_le_kyFan_of_invariantSubspace
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
+    (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
+    (hZcomm : ∀ x : A.domain,
+      A ⟨Z (x : H), hZdom x⟩ + B (Z (x : H)) = Z (A x) + Z (B (x : H)))
+    (hUa : ∀ x : A.domain, (x : H) ∈ U →
+      RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ a * ‖(x : H)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : H) ∈ Uᗮ →
+      b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
+    (hab : a < b)
+    {W : Submodule ℂ H} [FiniteDimensional ℂ W]
+    (hWdom : W ≤ A.domain) (hWU : W ≤ U)
+    (hWinv : ∀ w : A.domain, (w : H) ∈ W → A w ∈ W)
+    {k : ℕ} (hk : Module.finrank ℂ W = k) :
+    ∃ (y : Fin k → A.domain) (q : Fin k → ℝ),
+      (∀ i, ((y i : A.domain) : H) ∈ W) ∧
+        (Orthonormal ℂ fun i => ((y i : A.domain) : H)) ∧
+        (∀ i, ‖U.offDiagonalPart Z ((y i : A.domain) : H)‖ ^ 2 = q i ^ 2) ∧
+        (∀ i, 0 ≤ q i) ∧ (∀ i, q i < 1) ∧
+        (b - a) * ∑ i, q i / √(1 - (q i) ^ 2) ≤
+          2 * kyFanApproximationGauge k B := by
+  classical
+  obtain ⟨y, q, hyW, hyU, hyon, hqnn, hgram, hres⟩ :=
+    exists_compressedDoubleAngleEigenfamily_of_invariantSubspace (U := U)
+      (A := A) (Z := Z) hZsa hWdom hWU hWinv hk
+  have hx1 : ∀ i, ‖((y i : A.domain) : H)‖ = 1 := fun i => hyon.norm_eq_one i
+  have hself : ∀ i, ⟪((y i : A.domain) : H), U.offDiagonalPart Z
+      (U.offDiagonalPart Z ((y i : A.domain) : H))⟫_ℂ =
+      (((q i) ^ 2 : ℝ) : ℂ) := fun i => by rw [hgram i i, if_pos rfl, mul_one]
+  have hnorm : ∀ i, ‖U.offDiagonalPart Z ((y i : A.domain) : H)‖ ^ 2 =
+      (q i) ^ 2 := fun i =>
+    norm_sq_offDiagonalPart_of_compressedDiagonal (U := U) hZsa (hself i)
+  have hq1 : ∀ i, q i < 1 := by
+    intro i
+    rcases lt_or_eq_of_le (hqnn i) with hpos | hzero
+    · exact compressedDoubleAngleEigenvalue_lt_one hred hB hZsa hZ2 hZdom hZcomm
+        hUa hUb hab (hyU i) (hx1 i) hpos (hself i) (le_of_eq (hres i))
+    · rw [← hzero]
+      norm_num
+  refine ⟨y, q, hyW, hyon, hnorm, hqnn, hq1, ?_⟩
+  set s : Finset (Fin k) := Finset.univ.filter (fun i => 0 < q i) with hs
+  have hsmem : ∀ i, i ∈ s ↔ 0 < q i := by
+    intro i
+    rw [hs]
+    simp
+  set m : ℕ := s.card with hm
+  set σ : Fin m → Fin k := fun j => ((s.equivFin.symm j : {x // x ∈ s}) : Fin k)
+    with hσ
+  have hσinj : Function.Injective σ := by
+    intro j j' h
+    have hsub : (s.equivFin.symm j : {x // x ∈ s}) = s.equivFin.symm j' :=
+      Subtype.ext h
+    simpa using hsub
+  have hσmem : ∀ j, 0 < q (σ j) := fun j =>
+    (hsmem _).mp (s.equivFin.symm j).2
+  have hgram' : ∀ i j, ⟪((y (σ j) : A.domain) : H), U.offDiagonalPart Z
+      (U.offDiagonalPart Z ((y (σ i) : A.domain) : H))⟫_ℂ =
+      (((q (σ i)) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0) := by
+    intro i j
+    rw [hgram (σ i) (σ j)]
+    congr 1
+    by_cases hji : j = i
+    · rw [if_pos hji, if_pos (congrArg σ hji)]
+    · rw [if_neg hji, if_neg (fun h => hji (hσinj h))]
+  have hmain := gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
+    hred hB hZsa hZ2 hZdom hZcomm hUa hUb hab (fun j => y (σ j))
+    (fun j => hyU (σ j)) (hyon.comp σ hσinj) hσmem hgram'
+    (fun j => le_of_eq (hres (σ j)))
+  have hsumeq : ∑ i, q i / √(1 - (q i) ^ 2) =
+      ∑ j, q (σ j) / √(1 - (q (σ j)) ^ 2) := by
+    have h1 : ∑ j, q (σ j) / √(1 - (q (σ j)) ^ 2) =
+        ∑ x : {x // x ∈ s}, q (x : Fin k) / √(1 - (q (x : Fin k)) ^ 2) :=
+      Equiv.sum_comp s.equivFin.symm
+        (fun x : {x // x ∈ s} => q (x : Fin k) / √(1 - (q (x : Fin k)) ^ 2))
+    rw [h1, Finset.sum_coe_sort s (fun i => q i / √(1 - (q i) ^ 2))]
+    refine (Finset.sum_subset (Finset.subset_univ s) ?_).symm
+    intro i _ hnot
+    have hzero : q i = 0 :=
+      le_antisymm (not_lt.mp fun hc => hnot ((hsmem i).mpr hc)) (hqnn i)
+    rw [hzero]
+    simp
+  have hmono : kyFanApproximationGauge m B ≤ kyFanApproximationGauge k B := by
+    have hmk : m ≤ k := by
+      rw [hm]
+      simpa using Finset.card_le_card (Finset.subset_univ s)
+    simp only [kyFanApproximationGauge_eq_kyFanGauge,
+      ContinuousLinearMap.kyFanGauge]
+    refine Finset.sum_le_sum_of_subset_of_nonneg
+      (fun x hx => Finset.mem_range.mpr
+        (lt_of_lt_of_le (Finset.mem_range.mp hx) hmk))
+      (fun i _ _ => B.approximationNumber_nonneg i)
+  rw [hsumeq]
+  linarith [hmain, hmono, (by linarith : (0 : ℝ) ≤ b - a)]
+
+/-- A filtration of `𝔛₀ ∩ D(A)` by finite-dimensional `A`-invariant subspaces
+whose compressed principal angles realise the Ky Fan prefixes of a candidate
+tangent operator `T`.
+
+Every clause except the last is about `A`, `W` and `Z` alone — no eigenvector of
+`sin² 2Θ` is asked for, and no point-spectrum assumption is made.  The last
+clause is the *prefix-realisation* clause of `IsCompressedDoubleAngleEigenbasis`
+transported to this setting: it is the only link between `T` and the geometry,
+and it is quantified over every orthonormal family diagonalising the compression
+of `S²` to `W`, which pins it to the compression spectrum rather than to a
+choice of basis. -/
+def HasInvariantDoubleAngleFiltration (A : H →ₗ.[ℂ] H) (U : Submodule ℂ H)
+    [U.HasOrthogonalProjection] (Z T : H →L[ℂ] H) : Prop :=
+  ∀ k : ℕ, ∃ (W : Submodule ℂ H) (_ : FiniteDimensional ℂ W),
+    Module.finrank ℂ W = k ∧ W ≤ A.domain ∧ W ≤ U ∧
+      (∀ w : A.domain, (w : H) ∈ W → A w ∈ W) ∧
+      ∀ (y : Fin k → A.domain) (q : Fin k → ℝ),
+        (∀ i, ((y i : A.domain) : H) ∈ W) →
+        (Orthonormal ℂ fun i => ((y i : A.domain) : H)) →
+        (∀ i, 0 ≤ q i) →
+        (∀ i j, ⟪((y j : A.domain) : H), U.offDiagonalPart Z
+            (U.offDiagonalPart Z ((y i : A.domain) : H))⟫_ℂ =
+          (((q i) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0)) →
+        (∀ i, 0 < q i) ∧
+          kyFanApproximationGauge k T ≤ ∑ i, q i / √(1 - (q i) ^ 2)
+
+/-- **An invariant filtration supplies a compressed double-angle eigenbasis.**
+
+This is the discharge: the eigen-part of `IsCompressedDoubleAngleEigenbasis` is
+produced outright by
+`exists_compressedDoubleAngleEigenfamily_of_invariantSubspace`, and only the
+prefix-realisation clause is read off the filtration.  Self-adjointness of `Z`
+is the sole analytic input. -/
+theorem isCompressedDoubleAngleEigenbasis_of_hasInvariantDoubleAngleFiltration
+    (hZsa : IsSelfAdjoint Z) {T : H →L[ℂ] H}
+    (hfil : HasInvariantDoubleAngleFiltration A U Z T) :
+    IsCompressedDoubleAngleEigenbasis A U Z T := by
+  intro k
+  obtain ⟨W, hWfd, hk, hWdom, hWU, hWinv, hreal⟩ := hfil k
+  obtain ⟨y, q, hyW, hyU, hyon, hqnn, hgram, hres⟩ :=
+    exists_compressedDoubleAngleEigenfamily_of_invariantSubspace (U := U)
+      (A := A) (Z := Z) hZsa hWdom hWU hWinv hk
+  obtain ⟨hqpos, hle⟩ := hreal y q hyW hyon hqnn hgram
+  exact ⟨y, q, hyU, hyon, hqpos, hgram, fun i => le_of_eq (hres i), hle⟩
+
+/-- **The unbounded residual `tan 2Θ` theorem at every Ky Fan gauge, on an
+invariant filtration.**  `δ · kyFanApproximationGauge k T ≤
+2 · kyFanApproximationGauge k B`, with the sharp constant `2`, and with no
+hypothesis about the point spectrum of `sin² 2Θ`. -/
+theorem gap_mul_kyFan_le_two_mul_kyFan_of_invariantDoubleAngleFiltration
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
+    (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
+    (hZcomm : ∀ x : A.domain,
+      A ⟨Z (x : H), hZdom x⟩ + B (Z (x : H)) = Z (A x) + Z (B (x : H)))
+    (hUa : ∀ x : A.domain, (x : H) ∈ U →
+      RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ a * ‖(x : H)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : H) ∈ Uᗮ →
+      b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
+    (hab : a < b) {T : H →L[ℂ] H}
+    (hT : HasInvariantDoubleAngleFiltration A U Z T) (k : ℕ) :
+    (b - a) * kyFanApproximationGauge k T ≤
+      2 * kyFanApproximationGauge k B :=
+  gap_mul_kyFan_le_two_mul_kyFan_of_compressedDoubleAngleEigenbasis hred hB hZsa
+    hZ2 hZdom hZcomm hUa hUb hab
+    (isCompressedDoubleAngleEigenbasis_of_hasInvariantDoubleAngleFiltration
+      hZsa hT) k
+
+/-- **The unbounded, residual-form `tan 2Θ` theorem at every Fan-dominant
+unitarily invariant ideal gauge, on an invariant filtration.**
+
+`δ N(tan 2Θ₀) ≤ 2 N(R)` in the repository's scaled form, with ideal membership
+of the scaled tangent concluded rather than assumed, and with the eigenbasis
+hypothesis replaced throughout by finite-dimensional `A`-invariance. -/
+theorem mem_and_gauge_le_of_invariantDoubleAngleFiltration
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
+    (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
+    (hZcomm : ∀ x : A.domain,
+      A ⟨Z (x : H), hZdom x⟩ + B (Z (x : H)) = Z (A x) + Z (B (x : H)))
+    (hUa : ∀ x : A.domain, (x : H) ∈ U →
+      RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ a * ‖(x : H)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : H) ∈ Uᗮ →
+      b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
+    (hab : a < b) {T : H →L[ℂ] H}
+    (hT : HasInvariantDoubleAngleFiltration A U Z T) (hBmem : N.Mem B) :
+    N.Mem ((((b - a) / 2 : ℝ) : ℂ) • T) ∧
+      N.gauge ((((b - a) / 2 : ℝ) : ℂ) • T) ≤ N.gauge B :=
+  mem_and_gauge_le_of_compressedDoubleAngleEigenbasis N hred hB hZsa hZ2 hZdom
+    hZcomm hUa hUb hab
+    (isCompressedDoubleAngleEigenbasis_of_hasInvariantDoubleAngleFiltration
+      hZsa hT) hBmem
+
+/-!
+## A witness that the compressed hypothesis is strictly weaker
+
+`isCompressedDoubleAngleEigenbasis_of_isDoubleAngleEigenbasis` shows the
+compressed hypothesis is *no stronger* than the exact one.  Nothing so far shows
+it is genuinely *weaker*, and a weakening that is only cosmetic would be worth
+knowing about.  This section exhibits a three-dimensional model in which
+
+* every standing hypothesis of the endpoints holds — `Z` is a self-adjoint
+  involution, `B` is odd for the trial subspace, `A` is reduced by it with form
+  bounds `a = 0` on `𝔛₀` and `b = 1` on `𝔛₁`, and the block system holds;
+* the compressed conditions hold at a unit trial vector with `q = 2/3`;
+* the **exact** relation `S² x = q² x` fails at that same vector.
+
+The model is the reflection through the diagonal line `ℂ (e₀ + e₁ + e₂)` in
+`ℂ³`, with `𝔛₀` the plane `ℂ e₂` is orthogonal to.  The compression of `S²` to
+the `A`-invariant line `ℂ e₀` is the scalar `4/9`, while `S² e₀ = (4/9)(e₀+e₁)`
+leaves that line.  The last theorem runs
+`gap_mul_sum_tangent_le_kyFan_of_invariantSubspace` on the model, so the
+unconditional endpoint is exhibited as non-vacuous on data satisfying every
+hypothesis of the theorem it strengthens.
+-/
+
+namespace CompressedStrictness
+
+/-- The ambient space of the witness. -/
+abbrev Model : Type := EuclideanSpace ℂ (Fin 3)
+
+/-- The standard unit vectors of the model. -/
+def unitVector (i : Fin 3) : Model := EuclideanSpace.single i (1 : ℂ)
+
+/-- The diagonal line the model's reflection fixes. -/
+def axis : Model := unitVector 0 + unitVector 1 + unitVector 2
+
+/-- The reducing reflection of the model: `2 P_axis - 1`, written out so that no
+projection API is needed to evaluate it. -/
+def reflectionZ : Model →L[ℂ] Model :=
+  ((2 / 3 : ℂ) • ((innerSL ℂ axis).smulRight axis)) -
+    ContinuousLinearMap.id ℂ Model
+
+/-- The trial subspace `𝔛₀` of the model: the plane orthogonal to `e₂`. -/
+def trial : Submodule ℂ Model := (ℂ ∙ unitVector 2)ᗮ
+
+/-- Pointwise form of the model's reflection. -/
+theorem reflectionZ_apply (w : Model) :
+    reflectionZ w = (2 / 3 : ℂ) • (⟪axis, w⟫_ℂ • axis) - w := by
+  simp [reflectionZ]
+
+/-- The unit vectors are orthonormal. -/
+theorem inner_unitVector (i j : Fin 3) :
+    ⟪unitVector i, unitVector j⟫_ℂ = if i = j then 1 else 0 := by
+  simp [unitVector, EuclideanSpace.inner_single_left, PiLp.single_apply]
+
+/-- The unit vectors have norm one. -/
+theorem norm_unitVector (i : Fin 3) : ‖unitVector i‖ = 1 := by
+  simp [unitVector, PiLp.norm_single]
+
+/-- The axis pairs to one with every unit vector. -/
+theorem inner_axis_unitVector (i : Fin 3) : ⟪axis, unitVector i⟫_ℂ = 1 := by
+  rw [axis, inner_add_left, inner_add_left, inner_unitVector, inner_unitVector,
+    inner_unitVector]
+  fin_cases i <;> simp
+
+/-- The axis pairs to one with every unit vector, on the other side. -/
+theorem inner_unitVector_axis (i : Fin 3) : ⟪unitVector i, axis⟫_ℂ = 1 := by
+  rw [axis, inner_add_right, inner_add_right, inner_unitVector,
+    inner_unitVector, inner_unitVector]
+  fin_cases i <;> simp
+
+/-- The squared length of the axis. -/
+theorem inner_axis_axis : ⟪axis, axis⟫_ℂ = 3 := by
+  nth_rewrite 2 [axis]
+  rw [inner_add_right, inner_add_right, inner_axis_unitVector,
+    inner_axis_unitVector, inner_axis_unitVector]
+  norm_num
+
+/-- The model's reflection is self-adjoint. -/
+theorem isSelfAdjoint_reflectionZ : IsSelfAdjoint reflectionZ := by
+  rw [ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric]
+  intro x y
+  show ⟪reflectionZ x, y⟫_ℂ = ⟪x, reflectionZ y⟫_ℂ
+  rw [reflectionZ_apply, reflectionZ_apply, inner_sub_left, inner_sub_right,
+    inner_smul_left, inner_smul_left, inner_smul_right, inner_smul_right,
+    ← inner_conj_symm axis x]
+  simp only [map_div₀, map_ofNat, RCLike.conj_conj]
+  ring
+
+/-- The model's reflection is an involution. -/
+theorem reflectionZ_mul_self : reflectionZ * reflectionZ = 1 := by
+  refine ContinuousLinearMap.ext fun w => ?_
+  show reflectionZ (reflectionZ w) = w
+  rw [reflectionZ_apply w, reflectionZ_apply, inner_sub_right, inner_smul_right,
+    inner_smul_right, inner_axis_axis]
+  module
+
+/-- Projection onto the line the trial subspace is orthogonal to. -/
+theorem starProjection_span_unitVector_two (w : Model) :
+    (ℂ ∙ unitVector 2).starProjection w = ⟪unitVector 2, w⟫_ℂ • unitVector 2 := by
+  rw [Submodule.starProjection_singleton, norm_unitVector]
+  norm_num
+
+/-- Projection onto the trial subspace. -/
+theorem trial_starProjection (w : Model) :
+    trial.starProjection w = w - ⟪unitVector 2, w⟫_ℂ • unitVector 2 := by
+  simp [trial, starProjection_span_unitVector_two]
+
+/-- Projection onto the orthogonal complement of the trial subspace. -/
+theorem trial_orthogonal_starProjection (w : Model) :
+    trialᗮ.starProjection w = ⟪unitVector 2, w⟫_ℂ • unitVector 2 := by
+  refine Submodule.eq_starProjection_of_mem_of_inner_eq_zero ?_ ?_
+  · exact Submodule.smul_mem _ _ (Submodule.le_orthogonal_orthogonal _
+      (Submodule.mem_span_singleton_self _))
+  · intro z hz
+    have hmem : w - ⟪unitVector 2, w⟫_ℂ • unitVector 2 ∈ trialᗮᗮ := by
+      rw [Submodule.orthogonal_orthogonal]
+      have hzero : ⟪unitVector 2,
+          w - ⟪unitVector 2, w⟫_ℂ • unitVector 2⟫_ℂ = 0 := by
+        rw [inner_sub_right, inner_smul_right, inner_unitVector]
+        simp
+      exact (Submodule.mem_orthogonal_singleton_iff_inner_right).mpr hzero
+    exact inner_eq_zero_symm.mp (hmem z hz)
+
+/-- The orthogonal complement of the trial subspace is the third coordinate
+line. -/
+theorem trial_orthogonal_eq : trialᗮ = ℂ ∙ unitVector 2 :=
+  Submodule.orthogonal_orthogonal _
+
+/-- Membership in the trial subspace is a single orthogonality condition. -/
+theorem mem_trial_iff (x : Model) : x ∈ trial ↔ ⟪unitVector 2, x⟫_ℂ = 0 :=
+  Submodule.mem_orthogonal_singleton_iff_inner_right
+
+/-- The third unit vector lies in the complement of the trial subspace. -/
+theorem unitVector_two_mem_trial_orthogonal : unitVector 2 ∈ trialᗮ := by
+  rw [trial_orthogonal_eq]
+  exact Submodule.mem_span_singleton_self _
+
+/-- The first unit vector lies in the trial subspace. -/
+theorem unitVector_zero_mem_trial : unitVector 0 ∈ trial := by
+  refine (mem_trial_iff _).mpr ?_
+  rw [inner_unitVector]
+  simp
+
+/-- The reflection at a unit vector. -/
+theorem reflectionZ_unitVector (i : Fin 3) :
+    reflectionZ (unitVector i) = (2 / 3 : ℂ) • axis - unitVector i := by
+  rw [reflectionZ_apply, inner_axis_unitVector, one_smul]
+
+/-- The odd block sends `e₀` to `(2/3) e₂`. -/
+theorem offDiagonalPart_unitVector_zero :
+    trial.offDiagonalPart reflectionZ (unitVector 0) =
+      (2 / 3 : ℂ) • unitVector 2 := by
+  have hU0 : trial.starProjection (unitVector 0) = unitVector 0 := by
+    rw [trial_starProjection, inner_unitVector]
+    simp
+  have hP0 : trialᗮ.starProjection (unitVector 0) = 0 := by
+    rw [trial_orthogonal_starProjection, inner_unitVector]
+    simp
+  have hin : ⟪unitVector 2,
+      (2 / 3 : ℂ) • axis - unitVector 0⟫_ℂ = (2 / 3 : ℂ) := by
+    rw [inner_sub_right, inner_smul_right, inner_unitVector_axis,
+      inner_unitVector]
+    simp
+  rw [Submodule.offDiagonalPart_apply, Submodule.diagonalPart_apply, hU0, hP0,
+    map_zero, map_zero, reflectionZ_unitVector, trial_starProjection, hin]
+  module
+
+/-- The odd block sends `e₂` to `(2/3)(e₀ + e₁)`. -/
+theorem offDiagonalPart_unitVector_two :
+    trial.offDiagonalPart reflectionZ (unitVector 2) =
+      (2 / 3 : ℂ) • (unitVector 0 + unitVector 1) := by
+  have hU2 : trial.starProjection (unitVector 2) = 0 := by
+    rw [trial_starProjection, inner_unitVector]
+    simp
+  have hP2 : trialᗮ.starProjection (unitVector 2) = unitVector 2 := by
+    rw [trial_orthogonal_starProjection, inner_unitVector]
+    simp
+  have hin : ⟪unitVector 2,
+      (2 / 3 : ℂ) • axis - unitVector 2⟫_ℂ = (-1 / 3 : ℂ) := by
+    rw [inner_sub_right, inner_smul_right, inner_unitVector_axis,
+      inner_unitVector]
+    norm_num
+  rw [Submodule.offDiagonalPart_apply, Submodule.diagonalPart_apply, hU2, hP2,
+    map_zero, map_zero, reflectionZ_unitVector,
+    trial_orthogonal_starProjection, hin, axis]
+  module
+
+/-- `S² e₀ = (4/9)(e₀ + e₁)`: the square of the odd block leaves the line
+`ℂ e₀`. -/
+theorem offDiagonalPart_sq_unitVector_zero :
+    trial.offDiagonalPart reflectionZ
+        (trial.offDiagonalPart reflectionZ (unitVector 0)) =
+      (4 / 9 : ℂ) • (unitVector 0 + unitVector 1) := by
+  rw [offDiagonalPart_unitVector_zero, map_smul, offDiagonalPart_unitVector_two,
+    smul_smul]
+  norm_num
+
+/-- **The compressed diagonal Gram condition holds at `e₀` with `q = 2/3`.** -/
+theorem inner_unitVector_zero_offDiagonalPart_sq :
+    ⟪unitVector 0, trial.offDiagonalPart reflectionZ
+        (trial.offDiagonalPart reflectionZ (unitVector 0))⟫_ℂ =
+      ((((2 : ℝ) / 3) ^ 2 : ℝ) : ℂ) := by
+  rw [offDiagonalPart_sq_unitVector_zero, inner_smul_right, inner_add_right,
+    inner_unitVector, inner_unitVector]
+  norm_num
+
+/-- **The exact double-angle eigenvector relation fails at the same vector.**
+This is the witness that the compressed hypothesis is a real weakening. -/
+theorem not_doubleAngleEigenvector_unitVector_zero :
+    trial.offDiagonalPart reflectionZ
+        (trial.offDiagonalPart reflectionZ (unitVector 0)) ≠
+      ((((2 : ℝ) / 3) ^ 2 : ℝ) : ℂ) • unitVector 0 := by
+  rw [offDiagonalPart_sq_unitVector_zero]
+  intro h
+  have h1 : (4 / 9 : ℂ) • unitVector 1 = 0 := by
+    have hcast : ((((2 : ℝ) / 3) ^ 2 : ℝ) : ℂ) = (4 / 9 : ℂ) := by norm_num
+    rw [hcast] at h
+    linear_combination (norm := module) h
+  have h2 : unitVector 1 = 0 := by
+    rcases smul_eq_zero.mp h1 with h3 | h3
+    · exact absurd h3 (by norm_num)
+    · exact h3
+  have hn := norm_unitVector 1
+  rw [h2] at hn
+  simp at hn
+
+/-- The unperturbed operator of the model, as a bounded map: the rank-one
+projection onto `ℂ e₂`. -/
+def unperturbedMap : Model →L[ℂ] Model :=
+  (innerSL ℂ (unitVector 2)).smulRight (unitVector 2)
+
+/-- The residual of the model: the off-diagonal completion that makes `A + B`
+commute with the reflection. -/
+def residual : Model →L[ℂ] Model :=
+  -(((innerSL ℂ (unitVector 0)).smulRight (unitVector 2)) +
+      ((innerSL ℂ (unitVector 1)).smulRight (unitVector 2)) +
+      ((innerSL ℂ (unitVector 2)).smulRight (unitVector 0)) +
+      ((innerSL ℂ (unitVector 2)).smulRight (unitVector 1)))
+
+/-- The unperturbed operator of the model as a partial map, everywhere
+defined. -/
+def unperturbed : Model →ₗ.[ℂ] Model :=
+  (unperturbedMap : Model →ₗ[ℂ] Model).toPMap ⊤
+
+/-- The perturbed operator of the model. -/
+def perturbed : Model →L[ℂ] Model := unperturbedMap + residual
+
+/-- Pointwise form of the unperturbed operator. -/
+theorem unperturbedMap_apply (w : Model) :
+    unperturbedMap w = ⟪unitVector 2, w⟫_ℂ • unitVector 2 := rfl
+
+/-- Pointwise form of the residual. -/
+theorem residual_apply (w : Model) :
+    residual w = -(⟪unitVector 0, w⟫_ℂ • unitVector 2 +
+      ⟪unitVector 1, w⟫_ℂ • unitVector 2 +
+      ⟪unitVector 2, w⟫_ℂ • unitVector 0 +
+      ⟪unitVector 2, w⟫_ℂ • unitVector 1) := rfl
+
+/-- The partial map agrees with the bounded one. -/
+theorem unperturbed_apply (x : unperturbed.domain) :
+    unperturbed x = unperturbedMap (x : Model) := rfl
+
+/-- Pointwise form of the perturbed operator. -/
+theorem perturbed_apply (w : Model) :
+    perturbed w = unperturbedMap w + residual w := rfl
+
+/-- The axis is an eigenvector of the perturbed operator, with eigenvalue
+`-1`. -/
+theorem perturbed_axis : perturbed axis = -axis := by
+  rw [perturbed_apply, unperturbedMap_apply, residual_apply,
+    inner_unitVector_axis, inner_unitVector_axis, inner_unitVector_axis, axis]
+  module
+
+/-- The perturbed operator reverses the axis in the pairing as well, which is
+all that the commutation with the reflection needs. -/
+theorem inner_axis_perturbed (w : Model) :
+    ⟪axis, perturbed w⟫_ℂ = -⟪axis, w⟫_ℂ := by
+  rw [perturbed_apply, unperturbedMap_apply, residual_apply, inner_add_right,
+    inner_smul_right, inner_neg_right, inner_add_right, inner_add_right,
+    inner_add_right, inner_smul_right, inner_smul_right, inner_smul_right,
+    inner_smul_right, inner_axis_unitVector, inner_axis_unitVector,
+    inner_axis_unitVector, axis, inner_add_left, inner_add_left]
+  ring
+
+/-- **The perturbed operator commutes with the reflection.** -/
+theorem perturbed_comm_reflectionZ (w : Model) :
+    perturbed (reflectionZ w) = reflectionZ (perturbed w) := by
+  rw [reflectionZ_apply w, map_sub, map_smul, map_smul, perturbed_axis,
+    reflectionZ_apply, inner_axis_perturbed]
+  module
+
+/-- **The trial subspace reduces the unperturbed operator.** -/
+theorem reducesSubspace_unperturbed :
+    TauCeti.LinearPMap.ReducesSubspace unperturbed trial := by
+  refine ⟨fun _ => Submodule.mem_top, fun _ => Submodule.mem_top, ?_, ?_⟩
+  · intro x hx
+    rw [unperturbed_apply, unperturbedMap_apply, (mem_trial_iff _).mp hx,
+      zero_smul]
+    exact Submodule.zero_mem _
+  · intro x _
+    rw [unperturbed_apply, unperturbedMap_apply]
+    exact Submodule.smul_mem _ _ unitVector_two_mem_trial_orthogonal
+
+/-- **The residual is odd for the trial subspace.** -/
+theorem isOddFor_residual : TauCeti.IsOddFor trial residual := by
+  constructor
+  · intro x hx
+    rw [residual_apply, (mem_trial_iff _).mp hx, zero_smul, zero_smul]
+    refine Submodule.neg_mem _ ?_
+    simpa using Submodule.add_mem _
+      (Submodule.add_mem _
+        (Submodule.smul_mem _ _ unitVector_two_mem_trial_orthogonal)
+        (Submodule.smul_mem _ _ unitVector_two_mem_trial_orthogonal))
+      (Submodule.zero_mem _)
+  · intro x hx
+    rw [trial_orthogonal_eq, Submodule.mem_span_singleton] at hx
+    obtain ⟨c, rfl⟩ := hx
+    rw [mem_trial_iff, residual_apply]
+    simp [inner_unitVector, inner_smul_right, inner_add_right, inner_neg_right]
+
+/-- The reflection preserves the domain of the unperturbed operator. -/
+theorem mapsDomainTo_reflectionZ :
+    TauCeti.LinearPMap.MapsDomainTo unperturbed unperturbed reflectionZ :=
+  fun _ => Submodule.mem_top
+
+/-- **The unbounded Davis--Kahan block system holds in the model.** -/
+theorem reflectionZ_comm (x : unperturbed.domain) :
+    unperturbed ⟨reflectionZ (x : Model), mapsDomainTo_reflectionZ x⟩ +
+        residual (reflectionZ (x : Model)) =
+      reflectionZ (unperturbed x) + reflectionZ (residual (x : Model)) := by
+  show unperturbedMap (reflectionZ (x : Model)) +
+      residual (reflectionZ (x : Model)) =
+    reflectionZ (unperturbedMap (x : Model)) +
+      reflectionZ (residual (x : Model))
+  rw [← map_add reflectionZ]
+  exact perturbed_comm_reflectionZ (x : Model)
+
+/-- **The form of the unperturbed operator vanishes on the trial subspace**, so
+`a = 0` is admissible. -/
+theorem form_le_zero_on_trial (x : unperturbed.domain) (hx : (x : Model) ∈ trial) :
+    RCLike.re ⟪unperturbed x, (x : Model)⟫_ℂ ≤ (0 : ℝ) * ‖(x : Model)‖ ^ 2 := by
+  rw [unperturbed_apply, unperturbedMap_apply, (mem_trial_iff _).mp hx,
+    zero_smul, inner_zero_left, map_zero]
+  simp
+
+/-- **The form of the unperturbed operator is the identity form on the
+complement**, so `b = 1` is admissible. -/
+theorem one_le_form_on_trial_orthogonal (x : unperturbed.domain)
+    (hx : (x : Model) ∈ trialᗮ) :
+    (1 : ℝ) * ‖(x : Model)‖ ^ 2 ≤ RCLike.re ⟪unperturbed x, (x : Model)⟫_ℂ := by
+  rw [trial_orthogonal_eq, Submodule.mem_span_singleton] at hx
+  obtain ⟨c, hc⟩ := hx
+  have hAx : unperturbedMap (x : Model) = (x : Model) := by
+    rw [← hc, unperturbedMap_apply, inner_smul_right, inner_unitVector]
+    simp
+  rw [unperturbed_apply, hAx, inner_self_eq_norm_sq_to_K, ← RCLike.ofReal_pow,
+    RCLike.ofReal_re, one_mul]
+
+/-- The first unit vector is nonzero. -/
+theorem unitVector_zero_ne_zero : unitVector 0 ≠ 0 := by
+  intro h
+  have hn := norm_unitVector 0
+  rw [h] at hn
+  simp at hn
+
+/-- **The unconditional endpoint, run on the model.**
+
+`ℂ e₀` is a one-dimensional `A`-invariant subspace of `𝔛₀ ∩ D(A)`, so
+`gap_mul_sum_tangent_le_kyFan_of_invariantSubspace` applies to data satisfying
+every standing hypothesis of the conditional endpoints.  Together with
+`not_doubleAngleEigenvector_unitVector_zero` — which says the family the
+construction produces on this very subspace is *not* an exact `sin² 2Θ`
+eigenfamily — this is the demonstration that the unconditional route reaches
+data the exact-eigenbasis route does not. -/
+theorem gap_mul_sum_tangent_le_kyFan_on_model :
+    ∃ (y : Fin 1 → unperturbed.domain) (q : Fin 1 → ℝ),
+      (∀ i, ((y i : unperturbed.domain) : Model) ∈ (ℂ ∙ unitVector 0)) ∧
+        (Orthonormal ℂ fun i => ((y i : unperturbed.domain) : Model)) ∧
+        (∀ i, ‖trial.offDiagonalPart reflectionZ
+          ((y i : unperturbed.domain) : Model)‖ ^ 2 = q i ^ 2) ∧
+        (∀ i, 0 ≤ q i) ∧ (∀ i, q i < 1) ∧
+        ((1 : ℝ) - 0) * ∑ i, q i / √(1 - (q i) ^ 2) ≤
+          2 * kyFanApproximationGauge 1 residual := by
+  refine gap_mul_sum_tangent_le_kyFan_of_invariantSubspace
+    reducesSubspace_unperturbed isOddFor_residual isSelfAdjoint_reflectionZ
+    reflectionZ_mul_self mapsDomainTo_reflectionZ reflectionZ_comm
+    form_le_zero_on_trial one_le_form_on_trial_orthogonal (by norm_num) le_top
+    (Submodule.span_le.mpr
+      (Set.singleton_subset_iff.mpr unitVector_zero_mem_trial)) ?_ ?_
+  · intro w hw
+    rw [Submodule.mem_span_singleton] at hw
+    obtain ⟨c, hc⟩ := hw
+    rw [unperturbed_apply, ← hc, unperturbedMap_apply, inner_smul_right,
+      inner_unitVector]
+    simp
+  · exact finrank_span_singleton unitVector_zero_ne_zero
+
+end CompressedStrictness
+
 end
 
 end DavisKahan1970
