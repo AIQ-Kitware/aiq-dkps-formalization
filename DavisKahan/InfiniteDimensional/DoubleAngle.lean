@@ -328,6 +328,7 @@ private theorem spectrum_restrict_reflection_conjugate
   rw [hz]
   exact isUnit_conj_iff Φ Ψ hΨΦ hΦΨ _
 
+omit [CompleteSpace E] in
 /-- **Restricted-spectrum invariance under reflection conjugation.**  The
 mirror image of an invariant subspace carries the same restricted spectrum
 for the conjugated operator. -/
@@ -823,7 +824,7 @@ theorem reflectionDefect_range_le_residual
     {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
     (X : F →L[𝕜] E) (hX : IsometricEmbedding X)
     [(LinearMap.range X.toLinearMap).HasOrthogonalProjection]
-    {M : F →L[𝕜] F} (hM : IsSelfAdjointOperator M) :
+    {M : F →L[𝕜] F} (_hM : IsSelfAdjointOperator M) :
     ‖reflectionDefect (LinearMap.range X.toLinearMap) A‖ ≤
       2 * ‖residual A X M‖ := by
   have hAsa : IsSelfAdjoint A :=
@@ -968,7 +969,7 @@ finite-gap constant-one geometry separate from generic separated-spectrum estima
 -/
 theorem sinTwoTheta_generalSeparation
     {A B : E →L[𝕜] E}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    (hA : IsSelfAdjointOperator A) (_hB : IsSelfAdjointOperator B)
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hU : Reduces A U) (hV : Reduces B V)

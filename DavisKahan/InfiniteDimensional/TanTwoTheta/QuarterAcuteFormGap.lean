@@ -254,7 +254,7 @@ theorem reflection_anticommutes_of_maps_orthogonal
       rw [hJx]
 
 theorem spectrum_re_lower_of_coercive
-    (T : E →L[ℂ] E) {α : ℝ} (hα : 0 < α)
+    (T : E →L[ℂ] E) {α : ℝ} (_hα : 0 < α)
     (hcoer : ∀ x, α * ‖x‖ ^ 2 ≤ RCLike.re ⟪T x, x⟫_ℂ) :
     ∀ z ∈ spectrum ℂ T, α ≤ z.re := by
   intro z hz
@@ -660,7 +660,7 @@ theorem isQuarterAcute_of_paper_form_gap_infinite
     have hfour :
         RCLike.re ((starRingEnd ℂ) (4 : ℂ) * ⟪D (D x), x⟫_ℂ) =
           4 * RCLike.re ⟪D (D x), x⟫_ℂ := by
-      simpa using re_conj_real_mul 4 ⟪D (D x), x⟫_ℂ
+      exact re_conj_real_mul 4 ⟪D (D x), x⟫_ℂ
     have halpha :
         RCLike.re ((starRingEnd ℂ) (((2 * α : ℝ) : ℂ)) * ⟪x, x⟫_ℂ) =
           (2 * α) * ‖x‖ ^ 2 := by

@@ -53,8 +53,8 @@ theorem restrictedSpectrum_top_eq_realSpectrum
 /-- A common cut between two compact ordered spectra. -/
 theorem exists_common_cut_of_orderedSeparation
     {A : F →L[ℂ] F} {B : E →L[ℂ] E}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
-    {d : ℝ} (hd : 0 < d)
+    (_hA : IsSelfAdjointOperator A) (_hB : IsSelfAdjointOperator B)
+    {d : ℝ} (_hd : 0 < d)
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d) :
     ∃ c : ℝ,
       realSpectrum B ⊆ Set.Iic c ∧

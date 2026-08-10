@@ -34,7 +34,7 @@ def compactOperatorSubmodule : Submodule ℂ (E →L[ℂ] F) where
   carrier := {T | IsCompactOperator T}
   zero_mem' := isCompactOperator_zero
   add_mem' := fun hS hT => hS.add hT
-  smul_mem' := fun c T hT => hT.smul c
+  smul_mem' := fun c _T hT => hT.smul c
 
 omit [CompleteSpace E] in
 /-- The compact-operator submodule is operator-norm closed. -/
