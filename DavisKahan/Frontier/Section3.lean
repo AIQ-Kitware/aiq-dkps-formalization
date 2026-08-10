@@ -1811,6 +1811,111 @@ theorem twoProjection_operator_classification :
   · rintro ⟨⟨hc, hs, ht, he⟩, hg⟩
     exact ⟨hc, hs, ht, he, hg⟩
 
+/-! ### Corollary 3.1, the decreasing eigenvalue list
+
+The paper's Corollary 3.1 replaces the operator invariant of Theorem 3.1 by the
+*decreasing eigenvalue list* of the angle operator.  Everything here is stated
+over an arbitrary `RCLike` field, exactly like the operator-level spine above:
+the eigenvalues of a compact positive self-adjoint operator are real, so the
+list is `ℝ`-valued whatever the scalar field is, and only the embedding of an
+eigenvalue back into the field changes with `𝕜`. -/
+
+/-- Ordered eigenvalue data for a compact positive contraction: the
+approximation-number sequence of `A`.
+
+For a compact **positive** operator this is exactly the ordered eigenvalue list
+*with multiplicity* — `aₙ(A)` is the `n`-th largest singular value, and singular
+values coincide with eigenvalues when the operator is positive, so a repeated
+eigenvalue is repeated in the sequence.  That is the implementation this
+declaration's earlier open body was documented as wanting.
+
+The list is `ℝ`-valued over every scalar field, because the eigenvalues of a
+compact positive self-adjoint operator are real.
+
+Note the definition is total: it is stated for every `A`, and only *means* the
+angle eigenvalue list under the compactness and positivity hypotheses that the
+consumers carry.  This mirrors `approximationNumber` itself, which is total in
+the same way. -/
+noncomputable def compactAngleEigenvalueList
+    {K : Type*} [NormedAddCommGroup K] [InnerProductSpace 𝕜 K]
+    [CompleteSpace K] (A : K →L[𝕜] K) : ℕ → ℝ :=
+  fun n => A.approximationNumber n
+
+/-- **Approximation numbers are a unitary invariant.**  Conjugating by a linear isometric
+equivalence sandwiches the operator between two contractions in both directions, so no
+approximation number can move. -/
+theorem approximationNumber_eq_of_boundedOperatorsUnitaryEquivalent
+    {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    {A : E →L[𝕜] E} {B : F →L[𝕜] F}
+    (h : BoundedOperatorsUnitaryEquivalent A B) (n : ℕ) :
+    A.approximationNumber n = B.approximationNumber n := by
+  obtain ⟨U, hU⟩ := h
+  have hUapp : ∀ x, B (U x) = U (A x) := fun x => (hU x).symm
+  have hUnorm : ‖(U : E →L[𝕜] F)‖ ≤ 1 :=
+    U.toLinearIsometry.norm_toContinuousLinearMap_le
+  have hUsnorm : ‖(U.symm : F →L[𝕜] E)‖ ≤ 1 :=
+    U.symm.toLinearIsometry.norm_toContinuousLinearMap_le
+  have hBfact : B = (U : E →L[𝕜] F) ∘L A ∘L (U.symm : F →L[𝕜] E) := by
+    ext y
+    change B y = U (A (U.symm y))
+    rw [← hUapp (U.symm y), U.apply_symm_apply]
+  have hAfact : A = (U.symm : F →L[𝕜] E) ∘L B ∘L (U : E →L[𝕜] F) := by
+    ext x
+    change A x = U.symm (B (U x))
+    rw [hUapp x, U.symm_apply_apply]
+  refine le_antisymm ?_ ?_
+  · conv_lhs => rw [hAfact]
+    exact TauCeti.ApproximationNumber.approximationNumber_comp_contractions_le
+      (U.symm : F →L[𝕜] E) (U : E →L[𝕜] F) hUsnorm hUnorm n
+  · conv_lhs => rw [hBfact]
+    exact TauCeti.ApproximationNumber.approximationNumber_comp_contractions_le
+      (U : E →L[𝕜] F) (U.symm : F →L[𝕜] E) hUnorm hUsnorm n
+
+/-- Davis--Kahan 1970, Corollary 3.1: when the cross-projection is compact, the
+angle eigenvalue lists and elementary multiplicities classify the pair. -/
+theorem corollary3_1_compact_angleList_classification
+    (hcompact₁ : IsCompactOperator
+      (projection U₁ ∘L projection V₁ ∘L projection U₁))
+    (hcompact₂ : IsCompactOperator
+      (projection U₂ ∘L projection V₂ ∘L projection U₂)) :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
+      SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
+      compactAngleEigenvalueList
+          (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁) =
+        compactAngleEigenvalueList
+          (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂) := by
+  have hpos₁ : ∀ x, 0 ≤ RCLike.re
+      ⟪MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁ x, x⟫_𝕜 := by
+    intro x
+    rw [MathAhead.HiddenFoundations.re_inner_genericCosineBlock]
+    positivity
+  have hpos₂ : ∀ x, 0 ≤ RCLike.re
+      ⟪MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂ x, x⟫_𝕜 := by
+    intro x
+    rw [MathAhead.HiddenFoundations.re_inner_genericCosineBlock]
+    positivity
+  rw [twoProjection_operator_classification U₁ V₁ U₂ V₂]
+  constructor
+  · rintro ⟨htriv, hgen⟩
+    refine ⟨htriv, ?_⟩
+    funext n
+    exact approximationNumber_eq_of_boundedOperatorsUnitaryEquivalent hgen n
+  · rintro ⟨htriv, hlist⟩
+    refine ⟨htriv, ?_⟩
+    obtain ⟨W, hW⟩ :=
+      TauCeti.exists_linearIsometryEquiv_intertwining_of_approximationNumber_eq
+        (MathAhead.HiddenFoundations.isCompactOperator_genericCosineBlock U₁ V₁ hcompact₁)
+        (MathAhead.HiddenFoundations.isSelfAdjoint_genericCosineBlock U₁ V₁)
+        hpos₁
+        (MathAhead.HiddenFoundations.eigenspace_genericCosineBlock_zero U₁ V₁)
+        (MathAhead.HiddenFoundations.isCompactOperator_genericCosineBlock U₂ V₂ hcompact₂)
+        (MathAhead.HiddenFoundations.isSelfAdjoint_genericCosineBlock U₂ V₂)
+        hpos₂
+        (MathAhead.HiddenFoundations.eigenspace_genericCosineBlock_zero U₂ V₂)
+        (fun n => congrFun hlist n)
+    exact ⟨W, hW⟩
+
 end OperatorClassification
 
 section Classification
@@ -1868,99 +1973,6 @@ theorem theorem3_1_spectralMultiplicity_classification
     exact MathAhead.HiddenFoundations.isSelfAdjoint_genericCosineBlock U₁ V₁
   · rintro ⟨htriv, hmult⟩
     exact ⟨htriv, unitarilyEquivalent_of_sameSpectralMultiplicity _ _ hmult⟩
-
-/-- Ordered eigenvalue data for a compact positive contraction: the
-approximation-number sequence of `A`.
-
-For a compact **positive** operator this is exactly the ordered eigenvalue list
-*with multiplicity* — `aₙ(A)` is the `n`-th largest singular value, and singular
-values coincide with eigenvalues when the operator is positive, so a repeated
-eigenvalue is repeated in the sequence.  That is the implementation this
-declaration's earlier `sorry` body was documented as wanting.
-
-Note the definition is total: it is stated for every `A`, and only *means* the
-angle eigenvalue list under the compactness and positivity hypotheses that the
-consumers carry.  This mirrors `approximationNumber` itself, which is total in
-the same way. -/
-noncomputable def compactAngleEigenvalueList
-    {K : Type*} [NormedAddCommGroup K] [InnerProductSpace ℂ K]
-    [CompleteSpace K] (A : K →L[ℂ] K) : ℕ → ℝ :=
-  fun n => A.approximationNumber n
-
-/-- **Approximation numbers are a unitary invariant.**  Conjugating by a linear isometric
-equivalence sandwiches the operator between two contractions in both directions, so no
-approximation number can move. -/
-theorem approximationNumber_eq_of_boundedOperatorsUnitaryEquivalent
-    {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    {A : E →L[ℂ] E} {B : F →L[ℂ] F}
-    (h : BoundedOperatorsUnitaryEquivalent A B) (n : ℕ) :
-    A.approximationNumber n = B.approximationNumber n := by
-  obtain ⟨U, hU⟩ := h
-  have hUapp : ∀ x, B (U x) = U (A x) := fun x => (hU x).symm
-  have hUnorm : ‖(U : E →L[ℂ] F)‖ ≤ 1 :=
-    U.toLinearIsometry.norm_toContinuousLinearMap_le
-  have hUsnorm : ‖(U.symm : F →L[ℂ] E)‖ ≤ 1 :=
-    U.symm.toLinearIsometry.norm_toContinuousLinearMap_le
-  have hBfact : B = (U : E →L[ℂ] F) ∘L A ∘L (U.symm : F →L[ℂ] E) := by
-    ext y
-    change B y = U (A (U.symm y))
-    rw [← hUapp (U.symm y), U.apply_symm_apply]
-  have hAfact : A = (U.symm : F →L[ℂ] E) ∘L B ∘L (U : E →L[ℂ] F) := by
-    ext x
-    change A x = U.symm (B (U x))
-    rw [hUapp x, U.symm_apply_apply]
-  refine le_antisymm ?_ ?_
-  · conv_lhs => rw [hAfact]
-    exact TauCeti.ApproximationNumber.approximationNumber_comp_contractions_le
-      (U.symm : F →L[ℂ] E) (U : E →L[ℂ] F) hUsnorm hUnorm n
-  · conv_lhs => rw [hBfact]
-    exact TauCeti.ApproximationNumber.approximationNumber_comp_contractions_le
-      (U : E →L[ℂ] F) (U.symm : F →L[ℂ] E) hUnorm hUsnorm n
-
-/-- Davis--Kahan 1970, Corollary 3.1: when the cross-projection is compact, the
-angle eigenvalue lists and elementary multiplicities classify the pair. -/
-theorem corollary3_1_compact_angleList_classification
-    (hcompact₁ : IsCompactOperator
-      (projection U₁ ∘L projection V₁ ∘L projection U₁))
-    (hcompact₂ : IsCompactOperator
-      (projection U₂ ∘L projection V₂ ∘L projection U₂)) :
-    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
-      SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
-      compactAngleEigenvalueList
-          (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁) =
-        compactAngleEigenvalueList
-          (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂) := by
-  have hpos₁ : ∀ x, 0 ≤ RCLike.re
-      ⟪MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁ x, x⟫_ℂ := by
-    intro x
-    rw [MathAhead.HiddenFoundations.re_inner_genericCosineBlock]
-    positivity
-  have hpos₂ : ∀ x, 0 ≤ RCLike.re
-      ⟪MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂ x, x⟫_ℂ := by
-    intro x
-    rw [MathAhead.HiddenFoundations.re_inner_genericCosineBlock]
-    positivity
-  rw [twoProjection_operator_classification U₁ V₁ U₂ V₂]
-  constructor
-  · rintro ⟨htriv, hgen⟩
-    refine ⟨htriv, ?_⟩
-    funext n
-    exact approximationNumber_eq_of_boundedOperatorsUnitaryEquivalent hgen n
-  · rintro ⟨htriv, hlist⟩
-    refine ⟨htriv, ?_⟩
-    obtain ⟨W, hW⟩ :=
-      TauCeti.exists_linearIsometryEquiv_intertwining_of_approximationNumber_eq
-        (MathAhead.HiddenFoundations.isCompactOperator_genericCosineBlock U₁ V₁ hcompact₁)
-        (MathAhead.HiddenFoundations.isSelfAdjoint_genericCosineBlock U₁ V₁)
-        hpos₁
-        (MathAhead.HiddenFoundations.eigenspace_genericCosineBlock_zero U₁ V₁)
-        (MathAhead.HiddenFoundations.isCompactOperator_genericCosineBlock U₂ V₂ hcompact₂)
-        (MathAhead.HiddenFoundations.isSelfAdjoint_genericCosineBlock U₂ V₂)
-        hpos₂
-        (MathAhead.HiddenFoundations.eigenspace_genericCosineBlock_zero U₂ V₂)
-        (fun n => congrFun hlist n)
-    exact ⟨W, hW⟩
 
 /-! ### Corollary 3.1 with the printed compactness hypothesis
 
@@ -2211,6 +2223,36 @@ theorem corollary3_1_compact_classification_real
       MathAhead.HiddenFoundations.SameCompactAngleData U₁ V₁ U₂ V₂ :=
   MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData
     U₁ V₁ U₂ V₂ hc₁ hc₂
+
+/-- **Davis--Kahan 1970, Corollary 3.1 in the paper's decreasing eigenvalue-list
+phrasing, over a real Hilbert space.**
+
+The `𝕜 = ℝ` instance of `corollary3_1_compact_angleList_classification`.
+
+**The angle list stays `ℝ`-valued.**  `compactAngleEigenvalueList` has codomain
+`ℕ → ℝ` over every scalar field, because the eigenvalues of a compact positive
+self-adjoint operator are real; passing to real scalars changes only how such an
+eigenvalue is embedded back into the field, never what the list records.
+
+**The compactness hypothesis is the generic theorem's.**  It is
+`P_U P_V P_U` compact, not the printed defect block `P (I - Q) P`.  Those two are
+incomparable in infinite dimension; that is a pre-existing question recorded on
+this source row, and the real form inherits it unchanged.  The printed
+hypothesis is carried by
+`corollary3_1_compact_defectBlock_angleList_classification`, which is the same
+theorem applied to `(U, Vᗮ)`. -/
+theorem corollary3_1_compact_angleList_classification_real
+    (hcompact₁ : IsCompactOperator
+      (projection U₁ ∘L projection V₁ ∘L projection U₁))
+    (hcompact₂ : IsCompactOperator
+      (projection U₂ ∘L projection V₂ ∘L projection U₂)) :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
+      SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
+      compactAngleEigenvalueList
+          (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁) =
+        compactAngleEigenvalueList
+          (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂) :=
+  corollary3_1_compact_angleList_classification U₁ V₁ U₂ V₂ hcompact₁ hcompact₂
 
 end RealScalars
 
