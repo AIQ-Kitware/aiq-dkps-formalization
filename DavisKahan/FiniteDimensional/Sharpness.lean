@@ -8,8 +8,10 @@ import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
 import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
 import DavisKahan.FiniteDimensional.Core.AngleOperators
+import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
 import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 
 /-!
 # Sharpness and two-dimensional extremizers
@@ -179,9 +181,16 @@ noncomputable def modelSinTwoThetaPerturbation (a b θ : ℝ) :
        (((a - b) / 2 * Real.sin (2 * θ) : ℝ) : 𝕜), 0]
 
 /-- Off-diagonal perturbation used by the `tan (2 Θ)` extremizer: the purely
-off-diagonal symmetric perturbation with entry `((b-a)/2) tan (2θ)`, chosen so
-the eigenvectors of `diag(a,b) + H` sit at angle `θ` from the coordinate axes
-(the planar Riccati rotation law `tan (2θ) = 2h/(b-a)`). -/
+off-diagonal symmetric perturbation with entry `((b-a)/2) tan (2θ)`.
+
+Sign audit, 2026-08-10.  The planar Riccati rotation law for
+`diag(a,b) + h (e₀ ⊗ e₁ + e₁ ⊗ e₀)` is `tan (2θ) = 2h/(a-b)`, not `2h/(b-a)`
+as this docstring previously said, so the reducing line of `diag(a,b) + H` sits
+at angle `-θ`, and the operator whose reducing line is `rotatedModelSubspace θ`
+is `modelGappedOperator a b - H`: see `modelTanTwoThetaPerturbedOperator`.  Only
+the sign is affected; the two singular values are `((b-a)/2) |tan 2θ|` either
+way, so every unitarily invariant seminorm -- and hence
+`tanTwoTheta_model_equality` -- is unchanged. -/
 noncomputable def modelTanTwoThetaPerturbation (a b θ : ℝ) :
     Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
   Matrix.toEuclideanLin
@@ -1339,6 +1348,992 @@ theorem single_double_sine_tangent_ratios_tendsto_one :
     · filter_upwards [self_mem_nhdsWithin] with θ (hθ : (0 : ℝ) < θ)
       exact mul_pos two_pos hθ
   exact base.comp h2
+
+/-! ## Admissible operator pairs behind the planar models
+
+Every `*_model_equality` above compares an angle operator with an *explicitly given matrix*.  On
+its own that is an identity between two matrices, not sharpness of a theorem: a theorem's
+constant is shown optimal only once the matrix on the right is exhibited as the residual `B - A`
+of a pair `(A, B)` satisfying that theorem's own hypotheses -- both operators symmetric, the
+relevant subspace invariant, and the relevant gap present with the value the constant is
+divided by.
+
+This section supplies those pairs.  The frame `uθ θ`, `vθ θ` diagonalizes every perturbed
+operator below, so each verification reduces to two eigenvector equations. -/
+
+/-- The unit vector completing `uθ θ` to the rotated orthonormal frame of the plane. -/
+noncomputable def vθ (θ : ℝ) : Plane 𝕜 :=
+  -(Real.sin θ : 𝕜) • e0 + (Real.cos θ : 𝕜) • e1
+
+private theorem plane_sin_sq_add_cos_sq (θ : ℝ) :
+    ((Real.sin θ : 𝕜)) ^ 2 + ((Real.cos θ : 𝕜)) ^ 2 = 1 := by
+  have h := congrArg (fun r : ℝ => (r : 𝕜)) (Real.sin_sq_add_cos_sq θ)
+  push_cast at h
+  exact h
+
+/-- The complementary frame vector is the generator rotated by a further quarter turn.  Stating
+it this way transports every `uθ` lemma to `vθ` instead of repeating the computations. -/
+theorem vθ_eq_uθ_add_pi_div_two (θ : ℝ) :
+    vθ (𝕜 := 𝕜) θ = uθ (𝕜 := 𝕜) (θ + Real.pi / 2) := by
+  rw [vθ, uθ, Real.cos_add_pi_div_two, Real.sin_add_pi_div_two]
+  push_cast
+  module
+
+/-- The complementary frame vector is a unit vector. -/
+@[simp] theorem norm_vθ (θ : ℝ) : ‖vθ (𝕜 := 𝕜) θ‖ = 1 := by
+  rw [vθ_eq_uθ_add_pi_div_two]
+  exact norm_uθ _
+
+/-- Overlap of the complementary frame vector with the first coordinate. -/
+@[simp] theorem inner_vθ_e0 (θ : ℝ) :
+    ⟪vθ (𝕜 := 𝕜) θ, e0⟫_𝕜 = -(Real.sin θ : 𝕜) := by
+  rw [vθ_eq_uθ_add_pi_div_two, inner_uθ_e0, Real.cos_add_pi_div_two]
+  push_cast
+  ring
+
+/-- Overlap of the complementary frame vector with the second coordinate. -/
+@[simp] theorem inner_vθ_e1 (θ : ℝ) :
+    ⟪vθ (𝕜 := 𝕜) θ, e1⟫_𝕜 = (Real.cos θ : 𝕜) := by
+  rw [vθ_eq_uθ_add_pi_div_two, inner_uθ_e1, Real.sin_add_pi_div_two]
+
+/-- The rotated frame is orthogonal. -/
+@[simp] theorem inner_uθ_vθ (θ : ℝ) :
+    ⟪uθ (𝕜 := 𝕜) θ, vθ (𝕜 := 𝕜) θ⟫_𝕜 = 0 := by
+  simp only [vθ, inner_add_right, inner_smul_right, inner_uθ_e0, inner_uθ_e1]
+  ring
+
+/-- The rotated generator is nonzero, which every eigenvector argument below needs. -/
+theorem uθ_ne_zero (θ : ℝ) : uθ (𝕜 := 𝕜) θ ≠ 0 := by
+  intro h
+  have := norm_uθ (𝕜 := 𝕜) θ
+  rw [h, norm_zero] at this
+  exact zero_ne_one this
+
+/-- The complementary frame vector is nonzero. -/
+theorem vθ_ne_zero (θ : ℝ) : vθ (𝕜 := 𝕜) θ ≠ 0 := by
+  intro h
+  have := norm_vθ (𝕜 := 𝕜) θ
+  rw [h, norm_zero] at this
+  exact zero_ne_one this
+
+private theorem e0_ne_zero : e0 (𝕜 := 𝕜) ≠ 0 := by
+  intro h
+  have := norm_e0 (𝕜 := 𝕜)
+  rw [h, norm_zero] at this
+  exact zero_ne_one this
+
+private theorem e1_ne_zero : e1 (𝕜 := 𝕜) ≠ 0 := by
+  intro h
+  have := norm_e1 (𝕜 := 𝕜)
+  rw [h, norm_zero] at this
+  exact zero_ne_one this
+
+private theorem orthogonal_span_singleton_plane {u v : Plane 𝕜}
+    (hu : u ≠ 0) (hv : v ≠ 0) (huv : ⟪u, v⟫_𝕜 = 0) :
+    (Submodule.span 𝕜 {u})ᗮ = Submodule.span 𝕜 {v} := by
+  have hle : Submodule.span 𝕜 {v} ≤ (Submodule.span 𝕜 {u})ᗮ := by
+    rw [Submodule.span_le]
+    intro y hy
+    have hyv : y = v := by simpa using hy
+    subst hyv
+    rw [SetLike.mem_coe, Submodule.mem_orthogonal]
+    intro w hw
+    rw [Submodule.mem_span_singleton] at hw
+    obtain ⟨c, rfl⟩ := hw
+    rw [inner_smul_left, huv, mul_zero]
+  have h1 := Submodule.finrank_add_finrank_orthogonal
+    (K := (Submodule.span 𝕜 {u} : Submodule 𝕜 (Plane 𝕜)))
+  rw [finrank_span_singleton hu, finrank_euclideanSpace_fin] at h1
+  have hrank : Module.finrank 𝕜 (Submodule.span 𝕜 {v} : Submodule 𝕜 (Plane 𝕜)) =
+      Module.finrank 𝕜 ((Submodule.span 𝕜 {u} : Submodule 𝕜 (Plane 𝕜))ᗮ) := by
+    rw [finrank_span_singleton hv]
+    omega
+  exact (Submodule.eq_of_le_of_finrank_eq hle hrank).symm
+
+/-- The orthogonal complement of the coordinate line is the second coordinate line. -/
+theorem orthogonal_modelSubspace :
+    (modelSubspace (𝕜 := 𝕜))ᗮ = Submodule.span 𝕜 {e1 (𝕜 := 𝕜)} :=
+  orthogonal_span_singleton_plane e0_ne_zero e1_ne_zero inner_e0_e1
+
+/-- The orthogonal complement of the rotated line is spanned by the complementary frame
+vector. -/
+theorem orthogonal_rotatedModelSubspace (θ : ℝ) :
+    (rotatedModelSubspace (𝕜 := 𝕜) θ)ᗮ = Submodule.span 𝕜 {vθ (𝕜 := 𝕜) θ} :=
+  orthogonal_span_singleton_plane (uθ_ne_zero θ) (vθ_ne_zero θ) (inner_uθ_vθ θ)
+
+private theorem isInvariant_span_singleton {A : Plane 𝕜 →ₗ[𝕜] Plane 𝕜} {u : Plane 𝕜}
+    {lam : ℝ} (h : A u = (lam : 𝕜) • u) :
+    IsInvariant A (Submodule.span 𝕜 {u}) := by
+  intro x hx
+  rw [Submodule.mem_span_singleton] at hx ⊢
+  obtain ⟨c, rfl⟩ := hx
+  exact ⟨c * (lam : 𝕜), by rw [map_smul, h, smul_smul, mul_comm]⟩
+
+private theorem restrictedSpectrum_span_singleton_subset {A : Plane 𝕜 →ₗ[𝕜] Plane 𝕜}
+    {u : Plane 𝕜} (hu : u ≠ 0) {lam : ℝ} (h : A u = (lam : 𝕜) • u) :
+    restrictedSpectrum A (Submodule.span 𝕜 {u}) ⊆ {lam} := by
+  intro μ hμ
+  rw [mem_restrictedSpectrum_iff] at hμ
+  obtain ⟨x, hxU, hx0, hxeq⟩ := hμ
+  rw [Submodule.mem_span_singleton] at hxU
+  obtain ⟨c, rfl⟩ := hxU
+  have hc : c ≠ 0 := by
+    rintro rfl
+    exact hx0 (by simp)
+  rw [map_smul, h, smul_smul, smul_smul] at hxeq
+  have hzero : (c * (lam : 𝕜) - (μ : 𝕜) * c) • u = 0 := by
+    rw [sub_smul, hxeq, sub_self]
+  rcases smul_eq_zero.mp hzero with hscal | hu0
+  · have hfac : c * ((lam : 𝕜) - (μ : 𝕜)) = 0 := by linear_combination hscal
+    rcases mul_eq_zero.mp hfac with h' | h'
+    · exact absurd h' hc
+    · exact (RCLike.ofReal_injective (K := 𝕜) (sub_eq_zero.mp h')).symm
+  · exact absurd hu0 hu
+
+private theorem re_inner_span_singleton {A : Plane 𝕜 →ₗ[𝕜] Plane 𝕜} {u : Plane 𝕜}
+    (hu : ‖u‖ = 1) {lam : ℝ} (h : A u = (lam : 𝕜) • u)
+    {x : Plane 𝕜} (hx : x ∈ Submodule.span 𝕜 {u}) :
+    RCLike.re ⟪A x, x⟫_𝕜 = lam * ‖x‖ ^ 2 := by
+  rw [Submodule.mem_span_singleton] at hx
+  obtain ⟨c, rfl⟩ := hx
+  have huu : ⟪u, u⟫_𝕜 = 1 := by
+    rw [inner_self_eq_norm_sq_to_K, hu]
+    norm_num
+  rw [map_smul, h, inner_smul_left, inner_smul_left, inner_smul_right, huu, norm_smul, hu]
+  simp only [mul_one, RCLike.conj_ofReal]
+  rw [show (starRingEnd 𝕜) c * ((lam : 𝕜) * c) = (lam : 𝕜) * ((starRingEnd 𝕜) c * c) by ring,
+    RCLike.conj_mul, RCLike.re_ofReal_mul]
+  simp
+
+/-! ### The `sin Θ` model as an admissible perturbation pair -/
+
+private theorem modelGappedOperator_eq_matrix (a b : ℝ) :
+    modelGappedOperator (𝕜 := 𝕜) a b =
+      Matrix.toEuclideanLin !![((a : ℝ) : 𝕜), 0; 0, ((b : ℝ) : 𝕜)] := by
+  rw [modelGappedOperator]
+  congr 1
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp
+
+/-- The gapped model operator is symmetric. -/
+theorem modelGappedOperator_isSymmetric (a b : ℝ) :
+    (modelGappedOperator (𝕜 := 𝕜) a b).IsSymmetric := by
+  rw [modelGappedOperator_eq_matrix]
+  refine Matrix.isSymmetric_toEuclideanLin_iff.mpr ?_
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [Matrix.conjTranspose_apply, RCLike.conj_ofReal]
+
+/-- The first coordinate is the low eigenvector of the gapped model operator. -/
+@[simp] theorem modelGappedOperator_apply_e0 (a b : ℝ) :
+    modelGappedOperator (𝕜 := 𝕜) a b (e0 (𝕜 := 𝕜)) = ((a : ℝ) : 𝕜) • e0 := by
+  rw [modelGappedOperator_eq_matrix]
+  ext i
+  fin_cases i <;> simp [e0, Matrix.toLpLin_apply]
+  all_goals simp only [RCLike.real_smul_eq_coe_mul, mul_one]
+
+/-- The second coordinate is the high eigenvector of the gapped model operator. -/
+@[simp] theorem modelGappedOperator_apply_e1 (a b : ℝ) :
+    modelGappedOperator (𝕜 := 𝕜) a b (e1 (𝕜 := 𝕜)) = ((b : ℝ) : 𝕜) • e1 := by
+  rw [modelGappedOperator_eq_matrix]
+  ext i
+  fin_cases i <;> simp [e1, Matrix.toLpLin_apply]
+  all_goals simp only [RCLike.real_smul_eq_coe_mul, mul_one]
+
+/-- The gapped model operator in the rotated frame: a diagonal entry and the off-diagonal entry
+`(b - a) sin θ cos θ` that every tangent and double-angle model has to cancel. -/
+theorem modelGappedOperator_apply_uθ (a b θ : ℝ) :
+    modelGappedOperator (𝕜 := 𝕜) a b (uθ (𝕜 := 𝕜) θ) =
+      ((a * Real.cos θ ^ 2 + b * Real.sin θ ^ 2 : ℝ) : 𝕜) • uθ (𝕜 := 𝕜) θ +
+        (((b - a) * Real.sin θ * Real.cos θ : ℝ) : 𝕜) • vθ (𝕜 := 𝕜) θ := by
+  have hpy := plane_sin_sq_add_cos_sq (𝕜 := 𝕜) θ
+  rw [modelGappedOperator_eq_matrix]
+  ext i
+  fin_cases i <;>
+    simp [uθ, vθ, e0, e1, Matrix.toLpLin_apply] <;>
+    (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal]) <;>
+    first
+      | ring1
+      | linear_combination ((a : 𝕜) * (Real.cos θ : 𝕜)) * hpy
+      | linear_combination (-((a : 𝕜) * (Real.cos θ : 𝕜))) * hpy
+      | linear_combination ((a : 𝕜) * (Real.sin θ : 𝕜)) * hpy
+      | linear_combination (-((a : 𝕜) * (Real.sin θ : 𝕜))) * hpy
+      | linear_combination ((b : 𝕜) * (Real.cos θ : 𝕜)) * hpy
+      | linear_combination (-((b : 𝕜) * (Real.cos θ : 𝕜))) * hpy
+      | linear_combination ((b : 𝕜) * (Real.sin θ : 𝕜)) * hpy
+      | linear_combination (-((b : 𝕜) * (Real.sin θ : 𝕜))) * hpy
+
+/-- The rotation conjugate `R(θ) diag(a, b) R(θ)ᵀ` of the gapped model operator.  This is the
+second operator of the `sin Θ` extremal pair: it is symmetric, it leaves `rotatedModelSubspace θ`
+invariant, and its difference with `modelGappedOperator a b` is exactly
+`modelSinThetaPerturbation a b θ`. -/
+noncomputable def modelRotatedOperator (a b θ : ℝ) :
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  Matrix.toEuclideanLin
+    !![((a * Real.cos θ ^ 2 + b * Real.sin θ ^ 2 : ℝ) : 𝕜),
+       (((a - b) * Real.sin θ * Real.cos θ : ℝ) : 𝕜);
+       (((a - b) * Real.sin θ * Real.cos θ : ℝ) : 𝕜),
+       ((a * Real.sin θ ^ 2 + b * Real.cos θ ^ 2 : ℝ) : 𝕜)]
+
+/-- The rotated model operator is symmetric. -/
+theorem modelRotatedOperator_isSymmetric (a b θ : ℝ) :
+    (modelRotatedOperator (𝕜 := 𝕜) a b θ).IsSymmetric := by
+  rw [modelRotatedOperator]
+  refine Matrix.isSymmetric_toEuclideanLin_iff.mpr ?_
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [Matrix.conjTranspose_apply, RCLike.conj_ofReal]
+
+/-- The rotated generator is the low eigenvector of the rotated model operator. -/
+theorem modelRotatedOperator_apply_uθ (a b θ : ℝ) :
+    modelRotatedOperator (𝕜 := 𝕜) a b θ (uθ (𝕜 := 𝕜) θ) = ((a : ℝ) : 𝕜) • uθ (𝕜 := 𝕜) θ := by
+  have hpy := plane_sin_sq_add_cos_sq (𝕜 := 𝕜) θ
+  rw [modelRotatedOperator]
+  ext i
+  fin_cases i <;>
+    simp [uθ, e0, e1, Matrix.toLpLin_apply] <;>
+    (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal]) <;>
+    first
+      | ring1
+      | linear_combination ((a : 𝕜) * (Real.cos θ : 𝕜)) * hpy
+      | linear_combination (-((a : 𝕜) * (Real.cos θ : 𝕜))) * hpy
+      | linear_combination ((a : 𝕜) * (Real.sin θ : 𝕜)) * hpy
+
+/-- The complementary frame vector is the high eigenvector of the rotated model operator. -/
+theorem modelRotatedOperator_apply_vθ (a b θ : ℝ) :
+    modelRotatedOperator (𝕜 := 𝕜) a b θ (vθ (𝕜 := 𝕜) θ) = ((b : ℝ) : 𝕜) • vθ (𝕜 := 𝕜) θ := by
+  have hpy := plane_sin_sq_add_cos_sq (𝕜 := 𝕜) θ
+  rw [modelRotatedOperator]
+  ext i
+  fin_cases i <;>
+    simp [vθ, e0, e1, Matrix.toLpLin_apply] <;>
+    (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal]) <;>
+    first
+      | ring1
+      | linear_combination ((a : 𝕜) * (Real.cos θ : 𝕜)) * hpy
+      | linear_combination (-((a : 𝕜) * (Real.cos θ : 𝕜))) * hpy
+      | linear_combination ((a : 𝕜) * (Real.sin θ : 𝕜)) * hpy
+      | linear_combination (-((a : 𝕜) * (Real.sin θ : 𝕜))) * hpy
+      | linear_combination ((b : 𝕜) * (Real.cos θ : 𝕜)) * hpy
+      | linear_combination (-((b : 𝕜) * (Real.cos θ : 𝕜))) * hpy
+      | linear_combination ((b : 𝕜) * (Real.sin θ : 𝕜)) * hpy
+      | linear_combination (-((b : 𝕜) * (Real.sin θ : 𝕜))) * hpy
+
+/-- **The `sin Θ` model perturbation is a genuine residual.**  It is the difference of the two
+symmetric operators of the extremal pair, not merely a matrix with the right singular values. -/
+theorem modelRotatedOperator_sub_modelGappedOperator (a b θ : ℝ) :
+    modelRotatedOperator (𝕜 := 𝕜) a b θ - modelGappedOperator (𝕜 := 𝕜) a b =
+      modelSinThetaPerturbation (𝕜 := 𝕜) a b θ := by
+  have hpy := plane_sin_sq_add_cos_sq (𝕜 := 𝕜) θ
+  rw [modelRotatedOperator, modelGappedOperator_eq_matrix, modelSinThetaPerturbation,
+    ← map_sub]
+  congr 1
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp <;>
+    (try simp only [RCLike.algebraMap_eq_ofReal]) <;>
+    first
+      | ring1
+      | linear_combination ((a : 𝕜) * (Real.cos θ : 𝕜)) * hpy
+      | linear_combination (-((a : 𝕜) * (Real.cos θ : 𝕜))) * hpy
+      | linear_combination ((a : 𝕜) * (Real.sin θ : 𝕜)) * hpy
+      | linear_combination (-((a : 𝕜) * (Real.sin θ : 𝕜))) * hpy
+      | linear_combination ((b : 𝕜) * (Real.cos θ : 𝕜)) * hpy
+      | linear_combination (-((b : 𝕜) * (Real.cos θ : 𝕜))) * hpy
+      | linear_combination ((b : 𝕜) * (Real.sin θ : 𝕜)) * hpy
+      | linear_combination (-((b : 𝕜) * (Real.sin θ : 𝕜))) * hpy
+      | linear_combination ((a : 𝕜)) * hpy
+      | linear_combination (-(a : 𝕜)) * hpy
+      | linear_combination ((b : 𝕜)) * hpy
+
+/-- The coordinate line is invariant under the gapped model operator. -/
+theorem isInvariant_modelGappedOperator_modelSubspace (a b : ℝ) :
+    IsInvariant (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) :=
+  isInvariant_span_singleton (lam := a) (modelGappedOperator_apply_e0 a b)
+
+/-- The rotated line is invariant under the rotated model operator. -/
+theorem isInvariant_modelRotatedOperator_rotatedModelSubspace (a b θ : ℝ) :
+    IsInvariant (modelRotatedOperator (𝕜 := 𝕜) a b θ) (rotatedModelSubspace (𝕜 := 𝕜) θ) :=
+  isInvariant_span_singleton (lam := a) (modelRotatedOperator_apply_uθ a b θ)
+
+/-- The interval/exterior gap of the `sin Θ` pair, in the orientation the theorem consumes
+first: the selected block of the unperturbed operator against the complementary block of the
+perturbed one. -/
+theorem intervalExteriorGap_sinTheta_model {a b θ : ℝ} (hab : a < b) :
+    IntervalExteriorGap (modelGappedOperator (𝕜 := 𝕜) a b)
+      (modelRotatedOperator (𝕜 := 𝕜) a b θ) (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) θ) a a (b - a) := by
+  constructor
+  · intro lam hlam
+    have h := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) e0_ne_zero
+      (modelGappedOperator_apply_e0 (𝕜 := 𝕜) a b) hlam
+    rw [Set.mem_singleton_iff] at h
+    subst h
+    simp
+  · intro lam hlam
+    rw [orthogonal_rotatedModelSubspace] at hlam
+    have h := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) (vθ_ne_zero θ)
+      (modelRotatedOperator_apply_vθ (𝕜 := 𝕜) a b θ) hlam
+    rw [Set.mem_singleton_iff] at h
+    subst h
+    simp only [Set.mem_ofPred_eq, Set.mem_Ioo, not_and, not_lt]
+    intro _
+    linarith
+
+/-- The interval/exterior gap of the `sin Θ` pair in the mirrored orientation, which the
+symmetric `sin Θ` theorem also requires. -/
+theorem intervalExteriorGap_sinTheta_model_symm {a b θ : ℝ} (hab : a < b) :
+    IntervalExteriorGap (modelRotatedOperator (𝕜 := 𝕜) a b θ)
+      (modelGappedOperator (𝕜 := 𝕜) a b) (rotatedModelSubspace (𝕜 := 𝕜) θ)
+      (modelSubspace (𝕜 := 𝕜)) a a (b - a) := by
+  constructor
+  · intro lam hlam
+    have h := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) (uθ_ne_zero θ)
+      (modelRotatedOperator_apply_uθ (𝕜 := 𝕜) a b θ) hlam
+    rw [Set.mem_singleton_iff] at h
+    subst h
+    simp
+  · intro lam hlam
+    rw [orthogonal_modelSubspace] at hlam
+    have h := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) e1_ne_zero
+      (modelGappedOperator_apply_e1 (𝕜 := 𝕜) a b) hlam
+    rw [Set.mem_singleton_iff] at h
+    subst h
+    simp only [Set.mem_ofPred_eq, Set.mem_Ioo, not_and, not_lt]
+    intro _
+    linarith
+
+/-- **The `sin Θ` planar model is an admissible perturbation pair.**
+
+Both operators are symmetric, each of the two lines is invariant under its own operator, the
+interval/exterior gap holds in both orientations with `δ = b - a`, and the residual is exactly
+`modelSinThetaPerturbation a b θ`.  Consequently `sinTheta_model_equality` -- and through it
+`sinTheta_constant_optimal` -- is equality in `TauCeti.sinAngleOperator_perturbation_le`, that
+is, sharpness of the **theorem's** constant, not of a matrix identity. -/
+theorem sinTheta_model_isAdmissiblePair {a b θ : ℝ} (hab : a < b) :
+    (modelGappedOperator (𝕜 := 𝕜) a b).IsSymmetric ∧
+      (modelRotatedOperator (𝕜 := 𝕜) a b θ).IsSymmetric ∧
+      IsInvariant (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) ∧
+      IsInvariant (modelRotatedOperator (𝕜 := 𝕜) a b θ)
+        (rotatedModelSubspace (𝕜 := 𝕜) θ) ∧
+      IntervalExteriorGap (modelGappedOperator (𝕜 := 𝕜) a b)
+        (modelRotatedOperator (𝕜 := 𝕜) a b θ) (modelSubspace (𝕜 := 𝕜))
+        (rotatedModelSubspace (𝕜 := 𝕜) θ) a a (b - a) ∧
+      IntervalExteriorGap (modelRotatedOperator (𝕜 := 𝕜) a b θ)
+        (modelGappedOperator (𝕜 := 𝕜) a b) (rotatedModelSubspace (𝕜 := 𝕜) θ)
+        (modelSubspace (𝕜 := 𝕜)) a a (b - a) ∧
+      modelRotatedOperator (𝕜 := 𝕜) a b θ - modelGappedOperator (𝕜 := 𝕜) a b =
+        modelSinThetaPerturbation (𝕜 := 𝕜) a b θ :=
+  ⟨modelGappedOperator_isSymmetric a b, modelRotatedOperator_isSymmetric a b θ,
+   isInvariant_modelGappedOperator_modelSubspace a b,
+   isInvariant_modelRotatedOperator_rotatedModelSubspace a b θ,
+   intervalExteriorGap_sinTheta_model hab, intervalExteriorGap_sinTheta_model_symm hab,
+   modelRotatedOperator_sub_modelGappedOperator a b θ⟩
+
+/-- **Equality in the `sin Θ` perturbation theorem.**
+
+`TauCeti.sinAngleOperator_perturbation_le` gives `δ * N (sin Θ) ≤ N (B - A)` for an admissible
+pair; `sinTheta_model_isAdmissiblePair` supplies one with `δ = b - a`, and here the inequality
+is an equality for every unitarily invariant seminorm. -/
+theorem sinTheta_perturbation_le_model_equality
+    (N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜))
+    {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 2) :
+    (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
+      N (modelRotatedOperator (𝕜 := 𝕜) a b θ - modelGappedOperator (𝕜 := 𝕜) a b) := by
+  rw [modelRotatedOperator_sub_modelGappedOperator]
+  exact sinTheta_model_equality N hab hθ0 hθ1
+
+/-! ### The perturbation that is off-diagonal in the rotated frame
+
+The `tan Θ` and `sin 2Θ` families need a symmetric perturbation whose *rotated* compression
+vanishes, `-r (uθ ⊗ vθ + vθ ⊗ uθ)`.  It has the same two singular values `|r|` as the
+correspondingly scaled coordinate-frame off-diagonal matrix used by the model equalities above,
+so a unitarily invariant seminorm cannot tell them apart; but only this one is a residual. -/
+
+/-- The symmetric perturbation `-r (uθ ⊗ vθ + vθ ⊗ uθ)`, written in coordinates.  It exchanges
+the two rotated frame vectors up to the factor `-r`. -/
+noncomputable def modelRotatedOffDiagonal (r θ : ℝ) :
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  Matrix.toEuclideanLin
+    !![((r * Real.sin (2 * θ) : ℝ) : 𝕜), ((-(r * Real.cos (2 * θ)) : ℝ) : 𝕜);
+       ((-(r * Real.cos (2 * θ)) : ℝ) : 𝕜), ((-(r * Real.sin (2 * θ)) : ℝ) : 𝕜)]
+
+/-- The rotated off-diagonal perturbation is symmetric. -/
+theorem modelRotatedOffDiagonal_isSymmetric (r θ : ℝ) :
+    (modelRotatedOffDiagonal (𝕜 := 𝕜) r θ).IsSymmetric := by
+  rw [modelRotatedOffDiagonal]
+  refine Matrix.isSymmetric_toEuclideanLin_iff.mpr ?_
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [Matrix.conjTranspose_apply, RCLike.conj_ofReal]
+
+/-- The rotated off-diagonal perturbation sends the rotated generator to the complementary
+frame vector: this is what cancels the off-diagonal block of the base operator. -/
+theorem modelRotatedOffDiagonal_apply_uθ (r θ : ℝ) :
+    modelRotatedOffDiagonal (𝕜 := 𝕜) r θ (uθ (𝕜 := 𝕜) θ) =
+      -((r : ℝ) : 𝕜) • vθ (𝕜 := 𝕜) θ := by
+  have hpy := plane_sin_sq_add_cos_sq (𝕜 := 𝕜) θ
+  rw [modelRotatedOffDiagonal]
+  ext i
+  fin_cases i <;>
+    simp [uθ, vθ, e0, e1, Matrix.toLpLin_apply, Real.sin_two_mul, Real.cos_two_mul'] <;>
+    (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal]) <;>
+    (try push_cast) <;>
+    first
+      | ring1
+      | linear_combination ((r : 𝕜) * (Real.sin θ : 𝕜)) * hpy
+      | linear_combination (-((r : 𝕜) * (Real.sin θ : 𝕜))) * hpy
+      | linear_combination ((r : 𝕜) * (Real.cos θ : 𝕜)) * hpy
+      | linear_combination (-((r : 𝕜) * (Real.cos θ : 𝕜))) * hpy
+
+/-- The rotated off-diagonal perturbation exchanges the two frame vectors. -/
+theorem modelRotatedOffDiagonal_apply_vθ (r θ : ℝ) :
+    modelRotatedOffDiagonal (𝕜 := 𝕜) r θ (vθ (𝕜 := 𝕜) θ) =
+      -((r : ℝ) : 𝕜) • uθ (𝕜 := 𝕜) θ := by
+  have hpy := plane_sin_sq_add_cos_sq (𝕜 := 𝕜) θ
+  rw [modelRotatedOffDiagonal]
+  ext i
+  fin_cases i <;>
+    simp [uθ, vθ, e0, e1, Matrix.toLpLin_apply, Real.sin_two_mul, Real.cos_two_mul'] <;>
+    (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal]) <;>
+    (try push_cast) <;>
+    first
+      | ring1
+      | linear_combination ((r : 𝕜) * (Real.sin θ : 𝕜)) * hpy
+      | linear_combination (-((r : 𝕜) * (Real.sin θ : 𝕜))) * hpy
+      | linear_combination ((r : 𝕜) * (Real.cos θ : 𝕜)) * hpy
+      | linear_combination (-((r : 𝕜) * (Real.cos θ : 𝕜))) * hpy
+
+set_option maxHeartbeats 800000 in
+private theorem modelRotatedOffDiagonal_sq (r θ : ℝ) :
+    modelRotatedOffDiagonal (𝕜 := 𝕜) r θ ∘ₗ modelRotatedOffDiagonal (𝕜 := 𝕜) r θ =
+      ((((r ^ 2 : ℝ)) : 𝕜) • LinearMap.id) := by
+  have hpy := plane_sin_sq_add_cos_sq (𝕜 := 𝕜) (2 * θ)
+  ext x i
+  fin_cases i <;>
+    simp [modelRotatedOffDiagonal, Matrix.toLpLin_apply] <;>
+    (try simp only [RCLike.algebraMap_eq_ofReal, Matrix.vecHead,
+      Matrix.vecTail, Function.comp_apply, Fin.succ_zero_eq_one]) <;>
+    first
+      | ring1
+      | linear_combination ((r : 𝕜) ^ 2 * x.ofLp 0) * hpy
+      | linear_combination (-((r : 𝕜) ^ 2 * x.ofLp 0)) * hpy
+      | linear_combination ((r : 𝕜) ^ 2 * x.ofLp 1) * hpy
+
+set_option maxHeartbeats 800000 in
+private theorem singularValues_modelRotatedOffDiagonal (r θ : ℝ) :
+    (modelRotatedOffDiagonal (𝕜 := 𝕜) r θ).singularValues =
+      pairSingularValues |r| |r| :=
+  singularValues_eq_abs_pair_of_isSymmetric_sq finrank_euclideanSpace_fin
+    (EuclideanSpace.basisFun (Fin 2) 𝕜)
+    (modelRotatedOffDiagonal (𝕜 := 𝕜) r θ) r
+    (modelRotatedOffDiagonal_isSymmetric r θ) (modelRotatedOffDiagonal_sq r θ)
+
+set_option maxHeartbeats 800000 in
+private theorem norm_eq_of_singularValues_eq {A B : Plane 𝕜 →ₗ[𝕜] Plane 𝕜}
+    (h : A.singularValues = B.singularValues) :
+    ‖A.toContinuousLinearMap‖ = ‖B.toContinuousLinearMap‖ := by
+  rw [opNorm_eq_singularValues_zero (𝕜 := 𝕜) A (n := 2)
+      finrank_euclideanSpace_fin (by norm_num),
+    opNorm_eq_singularValues_zero (𝕜 := 𝕜) B (n := 2)
+      finrank_euclideanSpace_fin (by norm_num), h]
+
+/-! ### The `tan Θ` model as an admissible perturbation pair -/
+
+/-- The unperturbed operator of the `tan Θ` extremal pair.  Its internal gap is
+`(b - a)(1 + tan²θ) = (b - a)/cos²θ`; the Ritz value on the perturbed line sits exactly
+`b - a` below the complementary block, which is the gap the `tan Θ` theorem divides by. -/
+noncomputable def modelTanThetaBaseOperator (a b θ : ℝ) :
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  modelGappedOperator a (a + (b - a) * (1 + Real.tan θ ^ 2))
+
+/-- The perturbed operator of the `tan Θ` extremal pair.  Its perturbation is off-diagonal in
+the rotated frame, which is exactly the Galerkin condition `Q H Q = 0` of the `tan Θ`
+theorem. -/
+noncomputable def modelTanThetaPerturbedOperator (a b θ : ℝ) :
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ +
+    modelRotatedOffDiagonal ((b - a) * Real.tan θ) θ
+
+/-- The `tan Θ` pair's residual is the rotated off-diagonal perturbation. -/
+theorem modelTanThetaPerturbedOperator_sub_base (a b θ : ℝ) :
+    modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
+        modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ =
+      modelRotatedOffDiagonal (𝕜 := 𝕜) ((b - a) * Real.tan θ) θ := by
+  rw [modelTanThetaPerturbedOperator]
+  abel
+
+/-- Both operators of the `tan Θ` pair are symmetric. -/
+theorem modelTanThetaBaseOperator_isSymmetric (a b θ : ℝ) :
+    (modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ).IsSymmetric :=
+  modelGappedOperator_isSymmetric _ _
+
+/-- The perturbed `tan Θ` operator is symmetric. -/
+theorem modelTanThetaPerturbedOperator_isSymmetric (a b θ : ℝ) :
+    (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ).IsSymmetric := by
+  rw [modelTanThetaPerturbedOperator]
+  exact (modelTanThetaBaseOperator_isSymmetric a b θ).add
+    (modelRotatedOffDiagonal_isSymmetric _ _)
+
+/-- **The rotated line is an eigenline of the perturbed `tan Θ` operator**, with Ritz value
+`a + (b - a) tan²θ`: the base operator's rotated off-diagonal block is cancelled exactly. -/
+theorem modelTanThetaPerturbedOperator_apply_uθ {a b θ : ℝ} (hcos : Real.cos θ ≠ 0) :
+    modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ (uθ (𝕜 := 𝕜) θ) =
+      ((a + (b - a) * Real.tan θ ^ 2 : ℝ) : 𝕜) • uθ (𝕜 := 𝕜) θ := by
+  have hpyR := Real.sin_sq_add_cos_sq θ
+  have hs : Real.sin θ = Real.tan θ * Real.cos θ := by
+    rw [Real.tan_eq_sin_div_cos]
+    field_simp
+  have hkey : (1 + Real.tan θ ^ 2) * Real.cos θ ^ 2 = 1 := by
+    linear_combination hpyR - (Real.sin θ + Real.tan θ * Real.cos θ) * hs
+  have hdiag : a * Real.cos θ ^ 2 +
+      (a + (b - a) * (1 + Real.tan θ ^ 2)) * Real.sin θ ^ 2 =
+      a + (b - a) * Real.tan θ ^ 2 := by
+    linear_combination a * hpyR +
+      ((b - a) * (1 + Real.tan θ ^ 2) * (Real.sin θ + Real.tan θ * Real.cos θ)) * hs +
+      ((b - a) * Real.tan θ ^ 2) * hkey
+  have hoff : ((a + (b - a) * (1 + Real.tan θ ^ 2)) - a) * Real.sin θ * Real.cos θ =
+      (b - a) * Real.tan θ := by
+    linear_combination ((b - a) * (1 + Real.tan θ ^ 2) * Real.cos θ) * hs +
+      ((b - a) * Real.tan θ) * hkey
+  rw [modelTanThetaPerturbedOperator, modelTanThetaBaseOperator, LinearMap.add_apply,
+    modelGappedOperator_apply_uθ, modelRotatedOffDiagonal_apply_uθ, hdiag, hoff]
+  module
+
+/-- The rotated line is invariant under the perturbed `tan Θ` operator. -/
+theorem isInvariant_modelTanThetaPerturbedOperator {a b θ : ℝ} (hcos : Real.cos θ ≠ 0) :
+    IsInvariant (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
+      (rotatedModelSubspace (𝕜 := 𝕜) θ) :=
+  isInvariant_span_singleton (lam := a + (b - a) * Real.tan θ ^ 2)
+    (modelTanThetaPerturbedOperator_apply_uθ hcos)
+
+/-- The coordinate line is invariant under the unperturbed `tan Θ` operator. -/
+theorem isInvariant_modelTanThetaBaseOperator (a b θ : ℝ) :
+    IsInvariant (modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ) (modelSubspace (𝕜 := 𝕜)) :=
+  isInvariant_modelGappedOperator_modelSubspace _ _
+
+/-- **The Galerkin/Ritz condition of the `tan Θ` theorem holds for this pair**: the residual
+has vanishing compression onto the perturbed line. -/
+theorem compression_modelTanThetaResidual_eq_zero (a b θ : ℝ) :
+    projection (rotatedModelSubspace (𝕜 := 𝕜) θ) ∘ₗ
+        modelRotatedOffDiagonal (𝕜 := 𝕜) ((b - a) * Real.tan θ) θ ∘ₗ
+      projection (rotatedModelSubspace (𝕜 := 𝕜) θ) = 0 := by
+  ext x
+  have hproj : (rotatedModelSubspace (𝕜 := 𝕜) θ).starProjection x =
+      ⟪uθ (𝕜 := 𝕜) θ, x⟫_𝕜 • uθ (𝕜 := 𝕜) θ :=
+    starProjection_span_singleton_apply_of_norm_one _ _ (norm_uθ θ)
+  have hvθ : (rotatedModelSubspace (𝕜 := 𝕜) θ).starProjection (vθ (𝕜 := 𝕜) θ) = 0 := by
+    rw [rotatedModelSubspace,
+      starProjection_span_singleton_apply_of_norm_one _ _ (norm_uθ θ), inner_uθ_vθ,
+      zero_smul]
+  simp only [LinearMap.comp_apply, projection, ContinuousLinearMap.coe_coe,
+    LinearMap.zero_apply, hproj, map_smul, modelRotatedOffDiagonal_apply_uθ, hvθ]
+  simp
+
+/-- **The ordered gap of the `tan Θ` pair is exactly `b - a`.**  The Ritz value on the rotated
+line is `a + (b - a) tan²θ` and the unwanted exact block sits at `a + (b - a)(1 + tan²θ)`. -/
+theorem orderedGap_tanTheta_model {a b θ : ℝ} (_hab : a < b) (hcos : Real.cos θ ≠ 0) :
+    OrderedGap (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
+      (rotatedModelSubspace (𝕜 := 𝕜) θ) (modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ)
+      (modelSubspace (𝕜 := 𝕜))ᗮ (b - a) := by
+  intro lam μ hlam hμ
+  have hl := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) (uθ_ne_zero θ)
+    (modelTanThetaPerturbedOperator_apply_uθ (𝕜 := 𝕜) (a := a) (b := b) hcos) hlam
+  rw [Set.mem_singleton_iff] at hl
+  rw [orthogonal_modelSubspace] at hμ
+  have hr := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) e1_ne_zero
+    (modelGappedOperator_apply_e1 (𝕜 := 𝕜) a (a + (b - a) * (1 + Real.tan θ ^ 2))) hμ
+  rw [Set.mem_singleton_iff] at hr
+  subst hl
+  subst hr
+  ring_nf
+  linarith
+
+/-- **The `tan Θ` planar model is an admissible perturbation pair.**
+
+The equality `tanTheta_model_equality` therefore records equality in the source's `tan Θ`
+perturbation bound `δ N(tan Θ) ≤ N(H)` at `δ = b - a`, not merely an identity of matrices.
+Note where the pair differs from the naive guess: the residual is off-diagonal in the
+**rotated** frame, and the unperturbed internal gap is `(b - a)(1 + tan²θ)`, strictly larger
+than `b - a` off `θ = 0`.  The coordinate-frame matrix `modelTanThetaPerturbation` has the same
+two singular values, which is why the seminorm equality is unaffected. -/
+theorem tanTheta_model_isAdmissiblePair {a b θ : ℝ} (hab : a < b) (hcos : Real.cos θ ≠ 0) :
+    (modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ).IsSymmetric ∧
+      (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ).IsSymmetric ∧
+      IsInvariant (modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ) (modelSubspace (𝕜 := 𝕜)) ∧
+      IsInvariant (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
+        (rotatedModelSubspace (𝕜 := 𝕜) θ) ∧
+      OrderedGap (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
+        (rotatedModelSubspace (𝕜 := 𝕜) θ) (modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ)
+        (modelSubspace (𝕜 := 𝕜))ᗮ (b - a) ∧
+      projection (rotatedModelSubspace (𝕜 := 𝕜) θ) ∘ₗ
+          (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
+            modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ) ∘ₗ
+        projection (rotatedModelSubspace (𝕜 := 𝕜) θ) = 0 :=
+  ⟨modelTanThetaBaseOperator_isSymmetric a b θ,
+   modelTanThetaPerturbedOperator_isSymmetric a b θ,
+   isInvariant_modelTanThetaBaseOperator a b θ,
+   isInvariant_modelTanThetaPerturbedOperator hcos,
+   orderedGap_tanTheta_model hab hcos,
+   by rw [modelTanThetaPerturbedOperator_sub_base]
+      exact compression_modelTanThetaResidual_eq_zero a b θ⟩
+
+/-- **Equality in the `tan Θ` perturbation bound, for the admissible pair.** -/
+theorem tanTheta_perturbation_le_model_equality
+    (N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜))
+    {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 2) :
+    (b - a) * N (tanAngleOperator (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
+      N (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
+        modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ) := by
+  have htan : 0 ≤ Real.tan θ :=
+    Real.tan_nonneg_of_nonneg_of_le_pi_div_two hθ0 hθ1.le
+  have hprod : 0 ≤ (b - a) * Real.tan θ := mul_nonneg (sub_nonneg.mpr hab.le) htan
+  have hsing : (modelRotatedOffDiagonal (𝕜 := 𝕜) ((b - a) * Real.tan θ) θ).singularValues =
+      (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ).singularValues := by
+    rw [singularValues_modelRotatedOffDiagonal,
+      singularValues_modelTanThetaPerturbation hab htan, abs_of_nonneg hprod]
+  rw [modelTanThetaPerturbedOperator_sub_base, N.eq_of_same_singularValues hsing]
+  exact tanTheta_model_equality N hab hθ0 hθ1
+
+/-! ### The `sin 2Θ` model as an admissible perturbation pair -/
+
+/-- The unperturbed operator of the `sin 2Θ` extremal pair.  The coordinate line carries the
+**upper** block here, which is the orientation `TwoBlockFormGap` fixes. -/
+noncomputable def modelSinTwoThetaBaseOperator (a b : ℝ) :
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  modelGappedOperator b a
+
+/-- The perturbed operator of the `sin 2Θ` extremal pair: the base operator with its rotated
+off-diagonal block deleted, so the rotated line reduces it. -/
+noncomputable def modelSinTwoThetaPerturbedOperator (a b θ : ℝ) :
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b +
+    modelRotatedOffDiagonal (-((b - a) * Real.sin θ * Real.cos θ)) θ
+
+/-- The `sin 2Θ` pair's residual is the rotated off-diagonal perturbation. -/
+theorem modelSinTwoThetaPerturbedOperator_sub_base (a b θ : ℝ) :
+    modelSinTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
+        modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b =
+      modelRotatedOffDiagonal (𝕜 := 𝕜) (-((b - a) * Real.sin θ * Real.cos θ)) θ := by
+  rw [modelSinTwoThetaPerturbedOperator]
+  abel
+
+/-- The unperturbed `sin 2Θ` operator is symmetric. -/
+theorem modelSinTwoThetaBaseOperator_isSymmetric (a b : ℝ) :
+    (modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b).IsSymmetric :=
+  modelGappedOperator_isSymmetric _ _
+
+/-- The perturbed `sin 2Θ` operator is symmetric. -/
+theorem modelSinTwoThetaPerturbedOperator_isSymmetric (a b θ : ℝ) :
+    (modelSinTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ).IsSymmetric := by
+  rw [modelSinTwoThetaPerturbedOperator]
+  exact (modelSinTwoThetaBaseOperator_isSymmetric a b).add
+    (modelRotatedOffDiagonal_isSymmetric _ _)
+
+/-- **The rotated line is an eigenline of the perturbed `sin 2Θ` operator.** -/
+theorem modelSinTwoThetaPerturbedOperator_apply_uθ (a b θ : ℝ) :
+    modelSinTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ (uθ (𝕜 := 𝕜) θ) =
+      ((b * Real.cos θ ^ 2 + a * Real.sin θ ^ 2 : ℝ) : 𝕜) • uθ (𝕜 := 𝕜) θ := by
+  rw [modelSinTwoThetaPerturbedOperator, modelSinTwoThetaBaseOperator, LinearMap.add_apply,
+    modelGappedOperator_apply_uθ, modelRotatedOffDiagonal_apply_uθ]
+  push_cast
+  module
+
+/-- The rotated line is invariant under the perturbed `sin 2Θ` operator. -/
+theorem isInvariant_modelSinTwoThetaPerturbedOperator (a b θ : ℝ) :
+    IsInvariant (modelSinTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
+      (rotatedModelSubspace (𝕜 := 𝕜) θ) :=
+  isInvariant_span_singleton (lam := b * Real.cos θ ^ 2 + a * Real.sin θ ^ 2)
+    (modelSinTwoThetaPerturbedOperator_apply_uθ a b θ)
+
+/-- The coordinate line is invariant under the unperturbed `sin 2Θ` operator. -/
+theorem isInvariant_modelSinTwoThetaBaseOperator (a b : ℝ) :
+    IsInvariant (modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) :=
+  isInvariant_modelGappedOperator_modelSubspace _ _
+
+/-- **The two-block form gap of the `sin 2Θ` pair is exactly `b - a`.** -/
+theorem twoBlockFormGap_sinTwoTheta_model (a b : ℝ) :
+    TwoBlockFormGap (modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜))
+      a b := by
+  constructor
+  · intro x hx
+    rw [modelSinTwoThetaBaseOperator,
+      re_inner_span_singleton norm_e0 (modelGappedOperator_apply_e0 (𝕜 := 𝕜) b a) hx]
+  · intro x hx
+    rw [orthogonal_modelSubspace] at hx
+    rw [modelSinTwoThetaBaseOperator,
+      re_inner_span_singleton norm_e1 (modelGappedOperator_apply_e1 (𝕜 := 𝕜) b a) hx]
+
+/-- **The `sin 2Θ` planar model is an admissible perturbation pair.**
+
+This corrects the record: the rotated line *is* reducing for a symmetric `B` whose residual has
+the singular values of `modelSinTwoThetaPerturbation`.  What fails is only the naive guess
+`B = modelGappedOperator a b + modelSinTwoThetaPerturbation a b θ`; the residual must be
+off-diagonal in the **rotated** frame, and the base operator's upper block must be the
+coordinate line. -/
+theorem sinTwoTheta_model_isAdmissiblePair (a b θ : ℝ) :
+    (modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b).IsSymmetric ∧
+      (modelSinTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ).IsSymmetric ∧
+      IsInvariant (modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) ∧
+      IsInvariant (modelSinTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
+        (rotatedModelSubspace (𝕜 := 𝕜) θ) ∧
+      TwoBlockFormGap (modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b)
+        (modelSubspace (𝕜 := 𝕜)) a b :=
+  ⟨modelSinTwoThetaBaseOperator_isSymmetric a b,
+   modelSinTwoThetaPerturbedOperator_isSymmetric a b θ,
+   isInvariant_modelSinTwoThetaBaseOperator a b,
+   isInvariant_modelSinTwoThetaPerturbedOperator a b θ,
+   twoBlockFormGap_sinTwoTheta_model a b⟩
+
+private theorem singularValues_modelSinTwoThetaResidual
+    {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 4) :
+    (modelRotatedOffDiagonal (𝕜 := 𝕜)
+        (-((b - a) * Real.sin θ * Real.cos θ)) θ).singularValues =
+      (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ).singularValues := by
+  have hsin : 0 ≤ Real.sin (2 * θ) :=
+    Real.sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith [Real.pi_pos])
+  have hprod : 0 ≤ ((b - a) / 2) * Real.sin (2 * θ) :=
+    mul_nonneg (div_nonneg (sub_nonneg.mpr hab.le) (by norm_num)) hsin
+  have hrewrite : (b - a) * Real.sin θ * Real.cos θ = ((b - a) / 2) * Real.sin (2 * θ) := by
+    rw [Real.sin_two_mul]; ring
+  rw [singularValues_modelRotatedOffDiagonal,
+    singularValues_modelSinTwoThetaPerturbation hab hθ0 hθ1, hrewrite, abs_neg,
+    abs_of_nonneg hprod]
+
+/-- **Equality in the `sin 2Θ` perturbation theorem at the operator norm.**
+
+`sinTwoTheta_perturbation_le` gives `(b - a) N (sin 2Θ) ≤ 2 N (B - A)` for the admissible pair
+of `sinTwoTheta_model_isAdmissiblePair`; at the operator norm this is an equality.  It cannot
+be an equality at every unitarily invariant seminorm, because the one-sided `sin 2Θ` map has
+one nonzero singular value where the residual has two --
+`sinTwoTheta_model_equality_fails_beyond_operatorNorm`. -/
+theorem sinTwoTheta_perturbation_le_model_operatorNorm_equality
+    {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 4) :
+    (b - a) * ‖(sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
+        (rotatedModelSubspace (𝕜 := 𝕜) θ)).toContinuousLinearMap‖ =
+      2 * ‖(modelSinTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
+        modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b).toContinuousLinearMap‖ := by
+  rw [modelSinTwoThetaPerturbedOperator_sub_base,
+    norm_eq_of_singularValues_eq (singularValues_modelSinTwoThetaResidual hab hθ0 hθ1)]
+  exact sinTwoTheta_model_operatorNorm_equality hab hθ0 hθ1
+
+/-- **Equality in the rank-matched `sin 2Θ` bound, at every unitarily invariant seminorm.**
+
+The symmetric sine of the doubled angle is the gauge-faithful double-angle operator of this
+model; against the admissible pair's residual it attains equality at every seminorm at once,
+which is the form of the source's simultaneous-equality claim. -/
+theorem sinTwoTheta_model_equality_of_admissiblePair
+    (N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜))
+    {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 4) :
+    (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))) =
+      2 * N (modelSinTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
+        modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b) := by
+  rw [modelSinTwoThetaPerturbedOperator_sub_base,
+    N.eq_of_same_singularValues (singularValues_modelSinTwoThetaResidual hab hθ0 hθ1)]
+  exact sinTwoTheta_model_equality N hab hθ0 hθ1
+
+/-! ### The `tan 2Θ` model as an admissible perturbation pair -/
+
+/-- The perturbed operator of the `tan 2Θ` extremal pair.  The perturbation is off-diagonal in
+the **coordinate** frame -- the `tan 2Θ` theorem's `P H P = 0 = P^⊥ H P^⊥` hypothesis -- and the
+planar Riccati law then puts the reducing line of the perturbed operator at angle `θ`.
+
+The sign is the one the Riccati law forces: `tan 2θ = 2h/(a - b)` for
+`B = diag(a, b) + h(e₀ ⊗ e₁ + e₁ ⊗ e₀)`, so the residual is *minus*
+`modelTanTwoThetaPerturbation a b θ`.  A unitarily invariant seminorm does not see the sign. -/
+noncomputable def modelTanTwoThetaPerturbedOperator (a b θ : ℝ) :
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  modelGappedOperator a b - modelTanTwoThetaPerturbation a b θ
+
+/-- The `tan 2Θ` pair's residual is minus the coordinate-frame off-diagonal model. -/
+theorem modelTanTwoThetaPerturbedOperator_sub_base (a b θ : ℝ) :
+    modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ - modelGappedOperator (𝕜 := 𝕜) a b =
+      -modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ := by
+  rw [modelTanTwoThetaPerturbedOperator]
+  abel
+
+/-- The perturbed `tan 2Θ` operator is symmetric. -/
+theorem modelTanTwoThetaPerturbedOperator_isSymmetric (a b θ : ℝ) :
+    (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ).IsSymmetric := by
+  rw [modelTanTwoThetaPerturbedOperator]
+  refine (modelGappedOperator_isSymmetric a b).sub ?_
+  rw [modelTanTwoThetaPerturbation]
+  refine Matrix.isSymmetric_toEuclideanLin_iff.mpr ?_
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [Matrix.conjTranspose_apply, RCLike.conj_ofReal]
+
+private theorem modelTanTwoThetaPerturbation_apply_uθ (a b θ : ℝ) :
+    modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ (uθ (𝕜 := 𝕜) θ) =
+      (((((b - a) / 2) * Real.tan (2 * θ)) * Real.sin (2 * θ) : ℝ) : 𝕜) • uθ (𝕜 := 𝕜) θ +
+        (((((b - a) / 2) * Real.tan (2 * θ)) * Real.cos (2 * θ) : ℝ) : 𝕜) •
+          vθ (𝕜 := 𝕜) θ := by
+  have hpy := plane_sin_sq_add_cos_sq (𝕜 := 𝕜) θ
+  set h : ℝ := ((b - a) / 2) * Real.tan (2 * θ) with hh
+  rw [modelTanTwoThetaPerturbation]
+  ext i
+  fin_cases i <;>
+    simp [uθ, vθ, e0, e1, Matrix.toLpLin_apply, Real.sin_two_mul, Real.cos_two_mul',
+      ← hh] <;>
+    (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal]) <;>
+    (try push_cast) <;>
+    first
+      | ring1
+      | linear_combination ((h : 𝕜) * (Real.sin θ : 𝕜)) * hpy
+      | linear_combination (-((h : 𝕜) * (Real.sin θ : 𝕜))) * hpy
+      | linear_combination ((h : 𝕜) * (Real.cos θ : 𝕜)) * hpy
+      | linear_combination (-((h : 𝕜) * (Real.cos θ : 𝕜))) * hpy
+
+/-- **The rotated line is an eigenline of the perturbed `tan 2Θ` operator**: the planar Riccati
+law `tan 2θ = 2h/(a - b)` is exactly the cancellation of the rotated off-diagonal block. -/
+theorem modelTanTwoThetaPerturbedOperator_apply_uθ {a b θ : ℝ}
+    (hcos2 : Real.cos (2 * θ) ≠ 0) :
+    modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ (uθ (𝕜 := 𝕜) θ) =
+      ((a * Real.cos θ ^ 2 + b * Real.sin θ ^ 2 -
+        ((b - a) / 2) * Real.tan (2 * θ) * Real.sin (2 * θ) : ℝ) : 𝕜) • uθ (𝕜 := 𝕜) θ := by
+  have hcancel : (b - a) * Real.sin θ * Real.cos θ =
+      ((b - a) / 2) * Real.tan (2 * θ) * Real.cos (2 * θ) := by
+    rw [Real.tan_eq_sin_div_cos]
+    field_simp
+    rw [Real.sin_two_mul]
+    ring
+  rw [modelTanTwoThetaPerturbedOperator, LinearMap.sub_apply, modelGappedOperator_apply_uθ,
+    modelTanTwoThetaPerturbation_apply_uθ, hcancel]
+  push_cast
+  module
+
+/-- The rotated line is invariant under the perturbed `tan 2Θ` operator. -/
+theorem isInvariant_modelTanTwoThetaPerturbedOperator {a b θ : ℝ}
+    (hcos2 : Real.cos (2 * θ) ≠ 0) :
+    IsInvariant (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
+      (rotatedModelSubspace (𝕜 := 𝕜) θ) :=
+  isInvariant_span_singleton
+    (lam := a * Real.cos θ ^ 2 + b * Real.sin θ ^ 2 -
+      ((b - a) / 2) * Real.tan (2 * θ) * Real.sin (2 * θ))
+    (modelTanTwoThetaPerturbedOperator_apply_uθ hcos2)
+
+/-- **The internal gap of the `tan 2Θ` pair's unperturbed operator is exactly `b - a`.** -/
+theorem internalGap_tanTwoTheta_model {a b : ℝ} (hab : a < b) :
+    InternalGap (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) (b - a) := by
+  intro lam μ hlam hμ
+  have hl := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) e0_ne_zero
+    (modelGappedOperator_apply_e0 (𝕜 := 𝕜) a b) hlam
+  rw [Set.mem_singleton_iff] at hl
+  rw [orthogonal_modelSubspace] at hμ
+  have hr := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) e1_ne_zero
+    (modelGappedOperator_apply_e1 (𝕜 := 𝕜) a b) hμ
+  rw [Set.mem_singleton_iff] at hr
+  subst hl
+  subst hr
+  rw [abs_of_nonpos (by linarith)]
+  linarith
+
+/-- **The `tan 2Θ` residual is off-diagonal for the unperturbed splitting**, which is the extra
+hypothesis `P H P = 0 = P^⊥ H P^⊥` of the `tan 2Θ` theorem. -/
+theorem modelTanTwoThetaResidual_offDiagonal (a b θ : ℝ) :
+    projection (modelSubspace (𝕜 := 𝕜)) ∘ₗ
+        modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ ∘ₗ
+        projection (modelSubspace (𝕜 := 𝕜)) = 0 ∧
+      complementaryProjection (modelSubspace (𝕜 := 𝕜)) ∘ₗ
+        modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ ∘ₗ
+        complementaryProjection (modelSubspace (𝕜 := 𝕜)) = 0 := by
+  have he0 : modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ (e0 (𝕜 := 𝕜)) =
+      ((((b - a) / 2) * Real.tan (2 * θ) : ℝ) : 𝕜) • e1 (𝕜 := 𝕜) := by
+    rw [modelTanTwoThetaPerturbation]
+    ext i
+    fin_cases i <;> simp [e0, e1, Matrix.toLpLin_apply]
+  have he1 : modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ (e1 (𝕜 := 𝕜)) =
+      ((((b - a) / 2) * Real.tan (2 * θ) : ℝ) : 𝕜) • e0 (𝕜 := 𝕜) := by
+    rw [modelTanTwoThetaPerturbation]
+    ext i
+    fin_cases i <;> simp [e0, e1, Matrix.toLpLin_apply]
+  have key1 : ∀ z ∈ (modelSubspace (𝕜 := 𝕜))ᗮ,
+      modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ z ∈ modelSubspace (𝕜 := 𝕜) := by
+    intro z hz
+    rw [orthogonal_modelSubspace, Submodule.mem_span_singleton] at hz
+    obtain ⟨c, rfl⟩ := hz
+    rw [map_smul, he1, modelSubspace]
+    exact Submodule.smul_mem _ _
+      (Submodule.smul_mem _ _ (Submodule.mem_span_singleton_self _))
+  have hP : ∀ y : Plane 𝕜, (modelSubspace (𝕜 := 𝕜)).starProjection y =
+      ⟪e0 (𝕜 := 𝕜), y⟫_𝕜 • e0 (𝕜 := 𝕜) := by
+    intro y
+    rw [modelSubspace]
+    exact starProjection_span_singleton_apply_of_norm_one _ _ norm_e0
+  constructor
+  · refine LinearMap.ext fun x => ?_
+    simp only [LinearMap.comp_apply, projection, ContinuousLinearMap.coe_coe,
+      LinearMap.zero_apply, hP, map_smul, he0, inner_e0_e1, zero_smul, smul_zero]
+  · refine LinearMap.ext fun x => ?_
+    simp only [LinearMap.comp_apply, complementaryProjection, projection,
+      ContinuousLinearMap.coe_coe, LinearMap.zero_apply]
+    exact Submodule.starProjection_orthogonal_apply_eq_zero
+      (key1 _ (Submodule.starProjection_apply_mem _ x))
+
+/-- **The `tan 2Θ` planar model is an admissible perturbation pair.**
+
+The equality `tanTwoTheta_model_equality` therefore records equality in the source's `tan 2Θ`
+perturbation bound `δ N(tan 2Θ) ≤ 2 N(H)` at `δ = b - a`. -/
+theorem tanTwoTheta_model_isAdmissiblePair {a b θ : ℝ} (hab : a < b)
+    (hcos2 : Real.cos (2 * θ) ≠ 0) :
+    (modelGappedOperator (𝕜 := 𝕜) a b).IsSymmetric ∧
+      (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ).IsSymmetric ∧
+      IsInvariant (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) ∧
+      IsInvariant (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
+        (rotatedModelSubspace (𝕜 := 𝕜) θ) ∧
+      InternalGap (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) (b - a) ∧
+      modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ - modelGappedOperator (𝕜 := 𝕜) a b =
+        -modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ :=
+  ⟨modelGappedOperator_isSymmetric a b,
+   modelTanTwoThetaPerturbedOperator_isSymmetric a b θ,
+   isInvariant_modelGappedOperator_modelSubspace a b,
+   isInvariant_modelTanTwoThetaPerturbedOperator hcos2,
+   internalGap_tanTwoTheta_model hab,
+   modelTanTwoThetaPerturbedOperator_sub_base a b θ⟩
+
+/-- **Equality in the `tan 2Θ` perturbation bound, for the admissible pair.** -/
+theorem tanTwoTheta_perturbation_le_model_equality
+    (N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜))
+    {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 4) :
+    (b - a) * N (tanTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
+      2 * N (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
+        modelGappedOperator (𝕜 := 𝕜) a b) := by
+  have hneg : N (-modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ) =
+      N (modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
+    rw [show (-modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ) =
+      ((-1 : 𝕜) • modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ) by module, N.smul_eq]
+    simp
+  rw [modelTanTwoThetaPerturbedOperator_sub_base, hneg]
+  exact tanTwoTheta_model_equality N hab hθ0 hθ1
+
+/-! ### The block-sum angle operator at the subspace level
+
+The direct-sum equalities above are stated on `orthogonalBlockSum` of the *plane* angle
+operators.  The missing bookkeeping is the identification of the block sum of two projectors
+with the projector of an actual subspace of `WithLp 2 (E₁ × E₂)`; with it, those statements
+become statements about a pair of subspaces.  Iteration to `m` blocks composes the two-block
+lemma and is left to the consumer. -/
+
+/-- **The projector onto a block sum of subspaces is the block sum of the projectors**, in the
+`projection` spelling used by the angle operators.
+
+The reusable form lives in `ForTauCeti` as
+`TauCeti.RectangularUnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule`;
+this is the same statement through `TauCeti.projection`. -/
+theorem projection_orthogonalBlockSumSubmodule
+    {E₁ E₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
+    (U₁ : Submodule 𝕜 E₁) (U₂ : Submodule 𝕜 E₂) :
+    projection
+        (RectangularUnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂) =
+      RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
+        (projection U₁) (projection U₂) :=
+  RectangularUnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule U₁ U₂
 
 end DavisKahanTheory
 end TauCeti
