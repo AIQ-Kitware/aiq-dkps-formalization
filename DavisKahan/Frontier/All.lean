@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Frontier.CircleContour
 import DavisKahan.Frontier.Core
 import DavisKahan.Frontier.Section3
+import DavisKahan.Frontier.Section3BilateralShift
 import DavisKahan.Frontier.Section4
 import DavisKahan.Frontier.Section8
 import DavisKahan.Frontier.Section8PartII
