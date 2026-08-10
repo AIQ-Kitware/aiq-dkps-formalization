@@ -133,6 +133,54 @@ theorem orthonormal_neg_right
 
 end UnboundedApproximateLeadingSingularFamily
 
+/-- **The Riccati equation transports a spectral band through the angular
+operator.**
+
+The selection seam asks for approximate singular vectors lying in bands of
+*both* diagonal blocks: `‖A₀ x‖ ≤ τ` on the right and `‖A₁ y‖ ≤ τ` on the left.
+This theorem shows the second is not an independent demand.  The strong Riccati
+equation
+
+`A₁ (X x) + B₁₀ x = X (A₀ x + B₀₁ (X x))`
+
+expresses `A₁ (X x)` through `A₀ x` and two bounded blocks, so a band bound on
+the right propagates to the image with the band radius scaled by `‖X‖` and
+shifted by a constant depending only on the bounded data.  Nothing here is
+asymptotic and no cutoff limit is taken.
+
+Consequently a selection argument only has to place the *right* vectors in a
+band of `A₀`; taking the left vectors along the image, `y ∝ X x`, then supplies
+their own band bound automatically, with the normalising factor `‖X x‖` — which
+`selected_large` keeps above the retention threshold — as the only cost. -/
+theorem norm_A1_apply_le_of_band
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (S : ContractiveReducingGraphSelection H)
+    {τ : ℝ} (x : H.A0.domain) (hx : ‖H.A0 x‖ ≤ τ * ‖(x : E0)‖) :
+    ‖H.A1 ⟨S.X (x : E0), S.preservesDomains x⟩‖ ≤
+      (‖S.X‖ * τ + ‖S.X‖ * ‖H.B01‖ * ‖S.X‖ + ‖H.B10‖) * ‖(x : E0)‖ := by
+  obtain ⟨_hdom, hric⟩ :=
+    (strongSolvesRiccati_iff_pointwise H S.X).1 S.strongSolvesRiccati
+  have hkey : H.A1 ⟨S.X (x : E0), S.preservesDomains x⟩ =
+      S.X (H.A0 x + H.B01 (S.X (x : E0))) - H.B10 (x : E0) :=
+    eq_sub_of_add_eq (hric x)
+  have h1 : ‖H.B01 (S.X (x : E0))‖ ≤ ‖H.B01‖ * (‖S.X‖ * ‖(x : E0)‖) :=
+    le_trans (H.B01.le_opNorm _)
+      (mul_le_mul_of_nonneg_left (S.X.le_opNorm _) (norm_nonneg _))
+  have h2 : ‖H.A0 x + H.B01 (S.X (x : E0))‖ ≤
+      τ * ‖(x : E0)‖ + ‖H.B01‖ * (‖S.X‖ * ‖(x : E0)‖) :=
+    le_trans (norm_add_le _ _) (add_le_add hx h1)
+  rw [hkey]
+  calc ‖S.X (H.A0 x + H.B01 (S.X (x : E0))) - H.B10 (x : E0)‖
+      ≤ ‖S.X (H.A0 x + H.B01 (S.X (x : E0)))‖ + ‖H.B10 (x : E0)‖ :=
+        norm_sub_le _ _
+    _ ≤ ‖S.X‖ * ‖H.A0 x + H.B01 (S.X (x : E0))‖ + ‖H.B10‖ * ‖(x : E0)‖ :=
+        add_le_add (S.X.le_opNorm _) (H.B10.le_opNorm _)
+    _ ≤ ‖S.X‖ * (τ * ‖(x : E0)‖ + ‖H.B01‖ * (‖S.X‖ * ‖(x : E0)‖)) +
+          ‖H.B10‖ * ‖(x : E0)‖ :=
+        add_le_add (mul_le_mul_of_nonneg_left h2 (norm_nonneg _)) le_rfl
+    _ = (‖S.X‖ * τ + ‖S.X‖ * ‖H.B01‖ * ‖S.X‖ + ‖H.B10‖) * ‖(x : E0)‖ := by
+        ring
+
 /-- **The analytic half of the unbounded selection seam, discharged from a
 spectral band bound.**
 
@@ -270,8 +318,43 @@ theorem exists_unboundedApproximateLeadingSingularFamily
   -- graph-norm perturbation argument itself.  This line was `aesop`, which does not close
   -- the goal — so the module did not compile, and nothing reported that because
   -- `FinishTanTwoTheta` has no `globs` in `lakefile.toml` and is therefore never built as a
-  -- library.  A `sorry` is the honest form: it compiles, and `scripts/audit_scan.py --defn`
-  -- and the readiness gate can both see it.
+  -- library.  The open term below is the honest form: it compiles, and
+  -- `scripts/audit_scan.py --defn` and the readiness gate can both see it.
+  --
+  -- MEASURED 2026-08-10.  The spectral-cutoff route was worked out and does not close, for
+  -- a reason worth recording so it is not re-attempted.  Two facts are now available and
+  -- reduce the problem, but do not finish it:
+  --
+  --   * `unboundedApproximateLeadingSingularFamily_of_bandBound` discharges both pairing
+  --     fields from band bounds `‖A0 x‖ ≤ τ`, `‖A1 y‖ ≤ τ` at residual level `ε₀` whenever
+  --     `τ * ε₀ ≤ ε`.  No norm of a diagonal block survives.
+  --   * `norm_A1_apply_le_of_band` transports a band through `X` by the Riccati equation,
+  --     so only the *right* vectors need to be placed in a band; the left band bound then
+  --     comes along the image.
+  --
+  -- What blocks the remaining step is a missing RATE, and it appears identically in both
+  -- error channels.  Writing `P` for a spectral band projection of `A0` at radius `τ`, the
+  -- surviving pairing evaluates exactly to `(‖P X x‖ - a) * ⟪A1 y, y⟫` — the leakage term
+  -- is annihilated because `y` lies in the band and the band projection commutes with `A1`
+  -- — so the pairing is (residual) * (band radius).  Closing it therefore requires band
+  -- vectors that reproduce the leading singular values to accuracy `ε / τ`.  Band
+  -- projections converge only STRONGLY to the identity
+  -- (`TauCeti.LinearPMap.tendsto_specProjection_Icc`), and
+  -- `approximationSingularValue_comp_strongProjection_tendsto_complex` likewise gives
+  -- convergence without a rate; `τ * (displacement at radius τ)` need not tend to zero.
+  -- Choosing the ambient family first fixes its level before `τ` is known, and choosing
+  -- `τ` first does not bound the displacement — the dependency is genuinely circular.
+  --
+  -- A second, independent mismatch: the ambient selection places its vectors in spectral
+  -- bands of the GRAM operator `X⋆X` (established as a local step inside
+  -- `exists_gramSpectralBandModel`, though not exported), whereas the band needed here is
+  -- one of `A0`.  Those operators do not commute in general, so the existing selection
+  -- cannot be re-aimed at the required band by plumbing alone.
+  --
+  -- Neither observation refutes the statement; both say that no argument resting only on
+  -- strong convergence of spectral cutoffs will establish it.  A construction that tunes
+  -- the two real pairings directly — they are two scalars, and the domain is dense with
+  -- many free directions — is not ruled out and is the next thing to try.
   sorry
 
 /-- Error term in the graph-norm stable scalar estimate. -/
