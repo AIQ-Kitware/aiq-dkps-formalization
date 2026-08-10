@@ -216,7 +216,11 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # Added 2026-08-10 with the module: multiplication by the REAL coordinate and the
  # intertwining law transporting `cyclicIsometry_coordMulLp` to the real spectrum.
  # Imports `RealSpectrumCyclicModel`, already in this topic, so no forward reference.
- +[A+"RealSpectrumIntertwining"]),
+ +[A+"RealSpectrumIntertwining"]
+ # Added 2026-08-10 with the module: the cyclic decomposition and countable Hilbert-sum
+ # statements transported to the real spectrum, plus the push-forward identity that
+ # measures the `Measure C` boundary.  Imports `RealSpectrumIntertwining`, already here.
+ +[A+"RealSpectrumCyclicDecomposition"]),
 ("T25","The Hilbert-Schmidt Sylvester flow",
  [A+x for x in ["HilbertSchmidt.Block","Sylvester.BlockEstimate","Sylvester.BlockIdentity",
                 "Sylvester.Generator","Sylvester.Group","Sylvester.SpectralGap"]]),
