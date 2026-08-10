@@ -1,0 +1,20 @@
+{
+  "agent_id": "aivm-2404-jon",
+  "scope": [
+    "/aiq-dkps-formalization",
+    "/TauCetiRoadmap",
+    "/TauCetiReview",
+    "/TauCeti"
+  ],
+  "n_prompts": 114,
+  "n_events": 325,
+  "n_sessions": 10,
+  "first_prompt": "2026-07-27T15:55:49.534Z",
+  "last_prompt": "2026-08-10T02:04:18.381Z",
+  "cwds": [
+    "/home/joncrall/code/aiq-dkps-formalization",
+    "/home/joncrall/code/aiq-dkps-formalization/external/TauCeti"
+  ],
+  "transcript_files_scanned": 11,
+  "notes": "TOOL CHANGE (extract_prompts.py, classify()): three routing rules added, all in the spirit of the existing slash_body/slash_command routes rather than new policy. (1) A bundled-SKILL body injected as a user record -- prefix 'Base directory for this skill:' -- is now slash_body. On this machine one such record (the design-sync skill, 28,011 chars) was counted as a human prompt and by itself carried 18% of the slice's human characters. It passes every check in section 4 of AGENT-PROMPT.md: not isSidechain, no known synthetic prefix, and its register is documentation rather than instruction. This is a FOURTH failure mode and belongs in that list. (2) A bare typed slash command (unwrapped, no <command-name>) is now slash_command; four /compact turns were being counted as prompts. (3) The harness-generated '--continue' turn is now resume_continuation. NET EFFECT HERE: 120 prompts / 155,165 chars -> 114 / 127,089, i.e. -5% of prompts but -18% of characters. Other agents' slices will shift slightly if they re-run; the direction is always downward and concentrated in characters, not counts. STRUCTURE OF THIS STORE: 67 transcript files are in scope but only 11 contain a non-sidechain user record -- the other 56 are subagent transcripts. This slice is a coordinator/subagent workflow, so file counts overstate human sessions ~6x. NO RESUME DUPLICATION: 0 uuids appear in more than one file (11257 raw user records, 11257 unique), unlike toothbrush-jon's 1280->389. Dedup is running; there was simply nothing to dedup. CROSS-CHECK: ~/.claude/history.jsonl exists and logs 188 typed prompts for this project against 114 extracted -- see FINDINGS.md, the gap is real and is not loss."
+}
