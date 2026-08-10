@@ -117,6 +117,140 @@ theorem continuous_symbolRestrict {K s : Set 𝕜} (h : s ⊆ K) :
     Continuous (symbolRestrict h) :=
   ContinuousMap.continuous_precomp _
 
+/-! ## The self-adjoint calculus, at `RCLike` scalars
+
+Below, the *operator-algebra* scalar is a general `RCLike` field `𝕜` while the
+functional calculus itself is over `ℝ`.  Mathlib derives
+`ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint` by spectrum
+restriction only at `𝕜 = ℂ`, and
+`ContinuousLinearMap.instContinuousFunctionalCalculusRealIsSelfAdjoint` (in
+`ForTauCeti/Analysis/InnerProductSpace/RealContinuousFunctionalCalculus.lean`)
+supplies it at `𝕜 = ℝ`.  The calculus is therefore carried as a hypothesis, in
+the same shape `ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean`
+uses: the two scalar-action assumptions plus the calculus itself, once for each
+of the two spaces.  Every one of them is found by typeclass inference at
+`𝕜 = ℝ` and at `𝕜 = ℂ` alike, so no consumer at either field has to supply
+anything. -/
+
+section SelfAdjoint
+
+variable [CompleteSpace E] [CompleteSpace F]
+variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
+  [Algebra ℝ (F →L[𝕜] F)] [IsScalarTower ℝ 𝕜 (F →L[𝕜] F)]
+  [ContinuousFunctionalCalculus ℝ (F →L[𝕜] F) IsSelfAdjoint]
+
+/-- **A rectangular intertwiner of self-adjoint operators intertwines their real
+continuous functional calculi.**
+
+This is the self-adjoint analogue of `cfcHom_intertwines`.  The operators are
+`𝕜`-linear for an arbitrary `RCLike` field `𝕜`, but the functional-calculus
+scalar is `ℝ`, so only the single generator `id` is mathematically needed; the
+Stone--Weierstrass `star_id` case reduces to the same generator by
+self-adjointness.
+
+The theorem is deliberately stated on a common compact set `K`.  This is the
+right reusable form for angle operators: `Θ₀` and `Θ₁` can have different real
+spectra while both lie in the same interval, and an intertwiner
+`X Θ₁ = Θ₀ X` then automatically intertwines every continuous real function of
+the two angles, in particular `sin` and `cos`.  `cfc_intertwines_selfAdjoint`
+is the form that picks `K` for the caller. -/
+theorem cfcHom_intertwines_selfAdjoint
+    {u : E →L[𝕜] E} {v : F →L[𝕜] F} (hu : IsSelfAdjoint u) (hv : IsSelfAdjoint v)
+    {X : F →L[𝕜] E}
+    (hint : X ∘L v = u ∘L X)
+    {K : Set ℝ} (hK : IsCompact K)
+    (huK : _root_.spectrum ℝ u ⊆ K) (hvK : _root_.spectrum ℝ v ⊆ K) (g : C(K, ℝ)) :
+    X ∘L cfcHom hv (symbolRestrict hvK g)
+      = cfcHom hu (symbolRestrict huK g) ∘L X := by
+  have : CompactSpace K := isCompact_iff_compactSpace.mp hK
+  induction g using ContinuousMap.induction_on_of_compact with
+  | const r =>
+      have h1 : symbolRestrict hvK (ContinuousMap.const K r)
+          = algebraMap ℝ (C(_root_.spectrum ℝ v, ℝ)) r := rfl
+      have h2 : symbolRestrict huK (ContinuousMap.const K r)
+          = algebraMap ℝ (C(_root_.spectrum ℝ u, ℝ)) r := rfl
+      rw [h1, h2, AlgHomClass.commutes, AlgHomClass.commutes]
+      -- The two `ℝ`-algebra maps are the `𝕜`-scalar `algebraMap ℝ 𝕜 r` acting on `1`,
+      -- and `X` is `𝕜`-linear, so it passes that scalar.
+      have hEr : (algebraMap ℝ (E →L[𝕜] E)) r = (algebraMap ℝ 𝕜 r) • (1 : E →L[𝕜] E) := by
+        rw [Algebra.algebraMap_eq_smul_one, ← IsScalarTower.algebraMap_smul 𝕜]
+      have hFr : (algebraMap ℝ (F →L[𝕜] F)) r = (algebraMap ℝ 𝕜 r) • (1 : F →L[𝕜] F) := by
+        rw [Algebra.algebraMap_eq_smul_one, ← IsScalarTower.algebraMap_smul 𝕜]
+      rw [hEr, hFr]
+      ext y
+      simp only [ContinuousLinearMap.coe_comp, Function.comp_apply, smul_apply,
+        one_apply_eq_self, map_smul]
+  | id =>
+      have h1 : symbolRestrict hvK (ContinuousMap.restrict K (ContinuousMap.id ℝ))
+          = ContinuousMap.restrict _ (ContinuousMap.id ℝ) := rfl
+      have h2 : symbolRestrict huK (ContinuousMap.restrict K (ContinuousMap.id ℝ))
+          = ContinuousMap.restrict _ (ContinuousMap.id ℝ) := rfl
+      rw [h1, h2, cfcHom_id, cfcHom_id]
+      exact hint
+  | star_id =>
+      have h1 : symbolRestrict hvK (star (ContinuousMap.restrict K (ContinuousMap.id ℝ)))
+          = star (ContinuousMap.restrict _ (ContinuousMap.id ℝ)) := rfl
+      have h2 : symbolRestrict huK (star (ContinuousMap.restrict K (ContinuousMap.id ℝ)))
+          = star (ContinuousMap.restrict _ (ContinuousMap.id ℝ)) := rfl
+      rw [h1, h2, map_star, map_star, cfcHom_id, cfcHom_id, hv.star_eq, hu.star_eq]
+      exact hint
+  | add f g hf hg =>
+      simp only [map_add, ContinuousLinearMap.comp_add,
+        ContinuousLinearMap.add_comp, hf, hg]
+  | mul f g hf hg =>
+      rw [map_mul, map_mul, map_mul, map_mul]
+      ext y
+      exact (congrArg (fun T : F →L[𝕜] E => T (cfcHom hv (symbolRestrict hvK g) y)) hf
+        |>.trans (congrArg
+          (fun T : F →L[𝕜] E => cfcHom hu (symbolRestrict huK f) (T y)) hg))
+  | frequently f hf =>
+      have hc1 : Continuous
+          (fun g : C(K, ℝ) => X ∘L cfcHom hv (symbolRestrict hvK g)) :=
+        (ContinuousLinearMap.compL 𝕜 F F E X).continuous.comp
+          ((cfcHom_continuous hv).comp (continuous_symbolRestrict hvK))
+      have hc2 : Continuous
+          (fun g : C(K, ℝ) => cfcHom hu (symbolRestrict huK g) ∘L X) :=
+        ((ContinuousLinearMap.compL 𝕜 F E E).flip X).continuous.comp
+          ((cfcHom_continuous hu).comp (continuous_symbolRestrict huK))
+      rw [← Set.mem_ofPred (p := fun g : C(K, ℝ) =>
+          X ∘L cfcHom hv (symbolRestrict hvK g)
+            = cfcHom hu (symbolRestrict huK g) ∘L X),
+        ← (isClosed_eq hc1 hc2).closure_eq]
+      exact mem_closure_of_frequently_of_tendsto hf Filter.tendsto_id
+
+/-- **An intertwiner of self-adjoint operators intertwines `cfc f` for every
+symbol continuous on the union of the two spectra.**
+
+The `cfc`-level form of `cfcHom_intertwines_selfAdjoint`, with the common
+compact set chosen for the caller: `_root_.spectrum ℝ u ∪ _root_.spectrum ℝ v`
+is compact because the functional-calculus instance itself asserts compactness
+of each spectrum, so the section's hypotheses already supply it — no
+`ProperSpace`, and no `NormedAlgebra ℝ (E →L[𝕜] E)` for `spectrum.isCompact`,
+has to be added.
+
+This is the form angle operators want.  For a globally continuous symbol,
+supply `Continuous.continuousOn`. -/
+theorem cfc_intertwines_selfAdjoint
+    {u : E →L[𝕜] E} {v : F →L[𝕜] F} (hu : IsSelfAdjoint u) (hv : IsSelfAdjoint v)
+    {X : F →L[𝕜] E}
+    (hint : X ∘L v = u ∘L X) {f : ℝ → ℝ}
+    (hf : ContinuousOn f (_root_.spectrum ℝ u ∪ _root_.spectrum ℝ v)) :
+    X ∘L cfc f v = cfc f u ∘L X := by
+  have hK : IsCompact (_root_.spectrum ℝ u ∪ _root_.spectrum ℝ v) :=
+    (isCompact_iff_compactSpace.mpr
+        (ContinuousFunctionalCalculus.compactSpace_spectrum (R := ℝ) (p := IsSelfAdjoint) u)).union
+      (isCompact_iff_compactSpace.mpr
+        (ContinuousFunctionalCalculus.compactSpace_spectrum (R := ℝ) (p := IsSelfAdjoint) v))
+  have huK : _root_.spectrum ℝ u ⊆ _root_.spectrum ℝ u ∪ _root_.spectrum ℝ v :=
+    Set.subset_union_left
+  have hvK : _root_.spectrum ℝ v ⊆ _root_.spectrum ℝ u ∪ _root_.spectrum ℝ v :=
+    Set.subset_union_right
+  rw [cfc_apply f v hv (hf.mono hvK), cfc_apply f u hu (hf.mono huK)]
+  exact cfcHom_intertwines_selfAdjoint hu hv hint hK huK hvK ⟨_, hf.domRestrict⟩
+
+end SelfAdjoint
+
 section Complex
 
 attribute [local instance] IsStarNormal.instContinuousFunctionalCalculus
@@ -207,75 +341,6 @@ theorem cfcHom_intertwines
         ((ContinuousLinearMap.compL ℂ F E E).flip X).continuous.comp
           ((cfcHom_continuous hu).comp (continuous_symbolRestrict huK))
       rw [← Set.mem_ofPred (p := fun g : C(K, ℂ) =>
-          X ∘L cfcHom hv (symbolRestrict hvK g)
-            = cfcHom hu (symbolRestrict huK g) ∘L X),
-        ← (isClosed_eq hc1 hc2).closure_eq]
-      exact mem_closure_of_frequently_of_tendsto hf Filter.tendsto_id
-
-/-- **A rectangular intertwiner of self-adjoint operators intertwines their real
-continuous functional calculi.**
-
-This is the self-adjoint analogue of `cfcHom_intertwines`.  The codomain
-operators remain complex-linear, but the functional-calculus scalar is `ℝ`, so
-only the single generator `id` is mathematically needed; the Stone--Weierstrass
-`star_id` case reduces to the same generator by self-adjointness.
-
-The theorem is deliberately stated on a common compact set `K`.  This is the
-right reusable form for angle operators: `Θ₀` and `Θ₁` can have different real
-spectra while both lie in the same interval, and an intertwiner
-`X Θ₁ = Θ₀ X` then automatically intertwines every continuous real function of
-the two angles, in particular `sin` and `cos`. -/
-theorem cfcHom_intertwines_selfAdjoint
-    {u : E →L[ℂ] E} {v : F →L[ℂ] F} (hu : IsSelfAdjoint u) (hv : IsSelfAdjoint v)
-    {X : F →L[ℂ] E}
-    (hint : X ∘L v = u ∘L X)
-    {K : Set ℝ} (hK : IsCompact K)
-    (huK : _root_.spectrum ℝ u ⊆ K) (hvK : _root_.spectrum ℝ v ⊆ K) (g : C(K, ℝ)) :
-    X ∘L cfcHom hv (symbolRestrict hvK g)
-      = cfcHom hu (symbolRestrict huK g) ∘L X := by
-  have : CompactSpace K := isCompact_iff_compactSpace.mp hK
-  induction g using ContinuousMap.induction_on_of_compact with
-  | const r =>
-      have h1 : symbolRestrict hvK (ContinuousMap.const K r)
-          = algebraMap ℝ (C(_root_.spectrum ℝ v, ℝ)) r := rfl
-      have h2 : symbolRestrict huK (ContinuousMap.const K r)
-          = algebraMap ℝ (C(_root_.spectrum ℝ u, ℝ)) r := rfl
-      rw [h1, h2, AlgHomClass.commutes, AlgHomClass.commutes]
-      ext y
-      simp [Algebra.algebraMap_eq_smul_one]
-  | id =>
-      have h1 : symbolRestrict hvK (ContinuousMap.restrict K (ContinuousMap.id ℝ))
-          = ContinuousMap.restrict _ (ContinuousMap.id ℝ) := rfl
-      have h2 : symbolRestrict huK (ContinuousMap.restrict K (ContinuousMap.id ℝ))
-          = ContinuousMap.restrict _ (ContinuousMap.id ℝ) := rfl
-      rw [h1, h2, cfcHom_id, cfcHom_id]
-      exact hint
-  | star_id =>
-      have h1 : symbolRestrict hvK (star (ContinuousMap.restrict K (ContinuousMap.id ℝ)))
-          = star (ContinuousMap.restrict _ (ContinuousMap.id ℝ)) := rfl
-      have h2 : symbolRestrict huK (star (ContinuousMap.restrict K (ContinuousMap.id ℝ)))
-          = star (ContinuousMap.restrict _ (ContinuousMap.id ℝ)) := rfl
-      rw [h1, h2, map_star, map_star, cfcHom_id, cfcHom_id, hv.star_eq, hu.star_eq]
-      exact hint
-  | add f g hf hg =>
-      simp only [map_add, ContinuousLinearMap.comp_add,
-        ContinuousLinearMap.add_comp, hf, hg]
-  | mul f g hf hg =>
-      rw [map_mul, map_mul, map_mul, map_mul]
-      ext y
-      exact (congrArg (fun T : F →L[ℂ] E => T (cfcHom hv (symbolRestrict hvK g) y)) hf
-        |>.trans (congrArg
-          (fun T : F →L[ℂ] E => cfcHom hu (symbolRestrict huK f) (T y)) hg))
-  | frequently f hf =>
-      have hc1 : Continuous
-          (fun g : C(K, ℝ) => X ∘L cfcHom hv (symbolRestrict hvK g)) :=
-        (ContinuousLinearMap.compL ℂ F F E X).continuous.comp
-          ((cfcHom_continuous hv).comp (continuous_symbolRestrict hvK))
-      have hc2 : Continuous
-          (fun g : C(K, ℝ) => cfcHom hu (symbolRestrict huK g) ∘L X) :=
-        ((ContinuousLinearMap.compL ℂ F E E).flip X).continuous.comp
-          ((cfcHom_continuous hu).comp (continuous_symbolRestrict huK))
-      rw [← Set.mem_ofPred (p := fun g : C(K, ℝ) =>
           X ∘L cfcHom hv (symbolRestrict hvK g)
             = cfcHom hu (symbolRestrict huK g) ∘L X),
         ← (isClosed_eq hc1 hc2).closure_eq]

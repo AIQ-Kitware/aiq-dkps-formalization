@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Geometry.Halmos.TwoProjections
+import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner
 import Mathlib.Analysis.InnerProductSpace.ProdL2
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 
 /-!
 # Davis--Kahan 1970, Theorem 3.1: the realization half
@@ -1059,6 +1061,158 @@ theorem HalmosAngleDatum.prod_sin₁ (d : HalmosAngleDatum 𝕜 E F)
     (d.prod d').sin₁ = blockMap d.sin₁ d'.sin₁ := rfl
 
 end Product
+
+/-! ## A datum built from a single pair of intertwined angle operators
+
+`HalmosAngleDatum` records `cos Θ₀, sin Θ₀, cos Θ₁, sin Θ₁` and their
+intertwiner as *independent* data, because that is the shape Theorem 3.1's
+realization half consumes.  The mathematics behind the shape is smaller: there
+is one angle operator on each side, and one map between them.  This section
+supplies the constructor that says so.
+
+Given self-adjoint `Θ₀ : E →L[𝕜] E` and `Θ₁ : F →L[𝕜] F` and a single
+`J : E →L[𝕜] F` with `J Θ₀ = Θ₁ J`, six of the datum's twelve axioms are
+*derived* rather than assumed:
+
+* `commute₀`, `commute₁` — `cos` and `sin` commute as symbols, and the
+  functional calculus is an algebra map;
+* `pythagoras₀`, `pythagoras₁` — `cos² + sin² = 1` as symbols;
+* `map_cos`, `map_sin` — `TauCeti.LinearPMap.cfc_intertwines_selfAdjoint`
+  carries `J Θ₀ = Θ₁ J` to every symbol continuous on the union of the two real
+  spectra, by Stone--Weierstrass.
+
+The four self-adjointness axioms are `cfc_predicate`.  What is *not* derivable
+is the last pair: `J` isometric on `ran sin Θ₀` and co-isometric onto
+`ran sin Θ₁` is a statement about spectral *multiplicities*, invisible to a
+functional calculus of one operator at a time, so those stay hypotheses.
+
+**No confinement of the spectra is required.**  One expects to have to assume
+`spectrum ℝ Θᵢ ⊆ [0, π/2]`, and for `Θᵢ` to *deserve the name* "angle operator"
+one does — that is what makes `cos Θᵢ` and `sin Θᵢ` nonnegative, hence what lets
+`Θᵢ` be recovered from the datum.  But `HalmosAngleDatum` records no
+nonnegativity, and none of the six derived axioms uses one: `cos² + sin² = 1`
+and `J f(Θ₀) = f(Θ₁) J` hold on all of `ℝ`.  Adding the hypothesis would narrow
+the constructor without strengthening anything it produces, so it is omitted. -/
+
+section OfIntertwinedAngles
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
+  [Algebra ℝ (F →L[𝕜] F)] [IsScalarTower ℝ 𝕜 (F →L[𝕜] F)]
+  [ContinuousFunctionalCalculus ℝ (F →L[𝕜] F) IsSelfAdjoint]
+
+/-- **The angle datum of a pair of intertwined self-adjoint angle operators.**
+
+`cos Θᵢ` and `sin Θᵢ` are the continuous functional calculus of the two angle
+operators, and the intertwiner is the given `J`.  Every axiom except the last
+two is proved from the functional calculus; see the section preamble for which
+and why.  The two partial-isometry axioms are the caller's, because they are
+multiplicity statements that no functional calculus can supply.
+
+The functional-calculus hypothesis block is the one
+`ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean` uses; it is
+discharged by typeclass inference at `𝕜 = ℝ` and at `𝕜 = ℂ` alike. -/
+noncomputable def HalmosAngleDatum.ofIntertwinedAngles
+    {Θ₀ : E →L[𝕜] E} {Θ₁ : F →L[𝕜] F}
+    (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)
+    (J : E →L[𝕜] F) (hJ : J ∘L Θ₀ = Θ₁ ∘L J)
+    (hisom : ContinuousLinearMap.adjoint J ∘L J ∘L cfc Real.sin Θ₀ = cfc Real.sin Θ₀)
+    (hcoisom : J ∘L ContinuousLinearMap.adjoint J ∘L cfc Real.sin Θ₁ = cfc Real.sin Θ₁) :
+    HalmosAngleDatum 𝕜 E F where
+  cos₀ := cfc Real.cos Θ₀
+  sin₀ := cfc Real.sin Θ₀
+  cos₁ := cfc Real.cos Θ₁
+  sin₁ := cfc Real.sin Θ₁
+  intertwiner := J
+  isSelfAdjoint_cos₀ := cfc_predicate _ _
+  isSelfAdjoint_sin₀ := cfc_predicate _ _
+  isSelfAdjoint_cos₁ := cfc_predicate _ _
+  isSelfAdjoint_sin₁ := cfc_predicate _ _
+  commute₀ := by
+    rw [← ContinuousLinearMap.mul_def, ← ContinuousLinearMap.mul_def,
+      ← cfc_mul Real.cos Real.sin Θ₀ Real.continuous_cos.continuousOn
+        Real.continuous_sin.continuousOn,
+      ← cfc_mul Real.sin Real.cos Θ₀ Real.continuous_sin.continuousOn
+        Real.continuous_cos.continuousOn]
+    exact cfc_congr fun x _ => mul_comm _ _
+  commute₁ := by
+    rw [← ContinuousLinearMap.mul_def, ← ContinuousLinearMap.mul_def,
+      ← cfc_mul Real.cos Real.sin Θ₁ Real.continuous_cos.continuousOn
+        Real.continuous_sin.continuousOn,
+      ← cfc_mul Real.sin Real.cos Θ₁ Real.continuous_sin.continuousOn
+        Real.continuous_cos.continuousOn]
+    exact cfc_congr fun x _ => mul_comm _ _
+  pythagoras₀ := by
+    rw [← ContinuousLinearMap.mul_def, ← ContinuousLinearMap.mul_def,
+      ← cfc_mul Real.cos Real.cos Θ₀ Real.continuous_cos.continuousOn
+        Real.continuous_cos.continuousOn,
+      ← cfc_mul Real.sin Real.sin Θ₀ Real.continuous_sin.continuousOn
+        Real.continuous_sin.continuousOn,
+      ← cfc_add (a := Θ₀) (fun x => Real.cos x * Real.cos x)
+        (fun x => Real.sin x * Real.sin x) (by fun_prop) (by fun_prop),
+      ← cfc_one ℝ Θ₀ hΘ₀]
+    exact cfc_congr fun x _ => by
+      simpa [pow_two] using Real.cos_sq_add_sin_sq x
+  pythagoras₁ := by
+    rw [← ContinuousLinearMap.mul_def, ← ContinuousLinearMap.mul_def,
+      ← cfc_mul Real.cos Real.cos Θ₁ Real.continuous_cos.continuousOn
+        Real.continuous_cos.continuousOn,
+      ← cfc_mul Real.sin Real.sin Θ₁ Real.continuous_sin.continuousOn
+        Real.continuous_sin.continuousOn,
+      ← cfc_add (a := Θ₁) (fun x => Real.cos x * Real.cos x)
+        (fun x => Real.sin x * Real.sin x) (by fun_prop) (by fun_prop),
+      ← cfc_one ℝ Θ₁ hΘ₁]
+    exact cfc_congr fun x _ => by
+      simpa [pow_two] using Real.cos_sq_add_sin_sq x
+  map_cos :=
+    TauCeti.LinearPMap.cfc_intertwines_selfAdjoint hΘ₁ hΘ₀ hJ
+      Real.continuous_cos.continuousOn
+  map_sin :=
+    TauCeti.LinearPMap.cfc_intertwines_selfAdjoint hΘ₁ hΘ₀ hJ
+      Real.continuous_sin.continuousOn
+  isometry_on_sin₀ := hisom
+  coisometry_on_sin₁ := hcoisom
+
+variable {Θ₀ : E →L[𝕜] E} {Θ₁ : F →L[𝕜] F}
+  (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁) (J : E →L[𝕜] F)
+  (hJ : J ∘L Θ₀ = Θ₁ ∘L J)
+  (hisom : ContinuousLinearMap.adjoint J ∘L J ∘L cfc Real.sin Θ₀ = cfc Real.sin Θ₀)
+  (hcoisom : J ∘L ContinuousLinearMap.adjoint J ∘L cfc Real.sin Θ₁ = cfc Real.sin Θ₁)
+
+/-- The `P`-side cosine of the constructed datum is `cos Θ₀`. -/
+@[simp]
+theorem HalmosAngleDatum.ofIntertwinedAngles_cos₀ :
+    (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).cos₀
+      = cfc Real.cos Θ₀ := rfl
+
+/-- The `P`-side sine of the constructed datum is `sin Θ₀`. -/
+@[simp]
+theorem HalmosAngleDatum.ofIntertwinedAngles_sin₀ :
+    (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).sin₀
+      = cfc Real.sin Θ₀ := rfl
+
+/-- The `Pᗮ`-side cosine of the constructed datum is `cos Θ₁`. -/
+@[simp]
+theorem HalmosAngleDatum.ofIntertwinedAngles_cos₁ :
+    (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).cos₁
+      = cfc Real.cos Θ₁ := rfl
+
+/-- The `Pᗮ`-side sine of the constructed datum is `sin Θ₁`. -/
+@[simp]
+theorem HalmosAngleDatum.ofIntertwinedAngles_sin₁ :
+    (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).sin₁
+      = cfc Real.sin Θ₁ := rfl
+
+/-- The constructed datum's intertwiner is the given `J`. -/
+@[simp]
+theorem HalmosAngleDatum.ofIntertwinedAngles_intertwiner :
+    (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).intertwiner
+      = J := rfl
+
+end OfIntertwinedAngles
 
 end HiddenFoundations
 end MathAhead
