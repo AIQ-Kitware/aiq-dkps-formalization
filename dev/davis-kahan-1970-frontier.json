@@ -1222,6 +1222,21 @@
    "notes": "Repointed 2026-08-08. The former home `DavisKahan/Experimental/Frontier/Section9Analytic.lean` was deleted at commit 95bbd5ea; every declaration in it was an unproved skeleton, superseded by the concrete `FreeBeam.Model` realization. OPEN: no constructor survives and none has been written. The type is consumed only by `NumericalExampleCertificate.printedConclusions`; no value of it exists in the repository. The node now names the type that must be inhabited rather than a deleted constructor.",
    "external": true,
    "open_obligation": true
+  },
+  {
+   "id": "s1-ui-norms-kyfan-suprema",
+   "title": "Section 1, (1.12)-(1.13): the Ky Fan norm as a supremum",
+   "kind": "source",
+   "module": "DavisKahan.Sources.DavisKahan1970.Section1UnitaryInvariantNorms",
+   "declaration": "TauCeti.DavisKahan1970.equation1_12",
+   "dependencies": [],
+   "source_census_ids": [
+    "S1-ui-norms"
+   ],
+   "priority": "low",
+   "open_obligation": true,
+   "notes": "Added 2026-08-09 (Claude Opus 5) so the required census row `S1-ui-norms` is mapped.  The row became required in the same edit that added this node: M38 proved (1.12) and both forms of (1.13), and on integration the row was set to `compiled_specialization` rather than the `compiled_exact` the mission recorded, which moved it off the terminal-status list.  Companion declarations on the same row: `equation1_13_compressions`, `equation1_13_reSum` (both exact, no narrowing), and the two projector-composition `<=` halves.  Marked an open obligation for one reason only, recorded as the row's `scope_gap`: `equation1_12` carries a codomain-room hypothesis that printed (1.12) does not, since (1.12) quantifies over projectors on the domain alone.  It enters through the proof -- the rectangular Ky Fan principle needs room for `nu` orthonormal vectors on both sides -- and it excludes an operator whose codomain has finite dimension below `nu`, a class the paper permits.  The removal route is worked out on the row's `next_action`; when it lands, this node stops being an open obligation and the row returns to `compiled_exact`.",
+   "external": true
   }
  ],
  "coverage_policy": {
