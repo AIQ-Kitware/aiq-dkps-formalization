@@ -204,7 +204,11 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # plus its Submodule C-isomorphism with the existing complex-spectrum `bddSymbols`.  It
  # imports `BorelCalculus.CyclicModel`, which is already in this topic, so filing it here
  # creates no forward reference.
- +[A+"RealSpectrumBorelSymbols"]),
+ +[A+"RealSpectrumBorelSymbols"]
+ # Added 2026-08-10 with the module: the diagonal spectral measure pushed forward to the
+ # REAL spectrum, its `MeasurePreserving` statement, and the `Lp C 2` transport across it.
+ # Imports `RealSpectrumBorelSymbols`, already in this topic, so no forward reference.
+ +[A+"RealSpectrumDiagonalMeasure"]),
 ("T25","The Hilbert-Schmidt Sylvester flow",
  [A+x for x in ["HilbertSchmidt.Block","Sylvester.BlockEstimate","Sylvester.BlockIdentity",
                 "Sylvester.Generator","Sylvester.Group","Sylvester.SpectralGap"]]),
