@@ -448,7 +448,7 @@ produces a path of orthogonal fixed-contour Riesz projections. -/
 theorem fixedContourRieszOperator_operatorPath_isOrthogonalProjection
     (Γ : PiecewiseC1ClosedContour) (A V : H →L[ℂ] H)
     (s : Set ℝ)
-    (hseparating : ∀ t (ht : t ∈ Set.Icc (0 : ℝ) 1),
+    (hseparating : ∀ t (_ht : t ∈ Set.Icc (0 : ℝ) 1),
       SpectralSeparatingContour (operatorPath A V t) s)
     (hgeometric : ∀ t (ht : t ∈ Set.Icc (0 : ℝ) 1),
       (hseparating t ht).geometric = Γ) :

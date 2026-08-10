@@ -1080,12 +1080,10 @@ theorem beamTrialVec_span_eq_top :
     rw [← inner_conj_symm (𝕜 := ℂ) beamTrialVecTwo beamTrialVecOne, h12, map_zero]
   have hne1 : beamTrialVecOne ≠ 0 := by
     intro hzero
-    have : (0 : ℂ) = 1 := by simpa [hzero] using h1
-    exact zero_ne_one this
+    simp [hzero] at h1
   have hne2 : beamTrialVecTwo ≠ 0 := by
     intro hzero
-    have : (0 : ℂ) = 1 := by simpa [hzero] using h2
-    exact zero_ne_one this
+    simp [hzero] at h2
   have hli : LinearIndependent ℂ ![beamTrialVecOne, beamTrialVecTwo] := by
     rw [LinearIndependent.pair_iff]
     intro α β hαβ

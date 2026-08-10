@@ -131,6 +131,7 @@ theorem blockCoordinate1_mem_zeroGraph_orthogonal (v : E1) :
   rw [hz0]
   simp only [inner_zero_right, inner_zero_left, add_zero]
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- A vector in the orthogonal complement of the zero graph has zero first
 coordinate. -/
 theorem fst_eq_zero_of_mem_zeroGraph_orthogonal
@@ -195,13 +196,13 @@ theorem eq_blockDiagonalOperator_of_preserves_coordinates
           WithLp.fst (T z0) + WithLp.fst (T z1) =
             blockCompression0 T (WithLp.fst z)
         rw [hz1fst]
-        simpa [blockCompression0, z0]
+        simp [blockCompression0, z0]
       · simp only [map_add]
         change
           WithLp.snd (T z0) + WithLp.snd (T z1) =
             blockCompression1 T (WithLp.snd z)
         rw [hz0snd]
-        simpa [blockCompression1, z1]
+        simp [blockCompression1, z1]
     _ = blockDiagonalOperator (blockCompression0 T) (blockCompression1 T) z := rfl
 
 /-- Algebraic block diagonalization from a unitary transport of the coordinate
