@@ -1,0 +1,171 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, GPT-5.6 Sol
+-/
+import DavisKahan.Sources.DavisKahan1970.Section8.SourceTheorem81
+import DavisKahan.SpectralTheory.Complexification.BoundedGapProjection
+import DavisKahan.SpectralTheory.Complexification.FormTransport
+import DavisKahan.SpectralTheory.FormSpectrumBounds
+
+/-!
+# Davis--Kahan 1970, Theorem 8.1 over a real Hilbert space
+
+The complex source theorem already proves the hard perturbation theory.  This
+file descends its canonical Section 8 branch to a real Hilbert space without
+re-running the spectral argument.
+
+The nontrivial point is branch selection: after complexification, the complex
+branch must itself be the complexification of a real subspace.  The bounded-gap
+spectral descent layer proves exactly that for the genuine bounded spectral
+projection.  Once this branch is identified, reduction, sharp form bounds and
+quarter-acuteness transport without loss.  The printed restricted-spectrum
+orientation is recovered natively over `ℝ` from the transported sharp form
+bounds using the scalar-generic coercive resolvent lemmas.
+-/
+
+namespace TauCeti
+namespace DavisKahan1970
+namespace Section8
+
+open Set
+open scoped InnerProductSpace
+open DavisKahanExt
+open TauCeti.DavisKahan
+open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.RealComplexification
+open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+
+noncomputable section
+
+universe v
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [CompleteSpace E]
+
+/-- Real-scalar counterpart of `Theorem81Conclusion`. -/
+structure Theorem81ConclusionReal
+    (A H : E →L[ℝ] E) (P Q : Submodule ℝ E)
+    [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (alpha delta : ℝ) : Prop where
+  /-- The open gap contains no real spectrum of the perturbed operator. -/
+  spectral_repulsion :
+    realSpectrum (A + H) ⊆ Set.Iic alpha ∪ Set.Ici (alpha + delta)
+  /-- The descended branch reduces the real perturbed operator. -/
+  branch_reduces : (A + H).Reduces Q
+  /-- Sharp upper form bound on the low branch. -/
+  branch_form_low : ∀ x ∈ Q, ⟪(A + H) x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2
+  /-- Sharp lower form bound on the complementary branch. -/
+  branch_form_high :
+    ∀ x ∈ Qᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪(A + H) x, x⟫_ℝ
+  /-- The printed low spectral orientation. -/
+  branch_spectrum_low : SpectrumIn (A + H) Q (Set.Iic alpha)
+  /-- The printed high spectral orientation. -/
+  branch_spectrum_high : SpectrumIn (A + H) Qᗮ (Set.Ici (alpha + delta))
+  /-- The selected branch is strictly inside the quarter turn. -/
+  quarter_acute : IsQuarterAcute P Q
+  /-- Equivalent scalar maximal-angle statement. -/
+  maximal_angle_lt_pi_div_four : maximalAngle P Q < Real.pi / 4
+
+/-- **Davis--Kahan 1970, Theorem 8.1, existence over a REAL Hilbert space.**
+
+From the printed real-scalar hypotheses alone there exists an orthogonally
+complemented real branch carrying the complete Theorem 8.1 existence
+conclusion.  The witness is the real descent of the actual bounded complex
+spectral branch; no contour or extra branch-selection hypothesis is supplied
+by the caller. -/
+theorem theorem8_1_canonicalBranch_real
+    (A H : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ}
+    (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
+    (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
+    (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P) :
+    ∃ (Q : Submodule ℝ E) (hQ : Q.HasOrthogonalProjection),
+      haveI : Q.HasOrthogonalProjection := hQ
+      Theorem81ConclusionReal A H P Q alpha delta := by
+  classical
+  have hAc : IsSelfAdjoint (complexify A) := (complexify_isSelfAdjoint_iff A).2 hA
+  have hHc : IsSelfAdjoint (complexify H) := (complexify_isSelfAdjoint_iff H).2 hH
+  have hsum : complexify A + complexify H = complexify (A + H) :=
+    (complexify_add A H).symm
+  have hconcC := theorem8_1_canonicalBranch
+    (E := RealComplexification E)
+    (complexify A) (complexify H) (complexifySubmodule P) hdelta hAc hHc
+    (fun z hz => mapsTo_complexifySubmodule hAP hz)
+    (fun z hz => re_inner_le_of_mem_complexifySubmodule hPlow hz)
+    (fun z hz => by
+      rw [← complexifySubmodule_orthogonal P] at hz
+      exact le_re_inner_of_mem_complexifySubmodule hPhigh hz)
+    (fun z hz => mapsTo_orthogonal_complexifySubmodule P hHP hz)
+    (fun z hz => mapsTo_of_mem_orthogonal_complexifySubmodule P hHPperp hz)
+  have hrep : realSpectrum (A + H) ⊆
+      Set.Iic alpha ∪ Set.Ici (alpha + delta) := by
+    rw [← realSpectrum_complexify (A + H), ← hsum]
+    exact hconcC.spectral_repulsion
+  let Q : Submodule ℝ E :=
+    realBoundedSpectralSubspaceIicOfGap (A + H) (hA.add hH)
+      alpha delta hdelta hrep
+  let hQ : Q.HasOrthogonalProjection :=
+    realBoundedSpectralSubspaceIicOfGap_hasOrthogonalProjection
+      (A + H) (hA.add hH) alpha delta hdelta hrep
+  haveI : Q.HasOrthogonalProjection := hQ
+  have hQc : complexifySubmodule Q =
+      canonicalLowBranch (complexify A + complexify H)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hAc.add hHc)) alpha := by
+    unfold Q
+    simpa only [canonicalLowBranch, hsum] using
+      (complexifySubmodule_realBoundedSpectralSubspaceIicOfGap
+        (A + H) (hA.add hH) alpha delta hdelta hrep)
+  have hreducesC : (complexify (A + H)).Reduces (complexifySubmodule Q) := by
+    rw [← hsum, hQc]
+    exact hconcC.branch_reduces
+  have hreduces : (A + H).Reduces Q :=
+    (complexify_reduces_iff (A + H) Q).1 hreducesC
+  have hlow : ∀ x ∈ Q, ⟪(A + H) x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2 := by
+    intro x hx
+    have hxC : ofReal x ∈ complexifySubmodule Q :=
+      (ofReal_mem_complexifySubmodule_iff Q x).2 hx
+    have hc := hconcC.branch_form_low (ofReal x) (hQc ▸ hxC)
+    rw [hsum] at hc
+    simpa [re_inner_complexify] using hc
+  have hhigh : ∀ x ∈ Qᗮ,
+      (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪(A + H) x, x⟫_ℝ := by
+    intro x hx
+    have hxC : ofReal x ∈ (complexifySubmodule Q)ᗮ := by
+      rw [← complexifySubmodule_orthogonal Q]
+      exact (ofReal_mem_complexifySubmodule_iff Qᗮ x).2 hx
+    have hc := hconcC.branch_form_high (ofReal x) (by simpa only [hQc] using hxC)
+    rw [hsum] at hc
+    simpa [re_inner_complexify] using hc
+  have hquarterC : IsQuarterAcute (complexifySubmodule P) (complexifySubmodule Q) := by
+    simpa only [hQc] using hconcC.quarter_acute
+  have hquarter : IsQuarterAcute P Q :=
+    (isQuarterAcute_complexifySubmodule_iff P Q).1 hquarterC
+  have hangle : maximalAngle P Q < Real.pi / 4 := by
+    have hmem : Real.pi / 4 ∈ Set.Ioc (-(Real.pi / 2)) (Real.pi / 2) :=
+      ⟨by linarith [Real.pi_pos], by linarith [Real.pi_pos]⟩
+    show Real.arcsin (subspaceGap P Q) < Real.pi / 4
+    rw [Real.arcsin_lt_iff_lt_sin' hmem, Real.sin_pi_div_four]
+    exact hquarter
+  refine ⟨Q, hQ, ?_⟩
+  exact
+    { spectral_repulsion := hrep
+      branch_reduces := hreduces
+      branch_form_low := hlow
+      branch_form_high := hhigh
+      branch_spectrum_low :=
+        spectrumIn_Iic_of_re_inner_le_generic hreduces.1 hlow
+      branch_spectrum_high :=
+        spectrumIn_Ici_of_le_re_inner_generic hreduces.2 hhigh
+      quarter_acute := hquarter
+      maximal_angle_lt_pi_div_four := hangle }
+
+end
+
+end Section8
+end DavisKahan1970
+end TauCeti

@@ -76,6 +76,29 @@ theorem mem_complexifySubmodule {U : Submodule ℝ E}
   rfl
 
 omit [CompleteSpace E] in
+/-- The range of a complexified real operator is exactly the complexification
+of its real range.  This belongs with subspace complexification rather than in
+an operator-ideal consumer: it is pure linear geometry and is useful whenever
+a real projection or partial isometry is descended from the complex side. -/
+theorem range_complexify
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    (T : E →L[ℝ] F) :
+    LinearMap.range (complexify T).toLinearMap =
+      complexifySubmodule (LinearMap.range T.toLinearMap) := by
+  ext z
+  constructor
+  · rintro ⟨w, rfl⟩
+    rw [mem_complexifySubmodule]
+    exact ⟨⟨re w, rfl⟩, ⟨im w, rfl⟩⟩
+  · intro hz
+    rw [mem_complexifySubmodule] at hz
+    rcases hz with ⟨⟨x, hx⟩, ⟨y, hy⟩⟩
+    refine ⟨mk x y, ?_⟩
+    apply RealComplexification.ext
+    · simpa using hx
+    · simpa using hy
+
+omit [CompleteSpace E] in
 /-- Membership criterion for a vector given by its coordinates. -/
 @[simp]
 theorem mk_mem_complexifySubmodule_iff (U : Submodule ℝ E) (x y : E) :
