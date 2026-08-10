@@ -1,340 +1,1150 @@
-# Davis--Kahan 1970: completion handoff
+# Davis--Kahan 1970 completion handoff — mathematical and architectural edition
 
-State as of 2026-08-09, HEAD `b73c7ecd`, build green at 9573 jobs.
+State inspected 2026-08-09 from checkpoint HEAD `69d1655a` (`main`, clean working tree).
 
-This is the work list for finishing the Davis--Kahan 1970 formalization, written so that a
-coordinator who has never seen this campaign can dispatch it, and so that a subagent handed one
-mission can start without reading the rest.
+This document is for an agent taking over the remaining Davis--Kahan 1970 campaign without prior context. It is intentionally more than a work list: it records the mathematical architecture, the proof routes already discovered, the routes already falsified, and the reusable infrastructure that now exists so that the next agent does not have to rediscover the campaign's hardest lessons.
 
-**Read first:** [`coordinator-subagent-workflow.md`](coordinator-subagent-workflow.md) --- how the
-loop is run, what a brief must contain, and the verification protocol. Everything in this file
-assumes it.
+Read `dev/coordinator-subagent-workflow.md` for the mechanical coordinator loop and `AGENTS.md` for repository policy. Before substantial work under `ForTauCeti/Analysis/InnerProductSpace/`, also read `dev/lean-proof-engineering-lessons.md`.
 
-**Ground truth is the census**, `davis-kahan-1970-full-source-census.json`. This file is a plan;
-the census is the record. Where they disagree, the census wins, and this file is stale.
+The source census is `dev/davis-kahan-1970-full-source-census.json`. It is the durable record of source coverage, but do not treat any single status field, blocker name, or prose note as infallible. Re-measure the current declarations and current HEAD before acting. In particular, this checkpoint already contains work newer than the previous completion handoff, and one row (`DK-8.1-thm`) is still marked `compiled_exact` while also carrying a genuine real-scalar scope blocker.
 
 ---
 
-## 1. Where things stand
+## 0. What we are optimizing for
 
-| | |
-|---|---|
-| census rows | 49 |
-| proved in the default build | 46 (3 `not_applicable` --- the paper's own Section 10 open questions) |
-| `compiled_exact` | 26 |
-| `compiled_specialization` | 18 |
-| `refuted_as_transcribed` | 1 (`DK-4.4-prop`) |
-| blockers | 1: `real-scalar-infinite-dimensional-scope`, 8 rows |
-| rows with a recorded `scope_gap` | 22 |
-| build | 9573 jobs, exit 0 |
-| baselines | `check_dependency_layers` 7, `check_docstring_coverage` 98, `check_library_structure` checks 1--2 `ok` (check 3 pre-existing at 16) |
+The acceptance target is a faithful formalization of the mathematical content of Davis--Kahan 1970. The architectural target is an operator-theory library that remains coherent after the paper is finished.
 
-**Two rows are terminal and need nothing.** `DK-4.4-prop` is `refuted_as_transcribed`:
-Proposition 4.4 is false as printed, with a compiled counterexample and a write-up in
-`papers/davis_kahan_prop_4_4_counterexample.tex`. Recording a false proposition as refuted *is*
-the faithful outcome. The three `not_applicable` rows are questions the paper itself poses and
-leaves open.
+These are not competing goals. The usual good outcome is:
 
-**The remaining blocker's name no longer describes its rows.** `real-scalar-infinite-dimensional-scope`
-reads as one mechanical transport across 8 rows. Measured row by row, only two are really about
-scalars; the rest carry distinct printed obligations that would remain if every scalar question
-were settled tomorrow. Splitting it is worth doing --- keeping heterogeneous obligations under one
-name is exactly what let four stale entries hide in the blocker that was retired in M37.
+1. identify the paper obligation precisely;
+2. search Tau Ceti, `ForTauCeti`, and the existing Davis--Kahan development for the mathematical concept;
+3. if the missing statement is genuinely reusable operator theory, prove it once at the lowest natural layer;
+4. consume it from a thin source-facing theorem whose hypotheses and conclusion match the paper;
+5. register the paper endpoint in the census/frontier only after the declaration exists and compiles.
 
----
+The operator-theory roadmap is therefore a **design compass**, not a second bureaucratic checklist. `ForTauCeti` is a permanent mathematical product of this repository; `AGENTS.md` explicitly asks that it be held to the "platonic ideal" roadmap standard. When a Davis--Kahan proof naturally exposes a missing general theorem, fixing that abstraction seam is part of good Davis--Kahan work. Conversely, do not turn one source obligation into an unrelated research project merely because a neighboring roadmap signature exists.
 
-## 2. Before you prove anything: look for it first
+Concrete operating principles:
 
-This repository is large and much of what a mission needs already exists, usually under a name
-the mission did not think of. **Three of the four false-premise findings in recent missions were
-"this does not exist" claims that a repository-wide search refutes.** Search before you build.
+* **General mathematics goes at the lowest reusable layer.** If a proof says nothing about Davis--Kahan, Section numbers, or paper-specific records, it probably belongs in `ForTauCeti/`.
+* **Paper facades should expose paper hypotheses.** Internal records are useful implementation devices, but a source endpoint is not complete if its caller is required to supply a branch selection, spectral orientation, smallness condition, or conclusion-like witness that the paper itself proves.
+* **`LinearPMap` is the canonical carrier for unbounded operators.** The local `ClosedOperator` compatibility layer is transitional. New foundational work should normally strengthen `LinearPMap`, not deepen the duplicate carrier.
+* **Complexification is a proof technique, not the default architecture.** First determine whether the proof is already scalar-generic. If an essential ingredient is genuinely complex-only, transport the smallest necessary portion and descend the actual mathematical object, not an arbitrary existential witness.
+* **Mission boundaries are planning boundaries, not architectural walls.** It is correct to repair a missing reusable theorem immediately below the current source theorem. It is not necessary to implement an unrelated adjacent roadmap item.
+* **Do not modify `external/TauCeti/` or the roadmap checkout from this repository.** They are references. Reusable mathematics needed here lives in `ForTauCeti/`.
+* **Do not frame code as "work to push upstream".** Make it good mathematics locally. Other projects decide what they consume.
+* **Prefer one canonical spelling.** A compatibility alias may be useful during migration, but the end state should not contain two independent representations of the same operator-theory concept.
 
-### Where to look
-
-| place | what is there |
-|---|---|
-| `ForTauCeti/` | the general, reusable analysis: operator ideals, approximation numbers, Ky Fan gauges, polar decomposition, functional calculus, complexification, `LinearPMap` unbounded theory, Borel calculus |
-| `external/TauCeti/` | the Tau Ceti library, checked out for **reading**. Search it before writing general mathematics --- for the statement if it exists, and for the proof strategy if it does not. **We do not modify it from this repository.** What you need goes in `ForTauCeti/` |
-| `DavisKahan/` | paper-specific development; `Sources/DavisKahan1970/` is the source-numbered facade layer |
-| `dev/tauceti/` | migration ledgers, extraction manifests, the promotable inventory |
-| `dev/hilbert-space-operator-roadmap/` | the submitted operator-theory roadmap and its conformance status |
-
-Useful commands:
-
-```bash
-# does this declaration exist anywhere, under any namespace?
-grep -rn "theorem someName\|def someName" --include=*.lean .
-
-# does a name resolve from the default build target?
-python3 scripts/probe_census_declarations.py --keep     # then read dev/.census-probe.lean
-
-# what does this file's section actually assume?  read the `variable` block, not the docstring.
-```
-
-### The operator-theory roadmap: a source of general shapes, not a goal
-
-**Read this framing before the table.** The goal of this campaign is 100% Davis--Kahan, not
-roadmap delivery. The operator-theory roadmap is **still an unaccepted pull request**; it is not
-a specification anyone here is obliged to meet, and its contents may change. Two hard rules:
-
-* **We do not modify the roadmap or the Tau Ceti library from this repository.** Both are read-only
-  here. If a roadmap signature looks wrong, record that in the census or a `dev/` note --- do not
-  edit it.
-* **Do not frame anything you write as "to be upstreamed."** Tau Ceti policy (`TauCetiRoadmap`
-  PRs #165 and #169, both merged) is *never push work*: whether other projects absorb this
-  material is their decision, not a property of the code. Write `ForTauCeti/` results as
-  self-standing general mathematics and say what they are independent of, not where they are
-  going.
-
-What the roadmap is genuinely useful for here: it is a curated list of the **general shapes** that
-operator-theoretic results tend to take. When a Davis--Kahan mission needs a lemma, checking
-whether the roadmap names a general form of it is a cheap way to pick the right generality --- and
-a generic `RCLike` statement in `ForTauCeti/` is worth more to the campaign after this one than
-the paper-specific special case would be. That is the whole of the connection: better generality
-now, cheaper next goal. It is never a reason to enlarge a mission's scope.
-
-`submodules/TauCetiRoadmap/**/Suggested.lean` records signatures whose bodies are deliberately
-`sorry`. `scripts/check_roadmap_delivered.py` reports which names the donor libraries already
-carry. **A name match is a planning aid, not semantic verification** --- a delivered declaration
-can carry hypotheses the roadmap does not, and the script says so itself. Do not copy its output
-into public roadmap prose.
-
-Current OperatorTheory topics:
-
-| topic | delivered |
-|---|---|
-| `OrthogonalGeometry` | 6/6 |
-| `SpectralSubspacePerturbation` | 24/24 |
-| `Majorization` | 18/19 |
-| `PrincipalAngles` | 27/31 |
-| `SelfAdjointSpectralTheory` | 34/41 |
-| `PolarDecomposition` | 38/47 |
-| `MatrixSpectralStatistics` | 15/20 |
-| `OperatorIdeals` | 34/49 |
-
-```bash
-python3 scripts/check_roadmap_delivered.py --topic OperatorIdeals --missing
-```
-
-**How to use this list.** Several outstanding signatures are the general form of something a
-mission here would otherwise prove in a paper-specific shape --- the `singularValue` family and
-`singularValue_eq_linearMap_singularValues` in `OperatorIdeals`, the modulus/`operatorAbs` cluster
-in `PolarDecomposition`, `restrictedPointSpectrum` in `PrincipalAngles`, the spectral-projection
-measurability group in `MatrixSpectralStatistics`. If your mission needs one of these, **state it
-in the general `RCLike` form under `ForTauCeti/` and use it from the paper facade**, rather than
-proving the special case inline --- the cost is usually the same, and the campaign after this one
-inherits a tool instead of a specialization.
-
-Two limits on that. Do not generalize a statement you cannot prove in the general form: a
-paper-specific lemma that works beats a generic one that stalls the mission, and the Davis--Kahan
-row is what you are accountable for. And do not add scope --- if the roadmap names a neighbouring
-result your mission does not need, leave it.
-
-The conformance write-up's own conclusion is worth carrying, and it applies to this repository's
-notes as much as to the roadmap: of the items ever recorded there as blocked, *every one* turned
-out to be blocked by a description rather than by the mathematics. Attempt before believing.
+A useful litmus test is: if the paper disappeared tomorrow, would this lemma still be a natural theorem about Hilbert-space operators? If yes, strongly consider `ForTauCeti`. If the statement exists only to match a numbered source claim, keep the endpoint in `DavisKahan/Sources/DavisKahan1970/`.
 
 ---
 
-## 3. Standing traps
+## 1. Current checkpoint and what changed since the previous handoff
 
-These have each cost a mission at least once. They are repo-wide, not mission-specific.
+Current checkpoint:
 
-1. **Complexification is the fallback, not the default.** Check first whether the argument is
-   already scalar-generic and merely uninstantiated at `ℝ`. Section 6's tangent and leakage
-   material was; Section 3's polar factors were not. Measure link by link. A claim that a whole
-   tree is "complex by convention" is worth nothing until the finite-projector selection steps in
-   it have been checked.
-2. **The bounded projection-valued measure in `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/`
-   is ℂ-only.** Any proof that reaches `exists_finiteDimensional_le_almostInvariant` cannot be
-   generalized to `RCLike` by editing binders. This has blocked two separate generalization
-   attempts (Section 3 and the Appendix passage).
-3. **`spectrum ℝ` does not survive the complexification transport.** `Algebra.complexToReal` and
-   `RealComplexification.instModuleReal` create a real-algebra diamond: the two `Module ℝ`
-   structures are propositionally but not definitionally equal, so a `spectrum ℝ` rewrite across
-   the transport fails. Use `TauCeti.DavisKahan.Experimental.Foundation.realSpectrum`, which is
-   `spectrum` over the native scalar field and therefore diamond-free.
-4. **`KyFanDominantIdealFamily` is scalar-fixed and has no `gauge_complexify`** --- a complex
-   family's gauge cannot be transported onto real operators. But the structure is *`RCLike`-generic*,
-   as is the `RestrictedDisplacementApproximationDominance` / `restrictedDisplacement_idealGauge_le`
-   pair, so you can state the real endpoint over a **real** family with nothing transported but the
-   approximation numbers. Corollary 4.1 over `ℝ` is proved exactly that way. Do not read
-   obstruction (4) as wider than it is.
-5. **`PaperUnitaryInvariantNorm` is scalar-agnostic**; `KyFanDominantIdealFamily` is instantiated
-   per field. If an endpoint is stated over the latter and you need it over `ℝ`, re-derive at
-   `PaperUnitaryInvariantNorm` scope from a Ky Fan core rather than transporting.
-6. **A module nothing imports is invisible to every gate.** The census probe, the frontier check
-   and the axiom audit all resolve against `DavisKahan.All`, and the `DavisKahan` lean_lib has no
-   globs. Wire every new module into the appropriate `All.lean`.
-7. **The two JSON files under `dev/` are serialized differently.** The census is
-   `indent=2, ensure_ascii=False` with a trailing newline; the frontier manifest is `indent=1`
-   with **no** trailing newline. Verify a byte-identical round-trip before and after editing
-   either.
-8. **A census status change can break the frontier gate.** `compiled_specialization` is not in
-   `census_terminal_statuses`, so downgrading a row makes a frontier manifest mapping mandatory.
-   Run the *full* gate set after any status edit, not just the census gate.
+* HEAD `69d1655a`, clean tree.
+* 49 census rows.
+* Status counts currently serialized in the census:
 
-### Routes already refuted --- do not re-propose
+  * 26 `compiled_exact`;
+  * 18 `compiled_specialization`;
+  * 1 `refuted_as_transcribed`;
+  * 1 `resolved_by_modern_development`;
+  * 3 `not_a_completion_obligation`.
+* 23 rows currently contain a `scope_gap` field.
+* The stale global blocker `real-scalar-infinite-dimensional-scope` is still attached to 8 rows, but its name no longer describes most of them.
+* Static census check on this checkpoint reports `46/49` proved in the default build and 3 paper-open questions as not applicable; Lean declaration resolution was not rerun in this inspection environment.
+* Static frontier check reports `83/83` named declarations textually present and `18/18` required nonterminal census rows mapped. Treat that as a consistency check, not a completeness proof: `DK-8.1-thm` is the concrete example of a row whose status is `compiled_exact` while a real-scalar obligation remains.
+* Dependency-layer checker remains at the existing baseline of 7 backwards-dependency violations, all in the beam/form-method area. Library-structure checks 1, 2, 4, and 5 are green; check 3 retains 16 pre-existing Experimental-structure violations.
 
-* `J² = -1` is **false**. The correct identity is `J² = -(sinΘ)(sinΘ)⁺`, because `J` vanishes on
-  `Null Θ`.
-* On `DK-3.1-cor`, do **not** "simplify" the hypothesis back to `P Q P`. That was the bug. The
-  statement is on `genericCosineBlock`, not the symmetrized `genericHalmosCosineSq`.
-* On `DK-3.5-prop`, do **not** "restore" the source form of the maximal-subspace predicate; it is
-  refuted for `c < 1` by an exterior vector.
-* On `DK-8.2-thm`, the counterexample recorded in the row's notes does **not** satisfy standing
-  assumption (3.5) and must not be re-used as evidence against the (3.5)-hypothesised statement.
-* The unrestricted sharp infinite-dimensional `tan 2Θ` ideal statement is **refuted**: the genuine
-  unbounded Sylvester equation has a nonzero commutator defect, carried explicitly by
-  `doubleAngleTangent_sylvesterEquation`.
-* An attained-maximum form of (1.12)/(1.13) --- `∃ Ω, ‖KΩ‖_ν = ‖K‖_ν` --- is **false** in infinite
-  dimensions. `K = diag(1 - 1/n)` has every approximation number `1`, so `‖K‖_ν = ν`, while every
-  rank-ν compression falls strictly short. The statements are `IsLUB`.
+Two recent advances materially change the remaining proof graph.
 
----
+### 1.1 M38 landed: Section 1 equations (1.12) and (1.13)
 
-## 4. The work
+Commit `3902b73b` formalized the Section 1 Ky Fan/Rayleigh--Ritz suprema. The critical conceptual correction is that the printed `sup` is **not a maximum in infinite dimension**. For the diagonal operator with entries approaching one from below, e.g. `diag(1 - 1/n)`, every approximation number is one, so the Ky Fan `ν`-gauge is `ν`, but no finite-dimensional compression attains it. The correct formal shape is `IsLUB`.
 
-Each item is sized for one subagent. "Scalars?" says whether the mission is really about the
-real-scalar axis or whether that label is inherited from the blocker.
+Current public source declarations include:
 
-### Track A --- the last narrowing outside the blocker
+* `equation1_12`;
+* `equation1_13_compressions`;
+* `equation1_13_reSum`;
+* the compression monotonicity lemmas used for their `≤` halves.
 
-**A1. Remove the codomain-room hypothesis from `equation1_12`.** Row `S1-ui-norms`. *Scalars? No.*
+The approximate-attaining engine is now available and is exactly the form needed by the Appendix to Section 6. Do not reintroduce an `∃ Ω, ... = ...` maximizer statement.
 
-`equation1_12` carries `hF : ∃ y : Fin ν → F, Orthonormal ℂ y`, which printed (1.12) does not:
-(1.12) quantifies over projectors on the **domain** alone. It enters only through the proof --- the
-rectangular Ky Fan principle needs room on both sides --- and it excludes operators whose codomain
-has finite dimension below `ν`, a class the paper permits. The domain hypothesis `hE` is *not* a
-narrowing and must stay: without it the printed supremum ranges over an empty set.
+One small narrowing remains on `(1.12)` only: `equation1_12` assumes a codomain orthonormal `ν`-tuple (`hF`), while the printed supremum ranges only over domain projectors. See mission A below for the worked removal route.
 
-Route, worked out by M38 and recorded on the row's `next_action`: run the attaining argument at
-`ν'' = min ν (finrank W')`, use `rectangularKyFanSum_eq_minFinrank_of_minFinrank_le` to see the
-prefix has saturated there, then extend the orthonormal `ν''`-tuple to a `ν`-tuple inside the
-finite-dimensional `W`. Estimated ~130 lines.
+### 1.2 M36 foundation landed: real spectral ranges and real bounded gap branches
 
-On landing: row → `compiled_exact`, and frontier node `s1-ui-norms-kyfan-suprema` stops being an
-open obligation. This is the smallest remaining mission and it retires the last non-terminal row
-outside the blocker.
+The real-scalar Section 8 problem is no longer starting from scratch. The following operator-theory infrastructure has landed:
 
-### Track B --- genuinely about real scalars
+* real spectral ranges for self-adjoint `LinearPMap`s, including domain preservation, commutation, complement ranges, and reducing-subspace structure;
+* complex spectral-range complement/reduction facts at the same canonical layer;
+* exact complexification of a descended real `LinearPMap` spectral range;
+* exact subspace geometry transport under complexification;
+* exact form and invariant-subspace transport under complexification;
+* a **bounded real spectral branch across a genuine gap** obtained by descending the actual complex bounded spectral projection.
 
-**B1. `DK-8.1-thm`, Theorem 8.1 over `ℝ`.** *Scalars? Yes, and not mechanical.*
+The newest module is
 
-Every declaration on the row is `InnerProductSpace ℂ`. The transport is not binder editing:
-8.1(a) is an `iff` about spectral subspaces of a real self-adjoint operator and 8.1(b)
-*constructs* one, so after complexifying you must show the complex branch is the complexification
-of a real reducing subspace. Note the row's own qualification: `[FiniteDimensional]` on the
-8.1(iii) symmetric-gauge statements is **the paper's own restriction** and is not part of this
-gap.
+`DavisKahan/SpectralTheory/Complexification/BoundedGapProjection.lean`.
 
-**B2. `DK-3.2-prop`, the nonacute existence criterion.** *Scalars? Partly.* Three printed pieces,
-of which two are not about scalars:
+Its important declarations are:
 
-1. State the actual nonuniqueness: exhibit two **distinct** direct rotations in the nonacute case,
-   e.g. two distinct isometries of the crossed defect spaces whenever that space is nonzero, fed
-   to the injective `build` of `proposition3_2_parameterized_nonuniqueness`.
-2. Compile the Remark's bilateral-shift example on `ℓ²(ℤ)`: (1.5) holds, the shift satisfies
-   (1.4), and (3.5) fails. Short, and it is the source's own separation of (1.5) from (3.5).
-3. The real-scalar form.
+* `conjugateOperator_boundedSelfAdjointSpectralProjection_Iic_complexify`;
+* `realBoundedSpectralProjectionIicOfGap`;
+* `complexify_realBoundedSpectralProjectionIicOfGap`;
+* `realBoundedSpectralProjectionIicOfGap_idem`;
+* `realBoundedSpectralSubspaceIicOfGap`;
+* `complexifySubmodule_realBoundedSpectralSubspaceIicOfGap`.
 
-Note the connection to B3: the same standing assumption is what the Theorem 8.2 counterexample
-turns out to violate.
+The key mathematics is the gap. The bounded Borel spectral projection is complex-only, but when
 
-### Track C --- printed content, not scalars
+`realSpectrum B ⊆ Iic α ∪ Ici (α + δ)`, `δ > 0`,
 
-**C1. `DK-8.2-thm`: restate `Θ < π/4` under standing assumption (3.5).** *Scalars? No.*
+the indicator of `Iic α` agrees on the spectrum with a continuous **real-valued** gap symbol. Continuous functional calculus is compatible with canonical conjugation of the complexification, so the actual complex spectral projection is conjugation-fixed and descends to a real projection. Its real range complexifies exactly to the complex source branch. This is the missing nonmechanical ingredient for real Theorem 8.1.
 
-Replace `[FiniteDimensional ℂ H]` with the Section 3 standing assumption
-`dim(PH ∩ Q^⊥H) = dim(P^⊥H ∩ QH)`, and prove `subspaceGap P Q = directedGap P Q` from (3.5)
-rather than from `subspaceGap_eq_directedGap_of_finrank_eq`. Route: the transcription's
-L832--834 argument --- (3.5) says `dim Null(C₀) = dim Null(C₀⋆)`, which is exactly when `S₀` and
-`S₁` carry the same singular data. If it turns out false in infinite dimensions, **the
-counterexample must satisfy (3.5)**; the one already in the notes does not, and its refutation is
-written up there so it is not re-used.
-
-**C2. `DK-3.1-cor`: the compact realization sentence.** *Scalars? No.*
-
-Given a decreasing sequence `π/2 ≥ θ₁ ≥ θ₂ ≥ ...` tending to 0, plus a prescribed multiplicity of
-the eigenvalue 0 on each side, construct a pair of subspaces with `P Q^⊥ P` compact realizing it.
-The general instrument is `theorem3_1_realization` (on `DK-3.1-thm`, proved 2026-08-09); this is
-its compact specialization at the eigenvalue-list level. See the refuted-routes list above for the
-two things not to do.
-
-**C3. `DK-3.5-prop`: the eigenvector clause.** *Scalars? No.*
-
-One of the six printed assertions is outstanding: `angle(x, Ux) = θ`. `InnerProductGeometry` is
-used nowhere in `DavisKahan/` or `ForTauCeti/`, so the angle itself has to be brought in --- that
-is the bulk of the mission. Separately, the commutations proved in M19 and M24 are
-finite-dimensional over any `RCLike` field; lifting them to the bounded complex tree where
-`paperAngleOperatorC` lives is the remaining scope work, and the `J` clause additionally needs a
-`J` to exist there.
-
-**C4. `S2-unbounded-scope`: unbounded `tan 2Θ` beyond the operator norm.** *Scalars? No.*
-
-`tanTwoTheta_unbounded_residual_opNorm` is the `ν = 1` residual case. Open: the Ky Fan `ν ≥ 2`
-case, the arbitrary-unitarily-invariant-norm endpoint, and the perturbation form
-`δ N(tan 2Θ) ≤ 2 N(H)`. The obstruction and its proposed repair are recorded on `DK-6-appendix`,
-not on this row --- read both. Everything else on this row is closed: the sine, double-angle sine
-and tangent families are complete at complex scalars, at the printed hypothesis, and at arbitrary
-trial dimension.
-
-**C5. `DK-9-model`: the fourth-derivative Rayleigh--Ritz model.** *Scalars? No, and the
-complexification route is unavailable* --- `Lp ℂ 2 μ` is not presented as
-`RealComplexification (Lp ℝ 2 μ)` and no such isometry exists locally. Three items, increasing in
-difficulty:
-
-1. **Existence of `α₃`**: prove the positive real spectrum of `beamOperator` is nonempty (in fact
-   an unbounded increasing sequence). Compactness of the form embedding is already proved, so the
-   resolvent is compact and the spectrum is a sequence of eigenvalues; what is needed is that the
-   kernel is not everything, which the affine-plane kernel computation already gives. This is what
-   lets `beamFiniteDataCertificate` drop its `α ∈ realSpectrum` hypothesis.
-2. Identify `beamOperator` with the closure of the classical `(d/dt)⁴` on the four free-end
-   boundary-condition domain. At present the boundary conditions are derived rather than assumed.
-3. (See the row.)
-
-**C6. `DK-3.1-thm` follow-ups.** *Scalars? No. The row itself calls these non-blocking.* Theorem
-3.1's statement, uniqueness and realization half are all proved. Outstanding: bridge the
-realization datum from `(cos Θ, sin Θ)` to a single self-adjoint `Θ` with spectrum in `[0, π/2]`
-via the continuous functional calculus. The missing lemma is about an intertwiner of two
-self-adjoint operators.
-
-### Track D --- hygiene, not source coverage
-
-**D1. Finish the `LinearPMap` migration** (was M21). GPT moved the spectral reduction and its
-real companion onto the canonical `LinearPMap` carrier (`b73c7ecd`), which is the foundation.
-The temporary `ClosedOperator (𝕜 := ℝ)` adapter is still consumed by at least eight source
-facades: `FullSineTheta`, `RemainingSourceSurface`, `SinTwoTheta`, `DirectedUnboundedReal`, and
-the four `SineTheta/` modules. Migrate those and delete the duplicate.
-
-**D2. Frontier `--check` coverage** (was M23). `--check` no longer covers source nodes that have
-no census mapping.
-
-**D3. Removable-conjugation simplification back to the complex side** (was M28).
+Do not replace this with "complexify, obtain some reducing subspace, take real parts". An arbitrary complex reducing subspace need not descend. We now descend the **canonical spectral projection itself**.
 
 ---
 
-## 5. Sequencing
+## 2. Mathematical dictionary and recurring objects
 
-* **A1 first.** Smallest, route fully worked, and it retires the last non-terminal row outside the
-  blocker.
-* **Then split the blocker** before dispatching Track C. B1 and B2(3) are the real-scalar rows;
-  C1--C6 are printed obligations that happen to sit under a scalar-shaped name. One blocker with
-  eight heterogeneous rows is how four stale entries hid in the blocker M37 retired.
-* **C1 and B2 share (3.5)** --- the standing assumption C1 introduces is the one B2's bilateral-shift
-  example separates. Doing C1 first gives B2 a compiled hypothesis to point at.
-* **C4 depends on reading `DK-6-appendix`**, where its obstruction is actually recorded.
-* Track D is independent of all of it and can fill any gap.
+A next agent should be comfortable with these correspondences before proving anything.
 
-## 6. What "done" means
+### 2.1 Two subspaces and their angles
 
-The census carries no row that is a completion obligation: every row is `compiled_exact`,
-`not_applicable`, `refuted_as_transcribed`, or `resolved_by_modern_development`, with every
-recorded `scope_gap` either discharged or reclassified as a disclosed global convention rather
-than paper debt. The blockers table is empty. Six gates exit 0, build exit 0, every source
-endpoint axiom-clean.
+For closed subspaces `U,V` with orthogonal projections `P,Q`:
 
-That endpoint is a claim about the paper, so it is settled by a fresh section-by-section audit
-against `non-distributable/davis-kahan-1970-modernized-transcription.tex`, not by the gates. The
-gates cannot see scope, cannot see `status`, and cannot see a row that omits a declaration for a
-conclusion the paper asserts.
+* `directedGap U V` is one directed sine quantity, morally `‖P_{V⊥}|_U‖`;
+* `subspaceGap U V = ‖P-Q‖` is the symmetric gap, the sine of the maximal ambient angle;
+* the paper has two directed angle operators, usually `Θ₀` and `Θ₁`, associated with the two crossed blocks;
+* the ambient Hermitian angle is represented in the complex tree by `paperAngleOperatorC U V` and in the real tree by its real counterpart;
+* cosine/sine blocks in the Halmos decomposition carry the principal-angle data.
+
+The crossed defect spaces are the top-angle (`π/2`) pieces:
+
+* `U ∩ V⊥`;
+* `U⊥ ∩ V`.
+
+Standing assumption (3.5) equalizes their dimensions. This is the missing ingredient behind several places where the finite-dimensional development currently uses equality of ambient finranks to turn a directed bound into a symmetric bound.
+
+### 2.2 Approximation numbers, Ky Fan gauges, and UI norms
+
+The project deliberately uses approximation numbers as the dimension-free singular-value language:
+
+`a_n(T) = T.approximationNumber n`.
+
+The paper's `ν`-norm is represented by
+
+`kyFanApproximationGauge ν T = Σ_{n<ν} a_n(T)`.
+
+This is defined for every bounded operator, including noncompact operators. When a rectangular singular-value list exists it agrees with the corresponding Ky Fan prefix.
+
+For arbitrary unitarily invariant norms, the most robust proof architecture is usually:
+
+1. prove every Ky Fan prefix inequality;
+2. invoke the Fan-dominance theorem for `PaperUnitaryInvariantNorm` or the relevant ideal family.
+
+Do not attempt to transport a `KyFanDominantIdealFamily` object across scalar fields. The family is instantiated per field and there is no `gauge_complexify`. Transport approximation numbers/Ky Fan inequalities and rebuild the norm conclusion over the target field.
+
+### 2.3 Real spectrum
+
+When real and complex operators interact, use
+
+`TauCeti.DavisKahan.Experimental.Foundation.realSpectrum`.
+
+Do not rewrite `spectrum ℝ` through complexification. The repository has a real-algebra module diamond (`Algebra.complexToReal` versus the real structure on `RealComplexification`) that makes those expressions propositionally related but not definitionally identical.
+
+`realSpectrum_complexify` is the correct bridge for bounded real operators.
+
+### 2.4 Unbounded operators
+
+The canonical unbounded carrier is Mathlib `LinearPMap`. Existing `DKClosedOperator` / `ClosedOperator` wrappers are compatibility layers. If a new theorem is fundamentally about domains, graph closure, spectral projections, or self-adjoint partial maps, prefer the `LinearPMap` layer and adapt outward.
+
+In particular, recent spectral cutoff and spectral reduction work is already `LinearPMap`-native. Reuse it.
+
+### 2.5 Complexification transport that is already available
+
+For real subspaces/operators, the current complexification layer includes exact facts of the following shape:
+
+* `starProjection_complexifySubmodule`;
+* `complexifySubmodule_orthogonal`;
+* `subspaceGap_complexifySubmodule`;
+* `directedGap_complexifySubmodule`;
+* `isQuarterAcute_complexifySubmodule_iff`;
+* `complexify_reduces_iff`;
+* `re_inner_complexify`;
+* `re_inner_le_of_mem_complexifySubmodule`;
+* `le_re_inner_of_mem_complexifySubmodule`;
+* `mapsTo_complexifySubmodule` and orthogonal variants;
+* `range_complexify`;
+* `complexifySubmodule_realSpecRange` for the unbounded spectral range;
+* `complexifySubmodule_realBoundedSpectralSubspaceIicOfGap` for the actual bounded branch across a gap.
+
+Use these exact bridges before inventing new transport records.
+
+---
+
+## 3. Completed foundations that remaining proofs should reuse
+
+### 3.1 M30: branch-free bounded `tan 2Θ` with sharp factor two
+
+The bounded infinite-dimensional double-angle tangent problem is solved. The important public chain is:
+
+* `tanTwoTheta_directedCorner_residual_all_kyFan_branchFree`;
+* `tanTwoTheta_directedCorner_residual_all_kyFan_branchFree_upper`;
+* `tanTwoTheta_wholeSpace_all_kyFan_branchFree`;
+* `tanTwoTheta_wholeSpace_paperUINorm_branchFree`.
+
+The proof is a model for the unbounded Ky Fan problem. Its essential ingredients are:
+
+* the **actual rectangular tangent corner** `T`;
+
+* signed cosine blocks, not positive cosine branches;
+
+* Gram identities
+
+  `C₀† C₀ (1 + T†T) = 1`,
+
+  `C₁† C₁ (1 + TT†) = 1`;
+
+* Section 7 reflection equation
+
+  `(C₁ T) A₀ - A₁ (C₁ T) = B C₀ + C₁ B`;
+
+* approximate leading singular families;
+
+* polar isometries absorbing the sign of `cos 2θ`;
+
+* `sum_abs_le_kyFanApproximationGauge_of_orthonormal` applied to absolute real inner products;
+
+* epsilon-to-zero passage.
+
+The factor `2` comes once from the two residual pairings. Lower-to-upper corner transport is by adjoint/Ky Fan invariance and adds **no second factor two**. Preserve that invariant in any unbounded analogue.
+
+### 3.2 Section 6 single-angle unbounded tangent passage
+
+The single-angle tangent theorem is already available at unbounded ambient scope, arbitrary trial dimension, and UI-norm scope. Do not rebuild its cutoff/Fan machinery for unrelated scalar work.
+
+The infinite-trial proof uses min--max localization and almost-invariant spectral-band enlargement rather than literally reproducing equations (6.7)--(6.11). The theorem conclusion is therefore available even though those displayed identities themselves are not all source-numbered declarations.
+
+### 3.3 Unbounded double-angle pole exclusion and operator-norm tangent
+
+`ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/` now contains:
+
+* `ReflectionBlocks.lean` — reflection block identities from `Z²=1`;
+* `UnboundedReflection.lean` — domain preservation and domain-correct equation (7.6);
+* `UnboundedPole.lean` — branch-free pole exclusion;
+* `SpectralCutoff.lean` — actual self-adjoint spectral cutoff family.
+
+For a self-adjoint `LinearPMap A`, reducing low spectral subspace `U`, gap `δ=b-a>0`, bounded fully off-diagonal perturbation `B`, and commuting reflection, the pole theorem gives on `U`
+
+`‖Sx‖ ≤ [2‖B‖ / sqrt(δ²+4‖B‖²)] ‖x‖`,
+
+`[δ / sqrt(δ²+4‖B‖²)] ‖x‖ ≤ ‖Cx‖`.
+
+Thus `|cos 2Θ₀|` is uniformly bounded below before any tangent quotient is formed.
+
+`tanTwoTheta_unbounded_residual_opNorm` packages the `ν=1` consequence
+
+`δ |tan 2θ| ≤ 2 ‖B‖`
+
+with the sharp constant and without choosing an acute/obtuse branch.
+
+The open problem is the Ky Fan `ν≥2` / arbitrary UI-norm analogue, described in detail in mission F.
+
+### 3.4 Real single- and double-angle sine/tangent infrastructure
+
+Do not trust old comments saying whole trees are complex-only. Several real axes were closed by M32--M35. In particular:
+
+* ambient and directed real `tan Θ` endpoints exist;
+* real unbounded single-angle tangent endpoints exist;
+* ambient and directed real `sin 2Θ` UI-norm endpoints exist;
+* real angle/operator complexification machinery exists.
+
+The remaining rows often retain old historical notes describing obstacles that have since been routed around. Read the most recent paragraph of each census row and inspect the signatures.
+
+---
+
+## 4. The high-leverage dependency graph
+
+Do not think of the remaining work as 18 unrelated `compiled_specialization` rows. Several mathematical assets close multiple rows.
+
+### Shared unlock S: standing assumption (3.5) and equality of directed gaps
+
+Prove a reusable theorem expressing the effect of
+
+`dim(U ∩ V⊥) = dim(U⊥ ∩ V)`.
+
+At minimum, this should imply
+
+`subspaceGap U V = directedGap U V`
+
+(or equality of the two directed gaps, from which the symmetric formula follows).
+
+This feeds:
+
+* `DK-8.2-thm`: replace finite-dimensional/equal-finrank conversion by the paper's actual standing assumption;
+* `S2-tan-theta`: derive ambient transversality/acuteness from the already-derived directed estimate under (1.5)+(3.5);
+* the Section 3 narrative around why (1.5) does **not** imply (3.5), whose bilateral-shift example belongs to `DK-3.2-prop`.
+
+A stronger theorem identifying the crossed sine blocks' singular data under a `CrossedDefectsEquivalent` hypothesis may be worthwhile if it is clean, because the paper explicitly reasons through `S₀` and `S₁`. But for the norm-only uses, do not insist on a full singular-sequence classification if a direct defect/generic decomposition proof is shorter and reusable.
+
+### Shared unlock T: unbounded branch-free Ky Fan `tan 2Θ`
+
+Prove the unbounded residual theorem at every Ky Fan prefix, then Fan dominance.
+
+This closes or materially advances:
+
+* `S2-unbounded-scope`;
+* the substantive double-angle part of `DK-6-appendix`;
+* the missing 2-norm sentence of `(9.7)` on `DK-9.5-9.7`.
+
+Do this once in the correct general source module. The beam file should merely instantiate it.
+
+### Shared unlock R: real Theorem 8.1 branch
+
+The bounded-gap descent infrastructure in `e030479d` makes this a focused source theorem now. Once real Theorem 8.1 exists, the scalar part of Theorem 8.2 can be transported much more cleanly.
+
+### Shared unlock I: functional-calculus intertwiners
+
+Section 3 still has several obligations where the paper says, in effect,
+
+`A X = X B  =>  f(A) X = X f(B)`.
+
+Before proving a local spectral theorem, inspect
+
+`ForTauCeti/Analysis/InnerProductSpace/SeparatedIntertwiner.lean`, especially `cfcHom_intertwines`.
+
+A well-shaped rectangular/self-adjoint intertwining lemma may unlock both the Proposition 3.1 characterization and the Theorem 3.1 realization cleanup.
+
+---
+
+## 5. Detailed remaining missions and proof strategies
+
+### A. `S1-ui-norms`: remove the codomain-room hypothesis from equation (1.12)
+
+**Status:** one small source narrowing. `(1.13)` is already correct.
+
+Current theorem:
+
+`equation1_12 K hE hF`
+
+uses `hF : ∃ y : Fin ν → F, Orthonormal ℂ y`, but printed `(1.12)` only ranges over `ν`-projectors in the domain. The domain room hypothesis `hE` is legitimate: otherwise the indexing family is empty. The codomain room hypothesis is not printed.
+
+Why `hF` currently appears: the approximate rectangular Ky Fan attaining theorem asks for `ν` orthonormal vectors in both domain and codomain.
+
+**Worked repair.** Let the relevant finite-dimensional compressed codomain be `W'` and set
+
+`ν' = min ν (finrank W')`.
+
+The Ky Fan prefix has already saturated at `ν'`; use
+
+`rectangularKyFanSum_eq_minFinrank_of_minFinrank_le`.
+
+Run the approximate attaining theorem at `ν'`, where the codomain has enough room by construction. The resulting domain `ν'`-tuple lies in a finite-dimensional subspace `W` with at least `ν` dimensions because `hE` supplies the necessary domain room. Extend it to an orthonormal `ν`-tuple using
+
+`Orthonormal.exists_orthonormalBasis_extension_of_card_eq`.
+
+The extra extension directions should contribute zero after the relevant finite-rank compression because the approximation-number prefix has saturated. Package the same `IsLUB` lower-bound argument as the current proof.
+
+Do **not** replace `IsLUB` by an attained maximum.
+
+Likely files:
+
+* `DavisKahan/Sources/DavisKahan1970/Section1UnitaryInvariantNorms.lean`;
+* rectangular Ky Fan infrastructure in `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantSeminorm/Instances.lean` and `SchattenNorm.lean`.
+
+---
+
+### B. M36 / `DK-8.1-thm`: Theorem 8.1 over real Hilbert spaces
+
+**Status:** complex source theorem is complete and strong; real canonical-branch descent infrastructure is now complete. The census status is misleadingly `compiled_exact` while this real scope gap remains.
+
+This should be the next M36 source theorem, not another operator-theory detour.
+
+#### B.1 Complex theorem to reuse
+
+`DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean` contains:
+
+* `canonicalLowBranch`;
+* `Theorem81Conclusion`;
+* `theorem8_1_canonicalBranch`;
+* `theorem8_1_eq_canonicalBranch_of_maximalAngle_le`;
+* `theorem8_1_maximalAngle_le_iff_spectrumIn`.
+
+The source theorem assumes only the printed data:
+
+* `A` self-adjoint;
+* `P` invariant under `A` (self-adjointness then gives reduction);
+* form upper bound `A ≤ α` on `P`;
+* form lower bound `A ≥ α+δ` on `P⊥`;
+* `H` self-adjoint;
+* `H` fully off-diagonal, mapping `P -> P⊥` and `P⊥ -> P`;
+* `δ>0`.
+
+It proves spectral repulsion, canonical branch reduction, sharp form bounds, both restricted spectral orientations, strict quarter-acuteness, and hence maximal angle `< π/4`. The uniqueness theorem uses only the printed closed quarter-angle hypothesis.
+
+#### B.2 Real existence theorem: recommended construction
+
+Let real data be `A_R,H_R,P_R,α,δ` with the exact real analogues of the printed hypotheses.
+
+1. **Complexify the operators and subspace.**
+
+   Set `A_C = complexify A_R`, `H_C = complexify H_R`, `P_C = complexifySubmodule P_R`.
+
+   Use:
+
+   * `complexify_isSelfAdjoint_iff`;
+   * `mapsTo_complexifySubmodule` and `mapsTo_orthogonal_complexifySubmodule`;
+   * `re_inner_le_of_mem_complexifySubmodule`;
+   * `le_re_inner_of_mem_complexifySubmodule`.
+
+   This should transfer every source hypothesis with no constant loss.
+
+2. **Apply the complex source theorem.**
+
+   Invoke `theorem8_1_canonicalBranch A_C H_C P_C ...`.
+
+   Obtain the complex conclusion `hC`, especially
+
+   `hC.spectral_repulsion : realSpectrum (A_C+H_C) ⊆ Iic α ∪ Ici (α+δ)`.
+
+3. **Pull the gap back to the real perturbed operator.**
+
+   Rewrite `complexify (A_R+H_R)` using `complexify_add`, and use `realSpectrum_complexify` to derive
+
+   `hgapR : realSpectrum (A_R+H_R) ⊆ Iic α ∪ Ici (α+δ)`.
+
+4. **Define the real canonical branch using the new infrastructure.**
+
+   Let
+
+   `Q_R := realBoundedSpectralSubspaceIicOfGap (A_R+H_R) (hA.add hH) α δ hδ hgapR`.
+
+   This is the actual real spectral branch, not an arbitrary reducing subspace.
+
+5. **Identify its complexification with the complex source branch.**
+
+   Use
+
+   `complexifySubmodule_realBoundedSpectralSubspaceIicOfGap`.
+
+   Its right side is precisely the bounded spectral subspace used by `canonicalLowBranch`, modulo the straightforward `complexify_add` rewrite and the self-adjoint witness spelling.
+
+6. **Pull geometric conclusions back exactly.**
+
+   * reduction: `complexify_reduces_iff`;
+   * quarter-acuteness: `isQuarterAcute_complexifySubmodule_iff`;
+   * subspace gap/maximal-angle scalar if needed: `subspaceGap_complexifySubmodule`;
+   * orthogonal complement: `complexifySubmodule_orthogonal`.
+
+7. **Pull form inequalities back by testing real vectors.**
+
+   For `x∈Q_R`, embed `x` as `ofReal x`, use the complex branch-form inequality, then simplify `re_inner_complexify` / `inner_ofReal` and norm preservation. Do the complement similarly.
+
+This should give a real analogue of `Theorem81Conclusion`, or a source-facing real theorem with the same fields. If a generic `Theorem81Conclusion` over `RCLike` is clean after the proof is known, that may be preferable, but do not force a large refactor merely for a type parameter.
+
+#### B.3 Spectral orientation over `ℝ`
+
+`SpectrumIn` itself is scalar-generic, but the convenient form-bound-to-spectrum lemmas currently live in the complex source theorem. There are two good routes:
+
+* **Preferred if clean:** promote/generalize the reusable implication "reducing subspace + self-adjoint form bound => restricted real spectrum lies in half-line" to an `RCLike` spectral-order layer, and make both real and complex source theorems consume it.
+* **Fallback:** prove exact restricted-spectrum transport through complexification, then pull the existing complex `SpectrumIn` fields back.
+
+Do not duplicate a long Section 8-specific spectral proof if the proposition is scalar-generic operator theory.
+
+#### B.4 Real uniqueness: transport, do not replay the complex cfc proof
+
+For a real reducing `M_R` satisfying `maximalAngle P_R M_R ≤ π/4`:
+
+1. complexify `M_R`;
+2. transport reduction and angle exactly;
+3. apply complex `theorem8_1_eq_canonicalBranch_of_maximalAngle_le`;
+4. identify the complex canonical branch with `complexifySubmodule Q_R` using the new bounded-gap theorem;
+5. conclude `M_R=Q_R` by submodule extensionality and `ofReal_mem_complexifySubmodule_iff`.
+
+This is considerably cleaner than reproducing the complex uniqueness proof, whose core is commuting a reducing projection with the cfc branch projection.
+
+#### B.5 Real characterization iff
+
+Once real existence/uniqueness and spectral-orientation transport exist, the printed iff should follow by the same high-level structure as the complex theorem. If a restricted-spectrum complexification theorem was introduced for B.3, reuse it here.
+
+**Paper-owned finite-dimensionality:** The finite-dimensional restriction on Theorem 8.1(iii)'s symmetric-gauge statement is part of the paper. Do not count it as a gap to remove unless a stronger theorem is useful independently.
+
+---
+
+### C. Shared `(3.5)` geometry: `DK-8.2-thm` and ambient `tan Θ`
+
+This should probably be one reusable geometry mission followed by thin source wrappers.
+
+The standing assumption is
+
+`dim(U ∩ V⊥) = dim(U⊥ ∩ V)`.
+
+The paper uses it to ensure the two directed angle sides carry compatible singular data. The current infinite-dimensional source path has a directed estimate, but conversion to the symmetric maximal angle still often uses finite-dimensional finrank equality.
+
+#### C.1 Minimal theorem needed
+
+Prove under (3.5):
+
+`subspaceGap U V = directedGap U V`.
+
+Depending existing conventions, it may be cleaner first to prove equality of the two directed gaps
+
+`directedGap U V = directedGap V U`.
+
+Since symmetric gap is the max of the two directions, equality immediately identifies it with either one.
+
+#### C.2 Mathematical decomposition
+
+Use the Halmos decomposition into:
+
+* common pieces;
+* crossed defect pieces `U∩V⊥` and `U⊥∩V`;
+* generic position.
+
+On the generic part the two crossed sine blocks are adjoint/polar partners and carry the same nonzero singular data. Any asymmetry in the **norm** can only come from a top singular value `1` contributed by a crossed defect. Under (3.5), one crossed defect is nonzero iff the other is nonzero (indeed their dimensions agree), so either both directed gaps are `1`, or neither has the defect `1` block and the generic norms agree.
+
+That proof may be much shorter than formalizing equality of every approximation number. If a clean theorem already expresses a `CrossedDefectsEquivalent` and generic sine-block unitary equivalence, use it.
+
+A stronger reusable endpoint, if natural, is that the two directed sine blocks are equisingular under a crossed-defect equivalence. That would align very closely with the paper and could support later UI-norm statements.
+
+#### C.3 Apply to `DK-8.2-thm`
+
+The current dimension-free source theorem gives
+
+`directedGap P Q < sqrt 2 / 2`.
+
+Under (3.5), replace directed gap with `subspaceGap`, then use the existing maximal-angle dictionary to get
+
+`Θ < π/4`
+
+without `[FiniteDimensional]` or `finrank P = finrank Q`.
+
+Do not use the recorded infinite-dimensional counterexample unless it satisfies (3.5); it does not.
+
+#### C.4 Apply to `S2-tan-theta`
+
+The ambient `tan Θ` theorem still asks explicitly for transversality/acuteness, whereas the printed theorem derives it under the standing assumptions. The directed version already has `isTransverse_of_tanThetaIntervalGap`.
+
+Use (1.5) to obtain the directed bound/transversality on `Θ₀`; use (3.5) / equality of directed sides to identify the ambient sine norm with the directed one; conclude `‖sin Θ‖<1` and feed the existing ambient tangent theorem. Do not reprove the tangent estimate itself.
+
+#### C.5 `DK-8.2-thm` norm and scalar axes
+
+Separate from the dimension issue:
+
+* restate the inherited `sin 2Θ` conclusions at every source unitarily invariant norm under the 8.2 hypotheses; the current source surface exposes only operator-norm versions;
+* after real Theorem 8.1 lands, transport the real 8.2 branch argument through the same complexification infrastructure.
+
+The residual/half-gap proofs already exist. Avoid exposing `PerturbationHalfGapBridge` or similar conclusion-like internal records as the source theorem.
+
+---
+
+### D. Section 3: direct rotations, classification, realization, and eigenvector geometry
+
+These rows are related but not identical. The common theme is to reuse Halmos decomposition and functional-calculus intertwiners rather than transport arbitrary complex existential witnesses.
+
+#### D.1 `DK-3.1-prop`: printed characterization by property (i) alone
+
+Existence and uniqueness are already exact over both `ℂ` and `ℝ`. The remaining defect is the third printed clause.
+
+Current characterization theorems still assume equation (3.8), essentially the square/reflection-product identity. The paper does **not** assume that identity in the characterization direction. It starts from a unitary/orthogonal `W` carrying `U` to `V` with both diagonal blocks accretive.
+
+Write `W` in the `U⊕U⊥` / `V⊕V⊥` block form with cosine blocks `C₀,C₁` and crossed blocks `S₀,S₁`. The paper's route is:
+
+1. derive
+
+   `C₀² S₁ = S₁ C₁²`
+
+   from the block equations corresponding to unitarity and intertwining;
+2. use continuous functional calculus intertwining to obtain
+
+   `f(C₀²) S₁ = S₁ f(C₁²)`;
+3. choose `f(t)=sqrt t`, using positivity of the cosine blocks, to get
+
+   `C₀ S₁ = S₁ C₁`;
+4. use density of `Range C₁` in the acute case to conclude the desired crossed-block adjoint relation `S₁ = S₀*`;
+5. identify `W` with the principal direct rotation by the already-proved uniqueness result.
+
+Before building a local cfc lemma, inspect
+
+`ForTauCeti/Analysis/InnerProductSpace/SeparatedIntertwiner.lean`, especially `cfcHom_intertwines`.
+
+The likely reusable abstraction is a rectangular intertwiner between two self-adjoint positive operators. If its existing theorem already has the right shape, instantiate it. If not, add the smallest general theorem needed there.
+
+Do **not** smuggle equation (3.8) back into the implication; doing so proves the already-known stronger-hypothesis characterization, not the source clause.
+
+#### D.2 `DK-3.2-prop`: nonacute existence/nonuniqueness and the bilateral-shift remark
+
+Three pieces remain.
+
+**Actual nonuniqueness.** The repository already parameterizes nonacute direct rotations by an isometric equivalence of crossed defect spaces; `proposition3_2_parameterized_nonuniqueness` is injective in that parameter. To turn this into the source's literal nonuniqueness statement, exhibit two distinct parameters when the crossed defect is nonzero. The obvious pair is `J` and `-J`; check the scalar and nontriviality hypotheses carefully. Injectivity of the builder then gives distinct direct rotations.
+
+Do not claim every formally "nonacute" configuration has two parameters before checking the exact definition: if both crossed defect spaces vanish, the parameter space can degenerate. Align the theorem with the source's actual nonunique case.
+
+**Bilateral shift example.** Formalize the remark on `ℓ²(ℤ)` that separates (1.5) from (3.5). The intended geometry is a pair of shift-related half-space subspaces for which the bilateral shift realizes the unitary equivalence required by (1.4)/(1.5), while the two crossed defects have unequal dimensions (one is zero and the other one-dimensional, depending indexing convention). This is also the canonical warning that equality of two infinite ambient dimensions says nothing about equality of crossed defect dimensions.
+
+**Real scalar form.** Do not descend an arbitrary complex defect isometry by taking real parts. Either:
+
+* generalize the algebraic/polar construction of `Section3Nonacute` to `RCLike` if its ingredients are already scalar-generic; or
+* build the real construction natively from a real crossed-defect isometric equivalence and the existing real principal/polar factors.
+
+Search `Geometry/Polar/Section3Nonacute.lean`, `GenericRotationPredicates.lean`, and the real direct-rotation modules before choosing.
+
+#### D.3 `DK-3.1-thm`: real classification and cfc cleanup
+
+The complex classification/uniqueness/realization theorem is substantially complete. The remaining scalar problem is not a mechanical complexification transport: the classification contains existential unitary equivalences of invariant data, and an arbitrary complex unitary equivalence need not commute with conjugation.
+
+Preferred architecture:
+
+* inspect whether the Halmos classification theorem can be stated over `RCLike` using the same elementary orthogonal decomposition and positive cosine data;
+* if so, generalize the invariant/classification layer rather than attempting to descend existential complex equivalences;
+* otherwise define the real Halmos invariant explicitly and prove the real assembly theorem natively.
+
+The realization follow-up in the census is smaller and conceptually separate: current realization data can carry intertwining of `cos Θ` and `sin Θ` separately. The paper packages this through one self-adjoint angle operator `Θ`. If `J Θ₀ = Θ₁ J`, functional calculus should give both trigonometric intertwinings. Conversely, if the current data knows enough spectral information, construct `Θ = arccos C` or `arcsin S` with spectrum in `[0,π/2]`. Again, `SeparatedIntertwiner.cfcHom_intertwines` is the first place to look.
+
+Do not make this nonblocking cleanup prevent a source-exact row if the real classification is the actual blocker.
+
+#### D.4 `DK-3.1-cor`: compact realization sentence
+
+The classification half is on the correct compact object: `P (I-Q) P`, not `PQP`, and the invariant is `genericCosineBlock`, not the symmetrized `genericHalmosCosineSq`.
+
+The remaining source sentence asks for realization of a prescribed decreasing angle sequence
+
+`π/2 ≥ θ₁ ≥ θ₂ ≥ ... -> 0`
+
+with prescribed zero-angle multiplicities.
+
+Use `theorem3_1_realization`. Build a `HalmosAngleDatum` whose generic block is diagonal on an `ℓ²` model:
+
+* cosine entries `c_n = cos θ_n`;
+* sine entries `s_n = sin θ_n`;
+* `c_n²+s_n²=1` pointwise;
+* the generic left/right spaces are paired by the canonical basis equivalence;
+* add the four elementary Halmos summands to realize prescribed `0` / `π/2` multiplicities as needed.
+
+Compactness of `P(I-Q)P` corresponds on the generic block to the sine-square defect. Since `θ_n->0`, `sin² θ_n->0`, so the diagonal defect is compact. Search for existing diagonal compactness / prescribed approximation-number results before proving sequence compactness manually.
+
+Then invoke `theorem3_1_realization` rather than reconstructing the pair of subspaces directly.
+
+#### D.5 `DK-3.5-prop`: eigenvector angle clause and infinite-dimensional commutations
+
+The missing printed assertion is essentially:
+
+if `Θ x = θ x`, then `angle(x,Ux)=θ`
+
+for the direct rotation `U`.
+
+The conceptual calculation is straightforward. On an angle eigenvector,
+
+`U = cos Θ + J sin Θ`,
+
+so cfc gives
+
+`cos Θ x = cos θ · x`,
+
+`sin Θ x = sin θ · x`.
+
+The `J` term is orthogonal in real part because `J` is skew-adjoint on the active-angle subspace:
+
+`Re <x,Jx> = 0`.
+
+Therefore
+
+`Re <x,Ux> = cos θ ‖x‖²`.
+
+Since `U` is unitary/orthogonal, `‖Ux‖=‖x‖`, so the geometric angle is `arccos(cos θ)=θ` for `θ∈[0,π/2]`.
+
+The Lean work is mostly API alignment:
+
+* inspect Mathlib's `InnerProductGeometry.angle` definition before fixing the exact formula; it may normalize with a real part/absolute value in a way that changes the final simplification;
+* obtain cfc-on-eigenvector lemmas for `cos`/`sin`;
+* use the already-proved skew-adjoint properties of `J`.
+
+The second axis is scope: existing commutations are finite-dimensional, while `paperAngleOperatorC` is bounded/infinite-dimensional. Lift commutation to the bounded complex cfc tree first. The `J` clause additionally needs a suitable infinite-dimensional angle complex structure/polar factor.
+
+Do not assert `J²=-1` globally. It is false on the zero-angle kernel. The correct identity is
+
+`J² = -(sin Θ)(sin Θ)^+`,
+
+so `J` acts as a complex structure only on the nonzero-angle part.
+
+---
+
+### E. Section 2 remaining source-fidelity work
+
+#### E.1 `S2-sin-two-theta`: unequal-dimension extension from the end of Section 8
+
+The scalar axis is closed. The remaining printed assertion is the final Section 8 sentence that the `sin 2θ` theorem extends to
+
+`dim X(E₀) < dim X(F₀)`,
+
+analogously to Theorems 6.1/6.3. The paper explicitly says no analogous extension of `tan 2θ` is known.
+
+No source declaration currently states this extension.
+
+Two subproblems are recorded:
+
+1. make precise the bridge between directed `Θ₀` data and ambient `Θ` data needed by the source sentence;
+2. prove the dimension-unequal `sin 2Θ` estimate.
+
+Important correction: an earlier proposed counterexample based on "duplicated ambient multiplicity" was wrong. `sinTwoAngleOperatorC` is built from the directed sine geometry and its range lies in the relevant source subspace. Do not revive that argument.
+
+The Section 7 rectangular block algebra is already dimension-blind. Prefer a proof through the actual rectangular crossed block / Gram identities rather than artificially padding dimensions merely to call an equal-rank theorem. Also inspect any theorem whose name contains `unequalFinrank`: two names discovered during audit were decoys whose signatures were still equal-dimensional.
+
+If the only missing bridge is equality of approximation-number sequences between the directed block and the ambient double-angle operator, state that precise equisingularity theorem and derive every UI norm from it.
+
+#### E.2 `S2-sharpness`: full four-family simultaneous equality
+
+Current plane models:
+
+* `sinTheta_model_equality` — every UI seminorm;
+* `tanTheta_model_equality` — every UI seminorm;
+* `tanTwoTheta_model_equality` — every UI seminorm;
+* `sinTwoTheta_model_operatorNorm_equality` — operator norm only.
+
+Two obligations remain.
+
+**First:** upgrade the `sin 2Θ` plane model to every `UnitarilyInvariantSeminorm`.
+
+Do not prove each norm separately. Compute the singular/approximation-number data of the relevant 2D model. In rank one or a scalar-multiple model, equality of the whole singular sequence should make every UI seminorm equality immediate from the generic gauge API.
+
+**Second:** formalize the paper's direct-sum construction that attains all four constants simultaneously for every UI norm.
+
+The right architecture is to show the four model operators in each plane have the prescribed scalar-multiple singular-value lists and that finite orthogonal direct sums concatenate those lists. Then symmetric-gauge invariance gives simultaneous equality in one shot. If generic direct-sum singular-value/approximation-number machinery is missing, that is reusable `ForTauCeti` operator-ideal mathematics.
+
+---
+
+### F. `S2-unbounded-scope` + `DK-6-appendix`: unbounded `tan 2Θ` at Ky Fan/UI-norm scope
+
+This is probably the hardest remaining analytic proof and the most important place not to rediscover failed approaches.
+
+#### F.1 What is already proved
+
+At complex scalars, for the unbounded residual problem:
+
+* domain-correct reflection equation is proved;
+* spectral cutoffs are constructed;
+* pole exclusion is unconditional;
+* operator-norm (`ν=1`) branch-free residual `tan 2Θ` is proved with sharp factor `2`.
+
+The unrestricted naive transfer of the bounded approximate-pair proof fails because its error coefficient contains `‖A‖`.
+
+#### F.2 Exact obstruction in the bounded proof
+
+The bounded approximate-pair theorem pairs equation (7.6) for right approximate singular vector `x_k` against an approximate **left** singular vector `y_k`. The left residual
+
+`e_k = Sx_k - q_k y_k`
+
+produces a term involving
+
+`<A(Sx_k), e_k>`.
+
+In the unbounded problem `Sx_k` lies in the high spectral side, where `A` is bounded below but not above. The low-side spectral cutoff does not control that term. This is why simply replacing `‖A‖` by a cutoff radius does not work.
+
+#### F.3 Promising repair: define the left vectors exactly from `Sx_k`
+
+Do **not** use the approximate family's supplied left vectors. Take
+
+`y_k := S x_k / ‖S x_k‖`
+
+on indices where the singular magnitude is nonzero. Then
+
+`<A(Sx_k),y_k> = ‖Sx_k‖ <Ay_k,y_k>`
+
+exactly. The high-side operator enters only through its quadratic-form lower bound, not through an uncontrolled norm.
+
+Use `ApproximateLeadingSingularFamily` only for:
+
+* orthonormality of the right vectors `x_k`;
+* the approximate composite relation `X*X x_k ≈ q_k² x_k`, obtained from its two residual fields;
+* approximation of `q_k` to the desired approximation numbers of the compressed tangent/cross block.
+
+A useful structural observation is already recorded: for the compressed cross block `X=S Ω`,
+
+`X* = Ω S`
+
+because the reflection off-diagonal block is self-adjoint in the ambient reflection. Hence the family's `adjoint_residual` is exactly the low-cutoff leakage estimate for the geometric residual. No extra simultaneous-near-maximizer lemma is required.
+
+#### F.4 The Gram error and the ε^(1/3) split
+
+This is the subtle point most likely to be rediscovered incorrectly.
+
+With approximate singular vectors, neither
+
+`<D₀x_j,D₀x_k> = d_k² δ_jk`
+
+nor orthonormality of the exact normalized `y_k=Sx_k/‖Sx_k‖` is exact. From the reflection Gram identity,
+
+`<D₀x_j,D₀x_k> = δ_jk - <Gx_j,Gx_k>`,
+
+and the same defect controls the `y` Gram matrix.
+
+The error is of order
+
+`O(ε)/(q_j q_k)`.
+
+The family's basic `selected_large` bound only gives `q_k>ε`, which yields an error of order `1/ε` and diverges. Splitting at `q_k≥sqrt ε` leaves an `O(1)` error and is also insufficient.
+
+Use the threshold
+
+`q_k ≥ ε^(1/3)`.
+
+Then:
+
+* retained indices have Gram error `O(ε^(1/3))`;
+* dropped indices have small tangent contribution, bounded by the pole lower bound `d_k≥κ`, so roughly `f(q_k)≤ε^(1/3)/κ`;
+* both errors vanish as `ε->0`.
+
+This exponent is not cosmetic. Do not replace it by `ε` or `sqrt ε` without recomputing both error channels.
+
+#### F.5 Finish the finite-family estimate
+
+After the split:
+
+1. perform finite-dimensional Gram correction/polar orthonormalization on the high-side `y_k` family; the uniform `d_k≥κ>0` prevents denominator blowup;
+2. retain the signed-cosine/polar treatment from M30 so no branch of `cos 2θ` is chosen;
+3. apply `sum_abs_le_kyFanApproximationGauge_of_orthonormal` twice to the two residual pairings;
+4. preserve the single factor `2` from those pairings;
+5. send `ε->0` with spectral cutoff `τ` fixed;
+6. then send `τ->∞` using the existing DK-5.1 cutoff/approximation lemma.
+
+The order of limits matters: the low-side unbounded operator is controlled only at fixed cutoff radius.
+
+#### F.6 From Ky Fan to arbitrary UI norm
+
+Once every prefix satisfies
+
+`δ · KyFan_ν(tan 2Θ₀) ≤ 2 · KyFan_ν(R)`,
+
+invoke the existing Fan-dominance infrastructure to get
+
+`δ N(tan 2Θ₀) ≤ 2 N(R)`
+
+for the paper's UI norms/ideal family. Keep the core theorem at the most natural approximation-number/Ky Fan level.
+
+The approximation-family infrastructure lives on the `DavisKahan` side of the import firewall, so the final Ky Fan proof belongs in `DavisKahan`, consuming the generic `ForTauCeti` unbounded reflection engine. Do not move `ApproximateLeadingSingularFamily` into a `ForTauCeti` module merely to make the file look generic.
+
+#### F.7 Perturbation form and real scalars
+
+After the residual theorem exists, derive the perturbation form using the same off-diagonalization/reflection residual relationship as the bounded M30 source path. Check the norm pinching carefully so the right side remains `2 N(H)` and no extra two is introduced.
+
+Only after the complex analytic theorem is stable should the real version be transported. Most real unbounded spectral and sine infrastructure already exists; do not redo the analytic Ky Fan proof over `ℝ` independently unless transport genuinely fails.
+
+#### F.8 Other Appendix obligations
+
+Separate from the unbounded `tan 2Θ` theorem:
+
+* the paper's unbounded Ritz compression `Ω(τ) A₀ Ω(τ)` and leakage estimate `‖F‖₁≤ητ≤ε` are not represented in the literal paper route;
+* Proposition 6.1 still lacks the common-domain/unbounded relaxation the Appendix explicitly says is available;
+* displayed equations (6.7)--(6.11) themselves are not formalized, although the single-angle theorem conclusion is already proved by a different route.
+
+Prioritize actual source conclusions over reproducing proof-display numbers unless the census definition of completion requires those identities. If the theorem is already source-exact via a stronger alternate proof, the displayed derivation may be documentation fidelity rather than theorem debt; adjudicate explicitly rather than silently assuming either answer.
+
+---
+
+### G. Smaller but real source obligations
+
+#### G.1 `DK-4.2-prop`: identify the right side with `Σ sin² θ_k`
+
+The basis inequality is compiled. The missing source dictionary is the identification of
+
+`Σ_i (1 - ‖C b_i‖²)`
+
+with the principal-angle expression.
+
+In finite dimension:
+
+`Σ_i ‖C b_i‖² = trace(C* C)`.
+
+For the positive cosine block this is the sum of squared principal cosines. Therefore
+
+`dim - trace(C²) = Σ_k (1-cos² θ_k) = Σ_k sin² θ_k`.
+
+Search the existing Section 8 approximation-number/principal-cosine dictionary before building new eigenvalue machinery. If a general finite-dimensional trace/Hilbert--Schmidt identity is missing, put that identity in reusable operator theory and keep the principal-angle substitution in the source facade.
+
+Do not change the right side back to the older `sum cost D b_i` expression; recorded counterexamples show that transcription route was wrong.
+
+#### G.2 `DK-5-hermitian-inequalities`: equation (5.2) and its sharp 2x2 witness
+
+Equation (5.1) is already complete and more general than the paper. The remaining printed inequality is the rank-sensitive Schatten/trace-norm consequence (see the census/transcription for the exact project notation before coding).
+
+The likely route is finite-rank Cauchy--Schwarz between Schatten 1 and 2 quantities together with (5.1): one factor contributes a `sqrt(rank C)`. Do not rely on remembered notation; first inspect which project gauges correspond to the paper's subscripts `1` and `2` in this section.
+
+The paper also gives an explicit 2x2 sharpness/counterexample calculation, with matrices recorded in the census. Compile that arithmetic as part of the row rather than leaving it as prose.
+
+The paper's subsequent open question about replacing rank by a constant is not a completion obligation.
+
+#### G.3 `DK-6.3-thm`: remove the finite-trial wrapper under the paper's separability assumption
+
+The real arbitrary-trial theorem already exists. The complex source-facing finite theorem still has a finite-dimensional trial hypothesis in a place where the paper obtains finiteness from a strict rank inequality under separability.
+
+Rather than reprove the entire theorem for arbitrary trial dimension, derive finite-dimensionality from the paper hypotheses:
+
+1. a closed subspace of a separable Hilbert space is separable, hence Hilbert dimension/rank `≤ aleph0`;
+2. if `rank Z < rank V ≤ aleph0`, then `rank Z < aleph0`;
+3. use the library equivalence between rank below `aleph0` and finite-dimensionality;
+4. invoke the existing theorem.
+
+Search Mathlib/TauCeti for the exact cardinal lemmas first. If the general "separable Hilbert subspace has rank ≤ aleph0" bridge is missing, it is reusable `ForTauCeti` infrastructure.
+
+---
+
+### H. `DK-9-model`: complete the beam model as the paper states it
+
+This row has three logically separate axes. Do them in this order because each supplies infrastructure for the next.
+
+#### H.1 Prove positive spectrum exists, preferably as a discrete unbounded sequence
+
+Current state:
+
+* `beamOperator` is the self-adjoint form realization;
+* the form embedding is compact;
+* the kernel is the two-dimensional affine plane;
+* the positive spectrum is contained above the explicit gap, but nonemptiness is not proved;
+* `beamFiniteDataCertificate` still assumes a positive spectral value.
+
+The right general theorem is a compact-resolvent/discrete-spectrum result for a semibounded self-adjoint form realization.
+
+Conceptual route:
+
+1. compactness of the form-domain embedding implies compactness of a shifted resolvent `(A+c)^{-1}`;
+2. on `ker A⊥`, the compact resolvent is a nonzero positive compact self-adjoint operator;
+3. compact self-adjoint spectral theory supplies nonzero eigenvalues tending to zero on an infinite-dimensional complement;
+4. invert the resolvent eigenvalue relation to obtain positive eigenvalues of `A` tending to `+∞`;
+5. order them after the two zero modes to obtain the paper's `α₃<α₄<...` framework.
+
+If the general compact-form-embedding-to-compact-resolvent theorem is missing, implement it in the form-method / self-adjoint spectral theory layer of `ForTauCeti`. This is exactly the sort of reusable theorem the roadmap should influence.
+
+At minimum, nonemptiness of positive spectrum is enough to remove the current `α∈realSpectrum` certificate hypothesis; an unbounded sequence is the source-faithful stronger endpoint.
+
+#### H.2 Identify the form realization with the classical fourth derivative and free-end boundary conditions
+
+The paper's operator is the closure of `(d/dt)^4` with free-end boundary conditions. Current Lean defines the form realization and derives boundary conditions for eigenfunctions, which is weaker than identifying the operator domain.
+
+The desired theorem is an operator-domain equivalence:
+
+`u ∈ dom(beamOperator)` iff `u` has the appropriate fourth weak derivative in `L²` and
+
+`u''(0)=u''(1)=u'''(0)=u'''(1)=0`,
+
+with `beamOperator u = u''''`.
+
+Proof strategy:
+
+* from the representation theorem, `a(u,v)=<f,v>` for all form-domain `v`;
+* test first against compactly supported smooth functions to identify the distributional fourth derivative with `f`;
+* Sobolev regularity upgrades `u` to the required `H^4`/classical trace regularity;
+* integrate by parts twice against general `H²` test functions; vanishing of the boundary form forces the four natural free-end conditions;
+* converse: an `H^4` function with those boundary conditions satisfies the form identity by two integrations by parts, hence belongs to the form operator domain;
+* then identify the form operator with the closure of the classical operator.
+
+Any general interval Sobolev integration-by-parts or natural-boundary-condition lemmas should live below the beam source file.
+
+#### H.3 Real `L²(0,1)`
+
+The paper uses real `L²`; the current beam model uses `Lp ℂ 2`.
+
+The simple complexification route used elsewhere is unavailable because the repository does not yet present `Lp ℂ 2 μ` as the real complexification of `Lp ℝ 2 μ`.
+
+Two architecture-compatible options:
+
+1. build a general real/complex `L²` isometric equivalence, pointwise `f ↦ (re f, im f)`, and transport the form/operator;
+2. parameterize the beam form construction over `RCLike` if inspection shows the analytic ingredients are scalar-generic.
+
+Choose after inspecting the actual dependencies. A generic `L²` complexification theorem is valuable mathematics, but do not launch a broad Bochner-integration campaign if the beam construction can be made `RCLike` with substantially less machinery.
+
+---
+
+### I. Section 9 consequences sharing earlier work
+
+#### I.1 `DK-9.5-9.7`: the missing 2-norm sentence after (9.7)
+
+Do **not** do more beam analysis here.
+
+The beam perturbation, spectral gap, Rayleigh--Ritz residual, comparison operator, and operator-norm `tan 2θ₁` bound are already proved.
+
+Once mission F supplies
+
+`δ · KyFan_2(tan 2Θ₀) ≤ 2 · KyFan_2(R)`,
+
+the paper's `tan 2θ₁ + tan 2θ₂` sentence should be a short specialization. `norm_beamRitzOffDiagonal_le` already controls the residual block, and the recentered Gram/rank-one structure already gives the second approximation-number simplification needed on the right.
+
+Keep the hard theorem in `TanTwoThetaUnboundedResidual.lean`; the beam source file should instantiate it in a few lines.
+
+#### I.2 `DK-9-infinite-residual-counterexample`
+
+The operator-domain phenomenon is already formalized with the canonical `LinearPMap` diagonal operator. Three items remain.
+
+**Rayleigh quotient.** For the geometric vector `e_n=μ^n` and diagonal multiplier chosen in the source, evaluate numerator and denominator by geometric series. The recorded arithmetic is
+
+`[1/(1-μ)] / [1/(1-μ²)] = 1+μ`.
+
+Use existing `HasSum` geometric-series lemmas rather than manually manipulating partial sums if possible.
+
+**Self-adjointness of the maximal real diagonal operator.** This should be a reusable theorem: for real diagonal `d_n`, define domain `{x | (d_n x_n)∈ℓ²}` and multiplication `Ax=(d_n x_n)`. Symmetry is coordinatewise. For adjoint-domain equality, test a putative adjoint vector against standard basis vectors to identify its coordinate image as `d_n y_n`; the existence of the adjoint image then says that sequence lies in `ℓ²`, exactly the maximal domain condition. Package this in `ForTauCeti`'s `LinearPMap` diagonal/multiplication operator layer if no theorem exists.
+
+**Weinberger bound.** After the quotient is `1+μ`, apply the appropriate lower-bound/min--max angle estimate from the repository to derive the source contrast
+
+`sin² θ ≤ (1+μ-α̌₁)/(α̌₂-α̌₁)`,
+
+and the best-lower-bound simplification
+
+`sin θ ≤ μ / sqrt(1-μ)`.
+
+Search for the Weinberger/lower-bound theorem before reproving it. The point of the source example is precisely that residual theorems do not apply because the trial vector lies outside the operator domain, while the form/Rayleigh lower-bound method remains meaningful.
+
+---
+
+## 6. Architecture/migration work that affects the credibility of “100%”
+
+### M21: finish the `LinearPMap` migration
+
+Recent work moved spectral reduction and its real companion onto `LinearPMap`; that is the correct foundation. Several source facades still consume the temporary real `ClosedOperator` adapter. Re-search current HEAD for all consumers before editing, then migrate them dependency-order and delete the duplicate abstraction when the last consumer is gone.
+
+This is not merely cosmetic. Remaining unbounded work should not be forced to prove each theorem twice because two domain carriers survive indefinitely.
+
+### M23: frontier `--check` coverage
+
+The existing frontier check can miss source nodes with no census mapping. This matters because the final claim is source completeness, and an omitted row/declaration is exactly the failure the checker should expose.
+
+Keep the fix narrow: improve the existing checker/manifest relationship rather than adding another parallel checker system. Repository policy is explicitly against checker proliferation.
+
+### M28: removable conjugation cleanup
+
+Take removable real/complex conjugation simplifications back to the complex side where they reduce duplicated proof plumbing. Treat this as architecture cleanup, not a source theorem mission.
+
+---
+
+## 7. Standing traps and false routes
+
+These are established by compiler work or counterexample. Do not re-propose them without new mathematics.
+
+1. **Search before declaring an API absent.** Several campaign blockers were false descriptions of the repository.
+2. **`omit ... in` must precede the docstring it scopes.** Placing it between `/-- ... -/` and `theorem` produces a misleading parser error.
+3. **Bounded Borel spectral calculus is complex-only in the relevant local layer.** A proof reaching `exists_finiteDimensional_le_almostInvariant` cannot become `RCLike` by binder editing.
+4. **Use `realSpectrum`, not `spectrum ℝ`, across complexification.** Avoid the real-algebra diamond.
+5. **Do not transport `KyFanDominantIdealFamily` gauges across fields.** Transport approximation numbers/Ky Fan inequalities, then rebuild the target-field norm statement.
+6. **`PaperUnitaryInvariantNorm` is scalar-agnostic; ideal families are field instances.** This distinction has already routed around several false scalar blockers.
+7. **A module not imported by an `All.lean` is invisible to the default build/census/frontier.** Every new source endpoint must enter the build closure.
+8. **The census and frontier JSON files have different serialization conventions.** Preserve their existing formatting exactly.
+9. **Status edits can trigger frontier obligations.** Run the full source/frontier gate set after metadata changes.
+10. **No wildcard imports, no `sorry`, no `admit`, no new axioms.**
+11. **`J²=-1` is false globally.** Correct: `J²=-(sinΘ)(sinΘ)^+`; `J` vanishes on the zero-angle kernel.
+12. **`DK-3.1-cor` uses `P(I-Q)P`, not `PQP`.** Do not regress the compactness statement.
+13. **The Section 3 classification invariant is `genericCosineBlock`, not `genericHalmosCosineSq`.**
+14. **The weaker maximal-subspace predicate previously attributed to Proposition 3.5 is false for `c<1`.** Exterior vectors give a counterexample; keep the corrected complement-aware predicate.
+15. **The existing Theorem 8.2 infinite-dimensional counterexample does not satisfy (3.5).** It says nothing about the paper's (3.5)-qualified claim.
+16. **The naive unrestricted unbounded `tan 2Θ` Sylvester identity has a nonzero commutator defect.** `doubleAngleTangent_sylvesterEquation` carries it explicitly. Do not assume it vanishes.
+17. **(1.12)/(1.13) suprema need not be attained.** The `diag(1-1/n)` example rules out an exact maximizer.
+18. **The old `sin 2Θ` multiplicity-mismatch counterexample was wrong.** The directed double-angle sine range sits in the relevant source subspace; re-check the actual block geometry.
+19. **Proposition 4.4 is false as printed.** It is correctly terminal as `refuted_as_transcribed`; see the compiled counterexample and `papers/davis_kahan_prop_4_4_counterexample.tex`.
+20. **The Section 10 questions are the paper's open questions.** They are not proof debt.
+21. **M30's factor two is sacred.** Reflection gives the `2`; adjoint/corner transport gives no additional `2`.
+
+---
+
+## 8. Recommended sequencing and parallelism
+
+A good coordinator should dispatch by shared mathematics, not simply by census order.
+
+### Immediate parallel lanes
+
+**Lane 1 — M36 / real Theorem 8.1.** The hard descent infrastructure is now present. Finish the real source theorem while the architecture is fresh.
+
+**Lane 2 — equation (1.12) codomain-room cleanup.** Small, well-scoped, independent. This can retire `S1-ui-norms`.
+
+**Lane 3 — (3.5) directed-gap equality.** High leverage: closes the dimension issue in Theorem 8.2 and ambient tangent acuteness, and supplies the correct framework for the Section 3 bilateral-shift remark.
+
+**Lane 4 — unbounded Ky Fan `tan 2Θ`.** Hard analytic lane, but it unlocks three source locations at once. Give it to an agent with the M30/M30-style approximate singular-family context.
+
+**Lane 5 — Section 3 cfc/intertwiner work.** Proposition 3.1 characterization and Theorem 3.1 realization cleanup may share a generic intertwining lemma.
+
+**Lane 6 — Section 9 spectral/form theory.** Positive beam spectrum and maximal diagonal self-adjointness can proceed largely independently and may contribute reusable `ForTauCeti` theory.
+
+### Shared-file concurrency rule
+
+While multiple mathematical lanes are active, avoid editing shared census/frontier JSON and aggregate `All.lean` files unnecessarily. Land/compile the mathematical declarations first, then make one intentional integration update. This minimizes merge conflicts and prevents metadata from claiming a theorem before its implementation stabilizes.
+
+### When to split a mission
+
+Split when the mathematical dependencies separate. For example, `DK-9-model`'s compact-resolvent theorem and real-`L²` complexification are distinct projects. Do not make one agent hold both merely because they live in one census row.
+
+Conversely, combine tasks when one general theorem is clearly shared: (3.5) geometry and unbounded `tan 2Θ` are the obvious examples.
+
+---
+
+## 9. Startup protocol for a new proof agent
+
+For any mission:
+
+1. inspect `git status --short` and recent commits;
+2. read the exact census row, including the **latest** notes, not just `next_action`;
+3. inspect the source transcription for the precise hypothesis/conclusion and nearby proof;
+4. search declaration names and concepts repository-wide, including `external/TauCeti/` and `ForTauCeti/`;
+5. inspect the current variable blocks/signatures of candidate lemmas;
+6. identify the lowest reusable mathematical seam;
+7. prove that seam without weakening the source theorem;
+8. expose a thin source-facing theorem at the printed scope;
+9. wire new modules into the build closure;
+10. compile the narrowest meaningful target, then integration targets;
+11. update census/frontier only after the proof compiles;
+12. run the full validation set before claiming the row exact.
+
+When compiler feedback reveals a structural mismatch, inspect surrounding definitions and already-compiled analogous proofs before issuing a one-line speculative patch. The campaign has repeatedly lost time by fighting subtype/coercion representations tactically when the right answer was to use the canonical representation one layer lower.
+
+---
+
+## 10. Definition of done for the full paper
+
+The campaign is complete only when all of the following are simultaneously true:
+
+1. every printed mathematical conclusion has a source-facing Lean declaration at the printed scope, or is explicitly and correctly classified as false/open/not a completion obligation;
+2. no completion row remains merely `compiled_specialization` because of an actual paper-scope narrowing;
+3. the stale real-scalar blocker has been split/retired and the blockers table is empty;
+4. Proposition 4.4 remains documented as refuted rather than "proved" by changing its statement;
+5. the Section 10 open questions remain correctly non-obligatory;
+6. every source declaration resolves from the intended default build closure;
+7. census declaration verification and frontier checks are clean;
+8. source endpoints are axiom-clean: no `sorryAx`, `sorry`, `admit`, or new axioms;
+9. repository dependency rules and library-structure baselines do not regress;
+10. a full `lake build` succeeds without avoidable warning noise introduced by the campaign;
+11. `git diff --check` is clean;
+12. a final fresh section-by-section audit against `non-distributable/davis-kahan-1970-modernized-transcription.tex` confirms that no printed assertion was omitted merely because no census row named it.
+
+The last item is essential. The gates can verify declarations they know about; they cannot prove that the census itself remembered every sentence in the paper.
+
+---
+
+## 11. Short mission briefs a coordinator can copy
+
+### Real Theorem 8.1
+
+Use the compiled complex `theorem8_1_canonicalBranch` on complexified real data. Pull spectral repulsion back with `realSpectrum_complexify`. Define the real canonical branch with `realBoundedSpectralSubspaceIicOfGap`. Identify its complexification using `complexifySubmodule_realBoundedSpectralSubspaceIicOfGap`. Pull reduction, form bounds, and quarter-angle geometry back exactly. Prove uniqueness by complexifying any competing real branch, applying complex uniqueness, and using injectivity of `complexifySubmodule`. Generalize the restricted-spectrum/form-bound bridge if needed rather than duplicating it inside Section 8.
+
+### Standing assumption (3.5)
+
+Prove that equal crossed-defect dimensions make the two directed gaps equal, preferably through the Halmos decomposition / crossed sine blocks. The generic parts are equisingular; the only possible norm asymmetry is the defect singular value `1`, and (3.5) equalizes its presence. Use the theorem to convert directed Theorem 8.2 bounds into `subspaceGap<sqrt 2/2`, and to derive the ambient tangent transversality that the paper gets from (1.5)+(3.5).
+
+### Unbounded Ky Fan `tan 2Θ`
+
+Start from `TanTwoThetaUnboundedResidual` plus the `ForTauCeti` reflection/cutoff/pole infrastructure. Do not reuse the bounded approximate left singular vectors: define `y_k=Sx_k/‖Sx_k‖` exactly so the high-side unbounded form term has no residual. Use the approximate family for the right vectors and `X*X` relation only. Control Gram errors with the threshold `q_k≥ε^(1/3)`; `ε` and `sqrt ε` thresholds are insufficient. Gram-correct the retained high-side family, apply the magnitude Ky Fan variational estimate twice, send `ε->0` at fixed cutoff, then cutoff to infinity. Preserve the single sharp factor `2`. Fan dominance then gives arbitrary UI norms. Instantiate this result in the Appendix and beam `(9.7)`; do not reprove it downstream.
+
+### Proposition 3.1 characterization
+
+Do not assume equation (3.8). Starting from a unitary/orthogonal intertwiner with accretive diagonal blocks, derive `C₀²S₁=S₁C₁²`, transport through cfc with `f=sqrt` to get `C₀S₁=S₁C₁`, then use acute density of `Range C₁` to recover the crossed-block adjoint relation and invoke the existing direct-rotation uniqueness. Search `SeparatedIntertwiner.cfcHom_intertwines` first.
+
+### Beam positive spectrum
+
+Turn compactness of the form embedding into compactness of a shifted resolvent, restrict away from the known two-dimensional kernel, invoke compact self-adjoint spectral theory, and invert the resolvent spectrum to obtain positive beam eigenvalues (ideally an unbounded sequence). Put the compact-resolvent theorem in reusable form-method spectral theory if it is missing; keep the beam file as an application.
+
+---
+
+## Bottom line
+
+The project is no longer missing a single monolithic "real infinite-dimensional" layer. It is in the endgame of a handful of mathematically distinct obligations. The best way to reach 100% is to solve the shared operator-theory seams once—real canonical spectral branches, (3.5) gap symmetry, cfc intertwiners, unbounded Ky Fan double-angle tangent, compact-resolvent spectral theory—and let thin Davis--Kahan source theorems consume them.
+
+Do not optimize for the smallest local diff. Optimize for source-faithful endpoints resting on canonical, reusable operator theory, while keeping each mission bounded by the mathematics it actually needs.
