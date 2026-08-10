@@ -33,13 +33,14 @@ noncomputable section
 
 universe u v
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
-variable {V : Type v} [NormedAddCommGroup V] [InnerProductSpace ℂ V]
+variable {V : Type v} [NormedAddCommGroup V] [InnerProductSpace 𝕜 V]
   [CompleteSpace V]
 
 /-- Sequential compactness of a continuous embedding on bounded sequences. -/
-def SequentiallyCompactEmbedding (j : V →L[ℂ] H) : Prop :=
+def SequentiallyCompactEmbedding (j : V →L[𝕜] H) : Prop :=
   ∀ u : ℕ → V,
     (∃ C : ℝ, ∀ n, ‖u n‖ ≤ C) →
     ∃ phi : ℕ → ℕ, StrictMono phi ∧
@@ -48,8 +49,8 @@ def SequentiallyCompactEmbedding (j : V →L[ℂ] H) : Prop :=
 omit [CompleteSpace H] in
 /-- A bounded operator maps bounded sequences to bounded sequences. -/
 theorem bounded_sequence_comp
-    {W : Type*} [NormedAddCommGroup W] [NormedSpace ℂ W]
-    (T : H →L[ℂ] W) (x : ℕ → H)
+    {W : Type*} [NormedAddCommGroup W] [NormedSpace 𝕜 W]
+    (T : H →L[𝕜] W) (x : ℕ → H)
     {C : ℝ} (hC : ∀ n, ‖x n‖ ≤ C) :
     ∃ D : ℝ, ∀ n, ‖T (x n)‖ ≤ D := by
   refine ⟨‖T‖ * max C 0, ?_⟩
@@ -61,7 +62,7 @@ theorem bounded_sequence_comp
 /-- Compactness of the form embedding implies compactness of the ambient
 variational resolvent. -/
 theorem CoerciveFormData.resolvent_sequentiallyCompact
-    (D : CoerciveFormData (H := H) (V := V))
+    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V))
     (hcompact : SequentiallyCompactEmbedding D.embed) :
     SequentiallyCompactOperator D.resolvent := by
   intro f hf
@@ -75,7 +76,7 @@ theorem CoerciveFormData.resolvent_sequentiallyCompact
 /-- A compact form embedding gives compact graph embedding for the associated
 positive self-adjoint operator. -/
 theorem CoerciveFormData.associatedOperator_graph_compact
-    (D : CoerciveFormData (H := H) (V := V))
+    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V))
     (hcompact : SequentiallyCompactEmbedding D.embed) :
     SequentiallyCompactGraphEmbedding D.associatedOperator := by
   exact inverse_graph_embedding_compact
@@ -85,7 +86,7 @@ theorem CoerciveFormData.associatedOperator_graph_compact
 /-- For the form realization, compactness of the ambient resolvent and the
 inverse graph embedding are equivalent. -/
 theorem CoerciveFormData.graph_compact_iff_resolvent_compact
-    (D : CoerciveFormData (H := H) (V := V)) :
+    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     SequentiallyCompactGraphEmbedding D.associatedOperator ↔
       SequentiallyCompactOperator D.resolvent := by
   exact inverse_graph_compact_iff

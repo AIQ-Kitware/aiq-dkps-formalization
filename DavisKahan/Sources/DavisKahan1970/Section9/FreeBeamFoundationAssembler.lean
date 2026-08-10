@@ -50,7 +50,7 @@ variable {V : Type v} [NormedAddCommGroup V] [InnerProductSpace ℂ V]
 /-- Remaining completion data after the graph-space and trace-kernel
 constructions have been automated. -/
 structure BeamFoundationCompletionData where
-  traceModel : Abstract.FourthOrderTraceModel (H := H) (V := V)
+  traceModel : Abstract.FourthOrderTraceModel (𝕜 := ℂ) (H := H) (V := V)
   free_dense : DenseRange traceModel.freeEmbed
   graphConstant : ℝ
   graphConstant_pos : 0 < graphConstant

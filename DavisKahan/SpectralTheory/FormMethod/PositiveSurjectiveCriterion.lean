@@ -45,29 +45,30 @@ noncomputable section
 
 universe u
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
 
 /-- Positivity and surjectivity of `A + 1` force density of the operator
  domain.  This is useful when a variational construction initially presents a
  domain but has not yet established density independently. -/
 theorem dense_domain_of_nonnegative_one_add_surjective
-    (A : H →ₗ.[ℂ] H)
+    (A : H →ₗ.[𝕜] H)
     (hnonneg : ∀ x : A.domain,
-      0 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
+      0 ≤ RCLike.re ⟪A x, (x : H)⟫_𝕜)
     (hsurj : ∀ h : H, ∃ x : A.domain, A x + (x : H) = h) :
     Dense (A.domain : Set H) := by
   rw [Submodule.dense_iff_topologicalClosure_eq_top,
     Submodule.topologicalClosure_eq_top_iff, Submodule.eq_bot_iff]
   intro h hh
   obtain ⟨g, hg⟩ := hsurj h
-  have hortho : ⟪(g : H), h⟫_ℂ = 0 :=
+  have hortho : ⟪(g : H), h⟫_𝕜 = 0 :=
     (Submodule.mem_orthogonal _ h).1 hh (g : H) g.property
   rw [← hg, inner_add_right] at hortho
-  have hpos : 0 ≤ RCLike.re ⟪(g : H), A g⟫_ℂ := by
+  have hpos : 0 ≤ RCLike.re ⟪(g : H), A g⟫_𝕜 := by
     rw [inner_re_symm]
     exact hnonneg g
-  have hre : RCLike.re ⟪(g : H), A g⟫_ℂ + ‖(g : H)‖ ^ 2 = 0 := by
+  have hre : RCLike.re ⟪(g : H), A g⟫_𝕜 + ‖(g : H)‖ ^ 2 = 0 := by
     have hr := congrArg RCLike.re hortho
     rwa [map_add, map_zero, inner_self_eq_norm_sq] at hr
   have hg0 : (g : H) = 0 := by
@@ -81,10 +82,10 @@ theorem dense_domain_of_nonnegative_one_add_surjective
 /-- A symmetric nonnegative partial operator for which `A + 1` is onto is
  self-adjoint.  No prior density hypothesis is required. -/
 theorem isSelfAdjoint_of_isFormalAdjoint_nonnegative_one_add_surjective
-    (A : H →ₗ.[ℂ] H)
+    (A : H →ₗ.[𝕜] H)
     (hsym : A.IsFormalAdjoint A)
     (hnonneg : ∀ x : A.domain,
-      0 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
+      0 ≤ RCLike.re ⟪A x, (x : H)⟫_𝕜)
     (hsurj : ∀ h : H, ∃ x : A.domain, A x + (x : H) = h) :
     _root_.IsSelfAdjoint A := by
   have hdense : Dense (A.domain : Set H) :=
@@ -95,16 +96,16 @@ theorem isSelfAdjoint_of_isFormalAdjoint_nonnegative_one_add_surjective
       A.adjoint w = -(w : H) → (w : H) = 0 := by
     intro w hw
     have hortho : ∀ v : A.domain,
-        ⟪(w : H), A v + (v : H)⟫_ℂ = 0 := by
+        ⟪(w : H), A v + (v : H)⟫_𝕜 = 0 := by
       intro v
-      have hfa : ⟪A.adjoint w, (v : H)⟫_ℂ =
-          ⟪(w : H), A v⟫_ℂ :=
+      have hfa : ⟪A.adjoint w, (v : H)⟫_𝕜 =
+          ⟪(w : H), A v⟫_𝕜 :=
         LinearPMap.adjoint_isFormalAdjoint hdense w v
       rw [hw, inner_neg_left] at hfa
       rw [inner_add_right, ← hfa]
       ring
     obtain ⟨v, hv⟩ := hsurj (w : H)
-    have hself : ⟪(w : H), (w : H)⟫_ℂ = 0 := by
+    have hself : ⟪(w : H), (w : H)⟫_𝕜 = 0 := by
       have h := hortho v
       rwa [hv] at h
     exact inner_self_eq_zero.mp hself
@@ -138,10 +139,10 @@ theorem isSelfAdjoint_of_isFormalAdjoint_nonnegative_one_add_surjective
 
 /-- Closed-operator wrapper for the positive-surjective criterion. -/
 theorem DavisKahanExt.ClosedOperator.isSelfAdjoint_of_nonnegative_one_add_surjective
-    (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
+    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hsym : A.IsSymmetric)
     (hnonneg : ∀ x : A.domain,
-      0 ≤ RCLike.re ⟪A.toLinearMap x, (x : H)⟫_ℂ)
+      0 ≤ RCLike.re ⟪A.toLinearMap x, (x : H)⟫_𝕜)
     (hsurj : ∀ h : H, ∃ x : A.domain,
       A.toLinearMap x + (x : H) = h) :
     A.IsSelfAdjoint := by

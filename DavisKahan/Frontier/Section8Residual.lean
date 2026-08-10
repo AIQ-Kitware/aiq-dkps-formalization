@@ -83,24 +83,29 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-! ### 1. The printed residual is the first column of the perturbation -/
 
-omit [CompleteSpace H] in
 /-- **The paper's `R = (A + H) E₀ - E₀ A₀` equals `H E₀`.**
 
 This is the Section 1 remark "`R`, left-multiplied by the isometry `(E₀⋆; E₁⋆)`,
 gives the first column of `H`; or that `R = H E₀`", and it needs nothing beyond
 invariance of `P` under the unperturbed operator: on `P` the compression `A₀` is
-the honest restriction, so the two `A`-terms cancel. -/
-theorem residual_eq_comp_subtypeL (A K : H →L[ℂ] H) (P : Submodule ℂ H)
+the honest restriction, so the two `A`-terms cancel.
+
+Stated over an arbitrary `RCLike` field, with its own binders, because the real
+Section 8 descent needs exactly this identity over `ℝ`; nothing in the argument
+sees the scalars. -/
+theorem residual_eq_comp_subtypeL {𝕜 : Type*} [RCLike 𝕜] {G : Type*}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    (A K : G →L[𝕜] G) (P : Submodule 𝕜 G)
     [P.HasOrthogonalProjection] (hPinv : ∀ x ∈ P, A x ∈ P) :
     residual (A + K) P.subtypeL (compressOperator P A) = K ∘L P.subtypeL := by
   ext u
-  have hAu : A (u : H) ∈ P := hPinv (u : H) u.2
-  have hco : ((compressOperator P A u : P) : H) = A (u : H) := by
-    change P.starProjection (A (u : H)) = A (u : H)
+  have hAu : A (u : G) ∈ P := hPinv (u : G) u.2
+  have hco : ((compressOperator P A u : P) : G) = A (u : G) := by
+    change P.starProjection (A (u : G)) = A (u : G)
     exact Submodule.starProjection_eq_self_iff.mpr hAu
-  show (A + K) (u : H) - ((compressOperator P A u : P) : H) = K (u : H)
+  show (A + K) (u : G) - ((compressOperator P A u : P) : G) = K (u : G)
   rw [hco]
-  show A (u : H) + K (u : H) - A (u : H) = K (u : H)
+  show A (u : G) + K (u : G) - A (u : G) = K (u : G)
   abel
 
 /-! ### 2. Spectral data on `P` only sees the operator on `P` -/

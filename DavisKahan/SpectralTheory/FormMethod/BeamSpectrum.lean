@@ -532,6 +532,7 @@ theorem exists_characteristic_of_eigen {lam : ℝ} (hlam : 0 < lam)
   have hwwbar : wfn =ᵐ[unitIocMeasure] wbar := by
     refine hcd.trans (Filter.Eventually.of_forall fun t => ?_)
     simp only [hKsm, hwbar]
+    rfl
   have hKw : secondPrimitive wfn = secondPrimitive wbar := secondPrimitive_congr_ae hwwbar
   have hKx : secondPrimitive xfn = secondPrimitive ubar := secondPrimitive_congr_ae hxubar
   have hwint : Integrable wfn unitIocMeasure := integrable_coeFn _
@@ -769,16 +770,15 @@ theorem isCompactOperator_beamResolvent :
   rw [beamResolvent_eq]
   exact isCompactOperator_beamEmbed.comp_clm (ContinuousLinearMap.adjoint beamEmbed)
 
-/-- Classification of the nonzero eigenvalues of the variational resolvent: `1` (from the
-affine kernel side) or `(1+β⁴)⁻¹` for a characteristic root `β`. -/
-theorem beamResolvent_eigenvalue_classify {mu : ℂ} (hmu : mu ≠ 0)
-    {u : BeamL2} (hu0 : u ≠ 0)
-    (huv : beamCoerciveFormData.resolvent u = mu • u) :
-    mu = 1 ∨ ∃ beta : ℝ, 0 < beta ∧ characteristic beta = 0
-      ∧ mu = (((1 + beta ^ 4)⁻¹ : ℝ) : ℂ) := by
+/-- **Inverting the resolvent eigenvalue relation.**  A nonzero scalar `mu` with
+`R u = mu • u` places `u` in the operator domain and makes it an eigenvector of the beam
+operator for `mu⁻¹ - 1`.  No nondegeneracy of `u` is needed: at `u = 0` both statements
+hold trivially. -/
+theorem exists_beamOperator_apply_of_beamResolvent_smul {mu : ℂ} (hmu : mu ≠ 0)
+    {u : BeamL2} (huv : beamCoerciveFormData.resolvent u = mu • u) :
+    ∃ h : u ∈ beamOperator.domain,
+      beamOperator.toLinearMap ⟨u, h⟩ = (mu⁻¹ - 1) • u := by
   set R := beamCoerciveFormData.resolvent with hR
-  have hN : ((‖u‖ : ℂ)) ^ 2 ≠ 0 :=
-    pow_ne_zero _ (Complex.ofReal_ne_zero.mpr (norm_ne_zero_iff.mpr hu0))
   -- the eigenvector is in the domain of the shifted operator
   have humem : u ∈ beamOperator.domain := by
     have hmem : u ∈ LinearMap.range ((R : BeamL2 →ₗ[ℂ] BeamL2)) := by
@@ -786,6 +786,7 @@ theorem beamResolvent_eigenvalue_classify {mu : ℂ} (hmu : mu ≠ 0)
       rw [show ((R : BeamL2 →ₗ[ℂ] BeamL2)) (mu⁻¹ • u) = R (mu⁻¹ • u) from rfl,
         map_smul, huv, smul_smul, inv_mul_cancel₀ hmu, one_smul]
     exact hmem
+  refine ⟨humem, ?_⟩
   -- the shifted operator scales the eigenvector by `mu⁻¹`
   have hRmu : R (mu⁻¹ • u) = u := by
     rw [map_smul, huv, smul_smul, inv_mul_cancel₀ hmu, one_smul]
@@ -797,12 +798,33 @@ theorem beamResolvent_eigenvalue_classify {mu : ℂ} (hmu : mu ≠ 0)
     have hsub : (⟨R (mu⁻¹ • u), LinearMap.mem_range_self _ _⟩ :
         beamShiftedFormData.shiftedOperator.domain) = ⟨u, humem⟩ := Subtype.ext hRmu
     exact (congrArg beamShiftedFormData.shiftedOperator.toLinearMap hsub).symm.trans happ
-  -- so the beam operator has eigenvalue `mu⁻¹ - 1`
-  have hbeam : beamOperator.toLinearMap ⟨u, humem⟩ = (mu⁻¹ - 1) • u := by
-    have h : beamOperator.toLinearMap ⟨u, humem⟩
-        = beamShiftedFormData.shiftedOperator.toLinearMap ⟨u, humem⟩ - u :=
-      beamShiftedFormData.beamOperator_apply _
-    rw [h, hshift, sub_smul, one_smul]
+  have h : beamOperator.toLinearMap ⟨u, humem⟩
+      = beamShiftedFormData.shiftedOperator.toLinearMap ⟨u, humem⟩ - u :=
+    beamShiftedFormData.beamOperator_apply _
+  rw [h, hshift, sub_smul, one_smul]
+
+/-- A fixed vector of the variational resolvent is affine: `1` is the resolvent eigenvalue
+that corresponds to the operator's zero mode. -/
+theorem exists_affine_of_beamResolvent_eq_self {u : BeamL2}
+    (huv : beamCoerciveFormData.resolvent u = u) :
+    ∃ a b : ℂ, u = affineLp a b := by
+  obtain ⟨humem, hbeam⟩ :=
+    exists_beamOperator_apply_of_beamResolvent_smul (mu := 1) one_ne_zero
+      (by rw [huv, one_smul])
+  refine exists_affine_of_beamOperator_eq_zero (x := ⟨u, humem⟩) ?_
+  rw [hbeam, inv_one, sub_self, zero_smul]
+
+/-- Classification of the nonzero eigenvalues of the variational resolvent: `1` (from the
+affine kernel side) or `(1+β⁴)⁻¹` for a characteristic root `β`. -/
+theorem beamResolvent_eigenvalue_classify {mu : ℂ} (hmu : mu ≠ 0)
+    {u : BeamL2} (hu0 : u ≠ 0)
+    (huv : beamCoerciveFormData.resolvent u = mu • u) :
+    mu = 1 ∨ ∃ beta : ℝ, 0 < beta ∧ characteristic beta = 0
+      ∧ mu = (((1 + beta ^ 4)⁻¹ : ℝ) : ℂ) := by
+  have hN : ((‖u‖ : ℂ)) ^ 2 ≠ 0 :=
+    pow_ne_zero _ (Complex.ofReal_ne_zero.mpr (norm_ne_zero_iff.mpr hu0))
+  -- the beam operator has eigenvalue `mu⁻¹ - 1`
+  obtain ⟨humem, hbeam⟩ := exists_beamOperator_apply_of_beamResolvent_smul hmu huv
   -- the eigenvalue is real
   have hL : ⟪beamOperator.toLinearMap ⟨u, humem⟩, u⟫_ℂ
       = (starRingEnd ℂ) (mu⁻¹ - 1) * ((‖u‖ : ℂ)) ^ 2 := by

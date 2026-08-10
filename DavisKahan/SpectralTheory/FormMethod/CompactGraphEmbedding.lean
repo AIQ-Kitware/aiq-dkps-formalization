@@ -35,11 +35,12 @@ noncomputable section
 
 universe u
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
 
 /-- Sequential compactness on bounded sequences for a bounded operator. -/
-def SequentiallyCompactOperator (R : H →L[ℂ] H) : Prop :=
+def SequentiallyCompactOperator (R : H →L[𝕜] H) : Prop :=
   ∀ y : ℕ → H,
     (∃ C : ℝ, ∀ n, ‖y n‖ ≤ C) →
     ∃ phi : ℕ → ℕ, StrictMono phi ∧
@@ -49,7 +50,7 @@ def SequentiallyCompactOperator (R : H →L[ℂ] H) : Prop :=
  domain.  This matches the shape used by `SobolevTraceFoundation.graph_compact`.
 -/
 def SequentiallyCompactGraphEmbedding
-    (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)) : Prop :=
+    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H)) : Prop :=
   ∀ x : ℕ → A.domain,
     (∃ C : ℝ, ∀ n,
       ‖(x n : H)‖ ^ 2 + ‖A.toLinearMap (x n)‖ ^ 2 ≤ C) →
@@ -59,7 +60,7 @@ def SequentiallyCompactGraphEmbedding
 omit [CompleteSpace H] in
 /-- A sum-of-squares graph bound gives a uniform bound on operator values. -/
 theorem operator_values_bounded_of_graph_bound
-    (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
+    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (x : ℕ → A.domain) {C : ℝ}
     (hC : ∀ n,
       ‖(x n : H)‖ ^ 2 + ‖A.toLinearMap (x n)‖ ^ 2 ≤ C) :
@@ -75,7 +76,7 @@ theorem operator_values_bounded_of_graph_bound
 omit [CompleteSpace H] in
 /-- A sum-of-squares graph bound gives a uniform bound on ambient values. -/
 theorem ambient_values_bounded_of_graph_bound
-    (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
+    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (x : ℕ → A.domain) {C : ℝ}
     (hC : ∀ n,
       ‖(x n : H)‖ ^ 2 + ‖A.toLinearMap (x n)‖ ^ 2 ≤ C) :
@@ -91,7 +92,7 @@ theorem ambient_values_bounded_of_graph_bound
 /-- Compactness of a bounded resolvent implies compactness of the ambient
  embedding of its inverse graph domain. -/
 theorem inverse_graph_embedding_compact
-    (R : H →L[ℂ] H) (hR : IsSelfAdjoint R)
+    (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R)
     (hcompact : SequentiallyCompactOperator R) :
     SequentiallyCompactGraphEmbedding (inverseClosedOperator R hR hinj) := by
@@ -114,7 +115,7 @@ theorem inverse_graph_embedding_compact
 /-- A uniform bound on `y` gives a graph bound for the inverse-domain sequence
  `R y`. -/
 theorem graph_bound_of_bounded_preimage
-    (R : H →L[ℂ] H) (hR : IsSelfAdjoint R)
+    (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R)
     (y : ℕ → H) {C : ℝ} (hC : ∀ n, ‖y n‖ ≤ C) :
     ∀ n,
@@ -147,7 +148,7 @@ theorem graph_bound_of_bounded_preimage
 /-- Compactness of the inverse graph embedding implies sequential compactness
  of the bounded resolvent. -/
 theorem compact_of_inverse_graph_embedding_compact
-    (R : H →L[ℂ] H) (hR : IsSelfAdjoint R)
+    (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R)
     (hgraph : SequentiallyCompactGraphEmbedding
       (inverseClosedOperator R hR hinj)) :
@@ -168,7 +169,7 @@ theorem compact_of_inverse_graph_embedding_compact
 /-- For inverse realizations, bounded-resolvent compactness and graph-embedding
  compactness are equivalent in the sequential formulation. -/
 theorem inverse_graph_compact_iff
-    (R : H →L[ℂ] H) (hR : IsSelfAdjoint R)
+    (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R) :
     SequentiallyCompactGraphEmbedding (inverseClosedOperator R hR hinj) ↔
       SequentiallyCompactOperator R := by

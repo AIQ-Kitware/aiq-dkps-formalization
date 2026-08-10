@@ -989,6 +989,23 @@ def realSpectrum (A : E →ₗ.[𝕜] E) : Set ℝ :=
     lam ∈ realSpectrum A ↔ lam ∉ realResolventSet A :=
   Iff.rfl
 
+/-- **A real eigenvalue is a real spectral point.**  A left inverse of the shifted map
+would have to send `0` back to the eigenvector, so no such bounded inverse exists.
+
+This is the introduction rule for `realSpectrum`: every other lemma about it either
+consumes membership or proves a containment, and a containment is vacuously true of an
+operator with no spectrum at all.  Only the surjectivity half of `realResolventSet` is
+unused here, so the hypotheses are the weakest possible — no closedness, no dense domain,
+and no symmetry. -/
+theorem mem_realSpectrum_of_eigenvector {A : E →ₗ.[𝕜] E} {lam : ℝ} {x : A.domain}
+    (hx : (x : E) ≠ 0) (heig : A x = (lam : 𝕜) • (x : E)) :
+    lam ∈ realSpectrum A := by
+  intro hres
+  obtain ⟨R, hleft, -⟩ := hres
+  have hzero : R (A x - (lam : 𝕜) • (x : E)) = (x : E) := hleft x
+  rw [heig, sub_self, map_zero] at hzero
+  exact hx hzero.symm
+
 /-- Spectral-set separation for two partial maps, possibly on different Hilbert
 spaces. -/
 def SpectralSetsSeparated (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
