@@ -50,6 +50,14 @@ because there is no residual.
   `cos 2θ ≠ 0`, with no cutoff and no limit.
 * `gap_mul_sum_tangent_le_kyFan_of_doubleAngleEigenfamily` — the `ν ≥ 2`
   endpoint `δ ∑ᵢ qᵢ / √(1 - qᵢ²) ≤ 2 · kyFanApproximationGauge n B`.
+* `unboundedReflectionTangent` — the genuine `tan 2Θ₀ = sin 2Θ₀ · (cos 2Θ₀)⁻¹`
+  of the reflection picture, together with
+  `isDoubleAngleTangent_unboundedReflectionTangent_specRange`, which constructs
+  it under the standing Davis--Kahan data with no extra hypothesis.
+* `sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily` — the compression
+  sum is a *lower* bound for the genuine tangent's Ky Fan prefix, hence the
+  prefix-realisation clause of `IsCompressedDoubleAngleEigenbasis` is the
+  reverse of a theorem and can only hold with equality.
 
 The four orthonormal systems the Ky Fan step consumes — `xᵢ`, `S xᵢ / qᵢ`,
 `C xᵢ / cᵢ` and `C (S xᵢ) / (qᵢ cᵢ)` — are *exactly* orthonormal, which is again
@@ -1872,6 +1880,532 @@ theorem mem_and_gauge_le_of_invariantDoubleAngleFiltration
     hZcomm hUa hUb hab
     (isCompressedDoubleAngleEigenbasis_of_hasInvariantDoubleAngleFiltration
       hZsa hT) hBmem
+
+/-!
+## Tying the candidate `T` to the actual `tan 2Θ₀`
+
+Everything above quantifies over an *arbitrary* `T : H →L[ℂ] H`, linked to the
+geometry by the single prefix-realisation clause
+`kyFanApproximationGauge k T ≤ ∑ᵢ qᵢ / √(1 - qᵢ²)`.  This section replaces that
+free variable by the genuine tangent and then measures exactly what the clause
+asks for.
+
+The genuine object is fixed by the same defining identity the bounded theory
+uses (`tanTwoAngleOperatorC_comp_cosTwoAngleExtendedC`): a **double-angle
+tangent** is an operator `T` with `T (C x) = S x` on the trial subspace, for
+`C = cos 2Θ₀` and `S = sin 2Θ₀` the even and odd blocks of `Z` relative to
+`𝔛₀ ⊕ 𝔛₁`.  Such a `T` exists **unconditionally** in the Davis--Kahan setting:
+the operator-norm pole exclusion already proved in
+`TauCeti.norm_offDiagonalPart_apply_le_specRange` makes `S` a strict contraction
+with the explicit constant `2‖B‖ / √(δ² + 4‖B‖²) < 1`, so `C² = 1 - S²` is a
+Neumann unit and `tan 2Θ₀ = S · C⁻¹` is a bounded operator.
+
+**The direction of the prefix-realisation clause is the obstruction, and it is
+the reverse of a theorem.**  For *any* double-angle tangent `T` and *any*
+compressed eigenfamily, the four exactly orthonormal auxiliary systems already
+built above pair to give
+
+`∑ᵢ qᵢ / √(1 - qᵢ²) ≤ kyFanApproximationGauge k T`,
+
+which is `sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily` below.  The
+compression eigenvalues therefore *never* dominate the tangent's prefix; they
+are dominated by it.  Consequently, when `T` is the genuine tangent, the clause
+`kyFanApproximationGauge k T ≤ ∑ᵢ qᵢ / √(1 - qᵢ²)` is equivalent to **equality**
+— `kyFan_eq_sum_tangent_of_isCompressedDoubleAngleEigenbasis` — that is, to the
+compression being Ky Fan *extremal* for `sin² 2Θ`.  Finite-dimensional
+`A`-invariance of `W` says nothing about extremality for `S²`, so
+`exists_compressedDoubleAngleEigenfamily_of_invariantSubspace` cannot supply it:
+`sum_tangent_le_kyFan_of_invariantSubspace` records that what the construction
+does supply is precisely the opposite inequality.
+
+The endpoints are therefore stated at the genuine tangent below, but they remain
+conditional on that extremality clause, and this section makes the residual
+hypothesis exact rather than hiding it in a free operator.
+-/
+
+/-- `T` is a **double-angle tangent** for the reflection `Z` relative to the trial
+subspace `U`: composing it with the even block `C = cos 2Θ₀` returns the odd
+block `S = sin 2Θ₀` there.  This is the reflection-picture analogue of
+`tanTwoAngleOperatorC_comp_cosTwoAngleExtendedC`, and it is what makes an
+operator *the* `tan 2Θ₀` rather than a free variable. -/
+def IsDoubleAngleTangent (U : Submodule ℂ H) [U.HasOrthogonalProjection]
+    (Z T : H →L[ℂ] H) : Prop :=
+  ∀ x ∈ U, T (U.diagonalPart Z x) = U.offDiagonalPart Z x
+
+/-- A trial-subspace contraction bound for the odd block transfers to `Uᗮ`.
+`S` is self-adjoint and carries `Uᗮ` into `U`, so `‖S x‖² = ⟪x, S (S x)⟫` may be
+estimated with the bound applied at `S x ∈ U`. -/
+theorem norm_offDiagonalPart_apply_le_of_mem_orthogonal
+    (hZsa : IsSelfAdjoint Z) {g : ℝ} (hg0 : 0 ≤ g)
+    (hgU : ∀ y ∈ U, ‖U.offDiagonalPart Z y‖ ≤ g * ‖y‖)
+    {x : H} (hx : x ∈ Uᗮ) :
+    ‖U.offDiagonalPart Z x‖ ≤ g * ‖x‖ := by
+  have hSsym := TauCeti.inner_swap_of_isSelfAdjoint
+    (TauCeti.isSelfAdjoint_offDiagonalPart (U := U) hZsa)
+  have hSxU : U.offDiagonalPart Z x ∈ U :=
+    TauCeti.offDiagonalPart_mem_of_mem_orthogonal U Z hx
+  have h1 : ⟪U.offDiagonalPart Z x, U.offDiagonalPart Z x⟫_ℂ =
+      ⟪x, U.offDiagonalPart Z (U.offDiagonalPart Z x)⟫_ℂ :=
+    hSsym x (U.offDiagonalPart Z x)
+  have hn : ‖U.offDiagonalPart Z x‖ ^ 2 =
+      ‖⟪U.offDiagonalPart Z x, U.offDiagonalPart Z x⟫_ℂ‖ := by
+    rw [inner_self_eq_norm_sq_to_K, norm_pow, RCLike.norm_ofReal,
+      abs_of_nonneg (norm_nonneg _)]
+  have h2 : ‖U.offDiagonalPart Z x‖ ^ 2 ≤
+      ‖x‖ * ‖U.offDiagonalPart Z (U.offDiagonalPart Z x)‖ := by
+    rw [hn, h1]
+    exact norm_inner_le_norm _ _
+  have h3 : ‖U.offDiagonalPart Z (U.offDiagonalPart Z x)‖ ≤
+      g * ‖U.offDiagonalPart Z x‖ := hgU _ hSxU
+  by_contra hcon
+  rw [not_le] at hcon
+  have hXn : ‖x‖ * ‖U.offDiagonalPart Z (U.offDiagonalPart Z x)‖ ≤
+      ‖x‖ * (g * ‖U.offDiagonalPart Z x‖) :=
+    mul_le_mul_of_nonneg_left h3 (norm_nonneg x)
+  have hnpos : 0 < ‖U.offDiagonalPart Z x‖ :=
+    lt_of_le_of_lt (mul_nonneg hg0 (norm_nonneg x)) hcon
+  nlinarith [hnpos, hXn, h2, hcon]
+
+/-- A trial-subspace contraction bound for the odd block is an ambient one: the
+two halves of the orthogonal splitting land in orthogonal subspaces, so the two
+squared bounds add with no cross term and **no factor is lost**. -/
+theorem norm_offDiagonalPart_apply_le
+    (hZsa : IsSelfAdjoint Z) {g : ℝ} (hg0 : 0 ≤ g)
+    (hgU : ∀ y ∈ U, ‖U.offDiagonalPart Z y‖ ≤ g * ‖y‖) (x : H) :
+    ‖U.offDiagonalPart Z x‖ ≤ g * ‖x‖ := by
+  set p := U.starProjection x with hp
+  set r := Uᗮ.starProjection x with hr
+  have hpU : p ∈ U := U.starProjection_apply_mem x
+  have hrU : r ∈ Uᗮ := Uᗮ.starProjection_apply_mem x
+  have hsum : p + r = x :=
+    Submodule.starProjection_add_starProjection_orthogonal x
+  have hpr : ⟪p, r⟫_ℂ = 0 := (Submodule.mem_orthogonal U r).mp hrU p hpU
+  have hSp : U.offDiagonalPart Z p ∈ Uᗮ :=
+    TauCeti.offDiagonalPart_mem_orthogonal_of_mem U Z hpU
+  have hSr : U.offDiagonalPart Z r ∈ U :=
+    TauCeti.offDiagonalPart_mem_of_mem_orthogonal U Z hrU
+  have hSpr : ⟪U.offDiagonalPart Z p, U.offDiagonalPart Z r⟫_ℂ = 0 := by
+    have h := (Submodule.mem_orthogonal U (U.offDiagonalPart Z p)).mp hSp
+      (U.offDiagonalPart Z r) hSr
+    exact inner_eq_zero_symm.mp h
+  have hxsq : ‖x‖ * ‖x‖ = ‖p‖ * ‖p‖ + ‖r‖ * ‖r‖ := by
+    rw [← hsum]
+    exact norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero p r hpr
+  have hSxeq : U.offDiagonalPart Z x =
+      U.offDiagonalPart Z p + U.offDiagonalPart Z r := by
+    rw [← hsum, map_add]
+  have hSsq : ‖U.offDiagonalPart Z x‖ * ‖U.offDiagonalPart Z x‖ =
+      ‖U.offDiagonalPart Z p‖ * ‖U.offDiagonalPart Z p‖ +
+        ‖U.offDiagonalPart Z r‖ * ‖U.offDiagonalPart Z r‖ := by
+    rw [hSxeq]
+    exact norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ hSpr
+  have hbp : ‖U.offDiagonalPart Z p‖ ≤ g * ‖p‖ := hgU p hpU
+  have hbr : ‖U.offDiagonalPart Z r‖ ≤ g * ‖r‖ :=
+    norm_offDiagonalPart_apply_le_of_mem_orthogonal hZsa hg0 hgU hrU
+  have hsp : ‖U.offDiagonalPart Z p‖ * ‖U.offDiagonalPart Z p‖ ≤
+      (g * ‖p‖) * (g * ‖p‖) := mul_self_le_mul_self (norm_nonneg _) hbp
+  have hsr : ‖U.offDiagonalPart Z r‖ * ‖U.offDiagonalPart Z r‖ ≤
+      (g * ‖r‖) * (g * ‖r‖) := mul_self_le_mul_self (norm_nonneg _) hbr
+  have hgx : (g * ‖x‖) * (g * ‖x‖) =
+      (g * ‖p‖) * (g * ‖p‖) + (g * ‖r‖) * (g * ‖r‖) := by
+    linear_combination (g * g) * hxsq
+  have hfin : ‖U.offDiagonalPart Z x‖ * ‖U.offDiagonalPart Z x‖ ≤
+      (g * ‖x‖) * (g * ‖x‖) := by rw [hgx, hSsq]; linarith [hsp, hsr]
+  by_contra hcon
+  rw [not_le] at hcon
+  have hnpos : 0 < ‖U.offDiagonalPart Z x‖ :=
+    lt_of_le_of_lt (mul_nonneg hg0 (norm_nonneg x)) hcon
+  nlinarith [hfin, hcon, hnpos, mul_nonneg hg0 (norm_nonneg x)]
+
+/-- Operator-norm form of the ambient contraction bound. -/
+theorem norm_offDiagonalPart_le
+    (hZsa : IsSelfAdjoint Z) {g : ℝ} (hg0 : 0 ≤ g)
+    (hgU : ∀ y ∈ U, ‖U.offDiagonalPart Z y‖ ≤ g * ‖y‖) :
+    ‖U.offDiagonalPart Z‖ ≤ g :=
+  ContinuousLinearMap.opNorm_le_bound _ hg0
+    (norm_offDiagonalPart_apply_le hZsa hg0 hgU)
+
+/-- **The pole is excluded in operator form.**  `C² = 1 - S²` is a Neumann unit as
+soon as `S²` is a strict contraction, so `cos 2Θ₀` is boundedly invertible and
+the tangent is a bounded operator. -/
+theorem isUnit_diagonalPart_sq (hZ2 : Z * Z = 1)
+    (h : ‖U.offDiagonalPart Z * U.offDiagonalPart Z‖ < 1) :
+    IsUnit (U.diagonalPart Z * U.diagonalPart Z) := by
+  have hsum := TauCeti.diagonalPart_sq_add_offDiagonalPart_sq (U := U) hZ2
+  have hCC : U.diagonalPart Z * U.diagonalPart Z =
+      1 - U.offDiagonalPart Z * U.offDiagonalPart Z := by
+    rw [← hsum]; abel
+  rw [hCC]
+  exact ⟨Units.oneSub _ h, rfl⟩
+
+/-- **The tangent of the unbounded reflection picture**,
+`tan 2Θ₀ = sin 2Θ₀ · (cos 2Θ₀)⁻¹`, written so that the definition is total: the
+inverse is taken of `cos² 2Θ₀` through `Ring.inverse`, and the remaining
+`cos 2Θ₀` is kept on the right.  No hypothesis is attached to the definition;
+`isUnit_diagonalPart_sq` is what makes it the intended operator. -/
+def unboundedReflectionTangent (U : Submodule ℂ H) [U.HasOrthogonalProjection]
+    (Z : H →L[ℂ] H) : H →L[ℂ] H :=
+  U.offDiagonalPart Z *
+    Ring.inverse (U.diagonalPart Z * U.diagonalPart Z) * U.diagonalPart Z
+
+omit [CompleteSpace H] in
+/-- **The defining identity of the tangent**: `tan 2Θ₀ ∘ cos 2Θ₀ = sin 2Θ₀`. -/
+theorem unboundedReflectionTangent_comp_diagonalPart
+    (hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z)) :
+    unboundedReflectionTangent U Z ∘L U.diagonalPart Z =
+      U.offDiagonalPart Z := by
+  have hinv := Ring.inverse_mul_cancel _ hCC
+  have hassoc : unboundedReflectionTangent U Z * U.diagonalPart Z =
+      U.offDiagonalPart Z *
+        (Ring.inverse (U.diagonalPart Z * U.diagonalPart Z) *
+          (U.diagonalPart Z * U.diagonalPart Z)) := by
+    rw [unboundedReflectionTangent]
+    noncomm_ring
+  show unboundedReflectionTangent U Z * U.diagonalPart Z = _
+  rw [hassoc, hinv, mul_one]
+
+omit [CompleteSpace H] in
+/-- The constructed operator really is a double-angle tangent. -/
+theorem isDoubleAngleTangent_unboundedReflectionTangent
+    (hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z)) :
+    IsDoubleAngleTangent U Z (unboundedReflectionTangent U Z) := by
+  intro x _
+  exact congrArg (fun T : H →L[ℂ] H => T x)
+    (unboundedReflectionTangent_comp_diagonalPart hCC)
+
+/-- The cross-block bound `2‖B‖ / √(δ² + 4‖B‖²)` is a strict contraction as soon
+as the gap `δ` is positive. -/
+theorem crossBlockBound_lt_one {δ nB : ℝ} (hδ : 0 < δ) (hnB : 0 ≤ nB) :
+    TauCeti.crossBlockBound δ nB < 1 := by
+  rw [TauCeti.crossBlockBound_eq]
+  have hpos : 0 < √(δ ^ 2 + 4 * nB ^ 2) := Real.sqrt_pos.mpr (by positivity)
+  rw [div_lt_one hpos]
+  have hsq : (2 * nB) ^ 2 < (√(δ ^ 2 + 4 * nB ^ 2)) ^ 2 := by
+    rw [Real.sq_sqrt (by positivity)]
+    nlinarith
+  nlinarith [hpos, hsq]
+
+/-- **The pole is excluded from a trial-subspace contraction bound alone.** -/
+theorem isUnit_diagonalPart_sq_of_forall_mem
+    (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1) {g : ℝ} (hg0 : 0 ≤ g)
+    (hg1 : g < 1) (hgU : ∀ y ∈ U, ‖U.offDiagonalPart Z y‖ ≤ g * ‖y‖) :
+    IsUnit (U.diagonalPart Z * U.diagonalPart Z) := by
+  have hS : ‖U.offDiagonalPart Z‖ ≤ g := norm_offDiagonalPart_le hZsa hg0 hgU
+  have hmul : ‖U.offDiagonalPart Z * U.offDiagonalPart Z‖ ≤
+      ‖U.offDiagonalPart Z‖ * ‖U.offDiagonalPart Z‖ := norm_mul_le _ _
+  refine isUnit_diagonalPart_sq hZ2 ?_
+  nlinarith [hmul, hS, norm_nonneg (U.offDiagonalPart Z)]
+
+section GenuineTangentExists
+
+variable {c : ℝ}
+
+/-- **The genuine unbounded `tan 2Θ₀` exists, with no extra hypothesis.**
+
+Under exactly the standing Davis--Kahan data of `tanTwoTheta_unbounded_residual_opNorm`
+— `A` self-adjoint and possibly unbounded, `𝔛₀ = 1_{(-∞, c]}(A)`, `B` bounded and
+fully off-diagonal, `Z` the reducing reflection `2Q - 1`, and the form separation
+`a < b` — the operator `unboundedReflectionTangent 𝔛₀ Z` satisfies the defining
+identity `T (cos 2Θ₀ x) = sin 2Θ₀ x` on the trial subspace.
+
+This is what removes the free variable: from here on, `tan 2Θ₀` is a constructed
+operator and not a hypothesis. -/
+theorem isDoubleAngleTangent_unboundedReflectionTangent_specRange
+    (hA : IsSelfAdjoint A)
+    (hB : TauCeti.IsOddFor
+      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+    (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
+    (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
+    (hZcomm : ∀ x : A.domain,
+      A ⟨Z (x : H), hZdom x⟩ + B (Z (x : H)) = Z (A x) + Z (B (x : H)))
+    (hUa : ∀ x : A.domain,
+      (x : H) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ a * ‖(x : H)‖ ^ 2)
+    (hUb : ∀ x : A.domain,
+      (x : H) ∈
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+      b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
+    (hab : a < b) :
+    IsDoubleAngleTangent
+      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z
+      (unboundedReflectionTangent
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) := by
+  have hgU : ∀ y ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic,
+      ‖(TauCeti.LinearPMap.specRange hA (Set.Iic c)
+          measurableSet_Iic).offDiagonalPart Z y‖ ≤
+        TauCeti.crossBlockBound (b - a) ‖B‖ * ‖y‖ := fun y hy =>
+    TauCeti.norm_offDiagonalPart_apply_le_specRange hA hB hZsa hZ2 hZdom
+      hZcomm hUa hUb hab hy
+  exact isDoubleAngleTangent_unboundedReflectionTangent
+    (isUnit_diagonalPart_sq_of_forall_mem hZsa hZ2
+      (TauCeti.crossBlockBound_nonneg (norm_nonneg B))
+      (crossBlockBound_lt_one (by linarith) (norm_nonneg B)) hgU)
+
+end GenuineTangentExists
+
+/-- **The compression sum is a *lower* bound for the tangent's Ky Fan prefix.**
+
+For any double-angle tangent `T` and any compressed eigenfamily with `0 < qᵢ < 1`,
+
+`∑ᵢ qᵢ / √(1 - qᵢ²) ≤ kyFanApproximationGauge n T`.
+
+The two systems `S xᵢ / qᵢ` and `C xᵢ / cᵢ`, `cᵢ = √(1 - qᵢ²)`, are exactly
+orthonormal at a compressed eigenfamily — this is
+`inner_of_compressedDoubleAngleEigenfamily`, whose Gram identities never see the
+leakage — and the defining identity sends the second to the first:
+`T (C xᵢ / cᵢ) = S xᵢ / cᵢ`.  Pairing gives `qᵢ² / (qᵢ cᵢ) = qᵢ / cᵢ` exactly,
+and `sum_le_kyFanApproximationGauge_of_orthonormal` sums it.
+
+**This is the reverse of the prefix-realisation clause of
+`IsCompressedDoubleAngleEigenbasis`**, so for a genuine tangent that clause can
+only ever hold with equality. -/
+theorem sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
+    (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
+    {T : H →L[ℂ] H} (hT : IsDoubleAngleTangent U Z T)
+    {n : ℕ} (x : Fin n → H) (hxU : ∀ i, x i ∈ U)
+    (hxon : Orthonormal ℂ x) {q : Fin n → ℝ}
+    (hq : ∀ i, 0 < q i) (hq1 : ∀ i, q i < 1)
+    (hgram : ∀ i j, ⟪x j, U.offDiagonalPart Z
+        (U.offDiagonalPart Z (x i))⟫_ℂ =
+      (((q i) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0)) :
+    ∑ i, q i / √(1 - (q i) ^ 2) ≤ kyFanApproximationGauge n T := by
+  classical
+  have hcarg : ∀ i, (0 : ℝ) < 1 - (q i) ^ 2 := by
+    intro i; nlinarith [hq i, hq1 i]
+  have hcpos : ∀ i, (0 : ℝ) < √(1 - (q i) ^ 2) := fun i =>
+    Real.sqrt_pos.mpr (hcarg i)
+  have hcsq : ∀ i, (√(1 - (q i) ^ 2)) ^ 2 = 1 - (q i) ^ 2 := fun i =>
+    Real.sq_sqrt (hcarg i).le
+  have hG := fun i j => inner_of_compressedDoubleAngleEigenfamily
+    (U := U) hZsa hZ2 x hxon hgram i j
+  have hu : Orthonormal ℂ fun i =>
+      (((q i : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z (x i)) :=
+    orthonormal_scaled_of_inner_eq hq (fun i j => (hG i j).1)
+  have hv : Orthonormal ℂ fun i =>
+      (((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ • U.diagonalPart Z (x i)) := by
+    refine orthonormal_scaled_of_inner_eq hcpos ?_
+    intro i j
+    rw [(hG i j).2, hcsq j]
+  refine sum_le_kyFanApproximationGauge_of_orthonormal T hu hv ?_
+  intro i
+  have hTv : T (((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ • U.diagonalPart Z (x i)) =
+      ((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z (x i) := by
+    rw [map_smul, hT (x i) (hxU i)]
+  rw [hTv, inner_smul_left, inner_smul_right, (hG i i).1]
+  rw [if_pos rfl, mul_one]
+  have hqi := (hq i).ne'
+  have hci := (hcpos i).ne'
+  rw [← Complex.ofReal_inv, ← Complex.ofReal_inv, Complex.conj_ofReal]
+  rw [← Complex.ofReal_mul, ← Complex.ofReal_mul]
+  have hval : (q i)⁻¹ * ((√(1 - (q i) ^ 2))⁻¹ * (q i) ^ 2) =
+      q i / √(1 - (q i) ^ 2) := by
+    field_simp
+  rw [hval, RCLike.re_to_complex, Complex.ofReal_re]
+
+/-- **What the `A`-invariant construction actually supplies, at the genuine
+tangent: the opposite inequality.**
+
+Run `exists_compressedDoubleAngleEigenfamily_of_invariantSubspace` on a
+finite-dimensional `A`-invariant `W ⊆ 𝔛₀ ∩ D(A)` and pair the resulting family
+against any double-angle tangent `T`.  The conclusion is
+
+`∑ᵢ qᵢ / √(1 - qᵢ²) ≤ kyFanApproximationGauge k T`,
+
+with the vanishing `qᵢ` dropped exactly as in
+`gap_mul_sum_tangent_le_kyFan_of_invariantSubspace` — which only shortens the
+prefix and is absorbed by monotonicity of the gauge, in the same direction.
+
+**This is why the endpoints below cannot be made unconditional along this
+route.**  What `IsCompressedDoubleAngleEigenbasis` asks for is
+`kyFanApproximationGauge k T ≤ ∑ᵢ qᵢ / √(1 - qᵢ²)`; the construction proves the
+reverse.  The two together force equality, i.e. Ky Fan extremality of the
+compression of `sin² 2Θ` to `W`, and finite-dimensional `A`-invariance of `W`
+carries no information about that. -/
+theorem sum_tangent_le_kyFan_of_invariantSubspace
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
+    (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
+    (hZcomm : ∀ x : A.domain,
+      A ⟨Z (x : H), hZdom x⟩ + B (Z (x : H)) = Z (A x) + Z (B (x : H)))
+    (hUa : ∀ x : A.domain, (x : H) ∈ U →
+      RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ a * ‖(x : H)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : H) ∈ Uᗮ →
+      b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
+    (hab : a < b) {T : H →L[ℂ] H} (hTtan : IsDoubleAngleTangent U Z T)
+    {W : Submodule ℂ H} [FiniteDimensional ℂ W]
+    (hWdom : W ≤ A.domain) (hWU : W ≤ U)
+    (hWinv : ∀ w : A.domain, (w : H) ∈ W → A w ∈ W)
+    {k : ℕ} (hk : Module.finrank ℂ W = k) :
+    ∃ (y : Fin k → A.domain) (q : Fin k → ℝ),
+      (∀ i, ((y i : A.domain) : H) ∈ W) ∧
+        (Orthonormal ℂ fun i => ((y i : A.domain) : H)) ∧
+        (∀ i, ‖U.offDiagonalPart Z ((y i : A.domain) : H)‖ ^ 2 = q i ^ 2) ∧
+        (∀ i, 0 ≤ q i) ∧ (∀ i, q i < 1) ∧
+        ∑ i, q i / √(1 - (q i) ^ 2) ≤ kyFanApproximationGauge k T := by
+  classical
+  obtain ⟨y, q, hyW, hyU, hyon, hqnn, hgram, hres⟩ :=
+    exists_compressedDoubleAngleEigenfamily_of_invariantSubspace (U := U)
+      (A := A) (Z := Z) hZsa hWdom hWU hWinv hk
+  have hx1 : ∀ i, ‖((y i : A.domain) : H)‖ = 1 := fun i => hyon.norm_eq_one i
+  have hself : ∀ i, ⟪((y i : A.domain) : H), U.offDiagonalPart Z
+      (U.offDiagonalPart Z ((y i : A.domain) : H))⟫_ℂ =
+      (((q i) ^ 2 : ℝ) : ℂ) := fun i => by rw [hgram i i, if_pos rfl, mul_one]
+  have hnorm : ∀ i, ‖U.offDiagonalPart Z ((y i : A.domain) : H)‖ ^ 2 =
+      (q i) ^ 2 := fun i =>
+    norm_sq_offDiagonalPart_of_compressedDiagonal (U := U) hZsa (hself i)
+  have hq1 : ∀ i, q i < 1 := by
+    intro i
+    rcases lt_or_eq_of_le (hqnn i) with hpos | hzero
+    · exact compressedDoubleAngleEigenvalue_lt_one hred hB hZsa hZ2 hZdom hZcomm
+        hUa hUb hab (hyU i) (hx1 i) hpos (hself i) (le_of_eq (hres i))
+    · rw [← hzero]
+      norm_num
+  refine ⟨y, q, hyW, hyon, hnorm, hqnn, hq1, ?_⟩
+  set s : Finset (Fin k) := Finset.univ.filter (fun i => 0 < q i) with hs
+  have hsmem : ∀ i, i ∈ s ↔ 0 < q i := by
+    intro i
+    rw [hs]
+    simp
+  set m : ℕ := s.card with hm
+  set σ : Fin m → Fin k := fun j => ((s.equivFin.symm j : {x // x ∈ s}) : Fin k)
+    with hσ
+  have hσinj : Function.Injective σ := by
+    intro j j' h
+    have hsub : (s.equivFin.symm j : {x // x ∈ s}) = s.equivFin.symm j' :=
+      Subtype.ext h
+    simpa using hsub
+  have hσmem : ∀ j, 0 < q (σ j) := fun j =>
+    (hsmem _).mp (s.equivFin.symm j).2
+  have hgram' : ∀ i j, ⟪((y (σ j) : A.domain) : H), U.offDiagonalPart Z
+      (U.offDiagonalPart Z ((y (σ i) : A.domain) : H))⟫_ℂ =
+      (((q (σ i)) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0) := by
+    intro i j
+    rw [hgram (σ i) (σ j)]
+    congr 1
+    by_cases hji : j = i
+    · rw [if_pos hji, if_pos (congrArg σ hji)]
+    · rw [if_neg hji, if_neg (fun h => hji (hσinj h))]
+  have hmain := sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
+    hZsa hZ2 hTtan (fun j => ((y (σ j) : A.domain) : H))
+    (fun j => hyU (σ j)) (hyon.comp σ hσinj) hσmem (fun j => hq1 (σ j)) hgram'
+  have hsumeq : ∑ i, q i / √(1 - (q i) ^ 2) =
+      ∑ j, q (σ j) / √(1 - (q (σ j)) ^ 2) := by
+    have h1 : ∑ j, q (σ j) / √(1 - (q (σ j)) ^ 2) =
+        ∑ x : {x // x ∈ s}, q (x : Fin k) / √(1 - (q (x : Fin k)) ^ 2) :=
+      Equiv.sum_comp s.equivFin.symm
+        (fun x : {x // x ∈ s} => q (x : Fin k) / √(1 - (q (x : Fin k)) ^ 2))
+    rw [h1, Finset.sum_coe_sort s (fun i => q i / √(1 - (q i) ^ 2))]
+    refine (Finset.sum_subset (Finset.subset_univ s) ?_).symm
+    intro i _ hnot
+    have hzero : q i = 0 :=
+      le_antisymm (not_lt.mp fun hc => hnot ((hsmem i).mpr hc)) (hqnn i)
+    rw [hzero]
+    simp
+  have hmono : kyFanApproximationGauge m T ≤ kyFanApproximationGauge k T := by
+    have hmk : m ≤ k := by
+      rw [hm]
+      simpa using Finset.card_le_card (Finset.subset_univ s)
+    simp only [kyFanApproximationGauge_eq_kyFanGauge,
+      ContinuousLinearMap.kyFanGauge]
+    refine Finset.sum_le_sum_of_subset_of_nonneg
+      (fun x hx => Finset.mem_range.mpr
+        (lt_of_lt_of_le (Finset.mem_range.mp hx) hmk))
+      (fun i _ _ => T.approximationNumber_nonneg i)
+  rw [hsumeq]
+  linarith [hmain, hmono]
+
+/-- **At the genuine tangent, the prefix-realisation clause is an equality.**
+
+`IsCompressedDoubleAngleEigenbasis A U Z T` asserts an inequality
+`kyFanApproximationGauge k T ≤ ∑ᵢ qᵢ / √(1 - qᵢ²)` whose converse is a theorem
+whenever `T` is a double-angle tangent.  So for the genuine `tan 2Θ₀` that
+hypothesis says exactly that the compression of `sin² 2Θ` to the family's span
+**attains** the Ky Fan prefix — a Ky Fan extremality property of the family, not
+a property that any subspace construction supplies. -/
+theorem kyFan_eq_sum_tangent_of_isCompressedDoubleAngleEigenbasis
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
+    (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
+    (hZcomm : ∀ x : A.domain,
+      A ⟨Z (x : H), hZdom x⟩ + B (Z (x : H)) = Z (A x) + Z (B (x : H)))
+    (hUa : ∀ x : A.domain, (x : H) ∈ U →
+      RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ a * ‖(x : H)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : H) ∈ Uᗮ →
+      b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
+    (hab : a < b) {T : H →L[ℂ] H} (hTtan : IsDoubleAngleTangent U Z T)
+    (hT : IsCompressedDoubleAngleEigenbasis A U Z T) (k : ℕ) :
+    ∃ (y : Fin k → A.domain) (q : Fin k → ℝ),
+      (∀ i, ((y i : A.domain) : H) ∈ U) ∧
+        (Orthonormal ℂ fun i => ((y i : A.domain) : H)) ∧
+        (∀ i, 0 < q i) ∧ (∀ i, q i < 1) ∧
+        kyFanApproximationGauge k T = ∑ i, q i / √(1 - (q i) ^ 2) := by
+  obtain ⟨y, q, hyU, hyon, hqpos, hygram, hyres, hle⟩ := hT k
+  have hx1 : ∀ i, ‖((y i : A.domain) : H)‖ = 1 := fun i => hyon.norm_eq_one i
+  have hself : ∀ i, ⟪((y i : A.domain) : H), U.offDiagonalPart Z
+      (U.offDiagonalPart Z ((y i : A.domain) : H))⟫_ℂ =
+      (((q i) ^ 2 : ℝ) : ℂ) := fun i => by
+    rw [hygram i i, if_pos rfl, mul_one]
+  have hq1 : ∀ i, q i < 1 := fun i =>
+    compressedDoubleAngleEigenvalue_lt_one hred hB hZsa hZ2 hZdom hZcomm hUa hUb
+      hab (hyU i) (hx1 i) (hqpos i) (hself i) (hyres i)
+  refine ⟨y, q, hyU, hyon, hqpos, hq1, le_antisymm hle ?_⟩
+  exact sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily hZsa hZ2 hTtan
+    (fun i => ((y i : A.domain) : H)) hyU hyon hqpos hq1 hygram
+
+/-- **The Ky Fan endpoint, stated at the genuine `tan 2Θ₀`.**
+
+`δ · kyFanApproximationGauge k (tan 2Θ₀) ≤ 2 · kyFanApproximationGauge k B`, with
+the sharp constant `2`, for the constructed operator rather than a free `T`.
+
+It is **not** unconditional: the surviving hypothesis is
+`IsCompressedDoubleAngleEigenbasis A U Z (unboundedReflectionTangent U Z)`, which
+by `kyFan_eq_sum_tangent_of_isCompressedDoubleAngleEigenbasis` is exactly the
+statement that some compressed eigenfamily *attains* the prefix.  The gain over
+`gap_mul_kyFan_le_two_mul_kyFan_of_compressedDoubleAngleEigenbasis` is that the
+conclusion is now about a constructed operator; the two statements are otherwise
+the same theorem, and this one is its specialisation at `T = tan 2Θ₀`. -/
+theorem gap_mul_kyFan_le_two_mul_kyFan_unboundedReflectionTangent
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
+    (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
+    (hZcomm : ∀ x : A.domain,
+      A ⟨Z (x : H), hZdom x⟩ + B (Z (x : H)) = Z (A x) + Z (B (x : H)))
+    (hUa : ∀ x : A.domain, (x : H) ∈ U →
+      RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ a * ‖(x : H)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : H) ∈ Uᗮ →
+      b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
+    (hab : a < b)
+    (hT : IsCompressedDoubleAngleEigenbasis A U Z
+      (unboundedReflectionTangent U Z)) (k : ℕ) :
+    (b - a) * kyFanApproximationGauge k (unboundedReflectionTangent U Z) ≤
+      2 * kyFanApproximationGauge k B :=
+  gap_mul_kyFan_le_two_mul_kyFan_of_compressedDoubleAngleEigenbasis hred hB hZsa
+    hZ2 hZdom hZcomm hUa hUb hab hT k
+
+/-- **The Fan-dominant ideal endpoint, stated at the genuine `tan 2Θ₀`.**
+
+`δ N(tan 2Θ₀) ≤ 2 N(R)` in the repository's scaled form, for the constructed
+tangent.  The same honest caveat as for the Ky Fan form applies: the surviving
+hypothesis is the attainment clause, not a hypothesis about `A` alone. -/
+theorem mem_and_gauge_le_unboundedReflectionTangent
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
+    (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
+    (hZcomm : ∀ x : A.domain,
+      A ⟨Z (x : H), hZdom x⟩ + B (Z (x : H)) = Z (A x) + Z (B (x : H)))
+    (hUa : ∀ x : A.domain, (x : H) ∈ U →
+      RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ a * ‖(x : H)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : H) ∈ Uᗮ →
+      b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
+    (hab : a < b)
+    (hT : IsCompressedDoubleAngleEigenbasis A U Z
+      (unboundedReflectionTangent U Z)) (hBmem : N.Mem B) :
+    N.Mem ((((b - a) / 2 : ℝ) : ℂ) • unboundedReflectionTangent U Z) ∧
+      N.gauge ((((b - a) / 2 : ℝ) : ℂ) • unboundedReflectionTangent U Z) ≤
+        N.gauge B :=
+  mem_and_gauge_le_of_compressedDoubleAngleEigenbasis N hred hB hZsa hZ2 hZdom
+    hZcomm hUa hUb hab hT hBmem
 
 /-!
 ## A witness that the compressed hypothesis is strictly weaker
