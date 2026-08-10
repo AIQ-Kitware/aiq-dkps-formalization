@@ -238,6 +238,14 @@ theorem angleSequenceDatum_sin₀ : (angleSequenceDatum 𝕜 θ).sin₀ = angleS
 @[simp]
 theorem angleSequenceDatum_cos₀ : (angleSequenceDatum 𝕜 θ).cos₀ = angleCosOp 𝕜 θ := rfl
 
+/-- The datum's `Pᗮ`-side sine is the same prescribed diagonal operator. -/
+@[simp]
+theorem angleSequenceDatum_sin₁ : (angleSequenceDatum 𝕜 θ).sin₁ = angleSinOp 𝕜 θ := rfl
+
+/-- The datum's `Pᗮ`-side cosine is the same prescribed diagonal operator. -/
+@[simp]
+theorem angleSequenceDatum_cos₁ : (angleSequenceDatum 𝕜 θ).cos₁ = angleCosOp 𝕜 θ := rfl
+
 /-- The realized pair's defect block, `P (1 - Q) P`, where `P` projects onto the
 `E`-factor and `Q` onto `(angleSequenceDatum 𝕜 θ).targetSubspace`. -/
 noncomputable def angleSequenceDefectBlock :
@@ -499,7 +507,45 @@ theorem sin_ne_zero_of_ne_zero (hθ0 : ∀ n, 0 ≤ θ n) (hθ2 : ∀ n, θ n �
     (lt_of_le_of_ne (hθ0 n) (Ne.symm (hne n)))
     (lt_of_le_of_lt (hθ2 n) (by linarith [Real.pi_pos])))
 
+/-- `cos Θ` is injective exactly where no prescribed angle has vanishing cosine. -/
+theorem angleCosOp_eq_zero_iff (hcos : ∀ n, Real.cos (θ n) ≠ 0)
+    (x : AngleSequenceSpace 𝕜) : angleCosOp 𝕜 θ x = 0 ↔ x = 0 := by
+  refine ⟨fun hx => lp.ext (funext fun n => ?_), fun hx => by rw [hx, map_zero]⟩
+  have h := congrArg (fun w : AngleSequenceSpace 𝕜 => (w : ∀ _ : ℕ, 𝕜) n) hx
+  simp only [angleCosOp_apply, lp.coeFn_zero, Pi.zero_apply] at h
+  have hne : angleCosSeq 𝕜 θ n ≠ 0 := by
+    simp only [angleCosSeq, ne_eq, RCLike.ofReal_eq_zero]
+    exact hcos n
+  have hx0 : (x : ∀ _ : ℕ, 𝕜) n = 0 := (mul_eq_zero.mp h).resolve_left hne
+  simpa using hx0
+
+/-- The prescribed angles have nonvanishing cosine when none of them is `π / 2`.
+
+This is the angle-`π/2` counterpart of `sin_ne_zero_of_ne_zero`: it is what makes the
+crossed defect `U ⊓ Vᗮ` of the realized pair trivial. -/
+theorem cos_ne_zero_of_lt_pi_div_two (hθ0 : ∀ n, 0 ≤ θ n)
+    (hθ2 : ∀ n, θ n < Real.pi / 2) (n : ℕ) : Real.cos (θ n) ≠ 0 :=
+  ne_of_gt (Real.cos_pos_of_mem_Ioo
+    ⟨by linarith [hθ0 n, Real.pi_pos], hθ2 n⟩)
+
 variable (𝕜 θ)
+
+/-- **The kernel of `sin Θ` is trivial** when no prescribed angle is `0`. -/
+theorem ker_angleSinOp_eq_bot (hθ0 : ∀ n, 0 ≤ θ n) (hθ2 : ∀ n, θ n ≤ Real.pi / 2)
+    (hne : ∀ n, θ n ≠ 0) :
+    LinearMap.ker
+        (angleSinOp 𝕜 θ : AngleSequenceSpace 𝕜 →ₗ[𝕜] AngleSequenceSpace 𝕜) = ⊥ := by
+  refine (Submodule.eq_bot_iff _).mpr fun x hx => ?_
+  rw [LinearMap.mem_ker, ContinuousLinearMap.coe_coe] at hx
+  exact (angleSinOp_eq_zero_iff (sin_ne_zero_of_ne_zero hθ0 hθ2 hne) x).mp hx
+
+/-- **The kernel of `cos Θ` is trivial** when no prescribed angle is `π / 2`. -/
+theorem ker_angleCosOp_eq_bot (hθ0 : ∀ n, 0 ≤ θ n) (hθ2 : ∀ n, θ n < Real.pi / 2) :
+    LinearMap.ker
+        (angleCosOp 𝕜 θ : AngleSequenceSpace 𝕜 →ₗ[𝕜] AngleSequenceSpace 𝕜) = ⊥ := by
+  refine (Submodule.eq_bot_iff _).mpr fun x hx => ?_
+  rw [LinearMap.mem_ker, ContinuousLinearMap.coe_coe] at hx
+  exact (angleCosOp_eq_zero_iff (cos_ne_zero_of_lt_pi_div_two hθ0 hθ2) x).mp hx
 
 /-- **The kernel of `sin Θ` extended by zero over `Z` is exactly `Z`**, provided the
 prescribed sequence itself has no zero angle.  This is the angle-`0` eigenspace of

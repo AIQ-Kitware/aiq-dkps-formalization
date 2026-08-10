@@ -67,6 +67,47 @@ theorem approximationNumber_comp_contractions_le
     _ ≤ T.approximationNumber n * 1 := mul_le_mul_of_nonneg_left hR hTn
     _ = T.approximationNumber n := mul_one _
 
+omit [CompleteSpace E] in
+/-- **Extension by zero preserves every approximation number.**
+
+`W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto` is the operator on the ambient space that
+agrees with `A` on `W` and vanishes on `Wᗮ`.  Both outer factors are contractions, so no
+approximation number can increase; compressing back to `W` recovers `A` exactly, and the
+same estimate run in the other direction gives the reverse inequality.
+
+This is the "corestriction is invisible to the approximation numbers" step: an operator
+supported on a subspace has the same singular data read on that subspace as read on the
+whole space. -/
+theorem approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto
+    (W : Submodule 𝕜 E) [W.HasOrthogonalProjection] (A : W →L[𝕜] W) (n : ℕ) :
+    (W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto).approximationNumber n =
+      A.approximationNumber n := by
+  have hsubnorm : ‖W.subtypeL‖ ≤ (1 : ℝ) := W.norm_subtypeL_le
+  have hprojnorm : ‖W.orthogonalProjectionOnto‖ ≤ (1 : ℝ) :=
+    W.orthogonalProjectionOnto_norm_le
+  refine le_antisymm
+    (approximationNumber_comp_contractions_le W.subtypeL W.orthogonalProjectionOnto
+      hsubnorm hprojnorm n) ?_
+  -- Compressing the zero extension back to `W` returns `A`; there is no `_apply` lemma
+  -- to rewrite with, so the pointwise identity is stated with `change`.
+  have hfact : A = W.orthogonalProjectionOnto ∘L
+      (W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto) ∘L W.subtypeL := by
+    refine ContinuousLinearMap.ext fun x => ?_
+    have h1 : W.orthogonalProjectionOnto ((x : E)) = x :=
+      Subtype.ext (Submodule.starProjection_eq_self_iff.mpr x.2)
+    have h2 : W.orthogonalProjectionOnto ((A x : W) : E) = A x :=
+      Subtype.ext (Submodule.starProjection_eq_self_iff.mpr (A x).2)
+    change A x = W.orthogonalProjectionOnto
+        ((A (W.orthogonalProjectionOnto (x : E)) : W) : E)
+    rw [h1, h2]
+  calc A.approximationNumber n
+      = (W.orthogonalProjectionOnto ∘L
+          (W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto) ∘L
+            W.subtypeL).approximationNumber n := by rw [← hfact]
+    _ ≤ (W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto).approximationNumber n :=
+      approximationNumber_comp_contractions_le W.orthogonalProjectionOnto W.subtypeL
+        hprojnorm hsubnorm n
+
 /-- **Every bounded antitone nonnegative sequence is an approximation-number sequence**
 on an infinite-dimensional real or complex Hilbert space. -/
 theorem exists_approximationNumber_eq_of_antitone
@@ -182,39 +223,8 @@ theorem exists_approximationNumber_eq_of_antitone
           approximationNumber_comp_contractions_le U U' hUnorm hU'norm n
   -- Extension by zero to the whole space.
   refine ⟨W.subtypeL ∘L D₀ ∘L W.orthogonalProjectionOnto, fun n => ?_⟩
-  have hsubnorm : ‖W.subtypeL‖ ≤ 1 := W.norm_subtypeL_le
-  have hprojnorm : ‖W.orthogonalProjectionOnto‖ ≤ 1 := by
-    refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_
-    rw [one_mul]
-    have : ‖(W.orthogonalProjectionOnto x : E)‖ ≤ ‖x‖ := by
-      have hcoe : ((W.orthogonalProjectionOnto x : W) : E) = W.starProjection x := rfl
-      rw [hcoe]
-      exact W.norm_starProjection_apply_le x
-    exact this
-  refine le_antisymm ?_ ?_
-  · rw [← hD₀An n]
-    exact approximationNumber_comp_contractions_le W.subtypeL
-      W.orthogonalProjectionOnto hsubnorm hprojnorm n
-  · rw [← hD₀An n]
-    have hfact : D₀ = W.orthogonalProjectionOnto ∘L
-        (W.subtypeL ∘L D₀ ∘L W.orthogonalProjectionOnto) ∘L W.subtypeL := by
-      apply ContinuousLinearMap.ext
-      intro x
-      have h1 : W.orthogonalProjectionOnto ((x : E)) = x := by
-        apply Subtype.ext
-        exact Submodule.starProjection_eq_self_iff.mpr x.2
-      have h2 : W.orthogonalProjectionOnto ((D₀ x : W) : E) = D₀ x := by
-        apply Subtype.ext
-        exact Submodule.starProjection_eq_self_iff.mpr (D₀ x).2
-      change D₀ x = W.orthogonalProjectionOnto
-          ((D₀ (W.orthogonalProjectionOnto (x : E)) : W) : E)
-      rw [h1, h2]
-    calc D₀.approximationNumber n = (W.orthogonalProjectionOnto ∘L
-        (W.subtypeL ∘L D₀ ∘L W.orthogonalProjectionOnto) ∘L W.subtypeL).approximationNumber
-          n := by rw [← hfact]
-      _ ≤ (W.subtypeL ∘L D₀ ∘L W.orthogonalProjectionOnto).approximationNumber n :=
-        approximationNumber_comp_contractions_le W.orthogonalProjectionOnto
-          W.subtypeL hprojnorm hsubnorm n
+  rw [approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto W D₀ n]
+  exact hD₀An n
 
 end ApproximationNumber
 end TauCeti

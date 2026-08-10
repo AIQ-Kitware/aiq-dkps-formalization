@@ -4,6 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Geometry.Angle.PaperTanAngle
+import DavisKahan.Geometry.Halmos.CrossedDefectGap
+-- supplies the standing assumption (3.5) and the gap identity it buys, which is what
+-- turns this file's directed sine estimate into the ambient uniform transversality the
+-- tangent theorem consumes.  That module imports only `BoundedOperator/Compat` and
+-- `Geometry/Halmos/GenericRotationPredicates`, so the dependency is acyclic.
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 import DavisKahan.TanTheta.Theorem63InfiniteTrial
@@ -1194,6 +1199,97 @@ theorem tanTheta_wholeSpace_paperUINorm
   N.mul_gauge_le_of_all_mul_kyFan_le hdelta hMem
     (tanTheta_wholeSpace_all_kyFan hT hA hV hAU hdelta hCompressionUpper
       hUnwantedLower htr)
+
+/-! ### Uniform transversality is derived, not assumed
+
+The three theorems above take `‖sin Θ‖ < 1` as a hypothesis, whereas Davis and Kahan read
+it off the standing assumptions of the section.  The derivation below closes that gap.
+
+The quantitative work is done by the form bounds alone:
+`approximationSingularValue_sineBlock_lt_one_infiniteTrial` already bounds every
+approximation singular value of the **directed** sine block `P_{V^⊥} P_U|_U` strictly below
+one, with no dimension hypothesis anywhere.  The ambient block `P_{V^⊥} P_U` factors through
+it, so its operator norm — which is the directed gap by definition — inherits the bound.
+
+The only thing left is that the paper's `sin Θ` is the **symmetric** gap `‖P_U − P_V‖`,
+which in general merely dominates the directed one.  That is exactly what the printed
+standing assumption (3.5) supplies, through
+`subspaceGap_eq_directedGap_of_crossedDefectsEquivalent`.  Equation (1.5) is not needed
+separately: the directed bound is unconditional here. -/
+
+/-- **Davis--Kahan 1970, Section 2: uniform transversality is a consequence.**
+
+`‖sin Θ‖ < 1` follows from the tangent theorem's own form bounds together with the printed
+standing assumption (3.5), so it need not be assumed.
+
+Grounded by `:=` on `approximationSingularValue_sineBlock_lt_one_infiniteTrial` (the
+directed estimate, dimension-free) and
+`subspaceGap_eq_directedGap_of_crossedDefectsEquivalent` (the effect of (3.5)); the tangent
+estimate itself is untouched. -/
+theorem norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent
+    (hT : T.IsSymmetric) (hV : T.Reduces V)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hCompressionUpper : ∀ z : U,
+      RCLike.re ⟪theorem63Compression T U z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hUnwantedLower : ∀ y ∈ Vᗮ,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
+    (h35 : DavisKahan.Experimental.Frontier.CrossedDefectsEquivalent U V) :
+    ‖sinAngleOperatorC U V‖ < 1 := by
+  haveI : CompleteSpace U :=
+    U.isComplete_coe_of_hasOrthogonalProjection.completeSpace_coe
+  have hdirected : approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
+    approximationSingularValue_sineBlock_lt_one_infiniteTrial T V U hT hV hdelta
+      hCompressionUpper hUnwantedLower 0
+  have hambient : ‖paperDirectedSineAmbient U V‖ < 1 := by
+    have h := approximationNumber_paperDirectedSineAmbient_le (U := U) (V := V) 0
+    rw [(paperDirectedSineAmbient U V).approximationNumber_index_zero] at h
+    exact lt_of_le_of_lt h hdirected
+  rw [norm_sinAngleOperatorC U V,
+    DavisKahan.Experimental.Frontier.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
+      U V h35]
+  exact hambient
+
+/-- **The whole-space `tan Θ` theorem, Ky Fan form, with transversality derived.**
+
+The same conclusion as `tanTheta_wholeSpace_all_kyFan`, with the uniform transversality
+hypothesis replaced by the printed standing assumption (3.5). -/
+theorem tanTheta_wholeSpace_all_kyFan_of_crossedDefectsEquivalent
+    (hT : T.IsSymmetric) (hA : IsSelfAdjoint A)
+    (hV : T.Reduces V) (hAU : ∀ x ∈ U, A x ∈ U)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hCompressionUpper : ∀ z : U,
+      RCLike.re ⟪theorem63Compression T U z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hUnwantedLower : ∀ y ∈ Vᗮ,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
+    (h35 : DavisKahan.Experimental.Frontier.CrossedDefectsEquivalent U V) :
+    ∀ k : ℕ,
+      delta * kyFanApproximationGauge k (paperTanAngleOperatorC U V) ≤
+        kyFanApproximationGauge k (T - A) :=
+  tanTheta_wholeSpace_all_kyFan hT hA hV hAU hdelta hCompressionUpper hUnwantedLower
+    (norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent hT hV hdelta
+      hCompressionUpper hUnwantedLower h35)
+
+/-- **Davis--Kahan 1970, the whole-space `tan Θ` theorem for every source unitarily
+invariant norm, under the printed standing assumptions only.**
+
+Identical to `tanTheta_wholeSpace_paperUINorm` except that uniform transversality is no
+longer a hypothesis: it is derived from the form bounds and the printed (3.5). -/
+theorem tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent
+    (N : PaperUnitaryInvariantNorm)
+    (hT : T.IsSymmetric) (hA : IsSelfAdjoint A)
+    (hV : T.Reduces V) (hAU : ∀ x ∈ U, A x ∈ U)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hCompressionUpper : ∀ z : U,
+      RCLike.re ⟪theorem63Compression T U z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hUnwantedLower : ∀ y ∈ Vᗮ,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
+    (h35 : DavisKahan.Experimental.Frontier.CrossedDefectsEquivalent U V)
+    (hMem : N.Mem (T - A)) :
+    N.Mem (paperTanAngleOperatorC U V) ∧
+      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge (T - A) :=
+  tanTheta_wholeSpace_paperUINorm N hT hA hV hAU hdelta hCompressionUpper hUnwantedLower
+    (norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent hT hV hdelta
+      hCompressionUpper hUnwantedLower h35) hMem
 
 end WholeSpace
 
