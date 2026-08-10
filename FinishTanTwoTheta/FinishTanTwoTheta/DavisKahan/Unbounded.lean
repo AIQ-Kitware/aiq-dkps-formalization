@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 import DavisKahan.Riccati.UnboundedExistence
+import DavisKahan.Riccati.UnboundedAdjointRiccati
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 
 /-!
@@ -131,6 +132,107 @@ theorem orthonormal_neg_right
   exact F.toApproximateLeading.orthonormal_neg_right
 
 end UnboundedApproximateLeadingSingularFamily
+
+/-- **The analytic half of the unbounded selection seam, discharged from a
+spectral band bound.**
+
+`UnboundedApproximateLeadingSingularFamily` differs from the ambient bounded
+family of `SpectralSelection` in exactly two fields: the pairings
+`Re ⟪A₁ e₀, y⟫` and `Re ⟪A₀ x, e₁⟫`.  Those two fields are what remove the
+invalid factors `‖A₀‖` and `‖A₁‖` from the bounded stability calculation, and
+they are the reason ordinary density of the operator domains is not enough to
+build the family: density controls the Hilbert norm only.
+
+This theorem discharges both of them from a **band bound**.  If the selected
+vectors are chosen where the two diagonal blocks act with norm at most `τ`, and
+the two singular residuals are controlled at the finer level `ε₀` with
+`τ * ε₀ ≤ ε`, then both pairings hold at level `ε`.  For `A₁` the pairing is
+read through symmetry as `Re ⟪e₀, A₁ y⟫`, so the only vector ever normed is
+`A₁ y`, which lies in the band; for `A₀` the displayed form is already
+band-facing and no symmetry is needed.
+
+What is left of the selection seam after this theorem is purely geometric:
+producing orthonormal approximate singular vectors of the selected graph
+*inside* the two bands.  No estimate mentioning a norm of a diagonal block
+survives.
+
+The two thresholds are deliberately independent, and this is the whole content
+of the statement.  `ε` is the level at which indices are retained
+(`selected_large`) and at which the tail is discarded (`tail_small`); `ε₀` is
+the level at which the two singular residuals are controlled.  A band of radius
+`τ` costs exactly one factor `τ` in each pairing, so the residual level must be
+finer than the retention level by that factor — `τ * ε₀ ≤ ε`.  Taking `ε₀` and
+`ε` equal is admissible only for `τ ≤ 1`, which is why a single-threshold
+selection cannot serve here. -/
+theorem unboundedApproximateLeadingSingularFamily_of_bandBound
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (S : ContractiveReducingGraphSelection H)
+    (hadj : PreservesAdjointRiccatiDomains H S.X)
+    {k count : ℕ} {ε ε₀ τ : ℝ}
+    (hcount : count ≤ k) (hfine : ε₀ ≤ ε) (hband : τ * ε₀ ≤ ε)
+    (right : Fin count → H.A0.domain) (left : Fin count → H.A1.domain)
+    (hright : Orthonormal ℂ fun i => ((right i : H.A0.domain) : E0))
+    (hleft : Orthonormal ℂ fun i => ((left i : H.A1.domain) : E1))
+    (hsel : ∀ i : Fin count, ε < S.X.approximationNumber i)
+    (happly : ∀ i : Fin count,
+      ‖S.X ((right i : H.A0.domain) : E0) -
+          (S.X.approximationNumber (i : ℕ) : ℂ) •
+            ((left i : H.A1.domain) : E1)‖ ≤ ε₀)
+    (hadjres : ∀ i : Fin count,
+      ‖ContinuousLinearMap.adjoint S.X ((left i : H.A1.domain) : E1) -
+          (S.X.approximationNumber (i : ℕ) : ℂ) •
+            ((right i : H.A0.domain) : E0)‖ ≤ ε₀)
+    (hA0band : ∀ i : Fin count, ‖H.A0 (right i)‖ ≤ τ)
+    (hA1band : ∀ i : Fin count, ‖H.A1 (left i)‖ ≤ τ)
+    (htail : ∀ n, count ≤ n → n < k → S.X.approximationNumber n ≤ ε) :
+    Nonempty (UnboundedApproximateLeadingSingularFamily H S k ε) := by
+  have hsymm1 := (TauCeti.LinearPMap.isSymmetric_iff H.A1).mp H.isSymmetric1
+  refine ⟨{
+    count := count
+    count_le := hcount
+    right := right
+    left := left
+    right_orthonormal := hright
+    left_orthonormal := hleft
+    selected_large := hsel
+    applyDefect := fun i =>
+      ⟨S.X ((right i : H.A0.domain) : E0) -
+          (S.X.approximationNumber (i : ℕ) : ℂ) • ((left i : H.A1.domain) : E1),
+        Submodule.sub_mem _ (S.preservesDomains (right i))
+          (Submodule.smul_mem _ _ (left i).property)⟩
+    applyDefect_coe := fun _ => rfl
+    applyDefect_norm := fun i => (happly i).trans hfine
+    applyDefect_pairing := ?_
+    adjointDefect := fun i =>
+      ⟨ContinuousLinearMap.adjoint S.X ((left i : H.A1.domain) : E1) -
+          (S.X.approximationNumber (i : ℕ) : ℂ) • ((right i : H.A0.domain) : E0),
+        Submodule.sub_mem _ (hadj (left i))
+          (Submodule.smul_mem _ _ (right i).property)⟩
+    adjointDefect_coe := fun _ => rfl
+    adjointDefect_norm := fun i => (hadjres i).trans hfine
+    adjointDefect_pairing := ?_
+    tail_small := htail }⟩
+  · -- `Re ⟪A₁ e₀, y⟫` read through symmetry as `Re ⟪e₀, A₁ y⟫`: only the band
+    -- vector `A₁ y` is normed, never `A₁` itself.
+    intro i
+    calc |RCLike.re ⟪H.A1 _, ((left i : H.A1.domain) : E1)⟫_ℂ|
+        = |RCLike.re ⟪(_ : E1), H.A1 (left i)⟫_ℂ| := by rw [hsymm1 _ (left i)]
+      _ ≤ ‖⟪(_ : E1), H.A1 (left i)⟫_ℂ‖ := RCLike.abs_re_le_norm _
+      _ ≤ ‖(_ : E1)‖ * ‖H.A1 (left i)‖ := norm_inner_le_norm _ _
+      _ ≤ ε₀ * τ := by
+          exact mul_le_mul (happly i) (hA1band i) (norm_nonneg _)
+            (le_trans (norm_nonneg _) (happly i))
+      _ = τ * ε₀ := mul_comm _ _
+      _ ≤ ε := hband
+  · -- `Re ⟪A₀ x, e₁⟫` is already band-facing.
+    intro i
+    calc |RCLike.re ⟪H.A0 (right i), (_ : E0)⟫_ℂ|
+        ≤ ‖⟪H.A0 (right i), (_ : E0)⟫_ℂ‖ := RCLike.abs_re_le_norm _
+      _ ≤ ‖H.A0 (right i)‖ * ‖(_ : E0)‖ := norm_inner_le_norm _ _
+      _ ≤ τ * ε₀ := by
+          exact mul_le_mul (hA0band i) (hadjres i) (norm_nonneg _)
+            (le_trans (norm_nonneg _) (hA0band i))
+      _ ≤ ε := hband
 
 /-- Graph-norm spectral selection for a reducing Riccati graph.
 
@@ -457,14 +559,31 @@ private theorem eps_removal_bound
       (mul_nonneg hQ0 hε0)
   nlinarith [hε0]
 
-/-- Sharp unrestricted unbounded Ky Fan theorem. -/
-theorem sharp_unbounded_doubleAngleTangentOperator_kyFan
+/-- **Sharp unbounded Ky Fan `tan 2Θ` at a fixed prefix, selection supplied.**
+
+This is the whole analytic chain of the unbounded double-angle tangent theorem,
+with the one open seam of this file — the existence of domain-compatible
+approximate leading singular families — taken as an explicit hypothesis rather
+than invoked.  Its own proof is complete: no norm of either unbounded diagonal
+block appears anywhere in it, and the constant is the sharp `2`.
+
+Stating the selection as a hypothesis is what makes the dependency structure of
+the lane visible.  Everything downstream of `hfam` is proved; `hfam` is the
+only thing between this file and an unconditional theorem, and
+`unboundedApproximateLeadingSingularFamily_of_bandBound` reduces `hfam` to a
+purely geometric band-selection problem.
+
+The hypothesis quantifies over `ε` because the epsilon is chosen inside the
+argument, after the target accuracy `η` is fixed. -/
+theorem sharp_unbounded_doubleAngleTangentOperator_kyFan_of_selection
     (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (S : ContractiveReducingGraphSelection H)
     {d : ℝ} (hd0 : 0 ≤ d)
     (hA0 : TauCeti.LinearPMap.SemiboundedAbove H.A0 0)
     (hA1 : TauCeti.LinearPMap.SemiboundedBelow H.A1 d)
-    (k : ℕ) :
+    (k : ℕ)
+    (hfam : ∀ ε : ℝ, 0 < ε →
+      Nonempty (UnboundedApproximateLeadingSingularFamily H S k ε)) :
     d * kyFanApproximationGauge k
         (TauCeti.DavisKahan.doubleAngleTangentOperator S.X S.norm_lt_one) ≤
       2 * kyFanApproximationGauge k H.B01 := by
@@ -497,7 +616,7 @@ theorem sharp_unbounded_doubleAngleTangentOperator_kyFan
   have hεpos : 0 < ε := by
     dsimp only [ε]
     exact lt_min zero_lt_one (div_pos hη hC1)
-  obtain ⟨F⟩ := exists_unboundedApproximateLeadingSingularFamily H S k hεpos
+  obtain ⟨F⟩ := hfam ε hεpos
   have hselected := selected_unbounded_doubleAngleTangent_le_kyFan_add_error
     H S hd0 hr0 hr1 hεpos.le hA0 hA1 hXr F
   have hprefix := TauCeti.DavisKahan.sum_doubleAngleTangent_le_selected_add_tail
@@ -557,6 +676,24 @@ theorem sharp_unbounded_doubleAngleTangentOperator_kyFan
     exact eps_removal_bound hP0 hQ0 hd0 hεpos.le hU0 hU
       (Nat.cast_nonneg _) hcountReal (Nat.cast_nonneg _) hsubReal hkk hεchoice
   exact hraw.trans (by linarith)
+
+/-- Sharp unrestricted unbounded Ky Fan theorem.
+
+Grounded on `sharp_unbounded_doubleAngleTangentOperator_kyFan_of_selection` by
+discharging its selection hypothesis with the local existence theorem, which is
+the single open obligation of this file. -/
+theorem sharp_unbounded_doubleAngleTangentOperator_kyFan
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (S : ContractiveReducingGraphSelection H)
+    {d : ℝ} (hd0 : 0 ≤ d)
+    (hA0 : TauCeti.LinearPMap.SemiboundedAbove H.A0 0)
+    (hA1 : TauCeti.LinearPMap.SemiboundedBelow H.A1 d)
+    (k : ℕ) :
+    d * kyFanApproximationGauge k
+        (TauCeti.DavisKahan.doubleAngleTangentOperator S.X S.norm_lt_one) ≤
+      2 * kyFanApproximationGauge k H.B01 :=
+  sharp_unbounded_doubleAngleTangentOperator_kyFan_of_selection H S hd0 hA0 hA1 k
+    (fun _ε hε => exists_unboundedApproximateLeadingSingularFamily H S k hε)
 
 /-- Sharp unbounded endpoint for every maximal or minimal standard symmetric
 ideal generated by a coherent symmetric norming function. -/
