@@ -470,6 +470,179 @@ theorem tanTheta_directed_paperUINorm_real_infinite
   tanTheta_directed_paperUINorm_real N T hT V Z hV hdelta hCompressionUpper
     hUnwantedLower hResidual
 
+/-! ### The printed spectral orientation over a real Hilbert space
+
+The hypotheses Davis and Kahan actually print are spectral placements, not quadratic-form
+bounds: the Rayleigh--Ritz compression has spectrum in `[β, α]` and the restriction to the
+unwanted exact subspace has spectrum in `[α + δ, ∞)`.  Over `ℂ` the conversion is
+`SpectralOrder.Complex`; the real conversion is `TauCeti.SpectralOrder.Real`, which proves the
+same two bridges by a Rayleigh shift because Mathlib has no `StarOrderedRing (E →L[ℝ] E)`. -/
+
+/-- **Real directed Theorem 6.3 at every source unitarily invariant norm, in the printed
+spectral orientation.**
+
+The Ritz compression's spectrum lies in `[β, α]`, the spectrum of the restriction to the
+unwanted exact subspace lies in `[α + δ, ∞)`, and the conclusion is `δ N(tan Θ₀) ≤ N(R)` for
+the paper's norm class, with the tangent representative exhibited and its membership
+concluded.  Real Hilbert space of arbitrary dimension, arbitrary closed real trial subspace.
+
+Grounded on `tanTheta_directed_paperUINorm_real`; the spectral placement is converted to the
+form bounds by the two `TauCeti.SpectralOrder.Real` bridges, exactly as
+`tanTheta_directed_paperUINorm_spectral` uses their complex twins. -/
+theorem tanTheta_directed_paperUINorm_real_spectral
+    (N : PaperUnitaryInvariantNorm)
+    (T : E →L[ℝ] E) (hT : IsSelfAdjoint T)
+    (V Z : Submodule ℝ E) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
+    (hV : T.Reduces V)
+    {beta alpha delta : ℝ} (_hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
+    (hCompressionSpectrum :
+      spectrum ℝ (compressOperatorReal Z T) ⊆ Set.Icc beta alpha)
+    (hUnwantedSpectrum :
+      spectrum ℝ (T.restrict hV.2) ⊆ Set.Ici (alpha + delta))
+    (hResidual : N.Mem (theorem63ResidualReal T Z)) :
+    Exists (fun tanTheta0 : Z →L[ℝ] E =>
+      And (HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0)
+        (And (N.Mem tanTheta0)
+          (delta * N.gauge tanTheta0 ≤ N.gauge (theorem63ResidualReal T Z)))) := by
+  have hTsym : T.IsSymmetric := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hT
+  have hMsa : IsSelfAdjoint (compressOperatorReal Z T) :=
+    isSelfAdjoint_compressOperator hT Z
+  have hMsym : (compressOperatorReal Z T).IsSymmetric :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hMsa
+  have hCompressionUpper : ∀ z : Z,
+      ⟪compressOperatorReal Z T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2 := fun z =>
+    SpectralOrder.Real.upperFormBoundOn_top_of_spectrum_subset_Iic
+      (compressOperatorReal Z T) hMsym
+      (fun r hr => (hCompressionSpectrum hr).2) z Submodule.mem_top
+  have hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ :=
+    SpectralOrder.Real.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
+      hTsym hV.2 hUnwantedSpectrum
+  exact tanTheta_directed_paperUINorm_real N T hT V Z hV hdelta hCompressionUpper
+    hUnwantedLower hResidual
+
+/-! ### The perturbation companion over a real Hilbert space
+
+The printed tangent theorem's residual form bounds `tan Θ₀` by the Rayleigh--Ritz residual of
+the trial space.  Its perturbation companion bounds it by the perturbation itself, when the
+trial space is invariant for the perturbed operator.  The bridge is one line of algebra and
+no new estimate, exactly as over `ℂ`. -/
+
+omit [CompleteSpace E] in
+/-- **The real Ritz residual of an invariant trial space is the compressed perturbation.**
+
+If `Z` is invariant for `T + P` then `P_Zᗮ (T + P)|_Z = 0`, so the real residual of `T` on
+`Z` is exactly `−P_Zᗮ P|_Z`.  The real twin of
+`Experimental.MathAhead.Section2.theorem63Residual_eq_neg_of_invariant`. -/
+theorem theorem63ResidualReal_eq_neg_of_invariant
+    (T P : E →L[ℝ] E) (Z : Submodule ℝ E) [Z.HasOrthogonalProjection]
+    (hinv : ∀ x ∈ Z, (T + P) x ∈ Z) :
+    theorem63ResidualReal T Z = -(Zᗮ.starProjection ∘L (P ∘L Z.subtypeL)) := by
+  apply ContinuousLinearMap.ext
+  intro z
+  have hz : ((T + P) (z : E)) ∈ Z := hinv (z : E) z.property
+  have hzero : Zᗮ.starProjection ((T + P) (z : E)) = 0 := by
+    refine (Submodule.starProjection_apply_eq_zero_iff Zᗮ).mpr ?_
+    rw [Submodule.orthogonal_orthogonal]
+    exact hz
+  have hsplit : Zᗮ.starProjection (T (z : E)) + Zᗮ.starProjection (P (z : E)) = 0 := by
+    rw [← map_add]
+    simpa using hzero
+  have hres : theorem63ResidualReal T Z z = Zᗮ.starProjection (T (z : E)) := rfl
+  rw [hres]
+  have hneg : Zᗮ.starProjection (T (z : E)) = -Zᗮ.starProjection (P (z : E)) :=
+    eq_neg_of_add_eq_zero_left hsplit
+  simpa using hneg
+
+/-- Termwise domination of the real residual's approximation numbers by those of the
+restricted perturbation.  The residual is a contraction applied to `P|_Z`, so no estimate is
+involved. -/
+theorem approximationSingularValue_theorem63ResidualReal_le_of_invariant
+    (T P : E →L[ℝ] E) (Z : Submodule ℝ E) [Z.HasOrthogonalProjection]
+    (hinv : ∀ x ∈ Z, (T + P) x ∈ Z) (n : Nat) :
+    approximationSingularValue n (theorem63ResidualReal T Z) ≤
+      approximationSingularValue n (P ∘L Z.subtypeL) := by
+  rw [theorem63ResidualReal_eq_neg_of_invariant T P Z hinv,
+    approximationSingularValue_neg]
+  have hcomp := approximationSingularValue_comp_le (𝕜 := ℝ) n
+    (Zᗮ.starProjection) (P ∘L Z.subtypeL) (1 : Z →L[ℝ] Z)
+  have hid : (Zᗮ.starProjection ∘L ((P ∘L Z.subtypeL) ∘L
+      (1 : Z →L[ℝ] Z))) = Zᗮ.starProjection ∘L (P ∘L Z.subtypeL) := by
+    ext x
+    simp
+  rw [hid] at hcomp
+  refine hcomp.trans ?_
+  have hP : ‖(Zᗮ.starProjection : E →L[ℝ] E)‖ ≤ 1 :=
+    ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
+      simpa only [one_mul] using Submodule.norm_starProjection_apply_le Zᗮ x
+  have hone : ‖(1 : Z →L[ℝ] Z)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+  have hnn : 0 ≤ approximationSingularValue n (P ∘L Z.subtypeL) :=
+    approximationSingularValue_nonneg _ _
+  calc
+    ‖(Zᗮ.starProjection : E →L[ℝ] E)‖ *
+        approximationSingularValue n (P ∘L Z.subtypeL) *
+          ‖(1 : Z →L[ℝ] Z)‖ ≤
+        1 * approximationSingularValue n (P ∘L Z.subtypeL) * 1 := by
+      have h1 : ‖(Zᗮ.starProjection : E →L[ℝ] E)‖ *
+          approximationSingularValue n (P ∘L Z.subtypeL) ≤
+          1 * approximationSingularValue n (P ∘L Z.subtypeL) :=
+        mul_le_mul_of_nonneg_right hP hnn
+      exact mul_le_mul h1 hone (norm_nonneg (1 : Z →L[ℝ] Z)) (by linarith)
+    _ = approximationSingularValue n (P ∘L Z.subtypeL) := by ring
+
+/-- **Real directed Theorem 6.3, perturbation form, at every source unitarily invariant
+norm.**
+
+If the real trial space `Z` is invariant for the perturbed operator `T + P`, and `T` reduces
+`V` with the source gap, then `δ N(tan Θ₀) ≤ N(P|_Z)` for every `PaperUnitaryInvariantNorm`,
+with the tangent representative exhibited and its membership concluded.  Real Hilbert space
+of arbitrary dimension, arbitrary closed real trial subspace.
+
+The right-hand side is the perturbation *restricted to the trial space*: `P` and `P|_Z` live
+in different spaces, so a norm on an ideal cannot compare them, and the restriction is both
+what the estimate controls and the sharper statement.
+
+This is the real counterpart of
+`Experimental.MathAhead.Section2.theorem6_3_perturbation_infiniteTrial`, at the paper's own
+norm class rather than at a scalar-fixed ideal family. -/
+theorem tanTheta_directed_perturbation_paperUINorm_real
+    (N : PaperUnitaryInvariantNorm)
+    (T P : E →L[ℝ] E) (hT : IsSelfAdjoint T)
+    (V Z : Submodule ℝ E) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
+    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hCompressionUpper : ∀ z : Z, ⟪compressOperatorReal Z T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
+    (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
+    (hinv : ∀ x ∈ Z, (T + P) x ∈ Z)
+    (hPmem : N.Mem (P ∘L Z.subtypeL)) :
+    Exists (fun tanTheta0 : Z →L[ℝ] E =>
+      And (HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0)
+        (And (N.Mem tanTheta0)
+          (delta * N.gauge tanTheta0 ≤ N.gauge (P ∘L Z.subtypeL)))) := by
+  obtain ⟨tanTheta0, htan⟩ :=
+    exists_hasTheorem63DirectedTangentApproximationNumbersReal Z V
+      (fun n => approximationSingularValue_sineBlock_lt_one_infiniteTrial_real
+        T hT V Z hV hdelta hCompressionUpper hUnwantedLower n)
+  have hky : ∀ k : Nat,
+      delta * kyFanApproximationGauge k tanTheta0 ≤
+        kyFanApproximationGauge k (P ∘L Z.subtypeL) := by
+    intro k
+    have hcore := theorem6_3_all_kyFan_core_infiniteTrial_real
+      T hT V Z hV hdelta hCompressionUpper hUnwantedLower k
+    have htanKy : kyFanApproximationGauge k tanTheta0 =
+        Finset.sum (Finset.range k) (fun n =>
+          Real.tan (Real.arcsin
+            (approximationSingularValue n (theorem63DirectedSineBlockReal Z V)))) := by
+      unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+      exact Finset.sum_congr rfl fun n _ => htan n
+    have hres : kyFanApproximationGauge k (theorem63ResidualReal T Z) ≤
+        kyFanApproximationGauge k (P ∘L Z.subtypeL) := by
+      unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+      exact Finset.sum_le_sum fun n _ =>
+        approximationSingularValue_theorem63ResidualReal_le_of_invariant T P Z hinv n
+    rw [htanKy]
+    exact hcore.trans hres
+  obtain ⟨hmem, hbound⟩ := N.mul_gauge_le_of_all_mul_kyFan_le hdelta hPmem hky
+  exact ⟨tanTheta0, htan, hmem, hbound⟩
+
 /-! ### Uniform transversality over a real Hilbert space is derived, not assumed
 
 The real twin of `norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent`.  The
