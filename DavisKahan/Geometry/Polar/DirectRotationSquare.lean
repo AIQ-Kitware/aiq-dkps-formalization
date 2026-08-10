@@ -8,6 +8,7 @@ import DavisKahan.Geometry.Halmos.TwoProjections
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
 import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+import ForTauCeti.Analysis.CStarAlgebra.PositiveSquareRootCommute
 
 /-!
 # Principal-square-root completion of the Spectra direct rotation
@@ -1206,6 +1207,393 @@ theorem eq_spectraDirectRotation_iff_diagonalBlocks_nonneg
   · rintro ⟨hWunit, hsq, hint, hblockU, hblockUperp⟩
     exact spectraDirectRotation_unique_of_diagonalBlocks U V hacute W hWunit
       hsq hint hblockU hblockUperp
+
+/-! ### Proposition 3.1's third clause, from the printed hypotheses
+
+Proposition 3.1 has three clauses: in the acute case the direct rotation exists, is unique,
+and **is characterised by property (i) alone**.  Property (i) of Definition 3.1 is
+`C₀ ≥ 0` and `C₁ ≥ 0`, the two diagonal blocks of `W` in the `U ⊕ Uᗮ` decomposition; so the
+printed hypotheses of the third clause are exactly: `W` unitary, `W P_U = P_V W`, and those
+two blocks positive.
+
+Equation (3.8), `W² = J_V J_U`, is **not** among them.  The paper derives (3.8) from (3.6)
+and (3.7), i.e. from (i) *and* (ii), so assuming it is assuming part of the conclusion.
+`spectraDirectRotation_unique_of_diagonalBlocks` above does assume it; this section removes
+it.  The two statements are *incomparable*, not nested — dropping (3.8) forces the block
+condition to be strengthened, as follows.
+
+Two things about property (i) that the statement with (3.8) obscures.
+
+* It is genuine positivity of the blocks, not merely nonnegative real part.  Once (3.8) is
+  assumed, nonnegative real part is enough, which is why the theorem above can afford the
+  weaker hypothesis.  Without (3.8) it is not enough: on `H = ℂ²` with `U = V = ℂ ⬝ e₀`,
+  the unitary `diag (i, 1)` commutes with `P_U`, both of its diagonal compressions have
+  vanishing real part, and it is not the direct rotation `1`.
+* Over `ℂ`, "the compression to `U` is a positive operator" is the single condition
+  `∀ x ∈ U, 0 ≤ ⟪W x, x⟫` read in the order on `ℂ`: nonnegativity of a *complex* number
+  already forces the imaginary part to vanish, hence self-adjointness of the block.
+
+The proof is the printed one (transcription L887--898).  From the `U`←`Uᗮ` blocks of
+`W⋆W = 1` and `W W⋆ = 1` — equations (3.2) and (3.3) — eliminating `S₀⋆` gives
+`C₀² S₁ = S₁ C₁²`; the continuous functional calculus at `f = √` turns that into
+`C₀ S₁ = S₁ C₁`; comparing with (3.2) again gives `(S₁ − S₀⋆) C₁ = 0`; and `C₁` is injective
+on `Uᗮ` in the acute case, so `S₁ = S₀⋆`, which is (ii).
+
+The functional-calculus step needs no rectangular intertwiner.  `C₀` and `C₁` are supported
+on complementary summands of one space, so their sum `T` is a single nonnegative operator
+with `T² B = B T²` for `B` the off-diagonal block, and `T B = B T` is
+`TauCeti.commute_of_commute_mul_self`. -/
+
+/-- **The reflection conjugate of `W` is its adjoint, from property (i) alone.**
+
+`J_U W J_U = W⋆` says that in `U ⊕ Uᗮ` coordinates the diagonal blocks of `W` are
+self-adjoint and the off-diagonal blocks are negatives of each other's adjoints — the second
+half being property (ii), `S₁ = S₀⋆`.  So this is Definition 3.1(ii) in operator form, and
+proving it *is* the third clause of Proposition 3.1.
+
+`reflection_conjugate_eq_star_of_sq_of_intertwines` proves the same identity from (3.8)
+instead of from positivity of the blocks; neither hypothesis set contains the other. -/
+theorem reflection_conjugate_eq_star_of_intertwines_of_diagonalBlocks_pos
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsUniformlyAcute U V)
+    (W : H →L[ℂ] H)
+    (hWunit : W ∈ unitary (H →L[ℂ] H))
+    (hint : W * U.starProjection = V.starProjection * W)
+    (hblockU : ∀ x ∈ U, 0 ≤ ⟪W x, x⟫_ℂ)
+    (hblockUperp : ∀ x ∈ Uᗮ, 0 ≤ ⟪W x, x⟫_ℂ) :
+    U.reflectionOperator * W * U.reflectionOperator = star W := by
+  set P : H →L[ℂ] H := U.starProjection with hPdef
+  set P' : H →L[ℂ] H := Uᗮ.starProjection with hP'def
+  set Q : H →L[ℂ] H := V.starProjection with hQdef
+  -- Projection algebra.
+  have hPP : P * P = P := by rw [hPdef]; exact U.isIdempotentElem_starProjection
+  have hPstar : star P = P := by rw [hPdef]; exact (isSelfAdjoint_starProjection U).star_eq
+  have hP'eq : P' = 1 - P := by
+    rw [hP'def, hPdef]; exact Submodule.starProjection_orthogonal' U
+  have hone : P + P' = 1 := by rw [hP'eq]; abel
+  have hPP' : P * P' = 0 := by rw [hP'eq, mul_sub, mul_one, hPP, sub_self]
+  have hP'P : P' * P = 0 := by rw [hP'eq, sub_mul, one_mul, hPP, sub_self]
+  have hP'P' : P' * P' = P' := by
+    rw [hP'eq, sub_mul, one_mul, mul_sub, mul_one, hPP]; abel
+  have hP'star : star P' = P' := by rw [hP'eq, star_sub, star_one, hPstar]
+  -- Unitarity.
+  have hWsW : star W * W = 1 := Unitary.star_mul_self_of_mem hWunit
+  have hWWs : W * star W = 1 := Unitary.mul_star_self_of_mem hWunit
+  -- The four blocks of `W`.  In the paper's notation `C₀`, `C₁` are the diagonal blocks and
+  -- the off-diagonal ones are `B = -S₁` and `F = S₀`.
+  set C₀ : H →L[ℂ] H := P * W * P with hC₀def
+  set C₁ : H →L[ℂ] H := P' * W * P' with hC₁def
+  set B : H →L[ℂ] H := P * W * P' with hBdef
+  set F : H →L[ℂ] H := P' * W * P with hFdef
+  -- Property (i): both diagonal blocks are positive operators, hence self-adjoint.
+  have hre : ∀ z : ℂ, 0 ≤ z → ((RCLike.re z : ℝ) : ℂ) = z ∧ 0 ≤ RCLike.re z := by
+    intro z hz
+    obtain ⟨hzre, hzim⟩ := RCLike.nonneg_iff.mp hz
+    exact ⟨RCLike.conj_eq_iff_re.mp (RCLike.conj_eq_iff_im.mpr hzim), hzre⟩
+  have hC₀pos : (0 : H →L[ℂ] H) ≤ C₀ := by
+    rw [ContinuousLinearMap.nonneg_iff_isPositive,
+      ContinuousLinearMap.isPositive_iff_complex]
+    intro x
+    have hval : ⟪C₀ x, x⟫_ℂ = ⟪W (P x), P x⟫_ℂ := by
+      rw [hC₀def]
+      simp only [mul_apply_eq_comp]
+      rw [hPdef]
+      exact Submodule.inner_starProjection_left_eq_right U _ _
+    rw [hval]
+    exact hre _ (hblockU (P x) (by rw [hPdef]; exact U.starProjection_apply_mem x))
+  have hC₁pos : (0 : H →L[ℂ] H) ≤ C₁ := by
+    rw [ContinuousLinearMap.nonneg_iff_isPositive,
+      ContinuousLinearMap.isPositive_iff_complex]
+    intro x
+    have hval : ⟪C₁ x, x⟫_ℂ = ⟪W (P' x), P' x⟫_ℂ := by
+      rw [hC₁def]
+      simp only [mul_apply_eq_comp]
+      rw [hP'def]
+      exact Submodule.inner_starProjection_left_eq_right Uᗮ _ _
+    rw [hval]
+    exact hre _ (hblockUperp (P' x) (by rw [hP'def]; exact Uᗮ.starProjection_apply_mem x))
+  have hC₀star : star C₀ = C₀ := (IsSelfAdjoint.of_nonneg hC₀pos).star_eq
+  have hC₁star : star C₁ = C₁ := (IsSelfAdjoint.of_nonneg hC₁pos).star_eq
+  -- Adjoints of the blocks, before positivity is used.
+  have hstarC₀ : star C₀ = P * star W * P := by
+    rw [hC₀def, star_mul, star_mul, hPstar, mul_assoc]
+  have hstarC₁ : star C₁ = P' * star W * P' := by
+    rw [hC₁def, star_mul, star_mul, hP'star, mul_assoc]
+  have hstarB : star B = P' * star W * P := by
+    rw [hBdef, star_mul, star_mul, hPstar, hP'star, mul_assoc]
+  have hstarF : star F = P * star W * P' := by
+    rw [hFdef, star_mul, star_mul, hPstar, hP'star, mul_assoc]
+  -- Equation (3.2), the `U`←`Uᗮ` block of `W⋆W = 1`.
+  have hblock₁ : C₀ * B + star F * C₁ = 0 := by
+    have hexp : star C₀ * B + star F * C₁ = P * (star W * W) * P' := by
+      rw [hstarC₀, hstarF, hBdef, hC₁def]
+      calc P * star W * P * (P * W * P') + P * star W * P' * (P' * W * P')
+          = P * star W * (P * P) * W * P' + P * star W * (P' * P') * W * P' := by
+            noncomm_ring
+        _ = P * star W * P * W * P' + P * star W * P' * W * P' := by rw [hPP, hP'P']
+        _ = P * star W * (P + P') * W * P' := by noncomm_ring
+        _ = P * (star W * W) * P' := by rw [hone]; noncomm_ring
+    rw [hC₀star] at hexp
+    rw [hexp, hWsW, mul_one, hPP']
+  -- Equation (3.3), the `U`←`Uᗮ` block of `W W⋆ = 1`.
+  have hblock₂ : C₀ * star F + B * C₁ = 0 := by
+    have hexp : C₀ * star F + B * star C₁ = P * (W * star W) * P' := by
+      rw [hstarC₁, hstarF, hBdef, hC₀def]
+      calc P * W * P * (P * star W * P') + P * W * P' * (P' * star W * P')
+          = P * W * (P * P) * star W * P' + P * W * (P' * P') * star W * P' := by
+            noncomm_ring
+        _ = P * W * P * star W * P' + P * W * P' * star W * P' := by rw [hPP, hP'P']
+        _ = P * W * (P + P') * star W * P' := by noncomm_ring
+        _ = P * (W * star W) * P' := by rw [hone]; noncomm_ring
+    rw [hC₁star] at hexp
+    rw [hexp, hWWs, mul_one, hPP']
+  -- Eliminating `S₀⋆` from (3.4): `C₀² S₁ = S₁ C₁²`.
+  have h1 : C₀ * B = -(star F * C₁) := add_eq_zero_iff_eq_neg.mp hblock₁
+  have h2 : C₀ * star F = -(B * C₁) := add_eq_zero_iff_eq_neg.mp hblock₂
+  have hCB : C₀ * (C₀ * B) = B * (C₁ * C₁) := by
+    calc C₀ * (C₀ * B) = C₀ * -(star F * C₁) := by rw [h1]
+      _ = -(C₀ * star F * C₁) := by noncomm_ring
+      _ = -(-(B * C₁) * C₁) := by rw [h2]
+      _ = B * (C₁ * C₁) := by noncomm_ring
+  -- Block products that vanish.
+  have hC₀C₁ : C₀ * C₁ = 0 := by
+    rw [hC₀def, hC₁def]
+    calc P * W * P * (P' * W * P') = P * W * (P * P') * W * P' := by noncomm_ring
+      _ = 0 := by rw [hPP']; simp
+  have hC₁C₀ : C₁ * C₀ = 0 := by
+    rw [hC₀def, hC₁def]
+    calc P' * W * P' * (P * W * P) = P' * W * (P' * P) * W * P := by noncomm_ring
+      _ = 0 := by rw [hP'P]; simp
+  have hC₁B : C₁ * B = 0 := by
+    rw [hC₁def, hBdef]
+    calc P' * W * P' * (P * W * P') = P' * W * (P' * P) * W * P' := by noncomm_ring
+      _ = 0 := by rw [hP'P]; simp
+  have hBC₀ : B * C₀ = 0 := by
+    rw [hC₀def, hBdef]
+    calc P * W * P' * (P * W * P) = P * W * (P' * P) * W * P := by noncomm_ring
+      _ = 0 := by rw [hP'P]; simp
+  -- The diagonal part is a single nonnegative operator, and its square commutes with `B`.
+  set T : H →L[ℂ] H := C₀ + C₁ with hTdef
+  have hTpos : (0 : H →L[ℂ] H) ≤ T := by
+    rw [hTdef, ContinuousLinearMap.nonneg_iff_isPositive]
+    exact ((ContinuousLinearMap.nonneg_iff_isPositive _).mp hC₀pos).add
+      ((ContinuousLinearMap.nonneg_iff_isPositive _).mp hC₁pos)
+  have hTsq : T * T = C₀ * C₀ + C₁ * C₁ := by
+    rw [hTdef]
+    calc (C₀ + C₁) * (C₀ + C₁) = C₀ * C₀ + C₀ * C₁ + (C₁ * C₀ + C₁ * C₁) := by
+          noncomm_ring
+      _ = C₀ * C₀ + C₁ * C₁ := by rw [hC₀C₁, hC₁C₀]; abel
+  have hcomm : Commute (T * T) B := by
+    show T * T * B = B * (T * T)
+    have hBC₀C₀ : B * (C₀ * C₀) = 0 := by rw [← mul_assoc, hBC₀, zero_mul]
+    rw [hTsq]
+    calc (C₀ * C₀ + C₁ * C₁) * B = C₀ * (C₀ * B) + C₁ * (C₁ * B) := by noncomm_ring
+      _ = C₀ * (C₀ * B) := by rw [hC₁B, mul_zero, add_zero]
+      _ = B * (C₁ * C₁) := hCB
+      _ = B * (C₀ * C₀) + B * (C₁ * C₁) := by rw [hBC₀C₀, zero_add]
+      _ = B * (C₀ * C₀ + C₁ * C₁) := by rw [mul_add]
+  -- The functional-calculus step, at `f = √`.
+  have hTB : T * B = C₀ * B := by rw [hTdef, add_mul, hC₁B, add_zero]
+  have hBT : B * T = B * C₁ := by rw [hTdef, mul_add, hBC₀, zero_add]
+  have hkey : C₀ * B = B * C₁ := by
+    have hc := (TauCeti.commute_of_commute_mul_self hTpos hcomm).eq
+    rwa [hTB, hBT] at hc
+  -- `(S₁ - S₀⋆) C₁ = 0`, then injectivity of `C₁` on `Uᗮ`.
+  have hND : (B + star F) * C₁ = 0 := by rw [add_mul, ← hkey]; exact hblock₁
+  have hDN : C₁ * (star B + F) = 0 := by
+    have h := congrArg star hND
+    rw [star_mul, star_add, star_star, hC₁star, star_zero] at h
+    exact h
+  -- The acute case, in the form the paper uses: `U ∩ Vᗮ` is zero.
+  have hinf : U ⊓ Vᗮ = ⊥ := by
+    by_contra hne
+    have h1 : U.directedProjectionGap V = 1 :=
+      Submodule.directedProjectionGap_eq_one_of_inf_orthogonal_ne_bot U V hne
+    have h2 : U.directedProjectionGap V ≤ U.projectionGap V :=
+      Submodule.directedProjectionGap_le_projectionGap U V
+    have h3 : U.projectionGap V < 1 := hacute
+    linarith
+  have hC₁inj : ∀ y : H, P' y = y → C₁ y = 0 → y = 0 := by
+    intro y hy hzero
+    have hWP' : W * P' = (1 - Q) * W := by
+      rw [hP'eq, mul_sub, mul_one, sub_mul, one_mul, hint]
+    have hQzero : Q (W y) = 0 := by
+      have h := congrArg (fun S : H →L[ℂ] H => S y) hWP'
+      simp only [mul_apply_eq_comp, sub_apply, one_apply_eq_self] at h
+      rw [hy] at h
+      exact sub_eq_self.mp h.symm
+    have hP'zero : P' (W y) = 0 := by
+      have hval : C₁ y = P' (W y) := by
+        rw [hC₁def]
+        simp only [mul_apply_eq_comp]
+        rw [hy]
+      rw [← hval]; exact hzero
+    have hmemU : W y ∈ U := by
+      rw [← Submodule.orthogonal_orthogonal U]
+      rw [hP'def] at hP'zero
+      exact (Submodule.starProjection_apply_eq_zero_iff (K := Uᗮ)).mp hP'zero
+    have hWy : W y = 0 := by
+      rw [hQdef] at hQzero
+      have hmemVperp : W y ∈ Vᗮ :=
+        (Submodule.starProjection_apply_eq_zero_iff (K := V)).mp hQzero
+      have : W y ∈ (⊥ : Submodule ℂ H) := hinf ▸ Submodule.mem_inf.mpr ⟨hmemU, hmemVperp⟩
+      exact (Submodule.mem_bot ℂ).mp this
+    have h := congrArg (fun S : H →L[ℂ] H => S y) hWsW
+    simp only [mul_apply_eq_comp, one_apply_eq_self] at h
+    rw [hWy, map_zero] at h
+    exact h.symm
+  have hNrange : P' * (star B + F) = star B + F := by
+    rw [mul_add, hstarB, hFdef]
+    calc P' * (P' * star W * P) + P' * (P' * W * P)
+        = P' * P' * star W * P + P' * P' * W * P := by noncomm_ring
+      _ = P' * star W * P + P' * W * P := by rw [hP'P']
+  have hN : star B + F = 0 := by
+    ext y
+    have hzP' : P' ((star B + F) y) = ((star B + F) y) := by
+      have h := congrArg (fun S : H →L[ℂ] H => S y) hNrange
+      simpa only [mul_apply_eq_comp] using h
+    have hzC₁ : C₁ ((star B + F) y) = 0 := by
+      have h := congrArg (fun S : H →L[ℂ] H => S y) hDN
+      simpa only [mul_apply_eq_comp, zero_apply] using h
+    simpa using hC₁inj _ hzP' hzC₁
+  -- Property (ii), and with it the block form of `W⋆`.
+  have hsB : star B = -F := by
+    have := hN
+    rwa [add_eq_zero_iff_eq_neg] at this
+  have hsF : star F = -B := by
+    have h := congrArg star hN
+    rw [star_add, star_star, star_zero, add_comm, add_eq_zero_iff_eq_neg] at h
+    exact h
+  have hWdecomp : C₀ + B + F + C₁ = W := by
+    rw [hC₀def, hBdef, hFdef, hC₁def]
+    calc P * W * P + P * W * P' + P' * W * P + P' * W * P'
+        = (P + P') * W * (P + P') := by noncomm_ring
+      _ = W := by rw [hone, one_mul, mul_one]
+  have hsum : W + star W = (2 : ℂ) • T := by
+    rw [← hWdecomp, star_add, star_add, star_add, hC₀star, hC₁star, hsB, hsF, hTdef,
+      two_smul]
+    abel
+  -- Both `J_U W J_U` and `W⋆` are `2 T - W`, the diagonal pinch construction.
+  have hdiag : U.diagonalPart W = T := by
+    rw [Submodule.diagonalPart_eq, ← hPdef, ← hP'def, hTdef, hC₀def, hC₁def]
+    simp only [← ContinuousLinearMap.mul_def, mul_assoc]
+  have hpinch := Submodule.two_smul_diagonalPart_eq_add_reflectionConjugate U W
+  rw [hdiag] at hpinch
+  have hJ : U.reflectionOperator * W * U.reflectionOperator = (2 : ℂ) • T - W := by
+    rw [hpinch]
+    simp only [← ContinuousLinearMap.mul_def, mul_assoc]
+    abel
+  rw [hJ, ← hsum]
+  abel
+
+/-- **Proposition 3.1's third clause: property (i) alone characterises the direct
+rotation.**
+
+Among the unitaries `W` with `W P_U = P_V W`, the direct rotation is exactly the one whose
+two diagonal blocks are positive.  The square identity (3.8) is *not* assumed; it is a
+consequence, obtained here from
+`reflection_conjugate_eq_star_of_intertwines_of_diagonalBlocks_pos` by the paper's own
+computation `U²X = U(UX) = U(XU⁻¹) = UPU⁻¹ - UP̃U⁻¹ = Q - Q̃`. -/
+theorem spectraDirectRotation_unique_of_diagonalBlocks_pos
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsUniformlyAcute U V)
+    (W : H →L[ℂ] H)
+    (hWunit : W ∈ unitary (H →L[ℂ] H))
+    (hint : W * U.starProjection = V.starProjection * W)
+    (hblockU : ∀ x ∈ U, 0 ≤ ⟪W x, x⟫_ℂ)
+    (hblockUperp : ∀ x ∈ Uᗮ, 0 ≤ ⟪W x, x⟫_ℂ) :
+    W = spectraDirectRotation U V hacute := by
+  have hJJ : reflectionOperator U * reflectionOperator U = (1 : H →L[ℂ] H) :=
+    reflectionOperator_mul_self_complex U
+  have hconj : reflectionOperator U * W * reflectionOperator U = star W :=
+    reflection_conjugate_eq_star_of_intertwines_of_diagonalBlocks_pos U V hacute W
+      hWunit hint hblockU hblockUperp
+  have hintJ : W * reflectionOperator U = reflectionOperator V * W := by
+    rw [reflectionOperator_eq_projection_add_projection_sub_one U,
+      reflectionOperator_eq_projection_add_projection_sub_one V, mul_sub, mul_add,
+      mul_one, sub_mul, add_mul, one_mul, hint]
+  -- `W J_U = J_U W⋆`, the left-multiplied form of the reflection conjugate identity.
+  have hWJ : W * reflectionOperator U = reflectionOperator U * star W := by
+    calc W * reflectionOperator U
+        = reflectionOperator U * reflectionOperator U * W * reflectionOperator U := by
+          rw [hJJ, one_mul]
+      _ = reflectionOperator U * (reflectionOperator U * W * reflectionOperator U) := by
+          simp only [mul_assoc]
+      _ = reflectionOperator U * star W := by rw [hconj]
+  -- Equation (3.8) is now a consequence, not a hypothesis.
+  have hsq : W * W = spectraReflectionProduct U V := by
+    have hstep : W * W * reflectionOperator U = reflectionOperator V := by
+      calc W * W * reflectionOperator U = W * (W * reflectionOperator U) := by
+            rw [mul_assoc]
+        _ = W * (reflectionOperator U * star W) := by rw [hWJ]
+        _ = W * reflectionOperator U * star W := by rw [mul_assoc]
+        _ = reflectionOperator V * W * star W := by rw [hintJ]
+        _ = reflectionOperator V := by
+              rw [mul_assoc, Unitary.mul_star_self_of_mem hWunit, mul_one]
+    have h := congrArg (fun T : H →L[ℂ] H => T * reflectionOperator U) hstep
+    simpa only [mul_assoc, hJJ, mul_one, spectraReflectionProduct] using h
+  refine spectraDirectRotation_unique_of_diagonalBlocks U V hacute W hWunit hsq hintJ
+    ?_ ?_
+  · intro x hx
+    simpa only [RCLike.re_to_complex] using (RCLike.nonneg_iff.mp (hblockU x hx)).1
+  · intro x hx
+    simpa only [RCLike.re_to_complex] using (RCLike.nonneg_iff.mp (hblockUperp x hx)).1
+
+/-- **Proposition 3.1's third clause, as a biconditional.**
+
+`W` is the direct rotation exactly when it is a unitary intertwining the two projections
+whose diagonal blocks are positive.  Contrast
+`eq_spectraDirectRotation_iff_diagonalBlocks_nonneg`, which lists the square identity (3.8)
+among the conditions: that is also a correct characterisation, but not the printed one,
+which is by "property (i) alone". -/
+theorem eq_spectraDirectRotation_iff_diagonalBlocks_pos
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H) :
+    W = spectraDirectRotation U V hacute ↔
+      W ∈ unitary (H →L[ℂ] H) ∧
+        W * U.starProjection = V.starProjection * W ∧
+        (∀ x ∈ U, 0 ≤ ⟪W x, x⟫_ℂ) ∧
+        (∀ x ∈ Uᗮ, 0 ≤ ⟪W x, x⟫_ℂ) := by
+  have hCP : (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)).IsPositive :=
+    (ContinuousLinearMap.nonneg_iff_isPositive _).mp
+      (spectraOperatorAbsoluteValue_nonneg _)
+  constructor
+  · rintro rfl
+    refine ⟨spectraDirectRotation_mem_unitary U V hacute,
+      spectraDirectRotation_intertwines U V hacute, ?_, ?_⟩
+    · intro x hx
+      have hPx : U.starProjection x = x := Submodule.starProjection_eq_self_iff.mpr hx
+      have hblk : U.starProjection * spectraDirectRotation U V hacute *
+          U.starProjection = spectraOperatorAbsoluteValue
+            (spectraCanonicalIntertwiner U V) * U.starProjection :=
+        projection_mul_spectraDirectRotation_mul_projection U V hacute
+      have h := congrArg (fun S : H →L[ℂ] H => S x) hblk
+      simp only [mul_apply_eq_comp, hPx] at h
+      have hval : ⟪spectraDirectRotation U V hacute x, x⟫_ℂ =
+          ⟪spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x, x⟫_ℂ := by
+        rw [← h, Submodule.inner_starProjection_left_eq_right, hPx]
+      rw [hval]
+      exact hCP.inner_nonneg_left x
+    · intro x hx
+      have hPx : Uᗮ.starProjection x = x := Submodule.starProjection_eq_self_iff.mpr hx
+      have hblk : Uᗮ.starProjection * spectraDirectRotation U V hacute *
+          Uᗮ.starProjection = spectraOperatorAbsoluteValue
+            (spectraCanonicalIntertwiner U V) * Uᗮ.starProjection :=
+        complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
+          U V hacute
+      have h := congrArg (fun S : H →L[ℂ] H => S x) hblk
+      simp only [mul_apply_eq_comp, hPx] at h
+      have hval : ⟪spectraDirectRotation U V hacute x, x⟫_ℂ =
+          ⟪spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x, x⟫_ℂ := by
+        rw [← h, Submodule.inner_starProjection_left_eq_right, hPx]
+      rw [hval]
+      exact hCP.inner_nonneg_left x
+  · rintro ⟨hWunit, hint, hblockU, hblockUperp⟩
+    exact spectraDirectRotation_unique_of_diagonalBlocks_pos U V hacute W hWunit hint
+      hblockU hblockUperp
 
 /-- **A positive operator whose inverse is small is coercive.**
 

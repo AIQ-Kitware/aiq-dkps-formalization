@@ -187,6 +187,29 @@ alias complex_directRotation_of_diagonalBlocks :=
 alias complex_directRotation_iff_diagonalBlocks :=
   DavisKahan.Experimental.eq_spectraDirectRotation_iff_diagonalBlocks_nonneg
 
+/-! ### Proposition 3.1's third clause, from the printed hypotheses
+
+The three aliases immediately above put equation (3.8), `W² = J_V J_U`, on the left of the
+implication.  The printed clause (c) does not: it says the direct rotation "is characterized
+by property (i) alone", property (i) of Definition 3.1 being `C₀ ≥ 0` and `C₁ ≥ 0`.  Since
+(3.8) is derived at (3.6)--(3.7) from (i) *and* (ii), assuming it assumes part of the
+conclusion.  These four names carry the printed hypotheses only — unitary, `W P_U = P_V W`,
+and the two diagonal blocks positive — and derive (3.8) rather than assume it.
+
+Property (i) is positivity of the blocks as *operators*, which over `ℂ` is the single
+condition `∀ x ∈ U, 0 ≤ ⟪W x, x⟫` in the order on `ℂ` and over `ℝ` is `IsPositive` of the
+compression, symmetry included.  Nonnegative *real part* is not enough once (3.8) is
+dropped: `diag (i, 1)` on `ℂ²` with `U = V = ℂ ⬝ e₀`, and the plane rotation by `π/3` on
+`ℝ⁴` with `U = V = span (e₀, e₁)`, are the two counterexamples. -/
+alias complex_directRotation_reflectionConjugate_of_positiveDiagonalBlocks :=
+  DavisKahan.Experimental.reflection_conjugate_eq_star_of_intertwines_of_diagonalBlocks_pos
+alias complex_directRotation_of_positiveDiagonalBlocks :=
+  DavisKahan.Experimental.spectraDirectRotation_unique_of_diagonalBlocks_pos
+alias complex_directRotation_iff_positiveDiagonalBlocks :=
+  DavisKahan.Experimental.eq_spectraDirectRotation_iff_diagonalBlocks_pos
+alias real_directRotation_of_positiveDiagonalBlocks :=
+  DavisKahan.Experimental.directRotationR_unique_of_diagonalBlocks_pos
+
 /-! ### Section 3 over a **real** Hilbert space of arbitrary dimension
 
 Standing assumption 1 of the paper is "real or complex", and the `complex_*`

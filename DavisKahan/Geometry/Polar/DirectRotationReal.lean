@@ -554,6 +554,88 @@ theorem eq_directRotationR_iff_diagonalBlocks_nonneg (hacute : IsUniformlyAcute 
     exact directRotationR_unique_of_diagonalBlocks U V hacute W hWunit hsq hint
       hblockU hblockUperp
 
+/-! ### Proposition 3.1's third clause over `ℝ`, from the printed hypotheses
+
+The two theorems above assume the square identity (3.8), which the printed clause does not;
+`spectraDirectRotation_unique_of_diagonalBlocks_pos` removes it over `ℂ` and this section
+transports that.
+
+**Property (i) is a strictly stronger condition over `ℝ` than the pointwise sign condition
+used above.**  Definition 3.1(i) is `C₀ ≥ 0`, `C₁ ≥ 0` — positive *operators*, so symmetric.
+Over `ℂ` an operator with nonnegative quadratic form is automatically self-adjoint, so
+`∀ x ∈ U, 0 ≤ ⟪W x, x⟫_ℂ` already says it.  Over `ℝ` it does not: on `E = ℝ⁴` with
+`U = V = span (e₀, e₁)`, the orthogonal `W = R ⊕ 1` with `R` a plane rotation by `π/3`
+commutes with `P_U` and has `⟪W x, x⟫ = cos (π/3) ‖x‖² ≥ 0` on both blocks, yet is not the
+direct rotation `1`.  So over `ℝ` the hypothesis has to be `IsPositive` of the compression,
+which carries symmetry as well as the sign. -/
+
+section PrintedThirdClause
+
+open scoped ComplexOrder
+
+omit [CompleteSpace E] in
+/-- **A positive diagonal block complexifies to a positive one.**
+
+The complexified quadratic form on the complexified subspace has imaginary part
+`⟪A (re z), im z⟫ - ⟪A (im z), re z⟫`, and it is symmetry of the compression — the half of
+`IsPositive` that a pointwise sign condition does not supply over `ℝ` — that makes it
+vanish. -/
+theorem inner_complexify_nonneg_of_isPositive_compression
+    {A : E →L[ℝ] E} {W : Submodule ℝ E} [W.HasOrthogonalProjection]
+    (h : (W.starProjection * A * W.starProjection).IsPositive)
+    {z : RealComplexification E} (hz : z ∈ complexifySubmodule W) :
+    0 ≤ ⟪complexify A z, z⟫_ℂ := by
+  obtain ⟨hzre, hzim⟩ := mem_complexifySubmodule.mp hz
+  -- On the block, `A` agrees with its compression.
+  have hagree : ∀ x ∈ W, ∀ y ∈ W,
+      ⟪A x, y⟫_ℝ = ⟪(W.starProjection * A * W.starProjection) x, y⟫_ℝ := by
+    intro x hx y hy
+    rw [mul_apply_eq_comp, mul_apply_eq_comp,
+      Submodule.starProjection_eq_self_iff.mpr hx,
+      Submodule.inner_starProjection_left_eq_right,
+      Submodule.starProjection_eq_self_iff.mpr hy]
+  have hB : ⟪(W.starProjection * A * W.starProjection) (re z), im z⟫_ℝ =
+      ⟪re z, (W.starProjection * A * W.starProjection) (im z)⟫_ℝ := h.isSymmetric _ _
+  have hsym : ⟪A (re z), im z⟫_ℝ = ⟪A (im z), re z⟫_ℝ := by
+    calc ⟪A (re z), im z⟫_ℝ
+        = ⟪(W.starProjection * A * W.starProjection) (re z), im z⟫_ℝ :=
+          hagree _ hzre _ hzim
+      _ = ⟪re z, (W.starProjection * A * W.starProjection) (im z)⟫_ℝ := hB
+      _ = ⟪(W.starProjection * A * W.starProjection) (im z), re z⟫_ℝ :=
+          real_inner_comm _ _
+      _ = ⟪A (im z), re z⟫_ℝ := (hagree _ hzim _ hzre).symm
+  have hre : (0 : ℝ) ≤ ⟪A (re z), re z⟫_ℝ + ⟪A (im z), im z⟫_ℝ := by
+    rw [hagree _ hzre _ hzre, hagree _ hzim _ hzim]
+    exact add_nonneg (h.inner_nonneg_left _) (h.inner_nonneg_left _)
+  refine RCLike.nonneg_iff.mpr ⟨?_, ?_⟩
+  · rw [RCLike.re_to_complex]
+    exact hre
+  · rw [RCLike.im_to_complex]
+    show ⟪A (re z), im z⟫_ℝ - ⟪A (im z), re z⟫_ℝ = 0
+    rw [hsym, sub_self]
+
+/-- **Davis--Kahan 1970, Proposition 3.1, third clause, over `ℝ`.**
+
+Among the orthogonal `W` with `W P_U = P_V W`, the direct rotation is exactly the one whose
+two diagonal blocks are positive operators.  The square identity (3.8) is not assumed. -/
+theorem directRotationR_unique_of_diagonalBlocks_pos (hacute : IsUniformlyAcute U V)
+    (W : E →L[ℝ] E) (hWunit : W ∈ unitary (E →L[ℝ] E))
+    (hint : W * U.starProjection = V.starProjection * W)
+    (hblockU : (U.starProjection * W * U.starProjection).IsPositive)
+    (hblockUperp : (Uᗮ.starProjection * W * Uᗮ.starProjection).IsPositive) :
+    W = directRotationR U V hacute := by
+  refine complexify_injective ?_
+  rw [complexify_directRotationR]
+  refine spectraDirectRotation_unique_of_diagonalBlocks_pos _ _ _ (complexify W)
+    (complexify_mem_unitary hWunit) ?_ ?_ ?_
+  · rw [starProjection_complexifySubmodule, starProjection_complexifySubmodule,
+      ← complexify_mul, ← complexify_mul, hint]
+  · exact fun z hz => inner_complexify_nonneg_of_isPositive_compression hblockU hz
+  · refine fun z hz => inner_complexify_nonneg_of_isPositive_compression hblockUperp ?_
+    rwa [complexifySubmodule_orthogonal U]
+
+end PrintedThirdClause
+
 /-! ### Corollary 3.2: reversal symmetry -/
 
 /-- **Davis--Kahan 1970, Corollary 3.2, over `ℝ`.**  Reversing the ordered pair
