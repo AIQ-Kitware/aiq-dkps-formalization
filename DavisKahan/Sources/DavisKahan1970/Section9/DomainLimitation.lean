@@ -4,9 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
+import DavisKahan.Sources.DavisKahan1970.Section9.WeinbergerAngle
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.DiagonalMultiplication
 import Mathlib.Analysis.Normed.Lp.lpSpace
 import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Topology.Algebra.Module.LinearPMap
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
@@ -20,9 +23,24 @@ import Mathlib.Tactic.Ring
 The source displays a geometric trial sequence whose image under a diagonal
 unbounded operator is the constant sequence, hence is not square summable.  It
 then notes that an arbitrarily small modification repairs the domain issue.
-Here the repair is made explicit by finite truncation.  The statements below
-are sequence-level and avoid pretending that an undefined residual is a vector
-of `ell^2`.
+Here the repair is made explicit by finite truncation.  The first group of
+statements is sequence-level and avoids pretending that an undefined residual is
+a vector of `ell^2`.
+
+The file then carries the whole paragraph the source writes after (9.8):
+
+* the operator itself, `diag(1, mu^-1, mu^-2, ...)` on its maximal domain, and
+  the fact that it is self-adjoint there;
+* the trial vector `e = (1, mu, mu^2, ...)`, which is *outside* the operator
+  domain but inside the form domain;
+* its Rayleigh quotient `alphaHat = e*(A+H)e / e*e = 1 + mu`;
+* the angle `theta` between `e` and the first eigenvector, with `sin theta = mu`;
+* Weinberger's estimate `sin^2 theta <= (1 + mu - alphaCheck_1)/(alphaCheck_2 -
+  alphaCheck_1)` and its best-lower-bound form `sin theta <= mu / sqrt(1 - mu)`.
+
+That is the contrast the paragraph exists to draw: every residual-based theorem
+of the paper is silent here because the residual does not exist, while the
+form/Rayleigh lower-bound method still gives a bound.
 -/
 
 namespace TauCeti
@@ -141,61 +159,59 @@ open scoped ENNReal
 abbrev DomainLimitationSpace : Type := lp (fun _ : ℕ => ℝ) 2
 
 /-- **The maximal domain of the diagonal operator with multiplier `d`**: the
-vectors whose scaled sequence is still square summable. -/
-def diagonalDomain (d : ℕ → ℝ) : Submodule ℝ DomainLimitationSpace where
-  carrier := {x | Memℓp (fun n => d n * (x : ℕ → ℝ) n) 2}
-  add_mem' {x y} hx hy := by
-    have h : (fun n => d n * ((x + y : DomainLimitationSpace) : ℕ → ℝ) n)
-        = fun n => d n * (x : ℕ → ℝ) n + d n * (y : ℕ → ℝ) n := by
-      funext n
-      show d n * ((x : ℕ → ℝ) n + (y : ℕ → ℝ) n) = _
-      ring
-    rw [Set.mem_ofPred_eq, h]
-    exact hx.add hy
-  zero_mem' := by
-    have h : (fun n => d n * ((0 : DomainLimitationSpace) : ℕ → ℝ) n) = fun _ => 0 := by
-      funext n
-      show d n * (0 : ℝ) = 0
-      ring
-    rw [Set.mem_ofPred_eq, h]
-    exact zero_memℓp
-  smul_mem' c {x} hx := by
-    have h : (fun n => d n * ((c • x : DomainLimitationSpace) : ℕ → ℝ) n)
-        = fun n => c • (d n * (x : ℕ → ℝ) n) := by
-      funext n
-      show d n * (c * (x : ℕ → ℝ) n) = c * (d n * (x : ℕ → ℝ) n)
-      ring
-    rw [Set.mem_ofPred_eq, h]
-    exact hx.const_smul c
+vectors whose scaled sequence is still square summable.
+
+This is the reusable `TauCeti.LinearPMap.lpDiagonalDomain` at `𝕜 = ℝ`, `ι = ℕ`;
+the paper-facing name is kept so the Section 9 statements read as the source
+writes them. -/
+noncomputable def diagonalDomain (d : ℕ → ℝ) : Submodule ℝ DomainLimitationSpace :=
+  TauCeti.LinearPMap.lpDiagonalDomain d
 
 theorem mem_diagonalDomain_iff (d : ℕ → ℝ) (x : DomainLimitationSpace) :
-    x ∈ diagonalDomain d ↔ Memℓp (fun n => d n * (x : ℕ → ℝ) n) 2 := Iff.rfl
+    x ∈ diagonalDomain d ↔ Memℓp (fun n => d n * (x : ℕ → ℝ) n) 2 :=
+  TauCeti.LinearPMap.mem_lpDiagonalDomain_iff d x
 
-/-- **The unbounded diagonal operator**, on its maximal domain. -/
+/-- **The unbounded diagonal operator**, on its maximal domain.
+
+This is the reusable `TauCeti.LinearPMap.lpDiagonal` at `𝕜 = ℝ`, `ι = ℕ`. -/
 noncomputable def diagonalOperator (d : ℕ → ℝ) :
-    DomainLimitationSpace →ₗ.[ℝ] DomainLimitationSpace where
-  domain := diagonalDomain d
-  toFun :=
-    { toFun := fun x => ⟨fun n => d n * ((x : DomainLimitationSpace) : ℕ → ℝ) n, x.2⟩
-      map_add' := fun x y => by
-        apply Subtype.ext
-        funext n
-        show d n * (((x : DomainLimitationSpace) : ℕ → ℝ) n
-            + ((y : DomainLimitationSpace) : ℕ → ℝ) n)
-          = d n * ((x : DomainLimitationSpace) : ℕ → ℝ) n
-            + d n * ((y : DomainLimitationSpace) : ℕ → ℝ) n
-        ring
-      map_smul' := fun c x => by
-        apply Subtype.ext
-        funext n
-        show d n * (c * ((x : DomainLimitationSpace) : ℕ → ℝ) n)
-          = c * (d n * ((x : DomainLimitationSpace) : ℕ → ℝ) n)
-        ring }
+    DomainLimitationSpace →ₗ.[ℝ] DomainLimitationSpace :=
+  TauCeti.LinearPMap.lpDiagonal d
+
+/-- The operator's domain is the maximal domain, by construction. -/
+@[simp]
+theorem diagonalOperator_domain (d : ℕ → ℝ) :
+    (diagonalOperator d).domain = diagonalDomain d := rfl
 
 @[simp]
 theorem diagonalOperator_apply (d : ℕ → ℝ) (x : (diagonalOperator d).domain) (n : ℕ) :
     ((diagonalOperator d x : DomainLimitationSpace) : ℕ → ℝ) n
-      = d n * ((x : DomainLimitationSpace) : ℕ → ℝ) n := rfl
+      = d n * ((x : DomainLimitationSpace) : ℕ → ℝ) n :=
+  TauCeti.LinearPMap.lpDiagonal_apply d x n
+
+/-- **The diagonal operator is self-adjoint on its maximal domain** whenever the
+multiplier is real, which for `ℝ`-valued `d` is automatic.
+
+This is what makes "the Rayleigh quotient of a trial vector is useful"
+meaningful: without self-adjointness there is no spectral statement to compare
+the quotient against.  It is the paper-facing instance of the reusable
+`TauCeti.LinearPMap.lpDiagonal_isSelfAdjoint`. -/
+theorem diagonalOperator_isSelfAdjoint (d : ℕ → ℝ) :
+    IsSelfAdjoint (diagonalOperator d) :=
+  TauCeti.LinearPMap.lpDiagonal_isSelfAdjoint d fun n => by simp
+
+/-- Symmetry of the diagonal operator, the coordinatewise half of the previous
+theorem. -/
+theorem diagonalOperator_isSymmetric (d : ℕ → ℝ) :
+    TauCeti.LinearPMap.IsSymmetric (diagonalOperator d) :=
+  TauCeti.LinearPMap.lpDiagonal_isSymmetric d fun n => by simp
+
+/-- The maximal domain is dense, so the adjoint of the diagonal operator is the
+honest Hilbert-space adjoint rather than the junk value. -/
+theorem dense_diagonalDomain (d : ℕ → ℝ) :
+    Dense ((diagonalDomain d : Submodule ℝ DomainLimitationSpace) :
+      Set DomainLimitationSpace) :=
+  TauCeti.LinearPMap.dense_lpDiagonal_domain d
 
 /-- The `ℓ²` membership criterion, with the exponent already evaluated. -/
 theorem memℓp_two_of_summable_sq {f : ℕ → ℝ}
@@ -304,6 +320,273 @@ theorem truncatedTrial_eq_geometricTrial_of_lt
       = ((geometricTrial hμ0 hμ1 : DomainLimitationSpace) : ℕ → ℝ) n := by
   rw [truncatedTrial_apply, geometricTrial_apply,
     truncatedTrialSequence_eq_raw (lt_of_lt_of_le hn hKN), rawTrialSequence]
+
+/-! ## The Rayleigh quotient of the trial vector
+
+The source evaluates `α̂ = e*(A+H)e / e*e` for the geometric trial vector by two
+geometric series: the numerator is `∑ μ⁻ⁿ(μⁿ)² = ∑ μⁿ = 1/(1-μ)`, the denominator
+is `∑ (μⁿ)² = 1/(1-μ²)`, and the quotient is `(1-μ²)/(1-μ) = 1+μ`.
+
+The numerator is the *quadratic form*, not an inner product against an operator
+image: `(A+H)e` does not exist, which is the point of the example. -/
+
+/-- The denominator `e*e` as a geometric series: `∑ (μⁿ)² = 1/(1-μ²)`. -/
+theorem geometricTrial_hasSum_sq {μ : ℝ} (hμ0 : 0 ≤ μ) (hμ1 : μ < 1) :
+    HasSum (fun n => ((geometricTrial hμ0 hμ1 : DomainLimitationSpace) : ℕ → ℝ) n ^ 2)
+      (1 - μ ^ 2)⁻¹ := by
+  have h : (fun n : ℕ => ((geometricTrial hμ0 hμ1 : DomainLimitationSpace) : ℕ → ℝ) n ^ 2)
+      = fun n : ℕ => (μ ^ 2) ^ n := by
+    funext n
+    rw [geometricTrial_apply, ← pow_mul, ← pow_mul, mul_comm]
+  rw [h]
+  exact hasSum_geometric_of_lt_one (by positivity) (by nlinarith)
+
+/-- `e*e = ‖e‖² = 1/(1-μ²)`. -/
+theorem geometricTrial_norm_sq {μ : ℝ} (hμ0 : 0 ≤ μ) (hμ1 : μ < 1) :
+    ‖geometricTrial hμ0 hμ1‖ ^ 2 = (1 - μ ^ 2)⁻¹ := by
+  rw [← real_inner_self_eq_norm_sq, lp.inner_eq_tsum]
+  have h : (fun n : ℕ => inner ℝ
+        (((geometricTrial hμ0 hμ1 : DomainLimitationSpace) : ℕ → ℝ) n)
+        (((geometricTrial hμ0 hμ1 : DomainLimitationSpace) : ℕ → ℝ) n))
+      = fun n : ℕ => ((geometricTrial hμ0 hμ1 : DomainLimitationSpace) : ℕ → ℝ) n ^ 2 := by
+    funext n
+    rw [RCLike.inner_apply', sq]
+    simp
+  rw [h]
+  exact (geometricTrial_hasSum_sq hμ0 hμ1).tsum_eq
+
+/-- The numerator `e*(A+H)e` as a geometric series: `∑ μ⁻ⁿ(μⁿ)² = ∑ μⁿ = 1/(1-μ)`. -/
+theorem geometricTrial_hasSum_form {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : μ < 1) :
+    HasSum (fun n => diagonalMultiplier μ n *
+      ((geometricTrial hμ0.le hμ1 : DomainLimitationSpace) : ℕ → ℝ) n ^ 2) (1 - μ)⁻¹ := by
+  have h : (fun n => diagonalMultiplier μ n *
+      ((geometricTrial hμ0.le hμ1 : DomainLimitationSpace) : ℕ → ℝ) n ^ 2)
+      = fun n => μ ^ n := by
+    funext n
+    have hne : μ ^ n ≠ 0 := ne_of_gt (pow_pos hμ0 n)
+    rw [geometricTrial_apply, diagonalMultiplier]
+    field_simp
+  rw [h]
+  exact hasSum_geometric_of_lt_one hμ0.le hμ1
+
+/-- **The source's Rayleigh quotient**: `α̂ = e*(A+H)e / e*e = 1 + μ`.
+
+This is the arithmetic the paragraph after (9.8) records, and it is the whole
+reason the trial vector is useful despite not being in the operator domain. -/
+theorem geometricTrial_rayleighQuotient {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : μ < 1) :
+    (∑' n, diagonalMultiplier μ n *
+        ((geometricTrial hμ0.le hμ1 : DomainLimitationSpace) : ℕ → ℝ) n ^ 2)
+      / ‖geometricTrial hμ0.le hμ1‖ ^ 2 = 1 + μ := by
+  have h1 : (1 : ℝ) - μ ≠ 0 := ne_of_gt (by linarith)
+  rw [(geometricTrial_hasSum_form hμ0 hμ1).tsum_eq, geometricTrial_norm_sq hμ0.le hμ1]
+  have h2 : (1 : ℝ) - μ ^ 2 ≠ 0 := ne_of_gt (by nlinarith)
+  field_simp
+  ring
+
+/-- The normalized coordinate energy `dₙ eₙ² / e*e` is `μⁿ(1-μ²)`. -/
+theorem geometricTrial_normalizedForm_apply {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : μ < 1) (n : ℕ) :
+    diagonalMultiplier μ n *
+        ((geometricTrial hμ0.le hμ1 : DomainLimitationSpace) : ℕ → ℝ) n ^ 2
+      / ‖geometricTrial hμ0.le hμ1‖ ^ 2 = μ ^ n * (1 - μ ^ 2) := by
+  have hne : μ ^ n ≠ 0 := ne_of_gt (pow_pos hμ0 n)
+  have h2 : (1 : ℝ) - μ ^ 2 ≠ 0 := ne_of_gt (by nlinarith)
+  rw [geometricTrial_norm_sq hμ0.le hμ1, geometricTrial_apply, diagonalMultiplier]
+  field_simp
+
+/-- The normalized form sums to the Rayleigh value `1 + μ`, coordinate by
+coordinate. -/
+theorem geometricTrial_hasSum_normalizedForm {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : μ < 1) :
+    HasSum (fun n : ℕ => μ ^ n * (1 - μ ^ 2)) (1 + μ) := by
+  have h := (hasSum_geometric_of_lt_one hμ0.le hμ1).mul_right (1 - μ ^ 2)
+  have h1 : (1 : ℝ) - μ ≠ 0 := ne_of_gt (by linarith)
+  have hval : (1 - μ)⁻¹ * (1 - μ ^ 2) = 1 + μ := by
+    field_simp
+    ring
+  rwa [hval] at h
+
+/-- Every coordinate above the first carries normalized energy summing to
+`μ + μ²`.  This is the `γ s²` side of the lower-bound estimate. -/
+theorem geometricTrial_hasSum_normalizedFormTail {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : μ < 1) :
+    HasSum (fun n : ℕ => μ ^ (n + 1) * (1 - μ ^ 2)) (μ + μ ^ 2) := by
+  have h := ((hasSum_geometric_of_lt_one hμ0.le hμ1).mul_left μ).mul_right (1 - μ ^ 2)
+  have hfun : (fun n : ℕ => μ * μ ^ n * (1 - μ ^ 2))
+      = fun n : ℕ => μ ^ (n + 1) * (1 - μ ^ 2) := by
+    funext n
+    rw [pow_succ]
+    ring
+  have h1 : (1 : ℝ) - μ ≠ 0 := ne_of_gt (by linarith)
+  have hval : μ * (1 - μ)⁻¹ * (1 - μ ^ 2) = μ + μ ^ 2 := by
+    field_simp
+    ring
+  rw [hfun, hval] at h
+  exact h
+
+/-- The first coordinate carries normalized energy `1 - μ²`. -/
+theorem geometricTrial_normalizedForm_zero {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : μ < 1) :
+    diagonalMultiplier μ 0 *
+        ((geometricTrial hμ0.le hμ1 : DomainLimitationSpace) : ℕ → ℝ) 0 ^ 2
+      / ‖geometricTrial hμ0.le hμ1‖ ^ 2 = 1 - μ ^ 2 := by
+  rw [geometricTrial_normalizedForm_apply hμ0 hμ1 0, pow_zero, one_mul]
+
+/-- **The energy split the lower-bound method consumes**: the Rayleigh value is
+the first-coordinate normalized energy plus the energy carried above it. -/
+theorem geometricTrial_normalizedForm_split {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : μ < 1) :
+    (1 : ℝ) + μ
+      = diagonalMultiplier μ 0 *
+            ((geometricTrial hμ0.le hμ1 : DomainLimitationSpace) : ℕ → ℝ) 0 ^ 2
+          / ‖geometricTrial hμ0.le hμ1‖ ^ 2
+        + (μ + μ ^ 2) := by
+  rw [geometricTrial_normalizedForm_zero hμ0 hμ1]
+  ring
+
+/-! ## The angle to the first eigenvector, and Weinberger's bound -/
+
+/-- The first eigenvector `(1,0,0,…)` of `diag(1, μ⁻¹, μ⁻², …)`. -/
+noncomputable def firstEigenvector : DomainLimitationSpace := lp.single 2 0 (1 : ℝ)
+
+/-- Unfolding interface for `firstEigenvector`. -/
+theorem firstEigenvector_def :
+    (firstEigenvector : DomainLimitationSpace) = lp.single 2 0 (1 : ℝ) := rfl
+
+/-- Coordinates of the first eigenvector. -/
+@[simp]
+theorem firstEigenvector_apply (n : ℕ) :
+    ((firstEigenvector : DomainLimitationSpace) : ℕ → ℝ) n = if n = 0 then 1 else 0 := by
+  rw [firstEigenvector_def]
+  by_cases hn : n = 0
+  · subst hn
+    rw [lp.single_apply_self]
+    simp
+  · rw [lp.single_apply_ne _ _ _ hn]
+    simp [hn]
+
+/-- The first eigenvector is a unit vector. -/
+theorem norm_firstEigenvector : ‖(firstEigenvector : DomainLimitationSpace)‖ = 1 := by
+  rw [firstEigenvector_def, lp.norm_single (by norm_num), norm_one]
+
+/-- Having one nonzero coordinate, the first eigenvector is in every diagonal
+operator's domain. -/
+theorem firstEigenvector_mem_diagonalDomain (d : ℕ → ℝ) :
+    (firstEigenvector : DomainLimitationSpace) ∈ (diagonalOperator d).domain :=
+  TauCeti.LinearPMap.single_mem_lpDiagonal_domain d 0 1
+
+/-- `(1,0,0,…)` really is an eigenvector of the source's operator, with
+eigenvalue `d₀ = 1`.  This is the `λ₁ = 1` against which the source's lower
+bound `α̌₁ ≤ λ₁ = 1` is stated. -/
+theorem diagonalOperator_firstEigenvector (μ : ℝ)
+    (h : (firstEigenvector : DomainLimitationSpace)
+      ∈ (diagonalOperator (diagonalMultiplier μ)).domain) :
+    diagonalOperator (diagonalMultiplier μ) ⟨firstEigenvector, h⟩ = firstEigenvector := by
+  apply lp.ext
+  funext n
+  rw [diagonalOperator_apply]
+  by_cases hn : n = 0
+  · subst hn
+    simp [diagonalMultiplier]
+  · simp [hn]
+
+/-- The inner product of the trial vector with the first eigenvector is its first
+coordinate, `μ⁰ = 1`. -/
+theorem inner_geometricTrial_firstEigenvector {μ : ℝ} (hμ0 : 0 ≤ μ) (hμ1 : μ < 1) :
+    inner ℝ (geometricTrial hμ0 hμ1) (firstEigenvector : DomainLimitationSpace) = 1 := by
+  rw [firstEigenvector_def, lp.inner_single_right, RCLike.inner_apply', geometricTrial_apply]
+  simp
+
+/-- The cosine of the angle between the trial vector and the first eigenvector is
+`√(1-μ²)`. -/
+theorem cos_angle_geometricTrial {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : μ < 1) :
+    Real.cos (InnerProductGeometry.angle (geometricTrial hμ0.le hμ1)
+        (firstEigenvector : DomainLimitationSpace))
+      = Real.sqrt (1 - μ ^ 2) := by
+  have hnorm : ‖geometricTrial hμ0.le hμ1‖ = Real.sqrt ((1 - μ ^ 2)⁻¹) := by
+    calc ‖geometricTrial hμ0.le hμ1‖
+        = Real.sqrt (‖geometricTrial hμ0.le hμ1‖ ^ 2) := (Real.sqrt_sq (norm_nonneg _)).symm
+      _ = Real.sqrt ((1 - μ ^ 2)⁻¹) := by rw [geometricTrial_norm_sq hμ0.le hμ1]
+  rw [InnerProductGeometry.cos_angle, inner_geometricTrial_firstEigenvector,
+    norm_firstEigenvector, mul_one, hnorm, Real.sqrt_inv, one_div, inv_inv]
+
+/-- **`sin θ = μ`**, the source's `θ = arcsin μ` for the angle between the trial
+vector and the first eigenvector. -/
+theorem sin_angle_geometricTrial {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : μ < 1) :
+    Real.sin (InnerProductGeometry.angle (geometricTrial hμ0.le hμ1)
+        (firstEigenvector : DomainLimitationSpace)) = μ := by
+  have hpos : (0 : ℝ) ≤ 1 - μ ^ 2 := by nlinarith
+  rw [Real.sin_eq_sqrt_one_sub_cos_sq (InnerProductGeometry.angle_nonneg _ _)
+      (InnerProductGeometry.angle_le_pi _ _),
+    cos_angle_geometricTrial hμ0 hμ1, Real.sq_sqrt hpos,
+    show (1 : ℝ) - (1 - μ ^ 2) = μ ^ 2 from by ring, Real.sqrt_sq hμ0.le]
+
+/-- **Weinberger's estimate for the source's `ℓ²` example.**
+
+Residual-based theorems say nothing here: the residual `(A+H)e - e α̂` does not
+exist, because `e` is outside the operator domain
+(`geometricTrial_notMem_diagonalDomain`).  Weinberger's method needs only the
+Rayleigh value `α̂ = 1+μ` and *independent* lower bounds `α̌₁ ≤ λ₁ = 1` and
+`α̌₂ ≤ λ₂ = μ⁻¹`, all of which survive, and it delivers the source's
+
+`sin²θ ≤ (1 + μ - α̌₁) / (α̌₂ - α̌₁)`.
+
+The energy split fed to `weinberger_sine_sq_le_of_coupled_energy` is the genuine
+one: `geometricTrial_normalizedForm_zero` and
+`geometricTrial_hasSum_normalizedFormTail` evaluate the two energies. -/
+theorem geometricTrial_weinberger_sin_sq_le {μ αcheck₁ αcheck₂ : ℝ}
+    (hμ0 : 0 < μ) (hμ1 : μ < 1)
+    (hlow : αcheck₁ ≤ 1) (hhigh : αcheck₂ ≤ μ⁻¹) (hgap : αcheck₁ < αcheck₂) :
+    Real.sin (InnerProductGeometry.angle (geometricTrial hμ0.le hμ1)
+        (firstEigenvector : DomainLimitationSpace)) ^ 2
+      ≤ (1 + μ - αcheck₁) / (αcheck₂ - αcheck₁) := by
+  have hsq : (0 : ℝ) ≤ 1 - μ ^ 2 := by nlinarith
+  have hinvmul : μ⁻¹ * μ ^ 2 = μ := by
+    field_simp
+  have hhigh' : αcheck₂ * μ ^ 2 ≤ μ + μ ^ 2 := by
+    have hstep : αcheck₂ * μ ^ 2 ≤ μ⁻¹ * μ ^ 2 :=
+      mul_le_mul_of_nonneg_right hhigh (by positivity)
+    nlinarith [sq_nonneg μ]
+  rw [sin_angle_geometricTrial hμ0 hμ1]
+  exact weinberger_sine_sq_le_of_coupled_energy (s := μ) (alphaCheck := αcheck₁)
+    (alphaHat := 1 + μ) (gamma := αcheck₂) (lowEnergy := 1 - μ ^ 2)
+    (highEnergy := μ + μ ^ 2) hgap (by ring) (by nlinarith) hhigh'
+
+/-- **The source's best-lower-bound simplification, squared.**  With
+`α̌₁ = λ₁ = 1` and `α̌₂ = λ₂ = μ⁻¹` the estimate reads `sin²θ ≤ μ²/(1-μ)`. -/
+theorem geometricTrial_weinberger_best_sin_sq_le {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : μ < 1) :
+    Real.sin (InnerProductGeometry.angle (geometricTrial hμ0.le hμ1)
+        (firstEigenvector : DomainLimitationSpace)) ^ 2
+      ≤ μ ^ 2 / (1 - μ) := by
+  have hmul : μ⁻¹ * μ = 1 := inv_mul_cancel₀ (ne_of_gt hμ0)
+  have hinvpos : (0 : ℝ) < μ⁻¹ := inv_pos.mpr hμ0
+  have hinv : (1 : ℝ) < μ⁻¹ := by nlinarith
+  have h := geometricTrial_weinberger_sin_sq_le hμ0 hμ1 (αcheck₁ := 1) (αcheck₂ := μ⁻¹)
+    le_rfl le_rfl hinv
+  have h1 : (1 : ℝ) - μ ≠ 0 := ne_of_gt (by linarith)
+  have hval : (1 + μ - 1) / (μ⁻¹ - 1) = μ ^ 2 / (1 - μ) := by
+    field_simp
+    ring
+  rwa [hval] at h
+
+/-- **The source's printed conclusion** `sin θ ≤ μ / √(1-μ)`.
+
+The source annotates the left side with `(μ =)`: the true value of the sine is
+exactly `μ` (`sin_angle_geometricTrial`), so the estimate is correct but not
+sharp — which is precisely the contrast the paragraph is drawing, since no
+residual-based theorem gives any bound at all here. -/
+theorem geometricTrial_weinberger_best_sin_le {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : μ < 1) :
+    Real.sin (InnerProductGeometry.angle (geometricTrial hμ0.le hμ1)
+        (firstEigenvector : DomainLimitationSpace))
+      ≤ μ / Real.sqrt (1 - μ) := by
+  set θ := InnerProductGeometry.angle (geometricTrial hμ0.le hμ1)
+    (firstEigenvector : DomainLimitationSpace) with hθ
+  have hpos : (0 : ℝ) < 1 - μ := by linarith
+  have hb : (0 : ℝ) ≤ μ / Real.sqrt (1 - μ) := by positivity
+  have hsq : (μ / Real.sqrt (1 - μ)) ^ 2 = μ ^ 2 / (1 - μ) := by
+    rw [div_pow, Real.sq_sqrt hpos.le]
+  calc Real.sin θ = Real.sqrt (Real.sin θ ^ 2) :=
+        (Real.sqrt_sq (InnerProductGeometry.sin_angle_nonneg _ _)).symm
+    _ ≤ Real.sqrt ((μ / Real.sqrt (1 - μ)) ^ 2) := by
+        refine Real.sqrt_le_sqrt ?_
+        rw [hsq]
+        exact geometricTrial_weinberger_best_sin_sq_le hμ0 hμ1
+    _ = μ / Real.sqrt (1 - μ) := Real.sqrt_sq hb
 
 end Section9
 end DavisKahan1970
