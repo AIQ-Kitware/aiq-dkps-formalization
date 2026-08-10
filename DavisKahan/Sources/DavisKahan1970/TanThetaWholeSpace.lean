@@ -290,7 +290,7 @@ private theorem moebius_gram (hps : p * s = s * p) (hRs : R * s = s * R)
     _ = s * p * R := by rw [hcancel, mul_one]
 
 private theorem moebius_algebra (hps : p * s = s * p) (hpp : p * p = p)
-    (hRp : R * p = p * R) (hcancel : (1 - s) * R = 1) :
+    (_hRp : R * p = p * R) (hcancel : (1 - s) * R = 1) :
     s * p * R = s * p + s * p * (s * p * R) := by
   have hpc : (1 - s) * p = p * (1 - s) := by
     have h : (1 - s) * p = p - s * p := by noncomm_ring
@@ -1235,8 +1235,6 @@ theorem norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
     (h35 : DavisKahan.Experimental.Frontier.CrossedDefectsEquivalent U V) :
     ‖sinAngleOperatorC U V‖ < 1 := by
-  haveI : CompleteSpace U :=
-    U.isComplete_coe_of_hasOrthogonalProjection.completeSpace_coe
   have hdirected : approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
     approximationSingularValue_sineBlock_lt_one_infiniteTrial T V U hT hV hdelta
       hCompressionUpper hUnwantedLower 0

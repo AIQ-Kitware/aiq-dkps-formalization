@@ -85,7 +85,7 @@ variable [CompleteSpace E0] [CompleteSpace E1]
 /-- Sum the stable scalar estimate over one approximate leading family. -/
 theorem selected_doubleAngleTangent_le_kyFan_add_error
     (B : BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    {d r ε : ℝ} (hd0 : 0 ≤ d) (hr0 : 0 ≤ r) (hr1 : r < 1)
+    {d r ε : ℝ} (hd0 : 0 ≤ d) (_hr0 : 0 ≤ r) (hr1 : r < 1)
     (hε0 : 0 ≤ ε)
     (hA0 : ∀ z : E0, RCLike.re ⟪B.A0 z, z⟫_ℂ ≤ 0)
     (hA1 : ∀ z : E1, d * ‖z‖ ^ 2 ≤ RCLike.re ⟪B.A1 z, z⟫_ℂ)

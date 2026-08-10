@@ -384,6 +384,7 @@ theorem rectangularBlockMap_diagonal_mul
     add_zero, zero_add, h0x, h1x, one_apply_eq_self] using
       rectangularDirectSum_eta x
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The Schur inverse is a left inverse of the full block map. -/
 theorem schurBlockInverse_mul_rectangularBlockMap
     (l0 : E0 →L[ℂ] E0) (b : E1 →L[ℂ] E0)
@@ -391,7 +392,7 @@ theorem schurBlockInverse_mul_rectangularBlockMap
     (r0 : E0 →L[ℂ] E0) (q : E1 →L[ℂ] E1)
     (hr0l0 : r0 * l0 = 1) (hl0r0 : l0 * r0 = 1)
     (hqS : q * secondSchurComplement l1 c r0 b = 1)
-    (hSq : secondSchurComplement l1 c r0 b * q = 1) :
+    (_hSq : secondSchurComplement l1 c r0 b * q = 1) :
     schurBlockInverse b c r0 q * rectangularBlockMap l0 b c l1 = 1 := by
   rw [rectangularBlockMap_eq_schur_factorization l0 b c l1 r0 hr0l0 hl0r0]
   unfold schurBlockInverse
@@ -419,13 +420,14 @@ theorem schurBlockInverse_mul_rectangularBlockMap
     _ = schurUpperInv r0 b * 1 * schurUpper r0 b := by rw [hdiag]
     _ = 1 := by simp only [mul_one, schurUpperInv_mul_schurUpper]
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The Schur inverse is a right inverse of the full block map. -/
 theorem rectangularBlockMap_mul_schurBlockInverse
     (l0 : E0 →L[ℂ] E0) (b : E1 →L[ℂ] E0)
     (c : E0 →L[ℂ] E1) (l1 : E1 →L[ℂ] E1)
     (r0 : E0 →L[ℂ] E0) (q : E1 →L[ℂ] E1)
     (hr0l0 : r0 * l0 = 1) (hl0r0 : l0 * r0 = 1)
-    (hqS : q * secondSchurComplement l1 c r0 b = 1)
+    (_hqS : q * secondSchurComplement l1 c r0 b = 1)
     (hSq : secondSchurComplement l1 c r0 b * q = 1) :
     rectangularBlockMap l0 b c l1 * schurBlockInverse b c r0 q = 1 := by
   rw [rectangularBlockMap_eq_schur_factorization l0 b c l1 r0 hr0l0 hl0r0]

@@ -251,7 +251,15 @@ alias theorem8_2_sinTwoTheta_residual_source_real :=
 perturbation form, for **every** norm in the paper's own class of unitarily
 invariant norms. -/
 alias theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm
+  DavisKahan.Experimental.Frontier.Section8.
+    theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm
+
+/-- The directed `sin 2Theta_0` estimate Theorem 8.2 inherits over a REAL
+Hilbert space, residual form, for **every** norm in the paper's own class of
+unitarily invariant norms, with the printed factor two. -/
+alias theorem8_2_sinTwoTheta_residual_source_real_paperUINorm :=
+  DavisKahan.Experimental.Frontier.Section8.
+    theorem8_2_sinTwoTheta_residual_source_real_paperUINorm
 
 /-- **Davis--Kahan 1970, Theorem 8.2 over a REAL Hilbert space, exactly as
 printed.**  Both `sin 2Theta` estimates and `Theta < pi/4`, from either smallness
