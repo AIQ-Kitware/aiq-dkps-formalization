@@ -326,6 +326,200 @@ theorem realSpecProjection_isSelfAdjoint
   rw [RealComplexification.complexify_adjoint, complexify_realSpecProjection]
   exact (isSelfAdjoint_specProjection (isSelfAdjoint_complexifyReal hA) S hS).adjoint_eq
 
+/-! ## Real spectral ranges
+
+The spectral projection is only half of the reusable real spectral API.  The
+canonical object consumed by perturbation arguments is its range, together with
+the fact that this range reduces the original partial map.  Keeping this layer
+here, on raw `LinearPMap`, avoids rebuilding spectral subspaces downstream on a
+legacy closed-operator wrapper.
+-/
+
+/-- The canonical real spectral range of a self-adjoint partial map over a
+measurable set. -/
+noncomputable def realSpecRange
+    {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
+    (S : Set ℝ) (hS : MeasurableSet S) : Submodule ℝ E :=
+  (realSpecProjection hA S hS).range
+
+/-- Every projected vector belongs to the descended real spectral range. -/
+theorem realSpecProjection_mem_realSpecRange
+    {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
+    (S : Set ℝ) (hS : MeasurableSet S) (x : E) :
+    realSpecProjection hA S hS x ∈ realSpecRange hA S hS :=
+  ⟨x, rfl⟩
+
+/-- A vector in the descended real spectral range is fixed by the projection. -/
+theorem realSpecProjection_eq_self_of_mem
+    {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
+    (S : Set ℝ) (hS : MeasurableSet S) {x : E}
+    (hx : x ∈ realSpecRange hA S hS) :
+    realSpecProjection hA S hS x = x := by
+  rcases hx with ⟨y, rfl⟩
+  change realSpecProjection hA S hS (realSpecProjection hA S hS y) =
+    realSpecProjection hA S hS y
+  simpa only [_root_.mul_apply_eq_comp] using congrArg
+    (fun T : E →L[ℝ] E => T y) (realSpecProjection_idem hA S hS)
+
+/-- A vector lies in the real spectral range exactly when the descended
+spectral projection fixes it. -/
+theorem mem_realSpecRange_iff
+    {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
+    (S : Set ℝ) (hS : MeasurableSet S) (x : E) :
+    x ∈ realSpecRange hA S hS ↔ realSpecProjection hA S hS x = x := by
+  constructor
+  · exact realSpecProjection_eq_self_of_mem hA S hS
+  · intro hx
+    rw [← hx]
+    exact realSpecProjection_mem_realSpecRange hA S hS x
+
+/-- A real spectral range is complete because it is the closed range of an
+idempotent bounded operator. -/
+noncomputable instance instCompleteSpace_realSpecRange
+    {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
+    (S : Set ℝ) (hS : MeasurableSet S) :
+    CompleteSpace (realSpecRange hA S hS) := by
+  change CompleteSpace (realSpecProjection hA S hS).range
+  exact (ContinuousLinearMap.IsIdempotentElem.isClosed_range
+    (realSpecProjection_idem hA S hS)).completeSpace_coe
+
+/-- A real spectral range is orthogonally complemented. -/
+noncomputable instance instHasOrthogonalProjection_realSpecRange
+    {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
+    (S : Set ℝ) (hS : MeasurableSet S) :
+    (realSpecRange hA S hS).HasOrthogonalProjection := by
+  change (realSpecProjection hA S hS).range.HasOrthogonalProjection
+  exact ContinuousLinearMap.IsIdempotentElem.hasOrthogonalProjection_range
+    (realSpecProjection_idem hA S hS)
+
+/-- The descended spectral projection is exactly the orthogonal projection onto
+its real spectral range. -/
+theorem realSpecProjection_eq_starProjection
+    {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
+    (S : Set ℝ) (hS : MeasurableSet S) :
+    realSpecProjection hA S hS = (realSpecRange hA S hS).starProjection := by
+  apply ContinuousLinearMap.ext
+  intro x
+  symm
+  apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero
+  · exact realSpecProjection_mem_realSpecRange hA S hS x
+  · intro y hy
+    have hyfix := (mem_realSpecRange_iff hA S hS y).mp hy
+    rw [← hyfix]
+    have hadj := ContinuousLinearMap.adjoint_inner_right
+      (realSpecProjection hA S hS)
+      (x - realSpecProjection hA S hS x) y
+    rw [(realSpecProjection_isSelfAdjoint hA S hS).adjoint_eq] at hadj
+    rw [hadj, map_sub,
+      (mem_realSpecRange_iff hA S hS _).mp
+        (realSpecProjection_mem_realSpecRange hA S hS x),
+      sub_self, inner_zero_left]
+
+/-- Complementation of measurable sets becomes subtraction from the identity
+for descended real spectral projections. -/
+theorem realSpecProjection_compl
+    {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
+    (S : Set ℝ) (hS : MeasurableSet S) :
+    realSpecProjection hA Sᶜ hS.compl =
+      ContinuousLinearMap.id ℝ E - realSpecProjection hA S hS := by
+  apply RealComplexification.complexify_injective
+  rw [complexify_realSpecProjection, RealComplexification.complexify_sub,
+    RealComplexification.complexify_id, complexify_realSpecProjection]
+  simpa only [specProjection_def] using
+    (spectralPVM (isSelfAdjoint_complexifyReal hA)).proj_compl S hS
+
+/-- The real spectral range of a complement set is the orthogonal complement of
+the original real spectral range. -/
+theorem realSpecRange_compl
+    {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
+    (S : Set ℝ) (hS : MeasurableSet S) :
+    realSpecRange hA Sᶜ hS.compl = (realSpecRange hA S hS)ᗮ := by
+  apply Submodule.ext
+  intro x
+  rw [← Submodule.starProjection_eq_self_iff,
+    ← Submodule.starProjection_eq_self_iff]
+  rw [← realSpecProjection_eq_starProjection,
+    realSpecProjection_compl,
+    Submodule.starProjection_orthogonal,
+    ← realSpecProjection_eq_starProjection]
+
+/-- Descended real spectral projections preserve the original partial-map
+domain. -/
+theorem realSpecProjection_mem_domain
+    {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
+    {S : Set ℝ} (hS : MeasurableSet S) (x : A.domain) :
+    realSpecProjection hA S hS (x : E) ∈ A.domain := by
+  have hproj := specProjection_mem_domain (isSelfAdjoint_complexifyReal hA) S hS
+    (complexifyRealOfRealDomain A x)
+  rw [mem_complexifyReal_domain_iff] at hproj
+  have hre := hproj.1
+  rw [complexifyRealOfRealDomain_coe,
+    specProjection_complexifyReal_ofReal, re_ofReal] at hre
+  exact hre
+
+/-- A real self-adjoint partial map commutes with its descended spectral
+projection on the full operator domain. -/
+theorem realSpecProjection_apply_domain
+    {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
+    {S : Set ℝ} (hS : MeasurableSet S) (x : A.domain) :
+    A ⟨realSpecProjection hA S hS (x : E),
+        realSpecProjection_mem_domain hA hS x⟩ =
+      realSpecProjection hA S hS (A x) := by
+  let px : A.domain :=
+    ⟨realSpecProjection hA S hS (x : E),
+      realSpecProjection_mem_domain hA hS x⟩
+  have hz :
+      (⟨specProjection (isSelfAdjoint_complexifyReal hA) S hS
+          (complexifyRealOfRealDomain A x),
+        specProjection_mem_domain (isSelfAdjoint_complexifyReal hA) S hS
+          (complexifyRealOfRealDomain A x)⟩ : (complexifyReal A).domain) =
+        complexifyRealOfRealDomain A px := by
+    apply Subtype.ext
+    simp only [complexifyRealOfRealDomain_coe, px]
+    exact specProjection_complexifyReal_ofReal hA S hS (x : E)
+  have hcomm := specProjection_apply_domain (isSelfAdjoint_complexifyReal hA) S hS
+    (complexifyRealOfRealDomain A x)
+  rw [hz, complexifyReal_apply_ofReal, complexifyReal_apply_ofReal,
+    specProjection_complexifyReal_ofReal hA S hS] at hcomm
+  have hre := congrArg re hcomm
+  simpa only [re_ofReal, px] using hre
+
+/-- The image of a domain vector lying in a real spectral range stays in
+that spectral range. -/
+theorem apply_mem_realSpecRange
+    {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
+    (S : Set ℝ) (hS : MeasurableSet S) {x : A.domain}
+    (hx : (x : E) ∈ realSpecRange hA S hS) :
+    A x ∈ realSpecRange hA S hS := by
+  have hfix : realSpecProjection hA S hS (x : E) = (x : E) :=
+    (mem_realSpecRange_iff hA S hS _).mp hx
+  have h := realSpecProjection_apply_domain hA hS x
+  have hsub :
+      (⟨realSpecProjection hA S hS (x : E),
+        realSpecProjection_mem_domain hA hS x⟩ : A.domain) = x :=
+    Subtype.ext hfix
+  rw [hsub] at h
+  exact (mem_realSpecRange_iff hA S hS _).mpr h.symm
+
+/-- The canonical real spectral range reduces its self-adjoint partial map. -/
+theorem realSpecRange_reduces
+    {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
+    (S : Set ℝ) (hS : MeasurableSet S) :
+    ReducesSubspace A (realSpecRange hA S hS) := by
+  have hstar := realSpecProjection_eq_starProjection hA S hS
+  refine ReducesSubspace.of_components ?_ ?_ ?_ ?_
+  · intro x
+    rw [← hstar]
+    exact realSpecProjection_mem_domain hA hS x
+  · intro x
+    rw [Submodule.starProjection_orthogonal_apply, ← hstar]
+    exact A.domain.sub_mem x.property (realSpecProjection_mem_domain hA hS x)
+  · intro x hx
+    exact apply_mem_realSpecRange hA S hS hx
+  · intro x hx
+    rw [← realSpecRange_compl hA S hS] at hx ⊢
+    exact apply_mem_realSpecRange hA Sᶜ hS.compl hx
+
 end
 
 end LinearPMap
