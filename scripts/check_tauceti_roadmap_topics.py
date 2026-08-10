@@ -189,7 +189,12 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  [A+"CompactSelfAdjointClassification",A+"CompactApproximationEigenvalues"]),
 ("T27","Measure classes, L-two transport, and the multiplicity normal form",
  ["MeasureTheory."+x for x in ["MeasureClass","RadonNikodymL2","LpComp","LpRestrict",
-                               "LpSliceSum","MultiplicityLevels"]]
+                               "LpSliceSum","MultiplicityLevels",
+                               # Added 2026-08-10 with the module: `L^2` of a measure with
+                               # infinitely many disjoint positive-finite sets is infinite
+                               # dimensional, and the unit-interval instance.  Same `Lp`
+                               # structure family as `LpComp`/`LpRestrict`.
+                               "LpInfiniteDimensional"]]
  # `OperatorUnitaryEquiv` is Hilbert-space material by subject and would sit in T28 -- but
  # `MultiplicityLevels` states its conclusion as a unitary equivalence of multiplication
  # operators and so imports it, and filing it downstream would make this topic unsubmittable.
