@@ -66,55 +66,6 @@ section SpectralRange
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ)
   (hB : MeasurableSet B)
 
-/-- **The spectral projection is the orthogonal projection onto its range.**
-The two are the same operator, but Mathlib's block algebra is written in terms
-of `Submodule.starProjection`, so the identification has to be available. -/
-theorem specProjection_eq_starProjection_specRange :
-    specProjection hA B hB = (specRange hA B hB).starProjection := by
-  apply ContinuousLinearMap.ext
-  intro x
-  symm
-  apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero
-  · exact specProjection_mem_specRange hA B hB x
-  · intro y hy
-    have hyfix : specProjection hA B hB y = y := (mem_specRange_iff hA B hB y).mp hy
-    rw [← hyfix]
-    have hadj := ContinuousLinearMap.adjoint_inner_right
-      (specProjection hA B hB) (x - specProjection hA B hB x) y
-    rw [← ContinuousLinearMap.star_eq_adjoint,
-      (isSelfAdjoint_specProjection hA B hB).star_eq] at hadj
-    rw [hadj, map_sub,
-      (mem_specRange_iff hA B hB _).mp (specProjection_mem_specRange hA B hB x),
-      sub_self, inner_zero_left]
-
-/-- **A spectral subspace reduces the operator.**  Both projections preserve the
-domain and both summands are invariant. -/
-theorem reducesSubspace_specRange : ReducesSubspace A (specRange hA B hB) := by
-  have hstar := specProjection_eq_starProjection_specRange hA B hB
-  refine ReducesSubspace.of_components ?_ ?_ ?_ ?_
-  · intro x
-    rw [← hstar]
-    exact specProjection_mem_domain hA B hB x
-  · intro x
-    rw [Submodule.starProjection_orthogonal_apply, ← hstar]
-    exact A.domain.sub_mem x.property (specProjection_mem_domain hA B hB x)
-  · intro x hx
-    exact apply_mem_specRange hA B hB hx
-  · intro x hx
-    have hzero : specProjection hA B hB (x : H) = 0 := by
-      rw [hstar]
-      exact (Submodule.starProjection_apply_eq_zero_iff _).mpr hx
-    have h := specProjection_apply_domain hA B hB x
-    have hsub : (⟨specProjection hA B hB (x : H),
-        specProjection_mem_domain hA B hB x⟩ : A.domain) = 0 := Subtype.ext hzero
-    rw [hsub, _root_.LinearPMap.map_zero] at h
-    rw [Submodule.mem_orthogonal']
-    intro u hu
-    have hufix : specProjection hA B hB u = u := (mem_specRange_iff hA B hB u).mp hu
-    have hsym := inner_swap_of_isSelfAdjoint
-      (isSelfAdjoint_specProjection hA B hB) (A x) u
-    rw [← hufix, ← hsym, ← h, inner_zero_left]
-
 /-- Spectral projections of nested sets multiply to the inner one. -/
 theorem specProjection_mul_specProjection_of_subset {B₁ B₂ : Set ℝ}
     (hB₁ : MeasurableSet B₁) (hB₂ : MeasurableSet B₂) (h : B₂ ⊆ B₁) :

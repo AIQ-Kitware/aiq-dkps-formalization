@@ -222,7 +222,7 @@ theorem norm_complex_smul [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     rw [mul_pow, sq_abs]
   rw [hsq c.re ‖re z‖, hsq c.im ‖im z‖,
     hsq c.im ‖re z‖, hsq c.re ‖im z‖]
-  ring
+  ring_nf
 
 /-- The `L²` norm is compatible with *complex* scaling.  This is the non-formal instance of the
 group: it needs `‖c • z‖ = ‖c‖ ‖z‖` for complex `c`, which is the Pythagorean computation above and
