@@ -665,6 +665,20 @@ theorem kyFanApproximationGauge_comp_le
   ContinuousLinearMap.kyFanGauge_comp_le L K R k
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- **Enlarging the codomain leaves the finite Ky Fan gauge unchanged**, for a contraction
+`ι : F →L[𝕜] G` admitting a contractive left inverse `π`.  This is what lets an argument
+that needs `k` orthonormal vectors in the codomain run even when `F` has too few: pad `F`
+to `G`, run the argument there, and read the answer back.  See
+`ContinuousLinearMap.kyFanGauge_comp_eq_of_leftInverse`. -/
+theorem kyFanApproximationGauge_comp_eq_of_leftInverse
+    {G : Type vG}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    {ι : F →L[𝕜] G} {π : G →L[𝕜] F} (hπι : Function.LeftInverse π ι)
+    (hι : ‖ι‖ ≤ 1) (hπ : ‖π‖ ≤ 1) (k : ℕ) (K : E →L[𝕜] F) :
+    kyFanApproximationGauge k (ι ∘L K) = kyFanApproximationGauge k K :=
+  ContinuousLinearMap.kyFanGauge_comp_eq_of_leftInverse hπι hι hπ K k
+
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The operator norm is the first term of every positive finite Ky Fan gauge. -/
 theorem opNorm_le_kyFanApproximationGauge
     {k : ℕ} (hk : 0 < k) (K : E →L[𝕜] F) :

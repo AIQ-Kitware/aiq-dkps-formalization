@@ -151,6 +151,19 @@ theorem kyFanGauge_comp_le {G : Type x} {H : Type y}
     _ = ‖L‖ * T.kyFanGauge k * ‖R‖ := by
       simp only [kyFanGauge, Finset.mul_sum, Finset.sum_mul]
 
+/-- **Ky Fan gauges do not see an enlargement of the codomain**, since the approximation
+numbers do not: `ι` is a contraction of `F` into `G` and `π` a contractive left inverse,
+the model being the inclusion of `F` as one summand of an `ℓ²` direct sum together with
+the projection back onto it.  See
+`ContinuousLinearMap.approximationNumber_comp_eq_of_leftInverse`. -/
+theorem kyFanGauge_comp_eq_of_leftInverse {G : Type x}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    {ι : F →L[𝕜] G} {π : G →L[𝕜] F} (hπι : Function.LeftInverse π ι)
+    (hι : ‖ι‖ ≤ 1) (hπ : ‖π‖ ≤ 1) (T : E →L[𝕜] F) (k : ℕ) :
+    (ι ∘L T).kyFanGauge k = T.kyFanGauge k :=
+  Finset.sum_congr rfl fun n _ =>
+    approximationNumber_comp_eq_of_leftInverse hπι hι hπ T n
+
 /-- The operator norm is the first term of every positive Ky Fan gauge. -/
 theorem opNorm_le_kyFanGauge (T : E →L[𝕜] F) {k : ℕ} (hk : 0 < k) :
     ‖T‖ ≤ T.kyFanGauge k := by
