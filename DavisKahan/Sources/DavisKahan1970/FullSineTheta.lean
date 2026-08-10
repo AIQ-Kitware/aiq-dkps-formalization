@@ -158,6 +158,20 @@ alias CommonDomainTheorem6_2Data := PaperCommonDomainTheorem62Data
 alias Theorem6_2_commonDomain := PaperCommonDomainTheorem62Data.result_across
 alias Theorem6_2_commonDomain_boundNorm_of_finiteRank :=
   PaperCommonDomainTheorem62Data.operatorNorm_result_of_rank_le
+-- The Appendix says "the hypotheses of Proposition 6.1 and Theorem 6.1 may be
+-- relaxed similarly".  This is that relaxation of Proposition 6.1: two closed
+-- self-adjoint operators on one dense domain, whose difference there is the
+-- paper's bounded `H`.  `Proposition6_1_commonDomain_ofBounded` records that the
+-- bounded inputs are an instance, so nothing is assumed that Proposition 6.1 did
+-- not already assume.
+alias CommonDomainSymmetricSinThetaProblem :=
+  PaperCommonDomainSymmetricSinThetaProblem
+alias Proposition6_1_commonDomain :=
+  PaperCommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm
+alias Proposition6_1_commonDomain_kyFan :=
+  PaperCommonDomainSymmetricSinThetaProblem.symmetric_all_kyFan
+alias Proposition6_1_commonDomain_ofBounded :=
+  PaperCommonDomainSymmetricSinThetaProblem.ofBounded
 alias RealCommonDomainTheorem6_1Data :=
   PaperRealCommonDomainTheorem61Data
 alias Theorem6_1_real_commonDomain :=
