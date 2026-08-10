@@ -124,6 +124,17 @@ directed projector gaps, so `‖sin Θ‖` may be computed from either. -/
 alias subspaceGap_eq_directedGap_of_finrank_eq :=
   DavisKahan.Experimental.Frontier.Section8.subspaceGap_eq_directedGap_of_finrank_eq
 
+/-- The same identification of the two gaps under Section 3's standing
+assumption (3.5) instead of a dimension count: no finite dimensionality and no
+equal `finrank`, only a linear isometry between the two crossed defects. -/
+alias subspaceGap_eq_directedGap_of_crossedDefects :=
+  DavisKahan.Experimental.Frontier.Section8.subspaceGap_eq_directedGap_of_crossedDefects
+
+/-- **Theorem 8.2's printed conclusion `Θ < π/4` from the directed bound, in
+any dimension**, under Section 3's standing assumption (3.5). -/
+alias maximalAngle_lt_pi_div_four_of_crossedDefects :=
+  DavisKahan.Experimental.Frontier.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects
+
 /-- **Theorem 8.2, perturbation alternative, printed conclusion `Θ < π/4`.** -/
 alias theorem8_2_perturbationHalfGap_source_maximalAngle_lt :=
   DavisKahan.Experimental.Frontier.Section8.theorem8_2_perturbationHalfGap_source_maximalAngle_lt

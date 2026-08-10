@@ -317,6 +317,67 @@ theorem not_crossedDefectsEquivalent_coordinateHalfSpace
   rw [b.orthonormal.1 0] at hnorm
   exact one_ne_zero hnorm
 
+/-! ### The shift pair as a falsifier for the (3.5)-qualified gap identity -/
+
+omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
+  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
+/-- The later coordinate half-space sits inside the earlier one. -/
+theorem coordinateHalfSpace_le_coordinateHalfSpace (b : HilbertBasis ℤ 𝕜 H)
+    {j k : ℤ} (hjk : j ≤ k) :
+    coordinateHalfSpace b k ≤ coordinateHalfSpace b j := fun x hx =>
+  mem_coordinateHalfSpace.mpr fun n hn =>
+    mem_coordinateHalfSpace.mp hx n (by omega)
+
+omit [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
+  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
+/-- **The shift pair refutes the (3.5)-qualified gap identity when (3.5) is
+dropped.**
+
+The two directed gaps of the shift pair are `1` and `0`: the source crossed
+defect is the line `span {b 0}`, which pins `directedGap (P H) (Q H)` at `1`,
+while `Q H ⊆ P H` makes `directedGap (Q H) (P H)` vanish.  So
+
+* `directedGap_comm_of_crossedDefectsEquivalent` is false here — its two sides
+  are `1` and `0`; and
+* `subspaceGap_eq_directedGap_of_crossedDefectsEquivalent`, read at the pair in
+  the order `(Q H, P H)`, asserts `1 = 0`.
+
+Since the pair satisfies (1.5) (`coordinateHalfSpace_dimensions_agree`) and
+fails (3.5) (`not_crossedDefectsEquivalent_coordinateHalfSpace`), this is the
+machine-checked statement that the crossed-defect hypothesis in those two
+theorems is load-bearing and is not implied by the ambient dimension
+hypothesis.
+
+Read in the order `(P H, Q H)` the symmetric identity happens to hold, because
+the defect sits on the side that already realizes the maximum; the refutation is
+therefore stated in the order that exposes it. -/
+theorem directedGap_asymmetric_coordinateHalfSpace (b : HilbertBasis ℤ 𝕜 H) :
+    directedGap (coordinateHalfSpace b 0) (coordinateHalfSpace b 1) = 1 ∧
+      directedGap (coordinateHalfSpace b 1) (coordinateHalfSpace b 0) = 0 ∧
+      subspaceGap (coordinateHalfSpace b 1) (coordinateHalfSpace b 0) ≠
+        directedGap (coordinateHalfSpace b 1) (coordinateHalfSpace b 0) := by
+  have hsrc : halmosSourceDefect (coordinateHalfSpace b 0)
+      (coordinateHalfSpace b 1) ≠ ⊥ := by
+    rw [halmosSourceDefect_coordinateHalfSpace]
+    intro hbot
+    have hb : b 0 = 0 := (Submodule.eq_bot_iff _).mp hbot (b 0)
+      (Submodule.mem_span_singleton_self _)
+    have hnorm : ‖b 0‖ = 0 := by rw [hb, norm_zero]
+    rw [b.orthonormal.1 0] at hnorm
+    exact one_ne_zero hnorm
+  have hone : directedGap (coordinateHalfSpace b 0) (coordinateHalfSpace b 1) = 1 :=
+    Submodule.directedProjectionGap_eq_one_of_inf_orthogonal_ne_bot _ _ hsrc
+  have hzero : directedGap (coordinateHalfSpace b 1) (coordinateHalfSpace b 0) = 0 :=
+    Submodule.directedProjectionGap_eq_zero_of_le
+      (coordinateHalfSpace_le_coordinateHalfSpace b (by norm_num))
+  refine ⟨hone, hzero, ?_⟩
+  have hmax : subspaceGap (coordinateHalfSpace b 1) (coordinateHalfSpace b 0)
+      = max (directedGap (coordinateHalfSpace b 1) (coordinateHalfSpace b 0))
+        (directedGap (coordinateHalfSpace b 0) (coordinateHalfSpace b 1)) :=
+    Submodule.projectionGap_eq_max_directedProjectionGap _ _
+  rw [hmax, hone, hzero]
+  norm_num
+
 /-- **Davis--Kahan 1970, the Remark after Proposition 3.2.**
 
 For the shift pair on the two-sided square-summable sequences, the bilateral
