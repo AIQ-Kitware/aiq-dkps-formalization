@@ -34,35 +34,36 @@ noncomputable section
 
 universe u v
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
-variable {V : Type v} [NormedAddCommGroup V] [InnerProductSpace ℂ V]
+variable {V : Type v} [NormedAddCommGroup V] [InnerProductSpace 𝕜 V]
   [CompleteSpace V]
 
 namespace FourthOrderTraceModel
 
 /-- Ambient image of the maximal graph Hilbert space. -/
 noncomputable def maximalAmbientDomain
-    (D : FourthOrderTraceModel (H := H) (V := V)) : Submodule ℂ H :=
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) : Submodule 𝕜 H :=
   LinearMap.range D.embed.toLinearMap
 
 /-- Equivalence from the graph Hilbert space to its ambient image. -/
 noncomputable def maximalRangeEquiv
-    (D : FourthOrderTraceModel (H := H) (V := V)) :
-    V ≃ₗ[ℂ] D.maximalAmbientDomain :=
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
+    V ≃ₗ[𝕜] D.maximalAmbientDomain :=
   LinearEquiv.ofInjective D.embed.toLinearMap D.embed_injective
 
 /-- Recover the graph-space representative of a maximal ambient-domain
 vector. -/
 noncomputable def maximalAmbientInverse
-    (D : FourthOrderTraceModel (H := H) (V := V)) :
-    D.maximalAmbientDomain →ₗ[ℂ] V :=
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
+    D.maximalAmbientDomain →ₗ[𝕜] V :=
   D.maximalRangeEquiv.symm.toLinearMap
 
 omit [CompleteSpace H] [CompleteSpace V] in
 /-- The ambient inverse undoes the embedding. -/
 @[simp] theorem maximalAmbientInverse_embed
-    (D : FourthOrderTraceModel (H := H) (V := V)) (x : V) :
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) (x : V) :
     D.maximalAmbientInverse
       ⟨D.embed x, LinearMap.mem_range_self D.embed.toLinearMap x⟩ = x := by
   change D.maximalRangeEquiv.symm (D.maximalRangeEquiv x) = x
@@ -72,7 +73,7 @@ omit [CompleteSpace H] [CompleteSpace V] in
 /-- And the embedding undoes the ambient inverse, so the two are mutually inverse on the
 maximal domain. -/
 @[simp] theorem embed_maximalAmbientInverse
-    (D : FourthOrderTraceModel (H := H) (V := V))
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.maximalAmbientDomain) :
     D.embed (D.maximalAmbientInverse x) = (x : H) := by
   have h := D.maximalRangeEquiv.apply_symm_apply x
@@ -80,38 +81,38 @@ maximal domain. -/
 
 /-- Fourth derivative transported to the ambient maximal domain. -/
 noncomputable def maximalFourthAmbient
-    (D : FourthOrderTraceModel (H := H) (V := V)) :
-    D.maximalAmbientDomain →ₗ[ℂ] H :=
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
+    D.maximalAmbientDomain →ₗ[𝕜] H :=
   D.fourth.toLinearMap.comp D.maximalAmbientInverse
 
 /-- Transported second-derivative left trace. -/
 noncomputable def traceSecondLeftAmbient
-    (D : FourthOrderTraceModel (H := H) (V := V)) :
-    D.maximalAmbientDomain →ₗ[ℂ] ℂ :=
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
+    D.maximalAmbientDomain →ₗ[𝕜] 𝕜 :=
   D.traceSecondLeft.toLinearMap.comp D.maximalAmbientInverse
 
 /-- Transported third-derivative left trace. -/
 noncomputable def traceThirdLeftAmbient
-    (D : FourthOrderTraceModel (H := H) (V := V)) :
-    D.maximalAmbientDomain →ₗ[ℂ] ℂ :=
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
+    D.maximalAmbientDomain →ₗ[𝕜] 𝕜 :=
   D.traceThirdLeft.toLinearMap.comp D.maximalAmbientInverse
 
 /-- Transported second-derivative right trace. -/
 noncomputable def traceSecondRightAmbient
-    (D : FourthOrderTraceModel (H := H) (V := V)) :
-    D.maximalAmbientDomain →ₗ[ℂ] ℂ :=
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
+    D.maximalAmbientDomain →ₗ[𝕜] 𝕜 :=
   D.traceSecondRight.toLinearMap.comp D.maximalAmbientInverse
 
 /-- Transported third-derivative right trace. -/
 noncomputable def traceThirdRightAmbient
-    (D : FourthOrderTraceModel (H := H) (V := V)) :
-    D.maximalAmbientDomain →ₗ[ℂ] ℂ :=
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
+    D.maximalAmbientDomain →ₗ[𝕜] 𝕜 :=
   D.traceThirdRight.toLinearMap.comp D.maximalAmbientInverse
 
 omit [CompleteSpace H] [CompleteSpace V] in
 /-- The free ambient domain lies in the maximal ambient domain. -/
 theorem freeAmbientDomain_le_maximalAmbientDomain
-    (D : FourthOrderTraceModel (H := H) (V := V)) :
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
     D.freeAmbientDomain ≤ D.maximalAmbientDomain := by
   intro x hx
   obtain ⟨u, hu⟩ := LinearMap.mem_range.mp hx
@@ -120,15 +121,15 @@ theorem freeAmbientDomain_le_maximalAmbientDomain
 
 /-- Coercion of a free-domain vector into the maximal ambient domain. -/
 noncomputable def freeToMaximal
-    (D : FourthOrderTraceModel (H := H) (V := V)) :
-    D.freeAmbientDomain →ₗ[ℂ] D.maximalAmbientDomain :=
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
+    D.freeAmbientDomain →ₗ[𝕜] D.maximalAmbientDomain :=
   Submodule.inclusion D.freeAmbientDomain_le_maximalAmbientDomain
 
 omit [CompleteSpace H] [CompleteSpace V] in
 /-- The maximal inverse of a free vector is the underlying free graph-space
 representative. -/
 theorem maximalAmbientInverse_freeToMaximal
-    (D : FourthOrderTraceModel (H := H) (V := V))
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.freeAmbientDomain) :
     D.maximalAmbientInverse (D.freeToMaximal x) =
       (D.freeAmbientInverse x : D.freeSubspace) := by
@@ -142,7 +143,7 @@ omit [CompleteSpace H] [CompleteSpace V] in
 /-- The free fourth derivative agrees with the maximal fourth derivative after
 domain inclusion. -/
 theorem freeFourthAmbient_agrees
-    (D : FourthOrderTraceModel (H := H) (V := V))
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.freeAmbientDomain) :
     D.freeFourthAmbient x =
       D.maximalFourthAmbient (D.freeToMaximal x) := by
@@ -154,7 +155,7 @@ omit [CompleteSpace H] [CompleteSpace V] in
 /-- The free ambient domain is exactly the joint kernel of the four transported
 traces. -/
 theorem mem_freeAmbientDomain_iff_traces
-    (D : FourthOrderTraceModel (H := H) (V := V))
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.maximalAmbientDomain) :
     (x : H) ∈ D.freeAmbientDomain ↔
       D.traceSecondLeftAmbient x = 0 ∧

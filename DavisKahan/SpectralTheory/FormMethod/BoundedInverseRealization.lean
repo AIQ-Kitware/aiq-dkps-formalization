@@ -19,7 +19,7 @@ import Mathlib.Tactic
 # Unbounded inverse of a bounded positive resolvent
 
 A coercive-form realization naturally produces a bounded positive solution
-operator `R : H →L[ℂ] H`.  When `R` is self-adjoint and injective, its range is
+operator `R : H →L[𝕜] H`.  When `R` is self-adjoint and injective, its range is
 dense.  The inverse on `range R` is therefore a densely defined closed
 operator.  If `R` is also positive, that inverse is positive and self-adjoint.
 
@@ -45,12 +45,13 @@ noncomputable section
 
 universe u
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
 
 /-- A bounded self-adjoint injective operator has dense range. -/
 theorem denseRange_of_adjoint_eq_self_injective
-    {R : H →L[ℂ] H}
+    {R : H →L[𝕜] H}
     (hR : ContinuousLinearMap.adjoint R = R)
     (hinj : Function.Injective R) :
     DenseRange R := by
@@ -59,38 +60,38 @@ theorem denseRange_of_adjoint_eq_self_injective
     exact hinj
   have horth : R.rangeᗮ = ⊥ := by
     rw [ContinuousLinearMap.orthogonal_range, hR, hker]
-  have hdense : Dense ((R.range : Submodule ℂ H) : Set H) :=
+  have hdense : Dense ((R.range : Submodule 𝕜 H) : Set H) :=
     Submodule.dense_iff_topologicalClosure_eq_top.mpr
       (Submodule.topologicalClosure_eq_top_iff.mpr horth)
   simpa [DenseRange, LinearMap.coe_range] using hdense
 
 /-- Domain of the unbounded inverse of `R`. -/
-noncomputable def inverseDomain (R : H →L[ℂ] H) : Submodule ℂ H :=
+noncomputable def inverseDomain (R : H →L[𝕜] H) : Submodule 𝕜 H :=
   LinearMap.range R.toLinearMap
 
 /-- The injective bounded operator as a linear equivalence onto its range. -/
-noncomputable def rangeEquiv (R : H →L[ℂ] H)
+noncomputable def rangeEquiv (R : H →L[𝕜] H)
     (hinj : Function.Injective R) :
-    H ≃ₗ[ℂ] inverseDomain R :=
+    H ≃ₗ[𝕜] inverseDomain R :=
   LinearEquiv.ofInjective R.toLinearMap hinj
 
 /-- Algebraic inverse of `R` on `range R`. -/
-noncomputable def rangeInverse (R : H →L[ℂ] H)
+noncomputable def rangeInverse (R : H →L[𝕜] H)
     (hinj : Function.Injective R) :
-    inverseDomain R →ₗ[ℂ] H :=
+    inverseDomain R →ₗ[𝕜] H :=
   (rangeEquiv R hinj).symm.toLinearMap
 
 omit [CompleteSpace H] in
 /-- The range equivalence acts as the underlying vector. -/
 @[simp] theorem rangeEquiv_coe_apply
-    (R : H →L[ℂ] H) (hinj : Function.Injective R) (x : H) :
+    (R : H →L[𝕜] H) (hinj : Function.Injective R) (x : H) :
     ((rangeEquiv R hinj x : inverseDomain R) : H) = R x := by
   rfl
 
 omit [CompleteSpace H] in
 /-- Applying the range inverse after `R` returns the input. -/
 @[simp] theorem rangeInverse_mk_apply
-    (R : H →L[ℂ] H) (hinj : Function.Injective R) (x : H) :
+    (R : H →L[𝕜] H) (hinj : Function.Injective R) (x : H) :
     rangeInverse R hinj
       ⟨R x, LinearMap.mem_range_self R.toLinearMap x⟩ = x := by
   change (rangeEquiv R hinj).symm (rangeEquiv R hinj x) = x
@@ -99,7 +100,7 @@ omit [CompleteSpace H] in
 omit [CompleteSpace H] in
 /-- Applying `R` after the range inverse returns the domain vector. -/
 @[simp] theorem apply_rangeInverse
-    (R : H →L[ℂ] H) (hinj : Function.Injective R)
+    (R : H →L[𝕜] H) (hinj : Function.Injective R)
     (x : inverseDomain R) :
     R (rangeInverse R hinj x) = (x : H) := by
   have h := (rangeEquiv R hinj).apply_symm_apply x
@@ -108,7 +109,7 @@ omit [CompleteSpace H] in
 omit [CompleteSpace H] in
 /-- The graph of the range inverse is closed. -/
 theorem isClosed_graph_rangeInverse
-    (R : H →L[ℂ] H) (hinj : Function.Injective R) :
+    (R : H →L[𝕜] H) (hinj : Function.Injective R) :
     IsClosed (Set.range fun x : inverseDomain R =>
       ((x : H), rangeInverse R hinj x)) := by
   apply IsSeqClosed.isClosed
@@ -154,10 +155,10 @@ theorem isClosed_graph_rangeInverse
 
 /-- Closed unbounded inverse of a bounded injective self-adjoint operator. -/
 noncomputable def inverseClosedOperator
-    (R : H →L[ℂ] H)
+    (R : H →L[𝕜] H)
     (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R) :
-    DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H) where
+    DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H) where
   domain := inverseDomain R
   toLinearMap := rangeInverse R hinj
   dense_domain := by
@@ -170,14 +171,14 @@ noncomputable def inverseClosedOperator
 
 /-- The domain of the constructed inverse is the range of `R`. -/
 @[simp] theorem inverseClosedOperator_domain
-    (R : H →L[ℂ] H) (hR : IsSelfAdjoint R)
+    (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R) :
     (inverseClosedOperator R hR hinj).domain = inverseDomain R := rfl
 
 /-- The constructed inverse undoes `R`; this is the defining property of the unbounded inverse
 of a bounded injective operator. -/
 @[simp] theorem inverseClosedOperator_apply
-    (R : H →L[ℂ] H) (hR : IsSelfAdjoint R)
+    (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R)
     (x : (inverseClosedOperator R hR hinj).domain) :
     (inverseClosedOperator R hR hinj).toLinearMap x =
@@ -185,7 +186,7 @@ of a bounded injective operator. -/
 
 /-- `R` is a right inverse of the unbounded inverse on its domain. -/
 @[simp] theorem inverseClosedOperator_apply_R
-    (R : H →L[ℂ] H) (hR : IsSelfAdjoint R)
+    (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R) (x : H) :
     (inverseClosedOperator R hR hinj).toLinearMap
       ⟨R x, LinearMap.mem_range_self R.toLinearMap x⟩ = x := by
@@ -193,7 +194,7 @@ of a bounded injective operator. -/
 
 /-- `R` recovers every vector in the inverse domain. -/
 @[simp] theorem R_inverseClosedOperator_apply
-    (R : H →L[ℂ] H) (hR : IsSelfAdjoint R)
+    (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R)
     (x : (inverseClosedOperator R hR hinj).domain) :
     R ((inverseClosedOperator R hR hinj).toLinearMap x) = (x : H) := by
@@ -201,43 +202,43 @@ of a bounded injective operator. -/
 
 /-- The inverse of a bounded self-adjoint injective map is symmetric. -/
 theorem inverseClosedOperator_isSymmetric
-    (R : H →L[ℂ] H) (hR : IsSelfAdjoint R)
+    (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R) :
     (inverseClosedOperator R hR hinj).IsSymmetric := by
   intro x y
   calc
-    ⟪(inverseClosedOperator R hR hinj).toLinearMap x, (y : H)⟫_ℂ =
+    ⟪(inverseClosedOperator R hR hinj).toLinearMap x, (y : H)⟫_𝕜 =
         ⟪(inverseClosedOperator R hR hinj).toLinearMap x,
-          R ((inverseClosedOperator R hR hinj).toLinearMap y)⟫_ℂ := by
+          R ((inverseClosedOperator R hR hinj).toLinearMap y)⟫_𝕜 := by
             -- `IsSymmetric` presents the domain as `.toLinearPMap.domain`, which is only
             -- definitionally the `.domain` the rewrite lemma is stated for; `rw` will not
             -- match across that, so close the step by a congruence `exact` instead.
-            exact congrArg₂ (inner ℂ) rfl
+            exact congrArg₂ (inner 𝕜) rfl
               (R_inverseClosedOperator_apply R hR hinj y).symm
     _ = ⟪R ((inverseClosedOperator R hR hinj).toLinearMap x),
-          (inverseClosedOperator R hR hinj).toLinearMap y⟫_ℂ := by
+          (inverseClosedOperator R hR hinj).toLinearMap y⟫_𝕜 := by
             exact (hR.isSymmetric _ _).symm
     _ = ⟪(x : H),
-          (inverseClosedOperator R hR hinj).toLinearMap y⟫_ℂ := by
-            exact congrArg₂ (inner ℂ) (R_inverseClosedOperator_apply R hR hinj x) rfl
+          (inverseClosedOperator R hR hinj).toLinearMap y⟫_𝕜 := by
+            exact congrArg₂ (inner 𝕜) (R_inverseClosedOperator_apply R hR hinj x) rfl
 
 /-- Positivity passes from `R` to its unbounded inverse. -/
 theorem inverseClosedOperator_nonnegative
-    (R : H →L[ℂ] H) (hR : IsSelfAdjoint R)
+    (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R)
-    (hRpos : ∀ y : H, 0 ≤ RCLike.re ⟪R y, y⟫_ℂ)
+    (hRpos : ∀ y : H, 0 ≤ RCLike.re ⟪R y, y⟫_𝕜)
     (x : (inverseClosedOperator R hR hinj).domain) :
     0 ≤ RCLike.re
-      ⟪(inverseClosedOperator R hR hinj).toLinearMap x, (x : H)⟫_ℂ := by
+      ⟪(inverseClosedOperator R hR hinj).toLinearMap x, (x : H)⟫_𝕜 := by
   rw [← R_inverseClosedOperator_apply R hR hinj x]
   rw [inner_re_symm]
   exact hRpos ((inverseClosedOperator R hR hinj).toLinearMap x)
 
 /-- Surjectivity of `1 + R⁻¹` follows from bounded coercivity of `1 + R`. -/
 theorem inverseClosedOperator_one_add_surjective
-    (R : H →L[ℂ] H) (hR : IsSelfAdjoint R)
+    (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R)
-    (hRpos : ∀ y : H, 0 ≤ RCLike.re ⟪R y, y⟫_ℂ) :
+    (hRpos : ∀ y : H, 0 ≤ RCLike.re ⟪R y, y⟫_𝕜) :
     ∀ h : H, ∃ x : (inverseClosedOperator R hR hinj).domain,
       (inverseClosedOperator R hR hinj).toLinearMap x + (x : H) = h := by
   have hunit : IsUnit (1 + R) := by
@@ -263,9 +264,9 @@ theorem inverseClosedOperator_one_add_surjective
 /-- The densely defined inverse of a bounded positive self-adjoint injective
  operator is self-adjoint. -/
 theorem inverseClosedOperator_isSelfAdjoint
-    (R : H →L[ℂ] H) (hR : IsSelfAdjoint R)
+    (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R)
-    (hRpos : ∀ y : H, 0 ≤ RCLike.re ⟪R y, y⟫_ℂ) :
+    (hRpos : ∀ y : H, 0 ≤ RCLike.re ⟪R y, y⟫_𝕜) :
     (inverseClosedOperator R hR hinj).IsSelfAdjoint := by
   apply DavisKahanExt.ClosedOperator.isSelfAdjoint_of_nonnegative_one_add_surjective
   · exact inverseClosedOperator_isSymmetric R hR hinj

@@ -186,6 +186,96 @@ theorem paperSin_sq_add_paperCos_sq (U V : Submodule ℂ E)
         isSelfAdjoint_paperAngleOperatorC U V
       exact cfc_const_one ℝ _
 
+/-! ### Proposition 3.5's projection commutations, at bounded infinite dimension
+
+`Θ` commutes with `P` and with `Q`.  The finite-dimensional `RCLike` forms of
+these are `TauCeti.DavisKahanTheory.angleOperator_comm_projection` and its right
+companion; the two below are the same assertions for the bounded complex angle
+`paperAngleOperatorC`, where the dimension is arbitrary.
+
+Both reduce to one two-idempotent identity.  `sin Θ = |P_U - P_V|` is the
+functional-calculus square root of the Gram operator
+`(P_U - P_V)⋆(P_U - P_V) = (P_U - P_V)²`, and for idempotent `p`, `q`,
+
+```text
+(p - q)² p  =  p - p q p  =  p (p - q)²,
+```
+
+with the mirror identity for `q`.  Commutation then passes to the square root
+and to `Θ = arcsin (sin Θ)` by `Commute.cfcₙ_nnreal` and `Commute.cfc_real`; no
+acuteness, finite dimension, or spectral hypothesis is used. -/
+
+/-- The projector difference is self-adjoint, so its Gram operator is its
+square. -/
+theorem adjoint_starProjection_sub (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    (U.starProjection - V.starProjection : E →L[ℂ] E).adjoint =
+      U.starProjection - V.starProjection := by
+  rw [← ContinuousLinearMap.star_eq_adjoint]
+  exact ((isSelfAdjoint_starProjection U).sub (isSelfAdjoint_starProjection V)).star_eq
+
+/-- **`sin Θ` commutes with `P`.**  See the section note: the content is
+`(p - q)² p = p (p - q)²` for idempotents. -/
+theorem commute_sinAngleOperatorC_starProjection (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Commute (sinAngleOperatorC U V) U.starProjection := by
+  have hgram : Commute
+      ((U.starProjection - V.starProjection : E →L[ℂ] E).adjoint ∘L
+        (U.starProjection - V.starProjection)) U.starProjection := by
+    rw [adjoint_starProjection_sub U V]
+    set p : E →L[ℂ] E := U.starProjection with hpdef
+    set q : E →L[ℂ] E := V.starProjection with hqdef
+    have hp : p * p = p := U.isIdempotentElem_starProjection
+    have hq : q * q = q := V.isIdempotentElem_starProjection
+    show (p - q) * (p - q) * p = p * ((p - q) * (p - q))
+    have key : (p - q) * (p - q) * p - p * ((p - q) * (p - q)) =
+        ((p * p - p) * q - q * (p * p - p)) + ((q * q - q) * p - p * (q * q - q)) := by
+      noncomm_ring
+    rw [hp, hq] at key
+    simp only [sub_self, zero_mul, mul_zero, add_zero] at key
+    exact sub_eq_zero.mp key
+  rw [sinAngleOperatorC, ContinuousLinearMap.modulus_def]
+  exact Commute.cfcₙ_nnreal hgram _
+
+/-- **`sin Θ` commutes with `Q`.**  The mirror of
+`commute_sinAngleOperatorC_starProjection`. -/
+theorem commute_sinAngleOperatorC_starProjection_right (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Commute (sinAngleOperatorC U V) V.starProjection := by
+  have hgram : Commute
+      ((U.starProjection - V.starProjection : E →L[ℂ] E).adjoint ∘L
+        (U.starProjection - V.starProjection)) V.starProjection := by
+    rw [adjoint_starProjection_sub U V]
+    set p : E →L[ℂ] E := U.starProjection with hpdef
+    set q : E →L[ℂ] E := V.starProjection with hqdef
+    have hp : p * p = p := U.isIdempotentElem_starProjection
+    have hq : q * q = q := V.isIdempotentElem_starProjection
+    show (p - q) * (p - q) * q = q * ((p - q) * (p - q))
+    have key : (p - q) * (p - q) * q - q * ((p - q) * (p - q)) =
+        ((p * p - p) * q - q * (p * p - p)) + ((q * q - q) * p - p * (q * q - q)) := by
+      noncomm_ring
+    rw [hp, hq] at key
+    simp only [sub_self, zero_mul, mul_zero, add_zero] at key
+    exact sub_eq_zero.mp key
+  rw [sinAngleOperatorC, ContinuousLinearMap.modulus_def]
+  exact Commute.cfcₙ_nnreal hgram _
+
+/-- **Davis--Kahan Proposition 3.5: `Θ` commutes with `P`**, for the bounded
+complex angle operator at arbitrary dimension. -/
+theorem commute_paperAngleOperatorC_starProjection (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Commute (paperAngleOperatorC U V) U.starProjection := by
+  rw [paperAngleOperatorC]
+  exact Commute.cfc_real (commute_sinAngleOperatorC_starProjection U V) Real.arcsin
+
+/-- **Davis--Kahan Proposition 3.5: `Θ` commutes with `Q`**, for the bounded
+complex angle operator at arbitrary dimension. -/
+theorem commute_paperAngleOperatorC_starProjection_right (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Commute (paperAngleOperatorC U V) V.starProjection := by
+  rw [paperAngleOperatorC]
+  exact Commute.cfc_real (commute_sinAngleOperatorC_starProjection_right U V) Real.arcsin
+
 section Real
 
 open TauCeti.DavisKahan.Experimental.Foundation

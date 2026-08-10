@@ -97,9 +97,15 @@ section Compression
 
 variable (Z : Submodule ℝ E) [Z.HasOrthogonalProjection]
 
-/-- The real orthogonal compression of an operator to a closed subspace.  This is
-the real-scalar spelling of `compressOperator` / `theorem63Compression`, both of
-which Mathlib's functional calculus forces to be stated over `ℂ`. -/
+/-- The real orthogonal compression of an operator to a closed subspace.
+
+This is the real-scalar spelling of `compressOperator`, and it is that operator:
+`DavisKahanExt.compressOperator` is `RCLike`-generic, and at `𝕜 = ℝ` its body is
+this one, so `compressOperatorReal Z A = compressOperator Z A` holds by `rfl` and
+`compressOperator_eq_restrict_of_invariant` applies to it verbatim.  (`ℂ`-only
+spellings such as `theorem63Compression` are a separate matter; it is Mathlib's
+functional calculus, not the compression, that forces those.)  The two names
+should eventually be one; until then, do not restate a compression fact for both. -/
 def compressOperatorReal (A : E →L[ℝ] E) : Z →L[ℝ] Z :=
   Z.orthogonalProjectionOnto ∘L A ∘L Z.subtypeL
 

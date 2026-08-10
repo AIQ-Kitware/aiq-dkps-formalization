@@ -8,6 +8,7 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.AngleIdentity
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonCore
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonCoreTheorems
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomain
+import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomainSymmetric
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomainTheorems
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngle
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngleReal

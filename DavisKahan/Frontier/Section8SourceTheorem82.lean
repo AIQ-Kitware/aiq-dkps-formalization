@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Frontier.Section8Residual
 import DavisKahan.Geometry.Halmos.CrossedDefectGap
+import DavisKahan.Sources.DavisKahan1970.SinTwoThetaWholeSpace
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 
 /-!
@@ -113,7 +114,11 @@ out is exactly the configuration it exhibits.
   `theorem8_2_sinTwoTheta_residual_source` -- the `sin 2Θ` conclusions Theorem
   8.2 inherits, specialized to its configuration and stated with its
   hypotheses, so the exported Section 8.2 surface carries them rather than
-  merely pointing at Section 7;
+  merely pointing at Section 7, at the operator norm;
+* `theorem8_2_sinTwoTheta_perturbation_source_paperUINorm` -- the first of those
+  two at the printed norm scope, every unitarily invariant norm in the paper's
+  own sense.  The residual one is **not** available at that scope, and the
+  reason is recorded at the head of section 2b;
 * `theorem8_2_perturbationHalfGap_source_maximalAngle_lt`,
   `theorem8_2_residualHalfGap_source_maximalAngle_lt`,
   `theorem8_2_branch_source_maximalAngle_lt` -- the printed `Θ < π/4`;
@@ -145,26 +150,35 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-! ### 1. Equation (1.5), and what it buys -/
 
-omit [CompleteSpace H] in
 /-- **Davis--Kahan equation (1.5), finite form.**  For subspaces of equal rank
 the symmetric projector gap and the directed gap coincide, so `‖sin Θ‖` may be
 computed from either.
 
 This is `TauCeti.opNorm_projection_sub_eq_opNorm_sinThetaMap` in the Section 8
 vocabulary; both sides are literally the operator norms that
-`Submodule.projectionGap` and `Submodule.directedProjectionGap` unfold to. -/
-theorem subspaceGap_eq_directedGap_of_finrank_eq [FiniteDimensional ℂ H]
-    (P Q : Submodule ℂ H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hrank : finrank ℂ P = finrank ℂ Q) :
+`Submodule.projectionGap` and `Submodule.directedProjectionGap` unfold to.
+
+Stated over an arbitrary `RCLike` field, with its own binders, because the real
+Section 8 descent needs it over `ℝ`; the underlying geometry never sees the
+scalars. -/
+theorem subspaceGap_eq_directedGap_of_finrank_eq {𝕜 : Type*} [RCLike 𝕜]
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    [FiniteDimensional 𝕜 G]
+    (P Q : Submodule 𝕜 G) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (hrank : finrank 𝕜 P = finrank 𝕜 Q) :
     subspaceGap P Q = directedGap P Q :=
   TauCeti.opNorm_projection_sub_eq_opNorm_sinThetaMap P Q hrank
 
-omit [CompleteSpace H] in
 /-- Under equation (1.5), a directed quarter-angle bound is the printed
-`Θ < π/4`. -/
-theorem maximalAngle_lt_pi_div_four_of_directedGap_lt [FiniteDimensional ℂ H]
-    {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hrank : finrank ℂ P = finrank ℂ Q)
+`Θ < π/4`.
+
+Stated over an arbitrary `RCLike` field, with its own binders, so that the real
+Section 8 descent reads the same conclusion off the real directed bound. -/
+theorem maximalAngle_lt_pi_div_four_of_directedGap_lt {𝕜 : Type*} [RCLike 𝕜]
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    [FiniteDimensional 𝕜 G]
+    {P Q : Submodule 𝕜 G} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (hrank : finrank 𝕜 P = finrank 𝕜 Q)
     (hdir : directedGap P Q < Real.sqrt 2 / 2) :
     maximalAngle P Q < Real.pi / 4 := by
   refine (DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_iff P Q).2 ?_
@@ -184,8 +198,9 @@ This is the source-faithful hypothesis.  (1.5) alone does not suffice, and that
 is the paper's own Remark after Proposition 3.2, machine-checked as
 `Section3.directedGap_asymmetric_coordinateHalfSpace`: the bilateral-shift pair
 satisfies (1.5), fails (3.5), and has directed gaps `1` and `0`. -/
-theorem subspaceGap_eq_directedGap_of_crossedDefects
-    (P Q : Submodule ℂ H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+theorem subspaceGap_eq_directedGap_of_crossedDefects {𝕜 : Type*} [RCLike 𝕜]
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    (P Q : Submodule 𝕜 G) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (h : CrossedDefectsEquivalent P Q) :
     subspaceGap P Q = directedGap P Q :=
   subspaceGap_eq_directedGap_of_crossedDefectsEquivalent P Q h
@@ -198,8 +213,9 @@ The dimension-free counterpart of
 bound is what `Section8Perturbation.lean` and `Section8Residual.lean` actually
 deliver from the printed hypotheses; (3.5) is what turns it into the printed
 symmetric conclusion, with no finite-dimensionality anywhere. -/
-theorem maximalAngle_lt_pi_div_four_of_crossedDefects
-    {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+theorem maximalAngle_lt_pi_div_four_of_crossedDefects {𝕜 : Type*} [RCLike 𝕜]
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    {P Q : Submodule 𝕜 G} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (h : CrossedDefectsEquivalent P Q)
     (hdir : directedGap P Q < Real.sqrt 2 / 2) :
     maximalAngle P Q < Real.pi / 4 := by
@@ -240,9 +256,16 @@ theorem theorem8_2_sinTwoTheta_perturbation_source
 
 /-- **The `sin 2Θ` estimate at Theorem 8.2's hypotheses, residual form.**
 
-`δ ‖sin 2Θ₀‖ ≤ 2 ‖R‖` with `R` the printed residual (1.8),
+`δ ‖sin 2Θ‖ ≤ 2 ‖R‖` with `R` the printed residual (1.8),
 `R = (A + H) E₀ - E₀ A₀`.  Inherited from `sinTwoTheta_residual`; the trial
-embedding is the inclusion `E₀ = P.subtypeL`, whose range is `P`. -/
+embedding is the inclusion `E₀ = P.subtypeL`, whose range is `P`.
+
+The printed inequality is written at the *directed* `Θ₀`; the conclusion below is
+at the **ambient** `sinTwoAngleOperator Q P`.  At the operator norm that is
+legitimate and is the stronger reading, because `norm_offdiag_add_eq` makes the
+two off-diagonal blocks of the reflection defect equal there.  It is not
+legitimate at a general unitarily invariant norm, and that is the remaining open
+axis recorded at the head of section 2b below. -/
 theorem theorem8_2_sinTwoTheta_residual_source
     {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
@@ -279,6 +302,116 @@ theorem theorem8_2_sinTwoTheta_residual_source
     congr 1
     simp only [hrange]
   rwa [hangle] at h
+
+/-! ### 2b. The same `sin 2Θ` estimate at every source unitarily invariant norm
+
+The printed `sin 2Θ` theorem concludes "for every unitary-invariant norm", so
+that is the scope at which Theorem 8.2 inherits it; the two theorems above are
+its operator-norm reading.  The perturbation alternative is restated here over
+the paper's own class `PaperUnitaryInvariantNorm`, inherited from equation (7.5)
+(`DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm`) with nothing re-proved.
+
+The conclusion names the paper's literal `sin 2Θ`, the positive operator
+`paperSinTwoAngleOperatorC Q P`, rather than the modulus-free
+`sinTwoAngleOperator` of the operator-norm statements; the two have the same
+operator norm by `norm_paperSinTwoAngleOperatorC_eq_norm_sinTwoAngleOperatorC`,
+but only the former carries the whole singular-value list that a general
+unitarily invariant norm reads.
+
+## Why the residual alternative is not here
+
+The obstruction is mathematical, not bookkeeping, and it is recorded so that a
+later agent does not spend the day rediscovering it.
+
+The printed residual conclusion is `δ‖sin 2Θ₀‖ ≤ 2‖R‖` at the **directed** `Θ₀`
+(and the paper's own proof of it, through Lemma 6.1, actually gives the constant
+`1`).  `theorem8_2_sinTwoTheta_residual_source` above states it at the
+**ambient** `Θ`, which is legitimate at the operator norm because the two
+off-diagonal blocks of the reflection defect have the *same* operator norm --
+that is `norm_offdiag_add_eq`.
+
+For a general unitarily invariant norm that identity fails.  Writing `C` for the
+`P`-to-`Pᗮ` block of `A + K`, the singular values of `C + C⋆` are those of `C`
+doubled, so a symmetric gauge sees `N(C + C⋆) = 2 N(C)` in general (the trace
+norm does).  Every route through `sinTwoTheta_wholeSpace_paperUINorm` has to
+supply a comparison operator reduced by `P`, i.e. block-diagonal, so its
+displacement from `A + K` is exactly `-(C + C⋆)` for the best such choice; with
+`N(C) ≤ N(R)` this yields the constant `4`, not the printed `2`.
+
+Recovering the printed constant needs the singular-value identification of
+`sin 2Θ₀` with `sin 2Θ₁` -- the paper's `S_0`/`S_1` discussion, i.e. the Halmos
+generic decomposition.  That is the machinery the *dimension* axis of this row
+turned out not to need; the norm axis of the residual alternative does need
+it. -/
+
+omit [CompleteSpace H] in
+/-- **The spectral dictionary between Section 8 and the `sin 2Θ` development.**
+
+Section 8 states its spectral placements with `Foundation.SpectrumIn`, which
+constrains `restrictedSpectrum`; the `sin 2Θ` development states them as
+`spectrum ℝ (compressOperator …)`.  On an invariant subspace the compression is
+the honest restriction (`compressOperator_eq_restrict_of_invariant`), and over
+`ℂ` the real Banach-algebra spectrum is the pulled-back complex spectrum
+(`realSpectrum_eq_spectrum_real`), so the two readings agree. -/
+theorem spectrum_compressOperator_subset_of_spectrumIn
+    {T : H →L[ℂ] H} {U : Submodule ℂ H} [U.HasOrthogonalProjection]
+    {s : Set ℝ} (h : Foundation.SpectrumIn T U s) :
+    spectrum ℝ (compressOperator U T) ⊆ s := by
+  intro r hr
+  refine h.subset ⟨h.invariant, ?_⟩
+  rw [compressOperator_eq_restrict_of_invariant T U h.invariant] at hr
+  exact (DavisKahan1970.Section8.realSpectrum_eq_spectrum_real
+    (T.restrict h.invariant)).ge hr
+
+/-- **The `sin 2Θ` estimate at Theorem 8.2's hypotheses, perturbation form, for
+every source unitarily invariant norm.**
+
+`δ ‖sin 2Θ‖ ≤ 2 ‖H‖`, at the paper's own class of unitarily invariant norms and
+at Theorem 8.2's own hypotheses.  `theorem8_2_sinTwoTheta_perturbation_source`
+is the operator-norm reading of the same inheritance.
+
+Nothing is re-proved.  This is equation (7.5) of the paper's Section 7,
+`DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm`, read with `A + K` carrying
+the printed gap on `Q` and with `A` — which `P` reduces by hypothesis — as the
+comparison operator, so that the displacement is `-K`. -/
+theorem theorem8_2_sinTwoTheta_perturbation_source_paperUINorm
+    (N : ExactSinTheta.PaperUnitaryInvariantNorm)
+    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : Reduces A P)
+    (hKmem : N.Mem K) :
+    N.Mem (paperSinTwoAngleOperatorC Q P) ∧
+      delta * N.gauge (paperSinTwoAngleOperatorC Q P) ≤ 2 * N.gauge K := by
+  have hAsa : IsSelfAdjoint A :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
+  have hKsa : IsSelfAdjoint K :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK
+  have hAKsa : IsSelfAdjoint (A + K) := hAsa.add hKsa
+  have hQred : Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hUspec : spectrum ℝ (compressOperator Q (A + K)) ⊆ Set.Icc beta alpha :=
+    spectrum_compressOperator_subset_of_spectrumIn hQ
+  have hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Qᗮ (A + K)),
+      x ≤ beta - delta ∨ alpha + delta ≤ x :=
+    fun _ hx => spectrum_compressOperator_subset_of_spectrumIn hQperp hx
+  have hneg : A - (A + K) = (-1 : ℂ) • K := by
+    rw [neg_one_smul]
+    abel
+  have hone : ‖(-1 : ℂ)‖ = 1 := by norm_num
+  have hMemNeg : N.Mem (A - (A + K)) := by
+    rw [hneg]
+    intro htop
+    rw [N.extendedGauge_smul, hone] at htop
+    rcases ENNReal.mul_eq_top.mp htop with ⟨_, h⟩ | ⟨h, _⟩
+    · exact hKmem h
+    · exact absurd h (by simp)
+  have hgaugeNeg : N.gauge (A - (A + K)) = N.gauge K := by
+    rw [hneg, N.gauge_smul _ hKmem, hone, one_mul]
+  obtain ⟨hmem, hle⟩ := DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm N
+    hAKsa hAsa hQred hPred hdelta hab hUspec hUspec' hMemNeg
+  exact ⟨hmem, by rwa [hgaugeNeg] at hle⟩
 
 /-! ### 3. The printed conclusion `Θ < π/4` -/
 

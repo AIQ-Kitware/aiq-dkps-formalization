@@ -10,8 +10,8 @@ public import Mathlib.Analysis.InnerProductSpace.Basic
 /-!
 # Unitary equivalence of bounded operators
 
-Two bounded operators on possibly different complex Hilbert spaces are **unitarily equivalent**
-when some linear isometric equivalence intertwines them.
+Two bounded operators on possibly different Hilbert spaces over a common `RCLike` scalar field
+are **unitarily equivalent** when some linear isometric equivalence intertwines them.
 
 The relation is already spelled out at several places in the Davis--Kahan development; it is
 introduced here so that the *chain* of equivalences produced by the multiplicity construction --
@@ -37,40 +37,42 @@ namespace TauCeti
 
 universe u v w
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-variable {K : Type v} [NormedAddCommGroup K] [InnerProductSpace ℂ K]
-variable {L : Type w} [NormedAddCommGroup L] [InnerProductSpace ℂ L]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+variable {K : Type v} [NormedAddCommGroup K] [InnerProductSpace 𝕜 K]
+variable {L : Type w} [NormedAddCommGroup L] [InnerProductSpace 𝕜 L]
 
-/-- **Unitary equivalence of bounded operators** on possibly different complex Hilbert spaces.
+/-- **Unitary equivalence of bounded operators** on possibly different Hilbert spaces over the
+same `RCLike` scalar field.
 
 Exposed, because consumers outside this module need to see that it is the same existential as
 the Davis--Kahan development's own `BoundedOperatorsUnitaryEquivalent`. -/
-def OperatorUnitaryEquiv (A : H →L[ℂ] H) (B : K →L[ℂ] K) : Prop :=
-  ∃ e : H ≃ₗᵢ[ℂ] K, ∀ x : H, e (A x) = B (e x)
+def OperatorUnitaryEquiv (A : H →L[𝕜] H) (B : K →L[𝕜] K) : Prop :=
+  ∃ e : H ≃ₗᵢ[𝕜] K, ∀ x : H, e (A x) = B (e x)
 
 /-- A linear isometric equivalence that intertwines two operators exhibits their unitary
 equivalence.  This is the introduction rule; it exists so that call sites never write the
 anonymous constructor and can be read at a glance. -/
-theorem operatorUnitaryEquiv_of_intertwines {A : H →L[ℂ] H} {B : K →L[ℂ] K} (e : H ≃ₗᵢ[ℂ] K)
+theorem operatorUnitaryEquiv_of_intertwines {A : H →L[𝕜] H} {B : K →L[𝕜] K} (e : H ≃ₗᵢ[𝕜] K)
     (he : ∀ x : H, e (A x) = B (e x)) : OperatorUnitaryEquiv A B :=
   ⟨e, he⟩
 
 /-- The elimination rule, dual to `operatorUnitaryEquiv_of_intertwines`.  It exists so that
 consumers outside this module can destructure the relation without the definition having to be
 exposed. -/
-theorem OperatorUnitaryEquiv.exists_intertwiner {A : H →L[ℂ] H} {B : K →L[ℂ] K}
-    (h : OperatorUnitaryEquiv A B) : ∃ e : H ≃ₗᵢ[ℂ] K, ∀ x : H, e (A x) = B (e x) :=
+theorem OperatorUnitaryEquiv.exists_intertwiner {A : H →L[𝕜] H} {B : K →L[𝕜] K}
+    (h : OperatorUnitaryEquiv A B) : ∃ e : H ≃ₗᵢ[𝕜] K, ∀ x : H, e (A x) = B (e x) :=
   h
 
 /-- Unitary equivalence is reflexive, witnessed by the identity. -/
 @[refl]
-theorem OperatorUnitaryEquiv.refl (A : H →L[ℂ] H) : OperatorUnitaryEquiv A A :=
-  ⟨LinearIsometryEquiv.refl ℂ H, fun _ => rfl⟩
+theorem OperatorUnitaryEquiv.refl (A : H →L[𝕜] H) : OperatorUnitaryEquiv A A :=
+  ⟨LinearIsometryEquiv.refl 𝕜 H, fun _ => rfl⟩
 
 /-- Unitary equivalence is symmetric: the inverse of the intertwining unitary intertwines the
 operators the other way. -/
 @[symm]
-theorem OperatorUnitaryEquiv.symm {A : H →L[ℂ] H} {B : K →L[ℂ] K}
+theorem OperatorUnitaryEquiv.symm {A : H →L[𝕜] H} {B : K →L[𝕜] K}
     (h : OperatorUnitaryEquiv A B) : OperatorUnitaryEquiv B A := by
   obtain ⟨e, he⟩ := h
   refine ⟨e.symm, fun y => ?_⟩
@@ -80,7 +82,7 @@ theorem OperatorUnitaryEquiv.symm {A : H →L[ℂ] H} {B : K →L[ℂ] K}
 
 /-- Unitary equivalence is transitive.  This is what lets the chain of equivalences produced by
 the multiplicity construction be composed one step at a time. -/
-theorem OperatorUnitaryEquiv.trans {A : H →L[ℂ] H} {B : K →L[ℂ] K} {C : L →L[ℂ] L}
+theorem OperatorUnitaryEquiv.trans {A : H →L[𝕜] H} {B : K →L[𝕜] K} {C : L →L[𝕜] L}
     (h : OperatorUnitaryEquiv A B) (h' : OperatorUnitaryEquiv B C) :
     OperatorUnitaryEquiv A C := by
   obtain ⟨e, he⟩ := h

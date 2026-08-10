@@ -22,6 +22,8 @@ These two steps are the engine of the free-beam eigenfunction bootstrap: a weak 
 is an affine function plus a second primitive twice over, so it acquires a full fourth-order
 derivative chain within `[0,1]` and the interval ODE classification applies.
 
+The scalar field is an arbitrary `RCLike` `𝕜`.
+
 ## Main results
 
 * `TauCeti.hasDerivAt_secondPrimitive`: `(K w)' = firstPrimitive w` everywhere.
@@ -38,12 +40,14 @@ open scoped ENNReal NNReal
 
 noncomputable section
 
+variable {𝕜 : Type*} [RCLike 𝕜]
+
 /-- Running integral of a density on the unit interval, cut off below the parameter. -/
-@[expose] def firstPrimitive (w : ℝ → ℂ) (t : ℝ) : ℂ :=
+@[expose] def firstPrimitive (w : ℝ → 𝕜) (t : ℝ) : 𝕜 :=
   ∫ s, (Set.Iio t).indicator w s ∂unitIocMeasure
 
 /-- The running integral depends only on the almost-everywhere class of the density. -/
-theorem firstPrimitive_congr_ae {w w' : ℝ → ℂ} (h : w =ᵐ[unitIocMeasure] w') :
+theorem firstPrimitive_congr_ae {w w' : ℝ → 𝕜} (h : w =ᵐ[unitIocMeasure] w') :
     firstPrimitive w = firstPrimitive w' := by
   funext t
   refine integral_congr_ae ?_
@@ -54,17 +58,17 @@ theorem firstPrimitive_congr_ae {w w' : ℝ → ℂ} (h : w =ᵐ[unitIocMeasure]
 
 /-- **Differentiation under the integral**: the second primitive is everywhere
 differentiable, with derivative the running integral of the density. -/
-theorem hasDerivAt_secondPrimitive {w : ℝ → ℂ} (hw : Integrable w unitIocMeasure)
+theorem hasDerivAt_secondPrimitive {w : ℝ → 𝕜} (hw : Integrable w unitIocMeasure)
     (t₀ : ℝ) : HasDerivAt (secondPrimitive w) (firstPrimitive w t₀) t₀ := by
   have hnull : unitIocMeasure {t₀} = 0 := unitIocMeasure_singleton t₀
   have hmeasF : ∀ t : ℝ, AEStronglyMeasurable
-      (fun s => (secondPrimitiveKernel t s : ℂ) * w s) unitIocMeasure := fun t =>
-    ((Complex.continuous_ofReal.comp
+      (fun s => (secondPrimitiveKernel t s : 𝕜) * w s) unitIocMeasure := fun t =>
+    ((RCLike.continuous_ofReal.comp
       (continuous_secondPrimitiveKernel.comp
         (Continuous.prodMk continuous_const continuous_id))).aestronglyMeasurable).mul
       hw.aestronglyMeasurable
   have key := hasDerivAt_integral_of_dominated_loc_of_lip
-    (F := fun t s => (secondPrimitiveKernel t s : ℂ) * w s)
+    (F := fun t s => (secondPrimitiveKernel t s : 𝕜) * w s)
     (F' := fun s => (Set.Iio t₀).indicator w s)
     (bound := fun s => ‖w s‖)
     (μ := unitIocMeasure) (x₀ := t₀)
@@ -77,12 +81,12 @@ theorem hasDerivAt_secondPrimitive {w : ℝ → ℂ} (hw : Integrable w unitIocM
   · refine Filter.Eventually.of_forall fun s => ?_
     refine LipschitzOnWith.of_dist_le_mul fun t _ t' _ => ?_
     rw [dist_eq_norm, dist_eq_norm]
-    have hdiff : (secondPrimitiveKernel t s : ℂ) * w s
-        - (secondPrimitiveKernel t' s : ℂ) * w s
-        = ((secondPrimitiveKernel t s - secondPrimitiveKernel t' s : ℝ) : ℂ) * w s := by
+    have hdiff : (secondPrimitiveKernel t s : 𝕜) * w s
+        - (secondPrimitiveKernel t' s : 𝕜) * w s
+        = ((secondPrimitiveKernel t s - secondPrimitiveKernel t' s : ℝ) : 𝕜) * w s := by
       push_cast
       ring
-    rw [hdiff, norm_mul, Complex.norm_real, Real.norm_eq_abs]
+    rw [hdiff, norm_mul, RCLike.norm_ofReal, Real.norm_eq_abs]
     have hcoe : ((Real.nnabs ‖w s‖ : ℝ≥0) : ℝ) = ‖w s‖ := by
       simp
     rw [hcoe]
@@ -98,22 +102,25 @@ theorem hasDerivAt_secondPrimitive {w : ℝ → ℂ} (hw : Integrable w unitIocM
     filter_upwards [hae] with s hs
     rcases lt_or_gt_of_ne hs with hlt | hgt
     · -- `s < t₀`: locally the kernel is `t - s`.
-      have hlin : HasDerivAt (fun t : ℝ => ((t - s : ℝ) : ℂ) * w s) ((1 : ℂ) * w s) t₀ := by
-        have h1 : HasDerivAt (fun t : ℝ => ((t - s : ℝ) : ℂ)) 1 t₀ := by
-          have := ((hasDerivAt_id t₀).sub_const s).ofReal_comp
-          simpa using this
+      have hlin : HasDerivAt (fun t : ℝ => ((t - s : ℝ) : 𝕜) * w s) ((1 : 𝕜) * w s) t₀ := by
+        have h1 : HasDerivAt (fun t : ℝ => ((t - s : ℝ) : 𝕜)) 1 t₀ := by
+          have hbase : HasDerivAt (fun t : ℝ => t - s) 1 t₀ :=
+            (hasDerivAt_id t₀).sub_const s
+          have hcomp := (RCLike.ofRealCLM (K := 𝕜)).hasDerivAt.scomp t₀ hbase
+          simpa only [Function.comp_def, RCLike.ofRealCLM_apply, RCLike.ofReal_one,
+            one_smul] using hcomp
         simpa using h1.mul_const (w s)
-      have heq : (fun t : ℝ => ((t - s : ℝ) : ℂ) * w s)
-          =ᶠ[nhds t₀] fun t : ℝ => (secondPrimitiveKernel t s : ℂ) * w s := by
+      have heq : (fun t : ℝ => ((t - s : ℝ) : 𝕜) * w s)
+          =ᶠ[nhds t₀] fun t : ℝ => (secondPrimitiveKernel t s : 𝕜) * w s := by
         filter_upwards [eventually_gt_nhds hlt] with t ht
         rw [secondPrimitiveKernel_of_le ht.le]
       have hres := heq.hasDerivAt_iff.mp hlin
       rw [Set.indicator_of_mem (Set.mem_Iio.mpr hlt)]
       simpa using hres
     · -- `s > t₀`: locally the kernel vanishes.
-      have hzero : HasDerivAt (fun _ : ℝ => (0 : ℂ)) 0 t₀ := hasDerivAt_const _ _
-      have heq : (fun _ : ℝ => (0 : ℂ))
-          =ᶠ[nhds t₀] fun t : ℝ => (secondPrimitiveKernel t s : ℂ) * w s := by
+      have hzero : HasDerivAt (fun _ : ℝ => (0 : 𝕜)) 0 t₀ := hasDerivAt_const _ _
+      have heq : (fun _ : ℝ => (0 : 𝕜))
+          =ᶠ[nhds t₀] fun t : ℝ => (secondPrimitiveKernel t s : 𝕜) * w s := by
         filter_upwards [eventually_lt_nhds hgt] with t ht
         rw [secondPrimitiveKernel_of_ge ht.le]
         simp
@@ -122,7 +129,7 @@ theorem hasDerivAt_secondPrimitive {w : ℝ → ℂ} (hw : Integrable w unitIocM
       simpa using hres
 
 /-- On the unit interval the running integral is the interval integral of the density. -/
-theorem firstPrimitive_eq_intervalIntegral {w : ℝ → ℂ}
+theorem firstPrimitive_eq_intervalIntegral {w : ℝ → 𝕜}
     {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
     firstPrimitive w t = ∫ s in (0 : ℝ)..t, w s := by
   have hset : Set.Ioc (0 : ℝ) 1 ∩ Set.Iio t = Set.Ioo 0 t := by
@@ -138,7 +145,7 @@ theorem firstPrimitive_eq_intervalIntegral {w : ℝ → ℂ}
 
 /-- **Fundamental theorem of calculus within the interval**: for a continuous density the
 running integral is differentiable within `[0,1]` with derivative the density. -/
-theorem hasDerivWithinAt_firstPrimitive_of_continuous {w : ℝ → ℂ} (hw : Continuous w)
+theorem hasDerivWithinAt_firstPrimitive_of_continuous {w : ℝ → 𝕜} (hw : Continuous w)
     {t₀ : ℝ} (ht₀ : t₀ ∈ Set.Icc (0 : ℝ) 1) :
     HasDerivWithinAt (firstPrimitive w) (w t₀) (Set.Icc 0 1) t₀ := by
   have hFTC : HasDerivAt (fun u => ∫ x in (0 : ℝ)..u, w x) (w t₀) t₀ :=

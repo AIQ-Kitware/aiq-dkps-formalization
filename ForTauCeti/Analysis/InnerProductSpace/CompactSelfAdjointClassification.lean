@@ -42,6 +42,9 @@ sidesteps needing one.
   to the Euclidean space of its dimension.
 * `TauCeti.exists_linearIsometryEquiv_intertwining_of_finrank_eigenspace_eq`:
   the classification.
+* `TauCeti.exists_hasEigenvalue_eigenspace_not_le`: the existence half of the
+  same spectral theorem — a compact self-adjoint operator has an eigenvector
+  outside any subspace whose orthogonal complement is nontrivial.
 -/
 
 public section
@@ -83,6 +86,37 @@ theorem finiteDimensional_eigenspace_of_isCompactOperator {A : E →L[𝕜] E}
     rw [hA0]
     infer_instance
   · exact ContinuousLinearMap.finite_dimensional_eigenspace hAc μ hμ
+
+/-- **A compact self-adjoint operator has an eigenvector outside any subspace that
+misses a nonzero vector.**
+
+If every eigenspace were contained in `K`, then Mathlib's spectral theorem
+(`ContinuousLinearMap.orthogonalComplement_iSup_eigenspaces_eq_bot`) would make `K` dense,
+contradicting `y ∈ Kᗮ`, `y ≠ 0`.
+
+This is the *existence* direction the spectral theorem is usually not used for.  Taking `K`
+to be the span of the eigenvectors already known — for the inverse of an unbounded operator
+with compact resolvent, the kernel — turns an upper-bound-free spectral containment, which
+is vacuously true of an empty spectrum, into a genuine eigenpair. -/
+theorem exists_hasEigenvalue_eigenspace_not_le {A : E →L[𝕜] E}
+    (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
+    {K : Submodule 𝕜 E} {y : E} (hy : y ∈ Kᗮ) (hy0 : y ≠ 0) :
+    ∃ μ : 𝕜, Module.End.HasEigenvalue A.toLinearMap μ ∧
+      ¬ eigenspace A.toLinearMap μ ≤ K := by
+  by_contra hcon
+  have hall : ∀ μ : 𝕜, eigenspace A.toLinearMap μ ≤ K := by
+    intro μ
+    by_cases hμ : Module.End.HasEigenvalue A.toLinearMap μ
+    · by_contra hle
+      exact hcon ⟨μ, hμ, hle⟩
+    · rw [Module.End.hasEigenvalue_iff, not_not] at hμ
+      rw [hμ]
+      exact bot_le
+  have hsup : (⨆ μ : 𝕜, eigenspace A.toLinearMap μ) ≤ K := iSup_le hall
+  have hbot : (⨆ μ : 𝕜, eigenspace A.toLinearMap μ)ᗮ = ⊥ :=
+    ContinuousLinearMap.orthogonalComplement_iSup_eigenspaces_eq_bot hAc hAs.isSymmetric
+  have hmem : y ∈ (⊥ : Submodule 𝕜 E) := hbot ▸ Submodule.orthogonal_le hsup hy
+  exact hy0 (Submodule.mem_bot 𝕜 |>.mp hmem)
 
 /-- **Compact self-adjoint operators with trivial kernel are classified by their
 eigenspace dimensions.**

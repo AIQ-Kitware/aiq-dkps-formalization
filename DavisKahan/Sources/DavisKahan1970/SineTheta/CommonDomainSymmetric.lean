@@ -1,0 +1,524 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 5
+-/
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
+
+/-!
+# Davis--Kahan Proposition 6.1 on a common dense domain
+
+The Appendix to Section 6 says that "the hypotheses of Proposition 6.1 and Theorem 6.1
+may be relaxed similarly".  Theorem 6.1 was relaxed in
+`DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomainTheorems`; this module performs
+the same relaxation for Proposition 6.1, the *symmetric* sine theorem.
+
+`PaperSymmetricSinThetaProblem` requires two **bounded** self-adjoint operators
+`A B : E →L[ℂ] E`.  Here `A` and `B` are two closed densely defined self-adjoint
+operators sharing one domain, and the paper's `H = B - A` is the bounded operator that
+represents their difference on that common domain.  The bounded problem is the special
+case `A.domain = B.domain = ⊤`, recorded as `ofBounded` below.
+
+## What actually has to change
+
+Nothing in the paper's argument.  Both applications of the one-sided sine theorem already
+run through `UnboundedSinThetaData`, `unbounded_adjoint_residual_block_identity` and
+`davisKahan1970_sylvester_complex`, all of which are stated for closed operators; the
+bounded file only reaches them through `ClosedOperator.ofBounded`.  The combination step
+(Lemma 6.1), the perturbation-block contraction (Lemma 6.2) and the identification of the
+cross-block sum with the literal functional-calculus `sin Θ` see only bounded projections
+and the bounded `H`, so they are reused verbatim.
+
+Exactly one fact has to be re-proved rather than assumed.  In the bounded file
+`H.adjoint = H` follows from `A.adjoint = A` and `B.adjoint = B`.  Here `H` is a separate
+bounded operator, and its symmetry is a *consequence* of the data rather than a
+hypothesis: `⟪H x, y⟫ = ⟪x, H y⟫` holds for `x, y` in the common domain because `A` and
+`B` are symmetric there, and both sides are continuous, so density of the domain extends
+it to the whole space.  That is `perturbation_isSymmetric`.  It is deliberately not a
+structure field: adding it would strengthen the source hypotheses.
+
+## Main results
+
+* `PaperCommonDomainSymmetricSinThetaProblem`: the common-domain inputs of
+  Proposition 6.1;
+* `PaperCommonDomainSymmetricSinThetaProblem.symmetric_all_kyFan`: the estimate for every
+  finite Ky Fan gauge;
+* `PaperCommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm`:
+  Proposition 6.1 for every normalized unitarily invariant norm in the source sense;
+* `PaperCommonDomainSymmetricSinThetaProblem.ofBounded`: the bounded Proposition 6.1
+  inputs are an instance of the common-domain ones.
+-/
+
+namespace TauCeti
+namespace DavisKahan
+namespace Experimental
+namespace ExactSinTheta
+
+open scoped InnerProductSpace
+
+noncomputable section
+
+universe v
+
+open TauCeti.DavisKahanExt
+open TauCeti.DavisKahan
+
+variable {E : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+
+/-- A subspace admitting an orthogonal projection inside a complete ambient space is
+itself complete.  `local instance` does not propagate through imports, so it is
+reinstalled here, exactly as in the bounded Proposition 6.1 module.
+
+The common-domain proof works throughout in the coordinate spaces of `U`, `V` and their
+complements, so every reducing restriction below needs it. -/
+local instance instCompleteSpaceCoeOfHasOrthogonalProjectionCommonDomainSymmetric
+    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+
+/-- Common-domain inputs of Proposition 6.1.
+
+`A` and `B` are closed densely defined self-adjoint operators on one and the same dense
+domain, `U` reduces `A`, `V` reduces `B`, and `perturbation` is the paper's bounded `H`,
+which represents `B - A` on the common domain.  The two gap hypotheses are the paper's two
+applications of the original sine theorem, now between reducing restrictions of *unbounded*
+operators. -/
+structure PaperCommonDomainSymmetricSinThetaProblem
+    (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] where
+  /-- The unperturbed closed self-adjoint operator. -/
+  A : ClosedOperator (𝕜 := ℂ) (E := E)
+  /-- The perturbed closed self-adjoint operator. -/
+  B : ClosedOperator (𝕜 := ℂ) (E := E)
+  /-- `A` is self-adjoint in the domain-aware sense. -/
+  selfAdjoint_A : A.IsSelfAdjoint
+  /-- `B` is self-adjoint in the domain-aware sense. -/
+  selfAdjoint_B : B.IsSelfAdjoint
+  /-- `U` reduces `A`. -/
+  reduces_A_U : A.ReducesSubspace U
+  /-- `V` reduces `B`. -/
+  reduces_B_V : B.ReducesSubspace V
+  /-- The paper's bounded perturbation `H`. -/
+  perturbation : E →L[ℂ] E
+  /-- The two operators share one domain. -/
+  domain_eq : A.domain = B.domain
+  /-- On the common domain the perturbation represents `B - A`. -/
+  perturbation_eq : ∀ (x : E) (hA : x ∈ A.domain) (hB : x ∈ B.domain),
+    B.toLinearMap ⟨x, hB⟩ - A.toLinearMap ⟨x, hA⟩ = perturbation x
+  /-- The paper's spectral separation `δ`. -/
+  gap : ℝ
+  /-- The separation is positive. -/
+  gap_pos : 0 < gap
+  /-- First application of the one-sided sine theorem. -/
+  gap_U_to_Vperp : FormBoundedSylvesterGap
+    (ClosedOperator.reducingRestriction A U reduces_A_U)
+    (ClosedOperator.reducingRestriction B Vᗮ reduces_B_V.orthogonal)
+    gap
+  /-- Second application, with `A` and `B` interchanged. -/
+  gap_V_to_Uperp : FormBoundedSylvesterGap
+    (ClosedOperator.reducingRestriction B V reduces_B_V)
+    (ClosedOperator.reducingRestriction A Uᗮ reduces_A_U.orthogonal)
+    gap
+
+namespace PaperCommonDomainSymmetricSinThetaProblem
+
+variable {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+
+/-- The common domain, read from `A` into `B`. -/
+theorem mem_domain_B (P : PaperCommonDomainSymmetricSinThetaProblem U V)
+    {x : E} (hx : x ∈ P.A.domain) : x ∈ P.B.domain := by
+  rw [← P.domain_eq]; exact hx
+
+/-- The common domain, read from `B` into `A`. -/
+theorem mem_domain_A (P : PaperCommonDomainSymmetricSinThetaProblem U V)
+    {x : E} (hx : x ∈ P.B.domain) : x ∈ P.A.domain := by
+  rw [P.domain_eq]; exact hx
+
+/-- **The perturbation is symmetric**, and this is derived rather than assumed.
+
+On the common domain the identity `⟪H x, y⟫ = ⟪x, H y⟫` is the difference of the symmetry
+relations of `B` and of `A`.  Both sides are continuous in each argument separately and
+the domain is dense, so the identity extends to the whole space in two steps. -/
+theorem perturbation_isSymmetric (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    P.perturbation.IsSymmetric := by
+  have hAs := P.selfAdjoint_A.isSymmetric
+  have hBs := P.selfAdjoint_B.isSymmetric
+  have hdense : Dense ((P.A.domain : Submodule ℂ E) : Set E) := P.A.dense_domain
+  have hcore : ∀ x ∈ ((P.A.domain : Submodule ℂ E) : Set E),
+      ∀ y ∈ ((P.A.domain : Submodule ℂ E) : Set E),
+      ⟪P.perturbation x, y⟫_ℂ = ⟪x, P.perturbation y⟫_ℂ := by
+    intro x hx y hy
+    have hxB : x ∈ P.B.domain := P.mem_domain_B hx
+    have hyB : y ∈ P.B.domain := P.mem_domain_B hy
+    rw [← P.perturbation_eq x hx hxB, ← P.perturbation_eq y hy hyB,
+      inner_sub_left, inner_sub_right,
+      hBs.toLinearMap_inner_eq ⟨x, hxB⟩ ⟨y, hyB⟩,
+      hAs.toLinearMap_inner_eq ⟨x, hx⟩ ⟨y, hy⟩]
+  -- Freeze `x` in the domain and extend in `y`.
+  have step : ∀ x ∈ ((P.A.domain : Submodule ℂ E) : Set E), ∀ y : E,
+      ⟪P.perturbation x, y⟫_ℂ = ⟪x, P.perturbation y⟫_ℂ := by
+    intro x hx
+    have hf : Continuous fun y : E => ⟪P.perturbation x, y⟫_ℂ :=
+      continuous_const.inner continuous_id
+    have hg : Continuous fun y : E => ⟪x, P.perturbation y⟫_ℂ :=
+      continuous_const.inner P.perturbation.continuous
+    exact fun y => congrFun (Continuous.ext_on hdense hf hg fun y hy => hcore x hx y hy) y
+  -- Now extend in `x`.
+  intro x y
+  have hf : Continuous fun x : E => ⟪P.perturbation x, y⟫_ℂ :=
+    P.perturbation.continuous.inner continuous_const
+  have hg : Continuous fun x : E => ⟪x, P.perturbation y⟫_ℂ :=
+    continuous_id.inner continuous_const
+  exact congrFun (Continuous.ext_on hdense hf hg fun x hx => step x hx y) x
+
+/-- Internal data for the first directed application: the ambient operator is `B`, the
+trial operator is the reducing restriction of `A` to `U`, and the complementary operator
+is the reducing restriction of `B` to `Vᗮ`. -/
+noncomputable def forwardData
+    (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := U) (G := Vᗮ) where
+  A := P.B
+  A₀ := ClosedOperator.reducingRestriction P.A U P.reduces_A_U
+  Λ₁ := ClosedOperator.reducingRestriction P.B Vᗮ P.reduces_B_V.orthogonal
+  X := U.subtypeL
+  F₁ := Vᗮ.subtypeL
+  residual := P.perturbation ∘L U.subtypeL
+  X_maps_domain := fun x =>
+    P.mem_domain_B
+      (ClosedOperator.reducingRestriction_inclusion_mem_domain P.A U P.reduces_A_U x)
+  F₁_maps_domain := fun y =>
+    ClosedOperator.reducingRestriction_inclusion_mem_domain P.B Vᗮ
+      P.reduces_B_V.orthogonal y
+  residual_eq := by
+    intro x
+    have hmemA : ((x : U) : E) ∈ P.A.domain :=
+      ClosedOperator.reducingRestriction_inclusion_mem_domain P.A U P.reduces_A_U x
+    have hint :
+        (U.subtypeL
+            ((ClosedOperator.reducingRestriction P.A U P.reduces_A_U).toLinearMap x) : E) =
+          P.A.toLinearMap ⟨((x : U) : E), hmemA⟩ :=
+      (ClosedOperator.reducingRestriction_inclusion_intertwines P.A U P.reduces_A_U x).symm
+    rw [hint]
+    exact P.perturbation_eq _ hmemA (P.mem_domain_B hmemA)
+  intertwines :=
+    ClosedOperator.reducingRestriction_inclusion_intertwines P.B Vᗮ
+      P.reduces_B_V.orthogonal
+
+/-- Internal data for the reversed application, with `A` and `B` interchanged. -/
+noncomputable def reverseData
+    (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := V) (G := Uᗮ) where
+  A := P.A
+  A₀ := ClosedOperator.reducingRestriction P.B V P.reduces_B_V
+  Λ₁ := ClosedOperator.reducingRestriction P.A Uᗮ P.reduces_A_U.orthogonal
+  X := V.subtypeL
+  F₁ := Uᗮ.subtypeL
+  residual := (-P.perturbation) ∘L V.subtypeL
+  X_maps_domain := fun x =>
+    P.mem_domain_A
+      (ClosedOperator.reducingRestriction_inclusion_mem_domain P.B V P.reduces_B_V x)
+  F₁_maps_domain := fun y =>
+    ClosedOperator.reducingRestriction_inclusion_mem_domain P.A Uᗮ
+      P.reduces_A_U.orthogonal y
+  residual_eq := by
+    intro x
+    have hmemB : ((x : V) : E) ∈ P.B.domain :=
+      ClosedOperator.reducingRestriction_inclusion_mem_domain P.B V P.reduces_B_V x
+    have hmemA : ((x : V) : E) ∈ P.A.domain := P.mem_domain_A hmemB
+    have hint :
+        (V.subtypeL
+            ((ClosedOperator.reducingRestriction P.B V P.reduces_B_V).toLinearMap x) : E) =
+          P.B.toLinearMap ⟨((x : V) : E), hmemB⟩ :=
+      (ClosedOperator.reducingRestriction_inclusion_intertwines P.B V P.reduces_B_V x).symm
+    rw [hint]
+    have hPE := P.perturbation_eq ((x : V) : E) hmemA hmemB
+    have : P.A.toLinearMap ⟨((x : V) : E), hmemA⟩ -
+        P.B.toLinearMap ⟨((x : V) : E), hmemB⟩ = -P.perturbation ((x : V) : E) := by
+      rw [← hPE]; abel
+    exact this
+  intertwines :=
+    ClosedOperator.reducingRestriction_inclusion_intertwines P.A Uᗮ
+      P.reduces_A_U.orthogonal
+
+/-- The first exact cross-projection block.  It is determined by the two subspaces alone;
+the problem argument is carried only so that the estimates below can be stated with the
+same field notation as the bounded module. -/
+def forwardSineBlock (_P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    E →L[ℂ] E :=
+  Vᗮ.starProjection ∘L U.starProjection
+
+/-- The reversed exact cross-projection block, likewise determined by the two subspaces
+alone. -/
+def reverseSineBlock (_P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    E →L[ℂ] E :=
+  Uᗮ.starProjection ∘L V.starProjection
+
+/-- The first projected perturbation block from the proof of Proposition 6.1. -/
+def forwardResidualBlock (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    E →L[ℂ] E :=
+  Vᗮ.starProjection ∘L P.perturbation ∘L U.starProjection
+
+/-- The second projected perturbation block. -/
+def reverseResidualBlock (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    E →L[ℂ] E :=
+  V.starProjection ∘L P.perturbation ∘L Uᗮ.starProjection
+
+/-- First one-sided estimate simultaneously for every finite Ky Fan gauge. -/
+theorem forward_all_kyFan
+    (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    ∀ k,
+      P.gap * kyFanApproximationGauge k P.forwardSineBlock ≤
+        kyFanApproximationGauge k P.forwardResidualBlock := by
+  intro k
+  by_cases hk0 : k = 0
+  · subst k
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+  · have hk : 0 < k := Nat.pos_of_ne_zero hk0
+    let N := KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
+    let D := P.forwardData
+    have hA0 : D.A₀.IsSelfAdjoint :=
+      ClosedOperator.reducingRestriction_isSelfAdjoint P.A U P.reduces_A_U P.selfAdjoint_A
+    have hL : D.Λ₁.IsSelfAdjoint :=
+      ClosedOperator.reducingRestriction_isSelfAdjoint P.B Vᗮ
+        P.reduces_B_V.orthogonal P.selfAdjoint_B
+    have hEq := unbounded_adjoint_residual_block_identity D P.selfAdjoint_B hA0 hL
+    have hraw := davisKahan1970_sylvester_complex N hA0 hL P.gap_pos
+      P.gap_U_to_Vperp hEq
+      (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk
+        (-(D.residual.adjoint ∘L D.F₁)))
+    -- The ambient transport lemma produces the *adjoint* orientation of each block, so
+    -- both comparisons are heterogeneous and both pick up one adjoint step.  Ky Fan
+    -- gauges are adjoint-invariant, so nothing is lost.
+    have hsine : SameApproximationSingularSequence
+        (U.starProjection ∘L Vᗮ.starProjection)
+        (D.X.adjoint ∘L D.F₁) := by
+      simpa [D, forwardData, Submodule.adjoint_subtypeL,
+        Submodule.starProjection, ContinuousLinearMap.comp_assoc] using
+        sameApproximationSingularValues_ambientSubspaceBlock
+          Vᗮ U (D.X.adjoint ∘L D.F₁)
+    have hsineAdj : P.forwardSineBlock =
+        (U.starProjection ∘L Vᗮ.starProjection).adjoint := by
+      rw [ContinuousLinearMap.adjoint_comp,
+        (isSelfAdjoint_starProjection U).adjoint_eq,
+        (isSelfAdjoint_starProjection Vᗮ).adjoint_eq]
+      rfl
+    have hres : SameApproximationSingularSequence
+        (-P.forwardResidualBlock.adjoint)
+        (-(D.residual.adjoint ∘L D.F₁)) := by
+      simpa [D, forwardData, forwardResidualBlock,
+        Submodule.adjoint_subtypeL, Submodule.adjoint_orthogonalProjectionOnto,
+        Submodule.starProjection,
+        ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.comp_assoc,
+        map_neg] using
+        sameApproximationSingularValues_ambientSubspaceBlock
+          Vᗮ U (-(D.residual.adjoint ∘L D.F₁))
+    have hgaugeSine : kyFanApproximationGauge k P.forwardSineBlock =
+        kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
+      rw [hsineAdj, kyFanApproximationGauge_adjoint,
+        hsine.kyFanApproximationGauge_eq k]
+    have hgaugeRes : kyFanApproximationGauge k P.forwardResidualBlock =
+        kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) := by
+      rw [← kyFanApproximationGauge_adjoint k P.forwardResidualBlock,
+        ← kyFanApproximationGauge_neg k P.forwardResidualBlock.adjoint,
+        hres.kyFanApproximationGauge_eq k]
+    simpa [N, KyFanDominantIdealFamily.kyFan_gauge,
+      hgaugeSine, hgaugeRes] using hraw.2
+
+/-- Reversed one-sided estimate simultaneously for every finite Ky Fan gauge. -/
+theorem reverse_all_kyFan
+    (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    ∀ k,
+      P.gap * kyFanApproximationGauge k P.reverseSineBlock ≤
+        kyFanApproximationGauge k P.reverseResidualBlock := by
+  intro k
+  by_cases hk0 : k = 0
+  · subst k
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+  · have hk : 0 < k := Nat.pos_of_ne_zero hk0
+    let N := KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
+    let D := P.reverseData
+    have hA0 : D.A₀.IsSelfAdjoint :=
+      ClosedOperator.reducingRestriction_isSelfAdjoint P.B V P.reduces_B_V P.selfAdjoint_B
+    have hL : D.Λ₁.IsSelfAdjoint :=
+      ClosedOperator.reducingRestriction_isSelfAdjoint P.A Uᗮ
+        P.reduces_A_U.orthogonal P.selfAdjoint_A
+    have hEq := unbounded_adjoint_residual_block_identity D P.selfAdjoint_A hA0 hL
+    have hraw := davisKahan1970_sylvester_complex N hA0 hL P.gap_pos
+      P.gap_V_to_Uperp hEq
+      (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk
+        (-(D.residual.adjoint ∘L D.F₁)))
+    -- Mirror of the forward case: the ambient transport lemma again produces the adjoint
+    -- orientation, and Ky Fan gauges are adjoint-invariant.
+    have hsine : SameApproximationSingularSequence
+        (V.starProjection ∘L Uᗮ.starProjection)
+        (D.X.adjoint ∘L D.F₁) := by
+      simpa [D, reverseData, Submodule.adjoint_subtypeL,
+        Submodule.starProjection, ContinuousLinearMap.comp_assoc] using
+        sameApproximationSingularValues_ambientSubspaceBlock
+          Uᗮ V (D.X.adjoint ∘L D.F₁)
+    have hsineAdj : P.reverseSineBlock =
+        (V.starProjection ∘L Uᗮ.starProjection).adjoint := by
+      rw [ContinuousLinearMap.adjoint_comp,
+        (isSelfAdjoint_starProjection V).adjoint_eq,
+        (isSelfAdjoint_starProjection Uᗮ).adjoint_eq]
+      rfl
+    -- Here the perturbation is symmetric, so the ambient block comes out in the original
+    -- orientation rather than the adjoint one.
+    have hadjH : P.perturbation.adjoint = P.perturbation :=
+      P.perturbation_isSymmetric.isSelfAdjoint.adjoint_eq
+    have hres : SameApproximationSingularSequence
+        P.reverseResidualBlock
+        (-(D.residual.adjoint ∘L D.F₁)) := by
+      simpa [D, reverseData, reverseResidualBlock, hadjH,
+        Submodule.adjoint_subtypeL, Submodule.adjoint_orthogonalProjectionOnto,
+        Submodule.starProjection,
+        ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.comp_assoc,
+        map_neg] using
+        sameApproximationSingularValues_ambientSubspaceBlock
+          Uᗮ V (-(D.residual.adjoint ∘L D.F₁))
+    have hgaugeSine : kyFanApproximationGauge k P.reverseSineBlock =
+        kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
+      rw [hsineAdj, kyFanApproximationGauge_adjoint,
+        hsine.kyFanApproximationGauge_eq k]
+    have hgaugeRes : kyFanApproximationGauge k P.reverseResidualBlock =
+        kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) :=
+      hres.kyFanApproximationGauge_eq k
+    simpa [N, KyFanDominantIdealFamily.kyFan_gauge,
+      hgaugeSine, hgaugeRes] using hraw.2
+
+/-- Ky Fan form of the common-domain symmetric sine theorem, before universal Fan
+dominance. -/
+theorem symmetric_all_kyFan
+    (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    ∀ k,
+      P.gap * kyFanApproximationGauge k
+          (TauCeti.DavisKahanExt.paperSinAngleOperatorC U V) ≤
+        kyFanApproximationGauge k P.perturbation := by
+  intro k
+  have hadjH : P.perturbation.adjoint = P.perturbation :=
+    P.perturbation_isSymmetric.isSelfAdjoint.adjoint_eq
+  have hUperp : Uᗮᗮ = U := Submodule.orthogonal_orthogonal U
+  have hgapNorm : ‖((P.gap : ℝ) : ℂ)‖ = P.gap := by
+    simp [abs_of_pos P.gap_pos]
+  -- Lemma 6.1 is applied to the *scaled identity*, not to a scaled perturbation: the two
+  -- one-sided estimates bound `gap` times a pure projection product, and
+  -- `paperProjectionBlock Ω Γ (gap • id)` is exactly `gap` times that product.
+  have hcombine := paperLemma61_all_kyFan Uᗮ V
+    (((P.gap : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E)
+    (((P.gap : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E)
+    P.perturbation P.perturbation
+    (fun j => by
+      have hrev := P.reverse_all_kyFan j
+      have hblockSine :
+          paperProjectionBlock Uᗮ V (((P.gap : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E) =
+            ((P.gap : ℝ) : ℂ) • P.reverseSineBlock := by
+        ext x; simp [paperProjectionBlock, reverseSineBlock]
+      have hblockRes :
+          paperProjectionBlock Uᗮ V P.perturbation =
+            P.reverseResidualBlock.adjoint := by
+        simp [paperProjectionBlock, reverseResidualBlock,
+          ContinuousLinearMap.adjoint_comp, hadjH,
+          (isSelfAdjoint_starProjection V).adjoint_eq,
+          (isSelfAdjoint_starProjection Uᗮ).adjoint_eq,
+          ContinuousLinearMap.comp_assoc]
+      rw [hblockSine, hblockRes, kyFanApproximationGauge_smul,
+        hgapNorm, kyFanApproximationGauge_adjoint]
+      exact hrev)
+    (fun j => by
+      have hfwd := P.forward_all_kyFan j
+      have hblockSine :
+          paperProjectionBlock Uᗮᗮ Vᗮ (((P.gap : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E) =
+            ((P.gap : ℝ) : ℂ) • P.forwardSineBlock.adjoint := by
+        simp only [hUperp]
+        ext x
+        simp [paperProjectionBlock, forwardSineBlock,
+          ContinuousLinearMap.adjoint_comp,
+          (isSelfAdjoint_starProjection U).adjoint_eq,
+          (isSelfAdjoint_starProjection Vᗮ).adjoint_eq]
+      have hblockRes :
+          paperProjectionBlock Uᗮᗮ Vᗮ P.perturbation =
+            P.forwardResidualBlock.adjoint := by
+        simp only [hUperp]
+        simp [paperProjectionBlock, forwardResidualBlock,
+          ContinuousLinearMap.adjoint_comp, hadjH,
+          (isSelfAdjoint_starProjection U).adjoint_eq,
+          (isSelfAdjoint_starProjection Vᗮ).adjoint_eq,
+          ContinuousLinearMap.comp_assoc]
+      rw [hblockSine, hblockRes, kyFanApproximationGauge_smul,
+        hgapNorm, kyFanApproximationGauge_adjoint,
+        kyFanApproximationGauge_adjoint]
+      exact hfwd) k
+  have hsine := paperCrossSineSum_same_literalSin U V
+  have hres := paperDiagonalPair_all_kyFan_le Uᗮ V P.perturbation k
+  have hcross :
+      paperProjectionBlock Uᗮ V (((P.gap : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E) +
+          paperProjectionBlock Uᗮᗮ Vᗮ
+            (((P.gap : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E) =
+        ((P.gap : ℝ) : ℂ) • paperCrossSineSum U V := by
+    simp only [hUperp]
+    ext x
+    simp [paperProjectionBlock, paperCrossSineSum, smul_add]
+  rw [hcross] at hcombine
+  calc
+    P.gap * kyFanApproximationGauge k
+        (TauCeti.DavisKahanExt.paperSinAngleOperatorC U V) =
+      kyFanApproximationGauge k
+        (((P.gap : ℝ) : ℂ) • paperCrossSineSum U V) := by
+      rw [kyFanApproximationGauge_smul, hgapNorm,
+        hsine.kyFanApproximationGauge_eq]
+    _ ≤ kyFanApproximationGauge k
+        (paperDiagonalPair Uᗮ V P.perturbation) := hcombine
+    _ ≤ kyFanApproximationGauge k P.perturbation := hres
+
+/-- **Davis--Kahan 1970, Proposition 6.1 on a common dense domain**, for every normalized
+unitarily invariant norm in the source sense.
+
+`A` and `B` are unbounded closed self-adjoint operators sharing one dense domain, and the
+paper's `H` is the bounded operator representing `B - A` there.  This is the relaxation
+the Appendix to Section 6 licenses when it says the hypotheses of Proposition 6.1 may be
+relaxed in the same way as those of Theorem 6.1. -/
+theorem result_every_unitarilyInvariantNorm
+    (P : PaperCommonDomainSymmetricSinThetaProblem U V)
+    (N : PaperUnitaryInvariantNorm) (hH : N.Mem P.perturbation) :
+    N.Mem (TauCeti.DavisKahanExt.paperSinAngleOperatorC U V) ∧
+      P.gap * N.gauge
+          (TauCeti.DavisKahanExt.paperSinAngleOperatorC U V) ≤
+        N.gauge P.perturbation :=
+  N.mul_gauge_le_of_all_mul_kyFan_le P.gap_pos hH P.symmetric_all_kyFan
+
+/-- **The bounded Proposition 6.1 inputs are an instance of the common-domain ones**, at
+the full domain.  This is what makes the theorem above a genuine relaxation rather than a
+parallel statement: no hypothesis of `PaperSymmetricSinThetaProblem` is dropped, and the
+domain hypotheses are discharged by `⊤ = ⊤`. -/
+noncomputable def ofBounded (P : PaperSymmetricSinThetaProblem (E := E)) :
+    PaperCommonDomainSymmetricSinThetaProblem P.U P.V where
+  A := ClosedOperator.ofBounded P.A
+  B := ClosedOperator.ofBounded P.B
+  selfAdjoint_A := ClosedOperator.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A
+  selfAdjoint_B := ClosedOperator.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B
+  reduces_A_U := ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U
+  reduces_B_V := ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V
+  perturbation := P.perturbation
+  domain_eq := rfl
+  perturbation_eq := by intro x _ _; rfl
+  gap := P.gap
+  gap_pos := P.gap_pos
+  gap_U_to_Vperp := P.gap_U_to_Vperp
+  gap_V_to_Uperp := P.gap_V_to_Uperp
+
+/-- The bounded instance keeps the paper's perturbation `H = B - A`. -/
+@[simp] theorem ofBounded_perturbation (P : PaperSymmetricSinThetaProblem (E := E)) :
+    (ofBounded P).perturbation = P.perturbation := rfl
+
+/-- The bounded instance keeps the paper's spectral separation. -/
+@[simp] theorem ofBounded_gap (P : PaperSymmetricSinThetaProblem (E := E)) :
+    (ofBounded P).gap = P.gap := rfl
+
+end PaperCommonDomainSymmetricSinThetaProblem
+
+end
+
+end ExactSinTheta
+end Experimental
+end DavisKahan
+end TauCeti

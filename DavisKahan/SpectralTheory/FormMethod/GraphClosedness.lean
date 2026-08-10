@@ -38,23 +38,24 @@ noncomputable section
 
 universe u v
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
-variable {V : Type v} [NormedAddCommGroup V] [InnerProductSpace ℂ V]
+variable {V : Type v} [NormedAddCommGroup V] [InnerProductSpace 𝕜 V]
   [CompleteSpace V]
 
 namespace FourthOrderTraceModel
 
 /-- Graph embedding of the free trace kernel into the product Hilbert space. -/
 noncomputable def freeGraphMap
-    (D : FourthOrderTraceModel (H := H) (V := V)) :
-    D.freeSubspace →L[ℂ] H × H :=
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
+    D.freeSubspace →L[𝕜] H × H :=
   D.freeEmbed.prod D.freeFourth
 
 omit [CompleteSpace H] [CompleteSpace V] in
 /-- The free graph map, unfolded. -/
 @[simp] theorem freeGraphMap_apply
-    (D : FourthOrderTraceModel (H := H) (V := V))
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.freeSubspace) :
     D.freeGraphMap x = (D.freeEmbed x, D.freeFourth x) := rfl
 
@@ -62,7 +63,7 @@ omit [CompleteSpace H] [CompleteSpace V] in
 /-- The ambient image of the inverse range equivalence is the original domain
 vector. -/
 @[simp] theorem freeEmbed_freeAmbientInverse
-    (D : FourthOrderTraceModel (H := H) (V := V))
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.freeAmbientDomain) :
     D.freeEmbed (D.freeAmbientInverse x) = (x : H) := by
   have h := D.freeRangeEquiv.apply_symm_apply x
@@ -72,7 +73,7 @@ omit [CompleteSpace H] [CompleteSpace V] in
 /-- The fourth derivative transported to the ambient domain agrees with the
 free fourth derivative of the recovered graph-space vector. -/
 @[simp] theorem freeFourthAmbient_inverse
-    (D : FourthOrderTraceModel (H := H) (V := V))
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.freeAmbientDomain) :
     D.freeFourthAmbient x = D.freeFourth (D.freeAmbientInverse x) := by
   rfl
@@ -81,7 +82,7 @@ omit [CompleteSpace H] [CompleteSpace V] in
 /-- The graph-space range and the ambient partial-operator graph are the same
 subset of `H × H`. -/
 theorem range_freeGraphMap_eq_ambientGraph
-    (D : FourthOrderTraceModel (H := H) (V := V)) :
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
     Set.range D.freeGraphMap =
       Set.range (fun x : D.freeAmbientDomain =>
         ((x : H), D.freeFourthAmbient x)) := by
@@ -103,7 +104,7 @@ theorem range_freeGraphMap_eq_ambientGraph
 omit [CompleteSpace H] in
 /-- An anti-Lipschitz graph embedding has closed ambient operator graph. -/
 theorem isClosed_ambientGraph_of_antilipschitz
-    (D : FourthOrderTraceModel (H := H) (V := V))
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
     {K : NNReal}
     (hanti : AntilipschitzWith K D.freeGraphMap) :
     IsClosed (Set.range fun x : D.freeAmbientDomain =>
@@ -115,7 +116,7 @@ omit [CompleteSpace H] [CompleteSpace V] in
 /-- A lower graph-norm estimate gives the anti-Lipschitz hypothesis needed for
 closedness. -/
 theorem freeGraphMap_antilipschitz_of_bound
-    (D : FourthOrderTraceModel (H := H) (V := V))
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
     {c : ℝ} (hc : 0 < c)
     (hbound : ∀ x : D.freeSubspace, c * ‖x‖ ≤ ‖D.freeGraphMap x‖) :
     AntilipschitzWith (Real.toNNReal c)⁻¹ D.freeGraphMap := by
@@ -130,7 +131,7 @@ omit [CompleteSpace H] in
 /-- A positive lower graph-norm estimate proves the transported operator graph
 closed. -/
 theorem isClosed_ambientGraph_of_graphNorm_bound
-    (D : FourthOrderTraceModel (H := H) (V := V))
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
     {c : ℝ} (hc : 0 < c)
     (hbound : ∀ x : D.freeSubspace, c * ‖x‖ ≤ ‖D.freeGraphMap x‖) :
     IsClosed (Set.range fun x : D.freeAmbientDomain =>
@@ -142,7 +143,7 @@ omit [CompleteSpace H] in
 /-- A graph norm normalized so that `‖x‖ ≤ ‖(Jx,D⁴x)‖` immediately gives
 closedness. -/
 theorem isClosed_ambientGraph_of_normalized_graphNorm
-    (D : FourthOrderTraceModel (H := H) (V := V))
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
     (hbound : ∀ x : D.freeSubspace, ‖x‖ ≤ ‖D.freeGraphMap x‖) :
     IsClosed (Set.range fun x : D.freeAmbientDomain =>
       ((x : H), D.freeFourthAmbient x)) := by
@@ -152,11 +153,11 @@ theorem isClosed_ambientGraph_of_normalized_graphNorm
 /-- Build the closed free-beam operator directly from dense range and a graph
 norm lower bound. -/
 noncomputable def toClosedOperatorOfGraphNorm
-    (D : FourthOrderTraceModel (H := H) (V := V))
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
     (hdense : DenseRange D.freeEmbed)
     {c : ℝ} (hc : 0 < c)
     (hbound : ∀ x : D.freeSubspace, c * ‖x‖ ≤ ‖D.freeGraphMap x‖) :
-    DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H) :=
+    DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H) :=
   D.toClosedOperator
     (D.dense_freeAmbientDomain hdense)
     (D.isClosed_ambientGraph_of_graphNorm_bound hc hbound)
