@@ -229,6 +229,92 @@ theorem tsum_displacementAngleSineSq_ge_of_mem_real
     ENNReal.ofReal_le_ofReal
       (displacementAngleSineSq_ge_real U V W hWunitary hWmap (hb i) (hbnorm i))
 
+/-! ### The printed right-hand side over `ℝ`
+
+`sum_displacementAngleSineSq_ge_of_mem_real` bounds the competitor's energy below
+by `∑ᵢ (1 - ‖C_ℝ bᵢ‖²)`; the paper prints `∑ₖ sin² θₖ`.  The identification is the
+one used over `ℂ`, transported by the same complexification the rest of this
+module uses: `‖C_ℝ x‖ = ‖P_V x‖` on `U`, then the Pythagorean basis reading
+`TauCeti.sum_sq_principalSines_eq_sum_one_sub_sq_norm_projection`, which is
+`RCLike`-generic and so applies at `ℝ` unchanged.
+
+Two traps recorded on the complex side apply verbatim here.  Sorted decreasingly,
+`sin² θ` is the **reverse** of `1 - cos² θ`, so no termwise cosine-to-sine
+identity is available — only the sums agree.  And the `dim U - tr((C|_U)²)` route
+would need the eigenvalues of the compression `C|_U`, which nothing supplies:
+`∑ᵢ ‖C bᵢ‖² = tr(C⋆C)` holds for a basis of the *whole* space, not for a basis of
+`U`. -/
+
+/-- **On a source vector the real Halmos cosine has the length of the target
+projection**: `‖C_ℝ x‖ = ‖P_V x‖` for `x ∈ U`.
+
+This is `norm_absoluteValue_apply_eq_norm_projection` read on the real copy: the
+complexified real modulus is the modulus of the complexified pair, and both the
+projection and the vector complexify isometrically. -/
+theorem norm_canonicalAbsoluteValueR_apply_eq_norm_projection {x : E} (hx : x ∈ U) :
+    ‖Experimental.canonicalAbsoluteValueR U V x‖ = ‖DavisKahan.projection V x‖ := by
+  have h := MathAhead.Section4.norm_absoluteValue_apply_eq_norm_projection
+    (complexifySubmodule U) (complexifySubmodule V)
+    ((ofReal_mem_complexifySubmodule_iff U x).2 hx)
+  rw [← Experimental.complexify_canonicalAbsoluteValueR,
+    ← Experimental.complexify_projection, complexify_ofReal, complexify_ofReal,
+    ofReal.norm_map, ofReal.norm_map] at h
+  exact h
+
+/-- **The right-hand side of Proposition 4.2 over `ℝ` is `∑ₖ sin² θₖ`.**
+
+For every orthonormal basis `b` of a real `U`,
+
+  `∑ᵢ (1 - ‖C_ℝ bᵢ‖²) = ∑ₖ sin² θₖ`,
+
+with `C_ℝ` the real positive Halmos cosine and `sin θₖ` the principal sines of
+`(U, V)` — the singular values of `P_{Vᗮ} P_U`.  In particular the left side does
+not depend on the basis, which is what the paper's basis-free statement asserts.
+
+This is **a narrowing** of `sum_displacementAngleSineSq_ge_of_mem_real`, which
+needs no finite dimensionality and accepts any index type: the principal-angle
+*sequence* is a finite-dimensional object, so the printed right-hand side can only
+be written once `E` is finite dimensional and the basis is indexed by
+`Fin (finrank ℝ U)`.  The inequality itself is unchanged and remains available in
+the general form. -/
+theorem sum_one_sub_sq_norm_canonicalAbsoluteValueR_eq_sum_sq_principalSines
+    [FiniteDimensional ℝ E]
+    (b : OrthonormalBasis (Fin (Module.finrank ℝ U)) ℝ U) :
+    ∑ i, (1 - ‖Experimental.canonicalAbsoluteValueR U V ((b i : U) : E)‖ ^ 2) =
+      ∑ i : Fin (Module.finrank ℝ U),
+        TauCeti.principalSines U V (i : ℕ) ^ 2 := by
+  rw [TauCeti.sum_sq_principalSines_eq_sum_one_sub_sq_norm_projection U V b]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [norm_canonicalAbsoluteValueR_apply_eq_norm_projection U V (b i).2]
+  -- the two spellings of the orthogonal projector: the bounded-operator
+  -- `DavisKahan.projection` and the linear-map `TauCeti.projection`
+  rfl
+
+/-- **Davis--Kahan 1970, Proposition 4.2 over a real Hilbert space, with the
+printed right-hand side.**
+
+For every orthonormal basis of `U` and every orthogonal `W` carrying `U` onto `V`,
+
+  `∑ᵢ sin²(bᵢ, W bᵢ)  ≥  ∑ₖ sin² θₖ`.
+
+This is `sum_displacementAngleSineSq_ge_of_mem_real` composed with the
+identification `sum_one_sub_sq_norm_canonicalAbsoluteValueR_eq_sum_sq_principalSines`;
+writing the right-hand side in the printed variables is **a narrowing** to finite
+dimensions, for the reason given on the identification lemma. -/
+theorem sum_displacementAngleSineSqR_ge_sum_sq_principalSines
+    [FiniteDimensional ℝ E]
+    (b : OrthonormalBasis (Fin (Module.finrank ℝ U)) ℝ U) (W : E →L[ℝ] E)
+    (hWunitary : W ∈ unitary (E →L[ℝ] E))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    ∑ i : Fin (Module.finrank ℝ U), TauCeti.principalSines U V (i : ℕ) ^ 2 ≤
+      ∑ i, displacementAngleSineSqR W ((b i : U) : E) := by
+  rw [← sum_one_sub_sq_norm_canonicalAbsoluteValueR_eq_sum_sq_principalSines U V b]
+  refine sum_displacementAngleSineSq_ge_of_mem_real U V W hWunitary hWmap
+    (fun i => ((b i : U) : E)) (fun i => (b i).2) (fun i => ?_) Finset.univ
+  have h : ‖((b i : U) : E)‖ = ‖(b i : U)‖ := rfl
+  rw [h]
+  exact b.orthonormal.1 i
+
 /-! ### Proposition 4.3 -/
 
 /-- **Davis--Kahan 1970, Proposition 4.3, over a real Hilbert space of arbitrary
