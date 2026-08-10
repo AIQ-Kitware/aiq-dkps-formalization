@@ -356,17 +356,21 @@ theorem conjugateOperator_complexify (A : E →L[ℝ] E) :
   intro z
   apply RealComplexification.ext <;> simp [conjugateOperator_apply]
 
-/-- Continuous real functional calculus of a conjugation-fixed self-adjoint
-operator remains conjugation-fixed. -/
-theorem conjugateOperator_cfc_eq
+/-- **The bundled functional calculus of a conjugation-fixed self-adjoint operator lands in
+the fixed-point subalgebra.**  Stated for `cfcHom`, the `⋆`-algebra homomorphism itself, rather
+than for a single symbol: this is what a *descent* of the calculus needs, and the symbol-level
+statements `conjugateOperator_cfc_eq` and `conjugateOperator_cfc` below are corollaries.
+
+The proof is the uniqueness of the calculus: `conjugateOperatorHom.comp (cfcHom hC)` is another
+continuous real `⋆`-algebra homomorphism sending the restricted identity to `C`. -/
+theorem conjugateOperator_cfcHom
     (C : RealComplexification E →L[ℂ] RealComplexification E) (hC : IsSelfAdjoint C)
-    (hfix : conjugateOperator C = C) (f : ℝ → ℝ)
-    (hf : ContinuousOn f (spectrum ℝ C)) :
-    conjugateOperator (cfc f C) = cfc f C := by
+    (hfix : conjugateOperator C = C) (g : C(spectrum ℝ C, ℝ)) :
+    conjugateOperator (cfcHom hC g) = cfcHom hC g := by
   let φ : C(spectrum ℝ C, ℝ) →⋆ₐ[ℝ] (RealComplexification E →L[ℂ] RealComplexification E) :=
     conjugateOperatorHom.comp (cfcHom hC)
-  have hφcont : Continuous φ := by
-    exact continuous_conjugateOperatorHom.comp (cfcHom_continuous hC)
+  have hφcont : Continuous φ :=
+    continuous_conjugateOperatorHom.comp (cfcHom_continuous hC)
   have hφid : φ ((ContinuousMap.id ℝ).restrict (spectrum ℝ C)) = C := by
     change conjugateOperator
       (cfcHom hC ((ContinuousMap.id ℝ).restrict (spectrum ℝ C))) = C
@@ -374,12 +378,19 @@ theorem conjugateOperator_cfc_eq
     exact hfix
   have heq : cfcHom hC = φ :=
     cfcHom_eq_of_continuous_of_map_id hC φ hφcont hφid
-  rw [cfc_apply f C hC hf]
-  let g : C(spectrum ℝ C, ℝ) := ⟨fun x => f x.1, hf.domRestrict⟩
-  change conjugateOperator (cfcHom hC g) = cfcHom hC g
   have happ := DFunLike.congr_fun heq g
   change cfcHom hC g = conjugateOperator (cfcHom hC g) at happ
   exact happ.symm
+
+/-- Continuous real functional calculus of a conjugation-fixed self-adjoint
+operator remains conjugation-fixed. -/
+theorem conjugateOperator_cfc_eq
+    (C : RealComplexification E →L[ℂ] RealComplexification E) (hC : IsSelfAdjoint C)
+    (hfix : conjugateOperator C = C) (f : ℝ → ℝ)
+    (hf : ContinuousOn f (spectrum ℝ C)) :
+    conjugateOperator (cfc f C) = cfc f C := by
+  rw [cfc_apply f C hC hf]
+  exact conjugateOperator_cfcHom C hC hfix _
 
 /-! ## Descent of conjugation-fixed operators -/
 
@@ -453,6 +464,73 @@ theorem complexify_gram (T : E →L[ℝ] F) :
     complexify (T.adjoint ∘L T) =
       (complexify T).adjoint ∘L complexify T := by
   rw [complexify_comp, complexify_adjoint]
+
+/-! ## Complexification as a real `⋆`-algebra homomorphism
+
+`Complexification/Basic.lean` supplies the additive and composition laws; `complexify_comp` and
+`complexify_id` are the ring laws once `ContinuousLinearMap.mul_def` is unfolded.  Adding
+`complexify_adjoint` bundles `complexify` into a unital `⋆`-algebra map over `ℝ`, which is the
+form the real spectral theory needs.
+
+**The `⋆`-algebra structure maps are not re-exported as separate lemmas here.**  Three
+`DavisKahan` modules already declare `complexify_mul`, `complexify_one` and `complexify_star` in
+three different namespaces, and several of their consumers use the bare names under an `open` of
+this namespace; a fourth copy here would make those uses ambiguous.  Use
+`map_mul complexifyStarAlgHom`, `map_one`, `map_star` instead, and see the note in
+`RealContinuousFunctionalCalculus.lean` on consolidating the three. -/
+
+omit [CompleteSpace E] in
+/-- Complexification intertwines the real algebra map of `E →L[ℝ] E` with the *complex* algebra
+map of the complexified operator algebra, along `ℝ → ℂ`.
+
+Stated against `algebraMap ℂ` rather than `algebraMap ℝ` because the complexified operator
+algebra carries **two** real algebra structures: `ContinuousLinearMap.algebra`, which is global
+and sends `r` to the ambient `r • 1`, and the scoped `complexOperatorRealAlgebra`, which sends
+`r` to `(r : ℂ) • 1`.  They are propositionally but not definitionally equal.  The complex
+algebra map is unambiguous, so it is the one to phrase transport against. -/
+theorem complexify_algebraMapComplex (r : ℝ) :
+    complexify (algebraMap ℝ (E →L[ℝ] E) r) =
+      algebraMap ℂ (RealComplexification E →L[ℂ] RealComplexification E) (r : ℂ) := by
+  have hone : complexify (1 : E →L[ℝ] E) = 1 := complexify_id
+  rw [Algebra.algebraMap_eq_smul_one, Algebra.algebraMap_eq_smul_one,
+    complexify_real_smul, hone]
+
+omit [CompleteSpace E] in
+/-- The scoped real algebra structure on the complexified operator algebra factors the complex
+one through `ℝ → ℂ`; this holds by definition of `Algebra.complexToReal`.  It is what makes
+`spectrum ℝ` on that algebra the real trace of `spectrum ℂ`. -/
+theorem algebraMap_complexOperator (r : ℝ) :
+    algebraMap ℝ (RealComplexification E →L[ℂ] RealComplexification E) r =
+      algebraMap ℂ (RealComplexification E →L[ℂ] RealComplexification E) (r : ℂ) := rfl
+
+omit [CompleteSpace E] in
+/-- Complexification intertwines the two *real* algebra maps, for the scoped real structure on
+the target. -/
+theorem complexify_algebraMapReal (r : ℝ) :
+    complexify (algebraMap ℝ (E →L[ℝ] E) r) =
+      algebraMap ℝ (RealComplexification E →L[ℂ] RealComplexification E) r := by
+  rw [algebraMap_complexOperator, complexify_algebraMapComplex]
+
+/-- **Complexification bundled as a unital real `⋆`-algebra homomorphism.**  Its target carries
+the scoped real algebra structure `complexOperatorRealAlgebra`, so a consumer needs
+`open scoped TauCeti.RealComplexification`. -/
+@[expose]
+noncomputable def complexifyStarAlgHom :
+    (E →L[ℝ] E) →⋆ₐ[ℝ] (RealComplexification E →L[ℂ] RealComplexification E) where
+  toFun := complexify
+  map_one' := complexify_id
+  map_mul' A B := by
+    simpa only [ContinuousLinearMap.mul_def] using complexify_comp A B
+  map_zero' := complexify_zero
+  map_add' := complexify_add
+  commutes' := complexify_algebraMapReal
+  map_star' A := by
+    simpa only [ContinuousLinearMap.star_eq_adjoint] using complexify_adjoint A
+
+/-- `complexifyStarAlgHom` acts by `complexify`. -/
+@[simp]
+theorem complexifyStarAlgHom_apply (A : E →L[ℝ] E) :
+    complexifyStarAlgHom A = complexify A := rfl
 
 /-! ## The fixed-point subalgebra is closed under the whole spectral calculus
 
