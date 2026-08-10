@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Frontier.Section8Residual
+import DavisKahan.Geometry.Halmos.CrossedDefectGap
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 
 /-!
@@ -87,10 +88,27 @@ statement carries the finite rank convention.  The degenerate `P = ⊥`, `Q = �
 example recorded in `Section8Perturbation.lean` is the finite instance of the
 same phenomenon, there excluded by (1.5) itself.
 
+## The dimension-free reading, under Section 3's standing assumption (3.5)
+
+The paragraph above is about (1.5) and remains correct: neither reading of (1.5)
+identifies the two directed gaps.  Section 3's *other* standing assumption does.
+(3.5) asks that the two crossed defects `P ⊓ Qᗮ` and `Pᗮ ⊓ Q` carry the same
+data; `subspaceGap_eq_directedGap_of_crossedDefects` and
+`maximalAngle_lt_pi_div_four_of_crossedDefects` deliver the printed conclusion
+from it with **no** dimension hypothesis of any kind.
+
+The counterexample displayed above is not evidence against that statement, and
+this is the point on which a later agent is most likely to go wrong: it has
+`P ⊓ Qᗮ = ⊥` and `Pᗮ ⊓ Q = span {e₀} ≠ ⊥`, so it fails (3.5).  What (3.5) rules
+out is exactly the configuration it exhibits.
+
 ## What is exported
 
 * `subspaceGap_eq_directedGap_of_finrank_eq` -- the bridge, (1.5) in its finite
   form;
+* `subspaceGap_eq_directedGap_of_crossedDefects` and
+  `maximalAngle_lt_pi_div_four_of_crossedDefects` -- the same bridge and the
+  printed `Θ < π/4` under (3.5), in any dimension;
 * `theorem8_2_sinTwoTheta_perturbation_source` and
   `theorem8_2_sinTwoTheta_residual_source` -- the `sin 2Θ` conclusions Theorem
   8.2 inherits, specialized to its configuration and stated with its
@@ -152,6 +170,42 @@ theorem maximalAngle_lt_pi_div_four_of_directedGap_lt [FiniteDimensional ℂ H]
   refine (DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_iff P Q).2 ?_
   show subspaceGap P Q < Real.sqrt 2 / 2
   rw [subspaceGap_eq_directedGap_of_finrank_eq P Q hrank]
+  exact hdir
+
+/-- **Equation (1.5), under the paper's own standing assumption instead of a
+dimension count.**
+
+Same conclusion as `subspaceGap_eq_directedGap_of_finrank_eq`, with
+`[FiniteDimensional ℂ H]` and `finrank P = finrank Q` replaced by Section 3's
+standing assumption (3.5) in its constructive form: the two crossed defects
+`P ⊓ Qᗮ` and `Pᗮ ⊓ Q` are linearly isometric.
+
+This is the source-faithful hypothesis.  (1.5) alone does not suffice, and that
+is the paper's own Remark after Proposition 3.2, machine-checked as
+`Section3.directedGap_asymmetric_coordinateHalfSpace`: the bilateral-shift pair
+satisfies (1.5), fails (3.5), and has directed gaps `1` and `0`. -/
+theorem subspaceGap_eq_directedGap_of_crossedDefects
+    (P Q : Submodule ℂ H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (h : CrossedDefectsEquivalent P Q) :
+    subspaceGap P Q = directedGap P Q :=
+  subspaceGap_eq_directedGap_of_crossedDefectsEquivalent P Q h
+
+/-- **The printed `Θ < π/4` of Theorem 8.2 from the directed bound, in any
+dimension.**
+
+The dimension-free counterpart of
+`maximalAngle_lt_pi_div_four_of_directedGap_lt`.  The directed quarter-angle
+bound is what `Section8Perturbation.lean` and `Section8Residual.lean` actually
+deliver from the printed hypotheses; (3.5) is what turns it into the printed
+symmetric conclusion, with no finite-dimensionality anywhere. -/
+theorem maximalAngle_lt_pi_div_four_of_crossedDefects
+    {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (h : CrossedDefectsEquivalent P Q)
+    (hdir : directedGap P Q < Real.sqrt 2 / 2) :
+    maximalAngle P Q < Real.pi / 4 := by
+  refine (DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_iff P Q).2 ?_
+  show subspaceGap P Q < Real.sqrt 2 / 2
+  rw [subspaceGap_eq_directedGap_of_crossedDefects P Q h]
   exact hdir
 
 /-! ### 2. The `sin 2Θ` conclusions Theorem 8.2 inherits
