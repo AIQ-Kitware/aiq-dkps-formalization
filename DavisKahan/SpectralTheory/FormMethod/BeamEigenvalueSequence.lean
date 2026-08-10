@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.SpectralTheory.FormMethod.BeamSection9
 import ForTauCeti.MeasureTheory.LpInfiniteDimensional
+import ForTauCeti.Order.DiscreteEnumeration
 
 /-!
 # The free beam's eigenvalues are an unbounded increasing sequence
@@ -28,19 +29,22 @@ The chain is:
 ## What is and is not proved
 
 Proved: the real spectrum of `beamOperator` is unbounded above; there are infinitely many
-spectral points above `500`; a strictly increasing sequence of spectral points above `500`
-exists; and the set `beamEigenvalues` of positive *eigenvalues* is both unbounded above and
-finite below every bound.  "Unbounded and locally finite" is the substance of an increasing
-sequence tending to infinity.
+spectral points above `500`; the set `beamEigenvalues` of positive *eigenvalues* is both
+unbounded above and finite below every bound; and — the printed statement — that set *is* a
+strictly increasing sequence: `beamEigenvalues` is order-isomorphic to `ℕ`, and the
+enumeration `f : ℕ → ℝ` is strictly monotone with `Set.range f = beamEigenvalues`, every term
+above `500` and in `beamOperator.realSpectrum`.  Nothing is omitted from the list and nothing
+outside `beamEigenvalues` is in it.
 
-Not proved: that the strictly increasing sequence *enumerates* `beamEigenvalues` in order.
-That is order bookkeeping on top of `finite_beamEigenvalues_inter_Iic` and
-`exists_lt_mem_beamEigenvalues` — a monotone bijection `ℕ ≃o beamEigenvalues` — and no such
-construction exists in this repository or in Mathlib for a locally finite unbounded subset of
-`ℝ`.  Also not proved: that every nonzero point of `realSpectrum` is an eigenvalue, so the
-local finiteness above is about the point spectrum and not about `realSpectrum` itself;
-`realSpectrum_beamOperator_subset` gives only containment in the set of fourth powers of
-characteristic roots.
+The order bookkeeping is `TauCeti.exists_strictMono_range_eq_of_unbounded_of_finite_inter_Iic`
+(ForTauCeti), which is general: unbounded above plus finite below every bound is exactly
+"order-isomorphic to `ℕ`" for a subset of any linear order.
+
+Also proved, and this closes the last gap the previous pass recorded: the free beam has *no*
+continuous or residual real spectrum.  `exists_eigenvector_of_mem_realSpectrum_beamOperator`
+(BeamSpectrum) produces an eigenvector for every real spectral point, so
+`beamOperator.realSpectrum = insert 0 beamEigenvalues` exactly, and local finiteness holds for
+the whole real spectrum and not only for the point spectrum.
 
 ## Main results
 
@@ -51,6 +55,10 @@ characteristic roots.
 * `TauCeti.…FreeBeam.Model.exists_strictMono_mem_realSpectrum_beamOperator`: the increasing
   sequence.
 * `TauCeti.…FreeBeam.Model.finite_beamEigenvalues_inter_Iic`: the eigenvalues are discrete.
+* `TauCeti.…FreeBeam.Model.exists_strictMono_range_eq_beamEigenvalues`: the increasing
+  sequence *enumerates* the eigenvalues.
+* `TauCeti.…FreeBeam.Model.realSpectrum_beamOperator_eq_insert_zero`: the real spectrum is
+  exactly `{0}` together with those eigenvalues.
 -/
 
 open MeasureTheory
@@ -296,6 +304,81 @@ theorem exists_strictMono_mem_realSpectrum_beamOperator :
     cases n with
     | zero => exact ⟨hg2 500, hg3 500⟩
     | succ k => exact ⟨hg2 _, hg3 _⟩
+
+/-! ## The full real spectrum -/
+
+/-- **`0` is in the real spectrum of the free beam.**  The constant function is a nonzero
+element of the affine kernel — `norm_affineLp_sq` makes `‖affineLp 1 0‖ ^ 2 = 1`. -/
+theorem zero_mem_realSpectrum_beamOperator : (0 : ℝ) ∈ beamOperator.realSpectrum := by
+  obtain ⟨hmem, hzero⟩ := beamOperator_affine_mem_and_zero 1 0
+  set x : beamOperator.domain := ⟨affineLp 1 0, hmem⟩ with hxdef
+  have hne : (x : BeamL2) ≠ 0 := by
+    rw [hxdef]
+    intro h0
+    have hnorm := norm_affineLp_sq 1 0
+    rw [show affineLp 1 0 = 0 from h0, norm_zero] at hnorm
+    norm_num at hnorm
+  have heig : beamOperator.toLinearMap x = ((0 : ℝ) : ℂ) • (x : BeamL2) := by
+    rw [hzero, Complex.ofReal_zero, zero_smul]
+  exact TauCeti.LinearPMap.mem_realSpectrum_of_eigenvector (A := beamOperator.toLinearPMap)
+    (x := x) hne heig
+
+/-- **The real spectrum of the free beam is exactly `{0}` together with the positive
+eigenvalues.**  `exists_eigenvector_of_mem_realSpectrum_beamOperator` says every spectral point
+is an eigenvalue and `nonneg_of_beamOperator_eigen` says every eigenvalue is nonnegative, so
+there is no continuous or residual spectrum to account for. -/
+theorem realSpectrum_beamOperator_eq_insert_zero :
+    beamOperator.realSpectrum = insert 0 beamEigenvalues := by
+  apply Set.Subset.antisymm
+  · intro lam hlam
+    obtain ⟨x, hx0, heig⟩ := exists_eigenvector_of_mem_realSpectrum_beamOperator hlam
+    rcases eq_or_lt_of_le (nonneg_of_beamOperator_eigen hx0 heig) with h0 | hpos
+    · exact Set.mem_insert_iff.mpr (Or.inl h0.symm)
+    · exact Set.mem_insert_iff.mpr (Or.inr ⟨hpos, x, hx0, heig⟩)
+  · intro lam hlam
+    rcases Set.mem_insert_iff.mp hlam with rfl | hlam'
+    · exact zero_mem_realSpectrum_beamOperator
+    · exact mem_realSpectrum_of_mem_beamEigenvalues hlam'
+
+/-- **The free beam has only finitely many spectral points below any bound.**  This is
+`finite_beamEigenvalues_inter_Iic` upgraded from the point spectrum to the whole real
+spectrum, which the previous statement could not reach. -/
+theorem finite_realSpectrum_beamOperator_inter_Iic (M : ℝ) :
+    (beamOperator.realSpectrum ∩ Set.Iic M).Finite := by
+  refine Set.Finite.subset (Set.Finite.insert 0 (finite_beamEigenvalues_inter_Iic M)) ?_
+  rw [realSpectrum_beamOperator_eq_insert_zero]
+  rintro lam ⟨hlam, hle⟩
+  rcases Set.mem_insert_iff.mp hlam with rfl | hlam'
+  · exact Set.mem_insert _ _
+  · exact Set.mem_insert_iff.mpr (Or.inr ⟨hlam', hle⟩)
+
+/-! ## The printed enumeration -/
+
+/-- **The eigenvalues of the free beam are order-isomorphic to `ℕ`.**  The two facts proved
+above — unbounded above (`exists_lt_mem_beamEigenvalues`) and finite below every bound
+(`finite_beamEigenvalues_inter_Iic`) — are exactly the hypotheses under which a subset of a
+linear order is a strictly increasing sequence. -/
+theorem nonempty_orderIso_nat_beamEigenvalues : Nonempty (↥beamEigenvalues ≃o ℕ) :=
+  TauCeti.nonempty_orderIso_nat_of_unbounded_of_finite_inter_Iic
+    exists_lt_mem_beamEigenvalues finite_beamEigenvalues_inter_Iic
+
+/-- **Davis--Kahan Section 9's printed sequence `α₃ < α₄ < …`, as an enumeration.**  There is a
+strictly increasing `f : ℕ → ℝ` whose range is *exactly* the set of positive eigenvalues of the
+free-beam operator, with every term above the paper's `500` and in the real spectrum.  Unlike
+`exists_strictMono_mem_realSpectrum_beamOperator`, which merely picks an increasing subsequence
+of spectral points, this omits no eigenvalue and lists nothing else. -/
+theorem exists_strictMono_range_eq_beamEigenvalues :
+    ∃ f : ℕ → ℝ, StrictMono f ∧ Set.range f = beamEigenvalues ∧
+      ∀ n, 500 < f n ∧ f n ∈ beamOperator.realSpectrum := by
+  obtain ⟨f, hmono, hrange⟩ :=
+    TauCeti.exists_strictMono_range_eq_of_unbounded_of_finite_inter_Iic
+      exists_lt_mem_beamEigenvalues finite_beamEigenvalues_inter_Iic
+  refine ⟨f, hmono, hrange, fun n => ?_⟩
+  have hmem : f n ∈ beamEigenvalues := by
+    rw [← hrange]
+    exact Set.mem_range_self n
+  exact ⟨five_hundred_lt_of_mem_beamEigenvalues hmem,
+    mem_realSpectrum_of_mem_beamEigenvalues hmem⟩
 
 /-- **The free beam has infinitely many spectral points above `500`.** -/
 theorem infinite_five_hundred_lt_mem_realSpectrum_beamOperator :
