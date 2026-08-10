@@ -15,7 +15,7 @@ pairs iff their four elementary Halmos summands are linearly isometric and their
 generic cosine-square operators are unitarily equivalent.
 
 The forward direction is proved here in full: a pair-equivalence
-`e : H₁ ≃ₗᵢ[ℂ] H₂` restricts to isometric equivalences of the four elementary
+`e : H₁ ≃ₗᵢ[𝕜] H₂` restricts to isometric equivalences of the four elementary
 summands and, on the generic remainder, intertwines the cosine-square operator.
 
 The results live under `Experimental.MathAhead`; the frontier statement
@@ -35,9 +35,10 @@ open  Frontier
 
 universe u v
 
-variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace 𝕜 H₁]
   [CompleteSpace H₁]
-variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂]
   [CompleteSpace H₂]
 
 /-! ## Conjugation of orthogonal projections by an isometric equivalence -/
@@ -45,10 +46,10 @@ variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂]
 omit [CompleteSpace H₁] [CompleteSpace H₂] in
 /-- An isometric equivalence intertwines the orthogonal projections onto a
 subspace and its image. -/
-theorem isometryEquiv_intertwines_projection (e : H₁ ≃ₗᵢ[ℂ] H₂)
-    {K : Submodule ℂ H₁} {K' : Submodule ℂ H₂} [K.HasOrthogonalProjection]
+theorem isometryEquiv_intertwines_projection (e : H₁ ≃ₗᵢ[𝕜] H₂)
+    {K : Submodule 𝕜 H₁} {K' : Submodule 𝕜 H₂} [K.HasOrthogonalProjection]
     [K'.HasOrthogonalProjection]
-    (hmap : K.map (e.toLinearEquiv : H₁ →ₗ[ℂ] H₂) = K') (x : H₁) :
+    (hmap : K.map (e.toLinearEquiv : H₁ →ₗ[𝕜] H₂) = K') (x : H₁) :
     e (projection K x) = projection K' (e x) := by
   subst hmap
   have h := Submodule.starProjection_map_apply e K (e x)
@@ -59,28 +60,28 @@ theorem isometryEquiv_intertwines_projection (e : H₁ ≃ₗᵢ[ℂ] H₂)
 
 /-- An isometric equivalence taking `K` onto `K'` restricts to an isometric
 equivalence `K ≃ₗᵢ K'`. -/
-noncomputable def summandEquiv (e : H₁ ≃ₗᵢ[ℂ] H₂) (K : Submodule ℂ H₁)
-    {K' : Submodule ℂ H₂} (hmap : K.map e.toLinearMap = K') : K ≃ₗᵢ[ℂ] K' :=
+noncomputable def summandEquiv (e : H₁ ≃ₗᵢ[𝕜] H₂) (K : Submodule 𝕜 H₁)
+    {K' : Submodule 𝕜 H₂} (hmap : K.map e.toLinearMap = K') : K ≃ₗᵢ[𝕜] K' :=
   (e.submoduleMap K).trans (LinearIsometryEquiv.ofEq _ _ hmap)
 
 omit [CompleteSpace H₁] [CompleteSpace H₂] in
 /-- The restricted equivalence acts by the ambient one; restricting to a
 summand does not change where a vector goes.  This is what lets the four
 elementary-summand equivalences be glued without tracking coercions. -/
-@[simp] theorem coe_summandEquiv (e : H₁ ≃ₗᵢ[ℂ] H₂) (K : Submodule ℂ H₁)
-    {K' : Submodule ℂ H₂} (hmap : K.map e.toLinearMap = K') (x : K) :
+@[simp] theorem coe_summandEquiv (e : H₁ ≃ₗᵢ[𝕜] H₂) (K : Submodule 𝕜 H₁)
+    {K' : Submodule 𝕜 H₂} (hmap : K.map e.toLinearMap = K') (x : K) :
     (summandEquiv e K hmap x : H₂) = e (x : H₁) := rfl
 
 /-! ## Forward direction: a pair-equivalence induces the operator invariant -/
 
-variable (U₁ V₁ : Submodule ℂ H₁) [U₁.HasOrthogonalProjection]
+variable (U₁ V₁ : Submodule 𝕜 H₁) [U₁.HasOrthogonalProjection]
   [V₁.HasOrthogonalProjection]
-variable (U₂ V₂ : Submodule ℂ H₂) [U₂.HasOrthogonalProjection]
+variable (U₂ V₂ : Submodule 𝕜 H₂) [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection]
 
 omit [CompleteSpace H₁] [CompleteSpace H₂] in
 /-- A pair-equivalence intertwines the Halmos cosine-square operators. -/
-theorem intertwines_halmosCosineSq (e : H₁ ≃ₗᵢ[ℂ] H₂)
+theorem intertwines_halmosCosineSq (e : H₁ ≃ₗᵢ[𝕜] H₂)
     (hU : U₁.map e.toLinearMap = U₂) (hV : V₁.map e.toLinearMap = V₂) (v : H₁) :
     e (halmosCosineSq U₁ V₁ v) = halmosCosineSq U₂ V₂ (e v) := by
   have hUc : U₁ᗮ.map e.toLinearMap = U₂ᗮ := by
@@ -108,7 +109,7 @@ omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
   [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection] in
 /-- A pair-equivalence carries the common part onto the common part. -/
-theorem map_halmosCommonPart (e : H₁ ≃ₗᵢ[ℂ] H₂)
+theorem map_halmosCommonPart (e : H₁ ≃ₗᵢ[𝕜] H₂)
     (hU : U₁.map e.toLinearMap = U₂) (hV : V₁.map e.toLinearMap = V₂) :
     (halmosCommonPart U₁ V₁).map e.toLinearMap = halmosCommonPart U₂ V₂ := by
   have hinj : Function.Injective (e.toLinearMap : H₁ → H₂) := by simpa using e.injective
@@ -118,7 +119,7 @@ omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
   [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection] in
 /-- A pair-equivalence carries the source defect onto the source defect. -/
-theorem map_halmosSourceDefect (e : H₁ ≃ₗᵢ[ℂ] H₂)
+theorem map_halmosSourceDefect (e : H₁ ≃ₗᵢ[𝕜] H₂)
     (hU : U₁.map e.toLinearMap = U₂) (hV : V₁.map e.toLinearMap = V₂) :
     (halmosSourceDefect U₁ V₁).map e.toLinearMap = halmosSourceDefect U₂ V₂ := by
   have hinj : Function.Injective (e.toLinearMap : H₁ → H₂) := by simpa using e.injective
@@ -129,7 +130,7 @@ omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
   [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection] in
 /-- A pair-equivalence carries the target defect onto the target defect. -/
-theorem map_halmosTargetDefect (e : H₁ ≃ₗᵢ[ℂ] H₂)
+theorem map_halmosTargetDefect (e : H₁ ≃ₗᵢ[𝕜] H₂)
     (hU : U₁.map e.toLinearMap = U₂) (hV : V₁.map e.toLinearMap = V₂) :
     (halmosTargetDefect U₁ V₁).map e.toLinearMap = halmosTargetDefect U₂ V₂ := by
   have hinj : Function.Injective (e.toLinearMap : H₁ → H₂) := by simpa using e.injective
@@ -140,7 +141,7 @@ omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
   [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection] in
 /-- A pair-equivalence carries the exterior part onto the exterior part. -/
-theorem map_halmosExteriorPart (e : H₁ ≃ₗᵢ[ℂ] H₂)
+theorem map_halmosExteriorPart (e : H₁ ≃ₗᵢ[𝕜] H₂)
     (hU : U₁.map e.toLinearMap = U₂) (hV : V₁.map e.toLinearMap = V₂) :
     (halmosExteriorPart U₁ V₁).map e.toLinearMap = halmosExteriorPart U₂ V₂ := by
   have hinj : Function.Injective (e.toLinearMap : H₁ → H₂) := by simpa using e.injective
@@ -152,7 +153,7 @@ omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
   [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection] in
 /-- A pair-equivalence carries the trivial part onto the trivial part. -/
-theorem map_halmosTrivialPart (e : H₁ ≃ₗᵢ[ℂ] H₂)
+theorem map_halmosTrivialPart (e : H₁ ≃ₗᵢ[𝕜] H₂)
     (hU : U₁.map e.toLinearMap = U₂) (hV : V₁.map e.toLinearMap = V₂) :
     (halmosTrivialPart U₁ V₁).map e.toLinearMap = halmosTrivialPart U₂ V₂ := by
   simp only [halmosTrivialPart, Submodule.map_sup,
@@ -165,7 +166,7 @@ omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
   [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection] in
 /-- A pair-equivalence carries the generic part onto the generic part. -/
-theorem map_halmosGenericPart (e : H₁ ≃ₗᵢ[ℂ] H₂)
+theorem map_halmosGenericPart (e : H₁ ≃ₗᵢ[𝕜] H₂)
     (hU : U₁.map e.toLinearMap = U₂) (hV : V₁.map e.toLinearMap = V₂) :
     (halmosGenericPart U₁ V₁).map e.toLinearMap = halmosGenericPart U₂ V₂ := by
   rw [halmosGenericPart, Submodule.map_orthogonal_equiv,
@@ -177,10 +178,10 @@ four elementary Halmos summands together with a unitary intertwining of the
 generic cosine-square operators. -/
 theorem sameHalmosInvariant_of_pairEquiv
     (h : PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂) :
-    (Nonempty (halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)) ∧
-    (Nonempty (halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)) ∧
-    (Nonempty (halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)) ∧
-    (Nonempty (halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)) ∧
+    (Nonempty (halmosCommonPart U₁ V₁ ≃ₗᵢ[𝕜] halmosCommonPart U₂ V₂)) ∧
+    (Nonempty (halmosSourceDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosSourceDefect U₂ V₂)) ∧
+    (Nonempty (halmosTargetDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosTargetDefect U₂ V₂)) ∧
+    (Nonempty (halmosExteriorPart U₁ V₁ ≃ₗᵢ[𝕜] halmosExteriorPart U₂ V₂)) ∧
     BoundedOperatorsUnitaryEquivalent
       (genericHalmosCosineSq U₁ V₁) (genericHalmosCosineSq U₂ V₂) := by
   obtain ⟨e, hU, hV⟩ := h

@@ -38,23 +38,24 @@ universe u v
 
 section UnitaryGeometry
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
 
 /-- A bounded operator is a paper-style direct rotation when it is unitary,
 intertwines the two orthogonal projections, has nonnegative diagonal
 compressions, and has skew-adjoint crossed blocks. -/
 structure IsPaperDirectRotation
-    (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (T : H →L[ℂ] H) : Prop where
-  unitary_mem : T ∈ unitary (H →L[ℂ] H)
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] (T : H →L[𝕜] H) : Prop where
+  unitary_mem : T ∈ unitary (H →L[𝕜] H)
   intertwines : T * projection U = projection V * T
   source_compression_nonnegative :
     ∀ x : H, 0 ≤ RCLike.re
-      ⟪x, (projection U * T * projection U) x⟫_ℂ
+      ⟪x, (projection U * T * projection U) x⟫_𝕜
   complement_compression_nonnegative :
     ∀ x : H, 0 ≤ RCLike.re
-      ⟪x, (complementaryProjection U * T * complementaryProjection U) x⟫_ℂ
+      ⟪x, (complementaryProjection U * T * complementaryProjection U) x⟫_𝕜
   crossed_blocks :
     complementaryProjection U * T * projection U =
       -star (projection U * T * complementaryProjection U)
@@ -63,39 +64,39 @@ structure IsPaperDirectRotation
 identification.  This is the constructive form of equality of their Hilbert
 space dimensions. -/
 def CrossedDefectsEquivalent
-    (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] : Prop :=
   Nonempty
-    (halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V)
+    (halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V)
 
 /-- Restriction of the Halmos cosine square to the reducing generic summand,
 realized as the compression to the generic part.  The generic part reduces
 both projections, hence every word in them, so the compression is the honest
 restriction. -/
 noncomputable def genericHalmosCosineSq
-    (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    halmosGenericPart U V →L[ℂ] halmosGenericPart U V :=
+    halmosGenericPart U V →L[𝕜] halmosGenericPart U V :=
   DavisKahanExt.compressOperator (halmosGenericPart U V) (halmosCosineSq U V)
 
 /-- Restriction of the Halmos sine square to the reducing generic summand. -/
 noncomputable def genericHalmosSineSq
-    (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    halmosGenericPart U V →L[ℂ] halmosGenericPart U V :=
+    halmosGenericPart U V →L[𝕜] halmosGenericPart U V :=
   DavisKahanExt.compressOperator (halmosGenericPart U V) (halmosSineSq U V)
 
 /-- The restricted generic cosine and sine squares retain the Pythagorean
 identity. -/
 theorem genericHalmosCosineSq_add_sineSq
-    (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
     genericHalmosCosineSq U V + genericHalmosSineSq U V = 1 := by
   ext x
   have hsum : halmosCosineSq U V (x : H) + halmosSineSq U V (x : H) =
       (x : H) := by
     have h := congrArg
-      (fun T : H →L[ℂ] H => T (x : H)) (halmosCosineSq_add_sineSq U V)
+      (fun T : H →L[𝕜] H => T (x : H)) (halmosCosineSq_add_sineSq U V)
     simpa using h
   simp only [add_apply, one_apply_eq_self,
     genericHalmosCosineSq, genericHalmosSineSq, DavisKahanExt.compressOperator,

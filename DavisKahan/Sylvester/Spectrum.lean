@@ -198,33 +198,36 @@ section Compression
 projection.  For a reducing subspace of a self-adjoint operator this is the
 honest restriction, and its Banach-algebra spectrum is the correct
 interpretation of "the spectrum of `A` on `U`". -/
-noncomputable def compressOperator (U : Submodule ℂ E)
-    [U.HasOrthogonalProjection] (T : E →L[ℂ] E) : U →L[ℂ] U :=
+noncomputable def compressOperator
+    {𝕜 G : Type*} [RCLike 𝕜] [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
+    (T : G →L[𝕜] G) : U →L[𝕜] U :=
   U.orthogonalProjectionOnto ∘L T ∘L U.subtypeL
 
-omit [CompleteSpace E] in
 /-- On an invariant orthogonally complemented subspace, orthogonal compression is
 exactly the continuous-linear restriction.
 
-Stated here, beside `compressOperator`, rather than in either of the two
-`InfiniteDimensional` modules that need it: both carried their own copy under the
-same fully-qualified name while they lived in `Experimental/`, where nothing
-imported both, and promoting them into `DavisKahan.All` made the collision
-reachable. -/
+This projection-geometric statement is scalar-generic over `RCLike`; the
+complex-only Sylvester/spectrum arguments below merely instantiate it at `ℂ`.
+Keeping the compression primitive here scalar-generic lets the real Halmos and
+Davis--Kahan layers share the same restriction API. -/
 theorem compressOperator_eq_restrict_of_invariant
-    (T : E →L[ℂ] E) (U : Submodule ℂ E) [U.HasOrthogonalProjection]
+    {𝕜 G : Type*} [RCLike 𝕜] [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    (T : G →L[𝕜] G) (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
     (hU : InvariantFor T U) :
     compressOperator U T = T.restrict hU := by
   apply ContinuousLinearMap.ext
   intro u
   apply Subtype.ext
-  change U.starProjection (T (u : E)) = T (u : E)
-  exact Submodule.starProjection_eq_self_iff.mpr (hU (u : E) u.property)
+  change U.starProjection (T (u : G)) = T (u : G)
+  exact Submodule.starProjection_eq_self_iff.mpr (hU (u : G) u.property)
 
 /-- Compression preserves self-adjointness. -/
-theorem isSelfAdjoint_compressOperator {T : E →L[ℂ] E}
-    (hT : IsSelfAdjoint T) (U : Submodule ℂ E) [U.HasOrthogonalProjection]
-    [CompleteSpace U] :
+theorem isSelfAdjoint_compressOperator
+    {𝕜 G : Type*} [RCLike 𝕜] [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    [CompleteSpace G]
+    {T : G →L[𝕜] G} (hT : IsSelfAdjoint T)
+    (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] [CompleteSpace U] :
     IsSelfAdjoint (compressOperator U T) := by
   -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the goal unsolved: at
   -- least one lemma here has to fire at one occurrence, in order, and simp's normal form loses the
