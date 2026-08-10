@@ -520,6 +520,7 @@ theorem secondSchurComplement_has_inverse_of_norm_lt_one
       _ = l1 * 1 * r1 := by rw [hleft]
       _ = 1 := by simpa only [mul_one] using hl1r1
 
+omit [CompleteSpace E0] in
 /-- Sharp Schur-product criterion for full block resolvent-set membership. -/
 theorem blockOperator_inResolventSet_of_schur_norm_lt_one
     (H : BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1))

@@ -223,6 +223,7 @@ end Conjugation
 
 section RestrictionTransport
 
+omit [CompleteSpace E] in
 /-- Restriction to a complexified invariant real subspace is the isometric
 conjugate of the complexification of the real restriction. -/
 theorem restrict_complexifySubmodule_conjEquiv

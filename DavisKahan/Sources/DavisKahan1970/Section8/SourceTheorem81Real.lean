@@ -113,7 +113,7 @@ theorem theorem8_1_canonicalBranch_real
   let hQ : Q.HasOrthogonalProjection :=
     realBoundedSpectralSubspaceIicOfGap_hasOrthogonalProjection
       (A + H) (hA.add hH) alpha delta hdelta hrep
-  haveI : Q.HasOrthogonalProjection := hQ
+  have : Q.HasOrthogonalProjection := hQ
   have hQc : complexifySubmodule Q =
       canonicalLowBranch (complexify A + complexify H)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hAc.add hHc)) alpha := by
