@@ -71,19 +71,20 @@ open Frontier
 
 universe u v
 
-variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace 𝕜 H₁]
   [CompleteSpace H₁]
-variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂]
   [CompleteSpace H₂]
 
 section OrthogonalPairs
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
 
 /-- A join is orthogonal to a join when each of the four pairs is. -/
-theorem sup_le_orthogonal_sup {K L M N : Submodule ℂ H} (h₁ : K ≤ Mᗮ)
+theorem sup_le_orthogonal_sup {K L M N : Submodule 𝕜 H} (h₁ : K ≤ Mᗮ)
     (h₂ : K ≤ Nᗮ) (h₃ : L ≤ Mᗮ) (h₄ : L ≤ Nᗮ) : K ⊔ L ≤ (M ⊔ N)ᗮ := by
-  have hmem : ∀ {P : Submodule ℂ H}, P ≤ Mᗮ → P ≤ Nᗮ → P ≤ (M ⊔ N)ᗮ := by
+  have hmem : ∀ {P : Submodule 𝕜 H}, P ≤ Mᗮ → P ≤ Nᗮ → P ≤ (M ⊔ N)ᗮ := by
     intro P hM hN x hx
     rw [Submodule.mem_orthogonal]
     rintro u hu
@@ -105,9 +106,9 @@ preserve the summands) but not these.
 
 section Structure
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
-variable (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 
 omit [CompleteSpace H] in
@@ -148,7 +149,7 @@ theorem starProjection_trivial_mem_right {x : H} (hx : x ∈ V) :
 
 omit [CompleteSpace H] in
 /-- A vector in both `U` and `Uᗮ` is zero. -/
-private theorem eq_zero_of_mem_of_mem_orthogonal {K : Submodule ℂ H} {x : H}
+private theorem eq_zero_of_mem_of_mem_orthogonal {K : Submodule 𝕜 H} {x : H}
     (h₁ : x ∈ K) (h₂ : x ∈ Kᗮ) : x = 0 :=
   inner_self_eq_zero.mp ((Submodule.mem_orthogonal _ _).mp h₂ x h₁)
 
@@ -230,9 +231,9 @@ theorem eq_sup_inf_halmosTrivialPart_inf_halmosGenericPart_right :
 
 end Structure
 
-variable (U₁ V₁ : Submodule ℂ H₁) [U₁.HasOrthogonalProjection]
+variable (U₁ V₁ : Submodule 𝕜 H₁) [U₁.HasOrthogonalProjection]
   [V₁.HasOrthogonalProjection]
-variable (U₂ V₂ : Submodule ℂ H₂) [U₂.HasOrthogonalProjection]
+variable (U₂ V₂ : Submodule 𝕜 H₂) [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection]
 
 /-- The common part and the source defect are jointly complemented. -/
@@ -259,11 +260,11 @@ theorem commonSupSource_le_orthogonal_targetSupExterior :
 
 /-- **The trivial-part isometry**, glued from the four elementary ones. -/
 noncomputable def halmosTrivialEquiv
-    (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
-    (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)
-    (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
-    (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂) :
-    halmosTrivialPart U₁ V₁ ≃ₗᵢ[ℂ] halmosTrivialPart U₂ V₂ :=
+    (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[𝕜] halmosCommonPart U₂ V₂)
+    (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosSourceDefect U₂ V₂)
+    (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosTargetDefect U₂ V₂)
+    (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[𝕜] halmosExteriorPart U₂ V₂) :
+    halmosTrivialPart U₁ V₁ ≃ₗᵢ[𝕜] halmosTrivialPart U₂ V₂ :=
   TauCeti.orthogonalSupGlue
     (commonSupSource_le_orthogonal_targetSupExterior U₁ V₁)
     (commonSupSource_le_orthogonal_targetSupExterior U₂ V₂)
@@ -276,21 +277,21 @@ noncomputable def halmosTrivialEquiv
 remainder.  `halmosGenericPart` is by definition the orthogonal complement of
 `halmosTrivialPart`, so this is exactly the ambient-complement glue. -/
 noncomputable def halmosGlobalEquiv
-    (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
-    (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)
-    (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
-    (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
-    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂) :
-    H₁ ≃ₗᵢ[ℂ] H₂ :=
+    (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[𝕜] halmosCommonPart U₂ V₂)
+    (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosSourceDefect U₂ V₂)
+    (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosTargetDefect U₂ V₂)
+    (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[𝕜] halmosExteriorPart U₂ V₂)
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂) :
+    H₁ ≃ₗᵢ[𝕜] H₂ :=
   TauCeti.orthogonalGlue (halmosTrivialEquiv U₁ V₁ U₂ V₂ ec es et ee) eg
 
 /-- On the trivial part the global isometry is the trivial-part one. -/
 theorem halmosGlobalEquiv_apply_of_mem_trivial
-    (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
-    (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)
-    (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
-    (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
-    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂)
+    (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[𝕜] halmosCommonPart U₂ V₂)
+    (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosSourceDefect U₂ V₂)
+    (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosTargetDefect U₂ V₂)
+    (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[𝕜] halmosExteriorPart U₂ V₂)
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂)
     {x : H₁} (hx : x ∈ halmosTrivialPart U₁ V₁) :
     halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg x =
       (halmosTrivialEquiv U₁ V₁ U₂ V₂ ec es et ee ⟨x, hx⟩ : H₂) :=
@@ -298,11 +299,11 @@ theorem halmosGlobalEquiv_apply_of_mem_trivial
 
 /-- On the generic part the global isometry is the generic one. -/
 theorem halmosGlobalEquiv_apply_of_mem_generic
-    (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
-    (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)
-    (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
-    (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
-    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂)
+    (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[𝕜] halmosCommonPart U₂ V₂)
+    (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosSourceDefect U₂ V₂)
+    (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosTargetDefect U₂ V₂)
+    (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[𝕜] halmosExteriorPart U₂ V₂)
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂)
     {x : H₁} (hx : x ∈ halmosGenericPart U₁ V₁) :
     halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg x = (eg ⟨x, hx⟩ : H₂) :=
   TauCeti.orthogonalGlue_apply_of_mem_orthogonal _ _ hx
@@ -314,10 +315,10 @@ on a summand is two applications of `coe_orthogonalSupGlue` followed by the
 matching `supGlueAmbient_apply_of_mem_left/right`.
 -/
 
-variable (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
-  (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)
-  (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
-  (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
+variable (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[𝕜] halmosCommonPart U₂ V₂)
+  (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosSourceDefect U₂ V₂)
+  (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosTargetDefect U₂ V₂)
+  (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[𝕜] halmosExteriorPart U₂ V₂)
 
 omit [CompleteSpace H₂] [U₂.HasOrthogonalProjection] [V₂.HasOrthogonalProjection] in
 /-- On the common part, the glued trivial equivalence is the common-part
@@ -369,11 +370,11 @@ theorem coe_halmosTrivialEquiv_of_mem_exterior {x : H₁}
 
 /-- The global isometry carries the trivial part onto the trivial part. -/
 theorem map_halmosGlobalEquiv_trivial
-    (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
-    (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)
-    (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
-    (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
-    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂) :
+    (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[𝕜] halmosCommonPart U₂ V₂)
+    (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosSourceDefect U₂ V₂)
+    (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosTargetDefect U₂ V₂)
+    (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[𝕜] halmosExteriorPart U₂ V₂)
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂) :
     (halmosTrivialPart U₁ V₁).map
         (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
       halmosTrivialPart U₂ V₂ :=
@@ -381,11 +382,11 @@ theorem map_halmosGlobalEquiv_trivial
 
 /-- The global isometry carries the generic part onto the generic part. -/
 theorem map_halmosGlobalEquiv_generic
-    (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
-    (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)
-    (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
-    (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
-    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂) :
+    (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[𝕜] halmosCommonPart U₂ V₂)
+    (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosSourceDefect U₂ V₂)
+    (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosTargetDefect U₂ V₂)
+    (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[𝕜] halmosExteriorPart U₂ V₂)
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂) :
     (halmosGenericPart U₁ V₁).map
         (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
       halmosGenericPart U₂ V₂ :=
@@ -393,7 +394,7 @@ theorem map_halmosGlobalEquiv_generic
 
 /-- The assembled isometry carries the common summand onto the common summand. -/
 theorem map_halmosGlobalEquiv_common
-    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂) :
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂) :
     (halmosCommonPart U₁ V₁).map
         (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
       halmosCommonPart U₂ V₂ := by
@@ -415,7 +416,7 @@ theorem map_halmosGlobalEquiv_common
     simp
 /-- The assembled isometry carries the source summand onto the source summand. -/
 theorem map_halmosGlobalEquiv_source
-    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂) :
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂) :
     (halmosSourceDefect U₁ V₁).map
         (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
       halmosSourceDefect U₂ V₂ := by
@@ -437,7 +438,7 @@ theorem map_halmosGlobalEquiv_source
     simp
 /-- The assembled isometry carries the target summand onto the target summand. -/
 theorem map_halmosGlobalEquiv_target
-    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂) :
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂) :
     (halmosTargetDefect U₁ V₁).map
         (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
       halmosTargetDefect U₂ V₂ := by
@@ -459,7 +460,7 @@ theorem map_halmosGlobalEquiv_target
     simp
 /-- The assembled isometry carries the exterior summand onto the exterior summand. -/
 theorem map_halmosGlobalEquiv_exterior
-    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂) :
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂) :
     (halmosExteriorPart U₁ V₁).map
         (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
       halmosExteriorPart U₂ V₂ := by
@@ -483,7 +484,7 @@ theorem map_halmosGlobalEquiv_exterior
 /-- The assembled isometry carries the `U`-part of the generic summand where the
 generic hypothesis says it does. -/
 theorem map_halmosGlobalEquiv_inf_generic_left
-    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂)
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂)
     (hgU : ∀ y : halmosGenericPart U₁ V₁, ((eg y : H₂) ∈ U₂ ↔ (y : H₁) ∈ U₁)) :
     (U₁ ⊓ halmosGenericPart U₁ V₁).map
         (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
@@ -504,7 +505,7 @@ theorem map_halmosGlobalEquiv_inf_generic_left
 
 /-- The same for `V`. -/
 theorem map_halmosGlobalEquiv_inf_generic_right
-    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂)
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂)
     (hgV : ∀ y : halmosGenericPart U₁ V₁, ((eg y : H₂) ∈ V₂ ↔ (y : H₁) ∈ V₁)) :
     (V₁ ⊓ halmosGenericPart U₁ V₁).map
         (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
@@ -525,13 +526,13 @@ theorem map_halmosGlobalEquiv_inf_generic_right
 
 /-- **The assembled isometry carries `U₁` onto `U₂`.** -/
 theorem map_halmosGlobalEquiv_left
-    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂)
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂)
     (hgU : ∀ y : halmosGenericPart U₁ V₁, ((eg y : H₂) ∈ U₂ ↔ (y : H₁) ∈ U₁)) :
     U₁.map (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap = U₂ := by
   have hsplit : U₁.map (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
       ((U₁ ⊓ halmosTrivialPart U₁ V₁) ⊔ (U₁ ⊓ halmosGenericPart U₁ V₁)).map
         (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap :=
-    congrArg (fun K : Submodule ℂ H₁ =>
+    congrArg (fun K : Submodule 𝕜 H₁ =>
       K.map (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap)
       (eq_sup_inf_halmosTrivialPart_inf_halmosGenericPart U₁ V₁)
   rw [hsplit, Submodule.map_sup, inf_halmosTrivialPart_left U₁ V₁, Submodule.map_sup,
@@ -543,13 +544,13 @@ theorem map_halmosGlobalEquiv_left
 
 /-- **The assembled isometry carries `V₁` onto `V₂`.** -/
 theorem map_halmosGlobalEquiv_right
-    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂)
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂)
     (hgV : ∀ y : halmosGenericPart U₁ V₁, ((eg y : H₂) ∈ V₂ ↔ (y : H₁) ∈ V₁)) :
     V₁.map (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap = V₂ := by
   have hsplit : V₁.map (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap =
       ((V₁ ⊓ halmosTrivialPart U₁ V₁) ⊔ (V₁ ⊓ halmosGenericPart U₁ V₁)).map
         (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap :=
-    congrArg (fun K : Submodule ℂ H₁ =>
+    congrArg (fun K : Submodule 𝕜 H₁ =>
       K.map (halmosGlobalEquiv U₁ V₁ U₂ V₂ ec es et ee eg).toLinearMap)
       (eq_sup_inf_halmosTrivialPart_inf_halmosGenericPart_right U₁ V₁)
   rw [hsplit, Submodule.map_sup, inf_halmosTrivialPart_right U₁ V₁, Submodule.map_sup,
@@ -569,11 +570,11 @@ isometry between matched summands lands where it must.  The only real input is
 `hgU`/`hgV` on the generic part — which is exactly what brick (1), the generic
 `2 × 2` model, has to supply. -/
 theorem pairOfSubspacesUnitaryEquivalent_of_summandEquivs
-    (ec' : halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
-    (es' : halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)
-    (et' : halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
-    (ee' : halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
-    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂)
+    (ec' : halmosCommonPart U₁ V₁ ≃ₗᵢ[𝕜] halmosCommonPart U₂ V₂)
+    (es' : halmosSourceDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosSourceDefect U₂ V₂)
+    (et' : halmosTargetDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosTargetDefect U₂ V₂)
+    (ee' : halmosExteriorPart U₁ V₁ ≃ₗᵢ[𝕜] halmosExteriorPart U₂ V₂)
+    (eg : halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂)
     (hgU : ∀ y : halmosGenericPart U₁ V₁, ((eg y : H₂) ∈ U₂ ↔ (y : H₁) ∈ U₁))
     (hgV : ∀ y : halmosGenericPart U₁ V₁, ((eg y : H₂) ∈ V₂ ↔ (y : H₁) ∈ V₁)) :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ :=

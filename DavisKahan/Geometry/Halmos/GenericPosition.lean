@@ -36,9 +36,10 @@ open Frontier
 
 universe u
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
-variable (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 
 /-! ## Generic position
@@ -150,41 +151,40 @@ form of "every angle is strictly between `0` and `π/2`".
 -/
 
 /-- The `U`-half of the generic part. -/
-noncomputable abbrev genericLeftHalf : Submodule ℂ H := U ⊓ halmosGenericPart U V
+noncomputable abbrev genericLeftHalf : Submodule 𝕜 H := U ⊓ halmosGenericPart U V
 
 /-- The `Uᗮ`-half of the generic part. -/
-noncomputable abbrev genericRightHalf : Submodule ℂ H :=
+noncomputable abbrev genericRightHalf : Submodule 𝕜 H :=
   Uᗮ ⊓ halmosGenericPart U V
 
 omit [CompleteSpace H] in
 /-- The quadratic form of an orthogonal projector is the squared norm of the
 projection. -/
-theorem inner_starProjection_self (W : Submodule ℂ H)
+theorem inner_starProjection_self (W : Submodule 𝕜 H)
     [W.HasOrthogonalProjection] (x : H) :
-    ⟪W.starProjection x, x⟫_ℂ = ((‖W.starProjection x‖ : ℝ) : ℂ) ^ 2 := by
+    ⟪W.starProjection x, x⟫_𝕜 = ((‖W.starProjection x‖ : ℝ) : 𝕜) ^ 2 := by
   have hmem := W.starProjection_apply_mem x
   have hperp := W.sub_starProjection_mem_orthogonal x
   have hsplit : W.starProjection x + (x - W.starProjection x) = x := by abel
-  calc ⟪W.starProjection x, x⟫_ℂ
+  calc ⟪W.starProjection x, x⟫_𝕜
       = ⟪W.starProjection x,
-          W.starProjection x + (x - W.starProjection x)⟫_ℂ := by rw [hsplit]
-    _ = ⟪W.starProjection x, W.starProjection x⟫_ℂ +
-          ⟪W.starProjection x, x - W.starProjection x⟫_ℂ := inner_add_right _ _ _
-    _ = ((‖W.starProjection x‖ : ℝ) : ℂ) ^ 2 := by
+          W.starProjection x + (x - W.starProjection x)⟫_𝕜 := by rw [hsplit]
+    _ = ⟪W.starProjection x, W.starProjection x⟫_𝕜 +
+          ⟪W.starProjection x, x - W.starProjection x⟫_𝕜 := inner_add_right _ _ _
+    _ = ((‖W.starProjection x‖ : ℝ) : 𝕜) ^ 2 := by
         rw [Submodule.inner_right_of_mem_orthogonal hmem hperp, add_zero,
           inner_self_eq_norm_sq_to_K]
-        norm_cast
 
 omit [CompleteSpace H] in
 /-- Pythagoras across a projector. -/
-theorem norm_sq_eq_starProjection_add_orthogonal (W : Submodule ℂ H)
+theorem norm_sq_eq_starProjection_add_orthogonal (W : Submodule 𝕜 H)
     [W.HasOrthogonalProjection] (x : H) :
     ‖x‖ ^ 2 = ‖W.starProjection x‖ ^ 2 + ‖x - W.starProjection x‖ ^ 2 := by
-  have hperp : ⟪W.starProjection x, x - W.starProjection x⟫_ℂ = 0 :=
+  have hperp : ⟪W.starProjection x, x - W.starProjection x⟫_𝕜 = 0 :=
     Submodule.inner_right_of_mem_orthogonal (W.starProjection_apply_mem x)
       (W.sub_starProjection_mem_orthogonal x)
   have hsplit : W.starProjection x + (x - W.starProjection x) = x := by abel
-  have hpy := @norm_add_sq ℂ _ _ _ _ (W.starProjection x)
+  have hpy := @norm_add_sq 𝕜 _ _ _ _ (W.starProjection x)
     (x - W.starProjection x)
   rw [hsplit, hperp] at hpy
   simp only [map_zero, mul_zero, add_zero] at hpy
@@ -193,28 +193,28 @@ theorem norm_sq_eq_starProjection_add_orthogonal (W : Submodule ℂ H)
 /-- **Halmos's `cos²Θ`** on the `U`-half of the generic part: the compression of
 `P_V`. -/
 noncomputable def genericCosineBlock :
-    genericLeftHalf U V →L[ℂ] genericLeftHalf U V :=
+    genericLeftHalf U V →L[𝕜] genericLeftHalf U V :=
   DavisKahanExt.compressOperator (genericLeftHalf U V) V.starProjection
 
 /-- **The quadratic form of the cosine block is `‖P_V m‖²`.**  Everything below
 is read off this identity. -/
 theorem re_inner_genericCosineBlock (m : genericLeftHalf U V) :
-    RCLike.re ⟪genericCosineBlock U V m, m⟫_ℂ =
+    RCLike.re ⟪genericCosineBlock U V m, m⟫_𝕜 =
       ‖V.starProjection (m : H)‖ ^ 2 := by
   have hcoe : ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
       (genericLeftHalf U V).starProjection (V.starProjection (m : H)) := by
     simp [genericCosineBlock, DavisKahanExt.compressOperator]
-  have h1 : ⟪genericCosineBlock U V m, m⟫_ℂ =
-      ⟪V.starProjection (m : H), (m : H)⟫_ℂ := by
-    calc ⟪genericCosineBlock U V m, m⟫_ℂ
-        = ⟪((genericCosineBlock U V m : genericLeftHalf U V) : H), (m : H)⟫_ℂ :=
+  have h1 : ⟪genericCosineBlock U V m, m⟫_𝕜 =
+      ⟪V.starProjection (m : H), (m : H)⟫_𝕜 := by
+    calc ⟪genericCosineBlock U V m, m⟫_𝕜
+        = ⟪((genericCosineBlock U V m : genericLeftHalf U V) : H), (m : H)⟫_𝕜 :=
           rfl
       _ = ⟪(genericLeftHalf U V).starProjection (V.starProjection (m : H)),
-            (m : H)⟫_ℂ := by rw [hcoe]
+            (m : H)⟫_𝕜 := by rw [hcoe]
       _ = ⟪V.starProjection (m : H),
-            (genericLeftHalf U V).starProjection (m : H)⟫_ℂ :=
+            (genericLeftHalf U V).starProjection (m : H)⟫_𝕜 :=
           (genericLeftHalf U V).inner_starProjection_left_eq_right _ _
-      _ = ⟪V.starProjection (m : H), (m : H)⟫_ℂ := by
+      _ = ⟪V.starProjection (m : H), (m : H)⟫_𝕜 := by
           rw [Submodule.starProjection_eq_self_iff.mpr m.2]
   rw [h1, inner_starProjection_self]
   norm_cast
@@ -222,7 +222,7 @@ theorem re_inner_genericCosineBlock (m : genericLeftHalf U V) :
 /-- **The cosine block is strictly positive.**  Its quadratic form vanishes only
 at `0`, because a vector of the `U`-half orthogonal to `V` is zero. -/
 theorem re_inner_genericCosineBlock_pos {m : genericLeftHalf U V} (hm : m ≠ 0) :
-    0 < RCLike.re ⟪genericCosineBlock U V m, m⟫_ℂ := by
+    0 < RCLike.re ⟪genericCosineBlock U V m, m⟫_𝕜 := by
   rw [re_inner_genericCosineBlock]
   have hne : V.starProjection (m : H) ≠ 0 := by
     intro hzero
@@ -236,7 +236,7 @@ theorem re_inner_genericCosineBlock_pos {m : genericLeftHalf U V} (hm : m ≠ 0)
 /-- **The cosine block never reaches `1`.**  A vector of the `U`-half lying in
 `V` is zero, so the complementary component is always nonzero. -/
 theorem re_inner_genericCosineBlock_lt {m : genericLeftHalf U V} (hm : m ≠ 0) :
-    RCLike.re ⟪genericCosineBlock U V m, m⟫_ℂ < ‖m‖ ^ 2 := by
+    RCLike.re ⟪genericCosineBlock U V m, m⟫_𝕜 < ‖m‖ ^ 2 := by
   rw [re_inner_genericCosineBlock]
   have hne : (m : H) - V.starProjection (m : H) ≠ 0 := by
     intro hzero
@@ -280,7 +280,7 @@ theorem sub_starProjection_mem_genericRightHalf {g : H}
 
 /-- **The Halmos cross block** `B = P_N P_V |_M`. -/
 noncomputable def genericCrossBlock :
-    genericLeftHalf U V →L[ℂ] genericRightHalf U V :=
+    genericLeftHalf U V →L[𝕜] genericRightHalf U V :=
   (genericRightHalf U V).orthogonalProjectionOnto ∘L V.starProjection ∘L
     (genericLeftHalf U V).subtypeL
 
@@ -377,7 +377,7 @@ theorem starProjection_genericRightHalf_of_mem_generic {g : H}
 
 /-- **The mirrored cross block** `B' = P_M P_V |_N`, the adjoint entry. -/
 noncomputable def genericCrossBlockMirror :
-    genericRightHalf U V →L[ℂ] genericLeftHalf U V :=
+    genericRightHalf U V →L[𝕜] genericLeftHalf U V :=
   (genericLeftHalf U V).orthogonalProjectionOnto ∘L V.starProjection ∘L
     (genericRightHalf U V).subtypeL
 
@@ -512,15 +512,15 @@ theorem genericLeftHalf_le_orthogonal_genericRightHalf :
 by Pythagoras on `P_V m = A m + B m`. -/
 theorem norm_sq_genericCrossBlock (m : genericLeftHalf U V) :
     ‖genericCrossBlock U V m‖ ^ 2 =
-      RCLike.re ⟪genericCosineBlock U V m, m⟫_ℂ -
+      RCLike.re ⟪genericCosineBlock U V m, m⟫_𝕜 -
         ‖genericCosineBlock U V m‖ ^ 2 := by
   have hperp : ⟪((genericCosineBlock U V m : genericLeftHalf U V) : H),
-      ((genericCrossBlock U V m : genericRightHalf U V) : H)⟫_ℂ = 0 :=
+      ((genericCrossBlock U V m : genericRightHalf U V) : H)⟫_𝕜 = 0 :=
     (Submodule.mem_orthogonal _ _).mp
       (genericLeftHalf_le_orthogonal_genericRightHalf U V
         (genericCosineBlock U V m).2) _ (genericCrossBlock U V m).2
       |> inner_eq_zero_symm.mp
-  have hpy := @norm_add_sq ℂ _ _ _ _
+  have hpy := @norm_add_sq 𝕜 _ _ _ _
     ((genericCosineBlock U V m : genericLeftHalf U V) : H)
     ((genericCrossBlock U V m : genericRightHalf U V) : H)
   rw [← starProjection_eq_cosineBlock_add_crossBlock U V m, hperp] at hpy
@@ -536,41 +536,41 @@ theorem norm_sq_genericCrossBlock (m : genericLeftHalf U V) :
 /-- **`B'` is the adjoint of `B`.** -/
 theorem inner_genericCrossBlock (m : genericLeftHalf U V)
     (n : genericRightHalf U V) :
-    ⟪genericCrossBlock U V m, n⟫_ℂ = ⟪m, genericCrossBlockMirror U V n⟫_ℂ := by
+    ⟪genericCrossBlock U V m, n⟫_𝕜 = ⟪m, genericCrossBlockMirror U V n⟫_𝕜 := by
   have hBcoe : ((genericCrossBlock U V m : genericRightHalf U V) : H) =
       (genericRightHalf U V).starProjection (V.starProjection (m : H)) := by
     simp [genericCrossBlock]
   have hB'coe : ((genericCrossBlockMirror U V n : genericLeftHalf U V) : H) =
       (genericLeftHalf U V).starProjection (V.starProjection (n : H)) := by
     simp [genericCrossBlockMirror]
-  calc ⟪genericCrossBlock U V m, n⟫_ℂ
+  calc ⟪genericCrossBlock U V m, n⟫_𝕜
       = ⟪(genericRightHalf U V).starProjection (V.starProjection (m : H)),
-          (n : H)⟫_ℂ := by rw [← hBcoe]; rfl
+          (n : H)⟫_𝕜 := by rw [← hBcoe]; rfl
     _ = ⟪V.starProjection (m : H),
-          (genericRightHalf U V).starProjection (n : H)⟫_ℂ :=
+          (genericRightHalf U V).starProjection (n : H)⟫_𝕜 :=
         (genericRightHalf U V).inner_starProjection_left_eq_right _ _
-    _ = ⟪V.starProjection (m : H), (n : H)⟫_ℂ := by
+    _ = ⟪V.starProjection (m : H), (n : H)⟫_𝕜 := by
         rw [Submodule.starProjection_eq_self_iff.mpr n.2]
-    _ = ⟪(m : H), V.starProjection (n : H)⟫_ℂ :=
+    _ = ⟪(m : H), V.starProjection (n : H)⟫_𝕜 :=
         V.inner_starProjection_left_eq_right _ _
     _ = ⟪(genericLeftHalf U V).starProjection (m : H),
-          V.starProjection (n : H)⟫_ℂ := by
+          V.starProjection (n : H)⟫_𝕜 := by
         rw [Submodule.starProjection_eq_self_iff.mpr m.2]
     _ = ⟪(m : H), (genericLeftHalf U V).starProjection
-          (V.starProjection (n : H))⟫_ℂ := by
+          (V.starProjection (n : H))⟫_𝕜 := by
         rw [(genericLeftHalf U V).inner_starProjection_left_eq_right]
-    _ = ⟪m, genericCrossBlockMirror U V n⟫_ℂ := by rw [← hB'coe]; rfl
+    _ = ⟪m, genericCrossBlockMirror U V n⟫_𝕜 := by rw [← hB'coe]; rfl
 
 /-- **The cross block has dense range.**  A vector of `N` orthogonal to the
 range is killed by the mirror, hence zero. -/
 theorem orthogonal_range_genericCrossBlock_eq_bot :
-    (LinearMap.range (genericCrossBlock U V : genericLeftHalf U V →ₗ[ℂ]
+    (LinearMap.range (genericCrossBlock U V : genericLeftHalf U V →ₗ[𝕜]
       genericRightHalf U V))ᗮ = ⊥ := by
   rw [Submodule.eq_bot_iff]
   intro n hn
   refine (genericCrossBlockMirror_eq_zero_iff U V n).mp ?_
   have hzero : ∀ m : genericLeftHalf U V,
-      ⟪m, genericCrossBlockMirror U V n⟫_ℂ = 0 := by
+      ⟪m, genericCrossBlockMirror U V n⟫_𝕜 = 0 := by
     intro m
     rw [← inner_genericCrossBlock]
     exact (Submodule.mem_orthogonal _ _).mp hn _ ⟨m, rfl⟩
@@ -600,73 +600,82 @@ instance instCompleteSpaceGenericRightHalf :
 
 /-- The cross block has trivial kernel, as a submodule statement. -/
 theorem ker_genericCrossBlock :
-    LinearMap.ker (genericCrossBlock U V : genericLeftHalf U V →ₗ[ℂ]
+    LinearMap.ker (genericCrossBlock U V : genericLeftHalf U V →ₗ[𝕜]
       genericRightHalf U V) = ⊥ := by
   rw [Submodule.eq_bot_iff]
   intro m hm
   exact (genericCrossBlock_eq_zero_iff U V m).mp hm
 
-/-- The polar factor of the cross block is isometric on the whole `U`-half: its
+section ComplexPolar
+
+variable {Hc : Type u} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc]
+  [CompleteSpace Hc]
+variable (Uc Vc : Submodule ℂ Hc) [Uc.HasOrthogonalProjection]
+  [Vc.HasOrthogonalProjection]
+
+/-- The polar factor of the cross block is isometric on the whole `Uc`-half: its
 initial space is all of `M`, because `B` is injective. -/
 theorem polarInitial_genericCrossBlock :
-    (genericCrossBlock U V).polarInitial = ⊤ := by
+    (genericCrossBlock Uc Vc).polarInitial = ⊤ := by
   rw [← Submodule.orthogonal_eq_bot_iff]
   rw [ContinuousLinearMap.polarInitial_orthogonal_eq_ker]
-  exact ker_genericCrossBlock U V
+  exact ker_genericCrossBlock Uc Vc
 
 /-- **The two halves of the generic part are unitarily equivalent**, via the
 polar factor of the cross block. -/
 noncomputable def genericHalvesEquiv :
-    genericLeftHalf U V ≃ₗᵢ[ℂ] genericRightHalf U V := by
+    genericLeftHalf Uc Vc ≃ₗᵢ[ℂ] genericRightHalf Uc Vc := by
   refine LinearIsometryEquiv.ofSurjective
-    { toLinearMap := (genericCrossBlock U V).polarPartial.toLinearMap
+    { toLinearMap := (genericCrossBlock Uc Vc).polarPartial.toLinearMap
       norm_map' := fun m => ?_ } ?_
   · exact ContinuousLinearMap.norm_polarPartial_apply_of_mem _
       (by rw [polarInitial_genericCrossBlock]; trivial)
   · -- The range is closed and dense, hence everything.
-    have hsub : LinearMap.range (genericCrossBlock U V : genericLeftHalf U V →ₗ[ℂ]
-        genericRightHalf U V) ≤
-        LinearMap.range ((genericCrossBlock U V).polarPartial :
-          genericLeftHalf U V →ₗ[ℂ] genericRightHalf U V) := by
+    have hsub : LinearMap.range (genericCrossBlock Uc Vc : genericLeftHalf Uc Vc →ₗ[ℂ]
+        genericRightHalf Uc Vc) ≤
+        LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
+          genericLeftHalf Uc Vc →ₗ[ℂ] genericRightHalf Uc Vc) := by
       rintro _ ⟨m, rfl⟩
-      exact ⟨(genericCrossBlock U V).modulus m,
+      exact ⟨(genericCrossBlock Uc Vc).modulus m,
         ContinuousLinearMap.polarPartial_apply_modulus _ m⟩
     have hclosed : IsClosed
-        ((LinearMap.range ((genericCrossBlock U V).polarPartial :
-          genericLeftHalf U V →ₗ[ℂ] genericRightHalf U V) :
-          Set (genericRightHalf U V))) :=
+        ((LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
+          genericLeftHalf Uc Vc →ₗ[ℂ] genericRightHalf Uc Vc) :
+          Set (genericRightHalf Uc Vc))) :=
       ContinuousLinearMap.isClosed_range_polarPartial _
-    have : (LinearMap.range ((genericCrossBlock U V).polarPartial :
-        genericLeftHalf U V →ₗ[ℂ] genericRightHalf U V)).HasOrthogonalProjection := by
-      have : CompleteSpace (LinearMap.range ((genericCrossBlock U V).polarPartial :
-          genericLeftHalf U V →ₗ[ℂ] genericRightHalf U V)) :=
+    have : (LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
+        genericLeftHalf Uc Vc →ₗ[ℂ] genericRightHalf Uc Vc)).HasOrthogonalProjection := by
+      have : CompleteSpace (LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
+          genericLeftHalf Uc Vc →ₗ[ℂ] genericRightHalf Uc Vc)) :=
         hclosed.completeSpace_coe
       exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
-    have htop : LinearMap.range ((genericCrossBlock U V).polarPartial :
-        genericLeftHalf U V →ₗ[ℂ] genericRightHalf U V) = ⊤ := by
+    have htop : LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
+        genericLeftHalf Uc Vc →ₗ[ℂ] genericRightHalf Uc Vc) = ⊤ := by
       rw [← Submodule.orthogonal_eq_bot_iff, Submodule.eq_bot_iff]
       intro n hn
-      have : n ∈ (LinearMap.range (genericCrossBlock U V : genericLeftHalf U V →ₗ[ℂ]
-          genericRightHalf U V))ᗮ := fun u hu => hn u (hsub hu)
-      rw [orthogonal_range_genericCrossBlock_eq_bot U V] at this
+      have : n ∈ (LinearMap.range (genericCrossBlock Uc Vc : genericLeftHalf Uc Vc →ₗ[ℂ]
+          genericRightHalf Uc Vc))ᗮ := fun u hu => hn u (hsub hu)
+      rw [orthogonal_range_genericCrossBlock_eq_bot Uc Vc] at this
       simpa using this
     intro n
-    have : n ∈ LinearMap.range ((genericCrossBlock U V).polarPartial :
-        genericLeftHalf U V →ₗ[ℂ] genericRightHalf U V) := by
+    have : n ∈ LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
+        genericLeftHalf Uc Vc →ₗ[ℂ] genericRightHalf Uc Vc) := by
       rw [htop]; trivial
     exact this
 
 
+end ComplexPolar
+
 /-! ## `B* B = A - A²`
 
-The quadratic-form identity upgrades to an operator identity.  Working with the
-full complex inner product rather than its real part avoids any appeal to
-"a self-adjoint operator with vanishing quadratic form is zero": both sides are
-literally the same complex number.
+The operator identity is read directly from the `2 × 2` block equation
+`P_V² = P_V`.  This route is scalar-generic over `RCLike`: the mirrored cross
+block is the adjoint of the cross block, and the `(1,1)` block gives
+`B* B = A - A²`.
 
-This is the relation that makes `|B|` a function of `A`, which is what the
-transport step needs — a unitary intertwining `A` then intertwines `|B|` by
-uniqueness of positive square roots.
+This is the relation that later makes `|B|` a function of `A` on the complex
+polar side, while the block identity itself remains valid over both `ℝ` and
+`ℂ`.
 -/
 
 /-- The cosine block is self-adjoint. -/
@@ -677,80 +686,94 @@ theorem isSelfAdjoint_genericCosineBlock :
 
 /-- The complex-valued form of `re_inner_genericCosineBlock`. -/
 theorem inner_genericCosineBlock_self (m : genericLeftHalf U V) :
-    ⟪genericCosineBlock U V m, m⟫_ℂ =
-      ((‖V.starProjection (m : H)‖ : ℝ) : ℂ) ^ 2 := by
+    ⟪genericCosineBlock U V m, m⟫_𝕜 =
+      ((‖V.starProjection (m : H)‖ : ℝ) : 𝕜) ^ 2 := by
   have hcoe : ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
       (genericLeftHalf U V).starProjection (V.starProjection (m : H)) := by
     simp [genericCosineBlock, DavisKahanExt.compressOperator]
-  calc ⟪genericCosineBlock U V m, m⟫_ℂ
-      = ⟪((genericCosineBlock U V m : genericLeftHalf U V) : H), (m : H)⟫_ℂ := rfl
+  calc ⟪genericCosineBlock U V m, m⟫_𝕜
+      = ⟪((genericCosineBlock U V m : genericLeftHalf U V) : H), (m : H)⟫_𝕜 := rfl
     _ = ⟪(genericLeftHalf U V).starProjection (V.starProjection (m : H)),
-          (m : H)⟫_ℂ := by rw [hcoe]
+          (m : H)⟫_𝕜 := by rw [hcoe]
     _ = ⟪V.starProjection (m : H),
-          (genericLeftHalf U V).starProjection (m : H)⟫_ℂ :=
+          (genericLeftHalf U V).starProjection (m : H)⟫_𝕜 :=
         (genericLeftHalf U V).inner_starProjection_left_eq_right _ _
-    _ = ⟪V.starProjection (m : H), (m : H)⟫_ℂ := by
+    _ = ⟪V.starProjection (m : H), (m : H)⟫_𝕜 := by
         rw [Submodule.starProjection_eq_self_iff.mpr m.2]
-    _ = ((‖V.starProjection (m : H)‖ : ℝ) : ℂ) ^ 2 :=
+    _ = ((‖V.starProjection (m : H)‖ : ℝ) : 𝕜) ^ 2 :=
         inner_starProjection_self V (m : H)
 
-/-- **`B* B = A - A²`**, the classical Halmos relation, obtained from the
-quadratic form rather than from the `2 × 2` block algebra. -/
+/-- **The mirrored block is the adjoint of the cross block.**
+
+This is the operator form of `inner_genericCrossBlock`.  Unlike the previous
+quadratic-form upgrade, it is valid uniformly over `RCLike`. -/
+theorem adjoint_genericCrossBlock :
+    ContinuousLinearMap.adjoint (genericCrossBlock U V) =
+      genericCrossBlockMirror U V := by
+  refine ContinuousLinearMap.ext fun n => ?_
+  refine ext_inner_left 𝕜 fun m => ?_
+  rw [ContinuousLinearMap.adjoint_inner_right]
+  exact inner_genericCrossBlock U V m n
+
+/-- **`B' B = A - A²`**, the `(1,1)` entry of `P_V² = P_V`.
+
+The proof stays entirely in the two Halmos halves.  Applying the left-half
+projection to
+`P_V (A m) + P_V (B m) = A m + B m`
+gives `A²m + B'Bm = Am`. -/
+theorem mirrorCrossBlock_comp_genericCrossBlock :
+    genericCrossBlockMirror U V ∘L genericCrossBlock U V =
+      genericCosineBlock U V -
+        genericCosineBlock U V ∘L genericCosineBlock U V := by
+  refine ContinuousLinearMap.ext fun m => ?_
+  apply Subtype.ext
+  have hA : ∀ x : genericLeftHalf U V,
+      ((genericCosineBlock U V x : genericLeftHalf U V) : H) =
+        (genericLeftHalf U V).starProjection (V.starProjection (x : H)) :=
+    fun x => by simp [genericCosineBlock, DavisKahanExt.compressOperator]
+  have hB' : ∀ n : genericRightHalf U V,
+      ((genericCrossBlockMirror U V n : genericLeftHalf U V) : H) =
+        (genericLeftHalf U V).starProjection (V.starProjection (n : H)) :=
+    fun n => by simp [genericCrossBlockMirror]
+  have hidem : V.starProjection (V.starProjection (m : H)) =
+      V.starProjection (m : H) :=
+    Submodule.starProjection_eq_self_iff.mpr (V.starProjection_apply_mem _)
+  have hsplit := starProjection_eq_cosineBlock_add_crossBlock U V m
+  have hAfix : (genericLeftHalf U V).starProjection
+      ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
+      ((genericCosineBlock U V m : genericLeftHalf U V) : H) :=
+    Submodule.starProjection_eq_self_iff.mpr (genericCosineBlock U V m).2
+  have hBzero : (genericLeftHalf U V).starProjection
+      ((genericCrossBlock U V m : genericRightHalf U V) : H) = 0 := by
+    rw [Submodule.starProjection_apply_eq_zero_iff, Submodule.mem_orthogonal]
+    intro x hx
+    exact inner_eq_zero_symm.mp ((Submodule.mem_orthogonal _ _).mp
+      (genericLeftHalf_le_orthogonal_genericRightHalf U V hx) _
+      (genericCrossBlock U V m).2)
+  have hexp : V.starProjection
+        ((genericCosineBlock U V m : genericLeftHalf U V) : H) +
+      V.starProjection
+        ((genericCrossBlock U V m : genericRightHalf U V) : H) =
+      ((genericCosineBlock U V m : genericLeftHalf U V) : H) +
+        ((genericCrossBlock U V m : genericRightHalf U V) : H) := by
+    have h1 := congrArg V.starProjection hsplit
+    rw [hidem, map_add] at h1
+    rw [hsplit] at h1
+    exact h1.symm
+  have hkey := congrArg (genericLeftHalf U V).starProjection hexp
+  rw [map_add, map_add, hAfix, hBzero, add_zero] at hkey
+  rw [← hA (genericCosineBlock U V m), ← hB' (genericCrossBlock U V m)] at hkey
+  simp only [ContinuousLinearMap.comp_apply, sub_apply, Submodule.coe_sub]
+  exact eq_sub_of_add_eq' hkey
+
+/-- **`B* B = A - A²`**, the classical Halmos relation. -/
 theorem adjoint_comp_genericCrossBlock :
     (ContinuousLinearMap.adjoint (genericCrossBlock U V)) ∘L
         genericCrossBlock U V =
       genericCosineBlock U V -
         genericCosineBlock U V ∘L genericCosineBlock U V := by
-  have hkey : ∀ m : genericLeftHalf U V,
-      ⟪((ContinuousLinearMap.adjoint (genericCrossBlock U V)) ∘L
-          genericCrossBlock U V -
-        (genericCosineBlock U V -
-          genericCosineBlock U V ∘L genericCosineBlock U V)) m, m⟫_ℂ = 0 := by
-    intro m
-    have hBB : ⟪(ContinuousLinearMap.adjoint (genericCrossBlock U V))
-        (genericCrossBlock U V m), m⟫_ℂ =
-        ((‖genericCrossBlock U V m‖ : ℝ) : ℂ) ^ 2 := by
-      rw [ContinuousLinearMap.adjoint_inner_left, inner_self_eq_norm_sq_to_K]
-      norm_cast
-    have hAA : ⟪genericCosineBlock U V (genericCosineBlock U V m), m⟫_ℂ =
-        ((‖genericCosineBlock U V m‖ : ℝ) : ℂ) ^ 2 := by
-      have h2 := (isSelfAdjoint_genericCosineBlock U V).adjoint_eq
-      have h1 : ⟪genericCosineBlock U V (genericCosineBlock U V m), m⟫_ℂ =
-          ⟪genericCosineBlock U V m, genericCosineBlock U V m⟫_ℂ := by
-        calc ⟪genericCosineBlock U V (genericCosineBlock U V m), m⟫_ℂ
-            = ⟪(ContinuousLinearMap.adjoint (genericCosineBlock U V))
-                (genericCosineBlock U V m), m⟫_ℂ := by rw [h2]
-          _ = ⟪genericCosineBlock U V m, genericCosineBlock U V m⟫_ℂ :=
-              ContinuousLinearMap.adjoint_inner_left _ _ _
-      rw [h1, inner_self_eq_norm_sq_to_K]
-      norm_cast
-    have hnorms := norm_sq_genericCrossBlock U V m
-    rw [re_inner_genericCosineBlock] at hnorms
-    simp only [sub_apply, ContinuousLinearMap.comp_apply,
-      inner_sub_left]
-    rw [hBB, hAA, inner_genericCosineBlock_self]
-    have : (‖genericCrossBlock U V m‖ : ℝ) ^ 2 =
-        ‖V.starProjection (m : H)‖ ^ 2 - ‖genericCosineBlock U V m‖ ^ 2 := by
-      linarith
-    rw [show ((‖genericCrossBlock U V m‖ : ℝ) : ℂ) ^ 2 =
-      (((‖genericCrossBlock U V m‖ : ℝ) ^ 2 : ℝ) : ℂ) by norm_cast, this]
-    push_cast
-    ring
-  have hzero := (inner_map_self_eq_zero
-    (((ContinuousLinearMap.adjoint (genericCrossBlock U V)) ∘L
-        genericCrossBlock U V -
-      (genericCosineBlock U V -
-        genericCosineBlock U V ∘L genericCosineBlock U V)) :
-      genericLeftHalf U V →ₗ[ℂ] genericLeftHalf U V)).mp hkey
-  have h0 : (ContinuousLinearMap.adjoint (genericCrossBlock U V)) ∘L
-      genericCrossBlock U V -
-      (genericCosineBlock U V -
-        genericCosineBlock U V ∘L genericCosineBlock U V) = 0 := by
-    refine ContinuousLinearMap.ext fun m => ?_
-    have := congrArg (fun f : genericLeftHalf U V →ₗ[ℂ] genericLeftHalf U V => f m)
-      hzero
-    simpa using this
-  rwa [sub_eq_zero] at h0
+  rw [adjoint_genericCrossBlock]
+  exact mirrorCrossBlock_comp_genericCrossBlock U V
 
 
 /-! ## The lower-right block, and `D B = B (1 - A)`
@@ -763,7 +786,7 @@ terms of `A` and the halves-equivalence — the last block of the `2 × 2` model
 
 /-- The lower-right block of `P_V`, on the `Uᗮ`-half. -/
 noncomputable def genericSineBlock :
-    genericRightHalf U V →L[ℂ] genericRightHalf U V :=
+    genericRightHalf U V →L[𝕜] genericRightHalf U V :=
   DavisKahanExt.compressOperator (genericRightHalf U V) V.starProjection
 
 /-- The lower-right block in ambient coordinates: `D n = P_N P_V n`, and on the
@@ -859,12 +882,19 @@ theorem genericSineBlock_comp_genericCrossBlock :
   linear_combination (norm := module) hkey
 
 
+section ComplexPolarRelations
+
+variable {Hc : Type u} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc]
+  [CompleteSpace Hc]
+variable (Uc Vc : Submodule ℂ Hc) [Uc.HasOrthogonalProjection]
+  [Vc.HasOrthogonalProjection]
+
 /-- **The polar identity for the cross block**: `Φ |B| = B`.  This is what makes
 `Φ` usable in the transport step — everything about `B` is `Φ` applied to a
 function of `A`. -/
-theorem genericHalvesEquiv_modulus (m : genericLeftHalf U V) :
-    genericHalvesEquiv U V ((genericCrossBlock U V).modulus m) =
-      genericCrossBlock U V m :=
+theorem genericHalvesEquiv_modulus (m : genericLeftHalf Uc Vc) :
+    genericHalvesEquiv Uc Vc ((genericCrossBlock Uc Vc).modulus m) =
+      genericCrossBlock Uc Vc m :=
   ContinuousLinearMap.polarPartial_apply_modulus _ m
 
 /-- **The modulus of the cross block squares to `A - A²`.**  With
@@ -872,11 +902,14 @@ theorem genericHalvesEquiv_modulus (m : genericLeftHalf U V) :
 nonnegative square root — this is what will let a unitary intertwining `A`
 intertwine `|B|`. -/
 theorem modulus_genericCrossBlock_mul_self :
-    (genericCrossBlock U V).modulus * (genericCrossBlock U V).modulus =
-      genericCosineBlock U V -
-        genericCosineBlock U V ∘L genericCosineBlock U V := by
+    (genericCrossBlock Uc Vc).modulus * (genericCrossBlock Uc Vc).modulus =
+      genericCosineBlock Uc Vc -
+        genericCosineBlock Uc Vc ∘L genericCosineBlock Uc Vc := by
   rw [ContinuousLinearMap.modulus_mul_self]
-  exact adjoint_comp_genericCrossBlock U V
+  exact adjoint_comp_genericCrossBlock Uc Vc
+
+
+end ComplexPolarRelations
 
 end HiddenFoundations
 end MathAhead

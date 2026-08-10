@@ -27,19 +27,20 @@ universe u v
 
 section CrossSpaceClassification
 
-variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace 𝕜 H₁]
   [CompleteSpace H₁]
-variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂]
   [CompleteSpace H₂]
 
 /-- Unitary equivalence of two ordered pairs of subspaces.
 
 Stated as existential quantification over the unitary rather than as a
 `Prop`-valued structure carrying it: the intended notion is a proposition, and
-a `Prop` structure cannot hold the datum `H₁ ≃ₗᵢ[ℂ] H₂`. -/
+a `Prop` structure cannot hold the datum `H₁ ≃ₗᵢ[𝕜] H₂`. -/
 def PairOfSubspacesUnitaryEquivalent
-    (U₁ V₁ : Submodule ℂ H₁) (U₂ V₂ : Submodule ℂ H₂) : Prop :=
-  ∃ e : H₁ ≃ₗᵢ[ℂ] H₂,
+    (U₁ V₁ : Submodule 𝕜 H₁) (U₂ V₂ : Submodule 𝕜 H₂) : Prop :=
+  ∃ e : H₁ ≃ₗᵢ[𝕜] H₂,
     U₁.map e.toLinearMap = U₂ ∧ V₁.map e.toLinearMap = V₂
 
 /-- Unitary equivalence of bounded operators acting on possibly different
@@ -50,8 +51,8 @@ continuous linear maps forces `e` through `LinearMap.toContinuousLinearMap`,
 which carries a `FiniteDimensional` hypothesis that the source statement does
 not have. -/
 def BoundedOperatorsUnitaryEquivalent
-    (A : H₁ →L[ℂ] H₁) (B : H₂ →L[ℂ] H₂) : Prop :=
-  ∃ e : H₁ ≃ₗᵢ[ℂ] H₂, ∀ x : H₁, e (A x) = B (e x)
+    (A : H₁ →L[𝕜] H₁) (B : H₂ →L[𝕜] H₂) : Prop :=
+  ∃ e : H₁ ≃ₗᵢ[𝕜] H₂, ∀ x : H₁, e (A x) = B (e x)
 
 end CrossSpaceClassification
 
