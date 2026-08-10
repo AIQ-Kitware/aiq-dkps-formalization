@@ -765,6 +765,105 @@ theorem theorem6_3_infiniteTrial_of_formBounds_exists
     hCompressionUpper hUnwantedLower tanTheta0 htan hResidual
   exact ⟨tanTheta0, htan, hmem, hbound⟩
 
+omit [CompleteSpace H] in
+/-- The finite-trial and arbitrary-trial tangent conditions are **the same
+proposition**.
+
+`HasTheorem63DirectedTangentApproximationNumbers` carries a `[FiniteDimensional ℂ Z]`
+instance binder, but `theorem63DirectedSineBlock` does not depend on it and neither
+does the body, so the two definitions unfold to one another.  Consequently the
+finite-dimensional trial hypothesis is not part of what the source condition *says*; it
+only restricts where the condition can be *stated*.  This is what lets
+`theorem6_3_infiniteTrial_source_ideal` below subsume the finite-trial source facade. -/
+theorem hasTheorem63DirectedTangentApproximationNumbers_iff_infinite
+    (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    [FiniteDimensional ℂ Z] (tanTheta0 : Z →L[ℂ] H) :
+    HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0 ↔
+      HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 :=
+  Iff.rfl
+
+/-- **Davis--Kahan 1970, Theorem 6.3, source-facing spectral form at arbitrary trial
+dimension.**
+
+This is the printed generalized `tan Θ` theorem at the printed unitarily-invariant-norm
+scope: the Ritz compression's spectrum lies in `[β, α]`, the spectrum of the restriction
+to the unwanted exact subspace lies in `[α + δ, ∞)`, the tangent representative is
+quantified over exactly as the paper quantifies it ("let `sin Θ₀` be *any* operator whose
+singular values are the same as those of `E₀*F₁`"), and the conclusion is
+`δ ‖tan Θ₀‖ ≤ ‖R‖` in every Fan-dominant unitarily invariant ideal family.
+
+Unlike `theorem6_3_generalizedTanTheta_source_ideal`, the trial coordinate space carries
+**no** finite-dimensionality typeclass: `[CompleteSpace Z]` is the only structure
+assumed, and it already follows from `[Z.HasOrthogonalProjection]` with `H` complete.
+
+The printed hypothesis `dim 𝒳(E₀) < dim 𝒳(F₀)` is **not** assumed, because it is not
+needed: in the directed formulation the sine block is `P_{Vᗮ}|_Z` itself, and the Ky Fan
+core holds at every relative dimension.  The strict-dimension binder in the finite-trial
+chain was already inert — `theorem6_3_generalizedTanTheta_of_formBounds` binds it as
+`_hStrictDimension` and never uses it.  Dropping an unused hypothesis strengthens the
+statement; it does not narrow it. -/
+theorem theorem6_3_infiniteTrial_source_ideal
+    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (T : H →L[ℂ] H) (hT : T.IsSymmetric)
+    (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
+    [CompleteSpace Z]
+    (hV : T.Reduces V)
+    {beta alpha delta : ℝ} (_hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
+    (hCompressionSpectrum :
+      spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
+    (hUnwantedSpectrum :
+      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
+        Set.Ici (alpha + delta))
+    (tanTheta0 : Z →L[ℂ] H)
+    (htan : HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0)
+    (hResidual : N.Mem (theorem63Residual T Z)) :
+    N.Mem tanTheta0 ∧
+      delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) := by
+  have hTsa : IsSelfAdjoint T :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
+  have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by
+    simpa [theorem63Compression, DavisKahanExt.compressOperator] using
+      DavisKahanExt.isSelfAdjoint_compressOperator hTsa Z
+  have hCompressionUpper : ∀ z : Z,
+      RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2 := by
+    intro z
+    refine SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic
+      (theorem63Compression T Z) hMsa ?_ z
+    intro r hr
+    exact (hCompressionSpectrum hr).2
+  have hUnwantedLower : ∀ y ∈ Vᗮ,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
+    SpectralOrder.Complex.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
+      hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
+  exact theorem6_3_infiniteTrial_of_formBounds N T hT V Z hV hdelta
+    hCompressionUpper hUnwantedLower tanTheta0 htan hResidual
+
+/-- The finite-trial source facade
+`theorem6_3_generalizedTanTheta_source_ideal` is subsumed: its
+`[FiniteDimensional ℂ Z]` instance and its strict-rank hypothesis are both discardable,
+and its tangent hypothesis is definitionally the arbitrary-trial one.  Stating that
+collapse as a theorem keeps it machine-checked rather than asserted in prose. -/
+theorem theorem6_3_generalizedTanTheta_source_ideal_of_infiniteTrial
+    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (T : H →L[ℂ] H) (hT : T.IsSymmetric)
+    (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
+    [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
+    (hV : T.Reduces V)
+    (_hStrictDimension : Module.rank ℂ Z < Module.rank ℂ V)
+    {beta alpha delta : ℝ} (hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
+    (hCompressionSpectrum :
+      spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
+    (hUnwantedSpectrum :
+      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
+        Set.Ici (alpha + delta))
+    (tanTheta0 : Z →L[ℂ] H)
+    (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
+    (hResidual : N.Mem (theorem63Residual T Z)) :
+    N.Mem tanTheta0 ∧
+      delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) :=
+  theorem6_3_infiniteTrial_source_ideal N T hT V Z hV hbetaalpha hdelta
+    hCompressionSpectrum hUnwantedSpectrum tanTheta0 htan hResidual
+
 /-- **Theorem 6.3 at ideal-gauge scope and arbitrary trial dimension, in the source's
 spectral form.**  The Ritz compression's spectrum lies in `[β, α]`, the unwanted
 restriction's spectrum in `[α + δ, ∞)`, and the conclusion is the ideal-gauge tangent
