@@ -16,6 +16,7 @@ import DavisKahan.Frontier.Section8Krein
 import DavisKahan.Frontier.Section8Residual
 import DavisKahan.Frontier.Section8SourceDictionary
 import DavisKahan.Frontier.Section8SourceTheorem82
+import DavisKahan.Frontier.Section8SourceTheorem82Real
 import DavisKahan.Frontier.Section8SourceSurface
 import DavisKahan.Frontier.Section8Audit
 
