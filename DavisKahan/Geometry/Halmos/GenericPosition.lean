@@ -606,12 +606,23 @@ theorem ker_genericCrossBlock :
   intro m hm
   exact (genericCrossBlock_eq_zero_iff U V m).mp hm
 
-section ComplexPolar
+section RCLikePolar
 
-variable {Hc : Type u} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc]
+variable {Hc : Type u} [NormedAddCommGroup Hc] [InnerProductSpace 𝕜 Hc]
   [CompleteSpace Hc]
-variable (Uc Vc : Submodule ℂ Hc) [Uc.HasOrthogonalProjection]
+variable (Uc Vc : Submodule 𝕜 Hc) [Uc.HasOrthogonalProjection]
   [Vc.HasOrthogonalProjection]
+variable [Algebra ℝ (genericLeftHalf Uc Vc →L[𝕜] genericLeftHalf Uc Vc)]
+  [IsScalarTower ℝ 𝕜 (genericLeftHalf Uc Vc →L[𝕜] genericLeftHalf Uc Vc)]
+  [ContinuousFunctionalCalculus ℝ (genericLeftHalf Uc Vc →L[𝕜] genericLeftHalf Uc Vc)
+    IsSelfAdjoint]
+
+/-! The polar decomposition of the cross block needs the continuous functional
+calculus on the `U`-half's operator algebra.  It is carried as a hypothesis, as
+in `ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean`; typeclass
+inference discharges it at `𝕜 = ℂ` from Mathlib's C⋆-algebra structure and at
+`𝕜 = ℝ` from
+`ForTauCeti/Analysis/InnerProductSpace/RealContinuousFunctionalCalculus.lean`. -/
 
 /-- The polar factor of the cross block is isometric on the whole `Uc`-half: its
 initial space is all of `M`, because `B` is injective. -/
@@ -624,47 +635,47 @@ theorem polarInitial_genericCrossBlock :
 /-- **The two halves of the generic part are unitarily equivalent**, via the
 polar factor of the cross block. -/
 noncomputable def genericHalvesEquiv :
-    genericLeftHalf Uc Vc ≃ₗᵢ[ℂ] genericRightHalf Uc Vc := by
+    genericLeftHalf Uc Vc ≃ₗᵢ[𝕜] genericRightHalf Uc Vc := by
   refine LinearIsometryEquiv.ofSurjective
     { toLinearMap := (genericCrossBlock Uc Vc).polarPartial.toLinearMap
       norm_map' := fun m => ?_ } ?_
   · exact ContinuousLinearMap.norm_polarPartial_apply_of_mem _
       (by rw [polarInitial_genericCrossBlock]; trivial)
   · -- The range is closed and dense, hence everything.
-    have hsub : LinearMap.range (genericCrossBlock Uc Vc : genericLeftHalf Uc Vc →ₗ[ℂ]
+    have hsub : LinearMap.range (genericCrossBlock Uc Vc : genericLeftHalf Uc Vc →ₗ[𝕜]
         genericRightHalf Uc Vc) ≤
         LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
-          genericLeftHalf Uc Vc →ₗ[ℂ] genericRightHalf Uc Vc) := by
+          genericLeftHalf Uc Vc →ₗ[𝕜] genericRightHalf Uc Vc) := by
       rintro _ ⟨m, rfl⟩
       exact ⟨(genericCrossBlock Uc Vc).modulus m,
         ContinuousLinearMap.polarPartial_apply_modulus _ m⟩
     have hclosed : IsClosed
         ((LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
-          genericLeftHalf Uc Vc →ₗ[ℂ] genericRightHalf Uc Vc) :
+          genericLeftHalf Uc Vc →ₗ[𝕜] genericRightHalf Uc Vc) :
           Set (genericRightHalf Uc Vc))) :=
       ContinuousLinearMap.isClosed_range_polarPartial _
     have : (LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
-        genericLeftHalf Uc Vc →ₗ[ℂ] genericRightHalf Uc Vc)).HasOrthogonalProjection := by
+        genericLeftHalf Uc Vc →ₗ[𝕜] genericRightHalf Uc Vc)).HasOrthogonalProjection := by
       have : CompleteSpace (LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
-          genericLeftHalf Uc Vc →ₗ[ℂ] genericRightHalf Uc Vc)) :=
+          genericLeftHalf Uc Vc →ₗ[𝕜] genericRightHalf Uc Vc)) :=
         hclosed.completeSpace_coe
       exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
     have htop : LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
-        genericLeftHalf Uc Vc →ₗ[ℂ] genericRightHalf Uc Vc) = ⊤ := by
+        genericLeftHalf Uc Vc →ₗ[𝕜] genericRightHalf Uc Vc) = ⊤ := by
       rw [← Submodule.orthogonal_eq_bot_iff, Submodule.eq_bot_iff]
       intro n hn
-      have : n ∈ (LinearMap.range (genericCrossBlock Uc Vc : genericLeftHalf Uc Vc →ₗ[ℂ]
+      have : n ∈ (LinearMap.range (genericCrossBlock Uc Vc : genericLeftHalf Uc Vc →ₗ[𝕜]
           genericRightHalf Uc Vc))ᗮ := fun u hu => hn u (hsub hu)
       rw [orthogonal_range_genericCrossBlock_eq_bot Uc Vc] at this
       simpa using this
     intro n
     have : n ∈ LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
-        genericLeftHalf Uc Vc →ₗ[ℂ] genericRightHalf Uc Vc) := by
+        genericLeftHalf Uc Vc →ₗ[𝕜] genericRightHalf Uc Vc) := by
       rw [htop]; trivial
     exact this
 
 
-end ComplexPolar
+end RCLikePolar
 
 /-! ## `B* B = A - A²`
 
@@ -673,9 +684,10 @@ The operator identity is read directly from the `2 × 2` block equation
 block is the adjoint of the cross block, and the `(1,1)` block gives
 `B* B = A - A²`.
 
-This is the relation that later makes `|B|` a function of `A` on the complex
-polar side, while the block identity itself remains valid over both `ℝ` and
-`ℂ`.
+This is the relation that later makes `|B|` a function of `A` on the polar
+side, over any `RCLike` field: the block identity and the polar step are both
+field-generic, the latter modulo the functional-calculus hypothesis carried
+below.
 -/
 
 /-- The cosine block is self-adjoint. -/
@@ -882,12 +894,16 @@ theorem genericSineBlock_comp_genericCrossBlock :
   linear_combination (norm := module) hkey
 
 
-section ComplexPolarRelations
+section RCLikePolarRelations
 
-variable {Hc : Type u} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc]
+variable {Hc : Type u} [NormedAddCommGroup Hc] [InnerProductSpace 𝕜 Hc]
   [CompleteSpace Hc]
-variable (Uc Vc : Submodule ℂ Hc) [Uc.HasOrthogonalProjection]
+variable (Uc Vc : Submodule 𝕜 Hc) [Uc.HasOrthogonalProjection]
   [Vc.HasOrthogonalProjection]
+variable [Algebra ℝ (genericLeftHalf Uc Vc →L[𝕜] genericLeftHalf Uc Vc)]
+  [IsScalarTower ℝ 𝕜 (genericLeftHalf Uc Vc →L[𝕜] genericLeftHalf Uc Vc)]
+  [ContinuousFunctionalCalculus ℝ (genericLeftHalf Uc Vc →L[𝕜] genericLeftHalf Uc Vc)
+    IsSelfAdjoint]
 
 /-- **The polar identity for the cross block**: `Φ |B| = B`.  This is what makes
 `Φ` usable in the transport step — everything about `B` is `Φ` applied to a
@@ -909,7 +925,7 @@ theorem modulus_genericCrossBlock_mul_self :
   exact adjoint_comp_genericCrossBlock Uc Vc
 
 
-end ComplexPolarRelations
+end RCLikePolarRelations
 
 end HiddenFoundations
 end MathAhead

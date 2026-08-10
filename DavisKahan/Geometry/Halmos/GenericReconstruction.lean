@@ -49,7 +49,7 @@ Kahan state Theorem 3.1 for, and multiplicity theory left the critical path.
 ## Main results
 
 * `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.genericTransport`:
-  the extension `halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂`.
+  the extension `halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂`.
 * `..._mem_left_iff` and `..._mem_right_iff`: it carries `U₁` to `U₂` and `V₁`
   to `V₂`.
 * `..._pairOfSubspacesUnitaryEquivalent_of_cosineBlockEquiv`: the pair
@@ -69,13 +69,15 @@ open Frontier
 
 universe u v
 
+variable {𝕜 : Type*} [RCLike 𝕜]
+
 /-! ## The `M ⊕ N` decomposition of a generic vector -/
 
 section OneSpace
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
-variable (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 
 omit [CompleteSpace H] in
@@ -99,7 +101,7 @@ theorem add_mem_genericLeftHalf_iff (m : genericLeftHalf U V)
     have hn : (n : H) ∈ genericLeftHalf U V := by
       have hsub := (genericLeftHalf U V).sub_mem h m.2
       simpa using hsub
-    have hzero : ⟪(n : H), (n : H)⟫_ℂ = 0 :=
+    have hzero : ⟪(n : H), (n : H)⟫_𝕜 = 0 :=
       (Submodule.mem_orthogonal _ _).mp
         (genericLeftHalf_le_orthogonal_genericRightHalf U V hn) _ n.2
     exact Subtype.ext (inner_self_eq_zero.mp hzero)
@@ -116,7 +118,7 @@ theorem mem_left_iff_mem_genericLeftHalf {y : H}
 /-- The range of the cross block is dense in the `Uᗮ`-half. -/
 theorem dense_range_genericCrossBlock :
     Dense (Set.range (genericCrossBlock U V)) := by
-  have hclosed : (LinearMap.range (genericCrossBlock U V : genericLeftHalf U V →ₗ[ℂ]
+  have hclosed : (LinearMap.range (genericCrossBlock U V : genericLeftHalf U V →ₗ[𝕜]
       genericRightHalf U V)).topologicalClosure = ⊤ :=
     Submodule.topologicalClosure_eq_top_iff.mpr
       (orthogonal_range_genericCrossBlock_eq_bot U V)
@@ -129,15 +131,15 @@ end OneSpace
 
 section TwoSpaces
 
-variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁]
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace 𝕜 H₁]
   [CompleteSpace H₁]
-variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂]
   [CompleteSpace H₂]
-variable (U₁ V₁ : Submodule ℂ H₁) [U₁.HasOrthogonalProjection]
+variable (U₁ V₁ : Submodule 𝕜 H₁) [U₁.HasOrthogonalProjection]
   [V₁.HasOrthogonalProjection]
-variable (U₂ V₂ : Submodule ℂ H₂) [U₂.HasOrthogonalProjection]
+variable (U₂ V₂ : Submodule 𝕜 H₂) [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection]
-variable (W : genericLeftHalf U₁ V₁ ≃ₗᵢ[ℂ] genericLeftHalf U₂ V₂)
+variable (W : genericLeftHalf U₁ V₁ ≃ₗᵢ[𝕜] genericLeftHalf U₂ V₂)
 variable (hW : ∀ m, W (genericCosineBlock U₁ V₁ m) = genericCosineBlock U₂ V₂ (W m))
 
 include hW in
@@ -148,6 +150,25 @@ theorem gram_intertwine_of_cosineBlock (m : genericLeftHalf U₁ V₁) :
       ((genericCrossBlock U₂ V₂).adjoint ∘L genericCrossBlock U₂ V₂) (W m) := by
   rw [adjoint_comp_genericCrossBlock, adjoint_comp_genericCrossBlock]
   simp [hW]
+
+/-! ### The functional-calculus hypotheses
+
+Everything from `modulus_intertwine_of_cosineBlock` onwards factors through the
+operator modulus of the cross block, whose source algebra is the `U`-half.  As
+in `ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean`, the calculus is
+carried as a hypothesis rather than assumed globally: typeclass inference
+discharges it at `𝕜 = ℂ` from Mathlib and at `𝕜 = ℝ` from
+`ForTauCeti/Analysis/InnerProductSpace/RealContinuousFunctionalCalculus.lean`.
+Two copies are needed because two different `U`-halves are compared. -/
+
+variable [Algebra ℝ (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)]
+  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)]
+  [ContinuousFunctionalCalculus ℝ (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)
+    IsSelfAdjoint]
+variable [Algebra ℝ (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)]
+  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)]
+  [ContinuousFunctionalCalculus ℝ (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)
+    IsSelfAdjoint]
 
 include hW in
 /-- **Step 1.**  The intertwiner passes to the moduli of the cross blocks, by
@@ -161,7 +182,7 @@ theorem modulus_intertwine_of_cosineBlock (m : genericLeftHalf U₁ V₁) :
 /-- **Step 2.**  The forced companion of `W` on the `Uᗮ`-halves: conjugate by the
 two polar equivalences `Φᵢ : Mᵢ ≃ₗᵢ Nᵢ`. -/
 noncomputable def genericRightTransport :
-    genericRightHalf U₁ V₁ ≃ₗᵢ[ℂ] genericRightHalf U₂ V₂ :=
+    genericRightHalf U₁ V₁ ≃ₗᵢ[𝕜] genericRightHalf U₂ V₂ :=
   ((genericHalvesEquiv U₁ V₁).symm.trans W).trans (genericHalvesEquiv U₂ V₂)
 
 /-- The transported right half is `W` conjugated by the two polar factors `Φ`:
@@ -194,7 +215,7 @@ theorem sineBlock_intertwine (n : genericRightHalf U₁ V₁) :
         genericCrossBlock U₁ V₁ m -
           genericCrossBlock U₁ V₁ (genericCosineBlock U₁ V₁ m) := by
     intro m
-    have h := congrArg (fun f : genericLeftHalf U₁ V₁ →L[ℂ] genericRightHalf U₁ V₁ => f m)
+    have h := congrArg (fun f : genericLeftHalf U₁ V₁ →L[𝕜] genericRightHalf U₁ V₁ => f m)
       (genericSineBlock_comp_genericCrossBlock U₁ V₁)
     simpa using h
   have hDB₂ : ∀ m : genericLeftHalf U₂ V₂,
@@ -202,7 +223,7 @@ theorem sineBlock_intertwine (n : genericRightHalf U₁ V₁) :
         genericCrossBlock U₂ V₂ m -
           genericCrossBlock U₂ V₂ (genericCosineBlock U₂ V₂ m) := by
     intro m
-    have h := congrArg (fun f : genericLeftHalf U₂ V₂ →L[ℂ] genericRightHalf U₂ V₂ => f m)
+    have h := congrArg (fun f : genericLeftHalf U₂ V₂ →L[𝕜] genericRightHalf U₂ V₂ => f m)
       (genericSineBlock_comp_genericCrossBlock U₂ V₂)
     simpa using h
   -- The two continuous maps agree on the range of `B₁` ...
@@ -231,26 +252,26 @@ include hW in
 theorem mirrorBlock_intertwine (n : genericRightHalf U₁ V₁) :
     W (genericCrossBlockMirror U₁ V₁ n) =
       genericCrossBlockMirror U₂ V₂ (genericRightTransport U₁ V₁ U₂ V₂ W n) := by
-  refine ext_inner_left ℂ fun m₂ => ?_
+  refine ext_inner_left 𝕜 fun m₂ => ?_
   obtain ⟨m, rfl⟩ := W.surjective m₂
-  calc ⟪W m, W (genericCrossBlockMirror U₁ V₁ n)⟫_ℂ
-      = ⟪m, genericCrossBlockMirror U₁ V₁ n⟫_ℂ := W.inner_map_map _ _
-    _ = ⟪genericCrossBlock U₁ V₁ m, n⟫_ℂ := (inner_genericCrossBlock U₁ V₁ m n).symm
+  calc ⟪W m, W (genericCrossBlockMirror U₁ V₁ n)⟫_𝕜
+      = ⟪m, genericCrossBlockMirror U₁ V₁ n⟫_𝕜 := W.inner_map_map _ _
+    _ = ⟪genericCrossBlock U₁ V₁ m, n⟫_𝕜 := (inner_genericCrossBlock U₁ V₁ m n).symm
     _ = ⟪genericRightTransport U₁ V₁ U₂ V₂ W (genericCrossBlock U₁ V₁ m),
-          genericRightTransport U₁ V₁ U₂ V₂ W n⟫_ℂ :=
+          genericRightTransport U₁ V₁ U₂ V₂ W n⟫_𝕜 :=
         ((genericRightTransport U₁ V₁ U₂ V₂ W).inner_map_map _ _).symm
     _ = ⟪genericCrossBlock U₂ V₂ (W m),
-          genericRightTransport U₁ V₁ U₂ V₂ W n⟫_ℂ := by
+          genericRightTransport U₁ V₁ U₂ V₂ W n⟫_𝕜 := by
         rw [crossBlock_intertwine U₁ V₁ U₂ V₂ W hW]
     _ = ⟪W m, genericCrossBlockMirror U₂ V₂
-          (genericRightTransport U₁ V₁ U₂ V₂ W n)⟫_ℂ :=
+          (genericRightTransport U₁ V₁ U₂ V₂ W n)⟫_𝕜 :=
         inner_genericCrossBlock U₂ V₂ _ _
 
 /-! ## Gluing the two halves -/
 
 /-- **Step 6.**  The extension of `W` to the whole generic part. -/
 noncomputable def genericTransport :
-    halmosGenericPart U₁ V₁ ≃ₗᵢ[ℂ] halmosGenericPart U₂ V₂ :=
+    halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂ :=
   (LinearIsometryEquiv.ofEq _ _ (halmosGenericPart_eq_sup_inf_left U₁ V₁)).trans
     ((orthogonalSupGlue (genericLeftHalf_le_orthogonal_genericRightHalf U₁ V₁)
           (genericLeftHalf_le_orthogonal_genericRightHalf U₂ V₂) W
@@ -375,10 +396,10 @@ Every hypothesis here is *data about the two pairs separately*: no map between
 the ambient spaces is assumed.  That is what makes this the converse half of
 Davis--Kahan Theorem 3.1 rather than a restatement of it. -/
 theorem pairOfSubspacesUnitaryEquivalent_of_cosineBlockEquiv
-    (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
-    (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)
-    (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
-    (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂) :
+    (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[𝕜] halmosCommonPart U₂ V₂)
+    (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosSourceDefect U₂ V₂)
+    (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosTargetDefect U₂ V₂)
+    (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[𝕜] halmosExteriorPart U₂ V₂) :
     Frontier.PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ :=
   pairOfSubspacesUnitaryEquivalent_of_summandEquivs U₁ V₁ U₂ V₂ ec es et ee
     (genericTransport U₁ V₁ U₂ V₂ W)
@@ -391,13 +412,13 @@ end TwoSpaces
 
 section Classification
 
-variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁]
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace 𝕜 H₁]
   [CompleteSpace H₁]
-variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂]
   [CompleteSpace H₂]
-variable (U₁ V₁ : Submodule ℂ H₁) [U₁.HasOrthogonalProjection]
+variable (U₁ V₁ : Submodule 𝕜 H₁) [U₁.HasOrthogonalProjection]
   [V₁.HasOrthogonalProjection]
-variable (U₂ V₂ : Submodule ℂ H₂) [U₂.HasOrthogonalProjection]
+variable (U₂ V₂ : Submodule 𝕜 H₂) [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection]
 
 /-- **Forward direction, in the paper's invariant.**  A pair-equivalence carries
@@ -405,7 +426,7 @@ the `U`-half of the generic part onto the `U`-half, and there it intertwines the
 cosine blocks. -/
 theorem exists_cosineBlockEquiv_of_pairEquiv
     (h : Frontier.PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂) :
-    ∃ W : genericLeftHalf U₁ V₁ ≃ₗᵢ[ℂ] genericLeftHalf U₂ V₂,
+    ∃ W : genericLeftHalf U₁ V₁ ≃ₗᵢ[𝕜] genericLeftHalf U₂ V₂,
       ∀ m, W (genericCosineBlock U₁ V₁ m) = genericCosineBlock U₂ V₂ (W m) := by
   obtain ⟨e, hU, hV⟩ := h
   have hinj : Function.Injective (e.toLinearMap : H₁ → H₂) := by simpa using e.injective
@@ -439,14 +460,23 @@ on the generic part is the cosine block on the `U`-half and `1 - D` on the
 `Uᗮ`-half — the same angle data with multiplicity doubled, which is what put
 Hahn--Hellinger on the critical path. -/
 structure SameHalmosCosineBlockInvariant : Prop where
-  common : Nonempty (halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V₂)
+  common : Nonempty (halmosCommonPart U₁ V₁ ≃ₗᵢ[𝕜] halmosCommonPart U₂ V₂)
   sourceDefect : Nonempty
-    (halmosSourceDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosSourceDefect U₂ V₂)
+    (halmosSourceDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosSourceDefect U₂ V₂)
   targetDefect : Nonempty
-    (halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
-  exterior : Nonempty (halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
-  cosineBlock : ∃ W : genericLeftHalf U₁ V₁ ≃ₗᵢ[ℂ] genericLeftHalf U₂ V₂,
+    (halmosTargetDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosTargetDefect U₂ V₂)
+  exterior : Nonempty (halmosExteriorPart U₁ V₁ ≃ₗᵢ[𝕜] halmosExteriorPart U₂ V₂)
+  cosineBlock : ∃ W : genericLeftHalf U₁ V₁ ≃ₗᵢ[𝕜] genericLeftHalf U₂ V₂,
     ∀ m, W (genericCosineBlock U₁ V₁ m) = genericCosineBlock U₂ V₂ (W m)
+
+variable [Algebra ℝ (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)]
+  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)]
+  [ContinuousFunctionalCalculus ℝ (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)
+    IsSelfAdjoint]
+variable [Algebra ℝ (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)]
+  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)]
+  [ContinuousFunctionalCalculus ℝ (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)
+    IsSelfAdjoint]
 
 /-- **Davis--Kahan 1970, Theorem 3.1: the operator-level classification, both
 directions.**
