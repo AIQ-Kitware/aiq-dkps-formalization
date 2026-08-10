@@ -71,9 +71,18 @@ noncomputable def cosAngleOperator (U V : Submodule 𝕜 E)
 /-- `sin Θ` on the full ambient space, the modulus `|P_U - P_V|` of the projector
 difference.  This is the symmetric full-space sine operator; its singular values
 are those of `P_U - P_V` (`singularValues_projection_sub_projection`). -/
+@[expose]
 noncomputable def sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   TauCeti.operatorAbs (projection U - projection V)
+
+/-- Public characterization of the sine-angle operator as the modulus of the projector
+difference.  Keep downstream proofs on this theorem rather than unfolding the definition
+directly. -/
+theorem sinAngleOperator_eq_operatorAbs (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    sinAngleOperator U V = TauCeti.operatorAbs (projection U - projection V) :=
+  rfl
 
 /-- The one-sided finite-dimensional `sin (2 Θ)` map supported on `U`.
 

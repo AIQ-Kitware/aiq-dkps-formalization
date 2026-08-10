@@ -16,9 +16,10 @@ MD_PATH = ROOT / "dev/davis-kahan-1970-full-source-census.md"
 # should be able to find the frontier by scanning downward.
 VERIFICATION_ORDER = [
     "proved_in_build", "proved_conditional", "partially_in_build",
-    "proved_outside_build", "not_compiling", "absent", "not_applicable",
+    "proved_outside_build", "compiler_pending", "not_compiling", "absent",
+    "not_applicable",
 ]
-NEEDS_WORK = ["absent", "not_compiling", "proved_conditional",
+NEEDS_WORK = ["absent", "not_compiling", "compiler_pending", "proved_conditional",
               "partially_in_build", "proved_outside_build"]
 
 

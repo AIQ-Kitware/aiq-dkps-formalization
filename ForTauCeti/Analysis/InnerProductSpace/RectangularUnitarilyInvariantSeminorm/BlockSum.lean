@@ -97,6 +97,20 @@ second. -/
   apply WithLp.ofLp_injective 2
   simp [orthogonalBlockSum]
 
+/-- Subtraction of compatible orthogonal block sums is blockwise. -/
+@[simp] theorem orthogonalBlockSum_sub
+    {E₁ E₂ F₁ F₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁]
+    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂]
+    (A C : E₁ →ₗ[𝕜] F₁) (B D : E₂ →ₗ[𝕜] F₂) :
+    orthogonalBlockSum (A - C) (B - D) =
+      orthogonalBlockSum A B - orthogonalBlockSum C D := by
+  ext x
+  apply WithLp.ofLp_injective 2
+  simp [orthogonalBlockSum_apply]
+
 /-- **Doubling a map onto the diagonal of a block sum, as a linear map.**
 `A ↦ A ⊕ A`.
 
@@ -138,6 +152,35 @@ noncomputable def orthogonalBlockSumDiagonal
     LinearMap.adjoint_inner_left]
   rfl
 
+/-- Symmetry of square operators is preserved by orthogonal block sum. -/
+theorem orthogonalBlockSum_isSymmetric
+    {E₁ E₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
+    {A : E₁ →ₗ[𝕜] E₁} {B : E₂ →ₗ[𝕜] E₂}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric) :
+    (orthogonalBlockSum A B).IsSymmetric := by
+  intro x y
+  simp only [orthogonalBlockSum_apply, WithLp.prod_inner_apply,
+    WithLp.ofLp_fst, WithLp.ofLp_snd]
+  rw [hA x.fst y.fst, hB x.snd y.snd]
+
+/-- Positivity of square operators is preserved by orthogonal block sum. -/
+theorem orthogonalBlockSum_isPositive
+    {E₁ E₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
+    {A : E₁ →ₗ[𝕜] E₁} {B : E₂ →ₗ[𝕜] E₂}
+    (hA : A.IsPositive) (hB : B.IsPositive) :
+    (orthogonalBlockSum A B).IsPositive := by
+  refine ⟨orthogonalBlockSum_isSymmetric hA.isSymmetric hB.isSymmetric, ?_⟩
+  intro x
+  rw [orthogonalBlockSum_apply, WithLp.prod_inner_apply]
+  have hsum :
+      0 ≤ RCLike.re ⟪A x.fst, x.fst⟫_𝕜 + RCLike.re ⟪B x.snd, x.snd⟫_𝕜 :=
+    add_nonneg (hA.re_inner_nonneg_left x.fst) (hB.re_inner_nonneg_left x.snd)
+  simpa only [WithLp.ofLp_fst, WithLp.ofLp_snd, map_add] using hsum
+
 /-- Composition of compatible orthogonal block sums is blockwise. -/
 @[simp] theorem orthogonalBlockSum_comp
     {E₁ E₂ F₁ F₂ G₁ G₂ : Type*}
@@ -154,6 +197,22 @@ noncomputable def orthogonalBlockSumDiagonal
   ext x
   apply WithLp.ofLp_injective 2
   simp [orthogonalBlockSum, LinearMap.comp_apply]
+
+/-- The operator modulus of a block-diagonal map is block-diagonal. -/
+theorem operatorAbs_orthogonalBlockSum
+    {E₁ E₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
+    (A : E₁ →ₗ[𝕜] E₁) (B : E₂ →ₗ[𝕜] E₂) :
+    operatorAbs (orthogonalBlockSum A B) =
+      orthogonalBlockSum (operatorAbs A) (operatorAbs B) := by
+  symm
+  change orthogonalBlockSum (operatorAbs A) (operatorAbs B) =
+    (LinearMap.isPositive_adjoint_comp_self (orthogonalBlockSum A B)).sqrt
+  refine (LinearMap.isPositive_adjoint_comp_self (orthogonalBlockSum A B)).sqrt_unique
+    (orthogonalBlockSum_isPositive (isPositive_operatorAbs A) (isPositive_operatorAbs B)) ?_
+  rw [orthogonalBlockSum_comp, operatorAbs_mul_self, operatorAbs_mul_self,
+    orthogonalBlockSum_adjoint, orthogonalBlockSum_comp]
 
 /-- The orthogonal block sum of two unitaries is the `L²` product unitary.  This is what makes
 the block sum compatible with the two-sided unitary invariance the singular-value calculus
