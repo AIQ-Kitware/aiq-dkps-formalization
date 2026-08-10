@@ -99,8 +99,6 @@ theorem norm_sinAngleOperatorRC (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖sinAngleOperatorRC U V‖ = TauCeti.DavisKahan.subspaceGap U V := by
   rw [sinAngleOperatorRC, norm_sinAngleOperatorC]
-  change TauCeti.DavisKahan.subspaceGap (complexifySubmodule U)
-      (complexifySubmodule V) = TauCeti.DavisKahan.subspaceGap U V
   exact subspaceGap_complexifySubmodule U V
 
 /-- Pointwise real-copy form of the sine-angle norm identity. -/
@@ -119,8 +117,6 @@ theorem norm_sinAngleOperatorDirectedRC (U V : Submodule ℝ E)
     ‖sinAngleOperatorDirectedRC U V‖ =
       TauCeti.DavisKahan.directedGap U V := by
   rw [sinAngleOperatorDirectedRC, norm_sinAngleOperatorDirectedC]
-  change TauCeti.DavisKahan.directedGap (complexifySubmodule U)
-      (complexifySubmodule V) = TauCeti.DavisKahan.directedGap U V
   exact directedGap_complexifySubmodule U V
 
 /-- The cosine operator remains contractive for real subspaces. -/

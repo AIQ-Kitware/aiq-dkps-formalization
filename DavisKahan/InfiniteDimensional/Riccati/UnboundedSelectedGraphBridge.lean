@@ -40,6 +40,7 @@ noncomputable def rectangularAngularPart
   WithLp.sndL 2 ℂ E0 E1 ∘L Y ∘L
     blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1)
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The rectangular angular part reads off the second component of `Y` on the first block. -/
 @[simp]
 theorem rectangularAngularPart_apply
@@ -49,6 +50,7 @@ theorem rectangularAngularPart_apply
         (Y (blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1) x)) :=
   rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The unbounded and bounded block-graph definitions use the same direct-sum
 range construction. -/
 theorem unboundedBlockGraph_eq_blockGraph (X : E0 →L[ℂ] E1) :

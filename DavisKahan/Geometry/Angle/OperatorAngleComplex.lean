@@ -605,10 +605,10 @@ theorem cosAngleExtendedC_ker_bot_range_top (U V : Submodule ℂ E)
     convert hclosed using 1
     ext y
     simp [SetLike.mem_coe, Set.mem_range, LinearMap.mem_range]
-  haveI : CompleteSpace
+  have : CompleteSpace
       ((cosAngleExtendedC U V).range : Submodule ℂ E) :=
     hclosed'.completeSpace_coe
-  haveI : ((cosAngleExtendedC U V).range :
+  have : ((cosAngleExtendedC U V).range :
       Submodule ℂ E).HasOrthogonalProjection :=
     Submodule.HasOrthogonalProjection.ofCompleteSpace _
   rw [← Submodule.orthogonal_eq_bot_iff]
@@ -696,9 +696,9 @@ theorem ker_bot_range_top_of_isSelfAdjoint_of_bounded_below
     convert hclosed using 1
     ext y
     simp [SetLike.mem_coe, Set.mem_range, LinearMap.mem_range]
-  haveI : CompleteSpace (T.range : Submodule ℂ E) :=
+  have : CompleteSpace (T.range : Submodule ℂ E) :=
     hclosed'.completeSpace_coe
-  haveI : (T.range : Submodule ℂ E).HasOrthogonalProjection :=
+  have : (T.range : Submodule ℂ E).HasOrthogonalProjection :=
     Submodule.HasOrthogonalProjection.ofCompleteSpace _
   rw [← Submodule.orthogonal_eq_bot_iff]
   rw [Submodule.eq_bot_iff]

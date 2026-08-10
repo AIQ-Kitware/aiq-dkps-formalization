@@ -49,12 +49,12 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge
   classical
   set L₁ : Submodule 𝕜 F := Submodule.span 𝕜 (Set.range u) with hL₁def
   set L₂ : Submodule 𝕜 E := Submodule.span 𝕜 (Set.range v) with hL₂def
-  haveI : FiniteDimensional 𝕜 L₁ :=
+  have : FiniteDimensional 𝕜 L₁ :=
     FiniteDimensional.span_of_finite 𝕜 (Set.finite_range u)
-  haveI : FiniteDimensional 𝕜 L₂ :=
+  have : FiniteDimensional 𝕜 L₂ :=
     FiniteDimensional.span_of_finite 𝕜 (Set.finite_range v)
-  haveI : CompleteSpace L₁ := FiniteDimensional.complete 𝕜 L₁
-  haveI : CompleteSpace L₂ := FiniteDimensional.complete 𝕜 L₂
+  have : CompleteSpace L₁ := FiniteDimensional.complete 𝕜 L₁
+  have : CompleteSpace L₂ := FiniteDimensional.complete 𝕜 L₂
   set K' : L₂ →L[𝕜] L₁ :=
     L₁.orthogonalProjectionOnto ∘L K ∘L L₂.subtypeL with hK'def
   -- the corestricted families

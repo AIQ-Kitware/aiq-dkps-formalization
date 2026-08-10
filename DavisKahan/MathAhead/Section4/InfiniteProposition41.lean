@@ -73,6 +73,7 @@ structure CosineDisplacementData
 
 namespace CosineDisplacementData
 
+omit [CompleteSpace F] in
 /-- The cosine commutes with each of its spectral projections. -/
 private theorem cosine_commutes_spectralProjection
     {C : E →L[ℂ] E} {A B : E →L[ℂ] F}
@@ -83,6 +84,7 @@ private theorem cosine_commutes_spectralProjection
   boundedSelfAdjointSpectralProjection_apply_comm
     C D.cosine_selfAdjoint S hS x
 
+omit [CompleteSpace F] in
 /-- On the spectral range `(-∞, c₂]`, the cosine has norm at most every
 strictly larger threshold `c₁`. -/
 private theorem cosine_norm_le_on_low_range

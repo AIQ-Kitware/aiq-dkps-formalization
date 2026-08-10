@@ -79,6 +79,7 @@ theorem norm_operatorPath_sub
     ‖operatorPath A H t - operatorPath A H u‖ = ‖t - u‖ * ‖H‖ := by
   rw [operatorPath_sub, norm_smul, RCLike.norm_ofReal, Real.norm_eq_abs]
 
+omit [CompleteSpace E] in
 /-- Quantitative path-parameter estimate for the resolvent at one fixed
 spectral parameter.  Under a uniform bound `M` at two path values, the
 resolvent varies at most linearly in `|t-u|`.
@@ -106,6 +107,7 @@ theorem norm_resolventOperator_operatorPath_sub_le
       rw [norm_sub_rev]
       ring
 
+omit [CompleteSpace E] in
 /-- Set-uniform version of the fixed-parameter resolvent estimate. -/
 theorem norm_resolventOperator_operatorPath_sub_le_of_uniform_bound
     (A H : E →L[𝕜] E) (z : 𝕜) (M : ℝ) (I : Set ℝ)
@@ -190,12 +192,14 @@ private noncomputable instance projectionFixedSpaceHasOrthogonalProjection
     (projectionFixedSpace P).HasOrthogonalProjection :=
   Submodule.HasOrthogonalProjection.ofCompleteSpace _
 
+omit [CompleteSpace H] in
 private theorem mem_projectionFixedSpace_iff
     (P : H →L[ℂ] H) (x : H) :
     x ∈ projectionFixedSpace P ↔ P x = x := by
   change (P - 1) x = 0 ↔ P x = x
   simp only [sub_apply, one_apply_eq_self, sub_eq_zero]
 
+omit [CompleteSpace H] in
 private theorem projection_apply_idempotent
     (P : H →L[ℂ] H) (hP : IsOrthogonalProjection P) (x : H) :
     P (P x) = P x := by

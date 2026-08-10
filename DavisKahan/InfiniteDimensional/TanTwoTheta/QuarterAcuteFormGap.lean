@@ -56,6 +56,7 @@ universe u
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 
+omit [CompleteSpace E] in
 private theorem norm_sq_projection_add_norm_sq_complement
     (U : Submodule ℂ E) [U.HasOrthogonalProjection] (x : E) :
     ‖U.starProjection x‖ ^ 2 + ‖x - U.starProjection x‖ ^ 2 = ‖x‖ ^ 2 := by
@@ -76,15 +77,18 @@ private theorem re_conj_real_mul (r : ℝ) (z : ℂ) :
   rw [Complex.conj_ofReal]
   simp
 
+omit [CompleteSpace E] in
 private theorem re_conj_real_mul_inner_self (r : ℝ) (x : E) :
     RCLike.re ((starRingEnd ℂ) (r : ℂ) * ⟪x, x⟫_ℂ) = r * ‖x‖ ^ 2 := by
   rw [re_conj_real_mul, inner_self_eq_norm_sq]
 
+omit [CompleteSpace E] in
 private theorem re_inner_smul_self (z : ℂ) (x : E) :
     RCLike.re ⟪z • x, x⟫_ℂ = z.re * ‖x‖ ^ 2 := by
   rw [inner_smul_left, inner_self_eq_norm_sq_to_K]
   simp [RCLike.re_to_complex, pow_two]
 
+omit [CompleteSpace E] in
 /-- Reflection through a subspace with doubling written as a complex scalar. -/
 private theorem reflection_apply_ofNat_smul
     (K : Submodule ℂ E) [K.HasOrthogonalProjection] (w : E) :
@@ -97,6 +101,7 @@ private theorem star_id_clm :
   show star (1 : E →L[ℂ] E) = (1 : E →L[ℂ] E)
   exact star_one _
 
+omit [CompleteSpace E] in
 private theorem opNorm_le_sqrt_of_sq_apply_le
     (D : E →L[ℂ] E) {c : ℝ} (hc : 0 ≤ c)
     (hD : ∀ x, ‖D x‖ ^ 2 ≤ c * ‖x‖ ^ 2) :
@@ -200,6 +205,7 @@ theorem reflected_centered_form_lower
     _ = RCLike.re ⟪A p, p⟫_ℂ - (a + b) / 2 * ‖p‖ ^ 2 -
         (RCLike.re ⟪A m, m⟫_ℂ - (a + b) / 2 * ‖m‖ ^ 2) := by ring
 
+omit [CompleteSpace E] in
 /-- Full off-diagonality is anticommutation with the source reflection. -/
 theorem reflection_anticommutes_of_maps_orthogonal
     (H : E →L[ℂ] E) (U : Submodule ℂ E) [U.HasOrthogonalProjection]
@@ -557,7 +563,7 @@ theorem isQuarterAcute_of_paper_form_gap_infinite
     simpa only [W, K, J, ContinuousLinearMap.mul_def] using
       TauCeti.DavisKahan.Experimental.spectraReflectionProduct_mem_unitary U V
   let hWnormal : IsStarNormal W := isStarNormal_of_mem_unitary hWunit
-  letI : IsStarNormal W := hWnormal
+  let : IsStarNormal W := hWnormal
   have hshiftForm : ∀ x : E,
       0 ≤ RCLike.re
         ⟪(W + star W - ((2 * α : ℝ) : ℂ) • 1) x, x⟫_ℂ := by

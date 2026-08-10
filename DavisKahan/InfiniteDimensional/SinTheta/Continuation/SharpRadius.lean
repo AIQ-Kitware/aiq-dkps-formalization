@@ -80,6 +80,7 @@ section OperatorPath
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /-- The endpoint enclosure radius controls every point of the affine path. -/
 theorem offDiagonalEnclosureRadius_path_le_norm
     (Hpert : H →L[ℂ] H) {d t : ℝ}
@@ -94,6 +95,7 @@ theorem offDiagonalEnclosureRadius_path_le_norm
     nlinarith
   exact offDiagonalEnclosureRadius_mono htNorm hle
 
+omit [CompleteSpace H] in
 /-- Under the endpoint sharp threshold, every pathwise enclosure displacement
 is strictly below the original gap. -/
 theorem offDiagonalEnclosureRadius_path_lt_gap

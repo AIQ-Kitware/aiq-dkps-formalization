@@ -69,7 +69,7 @@ theorem spectrum_real_compress_subset_Iic_of_restrictedSpectrum_subset_Iic
     (hU : InvariantFor A U) {c : ℝ}
     (hspec : restrictedSpectrum A U ⊆ Set.Iic c) :
     spectrum ℝ (compressOperator U A) ⊆ Set.Iic c := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
@@ -89,7 +89,7 @@ theorem spectrum_real_compress_subset_Ici_of_restrictedSpectrum_subset_Ici
     (hU : InvariantFor A U) {c : ℝ}
     (hspec : restrictedSpectrum A U ⊆ Set.Ici c) :
     spectrum ℝ (compressOperator U A) ⊆ Set.Ici c := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA

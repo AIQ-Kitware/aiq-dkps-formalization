@@ -247,7 +247,7 @@ theorem highProb_prod_mk_right
   have hrect : {ω : Ωref × Ωresp | ω.2 ∈ E n} = (Set.univ : Set Ωref) ×ˢ E n := by
     ext ω; simp
   show ((μref n).prod (μresp n)) {ω : Ωref × Ωresp | ω.2 ∈ E n} ≥ 1 - δ
-  haveI := hμref n
+  have := hμref n
   rw [hrect, Measure.prod_prod, measure_univ, one_mul]
   exact hN n hn
 
@@ -272,7 +272,7 @@ private theorem integrable_sq_modelReplicateMean_sub {m p : Nat}
     ∀ n f, Integrable
       (fun ω => ‖modelReplicateMean replicates Y n ω f - μmodel f‖ ^ 2) (μresp n) := by
   intro n f
-  haveI := Hraw.probability n
+  have := Hraw.probability n
   have hL2 : MemLp (fun ω => modelReplicateMean replicates Y n ω f) 2 (μresp n) := by
     simp only [modelReplicateMean, replicateMean]
     exact (memLp_finsetSum _ (fun k _ => Hraw.memLp_two n f k)).const_smul

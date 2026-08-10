@@ -612,7 +612,7 @@ theorem queryEfficient_nn_of_second_moment
           ≤ MSE (Q := Q) (X := X) Pf (yFull score Qstar)
               (yQ (Q := Q) (X := X) score Qsub)} ≥ 1 - δ := by
   -- Derive the response-mean closeness event from second moments (Chebyshev).
-  haveI : ∀ u, IsProbabilityMeasure (μ u) := hμ
+  have : ∀ u, IsProbabilityMeasure (μ u) := hμ
   have hmean :=
     Acharyya2025.RateChain.highProb_uniformResponseMeanClose_of_secondMoment
       μ Xbar μvec σ2 η hint hσ2 hη_pos hratio

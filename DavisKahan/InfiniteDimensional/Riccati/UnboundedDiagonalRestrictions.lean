@@ -47,22 +47,26 @@ noncomputable def coordinateRestriction1
   domain := coordinateRestrictionDomain1 D
   toFun := coordinateRestrictionMap1 D
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The domain of the first coordinate restriction is `coordinateRestrictionDomain0 D`. -/
 @[simp] theorem coordinateRestriction0_domain
     (D : DirectSumPMap (E0 := E0) (E1 := E1)) :
     (coordinateRestriction0 D).domain = coordinateRestrictionDomain0 D := rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The domain of the second coordinate restriction is `coordinateRestrictionDomain1 D`. -/
 @[simp] theorem coordinateRestriction1_domain
     (D : DirectSumPMap (E0 := E0) (E1 := E1)) :
     (coordinateRestriction1 D).domain = coordinateRestrictionDomain1 D := rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The first coordinate restriction acts by `coordinateRestrictionMap0`. -/
 @[simp] theorem coordinateRestriction0_apply
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
     (u : (coordinateRestriction0 D).domain) :
     coordinateRestriction0 D u = coordinateRestrictionMap0 D u := rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- `coordinateRestriction0_apply` composed with `coordinateRestrictionMap0_apply`, in one step.
 
 Both steps individually are `rfl`, but chaining them under `simp` does not work: the first
@@ -76,12 +80,14 @@ one rewrite does the whole job. -/
     coordinateRestriction0 D u =
       WithLp.fst (D (coordinateRestrictionDomain0ToOriginal D u)) := rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The second coordinate restriction acts by `coordinateRestrictionMap1`. -/
 @[simp] theorem coordinateRestriction1_apply
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
     (v : (coordinateRestriction1 D).domain) :
     coordinateRestriction1 D v = coordinateRestrictionMap1 D v := rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The composite of `coordinateRestriction1_apply` and `coordinateRestrictionMap1_apply`; see
 `coordinateRestriction0_apply'` for why the one-step form is needed. -/
 @[simp] theorem coordinateRestriction1_apply'

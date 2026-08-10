@@ -959,7 +959,7 @@ theorem tan_two_theta_norm_sub_le (hT : T.IsSymmetric) (hS : S.IsSymmetric)
       show ⟪X (X v), w⟫_𝕜 = ⟪v, X (X w)⟫_𝕜
       rw [hXsym' (X v) w, hXsym' v (X w)]
     have hn0 : 0 < Module.finrank 𝕜 E := Module.finrank_pos
-    haveI : Nonempty (Fin (Module.finrank 𝕜 E)) := Fin.pos_iff_nonempty.mp hn0
+    have : Nonempty (Fin (Module.finrank 𝕜 E)) := Fin.pos_iff_nonempty.mp hn0
     obtain ⟨i₀, -, hi₀⟩ := Finset.exists_max_image Finset.univ (hYsym.eigenvalues rfl)
       Finset.univ_nonempty
     have hxn : ‖hYsym.eigenvectorBasis rfl i₀‖ = 1 :=

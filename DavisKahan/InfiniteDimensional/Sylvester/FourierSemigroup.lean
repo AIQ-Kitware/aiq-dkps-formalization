@@ -350,6 +350,7 @@ noncomputable def topConjAlgEquiv :
   map_mul' S₁ S₂ := by ext x; rfl
   commutes' c := by ext x; rfl
 
+omit [CompleteSpace H] in
 /-- Restricting to `⊤` and transporting back recovers the original operator. -/
 @[simp] theorem topConjAlgEquiv_restrict (T : H →L[ℂ] H)
     (hU : InvariantFor T ⊤) :
@@ -357,6 +358,7 @@ noncomputable def topConjAlgEquiv :
   ext x
   rfl
 
+omit [CompleteSpace H] in
 /-- The actual restriction to the top submodule has the original
 Banach-algebra spectrum. -/
 theorem spectrum_restrict_top (T : H →L[ℂ] H) (hU : InvariantFor T ⊤) :
@@ -436,7 +438,7 @@ theorem FiniteSpectralStep.norm_operator_sub_le
     have : S.operator - A = 0 := Subsingleton.elim _ _
     rw [this, norm_zero]
     exact S.diameter_nonneg
-  · haveI := hnon
+  · have := hnon
     have hf := measurable_chosenFiniteStepSymbol S.cell S.measurable_cell
       S.pairwise_disjoint S.representative
     have hfb : BoundedOnSpectrum A (chosenFiniteStepSymbol S.cell S.representative) := by

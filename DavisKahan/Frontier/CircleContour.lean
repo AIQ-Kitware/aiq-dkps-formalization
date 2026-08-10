@@ -197,6 +197,7 @@ theorem exists_circle_spectralMargin
 
 /-! ## The separating circle as a full spectral continuation contour -/
 
+omit [CompleteSpace H] in
 /-- A real point of the spectrum never lies on a separating circle. -/
 theorem abs_sub_ne_radius_of_mem_realSpectrum
     {A : H →L[ℂ] H} {hA : IsSelfAdjointOperator A}

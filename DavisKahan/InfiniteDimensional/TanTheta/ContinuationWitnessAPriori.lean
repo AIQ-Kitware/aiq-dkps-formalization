@@ -36,6 +36,7 @@ section CoordinateNorm
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /-- Compressing an ambient angular operator to `U → Uᗮ` preserves its operator
 norm. -/
 theorem norm_subspaceAngularCoordinate_eq
@@ -78,6 +79,7 @@ theorem norm_subspaceAngularCoordinate_eq
       _ ≤ ‖Y‖ * ‖x‖ :=
         mul_le_mul_of_nonneg_left hu_le (norm_nonneg Y)
 
+omit [CompleteSpace H] in
 /-- A cross compression by two orthogonal-coordinate contractions cannot have
 larger norm than the ambient operator. -/
 theorem norm_orthogonal_cross_compression_le
@@ -133,9 +135,9 @@ theorem selectedEndpointAngularOperator_sharp_riccati_bound
   let Y : U →L[ℂ] Uᗮ := subspaceAngularCoordinate U X
   let B := subspaceBlockOperatorData (A + V) U
     C.targetSeparatingContour.selfAdjoint
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ H) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ H) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hXang : IsAngularOperator U X := by
     simpa only [U, X] using

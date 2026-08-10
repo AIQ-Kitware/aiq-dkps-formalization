@@ -42,7 +42,7 @@ theorem compressOperator_upperFormBound_of_spectrum_subset_Iic
     (hspec : spectrum ℝ (compressOperator U A) ⊆ Set.Iic c) :
     ∀ z : U,
       RCLike.re ⟪compressOperator U A z, z⟫_ℂ ≤ c * ‖z‖ ^ 2 := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
@@ -61,7 +61,7 @@ theorem compressOperator_lowerFormBound_of_spectrum_subset_Ici
     (hspec : spectrum ℝ (compressOperator U A) ⊆ Set.Ici c) :
     ∀ z : U,
       c * ‖z‖ ^ 2 ≤ RCLike.re ⟪compressOperator U A z, z⟫_ℂ := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
@@ -86,9 +86,9 @@ theorem quarterAcuteAngularCoordinate_sharp_bound_of_spectral_halfLines
     (hquarter : IsQuarterAcute U V) :
     d * ‖quarterAcuteAngularCoordinate U V hquarter‖ ≤
       ‖H‖ * (1 - ‖quarterAcuteAngularCoordinate U V hquarter‖ ^ 2) := by
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : CompleteSpace (Uᗮ : Submodule ℂ E) :=
+  let : CompleteSpace (Uᗮ : Submodule ℂ E) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   exact quarterAcuteAngularCoordinate_sharp_bound_of_form_gap
     A H hA hH U V hU hV hoff hd

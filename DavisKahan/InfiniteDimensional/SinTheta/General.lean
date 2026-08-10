@@ -323,8 +323,8 @@ theorem sinTheta_perturbation
       (restrictToOrthogonal B V hV) (restrictToReducingSubspace A U hU)
       left right d := by
     exact intervalExteriorSeparated_restrictions hA hB hU hV hgap
-  haveI : CompleteSpace U := completeSpace_of_hasOrthogonalProjection U
-  haveI : CompleteSpace Vᗮ := completeSpace_of_hasOrthogonalProjection Vᗮ
+  have : CompleteSpace U := completeSpace_of_hasOrthogonalProjection U
+  have : CompleteSpace Vᗮ := completeSpace_of_hasOrthogonalProjection Vᗮ
   have hsolve := ExactSinTheta.sylvester_mem_and_gauge_le_of_intervalExteriorGap
     (TauCeti.operatorNormFamily.{u, v} 𝕜)
     (hB.restrictToOrthogonal V hV) (hA.restrictToReducingSubspace U hU)
@@ -585,8 +585,8 @@ theorem sinTheta_generalSeparation
   have hsep : SpectraSeparated (restrictToOrthogonal B V hV) ⊤
       (restrictToReducingSubspace A U hU) ⊤ d :=
     hybridGap_restrictions hA hB hU hV hgap
-  haveI : CompleteSpace U := completeSpace_of_hasOrthogonalProjection U
-  haveI : CompleteSpace Vᗮ := completeSpace_of_hasOrthogonalProjection Vᗮ
+  have : CompleteSpace U := completeSpace_of_hasOrthogonalProjection U
+  have : CompleteSpace Vᗮ := completeSpace_of_hasOrthogonalProjection Vᗮ
   have hsol := norm_sylvester_le_of_generalSeparation_rclike
     (hB.restrictToOrthogonal V hV) (hA.restrictToReducingSubspace U hU) hd hsep hEq
   have hC : ‖C‖ ≤ ‖B - A‖ :=
@@ -1031,7 +1031,7 @@ theorem projectionCross_eq_reflectionPinch
     ContinuousLinearMap.coe_id', id_eq, map_sub, map_smul]
   match_scalars <;> (try field_simp) ; ring
 
-omit [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] in
+omit [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)] in
 /-- **The cross term is gauge-contractive**: `gauge (R P_V − P_U R) ≤ gauge R`.
 
 The two-subspace analogue of `gauge_offDiagonalPart_le`, which pinches against a

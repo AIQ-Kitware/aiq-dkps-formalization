@@ -275,6 +275,7 @@ end Integration
 
 section Main
 
+omit [CompleteSpace E] in
 /-- **A spectrum inside the open ball misses the circle.**
 
 Derived identically in both Rosenblum identities below. -/

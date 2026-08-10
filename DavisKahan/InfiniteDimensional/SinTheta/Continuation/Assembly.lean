@@ -37,6 +37,7 @@ section UniformSubdivision
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /-- A Lipschitz operator path on `[0,1]` has a uniform natural-number mesh on
 which every adjacent operator difference has norm strictly below one. -/
 theorem exists_uniform_subdivision_norm_sub_lt_one

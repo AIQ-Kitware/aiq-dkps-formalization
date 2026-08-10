@@ -51,7 +51,7 @@ theorem rangeHasOrthogonalProjection
       ((LinearMap.range X.toLinearMap : Submodule 𝕜 E) : Set E) := by
     rw [hset]
     exact isClosed_range_of_isometric hX
-  haveI : CompleteSpace (LinearMap.range X.toLinearMap) :=
+  have : CompleteSpace (LinearMap.range X.toLinearMap) :=
     hclosed.completeSpace_coe
   infer_instance
 
@@ -60,7 +60,7 @@ theorem starProjection_range_eq_comp_adjoint
     (X : F →L[𝕜] E) (hX : IsometricEmbedding X) :
     letI := rangeHasOrthogonalProjection X hX
     (LinearMap.range X.toLinearMap).starProjection = X ∘L X.adjoint := by
-  letI := rangeHasOrthogonalProjection X hX
+  let := rangeHasOrthogonalProjection X hX
   apply ContinuousLinearMap.ext
   intro y
   apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero
@@ -89,7 +89,7 @@ theorem starProjection_range_comp_isometry
     (X : F →L[𝕜] E) (hX : IsometricEmbedding X) :
     letI := rangeHasOrthogonalProjection X hX
     (LinearMap.range X.toLinearMap).starProjection ∘L X = X := by
-  letI := rangeHasOrthogonalProjection X hX
+  let := rangeHasOrthogonalProjection X hX
   rw [starProjection_range_eq_comp_adjoint X hX,
     ContinuousLinearMap.comp_assoc, adjoint_comp_isometry_eq_id X hX,
     ContinuousLinearMap.comp_id]
@@ -99,7 +99,7 @@ theorem complementaryProjection_range_comp_isometry
     (X : F →L[𝕜] E) (hX : IsometricEmbedding X) :
     letI := rangeHasOrthogonalProjection X hX
     (LinearMap.range X.toLinearMap)ᗮ.starProjection ∘L X = 0 := by
-  letI := rangeHasOrthogonalProjection X hX
+  let := rangeHasOrthogonalProjection X hX
   rw [Submodule.starProjection_orthogonal',
     ContinuousLinearMap.sub_comp,
     starProjection_range_comp_isometry X hX]

@@ -37,6 +37,7 @@ section CompressionSpectrum
 variable {Hspace : Type v} [NormedAddCommGroup Hspace]
   [InnerProductSpace ℂ Hspace] [CompleteSpace Hspace]
 
+omit [CompleteSpace Hspace] in
 /-- On a reducing subspace, orthogonal compression is the actual restricted
 operator. -/
 theorem compressOperator_eq_restrict_of_reduces
@@ -51,6 +52,7 @@ theorem compressOperator_eq_restrict_of_reduces
   exact Submodule.starProjection_eq_self_iff.mpr
     (hU.1 (u : Hspace) u.property)
 
+omit [CompleteSpace Hspace] in
 /-- The real spectrum of a compression to a reducing subspace is exactly the
 restricted spectrum used by the theorem-facing gap predicates. -/
 theorem realSpectrum_compressOperator_eq_restrictedSpectrum_of_reduces
@@ -81,6 +83,7 @@ theorem realSpectrum_compressOperator_eq_restrictedSpectrum_of_reduces
   · rintro ⟨hInv', hr⟩
     simpa using hr
 
+omit [CompleteSpace Hspace] in
 /-- A finite-gap configuration places the genuine spectra of the two diagonal
 compressions in the same interval and exterior sets. -/
 theorem _root_.TauCeti.DavisKahan.Experimental.Foundation.FiniteGapConfiguration.exists_compressOperator_enclosures

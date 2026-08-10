@@ -215,14 +215,14 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
     selfAdjointSpectralRestriction_isSelfAdjoint A hA B hB
   let hΛ : Λ.IsSelfAdjoint :=
     selfAdjointSpectralRestriction_isSelfAdjoint A hA Bᶜ hB.compl
-  letI : U.HasOrthogonalProjection :=
+  let : U.HasOrthogonalProjection :=
     selfAdjointSpectralSubspace_hasOrthogonalProjection A hA B hB
-  letI : CompleteSpace U :=
+  let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  letI : Wc.HasOrthogonalProjection := by
+  let : Wc.HasOrthogonalProjection := by
     dsimp [Wc]
     infer_instance
-  letI : CompleteSpace Wc :=
+  let : CompleteSpace Wc :=
     (Wc.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   let e : Uc ≃ₗᵢ[ℂ] Wc := submoduleMapIsometry V.reflection Uc
   let ΛJ := unitaryConjugate e Λ hΛ

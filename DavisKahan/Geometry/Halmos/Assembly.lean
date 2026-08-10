@@ -152,7 +152,7 @@ private theorem eq_zero_of_mem_of_mem_orthogonal {K : Submodule ℂ H} {x : H}
     (h₁ : x ∈ K) (h₂ : x ∈ Kᗮ) : x = 0 :=
   inner_self_eq_zero.mp ((Submodule.mem_orthogonal _ _).mp h₂ x h₁)
 
-omit [CompleteSpace H] in
+omit [CompleteSpace H] [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] in
 /-- **The part of `U` inside the trivial summand is `common ⊔ source`.**  The
 other two elementary summands lie in `Uᗮ`, so they contribute nothing. -/
 theorem inf_halmosTrivialPart_left :
@@ -177,7 +177,7 @@ theorem inf_halmosTrivialPart_left :
   · exact sup_le (le_inf inf_le_left (halmosCommonPart_le_trivial U V))
       (le_inf inf_le_left (halmosSourceDefect_le_trivial U V))
 
-omit [CompleteSpace H] in
+omit [CompleteSpace H] [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] in
 /-- **The part of `V` inside the trivial summand is `common ⊔ target`.** -/
 theorem inf_halmosTrivialPart_right :
     V ⊓ halmosTrivialPart U V =
@@ -247,6 +247,7 @@ noncomputable instance instHasOrthogonalProjectionTargetSupExterior :
   hasOrthogonalProjection_sup_of_le_orthogonal _ _
     (halmosTargetDefect_le_exterior_orthogonal U₁ V₁)
 
+omit [CompleteSpace H₁] [U₁.HasOrthogonalProjection] [V₁.HasOrthogonalProjection] in
 /-- The two halves of the trivial part are orthogonal. -/
 theorem commonSupSource_le_orthogonal_targetSupExterior :
     halmosCommonPart U₁ V₁ ⊔ halmosSourceDefect U₁ V₁ ≤
@@ -318,6 +319,7 @@ variable (ec : halmosCommonPart U₁ V₁ ≃ₗᵢ[ℂ] halmosCommonPart U₂ V
   (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[ℂ] halmosTargetDefect U₂ V₂)
   (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[ℂ] halmosExteriorPart U₂ V₂)
 
+omit [CompleteSpace H₂] [U₂.HasOrthogonalProjection] [V₂.HasOrthogonalProjection] in
 /-- On the common part, the glued trivial equivalence is the common-part
 component `ec`. -/
 theorem coe_halmosTrivialEquiv_of_mem_common {x : H₁}
@@ -329,6 +331,7 @@ theorem coe_halmosTrivialEquiv_of_mem_common {x : H₁}
     TauCeti.coe_orthogonalSupGlue,
     TauCeti.supGlueAmbient_apply_of_mem_left (halmosCommon_le_sourceDefect_orthogonal U₁ V₁) _ _ hx]
 
+omit [CompleteSpace H₂] [U₂.HasOrthogonalProjection] [V₂.HasOrthogonalProjection] in
 /-- On the source defect `U ⊓ Vᗮ`, the glued trivial equivalence is the
 source-defect component `es`. -/
 theorem coe_halmosTrivialEquiv_of_mem_source {x : H₁}
@@ -340,6 +343,7 @@ theorem coe_halmosTrivialEquiv_of_mem_source {x : H₁}
     TauCeti.coe_orthogonalSupGlue,
     TauCeti.supGlueAmbient_apply_of_mem_right (halmosCommon_le_sourceDefect_orthogonal U₁ V₁) _ _ hx]
 
+omit [CompleteSpace H₂] [U₂.HasOrthogonalProjection] [V₂.HasOrthogonalProjection] in
 /-- On the target defect `Uᗮ ⊓ V`, the glued trivial equivalence is the
 target-defect component `et`. -/
 theorem coe_halmosTrivialEquiv_of_mem_target {x : H₁}
@@ -351,6 +355,7 @@ theorem coe_halmosTrivialEquiv_of_mem_target {x : H₁}
     TauCeti.coe_orthogonalSupGlue,
     TauCeti.supGlueAmbient_apply_of_mem_left (halmosTargetDefect_le_exterior_orthogonal U₁ V₁) _ _ hx]
 
+omit [CompleteSpace H₂] [U₂.HasOrthogonalProjection] [V₂.HasOrthogonalProjection] in
 /-- On the exterior `Uᗮ ⊓ Vᗮ`, the glued trivial equivalence is the exterior
 component `ee`. -/
 theorem coe_halmosTrivialEquiv_of_mem_exterior {x : H₁}

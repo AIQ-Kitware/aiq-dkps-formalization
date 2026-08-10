@@ -182,6 +182,7 @@ theorem spectrum_compressOperator_congr {S T : Submodule ℂ E}
   subst h
   rfl
 
+omit [CompleteSpace E] in
 /-- **Spectrum transport for conjugated compressions.**  The real spectrum
 of the compression of the conjugate to the image subspace equals the real
 spectrum of the original compression. -/
@@ -493,6 +494,7 @@ theorem starProjection_map_reflection (U V : Submodule ℂ E)
   rw [Submodule.starProjection_map_apply]
   rfl
 
+omit [CompleteSpace E] in
 /-- The gap to the reflected image is the norm of the reflection defect
 of the projection: `subspaceGap U (J_V U) = ‖J_V P_U J_V - P_U‖`. -/
 theorem subspaceGap_map_reflection (U V : Submodule ℂ E)

@@ -90,6 +90,7 @@ theorem im_inner_map_self_eq_zero
   rw [← RCLike.conj_eq_iff_im, inner_conj_symm]
   exact (hA x x).symm
 
+omit [CompleteSpace E] in
 /-- A symmetric pencil at a spectral parameter with nonzero imaginary part is
 bounded below by `|im z|`. -/
 theorem abs_im_mul_norm_le_norm_sub_smul_apply
@@ -198,8 +199,8 @@ theorem isUnit_sub_smul_one_of_im_ne_zero
       nlinarith
     exact norm_le_zero_iff.mp this
   have hrange : LinearMap.range (T : E →ₗ[𝕜] E) = ⊤ := by
-    haveI : (LinearMap.range (T : E →ₗ[𝕜] E)).HasOrthogonalProjection := by
-      haveI : CompleteSpace (LinearMap.range (T : E →ₗ[𝕜] E)) :=
+    have : (LinearMap.range (T : E →ₗ[𝕜] E)).HasOrthogonalProjection := by
+      have : CompleteSpace (LinearMap.range (T : E →ₗ[𝕜] E)) :=
         hclosed.completeSpace_coe
       infer_instance
     exact (Submodule.orthogonal_eq_bot_iff).mp hbot

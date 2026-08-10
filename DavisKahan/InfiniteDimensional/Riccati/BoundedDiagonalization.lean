@@ -52,12 +52,14 @@ noncomputable def blockCoordinate1 : E1 →L[𝕜] WithLp 2 (E0 × E1) :=
       (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1)) ∘L
     (0 : E1 →L[𝕜] E0).prod (ContinuousLinearMap.id 𝕜 E1)
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The first block coordinate embeds `u` as the pair `(u, 0)`. -/
 @[simp]
 theorem blockCoordinate0_apply (u : E0) :
     blockCoordinate0 (𝕜 := 𝕜) (E0 := E0) (E1 := E1) u = WithLp.toLp 2 (u, 0) :=
   rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The second block coordinate embeds `v` as the pair `(0, v)`. -/
 @[simp]
 theorem blockCoordinate1_apply (v : E1) :
@@ -93,9 +95,10 @@ noncomputable instance blockGraph_hasOrthogonalProjection
       tendsto_nhds_unique hlim hlim2
     rw [hy]
     exact hGmem _
-  letI : CompleteSpace (blockGraph X) := hclosed.completeSpace_coe
+  let : CompleteSpace (blockGraph X) := hclosed.completeSpace_coe
   exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Membership in the zero graph is exactly vanishing of the second
 coordinate. -/
 theorem mem_blockGraph_zero_iff_snd_eq_zero
@@ -107,12 +110,14 @@ theorem mem_blockGraph_zero_iff_snd_eq_zero
     (toLp_mem_blockGraph_iff (0 : E0 →L[𝕜] E1)
       (WithLp.fst z) (WithLp.snd z))
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The first coordinate inclusion lands in the zero graph. -/
 theorem blockCoordinate0_mem_zeroGraph (u : E0) :
     blockCoordinate0 (𝕜 := 𝕜) (E0 := E0) (E1 := E1) u ∈ blockGraph (0 : E0 →L[𝕜] E1) := by
   rw [mem_blockGraph_zero_iff_snd_eq_zero]
   rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The second coordinate inclusion is orthogonal to the zero graph. -/
 theorem blockCoordinate1_mem_zeroGraph_orthogonal (v : E1) :
     blockCoordinate1 (𝕜 := 𝕜) (E0 := E0) (E1 := E1) v ∈
@@ -141,6 +146,7 @@ theorem fst_eq_zero_of_mem_zeroGraph_orthogonal
   change z.ofLp.1 = 0
   exact inner_self_eq_zero.mp horth
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The two coordinate inclusions reconstruct every direct-sum vector. -/
 theorem blockCoordinate0_add_blockCoordinate1
     (z : WithLp 2 (E0 × E1)) :
@@ -159,6 +165,7 @@ noncomputable def blockCompression1
     (T : WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1)) : E1 →L[𝕜] E1 :=
   WithLp.sndL 2 𝕜 E0 E1 ∘L T ∘L blockCoordinate1 (𝕜 := 𝕜) (E0 := E0) (E1 := E1)
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- A bounded direct-sum operator which preserves both coordinate summands is
 exactly the corresponding block-diagonal operator. -/
 theorem eq_blockDiagonalOperator_of_preserves_coordinates

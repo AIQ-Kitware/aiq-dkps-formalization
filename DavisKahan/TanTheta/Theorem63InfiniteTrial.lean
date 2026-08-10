@@ -121,7 +121,7 @@ theorem exists_finiteDimensional_le_lt_approximationSingularValue
   obtain ⟨s, hcs, v, hv, hmod⟩ :=
     (ContinuousLinearMap.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
       (K ∘L Z.subtypeL) n hc0).mp hlt
-  haveI hspanfin : FiniteDimensional ℂ (Submodule.span ℂ (Set.range v)) :=
+  have hspanfin : FiniteDimensional ℂ (Submodule.span ℂ (Set.range v)) :=
     FiniteDimensional.span_of_finite ℂ (Set.finite_range v)
   refine ⟨(Submodule.span ℂ (Set.range v)).map Z.subtype, inferInstance,
     Submodule.map_subtype_le Z _, ?_⟩
@@ -275,12 +275,12 @@ theorem exists_finiteDimensional_superset_leak
   have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by
     simpa [theorem63Compression, DavisKahanExt.compressOperator] using
       DavisKahanExt.isSelfAdjoint_compressOperator hTsa Z
-  haveI : FiniteDimensional ℂ (F₀.comap Z.subtype) :=
+  have : FiniteDimensional ℂ (F₀.comap Z.subtype) :=
     LinearEquiv.finiteDimensional (Submodule.comapSubtypeEquivOfLe hF₀Z).symm
   obtain ⟨F', hF'fin, hF₀'F', hleak'⟩ :=
     TauCeti.BorelCalculus.exists_finiteDimensional_le_almostInvariant hMsa
       (F₀.comap Z.subtype) hε
-  haveI := hF'fin
+  have := hF'fin
   refine ⟨F'.map Z.subtype, inferInstance, ?_, Submodule.map_subtype_le Z F', ?_⟩
   · have hmapeq : (F₀.comap Z.subtype).map Z.subtype = F₀ := by
       rw [Submodule.map_comap_subtype]
@@ -403,12 +403,12 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteTrial (hT : T.IsSymm
   obtain ⟨F₁, hF₁fin, hF₁Z, hF₁⟩ :=
     exists_finiteDimensional_le_lt_approximationSingularValue
       (Vᗮ.starProjection) Z n hc0 hclt
-  haveI := hF₁fin
+  have := hF₁fin
   have hεp : (0 : ℝ) < delta / (2 * ((n : ℝ) + 1)) := by positivity
   obtain ⟨F, hFfin, hF₁F, hFZ, hleak₀⟩ :=
     exists_finiteDimensional_superset_leak T hT Z F₁ hF₁Z hεp
-  haveI := hFfin
-  haveI : F.HasOrthogonalProjection := inferInstance
+  have := hFfin
+  have : F.HasOrthogonalProjection := inferInstance
   have hleak : ∀ f : F, ‖Z.starProjection (T (f : H)) -
       F.starProjection (Z.starProjection (T (f : H)))‖ ≤
       delta / (2 * ((n : ℝ) + 1)) * ‖(f : H)‖ := by
@@ -537,7 +537,7 @@ theorem theorem6_3_all_kyFan_core_infiniteTrial (hT : T.IsSymmetric)
           (Vᗮ.starProjection) Z n hcn0 hcnlt
       refine ⟨Fn, hFnfin, hFnZ, ?_⟩
       intro F hFnF hFZ _ _
-      haveI := hFnfin
+      have := hFnfin
       have hmono : approximationSingularValue n (theorem63DirectedSineBlock Fn V) ≤
           approximationSingularValue n (theorem63DirectedSineBlock F V) :=
         approximationSingularValue_restrict_mono (Vᗮ.starProjection) n hFnF
@@ -554,16 +554,16 @@ theorem theorem6_3_all_kyFan_core_infiniteTrial (hT : T.IsSymmetric)
   -- One finite subspace containing all the per-index choices.
   set F₀ : Submodule ℂ H :=
     (Finset.range k).attach.sup (fun p => Fn p.1 p.2) with hF₀_def
-  haveI : ∀ p : { x // x ∈ Finset.range k }, FiniteDimensional ℂ (Fn p.1 p.2) :=
+  have : ∀ p : { x // x ∈ Finset.range k }, FiniteDimensional ℂ (Fn p.1 p.2) :=
     fun p => hFnfin p.1 p.2
-  haveI hF₀fin : FiniteDimensional ℂ F₀ :=
+  have hF₀fin : FiniteDimensional ℂ F₀ :=
     Submodule.finiteDimensional_finset_sup _ _
   have hF₀Z : F₀ ≤ Z := Finset.sup_le fun p _ => hFnZ p.1 p.2
   have hεp : (0 : ℝ) < κ / (2 * (k : ℝ)) := by positivity
   obtain ⟨F, hFfin, hF₀F, hFZ, hleak₀⟩ :=
     exists_finiteDimensional_superset_leak T hT Z F₀ hF₀Z hεp
-  haveI := hFfin
-  haveI : F.HasOrthogonalProjection := inferInstance
+  have := hFfin
+  have : F.HasOrthogonalProjection := inferInstance
   have hleak : ∀ f : F, ‖Z.starProjection (T (f : H)) -
       F.starProjection (Z.starProjection (T (f : H)))‖ ≤
       κ / (2 * (k : ℝ)) * ‖(f : H)‖ := by
