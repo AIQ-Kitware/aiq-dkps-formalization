@@ -4,9 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Geometry.Angle.PaperDoubleAngle
+import DavisKahan.DoubleAngle.UnboundedIdeal
+import DavisKahan.BoundedOperator.TrialResidual
 import DavisKahan.InfiniteDimensional.DoubleAngleSpectrum
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 
 /-!
 # The whole-space half of the `sin 2Θ` theorem
@@ -70,6 +73,8 @@ namespace DavisKahan1970
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.Experimental
+open TauCeti.DavisKahan.Experimental.Scratch.SharedFoundations
 
 open scoped InnerProductSpace
 
@@ -87,6 +92,16 @@ local instance instCompleteSpaceCoeOfHasOrthogonalProjectionSinTwoTheta
     {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
     (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+
+omit [CompleteSpace E] in
+/-- Equal subspaces have equal orthogonal-projection operators.  Keeping this
+as an operator equality avoids dependent rewrites through
+`HasOrthogonalProjection`. -/
+private theorem starProjection_eq_of_submodule_eq
+    {U W : Submodule ℂ E} [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
+    (h : U = W) : U.starProjection = W.starProjection := by
+  cases h
+  rfl
 
 /-! ### The sharp block form of the bounded `sin Θ` estimate -/
 
@@ -348,7 +363,7 @@ private theorem kyFan_reflectionDisplacement_le
 /-- **The whole-space `sin 2Θ` theorem, Ky Fan form.**  Equation (7.5) of
 Davis--Kahan 1970 at every finite Ky Fan gauge. -/
 theorem sinTwoTheta_wholeSpace_all_kyFan
-    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    (hA : IsSelfAdjoint A) (_hB : IsSelfAdjoint B)
     (hU : Reduces A U) (hV : Reduces B V)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
@@ -365,6 +380,342 @@ theorem sinTwoTheta_wholeSpace_all_kyFan
       (by rw [reflected_spectra_orthogonal A U V]; exact hUspec') k
   rw [← paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub U V] at hkey
   exact hkey.trans (kyFan_reflectionDisplacement_le hV k)
+
+/-- The two complementary blocks of a reflection defect, read between an
+exact spectral subspace and its mirror image, have the same complete singular
+sequence.  The equality is the reflection anticommutation of the defect plus
+adjoint invariance. -/
+private theorem reflectedDefect_complementaryBlocks_same
+    {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    let W := U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)
+    let D := conjByIsometryEquiv V.reflection A - A
+    SameApproximationSingularValues
+      (paperProjectionBlock Wᗮ U D)
+      (paperProjectionBlock Wᗮᗮ Uᗮ D) := by
+  let W := U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)
+  let D := conjByIsometryEquiv V.reflection A - A
+  change SameApproximationSingularValues
+    (paperProjectionBlock Wᗮ U D)
+    (paperProjectionBlock Wᗮᗮ Uᗮ D)
+  have hDdef : D = reflectionDefect V A :=
+    conjByReflection_sub_eq_reflectionDefect V A
+  have hDsa : IsSelfAdjoint D :=
+    (isSelfAdjoint_conjByIsometryEquiv V.reflection hA).sub hA
+  have hperp : Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E) = Wᗮ :=
+    Submodule.map_orthogonal_equiv U V.reflection
+  have hWproj : W.starProjection =
+      V.reflectionOperator ∘L U.starProjection ∘L V.reflectionOperator := by
+    calc
+      W.starProjection =
+          conjByIsometryEquiv V.reflection U.starProjection := by
+        simpa only [W] using
+          TauCeti.DavisKahanExt.starProjection_map_reflection U V
+      _ = V.reflectionOperator ∘L U.starProjection ∘L
+          V.reflectionOperator := by
+        ext x
+        simp only [conjByIsometryEquiv_apply, ContinuousLinearMap.comp_apply]
+        rw [Submodule.reflection_symm, reflectionOperator_eq_reflection,
+          reflectionOperator_eq_reflection]
+  have hWperpProj : Wᗮ.starProjection =
+      V.reflectionOperator ∘L Uᗮ.starProjection ∘L V.reflectionOperator := by
+    calc
+      Wᗮ.starProjection =
+          (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection :=
+        starProjection_eq_of_submodule_eq hperp.symm
+      _ = conjByIsometryEquiv V.reflection Uᗮ.starProjection :=
+        TauCeti.DavisKahanExt.starProjection_map_reflection Uᗮ V
+      _ = V.reflectionOperator ∘L Uᗮ.starProjection ∘L
+          V.reflectionOperator := by
+        ext x
+        simp only [conjByIsometryEquiv_apply, ContinuousLinearMap.comp_apply]
+        rw [Submodule.reflection_symm, reflectionOperator_eq_reflection,
+          reflectionOperator_eq_reflection]
+  have hB₀adj :
+      (paperProjectionBlock Wᗮ U D).adjoint =
+        U.starProjection ∘L D ∘L Wᗮ.starProjection := by
+    rw [paperProjectionBlock, ContinuousLinearMap.adjoint_comp,
+      ContinuousLinearMap.adjoint_comp,
+      (isSelfAdjoint_starProjection Wᗮ).adjoint_eq,
+      hDsa.adjoint_eq, (isSelfAdjoint_starProjection U).adjoint_eq]
+    rfl
+  have hanti : V.reflectionOperator ∘L D =
+      -(D ∘L V.reflectionOperator) := by
+    rw [hDdef]
+    exact reflectionOperator_comp_reflectionDefect V A
+  have hblock : paperProjectionBlock Wᗮᗮ Uᗮ D =
+      -(V.reflectionOperator ∘L
+          (paperProjectionBlock Wᗮ U D).adjoint ∘L
+          V.reflectionOperator) := by
+    have hWW : Wᗮᗮ.starProjection = W.starProjection :=
+      starProjection_eq_of_submodule_eq (Submodule.orthogonal_orthogonal W)
+    rw [hB₀adj, paperProjectionBlock, hWW, hWproj, hWperpProj]
+    ext x
+    simp only [ContinuousLinearMap.comp_apply, neg_apply]
+    rw [reflectionOperator_apply_apply V x]
+    have hanti_x := congrArg
+      (fun T : E →L[ℂ] E => T (Uᗮ.starProjection x)) hanti
+    simp only [ContinuousLinearMap.comp_apply, neg_apply] at hanti_x
+    rw [hanti_x]
+    simp only [map_neg]
+  intro n
+  rw [hblock, ContinuousLinearMap.approximationNumber_neg]
+  have hright := sameApproximationSingularValues_comp_reflection_right V
+    (V.reflectionOperator ∘L (paperProjectionBlock Wᗮ U D).adjoint)
+  have hleft := sameApproximationSingularValues_comp_reflection_left V
+    (paperProjectionBlock Wᗮ U D).adjoint
+  calc
+    (paperProjectionBlock Wᗮ U D).approximationNumber n =
+        (paperProjectionBlock Wᗮ U D).adjoint.approximationNumber n :=
+      (ContinuousLinearMap.approximationNumber_adjoint _ n).symm
+    _ = (V.reflectionOperator ∘L
+          (paperProjectionBlock Wᗮ U D).adjoint).approximationNumber n :=
+      (hleft n).symm
+    _ = (V.reflectionOperator ∘L (paperProjectionBlock Wᗮ U D).adjoint ∘L
+          V.reflectionOperator).approximationNumber n :=
+      (hright n).symm
+
+/-- The two off-diagonal blocks of a self-adjoint operator have the same
+complete singular sequence. -/
+private theorem offDiagonalBlocks_same
+    {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
+    (V : Submodule ℂ E) [V.HasOrthogonalProjection] :
+    SameApproximationSingularValues
+      (paperProjectionBlock Vᗮ V A)
+      (paperProjectionBlock Vᗮᗮ Vᗮ A) := by
+  have hadj : (paperProjectionBlock Vᗮ V A).adjoint =
+      paperProjectionBlock V Vᗮ A := by
+    rw [paperProjectionBlock, paperProjectionBlock,
+      ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp,
+      (isSelfAdjoint_starProjection Vᗮ).adjoint_eq, hA.adjoint_eq,
+      (isSelfAdjoint_starProjection V).adjoint_eq]
+    rfl
+  have hperpBlock : paperProjectionBlock Vᗮᗮ Vᗮ A =
+      paperProjectionBlock V Vᗮ A := by
+    have hp : Vᗮᗮ.starProjection = V.starProjection :=
+      starProjection_eq_of_submodule_eq (Submodule.orthogonal_orthogonal V)
+    unfold paperProjectionBlock
+    rw [hp]
+  intro n
+  calc
+    (paperProjectionBlock Vᗮ V A).approximationNumber n =
+        (paperProjectionBlock Vᗮ V A).adjoint.approximationNumber n :=
+      (ContinuousLinearMap.approximationNumber_adjoint _ n).symm
+    _ = (paperProjectionBlock V Vᗮ A).approximationNumber n := by rw [hadj]
+    _ = (paperProjectionBlock Vᗮᗮ Vᗮ A).approximationNumber n := by
+      rw [hperpBlock]
+
+/-- **Sharp directed residual `sin 2Θ₀`, Ky Fan form.**
+
+Reflect the exact reducing subspace through the trial subspace.  A one-sided
+`sin Θ` spectral estimate bounds one reflected overlap block by one block of
+the reflection defect.  The two complementary defect blocks have matching
+singular sequences; taking an even Ky Fan prefix, pinching, and then using the
+same multiplicity identity for the trial off-diagonal pair removes the second
+copy.  The result is the printed factor `2`, rather than the factor `4` from a
+triangle inequality on the two off-diagonal blocks. -/
+theorem sinTwoTheta_directedResidual_all_kyFan
+    {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U)
+    {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
+    (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
+    (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
+      x ≤ a - d ∨ b + d ≤ x)
+    (M : V →L[ℂ] V) :
+    ∀ k : ℕ,
+      d * kyFanApproximationGauge k (sinTwoThetaIdealBlock U V) ≤
+        2 * kyFanApproximationGauge k (residual A V.subtypeL M) := by
+  intro k
+  let W := U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)
+  let D := conjByIsometryEquiv V.reflection A - A
+  have hB : IsSelfAdjoint (conjByIsometryEquiv V.reflection A) :=
+    isSelfAdjoint_conjByIsometryEquiv V.reflection hA
+  have hW : Reduces (conjByIsometryEquiv V.reflection A) W :=
+    hU.map_isometryEquiv V.reflection
+  have hWspec : spectrum ℝ (compressOperator W
+      (conjByIsometryEquiv V.reflection A)) ⊆ Set.Icc a b := by
+    rw [reflected_spectra A U V]
+    exact hUspec
+  have hWspec' : ∀ x ∈ spectrum ℝ (compressOperator Wᗮ
+      (conjByIsometryEquiv V.reflection A)),
+      x ≤ a - d ∨ b + d ≤ x := by
+    intro x hx
+    rw [reflected_spectra_orthogonal A U V] at hx
+    exact hUspec' x hx
+  have hraw := sinTheta_spectrum_block_all_kyFan hA hB hU hW hd hab
+    hUspec hWspec' k
+  have hperp : Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E) = Wᗮ := by
+    exact Submodule.map_orthogonal_equiv U V.reflection
+  have hreflectedPerpProj :
+      (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection =
+        Wᗮ.starProjection :=
+    starProjection_eq_of_submodule_eq hperp
+  have hsinAdj : (sinTwoThetaIdealBlock U V).adjoint =
+      Wᗮ.starProjection ∘L U.starProjection := by
+    rw [sinTwoThetaIdealBlock, ContinuousLinearMap.adjoint_comp,
+      (isSelfAdjoint_starProjection
+        (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))).adjoint_eq,
+      (isSelfAdjoint_starProjection U).adjoint_eq, hreflectedPerpProj]
+  have hleftBlock : paperProjectionBlock Wᗮ U
+      (((d : ℝ) : ℂ) • (1 : E →L[ℂ] E)) =
+      ((d : ℝ) : ℂ) • (sinTwoThetaIdealBlock U V).adjoint := by
+    rw [paperProjectionBlock, hsinAdj]
+    ext x
+    simp only [ContinuousLinearMap.comp_apply, smul_apply, one_apply_eq_self,
+      map_smul]
+  have hdnorm : ‖((d : ℝ) : ℂ)‖ = d := by simp [abs_of_pos hd]
+  rw [hleftBlock, kyFanApproximationGauge_smul,
+    kyFanApproximationGauge_adjoint, hdnorm] at hraw
+  have hsameD := reflectedDefect_complementaryBlocks_same hA U V
+  have hpairD := paperDiagonalPair_even_kyFan_eq_two_mul_of_same Wᗮ U D hsameD k
+  have hpinchD := paperDiagonalPair_all_kyFan_le Wᗮ U D (2 * k)
+  have hDdef : D = reflectionDefect V A :=
+    conjByReflection_sub_eq_reflectionDefect V A
+  have hsameA := offDiagonalBlocks_same hA V
+  have hpairA := paperDiagonalPair_even_kyFan_eq_two_mul_of_same Vᗮ V A hsameA k
+  have hpairAdef : paperDiagonalPair Vᗮ V A =
+      Vᗮ.starProjection ∘L A ∘L V.starProjection +
+        V.starProjection ∘L A ∘L Vᗮ.starProjection := by
+    have hp : Vᗮᗮ.starProjection = V.starProjection :=
+      starProjection_eq_of_submodule_eq (Submodule.orthogonal_orthogonal V)
+    unfold paperDiagonalPair
+    rw [hp]
+  have hoffdiag : reflectionDefect V A =
+      (-2 : ℂ) • paperDiagonalPair Vᗮ V A := by
+    rw [reflectionDefect_eq_neg_two_smul_offdiag, hpairAdef]
+  have hDgauge : kyFanApproximationGauge (2 * k) D =
+      4 * kyFanApproximationGauge k
+        (Vᗮ.starProjection ∘L A ∘L V.starProjection) := by
+    rw [hDdef, hoffdiag, kyFanApproximationGauge_smul]
+    have hnorm : ‖(-2 : ℂ)‖ = 2 := by norm_num
+    rw [hnorm, hpairA]
+    simp only [paperProjectionBlock]
+    ring_nf
+  have hblockDefect : kyFanApproximationGauge k
+      (paperProjectionBlock Wᗮ U D) ≤
+      2 * kyFanApproximationGauge k
+        (Vᗮ.starProjection ∘L A ∘L V.starProjection) := by
+    rw [hpairD] at hpinchD
+    rw [hDgauge] at hpinchD
+    linarith
+  have hX : IsometricEmbedding (V.subtypeL : V →L[ℂ] E) := fun x => rfl
+  have hP : V.subtypeL ∘L V.subtypeL.adjoint = V.starProjection := by
+    ext x
+    rw [ContinuousLinearMap.comp_apply, Submodule.adjoint_subtypeL]
+    rfl
+  have hQV : Vᗮ.starProjection ∘L V.subtypeL = 0 := by
+    ext v
+    change Vᗮ.starProjection (v : E) = 0
+    rw [Submodule.starProjection_orthogonal_apply,
+      V.starProjection_eq_self_iff.mpr v.property, sub_self]
+  have hfactor : Vᗮ.starProjection ∘L A ∘L V.starProjection =
+      (Vᗮ.starProjection ∘L residual A V.subtypeL M) ∘L
+        V.subtypeL.adjoint := by
+    rw [← hP]
+    apply ContinuousLinearMap.ext
+    intro x
+    have hzero :
+        Vᗮ.starProjection (V.subtypeL (M (V.subtypeL.adjoint x))) = 0 := by
+      have hz := congrArg
+        (fun T : V →L[ℂ] E => T (M (V.subtypeL.adjoint x))) hQV
+      simpa only [ContinuousLinearMap.comp_apply, zero_apply]
+        using hz
+    change
+      Vᗮ.starProjection (A (V.subtypeL (V.subtypeL.adjoint x))) =
+        Vᗮ.starProjection
+          ((A ∘L V.subtypeL - V.subtypeL ∘L M) (V.subtypeL.adjoint x))
+    rw [sub_apply, ContinuousLinearMap.comp_apply,
+      ContinuousLinearMap.comp_apply, map_sub, hzero, sub_zero]
+  have hcrossKyFan : kyFanApproximationGauge k
+      (Vᗮ.starProjection ∘L A ∘L V.starProjection) ≤
+      kyFanApproximationGauge k (residual A V.subtypeL M) := by
+    have hcomp := kyFanApproximationGauge_comp_le k Vᗮ.starProjection
+      (residual A V.subtypeL M) V.subtypeL.adjoint
+    calc
+      kyFanApproximationGauge k
+          (Vᗮ.starProjection ∘L A ∘L V.starProjection) =
+          kyFanApproximationGauge k
+            ((Vᗮ.starProjection ∘L residual A V.subtypeL M) ∘L
+              V.subtypeL.adjoint) := congrArg (kyFanApproximationGauge k) hfactor
+      _ ≤ ‖Vᗮ.starProjection‖ *
+          kyFanApproximationGauge k (residual A V.subtypeL M) *
+          ‖V.subtypeL.adjoint‖ := hcomp
+      _ ≤ 1 * kyFanApproximationGauge k (residual A V.subtypeL M) * 1 := by
+        have hproj : ‖(Vᗮ.starProjection : E →L[ℂ] E)‖ ≤ 1 :=
+          Vᗮ.starProjection_norm_le
+        have hadj : ‖V.subtypeL.adjoint‖ ≤ 1 :=
+          (isometry_and_adjoint_norm_le_one V.subtypeL hX).2
+        have hnonneg : 0 ≤ kyFanApproximationGauge k (residual A V.subtypeL M) :=
+          kyFanApproximationGauge_nonneg k (residual A V.subtypeL M)
+        have hleft :
+            ‖(Vᗮ.starProjection : E →L[ℂ] E)‖ *
+                kyFanApproximationGauge k (residual A V.subtypeL M) ≤
+              1 * kyFanApproximationGauge k (residual A V.subtypeL M) :=
+          mul_le_mul_of_nonneg_right hproj hnonneg
+        exact mul_le_mul hleft hadj (norm_nonneg _) (by simpa using hnonneg)
+      _ = kyFanApproximationGauge k (residual A V.subtypeL M) := by simp
+  calc
+    d * kyFanApproximationGauge k (sinTwoThetaIdealBlock U V)
+        ≤ kyFanApproximationGauge k (paperProjectionBlock Wᗮ U D) := hraw
+    _ ≤ 2 * kyFanApproximationGauge k
+        (Vᗮ.starProjection ∘L A ∘L V.starProjection) := hblockDefect
+    _ ≤ 2 * kyFanApproximationGauge k (residual A V.subtypeL M) := by
+      gcongr
+
+/-- **The directed residual `sin 2Θ₀` theorem for every source unitarily
+invariant norm.**  This is the paper-norm lift of
+`sinTwoTheta_directedResidual_all_kyFan`, retaining the sharp factor `2`.
+
+The residual acts from the trial subspace into the ambient space, whereas the
+canonical doubled-angle block is ambient-to-ambient.  Before invoking the
+homogeneous Fan-dominance adapter, extend the residual by zero on `Vᗮ` using
+`V.subtypeL.adjoint`.  This preserves its complete approximation-singular
+sequence, hence every paper norm, and keeps the norm comparison within one
+operator type. -/
+theorem sinTwoTheta_directedResidual_paperUINorm
+    (N : PaperUnitaryInvariantNorm)
+    {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U)
+    {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
+    (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
+    (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
+      x ≤ a - d ∨ b + d ≤ x)
+    (M : V →L[ℂ] V)
+    (hMem : N.Mem (residual A V.subtypeL M)) :
+    N.Mem (sinTwoThetaIdealBlock U V) ∧
+      d * N.gauge (sinTwoThetaIdealBlock U V) ≤
+        2 * N.gauge (residual A V.subtypeL M) := by
+  let R : V →L[ℂ] E := residual A V.subtypeL M
+  let R0 : E →L[ℂ] E := R ∘L V.subtypeL.adjoint
+  have hsameR : SameApproximationSingularSequence R0 R := by
+    exact sameApproximationSingularValues_extendDomainByZero V R
+  have htransport := hsameR.paperMem_iff_and_gauge_eq N
+  have hMem0 : N.Mem R0 := htransport.1.mpr hMem
+  have hgauge : N.gauge R0 = N.gauge R := htransport.2
+  have htwo : ‖((2 : ℝ) : ℂ)‖ = 2 := by norm_num
+  have hscaled : ∀ k : ℕ,
+      d * kyFanApproximationGauge k (sinTwoThetaIdealBlock U V) ≤
+        kyFanApproximationGauge k (((2 : ℝ) : ℂ) • R0) := by
+    intro k
+    rw [kyFanApproximationGauge_smul, htwo,
+      hsameR.kyFanApproximationGauge_eq k]
+    exact sinTwoTheta_directedResidual_all_kyFan
+      (A := A) (U := U) (V := V) hA hU hd hab hUspec hUspec' M k
+  have hMem2 : N.Mem (((2 : ℝ) : ℂ) • R0) := by
+    intro htop
+    rw [N.extendedGauge_smul, htwo] at htop
+    rcases ENNReal.mul_eq_top.mp htop with ⟨_, h⟩ | ⟨h, _⟩
+    · exact hMem0 h
+    · exact absurd h (by simp)
+  obtain ⟨hmem, hle⟩ := N.mul_gauge_le_of_all_mul_kyFan_le hd hMem2 hscaled
+  refine ⟨hmem, ?_⟩
+  rw [N.gauge_smul _ hMem0, htwo, hgauge] at hle
+  exact hle
 
 /-- **The whole-space `sin 2Θ` theorem for every source unitarily invariant
 norm**: `δ ‖sin 2Θ‖ ≤ 2 ‖H‖`, the second conclusion of the Section 2 `sin 2Θ`

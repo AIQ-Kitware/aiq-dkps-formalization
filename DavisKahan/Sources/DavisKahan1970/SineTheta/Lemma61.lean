@@ -276,6 +276,38 @@ theorem splitKyFanGauge_two_mul_of_same
 
 end MergeEven
 
+/-- If the two complementary projection blocks have the same complete
+singular-value sequence, every even Ky Fan prefix of their diagonal pair is
+twice the corresponding prefix of either block.  This is the multiplicity
+bookkeeping used when a self-adjoint off-diagonal operator is compared with
+one rectangular corner. -/
+theorem paperDiagonalPair_even_kyFan_eq_two_mul_of_same
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+    (Ω Γ : Submodule 𝕜 E)
+    [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
+    (K : E →L[𝕜] E)
+    (h : SameApproximationSingularValues
+      (paperProjectionBlock Ω Γ K)
+      (paperProjectionBlock Ωᗮ Γᗮ K))
+    (k : ℕ) :
+    kyFanApproximationGauge (2 * k) (paperDiagonalPair Ω Γ K) =
+      2 * kyFanApproximationGauge k (paperProjectionBlock Ω Γ K) := by
+  have hc₀ := paperProjectionBlock_same_compression Ω Γ K
+  have hc₁ := paperProjectionBlock_same_compression Ωᗮ Γᗮ K
+  have hcomp : SameApproximationSingularSequence
+      (paperBlockCompression Ω Γ K)
+      (paperBlockCompression Ωᗮ Γᗮ K) :=
+    (hc₀.symm.trans h).trans hc₁
+  have hdiag : paperDiagonalPair Ω Γ K =
+      paperProjectionBlock Ω Γ K + paperProjectionBlock Ωᗮ Γᗮ K := by
+    rw [paperDiagonalPair, paperProjectionBlock, paperProjectionBlock]
+  rw [hdiag,
+    (paperProjectionBlockPair_same_blockSum Ω Γ K K).kyFanApproximationGauge_eq
+      (2 * k),
+    kyFanApproximationGauge_continuousOrthogonalBlockSum,
+    splitKyFanGauge_two_mul_of_same hcomp k,
+    hc₀.kyFanApproximationGauge_eq k]
+
 /-- The converse in Lemma 6.1 under the source paper's matching-singular-value
 hypotheses. -/
 theorem paperLemma61_converse
