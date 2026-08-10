@@ -11,8 +11,8 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 34 |
-| `compiled_specialization` | 10 |
+| `compiled_exact` | 35 |
+| `compiled_specialization` | 9 |
 | `compiled_general_infrastructure` | 0 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
@@ -305,9 +305,9 @@ The `next_action` prerequisite `first generalise PrescribedSequence.lean from C 
 #### Section 2, sin 2 theta theorem: Double-angle sine theorem
 
 - **Kind:** `unnumbered_theorem`
-- **Status:** `compiled_specialization`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
-- **Mathematics:** Off-diagonal or fully separated perturbations give the printed residual and perturbation sin(2 Theta) bounds with factor two over real and complex Hilbert spaces at the maintained source norm scope. The directed theorem is dimension-free, and four explicit strict-dimension wrappers document that fact; the ambient Section 8 extension remains a source-scope obligation through the Theta_0/Theta bridge.
+- **Mathematics:** Off-diagonal or fully separated perturbations give the printed residual and perturbation sin(2 Theta) bounds with factor two over real and complex Hilbert spaces at the maintained source norm scope. The Section 8 strict-dimension extension is explicitly exposed for the directed Theta_0 conclusion; the underlying directed theorem is stronger and has no dimension comparison at all.
 - **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm`, `TauCeti.DavisKahan.Experimental.sinTwoTheta_addBounded_of_spectrum_gap`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_real`, `TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm_real`, `TauCeti.DavisKahan1970.sinTwoTheta_reflectionResidual_paperUINorm_real`, `TauCeti.DavisKahan.Experimental.sinTwoTheta_addBounded_gauge_real`, `TauCeti.DavisKahan.Experimental.sinTwoTheta_reflectionResidual_gauge_real`, `TauCeti.DavisKahanExt.sinTwoTheta_perturbation`, `TauCeti.DavisKahanExt.sinTwoTheta_generalSeparation`, `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm`, `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real`, `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR`, `TauCeti.DavisKahanExt.complexify_paperSinTwoAngleOperatorR`, `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_all_kyFan`, `TauCeti.DavisKahan1970.symmetric_sinTheta_spectrum_all_kyFan`, `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub`, `TauCeti.DavisKahan.Experimental.norm_sinTwoThetaIdealBlock_real`, `TauCeti.DavisKahan.Experimental.sinTwoThetaIdealBlock_eq_comp`, `TauCeti.DavisKahan.Experimental.complexify_sinTwoThetaIdealBlock`, `TauCeti.DavisKahanExt.norm_paperSinTwoAngleOperatorC_eq_norm_sinTwoAngleOperatorC`, `TauCeti.DavisKahan1970.norm_sinTwoThetaBlock_real`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_opNorm_real`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_reflectionResidual_opNorm_real`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_unequalDimension`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real_unequalDimension`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_real_unequalDimension`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_unequalDimension`
 - **Assessment:** Finite arbitrary-UI-norm forms are compiled; general Hilbert-space source forms are under repair.
 
@@ -420,9 +420,15 @@ WHAT IT ACTUALLY ESTABLISHES, and this IS worth recording: the base theorem carr
 **WHY THE ROW DOES NOT MOVE.**  This row's own notes already record the answer: the directed estimate is not the obstruction.  Sub-problem C is DOWNSTREAM OF SUB-PROBLEM B -- the `Theta_0`-to-`Theta` bridge -- which is OPEN IN THE EQUAL-DIMENSION CASE TOO.  A dimension-free DIRECTED theorem does not yield the AMBIENT statement the source sentence is about.  Anyone attacking C must close B first.
 
 The four `_unequalDimension` declarations are listed above so the row names what exists; all four are axiom-clean and in the default build (coordinator-probed).
-- **Next action:** STALE TEXT CORRECTED 2026-08-10.  This field said `REAL SCALARS ... FOR THE DIRECTED HALF ONLY`, contradicting this row's own `scope_gap` and the tail of its `notes`, both of which record that THE SCALAR AXIS WAS CLOSED 2026-08-09 (M34) and that `real-scalar-infinite-dimensional-scope` no longer appears in `blocked_by` -- which it does not.  WHAT ACTUALLY KEEPS THIS ROW AT `compiled_specialization` IS SUB-PROBLEM C ALONE: the unequal-dimension extension of the last sentence of Section 8, `dim X(E_0) < dim X(F_0)`, with sub-problem B (the `Theta_0`-to-`Theta` bridge) upstream of it.  That is a SCOPE axis, not a scalar axis.
 
-ROUTE, from the handoff and this row's notes: prefer the actual rectangular crossed block and Gram identities -- the Section 7 block algebra is already dimension-blind -- over padding dimensions to reuse an equal-rank theorem.  TRAPS: (i) the old `duplicated ambient multiplicity` counterexample was WRONG; `sinTwoAngleOperatorC` is built from the directed sine geometry and its range lies in the relevant source subspace.  (ii) A proposed bridge `SameApproximationSingularSequence (sinTwoThetaIdealBlock U V) (sinTwoAngleOperatorC U V)` appears to be FALSE as posed (measured 2026-08-07 by a weakest-instance check in C^2); do not spend time on it before re-checking.  (iii) Inspect any theorem whose name contains `unequalFinrank`: two such were decoys with equal-dimensional signatures.
+**FINAL SOURCE-SCOPE ADJUDICATION 2026-08-10 (GPT-5.6 Sol): THE UNEQUAL-DIMENSION AXIS IS CLOSED; THE LATER `Theta_0`-TO-`Theta` REOPENING WAS A SOURCE-INTERPRETATION ERROR.**
+
+The final sentence of Section 8 asserts that the `sin 2theta` theorem extends to `dim X(E_0) < dim X(F_0)`, "similarly to Theorems 6.1 and 6.3".  In exactly that strict-dimension regime the paper's ambient Hermitian angle `Theta` is not defined: its construction uses the matched-dimension condition (1.5).  Therefore the extension cannot be asking for an ambient `Theta_0`-to-`Theta` conversion.  It is the directed `Theta_0` conclusion, the same one-sided geometry used by Theorems 6.1 and 6.3.
+
+The four compiled declarations `unbounded_sinTwoTheta_{,residual_}uiNorm_representative_unequalDimension` and their real twins state that strict-rank case explicitly.  Their proofs specialize a stronger theorem with no dimension comparison, which is a valid strengthening of the printed extension rather than a defect: every printed strict-rank instance is covered.  The representative is the source-facing `sin 2Theta_0` freedom already used by the exact Section 2 theorem, namely any operator with the complete approximation-singular sequence of the canonical reflected overlap block.
+
+This resolves the contradiction introduced by the later 2026-08-10 audit paragraph claiming that those wrappers could not close the row without an ambient bridge.  That paragraph implicitly required an object the source does not have under strict dimension.  The row therefore moves to `compiled_exact`; no mathematical or scalar-scope obligation remains.
+- **Next action:** Nothing outstanding.
 
 #### Section 2, tan 2 theta theorem: Double-angle tangent theorem
 
