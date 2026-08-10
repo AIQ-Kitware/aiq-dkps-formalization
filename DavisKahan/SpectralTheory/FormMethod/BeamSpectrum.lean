@@ -745,6 +745,26 @@ theorem eigenvalue_gt_five_hundred {lam : ℝ} (hlam : 0 < lam)
   rw [hlameq]
   exact Classical.five_hundred_lt_pow_four_of_characteristic_eq_zero hβ hchar
 
+/-- **Eigenvalues of the free-beam operator are nonnegative**, because the operator is: the
+Rayleigh quotient of an eigenvector is the eigenvalue times the squared norm. -/
+theorem nonneg_of_beamOperator_eigen {lam : ℝ} {x : beamOperator.domain}
+    (hx0 : (x : BeamL2) ≠ 0)
+    (heig : beamOperator.toLinearMap x = (lam : ℂ) • (x : BeamL2)) : 0 ≤ lam := by
+  have hpos := beamOperator_nonneg x
+  have hval : ⟪beamOperator.toLinearMap x, (x : BeamL2)⟫_ℂ
+      = ((lam * ‖(x : BeamL2)‖ ^ 2 : ℝ) : ℂ) := by
+    rw [heig, inner_smul_left, Complex.conj_ofReal, inner_self_eq_norm_sq_to_K]
+    push_cast
+    rfl
+  rw [hval] at hpos
+  have hre : RCLike.re (((lam * ‖(x : BeamL2)‖ ^ 2 : ℝ) : ℂ)) = lam * ‖(x : BeamL2)‖ ^ 2 :=
+    Complex.ofReal_re _
+  rw [hre] at hpos
+  have hn2 : (0 : ℝ) < ‖(x : BeamL2)‖ ^ 2 := by
+    have : (0 : ℝ) < ‖(x : BeamL2)‖ := norm_pos_iff.mpr hx0
+    positivity
+  nlinarith
+
 /-! ## The Fredholm bridge: the full real spectrum -/
 
 /-- The variational resolvent is the embedding composed with its own adjoint. -/
@@ -886,18 +906,23 @@ theorem beamResolvent_eigenvalue_classify {mu : ℂ} (hmu : mu ≠ 0)
     rw [show ((((1 + beta ^ 4)⁻¹ : ℝ)) : ℂ) = (((1 + beta ^ 4 : ℝ) : ℂ))⁻¹ from by
       push_cast; ring, ← hmuinv, inv_inv]
 
-/-- **The real spectrum of the free-beam operator**: contained in `{0}` together with the
-fourth powers of the characteristic roots.  Away from that set, the Fredholm alternative for
-the compact variational resolvent produces a bounded two-sided inverse of `B - λ`. -/
-theorem realSpectrum_beamOperator_subset :
-    beamOperator.realSpectrum
-      ⊆ {0} ∪ {lam : ℝ | ∃ beta : ℝ,
-          0 < beta ∧ characteristic beta = 0 ∧ lam = beta ^ 4} := by
-  intro lam hlam
+/-- **Every real spectral point of the free beam is an eigenvalue.**  The free beam has no
+continuous or residual real spectrum at all: if `lam` is in `beamOperator.realSpectrum` then
+`B x = lam x` for some nonzero `x` in the domain.
+
+This is the Fredholm alternative for the compact variational resolvent, run in the direction
+that produces the eigenvector rather than in the direction that produces a containment.  If
+`(1 + lam)⁻¹` is *not* an eigenvalue of the resolvent it lies in the resolvent set, and
+rescaling turns the inverse of `(1+lam)⁻¹ - R` into a bounded two-sided inverse of `B - lam`,
+contradicting `lam ∈ realSpectrum`; if it *is* an eigenvalue, then
+`exists_beamOperator_apply_of_beamResolvent_smul` inverts it to an eigenvector of `B` for
+`((1+lam)⁻¹)⁻¹ - 1 = lam`. -/
+theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
+    (hlam : lam ∈ beamOperator.realSpectrum) :
+    ∃ x : beamOperator.domain, (x : BeamL2) ≠ 0 ∧
+      beamOperator.toLinearMap x = (lam : ℂ) • (x : BeamL2) := by
   by_contra hcon
-  rw [Set.mem_union, Set.mem_singleton_iff, Set.mem_ofPred_eq] at hcon
   push Not at hcon
-  obtain ⟨hlam0, hlamchar⟩ := hcon
   set R := beamCoerciveFormData.resolvent with hRdef
   set c : ℂ := 1 + (lam : ℂ) with hcdef
   -- the shift operator `1 - c R` is invertible
@@ -908,34 +933,20 @@ theorem realSpectrum_beamOperator_subset :
     · have hmu : c⁻¹ ≠ 0 := inv_ne_zero hc
       rcases isCompactOperator_beamResolvent.hasEigenvalue_or_mem_resolventSet hmu with
         hev | hres
-      · -- an eigenvalue at `c⁻¹` contradicts the classification
+      · -- an eigenvalue at `c⁻¹` inverts to an eigenvector of `B` for `lam`
         exfalso
         obtain ⟨v, hvmem, hv0⟩ := hev.exists_hasEigenvector
         have hveq : R v = c⁻¹ • v := by
           have hv := hvmem
           simp only [Module.End.mem_genEigenspace_one] at hv
           exact hv
-        rcases beamResolvent_eigenvalue_classify hmu hv0 hveq with h1 | ⟨beta, hβ, hchar, hβeq⟩
-        · -- `c⁻¹ = 1` forces `lam = 0`
-          apply hlam0
-          have : c = 1 := by
-            rw [← inv_inv c, h1, inv_one]
-          rw [hcdef] at this
-          have := sub_eq_zero.mpr this.symm
-          have : (lam : ℂ) = 0 := by linear_combination -this
-          exact_mod_cast this
-        · -- `c⁻¹ = (1+β⁴)⁻¹` forces `lam = β⁴`
-          apply hlamchar beta hβ hchar
-          have hcc : c = ((1 + beta ^ 4 : ℝ) : ℂ) := by
-            rw [← inv_inv c, hβeq]
-            rw [show ((((1 + beta ^ 4)⁻¹ : ℝ)) : ℂ)
-              = (((1 + beta ^ 4 : ℝ) : ℂ))⁻¹ from by push_cast; ring, inv_inv]
-          rw [hcdef] at hcc
-          push_cast at hcc
-          have : (lam : ℂ) = ((beta ^ 4 : ℝ) : ℂ) := by
-            push_cast
-            linear_combination hcc
-          exact_mod_cast this
+        obtain ⟨hvdom, hbeam⟩ := exists_beamOperator_apply_of_beamResolvent_smul hmu hveq
+        have hcc : c⁻¹⁻¹ - 1 = (lam : ℂ) := by
+          rw [inv_inv, hcdef]
+          ring
+        refine hcon ⟨v, hvdom⟩ hv0 ?_
+        rw [← hcc]
+        exact hbeam
       · -- otherwise `c⁻¹` is in the resolvent set, and we rescale
         have hres' := spectrum.mem_resolventSet_iff.mp hres
         have hkey : (1 : BeamL2 →L[ℂ] BeamL2) - c • R
@@ -1025,6 +1036,20 @@ theorem realSpectrum_beamOperator_subset :
       _ = S y - (R * S) y - ((lam : ℝ) : ℂ) • (R * S) y := by rw [hshifted]
       _ = ((↑U : BeamL2 →L[ℂ] BeamL2) * S) y := hfinal
       _ = y := by rw [hUS]; rfl
+
+/-- **The real spectrum of the free-beam operator**: contained in `{0}` together with the
+fourth powers of the characteristic roots.  Every spectral point is now an eigenvalue
+(`exists_eigenvector_of_mem_realSpectrum_beamOperator`), it is nonnegative because the
+operator is, and a positive one carries a characteristic root. -/
+theorem realSpectrum_beamOperator_subset :
+    beamOperator.realSpectrum
+      ⊆ {0} ∪ {lam : ℝ | ∃ beta : ℝ,
+          0 < beta ∧ characteristic beta = 0 ∧ lam = beta ^ 4} := by
+  intro lam hlam
+  obtain ⟨x, hx0, heig⟩ := exists_eigenvector_of_mem_realSpectrum_beamOperator hlam
+  rcases eq_or_lt_of_le (nonneg_of_beamOperator_eigen hx0 heig) with h0 | hpos
+  · exact Or.inl (Set.mem_singleton_iff.mpr h0.symm)
+  · exact Or.inr (exists_characteristic_of_eigen hpos hx0 heig)
 
 /-- **The spectral gap of the free beam**: the real spectrum lies in `{0} ∪ (500, ∞)`.
 This is Davis--Kahan 1970 Section 9's `α₃ > 500` — including that the whole positive
