@@ -155,29 +155,41 @@ theorem crossed_intersections_are_halmos_defects_completed
       halmosTargetDefect U V = Uᗮ ⊓ V :=
   ⟨rfl, rfl⟩
 
-omit [CompleteSpace H] in
+section GenericCompression
+
+/-! This one compression identity is pure projection algebra: no functional
+calculus, no acuteness, and no complex structure.  It is therefore stated over
+an arbitrary `RCLike` field, which is what
+`DavisKahan/Geometry/Polar/Section3Nonacute.lean` -- the only consumer outside
+this file -- needs in order to be scalar-generic itself. -/
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+
 /-- Real part of the quadratic form of a compression by an orthogonal
 projection. -/
 theorem re_inner_projection_compression
-    (U : Submodule ℂ H) [U.HasOrthogonalProjection]
-    (A : H →L[ℂ] H) (x : H) :
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (A : E →L[𝕜] E) (x : E) :
     RCLike.re
-        ⟪x, (projection U * A * projection U) x⟫_ℂ =
-      RCLike.re ⟪A (projection U x), projection U x⟫_ℂ := by
+        ⟪x, (projection U * A * projection U) x⟫_𝕜 =
+      RCLike.re ⟪A (projection U x), projection U x⟫_𝕜 := by
   have hsymm := U.starProjection_isSymmetric
   have h1 :
-      ⟪projection U (A (projection U x)), x⟫_ℂ =
-        ⟪A (projection U x), projection U x⟫_ℂ :=
+      ⟪projection U (A (projection U x)), x⟫_𝕜 =
+        ⟪A (projection U x), projection U x⟫_𝕜 :=
     hsymm (A (projection U x)) x
   calc
     RCLike.re
-        ⟪x, (projection U * A * projection U) x⟫_ℂ =
+        ⟪x, (projection U * A * projection U) x⟫_𝕜 =
       RCLike.re
-        ⟪projection U (A (projection U x)), x⟫_ℂ := by
+        ⟪projection U (A (projection U x)), x⟫_𝕜 := by
           simp only [mul_apply_eq_comp]
           exact inner_re_symm x _
-    _ = RCLike.re ⟪A (projection U x), projection U x⟫_ℂ :=
+    _ = RCLike.re ⟪A (projection U x), projection U x⟫_𝕜 :=
       congrArg RCLike.re h1
+
+end GenericCompression
 
 /-- The acute canonical direct rotation has nonnegative source compression. -/
 theorem spectraDirectRotation_sourceCompression_nonnegative

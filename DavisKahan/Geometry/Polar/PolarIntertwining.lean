@@ -33,16 +33,21 @@ noncomputable section
 
 universe u
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
+variable [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
+  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint]
+
+attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-- A self-adjoint projection commuting with `|T|` preserves the initial polar
 space. -/
 theorem polarRange_invariant_of_commute_abs
-    (T P : H →L[ℂ] H)
+    (T P : H →L[𝕜] H)
     (hcomm : absOp T ∘L P = P ∘L absOp T)
     {x : H} (hx : x ∈ polarRange T) : P x ∈ polarRange T := by
-  let M : Submodule ℂ H := Submodule.comap (P : H →ₗ[ℂ] H) (polarRange T)
+  let M : Submodule 𝕜 H := Submodule.comap (P : H →ₗ[𝕜] H) (polarRange T)
   have hMclosed : IsClosed (M : Set H) := by
     have hcl : IsClosed ((polarRange T : Set H)) := by
       rw [polarRange]; exact Submodule.isClosed_topologicalClosure _
@@ -62,7 +67,7 @@ theorem polarRange_invariant_of_commute_abs
 /-- If a self-adjoint projection preserves the initial polar space, it also
 preserves its orthogonal complement. -/
 theorem polarRange_orthogonal_invariant_of_selfAdjoint
-    (T P : H →L[ℂ] H) (hP : IsSelfAdjoint P)
+    (T P : H →L[𝕜] H) (hP : IsSelfAdjoint P)
     (hpres : ∀ x ∈ polarRange T, P x ∈ polarRange T)
     {x : H} (hx : x ∈ (polarRange T)ᗮ) : P x ∈ (polarRange T)ᗮ := by
   rw [Submodule.mem_orthogonal'] at hx ⊢
@@ -76,7 +81,7 @@ theorem polarRange_orthogonal_invariant_of_selfAdjoint
 /-- The absolute value commutes with the initial projection whenever `T`
 intertwines two orthogonal projections. -/
 theorem absOp_commutes_of_projection_intertwining
-    (T P Q : H →L[ℂ] H)
+    (T P Q : H →L[𝕜] H)
     (hP : IsOrthogonalProjection P) (hQ : IsOrthogonalProjection Q)
     (hTP : T ∘L P = Q ∘L T) :
     absOp T ∘L P = P ∘L absOp T := by
@@ -117,7 +122,7 @@ theorem absOp_commutes_of_projection_intertwining
 /-- The polar partial isometry intertwines the same two projections as the
 original operator. -/
 theorem polarIsometry_intertwines_of_projection_intertwining
-    (T P Q : H →L[ℂ] H)
+    (T P Q : H →L[𝕜] H)
     (hP : IsOrthogonalProjection P) (hQ : IsOrthogonalProjection Q)
     (hTP : T ∘L P = Q ∘L T) :
     polarIsometry T ∘L P = Q ∘L polarIsometry T := by
@@ -147,11 +152,11 @@ theorem polarIsometry_intertwines_of_projection_intertwining
   have heqOnDense :
       polarPartial T ((polarRange T).orthogonalProjectionOnto (P m)) =
         Q (polarPartial T ((polarRange T).orthogonalProjectionOnto m)) := by
-    let f : polarRange T →L[ℂ] H :=
+    let f : polarRange T →L[𝕜] H :=
       polarPartial T ∘L
         (P ∘L (polarRange T).subtypeL).codRestrict
           (polarRange T) (fun z => hpres z z.property)
-    let g : polarRange T →L[ℂ] H := Q ∘L polarPartial T
+    let g : polarRange T →L[𝕜] H := Q ∘L polarPartial T
     have hfg : f = g := by
       apply DFunLike.coe_injective
       apply DenseRange.equalizer (denseRange_absOpCorestrict T)
@@ -191,7 +196,7 @@ theorem polarIsometry_intertwines_of_projection_intertwining
 /-- The polar factor of the canonical two-projection intertwiner intertwines
 both projections without an acuteness assumption. -/
 theorem canonicalPolarFactor_intertwines_from_polar
-    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectraCanonicalPolarFactor U V ∘L projection U =
       projection V ∘L spectraCanonicalPolarFactor U V := by
   rw [spectraCanonicalPolarFactor, spectraPolarIsometry]
@@ -206,7 +211,7 @@ theorem canonicalPolarFactor_intertwines_from_polar
 /-- Taking adjoints exchanges the ordered pair of subspaces in the canonical
 polar factor. -/
 theorem canonicalPolarFactor_adjoint_swap_from_polar
-    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     star (spectraCanonicalPolarFactor U V) =
       spectraCanonicalPolarFactor V U := by
   rw [spectraCanonicalPolarFactor, spectraCanonicalPolarFactor,
