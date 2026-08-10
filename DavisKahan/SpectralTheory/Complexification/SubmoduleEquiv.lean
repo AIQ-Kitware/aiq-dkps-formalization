@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
+import DavisKahan.SpectralTheory.Complexification.FormTransport
 import DavisKahan.SpectralTheory.Complexification.Subspace
 import DavisKahan.SpectralTheory.Complexification.Spectrum
 
@@ -161,8 +162,8 @@ theorem orthogonalProjectionOnto_complexify_apply
 section Conjugation
 
 variable {F G : Type*}
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+  [NormedAddCommGroup G] [InnerProductSpace ℂ G]
 
 /-- Conjugation by an isometric equivalence *between different spaces*.  The
 existing `conjByIsometryEquiv` only covers the endomorphism case `E ≃ₗᵢ[ℂ] E`,
@@ -172,16 +173,13 @@ noncomputable def conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) : G →
   e.toContinuousLinearEquiv.toContinuousLinearMap ∘L T ∘L
     e.symm.toContinuousLinearEquiv.toContinuousLinearMap
 
-omit [CompleteSpace F] [CompleteSpace G] in
 @[simp] theorem conjEquiv_apply (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) (y : G) :
     conjEquiv e T y = e (T (e.symm y)) := rfl
 
-omit [CompleteSpace F] [CompleteSpace G] in
 @[simp] theorem conjEquiv_symm_conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) :
     conjEquiv e.symm (conjEquiv e T) = T := by
   ext x; simp
 
-omit [CompleteSpace F] [CompleteSpace G] in
 @[simp] theorem conjEquiv_conjEquiv_symm (e : F ≃ₗᵢ[ℂ] G) (S : G →L[ℂ] G) :
     conjEquiv e (conjEquiv e.symm S) = S := by
   ext y; simp
@@ -194,7 +192,6 @@ noncomputable def conjEquivMonoidHom (e : F ≃ₗᵢ[ℂ] G) :
   map_one' := by ext y; simp
   map_mul' S T := by ext y; simp
 
-omit [CompleteSpace F] [CompleteSpace G] in
 /-- Conjugation preserves invertibility in both directions. -/
 theorem isUnit_conjEquiv_iff (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) :
     IsUnit (conjEquiv e T) ↔ IsUnit T := by
@@ -206,7 +203,6 @@ theorem isUnit_conjEquiv_iff (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) :
     have := h.map (conjEquivMonoidHom e)
     simpa [conjEquivMonoidHom] using this
 
-omit [CompleteSpace F] [CompleteSpace G] in
 /-- Conjugation by an isometric equivalence commutes with the scalar shift. -/
 theorem algebraMap_sub_conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) (c : ℂ) :
     algebraMap ℂ (G →L[ℂ] G) c - conjEquiv e T =
@@ -214,7 +210,6 @@ theorem algebraMap_sub_conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) (c
   ext y
   simp [Algebra.algebraMap_eq_smul_one]
 
-omit [CompleteSpace F] [CompleteSpace G] in
 /-- **Conjugation by an isometric equivalence preserves the real spectrum.**
 This is what lets a compression on `↥Z` be compared with the corresponding
 compression on `↥(complexifySubmodule Z)`. -/
@@ -225,6 +220,70 @@ theorem realSpectrum_conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) :
     algebraMap_sub_conjEquiv, isUnit_conjEquiv_iff]
 
 end Conjugation
+
+section RestrictionTransport
+
+/-- Restriction to a complexified invariant real subspace is the isometric
+conjugate of the complexification of the real restriction. -/
+theorem restrict_complexifySubmodule_conjEquiv
+    (Z : Submodule ℝ E) (A : E →L[ℝ] E)
+    (hZ : InvariantFor A Z) :
+    (complexify A).restrict (by
+      intro z hz
+      exact mapsTo_complexifySubmodule hZ hz) =
+      conjEquiv (complexifySubmoduleEquiv Z) (complexify (A.restrict hZ)) := by
+  apply ContinuousLinearMap.ext
+  intro z
+  apply Subtype.ext
+  apply TauCeti.RealComplexification.ext <;> rfl
+
+/-- The actual restricted spectrum is preserved by simultaneous operator and
+subspace complexification. -/
+theorem restrictedSpectrum_complexifySubmodule
+    (Z : Submodule ℝ E) (A : E →L[ℝ] E) (hZ : InvariantFor A Z) :
+    restrictedSpectrum (complexify A) (complexifySubmodule Z) =
+      restrictedSpectrum A Z := by
+  let hZC : InvariantFor (complexify A) (complexifySubmodule Z) := by
+    intro z hz
+    exact mapsTo_complexifySubmodule hZ hz
+  rw [restrictedSpectrum_eq_restrictionSpectrum (complexify A)
+      (complexifySubmodule Z) hZC,
+    restrictedSpectrum_eq_restrictionSpectrum A Z hZ]
+  change realSpectrum ((complexify A).restrict hZC) =
+    realSpectrum (A.restrict hZ)
+  rw [restrict_complexifySubmodule_conjEquiv Z A hZ,
+    realSpectrum_conjEquiv, realSpectrum_complexify]
+
+/-- Restricted-spectrum containment is preserved and reflected by simultaneous
+operator and subspace complexification. -/
+theorem spectrumIn_complexifySubmodule_iff
+    (Z : Submodule ℝ E) (A : E →L[ℝ] E) (S : Set ℝ) :
+    SpectrumIn (complexify A) (complexifySubmodule Z) S ↔
+      SpectrumIn A Z S := by
+  constructor
+  · rintro ⟨hZC, hspecC⟩
+    have hZ : InvariantFor A Z := by
+      intro x hx
+      have hxC := hZC (ofReal x) ((ofReal_mem_complexifySubmodule_iff Z x).2 hx)
+      exact (ofReal_mem_complexifySubmodule_iff Z (A x)).1 (by simpa using hxC)
+    refine ⟨hZ, ?_⟩
+    rw [← restrictedSpectrum_complexifySubmodule Z A hZ]
+    exact hspecC
+  · rintro ⟨hZ, hspec⟩
+    refine ⟨?_, ?_⟩
+    · intro z hz
+      exact mapsTo_complexifySubmodule hZ hz
+    rw [restrictedSpectrum_complexifySubmodule Z A hZ]
+    exact hspec
+
+/-- Forward spelling of `spectrumIn_complexifySubmodule_iff`. -/
+theorem spectrumIn_complexifySubmodule
+    (Z : Submodule ℝ E) (A : E →L[ℝ] E) (S : Set ℝ)
+    (h : SpectrumIn A Z S) :
+    SpectrumIn (complexify A) (complexifySubmodule Z) S :=
+  (spectrumIn_complexifySubmodule_iff Z A S).2 h
+
+end RestrictionTransport
 
 end RealComplexification
 end Foundation
