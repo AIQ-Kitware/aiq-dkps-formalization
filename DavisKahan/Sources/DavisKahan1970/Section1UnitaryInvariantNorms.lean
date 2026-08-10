@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.DoubleAngle.KyFanOrthonormal
+import Mathlib.Analysis.InnerProductSpace.ProdL2
 
 /-!
 # Davis--Kahan 1970, Section 1: the Rayleigh--Ritz principle for the `ν`-norms
@@ -29,12 +30,24 @@ would therefore be false.  `IsLUB` is the correct reading of the printed `sup`, 
 approximate attaining family it packages is exactly what the Appendix to Section 6 uses when
 it invokes (1.13) to produce a `ν`-projector.
 
-**Dimension hypotheses.**  (1.12) and (1.13) both assert that a supremum is taken over a
-nonempty family of `ν`-projectors, so both carry the hypothesis that the spaces have room for
-`ν` orthonormal vectors -- vacuously true in the paper's infinite-dimensional setting, and
-genuinely necessary otherwise: with `dim F < ν` there is no `ν`-projector `Υ` on `F` at all.
-The hypotheses are stated as the existence of orthonormal `ν`-tuples, which is precisely the
-existence of the projectors the printed suprema range over.
+**Dimension hypotheses.**  Each statement assumes exactly that the family its supremum ranges
+over is nonempty, and nothing more.  (1.12) ranges over `ν`-projectors on the *domain*, so it
+assumes only that `E` has room for `ν` orthonormal vectors; the codomain is unconstrained, and
+in particular `dim F < ν` is allowed.  (1.13) ranges over pairs, one projector on each side, so
+it assumes room on both.  Both hypotheses are vacuously true in the paper's
+infinite-dimensional setting, and each is genuinely necessary where it appears: with
+`dim F < ν` there is no `ν`-projector `Υ` on `F` at all, which is why (1.13) needs the codomain
+hypothesis and (1.12) does not.
+
+**Why (1.12) needs no codomain hypothesis, when its engine does.**  The attaining engine
+`exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner_complex` produces an
+orthonormal `ν`-tuple in *each* space, so it cannot run at all when `dim F < ν`.  The
+conclusion of (1.12) never mentions the codomain, so the fix is to give the engine a codomain
+with room: replace `F` by the `L²` sum `F ⊕₂ ℂ^ν` along the contraction `ι` that includes `F`
+as the first summand, whose left inverse -- the projection back -- is also a contraction.
+`kyFanApproximationGauge_comp_eq_of_leftInverse` says every Ky Fan gauge is blind to that
+substitution, so the bound obtained in the padded space is a bound in `F`.  This is why the
+`≤` half and the attaining half now have the same hypotheses, namely `hE` alone.
 
 **Scalar field.**  These are stated over `ℂ`, the paper's field.  The reason is not fidelity
 alone: the attaining half rests on the min--max localization of approximation numbers, which
@@ -121,32 +134,78 @@ theorem equation1_13_gauge_starProjection_comp_le
 the domain, here indexed by the orthonormal `ν`-tuple spanning the subspace.
 
 A supremum, not a maximum: see the module docstring for the diagonal operator on which it is
-not attained.  The hypotheses say only that both spaces admit orthonormal `ν`-tuples. -/
+not attained.  The single hypothesis says that the domain admits an orthonormal `ν`-tuple,
+which is exactly the statement that the printed supremum ranges over a nonempty family; the
+codomain carries no hypothesis, so `dim F < ν` is allowed.  The module docstring explains how
+the codomain room that the attaining engine needs is supplied by padding. -/
 theorem equation1_12 (K : E →L[ℂ] F) {ν : ℕ}
-    (hE : ∃ x : Fin ν → E, Orthonormal ℂ x) (hF : ∃ y : Fin ν → F, Orthonormal ℂ y) :
+    (hE : ∃ x : Fin ν → E, Orthonormal ℂ x) :
     IsLUB
       {r : ℝ | ∃ v : Fin ν → E, Orthonormal ℂ v ∧
         r = kyFanApproximationGauge ν (K ∘L (Submodule.span ℂ (Set.range v)).starProjection)}
       (kyFanApproximationGauge ν K) := by
   obtain ⟨x, hx⟩ := hE
-  obtain ⟨y, hy⟩ := hF
+  -- Pad the codomain with a `ν`-dimensional Euclidean summand so the attaining engine has the
+  -- orthonormal `ν`-tuple it wants there.  The inclusion `ι` of `F` as the first summand and
+  -- the projection `pr` back onto it are contractions with `pr ∘ ι = id`, so no Ky Fan gauge
+  -- can tell the padded operator from the original one.
+  set ι : F →L[ℂ] WithLp 2 (F × EuclideanSpace ℂ (Fin ν)) :=
+    (WithLp.prodContinuousLinearEquiv 2 ℂ F
+        (EuclideanSpace ℂ (Fin ν))).symm.toContinuousLinearMap ∘L
+      ContinuousLinearMap.inl ℂ F (EuclideanSpace ℂ (Fin ν))
+  set pr : WithLp 2 (F × EuclideanSpace ℂ (Fin ν)) →L[ℂ] F :=
+    WithLp.fstL 2 ℂ F (EuclideanSpace ℂ (Fin ν))
+  have hleft : Function.LeftInverse pr ι := fun _ => rfl
+  have hιnorm : ‖ι‖ ≤ 1 := by
+    refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun z => ?_
+    have hz : ‖ι z‖ = ‖z‖ := by
+      show ‖WithLp.toLp 2 ((z : F), (0 : EuclideanSpace ℂ (Fin ν)))‖ = ‖z‖
+      rw [WithLp.prod_norm_eq_of_L2]
+      simp
+    rw [hz, one_mul]
+  have hprnorm : ‖pr‖ ≤ 1 := by
+    refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun z => ?_
+    calc ‖pr z‖ = ‖WithLp.fst z‖ := rfl
+      _ = Real.sqrt (‖WithLp.fst z‖ ^ 2) := (Real.sqrt_sq (norm_nonneg _)).symm
+      _ ≤ Real.sqrt (‖WithLp.fst z‖ ^ 2 + ‖WithLp.snd z‖ ^ 2) :=
+        Real.sqrt_le_sqrt (by nlinarith [sq_nonneg ‖WithLp.snd z‖])
+      _ = ‖z‖ := (WithLp.prod_norm_eq_of_L2 z).symm
+      _ = 1 * ‖z‖ := (one_mul _).symm
+  have hy : Orthonormal ℂ fun i : Fin ν =>
+      (WithLp.toLp 2 ((0 : F), EuclideanSpace.basisFun (Fin ν) ℂ i) :
+        WithLp 2 (F × EuclideanSpace ℂ (Fin ν))) := by
+    have hb := (EuclideanSpace.basisFun (Fin ν) ℂ).orthonormal
+    rw [orthonormal_iff_ite] at hb ⊢
+    intro i j
+    simpa using hb i j
+  have hgauge : ∀ T : E →L[ℂ] F,
+      kyFanApproximationGauge ν (ι ∘L T) = kyFanApproximationGauge ν T := fun T =>
+    kyFanApproximationGauge_comp_eq_of_leftInverse hleft hιnorm hprnorm ν T
   constructor
   · rintro r ⟨v, -, rfl⟩
     exact equation1_12_gauge_comp_starProjection_le K ν _
   · intro b hb
     refine le_of_forall_pos_le_add fun ε hε => ?_
     obtain ⟨u, v, hu, hv, hlow⟩ :=
-      exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner_complex K hε hx hy
+      exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner_complex (ι ∘L K) hε hx hy
     have hfix : ∀ i, (Submodule.span ℂ (Set.range v)).starProjection (v i) = v i := fun i =>
       Submodule.starProjection_eq_self_iff.mpr (Submodule.subset_span (Set.mem_range_self i))
     have hpair : (∑ i, ⟪u i,
-          (K ∘L (Submodule.span ℂ (Set.range v)).starProjection) (v i)⟫_ℂ)
-        = ∑ i, ⟪u i, K (v i)⟫_ℂ :=
+          ((ι ∘L K) ∘L (Submodule.span ℂ (Set.range v)).starProjection) (v i)⟫_ℂ)
+        = ∑ i, ⟪u i, (ι ∘L K) (v i)⟫_ℂ :=
       Finset.sum_congr rfl fun i _ => by
         simp only [ContinuousLinearMap.comp_apply, hfix i]
     have hle := DavisKahan.Experimental.ExactSinTheta.re_sum_inner_map_le_kyFanApproximationGauge
-      (K ∘L (Submodule.span ℂ (Set.range v)).starProjection) hu hv
+      ((ι ∘L K) ∘L (Submodule.span ℂ (Set.range v)).starProjection) hu hv
     rw [hpair] at hle
+    have hcomp : kyFanApproximationGauge ν
+          ((ι ∘L K) ∘L (Submodule.span ℂ (Set.range v)).starProjection)
+        = kyFanApproximationGauge ν
+          (K ∘L (Submodule.span ℂ (Set.range v)).starProjection) := by
+      rw [ContinuousLinearMap.comp_assoc]
+      exact hgauge _
+    rw [hcomp] at hle
+    rw [hgauge K] at hlow
     have hub : kyFanApproximationGauge ν
         (K ∘L (Submodule.span ℂ (Set.range v)).starProjection) ≤ b := hb ⟨v, hv, rfl⟩
     linarith
