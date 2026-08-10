@@ -11,8 +11,8 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 32 |
-| `compiled_specialization` | 12 |
+| `compiled_exact` | 33 |
+| `compiled_specialization` | 11 |
 | `compiled_general_infrastructure` | 0 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
@@ -2540,10 +2540,10 @@ Two OPTIONAL items remain, neither a Davis--Kahan obligation.  (1) Import Weinbe
 #### Section 9, l2 example after (9.8): Residual-infinite limitation example
 
 - **Kind:** `example`
-- **Status:** `compiled_specialization`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** An l2 trial vector has a useful Rayleigh quotient but lies outside the perturbed operator domain, so residual-based theorems do not apply while lower-bound methods still do.
-- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.rawDiagonalImage_eq_one`, `TauCeti.DavisKahan1970.Section9.rawDiagonalImage_partial_energy`, `TauCeti.DavisKahan1970.Section9.truncatedDiagonalImage_energy`, `TauCeti.DavisKahan1970.Section9.diagonalOperator`, `TauCeti.DavisKahan1970.Section9.geometricTrial_notMem_diagonalDomain`, `TauCeti.DavisKahan1970.Section9.geometricTrial_form_summable`, `TauCeti.DavisKahan1970.Section9.truncatedTrial_mem_diagonalDomain`
+- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.rawDiagonalImage_eq_one`, `TauCeti.DavisKahan1970.Section9.rawDiagonalImage_partial_energy`, `TauCeti.DavisKahan1970.Section9.truncatedDiagonalImage_energy`, `TauCeti.DavisKahan1970.Section9.diagonalOperator`, `TauCeti.DavisKahan1970.Section9.geometricTrial_notMem_diagonalDomain`, `TauCeti.DavisKahan1970.Section9.geometricTrial_form_summable`, `TauCeti.DavisKahan1970.Section9.truncatedTrial_mem_diagonalDomain`, `TauCeti.DavisKahan1970.Section9.diagonalOperator_domain`, `TauCeti.DavisKahan1970.Section9.diagonalOperator_isSelfAdjoint`, `TauCeti.DavisKahan1970.Section9.diagonalOperator_isSymmetric`, `TauCeti.DavisKahan1970.Section9.dense_diagonalDomain`, `TauCeti.DavisKahan1970.Section9.geometricTrial_hasSum_sq`, `TauCeti.DavisKahan1970.Section9.geometricTrial_norm_sq`, `TauCeti.DavisKahan1970.Section9.geometricTrial_hasSum_form`, `TauCeti.DavisKahan1970.Section9.geometricTrial_rayleighQuotient`, `TauCeti.DavisKahan1970.Section9.geometricTrial_normalizedForm_apply`, `TauCeti.DavisKahan1970.Section9.geometricTrial_hasSum_normalizedForm`, `TauCeti.DavisKahan1970.Section9.geometricTrial_hasSum_normalizedFormTail`, `TauCeti.DavisKahan1970.Section9.geometricTrial_normalizedForm_zero`, `TauCeti.DavisKahan1970.Section9.geometricTrial_normalizedForm_split`, `TauCeti.DavisKahan1970.Section9.firstEigenvector`, `TauCeti.DavisKahan1970.Section9.firstEigenvector_def`, `TauCeti.DavisKahan1970.Section9.firstEigenvector_apply`, `TauCeti.DavisKahan1970.Section9.norm_firstEigenvector`, `TauCeti.DavisKahan1970.Section9.firstEigenvector_mem_diagonalDomain`, `TauCeti.DavisKahan1970.Section9.diagonalOperator_firstEigenvector`, `TauCeti.DavisKahan1970.Section9.inner_geometricTrial_firstEigenvector`, `TauCeti.DavisKahan1970.Section9.cos_angle_geometricTrial`, `TauCeti.DavisKahan1970.Section9.sin_angle_geometricTrial`, `TauCeti.DavisKahan1970.Section9.geometricTrial_weinberger_sin_sq_le`, `TauCeti.DavisKahan1970.Section9.geometricTrial_weinberger_best_sin_sq_le`, `TauCeti.DavisKahan1970.Section9.geometricTrial_weinberger_best_sin_le`, `TauCeti.LinearPMap.lpDiagonal`, `TauCeti.LinearPMap.lpDiagonal_isSelfAdjoint`, `TauCeti.LinearPMap.lpDiagonal_isSymmetric`, `TauCeti.LinearPMap.dense_lpDiagonal_domain`, `TauCeti.LinearPMap.adjoint_domain_le_lpDiagonal_domain`, `TauCeti.LinearPMap.lpDiagonalDomain`, `TauCeti.LinearPMap.mem_lpDiagonalDomain_iff`, `TauCeti.LinearPMap.lpDiagonal_domain`, `TauCeti.LinearPMap.lpDiagonal_apply`, `TauCeti.LinearPMap.single_mem_lpDiagonal_domain`, `TauCeti.LinearPMap.lpDiagonal_single`
 - **Assessment:** The pointwise constant image and divergent finite partial energies are formalized algebraically, together with an explicit finite-support truncation repair that agrees on arbitrary prescribed prefixes.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_specialization`. The sequence lemmas are compiled, axiom-clean and unconditional, but stated for coordinate sequences rather than in the abstract operator setting the source example describes.
@@ -2574,7 +2574,19 @@ that item -- "the Rayleigh quotient `alphaHat = e^*(A+H)e / e^*e = 1 + mu`.
 `(1/(1-mu)) / (1/(1-mu^2)) = 1 + mu`" -- and `next_action` repeats it as the first of its three
 remaining items.  No change to this row; the finding is recorded here only so the same objection is not
 raised a fourth time.
-- **Next action:** The operator lift is done and this row should stop asking for it.  What remains is the second half of the source paragraph: evaluate the Rayleigh quotient of `geometricTrial` at `diagonalOperator (diagonalMultiplier mu)` and prove it equals `1 + mu`; prove `diagonalOperator d` is self-adjoint on its maximal domain for real `d`; and state Weinberger's lower-bound estimate `sin theta <= mu / sqrt(1 - mu)` for the angle between `e` and the first eigenvector, which is the contrast the example is written to make.
+
+**ALL THREE REMAINING ITEMS ARE COMPILED, 2026-08-10 (Claude Opus 5, coordinator-verified).  THE ROW IS COMPLETE.**
+
+(1) RAYLEIGH QUOTIENT: `geometricTrial_rayleighQuotient` proves the quotient is `1 + mu`, from `hasSum_geometric_of_lt_one` twice -- no partial-sum manipulation.  (2) SELF-ADJOINTNESS: proved as REUSABLE infrastructure, not locally.  New module `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/DiagonalMultiplication.lean` gives `lpDiagonal_isSelfAdjoint` over general index type and `RCLike` scalars, by exactly the recorded recipe: test against `lp.single 2 i 1`, read the i-th coordinate of the adjoint image off as `d_i y_i`, conclude that sequence lies in `l^2`, which IS the maximal domain condition.  Section 9's `diagonalDomain` and `diagonalOperator` are now DEFINED AS those declarations at `K = R`, `iota = N`, so the reusable theorem applies to the census-pinned operator rather than to a look-alike.  (3) WEINBERGER: `geometricTrial_weinberger_sin_sq_le` and `geometricTrial_weinberger_best_sin_le` give `sin^2 theta <= (1 + mu - a1)/(a2 - a1)` and `sin theta <= mu / sqrt(1 - mu)`.  `theta` is the honest `InnerProductGeometry.angle`, and `sin_angle_geometricTrial` proves `sin theta = mu`, the source's parenthetical.
+
+NO NARROWING; IF ANYTHING THE HYPOTHESES ARE WEAKER THAN THE SOURCE'S.  The source says `take a small mu << 0.6`; the compiled statements require only `0 < mu < 1`.  (0.6 is the golden-ratio conjugate 0.618..., the threshold below which `mu / sqrt(1 - mu) < 1` and the bound is INFORMATIVE -- a remark about usefulness, not a hypothesis the mathematics needs.)
+
+THE WEINBERGER ESTIMATE ALREADY EXISTED and was grounded on rather than reproved: `weinberger_sine_sq_le_of_coupled_energy` (`Section9/WeinbergerAngle.lean:50`).  Its energy arguments are supplied as the GENUINE normalized energies of this example -- `1 - mu^2` and `mu + mu^2`, computed by `geometricTrial_normalizedForm_zero` and `geometricTrial_hasSum_normalizedFormTail` -- not as asserted numbers.
+
+A COORDINATOR PREMISE WAS WRONG: the brief said to put the diagonal operator in `ForTauCeti`'s `LinearPMap` diagonal/multiplication layer `if it has no such theorem`.  THERE IS NO SUCH LAYER -- none of the 25 modules under `ForTauCeti/.../LinearPMap/` concerns multiplication operators, and the only diagonal layer in `ForTauCeti` is the BOUNDED `diagOpLp` in `ApproximationNumber/DiagonalSequence.lean`, which requires a uniformly bounded multiplier and so cannot serve the unbounded case.  The module was created.
+
+RECORDED, not a regression: this work moves the per-declaration `@[expose]` count from 162 to 164 (two documented api-design carve-outs, `lpDiagonalDomain` and `lpDiagonal`, without which `lpDiagonal_domain`/`lpDiagonal_apply` are not provable as exported theorems).  `check_expose_ratchet.py --check` exits 1 BOTH BEFORE AND AFTER -- the count was already 16x its baseline of 10 at HEAD -- so this is drift in a long-broken ratchet, not a new failure.  The submission ladder was likewise already stale at HEAD (96 findings, 97 after).  Both are recorded for adjudication rather than absorbed silently.
+- **Next action:** Nothing outstanding.
 
 #### Equations (9.9)–(9.11) and final bounds: Individual eigenvector identification inside a cluster
 
