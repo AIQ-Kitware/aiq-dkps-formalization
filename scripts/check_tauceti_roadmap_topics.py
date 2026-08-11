@@ -195,7 +195,7 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  [A+"CompactSelfAdjointClassification",A+"CompactApproximationEigenvalues",
   "Order.DiscreteEnumeration"]),
 ("T27","Measure classes, L-two transport, and the multiplicity normal form",
- ["MeasureTheory."+x for x in ["MeasureClass","RadonNikodymL2","LpComp","LpRestrict",
+ ["MeasureTheory."+x for x in ["MeasureClass","RadonNikodymL2","LpComp","LpRestrict","LpStar",
                                "LpSliceSum","MultiplicityLevels",
                                # Added 2026-08-10 with the module: `L^2` of a measure with
                                # infinitely many disjoint positive-finite sets is infinite
