@@ -9,6 +9,7 @@ import DavisKahan.SpectralTheory.FormMethod.BeamEigenvalueSequence
 import DavisKahan.SpectralTheory.FormMethod.BeamFormSpace
 import DavisKahan.SpectralTheory.FormMethod.BeamInPlaneAngle
 import DavisKahan.SpectralTheory.FormMethod.BeamSection9
+import DavisKahan.SpectralTheory.FormMethod.BeamSection9Real
 import DavisKahan.SpectralTheory.FormMethod.BeamSpectrum
 import DavisKahan.SpectralTheory.FormMethod.BeamTangent
 import DavisKahan.SpectralTheory.FormMethod.BeamWeinberger
