@@ -151,6 +151,15 @@ needs to rewrite through the definition should use this rather than `rw
 C⋆-algebra notation. -/
 theorem modulus_def (T : E →L[𝕜] F) : T.modulus = CFC.sqrt (T.adjoint ∘L T) := (rfl)
 
+/-- The modulus is insensitive to multiplication by `-1`. -/
+@[simp]
+theorem modulus_neg (T : E →L[𝕜] F) : (-T).modulus = T.modulus := by
+  rw [modulus_def, modulus_def]
+  congr 1
+  ext x
+  simp only [ContinuousLinearMap.comp_apply, map_neg, neg_apply,
+    neg_neg]
+
 /-- The modulus is nonnegative in the C⋆-order. -/
 theorem modulus_nonneg (T : E →L[𝕜] F) : 0 ≤ T.modulus :=
   CFC.sqrt_nonneg _
