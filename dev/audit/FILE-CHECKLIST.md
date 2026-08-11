@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-1056/1459 files reviewed · 1459 files · 374,600 lines · 123 groups
+1056/1461 files reviewed · 1461 files · 375,654 lines · 123 groups
 
 ## How to review
 
@@ -396,7 +396,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/Frontier
 
-*17 files, 10,570 lines — 0/17 reviewed*
+*17 files, 10,582 lines — 0/17 reviewed*
 
 - [ ] `DavisKahan/Frontier/Section3.lean` — 3,189 lines · Lean source
 - [ ] `DavisKahan/Frontier/Section8Perturbation.lean` — 1,342 lines · Lean source
@@ -413,7 +413,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `DavisKahan/Frontier/Section8Residual.lean` — 272 lines · Lean source
 - [ ] `DavisKahan/Frontier/Section8SourceSurface.lean` — 271 lines · Lean source
 - [ ] `DavisKahan/Frontier/Section8Audit.lean` — 179 lines · Lean source
-- [ ] `DavisKahan/Frontier/Core.lean` — 158 lines · Lean source
+- [ ] `DavisKahan/Frontier/Core.lean` — 170 lines · Lean source
 - [ ] `DavisKahan/Frontier/All.lean` — 24 lines · Lean source
 
 ### DavisKahan/Geometry
@@ -820,7 +820,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/SpectralTheory
 
-*74 files, 22,722 lines — 50/74 reviewed*
+*75 files, 23,311 lines — 50/75 reviewed*
 
 - [ ] `DavisKahan/SpectralTheory/FormMethod/BeamSection9.lean` — 2,092 lines · Lean source
 - [ ] `DavisKahan/SpectralTheory/FormMethod/BeamClassicalReal.lean` — 1,331 lines · Lean source
@@ -834,6 +834,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `DavisKahan/SpectralTheory/FormMethod/BeamDoubleTangent.lean` — 667 lines · Lean source
 - [ ] `DavisKahan/SpectralTheory/FormMethod/BeamFormSpace.lean` — 663 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ReflectionRestriction.lean` — 641 lines · Lean source
+- [ ] `DavisKahan/SpectralTheory/Real/RealCyclicDecomposition.lean` — 589 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ClosedOperator/Basic.lean` — 560 lines · Lean source
 - [ ] `DavisKahan/SpectralTheory/FormMethod/BeamTrialReal.lean` — 545 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ResolventOperator.lean` — 518 lines · Lean source
@@ -1524,11 +1525,12 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T27 Measure classes, L-two transport, and the multiplicity normal form
 
-*8 files, 2,196 lines — 0/8 reviewed*
+*9 files, 2,494 lines — 0/9 reviewed*
 
 - [ ] `ForTauCeti/MeasureTheory/MultiplicityLevels.lean` — 550 lines · Lean source
 - [ ] `ForTauCeti/MeasureTheory/RadonNikodymL2.lean` — 412 lines · Lean source
 - [ ] `ForTauCeti/MeasureTheory/LpSliceSum.lean` — 323 lines · Lean source
+- [ ] `ForTauCeti/MeasureTheory/LpRealPart.lean` — 298 lines · Lean source
 - [ ] `ForTauCeti/MeasureTheory/LpRestrict.lean` — 267 lines · Lean source
 - [ ] `ForTauCeti/MeasureTheory/LpComp.lean` — 226 lines · Lean source
 - [ ] `ForTauCeti/MeasureTheory/MeasureClass.lean` — 173 lines · Lean source
@@ -1537,17 +1539,17 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T28 Cyclic subspaces, the multiplication model, and Hahn-Hellinger existence
 
-*14 files, 3,980 lines — 0/14 reviewed*
+*14 files, 4,125 lines — 0/14 reviewed*
 
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Restriction.lean` — 572 lines · Lean source
+- [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/MultiplicityModel.lean` — 526 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/CyclicModel.lean` — 449 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/AlmostInvariant.lean` — 418 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/MultiplicityModel.lean` — 379 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/CyclicDecomposition.lean` — 335 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/RealSpectrumIntertwining.lean` — 300 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/RealSpectrumDiagonalMeasure.lean` — 278 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/RealSpectrumBorelSymbols.lean` — 254 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/RealSpectrumCyclicDecomposition.lean` — 207 lines · Lean source
+- [ ] `ForTauCeti/Analysis/InnerProductSpace/RealSpectrumCyclicDecomposition.lean` — 205 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/SeparableCyclic.lean` — 204 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/RealSpectrumCyclicModel.lean` — 172 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagMeasureNatural.lean` — 164 lines · Lean source
@@ -1665,10 +1667,10 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*198 files, 42,392 lines — 158/198 reviewed*
+*198 files, 42,395 lines — 158/198 reviewed*
 
 - [x] `dev/davis-kahan-1970-full-source-census.md` — 3,312 lines · documentation
-- [x] `dev/audit/FILE-CHECKLIST.md` — 2,105 lines · documentation
+- [x] `dev/audit/FILE-CHECKLIST.md` — 2,108 lines · documentation
 - [x] `dev/davis-kahan-expert-completion-plan.md` — 1,589 lines · documentation
 - [ ] `dev/hilbert-space-operator-roadmap/glossary.md` — 1,519 lines · documentation
 - [x] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation
@@ -1987,13 +1989,13 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### scripts :: tooling
 
-*63 files, 15,127 lines — 55/63 reviewed*
+*63 files, 15,134 lines — 55/63 reviewed*
 
 - [x] `scripts/lake_build_report.py` — 1,156 lines · tooling
 - [x] `scripts/check_davis_kahan_frontier.py` — 684 lines · tooling
 - [x] `scripts/derive_tauceti_submission_ladder.py` — 618 lines · tooling
 - [ ] `scripts/fix_lean_warnings.py` — 569 lines · tooling
-- [x] `scripts/check_tauceti_roadmap_topics.py` — 497 lines · tooling
+- [x] `scripts/check_tauceti_roadmap_topics.py` — 504 lines · tooling
 - [x] `scripts/audit_scan.py` — 436 lines · tooling
 - [x] `scripts/check_yu_wang_samworth_source_census.py` — 424 lines · tooling
 - [x] `scripts/check_declaration_name_drift.py` — 420 lines · tooling

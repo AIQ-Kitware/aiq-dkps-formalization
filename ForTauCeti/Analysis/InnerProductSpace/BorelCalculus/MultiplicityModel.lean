@@ -116,6 +116,12 @@ theorem norm_coordTruncField_le (𝕜 : Type*) [RCLike 𝕜] {R : ℝ} (hR : 0 �
     _ ≤ ‖RCLike.map ℂ 𝕜‖ * R :=
       mul_le_mul_of_nonneg_left (norm_coordTrunc_le hR z) (norm_nonneg _)
 
+/-- At complex scalars the field-valued coordinate symbol is the original one.
+
+This is what keeps the `RCLike`-generic `coordTruncField` a strict generalization rather
+than a parallel definition: every statement previously proved about `coordTrunc` transfers
+to `coordTruncField ℂ` by `rfl`-level rewriting, so the complex specialization of the
+field-indexed datum is the datum that was there before. -/
 @[simp] theorem coordTruncField_complex (R : ℝ) : coordTruncField ℂ R = coordTrunc R := by
   funext z
   simp [coordTruncField]
