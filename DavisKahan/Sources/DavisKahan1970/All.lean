@@ -12,6 +12,7 @@ import DavisKahan.Sources.DavisKahan1970.Sylvester.All
 import DavisKahan.Sources.DavisKahan1970.Directed
 import DavisKahan.Sources.DavisKahan1970.DirectedReal
 import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
+import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
 import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
 import DavisKahan.Sources.DavisKahan1970.FullPartIII
 import DavisKahan.Sources.DavisKahan1970.FullPartIIIExtensions
