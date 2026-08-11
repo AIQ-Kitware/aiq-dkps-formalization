@@ -46,8 +46,8 @@ variable (U V : Submodule ℝ H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 
 example (hacute : TauCeti.IsAcute U V) :
-    Commute (proposition3_5_angleOperator U V) (projection U) ∧
-      Commute (proposition3_5_angleOperator U V) (projection V) ∧
+    Commute (proposition3_5_angleOperator U V) (projection U : H →L[ℝ] H) ∧
+      Commute (proposition3_5_angleOperator U V) (projection V : H →L[ℝ] H) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_quarterTurn U V) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_directRotation U V) :=
   proposition3_5_commutations U V hacute
@@ -62,8 +62,8 @@ variable (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 
 example (hacute : TauCeti.IsAcute U V) :
-    Commute (proposition3_5_angleOperator U V) (projection U) ∧
-      Commute (proposition3_5_angleOperator U V) (projection V) ∧
+    Commute (proposition3_5_angleOperator U V) (projection U : H →L[ℂ] H) ∧
+      Commute (proposition3_5_angleOperator U V) (projection V : H →L[ℂ] H) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_quarterTurn U V) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_directRotation U V) :=
   proposition3_5_commutations U V hacute
