@@ -531,7 +531,7 @@
   },
   {
    "id": "s6-appendix-unbounded",
-   "title": "Appendix to Section 6: unbounded common-domain sine theorem",
+   "title": "Appendix to Section 6, item (d): common-domain sine theorem (complex)",
    "kind": "source",
    "module": "DavisKahan.Sources.DavisKahan1970.FullSineTheta",
    "declaration": "TauCeti.DavisKahan1970.Theorem6_1_commonDomain",
@@ -540,8 +540,113 @@
     "DK-6-appendix"
    ],
    "priority": "high",
-   "open_obligation": true,
-   "notes": "Added 2026-08-08 so the required census row `DK-6-appendix` is mapped. The row's declarations live here (aliases onto the `PaperCommonDomain...` data-record results); this node names the arbitrary-unitarily-invariant-norm common-domain form. Marked an open obligation because the census records a live `scope_gap`: every declaration on the row is stated for `InnerProductSpace C`, and the appendix's arbitrary-ideal tangent cutoff / Fan passage is not covered by the common-domain sine wrappers. Companion declarations on the same row: `Theorem6_1_commonCore`, `Theorem6_1_real_commonDomain`, `Theorem6_1_real_commonCore`, `Theorem6_2_real_commonDomain`, `Theorem6_2_real_commonCore`.  UPDATED 2026-08-09 (Claude Opus 5): the appendix's arbitrary-ideal TANGENT cutoff/Fan passage is no longer missing -- `theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing` (`DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean`, default build, axiom-clean) proves it for an unbounded ambient operator AND an arbitrary complete trial subspace, so the finite-trial restriction the earlier endpoints carried is gone.  The node stays an open obligation for three other reasons, all now recorded on census row DK-6-appendix: the tangent half is still `InnerProductSpace C` only (the live `scope_gap`); Proposition 6.1 has no common-domain or unbounded form, although the appendix explicitly licenses one (`PaperSymmetricSinThetaProblem` is bounded-only); and the unbounded double-angle tangent endpoint exists only at the operator norm, the Ky Fan `nu >= 2` case being open.",
+   "notes": "Added 2026-08-08 so the required census row `DK-6-appendix` is mapped; this node names the arbitrary-unitarily-invariant-norm common-domain sine form over C.\n\nSPLIT AND RE-GROUNDED 2026-08-11 (Claude Opus 5, coordinator, task #9 strand 2).  This node previously carried `open_obligation` with an empty dependency list, so its closure was 1/1 and the whole appendix row scored 0% -- while the sine half in both scalar fields, the tangent half at arbitrary trial dimension, and Lemma 6.3 were all compiled and axiom-clean.  The census row said so explicitly ('ALSO OVER-PESSIMISTIC ELSEWHERE: dev/davis-kahan-1970-frontier-status.md:35 scores this row at 0%').\n\nALL THREE REASONS THE FLAG CITED ARE DISCHARGED, each re-measured against the build rather than taken from the note.  (1) 'the tangent half is still InnerProductSpace C only' -- item (a) went real on 2026-08-11 (`theorem6_3_unboundedCompression_ideal_of_reducing_exists_real`) and item (b) the same day (`mem_and_gauge_le_reflectionTangentCorner_real`).  (2) 'Proposition 6.1 has no common-domain or unbounded form' -- `Proposition6_1_commonDomain` landed 2026-08-10 by an in-place RCLike generalization of `CommonDomainSymmetric.lean`, with `Proposition6_1_real_commonDomain` alongside.  (3) 'the unbounded double-angle tangent endpoint exists only at the operator norm, the Ky Fan nu >= 2 case being open' -- that endpoint is `mem_and_gauge_le_reflectionTangentCorner`, at every `KyFanDominantIdealFamily`, with the extremality hypothesis DELETED rather than discharged.\n\nThe four printed items now have a node each, both scalar fields where the row distinguishes them: (a) `s6-appendix-unbounded-compression{,-real}`, (b) `s6-appendix-tan2-kyfan{,-real}`, (c) `s6-appendix-prop6-1-common-domain{,-real}`, (d) this node and `s6-appendix-sine-real`.  Item (e), the displayed chain (6.7)-(6.11), gets NO node: it was adjudicated 2026-08-10 as proof steps internal to the paper's argument for (a), not statements the paper asserts, and the repository reaches (a) by a different route.  Companion declarations on the same row: `Theorem6_1_commonCore`, `Theorem6_2_real_commonDomain`, `Theorem6_2_real_commonCore`.",
+   "external": true
+  },
+  {
+   "id": "s6-appendix-sine-real",
+   "title": "Appendix to Section 6, item (d): common-domain sine theorem (real)",
+   "kind": "source",
+   "module": "DavisKahan.Sources.DavisKahan1970.FullSineTheta",
+   "declaration": "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
+   "dependencies": [],
+   "source_census_ids": [
+    "DK-6-appendix"
+   ],
+   "priority": "high",
+   "notes": "Added 2026-08-11 (Claude Opus 5, coordinator, task #9 strand 2) as part of splitting `s6-appendix-unbounded`.  The real scalar field of the common-domain sine theorem.  No dependency on the complex node: `CommonDomainTheorems.lean`'s data layer is already `[RCLike k]` with a separate real packaging, so this is an instantiation and not a descent.",
+   "external": true
+  },
+  {
+   "id": "s6-appendix-prop6-1-common-domain",
+   "title": "Appendix to Section 6, item (c): common-domain Proposition 6.1 (complex)",
+   "kind": "source",
+   "module": "DavisKahan.Sources.DavisKahan1970.FullSineTheta",
+   "declaration": "TauCeti.DavisKahan1970.Proposition6_1_commonDomain",
+   "dependencies": [],
+   "source_census_ids": [
+    "DK-6-appendix"
+   ],
+   "priority": "high",
+   "notes": "Added 2026-08-11 (Claude Opus 5, coordinator, task #9 strand 2) as part of splitting `s6-appendix-unbounded`, whose flag asserted that Proposition 6.1 had no common-domain form.  It has had one since 2026-08-10.  `PaperCommonDomainSymmetricSinThetaProblem` takes `A` and `B` closed and self-adjoint in the domain-aware sense on a shared domain with a bounded `perturbation` representing `B - A`, and concludes the bounded Proposition 6.1 at every `PaperUnitaryInvariantNorm`.  It is a MACHINE-CHECKED relaxation, not an asserted one: `ofBounded` maps any `PaperSymmetricSinThetaProblem` into it with `domain_eq := rfl` and `perturbation_eq := rfl`, and `perturbation_isSymmetric` is DERIVED rather than a field, so no hypothesis is dropped and none added.",
+   "external": true
+  },
+  {
+   "id": "s6-appendix-prop6-1-common-domain-real",
+   "title": "Appendix to Section 6, item (c): common-domain Proposition 6.1 (real)",
+   "kind": "source",
+   "module": "DavisKahan.Sources.DavisKahan1970.FullSineTheta",
+   "declaration": "TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain",
+   "dependencies": [],
+   "source_census_ids": [
+    "DK-6-appendix"
+   ],
+   "priority": "high",
+   "notes": "Added 2026-08-11 (Claude Opus 5, coordinator, task #9 strand 2) as part of splitting `s6-appendix-unbounded`.  Landed by an IN-PLACE `RCLike` generalization of `CommonDomainSymmetric.lean` keeping every declaration name -- not a parallel real module -- so no dependency on the complex node.  Two genuinely complex-only dependencies were found on the way and are recorded on the census row: no `RCLike`-generic Sylvester theorem exists (resolved by the `HasUnboundedSylvesterKyFan` class with both instances supplied, so nothing gains a hypothesis), and `paperSinAngleOperatorC` is UNSTATABLE over general `k`, so the generic content is carried on `paperCrossSineSum` instead.",
+   "external": true
+  },
+  {
+   "id": "s6-appendix-unbounded-compression",
+   "title": "Appendix to Section 6, item (a): unbounded Ritz compression (complex)",
+   "kind": "source",
+   "module": "DavisKahan.TanTheta.Theorem63UnboundedCompression",
+   "declaration": "TauCeti.DavisKahan.Experimental.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_reducing_exists",
+   "dependencies": [
+    "s6-theorem6-3"
+   ],
+   "source_census_ids": [
+    "DK-6-appendix"
+   ],
+   "priority": "high",
+   "notes": "Added 2026-08-11 (Claude Opus 5, coordinator, task #9 strand 2) as part of splitting `s6-appendix-unbounded`.  Item (a) is the paper's `A_0 <= alpha` and `Lambda_1 >= alpha + delta` with BOTH allowed to be unbounded, which is why the spectral resolution and the `Omega(tau)` truncation appear in the printed proof at all.  `UnboundedCompressionTrialData` has `compression` an unbounded self-adjoint `DKClosedOperator` and `residual` bounded; `ofBounded` makes the existing bounded `Theorem63TrialData` an instance, so nothing already proved gains a hypothesis.  The conclusion is `delta * N.gauge tanTheta_0 <= N.gauge residual` at every `KyFanDominantIdealFamily`, under a FORM bound (`SemiboundedAbove`) rather than a CLM norm bound.\n\nThe route was truncate-then-release, and the ordering is load-bearing: the fixed-cutoff theorem `all_kyFan_core_trunc` has a `tau`-FREE right-hand side, which is what lets the release run over `tau -> atTop` with unbounded levels.  SCOPE, stated honestly: the data layer abstracts `A_0` as a self-adjoint operator GIVEN on `Z`, exactly as `Theorem63TrialData` already did; deriving self-adjointness of `P_Z A|_Z` from an ambient `A` is the Rayleigh-Ritz/Friedrichs question and is NOT attempted.",
+   "external": true
+  },
+  {
+   "id": "s6-appendix-unbounded-compression-real",
+   "title": "Appendix to Section 6, item (a): unbounded Ritz compression (real)",
+   "kind": "source",
+   "module": "DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal",
+   "declaration": "TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_of_reducing_exists_real",
+   "dependencies": [
+    "s6-appendix-unbounded-compression"
+   ],
+   "source_census_ids": [
+    "DK-6-appendix"
+   ],
+   "priority": "high",
+   "notes": "Added 2026-08-11 (Claude Opus 5, coordinator, task #9 strand 2) as part of splitting `s6-appendix-unbounded`.  Depends on the complex node because it genuinely IS a descent: the route was the trial-data transport of `DirectedUnboundedReal.lean`, NOT a real spectral cutoff.  The `Omega(tau)` cutoff in item (a) is the spectral cutoff of the Ritz compression ON THE TRIAL SPACE, so under transport it is applied to the COMPLEXIFIED compression, entirely inside the already-compiled complex `all_kyFan_core`; approximation numbers are preserved on the nose at the finite Ky Fan level, so the numerical conclusion descends.  The real module never mentions a real spectral cutoff.  A real `SpectralCutoffInterface` does exist (`DavisKahan/SpectralTheory/Real/SpectralCutoff.lean`) but is STANDALONE infrastructure -- item (a) did not need it, and the two must not be treated as coupled.",
+   "external": true
+  },
+  {
+   "id": "s6-appendix-tan2-kyfan",
+   "title": "Appendix to Section 6, item (b): unbounded tan 2-Theta at every ideal (complex)",
+   "kind": "source",
+   "module": "DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle",
+   "declaration": "TauCeti.DavisKahan1970.mem_and_gauge_le_reflectionTangentCorner",
+   "dependencies": [
+    "s7-tan2"
+   ],
+   "source_census_ids": [
+    "DK-6-appendix"
+   ],
+   "priority": "high",
+   "notes": "Added 2026-08-11 (Claude Opus 5, coordinator, task #9 strand 2) as part of splitting `s6-appendix-unbounded`, whose flag asserted that the unbounded double-angle tangent endpoint existed 'only at the operator norm, the Ky Fan nu >= 2 case being open'.  It has been at every `KyFanDominantIdealFamily` since 2026-08-10, over cutoff nets whose levels grow without bound.\n\nTHE EXTREMALITY HYPOTHESIS IS DELETED, NOT DISCHARGED.  `IsCompressedDoubleAngleEigenbasis` is a proved Ky Fan ATTAINMENT condition, so it can only hold with equality and must never be attacked directly; this endpoint removes it from the statement by routing through typed directed corners (`paperBlockCompression`) rather than the ambient `unboundedReflectionTangent`, which carries both adjoint corners and would risk double-counting the sharp 2.  Absence is verified by transitive constant closure with `allowOpaque := true` (56793 constants, with positive controls), NOT by grep -- the surviving textual hits are docstrings saying it is absent.",
+   "external": true
+  },
+  {
+   "id": "s6-appendix-tan2-kyfan-real",
+   "title": "Appendix to Section 6, item (b): unbounded tan 2-Theta at every ideal (real)",
+   "kind": "source",
+   "module": "DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal",
+   "declaration": "TauCeti.DavisKahan1970.mem_and_gauge_le_reflectionTangentCorner_real",
+   "dependencies": [
+    "s6-appendix-tan2-kyfan"
+   ],
+   "source_census_ids": [
+    "DK-6-appendix"
+   ],
+   "priority": "high",
+   "notes": "Added 2026-08-11 (Claude Opus 5, coordinator, task #9 strand 2) as part of splitting `s6-appendix-unbounded`.  The last thing holding census row `DK-6-appendix`, discharged 2026-08-11.  Depends on the complex node: the complex endpoint is blocked at the Gram-resolvent and Gram-selection layers, whose root is the CAYLEY TRANSFORM in `gramSpectralPVM` -- `1 - (2 * Complex.I) . resolvent A`, where `RCLike.I = 0` DEGENERATES the formula rather than generalizing it.  That is a measured no-go, not a convention, so the real side is a transport and never an in-place generalization of the Gram layer.",
    "external": true
   },
   {
@@ -1175,9 +1280,8 @@
     "DK-9.5-9.7"
    ],
    "priority": "high",
-   "notes": "Repointed 2026-08-08. The former home `DavisKahan/Experimental/Frontier/Section9Analytic.lean` was deleted at commit 95bbd5ea; every declaration in it was an unproved skeleton, superseded by the concrete `FreeBeam.Model` realization. OPEN: only the `tanTheta_1` conjunct is delivered. There is no `beamTanThetaSum`, `beamTanTwoTheta` or `beamTanTwoThetaSum` anywhere in the repository, so the two-term Ky Fan tangent bound and both double-angle tangent bounds have no operator-level supplier. Marked as an open obligation for that reason.",
-   "external": true,
-   "open_obligation": true
+   "notes": "Repointed 2026-08-08. The former home `DavisKahan/Experimental/Frontier/Section9Analytic.lean` was deleted at commit 95bbd5ea; every declaration in it was an unproved skeleton, superseded by the concrete `FreeBeam.Model` realization. OPEN: only the `tanTheta_1` conjunct is delivered. There is no `beamTanThetaSum`, `beamTanTwoTheta` or `beamTanTwoThetaSum` anywhere in the repository, so the two-term Ky Fan tangent bound and both double-angle tangent bounds have no operator-level supplier. Marked as an open obligation for that reason.\n\nFLAG CLEARED 2026-08-11 (Claude Opus 5, coordinator, task #9 strand 2).  The flag rested on a dated ABSENCE CLAIM -- 'There is no `beamTanThetaSum`, `beamTanTwoTheta` or `beamTanTwoThetaSum` anywhere in the repository, so the two-term Ky Fan tangent bound and both double-angle tangent bounds have no operator-level supplier'.  Absence claims expire when the thing gets built, and the Section 9 missions built all three after this note was written.  Re-measured at the declaration level: `beamTanThetaSum` and `beamTanThetaSum_le` (`DavisKahan/SpectralTheory/FormMethod/BeamTangent.lean:305,318`), `beamTanTwoTheta` and `beamTanTwoTheta_le` (`FormMethod/BeamDoubleTangent.lean`), `beamTanTwoThetaSum` and `beamTanTwoThetaSum_le` (`Sources/DavisKahan1970/Section9/BeamDoubleTangentKyFan.lean:189,201`), each also with a `_lt_printed` form.  So all four tangent conjuncts of (9.5)-(9.7) have operator-level suppliers, not just `tanTheta_1`.",
+   "external": true
   },
   {
    "id": "s9-output-certificate",
@@ -1195,7 +1299,7 @@
     "DK-9.9-9.11"
    ],
    "priority": "hard",
-   "notes": "Repointed 2026-08-08. The former home `DavisKahan/Experimental/Frontier/Section9Analytic.lean` was deleted at commit 95bbd5ea; every declaration in it was an unproved skeleton, superseded by the concrete `FreeBeam.Model` realization. OPEN: no constructor survives. The record type still exists and is the obligation, but no value of it is built anywhere; the Weinberger and individual-eigenvector fields (`weinbergerTanPhi`, `directTanPhi`, `omega`) have no operator-level supplier, and neither do the tangent sum and double-angle tangent fields. The node now names the type that must be inhabited rather than a deleted constructor.",
+   "notes": "Repointed 2026-08-08. The former home `DavisKahan/Experimental/Frontier/Section9Analytic.lean` was deleted at commit 95bbd5ea; every declaration in it was an unproved skeleton, superseded by the concrete `FreeBeam.Model` realization. OPEN: no constructor survives. The record type still exists and is the obligation, but no value of it is built anywhere; the Weinberger and individual-eigenvector fields (`weinbergerTanPhi`, `directTanPhi`, `omega`) have no operator-level supplier, and neither do the tangent sum and double-angle tangent fields. The node now names the type that must be inhabited rather than a deleted constructor.\n\nSTILL OPEN, AND THE REASON IS NOW MEASURED RATHER THAN ASSERTED, 2026-08-11 (Claude Opus 5, coordinator, task #9 strand 2).  The old note said flatly that the tangent fields 'have no operator-level supplier'; that half is now FALSE -- see `s9-tangent-angle-bounds`, where all four tangent conjuncts were re-measured as supplied.  The correct statement is a count: 8 of the 14 fields of `TheoremOutputCertificate` have beam-level suppliers (`beamSinTheta`, `beamSinTwoTheta`, `beamSinThetaSum`, `beamSinTwoThetaSum`, `beamTanTheta`, `beamTanThetaSum`, `beamTanTwoTheta`, `beamTanTwoThetaSum`, each with a proved `_le`), and 6 do NOT: `weinbergerTanPhi_1`, `weinbergerTanPhi_2`, `directTanPhi_1`, `directTanPhi_2`, `omega_1`, `omega_2`.  There is no `beamWeinbergerTanPhi`, `beamDirectTanPhi` or `beamOmega` -- no beam-level QUANTITY at all, so the gap is a missing definition and not merely a missing bound.\n\nWHY THE TYPE BEING INHABITED IS NOT THE TEST.  Every field is `<= bound`, so a value could be manufactured by picking a small enough number and proving the inequality arithmetically, with no connection to the beam operator.  That would score this node green while proving nothing about Section 9.  The obligation is an inhabitant whose 14 components ARE the model's angle quantities; keep the flag until the six missing quantities exist and are bounded.",
    "external": true,
    "open_obligation": true
   },
@@ -1219,7 +1323,7 @@
     "DK-9.9-9.11"
    ],
    "priority": "hard",
-   "notes": "Repointed 2026-08-08. The former home `DavisKahan/Experimental/Frontier/Section9Analytic.lean` was deleted at commit 95bbd5ea; every declaration in it was an unproved skeleton, superseded by the concrete `FreeBeam.Model` realization. OPEN: no constructor survives and none has been written. The type is consumed only by `NumericalExampleCertificate.printedConclusions`; no value of it exists in the repository. The node now names the type that must be inhabited rather than a deleted constructor.",
+   "notes": "Repointed 2026-08-08. The former home `DavisKahan/Experimental/Frontier/Section9Analytic.lean` was deleted at commit 95bbd5ea; every declaration in it was an unproved skeleton, superseded by the concrete `FreeBeam.Model` realization. OPEN: no constructor survives and none has been written. The type is consumed only by `NumericalExampleCertificate.printedConclusions`; no value of it exists in the repository. The node now names the type that must be inhabited rather than a deleted constructor.\n\nSTILL OPEN 2026-08-11 (Claude Opus 5, coordinator, task #9 strand 2), and downstream: `NumericalExampleCertificate` bundles `finiteData` with `theoremOutputs`, so it is uninhabited for exactly as long as `s9-output-certificate` is -- see the measured six-field gap recorded there.  The `finiteData` half is not the obstruction.  This node is the reason five Section 9 paper rows (`DK-9-model`, `DK-9.1-9.4`, `DK-9.5-9.7`, `DK-9.8`, `DK-9.9-9.11`) sit at 95% rather than 100%, and that is the honest number: the printed numerical conclusions are not yet derived end-to-end from the free-beam realization.",
    "external": true,
    "open_obligation": true
   },
@@ -1234,8 +1338,7 @@
     "S1-ui-norms"
    ],
    "priority": "low",
-   "open_obligation": true,
-   "notes": "Added 2026-08-09 (Claude Opus 5) so the required census row `S1-ui-norms` is mapped.  The row became required in the same edit that added this node: M38 proved (1.12) and both forms of (1.13), and on integration the row was set to `compiled_specialization` rather than the `compiled_exact` the mission recorded, which moved it off the terminal-status list.  Companion declarations on the same row: `equation1_13_compressions`, `equation1_13_reSum` (both exact, no narrowing), and the two projector-composition `<=` halves.  Marked an open obligation for one reason only, recorded as the row's `scope_gap`: `equation1_12` carries a codomain-room hypothesis that printed (1.12) does not, since (1.12) quantifies over projectors on the domain alone.  It enters through the proof -- the rectangular Ky Fan principle needs room for `nu` orthonormal vectors on both sides -- and it excludes an operator whose codomain has finite dimension below `nu`, a class the paper permits.  The removal route is worked out on the row's `next_action`; when it lands, this node stops being an open obligation and the row returns to `compiled_exact`.",
+   "notes": "Added 2026-08-09 (Claude Opus 5) so the required census row `S1-ui-norms` is mapped.  The row became required in the same edit that added this node: M38 proved (1.12) and both forms of (1.13), and on integration the row was set to `compiled_specialization` rather than the `compiled_exact` the mission recorded, which moved it off the terminal-status list.  Companion declarations on the same row: `equation1_13_compressions`, `equation1_13_reSum` (both exact, no narrowing), and the two projector-composition `<=` halves.  Marked an open obligation for one reason only, recorded as the row's `scope_gap`: `equation1_12` carries a codomain-room hypothesis that printed (1.12) does not, since (1.12) quantifies over projectors on the domain alone.  It enters through the proof -- the rectangular Ky Fan principle needs room for `nu` orthonormal vectors on both sides -- and it excludes an operator whose codomain has finite dimension below `nu`, a class the paper permits.  The removal route is worked out on the row's `next_action`; when it lands, this node stops being an open obligation and the row returns to `compiled_exact`.\n\nFLAG CLEARED 2026-08-11 (Claude Opus 5, coordinator, task #9 strand 2).  This note said the flag was set 'for one reason only', the codomain-room hypothesis on `equation1_12`, and that 'when it lands, this node stops being an open obligation and the row returns to compiled_exact'.  Both happened on 2026-08-09 and the flag was left behind.  Re-measured: census row `S1-ui-norms` is `compiled_exact` with `scope_gap` opening '**No narrowing remains.**' and `next_action` 'Nothing outstanding.'  `equation1_12` now assumes only `hE : exists x : Fin nu -> E, Orthonormal C x` -- nonemptiness of the family the printed supremum ranges over, not an addition to the printed claim -- the codomain carries no hypothesis at all, `dim F < nu` is allowed, and no replacement hypothesis (`[FiniteDimensional]`, compactness, rank bound) was introduced.",
    "external": true
   }
  ],
