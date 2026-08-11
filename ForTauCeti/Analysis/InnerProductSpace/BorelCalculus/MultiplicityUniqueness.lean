@@ -74,38 +74,38 @@ namespace BorelCalculus
 section Datum
 
 /-- The symbol of the model operator, as a function on `ℂ × ℕ`. -/
-noncomputable def datumSymbol (D : MultiplicityDatum) : ℂ × ℕ → ℂ :=
+noncomputable def datumSymbol (D : MultiplicityDatum ℂ) : ℂ × ℕ → ℂ :=
   fun p => coordTrunc D.bound p.1
 
 /-- The model symbol, unfolded.  Stated so that consumers outside this module can rewrite with
 it without the definition having to be exposed. -/
-theorem datumSymbol_def (D : MultiplicityDatum) :
+theorem datumSymbol_def (D : MultiplicityDatum ℂ) :
     datumSymbol D = fun p => coordTrunc D.bound p.1 := (rfl)
 
 /-- The model symbol agrees with the first coordinate wherever the model measure lives. -/
-theorem ae_datumSymbol_eq_fst (D : MultiplicityDatum) :
+theorem ae_datumSymbol_eq_fst (D : MultiplicityDatum ℂ) :
     ∀ᵐ p ∂D.measure, datumSymbol D p = p.1 := by
   filter_upwards [D.ae_norm_le_bound] with p hp
   rw [datumSymbol_def]
   exact coordTrunc_eq_self hp
 
 /-- The model symbol is measurable. -/
-theorem measurable_datumSymbol (D : MultiplicityDatum) : Measurable (datumSymbol D) :=
+theorem measurable_datumSymbol (D : MultiplicityDatum ℂ) : Measurable (datumSymbol D) :=
   (measurable_coordTrunc D.bound).comp measurable_fst
 
 /-- The model symbol is bounded by the datum's bound. -/
-theorem norm_datumSymbol_le (D : MultiplicityDatum) (p : ℂ × ℕ) :
+theorem norm_datumSymbol_le (D : MultiplicityDatum ℂ) (p : ℂ × ℕ) :
     ‖datumSymbol D p‖ ≤ D.bound :=
   norm_coordTrunc_le D.bound_nonneg p.1
 
 /-- The model operator really is multiplication by the model symbol. -/
-theorem operator_eq_mulLp_datumSymbol (D : MultiplicityDatum) :
+theorem operator_eq_mulLp_datumSymbol (D : MultiplicityDatum ℂ) :
     D.operator = mulLp D.measure (measurable_datumSymbol D) (norm_datumSymbol_le D) :=
   operator_eq_mulLp_of_le D.bound_nonneg le_rfl
 
 /-- **The model symbol and the coordinate projection push the model measure to the same
 place**, the truncation being invisible where the model measure lives. -/
-theorem map_datumSymbol_eq_map_fst (D : MultiplicityDatum) :
+theorem map_datumSymbol_eq_map_fst (D : MultiplicityDatum ℂ) :
     D.measure.map (datumSymbol D) = D.measure.map Prod.fst := by
   refine Measure.map_congr ?_
   filter_upwards [D.ae_norm_le_bound] with p hp
@@ -117,7 +117,7 @@ Forgetting the slice index turns the model measure into `∑ₖ base|_{level k}`
 by `base` term by term, and it dominates `base` because its zeroth term already does: `base` is
 carried by `level 0`, which is the field `base_supported_level_zero`.  **Without that field this
 is false**, mass outside `level 0` contributing to no term at all. -/
-theorem measureEquiv_map_fst_measure (D : MultiplicityDatum) :
+theorem measureEquiv_map_fst_measure (D : MultiplicityDatum ℂ) :
     MeasureEquiv (D.measure.map Prod.fst) D.base := by
   rw [MultiplicityDatum.measure_def, map_fst_sliceSum]
   constructor
@@ -139,7 +139,7 @@ theorem measureEquiv_map_fst_measure (D : MultiplicityDatum) :
       (measure_union_null h00 D.base_supported_level_zero)
 
 /-- The model symbol pushes the model measure onto the base measure class. -/
-theorem measureEquiv_map_datumSymbol (D : MultiplicityDatum) :
+theorem measureEquiv_map_datumSymbol (D : MultiplicityDatum ℂ) :
     MeasureEquiv (D.measure.map (datumSymbol D)) D.base := by
   rw [map_datumSymbol_eq_map_fst]
   exact measureEquiv_map_fst_measure D
@@ -153,7 +153,7 @@ of the two data exchanged.
 
 A maximal vector on the `D` side is transported by the intertwiner to *some* vector on the `E`
 side -- not necessarily a maximal one -- and the cheap domination is all that is asked of it. -/
-theorem absolutelyContinuous_base_of_intertwines {D E : MultiplicityDatum}
+theorem absolutelyContinuous_base_of_intertwines {D E : MultiplicityDatum ℂ}
     (e : Lp ℂ 2 D.measure ≃ₗᵢ[ℂ] Lp ℂ 2 E.measure)
     (he : ∀ x, e (mulLp D.measure (measurable_datumSymbol D) (norm_datumSymbol_le D) x)
       = mulLp E.measure (measurable_datumSymbol E) (norm_datumSymbol_le E) (e x)) :
@@ -179,7 +179,7 @@ theorem absolutelyContinuous_base_of_intertwines {D E : MultiplicityDatum}
 
 This is the measure-class half of uniqueness for the multiplicity classification, and the
 converse of the measure half of `operatorUnitaryEquiv_of_measureEquiv`. -/
-theorem measureEquiv_base_of_operatorUnitaryEquiv {D E : MultiplicityDatum}
+theorem measureEquiv_base_of_operatorUnitaryEquiv {D E : MultiplicityDatum ℂ}
     (h : OperatorUnitaryEquiv D.operator E.operator) : MeasureEquiv D.base E.base := by
   rw [operator_eq_mulLp_datumSymbol D, operator_eq_mulLp_datumSymbol E] at h
   obtain ⟨e, he⟩ := h.exists_intertwiner
