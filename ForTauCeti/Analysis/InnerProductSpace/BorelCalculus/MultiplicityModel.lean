@@ -17,7 +17,8 @@ multiplication by the spectral coordinate on `L²` of a level-set family.**  Tha
 half of Hahn--Hellinger, and it is what makes "same spectral multiplicity" a statement with
 content rather than a statement about an opaque term.
 
-The datum produced is a `TauCeti.MultiplicityDatum`: a finite measure `base` on `ℂ` supported in
+The datum produced by the complex existence theorem is a `TauCeti.MultiplicityDatum ℂ`: a finite
+measure `base` on `ℂ` supported in
 a ball, together with an **antitone** sequence of measurable level sets.  Its meaning is the
 usual one -- `base` carries the measure class of the operator and `k ↦ level k` is the sequence
 of super-level sets of the multiplicity function -- and its `operator` is multiplication by the
@@ -89,7 +90,111 @@ theorem norm_coordTrunc_le {R : ℝ} (hR : 0 ≤ R) (z : ℂ) : ‖coordTrunc R 
 by the coordinate itself. -/
 theorem coordTrunc_eq_self {R : ℝ} {z : ℂ} (h : ‖z‖ ≤ R) : coordTrunc R z = z := if_pos h
 
+/-- The truncated spectral coordinate, interpreted in the scalar field of the model.
+
+The underlying spectral parameter remains `ℂ`.  Only the *values* of the multiplier are changed:
+`RCLike.map ℂ 𝕜` is the identity for `𝕜 = ℂ` and the real-part map for `𝕜 = ℝ`.  This is the
+field axis needed by the real Hahn--Hellinger model; it deliberately does not replace the base
+measure by a measure on `𝕜`. -/
+noncomputable def coordTruncField (𝕜 : Type*) [RCLike 𝕜] (R : ℝ) : ℂ → 𝕜 :=
+  fun z => RCLike.map ℂ 𝕜 (coordTrunc R z)
+
+/-- The field-valued truncated coordinate is measurable. -/
+theorem measurable_coordTruncField (𝕜 : Type*) [RCLike 𝕜] (R : ℝ) :
+    Measurable (coordTruncField 𝕜 R) :=
+  (RCLike.map ℂ 𝕜).continuous.measurable.comp (measurable_coordTrunc R)
+
+/-- A convenient uniform bound for the field-valued coordinate.  The operator norm of the
+canonical real-linear map is used instead of case-splitting on `𝕜`; for the complex model the
+map is the identity, while the exact constant is irrelevant to the resulting multiplication
+operator. -/
+theorem norm_coordTruncField_le (𝕜 : Type*) [RCLike 𝕜] {R : ℝ} (hR : 0 ≤ R) (z : ℂ) :
+    ‖coordTruncField 𝕜 R z‖ ≤ ‖RCLike.map ℂ 𝕜‖ * R := by
+  calc
+    ‖coordTruncField 𝕜 R z‖ ≤ ‖RCLike.map ℂ 𝕜‖ * ‖coordTrunc R z‖ :=
+      (RCLike.map ℂ 𝕜).le_opNorm (coordTrunc R z)
+    _ ≤ ‖RCLike.map ℂ 𝕜‖ * R :=
+      mul_le_mul_of_nonneg_left (norm_coordTrunc_le hR z) (norm_nonneg _)
+
+@[simp] theorem coordTruncField_complex (R : ℝ) : coordTruncField ℂ R = coordTrunc R := by
+  funext z
+  simp [coordTruncField]
+
 end Coord
+
+section FieldMultiplication
+
+variable {𝕜 α : Type*} [RCLike 𝕜] [MeasurableSpace α]
+
+/-- A uniformly bounded measurable `𝕜`-valued function multiplies `L²(𝕜)` into itself.
+
+This is intentionally local to the multiplicity model rather than a generalisation of the
+complex Radon--Nikodym API: field-indexing `MultiplicityDatum.operator` is a typing refactor,
+whereas a field-generic Radon--Nikodym unitary is separate mathematics. -/
+theorem memLp_two_mul_field (ρ : Measure α) {g : α → 𝕜} (hg : Measurable g) {C : ℝ}
+    (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp 𝕜 2 ρ) : MemLp (fun x => g x * F x) 2 ρ := by
+  refine MemLp.mono' ((Lp.memLp F).norm.const_mul C)
+    (hg.aestronglyMeasurable.mul (Lp.aestronglyMeasurable F)) ?_
+  filter_upwards with x
+  rw [norm_mul]
+  exact mul_le_mul_of_nonneg_right (hgC x) (norm_nonneg _)
+
+/-- The `L²` seminorm estimate for multiplication by a bounded `𝕜`-valued symbol. -/
+theorem eLpNorm_two_mul_field_le (ρ : Measure α) {g : α → 𝕜} {C : ℝ}
+    (hgC : ∀ x, ‖g x‖ ≤ C) (f : α → 𝕜) :
+    eLpNorm (fun x => g x * f x) 2 ρ ≤ ENNReal.ofReal |C| * eLpNorm f 2 ρ := by
+  have hle : eLpNorm (fun x => g x * f x) 2 ρ ≤
+      eLpNorm (((|C| : ℝ) : 𝕜) • f) 2 ρ := by
+    refine eLpNorm_mono_ae (Filter.Eventually.of_forall fun x => ?_)
+    simp only [Pi.smul_apply, smul_eq_mul, norm_mul, RCLike.norm_ofReal, abs_abs]
+    exact mul_le_mul_of_nonneg_right ((hgC x).trans (le_abs_self C)) (norm_nonneg _)
+  rw [eLpNorm_const_smul] at hle
+  refine hle.trans_eq ?_
+  congr 1
+  rw [← ofReal_norm, RCLike.norm_ofReal, abs_abs]
+
+/-- The norm estimate that makes field-valued multiplication a bounded operator on `L²`. -/
+theorem norm_toLp_mul_field_le (ρ : Measure α) {g : α → 𝕜} (hg : Measurable g) {C : ℝ}
+    (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp 𝕜 2 ρ) :
+    ‖MemLp.toLp (fun x => g x * F x) (memLp_two_mul_field ρ hg hgC F)‖ ≤ |C| * ‖F‖ := by
+  rw [Lp.norm_toLp, Lp.norm_def, ← ENNReal.toReal_ofReal (abs_nonneg C), ← ENNReal.toReal_mul]
+  refine ENNReal.toReal_mono ?_ (eLpNorm_two_mul_field_le ρ hgC _)
+  exact ENNReal.mul_ne_top ENNReal.ofReal_ne_top (Lp.eLpNorm_ne_top F)
+
+/-- Multiplication by a bounded measurable `𝕜`-valued function on `L²(𝕜)`. -/
+noncomputable def mulLpField (ρ : Measure α) {g : α → 𝕜} (hg : Measurable g) {C : ℝ}
+    (hgC : ∀ x, ‖g x‖ ≤ C) : Lp 𝕜 2 ρ →L[𝕜] Lp 𝕜 2 ρ :=
+  LinearMap.mkContinuous
+    { toFun := fun F => MemLp.toLp (fun x => g x * F x) (memLp_two_mul_field ρ hg hgC F)
+      map_add' := fun F G => by
+        rw [← MemLp.toLp_add (memLp_two_mul_field ρ hg hgC F)
+          (memLp_two_mul_field ρ hg hgC G)]
+        refine (MemLp.toLp_eq_toLp_iff _ _).2 ?_
+        filter_upwards [Lp.coeFn_add F G] with x hx
+        simp only [Pi.add_apply, hx]
+        ring
+      map_smul' := fun c F => by
+        rw [RingHom.id_apply, ← MemLp.toLp_const_smul c (memLp_two_mul_field ρ hg hgC F)]
+        refine (MemLp.toLp_eq_toLp_iff _ _).2 ?_
+        filter_upwards [Lp.coeFn_smul c F] with x hx
+        simp only [Pi.smul_apply, hx, smul_eq_mul]
+        ring }
+    |C| (norm_toLp_mul_field_le ρ hg hgC)
+
+/-- Field-valued multiplication, unfolded. -/
+theorem mulLpField_apply (ρ : Measure α) {g : α → 𝕜} (hg : Measurable g) {C : ℝ}
+    (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp 𝕜 2 ρ) :
+    mulLpField ρ hg hgC F =
+      MemLp.toLp (fun x => g x * F x) (memLp_two_mul_field ρ hg hgC F) := (rfl)
+
+/-- Field-valued multiplication is pointwise multiplication almost everywhere. -/
+theorem coeFn_mulLpField (ρ : Measure α) {g : α → 𝕜} (hg : Measurable g) {C : ℝ}
+    (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp 𝕜 2 ρ) :
+    (mulLpField ρ hg hgC F : α → 𝕜) =ᵐ[ρ] fun x => g x * F x := by
+  rw [mulLpField_apply]
+  exact MemLp.coeFn_toLp _
+
+end FieldMultiplication
 
 section Datum
 
@@ -98,9 +203,11 @@ antitone sequence of measurable level sets.
 
 The measure carries the measure class; the level sets encode the cardinal-valued multiplicity
 function by its super-level sets, which is what makes every hypothesis a plain `MeasurableSet`
-rather than measurability of an `ℕ∞`-valued function.  The bound is part of the *presentation*,
-not of the invariant: it exists only so the coordinate symbol is bounded. -/
-structure MultiplicityDatum where
+rather than measurability of an `ℕ∞`-valued function.  The scalar parameter `𝕜` indexes only the
+`L²` operator presented by the datum: `base` remains a `Measure ℂ`, and the level sets remain
+subsets of `ℂ`.  The bound is part of the *presentation*, not of the invariant: it exists only so
+the coordinate symbol is bounded. -/
+structure MultiplicityDatum (𝕜 : Type*) [RCLike 𝕜] where
   /-- The base measure, carrying the measure class. -/
   base : Measure ℂ
   /-- A bound outside which the base measure vanishes. -/
@@ -130,17 +237,19 @@ structure MultiplicityDatum where
 attribute [instance] MultiplicityDatum.base_finite
 
 /-- The measure of the model: the slice sum of the restrictions to the level sets. -/
-noncomputable def MultiplicityDatum.measure (D : MultiplicityDatum) : Measure (ℂ × ℕ) :=
+noncomputable def MultiplicityDatum.measure {𝕜 : Type*} [RCLike 𝕜]
+    (D : MultiplicityDatum 𝕜) : Measure (ℂ × ℕ) :=
   sliceSum fun k => D.base.restrict (D.level k)
 
 /-- The model measure, unfolded.  Stated so that consumers outside this module can rewrite with
 it without the definition having to be exposed. -/
-theorem MultiplicityDatum.measure_def (D : MultiplicityDatum) :
+theorem MultiplicityDatum.measure_def {𝕜 : Type*} [RCLike 𝕜] (D : MultiplicityDatum 𝕜) :
     D.measure = sliceSum fun k => D.base.restrict (D.level k) := (rfl)
 
 /-- The model measure is σ-finite: its slices are spanning sets of finite measure, because the
 base measure is finite.  This is what lets the Radon--Nikodym unitary compare two models. -/
-instance MultiplicityDatum.sigmaFinite_measure (D : MultiplicityDatum) :
+instance MultiplicityDatum.sigmaFinite_measure {𝕜 : Type*} [RCLike 𝕜]
+    (D : MultiplicityDatum 𝕜) :
     SigmaFinite D.measure := by
   rw [MultiplicityDatum.measure]
   infer_instance
@@ -154,7 +263,8 @@ function is what Davis and Kahan's Theorem 3.1 names, and `mem_level_iff` below 
 carry exactly the same information: `level k` **is** `{z | k < multiplicity z}`.  So the level
 sets are the super-level sets of a genuine cardinal-valued function, not a proxy for one --
 which is what `MultiplicityDatum.antitone_level` is there to guarantee. -/
-noncomputable def MultiplicityDatum.multiplicity (D : MultiplicityDatum) (z : ℂ) : ℕ∞ :=
+noncomputable def MultiplicityDatum.multiplicity {𝕜 : Type*} [RCLike 𝕜]
+    (D : MultiplicityDatum 𝕜) (z : ℂ) : ℕ∞ :=
   ⨆ (k : ℕ) (_ : z ∈ D.level k), ((k : ℕ∞) + 1)
 
 /-- **The level sets are the super-level sets of the multiplicity function.**
@@ -162,7 +272,8 @@ noncomputable def MultiplicityDatum.multiplicity (D : MultiplicityDatum) (z : �
 Forwards is the definition: membership in `level k` puts `k + 1` into the supremum.  Backwards
 is antitonicity: if the supremum exceeds `k` then some `level j` with `j ≥ k` contains the
 point, and `level j ⊆ level k`. -/
-theorem MultiplicityDatum.mem_level_iff (D : MultiplicityDatum) (k : ℕ) (z : ℂ) :
+theorem MultiplicityDatum.mem_level_iff {𝕜 : Type*} [RCLike 𝕜]
+    (D : MultiplicityDatum 𝕜) (k : ℕ) (z : ℂ) :
     z ∈ D.level k ↔ (k : ℕ∞) < D.multiplicity z := by
   constructor
   · intro hz
@@ -185,7 +296,8 @@ theorem MultiplicityDatum.mem_level_iff (D : MultiplicityDatum) (k : ℕ) (z : �
 and `mem_level_iff` turns every fibre into a Boolean combination of level sets: the fibre over
 `⊤` is their intersection, the fibre over `0` is the complement of `level 0`, and the fibre over
 `n + 1` is `level n` minus `level (n + 1)`. -/
-theorem MultiplicityDatum.measurable_multiplicity (D : MultiplicityDatum) :
+theorem MultiplicityDatum.measurable_multiplicity {𝕜 : Type*} [RCLike 𝕜]
+    (D : MultiplicityDatum 𝕜) :
     Measurable D.multiplicity := by
   refine measurable_to_countable' fun c => ?_
   induction c with
@@ -230,14 +342,28 @@ theorem MultiplicityDatum.measurable_multiplicity (D : MultiplicityDatum) :
       rw [hset]
       exact (D.measurableSet_level n).diff (D.measurableSet_level (n + 1))
 
-/-- **The model operator**: multiplication by the spectral coordinate. -/
-noncomputable def MultiplicityDatum.operator (D : MultiplicityDatum) :
-    Lp ℂ 2 D.measure →L[ℂ] Lp ℂ 2 D.measure :=
-  mulLp D.measure ((measurable_coordTrunc D.bound).comp measurable_fst)
-    (fun p => norm_coordTrunc_le D.bound_nonneg p.1)
+/-- **The model operator**: multiplication by the spectral coordinate, with values in the
+model's scalar field.
+
+The model measure still lives on `ℂ × ℕ`; field-indexing changes only the `L²` fibres and the
+value field of the coordinate multiplier. -/
+noncomputable def MultiplicityDatum.operator {𝕜 : Type*} [RCLike 𝕜]
+    (D : MultiplicityDatum 𝕜) : Lp 𝕜 2 D.measure →L[𝕜] Lp 𝕜 2 D.measure :=
+  mulLpField D.measure ((measurable_coordTruncField 𝕜 D.bound).comp measurable_fst)
+    (fun p => norm_coordTruncField_le 𝕜 D.bound_nonneg p.1)
+
+/-- The field-indexed model operator is pointwise multiplication by the field-valued truncated
+spectral coordinate. -/
+theorem MultiplicityDatum.coeFn_operator {𝕜 : Type*} [RCLike 𝕜]
+    (D : MultiplicityDatum 𝕜) (F : Lp 𝕜 2 D.measure) :
+    (D.operator F : ℂ × ℕ → 𝕜) =ᵐ[D.measure]
+      fun p => coordTruncField 𝕜 D.bound p.1 * F p :=
+  coeFn_mulLpField D.measure ((measurable_coordTruncField 𝕜 D.bound).comp measurable_fst)
+    (fun p => norm_coordTruncField_le 𝕜 D.bound_nonneg p.1) F
 
 /-- The model measure lives where the coordinate is bounded by the datum's bound. -/
-theorem MultiplicityDatum.ae_norm_le_bound (D : MultiplicityDatum) :
+theorem MultiplicityDatum.ae_norm_le_bound {𝕜 : Type*} [RCLike 𝕜]
+    (D : MultiplicityDatum 𝕜) :
     ∀ᵐ p ∂D.measure, ‖p.1‖ ≤ D.bound := by
   rw [ae_iff]
   have hmeas : MeasurableSet {p : ℂ × ℕ | ¬ ‖p.1‖ ≤ D.bound} :=
@@ -254,11 +380,25 @@ end Datum
 
 section Equivalence
 
+/-- On complex `L²`, the field-indexed model operator is the existing complex multiplication
+operator.  This keeps the established complex Hahn--Hellinger and uniqueness theory unchanged
+while making the datum itself available at `𝕜 = ℝ`. -/
+theorem MultiplicityDatum.operator_eq_mulLp (D : MultiplicityDatum ℂ) :
+    D.operator = mulLp D.measure ((measurable_coordTrunc D.bound).comp measurable_fst)
+      (fun p => norm_coordTrunc_le D.bound_nonneg p.1) := by
+  refine ContinuousLinearMap.ext fun F => Lp.ext ?_
+  filter_upwards [D.coeFn_operator F,
+    coeFn_mulLp D.measure ((measurable_coordTrunc D.bound).comp measurable_fst)
+      (fun p => norm_coordTrunc_le D.bound_nonneg p.1) F] with p hfield hcomplex
+  rw [hfield, hcomplex]
+  simp only [coordTruncField_complex, Function.comp_apply]
+
 /-- The two truncations of the coordinate agree where the model measure lives. -/
-theorem operator_eq_mulLp_of_le {D : MultiplicityDatum} {R : ℝ} (hR : 0 ≤ R)
+theorem operator_eq_mulLp_of_le {D : MultiplicityDatum ℂ} {R : ℝ} (hR : 0 ≤ R)
     (hle : D.bound ≤ R) :
     D.operator = mulLp D.measure ((measurable_coordTrunc R).comp measurable_fst)
       (fun p => norm_coordTrunc_le hR p.1) := by
+  rw [D.operator_eq_mulLp]
   refine mulLp_congr_ae _ _ _ _ _ ?_
   filter_upwards [D.ae_norm_le_bound] with p hp
   rw [Function.comp_apply, Function.comp_apply, coordTrunc_eq_self hp,
@@ -270,7 +410,7 @@ The measure classes of the two model measures agree fibrewise -- restricting one
 almost-equal sets gives literally the same measure, and the bases are equivalent -- so the
 Radon--Nikodym unitary applies once the two coordinate symbols are truncated at a common
 bound. -/
-theorem operatorUnitaryEquiv_of_measureEquiv {D E : MultiplicityDatum}
+theorem operatorUnitaryEquiv_of_measureEquiv {D E : MultiplicityDatum ℂ}
     (hbase : MeasureEquiv D.base E.base)
     (hlevel : ∀ k, D.base (symmDiff (D.level k) (E.level k)) = 0) :
     OperatorUnitaryEquiv D.operator E.operator := by
@@ -310,7 +450,7 @@ theorem mulLp_eq_coordMulLp (ha : IsStarNormal a) (ξ : H) {g : spectrum ℂ a �
 /-- **Every bounded normal operator on a separable complex Hilbert space has a multiplicity
 model.**  This is the existence half of Hahn--Hellinger. -/
 theorem exists_hasMultiplicityModel [TopologicalSpace.SeparableSpace H] (ha : IsStarNormal a) :
-    ∃ D : MultiplicityDatum, OperatorUnitaryEquiv a D.operator := by
+    ∃ D : MultiplicityDatum ℂ, OperatorUnitaryEquiv a D.operator := by
   classical
   have hR0 : (0 : ℝ) ≤ ‖a‖ * ‖(1 : H →L[ℂ] H)‖ := mul_nonneg (norm_nonneg _) (norm_nonneg _)
   have hspec : ∀ w : spectrum ℂ a, ‖(w : ℂ)‖ ≤ ‖a‖ * ‖(1 : H →L[ℂ] H)‖ := by
@@ -365,13 +505,14 @@ theorem exists_hasMultiplicityModel [TopologicalSpace.SeparableSpace H] (ha : Is
     exists_multiplicityLevels (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ)
       (diagMeasure ha (ξ n))) (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖))
       (norm_coordTrunc_le hR0)
-  refine ⟨⟨ρ, ‖a‖ * ‖(1 : H →L[ℂ] H)‖, D, hρfin, hR0, ?_, hρzero, hDmeas, hDanti⟩,
-    hstep1.trans hstep2⟩
-  refine hρsupp _ (measurableSet_lt measurable_const measurable_norm) fun n => ?_
-  rw [Measure.map_apply hemb.measurable (measurableSet_lt measurable_const measurable_norm)]
-  convert measure_empty (μ := diagMeasure ha (ξ n))
-  refine Set.eq_empty_iff_forall_notMem.mpr fun w hw => ?_
-  exact absurd (hspec w) (not_le.mpr hw)
+  refine ⟨⟨ρ, ‖a‖ * ‖(1 : H →L[ℂ] H)‖, D, hρfin, hR0, ?_, hρzero, hDmeas, hDanti⟩, ?_⟩
+  · refine hρsupp _ (measurableSet_lt measurable_const measurable_norm) fun n => ?_
+    rw [Measure.map_apply hemb.measurable (measurableSet_lt measurable_const measurable_norm)]
+    convert measure_empty (μ := diagMeasure ha (ξ n))
+    refine Set.eq_empty_iff_forall_notMem.mpr fun w hw => ?_
+    exact absurd (hspec w) (not_le.mpr hw)
+  · rw [MultiplicityDatum.operator_eq_mulLp]
+    exact hstep1.trans hstep2
 
 end BorelCalculus
 
