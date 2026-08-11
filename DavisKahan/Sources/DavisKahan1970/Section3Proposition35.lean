@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 import DavisKahan.Geometry.Angle.Proposition35Infinite
+import DavisKahan.Geometry.Polar.Section3Nonacute
 
 /-!
 # Davis--Kahan 1970, Proposition 3.5, in arbitrary Hilbert dimension
@@ -48,6 +49,21 @@ alias proposition3_5_directRotation := section3DirectRotation
 /-- The paper's quarter turn `J`, zero on the zero-angle space. -/
 alias proposition3_5_quarterTurn := section3QuarterTurn
 
+/-- The paper's quarter turn for a general pair with a chosen identification of
+the crossed defects.  The regular polar quarter turn and the chosen defect
+quarter turn act on orthogonal summands. -/
+noncomputable def corollary3_2_quarterTurn
+    {𝕜 : Type*} [RCLike 𝕜]
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+    [CompleteSpace H]
+    [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
+    [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint]
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection]
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    H →L[𝕜] H :=
+  section3QuarterTurn U V + crossedDefectQuarterTurn U V J
+
 /-- The spectral eigenspace `Omega({theta}) H` at an angle eigenvalue. -/
 alias proposition3_5_angleEigenspace := section3AngleEigenspace
 
@@ -79,6 +95,27 @@ resolution changes sign when the subspaces are interchanged. -/
 theorem corollary3_2_quarterTurn_symm :
     proposition3_5_quarterTurn V U = -proposition3_5_quarterTurn U V :=
   section3QuarterTurn_symm U V
+
+/-- Reversal symmetry for the general chosen-defect quarter-turn construction.
+For any chosen identification of the crossed defects, reversing the ordered
+pair uses the inverse identification.  The operator angle is unchanged and the
+assembled quarter turn changes sign. -/
+theorem corollary3_2_chosenDefect_symmetry
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    proposition3_5_angleOperator V U = proposition3_5_angleOperator U V ∧
+      corollary3_2_quarterTurn V U (swapCrossedDefectEquiv U V J) =
+        -corollary3_2_quarterTurn U V J := by
+  refine ⟨section3AngleOperator_symm U V, ?_⟩
+  rw [corollary3_2_quarterTurn, corollary3_2_quarterTurn,
+    section3QuarterTurn_symm U V, crossedDefectQuarterTurn_swap U V J]
+  abel
+
+/-- The corresponding chosen nonacute direct rotation reverses to its adjoint. -/
+theorem corollary3_2_directRotation_swap
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    nonacuteDirectRotation V U (swapCrossedDefectEquiv U V J) =
+      star (nonacuteDirectRotation U V J) :=
+  nonacuteDirectRotation_swap U V J
 
 /-- **Davis--Kahan 1970, Proposition 3.5, the four commutation assertions.**
 In the acute case `Theta` commutes with `P`, `Q`, the quarter turn `J`, and the
