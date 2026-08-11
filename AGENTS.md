@@ -243,6 +243,10 @@ read-only review and submission surface unless the human explicitly requests a
 roadmap change. A request to prove, refactor, or validate an API in this
 repository does not authorize editing that submodule.
 
+Operator-roadmap edits use the condensed authoring guide at
+`dev/hilbert-space-operator-roadmap/roadmap-style.md`. The guide summarizes the
+Tau Ceti roadmap rules and the accepted operator-roadmap prose style.
+
 Prove proposed signatures and ownership decisions here first. After human
 review, translate the accepted result into the roadmap. A theorem having local
 consumers does not by itself put it in Tau Ceti's scope: either give it explicit
