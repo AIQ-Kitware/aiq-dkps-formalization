@@ -59,49 +59,71 @@ automatic.  Under it, `opNorm_projection_sub_eq_opNorm_sinThetaMap` identifies
 the symmetric and directed gaps, and the printed conclusion follows from the
 directed theorem with nothing else added.
 
-The *cardinal* reading of (1.5) does not suffice, and this is worth recording so
-that a later agent does not "generalize" the hypothesis away.  Under the
-cardinal reading the printed conclusion is **false**, and the counterexample
-satisfies every printed hypothesis of Theorem 8.2:
+**CORRECTED 2026-08-11.**  This passage used to display a configuration --
+`H := E × E`, `Q := E × 0`, `P := span {e₁, e₂, …} × 0` on a separable
+infinite-dimensional `E` -- and assert that under the cardinal reading of (1.5)
+"the printed conclusion is **false**, and the counterexample satisfies every
+printed hypothesis of Theorem 8.2".  That assertion was wrong, and it was wrong
+about a *printed hypothesis it did not check*.
 
-> Let `E` be a separable infinite-dimensional Hilbert space with orthonormal
-> basis `e₀, e₁, …`, put `H := E × E`, and let `A` be `0` on the first summand
-> and `10` on the second.  Take `K = 0`, `β = α = 0`, `δ = 1`.
->
-> * `Q := E × 0` reduces `A + K = A`, with `spectrum(Λ₀) = {0} ⊆ [β, α]` and
->   `spectrum(Λ₁) = {10}` outside `(β - δ, α + δ)` -- the `sin 2Θ` hypotheses.
-> * `P := span{e₁, e₂, …} × 0` reduces `A`, with
->   `spectrum(A₀) = {0} ⊆ [β - δ/2, α + δ/2]` -- Theorem 8.2's extra placement.
-> * `‖K‖ = 0 < δ/2` -- the printed perturbation alternative.
-> * Both halves of (1.5) hold as cardinals: `dim P = dim Q = ℵ₀` and
->   `dim Pᗮ = dim Qᗮ = ℵ₀`, so a unitary satisfying (1.4) exists and `Θ` is
->   defined.
->
-> Yet `e₀ ∈ Q` is orthogonal to `P`, so `‖P_P - P_Q‖ = 1` and the symmetric `Θ`
-> is `π/2`.  The directed conclusion `directedGap P Q = 0 < √2/2` is of course
-> true, which is exactly the point.
+(3.5), stated at Proposition 3.2 of the transcription as
+`dim(P𝓗 ∩ Q̃𝓗) = dim(P̃𝓗 ∩ Q𝓗)`, is a **standing** hypothesis of the source from
+Section 3 onward: the sentence closing that proposition's proof reads "We shall
+assume (3.5) as well as (1.5) except where stated otherwise."  Theorem 8.2 does
+not state otherwise, so (3.5) is in force there exactly as (1.5) is.  In the
+displayed configuration `P𝓗 ∩ Q̃𝓗 = 0` while `P̃𝓗 ∩ Q𝓗 = span {e₀} × 0`, so the
+two crossed dimensions are `0` and `1` and (3.5) **fails**.  It is therefore not
+a configuration satisfying every printed hypothesis, and it refutes nothing
+about the printed conclusion.
 
-Equal (infinite) dimension does not make the two directed gaps agree.  In finite
-dimensions the same configuration is impossible: `P ≤ Q` with equal rank forces
-`P = Q`.  So the finite form of (1.5) is not a lazy restriction but the correct
-reading; the dimension-free statement stays directed, and the exact printed
-statement carries the finite rank convention.  The degenerate `P = ⊥`, `Q = ⊤`
-example recorded in `Section8Perturbation.lean` is the finite instance of the
-same phenomenon, there excluded by (1.5) itself.
+It is, in fact, the paper's own (3.5)-failure example.  The Remark following
+Proposition 3.2 takes `𝓗 = ℓ²(ℤ)`, `P𝓗` the sequences with `a_n = 0` for
+`n < 0`, `Q𝓗` those with `a_n = 0` for `n ≤ 0`, notes that (1.5) holds with the
+bilateral shift as a witness for (1.4), and concludes: "`P Q̃` is the projector
+upon the subspace of sequences with `a_n = 0` for `n ≠ 0`, whereas `P̃ Q = 0`; so
+(3.5) fails."  That is the displayed configuration with the two subspaces
+interchanged.  It is machine-checked in this repository as
+`Section3.directedGap_asymmetric_coordinateHalfSpace`, together with
+`coordinateHalfSpace_dimensions_agree` ((1.5) holds) and
+`not_crossedDefectsEquivalent_coordinateHalfSpace` ((3.5) fails).
+
+**What the configuration does show, and what it does not.**  It shows that (1.5)
+at the cardinal reading does not by itself identify the symmetric gap with the
+directed one: equal (infinite) dimension does not make the two directed gaps
+agree, whereas in finite dimensions `P ≤ Q` with equal rank forces `P = Q`.
+That was always its real content, and it is why the dimension-free statements
+below take (3.5) rather than a dimension count.  It does **not** show that the
+printed conclusion fails under the cardinal reading, because (3.5) is printed
+too.  Nothing here should be read as settling the cardinal reading either way.
+
+**Why the finite form, then, on its own grounds.**  Two, neither of which is a
+counterexample.  First, the paper's own Remark after Proposition 3.2: "Since we
+are assuming (1.5), (3.5) will hold automatically if either `dim P𝓗` or
+`dim P̃𝓗` is finite."  The finite form is thus precisely the regime in which the
+standing hypothesis (3.5) is free, so a statement carrying it assumes nothing
+the source has not already assumed.  Second, it is the checkable form:
+`finrank ℂ P = finrank ℂ Q` is a hypothesis a consumer discharges by counting,
+where (3.5) in its constructive form `CrossedDefectsEquivalent` asks for an
+isometry between the two crossed defects.
+
+The degenerate `P = ⊥`, `Q = ⊤` example recorded in `Section8Perturbation.lean`
+is a separate matter: it is excluded by (1.5) itself, at either reading.
 
 ## The dimension-free reading, under Section 3's standing assumption (3.5)
 
-The paragraph above is about (1.5) and remains correct: neither reading of (1.5)
+The section above is about (1.5) and remains correct: neither reading of (1.5)
 identifies the two directed gaps.  Section 3's *other* standing assumption does.
 (3.5) asks that the two crossed defects `P ⊓ Qᗮ` and `Pᗮ ⊓ Q` carry the same
 data; `subspaceGap_eq_directedGap_of_crossedDefects` and
 `maximalAngle_lt_pi_div_four_of_crossedDefects` deliver the printed conclusion
-from it with **no** dimension hypothesis of any kind.
+from it with **no** dimension hypothesis of any kind, and
+`theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects` is Theorem 8.2's
+printed disjunction read off them.
 
-The counterexample displayed above is not evidence against that statement, and
-this is the point on which a later agent is most likely to go wrong: it has
-`P ⊓ Qᗮ = ⊥` and `Pᗮ ⊓ Q = span {e₀} ≠ ⊥`, so it fails (3.5).  What (3.5) rules
-out is exactly the configuration it exhibits.
+So the printed `Θ < π/4` is available in this repository under *either* the
+finite form of (1.5) or the standing (3.5) -- and the bilateral-shift
+configuration discussed above, which fails (3.5), is exactly what the second of
+those rules out.
 
 ## What is exported
 
@@ -115,10 +137,14 @@ out is exactly the configuration it exhibits.
   8.2 inherits, specialized to its configuration and stated with its
   hypotheses, so the exported Section 8.2 surface carries them rather than
   merely pointing at Section 7, at the operator norm;
-* `theorem8_2_sinTwoTheta_perturbation_source_paperUINorm` -- the first of those
-  two at the printed norm scope, every unitarily invariant norm in the paper's
-  own sense.  The residual one is **not** available at that scope, and the
-  reason is recorded at the head of section 2b;
+* `theorem8_2_sinTwoTheta_perturbation_source_paperUINorm` and
+  `theorem8_2_sinTwoTheta_residual_source_paperUINorm` -- both of those at the
+  printed norm scope, every unitarily invariant norm in the paper's own sense,
+  the residual one at the printed *directed* `sin 2Θ₀` and with the printed
+  factor `2`; `theorem8_2_sinTwoTheta_residual_source_all_kyFan` is the same
+  content at every Ky Fan level.  What is *not* available at that scope is the
+  **ambient** `sin 2Θ` reading of the residual alternative; the measurement is
+  at the head of section 2b;
 * `theorem8_2_perturbationHalfGap_source_maximalAngle_lt`,
   `theorem8_2_residualHalfGap_source_maximalAngle_lt`,
   `theorem8_2_branch_source_maximalAngle_lt` -- the printed `Θ < π/4`;
@@ -325,31 +351,53 @@ operator norm by `norm_paperSinTwoAngleOperatorC_eq_norm_sinTwoAngleOperatorC`,
 but only the former carries the whole singular-value list that a general
 unitarily invariant norm reads.
 
-## Why the residual alternative is not here
+## The residual alternative at this scope: the obstruction, and how it was passed
 
-The obstruction is mathematical, not bookkeeping, and it is recorded so that a
-later agent does not spend the day rediscovering it.
+**CORRECTED 2026-08-11.**  This passage used to be headed "Why the residual
+alternative is not here" and concluded that the printed constant `2` was out of
+reach at a general unitarily invariant norm.  It is contradicted by
+`theorem8_2_sinTwoTheta_residual_source_paperUINorm` below, which is here and
+which carries the printed `2`.  The measurement itself was correct and is kept;
+what was wrong was the inference drawn from it, because it measured the
+**ambient** reading and the printed statement is the **directed** one.
 
-The printed residual conclusion is `δ‖sin 2Θ₀‖ ≤ 2‖R‖` at the **directed** `Θ₀`
-(and the paper's own proof of it, through Lemma 6.1, actually gives the constant
-`1`).  `theorem8_2_sinTwoTheta_residual_source` above states it at the
-**ambient** `Θ`, which is legitimate at the operator norm because the two
-off-diagonal blocks of the reflection defect have the *same* operator norm --
-that is `norm_offdiag_add_eq`.
+*The measurement, which stands.*  The printed residual conclusion is
+`δ‖sin 2Θ₀‖ ≤ 2‖R‖` at the **directed** `Θ₀` (and the paper's own proof of it,
+through Lemma 6.1, actually gives the constant `1`).
+`theorem8_2_sinTwoTheta_residual_source` above states it at the **ambient** `Θ`,
+which is legitimate at the operator norm because the two off-diagonal blocks of
+the reflection defect have the *same* operator norm -- that is
+`norm_offdiag_add_eq`.  For a general unitarily invariant norm that identity
+fails.  Writing `C` for the `P`-to-`Pᗮ` block of `A + K`, the singular values of
+`C + C⋆` are those of `C` doubled, so a symmetric gauge sees
+`N(C + C⋆) = 2 N(C)` in general (the trace norm does).  Every route through
+`sinTwoTheta_wholeSpace_paperUINorm` has to supply a comparison operator reduced
+by `P`, i.e. block-diagonal, so its displacement from `A + K` is exactly
+`-(C + C⋆)` for the best such choice; with `N(C) ≤ N(R)` this yields the
+constant `4`, not the printed `2`.  So the **ambient** `sin 2Θ` at a general
+symmetric gauge is still not available with the printed constant, and no
+statement below claims it.
 
-For a general unitarily invariant norm that identity fails.  Writing `C` for the
-`P`-to-`Pᗮ` block of `A + K`, the singular values of `C + C⋆` are those of `C`
-doubled, so a symmetric gauge sees `N(C + C⋆) = 2 N(C)` in general (the trace
-norm does).  Every route through `sinTwoTheta_wholeSpace_paperUINorm` has to
-supply a comparison operator reduced by `P`, i.e. block-diagonal, so its
-displacement from `A + K` is exactly `-(C + C⋆)` for the best such choice; with
-`N(C) ≤ N(R)` this yields the constant `4`, not the printed `2`.
+*What the inference got wrong.*  The passage then asserted that recovering the
+printed constant needs the singular-value identification of `sin 2Θ₀` with
+`sin 2Θ₁` -- the paper's `S_0`/`S_1` discussion, i.e. the Halmos generic
+decomposition.  It does not.  The printed conclusion is about `Θ₀`, so the route
+that works never forms the ambient sum at all: state the conclusion at the
+canonical directed block `sinTwoThetaIdealBlock Q P`, and the constant `2` comes
+out of `sinTwoTheta_directedResidual_paperUINorm`'s own chain -- the paper
+projection block dominates `δ` times the ideal block, the block defect costs the
+factor `2`, and the residual is extended by zero along `P.subtypeL.adjoint`,
+which preserves the whole approximation-singular sequence and hence every paper
+norm.  No generic decomposition is used anywhere in it.
 
-Recovering the printed constant needs the singular-value identification of
-`sin 2Θ₀` with `sin 2Θ₁` -- the paper's `S_0`/`S_1` discussion, i.e. the Halmos
-generic decomposition.  That is the machinery the *dimension* axis of this row
-turned out not to need; the norm axis of the residual alternative does need
-it. -/
+*What is therefore available below.*
+`theorem8_2_sinTwoTheta_residual_source_all_kyFan` at every Ky Fan level and
+`theorem8_2_sinTwoTheta_residual_source_paperUINorm` at every norm in the
+paper's own class, both at the directed `sin 2Θ₀` and both with the printed
+factor `2`.  The negative knowledge that survives is exactly one sentence: the
+**ambient** `sin 2Θ` reading of the residual alternative does not reach the
+printed constant at a general symmetric gauge, and is available only at the
+operator norm. -/
 
 omit [CompleteSpace H] in
 /-- **The spectral dictionary between Section 8 and the `sin 2Θ` development.**
@@ -534,6 +582,30 @@ theorem theorem8_2_branch_source_maximalAngle_lt [FiniteDimensional ℂ H]
       ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
     maximalAngle P Q < Real.pi / 4 :=
   maximalAngle_lt_pi_div_four_of_directedGap_lt hrank
+    (theorem8_2_branch_source hA hK hdelta hab hQ hQperp hPred hP hsmall)
+
+/-- **Davis--Kahan 1970, Theorem 8.2, printed conclusion `Θ < π/4`, in any
+dimension, under Section 3's standing assumption (3.5).**
+
+`maximalAngle_lt_pi_div_four_of_crossedDefects` applied to Theorem 8.2's printed
+disjunction: either printed smallness alternative, plus (3.5) in its
+constructive form, gives the printed symmetric conclusion with **no**
+finite-dimensionality and **no** rank hypothesis.  The complex counterpart of
+`theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects`, which existed
+first only because the real descent needed it. -/
+theorem theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects
+    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : Reduces A P)
+    (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
+    (hcross : CrossedDefectsEquivalent P Q)
+    (hsmall : ‖K‖ < delta / 2 ∨
+      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+    maximalAngle P Q < Real.pi / 4 :=
+  maximalAngle_lt_pi_div_four_of_crossedDefects hcross
     (theorem8_2_branch_source hA hK hdelta hab hQ hQperp hPred hP hsmall)
 
 /-! ### 4. The whole printed theorem -/

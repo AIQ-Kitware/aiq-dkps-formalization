@@ -72,6 +72,17 @@ state part (ii) with the printed factor written as a principal cosine.
 state part (iii) with the printed right-hand side `(λ_i - α) cos²θ_i`, quantified
 over **every** symmetric gauge -- not the operator norm, not the Frobenius norm,
 not Ky Fan `k` alone.
+
+## Scalar scope, measured 2026-08-11
+
+The three identifications of sections 1--3, and the opening illustration of the
+last section, are stated over an arbitrary `RCLike` field.  The six printed
+statements of sections 4--6 are complex, and the obstruction is that they
+**name** `canonicalLowBranch`; it is `boundedSelfAdjointSpectralSubspace`, which
+is declared for `E →L[ℂ] E` alone, so the statements are not expressible over a
+general `𝕜` at all.  This is *not* the `gramSpectralPVM` obstruction that keeps
+`approximationNumber_mono_of_form_le` complex; that one is reached only through
+the proofs, never through these statements.  See section 0 below.
 -/
 
 namespace TauCeti
@@ -85,7 +96,31 @@ open Module (finrank)
 
 universe u
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+/-! ### 0. Scalar scope
+
+Sections 1--3 are the identifications, and they hold over **any** `RCLike`
+scalar field: `TauCeti.principalCosines` is `𝕜`-generic, the block algebra
+(`upperBlockShift`, `cosineBlock`, `lowerBlockShift`, `lowerCosineBlock`) is
+`𝕜`-generic in `Section8PartII.lean`'s `section Generic`, and
+`approximationNumber = singularValues` in finite dimensions is `𝕜`-generic.
+
+Sections 4--6 are the printed statements, and they are complex.  The obstruction
+is *not* the `gramOperator`/`gramSpectralPVM` layer that holds
+`approximationNumber_mono_of_form_le` at `ℂ`; that layer is reached only
+transitively.  It is that the statements **name** `canonicalLowBranch`, which is
+`boundedSelfAdjointSpectralSubspace` and is declared for `E →L[ℂ] E` alone.  The
+real reading of parts (ii) and (iii) therefore goes through the separate
+`canonicalLowBranchReal` of `Section8PartIIReal.lean`, whose argument list is
+not the complex one -- it carries the printed hypotheses, because the spectral
+repulsion that selects the branch must be proved before the branch exists.  A
+single `𝕜`-generic statement of sections 4--6 would need a `𝕜`-generic bounded
+spectral subspace, which does not exist here; see `section ComplexBranch` below.
+-/
+
+section Generic
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
 
 /-! ### 1. Positive blocks: approximation numbers are ordered eigenvalues -/
@@ -97,9 +132,9 @@ In finite dimensions the approximation numbers are the singular values, and for
 a positive operator the singular values are the eigenvalues.  This is the step
 that turns the ambient part (ii)/(iii) statements into the printed `α_k`, `λ_k`
 readings, since every block appearing there is positive. -/
-theorem approximationNumber_eq_eigenvalues_of_isPositive [FiniteDimensional ℂ H]
-    {S : H →L[ℂ] H} (hpos : (S : H →ₗ[ℂ] H).IsPositive)
-    (i : Fin (finrank ℂ H)) :
+theorem approximationNumber_eq_eigenvalues_of_isPositive [FiniteDimensional 𝕜 H]
+    {S : H →L[𝕜] H} (hpos : (S : H →ₗ[𝕜] H).IsPositive)
+    (i : Fin (finrank 𝕜 H)) :
     S.approximationNumber (i : ℕ) = hpos.isSymmetric.eigenvalues rfl i := by
   rw [ContinuousLinearMap.approximationNumber_eq_singularValues,
     ← ContinuousLinearMap.toLinearMap_singularValues]
@@ -108,25 +143,25 @@ theorem approximationNumber_eq_eigenvalues_of_isPositive [FiniteDimensional ℂ 
 omit [CompleteSpace H] in
 /-- The positivity of an ambient block in the form `approximationNumber_eq_eigenvalues_of_isPositive`
 consumes. -/
-theorem isPositive_toLinearMap_of_nonneg {S : H →L[ℂ] H}
-    (hS : (0 : H →L[ℂ] H) ≤ S) : (S : H →ₗ[ℂ] H).IsPositive :=
+theorem isPositive_toLinearMap_of_nonneg {S : H →L[𝕜] H}
+    (hS : (0 : H →L[𝕜] H) ≤ S) : (S : H →ₗ[𝕜] H).IsPositive :=
   ((ContinuousLinearMap.nonneg_iff_isPositive S).mp hS).toLinearMap
 
 /-! ### 2. Extension by zero appends zeros -/
 
 omit [CompleteSpace H] in
 /-- The unperturbed upper block lives on `Pᗮ`. -/
-theorem range_upperBlockShift_le (A : H →L[ℂ] H) (P : Submodule ℂ H)
+theorem range_upperBlockShift_le (A : H →L[𝕜] H) (P : Submodule 𝕜 H)
     [P.HasOrthogonalProjection] (alpha : ℝ) :
-    LinearMap.range (upperBlockShift A P alpha : H →ₗ[ℂ] H) ≤ Pᗮ := by
+    LinearMap.range (upperBlockShift A P alpha : H →ₗ[𝕜] H) ≤ Pᗮ := by
   rintro y ⟨x, rfl⟩
   exact Submodule.starProjection_apply_mem _ _
 
 omit [CompleteSpace H] in
 /-- The unperturbed lower block lives on `P`. -/
-theorem range_lowerBlockShift_le (A : H →L[ℂ] H) (P : Submodule ℂ H)
+theorem range_lowerBlockShift_le (A : H →L[𝕜] H) (P : Submodule 𝕜 H)
     [P.HasOrthogonalProjection] (alpha delta : ℝ) :
-    LinearMap.range (lowerBlockShift A P alpha delta : H →ₗ[ℂ] H) ≤ P := by
+    LinearMap.range (lowerBlockShift A P alpha delta : H →ₗ[𝕜] H) ≤ P := by
   rintro y ⟨x, rfl⟩
   exact Submodule.starProjection_apply_mem _ _
 
@@ -135,18 +170,18 @@ omit [CompleteSpace H] in
 rank of `Pᗮ` every approximation number of the ambient block vanishes, so the
 ambient decreasing sequence is the printed eigenvalue list of `A₁ - α` followed
 by zeros. -/
-theorem approximationNumber_upperBlockShift_eq_zero_of_le [FiniteDimensional ℂ H]
-    (A : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
-    (alpha : ℝ) {n : ℕ} (hn : finrank ℂ (Pᗮ : Submodule ℂ H) ≤ n) :
+theorem approximationNumber_upperBlockShift_eq_zero_of_le [FiniteDimensional 𝕜 H]
+    (A : H →L[𝕜] H) (P : Submodule 𝕜 H) [P.HasOrthogonalProjection]
+    (alpha : ℝ) {n : ℕ} (hn : finrank 𝕜 (Pᗮ : Submodule 𝕜 H) ≤ n) :
     (upperBlockShift A P alpha).approximationNumber n = 0 :=
   ContinuousLinearMap.approximationNumber_eq_zero_of_finrank_range_le _
     ((Submodule.finrank_mono (range_upperBlockShift_le A P alpha)).trans hn)
 
 omit [CompleteSpace H] in
 /-- **Extending the lower compression by zero only appends zeros.** -/
-theorem approximationNumber_lowerBlockShift_eq_zero_of_le [FiniteDimensional ℂ H]
-    (A : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
-    (alpha delta : ℝ) {n : ℕ} (hn : finrank ℂ P ≤ n) :
+theorem approximationNumber_lowerBlockShift_eq_zero_of_le [FiniteDimensional 𝕜 H]
+    (A : H →L[𝕜] H) (P : Submodule 𝕜 H) [P.HasOrthogonalProjection]
+    (alpha delta : ℝ) {n : ℕ} (hn : finrank 𝕜 P ≤ n) :
     (lowerBlockShift A P alpha delta).approximationNumber n = 0 :=
   ContinuousLinearMap.approximationNumber_eq_zero_of_finrank_range_le _
     ((Submodule.finrank_mono (range_lowerBlockShift_le A P alpha delta)).trans hn)
@@ -161,8 +196,8 @@ pair `(Pᗮ, Qᗮ)`.**
 projection `P_V P_U`, and the ambient `C₁ = P_{Qᗮ} P_{Pᗮ}` is that cross
 projection.  With `approximationNumber = singularValues` in finite dimensions,
 the identification is definitional. -/
-theorem approximationNumber_cosineBlock_eq_principalCosines [FiniteDimensional ℂ H]
-    (P Q : Submodule ℂ H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+theorem approximationNumber_cosineBlock_eq_principalCosines [FiniteDimensional 𝕜 H]
+    (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (i : ℕ) :
     (cosineBlock P Q).approximationNumber i = TauCeti.principalCosines Pᗮ Qᗮ i := by
   rw [ContinuousLinearMap.approximationNumber_eq_singularValues,
@@ -173,8 +208,8 @@ omit [CompleteSpace H] in
 /-- **The lower cosine block's singular values are the principal cosines of the
 pair `(P, Q)`.** -/
 theorem approximationNumber_lowerCosineBlock_eq_principalCosines
-    [FiniteDimensional ℂ H]
-    (P Q : Submodule ℂ H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    [FiniteDimensional 𝕜 H]
+    (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (i : ℕ) :
     (lowerCosineBlock P Q).approximationNumber i = TauCeti.principalCosines P Q i := by
   rw [ContinuousLinearMap.approximationNumber_eq_singularValues,
@@ -184,7 +219,7 @@ theorem approximationNumber_lowerCosineBlock_eq_principalCosines
 omit [CompleteSpace H] in
 /-- A cosine block is a contraction: it is a composite of two orthogonal
 projections. -/
-theorem norm_cosineBlock_le_one (P Q : Submodule ℂ H)
+theorem norm_cosineBlock_le_one (P Q : Submodule 𝕜 H)
     [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] :
     ‖cosineBlock P Q‖ ≤ 1 := by
   refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_
@@ -197,8 +232,8 @@ omit [CompleteSpace H] in
 /-- Every principal cosine of the upper pair lies in `[0, 1]`, so the printed
 angle `θ_i = arccos (a_i C₁)` of equation (1.16) is a genuine angle in
 `[0, π/2]` and satisfies `cos θ_i = a_i(C₁)`. -/
-theorem cos_arccos_approximationNumber_cosineBlock [FiniteDimensional ℂ H]
-    (P Q : Submodule ℂ H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+theorem cos_arccos_approximationNumber_cosineBlock [FiniteDimensional 𝕜 H]
+    (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (i : ℕ) :
     Real.cos (Real.arccos ((cosineBlock P Q).approximationNumber i)) =
       (cosineBlock P Q).approximationNumber i :=
@@ -213,24 +248,35 @@ omit [CompleteSpace H] in
 The approximation-number sequence starts at the operator norm, so part (ii)'s
 factor `‖C₁‖₁²` is `cos²θ_min` -- the cosine of the *smallest* principal angle,
 which is the printed reading of replacing every `cos²θ_k` by the largest one. -/
-theorem norm_cosineBlock_eq_principalCosines_zero [FiniteDimensional ℂ H]
-    (P Q : Submodule ℂ H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] :
+theorem norm_cosineBlock_eq_principalCosines_zero [FiniteDimensional 𝕜 H]
+    (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] :
     ‖cosineBlock P Q‖ = TauCeti.principalCosines Pᗮ Qᗮ 0 := by
   rw [← approximationNumber_cosineBlock_eq_principalCosines,
     ContinuousLinearMap.approximationNumber_index_zero]
 
 omit [CompleteSpace H] in
 /-- The lower companion: `‖C₀‖₁` is the largest principal cosine of `(P, Q)`. -/
-theorem norm_lowerCosineBlock_eq_principalCosines_zero [FiniteDimensional ℂ H]
-    (P Q : Submodule ℂ H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] :
+theorem norm_lowerCosineBlock_eq_principalCosines_zero [FiniteDimensional 𝕜 H]
+    (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] :
     ‖lowerCosineBlock P Q‖ = TauCeti.principalCosines P Q 0 := by
   rw [← approximationNumber_lowerCosineBlock_eq_principalCosines,
     ContinuousLinearMap.approximationNumber_index_zero]
 
-/-! ### 4. Part (ii) with the printed angle factor -/
+end Generic
+
+/-! ### 4. Part (ii) with the printed angle factor
+
+Everything from here to the end of `section Source` names `canonicalLowBranch`,
+the bounded self-adjoint spectral subspace, and is complex for that reason
+alone -- the same reason `Section8PartII.lean` splits at `section ComplexBranch`.
+The real reading of these six statements is not a scalar generalization of them;
+it is the `_real` family of `Section8PartIIReal.lean` and `Section8PartIIIReal.lean`,
+built on `canonicalLowBranchReal`. -/
 
 section Source
 
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
 variable (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
 variable {alpha delta : ℝ}
 
@@ -489,7 +535,14 @@ Section 8 opens by reading a norm bound back as an angle: "if the hypotheses of
 the `sin θ` theorem hold with `‖R‖₁ = 1` and `δ = 2`, then `‖sin Θ₀‖₁ ≤ 1/2`,
 which is exactly `Θ ≤ π/6`".  The `sin θ` theorem itself is Section 6's; the only
 content added there is the scalar dictionary below, the exact analogue of
-`maximalAngle_le_pi_div_four_iff` at the sixth of a turn. -/
+`maximalAngle_le_pi_div_four_iff` at the sixth of a turn.  Both statements are
+`𝕜`-generic: no branch appears in either. -/
+
+section OpeningIllustration
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+  [CompleteSpace H]
 
 /-- `arcsin (1/2) = π/6`. -/
 theorem arcsin_one_div_two : Real.arcsin (1 / 2) = Real.pi / 6 :=
@@ -499,7 +552,7 @@ theorem arcsin_one_div_two : Real.arcsin (1 / 2) = Real.pi / 6 :=
 omit [CompleteSpace H] in
 /-- **The section's opening reading**: a sine bound of `1/2` is exactly
 `Θ ≤ π/6`. -/
-theorem maximalAngle_le_pi_div_six_iff (U V : Submodule ℂ H)
+theorem maximalAngle_le_pi_div_six_iff (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     DavisKahanExt.maximalAngle U V ≤ Real.pi / 6 ↔
       subspaceGap U V ≤ 1 / 2 := by
@@ -507,6 +560,8 @@ theorem maximalAngle_le_pi_div_six_iff (U V : Submodule ℂ H)
     ⟨by linarith [Real.pi_pos], by linarith [Real.pi_pos]⟩
   show Real.arcsin (subspaceGap U V) ≤ Real.pi / 6 ↔ _
   rw [Real.arcsin_le_iff_le_sin' hmem, Real.sin_pi_div_six]
+
+end OpeningIllustration
 
 end Section8
 end DavisKahan1970

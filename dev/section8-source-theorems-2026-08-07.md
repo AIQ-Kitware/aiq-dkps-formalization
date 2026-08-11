@@ -96,22 +96,51 @@ and `subspaceGap_eq_directedGap_of_finrank_eq` then converts the directed
 conclusion the printed argument actually delivers into the printed symmetric
 one.
 
-Under the **cardinal** form of (1.5) the printed conclusion is *false*.  Take
-`H := E × E` with `E` separable infinite-dimensional with basis `e₀, e₁, …`, `A`
-equal to `0` on the first summand and `10` on the second, `K = 0`,
-`β = α = 0`, `δ = 1`, `Q := E × 0`, `P := span{e₁, e₂, …} × 0`.  Every printed
-hypothesis of Theorem 8.2 holds, both halves of (1.5) hold as cardinals, and yet
-`‖P_P - P_Q‖ = 1`.  In finite dimensions the configuration cannot occur, since
-`P ≤ Q` with equal rank forces `P = Q`.  So the finite form of (1.5) is the
-correct reading and not a lazy restriction, and
-`theorem8_2_branch_source_directed` — the strongest statement from the explicit
-printed hypotheses alone, with no dimension convention — is kept and must not be
-collapsed into the symmetric one.
+**CORRECTED 2026-08-11 (Claude Opus 5, coordinator).  THE PARAGRAPH THAT STOOD
+HERE CLAIMED A COUNTEREXAMPLE THAT IS NOT ONE, AND THE PAPER ITSELF SAYS SO.**
 
-This counterexample is recorded in prose here, in the census row, and in the
-`Section8SourceTheorem82.lean` module docstring.  It is the only piece of
-Section 8 that is documented rather than machine-checked; a Lean version needs
-an explicit two-eigenvalue operator on `E × E` and its restricted spectra.
+It read: "Under the **cardinal** form of (1.5) the printed conclusion is
+*false*.  Take `H := E × E` … `Q := E × 0`, `P := span{e₁, e₂, …} × 0`.  Every
+printed hypothesis of Theorem 8.2 holds, both halves of (1.5) hold as cardinals,
+and yet `‖P_P - P_Q‖ = 1`."
+
+The configuration does **not** satisfy every printed hypothesis, because it
+violates the standing assumption (3.5).  Against
+`non-distributable/davis-kahan-1970-modernized-transcription.tex`:
+
+* (3.5) is stated at **L901–908** (Proposition 3.2) as
+  `dim(P𝓗 ∩ Q̃𝓗) = dim(P̃𝓗 ∩ Q𝓗)` — equality of the two *crossed* intersection
+  dimensions.
+* **L961: "We shall assume (3.5) as well as (1.5) except where stated
+  otherwise."**  So (3.5) is a printed *standing* hypothesis from Section 3
+  onward, and is therefore in force for Theorem 8.2.
+* In the configuration above `P𝓗 ∩ Q̃𝓗 = 0` while `P̃𝓗 ∩ Q𝓗 = span{e₀} × 0`.
+  **0 ≠ 1, so (3.5) fails.**
+* The paper's own Remark after Proposition 3.2 (**L911–916**) exhibits the same
+  phenomenon — with the two subspaces interchanged — as its illustration that
+  (3.5) *fails* under the cardinal reading of (1.5): "`P Q̃` is the projector
+  upon the subspace of sequences with `aₙ=0` for `n≠0`, whereas `P̃ Q = 0`; so
+  (3.5) fails."
+
+So the paragraph reproduced the paper's own (3.5)-failure example and labelled
+it a counterexample to a theorem that assumes (3.5).  This is audit
+disagreement 19, now upheld and closed.
+
+**WHAT SURVIVES, on better grounds.**  The finite form of (1.5) is still the
+right reading, but because of the Remark's *positive* justification rather than
+any claim about the cardinal form: "Since we are assuming (1.5), (3.5) will hold
+automatically if either `dim P𝓗` or `dim P̃𝓗` is finite."  The finite form is
+precisely the regime in which the standing (3.5) is free.  Whether the printed
+conclusion holds under the cardinal form together with (3.5) is **not settled
+here** and must not be asserted either way.  `theorem8_2_branch_source_directed`
+— the strongest statement from the explicit printed hypotheses alone, with no
+dimension convention — is kept and must not be collapsed into the symmetric one.
+
+The paper's configuration is no longer documented-only: it is machine-checked as
+`Section3.directedGap_asymmetric_coordinateHalfSpace` with
+`coordinateHalfSpace_dimensions_agree` and
+`not_crossedDefectsEquivalent_coordinateHalfSpace`
+(`DavisKahan/Frontier/Section3BilateralShift.lean`).
 
 ## Gates at the close of the campaign
 
