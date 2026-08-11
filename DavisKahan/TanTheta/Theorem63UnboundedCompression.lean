@@ -74,7 +74,18 @@ open TauCeti.ApproximationNumber (IsOrthogonalProjectionMap StronglyTendsto)
 
 universe u
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+/-! ## The data bundle and its field-independent algebra
+
+Everything in this section is scalar-generic: the bundle itself, the ambient action it
+determines, the exhibition of every bounded bundle as an instance, and the block-algebra
+passage from a chosen reducing subspace to the crossed form bound.  Only the spectral
+truncation that follows is pinned to `ℂ`, and only because the projection-valued measure
+it uses is. -/
+
+section GenericScalars
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
 
 /-- **Trial data with an unbounded Ritz compression.**
@@ -86,20 +97,20 @@ not.
 
 The field layout mirrors `ExactSinTheta.PaperCommonDomainSinThetaData`, where the sine half
 of the Appendix already reaches this generality. -/
-structure UnboundedCompressionTrialData (Z : Submodule ℂ H)
+structure UnboundedCompressionTrialData (Z : Submodule 𝕜 H)
     [Z.HasOrthogonalProjection] [CompleteSpace Z] where
   /-- The Ritz compression `A₀`, densely defined and self-adjoint on the trial space. -/
-  compression : DKClosedOperator (H := Z)
+  compression : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := Z)
   /-- `A₀` is self-adjoint. -/
   compression_isSelfAdjoint : compression.IsSelfAdjoint
   /-- The bounded Ritz residual. -/
-  residual : Z →L[ℂ] H
+  residual : Z →L[𝕜] H
   /-- The residual is orthogonal to the trial subspace. -/
-  residual_orthogonal : ∀ z z' : Z, ⟪residual z, ((z' : Z) : H)⟫_ℂ = 0
+  residual_orthogonal : ∀ z z' : Z, ⟪residual z, ((z' : Z) : H)⟫_𝕜 = 0
 
 namespace UnboundedCompressionTrialData
 
-variable {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
+variable {Z : Submodule 𝕜 H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
 
 /-- The ambient action of a trial vector lying in the compression domain:
 `A₀ z + R z`. -/
@@ -111,7 +122,7 @@ noncomputable def action (D : UnboundedCompressionTrialData Z)
 
 /-- **Every bounded trial-block bundle is unbounded-compression data.**  No hypothesis is
 added to anything already proved over `Theorem63TrialData`. -/
-noncomputable def ofBounded {V : Submodule ℂ H} [V.HasOrthogonalProjection]
+noncomputable def ofBounded {V : Submodule 𝕜 H} [V.HasOrthogonalProjection]
     (data : Theorem63TrialData Z V) : UnboundedCompressionTrialData Z where
   compression := DavisKahanExt.ClosedOperator.ofBounded data.compression
   compression_isSelfAdjoint :=
@@ -121,30 +132,93 @@ noncomputable def ofBounded {V : Submodule ℂ H} [V.HasOrthogonalProjection]
 
 omit [CompleteSpace H] in
 /-- The bounded instance has the bounded bundle's residual. -/
-theorem ofBounded_residual {V : Submodule ℂ H} [V.HasOrthogonalProjection]
+theorem ofBounded_residual {V : Submodule 𝕜 H} [V.HasOrthogonalProjection]
     (data : Theorem63TrialData Z V) :
     (ofBounded data).residual = data.residual := rfl
 
 omit [CompleteSpace H] in
 /-- The bounded instance's compression domain is everything. -/
-theorem ofBounded_compression_domain {V : Submodule ℂ H} [V.HasOrthogonalProjection]
+theorem ofBounded_compression_domain {V : Submodule 𝕜 H} [V.HasOrthogonalProjection]
     (data : Theorem63TrialData Z V) :
     (ofBounded data).compression.domain = ⊤ := rfl
 
 omit [CompleteSpace H] in
 /-- The bounded instance's ambient action is the bounded bundle's action. -/
-theorem ofBounded_action {V : Submodule ℂ H} [V.HasOrthogonalProjection]
+theorem ofBounded_action {V : Submodule 𝕜 H} [V.HasOrthogonalProjection]
     (data : Theorem63TrialData Z V) (z : (ofBounded data).compression.domain) :
     (ofBounded data).action z = data.action ((z : Z)) :=
   (data.action_eq ((z : Z))).symm
-
-/-! ### The spectral truncation of the Ritz compression -/
 
 omit [CompleteSpace H] [CompleteSpace Z] in
 /-- The orthogonal projection onto the trial space fixes trial vectors. -/
 theorem orthogonalProjectionOnto_coe (z : Z) :
     Z.orthogonalProjectionOnto ((z : Z) : H) = z :=
   Subtype.ext (Submodule.starProjection_eq_self_iff.mpr z.2)
+
+/-! ### The printed hypotheses: a chosen reducing subspace of an ambient operator
+
+The crossed bound the tangent chain consumes is stated at the abstraction level
+`Theorem63TrialData` consumes.  The printed Theorem 6.3 states it instead as
+`α + δ ≤ Λ₁ = F₁⋆ (A + H) F₁` for a *chosen* pair of complementary reducing subspaces.
+The two are connected exactly as they are on the bounded side
+(`ExactTanTheta.crossed_lower_of_reducing`): by block algebra on the domain.  The link
+between the data and the ambient operator is the single equation `haction` — the data's
+ambient action is the ambient operator's — which encodes both `A₀ = E₀⋆ (A + H) E₀` and
+`R = (A + H) E₀ - E₀ A₀`.
+
+Nothing here touches the scalar field beyond the real part of an inner product, so it is
+proved once, generically. -/
+
+omit [CompleteSpace H] in
+/-- **The crossed form bound from a chosen reducing subspace**, for unbounded-compression
+trial data presented through an ambient closed operator.
+
+`V` is a chosen subspace reducing `A` — its complementary projection preserves the domain
+(`hVdom`) and commutes with the operator there (`hVcomm`) — and the quadratic form on `Vᗮ`
+is bounded below by `α + δ` (`hlower`).  Nothing is assumed about `A` on `V` itself. -/
+theorem crossed_lower_of_reducing
+    (D : UnboundedCompressionTrialData Z)
+    (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    {α δ : ℝ}
+    (hZA : ∀ z : D.compression.domain, ((z : Z) : H) ∈ A.domain)
+    (haction : ∀ z : D.compression.domain,
+      D.action z = A.toLinearMap ⟨((z : Z) : H), hZA z⟩)
+    (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : H)) ∈ A.domain)
+    (hVcomm : ∀ x : A.domain,
+      Vᗮ.starProjection (A.toLinearMap x) =
+        A.toLinearMap ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
+    (hlower : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_𝕜)
+    (z : D.compression.domain) :
+    (α + δ) * ‖Vᗮ.starProjection (((z : Z) : H))‖ ^ 2 ≤
+      RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
+        Vᗮ.starProjection (D.action z)⟫_𝕜 := by
+  have hswap : ∀ a b : H, RCLike.re ⟪a, b⟫_𝕜 = RCLike.re ⟪b, a⟫_𝕜 := by
+    intro a b
+    conv_lhs => rw [← inner_conj_symm]
+    rw [RCLike.conj_re]
+  have hcomm : Vᗮ.starProjection (D.action z) =
+      A.toLinearMap ⟨Vᗮ.starProjection (((z : Z) : H)),
+        hVdom ⟨((z : Z) : H), hZA z⟩⟩ := by
+    rw [haction z]
+    exact hVcomm ⟨((z : Z) : H), hZA z⟩
+  rw [hcomm]
+  exact (hlower (Vᗮ.starProjection (((z : Z) : H)))
+    (Vᗮ.starProjection_apply_mem _) (hVdom ⟨((z : Z) : H), hZA z⟩)).trans_eq (hswap _ _)
+
+end UnboundedCompressionTrialData
+
+end GenericScalars
+
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+namespace UnboundedCompressionTrialData
+
+variable {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
+
+/-! ### The spectral truncation of the Ritz compression -/
 
 variable (D : UnboundedCompressionTrialData Z)
 
@@ -739,49 +813,8 @@ theorem ideal_of_formBounds_exists
 
 /-! ### The printed hypotheses: a chosen reducing subspace of an ambient operator
 
-The crossed bound above is stated at the abstraction level `Theorem63TrialData` consumes.
-The printed Theorem 6.3 states it instead as `α + δ ≤ Λ₁ = F₁⋆ (A + H) F₁` for a *chosen*
-pair of complementary reducing subspaces.  The two are connected exactly as they are on
-the bounded side (`ExactTanTheta.crossed_lower_of_reducing`): by block algebra on the
-domain.  The link between the data and the ambient operator is the single equation
-`haction` — the data's ambient action is the ambient operator's — which encodes both
-`A₀ = E₀⋆ (A + H) E₀` and `R = (A + H) E₀ - E₀ A₀`. -/
-
-omit [CompleteSpace H] in
-/-- **The crossed form bound from a chosen reducing subspace**, for unbounded-compression
-trial data presented through an ambient closed operator.
-
-`V` is a chosen subspace reducing `A` — its complementary projection preserves the domain
-(`hVdom`) and commutes with the operator there (`hVcomm`) — and the quadratic form on `Vᗮ`
-is bounded below by `α + δ` (`hlower`).  Nothing is assumed about `A` on `V` itself. -/
-theorem crossed_lower_of_reducing
-    (A : DKClosedOperator (H := H))
-    {α δ : ℝ}
-    (hZA : ∀ z : D.compression.domain, ((z : Z) : H) ∈ A.domain)
-    (haction : ∀ z : D.compression.domain,
-      D.action z = A.toLinearMap ⟨((z : Z) : H), hZA z⟩)
-    (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : H)) ∈ A.domain)
-    (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
-    (hlower : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ)
-    (z : D.compression.domain) :
-    (α + δ) * ‖Vᗮ.starProjection (((z : Z) : H))‖ ^ 2 ≤
-      RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
-        Vᗮ.starProjection (D.action z)⟫_ℂ := by
-  have hswap : ∀ a b : H, RCLike.re ⟪a, b⟫_ℂ = RCLike.re ⟪b, a⟫_ℂ := by
-    intro a b
-    conv_lhs => rw [← inner_conj_symm]
-    rw [RCLike.conj_re]
-  have hcomm : Vᗮ.starProjection (D.action z) =
-      A.toLinearMap ⟨Vᗮ.starProjection (((z : Z) : H)),
-        hVdom ⟨((z : Z) : H), hZA z⟩⟩ := by
-    rw [haction z]
-    exact hVcomm ⟨((z : Z) : H), hZA z⟩
-  rw [hcomm]
-  exact (hlower (Vᗮ.starProjection (((z : Z) : H)))
-    (Vᗮ.starProjection_apply_mem _) (hVdom ⟨((z : Z) : H), hZA z⟩)).trans_eq (hswap _ _)
+The passage from the printed reducing-subspace hypotheses to the crossed form bound the
+tangent chain consumes is `crossed_lower_of_reducing`, proved scalar-generically above. -/
 
 /-- **Davis--Kahan Theorem 6.3 for an unbounded Ritz compression under the printed
 reducing-subspace hypotheses, at every Fan-dominant unitarily invariant ideal gauge.**

@@ -7,5 +7,6 @@ import DavisKahan.SpectralTheory.Real.ContinuousFunctionalCalculus
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Real
 import DavisKahan.SpectralTheory.Real.SpectralRestriction
 import DavisKahan.SpectralTheory.Real.BoundedAlmostInvariant
+import DavisKahan.SpectralTheory.Real.SpectralCutoff
 
 /-! # `DavisKahan/SpectralTheory/Real` -/
