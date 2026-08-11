@@ -321,6 +321,143 @@ theorem theorem8_1_perturbedLowerBlockShift_nonneg_real
       canonicalLowBranchReal_form_low A K P hdelta hA hK hAP hPlow hPhigh hKP
         hKPperp x hx
 
+/-! ### Part (i): the printed form repulsion
+
+Part (ii) is a statement about approximation numbers; part (i) is the quadratic
+form inequality it is deduced from, and the paper prints it separately.  It is
+descended here by the same route: evaluate the complex source-literal statement
+on the real copy `ofReal x`, where every projection, every operator and every
+inner product is the complexification of its real counterpart. -/
+
+/-- **Davis--Kahan 1970, Theorem 8.1(i), upper block, over a REAL Hilbert
+space.**
+
+  `A₁ - α ≤ C₁ (Λ₁ - α) C₁`
+
+read as a quadratic form on `Pᗮ`, with `Q` the real canonical low branch.  As in
+the complex statement, the left-hand side is the form of the *unperturbed* `A`
+and not of `A + K`, because off-diagonality of `K` kills its cross term on `Pᗮ`.
+No dimension hypothesis is introduced. -/
+theorem theorem8_1_upperCompressionRepulsion_real
+    (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    {x : E} (hx : x ∈ Pᗮ) :
+    ⟪x, A x⟫_ℝ - alpha * ‖x‖ ^ 2 ≤
+      ⟪(canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp)ᗮ.starProjection x,
+          (A + K) ((canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp)ᗮ.starProjection x)⟫_ℝ -
+        alpha * ‖(canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+          hKPperp)ᗮ.starProjection x‖ ^ 2 := by
+  have hAc : IsSelfAdjoint (complexify A) := (complexify_isSelfAdjoint_iff A).2 hA
+  have hKc : IsSelfAdjoint (complexify K) := (complexify_isSelfAdjoint_iff K).2 hK
+  have hsum : complexify A + complexify K = complexify (A + K) :=
+    (complexify_add A K).symm
+  set Q : Submodule ℝ E :=
+    canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp with hQdef
+  have hQc : complexifySubmodule Q =
+      canonicalLowBranch (complexify A + complexify K)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hAc.add hKc)) alpha :=
+    complexifySubmodule_canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh
+      hKP hKPperp
+  have hxC : ofReal x ∈ (complexifySubmodule P)ᗮ := by
+    rw [← complexifySubmodule_orthogonal]
+    exact (ofReal_mem_complexifySubmodule_iff _ x).2 hx
+  have key : ∀ (Qc : Submodule ℂ (RealComplexification E))
+      [Qc.HasOrthogonalProjection],
+      Qc = canonicalLowBranch (complexify A + complexify K)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hAc.add hKc))
+          alpha →
+      RCLike.re ⟪ofReal x, complexify A (ofReal x)⟫_ℂ - alpha * ‖ofReal x‖ ^ 2 ≤
+        RCLike.re ⟪Qcᗮ.starProjection (ofReal x),
+            (complexify A + complexify K) (Qcᗮ.starProjection (ofReal x))⟫_ℂ -
+          alpha * ‖Qcᗮ.starProjection (ofReal x)‖ ^ 2 := by
+    rintro Qc _ rfl
+    exact DavisKahan.Experimental.Frontier.Section8.theorem8_1_upperCompressionRepulsion_source
+      (complexify A) (complexify K) (complexifySubmodule P) hdelta hAc hKc
+      (fun z hz => mapsTo_complexifySubmodule hAP hz)
+      (fun z hz => re_inner_le_of_mem_complexifySubmodule hPlow hz)
+      (fun z hz => by
+        rw [← complexifySubmodule_orthogonal P] at hz
+        exact le_re_inner_of_mem_complexifySubmodule hPhigh hz)
+      (fun z hz => mapsTo_orthogonal_complexifySubmodule P hKP hz)
+      (fun z hz => mapsTo_of_mem_orthogonal_complexifySubmodule P hKPperp hz) hxC
+  have hmain := key (complexifySubmodule Q) hQc
+  have hproj : (complexifySubmodule Q)ᗮ.starProjection (ofReal x) =
+      ofReal (Qᗮ.starProjection x) := by
+    rw [starProjection_complexifySubmodule_orthogonal, complexify_ofReal]
+  rw [hproj, hsum] at hmain
+  simpa only [complexify_ofReal, inner_ofReal, ofReal.norm_map,
+    RCLike.re_to_complex, Complex.ofReal_re] using hmain
+
+/-- **Davis--Kahan 1970, Theorem 8.1(i), lower block, over a REAL Hilbert
+space.**
+
+  `(α + δ) - A₀ ≤ C₀ ((α + δ) - Λ₀) C₀`
+
+read as a quadratic form on `P`, the printed lower companion. -/
+theorem theorem8_1_lowerCompressionRepulsion_real
+    (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    {x : E} (hx : x ∈ P) :
+    (alpha + delta) * ‖x‖ ^ 2 - ⟪x, A x⟫_ℝ ≤
+      (alpha + delta) * ‖(canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
+          hPhigh hKP hKPperp).starProjection x‖ ^ 2 -
+        ⟪(canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp).starProjection x,
+          (A + K) ((canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp).starProjection x)⟫_ℝ := by
+  have hAc : IsSelfAdjoint (complexify A) := (complexify_isSelfAdjoint_iff A).2 hA
+  have hKc : IsSelfAdjoint (complexify K) := (complexify_isSelfAdjoint_iff K).2 hK
+  have hsum : complexify A + complexify K = complexify (A + K) :=
+    (complexify_add A K).symm
+  set Q : Submodule ℝ E :=
+    canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp with hQdef
+  have hQc : complexifySubmodule Q =
+      canonicalLowBranch (complexify A + complexify K)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hAc.add hKc)) alpha :=
+    complexifySubmodule_canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh
+      hKP hKPperp
+  have hxC : ofReal x ∈ complexifySubmodule P :=
+    (ofReal_mem_complexifySubmodule_iff _ x).2 hx
+  have key : ∀ (Qc : Submodule ℂ (RealComplexification E))
+      [Qc.HasOrthogonalProjection],
+      Qc = canonicalLowBranch (complexify A + complexify K)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hAc.add hKc))
+          alpha →
+      (alpha + delta) * ‖ofReal x‖ ^ 2 -
+          RCLike.re ⟪ofReal x, complexify A (ofReal x)⟫_ℂ ≤
+        (alpha + delta) * ‖Qc.starProjection (ofReal x)‖ ^ 2 -
+          RCLike.re ⟪Qc.starProjection (ofReal x),
+            (complexify A + complexify K) (Qc.starProjection (ofReal x))⟫_ℂ := by
+    rintro Qc _ rfl
+    exact DavisKahan.Experimental.Frontier.Section8.theorem8_1_lowerCompressionRepulsion_source
+      (complexify A) (complexify K) (complexifySubmodule P) hdelta hAc hKc
+      (fun z hz => mapsTo_complexifySubmodule hAP hz)
+      (fun z hz => re_inner_le_of_mem_complexifySubmodule hPlow hz)
+      (fun z hz => by
+        rw [← complexifySubmodule_orthogonal P] at hz
+        exact le_re_inner_of_mem_complexifySubmodule hPhigh hz)
+      (fun z hz => mapsTo_orthogonal_complexifySubmodule P hKP hz)
+      (fun z hz => mapsTo_of_mem_orthogonal_complexifySubmodule P hKPperp hz) hxC
+  have hmain := key (complexifySubmodule Q) hQc
+  have hproj : (complexifySubmodule Q).starProjection (ofReal x) =
+      ofReal (Q.starProjection x) := by
+    rw [starProjection_complexifySubmodule, complexify_ofReal]
+  rw [hproj, hsum] at hmain
+  simpa only [complexify_ofReal, inner_ofReal, ofReal.norm_map,
+    RCLike.re_to_complex, Complex.ofReal_re] using hmain
+
 /-! ### The endpoints -/
 
 /-- **The Weyl step of Theorem 8.1 over `ℝ`, upper block.**

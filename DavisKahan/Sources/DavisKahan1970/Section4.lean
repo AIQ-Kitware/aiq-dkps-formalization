@@ -121,5 +121,60 @@ this repository refutes. -/
 alias Proposition4_3_infiniteDimensional :=
   DavisKahan.Experimental.MathAhead.Section4.proposition4_3_squaredDisplacement_kyFan_scratch
 
+/-! ### Proposition 4.3 at the printed "every unitarily invariant norm" scope
+
+The alias above stops at Ky Fan, which is where its proof stops.  The printed
+clause is about every unitarily invariant norm, and in infinite dimensions the
+carrier of that phrase is an arbitrary Ky-Fan-dominant symmetric operator ideal
+family, exactly as for Corollary 4.1.  The promotion is
+`KyFanDominantIdealFamily.majorization_mem_and_gauge_le`, whose hypothesis is
+the Ky Fan domination this alias supplies.
+
+**This is not pointwise domination and must never be replaced by it.**  Fan
+dominance constrains the *prefix sums* of the approximation numbers; the
+individual approximation numbers are not dominated, and asserting that they were
+would contradict this repository's compiled refutation of Proposition 4.4. -/
+
+section IdealGauge
+
+open DavisKahan (IsUniformlyAcute)
+open DavisKahan.Experimental (spectraDirectRotation)
+open DavisKahan.Experimental.ExactSinTheta (KyFanDominantIdealFamily)
+
+universe v
+
+variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+/-- **Davis--Kahan 1970, Proposition 4.3, at the printed scope, for every
+unitarily invariant norm.**
+
+In an arbitrary complex Hilbert space, for every Ky-Fan-dominant symmetric ideal
+family of operators, the squared full displacement `(1 − W)⋆(1 − W)` of the
+direct rotation lies in the ideal and its gauge is least among all unitaries `W`
+carrying `U` onto `V`.  Membership of the minimizer is **concluded**, not
+assumed; only the competitor is assumed to lie in the ideal.
+
+This is `Proposition4_3_infiniteDimensional` promoted through
+`KyFanDominantIdealFamily.majorization_mem_and_gauge_le`.  The promotion consumes
+Ky Fan prefix sums only: no pointwise approximation-number domination is claimed
+here, and none is true. -/
+theorem Proposition4_3_infiniteDimensional_idealGauge
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
+    (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmem : N.Mem ((1 - star W) * (1 - W))) :
+    N.Mem ((1 - star (spectraDirectRotation U V hacute)) *
+        (1 - spectraDirectRotation U V hacute)) ∧
+      N.gauge ((1 - star (spectraDirectRotation U V hacute)) *
+          (1 - spectraDirectRotation U V hacute)) ≤
+        N.gauge ((1 - star W) * (1 - W)) :=
+  N.majorization_mem_and_gauge_le hWmem
+    (Proposition4_3_infiniteDimensional U V hacute W hWunitary hWmap)
+
+end IdealGauge
+
 end DavisKahan1970
 end TauCeti

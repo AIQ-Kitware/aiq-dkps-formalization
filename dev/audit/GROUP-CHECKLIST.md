@@ -24,7 +24,7 @@ cross-file findings are invisible until the files themselves have been read.
 review is exactly a review of a future submission unit.
 
 - [x] `(root files) :: build config` — 2 files, 328 lines — **READY**
-- [x] `(root files) :: documentation` — 2 files, 747 lines — **READY**
+- [x] `(root files) :: documentation` — 2 files, 770 lines — **READY**
 - [x] `(root files) :: other` — 2 files, 56 lines — **READY**
 - [x] `(root files) :: tooling` — 2 files, 789 lines — **READY**
 - [x] `(root modules)` — 8 files, 68 lines — **blocked (7/8 files)**
@@ -52,7 +52,7 @@ review is exactly a review of a future submission unit.
 - [x] `DavisKahan/Experimental/MathAhead` — 7 files, 724 lines — **READY**
 - [x] `DavisKahan/Experimental/Scratch` — 4 files, 336 lines — **READY**
 - [x] `DavisKahan/FiniteDimensional` — 37 files, 12,512 lines — **blocked (34/37 files)**
-- [ ] `DavisKahan/Frontier` — 20 files, 11,719 lines — **blocked (0/20 files)**
+- [ ] `DavisKahan/Frontier` — 20 files, 12,149 lines — **blocked (0/20 files)**
 - [x] `DavisKahan/Geometry` — 34 files, 15,699 lines — **blocked (21/34 files)**
 - [ ] `DavisKahan/InfiniteDimensional` — 79 files, 18,239 lines — **blocked (0/79 files)**
 - [x] `DavisKahan/Interop` — 3 files, 82 lines — **READY**
@@ -63,7 +63,7 @@ review is exactly a review of a future submission unit.
 - [x] `DavisKahan/SinTheta` — 34 files, 6,505 lines — **READY**
 - [x] `DavisKahan/Sources` — 1 files, 11 lines — **READY**
 - [x] `DavisKahan/Sources/Davis1963` — 4 files, 604 lines — **READY**
-- [x] `DavisKahan/Sources/DavisKahan1970` — 139 files, 41,606 lines — **blocked (90/139 files)**
+- [x] `DavisKahan/Sources/DavisKahan1970` — 139 files, 41,687 lines — **blocked (90/139 files)**
 - [x] `DavisKahan/Specialized` — 1 files, 10 lines — **READY**
 - [x] `DavisKahan/SpectralTheory` — 76 files, 23,374 lines — **blocked (50/76 files)**
 - [x] `DavisKahan/Sylvester` — 28 files, 6,888 lines — **blocked (27/28 files)**
@@ -126,8 +126,8 @@ review is exactly a review of a future submission unit.
 - [x] `Helm2025 :: other` — 1 files, 265 lines — **READY**
 - [ ] `RoadmapBridge` — 2 files, 297 lines — **blocked (0/2 files)**
 - [x] `comparator :: data/config` — 22 files, 318 lines — **READY**
-- [x] `dev :: data/config` — 42 files, 15,392 lines — **blocked (25/42 files)**
-- [x] `dev :: documentation` — 199 files, 42,536 lines — **blocked (158/199 files)**
+- [x] `dev :: data/config` — 42 files, 15,402 lines — **blocked (25/42 files)**
+- [x] `dev :: documentation` — 199 files, 42,462 lines — **blocked (158/199 files)**
 - [x] `dev :: manifest/notes` — 17 files, 219 lines — **blocked (8/17 files)**
 - [ ] `dev :: other` — 5 files, 715 lines — **blocked (0/5 files)**
 - [ ] `dev :: tooling` — 5 files, 1,374 lines — **blocked (0/5 files)**
@@ -138,7 +138,7 @@ review is exactly a review of a future submission unit.
 - [x] `prose :: data/config` — 1 files, 1,488 lines — **READY**
 - [x] `prose :: documentation` — 3 files, 271 lines — **READY**
 - [x] `prose :: other` — 1 files, 2 lines — **READY**
-- [x] `scripts :: tooling` — 63 files, 15,140 lines — **blocked (55/63 files)**
+- [x] `scripts :: tooling` — 63 files, 15,146 lines — **blocked (55/63 files)**
 - [ ] `submodules :: other` — 2 files, 0 lines — **blocked (0/2 files)**
 - [x] `tools :: build config` — 2 files, 210 lines — **blocked (1/2 files)**
 - [x] `tools :: documentation` — 2 files, 229 lines — **blocked (1/2 files)**

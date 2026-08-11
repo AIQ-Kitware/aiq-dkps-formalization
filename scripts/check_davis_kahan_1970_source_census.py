@@ -105,8 +105,14 @@ def main() -> int:
     if not verifications:
         fail("schema 4 requires verification_definitions")
     blockers = data.get("blockers", {})
-    if not isinstance(blockers, dict) or not blockers:
-        fail("schema 4 requires a nonempty blockers table")
+    # An EMPTY blockers table is legal, and is the goal state of the campaign.
+    # This check used to require a nonempty table, which combined with the
+    # orphan check below made "no blockers remain" unrepresentable: retiring the
+    # last blocker forced a choice between an orphan failure and keeping a
+    # fictional entry.  Retired blockers keep their accumulated route notes under
+    # the separate `retired_blockers` key, which nothing is required to reference.
+    if not isinstance(blockers, dict):
+        fail("schema 4 requires a blockers table")
     for key, blocker in blockers.items():
         if blocker.get("kind") not in {"hard_math", "mechanical", "mixed"}:
             fail(f"blocker {key} has invalid kind: {blocker.get('kind')!r}")
