@@ -117,22 +117,53 @@ theorem norm_section3SinAngleOperator_le_one :
           (norm_nonneg _) zero_le_one
       _ = 1 := by ring
 
+/-- The positive sine operator is bounded above by the identity. -/
+theorem section3SinAngleOperator_le_one :
+    section3SinAngleOperator U V ≤ (1 : H →L[𝕜] H) := by
+  rw [← sub_nonneg, ContinuousLinearMap.nonneg_iff_isPositive]
+  have hsa : IsSelfAdjoint
+      ((1 : H →L[𝕜] H) - section3SinAngleOperator U V) :=
+    (IsSelfAdjoint.one _).sub (section3SinAngleOperator_isSelfAdjoint U V)
+  refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hsa, fun x => ?_⟩
+  rw [ContinuousLinearMap.reApplyInnerSelf_apply, sub_apply, inner_sub_left, map_sub,
+    inner_self_eq_norm_sq]
+  have hSx : ‖section3SinAngleOperator U V x‖ ≤ ‖x‖ := by
+    calc
+      ‖section3SinAngleOperator U V x‖
+          ≤ ‖section3SinAngleOperator U V‖ * ‖x‖ :=
+        (section3SinAngleOperator U V).le_opNorm x
+      _ ≤ 1 * ‖x‖ :=
+        mul_le_mul_of_nonneg_right (norm_section3SinAngleOperator_le_one U V) (norm_nonneg x)
+      _ = ‖x‖ := one_mul _
+  have hinner :
+      RCLike.re ⟪section3SinAngleOperator U V x, x⟫_𝕜 ≤ ‖x‖ ^ 2 := by
+    calc
+      RCLike.re ⟪section3SinAngleOperator U V x, x⟫_𝕜
+          ≤ ‖⟪section3SinAngleOperator U V x, x⟫_𝕜‖ := RCLike.re_le_norm _
+      _ ≤ ‖section3SinAngleOperator U V x‖ * ‖x‖ := norm_inner_le_norm _ _
+      _ ≤ ‖x‖ * ‖x‖ := mul_le_mul_of_nonneg_right hSx (norm_nonneg x)
+      _ = ‖x‖ ^ 2 := by ring
+  linarith
+
 /-- The real spectrum of `sin Θ` lies in `[0,1]`. -/
 theorem spectrum_section3SinAngleOperator_subset_Icc :
     spectrum ℝ (section3SinAngleOperator U V) ⊆ Set.Icc 0 1 := by
   intro x hx
   refine ⟨spectrum_nonneg_of_nonneg (section3SinAngleOperator_nonneg U V) hx, ?_⟩
-  have hone : ‖(1 : H →L[𝕜] H)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have habs : |x| ≤
-      ‖section3SinAngleOperator U V‖ * ‖(1 : H →L[𝕜] H)‖ := by
-    rw [← Real.norm_eq_abs]
-    exact spectrum.norm_le_norm_mul_of_mem (𝕜 := ℝ) hx
-  refine le_trans (le_abs_self x) (habs.trans ?_)
-  calc
-    ‖section3SinAngleOperator U V‖ * ‖(1 : H →L[𝕜] H)‖ ≤ 1 * 1 :=
-      mul_le_mul (norm_section3SinAngleOperator_le_one U V) hone
-        (norm_nonneg _) zero_le_one
-    _ = 1 := by ring
+  have hsub :
+      0 ≤ (1 : H →L[𝕜] H) - section3SinAngleOperator U V :=
+    sub_nonneg.mpr (section3SinAngleOperator_le_one U V)
+  have hcfc :
+      cfc (fun t : ℝ => 1 - t) (section3SinAngleOperator U V) =
+        (1 : H →L[𝕜] H) - section3SinAngleOperator U V := by
+    rw [cfc_sub (fun _ : ℝ => (1 : ℝ)) (fun t : ℝ => t)
+      (section3SinAngleOperator U V), cfc_const_one ℝ _, cfc_id' ℝ _]
+  rw [← hcfc] at hsub
+  have hpoint :=
+    (cfc_nonneg_iff (R := ℝ) (fun t : ℝ => 1 - t)
+      (section3SinAngleOperator U V) (by fun_prop)
+      (section3SinAngleOperator_isSelfAdjoint U V)).mp hsub
+  exact sub_nonneg.mp (hpoint x hx)
 
 /-- The literal angle is self-adjoint. -/
 theorem section3AngleOperator_isSelfAdjoint :
