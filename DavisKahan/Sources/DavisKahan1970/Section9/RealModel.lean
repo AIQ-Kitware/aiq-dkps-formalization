@@ -62,6 +62,28 @@ theorem real_freeBeam_spectrum_source :
     DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.realSpectrum_beamOperator_eq_insert_zero,
     DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.exists_strictMono_range_eq_beamEigenvalues⟩
 
+/-- The paper's positive free-beam spectral values are exactly the fourth powers of the
+positive roots of `cos beta * cosh beta = 1`. -/
+theorem real_freeBeam_positive_spectrum_source :
+    DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamEigenvalues =
+      {lam : ℝ | ∃ beta : ℝ, 0 < beta ∧
+        DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.characteristic beta = 0 ∧
+        lam = beta ^ 4} :=
+  DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamRealPositiveSpectrum_sourceFacts
+
+/-- The paper's affine zero-mode plane is contained in the real beam-operator domain. -/
+theorem real_freeBeam_trial_le_domain {x : RealBeamL2}
+    (hx : x ∈ DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamTrial) :
+    x ∈ realBeamOperator.domain :=
+  DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamTrial_le_domain hx
+
+/-- The real free-beam operator annihilates every vector in the paper's affine trial plane. -/
+theorem real_freeBeam_operator_apply_trial {x : RealBeamL2}
+    (hx : x ∈ DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamTrial)
+    (hdom : x ∈ realBeamOperator.domain) :
+    realBeamOperator.toLinearMap ⟨x, hdom⟩ = 0 :=
+  DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamOperator_apply_trial hx hdom
+
 /-- The zero eigenspace is exactly the paper's two-dimensional affine trial plane. -/
 theorem real_freeBeam_zero_mode_source :
     Module.finrank ℝ
