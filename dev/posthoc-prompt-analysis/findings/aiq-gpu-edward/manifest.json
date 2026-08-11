@@ -7,17 +7,17 @@
     "/TauCeti",
     "/home/joncrall-agent"
   ],
-  "n_prompts": 275,
-  "n_events": 754,
-  "n_sessions": 19,
+  "n_prompts": 292,
+  "n_events": 925,
+  "n_sessions": 21,
   "first_prompt": "2026-07-28T15:55:00.371Z",
-  "last_prompt": "2026-08-08T13:10:47.814Z",
+  "last_prompt": "2026-08-11T17:45:05.933Z",
   "cwds": [
     "/home/joncrall-agent",
     "/home/joncrall-agent/.claude/projects/-home-joncrall-agent/memory",
     "/home/local/KHQ/jon.crall/code/aiq-dkps-formalization",
     "/home/local/KHQ/jon.crall/code/aiq-dkps-formalization/.claude/worktrees/aiq-gpu-docs"
   ],
-  "transcript_files_scanned": 19,
-  "notes": "RE-RUN 2026-08-08: extended from 236 prompts / 11 sessions (through 08-06) to 275 / 19 (through 08-08). NO tool code changed in this re-run. Scope unchanged: four defaults + /home/joncrall-agent; all 8 newly-captured sessions verified DKPS/Davis-Kahan work by hand. Default-scope counterfactual on this corpus is 231 prompts / 13 sessions, so the default still silently drops 6 in-project sessions -- it now matches more only because later sessions happened to cd into the repo, which is accident, not coverage. VALIDATION: 77990 raw records -> 55065 unique uuids (1.42x) over 19 files; prompts 278 -> 275 (1.01x, this machine compacted in place rather than resuming); zero isSidechain records anywhere in scope; zero synthetic turns in prompts.jsonl; history.jsonl cross-check: 376 non-slash entries, 149 never became a user record, 116 of those recovered as queued_prompt_dropped (136 recovered in total, the excess being VSCode-entry prompts history.jsonl does not log), 33 unreconciled = 31 '[Pasted text #N]' placeholders + 1 truncation mismatch + 1 prompt from an aged-out session. TAXONOMY MISFIRE, DELIBERATELY NOT FIXED: from 2026-08-07 the driving prompts are 4000-32000 char GPT-authored campaign briefs relayed by the human (the human confirms this in-transcript; see dev/journals/gpt-authored-campaign-briefs-2026-08-07.md). 17 such briefs carry 273011 chars = 67% of every human-authored character in this slice; across the whole corpus 24 prompts of 275 (9%) carry 90% of the text. The first-rule-wins regex classifier was tuned on short prompts and scatters these across coordination (9), ferry_relay (2), quality_gate (2), paper_editorial (2), correction_redirect (2) -- only ferry_relay is right. Phase-B group shares in ANALYSIS.md are therefore artifacts and must not be quoted; the classifier is left unchanged so every other agent's numbers stay comparable, and the fix belongs in a versioned taxonomy change. RUNBOOK BUG FOUND: AGENT-PROMPT.md section 4 check 2 tells the auditor to treat second-person specifications ('You are auditing part of the repo at...') as sub-agent leakage. The largest prompt in this slice (31469 chars) begins 'You are continuing the Davis-Kahan 1970 formalization' and is a legitimate human turn carrying GPT-authored text. Use the structural isSidechain test only; the prose heuristic no longer discriminates now that humans relay machine-written briefs. PRIOR RUN'S NOTES FOLLOW. SCOPE WIDENED: ran with --scope /home/joncrall-agent added to the four defaults. This agent's sessions open at $HOME, which contains no default scope substring; all 8 -home-joncrall-agent sessions at the time were DKPS/DavisKahan/TauCeti work (verified session by session, no unrelated project exists on this account) but only 4 matched the default, and those 4 matched by accident via a cd into ~/.lake-cache/aiq-dkps-formalization or ~/TauCeti. Default scope gave 195 prompts / 7 sessions; widened gave 236 / 11. TOOL CHANGE (extract_prompts.py, made in the 08-06 run): recover prompts typed while the agent was running. Those do not create type=='user' records, only type=='queue-operation' (enqueue -> dequeue if delivered, remove if flushed by ESC/queue-edit/compaction); a removed one never becomes a user record and was silently lost. Session c87e014d alone: 201 enqueues, 44 dequeues, 157 removes. Emitted to events.jsonl as event=queued_prompt_dropped, NOT to prompts.jsonl, so prompt counts stay comparable with findings produced before this change; other agents will read 0 until they re-run, which is a missing measurement rather than a zero. Also added $POSTHOC_NOTE support so this note survives regeneration."
+  "transcript_files_scanned": 21,
+  "notes": "agent works out of $HOME so scope includes /home/joncrall-agent; snapshot refreshed 2026-08-11 (46->141 session files) immediately before machine access was lost"
 }

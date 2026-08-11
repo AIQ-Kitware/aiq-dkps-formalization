@@ -456,3 +456,69 @@ giving the reviewer write access to anything.
   Whether that regime produces a different *mix* of mistakes cannot be judged
   from two instances; it is flagged so the joint analysis does not pool them
   blindly with the rest.
+
+---
+
+## Addendum, 2026-08-09..11 — the coordinator-brief regime
+
+Added at the 2026-08-11 refresh (275 -> 292 prompts, 19 -> 21 sessions), which
+captured the final phase of this machine's work: the agent acting purely as
+**campaign coordinator**, scoping missions and dispatching subagents rather than
+proving anything itself. That regime has its own dominant failure, and it is not
+in classes A-E above.
+
+### C8 (new). The coordinator's brief is the least-checked artifact in the loop
+
+**Three consecutive dispatch briefs carried a load-bearing false premise, and
+every one was caught by the subagent rather than by any gate.**
+
+1. *"Generalizing `CompressionApproximation.lean` to `[RCLike 𝕜]` is
+   load-bearing; `CFC.sqrt` is the risk."* Both halves false. `CFC.sqrt` works
+   at general `𝕜`; the obstruction is the *squaring* step through the ℂ-only
+   `gramOperator`/PVM. And it did not matter at all — the real endpoints descend
+   the *finished* complex inequality. The brief also said "STOP if this fails",
+   which would have halted the mission on an optional checkpoint.
+2. *"The six `cos²θₖ` statements are measured reachable over `[RCLike 𝕜]`."*
+   False: they name `canonicalLowBranch`, declared for `E →L[ℂ] E` alone, so they
+   are not **statable** generically. **The repository had already recorded the
+   answer** — `Section8PartII.lean:292-297` says "Everything below names
+   `canonicalLowBranch` ... and is complex for that reason alone." The
+   coordinator's own memory rule is to grep for recorded decisions before
+   scoping, and did not.
+3. *"Everything else on that row is real already."* False, and this one had
+   teeth: Theorem 8.1 **part (i)** had no real sibling anywhere, while being
+   listed on the very row being closed. Had the subagent delivered exactly what
+   was scoped, a census blocker would have been retired on an incomplete row and
+   reported as done.
+
+**Why it recurs.** Every other artifact has a checker: statements have `lake
+build`, census rows have the declaration probe, names have the drift gate,
+absence claims have the closure probe. The brief has none. It is prose, written
+fast, from memory of what the *previous* mission reported — and (3) is exactly
+that: a summary of mission N repeated as a premise of mission N+1 without
+re-measuring.
+
+**What worked, and it is cheap.** Briefs that explicitly said *"report every
+false premise you find in this brief — it is as valuable as the proofs"*
+produced all three catches. Subagents will not volunteer a correction to their
+instructions unless invited; when invited, they lead with it.
+
+**The mechanical fix, now recorded on the census rows:** before asserting a
+clause is already covered, enumerate the row's own `lean_declarations` and check
+each printed clause against them. That is free and would have caught (3).
+Related: C1′ (trackers decay) — a brief is a tracker with a shorter half-life
+than any of them.
+
+### C9 (new). A schema that cannot express success
+
+Retiring the campaign's last census blocker was **unrepresentable**:
+`check_davis_kahan_1970_source_census.py` demanded a *nonempty* `blockers` table
+while also failing on any blocker referenced by no row. So "no blockers remain"
+— the goal state of the whole campaign — forced a choice between an orphan
+failure and keeping a fictional entry. Nobody noticed for the ~5 weeks the
+constraint existed, because the terminal state had never been reached.
+
+Worth generalising: a validator written while the work is in progress tends to
+encode "work is in progress" as an invariant. When a project approaches its
+terminal state, re-read the gates for constraints that only hold *before* the
+end.
