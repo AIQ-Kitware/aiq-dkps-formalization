@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.SpectralTheory.Real.BoundedAlmostInvariant
 import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SeparableCyclic
+import ForTauCeti.MeasureTheory.LpStar
 
 /-!
 # The conjugation-equivariant cyclic decomposition
@@ -63,10 +64,9 @@ compactness, or finite-dimensionality hypothesis beyond that was introduced.
 
 ## Auxiliary `L²` infrastructure
 
-`Lp ℂ p μ` carries a bare `Star` instance in Mathlib and no `StarAddMonoid`, so `norm_star_lp`,
-`star_sub_lp` and `isometry_star_lp` are proved here from representatives.  They are
-scalar-generic in spirit and belong upstream; they are stated locally because this module lives
-below the descent layer, not in `ForTauCeti`.
+The pointwise-star API for `Lp` is provided by `ForTauCeti.MeasureTheory.LpStar`.  In particular,
+`norm_star_lp`, `star_sub_lp`, `isometry_star_lp`, and `continuous_star_lp` are reusable Tau Ceti
+lemmas rather than paper-local infrastructure.
 -/
 
 open scoped InnerProductSpace ComplexConjugate
@@ -200,45 +200,6 @@ theorem conjugation_mem_cyclicSubspace (hT : IsSelfAdjoint T) {ξ : Eℂ}
   exact hle hz
 
 end CyclicSubspace
-
-section LpStar
-
-variable {α : Type*} [MeasurableSpace α] {μ : Measure α}
-
-/-- The `L²` class of `star F` is represented by the pointwise conjugate of a representative
-of `F`. -/
-theorem coeFn_star_lp (F : Lp ℂ 2 μ) :
-    ∀ᵐ x ∂μ, (star F : Lp ℂ 2 μ) x = star ((F : Lp ℂ 2 μ) x) :=
-  Lp.coeFn_star F
-
-/-- Pointwise conjugation preserves the `L²` norm. -/
-theorem norm_star_lp (F : Lp ℂ 2 μ) : ‖star F‖ = ‖F‖ := by
-  rw [Lp.norm_def, Lp.norm_def]
-  congr 1
-  refine eLpNorm_congr_norm_ae ?_
-  filter_upwards [coeFn_star_lp F] with x hx
-  rw [hx, norm_star]
-
-/-- Pointwise conjugation on `L²` is additive on differences; `Lp` carries a bare `Star`
-instance and no `StarAddMonoid`, so this is proved from representatives. -/
-theorem star_sub_lp (F G : Lp ℂ 2 μ) : star (F - G) = star F - star G := by
-  refine Lp.ext ?_
-  filter_upwards [coeFn_star_lp (F - G), Lp.coeFn_sub F G,
-    Lp.coeFn_sub (star F) (star G), coeFn_star_lp F, coeFn_star_lp G] with x h1 h2 h3 h4 h5
-  rw [h1, h2, h3]
-  simp only [Pi.sub_apply, h4, h5, star_sub]
-
-/-- Pointwise conjugation on `L²` is an isometry, hence continuous.  This is what lets the
-equivariance statement be proved on a dense set of symbols. -/
-theorem isometry_star_lp : Isometry (star : Lp ℂ 2 μ → Lp ℂ 2 μ) :=
-  Isometry.of_dist_eq fun F G => by
-    rw [dist_eq_norm, dist_eq_norm, ← star_sub_lp, norm_star_lp]
-
-/-- Pointwise conjugation on `L²` is continuous. -/
-theorem continuous_star_lp : Continuous (star : Lp ℂ 2 μ → Lp ℂ 2 μ) :=
-  isometry_star_lp.continuous
-
-end LpStar
 
 section CyclicIsometry
 
