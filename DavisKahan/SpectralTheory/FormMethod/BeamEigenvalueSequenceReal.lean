@@ -119,6 +119,26 @@ def beamEigenvalues : Set ℝ :=
   {lam : ℝ | 0 < lam ∧ ∃ x : beamOperator.domain, (x : BeamL2) ≠ 0 ∧
     beamOperator.toLinearMap x = lam • (x : BeamL2)}
 
+/-- Every positive characteristic root contributes its fourth power to the real beam point
+spectrum. -/
+theorem pow_four_mem_beamEigenvalues_of_characteristic {beta : ℝ} (hbeta : 0 < beta)
+    (hroot : characteristic beta = 0) : beta ^ 4 ∈ beamEigenvalues := by
+  refine ⟨by positivity, ?_⟩
+  exact exists_eigenpair_of_characteristic hbeta hroot
+
+/-- The positive real beam eigenvalues are exactly the fourth powers of the positive roots of
+the free-beam characteristic equation. -/
+theorem beamEigenvalues_eq_characteristicFourthPowers :
+    beamEigenvalues =
+      {lam : ℝ | ∃ beta : ℝ, 0 < beta ∧ characteristic beta = 0 ∧ lam = beta ^ 4} := by
+  ext lam
+  constructor
+  · intro hlam
+    obtain ⟨hpos, x, hx0, heig⟩ := hlam
+    exact exists_characteristic_of_eigen hpos hx0 heig
+  · rintro ⟨beta, hbeta, hroot, rfl⟩
+    exact pow_four_mem_beamEigenvalues_of_characteristic hbeta hroot
+
 theorem five_hundred_lt_of_mem_beamEigenvalues {lam : ℝ} (hlam : lam ∈ beamEigenvalues) :
     500 < lam := by
   obtain ⟨hpos, x, hx0, heig⟩ := hlam

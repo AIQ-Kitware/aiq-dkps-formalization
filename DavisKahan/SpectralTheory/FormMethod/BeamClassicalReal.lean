@@ -6,7 +6,10 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 
 import DavisKahan.SpectralTheory.FormMethod.BeamFormSpaceReal
 import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamModeUniqueness
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicConverse
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamOrthogonality
 import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootLocalization
+import Mathlib.Analysis.Real.Pi.Bounds
 import Mathlib.Tactic
 
 /-!
@@ -947,6 +950,179 @@ theorem beamOperator_is_closure_of_classical_freeBeam_fourthDerivative :
       closure classicalFreeBeamGraph =
         (beamOperator.toLinearPMap.graph : Set (BeamL2 × BeamL2)) :=
   ⟨beamOperator_isSelfAdjoint, closure_classicalFreeBeamGraph_eq_graph⟩
+
+/-! ## Characteristic roots produce operator eigenpairs -/
+
+/-- The `L²(0,1)` class of a classical free-beam mode. -/
+def classicalModeLp (beta a b c d : ℝ) : BeamL2 :=
+  contToLp (mode beta a b c d) (continuous_mode beta a b c d)
+
+/-- The `L²` representative of `classicalModeLp` is the classical mode almost everywhere. -/
+theorem coeFn_classicalModeLp (beta a b c d : ℝ) :
+    (classicalModeLp beta a b c d : ℝ → ℝ) =ᵐ[unitIocMeasure]
+      mode beta a b c d :=
+  coeFn_contToLp (mode beta a b c d) (continuous_mode beta a b c d)
+
+private theorem exists_Ioo_ne_zero_of_continuous_of_ne_zero_at_zero
+    {f : ℝ → ℝ} (hf : Continuous f) (h0 : f 0 ≠ 0) :
+    ∃ t ∈ Set.Ioo (0 : ℝ) 1, f t ≠ 0 := by
+  have hclosed : IsClosed {t : ℝ | f t = 0} :=
+    isClosed_eq hf continuous_const
+  have hopen : IsOpen {t : ℝ | f t ≠ 0} := by
+    have hset : {t : ℝ | f t ≠ 0} = ({t : ℝ | f t = 0})ᶜ := by
+      ext t
+      simp
+    rw [hset]
+    exact hclosed.isOpen_compl
+  rw [Metric.isOpen_iff] at hopen
+  obtain ⟨ε, hε, hball⟩ := hopen 0 h0
+  let t : ℝ := min (ε / 2) (1 / 2)
+  have htpos : 0 < t := by
+    dsimp [t]
+    exact lt_min (by linarith) (by norm_num)
+  have htone : t < 1 :=
+    lt_of_le_of_lt (min_le_right _ _) (by norm_num)
+  have htball : t ∈ Metric.ball (0 : ℝ) ε := by
+    rw [Metric.mem_ball, Real.dist_eq, sub_zero, abs_of_pos htpos]
+    exact lt_of_le_of_lt (min_le_left _ _) (by linarith)
+  exact ⟨t, ⟨htpos, htone⟩, hball htball⟩
+
+/-- A positive-frequency identified mode with nontrivial reduced coefficients is nonzero in
+`L²(0,1)`. -/
+theorem classicalModeLp_ne_zero_of_identified_coefficients
+    {beta a b : ℝ} (hbeta : 0 < beta) (hab : a ≠ 0 ∨ b ≠ 0) :
+    classicalModeLp beta a b a b ≠ 0 := by
+  have hpoint : ∃ t ∈ Set.Ioo (0 : ℝ) 1, mode beta a b a b t ≠ 0 := by
+    by_cases ha : a = 0
+    · have hb : b ≠ 0 := by
+        rcases hab with ha' | hb
+        · exact False.elim (ha' ha)
+        · exact hb
+      let t : ℝ := 1 / (beta + 1)
+      let z : ℝ := beta / (beta + 1)
+      have hden : 0 < beta + 1 := by linarith
+      have htpos : 0 < t := by
+        dsimp [t]
+        positivity
+      have htone : t < 1 := by
+        dsimp [t]
+        exact (div_lt_one hden).2 (by linarith)
+      have hzt : beta * t = z := by
+        simp [t, z, div_eq_mul_inv]
+      have hzpos : 0 < z := by
+        dsimp [z]
+        exact div_pos hbeta hden
+      have hzone : z < 1 := by
+        dsimp [z]
+        exact (div_lt_one hden).2 (by linarith)
+      have honepi : (1 : ℝ) < Real.pi :=
+        lt_trans (by norm_num) Real.pi_gt_three
+      have hsin : 0 < Real.sin z :=
+        Real.sin_pos_of_pos_of_lt_pi hzpos (lt_trans hzone honepi)
+      have hsinh : 0 < Real.sinh z := Real.sinh_pos_iff.mpr hzpos
+      have hmode : mode beta a b a b t = b * (Real.sin z + Real.sinh z) := by
+        unfold mode
+        rw [ha, hzt]
+        ring
+      refine ⟨t, ⟨htpos, htone⟩, ?_⟩
+      rw [hmode]
+      exact mul_ne_zero hb (ne_of_gt (add_pos hsin hsinh))
+    · have hzero : mode beta a b a b 0 = 2 * a := by
+        rw [mode_eval_zero]
+        ring
+      have hzero_ne : mode beta a b a b 0 ≠ 0 := by
+        rw [hzero]
+        exact mul_ne_zero (by norm_num) ha
+      exact exists_Ioo_ne_zero_of_continuous_of_ne_zero_at_zero
+        (continuous_mode beta a b a b) hzero_ne
+  obtain ⟨t, ht, hmode_ne⟩ := hpoint
+  have hpos : 0 < ∫ x in (0 : ℝ)..1, mode beta a b a b x ^ 2 :=
+    integral_mode_sq_pos ht hmode_ne
+  intro hzero
+  have hae : mode beta a b a b =ᵐ[unitIocMeasure] (fun _ : ℝ => 0) := by
+    have hcoe := coeFn_classicalModeLp beta a b a b
+    rw [hzero] at hcoe
+    exact hcoe.symm.trans (Lp.coeFn_zero ℝ 2 unitIocMeasure)
+  have hsq : (fun x => mode beta a b a b x ^ 2) =ᵐ[unitIocMeasure]
+      (fun _ : ℝ => 0) := by
+    filter_upwards [hae] with x hx
+    rw [hx]
+    norm_num
+  have hzint : ∫ x, mode beta a b a b x ^ 2 ∂unitIocMeasure = 0 := by
+    calc
+      ∫ x, mode beta a b a b x ^ 2 ∂unitIocMeasure =
+          ∫ _x, (0 : ℝ) ∂unitIocMeasure := integral_congr_ae hsq
+      _ = 0 := by simp
+  have hzinterval : ∫ x in (0 : ℝ)..1, mode beta a b a b x ^ 2 = 0 := by
+    rw [← integral_unitIocMeasure_eq_intervalIntegral]
+    exact hzint
+  exact (ne_of_gt hpos) hzinterval
+
+/-- A classical mode satisfying the four free-end boundary equations gives a point of the
+classical fourth-derivative graph, with output `beta^4` times its `L²` class. -/
+def classicalFreeBeamRepresentative_mode
+    {beta a b c d : ℝ} (hfree : FreeBoundary beta a b c d) :
+    ClassicalFreeBeamRepresentative
+      (classicalModeLp beta a b c d)
+      (beta ^ 4 • classicalModeLp beta a b c d) := by
+  rcases hfree with ⟨h20, h30, h21, h31⟩
+  refine
+    { u0 := mode beta a b c d
+      u1 := modeD1 beta a b c d
+      u2 := modeD2 beta a b c d
+      u3 := modeD3 beta a b c d
+      u4 := modeD4 beta a b c d
+      x_ae := coeFn_classicalModeLp beta a b c d
+      y_ae := ?_
+      u0_continuous := continuous_mode beta a b c d
+      u2_continuous := continuous_modeD2 beta a b c d
+      u4_continuous := continuous_modeD4 beta a b c d
+      deriv0 := fun t _ => (hasDerivAt_mode beta a b c d t).hasDerivWithinAt
+      deriv1 := fun t _ => (hasDerivAt_modeD1 beta a b c d t).hasDerivWithinAt
+      deriv2 := fun t _ => (hasDerivAt_modeD2 beta a b c d t).hasDerivWithinAt
+      deriv3 := fun t _ => (hasDerivAt_modeD3 beta a b c d t).hasDerivWithinAt
+      second_left := h20
+      third_left := h30
+      second_right := h21
+      third_right := h31 }
+  filter_upwards [Lp.coeFn_smul (beta ^ 4) (classicalModeLp beta a b c d),
+    coeFn_classicalModeLp beta a b c d] with t hsmul hmode
+  rw [hsmul, Pi.smul_apply, hmode, smul_eq_mul]
+  rfl
+
+/-- Every positive characteristic root produces a genuine nonzero eigenpair of the real
+self-adjoint free-beam operator. -/
+theorem exists_eigenpair_of_characteristic {beta : ℝ} (hbeta : 0 < beta)
+    (hroot : characteristic beta = 0) :
+    ∃ x : beamOperator.domain, (x : BeamL2) ≠ 0 ∧
+      beamOperator.toLinearMap x = beta ^ 4 • (x : BeamL2) := by
+  obtain ⟨a, b, hab, hfree⟩ :=
+    TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Classical.exists_nontrivial_freeBoundary_of_characteristic
+      hbeta.ne' hroot
+  let u : BeamL2 := classicalModeLp beta a b a b
+  have hu0 : u ≠ 0 := by
+    simpa [u] using classicalModeLp_ne_zero_of_identified_coefficients hbeta hab
+  have hrep : ClassicalFreeBeamRepresentative u (beta ^ 4 • u) := by
+    simpa [u] using classicalFreeBeamRepresentative_mode hfree
+  have hclassical : (u, beta ^ 4 • u) ∈ classicalFreeBeamGraph :=
+    (show Nonempty (ClassicalFreeBeamRepresentative u (beta ^ 4 • u)) from ⟨hrep⟩)
+  have hgraph : (u, beta ^ 4 • u) ∈
+      (beamOperator.toLinearPMap.graph : Set (BeamL2 × BeamL2)) :=
+    classicalFreeBeamGraph_subset_graph hclassical
+  obtain ⟨x, hxu, hBx⟩ :=
+    (LinearPMap.mem_graph_iff beamOperator.toLinearPMap).1 hgraph
+  let xb : beamOperator.domain := x
+  have hxb : (xb : BeamL2) = u := by
+    change (x : BeamL2) = u
+    exact hxu
+  have hBxb : beamOperator.toLinearMap xb = beta ^ 4 • u := by
+    change beamOperator.toLinearMap x = beta ^ 4 • u
+    exact hBx
+  refine ⟨xb, ?_, ?_⟩
+  · intro hzero
+    apply hu0
+    rw [← hxb, hzero]
+  · rw [hBxb, hxb]
 
 /-! ## Positive eigenfunctions satisfy the characteristic equation -/
 
