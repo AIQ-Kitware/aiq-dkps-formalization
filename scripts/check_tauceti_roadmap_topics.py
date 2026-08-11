@@ -187,12 +187,16 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # imports the approximation-number layer of T09, so this topic sits after it.  Together they
  # are the Corollary 3.1 bridge: equal approximation-number sequences and equal eigenspace
  # dimensions say the same thing for a compact positive operator with trivial kernel.
+ # `CompactSpectralDecomposition` packages the Hilbert sum of eigenspaces and the positive
+ # approximation-number/eigenvalue dictionary. `CompactSingularSubspaces` supplies the
+ # arbitrary-dimensional rectangular nonzero Gram-block equivalence.
  # Added 2026-08-10 with the module: `Order.DiscreteEnumeration` is the order-theoretic half
  # of the same story -- a set that is unbounded above and finite below every bound IS a
  # strictly increasing sequence.  It imports only Mathlib and nothing in `ForTauCeti` imports
  # it, so it constrains no topic ordering; it is filed here because its consumers are the
  # discrete-spectrum statements this topic collects.
  [A+"CompactSelfAdjointClassification",A+"CompactApproximationEigenvalues",
+  A+"CompactSpectralDecomposition",A+"CompactSingularSubspaces",
   "Order.DiscreteEnumeration"]),
 ("T27","Measure classes, L-two transport, and the multiplicity normal form",
  ["MeasureTheory."+x for x in ["MeasureClass","RadonNikodymL2","LpComp","LpRestrict","LpStar",
