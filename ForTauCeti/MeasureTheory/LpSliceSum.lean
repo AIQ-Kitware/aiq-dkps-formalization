@@ -69,6 +69,13 @@ theorem lpCongrMeasure_mulLp {μ ν : Measure α} (h : μ = ν) {g : α → ℂ}
   subst h
   rfl
 
+/-- **Transport along an equality of measures is `star`-equivariant** -- trivially, once the
+equality is substituted away, but the statement is what the real-part transfer needs. -/
+theorem star_lpCongrMeasure {μ ν : Measure α} (h : μ = ν) (F : Lp ℂ 2 μ) :
+    star (lpCongrMeasure h F) = lpCongrMeasure h (star F) := by
+  subst h
+  rfl
+
 end CongrMeasure
 
 section HilbertSumTransport
@@ -316,6 +323,23 @@ theorem sliceLp_mulLp (μ : ℕ → Measure X) (n : ℕ) {g : X → ℂ} (hg : M
   simp only [sliceLp, LinearIsometry.coe_comp, Function.comp_apply,
     LinearIsometryEquiv.coe_toLinearIsometry]
   rw [hstep, extendLp_mulLp]
+
+/-- **The summand identification is `star`-equivariant**, being built from the pushforward
+unitary and a transport along an equality of measures, both of which are. -/
+theorem star_sliceLpEquiv (μ : ℕ → Measure X) (n : ℕ) (F : Lp ℂ 2 (μ n)) :
+    star (sliceLpEquiv μ n F) = sliceLpEquiv μ n (star F) := by
+  simp only [sliceLpEquiv, LinearIsometryEquiv.trans_apply]
+  rw [star_lpCongrMeasure, star_embLpEquiv_symm]
+
+/-- **The summand embeddings are `star`-equivariant.**  With
+`TauCeti.star_compLp`, `TauCeti.star_extendLp` and `TauCeti.star_rnDerivL2Equiv`, this completes
+the list of assembly steps of the multiplicity model that carry the `star`-fixed classes of one
+`L²` space into those of the next. -/
+theorem star_sliceLp (μ : ℕ → Measure X) (n : ℕ) (F : Lp ℂ 2 (μ n)) :
+    star (sliceLp μ n F) = sliceLp μ n (star F) := by
+  simp only [sliceLp, LinearIsometry.coe_comp, Function.comp_apply,
+    LinearIsometryEquiv.coe_toLinearIsometry]
+  rw [star_extendLp, star_sliceLpEquiv]
 
 end SliceSum
 

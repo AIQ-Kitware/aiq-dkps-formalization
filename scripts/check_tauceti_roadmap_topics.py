@@ -239,7 +239,13 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # Added 2026-08-10 with the module: the cyclic decomposition and countable Hilbert-sum
  # statements transported to the real spectrum, plus the push-forward identity that
  # measures the `Measure C` boundary.  Imports `RealSpectrumIntertwining`, already here.
- +[A+"RealSpectrumCyclicDecomposition"]),
+ +[A+"RealSpectrumCyclicDecomposition"]
+ # Added 2026-08-11 with the module: the biconditional saying WHEN the `star`-fixed part of
+ # a multiplicity model is invariant under the model operator -- exactly when the base
+ # measure is carried by the real axis.  Imports `BorelCalculus.MultiplicityModel`, already
+ # in this topic, and `MeasureTheory.LpRealPart` from T27, which sorts earlier; so filing it
+ # here creates no forward reference.
+ +[A+"BorelCalculus.MultiplicityModelReal"]),
 ("T25","The Hilbert-Schmidt Sylvester flow",
  [A+x for x in ["HilbertSchmidt.Block","Sylvester.BlockEstimate","Sylvester.BlockIdentity",
                 "Sylvester.Generator","Sylvester.Group","Sylvester.SpectralGap"]]),

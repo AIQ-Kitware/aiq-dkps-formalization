@@ -222,4 +222,40 @@ theorem embLpEquiv_symm_mulLp {e : α → β} (he : MeasurableEmbedding e) (ρ :
 
 end Comp
 
+section Star
+
+/-- **Relabelling is `star`-equivariant.**  Composition acts on the argument and `star` acts on
+the value, so the two commute with nothing to prove beyond moving the representatives past each
+other.
+
+This is what carries the real (`star`-fixed) part of an `L²` space along the relabelling step of
+the multiplicity model: `TauCeti.starFixedSubmodule` is a `star`-fixed set, so an equivariant
+isometry maps it into the corresponding one. -/
+theorem star_compLp (hf : MeasurePreserving f μ ν) (F : Lp ℂ 2 ν) :
+    star (compLp f hf F) = compLp f hf (star F) := by
+  refine Lp.ext ?_
+  filter_upwards [Lp.coeFn_star (compLp f hf F), coeFn_compLp hf F,
+    coeFn_compLp hf (star F), hf.quasiMeasurePreserving.ae (Lp.coeFn_star F)] with x h1 h2 h3 h4
+  calc ((star (compLp f hf F) : Lp ℂ 2 μ) : α → ℂ) x
+      = star ((F : β → ℂ) (f x)) := by rw [h1, Pi.star_apply, h2]
+    _ = ((star F : Lp ℂ 2 ν) : β → ℂ) (f x) := by rw [h4, Pi.star_apply]
+    _ = ((compLp f hf (star F) : Lp ℂ 2 μ) : α → ℂ) x := h3.symm
+
+/-- **The pushforward unitary is `star`-equivariant.** -/
+theorem star_embLpEquiv {e : α → β} (he : MeasurableEmbedding e) (ρ : Measure α)
+    (F : Lp ℂ 2 (Measure.map e ρ)) :
+    star (embLpEquiv he ρ F) = embLpEquiv he ρ (star F) :=
+  star_compLp (measurePreserving_of_measurableEmbedding he ρ) F
+
+/-- **The inverse of the pushforward unitary is `star`-equivariant**, which follows from
+`star_embLpEquiv` by applying the unitary to both sides. -/
+theorem star_embLpEquiv_symm {e : α → β} (he : MeasurableEmbedding e) (ρ : Measure α)
+    (F : Lp ℂ 2 ρ) :
+    star ((embLpEquiv he ρ).symm F) = (embLpEquiv he ρ).symm (star F) := by
+  refine (embLpEquiv he ρ).injective ?_
+  rw [LinearIsometryEquiv.apply_symm_apply, ← star_embLpEquiv,
+    LinearIsometryEquiv.apply_symm_apply]
+
+end Star
+
 end TauCeti

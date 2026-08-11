@@ -263,4 +263,41 @@ theorem extendLp_mulLp (μ : Measure α) (hs : MeasurableSet s) {g : α → ℂ}
 
 end Multiplication
 
+section Star
+
+omit [MeasurableSpace α] in
+/-- Pointwise conjugation passes through an indicator, because it fixes zero. -/
+theorem star_indicator_apply (s : Set α) (u : α → ℂ) (x : α) :
+    star (s.indicator u x) = s.indicator (star u) x := by
+  by_cases hxs : x ∈ s
+  · rw [Set.indicator_of_mem hxs, Set.indicator_of_mem hxs, Pi.star_apply]
+  · rw [Set.indicator_of_notMem hxs, Set.indicator_of_notMem hxs, star_zero]
+
+/-- **Extension by zero is `star`-equivariant.**  Conjugation fixes the zero that the extension
+inserts, so it commutes with the indicator. -/
+theorem star_extendLp (μ : Measure α) (hs : MeasurableSet s) (F : Lp ℂ 2 (μ.restrict s)) :
+    star (extendLp μ hs F) = extendLp μ hs (star F) := by
+  refine Lp.ext ?_
+  filter_upwards [Lp.coeFn_star (extendLp μ hs F), coeFn_extendLp μ hs F,
+    coeFn_extendLp μ hs (star F),
+    indicator_ae_eq_of_restrict (μ := μ) hs (Lp.coeFn_star F)] with x h1 h2 h3 h4
+  calc ((star (extendLp μ hs F) : Lp ℂ 2 μ) : α → ℂ) x
+      = star (s.indicator (F : α → ℂ) x) := by rw [h1, Pi.star_apply, h2]
+    _ = s.indicator (star (F : α → ℂ)) x := star_indicator_apply s _ x
+    _ = s.indicator ((star F : Lp ℂ 2 (μ.restrict s)) : α → ℂ) x := (h4 ▸ rfl)
+    _ = ((extendLp μ hs (star F) : Lp ℂ 2 μ) : α → ℂ) x := h3.symm
+
+/-- **Restriction is `star`-equivariant**: both sides are represented by the same function. -/
+theorem star_restrictLp (μ : Measure α) (s : Set α) (g : Lp ℂ 2 μ) :
+    star (restrictLp μ s g) = restrictLp μ s (star g) := by
+  refine Lp.ext ?_
+  filter_upwards [Lp.coeFn_star (restrictLp μ s g), coeFn_restrictLp μ s g,
+    coeFn_restrictLp μ s (star g), ae_restrict_of_ae (Lp.coeFn_star g)] with x h1 h2 h3 h4
+  calc ((star (restrictLp μ s g) : Lp ℂ 2 (μ.restrict s)) : α → ℂ) x
+      = star ((g : α → ℂ) x) := by rw [h1, Pi.star_apply, h2]
+    _ = ((star g : Lp ℂ 2 μ) : α → ℂ) x := by rw [h4, Pi.star_apply]
+    _ = ((restrictLp μ s (star g) : Lp ℂ 2 (μ.restrict s)) : α → ℂ) x := h3.symm
+
+end Star
+
 end TauCeti

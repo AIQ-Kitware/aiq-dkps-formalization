@@ -268,6 +268,33 @@ theorem coeFn_rnDerivL2Equiv [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ �
   rw [rnDerivL2Equiv_apply]
   exact coeFn_rnDerivL2 hμν hνμ F
 
+/-- **The Radon--Nikodym isometry is `star`-equivariant.**
+
+This is the step of the multiplicity-model assembly where equivariance is not formal: the
+multiplier is `√(dμ/dν)`, and what makes conjugation pass through it is that the density is a
+**real** quantity, so `Complex.conj_ofReal` applies.  A complex reweighting would rotate the
+`star`-fixed classes off themselves. -/
+theorem star_rnDerivL2 [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ ν) (hνμ : ν ≪ μ)
+    (F : Lp ℂ 2 μ) :
+    star (rnDerivL2 hμν hνμ F) = rnDerivL2 hμν hνμ (star F) := by
+  refine Lp.ext ?_
+  filter_upwards [Lp.coeFn_star (rnDerivL2 hμν hνμ F), coeFn_rnDerivL2 hμν hνμ F,
+    coeFn_rnDerivL2 hμν hνμ (star F), hνμ.ae_le (Lp.coeFn_star F)] with x h1 h2 h3 h4
+  calc ((star (rnDerivL2 hμν hνμ F) : Lp ℂ 2 ν) : α → ℂ) x
+      = star (((rnDerivSqrt μ ν x : ℝ) : ℂ) * (F : α → ℂ) x) := by rw [h1, Pi.star_apply, h2]
+    _ = (starRingEnd ℂ) ((rnDerivSqrt μ ν x : ℝ) : ℂ) * (starRingEnd ℂ) ((F : α → ℂ) x) := by
+        rw [RCLike.star_def, map_mul]
+    _ = ((rnDerivSqrt μ ν x : ℝ) : ℂ) * ((star F : Lp ℂ 2 μ) : α → ℂ) x := by
+        rw [Complex.conj_ofReal, h4, Pi.star_apply, RCLike.star_def]
+    _ = ((rnDerivL2 hμν hνμ (star F) : Lp ℂ 2 ν) : α → ℂ) x := h3.symm
+
+/-- **The Radon--Nikodym unitary is `star`-equivariant.** -/
+theorem star_rnDerivL2Equiv [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ ν) (hνμ : ν ≪ μ)
+    (F : Lp ℂ 2 μ) :
+    star (rnDerivL2Equiv hμν hνμ F) = rnDerivL2Equiv hμν hνμ (star F) := by
+  rw [rnDerivL2Equiv_apply, rnDerivL2Equiv_apply]
+  exact star_rnDerivL2 hμν hνμ F
+
 /-- **The inverse of the Radon--Nikodym unitary is the Radon--Nikodym unitary of the reversed
 pair**, built from `dν/dμ`. -/
 theorem rnDerivL2Equiv_symm [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ ν) (hνμ : ν ≪ μ) :
