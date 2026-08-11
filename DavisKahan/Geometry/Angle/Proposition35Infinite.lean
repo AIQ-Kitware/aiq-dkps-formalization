@@ -121,12 +121,18 @@ theorem norm_section3SinAngleOperator_le_one :
 theorem spectrum_section3SinAngleOperator_subset_Icc :
     spectrum ℝ (section3SinAngleOperator U V) ⊆ Set.Icc 0 1 := by
   intro x hx
-  have hsymmetric : spectrum ℝ (section3SinAngleOperator U V) ⊆ Set.Icc (-1) 1 :=
-    (TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc
-      (section3SinAngleOperator_isSelfAdjoint U V) zero_le_one).mp
-      (norm_section3SinAngleOperator_le_one U V)
-  exact ⟨spectrum_nonneg_of_nonneg (section3SinAngleOperator_nonneg U V) hx,
-    (hsymmetric hx).2⟩
+  refine ⟨spectrum_nonneg_of_nonneg (section3SinAngleOperator_nonneg U V) hx, ?_⟩
+  have hone : ‖(1 : H →L[𝕜] H)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+  have habs : |x| ≤
+      ‖section3SinAngleOperator U V‖ * ‖(1 : H →L[𝕜] H)‖ := by
+    rw [← Real.norm_eq_abs]
+    exact spectrum.norm_le_norm_mul_of_mem (𝕜 := ℝ) hx
+  refine le_trans (le_abs_self x) (habs.trans ?_)
+  calc
+    ‖section3SinAngleOperator U V‖ * ‖(1 : H →L[𝕜] H)‖ ≤ 1 * 1 :=
+      mul_le_mul (norm_section3SinAngleOperator_le_one U V) hone
+        (norm_nonneg _) zero_le_one
+    _ = 1 := by ring
 
 /-- The literal angle is self-adjoint. -/
 theorem section3AngleOperator_isSelfAdjoint :
