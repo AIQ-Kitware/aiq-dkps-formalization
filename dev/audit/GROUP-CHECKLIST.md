@@ -65,7 +65,7 @@ review is exactly a review of a future submission unit.
 - [x] `DavisKahan/Sources/Davis1963` — 4 files, 604 lines — **READY**
 - [x] `DavisKahan/Sources/DavisKahan1970` — 139 files, 41,574 lines — **blocked (90/139 files)**
 - [x] `DavisKahan/Specialized` — 1 files, 10 lines — **READY**
-- [x] `DavisKahan/SpectralTheory` — 75 files, 23,311 lines — **blocked (50/75 files)**
+- [x] `DavisKahan/SpectralTheory` — 75 files, 23,272 lines — **blocked (50/75 files)**
 - [x] `DavisKahan/Sylvester` — 28 files, 6,888 lines — **blocked (27/28 files)**
 - [x] `DavisKahan/TanTheta` — 13 files, 6,712 lines — **blocked (7/13 files)**
 - [x] `DavisKahan/TanTwoTheta` — 5 files, 688 lines — **READY**
@@ -88,7 +88,7 @@ review is exactly a review of a future submission unit.
 - [x] `FinishYuWangSamworth :: documentation` — 4 files, 229 lines — **READY**
 - [x] `FinishYuWangSamworth :: tooling` — 1 files, 79 lines — **READY**
 - [x] `FinishYuWangSamworth/FinishYuWangSamworth` — 13 files, 1,778 lines — **blocked (11/13 files)**
-- [ ] `ForTauCeti :: (unassigned — fix the topic design)` — 46 files, 14,129 lines — **blocked (0/46 files)**
+- [ ] `ForTauCeti :: (unassigned — fix the topic design)` — 46 files, 14,149 lines — **blocked (0/46 files)**
 - [x] `ForTauCeti :: T01 Positive square root, operator modulus, functional calculus` — 8 files, 2,280 lines — **blocked (7/8 files)**
 - [x] `ForTauCeti :: T02 Polar decomposition and partial isometries` — 7 files, 2,897 lines — **blocked (6/7 files)**
 - [x] `ForTauCeti :: T03 Singular values and the singular system` — 4 files, 1,513 lines — **READY**
@@ -118,8 +118,8 @@ review is exactly a review of a future submission unit.
 - [ ] `ForTauCeti :: T25 The Hilbert-Schmidt Sylvester flow` — 6 files, 1,404 lines — **READY**
 - [ ] `ForTauCeti :: T26 Inner-product identities, linear isometries, Gram rigidity, orthogonal series, projection geometry, and reducing subspaces` — 6 files, 952 lines — **READY**
 - [ ] `ForTauCeti :: T26a Discrete spectra: compact self-adjoint operators classified by eigenspace dimensions, and the enumeration of an unbounded locally finite set` — 3 files, 1,158 lines — **blocked (0/3 files)**
-- [ ] `ForTauCeti :: T27 Measure classes, L-two transport, and the multiplicity normal form` — 9 files, 2,494 lines — **blocked (0/9 files)**
-- [ ] `ForTauCeti :: T28 Cyclic subspaces, the multiplication model, and Hahn-Hellinger existence` — 14 files, 4,125 lines — **blocked (0/14 files)**
+- [ ] `ForTauCeti :: T27 Measure classes, L-two transport, and the multiplicity normal form` — 10 files, 2,711 lines — **blocked (0/10 files)**
+- [ ] `ForTauCeti :: T28 Cyclic subspaces, the multiplication model, and Hahn-Hellinger existence` — 15 files, 4,472 lines — **blocked (0/15 files)**
 - [x] `ForTauCeti :: documentation` — 1 files, 141 lines — **READY**
 - [x] `Helm2025` — 4 files, 2,002 lines — **READY**
 - [x] `Helm2025 :: documentation` — 2 files, 683 lines — **READY**
@@ -127,7 +127,7 @@ review is exactly a review of a future submission unit.
 - [ ] `RoadmapBridge` — 2 files, 297 lines — **blocked (0/2 files)**
 - [x] `comparator :: data/config` — 22 files, 318 lines — **READY**
 - [x] `dev :: data/config` — 42 files, 15,251 lines — **blocked (25/42 files)**
-- [x] `dev :: documentation` — 198 files, 42,397 lines — **blocked (158/198 files)**
+- [x] `dev :: documentation` — 198 files, 42,399 lines — **blocked (158/198 files)**
 - [x] `dev :: manifest/notes` — 17 files, 219 lines — **blocked (8/17 files)**
 - [ ] `dev :: other` — 5 files, 715 lines — **blocked (0/5 files)**
 - [ ] `dev :: tooling` — 5 files, 1,374 lines — **blocked (0/5 files)**
@@ -138,7 +138,7 @@ review is exactly a review of a future submission unit.
 - [x] `prose :: data/config` — 1 files, 1,488 lines — **READY**
 - [x] `prose :: documentation` — 3 files, 271 lines — **READY**
 - [x] `prose :: other` — 1 files, 2 lines — **READY**
-- [x] `scripts :: tooling` — 63 files, 15,134 lines — **blocked (55/63 files)**
+- [x] `scripts :: tooling` — 63 files, 15,140 lines — **blocked (55/63 files)**
 - [ ] `submodules :: other` — 2 files, 0 lines — **blocked (0/2 files)**
 - [x] `tools :: build config` — 2 files, 210 lines — **blocked (1/2 files)**
 - [x] `tools :: documentation` — 2 files, 229 lines — **blocked (1/2 files)**
