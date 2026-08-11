@@ -40,11 +40,11 @@ reads off the printed bound.
 ## Scope
 
 This is the **bound-norm** half of (9.7).  The paper's following sentence, "with the
-same right side bounding `tan 2θ₁ + tan 2θ₂` in the 2-norm", needs the arbitrary
-unitarily-invariant-ideal form of the unbounded residual `tan 2Θ` theorem, which is
-not available: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedResidual.lean`
-states the operator-norm case only and records the `DK-6-appendix` obligation that
-blocks the ideal endpoint.
+same right side bounding `tan 2θ₁ + tan 2θ₂` in the 2-norm", is
+`beamTanTwoThetaSum_le` in
+`DavisKahan/Sources/DavisKahan1970/Section9/BeamDoubleTangentKyFan.lean`: it needs
+the Ky Fan prefix form of the unbounded residual `tan 2Θ` theorem, which is a
+source facade this generic-foundation module may not import.
 
 ## References
 
@@ -653,6 +653,7 @@ theorem beamTanTwoTheta_lt_printed (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100)
     beamTanTwoTheta ε
       < ((1291 : ℝ) / 1250000 * ε) / (1 - (7887 : ℝ) / 5000000 * ε) :=
   equation_9_7 ε (beamTanTwoTheta ε) hε hε100 (beamTanTwoTheta_le ε hε hε100)
+
 
 end
 
