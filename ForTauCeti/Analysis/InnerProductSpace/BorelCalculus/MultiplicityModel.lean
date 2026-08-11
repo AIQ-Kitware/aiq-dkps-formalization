@@ -126,6 +126,13 @@ field-indexed datum is the datum that was there before. -/
   funext z
   simp [coordTruncField]
 
+/-- At real scalars the field-valued coordinate symbol is the **real part** of the original one,
+because `RCLike.map ℂ ℝ` is `RCLike.reCLM`.  Stated because `coordTruncField` is not exposed, so
+a consumer in another module cannot reach this by unfolding. -/
+@[simp] theorem coordTruncField_real (R : ℝ) (z : ℂ) :
+    coordTruncField ℝ R z = (coordTrunc R z).re := by
+  simp [coordTruncField]
+
 end Coord
 
 section FieldMultiplication
@@ -199,6 +206,15 @@ theorem coeFn_mulLpField (ρ : Measure α) {g : α → 𝕜} (hg : Measurable g)
     (mulLpField ρ hg hgC F : α → 𝕜) =ᵐ[ρ] fun x => g x * F x := by
   rw [mulLpField_apply]
   exact MemLp.coeFn_toLp _
+
+/-- Field-valued multiplication depends on the symbol only almost everywhere.  The `mulLp`
+counterpart is `TauCeti.mulLp_congr_ae`. -/
+theorem mulLpField_congr_ae (ρ : Measure α) {g g' : α → 𝕜} (hg : Measurable g)
+    (hg' : Measurable g') {C C' : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) (hgC' : ∀ x, ‖g' x‖ ≤ C')
+    (h : g =ᵐ[ρ] g') : mulLpField ρ hg hgC = mulLpField ρ hg' hgC' := by
+  refine ContinuousLinearMap.ext fun F => Lp.ext ?_
+  filter_upwards [coeFn_mulLpField ρ hg hgC F, coeFn_mulLpField ρ hg' hgC' F, h] with x h1 h2 h3
+  rw [h1, h2, h3]
 
 end FieldMultiplication
 
@@ -358,6 +374,12 @@ noncomputable def MultiplicityDatum.operator {𝕜 : Type*} [RCLike 𝕜]
   mulLpField D.measure ((measurable_coordTruncField 𝕜 D.bound).comp measurable_fst)
     (fun p => norm_coordTruncField_le 𝕜 D.bound_nonneg p.1)
 
+/-- The model operator, unfolded.  Stated so that consumers can rewrite with it without the
+definition having to be exposed. -/
+theorem MultiplicityDatum.operator_def {𝕜 : Type*} [RCLike 𝕜] (D : MultiplicityDatum 𝕜) :
+    D.operator = mulLpField D.measure ((measurable_coordTruncField 𝕜 D.bound).comp measurable_fst)
+      (fun p => norm_coordTruncField_le 𝕜 D.bound_nonneg p.1) := (rfl)
+
 /-- The field-indexed model operator is pointwise multiplication by the field-valued truncated
 spectral coordinate. -/
 theorem MultiplicityDatum.coeFn_operator {𝕜 : Type*} [RCLike 𝕜]
@@ -399,6 +421,73 @@ theorem MultiplicityDatum.operator_eq_mulLp (D : MultiplicityDatum ℂ) :
   rw [hfield, hcomplex]
   simp only [coordTruncField_complex, Function.comp_apply]
 
+/-- **A datum read in a different scalar field.**
+
+Every field of `TauCeti.MultiplicityDatum` -- base measure, bound, level sets and their
+properties -- is scalar-field independent; the field enters only through
+`TauCeti.MultiplicityDatum.operator`, whose `L²` fibres and multiplier take values in `𝕜`.  So a
+datum for one field is literally a datum for any other, and this is the (identity-on-fields) map
+that says so.  It is what lets the *complex* datum produced by Hahn--Hellinger be read as the
+*real* datum a real classification statement needs, with the measure class and the level sets --
+the entire multiplicity content -- unchanged. -/
+def MultiplicityDatum.retype {𝕜 : Type*} [RCLike 𝕜] (𝕜' : Type*) [RCLike 𝕜']
+    (D : MultiplicityDatum 𝕜) : MultiplicityDatum 𝕜' where
+  base := D.base
+  bound := D.bound
+  level := D.level
+  base_finite := D.base_finite
+  bound_nonneg := D.bound_nonneg
+  base_supported := D.base_supported
+  base_supported_level_zero := D.base_supported_level_zero
+  measurableSet_level := D.measurableSet_level
+  antitone_level := D.antitone_level
+
+/-- Retyping leaves the base measure alone. -/
+@[simp] theorem MultiplicityDatum.retype_base {𝕜 : Type*} [RCLike 𝕜] (𝕜' : Type*) [RCLike 𝕜']
+    (D : MultiplicityDatum 𝕜) : (D.retype 𝕜').base = D.base := (rfl)
+
+/-- Retyping leaves the bound alone. -/
+@[simp] theorem MultiplicityDatum.retype_bound {𝕜 : Type*} [RCLike 𝕜] (𝕜' : Type*) [RCLike 𝕜']
+    (D : MultiplicityDatum 𝕜) : (D.retype 𝕜').bound = D.bound := (rfl)
+
+/-- Retyping leaves the level sets alone -- which is the whole point: the multiplicity data are
+the invariant, and they do not move. -/
+@[simp] theorem MultiplicityDatum.retype_level {𝕜 : Type*} [RCLike 𝕜] (𝕜' : Type*) [RCLike 𝕜']
+    (D : MultiplicityDatum 𝕜) : (D.retype 𝕜').level = D.level := (rfl)
+
+/-- **Transport a real unitary equivalence into the retyped datum's presentation.**
+
+Same reason as `starOperatorUnitaryEquiv_operator_of_mulLp_sliceSum`: neither
+`TauCeti.MultiplicityDatum.measure` nor `TauCeti.MultiplicityDatum.operator` nor
+`TauCeti.MultiplicityDatum.retype` is exposed, so outside this module the model `L²` space of
+`D.retype ℝ` is not visibly the model `L²` space of `D`.  Inside it, the two sides are the same
+term. -/
+theorem operatorUnitaryEquiv_retype_real_operator_of_mulLpField {E : Type*}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] {T : E →L[ℝ] E} (D : MultiplicityDatum ℂ)
+    (h : OperatorUnitaryEquiv T (mulLpField D.measure
+      ((measurable_coordTruncField ℝ D.bound).comp measurable_fst)
+      (fun p => norm_coordTruncField_le ℝ D.bound_nonneg p.1))) :
+    OperatorUnitaryEquiv T (D.retype ℝ).operator :=
+  h
+
+/-- **Transport a `star`-equivariant equivalence into the datum's own presentation.**
+
+`TauCeti.MultiplicityDatum.measure` is not exposed, so a consumer in another module cannot see by
+unfolding that `D.measure` *is* `sliceSum fun k => D.base.restrict (D.level k)`; and the measure
+occurs in the *type* of the model `L²` space, so `TauCeti.MultiplicityDatum.measure_def` cannot
+be rewritten with at the call site either.  This lemma performs the transport once, in the module
+that can see the definition.  The plain `TauCeti.OperatorUnitaryEquiv` form needs no such lemma:
+its unifier reaches the same defeq through the operator arguments alone. -/
+theorem starOperatorUnitaryEquiv_operator_of_mulLp_sliceSum {H : Type*} [NormedAddCommGroup H]
+    [InnerProductSpace ℂ H] {cH : H → H} {A : H →L[ℂ] H} (D : MultiplicityDatum ℂ)
+    (h : StarOperatorUnitaryEquiv cH star A
+      (mulLp (sliceSum fun k => D.base.restrict (D.level k))
+        ((measurable_coordTrunc D.bound).comp measurable_fst)
+        (fun p => norm_coordTrunc_le D.bound_nonneg p.1))) :
+    StarOperatorUnitaryEquiv cH star A D.operator := by
+  rw [MultiplicityDatum.operator_eq_mulLp]
+  exact h
+
 /-- The two truncations of the coordinate agree where the model measure lives. -/
 theorem operator_eq_mulLp_of_le {D : MultiplicityDatum ℂ} {R : ℝ} (hR : 0 ≤ R)
     (hle : D.bound ≤ R) :
@@ -410,6 +499,34 @@ theorem operator_eq_mulLp_of_le {D : MultiplicityDatum ℂ} {R : ℝ} (hR : 0 �
   rw [Function.comp_apply, Function.comp_apply, coordTrunc_eq_self hp,
     coordTrunc_eq_self (hp.trans hle)]
 
+/-- **The model operator is multiplication by the coordinate truncated at any larger bound**, at
+any scalar field.  The `𝕜 = ℂ` case is `operator_eq_mulLp_of_le`, stated separately because that
+one lands in `mulLp` rather than `mulLpField`. -/
+theorem MultiplicityDatum.operator_eq_mulLpField_of_le {𝕜 : Type*} [RCLike 𝕜]
+    {D : MultiplicityDatum 𝕜} {R : ℝ} (hR : 0 ≤ R) (hle : D.bound ≤ R) :
+    D.operator = mulLpField D.measure ((measurable_coordTruncField 𝕜 R).comp measurable_fst)
+      (fun p => norm_coordTruncField_le 𝕜 hR p.1) := by
+  rw [MultiplicityDatum.operator_def]
+  refine mulLpField_congr_ae _ _ _ _ _ ?_
+  filter_upwards [D.ae_norm_le_bound] with p hp
+  simp only [Function.comp_apply, coordTruncField, coordTrunc_eq_self hp,
+    coordTrunc_eq_self (hp.trans hle)]
+
+/-- **Data agreeing up to measure class and null sets have model measures in the same class.**
+
+Split out of `operatorUnitaryEquiv_of_measureEquiv` because it is scalar-field independent -- the
+model *measure* never mentions `𝕜` -- and the real classification needs it at `𝕜 = ℝ`. -/
+theorem measureEquiv_measure_of_measureEquiv_base {𝕜 : Type*} [RCLike 𝕜]
+    {D E : MultiplicityDatum 𝕜} (hbase : MeasureEquiv D.base E.base)
+    (hlevel : ∀ k, D.base (symmDiff (D.level k) (E.level k)) = 0) :
+    MeasureEquiv D.measure E.measure := by
+  have hlev : ∀ k, (D.level k : Set ℂ) =ᵐ[D.base] (E.level k : Set ℂ) := fun k =>
+    measure_symmDiff_eq_zero_iff.mp (hlevel k)
+  have hfib : ∀ k, MeasureEquiv (D.base.restrict (D.level k)) (E.base.restrict (E.level k)) :=
+    fun k => (measureEquiv_restrict_congr (hlev k)).trans (hbase.restrict (E.level k))
+  rw [MultiplicityDatum.measure, MultiplicityDatum.measure]
+  exact measureEquiv_sliceSum hfib
+
 /-- **Data agreeing up to measure class and null sets present unitarily equivalent operators.**
 
 The measure classes of the two model measures agree fibrewise -- restricting one base measure to
@@ -420,13 +537,8 @@ theorem operatorUnitaryEquiv_of_measureEquiv {D E : MultiplicityDatum ℂ}
     (hbase : MeasureEquiv D.base E.base)
     (hlevel : ∀ k, D.base (symmDiff (D.level k) (E.level k)) = 0) :
     OperatorUnitaryEquiv D.operator E.operator := by
-  have hlev : ∀ k, (D.level k : Set ℂ) =ᵐ[D.base] (E.level k : Set ℂ) := fun k =>
-    measure_symmDiff_eq_zero_iff.mp (hlevel k)
-  have hfib : ∀ k, MeasureEquiv (D.base.restrict (D.level k)) (E.base.restrict (E.level k)) :=
-    fun k => (measureEquiv_restrict_congr (hlev k)).trans (hbase.restrict (E.level k))
-  have hmeas : MeasureEquiv D.measure E.measure := by
-    rw [MultiplicityDatum.measure, MultiplicityDatum.measure]
-    exact measureEquiv_sliceSum hfib
+  have hmeas : MeasureEquiv D.measure E.measure :=
+    measureEquiv_measure_of_measureEquiv_base hbase hlevel
   set R : ℝ := max D.bound E.bound with hRdef
   have hR0 : 0 ≤ R := le_trans D.bound_nonneg (le_max_left _ _)
   rw [operator_eq_mulLp_of_le (D := D) hR0 (le_max_left _ _),
@@ -518,7 +630,7 @@ theorem exists_hasMultiplicityModel [TopologicalSpace.SeparableSpace H] (ha : Is
     refine Set.eq_empty_iff_forall_notMem.mpr fun w hw => ?_
     exact absurd (hspec w) (not_le.mpr hw)
   · rw [MultiplicityDatum.operator_eq_mulLp]
-    exact hstep1.trans hstep2
+    exact hstep1.trans hstep2.toOperatorUnitaryEquiv
 
 end BorelCalculus
 

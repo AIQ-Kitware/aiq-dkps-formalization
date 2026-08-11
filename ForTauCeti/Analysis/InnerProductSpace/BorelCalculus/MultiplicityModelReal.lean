@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.MultiplicityModel
 public import ForTauCeti.MeasureTheory.LpRealPart
+public import ForTauCeti.MeasureTheory.LpStar
 
 /-!
 # When the real part of a multiplicity model is invariant
@@ -37,10 +38,14 @@ measure has no such character: a datum whose base charges the non-real points is
 determined and presents a perfectly good operator.  It is a property of the *operator being
 self-adjoint*, not a well-formedness condition on the presentation.
 
-Making it a field would also be an outright regression.  `TauCeti.MultiplicityDatum` has exactly
-one construction site in this repository, `TauCeti.BorelCalculus.exists_hasMultiplicityModel`,
-which is complex Hahn--Hellinger for an arbitrary bounded **normal** operator.  A normal operator
-has complex spectrum, so that construction could not discharge such a field at all.
+Making it a field would also be an outright regression.  The datum's *general* construction site
+is `TauCeti.BorelCalculus.exists_hasMultiplicityModel`, complex Hahn--Hellinger for an arbitrary
+bounded **normal** operator.  A normal operator has complex spectrum, so that construction could
+not discharge such a field at all, and adding it would make the theorem unprovable.  The
+`star`-equivariant refinement below, `TauCeti.BorelCalculus.exists_hasMultiplicityModel_star`,
+*does* deliver reality of the base -- but only because it additionally assumes the operator
+self-adjoint, and it delivers it as a **conclusion**, which is exactly the point: it is a property
+of the operator, not a well-formedness condition on presentations in general.
 
 ## Main results
 
@@ -342,5 +347,264 @@ theorem reLp_mulLpField_ofRealLp (ρ : Measure α) {g : α → ℂ} (hg : Measur
   simp
 
 end Compression
+
+section RealModel
+
+/-- At a real point inside the ball, the complex symbol times a real value is the coercion of the
+real symbol times that value.  This is the pointwise identity behind the compression, isolated so
+that the `Lᵖ` argument never has to reason about coercions. -/
+theorem coordTruncField_complex_mul_ofReal {R : ℝ} {z : ℂ} (hzR : ‖z‖ ≤ R) (hz : z.im = 0)
+    (r : ℝ) : coordTruncField ℂ R z * (r : ℂ) = ((coordTruncField ℝ R z * r : ℝ) : ℂ) := by
+  have hre : ((coordTrunc R z).re : ℂ) = coordTrunc R z :=
+    Complex.conj_eq_iff_re.mp (conj_coordTrunc_of_im_eq_zero hzR hz)
+  simp only [coordTruncField_complex, coordTruncField_real]
+  rw [Complex.ofReal_mul, hre]
+
+/-- **On a real-carried datum the model operator restricts to the real classes, and acts there by
+the real truncated coordinate.**
+
+This is the equational form of `MultiplicityDatum.mapsTo_starFixedSubmodule`: not merely that the
+`star`-fixed part is preserved, but *what the restriction is*.  The reality hypothesis is used
+pointwise, through `conj_coordTrunc_of_im_eq_zero`, at almost every point of the model measure --
+which is where `MultiplicityDatum.ae_fst_notMem` and `MultiplicityDatum.ae_norm_le_bound` enter. -/
+theorem MultiplicityDatum.operator_ofRealLp {D : MultiplicityDatum ℂ}
+    (hbase : D.base {z : ℂ | z.im ≠ 0} = 0) (f : Lp ℝ 2 D.measure) :
+    D.operator (ofRealLp f) = ofRealLp (mulLpField D.measure
+      ((measurable_coordTruncField ℝ D.bound).comp measurable_fst)
+      (fun p => norm_coordTruncField_le ℝ D.bound_nonneg p.1) f) := by
+  refine Lp.ext ?_
+  filter_upwards [D.coeFn_operator (ofRealLp f), coeFn_ofRealLp (K := ℂ) f,
+    coeFn_ofRealLp (K := ℂ) (mulLpField D.measure
+      ((measurable_coordTruncField ℝ D.bound).comp measurable_fst)
+      (fun p => norm_coordTruncField_le ℝ D.bound_nonneg p.1) f),
+    coeFn_mulLpField D.measure ((measurable_coordTruncField ℝ D.bound).comp measurable_fst)
+      (fun p => norm_coordTruncField_le ℝ D.bound_nonneg p.1) f,
+    D.ae_fst_notMem measurableSet_im_ne_zero hbase, D.ae_norm_le_bound] with q h1 h2 h3 h4 h5 h6
+  rw [h1, h2, h3, h4]
+  simp only [Function.comp_apply]
+  exact coordTruncField_complex_mul_ofReal h6 (not_not.mp h5) _
+
+/-- **A real model, read off a `star`-equivariant complex model.**
+
+`E` is presented as a real form of `H`: an `ℝ`-linear isometry `jE` into the fixed set of `cH`,
+with a retraction `rE` inverting it there, carrying `T` to `A`.  The model side needs no such
+hypothesis-shaped input, because `TauCeti.ofRealLpₗᵢ` and `TauCeti.reLp` *are* the corresponding
+data for `star`, by `TauCeti.star_ofRealLp` and `TauCeti.ofRealLp_reLp_of_star_eq_self`.
+
+The retyped datum carries the same base measure and the same level sets
+(`MultiplicityDatum.retype_base`, `MultiplicityDatum.retype_level`), so no multiplicity content
+is lost or invented in the descent: only the scalar field of the `L²` fibres changes. -/
+theorem operatorUnitaryEquiv_retype_real_of_starOperatorUnitaryEquiv {H : Type*}
+    [NormedAddCommGroup H] [InnerProductSpace ℂ H] {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] {cH : H → H} {A : H →L[ℂ] H} {T : E →L[ℝ] E}
+    {D : MultiplicityDatum ℂ} (hbase : D.base {z : ℂ | z.im ≠ 0} = 0) (jE : E → H) (rE : H → E)
+    (hjEadd : ∀ x y, jE (x + y) = jE x + jE y)
+    (hjEsmul : ∀ (c : ℝ) x, jE (c • x) = (c : ℂ) • jE x)
+    (hjEnorm : ∀ x, ‖jE x‖ = ‖x‖) (hfixE : ∀ x, cH (jE x) = jE x)
+    (hrjE : ∀ y, cH y = y → jE (rE y) = y) (hT : ∀ x, A (jE x) = jE (T x))
+    (h : StarOperatorUnitaryEquiv cH star A D.operator) :
+    OperatorUnitaryEquiv T (D.retype ℝ).operator := by
+  refine operatorUnitaryEquiv_retype_real_operator_of_mulLpField D ?_
+  exact operatorUnitaryEquiv_of_starOperatorUnitaryEquiv jE rE hjEadd hjEsmul hjEnorm hfixE
+    hrjE hT (fun f => (ofRealLp f : Lp ℂ 2 D.measure)) reLp (fun f g => ofRealLp_add f g)
+    (fun c f => ofRealLp_coe_smul c f) (fun f => norm_ofRealLp f) (fun f => star_ofRealLp f)
+    (fun _ hG => ofRealLp_reLp_of_star_eq_self hG)
+    (fun f => MultiplicityDatum.operator_ofRealLp hbase f) h
+
+/-- **Multiplication by a real-valued symbol restricts to the real classes**, with no reality
+hypothesis on the measure at all.
+
+A real symbol commutes with pointwise conjugation outright, which is what lets the *second* half
+of the real classification run entirely inside the complex Radon--Nikodym theory and then descend.
+Compare `MultiplicityDatum.operator_ofRealLp`, where the symbol is the complex coordinate and the
+statement is therefore conditional on the base measure being carried by the real axis. -/
+theorem mulLp_ofReal_ofRealLp {α : Type*} [MeasurableSpace α] (ρ : Measure α) {g : α → ℝ}
+    (hg : Measurable g) {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C)
+    (hgC' : ∀ x, ‖((g x : ℝ) : ℂ)‖ ≤ C) (f : Lp ℝ 2 ρ) :
+    mulLp ρ (Complex.measurable_ofReal.comp hg) hgC' (ofRealLp f)
+      = ofRealLp (mulLpField ρ (𝕜 := ℝ) hg hgC f) := by
+  refine Lp.ext ?_
+  filter_upwards [coeFn_mulLp ρ (Complex.measurable_ofReal.comp hg) hgC' (ofRealLp f),
+    coeFn_ofRealLp (K := ℂ) f, coeFn_ofRealLp (K := ℂ) (mulLpField ρ (𝕜 := ℝ) hg hgC f),
+    coeFn_mulLpField ρ (𝕜 := ℝ) hg hgC f] with x h1 h2 h3 h4
+  rw [h1, h2, h3, h4]
+  simp
+
+/-- **The real converse: real data agreeing up to measure class and null sets present unitarily
+equivalent real operators.**
+
+This is `operatorUnitaryEquiv_of_measureEquiv` at real scalars, and it is proved *without* a real
+Radon--Nikodym theory.  The trick is that the real model operator is multiplication by a symbol
+that happens to be real valued, so it is the restriction to the real classes of multiplication by
+the **same** symbol read in `ℂ` -- and that complex operator is intertwined by the ordinary
+complex Radon--Nikodym unitary, which is `star`-equivariant because the Radon--Nikodym density is
+a nonnegative real function.  Descending the resulting `TauCeti.StarOperatorUnitaryEquiv` gives
+the real statement.
+
+Note what is *not* assumed: the base measures need not be carried by the real axis.  Reality of
+the base is what the *forward* direction needs, because there the symbol is the complex
+coordinate. -/
+theorem operatorUnitaryEquiv_of_measureEquiv_real {D E : MultiplicityDatum ℝ}
+    (hbase : MeasureEquiv D.base E.base)
+    (hlevel : ∀ k, D.base (symmDiff (D.level k) (E.level k)) = 0) :
+    OperatorUnitaryEquiv D.operator E.operator := by
+  have hmeas : MeasureEquiv D.measure E.measure :=
+    measureEquiv_measure_of_measureEquiv_base hbase hlevel
+  set R : ℝ := max D.bound E.bound with hRdef
+  have hR0 : (0 : ℝ) ≤ R := le_trans D.bound_nonneg (le_max_left _ _)
+  have hgmeas : Measurable (coordTruncField ℝ R ∘ (Prod.fst : ℂ × ℕ → ℂ)) :=
+    (measurable_coordTruncField ℝ R).comp measurable_fst
+  have hgC : ∀ p : ℂ × ℕ, ‖(coordTruncField ℝ R ∘ (Prod.fst : ℂ × ℕ → ℂ)) p‖
+      ≤ ‖RCLike.map ℂ ℝ‖ * R := fun p => norm_coordTruncField_le ℝ hR0 p.1
+  have hgC' : ∀ p : ℂ × ℕ,
+      ‖(((coordTruncField ℝ R ∘ (Prod.fst : ℂ × ℕ → ℂ)) p : ℝ) : ℂ)‖ ≤ ‖RCLike.map ℂ ℝ‖ * R := by
+    intro p
+    rw [Complex.norm_real]
+    exact hgC p
+  rw [MultiplicityDatum.operator_eq_mulLpField_of_le (D := D) hR0 (le_max_left _ _),
+    MultiplicityDatum.operator_eq_mulLpField_of_le (D := E) hR0 (le_max_right _ _)]
+  have hstar : StarOperatorUnitaryEquiv star star
+      (mulLp D.measure (Complex.measurable_ofReal.comp hgmeas) hgC')
+      (mulLp E.measure (Complex.measurable_ofReal.comp hgmeas) hgC') :=
+    starOperatorUnitaryEquiv_of_intertwines (rnDerivL2Equiv hmeas.1 hmeas.2)
+      (fun F => rnDerivL2Equiv_mulLp hmeas.1 hmeas.2
+        (Complex.measurable_ofReal.comp hgmeas) hgC' F)
+      (fun F => (star_rnDerivL2Equiv hmeas.1 hmeas.2 F).symm)
+  exact operatorUnitaryEquiv_of_starOperatorUnitaryEquiv
+    (fun f => (ofRealLp f : Lp ℂ 2 D.measure)) reLp ofRealLp_add ofRealLp_coe_smul norm_ofRealLp
+    star_ofRealLp (fun _ hG => ofRealLp_reLp_of_star_eq_self hG)
+    (fun f => mulLp_ofReal_ofRealLp D.measure hgmeas hgC hgC' f)
+    (fun f => (ofRealLp f : Lp ℂ 2 E.measure)) reLp ofRealLp_add ofRealLp_coe_smul norm_ofRealLp
+    star_ofRealLp (fun _ hG => ofRealLp_reLp_of_star_eq_self hG)
+    (fun f => mulLp_ofReal_ofRealLp E.measure hgmeas hgC hgC' f) hstar
+
+end RealModel
+
+namespace BorelCalculus
+
+section StarModel
+
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+variable {a : H →L[ℂ] H}
+
+/-- **The `star`-equivariant multiplicity model.**
+
+`TauCeti.BorelCalculus.exists_hasMultiplicityModel` produces a model for an arbitrary bounded
+normal operator, but it produces it as a bare `TauCeti.OperatorUnitaryEquiv`, which forgets its
+unitary.  A conjugation cannot be pushed through a forgotten unitary, and -- this is the
+mathematical point, not a Lean difficulty -- an *arbitrary* intertwiner need not commute with the
+conjugations, since the intertwiner is unique only up to the commutant.  So the equivariance has
+to be carried along the chain, not recovered at the end.
+
+The cyclic decomposition is taken as a **hypothesis** rather than constructed here.  The complex
+construction chooses its cyclic vectors by an arbitrary maximality argument and has no reason to
+choose conjugation-fixed ones; the real analogue
+`exists_countable_isHilbertSum_lp_diagMeasure_real`, in
+`TauCeti.DavisKahan.Experimental.RealSpectralRestriction`,
+does, and it lives downstream of this module.  Taking the decomposition as input keeps this
+module free of the complexification API and makes the *only* input the equivariance `hstar` of
+each cyclic isometry.
+
+Self-adjointness is used for exactly one thing: the spectrum is real, so the base measure of the
+resulting datum vanishes off the real axis, which by
+`TauCeti.MultiplicityDatum.starFixedInvariant_iff_base_im_eq_zero` is precisely what makes the
+`star`-fixed part of the model invariant.  It is delivered as a conclusion rather than assumed. -/
+theorem exists_hasMultiplicityModel_star [TopologicalSpace.SeparableSpace H]
+    (ha : IsStarNormal a) (hsa : IsSelfAdjoint a) {cH : H → H} (hcH : Continuous cH)
+    (hcHadd : ∀ x y, cH (x + y) = cH x + cH y) {ξ : ℕ → H}
+    (hsum : IsHilbertSum ℂ (fun n => Lp ℂ 2 (diagMeasure ha (ξ n)))
+      (fun n => cyclicIsometry ha (ξ n)))
+    (hstar : ∀ (n : ℕ) (F : Lp ℂ 2 (diagMeasure ha (ξ n))),
+      cyclicIsometry ha (ξ n) (star F) = cH (cyclicIsometry ha (ξ n) F)) :
+    ∃ D : MultiplicityDatum ℂ, D.base {z : ℂ | z.im ≠ 0} = 0 ∧
+      StarOperatorUnitaryEquiv cH star a D.operator := by
+  classical
+  have hR0 : (0 : ℝ) ≤ ‖a‖ * ‖(1 : H →L[ℂ] H)‖ := mul_nonneg (norm_nonneg _) (norm_nonneg _)
+  have hspec : ∀ w : spectrum ℂ a, ‖(w : ℂ)‖ ≤ ‖a‖ * ‖(1 : H →L[ℂ] H)‖ := by
+    intro w
+    have hw := spectrum.subset_closedBall_norm_mul a w.2
+    simpa [Metric.mem_closedBall, dist_zero_right] using hw
+  have hmeasSpec : MeasurableSet (spectrum ℂ a) := (spectrum.isCompact a).isClosed.measurableSet
+  have hemb : MeasurableEmbedding ((↑) : spectrum ℂ a → ℂ) :=
+    MeasurableEmbedding.subtype_coe hmeasSpec
+  have hfin : ∀ n, IsFiniteMeasure (Measure.map ((↑) : spectrum ℂ a → ℂ)
+      (diagMeasure ha (ξ n))) := fun n => Measure.isFiniteMeasure_map _ _
+  have hsum' : IsHilbertSum ℂ
+      (fun n => Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ n))))
+      (fun n => (cyclicIsometry ha (ξ n)).comp
+        (embLpEquiv hemb (diagMeasure ha (ξ n))).toLinearIsometry) :=
+    isHilbertSum_comp_linearIsometryEquiv hsum fun n => embLpEquiv hemb (diagMeasure ha (ξ n))
+  have hsum2 := isHilbertSum_sliceLp
+    (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ n)))
+  have hA : ∀ (n : ℕ)
+      (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ n)))),
+      a (((cyclicIsometry ha (ξ n)).comp
+          (embLpEquiv hemb (diagMeasure ha (ξ n))).toLinearIsometry) F)
+        = ((cyclicIsometry ha (ξ n)).comp
+          (embLpEquiv hemb (diagMeasure ha (ξ n))).toLinearIsometry)
+          (mulLp _ (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖))
+            (norm_coordTrunc_le hR0) F) := by
+    intro n F
+    have h1 : embLpEquiv hemb (diagMeasure ha (ξ n))
+        (mulLp _ (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖)) (norm_coordTrunc_le hR0) F)
+        = coordMulLp ha (ξ n) (embLpEquiv hemb (diagMeasure ha (ξ n)) F) :=
+      (embLpEquiv_mulLp hemb (diagMeasure ha (ξ n))
+        (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖)) (norm_coordTrunc_le hR0) F).trans
+        (mulLp_eq_coordMulLp ha (ξ n) _ _ (fun w => coordTrunc_eq_self (hspec w)) _)
+    change a (cyclicIsometry ha (ξ n) (embLpEquiv hemb (diagMeasure ha (ξ n)) F))
+      = cyclicIsometry ha (ξ n) (embLpEquiv hemb (diagMeasure ha (ξ n)) _)
+    rw [h1, cyclicIsometry_coordMulLp ha (ξ n)]
+  have hB : ∀ (n : ℕ)
+      (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ n)))),
+      (mulLp _ ((measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖)).comp measurable_fst)
+          (fun p => norm_coordTrunc_le hR0 p.1))
+        (sliceLp (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ)
+          (diagMeasure ha (ξ n))) n F)
+        = sliceLp (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ n))) n
+          (mulLp _ (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖))
+            (norm_coordTrunc_le hR0) F) :=
+    fun n F => (sliceLp_mulLp (fun m => Measure.map ((↑) : spectrum ℂ a → ℂ)
+      (diagMeasure ha (ξ m))) n (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖))
+      (norm_coordTrunc_le hR0) F).symm
+  have hVc : ∀ (n : ℕ)
+      (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ n)))),
+      ((cyclicIsometry ha (ξ n)).comp
+          (embLpEquiv hemb (diagMeasure ha (ξ n))).toLinearIsometry) (star F)
+        = cH (((cyclicIsometry ha (ξ n)).comp
+          (embLpEquiv hemb (diagMeasure ha (ξ n))).toLinearIsometry) F) := by
+    intro n F
+    change cyclicIsometry ha (ξ n) (embLpEquiv hemb (diagMeasure ha (ξ n)) (star F))
+      = cH (cyclicIsometry ha (ξ n) (embLpEquiv hemb (diagMeasure ha (ξ n)) F))
+    rw [← star_embLpEquiv hemb (diagMeasure ha (ξ n)) F, hstar]
+  have hWc : ∀ (n : ℕ)
+      (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ n)))),
+      sliceLp (fun m => Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ m))) n (star F)
+        = star (sliceLp (fun m => Measure.map ((↑) : spectrum ℂ a → ℂ)
+          (diagMeasure ha (ξ m))) n F) :=
+    fun n F => (star_sliceLp (fun m => Measure.map ((↑) : spectrum ℂ a → ℂ)
+      (diagMeasure ha (ξ m))) n F).symm
+  have hstep1 := starOperatorUnitaryEquiv_of_isHilbertSum hsum' hsum2 hA hB hcH hcHadd
+    continuous_star_lp star_add_lp hVc hWc
+  obtain ⟨ρ, D, hρfin, hDmeas, hDanti, hρsupp, hρzero, hstep2⟩ :=
+    exists_multiplicityLevels (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ)
+      (diagMeasure ha (ξ n))) (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖))
+      (norm_coordTrunc_le hR0)
+  have hbase : ρ {z : ℂ | z.im ≠ 0} = 0 := by
+    refine hρsupp _ measurableSet_im_ne_zero fun n => ?_
+    rw [Measure.map_apply hemb.measurable measurableSet_im_ne_zero]
+    convert measure_empty (μ := diagMeasure ha (ξ n))
+    refine Set.eq_empty_iff_forall_notMem.mpr fun w hw => ?_
+    exact hw (hsa.im_eq_zero_of_mem_spectrum w.2)
+  refine ⟨⟨ρ, ‖a‖ * ‖(1 : H →L[ℂ] H)‖, D, hρfin, hR0, ?_, hρzero, hDmeas, hDanti⟩, hbase, ?_⟩
+  · refine hρsupp _ (measurableSet_lt measurable_const measurable_norm) fun n => ?_
+    rw [Measure.map_apply hemb.measurable (measurableSet_lt measurable_const measurable_norm)]
+    convert measure_empty (μ := diagMeasure ha (ξ n))
+    refine Set.eq_empty_iff_forall_notMem.mpr fun w hw => ?_
+    exact absurd (hspec w) (not_le.mpr hw)
+  · exact starOperatorUnitaryEquiv_operator_of_mulLp_sliceSum _ (hstep1.trans hstep2)
+
+end StarModel
+
+end BorelCalculus
 
 end TauCeti

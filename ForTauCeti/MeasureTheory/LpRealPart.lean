@@ -162,6 +162,31 @@ theorem coeFn_ofRealLp (f : Lp ℝ p μ) :
     ∀ᵐ x ∂μ, ((ofRealLp f : Lp K p μ) : α → K) x = (((f : α → ℝ) x : ℝ) : K) :=
   (RCLike.ofRealCLM : ℝ →L[ℝ] K).coeFn_compLp f
 
+/-- `ofRealLp` is additive.  Stated unbundled, because consumers that also mention the
+`ℝ`-module structure `Lp K p μ` inherits from `InnerProductSpace K` cannot use the bundled
+`ofRealLpₗᵢ` without the two `Module ℝ` instances having to match syntactically. -/
+theorem ofRealLp_add (f g : Lp ℝ p μ) :
+    (ofRealLp (f + g) : Lp K p μ) = ofRealLp f + ofRealLp g :=
+  map_add ((RCLike.ofRealCLM : ℝ →L[ℝ] K).compLpₗ p μ) f g
+
+/-- `ofRealLp` is homogeneous for real scalars; stated unbundled for the same reason as
+`ofRealLp_add`. -/
+theorem ofRealLp_real_smul (r : ℝ) (f : Lp ℝ p μ) :
+    (ofRealLp (r • f) : Lp K p μ) = r • ofRealLp f :=
+  map_smul ((RCLike.ofRealCLM : ℝ →L[ℝ] K).compLpₗ p μ) r f
+
+/-- `ofRealLp` carries a real scalar to the **coerced** scalar acting through the `K`-module
+structure.  This is the form a descent argument wants: a complex space carries two `Module ℝ`
+structures, and mentioning only the `K`-action is unambiguous.  Proved pointwise rather than by
+transporting `ofRealLp_real_smul`, for exactly that reason. -/
+theorem ofRealLp_coe_smul (r : ℝ) (f : Lp ℝ p μ) :
+    (ofRealLp (r • f) : Lp K p μ) = (r : K) • ofRealLp f := by
+  refine Lp.ext ?_
+  filter_upwards [coeFn_ofRealLp (K := K) (r • f), Lp.coeFn_smul r f,
+    Lp.coeFn_smul (r : K) (ofRealLp f : Lp K p μ), coeFn_ofRealLp (K := K) f] with x h1 h2 h3 h4
+  rw [h1, h3, h2]
+  simp [Pi.smul_apply, h4, RCLike.ofReal_mul]
+
 /-- **The image of `ofRealLp` is `star`-fixed.** -/
 theorem star_ofRealLp (f : Lp ℝ p μ) : star (ofRealLp f : Lp K p μ) = ofRealLp f := by
   refine star_eq_self_of_ae_ofReal_re_eq ?_

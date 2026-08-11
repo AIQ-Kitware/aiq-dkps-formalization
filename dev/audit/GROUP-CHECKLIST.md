@@ -52,7 +52,7 @@ review is exactly a review of a future submission unit.
 - [x] `DavisKahan/Experimental/MathAhead` — 7 files, 724 lines — **READY**
 - [x] `DavisKahan/Experimental/Scratch` — 4 files, 336 lines — **READY**
 - [x] `DavisKahan/FiniteDimensional` — 37 files, 12,512 lines — **blocked (34/37 files)**
-- [ ] `DavisKahan/Frontier` — 17 files, 10,582 lines — **blocked (0/17 files)**
+- [ ] `DavisKahan/Frontier` — 17 files, 10,583 lines — **blocked (0/17 files)**
 - [x] `DavisKahan/Geometry` — 34 files, 15,699 lines — **blocked (21/34 files)**
 - [ ] `DavisKahan/InfiniteDimensional` — 79 files, 18,239 lines — **blocked (0/79 files)**
 - [x] `DavisKahan/Interop` — 3 files, 82 lines — **READY**
@@ -65,7 +65,7 @@ review is exactly a review of a future submission unit.
 - [x] `DavisKahan/Sources/Davis1963` — 4 files, 604 lines — **READY**
 - [x] `DavisKahan/Sources/DavisKahan1970` — 139 files, 41,574 lines — **blocked (90/139 files)**
 - [x] `DavisKahan/Specialized` — 1 files, 10 lines — **READY**
-- [x] `DavisKahan/SpectralTheory` — 75 files, 23,272 lines — **blocked (50/75 files)**
+- [x] `DavisKahan/SpectralTheory` — 75 files, 23,273 lines — **blocked (50/75 files)**
 - [x] `DavisKahan/Sylvester` — 28 files, 6,888 lines — **blocked (27/28 files)**
 - [x] `DavisKahan/TanTheta` — 13 files, 6,712 lines — **blocked (7/13 files)**
 - [x] `DavisKahan/TanTwoTheta` — 5 files, 688 lines — **READY**
@@ -118,16 +118,16 @@ review is exactly a review of a future submission unit.
 - [ ] `ForTauCeti :: T25 The Hilbert-Schmidt Sylvester flow` — 6 files, 1,404 lines — **READY**
 - [ ] `ForTauCeti :: T26 Inner-product identities, linear isometries, Gram rigidity, orthogonal series, projection geometry, and reducing subspaces` — 6 files, 952 lines — **READY**
 - [ ] `ForTauCeti :: T26a Discrete spectra: compact self-adjoint operators classified by eigenspace dimensions, and the enumeration of an unbounded locally finite set` — 3 files, 1,158 lines — **blocked (0/3 files)**
-- [ ] `ForTauCeti :: T27 Measure classes, L-two transport, and the multiplicity normal form` — 10 files, 2,711 lines — **blocked (0/10 files)**
-- [ ] `ForTauCeti :: T28 Cyclic subspaces, the multiplication model, and Hahn-Hellinger existence` — 15 files, 4,472 lines — **blocked (0/15 files)**
+- [ ] `ForTauCeti :: T27 Measure classes, L-two transport, and the multiplicity normal form` — 10 files, 2,915 lines — **blocked (0/10 files)**
+- [ ] `ForTauCeti :: T28 Cyclic subspaces, the multiplication model, and Hahn-Hellinger existence` — 15 files, 4,926 lines — **blocked (0/15 files)**
 - [x] `ForTauCeti :: documentation` — 1 files, 141 lines — **READY**
 - [x] `Helm2025` — 4 files, 2,002 lines — **READY**
 - [x] `Helm2025 :: documentation` — 2 files, 683 lines — **READY**
 - [x] `Helm2025 :: other` — 1 files, 265 lines — **READY**
 - [ ] `RoadmapBridge` — 2 files, 297 lines — **blocked (0/2 files)**
 - [x] `comparator :: data/config` — 22 files, 318 lines — **READY**
-- [x] `dev :: data/config` — 42 files, 15,251 lines — **blocked (25/42 files)**
-- [x] `dev :: documentation` — 198 files, 42,399 lines — **blocked (158/198 files)**
+- [x] `dev :: data/config` — 42 files, 15,260 lines — **blocked (25/42 files)**
+- [x] `dev :: documentation` — 198 files, 42,394 lines — **blocked (158/198 files)**
 - [x] `dev :: manifest/notes` — 17 files, 219 lines — **blocked (8/17 files)**
 - [ ] `dev :: other` — 5 files, 715 lines — **blocked (0/5 files)**
 - [ ] `dev :: tooling` — 5 files, 1,374 lines — **blocked (0/5 files)**
