@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-1056/1463 files reviewed · 1463 files · 376,207 lines · 123 groups
+1056/1463 files reviewed · 1463 files · 376,873 lines · 123 groups
 
 ## How to review
 
@@ -396,7 +396,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/Frontier
 
-*17 files, 10,582 lines — 0/17 reviewed*
+*17 files, 10,583 lines — 0/17 reviewed*
 
 - [ ] `DavisKahan/Frontier/Section3.lean` — 3,189 lines · Lean source
 - [ ] `DavisKahan/Frontier/Section8Perturbation.lean` — 1,342 lines · Lean source
@@ -414,7 +414,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `DavisKahan/Frontier/Section8SourceSurface.lean` — 271 lines · Lean source
 - [ ] `DavisKahan/Frontier/Section8Audit.lean` — 179 lines · Lean source
 - [ ] `DavisKahan/Frontier/Core.lean` — 170 lines · Lean source
-- [ ] `DavisKahan/Frontier/All.lean` — 24 lines · Lean source
+- [ ] `DavisKahan/Frontier/All.lean` — 25 lines · Lean source
 
 ### DavisKahan/Geometry
 
@@ -820,7 +820,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/SpectralTheory
 
-*75 files, 23,272 lines — 50/75 reviewed*
+*75 files, 23,273 lines — 50/75 reviewed*
 
 - [ ] `DavisKahan/SpectralTheory/FormMethod/BeamSection9.lean` — 2,092 lines · Lean source
 - [ ] `DavisKahan/SpectralTheory/FormMethod/BeamClassicalReal.lean` — 1,331 lines · Lean source
@@ -895,7 +895,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/SpectralTheory/Real/ContinuousFunctionalCalculus.lean` — 20 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/Complexification/All.lean` — 16 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ClosedOperator/All.lean` — 15 lines · Lean source
-- [x] `DavisKahan/SpectralTheory/Real/All.lean` — 14 lines · Lean source
+- [x] `DavisKahan/SpectralTheory/Real/All.lean` — 15 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ReducingSubspace/All.lean` — 10 lines · Lean source
 
 ### DavisKahan/Sylvester
@@ -1525,38 +1525,38 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: T27 Measure classes, L-two transport, and the multiplicity normal form
 
-*10 files, 2,711 lines — 0/10 reviewed*
+*10 files, 2,915 lines — 0/10 reviewed*
 
-- [ ] `ForTauCeti/MeasureTheory/MultiplicityLevels.lean` — 550 lines · Lean source
+- [ ] `ForTauCeti/MeasureTheory/MultiplicityLevels.lean` — 560 lines · Lean source
 - [ ] `ForTauCeti/MeasureTheory/RadonNikodymL2.lean` — 439 lines · Lean source
 - [ ] `ForTauCeti/MeasureTheory/LpSliceSum.lean` — 347 lines · Lean source
+- [ ] `ForTauCeti/MeasureTheory/LpRealPart.lean` — 323 lines · Lean source
 - [ ] `ForTauCeti/MeasureTheory/LpRestrict.lean` — 304 lines · Lean source
-- [ ] `ForTauCeti/MeasureTheory/LpRealPart.lean` — 298 lines · Lean source
+- [ ] `ForTauCeti/Analysis/InnerProductSpace/OperatorUnitaryEquiv.lean` — 264 lines · Lean source
 - [ ] `ForTauCeti/MeasureTheory/LpComp.lean` — 262 lines · Lean source
 - [ ] `ForTauCeti/MeasureTheory/MeasureClass.lean` — 173 lines · Lean source
 - [ ] `ForTauCeti/MeasureTheory/LpInfiniteDimensional.lean` — 150 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/OperatorUnitaryEquiv.lean` — 95 lines · Lean source
 - [ ] `ForTauCeti/MeasureTheory/LpStar.lean` — 93 lines · Lean source
 
 ### ForTauCeti :: T28 Cyclic subspaces, the multiplication model, and Hahn-Hellinger existence
 
-*15 files, 4,472 lines — 0/15 reviewed*
+*15 files, 4,926 lines — 0/15 reviewed*
 
+- [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/MultiplicityModel.lean` — 638 lines · Lean source
+- [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/MultiplicityModelReal.lean` — 611 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Restriction.lean` — 572 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/MultiplicityModel.lean` — 526 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/CyclicModel.lean` — 449 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/AlmostInvariant.lean` — 418 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/MultiplicityModelReal.lean` — 347 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/CyclicDecomposition.lean` — 335 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/RealSpectrumIntertwining.lean` — 300 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/RealSpectrumDiagonalMeasure.lean` — 278 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/RealSpectrumBorelSymbols.lean` — 254 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/RealSpectrumCyclicDecomposition.lean` — 205 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/SeparableCyclic.lean` — 204 lines · Lean source
+- [ ] `ForTauCeti/Analysis/InnerProductSpace/HilbertSumIntertwine.lean` — 179 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/RealSpectrumCyclicModel.lean` — 172 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagMeasureNatural.lean` — 164 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/CyclicIsometry.lean` — 147 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/HilbertSumIntertwine.lean` — 101 lines · Lean source
 
 ### ForTauCeti :: documentation
 
@@ -1622,10 +1622,10 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: data/config
 
-*42 files, 15,251 lines — 25/42 reviewed*
+*42 files, 15,260 lines — 25/42 reviewed*
 
 - [x] `dev/tauceti/extraction-manifest.json` — 4,544 lines · data/config
-- [x] `dev/davis-kahan-1970-full-source-census.json` — 1,771 lines · data/config
+- [x] `dev/davis-kahan-1970-full-source-census.json` — 1,780 lines · data/config
 - [x] `dev/davis-kahan-1970-frontier.json` — 1,252 lines · data/config
 - [x] `dev/davis-kahan-hidden-foundations.json` — 930 lines · data/config
 - [x] `dev/upstream-extraction/spectra-usage-inventory-650b0e3.json` — 908 lines · data/config
@@ -1669,10 +1669,10 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*198 files, 42,397 lines — 158/198 reviewed*
+*198 files, 42,394 lines — 158/198 reviewed*
 
-- [x] `dev/davis-kahan-1970-full-source-census.md` — 3,312 lines · documentation
-- [x] `dev/audit/FILE-CHECKLIST.md` — 2,110 lines · documentation
+- [x] `dev/davis-kahan-1970-full-source-census.md` — 3,307 lines · documentation
+- [x] `dev/audit/FILE-CHECKLIST.md` — 2,112 lines · documentation
 - [x] `dev/davis-kahan-expert-completion-plan.md` — 1,589 lines · documentation
 - [ ] `dev/hilbert-space-operator-roadmap/glossary.md` — 1,519 lines · documentation
 - [x] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation

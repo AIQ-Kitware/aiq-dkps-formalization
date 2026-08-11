@@ -475,14 +475,22 @@ antitone.
 The two moves are domination -- every member becomes a restriction of one finite measure, up to
 measure class, so the Radon--Nikodym unitary applies -- and the fibrewise relabelling
 `(x, n) ↦ (x, rank S x n)`, which fixes the first coordinate and so commutes with multiplication
-by any symbol pulled back along `Prod.fst`. -/
+by any symbol pulled back along `Prod.fst`.
+
+**The unitary is `star`-equivariant**, and that is recorded in the conclusion rather than left to
+a second existential.  Both moves are, and the equivariance is
+`TauCeti.star_rnDerivL2Equiv` and `TauCeti.star_compLp` respectively -- the Radon--Nikodym
+density is a nonnegative *real* function, so conjugation passes through it, and composition with
+a point map commutes with pointwise conjugation outright.  A separate existential would be
+useless here: `OperatorUnitaryEquiv` forgets its witness, so a second statement about "the"
+unitary could not be paired with this one. -/
 theorem exists_multiplicityLevels (μ : ℕ → Measure X) [∀ n, IsFiniteMeasure (μ n)]
     {g : X → ℂ} (hg : Measurable g) {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) :
     ∃ (ρ : Measure X) (D : ℕ → Set X), IsFiniteMeasure ρ ∧ (∀ k, MeasurableSet (D k)) ∧
       Antitone D ∧
       (∀ N : Set X, MeasurableSet N → (∀ n, μ n N = 0) → ρ N = 0) ∧
       ρ (D 0)ᶜ = 0 ∧
-      OperatorUnitaryEquiv
+      StarOperatorUnitaryEquiv star star
         (mulLp (sliceSum μ) (hg.comp measurable_fst) (fun p => hgC p.1))
         (mulLp (sliceSum fun k => ρ.restrict (D k)) (hg.comp measurable_fst)
           (fun p => hgC p.1)) := by
@@ -505,12 +513,13 @@ theorem exists_multiplicityLevels (μ : ℕ → Measure X) [∀ n, IsFiniteMeasu
   have heq : MeasureEquiv (sliceSum μ)
       (sliceSum fun n => (dominatingMeasure μ).restrict (S n)) :=
     measureEquiv_sliceSum hSequiv
-  have step1 : OperatorUnitaryEquiv
+  have step1 : StarOperatorUnitaryEquiv star star
       (mulLp (sliceSum μ) (hg.comp measurable_fst) (fun p => hgC p.1))
       (mulLp (sliceSum fun n => (dominatingMeasure μ).restrict (S n))
         (hg.comp measurable_fst) (fun p => hgC p.1)) :=
-    operatorUnitaryEquiv_of_intertwines (rnDerivL2Equiv heq.1 heq.2)
-      fun F => rnDerivL2Equiv_mulLp heq.1 heq.2 (hg.comp measurable_fst) (fun p => hgC p.1) F
+    starOperatorUnitaryEquiv_of_intertwines (rnDerivL2Equiv heq.1 heq.2)
+      (fun F => rnDerivL2Equiv_mulLp heq.1 heq.2 (hg.comp measurable_fst) (fun p => hgC p.1) F)
+      fun F => (star_rnDerivL2Equiv heq.1 heq.2 F).symm
   have hmap : Measure.map (rankMap S)
       (sliceSum fun n => (dominatingMeasure μ).restrict (S n))
       = sliceSum fun k => (dominatingMeasure μ).restrict (levelSet S k) :=
@@ -534,14 +543,15 @@ theorem exists_multiplicityLevels (μ : ℕ → Measure X) [∀ n, IsFiniteMeasu
     refine ⟨measurable_rankInv hSmeas, ?_⟩
     rw [← hmap, Measure.map_map (measurable_rankInv hSmeas) (measurable_rankMap hSmeas)]
     exact (Measure.map_congr hgf).trans Measure.map_id
-  have step2 : OperatorUnitaryEquiv
+  have step2 : StarOperatorUnitaryEquiv star star
       (mulLp (sliceSum fun n => (dominatingMeasure μ).restrict (S n))
         (hg.comp measurable_fst) (fun p => hgC p.1))
       (mulLp (sliceSum fun k => (dominatingMeasure μ).restrict (levelSet S k))
         (hg.comp measurable_fst) (fun p => hgC p.1)) :=
-    operatorUnitaryEquiv_of_intertwines
+    starOperatorUnitaryEquiv_of_intertwines
       (compLpEquiv (rankInv S) (rankMap S) hpres' hpres hfg hgf)
-      fun F => compLp_mulLp hpres' (hg.comp measurable_fst) (fun p => hgC p.1) F
+      (fun F => compLp_mulLp hpres' (hg.comp measurable_fst) (fun p => hgC p.1) F)
+      fun F => (star_compLp hpres' F).symm
   exact step1.trans step2
 
 end NormalForm

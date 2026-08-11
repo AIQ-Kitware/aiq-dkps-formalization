@@ -9,5 +9,6 @@ import DavisKahan.SpectralTheory.Real.SpectralRestriction
 import DavisKahan.SpectralTheory.Real.BoundedAlmostInvariant
 import DavisKahan.SpectralTheory.Real.SpectralCutoff
 import DavisKahan.SpectralTheory.Real.RealCyclicDecomposition
+import DavisKahan.SpectralTheory.Real.RealMultiplicityModel
 
 /-! # `DavisKahan/SpectralTheory/Real` -/
