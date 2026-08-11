@@ -7,6 +7,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Geometry.Polar.Section3Elementary
 import DavisKahan.Geometry.Polar.PolarIsometryFinal
 import DavisKahan.Geometry.Polar.PolarIntertwining
+import ForTauCeti.Analysis.Normed.Operator.LinearIsometry
 
 /-!
 # Nonacute direct rotations from crossed-defect data
@@ -123,6 +124,27 @@ noncomputable def crossedDefectQuarterTurn
 
 omit [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
   [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
+@[simp]
+private theorem ofEq_orthogonalProjectionOnto
+    {K L : Submodule 𝕜 H} [K.HasOrthogonalProjection]
+    [L.HasOrthogonalProjection] (h : K = L) (x : H) :
+    LinearIsometryEquiv.ofEq K L h (K.orthogonalProjectionOnto x) =
+      L.orthogonalProjectionOnto x := by
+  subst L
+  rfl
+
+/-- The same crossed-defect identification for the reversed ordered pair.
+The two defect spaces exchange roles, so reversal uses the inverse isometry. -/
+noncomputable def swapCrossedDefectEquiv
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    halmosSourceDefect V U ≃ₗᵢ[𝕜] halmosTargetDefect V U :=
+  ((LinearIsometryEquiv.ofEq _ _ (by
+      simp only [halmosSourceDefect, halmosTargetDefect, inf_comm])).trans J.symm).trans
+    (LinearIsometryEquiv.ofEq _ _ (by
+      simp only [halmosSourceDefect, halmosTargetDefect, inf_comm]))
+
+omit [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
+  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
 /-- The crossed defect map on a source vector. -/
 @[simp]
 theorem sourceToTargetDefect_apply_source
@@ -236,6 +258,19 @@ theorem star_crossedDefectQuarterTurn
     rw [← star_sourceToTargetDefect U V J, star_star]
   rw [h2]
   abel
+
+omit [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
+  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
+/-- Reversing the ordered pair and the chosen crossed-defect isometry negates
+the defect quarter turn. -/
+theorem crossedDefectQuarterTurn_swap
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    crossedDefectQuarterTurn V U (swapCrossedDefectEquiv U V J) =
+      -crossedDefectQuarterTurn U V J := by
+  apply ContinuousLinearMap.ext
+  intro x
+  simp [crossedDefectQuarterTurn, sourceToTargetDefect, targetToSourceDefect,
+    swapCrossedDefectEquiv, halmosSourceDefect, halmosTargetDefect]
 
 omit [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
   [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
@@ -740,6 +775,16 @@ noncomputable def nonacuteDirectRotation
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     H →L[𝕜] H :=
   spectraCanonicalPolarFactor U V + crossedDefectQuarterTurn U V J
+
+/-- Reversing the ordered pair sends the completed direct rotation to its
+adjoint when the crossed-defect choice is reversed. -/
+theorem nonacuteDirectRotation_swap
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    nonacuteDirectRotation V U (swapCrossedDefectEquiv U V J) =
+      star (nonacuteDirectRotation U V J) := by
+  rw [nonacuteDirectRotation, nonacuteDirectRotation, star_add,
+    canonicalPolarFactor_adjoint_swap_from_polar U V,
+    crossedDefectQuarterTurn_swap U V J, star_crossedDefectQuarterTurn U V J]
 
 /-- Initial projection identity for the nonacute rotation. -/
 theorem star_nonacuteDirectRotation_mul_self
