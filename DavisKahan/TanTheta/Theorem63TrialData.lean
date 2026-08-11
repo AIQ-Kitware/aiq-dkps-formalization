@@ -232,73 +232,98 @@ omit [CompleteSpace H] in
 theorem inclCLM_coe {F Z : Submodule ℂ H} (hFZ : F ≤ Z) (x : F) :
     ((inclCLM hFZ x : Z) : H) = ((x : F) : H) := rfl
 
-/-- The trial-block data restricted to a subspace of the trial space. -/
-noncomputable def restrict (data : Theorem63TrialData Z V)
-    (F : Submodule ℂ H) (hFZ : F ≤ Z) [F.HasOrthogonalProjection] :
-    Theorem63TrialData F V where
-  action := data.action ∘L inclCLM hFZ
-  compression := F.orthogonalProjectionOnto ∘L data.action ∘L inclCLM hFZ
-  residual := data.action ∘L inclCLM hFZ -
-    F.subtypeL ∘L (F.orthogonalProjectionOnto ∘L data.action ∘L inclCLM hFZ)
+/-- **Trial-block data from a bounded symmetric action on the trial subspace.**
+
+The compression and the residual are not extra data: they are the trial projection of the
+action and its complementary part.  Everything the bundle asks for is then a consequence
+of the action being symmetric on the trial subspace.
+
+This is the constructor the ambient operator never appears in, so it is the one an
+unbounded ambient operator — or an unbounded Ritz compression truncated to a reducing
+subspace — can use. -/
+noncomputable def ofAction (Z V : Submodule ℂ H)
+    [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (act : Z →L[ℂ] H)
+    (hsym : ∀ z z' : Z, ⟪act z, ((z' : Z) : H)⟫_ℂ = ⟪((z : Z) : H), act z'⟫_ℂ) :
+    Theorem63TrialData Z V where
+  action := act
+  compression := Z.orthogonalProjectionOnto ∘L act
+  residual := act - Z.subtypeL ∘L (Z.orthogonalProjectionOnto ∘L act)
   compression_isSymmetric := by
     intro x y
-    have hx : ⟪(F.orthogonalProjectionOnto (data.action (inclCLM hFZ x)) : F), y⟫_ℂ =
-        ⟪data.action (inclCLM hFZ x), ((y : F) : H)⟫_ℂ := by
+    have hx : ⟪(Z.orthogonalProjectionOnto (act x) : Z), y⟫_ℂ =
+        ⟪act x, ((y : Z) : H)⟫_ℂ := by
       rw [Submodule.coe_inner]
-      have hc : ((F.orthogonalProjectionOnto (data.action (inclCLM hFZ x)) : F) : H) =
-          F.starProjection (data.action (inclCLM hFZ x)) := rfl
-      rw [hc, F.inner_starProjection_left_eq_right,
+      have hc : ((Z.orthogonalProjectionOnto (act x) : Z) : H) =
+          Z.starProjection (act x) := rfl
+      rw [hc, Z.inner_starProjection_left_eq_right,
         Submodule.starProjection_eq_self_iff.mpr y.2]
-    have hy : ⟪x, (F.orthogonalProjectionOnto (data.action (inclCLM hFZ y)) : F)⟫_ℂ =
-        ⟪((x : F) : H), data.action (inclCLM hFZ y)⟫_ℂ := by
+    have hy : ⟪x, (Z.orthogonalProjectionOnto (act y) : Z)⟫_ℂ =
+        ⟪((x : Z) : H), act y⟫_ℂ := by
       rw [Submodule.coe_inner]
-      have hc : ((F.orthogonalProjectionOnto (data.action (inclCLM hFZ y)) : F) : H) =
-          F.starProjection (data.action (inclCLM hFZ y)) := rfl
-      rw [hc, ← F.inner_starProjection_left_eq_right,
+      have hc : ((Z.orthogonalProjectionOnto (act y) : Z) : H) =
+          Z.starProjection (act y) := rfl
+      rw [hc, ← Z.inner_starProjection_left_eq_right,
         Submodule.starProjection_eq_self_iff.mpr x.2]
-    have hmid : ⟪data.action (inclCLM hFZ x), ((y : F) : H)⟫_ℂ =
-        ⟪((x : F) : H), data.action (inclCLM hFZ y)⟫_ℂ := by
-      have h1 : ⟪data.action (inclCLM hFZ x), ((y : F) : H)⟫_ℂ =
-          ⟪data.compression (inclCLM hFZ x), inclCLM hFZ y⟫_ℂ := by
-        rw [data.action_eq (inclCLM hFZ x), inner_add_left]
-        have hres := data.residual_orthogonal (inclCLM hFZ x) (inclCLM hFZ y)
-        rw [inclCLM_coe] at hres
-        rw [hres, add_zero, Submodule.coe_inner]
-        rfl
-      have h2 : ⟪((x : F) : H), data.action (inclCLM hFZ y)⟫_ℂ =
-          ⟪inclCLM hFZ x, data.compression (inclCLM hFZ y)⟫_ℂ := by
-        rw [data.action_eq (inclCLM hFZ y), inner_add_right]
-        have hres := data.inner_residual_left (inclCLM hFZ y) (inclCLM hFZ x)
-        rw [inclCLM_coe] at hres
-        rw [hres, add_zero, Submodule.coe_inner]
-        rfl
-      rw [h1, h2]
-      exact data.compression_isSymmetric _ _
     calc
-      ⟪((F.orthogonalProjectionOnto ∘L data.action ∘L inclCLM hFZ) x : F), y⟫_ℂ =
-          ⟪data.action (inclCLM hFZ x), ((y : F) : H)⟫_ℂ := hx
-      _ = ⟪((x : F) : H), data.action (inclCLM hFZ y)⟫_ℂ := hmid
-      _ = ⟪x, ((F.orthogonalProjectionOnto ∘L data.action ∘L inclCLM hFZ) y : F)⟫_ℂ :=
-        hy.symm
+      ⟪((Z.orthogonalProjectionOnto ∘L act) x : Z), y⟫_ℂ =
+          ⟪act x, ((y : Z) : H)⟫_ℂ := hx
+      _ = ⟪((x : Z) : H), act y⟫_ℂ := hsym x y
+      _ = ⟪x, ((Z.orthogonalProjectionOnto ∘L act) y : Z)⟫_ℂ := hy.symm
   action_eq := fun z => by
     simp only [ContinuousLinearMap.comp_apply, sub_apply]
-    have hc : ((F.orthogonalProjectionOnto (data.action (inclCLM hFZ z)) : F) : H) =
-        F.starProjection (data.action (inclCLM hFZ z)) := rfl
-    change data.action (inclCLM hFZ z) =
-      F.starProjection (data.action (inclCLM hFZ z)) +
-        (data.action (inclCLM hFZ z) -
-          F.starProjection (data.action (inclCLM hFZ z)))
+    have hc : ((Z.orthogonalProjectionOnto (act z) : Z) : H) =
+        Z.starProjection (act z) := rfl
+    change act z =
+      Z.starProjection (act z) + (act z - Z.starProjection (act z))
     abel
   residual_orthogonal := fun z z' => by
     simp only [ContinuousLinearMap.comp_apply, sub_apply]
-    change ⟪data.action (inclCLM hFZ z) -
-        F.starProjection (data.action (inclCLM hFZ z)), ((z' : F) : H)⟫_ℂ = 0
-    have hmem : data.action (inclCLM hFZ z) -
-        F.starProjection (data.action (inclCLM hFZ z)) ∈ Fᗮ := by
-      have h := Submodule.sub_starProjection_mem_orthogonal
-        (K := F) (data.action (inclCLM hFZ z))
-      exact h
-    exact Submodule.inner_left_of_mem_orthogonal z'.2 hmem
+    change ⟪act z - Z.starProjection (act z), ((z' : Z) : H)⟫_ℂ = 0
+    exact Submodule.inner_left_of_mem_orthogonal z'.2
+      (Submodule.sub_starProjection_mem_orthogonal (K := Z) (act z))
+
+omit [CompleteSpace H] in
+/-- The action of `ofAction` is the supplied action. -/
+@[simp] theorem ofAction_action (Z V : Submodule ℂ H)
+    [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (act : Z →L[ℂ] H)
+    (hsym : ∀ z z' : Z, ⟪act z, ((z' : Z) : H)⟫_ℂ = ⟪((z : Z) : H), act z'⟫_ℂ) :
+    (ofAction Z V act hsym).action = act := rfl
+
+omit [CompleteSpace H] in
+/-- The residual of `ofAction` is the complementary part of the action. -/
+theorem ofAction_residual_apply (Z V : Submodule ℂ H)
+    [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (act : Z →L[ℂ] H)
+    (hsym : ∀ z z' : Z, ⟪act z, ((z' : Z) : H)⟫_ℂ = ⟪((z : Z) : H), act z'⟫_ℂ)
+    (z : Z) :
+    (ofAction Z V act hsym).residual z = act z - Z.starProjection (act z) := rfl
+
+/-- The trial-block data restricted to a subspace of the trial space. -/
+noncomputable def restrict (data : Theorem63TrialData Z V)
+    (F : Submodule ℂ H) (hFZ : F ≤ Z) [F.HasOrthogonalProjection] :
+    Theorem63TrialData F V :=
+  ofAction F V (data.action ∘L inclCLM hFZ) (by
+    intro x y
+    have h1 : ⟪data.action (inclCLM hFZ x), ((y : F) : H)⟫_ℂ =
+        ⟪data.compression (inclCLM hFZ x), inclCLM hFZ y⟫_ℂ := by
+      rw [data.action_eq (inclCLM hFZ x), inner_add_left]
+      have hres := data.residual_orthogonal (inclCLM hFZ x) (inclCLM hFZ y)
+      rw [inclCLM_coe] at hres
+      rw [hres, add_zero, Submodule.coe_inner]
+      rfl
+    have h2 : ⟪((x : F) : H), data.action (inclCLM hFZ y)⟫_ℂ =
+        ⟪inclCLM hFZ x, data.compression (inclCLM hFZ y)⟫_ℂ := by
+      rw [data.action_eq (inclCLM hFZ y), inner_add_right]
+      have hres := data.inner_residual_left (inclCLM hFZ y) (inclCLM hFZ x)
+      rw [inclCLM_coe] at hres
+      rw [hres, add_zero, Submodule.coe_inner]
+      rfl
+    change ⟪data.action (inclCLM hFZ x), ((y : F) : H)⟫_ℂ =
+      ⟪((x : F) : H), data.action (inclCLM hFZ y)⟫_ℂ
+    rw [h1, h2]
+    exact data.compression_isSymmetric _ _)
 
 omit [CompleteSpace H] in
 /-- The restricted action, applied. -/
