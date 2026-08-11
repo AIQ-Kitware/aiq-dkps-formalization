@@ -73,8 +73,8 @@ theorem proposition3_5_directRotation_resolution (hacute : TauCeti.IsAcute U V) 
 In the acute case `Theta` commutes with `P`, `Q`, the quarter turn `J`, and the
 direct rotation `W`. -/
 theorem proposition3_5_commutations (hacute : TauCeti.IsAcute U V) :
-    Commute (proposition3_5_angleOperator U V) (projection U : H →L[𝕜] H) ∧
-      Commute (proposition3_5_angleOperator U V) (projection V : H →L[𝕜] H) ∧
+    Commute (proposition3_5_angleOperator U V) (TauCeti.DavisKahan.projection U) ∧
+      Commute (proposition3_5_angleOperator U V) (TauCeti.DavisKahan.projection V) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_quarterTurn U V) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_directRotation U V) :=
   ⟨section3AngleOperator_comm_projection U V,
