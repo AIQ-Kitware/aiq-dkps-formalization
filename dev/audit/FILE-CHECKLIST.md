@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-1056/1450 files reviewed · 1450 files · 370,456 lines · 123 groups
+1056/1451 files reviewed · 1451 files · 371,284 lines · 123 groups
 
 ## How to review
 
@@ -814,7 +814,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/SpectralTheory
 
-*72 files, 22,275 lines — 50/72 reviewed*
+*72 files, 22,276 lines — 50/72 reviewed*
 
 - [ ] `DavisKahan/SpectralTheory/FormMethod/BeamSection9.lean` — 2,092 lines · Lean source
 - [ ] `DavisKahan/SpectralTheory/FormMethod/BeamClassicalReal.lean` — 1,331 lines · Lean source
@@ -886,7 +886,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/SpectralTheory/Real/ContinuousFunctionalCalculus.lean` — 20 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/Complexification/All.lean` — 16 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ClosedOperator/All.lean` — 15 lines · Lean source
-- [x] `DavisKahan/SpectralTheory/Real/All.lean` — 11 lines · Lean source
+- [x] `DavisKahan/SpectralTheory/Real/All.lean` — 12 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ReducingSubspace/All.lean` — 10 lines · Lean source
 
 ### DavisKahan/Sylvester
@@ -924,10 +924,11 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/TanTheta
 
-*12 files, 5,852 lines — 7/12 reviewed*
+*13 files, 6,679 lines — 7/13 reviewed*
 
 - [x] `DavisKahan/TanTheta/Theorem63FiniteSource.lean` — 1,212 lines · Lean source
 - [ ] `DavisKahan/TanTheta/Theorem63InfiniteTrial.lean` — 912 lines · Lean source
+- [ ] `DavisKahan/TanTheta/Theorem63UnboundedCompression.lean` — 827 lines · Lean source
 - [ ] `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean` — 666 lines · Lean source
 - [ ] `DavisKahan/TanTheta/Theorem63TrialData.lean` — 580 lines · Lean source
 - [ ] `DavisKahan/TanTheta/Theorem63Unbounded.lean` — 517 lines · Lean source
