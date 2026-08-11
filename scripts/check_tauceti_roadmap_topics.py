@@ -201,7 +201,14 @@ TOPICS: list[tuple[str, str, list[str]]] = [
                                # infinitely many disjoint positive-finite sets is infinite
                                # dimensional, and the unit-interval instance.  Same `Lp`
                                # structure family as `LpComp`/`LpRestrict`.
-                               "LpInfiniteDimensional"]]
+                               "LpInfiniteDimensional",
+                               # Added 2026-08-11 with the module: the `star`-fixed part of
+                               # `Lp K p mu` as an `R`-linear isometry copy of `Lp R p mu`,
+                               # plus the `star` algebra `Lp` lacks (Mathlib gives it no
+                               # `StarAddMonoid`).  Imports Mathlib only, so it sorts to the
+                               # front of this topic and creates no forward reference.  Same
+                               # `Lp` structure family as `LpComp`/`LpRestrict`.
+                               "LpRealPart"]]
  # `OperatorUnitaryEquiv` is Hilbert-space material by subject and would sit in T28 -- but
  # `MultiplicityLevels` states its conclusion as a unitary equivalence of multiplication
  # operators and so imports it, and filing it downstream would make this topic unsubmittable.
