@@ -25,9 +25,8 @@ Section 1 does make three claims, and this file gives them the paper's numbering
 The first two are already compiled; this file supplies the source names.  The third is proved
 here, in the quadratic form the paper uses it in: for `u ∈ Pℋ`, `P(Hu)` is `E₀H₀u` and
 `P̃(Hu)` is `E₁Bu`, and both isometries preserve norms, so
-`‖Ru‖² = ‖H₀u‖² + ‖Bu‖²` is exactly the printed operator identity read at `u`.  Over `ℂ` a
-self-adjoint operator is determined by its quadratic form, so nothing is lost by stating it
-this way, and the coordinate isometries `E₀, E₁` are not needed.
+`‖Ru‖² = ‖H₀u‖² + ‖Bu‖²` is exactly the printed operator identity read at `u`.  The norm-square formulation is scalar-generic over `RCLike`, and the coordinate
+isometries `E₀, E₁` are unnecessary for the source identity.
 
 The residual identities live upstream in `DavisKahan/Frontier/Section8Residual.lean`, where
 Theorem 8.2's residual branch consumes them; they are cited by `:=` here rather than
@@ -43,7 +42,8 @@ universe u
 
 section Residual
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
 
 /-- **Davis--Kahan 1970, equation (1.8): the residual.**
 
@@ -68,20 +68,20 @@ alias equation1_8_eq_perturbation_comp :=
 
 /-- **Davis--Kahan 1970, Section 1: `R⋆R = H₀² + B⋆B`.**
 
-Stated as the quadratic form of that operator identity, which over `ℂ` carries the same
-information: `P(Ku)` is the paper's `E₀H₀u` and `Pᗮ(Ku)` is its `E₁Bu`, and `E₀`, `E₁` are
+Stated as the quadratic form of that operator identity, in a form valid over every
+`RCLike` scalar field: `P(Ku)` is the paper's `E₀H₀u` and `Pᗮ(Ku)` is its `E₁Bu`, and `E₀`, `E₁` are
 isometries.  Once `R = KE₀` is known (`equation1_8_eq_perturbation_comp`) this is the
 Pythagorean splitting of `Ku` along `Pℋ ⊕ P̃ℋ`.  The printed identity writes `H₀²` rather
 than `H₀⋆H₀` because `H₀ = E₀⋆HE₀` is a compression of the self-adjoint `H` and so is itself
 self-adjoint; the statement here is in norms, which needs no such hypothesis, and `K` is
 accordingly an arbitrary bounded operator. -/
 theorem equation1_8_norm_sq_eq_diagonal_add_offDiagonal
-    (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
+    (A K : H →L[𝕜] H) (P : Submodule 𝕜 H) [P.HasOrthogonalProjection]
     (hPinv : ∀ x ∈ P, A x ∈ P) (u : P) :
     ‖DavisKahan.residual (A + K) P.subtypeL
         (DavisKahanExt.compressOperator P A) u‖ ^ 2 =
       ‖P.starProjection (K (u : H))‖ ^ 2 + ‖Pᗮ.starProjection (K (u : H))‖ ^ 2 := by
-  have hR := congrArg (fun T : P →L[ℂ] H => T u)
+  have hR := congrArg (fun T : P →L[𝕜] H => T u)
     (DavisKahan.Experimental.Frontier.Section8.residual_eq_comp_subtypeL A K P hPinv)
   have hRu : DavisKahan.residual (A + K) P.subtypeL
       (DavisKahanExt.compressOperator P A) u = K (u : H) := hR
@@ -91,15 +91,10 @@ theorem equation1_8_norm_sq_eq_diagonal_add_offDiagonal
 /-- **Davis--Kahan 1970, Section 1: the off-diagonal block is never larger than the
 residual**, and equals it exactly when the diagonal block vanishes.
 
-This is the mechanism behind the printed remark that "the size of `R` is minimized when `H₀`
-is taken to be zero", which is what makes `A₀ = E₀⋆(A + H)E₀` -- the `m × m` generalization
-of the Rayleigh quotient -- a good choice for the numerical analyst.  It is not that remark
-verbatim: the printed one quantifies over choices of `A₀`, whereas `A₀` is fixed here at the
-unperturbed compression and the comparison is made pointwise, with equality at `u` exactly
-when the diagonal block kills `u`.  Ranging over `A₀` would require the trial operator to be
-a variable of the statement, which the residual's compiled signature does not make it. -/
+This is the pointwise block estimate used by the source minimization statement below.
+Equality at `u` holds exactly when the diagonal block kills `u`. -/
 theorem equation1_8_norm_offDiagonal_le
-    (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
+    (A K : H →L[𝕜] H) (P : Submodule 𝕜 H) [P.HasOrthogonalProjection]
     (hPinv : ∀ x ∈ P, A x ∈ P) (u : P) :
     ‖Pᗮ.starProjection (K (u : H))‖ ≤
         ‖DavisKahan.residual (A + K) P.subtypeL
@@ -129,6 +124,40 @@ theorem equation1_8_norm_offDiagonal_le
       ring
     have := congrArg Real.sqrt hsq
     rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)] at this
+
+
+/-- **Davis--Kahan 1970, Section 1: the Rayleigh-quotient choice minimizes the
+residual norm.**
+
+For every trial operator `A₀` on `P`, the residual obtained from the compression
+`P(A+H)|P` has no larger operator norm.  This is the printed conclusion drawn
+from `R⋆R = H₀² + B⋆B`: choosing `H₀ = 0`, equivalently
+`A₀ = E₀⋆(A+H)E₀`, minimizes the size of `R`. -/
+theorem equation1_8_residual_norm_minimized_by_rayleighQuotient
+    (T : H →L[𝕜] H) (P : Submodule 𝕜 H) [P.HasOrthogonalProjection]
+    (A₀ : P →L[𝕜] P) :
+    ‖DavisKahan.residual T P.subtypeL (DavisKahanExt.compressOperator P T)‖ ≤
+      ‖DavisKahan.residual T P.subtypeL A₀‖ := by
+  let R := DavisKahan.residual T P.subtypeL A₀
+  have hfactor :
+      DavisKahan.residual T P.subtypeL (DavisKahanExt.compressOperator P T) =
+        Pᗮ.starProjection ∘L R := by
+    apply ContinuousLinearMap.ext
+    intro u
+    change T (u : H) - P.starProjection (T (u : H)) =
+      Pᗮ.starProjection (T (u : H) - (A₀ u : H))
+    rw [map_sub]
+    have hzero : Pᗮ.starProjection (A₀ u : H) = 0 :=
+      (Submodule.starProjection_apply_eq_zero_iff Pᗮ).mpr
+        (P.le_orthogonal_orthogonal (A₀ u).property)
+    rw [hzero, sub_zero, Submodule.starProjection_orthogonal_apply]
+  rw [hfactor]
+  calc
+    ‖Pᗮ.starProjection ∘L R‖ ≤ ‖Pᗮ.starProjection‖ * ‖R‖ :=
+      ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ 1 * ‖R‖ :=
+      mul_le_mul_of_nonneg_right Pᗮ.starProjection_norm_le (norm_nonneg R)
+    _ = ‖R‖ := one_mul _
 
 end Residual
 

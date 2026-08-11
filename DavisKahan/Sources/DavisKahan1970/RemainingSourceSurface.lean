@@ -16,6 +16,7 @@ import DavisKahan.TanTheta.Theorem63Unbounded
 import DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+import ForTauCeti.Analysis.Normed.Operator.PartialSylvesterBoundedInverse
 
 /-!
 # Remaining source-level endpoint signatures
@@ -74,6 +75,13 @@ structure BoundedLeftInverseData (A : Y →L[ℂ] Y) (c : ℝ) where
   comp_eq_id : leftInverse ∘L A = ContinuousLinearMap.id ℂ Y
   norm_le : ‖leftInverse‖ ≤ c
 
+/-- An explicit bounded right inverse with a reciprocal norm bound, used by the
+source's symmetric form of Theorem 5.1. -/
+structure BoundedRightInverseData (B : X →L[ℂ] X) (c : ℝ) where
+  rightInverse : X →L[ℂ] X
+  comp_eq_id : B ∘L rightInverse = ContinuousLinearMap.id ℂ X
+  norm_le : ‖rightInverse‖ ≤ c
+
 namespace CompatibleCrossOperatorNorm
 
 /-- The compatible norm vanishes at the zero operator. -/
@@ -130,6 +138,27 @@ theorem comp_left_le_mul (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
       mul_le_mul_of_nonneg_left ContinuousLinearMap.norm_id_le
         (mul_nonneg (norm_nonneg L) (N.nonneg T))
     _ = ‖L‖ * N T := by ring
+
+/-- A compatible cross-operator norm is invariant under negation. -/
+theorem map_neg (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
+    (T : X →L[ℂ] Y) : N (-T) = N T := by
+  have h := N.smul (-1) T
+  simpa using h
+
+/-- One-sided right ideal estimate. -/
+theorem comp_right_le_mul (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
+    (T : X →L[ℂ] Y) (R : X →L[ℂ] X) :
+    N (T ∘L R) ≤ N T * ‖R‖ := by
+  have h := comp_le_mul N (ContinuousLinearMap.id ℂ Y) T R
+  have hid : ‖ContinuousLinearMap.id ℂ Y‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+  calc
+    N (T ∘L R) = N ((ContinuousLinearMap.id ℂ Y) ∘L T ∘L R) := by
+      rw [ContinuousLinearMap.id_comp]
+    _ ≤ ‖ContinuousLinearMap.id ℂ Y‖ * N T * ‖R‖ := h
+    _ ≤ 1 * N T * ‖R‖ :=
+      mul_le_mul_of_nonneg_right
+        (mul_le_mul_of_nonneg_right hid (N.nonneg T)) (norm_nonneg R)
+    _ = N T * ‖R‖ := by ring
 
 end CompatibleCrossOperatorNorm
 
@@ -198,6 +227,50 @@ theorem theorem5_1_banach_sylvester
         rw [mul_inv_cancel₀ hgd.ne']; ring
   rw [hnormalize] at hscaled
   nlinarith
+
+
+/-- **Davis--Kahan 1970, Theorem 5.1 with the roles of `A` and `B`
+interchanged.**
+
+This is the printed symmetry remark following Theorem 5.1.  The left block is
+bounded by `gamma`, the right block has a bounded right inverse of norm at most
+`(gamma + delta)⁻¹`, and the same compatible-norm conclusion follows. -/
+theorem theorem5_1_banach_sylvester_interchanged
+    (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
+    (A : Y →L[ℂ] Y) (B : X →L[ℂ] X)
+    (T C : X →L[ℂ] Y) {gamma delta : ℝ}
+    (hgamma : 0 ≤ gamma) (hdelta : 0 < delta)
+    (hA : ‖A‖ ≤ gamma)
+    (hright : BoundedRightInverseData B (gamma + delta)⁻¹)
+    (hEq : A ∘L T - T ∘L B = C) :
+    delta * N T ≤ N C :=
+  TauCeti.ContinuousLinearMap.opNorm_le_of_sylvester_of_rightInverse
+    N.triangle N.map_neg
+    (fun L S => N.comp_left_le_mul L S)
+    (fun S R => N.comp_right_le_mul S R)
+    N.nonneg hright.comp_eq_id hgamma hdelta hright.norm_le hA hEq
+
+/-- **Davis--Kahan 1970, Theorem 5.1 with an unbounded left block.**
+
+The partial operator `A` has the dense domain stated in the paper and an
+everywhere-defined bounded inverse.  The bounded maps `T` and `C` satisfy the
+Sylvester equation on that domain.  The conclusion is the same compatible-norm
+bound as in the bounded theorem. -/
+theorem theorem5_1_banach_sylvester_unboundedA
+    (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
+    (A : Y →ₗ.[ℂ] Y) (hAdense : Dense (A.domain : Set Y))
+    (hAinv : TauCeti.LinearPMap.BoundedEverywhereInverseData A)
+    (B : X →L[ℂ] X) (T C : X →L[ℂ] Y) {gamma delta : ℝ}
+    (hgamma : 0 ≤ gamma) (hdelta : 0 < delta)
+    (hAinvNorm : ‖hAinv.inv‖ ≤ (gamma + delta)⁻¹)
+    (hB : ‖B‖ ≤ gamma)
+    (hEq : TauCeti.LinearPMap.BoundedRightSylvesterEquation A B T C) :
+    delta * N T ≤ N C :=
+  TauCeti.LinearPMap.opNorm_le_of_boundedRight_sylvester_of_everywhereInverse
+    N.triangle
+    (fun L S => N.comp_left_le_mul L S)
+    (fun S R => N.comp_right_le_mul S R)
+    N.nonneg hAinv hgamma hdelta hAinvNorm hB hEq
 
 end BanachSylvester
 
