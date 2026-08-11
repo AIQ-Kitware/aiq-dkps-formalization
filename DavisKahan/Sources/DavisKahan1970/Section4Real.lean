@@ -340,6 +340,32 @@ theorem Proposition4_3_real (hacute : IsUniformlyAcute U V)
     (Experimental.complexify_mem_unitary hWunitary)
     (complexify_intertwines U V hWmap) k
 
+/-- **Davis--Kahan 1970, Proposition 4.3 over a real Hilbert space of arbitrary
+dimension, for every unitarily invariant norm.**
+
+For every Ky-Fan-dominant symmetric ideal family of operators on real Hilbert
+spaces, the squared full displacement `(1 − W)ᵀ(1 − W)` of the real direct
+rotation lies in the ideal and its gauge is least among all real orthogonal `W`
+carrying `U` onto `V`.  Membership of the minimizer is **concluded**, not
+assumed, matching `Corollary4_1_real`.
+
+The family is real, not a transported complex one, for the reason given in the
+module docstring.  The promotion consumes Ky Fan prefix sums only: the
+individual approximation numbers are *not* dominated, which is what the
+repository's refutation of Proposition 4.4 records. -/
+theorem Proposition4_3_real_idealGauge (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (hacute : IsUniformlyAcute U V)
+    (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmem : N.Mem ((1 - star W) * (1 - W))) :
+    N.Mem ((1 - star (Experimental.directRotationR U V hacute)) *
+        (1 - Experimental.directRotationR U V hacute)) ∧
+      N.gauge ((1 - star (Experimental.directRotationR U V hacute)) *
+          (1 - Experimental.directRotationR U V hacute)) ≤
+        N.gauge ((1 - star W) * (1 - W)) :=
+  N.majorization_mem_and_gauge_le hWmem
+    (Proposition4_3_real U V hacute W hWunitary hWmap)
+
 end
 
 end DavisKahan1970

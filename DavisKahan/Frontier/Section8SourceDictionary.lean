@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Frontier.Section8PartIII
+import DavisKahan.Frontier.Section8PartIIIReal
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Examples
 
@@ -83,6 +84,13 @@ is declared for `E →L[ℂ] E` alone, so the statements are not expressible ove
 general `𝕜` at all.  This is *not* the `gramSpectralPVM` obstruction that keeps
 `approximationNumber_mono_of_form_le` complex; that one is reached only through
 the proofs, never through these statements.  See section 0 below.
+
+Not being generically statable over `𝕜` is not the same as not being statable
+over `ℝ`.  Section 7 carries the **real** siblings of all six -- the same printed
+vocabulary, over `InnerProductSpace ℝ E`, named against `canonicalLowBranchReal`
+instead.  They are the real endpoints of `Section8PartIIReal.lean` and
+`Section8PartIIIReal.lean` rewritten through the identifications of sections
+1--3, which apply at `𝕜 = ℝ` unchanged; no new analysis appears in section 7.
 -/
 
 namespace TauCeti
@@ -115,6 +123,10 @@ not the complex one -- it carries the printed hypotheses, because the spectral
 repulsion that selects the branch must be proved before the branch exists.  A
 single `𝕜`-generic statement of sections 4--6 would need a `𝕜`-generic bounded
 spectral subspace, which does not exist here; see `section ComplexBranch` below.
+
+Section 7 states the real half over `canonicalLowBranchReal`.  It is a sibling
+family and not a generalization: the two branches take different arguments, so
+no single statement covers both, and that is the whole of the obstruction.
 -/
 
 section Generic
@@ -529,7 +541,288 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source
 
 end Source
 
-/-! ### 7. The section's opening illustration
+/-! ### 7. The same six statements over a REAL Hilbert space
+
+`canonicalLowBranch` has no `𝕜`-generic form, so sections 4--6 cannot be
+generalized in place.  They can, however, be *restated* over `ℝ` against the
+real branch `canonicalLowBranchReal` of `Section8PartIIReal.lean`, and that is
+what this section does.  The six statements below are the printed
+`cos²θ` vocabulary of Theorem 8.1(ii)--(iii) over `InnerProductSpace ℝ E`.
+
+Nothing here is new mathematics.  Each is exactly its existing real endpoint --
+`theorem8_1_{upper,lower}ApproximationRepulsion_real` in
+`Section8PartIIReal.lean`, `theorem8_1_{upper,lower}SymmetricGaugeRepulsion_real`
+in `Section8PartIIIReal.lean` -- rewritten through the identifications of
+sections 1--3, which are `𝕜`-generic and so apply at `ℝ` unchanged.
+
+`[FiniteDimensional ℝ E]` appears on all six, exactly as `[FiniteDimensional ℂ H]`
+appears on all six complex ones.  On the symmetric-gauge clauses it is the
+paper's own restriction.  On the two part (ii) clauses it is genuinely stronger
+than the endpoint being rewritten, which is dimension-free: `principalCosines`
+is a finite-dimensional object here, so writing the printed `‖C₁‖₁` as a
+principal cosine is precisely where the dimension enters.  The dimension-free
+reading of part (ii) over `ℝ` remains available, in the norm form. -/
+
+section SourceReal
+
+universe v
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [CompleteSpace E]
+
+/-- **Theorem 8.1(ii), upper block, over a REAL Hilbert space, with the printed
+factor as a cosine.**
+
+  `α_k - α ≤ cos²θ_max · (λ_k - α)`,
+
+the real sibling of `theorem8_1_upperApproximationRepulsion_angle_source`: the
+printed `α_k - α ≤ ‖C₁‖₁² (λ_k - α)` with `‖C₁‖₁` rewritten as the largest
+principal cosine of the pair `(Pᗮ, Qᗮ)`, `Q` the real canonical low branch. -/
+theorem theorem8_1_upperApproximationRepulsion_angle_real [FiniteDimensional ℝ E]
+    (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    (n : ℕ) :
+    (upperBlockShift A P alpha).approximationNumber n ≤
+      TauCeti.principalCosines Pᗮ
+          (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp)ᗮ 0 ^ 2 *
+        (upperBlockShift (A + K)
+          (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp) alpha).approximationNumber n := by
+  rw [← norm_cosineBlock_eq_principalCosines_zero]
+  exact theorem8_1_upperApproximationRepulsion_real A K P hdelta hA hK hAP hPlow
+    hPhigh hKP hKPperp n
+
+/-- **Theorem 8.1(ii), lower block, over a REAL Hilbert space, with the printed
+factor as a cosine.**  The real sibling of
+`theorem8_1_lowerApproximationRepulsion_angle_source`. -/
+theorem theorem8_1_lowerApproximationRepulsion_angle_real [FiniteDimensional ℝ E]
+    (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    (n : ℕ) :
+    (lowerBlockShift A P alpha delta).approximationNumber n ≤
+      TauCeti.principalCosines P
+          (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp) 0 ^ 2 *
+        (lowerBlockShift (A + K)
+          (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp) alpha delta).approximationNumber n := by
+  rw [← norm_lowerCosineBlock_eq_principalCosines_zero]
+  exact theorem8_1_lowerApproximationRepulsion_real A K P hdelta hA hK hAP hPlow
+    hPhigh hKP hKPperp n
+
+/-- **Theorem 8.1(iii), upper block, over a REAL Hilbert space, printed form.**
+
+  `Φ(α₁ - α, …, α_n - α) ≤ Φ((λ₁ - α) cos²θ₁, …, (λ_n - α) cos²θ_n)`
+
+for **every** symmetric gauge `Φ`, with `cos θ_i` the principal cosines of the
+pair `(Pᗮ, Qᗮ)`.  Indices run decreasingly; see
+`theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real` for the printed
+increasing reading. -/
+theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_real [FiniteDimensional ℝ E]
+    (Phi : FiniteSymmetricGauge (Module.finrank ℝ E))
+    (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
+    Phi (fun i : Fin (Module.finrank ℝ E) =>
+        (upperBlockShift A P alpha).approximationNumber (i : ℕ))
+      ≤ Phi (fun i : Fin (Module.finrank ℝ E) =>
+        (upperBlockShift (A + K)
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp) alpha).approximationNumber (i : ℕ) *
+          TauCeti.principalCosines Pᗮ
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp)ᗮ (i : ℕ) ^ 2) := by
+  have hrw : (fun i : Fin (Module.finrank ℝ E) =>
+      (upperBlockShift (A + K)
+          (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp) alpha).approximationNumber (i : ℕ) *
+        TauCeti.principalCosines Pᗮ
+          (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp)ᗮ (i : ℕ) ^ 2) =
+      (fun i : Fin (Module.finrank ℝ E) =>
+        (upperBlockShift (A + K)
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp) alpha).approximationNumber (i : ℕ) *
+          (cosineBlock P
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp)).approximationNumber (i : ℕ) ^ 2) := by
+    funext i
+    rw [approximationNumber_cosineBlock_eq_principalCosines]
+  rw [hrw]
+  exact theorem8_1_upperSymmetricGaugeRepulsion_real Phi A K P hdelta hA hK hAP
+    hPlow hPhigh hKP hKPperp
+
+/-- **Theorem 8.1(iii), lower block, over a REAL Hilbert space, printed form.**
+The printed "with a similar relation for `Λ₀`", for every symmetric gauge, with
+the principal cosines of `(P, Q)`. -/
+theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_real [FiniteDimensional ℝ E]
+    (Phi : FiniteSymmetricGauge (Module.finrank ℝ E))
+    (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
+    Phi (fun i : Fin (Module.finrank ℝ E) =>
+        (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+      ≤ Phi (fun i : Fin (Module.finrank ℝ E) =>
+        (lowerBlockShift (A + K)
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp) alpha delta).approximationNumber (i : ℕ) *
+          TauCeti.principalCosines P
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp) (i : ℕ) ^ 2) := by
+  have hrw : (fun i : Fin (Module.finrank ℝ E) =>
+      (lowerBlockShift (A + K)
+          (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp) alpha delta).approximationNumber (i : ℕ) *
+        TauCeti.principalCosines P
+          (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp) (i : ℕ) ^ 2) =
+      (fun i : Fin (Module.finrank ℝ E) =>
+        (lowerBlockShift (A + K)
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp) alpha delta).approximationNumber (i : ℕ) *
+          (lowerCosineBlock P
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp)).approximationNumber (i : ℕ) ^ 2) := by
+    funext i
+    rw [approximationNumber_lowerCosineBlock_eq_principalCosines]
+  rw [hrw]
+  exact theorem8_1_lowerSymmetricGaugeRepulsion_real Phi A K P hdelta hA hK hAP
+    hPlow hPhigh hKP hKPperp
+
+/-- **Theorem 8.1(iii), upper block, over a REAL Hilbert space, in the paper's
+index order.**  Both sides are reindexed by `Fin.rev` together, so this is a
+global reindex and not a reordering of one side against the other; it follows
+from the decreasing statement by permutation invariance alone. -/
+theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real
+    [FiniteDimensional ℝ E]
+    (Phi : FiniteSymmetricGauge (Module.finrank ℝ E))
+    (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
+    Phi (fun i : Fin (Module.finrank ℝ E) =>
+        (upperBlockShift A P alpha).approximationNumber (i.rev : ℕ))
+      ≤ Phi (fun i : Fin (Module.finrank ℝ E) =>
+        (upperBlockShift (A + K)
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp) alpha).approximationNumber (i.rev : ℕ) *
+          TauCeti.principalCosines Pᗮ
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp)ᗮ (i.rev : ℕ) ^ 2) := by
+  have hL := Phi.perm (fun i : Fin (Module.finrank ℝ E) =>
+    (upperBlockShift A P alpha).approximationNumber (i : ℕ))
+    (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E))
+  have hR := Phi.perm (fun i : Fin (Module.finrank ℝ E) =>
+    (upperBlockShift (A + K)
+        (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+          hKPperp) alpha).approximationNumber (i : ℕ) *
+      TauCeti.principalCosines Pᗮ
+        (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+          hKPperp)ᗮ (i : ℕ) ^ 2)
+    (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E))
+  rw [show (fun i : Fin (Module.finrank ℝ E) =>
+      (upperBlockShift A P alpha).approximationNumber (i.rev : ℕ)) =
+      (fun i : Fin (Module.finrank ℝ E) =>
+        (upperBlockShift A P alpha).approximationNumber (i : ℕ)) ∘
+        (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E)) from rfl,
+    show (fun i : Fin (Module.finrank ℝ E) =>
+      (upperBlockShift (A + K)
+          (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp) alpha).approximationNumber (i.rev : ℕ) *
+        TauCeti.principalCosines Pᗮ
+          (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp)ᗮ (i.rev : ℕ) ^ 2) =
+      (fun i : Fin (Module.finrank ℝ E) =>
+        (upperBlockShift (A + K)
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp) alpha).approximationNumber (i : ℕ) *
+          TauCeti.principalCosines Pᗮ
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp)ᗮ (i : ℕ) ^ 2) ∘
+        (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E)) from rfl, hL, hR]
+  exact theorem8_1_upperSymmetricGaugeRepulsion_angle_real Phi A K P hdelta hA hK
+    hAP hPlow hPhigh hKP hKPperp
+
+/-- **Theorem 8.1(iii), lower block, over a REAL Hilbert space, in the paper's
+index order.** -/
+theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real
+    [FiniteDimensional ℝ E]
+    (Phi : FiniteSymmetricGauge (Module.finrank ℝ E))
+    (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
+    Phi (fun i : Fin (Module.finrank ℝ E) =>
+        (lowerBlockShift A P alpha delta).approximationNumber (i.rev : ℕ))
+      ≤ Phi (fun i : Fin (Module.finrank ℝ E) =>
+        (lowerBlockShift (A + K)
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp) alpha delta).approximationNumber (i.rev : ℕ) *
+          TauCeti.principalCosines P
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp) (i.rev : ℕ) ^ 2) := by
+  have hL := Phi.perm (fun i : Fin (Module.finrank ℝ E) =>
+    (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+    (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E))
+  have hR := Phi.perm (fun i : Fin (Module.finrank ℝ E) =>
+    (lowerBlockShift (A + K)
+        (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+          hKPperp) alpha delta).approximationNumber (i : ℕ) *
+      TauCeti.principalCosines P
+        (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+          hKPperp) (i : ℕ) ^ 2)
+    (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E))
+  rw [show (fun i : Fin (Module.finrank ℝ E) =>
+      (lowerBlockShift A P alpha delta).approximationNumber (i.rev : ℕ)) =
+      (fun i : Fin (Module.finrank ℝ E) =>
+        (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ)) ∘
+        (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E)) from rfl,
+    show (fun i : Fin (Module.finrank ℝ E) =>
+      (lowerBlockShift (A + K)
+          (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp) alpha delta).approximationNumber (i.rev : ℕ) *
+        TauCeti.principalCosines P
+          (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+            hKPperp) (i.rev : ℕ) ^ 2) =
+      (fun i : Fin (Module.finrank ℝ E) =>
+        (lowerBlockShift (A + K)
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp) alpha delta).approximationNumber (i : ℕ) *
+          TauCeti.principalCosines P
+            (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
+              hKPperp) (i : ℕ) ^ 2) ∘
+        (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E)) from rfl, hL, hR]
+  exact theorem8_1_lowerSymmetricGaugeRepulsion_angle_real Phi A K P hdelta hA hK
+    hAP hPlow hPhigh hKP hKPperp
+
+end SourceReal
+
+/-! ### 8. The section's opening illustration
 
 Section 8 opens by reading a norm bound back as an angle: "if the hypotheses of
 the `sin θ` theorem hold with `‖R‖₁ = 1` and `δ = 2`, then `‖sin Θ₀‖₁ ≤ 1/2`,

@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-1056/1468 files reviewed · 1468 files · 378,417 lines · 123 groups
+1056/1468 files reviewed · 1468 files · 378,896 lines · 123 groups
 
 ## How to review
 
@@ -41,9 +41,9 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### (root files) :: documentation
 
-*2 files, 747 lines — 2/2 reviewed*
+*2 files, 770 lines — 2/2 reviewed*
 
-- [x] `AGENTS.md` — 457 lines · documentation
+- [x] `AGENTS.md` — 480 lines · documentation
 - [x] `README.md` — 290 lines · documentation
 
 ### (root files) :: other
@@ -396,16 +396,16 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/Frontier
 
-*20 files, 11,719 lines — 0/20 reviewed*
+*20 files, 12,149 lines — 0/20 reviewed*
 
 - [ ] `DavisKahan/Frontier/Section3.lean` — 3,189 lines · Lean source
 - [ ] `DavisKahan/Frontier/Section8Perturbation.lean` — 1,342 lines · Lean source
 - [ ] `DavisKahan/Frontier/Section8.lean` — 1,101 lines · Lean source
+- [ ] `DavisKahan/Frontier/Section8SourceDictionary.lean` — 862 lines · Lean source
 - [ ] `DavisKahan/Frontier/Section8SourceTheorem82Real.lean` — 703 lines · Lean source
 - [ ] `DavisKahan/Frontier/Section8SourceTheorem82.lean` — 653 lines · Lean source
+- [ ] `DavisKahan/Frontier/Section8PartIIReal.lean` — 646 lines · Lean source
 - [ ] `DavisKahan/Frontier/Section8PartII.lean` — 573 lines · Lean source
-- [ ] `DavisKahan/Frontier/Section8SourceDictionary.lean` — 569 lines · Lean source
-- [ ] `DavisKahan/Frontier/Section8PartIIReal.lean` — 509 lines · Lean source
 - [ ] `DavisKahan/Frontier/Section3BilateralShift.lean` — 471 lines · Lean source
 - [ ] `DavisKahan/Frontier/CircleContour.lean` — 317 lines · Lean source
 - [ ] `DavisKahan/Frontier/Section4.lean` — 312 lines · Lean source
@@ -673,7 +673,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/Sources/DavisKahan1970
 
-*139 files, 41,606 lines — 90/139 reviewed*
+*139 files, 41,687 lines — 90/139 reviewed*
 
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedKyFan.lean` — 2,818 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean` — 1,536 lines · Lean source
@@ -709,13 +709,13 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/CommonDomainTheorems.lean` — 387 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61Universal.lean` — 378 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean` — 374 lines · Lean source
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section4Real.lean` — 373 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/SingularValueTransport.lean` — 372 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/FiniteMultiplicity.lean` — 367 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Sylvester/PaperOperatorNorm.lean` — 363 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Ideals/KyFanNorm.lean` — 360 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SharpKyFan.lean` — 352 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNormLaws.lean` — 349 lines · Lean source
-- [ ] `DavisKahan/Sources/DavisKahan1970/Section4Real.lean` — 347 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Section9/NumericalBounds.lean` — 329 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean` — 318 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCoreTheorems.lean` — 312 lines · Lean source
@@ -750,6 +750,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamRootLocalization.lean` — 201 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section8/CompressionApproximation.lean` — 189 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/PartIII.lean` — 181 lines · Lean source
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section4.lean` — 181 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Section9/FullExample.lean` — 178 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Ideals/UnitaryInvariantNormInstances.lean` — 177 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/CommonDomain.lean` — 173 lines · Lean source
@@ -778,7 +779,6 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/Sources/DavisKahan1970/Section4FiniteSurface.lean` — 131 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Section9/RankOneCorrection.lean` — 131 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean` — 129 lines · Lean source
-- [ ] `DavisKahan/Sources/DavisKahan1970/Section4.lean` — 126 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtTensor.lean` — 124 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section8/SourceSurface.lean` — 123 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean` — 120 lines · Lean source
@@ -1626,10 +1626,10 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: data/config
 
-*42 files, 15,392 lines — 25/42 reviewed*
+*42 files, 15,402 lines — 25/42 reviewed*
 
 - [x] `dev/tauceti/extraction-manifest.json` — 4,544 lines · data/config
-- [x] `dev/davis-kahan-1970-full-source-census.json` — 1,809 lines · data/config
+- [x] `dev/davis-kahan-1970-full-source-census.json` — 1,819 lines · data/config
 - [x] `dev/davis-kahan-1970-frontier.json` — 1,355 lines · data/config
 - [x] `dev/davis-kahan-hidden-foundations.json` — 930 lines · data/config
 - [x] `dev/upstream-extraction/spectra-usage-inventory-650b0e3.json` — 908 lines · data/config
@@ -1673,10 +1673,10 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*199 files, 42,533 lines — 158/199 reviewed*
+*199 files, 42,462 lines — 158/199 reviewed*
 
-- [x] `dev/davis-kahan-1970-full-source-census.md` — 3,339 lines · documentation
-- [x] `dev/audit/FILE-CHECKLIST.md` — 2,114 lines · documentation
+- [x] `dev/davis-kahan-1970-full-source-census.md` — 3,265 lines · documentation
+- [x] `dev/audit/FILE-CHECKLIST.md` — 2,117 lines · documentation
 - [x] `dev/davis-kahan-expert-completion-plan.md` — 1,589 lines · documentation
 - [ ] `dev/hilbert-space-operator-roadmap/glossary.md` — 1,519 lines · documentation
 - [x] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation
@@ -1996,7 +1996,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### scripts :: tooling
 
-*63 files, 15,140 lines — 55/63 reviewed*
+*63 files, 15,146 lines — 55/63 reviewed*
 
 - [x] `scripts/lake_build_report.py` — 1,156 lines · tooling
 - [x] `scripts/check_davis_kahan_frontier.py` — 684 lines · tooling
@@ -2028,8 +2028,8 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `scripts/render_davis_kahan_1970_source_census.py` — 211 lines · tooling
 - [ ] `scripts/tests/test_proof_length_census.py` — 208 lines · tooling
 - [x] `scripts/check_davis_kahan_hidden_foundations.py` — 205 lines · tooling
+- [x] `scripts/check_davis_kahan_1970_source_census.py` — 203 lines · tooling
 - [ ] `scripts/check_roadmap_delivered.py` — 203 lines · tooling
-- [x] `scripts/check_davis_kahan_1970_source_census.py` — 197 lines · tooling
 - [x] `scripts/audit_profile.py` — 190 lines · tooling
 - [x] `scripts/tests/test_refresh_tauceti_pr1_consistency.py` — 186 lines · tooling
 - [x] `scripts/check_expose_ratchet.py` — 185 lines · tooling
