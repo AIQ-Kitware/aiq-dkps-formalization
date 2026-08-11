@@ -400,10 +400,23 @@ theorem sq_norm_sum_smul_diagonalPart_offDiagonalPart_le_of_approximate
 
 /-! ### Charging a pairing to the typed directed residual corner -/
 
-variable (U B) in
+section ScalarGenericResidualCorner
+
+variable {𝕜 : Type*} [RCLike 𝕜] {G : Type u} [NormedAddCommGroup G]
+  [InnerProductSpace 𝕜 G] [CompleteSpace G]
+
+/-- The scalar-generic form of the module's completeness instance for an
+orthogonally complemented subspace. -/
+local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramMiddleGeneric
+    (W : Submodule 𝕜 G) [W.HasOrthogonalProjection] : CompleteSpace W :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+
 /-- The directed residual corner `R₀ : U → Uᗮ`, the companion of
 `reflectionSineCorner` and `reflectionTangentCorner`. -/
-abbrev reflectionResidualCorner : U →L[ℂ] Uᗮ := paperBlockCompression Uᗮ U B
+abbrev reflectionResidualCorner (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
+    (B : G →L[𝕜] G) : U →L[𝕜] Uᗮ := paperBlockCompression Uᗮ U B
+
+end ScalarGenericResidualCorner
 
 /-- Pairing a vector of `Uᗮ` with the directed corner of `K` is the ambient
 pairing: the projection in the corner is invisible on `Uᗮ`. -/
@@ -1104,9 +1117,21 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan
   have hδ : (0 : ℝ) ≤ b - a := by linarith
   nlinarith [mul_le_mul_of_nonneg_left hleft hδ, hmid]
 
+section ScalarGenericAmbientBound
+
+variable {𝕜 : Type*} [RCLike 𝕜] {G : Type u} [NormedAddCommGroup G]
+  [InnerProductSpace 𝕜 G] [CompleteSpace G]
+
+/-- The scalar-generic form of the module's completeness instance for an
+orthogonally complemented subspace. -/
+local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramMiddleAmbient
+    (W : Submodule 𝕜 G) [W.HasOrthogonalProjection] : CompleteSpace W :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+
 /-- The directed corner never has larger approximation numbers than the ambient
 operator: it is the ambient operator pre- and post-composed with contractions. -/
-theorem kyFanApproximationGauge_reflectionResidualCorner_le (K : H →L[ℂ] H)
+theorem kyFanApproximationGauge_reflectionResidualCorner_le
+    (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] (K : G →L[𝕜] G)
     (k : ℕ) :
     kyFanApproximationGauge k (reflectionResidualCorner U K) ≤
       kyFanApproximationGauge k K := by
@@ -1117,19 +1142,21 @@ theorem kyFanApproximationGauge_reflectionResidualCorner_le (K : H →L[ℂ] H)
   refine Finset.sum_le_sum fun p _ => ?_
   have hcomp := approximationSingularValue_comp_le p
     (Uᗮ.subtypeL.adjoint) K U.subtypeL
-  have h1 : ‖(Uᗮ.subtypeL : Uᗮ →L[ℂ] H).adjoint‖ ≤ 1 := by
+  have h1 : ‖(Uᗮ.subtypeL : Uᗮ →L[𝕜] G).adjoint‖ ≤ 1 := by
     rw [ContinuousLinearMap.adjoint.norm_map]
     exact Uᗮ.norm_subtypeL_le
   have h2 : ‖U.subtypeL‖ ≤ 1 := U.norm_subtypeL_le
   have h0 := approximationSingularValue_nonneg p K
   refine hcomp.trans ?_
-  calc ‖(Uᗮ.subtypeL : Uᗮ →L[ℂ] H).adjoint‖ * approximationSingularValue p K *
+  calc ‖(Uᗮ.subtypeL : Uᗮ →L[𝕜] G).adjoint‖ * approximationSingularValue p K *
         ‖U.subtypeL‖
       ≤ 1 * approximationSingularValue p K * 1 := by
         refine mul_le_mul (mul_le_mul h1 le_rfl h0 zero_le_one) h2
           (norm_nonneg U.subtypeL) ?_
         positivity
     _ = approximationSingularValue p K := by ring
+
+end ScalarGenericAmbientBound
 
 /-- **The endpoint against the ambient residual.**  The form the exact- and
 compressed-eigenfamily endpoints of `TanTwoThetaUnboundedKyFan.lean` are stated
