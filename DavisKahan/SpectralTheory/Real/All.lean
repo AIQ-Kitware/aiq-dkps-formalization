@@ -6,5 +6,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SpectralTheory.Real.ContinuousFunctionalCalculus
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Real
 import DavisKahan.SpectralTheory.Real.SpectralRestriction
+import DavisKahan.SpectralTheory.Real.BoundedAlmostInvariant
 
 /-! # `DavisKahan/SpectralTheory/Real` -/
