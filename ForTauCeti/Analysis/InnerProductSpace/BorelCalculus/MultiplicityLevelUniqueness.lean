@@ -219,7 +219,7 @@ section Model
 /-- **The matrix element of a symbol acting on the model, decomposed into slices.**  The symbol
 acts through the first coordinate only, so each slice contributes a separate integral against
 the corresponding restriction of the base measure. -/
-theorem inner_mulLp_comp_eq_tsum (D : MultiplicityDatum) {h : ℂ → ℂ} (hm : Measurable h)
+theorem inner_mulLp_comp_eq_tsum (D : MultiplicityDatum ℂ) {h : ℂ → ℂ} (hm : Measurable h)
     {C : ℝ} (hC : ∀ z, ‖h z‖ ≤ C) (V W : Lp ℂ 2 D.measure) {vb wb : ℂ × ℕ → ℂ}
     (hvb : (V : ℂ × ℕ → ℂ) =ᵐ[D.measure] vb) (hwb : (W : ℂ × ℕ → ℂ) =ᵐ[D.measure] wb) :
     ⟪mulLp D.measure (hm.comp (measurable_datumSymbol D))
@@ -254,7 +254,7 @@ theorem inner_mulLp_comp_eq_tsum (D : MultiplicityDatum) {h : ℂ → ℂ} (hm :
         exact integral_sliceSum _ hJint
 
 /-- Beyond the critical index, the slice restrictions give the spectral subset no mass. -/
-theorem restrict_level_inter_eq_zero (E : MultiplicityDatum) {S : Set ℂ}
+theorem restrict_level_inter_eq_zero (E : MultiplicityDatum ℂ) {S : Set ℂ}
     (hS : MeasurableSet S) {k n : ℕ} (hkn : k ≤ n)
     (hnull : E.base (S ∩ E.level k) = 0) :
     (E.base.restrict (E.level n)) (S ∩ E.level n) = 0 := by
@@ -269,7 +269,7 @@ If `S` meets `level k` in a null set, the indicators of the slices `(S ∩ level
 calculus orbits has, slice by slice, sections vanishing on `S` -- by duality against every
 bounded Borel symbol on the low slices, and because `S` itself is negligible on the high
 ones. -/
-theorem spectralGeneratedLE_mulLp_datumSymbol (E : MultiplicityDatum) {S : Set ℂ}
+theorem spectralGeneratedLE_mulLp_datumSymbol (E : MultiplicityDatum ℂ) {S : Set ℂ}
     (hS : MeasurableSet S) {k : ℕ} (hnull : E.base (S ∩ E.level k) = 0) :
     SpectralGeneratedLE
       (isStarNormal_mulLp E.measure (measurable_datumSymbol E) (norm_datumSymbol_le E))
@@ -375,7 +375,7 @@ measurable kernel selection: over `S ∩ level k`, a pointwise unit vector in `�
 orthogonal to the `k` generator sections, spread over the `k + 1` lowest slices -- all of which
 carry `S ∩ level k` with full base measure.  The result is a nonzero vector fixed by the
 projection and orthogonal to every calculus orbit of the generators, which is absurd. -/
-theorem not_spectralGeneratedLE_mulLp_datumSymbol (D : MultiplicityDatum) {S : Set ℂ}
+theorem not_spectralGeneratedLE_mulLp_datumSymbol (D : MultiplicityDatum ℂ) {S : Set ℂ}
     (hS : MeasurableSet S) {k : ℕ} (hpos : D.base (S ∩ D.level k) ≠ 0) :
     ¬ SpectralGeneratedLE
       (isStarNormal_mulLp D.measure (measurable_datumSymbol D) (norm_datumSymbol_le D))
@@ -628,7 +628,7 @@ theorem not_spectralGeneratedLE_mulLp_datumSymbol (D : MultiplicityDatum) {S : S
 
 /-- One half of the level-set comparison: what `D` claims above level `k`, `E` must claim
 too, up to a null set. -/
-theorem base_level_diff_eq_zero_of_operatorUnitaryEquiv {D E : MultiplicityDatum}
+theorem base_level_diff_eq_zero_of_operatorUnitaryEquiv {D E : MultiplicityDatum ℂ}
     (h : OperatorUnitaryEquiv D.operator E.operator) (k : ℕ) :
     D.base (D.level k \ E.level k) = 0 := by
   by_contra hpos
@@ -651,7 +651,7 @@ theorem base_level_diff_eq_zero_of_operatorUnitaryEquiv {D E : MultiplicityDatum
 /-- **The level sets of a multiplicity datum are unitary invariants.**  This is the level-set
 half of Hahn--Hellinger uniqueness; the measure-class half is
 `measureEquiv_base_of_operatorUnitaryEquiv`. -/
-theorem base_level_symmDiff_eq_zero_of_operatorUnitaryEquiv {D E : MultiplicityDatum}
+theorem base_level_symmDiff_eq_zero_of_operatorUnitaryEquiv {D E : MultiplicityDatum ℂ}
     (h : OperatorUnitaryEquiv D.operator E.operator) (k : ℕ) :
     D.base (symmDiff (D.level k) (E.level k)) = 0 := by
   have h1 := base_level_diff_eq_zero_of_operatorUnitaryEquiv h k
@@ -663,7 +663,7 @@ theorem base_level_symmDiff_eq_zero_of_operatorUnitaryEquiv {D E : MultiplicityD
 
 /-- **Hahn--Hellinger uniqueness, both halves.**  Unitarily equivalent multiplicity models
 agree in measure class and, up to null sets, in every level set. -/
-theorem measureEquiv_and_level_of_operatorUnitaryEquiv {D E : MultiplicityDatum}
+theorem measureEquiv_and_level_of_operatorUnitaryEquiv {D E : MultiplicityDatum ℂ}
     (h : OperatorUnitaryEquiv D.operator E.operator) :
     MeasureEquiv D.base E.base ∧
       ∀ k, D.base (symmDiff (D.level k) (E.level k)) = 0 :=
@@ -674,7 +674,7 @@ theorem measureEquiv_and_level_of_operatorUnitaryEquiv {D E : MultiplicityDatum}
 unitarily equivalent operators exactly when they agree in measure class and, up to null sets,
 in every level set.  The forward direction is the uniqueness proved in this module; the
 converse is the existence-side transport `operatorUnitaryEquiv_of_measureEquiv`. -/
-theorem operatorUnitaryEquiv_iff_measureEquiv_and_level {D E : MultiplicityDatum} :
+theorem operatorUnitaryEquiv_iff_measureEquiv_and_level {D E : MultiplicityDatum ℂ} :
     OperatorUnitaryEquiv D.operator E.operator ↔
       MeasureEquiv D.base E.base ∧
         ∀ k, D.base (symmDiff (D.level k) (E.level k)) = 0 :=

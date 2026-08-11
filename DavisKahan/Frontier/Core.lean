@@ -51,7 +51,7 @@ variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂]
 /-- **Equality of spectral multiplicity data.**
 
 Two operators have the same spectral multiplicity when each is unitarily equivalent to the
-multiplication model of a `TauCeti.MultiplicityDatum` -- a finite measure on `ℂ` together with
+multiplication model of a `TauCeti.MultiplicityDatum ℂ` -- a finite measure on `ℂ` together with
 an **antitone** sequence of measurable level sets -- and the two data agree: the base measures
 are in the same **measure class**, and the level sets agree up to null sets.
 
@@ -81,7 +81,7 @@ whose `multiplicity` field is a *function* and therefore needs uniqueness as wel
 See `dev/section3-multiplicity-plan-2026-08-06.md` §5. -/
 def SameSpectralMultiplicity
     (A : H₁ →L[ℂ] H₁) (B : H₂ →L[ℂ] H₂) : Prop :=
-  ∃ D E : TauCeti.MultiplicityDatum,
+  ∃ D E : TauCeti.MultiplicityDatum ℂ,
     TauCeti.OperatorUnitaryEquiv A D.operator ∧
     TauCeti.OperatorUnitaryEquiv B E.operator ∧
     TauCeti.MeasureEquiv D.base E.base ∧
