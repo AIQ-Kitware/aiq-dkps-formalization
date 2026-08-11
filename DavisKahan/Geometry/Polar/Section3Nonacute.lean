@@ -819,6 +819,49 @@ theorem nonacuteDirectRotation_mem_unitary
   exact ⟨star_nonacuteDirectRotation_mul_self U V J,
     nonacuteDirectRotation_mul_star_self U V J⟩
 
+/-- The Hermitian part of the completed nonacute direct rotation is twice the
+modulus of the canonical intertwiner. -/
+theorem nonacuteDirectRotation_add_star_eq_two_absoluteValue
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    nonacuteDirectRotation U V J + star (nonacuteDirectRotation U V J) =
+      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) +
+        spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) := by
+  rw [nonacuteDirectRotation, star_add,
+    star_crossedDefectQuarterTurn U V J]
+  rw [← polarFactor_add_star_eq_two_absoluteValue U V]
+  abel
+
+private theorem add_self_cancel_nonacute
+    {a b : H →L[𝕜] H} (h : a + a = b + b) : a = b := by
+  let twoUnit : 𝕜ˣ := Units.mk0 2 (by norm_num)
+  apply smul_left_cancel twoUnit
+  change (2 : 𝕜) • a = (2 : 𝕜) • b
+  simpa only [two_smul 𝕜] using h
+
+/-- The completed nonacute direct rotation commutes with the modulus of the
+canonical intertwiner. -/
+theorem nonacuteDirectRotation_comm_absoluteValue
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    Commute (nonacuteDirectRotation U V J)
+      (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)) := by
+  let W := nonacuteDirectRotation U V J
+  let A := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  have hunit : W ∈ unitary (H →L[𝕜] H) :=
+    nonacuteDirectRotation_mem_unitary U V J
+  have hsum : W + star W = A + A := by
+    simpa [W, A] using nonacuteDirectRotation_add_star_eq_two_absoluteValue U V J
+  have hcommStar : Commute W (star W) := by
+    rw [commute_iff_eq]
+    exact (Unitary.mul_star_self_of_mem hunit).trans
+      (Unitary.star_mul_self_of_mem hunit).symm
+  have hcommSum : Commute W (W + star W) :=
+    (Commute.refl W).add_right hcommStar
+  have hcommDouble : Commute W (A + A) := by rwa [← hsum]
+  have hleft : W * A + W * A = A * W + A * W := by
+    simpa [mul_add, add_mul] using hcommDouble.eq
+  rw [commute_iff_eq]
+  exact add_self_cancel_nonacute hleft
+
 omit [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
   [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
 /-- The defect quarter-turn intertwines the source and target projections. -/
