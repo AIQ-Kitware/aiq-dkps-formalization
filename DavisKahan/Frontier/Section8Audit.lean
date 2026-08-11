@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Frontier.Section8SourceSurface
+import DavisKahan.Frontier.Section8PartIIIReal
 
 /-!
 # Dependency audit for Davis--Kahan 1970 Section 8
@@ -87,6 +88,37 @@ forms, and the paper's increasing index order. -/
 #print axioms theorem8_1_lowerSymmetricGaugeRepulsion_angle_source
 #print axioms theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source
 #print axioms theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source
+
+/-! ## Theorem 8.1(ii) and 8.1(iii) over a REAL Hilbert space, both blocks
+
+The real branch, its sharp form bounds, the dimension-free part (ii) endpoints
+and the finite-dimensional part (iii) endpoints. -/
+
+#check canonicalLowBranchReal
+#check theorem8_1_spectralRepulsion_real
+#check canonicalLowBranchReal_form_low
+#check canonicalLowBranchReal_form_high
+#check theorem8_1_upperSandwichApproximation_real
+#check theorem8_1_lowerSandwichApproximation_real
+#check theorem8_1_upperApproximationRepulsion_real
+#check theorem8_1_lowerApproximationRepulsion_real
+#check theorem8_1_upperWeightedWeakMajorization_real
+#check theorem8_1_lowerWeightedWeakMajorization_real
+#check theorem8_1_upperSymmetricGaugeRepulsion_real
+#check theorem8_1_lowerSymmetricGaugeRepulsion_real
+
+#print axioms canonicalLowBranchReal
+#print axioms theorem8_1_spectralRepulsion_real
+#print axioms canonicalLowBranchReal_form_low
+#print axioms canonicalLowBranchReal_form_high
+#print axioms theorem8_1_upperSandwichApproximation_real
+#print axioms theorem8_1_lowerSandwichApproximation_real
+#print axioms theorem8_1_upperApproximationRepulsion_real
+#print axioms theorem8_1_lowerApproximationRepulsion_real
+#print axioms theorem8_1_upperWeightedWeakMajorization_real
+#print axioms theorem8_1_lowerWeightedWeakMajorization_real
+#print axioms theorem8_1_upperSymmetricGaugeRepulsion_real
+#print axioms theorem8_1_lowerSymmetricGaugeRepulsion_real
 
 /-! ## The eigenvalue/angle source dictionary -/
 
