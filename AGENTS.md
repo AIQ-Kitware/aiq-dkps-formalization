@@ -106,6 +106,13 @@ namespaces), in small dependency-closed clusters. This is the current default
 work. `ForTauCeti` is the polished destination for reusable mathematics; Mathlib
 is not the near-term target for this contribution.
 
+### Foundation-building route
+
+When a task asks for the foundation-building route, use
+[`dev/foundation-building.md`](dev/foundation-building.md) as the execution contract. Build the
+paper-independent mathematical layer in `ForTauCeti` at its natural scope, then make the
+paper-facing theorem a downstream consumer.
+
 ### Maintenance track — Davis--Kahan source fidelity
 
 Keep `DavisKahan` the paper-facing package: the source census, counterexamples,
@@ -261,29 +268,6 @@ but only the accepted upstream roadmap determines submission scope.
 
 The default Davis--Kahan objective is a source-faithful formalization of the
 full 1970 paper, not merely its finite-dimensional specialization.
-
-### Meaning of 100% source formalization
-
-For this repository, **100% Davis--Kahan 1970 formalization means complete formal
-coverage of the paper's mathematical claims.** It is a statement-level standard,
-not a requirement to reproduce the paper's proof arguments or proof organization.
-
-- A true source claim is covered when a compiled source-facing Lean declaration
-  states the same mathematical claim at the scope stated in the paper. The proof
-  may use any correct formal route, including stronger reusable theorems,
-  specializations, reductions, alternative arguments, and source-facing wrappers.
-- A false source claim is covered when compiled Lean gives a counterexample or
-  refutation satisfying the source hypotheses and falsifying the source
-  conclusion. That outcome counts as complete formalization of the claim.
-- **Proposition 4.4 is the canonical example.** The exact transcribed source claim
-  is false. The repository's machine-checked counterexample/refutation is the
-  complete source-faithful formalization of Proposition 4.4 and counts fully
-  toward 100% coverage. It is not an open obligation to prove the false printed
-  conclusion.
-- A 100% full-paper claim means every mathematical claim tracked by the maintained
-  transcription and source census has one of these completed outcomes, with the
-  source-facing correspondence recorded. Internal helper statements and proof
-  paths may differ freely from the paper.
 
 The modernized local transcription fixes the ambient scope:
 
