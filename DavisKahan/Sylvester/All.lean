@@ -17,6 +17,7 @@ import DavisKahan.Sylvester.PairwiseHomogeneousUniqueness
 import DavisKahan.Sylvester.PairwiseSpectrumGap
 import DavisKahan.Sylvester.RealUnbounded
 import DavisKahan.Sylvester.RosenblumExistence
+import DavisKahan.Sylvester.ScalarGeneric
 import DavisKahan.Sylvester.ShiftedInverse
 import DavisKahan.Sylvester.ShiftedInverseGauge
 import DavisKahan.Sylvester.Spectrum

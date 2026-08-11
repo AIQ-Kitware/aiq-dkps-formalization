@@ -172,6 +172,29 @@ alias Proposition6_1_commonDomain_kyFan :=
   PaperCommonDomainSymmetricSinThetaProblem.symmetric_all_kyFan
 alias Proposition6_1_commonDomain_ofBounded :=
   PaperCommonDomainSymmetricSinThetaProblem.ofBounded
+-- The common-domain Proposition 6.1 is stated over any `RCLike` field.  Its
+-- scalar-generic conclusion is carried by `paperCrossSineSum U V` rather than by
+-- a functional-calculus sine, for the same reason as in the bounded real file:
+-- no real continuous functional calculus is constructed, and a unitarily
+-- invariant norm sees only the singular-value sequence.
+-- `Proposition6_1_commonDomain_sinTheta_singularValues` is the compiled
+-- certificate that this operator carries exactly the paper's whole-space
+-- `sin Theta` sequence.  Over `ℂ` the literal form is `Proposition6_1_commonDomain`
+-- itself.  `Proposition6_1_real_commonDomain_ofBounded` records that the real
+-- bounded inputs are an instance, so the real form is a relaxation of the real
+-- Proposition 6.1 rather than a statement parallel to it.
+alias Proposition6_1_commonDomain_crossSineSum :=
+  PaperCommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm_crossSineSum
+alias Proposition6_1_commonDomain_crossSineSum_kyFan :=
+  PaperCommonDomainSymmetricSinThetaProblem.symmetric_all_kyFan_crossSineSum
+alias Proposition6_1_commonDomain_sinTheta_singularValues :=
+  PaperCommonDomainSymmetricSinThetaProblem.crossSineSum_paperMem_iff_and_gauge_eq
+alias Proposition6_1_real_commonDomain :=
+  PaperCommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm_real
+alias Proposition6_1_real_commonDomain_kyFan :=
+  PaperCommonDomainSymmetricSinThetaProblem.symmetric_all_kyFan_real
+alias Proposition6_1_real_commonDomain_ofBounded :=
+  PaperCommonDomainSymmetricSinThetaProblem.ofBoundedReal
 alias RealCommonDomainTheorem6_1Data :=
   PaperRealCommonDomainTheorem61Data
 alias Theorem6_1_real_commonDomain :=
