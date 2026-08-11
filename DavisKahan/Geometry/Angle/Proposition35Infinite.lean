@@ -9,7 +9,9 @@ import DavisKahan.Frontier.Section3
 import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
 import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner
+import ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt
 import ForTauCeti.Analysis.CStarAlgebra.PositiveSquareRootCommute
+import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 
 /-!
 # Davis--Kahan Proposition 3.5 in arbitrary Hilbert dimension
@@ -118,17 +120,13 @@ theorem norm_section3SinAngleOperator_le_one :
 /-- The real spectrum of `sin Θ` lies in `[0,1]`. -/
 theorem spectrum_section3SinAngleOperator_subset_Icc :
     spectrum ℝ (section3SinAngleOperator U V) ⊆ Set.Icc 0 1 := by
+  have hsymm : spectrum ℝ (section3SinAngleOperator U V) ⊆ Set.Icc (-1) 1 :=
+    (TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc
+      (section3SinAngleOperator_isSelfAdjoint U V) zero_le_one).mp
+        (norm_section3SinAngleOperator_le_one U V)
   intro x hx
-  refine ⟨spectrum_nonneg_of_nonneg (section3SinAngleOperator_nonneg U V) hx, ?_⟩
-  have habs : |x| ≤ ‖section3SinAngleOperator U V‖ * ‖(1 : H →L[𝕜] H)‖ :=
-    spectrum.norm_le_norm_mul_of_mem hx
-  have hone : ‖(1 : H →L[𝕜] H)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  refine le_trans (le_abs_self x) (habs.trans ?_)
-  calc
-    ‖section3SinAngleOperator U V‖ * ‖(1 : H →L[𝕜] H)‖ ≤ 1 * 1 :=
-      mul_le_mul (norm_section3SinAngleOperator_le_one U V) hone
-        (norm_nonneg _) zero_le_one
-    _ = 1 := by ring
+  exact ⟨spectrum_nonneg_of_nonneg (section3SinAngleOperator_nonneg U V) hx,
+    (hsymm hx).2⟩
 
 /-- The literal angle is self-adjoint. -/
 theorem section3AngleOperator_isSelfAdjoint :
@@ -193,7 +191,10 @@ theorem section3Sin_sq_add_cos_sq :
       apply cfc_congr
       intro x _
       nlinarith [Real.sin_sq_add_cos_sq x]
-    _ = 1 := cfc_const_one ℝ _
+    _ = 1 := by
+      have ha : IsSelfAdjoint (section3AngleOperator U V) :=
+        section3AngleOperator_isSelfAdjoint U V
+      exact cfc_const_one ℝ _
 
 /-- `cos Θ` is nonnegative on the canonical angle spectrum. -/
 theorem section3CosAngleOperator_nonneg :
@@ -203,7 +204,7 @@ theorem section3CosAngleOperator_nonneg :
   intro x hx
   have hI := spectrum_section3AngleOperator_subset_Icc U V hx
   exact Real.cos_nonneg_of_mem_Icc
-    ⟨by linarith [Real.pi_pos], by linarith [hI.2]⟩
+    ⟨(neg_nonpos.mpr (by positivity : 0 ≤ Real.pi / 2)).trans hI.1, hI.2⟩
 
 /-! ## Identification with the Halmos cosine -/
 
@@ -247,7 +248,7 @@ theorem section3CanonicalAbsoluteValue_mul_self_eq_halmosCosineSq :
         mul_assoc P Q (Qc * Pc), ← mul_assoc Q Qc Pc, hQQc,
         mul_assoc Pc Qc (Q * P), ← mul_assoc Qc Q P, hQcQ,
         mul_assoc Pc Qc (Qc * Pc), ← mul_assoc Qc Qc Pc, hQc]
-      simp
+      simp only [mul_assoc]
 
 /-- The literal `cos Θ` has square equal to the Halmos cosine square. -/
 theorem section3CosAngleOperator_mul_self_eq_halmosCosineSq :
@@ -315,6 +316,9 @@ theorem section3AngleOperator_comm_projection_right :
   rw [section3AngleOperator]
   exact Commute.cfc_real (section3SinAngleOperator_comm_projection_right U V) Real.arcsin
 
+omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)]
+    [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
+    [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
 private theorem add_self_cancel {a b : H →L[𝕜] H} (h : a + a = b + b) : a = b := by
   let twoUnit : 𝕜ˣ := Units.mk0 2 (by norm_num)
   apply smul_left_cancel twoUnit
@@ -355,7 +359,7 @@ theorem section3DirectRotation_comm_sine (hacute : TauCeti.IsAcute U V) :
     have hpy := section3Sin_sq_add_cos_sq U V
     have hs : section3SinAngleOperator U V * section3SinAngleOperator U V =
         1 - section3CosAngleOperator U V * section3CosAngleOperator U V :=
-      eq_sub_of_add_eq' hpy
+      eq_sub_of_add_eq hpy
     rw [hs]
     exact (Commute.one_left _).sub_left (hC.symm.mul_left hC.symm)
   exact (TauCeti.commute_of_commute_mul_self
@@ -370,7 +374,7 @@ theorem section3AngleOperator_comm_directRotation (hacute : TauCeti.IsAcute U V)
 /-! ## The quarter turn -/
 
 /-- The skew part `W - cos Θ` is skew-adjoint. -/
-theorem star_section3DirectRotation_sub_cosine (hacute : TauCeti.IsAcute U V) :
+theorem star_section3DirectRotation_sub_cosine :
     star (section3DirectRotation U V - section3CosAngleOperator U V) =
       -(section3DirectRotation U V - section3CosAngleOperator U V) := by
   let W := section3DirectRotation U V
@@ -398,15 +402,12 @@ theorem modulus_section3DirectRotation_sub_cosine (hacute : TauCeti.IsAcute U V)
   have hunit : W ∈ unitary (H →L[𝕜] H) :=
     spectraCanonicalPolarFactor_mem_unitary U V hUV hVU
   have hWC := section3DirectRotation_comm_cosine U V hacute
-  have hstarD : star D = -D := by
-    simpa [D, W, C] using star_section3DirectRotation_sub_cosine U V hacute
   have hsum0 := polarFactor_add_star_eq_two_absoluteValue U V
   have hCeq := section3CosAngleOperator_eq_canonicalAbsoluteValue U V
   have hsum : W + star W = C + C := by
     simpa [W, C, section3DirectRotation, hCeq] using hsum0
   have hgram : star D * D = S * S := by
     have hWstarW := Unitary.star_mul_self_of_mem hunit
-    have hC2 := section3CosAngleOperator_mul_self_eq_halmosCosineSq U V
     have hpy := section3Sin_sq_add_cos_sq U V
     dsimp [D]
     rw [star_sub]
@@ -415,13 +416,14 @@ theorem modulus_section3DirectRotation_sub_cosine (hacute : TauCeti.IsAcute U V)
     rw [hCsa]
     have hstarWC : star W * C = C * star W := by
       have h := congrArg star hWC.eq
-      simpa [star_mul, hCsa] using h
+      simpa [star_mul, hCsa] using h.symm
     noncomm_ring [hWstarW, hsum, hWC.eq, hstarWC, hpy]
   have hS0 : 0 ≤ S := section3SinAngleOperator_nonneg U V
   have hmod : S = D.modulus := by
     refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq hS0 ?_
-    rw [ContinuousLinearMap.star_eq_adjoint]
-    simpa only [ContinuousLinearMap.mul_def] using hgram.symm
+    have hgram' : S * S = star D * D := hgram.symm
+    rw [ContinuousLinearMap.star_eq_adjoint] at hgram'
+    simpa only [ContinuousLinearMap.mul_def] using hgram'
   exact hmod.symm
 
 /-- The paper's polar resolution `W = cos Θ + J sin Θ`. -/
@@ -449,9 +451,9 @@ private theorem commute_polarPartial_of_commute
   have hJq : M.polarPartial q = 0 := M.polarPartial_eq_zero_of_mem_orthogonal hq
   have hAqker : A q ∈ LinearMap.ker M.toLinearMap := by
     rw [LinearMap.mem_ker]
-    have hqker : M q = 0 := by
-      rw [← LinearMap.mem_ker]
+    have hq' : q ∈ LinearMap.ker M.toLinearMap := by
       rwa [← M.polarInitial_orthogonal_eq_ker]
+    have hqker : M q = 0 := hq'
     have h := congrArg (fun T : H →L[𝕜] H => T q) hAM.eq
     simp only [mul_apply_eq_comp] at h
     rw [hqker, map_zero] at h
@@ -473,13 +475,13 @@ private theorem commute_polarPartial_of_commute
       have hmodApp : A (M.modulus y) = M.modulus (A y) := by
         have h := congrArg (fun T : H →L[𝕜] H => T y) hAmod.eq
         simpa only [mul_apply_eq_comp] using h
-      rw [M.polarPartial_apply_modulus]
-      change A (M y) = M.polarPartial (A (M.modulus y))
-      rw [hmodApp, M.polarPartial_apply_modulus, hleft]
+      change A (M.polarPartial (M.modulus y)) =
+        M.polarPartial (A (M.modulus y))
+      rw [M.polarPartial_apply_modulus, hmodApp, M.polarPartial_apply_modulus, hleft]
     exact M.denseRange_modulusCorestrict.induction_on
       (p := fun z : M.polarInitial =>
         A (M.polarPartial z) = M.polarPartial (A z)) ⟨p, hp⟩ hclosed hgen
-  simp only [map_add, hJq, map_zero, add_zero, hJAq]
+  simp only [mul_apply_eq_comp, map_add, hJq, hJAq, map_zero, add_zero]
   exact hagree
 
 /-- Proposition 3.5: `Θ` commutes with the quarter turn `J`. -/
@@ -489,7 +491,7 @@ theorem section3AngleOperator_comm_quarterTurn (hacute : TauCeti.IsAcute U V) :
   have hθW := section3AngleOperator_comm_directRotation U V hacute
   have hθC : Commute (section3AngleOperator U V) (section3CosAngleOperator U V) := by
     rw [section3CosAngleOperator]
-    exact Commute.cfc_real (Commute.refl (section3AngleOperator U V)) Real.cos
+    exact (Commute.cfc_real (Commute.refl (section3AngleOperator U V)) Real.cos).symm
   have hθD : Commute (section3AngleOperator U V) D := by
     exact hθW.sub_right hθC
   have hmod := modulus_section3DirectRotation_sub_cosine U V hacute
@@ -502,6 +504,9 @@ theorem section3AngleOperator_comm_quarterTurn (hacute : TauCeti.IsAcute U V) :
 
 /-! ## Eigenvectors -/
 
+omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)]
+    [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
+    [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
 private theorem eq_of_smul_eq_smul_right {α β : 𝕜} {x : H} (hx : x ≠ 0)
     (h : α • x = β • x) : α = β := by
   have hz : (α - β) • x = 0 := by rw [sub_smul, h, sub_self]
@@ -515,7 +520,7 @@ theorem section3SinAngleOperator_apply_of_angleOperator_apply {x : H} {θ : ℝ}
     (hx : section3AngleOperator U V x = ((θ : ℝ) : 𝕜) • x) :
     section3SinAngleOperator U V x = ((Real.sin θ : ℝ) : 𝕜) • x := by
   rw [← cfc_sin_section3AngleOperator U V]
-  exact TauCeti.cfc_apply_of_apply_eq_real_smul
+  exact TauCeti.LinearPMap.cfc_apply_of_apply_eq_real_smul
     (section3AngleOperator_isSelfAdjoint U V) hx0 hx Real.sin Real.continuous_sin
 
 /-- `cos Θ` acts on an angle eigenvector by the scalar cosine. -/
@@ -524,7 +529,7 @@ theorem section3CosAngleOperator_apply_of_angleOperator_apply {x : H} {θ : ℝ}
     (hx : section3AngleOperator U V x = ((θ : ℝ) : 𝕜) • x) :
     section3CosAngleOperator U V x = ((Real.cos θ : ℝ) : 𝕜) • x := by
   rw [section3CosAngleOperator]
-  exact TauCeti.cfc_apply_of_apply_eq_real_smul
+  exact TauCeti.LinearPMap.cfc_apply_of_apply_eq_real_smul
     (section3AngleOperator_isSelfAdjoint U V) hx0 hx Real.cos Real.continuous_cos
 
 /-- Every genuine eigenvalue of the operator angle lies in `[0,π/2]`. -/
@@ -535,7 +540,7 @@ theorem section3AngleOperator_eigenvalue_mem_Icc {x : H} (hx0 : x ≠ 0) {θ : �
   have hback : section3AngleOperator U V x =
       ((Real.arcsin (Real.sin θ) : ℝ) : 𝕜) • x := by
     rw [section3AngleOperator]
-    exact TauCeti.cfc_apply_of_apply_eq_real_smul
+    exact TauCeti.LinearPMap.cfc_apply_of_apply_eq_real_smul
       (section3SinAngleOperator_isSelfAdjoint U V) hx0 hsx
       Real.arcsin Real.continuous_arcsin
   rw [hx] at hback
@@ -555,15 +560,14 @@ theorem section3AngleOperator_eigenvalue_mem_Icc {x : H} (hx0 : x ≠ 0) {θ : �
   exact ⟨Real.arcsin_nonneg.mpr hsin0, harc.2⟩
 
 /-- The skew part has vanishing real quadratic form. -/
-theorem re_inner_section3DirectRotation_sub_cosine_apply_self
-    (hacute : TauCeti.IsAcute U V) (x : H) :
+theorem re_inner_section3DirectRotation_sub_cosine_apply_self (x : H) :
     RCLike.re ⟪(section3DirectRotation U V - section3CosAngleOperator U V) x, x⟫_𝕜 = 0 := by
   let D := section3DirectRotation U V - section3CosAngleOperator U V
   have hstar : star D = -D := by
-    simpa [D] using star_section3DirectRotation_sub_cosine U V hacute
+    simpa [D] using star_section3DirectRotation_sub_cosine U V
   have h1 : ⟪D x, x⟫_𝕜 = ⟪x, star D x⟫_𝕜 := by
     rw [ContinuousLinearMap.star_eq_adjoint]
-    exact ContinuousLinearMap.adjoint_inner_right D x x
+    exact (ContinuousLinearMap.adjoint_inner_right D x x).symm
   rw [hstar, neg_apply, inner_neg_right] at h1
   have hre := congrArg RCLike.re h1
   have hsym : RCLike.re ⟪x, D x⟫_𝕜 = RCLike.re ⟪D x, x⟫_𝕜 :=
@@ -590,7 +594,7 @@ theorem vectorAngle_section3DirectRotation_eq_of_angleOperator_apply
       Real.cos θ * ‖x‖ ^ 2 := by
     rw [hWx, inner_add_left, inner_smul_left, RCLike.conj_ofReal, map_add,
       RCLike.re_ofReal_mul, inner_self_eq_norm_sq,
-      re_inner_section3DirectRotation_sub_cosine_apply_self U V hacute x, add_zero]
+      re_inner_section3DirectRotation_sub_cosine_apply_self U V x, add_zero]
   have hunit := spectraCanonicalPolarFactor_mem_unitary U V hUV hVU
   refine TauCeti.vectorAngle_eq_of_re_inner_eq hx0
     (ContinuousLinearMap.norm_map_of_mem_unitary hunit x) hIcc.1 ?_ hinner
@@ -602,32 +606,12 @@ private theorem positive_square_eigenvector
     {A : H →L[𝕜] H} (hA : 0 ≤ A) {x : H} {c : ℝ} (hc : 0 ≤ c)
     (hsq : A (A x) = ((c ^ 2 : ℝ) : 𝕜) • x) :
     A x = ((c : ℝ) : 𝕜) • x := by
-  let z := A x - ((c : ℝ) : 𝕜) • x
-  have hz : A z = -((c : ℝ) : 𝕜) • z := by
-    dsimp [z]
-    rw [map_sub, map_smul, hsq, sub_smul, smul_smul]
-    push_cast
-    module
-  have hnn := ((ContinuousLinearMap.nonneg_iff_isPositive _).mp hA).re_inner_nonneg_left z
-  rw [hz, inner_smul_left, map_neg, RCLike.conj_ofReal, RCLike.re_ofReal_mul,
-    inner_self_eq_norm_sq] at hnn
-  have hcz : c * ‖z‖ ^ 2 = 0 := by
-    have hnorm : 0 ≤ ‖z‖ ^ 2 := sq_nonneg _
-    nlinarith
-  rcases mul_eq_zero.mp hcz with hc0 | hz0
-  · rw [hc0] at hsq ⊢
-    have hA2 : A (A x) = 0 := by simpa using hsq
-    have hinner : ⟪A x, A x⟫_𝕜 = 0 := by
-      have hsa := (ContinuousLinearMap.nonneg_iff_isPositive _).mp hA |>.isSelfAdjoint
-      calc
-        ⟪A x, A x⟫_𝕜 = ⟪x, A (A x)⟫_𝕜 := by
-          rw [← hsa.adjoint_eq]
-          exact ContinuousLinearMap.adjoint_inner_right A x (A x)
-        _ = 0 := by rw [hA2, inner_zero_right]
-    exact inner_self_eq_zero.mp hinner
-  · apply sub_eq_zero.mp
-    change z = 0
-    exact norm_eq_zero.mp ((pow_eq_zero_iff (n := 2) (by norm_num)).mp hz0)
+  have hApos : (A : H →ₗ[𝕜] H).IsPositive :=
+    ((ContinuousLinearMap.nonneg_iff_isPositive A).mp hA).toLinearMap
+  have hsq' : (A : H →ₗ[𝕜] H) ((A : H →ₗ[𝕜] H) x) =
+      (((c : ℝ) : 𝕜) * ((c : ℝ) : 𝕜)) • x := by
+    simpa only [pow_two, RCLike.ofReal_mul] using hsq
+  exact LinearMap.IsPositive.apply_eq_smul_of_apply_apply_eq_smul hApos hc hsq'
 
 /-- The angle eigenspace equals the fixed-cosine Halmos eigenspace at every
 actual acute angle eigenvalue. -/
@@ -642,7 +626,7 @@ theorem section3AngleEigenspace_eq_fixedCosineSubspace
   have hθI := section3AngleOperator_eigenvalue_mem_Icc U V hx0 hx
   have hc0 : 0 < Real.cos θ := by
     have hc : 0 ≤ Real.cos θ := Real.cos_nonneg_of_mem_Icc
-      ⟨by linarith [Real.pi_pos], by linarith [hθI.2]⟩
+      ⟨(neg_nonpos.mpr (by positivity : 0 ≤ Real.pi / 2)).trans hθI.1, hθI.2⟩
     refine lt_of_le_of_ne hc ?_
     intro hzero
     obtain ⟨hUV, hVU⟩ := TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mp hacute
@@ -650,10 +634,11 @@ theorem section3AngleEigenspace_eq_fixedCosineSubspace
     have hCeq := section3CosAngleOperator_eq_canonicalAbsoluteValue U V
     have hk : x ∈ LinearMap.ker
         (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)).toLinearMap := by
-      rw [LinearMap.mem_ker, ← hCeq, hCx, hzero]
-      simp
+      rw [LinearMap.mem_ker, ← hCeq]
+      change section3CosAngleOperator U V x = 0
+      rw [hCx, ← hzero, zero_smul]
     rw [ker_spectraCanonicalAbsoluteValue_eq_bot U V hUV hVU] at hk
-    exact hx0 hk
+    exact hx0 (by simpa using hk)
   ext y
   constructor
   · intro hy
@@ -668,7 +653,7 @@ theorem section3AngleEigenspace_eq_fixedCosineSubspace
     have happ := congrArg (fun T : H →L[𝕜] H => T y) hC2
     simp only [mul_apply_eq_comp, hCy, map_smul, smul_smul] at happ
     push_cast at happ
-    exact happ.symm
+    simpa only [pow_two] using happ.symm
   · intro hy
     have hfixed := (mem_fixedCosineSubspace U V (Real.cos θ) y).mp hy
     by_cases hy0 : y = 0
@@ -680,6 +665,7 @@ theorem section3AngleEigenspace_eq_fixedCosineSubspace
       have happ := congrArg (fun T : H →L[𝕜] H => T y) hC2
       simp only [mul_apply_eq_comp] at happ
       rw [happ, hfixed]
+      push_cast
     have hCy := positive_square_eigenvector
       (section3CosAngleOperator_nonneg U V) (le_of_lt hc0) hsq
     have hpy := section3Sin_sq_add_cos_sq U V
@@ -693,22 +679,27 @@ theorem section3AngleEigenspace_eq_fixedCosineSubspace
       have hcast : (1 : 𝕜) - (((Real.cos θ) ^ 2 : ℝ) : 𝕜) =
           (((Real.sin θ) ^ 2 : ℝ) : 𝕜) := by
         exact_mod_cast htrig
+      have happ' :
+          section3SinAngleOperator U V (section3SinAngleOperator U V y) +
+              (((Real.cos θ) ^ 2 : ℝ) : 𝕜) • y = y := by
+        simpa only [pow_two, RCLike.ofReal_mul] using happ
       calc
         section3SinAngleOperator U V (section3SinAngleOperator U V y) =
-            y - (((Real.cos θ) ^ 2 : ℝ) : 𝕜) • y := eq_sub_of_add_eq happ
+            y - (((Real.cos θ) ^ 2 : ℝ) : 𝕜) • y := eq_sub_of_add_eq happ'
         _ = ((1 : 𝕜) - (((Real.cos θ) ^ 2 : ℝ) : 𝕜)) • y := by
           rw [sub_smul, one_smul]
         _ = (((Real.sin θ) ^ 2 : ℝ) : 𝕜) • y := by rw [hcast]
     have hsin0 : 0 ≤ Real.sin θ := Real.sin_nonneg_of_nonneg_of_le_pi
-      hθI.1 (by linarith [hθI.2, Real.pi_pos])
+      hθI.1 (hθI.2.trans (by linarith [Real.pi_pos] : Real.pi / 2 ≤ Real.pi))
     have hSy := positive_square_eigenvector
       (section3SinAngleOperator_nonneg U V) hsin0 hSinSq
-    have hθy := TauCeti.cfc_apply_of_apply_eq_real_smul
+    have hθy := TauCeti.LinearPMap.cfc_apply_of_apply_eq_real_smul
       (section3SinAngleOperator_isSelfAdjoint U V) hy0 hSy
       Real.arcsin Real.continuous_arcsin
     rw [← section3AngleOperator] at hθy
     have hasin : Real.arcsin (Real.sin θ) = θ := by
-      exact Real.arcsin_sin (by linarith [hθI.1, Real.pi_pos]) hθI.2
+      exact Real.arcsin_sin
+        ((neg_nonpos.mpr (by positivity : 0 ≤ Real.pi / 2)).trans hθI.1) hθI.2
     rw [hasin] at hθy
     exact Module.End.mem_eigenspace_iff.mpr hθy
 
@@ -729,7 +720,7 @@ theorem proposition3_5_angleEigenspace_maximal
   have hθI := section3AngleOperator_eigenvalue_mem_Icc U V hx0 hx
   have hc0 : 0 < Real.cos θ := by
     have hc : 0 ≤ Real.cos θ := Real.cos_nonneg_of_mem_Icc
-      ⟨by linarith [Real.pi_pos], by linarith [hθI.2]⟩
+      ⟨(neg_nonpos.mpr (by positivity : 0 ≤ Real.pi / 2)).trans hθI.1, hθI.2⟩
     refine lt_of_le_of_ne hc ?_
     intro hzero
     obtain ⟨hUV, hVU⟩ := TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mp hacute
@@ -737,10 +728,11 @@ theorem proposition3_5_angleEigenspace_maximal
     have hCeq := section3CosAngleOperator_eq_canonicalAbsoluteValue U V
     have hk : x ∈ LinearMap.ker
         (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)).toLinearMap := by
-      rw [LinearMap.mem_ker, ← hCeq, hCx, hzero]
-      simp
+      rw [LinearMap.mem_ker, ← hCeq]
+      change section3CosAngleOperator U V x = 0
+      rw [hCx, ← hzero, zero_smul]
     rw [ker_spectraCanonicalAbsoluteValue_eq_bot U V hUV hVU] at hk
-    exact hx0 hk
+    exact hx0 (by simpa using hk)
   have heq := section3AngleEigenspace_eq_fixedCosineSubspace U V hacute hθ
   rw [heq]
   exact Frontier.Section3.proposition3_5_fixedAngle_maximal U V (Real.cos θ) hc0
