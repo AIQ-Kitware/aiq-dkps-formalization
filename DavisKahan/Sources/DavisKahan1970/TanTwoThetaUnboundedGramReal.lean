@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
 import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
+import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification
 
 /-!
@@ -58,7 +59,11 @@ So the real statement below mentions no complex object at all: `A`, `B`, `Z`,
 * `gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_ambient_real` — the
   same charged to the ambient residual;
 * `mem_and_gauge_le_reflectionTangentCorner_real` — the same endpoint at every
-  real Fan-dominant unitarily invariant ideal gauge.
+  real Fan-dominant unitarily invariant ideal gauge;
+* `tanTwoTheta_unbounded_residual_opNorm_real` and
+  `tanTwoTheta_unbounded_residual_div_real` — the real counterparts of the
+  *pointwise* operator-norm statements of
+  `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedResidual.lean`.
 
 Neither `IsCompressedDoubleAngleEigenbasis` nor any other attainment condition
 occurs in the hypotheses or in the transitive constant closure of any of the
@@ -314,23 +319,6 @@ def complexifyBoundedCutoff (Ω : TauCeti.BoundedCutoff A U τ) :
     · rw [im_complexify]
       exact Ω.apply_mem_range (im v)
 
-/-- **The compressed cutoff is an orthogonal projection unconditionally.**
-
-`isIdempotentElem_cutoffCorner` and `isSelfAdjoint_cutoffCorner` already prove
-this for every `BoundedCutoff`, so the `hproj` hypothesis carried by the complex
-endpoints of `TanTwoThetaUnboundedGramMiddle.lean` is redundant.  The real
-endpoints below therefore do not ask for it. -/
-theorem isOrthogonalProjectionMap_cutoffCorner
-    {k : Type*} [RCLike k] {G : Type v} [NormedAddCommGroup G]
-    [InnerProductSpace k G] [CompleteSpace G]
-    {A' : G →ₗ.[k] G} {W : Submodule k G} [W.HasOrthogonalProjection] {τ' : ℝ}
-    (Ω : TauCeti.BoundedCutoff A' W τ') :
-    TauCeti.ApproximationNumber.IsOrthogonalProjectionMap (cutoffCorner Ω) := by
-  refine ⟨?_, ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-    (isSelfAdjoint_cutoffCorner Ω)⟩
-  rw [← ContinuousLinearMap.mul_def]
-  exact (isIdempotentElem_cutoffCorner Ω).eq
-
 /-- Through the canonical subspace adapter, the compressed complexified cutoff is
 the complexification of the compressed real cutoff. -/
 theorem cutoffCorner_complexifyBoundedCutoff (Ω : TauCeti.BoundedCutoff A U τ) :
@@ -491,10 +479,10 @@ Hilbert space.  Every object is real: the ambient space, the unbounded operator
 `A`, the odd perturbation `B`, the involution `Z`, the trial subspace `U` and the
 cutoff net.
 
-The complex sibling `gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan` also
-carries a hypothesis `hproj` asserting that each compressed cutoff is an
-orthogonal projection; that hypothesis is redundant
-(`isOrthogonalProjectionMap_cutoffCorner`) and is not asked for here. -/
+Neither this endpoint nor its complex sibling
+`gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan` asks for the compressed
+cutoffs to be orthogonal projections: `isOrthogonalProjectionMap_cutoffCorner`
+proves that unconditionally for every `BoundedCutoff`. -/
 theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_real
     (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
@@ -599,8 +587,7 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_real
     ((complexify_isSelfAdjoint_iff Z).2 hZsa)
     (by rw [← complexify_mul, hZ2, complexify_one])
     hZdom' hZcomm' hUa' hUb' hab hS1' hσ
-    (fun i => complexifyBoundedCutoff (Ω i))
-    (fun i => isOrthogonalProjectionMap_cutoffCorner _) hstrong' k
+    (fun i => complexifyBoundedCutoff (Ω i)) hstrong' k
   -- and the descent
   have htan : reflectionTangentCorner (complexifySubmodule U) (complexify Z) =
       paperBlockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
@@ -676,6 +663,231 @@ theorem mem_and_gauge_le_reflectionTangentCorner_real
   linarith
 
 end Endpoints
+
+/-! ## The pointwise operator-norm endpoint over real scalars
+
+`DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedResidual.lean` states the
+operator-norm case of the unbounded residual `tan 2Θ` theorem over `ℂ` in a
+different *shape* from the gauge endpoints above: it is a **pointwise** vector
+inequality on the spectral subspace `1_{(-∞, c]}(A)`, it carries the explicit
+pole-exclusion constant `κ = δ / √(δ² + 4‖B‖²)` as a second conclusion, and it
+assumes **no** cutoff net and **no** hypothesis `‖sin 2Θ₀‖ < 1` — the cutoffs are
+built from the spectral measure and the pole exclusion is proved, not assumed.
+
+So the real counterpart below is *not* the `k = 1` case of
+`gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_ambient_real`: that
+endpoint bounds the gauge of a *tangent operator* whose very existence needs
+`hS1`, and its right-hand side is a Ky Fan gauge, not `‖B‖ ‖cos 2Θ₀ x‖`.  What
+the two do share is the descent: the pointwise complex statement transports along
+exactly the same complexification, with `TauCeti.LinearPMap.realSpecRange`
+supplying the real trial subspace and
+`complexifySubmodule_realSpecRange` identifying its complexification with the
+complex spectral subspace the complex theorem is stated on. -/
+
+section BlockCongr
+
+variable {k : Type*} [RCLike k] {G : Type*} [NormedAddCommGroup G]
+  [InnerProductSpace k G]
+
+/-- **The even reflection block depends on the subspace only through its value.**
+`Submodule.HasOrthogonalProjection` is a `Prop`, so once the two subspaces are
+equal their instance arguments are definitionally equal too.  This is the
+substitute for `rw`, whose motive is not type correct across an equality of
+subspaces that occurs in an instance argument. -/
+theorem diagonalPart_congr {U V : Submodule k G} [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] (h : U = V) (T : G →L[k] G) :
+    U.diagonalPart T = V.diagonalPart T := by
+  subst h
+  rfl
+
+/-- The odd reflection block depends on the subspace only through its value. -/
+theorem offDiagonalPart_congr {U V : Submodule k G} [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] (h : U = V) (T : G →L[k] G) :
+    U.offDiagonalPart T = V.offDiagonalPart T := by
+  subst h
+  rfl
+
+end BlockCongr
+
+section RealResidualOpNorm
+
+variable {A : E →ₗ.[ℝ] E} {B Z : E →L[ℝ] E} {a b c : ℝ}
+
+/-- **Davis--Kahan Section 7, the `tan 2Θ` theorem for an unbounded self-adjoint
+operator, in residual form, at the operator norm, over real scalars.**
+
+The real counterpart of `tanTwoTheta_unbounded_residual_opNorm`, with the same
+two conclusions: the tangent inequality with the sharp constant `2` against the
+residual `B`, and the explicit lower bound `κ ‖x‖ ≤ ‖cos 2Θ₀ x‖` that makes it
+meaningful.  As over `ℂ`, no cutoff data is assumed: the trial subspace is the
+descended real spectral subspace `1_{(-∞, c]}(A)` and the cutoffs are built from
+the spectral measure of the complexification.
+
+Hypotheses, in the source's terms.  `hA` : `A` is self-adjoint.  `hB` : the
+perturbation is fully off-diagonal, `H₀ = H₁ = 0`.  `hZsa`, `hZ2` : `Z` is the
+self-adjoint involution `2Q - 1`.  `hZdom`, `hZcomm` : `Q` reduces `A + B`.
+`hUa`, `hUb`, `hab` : the spectral separation `A ≤ a` on `𝔛₀`, `A ≥ b` on
+`𝔛₁`, `a < b`. -/
+theorem tanTwoTheta_unbounded_residual_opNorm_real
+    (hA : _root_.IsSelfAdjoint A)
+    (hB : TauCeti.IsOddFor
+      (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) B)
+    (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
+    (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
+    (hZcomm : ∀ x : A.domain,
+      A ⟨Z (x : E), hZdom x⟩ + B (Z (x : E)) = Z (A x) + Z (B (x : E)))
+    (hUa : ∀ x : A.domain,
+      (x : E) ∈ TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic →
+      ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
+    (hUb : ∀ x : A.domain,
+      (x : E) ∈ (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+      b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
+    (hab : a < b) {x : E}
+    (hx : x ∈ TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) :
+    (b - a) *
+        ‖(TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
+          measurableSet_Iic).offDiagonalPart Z x‖ ≤
+      2 * ‖B‖ *
+        ‖(TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
+          measurableSet_Iic).diagonalPart Z x‖ ∧
+    TauCeti.diagonalBlockBound (b - a) ‖B‖ * ‖x‖ ≤
+      ‖(TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
+        measurableSet_Iic).diagonalPart Z x‖ := by
+  classical
+  have hAc : _root_.IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
+    TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
+  have hUeq : complexifySubmodule
+        (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) =
+      TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic :=
+    complexifySubmodule_realSpecRange hA (Set.Iic c) measurableSet_Iic
+  -- the transported hypotheses
+  have hB' : TauCeti.IsOddFor
+      (TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic)
+      (complexify B) := hUeq ▸ isOddFor_complexifySubmodule hB
+  have hZdom' := mapsDomainTo_complexifyReal hZdom
+  have hZcomm' : ∀ x : (TauCeti.LinearPMap.complexifyReal A).domain,
+      TauCeti.LinearPMap.complexifyReal A
+          ⟨complexify Z (x : RealComplexification E), hZdom' x⟩ +
+        complexify B (complexify Z (x : RealComplexification E)) =
+      complexify Z (TauCeti.LinearPMap.complexifyReal A x) +
+        complexify Z (complexify B (x : RealComplexification E)) := by
+    intro y
+    have hcoord := (TauCeti.LinearPMap.mem_complexifyReal_domain_iff A
+      (y : RealComplexification E)).mp y.2
+    refine RealComplexification.ext ?_ ?_
+    · exact hZcomm ⟨re (y : RealComplexification E), hcoord.1⟩
+    · exact hZcomm ⟨im (y : RealComplexification E), hcoord.2⟩
+  have hUa' : ∀ y : (TauCeti.LinearPMap.complexifyReal A).domain,
+      (y : RealComplexification E) ∈
+        TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic →
+      (⟪TauCeti.LinearPMap.complexifyReal A y,
+          (y : RealComplexification E)⟫_ℂ).re ≤
+        a * ‖(y : RealComplexification E)‖ ^ 2 := by
+    intro y hy
+    rw [← hUeq, mem_complexifySubmodule] at hy
+    have hcoord := (TauCeti.LinearPMap.mem_complexifyReal_domain_iff A
+      (y : RealComplexification E)).mp y.2
+    have h1 := hUa ⟨re (y : RealComplexification E), hcoord.1⟩ hy.1
+    have h2 := hUa ⟨im (y : RealComplexification E), hcoord.2⟩ hy.2
+    have hsplit : (⟪TauCeti.LinearPMap.complexifyReal A y,
+          (y : RealComplexification E)⟫_ℂ).re =
+        ⟪A ⟨re (y : RealComplexification E), hcoord.1⟩,
+            re (y : RealComplexification E)⟫_ℝ +
+          ⟪A ⟨im (y : RealComplexification E), hcoord.2⟩,
+            im (y : RealComplexification E)⟫_ℝ := rfl
+    rw [hsplit, RealComplexification.norm_sq, mul_add]
+    linarith
+  have hUb' : ∀ y : (TauCeti.LinearPMap.complexifyReal A).domain,
+      (y : RealComplexification E) ∈
+        (TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic)ᗮ →
+      b * ‖(y : RealComplexification E)‖ ^ 2 ≤
+        (⟪TauCeti.LinearPMap.complexifyReal A y,
+          (y : RealComplexification E)⟫_ℂ).re := by
+    intro y hy
+    rw [← hUeq, ← complexifySubmodule_orthogonal, mem_complexifySubmodule] at hy
+    have hcoord := (TauCeti.LinearPMap.mem_complexifyReal_domain_iff A
+      (y : RealComplexification E)).mp y.2
+    have h1 := hUb ⟨re (y : RealComplexification E), hcoord.1⟩ hy.1
+    have h2 := hUb ⟨im (y : RealComplexification E), hcoord.2⟩ hy.2
+    have hsplit : (⟪TauCeti.LinearPMap.complexifyReal A y,
+          (y : RealComplexification E)⟫_ℂ).re =
+        ⟪A ⟨re (y : RealComplexification E), hcoord.1⟩,
+            re (y : RealComplexification E)⟫_ℝ +
+          ⟪A ⟨im (y : RealComplexification E), hcoord.2⟩,
+            im (y : RealComplexification E)⟫_ℝ := rfl
+    rw [hsplit, RealComplexification.norm_sq, mul_add]
+    linarith
+  have hxc : (ofReal x : RealComplexification E) ∈
+      TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic := by
+    rw [← hUeq, mem_complexifySubmodule]
+    exact ⟨hx, Submodule.zero_mem _⟩
+  -- the complex pointwise theorems, applied to the complexified data
+  have h1 := TauCeti.gap_mul_norm_offDiagonalPart_apply_le_specRange hAc hB'
+    ((complexify_isSelfAdjoint_iff Z).2 hZsa)
+    (by rw [← complexify_mul, hZ2, complexify_one]) hZdom' hZcomm' hUa' hUb' hab hxc
+  have h2 := TauCeti.diagonalBlockBound_mul_le_norm_diagonalPart_apply_specRange hAc hB'
+    ((complexify_isSelfAdjoint_iff Z).2 hZsa)
+    (by rw [← complexify_mul, hZ2, complexify_one]) hZdom' hZcomm' hUa' hUb' hab hxc
+  -- and the descent
+  have hoff : (TauCeti.LinearPMap.specRange hAc (Set.Iic c)
+        measurableSet_Iic).offDiagonalPart (complexify Z) =
+      complexify ((TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
+        measurableSet_Iic).offDiagonalPart Z) := by
+    rw [← offDiagonalPart_congr hUeq (complexify Z)]
+    exact offDiagonalPart_complexifySubmodule _ Z
+  have hdiag : (TauCeti.LinearPMap.specRange hAc (Set.Iic c)
+        measurableSet_Iic).diagonalPart (complexify Z) =
+      complexify ((TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
+        measurableSet_Iic).diagonalPart Z) := by
+    rw [← diagonalPart_congr hUeq (complexify Z)]
+    exact diagonalPart_complexifySubmodule _ Z
+  rw [hoff, hdiag, complexify_ofReal, complexify_ofReal, ofReal.norm_map,
+    ofReal.norm_map, norm_complexify] at h1
+  rw [hdiag, complexify_ofReal, ofReal.norm_map, ofReal.norm_map,
+    norm_complexify] at h2
+  exact ⟨h1, h2⟩
+
+/-- The tangent form over real scalars: on the trial subspace the denominator is
+nonzero, so the estimate can be divided through.
+`‖sin 2Θ₀ x‖ / ‖cos 2Θ₀ x‖ ≤ 2 ‖B‖ / δ`.  The real counterpart of
+`tanTwoTheta_unbounded_residual_div`. -/
+theorem tanTwoTheta_unbounded_residual_div_real
+    (hA : _root_.IsSelfAdjoint A)
+    (hB : TauCeti.IsOddFor
+      (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) B)
+    (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
+    (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
+    (hZcomm : ∀ x : A.domain,
+      A ⟨Z (x : E), hZdom x⟩ + B (Z (x : E)) = Z (A x) + Z (B (x : E)))
+    (hUa : ∀ x : A.domain,
+      (x : E) ∈ TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic →
+      ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
+    (hUb : ∀ x : A.domain,
+      (x : E) ∈ (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+      b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
+    (hab : a < b) {x : E}
+    (hx : x ∈ TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic)
+    (hx0 : x ≠ 0) :
+    ‖(TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
+        measurableSet_Iic).offDiagonalPart Z x‖ /
+      ‖(TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
+        measurableSet_Iic).diagonalPart Z x‖ ≤ 2 * ‖B‖ / (b - a) := by
+  obtain ⟨htan, hpole⟩ := tanTwoTheta_unbounded_residual_opNorm_real hA hB hZsa hZ2
+    hZdom hZcomm hUa hUb hab hx
+  have hδ : 0 < b - a := by linarith
+  have hxpos : 0 < ‖x‖ := norm_pos_iff.mpr hx0
+  have hκ : 0 < TauCeti.diagonalBlockBound (b - a) ‖B‖ := by
+    rw [TauCeti.diagonalBlockBound_eq]
+    have : (0 : ℝ) < √((b - a) ^ 2 + 4 * ‖B‖ ^ 2) :=
+      Real.sqrt_pos.mpr (by positivity)
+    positivity
+  have hden : 0 < ‖(TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
+      measurableSet_Iic).diagonalPart Z x‖ :=
+    lt_of_lt_of_le (by positivity) hpole
+  rw [div_le_div_iff₀ hden hδ]
+  linarith [htan]
+
+end RealResidualOpNorm
 
 end
 

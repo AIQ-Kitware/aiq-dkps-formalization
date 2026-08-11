@@ -523,6 +523,18 @@ theorem isSelfAdjoint_cutoffCorner (Ω : TauCeti.BoundedCutoff A U τ) :
   rw [h1, h2]
   exact TauCeti.inner_swap_of_isSelfAdjoint Ω.isSelfAdjoint _ _
 
+/-- **The compressed cutoff is an orthogonal projection, unconditionally.**
+
+`isIdempotentElem_cutoffCorner` and `isSelfAdjoint_cutoffCorner` prove it for
+*every* `BoundedCutoff`, so no consumer of `cutoffCorner` has to ask for it as a
+hypothesis. -/
+theorem isOrthogonalProjectionMap_cutoffCorner (Ω : TauCeti.BoundedCutoff A U τ) :
+    TauCeti.ApproximationNumber.IsOrthogonalProjectionMap (cutoffCorner Ω) := by
+  refine ⟨?_, ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+    (isSelfAdjoint_cutoffCorner Ω)⟩
+  rw [← ContinuousLinearMap.mul_def]
+  exact (isIdempotentElem_cutoffCorner Ω).eq
+
 end ScalarGenericCutoff
 
 variable {A : H →ₗ.[ℂ] H} {τ : ℝ}

@@ -4,7 +4,7 @@
 regeneration** — rerun it after files move or land; `[x]` survives, new files
 appear unchecked, vanished files drop out. Do not hand-maintain this list.
 
-1056/1454 files reviewed · 1454 files · 372,259 lines · 123 groups
+1056/1455 files reviewed · 1455 files · 373,277 lines · 123 groups
 
 ## How to review
 
@@ -669,7 +669,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/Sources/DavisKahan1970
 
-*135 files, 40,192 lines — 90/135 reviewed*
+*136 files, 41,101 lines — 90/136 reviewed*
 
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedKyFan.lean` — 2,818 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean` — 1,536 lines · Lean source
@@ -677,11 +677,12 @@ been read. An unrecorded review is indistinguishable from no review.
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramMiddle.lean` — 1,233 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean` — 947 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/DoubleAngleTangentOperator.lean` — 915 lines · Lean source
+- [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean` — 896 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean` — 758 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/DirectedReal.lean` — 712 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/SineTheta/CommonDomainSymmetric.lean` — 677 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean` — 644 lines · Lean source
-- [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean` — 608 lines · Lean source
+- [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean` — 620 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Section9/DomainLimitation.lean` — 594 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/DirectedUnboundedReal.lean` — 586 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean` — 579 lines · Lean source
@@ -798,7 +799,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/Sources/DavisKahan1970/All.lean` — 59 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/FullAngleReal.lean` — 48 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Audits/Correspondence.lean` — 42 lines · Lean source
-- [x] `DavisKahan/Sources/DavisKahan1970/Section9/All.lean` — 29 lines · Lean source
+- [x] `DavisKahan/Sources/DavisKahan1970/Section9/All.lean` — 30 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/All.lean` — 29 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Ideals/All.lean` — 24 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Audits/All.lean` — 17 lines · Lean source
@@ -815,7 +816,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### DavisKahan/SpectralTheory
 
-*74 files, 22,720 lines — 50/74 reviewed*
+*74 files, 22,721 lines — 50/74 reviewed*
 
 - [ ] `DavisKahan/SpectralTheory/FormMethod/BeamSection9.lean` — 2,092 lines · Lean source
 - [ ] `DavisKahan/SpectralTheory/FormMethod/BeamClassicalReal.lean` — 1,331 lines · Lean source
@@ -826,7 +827,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/SpectralTheory/ClosedOperator/Complexification.lean` — 790 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/Real/SpectralRestriction.lean` — 715 lines · Lean source
 - [ ] `DavisKahan/SpectralTheory/FormMethod/BeamFormSpaceScalar.lean` — 704 lines · Lean source
-- [ ] `DavisKahan/SpectralTheory/FormMethod/BeamDoubleTangent.lean` — 666 lines · Lean source
+- [ ] `DavisKahan/SpectralTheory/FormMethod/BeamDoubleTangent.lean` — 667 lines · Lean source
 - [ ] `DavisKahan/SpectralTheory/FormMethod/BeamFormSpace.lean` — 663 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ReflectionRestriction.lean` — 641 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ClosedOperator/Basic.lean` — 560 lines · Lean source
@@ -1122,10 +1123,10 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### ForTauCeti :: (unassigned — fix the topic design)
 
-*46 files, 14,021 lines — 0/46 reviewed*
+*46 files, 14,129 lines — 0/46 reviewed*
 
 - [ ] `ForTauCeti/MeasureTheory/IntervalWeakSecondDeriv.lean` — 936 lines · Lean source
-- [ ] `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/UnboundedPole.lean` — 806 lines · Lean source
+- [ ] `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/UnboundedPole.lean` — 914 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/MultiplicityLevelUniqueness.lean` — 688 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/RayleighRitz.lean` — 617 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/Polar/SelfAdjointCompletion.lean` — 557 lines · Lean source
@@ -1613,10 +1614,10 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: data/config
 
-*42 files, 15,240 lines — 25/42 reviewed*
+*42 files, 15,243 lines — 25/42 reviewed*
 
 - [x] `dev/tauceti/extraction-manifest.json` — 4,544 lines · data/config
-- [x] `dev/davis-kahan-1970-full-source-census.json` — 1,760 lines · data/config
+- [x] `dev/davis-kahan-1970-full-source-census.json` — 1,763 lines · data/config
 - [x] `dev/davis-kahan-1970-frontier.json` — 1,252 lines · data/config
 - [x] `dev/davis-kahan-hidden-foundations.json` — 930 lines · data/config
 - [x] `dev/upstream-extraction/spectra-usage-inventory-650b0e3.json` — 908 lines · data/config
@@ -1660,10 +1661,10 @@ been read. An unrecorded review is indistinguishable from no review.
 
 ### dev :: documentation
 
-*198 files, 42,398 lines — 158/198 reviewed*
+*198 files, 42,395 lines — 158/198 reviewed*
 
-- [x] `dev/davis-kahan-1970-full-source-census.md` — 3,322 lines · documentation
-- [x] `dev/audit/FILE-CHECKLIST.md` — 2,101 lines · documentation
+- [x] `dev/davis-kahan-1970-full-source-census.md` — 3,317 lines · documentation
+- [x] `dev/audit/FILE-CHECKLIST.md` — 2,103 lines · documentation
 - [x] `dev/davis-kahan-expert-completion-plan.md` — 1,589 lines · documentation
 - [ ] `dev/hilbert-space-operator-roadmap/glossary.md` — 1,519 lines · documentation
 - [x] `dev/davis-kahan-gap-closure-plan.md` — 1,161 lines · documentation

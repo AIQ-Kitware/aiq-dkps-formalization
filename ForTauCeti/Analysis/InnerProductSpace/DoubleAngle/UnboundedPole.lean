@@ -50,6 +50,11 @@ kills the product; only then is `τ → ∞` taken.  The cutoff data is packaged
 * `TauCeti.opNorm_offDiagonalPart_comp_le`: the estimate on a single cutoff.
 * `TauCeti.norm_offDiagonalPart_apply_le_of_tendsto`: the estimate on all of
   `U`, after `τ → ∞`.
+* `TauCeti.norm_offDiagonalPart_le_of_tendsto` and
+  `TauCeti.norm_offDiagonalPart_lt_one_of_tendsto`: the same estimate as a bound
+  on the *operator* norm of the cross block, hence `‖S‖ < 1`.  The step from `U`
+  to the whole space is adjointness: `S` is self-adjoint and exchanges `U` and
+  `Uᗮ`, so its `Uᗮ` block is the adjoint of its `U` block.
 * `TauCeti.diagonalBlockBound_mul_le_norm_diagonalPart_apply` and
   `…_of_tendsto`: the pole exclusion `κ ‖x‖ ≤ ‖C x‖`.
 
@@ -195,6 +200,17 @@ theorem crossBlockBound_nonneg {δ nB : ℝ} (hnB : 0 ≤ nB) :
     0 ≤ crossBlockBound δ nB := by
   rw [crossBlockBound_eq]
   positivity
+
+/-- **The cross-block bound is a strict contraction.**  `2β < √(δ² + 4β²)` as
+soon as the gap `δ` is positive, with no smallness assumption on `β = ‖B‖`: this
+is why the pole exclusion never needs a hypothesis relating `‖B‖` to the gap. -/
+theorem crossBlockBound_lt_one {δ nB : ℝ} (hδ : 0 < δ) (hnB : 0 ≤ nB) :
+    crossBlockBound δ nB < 1 := by
+  have hD : (0 : ℝ) < √(δ ^ 2 + 4 * nB ^ 2) := Real.sqrt_pos.mpr (by positivity)
+  have hD2 : √(δ ^ 2 + 4 * nB ^ 2) ^ 2 = δ ^ 2 + 4 * nB ^ 2 :=
+    Real.sq_sqrt (by positivity)
+  rw [crossBlockBound_eq, div_lt_one hD]
+  nlinarith [hD, hD2, hnB, hδ]
 
 /-- The scalar step from the cross-block bound to the diagonal-block bound:
 `c² + s² = n²` and `s ≤ (2β/D) n` give `(δ/D) n ≤ c`, where `D² = δ² + 4β²`. -/
@@ -754,6 +770,98 @@ theorem norm_offDiagonalPart_apply_le_of_tendsto {ι : Type*} {l : Filter ι}
     (continuous_norm.tendsto _).comp
       (((U.offDiagonalPart Z).continuous.tendsto x).comp hx)
   exact le_of_tendsto hlim (Filter.Eventually.of_forall hbound)
+
+/-- **The cross block is a strict contraction on the whole space**, not merely on
+the trial subspace.
+
+`S = U.offDiagonalPart Z` is self-adjoint and exchanges `U` and `Uᗮ`, so its
+`Uᗮ` block is the adjoint of its `U` block and carries the same bound: for
+`y ∈ Uᗮ`, `‖S y‖² = ⟪y, S (S y)⟫ ≤ ‖y‖ ‖S (S y)‖ ≤ c ‖y‖ ‖S y‖` because
+`S y ∈ U`.  The two blocks land in orthogonal subspaces, so the bound assembles
+by Pythagoras.
+
+This is the hypothesis `‖U.offDiagonalPart Z‖ < 1` that the Ky Fan endpoints of
+`DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramMiddle.lean` take; see
+`norm_offDiagonalPart_lt_one_of_tendsto`. -/
+theorem norm_offDiagonalPart_le_of_tendsto {ι : Type*} {l : Filter ι}
+    [l.NeBot] (τf : ι → ℝ) (Ωf : ∀ i, BoundedCutoff A U (τf i))
+    (hτ : ∀ i, 0 ≤ τf i) (hab : a < b)
+    (hconv : ∀ x ∈ U, Filter.Tendsto (fun i => (Ωf i).toProj x) l (nhds x)) :
+    ‖U.offDiagonalPart Z‖ ≤ crossBlockBound (b - a) ‖B‖ := by
+  have hc0 : 0 ≤ crossBlockBound (b - a) ‖B‖ := crossBlockBound_nonneg (norm_nonneg B)
+  have hsym : ∀ u v : H, ⟪U.offDiagonalPart Z u, v⟫_ℂ = ⟪u, U.offDiagonalPart Z v⟫_ℂ :=
+    inner_swap_of_isSelfAdjoint (isSelfAdjoint_offDiagonalPart hZsa)
+  have hU : ∀ x ∈ U, ‖U.offDiagonalPart Z x‖ ≤ crossBlockBound (b - a) ‖B‖ * ‖x‖ :=
+    fun x hx => norm_offDiagonalPart_apply_le_of_tendsto hred hB hZsa hZ2 hZdom
+      hZcomm hUa hUb τf Ωf hτ hab (hconv x hx)
+  have hUp : ∀ y ∈ Uᗮ, ‖U.offDiagonalPart Z y‖ ≤ crossBlockBound (b - a) ‖B‖ * ‖y‖ := by
+    intro y hy
+    have hmem : U.offDiagonalPart Z y ∈ U :=
+      offDiagonalPart_mem_of_mem_orthogonal U Z hy
+    have hval : RCLike.re ⟪y, U.offDiagonalPart Z (U.offDiagonalPart Z y)⟫_ℂ
+        = ‖U.offDiagonalPart Z y‖ ^ 2 := by
+      rw [← hsym y (U.offDiagonalPart Z y)]
+      exact inner_self_eq_norm_sq _
+    have hle : ‖U.offDiagonalPart Z y‖ ^ 2
+        ≤ ‖y‖ * ‖U.offDiagonalPart Z (U.offDiagonalPart Z y)‖ := by
+      rw [← hval]
+      exact (RCLike.re_le_norm _).trans (norm_inner_le_norm y _)
+    have hinner := hU (U.offDiagonalPart Z y) hmem
+    rcases eq_or_lt_of_le (norm_nonneg (U.offDiagonalPart Z y)) with h0 | h0
+    · rw [← h0]
+      exact mul_nonneg hc0 (norm_nonneg y)
+    · nlinarith [hle, hinner, norm_nonneg y, hc0]
+  refine ContinuousLinearMap.opNorm_le_bound _ hc0 fun v => ?_
+  have hsplit : U.starProjection v + Uᗮ.starProjection v = v := by
+    rw [Submodule.starProjection_orthogonal_apply]
+    abel
+  have hSv : U.offDiagonalPart Z v
+      = U.offDiagonalPart Z (U.starProjection v)
+        + U.offDiagonalPart Z (Uᗮ.starProjection v) := by
+    rw [← map_add, hsplit]
+  have hp : U.offDiagonalPart Z (U.starProjection v) ∈ Uᗮ :=
+    offDiagonalPart_mem_orthogonal_of_mem U Z (U.starProjection_apply_mem v)
+  have hq : U.offDiagonalPart Z (Uᗮ.starProjection v) ∈ U :=
+    offDiagonalPart_mem_of_mem_orthogonal U Z (Uᗮ.starProjection_apply_mem v)
+  have hqp : ⟪U.offDiagonalPart Z (Uᗮ.starProjection v),
+      U.offDiagonalPart Z (U.starProjection v)⟫_ℂ = 0 :=
+    hp _ hq
+  have hpq : ⟪U.offDiagonalPart Z (U.starProjection v),
+      U.offDiagonalPart Z (Uᗮ.starProjection v)⟫_ℂ = 0 := by
+    rw [← inner_conj_symm (𝕜 := ℂ), hqp, map_zero]
+  have hnormsq : ‖U.offDiagonalPart Z v‖ ^ 2
+      = ‖U.offDiagonalPart Z (U.starProjection v)‖ ^ 2
+        + ‖U.offDiagonalPart Z (Uᗮ.starProjection v)‖ ^ 2 := by
+    rw [hSv, norm_add_sq (𝕜 := ℂ), hpq]
+    simp
+  have hcross : ⟪U.starProjection v, Uᗮ.starProjection v⟫_ℂ = 0 :=
+    (Uᗮ.starProjection_apply_mem v) _ (U.starProjection_apply_mem v)
+  have hvsq : ‖v‖ ^ 2 = ‖U.starProjection v‖ ^ 2 + ‖Uᗮ.starProjection v‖ ^ 2 := by
+    rw [← hsplit, norm_add_sq (𝕜 := ℂ), hcross]
+    simp
+  have hpv := hU (U.starProjection v) (U.starProjection_apply_mem v)
+  have hqv := hUp (Uᗮ.starProjection v) (Uᗮ.starProjection_apply_mem v)
+  have hsq : ‖U.offDiagonalPart Z v‖ ^ 2
+      ≤ (crossBlockBound (b - a) ‖B‖ * ‖v‖) ^ 2 := by
+    rw [hnormsq, mul_pow, hvsq]
+    nlinarith [hpv, hqv, norm_nonneg (U.offDiagonalPart Z (U.starProjection v)),
+      norm_nonneg (U.offDiagonalPart Z (Uᗮ.starProjection v)), hc0,
+      norm_nonneg (U.starProjection v), norm_nonneg (Uᗮ.starProjection v)]
+  have hfin := Real.sqrt_le_sqrt hsq
+  rwa [Real.sqrt_sq (norm_nonneg _),
+    Real.sqrt_sq (mul_nonneg hc0 (norm_nonneg v))] at hfin
+
+/-- **The cross block is separated from `1` in operator norm**, with no smallness
+hypothesis: `‖sin 2Θ₀‖ ≤ 2‖B‖ / √(δ² + 4‖B‖²) < 1`. -/
+theorem norm_offDiagonalPart_lt_one_of_tendsto {ι : Type*} {l : Filter ι}
+    [l.NeBot] (τf : ι → ℝ) (Ωf : ∀ i, BoundedCutoff A U (τf i))
+    (hτ : ∀ i, 0 ≤ τf i) (hab : a < b)
+    (hconv : ∀ x ∈ U, Filter.Tendsto (fun i => (Ωf i).toProj x) l (nhds x)) :
+    ‖U.offDiagonalPart Z‖ < 1 :=
+  lt_of_le_of_lt
+    (norm_offDiagonalPart_le_of_tendsto hred hB hZsa hZ2 hZdom hZcomm hUa hUb τf
+      Ωf hτ hab hconv)
+    (crossBlockBound_lt_one (by linarith) (norm_nonneg B))
 
 /-- **The pole-exclusion theorem.**  For `x` in the trial subspace `U`,
 

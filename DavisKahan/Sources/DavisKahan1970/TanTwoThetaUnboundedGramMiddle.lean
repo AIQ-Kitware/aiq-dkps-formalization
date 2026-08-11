@@ -1090,7 +1090,12 @@ This is the target chain of `TanTwoThetaUnboundedGramBridge.lean` closed:
 `kyFan_reflectionTangentCorner_le` is the left half and
 `gap_mul_sum_tanArcsin_le_two_mul_kyFan` is the middle inequality.  Neither
 `IsCompressedDoubleAngleEigenbasis` nor any other attainment condition occurs in
-the hypotheses or in the dependency closure. -/
+the hypotheses or in the dependency closure.
+
+The compressed cutoffs are *not* asked to be orthogonal projections:
+`isOrthogonalProjectionMap_cutoffCorner` proves that for every `BoundedCutoff`,
+so the hypothesis this endpoint used to carry was redundant and is discharged
+internally. -/
 theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan
     (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
@@ -1104,8 +1109,6 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan
     (hab : a < b) (hS1 : ‖U.offDiagonalPart Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
-    (hproj : ∀ i, TauCeti.ApproximationNumber.IsOrthogonalProjectionMap
-      (cutoffCorner (Ω i)))
     (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
       (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℂ U))
     (k : ℕ) :
@@ -1113,7 +1116,8 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan
       2 * kyFanApproximationGauge k (reflectionResidualCorner U B) := by
   have hleft := kyFan_reflectionTangentCorner_le hZsa hZ2 hS1 k
   have hmid := gap_mul_sum_tanArcsin_le_two_mul_kyFan hred hB hZsa hZ2 hZdom
-    hZcomm hUa hUb hab hS1 hσ Ω hproj hstrong k
+    hZcomm hUa hUb hab hS1 hσ Ω (fun i => isOrthogonalProjectionMap_cutoffCorner (Ω i))
+    hstrong k
   have hδ : (0 : ℝ) ≤ b - a := by linarith
   nlinarith [mul_le_mul_of_nonneg_left hleft hδ, hmid]
 
@@ -1174,15 +1178,13 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_ambient
     (hab : a < b) (hS1 : ‖U.offDiagonalPart Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
-    (hproj : ∀ i, TauCeti.ApproximationNumber.IsOrthogonalProjectionMap
-      (cutoffCorner (Ω i)))
     (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
       (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℂ U))
     (k : ℕ) :
     (b - a) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
       2 * kyFanApproximationGauge k B := by
   have h := gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan hred hB hZsa
-    hZ2 hZdom hZcomm hUa hUb hab hS1 hσ Ω hproj hstrong k
+    hZ2 hZdom hZcomm hUa hUb hab hS1 hσ Ω hstrong k
   have h2 := kyFanApproximationGauge_reflectionResidualCorner_le (U := U) B k
   linarith
 
@@ -1211,8 +1213,6 @@ theorem mem_and_gauge_le_reflectionTangentCorner
     (hab : a < b) (hS1 : ‖U.offDiagonalPart Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
-    (hproj : ∀ i, TauCeti.ApproximationNumber.IsOrthogonalProjectionMap
-      (cutoffCorner (Ω i)))
     (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
       (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℂ U))
     (hBmem : N.Mem (reflectionResidualCorner U B)) :
@@ -1223,7 +1223,7 @@ theorem mem_and_gauge_le_reflectionTangentCorner
   rw [kyFanApproximationGauge_smul, Complex.norm_real, Real.norm_eq_abs,
     abs_of_nonneg (by linarith : (0 : ℝ) ≤ (b - a) / 2)]
   have h := gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan hred hB hZsa
-    hZ2 hZdom hZcomm hUa hUb hab hS1 hσ Ω hproj hstrong k
+    hZ2 hZdom hZcomm hUa hUb hab hS1 hσ Ω hstrong k
   linarith
 
 end
