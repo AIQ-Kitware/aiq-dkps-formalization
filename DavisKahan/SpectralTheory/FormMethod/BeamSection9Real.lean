@@ -66,6 +66,13 @@ theorem beamRealModel_sourceFacts :
     realSpectrum_beamOperator_eq_insert_zero,
     exists_strictMono_range_eq_beamEigenvalues⟩
 
+/-- The positive spectrum in the real Section 9 model is exactly the fourth powers of the
+positive roots of `cos beta * cosh beta = 1`. -/
+theorem beamRealPositiveSpectrum_sourceFacts :
+    beamEigenvalues =
+      {lam : ℝ | ∃ beta : ℝ, 0 < beta ∧ characteristic beta = 0 ∧ lam = beta ^ 4} :=
+  beamEigenvalues_eq_characteristicFourthPowers
+
 /-- The zero eigenspace is exactly the two-dimensional affine trial plane printed in Section 9. -/
 theorem beamRealZeroMode_sourceFacts :
     Module.finrank ℝ beamTrial = 2 ∧

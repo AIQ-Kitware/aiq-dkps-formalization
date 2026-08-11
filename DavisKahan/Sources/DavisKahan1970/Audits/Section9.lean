@@ -22,12 +22,18 @@ namespace Section9
 
 #check real_freeBeam_operator_source
 #check real_freeBeam_spectrum_source
+#check real_freeBeam_positive_spectrum_source
+#check real_freeBeam_trial_le_domain
+#check real_freeBeam_operator_apply_trial
 #check real_freeBeam_zero_mode_source
 #check real_freeBeam_finiteData_source
 #check real_freeBeam_trial_and_perturbation_source
 
 #print axioms real_freeBeam_operator_source
 #print axioms real_freeBeam_spectrum_source
+#print axioms real_freeBeam_positive_spectrum_source
+#print axioms real_freeBeam_trial_le_domain
+#print axioms real_freeBeam_operator_apply_trial
 #print axioms real_freeBeam_zero_mode_source
 #print axioms real_freeBeam_finiteData_source
 #print axioms real_freeBeam_trial_and_perturbation_source
@@ -40,6 +46,9 @@ namespace Section9
 #check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.closure_classicalFreeBeamGraph_eq_graph
 #check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.realSpectrum_beamOperator_eq_insert_zero
 #check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.exists_strictMono_range_eq_beamEigenvalues
+#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.exists_eigenpair_of_characteristic
+#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamEigenvalues_eq_characteristicFourthPowers
+#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamRealPositiveSpectrum_sourceFacts
 #check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamRealZeroMode_sourceFacts
 #check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamPerturbation_isSelfAdjoint
 #check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamTrial_orthonormal
@@ -53,6 +62,9 @@ namespace Section9
 #print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.classicalFreeBeamGraph_subset_graph
 #print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.realSpectrum_beamOperator_eq_insert_zero
 #print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.exists_strictMono_range_eq_beamEigenvalues
+#print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.exists_eigenpair_of_characteristic
+#print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamEigenvalues_eq_characteristicFourthPowers
+#print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamRealPositiveSpectrum_sourceFacts
 #print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamRealZeroMode_sourceFacts
 #print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamFiniteDataCertificate
 #print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamRealModel_sourceFacts
