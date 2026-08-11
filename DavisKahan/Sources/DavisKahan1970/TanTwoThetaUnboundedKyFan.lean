@@ -2042,9 +2042,15 @@ theorem isUnit_diagonalPart_sq (hZ2 : Z * Z = 1)
 `tan 2Θ₀ = sin 2Θ₀ · (cos 2Θ₀)⁻¹`, written so that the definition is total: the
 inverse is taken of `cos² 2Θ₀` through `Ring.inverse`, and the remaining
 `cos 2Θ₀` is kept on the right.  No hypothesis is attached to the definition;
-`isUnit_diagonalPart_sq` is what makes it the intended operator. -/
-def unboundedReflectionTangent (U : Submodule ℂ H) [U.HasOrthogonalProjection]
-    (Z : H →L[ℂ] H) : H →L[ℂ] H :=
+`isUnit_diagonalPart_sq` is what makes it the intended operator.
+
+The body is block algebra in the ring `H →L[𝕜] H`, so the definition is stated
+for an arbitrary `RCLike` scalar field; only the *theorems* about it below are
+complex. -/
+def unboundedReflectionTangent {𝕜 : Type*} [RCLike 𝕜] {G : Type*}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
+    (Z : G →L[𝕜] G) : G →L[𝕜] G :=
   U.offDiagonalPart Z *
     Ring.inverse (U.diagonalPart Z * U.diagonalPart Z) * U.diagonalPart Z
 

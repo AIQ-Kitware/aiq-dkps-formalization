@@ -245,36 +245,57 @@ theorem adjoint_mul_unboundedReflectionTangent_moebius
 
 /-! ### The typed corners -/
 
-variable (U Z) in
-/-- The directed sine corner `S₀ : U → Uᗮ`. -/
-abbrev reflectionSineCorner : U →L[ℂ] Uᗮ := paperBlockCompression Uᗮ U Z
+section ScalarGenericCorners
 
-variable (U Z) in
+variable {𝕜 : Type*} [RCLike 𝕜] {G : Type u} [NormedAddCommGroup G]
+  [InnerProductSpace 𝕜 G] [CompleteSpace G]
+
+/-- The scalar-generic form of the module's completeness instance for an
+orthogonally complemented subspace. -/
+local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramBridgeGeneric
+    (W : Submodule 𝕜 G) [W.HasOrthogonalProjection] : CompleteSpace W :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+
+/-- The directed sine corner `S₀ : U → Uᗮ`. -/
+abbrev reflectionSineCorner (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
+    (Z : G →L[𝕜] G) : U →L[𝕜] Uᗮ := paperBlockCompression Uᗮ U Z
+
 /-- The directed tangent corner `T₀ : U → Uᗮ`. -/
-abbrev reflectionTangentCorner : U →L[ℂ] Uᗮ :=
+abbrev reflectionTangentCorner (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
+    (Z : G →L[𝕜] G) : U →L[𝕜] Uᗮ :=
   paperBlockCompression Uᗮ U (unboundedReflectionTangent U Z)
 
 section CompressionAlgebra
 
-variable (Ω Γ : Submodule ℂ H) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
+variable (Ω Γ : Submodule 𝕜 G) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
 
 /-- The adjoint of a block compression is the transposed block compression of
 the adjoint. -/
-theorem adjoint_paperBlockCompression (K : H →L[ℂ] H) :
+theorem adjoint_paperBlockCompression (K : G →L[𝕜] G) :
     (paperBlockCompression Ω Γ K).adjoint = paperBlockCompression Γ Ω K.adjoint := by
   rw [paperBlockCompression, paperBlockCompression, ContinuousLinearMap.adjoint_comp,
     ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_adjoint,
     ContinuousLinearMap.comp_assoc]
 
 /-- The block compression, evaluated in the ambient space. -/
-theorem coe_paperBlockCompression_apply (K : H →L[ℂ] H) (y : Γ) :
-    ((paperBlockCompression Ω Γ K y : Ω) : H) = Ω.starProjection (K (y : H)) := by
+theorem coe_paperBlockCompression_apply (K : G →L[𝕜] G) (y : Γ) :
+    ((paperBlockCompression Ω Γ K y : Ω) : G) = Ω.starProjection (K (y : G)) := by
   rw [paperBlockCompression]
   simp only [ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply,
     Submodule.adjoint_subtypeL]
   exact Submodule.coe_orthogonalProjectionOnto_apply Ω _
 
-/-- The Gram operator of a block compression, evaluated in the ambient space. -/
+end CompressionAlgebra
+
+end ScalarGenericCorners
+
+section GramCompressionAlgebra
+
+variable (Ω Γ : Submodule ℂ H) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
+
+/-- The Gram operator of a block compression, evaluated in the ambient space.
+`gramOperator` is complex-only, so this companion of
+`coe_paperBlockCompression_apply` stays at `ℂ`. -/
 theorem coe_gramOperator_paperBlockCompression_apply (K : H →L[ℂ] H) (y : Γ) :
     ((gramOperator (paperBlockCompression Ω Γ K) y : Γ) : H) =
       Γ.starProjection (K.adjoint (Ω.starProjection (K (y : H)))) := by
@@ -283,7 +304,7 @@ theorem coe_gramOperator_paperBlockCompression_apply (K : H →L[ℂ] H) (y : Γ
   rw [adjoint_paperBlockCompression, coe_paperBlockCompression_apply,
     coe_paperBlockCompression_apply]
 
-end CompressionAlgebra
+end GramCompressionAlgebra
 
 /-- The Gram operator of the directed sine corner is the ambient `S²`,
 restricted to `U`. -/
@@ -453,16 +474,28 @@ theorem eq_of_mem_polarInitial_comp {P : E0 →L[ℂ] E0} (hPsa : IsSelfAdjoint 
 
 end CutoffFixity
 
-variable {A : H →ₗ.[ℂ] H} {τ : ℝ}
+section ScalarGenericCutoff
+
+variable {𝕜 : Type*} [RCLike 𝕜] {G : Type u} [NormedAddCommGroup G]
+  [InnerProductSpace 𝕜 G] [CompleteSpace G]
+
+/-- The scalar-generic form of the module's completeness instance for an
+orthogonally complemented subspace. -/
+local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramBridgeCutoff
+    (W : Submodule 𝕜 G) [W.HasOrthogonalProjection] : CompleteSpace W :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+
+variable {U : Submodule 𝕜 G} [U.HasOrthogonalProjection]
+variable {A : G →ₗ.[𝕜] G} {τ : ℝ}
 
 /-- The bounded cutoff, compressed to the trial subspace `U`.  The cutoff's
 range already lies in `U`, so this loses nothing. -/
-def cutoffCorner (Ω : TauCeti.BoundedCutoff A U τ) : U →L[ℂ] U :=
+def cutoffCorner (Ω : TauCeti.BoundedCutoff A U τ) : U →L[𝕜] U :=
   paperBlockCompression U U Ω.toProj
 
 /-- The compressed cutoff, evaluated in the ambient space. -/
 theorem coe_cutoffCorner_apply (Ω : TauCeti.BoundedCutoff A U τ) (y : U) :
-    ((cutoffCorner Ω y : U) : H) = Ω.toProj (y : H) := by
+    ((cutoffCorner Ω y : U) : G) = Ω.toProj (y : G) := by
   rw [cutoffCorner, coe_paperBlockCompression_apply]
   exact Submodule.starProjection_eq_self_iff.mpr (Ω.mem_subspace _)
 
@@ -478,17 +511,21 @@ theorem isIdempotentElem_cutoffCorner (Ω : TauCeti.BoundedCutoff A U τ) :
 theorem isSelfAdjoint_cutoffCorner (Ω : TauCeti.BoundedCutoff A U τ) :
     IsSelfAdjoint (cutoffCorner Ω) := by
   refine ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr fun y z => ?_
-  show ⟪cutoffCorner Ω y, z⟫_ℂ = ⟪y, cutoffCorner Ω z⟫_ℂ
-  have hy : ((cutoffCorner Ω y : U) : H) = Ω.toProj (y : H) :=
+  show ⟪cutoffCorner Ω y, z⟫_𝕜 = ⟪y, cutoffCorner Ω z⟫_𝕜
+  have hy : ((cutoffCorner Ω y : U) : G) = Ω.toProj (y : G) :=
     coe_cutoffCorner_apply Ω y
-  have hz : ((cutoffCorner Ω z : U) : H) = Ω.toProj (z : H) :=
+  have hz : ((cutoffCorner Ω z : U) : G) = Ω.toProj (z : G) :=
     coe_cutoffCorner_apply Ω z
-  have h1 : ⟪cutoffCorner Ω y, z⟫_ℂ = ⟪Ω.toProj (y : H), (z : H)⟫_ℂ := by
+  have h1 : ⟪cutoffCorner Ω y, z⟫_𝕜 = ⟪Ω.toProj (y : G), (z : G)⟫_𝕜 := by
     rw [← hy]; rfl
-  have h2 : ⟪y, cutoffCorner Ω z⟫_ℂ = ⟪(y : H), Ω.toProj (z : H)⟫_ℂ := by
+  have h2 : ⟪y, cutoffCorner Ω z⟫_𝕜 = ⟪(y : G), Ω.toProj (z : G)⟫_𝕜 := by
     rw [← hz]; rfl
   rw [h1, h2]
   exact TauCeti.inner_swap_of_isSelfAdjoint Ω.isSelfAdjoint _ _
+
+end ScalarGenericCutoff
+
+variable {A : H →ₗ.[ℂ] H} {τ : ℝ}
 
 /-- **Checkpoint B.**  Every vector of the polar initial space of the
 cutoff-composed sine corner is fixed by the cutoff, in the ambient space.  This

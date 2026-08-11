@@ -66,12 +66,21 @@ namespace TauCeti
 
 open scoped InnerProductSpace
 
-variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+section ScalarGeneric
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
 
 /-- **A bounded low-energy cutoff.**  An orthogonal projection whose range lies
 in `U` and in `D(A)`, is invariant under `A`, and on which `A` is bounded by
 `τ`.
+
+Every field is an identity or an inequality between vectors of `H` and real
+numbers, so the structure is stated for an arbitrary `RCLike` scalar field.  The
+*construction* of a cutoff from a projection-valued measure is complex-only, but
+the data itself is not, and a real cutoff is transported to the complexification
+coordinatewise.
 
 The intended instance — `A` self-adjoint, `U = specRange hA (Iic a)`, and
 `toProj = specProjection hA (Icc (-τ) a)` — is **not constructed here**; the
@@ -80,9 +89,9 @@ fields would come from `specProjection_mem_domain`,
 `mem_domain_of_mem_specRange_of_bounded`, `norm_sub_smul_le_of_mem_specRange`
 and `specProjection_apply_domain`, with `mem_subspace` from the product rule
 for spectral projections. -/
-structure BoundedCutoff (A : H →ₗ.[ℂ] H) (U : Submodule ℂ H) (τ : ℝ) where
+structure BoundedCutoff (A : H →ₗ.[𝕜] H) (U : Submodule 𝕜 H) (τ : ℝ) where
   /-- The underlying projection. -/
-  toProj : H →L[ℂ] H
+  toProj : H →L[𝕜] H
   /-- The projection is self-adjoint. -/
   isSelfAdjoint : IsSelfAdjoint toProj
   /-- The projection is idempotent. -/
@@ -98,13 +107,13 @@ structure BoundedCutoff (A : H →ₗ.[ℂ] H) (U : Submodule ℂ H) (τ : ℝ) 
     toProj (A ⟨toProj v, mem_domain v⟩) = A ⟨toProj v, mem_domain v⟩
 
 /-- Self-adjointness of a bounded operator, in inner-product form. -/
-theorem inner_swap_of_isSelfAdjoint {T : H →L[ℂ] H} (hT : IsSelfAdjoint T)
-    (u v : H) : ⟪T u, v⟫_ℂ = ⟪u, T v⟫_ℂ :=
+theorem inner_swap_of_isSelfAdjoint {T : H →L[𝕜] H} (hT : IsSelfAdjoint T)
+    (u v : H) : ⟪T u, v⟫_𝕜 = ⟪u, T v⟫_𝕜 :=
   ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hT u v
 
 namespace BoundedCutoff
 
-variable {A : H →ₗ.[ℂ] H} {U : Submodule ℂ H} {τ : ℝ}
+variable {A : H →ₗ.[𝕜] H} {U : Submodule 𝕜 H} {τ : ℝ}
 
 /-- A fixed vector of the cutoff lies in the domain. -/
 theorem mem_domain_of_eq (Ω : BoundedCutoff A U τ) {x : H} (hx : Ω.toProj x = x) :
@@ -117,7 +126,7 @@ theorem mem_subspace_of_eq (Ω : BoundedCutoff A U τ) {x : H}
 /-- The cutoff is idempotent, pointwise. -/
 theorem toProj_apply_toProj (Ω : BoundedCutoff A U τ) (v : H) :
     Ω.toProj (Ω.toProj v) = Ω.toProj v := by
-  have h := congrArg (fun T : H →L[ℂ] H => T v) Ω.isIdempotentElem.eq
+  have h := congrArg (fun T : H →L[𝕜] H => T v) Ω.isIdempotentElem.eq
   simpa using h
 
 /-- An orthogonal projection is a contraction. -/
@@ -126,19 +135,21 @@ theorem norm_toProj_apply_le (Ω : BoundedCutoff A U τ) (v : H) :
   rcases eq_or_lt_of_le (norm_nonneg (Ω.toProj v)) with h0 | h0
   · rw [← h0]; exact norm_nonneg v
   · have hsym := inner_swap_of_isSelfAdjoint Ω.isSelfAdjoint
-    have hid : ⟪Ω.toProj v, Ω.toProj v⟫_ℂ = ⟪v, Ω.toProj v⟫_ℂ := by
+    have hid : ⟪Ω.toProj v, Ω.toProj v⟫_𝕜 = ⟪v, Ω.toProj v⟫_𝕜 := by
       rw [hsym v (Ω.toProj v), Ω.toProj_apply_toProj]
-    have h1 : ((‖Ω.toProj v‖ ^ 2 : ℝ) : ℂ) = ⟪v, Ω.toProj v⟫_ℂ := by
-      rw [← hid, inner_self_eq_norm_sq_to_K]
-      norm_cast
+    have h1 : ‖Ω.toProj v‖ ^ 2 = RCLike.re ⟪v, Ω.toProj v⟫_𝕜 := by
+      rw [← hid, inner_self_eq_norm_sq]
     have h2 : ‖Ω.toProj v‖ ^ 2 ≤ ‖v‖ * ‖Ω.toProj v‖ := by
-      have := norm_inner_le_norm (𝕜 := ℂ) v (Ω.toProj v)
-      rw [← h1, Complex.norm_real, Real.norm_eq_abs,
-        abs_of_nonneg (by positivity : (0:ℝ) ≤ ‖Ω.toProj v‖ ^ 2)] at this
-      exact this
+      rw [h1]
+      exact (RCLike.re_le_norm _).trans (norm_inner_le_norm (𝕜 := 𝕜) v (Ω.toProj v))
     nlinarith [h2, h0]
 
 end BoundedCutoff
+
+end ScalarGeneric
+
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
 
 /-- A self-adjoint involution preserves norms. -/
 theorem norm_apply_of_isSelfAdjoint_of_mul_self {Z : H →L[ℂ] H}

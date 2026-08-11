@@ -63,9 +63,9 @@ review is exactly a review of a future submission unit.
 - [x] `DavisKahan/SinTheta` — 34 files, 6,505 lines — **READY**
 - [x] `DavisKahan/Sources` — 1 files, 11 lines — **READY**
 - [x] `DavisKahan/Sources/Davis1963` — 4 files, 604 lines — **READY**
-- [x] `DavisKahan/Sources/DavisKahan1970` — 134 files, 39,711 lines — **blocked (90/134 files)**
+- [x] `DavisKahan/Sources/DavisKahan1970` — 135 files, 40,192 lines — **blocked (90/135 files)**
 - [x] `DavisKahan/Specialized` — 1 files, 10 lines — **READY**
-- [x] `DavisKahan/SpectralTheory` — 73 files, 22,549 lines — **blocked (50/73 files)**
+- [x] `DavisKahan/SpectralTheory` — 74 files, 22,720 lines — **blocked (50/74 files)**
 - [x] `DavisKahan/Sylvester` — 28 files, 6,888 lines — **blocked (27/28 files)**
 - [x] `DavisKahan/TanTheta` — 13 files, 6,712 lines — **blocked (7/13 files)**
 - [x] `DavisKahan/TanTwoTheta` — 5 files, 688 lines — **READY**
@@ -88,7 +88,7 @@ review is exactly a review of a future submission unit.
 - [x] `FinishYuWangSamworth :: documentation` — 4 files, 229 lines — **READY**
 - [x] `FinishYuWangSamworth :: tooling` — 1 files, 79 lines — **READY**
 - [x] `FinishYuWangSamworth/FinishYuWangSamworth` — 13 files, 1,778 lines — **blocked (11/13 files)**
-- [ ] `ForTauCeti :: (unassigned — fix the topic design)` — 46 files, 14,010 lines — **blocked (0/46 files)**
+- [ ] `ForTauCeti :: (unassigned — fix the topic design)` — 46 files, 14,021 lines — **blocked (0/46 files)**
 - [x] `ForTauCeti :: T01 Positive square root, operator modulus, functional calculus` — 8 files, 2,280 lines — **blocked (7/8 files)**
 - [x] `ForTauCeti :: T02 Polar decomposition and partial isometries` — 7 files, 2,897 lines — **blocked (6/7 files)**
 - [x] `ForTauCeti :: T03 Singular values and the singular system` — 4 files, 1,513 lines — **READY**
@@ -126,8 +126,8 @@ review is exactly a review of a future submission unit.
 - [x] `Helm2025 :: other` — 1 files, 265 lines — **READY**
 - [ ] `RoadmapBridge` — 2 files, 297 lines — **blocked (0/2 files)**
 - [x] `comparator :: data/config` — 22 files, 318 lines — **READY**
-- [x] `dev :: data/config` — 42 files, 15,237 lines — **blocked (25/42 files)**
-- [x] `dev :: documentation` — 198 files, 42,402 lines — **blocked (158/198 files)**
+- [x] `dev :: data/config` — 42 files, 15,240 lines — **blocked (25/42 files)**
+- [x] `dev :: documentation` — 198 files, 42,400 lines — **blocked (158/198 files)**
 - [x] `dev :: manifest/notes` — 17 files, 219 lines — **blocked (8/17 files)**
 - [ ] `dev :: other` — 5 files, 715 lines — **blocked (0/5 files)**
 - [ ] `dev :: tooling` — 5 files, 1,374 lines — **blocked (0/5 files)**
