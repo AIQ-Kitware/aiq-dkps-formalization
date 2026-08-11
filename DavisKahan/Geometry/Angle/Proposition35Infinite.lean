@@ -121,15 +121,12 @@ theorem norm_section3SinAngleOperator_le_one :
 theorem spectrum_section3SinAngleOperator_subset_Icc :
     spectrum ℝ (section3SinAngleOperator U V) ⊆ Set.Icc 0 1 := by
   intro x hx
-  refine ⟨spectrum_nonneg_of_nonneg (section3SinAngleOperator_nonneg U V) hx, ?_⟩
-  have hone : ‖(1 : H →L[𝕜] H)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have habs : ‖((x : ℝ) : 𝕜)‖ ≤
-      ‖section3SinAngleOperator U V‖ * ‖(1 : H →L[𝕜] H)‖ :=
-    spectrum.norm_le_norm_mul_of_mem hx
-  rw [RCLike.norm_ofReal] at habs
-  exact (le_abs_self x).trans <| habs.trans <|
-    (mul_le_mul (norm_section3SinAngleOperator_le_one U V) hone
-      (norm_nonneg _) zero_le_one).trans_eq (mul_one 1)
+  have hsymmetric : spectrum ℝ (section3SinAngleOperator U V) ⊆ Set.Icc (-1) 1 :=
+    (TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc
+      (section3SinAngleOperator_isSelfAdjoint U V) zero_le_one).mp
+      (norm_section3SinAngleOperator_le_one U V)
+  exact ⟨spectrum_nonneg_of_nonneg (section3SinAngleOperator_nonneg U V) hx,
+    (hsymmetric hx).2⟩
 
 /-- The literal angle is self-adjoint. -/
 theorem section3AngleOperator_isSelfAdjoint :
@@ -405,23 +402,31 @@ theorem modulus_section3DirectRotation_sub_cosine (hacute : TauCeti.IsAcute U V)
   have hunit : W ∈ unitary (H →L[𝕜] H) :=
     spectraCanonicalPolarFactor_mem_unitary U V hUV hVU
   have hWC := section3DirectRotation_comm_cosine U V hacute
+  have hWC' : W * C = C * W := by
+    simpa [W, C] using hWC.eq
   have hsum0 := polarFactor_add_star_eq_two_absoluteValue U V
   have hCeq := section3CosAngleOperator_eq_canonicalAbsoluteValue U V
   have hsum : W + star W = C + C := by
     simpa [W, C, section3DirectRotation, hCeq] using hsum0
   have hgram : star D * D = S * S := by
-    have hWstarW := Unitary.star_mul_self_of_mem hunit
-    have hpy := section3Sin_sq_add_cos_sq U V
-    dsimp [D]
-    rw [star_sub]
-    have hCsa : star C = C :=
-      (cfc_predicate Real.cos (section3AngleOperator U V)).star_eq
-    rw [hCsa]
     have hstarW : star W = C + C - W := by
       apply eq_sub_iff_add_eq.mpr
       simpa only [add_comm] using hsum
-    rw [hstarW] at hWstarW ⊢
-    noncomm_ring [hWstarW, hWC.eq, hpy]
+    have hWstarW : (C + C - W) * W = 1 := by
+      rw [← hstarW]
+      exact Unitary.star_mul_self_of_mem hunit
+    have hpy := section3Sin_sq_add_cos_sq U V
+    have hpy' : S * S + C * C = 1 := by
+      simpa [S, C] using hpy
+    have hCsa : star C = C :=
+      (cfc_predicate Real.cos (section3AngleOperator U V)).star_eq
+    dsimp [D]
+    rw [star_sub, hCsa, hstarW]
+    calc
+      (C + C - W - C) * (W - C) = (C + C - W) * W - C * C := by
+        noncomm_ring [hWC']
+      _ = 1 - C * C := by rw [hWstarW]
+      _ = S * S := (eq_sub_of_add_eq hpy').symm
   have hS0 : 0 ≤ S := section3SinAngleOperator_nonneg U V
   have hmod : S = D.modulus := by
     refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq hS0 ?_
@@ -606,6 +611,9 @@ theorem vectorAngle_section3DirectRotation_eq_of_angleOperator_apply
 
 /-! ## The printed maximal eigenspace -/
 
+omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)]
+  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
+  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
 private theorem positive_square_eigenvector
     {A : H →L[𝕜] H} (hA : 0 ≤ A) {x : H} {c : ℝ} (hc : 0 ≤ c)
     (hsq : A (A x) = ((c ^ 2 : ℝ) : 𝕜) • x) :
@@ -614,7 +622,8 @@ private theorem positive_square_eigenvector
     ((ContinuousLinearMap.nonneg_iff_isPositive A).mp hA).toLinearMap
   have hsq' : (A : H →ₗ[𝕜] H) ((A : H →ₗ[𝕜] H) x) =
       (((c : ℝ) : 𝕜) * ((c : ℝ) : 𝕜)) • x := by
-    simpa only [ContinuousLinearMap.coe_coe, pow_two, RCLike.ofReal_mul] using hsq
+    change A (A x) = (((c : ℝ) : 𝕜) * ((c : ℝ) : 𝕜)) • x
+    rw [hsq, pow_two, RCLike.ofReal_mul]
   exact LinearMap.IsPositive.apply_eq_smul_of_apply_apply_eq_smul hApos hc hsq'
 
 /-- The angle eigenspace equals the fixed-cosine Halmos eigenspace at every
@@ -641,7 +650,7 @@ theorem section3AngleEigenspace_eq_fixedCosineSubspace
       rw [LinearMap.mem_ker, ← hCeq]
       change section3CosAngleOperator U V x = 0
       rw [hCx, ← hzero]
-      simp only [RCLike.ofReal_zero, zero_smul]
+      simp
     rw [ker_spectraCanonicalAbsoluteValue_eq_bot U V hUV hVU] at hk
     exact hx0 (by simpa using hk)
   ext y
@@ -657,8 +666,7 @@ theorem section3AngleEigenspace_eq_fixedCosineSubspace
     have hC2 := section3CosAngleOperator_mul_self_eq_halmosCosineSq U V
     have happ := congrArg (fun T : H →L[𝕜] H => T y) hC2
     simp only [mul_apply_eq_comp, hCy, map_smul, smul_smul] at happ
-    push_cast at happ
-    simpa only [pow_two] using happ.symm
+    simpa only [pow_two, RCLike.ofReal_mul] using happ.symm
   · intro hy
     have hfixed := (mem_fixedCosineSubspace U V (Real.cos θ) y).mp hy
     by_cases hy0 : y = 0
@@ -736,7 +744,7 @@ theorem proposition3_5_angleEigenspace_maximal
       rw [LinearMap.mem_ker, ← hCeq]
       change section3CosAngleOperator U V x = 0
       rw [hCx, ← hzero]
-      simp only [RCLike.ofReal_zero, zero_smul]
+      simp
     rw [ker_spectraCanonicalAbsoluteValue_eq_bot U V hUV hVU] at hk
     exact hx0 (by simpa using hk)
   have heq := section3AngleEigenspace_eq_fixedCosineSubspace U V hacute hθ
