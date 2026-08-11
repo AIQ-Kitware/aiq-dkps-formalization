@@ -187,6 +187,23 @@ should know which "obstructions" have already been overturned.
 | "Complexify-and-descend is dead / circular" | True only for an **arbitrary** intertwiner. False for **conjugation-fixed** objects — which is what a multiplicity model is assembled from. The blanket verdict would have suppressed a viable route. |
 | "The 8.2 constant-4 route is not improvable, and constant 2 needs the Halmos generic decomposition" | Improvable. Resolved at constant 2 via a Ky Fan even-prefix pinch plus two matching-singular-sequence lemmas. No Halmos decomposition used. |
 | "`IsUniformlyAcute` enters `DK-3.1-prop` through clause (a) only" | False as a statement about signatures — it rides on all five endpoints. Clause (a) is the root cause only. |
+| "The repository proves `IsAcute` and `IsUniformlyAcute` differ in infinite dimension" | It does not. One direction is unconditional; the converse `projectionGap_lt_one_of_isAcute` is **finite-dimensional only**. A compiled witness pair separating them is still outstanding (`DK-3.2-def`). |
+| "Prop 3.1 at `IsAcute` may be genuinely unprovable — `cos Θ` need not be boundedly invertible" | It is provable, in arbitrary dimension over both fields, and without (1.5). The construction is **polar, not spectral**: a partial isometry is unitary exactly when both polar projections are `⊤`, which *is* Definition 3.2. Bounded invertibility is never needed. |
+
+---
+
+## 5b. A recurring shape worth checking elsewhere: the fake scope gap
+
+`DK-3.1-prop` was recorded for weeks as narrowed by `IsUniformlyAcute`. The object it was
+narrowed *around*, `spectraDirectRotation U V hacute`, binds that hypothesis as **`_hacute`** — a
+literal underscore — and returns `spectraCanonicalPolarFactor U V`, which is defined for every
+pair. The definition's own docstring said so. Only the *theorem statements* were narrowed; the
+mathematics was never gap-dependent.
+
+**Reviewers and future missions: when a row records a hypothesis as a scope gap, check whether
+the underlying definition actually consumes it.** An underscore binder means the recorded
+obstacle may be pure bookkeeping. This has now cost this campaign at least once, with a standing
+note already on the books warning about exactly it.
 
 ---
 
