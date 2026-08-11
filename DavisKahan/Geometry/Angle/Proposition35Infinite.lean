@@ -120,13 +120,16 @@ theorem norm_section3SinAngleOperator_le_one :
 /-- The real spectrum of `sin Θ` lies in `[0,1]`. -/
 theorem spectrum_section3SinAngleOperator_subset_Icc :
     spectrum ℝ (section3SinAngleOperator U V) ⊆ Set.Icc 0 1 := by
-  have hsymm : spectrum ℝ (section3SinAngleOperator U V) ⊆ Set.Icc (-1) 1 :=
-    (TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc
-      (section3SinAngleOperator_isSelfAdjoint U V) zero_le_one).mp
-        (norm_section3SinAngleOperator_le_one U V)
   intro x hx
-  exact ⟨spectrum_nonneg_of_nonneg (section3SinAngleOperator_nonneg U V) hx,
-    (hsymm hx).2⟩
+  refine ⟨spectrum_nonneg_of_nonneg (section3SinAngleOperator_nonneg U V) hx, ?_⟩
+  have hone : ‖(1 : H →L[𝕜] H)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+  have habs : ‖((x : ℝ) : 𝕜)‖ ≤
+      ‖section3SinAngleOperator U V‖ * ‖(1 : H →L[𝕜] H)‖ :=
+    spectrum.norm_le_norm_mul_of_mem hx
+  rw [RCLike.norm_ofReal] at habs
+  exact (le_abs_self x).trans <| habs.trans <|
+    (mul_le_mul (norm_section3SinAngleOperator_le_one U V) hone
+      (norm_nonneg _) zero_le_one).trans_eq (mul_one 1)
 
 /-- The literal angle is self-adjoint. -/
 theorem section3AngleOperator_isSelfAdjoint :
@@ -248,7 +251,7 @@ theorem section3CanonicalAbsoluteValue_mul_self_eq_halmosCosineSq :
         mul_assoc P Q (Qc * Pc), ← mul_assoc Q Qc Pc, hQQc,
         mul_assoc Pc Qc (Q * P), ← mul_assoc Qc Q P, hQcQ,
         mul_assoc Pc Qc (Qc * Pc), ← mul_assoc Qc Qc Pc, hQc]
-      simp only [mul_assoc]
+      simp only [mul_assoc, zero_mul, mul_zero, add_zero]
 
 /-- The literal `cos Θ` has square equal to the Halmos cosine square. -/
 theorem section3CosAngleOperator_mul_self_eq_halmosCosineSq :
@@ -414,10 +417,11 @@ theorem modulus_section3DirectRotation_sub_cosine (hacute : TauCeti.IsAcute U V)
     have hCsa : star C = C :=
       (cfc_predicate Real.cos (section3AngleOperator U V)).star_eq
     rw [hCsa]
-    have hstarWC : star W * C = C * star W := by
-      have h := congrArg star hWC.eq
-      simpa [star_mul, hCsa] using h.symm
-    noncomm_ring [hWstarW, hsum, hWC.eq, hstarWC, hpy]
+    have hstarW : star W = C + C - W := by
+      apply eq_sub_iff_add_eq.mpr
+      simpa only [add_comm] using hsum
+    rw [hstarW] at hWstarW ⊢
+    noncomm_ring [hWstarW, hWC.eq, hpy]
   have hS0 : 0 ≤ S := section3SinAngleOperator_nonneg U V
   have hmod : S = D.modulus := by
     refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq hS0 ?_
@@ -610,7 +614,7 @@ private theorem positive_square_eigenvector
     ((ContinuousLinearMap.nonneg_iff_isPositive A).mp hA).toLinearMap
   have hsq' : (A : H →ₗ[𝕜] H) ((A : H →ₗ[𝕜] H) x) =
       (((c : ℝ) : 𝕜) * ((c : ℝ) : 𝕜)) • x := by
-    simpa only [pow_two, RCLike.ofReal_mul] using hsq
+    simpa only [ContinuousLinearMap.coe_coe, pow_two, RCLike.ofReal_mul] using hsq
   exact LinearMap.IsPositive.apply_eq_smul_of_apply_apply_eq_smul hApos hc hsq'
 
 /-- The angle eigenspace equals the fixed-cosine Halmos eigenspace at every
@@ -636,7 +640,8 @@ theorem section3AngleEigenspace_eq_fixedCosineSubspace
         (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)).toLinearMap := by
       rw [LinearMap.mem_ker, ← hCeq]
       change section3CosAngleOperator U V x = 0
-      rw [hCx, ← hzero, zero_smul]
+      rw [hCx, ← hzero]
+      simp only [RCLike.ofReal_zero, zero_smul]
     rw [ker_spectraCanonicalAbsoluteValue_eq_bot U V hUV hVU] at hk
     exact hx0 (by simpa using hk)
   ext y
@@ -664,8 +669,8 @@ theorem section3AngleEigenspace_eq_fixedCosineSubspace
         (((Real.cos θ) ^ 2 : ℝ) : 𝕜) • y := by
       have happ := congrArg (fun T : H →L[𝕜] H => T y) hC2
       simp only [mul_apply_eq_comp] at happ
-      rw [happ, hfixed]
-      push_cast
+      rw [happ]
+      simpa only [pow_two, RCLike.ofReal_mul] using hfixed
     have hCy := positive_square_eigenvector
       (section3CosAngleOperator_nonneg U V) (le_of_lt hc0) hsq
     have hpy := section3Sin_sq_add_cos_sq U V
@@ -730,7 +735,8 @@ theorem proposition3_5_angleEigenspace_maximal
         (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)).toLinearMap := by
       rw [LinearMap.mem_ker, ← hCeq]
       change section3CosAngleOperator U V x = 0
-      rw [hCx, ← hzero, zero_smul]
+      rw [hCx, ← hzero]
+      simp only [RCLike.ofReal_zero, zero_smul]
     rw [ker_spectraCanonicalAbsoluteValue_eq_bot U V hUV hVU] at hk
     exact hx0 (by simpa using hk)
   have heq := section3AngleEigenspace_eq_fixedCosineSubspace U V hacute hθ
