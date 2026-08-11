@@ -381,3 +381,39 @@ a recomputation under a stated definition (§1's halt-language figures).
   changed and enough to break the taxonomy, but it is not enough to characterise
   the new regime. Whether GPT-authored briefs are a durable mode or a two-day
   experiment cannot be answered from this slice.
+
+---
+
+## Addendum, 2026-08-11 refresh — final snapshot before machine loss
+
+**This is the last extraction this machine will produce; account access ends
+here.** The snapshot was refreshed immediately before writing this: `local/raw-all`
+went from **46 to 141 session files** (182M -> 283M), because the live store had
+accumulated three weeks of sessions the committed snapshot never saw. Anyone
+comparing to the previous `ANALYSIS.md` should note the corpus grew 275 -> 292
+prompts and 19 -> 21 sessions, so the phase boundaries shift slightly.
+
+**A trap for the next person to run this pipeline.** `extract_prompts.py` reads
+`local/raw-all`, not `~/.claude/projects`. The two drift apart silently, and
+because Claude Code prunes transcripts at ~30 days, a naive `rsync --delete`
+or a re-run against a stale snapshot **loses history permanently**. Sync
+additively into `raw-all` *before* extracting, and check the file count moved.
+A re-run here initially reported *fewer* prompts than the committed findings
+(275 -> 257), which is the signature of exactly this problem.
+
+**What the added sessions contain.** The tail of the corpus is a distinct
+regime — the agent as **campaign coordinator**, dispatching subagents and
+verifying their work rather than proving anything itself. Its characteristic
+failure is new and is written up as C8 in `MISTAKES.md`: the dispatch brief is
+the only artifact in the loop with no checker, and three consecutive briefs
+carried load-bearing false premises, each caught by the subagent rather than by
+any gate. The cheap countermeasure — asking subagents in the brief to report
+false premises in the brief itself — has a 3/3 hit rate here and costs one
+sentence.
+
+**Phase B's question is now answerable, and the answer is no.** The previous
+version asked whether GPT-authored briefs were "a durable mode or a two-day
+experiment". They persisted through the end of the corpus and were load-bearing
+for the `tan 2Θ` endpoint, but they did not become the dominant mode: the
+dominant mode became coordinator-plus-subagents, with the human supplying goals
+("finish all open tasks") rather than routes.

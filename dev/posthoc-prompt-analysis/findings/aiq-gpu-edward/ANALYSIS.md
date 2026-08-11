@@ -9,36 +9,36 @@ Hand-written interpretation lives in `FINDINGS.md`.
 ## Scope of the visible slice
 
 - Claude Code retains roughly 30 days of session transcripts. The oldest
-  surviving record here is **2026-07-28**; the newest is **2026-08-08**.
+  surviving record here is **2026-07-28**; the newest is **2026-08-11**.
   Earlier work is gone except for the typed-prompt index in
   `claude-meta/history.jsonl` (prompt text only, no responses, CLI sessions only).
 - No session was ever run with a TauCeti subrepo as its cwd; all subrepo work
   was driven from the parent repo, so the scope filter changes nothing in
   practice beyond excluding unrelated projects.
-- **275 human prompts** across **19 sessions** on
-  **11 active days**.
+- **292 human prompts** across **21 sessions** on
+  **13 active days**.
 
 ## Headline
 
 | metric | value |
 |---|---|
-| Human prompts | 275 |
-| Steering bursts (prompts within 60s merged) | 251 |
-| Human-authored characters | 409,612 |
-| Median prompt length | 93 chars |
-| Prompts under 80 chars | 121 (44%) |
-| Agent tool calls in response | 16,718 |
-| Tool calls per human prompt (median) | 8 |
-| Tool calls per human prompt (mean) | 60.8 |
-| Median unattended run between prompts | 8.2 min |
-| Interquartile unattended run | 3.3-28.9 min |
+| Human prompts | 292 |
+| Steering bursts (prompts within 60s merged) | 269 |
+| Human-authored characters | 457,780 |
+| Median prompt length | 104 chars |
+| Prompts under 80 chars | 119 (41%) |
+| Agent tool calls in response | 18,297 |
+| Tool calls per human prompt (median) | 11 |
+| Tool calls per human prompt (mean) | 62.7 |
+| Median unattended run between prompts | 11.0 min |
+| Interquartile unattended run | 3.5-38.3 min |
 | Longest unattended run (intra-session) | 288.9 min |
-| Handoffs shorter than 5 min | 87 of 222 |
-| User interrupts (ESC mid-run) | 49 |
-| Context compactions | 29 |
-| Stop-hook goal replays | 203 |
+| Handoffs shorter than 5 min | 87 of 236 |
+| User interrupts (ESC mid-run) | 54 |
+| Context compactions | 32 |
+| Stop-hook goal replays | 241 |
 
-One human turn bought a median of **8 tool calls** (mean 60.8) of autonomous agent work.
+One human turn bought a median of **11 tool calls** (mean 62.7) of autonomous agent work.
 
 ## What the steering was actually for
 
@@ -46,30 +46,32 @@ Single-label heuristic classification, priority-ordered (first rule wins).
 
 | category | n | share | what it means |
 |---|---|---|---|
-| other | 81 | 29% | Did not match any rule |
-| status_query | 41 | 15% | Asking for status/information rather than issuing work |
-| coordination | 41 | 15% | Multi-agent bookkeeping: identity, lanes, branch fetch/merge, conflicts |
-| paper_editorial | 20 | 7% | Prose/LaTeX editorial direction on the write-up |
-| task_direct | 19 | 7% | A concrete, short work order naming the unit of work |
-| correction_redirect | 18 | 7% | Correcting or reversing what the agent just did or was about to do |
+| other | 70 | 24% | Did not match any rule |
+| status_query | 44 | 15% | Asking for status/information rather than issuing work |
+| coordination | 44 | 15% | Multi-agent bookkeeping: identity, lanes, branch fetch/merge, conflicts |
+| correction_redirect | 25 | 9% | Correcting or reversing what the agent just did or was about to do |
+| task_direct | 23 | 8% | A concrete, short work order naming the unit of work |
+| paper_editorial | 22 | 8% | Prose/LaTeX editorial direction on the write-up |
+| ferry_relay | 18 | 6% | Relaying another agent's text into this session (the human as message bus) |
 | decision_answer | 14 | 5% | Answering a question the agent asked (choosing between options it surfaced) |
-| ferry_relay | 13 | 5% | Relaying another agent's text into this session (the human as message bus) |
-| throughput_nudge | 9 | 3% | Pure 'keep going' with no new information |
-| context_supply | 6 | 2% | Supplying out-of-band state the agent cannot observe (the human's own work, other machines, parallel merges) |
+| throughput_nudge | 10 | 3% | Pure 'keep going' with no new information |
+| context_supply | 7 | 2% | Supplying out-of-band state the agent cannot observe (the human's own work, other machines, parallel merges) |
 | priority_scope | 5 | 2% | Setting or re-setting priorities and scope the agent did not choose |
 | env_infra | 4 | 1% | Environment and tooling breakage (lake, symlinks, MCP, keys, fonts, LaTeX build) |
 | session_lifecycle | 2 | 1% | Managing the session itself: stopping points, handoffs, context budget |
 | quality_gate | 2 | 1% | Asserting a standard the agent would otherwise relax (rigor, artifacts, trust) |
+| task_spec | 1 | 0% | A substantial new mandate / specification (>1200 chars) |
+| ferry_compose | 1 | 0% | Asking this agent to author a prompt/question for a different agent |
 
 ### Grouped
 
 | group | n | share | categories |
 |---|---|---|---|
-| multi-agent logistics | 54 | 20% | ferry_relay, ferry_compose, coordination |
-| judgment (irreducibly human) | 39 | 14% | correction_redirect, quality_gate, priority_scope, decision_answer |
-| work orders | 28 | 10% | compile_cycle, task_direct, task_spec, throughput_nudge |
-| editorial | 20 | 7% | paper_editorial |
-| gap-filling for a blind agent | 53 | 19% | context_supply, error_paste, env_infra, status_query, session_lifecycle |
+| multi-agent logistics | 63 | 22% | ferry_relay, ferry_compose, coordination |
+| judgment (irreducibly human) | 46 | 16% | correction_redirect, quality_gate, priority_scope, decision_answer |
+| work orders | 34 | 12% | compile_cycle, task_direct, task_spec, throughput_nudge |
+| editorial | 22 | 8% | paper_editorial |
+| gap-filling for a blind agent | 57 | 20% | context_supply, error_paste, env_infra, status_query, session_lifecycle |
 
 ## How the steering mix moved over time
 
@@ -77,24 +79,27 @@ Share of that week's prompts, by group.
 
 | week | prompts | multi-agent logistics | judgment (irreducibly human) | work orders | editorial | gap-filling for a blind agent |
 |---|---|---|---|---|---|---|
-| 2026-W31 | 78 | 44% | 10% | 10% | 1% | 17% |
-| 2026-W32 | 197 | 10% | 16% | 10% | 10% | 20% |
+| 2026-W31 | 76 | 45% | 11% | 11% | 1% | 17% |
+| 2026-W32 | 183 | 11% | 17% | 11% | 11% | 22% |
+| 2026-W33 | 33 | 27% | 18% | 18% | 3% | 12% |
 
 ## Prompt volume by day
 
 | day | prompts |
 |---|---|
 | 2026-07-28 | 4 |
-| 2026-07-29 | 35 |
+| 2026-07-29 | 34 |
 | 2026-07-30 | 25 |
 | 2026-07-31 | 8 |
-| 2026-08-02 | 6 |
-| 2026-08-03 | 62 |
-| 2026-08-04 | 44 |
-| 2026-08-05 | 32 |
-| 2026-08-06 | 21 |
-| 2026-08-07 | 29 |
-| 2026-08-08 | 9 |
+| 2026-08-02 | 5 |
+| 2026-08-03 | 61 |
+| 2026-08-04 | 41 |
+| 2026-08-05 | 28 |
+| 2026-08-06 | 19 |
+| 2026-08-07 | 23 |
+| 2026-08-08 | 11 |
+| 2026-08-10 | 13 |
+| 2026-08-11 | 20 |
 
 ## Longest unattended runs
 
@@ -103,20 +108,20 @@ The prompts that bought the most autonomous work before the next human turn.
 | unattended | tool calls | category | prompt |
 |---|---|---|---|
 | 289 min | 46 | coordination | Always push your changes and work on the main branch, you are the only agent working, so ignore the dev lanes  |
+| 286 min | 233 | status_query | Ready to compact? |
 | 278 min | 384 | status_query | What is CH-DEDUP issue? |
-| 257 min | 240 | priority_scope | Continue your goal. Focus on section 3, get all the prereqs done and section 3 props and theorems proven |
+| 260 min | 240 | priority_scope | Continue your goal. Focus on section 3, get all the prereqs done and section 3 props and theorems proven |
 | 251 min | 338 | throughput_nudge | Continue |
 | 249 min | 111 | ferry_relay | Fetch and merge in the results from all of the other agents, your job is to review our breakdown of roadmaps i |
 | 234 min | 191 | paper_editorial | Look at the recent handoff and the davis kahan inventory of what paper faithful proofs we are currently missin |
 | 207 min | 306 | coordination | Ok, yardrat has resolved a lot of the doc weirdness, merge it in and continue your lane |
 | 207 min | 151 | status_query | You have 12 shells running, do those need to be cleaned up? |
-| 169 min | 35 | other | /compact |
+| 188 min | 165 | coordination | You are now Opus, be mindful of your model when authoring and committing. All the hard parts should be taken c |
+| 184 min | 46 | paper_editorial | Ok, I want to compact and then finish the rest of the proofs so we have full paper faithful theorems for every |
 | 150 min | 48 | other | You need to propose candidate roadmap topics and a roadmap ladder to get things upstream. You are planning and |
-| 128 min | 16 | decision_answer | Yes, take the edit, and yes if the roadmaps need the basic theory, then we must provide it. Add it to our ForT |
-| 127 min | 175 | coordination | fetch and merge other remote branches, are any new hard lanes open? Don't start just tell me. |
-| 118 min | 81 | decision_answer | Ok, you can remove some of the non lean files from the checklist. Like MANFEST.txt we can ignore those lake-ma |
-| 113 min | 64 | coordination | Note you are the agent with the highest level of thinking enabled, so you should be taking on the hardest work |
-| 112 min | 305 | task_direct | Working serially, no subagents, finish all the foundations for theorem 3.1 and then finish theorem 3.1 |
+| 146 min | 88 | task_direct | more section 9 work is on main. |
+| 144 min | 50 | task_spec | I had an agent start on that, but I've stopped them. Here is the progress they made with hints: The highest-va |
+| 133 min | 193 | task_direct | Do #9 |
 
 ## Tightest loops
 
@@ -136,23 +141,23 @@ watching closely or the agent kept stalling.
 | 0.1 min | other | Another change to the submodule roadmap sugested lean files in our roadmap (dont touch anyone elses roadmap) I |
 | 0.1 min | other | You can workahead in the submodule |
 | 0.2 min | other | And stop |
-| 0.2 min | correction_redirect | No, that's ok. We are running low on usage. I want to compact. Are we ok to do that? |
 | 0.2 min | coordination | Spectra is now retired, this should unblock many more lanes of work. |
 | 0.3 min | other | > The perturbation estimates downstream are proved once, as Ky Fan dominations, and this Part turns each such  |
 | 0.3 min | other | that is ok |
+| 0.4 min | status_query | Ok, what about pivot to 4.2 and DK 5? |
 
 ## Harness friction events
 
 | event | n |
 |---|---|
-| stop_hook_replay | 203 |
-| task_notification | 183 |
-| queued_prompt_dropped | 136 |
-| slash_command | 71 |
-| interrupt | 49 |
-| command_stdout | 44 |
-| compact_continuation | 29 |
-| stop_hook_set | 27 |
+| task_notification | 253 |
+| stop_hook_replay | 241 |
+| queued_prompt_dropped | 153 |
+| slash_command | 100 |
+| interrupt | 54 |
+| command_stdout | 50 |
+| compact_continuation | 32 |
+| stop_hook_set | 30 |
 | slash_body | 12 |
 
 ## Caveats
