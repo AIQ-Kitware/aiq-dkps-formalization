@@ -18,9 +18,10 @@ import Mathlib.Tactic.Ring
 
 This file records the exact two-dimensional algebra used by the numerical
 example.  It deliberately separates the finite calculations from the analytic
-construction of the free-beam fourth-derivative operator.  A future analytic
-module can discharge the certificate boundary by proving that its compressed
-operators have exactly the data defined here.
+construction of the free-beam fourth-derivative operator.  The real analytic
+model in `DavisKahan.SpectralTheory.FormMethod.BeamSection9Real` discharges this
+certificate boundary by proving that the paper's real free-beam realization has
+exactly the data defined here.
 
 The primary quantities are kept in radical form.  Decimal values used in the
 paper are derived later as rational upper bounds.
