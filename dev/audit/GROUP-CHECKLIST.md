@@ -63,10 +63,10 @@ review is exactly a review of a future submission unit.
 - [x] `DavisKahan/SinTheta` — 34 files, 6,505 lines — **READY**
 - [x] `DavisKahan/Sources` — 1 files, 11 lines — **READY**
 - [x] `DavisKahan/Sources/Davis1963` — 4 files, 604 lines — **READY**
-- [x] `DavisKahan/Sources/DavisKahan1970` — 132 files, 37,722 lines — **blocked (90/132 files)**
+- [x] `DavisKahan/Sources/DavisKahan1970` — 134 files, 39,710 lines — **blocked (90/134 files)**
 - [x] `DavisKahan/Specialized` — 1 files, 10 lines — **READY**
-- [x] `DavisKahan/SpectralTheory` — 72 files, 22,072 lines — **blocked (50/72 files)**
-- [x] `DavisKahan/Sylvester` — 27 files, 6,761 lines — **READY**
+- [x] `DavisKahan/SpectralTheory` — 72 files, 22,275 lines — **blocked (50/72 files)**
+- [x] `DavisKahan/Sylvester` — 28 files, 6,888 lines — **blocked (27/28 files)**
 - [x] `DavisKahan/TanTheta` — 12 files, 5,826 lines — **blocked (7/12 files)**
 - [x] `DavisKahan/TanTwoTheta` — 5 files, 688 lines — **READY**
 - [x] `DkpsQuench2026` — 8 files, 40 lines — **READY**
@@ -126,8 +126,8 @@ review is exactly a review of a future submission unit.
 - [x] `Helm2025 :: other` — 1 files, 265 lines — **READY**
 - [ ] `RoadmapBridge` — 2 files, 297 lines — **blocked (0/2 files)**
 - [x] `comparator :: data/config` — 22 files, 318 lines — **READY**
-- [x] `dev :: data/config` — 42 files, 15,214 lines — **blocked (25/42 files)**
-- [x] `dev :: documentation` — 198 files, 42,346 lines — **blocked (158/198 files)**
+- [x] `dev :: data/config` — 42 files, 15,227 lines — **blocked (25/42 files)**
+- [x] `dev :: documentation` — 198 files, 42,402 lines — **blocked (158/198 files)**
 - [x] `dev :: manifest/notes` — 17 files, 219 lines — **blocked (8/17 files)**
 - [ ] `dev :: other` — 5 files, 715 lines — **blocked (0/5 files)**
 - [ ] `dev :: tooling` — 5 files, 1,374 lines — **blocked (0/5 files)**
