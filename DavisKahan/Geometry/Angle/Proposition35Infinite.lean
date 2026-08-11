@@ -125,8 +125,8 @@ theorem section3SinAngleOperator_le_one :
       ((1 : H →L[𝕜] H) - section3SinAngleOperator U V) :=
     (IsSelfAdjoint.one _).sub (section3SinAngleOperator_isSelfAdjoint U V)
   refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hsa, fun x => ?_⟩
-  rw [ContinuousLinearMap.reApplyInnerSelf_apply, sub_apply, inner_sub_left, map_sub,
-    inner_self_eq_norm_sq]
+  rw [ContinuousLinearMap.reApplyInnerSelf_apply, sub_apply, inner_sub_left,
+    one_apply_eq_self, map_sub, inner_self_eq_norm_sq]
   have hSx : ‖section3SinAngleOperator U V x‖ ≤ ‖x‖ := by
     calc
       ‖section3SinAngleOperator U V x‖
@@ -150,20 +150,14 @@ theorem spectrum_section3SinAngleOperator_subset_Icc :
     spectrum ℝ (section3SinAngleOperator U V) ⊆ Set.Icc 0 1 := by
   intro x hx
   refine ⟨spectrum_nonneg_of_nonneg (section3SinAngleOperator_nonneg U V) hx, ?_⟩
-  have hsub :
-      0 ≤ (1 : H →L[𝕜] H) - section3SinAngleOperator U V :=
-    sub_nonneg.mpr (section3SinAngleOperator_le_one U V)
-  have hcfc :
-      cfc (fun t : ℝ => 1 - t) (section3SinAngleOperator U V) =
-        (1 : H →L[𝕜] H) - section3SinAngleOperator U V := by
-    rw [cfc_sub (fun _ : ℝ => (1 : ℝ)) (fun t : ℝ => t)
-      (section3SinAngleOperator U V), cfc_const_one ℝ _, cfc_id' ℝ _]
-  rw [← hcfc] at hsub
-  have hpoint :=
-    (cfc_nonneg_iff (R := ℝ) (fun t : ℝ => 1 - t)
-      (section3SinAngleOperator U V) (by fun_prop)
-      (section3SinAngleOperator_isSelfAdjoint U V)).mp hsub
-  exact sub_nonneg.mp (hpoint x hx)
+  have hle :
+      section3SinAngleOperator U V ≤
+        algebraMap ℝ (H →L[𝕜] H) (1 : ℝ) := by
+    rw [map_one]
+    exact section3SinAngleOperator_le_one U V
+  exact (le_algebraMap_iff_spectrum_le
+    (R := ℝ) (a := section3SinAngleOperator U V) (r := (1 : ℝ))
+    (ha := section3SinAngleOperator_isSelfAdjoint U V)).mp hle x hx
 
 /-- The literal angle is self-adjoint. -/
 theorem section3AngleOperator_isSelfAdjoint :
