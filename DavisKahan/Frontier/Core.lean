@@ -156,7 +156,7 @@ Radon--Nikodym theory this development does not have. -/
 theorem sameSpectralMultiplicity_iff_unitarilyEquivalent
     [TopologicalSpace.SeparableSpace H₁]
     (A : H₁ →L[ℂ] H₁) (B : H₂ →L[ℂ] H₂)
-    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B) :
+    (hA : IsSelfAdjoint A) (_hB : IsSelfAdjoint B) :
     SameSpectralMultiplicity A B ↔
       BoundedOperatorsUnitaryEquivalent A B :=
   ⟨unitarilyEquivalent_of_sameSpectralMultiplicity A B,

@@ -1587,6 +1587,64 @@ theorem norm_projection_apply_le_of_forall_mem_source
   rw [hval, hisom, norm_neg]
   exact le_trans (L.le_opNorm w) (mul_le_mul_of_nonneg_right hLnorm (norm_nonneg w))
 
+/-- A bound on one directed gap transfers to the other for an arbitrary paper direct
+rotation whose two diagonal compressions are self-adjoint.
+
+This is the direct-rotation form of `norm_projection_apply_le_of_forall_mem_source`.
+Definition 3.1 supplies the equality of the two crossed-block norms directly, so the result
+applies to the full nonacute direct-rotation scope. -/
+theorem norm_projection_apply_le_of_paperDirectRotation
+    (T : H →L[ℂ] H) (hT : IsPaperDirectRotation U V T)
+    (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
+    (hcomplement_sa :
+      IsSelfAdjoint (complementaryProjection U * T * complementaryProjection U))
+    {r : ℝ} (hr : 0 ≤ r)
+    (hsrc : ∀ x ∈ U, ‖complementaryProjection V x‖ ≤ r * ‖x‖)
+    (w : H) (hw : w ∈ Uᗮ) : ‖projection V w‖ ≤ r * ‖w‖ := by
+  obtain ⟨-, -, h12, h21⟩ :=
+    star_blocks_eq U T hsource_sa hcomplement_sa hT.crossed_blocks
+  set L : H →L[ℂ] H := projection U * T * complementaryProjection U with hLdef
+  have hstarL : complementaryProjection U * star T * projection U = star L := by
+    rw [h21, hT.crossed_blocks, neg_neg]
+  have hisom : ∀ z : H, ‖T z‖ = ‖z‖ := fun z =>
+    Unitary.norm_map ⟨T, hT.unitary_mem⟩ z
+  have hconjc : ∀ z : H,
+      complementaryProjection V z = T (complementaryProjection U (star T z)) := by
+    intro z
+    have h := congrArg (fun A : H →L[ℂ] H => A z)
+      (MathAhead.HiddenFoundations.paperDirectRotation_conjugates_complementaryProjection
+        U V T hT)
+    simpa only [mul_apply_eq_comp] using h.symm
+  have hconj : ∀ z : H, projection V z = T (projection U (star T z)) := by
+    intro z
+    have h := congrArg (fun A : H →L[ℂ] H => A z)
+      (MathAhead.HiddenFoundations.paperDirectRotation_conjugates_projection U V T hT)
+    simpa only [mul_apply_eq_comp] using h.symm
+  have hstarLbound : ∀ y : H, ‖star L y‖ ≤ r * ‖y‖ := by
+    intro y
+    have hy : star L y = complementaryProjection U (star T (projection U y)) := by
+      rw [← hstarL]
+      simp only [mul_apply_eq_comp]
+    have hval : ‖star L y‖ = ‖complementaryProjection V (projection U y)‖ := by
+      rw [hy, hconjc (projection U y), hisom]
+    rw [hval]
+    refine le_trans (hsrc _ (U.starProjection_apply_mem y)) ?_
+    exact mul_le_mul_of_nonneg_left (U.norm_starProjection_apply_le y) hr
+  have hLnorm : ‖L‖ ≤ r := by
+    rw [← norm_star L]
+    exact ContinuousLinearMap.opNorm_le_bound _ hr hstarLbound
+  have hwc : complementaryProjection U w = w :=
+    Submodule.starProjection_eq_self_iff.mpr hw
+  have hval : projection V w = T (-(L w)) := by
+    rw [hconj w]
+    have hy : projection U (star T w) =
+        (projection U * star T * complementaryProjection U) w := by
+      simp only [mul_apply_eq_comp, hwc]
+    rw [hy, h12]
+    simp only [neg_apply]
+  rw [hval, hisom, norm_neg]
+  exact le_trans (L.le_opNorm w) (mul_le_mul_of_nonneg_right hLnorm (norm_nonneg w))
+
 omit [CompleteSpace H] in
 /-- The cosine-square quadratic form, block by block: `⟪x, cos²Θ x⟫` is
 `‖P_V P_U x‖² + ‖P_{Vᗮ} P_{Uᗮ} x‖²`. -/
@@ -1616,6 +1674,60 @@ theorem re_inner_halmosCosineSq_self (x : H) :
     rw [hsym, inner_re_symm, hself]
     norm_cast
   rw [hval, inner_add_right, map_add, hblock U V, hblock Uᗮ Vᗮ]
+
+/-- The printed source-block half-angle bound yields the whole-space cosine-square bound for
+an arbitrary paper direct rotation with self-adjoint diagonal compressions. -/
+theorem re_inner_halmosCosineSq_sub_half_nonneg_of_paperDirectRotation
+    (T : H →L[ℂ] H) (hT : IsPaperDirectRotation U V T)
+    (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
+    (hcomplement_sa :
+      IsSelfAdjoint (complementaryProjection U * T * complementaryProjection U))
+    (hcos : ∀ x ∈ U, ‖x‖ ^ 2 / 2 ≤ ‖projection V x‖ ^ 2) (x : H) :
+    0 ≤ RCLike.re ⟪x, halmosCosineSq U V x⟫_ℂ - ‖x‖ ^ 2 / 2 := by
+  have hroot : (0 : ℝ) ≤ Real.sqrt 2 / 2 := by positivity
+  have hrootsq : (Real.sqrt 2 / 2) ^ 2 = 1 / 2 := by
+    have h2 : Real.sqrt 2 ^ 2 = 2 := Real.sq_sqrt (by norm_num)
+    rw [div_pow, h2]
+    norm_num
+  have hsrc : ∀ y ∈ U,
+      ‖complementaryProjection V y‖ ≤ (Real.sqrt 2 / 2) * ‖y‖ := by
+    intro y hy
+    have hpy : ‖y‖ ^ 2 =
+        ‖projection V y‖ ^ 2 + ‖complementaryProjection V y‖ ^ 2 :=
+      Submodule.norm_sq_eq_add_norm_sq_starProjection y V
+    have h1 := hcos y hy
+    have hsq : ‖complementaryProjection V y‖ ^ 2 ≤
+        ((Real.sqrt 2 / 2) * ‖y‖) ^ 2 := by
+      rw [mul_pow, hrootsq]
+      linarith
+    have hle := Real.sqrt_le_sqrt hsq
+    rwa [Real.sqrt_sq (norm_nonneg _),
+      Real.sqrt_sq (by positivity : (0 : ℝ) ≤ (Real.sqrt 2 / 2) * ‖y‖)] at hle
+  have htgt : ∀ w ∈ Uᗮ, ‖projection V w‖ ≤ (Real.sqrt 2 / 2) * ‖w‖ := fun w hw =>
+    norm_projection_apply_le_of_paperDirectRotation U V T hT hsource_sa hcomplement_sa
+      hroot hsrc w hw
+  have hx : ‖x‖ ^ 2 =
+      ‖projection U x‖ ^ 2 + ‖complementaryProjection U x‖ ^ 2 :=
+    Submodule.norm_sq_eq_add_norm_sq_starProjection x U
+  have hU : ‖projection U x‖ ^ 2 / 2 ≤ ‖projection V (projection U x)‖ ^ 2 :=
+    hcos _ (U.starProjection_apply_mem x)
+  have hUc : ‖complementaryProjection U x‖ ^ 2 / 2 ≤
+      ‖complementaryProjection V (complementaryProjection U x)‖ ^ 2 := by
+    have hw := htgt _ (Uᗮ.starProjection_apply_mem x)
+    have hpy : ‖complementaryProjection U x‖ ^ 2 =
+        ‖projection V (complementaryProjection U x)‖ ^ 2 +
+          ‖complementaryProjection V (complementaryProjection U x)‖ ^ 2 :=
+      Submodule.norm_sq_eq_add_norm_sq_starProjection _ V
+    have hsq : ‖projection V (complementaryProjection U x)‖ ^ 2 ≤
+        1 / 2 * ‖complementaryProjection U x‖ ^ 2 := by
+      have h := mul_self_le_mul_self
+        (norm_nonneg (projection V (complementaryProjection U x))) hw
+      rw [← pow_two, ← pow_two, mul_pow, hrootsq] at h
+      exact h
+    linarith
+  rw [re_inner_halmosCosineSq_self U V x]
+  linarith
+
 
 /-- **The printed half-angle hypothesis implies the whole-space form bound.**
 
@@ -1705,7 +1817,90 @@ theorem nonneg_add_star_of_re_inner_nonneg (T : H →L[ℂ] H)
     have := hre x
     linarith
 
-/-- **Davis--Kahan 1970, Proposition 3.4, as printed.**
+/-- **Davis--Kahan 1970, Proposition 3.4 at the full nonacute source scope.**
+
+The operator `W` is an arbitrary direct rotation in the sense of Definition 3.1: the two
+operator inequalities are the printed `C₀ ≥ 0` and `C₁ ≥ 0` conditions, while the remaining
+three hypotheses are unitarity, intertwining, and the skew-adjoint crossed-block relation.
+The hypotheses are exactly the direct-rotation data used in the paper's nonacute Section 3
+scope.
+
+The additional hypothesis `hcos` is exactly the printed `C₀² ≥ 1/2`, read through equation
+(3.7).  The conclusion says that `W²` satisfies Definition 3.1 for the ordered pair
+`(Q₋ℋ,Qℋ)`. -/
+theorem proposition3_4_source_full
+    (W : H →L[ℂ] H)
+    (hunitary : W ∈ unitary (H →L[ℂ] H))
+    (hintertwines : W * projection U = projection V * W)
+    (hcrossed : complementaryProjection U * W * projection U =
+      -star (projection U * W * complementaryProjection U))
+    (hsource_pos : (0 : H →L[ℂ] H) ≤ projection U * W * projection U)
+    (hcomplement_pos :
+      (0 : H →L[ℂ] H) ≤ complementaryProjection U * W * complementaryProjection U)
+    (hcos : ∀ x ∈ U, ‖x‖ ^ 2 / 2 ≤ ‖projection V x‖ ^ 2) :
+    IsPaperDirectRotation (reflectedSubspace U V) V (W * W) := by
+  have hsp := (ContinuousLinearMap.nonneg_iff_isPositive _).mp hsource_pos
+  have hcp := (ContinuousLinearMap.nonneg_iff_isPositive _).mp hcomplement_pos
+  have hW : IsPaperDirectRotation U V W :=
+    { unitary_mem := hunitary
+      intertwines := hintertwines
+      source_compression_nonnegative := fun x => by
+        rw [inner_re_symm (𝕜 := ℂ)]
+        exact hsp.re_inner_nonneg_left x
+      complement_compression_nonnegative := fun x => by
+        rw [inner_re_symm (𝕜 := ℂ)]
+        exact hcp.re_inner_nonneg_left x
+      crossed_blocks := hcrossed }
+  have hWsq : W * W = spectraReflectionProduct U V :=
+    sq_eq_spectraReflectionProduct U V W hunitary hintertwines
+      hsp.isSelfAdjoint hcp.isSelfAdjoint hcrossed
+  have hW2unit : W * W ∈ unitary (H →L[ℂ] H) := mul_mem hunitary hunitary
+  have hrefl : reflectionOperator (reflectedSubspace U V) =
+      reflectionOperator U * reflectionOperator V * reflectionOperator U :=
+    reflectionOperator_reflectedSubspace V U
+  have hRU : reflectionOperator U * reflectionOperator U = 1 :=
+    reflectionOperator_mul_self_complex U
+  have hsq : (W * W) * (W * W) =
+      spectraReflectionProduct (reflectedSubspace U V) V := by
+    show (W * W) * (W * W) =
+      reflectionOperator V * reflectionOperator (reflectedSubspace U V)
+    rw [hrefl, hWsq]
+    noncomm_ring
+  have hint : (W * W) * projection (reflectedSubspace U V) =
+      projection V * (W * W) := by
+    have hPref : projection (reflectedSubspace U V) =
+        reflectionOperator U * projection V * reflectionOperator U :=
+      starProjection_reflectedSubspace U V
+    rw [hPref, hWsq]
+    calc
+      reflectionOperator V * reflectionOperator U *
+          (reflectionOperator U * projection V * reflectionOperator U) =
+        reflectionOperator V * (reflectionOperator U * reflectionOperator U) *
+          (projection V * reflectionOperator U) := by noncomm_ring
+      _ = reflectionOperator V * projection V * reflectionOperator U := by
+        rw [hRU, mul_one, mul_assoc]
+      _ = projection V * reflectionOperator U := by
+        rw [reflectionOperator_mul_projection_self V]
+      _ = (projection V * reflectionOperator V) * reflectionOperator U := by
+        rw [projection_mul_reflectionOperator_self V]
+      _ = projection V * (reflectionOperator V * reflectionOperator U) := by
+        rw [mul_assoc]
+  have hhalf : ∀ x : H,
+      0 ≤ RCLike.re ⟪x, halmosCosineSq U V x⟫_ℂ - ‖x‖ ^ 2 / 2 :=
+    re_inner_halmosCosineSq_sub_half_nonneg_of_paperDirectRotation U V W hW
+      hsp.isSelfAdjoint hcp.isSelfAdjoint hcos
+  have hre : ∀ x : H, 0 ≤ RCLike.re ⟪(W * W) x, x⟫_ℂ := by
+    intro x
+    rw [hWsq]
+    exact re_inner_reflectionProduct_nonneg U V hhalf x
+  have hspec := spectrum_re_nonneg_of_nonneg_add_star (W * W) hW2unit
+    (nonneg_add_star_of_re_inner_nonneg (W * W) hre)
+  exact proposition3_3_principalSquareRoot_converse (reflectedSubspace U V) V (W * W)
+    ⟨hW2unit, hsq, hspec⟩
+    (crossedDefect_image_of_unitary_sq (reflectedSubspace U V) V (W * W)
+      hW2unit hsq hint)
+
+/-- **Acute-constructor specialization of Davis--Kahan 1970, Proposition 3.4.**
 
 > If `C₀² ≥ ½`, then `U²` is the direct rotation of `Q₋ℋ` to `Qℋ`.
 

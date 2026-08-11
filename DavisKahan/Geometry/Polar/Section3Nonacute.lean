@@ -122,7 +122,8 @@ noncomputable def crossedDefectQuarterTurn
     H →L[𝕜] H :=
   sourceToTargetDefect U V J - targetToSourceDefect U V J
 
-omit [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
+omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)]
+  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
   [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
 @[simp]
 private theorem ofEq_orthogonalProjectionOnto
@@ -831,6 +832,9 @@ theorem nonacuteDirectRotation_add_star_eq_two_absoluteValue
   rw [← polarFactor_add_star_eq_two_absoluteValue U V]
   abel
 
+omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)]
+  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
+  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
 private theorem add_self_cancel_nonacute
     {a b : H →L[𝕜] H} (h : a + a = b + b) : a = b := by
   let twoUnit : 𝕜ˣ := Units.mk0 2 (by norm_num)
@@ -1031,6 +1035,37 @@ private theorem starIntertwines_of_intertwines
   have h := congrArg star hint
   rwa [star_mul, star_mul, (isSelfAdjoint_starProjection U).star_eq,
     (isSelfAdjoint_starProjection V).star_eq] at h
+
+omit [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
+  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
+/-- A paper direct rotation conjugates the source projection to the target projection. -/
+theorem paperDirectRotation_conjugates_projection
+    (T : H →L[𝕜] H) (hT : IsPaperDirectRotation U V T) :
+    T * projection U * star T = projection V := by
+  calc
+    T * projection U * star T = (projection V * T) * star T := by
+      rw [hT.intertwines]
+    _ = projection V * (T * star T) := by rw [mul_assoc]
+    _ = projection V := by rw [hT.unitary_mem.2, mul_one]
+
+omit [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
+  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
+/-- A paper direct rotation also conjugates the complementary source projection to the
+complementary target projection. -/
+theorem paperDirectRotation_conjugates_complementaryProjection
+    (T : H →L[𝕜] H) (hT : IsPaperDirectRotation U V T) :
+    T * complementaryProjection U * star T = complementaryProjection V := by
+  have hinter : T * complementaryProjection U = complementaryProjection V * T := by
+    rw [show complementaryProjection U = 1 - projection U from
+      Submodule.starProjection_orthogonal' U]
+    rw [show complementaryProjection V = 1 - projection V from
+      Submodule.starProjection_orthogonal' V]
+    rw [mul_sub, sub_mul, mul_one, one_mul, hT.intertwines]
+  calc
+    T * complementaryProjection U * star T =
+        (complementaryProjection V * T) * star T := by rw [hinter]
+    _ = complementaryProjection V * (T * star T) := by rw [mul_assoc]
+    _ = complementaryProjection V := by rw [hT.unitary_mem.2, mul_one]
 
 omit [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
   [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
