@@ -152,6 +152,26 @@ theorem adjoint_mulLp {g h : α → ℂ} (hg : Measurable g) (hh : Measurable h)
   rw [h1, h2, h3, RCLike.inner_apply, RCLike.inner_apply, map_mul, starRingEnd_self_apply]
   ring
 
+/-- **Multiplication is `star`-equivariant, with the symbol conjugated.**
+
+The operator-level statement is `star_mulLp` below; this is the *vector*-level one, and it is
+the form the real multiplicity model needs: taking `h = g` almost everywhere real, it says
+multiplication by a real symbol maps `star`-fixed classes to `star`-fixed classes, whereas a
+symbol with a nonvanishing imaginary part moves them off. -/
+theorem star_mulLp_apply {g h : α → ℂ} (hg : Measurable g) (hh : Measurable h) {Cg C : ℝ}
+    (hgC : ∀ x, ‖g x‖ ≤ Cg) (hhC : ∀ x, ‖h x‖ ≤ C) (heq : ∀ᵐ x ∂ρ, h x = conj (g x))
+    (F : Lp ℂ 2 ρ) :
+    star (mulLp ρ hg hgC F) = mulLp ρ hh hhC (star F) := by
+  refine Lp.ext ?_
+  filter_upwards [Lp.coeFn_star (mulLp ρ hg hgC F), coeFn_mulLp ρ hg hgC F,
+    coeFn_mulLp ρ hh hhC (star F), Lp.coeFn_star F, heq] with x h1 h2 h3 h4 h5
+  calc ((star (mulLp ρ hg hgC F) : Lp ℂ 2 ρ) : α → ℂ) x
+      = star (g x * (F : α → ℂ) x) := by rw [h1, Pi.star_apply, h2]
+    _ = conj (g x) * conj ((F : α → ℂ) x) := by rw [RCLike.star_def, map_mul]
+    _ = h x * ((star F : Lp ℂ 2 ρ) : α → ℂ) x := by
+        rw [h5, h4, Pi.star_apply, RCLike.star_def]
+    _ = ((mulLp ρ hh hhC (star F) : Lp ℂ 2 ρ) : α → ℂ) x := h3.symm
+
 /-- The adjoint statement in `⋆`-ring form, which is what a `StarAlgHom` obligation asks for. -/
 theorem star_mulLp {g h : α → ℂ} (hg : Measurable g) (hh : Measurable h) {Cg C : ℝ}
     (hgC : ∀ x, ‖g x‖ ≤ Cg) (hhC : ∀ x, ‖h x‖ ≤ C) (heq : ∀ᵐ x ∂ρ, h x = conj (g x)) :
