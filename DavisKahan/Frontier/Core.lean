@@ -41,19 +41,19 @@ namespace Frontier
 
 universe u v
 
-section CrossSpaceClassification
+section SpectralMultiplicityData
 
-variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁]
-  [CompleteSpace H₁]
-variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂]
-  [CompleteSpace H₂]
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace 𝕜 H₁]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂]
 
-/-- **Equality of spectral multiplicity data.**
+/-- **Equality of spectral multiplicity data over an arbitrary `RCLike` scalar field.**
 
 Two operators have the same spectral multiplicity when each is unitarily equivalent to the
-multiplication model of a `TauCeti.MultiplicityDatum ℂ` -- a finite measure on `ℂ` together with
+multiplication model of a `TauCeti.MultiplicityDatum 𝕜` -- a finite measure on `ℂ` together with
 an **antitone** sequence of measurable level sets -- and the two data agree: the base measures
-are in the same **measure class**, and the level sets agree up to null sets.
+are in the same **measure class**, and the level sets agree up to null sets.  The spectral
+parameter and base measure remain complex; only the `L²` fibres and model operator use `𝕜`.
 
 This discharges both requirements the earlier `sorry`ed definition's docstring made.  The
 measure class is `TauCeti.MeasureEquiv`, a named relation proved to be an `Equivalence` at the
@@ -80,20 +80,30 @@ does **not** inhabit
 whose `multiplicity` field is a *function* and therefore needs uniqueness as well as existence.
 See `dev/section3-multiplicity-plan-2026-08-06.md` §5. -/
 def SameSpectralMultiplicity
-    (A : H₁ →L[ℂ] H₁) (B : H₂ →L[ℂ] H₂) : Prop :=
-  ∃ D E : TauCeti.MultiplicityDatum ℂ,
+    (A : H₁ →L[𝕜] H₁) (B : H₂ →L[𝕜] H₂) : Prop :=
+  ∃ D E : TauCeti.MultiplicityDatum 𝕜,
     TauCeti.OperatorUnitaryEquiv A D.operator ∧
     TauCeti.OperatorUnitaryEquiv B E.operator ∧
     TauCeti.MeasureEquiv D.base E.base ∧
     ∀ k, D.base (symmDiff (D.level k) (E.level k)) = 0
 
+end SpectralMultiplicityData
+
+section CrossSpaceClassification
+
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁]
+  [CompleteSpace H₁]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂]
+  [CompleteSpace H₂]
+
 omit [CompleteSpace H₁] [CompleteSpace H₂] in
 /-- **Same multiplicity data implies unitary equivalence**, with no separability hypothesis on
 either space.
 
-Chain the two models: `A ≃ D.operator ≃ E.operator ≃ B`.  The middle step is the Radon--Nikodym
-unitary, which needs only that the two model measures are in the same measure class -- which is
-what the agreement of the data says. -/
+Chain the two models: `A ≃ D.operator ≃ E.operator ≃ B`.  This theorem remains at the
+complex specialization: the available middle step `TauCeti.operatorUnitaryEquiv_of_measureEquiv`
+uses the complex `rnDerivL2Equiv` API.  Generalizing that Radon--Nikodym unitary to arbitrary
+`RCLike` scalars is separate mathematics from field-indexing the multiplicity datum. -/
 theorem unitarilyEquivalent_of_sameSpectralMultiplicity
     (A : H₁ →L[ℂ] H₁) (B : H₂ →L[ℂ] H₂) (h : SameSpectralMultiplicity A B) :
     BoundedOperatorsUnitaryEquivalent A B := by
@@ -108,7 +118,9 @@ This is the direction that needs the existence half of Hahn--Hellinger, and ther
 separability of `H₁`: a model for `A` is built from a *countable* cyclic decomposition, and
 countability of the index is what lets the level-set normalisation run, since ranks count
 earlier indices.  `H₂` needs nothing -- `B` inherits `A`'s model along the given unitary, so the
-same datum serves for both. -/
+same datum serves for both.  This theorem therefore remains at the complex specialization:
+`TauCeti.BorelCalculus.exists_hasMultiplicityModel` is the complex Hahn--Hellinger existence
+theorem, and the real existence direction is intentionally not asserted here. -/
 theorem sameSpectralMultiplicity_of_unitarilyEquivalent
     [TopologicalSpace.SeparableSpace H₁]
     (A : H₁ →L[ℂ] H₁) (B : H₂ →L[ℂ] H₂) (hA : IsSelfAdjoint A)
