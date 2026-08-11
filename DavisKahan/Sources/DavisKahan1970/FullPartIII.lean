@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.PartIII
+import DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface
 import ForTauCeti.Analysis.Normed.Operator.SylvesterBoundedInverse
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Alternative.All
@@ -264,6 +265,10 @@ alias banach_sylvester_lower_bound :=
   TauCeti.ContinuousLinearMap.norm_le_of_sylvester_of_leftInverse
 alias banach_sylvester_lower_bound_uiNorm :=
   TauCeti.ContinuousLinearMap.opNorm_le_of_sylvester_of_leftInverse
+alias banach_sylvester_lower_bound_interchanged :=
+  DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester_interchanged
+alias banach_sylvester_lower_bound_unboundedA :=
+  DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester_unboundedA
 
 /-! ## Graph and Riccati theory (continued) -/
 alias bounded_coercive_isUnit :=
