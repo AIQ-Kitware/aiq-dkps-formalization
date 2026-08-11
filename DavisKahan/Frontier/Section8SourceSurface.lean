@@ -72,8 +72,11 @@ are separately available, and so is the strongest dimension-free form:
 * `theorem8_2_branch_source_directed` -- `directedGap P Q < √2/2` from the
   explicit printed hypotheses **alone**, with no dimension convention.  This is
   *not* superseded by `theorem8_2_source`; see `Section8SourceTheorem82.lean`
-  for why the symmetric reading needs (1.5) and why the cardinal form of (1.5)
-  does not suffice.
+  for why the symmetric reading needs a standing convention and why (1.5) at
+  either reading does not by itself supply one.
+* `theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects` -- the printed
+  `Θ < π/4` in **any** dimension, under Section 3's other standing assumption
+  (3.5) in place of any dimension count.
 
 ## The source dictionary
 
@@ -164,12 +167,20 @@ blocks of the reflection defect have the same operator norm
 (`norm_offdiag_add_eq`), and it is the stronger of the two readings.
 
 The **directed** `δ N(sin 2Θ₀) ≤ 2 N(R)` at a *general* unitarily invariant norm
-is a different statement and is the one remaining substantive axis of this
-Section 8.2 surface.  No route through `sinTwoTheta_wholeSpace_paperUINorm`
-reaches the printed constant `2` there -- a symmetric gauge sees the singular
-values of a block plus its adjoint as those of the block doubled -- so recovering
-it needs the Halmos generic decomposition.  The measurement is recorded at the
-head of section 2b of `Section8SourceTheorem82.lean`. -/
+is a different statement, and **it is proved**:
+`theorem8_2_sinTwoTheta_residual_source_paperUINorm` below, at the paper's own
+class of unitarily invariant norms and with the printed factor `2`, together
+with `theorem8_2_sinTwoTheta_residual_source_all_kyFan` at every Ky Fan level.
+
+This docstring used to say the opposite -- that no route reached the printed
+constant `2` and that recovering it needed the Halmos generic decomposition.
+**CORRECTED 2026-08-11.**  The measurement behind that claim was about the
+*ambient* `sin 2Θ`, where a symmetric gauge does see the singular values of a
+block plus its adjoint as those of the block doubled; the printed statement is
+at the *directed* `Θ₀`, which never forms that sum, and no generic decomposition
+is used.  What remains genuinely unavailable at a general symmetric gauge is the
+**ambient** reading with the printed constant, and that is all.  The full
+measurement is at the head of section 2b of `Section8SourceTheorem82.lean`. -/
 alias theorem8_2_sinTwoTheta_residual_source :=
   DavisKahan.Experimental.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source
 
@@ -195,6 +206,26 @@ above are the `N = operator norm` reading. -/
 of unitarily invariant norms, at Theorem 8.2's own hypotheses. -/
 alias theorem8_2_sinTwoTheta_perturbation_source_paperUINorm :=
   DavisKahan.Experimental.Frontier.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm
+
+/-- The directed `sin 2Theta_0` estimate Theorem 8.2 inherits, residual form,
+for **every** norm in the paper's own class of unitarily invariant norms, with
+the printed factor two.  This is the printed reading of the residual
+alternative: the conclusion is the canonical directed block, not the ambient
+`sin 2Theta`, which at a general symmetric gauge carries the same nonzero
+singular data twice. -/
+alias theorem8_2_sinTwoTheta_residual_source_paperUINorm :=
+  DavisKahan.Experimental.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm
+
+/-- The directed `sin 2Theta_0` estimate Theorem 8.2 inherits, residual form, at
+every Ky Fan level, with the printed factor two. -/
+alias theorem8_2_sinTwoTheta_residual_source_all_kyFan :=
+  DavisKahan.Experimental.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_all_kyFan
+
+/-- **Theorem 8.2's printed disjunction, printed `Theta < pi/4`, in any
+dimension**, under Section 3's standing assumption (3.5).  No
+finite-dimensionality and no rank hypothesis. -/
+alias theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects :=
+  DavisKahan.Experimental.Frontier.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects
 
 /-! ### Theorem 8.2 over a real Hilbert space
 
