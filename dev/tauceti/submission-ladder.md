@@ -143,7 +143,7 @@ base Tau Ceti has already accepted.
   - `Analysis.OperatorIdeal.Family.TraceClass`
   - `Topology.ENNRealLiminf`
 
-**Cumulative after F: 41 of 271 `ForTauCeti` modules.** Rungs A–F were the whole
+**Cumulative after F: 41 of 272 `ForTauCeti` modules.** Rungs A–F were the whole
 ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung G — Foundations completion — the rest of topics T01-T10
@@ -365,7 +365,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
   - `Topology.ApproxMinimizer`
   - `Topology.Berge`
-**Cumulative: 179 of 271 `ForTauCeti` modules — the ladder is total.**
+**Cumulative: 179 of 272 `ForTauCeti` modules — the ladder is total.**
 
 It briefly was not.  Three modules merged in after rung U closed on 2026-07-29
 and no rung's closure reached them; they were placed on 2026-07-30 by matching
