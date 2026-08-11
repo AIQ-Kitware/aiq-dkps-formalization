@@ -249,6 +249,58 @@ theorem cfc_intertwines_selfAdjoint
   rw [cfc_apply f v hv (hf.mono hvK), cfc_apply f u hu (hf.mono huK)]
   exact cfcHom_intertwines_selfAdjoint hu hv hint hK huK hvK ⟨_, hf.domRestrict⟩
 
+
+/-- **Continuous functional calculus acts pointwise on a genuine eigenvector.**
+
+If a bounded self-adjoint operator satisfies `u x = λ x` with `x ≠ 0`, then
+`f(u) x = f(λ) x` for every continuous real symbol `f`.  The proof is
+infinite-dimensional: the normalized rank-one projection onto `𝕜 x`
+intertwines `u` with the scalar operator `λ I`, so
+`cfc_intertwines_selfAdjoint` transports the scalar functional calculus.
+
+This is the bounded `RCLike` analogue of the finite-dimensional eigenbasis
+calculus lemma, and is deliberately independent of any compactness or pure
+point spectrum assumption. -/
+theorem cfc_apply_of_apply_eq_real_smul
+    {u : E →L[𝕜] E} (hu : IsSelfAdjoint u) {x : E} (hx0 : x ≠ 0)
+    {lam : ℝ} (hx : u x = ((lam : ℝ) : 𝕜) • x)
+    (f : ℝ → ℝ) (hf : Continuous f) :
+    cfc f u x = ((f lam : ℝ) : 𝕜) • x := by
+  let alpha : 𝕜 := (inner 𝕜 x x)⁻¹
+  let X : E →L[𝕜] E := alpha • InnerProductSpace.rankOne 𝕜 x x
+  let v : E →L[𝕜] E := algebraMap ℝ (E →L[𝕜] E) lam
+  have hinner : inner 𝕜 x x ≠ 0 := by
+    intro hzero
+    exact hx0 (inner_self_eq_zero.mp hzero)
+  have hXx : X x = x := by
+    simp only [X, smul_apply, InnerProductSpace.rankOne_apply, smul_smul]
+    rw [show alpha * inner 𝕜 x x = 1 from inv_mul_cancel₀ hinner]
+    exact one_smul 𝕜 x
+  have hv_eq : v = ((lam : ℝ) : 𝕜) • (1 : E →L[𝕜] E) := by
+    dsimp [v]
+    rw [Algebra.algebraMap_eq_smul_one, ← IsScalarTower.algebraMap_smul 𝕜]
+  have hv_apply (y : E) : v y = ((lam : ℝ) : 𝕜) • y := by
+    rw [hv_eq, smul_apply, one_apply_eq_self]
+  have hvsa : IsSelfAdjoint v := by
+    dsimp [v]
+    exact cfc_predicate_algebraMap lam
+  have hint : X ∘L v = u ∘L X := by
+    ext y
+    simp only [ContinuousLinearMap.comp_apply, hv_apply, X, smul_apply,
+      InnerProductSpace.rankOne_apply, map_smul, hx, smul_smul]
+    rw [mul_comm (((lam : ℝ) : 𝕜)) (alpha * inner 𝕜 x y)]
+  have hinter := cfc_intertwines_selfAdjoint hu hvsa hint hf.continuousOn
+  have hcfv : cfc f v = algebraMap ℝ (E →L[𝕜] E) (f lam) := by
+    dsimp [v]
+    rw [cfc_algebraMap]
+  have hfv_eq : algebraMap ℝ (E →L[𝕜] E) (f lam) =
+      ((f lam : ℝ) : 𝕜) • (1 : E →L[𝕜] E) := by
+    rw [Algebra.algebraMap_eq_smul_one, ← IsScalarTower.algebraMap_smul 𝕜]
+  have happ := congrArg (fun T : E →L[𝕜] E => T x) hinter
+  simp only [ContinuousLinearMap.comp_apply, hcfv, hfv_eq, smul_apply,
+    one_apply_eq_self, map_smul, hXx] at happ
+  exact happ.symm
+
 end SelfAdjoint
 
 section Complex

@@ -25,6 +25,7 @@ import DavisKahan.Sources.DavisKahan1970.Section1
 import DavisKahan.Sources.DavisKahan1970.Section1UnitaryInvariantNorms
 import DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation
 import DavisKahan.Sources.DavisKahan1970.Section3AcuteDirectRotation
+import DavisKahan.Sources.DavisKahan1970.Section3Proposition35
 import DavisKahan.Sources.DavisKahan1970.Section4
 import DavisKahan.Sources.DavisKahan1970.Section4BasisAngleEnergy
 import DavisKahan.Sources.DavisKahan1970.Section4Dominance
