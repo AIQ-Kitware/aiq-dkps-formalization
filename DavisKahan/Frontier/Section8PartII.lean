@@ -60,6 +60,20 @@ carrying one to the other is `A ↦ -A`, `α ↦ -(α + δ)`, which exchanges th
 sides of the printed gap; it turns `A₁ - α` into `(α + δ) - A₀` and `C₁` into
 `C₀`.  Nothing in the lower proof is a second strategy -- each step is its upper
 namesake with the reflected data.
+
+## The scalar field
+
+The **block algebra** of this module -- the four block definitions, their form
+evaluations, self-adjointness, positivity and the sandwich positivity lemma --
+is `RCLike`-generic, so it is available over a real Hilbert space at
+unrestricted dimension.  Nothing in it mentions a spectral branch.
+
+The **endpoints** stay pinned at `ℂ`, and for one reason only: they name
+`canonicalLowBranch`, which is the bounded self-adjoint spectral subspace and is
+complex by construction.  Their real companions are not re-elaborations; they
+descend across `complexify` in `DavisKahan/Frontier/Section8PartIIReal.lean`,
+which is also where the block bridges
+`complexify_upperBlockShift` and friends live.
 -/
 
 namespace TauCeti
@@ -72,18 +86,25 @@ open TauCeti.DavisKahan.Experimental.Frontier.Section8
 
 universe u
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+/-! ### The block algebra, over any `RCLike` field
+
+None of the following mentions the spectral branch, so none of it is complex. -/
+
+section Generic
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
 
 /-- The unperturbed upper compression `A₁ - α`, extended by zero off `Pᗮ`. -/
-noncomputable def upperBlockShift (A : H →L[ℂ] H) (P : Submodule ℂ H)
-    [P.HasOrthogonalProjection] (alpha : ℝ) : H →L[ℂ] H :=
-  Pᗮ.starProjection ∘L (A - (alpha : ℂ) • ContinuousLinearMap.id ℂ H) ∘L
+noncomputable def upperBlockShift (A : H →L[𝕜] H) (P : Submodule 𝕜 H)
+    [P.HasOrthogonalProjection] (alpha : ℝ) : H →L[𝕜] H :=
+  Pᗮ.starProjection ∘L (A - (alpha : 𝕜) • ContinuousLinearMap.id 𝕜 H) ∘L
     Pᗮ.starProjection
 
 /-- The cosine block `C₁`, as an ambient operator: `P_{Qᗮ} P_{Pᗮ}`. -/
-noncomputable def cosineBlock (P Q : Submodule ℂ H)
-    [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] : H →L[ℂ] H :=
+noncomputable def cosineBlock (P Q : Submodule 𝕜 H)
+    [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] : H →L[𝕜] H :=
   Qᗮ.starProjection ∘L Pᗮ.starProjection
 
 /-- The unperturbed lower compression `(α + δ) - A₀`, extended by zero off `P`.
@@ -91,96 +112,94 @@ noncomputable def cosineBlock (P Q : Submodule ℂ H)
 The shift constant is `α + δ`, not `α`: the lower clause is the image of the
 upper one under `A ↦ -A`, `α ↦ -(α + δ)`, which is the reflection exchanging the
 two sides of the printed gap. -/
-noncomputable def lowerBlockShift (A : H →L[ℂ] H) (P : Submodule ℂ H)
-    [P.HasOrthogonalProjection] (alpha delta : ℝ) : H →L[ℂ] H :=
+noncomputable def lowerBlockShift (A : H →L[𝕜] H) (P : Submodule 𝕜 H)
+    [P.HasOrthogonalProjection] (alpha delta : ℝ) : H →L[𝕜] H :=
   P.starProjection ∘L
-    (((alpha + delta : ℝ) : ℂ) • ContinuousLinearMap.id ℂ H - A) ∘L P.starProjection
+    (((alpha + delta : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 H - A) ∘L P.starProjection
 
 /-- The lower cosine block `C₀`, as an ambient operator: `P_Q P_P`. -/
-noncomputable def lowerCosineBlock (P Q : Submodule ℂ H)
-    [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] : H →L[ℂ] H :=
+noncomputable def lowerCosineBlock (P Q : Submodule 𝕜 H)
+    [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] : H →L[𝕜] H :=
   Q.starProjection ∘L P.starProjection
 
-theorem upperBlockShift_apply (A : H →L[ℂ] H) (P : Submodule ℂ H)
+theorem upperBlockShift_apply (A : H →L[𝕜] H) (P : Submodule 𝕜 H)
     [P.HasOrthogonalProjection] (alpha : ℝ) (x : H) :
-    RCLike.re ⟪x, upperBlockShift A P alpha x⟫_ℂ =
-      RCLike.re ⟪Pᗮ.starProjection x, A (Pᗮ.starProjection x)⟫_ℂ -
+    RCLike.re ⟪x, upperBlockShift A P alpha x⟫_𝕜 =
+      RCLike.re ⟪Pᗮ.starProjection x, A (Pᗮ.starProjection x)⟫_𝕜 -
         alpha * ‖Pᗮ.starProjection x‖ ^ 2 := by
-  have hself : ⟪x, upperBlockShift A P alpha x⟫_ℂ =
+  have hself : ⟪x, upperBlockShift A P alpha x⟫_𝕜 =
       ⟪Pᗮ.starProjection x,
-        (A - (alpha : ℂ) • ContinuousLinearMap.id ℂ H) (Pᗮ.starProjection x)⟫_ℂ := by
-    show ⟪x, Pᗮ.starProjection ((A - (alpha : ℂ) • ContinuousLinearMap.id ℂ H)
-      (Pᗮ.starProjection x))⟫_ℂ = _
+        (A - (alpha : 𝕜) • ContinuousLinearMap.id 𝕜 H) (Pᗮ.starProjection x)⟫_𝕜 := by
+    show ⟪x, Pᗮ.starProjection ((A - (alpha : 𝕜) • ContinuousLinearMap.id 𝕜 H)
+      (Pᗮ.starProjection x))⟫_𝕜 = _
     rw [← ContinuousLinearMap.adjoint_inner_right,
       ContinuousLinearMap.isSelfAdjoint_iff'.mp (isSelfAdjoint_starProjection Pᗮ)]
   rw [hself]
   simp only [sub_apply, smul_apply,
     ContinuousLinearMap.id_apply, inner_sub_right, inner_smul_right, map_sub]
-  have hnorm : (⟪Pᗮ.starProjection x, Pᗮ.starProjection x⟫_ℂ).re =
+  have hnorm : RCLike.re ⟪Pᗮ.starProjection x, Pᗮ.starProjection x⟫_𝕜 =
       ‖Pᗮ.starProjection x‖ ^ 2 :=
-    inner_self_eq_norm_sq (𝕜 := ℂ) _
-  have hs : RCLike.re ((alpha : ℂ) *
-      ⟪Pᗮ.starProjection x, Pᗮ.starProjection x⟫_ℂ) =
+    inner_self_eq_norm_sq (𝕜 := 𝕜) _
+  have hs : RCLike.re ((alpha : 𝕜) *
+      ⟪Pᗮ.starProjection x, Pᗮ.starProjection x⟫_𝕜) =
       alpha * ‖Pᗮ.starProjection x‖ ^ 2 := by
-    rw [RCLike.re_to_complex, Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
-      hnorm]
-    ring
+    rw [RCLike.re_ofReal_mul, hnorm]
   rw [hs]
 
 /-- The real scalar shift is self-adjoint. -/
 theorem adjoint_realShift (alpha : ℝ) :
-    ContinuousLinearMap.adjoint ((alpha : ℂ) • ContinuousLinearMap.id ℂ H) =
-      (alpha : ℂ) • ContinuousLinearMap.id ℂ H := by
+    ContinuousLinearMap.adjoint ((alpha : 𝕜) • ContinuousLinearMap.id 𝕜 H) =
+      (alpha : 𝕜) • ContinuousLinearMap.id 𝕜 H := by
   refine ContinuousLinearMap.ext fun y => ?_
-  refine ext_inner_left ℂ fun z => ?_
+  refine ext_inner_left 𝕜 fun z => ?_
   rw [ContinuousLinearMap.adjoint_inner_right]
   simp only [smul_apply, ContinuousLinearMap.id_apply,
-    inner_smul_left, inner_smul_right, Complex.conj_ofReal]
+    inner_smul_left, inner_smul_right, RCLike.conj_ofReal]
 
 /-- `upperBlockShift` is self-adjoint when `A` is: it is a projection sandwich of
 the self-adjoint shift `A - α`. -/
-theorem upperBlockShift_isSelfAdjoint (A : H →L[ℂ] H) (P : Submodule ℂ H)
+theorem upperBlockShift_isSelfAdjoint (A : H →L[𝕜] H) (P : Submodule 𝕜 H)
     [P.HasOrthogonalProjection] (alpha : ℝ) (hA : IsSelfAdjoint A) :
     IsSelfAdjoint (upperBlockShift A P alpha) := by
-  have hP : ContinuousLinearMap.adjoint (Pᗮ : Submodule ℂ H).starProjection =
-      (Pᗮ : Submodule ℂ H).starProjection :=
+  have hP : ContinuousLinearMap.adjoint (Pᗮ : Submodule 𝕜 H).starProjection =
+      (Pᗮ : Submodule 𝕜 H).starProjection :=
     ContinuousLinearMap.isSelfAdjoint_iff'.mp (isSelfAdjoint_starProjection _)
   have hB : ContinuousLinearMap.adjoint
-      (A - (alpha : ℂ) • ContinuousLinearMap.id ℂ H) =
-      A - (alpha : ℂ) • ContinuousLinearMap.id ℂ H := by
+      (A - (alpha : 𝕜) • ContinuousLinearMap.id 𝕜 H) =
+      A - (alpha : 𝕜) • ContinuousLinearMap.id 𝕜 H := by
     rw [map_sub, adjoint_realShift, ContinuousLinearMap.isSelfAdjoint_iff'.mp hA]
   rw [ContinuousLinearMap.isSelfAdjoint_iff']
   show ContinuousLinearMap.adjoint (Pᗮ.starProjection ∘L
-      (A - (alpha : ℂ) • ContinuousLinearMap.id ℂ H) ∘L Pᗮ.starProjection) = _
+      (A - (alpha : 𝕜) • ContinuousLinearMap.id 𝕜 H) ∘L Pᗮ.starProjection) = _
   rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp, hP, hB]
   simp [upperBlockShift, ContinuousLinearMap.comp_assoc]
 
 /-- The unperturbed upper block is positive: on `Pᗮ` the form of `A` is at least
 `α + δ`, so after subtracting `α` it is at least `δ ≥ 0`. -/
-theorem upperBlockShift_nonneg (A : H →L[ℂ] H) (P : Submodule ℂ H)
+theorem upperBlockShift_nonneg (A : H →L[𝕜] H) (P : Submodule 𝕜 H)
     [P.HasOrthogonalProjection] {alpha delta : ℝ} (hdelta : 0 ≤ delta)
     (hA : IsSelfAdjoint A)
-    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ) :
-    (0 : H →L[ℂ] H) ≤ upperBlockShift A P alpha := by
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜) :
+    (0 : H →L[𝕜] H) ≤ upperBlockShift A P alpha := by
   rw [ContinuousLinearMap.nonneg_iff_isPositive]
   refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
     (upperBlockShift_isSelfAdjoint A P alpha hA), fun x => ?_⟩
-  have hmem : Pᗮ.starProjection x ∈ (Pᗮ : Submodule ℂ H) :=
+  have hmem : Pᗮ.starProjection x ∈ (Pᗮ : Submodule 𝕜 H) :=
     Submodule.starProjection_apply_mem _ x
   have hhigh := hPhigh _ hmem
   have hgoal : (upperBlockShift A P alpha).reApplyInnerSelf x =
-      RCLike.re ⟪x, upperBlockShift A P alpha x⟫_ℂ :=
-    inner_re_symm (𝕜 := ℂ) _ _
-  have hswap : RCLike.re ⟪Pᗮ.starProjection x, A (Pᗮ.starProjection x)⟫_ℂ =
-      RCLike.re ⟪A (Pᗮ.starProjection x), Pᗮ.starProjection x⟫_ℂ :=
-    inner_re_symm (𝕜 := ℂ) _ _
+      RCLike.re ⟪x, upperBlockShift A P alpha x⟫_𝕜 :=
+    inner_re_symm (𝕜 := 𝕜) _ _
+  have hswap : RCLike.re ⟪Pᗮ.starProjection x, A (Pᗮ.starProjection x)⟫_𝕜 =
+      RCLike.re ⟪A (Pᗮ.starProjection x), Pᗮ.starProjection x⟫_𝕜 :=
+    inner_re_symm (𝕜 := 𝕜) _ _
   rw [hgoal, upperBlockShift_apply, hswap]
   nlinarith [sq_nonneg ‖Pᗮ.starProjection x‖]
 
 /-- Positivity is preserved by conjugation: `0 ≤ M` gives `0 ≤ D⋆ M D`. -/
-theorem nonneg_adjoint_sandwich {M : H →L[ℂ] H} (hM : (0 : H →L[ℂ] H) ≤ M)
-    (D : H →L[ℂ] H) :
-    (0 : H →L[ℂ] H) ≤ ContinuousLinearMap.adjoint D ∘L M ∘L D := by
+theorem nonneg_adjoint_sandwich {M : H →L[𝕜] H} (hM : (0 : H →L[𝕜] H) ≤ M)
+    (D : H →L[𝕜] H) :
+    (0 : H →L[𝕜] H) ≤ ContinuousLinearMap.adjoint D ∘L M ∘L D := by
   rw [ContinuousLinearMap.nonneg_iff_isPositive]
   have hp := ((ContinuousLinearMap.nonneg_iff_isPositive _).mp hM).conj_adjoint
     (ContinuousLinearMap.adjoint D)
@@ -188,11 +207,96 @@ theorem nonneg_adjoint_sandwich {M : H →L[ℂ] H} (hM : (0 : H →L[ℂ] H) �
 
 omit [CompleteSpace H] in
 /-- The cosine block lands in `Qᗮ`, so `P_{Qᗮ}` fixes its image. -/
-theorem starProjection_cosineBlock (P Q : Submodule ℂ H)
+theorem starProjection_cosineBlock (P Q : Submodule 𝕜 H)
     [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] (x : H) :
     Qᗮ.starProjection (cosineBlock P Q x) = cosineBlock P Q x :=
   Submodule.starProjection_eq_self_iff.mpr
     (Submodule.starProjection_apply_mem _ _)
+
+theorem lowerBlockShift_apply (A : H →L[𝕜] H) (P : Submodule 𝕜 H)
+    [P.HasOrthogonalProjection] (alpha delta : ℝ) (x : H) :
+    RCLike.re ⟪x, lowerBlockShift A P alpha delta x⟫_𝕜 =
+      (alpha + delta) * ‖P.starProjection x‖ ^ 2 -
+        RCLike.re ⟪P.starProjection x, A (P.starProjection x)⟫_𝕜 := by
+  have hself : ⟪x, lowerBlockShift A P alpha delta x⟫_𝕜 =
+      ⟪P.starProjection x,
+        (((alpha + delta : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 H - A)
+          (P.starProjection x)⟫_𝕜 := by
+    show ⟪x, P.starProjection ((((alpha + delta : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 H - A)
+      (P.starProjection x))⟫_𝕜 = _
+    rw [← ContinuousLinearMap.adjoint_inner_right,
+      ContinuousLinearMap.isSelfAdjoint_iff'.mp (isSelfAdjoint_starProjection P)]
+  rw [hself]
+  simp only [sub_apply, smul_apply,
+    ContinuousLinearMap.id_apply, inner_sub_right, inner_smul_right, map_sub]
+  have hnorm : RCLike.re ⟪P.starProjection x, P.starProjection x⟫_𝕜 =
+      ‖P.starProjection x‖ ^ 2 :=
+    inner_self_eq_norm_sq (𝕜 := 𝕜) _
+  have hs : RCLike.re (((alpha + delta : ℝ) : 𝕜) *
+      ⟪P.starProjection x, P.starProjection x⟫_𝕜) =
+      (alpha + delta) * ‖P.starProjection x‖ ^ 2 := by
+    rw [RCLike.re_ofReal_mul, hnorm]
+  rw [hs]
+
+/-- `lowerBlockShift` is self-adjoint when `A` is: it is a projection sandwich of
+the self-adjoint shift `(α + δ) - A`. -/
+theorem lowerBlockShift_isSelfAdjoint (A : H →L[𝕜] H) (P : Submodule 𝕜 H)
+    [P.HasOrthogonalProjection] (alpha delta : ℝ) (hA : IsSelfAdjoint A) :
+    IsSelfAdjoint (lowerBlockShift A P alpha delta) := by
+  have hP : ContinuousLinearMap.adjoint (P : Submodule 𝕜 H).starProjection =
+      (P : Submodule 𝕜 H).starProjection :=
+    ContinuousLinearMap.isSelfAdjoint_iff'.mp (isSelfAdjoint_starProjection _)
+  have hB : ContinuousLinearMap.adjoint
+      (((alpha + delta : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 H - A) =
+      ((alpha + delta : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 H - A := by
+    rw [map_sub, adjoint_realShift, ContinuousLinearMap.isSelfAdjoint_iff'.mp hA]
+  rw [ContinuousLinearMap.isSelfAdjoint_iff']
+  show ContinuousLinearMap.adjoint (P.starProjection ∘L
+      (((alpha + delta : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 H - A) ∘L
+        P.starProjection) = _
+  rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp, hP, hB]
+  simp [lowerBlockShift, ContinuousLinearMap.comp_assoc]
+
+/-- The unperturbed lower block is positive: on `P` the form of `A` is at most
+`α`, so after subtracting it from `α + δ` at least `δ ≥ 0` is left. -/
+theorem lowerBlockShift_nonneg (A : H →L[𝕜] H) (P : Submodule 𝕜 H)
+    [P.HasOrthogonalProjection] {alpha delta : ℝ} (hdelta : 0 ≤ delta)
+    (hA : IsSelfAdjoint A)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_𝕜 ≤ alpha * ‖x‖ ^ 2) :
+    (0 : H →L[𝕜] H) ≤ lowerBlockShift A P alpha delta := by
+  rw [ContinuousLinearMap.nonneg_iff_isPositive]
+  refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+    (lowerBlockShift_isSelfAdjoint A P alpha delta hA), fun x => ?_⟩
+  have hmem : P.starProjection x ∈ P := Submodule.starProjection_apply_mem _ x
+  have hlow := hPlow _ hmem
+  have hgoal : (lowerBlockShift A P alpha delta).reApplyInnerSelf x =
+      RCLike.re ⟪x, lowerBlockShift A P alpha delta x⟫_𝕜 :=
+    inner_re_symm (𝕜 := 𝕜) _ _
+  have hswap : RCLike.re ⟪P.starProjection x, A (P.starProjection x)⟫_𝕜 =
+      RCLike.re ⟪A (P.starProjection x), P.starProjection x⟫_𝕜 :=
+    inner_re_symm (𝕜 := 𝕜) _ _
+  rw [hgoal, lowerBlockShift_apply, hswap]
+  nlinarith [sq_nonneg ‖P.starProjection x‖]
+
+omit [CompleteSpace H] in
+/-- The lower cosine block lands in `Q`, so `P_Q` fixes its image. -/
+theorem starProjection_lowerCosineBlock (P Q : Submodule 𝕜 H)
+    [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] (x : H) :
+    Q.starProjection (lowerCosineBlock P Q x) = lowerCosineBlock P Q x :=
+  Submodule.starProjection_eq_self_iff.mpr
+    (Submodule.starProjection_apply_mem _ _)
+
+end Generic
+
+/-! ### The branch endpoints
+
+Everything below names `canonicalLowBranch`, the bounded self-adjoint spectral
+subspace, and is complex for that reason alone. -/
+
+section ComplexBranch
+
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
 
 /-- The perturbed upper block of the canonical branch is positive.
 
@@ -341,81 +445,6 @@ the lower one is `A ↦ -A`, `α ↦ -(α + δ)`; under it `Pᗮ ↦ P`, `Qᗮ �
 `lowerBlockShift` and `lowerCosineBlock`, and no second proof strategy is
 needed. -/
 
-theorem lowerBlockShift_apply (A : H →L[ℂ] H) (P : Submodule ℂ H)
-    [P.HasOrthogonalProjection] (alpha delta : ℝ) (x : H) :
-    RCLike.re ⟪x, lowerBlockShift A P alpha delta x⟫_ℂ =
-      (alpha + delta) * ‖P.starProjection x‖ ^ 2 -
-        RCLike.re ⟪P.starProjection x, A (P.starProjection x)⟫_ℂ := by
-  have hself : ⟪x, lowerBlockShift A P alpha delta x⟫_ℂ =
-      ⟪P.starProjection x,
-        (((alpha + delta : ℝ) : ℂ) • ContinuousLinearMap.id ℂ H - A)
-          (P.starProjection x)⟫_ℂ := by
-    show ⟪x, P.starProjection ((((alpha + delta : ℝ) : ℂ) • ContinuousLinearMap.id ℂ H - A)
-      (P.starProjection x))⟫_ℂ = _
-    rw [← ContinuousLinearMap.adjoint_inner_right,
-      ContinuousLinearMap.isSelfAdjoint_iff'.mp (isSelfAdjoint_starProjection P)]
-  rw [hself]
-  simp only [sub_apply, smul_apply,
-    ContinuousLinearMap.id_apply, inner_sub_right, inner_smul_right, map_sub]
-  have hnorm : (⟪P.starProjection x, P.starProjection x⟫_ℂ).re =
-      ‖P.starProjection x‖ ^ 2 :=
-    inner_self_eq_norm_sq (𝕜 := ℂ) _
-  have hs : RCLike.re (((alpha + delta : ℝ) : ℂ) *
-      ⟪P.starProjection x, P.starProjection x⟫_ℂ) =
-      (alpha + delta) * ‖P.starProjection x‖ ^ 2 := by
-    rw [RCLike.re_to_complex, Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
-      hnorm]
-    ring
-  rw [hs]
-
-/-- `lowerBlockShift` is self-adjoint when `A` is: it is a projection sandwich of
-the self-adjoint shift `(α + δ) - A`. -/
-theorem lowerBlockShift_isSelfAdjoint (A : H →L[ℂ] H) (P : Submodule ℂ H)
-    [P.HasOrthogonalProjection] (alpha delta : ℝ) (hA : IsSelfAdjoint A) :
-    IsSelfAdjoint (lowerBlockShift A P alpha delta) := by
-  have hP : ContinuousLinearMap.adjoint (P : Submodule ℂ H).starProjection =
-      (P : Submodule ℂ H).starProjection :=
-    ContinuousLinearMap.isSelfAdjoint_iff'.mp (isSelfAdjoint_starProjection _)
-  have hB : ContinuousLinearMap.adjoint
-      (((alpha + delta : ℝ) : ℂ) • ContinuousLinearMap.id ℂ H - A) =
-      ((alpha + delta : ℝ) : ℂ) • ContinuousLinearMap.id ℂ H - A := by
-    rw [map_sub, adjoint_realShift, ContinuousLinearMap.isSelfAdjoint_iff'.mp hA]
-  rw [ContinuousLinearMap.isSelfAdjoint_iff']
-  show ContinuousLinearMap.adjoint (P.starProjection ∘L
-      (((alpha + delta : ℝ) : ℂ) • ContinuousLinearMap.id ℂ H - A) ∘L
-        P.starProjection) = _
-  rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp, hP, hB]
-  simp [lowerBlockShift, ContinuousLinearMap.comp_assoc]
-
-/-- The unperturbed lower block is positive: on `P` the form of `A` is at most
-`α`, so after subtracting it from `α + δ` at least `δ ≥ 0` is left. -/
-theorem lowerBlockShift_nonneg (A : H →L[ℂ] H) (P : Submodule ℂ H)
-    [P.HasOrthogonalProjection] {alpha delta : ℝ} (hdelta : 0 ≤ delta)
-    (hA : IsSelfAdjoint A)
-    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2) :
-    (0 : H →L[ℂ] H) ≤ lowerBlockShift A P alpha delta := by
-  rw [ContinuousLinearMap.nonneg_iff_isPositive]
-  refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-    (lowerBlockShift_isSelfAdjoint A P alpha delta hA), fun x => ?_⟩
-  have hmem : P.starProjection x ∈ P := Submodule.starProjection_apply_mem _ x
-  have hlow := hPlow _ hmem
-  have hgoal : (lowerBlockShift A P alpha delta).reApplyInnerSelf x =
-      RCLike.re ⟪x, lowerBlockShift A P alpha delta x⟫_ℂ :=
-    inner_re_symm (𝕜 := ℂ) _ _
-  have hswap : RCLike.re ⟪P.starProjection x, A (P.starProjection x)⟫_ℂ =
-      RCLike.re ⟪A (P.starProjection x), P.starProjection x⟫_ℂ :=
-    inner_re_symm (𝕜 := ℂ) _ _
-  rw [hgoal, lowerBlockShift_apply, hswap]
-  nlinarith [sq_nonneg ‖P.starProjection x‖]
-
-omit [CompleteSpace H] in
-/-- The lower cosine block lands in `Q`, so `P_Q` fixes its image. -/
-theorem starProjection_lowerCosineBlock (P Q : Submodule ℂ H)
-    [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] (x : H) :
-    Q.starProjection (lowerCosineBlock P Q x) = lowerCosineBlock P Q x :=
-  Submodule.starProjection_eq_self_iff.mpr
-    (Submodule.starProjection_apply_mem _ _)
-
 /-- The perturbed lower block of the canonical branch is positive.
 
 The mirror of `theorem8_1_perturbedUpperBlockShift_nonneg`: Theorem 8.1's
@@ -535,6 +564,8 @@ theorem theorem8_1_lowerApproximationRepulsion_source
   (theorem8_1_lowerSandwichApproximation_source A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp n).trans
     (approximationNumber_adjoint_sandwich_le _ _ n)
+
+end ComplexBranch
 
 end Section8
 end DavisKahan1970

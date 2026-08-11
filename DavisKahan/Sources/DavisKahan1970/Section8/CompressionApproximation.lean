@@ -41,6 +41,25 @@ is needed either.
 
 In finite dimensions the approximation numbers of an operator are its singular
 values, so this is the printed statement's factor and not a weaker surrogate.
+
+## The scalar field
+
+The two sandwich bounds are `RCLike`-generic: they use only the adjoint, the
+operator norm and the one-sided composition bounds, none of which knows the
+field.
+
+The Weyl step `approximationNumber_mono_of_form_le` is stated over `ℂ` only, and
+the obstruction is *not* `CFC.sqrt` — that is available over any `RCLike` field
+once the three functional-calculus hypotheses of
+`ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean` are carried.  It is
+the squaring step `TauCeti.ApproximationNumber.approximationNumber_gramOperator`
+(`aₙ(X⋆X) = aₙ(X)²`), whose whole layer — `gramOperator`, `gramLinearPMap`,
+`gramSpectralPVM` — is defined only for `InnerProductSpace ℂ`, because it runs
+through the bounded projection-valued measure of a self-adjoint operator.  Since
+`RCLike` carries no `ℝ`/`ℂ` discriminator, that cannot be worked around inside a
+`𝕜`-generic proof.  The real-scalar consumers therefore descend from the complex
+statement by complexification rather than re-elaborating this proof over `ℝ`;
+see `DavisKahan/Frontier/Section8PartIIReal.lean`.
 -/
 
 namespace TauCeti
@@ -51,9 +70,12 @@ open scoped InnerProductSpace
 
 universe u v
 
+section Generic
+
+variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type u} {F : Type v}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- **The cosine-sandwich bound.**  Conjugating by a bounded map multiplies every
 approximation number by at most `‖C‖²`.
@@ -61,7 +83,7 @@ approximation number by at most `‖C‖²`.
 This is the estimate Theorem 8.1(ii) needs on top of part (i), and it is exactly
 the printed factor: the paper's `‖C₁‖₁²` is the squared *bound* norm. -/
 theorem approximationNumber_adjoint_sandwich_le
-    (M : F →L[ℂ] F) (C : E →L[ℂ] F) (n : ℕ) :
+    (M : F →L[𝕜] F) (C : E →L[𝕜] F) (n : ℕ) :
     (ContinuousLinearMap.adjoint C ∘L M ∘L C).approximationNumber n ≤
       ‖C‖ ^ 2 * M.approximationNumber n := by
   have hleft :
@@ -82,12 +104,22 @@ theorem approximationNumber_adjoint_sandwich_le
 /-- The sandwich bound for a self-adjoint conjugator, the shape Theorem 8.1(ii)
 instantiates: `C₁` there is a compression of an orthogonal projection. -/
 theorem approximationNumber_sandwich_le_of_isSelfAdjoint
-    {C : E →L[ℂ] E} (hC : IsSelfAdjoint C) (M : E →L[ℂ] E) (n : ℕ) :
+    {C : E →L[𝕜] E} (hC : IsSelfAdjoint C) (M : E →L[𝕜] E) (n : ℕ) :
     (C ∘L M ∘L C).approximationNumber n ≤ ‖C‖ ^ 2 * M.approximationNumber n := by
   have h := approximationNumber_adjoint_sandwich_le M C n
   rwa [ContinuousLinearMap.isSelfAdjoint_iff'.mp hC] at h
 
-/-! ### The Weyl step, dimension-free -/
+end Generic
+
+/-! ### The Weyl step, dimension-free
+
+Complex-only, and the module docstring records exactly which link is complex:
+the Gram squaring identity, not the square root. -/
+
+section ComplexWeylStep
+
+variable {E : Type u}
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
 open TauCeti.ApproximationNumber in
 /-- If a positive operator dominates another in the quadratic-form order, it
@@ -148,6 +180,8 @@ theorem approximationNumber_mono_of_form_le
     _ = (gramOperator (CFC.sqrt T)).approximationNumber n :=
         (approximationNumber_gramOperator _ n).symm
     _ = T.approximationNumber n := by rw [hgram hT]
+
+end ComplexWeylStep
 
 end Section8
 end DavisKahan1970

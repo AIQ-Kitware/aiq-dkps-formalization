@@ -31,7 +31,7 @@ universe v
 
 section CompressionAlgebra
 
-variable {E : Type v} [NormedAddCommGroup E] [NormedSpace ℂ E]
+variable {E : Type v} [NormedAddCommGroup E]
 
 /-- Quadratic-form data for the upper-compression identity
 `A₁ = S Λ₀ S⋆ + C Λ₁ C⋆`, stated at exactly the abstraction level needed by
@@ -43,7 +43,6 @@ structure UpperCompressionRepulsionData
   pythagoras : ∀ x,
     ‖Sstar x‖ ^ 2 + ‖Cstar x‖ ^ 2 = ‖x‖ ^ 2
 
-omit [NormedSpace ℂ E] in
 /-- The upper compression-repulsion inequality.  This is the quadratic-form
 content of
 `A₁ - α ≤ C₁ (Λ₁ - α) C₁`
@@ -75,7 +74,6 @@ structure LowerCompressionRepulsionData
   pythagoras : ∀ x,
     ‖Cstar x‖ ^ 2 + ‖Sstar x‖ ^ 2 = ‖x‖ ^ 2
 
-omit [NormedSpace ℂ E] in
 /-- The lower-block companion of Theorem 8.1(i).  If the complementary
 restricted form lies above the cut, then the downward displacement of the old
 lower compression is controlled by the cosine-sandwiched displacement of the
