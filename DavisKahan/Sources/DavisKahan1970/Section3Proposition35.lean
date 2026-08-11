@@ -69,6 +69,17 @@ theorem proposition3_5_directRotation_resolution (hacute : TauCeti.IsAcute U V) 
         proposition3_5_quarterTurn U V ∘L section3SinAngleOperator U V :=
   section3DirectRotation_eq_cos_add_quarterTurn_sin U V hacute
 
+/-- Interchanging the subspaces leaves the arbitrary-dimensional bounded angle unchanged. -/
+theorem corollary3_2_angleOperator_symm :
+    proposition3_5_angleOperator V U = proposition3_5_angleOperator U V :=
+  section3AngleOperator_symm U V
+
+/-- On the acute branch, the arbitrary-dimensional quarter turn used in the paper's polar
+resolution changes sign when the subspaces are interchanged. -/
+theorem corollary3_2_quarterTurn_symm :
+    proposition3_5_quarterTurn V U = -proposition3_5_quarterTurn U V :=
+  section3QuarterTurn_symm U V
+
 /-- **Davis--Kahan 1970, Proposition 3.5, the four commutation assertions.**
 In the acute case `Theta` commutes with `P`, `Q`, the quarter turn `J`, and the
 direct rotation `W`. -/

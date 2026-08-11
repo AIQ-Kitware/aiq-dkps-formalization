@@ -619,6 +619,23 @@ theorem eq_polarPartial_of_comp_modulus (M : E →L[𝕜] F) (V : E →L[𝕜] F
   rw [map_add, map_add, hagree p hp, hker q hq,
     M.polarPartial_eq_zero_of_mem_orthogonal hq]
 
+/-- Negating an operator negates its polar partial isometry. -/
+@[simp]
+theorem polarPartial_neg (M : E →L[𝕜] F) : (-M).polarPartial = -M.polarPartial := by
+  symm
+  refine (-M).eq_polarPartial_of_comp_modulus (-M.polarPartial) ?_ ?_
+  · rw [ContinuousLinearMap.modulus_neg]
+    ext x
+    simp only [ContinuousLinearMap.comp_apply, neg_apply,
+      M.polarPartial_apply_modulus]
+  · intro y hy
+    have hyM : y ∈ M.polarInitialᗮ := by
+      rw [M.polarInitial_orthogonal_eq_ker]
+      rw [(-M).polarInitial_orthogonal_eq_ker] at hy
+      simpa using hy
+    rw [neg_apply,
+      M.polarPartial_eq_zero_of_mem_orthogonal hyM, neg_zero]
+
 /-- The projection onto the initial space fixes the range of `|M|`. -/
 theorem starProjection_comp_modulus (M : E →L[𝕜] F) :
     M.polarInitial.starProjection ∘L M.modulus = M.modulus := by

@@ -311,6 +311,32 @@ theorem section3CosAngleOperator_eq_canonicalAbsoluteValue :
     _ = spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) :=
           CFC.sqrt_unique habssquare habs0
 
+/-! ## Symmetry under interchange of the subspaces -/
+
+/-- Interchanging the subspaces leaves `sin Θ` unchanged. -/
+theorem section3SinAngleOperator_symm :
+    section3SinAngleOperator V U = section3SinAngleOperator U V := by
+  rw [section3SinAngleOperator, section3SinAngleOperator]
+  have hneg : projection V - projection U = -(projection U - projection V) := by
+    abel
+  rw [hneg, ContinuousLinearMap.modulus_neg]
+
+/-- Interchanging the subspaces leaves the bounded operator angle unchanged. -/
+theorem section3AngleOperator_symm :
+    section3AngleOperator V U = section3AngleOperator U V := by
+  rw [section3AngleOperator, section3AngleOperator, section3SinAngleOperator_symm U V]
+
+/-- Interchanging the subspaces leaves `cos Θ` unchanged. -/
+theorem section3CosAngleOperator_symm :
+    section3CosAngleOperator V U = section3CosAngleOperator U V := by
+  rw [section3CosAngleOperator, section3CosAngleOperator, section3AngleOperator_symm U V]
+
+/-- Interchanging the subspaces takes the canonical direct rotation to its adjoint. -/
+theorem section3DirectRotation_swap :
+    section3DirectRotation V U = star (section3DirectRotation U V) := by
+  rw [section3DirectRotation, section3DirectRotation]
+  exact (canonicalPolarFactor_adjoint_swap_from_polar U V).symm
+
 /-! ## The four commutations -/
 
 /-- `sin Θ` commutes with the source projection. -/
@@ -420,6 +446,25 @@ theorem star_section3DirectRotation_sub_cosine :
     rw [← hsum]; abel
   rw [star_sub, show star W = C + C - W from hsW, hCsa]
   abel
+
+/-- Interchanging the subspaces negates the canonical quarter turn. -/
+theorem section3QuarterTurn_symm :
+    section3QuarterTurn V U = -section3QuarterTurn U V := by
+  rw [section3QuarterTurn, section3QuarterTurn]
+  have hD :
+      section3DirectRotation V U - section3CosAngleOperator V U =
+        -(section3DirectRotation U V - section3CosAngleOperator U V) := by
+    rw [section3DirectRotation_swap U V, section3CosAngleOperator_symm U V]
+    have hCstar :
+        star (section3CosAngleOperator U V) = section3CosAngleOperator U V :=
+      (cfc_predicate Real.cos (section3AngleOperator U V)).star_eq
+    calc
+      star (section3DirectRotation U V) - section3CosAngleOperator U V =
+          star (section3DirectRotation U V) - star (section3CosAngleOperator U V) := by
+        rw [hCstar]
+      _ = -(section3DirectRotation U V - section3CosAngleOperator U V) := by
+        simpa only [star_sub] using star_section3DirectRotation_sub_cosine U V
+  rw [hD, ContinuousLinearMap.polarPartial_neg]
 
 /-- The skew part has modulus exactly `sin Θ`. -/
 theorem modulus_section3DirectRotation_sub_cosine (hacute : TauCeti.IsAcute U V) :
