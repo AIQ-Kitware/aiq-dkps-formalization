@@ -62,9 +62,9 @@ same constant as in `BorelCalculus/CyclicModel.lean`.
 
 ## What is deliberately not delivered
 
-Nothing here touches `BorelCalculus/`.  The cyclic *decomposition* and a real-parameter
-`MultiplicityDatum` are separate families: they need compatibility with orthogonality
-bookkeeping, not one composition, and nothing in this module is a step toward them.
+Nothing here builds a multiplicity datum.  The cyclic *decomposition* and the field-indexed
+`MultiplicityDatum ℝ` are separate families: the latter still has `base : Measure ℂ`, so changing
+the spectral base to `Measure ℝ` is neither required nor supplied by this module.
 
 ## Provenance
 

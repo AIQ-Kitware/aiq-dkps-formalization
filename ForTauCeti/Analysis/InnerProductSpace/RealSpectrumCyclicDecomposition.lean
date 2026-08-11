@@ -34,15 +34,13 @@ The diagonality statement is the intertwining law
 `realSpectrumCyclicIsometry_realSpectrumCoordMulLp`, read once per index.  Its shape is exactly
 the hypothesis `hA` of `TauCeti.operatorUnitaryEquiv_of_isHilbertSum`.
 
-## Where the real-parameter route actually stops
+## Why the base measure stays complex
 
-`map_ofReal_realSpectrumDiagMeasure` below is a *negative* result and is stated for that reason.
-Pushing the real-spectrum diagonal measure off its subtype **into `ℂ`** -- the only push-forward
-that `TauCeti.MultiplicityDatum`, a datum over `Measure ℂ`, can consume -- returns literally the
-measure that `exists_hasMultiplicityModel` already uses.  So a "real-spectrum multiplicity model"
-routed through `ℂ` is not a new theorem; it is the old one with a longer proof.  Progress past
-this module needs the push-forward into `Measure ℝ`, hence a real-parameter datum, which is a
-separate development.
+`map_ofReal_realSpectrumDiagMeasure` records that pushing the real-spectrum diagonal measure off
+its subtype **into `ℂ`** returns literally the measure that `exists_hasMultiplicityModel` already
+uses.  This is now the intended base-measure route: `TauCeti.MultiplicityDatum 𝕜` keeps
+`base : Measure ℂ` for both scalar fields, while only its `L²` operator is field-indexed.
+Consequently no push-forward into `Measure ℝ` is required to obtain a real multiplication model.
 
 ## Main results
 
@@ -61,8 +59,9 @@ separate development.
 
 ## What is deliberately not delivered
 
-Nothing here touches `BorelCalculus/`, and `TauCeti.MultiplicityDatum` is untouched: no
-real-parameter datum is introduced, and no multiplicity normal form is claimed over `ℝ`.
+This module does not build the real multiplicity normal form.  The field-indexed
+`TauCeti.MultiplicityDatum 𝕜` is defined in `BorelCalculus/MultiplicityModel`; this file supplies
+the real-spectrum decomposition that a later real model theorem consumes.
 
 ## Provenance
 
@@ -189,10 +188,9 @@ Pushing the real-spectrum diagonal measure off its subtype into `ℂ` gives lite
 `coe_realSpectrumHomeomorph` identifies the transported real coordinate with the complex
 coordinate on the nose, so the two push-forwards agree pointwise, not merely almost everywhere.
 
-The statement is recorded because it is negative and load-bearing for planning: any
-`MultiplicityDatum` obtained by routing the real-spectrum decomposition through `ℂ` is the datum
-already available, so the real-parameter multiplicity theory cannot be reached that way.  It has
-to go through `Measure ℝ`, and therefore through a real-parameter datum. -/
+The statement is load-bearing for planning because it rules out `Measure ℝ` as a necessary
+axis.  A real-valued multiplication model can reuse this same `Measure ℂ` base and instantiate
+`MultiplicityDatum ℝ`; only the operator value field changes. -/
 theorem map_ofReal_realSpectrumDiagMeasure (ha : IsSelfAdjoint a) (ξ : H) :
     (realSpectrumDiagMeasure ha ξ).map (fun x : spectrum ℝ a => ((x : ℝ) : ℂ))
       = (diagMeasure ha.isStarNormal ξ).map (fun z : spectrum ℂ a => (z : ℂ)) := by
