@@ -6,8 +6,8 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **12**
-- Awaiting result-statement semantic closure: **17**
+- Currently hostile-certified terminal: **18**
+- Awaiting result-statement semantic closure: **11**
 
 Each result below explicitly partitions its primary source block into atoms inside the printed result statement and adjacent fidelity-only atoms outside it. Cross-block atoms are shared scope clauses (not extra results).
 
@@ -18,26 +18,26 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `S2-sin-two-theta` | unnumbered_theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
 | `S2-tan-two-theta` | unnumbered_theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
 | `DK-3.1-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-3.2-prop` | proposition | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `DK-3.2-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.3-prop` | proposition | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
 | `DK-3.4-prop` | proposition | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
 | `DK-3.1-thm` | theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.1-cor` | corollary | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-3.5-prop` | proposition | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `DK-3.5-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.2-cor` | corollary | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-4.1-prop` | proposition | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
 | `DK-4.1-cor` | corollary | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-4.2-prop` | proposition | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `DK-4.2-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-4.3-prop` | proposition | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
 | `DK-4.4-prop` | proposition | `refuted_as_transcribed` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-5.1-thm` | theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `DK-5.1-thm` | theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-5.2-thm` | theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
 | `DK-5.1-lem` | lemma | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.1-lem` | lemma | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.2-lem` | lemma | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-6.1-prop` | proposition | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `DK-6.1-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.1-thm` | theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-6.2-thm` | theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `DK-6.2-thm` | theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.3-thm` | theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
 | `DK-6.3-lem` | lemma | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-8.1-thm` | theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
