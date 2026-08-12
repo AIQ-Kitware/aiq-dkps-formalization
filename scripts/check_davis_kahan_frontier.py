@@ -130,10 +130,15 @@ def required_census_ids(manifest: dict[str, Any], census: dict[str, Any]) -> set
     remain completion debt and are represented as ungrounded paper results by
     ``paper_result_rows`` below.
     """
-    terminal = set(manifest.get("coverage_policy", {}).get("census_terminal_statuses", []))
+    ignored = set(
+        manifest.get("coverage_policy", {}).get(
+            "census_statuses_not_requiring_frontier_mapping",
+            manifest.get("coverage_policy", {}).get("census_terminal_statuses", []),
+        )
+    )
     required: set[str] = set()
     for item in census.get("items", []):
-        if item.get("status") not in terminal and not census_row_is_explicitly_absent(item):
+        if item.get("status") not in ignored and not census_row_is_explicitly_absent(item):
             required.add(item["id"])
     return required
 
@@ -244,6 +249,7 @@ def paper_result_rows(
             "title": item.get("title", ""),
             "census_status": item.get("status", ""),
             "verification": item.get("verification", ""),
+            "completion_certification": item.get("completion_certification", ""),
             "explicitly_absent": explicitly_absent,
             "endpoint_nodes": endpoints,
             "closure_nodes": closure,
@@ -502,16 +508,20 @@ def render_report(
         "`kind = source` means a frontier endpoint; it does **not** by itself "
         "mean that the declaration appeared in the paper.",
         "",
+        "**This is a legacy dependency-grounding report, not a source-semantic completion certificate.** "
+        "A row may be recursively grounded here while remaining reopened by the maintained "
+        "`completion_certification` axis. Use the full source census/statement map for any 100% claim.",
+        "",
         "A piece is one manifest node in the result's transitive dependency "
         "closure. Missing pieces are currently exposed blockers: ungrounded "
         "nodes whose declared dependencies are already grounded. This avoids "
         "counting one upstream blocker at every downstream node, but new "
         "blockers may appear after repairs. The percentage is intentionally "
-        "approximate, but **100% is reserved for a recursively grounded "
-        "result**.",
+        "approximate. A graph estimate of 100% means only that the represented dependency endpoints are "
+        "recursively grounded; it does **not** mean the paper passage is hostile-certified complete.",
         "",
-        "| Paper item | Source kind | Frontier endpoint(s) | Missing pieces | Est. complete | Grounded |",
-        "|---|---|---|---:|---:|:---:|",
+        "| Paper item | Source kind | Census status | Semantic cert | Frontier endpoint(s) | Missing pieces | Graph complete | Grounded |",
+        "|---|---|---|---|---|---:|---:|:---:|",
     ]
     for row in paper_rows:
         label = f"`{row['id']}` — {row['source_anchor']}: {row['title']}"
@@ -528,6 +538,7 @@ def render_report(
         )
         lines.append(
             f"| {markdown_cell(label)} | {markdown_cell(row['source_kind'])} | "
+            f"`{markdown_cell(row['census_status'])}` | `{markdown_cell(row['completion_certification'])}` | "
             f"{endpoints} | {missing} | {estimate} | "
             f"{mark(row['recursively_grounded'])} |"
         )

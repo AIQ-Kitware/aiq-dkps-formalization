@@ -21,7 +21,36 @@ VERIFICATION_ORDER = [
 ]
 NEEDS_WORK = ["absent", "not_compiling", "compiler_pending", "proved_conditional",
               "partially_in_build", "proved_outside_build"]
+CERTIFICATION_ORDER = [
+    "accepted", "reopened_source_spec", "reopened_math", "reopened_mapping",
+    "mixed_disposition", "not_applicable",
+]
 
+
+
+def _render_completion_certification(data: dict, items: list) -> list[str]:
+    """The hostile semantic axis: whether a row may count toward 100%."""
+    counts = Counter(item.get("completion_certification", "missing") for item in items)
+    lines = [
+        "",
+        "## Hostile completion-certification summary",
+        "",
+        "A terminal `status` and a green Lean declaration probe are necessary but no longer",
+        "sufficient for the 100% claim. `completion_certification` records whether the entire",
+        "hashed source passage survived an adversarial source-to-Lean review. Only `accepted`",
+        "completion obligations count toward hostile-certified 100% coverage.",
+        "",
+        "| Completion certification | Count |",
+        "| --- | ---: |",
+    ]
+    for key in CERTIFICATION_ORDER:
+        lines.append(f"| `{key}` | {counts.get(key, 0)} |")
+    lines += ["", "## Completion-certification meanings", ""]
+    for key in CERTIFICATION_ORDER:
+        meaning = data.get("completion_certification_definitions", {}).get(key)
+        if meaning:
+            lines.append(f"- **`{key}`** -- {meaning}")
+    return lines
 
 def _render_verification(data: dict, items: list) -> list[str]:
     """The compile-backed axis: what the Lean build actually certifies."""
@@ -131,6 +160,7 @@ def render(data: dict) -> str:
     for status, meaning in data["status_definitions"].items():
         lines.append(f"- **`{status}`** -- {meaning}")
 
+    lines += _render_completion_certification(data, items)
     lines += _render_verification(data, items)
     lines += _render_frontier(data, items)
     lines += ["", "## Source ledger", ""]
@@ -146,11 +176,17 @@ def render(data: dict) -> str:
             f"- **Kind:** `{item['source_kind']}`",
             f"- **Status:** `{item['status']}`",
             f"- **Verification:** `{item['verification']}`",
+            f"- **Hostile completion certification:** `{item.get('completion_certification', 'missing')}`",
             f"- **Mathematics:** {item['summary']}",
         ]
         blocked = item.get("blocked_by") or []
         if blocked:
             lines.append("- **Blocked by:** " + ", ".join(f"`{x}`" for x in blocked))
+        holes = item.get("completion_holes") or []
+        if holes:
+            lines.append("- **Known hostile-review holes:**")
+            for hole in holes:
+                lines.append(f"  - `{hole.get('kind', 'unspecified')}`: {hole.get('detail', '')}")
         refs = item.get("lean_declarations", [])
         if refs:
             lines.append("- **Current Lean references:** " + ", ".join(f"`{x}`" for x in refs))
@@ -170,24 +206,23 @@ def render(data: dict) -> str:
     lines += [
         "## Completion interpretation",
         "",
-        "The completed Section 6 sine-theta surface is not the same as completion of",
-        "the whole paper, but the remaining distance is smaller than a raw count of",
-        "outstanding rows suggests, and it is not uniform.",
+        "The compiler and declaration census are healthy evidence layers, but they are not a",
+        "semantic completeness certificate. The 2026-08-12 hostile review deliberately reopened",
+        "rows whose public source specification is incomplete, whose source-facing statement is",
+        "missing/narrower than the paper, or whose current `.whole` audit clause cannot demonstrate",
+        "that every separable assertion in the hashed passage is covered.",
         "",
-        "A zero `sorry` count is not evidence of completion here. Because the tree is",
-        "both sorry-free and axiom-free, unfinished work cannot show up as a `sorry`;",
-        "it shows up in exactly three places, which the `verification` axis separates:",
-        "a package that does not compile (`not_compiling`), a conclusion stated",
-        "relative to a hypothesis record nobody constructs (`proved_conditional`), and",
-        "a statement nobody wrote (`absent`). Rows marked `proved_outside_build` and",
-        "`partially_in_build` are a fourth, much cheaper case: the mathematics is",
-        "already proved and merely sits outside the default build target.",
+        "The hard 100% gate is now: explicit statement-map completion obligation + terminal source",
+        "status + `proved_in_build` + `completion_certification = accepted`. Pure source open questions",
+        "remain non-obligations. Question 10.4 is intentionally different: its final general-f question",
+        "is open, but the same source block contains established functional-calculus/projection identities",
+        "and tan(2 Theta) specializations, so that mixed block remains a completion obligation until its",
+        "established clauses are atomically certified.",
         "",
-        "The genuinely hard remainder is Section 8, which is blocked on an",
-        "operator-valued contour-integration API that exists nowhere, the Section 9",
-        "analytic model, and the Section 3 classification results. The Section 10",
-        "questions are part of the source record but are not proof obligations for a",
-        "faithful formalization of what the paper proves.",
+        "Do not report 100% from the raw `compiled_exact` count, from a green `lake build`, or from a",
+        "recursively grounded legacy frontier graph. Those answer different questions. Repair the known",
+        "holes listed above, re-run the hostile audit, and only then promote `completion_certification` to",
+        "`accepted`.",
         "",
     ]
     return "\n".join(lines)

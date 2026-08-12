@@ -1410,13 +1410,16 @@
     }
   ],
   "coverage_policy": {
-    "census_terminal_statuses": [
+    "admission_marker": "sorryAx",
+    "census_statuses_not_requiring_frontier_mapping": [
       "compiled_exact",
       "compiled_general_infrastructure",
       "refuted_as_transcribed",
       "not_a_completion_obligation",
-      "resolved_by_modern_development"
+      "resolved_by_modern_development",
+      "partial_or_wrapper_missing",
+      "source_spec_incomplete"
     ],
-    "admission_marker": "sorryAx"
+    "semantic_completion_note": "This frontier graph tracks dependency grounding only. Semantic 100% completion is governed by the source census/statement map completion_certification axis; reopened semantic rows may intentionally be omitted from the legacy frontier graph."
   }
 }

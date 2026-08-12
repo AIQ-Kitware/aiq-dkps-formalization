@@ -123,7 +123,7 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
         "",
         "This packet is organized one source claim at a time. The TeX passages come directly from the checked-in transformative, source-order reconstruction `DavisKahan1970_part_III.tex`; they are the repository's distributable semantic audit specification. The census status is a claim to audit, not evidence of semantic fidelity.",
         "",
-        "Compiler evidence and mathematical-source fidelity are intentionally separate. A compiler certificate establishes that registered declarations elaborate against `DavisKahan.All`; the auditor must decide whether their types jointly match the source passage.",
+        "Compiler evidence, source status, and hostile semantic certification are intentionally separate. A compiler certificate establishes that registered declarations elaborate against `DavisKahan.All`; the maintained `completion_certification` records whether the current passage has already survived an adversarial semantic review, and the auditor must independently confirm or overturn that judgement.",
         "",
         f"- Statement map: `{MAP_PATH.relative_to(ROOT)}`",
         f"- Distributable source specification: `{tex_path.relative_to(ROOT)}`",
@@ -165,6 +165,7 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
             f"- **Source kind:** `{mapped['source_kind']}`",
             f"- **Completion obligation:** `{str(mapped['completion_obligation']).lower()}`",
             f"- **Census claim:** `{c['status']}` / `{c['verification']}`",
+            f"- **Hostile completion certification:** `{c.get('completion_certification', 'missing')}`",
             f"- **Source-specification passage SHA-256:** `{mapped['source_specification_sha256']}`",
             "",
             "### Registered distributable source-specification passage",
@@ -181,6 +182,11 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
                 lines.append("  - Review declarations: " + ", ".join(f"`{d}`" for d in clause_decls))
             else:
                 lines.append("  - Review declarations: *(none; inspect the row mapping/source context)*")
+        holes = c.get("completion_holes") or []
+        if holes:
+            lines += ["", "### Known hostile-review holes", ""]
+            for hole in holes:
+                lines.append(f"- **`{hole.get('kind', 'unspecified')}`:** {hole.get('detail', '')}")
         if mapped.get("audit_warning"):
             lines += ["", f"> **Audit warning:** {mapped['audit_warning']}"]
         lines += [
@@ -190,7 +196,7 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
         ]
         review = mapped.get("review_declarations", [])
         if not review:
-            lines.append("No primary Lean declaration is registered for this non-obligation source question.")
+            lines.append("No primary Lean declaration is registered for this row. If it is a completion obligation, this is itself a blocking audit defect.")
             lines.append("")
         for decl in review:
             locs = locations.get(decl) or []
@@ -249,17 +255,23 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
             "",
         ]
 
-    completion_rows = [c for c in census["items"] if c.get("section") != "10"]
-    exact_rows = [c for c in completion_rows if c.get("status") == "compiled_exact"]
-    refuted_rows = [c for c in completion_rows if c.get("status") == "refuted_as_transcribed"]
-    nonterminal_rows = [c for c in completion_rows if c.get("status") not in {"compiled_exact", "refuted_as_transcribed"}]
+    mapped_by_id = {x["id"]: x for x in statement_map["items"]}
+    completion_rows = [
+        c for c in census["items"]
+        if bool(mapped_by_id[c["id"]].get("completion_obligation"))
+    ]
+    accepted_rows = [c for c in completion_rows if c.get("completion_certification") == "accepted"]
+    reopened_rows = [c for c in completion_rows if c.get("completion_certification") != "accepted"]
+    accepted_exact = [c for c in accepted_rows if c.get("status") == "compiled_exact"]
+    accepted_refuted = [c for c in accepted_rows if c.get("status") == "refuted_as_transcribed"]
     lines += [
         "# Final independent conclusion",
         "",
-        f"- **{len(completion_rows)} mathematical completion obligations reviewed:** yes / no",
-        f"- **{len(exact_rows)} census-claimed exact obligations independently accepted:** yes / no",
-        f"- **{len(refuted_rows)} census-claimed refuted obligations independently accepted:** yes / no",
-        "- **Nonterminal census rows:** " + (", ".join(f"`{c['id']}` ({c['status']})" for c in nonterminal_rows) if nonterminal_rows else "none"),
+        f"- **{len(completion_rows)} explicit mathematical completion obligations reviewed:** yes / no",
+        f"- **{len(accepted_exact)} currently hostile-certified exact obligations independently reconfirmed:** yes / no",
+        f"- **{len(accepted_refuted)} currently hostile-certified refuted obligations independently reconfirmed:** yes / no",
+        f"- **{len(reopened_rows)} currently reopened completion obligations resolved by this audit:** yes / no",
+        "- **Reopened rows at packet generation:** " + (", ".join(f"`{c['id']}` ({c.get('completion_certification')})" for c in reopened_rows) if reopened_rows else "none"),
         "- **Any unregistered mathematical claims found:** yes / no",
         "- **Compiler certificate clean and complete:** yes / no",
         "- **Is the repository's claim of 100% theorem-statement-level Davis--Kahan 1970 coverage justified?** yes / no / uncertain",
