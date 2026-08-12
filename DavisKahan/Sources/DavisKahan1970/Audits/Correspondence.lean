@@ -16,7 +16,6 @@ promoting the new source forms.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 #check ClosedOperator.IsGraphCore
@@ -37,6 +36,5 @@ namespace ExactSinTheta
 #print axioms paperSineDefinedDirectedAngleC_eq_source
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

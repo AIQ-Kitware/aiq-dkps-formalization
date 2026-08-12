@@ -31,7 +31,6 @@ made this file look like an independent Spectra consumer when it is not.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 #check paperNuclearNorm
@@ -70,6 +69,5 @@ namespace ExactSinTheta
 #print axioms paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

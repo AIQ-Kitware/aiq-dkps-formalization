@@ -9,6 +9,7 @@ import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
 import DavisKahan.Sylvester.RealUnbounded
 import DavisKahan.SinTheta.Real.Specializations
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
+import DavisKahan.Sources.DavisKahan1970.FullPartIII
 
 /-!
 # Full unbounded sine-theta trusted-dependency audit
@@ -25,7 +26,6 @@ open TauCeti.DavisKahan.Foundation.RealComplexification
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 #check sylvesterNeumannPartialSum_cauchy
@@ -142,8 +142,11 @@ namespace ExactSinTheta
 #print axioms TauCeti.DavisKahan1970.generalizedSinTheta_real
 #print axioms TauCeti.DavisKahan1970.generalizedSinTheta_boundedSpecialization
 #print axioms TauCeti.DavisKahan1970.generalizedSinTheta_boundedSpecialization_real
+#check TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged
+#check TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA
+#print axioms TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged
+#print axioms TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

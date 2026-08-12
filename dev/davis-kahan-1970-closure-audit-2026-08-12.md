@@ -5,7 +5,9 @@ baseline is the source-first transcription audit of 2026-08-09, including that
 audit's section-by-section list of hypotheses and conclusions.  Each finding in
 that audit was checked against the current source-facing declarations and the
 maintained resolution notes.  The three Section 4 findings raised by the final
-review were then checked directly against the new theorem signatures.
+review, the Definition 3.2 infinite-dimensional separation witness, and the two
+scope remarks attached to Theorem 5.1 were then checked directly against the
+new theorem signatures.
 
 The non-distributable transcription is not present in this checkout, so this
 re-audit does not pretend to have re-read the private source independently.  It
@@ -69,7 +71,24 @@ The last three specialization findings are discharged as follows.
    conclusion remains Ky Fan/UI-gauge majorization, not the false pointwise
    approximation-number strengthening that would imply Proposition 4.4.
 
-The source census declaration probe resolves all 999 named declarations against
+## Definition 3.2 and Theorem 5.1 review
+
+The earlier closure audit inherited two stale claims from the census.  Both are
+now discharged in the build rather than treated as prose-only facts.
+
+1. Definition 3.2 is separated from uniform acuteness by a concrete pair in
+   `ℓ²(ℕ × Bool, 𝕜)`, uniformly over every `RCLike` scalar field.  The two closed
+   subspaces have both crossed intersections zero, while unit coordinate vectors
+   have projection norms `1 / (n + 2)`.  Hence their projection gap is exactly
+   one.  The audit instantiates the result over both `ℝ` and `ℂ`.
+
+2. Theorem 5.1 now includes the printed `A`/`B` interchange companion.  Its
+   unbounded extension is stated for a densely defined closed `LinearPMap` `A`
+   with a bounded everywhere left inverse; it does not assume a right inverse or
+   surjectivity.  The proof uses only the left-inverse identity, matching the
+   printed argument.
+
+The source census declaration probe resolves every named declaration against
 `DavisKahan.All`.  The generated census therefore records 44 exact proofs, one
 source-level refutation, and no remaining mathematical completion obligation
 outside Section 10's questions.
