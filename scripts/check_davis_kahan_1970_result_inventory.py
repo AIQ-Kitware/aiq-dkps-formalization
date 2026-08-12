@@ -453,6 +453,106 @@ def _validate_selection_review(
     return True, None
 
 
+
+def _validate_semantic_audit_surface(
+    data: dict[str, Any],
+    items: list[dict[str, Any]],
+    *,
+    terminal: int,
+    nonterminal: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Require reviewer-visible static evidence for every semantic promotion.
+
+    The result inventory is the semantic ledger, but a hostile reviewer should not
+    need to trust declaration strings inside JSON.  The maintained audit surface
+    imports `DavisKahan.All` and `#check`s every selected declaration, while the
+    companion Markdown report records the source-vs-Lean judgement and the exact
+    residual gap for nonterminal results.
+    """
+    sweep = data.get("semantic_review_sweep")
+    if not isinstance(sweep, dict):
+        fail("formalization-result inventory must record semantic_review_sweep")
+
+    audit_rel = sweep.get("compiler_audit_surface")
+    report_rel = sweep.get("human_report")
+    if not isinstance(audit_rel, str) or not audit_rel.strip():
+        fail("semantic_review_sweep.compiler_audit_surface must name the maintained Lean audit file")
+    if not isinstance(report_rel, str) or not report_rel.strip():
+        fail("semantic_review_sweep.human_report must name the maintained semantic-review report")
+    audit_path = ROOT / audit_rel
+    report_path = ROOT / report_rel
+    if not audit_path.exists():
+        fail(f"semantic compiler audit surface does not exist: {audit_rel}")
+    if not report_path.exists():
+        fail(f"semantic review report does not exist: {report_rel}")
+
+    if sweep.get("terminal_results") != terminal:
+        fail(
+            "semantic_review_sweep.terminal_results is stale: "
+            f"expected {terminal}, got {sweep.get('terminal_results')!r}"
+        )
+    expected_remaining = [item["id"] for item in nonterminal]
+    if sweep.get("remaining_results") != expected_remaining:
+        fail(
+            "semantic_review_sweep.remaining_results is stale: "
+            f"expected {expected_remaining!r}, got {sweep.get('remaining_results')!r}"
+        )
+
+    audit_text = audit_path.read_text(encoding="utf-8")
+    report_text = report_path.read_text(encoding="utf-8")
+    for item in items:
+        result_id = item["id"]
+        review_note = item.get("review_note")
+        if not isinstance(review_note, str) or not review_note.strip():
+            fail(f"{result_id}: semantic result entry must record a nonempty review_note")
+        for declaration in _declarations(item):
+            if f"#check @{declaration}" not in audit_text and f"#check {declaration}" not in audit_text:
+                fail(
+                    f"{result_id}: selected semantic evidence {declaration} is missing from "
+                    f"{audit_rel}"
+                )
+        repair = item.get("repair")
+        if isinstance(repair, dict):
+            for declaration in repair.get("lean_declarations", []) or []:
+                if f"#check @{declaration}" not in audit_text and f"#check {declaration}" not in audit_text:
+                    fail(
+                        f"{result_id}: repair evidence {declaration} is missing from {audit_rel}"
+                    )
+
+        is_terminal = (
+            _result_disposition(item) in TERMINAL_RESULT_DISPOSITIONS
+            and item.get("verification") in TERMINAL_VERIFICATIONS
+            and _semantic_certification(item) in TERMINAL_SEMANTIC_CERTIFICATIONS
+        )
+        gap = item.get("remaining_gap")
+        if is_terminal:
+            if gap is not None:
+                fail(f"{result_id}: terminal result must not retain remaining_gap")
+        else:
+            if not isinstance(gap, dict):
+                fail(f"{result_id}: nonterminal result must carry a structured remaining_gap")
+            for key in ("category", "missing_surface", "next_action"):
+                value = gap.get(key)
+                if not isinstance(value, str) or not value.strip():
+                    fail(f"{result_id}: remaining_gap.{key} must be nonempty")
+            strongest = gap.get("strongest_existing_evidence")
+            if not isinstance(strongest, list) or not strongest or not all(isinstance(x, str) for x in strongest):
+                fail(f"{result_id}: remaining_gap.strongest_existing_evidence must be a nonempty list")
+            for declaration in strongest:
+                if f"#check @{declaration}" not in audit_text and f"#check {declaration}" not in audit_text:
+                    fail(
+                        f"{result_id}: strongest gap evidence {declaration} is missing from {audit_rel}"
+                    )
+        if f"`{result_id}`" not in report_text:
+            fail(f"{result_id}: semantic review report {report_rel} does not mention this counted result")
+
+    return {
+        "compiler_audit_surface": audit_rel,
+        "human_report": report_rel,
+        "compiler_audit_surface_sha256": sha256_file(audit_path),
+        "human_report_sha256": sha256_file(report_path),
+    }
+
 def completion_summary(
     inventory_path: Path | None = None,
     *,
@@ -584,6 +684,9 @@ def completion_summary(
         else:
             terminal += 1
 
+    semantic_audit = _validate_semantic_audit_surface(
+        data, items, terminal=terminal, nonterminal=nonterminal
+    )
     _validate_boundary_accounting(source_atoms, items)
     classification_complete, classification_note = _validate_total_source_classification(
         data, source_atoms, obligation_source_atoms, require_terminal=require_terminal
@@ -617,6 +720,7 @@ def completion_summary(
         "completion_obligations": obligations,
         "terminal_completion_obligations": terminal,
         "source_coverage_terminal": source_coverage_terminal,
+        "semantic_audit": semantic_audit,
         "nonterminal_results": nonterminal,
     }
 
@@ -651,6 +755,8 @@ def main() -> int:
     )
     print(f"  inventory: {summary['inventory_path']}")
     print(f"  source fidelity: {summary['source_fidelity_inventory']}")
+    print(f"  semantic audit surface: {summary['semantic_audit']['compiler_audit_surface']}")
+    print(f"  semantic review report: {summary['semantic_audit']['human_report']}")
     if summary["nonterminal_results"]:
         print("  first nonterminal results:")
         for item in summary["nonterminal_results"][:10]:

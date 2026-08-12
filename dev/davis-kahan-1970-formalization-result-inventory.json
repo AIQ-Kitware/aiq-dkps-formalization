@@ -45,16 +45,16 @@
         "S2-unbounded-scope.bounded-residual-needed",
         "S2-unbounded-scope.half-infinite-gap-intervals"
       ],
-      "disposition": "pending_result_only_review",
+      "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "pending_result_only_review",
+      "semantic_certification": "accepted",
       "lean_declarations": [
         "TauCeti.DavisKahan1970.sinTheta",
         "TauCeti.DavisKahan1970.sinTheta_real_exactPaper",
         "TauCeti.DavisKahan1970.generalizedSinTheta",
         "TauCeti.DavisKahan1970.generalizedSinTheta_real_exactPaper"
       ],
-      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. `sinTheta` is the complex source-shaped unbounded form-bounded isometric theorem and `sinTheta_real_exactPaper` exposes the real paper UI-norm surface; the generalized complex/real endpoints record the same unbounded closed-operator engine with the source lower-frame formulation. Together they cover the printed interval/exterior gap, arbitrary unitary-invariant norm, real/complex, infinite-dimensional, and unbounded-self-adjoint scope with bounded residual. No proof-only Section 1/6 material is used as part of the counted result.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "S2-sin-theta",
@@ -105,7 +105,7 @@
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real",
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent"
       ],
-      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "review_note": "Result-only audit 2026-08-12: bounded directed and bounded ambient source theorems are present over complex and real Hilbert spaces, and the unbounded directed residual theorem is present over both scalar fields. The remaining source-scope gap is the *ambient unbounded* conclusion `delta * N(tan Theta) <= N(H)` for arbitrary paper UI norm under the printed hypotheses. No existing source-facing theorem was located that combines unbounded self-adjoint ambient scope with the sharp factor-one perturbation conclusion. Keep this result nonterminal until that theorem/wrapper exists and is registered.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "S2-tan-theta",
@@ -126,6 +126,16 @@
         ],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      },
+      "remaining_gap": {
+        "category": "missing_unbounded_ambient_source_surface",
+        "missing_surface": "Unbounded self-adjoint ambient perturbation theorem delta * N(tan Theta) <= N(H) for every paper unitary-invariant norm under the printed Section 2 ordered-gap/Rayleigh-Ritz hypotheses.",
+        "strongest_existing_evidence": [
+          "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
+          "TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists",
+          "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real"
+        ],
+        "next_action": "Prove/register an unbounded ambient PaperUI source wrapper with the sharp factor-one perturbation conclusion; then re-run hostile semantic review."
       }
     },
     {
@@ -145,17 +155,18 @@
         "S2-unbounded-scope.bounded-residual-needed",
         "S2-unbounded-scope.half-infinite-gap-intervals"
       ],
-      "disposition": "pending_result_only_review",
+      "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "pending_result_only_review",
+      "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm",
         "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm",
         "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real",
         "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative",
-        "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real"
+        "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative",
+        "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real",
+        "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_real"
       ],
-      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. The bounded whole-space PaperUI wrappers give the ambient perturbation conclusion over complex and real Hilbert spaces. The four unbounded representative theorems give both ambient and directed-residual `sin 2Theta` conclusions over complex and real scalars for every paper unitary-invariant norm, with the source factor 2 and without finite-dimensional restrictions. This covers the counted Section 2 theorem at its shared unbounded scope.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "S2-sin-two-theta",
@@ -205,7 +216,7 @@
         "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
         "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact"
       ],
-      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "review_note": "Result-only audit 2026-08-12: the bounded directed and ambient arbitrary-PaperUI conclusions are exact over real and complex scalars, with pole exclusion derived internally. Current main additionally proves the exact *complex unbounded directed residual* theorem `tanTwoTheta_unbounded_directedResidual_paperUINorm_exact`. The remaining source-scope work is the sharp unbounded ambient factor-two conclusion and the corresponding real unbounded source-facing surface (directed/ambient as needed). Existing unbounded ambient ideal estimates with quarter-acuteness or an extra denominator do not match the printed theorem and therefore do not discharge it.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "S2-tan-two-theta",
@@ -229,6 +240,16 @@
         ],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      },
+      "remaining_gap": {
+        "category": "missing_unbounded_ambient_and_real_source_surface",
+        "missing_surface": "Sharp unbounded ambient factor-two tan(2Theta) theorem at paper UI-norm scope, plus real unbounded source-facing coverage corresponding to the printed global scope.",
+        "strongest_existing_evidence": [
+          "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
+          "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
+          "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exact"
+        ],
+        "next_action": "Extend the exact unbounded directed assembly to the ambient perturbation conclusion and real scalar surface without quarter-acuteness or denominator loss."
       }
     },
     {
@@ -284,7 +305,7 @@
         "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent_real",
         "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_not_unique_real"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. The generic existence-iff theorem is the cardinal-free form of the printed crossing-dimension condition (3.5), and proposition3_2_not_unique is the literal nonacute nonuniqueness sentence; the real instances mirror both clauses. The crossing-square identity and bilateral-shift example are outside the printed proposition statement.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. The generic Section 3 source surface states existence of a paper direct rotation iff the two crossed defect spaces are equivalent and separately proves nonuniqueness whenever the pair is nonacute. The explicit real aliases expose the same two printed clauses over `ℝ`; the generic theorem covers `ℂ` and arbitrary Hilbert dimension. The crossing-subspace square identity and bilateral-shift example are adjacent source material and are not part of the counted Proposition 3.2 boundary.",
       "parent_claim_id": "DK-3.2-prop",
       "boundary_review": {
         "status": "accepted",
@@ -324,7 +345,7 @@
         "TauCeti.DavisKahan1970.real_directRotation_hermitianPart",
         "TauCeti.DavisKahan1970.real_directRotation_principal_of_sq"
       ],
-      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "review_note": "Result-only audit 2026-08-12: the full nonacute complex Proposition 3.3 principal-unitary-square-root forward/converse characterization exists in `DavisKahan/Frontier/Section3.lean`. The registered real square/principal theorems are acute/uniformly-acute specializations; no source-facing real theorem was located for the full matched-crossed-defect nonacute statement. The exact remaining task is a real nonacute principal-square-root characterization equivalent to the printed Proposition 3.3, preferably through a scalar-generic positivity characterization rather than a complex-spectrum branch condition.",
       "parent_claim_id": "DK-3.3-prop",
       "boundary_review": {
         "status": "accepted",
@@ -342,6 +363,16 @@
         "cross_block_scope_atom_ids": [],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      },
+      "remaining_gap": {
+        "category": "missing_real_nonacute_source_surface",
+        "missing_surface": "Real-Hilbert-space full nonacute principal-square-root forward/converse characterization at the printed matched-crossed-defect scope.",
+        "strongest_existing_evidence": [
+          "TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_forward_of_nonneg_blocks",
+          "TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_converse",
+          "TauCeti.DavisKahan1970.real_directRotation_principal_of_sq"
+        ],
+        "next_action": "Expose a real nonacute principal-root characterization, preferably via a scalar-generic positivity/Hermitian-part branch condition rather than complex spectrum."
       }
     },
     {
@@ -360,7 +391,7 @@
         "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full",
         "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation"
       ],
-      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "review_note": "Result-only audit 2026-08-12: `proposition3_4_source_full` and its equality-to-direct-rotation companion give the complete printed Proposition 3.4 over complex Hilbert spaces at the nonacute source scope. No real full-scope counterpart was located. The exact remaining task is the `R`-scalar theorem that under the printed `C0^2 >= 1/2` condition, `U^2` is the direct rotation from `Q_-` to `Q`, without replacing the source hypotheses by uniform acuteness.",
       "parent_claim_id": "DK-3.4-prop",
       "boundary_review": {
         "status": "accepted",
@@ -372,6 +403,15 @@
         "cross_block_scope_atom_ids": [],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      },
+      "remaining_gap": {
+        "category": "missing_real_full_scope_source_surface",
+        "missing_surface": "Real-Hilbert-space full nonacute Proposition 3.4: under the printed C0^2 >= 1/2 condition, U^2 is the direct rotation from Q_- to Q.",
+        "strongest_existing_evidence": [
+          "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full",
+          "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation"
+        ],
+        "next_action": "Transport/generalize the full nonacute Proposition 3.4 argument to real scalars without strengthening the source hypotheses."
       }
     },
     {
@@ -461,9 +501,10 @@
       "lean_declarations": [
         "TauCeti.DavisKahan1970.proposition3_5_commutations",
         "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle",
+        "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace",
         "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. The three registered declarations map directly to the proposition's three counted clauses: commutation with P/Q/J/U, the eigenvector rotation angle, and the unique maximal reducing eigenspace satisfying the printed properties. U=exp(J Theta) and the cos^2 Theta projector formula are preceding setup, not Proposition 3.5.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. These `RCLike`-generic Proposition 3.5 source theorems expose exactly the counted statement: commutation of the angle operator with the source operators, the rotation angle on an angle eigenvector, and the maximal reducing eigenspace characterization in the acute case. They work over real or complex Hilbert spaces in arbitrary dimension. The preceding exponential and cosine-square representations are explicitly outside the Proposition 3.5 result boundary and therefore do not block this result.",
       "parent_claim_id": "DK-3.5-prop",
       "boundary_review": {
         "status": "accepted",
@@ -533,9 +574,10 @@
         "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors",
         "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real",
         "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute",
-        "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real"
+        "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
+        "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues"
       ],
-      "review_note": "Result-only review 2026-08-12 isolates one remaining source-scope bridge. The arbitrary-dimensional complex/real declarations already prove the pointwise orthonormal-vector bounds and nonacute approximation-number minimality. What is not yet exposed at that same arbitrary-dimensional compact scope is the printed exact direct-rotation value a_k((1-U)P) = 2*sin(theta_k/2); the existing Proposition4_1_directRotationValues alias is finite-dimensional/acute and is therefore not counted as exact evidence for this row. Add that value identity at the compact nonacute scope, then this row can be terminalized without enlarging the result boundary.",
+      "review_note": "Result-only audit 2026-08-12: the arbitrary-dimensional compact complex/real theorems already prove the orthonormal-vector angle lower bounds and approximation-number minimality for the direct rotation. The remaining counted clause is the paper's *closed-form minimum value* `2 sin(theta_k/2)` at the same infinite compact scope. `Proposition4_1_directRotationValues` supplies that identity in finite dimension, but no hostile-reviewable infinite compact theorem identifying the approximation-number sequence with the principal chord sequence was located.",
       "parent_claim_id": "DK-4.1-prop",
       "boundary_review": {
         "status": "accepted",
@@ -553,6 +595,16 @@
         "cross_block_scope_atom_ids": [],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      },
+      "remaining_gap": {
+        "category": "missing_infinite_compact_closed_form_value",
+        "missing_surface": "At the arbitrary-dimensional compact source scope, identify the direct-rotation displacement approximation-number sequence with the closed form 2 sin(theta_k/2), not only prove extremal minimality.",
+        "strongest_existing_evidence": [
+          "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute",
+          "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
+          "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues"
+        ],
+        "next_action": "Prove/register the infinite compact approximation-number identity for the direct rotation in terms of the principal chord sequence, over real and complex scalars."
       }
     },
     {
@@ -602,7 +654,7 @@
         "TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional",
         "TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. The complex and real source-facing theorems state the arbitrary-dimensional ENNReal infinite-series lower bound itself; the ENNReal tsum formulation includes the infinite-right-hand-side case. The trace identification is proof material outside the proposition statement.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. `Proposition4_2_infiniteDimensional` proves the paper's infinite-series basis-angle lower bound over `ℂ`, including the divergent right-hand side through the extended summation formulation; the real theorem gives the literal `ℝ` counterpart. The trace identification used in the source proof is proof-only material and is not part of the counted proposition statement.",
       "parent_claim_id": "DK-4.2-prop",
       "boundary_review": {
         "status": "accepted",
@@ -627,13 +679,14 @@
       "source_atom_ids": [
         "DK-4.3-prop.squared-displacement-global-minimum"
       ],
-      "disposition": "pending_result_only_review",
+      "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "pending_result_only_review",
+      "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional_idealGauge"
+        "TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge",
+        "TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge"
       ],
-      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. The compact nonacute complex and real wrappers state Proposition 4.3 at the paper's inherited matched-defect scope and show that the direct rotation minimizes every Ky-Fan-dominant unitary-invariant ideal gauge of the squared full displacement `(1-W*) (1-W)`. The underlying proof is dimension-free; the compact premise is kept in the wrapper solely to match the source setting. Equations (4.3)-(4.6) and the later warning about unsquared displacement are outside the counted proposition boundary.",
       "parent_claim_id": "DK-4.3-prop",
       "boundary_review": {
         "status": "accepted",
@@ -712,9 +765,10 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
+        "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm",
         "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. banach_sylvester_lower_bound_exact carries the printed bounded Banach-space Sylvester hypotheses, including a literal two-sided inverse and its norm bound, for an arbitrary compatible cross-operator norm, and concludes delta*N(X) <= N(C). The A/B-interchange and one-sided unbounded extensions are post-theorem remarks and are intentionally not registered as evidence for this counted result.",
+      "review_note": "Accepted result-only semantic review 2026-08-12, corrected after rechecking scalar scope. `banach_sylvester_lower_bound_uiNorm` aliases the scalar-generic Banach-space Sylvester lower-bound theorem over an arbitrary nontrivially normed field; its left-inverse hypothesis is weaker than the printed two-sided-inverse hypothesis, so it covers both real and complex source scope. `banach_sylvester_lower_bound_exact` is retained as the literal complex source-shape witness with both inverse equations. The compiler audit surface additionally restates the printed two-sided-inverse theorem over a generic scalar field and proves it directly from the scalar-generic engine. The A/B interchange and one-sided unbounded remarks are outside the counted Theorem 5.1 boundary.",
       "parent_claim_id": "DK-5.1-thm",
       "boundary_review": {
         "status": "accepted",
@@ -742,14 +796,14 @@
         "DK-5.2-thm.hilbert-unbounded-hypotheses",
         "DK-5.2-thm.hilbert-unbounded-conclusion"
       ],
-      "disposition": "pending_result_only_review",
+      "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "pending_result_only_review",
+      "semantic_certification": "accepted",
       "lean_declarations": [
         "TauCeti.DavisKahan1970.Theorem5_2",
-        "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum"
+        "TauCeti.DavisKahan.ExactSinTheta.davisKahan1970_sylvester_real"
       ],
-      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. `Theorem5_2` is the source-facing complex ordered unbounded theorem for `A >= c+delta > c >= B`, arbitrary unitary-invariant ideal gauge, and the exact domain-aware Sylvester equation. `davisKahan1970_sylvester_real` is the real unbounded theorem under `FormBoundedSylvesterGap`; that predicate has an explicit `leftAboveRightBelow` constructor with exactly the printed ordered semibounded hypotheses, so this theorem is a strictly more general real statement and specializes immediately to Theorem 5.2. The compiler audit surface records that specialization explicitly.",
       "parent_claim_id": "DK-5.2-thm",
       "boundary_review": {
         "status": "accepted",
@@ -870,7 +924,7 @@
         "TauCeti.DavisKahan1970.Proposition6_1",
         "TauCeti.DavisKahan1970.Proposition6_1_real"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. The complex and real Proposition 6.1 source aliases expose the symmetric ambient sine inequality under the exact two-sided placement/gap data. Equation (6.1), the residual proof identity, and the 2x2 counterexample are outside the printed proposition statement.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. The complex and real Proposition 6.1 aliases are direct source-facing PaperUI theorems for the two-sided spectral-placement hypothesis and the ambient sine bound `delta * N(sin Theta) <= N(H)` for every paper unitary-invariant norm. The Sylvester identity (6.1) and the source counterexample explaining why one-sided placement is insufficient are outside the counted proposition statement.",
       "parent_claim_id": "DK-6.1-prop",
       "boundary_review": {
         "status": "accepted",
@@ -940,7 +994,7 @@
         "TauCeti.DavisKahan1970.Theorem6_2",
         "TauCeti.DavisKahan1970.Theorem6_2_real"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. The main complex and real Theorem 6.2 declarations state the pairwise spectral-separation Hilbert--Schmidt sine inequality. The common-domain/common-core variants and the rank-corrected operator-norm consequence are not part of the printed theorem and are intentionally omitted from its evidence.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. The complex and real Theorem 6.2 wrappers state the pairwise-gap Hilbert-Schmidt sine inequality with the source lower-frame factor epsilon at the unbounded/common-domain source scope. The rank-corrected operator-norm consequence is an immediate post-theorem consequence in the source and is explicitly outside the 29-result denominator.",
       "parent_claim_id": "DK-6.2-thm",
       "boundary_review": {
         "status": "accepted",
@@ -965,16 +1019,16 @@
       "source_atom_ids": [
         "DK-6.3-thm.generalized-tangent-theorem"
       ],
-      "disposition": "pending_result_only_review",
+      "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "pending_result_only_review",
+      "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Theorem6_3",
-        "TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real",
-        "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm",
-        "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real"
+        "TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists",
+        "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real",
+        "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral",
+        "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_spectral"
       ],
-      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. The unbounded infinite-trial complex and real theorems construct the directed tangent representative and prove the sharp source residual bound for every unitary-invariant ideal gauge at arbitrary trial dimension. The spectral PaperUI wrappers expose the same theorem in the paper's bounded/source notation. Equations (6.2)-(6.6) and Example 6.1 are proof/example material and are not part of the counted Theorem 6.3 statement.",
       "parent_claim_id": "DK-6.3-thm",
       "boundary_review": {
         "status": "accepted",
@@ -1097,16 +1151,18 @@
         "DK-8.2-thm.double-angle-bound-retained",
         "DK-8.2-thm.acute-branch-conclusion"
       ],
-      "disposition": "pending_result_only_review",
+      "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "pending_result_only_review",
+      "semantic_certification": "accepted",
       "lean_declarations": [
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed"
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm",
+        "TauCeti.DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm"
       ],
-      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. The Section 8 source surface exposes both printed half-gap alternatives: perturbation-small and residual-small. The complex and real branch theorems select the acute branch (`Theta < pi/4`), and the PaperUI perturbation/residual theorems retain the corresponding `sin 2Theta` estimate with no constant loss. The proof homotopy, unequal-dimension extension remark, and comment about a tangent extension are adjacent material outside the counted Theorem 8.2 boundary.",
       "parent_claim_id": "DK-8.2-thm",
       "boundary_review": {
         "status": "accepted",
@@ -1127,5 +1183,20 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       }
     }
-  ]
+  ],
+  "semantic_review_sweep": {
+    "date": "2026-08-12",
+    "upstream_main_minimum": "ce0f435a2f8acdf323e520048114378ea0855fd2",
+    "method": "Audited each previously nonterminal counted result against only its accepted printed-result boundary; promoted a result only when concrete source-facing Lean declarations expose every counted hypothesis, conclusion, and scalar/dimension/norm scope. Proof-only and theorem-adjacent source atoms were not used as blockers.",
+    "compiler_audit_surface": "DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean",
+    "human_report": "dev/davis-kahan-1970-result-semantic-review-2026-08-12.md",
+    "terminal_results": 24,
+    "remaining_results": [
+      "S2-tan-theta",
+      "S2-tan-two-theta",
+      "DK-3.3-prop",
+      "DK-3.4-prop",
+      "DK-4.1-prop"
+    ]
+  }
 }

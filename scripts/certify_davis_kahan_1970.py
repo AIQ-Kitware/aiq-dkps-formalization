@@ -50,6 +50,8 @@ CENSUS_PATH = ROOT / "dev/davis-kahan-1970-full-source-census.json"
 FORMALIZATION_PATH = ROOT / "formalization.yaml"
 TEX_PATH = ROOT / "prose/distilled_literature/DavisKahan1970_part_III.tex"
 SOURCE_MANIFEST_PATH = ROOT / "prose/distilled_literature/source_manifest.json"
+SEMANTIC_REVIEW_PATH = ROOT / "dev/davis-kahan-1970-result-semantic-review-2026-08-12.md"
+SEMANTIC_AUDIT_SURFACE_PATH = ROOT / "DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean"
 
 HASH_EXTENSIONS = {".lean", ".py", ".yaml", ".yml", ".toml", ".json", ".tex", ".md"}
 HASH_BASENAMES = {"lean-toolchain", "lake-manifest.json"}
@@ -287,6 +289,8 @@ def snapshot_inputs(outdir: pathlib.Path) -> dict[str, str]:
         ROOT / "lakefile.toml",
         ROOT / "lake-manifest.json",
         ROOT / "dev/davis-kahan-1970-independent-audit-prompt.md",
+        SEMANTIC_REVIEW_PATH,
+        SEMANTIC_AUDIT_SURFACE_PATH,
     ]
     statement_map = json.loads(MAP_PATH.read_text(encoding="utf-8"))
     fidelity_rel = statement_map.get("source_atom_inventory")
@@ -336,7 +340,9 @@ sha256sum -c SHA256SUMS
 
 - `certificate.json`: toolchain, Git/source identity, command results, warning counts, and source-tree hash.
 - `signatures.json`: compiler-printed types for every declaration registered by the Davis--Kahan source census.
-- `statement-audit.md`: registered passages from the distributable source specification paired with the primary Lean theorem types and a row-by-row audit checklist.
+- `statement-audit.md`: registered passages from the distributable source specification paired with the primary Lean theorem types and a result-by-result audit checklist.
+- `inputs/dev__davis-kahan-1970-result-semantic-review-2026-08-12.md`: maintained hostile semantic review for all 29 counted results.
+- `inputs/DavisKahan__Sources__DavisKahan1970__Audits__ResultSemanticSurface.lean`: compiler-checkable `#check` surface for the exact declarations selected by the result inventory and the strongest evidence delimiting any remaining red result.
 - `logs/`: complete output of each certification command and the theorem-signature probe.
 - `inputs/`: snapshots of the distributable source specification, source-fidelity inventory, formalization-result inventory when present, statement map, census, formalization metadata, and audit prompt.
 
@@ -438,6 +444,7 @@ def main() -> int:
         ("05b-formalization-result-inventory", result_inventory_command),
         ("06-distilled-literature-index", [sys.executable, "scripts/check_distilled_literature_index.py"]),
         ("07-production-build", ["lake", "build", "DavisKahan.All"]),
+        ("07b-result-semantic-surface", ["lake", "env", "lean", str(SEMANTIC_AUDIT_SURFACE_PATH.relative_to(ROOT))]),
         ("08-source-census", [sys.executable, "scripts/check_davis_kahan_1970_source_census.py"]),
         ("09-census-declaration-probe", [sys.executable, "scripts/probe_census_declarations.py", "--verify"]),
     ]
