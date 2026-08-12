@@ -9,24 +9,43 @@ review, the Definition 3.2 infinite-dimensional separation witness, and the two
 scope remarks attached to Theorem 5.1 were then checked directly against the
 new theorem signatures.
 
-The non-distributable transcription is not present in this checkout, so this
-re-audit does not pretend to have re-read the private source independently.  It
-uses the earlier audit's transcription-derived clause inventory as its fixed
-source baseline.  The current census was used only after the declaration review,
-to check that its status agrees with the result.
+The full non-distributable transcription is not present in this checkout.  The
+repository now carries the exact mathematical excerpts used by this audit in
+`prose/distilled_literature/DavisKahan1970_exact_source_register.tex`, with line-range and
+SHA-256 provenance in `dev/davis-kahan-1970-statement-map.json`.  The static
+statement-map checker can additionally compare those excerpts against the
+private transcription when a local path is supplied.  The current census was
+used only after declaration review, to check that its status agrees with the
+result.
 
-## Verdict
+For an independent re-audit, generate a clean compiler certificate with
+`scripts/certify_davis_kahan_1970.py --clean` and use
+`dev/davis-kahan-1970-independent-audit-prompt.md`.  The certificate establishes
+compilation and declaration types; semantic equivalence to the source remains a
+separate row-by-row judgement.
 
-Excluding the four questions in Section 10, all 45 tracked mathematical
-obligations have a terminal source-faithful outcome:
+## Current verdict after independent-audit challenge
 
-- 44 are `compiled_exact` and `proved_in_build`;
-- Proposition 4.4 is `refuted_as_transcribed` by a compiled counterexample that
-  satisfies its printed real-space and angle hypotheses.
+An independent source-first review on 2026-08-12 found a concrete overclaim in
+the unrestricted Section 2 `tan 2 Theta` row.  The strongest registered ambient
+arbitrary-UI-norm theorem still assumes explicit spectral pole exclusion
+`cos (2*t) != 0`, while the printed Section 2 theorem does not: Section 7 derives
+that exclusion from the gap and off-diagonal hypotheses.  The graph-coordinate
+branch-free route has different extra representation data.  The census is
+therefore intentionally downgraded until one canonical ambient wrapper derives
+the pole exclusion and states exactly the source hypotheses.
 
-No `compiled_specialization` row remains.  The four questions are reported
-separately: Question 10.1 has a compiled modern resolution, while Questions
-10.2--10.4 are not theorem-completion obligations.
+Excluding the four questions in Section 10, the maintained 45 mathematical
+completion obligations currently consist of:
+
+- 43 `compiled_exact` / `proved_in_build` rows;
+- Proposition 4.4, `refuted_as_transcribed` / `proved_in_build`;
+- one `compiled_specialization` row: `S2-tan-two-theta`.
+
+Accordingly this document no longer certifies 100% source fidelity.  It records
+the prior closure review plus the reopened statement-level gap that an
+independent auditor should verify after repair.  The Section 10 questions remain
+source-accounting entries rather than theorem-completion obligations.
 
 ## Clause review
 
@@ -37,7 +56,8 @@ conclusion.  The row identifiers are grouped only for readability.
 
 | Source part | Rows reviewed | Result |
 | --- | --- | --- |
-| Sections 1--2 | `S1-block-residual`, `S1-ui-norms`; `S2-sin-theta`, `S2-tan-theta`, `S2-sin-two-theta`, `S2-tan-two-theta`, `S2-sharpness`, `S2-unbounded-scope` | Exact |
+| Sections 1--2 | `S1-block-residual`, `S1-ui-norms`; `S2-sin-theta`, `S2-tan-theta`, `S2-sin-two-theta`, `S2-sharpness`, `S2-unbounded-scope` | Exact |
+| Section 2 | `S2-tan-two-theta` | Reopened: compiled specialization; literal ambient wrapper still needed |
 | Section 3 | `DK-3.1-def`, `DK-3.2-def`, `DK-3.1-prop`, `DK-3.2-prop`, `DK-3.3-prop`, `DK-3.4-prop`, `DK-3.1-thm`, `DK-3.1-cor`, `DK-3.5-prop`, `DK-3.2-cor` | Exact |
 | Section 4 | `DK-4.1-prop`, `DK-4.1-cor`, `DK-4.2-prop`, `DK-4.3-prop` | Exact |
 | Section 4 | `DK-4.4-prop` | Refuted as printed |
@@ -82,13 +102,16 @@ now discharged in the build rather than treated as prose-only facts.
    have projection norms `1 / (n + 2)`.  Hence their projection gap is exactly
    one.  The audit instantiates the result over both `ℝ` and `ℂ`.
 
-2. Theorem 5.1 now includes the printed `A`/`B` interchange companion.  Its
-   unbounded extension is stated for a densely defined closed `LinearPMap` `A`
-   with a bounded everywhere left inverse; it does not assume a right inverse or
-   surjectivity.  The proof uses only the left-inverse identity, matching the
-   printed argument.
+2. Theorem 5.1 includes the printed `A`/`B` interchange companion and its
+   densely-defined unbounded-`A` extension.  The reusable Banach theorem needs
+   only a bounded left inverse, which is weaker than the paper's literal
+   two-sided `A^{-1}` hypothesis.  The source layer now additionally contains
+   literal bounded wrappers carrying a two-sided inverse and its printed norm
+   bound, so an auditor can compare the theorem statement without inferring that
+   specialization.  These new wrappers must be compiler-certified by the clean
+   certificate run before they are used as compiler evidence.
 
-The source census declaration probe resolves every named declaration against
-`DavisKahan.All`.  The generated census therefore records 44 exact proofs, one
-source-level refutation, and no remaining mathematical completion obligation
-outside Section 10's questions.
+The source census declaration probe is the compiler-backed guard for named
+declarations.  After the independent-audit correction the census deliberately
+retains one nonterminal mathematical row, `S2-tan-two-theta`; a clean build does
+not by itself promote that row back to `compiled_exact`.

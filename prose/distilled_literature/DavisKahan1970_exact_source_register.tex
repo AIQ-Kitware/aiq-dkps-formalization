@@ -1,0 +1,1792 @@
+\input{preamble}
+\title{Davis--Kahan Part III: exact mathematical claim register for formalization audit}
+\author{}
+\date{Source-facing audit baseline for Davis--Kahan (1970)}
+\begin{document}
+\maketitle
+
+\section*{Purpose and authority}
+This file is the distributable statement-level audit baseline for the repository formalization of Chandler Davis and W. M. Kahan, \emph{The Rotation of Eigenvectors by a Perturbation. III}, SIAM J. Numer. Anal. 7(1) (1970), 1--46, DOI 10.1137/0707001.
+
+The prose inside each \texttt{DK-CERT-CLAIM} block below is copied exactly from the maintained modernized transcription used by the formalization campaign.  Editorial modernization already present in that transcription is preserved.  The full private transcription is not required for the independent statement audit: this file contains the exact mathematical passages against which the registered Lean declarations are to be compared.
+
+This register intentionally contains source text and provenance only; it does not embed mutable formalization-status claims.  The machine-readable registration is \code{dev/davis-kahan-1970-statement-map.json}.  The maintained mathematical-status ledger is \code{dev/davis-kahan-1970-full-source-census.json}.  Run \code{python3 scripts/check_davis_kahan_1970_statement_map.py} to verify that the TeX blocks, registration, and census agree structurally.  When the private modernized transcription is locally available, add \code{--transcription PATH} to verify its full SHA-256 and every registered line-range excerpt.  Run \code{python3 scripts/certify_davis_kahan_1970.py --clean} on a machine with the pinned Lean toolchain to produce a build certificate and a one-by-one audit packet with compiler-printed theorem signatures; the same optional \code{--transcription PATH} strengthens the certificate without copying the private source.
+
+\section*{Completion rule}
+Every mathematical claim tracked as a completion obligation must have an exact source-facing Lean statement at the source scope.  If the printed statement is false, a machine-checked counterexample satisfying the printed hypotheses and falsifying the conclusion is a terminal formal coverage result.  The four questions in Section 10 are retained in this register for source completeness but are not theorem-completion obligations.
+
+\section*{How to audit}
+For each block, compare the exact source passage with the compiler-printed types of the registered Lean declarations.  Check hypotheses, conclusions, scalar field, finite versus arbitrary dimension, compactness, acute versus nonacute scope, existence claims, indexing and multiplicity, finite versus infinite sums, and all branch or domain conditions.  Compiler success establishes that a Lean declaration exists and typechecks; it does not establish semantic fidelity.  The independent auditor must make that judgement row by row.
+
+\section{Exact registered source claims}
+Each source excerpt is deliberately typeset verbatim so the registration script can hash and extract it without normalizing the mathematical prose.
+
+% DK-CERT-CLAIM-BEGIN S1-block-residual
+\subsection*{S1-block-residual: Two reducing decompositions and the residual}
+\noindent\textbf{Source anchor:} Section 1, equations (1.1)–(1.8)\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+Throughout the paper, $\Hilbert$ will denote a separable Hilbert space and its vectors will be denoted by $x,y$, etc.; the inner product of $x$ with $y$, often written $(x,y)$, will here be written $y^{*}x$.
+(On the other hand, $[x,y]$ will denote the linear subspace spanned by $x$ and $y$.\,)
+It will usually not matter whether the space is real or complex, or whether its dimensionality is finite.
+
+Consequently we define
+\[
+  E_0:\Xspace(E_0)\to\Hilbert,
+  \qquad
+  E_1:\Xspace(E_1)\to\Hilbert,
+\]
+isometric mappings of new Hilbert spaces into $\Hilbert$, having ranges $E_0\Xspace(E_0)=P\Hilbert$ and $E_1\Xspace(E_1)=\tP\Hilbert$.
+(Here we have introduced the notation $\Xspace(\cdot)$ for the ``source space'' of an isometry.
+Later we shall also use the notations $\Null(\cdot)$ for null space and $\Range(\cdot)$ for range; $\Xspace(E_j)=\Range(E_j^{*})$.\,)
+Now $E_0E_0^{*}=P$ and $E_1E_1^{*}=\tP$; on the other hand, $E_0^{*}E_0$ is the identity operator on $\Xspace(E_0)$, $E_1^{*}E_0$ is the zero transformation from $\Xspace(E_0)$ to $\Xspace(E_1)$, and so on.
+Now we can write $x_0=E_0^{*}x$, $x_1=E_1^{*}x$, and
+\begin{equation*}
+  x=(E_0\ E_1)\binom{x_0}{x_1}=E_0x_0+E_1x_1,
+  \tag{1.1}\label{eq:1.1}
+\end{equation*}
+if we want to; or we can simply say $x$ is represented by $\binom{x_0}{x_1}$.
+Clearly $(E_0\ E_1)$ is an isometry onto $\Hilbert$, and
+\[
+  (E_0\ E_1)^{-1}=\binom{E_0^{*}}{E_1^{*}}.
+\]
+
+The corresponding notation for operators is
+\begin{equation*}
+\begin{aligned}
+  A&=(E_0\ E_1)
+  \begin{pmatrix}A_0&0\\0&A_1\end{pmatrix}
+  \binom{E_0^{*}}{E_1^{*}},\\
+  H&=(E_0\ E_1)
+  \begin{pmatrix}H_0&B^{*}\\B&H_1\end{pmatrix}
+  \binom{E_0^{*}}{E_1^{*}}.
+\end{aligned}
+\tag{1.2}\label{eq:1.2}
+\end{equation*}
+These equations define the new operators appearing in them; for instance,
+$B=E_1^{*}HE_0$, an operator from $\Xspace(E_0)$ to $\Xspace(E_1)$.
+The $A_j$ and $H_j$ are automatically Hermitian.
+Equations like \eqref{eq:1.1} and \eqref{eq:1.2} can be written more clearly if we agree that the sign $\representedby$ is to be read as ``is represented by.''
+Then we write
+\[
+  x\representedby\binom{x_0}{x_1},
+  \qquad
+  A\representedby\begin{pmatrix}A_0&0\\0&A_1\end{pmatrix},
+  \qquad
+  P\representedby\begin{pmatrix}1&0\\0&0\end{pmatrix},
+\]
+and so on.
+The usual rules of matrix multiplication apply; for example,
+\[
+  PAP\representedby\begin{pmatrix}A_0&0\\0&0\end{pmatrix}
+\]
+(and neither member here is the same as $A_0$).
+
+When we decompose $\Hilbert$ according to a reducing subspace $Q\Hilbert$ of $A+H$ instead, then we shall want to define new isometries
+\[
+  F_0:\Xspace(F_0)\to\Hilbert,
+  \qquad
+  F_1:\Xspace(F_1)\to\Hilbert,
+\]
+with $F_0F_0^{*}=Q$ and $F_1F_1^{*}=\tQ=1-Q$.
+Now the notion of representing operators on $\Hilbert$ by $2\times2$ block matrices becomes treacherous, because there are more ways than one to represent them.
+The two ways of representing $A+H$ are
+\begin{equation*}
+\begin{aligned}
+  A+H
+  &=(E_0\ E_1)
+  \begin{pmatrix}A_0+H_0&B^{*}\\B&A_1+H_1\end{pmatrix}
+  \binom{E_0^{*}}{E_1^{*}}\\
+  &=(F_0\ F_1)
+  \begin{pmatrix}\Lambda_0&0\\0&\Lambda_1\end{pmatrix}
+  \binom{F_0^{*}}{F_1^{*}}.
+\end{aligned}
+\tag{1.3}\label{eq:1.3}
+\end{equation*}
+Nothing has been said about diagonalizing $A_0$ or $\Lambda_0$; choice of coordinate system in their respective spaces has not come up.
+No demand has been made that the reducing projectors $P$ and $Q$ be spectral projectors either; that is, so far $A_0$ may have spectrum in common with $A_1$, or $\Lambda_0$ with $\Lambda_1$.
+
+The numerical analyst also chooses, at each step, an $m\times m$ matrix intended to have eigenvalues approximating $\lambda_1,\ldots,\lambda_m$; this we call $A_0$.
+From this is computed the residual
+\begin{equation*}
+  R=(A+H)E_0-E_0A_0
+  \tag{1.8}\label{eq:1.8}
+\end{equation*}
+(if $E_0=F_0$ and $A_0=\Lambda_0$, then $R=0$).
+
+Any choice of $A_0$ which makes $R$ small will give good approximate eigenvalues.
+More explicitly, let the eigenvalues of $A_0$ in some order be $\alpha_1,\ldots,\alpha_m$ (since $m$ is relatively small, think of these also as easily computable).
+Kahan has shown~\cite{Kahan1967} that then there exists an ordered $m$-tuple $(\lambda_1,\ldots,\lambda_m)$ of eigenvalues of $A+H$ such that
+\[
+  \sum_{j=1}^{m}(\alpha_j-\lambda_j)^2
+  \leq \norm{R}_{\mathrm{sq}}^2
+  \equiv \tr R^{*}R,
+  \qquad
+  \abs{\alpha_j-\lambda_j}\leq \norm{R}_1
+  \quad (j=1,\ldots,m).
+\]
+
+Thus in the numerical-analytic interpretation of the problem of rotation of eigenspaces, though the same operator-theoretic notation can be followed, there is a slight difference which will bear on the statements of our theorems.
+Instead of comparing a given operator $A+H$ to a simpler operator $A$ on the same space and saying that the difference $H$ between the two is small, we compare the given operator to an operator $A_0$ on a space of lower dimension and say that the residual $R$ is small.
+In our notation $A_0$ is isometric-equivalent to a part of $A$ (see \eqref{eq:1.2}), and the numerical analyst would rather talk about that part than about $A_1$, which he does not compute.
+Similarly, $R$ is essentially that part of the perturbation $H$ which he does compute.
+To see the point of the notation better, the reader may want to check formally from \eqref{eq:1.3} and \eqref{eq:1.8} that $R$, left-multiplied by the isometry $\binom{E_0^{*}}{E_1^{*}}$, gives the first column of
+\[
+  \begin{pmatrix}H_0&B^{*}\\B&H_1\end{pmatrix},
+\]
+which represents $H$ (see \eqref{eq:1.2}); or that $R=HE_0$.
+
+In two of our main theorems we shall make hypotheses that the perturbation is off-diagonal.
+In one theorem, this means the strong assertion that both the $H_j$ are zero; but the numerical analyst might prefer that nothing be said about the southeast corners of our block matrices; accordingly, another theorem has as its hypothesis of off-diagonality only $H_0=0$.
+It is a natural hypothesis because it means that, from the given $A+H$ and the computed vectors $E_0$, he obtains his $A_0$ by the simple rule
+\[
+  A_0=E_0^{*}(A+H)E_0,
+\]
+which is the $m\times m$ generalization of what, for $m=1$, is known as the Rayleigh quotient.
+This is often a good choice, particularly in view of the fact that
+\[
+  R^{*}R=H_0^2+B^{*}B,
+\]
+so that the size of $R$ is minimized when $H_0$ is taken to be zero.
+In the operator-theoretic interpretation of the problem we are less likely to have the option of declaring an $H_j$ to be zero.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END S1-block-residual
+
+% DK-CERT-CLAIM-BEGIN S1-ui-norms
+\subsection*{S1-ui-norms: Unitary-invariant norms and Fan dominance}
+\noindent\textbf{Source anchor:} Section 1, equations (1.9)–(1.13)\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+The measures we have chosen to use for magnitudes of operators are arbitrary unitary-invariant norms.
+There are three good surveys~\cite[Chaps.~II--III]{GohbergKrein1965},\cite{Mirsky1960},\cite{Schatten1960} of the theory of such norms.
+However, we think it will be convenient to collect here some of the leading points.
+
+The symbol $\norm{\cdot}$, applied to bounded operators $K$ from one Hilbert space to the same or another Hilbert space, stands for a norm which, beside having the usual properties
+\[
+\begin{gathered}
+  \norm{K}\geq 0,
+  \qquad
+  \norm{K}=0\Longleftrightarrow K=0,\\
+  \norm{\lambda K}=\abs{\lambda}\norm{K},
+  \qquad
+  \norm{K+L}\leq \norm{K}+\norm{L},
+\end{gathered}
+\]
+is unitary-invariant in the sense that
+\begin{equation*}
+  \norm{VKW}=\norm{K}
+  \tag{1.9}\label{eq:1.9}
+\end{equation*}
+whenever $V$ and $W$ are unitary operators (on the respective spaces).
+
+\emph{Normalization.}
+We assume that $\norm{uv^{*}}=\norm{u}\,\norm{v}$ for the operator $uv^{*}$ of rank $1$.
+(If this holds for one choice of nonzero $u$ and $v$, it holds for all.\,)
+
+\emph{Compatibility.}
+If $W$ is a contraction ($\norm{Wx}\leq\norm{x}$ for all $x$) and $V$ is a contraction, then $\norm{VKW}\leq\norm{K}$.
+This follows easily from \eqref{eq:1.10} below.
+
+We recall that, for compact $K$, the ``singular values'' $\kappa_1\geq\kappa_2\geq\cdots$ of $K$ are the square roots of the eigenvalues of $K^{*}K$.
+These are the same as the eigenvalues of $KK^{*}$, except perhaps for striking out a certain number of zeros.
+Now it follows from \eqref{eq:1.9} that for any unitary-invariant norm, the value of $\norm{K}$ depends only on the nonzero singular values of $K$.
+
+\emph{Minimax characterization of singular values.}
+\begin{equation*}
+  \kappa_k=\inf_{\mathcal S}\ \sup_x \norm{Kx},
+  \tag{1.10}\label{eq:1.10}
+\end{equation*}
+where the infimum is over $(k-1)$-dimensional subspaces $\mathcal S$ of the domain space, and the supremum is over unit vectors $x\perp\mathcal S$.
+In particular, $\kappa_1$ is equal to the bound norm of $K$, which we write $\norm{K}_1$, and we could write instead of \eqref{eq:1.10} that
+\[
+  \kappa_k=\inf_{\mathcal S}\norm{K\vert_{\mathcal S^{\perp}}}_1.
+\]
+These formulations are applicable to general bounded operators, not only compact ones, but for noncompact operators it might be more appropriate to deal instead with the spectral multiplicity function~\cite{Halmos1951} of $K^{*}K$.
+Although we shall not assume our operators compact in most of this paper, we believe the most important applications are to compact operators.
+
+Every unitary-invariant norm is obtained as a ``symmetric gauge function'' of the singular values; the converse also holds.
+For the details, see the references cited.
+
+One of the most tractable of these norms is the Hilbert--Schmidt norm or square norm $\norm{\cdot}_{\mathrm{sq}}$:
+\[
+  \norm{K}_{\mathrm{sq}}^2=\sum_k\kappa_k^2=\tr K^{*}K.
+\]
+Particular unitary-invariant norms are
+\begin{equation*}
+  \norm{K}_{\nu}=\kappa_1+\kappa_2+\cdots+\kappa_{\nu},
+  \qquad \nu=1,2,\ldots,
+  \tag{1.11}\label{eq:1.11}
+\end{equation*}
+the sums of the $\nu$ highest singular values (whether or not there are that many nonzero ones).
+These include the bound norm $\norm{\cdot}_1$.
+The norms \eqref{eq:1.11} play a distinguished role: $K$ and $L$ being two operators, the inequality $\norm{K}\leq\norm{L}$ holds for arbitrary unitary-invariant norms if and only if it holds for all the norms $\norm{\cdot}_{\nu}$ (theorem of Ky Fan~\cite[Chap.~III, Section~3]{GohbergKrein1965}).
+
+The following analogue of the Rayleigh--Ritz principle therefore becomes interesting:
+\begin{equation*}
+  \norm{K}_{\nu}=\sup_{\Omega}\norm{K\Omega}_{\nu},
+  \tag{1.12}\label{eq:1.12}
+\end{equation*}
+the supremum being over all projectors $\Omega$ onto $\nu$-dimensional subspaces.
+For $\nu=1$ this is evident, but even for higher $\nu$ it is readily reduced to familiar statements.
+We shall also use the alternative form
+\begin{equation*}
+  \norm{K}_{\nu}
+  =\sup_{\Omega,\Upsilon}\norm{\Upsilon K\Omega}_{\nu}
+  =\sup \RePart\sum_{k=1}^{\nu}y_k^{*}Kx_k,
+  \tag{1.13}\label{eq:1.13}
+\end{equation*}
+the first supremum being over pairs of $\nu$-projectors $\Omega,\Upsilon$, and the second supremum being over all orthonormal $\nu$-tuples $\{x_1,\ldots,x_{\nu}\}$ and all orthonormal $\nu$-tuples $\{y_1,\ldots,y_{\nu}\}$.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END S1-ui-norms
+
+% DK-CERT-CLAIM-BEGIN S2-sin-theta
+\subsection*{S2-sin-theta: Single-angle sine theorem}
+\noindent\textbf{Source anchor:} Section 2, sin theta theorem\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{unnumberedtheorem}[The $\sin\theta$ theorem]
+Assume there is an interval $[\beta,\alpha]$ and a $\delta>0$ such that the spectrum of $A_0$ lies entirely in $[\beta,\alpha]$ while that of $\Lambda_1$ lies entirely outside of $\,]\beta-\delta,\alpha+\delta[\,$ (or such that the spectrum of $\Lambda_1$ lies entirely in $[\beta,\alpha]$ while that of $A_0$ lies entirely outside of $\,]\beta-\delta,\alpha+\delta[\,$).
+Then for every unitary-invariant norm,
+\[
+  \delta\norm{\sin\angles_0}\leq\norm{R}.
+\]
+\end{unnumberedtheorem}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END S2-sin-theta
+
+% DK-CERT-CLAIM-BEGIN S2-tan-theta
+\subsection*{S2-tan-theta: Single-angle tangent theorem}
+\noindent\textbf{Source anchor:} Section 2, tan theta theorem\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{unnumberedtheorem}[The $\tan\theta$ theorem]
+Assume there is an interval $[\beta,\alpha]$ and a $\delta>0$ such that the spectrum of $A_0$ lies entirely in $[\beta,\alpha]$ while that of $\Lambda_1$ lies entirely in $[\alpha+\delta,\infty[$.
+Assume further that $H_0=0$.
+Then for every unitary-invariant norm,
+\[
+  \delta\norm{\tan\angles_0}\leq\norm{R},
+  \qquad
+  \delta\norm{\tan\angles}\leq\norm{H}.
+\]
+\end{unnumberedtheorem}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END S2-tan-theta
+
+% DK-CERT-CLAIM-BEGIN S2-sin-two-theta
+\subsection*{S2-sin-two-theta: Double-angle sine theorem}
+\noindent\textbf{Source anchor:} Section 2, sin 2 theta theorem\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{unnumberedtheorem}[The $\sin 2\theta$ theorem]
+Assume there is an interval $[\beta,\alpha]$ and a $\delta>0$ such that the spectrum of $\Lambda_0$ lies entirely in $[\beta,\alpha]$ while that of $\Lambda_1$ lies entirely outside of $\,]\beta-\delta,\alpha+\delta[\,$.
+Then for every unitary-invariant norm,
+\[
+  \delta\norm{\sin 2\angles_0}\leq2\norm{R},
+  \qquad
+  \delta\norm{\sin 2\angles}\leq2\norm{H}.
+\]
+\end{unnumberedtheorem}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END S2-sin-two-theta
+
+% DK-CERT-CLAIM-BEGIN S2-tan-two-theta
+\subsection*{S2-tan-two-theta: Double-angle tangent theorem}
+\noindent\textbf{Source anchor:} Section 2, tan 2 theta theorem\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{unnumberedtheorem}[The $\tan 2\theta$ theorem]
+Assume there is an interval $[\beta,\alpha]$ and a $\delta>0$ such that the spectrum of $A_0$ lies entirely in $[\beta,\alpha]$ while that of $A_1$ lies entirely in $[\alpha+\delta,\infty[$.
+Assume further that $H_0=0$, $H_1=0$.
+Then for every unitary-invariant norm,
+\[
+  \delta\norm{\tan 2\angles_0}\leq2\norm{R},
+  \qquad
+  \delta\norm{\tan 2\angles}\leq2\norm{H}.
+\]
+\end{unnumberedtheorem}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END S2-tan-two-theta
+
+% DK-CERT-CLAIM-BEGIN S2-sharpness
+\subsection*{S2-sharpness: Best constants and simultaneous equality}
+\noindent\textbf{Source anchor:} Section 2, paragraph after four theorems\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+It was mentioned earlier that the constants in all four theorems are best possible; this is seen from the $2$-dimensional case.
+Furthermore, one sees by taking a direct sum of $2$-dimensional examples that, in any one of the theorems, equality in the conclusion can be attained simultaneously for all unitary-invariant norms.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END S2-sharpness
+
+% DK-CERT-CLAIM-BEGIN S2-unbounded-scope
+\subsection*{S2-unbounded-scope: Unbounded self-adjoint scope}
+\noindent\textbf{Source anchor:} Section 2, final paragraphs\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+The subject throughout will be a bounded Hermitian operator $A$ acting upon $\Hilbert$, together with a modified Hermitian operator $A+H$, where $H$ will usually be thought of as small.
+The results and proofs also apply to unbounded self-adjoint $A$, provided the domain of $H$ contains that of $A$.
+(Some of the results are vacuous when certain norms fail to exist, but we shall not need to make special mention of this.\,)
+
+Unbounded self-adjoint operators, important in several applications, are covered by our theorems or slight extensions thereof, although we must assume $H$ or $R$ bounded to draw useful inferences.
+The theorems above contain references to a finite interval $[\beta,\alpha]$; they remain valid after this interval is extended to $]-\infty,\alpha]$ and $]\beta-\delta,\alpha+\delta[$ to $]-\infty,\alpha+\delta[$.
+As long as the spectra of $A_i$ and $\Lambda_i$ satisfy their respective hypotheses concerning the gap $\delta$, they may be otherwise unbounded without invalidating the theorems.
+However, to free our theorems from all inessential boundedness hypotheses, we have had to complicate the proofs substantially.
+These complications have been confined to two passages---\TheoremRef{5.2}, and the \AppendixSixRef---in order to avoid distracting those readers not concerned with the utmost generality.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END S2-unbounded-scope
+
+% DK-CERT-CLAIM-BEGIN DK-3.1-def
+\subsection*{DK-3.1-def: Direct rotation}
+\noindent\textbf{Source anchor:} Definition 3.1\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{definition}\label{def:3.1}
+A unitary solution
+\[
+  V\representedby\begin{pmatrix}C_0&-S_1\\S_0&C_1\end{pmatrix}
+\]
+of $VP=QV$ will be called a \emph{direct rotation} from $P\Hilbert$ to $Q\Hilbert$ if it satisfies the following additional conditions:
+\begin{enumerate}[label=(\roman*)]
+\item $C_0\geq0$, $C_1\geq0$;
+\item $S_1=S_0^{*}$.
+\end{enumerate}
+The symbol $U$ will be reserved for direct rotations.
+\end{definition}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-3.1-def
+
+% DK-CERT-CLAIM-BEGIN DK-3.2-def
+\subsection*{DK-3.2-def: Acute case}
+\noindent\textbf{Source anchor:} Definition 3.2\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{definition}\label{def:3.2}
+Subspaces $P\Hilbert$ and $Q\Hilbert$ are said to be in the \emph{acute case} if $P\Hilbert\cap\tQ\Hilbert$ and $\tP\Hilbert\cap Q\Hilbert$ are zero.
+\end{definition}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-3.2-def
+
+% DK-CERT-CLAIM-BEGIN DK-3.1-prop
+\subsection*{DK-3.1-prop: Acute direct rotation existence and uniqueness}
+\noindent\textbf{Source anchor:} Proposition 3.1\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{proposition}\label{prop:3.1}
+In the acute case the direct rotation exists, is unique, and is characterized by property~(i) alone.
+\end{proposition}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-3.1-prop
+
+% DK-CERT-CLAIM-BEGIN DK-3.2-prop
+\subsection*{DK-3.2-prop: Nonacute existence criterion}
+\noindent\textbf{Source anchor:} Proposition 3.2\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{proposition}\label{prop:3.2}
+In the nonacute case, a direct rotation exists if and only if
+\begin{equation*}
+  \dim(P\Hilbert\cap\tQ\Hilbert)
+  =\dim(\tP\Hilbert\cap Q\Hilbert).
+  \tag{3.5}\label{eq:3.5}
+\end{equation*}
+It is not unique.
+\end{proposition}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-3.2-prop
+
+% DK-CERT-CLAIM-BEGIN DK-3.3-prop
+\subsection*{DK-3.3-prop: Principal square-root characterization}
+\noindent\textbf{Source anchor:} Proposition 3.3\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+We shall assume \eqref{eq:3.5} as well as \eqref{eq:1.5} except where stated otherwise.
+Consequently the direct rotation will always exist, and rather than the more general $V$ of \eqref{eq:1.6} we shall deal mostly with its direct special case
+\begin{equation*}
+  U\representedby
+  \begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
+  \qquad C_j\geq0.
+  \tag{3.6}\label{eq:3.6}
+\end{equation*}
+
+\begin{proposition}\label{prop:3.3}
+Any direct rotation of $P\Hilbert$ to $Q\Hilbert$ is a principal square root of $(Q-\tQ)(P-\tP)$, that is, a unitary square root with spectrum in the right half-plane.
+Any principal square root of $(Q-\tQ)(P-\tP)$ is a direct rotation of $P\Hilbert$ to $Q\Hilbert$ provided it takes $P\Hilbert\cap\tQ\Hilbert$ onto $\tP\Hilbert\cap Q\Hilbert$.
+\end{proposition}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-3.3-prop
+
+% DK-CERT-CLAIM-BEGIN DK-3.4-prop
+\subsection*{DK-3.4-prop: Square as a direct rotation}
+\noindent\textbf{Source anchor:} Proposition 3.4\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+We shall assume \eqref{eq:3.5} as well as \eqref{eq:1.5} except where stated otherwise.
+Consequently the direct rotation will always exist, and rather than the more general $V$ of \eqref{eq:1.6} we shall deal mostly with its direct special case
+\begin{equation*}
+  U\representedby
+  \begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
+  \qquad C_j\geq0.
+  \tag{3.6}\label{eq:3.6}
+\end{equation*}
+
+\begin{proposition}\label{prop:3.4}
+If $C_0^2\geq\tfrac12$, then $U^2$ is the direct rotation of $Q_-\Hilbert$ to $Q\Hilbert$.
+\end{proposition}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-3.4-prop
+
+% DK-CERT-CLAIM-BEGIN DK-3.1-thm
+\subsection*{DK-3.1-thm: Classification of pairs of subspaces}
+\noindent\textbf{Source anchor:} Theorem 3.1\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+We shall assume \eqref{eq:3.5} as well as \eqref{eq:1.5} except where stated otherwise.
+Consequently the direct rotation will always exist, and rather than the more general $V$ of \eqref{eq:1.6} we shall deal mostly with its direct special case
+\begin{equation*}
+  U\representedby
+  \begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
+  \qquad C_j\geq0.
+  \tag{3.6}\label{eq:3.6}
+\end{equation*}
+
+\begin{theorem}\label{thm:3.1}
+For a pair of subspaces $P\Hilbert,Q\Hilbert$, subject to
+\[
+  \dim P\Hilbert=\dim Q\Hilbert,
+  \qquad
+  \dim(P\Hilbert\cap\tQ\Hilbert)=\dim(\tP\Hilbert\cap Q\Hilbert),
+\]
+a complete system of invariants under isometric equivalence is afforded by the spectral multiplicity functions of $\angles_0,\angles_1$.
+These are arbitrary Hermitian operators satisfying the following conditions:
+$0\leq\angles_j\leq\pi/2$; the dimensionalities of their domains sum to that of $\Hilbert$; and the spectral multiplicity functions of the $\angles_j$ are the same except for a possible difference in the multiplicity of $\{0\}$.
+\end{theorem}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-3.1-thm
+
+% DK-CERT-CLAIM-BEGIN DK-3.1-cor
+\subsection*{DK-3.1-cor: Compact classification by angle eigenvalues}
+\noindent\textbf{Source anchor:} Corollary 3.1\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+We shall assume \eqref{eq:3.5} as well as \eqref{eq:1.5} except where stated otherwise.
+Consequently the direct rotation will always exist, and rather than the more general $V$ of \eqref{eq:1.6} we shall deal mostly with its direct special case
+\begin{equation*}
+  U\representedby
+  \begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
+  \qquad C_j\geq0.
+  \tag{3.6}\label{eq:3.6}
+\end{equation*}
+
+\begin{corollary}\label{cor:3.1}
+For a pair of subspaces $P\Hilbert,Q\Hilbert$, subject to
+\[
+  \dim P\Hilbert=\dim Q\Hilbert,
+  \qquad
+  \dim(P\Hilbert\cap\tQ\Hilbert)=\dim(\tP\Hilbert\cap Q\Hilbert),
+\]
+and such that $P\tQ P$ is compact, a complete system of invariants under isometric equivalence is afforded by the eigenvalues (multiplicity counted) of $\angles_0,\angles_1$.
+The eigenvalues $\theta_i$ of $\angles_0$ are an arbitrary sequence satisfying
+\[
+  \pi/2\geq\theta_1\geq\theta_2\geq\cdots
+\]
+and approaching $0$, together with a possible eigenvalue $0$.
+The eigenvalues of $\angles_1$ must be the same except perhaps for the multiplicity of $0$.
+\end{corollary}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-3.1-cor
+
+% DK-CERT-CLAIM-BEGIN DK-3.5-prop
+\subsection*{DK-3.5-prop: Angle commutation and eigenspace geometry}
+\noindent\textbf{Source anchor:} Proposition 3.5\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+We shall assume \eqref{eq:3.5} as well as \eqref{eq:1.5} except where stated otherwise.
+Consequently the direct rotation will always exist, and rather than the more general $V$ of \eqref{eq:1.6} we shall deal mostly with its direct special case
+\begin{equation*}
+  U\representedby
+  \begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
+  \qquad C_j\geq0.
+  \tag{3.6}\label{eq:3.6}
+\end{equation*}
+
+\begin{proposition}\label{prop:3.5}
+$\angles$ commutes with $P$, with $Q$, with $J$, and with $U$.
+For every eigenvalue $\theta$, the eigenvectors $x$ satisfy $\angle(x,Ux)=\theta$.
+In the acute case, for every eigenvalue $\theta$, the eigenspace $\Omega(\{\theta\})\Hilbert$ is the unique maximal subspace with the properties
+\begin{enumerate}[label=(\alph*)]
+\item it reduces $P$ and $Q$;
+\item for every nonzero vector $x$ of $P\Hilbert$ lying in it, $\angle(x,Qx)=\theta$;
+\item for every nonzero vector $x$ of $\tP\Hilbert$ lying in it, $\angle(x,\tQ x)=\theta$.
+\end{enumerate}
+\end{proposition}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-3.5-prop
+
+% DK-CERT-CLAIM-BEGIN DK-3.2-cor
+\subsection*{DK-3.2-cor: Reversal symmetry}
+\noindent\textbf{Source anchor:} Corollary 3.2\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+We shall assume \eqref{eq:3.5} as well as \eqref{eq:1.5} except where stated otherwise.
+Consequently the direct rotation will always exist, and rather than the more general $V$ of \eqref{eq:1.6} we shall deal mostly with its direct special case
+\begin{equation*}
+  U\representedby
+  \begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
+  \qquad C_j\geq0.
+  \tag{3.6}\label{eq:3.6}
+\end{equation*}
+
+\begin{corollary}\label{cor:3.2}
+If the roles of $P$ and $Q$ are interchanged, $\angles$ remains the same, while $J$ is replaced by $-J$.
+\end{corollary}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-3.2-cor
+
+% DK-CERT-CLAIM-BEGIN DK-4.1-prop
+\subsection*{DK-4.1-prop: Pointwise and singular-value extremality of the direct rotation}
+\noindent\textbf{Source anchor:} Proposition 4.1\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+The present section is not required for the rest of the paper.
+
+We shall make the hypotheses of \TheoremRef{3.1} and \CorollaryRef{3.1} (leaving to the reader the modifications entailed in the absence of compactness).
+The notation will be
+\[
+  U\representedby\begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
+  \qquad V=UZ,
+  \qquad Z\representedby\begin{pmatrix}Z_0&0\\0&Z_1\end{pmatrix}.
+\]
+We have introduced the angles $\theta_1\geq\theta_2\geq\cdots$ associated with $P\Hilbert$ and $Q\Hilbert$.
+We showed how the sines of these angles can be recovered from any unitary taking $P\Hilbert$ to $Q\Hilbert$.
+Among these, the ``direct rotation'' $U$ of \DefinitionRef{3.1} was singled out in two respects: the simple canonical construction of it in terms of $P$ and $Q$ (see \eqref{eq:3.8}) and the decomposition of the space by \eqref{eq:1.18} and \TheoremRef{3.1}.
+But the motivation for the direct rotation was the notion of taking elements of $P\Hilbert$ to $Q\Hilbert$ by the most economical route.
+This notion cannot be taken naively, for if (say) $\theta_1=\pi/4$, $\theta_2=\pi/6$, then a unitary cannot take every unit vector in $P\Hilbert$ to the unit vector in $Q\Hilbert$ closest to it.
+It can almost do this, however, as we now show.
+
+\begin{proposition}\label{prop:4.1}
+Given any unitary $V$ which maps $P\Hilbert$ onto $Q\Hilbert$, there exist orthonormal $v_1,v_2,\ldots\in P\Hilbert$ such that for all $k$, $\angle(v_k,Vv_k)\geq\theta_k$.
+Equivalent statement: among all such $V$, the singular values $\lambda_1\geq\lambda_2\geq\cdots$ of $(1-V)|_{P\Hilbert}$ are all minimized when $V=U$, and their values then are
+\[
+  \lambda_k=2\sin(\theta_k/2).
+\]
+\end{proposition}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-4.1-prop
+
+% DK-CERT-CLAIM-BEGIN DK-4.1-cor
+\subsection*{DK-4.1-cor: UI-norm minimality of direct rotation displacement}
+\noindent\textbf{Source anchor:} Corollary 4.1\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+The present section is not required for the rest of the paper.
+
+We shall make the hypotheses of \TheoremRef{3.1} and \CorollaryRef{3.1} (leaving to the reader the modifications entailed in the absence of compactness).
+The notation will be
+\[
+  U\representedby\begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
+  \qquad V=UZ,
+  \qquad Z\representedby\begin{pmatrix}Z_0&0\\0&Z_1\end{pmatrix}.
+\]
+We have introduced the angles $\theta_1\geq\theta_2\geq\cdots$ associated with $P\Hilbert$ and $Q\Hilbert$.
+We showed how the sines of these angles can be recovered from any unitary taking $P\Hilbert$ to $Q\Hilbert$.
+Among these, the ``direct rotation'' $U$ of \DefinitionRef{3.1} was singled out in two respects: the simple canonical construction of it in terms of $P$ and $Q$ (see \eqref{eq:3.8}) and the decomposition of the space by \eqref{eq:1.18} and \TheoremRef{3.1}.
+But the motivation for the direct rotation was the notion of taking elements of $P\Hilbert$ to $Q\Hilbert$ by the most economical route.
+This notion cannot be taken naively, for if (say) $\theta_1=\pi/4$, $\theta_2=\pi/6$, then a unitary cannot take every unit vector in $P\Hilbert$ to the unit vector in $Q\Hilbert$ closest to it.
+It can almost do this, however, as we now show.
+
+\begin{corollary}\label{cor:4.1}
+For every unitary-invariant norm, $\norm{(1-V)P}$ is minimized when $V=U$.
+\end{corollary}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-4.1-cor
+
+% DK-CERT-CLAIM-BEGIN DK-4.2-prop
+\subsection*{DK-4.2-prop: Basis-angle square-sum extremality}
+\noindent\textbf{Source anchor:} Proposition 4.2\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+The present section is not required for the rest of the paper.
+
+We shall make the hypotheses of \TheoremRef{3.1} and \CorollaryRef{3.1} (leaving to the reader the modifications entailed in the absence of compactness).
+The notation will be
+\[
+  U\representedby\begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
+  \qquad V=UZ,
+  \qquad Z\representedby\begin{pmatrix}Z_0&0\\0&Z_1\end{pmatrix}.
+\]
+We have introduced the angles $\theta_1\geq\theta_2\geq\cdots$ associated with $P\Hilbert$ and $Q\Hilbert$.
+We showed how the sines of these angles can be recovered from any unitary taking $P\Hilbert$ to $Q\Hilbert$.
+Among these, the ``direct rotation'' $U$ of \DefinitionRef{3.1} was singled out in two respects: the simple canonical construction of it in terms of $P$ and $Q$ (see \eqref{eq:3.8}) and the decomposition of the space by \eqref{eq:1.18} and \TheoremRef{3.1}.
+But the motivation for the direct rotation was the notion of taking elements of $P\Hilbert$ to $Q\Hilbert$ by the most economical route.
+This notion cannot be taken naively, for if (say) $\theta_1=\pi/4$, $\theta_2=\pi/6$, then a unitary cannot take every unit vector in $P\Hilbert$ to the unit vector in $Q\Hilbert$ closest to it.
+It can almost do this, however, as we now show.
+
+\begin{proposition}\label{prop:4.2}
+Given any unitary $V$ which maps $P\Hilbert$ onto $Q\Hilbert$, and given any orthonormal basis $\{v_1,v_2,\ldots\}$ of $P\Hilbert$, we have
+\[
+  \sum_{k=1}^{\infty}\sin^2\angle(v_k,Vv_k)
+  \geq\sum_{k=1}^{\infty}\sin^2\theta_k.
+\]
+\end{proposition}
+
+\begin{proof}
+Writing again $v_k\representedby\binom{v_{0k}}{0}$, we have
+\[
+\begin{aligned}
+  \sum_k\sin^2\angle(v_k,Vv_k)
+  &=\sum_k\bigl(1-\cos^2\angle(v_k,Vv_k)\bigr)\\
+  &=\sum_k\bigl(1-(\RePart v_{0k}^{*}C_0Z_0v_{0k})^2\bigr)\\
+  &\geq\sum_k\bigl(1-\abs{v_{0k}^{*}C_0Z_0v_{0k}}^2\bigr)\\
+  &\geq\sum_k\left(1-\sum_l\abs{v_{0k}^{*}C_0Z_0v_{0l}}^2\right)\\
+  &=\sum_k(1-v_{0k}^{*}C_0^2v_{0k})
+   =\tr S_0^{*}S_0\\
+  &=\sum_k\sin^2\theta_k,
+\end{aligned}
+\]
+even if the rightmost member is infinite.
+This completes the proof.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-4.2-prop
+
+% DK-CERT-CLAIM-BEGIN DK-4.3-prop
+\subsection*{DK-4.3-prop: Squared displacement UI-norm minimality}
+\noindent\textbf{Source anchor:} Proposition 4.3\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+The present section is not required for the rest of the paper.
+
+We shall make the hypotheses of \TheoremRef{3.1} and \CorollaryRef{3.1} (leaving to the reader the modifications entailed in the absence of compactness).
+The notation will be
+\[
+  U\representedby\begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
+  \qquad V=UZ,
+  \qquad Z\representedby\begin{pmatrix}Z_0&0\\0&Z_1\end{pmatrix}.
+\]
+We have introduced the angles $\theta_1\geq\theta_2\geq\cdots$ associated with $P\Hilbert$ and $Q\Hilbert$.
+We showed how the sines of these angles can be recovered from any unitary taking $P\Hilbert$ to $Q\Hilbert$.
+Among these, the ``direct rotation'' $U$ of \DefinitionRef{3.1} was singled out in two respects: the simple canonical construction of it in terms of $P$ and $Q$ (see \eqref{eq:3.8}) and the decomposition of the space by \eqref{eq:1.18} and \TheoremRef{3.1}.
+But the motivation for the direct rotation was the notion of taking elements of $P\Hilbert$ to $Q\Hilbert$ by the most economical route.
+This notion cannot be taken naively, for if (say) $\theta_1=\pi/4$, $\theta_2=\pi/6$, then a unitary cannot take every unit vector in $P\Hilbert$ to the unit vector in $Q\Hilbert$ closest to it.
+It can almost do this, however, as we now show.
+
+\begin{proposition}\label{prop:4.3}
+For every unitary-invariant norm, $\norm{(1-V^{*})(1-V)}$ is minimized when $V=U$.
+\end{proposition}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-4.3-prop
+
+% DK-CERT-CLAIM-BEGIN DK-4.4-prop
+\subsection*{DK-4.4-prop: Real-space full displacement minimality below pi/3}
+\noindent\textbf{Source anchor:} Proposition 4.4\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+The present section is not required for the rest of the paper.
+
+We shall make the hypotheses of \TheoremRef{3.1} and \CorollaryRef{3.1} (leaving to the reader the modifications entailed in the absence of compactness).
+The notation will be
+\[
+  U\representedby\begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
+  \qquad V=UZ,
+  \qquad Z\representedby\begin{pmatrix}Z_0&0\\0&Z_1\end{pmatrix}.
+\]
+We have introduced the angles $\theta_1\geq\theta_2\geq\cdots$ associated with $P\Hilbert$ and $Q\Hilbert$.
+We showed how the sines of these angles can be recovered from any unitary taking $P\Hilbert$ to $Q\Hilbert$.
+Among these, the ``direct rotation'' $U$ of \DefinitionRef{3.1} was singled out in two respects: the simple canonical construction of it in terms of $P$ and $Q$ (see \eqref{eq:3.8}) and the decomposition of the space by \eqref{eq:1.18} and \TheoremRef{3.1}.
+But the motivation for the direct rotation was the notion of taking elements of $P\Hilbert$ to $Q\Hilbert$ by the most economical route.
+This notion cannot be taken naively, for if (say) $\theta_1=\pi/4$, $\theta_2=\pi/6$, then a unitary cannot take every unit vector in $P\Hilbert$ to the unit vector in $Q\Hilbert$ closest to it.
+It can almost do this, however, as we now show.
+
+\begin{proposition}\label{prop:4.4}
+Assume $V$ a unitary taking $P\Hilbert$ onto $Q\Hilbert$ in a real space $\Hilbert$; assume also that $\angles\leq\pi/3$.
+Then $\norm{1-V}$ is minimized, for every unitary-invariant norm, when $V=U$.
+\end{proposition}
+
+If $\theta$ gets any larger, the conclusion fails because of Example~4.1; in complex space, it fails because of Example~4.2.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-4.4-prop
+
+% DK-CERT-CLAIM-BEGIN DK-5.1-thm
+\subsection*{DK-5.1-thm: Banach-space Sylvester lower bound}
+\noindent\textbf{Source anchor:} Theorem 5.1\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{theorem}\label{thm:5.1}
+Let $\mathcal X$ and $\mathcal Y$ be Banach spaces; let operators $A$ on $\mathcal Y$ and $B$ on $\mathcal X$ satisfy
+\[
+  \norm{B}\leq\alpha,
+  \qquad
+  \norm{A^{-1}}\leq(\alpha+\delta)^{-1}
+\]
+for some $\alpha\geq0$, $\delta>0$, and for the bound norms on the respective spaces.
+For linear transformations from $\mathcal X$ to $\mathcal Y$, use any norm compatible with the bound norms.
+Assume $AX-XB=C$.
+Then
+\[
+  \norm{C}\geq\delta\norm{X}.
+\]
+\end{theorem}
+
+Note that the roles of $A$ and $B$ are symmetrical, so the hypotheses upon them may be interchanged.
+
+Another variation upon the theme of \TheoremRef{5.1} concerns unbounded operators.
+Although that theorem was stated for bounded operators $B$ and $X$, its statement and proof encompass the case where $A$ is an unbounded operator with domain dense in $\mathcal Y$; for example, $A$ could be the inverse of a compact operator with dense range (so that $AA^{-1}=1$).
+Here is a further variation which allows $B$ to be unbounded too.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-5.1-thm
+
+% DK-CERT-CLAIM-BEGIN DK-5-hermitian-inequalities
+\subsection*{DK-5-hermitian-inequalities: Square-norm and rank-corrected Sylvester inequalities}
+\noindent\textbf{Source anchor:} Section 5, inequalities (5.1) and (5.2)\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+Here is an adumbration of the difficulties.
+Suppose $A$ and $B$ are Hermitian matrices, possibly of different dimensions, and suppose $0<\delta\leq\abs{\lambda-\mu}$ for every eigenvalue $\lambda$ of $A$ and $\mu$ of $B$.
+Let $C=AX-XB$.
+Then the inequality
+\begin{equation*}
+  \norm{C}_{\mathrm{sq}}\geq\delta\norm{X}_{\mathrm{sq}}
+  \qquad\bigl(=\delta\sqrt{\tr X^{*}X}\bigr)
+  \tag{5.1}\label{eq:5.1}
+\end{equation*}
+is easy to prove via the unitary diagonalization of $A$ and $B$.
+However, sometimes $\norm{C}_1\ngeq\delta\norm{X}_1$.
+To be sure, we may infer from \eqref{eq:5.1} that
+\begin{equation*}
+  \norm{C}_1\sqrt{\rank C}\geq\delta\norm{X}_1;
+  \tag{5.2}\label{eq:5.2}
+\end{equation*}
+and this inequality has been discovered independently and applied by G.~W. Stewart III~\cite[Theorem~4.6]{Stewart1968} to obtain results similar to but slightly weaker than our $\sin\theta$ \TheoremRef{6.1} and \TheoremRef{6.2}.
+But inequality \eqref{eq:5.2} does not promise much help for infinite-dimensional applications.
+Besides, \eqref{eq:5.2} is not best possible unless $\rank C\leq1$, whereas \TheoremRef{5.1} and inequality \eqref{eq:5.1} are best possible in a nontrivial sense.
+Whether $\rank C$ in \eqref{eq:5.2} can be replaced by a constant is an open
+question; certainly the constant $1$ is too small, as can be seen from
+\[
+  X=\begin{pmatrix}3&-3\\-3&1\end{pmatrix},
+  \qquad
+  A=\begin{pmatrix}1&0\\0&-1\end{pmatrix},
+  \qquad
+  B=\begin{pmatrix}0&0\\0&2\end{pmatrix},
+  \qquad \delta=1,
+\]
+for which
+\[
+  \delta\norm{X}_1=2+\sqrt{10}=5.16\ldots
+  >\norm{AX-XB}_1=3\sqrt2=4.24\ldots.
+\]
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-5-hermitian-inequalities
+
+% DK-CERT-CLAIM-BEGIN DK-5.2-thm
+\subsection*{DK-5.2-thm: Semibounded self-adjoint Sylvester theorem}
+\noindent\textbf{Source anchor:} Theorem 5.2\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{theorem}\label{thm:5.2}
+Let $\mathcal X$ and $\mathcal Y$ be Hilbert spaces; let $A$ on $\mathcal Y$ and $B$ on $\mathcal X$ be semibounded self-adjoint operators satisfying
+\[
+  A\geq\gamma+\delta>\gamma\geq B
+\]
+for some scalars $\gamma$ and $\delta$.
+Assume $AX=XB+C$, where $X$ and $C$ are bounded operators from $\mathcal X$ to $\mathcal Y$.
+Then
+\[
+  \norm{C}\geq\delta\norm{X}
+\]
+for every unitary-invariant norm.
+\end{theorem}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-5.2-thm
+
+% DK-CERT-CLAIM-BEGIN DK-5.1-lem
+\subsection*{DK-5.1-lem: Strong-cutoff convergence of singular values}
+\noindent\textbf{Source anchor:} Lemma 5.1\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{lemma}\label{lem:5.1}
+Let $\Omega(\tau)$ be a family of projectors such that $\Omega(\tau)\to1$ strongly as $\tau\to\infty$; let $\kappa_\nu$ and $\kappa_\nu(\tau)$ be the $\nu$th singular values of $K$ and $K\Omega(\tau)$ respectively.
+Then $\kappa_\nu(\tau)\to\kappa_\nu$ also.
+\end{lemma}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-5.1-lem
+
+% DK-CERT-CLAIM-BEGIN DK-6.1-lem
+\subsection*{DK-6.1-lem: Direct-sum UI-norm comparison and converse}
+\noindent\textbf{Source anchor:} Lemma 6.1\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{lemma}\label{lem:6.1}
+Let $\Omega$ and $\Upsilon$ be projectors.
+If
+\[
+  \norm{\Omega K\Upsilon}\leq\norm{\Omega L\Upsilon}
+  \quad\text{and}\quad
+  \norm{\widetilde\Omega K\widetilde\Upsilon}
+  \leq\norm{\widetilde\Omega L\widetilde\Upsilon}
+\]
+for all unitary-invariant norms, then
+\[
+  \norm{\Omega K\Upsilon+\widetilde\Omega K\widetilde\Upsilon}
+  \leq
+  \norm{\Omega L\Upsilon+\widetilde\Omega L\widetilde\Upsilon}
+\]
+for all unitary-invariant norms.
+The converse holds whenever $\Omega K\Upsilon$ has the same singular values as $\widetilde\Omega K\widetilde\Upsilon$ and $\Omega L\Upsilon$ has the same singular values as $\widetilde\Omega L\widetilde\Upsilon$.
+\end{lemma}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-6.1-lem
+
+% DK-CERT-CLAIM-BEGIN DK-6.2-lem
+\subsection*{DK-6.2-lem: Reflection-pinch contraction}
+\noindent\textbf{Source anchor:} Lemma 6.2\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{lemma}\label{lem:6.2}
+Let $\Omega$ and $\Upsilon$ be projectors.
+Then
+\[
+  \norm{\Omega K\Upsilon+\widetilde\Omega K\widetilde\Upsilon}
+  \leq\norm{K}
+\]
+for all unitary-invariant norms.
+\end{lemma}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-6.2-lem
+
+% DK-CERT-CLAIM-BEGIN DK-6.1-prop
+\subsection*{DK-6.1-prop: Symmetric sine theorem}
+\noindent\textbf{Source anchor:} Proposition 6.1\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{proposition}[Symmetric $\sin\theta$ theorem]\label{prop:6.1}
+For given $\delta>0$, assume that the spectra of $A_0$ and $\Lambda_1$ are separated as in the hypotheses of the $\sin\theta$ theorem, and assume that the spectra of $A_1$ and $\Lambda_0$ are also separated as in the hypotheses of the $\sin\theta$ theorem. Then for every unitary-invariant norm,
+\[
+  \delta\norm{\sin\angles}\leq \norm{H}.
+\]
+\end{proposition}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-6.1-prop
+
+% DK-CERT-CLAIM-BEGIN DK-6.1-thm
+\subsection*{DK-6.1-thm: Generalized sine theorem}
+\noindent\textbf{Source anchor:} Theorem 6.1\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{theorem}[Generalized $\sin\theta$ theorem]\label{thm:6.1}
+Assume the Hermitian operator $A+H$ satisfies~\eqref{eq:1.3} and $R$ is given by~\eqref{eq:1.8}. Assume as before that $F_0$ and $F_1$ are isometries with
+\[
+  F_0F_0^*+F_1F_1^*=1,
+\]
+but assume regarding $E_0$ only that $E_0^*E_0\geq \varepsilon^2$ for some $\varepsilon>0$. Let $P$ and $Q$ be the projectors onto $\Range(E_0)$ and $\Range(F_0)$, without any hypothesis upon the dimensionality of these subspaces. Let $\sin\angles_0$ be any operator with the same singular values as $P\tQ$.
+
+Assume there is an interval $[\beta,\alpha]$ and a $\delta>0$ such that the spectrum of $A_0$ lies entirely in $[\beta,\alpha]$ while that of $\Lambda_1$ lies entirely outside $({\beta-\delta},{\alpha+\delta})$; or such that the spectrum of $\Lambda_1$ lies entirely in $[\beta,\alpha]$ while that of $A_0$ lies entirely outside $({\beta-\delta},{\alpha+\delta})$. Then, for every unitary-invariant norm,
+\[
+  \delta\varepsilon\norm{\sin\angles_0}\leq \norm{R}.
+\]
+\end{theorem}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-6.1-thm
+
+% DK-CERT-CLAIM-BEGIN DK-6.2-thm
+\subsection*{DK-6.2-thm: Pairwise-gap square-norm sine theorem}
+\noindent\textbf{Source anchor:} Theorem 6.2\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{theorem}[Second generalized $\sin\theta$ theorem]\label{thm:6.2}
+Assume the same as in \TheoremRef{6.1}, except that the only restriction on the spectra is
+\[
+  \abs{\lambda-a}\geq\delta>0
+\]
+for every $\lambda\in\spec(\Lambda_1)$ and $a\in\spec(A_0)$. Then
+\[
+  \delta\varepsilon\norm{\sin\angles_0}_{\mathrm{sq}}
+  \leq \norm{R}_{\mathrm{sq}}.
+\]
+\end{theorem}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-6.2-thm
+
+% DK-CERT-CLAIM-BEGIN DK-6.3-thm
+\subsection*{DK-6.3-thm: Generalized tangent theorem}
+\noindent\textbf{Source anchor:} Theorem 6.3\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{theorem}[Generalized $\tan\theta$ theorem]\label{thm:6.3}
+Assume the Hermitian operator $A+H$ satisfies~\eqref{eq:1.3}, and $R$ is given by~\eqref{eq:1.8} with $A_0=E_0^*(A+H)E_0$. Assume that $E_0,E_1,F_0,F_1$ are isometries satisfying
+\[
+  E_0E_0^*+E_1E_1^*=F_0F_0^*+F_1F_1^*=1,
+\]
+whose ranges are invariant subspaces of $A$ and $A+H$, respectively, but assume
+\[
+  \dim\Xspace(E_0)<\dim\Xspace(F_0)
+\]
+instead of~\eqref{eq:1.5}. Let $\sin\angles_0$ be any operator whose singular values are the same as those of $E_0^*F_1$. Assume there is a gap of width $\delta>0$ between an interval $[\beta,\alpha]$ containing $A_0$'s spectrum and $[\alpha+\delta,\infty)$ containing the spectrum of $\Lambda_1=F_1^*(A+H)F_1$. Then, for every unitary-invariant norm,
+\[
+  \delta\norm{\tan\angles_0}\leq\norm{R}.
+\]
+\end{theorem}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-6.3-thm
+
+% DK-CERT-CLAIM-BEGIN DK-6-appendix
+\subsection*{DK-6-appendix: Unbounded-operator passage}
+\noindent\textbf{Source anchor:} Appendix to Section 6, equations (6.7)–(6.11)\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+The $\sin\theta$ theorem as stated admits unbounded $\Lambda_1$ (or $A_0$, but not both). It remains valid in the following more general form: assume there is an interval containing the spectrum of $A_0$, while the spectrum of $\Lambda_1$ lies entirely at distance at least $\delta$ from that interval.
+
+If the interval is finite, the conclusion $\delta\norm{\sin\angles_0}\leq\norm{R}$ follows from \TheoremRef{5.1}. If the interval is infinite, say $(-\infty,\alpha]$, there is no conclusion unless $R$ is bounded. We therefore assume that $(A+H)E_0$ and $E_0A_0$ have a common dense domain on which the $R$ defined by~\eqref{eq:1.8} is bounded, and extend $R$ by continuity. \TheoremRef{5.2} then applies exactly as \TheoremRef{5.1} did. The hypotheses of \PropositionRef{6.1} and \TheoremRef{6.1} may be relaxed similarly.
+
+The $\tan\theta$ theorem requires more care because we must both use the technique of \TheoremRef{5.2} and allow for noncompact $\angles$. We give the proof in the general case.
+
+As before, $A_0\leq\alpha$ and $\Lambda_1\geq\alpha+\delta$, but both may now be unbounded. We still have $\norm{R}=\norm{B}$, and only the finite case is interesting. Equation~\eqref{eq:6.5} holds on the common dense domain of $S_0A_0$ and $\Lambda_1S_0$.
+
+Fix $\nu=1,2,\ldots$ and $\varepsilon>0$. We shall choose a $\nu$-projector $\Upsilon$ on $\Xspace(E_0)$ such that the singular values
+\[
+  \sin\phi_1\geq\sin\phi_2\geq\cdots
+\]
+of $S_0\Upsilon$ satisfy
+\begin{equation*}
+  \sum_{k=1}^{\nu}\tan\phi_k
+  >\sum_{k=1}^{\nu}\tan\theta_k-\varepsilon
+\tag{6.7}\label{eq:6.7}
+\end{equation*}
+and
+\begin{equation*}
+  \sum_{k=1}^{\nu}\sin^2\phi_k
+  >\sum_{k=1}^{\nu}\sin^2\theta_k-\varepsilon^2.
+\tag{6.8}\label{eq:6.8}
+\end{equation*}
+We shall prove
+\[
+  \norm{B\Upsilon}_\nu
+  \geq\delta\sum_{k=1}^{\nu}\tan\phi_k-\gamma_\varepsilon,
+  \qquad \gamma_\varepsilon\to0.
+\]
+This implies the desired $\nu$-norm estimate and hence, by Ky Fan's theorem, the full result.
+
+By~\eqref{eq:1.13}, there is some $\nu$-projector $\Pi$ satisfying~\eqref{eq:6.8}. For the spectral resolution of $A_0$, write
+\[
+  -A_0=\int_{-\alpha}^{\infty}\lambda\,d\Omega(\lambda).
+\]
+Consider $\Omega(\tau)\Pi$ as $\tau\to\infty$. Since $\norm{\widetilde\Omega(\tau)\Pi}\to0$, the subspace $\Omega(\tau)\Pi\Xspace(E_0)$ is ultimately $\nu$-dimensional and approaches $\Pi\Xspace(E_0)$. Let $\Upsilon_\tau$ be its projector. The singular values of $S_0\Upsilon_\tau$ approach those of $S_0\Pi$, so for sufficiently large $\tau$ they satisfy~\eqref{eq:6.8}. Moreover,
+\[
+  \Upsilon_\tau=\Omega(\tau)\Upsilon_\tau,
+  \qquad
+  A_0\Upsilon_\tau=\Omega(\tau)A_0\Omega(\tau)\Upsilon_\tau,
+\]
+and the truncated self-adjoint operator $\Omega(\tau)A_0\Omega(\tau)$ has spectrum in $[-\tau,\alpha]$.
+
+Let $\sin\psi_1\geq\sin\psi_2\geq\cdots$ be the singular values of $S_0\Omega(\tau)$. Then
+\[
+  \sum_{k=1}^{\nu}\sin^2\psi_k
+  -\sum_{k=1}^{\nu}\sin^2\theta_k+\varepsilon^2>0.
+\]
+Choose $\eta>0$ with $\eta^2$ less than this quantity. Applying~\eqref{eq:1.13} once more, choose a $\nu$-projector $\Upsilon=\Omega(\tau)\Upsilon$ such that the singular values $\sin\phi_k$ of $S_0\Upsilon=S_0\Omega(\tau)\Upsilon$ satisfy
+\begin{equation*}
+  \sum_{k=1}^{\nu}\sin^2\phi_k
+  >\sum_{k=1}^{\nu}\sin^2\psi_k-\eta^2.
+\tag{6.9}\label{eq:6.9}
+\end{equation*}
+They then satisfy~\eqref{eq:6.8} as well.
+
+Choose an orthonormal basis $x_{01},\ldots,x_{0\nu}$ of $\Upsilon\Xspace(E_0)$ consisting of eigenvectors of $\Upsilon S_0^*S_0\Upsilon$, with $x_{0k}$ corresponding to $\sin^2\phi_k$. Choose orthonormal $y_{11},\ldots,y_{1\nu}$ satisfying
+\[
+  S_0x_{0k}=-\sin\phi_ky_{1k},
+  \qquad
+  \Upsilon S_0^*y_{1k}=-\sin\phi_kx_{0k},
+\]
+using vectors from $\Null(\Upsilon S_0^*)$ when necessary. Let
+\[
+  \Gamma=\sum_{k=1}^{\nu}y_{1k}y_{1k}^*.
+\]
+Then $S_0\Upsilon=\Gamma S_0\Upsilon$. Multiplying~\eqref{eq:6.5} on the left by $\Gamma$ and on the right by $\Upsilon$ gives
+\begin{equation*}
+  -\Gamma C_1B\Upsilon
+  +\Gamma S_0\bigl(\Omega(\tau)A_0\Omega(\tau)\bigr)\Upsilon
+  =(\Gamma\Lambda_1\Gamma)\Gamma S_0\Upsilon.
+\tag{6.10}\label{eq:6.10}
+\end{equation*}
+Both sides are bounded; thus $\Gamma\Lambda_1\Gamma$ is bounded on $\Gamma\Xspace(E_1)$ and has spectrum in $[\alpha+\delta,\infty)$.
+
+
+Decompose the second term of~\eqref{eq:6.10} as
+\[
+\begin{aligned}
+ \Gamma S_0\bigl(\Omega(\tau)A_0\Omega(\tau)\bigr)\Upsilon
+  &=\Gamma S_0\Upsilon(\Upsilon A_0\Upsilon)\\
+  &\quad+
+  (\Gamma S_0\widetilde\Upsilon\Omega(\tau))
+  (\Omega(\tau)A_0\Omega(\tau)\Upsilon).
+\end{aligned}
+\]
+Call the second term $F$. By~\eqref{eq:6.9} and \LemmaRef{6.3},
+\[
+  \norm{\Gamma S_0\widetilde\Upsilon\Omega(\tau)}_1\leq\eta,
+\]
+so $\norm{F}_1\leq\eta\tau$. We may choose $\eta$ small enough that $\eta\tau\leq\varepsilon$.
+
+The first term is $\Gamma S_0\Upsilon$ multiplied by a self-adjoint operator whose spectrum is at most $\alpha$. Apply $y_{1k}^*$ on the left and $x_{0k}$ on the right in~\eqref{eq:6.10}, exactly as in~\eqref{eq:6.6}, to obtain
+\begin{equation*}
+  y_{1k}^*C_1Bx_{0k}+y_{1k}^*Fx_{0k}
+  \geq\delta\sin\phi_k.
+\tag{6.11}\label{eq:6.11}
+\end{equation*}
+We have $\abs{y_{1k}^*Fx_{0k}}\leq\varepsilon$.
+
+The Gram matrix of $C_1y_{11},\ldots,C_1y_{1\nu}$ has entries
+\[
+\begin{aligned}
+ y_{1j}^*C_1^2y_{1k}
+ &=y_{1j}^*(1-S_0S_0^*)y_{1k}\\
+ &=y_{1j}^*(1-S_0\Upsilon S_0^*)y_{1k}
+   -y_{1j}^*S_0\widetilde\Upsilon S_0^*y_{1k}.
+\end{aligned}
+\]
+The first term is $\delta_{jk}\cos^2\phi_k$. By~\eqref{eq:6.8} and \LemmaRef{6.3}, $\norm{\Gamma S_0\widetilde\Upsilon}_1\leq\varepsilon$, so the second term is smaller than $\varepsilon^2$.
+
+From~\eqref{eq:6.11} we first obtain the crude estimate
+\[
+  \delta\sin\phi_k
+  \leq\norm{B}_1\norm{C_1y_{1k}}+\varepsilon
+  \leq\norm{B}_1(\cos\phi_k+\varepsilon)+\varepsilon.
+\]
+Letting $\varepsilon\to0$ proves the bound-norm case and provides a positive lower bound on every $\cos\phi_k$, independent of $\varepsilon$. Hence the vectors $(\sec\phi_k)C_1y_{1k}$ can be approximated by an orthonormal set with an error tending to zero. Together with~\eqref{eq:6.7}, this completes the proof for all unitary-invariant norms. The same method allows \TheoremRef{6.3} to be applied to unbounded operators.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-6-appendix
+
+% DK-CERT-CLAIM-BEGIN DK-6.3-lem
+\subsection*{DK-6.3-lem: Finite-rank near-maximizer leakage estimate}
+\noindent\textbf{Source anchor:} Lemma 6.3\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{lemma}\label{lem:6.3}
+Let $K$ have singular values $\kappa_1\geq\kappa_2\geq\cdots$. Let $\Gamma$ and $\Psi$ be $\nu$-projectors such that $K\Psi=\Gamma K\Psi$, and let $\eta>0$. If the singular values $\mu_1\geq\mu_2\geq\cdots$ of $K\Psi$ satisfy
+\[
+  \sum_{k=1}^{\nu}\mu_k^2
+  >\sum_{k=1}^{\nu}\kappa_k^2-\eta^2,
+\]
+then
+\[
+  \norm{\Gamma K\widetilde\Psi}_1\leq\eta.
+\]
+\end{lemma}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-6.3-lem
+
+% DK-CERT-CLAIM-BEGIN DK-7-sin2-proof
+\subsection*{DK-7-sin2-proof: Reflection proof of the sine double-angle theorem}
+\noindent\textbf{Source anchor:} Section 7, equations (7.1)–(7.5)\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+The new idea is the symmetric perturbation. We use the notation of~\eqref{eq:6.2} and~\eqref{eq:6.3}.
+Recall the definitions $X=P-\tP$ and $Q_-=XQX$ and the discussion in \SectionRef{3}. Consider $A+H$ together with the symmetric perturbation
+\begin{equation*}
+  A+XHX\representedby
+  \begin{pmatrix}A_0+H_0&-B^*\\-B&A_1+H_1\end{pmatrix}.
+\tag{7.1}\label{eq:7.1}
+\end{equation*}
+Because it is obtained from $A+H$ by a unitary similarity, it has the same diagonal form; corresponding to~\eqref{eq:6.3},
+\begin{equation*}
+\begin{pmatrix}A_0+H_0&-B^*\\-B&A_1+H_1\end{pmatrix}
+\begin{pmatrix}C_0&S_0^*\\-S_0&C_1\end{pmatrix}
+=
+\begin{pmatrix}C_0&S_0^*\\-S_0&C_1\end{pmatrix}
+\begin{pmatrix}\Lambda_0&0\\0&\Lambda_1\end{pmatrix}.
+\tag{7.2}\label{eq:7.2}
+\end{equation*}
+The unitary appearing here is the inverse of the one in~\eqref{eq:6.2} and~\eqref{eq:6.3}.
+
+Combining~\eqref{eq:6.3} and~\eqref{eq:7.2},
+\begin{equation*}
+\begin{pmatrix}A_0+H_0&B^*\\B&A_1+H_1\end{pmatrix}
+\begin{pmatrix}C_0&-S_0^*\\S_0&C_1\end{pmatrix}^{2}
+=
+\begin{pmatrix}C_0&-S_0^*\\S_0&C_1\end{pmatrix}^{2}
+\begin{pmatrix}A_0+H_0&-B^*\\-B&A_1+H_1\end{pmatrix},
+\tag{7.3}\label{eq:7.3}
+\end{equation*}
+or simply
+\[
+  (A+H)U^2=U^2(A+XHX).
+\]
+The unitary is
+\begin{equation*}
+U^2\representedby
+\begin{pmatrix}
+  2C_0^2-1&-2C_0S_0^*\\
+  2S_0C_0&2C_1^2-1
+\end{pmatrix}
+=
+\begin{pmatrix}
+  \cos2\angles_0&-J_0^*\sin2\angles_1\\
+  J_0\sin2\angles_0&\cos2\angles_1
+\end{pmatrix}.
+\tag{7.4}\label{eq:7.4}
+\end{equation*}
+By \PropositionRef{3.4}, although this unitary need not be the direct rotation from $Q_-\Hilbert$ to $Q\Hilbert$, it satisfies $U^2Q_-=QU^2$.
+
+We obtain the $\sin2\theta$ theorem by regarding $A+H$ as a perturbation not of $A$, but of $A+XHX$. The perturbation is $H-XHX$. The parts of $A+H$ on $Q\Hilbert$ and $\tQ\Hilbert$ remain
+\[
+  \Lambda_j=F_j^*(A+H)F_j.
+\]
+The roles of $A_0,A_1$ are now taken by the parts of $A+XHX$ on $Q_-\Hilbert$ and $\widetilde Q_-\Hilbert$:
+\[
+  \Lambda_j=(XF_j)^*(A+XHX)XF_j.
+\]
+Thus the hypotheses on the spectra of $\Lambda_0$ and $\Lambda_1$ permit us to invoke \PropositionRef{6.1}. In place of $E_0^*F_1$ we examine
+\[
+  (XF_0)^*F_1=2(F_0^*E_0)(E_0^*F_1),
+\]
+whose relevant singular values are those of $\sin2\angles_0$. \PropositionRef{6.1} yields
+\begin{equation*}
+  \delta\norm{\sin2\angles}
+  \leq\norm{H-XHX}
+  \leq\norm{H}+\norm{XHX}
+  =2\norm{H}.
+\tag{7.5}\label{eq:7.5}
+\end{equation*}
+To obtain the residual version, rewrite the first inequality as
+\[
+  \delta
+  \norm{\begin{pmatrix}
+    0&-\sin2\angles_0J_0^*\\
+    J_0\sin2\angles_0&0
+  \end{pmatrix}}
+  \leq
+  \norm{\begin{pmatrix}0&B^*\\B&0\end{pmatrix}}
+\]
+and invoke \LemmaRef{6.1}. Hence
+\[
+  \delta\norm{\sin2\angles_0}\leq\norm{B}\leq\norm{R}.
+\]
+This completes the proof of the $\sin2\theta$ theorem.
+
+The inference $\delta\norm{\sin2\angles}\leq2\norm{H}$ may also be drawn from one or two gaps of width $\delta$ in the spectrum of $A$ instead of $\Lambda$, by interchanging $A$ and $A+H$. The residual inference is asymmetric: if
+\[
+  A\representedby\begin{pmatrix}0&0\\0&\delta\end{pmatrix},
+  \qquad
+  H\representedby\begin{pmatrix}0&1\\1&-\delta\end{pmatrix},
+\]
+then $2\norm{R}=2$, whereas $\delta\norm{\sin2\angles_0}=\delta$ can be arbitrarily large.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-7-sin2-proof
+
+% DK-CERT-CLAIM-BEGIN DK-7-tan2-proof
+\subsection*{DK-7-tan2-proof: Singular-vector proof of the tangent double-angle theorem}
+\noindent\textbf{Source anchor:} Section 7, equation (7.6) and following argument\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\paragraph{Proof of the $\tan2\theta$ theorem.}
+The proof imitates the $\tan\theta$ proof rather than applying a single-angle theorem. We give details for bounded operators and compact $S_0$; the extension is analogous to the one above.
+
+The hypotheses are
+\[
+  H_0=H_1=0,
+  \qquad A_0\leq\alpha,
+  \qquad \alpha+\delta\leq A_1.
+\]
+From~\eqref{eq:1.7},
+\[
+  F_0^*(A+H)F_1
+  =(C_0\;S_0^*)
+  \begin{pmatrix}A_0&B^*\\B&A_1\end{pmatrix}
+  \begin{pmatrix}-S_0^*\\C_1\end{pmatrix}=0,
+\]
+so
+\begin{equation*}
+  -C_0B^*C_1+S_0^*BS_0^*
+  =S_0^*A_1C_1-C_0A_0S_0^*.
+\tag{7.6}\label{eq:7.6}
+\end{equation*}
+Let $x_{01},\ldots,x_{0\nu}$ and $y_{11},\ldots,y_{1\nu}$ be orthonormal eigenvectors of $S_0^*S_0$ and $S_0S_0^*$, respectively, arranged so that
+\[
+  S_0x_{0j}=\mp\sin\theta_jy_{1j},
+  \qquad
+  S_0^*y_{1j}=\mp\sin\theta_jx_{0j}.
+\]
+The sign will be chosen momentarily. Applying these vectors to~\eqref{eq:7.6} yields
+\[
+\begin{aligned}
+ &\pm\bigl(\cos^2\theta_j\,x_{0j}^*B^*y_{1j}
+       -\sin^2\theta_j\,y_{1j}^*Bx_{0j}\bigr)\\
+ &\qquad
+ =\pm x_{0j}^*(C_0B^*C_1-S_0^*BS_0^*)y_{1j}\\
+ &\qquad
+ =\sin\theta_j\cos\theta_j
+   \bigl(y_{1j}^*A_1y_{1j}-x_{0j}^*A_0x_{0j}\bigr)\\
+ &\qquad\geq\delta\sin\theta_j\cos\theta_j,
+\end{aligned}
+\]
+and hence
+\[
+  \pm2\cos2\theta_j\,
+  \RePart(y_{1j}^*Bx_{0j})
+  \geq\delta\sin2\theta_j.
+\]
+Thus $\cos2\theta_j\ne0$. Choose the sign so that
+\[
+  2\RePart(y_{1j}^*Bx_{0j})
+  \geq\delta\abs{\tan2\theta_j}.
+\]
+Therefore
+\[
+  2\norm{B}_\nu\geq\delta\norm{\tan2\angles_0}_\nu.
+\]
+Ky Fan's theorem gives
+\[
+  \delta\norm{\tan2\angles_0}\leq2\norm{R}.
+\]
+The whole-space estimate follows by \LemmaRef{6.1}.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-7-tan2-proof
+
+% DK-CERT-CLAIM-BEGIN DK-8.1-thm
+\subsection*{DK-8.1-thm: Branch selection and spectral repulsion}
+\noindent\textbf{Source anchor:} Theorem 8.1\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{theorem}\label{thm:8.1}
+Assume the hypotheses of the $\tan2\theta$ theorem. Then $\angles\leq\pi/4$ if and only if
+\[
+  \Lambda_1\geq\alpha+\delta,
+  \qquad
+  \Lambda_0\leq\alpha.
+\]
+For fixed $A,P,H$, there always exists a reducing projector $Q$ with these properties. For this $Q$ the following stronger inequalities hold.
+\begin{enumerate}[label=(\roman*)]
+\item
+\[
+  A_1-\alpha\leq C_1(\Lambda_1-\alpha)C_1,
+\]
+with a similar relation for $A_0$.
+\item In finite dimensions, if $\lambda_1\leq\lambda_2\leq\cdots$ are the eigenvalues of $\Lambda_1$ and $\alpha_1\leq\alpha_2\leq\cdots$ those of $A_1$, then
+\[
+  \alpha_k-\alpha\leq\norm{C_1}_1^2(\lambda_k-\alpha),
+\]
+with a similar relation for $\Lambda_0$, and natural infinite-dimensional extensions.
+\item In finite dimensions,
+\[
+  \Phi(\alpha_1-\alpha,\ldots,\alpha_n-\alpha)
+  \leq
+  \Phi\bigl((\lambda_1-\alpha)\cos^2\theta_1,
+             \ldots,
+             (\lambda_n-\alpha)\cos^2\theta_n\bigr)
+\]
+for every symmetric gauge function $\Phi$, with a similar relation for $\Lambda_0$.
+\end{enumerate}
+\end{theorem}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-8.1-thm
+
+% DK-CERT-CLAIM-BEGIN DK-8.2-thm
+\subsection*{DK-8.2-thm: Smallness selects the acute branch}
+\noindent\textbf{Source anchor:} Theorem 8.2\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\begin{theorem}\label{thm:8.2}
+Add to the hypotheses of the $\sin2\theta$ theorem either
+\[
+  \norm{H}_1<\delta/2
+  \qquad\text{or}\qquad
+  \norm{R}_1<\delta/2,
+\]
+and assume the spectrum of $A_0$ lies in $[\beta-\delta/2,\alpha+\delta/2]$. Then, in addition to
+\[
+  \delta\norm{\sin2\angles}\leq2\norm{H}
+  \quad\text{or}\quad
+  \delta\norm{\sin2\angles_0}\leq2\norm{R},
+\]
+we have $\angles<\pi/4$.
+\end{theorem}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-8.2-thm
+
+% DK-CERT-CLAIM-BEGIN DK-9-model
+\subsection*{DK-9-model: Fourth-derivative Rayleigh–Ritz model}
+\noindent\textbf{Source anchor:} Section 9, problem setup\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+The following example was used by H.~F. Weinberger to illustrate his eigenvector estimates. It illustrates our notation and theorems and permits comparison of bounds obtained by different procedures.
+
+\paragraph{The problem.}
+Let $\Hilbert$ be the real space $L^2(0,1)$, with
+\[
+  u^*v=\int_0^1u(t)v(t)\,dt.
+\]
+The operator $(d/dt)^4$ acting on functions satisfying
+\[
+  u''(0)=u'''(0)=u''(1)=u'''(1)=0
+\]
+has a self-adjoint closure, denoted by $A$. Let $H$ be multiplication by $\varepsilon t$, where $0<\varepsilon<100$.
+
+We study the two lowest eigenvalues of $A+H$ and their eigenvectors. In differential-equation notation,
+\[
+  u^{(4)}+\varepsilon tu=\lambda u,
+  \qquad
+  u''(0)=u'''(0)=u''(1)=u'''(1)=0.
+\]
+The comparison problem for $A$ is
+\[
+  w^{(4)}=\alpha w,
+  \qquad
+  w''(0)=w'''(0)=w''(1)=w'''(1)=0.
+\]
+The eigenvalues are
+\[
+  \alpha_1=0=\alpha_2<\alpha_3<\cdots,
+\]
+where, for $k>2$, the $\alpha_k$ are the positive roots of
+\[
+  \cos\alpha_k^{1/4}\cosh\alpha_k^{1/4}=1;
+\]
+all exceed $500$. Two orthonormal linear eigenfunctions for $\alpha_1,\alpha_2$ are
+\[
+  w_k(t)=\frac{1+(-1)^k\sqrt3(2t-1)}{\sqrt2},
+  \qquad k=1,2.
+\]
+We put $e_k=w_k$ and $E_0=(e_1\;e_2):\mathbb R^2\to\Hilbert$.
+
+Let $\lambda_1\leq\lambda_2\leq\cdots$ be the eigenvalues of $A+H$, with corresponding orthonormal eigenfunctions $f_1,f_2,\ldots$, and put $F_0=(f_1\;f_2)$. The problem is to bound the difference between $E_0\mathbb R^2$ and $F_0\mathbb R^2$.
+
+Since $H\geq0$, we have $\lambda_3\geq\alpha_3>500$, or $\Lambda_1>500$ in our notation. The straightforward comparison matrix is
+\[
+  A_0=E_0^*AE_0=\begin{pmatrix}0&0\\0&0\end{pmatrix}.
+\]
+The residual is
+\[
+  R=(A+H)E_0-E_0\cdot0=HE_0=(r_1\;r_2),
+\]
+where
+\[
+  r_k(t)=\varepsilon te_k(t)
+  =\frac{\varepsilon t\bigl(1+(-1)^k\sqrt3(2t-1)\bigr)}{\sqrt2}.
+\]
+A direct computation gives
+\[
+  R^*R=\frac{\varepsilon^2}{30}
+  \begin{pmatrix}
+    11-\sqrt{75}&-1\\
+    -1&11+\sqrt{75}
+  \end{pmatrix},
+\]
+with eigenvalues $\varepsilon^2(11\pm\sqrt{76})/30$.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-9-model
+
+% DK-CERT-CLAIM-BEGIN DK-9.1-9.4
+\subsection*{DK-9.1-9.4: Initial sine and sine-double-angle bounds}
+\noindent\textbf{Source anchor:} Equations (9.1)–(9.4)\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+The $\sin\theta$ theorem applies with $\delta=500$. For the bound norm,
+\begin{equation*}
+  \sin\theta_1<0.001622\varepsilon.
+\tag{9.1}\label{eq:9.1}
+\end{equation*}
+The $\sin2\theta$ theorem, with $A$ and $A+H$ interchanged, gives the slightly weaker
+\begin{equation*}
+  \sin2\theta_1<0.004\varepsilon.
+\tag{9.2}\label{eq:9.2}
+\end{equation*}
+For the norm equal to the sum of the two largest singular values, the corresponding bounds are
+\begin{align*}
+  \sin\theta_1+\sin\theta_2&<0.00218\varepsilon,
+  \tag{9.3}\label{eq:9.3}\\
+  \sin2\theta_1+\sin2\theta_2&<0.008\varepsilon.
+  \tag{9.4}\label{eq:9.4}
+\end{align*}
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-9.1-9.4
+
+% DK-CERT-CLAIM-BEGIN DK-9.5-9.7
+\subsection*{DK-9.5-9.7: Rayleigh–Ritz tangent refinements}
+\noindent\textbf{Source anchor:} Equations (9.5)–(9.7)\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+A refinement is to choose the comparison matrix so that $H_0=0$. Keep the same subspaces but use the generalized Rayleigh--Ritz quotient
+\[
+  \widehat A_0=E_0^*(A+H)E_0
+  =\frac{\varepsilon}{2}
+  \begin{pmatrix}
+    1-1/\sqrt3&0\\
+    0&1+1/\sqrt3
+  \end{pmatrix}.
+\]
+Then
+\[
+  \widehat R=(A+H)E_0-E_0\widehat A_0
+  =R-E_0\widehat A_0=(\widehat r_1\;\widehat r_2),
+\]
+and, since $E_0^*\widehat R=0$,
+\[
+  \widehat R^*\widehat R
+  =R^*R-\widehat A_0^2
+  =\frac{\varepsilon^2}{30}
+   \begin{pmatrix}1&-1\\-1&1\end{pmatrix}.
+\]
+Thus
+\[
+  \norm{\widehat R}_1=\norm{\widehat R}_2
+  =\varepsilon/\sqrt{15}=0.2582\varepsilon.
+\]
+Let $\widehat\alpha_1<\widehat\alpha_2$ be the eigenvalues of $\widehat A_0$:
+\begin{equation*}
+  \widehat\alpha_k
+  =\frac{\varepsilon}{2}
+   \left(1+\frac{(-1)^k}{\sqrt3}\right).
+\tag{9.5}\label{eq:9.5}
+\end{equation*}
+Hence $\widehat A_0<0.7887\varepsilon$ and the $\tan\theta$ theorem may use $\delta=500-0.7887\varepsilon$. For the bound norm,
+\begin{equation*}
+  \tan\theta_1
+  <\frac{0.0005164\varepsilon}{1-0.0015774\varepsilon}.
+\tag{9.6}\label{eq:9.6}
+\end{equation*}
+The same bound applies to $\tan\theta_1+\tan\theta_2$ in the $2$-norm.
+
+For the $\tan2\theta$ theorem we also replace $A_1$ by
+\[
+  \widehat A_1=E_1^*(A+H)E_1.
+\]
+Since $\widehat A_1-A_1=E_1^*HE_1\geq0$, still $\widehat A_1>500$. The bound-norm result is
+\begin{equation*}
+  \tan2\theta_1
+  <\frac{0.0010328\varepsilon}{1-0.0015774\varepsilon},
+\tag{9.7}\label{eq:9.7}
+\end{equation*}
+with the same right side bounding $\tan2\theta_1+\tan2\theta_2$ in the $2$-norm.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-9.5-9.7
+
+% DK-CERT-CLAIM-BEGIN DK-9.8
+\subsection*{DK-9.8: Comparison with Weinberger bounds}
+\noindent\textbf{Source anchor:} Equation (9.8)\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+We now compare these estimates with Weinberger's. His method uses the Rayleigh--Ritz upper bounds $\widehat\alpha_1,\widehat\alpha_2$, lower bounds $\check\alpha_1,\check\alpha_2$, and $\widehat\alpha_2<500<\lambda_3$. His theorem gives
+\[
+  \sin^2\phi_k
+  \leq\frac{\widehat\alpha_k-\check\alpha_k}{500-\check\alpha_k},
+  \qquad k=1,2,
+\]
+where $\phi_k$ is the angle between $e_k$ and $F_0\mathbb R^2$.
+
+The best lower bounds deducible from $\widehat A_0$, $\widehat R^*\widehat R$, and $\widehat A_1>500$ are the two lower eigenvalues of
+\[
+  \begin{pmatrix}
+    \widehat\alpha_1&0&\varepsilon/\sqrt{30}\\
+    0&\widehat\alpha_2&\varepsilon/\sqrt{30}\\
+    \varepsilon/\sqrt{30}&\varepsilon/\sqrt{30}&500
+  \end{pmatrix}.
+\]
+The deduction follows Weinberger and Lehmann. For $0<\varepsilon<100$,
+\[
+  \frac{\varepsilon^2/30}{500-\widehat\alpha_k}
+  >\widehat\alpha_k-\check\alpha_k
+  =\frac{\varepsilon^2/30}{500-\widehat\alpha_k}-O(\varepsilon^4),
+\]
+whence
+\begin{equation*}
+\begin{aligned}
+  \tan\phi_1&<\frac{0.0005164\varepsilon}{1-0.0004227\varepsilon},\\
+  \tan\phi_2&<\frac{0.0005164\varepsilon}{1-0.0015774\varepsilon}.
+\end{aligned}
+\tag{9.8}\label{eq:9.8}
+\end{equation*}
+These bounds answer a different question from ours: $\theta_1$ is the largest angle made by any vector in $E_0\mathbb R^2$ with $F_0\mathbb R^2$, whereas $\phi_k$ concerns the specific vector $e_k$. Thus $\theta_1\geq\phi_k$, although
+\[
+  \sin^2\phi_1+\sin^2\phi_2
+  =\sin^2\theta_1+\sin^2\theta_2.
+\]
+
+To estimate $\phi_k$ directly by our method, apply \TheoremRef{6.3} with $E_0=e_k$, $A_0=\widehat\alpha_k=e_k^*(A+H)e_k$, and
+\[
+  R=(A+H)e_k-e_k\widehat\alpha_k=\widehat r_k.
+\]
+The gap is $500-\widehat\alpha_k$, giving
+\[
+  \tan\phi_1
+  <\frac{\varepsilon/\sqrt{30}}{500-\widehat\alpha_1}
+  =\frac{0.0003652\varepsilon}{1-0.0004227\varepsilon},
+\]
+\[
+  \tan\phi_2
+  <\frac{\varepsilon/\sqrt{30}}{500-\widehat\alpha_2}
+  =\frac{0.0003652\varepsilon}{1-0.0015774\varepsilon},
+\]
+which are sharper than~\eqref{eq:9.8}.
+
+Neither approach supplants the other. Our estimates are inferred from a residual or perturbation norm and a spectral gap. Weinberger's use both Rayleigh--Ritz upper and lower bounds, and can exploit independent lower-bound information that our results do not use.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-9.8
+
+% DK-CERT-CLAIM-BEGIN DK-9-infinite-residual-counterexample
+\subsection*{DK-9-infinite-residual-counterexample: Residual-infinite limitation example}
+\noindent\textbf{Source anchor:} Section 9, l2 example after (9.8)\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+For example, take a small $\mu\ll0.6$ and
+\[
+  e=(1,\mu,\mu^2,\ldots,\mu^n,\ldots)^*\in\ell_2,
+  \qquad
+  A+H=\diag(1,\mu^{-1},\mu^{-2},\ldots,\mu^{-n},\ldots).
+\]
+Strictly, $e$ is not in the domain of $A+H$ because $(A+H)e=(1,1,1,\ldots)^*$ has infinite norm, but an arbitrarily small change remedies this. We have
+\[
+  \widehat\alpha=e^*(A+H)e/e^*e=1+\mu,
+\]
+but the residual has infinite norm, so none of our theorems applies. If, however, one knows lower bounds $\check\alpha_1\leq\lambda_1=1$ and $\check\alpha_2\leq\lambda_2=\mu^{-1}$ with $\check\alpha_2>\check\alpha_1$, Weinberger's theorem gives
+\[
+  \sin^2\theta
+  \leq\frac{1+\mu-\check\alpha_1}{\check\alpha_2-\check\alpha_1}
+\]
+for the angle $\theta=\arcsin\mu$ between $e$ and the first eigenvector. With the best lower bounds,
+\[
+  (\mu=)\sin\theta\leq\frac{\mu}{\sqrt{1-\mu}}.
+\]
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-9-infinite-residual-counterexample
+
+% DK-CERT-CLAIM-BEGIN DK-9.9-9.11
+\subsection*{DK-9.9-9.11: Individual eigenvector identification inside a cluster}
+\noindent\textbf{Source anchor:} Equations (9.9)–(9.11) and final bounds\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+So far neither approach has separately identified the eigenvectors $f_k$ within a cluster of nearly indistinguishable eigenvalues. Return to Weinberger's example. We know orthonormal $e_1,e_2$ spanning $\Range(E_0)$ and $f_1,f_2$ spanning $\Range(F_0)$. We estimated the subspace angles $\theta_1,\theta_2$ and the angles $\phi_i$ between $e_i$ and $\Range(F_0)$. We now estimate $\omega_k$, the angle between the one-dimensional subspaces $[e_k]$ and $[f_k]$.
+
+Let $g_k$ be the unit vector in $\Range(E_0)$ closest to $f_k$, and put
+\[
+  \eta_k=\arccos(g_k^*f_k),
+  \qquad
+  Pf_k=(\cos\eta_k)g_k.
+\]
+Let $\psi_k$ be the angle between $[g_k]$ and $[e_k]$. Then
+\[
+  \cos\omega_k=\cos\eta_k\cos\psi_k,
+\]
+and, less precisely,
+\[
+  \omega_k^2\leq\psi_k^2+\eta_k^2.
+\]
+
+Write
+\[
+  e_k\representedby\begin{pmatrix}u_k\\0\end{pmatrix},
+  \qquad
+  f_k\representedby\begin{pmatrix}x_k\\y_k\end{pmatrix},
+  \qquad
+  u_k,x_k\in\mathbb R^2.
+\]
+Then
+\begin{equation*}
+  \begin{pmatrix}\widehat A_0&B^*\\B&\widehat A_1\end{pmatrix}
+  \begin{pmatrix}x_k\\y_k\end{pmatrix}
+  =\lambda_k\begin{pmatrix}x_k\\y_k\end{pmatrix},
+\tag{9.9}\label{eq:9.9}
+\end{equation*}
+and
+\[
+  (\cos\eta_k)g_k=\begin{pmatrix}x_k\\0\end{pmatrix}.
+\]
+Here $B^*B=\widehat R^*\widehat R$, $\widehat A_0=\diag(\widehat\alpha_1,\widehat\alpha_2)$, and $\widehat A_1>500$, while $\lambda_1,\lambda_2<500$. Thus
+\begin{align*}
+  y_k&=(\lambda_k-\widehat A_1)^{-1}Bx_k,
+  \tag{9.10}\label{eq:9.10}\\
+  \bigl[\widehat A_0+B^*(\lambda_k-\widehat A_1)^{-1}B\bigr]x_k
+  &=\lambda_kx_k.
+  \tag{9.11}\label{eq:9.11}
+\end{align*}
+Thus $\lambda_k$ and $x_k$ form the eigenproblem~\eqref{eq:9.11} in two-space.
+
+The matrix in~\eqref{eq:9.11} is the sum of the diagonal matrix
+\[
+  \widehat A_0-\frac{\varepsilon^2}{30\gamma_k}
+\]
+and an off-diagonal perturbation
+\[
+  \widehat H=\frac{\varepsilon^2}{30\gamma_k}
+  \begin{pmatrix}0&1\\1&0\end{pmatrix}
+\]
+for some $\gamma_k>500-\lambda_k$. Indeed,
+\[
+  0\leq\frac{\varepsilon^2}{30\gamma_k}-\widehat H
+  =B^*(\widehat A_1-\lambda_k)^{-1}B
+  \leq\frac{B^*B}{500-\lambda_k},
+\]
+and $B^*B$ has rank one.
+
+Here $\psi_k$ is the angle between $[x_k]$ and the eigenspace $[u_k]$ of the diagonal matrix. The $\tan2\theta$ theorem gives
+\[
+  (\widehat\alpha_2-\widehat\alpha_1)\tan2\psi_k
+  \leq2\norm{\widehat H}_1
+  <\frac{\varepsilon^2}{15(500-\lambda_k)}.
+\]
+For $0<\varepsilon<100$, \TheoremRef{8.1} also gives $0\leq\psi_k<\pi/4$, using the bounds
+\[
+  \widehat\alpha_k-\frac{\varepsilon^2}{15000-30\widehat\alpha_k}
+  <\check\alpha_k\leq\lambda_k\leq\widehat\alpha_k.
+\]
+Consequently,
+\[
+  2\psi_k
+  <\arctan\left(
+    \frac{\varepsilon}{\sqrt{75}(500-\widehat\alpha_k)}
+  \right).
+\]
+
+The angle $\eta_k$ is less than $\theta_1$, but a $\tan\theta$ estimate is more convenient. From~\eqref{eq:9.10},
+\[
+  \tan\eta_k
+  =\frac{\norm{y_k}}{\norm{x_k}}
+  <\frac{\norm{B}_1}{500-\lambda_k}
+  \leq\frac{\varepsilon}{\sqrt{15}(500-\widehat\alpha_k)}.
+\]
+Combining the estimates through
+\[
+  \omega_k^2\leq\psi_k^2+\eta_k^2
+  <\left(\frac12\tan2\psi_k\right)^2+\tan^2\eta_k,
+\]
+we obtain
+\[
+  \omega_1<\frac{0.00053\varepsilon}{1-0.00043\varepsilon},
+  \qquad
+  \omega_2<\frac{0.00053\varepsilon}{1-0.0016\varepsilon}.
+\]
+These surprisingly small bounds, despite the closeness of the eigenvalues compared with $\norm{H}_1=\varepsilon$, further support the use of Rayleigh--Ritz approximations.
+
+The bounds can be improved. The best possible bound on $\omega_k$ for $k=1,2$ is the angle between the $k$th coordinate vector and the $k$th eigenvector of
+\[
+  \begin{pmatrix}
+    \widehat\alpha_1&0&\varepsilon/\sqrt{30}\\
+    0&\widehat\alpha_2&\varepsilon/\sqrt{30}\\
+    \varepsilon/\sqrt{30}&\varepsilon/\sqrt{30}&500
+  \end{pmatrix},
+\]
+but the proof must await investigation of Question~10.2.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-9.9-9.11
+
+% DK-CERT-CLAIM-BEGIN DK-10.1
+\subsection*{DK-10.1: Sine bounds under arbitrary pairwise spectral distance}
+\noindent\textbf{Source anchor:} Question 10.1\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\paragraph{Question 10.1.}
+If the spectra of $A_0$ and $\Lambda_1$ are known only to be at distance at least $\delta$, how well can $\angles_0$ be bounded in terms of $R$? Compare the discussions after Theorems~5.1 and~6.2.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-10.1
+
+% DK-CERT-CLAIM-BEGIN DK-10.2
+\subsection*{DK-10.2: Three-way subspace decompositions}
+\noindent\textbf{Source anchor:} Question 10.2\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\paragraph{Question 10.2.}
+Generalizing \SectionRef{1}, let $E_0,E_1,E_2$ be isometric mappings into $\Hilbert$ such that
+\[
+  E_0E_0^*+E_1E_1^*+E_2E_2^*=1,
+\]
+and let $F_0,F_1,F_2$ satisfy the analogous relation. The difference between the two decompositions might be measured by the off-diagonal entries of
+\[
+  \begin{pmatrix}
+    E_0^*F_0&E_0^*F_1&E_0^*F_2\\
+    E_1^*F_0&E_1^*F_1&E_1^*F_2\\
+    E_2^*F_0&E_2^*F_1&E_2^*F_2
+  \end{pmatrix},
+\]
+just as~\eqref{eq:1.7} was used here. If the decompositions are associated with reducing subspaces of two nearby operators, can estimates parallel to those in this paper be found?
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-10.2
+
+% DK-CERT-CLAIM-BEGIN DK-10.3
+\subsection*{DK-10.3: Joint eigenvalue–eigenvector bounds}
+\noindent\textbf{Source anchor:} Question 10.3\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\paragraph{Question 10.3.}
+Pursuing the remark after \TheoremRef{8.1}, seek best possible bounds on expressions involving both eigenvalue changes and eigenvector changes.
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-10.3
+
+% DK-CERT-CLAIM-BEGIN DK-10.4
+\subsection*{DK-10.4: Perturbation bounds for functional calculus}
+\noindent\textbf{Source anchor:} Question 10.4\\
+% DK-CERT-SOURCE-BEGIN
+\begin{verbatim}
+\paragraph{Question 10.4.}
+The spectral decomposition
+\[
+  A=\int_{-\infty}^{\infty}\lambda\,d\Omega(\lambda)
+\]
+defines
+\[
+  f(A)=\int_{-\infty}^{\infty}f(\lambda)\,d\Omega(\lambda)
+\]
+for many real functions $f$. The algebraic and topological properties of this functional calculus are well known, but little is known about bounds on $f(A+H)-f(A)$ in terms of $H$.
+
+For example, let $f(\xi)=1$ for $\xi\leq\alpha$ and $f(\xi)=0$ for $\alpha+\delta\leq\xi$. Under the $\tan2\theta$ hypotheses, $f(A)=P$, $f(A+H)=Q$, and $f(A_0)=1$, so
+\[
+  \norm{f(A+H)-f(A)}=\norm{Q-P}=\norm{\sin\angles},
+\]
+where
+\[
+  \delta\norm{\tan2\angles}\leq2\norm{H},
+\end{verbatim}
+% DK-CERT-SOURCE-END
+% DK-CERT-CLAIM-END DK-10.4
+
+\section*{Bibliographic note}
+\begin{thebibliography}{9}
+\bibitem{DK1970}
+C. Davis and W. M. Kahan,
+\emph{The Rotation of Eigenvectors by a Perturbation. III},
+SIAM J. Numer. Anal. 7 (1970), 1--46, DOI 10.1137/0707001.
+\end{thebibliography}
+\end{document}
