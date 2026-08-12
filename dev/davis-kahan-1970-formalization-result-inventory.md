@@ -6,16 +6,18 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **18**
-- Awaiting result-statement semantic closure: **11**
+- Currently hostile-certified terminal: **24**
+- Awaiting result-statement semantic closure: **5**
+- Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
+- Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
 
 Each result below explicitly partitions its primary source block into atoms inside the printed result statement and adjacent fidelity-only atoms outside it. Cross-block atoms are shared scope clauses (not extra results).
 
 | Result | Kind | Disposition | Compiler | Semantic review | Boundary |
 |---|---|---|---|---|---|
-| `S2-sin-theta` | unnumbered_theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `S2-sin-theta` | unnumbered_theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-theta` | unnumbered_theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
-| `S2-sin-two-theta` | unnumbered_theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `S2-sin-two-theta` | unnumbered_theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-two-theta` | unnumbered_theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
 | `DK-3.1-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.2-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
@@ -28,20 +30,44 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `DK-4.1-prop` | proposition | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
 | `DK-4.1-cor` | corollary | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-4.2-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-4.3-prop` | proposition | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `DK-4.3-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-4.4-prop` | proposition | `refuted_as_transcribed` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-5.1-thm` | theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-5.2-thm` | theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `DK-5.2-thm` | theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-5.1-lem` | lemma | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.1-lem` | lemma | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.2-lem` | lemma | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.1-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.1-thm` | theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.2-thm` | theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-6.3-thm` | theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `DK-6.3-thm` | theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.3-lem` | lemma | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-8.1-thm` | theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-8.2-thm` | theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `DK-8.2-thm` | theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
+
+## Current semantic-closure queue
+
+The result-only hostile audit has reduced the remaining mathematical surface to five precisely scoped targets. Everything else in the 29-result denominator has an accepted source-vs-Lean semantic correspondence.
+
+### `S2-tan-theta` — Single-angle tangent theorem
+
+Result-only audit 2026-08-12: bounded directed and bounded ambient source theorems are present over complex and real Hilbert spaces, and the unbounded directed residual theorem is present over both scalar fields. The remaining source-scope gap is the *ambient unbounded* conclusion `delta * N(tan Theta) <= N(H)` for arbitrary paper UI norm under the printed hypotheses. No existing source-facing theorem was located that combines unbounded self-adjoint ambient scope with the sharp factor-one perturbation conclusion. Keep this result nonterminal until that theorem/wrapper exists and is registered.
+
+### `S2-tan-two-theta` — Double-angle tangent theorem
+
+Result-only audit 2026-08-12: the bounded directed and ambient arbitrary-PaperUI conclusions are exact over real and complex scalars, with pole exclusion derived internally. Current main additionally proves the exact *complex unbounded directed residual* theorem `tanTwoTheta_unbounded_directedResidual_paperUINorm_exact`. The remaining source-scope work is the sharp unbounded ambient factor-two conclusion and the corresponding real unbounded source-facing surface (directed/ambient as needed). Existing unbounded ambient ideal estimates with quarter-acuteness or an extra denominator do not match the printed theorem and therefore do not discharge it.
+
+### `DK-3.3-prop` — Principal square-root characterization
+
+Result-only audit 2026-08-12: the full nonacute complex Proposition 3.3 principal-unitary-square-root forward/converse characterization exists in `DavisKahan/Frontier/Section3.lean`. The registered real square/principal theorems are acute/uniformly-acute specializations; no source-facing real theorem was located for the full matched-crossed-defect nonacute statement. The exact remaining task is a real nonacute principal-square-root characterization equivalent to the printed Proposition 3.3, preferably through a scalar-generic positivity characterization rather than a complex-spectrum branch condition.
+
+### `DK-3.4-prop` — Square as a direct rotation
+
+Result-only audit 2026-08-12: `proposition3_4_source_full` and its equality-to-direct-rotation companion give the complete printed Proposition 3.4 over complex Hilbert spaces at the nonacute source scope. No real full-scope counterpart was located. The exact remaining task is the `R`-scalar theorem that under the printed `C0^2 >= 1/2` condition, `U^2` is the direct rotation from `Q_-` to `Q`, without replacing the source hypotheses by uniform acuteness.
+
+### `DK-4.1-prop` — Pointwise and singular-value extremality of the direct rotation
+
+Result-only audit 2026-08-12: the arbitrary-dimensional compact complex/real theorems already prove the orthonormal-vector angle lower bounds and approximation-number minimality for the direct rotation. The remaining counted clause is the paper's *closed-form minimum value* `2 sin(theta_k/2)` at the same infinite compact scope. `Proposition4_1_directRotationValues` supplies that identity in finite dimension, but no hostile-reviewable infinite compact theorem identifying the approximation-number sequence with the principal chord sequence was located.
 
 ## Printed-statement boundary reviews
 

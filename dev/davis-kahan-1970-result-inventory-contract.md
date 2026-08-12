@@ -104,6 +104,22 @@ A final certificate should make both layers explicit:
 - every excluded source item remains displayed with its boundary rationale so a
   reviewer can challenge the exclusion directly.
 
+## Static semantic evidence surface
+
+The result inventory is not allowed to promote a result using declaration names that exist
+only in JSON.  `semantic_review_sweep` names two maintained reviewer artifacts:
+
+- `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`, which
+  imports `DavisKahan.All` and `#check`s every declaration selected by all 29 result
+  entries plus the strongest existing evidence for each red result; and
+- `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`, which records the
+  source-boundary comparison, the accepted semantic judgement, or the exact residual gap.
+
+The result checker requires those artifacts to mention every selected declaration/result,
+and the compiler certificate separately runs `lake env lean` on the Lean audit surface.
+Thus a hostile reviewer can inspect the source passage, inspect the actual Lean theorem
+type, and reproduce the compiler check without trusting a prose status flag.
+
 ## Gates
 
 Source-fidelity / structural check:
