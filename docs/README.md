@@ -18,14 +18,14 @@ smallest authority that answers the question:
 | [`../dev/davis-kahan-1970-frontier-status.md`](../dev/davis-kahan-1970-frontier-status.md) | Current Davis--Kahan dependency frontier |
 | [`planning/davis-kahan-general-sin-theta-roadmap.md`](planning/davis-kahan-general-sin-theta-roadmap.md) | Completed Section 6 single-angle target and its stable source map |
 
-`dev/LANES.md` is a retirement notice, not a live board.
+The retired lane workflow is not a source of current status.
 
 ## Directory map
 
 ```text
 docs/
-  planning/     # Scope notes, completed plans, candidate/reviewer analysis
-    historical/ # Explicit archive of earlier phases
+  planning/     # Durable scope/design notes still cited by the implementation
+    historical/ # Small set of historical notes retained for stable citations
   challenge/    # Comparator challenge reference
   migrations/   # Library reorganization crosswalks
   ots/          # OpenTimestamps proofs for release manifests
@@ -36,11 +36,9 @@ docs/
 A planning document should contain durable scope or design information. Mutable
 completion counts belong in generated/checked ledgers instead of prose.
 
-Several files in `planning/` are intentionally retained at their old paths because
-source comments or old engineering records cite them. Closed campaigns are reduced
-to short historical tombstones instead of leaving their obsolete commands and
-status claims in place. Detailed historical text is recoverable from Git history.
-
-Mathlib-era candidate/readiness documents are reviewer-analysis records, not a
-current Mathlib submission plan. The current reusable destination is `ForTauCeti`
-for eventual Tau Ceti integration, subject to `AGENTS.md`.
+Historical campaign plans, handoffs, and retired Mathlib-readiness queues are
+not kept in the working documentation merely as tombstones; Git history preserves
+them. A historical file remains only when a source file, provenance manifest, or
+other maintained artifact still depends on its stable path. The current reusable
+destination is `ForTauCeti` for eventual Tau Ceti integration, subject to
+`AGENTS.md`.

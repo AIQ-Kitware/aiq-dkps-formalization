@@ -12,11 +12,10 @@
 > map. **Active work has moved on twice since: first to a Mathlib-readiness
 > phase, and then — as of 2026-07-24 — to the dual-track Tau Ceti policy in
 > `AGENTS.md`. The Mathlib track is closed and is not resuming; Tau Ceti holds a
-> comparable bar, so the readiness work carries over. See `remaining-work.md`**
-> (tracker), `tauceti-adaptation-and-spectra-extraction.md` (the current
-> roadmap), and `upstream-readiness-audit.md` (the reviewer-objection analysis,
-> retargeted). The "optional strengthenings" near the end are reflected in
-> `remaining-work.md` §C.
+> comparable bar. The old Mathlib-readiness queue and campaign documents have
+> been removed from the working tree; use `AGENTS.md`, `ForTauCeti/README.md`, and
+> current checked metadata for present-day work. The historical body below is
+> retained because source files cite this path as the Acharyya formalization map.
 
 Companion: `acharyya-graveyard.md` (approaches tried and abandoned, so we and
 other agents don't re-visit them).

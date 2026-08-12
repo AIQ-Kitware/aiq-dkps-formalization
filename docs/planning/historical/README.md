@@ -1,15 +1,15 @@
-# Historical planning docs
+# Retained historical planning notes
 
-Completed-phase planning artifacts, kept for provenance but no longer part of the
-active working set in `docs/planning/`. Each was strictly done when archived
-(2026-06-12); paths in the parent directory and source comments may still point
-here.
+Git history is the archive for completed campaigns. This directory contains only
+historical paths that still have a live citation and therefore need a stable
+working-tree location:
 
-- **`hmeas-spec-discharge.md`** — warm-start/seam history for the `hmeas_spec`
-  measurability discharge. The seam is fully discharged and committed; this
-  records how. Referenced from `Acharyya2025/SpectralMeasurability.lean`.
-- **`opus-handoff.md`** — Fable→Opus handoff plan for finishing the ForMathlib
-  staging effort. Staging is complete; the handoff is closed.
-- **`for-fable.md`** - the F1-F6 Fable task list. **All items done**. The old
-  R-track is also retired; current operating policy and live status pointers are
-  in `AGENTS.md` and `../README.md`.
+- `for-fable.md` - retained because paper provenance material still cites it;
+- `hmeas-spec-discharge.md` - retained because a Lean source cites the discharge
+  record;
+- `davis-kahan-pre-reorganization/infinite-proof-plan.md` - retained because the
+  distilled-literature source manifest records it as provenance.
+
+These are evidence/provenance documents, not current work queues. Current policy
+and status live in `AGENTS.md`, `ForTauCeti/README.md`, and the maintained
+Davis--Kahan census/frontier artifacts.

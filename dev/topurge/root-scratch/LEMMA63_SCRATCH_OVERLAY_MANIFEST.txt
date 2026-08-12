@@ -1,5 +1,0 @@
-DavisKahan/Experimental/Scratch/Section6/Lemma63Promotion.lean
-DavisKahan/Experimental/Scratch/Section6/All.lean
-dev/lemma63-scratch-candidates-7f9f562.json
-dev/overlays/lemma63-promotion-scratch-7f9f562-gpt56.md
-dev/overlays/lemma63-promotion-scratch-7f9f562-gpt56.manifest.txt

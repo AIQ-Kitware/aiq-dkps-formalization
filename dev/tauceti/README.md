@@ -11,15 +11,14 @@ have been retired.
 3. `extraction-manifest.json` and the current roadmap-topic data - maintained
    ownership/provenance metadata.
 4. `submission-ladder.md` only through its deriving/checking script; do not copy
-   hand-measured counts from older prose.
+   hand-measured counts from prose.
 
-## Historical records
+## What remains here
 
-The convergence matrix, Spectra removal plan and Spectra port ledger describe a
-completed migration phase. Their old operational bodies have been reduced or
-labelled historical so they cannot be mistaken for instructions to recreate
-`ForMathlib`, `vendor/Spectra`, or the retired lane workflow.
+Keep machine-consumed migration crosswalks, provenance ledgers, current roadmap
+metadata, and the few historical paths still cited by source or scripts. Completed
+migration narratives, agent status dumps, promotion triage, and retired work queues
+belong in Git history and are not maintained as tombstones in the working tree.
 
-Other files in this directory are engineering records, migration crosswalks and
-provenance ledgers. Treat dated measurements as historical unless a current script
-regenerates or checks them.
+Treat any dated measurement in a retained engineering record as historical unless
+a current script regenerates or checks it.
