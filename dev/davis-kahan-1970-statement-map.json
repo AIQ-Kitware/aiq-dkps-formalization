@@ -1,0 +1,1882 @@
+{
+  "schema_version": 1,
+  "source": {
+    "citation": "C. Davis and W. M. Kahan, The Rotation of Eigenvectors by a Perturbation. III, SIAM J. Numer. Anal. 7(1), 1970, 1–46.",
+    "doi": "10.1137/0707001",
+    "audit_tex": "prose/distilled_literature/DavisKahan1970_exact_source_register.tex",
+    "modernized_transcription_sha256": "4d93f47ca2d0a1fcf84bf8fc6a86bfddbeb55e7b4e17260641936602f7463ac3",
+    "note": "Exact registered mathematical excerpts are kept in the audit-specific TeX register. The separate DavisKahan1970_part_III.tex remains the readable mathematical distillation. The full private transcription need not be present to review registered excerpts.",
+    "distilled_exposition": "prose/distilled_literature/DavisKahan1970_part_III.tex"
+  },
+  "census": "dev/davis-kahan-1970-full-source-census.json",
+  "completion_rule": "A mathematical completion obligation is terminal only when its source statement is matched by compiled exact Lean statement(s), or by a compiled counterexample/refutation when the printed claim is false. Section 10 questions are audit entries but are not completion obligations.",
+  "items": [
+    {
+      "id": "S1-block-residual",
+      "section": "1",
+      "title": "Two reducing decompositions and the residual",
+      "source_kind": "construction",
+      "source_anchor": "Section 1, equations (1.1)–(1.8)",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "S1-block-residual",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          202,
+          204
+        ],
+        [
+          241,
+          315
+        ],
+        [
+          461,
+          503
+        ]
+      ],
+      "source_excerpt_sha256": "db69a79e5384cf5ad0236a1f73abdccf8d9d8cc75422df74c0583d21f77fa816",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Equation1_8",
+        "TauCeti.DavisKahan1970.equation1_8_eq_perturbation_comp",
+        "TauCeti.DavisKahan1970.equation1_8_norm_sq_eq_diagonal_add_offDiagonal",
+        "TauCeti.DavisKahan1970.equation1_8_norm_offDiagonal_le"
+      ],
+      "audit_clauses": [
+        {
+          "id": "S1-block-residual.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Equation1_8",
+            "TauCeti.DavisKahan1970.equation1_8_eq_perturbation_comp",
+            "TauCeti.DavisKahan1970.equation1_8_norm_sq_eq_diagonal_add_offDiagonal",
+            "TauCeti.DavisKahan1970.equation1_8_norm_offDiagonal_le"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S1-ui-norms",
+      "section": "1",
+      "title": "Unitary-invariant norms and Fan dominance",
+      "source_kind": "framework",
+      "source_anchor": "Section 1, equations (1.9)–(1.13)",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "S1-ui-norms",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          505,
+          583
+        ]
+      ],
+      "source_excerpt_sha256": "7cbf06e9a54408d0a6644b521befdf01fa99c88e2a0aaeed2378a3468e95773d",
+      "review_declarations": [
+        "TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm",
+        "TauCeti.DavisKahan.ExactSinTheta.paperKyFanNorm",
+        "TauCeti.DavisKahan1970.equation1_12",
+        "TauCeti.DavisKahan1970.equation1_13_compressions",
+        "TauCeti.DavisKahan1970.equation1_13_reSum"
+      ],
+      "audit_clauses": [
+        {
+          "id": "S1-ui-norms.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm",
+            "TauCeti.DavisKahan.ExactSinTheta.paperKyFanNorm",
+            "TauCeti.DavisKahan1970.equation1_12",
+            "TauCeti.DavisKahan1970.equation1_13_compressions",
+            "TauCeti.DavisKahan1970.equation1_13_reSum"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S2-sin-theta",
+      "section": "2",
+      "title": "Single-angle sine theorem",
+      "source_kind": "unnumbered_theorem",
+      "source_anchor": "Section 2, sin theta theorem",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "S2-sin-theta",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          719,
+          725
+        ]
+      ],
+      "source_excerpt_sha256": "21065969e0e5f2a4d5c4d48143b2464dc5e8d974ca80a53196f91f0fd7db57aa",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.sinTheta",
+        "TauCeti.DavisKahan1970.sinTheta_real_exactPaper",
+        "TauCeti.DavisKahan1970.generalizedSinTheta",
+        "TauCeti.DavisKahan1970.generalizedSinTheta_real_exactPaper"
+      ],
+      "audit_clauses": [
+        {
+          "id": "S2-sin-theta.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.sinTheta",
+            "TauCeti.DavisKahan1970.sinTheta_real_exactPaper",
+            "TauCeti.DavisKahan1970.generalizedSinTheta",
+            "TauCeti.DavisKahan1970.generalizedSinTheta_real_exactPaper"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S2-tan-theta",
+      "section": "2",
+      "title": "Single-angle tangent theorem",
+      "source_kind": "unnumbered_theorem",
+      "source_anchor": "Section 2, tan theta theorem",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "S2-tan-theta",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          738,
+          747
+        ]
+      ],
+      "source_excerpt_sha256": "0958988cf989bf4bbc6ca34699d7b28cda3b68be4e455e12b43a4ad712b2c9a0",
+      "review_declarations": [
+        "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
+        "TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial",
+        "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm",
+        "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real",
+        "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent"
+      ],
+      "audit_clauses": [
+        {
+          "id": "S2-tan-theta.directed",
+          "description": "Directed conclusion: delta * ||tan Theta_0|| <= ||R||.",
+          "review_declarations": [
+            "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm"
+          ]
+        },
+        {
+          "id": "S2-tan-theta.ambient",
+          "description": "Ambient conclusion: delta * ||tan Theta|| <= ||H||, with the ambient angle rather than Theta_0.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm",
+            "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S2-sin-two-theta",
+      "section": "2",
+      "title": "Double-angle sine theorem",
+      "source_kind": "unnumbered_theorem",
+      "source_anchor": "Section 2, sin 2 theta theorem",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "S2-sin-two-theta",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          753,
+          761
+        ]
+      ],
+      "source_excerpt_sha256": "03db6ca98f2073a4f98a819b9a9460fb753e5587e78b8949b56a0668291fc4fb",
+      "review_declarations": [
+        "TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm",
+        "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm",
+        "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real",
+        "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative",
+        "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real"
+      ],
+      "audit_clauses": [
+        {
+          "id": "S2-sin-two-theta.directed",
+          "description": "Directed conclusion: delta * ||sin(2 Theta_0)|| <= 2 ||R||.",
+          "review_declarations": [
+            "TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm"
+          ]
+        },
+        {
+          "id": "S2-sin-two-theta.ambient",
+          "description": "Ambient conclusion: delta * ||sin(2 Theta)|| <= 2 ||H||.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm",
+            "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S2-tan-two-theta",
+      "section": "2",
+      "title": "Double-angle tangent theorem",
+      "source_kind": "unnumbered_theorem",
+      "source_anchor": "Section 2, tan 2 theta theorem",
+      "completion_obligation": true,
+      "expected_status": "compiled_specialization",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "S2-tan-two-theta",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          765,
+          774
+        ]
+      ],
+      "source_excerpt_sha256": "13b00134126824e941e6a613a418da4b82b8cf629a7c1c406fa2e5b89eafcdd3",
+      "review_declarations": [
+        "TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm",
+        "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm",
+        "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real",
+        "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_branchFree",
+        "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_of_corner"
+      ],
+      "audit_clauses": [
+        {
+          "id": "S2-tan-two-theta.hypotheses",
+          "description": "Printed source hypotheses only: ordered spectral gap between A_0 and A_1 plus H_0 = H_1 = 0; no independent pole-exclusion or perturbed-Q-block placement hypothesis.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_branchFree"
+          ]
+        },
+        {
+          "id": "S2-tan-two-theta.directed",
+          "description": "Directed conclusion: delta * ||tan(2 Theta_0)|| <= 2 ||R|| for every source unitarily invariant norm.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_all_kyFan",
+            "TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace"
+          ]
+        },
+        {
+          "id": "S2-tan-two-theta.ambient",
+          "description": "Ambient conclusion: delta * ||tan(2 Theta)|| <= 2 ||H|| for every source unitarily invariant norm, from only the printed hypotheses. This is the currently reopened exact-wrapper obligation.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_branchFree",
+            "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S2-sharpness",
+      "section": "2",
+      "title": "Best constants and simultaneous equality",
+      "source_kind": "source_claim",
+      "source_anchor": "Section 2, paragraph after four theorems",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "S2-sharpness",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          776,
+          777
+        ]
+      ],
+      "source_excerpt_sha256": "40c1bd8f533c1b0c08d7881fadb8617edfee2fcbfcd63ec6ca8100234a183c6e",
+      "review_declarations": [
+        "TauCeti.DavisKahanTheory.tanTheta_model_sourceSharpness",
+        "TauCeti.DavisKahanTheory.tanTwoTheta_model_sourceSharpness",
+        "TauCeti.DavisKahanTheory.sinTheta_constant_optimal",
+        "TauCeti.DavisKahanTheory.sinTwoTheta_constant_optimal",
+        "TauCeti.DavisKahanTheory.single_double_sine_tangent_ratios_tendsto_one",
+        "TauCeti.DavisKahanTheory.sinTheta_model_equality"
+      ],
+      "audit_clauses": [
+        {
+          "id": "S2-sharpness.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahanTheory.tanTheta_model_sourceSharpness",
+            "TauCeti.DavisKahanTheory.tanTwoTheta_model_sourceSharpness",
+            "TauCeti.DavisKahanTheory.sinTheta_constant_optimal",
+            "TauCeti.DavisKahanTheory.sinTwoTheta_constant_optimal",
+            "TauCeti.DavisKahanTheory.single_double_sine_tangent_ratios_tendsto_one",
+            "TauCeti.DavisKahanTheory.sinTheta_model_equality"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S2-unbounded-scope",
+      "section": "2",
+      "title": "Unbounded self-adjoint scope",
+      "source_kind": "scope_claim",
+      "source_anchor": "Section 2, final paragraphs",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "S2-unbounded-scope",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          216,
+          218
+        ],
+        [
+          781,
+          785
+        ]
+      ],
+      "source_excerpt_sha256": "e25372d3c1f23d592684090e06ab59344253ceac7704650a868c0846d748272d",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing_real",
+        "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_of_reducing_real",
+        "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real",
+        "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_real",
+        "TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteData_real",
+        "TauCeti.DavisKahan1970.canonical_generalizedSinTheta"
+      ],
+      "audit_clauses": [
+        {
+          "id": "S2-unbounded-scope.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing_real",
+            "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_of_reducing_real",
+            "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real",
+            "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_real",
+            "TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteData_real",
+            "TauCeti.DavisKahan1970.canonical_generalizedSinTheta"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-3.1-def",
+      "section": "3",
+      "title": "Direct rotation",
+      "source_kind": "definition",
+      "source_anchor": "Definition 3.1",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-3.1-def",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          834,
+          845
+        ]
+      ],
+      "source_excerpt_sha256": "161814de6687dea957ba7408dd53b56c71b504b2d3065002a19efdcc026f94cc",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.complex_directRotation",
+        "TauCeti.DavisKahan1970.real_directRotation",
+        "TauCeti.DavisKahan1970.real_directRotation_orthogonal",
+        "TauCeti.DavisKahan1970.real_directRotation_intertwines",
+        "TauCeti.DavisKahan1970.real_directRotation_diagonalBlock",
+        "TauCeti.DavisKahan1970.real_directRotation_complementaryDiagonalBlock"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-3.1-def.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.complex_directRotation",
+            "TauCeti.DavisKahan1970.real_directRotation",
+            "TauCeti.DavisKahan1970.real_directRotation_orthogonal",
+            "TauCeti.DavisKahan1970.real_directRotation_intertwines",
+            "TauCeti.DavisKahan1970.real_directRotation_diagonalBlock",
+            "TauCeti.DavisKahan1970.real_directRotation_complementaryDiagonalBlock"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-3.2-def",
+      "section": "3",
+      "title": "Acute case",
+      "source_kind": "definition",
+      "source_anchor": "Definition 3.2",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-3.2-def",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          847,
+          849
+        ]
+      ],
+      "source_excerpt_sha256": "565defff648c593393e79ca50a2ed8e93e969c41351f67ac63aed945ac77014f",
+      "review_declarations": [
+        "TauCeti.IsAcute",
+        "TauCeti.isAcute_iff_inf_orthogonal_eq_bot",
+        "TauCeti.DavisKahan1970.Section3AcuteCounterexample.exists_isAcute_projectionGap_eq_one"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-3.2-def.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.IsAcute",
+            "TauCeti.isAcute_iff_inf_orthogonal_eq_bot",
+            "TauCeti.DavisKahan1970.Section3AcuteCounterexample.exists_isAcute_projectionGap_eq_one"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-3.1-prop",
+      "section": "3",
+      "title": "Acute direct rotation existence and uniqueness",
+      "source_kind": "proposition",
+      "source_anchor": "Proposition 3.1",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-3.1-prop",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          850,
+          852
+        ]
+      ],
+      "source_excerpt_sha256": "46a75530e2d8da8c3c9f8871f2df1807511b073f02ed0208842730243a3c1f02",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.complex_directRotation",
+        "TauCeti.DavisKahan1970.complex_directRotation_unique",
+        "TauCeti.DavisKahan1970.complex_directRotation_diagonalBlock",
+        "TauCeti.DavisKahan1970.complex_directRotation_complementaryDiagonalBlock",
+        "TauCeti.DavisKahan1970.complex_directRotation_reflectionConjugate",
+        "TauCeti.DavisKahan1970.complex_directRotation_of_diagonalBlocks"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-3.1-prop.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.complex_directRotation",
+            "TauCeti.DavisKahan1970.complex_directRotation_unique",
+            "TauCeti.DavisKahan1970.complex_directRotation_diagonalBlock",
+            "TauCeti.DavisKahan1970.complex_directRotation_complementaryDiagonalBlock",
+            "TauCeti.DavisKahan1970.complex_directRotation_reflectionConjugate",
+            "TauCeti.DavisKahan1970.complex_directRotation_of_diagonalBlocks"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-3.2-prop",
+      "section": "3",
+      "title": "Nonacute existence criterion",
+      "source_kind": "proposition",
+      "source_anchor": "Proposition 3.2",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-3.2-prop",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          901,
+          909
+        ]
+      ],
+      "source_excerpt_sha256": "7fa0afb04717e112c11b6069c69102c2ea9cb3b29337c0a88464921f02a37777",
+      "review_declarations": [
+        "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent",
+        "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_parameterized_nonuniqueness",
+        "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent_real"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-3.2-prop.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent",
+            "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_parameterized_nonuniqueness",
+            "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent_real"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-3.3-prop",
+      "section": "3",
+      "title": "Principal square-root characterization",
+      "source_kind": "proposition",
+      "source_anchor": "Proposition 3.3",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-3.3-prop",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          961,
+          968
+        ],
+        [
+          1008,
+          1011
+        ]
+      ],
+      "source_excerpt_sha256": "87620ffbc1a3ee6e3c1eb880ee359423e4cc4888b4e5c601f71c31b33ee7a8c5",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.complex_directRotation_sq",
+        "TauCeti.DavisKahan1970.complex_directRotation_hermitianPart",
+        "TauCeti.DavisKahan1970.complex_directRotation_principal_of_sq",
+        "TauCeti.DavisKahan1970.real_directRotation_sq",
+        "TauCeti.DavisKahan1970.real_directRotation_hermitianPart",
+        "TauCeti.DavisKahan1970.real_directRotation_principal_of_sq"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-3.3-prop.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.complex_directRotation_sq",
+            "TauCeti.DavisKahan1970.complex_directRotation_hermitianPart",
+            "TauCeti.DavisKahan1970.complex_directRotation_principal_of_sq",
+            "TauCeti.DavisKahan1970.real_directRotation_sq",
+            "TauCeti.DavisKahan1970.real_directRotation_hermitianPart",
+            "TauCeti.DavisKahan1970.real_directRotation_principal_of_sq"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-3.4-prop",
+      "section": "3",
+      "title": "Square as a direct rotation",
+      "source_kind": "proposition",
+      "source_anchor": "Proposition 3.4",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-3.4-prop",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          961,
+          968
+        ],
+        [
+          1035,
+          1037
+        ]
+      ],
+      "source_excerpt_sha256": "821c742e5042b7ae1d62ca7267f13353c0dc72719849ccb9e9b73519fa175575",
+      "review_declarations": [
+        "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full",
+        "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-3.4-prop.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full",
+            "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-3.1-thm",
+      "section": "3",
+      "title": "Classification of pairs of subspaces",
+      "source_kind": "theorem",
+      "source_anchor": "Theorem 3.1",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-3.1-thm",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          961,
+          968
+        ],
+        [
+          1083,
+          1093
+        ]
+      ],
+      "source_excerpt_sha256": "885d6b1c497533c6c2c1c0ef2940fd9f882249aaae51c85ea0392067b7dd5ed7",
+      "review_declarations": [
+        "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification",
+        "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_realization",
+        "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification_real"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-3.1-thm.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification",
+            "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_realization",
+            "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification_real"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-3.1-cor",
+      "section": "3",
+      "title": "Compact classification by angle eigenvalues",
+      "source_kind": "corollary",
+      "source_anchor": "Corollary 3.1",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-3.1-cor",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          961,
+          968
+        ],
+        [
+          1118,
+          1132
+        ]
+      ],
+      "source_excerpt_sha256": "fa52f58d0a2c0378b7d41e22854d1b88b1d4e73c6906c9a5bd13affa588f2c38",
+      "review_declarations": [
+        "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_defectBlock_angleList_classification",
+        "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_classification_real",
+        "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_realization"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-3.1-cor.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_defectBlock_angleList_classification",
+            "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_classification_real",
+            "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_realization"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-3.5-prop",
+      "section": "3",
+      "title": "Angle commutation and eigenspace geometry",
+      "source_kind": "proposition",
+      "source_anchor": "Proposition 3.5",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-3.5-prop",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          961,
+          968
+        ],
+        [
+          1143,
+          1152
+        ]
+      ],
+      "source_excerpt_sha256": "2b467fb17b6fbfdd563e339abcd67e54cbaad60faf4ff6a692dbb6916beceb70",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.proposition3_5_directRotation_resolution",
+        "TauCeti.DavisKahan1970.proposition3_5_commutations",
+        "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle",
+        "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace",
+        "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal",
+        "TauCeti.DavisKahan1970.proposition3_5_angleOperator"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-3.5-prop.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.proposition3_5_directRotation_resolution",
+            "TauCeti.DavisKahan1970.proposition3_5_commutations",
+            "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle",
+            "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace",
+            "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal",
+            "TauCeti.DavisKahan1970.proposition3_5_angleOperator"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-3.2-cor",
+      "section": "3",
+      "title": "Reversal symmetry",
+      "source_kind": "corollary",
+      "source_anchor": "Corollary 3.2",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-3.2-cor",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          961,
+          968
+        ],
+        [
+          1207,
+          1209
+        ]
+      ],
+      "source_excerpt_sha256": "c680a31852c56ff741530933bb1230243b41cf60da3333c60aca4a31e0ebda7d",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.corollary3_2_source",
+        "TauCeti.DavisKahan1970.corollary3_2_paperQuarterTurn_symm",
+        "TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution",
+        "TauCeti.DavisKahan1970.complex_directRotation_reversal",
+        "TauCeti.DavisKahan1970.real_directRotation_reversal",
+        "TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_source_form"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-3.2-cor.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.corollary3_2_source",
+            "TauCeti.DavisKahan1970.corollary3_2_paperQuarterTurn_symm",
+            "TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution",
+            "TauCeti.DavisKahan1970.complex_directRotation_reversal",
+            "TauCeti.DavisKahan1970.real_directRotation_reversal",
+            "TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_source_form"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-4.1-prop",
+      "section": "4",
+      "title": "Pointwise and singular-value extremality of the direct rotation",
+      "source_kind": "proposition",
+      "source_anchor": "Proposition 4.1",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-4.1-prop",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          1223,
+          1237
+        ],
+        [
+          1239,
+          1245
+        ]
+      ],
+      "source_excerpt_sha256": "09ada1a08832709c40382ecedb51bfaad20b3f6662d61ce7f4ca26c709c8fc64",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors",
+        "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real",
+        "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute",
+        "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
+        "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-4.1-prop.vector",
+          "description": "First printed formulation: an orthonormal principal-vector family v_k in P H with angle(v_k, V v_k) >= theta_k.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors",
+            "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real"
+          ]
+        },
+        {
+          "id": "DK-4.1-prop.singular",
+          "description": "Equivalent singular-value/approximation-number minimality formulation, including the direct-rotation value 2 sin(theta_k/2).",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors",
+            "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real",
+            "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute",
+            "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
+            "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-4.1-cor",
+      "section": "4",
+      "title": "UI-norm minimality of direct rotation displacement",
+      "source_kind": "corollary",
+      "source_anchor": "Corollary 4.1",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-4.1-cor",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          1223,
+          1237
+        ],
+        [
+          1247,
+          1249
+        ]
+      ],
+      "source_excerpt_sha256": "7a3c0e3316724cc7e8f7639f2c9c23faf124a5bc657d8b16d4ad3efdf4b0b341",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute",
+        "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real",
+        "TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-4.1-cor.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute",
+            "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real",
+            "TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-4.2-prop",
+      "section": "4",
+      "title": "Basis-angle square-sum extremality",
+      "source_kind": "proposition",
+      "source_anchor": "Proposition 4.2",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-4.2-prop",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          1223,
+          1237
+        ],
+        [
+          1323,
+          1329
+        ],
+        [
+          1330,
+          1345
+        ]
+      ],
+      "source_excerpt_sha256": "6076a83e13dd47c93f09465c856f90fa3e7010dad4d8710b122b70bc5b9a5835",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional",
+        "TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-4.2-prop.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional",
+            "TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-4.3-prop",
+      "section": "4",
+      "title": "Squared displacement UI-norm minimality",
+      "source_kind": "proposition",
+      "source_anchor": "Proposition 4.3",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-4.3-prop",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          1223,
+          1237
+        ],
+        [
+          1500,
+          1502
+        ]
+      ],
+      "source_excerpt_sha256": "6da0c42a78ae20ed9f7478a157b3f87bbb2699ea1c45ed0a2e09a8833d4a6c1d",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional_idealGauge"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-4.3-prop.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional_idealGauge"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-4.4-prop",
+      "section": "4",
+      "title": "Real-space full displacement minimality below pi/3",
+      "source_kind": "proposition",
+      "source_anchor": "Proposition 4.4",
+      "completion_obligation": true,
+      "expected_status": "refuted_as_transcribed",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-4.4-prop",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          1223,
+          1237
+        ],
+        [
+          1534,
+          1537
+        ],
+        [
+          1570,
+          1570
+        ]
+      ],
+      "source_excerpt_sha256": "66ac9b6a665e40b0ce3946285d0891bb9b26bd01eb9d496dadbfa5cc0aed2aa1",
+      "review_declarations": [
+        "TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite",
+        "TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite",
+        "TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-4.4-prop.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite",
+            "TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite",
+            "TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-5.1-thm",
+      "section": "5",
+      "title": "Banach-space Sylvester lower bound",
+      "source_kind": "theorem",
+      "source_anchor": "Theorem 5.1",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-5.1-thm",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          1576,
+          1590
+        ],
+        [
+          1607,
+          1607
+        ],
+        [
+          1648,
+          1650
+        ]
+      ],
+      "source_excerpt_sha256": "0137368cd5d5331a76f9afd4abbec946f3b6450ff0715418372f6776b52636bc",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact",
+        "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact",
+        "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-5.1-thm.bounded",
+          "description": "Printed bounded Banach-space theorem with a genuine inverse A^{-1}, its norm bound, an arbitrary compatible cross-operator norm, AX-XB=C, and delta ||X|| <= ||C||.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact"
+          ]
+        },
+        {
+          "id": "DK-5.1-thm.interchange",
+          "description": "Printed prose remark interchanging the roles/hypotheses of A and B.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact"
+          ]
+        },
+        {
+          "id": "DK-5.1-thm.unboundedA",
+          "description": "Printed prose extension allowing densely-defined unbounded A while B and X remain bounded.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-5-hermitian-inequalities",
+      "section": "5",
+      "title": "Square-norm and rank-corrected Sylvester inequalities",
+      "source_kind": "equation",
+      "source_anchor": "Section 5, inequalities (5.1) and (5.2)",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-5-hermitian-inequalities",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          1613,
+          1646
+        ]
+      ],
+      "source_excerpt_sha256": "e276ec25f4fbc471721a7a8d9c50f6f761c02f785130051ccd3d724eeb2b01da",
+      "review_declarations": [
+        "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap",
+        "TauCeti.DavisKahan.ExactSinTheta.paperOperatorNorm_sylvester_le_of_pairwiseSpectrumGap"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-5-hermitian-inequalities.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap",
+            "TauCeti.DavisKahan.ExactSinTheta.paperOperatorNorm_sylvester_le_of_pairwiseSpectrumGap"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-5.2-thm",
+      "section": "5",
+      "title": "Semibounded self-adjoint Sylvester theorem",
+      "source_kind": "theorem",
+      "source_anchor": "Theorem 5.2",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-5.2-thm",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          1652,
+          1664
+        ]
+      ],
+      "source_excerpt_sha256": "9b7653bd5df0f630c73e2b3b2963be6cb99f5907d7ef396e09c20c64b55707df",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Theorem5_2",
+        "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-5.2-thm.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Theorem5_2",
+            "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-5.1-lem",
+      "section": "5",
+      "title": "Strong-cutoff convergence of singular values",
+      "source_kind": "lemma",
+      "source_anchor": "Lemma 5.1",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-5.1-lem",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          1700,
+          1703
+        ]
+      ],
+      "source_excerpt_sha256": "fd5f92ac854b05b1737f4e121ce4de1d815a786d4f8966093a2479dad0408c81",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Lemma5_1"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-5.1-lem.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Lemma5_1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-6.1-lem",
+      "section": "6",
+      "title": "Direct-sum UI-norm comparison and converse",
+      "source_kind": "lemma",
+      "source_anchor": "Lemma 6.1",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-6.1-lem",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          1742,
+          1759
+        ]
+      ],
+      "source_excerpt_sha256": "862500c7811f1974bb6ce020aec9cedba22f3f28f61e8981769fa615c530edac",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.lemma6_1",
+        "TauCeti.DavisKahan1970.lemma6_1_converse"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-6.1-lem.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.lemma6_1",
+            "TauCeti.DavisKahan1970.lemma6_1_converse"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-6.2-lem",
+      "section": "6",
+      "title": "Reflection-pinch contraction",
+      "source_kind": "lemma",
+      "source_anchor": "Lemma 6.2",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-6.2-lem",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          1763,
+          1771
+        ]
+      ],
+      "source_excerpt_sha256": "08a31e182ed2cc092d989a785ee0e01fe7a484f3e8748be4d9d0c35cee3b7760",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.lemma6_2"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-6.2-lem.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.lemma6_2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-6.1-prop",
+      "section": "6",
+      "title": "Symmetric sine theorem",
+      "source_kind": "proposition",
+      "source_anchor": "Proposition 6.1",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-6.1-prop",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          1831,
+          1836
+        ]
+      ],
+      "source_excerpt_sha256": "0898b12bd89f52b80c9fb5be54d2b5f803254b87723e1d2907865f825332dd73",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Proposition6_1",
+        "TauCeti.DavisKahan1970.Proposition6_1_real"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-6.1-prop.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Proposition6_1",
+            "TauCeti.DavisKahan1970.Proposition6_1_real"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-6.1-thm",
+      "section": "6",
+      "title": "Generalized sine theorem",
+      "source_kind": "theorem",
+      "source_anchor": "Theorem 6.1",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-6.1-thm",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          1859,
+          1870
+        ]
+      ],
+      "source_excerpt_sha256": "f97020c4ed2e67a8509af2e2985a797f8564a4d102e44a64b0e10f971609c68b",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Theorem6_1",
+        "TauCeti.DavisKahan1970.Theorem6_1_real",
+        "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
+        "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-6.1-thm.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Theorem6_1",
+            "TauCeti.DavisKahan1970.Theorem6_1_real",
+            "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
+            "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-6.2-thm",
+      "section": "6",
+      "title": "Pairwise-gap square-norm sine theorem",
+      "source_kind": "theorem",
+      "source_anchor": "Theorem 6.2",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-6.2-thm",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          1908,
+          1918
+        ]
+      ],
+      "source_excerpt_sha256": "b2dfa6c1c441067a8946addd9e2ccf11d6acb21bd084bbd3a1294e7f9b72b13d",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Theorem6_2",
+        "TauCeti.DavisKahan1970.Theorem6_2_real",
+        "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
+        "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-6.2-thm.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Theorem6_2",
+            "TauCeti.DavisKahan1970.Theorem6_2_real",
+            "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
+            "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-6.3-thm",
+      "section": "6",
+      "title": "Generalized tangent theorem",
+      "source_kind": "theorem",
+      "source_anchor": "Theorem 6.3",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-6.3-thm",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2060,
+          2073
+        ]
+      ],
+      "source_excerpt_sha256": "53279da9472354f0db70b73667be22dae5fb2a3e8305f99310bdeed0b0d1a156",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Theorem6_3",
+        "TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real",
+        "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm",
+        "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-6.3-thm.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Theorem6_3",
+            "TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real",
+            "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm",
+            "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-6-appendix",
+      "section": "6 appendix",
+      "title": "Unbounded-operator passage",
+      "source_kind": "appendix",
+      "source_anchor": "Appendix to Section 6, equations (6.7)–(6.11)",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-6-appendix",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2118,
+          2193
+        ],
+        [
+          2218,
+          2260
+        ]
+      ],
+      "source_excerpt_sha256": "90f1b6bc70ee4592d14153fc2d901df3e929d8f1638f7707a7fa0748a151f8af",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Theorem6_1_commonDomain",
+        "TauCeti.DavisKahan1970.Theorem6_1_commonCore",
+        "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
+        "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
+        "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
+        "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-6-appendix.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Theorem6_1_commonDomain",
+            "TauCeti.DavisKahan1970.Theorem6_1_commonCore",
+            "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
+            "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
+            "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
+            "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-6.3-lem",
+      "section": "6 appendix",
+      "title": "Finite-rank near-maximizer leakage estimate",
+      "source_kind": "lemma",
+      "source_anchor": "Lemma 6.3",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-6.3-lem",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2194,
+          2204
+        ]
+      ],
+      "source_excerpt_sha256": "715e416fd75ce6791ef252fc199779397ebb66f9474ff506d7ae2d2b6b498677",
+      "review_declarations": [
+        "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage",
+        "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_singularValue_leakage",
+        "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage_real"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-6.3-lem.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage",
+            "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_singularValue_leakage",
+            "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage_real"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-7-sin2-proof",
+      "section": "7",
+      "title": "Reflection proof of the sine double-angle theorem",
+      "source_kind": "proof_package",
+      "source_anchor": "Section 7, equations (7.1)–(7.5)",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-7-sin2-proof",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2263,
+          2352
+        ]
+      ],
+      "source_excerpt_sha256": "52d975254bf2edd6bf06bdb3b707e8d32d3d0ba2d8e30d1e257b34e59d0d7769",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.sinTwoTheta_mirrorDefect_eq_perturbationDefect",
+        "TauCeti.DavisKahan1970.sinTwoTheta_mirrorDefect_le_two_mul",
+        "TauCeti.DavisKahan1970.sinTwoTheta_reflectedOverlap_norm"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-7-sin2-proof.reflection",
+          "description": "Reflection/symmetric-perturbation identities (7.1)-(7.4), including the doubled-angle overlap representation.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.sinTwoTheta_mirrorDefect_eq_perturbationDefect",
+            "TauCeti.DavisKahan1970.sinTwoTheta_reflectedOverlap_norm"
+          ]
+        },
+        {
+          "id": "DK-7-sin2-proof.ambient",
+          "description": "Ambient estimate (7.5): delta ||sin 2 Theta|| <= ||H-XHX|| <= 2 ||H||.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.sinTwoTheta_mirrorDefect_le_two_mul",
+            "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative"
+          ]
+        },
+        {
+          "id": "DK-7-sin2-proof.directed",
+          "description": "Sharper directed residual conclusion: delta ||sin 2 Theta_0|| <= ||B|| <= ||R||, without the ambient factor two.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative"
+          ]
+        }
+      ],
+      "audit_warning": "The maintained modernized transcription records a factor-one directed residual step in Section 7, while the Section 2 theorem prints factor two and repository repair notes question the block normalization. Preserve the transcription in this register, but compare this passage against the original paper page image before deciding whether the factor-one line is an independent source obligation or a transcription/source defect."
+    },
+    {
+      "id": "DK-7-tan2-proof",
+      "section": "7",
+      "title": "Singular-vector proof of the tangent double-angle theorem",
+      "source_kind": "proof_package",
+      "source_anchor": "Section 7, equation (7.6) and following argument",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-7-tan2-proof",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2354,
+          2414
+        ]
+      ],
+      "source_excerpt_sha256": "a1c1d0ae88cf3ad76b63fe564b68e426cb2f6d0aeda61b4751598de187533786",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.tanTwoTheta_uiNorm",
+        "TauCeti.DavisKahan1970.tanTwoTheta_kyFan",
+        "TauCeti.DavisKahan1970.tanTwoTheta_sharp_opNorm",
+        "TauCeti.DavisKahan1970.tanTwoTheta_spectral_repulsion"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-7-tan2-proof.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.tanTwoTheta_uiNorm",
+            "TauCeti.DavisKahan1970.tanTwoTheta_kyFan",
+            "TauCeti.DavisKahan1970.tanTwoTheta_sharp_opNorm",
+            "TauCeti.DavisKahan1970.tanTwoTheta_spectral_repulsion"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-8.1-thm",
+      "section": "8",
+      "title": "Branch selection and spectral repulsion",
+      "source_kind": "theorem",
+      "source_anchor": "Theorem 8.1",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-8.1-thm",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2426,
+          2455
+        ]
+      ],
+      "source_excerpt_sha256": "dad2a4e3936fd9e312e170375c57ed7fb19f3a0bd54b3f811fec8da4f477679a",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSandwichApproximation_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSandwichApproximation_source"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-8.1-thm.branch",
+          "description": "Theta <= pi/4 iff the selected Lambda blocks lie on the prescribed sides of alpha, together with existence of a reducing projector Q having those properties.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn"
+          ]
+        },
+        {
+          "id": "DK-8.1-thm.i",
+          "description": "Part (i): operator compression/sandwich inequality for A_1-alpha and C_1(Lambda_1-alpha)C_1, and the analogous lower block.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source"
+          ]
+        },
+        {
+          "id": "DK-8.1-thm.ii",
+          "description": "Part (ii): finite-dimensional eigenvalue inequalities and their natural infinite-dimensional approximation-number extensions.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source"
+          ]
+        },
+        {
+          "id": "DK-8.1-thm.iii",
+          "description": "Part (iii): symmetric-gauge/weak-majorization inequalities with principal-cosine weights, plus the analogous lower-block relation.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_source",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_source"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-8.2-thm",
+      "section": "8",
+      "title": "Smallness selects the acute branch",
+      "source_kind": "theorem",
+      "source_anchor": "Theorem 8.2",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-8.2-thm",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2514,
+          2528
+        ]
+      ],
+      "source_excerpt_sha256": "bd514c221ed24a8644c82ed2f1af807064b2ed250c875bebffe88c2d6fa76b31",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-8.2-thm.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm",
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm",
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm",
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-9-model",
+      "section": "9",
+      "title": "Fourth-derivative Rayleigh–Ritz model",
+      "source_kind": "numerical_model",
+      "source_anchor": "Section 9, problem setup",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-9-model",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2562,
+          2625
+        ]
+      ],
+      "source_excerpt_sha256": "74832d3be5476a43a706c8866a795303c93d349c6094965d676b34545ffe1c41",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_source",
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_spectrum_source",
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_mode_source",
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteData_source",
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source",
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-9-model.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_source",
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_spectrum_source",
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_mode_source",
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteData_source",
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source",
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-9.1-9.4",
+      "section": "9",
+      "title": "Initial sine and sine-double-angle bounds",
+      "source_kind": "numerical_claims",
+      "source_anchor": "Equations (9.1)–(9.4)",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-9.1-9.4",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2627,
+          2643
+        ]
+      ],
+      "source_excerpt_sha256": "5a3c208371c79e6baf9a2b9af2b75d955fe9ab6b884da7b8400cb39329dcba03",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Section9.equation_9_1",
+        "TauCeti.DavisKahan1970.Section9.equation_9_2",
+        "TauCeti.DavisKahan1970.Section9.equation_9_3",
+        "TauCeti.DavisKahan1970.Section9.equation_9_4"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-9.1-9.4.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Section9.equation_9_1",
+            "TauCeti.DavisKahan1970.Section9.equation_9_2",
+            "TauCeti.DavisKahan1970.Section9.equation_9_3",
+            "TauCeti.DavisKahan1970.Section9.equation_9_4"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-9.5-9.7",
+      "section": "9",
+      "title": "Rayleigh–Ritz tangent refinements",
+      "source_kind": "numerical_claims",
+      "source_anchor": "Equations (9.5)–(9.7)",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-9.5-9.7",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2645,
+          2696
+        ]
+      ],
+      "source_excerpt_sha256": "c38f0b52a80497c632c09dda0635e326b35f0098cc1994a78a03e52673f53cc0",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Section9.equation_9_5_low",
+        "TauCeti.DavisKahan1970.Section9.equation_9_5_high",
+        "TauCeti.DavisKahan1970.Section9.equation_9_6",
+        "TauCeti.DavisKahan1970.Section9.equation_9_7"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-9.5-9.7.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Section9.equation_9_5_low",
+            "TauCeti.DavisKahan1970.Section9.equation_9_5_high",
+            "TauCeti.DavisKahan1970.Section9.equation_9_6",
+            "TauCeti.DavisKahan1970.Section9.equation_9_7"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-9.8",
+      "section": "9",
+      "title": "Comparison with Weinberger bounds",
+      "source_kind": "comparison_claim",
+      "source_anchor": "Equation (9.8)",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-9.8",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2698,
+          2751
+        ]
+      ],
+      "source_excerpt_sha256": "740fea893adc19c56bcdc1bda015e9d6f1eab315d2c720cabc92482566c3da0c",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Section9.equation_9_8_lower",
+        "TauCeti.DavisKahan1970.Section9.equation_9_8_upper"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-9.8.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Section9.equation_9_8_lower",
+            "TauCeti.DavisKahan1970.Section9.equation_9_8_upper"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-9-infinite-residual-counterexample",
+      "section": "9",
+      "title": "Residual-infinite limitation example",
+      "source_kind": "example",
+      "source_anchor": "Section 9, l2 example after (9.8)",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-9-infinite-residual-counterexample",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2753,
+          2771
+        ]
+      ],
+      "source_excerpt_sha256": "1c9a418ebfeb827fb472bf6229506bd73f5cb5a6077f98cb467f7255ef069cb3",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Section9.rawDiagonalImage_eq_one",
+        "TauCeti.DavisKahan1970.Section9.rawDiagonalImage_partial_energy",
+        "TauCeti.DavisKahan1970.Section9.truncatedDiagonalImage_energy",
+        "TauCeti.DavisKahan1970.Section9.diagonalOperator",
+        "TauCeti.DavisKahan1970.Section9.geometricTrial_notMem_diagonalDomain",
+        "TauCeti.DavisKahan1970.Section9.geometricTrial_form_summable"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-9-infinite-residual-counterexample.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Section9.rawDiagonalImage_eq_one",
+            "TauCeti.DavisKahan1970.Section9.rawDiagonalImage_partial_energy",
+            "TauCeti.DavisKahan1970.Section9.truncatedDiagonalImage_energy",
+            "TauCeti.DavisKahan1970.Section9.diagonalOperator",
+            "TauCeti.DavisKahan1970.Section9.geometricTrial_notMem_diagonalDomain",
+            "TauCeti.DavisKahan1970.Section9.geometricTrial_form_summable"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-9.9-9.11",
+      "section": "9",
+      "title": "Individual eigenvector identification inside a cluster",
+      "source_kind": "numerical_claims",
+      "source_anchor": "Equations (9.9)–(9.11) and final bounds",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-9.9-9.11",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2773,
+          2883
+        ]
+      ],
+      "source_excerpt_sha256": "b363c295b3d268f41be6cab25ddb80342b4b24e029cacb81b6d648a75df9f061",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Section9.block_eigenproblem_iff",
+        "TauCeti.DavisKahan1970.Section9.schur_complement_reduction",
+        "TauCeti.DavisKahan1970.Section9.individual_angle_le_exact_envelope",
+        "TauCeti.DavisKahan1970.Section9.final_lower_individual_angle_bound"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-9.9-9.11.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Section9.block_eigenproblem_iff",
+            "TauCeti.DavisKahan1970.Section9.schur_complement_reduction",
+            "TauCeti.DavisKahan1970.Section9.individual_angle_le_exact_envelope",
+            "TauCeti.DavisKahan1970.Section9.final_lower_individual_angle_bound"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-10.1",
+      "section": "10",
+      "title": "Sine bounds under arbitrary pairwise spectral distance",
+      "source_kind": "open_question",
+      "source_anchor": "Question 10.1",
+      "completion_obligation": false,
+      "expected_status": "resolved_by_modern_development",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "DK-10.1",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2887,
+          2888
+        ]
+      ],
+      "source_excerpt_sha256": "868b898f474a0d303a83f6f0232f91baebb2edc1bf016994ac1629615ec9d1fe",
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.Theorem6_2"
+      ],
+      "audit_clauses": [
+        {
+          "id": "DK-10.1.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Theorem6_2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DK-10.2",
+      "section": "10",
+      "title": "Three-way subspace decompositions",
+      "source_kind": "open_question",
+      "source_anchor": "Question 10.2",
+      "completion_obligation": false,
+      "expected_status": "not_a_completion_obligation",
+      "expected_verification": "not_applicable",
+      "tex_marker": "DK-10.2",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2890,
+          2903
+        ]
+      ],
+      "source_excerpt_sha256": "c8431b7396b6b7d629f0986f6ef0d71f011c957cf27023cffc47fae994844e1c",
+      "review_declarations": [],
+      "audit_clauses": [
+        {
+          "id": "DK-10.2.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": []
+        }
+      ]
+    },
+    {
+      "id": "DK-10.3",
+      "section": "10",
+      "title": "Joint eigenvalue–eigenvector bounds",
+      "source_kind": "open_question",
+      "source_anchor": "Question 10.3",
+      "completion_obligation": false,
+      "expected_status": "not_a_completion_obligation",
+      "expected_verification": "not_applicable",
+      "tex_marker": "DK-10.3",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2905,
+          2906
+        ]
+      ],
+      "source_excerpt_sha256": "3eef588dbf2a6d19dbb738db58853081f4ef70dbbe6223423b6f84cf8187bb33",
+      "review_declarations": [],
+      "audit_clauses": [
+        {
+          "id": "DK-10.3.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": []
+        }
+      ]
+    },
+    {
+      "id": "DK-10.4",
+      "section": "10",
+      "title": "Perturbation bounds for functional calculus",
+      "source_kind": "open_question",
+      "source_anchor": "Question 10.4",
+      "completion_obligation": false,
+      "expected_status": "not_a_completion_obligation",
+      "expected_verification": "not_applicable",
+      "tex_marker": "DK-10.4",
+      "source_line_ranges_in_modernized_transcription": [
+        [
+          2908,
+          2925
+        ]
+      ],
+      "source_excerpt_sha256": "4969fbdfdb8b7a27fd5a31e5918f89c9601862cbf2f8c2fd3d254dbdb3c3630b",
+      "review_declarations": [],
+      "audit_clauses": [
+        {
+          "id": "DK-10.4.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "review_declarations": []
+        }
+      ]
+    }
+  ]
+}

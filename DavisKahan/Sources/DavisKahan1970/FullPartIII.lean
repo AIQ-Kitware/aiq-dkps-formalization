@@ -265,8 +265,14 @@ alias banach_sylvester_lower_bound :=
   TauCeti.ContinuousLinearMap.norm_le_of_sylvester_of_leftInverse
 alias banach_sylvester_lower_bound_uiNorm :=
   TauCeti.ContinuousLinearMap.opNorm_le_of_sylvester_of_leftInverse
+/-- Source-facing bounded Theorem 5.1 with the paper's literal two-sided inverse hypothesis. -/
+alias banach_sylvester_lower_bound_exact :=
+  DavisKahan.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester_exact
 alias banach_sylvester_lower_bound_interchanged :=
   DavisKahan.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester_interchanged
+/-- Source-facing `A`/`B` interchange remark with a literal two-sided inverse of `B`. -/
+alias banach_sylvester_lower_bound_interchanged_exact :=
+  DavisKahan.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester_interchanged_exact
 alias banach_sylvester_lower_bound_unboundedA :=
   DavisKahan.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester_unboundedA
 

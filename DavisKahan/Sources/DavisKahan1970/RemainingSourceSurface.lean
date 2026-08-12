@@ -161,18 +161,13 @@ theorem comp_right_le_mul (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
 
 end CompatibleCrossOperatorNorm
 
-/-- Davis--Kahan 1970, Theorem 5.1 at Banach compatible-norm scope, under the
-corrected operator hypothesis.
+/-- Reusable Banach-space Sylvester lower bound from a bounded left inverse.
 
-The printed separation hypothesis `(gamma + delta) * ‖y‖ ≤ ‖A y‖` (i.e. `A`
-bounded below) is insufficient on a general Banach space: it gives injectivity
-and closed range but no bounded projection onto that range, hence no bounded left
-inverse, and the elementary quotient argument breaks.  The faithful reusable
-hypothesis is therefore an explicit bounded left inverse of `A` with reciprocal
-norm bound `(gamma + delta)⁻¹`.  On a Hilbert space the bounded-below separation
-supplies exactly this datum via the closed-range orthogonal projection (through
-`lowerFramePolarData`), so this statement specializes to the paper's Hilbert
-Theorem 5.1 there. -/
+Davis--Kahan Theorem 5.1 assumes a genuine bounded inverse `A⁻¹` with
+`‖A⁻¹‖ ≤ (gamma + delta)⁻¹`.  The proof uses only the left-inverse half of that
+datum, so this reusable theorem is intentionally stronger than the printed
+statement.  The source-facing theorem `theorem5_1_banach_sylvester_exact` below
+restores the literal two-sided inverse hypothesis for statement-level auditing. -/
 theorem theorem5_1_banach_sylvester
     (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
     (A : Y →L[ℂ] Y) (B : X →L[ℂ] X)
@@ -228,6 +223,28 @@ theorem theorem5_1_banach_sylvester
   nlinarith
 
 
+/-- **Davis--Kahan 1970, Theorem 5.1 with the printed inverse hypothesis.**
+
+The paper states `‖A⁻¹‖ ≤ (gamma + delta)⁻¹`.  This source-facing wrapper
+carries that literally as a bounded operator `Ainv` which is both a left and a
+right inverse of `A`.  The proof below only needs the left-inverse equation,
+which is why the reusable theorem `theorem5_1_banach_sylvester` is formulated
+with the weaker `BoundedLeftInverseData` hypothesis. -/
+theorem theorem5_1_banach_sylvester_exact
+    (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
+    (A Ainv : Y →L[ℂ] Y) (B : X →L[ℂ] X)
+    (T C : X →L[ℂ] Y) {gamma delta : ℝ}
+    (hgamma : 0 ≤ gamma) (hdelta : 0 < delta)
+    (hB : ‖B‖ ≤ gamma)
+    (hAinv_left : Ainv ∘L A = ContinuousLinearMap.id ℂ Y)
+    (_hAinv_right : A ∘L Ainv = ContinuousLinearMap.id ℂ Y)
+    (hAinv_norm : ‖Ainv‖ ≤ (gamma + delta)⁻¹)
+    (hEq : A ∘L T - T ∘L B = C) :
+    delta * N T ≤ N C := by
+  exact theorem5_1_banach_sylvester N A B T C hgamma hdelta hB
+    ⟨Ainv, hAinv_left, hAinv_norm⟩ hEq
+
+
 /-- **Davis--Kahan 1970, Theorem 5.1 with the roles of `A` and `B`
 interchanged.**
 
@@ -248,6 +265,26 @@ theorem theorem5_1_banach_sylvester_interchanged
     (fun L S => N.comp_left_le_mul L S)
     (fun S R => N.comp_right_le_mul S R)
     N.nonneg hright.comp_eq_id hgamma hdelta hright.norm_le hA hEq
+
+
+/-- **The printed `A`/`B` interchange remark with a literal inverse of `B`.**
+
+This is the symmetric source wrapper: `A` is bounded by `gamma`, while `Binv`
+is a genuine bounded two-sided inverse of `B` with norm at most
+`(gamma + delta)⁻¹`. -/
+theorem theorem5_1_banach_sylvester_interchanged_exact
+    (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
+    (A : Y →L[ℂ] Y) (B Binv : X →L[ℂ] X)
+    (T C : X →L[ℂ] Y) {gamma delta : ℝ}
+    (hgamma : 0 ≤ gamma) (hdelta : 0 < delta)
+    (hA : ‖A‖ ≤ gamma)
+    (_hBinv_left : Binv ∘L B = ContinuousLinearMap.id ℂ X)
+    (hBinv_right : B ∘L Binv = ContinuousLinearMap.id ℂ X)
+    (hBinv_norm : ‖Binv‖ ≤ (gamma + delta)⁻¹)
+    (hEq : A ∘L T - T ∘L B = C) :
+    delta * N T ≤ N C := by
+  exact theorem5_1_banach_sylvester_interchanged N A B T C hgamma hdelta hA
+    ⟨Binv, hBinv_right, hBinv_norm⟩ hEq
 
 /-- **Davis--Kahan 1970, Theorem 5.1 with an unbounded left block.**
 
