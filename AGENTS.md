@@ -189,8 +189,9 @@ difference to hide behind a forwarding facade.
 
 Temporary adapters may keep intermediate commits buildable, but completion of
 the migration includes removing them. Namespace aliases and forwarding
-re-exports are not the final architecture. The narrow `MathAhead` re-export
-used after scratch promotion is the explicit staging exception described below.
+re-exports are not the final architecture. `Experimental/**`, `MathAhead/**`,
+and diagnostic `Audits/**` modules remain outside `DavisKahan.All`; production
+code never imports them.
 
 Planning inventories under `dev/tauceti/` record earlier campaigns and may be
 useful evidence, but the current source tree and pinned Mathlib/Tau Ceti APIs are
@@ -338,6 +339,10 @@ Accordingly:
   the source norm scope, the direct-rotation and spectral-selection theory,
   the unbounded passages, sharpness/equality content, and a fresh build and
   trusted-dependency audit.
+- Keep print-heavy Lean audit modules out of ordinary aggregate imports.
+  `lake build DavisKahan.All` is the mathematical/source-facing build and should
+  keep elaboration diagnostics focused. Run `lake build DavisKahan.Audits.All`
+  explicitly for theorem-surface `#check` output and dependency printouts.
 
 The finite branch may intentionally retain proofs with fewer foundational
 requirements, explicit coordinates, or simpler dependencies. Such results are
@@ -387,9 +392,9 @@ for the maintained scope ledger and completion standard.
     `omit [NormedAddCommGroup E] [CompleteSpace E] in`. Named (non-instance)
     variables use the bare name: `omit 𝕜 in`.
 
-  This is a warning, not an error. Do not restructure a working `variable` block
-  to chase it, and do not add `set_option linter.unusedSectionVars false`; add
-  the one-line `omit`, or leave the warning if the declaration is in flux.
+  Treat this warning as cleanup debt in production files touched by the current
+  change. Do not add `set_option linter.unusedSectionVars false`; use the
+  one-line `omit` or narrow the declaration's variables so the warning is gone.
 
 
 ## Scratch overlays are proof sketches to be promoted, not fixed in place
@@ -420,13 +425,19 @@ The task is to **promote** the sketch:
    trivializes the conclusion; correct the statement to match the paper before
    grounding it (retain the paper's hypotheses even if the Lean proof does not
    consume all of them, for source correspondence).
-5. After promotion, slim the staging module (`MathAhead/**`) to a thin
-   re-export of the promoted names so there is a single source of truth, and
-   record the promotion in the overlay manifest.
+5. After promotion, leave the staging module as scratch-only source or delete it
+   when it no longer carries useful history. A declaration used by a
+   source-facing theorem or counted by the source census has its canonical owner
+   outside `Experimental`, `MathAhead`, and `HiddenFoundations` staging paths.
+   Production consumers import only that canonical owner.
 
-Scratch directories are excluded from the default `DavisKahan.All` build. Do not
-wire them into it, and do not treat a non-building scratch overlay as a
-regression.
+`DavisKahan.All` contains production mathematics only. Directories named
+`Experimental`, `MathAhead`, and `Audits` are excluded from generated production
+aggregates. Run `lake build DavisKahan.Audits.All` explicitly for diagnostics.
+A production import of a staging or audit module is an architecture error.
+Production declarations also do not live under a `Scratch` namespace; once a proof
+is admitted to the production tree, give it the stable namespace matching its
+canonical module.
 
 ## Comparator challenge rule
 
@@ -484,3 +495,5 @@ Before changing the single-angle API, read
 `DavisKahan/Experimental/InfiniteDimensional/SinTheta/README.md`. The canonical
 target is the domain-aware unbounded theorem; bounded and finite results are
 specializations or alternative proofs.
+
+Production theorem names use stable namespaces. Promoted declarations leave `Experimental`, `MathAhead`, and `HiddenFoundations` namespaces when they enter the production API.
