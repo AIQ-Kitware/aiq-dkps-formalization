@@ -17,7 +17,7 @@ This audit separates three independent axes:
 
 The 49 rows are organizational groups and the 266 atoms are a source-fidelity inventory. The 100% completion denominator is the separate 29-result inventory. The broader row/atom findings below remain useful adversarial evidence, but only defects in the exact statement or scope of one of those 29 results block the formalization claim.
 
-Current explicit completion obligations: **46**. Hostile-certified terminal passages: **14** (13 exact + 1 refuted). Reopened obligations: **32**.
+Current maintained result denominator: **29**. Exact printed-result boundary reviews: **29/29 accepted**. Current result-level semantic terminality: **10/29**; the remaining **19** are the mathematics/review queue. The old 46-row/32-reopened counts below are retained only as historical evidence from the broader pre-pivot hostile audit and are not the current completion metric.
 
 ### Agent 3 source-denominator update
 
@@ -27,13 +27,38 @@ This re-audit also repaired the five source-specification defects identified by 
 
 Question 10.4 remains faithfully inventoried, but it is **not** a completion obligation under the final policy: Section 10 is open-question material. Its preceding established identities may be retained and even formalized, but they do not enlarge the result denominator unless they are part of one of the 29 designated results.
 
-## Passages currently accepted by the hostile audit
+### Census tooling closure
+
+The result-selection boundary is now itself audited and machine-checked. All 266
+fidelity atoms have a specific inclusion/exclusion reason and exact reverse links
+to any counted result they support. All 29 counted results have accepted boundary
+reviews that partition their primary source block into printed-statement atoms and
+adjacent non-result material, with cross-block scope atoms identified explicitly.
+The generated independent-audit packet exposes the complete 266-atom exclusion
+table to the reviewer.
+
+Accordingly, **the census/tooling campaign is closed** unless a fresh source audit
+finds an omitted result or the human explicitly changes the claim boundary. The
+active completion queue is the 29-result inventory, not the broad row list below.
+Future work should resolve exact source-to-Lean semantics for its nonterminal
+results rather than add more census machinery.
+
+## Historical broad hostile-audit findings
+
+The remainder of this document records the intentionally broader hostile pass that
+preceded the result-denominator pivot. It remains useful as adversarial source
+fidelity and implementation advice, but statements below that call proof equations,
+examples, Section 9 calculations, or Section 10 material "obligations" are
+**historical terminology and are not the current 100% task list**. Consult
+`dev/davis-kahan-1970-formalization-result-inventory.md` for the maintained queue.
+
+## Passages accepted by the historical broad audit
 
 `S2-sin-theta`, `S2-sin-two-theta`, `S2-tan-two-theta`, `DK-3.2-def`, `DK-3.1-thm`, `DK-3.1-cor`, `DK-3.2-cor`, `DK-4.1-cor`, `DK-4.4-prop`, `DK-5.1-lem`, `DK-6.1-lem`, `DK-6.2-lem`, `DK-6.1-thm`, `DK-6.3-lem`.
 
 Acceptance here means only that this hostile pass found no concrete semantic hole in the registered passage. It is not permanent: any change to the public source specification or source-facing theorem surface should trigger re-audit.
 
-## Reopened obligations
+## Historically reopened rows
 
 | ID | Source status | Verification | Hostile certification | Known hole(s) |
 | --- | --- | --- | --- | --- |
@@ -72,7 +97,7 @@ Acceptance here means only that this hostile pass found no concrete semantic hol
 
 ## Severity buckets
 
-### Source-specification fidelity repairs completed by the source-inventory pass
+### Historical source-specification fidelity findings
 
 The concrete source-spec defects found by the hostile review are repaired in the distributable TeX: the cosine law after (1.14), equations (3.7), (4.1), and (4.2), the strict Section 9 eigenvalue ordering, and the asymptotic preceding (9.8). The source-side denominator is now recorded atomically in `dev/davis-kahan-1970-source-atom-inventory.json`.
 

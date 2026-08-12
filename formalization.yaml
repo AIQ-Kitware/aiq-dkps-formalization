@@ -165,10 +165,15 @@ review:
     remain distinct from those checks. For Davis--Kahan 1970, run
     `python3 scripts/certify_davis_kahan_1970.py --clean` to generate a self-contained
     compiler-evidence bundle and source-order audit packet. The 49 rows are organizational
-    groups; semantic completion is judged against their atomic source claims. No private transcription
-    is a certificate input. Add `--require-terminal` only when requesting the hard 100%
-    gate: every explicit completion obligation must have terminal source status,
-    `proved_in_build` verification, and hostile semantic certification `accepted`.
+    groups and the 266 atoms are an exhaustive source-fidelity/disclosure surface; neither is
+    the formalization denominator. Every fidelity atom has an explicit boundary reason and
+    reverse link to any counted result it supports, and all 29 counted results have accepted
+    printed-statement boundary reviews. No private transcription is a certificate input. Add
+    `--require-terminal` only when requesting the hard 100% gate: every one of the 29 results
+    Davis--Kahan actually establish must have exact/refuted source-facing evidence,
+    `proved_in_build` verification, hostile semantic certification `accepted`, and any required
+    refutation repair. Section 10, deferred/unproved claims, proof details, examples, and
+    historical material remain visible fidelity records but are not completion obligations.
     Current integration policy targets Tau Ceti.
 
 alignment:

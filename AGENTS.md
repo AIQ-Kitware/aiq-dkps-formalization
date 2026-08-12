@@ -339,6 +339,32 @@ completion denominator.
   did not lose source mathematics; the 29-result inventory answers whether the
   paper is 100% formalized under this project's definition.
 
+### Census boundary accounting is explicit and frozen
+
+The census tooling is intended to expose the project's claim boundary to a hostile
+reviewer, not to manufacture additional proof debt. Every source-fidelity atom must
+therefore carry all three of the following: an explicit formalization role, a
+specific boundary-reason code/rationale, and an exact reverse link to every counted
+result it supports (or an empty result link when it is deliberately outside the
+29-result denominator). Generic unexplained `non_result` classifications are not
+acceptable.
+
+Each of the 29 counted results must also carry an accepted `boundary_review` that
+partitions its primary source block into (a) atoms belonging to the printed result
+statement and (b) adjacent setup, proof, example, consequence, extension, or remark
+material that does not belong to that statement. Cross-block source-scope atoms must
+be linked explicitly. This makes exclusions visible and challengeable: a reviewer
+can disagree with a boundary decision, but cannot expose an assertion that the
+repository silently ignored.
+
+The maintained hard gate must fail stale if the distributable TeX, fidelity
+inventory, 29-result selection, or any accepted boundary review changes. Do not add
+new completion obligations merely because an atom is mathematical. Conversely, do
+not remove or reclassify one of the 29 counted results without a fresh original-paper
+result-selection audit and explicit human approval. With this accounting in place,
+future Davis--Kahan completion work should focus on exact source-to-Lean semantics
+for the remaining nonterminal counted results rather than expanding census tooling.
+
 The checked-in distributable source specification fixes the ambient scope:
 
 - the paper works on a separable Hilbert space;

@@ -5,20 +5,22 @@ This checker deliberately separates two different questions:
 
 * source fidelity: did the distributable TeX preserve the mathematical content
   of the paper?  The fine-grained source-atom inventory answers that question.
-* formalization completion: did Lean exactly represent every *stated result*
-  (theorem/proposition/lemma/corollary, the four Section 2 headline theorems,
-  and any other standalone theorem-like result)?  This result inventory is the
-  only denominator for the project's "100% formalized" claim.
+* formalization completion: did Lean exactly represent every result that
+  Davis--Kahan actually establish in this paper (the named
+  theorem/proposition/lemma/corollary environments plus the four Section 2
+  headline theorems)?  This result inventory is the only denominator for the
+  project's "100% formalized" claim.
 
 Intermediate proof identities, proof equations, derivations, historical remarks,
 and numerical working may be source-fidelity atoms without becoming Lean proof
 obligations.
 
-The script is migration-friendly: before Agent 3's compact result inventory is
-checked in, ordinary validation succeeds with an explicit NOTE while
-`--require-terminal` fails closed.  Once the inventory exists, terminality is
-computed only from its result entries, never from the fine-grained source atoms
-or the 49 organizational statement-map rows.
+The compact result inventory is now the maintained completion contract.
+Terminality is computed only from its 29 result entries, never from the
+fine-grained source atoms or the 49 organizational statement-map rows.  The
+source atoms remain a total reviewer-facing accounting surface: each one must
+say which counted result it supports, or why it is intentionally outside the
+completion denominator.
 """
 from __future__ import annotations
 
@@ -43,11 +45,10 @@ TERMINAL_RESULT_DISPOSITIONS = {
     "compiled_exact",
     "refuted_as_transcribed",
 }
-OPEN_RESULT_DISPOSITIONS = {"source_open_question", "open_question"}
 TERMINAL_VERIFICATIONS = {"proved_in_build"}
 TERMINAL_SEMANTIC_CERTIFICATIONS = {"accepted"}
 TERMINAL_REPAIR_STATUSES = {"proved", "documented_no_satisfactory_repair"}
-OPEN_KINDS = {"open_question"}
+COUNTED_RESULT_KINDS = {"unnumbered_theorem", "theorem", "proposition", "lemma", "corollary"}
 RESULT_SUPPORT_ROLES = {
     "result", "stated_result", "result_support", "result_hypothesis", "result_scope"
 }
@@ -55,6 +56,32 @@ NON_RESULT_ROLES = {
     "definition", "definition_only", "proof_only", "intermediate_proof",
     "derivation", "derivation_only", "historical", "historical_comment",
     "numerical_working", "expository", "open_question", "non_result",
+}
+BOUNDARY_REASON_CODES = {
+    "counted_result_statement",
+    "counted_result_hypothesis",
+    "counted_result_scope",
+    "definition_not_result",
+    "proof_or_derivation_not_result",
+    "introductory_background_not_designated_result",
+    "section_setup_not_result",
+    "expository_commentary_not_result",
+    "sharpness_commentary_not_designated_result",
+    "pre_result_setup_not_in_printed_statement",
+    "proof_detail_not_in_printed_statement",
+    "post_result_consequence_not_in_printed_statement",
+    "post_result_scope_remark_not_in_printed_statement",
+    "remark_or_example_not_result",
+    "background_theory_not_designated_result",
+    "restatement_of_counted_result",
+    "pre_result_motivation_not_result",
+    "post_result_interpretation_not_result",
+    "section9_worked_example_not_result",
+    "external_result_not_dk_result",
+    "historical_knowledge_state",
+    "deferred_unproved_claim",
+    "open_question",
+    "section10_motivation_not_result",
 }
 
 
@@ -229,7 +256,6 @@ def _validate_total_source_classification(
     data: dict[str, Any],
     source_atoms: dict[str, dict[str, Any]],
     obligation_atom_ids: set[str],
-    open_question_atom_ids: set[str],
     *,
     require_terminal: bool,
 ) -> tuple[bool, str | None]:
@@ -256,17 +282,103 @@ def _validate_total_source_classification(
                     f"{atom_id}: selected by a formalization obligation but classified as non-result role {role!r}"
                 )
             continue
-        if atom_id in open_question_atom_ids:
-            if role not in RESULT_SUPPORT_ROLES | {"open_question"}:
-                fail(
-                    f"{atom_id}: selected by an open-question record but has incompatible role {role!r}"
-                )
-            continue
         if role not in NON_RESULT_ROLES:
             fail(
                 f"{atom_id}: classified as result-support role {role!r} but no formalization result selects it"
             )
     return True, None
+
+
+def _validate_boundary_accounting(
+    source_atoms: dict[str, dict[str, Any]],
+    items: list[dict[str, Any]],
+) -> None:
+    """Check the explicit reviewer-facing boundary between fidelity and completion.
+
+    The fine-grained source inventory is intentionally larger than the 29-result
+    denominator.  This check makes that limitation visible rather than implicit:
+    every source atom has a specific reason code, every result-support atom names
+    the result(s) it supports, and every counted result partitions its primary
+    source block into statement atoms versus adjacent fidelity-only material.
+    """
+    expected_links: dict[str, list[str]] = {atom_id: [] for atom_id in source_atoms}
+    for item in items:
+        result_id = item["id"]
+        for atom_id in _source_atom_ids(item):
+            expected_links[atom_id].append(result_id)
+
+    role_to_reason = {
+        "result": "counted_result_statement",
+        "stated_result": "counted_result_statement",
+        "result_support": "counted_result_statement",
+        "result_hypothesis": "counted_result_hypothesis",
+        "result_scope": "counted_result_scope",
+    }
+    for atom_id, atom in source_atoms.items():
+        role = _first(atom, ("formalization_role", "formalization_result_role", "completion_role"))
+        reason_code = atom.get("formalization_role_reason_code")
+        reason = atom.get("formalization_role_reason")
+        result_ids = atom.get("formalization_result_ids")
+        if reason_code not in BOUNDARY_REASON_CODES:
+            fail(f"{atom_id}: missing/unsupported formalization_role_reason_code {reason_code!r}")
+        if not isinstance(reason, str) or not reason.strip():
+            fail(f"{atom_id}: formalization_role_reason must explain the inclusion/exclusion decision")
+        if not isinstance(result_ids, list) or not all(isinstance(x, str) for x in result_ids):
+            fail(f"{atom_id}: formalization_result_ids must be a list of result ids")
+        if result_ids != expected_links[atom_id]:
+            fail(
+                f"{atom_id}: formalization_result_ids disagree with the compact result inventory; "
+                f"expected {expected_links[atom_id]!r}, got {result_ids!r}"
+            )
+        if role in RESULT_SUPPORT_ROLES:
+            expected_reason = role_to_reason[role]
+            if reason_code != expected_reason:
+                fail(
+                    f"{atom_id}: result-support role {role!r} must use reason code {expected_reason!r}, "
+                    f"got {reason_code!r}"
+                )
+            if not result_ids:
+                fail(f"{atom_id}: result-support atom is linked to no counted result")
+        else:
+            if result_ids:
+                fail(f"{atom_id}: fidelity-only atom unexpectedly supports counted results {result_ids!r}")
+            if reason_code.startswith("counted_result_"):
+                fail(f"{atom_id}: fidelity-only role {role!r} uses counted-result reason {reason_code!r}")
+
+    atoms_by_parent: dict[str, list[str]] = {}
+    for atom_id, atom in source_atoms.items():
+        atoms_by_parent.setdefault(atom.get("parent_claim_id"), []).append(atom_id)
+
+    for item in items:
+        result_id = item["id"]
+        boundary = item.get("boundary_review")
+        if not isinstance(boundary, dict) or boundary.get("status") != "accepted":
+            fail(f"{result_id}: missing accepted boundary_review")
+        if boundary.get("primary_source_block") != result_id:
+            fail(
+                f"{result_id}: boundary_review.primary_source_block must be the result's source block {result_id!r}"
+            )
+        selected = _source_atom_ids(item)
+        same_block = atoms_by_parent.get(result_id, [])
+        expected_included = [atom_id for atom_id in same_block if atom_id in selected]
+        expected_excluded = [atom_id for atom_id in same_block if atom_id not in selected]
+        expected_cross = [atom_id for atom_id in selected if atom_id not in same_block]
+        for key, expected in (
+            ("included_same_block_atom_ids", expected_included),
+            ("excluded_same_block_atom_ids", expected_excluded),
+            ("cross_block_scope_atom_ids", expected_cross),
+        ):
+            value = boundary.get(key)
+            if value != expected:
+                fail(f"{result_id}: boundary_review.{key} must be {expected!r}, got {value!r}")
+        for atom_id in expected_excluded:
+            atom = source_atoms[atom_id]
+            if atom.get("formalization_role") in RESULT_SUPPORT_ROLES:
+                fail(f"{result_id}: excluded same-block atom {atom_id} is still classified as result support")
+        for key in ("method", "note"):
+            value = boundary.get(key)
+            if not isinstance(value, str) or not value.strip():
+                fail(f"{result_id}: boundary_review.{key} must explain the boundary audit")
 
 def _repair_terminal(item: dict[str, Any], census_declarations: set[str]) -> tuple[bool, str | None]:
     repair = item.get("repair")
@@ -310,11 +422,14 @@ def _validate_selection_review(
         return False, message
 
     policy = review.get("policy", review.get("completion_policy"))
-    if policy not in {"stated_results_only", "stated-results-only"}:
+    if policy != "dk_established_results_only":
         fail(
-            "accepted source-selection review must use policy='stated_results_only'; "
-            "proof equations and intermediate mathematical facts are source-fidelity material, not completion obligations"
+            "accepted source-selection review must use policy='dk_established_results_only'; "
+            "the denominator is only results Davis--Kahan actually establish in this paper, while proof equations, "
+            "examples, open/deferred claims, and other source mathematics remain source-fidelity material"
         )
+    if review.get("boundary_review_status") != "accepted":
+        fail("accepted source-selection review must record boundary_review_status='accepted'")
 
     expected_source_hash = review.get("source_fidelity_inventory_sha256")
     actual_source_hash = sha256_file(source_inventory_path)
@@ -381,12 +496,20 @@ def completion_summary(
 
     census_declarations = _registered_census_declarations()
     items = _result_items(data)
+    if data.get("result_count") != len(items):
+        fail(
+            f"formalization-result inventory result_count={data.get('result_count')!r} "
+            f"but contains {len(items)} results"
+        )
+    if len(items) != 29:
+        fail(
+            f"current DK1970 established-result denominator must contain 29 results, got {len(items)}; "
+            "change this only after a fresh original-paper result-selection audit"
+        )
     seen: set[str] = set()
     obligation_source_atoms: set[str] = set()
-    open_question_source_atoms: set[str] = set()
     obligations = 0
     terminal = 0
-    open_questions = 0
     nonterminal: list[dict[str, Any]] = []
 
     for item in items:
@@ -413,8 +536,8 @@ def completion_summary(
                 )
 
         kind = _result_kind(item)
-        if not isinstance(kind, str) or not kind:
-            fail(f"{result_id}: missing result_kind/source_kind")
+        if kind not in COUNTED_RESULT_KINDS:
+            fail(f"{result_id}: unsupported counted result_kind/source_kind {kind!r}")
         obligation = item.get("completion_obligation")
         if not isinstance(obligation, bool):
             fail(f"{result_id}: completion_obligation must be an explicit boolean")
@@ -424,18 +547,10 @@ def completion_summary(
         declarations = _declarations(item)
 
         if not obligation:
-            if kind not in OPEN_KINDS:
-                fail(
-                    f"{result_id}: only an explicit open_question may be excluded from the formalization denominator; "
-                    f"result_kind={kind!r}"
-                )
-            if disposition not in OPEN_RESULT_DISPOSITIONS:
-                fail(f"{result_id}: open question must have an open-question disposition")
-            if declarations:
-                fail(f"{result_id}: open question must not use proof declarations to manufacture completion")
-            open_question_source_atoms.update(source_ids)
-            open_questions += 1
-            continue
+            fail(
+                f"{result_id}: the compact formalization-result inventory contains only counted results; "
+                "open questions and other exclusions belong in the source-fidelity inventory"
+            )
 
         obligation_source_atoms.update(source_ids)
         obligations += 1
@@ -469,9 +584,9 @@ def completion_summary(
         else:
             terminal += 1
 
+    _validate_boundary_accounting(source_atoms, items)
     classification_complete, classification_note = _validate_total_source_classification(
-        data, source_atoms, obligation_source_atoms, open_question_source_atoms,
-        require_terminal=require_terminal
+        data, source_atoms, obligation_source_atoms, require_terminal=require_terminal
     )
     source_coverage_terminal = (
         selection_review_accepted and classification_complete and terminal == obligations
@@ -501,7 +616,6 @@ def completion_summary(
         "result_count": len(items),
         "completion_obligations": obligations,
         "terminal_completion_obligations": terminal,
-        "open_questions": open_questions,
         "source_coverage_terminal": source_coverage_terminal,
         "nonterminal_results": nonterminal,
     }
@@ -531,7 +645,7 @@ def main() -> int:
     print(
         "Davis--Kahan formalization-result inventory: CLEAN "
         f"({summary['terminal_completion_obligations']}/{summary['completion_obligations']} stated-result "
-        f"obligations terminal; {summary['open_questions']} open questions; "
+        "obligations terminal; "
         f"selection review accepted={summary['selection_review_accepted']}; "
         f"source classification complete={summary['source_classification_complete']})"
     )
