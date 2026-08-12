@@ -14,8 +14,9 @@ for (2).
 Recommended compiler-evidence run:
     python3 scripts/certify_davis_kahan_1970.py --clean
 
-Once every completion obligation is independently believed terminal, add
-`--require-terminal` to make a nonterminal census row fail the certificate gate.
+Once every completion obligation has passed hostile semantic review, add
+`--require-terminal` to require terminal source status, compiler verification, and
+`completion_certification = accepted` for every registered obligation.
 
 `--clean` removes only this repository's `.lake/build`; dependency caches remain
 intact. `--clean-tauceti` additionally removes `external/TauCeti/.lake/build`.
@@ -297,19 +298,24 @@ def snapshot_inputs(outdir: pathlib.Path) -> dict[str, str]:
 
 
 def census_completion_summary() -> dict:
-    data = json.loads(CENSUS_PATH.read_text(encoding="utf-8"))
-    items = data["items"]
-    completion = [item for item in items if item.get("section") != "10"]
+    census = json.loads(CENSUS_PATH.read_text(encoding="utf-8"))
+    statement_map = json.loads(MAP_PATH.read_text(encoding="utf-8"))
+    by_id = {item["id"]: item for item in census["items"]}
+    obligations = [item for item in statement_map["items"] if bool(item.get("completion_obligation"))]
+    completion = [by_id[item["id"]] for item in obligations]
     terminal = [
         item for item in completion
         if item.get("verification") == "proved_in_build"
         and item.get("status") in {"compiled_exact", "refuted_as_transcribed"}
+        and item.get("completion_certification") == "accepted"
     ]
     nonterminal = [
         {
             "id": item.get("id"),
             "status": item.get("status"),
             "verification": item.get("verification"),
+            "completion_certification": item.get("completion_certification"),
+            "completion_holes": item.get("completion_holes", []),
             "scope_gap": item.get("scope_gap"),
             "blocked_by": item.get("blocked_by", []),
         }
@@ -328,7 +334,7 @@ def write_bundle_readme(outdir: pathlib.Path, certificate: dict) -> None:
 
 Overall compiler-certificate status: **{certificate.get('overall_status', 'unknown')}**
 
-Tracked source-coverage terminality: **{certificate.get('source_coverage', {}).get('source_coverage_terminal', 'unknown')}** ({certificate.get('source_coverage', {}).get('terminal_completion_obligations', '?')}/{certificate.get('source_coverage', {}).get('completion_obligations', '?')} completion obligations currently terminal in the census).
+Hostile-certified source-coverage terminality: **{certificate.get('source_coverage', {}).get('source_coverage_terminal', 'unknown')}** ({certificate.get('source_coverage', {}).get('terminal_completion_obligations', '?')}/{certificate.get('source_coverage', {}).get('completion_obligations', '?')} completion obligations currently terminal on all three axes (source status, compiler verification, hostile semantic certification)).
 
 This bundle certifies compilation/name-resolution evidence only. It does not certify semantic equivalence between the paper and the Lean theorem types. Use `statement-audit.md` with the independent audit prompt snapshot under `inputs/` for that review.
 
@@ -350,7 +356,7 @@ sha256sum -c SHA256SUMS
 
 `DavisKahan1970_part_III.tex` is both the readable transformative reconstruction and the mechanical statement-level semantic baseline. The certificate does not require or snapshot a private transcription.
 
-For a final 100% audit, require `clean_root_build: true`, `source_tree_stable_during_certificate: true`, zero unresolved registered signatures, a successful `DavisKahan.All` build, `source_coverage.source_coverage_terminal: true`, and then independently audit the mathematical statements row by row. Running the certificate with `--require-terminal` makes the maintained census terminality a hard gate; it still does not replace semantic review.
+For a final 100% audit, require `clean_root_build: true`, `source_tree_stable_during_certificate: true`, zero unresolved registered signatures, a successful `DavisKahan.All` build, and `source_coverage.source_coverage_terminal: true`. The latter now requires every explicit statement-map completion obligation to have terminal source status, `proved_in_build` verification, and hostile semantic certification `accepted`. Running with `--require-terminal` makes those three axes a hard gate.
 """
     (outdir / "README.md").write_text(text, encoding="utf-8")
 
@@ -404,7 +410,7 @@ def main() -> int:
     parser.add_argument(
         "--require-terminal",
         action="store_true",
-        help="also require every non-Section-10 completion obligation to be compiled_exact or refuted_as_transcribed with proved_in_build verification",
+        help="also require every explicit statement-map completion obligation to have terminal source status, proved_in_build verification, and hostile semantic certification=accepted",
     )
     args = parser.parse_args()
 

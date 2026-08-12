@@ -11,6 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 JSON_PATH = ROOT / "dev/davis-kahan-1970-full-source-census.json"
+MAP_PATH = ROOT / "dev/davis-kahan-1970-statement-map.json"
 
 REQUIRED_IDS = {
     "S1-block-residual", "S1-ui-norms",
@@ -43,6 +44,9 @@ def main() -> int:
     if not isinstance(items, list) or not items:
         fail("items must be a nonempty list")
     statuses = set(data.get("status_definitions", {}))
+    certifications = set(data.get("completion_certification_definitions", {}))
+    if not certifications:
+        fail("completion_certification_definitions must be nonempty")
     ids: set[str] = set()
     for item in items:
         item_id = item.get("id")
@@ -53,6 +57,18 @@ def main() -> int:
             fail(f"invalid section for {item_id}: {item.get('section')!r}")
         if item.get("status") not in statuses:
             fail(f"invalid status for {item_id}: {item.get('status')!r}")
+        if item.get("completion_certification") not in certifications:
+            fail(f"invalid completion_certification for {item_id}: {item.get('completion_certification')!r}")
+        holes = item.get("completion_holes")
+        if not isinstance(holes, list):
+            fail(f"{item_id} must carry a completion_holes list")
+        for hole in holes:
+            if not isinstance(hole, dict) or not isinstance(hole.get("kind"), str) or not hole.get("kind"):
+                fail(f"{item_id} has malformed completion_hole kind")
+            if not isinstance(hole.get("detail"), str) or not hole.get("detail").strip():
+                fail(f"{item_id} has malformed completion_hole detail")
+        if item.get("completion_certification") == "accepted" and holes:
+            fail(f"{item_id} is hostile-certified accepted but still records completion_holes")
         for key in ("source_kind", "source_anchor", "title", "summary", "notes", "next_action"):
             if not isinstance(item.get(key), str) or not item[key].strip():
                 fail(f"{item_id} has empty {key}")
@@ -202,6 +218,29 @@ def main() -> int:
     )
     if unproved:
         print("  not proved: " + ", ".join(unproved))
+
+    statement_map = json.loads(MAP_PATH.read_text())
+    obligation_ids = {
+        item["id"] for item in statement_map.get("items", [])
+        if item.get("completion_obligation") is True
+    }
+    by_id = {item["id"]: item for item in items}
+    certified = [
+        by_id[item_id] for item_id in obligation_ids
+        if by_id[item_id].get("completion_certification") == "accepted"
+        and by_id[item_id].get("status") in {"compiled_exact", "refuted_as_transcribed"}
+        and by_id[item_id].get("verification") == "proved_in_build"
+    ]
+    reopened = sorted(
+        item_id for item_id in obligation_ids
+        if by_id[item_id] not in certified
+    )
+    print(
+        f"  hostile semantic completion: {len(certified)}/{len(obligation_ids)} explicit obligations accepted; "
+        f"{len(reopened)} reopened"
+    )
+    if reopened:
+        print("  reopened semantic obligations: " + ", ".join(reopened))
     return 0
 
 

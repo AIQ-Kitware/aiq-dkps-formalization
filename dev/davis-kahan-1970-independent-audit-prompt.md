@@ -103,6 +103,8 @@ Use exactly one verdict per row:
 
 Do not upgrade an `UNCERTAIN` row merely because nearby infrastructure strongly suggests the intended theorem is true.
 
+The maintained census now has a third axis, `completion_certification`. Treat it as a prior hostile-review judgement to challenge, not as evidence. A row contributes to the repository's 100% claim only when it is an explicit statement-map completion obligation, has terminal source status, is compiler-verified, and its full registered passage is independently accepted. Generic `.whole` clauses are not sufficient when a passage contains separable mathematical assertions; split and audit those clauses explicitly.
+
 ## High-risk rows and context traps
 
 Give extra attention to the following known historical failure modes. These are hints about what to inspect, not instructions about what verdict to reach.
@@ -154,7 +156,7 @@ This was the last major source-fidelity frontier, so inspect it especially caref
 
 ### Section 10
 
-Review the four questions for faithful documentation, but do not count unanswered source questions as formalization failures. Question 10.1 may have a modern partial resolution; distinguish that from claiming the original general question was solved in the 1970 paper.
+Do not infer completion-obligation status from the section number. Pure unanswered source questions are documentation obligations, not theorem proof failures, and Question 10.1 may have only a modern partial/norm-specific resolution. However, **Question 10.4 is a mixed block**: before posing the general functional-calculus question the paper states model-case identities `f(A)=P`, `f(A+H)=Q`, `f(A_0)=I`, projector/sine identities, and the ambient and directed tan(2 Theta) estimates. Audit those established clauses as mathematical completion obligations and audit only the final general-`f` question as open. This mixed row is an explicit regression test against the old checker bug that exempted every `DK-10.*` item by identifier.
 
 ## Optional third pass: re-audit the distillation against full source material if available
 

@@ -35,6 +35,7 @@ SOURCE_END = "% DK-CERT-SOURCE-END"
 
 TERMINAL_COMPLETION_STATUSES = {"compiled_exact", "refuted_as_transcribed"}
 TERMINAL_COMPLETION_VERIFICATIONS = {"proved_in_build"}
+TERMINAL_COMPLETION_CERTIFICATIONS = {"accepted"}
 
 
 def fail(message: str) -> None:
@@ -142,7 +143,7 @@ def main() -> int:
     parser.add_argument(
         "--require-terminal",
         action="store_true",
-        help="require every mathematical obligation to be compiled_exact or refuted_as_transcribed and proved_in_build",
+        help="require every registered completion obligation to have terminal source status, proved_in_build verification, and hostile semantic certification=accepted",
     )
     args = parser.parse_args()
 
@@ -214,6 +215,8 @@ def main() -> int:
     exact_count = 0
     refuted_count = 0
     questions = 0
+    reopened_count = 0
+    nonobligation_count = 0
     review_count = 0
 
     for item_id in census_order:
@@ -235,6 +238,10 @@ def main() -> int:
             fail(f"{item_id}: expected_status disagrees with census status")
         if m.get("expected_verification") != c.get("verification"):
             fail(f"{item_id}: expected_verification disagrees with census verification")
+        if m.get("expected_completion_certification") != c.get("completion_certification"):
+            fail(f"{item_id}: expected_completion_certification disagrees with census completion_certification")
+        if m.get("known_completion_holes", []) != c.get("completion_holes", []):
+            fail(f"{item_id}: statement-map known_completion_holes disagree with census completion_holes")
         if m.get("tex_marker") != item_id:
             fail(f"{item_id}: tex_marker must equal the census id")
 
@@ -259,31 +266,59 @@ def main() -> int:
                 + ", ".join(stale)
             )
 
-        is_question = item_id.startswith("DK-10.")
-        if bool(m.get("completion_obligation")) == is_question:
-            fail(f"{item_id}: completion_obligation must be false exactly for Section 10 questions")
-        if is_question:
+        obligation = m.get("completion_obligation")
+        if not isinstance(obligation, bool):
+            fail(f"{item_id}: completion_obligation must be an explicit boolean")
+        source_kind = c.get("source_kind")
+        if source_kind == "open_question" and obligation:
+            fail(f"{item_id}: a pure open_question row cannot be a completion obligation; use mixed_open_question for mixed blocks")
+        if not obligation and source_kind != "open_question":
+            fail(
+                f"{item_id}: only a pure open_question row may be excluded from completion obligations; "
+                f"source_kind={source_kind!r}"
+            )
+        cert = c.get("completion_certification")
+        if obligation and cert == "not_applicable":
+            fail(f"{item_id}: a completion obligation cannot have completion_certification='not_applicable'")
+        if not obligation and cert != "not_applicable":
+            fail(f"{item_id}: a pure non-obligation must have completion_certification='not_applicable'")
+        if item_id.startswith("DK-10."):
             questions += 1
-        else:
+        if obligation:
             completion_count += 1
-            if c.get("status") == "compiled_exact" and c.get("verification") == "proved_in_build":
-                exact_count += 1
-            elif c.get("status") == "refuted_as_transcribed" and c.get("verification") == "proved_in_build":
-                refuted_count += 1
-            elif args.require_terminal:
-                if c.get("status") not in TERMINAL_COMPLETION_STATUSES:
-                    fail(f"{item_id}: completion obligation is not terminal: status={c.get('status')!r}")
-                if c.get("verification") not in TERMINAL_COMPLETION_VERIFICATIONS:
-                    fail(
-                        f"{item_id}: terminal completion obligation is not compiler-certified: "
-                        f"verification={c.get('verification')!r}"
-                    )
+            is_compiler_terminal = (
+                c.get("status") in TERMINAL_COMPLETION_STATUSES
+                and c.get("verification") in TERMINAL_COMPLETION_VERIFICATIONS
+            )
+            is_semantically_terminal = cert in TERMINAL_COMPLETION_CERTIFICATIONS
+            if is_compiler_terminal and is_semantically_terminal:
+                if c.get("status") == "compiled_exact":
+                    exact_count += 1
+                else:
+                    refuted_count += 1
+            else:
+                reopened_count += 1
+                if args.require_terminal:
+                    if c.get("status") not in TERMINAL_COMPLETION_STATUSES:
+                        fail(f"{item_id}: completion obligation is not source-terminal: status={c.get('status')!r}")
+                    if c.get("verification") not in TERMINAL_COMPLETION_VERIFICATIONS:
+                        fail(
+                            f"{item_id}: terminal completion obligation is not compiler-certified: "
+                            f"verification={c.get('verification')!r}"
+                        )
+                    if cert not in TERMINAL_COMPLETION_CERTIFICATIONS:
+                        fail(
+                            f"{item_id}: hostile semantic certification is not accepted: "
+                            f"completion_certification={cert!r}"
+                        )
+        else:
+            nonobligation_count += 1
 
         full_decls = c.get("lean_declarations") or []
         review_decls = m.get("review_declarations") or []
         if not isinstance(review_decls, list) or not all(isinstance(x, str) for x in review_decls):
             fail(f"{item_id}: review_declarations must be a list of strings")
-        if not is_question and not review_decls:
+        if obligation and not review_decls:
             fail(f"{item_id}: completion obligation has no primary review declarations")
         missing = [d for d in review_decls if d not in full_decls]
         if missing:
@@ -325,8 +360,9 @@ def main() -> int:
     print(
         "Davis--Kahan statement map: CLEAN "
         f"({len(mapped)} rows; {completion_count} completion obligations; "
-        f"{exact_count} compiled exact + {refuted_count} compiled refuted; {questions} Section 10 questions; "
-        f"{review_count} primary review links)"
+        f"{exact_count} hostile-certified exact + {refuted_count} hostile-certified refuted; "
+        f"{reopened_count} reopened obligations; {nonobligation_count} non-obligations; "
+        f"{questions} Section 10 rows; {review_count} primary review links)"
     )
     print(f"  distributable source specification: {tex_path.relative_to(ROOT)}")
     print(f"  statement map: {MAP_PATH.relative_to(ROOT)}")

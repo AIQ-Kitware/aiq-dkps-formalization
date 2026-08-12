@@ -330,9 +330,9 @@ Accordingly:
   what remains to lift it.
 - Interpret unqualified requests to complete, polish, or finish Davis--Kahan or
   the 1970 paper in this full source scope. Do not silently reinterpret them as
-  requests to finish the finite branch. Before source-facing work, consult the
-  maintained transcription or its audited distillation rather than inferring
-  the scope from whichever Lean modules are currently most complete.
+  requests to finish the finite branch. Before source-facing work, consult the checked-in distributable source
+  specification (and the original paper when re-auditing that specification)
+  rather than inferring scope from whichever Lean modules are currently most complete.
 - Never say that Davis--Kahan, Part III, the four-theorem package, or the paper
   is complete when only a bounded or finite specialization is complete. Use
   precise status language such as “the finite arbitrary-UI-norm specialization
@@ -345,6 +345,20 @@ Accordingly:
   the source norm scope, the direct-rotation and spectral-selection theory,
   the unbounded passages, sharpness/equality content, and a fresh build and
   trusted-dependency audit.
+- **Davis--Kahan completion has three independent axes.** `status` records the
+  source-facing mathematical implementation judgement, `verification` records what
+  the Lean build certifies for registered declarations, and `completion_certification`
+  records whether a hostile semantic review has accepted the complete hashed source
+  passage. A row counts toward 100% only when the statement map marks it as a completion
+  obligation, its source status is terminal (`compiled_exact` or
+  `refuted_as_transcribed`), verification is `proved_in_build`, and hostile semantic
+  certification is `accepted`. Never infer 100% from a green build, a raw
+  `compiled_exact` count, or a recursively grounded frontier graph.
+- Do not exempt a claim from completion merely because it occurs in Section 10. Pure
+  open questions are non-obligations, but mixed blocks must split established
+  mathematics from the open clause. `DK-10.4` is the regression case: its step-function
+  and tan(2 Theta) specializations are mathematical claims even though the final
+  general-functional-calculus question is open.
 - `prose/distilled_literature/DavisKahan1970_part_III.tex` is both the readable
   transformative reconstruction and the checked-in distributable semantic audit
   specification. Its source-order `DK-CERT` claim passages are bound directly to
@@ -354,10 +368,10 @@ Accordingly:
   certification.
 - For independently checkable compiler evidence, run
   `python3 scripts/certify_davis_kahan_1970.py --clean`. Add `--require-terminal`
-  only when asking the maintained census itself to be a hard 100%-coverage gate.
-  The compiler
-  certificate proves compilation and declaration resolution; semantic fidelity
-  is judged independently with `dev/davis-kahan-1970-independent-audit-prompt.md`.
+  only when asking the maintained statement map/census to be a hard 100%-coverage gate.
+  That gate requires all three axes, including `completion_certification = accepted`;
+  the compiler evidence itself still proves only compilation and declaration resolution.
+  Re-audit semantic fidelity with `dev/davis-kahan-1970-independent-audit-prompt.md`.
 - Keep print-heavy Lean audit modules out of ordinary aggregate imports.
   `lake build DavisKahan.All` is the mathematical/source-facing build and should
   keep elaboration diagnostics focused. Run `lake build DavisKahan.Audits.All`

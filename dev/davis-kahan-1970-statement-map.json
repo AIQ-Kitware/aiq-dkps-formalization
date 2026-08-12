@@ -1,23 +1,23 @@
 {
   "schema_version": 1,
   "source": {
-    "citation": "C. Davis and W. M. Kahan, The Rotation of Eigenvectors by a Perturbation. III, SIAM J. Numer. Anal. 7(1), 1970, 1\u201346.",
+    "citation": "C. Davis and W. M. Kahan, The Rotation of Eigenvectors by a Perturbation. III, SIAM J. Numer. Anal. 7(1), 1970, 1–46.",
     "doi": "10.1137/0707001",
     "audit_tex": "prose/distilled_literature/DavisKahan1970_part_III.tex",
     "authority": "checked_in_transformative_source_specification",
     "note": "The checked-in Part III distillation is the distributable source-order semantic audit specification. Its marked passages are independently worded reconstructions that preserve the mathematical hypotheses, conclusions, equations, exceptions, and scope needed for source-to-Lean comparison. No private transcription is required by the static checker or compiler certificate."
   },
   "census": "dev/davis-kahan-1970-full-source-census.json",
-  "completion_rule": "A mathematical completion obligation is terminal only when its source statement is matched by compiled exact Lean statement(s), or by a compiled counterexample/refutation when the printed claim is false. Section 10 questions are audit entries but are not completion obligations.",
+  "completion_rule": "A registered passage counts toward 100% only when completion_obligation=true, its census status is terminal (`compiled_exact` or `refuted_as_transcribed`), verification is `proved_in_build`, and hostile semantic completion_certification is `accepted`. Pure open questions may have completion_obligation=false. A mixed block such as DK-10.4 remains an obligation for its established mathematical clauses even though its final question is open.",
   "items": [
     {
       "id": "S1-block-residual",
       "section": "1",
       "title": "Two reducing decompositions and the residual",
       "source_kind": "construction",
-      "source_anchor": "Section 1, equations (1.1)\u2013(1.8)",
+      "source_anchor": "Section 1, equations (1.1)–(1.8)",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "partial_or_wrapper_missing",
       "expected_verification": "proved_in_build",
       "tex_marker": "S1-block-residual",
       "review_declarations": [
@@ -38,16 +38,28 @@
           ]
         }
       ],
-      "source_specification_sha256": "fe0395b4f9940b40576035b37c919996ecae46afc37cd384d4c0ad4851992699"
+      "source_specification_sha256": "fe0395b4f9940b40576035b37c919996ecae46afc37cd384d4c0ad4851992699",
+      "expected_completion_certification": "reopened_math",
+      "known_completion_holes": [
+        {
+          "kind": "missing_source_facing_statement",
+          "detail": "The registered TeX includes the standard residual-to-eigenvalue consequence: ordered eigenvalues lambda_j with sum_j (alpha_j-lambda_j)^2 <= ||R||_sq^2 and |alpha_j-lambda_j| <= ||R||_1. The hostile review found no source-facing Lean declaration for these displayed conclusions."
+        },
+        {
+          "kind": "audit_mapping",
+          "detail": "`equation1_8_residual_norm_minimized_by_rayleighQuotient` now proves the printed Rayleigh--Ritz minimization statement but is not registered as primary evidence for this row."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The registered TeX includes the standard residual-to-eigenvalue consequence: ordered eigenvalues lambda_j with sum_j (alpha_j-lambda_j)^2 <= ||R||_sq^2 and |alpha_j-lambda_j| <= ||R||_1. The hostile review found no source-facing Lean declaration for these displayed conclusions. `equation1_8_residual_norm_minimized_by_rayleighQuotient` now proves the printed Rayleigh--Ritz minimization statement but is not registered as primary evidence for this row."
     },
     {
       "id": "S1-ui-norms",
       "section": "1",
       "title": "Unitary-invariant norms, angle operators, and direct-rotation setup",
       "source_kind": "framework",
-      "source_anchor": "Section 1, equations (1.9)\u2013(1.18)",
+      "source_anchor": "Section 1, equations (1.9)–(1.18)",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "source_spec_incomplete",
       "expected_verification": "proved_in_build",
       "tex_marker": "S1-ui-norms",
       "review_declarations": [
@@ -70,7 +82,19 @@
           ]
         }
       ],
-      "source_specification_sha256": "b640df622d247d4b4147214c265cd5ae876424d352b8bf1f0ea8e799c17aede2"
+      "source_specification_sha256": "b640df622d247d4b4147214c265cd5ae876424d352b8bf1f0ea8e799c17aede2",
+      "expected_completion_certification": "reopened_source_spec",
+      "known_completion_holes": [
+        {
+          "kind": "source_spec_omission",
+          "detail": "The distributable TeX omits the unnumbered cosine-law identity immediately following source equation (1.14)."
+        },
+        {
+          "kind": "scope_gap",
+          "detail": "The TeX preserves U = exp(J Theta) = cos Theta + J sin Theta in the general Hilbert-space setup. The source-facing arbitrary-dimensional surface proves the cosine/sine resolution, while the explicit exponential identity located by the hostile review is finite-dimensional."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The distributable TeX omits the unnumbered cosine-law identity immediately following source equation (1.14). The TeX preserves U = exp(J Theta) = cos Theta + J sin Theta in the general Hilbert-space setup. The source-facing arbitrary-dimensional surface proves the cosine/sine resolution, while the explicit exponential identity located by the hostile review is finite-dimensional."
     },
     {
       "id": "S2-sin-theta",
@@ -100,7 +124,9 @@
           ]
         }
       ],
-      "source_specification_sha256": "8e5e36e64c718f1cdb002dd3c5a191c8919fa22bad64020bdbf8f22adb6a3f72"
+      "source_specification_sha256": "8e5e36e64c718f1cdb002dd3c5a191c8919fa22bad64020bdbf8f22adb6a3f72",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": []
     },
     {
       "id": "S2-tan-theta",
@@ -136,7 +162,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "c85f8a2839187dd9ae4d020608816821c3b1f30e401eb5e52d4cbce093e82b3c"
+      "source_specification_sha256": "c85f8a2839187dd9ae4d020608816821c3b1f30e401eb5e52d4cbce093e82b3c",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_mapping",
+          "detail": "The mapped real ambient declaration accepts an explicit transversality premise. A source-hypotheses-only real theorem (`tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent`) exists, so this is evidence-selection debt rather than missing mathematics."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The mapped real ambient declaration accepts an explicit transversality premise. A source-hypotheses-only real theorem (`tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent`) exists, so this is evidence-selection debt rather than missing mathematics."
     },
     {
       "id": "S2-sin-two-theta",
@@ -172,7 +206,9 @@
           ]
         }
       ],
-      "source_specification_sha256": "7da711fdbd912b64b5aa6f2efc5c4255bcbe796831a18b99c92712024b81c70b"
+      "source_specification_sha256": "7da711fdbd912b64b5aa6f2efc5c4255bcbe796831a18b99c92712024b81c70b",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": []
     },
     {
       "id": "S2-tan-two-theta",
@@ -221,7 +257,9 @@
           ]
         }
       ],
-      "source_specification_sha256": "5c5b96c1cc563a42d13b8b4e06989c19ff82ec8ed6958f3da78d67dc9b2b7830"
+      "source_specification_sha256": "5c5b96c1cc563a42d13b8b4e06989c19ff82ec8ed6958f3da78d67dc9b2b7830",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": []
     },
     {
       "id": "S2-sharpness",
@@ -255,7 +293,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "fb0eaba8db2c7f46d5005c12d734b0dad4f4ad83097696e71a3954e68ffb8efb"
+      "source_specification_sha256": "fb0eaba8db2c7f46d5005c12d734b0dad4f4ad83097696e71a3954e68ffb8efb",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_atomization",
+          "detail": "The hashed passage asserts optimal constants, two-dimensional equality models, direct-sum simultaneous equality for all unitary-invariant norms, and first-order sharpness. Existing sharpness machinery is richer than the current review mapping, but these separable claims are not individually certified."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The hashed passage asserts optimal constants, two-dimensional equality models, direct-sum simultaneous equality for all unitary-invariant norms, and first-order sharpness. Existing sharpness machinery is richer than the current review mapping, but these separable claims are not individually certified."
     },
     {
       "id": "S2-unbounded-scope",
@@ -289,7 +335,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "7f098b2419b68b1002016fbc6983ccd57639127da6c28456751248a9c33cf43a"
+      "source_specification_sha256": "7f098b2419b68b1002016fbc6983ccd57639127da6c28456751248a9c33cf43a",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_atomization",
+          "detail": "The passage asserts the full infinite-dimensional/unbounded/arbitrary-UI-norm scope for all four headline theorem families. The current evidence is a sample of endpoints rather than an explicit clause-by-clause four-family scope certificate."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The passage asserts the full infinite-dimensional/unbounded/arbitrary-UI-norm scope for all four headline theorem families. The current evidence is a sample of endpoints rather than an explicit clause-by-clause four-family scope certificate."
     },
     {
       "id": "DK-3.1-def",
@@ -323,7 +377,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "a20649b8dd41ae1561494af20da1e2ea6ada223a3c5b2c4156bd2a795fdfd092"
+      "source_specification_sha256": "a20649b8dd41ae1561494af20da1e2ea6ada223a3c5b2c4156bd2a795fdfd092",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_atomization",
+          "detail": "The block contains equations (3.1)-(3.4), unitarity block identities, singular-value/nullity assertions, and the direct-rotation definition. The current generic `.whole` clause does not certify those assertions individually."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The block contains equations (3.1)-(3.4), unitarity block identities, singular-value/nullity assertions, and the direct-rotation definition. The current generic `.whole` clause does not certify those assertions individually."
     },
     {
       "id": "DK-3.2-def",
@@ -351,7 +413,9 @@
           ]
         }
       ],
-      "source_specification_sha256": "62638f6ec5fe84cc6ddad8a423f99d5b024c0f6ff2e1aa7a37f3d9604a77b609"
+      "source_specification_sha256": "62638f6ec5fe84cc6ddad8a423f99d5b024c0f6ff2e1aa7a37f3d9604a77b609",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": []
     },
     {
       "id": "DK-3.1-prop",
@@ -385,7 +449,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "ff945cb6247987becf0eec9e3c5fd945ba2df2d2b8756cea6df2c7ebd00213d4"
+      "source_specification_sha256": "ff945cb6247987becf0eec9e3c5fd945ba2df2d2b8756cea6df2c7ebd00213d4",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_mapping",
+          "detail": "Primary evidence is complex-centric even though the paper ambient convention is real or complex and real counterparts exist elsewhere in the census. Register exact real evidence explicitly."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: Primary evidence is complex-centric even though the paper ambient convention is real or complex and real counterparts exist elsewhere in the census. Register exact real evidence explicitly."
     },
     {
       "id": "DK-3.2-prop",
@@ -394,7 +466,7 @@
       "source_kind": "proposition",
       "source_anchor": "Proposition 3.2",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "partial_or_wrapper_missing",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.2-prop",
       "review_declarations": [
@@ -413,7 +485,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "3824155c8b919c0b61e9eb7bdc7b822214fbb6d6abfa95f7e7eb5eac2a73c09a"
+      "source_specification_sha256": "3824155c8b919c0b61e9eb7bdc7b822214fbb6d6abfa95f7e7eb5eac2a73c09a",
+      "expected_completion_certification": "reopened_math",
+      "known_completion_holes": [
+        {
+          "kind": "missing_source_facing_statement",
+          "detail": "The source passage says that on the two crossing subspaces every direct rotation satisfies U^2 x = -x. The hostile review did not find an exported source-facing theorem with that statement, although related reflection-product ingredients exist."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The source passage says that on the two crossing subspaces every direct rotation satisfies U^2 x = -x. The hostile review did not find an exported source-facing theorem with that statement, although related reflection-product ingredients exist."
     },
     {
       "id": "DK-3.3-prop",
@@ -422,7 +502,7 @@
       "source_kind": "proposition",
       "source_anchor": "Proposition 3.3",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "source_spec_incomplete",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.3-prop",
       "review_declarations": [
@@ -447,7 +527,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "0694cb7e2df9c35cd98c528b0ded3fea303834eb3366ae666c66e73b87a7e345"
+      "source_specification_sha256": "0694cb7e2df9c35cd98c528b0ded3fea303834eb3366ae666c66e73b87a7e345",
+      "expected_completion_certification": "reopened_source_spec",
+      "known_completion_holes": [
+        {
+          "kind": "source_spec_omission",
+          "detail": "The anchor promises equations (3.6)-(3.8), but the distributable TeX skips source equation (3.7), the explicit block formula for Q in terms of C_0 and S_0."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The anchor promises equations (3.6)-(3.8), but the distributable TeX skips source equation (3.7), the explicit block formula for Q in terms of C_0 and S_0."
     },
     {
       "id": "DK-3.4-prop",
@@ -456,7 +544,7 @@
       "source_kind": "proposition",
       "source_anchor": "Proposition 3.4",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "compiled_specialization",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.4-prop",
       "review_declarations": [
@@ -473,7 +561,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "a4914037fecd9b2f6193105f137f3a59d160e47ca70747bb4a6c430477038990"
+      "source_specification_sha256": "a4914037fecd9b2f6193105f137f3a59d160e47ca70747bb4a6c430477038990",
+      "expected_completion_certification": "reopened_math",
+      "known_completion_holes": [
+        {
+          "kind": "scope_gap",
+          "detail": "`proposition3_4_source_full` is explicitly complex-valued. The paper does not restrict Proposition 3.4 to the complex scalar field; an exact real source-facing counterpart was not located."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: `proposition3_4_source_full` is explicitly complex-valued. The paper does not restrict Proposition 3.4 to the complex scalar field; an exact real source-facing counterpart was not located."
     },
     {
       "id": "DK-3.1-thm",
@@ -501,7 +597,9 @@
           ]
         }
       ],
-      "source_specification_sha256": "c596c36a00cab2889d9af204a420d6746d77273cc66e9a3268dc91891902987f"
+      "source_specification_sha256": "c596c36a00cab2889d9af204a420d6746d77273cc66e9a3268dc91891902987f",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": []
     },
     {
       "id": "DK-3.1-cor",
@@ -529,7 +627,9 @@
           ]
         }
       ],
-      "source_specification_sha256": "2661dd05c08e61c06c54ce50c66032413a3c958bb7cda1b28638548253e30d2c"
+      "source_specification_sha256": "2661dd05c08e61c06c54ce50c66032413a3c958bb7cda1b28638548253e30d2c",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": []
     },
     {
       "id": "DK-3.5-prop",
@@ -538,7 +638,7 @@
       "source_kind": "proposition",
       "source_anchor": "Proposition 3.5",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "partial_or_wrapper_missing",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.5-prop",
       "review_declarations": [
@@ -563,7 +663,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "bdabc4530ed8ad8040dfe34d4a1071b2b52d3563d3e0e5bb9de9868287999a4e"
+      "source_specification_sha256": "bdabc4530ed8ad8040dfe34d4a1071b2b52d3563d3e0e5bb9de9868287999a4e",
+      "expected_completion_certification": "reopened_math",
+      "known_completion_holes": [
+        {
+          "kind": "scope_gap",
+          "detail": "The registered passage includes the Hilbert-space identity U = exp(J Theta). The source-facing arbitrary-dimensional Proposition 3.5 surface exposes U = cos Theta + J sin Theta; the explicit exponential theorem located by the review is finite-dimensional."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The registered passage includes the Hilbert-space identity U = exp(J Theta). The source-facing arbitrary-dimensional Proposition 3.5 surface exposes U = cos Theta + J sin Theta; the explicit exponential theorem located by the review is finite-dimensional."
     },
     {
       "id": "DK-3.2-cor",
@@ -597,7 +705,9 @@
           ]
         }
       ],
-      "source_specification_sha256": "6ef3d66483655d6bf428a2422d4d26494455fe9cba09939d61a2092809e68a9d"
+      "source_specification_sha256": "6ef3d66483655d6bf428a2422d4d26494455fe9cba09939d61a2092809e68a9d",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": []
     },
     {
       "id": "DK-4.1-prop",
@@ -606,7 +716,7 @@
       "source_kind": "proposition",
       "source_anchor": "Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2)",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "source_spec_incomplete",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-4.1-prop",
       "review_declarations": [
@@ -637,7 +747,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "bf3ccc8a5961a08a52de6724dd95561afa29412f0c4c4dfdb7a40ea81112f45f"
+      "source_specification_sha256": "bf3ccc8a5961a08a52de6724dd95561afa29412f0c4c4dfdb7a40ea81112f45f",
+      "expected_completion_certification": "reopened_source_spec",
+      "known_completion_holes": [
+        {
+          "kind": "source_spec_omission",
+          "detail": "The TeX anchor says it covers source equations (4.1)-(4.2) but only paraphrases them. The explicit minimax formula (4.1) and pointwise vector-angle inequality (4.2) are missing from the distributable specification."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The TeX anchor says it covers source equations (4.1)-(4.2) but only paraphrases them. The explicit minimax formula (4.1) and pointwise vector-angle inequality (4.2) are missing from the distributable specification."
     },
     {
       "id": "DK-4.1-cor",
@@ -665,7 +783,9 @@
           ]
         }
       ],
-      "source_specification_sha256": "73cd6caf9a976a811e4836d656d566a66b0f57c7504ff38365d6891b3d75b9ba"
+      "source_specification_sha256": "73cd6caf9a976a811e4836d656d566a66b0f57c7504ff38365d6891b3d75b9ba",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": []
     },
     {
       "id": "DK-4.2-prop",
@@ -691,7 +811,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "a1d36230f960f5b48427a6c4fce26c28327cc9fdff714575e4261c76ae92c4f4"
+      "source_specification_sha256": "a1d36230f960f5b48427a6c4fce26c28327cc9fdff714575e4261c76ae92c4f4",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_atomization",
+          "detail": "The main inequality appears formalized, but the source block also records the trace/basis identification used in the proof. The terminal row does not separately bind that preserved mathematical assertion to Lean evidence."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The main inequality appears formalized, but the source block also records the trace/basis identification used in the proof. The terminal row does not separately bind that preserved mathematical assertion to Lean evidence."
     },
     {
       "id": "DK-4.3-prop",
@@ -715,14 +843,22 @@
           ]
         }
       ],
-      "source_specification_sha256": "efb61fbf15adb18ac47572bb82096f44ac2bd356072eaa15cd006cec8cc14dac"
+      "source_specification_sha256": "efb61fbf15adb18ac47572bb82096f44ac2bd356072eaa15cd006cec8cc14dac",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_mapping",
+          "detail": "Broader nonacute and real source theorems exist, but the primary row evidence is narrower and the hashed block contains equations (4.3)-(4.6) plus the precise UI-norm limitation. Rebind/atomize the complete source scope."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: Broader nonacute and real source theorems exist, but the primary row evidence is narrower and the hashed block contains equations (4.3)-(4.6) plus the precise UI-norm limitation. Rebind/atomize the complete source scope."
     },
     {
       "id": "DK-4.4-prop",
       "section": "4",
       "title": "Full-displacement counterexamples and Proposition 4.4 as printed",
       "source_kind": "proposition",
-      "source_anchor": "Examples 4.1\u20134.2 and Proposition 4.4",
+      "source_anchor": "Examples 4.1–4.2 and Proposition 4.4",
       "completion_obligation": true,
       "expected_status": "refuted_as_transcribed",
       "expected_verification": "proved_in_build",
@@ -743,7 +879,9 @@
           ]
         }
       ],
-      "source_specification_sha256": "1896dfda86994261bd007a6aeaf1fcd46b1b47e60a197caa7313cc5025ac1194"
+      "source_specification_sha256": "1896dfda86994261bd007a6aeaf1fcd46b1b47e60a197caa7313cc5025ac1194",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": []
     },
     {
       "id": "DK-5.1-thm",
@@ -783,7 +921,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "38590318e770b1eddea8bb6e6a45126b57c9652588f5e1c6991078f3dd8a6c4a"
+      "source_specification_sha256": "38590318e770b1eddea8bb6e6a45126b57c9652588f5e1c6991078f3dd8a6c4a",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_mapping",
+          "detail": "The source block includes the Banach-space inverse-norm form, A/B interchange, and unbounded-left extension. The repository contains strong infrastructure and literal wrappers, but the audit row does not atomically show that every printed clause is represented at real/complex source scope."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The source block includes the Banach-space inverse-norm form, A/B interchange, and unbounded-left extension. The repository contains strong infrastructure and literal wrappers, but the audit row does not atomically show that every printed clause is represented at real/complex source scope."
     },
     {
       "id": "DK-5-hermitian-inequalities",
@@ -792,7 +938,7 @@
       "source_kind": "equation",
       "source_anchor": "Section 5, inequalities (5.1) and (5.2)",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "partial_or_wrapper_missing",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-5-hermitian-inequalities",
       "review_declarations": [
@@ -809,7 +955,19 @@
           ]
         }
       ],
-      "source_specification_sha256": "da41db53882bd87b7aba9f8e3b827b46a08f6e6ac0d2e6638d6251d93c20cb5f"
+      "source_specification_sha256": "da41db53882bd87b7aba9f8e3b827b46a08f6e6ac0d2e6638d6251d93c20cb5f",
+      "expected_completion_certification": "reopened_math",
+      "known_completion_holes": [
+        {
+          "kind": "missing_source_facing_statement",
+          "detail": "The TeX states that (5.2) is not best possible unless rank C <= 1. The repository formalizes (5.1), the rank-corrected estimate, and a counterexample showing constant 1 is too small, but the hostile review found no source-facing theorem for this stronger qualitative assertion."
+        },
+        {
+          "kind": "mixed_disposition",
+          "detail": "The same block asks whether the rank factor can be replaced by a universal constant. That open question should be atomically dispositioned instead of being swallowed by a terminal `.whole` clause."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The TeX states that (5.2) is not best possible unless rank C <= 1. The repository formalizes (5.1), the rank-corrected estimate, and a counterexample showing constant 1 is too small, but the hostile review found no source-facing theorem for this stronger qualitative assertion. The same block asks whether the rank factor can be replaced by a universal constant. That open question should be atomically dispositioned instead of being swallowed by a terminal `.whole` clause."
     },
     {
       "id": "DK-5.2-thm",
@@ -835,7 +993,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "2078bb97672c50ca247554b198c575e381bd776725924f1333057a2a10fc3d8c"
+      "source_specification_sha256": "2078bb97672c50ca247554b198c575e381bd776725924f1333057a2a10fc3d8c",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_mapping",
+          "detail": "The theorem appears available in both scalar fields, but primary evidence is not explicitly bound clause-by-clause to the paper's full real/complex source scope."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The theorem appears available in both scalar fields, but primary evidence is not explicitly bound clause-by-clause to the paper's full real/complex source scope."
     },
     {
       "id": "DK-5.1-lem",
@@ -859,7 +1025,9 @@
           ]
         }
       ],
-      "source_specification_sha256": "4154e65f1eb46629c33da85de5866a2751ce9b5e21d9fa3956d2d6d0e677ecbd"
+      "source_specification_sha256": "4154e65f1eb46629c33da85de5866a2751ce9b5e21d9fa3956d2d6d0e677ecbd",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": []
     },
     {
       "id": "DK-6.1-lem",
@@ -885,7 +1053,9 @@
           ]
         }
       ],
-      "source_specification_sha256": "3fcdb9152000100900fc421874565b2defe8ccb6cc2a8574154d146c509eb2d5"
+      "source_specification_sha256": "3fcdb9152000100900fc421874565b2defe8ccb6cc2a8574154d146c509eb2d5",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": []
     },
     {
       "id": "DK-6.2-lem",
@@ -909,7 +1079,9 @@
           ]
         }
       ],
-      "source_specification_sha256": "fefd468fd43df7f2d9ecb643c21a78aa0f8471b3b3909472925d347e6aa26f63"
+      "source_specification_sha256": "fefd468fd43df7f2d9ecb643c21a78aa0f8471b3b3909472925d347e6aa26f63",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": []
     },
     {
       "id": "DK-6.1-prop",
@@ -935,7 +1107,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "ec802eefcfa341b4268ff3fd35bdb06d38211ec9cf5c72138d53e1ffdf5d11ce"
+      "source_specification_sha256": "ec802eefcfa341b4268ff3fd35bdb06d38211ec9cf5c72138d53e1ffdf5d11ce",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_mapping",
+          "detail": "The source block contains the Sylvester identity (6.1), Proposition 6.1, and an explicit 2x2 counterexample showing the ambient one-sided sine conclusion fails. The counterexample exists elsewhere but is not registered as evidence for this row."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The source block contains the Sylvester identity (6.1), Proposition 6.1, and an explicit 2x2 counterexample showing the ambient one-sided sine conclusion fails. The counterexample exists elsewhere but is not registered as evidence for this row."
     },
     {
       "id": "DK-6.1-thm",
@@ -965,7 +1145,9 @@
           ]
         }
       ],
-      "source_specification_sha256": "13e2036a72aaec0c5094f6014d3bfe1933167f1a43cf79f77716d5d7bf9726c7"
+      "source_specification_sha256": "13e2036a72aaec0c5094f6014d3bfe1933167f1a43cf79f77716d5d7bf9726c7",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": []
     },
     {
       "id": "DK-6.2-thm",
@@ -995,16 +1177,24 @@
           ]
         }
       ],
-      "source_specification_sha256": "3d339a183924f39cbfd71c81f3745c69442b26a631b3a25921093e05277bb58d"
+      "source_specification_sha256": "3d339a183924f39cbfd71c81f3745c69442b26a631b3a25921093e05277bb58d",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_mapping",
+          "detail": "The source passage contains both the Hilbert--Schmidt theorem and its rank-corrected operator-norm consequence. Exact rank-consequence declarations exist but are not mapped into the row's semantic audit clauses."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The source passage contains both the Hilbert--Schmidt theorem and its rank-corrected operator-norm consequence. Exact rank-consequence declarations exist but are not mapped into the row's semantic audit clauses."
     },
     {
       "id": "DK-6.3-thm",
       "section": "6",
       "title": "Tangent proof machinery, Example 6.1, and generalized tangent theorem",
       "source_kind": "theorem",
-      "source_anchor": "Section 6 equations (6.2)\u2013(6.6), Example 6.1, and Theorem 6.3",
+      "source_anchor": "Section 6 equations (6.2)–(6.6), Example 6.1, and Theorem 6.3",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "partial_or_wrapper_missing",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-6.3-thm",
       "review_declarations": [
@@ -1025,14 +1215,22 @@
           ]
         }
       ],
-      "source_specification_sha256": "ca0097fc54e1567d7129b6da2a912399a2cb516b3ba5ddc306bf4ab65b746505"
+      "source_specification_sha256": "ca0097fc54e1567d7129b6da2a912399a2cb516b3ba5ddc306bf4ab65b746505",
+      "expected_completion_certification": "reopened_math",
+      "known_completion_holes": [
+        {
+          "kind": "missing_source_facing_statement",
+          "detail": "The generalized tangent theorem itself appears covered, but the same hashed passage preserves Example 6.1: delta=1, tangent quantity 1, residual 1/sqrt(2) when spectral mass lies on the wrong side. The hostile review did not find an exact source-facing formalization of that explicit counterexample."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The generalized tangent theorem itself appears covered, but the same hashed passage preserves Example 6.1: delta=1, tangent quantity 1, residual 1/sqrt(2) when spectral mass lies on the wrong side. The hostile review did not find an exact source-facing formalization of that explicit counterexample."
     },
     {
       "id": "DK-6-appendix",
       "section": "6 appendix",
       "title": "Unbounded-operator passage",
       "source_kind": "appendix",
-      "source_anchor": "Appendix to Section 6, equations (6.7)\u2013(6.11)",
+      "source_anchor": "Appendix to Section 6, equations (6.7)–(6.11)",
       "completion_obligation": true,
       "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
@@ -1059,7 +1257,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "c5bacffe42fb3c4e8e6bba5a6b28fc34f51bd04ec368afb41d9fee5e9de689aa"
+      "source_specification_sha256": "c5bacffe42fb3c4e8e6bba5a6b28fc34f51bd04ec368afb41d9fee5e9de689aa",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_atomization",
+          "detail": "The TeX explicitly preserves equations (6.7)-(6.11) and the limiting proof chain. The row maps endpoint/common-domain machinery and historically treats parts of the chain as documentation fidelity; under statement-level 100% coverage, every preserved mathematical equation needs explicit evidence/disposition."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The TeX explicitly preserves equations (6.7)-(6.11) and the limiting proof chain. The row maps endpoint/common-domain machinery and historically treats parts of the chain as documentation fidelity; under statement-level 100% coverage, every preserved mathematical equation needs explicit evidence/disposition."
     },
     {
       "id": "DK-6.3-lem",
@@ -1087,14 +1293,16 @@
           ]
         }
       ],
-      "source_specification_sha256": "6709c9fbf240ea7fc10d68b73cd0c746c59536127a66d13108ba14d114d52a45"
+      "source_specification_sha256": "6709c9fbf240ea7fc10d68b73cd0c746c59536127a66d13108ba14d114d52a45",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": []
     },
     {
       "id": "DK-7-sin2-proof",
       "section": "7",
       "title": "Reflection proof of the sine double-angle theorem",
       "source_kind": "proof_package",
-      "source_anchor": "Section 7, equations (7.1)\u2013(7.5)",
+      "source_anchor": "Section 7, equations (7.1)–(7.5)",
       "completion_obligation": true,
       "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
@@ -1129,8 +1337,15 @@
           ]
         }
       ],
-      "audit_warning": "The distributable source specification intentionally records both the Section 2 factor-two directed residual theorem and the Section 7 factor-one proof-derived residual step. Treat them as distinct source facts during source-to-Lean review. If the original paper or a private transcription is available, it may be used separately to re-audit this discrepancy; ordinary static certification does not depend on that private material.",
-      "source_specification_sha256": "67854d13100c18b09c60f5af6e85a937281d1653a691c7f24357da4964f82cf2"
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The block contains equations (7.1)-(7.5), reflected diagonalization, the factor-one directed residual refinement, swap asymmetry, and a counterexample. The current clauses do not explicitly account for every separable identity/assertion.",
+      "source_specification_sha256": "67854d13100c18b09c60f5af6e85a937281d1653a691c7f24357da4964f82cf2",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_atomization",
+          "detail": "The block contains equations (7.1)-(7.5), reflected diagonalization, the factor-one directed residual refinement, swap asymmetry, and a counterexample. The current clauses do not explicitly account for every separable identity/assertion."
+        }
+      ]
     },
     {
       "id": "DK-7-tan2-proof",
@@ -1160,7 +1375,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "59db32e78184895941dce6d1068875d12f24818a0c86b7a02a9f452d2324f226"
+      "source_specification_sha256": "59db32e78184895941dce6d1068875d12f24818a0c86b7a02a9f452d2324f226",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_atomization",
+          "detail": "The exact directed/ambient tan(2 Theta) endpoints are now closed. The proof block still contains equation (7.6), scalar singular-vector inequality, pole exclusion as a conclusion, Fan-dominance steps, and both endpoints under one coarse audit clause; atomize these for static semantic certification."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The exact directed/ambient tan(2 Theta) endpoints are now closed. The proof block still contains equation (7.6), scalar singular-vector inequality, pole exclusion as a conclusion, Fan-dominance steps, and both endpoints under one coarse audit clause; atomize these for static semantic certification."
     },
     {
       "id": "DK-8.1-thm",
@@ -1212,7 +1435,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "ca616396d0bee7b303c7da3ad0904053b80ad6da1a13a172bbec402be84f7c57"
+      "source_specification_sha256": "ca616396d0bee7b303c7da3ad0904053b80ad6da1a13a172bbec402be84f7c57",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_mapping",
+          "detail": "The theorem is usefully split into branch/(i)/(ii)/(iii), but primary evidence remains complex-centric while real counterparts exist. Bind each source conclusion explicitly in both source scalar fields."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The theorem is usefully split into branch/(i)/(ii)/(iii), but primary evidence remains complex-centric while real counterparts exist. Bind each source conclusion explicitly in both source scalar fields."
     },
     {
       "id": "DK-8.2-thm",
@@ -1242,16 +1473,24 @@
           ]
         }
       ],
-      "source_specification_sha256": "8af6a38667dbf398e65e1b4460763ab627b559607ac519214c35402797c1b48e"
+      "source_specification_sha256": "8af6a38667dbf398e65e1b4460763ab627b559607ac519214c35402797c1b48e",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_atomization",
+          "detail": "A single `.whole` clause covers two alternative half-gap hypotheses, branch selection, homotopy, perturbation and residual forms, unequal-dimensional extension, and the source statement that no analogous tan(2 Theta) extension is known. These need atomic evidence/dispositions."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: A single `.whole` clause covers two alternative half-gap hypotheses, branch selection, homotopy, perturbation and residual forms, unequal-dimensional extension, and the source statement that no analogous tan(2 Theta) extension is known. These need atomic evidence/dispositions."
     },
     {
       "id": "DK-9-model",
       "section": "9",
-      "title": "Fourth-derivative Rayleigh\u2013Ritz model",
+      "title": "Fourth-derivative Rayleigh–Ritz model",
       "source_kind": "numerical_model",
       "source_anchor": "Section 9, problem setup",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "source_spec_incomplete",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-9-model",
       "review_declarations": [
@@ -1276,14 +1515,22 @@
           ]
         }
       ],
-      "source_specification_sha256": "bdc43ef4b79411c729d3004b3ffe56154fa83888d1bc3b2936afad9b2edf6d6d"
+      "source_specification_sha256": "bdc43ef4b79411c729d3004b3ffe56154fa83888d1bc3b2936afad9b2edf6d6d",
+      "expected_completion_certification": "reopened_source_spec",
+      "known_completion_holes": [
+        {
+          "kind": "source_spec_weakening",
+          "detail": "The source transcription used in the hostile review has alpha_1=alpha_2=0 < alpha_3 < alpha_4 < ... . The distributable TeX weakens this to alpha_1=alpha_2=0 and says only that positive eigenvalues are determined by the free-beam equation and exceed 500. Re-audit the original PDF to decide whether the printed indexing asserts simplicity of all positive eigenvalues; do not choose the weaker reading to fit current Lean coverage."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The source transcription used in the hostile review has alpha_1=alpha_2=0 < alpha_3 < alpha_4 < ... . The distributable TeX weakens this to alpha_1=alpha_2=0 and says only that positive eigenvalues are determined by the free-beam equation and exceed 500. Re-audit the original PDF to decide whether the printed indexing asserts simplicity of all positive eigenvalues; do not choose the weaker reading to fit current Lean coverage."
     },
     {
       "id": "DK-9.1-9.4",
       "section": "9",
       "title": "Initial sine and sine-double-angle bounds",
       "source_kind": "numerical_claims",
-      "source_anchor": "Equations (9.1)\u2013(9.4)",
+      "source_anchor": "Equations (9.1)–(9.4)",
       "completion_obligation": true,
       "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
@@ -1306,14 +1553,22 @@
           ]
         }
       ],
-      "source_specification_sha256": "57ea978cfdbd641bfe2c257f686d449a42baa10cfba67fa9d593be8ca2ab9bf9"
+      "source_specification_sha256": "57ea978cfdbd641bfe2c257f686d449a42baa10cfba67fa9d593be8ca2ab9bf9",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_mapping",
+          "detail": "The primary mapped `equation_9_*` declarations are largely arithmetic wrappers conditional on analytic bounds. Genuine unconditional beam-model sine/sin(2 Theta) theorems exist elsewhere and should be the source evidence for the actual Section 9 conclusions."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The primary mapped `equation_9_*` declarations are largely arithmetic wrappers conditional on analytic bounds. Genuine unconditional beam-model sine/sin(2 Theta) theorems exist elsewhere and should be the source evidence for the actual Section 9 conclusions."
     },
     {
       "id": "DK-9.5-9.7",
       "section": "9",
-      "title": "Rayleigh\u2013Ritz tangent refinements",
+      "title": "Rayleigh–Ritz tangent refinements",
       "source_kind": "numerical_claims",
-      "source_anchor": "Equations (9.5)\u2013(9.7)",
+      "source_anchor": "Equations (9.5)–(9.7)",
       "completion_obligation": true,
       "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
@@ -1336,7 +1591,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "dfcd77c495e43593fcd6cd52f5719eacdda94902526d1117ca61dba086500774"
+      "source_specification_sha256": "dfcd77c495e43593fcd6cd52f5719eacdda94902526d1117ca61dba086500774",
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_mapping",
+          "detail": "The current primary mapping emphasizes numerical wrappers rather than the genuine beam tangent/double-tangent theorems that discharge the analytic hypotheses. Rebind the row to the unconditional source-facing model results."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The current primary mapping emphasizes numerical wrappers rather than the genuine beam tangent/double-tangent theorems that discharge the analytic hypotheses. Rebind the row to the unconditional source-facing model results."
     },
     {
       "id": "DK-9.8",
@@ -1345,7 +1608,7 @@
       "source_kind": "comparison_claim",
       "source_anchor": "Equation (9.8)",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "source_spec_incomplete",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-9.8",
       "review_declarations": [
@@ -1362,7 +1625,19 @@
           ]
         }
       ],
-      "source_specification_sha256": "1afeeefe736d746ac80fde7fcf57af04561e0d71121040113d8bdcd7654c98e7"
+      "source_specification_sha256": "1afeeefe736d746ac80fde7fcf57af04561e0d71121040113d8bdcd7654c98e7",
+      "expected_completion_certification": "reopened_source_spec",
+      "known_completion_holes": [
+        {
+          "kind": "source_spec_omission",
+          "detail": "The source comparison includes the asymptotic alpha_hat_k - alpha_check_k = (eps^2/30)/(500-alpha_hat_k) - O(eps^4), which is absent from the distributable TeX; the Lean comparison module explicitly says this asymptotic is intentionally not encoded."
+        },
+        {
+          "kind": "missing_source_facing_statement",
+          "detail": "The TeX asserts Weinberger's sine-square estimate and the Lehmann claim that the two lower arrowhead eigenvalues are the best lower bounds from the stated data. The repository proves the final (9.8) numbers by a sharper Davis--Kahan route and formalizes algebraic pieces conditionally, but explicitly leaves the historical Weinberger/Lehmann derivation/optimality unproved."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The source comparison includes the asymptotic alpha_hat_k - alpha_check_k = (eps^2/30)/(500-alpha_hat_k) - O(eps^4), which is absent from the distributable TeX; the Lean comparison module explicitly says this asymptotic is intentionally not encoded. The TeX asserts Weinberger's sine-square estimate and the Lehmann claim that the two lower arrowhead eigenvalues are the best lower bounds from the stated data. The repository proves the final (9.8) numbers by a sharper Davis--Kahan route and formalizes algebraic pieces conditionally, but explicitly leaves the historical Weinberger/Lehmann derivation/optimality unproved."
     },
     {
       "id": "DK-9-infinite-residual-counterexample",
@@ -1371,7 +1646,7 @@
       "source_kind": "example",
       "source_anchor": "Section 9, l2 example after (9.8)",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "partial_or_wrapper_missing",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-9-infinite-residual-counterexample",
       "review_declarations": [
@@ -1396,14 +1671,22 @@
           ]
         }
       ],
-      "source_specification_sha256": "2b28098ba69b0cd83e5755b950b4a4eda9cc7e80f3a2a6d95d46921271d8c91f"
+      "source_specification_sha256": "2b28098ba69b0cd83e5755b950b4a4eda9cc7e80f3a2a6d95d46921271d8c91f",
+      "expected_completion_certification": "reopened_math",
+      "known_completion_holes": [
+        {
+          "kind": "missing_source_facing_statement",
+          "detail": "The source says an arbitrarily small modification repairs the domain defect. Lean proves finite truncations lie in the operator domain and agree on every fixed prefix, but the hostile review did not find a norm-convergence/arbitrarily-small-perturbation theorem for those truncations."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The source says an arbitrarily small modification repairs the domain defect. Lean proves finite truncations lie in the operator domain and agree on every fixed prefix, but the hostile review did not find a norm-convergence/arbitrarily-small-perturbation theorem for those truncations."
     },
     {
       "id": "DK-9.9-9.11",
       "section": "9",
       "title": "Individual eigenvector identification inside a cluster",
       "source_kind": "numerical_claims",
-      "source_anchor": "Equations (9.9)\u2013(9.11) and final bounds",
+      "source_anchor": "Equations (9.9)–(9.11) and final bounds",
       "completion_obligation": true,
       "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
@@ -1426,7 +1709,15 @@
           ]
         }
       ],
-      "source_specification_sha256": "0f9c97c3405ebbf348de1e40df437d08c8f1e129a0038987c7ed12e45061413f"
+      "source_specification_sha256": "0f9c97c3405ebbf348de1e40df437d08c8f1e129a0038987c7ed12e45061413f",
+      "expected_completion_certification": "mixed_disposition",
+      "known_completion_holes": [
+        {
+          "kind": "mixed_disposition",
+          "detail": "The numerical/Schur-complement conclusions appear formalized, but the block ends with a source assertion that the 3x3 comparison angle is the best possible bound obtainable from the stated data while explicitly deferring its proof to unresolved Question 10.2. Record that assertion separately as source-asserted/unproved rather than counting the entire block as exact."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The numerical/Schur-complement conclusions appear formalized, but the block ends with a source assertion that the 3x3 comparison angle is the best possible bound obtainable from the stated data while explicitly deferring its proof to unresolved Question 10.2. Record that assertion separately as source-asserted/unproved rather than counting the entire block as exact."
     },
     {
       "id": "DK-10.1",
@@ -1450,7 +1741,9 @@
           ]
         }
       ],
-      "source_specification_sha256": "31b6c36c9e33fb0d82afcfe7223d42b7558d1ba307b0b7823a2ff1e8ac23c764"
+      "source_specification_sha256": "31b6c36c9e33fb0d82afcfe7223d42b7558d1ba307b0b7823a2ff1e8ac23c764",
+      "expected_completion_certification": "not_applicable",
+      "known_completion_holes": []
     },
     {
       "id": "DK-10.2",
@@ -1470,12 +1763,14 @@
           "review_declarations": []
         }
       ],
-      "source_specification_sha256": "b86da1d92d84b2592690213b7f007b3a770bd42fe09dccca2c21756a36cd7dab"
+      "source_specification_sha256": "b86da1d92d84b2592690213b7f007b3a770bd42fe09dccca2c21756a36cd7dab",
+      "expected_completion_certification": "not_applicable",
+      "known_completion_holes": []
     },
     {
       "id": "DK-10.3",
       "section": "10",
-      "title": "Joint eigenvalue\u2013eigenvector bounds",
+      "title": "Joint eigenvalue–eigenvector bounds",
       "source_kind": "open_question",
       "source_anchor": "Question 10.3",
       "completion_obligation": false,
@@ -1490,27 +1785,68 @@
           "review_declarations": []
         }
       ],
-      "source_specification_sha256": "4354f4d04ae31bb397e07edd9f6dc6d99d9b2edddc6fd44b0bcc6509a9d442cf"
+      "source_specification_sha256": "4354f4d04ae31bb397e07edd9f6dc6d99d9b2edddc6fd44b0bcc6509a9d442cf",
+      "expected_completion_certification": "not_applicable",
+      "known_completion_holes": []
     },
     {
       "id": "DK-10.4",
       "section": "10",
       "title": "Perturbation bounds for functional calculus",
-      "source_kind": "open_question",
+      "source_kind": "mixed_open_question",
       "source_anchor": "Question 10.4, including ambient and directed functional-calculus specializations",
-      "completion_obligation": false,
-      "expected_status": "not_a_completion_obligation",
-      "expected_verification": "not_applicable",
+      "completion_obligation": true,
+      "expected_status": "partial_or_wrapper_missing",
+      "expected_verification": "proved_in_build",
       "tex_marker": "DK-10.4",
-      "review_declarations": [],
+      "review_declarations": [
+        "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
+        "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact"
+      ],
       "audit_clauses": [
         {
-          "id": "DK-10.4.whole",
-          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "id": "DK-10.4.step-function-identities",
+          "description": "Established model-case identities: f(A)=P, f(A+H)=Q, f(A0)=I and the projector/sine identities. These remain a completion obligation and currently have no exact registered source-facing declarations.",
           "review_declarations": []
+        },
+        {
+          "id": "DK-10.4.ambient-tan2",
+          "description": "Established ambient model-case bound delta * ||tan(2 Theta)|| <= 2 ||H||.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
+            "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact"
+          ]
+        },
+        {
+          "id": "DK-10.4.directed-tan2",
+          "description": "Established directed model-case bound delta * ||tan(2 Theta_0)|| <= 2 ||R||.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact"
+          ]
+        },
+        {
+          "id": "DK-10.4.open-general-f",
+          "description": "Genuinely open source question: analogous perturbation bounds for useful broader classes of real functions f. This clause is not proof debt.",
+          "review_declarations": [],
+          "disposition": "source_open_question"
         }
       ],
-      "source_specification_sha256": "cb03063c7dac9729bde9e1594aca09f614de292828a9f3770c28061743fb3792"
+      "source_specification_sha256": "cb03063c7dac9729bde9e1594aca09f614de292828a9f3770c28061743fb3792",
+      "expected_completion_certification": "mixed_disposition",
+      "known_completion_holes": [
+        {
+          "kind": "mixed_disposition",
+          "detail": "Question 10.4 is not a pure open-question block. Before the general-f question it states established step-function identities f(A)=P, f(A+H)=Q, f(A0)=I, the projector/sine identities, and the ambient/directed tan(2 Theta) bounds. The tan(2 Theta) bounds now have exact complex/real wrappers, but the functional-calculus identities are not atomically registered."
+        },
+        {
+          "kind": "checker_loophole",
+          "detail": "The previous checker exempted every DK-10.* row by identifier. This let established mathematics inside the Question 10.4 block escape the completion count. The row is now a mixed completion obligation until established clauses are explicitly covered and the final question separately marked open."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: Question 10.4 is not a pure open-question block. Before the general-f question it states established step-function identities f(A)=P, f(A+H)=Q, f(A0)=I, the projector/sine identities, and the ambient/directed tan(2 Theta) bounds. The tan(2 Theta) bounds now have exact complex/real wrappers, but the functional-calculus identities are not atomically registered. The previous checker exempted every DK-10.* row by identifier. This let established mathematics inside the Question 10.4 block escape the completion count. The row is now a mixed completion obligation until established clauses are explicitly covered and the final question separately marked open."
     }
   ]
 }

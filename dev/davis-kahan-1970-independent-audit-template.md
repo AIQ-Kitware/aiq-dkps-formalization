@@ -2,13 +2,13 @@
 
 This packet is organized one source claim at a time. The TeX passages come directly from the checked-in transformative, source-order reconstruction `DavisKahan1970_part_III.tex`; they are the repository's distributable semantic audit specification. The census status is a claim to audit, not evidence of semantic fidelity.
 
-Compiler evidence and mathematical-source fidelity are intentionally separate. A compiler certificate establishes that registered declarations elaborate against `DavisKahan.All`; the auditor must decide whether their types jointly match the source passage.
+Compiler evidence, source status, and hostile semantic certification are intentionally separate. A compiler certificate establishes that registered declarations elaborate against `DavisKahan.All`; the maintained `completion_certification` records whether the current passage has already survived an adversarial semantic review, and the auditor must independently confirm or overturn that judgement.
 
 - Statement map: `dev/davis-kahan-1970-statement-map.json`
 - Distributable source specification: `prose/distilled_literature/DavisKahan1970_part_III.tex`
 - Census: `dev/davis-kahan-1970-full-source-census.json`
 - Registered rows: **49**
-- Mathematical completion obligations: **45**
+- Mathematical completion obligations: **46**
 - Compiler certificate: **not supplied**. The theorem-type boxes below are placeholders; do not infer compilation from this static packet.
 
 ## Verdict vocabulary
@@ -22,7 +22,8 @@ At the end, separately list any mathematical claim found in the distributable so
 - **Source anchor:** Section 1, equations (1.1)–(1.8)
 - **Source kind:** `construction`
 - **Completion obligation:** `true`
-- **Census claim:** `compiled_exact` / `proved_in_build`
+- **Census claim:** `partial_or_wrapper_missing` / `proved_in_build`
+- **Hostile completion certification:** `reopened_math`
 - **Source-specification passage SHA-256:** `fe0395b4f9940b40576035b37c919996ecae46afc37cd384d4c0ad4851992699`
 
 ### Registered distributable source-specification passage
@@ -105,6 +106,13 @@ The paper also records the standard residual-to-eigenvalue consequence: if $\alp
 - **`S1-block-residual.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.Equation1_8`, `TauCeti.DavisKahan1970.equation1_8_eq_perturbation_comp`, `TauCeti.DavisKahan1970.equation1_8_norm_sq_eq_diagonal_add_offDiagonal`, `TauCeti.DavisKahan1970.equation1_8_norm_offDiagonal_le`
 
+### Known hostile-review holes
+
+- **`missing_source_facing_statement`:** The registered TeX includes the standard residual-to-eigenvalue consequence: ordered eigenvalues lambda_j with sum_j (alpha_j-lambda_j)^2 <= ||R||_sq^2 and |alpha_j-lambda_j| <= ||R||_1. The hostile review found no source-facing Lean declaration for these displayed conclusions.
+- **`audit_mapping`:** `equation1_8_residual_norm_minimized_by_rayleighQuotient` now proves the printed Rayleigh--Ritz minimization statement but is not registered as primary evidence for this row.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The registered TeX includes the standard residual-to-eigenvalue consequence: ordered eigenvalues lambda_j with sum_j (alpha_j-lambda_j)^2 <= ||R||_sq^2 and |alpha_j-lambda_j| <= ||R||_1. The hostile review found no source-facing Lean declaration for these displayed conclusions. `equation1_8_residual_norm_minimized_by_rayleighQuotient` now proves the printed Rayleigh--Ritz minimization statement but is not registered as primary evidence for this row.
+
 ### Primary Lean declarations for semantic review
 
 #### `TauCeti.DavisKahan1970.Equation1_8`
@@ -175,7 +183,8 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Section 1, equations (1.9)–(1.18)
 - **Source kind:** `framework`
 - **Completion obligation:** `true`
-- **Census claim:** `compiled_exact` / `proved_in_build`
+- **Census claim:** `source_spec_incomplete` / `proved_in_build`
+- **Hostile completion certification:** `reopened_source_spec`
 - **Source-specification passage SHA-256:** `b640df622d247d4b4147214c265cd5ae876424d352b8bf1f0ea8e799c17aede2`
 
 ### Registered distributable source-specification passage
@@ -261,6 +270,13 @@ Section~4 proves the stated extremal meaning of this $U$; the four main perturba
 
 - **`S1-ui-norms.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm`, `TauCeti.DavisKahan.ExactSinTheta.paperKyFanNorm`, `TauCeti.DavisKahan1970.equation1_12`, `TauCeti.DavisKahan1970.equation1_13_compressions`, `TauCeti.DavisKahan1970.equation1_13_reSum`
+
+### Known hostile-review holes
+
+- **`source_spec_omission`:** The distributable TeX omits the unnumbered cosine-law identity immediately following source equation (1.14).
+- **`scope_gap`:** The TeX preserves U = exp(J Theta) = cos Theta + J sin Theta in the general Hilbert-space setup. The source-facing arbitrary-dimensional surface proves the cosine/sine resolution, while the explicit exponential identity located by the hostile review is finite-dimensional.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The distributable TeX omits the unnumbered cosine-law identity immediately following source equation (1.14). The TeX preserves U = exp(J Theta) = cos Theta + J sin Theta in the general Hilbert-space setup. The source-facing arbitrary-dimensional surface proves the cosine/sine resolution, while the explicit exponential identity located by the hostile review is finite-dimensional.
 
 ### Primary Lean declarations for semantic review
 
@@ -350,6 +366,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `unnumbered_theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Source-specification passage SHA-256:** `8e5e36e64c718f1cdb002dd3c5a191c8919fa22bad64020bdbf8f22adb6a3f72`
 
 ### Registered distributable source-specification passage
@@ -441,6 +458,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `unnumbered_theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `c85f8a2839187dd9ae4d020608816821c3b1f30e401eb5e52d4cbce093e82b3c`
 
 ### Registered distributable source-specification passage
@@ -468,6 +486,12 @@ The first is directed and residual-based; the second uses the ambient angle and 
   - Review declarations: `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`
 - **`S2-tan-theta.ambient`:** Ambient conclusion: delta * ||tan Theta|| <= ||H||, with the ambient angle rather than Theta_0.
   - Review declarations: `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm`, `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real`
+
+### Known hostile-review holes
+
+- **`audit_mapping`:** The mapped real ambient declaration accepts an explicit transversality premise. A source-hypotheses-only real theorem (`tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent`) exists, so this is evidence-selection debt rather than missing mathematics.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The mapped real ambient declaration accepts an explicit transversality premise. A source-hypotheses-only real theorem (`tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent`) exists, so this is evidence-selection debt rather than missing mathematics.
 
 ### Primary Lean declarations for semantic review
 
@@ -497,7 +521,7 @@ Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a
 
 #### `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:292`, `DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1275`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:320`, `DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1275`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
@@ -539,7 +563,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - `TauCeti.DavisKahan1970.theorem63DirectedSineBlockReal` — DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:54
 - `TauCeti.DavisKahan1970.theorem63ResidualReal` — DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:60
 - `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real` — DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:418
-- `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent` — Challenge/DavisKahan1970/Conformance.lean:292, DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1275
+- `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent` — Challenge/DavisKahan1970/Conformance.lean:320, DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1275
 - `TauCeti.DavisKahan1970.tanTheta_wholeSpace_all_kyFan_of_crossedDefectsEquivalent` — DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1254
 - `TauCeti.DavisKahan1970.norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent` — DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1229
 - `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_spectral` — DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:492
@@ -578,6 +602,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `unnumbered_theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Source-specification passage SHA-256:** `7da711fdbd912b64b5aa6f2efc5c4255bcbe796831a18b99c92712024b81c70b`
 
 ### Registered distributable source-specification passage
@@ -609,13 +634,13 @@ Again the source distinguishes the directed residual statement from the ambient 
 
 #### `TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:132`, `DavisKahan/Sources/DavisKahan1970/PartIII.lean:150`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:135`, `DavisKahan/Sources/DavisKahan1970/PartIII.lean:150`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:328`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:723`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:390`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:723`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
@@ -642,7 +667,7 @@ Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a
 
 When a compiler certificate is supplied, `signatures.json` contains the compiler-printed type for every declaration in this full mapping, not only the primary declarations displayed above.
 
-- `TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm` — Challenge/DavisKahan1970/Conformance.lean:132, DavisKahan/Sources/DavisKahan1970/PartIII.lean:150
+- `TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm` — Challenge/DavisKahan1970/Conformance.lean:135, DavisKahan/Sources/DavisKahan1970/PartIII.lean:150
 - `TauCeti.DavisKahan.sinTwoTheta_addBounded_of_spectrum_gap` — DavisKahan/DoubleAngle/UnboundedIdeal.lean:509
 - `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative` — DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:166
 - `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative` — DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:254
@@ -654,7 +679,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - `TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_real` — DavisKahan/DoubleAngle/RealUnboundedIdeal.lean:180
 - `TauCeti.DavisKahanExt.sinTwoTheta_perturbation` — DavisKahan/InfiniteDimensional/DoubleAngle.lean:937
 - `TauCeti.DavisKahanExt.sinTwoTheta_generalSeparation` — DavisKahan/InfiniteDimensional/DoubleAngle.lean:970
-- `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm` — Challenge/DavisKahan1970/Conformance.lean:328, DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:723
+- `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm` — Challenge/DavisKahan1970/Conformance.lean:390, DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:723
 - `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:252
 - `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR` — DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:122
 - `TauCeti.DavisKahanExt.complexify_paperSinTwoAngleOperatorR` — DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:156
@@ -704,6 +729,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `unnumbered_theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Source-specification passage SHA-256:** `5c5b96c1cc563a42d13b8b4e06989c19ff82ec8ed6958f3da78d67dc9b2b7830`
 
 ### Registered distributable source-specification passage
@@ -742,7 +768,7 @@ Section~7 derives the nonvanishing of the relevant $\cos(2\theta_j)$ factors fro
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1160`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:441`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1160`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
@@ -754,7 +780,7 @@ Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1297`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:531`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1297`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
@@ -769,7 +795,7 @@ Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a
 
 When a compiler certificate is supplied, `signatures.json` contains the compiler-printed type for every declaration in this full mapping, not only the primary declarations displayed above.
 
-- `TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm` — Challenge/DavisKahan1970/Conformance.lean:151, DavisKahan/Sources/DavisKahan1970/PartIII.lean:163
+- `TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm` — Challenge/DavisKahan1970/Conformance.lean:154, DavisKahan/Sources/DavisKahan1970/PartIII.lean:163
 - `TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine` — DavisKahan/TanTwoTheta/BoundedOffDiagonal.lean:143
 - `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm` — DavisKahan/Sources/DavisKahan1970/SharpIdeal.lean:99
 - `TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm_selectedBranch` — DavisKahan/Sources/DavisKahan1970/SharpIdeal.lean:203
@@ -783,7 +809,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace` — DavisKahan/DoubleAngle/TanTwoThetaKyFanFiniteCarrier.lean:157
 - `TauCeti.DavisKahanTheory.kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace` — DavisKahan/DoubleAngle/TanTwoThetaKyFanFiniteCarrier.lean:555
 - `TauCeti.DavisKahanTheory.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace` — DavisKahan/DoubleAngle/TanTwoThetaKyFanFiniteCarrier.lean:603
-- `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace` — Challenge/DavisKahan1970/Conformance.lean:349, DavisKahan/Sources/DavisKahan1970/TanTwoThetaBranchFree.lean:140
+- `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace` — Challenge/DavisKahan1970/Conformance.lean:411, DavisKahan/Sources/DavisKahan1970/TanTwoThetaBranchFree.lean:140
 - `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_real` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaBranchFreeInfiniteReal.lean:120
 - `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_kyFan_arbitrarySubspace` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaBranchFree.lean:230
 - `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_prefix_arbitrarySubspace` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaBranchFree.lean:235
@@ -813,15 +839,15 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_all_kyFan_of_corner` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean:1424
 - `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_of_corner` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean:1531
 - `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_all_kyFan_branchFree` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1107
-- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_branchFree` — Challenge/DavisKahan1970/Conformance.lean:408, DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1126
+- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_branchFree` — Challenge/DavisKahan1970/Conformance.lean:511, DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1126
 - `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_all_kyFan_branchFree` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1008
 - `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_branchFree` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1043
-- `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1160
+- `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact` — Challenge/DavisKahan1970/Conformance.lean:441, DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1160
 - `TauCeti.DavisKahan1970.paperTanTwoDirectedCornerR` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:176
 - `TauCeti.DavisKahan1970.paperProjectionBlock_complexifySubmodule_real` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:187
 - `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:362
 - `TauCeti.DavisKahan1970.paperAbsTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean:572
-- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1297
+- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact` — Challenge/DavisKahan1970/Conformance.lean:531, DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1297
 - `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:433
 
 </details>
@@ -855,6 +881,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `source_claim`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `fb0eaba8db2c7f46d5005c12d734b0dad4f4ad83097696e71a3954e68ffb8efb`
 
 ### Registered distributable source-specification passage
@@ -867,6 +894,12 @@ The constants in all four theorem families are asserted to be best possible.  Tw
 
 - **`S2-sharpness.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahanTheory.tanTheta_model_sourceSharpness`, `TauCeti.DavisKahanTheory.tanTwoTheta_model_sourceSharpness`, `TauCeti.DavisKahanTheory.sinTheta_constant_optimal`, `TauCeti.DavisKahanTheory.sinTwoTheta_constant_optimal`, `TauCeti.DavisKahanTheory.single_double_sine_tangent_ratios_tendsto_one`, `TauCeti.DavisKahanTheory.sinTheta_model_equality`
+
+### Known hostile-review holes
+
+- **`audit_atomization`:** The hashed passage asserts optimal constants, two-dimensional equality models, direct-sum simultaneous equality for all unitary-invariant norms, and first-order sharpness. Existing sharpness machinery is richer than the current review mapping, but these separable claims are not individually certified.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The hashed passage asserts optimal constants, two-dimensional equality models, direct-sum simultaneous equality for all unitary-invariant norms, and first-order sharpness. Existing sharpness machinery is richer than the current review mapping, but these separable claims are not individually certified.
 
 ### Primary Lean declarations for semantic review
 
@@ -1000,6 +1033,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `scope_claim`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `7f098b2419b68b1002016fbc6983ccd57639127da6c28456751248a9c33cf43a`
 
 ### Registered distributable source-specification passage
@@ -1012,6 +1046,12 @@ The paper states the four main results for infinite as well as finite dimensiona
 
 - **`S2-unbounded-scope.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing_real`, `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_of_reducing_real`, `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real`, `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_real`, `TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteData_real`, `TauCeti.DavisKahan1970.canonical_generalizedSinTheta`
+
+### Known hostile-review holes
+
+- **`audit_atomization`:** The passage asserts the full infinite-dimensional/unbounded/arbitrary-UI-norm scope for all four headline theorem families. The current evidence is a sample of endpoints rather than an explicit clause-by-clause four-family scope certificate.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The passage asserts the full infinite-dimensional/unbounded/arbitrary-UI-norm scope for all four headline theorem families. The current evidence is a sample of endpoints rather than an explicit clause-by-clause four-family scope certificate.
 
 ### Primary Lean declarations for semantic review
 
@@ -1118,6 +1158,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `definition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `a20649b8dd41ae1561494af20da1e2ea6ada223a3c5b2c4156bd2a795fdfd092`
 
 ### Registered distributable source-specification passage
@@ -1173,6 +1214,12 @@ which are used in the existence and uniqueness analysis.
 
 - **`DK-3.1-def.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.complex_directRotation`, `TauCeti.DavisKahan1970.real_directRotation`, `TauCeti.DavisKahan1970.real_directRotation_orthogonal`, `TauCeti.DavisKahan1970.real_directRotation_intertwines`, `TauCeti.DavisKahan1970.real_directRotation_diagonalBlock`, `TauCeti.DavisKahan1970.real_directRotation_complementaryDiagonalBlock`
+
+### Known hostile-review holes
+
+- **`audit_atomization`:** The block contains equations (3.1)-(3.4), unitarity block identities, singular-value/nullity assertions, and the direct-rotation definition. The current generic `.whole` clause does not certify those assertions individually.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The block contains equations (3.1)-(3.4), unitarity block identities, singular-value/nullity assertions, and the direct-rotation definition. The current generic `.whole` clause does not certify those assertions individually.
 
 ### Primary Lean declarations for semantic review
 
@@ -1269,6 +1316,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `definition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Source-specification passage SHA-256:** `62638f6ec5fe84cc6ddad8a423f99d5b024c0f6ff2e1aa7a37f3d9604a77b609`
 
 ### Registered distributable source-specification passage
@@ -1353,6 +1401,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `ff945cb6247987becf0eec9e3c5fd945ba2df2d2b8756cea6df2c7ebd00213d4`
 
 ### Registered distributable source-specification passage
@@ -1365,6 +1414,12 @@ In the acute case, a direct rotation exists and is unique.  Moreover positivity 
 
 - **`DK-3.1-prop.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.complex_directRotation`, `TauCeti.DavisKahan1970.complex_directRotation_unique`, `TauCeti.DavisKahan1970.complex_directRotation_diagonalBlock`, `TauCeti.DavisKahan1970.complex_directRotation_complementaryDiagonalBlock`, `TauCeti.DavisKahan1970.complex_directRotation_reflectionConjugate`, `TauCeti.DavisKahan1970.complex_directRotation_of_diagonalBlocks`
+
+### Known hostile-review holes
+
+- **`audit_mapping`:** Primary evidence is complex-centric even though the paper ambient convention is real or complex and real counterparts exist elsewhere in the census. Register exact real evidence explicitly.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: Primary evidence is complex-centric even though the paper ambient convention is real or complex and real counterparts exist elsewhere in the census. Register exact real evidence explicitly.
 
 ### Primary Lean declarations for semantic review
 
@@ -1470,7 +1525,8 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Proposition 3.2
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
-- **Census claim:** `compiled_exact` / `proved_in_build`
+- **Census claim:** `partial_or_wrapper_missing` / `proved_in_build`
+- **Hostile completion certification:** `reopened_math`
 - **Source-specification passage SHA-256:** `3824155c8b919c0b61e9eb7bdc7b822214fbb6d6abfa95f7e7eb5eac2a73c09a`
 
 ### Registered distributable source-specification passage
@@ -1489,6 +1545,12 @@ When it exists it need not be unique.  On the two crossing subspaces a direct ro
 
 - **`DK-3.2-prop.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_parameterized_nonuniqueness`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent_real`
+
+### Known hostile-review holes
+
+- **`missing_source_facing_statement`:** The source passage says that on the two crossing subspaces every direct rotation satisfies U^2 x = -x. The hostile review did not find an exported source-facing theorem with that statement, although related reflection-product ingredients exist.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The source passage says that on the two crossing subspaces every direct rotation satisfies U^2 x = -x. The hostile review did not find an exported source-facing theorem with that statement, although related reflection-product ingredients exist.
 
 ### Primary Lean declarations for semantic review
 
@@ -1561,7 +1623,8 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Proposition 3.3
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
-- **Census claim:** `compiled_exact` / `proved_in_build`
+- **Census claim:** `source_spec_incomplete` / `proved_in_build`
+- **Hostile completion certification:** `reopened_source_spec`
 - **Source-specification passage SHA-256:** `0694cb7e2df9c35cd98c528b0ded3fea303834eb3366ae666c66e73b87a7e345`
 
 ### Registered distributable source-specification passage
@@ -1585,6 +1648,12 @@ Every direct rotation is therefore the principal unitary square root of $(Q-Q^\p
 
 - **`DK-3.3-prop.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.complex_directRotation_sq`, `TauCeti.DavisKahan1970.complex_directRotation_hermitianPart`, `TauCeti.DavisKahan1970.complex_directRotation_principal_of_sq`, `TauCeti.DavisKahan1970.real_directRotation_sq`, `TauCeti.DavisKahan1970.real_directRotation_hermitianPart`, `TauCeti.DavisKahan1970.real_directRotation_principal_of_sq`
+
+### Known hostile-review holes
+
+- **`source_spec_omission`:** The anchor promises equations (3.6)-(3.8), but the distributable TeX skips source equation (3.7), the explicit block formula for Q in terms of C_0 and S_0.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The anchor promises equations (3.6)-(3.8), but the distributable TeX skips source equation (3.7), the explicit block formula for Q in terms of C_0 and S_0.
 
 ### Primary Lean declarations for semantic review
 
@@ -1670,7 +1739,8 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Proposition 3.4
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
-- **Census claim:** `compiled_exact` / `proved_in_build`
+- **Census claim:** `compiled_specialization` / `proved_in_build`
+- **Hostile completion certification:** `reopened_math`
 - **Source-specification passage SHA-256:** `a4914037fecd9b2f6193105f137f3a59d160e47ca70747bb4a6c430477038990`
 
 ### Registered distributable source-specification passage
@@ -1687,6 +1757,12 @@ Under the same direct-rotation setup, if
 
 - **`DK-3.4-prop.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation`
+
+### Known hostile-review holes
+
+- **`scope_gap`:** `proposition3_4_source_full` is explicitly complex-valued. The paper does not restrict Proposition 3.4 to the complex scalar field; an exact real source-facing counterpart was not located.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: `proposition3_4_source_full` is explicitly complex-valued. The paper does not restrict Proposition 3.4 to the complex scalar field; an exact real source-facing counterpart was not located.
 
 ### Primary Lean declarations for semantic review
 
@@ -1754,6 +1830,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Source-specification passage SHA-256:** `c596c36a00cab2889d9af204a420d6746d77273cc66e9a3268dc91891902987f`
 
 ### Registered distributable source-specification passage
@@ -1874,6 +1951,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `corollary`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Source-specification passage SHA-256:** `2661dd05c08e61c06c54ce50c66032413a3c958bb7cda1b28638548253e30d2c`
 
 ### Registered distributable source-specification passage
@@ -1965,7 +2043,8 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Proposition 3.5
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
-- **Census claim:** `compiled_exact` / `proved_in_build`
+- **Census claim:** `partial_or_wrapper_missing` / `proved_in_build`
+- **Hostile completion certification:** `reopened_math`
 - **Source-specification passage SHA-256:** `bdabc4530ed8ad8040dfe34d4a1071b2b52d3563d3e0e5bb9de9868287999a4e`
 
 ### Registered distributable source-specification passage
@@ -1986,6 +2065,12 @@ In the acute case the $\theta$-eigenspace of $\Theta$ is the unique maximal subs
 
 - **`DK-3.5-prop.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.proposition3_5_directRotation_resolution`, `TauCeti.DavisKahan1970.proposition3_5_commutations`, `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle`, `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace`, `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal`, `TauCeti.DavisKahan1970.proposition3_5_angleOperator`
+
+### Known hostile-review holes
+
+- **`scope_gap`:** The registered passage includes the Hilbert-space identity U = exp(J Theta). The source-facing arbitrary-dimensional Proposition 3.5 surface exposes U = cos Theta + J sin Theta; the explicit exponential theorem located by the review is finite-dimensional.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The registered passage includes the Hilbert-space identity U = exp(J Theta). The source-facing arbitrary-dimensional Proposition 3.5 surface exposes U = cos Theta + J sin Theta; the explicit exponential theorem located by the review is finite-dimensional.
 
 ### Primary Lean declarations for semantic review
 
@@ -2123,6 +2208,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `corollary`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Source-specification passage SHA-256:** `6ef3d66483655d6bf428a2422d4d26494455fe9cba09939d61a2092809e68a9d`
 
 ### Registered distributable source-specification passage
@@ -2223,7 +2309,8 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2)
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
-- **Census claim:** `compiled_exact` / `proved_in_build`
+- **Census claim:** `source_spec_incomplete` / `proved_in_build`
+- **Hostile completion certification:** `reopened_source_spec`
 - **Source-specification passage SHA-256:** `bf3ccc8a5961a08a52de6724dd95561afa29412f0c4c4dfdb7a40ea81112f45f`
 
 ### Registered distributable source-specification passage
@@ -2248,6 +2335,12 @@ The proof uses the singular-value minimax principle (the paper's equation (4.1))
   - Review declarations: `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors`, `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real`
 - **`DK-4.1-prop.singular`:** Equivalent singular-value/approximation-number minimality formulation, including the direct-rotation value 2 sin(theta_k/2).
   - Review declarations: `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors`, `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real`, `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute`, `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real`, `TauCeti.DavisKahan1970.Proposition4_1_directRotationValues`
+
+### Known hostile-review holes
+
+- **`source_spec_omission`:** The TeX anchor says it covers source equations (4.1)-(4.2) but only paraphrases them. The explicit minimax formula (4.1) and pointwise vector-angle inequality (4.2) are missing from the distributable specification.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The TeX anchor says it covers source equations (4.1)-(4.2) but only paraphrases them. The explicit minimax formula (4.1) and pointwise vector-angle inequality (4.2) are missing from the distributable specification.
 
 ### Primary Lean declarations for semantic review
 
@@ -2333,6 +2426,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `corollary`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Source-specification passage SHA-256:** `73cd6caf9a976a811e4836d656d566a66b0f57c7504ff38365d6891b3d75b9ba`
 
 ### Registered distributable source-specification passage
@@ -2417,6 +2511,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `a1d36230f960f5b48427a6c4fce26c28327cc9fdff714575e4261c76ae92c4f4`
 
 ### Registered distributable source-specification passage
@@ -2435,6 +2530,12 @@ with the inequality also valid when the right-hand side is infinite.  The proof 
 
 - **`DK-4.2-prop.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional`, `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence`
+
+### Known hostile-review holes
+
+- **`audit_atomization`:** The main inequality appears formalized, but the source block also records the trace/basis identification used in the proof. The terminal row does not separately bind that preserved mathematical assertion to Lean evidence.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The main inequality appears formalized, but the source block also records the trace/basis identification used in the proof. The terminal row does not separately bind that preserved mathematical assertion to Lean evidence.
 
 ### Primary Lean declarations for semantic review
 
@@ -2510,6 +2611,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `efb61fbf15adb18ac47572bb82096f44ac2bd356072eaa15cd006cec8cc14dac`
 
 ### Registered distributable source-specification passage
@@ -2577,6 +2679,12 @@ for every unitary-invariant norm.  They also imply minimality of the operator no
 - **`DK-4.3-prop.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional_idealGauge`
 
+### Known hostile-review holes
+
+- **`audit_mapping`:** Broader nonacute and real source theorems exist, but the primary row evidence is narrower and the hashed block contains equations (4.3)-(4.6) plus the precise UI-norm limitation. Rebind/atomize the complete source scope.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: Broader nonacute and real source theorems exist, but the primary row evidence is narrower and the hashed block contains equations (4.3)-(4.6) plus the precise UI-norm limitation. Rebind/atomize the complete source scope.
+
 ### Primary Lean declarations for semantic review
 
 #### `TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional_idealGauge`
@@ -2639,6 +2747,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
 - **Census claim:** `refuted_as_transcribed` / `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Source-specification passage SHA-256:** `1896dfda86994261bd007a6aeaf1fcd46b1b47e60a197caa7313cc5025ac1194`
 
 ### Registered distributable source-specification passage
@@ -2723,6 +2832,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `38590318e770b1eddea8bb6e6a45126b57c9652588f5e1c6991078f3dd8a6c4a`
 
 ### Registered distributable source-specification passage
@@ -2754,6 +2864,12 @@ The roles and hypotheses of $A$ and $B$ may be interchanged.  The same proof als
   - Review declarations: `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact`
 - **`DK-5.1-thm.unboundedA`:** Printed prose extension allowing densely-defined unbounded A while B and X remain bounded.
   - Review declarations: `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA`
+
+### Known hostile-review holes
+
+- **`audit_mapping`:** The source block includes the Banach-space inverse-norm form, A/B interchange, and unbounded-left extension. The repository contains strong infrastructure and literal wrappers, but the audit row does not atomically show that every printed clause is represented at real/complex source scope.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The source block includes the Banach-space inverse-norm form, A/B interchange, and unbounded-left extension. The repository contains strong infrastructure and literal wrappers, but the audit row does not atomically show that every printed clause is represented at real/complex source scope.
 
 ### Primary Lean declarations for semantic review
 
@@ -2823,7 +2939,8 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Section 5, inequalities (5.1) and (5.2)
 - **Source kind:** `equation`
 - **Completion obligation:** `true`
-- **Census claim:** `compiled_exact` / `proved_in_build`
+- **Census claim:** `partial_or_wrapper_missing` / `proved_in_build`
+- **Hostile completion certification:** `reopened_math`
 - **Source-specification passage SHA-256:** `da41db53882bd87b7aba9f8e3b827b46a08f6e6ac0d2e6638d6251d93c20cb5f`
 
 ### Registered distributable source-specification passage
@@ -2855,6 +2972,13 @@ for which
 
 - **`DK-5-hermitian-inequalities.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap`, `TauCeti.DavisKahan.ExactSinTheta.paperOperatorNorm_sylvester_le_of_pairwiseSpectrumGap`
+
+### Known hostile-review holes
+
+- **`missing_source_facing_statement`:** The TeX states that (5.2) is not best possible unless rank C <= 1. The repository formalizes (5.1), the rank-corrected estimate, and a counterexample showing constant 1 is too small, but the hostile review found no source-facing theorem for this stronger qualitative assertion.
+- **`mixed_disposition`:** The same block asks whether the rank factor can be replaced by a universal constant. That open question should be atomically dispositioned instead of being swallowed by a terminal `.whole` clause.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The TeX states that (5.2) is not best possible unless rank C <= 1. The repository formalizes (5.1), the rank-corrected estimate, and a counterexample showing constant 1 is too small, but the hostile review found no source-facing theorem for this stronger qualitative assertion. The same block asks whether the rank factor can be replaced by a universal constant. That open question should be atomically dispositioned instead of being swallowed by a terminal `.whole` clause.
 
 ### Primary Lean declarations for semantic review
 
@@ -2919,6 +3043,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `2078bb97672c50ca247554b198c575e381bd776725924f1333057a2a10fc3d8c`
 
 ### Registered distributable source-specification passage
@@ -2943,6 +3068,12 @@ This is the source's main Sylvester tool for the unbounded self-adjoint passages
 
 - **`DK-5.2-thm.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.Theorem5_2`, `TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum`
+
+### Known hostile-review holes
+
+- **`audit_mapping`:** The theorem appears available in both scalar fields, but primary evidence is not explicitly bound clause-by-clause to the paper's full real/complex source scope.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The theorem appears available in both scalar fields, but primary evidence is not explicitly bound clause-by-clause to the paper's full real/complex source scope.
 
 ### Primary Lean declarations for semantic review
 
@@ -3000,6 +3131,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `lemma`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Source-specification passage SHA-256:** `4154e65f1eb46629c33da85de5866a2751ce9b5e21d9fa3956d2d6d0e677ecbd`
 
 ### Registered distributable source-specification passage
@@ -3064,6 +3196,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `lemma`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Source-specification passage SHA-256:** `3fcdb9152000100900fc421874565b2defe8ccb6cc2a8574154d146c509eb2d5`
 
 ### Registered distributable source-specification passage
@@ -3142,6 +3275,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `lemma`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Source-specification passage SHA-256:** `fefd468fd43df7f2d9ecb643c21a78aa0f8471b3b3909472925d347e6aa26f63`
 
 ### Registered distributable source-specification passage
@@ -3205,6 +3339,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `ec802eefcfa341b4268ff3fd35bdb06d38211ec9cf5c72138d53e1ffdf5d11ce`
 
 ### Registered distributable source-specification passage
@@ -3236,6 +3371,12 @@ The symmetric replacement is Proposition~6.1: if the $A_0$--$\Lambda_1$ spectra 
 
 - **`DK-6.1-prop.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.Proposition6_1`, `TauCeti.DavisKahan1970.Proposition6_1_real`
+
+### Known hostile-review holes
+
+- **`audit_mapping`:** The source block contains the Sylvester identity (6.1), Proposition 6.1, and an explicit 2x2 counterexample showing the ambient one-sided sine conclusion fails. The counterexample exists elsewhere but is not registered as evidence for this row.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The source block contains the Sylvester identity (6.1), Proposition 6.1, and an explicit 2x2 counterexample showing the ambient one-sided sine conclusion fails. The counterexample exists elsewhere but is not registered as evidence for this row.
 
 ### Primary Lean declarations for semantic review
 
@@ -3295,6 +3436,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Source-specification passage SHA-256:** `13e2036a72aaec0c5094f6014d3bfe1933167f1a43cf79f77716d5d7bf9726c7`
 
 ### Registered distributable source-specification passage
@@ -3384,6 +3526,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `3d339a183924f39cbfd71c81f3745c69442b26a631b3a25921093e05277bb58d`
 
 ### Registered distributable source-specification passage
@@ -3410,6 +3553,12 @@ Combining this with (5.2) also yields the rank-corrected operator-norm estimate
 
 - **`DK-6.2-thm.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.Theorem6_2`, `TauCeti.DavisKahan1970.Theorem6_2_real`, `TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain`, `TauCeti.DavisKahan1970.Theorem6_2_real_commonCore`
+
+### Known hostile-review holes
+
+- **`audit_mapping`:** The source passage contains both the Hilbert--Schmidt theorem and its rank-corrected operator-norm consequence. Exact rank-consequence declarations exist but are not mapped into the row's semantic audit clauses.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The source passage contains both the Hilbert--Schmidt theorem and its rank-corrected operator-norm consequence. Exact rank-consequence declarations exist but are not mapped into the row's semantic audit clauses.
 
 ### Primary Lean declarations for semantic review
 
@@ -3479,7 +3628,8 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Section 6 equations (6.2)–(6.6), Example 6.1, and Theorem 6.3
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
-- **Census claim:** `compiled_exact` / `proved_in_build`
+- **Census claim:** `partial_or_wrapper_missing` / `proved_in_build`
+- **Hostile completion certification:** `reopened_math`
 - **Source-specification passage SHA-256:** `ca0097fc54e1567d7129b6da2a912399a2cb516b3ba5ddc306bf4ab65b746505`
 
 ### Registered distributable source-specification passage
@@ -3545,6 +3695,12 @@ then the corresponding directed tangent operator satisfies, for every unitary-in
 - **`DK-6.3-thm.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.Theorem6_3`, `TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real`, `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm`, `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real`
 
+### Known hostile-review holes
+
+- **`missing_source_facing_statement`:** The generalized tangent theorem itself appears covered, but the same hashed passage preserves Example 6.1: delta=1, tangent quantity 1, residual 1/sqrt(2) when spectral mass lies on the wrong side. The hostile review did not find an exact source-facing formalization of that explicit counterexample.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The generalized tangent theorem itself appears covered, but the same hashed passage preserves Example 6.1: delta=1, tangent quantity 1, residual 1/sqrt(2) when spectral mass lies on the wrong side. The hostile review did not find an exact source-facing formalization of that explicit counterexample.
+
 ### Primary Lean declarations for semantic review
 
 #### `TauCeti.DavisKahan1970.Theorem6_3`
@@ -3561,7 +3717,7 @@ Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:271`, `DavisKahan/Sources/DavisKahan1970/Directed.lean:73`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:274`, `DavisKahan/Sources/DavisKahan1970/Directed.lean:73`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
@@ -3595,8 +3751,8 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_spectral_exists` — DavisKahan/TanTheta/Theorem63InfiniteTrial.lean:871
 - `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_of_formBounds` — DavisKahan/TanTheta/Theorem63InfiniteTrial.lean:642
 - `TauCeti.DavisKahan.ExactTanTheta.exists_hasTheorem63DirectedTangentApproximationNumbersInfinite` — DavisKahan/TanTheta/Theorem63InfiniteTrial.lean:703
-- `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm` — Challenge/DavisKahan1970/Conformance.lean:271, DavisKahan/Sources/DavisKahan1970/Directed.lean:73
-- `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral` — DavisKahan/Sources/DavisKahan1970/Directed.lean:122
+- `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm` — Challenge/DavisKahan1970/Conformance.lean:274, DavisKahan/Sources/DavisKahan1970/Directed.lean:73
+- `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral` — Challenge/DavisKahan1970/Conformance.lean:297, DavisKahan/Sources/DavisKahan1970/Directed.lean:122
 
 </details>
 
@@ -3629,6 +3785,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `appendix`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `c5bacffe42fb3c4e8e6bba5a6b28fc34f51bd04ec368afb41d9fee5e9de689aa`
 
 ### Registered distributable source-specification passage
@@ -3673,6 +3830,12 @@ The source then lets the approximation error tend to zero, first obtaining the o
 
 - **`DK-6-appendix.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.Theorem6_1_commonDomain`, `TauCeti.DavisKahan1970.Theorem6_1_commonCore`, `TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain`, `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore`, `TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain`, `TauCeti.DavisKahan1970.Theorem6_2_real_commonCore`
+
+### Known hostile-review holes
+
+- **`audit_atomization`:** The TeX explicitly preserves equations (6.7)-(6.11) and the limiting proof chain. The row maps endpoint/common-domain machinery and historically treats parts of the chain as documentation fidelity; under statement-level 100% coverage, every preserved mathematical equation needs explicit evidence/disposition.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The TeX explicitly preserves equations (6.7)-(6.11) and the limiting proof chain. The row maps endpoint/common-domain machinery and historically treats parts of the chain as documentation fidelity; under statement-level 100% coverage, every preserved mathematical equation needs explicit evidence/disposition.
 
 ### Primary Lean declarations for semantic review
 
@@ -3790,6 +3953,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `lemma`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Source-specification passage SHA-256:** `6709c9fbf240ea7fc10d68b73cd0c746c59536127a66d13108ba14d114d52a45`
 
 ### Registered distributable source-specification passage
@@ -3874,6 +4038,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proof_package`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `67854d13100c18b09c60f5af6e85a937281d1653a691c7f24357da4964f82cf2`
 
 ### Registered distributable source-specification passage
@@ -3934,7 +4099,11 @@ has $2\norm{R}=2$ while $\delta\norm{\sin2\Theta_0}=\delta$, which can be arbitr
 - **`DK-7-sin2-proof.directed`:** Sharper directed residual conclusion: delta ||sin 2 Theta_0|| <= ||B|| <= ||R||, without the ambient factor two.
   - Review declarations: `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative`
 
-> **Audit warning:** The distributable source specification intentionally records both the Section 2 factor-two directed residual theorem and the Section 7 factor-one proof-derived residual step. Treat them as distinct source facts during source-to-Lean review. If the original paper or a private transcription is available, it may be used separately to re-audit this discrepancy; ordinary static certification does not depend on that private material.
+### Known hostile-review holes
+
+- **`audit_atomization`:** The block contains equations (7.1)-(7.5), reflected diagonalization, the factor-one directed residual refinement, swap asymmetry, and a counterexample. The current clauses do not explicitly account for every separable identity/assertion.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The block contains equations (7.1)-(7.5), reflected diagonalization, the factor-one directed residual refinement, swap asymmetry, and a counterexample. The current clauses do not explicitly account for every separable identity/assertion.
 
 ### Primary Lean declarations for semantic review
 
@@ -3998,6 +4167,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proof_package`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `59db32e78184895941dce6d1068875d12f24818a0c86b7a02a9f452d2324f226`
 
 ### Registered distributable source-specification passage
@@ -4035,6 +4205,12 @@ Lemma~6.1 supplies the corresponding whole-space estimate, recovering the ambien
 
 - **`DK-7-tan2-proof.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.tanTwoTheta_uiNorm`, `TauCeti.DavisKahan1970.tanTwoTheta_kyFan`, `TauCeti.DavisKahan1970.tanTwoTheta_sharp_opNorm`, `TauCeti.DavisKahan1970.tanTwoTheta_spectral_repulsion`
+
+### Known hostile-review holes
+
+- **`audit_atomization`:** The exact directed/ambient tan(2 Theta) endpoints are now closed. The proof block still contains equation (7.6), scalar singular-vector inequality, pole exclusion as a conclusion, Fan-dominance steps, and both endpoints under one coarse audit clause; atomize these for static semantic certification.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The exact directed/ambient tan(2 Theta) endpoints are now closed. The proof block still contains equation (7.6), scalar singular-vector inequality, pole exclusion as a conclusion, Fan-dominance steps, and both endpoints under one coarse audit clause; atomize these for static semantic certification.
 
 ### Primary Lean declarations for semantic review
 
@@ -4107,6 +4283,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `ca616396d0bee7b303c7da3ad0904053b80ad6da1a13a172bbec402be84f7c57`
 
 ### Registered distributable source-specification passage
@@ -4171,6 +4348,12 @@ These exclude $\theta=\pi/4$ and then $\theta>\pi/4$ under the chosen spectral p
   - Review declarations: `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source`
 - **`DK-8.1-thm.iii`:** Part (iii): symmetric-gauge/weak-majorization inequalities with principal-cosine weights, plus the analogous lower-block relation.
   - Review declarations: `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_source`, `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_source`
+
+### Known hostile-review holes
+
+- **`audit_mapping`:** The theorem is usefully split into branch/(i)/(ii)/(iii), but primary evidence remains complex-centric while real counterparts exist. Bind each source conclusion explicitly in both source scalar fields.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The theorem is usefully split into branch/(i)/(ii)/(iii), but primary evidence remains complex-centric while real counterparts exist. Bind each source conclusion explicitly in both source scalar fields.
 
 ### Primary Lean declarations for semantic review
 
@@ -4316,6 +4499,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `8af6a38667dbf398e65e1b4460763ab627b559607ac519214c35402797c1b48e`
 
 ### Registered distributable source-specification passage
@@ -4357,6 +4541,12 @@ The source closes Section~8 by stating that the $\sin2\theta$ theorem extends to
 
 - **`DK-8.2-thm.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm`, `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm`, `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm`, `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed`
+
+### Known hostile-review holes
+
+- **`audit_atomization`:** A single `.whole` clause covers two alternative half-gap hypotheses, branch selection, homotopy, perturbation and residual forms, unequal-dimensional extension, and the source statement that no analogous tan(2 Theta) extension is known. These need atomic evidence/dispositions.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: A single `.whole` clause covers two alternative half-gap hypotheses, branch selection, homotopy, perturbation and residual forms, unequal-dimensional extension, and the source statement that no analogous tan(2 Theta) extension is known. These need atomic evidence/dispositions.
 
 ### Primary Lean declarations for semantic review
 
@@ -4464,7 +4654,8 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Section 9, problem setup
 - **Source kind:** `numerical_model`
 - **Completion obligation:** `true`
-- **Census claim:** `compiled_exact` / `proved_in_build`
+- **Census claim:** `source_spec_incomplete` / `proved_in_build`
+- **Hostile completion certification:** `reopened_source_spec`
 - **Source-specification passage SHA-256:** `bdc43ef4b79411c729d3004b3ffe56154fa83888d1bc3b2936afad9b2edf6d6d`
 
 ### Registered distributable source-specification passage
@@ -4516,6 +4707,12 @@ These data drive the first sine estimates.
 
 - **`DK-9-model.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_source`, `TauCeti.DavisKahan1970.Section9.real_freeBeam_spectrum_source`, `TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_mode_source`, `TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteData_source`, `TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source`, `TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source`
+
+### Known hostile-review holes
+
+- **`source_spec_weakening`:** The source transcription used in the hostile review has alpha_1=alpha_2=0 < alpha_3 < alpha_4 < ... . The distributable TeX weakens this to alpha_1=alpha_2=0 and says only that positive eigenvalues are determined by the free-beam equation and exceed 500. Re-audit the original PDF to decide whether the printed indexing asserts simplicity of all positive eigenvalues; do not choose the weaker reading to fit current Lean coverage.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The source transcription used in the hostile review has alpha_1=alpha_2=0 < alpha_3 < alpha_4 < ... . The distributable TeX weakens this to alpha_1=alpha_2=0 and says only that positive eigenvalues are determined by the free-beam equation and exceed 500. Re-audit the original PDF to decide whether the printed indexing asserts simplicity of all positive eigenvalues; do not choose the weaker reading to fit current Lean coverage.
 
 ### Primary Lean declarations for semantic review
 
@@ -4677,6 +4874,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `numerical_claims`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `57ea978cfdbd641bfe2c257f686d449a42baa10cfba67fa9d593be8ca2ab9bf9`
 
 ### Registered distributable source-specification passage
@@ -4707,6 +4905,12 @@ Using the two-term Ky Fan norm gives the simultaneous subspace estimates
 
 - **`DK-9.1-9.4.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.Section9.equation_9_1`, `TauCeti.DavisKahan1970.Section9.equation_9_2`, `TauCeti.DavisKahan1970.Section9.equation_9_3`, `TauCeti.DavisKahan1970.Section9.equation_9_4`
+
+### Known hostile-review holes
+
+- **`audit_mapping`:** The primary mapped `equation_9_*` declarations are largely arithmetic wrappers conditional on analytic bounds. Genuine unconditional beam-model sine/sin(2 Theta) theorems exist elsewhere and should be the source evidence for the actual Section 9 conclusions.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The primary mapped `equation_9_*` declarations are largely arithmetic wrappers conditional on analytic bounds. Genuine unconditional beam-model sine/sin(2 Theta) theorems exist elsewhere and should be the source evidence for the actual Section 9 conclusions.
 
 ### Primary Lean declarations for semantic review
 
@@ -4794,6 +4998,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `numerical_claims`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
 - **Source-specification passage SHA-256:** `dfcd77c495e43593fcd6cd52f5719eacdda94902526d1117ca61dba086500774`
 
 ### Registered distributable source-specification passage
@@ -4838,6 +5043,12 @@ again with the same right-hand side for $\tan2\theta_1+\tan2\theta_2$ in the two
 
 - **`DK-9.5-9.7.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.Section9.equation_9_5_low`, `TauCeti.DavisKahan1970.Section9.equation_9_5_high`, `TauCeti.DavisKahan1970.Section9.equation_9_6`, `TauCeti.DavisKahan1970.Section9.equation_9_7`
+
+### Known hostile-review holes
+
+- **`audit_mapping`:** The current primary mapping emphasizes numerical wrappers rather than the genuine beam tangent/double-tangent theorems that discharge the analytic hypotheses. Rebind the row to the unconditional source-facing model results.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The current primary mapping emphasizes numerical wrappers rather than the genuine beam tangent/double-tangent theorems that discharge the analytic hypotheses. Rebind the row to the unconditional source-facing model results.
 
 ### Primary Lean declarations for semantic review
 
@@ -4932,7 +5143,8 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Equation (9.8)
 - **Source kind:** `comparison_claim`
 - **Completion obligation:** `true`
-- **Census claim:** `compiled_exact` / `proved_in_build`
+- **Census claim:** `source_spec_incomplete` / `proved_in_build`
+- **Hostile completion certification:** `reopened_source_spec`
 - **Source-specification passage SHA-256:** `1afeeefe736d746ac80fde7fcf57af04561e0d71121040113d8bdcd7654c98e7`
 
 ### Registered distributable source-specification passage
@@ -4975,6 +5187,13 @@ The source presents the methods as complementary rather than as one dominating t
 
 - **`DK-9.8.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.Section9.equation_9_8_lower`, `TauCeti.DavisKahan1970.Section9.equation_9_8_upper`
+
+### Known hostile-review holes
+
+- **`source_spec_omission`:** The source comparison includes the asymptotic alpha_hat_k - alpha_check_k = (eps^2/30)/(500-alpha_hat_k) - O(eps^4), which is absent from the distributable TeX; the Lean comparison module explicitly says this asymptotic is intentionally not encoded.
+- **`missing_source_facing_statement`:** The TeX asserts Weinberger's sine-square estimate and the Lehmann claim that the two lower arrowhead eigenvalues are the best lower bounds from the stated data. The repository proves the final (9.8) numbers by a sharper Davis--Kahan route and formalizes algebraic pieces conditionally, but explicitly leaves the historical Weinberger/Lehmann derivation/optimality unproved.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The source comparison includes the asymptotic alpha_hat_k - alpha_check_k = (eps^2/30)/(500-alpha_hat_k) - O(eps^4), which is absent from the distributable TeX; the Lean comparison module explicitly says this asymptotic is intentionally not encoded. The TeX asserts Weinberger's sine-square estimate and the Lehmann claim that the two lower arrowhead eigenvalues are the best lower bounds from the stated data. The repository proves the final (9.8) numbers by a sharper Davis--Kahan route and formalizes algebraic pieces conditionally, but explicitly leaves the historical Weinberger/Lehmann derivation/optimality unproved.
 
 ### Primary Lean declarations for semantic review
 
@@ -5042,7 +5261,8 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Section 9, l2 example after (9.8)
 - **Source kind:** `example`
 - **Completion obligation:** `true`
-- **Census claim:** `compiled_exact` / `proved_in_build`
+- **Census claim:** `partial_or_wrapper_missing` / `proved_in_build`
+- **Hostile completion certification:** `reopened_math`
 - **Source-specification passage SHA-256:** `2b28098ba69b0cd83e5755b950b4a4eda9cc7e80f3a2a6d95d46921271d8c91f`
 
 ### Registered distributable source-specification passage
@@ -5073,6 +5293,12 @@ and at the best lower bounds, for the true $\theta=\arcsin\mu$,
 
 - **`DK-9-infinite-residual-counterexample.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.Section9.rawDiagonalImage_eq_one`, `TauCeti.DavisKahan1970.Section9.rawDiagonalImage_partial_energy`, `TauCeti.DavisKahan1970.Section9.truncatedDiagonalImage_energy`, `TauCeti.DavisKahan1970.Section9.diagonalOperator`, `TauCeti.DavisKahan1970.Section9.geometricTrial_notMem_diagonalDomain`, `TauCeti.DavisKahan1970.Section9.geometricTrial_form_summable`
+
+### Known hostile-review holes
+
+- **`missing_source_facing_statement`:** The source says an arbitrarily small modification repairs the domain defect. Lean proves finite truncations lie in the operator domain and agree on every fixed prefix, but the hostile review did not find a norm-convergence/arbitrarily-small-perturbation theorem for those truncations.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The source says an arbitrarily small modification repairs the domain defect. Lean proves finite truncations lie in the operator domain and agree on every fixed prefix, but the hostile review did not find a norm-convergence/arbitrarily-small-perturbation theorem for those truncations.
 
 ### Primary Lean declarations for semantic review
 
@@ -5192,6 +5418,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `numerical_claims`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
+- **Hostile completion certification:** `mixed_disposition`
 - **Source-specification passage SHA-256:** `0f9c97c3405ebbf348de1e40df437d08c8f1e129a0038987c7ed12e45061413f`
 
 ### Registered distributable source-specification passage
@@ -5260,6 +5487,12 @@ Finally, the source says the best possible bound obtainable from the stated data
 
 - **`DK-9.9-9.11.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
   - Review declarations: `TauCeti.DavisKahan1970.Section9.block_eigenproblem_iff`, `TauCeti.DavisKahan1970.Section9.schur_complement_reduction`, `TauCeti.DavisKahan1970.Section9.individual_angle_le_exact_envelope`, `TauCeti.DavisKahan1970.Section9.final_lower_individual_angle_bound`
+
+### Known hostile-review holes
+
+- **`mixed_disposition`:** The numerical/Schur-complement conclusions appear formalized, but the block ends with a source assertion that the 3x3 comparison angle is the best possible bound obtainable from the stated data while explicitly deferring its proof to unresolved Question 10.2. Record that assertion separately as source-asserted/unproved rather than counting the entire block as exact.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The numerical/Schur-complement conclusions appear formalized, but the block ends with a source assertion that the 3x3 comparison angle is the best possible bound obtainable from the stated data while explicitly deferring its proof to unresolved Question 10.2. Record that assertion separately as source-asserted/unproved rather than counting the entire block as exact.
 
 ### Primary Lean declarations for semantic review
 
@@ -5378,6 +5611,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `open_question`
 - **Completion obligation:** `false`
 - **Census claim:** `resolved_by_modern_development` / `proved_in_build`
+- **Hostile completion certification:** `not_applicable`
 - **Source-specification passage SHA-256:** `31b6c36c9e33fb0d82afcfe7223d42b7558d1ba307b0b7823a2ff1e8ac23c764`
 
 ### Registered distributable source-specification passage
@@ -5437,6 +5671,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `open_question`
 - **Completion obligation:** `false`
 - **Census claim:** `not_a_completion_obligation` / `not_applicable`
+- **Hostile completion certification:** `not_applicable`
 - **Source-specification passage SHA-256:** `b86da1d92d84b2592690213b7f007b3a770bd42fe09dccca2c21756a36cd7dab`
 
 ### Registered distributable source-specification passage
@@ -5458,7 +5693,7 @@ the relative position is encoded by the $3\times3$ block matrix $(E_i^*F_j)_{i,j
 
 ### Primary Lean declarations for semantic review
 
-No primary Lean declaration is registered for this non-obligation source question.
+No primary Lean declaration is registered for this row. If it is a completion obligation, this is itself a blocking audit defect.
 
 <details>
 <summary>Full census declaration mapping for this row</summary>
@@ -5498,6 +5733,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `open_question`
 - **Completion obligation:** `false`
 - **Census claim:** `not_a_completion_obligation` / `not_applicable`
+- **Hostile completion certification:** `not_applicable`
 - **Source-specification passage SHA-256:** `4354f4d04ae31bb397e07edd9f6dc6d99d9b2edddc6fd44b0bcc6509a9d442cf`
 
 ### Registered distributable source-specification passage
@@ -5513,7 +5749,7 @@ Find best possible inequalities involving eigenvalue changes and eigenvector cha
 
 ### Primary Lean declarations for semantic review
 
-No primary Lean declaration is registered for this non-obligation source question.
+No primary Lean declaration is registered for this row. If it is a completion obligation, this is itself a blocking audit defect.
 
 <details>
 <summary>Full census declaration mapping for this row</summary>
@@ -5550,9 +5786,10 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 ## 49. DK-10.4 — Perturbation bounds for functional calculus
 
 - **Source anchor:** Question 10.4, including ambient and directed functional-calculus specializations
-- **Source kind:** `open_question`
-- **Completion obligation:** `false`
-- **Census claim:** `not_a_completion_obligation` / `not_applicable`
+- **Source kind:** `mixed_open_question`
+- **Completion obligation:** `true`
+- **Census claim:** `partial_or_wrapper_missing` / `proved_in_build`
+- **Hostile completion certification:** `mixed_disposition`
 - **Source-specification passage SHA-256:** `cb03063c7dac9729bde9e1594aca09f614de292828a9f3770c28061743fb3792`
 
 ### Registered distributable source-specification passage
@@ -5595,19 +5832,57 @@ Question~10.4 asks for analogous bounds for more general $f$.
 
 ### Semantic audit clauses
 
-- **`DK-10.4.whole`:** Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.
+- **`DK-10.4.step-function-identities`:** Established model-case identities: f(A)=P, f(A+H)=Q, f(A0)=I and the projector/sine identities. These remain a completion obligation and currently have no exact registered source-facing declarations.
   - Review declarations: *(none; inspect the row mapping/source context)*
+- **`DK-10.4.ambient-tan2`:** Established ambient model-case bound delta * ||tan(2 Theta)|| <= 2 ||H||.
+  - Review declarations: `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact`
+- **`DK-10.4.directed-tan2`:** Established directed model-case bound delta * ||tan(2 Theta_0)|| <= 2 ||R||.
+  - Review declarations: `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact`, `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact`
+- **`DK-10.4.open-general-f`:** Genuinely open source question: analogous perturbation bounds for useful broader classes of real functions f. This clause is not proof debt.
+  - Review declarations: *(none; inspect the row mapping/source context)*
+
+### Known hostile-review holes
+
+- **`mixed_disposition`:** Question 10.4 is not a pure open-question block. Before the general-f question it states established step-function identities f(A)=P, f(A+H)=Q, f(A0)=I, the projector/sine identities, and the ambient/directed tan(2 Theta) bounds. The tan(2 Theta) bounds now have exact complex/real wrappers, but the functional-calculus identities are not atomically registered.
+- **`checker_loophole`:** The previous checker exempted every DK-10.* row by identifier. This let established mathematics inside the Question 10.4 block escape the completion count. The row is now a mixed completion obligation until established clauses are explicitly covered and the final question separately marked open.
+
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: Question 10.4 is not a pure open-question block. Before the general-f question it states established step-function identities f(A)=P, f(A+H)=Q, f(A0)=I, the projector/sine identities, and the ambient/directed tan(2 Theta) bounds. The tan(2 Theta) bounds now have exact complex/real wrappers, but the functional-calculus identities are not atomically registered. The previous checker exempted every DK-10.* row by identifier. This let established mathematics inside the Question 10.4 block escape the completion count. The row is now a mixed completion obligation until established clauses are explicitly covered and the final question separately marked open.
 
 ### Primary Lean declarations for semantic review
 
-No primary Lean declaration is registered for this non-obligation source question.
+#### `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact`
+
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:531`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1297`
+
+Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:433`
+
+Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact`
+
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:441`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1160`
+
+Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:362`
+
+Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
 <details>
 <summary>Full census declaration mapping for this row</summary>
 
 When a compiler certificate is supplied, `signatures.json` contains the compiler-printed type for every declaration in this full mapping, not only the primary declarations displayed above.
 
-- *(none)*
+- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact` — Challenge/DavisKahan1970/Conformance.lean:531, DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1297
+- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:433
+- `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact` — Challenge/DavisKahan1970/Conformance.lean:441, DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1160
+- `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:362
 
 </details>
 
@@ -5636,10 +5911,11 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 
 # Final independent conclusion
 
-- **45 mathematical completion obligations reviewed:** yes / no
-- **44 census-claimed exact obligations independently accepted:** yes / no
-- **1 census-claimed refuted obligations independently accepted:** yes / no
-- **Nonterminal census rows:** none
+- **46 explicit mathematical completion obligations reviewed:** yes / no
+- **13 currently hostile-certified exact obligations independently reconfirmed:** yes / no
+- **1 currently hostile-certified refuted obligations independently reconfirmed:** yes / no
+- **32 currently reopened completion obligations resolved by this audit:** yes / no
+- **Reopened rows at packet generation:** `S1-block-residual` (reopened_math), `S1-ui-norms` (reopened_source_spec), `S2-tan-theta` (reopened_mapping), `S2-sharpness` (reopened_mapping), `S2-unbounded-scope` (reopened_mapping), `DK-3.1-def` (reopened_mapping), `DK-3.1-prop` (reopened_mapping), `DK-3.2-prop` (reopened_math), `DK-3.3-prop` (reopened_source_spec), `DK-3.4-prop` (reopened_math), `DK-3.5-prop` (reopened_math), `DK-4.1-prop` (reopened_source_spec), `DK-4.2-prop` (reopened_mapping), `DK-4.3-prop` (reopened_mapping), `DK-5.1-thm` (reopened_mapping), `DK-5-hermitian-inequalities` (reopened_math), `DK-5.2-thm` (reopened_mapping), `DK-6.1-prop` (reopened_mapping), `DK-6.2-thm` (reopened_mapping), `DK-6.3-thm` (reopened_math), `DK-6-appendix` (reopened_mapping), `DK-7-sin2-proof` (reopened_mapping), `DK-7-tan2-proof` (reopened_mapping), `DK-8.1-thm` (reopened_mapping), `DK-8.2-thm` (reopened_mapping), `DK-9-model` (reopened_source_spec), `DK-9.1-9.4` (reopened_mapping), `DK-9.5-9.7` (reopened_mapping), `DK-9.8` (reopened_source_spec), `DK-9-infinite-residual-counterexample` (reopened_math), `DK-9.9-9.11` (mixed_disposition), `DK-10.4` (mixed_disposition)
 - **Any unregistered mathematical claims found:** yes / no
 - **Compiler certificate clean and complete:** yes / no
 - **Is the repository's claim of 100% theorem-statement-level Davis--Kahan 1970 coverage justified?** yes / no / uncertain
