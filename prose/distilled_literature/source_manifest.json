@@ -814,6 +814,7 @@
       "formalization_status": "source-facing coverage is extensive and the tracked census is near-terminal, with Proposition 4.4 formally refuted as transcribed; an independent statement audit has identified a remaining unrestricted Section 2 tan(2 Theta) exact-wrapper gap, so the repository does not currently certify 100% source fidelity",
       "distilled_status": "source_faithful_audit_specification",
       "primary_url": "https://doi.org/10.1137/0707001",
+      "archival_locator": "https://ia600108.us.archive.org/view_archive.php?archive=/24/items/wikipedia-scholarly-sources-corpus/10.1137.zip&file=10.1137%252F0707001.pdf",
       "target_note": "DavisKahan1970_part_III.tex",
       "repo_evidence": [
         "DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean",
