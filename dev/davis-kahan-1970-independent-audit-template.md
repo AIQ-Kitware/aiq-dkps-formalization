@@ -11,7 +11,7 @@ The two accounting layers are deliberately both visible:
 - Section 10 questions, explicitly deferred/unproved claims, definitions, proof-only derivations, examples, numerical working, historical/external results, and theorem-adjacent remarks remain visible in source fidelity but do not enlarge the denominator.
 - A false counted result remains in the denominator and requires exact formal refutation plus the repository's separate best-effort repair disposition.
 
-Current result-level status: **25/29 terminal**, **4 awaiting semantic closure**.
+Current result-level status: **26/29 terminal**, **3 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -615,9 +615,9 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 - **Counted result kind:** `proposition`
 - **Exact source anchor:** Proposition 3.3
-- **Result disposition:** `pending_result_only_review`
+- **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `pending_result_only_review`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Organizational source-block hash:** `dbc77fc4c71873dbd8c706d68f5bb4ea28064a4d930ccb58c91c2640ab7bf382`
 
@@ -669,39 +669,27 @@ Every direct rotation is therefore the principal unitary square root of $(Q-Q^\p
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.complex_directRotation_sq`
+#### `TauCeti.DavisKahan1970.proposition3_3_complex_forward_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:130`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.complex_directRotation_hermitianPart`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:156`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:112`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.complex_directRotation_principal_of_sq`
+#### `TauCeti.DavisKahan1970.proposition3_3_complex_converse_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:158`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.real_directRotation_sq`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:234`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:135`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.real_directRotation_hermitianPart`
+#### `TauCeti.DavisKahan1970.proposition3_3_real_forward_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:235`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:257`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.real_directRotation_principal_of_sq`
+#### `TauCeti.DavisKahan1970.proposition3_3_real_converse_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:241`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:299`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3094,8 +3082,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 266 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **25 currently terminal results independently reconfirmed:** yes / no
-- **4 currently nonterminal/pending results resolved by this audit:** yes / no
+- **26 currently terminal results independently reconfirmed:** yes / no
+- **3 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no

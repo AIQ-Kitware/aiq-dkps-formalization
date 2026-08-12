@@ -17,9 +17,11 @@ This audit separates three independent axes:
 
 The 49 rows are organizational groups and the 266 atoms are a source-fidelity inventory. The 100% completion denominator is the separate 29-result inventory. The broader row/atom findings below remain useful adversarial evidence, but only defects in the exact statement or scope of one of those 29 results block the formalization claim.
 
-Current maintained result denominator: **29**. Exact printed-result boundary reviews: **29/29 accepted**. Current result-level semantic terminality: **25/29**; the remaining **4** are the mathematics/review queue. The old 46-row/32-reopened counts below are retained only as historical evidence from the broader pre-pivot hostile audit and are not the current completion metric.
+Current maintained result denominator: **29**. Exact printed-result boundary reviews: **29/29 accepted**. Current result-level semantic terminality: **26/29**; the remaining **3** are the mathematics/review queue. The old 46-row/32-reopened counts below are retained only as historical evidence from the broader pre-pivot hostile audit and are not the current completion metric.
 
 `DK-3.1-prop` is now result-level terminal: `TauCeti.DavisKahan1970.proposition3_1_source` packages the already-proved generic acute direct-rotation existence, uniqueness, positive diagonal blocks, crossed-block identity, and property-(i)-alone characterization at the paper's printed `TauCeti.IsAcute` hypothesis.
+
+`DK-3.3-prop` is now result-level terminal at the full printed nonacute real/complex scope: the existing arbitrary-pair complex principal-root characterization is joined by real forward/converse source wrappers transported through canonical complexification, with positive diagonal blocks and the crossed-defect mapping condition exposed explicitly.
 
 `S2-tan-two-theta` is now result-level terminal at the full shared Section 2 scope: the existing bounded exact wrappers are joined by compiler-verified complex/real unbounded directed and ambient `PaperUnitaryInvariantNorm` endpoints, with canonical cutoff/pole machinery and the two-corner assembly internal to the source-facing theorems.
 

@@ -10,11 +10,11 @@ A hostile reviewer should use this report together with `prose/distilled_literat
 
 - Counted DK-established results: **29**
 - Printed-result boundaries reviewed: **29/29**
-- Semantically terminal: **25/29**
-- Genuine remaining result-scope gaps: **4**
+- Semantically terminal: **26/29**
+- Genuine remaining result-scope gaps: **3**
 - Pending results re-audited in the current sweep: **17**
 - False-positive pending statuses closed across the result-only sweep: **12**
-- Latest-main baseline for this promotion: `7cc049b4f9aaf5754224ece9114abad04df44c57`. The self-contained unbounded tan-2Theta implementation was applied to this base and its complex ambient, real directed, real ambient, and aggregate `DavisKahan.All` builds were reported green before semantic promotion.
+- Latest-main baseline for this promotion: `9f1c3000e6d12cc013426bef07e3be107b7d5177`. That baseline already contains the compiler-verified full unbounded tan-2Theta closure at 25/29; this promotion adds only the real nonacute Proposition 3.3 source surface and advances the denominator to 26/29.
 
 ## All 29 counted results
 
@@ -130,31 +130,19 @@ Accepted result-only semantic review 2026-08-12. The generic Section 3 source su
 
 ### 7. `DK-3.3-prop` — Principal square-root characterization
 
-**Verdict:** OPEN — genuine result-scope theorem surface remains. Re-audited in this sweep.
+**Verdict:** PASS exact.
 
 **Counted source atoms:** `DK-3.3-prop.principal-square-root`, `DK-3.3-prop.square-root-converse`.
 
 **Selected source-facing Lean declarations:**
-- `TauCeti.DavisKahan1970.complex_directRotation_sq`
-- `TauCeti.DavisKahan1970.complex_directRotation_hermitianPart`
-- `TauCeti.DavisKahan1970.complex_directRotation_principal_of_sq`
-- `TauCeti.DavisKahan1970.real_directRotation_sq`
-- `TauCeti.DavisKahan1970.real_directRotation_hermitianPart`
-- `TauCeti.DavisKahan1970.real_directRotation_principal_of_sq`
+- `TauCeti.DavisKahan1970.proposition3_3_complex_forward_source`
+- `TauCeti.DavisKahan1970.proposition3_3_complex_converse_source`
+- `TauCeti.DavisKahan1970.proposition3_3_real_forward_source`
+- `TauCeti.DavisKahan1970.proposition3_3_real_converse_source`
 
 **Semantic review:**
 
-Result-only audit 2026-08-12: the full nonacute complex Proposition 3.3 principal-unitary-square-root forward/converse characterization exists in `DavisKahan/Frontier/Section3.lean`. The registered real square/principal theorems are acute/uniformly-acute specializations; no source-facing real theorem was located for the full matched-crossed-defect nonacute statement. The exact remaining task is a real nonacute principal-square-root characterization equivalent to the printed Proposition 3.3, preferably through a scalar-generic positivity characterization rather than a complex-spectrum branch condition.
-
-**Structured remaining gap:**
-
-- Category: `missing_real_nonacute_source_surface`
-- Missing surface: Real-Hilbert-space full nonacute principal-square-root forward/converse characterization at the printed matched-crossed-defect scope.
-- Next action: Expose a real nonacute principal-root characterization, preferably via a scalar-generic positivity/Hermitian-part branch condition rather than complex spectrum.
-- Strongest current evidence:
-  - `TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_forward_of_nonneg_blocks`
-  - `TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_converse`
-  - `TauCeti.DavisKahan1970.real_directRotation_principal_of_sq`
+Accepted result-only semantic review 2026-08-12. The full nonacute complex forward/converse characterization was already proved in `DavisKahan.Frontier.Section3`. The source-facing complex wrappers expose exactly those printed clauses. The real forward/converse wrappers transport the same arbitrary-dimensional nonacute statement through canonical real complexification: the principal branch is defined by the spectrum of the complexification, crossed-defect transport is coordinatewise, and unitarity/intertwining/positive diagonal blocks/crossed blocks descend through the established complexification API. No `IsUniformlyAcute`, finite-dimensional, separability, compactness, or extra branch hypothesis is added. Equations (3.6)--(3.8) and reflection conjugacy remain adjacent fidelity/proof material outside the counted proposition boundary.
 
 ### 8. `DK-3.4-prop` — Square as a direct rotation
 

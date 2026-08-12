@@ -608,40 +608,31 @@
       "source_kind": "proposition",
       "source_anchor": "Proposition 3.3",
       "completion_obligation": true,
-      "expected_status": "partial_or_wrapper_missing",
+      "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.3-prop",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.complex_directRotation_sq",
-        "TauCeti.DavisKahan1970.complex_directRotation_hermitianPart",
-        "TauCeti.DavisKahan1970.complex_directRotation_principal_of_sq",
-        "TauCeti.DavisKahan1970.real_directRotation_sq",
-        "TauCeti.DavisKahan1970.real_directRotation_hermitianPart",
-        "TauCeti.DavisKahan1970.real_directRotation_principal_of_sq"
+        "TauCeti.DavisKahan1970.proposition3_3_complex_forward_source",
+        "TauCeti.DavisKahan1970.proposition3_3_complex_converse_source",
+        "TauCeti.DavisKahan1970.proposition3_3_real_forward_source",
+        "TauCeti.DavisKahan1970.proposition3_3_real_converse_source"
       ],
       "audit_clauses": [
         {
-          "id": "DK-3.3-prop.whole",
-          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "id": "DK-3.3-prop.result",
+          "description": "Exact result-only audit of Proposition 3.3: every direct rotation is the principal square root, and the principal-root converse uses exactly the crossed-intersection mapping condition.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.complex_directRotation_sq",
-            "TauCeti.DavisKahan1970.complex_directRotation_hermitianPart",
-            "TauCeti.DavisKahan1970.complex_directRotation_principal_of_sq",
-            "TauCeti.DavisKahan1970.real_directRotation_sq",
-            "TauCeti.DavisKahan1970.real_directRotation_hermitianPart",
-            "TauCeti.DavisKahan1970.real_directRotation_principal_of_sq"
+            "TauCeti.DavisKahan1970.proposition3_3_complex_forward_source",
+            "TauCeti.DavisKahan1970.proposition3_3_complex_converse_source",
+            "TauCeti.DavisKahan1970.proposition3_3_real_forward_source",
+            "TauCeti.DavisKahan1970.proposition3_3_real_converse_source"
           ]
         }
       ],
       "source_specification_sha256": "dbc77fc4c71873dbd8c706d68f5bb4ea28064a4d930ccb58c91c2640ab7bf382",
-      "expected_completion_certification": "reopened_mapping",
-      "known_completion_holes": [
-        {
-          "kind": "mapping",
-          "detail": "PDF re-audit restored source equation (3.7) exactly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the new atomic equation (3.7) and the other Proposition 3.3 atoms are explicitly bound to exact Lean evidence."
-        }
-      ],
-      "audit_warning": "HOSTILE RE-AUDIT REOPENED: PDF re-audit restored source equation (3.7) exactly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the new atomic equation (3.7) and the other Proposition 3.3 atoms are explicitly bound to exact Lean evidence.",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
+      "audit_warning": "RESULT-ONLY REVIEW ACCEPTED: arbitrary-pair complex and real source-facing forward/converse endpoints; equations (3.6)--(3.8) remain explicitly inventoried proof/fidelity atoms rather than extra result obligations.",
       "source_atom_ids": [
         "DK-3.3-prop.reflection-conjugacy",
         "DK-3.3-prop.principal-square-root",
