@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Geometry.Angle.PaperOperatorAngleReal
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaWholeSpace
 import DavisKahan.Sources.DavisKahan1970.TanThetaWholeSpace
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaWholeSpace
+import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
 import DavisKahan.SpectralTheory.Complexification.FormTransport
 import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 import DavisKahan.SpectralTheory.Complexification.Spectrum
@@ -54,7 +54,7 @@ kinds of hypothesis have to travel, and all three were already available:
 
 * `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real`
 * `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real`
-* `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real`
+* `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact`
 
 ## References
 
@@ -259,13 +259,13 @@ theorem sinTwoTheta_wholeSpace_paperUINorm_real
   rwa [PaperUnitaryInvariantNorm.gauge_complexify,
     PaperUnitaryInvariantNorm.gauge_complexify] at hboundC
 
-/-- **Davis--Kahan 1970, the whole-space `tan 2Θ` theorem over a REAL Hilbert
-space, for every source unitarily invariant norm**: `δ ‖tan 2Θ‖ ≤ 2‖H‖`, the
-second conclusion of the Section 2 double-angle tangent theorem.
+/-- A useful stronger-placement specialization of the whole-space `tan 2Θ`
+theorem over a real Hilbert space.
 
-As in the complex statement the quarter-angle branch is *concluded* from the
-four ordered form bounds, not assumed, and membership of `tan 2Θ` in the norm's
-ideal is concluded as well. -/
+This older endpoint assumes ordered form bounds on both the unperturbed `U`
+blocks and the perturbed `V` blocks.  It is retained as reusable infrastructure;
+the literal Section 2 source signature, which does **not** assume the `V`-block
+placement, is `tanTwoTheta_wholeSpace_paperUINorm_real_exact` below. -/
 theorem tanTwoTheta_wholeSpace_paperUINorm_real
     (N : PaperUnitaryInvariantNorm) {a b : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
@@ -303,6 +303,64 @@ theorem tanTwoTheta_wholeSpace_paperUINorm_real
         rw [← complexifySubmodule_orthogonal V] at hz
         rw [hsum]
         exact re_inner_le_of_mem_complexifySubmodule hVperpLow hz)
+      (fun z hz => mapsTo_orthogonal_complexifySubmodule U hHU hz)
+      (fun z hz => mapsTo_of_mem_orthogonal_complexifySubmodule U hHUperp hz)
+      ((PaperUnitaryInvariantNorm.mem_complexify_iff N H).2 hHmem)
+  rw [← complexify_paperTanTwoAngleOperatorR U V] at hmemC hboundC
+  refine ⟨(PaperUnitaryInvariantNorm.mem_complexify_iff N _).1 hmemC, ?_⟩
+  rwa [PaperUnitaryInvariantNorm.gauge_complexify,
+    PaperUnitaryInvariantNorm.gauge_complexify] at hboundC
+
+/-- **Davis--Kahan 1970, Section 2 `tan 2Θ`, ambient conclusion over a REAL
+Hilbert space, exactly from the printed hypotheses.**
+
+This is the real-scalar counterpart of
+`tanTwoTheta_wholeSpace_paperUINorm_exact`.  In particular it assumes only the
+paper's interval/half-line separation for the two blocks of `A`, positivity of
+`δ`, `H₀ = H₁ = 0`, and invariance of the comparison subspace for `A+H`.
+There is no quarter-angle branch, no pole-exclusion hypothesis, and no
+spectral-placement hypothesis for the blocks of `A+H`. -/
+theorem tanTwoTheta_wholeSpace_paperUINorm_real_exact
+    (N : PaperUnitaryInvariantNorm)
+    {β α δ : ℝ}
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
+    (hδ : 0 < δ)
+    (hA0spec : spectrum ℝ (compressOperatorReal U A) ⊆ Set.Icc β α)
+    (hA1spec : spectrum ℝ (compressOperatorReal Uᗮ A) ⊆ Set.Ici (α + δ))
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    (hHmem : N.Mem H) :
+    N.Mem (paperTanTwoAngleOperatorR U V) ∧
+      δ * N.gauge (paperTanTwoAngleOperatorR U V) ≤ 2 * N.gauge H := by
+  have hsum : complexify A + complexify H = complexify (A + H) :=
+    (complexify_add A H).symm
+  -- Keep these spectrum transports inline.  On a complex operator there are
+  -- multiple elaboration paths for `spectrum ℝ`; the expected argument type of
+  -- the complex theorem selects the native `realSpectrum` path, avoiding the
+  -- real-algebra diamond (as in `sinTwoTheta_wholeSpace_paperUINorm_real`).
+  obtain ⟨hmemC, hboundC⟩ :=
+    tanTwoTheta_wholeSpace_paperUINorm_exact (E := RealComplexification E) N
+      (A := complexify A) (H := complexify H)
+      (U := complexifySubmodule U) (V := complexifySubmodule V)
+      ((complexify_isSelfAdjoint_iff A).2 hA)
+      ((complexify_isSelfAdjoint_iff H).2 hH)
+      (fun z hz => mapsTo_complexifySubmodule hAU hz)
+      (fun z hz => by
+        rw [hsum]
+        exact mapsTo_complexifySubmodule hAplusH_V hz)
+      hδ
+      (fun r hr => by
+        have hr' : r ∈ realSpectrum
+            (compressOperator (complexifySubmodule U) (complexify A)) := hr
+        rw [realSpectrum_compressOperator_complexifySubmodule U A rfl] at hr'
+        exact hA0spec hr')
+      (fun r hr => by
+        have hr' : r ∈ realSpectrum
+            (compressOperator (complexifySubmodule U)ᗮ (complexify A)) := hr
+        rw [realSpectrum_compressOperator_complexifySubmodule (E := E) Uᗮ A
+          (W := (complexifySubmodule U)ᗮ)
+          (complexifySubmodule_orthogonal U).symm] at hr'
+        exact hA1spec hr')
       (fun z hz => mapsTo_orthogonal_complexifySubmodule U hHU hz)
       (fun z hz => mapsTo_of_mem_orthogonal_complexifySubmodule U hHUperp hz)
       ((PaperUnitaryInvariantNorm.mem_complexify_iff N H).2 hHmem)

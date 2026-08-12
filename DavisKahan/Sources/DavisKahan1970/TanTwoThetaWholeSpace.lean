@@ -411,6 +411,41 @@ theorem isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero
       (by fun_prop) (isSelfAdjoint_sinAngleOperatorC U V)).mpr
     fun t ht => one_sub_two_sq_ne_zero_of_cos_two_ne_zero hcos ht
 
+/-- **Conversely, invertibility of the signed doubled cosine excludes every
+quarter-turn pole.**
+
+This is the direction needed by the literal Section 2 `tan 2θ` wrapper: the
+ordered gap first proves invertibility of the reflection's diagonal part, and
+that operator is the signed doubled cosine.  The source does not assume pole
+exclusion; it is recovered here from the resulting unit. -/
+theorem cos_two_ne_zero_of_isUnit_one_sub_two_mul_paperProjectorDifference_sq
+    (hinv : IsUnit (1 - 2 * (paperProjectorDifference U V *
+      paperProjectorDifference U V))) :
+    ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0 := by
+  have hinv' : IsUnit
+      (cfc (fun s : ℝ => 1 - 2 * (s * s)) (sinAngleOperatorC U V)) := by
+    rw [← cfc_one_sub_two_sq', ← paperProjectorDifference_sq]
+    exact hinv
+  have hnonzero : ∀ s ∈ spectrum ℝ (sinAngleOperatorC U V),
+      (1 : ℝ) - 2 * (s * s) ≠ 0 :=
+    (isUnit_cfc_iff (fun s : ℝ => 1 - 2 * (s * s)) (sinAngleOperatorC U V)
+      (by fun_prop) (isSelfAdjoint_sinAngleOperatorC U V)).mp hinv'
+  intro t ht
+  rw [paperAngleOperatorC,
+    cfc_map_spectrum (R := ℝ) (f := Real.arcsin) (a := sinAngleOperatorC U V)
+      (isSelfAdjoint_sinAngleOperatorC U V)
+      Real.continuous_arcsin.continuousOn] at ht
+  rcases ht with ⟨s, hs, rfl⟩
+  have hsi := spectrum_sinAngleOperatorC_subset_Icc U V hs
+  have hroot : Real.sqrt (1 - s ^ 2) * Real.sqrt (1 - s ^ 2) = 1 - s ^ 2 :=
+    Real.mul_self_sqrt (by nlinarith [hsi.1, hsi.2])
+  have hcos2 : Real.cos (2 * Real.arcsin s) = 1 - 2 * (s * s) := by
+    rw [Real.cos_two_mul', Real.sin_arcsin (by linarith [hsi.1]) hsi.2,
+      Real.cos_arcsin, sq, hroot]
+    ring
+  rw [hcos2]
+  exact hnonzero s hs
+
 /-- **`|tan 2Θ|² · cos²2Θ = sin²2Θ`**, the scalar Pythagoras of the doubled
 tangent, as an operator identity of functional calculi — and **branch-free**:
 the hypothesis is only the paper's `cos 2θ ≠ 0`, so principal angles past
@@ -524,6 +559,38 @@ theorem paperAbsTanTwo_sq_mul_cos_two_sq
       4 * (t * t) * (Real.sqrt (1 - t ^ 2) * Real.sqrt (1 - t ^ 2)) := by ring
   rw [hexpand, hroot]
   ring
+
+/-- **The branch-free positive tangent is exactly the modulus of the paper's
+literal signed `tan 2Θ`.**
+
+The printed theorem is stated for `tan 2Θ`, not for a separately named
+absolute-value operator.  Once the ordered gap has excluded the poles of the
+tangent, the signed functional calculus is continuous on the angle spectrum,
+and taking its operator modulus is the same as applying `t ↦ |tan (2t)|`
+pointwise.  This bridge lets the branch-free proof below expose a literally
+paper-facing conclusion while retaining the positive representative internally. -/
+theorem paperAbsTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC
+    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0) :
+    paperAbsTanTwoAngleOperatorC U V =
+      (paperTanTwoAngleOperatorC U V).modulus := by
+  have hcontTan : ContinuousOn (fun t : ℝ => Real.tan (2 * t))
+      (spectrum ℝ (paperAngleOperatorC U V)) :=
+    Real.continuousOn_tan.comp (by fun_prop) hcos
+  have hcontAbs : ContinuousOn (fun t : ℝ => |Real.tan (2 * t)|)
+      (spectrum ℝ (paperAngleOperatorC U V)) :=
+    ContinuousOn.abs hcontTan
+  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
+    (paperAbsTanTwoAngleOperatorC_nonneg U V) ?_
+  have hself := isSelfAdjoint_paperTanTwoAngleOperatorC U V
+  rw [comp_eq_mul', hself.adjoint_eq, paperAbsTanTwoAngleOperatorC,
+    paperTanTwoAngleOperatorC,
+    ← cfc_mul (fun t : ℝ => |Real.tan (2 * t)|)
+      (fun t : ℝ => |Real.tan (2 * t)|) (paperAngleOperatorC U V)
+      hcontAbs hcontAbs,
+    ← cfc_mul (fun t : ℝ => Real.tan (2 * t))
+      (fun t : ℝ => Real.tan (2 * t)) (paperAngleOperatorC U V)
+      hcontTan hcontTan]
+  exact cfc_congr fun _ _ => abs_mul_abs_self _
 
 /-- **`tan²2Θ · cos²2Θ = sin²2Θ`** in the quarter-acute branch, where the
 ambient double-angle tangent is nonnegative and therefore equal to its
